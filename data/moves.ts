@@ -22943,9 +22943,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 40,
 		basePowerCallback(pokemon, target, move) {
 			move.allies = pokemon.side.pokemon.filter(ally => ally === pokemon || ally.fainted);
-			var monsfainted = (pokemon.side.pokemon.length-pokemon.side.pokemonLeft) 
+			var monsfainted = (pokemon.side.pokemon.length-pokemon.side.pokemonLeft)
 			return 40 + (monsfainted*20) //using BP in callback was calling issues,
-										// first number should match base power 
+										// first number should match base power
 		},
 		category: "Special",
 		name: "Vengeance",
@@ -23049,7 +23049,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	// 	// },
 
 	// 	secondary: null,
-	// 	target: "self", 
+	// 	target: "self",
 	// 	type: "Light",
 	// 	contestType: "Clever",
 	// },
@@ -23213,5 +23213,33 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Normal",
 		contestType: "Cool",
+	},
+	candescence: {
+		num: 981,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Candescence",
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1},
+		volatileStatus: 'candescence',
+		condition: {
+			duration: 4,
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Candescence');
+			},
+			onResidualOrder: 6,
+			onResidual(pokemon) {
+				this.boost({atk: 1, spa: 1}, pokemon);
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Candescence', '[silent]');
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Light",
+		contestType: "Beautiful",
 	},
 };

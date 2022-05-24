@@ -152,6 +152,14 @@ export const MovesText: {[k: string]: MoveText} = {
 		start: "  [POKEMON] surrounded itself with a veil of water!",
 		heal: "  A veil of water restored [POKEMON]'s HP!",
 	},
+	candescence: {
+		name: "Candescence",
+		desc: "The user has its Atk and SpA increaded by 1 stage at the end of each turn while it remains active. Lasts 3 turns",
+		shortDesc: "The user has its Atk and SpA increaded by 1 stage at the end of each turn while it remains active. Lasts 3 turns",
+
+		start: "  [POKEMON] surrounded itself with a veil of light!",
+		heal: "  A veil of light restored [POKEMON]'s HP!",
+	},
 	aquatail: {
 		name: "Aqua Tail",
 		shortDesc: "No additional effect.",
