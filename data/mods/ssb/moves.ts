@@ -363,7 +363,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		sideCondition: 'psychicshield',
+		sideCondition: 'auroraveil',
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
