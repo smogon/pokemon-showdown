@@ -140,7 +140,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Traps foe for 4-5 turns; 100% flinch.",
 		name: "Psychic Bind",
 		gen: 8,
-		pp: 10,
+		pp: 40,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onTryMove() {
