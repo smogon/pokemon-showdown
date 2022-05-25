@@ -2142,7 +2142,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC UU",
 	},
 	probopass: {
-		tier: "OU",
+		tier: "UU",
 	},
 	skitty: {
 		tier: "LC UU",
@@ -6815,5 +6815,65 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	bulshian:{
 		tier: "Uber",
+	},
+	roedrunna : {
+		tier: "NU",
+	},
+	maliceros : {
+		tier: "RU",
+	},
+	breechon : {
+		tier: "LC UU",
+	},
+	nimbichon : {
+		tier: "NU",
+	},
+	leviorca : {
+		tier: "OU",
+	},
+	squimshi : {
+		tier: "LC OU",
+	},
+	gummelid : {
+		tier: "RU",
+	},
+	alivolt : {
+		tier: "UU",
+	},
+	fintricity : {
+		tier: "ZU",
+	},
+	terrator : {
+		tier: "OU",
+	},
+	intricat : {
+		tier: "RU",
+	},
+	gengaralola : {
+		tier: "NUBL",
+	},
+	grubbinunova : {
+		tier: "LCUU",
+	},
+	charjabugunova : {
+		tier: "NFE",
+	},
+	vikavoltunova : {
+		tier: "PU",
+	},
+	trapinchorre : {
+		tier: "LCOU",
+	},
+	vibravaorre : {
+		tier: "NFE",
+	},
+	flygonorre : {
+		tier: "RU",
+	},
+	ferroseedkliiro : {
+		tier: "LCUU",
+	},
+	ferrothornkliiro : {
+		tier: "NU",
 	},
 };
