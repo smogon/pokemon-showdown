@@ -1575,7 +1575,12 @@ export class Pokemon {
 	 * Unlike cureStatus, does not give cure message
 	 */
 	clearStatus() {
-		return this.setStatus('');
+		if (!this.hp || !this.status) return false;
+		if (this.status === 'slp' && !this.hasAbility('comatose') && this.removeVolatile('nightmare')) {
+			this.battle.add('-end', this, 'Nightmare', '[silent]');
+		}
+		this.setStatus('');
+		return true;
 	}
 
 	getStatus() {

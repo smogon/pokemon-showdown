@@ -101,7 +101,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onModifyMove(move, pokemon) {
 			if (move.flags['defrost']) {
 				this.add('-curestatus', pokemon, 'frz', '[from] move: ' + move);
-				pokemon.setStatus('');
+				pokemon.clearStatus();
 			}
 		},
 		onAfterMoveSecondary(target, source, move) {
