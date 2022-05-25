@@ -219,13 +219,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Kaiser Dragon
 	ultima: {
 		accuracy: true,
-		basePower: 10,
+		basePower: 40,
 		basePowerCallback(pokemon, target, move) {
-			return move.basePower + 15 * pokemon.positiveBoosts();
+			return move.basePower + 5 * pokemon.positiveBoosts();
 		},
 		category: "Special",
-		desc: "This move's type is the same as user's; boosts Special Attack by 1 stage; +15 power for each boost.",
-		shortDesc: "Same type as user's; boosts SpA by 1; +15 BP per boost.",
+		desc: "This move's type is the same as user's; boosts Special Attack and Speed by 1 stage; +5 power for each boost.",
+		shortDesc: "Same type as user's; boosts SpA and Spe by 1; +5 BP per boost.",
 		name: "Ultima",
 		gen: 8,
 		pp: 40,
@@ -243,6 +243,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		self: {
 			boosts: {
 				spa: 1,
+				spe: 1,
 			},
 		},
 		secondary: null,
