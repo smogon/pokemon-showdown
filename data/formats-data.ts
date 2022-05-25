@@ -6846,4 +6846,34 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	terrator : {
 		tier: "OU",
 	},
+	intricat : {
+		tier: "RU",
+	},
+	gengaralola : {
+		tier: "NUBL",
+	},
+	grubbinunova : {
+		tier: "LCUU",
+	},
+	charjabugunova : {
+		tier: "NFE",
+	},
+	vikavoltunova : {
+		tier: "PU",
+	},
+	trapinchorre : {
+		tier: "LCOU",
+	},
+	vibravaorre : {
+		tier: "NFE",
+	},
+	flygonorre : {
+		tier: "RU",
+	},
+	ferroseedkliiro : {
+		tier: "LCUU",
+	},
+	ferrothornkliiro : {
+		tier: "NU",
+	},
 };
