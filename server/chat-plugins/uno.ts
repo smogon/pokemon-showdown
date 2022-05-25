@@ -189,7 +189,7 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 
 	leaveGame(user: User) {
 		if (!(user.id in this.playerTable)) return false;
-		if (this.state === 'signups' && this.removePlayer(user)) {
+		if ((this.state === 'signups' && this.removePlayer(user)) || this.eliminate(user.id)) {
 			this.sendToRoom(`${user.name} has left the game of UNO.`);
 			return true;
 		}
