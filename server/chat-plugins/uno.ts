@@ -152,7 +152,9 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 	}
 
 	onStart() {
-		if (this.playerCount < 2) return false;
+		if (this.playerCount < 2) {
+			throw new Chat.ErrorMessage("There must be at least 2 players to start a game of UNO.");
+		}
 		if (this.autostartTimer) clearTimeout(this.autostartTimer);
 		this.sendToRoom(`|uhtmlchange|uno-${this.gameNumber}|<div class="infobox"><p>The game of UNO has started. <button class="button" name="send" value="/uno spectate">Spectate Game</button></p>${this.suppressMessages ? `<p style="font-size: 6pt">Game messages won't show up unless you're playing or watching.` : ''}</div>`, true);
 		this.state = 'play';
