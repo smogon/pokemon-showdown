@@ -720,6 +720,7 @@ export const commands: Chat.ChatCommands = {
 			this.modlog('UNO END');
 		},
 
+		autodq: 'timer',
 		timer(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
