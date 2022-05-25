@@ -425,17 +425,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	highjumpkick: {
 		inherit: true,
 		onMoveFail(target, source, move) {
-			if (!target.types.includes('Ghost')) {
-				this.directDamage(1, source, target);
-			}
+			this.directDamage(1, source, target);
 		},
 	},
 	jumpkick: {
 		inherit: true,
 		onMoveFail(target, source, move) {
-			if (!target.types.includes('Ghost')) {
-				this.directDamage(1, source, target);
-			}
+			this.directDamage(1, source, target);
 		},
 	},
 	karatechop: {
