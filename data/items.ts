@@ -7764,8 +7764,8 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Past",
 	},
-	pinsiriteoblivia: {
-		name: "Oblivia Pinsirite",
+	oblivianpinsirite: {
+		name: "Oblivian Pinsirite",
 		spritenum: 576,
 		megaStone: "Pinsir-Oblivia-Mega",
 		megaEvolves: "Pinsir-Oblivia",
@@ -7774,7 +7774,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
-		num: 758,
+		num: 762,
 		gen: 6,
 		isNonstandard: "Past",
 	},
@@ -7789,6 +7789,20 @@ export const Items: {[itemid: string]: ItemData} = {
 			return true;
 		},
 		num: 759,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	orbetite: {
+		name: "Orbetite",
+		spritenum: 576,
+		megaStone: "Orbeetle-Mega",
+		megaEvolves: "Orbeetle",
+		itemUser: ["Orbeetle"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 761,
 		gen: 6,
 		isNonstandard: "Past",
 	},
