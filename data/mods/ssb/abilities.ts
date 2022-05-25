@@ -112,6 +112,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.effectState.slowburn = true;
 				this.add('-ability', target, 'Slow Burn');
 				this.heal(target.maxhp);
+				return target.hp - 1;
 			}
 		},
 		isBreakable: true,
@@ -239,7 +240,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Horrific17
 	fairfight: {
-		desc: "Sets up Magic Room, Haze and Fairy Lock on switch-in; Extreme Speed is 120 BP.",
+		desc: "This Pokemon uses Magic Room, Haze and Fairy Lock on switch-in; Extreme Speed is 120 BP.",
 		shortDesc: "Magic Room, Haze and Fairy Lock on switch-in; 120 BP Extreme Speed.",
 		onStart(pokemon) {
 			this.actions.useMove('Magic Room', pokemon);
@@ -424,7 +425,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Omega
 	burnheal: {
-		desc: "Heals 1/8 of max HP per turn when burned.",
+		desc: "This Pokemon heals 1/8 of max HP per turn when burned.",
 		shortDesc: "+1/8 HP/turn when burned.",
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
