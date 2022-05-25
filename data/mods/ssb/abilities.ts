@@ -96,16 +96,18 @@ export function changeMoves(context: Battle, pokemon: Pokemon, newMoves: (string
 export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// A Resident No-Life
 	slowburn: {
-		desc: "This Pokemon fully heals if it gets KO'd; gains Focus Energy on turn 1, +1 Speed on turn 2, Magnet Rise on turn 3, +2 Attack on turn 4, and fully heals on turn 5.",
+		desc: "This Pokemon fully heals if it gets KO'd; gains Focus Energy on switch-in, +1 Speed on turn 1, Magnet Rise on turn 2, +2 Attack on turn 3, and fully heals on turn 4.",
 		shortDesc: "Fully heals if KO'd; buffed per turn.",
+		onStart(pokemon) {
+			pokemon.addVolatile('focusenergy');
+		},
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
-			if (pokemon.activeTurns === 1) pokemon.addVolatile('focusenergy');
-			if (pokemon.activeTurns === 2) this.boost({spe: 1});
-			if (pokemon.activeTurns === 3) pokemon.addVolatile('magnetrise');
-			if (pokemon.activeTurns === 4) this.boost({atk: 2});
-			if (pokemon.activeTurns === 5) this.heal(pokemon.maxhp);
+			if (pokemon.activeTurns === 1) this.boost({spe: 1});
+			if (pokemon.activeTurns === 2) pokemon.addVolatile('magnetrise');
+			if (pokemon.activeTurns === 3) this.boost({atk: 2});
+			if (pokemon.activeTurns === 4) this.heal(pokemon.maxhp);
 		},
 		onDamage(damage, target, source, effect) {
 			if (damage >= target.hp && effect && effect.effectType === 'Move' && !this.effectState.slowburn) {
