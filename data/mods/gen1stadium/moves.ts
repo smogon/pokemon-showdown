@@ -48,26 +48,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	haze: {
 		inherit: true,
 		onHit(target, source) {
-			this.add('-clearallboost');
+			this.add('-activate', target, 'move: Haze');
+			this.add('-clearallboost', '[silent]');
 			for (const pokemon of this.getAllActive()) {
 				pokemon.clearBoosts();
-				// This should cure the status of both Pokemon, and subsequently recalculate stats to remove the Paralysis/Burn Speed Drop.
-				pokemon.cureStatus();
+				pokemon.cureStatus(true);
 				for (const id of Object.keys(pokemon.volatiles)) {
 					pokemon.removeVolatile(id);
-					this.add('-end', pokemon, id);
+					this.add('-end', pokemon, id, '[silent]');
 				}
 				pokemon.recalculateStats!();
-			}
-		},
-	},
-	highjumpkick: {
-		inherit: true,
-		desc: "If this attack misses the target, the user takes 1 HP of damage.",
-		shortDesc: "User takes 1 HP damage it would have dealt if miss.",
-		onMoveFail(target, source, move) {
-			if (!target.types.includes('Ghost')) {
-				this.directDamage(1, source);
 			}
 		},
 	},
@@ -75,34 +65,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onMoveFail(target, source, move) {
 			source.addVolatile('mustrecharge');
-		},
-	},
-	jumpkick: {
-		inherit: true,
-		desc: "If this attack misses the target, the user 1HP of damage.",
-		shortDesc: "User takes 1 HP damage if miss.",
-		onMoveFail(target, source, move) {
-			this.damage(1, source);
-		},
-	},
-	leechseed: {
-		inherit: true,
-		onHit() {},
-		condition: {
-			onStart(target) {
-				this.add('-start', target, 'move: Leech Seed');
-			},
-			onAfterMoveSelfPriority: 1,
-			onAfterMoveSelf(pokemon) {
-				const leecher = this.getAtSlot(pokemon.volatiles['leechseed'].sourceSlot);
-				if (!leecher || leecher.fainted || leecher.hp <= 0) {
-					this.debug('Nothing to leech into');
-					return;
-				}
-				const toLeech = this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1);
-				const damage = this.damage(toLeech, pokemon, leecher);
-				if (damage) this.heal(damage, leecher, pokemon);
-			},
 		},
 	},
 	psywave: {

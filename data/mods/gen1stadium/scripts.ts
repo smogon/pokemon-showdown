@@ -58,6 +58,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.recalculateStats!();
 			return changed;
 		},
+		// Remove stat recalculation logic from gen 1
+		clearBoosts() {
+			let i: BoostID;
+			for (i in this.boosts) {
+				this.boosts[i] = 0;
+			}
+		},
 	},
 	actions: {
 		inherit: true,
