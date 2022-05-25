@@ -94,6 +94,21 @@ describe('Healing Wish', function () {
 		assert.false.fainted(battle.p1.active[0]);
 	});
 
+	it(`should not set up the slot condition when it fails`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'wobbuffet', moves: ['healingwish', 'swordsdance']},
+			{species: 'wynaut', moves: ['swordsdance', 'allyswitch']},
+		], [
+			{species: 'dratini', moves: ['breakingswipe', 'swordsdance']},
+			{species: 'pichu', moves: ['swordsdance']},
+		]]);
+		const wynaut = battle.p1.active[1];
+		battle.makeChoices();
+		battle.makeChoices('move swordsdance, move allyswitch', 'move swordsdance, move swordsdance');
+		assert(battle.log.some(line => line.startsWith('|-fail')));
+		assert.false.fullHP(wynaut);
+	});
+
 	it('[Gen 4] should heal a switch-in for full after hazards mid-turn', function () {
 		battle = common.gen(4).createBattle();
 		battle.setPlayer('p1', {team: [
