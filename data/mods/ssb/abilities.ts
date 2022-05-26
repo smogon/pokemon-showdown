@@ -440,6 +440,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 	
+	// Satori
+	mindreading: {
+		desc: "This Pokemon uses Mind Reader and Torment on switch-in.",
+		shortDesc: "Mind Reader and Torment on switch-in.",
+		onStart(pokemon) {
+			this.actions.useMove('Mind Reader', pokemon);
+			this.actions.useMove('Torment', pokemon);
+		},
+		name: "Mind Reading",
+		gen: 8,
+	},
+	
 	// Tonberry
 	vindictive: {
 		desc: "This Pokemon deals double damage to the target if an ally fainted last turn.",
