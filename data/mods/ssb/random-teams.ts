@@ -36,6 +36,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Tenacious Rush',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
+	Finger: {
+		species: 'Reuniclus', ability: 'Dual Receptors', item: 'Chaos Ring', gender: 'N',
+		moves: ['Future Sight', 'Teleport', 'Recover'],
+		signatureMove: 'Mega Metronome',
+		evs: {def: 252, spa: 252, spd: 4}, nature: 'Modest',
+	},
 	flufi: {
 		species: 'Pikachu-Libre', ability: 'Hero Morale', item: 'Light Ball', gender: 'M',
 		moves: ['Wild Charge', 'Darkest Lariat', 'Extreme Speed'],
@@ -71,12 +77,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Parting Shot', 'Thunder Wave', 'Scald'],
 		signatureMove: 'Sacred Penance',
 		evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0}, nature: 'Bold',
-	},
-	Minimind: {
-		species: 'Clefable', ability: 'Unaware', item: 'Leftovers', gender: 'F',
-		moves: ['Calm Mind', 'Draining Kiss', 'Soft-Boiled'],
-		signatureMove: 'Mega Metronome',
-		evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold',
 	},
 	Nina: {
 		species: 'Chansey', ability: 'Sticky Hold', item: 'Eviolite', gender: 'F',
