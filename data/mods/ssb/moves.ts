@@ -694,7 +694,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Beat Up', target);
 		},
 		onModifyMove(move, pokemon) {
-			move.multihit = (7 - pokemon.side.pokemonLeft);
+			move.multihit = 7 - pokemon.side.pokemonLeft;
 		},
 		secondary: null,
 		target: "normal",
