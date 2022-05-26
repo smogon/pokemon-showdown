@@ -55,7 +55,7 @@ export const ssbSets: SSBSets = {
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
 	'Kaiser Dragon': {
-		species: 'Rayquaza', ability: 'Elemental Shift', item: 'Leftovers', gender: 'N',
+		species: 'Rayquaza-Mega', ability: 'Elemental Shift', item: 'Leftovers', gender: 'N',
 		moves: ['Protect', 'Refresh', 'Recover'],
 		signatureMove: 'Ultima',
 		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm', shiny: true,
@@ -79,8 +79,8 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold',
 	},
 	Nina: {
-		species: 'Chansey', ability: 'Fur Coat', item: 'Eviolite', gender: 'F',
-		moves: ['Will-O-Wisp', 'Aromatherapy', 'Soft-Boiled'],
+		species: 'Chansey', ability: 'Sticky Hold', item: 'Eviolite', gender: 'F',
+		moves: ['Teleport', 'Aromatherapy', 'Wish'],
 		signatureMove: 'Psychic Shield',
 		evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0}, nature: 'Bold', shiny: true,
 	},
@@ -90,11 +90,23 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Wave Cannon',
 		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
 	},
+	Satori: {
+		species: 'Gardevoir', ability: 'Mind Reading', item: 'Third Eye', gender: 'F',
+		moves: ['Calm Mind', 'Zap Cannon', 'Psychic'],
+		signatureMove: 'Terrifying Hypnotism',
+		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+	},
 	SunDraco: {
-		species: 'Silvally', ability: 'Oblivious', item: 'Life Orb', gender: 'N',
+		species: 'Silvally', ability: 'Oblivious', item: 'Life Orb', gender: 'M',
 		moves: ['Dragon Claw', 'Shadow Claw', 'Fire Punch'],
 		signatureMove: 'Ein Sol',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant',
+	},
+	Tonberry: {
+		species: 'Marshadow', ability: 'Vindictive', item: 'Life Orb', gender: 'N',
+		moves: ['Thousand Arrows', 'Glacial Lance', 'Close Combat'],
+		signatureMove: 'Karma',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
 };
 

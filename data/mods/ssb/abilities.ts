@@ -96,22 +96,25 @@ export function changeMoves(context: Battle, pokemon: Pokemon, newMoves: (string
 export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// A Resident No-Life
 	slowburn: {
-		desc: "This Pokemon fully heals if it gets KO'd; gains Focus Energy on turn 1, +1 Speed on turn 2, Magnet Rise on turn 3, +2 Attack on turn 4, and fully heals on turn 5.",
+		desc: "This Pokemon fully heals if it gets KO'd; gains Focus Energy on switch-in, +1 Speed on turn 1, Magnet Rise on turn 2, +2 Attack on turn 3, and fully heals on turn 4.",
 		shortDesc: "Fully heals if KO'd; buffed per turn.",
+		onStart(pokemon) {
+			pokemon.addVolatile('focusenergy');
+		},
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
-			if (pokemon.activeTurns === 1) pokemon.addVolatile('focusenergy');
-			if (pokemon.activeTurns === 2) this.boost({spe: 1});
-			if (pokemon.activeTurns === 3) pokemon.addVolatile('magnetrise');
-			if (pokemon.activeTurns === 4) this.boost({atk: 2});
-			if (pokemon.activeTurns === 5) this.heal(pokemon.maxhp);
+			if (pokemon.activeTurns === 1) this.boost({spe: 1});
+			if (pokemon.activeTurns === 2) pokemon.addVolatile('magnetrise');
+			if (pokemon.activeTurns === 3) this.boost({atk: 2});
+			if (pokemon.activeTurns === 4) this.heal(pokemon.maxhp);
 		},
 		onDamage(damage, target, source, effect) {
 			if (damage >= target.hp && effect && effect.effectType === 'Move' && !this.effectState.slowburn) {
 				this.effectState.slowburn = true;
 				this.add('-ability', target, 'Slow Burn');
 				this.heal(target.maxhp);
+				return target.hp - 1;
 			}
 		},
 		isBreakable: true,
@@ -239,7 +242,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Horrific17
 	fairfight: {
-		desc: "Sets up Magic Room, Haze and Fairy Lock on switch-in; Extreme Speed is 120 BP.",
+		desc: "This Pokemon uses Magic Room, Haze and Fairy Lock on switch-in; Extreme Speed is 120 BP.",
 		shortDesc: "Magic Room, Haze and Fairy Lock on switch-in; 120 BP Extreme Speed.",
 		onStart(pokemon) {
 			this.actions.useMove('Magic Room', pokemon);
@@ -424,7 +427,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Omega
 	burnheal: {
-		desc: "Heals 1/8 of max HP per turn when burned.",
+		desc: "This Pokemon heals 1/8 of max HP per turn when burned.",
 		shortDesc: "+1/8 HP/turn when burned.",
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
@@ -434,6 +437,33 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Burn Heal",
+		gen: 8,
+	},
+	
+	// Satori
+	mindreading: {
+		desc: "This Pokemon uses Mind Reader and Torment on switch-in.",
+		shortDesc: "Mind Reader and Torment on switch-in.",
+		onStart(pokemon) {
+			this.actions.useMove('Mind Reader', pokemon);
+			this.actions.useMove('Torment', pokemon);
+		},
+		name: "Mind Reading",
+		gen: 8,
+	},
+	
+	// Tonberry
+	vindictive: {
+		desc: "This Pokemon deals double damage to the target if an ally fainted last turn.",
+		shortDesc: "2x damage if an ally fainted last turn.",
+		onBasePowerPriority: 21,
+		onBasePower(basePower, pokemon) {
+			if (pokemon.side.faintedLastTurn) {
+				this.debug('Boosted for a faint last turn');
+				return this.chainModify(2);
+			}
+		},
+		name: "Vindictive",
 		gen: 8,
 	},
 };

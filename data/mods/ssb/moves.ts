@@ -219,13 +219,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Kaiser Dragon
 	ultima: {
 		accuracy: true,
-		basePower: 10,
+		basePower: 40,
 		basePowerCallback(pokemon, target, move) {
-			return move.basePower + 15 * pokemon.positiveBoosts();
+			return move.basePower + 5 * pokemon.positiveBoosts();
 		},
 		category: "Special",
-		desc: "This move's type is the same as user's; boosts Special Attack by 1 stage; +15 power for each boost.",
-		shortDesc: "Same type as user's; boosts SpA by 1; +15 BP per boost.",
+		desc: "This move's type is the same as user's; boosts Special Attack and Speed by 1 stage; +5 power for each boost.",
+		shortDesc: "Same type as user's; boosts SpA and Spe by 1; +5 BP per boost.",
 		name: "Ultima",
 		gen: 8,
 		pp: 40,
@@ -243,6 +243,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		self: {
 			boosts: {
 				spa: 1,
+				spe: 1,
 			},
 		},
 		secondary: null,
@@ -411,7 +412,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Special",
 		desc: "Deals 1/3 of max HP; prevents healing.",
-		shortDesc: "Deals 1/3 mHP; prevents healing.",
+		shortDesc: "Deals 1/3 HP; prevents healing.",
 		name: "Wave Cannon",
 		gen: 8,
 		pp: 15,
@@ -431,6 +432,216 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Steel",
+	},
+	
+	// Satori
+	terrifyinghypnotism: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "This move flinches and Mind Readers the target, then becomes one of six signature moves depending on the target's type.",
+		shortDesc: "Flinches and Mind Readers; new sig depending on type.",
+		name: "Terrifying Hypnotism",
+		gen: 8,
+		pp: 1,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {bypasssub: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Hypnosis', target);
+			this.add('-anim', source, 'Mind Reader', target);
+		},
+		self: {
+			onHit(target, source) {
+				const possibleMoves = ["Calm Mind", "Zap Cannon", "Psychic", ""];
+				if (target.types[0] === "Normal" || target.types[0] === "Rock" || target.types[0] === "Steel") {
+					possibleMoves[3] === "Mt. Togakushi Toss";
+				}
+				else if (target.types[0] === "Fighting" || target.types[0] === "Bug" || target.types[0] === "Grass") {
+					possibleMoves[3] === "Torii Whorl-Wind";
+				}
+				else if (target.types[0] === "Flying" || target.types[0] === "Electric" || target.types[0] === "Ice") {
+					possibleMoves[3] === "Straw Doll Kamikaze";
+				}
+				else if (target.types[0] === "Poison" || target.types[0] === "Ground" || target.types[0] === "Fire") {
+					possibleMoves[3] === "Trauma in the Glimmering Depths";
+				}
+				else if (target.types[0] === "Water" || target.types[0] === "Dragon" || target.types[0] === "Dark") {
+					possibleMoves[3] === "Philosopher's Stone";
+				}
+				else {
+					possibleMoves[3] === 'Border of Wave and Particle';
+				}
+				const newMoves = [];
+				const moveIndex = (possibleMoves.length);
+				newMoves.push(possibleMoves[moveIndex]);
+				possibleMoves.splice(moveIndex, 1);
+				const newMoveSlots = changeMoves(this, source, newMoves);
+				source.m.terrifyinghypnotism = true;
+				source.moveSlots = newMoveSlots;
+				// @ts-ignore
+				source.baseMoveSlots = newMoveSlots;
+			},
+		},
+		volatileStatus: 'flinch',
+		ignoreAbility: true,
+		secondary: {
+			chance: 100,
+			volatileStatus: 'lockon',
+		},
+		target: "normal",
+		type: "???",
+	},
+	
+	// Satori
+	mttogakushitoss: {
+		accuracy: 80,
+		basePower: 120,
+		category: "Special",
+		desc: "This move raises the user's critical hit ratio by 2.",
+		shortDesc: "Raises critical hit ratio by 2.",
+		name: "Mt. Togakushi Toss",
+		gen: 8,
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Focus Blast', target);
+		},
+		self: {
+			volatileStatus: 'focusenergy',
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fighting",
+	},
+	
+	// Satori
+	toriiwhorlwind: {
+		accuracy: 80,
+		basePower: 120,
+		category: "Special",
+		desc: "This move doubles the user's allies' speed for 4 turns.",
+		shortDesc: "2x speed for allies for 4 turns.",
+		name: "Torii Whorl-Wind",
+		gen: 8,
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Hurricane', target);
+		},
+		self: {
+			sideCondition: 'tailwind',
+		},
+		secondary: null,
+		target: "normal",
+		type: "Flying",
+	},
+	
+	// Satori
+	strawdollkamikaze: {
+		accuracy: 80,
+		basePower: 120,
+		category: "Special",
+		desc: "This move burns the target.",
+		shortDesc: "Burns target.",
+		name: "Straw Doll Kamikaze",
+		gen: 8,
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', target, 'Explosion', target);
+		},
+		status: 'brn',
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+	},
+	
+	// Satori
+	traumaintheglimmeringdepths: {
+		accuracy: 80,
+		basePower: 120,
+		category: "Special",
+		desc: "This move traps the target.",
+		shortDesc: "Traps target.",
+		name: "Trauma in the Glimmering Depths",
+		gen: 8,
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Whirlpool', target);
+		},
+		volatileStatus: 'partiallytrapped',
+		secondary: null,
+		target: "normal",
+		type: "Water",
+	},
+	
+	// Satori
+	philosophersstone: {
+		accuracy: 80,
+		basePower: 120,
+		category: "Special",
+		desc: "This move sets up Misty Terrain.",
+		shortDesc: "Sets up Misty Terrain.",
+		name: "Philosopher's Stone",
+		gen: 8,
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Moonblast', target);
+		},
+		terrain: 'mistyterrain',
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+	},
+	
+	// Satori
+	borderofwaveandparticle: {
+		accuracy: 80,
+		basePower: 120,
+		category: "Special",
+		desc: "This move curses the target.",
+		shortDesc: "Curses target.",
+		name: "Border of Wave and Particle",
+		gen: 8,
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Shadow Ball', target);
+		},
+		volatileStatus: 'curse',
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
 	},
 
 	// SunDraco
@@ -462,5 +673,32 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "randomNormal",
 		type: "Normal",
+	},
+	
+	// Tonberry
+	karma: {
+		accuracy: 100,
+		basePower: 35,
+		category: "Physical",
+		desc: "This move additionally hits the target once for each fainted ally of the user's.",
+		shortDesc: "Extra hit per fainted ally.",
+		name: "Karma",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, allyanim: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Beat Up', target);
+		},
+		onModifyMove(move, pokemon) {
+			move.allies = pokemon.side.pokemon.filter(ally => ally === pokemon && ally.fainted);
+			move.multihit = move.allies.length + 1;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
 	},
 };
