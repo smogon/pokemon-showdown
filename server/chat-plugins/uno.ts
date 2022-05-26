@@ -247,7 +247,7 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 				this.sendToRoom(`|raw|${Utils.escapeHTML(name)} has not picked a color, the color will stay as <span style="color: ${textColors[this.topCard.changedColor]}">${this.topCard.changedColor}</span>.`);
 			}
 		}
-		
+
 		if (this.awaitUno === userid) this.awaitUno = null;
 		if (!this.topCard) {
 			throw new Chat.ErrorMessage(`Unable to disqualify ${name}.`);
@@ -334,10 +334,6 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 		});
 	}
 
-	// Something about this is what's wrong; it's either 1) trying to set a playerID it can't find when the current user is DQed,
-	// or it's setting the person to be in the original slot
-
-	// evals: Rooms.get('lobby').game.x
 	onNextPlayer() {
 		// if none is set
 		if (!this.currentPlayerid) {
