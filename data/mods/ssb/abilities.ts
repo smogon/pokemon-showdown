@@ -439,4 +439,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Burn Heal",
 		gen: 8,
 	},
+	
+	// Tonberry
+	vindictive: {
+		desc: "This Pokemon deals double damage to the target if an ally fainted last turn.",
+		shortDesc: "2x damage if an ally fainted last turn.",
+		onBasePowerPriority: 21,
+		onBasePower(basePower, pokemon) {
+			if (pokemon.side.faintedLastTurn) {
+				this.debug('Boosted for a faint last turn');
+				return this.chainModify(2);
+			}
+		},
+		name: "Vindictive",
+		gen: 8,
+	},
 };
