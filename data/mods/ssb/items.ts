@@ -28,6 +28,48 @@ export const Items: {[k: string]: ModdedItemData} = {
 		desc: "Holder cannot be struck by a critical hit.",
 	},
 
+	// Finger
+	chaosring: {
+		name: "Chaos Ring",
+		fling: {
+			basePower: 150,
+		},
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			if (move.name === "Future Sight") {
+				let t = this.random(5);
+				switch (t) {
+				case 1:
+					this.add('-start', move, 'typechange', 'Psychic');
+					move.type = "Psychic";
+					break;
+				case 2:
+					this.add('-start', move, 'typechange', 'Dark');
+					move.type = "Dark";
+					break;
+				case 3:
+					this.add('-start', move, 'typechange', 'Ghost');
+					move.type = "Ghost";
+					break;
+				case 4:
+					this.add('-start', move, 'typechange', 'Fairy');
+					move.type = "Fairy";
+					break;
+				case 5:
+					this.add('-start', move, 'typechange', 'Dragon');
+					move.type = "Dragon";
+					break;
+				default:
+					this.add('-start', move, 'typechange', 'Normal');
+					move.type = "Normal";
+					break;
+				}
+			}
+		},
+		gen: 8,
+		desc: "When Future Sight is used by the holder, the typing is randomized on hit.",
+	},
+
 	// Horrific17
 	horrifiumz: {
 		name: "Horrifium Z",
