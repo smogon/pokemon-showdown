@@ -90,6 +90,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Wave Cannon',
 		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
 	},
+	Satori: {
+		species: 'Gardevoir', ability: 'Mind Reading', item: 'Third Eye', gender: 'F',
+		moves: ['Calm Mind', 'Zap Cannon', 'Psychic'],
+		signatureMove: 'Terrifying Hypnotism',
+		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+	},
 	SunDraco: {
 		species: 'Silvally', ability: 'Oblivious', item: 'Life Orb', gender: 'M',
 		moves: ['Dragon Claw', 'Shadow Claw', 'Fire Punch'],
