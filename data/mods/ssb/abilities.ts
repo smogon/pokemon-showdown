@@ -188,6 +188,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Finger
+	dualreceptors: {
+		shortDesc: "This Pokemon's Special Attack is boosted by x1.33.",
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			this.debug('Dual Receptors boost');
+			return this.chainModify([5448, 4096]);
+		},
+		isPermanent: true,
+		name: "Dual Receptors",
+		gen: 8,
+	},
+
 	// flufi
 	heromorale: {
 		desc: "This Pokemon's contact moves deal 1.25x damage; survives an attack that would KO it with 1 HP.",
