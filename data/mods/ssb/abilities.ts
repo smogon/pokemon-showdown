@@ -190,9 +190,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Finger
 	dualreceptors: {
-		shortDesc: "This Pokemon's Special Attack is boosted by x1.33.",
+		shortDesc: "This Pokemon's attacking stats are boosted by x1.33.",
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
+			this.debug('Dual Receptors boost');
+			return this.chainModify([5448, 4096]);
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
 			this.debug('Dual Receptors boost');
 			return this.chainModify([5448, 4096]);
 		},
