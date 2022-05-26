@@ -113,8 +113,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (damage >= target.hp && effect && effect.effectType === 'Move' && !this.effectState.slowburn) {
 				this.effectState.slowburn = true;
 				this.add('-ability', target, 'Slow Burn');
-				this.heal(target.maxhp);
 				return target.hp - 1;
+			}
+			if (this.effectState.slowburn) {
+				this.heal(target.maxhp);
+				this.effectState.slowburn = false;
 			}
 		},
 		isBreakable: true,
