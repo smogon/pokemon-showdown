@@ -412,7 +412,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Special",
 		desc: "Deals 1/3 of max HP; prevents healing.",
-		shortDesc: "Deals 1/3 mHP; prevents healing.",
+		shortDesc: "Deals 1/3 HP; prevents healing.",
 		name: "Wave Cannon",
 		gen: 8,
 		pp: 15,
@@ -463,5 +463,32 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "randomNormal",
 		type: "Normal",
+	},
+	
+	// Tonberry
+	karma: {
+		accuracy: 100,
+		basePower: 35,
+		category: "Physical",
+		desc: "This move additionally hits the target once for each fainted ally of the user's.",
+		shortDesc: "Extra hit per fainted ally.",
+		name: "Karma",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, allyanim: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Beat Up', target);
+		},
+		onModifyMove(move, pokemon) {
+			move.allies = pokemon.side.pokemon.filter(ally => ally === pokemon && ally.fainted);
+			move.multihit = move.allies.length + 1;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
 	},
 };
