@@ -85,7 +85,7 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 252, spa: 252, spd: 4}, nature: 'Modest',
 	},
 	Mirāju: {
-		species: 'Wobbuffet', ability: 'Illusion', item: 'Quick Claw', gender: 'N',
+		species: 'Wynaut', ability: 'Illusion', item: 'Eviolite', gender: 'N',
 		moves: ['Hyperspace Hole', 'Glare', 'Memento'],
 		signatureMove: 'Illusive Energy',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest',
