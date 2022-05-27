@@ -115,7 +115,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-ability', target, 'Slow Burn');
 				return target.hp - 1;
 			}
-			if (this.effectState.slowburn) {
+			if (this.effectState.slowburn == true) {
 				this.heal(target.maxhp);
 				this.effectState.slowburn = false;
 			}
