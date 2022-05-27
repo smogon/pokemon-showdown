@@ -351,6 +351,25 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fairy",
 		contestType: "Cool",
 	},
+
+	// Mink the Putrid
+	madtoxin: {
+		accuracy: 85,
+		basePower: 0,
+		category: "Status",
+		name: "Mad Toxin",
+		desc: "Very badly poisons the target. Affects all Pokemon regardless of typing, and hits through protection.",
+		shortDesc: "Very badly poisons regardless of typing or protection.",
+		pp: 10,
+		priority: 0,
+		flags: {bypasssub: 1, snatch: 1},
+		breaksProtect: true,
+		status: 'badtox',
+		secondary: null,
+		target: "normal",
+		type: "Dark",
+		contestType: "Tough",
+	},
 	
 	// Nina
 	psychicshield: {
