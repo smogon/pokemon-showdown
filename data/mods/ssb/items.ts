@@ -81,6 +81,26 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "If held by an Arcanine with Meteor Charge, it can use Final Trick.",
 	},
+
+	// Mink the Putrid
+	gurglingblossom: {
+		name: "Gurgling Blossom",
+		spritenum: 487,
+		onResidualOrder: 5,
+		onResidualSubOrder: 4,
+		onResidual(pokemon) {
+			if (pokemon.hasType('Poison')) this.heal(pokemon.baseMaxhp / 8);
+		},
+		onDamagingHitOrder: 2,
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target)) {
+				this.damage(source.baseMaxhp / 8, source, target);
+			}
+		},
+		gen: 8,
+		desc: "Each turn, if holder is a Poison type, restores 1/8 max HP. If holder is hit by a contact move, the attacker loses 1/8 of its max HP.",
+		shortDesc: "Heals Poison-types by 1/8 per turn; Damages foes on contact.",
+	},
 	
 	// Satori
 	thirdeye: {
