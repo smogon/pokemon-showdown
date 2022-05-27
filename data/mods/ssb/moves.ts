@@ -382,18 +382,24 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {},
+		volatileStatus: 'illusiveenergy',
 		condition: {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Illusive Energy');
-				pokemon.storedStats.spa = pokemon.hp * 2;
+				const newspa = pokemon.hp * 2;
+				pokemon.storedStats.spa = newspa;
 			},
-			onResidualOrder: 6,
-			onResidual(pokemon) {
-				pokemon.storedStats.spa = pokemon.hp * 2;
+			onCopy(pokemon) {
+				const newspa = pokemon.hp * 2;
+				pokemon.storedStats.spa = newspa;
 			},
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Illusive Energy');
-				pokemon.storedStats.spa = pokemon.baseStoredStats.spa;
+				const newspa = pokemon.hp * 2;
+				pokemon.storedStats.spa = newspa;
+			},
+			onRestart(pokemon) {
+				pokemon.removeVolatile('Illusive Energy');
 			},
 		},
 		secondary: null,
