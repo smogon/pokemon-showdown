@@ -363,6 +363,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {bypasssub: 1, snatch: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Agility', source);
+			this.add('-anim', source, 'Gunk Shot', target);
+		},
 		breaksProtect: true,
 		status: 'badtox',
 		secondary: null,
