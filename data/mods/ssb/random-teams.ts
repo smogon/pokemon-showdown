@@ -88,7 +88,7 @@ export const ssbSets: SSBSets = {
 		species: 'Wynaut', ability: 'Illusion', item: 'Eviolite', gender: 'N',
 		moves: ['Hyperspace Hole', 'Glare', 'Memento'],
 		signatureMove: 'Illusive Energy',
-		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest',
+		evs: {hp: 252, def: 4, spe: 252}, nature: 'Timid',
 	},
 	Nina: {
 		species: 'Chansey', ability: 'Sticky Hold', item: 'Eviolite', gender: 'F',
