@@ -1516,6 +1516,7 @@ export const commands: Chat.ChatCommands = {
 		`/am thresholdincrement [num], [amount][, min turns] - Sets the threshold increment for the abuse monitor to increase [amount] every [num] turns.`,
 		`If [min turns] is provided, increments will start after that turn number. Requires: whitelist &`,
 		`/am deleteincrement - clear abuse-monitor threshold increment. Requires: whitelist &`,
+		`/am review - Submit feedback for manual abuse monitor review. Requires: % @ &`,
 	],
 };
 
