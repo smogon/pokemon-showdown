@@ -117,7 +117,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			if (this.effectState.slowburn == true) {
 				this.heal(target.maxhp);
-				this.effectState.slowburn = false;
 			}
 		},
 		isBreakable: true,
