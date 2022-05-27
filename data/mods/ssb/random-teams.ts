@@ -78,6 +78,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Sacred Penance',
 		evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0}, nature: 'Bold',
 	},
+	'Mink the Putrid': {
+		species: 'Venusaur', ability: 'Retardant Scales', item: 'Gurgling Blossom', gender: 'F',
+		moves: ['Leaf Storm', 'Earth Power', 'Clear Smog'],
+		signatureMove: 'Mad Toxin',
+		evs: {hp: 252, spa: 252, spd: 4}, nature: 'Modest',
+	},
 	Nina: {
 		species: 'Chansey', ability: 'Sticky Hold', item: 'Eviolite', gender: 'F',
 		moves: ['Teleport', 'Aromatherapy', 'Wish'],
