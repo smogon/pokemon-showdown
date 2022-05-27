@@ -382,6 +382,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Hypnosis', source);
+		},
 		volatileStatus: 'illusiveenergy',
 		condition: {
 			onStart(pokemon) {
