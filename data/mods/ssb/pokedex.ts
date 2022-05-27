@@ -19,4 +19,9 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 55, atk: 50, def: 45, spa: 135, spd: 135, spe: 120},
 	},
+	// Mirāju
+	wynaut: {
+		inherit: true,
+		baseStats: {hp: 135, atk: 35, def: 55, spa: 35, spd: 55, spe: 80},
+	},
 };
