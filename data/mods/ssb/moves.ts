@@ -370,6 +370,37 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Dark",
 		contestType: "Tough",
 	},
+
+	// Mirāju
+	illusiveenergy: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Illusive Energy",
+		desc: "The user's Special Attack is set to equal double the user's current HP.",
+		shortDesc: "User's SpA = current HP * 2.",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		condition: {
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Illusive Energy');
+				pokemon.storedStats.spa = pokemon.hp * 2;
+			},
+			onResidualOrder: 6,
+			onResidual(pokemon) {
+				pokemon.storedStats.spa = pokemon.hp * 2;
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Illusive Energy');
+				pokemon.storedStats.spa = pokemon.baseStoredStats.spa;
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Ghost",
+		contestType: "Clever",
+	},
 	
 	// Nina
 	psychicshield: {
