@@ -678,7 +678,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Tonberry
 	karma: {
 		accuracy: 100,
-		basePower: 35,
+		basePower: 25,
 		category: "Physical",
 		desc: "This move additionally hits the target once for each fainted ally of the user's.",
 		shortDesc: "Extra hit per fainted ally.",
@@ -694,8 +694,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Beat Up', target);
 		},
 		onModifyMove(move, pokemon) {
-			move.allies = pokemon.side.pokemon.filter(ally => ally === pokemon && ally.fainted);
-			move.multihit = move.allies.length + 1;
+			move.multihit = 7 - pokemon.side.pokemonLeft;
 		},
 		secondary: null,
 		target: "normal",
