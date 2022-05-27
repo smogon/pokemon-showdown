@@ -446,6 +446,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Mink the Putrid
+	retardantscales: {
+		desc: "This Pokemon takes 0.8x damage from attacks, 0.5x damage from Fire-type attacks, and 1.5x damage from Dragon-type attacks.",
+		shortDesc: "Takes 0.8x damage, 0.5x from Fire, 1.2x from Dragon.",
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Fire') {
+				return this.chainModify(0.5);
+			} else if (move.type === 'Dragon') {
+				return this.chainModify(1.5);
+			} else {
+				return this.chainModify(0.8);
+			}
+		},
+		isBreakable: true,
+		name: "Retardant Scales",
+		gen: 8,
+	},
+
 	// Omega
 	burnheal: {
 		desc: "This Pokemon heals 1/8 of max HP per turn when burned.",
