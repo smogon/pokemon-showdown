@@ -118,7 +118,7 @@ export const ssbSets: SSBSets = {
 		species: 'Lilligant', ability: 'Flower Master', item: 'Big Root', gender: 'F',
 		moves: ['Teleport', 'Protect', 'Substitute'],
 		signatureMove: 'Tera Drain',
-		evs: {hp: 252, spa: 252, spd: 4}, nature: 'Modest',
+		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0}, nature: 'Modest',
 	},
 };
 
