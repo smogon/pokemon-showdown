@@ -20,7 +20,7 @@ interface SSBSets {[k: string]: SSBSet}
 export const ssbSets: SSBSets = {
 	'A Resident No-Life': {
 		species: 'Mawile', ability: 'Slow Burn', item: 'Mawilite', gender: 'M',
-		moves: ['Thunder Punch', 'Ice Punch', 'Double Iron Bash'],
+		moves: ['Thunder Punch', 'Ice Punch', 'Iron Head'],
 		signatureMove: 'Rising Surge',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
@@ -90,12 +90,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Illusive Energy',
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Timid',
 	},
-	Nina: {
-		species: 'Chansey', ability: 'Sticky Hold', item: 'Eviolite', gender: 'F',
-		moves: ['Teleport', 'Aromatherapy', 'Wish'],
-		signatureMove: 'Psychic Shield',
-		evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0}, nature: 'Bold', shiny: true,
-	},
 	Omega: {
 		species: 'Aegislash', ability: 'Burn Heal', item: 'Flame Orb', gender: 'N',
 		moves: ['Teleport', 'Protect', 'Wish'],
@@ -119,6 +113,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Thousand Arrows', 'Glacial Lance', 'Close Combat'],
 		signatureMove: 'Karma',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
+	},
+	'Yuuka Kazami': {
+		species: 'Lilligant', ability: 'Flower Master', item: 'Leftovers', gender: 'F',
+		moves: ['Teleport', 'Protect', 'Substitute'],
+		signatureMove: 'Tera Drain',
+		evs: {hp: 252, spa: 252, spd: 4}, nature: 'Modest',
 	},
 };
 
