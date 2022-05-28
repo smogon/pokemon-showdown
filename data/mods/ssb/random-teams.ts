@@ -115,7 +115,7 @@ export const ssbSets: SSBSets = {
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
 	'Yuuka Kazami': {
-		species: 'Lilligant', ability: 'Flower Master', item: 'Leftovers', gender: 'F',
+		species: 'Lilligant', ability: 'Flower Master', item: 'Big Root', gender: 'F',
 		moves: ['Teleport', 'Protect', 'Substitute'],
 		signatureMove: 'Tera Drain',
 		evs: {hp: 252, spa: 252, spd: 4}, nature: 'Modest',
