@@ -8,16 +8,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 30,
 		basePowerCallback(pokemon, target, move) {
-			return move.basePower + 40 * pokemon.positiveBoosts();
+			return move.basePower + 30 * pokemon.positiveBoosts();
 		},
 		category: "Physical",
-		desc: "+40 power for each of the user's stat boosts.",
-		shortDesc: "+40 BP for each of user's boosts.",
+		desc: "+30 power for each of the user's stat boosts.",
+		shortDesc: "+30 BP for each of user's boosts.",
 		name: "Rising Surge",
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, mirror: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -40,7 +40,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, mirror: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -85,7 +85,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 5,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, mirror: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -104,6 +104,47 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Dragon",
 	},
 	
+	// Finger
+	megametronome: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Mega Metronome",
+		desc: "Picks and uses 3 random consecutive moves.",
+		shortDesc: "Uses 3 random moves.",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		noMetronome: [
+			"After You", "Assist", "Aura Wheel", "Baneful Bunker", "Beak Blast", "Belch", "Bestow", "Celebrate", "Clangorous Soul", "Copycat", "Counter", "Covet", "Crafty Shield", "Decorate", "Destiny Bond", "Detect", "Endure", "Eternabeam", "False Surrender", "Feint", "Focus Punch", "Follow Me", "Freeze Shock", "Helping Hand", "Hold Hands", "Hyperspace Fury", "Hyperspace Hole", "Ice Burn", "Instruct", "King's Shield", "Light of Ruin", "Mat Block", "Me First", "Metronome", "Mimic", "Mirror Coat", "Mirror Move", "Obstruct", "Overdrive", "Photon Geyser", "Plasma Fists", "Precipice Blades", "Protect", "Pyro Ball", "Quash", "Quick Guard", "Rage Powder", "Relic Song", "Secret Sword", "Shell Trap", "Sketch", "Sleep Talk", "Snap Trap", "Snarl", "Snatch", "Snore", "Spectral Thief", "Spiky Shield", "Spirit Break", "Spotlight", "Struggle", "Switcheroo", "Transform", "Wide Guard",
+		],
+		onHit(target, source, effect) {
+			const moves = this.dex.moves.all().filter(move => (
+				(![2, 4].includes(this.gen) || !source.moves.includes(move.id)) &&
+				!move.realMove && !move.isZ && !move.isMax &&
+				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
+				!effect.noMetronome!.includes(move.name)
+			));
+			let randomMove = '';
+			let randomMove2 = '';
+			let randomMove3 = '';
+			if (moves.length) {
+				moves.sort((a, b) => a.num - b.num);
+				randomMove = this.sample(moves).id;
+				randomMove2 = this.sample(moves).id;
+				randomMove3 = this.sample(moves).id;
+			}
+			if (!randomMove || !randomMove2 || !randomMove3) return false;
+			this.actions.useMove(randomMove, target);
+			this.actions.useMove(randomMove2, target);
+			this.actions.useMove(randomMove3, target);
+		},
+		secondary: null,
+		target: "self",
+		type: "Fairy",
+		contestType: "Cool",
+	},
+	
 	// flufi
 	cranberrycutter: {
 		accuracy: 100,
@@ -115,7 +156,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, mirror: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -133,16 +174,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 	// Genwunner
 	psychicbind: {
-		accuracy: 85,
-		basePower: 60,
+		accuracy: 75,
+		basePower: 40,
 		category: "Special",
-		desc: "Traps the opponent for 4-5 turns; 100% chance to flinch.",
-		shortDesc: "Traps foe for 4-5 turns; 100% flinch.",
+		desc: "Traps the target for 4-5 turns; 100% chance to flinch.",
+		shortDesc: "Partially traps target; 100% flinch.",
 		name: "Psychic Bind",
 		gen: 8,
-		pp: 40,
+		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {mirror: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -169,7 +210,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, defrost: 1},
+		flags: {contact: 1, defrost: 1, mirror: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -189,7 +230,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 150,
 		category: "Physical",
 		desc: "Causes Desolate Land permanently; burns and traps target for 4-5 turns.",
-		shortDesc: "Desolate Land; burns and traps target.",
+		shortDesc: "Desolate Land; burns and partially traps target.",
 		name: "Final Trick",
 		gen: 8,
 		pp: 1,
@@ -230,7 +271,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 40,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {mirror: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -256,12 +297,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
-		desc: "User is confused after use.",
+		desc: "This move confuses the user.",
 		shortDesc: "Confuses user.",
 		name: "Cross Dance",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, mirror: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -310,47 +351,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Fairy",
 	},
-	
-	// Minimind
-	megametronome: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Mega Metronome",
-		desc: "Picks and uses three random consecutive moves.",
-		shortDesc: "Uses three random moves.",
-		pp: 10,
-		priority: 0,
-		flags: {},
-		noMetronome: [
-			"After You", "Assist", "Aura Wheel", "Baneful Bunker", "Beak Blast", "Belch", "Bestow", "Celebrate", "Clangorous Soul", "Copycat", "Counter", "Covet", "Crafty Shield", "Decorate", "Destiny Bond", "Detect", "Endure", "Eternabeam", "False Surrender", "Feint", "Focus Punch", "Follow Me", "Freeze Shock", "Helping Hand", "Hold Hands", "Hyperspace Fury", "Hyperspace Hole", "Ice Burn", "Instruct", "King's Shield", "Light of Ruin", "Mat Block", "Me First", "Metronome", "Mimic", "Mirror Coat", "Mirror Move", "Obstruct", "Overdrive", "Photon Geyser", "Plasma Fists", "Precipice Blades", "Protect", "Pyro Ball", "Quash", "Quick Guard", "Rage Powder", "Relic Song", "Secret Sword", "Shell Trap", "Sketch", "Sleep Talk", "Snap Trap", "Snarl", "Snatch", "Snore", "Spectral Thief", "Spiky Shield", "Spirit Break", "Spotlight", "Struggle", "Switcheroo", "Transform", "Wide Guard",
-		],
-		onHit(target, source, effect) {
-			const moves = this.dex.moves.all().filter(move => (
-				(![2, 4].includes(this.gen) || !source.moves.includes(move.id)) &&
-				!move.realMove && !move.isZ && !move.isMax &&
-				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
-				!effect.noMetronome!.includes(move.name)
-			));
-			let randomMove = '';
-			let randomMove2 = '';
-			let randomMove3 = '';
-			if (moves.length) {
-				moves.sort((a, b) => a.num - b.num);
-				randomMove = this.sample(moves).id;
-				randomMove2 = this.sample(moves).id;
-				randomMove3 = this.sample(moves).id;
-			}
-			if (!randomMove || !randomMove2 || !randomMove3) return false;
-			this.actions.useMove(randomMove, target);
-			this.actions.useMove(randomMove2, target);
-			this.actions.useMove(randomMove3, target);
-		},
-		secondary: null,
-		target: "self",
-		type: "Fairy",
-		contestType: "Cool",
-	},
 
 	// Mink the Putrid
 	madtoxin: {
@@ -358,7 +358,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Mad Toxin",
-		desc: "Very badly poisons the target. Affects all Pokemon regardless of typing, and hits through protection.",
+		desc: "Very badly poisons the target; ignores typing and protection.",
 		shortDesc: "Very badly poisons regardless of typing or protection.",
 		pp: 10,
 		priority: 0,
@@ -370,7 +370,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Agility', source);
 			this.add('-anim', source, 'Gunk Shot', target);
 		},
-		breaksProtect: true,
 		status: 'badtox',
 		secondary: null,
 		target: "normal",
@@ -384,8 +383,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Illusive Energy",
-		desc: "The user's Special Attack is set to equal double the user's current HP.",
-		shortDesc: "User's SpA = current HP * 2.",
+		desc: "The user's Special Attack becomes double the user's current HP the moment this move was used.",
+		shortDesc: "User's SpA = 2x current HP.",
 		pp: 5,
 		priority: 0,
 		flags: {},
@@ -420,72 +419,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ghost",
 		contestType: "Clever",
 	},
-	
-	// Nina
-	psychicshield: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "For 5 turns, damage to allies is halved.",
-		shortDesc: "Halve damage for 5 turns.",
-		name: "Psychic Shield",
-		gen: 8,
-		pp: 20,
-		priority: 0,
-		flags: {snatch: 1},
-		sideCondition: 'auroraveil',
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Aurora Veil', target);
-		},
-		condition: {
-			duration: 5,
-			durationCallback(target, source, effect) {
-				if (source?.hasItem('lightclay')) {
-					return 8;
-				}
-				return 5;
-			},
-			onAnyModifyDamage(damage, source, target, move) {
-				if (target !== source && this.effectState.target.hasAlly(target)) {
-					if ((target.side.getSideCondition('reflect') && this.getCategory(move) === 'Physical') ||
-							(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {
-						return;
-					}
-					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
-						this.debug('Psychic Shield weaken');
-						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
-						return this.chainModify(0.5);
-					}
-				}
-			},
-			onSideStart(side) {
-				this.add('-sidestart', side, 'move: Psychic Shield');
-			},
-			onSideResidualOrder: 26,
-			onSideResidualSubOrder: 10,
-			onSideEnd(side) {
-				this.add('-sideend', side, 'move: Psychic Shield');
-			},
-		},
-		secondary: null,
-		target: "allySide",
-		type: "Psychic",
-	},
 
 	// Omega
 	wavecannon: {
 		accuracy: true,
 		basePower: 0,
 		category: "Special",
-		desc: "Deals 1/3 of max HP; prevents healing.",
-		shortDesc: "Deals 1/3 HP; prevents healing.",
+		desc: "Deals 1/4 of the target's max HP; prevents the target from healing.",
+		shortDesc: "Deals 1/4 HP; prevents healing.",
 		name: "Wave Cannon",
 		gen: 8,
 		pp: 15,
-		priority: 0,
+		priority: -1,
 		flags: {bypasssub: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -494,7 +439,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Hyper Beam', target);
 		},
 		onHit(target) {
-			this.directDamage(Math.ceil(target.maxhp / 3));
+			this.directDamage(Math.ceil(target.maxhp / 4));
 		},
 		volatileStatus: 'healblock',
 		ignoreAbility: true,
@@ -576,7 +521,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {mirror: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -602,7 +547,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {mirror: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -628,7 +573,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {mirror: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -652,7 +597,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {mirror: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -676,14 +621,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {mirror: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Moonblast', target);
 		},
-		terrain: 'mistyterrain',
+		terrain: 'psychicterrain',
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
@@ -700,7 +645,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {mirror: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -724,7 +669,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, mirror: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -747,7 +692,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Tonberry
 	karma: {
 		accuracy: 100,
-		basePower: 25,
+		basePower: 20,
 		category: "Physical",
 		desc: "This move additionally hits the target once for each fainted ally of the user's.",
 		shortDesc: "Extra hit per fainted ally.",
@@ -755,12 +700,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, allyanim: 1},
+		flags: {contact: 1, mirror: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Beat Up', target);
+			this.add('-anim', source, 'Shadow Punch', target);
 		},
 		onModifyMove(move, pokemon) {
 			move.multihit = 7 - pokemon.side.pokemonLeft;
@@ -768,5 +713,39 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
+	},
+	
+	// Yuuka Kazami
+	teradrain: {
+		accuracy: true,
+		basePower: 100,
+		category: "Special",
+		desc: "Recovers damage dealt; causes Grassy Terrain and Leech Seed; gives the target Magnet Rise; cures status ailments.",
+		shortDesc: "Recovers damage; Grassy Terrain & Leech Seed; gives target Magnet Rise; cures status.",
+		name: "Tera Drain",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {defrost: 1, heal: 1, mirror: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Giga Drain', target);
+		},
+		self: {
+			onHit(pokemon) {
+				pokemon.cureStatus();
+			},
+		},
+		volatileStatus: 'leechseed',
+		terrain: 'grassyterrain',
+		drain: 1,
+		secondary: {
+			chance: 100,
+			volatileStatus: 'magnetrise',
+		},
+		target: "normal",
+		type: "Grass",
 	},
 };
