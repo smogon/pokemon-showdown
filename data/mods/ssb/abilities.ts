@@ -1713,10 +1713,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onTryMove(pokemon, target, move) {
 			const moveData = pokemon.getMoveData(move.id);
-			if (!moveData) return;
+			if (!moveData || moveData.pp < 0.5) return;
 			// Lost 1 PP due to move usage, restore 0.5 PP to make it so that only 0.5 PP
 			// would be used.
-			moveData.pp = (Math.round(moveData.pp * 100) + 50) / 100;
+			moveData.pp += 0.5;
 		},
 		gen: 8,
 	},

@@ -2129,6 +2129,16 @@ export const Formats: FormatList = [
 		onBegin() { // TODO look into making an event to put this right after turn|1
 			// https://discordapp.com/channels/630837856075513856/630845310033330206/716126469528485909
 			// Requires client change
+			if (!this.ruleTable.has('dynamaxclause')) {
+				// forcibly remove dynamax anyways
+				for (const side of this.sides) {
+					side.dynamaxUsed = true;
+				}
+				this.add('message', 'Delphox only');
+				this.add('message', 'No items');
+				this.add('message', 'Final Destination');
+				return;
+			}
 			this.add(`raw|<div class='broadcast-green'><b>Wondering what all these custom moves, abilities, and items do?<br />Check out the <a href="https://www.smogon.com/articles/super-staff-bros-4" target="_blank">Super Staff Bros 4 Guide</a> or use /ssb to find out!</b></div>`);
 
 			this.add('message', [
