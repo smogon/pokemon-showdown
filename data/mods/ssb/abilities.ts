@@ -490,15 +490,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 
 	// Rusty
-	'R.E.M': {
+	nrem: {
 		desc: "This Pokemon's attacks do x1.5 damage if the target is asleep.",
 		onModifyDamage(damage, source, target, move) {
 			if (target.status === 'slp' || target.hasAbility('comatose')) {
-				this.debug('R.E.M boost');
+				this.debug('NREM boost');
 				return this.chainModify(1.5);
 			}
 		},
-		name: "R.E.M",
+		name: "NREM",
 		gen: 8,
 	},
 	
