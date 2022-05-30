@@ -16,6 +16,8 @@ import type {GlobalPermission} from '../user-groups';
 
 const WHITELIST = ["mia"];
 const MUTE_DURATION = 7 * 60 * 1000;
+const DAY = 24 * 60 * 60 * 1000;
+const MAX_MODLOG_TIME = 2 * 365 * DAY;
 const PUNISHMENTS = ['WARN', 'LOCK', 'WEEKLOCK'];
 const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
 	'lock': '/lock',
@@ -162,10 +164,10 @@ function displayResolved(review: ReviewRequest, justSubmitted = false) {
 		(justSubmitted ? "." : `, ${Chat.toDurationString(Date.now() - resolved.time)} ago.`)
 	);
 	if (resolved.details) user.send(prefix + `The response was: "${resolved.details}"`);
-	const idx = reviews[user.id].findIndex(r => r.room === review.room) || -1;
-	if (idx > -1) reviews[user.id].splice(idx, 1);
-	if (!reviews[user.id].length) {
-		delete reviews[user.id];
+	const idx = reviews[review.staff].findIndex(r => r.room === review.room);
+	if (idx > -1) reviews[review.staff].splice(idx, 1);
+	if (!reviews[review.staff].length) {
+		delete reviews[review.staff];
 	}
 	saveReviews();
 }
@@ -208,6 +210,7 @@ export async function searchModlog(
 		const validTypes = Array.from(Punishments.punishmentTypes.keys());
 		const cacheEntry: Record<string, number> = {};
 		for (const entry of modlog.results) {
+			if ((Date.now() - entry.time) > MAX_MODLOG_TIME) continue;
 			if (!validTypes.some(k => entry.action.endsWith(k))) continue;
 			if (!cacheEntry[entry.action]) cacheEntry[entry.action] = 0;
 			cacheEntry[entry.action]++;
@@ -265,10 +268,15 @@ export async function runActions(user: User, room: GameRoom, message: string, re
 					`SELECT * FROM perspective_flags WHERE userid = ? AND type = ? AND certainty >= ?`,
 					[user.id, type, num]
 				);
-				// filtering out old hits by request of admins.
-				// don't wanna make this easily configured bc we should never need to do it again
-				// don't wanna delete it bc data is good
-				hits = hits.filter(f => new Date(f.time).getFullYear() > 2021);
+				// filtering out old hits. 5-17-2022 perspective did an update that seriously changed scoring
+				// so old hits are unreliable.
+				// yes i know this is horrible but i'm not writing a framework for this because
+				// i should never need to do it again
+				hits = hits.filter(f => {
+					const date = new Date(f.time);
+					if (date.getFullYear() < 2022) return false;
+					return !(date.getFullYear() === 2022 && date.getMonth() <= 4 && date.getDate() <= 17);
+				});
 				if (hits.length < punishment.count) continue;
 			}
 			recommended.push([punishment.punishment, type]);
@@ -617,8 +625,9 @@ export function writeStats(type: string, entry: AnyObject) {
 	void FS(path).append(JSON.stringify(entry) + "\n");
 }
 
-function saveSettings(isBackup = false) {
-	FS(`config/chat-plugins/nf${isBackup ? ".backup" : ""}.json`).writeUpdate(() => JSON.stringify(settings));
+function saveSettings(path?: string) {
+	if (!path) path = 'nf';
+	FS(`config/chat-plugins/${path}.json`).writeUpdate(() => JSON.stringify(settings));
 }
 
 function saveReviews() {
@@ -1305,22 +1314,73 @@ export const commands: Chat.ChatCommands = {
 			);
 		},
 		bs: 'backupsettings',
-		backupsettings(target, room, user) {
+		async backupsettings(target, room, user) {
 			checkAccess(this);
-			saveSettings(true);
+			target = target.replace(/\//g, '-').toLowerCase().trim();
+			let dotIdx = target.lastIndexOf('.');
+			if (dotIdx < 0) {
+				dotIdx = target.length;
+			}
+			target = target.toLowerCase().slice(0, dotIdx);
+			if (target) {
+				target = `/artemis/${target}`;
+				await FS(`config/chat-plugins/artemis/`).mkdirIfNonexistent();
+			} else {
+				target = `/nf.backup`;
+			}
+			saveSettings(target);
 			this.addGlobalModAction(`${user.name} used /abusemonitor backupsettings`);
+			this.stafflog(`Logged to ${target || "default location"}`);
+			if (target) { // named? probably relevant
+				this.globalModlog(`ABUSEMONITOR BACKUP`, null, target);
+			}
 			this.refreshPage('abusemonitor-settings');
 		},
 		lb: 'loadbackup',
 		async loadbackup(target, room, user) {
 			checkAccess(this);
-			const backup = await FS('config/chat-plugins/nf.backup.json').readIfExists();
+			let path = `nf.backup`;
+			if (target) {
+				path = `artemis/${target.toLowerCase().replace(/\//g, '-')}`;
+			}
+			const backup = await FS(`config/chat-plugins/${path}.json`).readIfExists();
 			if (!backup) return this.errorReply(`No backup settings saved.`);
 			const backupSettings = JSON.parse(backup);
 			Object.assign(settings, backupSettings);
 			saveSettings();
 			this.addGlobalModAction(`${user.name} used /abusemonitor loadbackup`);
+			this.stafflog(`Loaded ${path}`);
 			this.refreshPage('abusemonitor-settings');
+		},
+		async deletebackup(target, room, user) {
+			checkAccess(this);
+			target = target.toLowerCase().replace(/\//g, '-');
+			if (!target) return this.errorReply(`Specify a backup file.`);
+			const path = FS(`config/chat-plugins/artemis/${target}.json`);
+			if (!(await path.exists())) {
+				return this.errorReply(`Backup '${target}' not found.`);
+			}
+			await path.unlinkIfExists();
+			this.globalModlog(`ABUSEMONITOR DELETEBACKUP`, null, target);
+			this.sendReply(`Backup '${target}' deleted.`);
+			this.privateGlobalModAction(`${user.name} deleted the abuse-monitor backup '${target}'`);
+		},
+		async backups() {
+			checkAccess(this);
+			let buf = `<strong>Artemis backups:</strong><br />`;
+			const files = await FS(`config/chat-plugins/artemis`).readdirIfExists();
+			if (!files.length) {
+				buf += `No backups found.`;
+			} else {
+				buf += files.map(f => {
+					const fName = f.slice(0, f.lastIndexOf('.'));
+					let line = `&bull; ${fName} `;
+					line += `<button name="send" value="/abusemonitor deletebackup ${fName}">Delete</button> `;
+					line += `<button name="send" value="/abusemonitor loadbackup ${fName}">Load</button>`;
+					return line;
+				}).join('<br />');
+			}
+			this.sendReplyBox(buf);
 		},
 		togglepunishments(target, room, user) {
 			checkAccess(this);
@@ -1456,6 +1516,7 @@ export const commands: Chat.ChatCommands = {
 		`/am thresholdincrement [num], [amount][, min turns] - Sets the threshold increment for the abuse monitor to increase [amount] every [num] turns.`,
 		`If [min turns] is provided, increments will start after that turn number. Requires: whitelist &`,
 		`/am deleteincrement - clear abuse-monitor threshold increment. Requires: whitelist &`,
+		`/am review - Submit feedback for manual abuse monitor review. Requires: % @ &`,
 	],
 };
 

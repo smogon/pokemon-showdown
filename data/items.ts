@@ -2349,7 +2349,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1120,
 		gen: 8,
-		// Hazard Immunity implemented in moves.js
+		// Hazard Immunity implemented in moves.ts
 	},
 	helixfossil: {
 		name: "Helix Fossil",
@@ -4664,7 +4664,6 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 			return true;
 		},
-		forcedForme: "Zamazenta-Crowned",
 		itemUser: ["Zamazenta-Crowned"],
 		num: 1104,
 		gen: 8,
@@ -4678,7 +4677,6 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 			return true;
 		},
-		forcedForme: "Zacian-Crowned",
 		itemUser: ["Zacian-Crowned"],
 		num: 1103,
 		gen: 8,

@@ -254,7 +254,7 @@ export const Formats: FormatList = [
 			'Larvesta', 'Magby', 'Magnemite', 'Mareanie', 'Mienfoo', 'Mudbray', 'Munchlax', 'Natu', 'Onix', 'Pawniard',
 			'Ponyta', 'Ponyta-Galar', 'Porygon', 'Slowpoke-Base', 'Staryu', 'Timburr', 'Trapinch', 'Tyrunt',
 			// LC UUBL
-			'Farfetch\u2019d-Galar', 'Scorbunny', 'Shellder', 'Wingull',
+			'Archen', 'Farfetch\u2019d-Galar', 'Scorbunny', 'Shellder', 'Wingull',
 		],
 	},
 	{
@@ -359,7 +359,7 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Standard Doubles', 'Little Cup', 'Dynamax Clause', 'Swagger Clause', 'Sleep Clause Mod'],
-		banlist: ['Corsola-Galar', 'Cutiefly', 'Ponyta-Base', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Vulpix', 'Vulpix-Alola', 'Ally Switch'],
+		banlist: ['Corsola-Galar', 'Cutiefly', 'Ponyta-Base', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Vulpix-Base', 'Ally Switch'],
 	},
 	{
 		name: "[Gen 8] VGC 2022",
@@ -626,11 +626,12 @@ export const Formats: FormatList = [
 		ruleset: ['Standard', 'Crazyhouse Rule', 'Dynamax Clause', 'Sleep Moves Clause', 'Evasion Abilities Clause', '!Sleep Clause Mod'],
 		banlist: [
 			'Calyrex-Ice', 'Calyrex-Shadow', 'Cinderace', 'Darmanitan-Galar', 'Dialga', 'Dracovish', 'Eternatus', 'Genesect', 'Giratina',
-			'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Base', 'Lugia', 'Lunala', 'Magearna',
-			'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Pheromosa', 'Rayquaza', 'Reshiram',
-			'Solgaleo', 'Spectrier', 'Urshifu-Base', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned',
-			'Zekrom', 'Zygarde-Base', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'Bright Powder', 'King\'s Rock', 'Lax Incense',
-			'Baton Pass', 'Explosion', 'Final Gambit', 'Misty Explosion', 'Self-Destruct',
+			'Giratina-Origin', 'Groudon', 'Hawlucha', 'Ho-Oh', 'Kyogre', 'Kyurem', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Base', 'Lugia',
+			'Lunala', 'Magearna', 'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Pheromosa',
+			'Rayquaza', 'Reshiram', 'Solgaleo', 'Spectrier', 'Urshifu-Base', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta',
+			'Zamazenta-Crowned', 'Zekrom', 'Zygarde-Base', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'Bright Powder',
+			'King\'s Rock', 'Lax Incense', 'Baton Pass', 'Explosion', 'Final Gambit', 'Healing Wish', 'Lunar Dance', 'Memento',
+			'Misty Explosion', 'Self-Destruct',
 		],
 	},
 	{
@@ -643,17 +644,18 @@ export const Formats: FormatList = [
 		mod: 'pokebilities',
 		ruleset: ['[Gen 8] Pokebilities', '!Obtainable Abilities', 'AAA Restricted Abilities', '2 Ability Clause', 'Sleep Moves Clause', '!Sleep Clause Mod'],
 		banlist: [
-			'Blacephalon', 'Buzzwole', 'Clefable', 'Dragapult', 'Dragonite', 'Kartana', 'Keldeo', 'Kyurem', 'Melmetal', 'Mienshao',
-			'Obstagoon', 'Noivern', 'Pangoro', 'Perrserker', 'Rillaboom', 'Tapu Bulu', 'Tapu Lele', 'Urshifu', 'Urshifu-Rapid-Strike',
-			'Victini', 'Weavile', 'Zamazenta-Crowned', 'Arena Trap', 'Moody', 'Shadow Tag', 'Wonder Guard', 'Chlorophyll + Desolate Land',
-			'Chlorophyll + Drought', 'Electric Surge + Surge Surfer', 'Regenerator + Emergency Exit', 'Regenerator + Multiscale',
-			'Regenerator + Shadow Shield', 'Regenerator + Wimp Out', 'Sand Rush + Sand Stream', 'Slush Rush + Snow Warning', 'Swift Swim + Drizzle',
-			'Swift Swim + Primordial Sea', 'Regenerator > 2',
+			'Alakazam', 'Blacephalon', 'Buzzwole', 'Clefable', 'Dragapult', 'Dragonite', 'Gengar', 'Kartana', 'Keldeo', 'Kyurem', 'Melmetal', 'Mienshao',
+			'Noivern', 'Obstagoon', 'Perrserker', 'Rillaboom', 'Tapu Lele', 'Urshifu', 'Urshifu-Rapid-Strike', 'Victini', 'Weavile', 'Zamazenta-Crowned',
+			'Zapdos-Galar', 'Arena Trap', 'Moody', 'Shadow Tag', 'Wonder Guard', 'Chlorophyll + Desolate Land', 'Chlorophyll + Drought', 'Electric Surge + Surge Surfer',
+			'Regenerator + Emergency Exit', 'Regenerator + Multiscale', 'Regenerator + Shadow Shield', 'Regenerator + Wimp Out', 'Sand Rush + Sand Stream',
+			'Slush Rush + Snow Warning', 'Swift Swim + Drizzle', 'Swift Swim + Primordial Sea', 'Snow Cloak + Snow Warning', 'Sand Veil + Sand Stream',
+			'Regenerator > 2', 'Bright Powder', 'Lax Incense', 'Quick Claw',
 		],
 		restricted: [
 			'Comatose', 'Contrary', 'Fluffy', 'Fur Coat', 'Gorilla Tactics', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter', 'Innards Out',
-			'Intrepid Sword', 'Libero', 'Magnet Pull', 'Neutralizing Gas', 'Parental Bond', 'Poison Heal', 'Prankster', 'Protean',
-			'Pure Power', 'Simple', 'Stakeout', 'Speed Boost', 'Tinted Lens', 'Unburden', 'Water Bubble',
+			'Intrepid Sword', 'Libero', 'Magnet Pull', 'Neutralizing Gas', 'Parental Bond', 'Poison Heal', 'Prankster', 'Protean', 'Pure Power',
+			'Quick Draw', 'Sand Veil', 'Serene Grace', 'Simple', 'Snow Cloak', 'Speed Boost', 'Stakeout', 'Stench', 'Tinted Lens', 'Triage',
+			'Unburden', 'Water Bubble',
 		],
 	},
 
@@ -681,25 +683,6 @@ export const Formats: FormatList = [
 			'Water Bubble', 'Wonder Guard', 'Comatose + Sleep Talk', 'Rusted Sword', 'Court Change', 'Bolt Beak', 'Double Iron Bash',
 			'Octolock', 'Shell Smash',
 		],
-		onChangeSet(set) {
-			const item = this.dex.toID(set.item);
-			if (set.species === 'Zacian' && item === 'rustedsword') {
-				set.species = 'Zacian-Crowned';
-				set.ability = 'Intrepid Sword';
-				const ironHead = set.moves.indexOf('ironhead');
-				if (ironHead >= 0) {
-					set.moves[ironHead] = 'behemothblade';
-				}
-			}
-			if (set.species === 'Zamazenta' && item === 'rustedshield') {
-				set.species = 'Zamazenta-Crowned';
-				set.ability = 'Dauntless Shield';
-				const ironHead = set.moves.indexOf('ironhead');
-				if (ironHead >= 0) {
-					set.moves[ironHead] = 'behemothbash';
-				}
-			}
-		},
 	},
 	{
 		name: "[Gen 8] Almost Any Ability",
@@ -721,15 +704,6 @@ export const Formats: FormatList = [
 			'Innards Out', 'Intrepid Sword', 'Libero', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Poison Heal', 'Protean',
 			'Pure Power', 'Shadow Tag', 'Simple', 'Stakeout', 'Speed Boost', 'Water Bubble', 'Wonder Guard', 'King\'s Rock', 'Baton Pass',
 		],
-		onValidateSet(set) {
-			// Temporary fix until battle-only is implemented properly
-			if (this.toID(set.species) === 'zamazentacrowned' && this.toID(set.ability) !== 'dauntlessshield') {
-				return [`Zamazenta-Crowned can only use Dauntless Shield because it is a battle-only forme.`];
-			}
-			if (this.toID(set.species) === 'zaciancrowned' && this.toID(set.ability) !== 'intrepidsword') {
-				return [`Zacian-Crowned can only use Intrepid Sword because it is a battle-only forme.`];
-			}
-		},
 	},
 	{
 		name: "[Gen 8] Mix and Mega",
@@ -900,9 +874,6 @@ export const Formats: FormatList = [
 			const stat = Dex.stats.ids()[target.side.team.indexOf(target.set)];
 			const newSpecies = this.dex.deepClone(species);
 			let godSpecies = this.dex.species.get(god.species);
-			if (godSpecies.forme === 'Crowned') {
-				godSpecies = this.dex.species.get(godSpecies.changesFrom || godSpecies.baseSpecies);
-			}
 			if (typeof godSpecies.battleOnly === 'string') {
 				godSpecies = this.dex.species.get(godSpecies.battleOnly);
 			}
@@ -1756,6 +1727,17 @@ export const Formats: FormatList = [
 				}
 			}
 		},
+		onSwitchOut(pokemon) {
+			for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
+				pokemon.removeVolatile(innate);
+			}
+		},
+		onFaint(pokemon) {
+			for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
+				const innateEffect = this.dex.conditions.get(innate) as Effect;
+				this.singleEvent('End', innateEffect, null, pokemon);
+			}
+		},
 		onAfterMega(pokemon) {
 			for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
 				pokemon.removeVolatile(innate);
@@ -2253,7 +2235,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen7',
 		team: 'random',
-		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
 	},
 	{
 		name: "[Gen 7] Random Doubles Battle",
@@ -2316,7 +2298,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen6',
 		team: 'random',
-		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
 	},
 	{
 		name: "[Gen 6] Battle Factory",
@@ -2495,7 +2477,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen3',
 		ruleset: ['Standard', 'One Boost Passer Clause'],
-		banlist: ['Uber', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Smeargle + Ingrain'],
+		banlist: ['Uber', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Smeargle + Ingrain'],
 	},
 	{
 		name: "[Gen 2] OU",
@@ -3029,8 +3011,8 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['Standard', 'Swagger Clause', 'Same Type Clause'],
 		banlist: [
-			'Aegislash', 'Altaria-Mega', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys-Base', 'Deoxys-Attack', 'Dialga', 'Genesect', 'Gengar-Mega',
-			'Giratina', 'Giratina-Origin', 'Greninja', 'Groudon', 'Ho-Oh', 'Hoopa-Unbound', 'Kangaskhan-Mega', 'Kyogre', 'Kyurem-White',
+			'Aegislash', 'Altaria-Mega', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys-Base', 'Deoxys-Attack', 'Deoxys-Speed', 'Dialga', 'Genesect',
+			'Gengar-Mega', 'Giratina', 'Giratina-Origin', 'Greninja', 'Groudon', 'Ho-Oh', 'Hoopa-Unbound', 'Kangaskhan-Mega', 'Kyogre', 'Kyurem-White',
 			'Lucario-Mega', 'Lugia', 'Mawile-Mega', 'Medicham-Mega', 'Metagross-Mega', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Sableye-Mega',
 			'Salamence-Mega', 'Shaymin-Sky', 'Slowbro-Mega', 'Talonflame', 'Xerneas', 'Yveltal', 'Zekrom',
 			'Shadow Tag', 'Bright Powder', 'Damp Rock', 'Focus Band', 'King\'s Rock', 'Lax Incense', 'Quick Claw', 'Razor Fang', 'Smooth Rock',
@@ -3054,8 +3036,8 @@ export const Formats: FormatList = [
 		banlist: [
 			'Arceus', 'Blaziken', 'Darkrai', 'Deoxys-Base', 'Deoxys-Attack', 'Deoxys-Defense', 'Dialga', 'Giratina',
 			'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kangaskhan-Mega', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo',
-			'Palkia', 'Rayquaza', 'Reshiram', 'Salamence-Mega', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom',
-			'Focus Sash', 'Soul Dew', 'Grass Whistle', 'Hypnosis', 'Perish Song', 'Sing', 'Yawn',
+			'Palkia', 'Rayquaza', 'Reshiram', 'Salamence-Mega', 'Shaymin-Sky', 'Snorlax', 'Xerneas', 'Yveltal',
+			'Zekrom', 'Focus Sash', 'Soul Dew', 'Grass Whistle', 'Hypnosis', 'Perish Song', 'Sing', 'Yawn',
 		],
 	},
 	{
@@ -3536,11 +3518,11 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['[Gen 4] PU'],
 		banlist: [
-			'Ampharos', 'Armaldo', 'Bellossom', 'Dragonair', 'Gabite', 'Gastrodon', 'Glaceon', 'Glalie', 'Golduck',
-			'Gorebyss', 'Hippopotas', 'Kadabra', 'Machoke', 'Magmar', 'Mantine', 'Marowak', 'Metang', 'Misdreavus',
-			'Monferno', 'Mr. Mime', 'Muk', 'Murkrow', 'Pinsir', 'Politoed', 'Purugly', 'Quagsire', 'Raichu',
-			'Rampardos', 'Rapidash', 'Regigigas', 'Relicanth', 'Rhydon', 'Scyther', 'Sneasel', 'Snover', 'Solrock',
-			'Tangela', 'Torkoal', 'Victreebel', 'Xatu', 'Zangoose', 'Damp Rock',
+			'Ampharos', 'Armaldo', 'Bellossom', 'Dragonair', 'Electabuzz', 'Gabite', 'Gastrodon', 'Glaceon', 'Glalie',
+			'Golduck', 'Gorebyss', 'Hippopotas', 'Kadabra', 'Machoke', 'Magmar', 'Mantine', 'Marowak', 'Metang',
+			'Misdreavus', 'Monferno', 'Mr. Mime', 'Muk', 'Murkrow', 'Pinsir', 'Politoed', 'Purugly', 'Quagsire',
+			'Raichu', 'Rampardos', 'Rapidash', 'Regigigas', 'Relicanth', 'Rhydon', 'Scyther', 'Sneasel', 'Snover',
+			'Solrock', 'Tangela', 'Torkoal', 'Victreebel', 'Xatu', 'Zangoose', 'Damp Rock',
 		],
 	},
 	{

@@ -55,7 +55,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (sourceAbility.isPermanent || sourceAbility.id === 'mummy') {
 					return;
 				}
-				if (move.flags['contact']) {
+				if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
 					const oldAbility = source.setAbility('mummy', target);
 					if (oldAbility) {
 						this.add('-activate', target, 'ability: Mummy', this.dex.abilities.get(oldAbility).name, '[of] ' + source);
@@ -65,7 +65,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				const possibleAbilities = [source.ability, ...(source.m.innates || [])]
 					.filter(val => !this.dex.abilities.get(val).isPermanent && val !== 'mummy');
 				if (!possibleAbilities.length) return;
-				if (move.flags['contact']) {
+				if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
 					const abil = this.sample(possibleAbilities);
 					if (abil === source.ability) {
 						const oldAbility = source.setAbility('mummy', target);
@@ -75,6 +75,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					} else {
 						source.removeVolatile('ability:' + abil);
 						source.addVolatile('ability:mummy', source);
+						if (abil) {
+							this.add('-activate', target, 'ability: Mummy', this.dex.abilities.get(abil).name, '[of] ' + source);
+						}
 					}
 				}
 			}
@@ -154,6 +157,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Own Tempo', '[of] ' + target);
 			}
 		},
+	},
+	poisontouch: {
+		inherit: true,
+		// Activate after Sheer Force to make interaction determistic. The ordering for this ability is
+		// an arbitary decision, but is modelled on Stench, which is reflective of on-cart behaviour.
+		onModifyMovePriority: -1,
 	},
 	powerofalchemy: {
 		inherit: true,
@@ -270,7 +279,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					return;
 				}
 
-				if (move.flags['contact']) {
+				if (this.checkMoveMakesContact(move, source, target)) {
 					const sourceAbility = source.setAbility('wanderingspirit', target);
 					if (!sourceAbility) return;
 					if (target.isAlly(source)) {
