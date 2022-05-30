@@ -470,29 +470,23 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		self: {
 			onHit(target, source) {
-				const possibleMoves = ["Calm Mind", "Zap Cannon", "Psychic", ""];
+				let possibleMoves = ["Calm Mind", "Zap Cannon", "Psychic", ""];
 				if (target.types[0] === "Normal" || target.types[0] === "Rock" || target.types[0] === "Steel") {
 					possibleMoves[3] === "Mt. Togakushi Toss";
-				}
-				else if (target.types[0] === "Fighting" || target.types[0] === "Bug" || target.types[0] === "Grass") {
+				} else if (target.types[0] === "Fighting" || target.types[0] === "Bug" || target.types[0] === "Grass") {
 					possibleMoves[3] === "Torii Whorl-Wind";
-				}
-				else if (target.types[0] === "Flying" || target.types[0] === "Electric" || target.types[0] === "Ice") {
+				} else if (target.types[0] === "Flying" || target.types[0] === "Electric" || target.types[0] === "Ice") {
 					possibleMoves[3] === "Straw Doll Kamikaze";
-				}
-				else if (target.types[0] === "Poison" || target.types[0] === "Ground" || target.types[0] === "Fire") {
+				} else if (target.types[0] === "Poison" || target.types[0] === "Ground" || target.types[0] === "Fire") {
 					possibleMoves[3] === "Trauma in the Glimmering Depths";
-				}
-				else if (target.types[0] === "Water" || target.types[0] === "Dragon" || target.types[0] === "Dark") {
+				} else if (target.types[0] === "Water" || target.types[0] === "Dragon" || target.types[0] === "Dark") {
 					possibleMoves[3] === "Philosopher's Stone";
-				}
-				else {
+				} else {
 					possibleMoves[3] === 'Border of Wave and Particle';
 				}
-				const newMoves = [];
 				const moveIndex = (possibleMoves.length);
-				newMoves.push(possibleMoves[moveIndex]);
 				possibleMoves.splice(moveIndex, 1);
+				const newMoves = possibleMoves;
 				const newMoveSlots = changeMoves(this, source, newMoves);
 				source.m.terrifyinghypnotism = true;
 				source.moveSlots = newMoveSlots;
