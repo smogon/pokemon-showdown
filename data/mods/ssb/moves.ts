@@ -538,8 +538,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			else {
 				move = 'borderofwaveandparticle';
 			}
-			const baseMove = source.moves.indexOf('terrifyinghypnotism');
-			if (baseMove < 0) return false;
 			const newMove = {
 				move: move.name,
 				id: move.id,
@@ -549,9 +547,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				disabled: false,
 				used: false,
 			};
-			source.moveSlots[baseMove] = newMove;
-			source.baseMoveSlots[baseMove] = newMove;
-			this.add('-activate', source, 'move: Terrifying Hypnotism', move.name);
+			let moveTest = target.lastMove;
+			this.add('-message', `yuki tries her best to impress ${moveTest}!`);
+			//source.moveSlots[3] = newMove;
+			//source.baseMoveSlots[3] = newMove;
+			//this.add('-activate', source, 'move: Terrifying Hypnotism', move.name);
 		},
 		volatileStatus: 'flinch',
 		ignoreAbility: true,
