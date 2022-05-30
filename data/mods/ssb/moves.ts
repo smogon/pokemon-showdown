@@ -519,7 +519,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Mind Reader', target);
 		},
 		onHit(target, source) {
-			const move = target.lastMove;
+			let move = target.lastMove;
 			/*
 			if (target.types[0] === "Normal" || target.types[0] === "Rock" || target.types[0] === "Steel") {
 				move = "Mt. Togakushi Toss";
