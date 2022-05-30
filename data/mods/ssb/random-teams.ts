@@ -109,7 +109,7 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant',
 	},
 	Rusty: {
-		species: 'Hypno', ability: 'R.E.M', item: 'Dream Glass', gender: 'N',
+		species: 'Hypno', ability: 'NREM', item: 'Dream Glass', gender: 'N',
 		moves: ['Freezing Glare', 'Shadow Ball', 'Taunt'],
 		signatureMove: 'Scream of the Fallen',
 		evs: {hp: 248, def: 60, spa: 200}, nature: 'Modest',
