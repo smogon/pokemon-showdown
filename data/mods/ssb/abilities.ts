@@ -179,6 +179,29 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Aggression",
 		gen: 8,
 	},
+	
+	// Chocolate Pudding
+	fudgefilledbody: {
+		desc: "This Pokemon heals 1/4 of its max HP when hit by a Water or Poison-type attack; Pokemon making contact with this Pokemon have their speed lowered by 2 stages.",
+		shortDesc: "+1/4 HP from Water/Poison; -2 speed to contact.",
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Water' || move.type === 'Poison') {
+				if (!this.heal(target.baseMaxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Fudge-Filled Body');
+				}
+				return null;
+			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target, true)) {
+				this.add('-ability', target, 'Fudge-Filled Body');
+				this.boost({spe: -1}, source, target, null, true);
+			}
+		},
+		isBreakable: true,
+		name: "Fudge-Filled Body",
+		gen: 8,
+	},
 
 	// El Capitan
 	ironwill: {
