@@ -521,22 +521,22 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, source) {
 			let move = '';
 			if (target.types[0] === "Normal" || target.types[0] === "Rock" || target.types[0] === "Steel") {
-				move = "mttogakushitoss";
+				move = "Mt. Togakushi Toss";
 			}
 			else if (target.types[0] === "Fighting" || target.types[0] === "Bug" || target.types[0] === "Grass") {
-				move = "toriiwhorlwind";
+				move = "Torii Whorl-Wind";
 			}
 			else if (target.types[0] === "Flying" || target.types[0] === "Electric" || target.types[0] === "Ice") {
-				move = "strawdollkamikaze";
+				move = "Straw Doll Kamikaze";
 			}
 			else if (target.types[0] === "Poison" || target.types[0] === "Ground" || target.types[0] === "Fire") {
-				move = "traumaintheglimmeringdepths";
+				move = "Trauma in the Glimmering Depths";
 			}
 			else if (target.types[0] === "Water" || target.types[0] === "Dragon" || target.types[0] === "Dark") {
-				move = "philosophersstone";
+				move = "Philosopher's Stone";
 			}
 			else {
-				move = 'borderofwaveandparticle';
+				move = "Border of Wave and Particle";
 			}
 			const newMove = {
 				move: move.name,
@@ -547,11 +547,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				disabled: false,
 				used: false,
 			};
-			let moveTest = target.lastMove;
-			this.add('-message', `yuki tries her best to impress ${moveTest}!`);
-			//source.moveSlots[3] = newMove;
-			//source.baseMoveSlots[3] = newMove;
-			//this.add('-activate', source, 'move: Terrifying Hypnotism', move.name);
+			source.moveSlots[3] = newMove;
+			source.baseMoveSlots[3] = newMove;
+			this.add('-activate', source, 'move: Terrifying Hypnotism', move.name);
 		},
 		volatileStatus: 'flinch',
 		ignoreAbility: true,
