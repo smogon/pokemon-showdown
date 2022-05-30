@@ -425,12 +425,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Special",
-		desc: "Deals 1/4 of the target's max HP; prevents the target from healing.",
-		shortDesc: "Deals 1/4 HP; prevents healing.",
+		desc: "Deals 1/3 of the target's max HP; prevents the target from healing.",
+		shortDesc: "Deals 1/3 HP; prevents healing.",
 		name: "Wave Cannon",
 		gen: 8,
-		pp: 15,
-		priority: -1,
+		pp: 5,
+		priority: 0,
 		flags: {bypasssub: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -439,7 +439,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Hyper Beam', target);
 		},
 		onHit(target) {
-			this.directDamage(Math.ceil(target.maxhp / 4));
+			this.directDamage(Math.ceil(target.maxhp / 3));
 		},
 		volatileStatus: 'healblock',
 		ignoreAbility: true,
