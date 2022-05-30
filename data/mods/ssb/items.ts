@@ -16,6 +16,52 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "Raises Speed by 1 stage and critical hit ratio by 2 stages. Single use.",
 	},
+	
+	// Chocolate Pudding
+	parfaitspoon: {
+		name: "Parfait Spoon",
+		spritenum: 520,
+		fling: {
+			basePower: 30,
+		},
+		onModifyDefPriority: 1,
+		onModifyDef(def) {
+			return this.chainModify(1.5);
+		},
+		onModifySpDPriority: 1,
+		onModifySpD(spd) {
+			return this.chainModify(1.5);
+		},
+		onModifyAtkPriority: 1,
+		onModifyAtk(atk, target) {
+			if (target.types === 'Ice') {
+				return this.chainModify(1.5);
+			}
+		},
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			if (target === source || move.hasBounced || !move.flags['reflectable']) {
+				return;
+			}
+			const newMove = this.dex.getActiveMove(move.id);
+			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
+			this.actions.useMove(newMove, target, source);
+			return null;
+		},
+		onAllyTryHitSide(target, source, move) {
+			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
+				return;
+			}
+			const newMove = this.dex.getActiveMove(move.id);
+			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
+			this.actions.useMove(newMove, this.effectState.target, source);
+			return null;
+		},
+		gen: 8,
+		desc: "Reflects status moves; boosts Defense and Special Defense by 1.5x; 1.5x damage to Ice-types.",
+	},
 
 	// El Capitan
 	assaulthelmet: {
