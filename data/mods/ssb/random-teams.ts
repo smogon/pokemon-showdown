@@ -108,6 +108,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Ein Sol',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant',
 	},
+	Rusty: {
+		species: 'Hypno', ability: 'R.E.M', item: 'Dream Glass', gender: 'N',
+		moves: ['Freezing Glare', 'Shadow Ball', 'Taunt'],
+		signatureMove: 'Scream of the Fallen',
+		evs: {hp: 248, def: 60, spa: 200}, nature: 'Modest',
+	},
 	Tonberry: {
 		species: 'Marshadow', ability: 'Vindictive', item: 'Life Orb', gender: 'N',
 		moves: ['Thousand Arrows', 'Glacial Lance', 'Close Combat'],
