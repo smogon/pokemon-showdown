@@ -507,7 +507,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Flinches and Mind Readers; new sig depending on type.",
 		name: "Terrifying Hypnotism",
 		gen: 8,
-		pp: 1,
+		pp: 5,
 		noPPBoosts: true,
 		priority: 0,
 		flags: {bypasssub: 1},
