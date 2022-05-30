@@ -519,7 +519,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Mind Reader', target);
 		},
 		onHit(target, source) {
-			let move = '';
+			let move = 'Flare Blitz';
+			/*
 			if (target.types[0] === "Normal" || target.types[0] === "Rock" || target.types[0] === "Steel") {
 				move = "Mt. Togakushi Toss";
 			}
@@ -538,6 +539,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			else {
 				move = "Border of Wave and Particle";
 			}
+			*/
 			const newMove = {
 				move: move.name,
 				id: move.id,
