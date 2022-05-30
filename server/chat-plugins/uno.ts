@@ -705,10 +705,9 @@ export const commands: Chat.ChatCommands = {
 			if (game.state !== 'signups') {
 				throw new Chat.ErrorMessage("There is no UNO game in signups phase in this room.");
 			}
-			if (game.onStart()) {
-				this.privateModAction(`The game of UNO was started by ${user.name}.`);
-				this.modlog('UNO START');
-			}
+			game.onStart();
+			this.privateModAction(`The game of UNO was started by ${user.name}.`);
+			this.modlog('UNO START');
 		},
 
 		stop: 'end',
