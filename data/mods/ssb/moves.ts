@@ -507,7 +507,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Flinches and Mind Readers; new sig depending on type.",
 		name: "Terrifying Hypnotism",
 		gen: 8,
-		pp: 5,
+		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
 		flags: {bypasssub: 1},
@@ -518,37 +518,40 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Hypnosis', target);
 			this.add('-anim', source, 'Mind Reader', target);
 		},
-		self: {
-			onHit(target, source) {
-				const possibleMoves = ["Calm Mind", "Zap Cannon", "Psychic", ""];
-				if (target.types[0] === "Normal" || target.types[0] === "Rock" || target.types[0] === "Steel") {
-					possibleMoves[3] === "Mt. Togakushi Toss";
-				}
-				else if (target.types[0] === "Fighting" || target.types[0] === "Bug" || target.types[0] === "Grass") {
-					possibleMoves[3] === "Torii Whorl-Wind";
-				}
-				else if (target.types[0] === "Flying" || target.types[0] === "Electric" || target.types[0] === "Ice") {
-					possibleMoves[3] === "Straw Doll Kamikaze";
-				}
-				else if (target.types[0] === "Poison" || target.types[0] === "Ground" || target.types[0] === "Fire") {
-					possibleMoves[3] === "Trauma in the Glimmering Depths";
-				}
-				else if (target.types[0] === "Water" || target.types[0] === "Dragon" || target.types[0] === "Dark") {
-					possibleMoves[3] === "Philosopher's Stone";
-				}
-				else {
-					possibleMoves[3] === 'Border of Wave and Particle';
-				}
-				const newMoves = [];
-				const moveIndex = (possibleMoves.length);
-				newMoves.push(possibleMoves[moveIndex]);
-				possibleMoves.splice(moveIndex, 1);
-				const newMoveSlots = changeMoves(this, source, newMoves);
-				source.m.terrifyinghypnotism = true;
-				source.moveSlots = newMoveSlots;
-				// @ts-ignore
-				source.baseMoveSlots = newMoveSlots;
-			},
+		onHit(target, source) {
+			let move = '';
+			if (target.types[0] === "Normal" || target.types[0] === "Rock" || target.types[0] === "Steel") {
+				move = "mttogakushitoss";
+			}
+			else if (target.types[0] === "Fighting" || target.types[0] === "Bug" || target.types[0] === "Grass") {
+				move = "toriiwhorlwind";
+			}
+			else if (target.types[0] === "Flying" || target.types[0] === "Electric" || target.types[0] === "Ice") {
+				move = "strawdollkamikaze";
+			}
+			else if (target.types[0] === "Poison" || target.types[0] === "Ground" || target.types[0] === "Fire") {
+				move = "traumaintheglimmeringdepths";
+			}
+			else if (target.types[0] === "Water" || target.types[0] === "Dragon" || target.types[0] === "Dark") {
+				move = "philosophersstone";
+			}
+			else {
+				move = 'borderofwaveandparticle';
+			}
+			const baseMove = source.moves.indexOf('terrifyinghypnotism');
+			if (baseMove < 0) return false;
+			const newMove = {
+				move: move.name,
+				id: move.id,
+				pp: move.pp,
+				maxpp: move.pp,
+				target: move.target,
+				disabled: false,
+				used: false,
+			};
+			source.moveSlots[baseMove] = newMove;
+			source.baseMoveSlots[baseMove] = newMove;
+			this.add('-activate', source, 'move: Terrifying Hypnotism', move.name);
 		},
 		volatileStatus: 'flinch',
 		ignoreAbility: true,
