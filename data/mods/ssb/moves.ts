@@ -447,6 +447,56 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Steel",
 	},
+
+	// Rusty
+	screamofthefallen: {
+		accuracy: true,
+		basePower: 0,
+		category: "Special",
+		name: "Scream of the Fallen",
+		desc: "Randomly ranges from 40 to 80 power. Power is doubled if foe is asleep, and wakes them. Lowers Speed, Attack, and Special Attack by 1.",
+		shortDesc: "40-80 BP; x2 power if asleep, wakes foe; -1 Spe/Atk/SpA.",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Hex', source);
+			this.add('-anim', source, 'Boomburst', target);
+		},
+		onModifyMove(move, pokemon, target) {
+			const rand = this.random(15);
+			if (rand < 2) {
+				move.basePower = 40;
+			} else if (rand < 6) {
+				move.basePower = 50;
+			} else if (rand < 9) {
+				move.basePower = 60;
+			} else if (rand < 12) {
+				move.basePower = 70;
+			} else {
+				move.basePower = 80;
+			}
+		},
+		onBasePower(basePower, source, target, move) {
+			if (target.status === 'slp') {
+				return this.chainModify(2);
+			}
+		},
+		onHit(target) {
+			if (target.status === 'slp') target.cureStatus();
+		},
+		boosts: {
+			spe: -1,
+			atk: -1,
+			spa: -1,
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
 	
 	// Satori
 	terrifyinghypnotism: {
