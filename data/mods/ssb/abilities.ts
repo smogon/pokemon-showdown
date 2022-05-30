@@ -578,12 +578,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	
 	// Yuuka Kazami
 	flowermaster: {
-		desc: "This Pokemon uses Aqua Ring, Ingrain, and No Retreat on switch-in.",
-		shortDesc: "Aqua Ring, Ingrain, & No Retreat on switch-in.",
+		desc: "This Pokemon uses Ingrain on switch-in.",
+		shortDesc: "Ingrain on switch-in.",
 		onStart(pokemon) {
-			this.actions.useMove('Aqua Ring', pokemon);
 			this.actions.useMove('Ingrain', pokemon);
-			this.actions.useMove('No Retreat', pokemon);
 		},
 		name: "Flower Master",
 		gen: 8,
