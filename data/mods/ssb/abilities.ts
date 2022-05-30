@@ -455,6 +455,53 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Final Prayer",
 		gen: 8,
 	},
+	
+	// Mechagodzilla
+	adamantium: {
+		desc: "This Pokemon becomes Steel/Electric-type on switch-in; immune to indirect damage, secondary effects, stat lowering, flinch, critical hits, powder, sound, ballistic and status moves.",
+		shortDesc: "Steel/Electric on switch-in; immune to many things.",
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'typechange', 'Steel', 'Electric');
+			pokemon.types = ['Steel', 'Electric'];
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') {
+				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
+				return false;
+			}
+		},
+		onModifySecondaries(secondaries) {
+			this.debug('Adamantium prevent secondary');
+			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
+		},
+		onBoost(boost, target, source, effect) {
+			if (source && target === source) return;
+			let showMsg = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					delete boost[i];
+					showMsg = true;
+				}
+			}
+			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+				this.add("-fail", target, "unboost", "[from] ability: Adamantium", "[of] " + target);
+			}
+		},
+		onTryAddVolatile(status, pokemon) {
+			if (status.id === 'flinch') return null;
+		},
+		onTryHit(pokemon, target, move) {
+			if (move.flags['bullet'] || move.flags['powder'] || move.flags['sound'] || move.hasBounced || !move.flags['reflectable']) {
+				this.add('-immune', pokemon, '[from] ability: Adamantium');
+				return null;
+			}
+		},
+		onCriticalHit: false,
+		isBreakable: true,
+		name: "Adamantium",
+		gen: 8,
+	},
 
 	// Mink the Putrid
 	retardantscales: {
