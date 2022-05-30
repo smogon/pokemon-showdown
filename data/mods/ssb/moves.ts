@@ -54,6 +54,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Fighting",
 	},
+	
+	// Chocolate Pudding
+	steadybaking: {
+		accuracy: 100,
+		basePower: 80,
+		basePowerCallback(pokemon, target, move) {
+			return move.basePower + 40 * pokemon.volatiles['stockpile'].layers;
+		},
+		category: "Physical",
+		desc: "Gives the user 1 layer of Stockpile; +40 BP for each layer.",
+		shortDesc: "+1 Stockpile; +40 BP for each.",
+		name: "Steady Baking",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, mirror: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onprepareHit(target, source) {
+			this.add('-anim', source, 'Stockpile', source);
+			this.add('-anim', source, 'Spit Up', target);
+		},
+		self: {
+			volatileStatus: 'stockpile',
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+	},
 
 	// El Capitan
 	tenaciousrush: {
