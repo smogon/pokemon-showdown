@@ -96,8 +96,8 @@ export function changeMoves(context: Battle, pokemon: Pokemon, newMoves: (string
 export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// A Resident No-Life
 	slowburn: {
-		desc: "This Pokemon fully heals if it gets KO'd; gains Focus Energy on switch-in, +1 Speed on turn 1, Magnet Rise on turn 2, +2 Attack on turn 3, and fully heals on turn 4.",
-		shortDesc: "Fully heals if KO'd; buffed per turn.",
+		desc: "This Pokemon heals 1/2 of max HP if it gets KO'd; gains Focus Energy on switch-in, +1 Speed on turn 1, Magnet Rise on turn 2, +2 Attack on turn 3, and fully heals on turn 4.",
+		shortDesc: "Heals 1/2 HP if KO'd; buffed per turn.",
 		onStart(pokemon) {
 			pokemon.addVolatile('focusenergy');
 		},
@@ -116,7 +116,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return target.hp - 1;
 			}
 			if (this.effectState.slowburn == true) {
-				this.heal(target.maxhp);
+				this.heal(target.maxhp / 2);
 			}
 		},
 		isBreakable: true,
@@ -126,11 +126,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	
 	// A Resident No-Life
 	powerunleashed: {
-		desc: "This Pokemon uses Refresh and Misty Terrain on switch-in; ignores protection, screens and substitutes; moves sacrifice secondary effects to deal 1.25x damage.",
-		shortDesc: "Refresh and Misty Terrain on switch-in; ignores protection, screens and substitutes; no secondary effects for 1.25x damage.",
+		desc: "This Pokemon uses Refresh on switch-in; is immune to status ailments; ignores protection, screens, and substitutes; sacrifices secondary effects to deal 1.25x damage.",
+		shortDesc: "Refresh on switch-in; immune to status; ignores protection, screens, and substitutes; no secondaries for 1.25x damage.",
 		onStart(pokemon) {
 			this.actions.useMove('Refresh', pokemon);
-			this.actions.useMove('Misty Terrain', pokemon);
 		},
 		onModifyMove(move, pokemon) {
 			move.infiltrates = true;
@@ -146,6 +145,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.hasPowerUnleashed) return this.chainModify(1.25);
 		},
+		onSetStatus(status, target, source, effect) {
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Power Unleashed');
+			}
+			return false;
+		},
+		onTryAddVolatile(status, target) {
+			if (status.id === 'yawn') {
+				this.add('-immune', target, '[from] ability: Power Unleashed');
+				return null;
+			}
+		},
+		isBreakable: true,
 		name: "Power Unleashed",
 		gen: 8,
 	},
@@ -238,7 +250,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			return critRatio + 1
 		},
 		onModifyMove(move) {
-			if (move.id === 'Blizzard') move.accuracy = 90;
+			if (move.id === 'Blizzard') {
+				move.accuracy = 90;
+			}
 		},
 		onBoost(boost, target, source, effect) {
 			if (boost.spa) {
@@ -262,15 +276,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Horrific17
 	fairfight: {
-		desc: "This Pokemon uses Magic Room, Haze and Fairy Lock on switch-in; Extreme Speed is 120 BP.",
-		shortDesc: "Magic Room, Haze and Fairy Lock on switch-in; 120 BP Extreme Speed.",
+		desc: "This Pokemon uses Fairy Lock, Haze, and Magic Room on switch-in.",
+		shortDesc: "Fairy Lock, Haze, & Magic Room on switch-in.",
 		onStart(pokemon) {
-			this.actions.useMove('Magic Room', pokemon);
-			this.actions.useMove('Haze', pokemon);
 			this.actions.useMove('Fairy Lock', pokemon);
-		},
-		onModifyMove(move) {
-			if (move.id === 'Extreme Speed') move.basePower = 120;
+			this.actions.useMove('Haze', pokemon);
+			this.actions.useMove('Magic Room', pokemon);
 		},
 		name: "Fair Fight",
 		gen: 8,
@@ -481,7 +492,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Satori
 	mindreading: {
 		desc: "This Pokemon uses Mind Reader and Torment on switch-in.",
-		shortDesc: "Mind Reader and Torment on switch-in.",
+		shortDesc: "Mind Reader & Torment on switch-in.",
 		onStart(pokemon) {
 			this.actions.useMove('Mind Reader', pokemon);
 			this.actions.useMove('Torment', pokemon);
@@ -502,6 +513,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Vindictive",
+		gen: 8,
+	},
+	
+	// Yuuka Kazami
+	flowermaster: {
+		desc: "This Pokemon uses Aqua Ring, Ingrain, and No Retreat on switch-in.",
+		shortDesc: "Aqua Ring, Ingrain, & No Retreat on switch-in.",
+		onStart(pokemon) {
+			this.actions.useMove('Aqua Ring', pokemon);
+			this.actions.useMove('Ingrain', pokemon);
+			this.actions.useMove('No Retreat', pokemon);
+		},
+		name: "Flower Master",
 		gen: 8,
 	},
 };
