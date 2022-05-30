@@ -447,56 +447,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Steel",
 	},
-
-	// Rusty
-	screamofthefallen: {
-		accuracy: true,
-		basePower: 0,
-		category: "Special",
-		name: "Scream of the Fallen",
-		desc: "Randomly ranges from 40 to 80 power. Power is doubled if foe is asleep, and wakes them. Lowers Speed, Attack, and Special Attack by 1.",
-		shortDesc: "40-80 BP; x2 power if asleep, wakes foe; -1 Spe/Atk/SpA.",
-		pp: 5,
-		priority: 0,
-		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Hex', source);
-			this.add('-anim', source, 'Boomburst', target);
-		},
-		onModifyMove(move, pokemon, target) {
-			const rand = this.random(15);
-			if (rand < 2) {
-				move.basePower = 40;
-			} else if (rand < 6) {
-				move.basePower = 50;
-			} else if (rand < 9) {
-				move.basePower = 60;
-			} else if (rand < 12) {
-				move.basePower = 70;
-			} else {
-				move.basePower = 80;
-			}
-		},
-		onBasePower(basePower, source, target, move) {
-			if (target.status === 'slp') {
-				return this.chainModify(2);
-			}
-		},
-		onHit(target) {
-			if (target.status === 'slp') target.cureStatus();
-		},
-		boosts: {
-			spe: -1,
-			atk: -1,
-			spa: -1,
-		},
-		secondary: null,
-		target: "normal",
-		type: "Ghost",
-	},
 	
 	// Satori
 	terrifyinghypnotism: {
@@ -518,40 +468,37 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Hypnosis', target);
 			this.add('-anim', source, 'Mind Reader', target);
 		},
-		onHit(target, source) {
-			let move = target.lastMove;
-			/*
-			if (target.types[0] === "Normal" || target.types[0] === "Rock" || target.types[0] === "Steel") {
-				move = "Mt. Togakushi Toss";
-			}
-			else if (target.types[0] === "Fighting" || target.types[0] === "Bug" || target.types[0] === "Grass") {
-				move = "Torii Whorl-Wind";
-			}
-			else if (target.types[0] === "Flying" || target.types[0] === "Electric" || target.types[0] === "Ice") {
-				move = "Straw Doll Kamikaze";
-			}
-			else if (target.types[0] === "Poison" || target.types[0] === "Ground" || target.types[0] === "Fire") {
-				move = "Trauma in the Glimmering Depths";
-			}
-			else if (target.types[0] === "Water" || target.types[0] === "Dragon" || target.types[0] === "Dark") {
-				move = "Philosopher's Stone";
-			}
-			else {
-				move = "Border of Wave and Particle";
-			}
-			*/
-			const newMove = {
-				move: move.name,
-				id: move.id,
-				pp: move.pp,
-				maxpp: move.pp,
-				target: move.target,
-				disabled: false,
-				used: false,
-			};
-			source.moveSlots[3] = newMove;
-			source.baseMoveSlots[3] = newMove;
-			this.add('-activate', source, 'move: Terrifying Hypnotism', move.name);
+		self: {
+			onHit(target, source) {
+				const possibleMoves = ["Calm Mind", "Zap Cannon", "Psychic", ""];
+				if (target.types[0] === "Normal" || target.types[0] === "Rock" || target.types[0] === "Steel") {
+					possibleMoves[3] === "Mt. Togakushi Toss";
+				}
+				else if (target.types[0] === "Fighting" || target.types[0] === "Bug" || target.types[0] === "Grass") {
+					possibleMoves[3] === "Torii Whorl-Wind";
+				}
+				else if (target.types[0] === "Flying" || target.types[0] === "Electric" || target.types[0] === "Ice") {
+					possibleMoves[3] === "Straw Doll Kamikaze";
+				}
+				else if (target.types[0] === "Poison" || target.types[0] === "Ground" || target.types[0] === "Fire") {
+					possibleMoves[3] === "Trauma in the Glimmering Depths";
+				}
+				else if (target.types[0] === "Water" || target.types[0] === "Dragon" || target.types[0] === "Dark") {
+					possibleMoves[3] === "Philosopher's Stone";
+				}
+				else {
+					possibleMoves[3] === 'Border of Wave and Particle';
+				}
+				const newMoves = [];
+				const moveIndex = (possibleMoves.length);
+				newMoves.push(possibleMoves[moveIndex]);
+				possibleMoves.splice(moveIndex, 1);
+				const newMoveSlots = changeMoves(this, source, newMoves);
+				source.m.terrifyinghypnotism = true;
+				source.moveSlots = newMoveSlots;
+				// @ts-ignore
+				source.baseMoveSlots = newMoveSlots;
+			},
 		},
 		volatileStatus: 'flinch',
 		ignoreAbility: true,
@@ -560,7 +507,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			volatileStatus: 'lockon',
 		},
 		target: "normal",
-		type: "Normal",
+		type: "???",
 	},
 	
 	// Satori
