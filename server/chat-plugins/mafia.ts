@@ -2473,6 +2473,12 @@ export const commands: Chat.ChatCommands = {
 					if (extension < 1) extension = 1;
 					if (extension > 10) extension = 10;
 				}
+				if (cmd === 'extend') {
+					for (const p in game.playerTable) {
+						const player = game.playerTable[p];
+						player.actionArr[game.dayNum] = '';
+					}
+				}
 				game.day(cmd === 'extend' ? extension : null);
 			}
 			game.logAction(user, `set day/night`);
