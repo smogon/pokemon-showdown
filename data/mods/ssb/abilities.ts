@@ -488,6 +488,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Burn Heal",
 		gen: 8,
 	},
+
+	// Rusty
+	'R.E.M': {
+		desc: "This Pokemon's attacks do x1.5 damage if the target is asleep.",
+		onModifyDamage(damage, source, target, move) {
+			if (target.status === 'slp' || target.hasAbility('comatose')) {
+				this.debug('R.E.M boost');
+				return this.chainModify(1.5);
+			}
+		},
+		name: "R.E.M",
+		gen: 8,
+	},
 	
 	// Satori
 	mindreading: {
