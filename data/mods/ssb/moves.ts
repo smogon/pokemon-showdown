@@ -558,7 +558,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			volatileStatus: 'lockon',
 		},
 		target: "normal",
-		type: "???",
+		type: "Normal",
 	},
 	
 	// Satori
