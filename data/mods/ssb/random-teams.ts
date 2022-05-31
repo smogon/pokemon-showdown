@@ -30,6 +30,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Masochism',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
+	'Chocolate Pudding': {
+		species: 'Drowzee', ability: 'Fudge-Filled Body', item: 'Parfait Spoon', gender: 'M',
+		moves: ['Glacial Lance', 'Drain Punch', 'Photon Geyser'],
+		signatureMove: 'Steady Baking',
+		evs: {hp: 252, atk: 252, def: 4}, nature: 'Adamant',
+	},
 	'El Capitan': {
 		species: 'Zygarde-10%', ability: 'Iron Will', item: 'Assault Helmet', gender: 'M',
 		moves: ['No Retreat', 'Thousand Arrows', 'Flare Blitz'],
@@ -54,6 +60,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Psychic Bind',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Serious',
 	},
+	/*Hell: {
+		species: "Gengar", ability: "Sinner's Punishment", item: "Air Blimp", gender: "M",
+		moves: ["Thunderbolt", "Dark Pulse", "Flamethrower"],
+		signatureMove: "Hade's Erinyes",
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: "Timid",
+	},*/
 	Horrific17: {
 		species: 'Arcanine', ability: 'Fair Fight', item: 'Horrifium Z', gender: 'M',
 		moves: ['Morning Sun', 'Solar Blade', 'Extreme Speed'],
@@ -78,17 +90,23 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Sacred Penance',
 		evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0}, nature: 'Bold',
 	},
+	Mechagodzilla: {
+		species: 'Tyranitar-Mega', ability: 'Adamantium', item: 'Assault Vest', gender: 'N',
+		moves: ['Glacial Lance', 'Thousand Arrows', 'Fusion Bolt'],
+		signatureMove: 'Rocket Punch',
+		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
+	},
 	'Mink the Putrid': {
 		species: 'Venusaur', ability: 'Retardant Scales', item: 'Gurgling Blossom', gender: 'F',
 		moves: ['Leaf Storm', 'Earth Power', 'Clear Smog'],
 		signatureMove: 'Mad Toxin',
-		evs: {hp: 252, spa: 252, spd: 4}, nature: 'Modest',
+		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0}, nature: 'Modest',
 	},
 	Mirāju: {
 		species: 'Wynaut', ability: 'Illusion', item: 'Eviolite', gender: 'N',
 		moves: ['Hyperspace Hole', 'Glare', 'Memento'],
 		signatureMove: 'Illusive Energy',
-		evs: {hp: 252, def: 4, spe: 252}, nature: 'Timid',
+		evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
 	Omega: {
 		species: 'Aegislash', ability: 'Burn Heal', item: 'Flame Orb', gender: 'N',
@@ -96,6 +114,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Wave Cannon',
 		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
 	},
+	/*"Rin Kaenbyou": {
+		species: "Torracat", ability: "Cat's Walk", item: "Rinium Z", gender: "F",
+		moves: ["Aura Sphere", "Shadow Ball", "Flamethrower"],
+		signatureMove: "Zombie Fairy",
+		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: "Timid",
+	},*/
 	Satori: {
 		species: 'Gardevoir', ability: 'Mind Reading', item: 'Third Eye', gender: 'F',
 		moves: ['Calm Mind', 'Zap Cannon', 'Psychic'],
@@ -108,12 +132,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Ein Sol',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant',
 	},
-	Rusty: {
-		species: 'Hypno', ability: 'NREM', item: 'Dream Glass', gender: 'N',
-		moves: ['Freezing Glare', 'Shadow Ball', 'Taunt'],
-		signatureMove: 'Scream of the Fallen',
-		evs: {hp: 248, def: 60, spa: 200}, nature: 'Modest',
-	},
+	/*'The Dealer': {
+		species: 'Hoopa', ability: 'Croupier', item: 'Psychium Z', gender: 'N',
+		moves: ['Photon Geyser', 'Ominous Wind', 'Tap Out'],
+		signatureMove: 'Roll the Dice',
+		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Hasty',
+	},*/
 	Tonberry: {
 		species: 'Marshadow', ability: 'Vindictive', item: 'Life Orb', gender: 'N',
 		moves: ['Thousand Arrows', 'Glacial Lance', 'Close Combat'],
@@ -121,7 +145,7 @@ export const ssbSets: SSBSets = {
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
 	'Yuuka Kazami': {
-		species: 'Lilligant', ability: 'Flower Master', item: 'Big Root', gender: 'F',
+		species: 'Lilligant', ability: 'Flower Master', item: 'Leftovers', gender: 'F',
 		moves: ['Teleport', 'Protect', 'Substitute'],
 		signatureMove: 'Tera Drain',
 		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0}, nature: 'Modest',

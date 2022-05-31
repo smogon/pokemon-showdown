@@ -123,7 +123,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Slow Burn",
 		gen: 8,
 	},
-	
+
 	// A Resident No-Life
 	powerunleashed: {
 		desc: "This Pokemon uses Refresh on switch-in; is immune to status ailments; ignores protection, screens, and substitutes; sacrifices secondary effects to deal 1.25x damage.",
@@ -161,7 +161,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Power Unleashed",
 		gen: 8,
 	},
-	
+
 	// Brookeee
 	aggression: {
 		desc: "This Pokemon's attack is raised by 1 stage after it is damaged by a move; half damage received at full HP.",
@@ -177,6 +177,29 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		isBreakable: true,
 		name: "Aggression",
+		gen: 8,
+	},
+
+	// Chocolate Pudding
+	fudgefilledbody: {
+		desc: "This Pokemon heals 1/4 of its max HP when hit by a Water or Poison-type attack; Pokemon making contact with this Pokemon have their speed lowered by 2 stages.",
+		shortDesc: "+1/4 HP from Water/Poison; -2 speed to contact.",
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Water' || move.type === 'Poison') {
+				if (!this.heal(target.baseMaxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Fudge-Filled Body');
+				}
+				return null;
+			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target, true)) {
+				this.add('-ability', target, 'Fudge-Filled Body');
+				this.boost({spe: -1}, source, target, null, true);
+			}
+		},
+		isBreakable: true,
+		name: "Fudge-Filled Body",
 		gen: 8,
 	},
 
@@ -286,7 +309,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Fair Fight",
 		gen: 8,
 	},
-	
+
 	// Kaiser Dragon
 	elementalshift: {
 		desc: "On switch-in and at the end of every turn, this Pokemon changes its type to a random one.",
@@ -456,6 +479,53 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Mechagodzilla
+	adamantium: {
+		desc: "This Pokemon becomes Steel/Electric-type on switch-in; immune to indirect damage, secondary effects, stat lowering, flinch, critical hits, powder, sound, ballistic and status moves.",
+		shortDesc: "Steel/Electric on switch-in; immune to many things.",
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'typechange', 'Steel', 'Electric');
+			pokemon.types = ['Steel', 'Electric'];
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') {
+				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
+				return false;
+			}
+		},
+		onModifySecondaries(secondaries) {
+			this.debug('Adamantium prevent secondary');
+			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
+		},
+		onBoost(boost, target, source, effect) {
+			if (source && target === source) return;
+			let showMsg = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					delete boost[i];
+					showMsg = true;
+				}
+			}
+			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+				this.add("-fail", target, "unboost", "[from] ability: Adamantium", "[of] " + target);
+			}
+		},
+		onTryAddVolatile(status, pokemon) {
+			if (status.id === 'flinch') return null;
+		},
+		onTryHit(pokemon, target, move) {
+			if (move.flags['bullet'] || move.flags['powder'] || move.flags['sound'] || move.hasBounced || !move.flags['reflectable']) {
+				this.add('-immune', pokemon, '[from] ability: Adamantium');
+				return null;
+			}
+		},
+		onCriticalHit: false,
+		isBreakable: true,
+		name: "Adamantium",
+		gen: 8,
+	},
+
 	// Mink the Putrid
 	retardantscales: {
 		desc: "This Pokemon takes 0.8x damage from attacks, 0.5x damage from Fire-type attacks, and 1.5x damage from Dragon-type attacks.",
@@ -489,19 +559,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
-	// Rusty
-	nrem: {
-		desc: "This Pokemon's attacks do x1.5 damage if the target is asleep.",
-		onModifyDamage(damage, source, target, move) {
-			if (target.status === 'slp' || target.hasAbility('comatose')) {
-				this.debug('NREM boost');
-				return this.chainModify(1.5);
-			}
-		},
-		name: "NREM",
-		gen: 8,
-	},
-	
 	// Satori
 	mindreading: {
 		desc: "This Pokemon uses Mind Reader and Torment on switch-in.",
@@ -513,7 +570,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Mind Reading",
 		gen: 8,
 	},
-	
+
 	// Tonberry
 	vindictive: {
 		desc: "This Pokemon deals double damage to the target if an ally fainted last turn.",
@@ -528,15 +585,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Vindictive",
 		gen: 8,
 	},
-	
+
 	// Yuuka Kazami
 	flowermaster: {
-		desc: "This Pokemon uses Aqua Ring, Ingrain, and No Retreat on switch-in.",
-		shortDesc: "Aqua Ring, Ingrain, & No Retreat on switch-in.",
+		desc: "This Pokemon uses Ingrain on switch-in.",
+		shortDesc: "Ingrain on switch-in.",
 		onStart(pokemon) {
-			this.actions.useMove('Aqua Ring', pokemon);
 			this.actions.useMove('Ingrain', pokemon);
-			this.actions.useMove('No Retreat', pokemon);
 		},
 		name: "Flower Master",
 		gen: 8,

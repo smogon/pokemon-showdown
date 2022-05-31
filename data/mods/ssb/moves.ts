@@ -28,7 +28,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Fairy",
 	},
-	
+
 	// Brookeee
 	masochism: {
 		accuracy: true,
@@ -53,6 +53,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
+	},
+
+	// Chocolate Pudding
+	steadybaking: {
+		accuracy: 100,
+		basePower: 80,
+		basePowerCallback(pokemon, target, move) {
+			return move.basePower + 40 * pokemon.volatiles['stockpile'].layers;
+		},
+		category: "Physical",
+		desc: "Gives the user 1 layer of Stockpile; +40 BP for each layer.",
+		shortDesc: "+1 Stockpile; +40 BP for each.",
+		name: "Steady Baking",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, mirror: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onprepareHit(target, source) {
+			this.add('-anim', source, 'Stockpile', source);
+			this.add('-anim', source, 'Spit Up', target);
+		},
+		self: {
+			volatileStatus: 'stockpile',
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fire",
 	},
 
 	// El Capitan
@@ -103,15 +133,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Dragon",
 	},
-	
+
 	// Finger
 	megametronome: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		name: "Mega Metronome",
 		desc: "Picks and uses 3 random consecutive moves.",
 		shortDesc: "Uses 3 random moves.",
+		name: "Mega Metronome",
+		gen: 8,
 		pp: 10,
 		priority: 0,
 		flags: {},
@@ -144,7 +175,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fairy",
 		contestType: "Cool",
 	},
-	
+
 	// flufi
 	cranberrycutter: {
 		accuracy: 100,
@@ -198,7 +229,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Psychic",
 	},
-
+ 
 	// Horrific17
 	meteorcharge: {
 		accuracy: 100,
@@ -256,7 +287,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Fire",
 	},
-	
+
 	// Kaiser Dragon
 	ultima: {
 		accuracy: true,
@@ -300,6 +331,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "This move confuses the user.",
 		shortDesc: "Confuses user.",
 		name: "Cross Dance",
+		gen: 8,
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, mirror: 1, protect: 1},
@@ -325,6 +357,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "User fully restores HP; cures the user's party of all status conditions; badly poisons the target.",
 		shortDesc: "+100% HP; cures party's status; badly poisons.",
 		name: "Sacred Penance",
+		gen: 8,
 		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
@@ -352,14 +385,58 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fairy",
 	},
 
+	// Mechagodzilla
+	rocketpunch: {
+		accuracy: 100,
+		basePower: 75,
+		category: "Physical",
+		desc: "Hits the target again on the second turn.",
+		shortDesc: "Hits again on turn 2.",
+		name: "Rocket Punch",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {mirror: 1, protect: 1},
+		onTry(source, target) {
+			Object.assign(target.side.slotConditions[target.position]['rocketpunch'], {
+				duration: 1,
+				move: 'rocketpunch',
+				source: source,
+				moveData: {
+					id: 'rocketpunch',
+					name: "Rocket Punch",
+					accuracy: 100,
+					basePower: 75,
+					category: "Physical",
+					priority: 0,
+					flags: {},
+					effectType: 'Move',
+					type: 'Steel',
+				},
+			});
+			this.add('-start', source, 'move: Rocket Punch');
+			return this.NOT_FAIL;
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Dynamic Punch', target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+	},
+
 	// Mink the Putrid
 	madtoxin: {
 		accuracy: 85,
 		basePower: 0,
 		category: "Status",
-		name: "Mad Toxin",
 		desc: "Very badly poisons the target; ignores typing and protection.",
 		shortDesc: "Very badly poisons regardless of typing or protection.",
+		name: "Mad Toxin",
+		gen: 8,
 		pp: 10,
 		priority: 0,
 		flags: {bypasssub: 1, snatch: 1},
@@ -382,9 +459,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		name: "Illusive Energy",
 		desc: "The user's Special Attack becomes double the user's current HP the moment this move was used.",
 		shortDesc: "User's SpA = 2x current HP.",
+		name: "Illusive Energy",
+		gen: 8,
 		pp: 5,
 		priority: 0,
 		flags: {},
@@ -447,7 +525,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Steel",
 	},
-	
+
 	// Satori
 	terrifyinghypnotism: {
 		accuracy: true,
@@ -503,7 +581,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "???",
 	},
-	
+
 	// Satori
 	mttogakushitoss: {
 		accuracy: 80,
@@ -529,7 +607,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Fighting",
 	},
-	
+
 	// Satori
 	toriiwhorlwind: {
 		accuracy: 80,
@@ -555,7 +633,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Flying",
 	},
-	
+
 	// Satori
 	strawdollkamikaze: {
 		accuracy: 80,
@@ -579,7 +657,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Fire",
 	},
-	
+
 	// Satori
 	traumaintheglimmeringdepths: {
 		accuracy: 80,
@@ -603,7 +681,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Water",
 	},
-	
+
 	// Satori
 	philosophersstone: {
 		accuracy: 80,
@@ -627,7 +705,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Fairy",
 	},
-	
+
 	// Satori
 	borderofwaveandparticle: {
 		accuracy: 80,
@@ -682,7 +760,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "randomNormal",
 		type: "Normal",
 	},
-	
+
 	// Tonberry
 	karma: {
 		accuracy: 100,
@@ -708,7 +786,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Ghost",
 	},
-	
+
 	// Yuuka Kazami
 	teradrain: {
 		accuracy: true,
@@ -734,7 +812,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		volatileStatus: 'leechseed',
 		terrain: 'grassyterrain',
-		drain: 1,
+		drain: [1, 1],
 		secondary: {
 			chance: 100,
 			volatileStatus: 'magnetrise',
