@@ -171,4 +171,41 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "Boosts the user's Special Attack by 1.2x and evasiveness by 1.1x.",
 	},
+	
+	// Roughskull
+	cheaterglasses: {
+		name: "Cheater Glasses",
+		onStart(pokemon) {
+			let totaldef = 0;
+			let totalspd = 0;
+			let totalatk = 0;
+			let totalspa = 0;
+			for (const target of pokemon.side.foe.active) {
+				if (!target || target.fainted) continue;
+				totaldef += target.getStat('def', false, true);
+				totalspd += target.getStat('spd', false, true);
+				totalatk += target.getStat('atk', false, true);
+				totalspa += target.getStat('spa', false, true);
+			}
+			if (totaldef && totaldef >= totalspd) {
+				this.boost({spa: 1});
+			} else if (totalspd) {
+				this.boost({atk: 1});
+			}
+			if (totalatk && totalatk >= totalspa) {
+				this.boost({def: 1});
+			} else if (totalspd) {
+				this.boost({spd: 1});
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.hp >= target.maxhp) {
+				this.debug('Crown of TMS weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		gen: 8,
+		desc: "On switch-in, the user raises its Attack or Special Attack depending on if the opponent's Defense or Special Defense is lower, and raises either Defense or Special Defense the Pokemon's highest Attack stat (Physical or Special).  At full HP, this Pokemon reduces the damage of the first hit by half.",
+		shortDesc: "Raises Atk or SpA based on lower Def, Raises Def or SpD based on higher Atk, halves damage taken if at full HP.",
+	},
 };
