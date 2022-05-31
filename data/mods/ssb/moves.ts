@@ -548,6 +548,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		self: {
 			onHit(target, source) {
 				let possibleMoves = ["Calm Mind", "Zap Cannon", "Psychic"];
+				this.add('-message', `Opponent Typing: ${target.types}`);
+				this.add('-message', `Opponent Primary Typing: ${target.types[0]}`);
 				if (target.types[0] === "Normal" || target.types[0] === "Rock" || target.types[0] === "Steel") {
 					possibleMoves.push("Mt. Togakushi Toss");
 				} else if (target.types[0] === "Fighting" || target.types[0] === "Bug" || target.types[0] === "Grass") {
