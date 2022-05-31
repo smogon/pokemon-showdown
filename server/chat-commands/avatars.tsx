@@ -271,7 +271,7 @@ const OFFICIAL_AVATARS = new Set([
 	'burgh',
 	'burglar-gen1', 'burglar-gen1rb', 'burglar-gen2', 'burglar-gen3', 'burglar',
 	'byron',
-	'caitlin',
+	'caitlin-gen4', 'caitlin',
 	'cameraman',
 	'camper-gen2', 'camper-gen3', 'camper-gen3rs', 'camper',
 	'candice',
@@ -303,7 +303,7 @@ const OFFICIAL_AVATARS = new Set([
 	'dahlia',
 	'daisy-gen3',
 	'dancer',
-	'darach',
+	'darach-caitlin', 'darach',
 	'dawn-gen4pt', 'dawn',
 	'depotagent',
 	'doctor',
@@ -547,7 +547,7 @@ const OFFICIAL_AVATARS_BRUMIRAGE = new Set([
 	'elaine', 'gloria', 'gordie', 'hop', 'irida', 'kabu', 'klara', 'koga-lgpe', 'leon', 'leon-tower',
 	'lian', 'lisia', 'lorelei-lgpe', 'magnolia', 'mai', 'marnie', 'may-contest', 'melony', 'milo', 'mina-lgpe',
 	'mustard', 'mustard-master', 'nessa', 'oleana', 'opal', 'peonia', 'peony', 'pesselle', 'phoebe-gen6', 'piers',
-	'raihan', 'rei', 'rose', 'sabi', 'sanqua', 'shielbert', 'sonia', 'sonia-professor', 'sordward',
+	'raihan', 'rei', 'rose', 'sabi', 'sanqua', 'shielbert', 'sonia', 'sonia-professor', 'sordward', 'sordward-shielbert',
 	'tateandliza-gen6', 'victor', 'victor-dojo', 'volo', 'yellgrunt', 'yellgruntf', 'zisu',
 ]);
 
@@ -564,11 +564,16 @@ const OFFICIAL_AVATARS_KYLEDOVE = new Set([
 	'worker-gen8', 'workerf-gen8', 'youngster-gen8',
 ]);
 
+const OFFICIAL_AVATARS_HYOOPPA = new Set([
+	'brendan', 'maxie-gen6', 'may',
+]);
+
 for (const avatar of OFFICIAL_AVATARS_BELIOT419) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_GNOMOWLADNY) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_BRUMIRAGE) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_ZACWEAVILE) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_KYLEDOVE) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_HYOOPPA) OFFICIAL_AVATARS.add(avatar);
 
 export const commands: Chat.ChatCommands = {
 	avatar(target, room, user) {
@@ -605,6 +610,9 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (OFFICIAL_AVATARS_KYLEDOVE.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/DoveKyle">Kyledove</a>)`);
+			}
+			if (OFFICIAL_AVATARS_HYOOPPA.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/hyo_oppa">hyo-oppa</a>)`);
 			}
 		}
 	},
