@@ -91,7 +91,7 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0}, nature: 'Bold',
 	},
 	Mechagodzilla: {
-		species: 'Tyranitar-Mega', ability: 'Adamantium', item: 'Assault Vest', gender: 'N',
+		species: 'Pokestar MT2', ability: 'Adamantium', item: 'Assault Vest', gender: 'N',
 		moves: ['Glacial Lance', 'Thousand Arrows', 'Fusion Bolt'],
 		signatureMove: 'Rocket Punch',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',

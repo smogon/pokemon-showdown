@@ -195,7 +195,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target, true)) {
 				this.add('-ability', target, 'Fudge-Filled Body');
-				this.boost({spe: -1}, source, target, null, true);
+				this.boost({spe: -2}, source, target, null, true);
 			}
 		},
 		isBreakable: true,
@@ -481,12 +481,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Mechagodzilla
 	adamantium: {
-		desc: "This Pokemon becomes Steel/Electric-type on switch-in; immune to indirect damage, secondary effects, stat lowering, flinch, critical hits, powder, sound, ballistic and status moves.",
-		shortDesc: "Steel/Electric on switch-in; immune to many things.",
-		onStart(pokemon) {
-			this.add('-start', pokemon, 'typechange', 'Steel', 'Electric');
-			pokemon.types = ['Steel', 'Electric'];
-		},
+		desc: "Immune to indirect damage, secondary effects, stat lowering, flinch, critical hits, powder, sound, ballistic and status moves.",
+		shortDesc: "Immune to many things.",
 		onDamage(damage, target, source, effect) {
 			if (effect.effectType !== 'Move') {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
