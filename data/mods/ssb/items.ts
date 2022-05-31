@@ -16,7 +16,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "Raises Speed by 1 stage and critical hit ratio by 2 stages. Single use.",
 	},
-	
+
 	// Chocolate Pudding
 	parfaitspoon: {
 		name: "Parfait Spoon",
@@ -146,26 +146,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "Each turn, if holder is a Poison type, restores 1/8 max HP. If holder is hit by a contact move, the attacker loses 1/8 of its max HP.",
 		shortDesc: "Heals Poison-types by 1/8 per turn; Damages foes on contact.",
-	},
-
-	// Rusty
-	dreamglass: {
-		name: "Dream Glass",
-		fling: {
-			basePower: 10,
-		},
-		onModifyMovePriority: -1,
-		onModifyMove(move) {
-			if (move.category !== "Status") {
-				if (!move.secondaries) move.secondaries = [];
-				move.secondaries.push({
-					chance: 30,
-					status: 'slp',
-				});
-			}
-		},
-		gen: 8,
-		desc: "Holder's attacks gain a 30% chance to put the foe to sleep.",
 	},
 
 	// Satori
