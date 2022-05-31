@@ -545,33 +545,31 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Hypnosis', target);
 			this.add('-anim', source, 'Mind Reader', target);
 		},
-		self: {
-			onHit(target, source) {
-				let possibleMoves = ["Calm Mind", "Zap Cannon", "Psychic"];
-				this.add('-message', `Opponent Typing: ${target.types}`);
-				this.add('-message', `Opponent Primary Typing: ${target.types[0]}`);
-				if (target.types[0] === "Normal" || target.types[0] === "Rock" || target.types[0] === "Steel") {
-					possibleMoves.push("Mt. Togakushi Toss");
-				} else if (target.types[0] === "Fighting" || target.types[0] === "Bug" || target.types[0] === "Grass") {
-					possibleMoves.push("Torii Whorl-Wind");
-				} else if (target.types[0] === "Flying" || target.types[0] === "Electric" || target.types[0] === "Ice") {
-					possibleMoves.push("Straw Doll Kamikaze");
-				} else if (target.types[0] === "Poison" || target.types[0] === "Ground" || target.types[0] === "Fire") {
-					possibleMoves.push("Trauma in the Glimmering Depths");
-				} else if (target.types[0] === "Water" || target.types[0] === "Dragon" || target.types[0] === "Dark") {
-					possibleMoves.push("Philosopher's Stone");
-				} else {
-					possibleMoves.push("Border of Wave and Particle");
-				}
-				const moveIndex = (possibleMoves.length);
-				const newMoves = possibleMoves;
-				const newMoveSlots = changeMoves(this, source, newMoves);
-				this.add('-message', `Satori\'s Terrifying Hypnotism transformed into ${possibleMoves[3]}!`);
-				source.m.terrifyinghypnotism = true;
-				source.moveSlots = newMoveSlots;
-				// @ts-ignore
-				source.baseMoveSlots = newMoveSlots;
-			},
+		onHit(target, source) {
+			let possibleMoves = ["Calm Mind", "Zap Cannon", "Psychic"];
+			this.add('-message', `Opponent Typing: ${target.types}`);
+			this.add('-message', `Opponent Primary Typing: ${target.types[0]}`);
+			if (target.types[0] === "Normal" || target.types[0] === "Rock" || target.types[0] === "Steel") {
+				possibleMoves.push("Mt. Togakushi Toss");
+			} else if (target.types[0] === "Fighting" || target.types[0] === "Bug" || target.types[0] === "Grass") {
+				possibleMoves.push("Torii Whorl-Wind");
+			} else if (target.types[0] === "Flying" || target.types[0] === "Electric" || target.types[0] === "Ice") {
+				possibleMoves.push("Straw Doll Kamikaze");
+			} else if (target.types[0] === "Poison" || target.types[0] === "Ground" || target.types[0] === "Fire") {
+				possibleMoves.push("Trauma in the Glimmering Depths");
+			} else if (target.types[0] === "Water" || target.types[0] === "Dragon" || target.types[0] === "Dark") {
+				possibleMoves.push("Philosopher's Stone");
+			} else {
+				possibleMoves.push("Border of Wave and Particle");
+			}
+			const moveIndex = (possibleMoves.length);
+			const newMoves = possibleMoves;
+			const newMoveSlots = changeMoves(this, source, newMoves);
+			this.add('-message', `Satori\'s Terrifying Hypnotism transformed into ${possibleMoves[3]}!`);
+			source.m.terrifyinghypnotism = true;
+			source.moveSlots = newMoveSlots;
+			// @ts-ignore
+			source.baseMoveSlots = newMoveSlots;
 		},
 		volatileStatus: 'flinch',
 		ignoreAbility: true,
