@@ -432,8 +432,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1, protect: 1},
-		onTry(source, target) {
-			Object.assign(target.side.slotConditions[target.position]['rocketpunch'], {
+		basePowerCallback() {
+			return 75;
+		},
+		ignoreImmunity: true,
+		onHit(target, source) {
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 1,
 				move: 'rocketpunch',
 				source: source,
@@ -445,12 +450,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					category: "Physical",
 					priority: 0,
 					flags: {},
+					ignoreImmunity: false,
 					effectType: 'Move',
+					isFutureMove: true,
 					type: 'Steel',
 				},
 			});
 			this.add('-start', source, 'move: Rocket Punch');
-			return this.NOT_FAIL;
+			return null;
 		},
 		onTryMove() {
 			this.attrLastMove('[still]');
