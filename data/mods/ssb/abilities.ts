@@ -123,7 +123,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Slow Burn",
 		gen: 8,
 	},
-	
+
 	// A Resident No-Life
 	powerunleashed: {
 		desc: "This Pokemon uses Refresh on switch-in; is immune to status ailments; ignores protection, screens, and substitutes; sacrifices secondary effects to deal 1.25x damage.",
@@ -161,7 +161,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Power Unleashed",
 		gen: 8,
 	},
-	
+
 	// Brookeee
 	aggression: {
 		desc: "This Pokemon's attack is raised by 1 stage after it is damaged by a move; half damage received at full HP.",
@@ -179,7 +179,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Aggression",
 		gen: 8,
 	},
-	
+
 	// Chocolate Pudding
 	fudgefilledbody: {
 		desc: "This Pokemon heals 1/4 of its max HP when hit by a Water or Poison-type attack; Pokemon making contact with this Pokemon have their speed lowered by 2 stages.",
@@ -309,7 +309,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Fair Fight",
 		gen: 8,
 	},
-	
+
 	// Kaiser Dragon
 	elementalshift: {
 		desc: "On switch-in and at the end of every turn, this Pokemon changes its type to a random one.",
@@ -478,7 +478,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Final Prayer",
 		gen: 8,
 	},
-	
+
 	// Mechagodzilla
 	adamantium: {
 		desc: "This Pokemon becomes Steel/Electric-type on switch-in; immune to indirect damage, secondary effects, stat lowering, flinch, critical hits, powder, sound, ballistic and status moves.",
@@ -559,19 +559,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
-	// Rusty
-	nrem: {
-		desc: "This Pokemon's attacks do x1.5 damage if the target is asleep.",
-		onModifyDamage(damage, source, target, move) {
-			if (target.status === 'slp' || target.hasAbility('comatose')) {
-				this.debug('NREM boost');
-				return this.chainModify(1.5);
-			}
-		},
-		name: "NREM",
-		gen: 8,
-	},
-	
 	// Satori
 	mindreading: {
 		desc: "This Pokemon uses Mind Reader and Torment on switch-in.",
@@ -583,7 +570,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Mind Reading",
 		gen: 8,
 	},
-	
+
 	// Tonberry
 	vindictive: {
 		desc: "This Pokemon deals double damage to the target if an ally fainted last turn.",
@@ -598,7 +585,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Vindictive",
 		gen: 8,
 	},
-	
+
 	// Yuuka Kazami
 	flowermaster: {
 		desc: "This Pokemon uses Ingrain on switch-in.",
