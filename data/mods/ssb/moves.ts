@@ -28,7 +28,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Fairy",
 	},
-	
+
 	// Brookeee
 	masochism: {
 		accuracy: true,
@@ -54,7 +54,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Fighting",
 	},
-	
+
 	// Chocolate Pudding
 	steadybaking: {
 		accuracy: 100,
@@ -133,7 +133,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Dragon",
 	},
-	
+
 	// Finger
 	megametronome: {
 		accuracy: true,
@@ -175,7 +175,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fairy",
 		contestType: "Cool",
 	},
-	
+
 	// flufi
 	cranberrycutter: {
 		accuracy: 100,
@@ -229,7 +229,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Psychic",
 	},
-
+ 
 	// Horrific17
 	meteorcharge: {
 		accuracy: 100,
@@ -287,7 +287,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Fire",
 	},
-	
+
 	// Kaiser Dragon
 	ultima: {
 		accuracy: true,
@@ -384,7 +384,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Fairy",
 	},
-	
+
 	// Mechagodzilla
 	rocketpunch: {
 		accuracy: 100,
@@ -526,57 +526,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Steel",
 	},
 
-	// Rusty
-	screamofthefallen: {
-		accuracy: true,
-		basePower: 0,
-		category: "Special",
-		desc: "Randomly ranges from 40 to 80 power. Power is doubled if foe is asleep, and wakes them. Lowers Speed, Attack, and Special Attack by 1.",
-		shortDesc: "40-80 BP; x2 power if asleep, wakes foe; -1 Spe/Atk/SpA.",
-		name: "Scream of the Fallen",
-		gen: 8,
-		pp: 5,
-		priority: 0,
-		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Hex', source);
-			this.add('-anim', source, 'Boomburst', target);
-		},
-		onModifyMove(move, pokemon, target) {
-			const rand = this.random(15);
-			if (rand < 2) {
-				move.basePower = 40;
-			} else if (rand < 6) {
-				move.basePower = 50;
-			} else if (rand < 9) {
-				move.basePower = 60;
-			} else if (rand < 12) {
-				move.basePower = 70;
-			} else {
-				move.basePower = 80;
-			}
-		},
-		onBasePower(basePower, source, target, move) {
-			if (target.status === 'slp') {
-				return this.chainModify(2);
-			}
-		},
-		onHit(target) {
-			if (target.status === 'slp') target.cureStatus();
-		},
-		boosts: {
-			spe: -1,
-			atk: -1,
-			spa: -1,
-		},
-		secondary: null,
-		target: "normal",
-		type: "Ghost",
-	},
-	
 	// Satori
 	terrifyinghypnotism: {
 		accuracy: true,
@@ -599,29 +548,23 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		self: {
 			onHit(target, source) {
-				const possibleMoves = ["Calm Mind", "Zap Cannon", "Psychic", ""];
+				let possibleMoves = ["Calm Mind", "Zap Cannon", "Psychic", ""];
 				if (target.types[0] === "Normal" || target.types[0] === "Rock" || target.types[0] === "Steel") {
 					possibleMoves[3] === "Mt. Togakushi Toss";
-				}
-				else if (target.types[0] === "Fighting" || target.types[0] === "Bug" || target.types[0] === "Grass") {
+				} else if (target.types[0] === "Fighting" || target.types[0] === "Bug" || target.types[0] === "Grass") {
 					possibleMoves[3] === "Torii Whorl-Wind";
-				}
-				else if (target.types[0] === "Flying" || target.types[0] === "Electric" || target.types[0] === "Ice") {
+				} else if (target.types[0] === "Flying" || target.types[0] === "Electric" || target.types[0] === "Ice") {
 					possibleMoves[3] === "Straw Doll Kamikaze";
-				}
-				else if (target.types[0] === "Poison" || target.types[0] === "Ground" || target.types[0] === "Fire") {
+				} else if (target.types[0] === "Poison" || target.types[0] === "Ground" || target.types[0] === "Fire") {
 					possibleMoves[3] === "Trauma in the Glimmering Depths";
-				}
-				else if (target.types[0] === "Water" || target.types[0] === "Dragon" || target.types[0] === "Dark") {
+				} else if (target.types[0] === "Water" || target.types[0] === "Dragon" || target.types[0] === "Dark") {
 					possibleMoves[3] === "Philosopher's Stone";
-				}
-				else {
+				} else {
 					possibleMoves[3] === 'Border of Wave and Particle';
 				}
-				const newMoves = [];
 				const moveIndex = (possibleMoves.length);
-				newMoves.push(possibleMoves[moveIndex]);
 				possibleMoves.splice(moveIndex, 1);
+				const newMoves = possibleMoves;
 				const newMoveSlots = changeMoves(this, source, newMoves);
 				source.m.terrifyinghypnotism = true;
 				source.moveSlots = newMoveSlots;
@@ -638,7 +581,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "???",
 	},
-	
+
 	// Satori
 	mttogakushitoss: {
 		accuracy: 80,
@@ -664,7 +607,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Fighting",
 	},
-	
+
 	// Satori
 	toriiwhorlwind: {
 		accuracy: 80,
@@ -690,7 +633,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Flying",
 	},
-	
+
 	// Satori
 	strawdollkamikaze: {
 		accuracy: 80,
@@ -714,7 +657,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Fire",
 	},
-	
+
 	// Satori
 	traumaintheglimmeringdepths: {
 		accuracy: 80,
@@ -738,7 +681,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Water",
 	},
-	
+
 	// Satori
 	philosophersstone: {
 		accuracy: 80,
@@ -762,7 +705,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Fairy",
 	},
-	
+
 	// Satori
 	borderofwaveandparticle: {
 		accuracy: 80,
@@ -817,7 +760,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "randomNormal",
 		type: "Normal",
 	},
-	
+
 	// Tonberry
 	karma: {
 		accuracy: 100,
@@ -843,7 +786,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Ghost",
 	},
-	
+
 	// Yuuka Kazami
 	teradrain: {
 		accuracy: true,
@@ -869,7 +812,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		volatileStatus: 'leechseed',
 		terrain: 'grassyterrain',
-		drain: 1,
+		drain: [1, 1],
 		secondary: {
 			chance: 100,
 			volatileStatus: 'magnetrise',
