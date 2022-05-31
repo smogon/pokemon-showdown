@@ -195,7 +195,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target, true)) {
 				this.add('-ability', target, 'Fudge-Filled Body');
-				this.boost({spe: -1}, source, target, null, true);
+				this.boost({spe: -2}, source, target, null, true);
 			}
 		},
 		isBreakable: true,
