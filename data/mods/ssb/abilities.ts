@@ -515,7 +515,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (status.id === 'flinch') return null;
 		},
 		onTryHit(pokemon, target, move) {
-			if (move.flags['bullet'] || move.flags['powder'] || move.flags['sound'] || move.hasBounced || !move.flags['reflectable']) {
+			if (move.flags['bullet'] || move.flags['powder'] || move.flags['sound'] || move.hasBounced || move.flags['reflectable']) {
 				this.add('-immune', pokemon, '[from] ability: Adamantium');
 				return null;
 			}
