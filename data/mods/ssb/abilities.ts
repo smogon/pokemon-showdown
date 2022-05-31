@@ -563,6 +563,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	mindreading: {
 		desc: "This Pokemon uses Mind Reader and Torment on switch-in.",
 		shortDesc: "Mind Reader & Torment on switch-in.",
+		onSwitchIn(pokemon) {
+			if (pokemon.species.baseSpecies !== 'Gardevoir') return;
+			changeSet(this, pokemon, ssbSets['Satori']);
+		},
 		onStart(pokemon) {
 			this.actions.useMove('Mind Reader', pokemon);
 			this.actions.useMove('Torment', pokemon);
