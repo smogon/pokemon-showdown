@@ -562,7 +562,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			} else {
 				possibleMoves.push("Border of Wave and Particle");
 			}
-			const moveIndex = (possibleMoves.length);
 			const newMoves = possibleMoves;
 			const newMoveSlots = changeMoves(this, source, newMoves);
 			this.add('-message', `Satori\'s Terrifying Hypnotism transformed into ${possibleMoves[3]}!`);
