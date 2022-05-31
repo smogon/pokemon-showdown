@@ -564,8 +564,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "This Pokemon uses Mind Reader and Torment on switch-in.",
 		shortDesc: "Mind Reader & Torment on switch-in.",
 		onSwitchIn(pokemon) {
-			if (pokemon.species.baseSpecies !== 'Gardevoir') return;
-			changeSet(this, pokemon, ssbSets['Satori']);
+			//if (pokemon.species.baseSpecies !== 'Gardevoir') return;
+			const newMoves = ["Calm Mind", "Zap Cannon", "Psychic", "Terrifying Hypnotism"];
+			const newMoveSlots = changeMoves(this, pokemon, newMoves);
+			pokemon.m.terrifyinghypnotism = false;
+			pokemon.moveSlots = newMoveSlots;
+			pokemon.baseMoveSlots = newMoveSlots;
 		},
 		onStart(pokemon) {
 			this.actions.useMove('Mind Reader', pokemon);
