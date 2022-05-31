@@ -535,8 +535,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Flinches and Mind Readers; new sig depending on type.",
 		name: "Terrifying Hypnotism",
 		gen: 8,
-		pp: 1,
-		noPPBoosts: true,
+		pp: 15,
 		priority: 0,
 		flags: {bypasssub: 1},
 		onTryMove() {
@@ -565,6 +564,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const moveIndex = (possibleMoves.length);
 				const newMoves = possibleMoves;
 				const newMoveSlots = changeMoves(this, source, newMoves);
+				this.add('-message', `Satori\'s Terrifying Hypnotism transformed into ${possibleMoves[3]}!`);
 				source.m.terrifyinghypnotism = true;
 				source.moveSlots = newMoveSlots;
 				// @ts-ignore
