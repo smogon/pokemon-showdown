@@ -34,4 +34,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 95, atk: 110, def: 95, spa: 95, spd: 95, spe: 110},
 	},
+	// Mewth
+	furret: {
+		inherit: true,
+		baseStats: {hp: 85, atk: 45, def: 64, spa: 140, spd: 55, spe: 110},
 };
