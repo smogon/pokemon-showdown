@@ -600,4 +600,28 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Flower Master",
 		gen: 8,
 	},
+	
+	// Roughskull
+	"venomshock": {
+		desc: "Every move the user uses has a 30% chance to badly poison or paralyze the target.",
+		shortDesc: "Every move has a 30% chance to toxicate or paralyze target.",
+		onModifyMove(move) {
+			if (!move || move.target === 'self') return;
+			if (!move.secondaries) {
+				move.secondaries = [];
+			}
+			move.secondaries.push({
+				chance: 30,
+				status: 'tox',
+				ability: this.getAbility('venomshock'),
+			});
+			move.secondaries.push({
+				chance: 30,
+				status: 'par',
+				ability: this.getAbility('venomshock'),
+			});
+		},
+		name: "Venom Shock",
+		gen: 8,
+		},
 };
