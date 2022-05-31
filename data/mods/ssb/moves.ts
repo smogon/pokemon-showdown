@@ -73,12 +73,47 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
-		onprepareHit(target, source) {
+		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Stockpile', source);
 			this.add('-anim', source, 'Spit Up', target);
 		},
 		self: {
 			volatileStatus: 'stockpile',
+		},
+		condition: {
+			noCopy: true,
+			onStart(target) {
+				this.effectState.layers = 1;
+				this.effectState.def = 0;
+				this.effectState.spd = 0;
+				this.add('-start', target, 'stockpile' + this.effectState.layers);
+				const [curDef, curSpD] = [target.boosts.def, target.boosts.spd];
+				this.boost({def: 1, spd: 1}, target, target);
+				if (curDef !== target.boosts.def) this.effectState.def--;
+				if (curSpD !== target.boosts.spd) this.effectState.spd--;
+			},
+			onRestart(target) {
+				if (this.effectState.layers >= 3) return false;
+				this.effectState.layers++;
+				this.add('-start', target, 'stockpile' + this.effectState.layers);
+				const curDef = target.boosts.def;
+				const curSpD = target.boosts.spd;
+				this.boost({def: 1, spd: 1}, target, target);
+				if (curDef !== target.boosts.def) this.effectState.def--;
+				if (curSpD !== target.boosts.spd) this.effectState.spd--;
+			},
+			onEnd(target) {
+				if (this.effectState.def || this.effectState.spd) {
+					const boosts: SparseBoostsTable = {};
+					if (this.effectState.def) boosts.def = this.effectState.def;
+					if (this.effectState.spd) boosts.spd = this.effectState.spd;
+					this.boost(boosts, target, target);
+				}
+				this.add('-end', target, 'Stockpile');
+				if (this.effectState.def !== this.effectState.layers * -1 || this.effectState.spd !== this.effectState.layers * -1) {
+					this.hint("In Gen 7, Stockpile keeps track of how many times it successfully altered each stat individually.");
+				}
+			},
 		},
 		secondary: null,
 		target: "normal",
