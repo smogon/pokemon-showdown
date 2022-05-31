@@ -24,6 +24,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 135, atk: 35, def: 55, spa: 35, spd: 55, spe: 80},
 	},
+	// Mechagodzilla
+	pokestarmt2: {
+		inherit: true,
+		baseStats: {hp: 100, atk: 164, def: 150, spa: 95, spd: 120, spe: 71},
+	},
 	// Tonberry
 	marshadow: {
 		inherit: true,
