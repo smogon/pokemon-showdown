@@ -439,7 +439,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, source) {
 			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-				duration: 1,
+				duration: 2,
 				move: 'rocketpunch',
 				source: source,
 				moveData: {
@@ -456,7 +456,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					type: 'Steel',
 				},
 			});
-			this.add('-start', source, 'move: Rocket Punch');
 			return null;
 		},
 		onTryMove() {
