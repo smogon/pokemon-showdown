@@ -80,9 +80,9 @@ export const Items: {[k: string]: ModdedItemData} = {
 		fling: {
 			basePower: 150,
 		},
-		onModifyTypePriority: -1,
-		onModifyType(move, pokemon) {
-			if (move.name === "Future Sight") {
+		onModifyMovePriority: -1,
+		onModifyMove(move, attacker) {
+			if (move.id === 'futuresight') {
 				let t = this.random(5);
 				switch (t) {
 				case 1:
@@ -110,6 +110,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 					move.type = "Normal";
 					break;
 				}
+				this.add('-message', `Roll: ${t} - Future Sight Type: ${move.type}`);
 			}
 		},
 		gen: 8,
