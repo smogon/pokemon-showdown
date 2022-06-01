@@ -799,6 +799,98 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// The Dealer
+	tapout: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		name: "Tap Out",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, mirror: 1, protect: 1},
+		volatileStatus: 'taunt',
+		onTry(source) {
+			if (source.species.name === 'Hoopa' || source.species.name === 'Hoopa-Unbound') {
+				return;
+			} else {
+				this.hint('Only Hoopa or Hoopa-Unbound can use Tap Out.');
+				this.attrLastMove('[still]');
+				this.add('-fail', source, 'move: Tap Out');
+				return null;
+			}
+		},
+		condition: {
+			duration: 3,
+			onStart(pokemon, source, effect) {
+				if (source.species.name !== 'Hoopa') return false;
+				if (pokemon.activeTurns && !this.queue.willMove(pokemon)) {
+					this.effectState.duration++;
+				}
+				this.add('-start', pokemon, 'move: Taunt');
+				this.add('-start', pokemon, 'Torment');
+			},
+			onResidualOrder: 15,
+			onEnd(target) {
+				this.add('-end', target, 'move: Taunt');
+				this.add('-end', target, 'Torment');
+			},
+			onDisableMove(pokemon) {
+				if (pokemon.lastMove && pokemon.lastMove.id !== 'struggle') pokemon.disableMove(pokemon.lastMove.id);
+				for (const moveSlot of pokemon.moveSlots) {
+					const move = this.dex.moves.get(moveSlot.id);
+					if (move.category === 'Status' && move.id !== 'mefirst') {
+						pokemon.disableMove(moveSlot.id);
+					}
+				}
+			},
+			onBeforeMovePriority: 5,
+			onBeforeMove(attacker, defender, move) {
+				if (!move.isZ && !move.isMax && move.category === 'Status' && move.id !== 'mefirst') {
+					this.add('cant', attacker, 'move: Taunt', move);
+					return false;
+				}
+			},
+		},
+		basePowerCallback(pokemon, target, move) {
+			if (pokemon.species.name === 'Hoopa-Unbound') {
+				return move.basePower + 80;
+			} else {
+				return move.basePower;
+			}
+		},
+		onModifyType(move, pokemon) {
+			if (pokemon.species.name === 'Hoopa-Unbound') {
+				move.type = 'Dark';
+			} else {
+				move.type = 'Ghost';
+			}
+		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.species.name === 'Hoopa-Unbound') {
+				move.category = 'Physical';
+			} else {
+				move.category = 'Status';
+			}
+		},
+		self: {
+			onHit(source) {
+				if (source.species.name !== 'Hoopa') return false;
+				source.skipBeforeSwitchOutEventFlag = true;
+				if (!this.canSwitch(target.side) || source.species.name !== 'Hoopa') {
+					this.attrLastMove('[still]');
+					this.add('-fail', target);
+					return this.NOT_FAIL;
+			},
+		},
+		selfSwitch: 'copyvolatile',
+		ignoreEvasion: true,
+		ignoreDefensive: true,
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
+
 	// Tonberry
 	karma: {
 		accuracy: 100,
