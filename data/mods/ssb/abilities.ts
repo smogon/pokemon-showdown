@@ -591,7 +591,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return false;
 			}
 		},
-		// Magic Room bypass integrated into statuses.js
+		// Magic Room bypass implemented in Pokemon.ignoringItem() within sim/pokemon.js
 		name: "Dexterity",
 		gen: 8,
 	},
