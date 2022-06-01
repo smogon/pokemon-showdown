@@ -29,6 +29,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 100, atk: 164, def: 150, spa: 95, spd: 120, spe: 71},
 	},
+	// SunDraco
+	silvally: {
+		inherit: true,
+		types: ["Normal", "Ghost"],
+	},
 	// Tonberry
 	marshadow: {
 		inherit: true,
