@@ -839,14 +839,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (source.species.name === 'Hoopa') {
 				target.addVolatile("taunt");
 				target.addVolatile("torment");
+				move.target = "self";
+				source.skipBeforeSwitchOutEventFlag = true;
+				if (!this.canSwitch(source.side)) {
+					this.attrLastMove('[still]');
+					this.add('-fail', target);
+					return this.NOT_FAIL;
+				}
 			} else {
+				move.target = "normal";
 				delete move.selfSwitch;
 			}
-		},
-		self: {
-			onHit(source) {
-				source.skipBeforeSwitchOutEventFlag = true;
-			},
 		},
 		selfSwitch: 'copyvolatile',
 		ignoreEvasion: true,
