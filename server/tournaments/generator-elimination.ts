@@ -393,7 +393,7 @@ export class Elimination {
 		if (targetNode.parent) {
 			const parent = targetNode.parent;
 
-			if (loser.losses < winner.losses) {
+			if (loser.losses <= winner.losses) {
 				// grand subfinals rematch
 				const newNode = new ElimNode({state: 'available', losersBracketNode: targetNode.losersBracketNode});
 				newNode.setChildren([targetNode, new ElimNode({user: loser})]);
