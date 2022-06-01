@@ -778,7 +778,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Ein Sol",
 		gen: 8,
 		pp: 10,
-		priority: 0,
+		priority: 1,
 		flags: {contact: 1, mirror: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
