@@ -861,6 +861,14 @@ export const ssbSets: SSBSets = {
 	},
 };
 
+const afdSSBSets: SSBSets = {
+	'Fox': {
+		species: 'Delphox', ability: 'No Ability', item: '', gender: '',
+		moves: [],
+		signatureMove: 'Super Metronome',
+	},
+};
+
 export class RandomStaffBrosTeams extends RandomTeams {
 	randomStaffBrosTeam(options: {inBattle?: boolean} = {}) {
 		this.enforceNoDirectCustomBanlistChanges();
@@ -868,8 +876,10 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		const team: PokemonSet[] = [];
 		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
+		const wiiulegacy = !ruleTable.has('dynamaxclause');
 		const monotype = ruleTable.has('sametypeclause') ? this.sample([...this.dex.types.names()]) : false;
-		let pool = debug.length ? debug : Object.keys(ssbSets);
+
+		let pool = debug.length ? debug : wiiulegacy ? Object.keys(afdSSBSets) : Object.keys(ssbSets);
 		if (monotype && !debug.length) {
 			pool = pool.filter(x => this.dex.species.get(ssbSets[x].species).types.includes(monotype));
 		}
@@ -878,12 +888,12 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		while (pool.length && team.length < this.maxTeamSize) {
 			if (depth >= 200) throw new Error(`Infinite loop in Super Staff Bros team generation.`);
 			depth++;
-			const name = this.sampleNoReplace(pool);
-			const ssbSet: SSBSet = this.dex.deepClone(ssbSets[name]);
+			const name = wiiulegacy ? this.sample(pool) : this.sampleNoReplace(pool);
+			const ssbSet: SSBSet = wiiulegacy ? this.dex.deepClone(afdSSBSets[name]) : this.dex.deepClone(ssbSets[name]);
 			if (ssbSet.skip) continue;
 
 			// Enforce typing limits
-			if (!(debug.length || monotype)) { // Type limits are ignored when debugging or for monotype variations.
+			if (!(debug.length || monotype || wiiulegacy)) { // Type limits are ignored for debugging, monotype, or memes.
 				const species = this.dex.species.get(ssbSet.species);
 				if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
 
@@ -939,6 +949,20 @@ export class RandomStaffBrosTeams extends RandomTeams {
 
 			// Any set specific tweaks occur here.
 			if (set.name === 'Marshmallon' && !set.moves.includes('Head Charge')) set.moves[this.random(3)] = 'Head Charge';
+
+			if (wiiulegacy) {
+				const egg = this.random(100);
+				if (egg === 69) {
+					set.name = 'Falco';
+					set.species = 'Swellow';
+				} else if (egg === 96) {
+					set.name = 'Captain Falcon';
+					set.species = 'Talonflame';
+				}
+				if (this.randomChance(1, 100)) {
+					set.item = 'Mail';
+				}
+			}
 
 			team.push(set);
 
