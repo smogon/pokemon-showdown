@@ -820,6 +820,27 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return null;
 			}
 		},
+		basePowerCallback(pokemon, target, move) {
+			if (pokemon.species.name === 'Hoopa-Unbound') {
+				return move.basePower + 80;
+			} else {
+				return move.basePower;
+			}
+		},
+		onModifyType(move, pokemon) {
+			if (pokemon.species.name === 'Hoopa-Unbound') {
+				move.type = 'Dark';
+			} else {
+				move.type = 'Ghost';
+			}
+		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.species.name === 'Hoopa-Unbound') {
+				move.category = 'Physical';
+			} else {
+				move.category = 'Status';
+			}
+		},
 		condition: {
 			duration: 3,
 			onStart(pokemon, source, effect) {
@@ -852,27 +873,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 		},
-		basePowerCallback(pokemon, target, move) {
-			if (pokemon.species.name === 'Hoopa-Unbound') {
-				return move.basePower + 80;
-			} else {
-				return move.basePower;
-			}
-		},
-		onModifyType(move, pokemon) {
-			if (pokemon.species.name === 'Hoopa-Unbound') {
-				move.type = 'Dark';
-			} else {
-				move.type = 'Ghost';
-			}
-		},
-		onModifyMove(move, pokemon) {
-			if (pokemon.species.name === 'Hoopa-Unbound') {
-				move.category = 'Physical';
-			} else {
-				move.category = 'Status';
-			}
-		},
 		self: {
 			onHit(source) {
 				source.skipBeforeSwitchOutEventFlag = true;
@@ -880,6 +880,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.attrLastMove('[still]');
 					this.add('-fail', target);
 					return this.NOT_FAIL;
+				}
 			},
 		},
 		selfSwitch: 'copyvolatile',
