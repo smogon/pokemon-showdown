@@ -893,7 +893,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			if (ssbSet.skip) continue;
 
 			// Enforce typing limits
-			if (!(debug.length || monotype || wiiulegacy)) { // Type limits are ignored when debugging or for monotype variations.
+			if (!(debug.length || monotype || wiiulegacy)) { // Type limits are ignored for debugging, monotype, or memes.
 				const species = this.dex.species.get(ssbSet.species);
 				if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
 
