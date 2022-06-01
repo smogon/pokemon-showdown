@@ -875,7 +875,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		self: {
 			onHit(source) {
-				if (source.species.name !== 'Hoopa') return false;
 				source.skipBeforeSwitchOutEventFlag = true;
 				if (!this.canSwitch(target.side) || source.species.name !== 'Hoopa') {
 					this.attrLastMove('[still]');
