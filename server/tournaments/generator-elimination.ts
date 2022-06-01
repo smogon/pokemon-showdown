@@ -391,10 +391,19 @@ export class Elimination {
 		}
 
 		if (targetNode.parent) {
-			const userA = targetNode.parent.children![0].user;
-			const userB = targetNode.parent.children![1].user;
+			const parent = targetNode.parent;
+
+			if (loser.losses <= winner.losses && !loser.isDisqualified) {
+				// grand subfinals rematch
+				const newNode = new ElimNode({state: 'available', losersBracketNode: targetNode.losersBracketNode});
+				newNode.setChildren([targetNode, new ElimNode({user: loser})]);
+				parent.setChildren([newNode, parent.children![1]]);
+				return;
+			}
+			const userA = parent.children![0].user;
+			const userB = parent.children![1].user;
 			if (userA && userB) {
-				targetNode.parent.state = 'available';
+				parent.state = 'available';
 
 				let error: string | undefined = '';
 				if (userA.isDisqualified) {
