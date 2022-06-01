@@ -5326,9 +5326,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 	},
 
-	// :^)
-	// Remnant of an AFD past. Thank u for the memes.
-	/*
+	// Try playing Staff Bros without dynamax and see what happens
 	supermetronome: {
 		accuracy: true,
 		basePower: 0,
@@ -5372,5 +5370,4 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "self",
 		type: "???",
 	},
-	*/
 };
