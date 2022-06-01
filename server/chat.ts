@@ -713,7 +713,7 @@ export class CommandContext extends MessageContext {
 	checkFormat(room: BasicRoom | null | undefined, user: User, message: string) {
 		if (!room) return true;
 		if (!room.settings.filterStretching && !room.settings.filterCaps && !room.settings.filterEmojis) return true;
-		if (user.can('bypassall')) return true;
+		if (user.can('mute', null, room)) return true;
 
 		if (room.settings.filterStretching && /(.+?)\1{5,}/i.test(user.name)) {
 			throw new Chat.ErrorMessage(`Your username contains too much stretching, which this room doesn't allow.`);
