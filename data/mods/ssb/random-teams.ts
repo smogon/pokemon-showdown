@@ -132,12 +132,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Ein Sol',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant',
 	},
-	/*'The Dealer': {
-		species: 'Hoopa', ability: 'Croupier', item: 'Psychium Z', gender: 'N',
+	'The Dealer': {
+		species: 'Hoopa', ability: 'Croupier', item: 'Double or Nothing', gender: 'N',
 		moves: ['Photon Geyser', 'Ominous Wind', 'Tap Out'],
 		signatureMove: 'Roll the Dice',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Hasty',
-	},*/
+	},
 	Tonberry: {
 		species: 'Marshadow', ability: 'Vindictive', item: 'Life Orb', gender: 'N',
 		moves: ['Thousand Arrows', 'Glacial Lance', 'Close Combat'],
