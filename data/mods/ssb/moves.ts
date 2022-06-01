@@ -839,23 +839,85 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (source.species.name === 'Hoopa') {
 				target.addVolatile("taunt");
 				target.addVolatile("torment");
-				move.target = "self";
-				source.skipBeforeSwitchOutEventFlag = true;
-				if (!this.canSwitch(source.side)) {
-					this.attrLastMove('[still]');
-					this.add('-fail', target);
-					return this.NOT_FAIL;
-				}
 			} else {
-				move.target = "normal";
 				delete move.selfSwitch;
 			}
 		},
-		selfSwitch: 'copyvolatile',
+		selfSwitch: true,
+		sideCondition: 'tapout',
+		condition: {
+			duration: 1,
+			onSideStart(side, source) {
+				this.debug('Tap Out started on ' + side.name);
+				this.effectState.positions = [];
+				for (const i of side.active.keys()) {
+					this.effectState.positions[i] = false;
+				}
+				this.effectState.positions[source.position] = true;
+			},
+			onSideRestart(side, source) {
+				this.effectState.positions[source.position] = true;
+			},
+			onSwitchInPriority: 1,
+			onSwitchIn(target) {
+				this.add('-activate', target, 'move: Hero Creation');
+				this.boost({atk: 1, spa: 1}, target, null, this.dex.getActiveMove('herocreation'));
+			},
+		},
 		ignoreEvasion: true,
 		ignoreDefensive: true,
 		secondary: null,
 		target: "normal",
+		type: "Ghost",
+	},
+
+	// The Dealer
+	tapout: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Taunts, Torments, and Baton Passes if Hoopa; 80BP Physical Dark-type if Hoopa-Unbound. Ignores opposing stat changes.",
+		shortDesc: "Taunt/Torment/BatonPass, Unbound: 80 BP/Phys/Dark.",
+		name: "Tap Out",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1},
+		onModifyMove(move, pokemon) {
+			if (pokemon.species.name === 'Hoopa-Unbound') {
+				move.category = 'Physical';
+				move.type = 'Dark';
+				move.basePower = 80;
+				move.target = "normal";
+			} else {
+				move.category = 'Status';
+				move.category = 'Ghost';
+				move.basePower = 0;
+				move.target = "self";
+			}
+		},
+		onHit(target, source, move) {
+			if (!this.canSwitch(target.side)) {
+				this.attrLastMove('[still]');
+				this.add('-fail', target);
+				return this.NOT_FAIL;
+			}
+			if (source.species.name === 'Hoopa') {
+				move.target = "normal";
+				target.addVolatile("taunt");
+				target.addVolatile("torment");
+				move.target = "self";
+			} else {
+				delete move.selfSwitch;
+			}
+		},
+		self: {
+			onHit(source) {
+				source.skipBeforeSwitchOutEventFlag = true;
+			},
+		},
+		selfSwitch: 'copyvolatile',
+		secondary: null,
+		target: "self",
 		type: "Ghost",
 	},
 
