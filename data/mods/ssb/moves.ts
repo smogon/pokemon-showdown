@@ -771,10 +771,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// SunDraco
 	einsol: {
 		accuracy: 100,
-		basePower: 120,
+		basePower: 80,
 		category: "Physical",
-		desc: "This Pokemon attacks for 2-3 turns and is then confused afterwards.",
-		shortDesc: "Lasts 2-3 turns; confuses user afterwards.",
+		desc: "Usually goes first. Combines Fire into type effectiveness. User switches if below 1/3 max HP.",
+		shortDesc: "+Fire-type effectiveness. Switches if below 1/3 HP.",
 		name: "Ein Sol",
 		gen: 8,
 		pp: 10,
@@ -784,18 +784,21 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Outrage', target);
+			this.add('-anim', source, 'Will-O-Wisp', source);
+			this.add('-anim', source, 'Aerial Ace', target);
 		},
-		self: {
-			volatileStatus: 'lockedmove',
+		onEffectiveness(typeMod, target, type, move) {
+			return typeMod + this.dex.getEffectiveness('Fire', type);
 		},
-		onAfterMove(pokemon) {
-			if (pokemon.volatiles['lockedmove'] && pokemon.volatiles['lockedmove'].duration === 1) {
-				pokemon.removeVolatile('lockedmove');
+		onHit(target, source, move) {
+			const willSwitch = source.hp <= source.maxhp / 3;
+			if (!willSwitch) {
+				delete move.selfSwitch;
 			}
 		},
+		selfSwitch: true,
 		secondary: null,
-		target: "randomNormal",
+		target: "normal",
 		type: "Normal",
 	},
 
@@ -839,6 +842,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			} else {
 				delete move.selfSwitch;
 			}
+		},
+		self: {
+			onHit(source) {
+				source.skipBeforeSwitchOutEventFlag = true;
+			},
 		},
 		selfSwitch: 'copyvolatile',
 		ignoreEvasion: true,
