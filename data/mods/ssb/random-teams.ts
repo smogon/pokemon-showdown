@@ -127,8 +127,8 @@ export const ssbSets: SSBSets = {
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
 	SunDraco: {
-		species: 'Silvally', ability: 'Dexterity', item: 'Life Orb', gender: 'M',
-		moves: ['Swords Dance', 'Shadow Claw', 'Smart Strike'],
+		species: 'Silvally', ability: 'Dexterity', item: 'Fanblade', gender: 'M',
+		moves: ['Metal Claw', 'Shadow Sneak', 'Swords Dance'],
 		signatureMove: 'Ein Sol',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
