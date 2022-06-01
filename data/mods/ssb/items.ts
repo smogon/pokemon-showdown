@@ -181,7 +181,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		onModifyMovePriority: 1,
 		onModifyMove(move) {
-			if (!move.multihit && move.basePower <= 60) {
+			if (!move.multihit && move.basePower <= 60 && move.basePower > 0) {
 				const hits = this.random(2, 5);
 				move.multihit = hits;
 				move.basePower = 20;
