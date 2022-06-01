@@ -575,6 +575,27 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// SunDraco
+	dexterity: {
+		desc: "This Pokemon's Speed is boosted by x1.1. This Pokemon cannot lose its held item or its effects due to another Pokemon by means of Knock Off, Corrosive Gas, Trick, or Magic Room.",
+		shortDesc: "x1.1 Speed; Held item cannot be removed or disabled.",
+		onModifySpePriority: 5,
+		onModifySpe(spe) {
+			return this.chainModify([4505, 4096]);
+		},
+		onTakeItem(item, pokemon, source) {
+			if (!this.activeMove) throw new Error("Battle.activeMove is null");
+			if (!pokemon.hp || pokemon.item === 'stickybarb') return;
+			if ((source && source !== pokemon) || this.activeMove.id === 'knockoff') {
+				this.add('-activate', pokemon, 'ability: Dexterity');
+				return false;
+			}
+		},
+		// Magic Room bypass integrated into statuses.js
+		name: "Dexterity",
+		gen: 8,
+	},
+
 	// The Dealer
 	croupier: {
 		desc: "This Pokemon can only be damaged by direct attacks, is unaffected by opposing priority moves, will always hit its moves, and will always be hit by incoming moves.",
