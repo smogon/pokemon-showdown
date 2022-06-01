@@ -100,6 +100,8 @@ interface PunishmentSettings {
 	modlogActions?: string[];
 	/** Other types of a given certainty needed beyond the primary */
 	secondaryTypes?: Record<string, number>;
+	/** Requires another punishment given to activate. */
+	requiresPunishment?: boolean;
 }
 
 interface FilterSettings {
@@ -237,8 +239,13 @@ export async function searchModlog(
 export const classifier = new Artemis.RemoteClassifier();
 
 export async function runActions(user: User, room: GameRoom, message: string, response: Record<string, number>) {
+	// always mute on flag
+	const roomMutes = muted.get(room) || new WeakMap();
+	roomMutes.set(user, Date.now() + MUTE_DURATION);
+	muted.set(room, roomMutes);
+
 	const keys = Utils.sortBy(Object.keys(response), k => -response[k]);
-	const recommended: [string, string][] = [];
+	const recommended: [string, string, boolean][] = [];
 	const prevRecommend = cache[room.roomid]?.recommended?.[user.id];
 	for (const punishment of settings.punishments) {
 		if (prevRecommend?.type) { // avoid making extra db queries by frontloading this check
@@ -279,11 +286,16 @@ export async function runActions(user: User, room: GameRoom, message: string, re
 				});
 				if (hits.length < punishment.count) continue;
 			}
-			recommended.push([punishment.punishment, type]);
+			recommended.push([punishment.punishment, type, !!punishment.requiresPunishment]);
 		}
 	}
 	if (recommended.length) {
 		Utils.sortBy(recommended, ([punishment]) => -PUNISHMENTS.indexOf(punishment));
+		if (recommended.every(k => k[2])) {
+			// requiresPunishment is for upgrading. if every one is an upgrade and
+			// there's no independent punishment, do not upgrade it
+			return;
+		}
 		// go by most severe
 		const [punishment, reason] = recommended[0];
 		if (cache[room.roomid]) {
@@ -298,10 +310,6 @@ export async function runActions(user: User, room: GameRoom, message: string, re
 			).update();
 			return; // we want nothing else to be executed. staff want trusted users to be reviewed manually for now
 		}
-
-		const roomMutes = muted.get(room) || new WeakMap();
-		roomMutes.set(user, Date.now() + MUTE_DURATION);
-		muted.set(room, roomMutes);
 
 		const result = await punishmentHandlers[toID(punishment)]?.(user, room, response, message);
 		writeStats('punishments', {
@@ -1193,6 +1201,9 @@ export const commands: Chat.ChatCommands = {
 						return this.errorReply(`Duplicate secondary type.`);
 					}
 					punishment.secondaryTypes[sType] = sCertainty;
+					break;
+				case 'requirepunishment': case 'rp':
+					punishment.requiresPunishment = true;
 					break;
 				default:
 					this.errorReply(`Invalid key:  ${key}`);
