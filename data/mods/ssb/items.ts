@@ -171,4 +171,24 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "Boosts the user's Special Attack by 1.2x and evasiveness by 1.1x.",
 	},
+
+	// SunDraco
+	fanblade: {
+		name: "Fanblade",
+		fling: {
+			basePower: 50,
+			volatileStatus: 'flinch',
+		},
+		onModifyMovePriority: 1,
+		onModifyMove(move) {
+			if (!move.multihit && move.basePower <= 60) {
+				const hits = this.random(2, 5);
+				move.multihit = hits;
+				move.basePower = 20;
+			}
+		},
+		gen: 8,
+		desc: "Holder's single-hit moves of 60 power or less have 20 power and hit 2-5 times instead.",
+		shortDesc: "Moves <= 60 BP become 20 BP, hit 2-5 times.",
+	},
 };
