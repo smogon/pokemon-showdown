@@ -150,6 +150,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Tera Drain',
 		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0}, nature: 'Modest',
 	},
+	'Roughskull': {
+		species: 'Skuntank', ability: 'Venom Shock', item: 'Cheater Glasses', gender: 'N',
+		moves: ['Sucker Punch', 'Drain Punch', 'Sand Tomb'],
+		signatureMove: 'Radiation Stench',
+		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
+	},
 };
 
 export class RandomStaffBrosTeams extends RandomTeams {
