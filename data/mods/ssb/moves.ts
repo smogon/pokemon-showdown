@@ -812,18 +812,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Tap Out",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1},
+		flags: {protect: 1, reflectable: 1, mirror: 1},
 		onModifyMove(move, pokemon) {
 			if (pokemon.species.name === 'Hoopa-Unbound') {
 				move.category = 'Physical';
 				move.type = 'Dark';
 				move.basePower = 80;
-				move.target = "normal";
 			} else {
 				move.category = 'Status';
 				move.category = 'Ghost';
 				move.basePower = 0;
-				move.target = "self";
 			}
 		},
 		onHit(target, source, move) {
@@ -833,10 +831,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return this.NOT_FAIL;
 			}
 			if (source.species.name === 'Hoopa') {
-				move.target = "normal";
 				target.addVolatile("taunt");
 				target.addVolatile("torment");
-				move.target = "self";
+				this.add('-message', 'The Dealer has tapped out!');
 			} else {
 				delete move.selfSwitch;
 			}
@@ -848,7 +845,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		selfSwitch: 'copyvolatile',
 		secondary: null,
-		target: "self",
+		target: "normal",
 		type: "Ghost",
 	},
 
