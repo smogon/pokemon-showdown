@@ -84,6 +84,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Cross Dance',
 		evs: {hp: 252, atk: 252, def: 4}, nature: 'Adamant',
 	},
+	'Tiny Teebo': {
+		species: 'Tyrogue', ability: 'Big Dreams', item: 'Marble Foot', gender: 'M',
+		moves: ['Double Kick', 'Payback', 'Smack Down'],
+		signatureMove: 'Pain into Passion',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
+	},
 	Mayie: {
 		species: 'Lanturn', ability: 'Final Prayer', item: 'Leftovers', gender: 'F',
 		moves: ['Parting Shot', 'Thunder Wave', 'Scald'],
