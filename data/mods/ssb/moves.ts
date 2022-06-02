@@ -908,4 +908,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Grass",
 	},
+	
+	// Roughskull
+	"radiationstench": {
+		accuracy: 100,
+		basePower: 120,
+		category: "Physical",
+		desc: "Power doubles if the target is poisoned, and has a 30% chance to cause the target to flinch.",
+		shortDesc: "Power doubles if the target is poisoned. 30% chance to flinch.",
+		name: "Radiation Stench",
+		pp: 10,
+		priority: 0,
+		volatileStatus: 'gastroacid',
+		flags: {protect: 1, mirror: 1},
+		onBasePower(basePower, pokemon, target) {
+			if (target.status === 'psn' || target.status === 'tox') {
+				return this.chainModify(2);
+			}
+		},
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Steel') return 1;
+		},
+		secondary: {
+			chance: 30,
+			volatileStatus: 'flinch',
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Acid Downpour', target);
+		},
+		target: "normal",
+		type: "Poison",
+	},
 };
