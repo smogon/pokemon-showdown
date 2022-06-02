@@ -1746,30 +1746,29 @@ export const pages: Chat.PageTable = {
 		},
 		async stats(query, user) {
 			checkAccess(this);
-			const date = new Date(query.join('-') || Chat.toTimestamp(new Date()).split(' ')[0]);
-			if (isNaN(date.getTime())) {
-				return this.errorReply(`Invalid date: ${date}`);
+			const dateString = (query.join('-') || Chat.toTimestamp(new Date())).slice(0, 7);
+			if (!/^[0-9]{4}-[0-9]{2}$/.test(dateString)) {
+				return this.errorReply(`Invalid date: ${dateString}`);
 			}
-			const month = Chat.toTimestamp(date).split(' ')[0].slice(0, -3);
 			let buf = `<div class="pad">`;
 			buf += `<button style="float:right;" class="button" name="send" value="/join ${this.pageid}">`;
 			buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
-			buf += `<h2>Abuse Monitor stats for ${month}</h2>`;
-			const next = nextMonth(month);
-			const prev = new Date(new Date(`${month}-15`).getTime() - (30 * 24 * 60 * 60 * 1000)).toISOString().slice(0, 7);
+			buf += `<h2>Abuse Monitor stats for ${dateString}</h2>`;
+			const next = nextMonth(dateString);
+			const prev = new Date(new Date(`${dateString}-15`).getTime() - (30 * 24 * 60 * 60 * 1000)).toISOString().slice(0, 7);
 			buf += `<a class="button" target="replace" href="/view-abusemonitor-stats-${prev}-15">Previous month</a> | `;
 			buf += `<a class="button" target="replace" href="/view-abusemonitor-stats-${next}-15">Next month</a>`;
 			buf += `<hr />`;
 			const logs = await Chat.database.all(
 				`SELECT * FROM perspective_stats WHERE timestamp > ? AND timestamp < ?`,
-				[new Date(month).getTime(), new Date(nextMonth(month)).getTime()]
+				[new Date(dateString + '-01').getTime(), new Date(nextMonth(dateString)).getTime()]
 			);
 			this.title = '[Abuse Monitor] Stats';
 			if (!logs.length) {
-				buf += `<p class="message-error">No logs found for the month ${month}.</p>`;
+				buf += `<p class="message-error">No logs found for the month ${dateString}.</p>`;
 				return buf;
 			}
-			this.title += ` ${month}`;
+			this.title += ` ${dateString}`;
 			buf += `<p>${Chat.count(logs.length, 'logs')} found.</p>`;
 			let successes = 0;
 			let failures = 0;
@@ -1839,7 +1838,7 @@ export const pages: Chat.PageTable = {
 				types: {} as Record<string, number>,
 			};
 			const inaccurate = new Set();
-			const logPath = FS(`logs/artemis/punishments/${month}.jsonl`);
+			const logPath = FS(`logs/artemis/punishments/${dateString}.jsonl`);
 			if (await logPath.exists()) {
 				const stream = logPath.createReadStream();
 				for await (const line of stream.byLine()) {
@@ -1854,7 +1853,7 @@ export const pages: Chat.PageTable = {
 				}
 			}
 
-			const reviewLogPath = FS(`logs/artemis/reviews/${month}.jsonl`);
+			const reviewLogPath = FS(`logs/artemis/reviews/${dateString}.jsonl`);
 			if (await reviewLogPath.exists()) {
 				const stream = reviewLogPath.createReadStream();
 				for await (const line of stream.byLine()) {
