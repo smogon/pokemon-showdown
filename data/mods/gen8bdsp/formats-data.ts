@@ -346,7 +346,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	magneton: {
-		tier: "RU",
+		tier: "NU",
 		doublesTier: "NFE",
 	},
 	magnezone: {
@@ -703,7 +703,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["bodyslam", "curse", "rest", "sleeptalk"],
 	},
 	articuno: {
-		tier: "RU",
+		tier: "NU",
 		doublesTier: "DUU",
 		randomBattleMoves: ["defog", "icebeam", "roost", "uturn"],
 	},
@@ -1247,7 +1247,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	masquerain: {
-		tier: "NU",
+		tier: "PU",
 		doublesTier: "DUU",
 		randomBattleMoves: ["airslash", "bugbuzz", "quiverdance", "scald", "stickyweb"],
 	},
@@ -1367,7 +1367,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["grassknot", "nastyplot", "nuzzle", "switcheroo", "thunderbolt", "voltswitch"],
 	},
 	volbeat: {
-		tier: "RU",
+		tier: "NU",
 		doublesTier: "DUU",
 		randomBattleMoves: ["encore", "roost", "thunderwave", "uturn"],
 	},
