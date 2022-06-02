@@ -29,9 +29,18 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 100, atk: 164, def: 150, spa: 95, spd: 120, spe: 71},
 	},
+	// SunDraco
+	silvally: {
+		inherit: true,
+		types: ["Normal", "Ghost"],
+	},
 	// Tonberry
 	marshadow: {
 		inherit: true,
 		baseStats: {hp: 95, atk: 110, def: 95, spa: 95, spd: 95, spe: 110},
 	},
+	// Mewth
+	furret: {
+		inherit: true,
+		baseStats: {hp: 85, atk: 45, def: 64, spa: 140, spd: 55, spe: 110},
 };

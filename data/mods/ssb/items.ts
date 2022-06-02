@@ -149,32 +149,12 @@ export const Items: {[k: string]: ModdedItemData} = {
 		shortDesc: "Heals Poison-types by 1/8 per turn; Damages foes on contact.",
 	},
 
-	// Satori
-	thirdeye: {
-		name: "Third Eye",
-		spritenum: 574,
-		fling: {
-			basePower: 10,
-		},
-		onBasePowerPriority: 16,
-		onBasePower(basePower, user, target, move) {
-			if (move.category === 'Special') {
-				return this.chainModify(1.2);
-			}
-		},
-		onModifyAccuracyPriority: -2,
-		onModifyAccuracy(accuracy) {
-			if (typeof accuracy !== 'number') return;
-			this.debug('thirdeye - decreasing accuracy');
-			return this.chainModify(0.9);
-		},
-		gen: 8,
-		desc: "Boosts the user's Special Attack by 1.2x and evasiveness by 1.1x.",
-	},
-	
-	// Roughskull
+  // Roughskull
 	cheaterglasses: {
 		name: "Cheater Glasses",
+    fling: {
+			basePower: 10,
+		},
 		onStart(pokemon) {
 			let totaldef = 0;
 			let totalspd = 0;
@@ -207,5 +187,48 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "On switch-in, the user raises its Attack or Special Attack depending on if the opponent's Defense or Special Defense is lower, and raises either Defense or Special Defense the Pokemon's highest Attack stat (Physical or Special).  At full HP, this Pokemon reduces the damage of the first hit by half.",
 		shortDesc: "Raises Atk or SpA based on lower Def, Raises Def or SpD based on higher Atk, halves damage taken if at full HP.",
+  },
+  
+	// Satori
+	thirdeye: {
+		name: "Third Eye",
+		spritenum: 574,
+		fling: {
+			basePower: 10,
+		},
+		onBasePowerPriority: 16,
+		onBasePower(basePower, user, target, move) {
+			if (move.category === 'Special') {
+				return this.chainModify(1.2);
+			}
+		},
+		onModifyAccuracyPriority: -2,
+		onModifyAccuracy(accuracy) {
+			if (typeof accuracy !== 'number') return;
+			this.debug('thirdeye - decreasing accuracy');
+			return this.chainModify(0.9);
+		},
+		gen: 8,
+		desc: "Boosts the user's Special Attack by 1.2x and evasiveness by 1.1x.",
+	},
+
+	// SunDraco
+	fanblade: {
+		name: "Fanblade",
+		fling: {
+			basePower: 50,
+			volatileStatus: 'flinch',
+		},
+		onModifyMovePriority: 1,
+		onModifyMove(move) {
+			if (!move.multihit && move.basePower <= 60 && move.basePower > 0) {
+				const hits = this.random(2, 5);
+				move.multihit = hits;
+				move.basePower = 20;
+			}
+		},
+		gen: 8,
+		desc: "Holder's single-hit moves of 60 power or less have 20 power and hit 2-5 times instead.",
+		shortDesc: "Moves <= 60 BP become 20 BP, hit 2-5 times.",
 	},
 };

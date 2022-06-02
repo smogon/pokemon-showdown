@@ -127,17 +127,17 @@ export const ssbSets: SSBSets = {
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
 	SunDraco: {
-		species: 'Silvally', ability: 'Oblivious', item: 'Life Orb', gender: 'M',
-		moves: ['Dragon Claw', 'Shadow Claw', 'Fire Punch'],
+		species: 'Silvally', ability: 'Dexterity', item: 'Fanblade', gender: 'M',
+		moves: ['Swords Dance', 'Shadow Sneak', 'Metal Claw'],
 		signatureMove: 'Ein Sol',
-		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
-	/*'The Dealer': {
-		species: 'Hoopa', ability: 'Croupier', item: 'Psychium Z', gender: 'N',
+	'The Dealer': {
+		species: 'Hoopa', ability: 'Croupier', item: 'Double or Nothing', gender: 'N',
 		moves: ['Photon Geyser', 'Ominous Wind', 'Tap Out'],
 		signatureMove: 'Roll the Dice',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Hasty',
-	},*/
+	},
 	Tonberry: {
 		species: 'Marshadow', ability: 'Vindictive', item: 'Life Orb', gender: 'N',
 		moves: ['Thousand Arrows', 'Glacial Lance', 'Close Combat'],
@@ -145,7 +145,7 @@ export const ssbSets: SSBSets = {
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
 	'Yuuka Kazami': {
-		species: 'Lilligant', ability: 'Flower Master', item: 'Leftovers', gender: 'F',
+		species: 'Lilligant', ability: 'Flower Master', item: 'Big Root', gender: 'F',
 		moves: ['Teleport', 'Protect', 'Substitute'],
 		signatureMove: 'Tera Drain',
 		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0}, nature: 'Modest',

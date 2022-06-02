@@ -771,32 +771,82 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// SunDraco
 	einsol: {
 		accuracy: 100,
-		basePower: 120,
+		basePower: 80,
 		category: "Physical",
-		desc: "This Pokemon attacks for 2-3 turns and is then confused afterwards.",
-		shortDesc: "Lasts 2-3 turns; confuses user afterwards.",
+		desc: "Usually goes first. Combines Fire into type effectiveness. User switches if below 1/3 max HP.",
+		shortDesc: "+Fire-type effectiveness. Switches if below 1/3 HP.",
 		name: "Ein Sol",
 		gen: 8,
 		pp: 10,
-		priority: 0,
+		priority: 1,
 		flags: {contact: 1, mirror: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Outrage', target);
+			this.add('-anim', source, 'Will-O-Wisp', source);
+			this.add('-anim', source, 'Aerial Ace', target);
 		},
-		self: {
-			volatileStatus: 'lockedmove',
+		onEffectiveness(typeMod, target, type, move) {
+			return typeMod + this.dex.getEffectiveness('Fire', type);
 		},
-		onAfterMove(pokemon) {
-			if (pokemon.volatiles['lockedmove'] && pokemon.volatiles['lockedmove'].duration === 1) {
-				pokemon.removeVolatile('lockedmove');
+		onHit(target, source, move) {
+			const willSwitch = source.hp <= source.maxhp / 3;
+			if (!willSwitch) {
+				delete move.selfSwitch;
 			}
 		},
+		selfSwitch: true,
 		secondary: null,
-		target: "randomNormal",
+		target: "normal",
 		type: "Normal",
+	},
+
+	// The Dealer
+	tapout: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Taunts, Torments, and Baton Passes if Hoopa; 80BP Physical Dark-type if Hoopa-Unbound. Ignores opposing stat changes.",
+		shortDesc: "Taunt/Torment/BatonPass, Unbound: 80 BP/Phys/Dark.",
+		name: "Tap Out",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1},
+		onModifyMove(move, pokemon) {
+			if (pokemon.species.name === 'Hoopa-Unbound') {
+				move.category = 'Physical';
+				move.type = 'Dark';
+				move.basePower = 80;
+			} else {
+				move.category = 'Status';
+				move.category = 'Ghost';
+				move.basePower = 0;
+			}
+		},
+		onHit(target, source, move) {
+			if (!this.canSwitch(target.side)) {
+				this.attrLastMove('[still]');
+				this.add('-fail', target);
+				return this.NOT_FAIL;
+			}
+			if (source.species.name === 'Hoopa') {
+				target.addVolatile("taunt");
+				target.addVolatile("torment");
+				this.add('-message', 'The Dealer has tapped out!');
+			} else {
+				delete move.selfSwitch;
+			}
+		},
+		self: {
+			onHit(source) {
+				source.skipBeforeSwitchOutEventFlag = true;
+			},
+		},
+		selfSwitch: 'copyvolatile',
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
 	},
 
 	// Tonberry
@@ -857,5 +907,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		target: "normal",
 		type: "Grass",
+	},
+	
+	// Roughskull
+	"radiationstench": {
+		accuracy: 100,
+		basePower: 120,
+		category: "Physical",
+		desc: "Power doubles if the target is poisoned, and has a 30% chance to cause the target to flinch.",
+		shortDesc: "Power doubles if the target is poisoned. 30% chance to flinch.",
+		name: "Radiation Stench",
+		pp: 10,
+		priority: 0,
+		volatileStatus: 'gastroacid',
+		flags: {protect: 1, mirror: 1},
+		onBasePower(basePower, pokemon, target) {
+			if (target.status === 'psn' || target.status === 'tox') {
+				return this.chainModify(2);
+			}
+		},
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Steel') return 1;
+		},
+		secondary: {
+			chance: 30,
+			volatileStatus: 'flinch',
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Acid Downpour', target);
+		},
+		target: "normal",
+		type: "Poison",
 	},
 };
