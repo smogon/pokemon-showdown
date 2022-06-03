@@ -640,7 +640,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 
 			if (target === 'natdex') {
-				if (isNotSearch) return {error: "A search cannot exclude 'natdex'."};
 				if (parameters.length > 1) return {error: "The parameter 'natdex' cannot have alternative parameters."};
 				nationalSearch = true;
 				orGroup.skip = true;
@@ -1348,12 +1347,14 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 			if (target === 'all') {
 				if (!canAll) return {error: "A search with the parameter 'all' cannot be broadcast."};
+				if (parameters.length > 1) return {error: "The parameter 'all' cannot have alternative parameters."};
 				showAll = true;
 				orGroup.skip = true;
 				continue;
 			}
 
 			if (target === 'natdex') {
+				if (parameters.length > 1) return {error: "The parameter 'natdex' cannot have alternative parameters."};
 				nationalSearch = true;
 				orGroup.skip = true;
 				continue;
