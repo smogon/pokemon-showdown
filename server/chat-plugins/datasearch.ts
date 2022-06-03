@@ -682,7 +682,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 
 			if (target.endsWith(' asc') || target.endsWith(' desc')) {
-				if (parameters.length > 1) return {error: `The parameter '${target.split(' ')[1]}' cannot have alternative parameters.`};
+				if (parameters.length > 1) {
+					return {error: `The parameter '${target.split(' ')[1]}' cannot have alternative parameters.`};
+				}
 				const stat = allStatAliases[toID(target.split(' ')[0])] || toID(target.split(' ')[0]);
 				if (!allStats.includes(stat)) return {error: `'${escapeHTML(target)}' did not contain a valid stat.`};
 				sort = `${stat}${target.endsWith(' asc') ? '+' : '-'}`;
@@ -1361,7 +1363,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 
 			if (target.endsWith(' asc') || target.endsWith(' desc')) {
-				if (parameters.length > 1) return {error: `The parameter '${target.split(' ')[1]}' cannot have alternative parameters.`};
+				if (parameters.length > 1) {
+					return {error: `The parameter '${target.split(' ')[1]}' cannot have alternative parameters.`};
+				}
 				let prop = target.split(' ')[0];
 				switch (toID(prop)) {
 				case 'basepower': prop = 'basePower'; break;
