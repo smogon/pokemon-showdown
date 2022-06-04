@@ -713,7 +713,7 @@ export class CommandContext extends MessageContext {
 	checkFormat(room: BasicRoom | null | undefined, user: User, message: string) {
 		if (!room) return true;
 		if (!room.settings.filterStretching && !room.settings.filterCaps && !room.settings.filterEmojis) return true;
-		if (user.can('bypassall')) return true;
+		if (user.can('mute', null, room)) return true;
 
 		if (room.settings.filterStretching && /(.+?)\1{5,}/i.test(user.name)) {
 			throw new Chat.ErrorMessage(`Your username contains too much stretching, which this room doesn't allow.`);
@@ -1009,6 +1009,11 @@ export class CommandContext extends MessageContext {
 	checkBroadcast(overrideCooldown?: boolean | string, suppressMessage?: string | null) {
 		if (this.broadcasting || !this.shouldBroadcast()) {
 			return true;
+		}
+
+		if (this.user.locked && !(this.room?.roomid.startsWith('help-') || this.pmTarget?.can('lock'))) {
+			this.errorReply(`You cannot broadcast this command's information while locked.`);
+			throw new Chat.ErrorMessage(`To see it for yourself, use: /${this.message.slice(1)}`);
 		}
 
 		if (this.room && !this.user.can('show', null, this.room)) {

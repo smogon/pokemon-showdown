@@ -1031,11 +1031,13 @@ export class TimerModeTrivia extends Trivia {
 		}
 
 		buffer += '</table>';
-
-		if (winner) return this.win(buffer);
-
 		buffer += `<br />${this.room.tr`The top 5 players are: ${this.formatPlayerList({max: 5})}`}`;
-		broadcast(this.room, this.room.tr`The answering period has ended!`, buffer);
+
+		if (winner) {
+			return this.win(buffer);
+		} else {
+			broadcast(this.room, this.room.tr`The answering period has ended!`, buffer);
+		}
 		this.setPhaseTimeout(() => void this.askQuestion(), INTERMISSION_INTERVAL);
 	}
 }
@@ -1077,10 +1079,11 @@ export class NumberModeTrivia extends Trivia {
 		);
 
 		const points = this.calculatePoints(innerBuffer.length);
+		let winner = false;
 		if (points) {
 			const cap = this.getCap();
 			// We add 1 questionNumber because it starts at 0
-			let winner = cap.questions && this.questionNumber >= cap.questions;
+			winner = !!cap.questions && this.questionNumber >= cap.questions;
 			for (const userid in this.playerTable) {
 				const player = this.playerTable[userid];
 				if (player.isCorrect) player.incrementPoints(points, this.questionNumber);
@@ -1096,8 +1099,6 @@ export class NumberModeTrivia extends Trivia {
 			buffer = this.room.tr`Correct: ${players}` + `<br />` +
 				this.room.tr`Answer(s): ${this.curAnswers.join(', ')}<br />` +
 				`${Chat.plural(innerBuffer, this.room.tr`Each of them gained <strong>${points}</strong> point(s)!`, this.room.tr`They gained <strong>${points}</strong> point(s)!`)}`;
-
-			if (winner) return this.win(buffer);
 		} else {
 			for (const userid in this.playerTable) {
 				const player = this.playerTable[userid];
@@ -1110,7 +1111,12 @@ export class NumberModeTrivia extends Trivia {
 		}
 
 		buffer += `<br />${this.room.tr`The top 5 players are: ${this.formatPlayerList({max: 5})}`}`;
-		broadcast(this.room, this.room.tr`The answering period has ended!`, buffer);
+
+		if (winner) {
+			return this.win(buffer);
+		} else {
+			broadcast(this.room, this.room.tr`The answering period has ended!`, buffer);
+		}
 		this.setPhaseTimeout(() => void this.askQuestion(), INTERMISSION_INTERVAL);
 	}
 }
@@ -1772,16 +1778,21 @@ const triviaCommands: Chat.ChatCommands = {
 			});
 		}
 
-		const formattedQuestions = questions.map(q => q.question).join("', '");
+		let formattedQuestions = '';
+		for (const [index, question] of questions.entries()) {
+			formattedQuestions += `'${question.question}' in ${question.category}`;
+			if (index !== questions.length - 1) formattedQuestions += ', ';
+		}
+
 		if (cmd === 'add') {
 			await database.addQuestions(questions);
-			this.modlog('TRIVIAQUESTION', null, `added '${formattedQuestions}'`);
-			this.privateModAction(`Questions '${formattedQuestions}' were added to the question database by ${user.name}.`);
+			this.modlog('TRIVIAQUESTION', null, `added ${formattedQuestions}`);
+			this.privateModAction(`Questions ${formattedQuestions} were added to the question database by ${user.name}.`);
 		} else {
 			await database.addQuestionSubmissions(questions);
 			if (!user.can('mute', null, room)) this.sendReply(`Questions '${formattedQuestions}' were submitted for review.`);
-			this.modlog('TRIVIAQUESTION', null, `submitted '${formattedQuestions}'`);
-			this.privateModAction(`Questions '${formattedQuestions}' were submitted to the submission database by ${user.name} for review.`);
+			this.modlog('TRIVIAQUESTION', null, `submitted ${formattedQuestions}`);
+			this.privateModAction(`Questions ${formattedQuestions} were submitted to the submission database by ${user.name} for review.`);
 		}
 	},
 	submithelp: [`/trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Adds question(s) to the submission database for staff to review. Requires: + % @ # &`],
@@ -1824,7 +1835,7 @@ const triviaCommands: Chat.ChatCommands = {
 		if (toID(target) === 'all') {
 			if (isAccepting) await database.addQuestions(submissions);
 			await database.clearSubmissions();
-			this.modlog(`TRIVIAQUESTION`, null, `${(isAccepting ? "added" : "removed")} all from submission database.`);
+			this.modlog(`TRIVIAQUESTION`, null, `${(isAccepting ? "added" : "removed")} all questions from the submission database.`);
 			return this.privateModAction(`${user.name} ${(isAccepting ? " added " : " removed ")} all questions from the submission database.`);
 		}
 
@@ -1890,18 +1901,18 @@ const triviaCommands: Chat.ChatCommands = {
 		this.checkChat();
 
 		target = target.trim();
-		if (!target) return false;
+		if (!target) return this.parse(`/help trivia delete`);
 
 		const question = Utils.escapeHTML(target).trim();
 		if (!question) {
 			return this.errorReply(this.tr`'${target}' is not a valid argument. View /trivia help questions for more information.`);
 		}
 
-		await database.ensureQuestionExists(question);
+		const {category} = await database.ensureQuestionExists(question);
 		await database.deleteQuestion(question);
 
-		this.modlog('TRIVIAQUESTION', null, `removed '${target}'`);
-		return this.privateModAction(room.tr`${user.name} removed question '${target}' from the question database.`);
+		this.modlog('TRIVIAQUESTION', null, `removed '${target}' from ${category}`);
+		return this.privateModAction(room.tr`${user.name} removed question '${target}' (category: ${category}) from the question database.`);
 	},
 	deletehelp: [`/trivia delete [question] - Delete a question from the trivia database. Requires: % @ # &`],
 
@@ -1933,11 +1944,11 @@ const triviaCommands: Chat.ChatCommands = {
 				continue;
 			}
 
-			await database.ensureQuestionExists(question);
+			const {category: oldCat} = await database.ensureQuestionExists(question);
 			await database.moveQuestionToCategory(question, category);
-			this.modlog('TRIVIAQUESTION', null, `changed category for '${param[1].trim()}' to '${param[0]}'`);
+			this.modlog('TRIVIAQUESTION', null, `changed category for '${param[1].trim()}' from '${oldCat}' to '${param[0]}'`);
 			return this.privateModAction(
-				this.tr`${user.name} changed question category to '${param[0]}' for '${param[1].trim()}' ` +
+				this.tr`${user.name} changed question category from '${oldCat}' to '${param[0]}' for '${param[1].trim()}' ` +
 				this.tr`from the question database.`
 			);
 		}
@@ -1999,7 +2010,7 @@ const triviaCommands: Chat.ChatCommands = {
 		}
 		if (!oldQuestionText) return this.parse(`/help trivia edit`);
 
-		await database.ensureQuestionExists(Utils.escapeHTML(oldQuestionText));
+		const {category} = await database.ensureQuestionExists(Utils.escapeHTML(oldQuestionText));
 
 		let newQuestionText: string | undefined;
 		if (!isAnswersOnly) {
@@ -2049,7 +2060,7 @@ const triviaCommands: Chat.ChatCommands = {
 			isQuestionOnly ? undefined : answers
 		);
 
-		let actionString = `edited question '${oldQuestionText}'`;
+		let actionString = `edited question '${oldQuestionText}' in ${category}`;
 		if (!isAnswersOnly) actionString += ` to '${newQuestionText}'`;
 		if (answers.length) {
 			actionString += ` and changed the answers to ${answers.join(', ')}`;

@@ -152,7 +152,9 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 	}
 
 	onStart() {
-		if (this.playerCount < 2) return false;
+		if (this.playerCount < 2) {
+			throw new Chat.ErrorMessage("There must be at least 2 players to start a game of UNO.");
+		}
 		if (this.autostartTimer) clearTimeout(this.autostartTimer);
 		this.sendToRoom(`|uhtmlchange|uno-${this.gameNumber}|<div class="infobox"><p>The game of UNO has started. <button class="button" name="send" value="/uno spectate">Spectate Game</button></p>${this.suppressMessages ? `<p style="font-size: 6pt">Game messages won't show up unless you're playing or watching.` : ''}</div>`, true);
 		this.state = 'play';
@@ -189,7 +191,7 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 
 	leaveGame(user: User) {
 		if (!(user.id in this.playerTable)) return false;
-		if (this.state === 'signups' && this.removePlayer(user)) {
+		if ((this.state === 'signups' && this.removePlayer(user)) || this.eliminate(user.id)) {
 			this.sendToRoom(`${user.name} has left the game of UNO.`);
 			return true;
 		}
@@ -234,7 +236,8 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 		}
 
 		// handle current player...
-		if (userid === this.currentPlayerid) {
+		const removingCurrentPlayer = userid === this.currentPlayerid;
+		if (removingCurrentPlayer) {
 			if (this.state === 'color') {
 				if (!this.topCard) {
 					// should never happen
@@ -244,10 +247,7 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 				this.sendToRoom(`|raw|${Utils.escapeHTML(name)} has not picked a color, the color will stay as <span style="color: ${textColors[this.topCard.changedColor]}">${this.topCard.changedColor}</span>.`);
 			}
 		}
-		if (this.isPlusFour) {
-			this.isPlusFour = false;
-			this.onNextPlayer();
-		}
+
 		if (this.awaitUno === userid) this.awaitUno = null;
 		if (!this.topCard) {
 			throw new Chat.ErrorMessage(`Unable to disqualify ${name}.`);
@@ -256,9 +256,13 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 		// put that player's cards into the discard pile to prevent cards from being permanently lost
 		this.discards.push(...this.playerTable[userid].hand);
 
-		this.onNextPlayer();
+		if (removingCurrentPlayer) {
+			this.onNextPlayer();
+		}
 		this.removePlayer(this.playerTable[userid]);
-		this.nextTurn(true);
+		if (removingCurrentPlayer) {
+			this.nextTurn(true);
+		}
 		return name;
 	}
 
@@ -701,10 +705,9 @@ export const commands: Chat.ChatCommands = {
 			if (game.state !== 'signups') {
 				throw new Chat.ErrorMessage("There is no UNO game in signups phase in this room.");
 			}
-			if (game.onStart()) {
-				this.privateModAction(`The game of UNO was started by ${user.name}.`);
-				this.modlog('UNO START');
-			}
+			game.onStart();
+			this.privateModAction(`The game of UNO was started by ${user.name}.`);
+			this.modlog('UNO START');
 		},
 
 		stop: 'end',
@@ -720,6 +723,7 @@ export const commands: Chat.ChatCommands = {
 			this.modlog('UNO END');
 		},
 
+		autodq: 'timer',
 		timer(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);

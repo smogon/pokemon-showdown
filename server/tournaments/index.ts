@@ -213,8 +213,8 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	setCustomRules(rules: string) {
 		let format;
 		try {
-			this.fullFormat = Dex.formats.validate(`${this.baseFormat}@@@${rules}`);
-			format = Dex.formats.get(this.fullFormat, true);
+			const tryFormat = Dex.formats.validate(`${this.baseFormat}@@@${rules}`);
+			format = Dex.formats.get(tryFormat, true);
 
 			// In tours of formats with generated teams, custom rule errors should be checked for here,
 			// since users can't edit their teams to avoid them at matching time
@@ -223,6 +223,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 				const testTeamGenerator = Teams.getGenerator(format, testTeamSeed);
 				testTeamGenerator.getTeam(); // Throws error if generation fails
 			}
+			this.fullFormat = tryFormat;
 		} catch (e: any) {
 			throw new Chat.ErrorMessage(`Custom rule error: ${e.message}`);
 		}
@@ -492,7 +493,9 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			for (const otherPlayer of this.players) {
 				if (!otherPlayer) continue;
 				const otherUser = Users.get(otherPlayer.id);
-				if (otherUser && otherUser.latestIp === replacementUser.latestIp) {
+				if (otherUser &&
+					otherUser.latestIp === replacementUser.latestIp &&
+					replacementUser.latestIp !== user.latestIp) {
 					output.errorReply(`${replacementUser.name} already has an alt in the tournament.`);
 					return;
 				}
@@ -1294,7 +1297,7 @@ const commands: Chat.ChatCommands = {
 		const {name, time} = array[0];
 		let buf = `The last tournament ended ${Chat.toDurationString(Date.now() - time)} ago - ${name}`;
 		if (array.length > 1) {
-			buf += `<hr /><strong>Previous tournments:</strong> `;
+			buf += `<hr /><strong>Previous tournaments:</strong> `;
 			buf += array.filter((x, i) => i !== 0).map(x => x.name).join(', ');
 		}
 		this.sendReplyBox(buf);

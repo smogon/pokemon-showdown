@@ -527,6 +527,10 @@ export class TeamValidator {
 				tierSpecies = dex.species.get('Kyogre-Primal');
 			} else if (canMegaEvo && species.id === 'rayquaza' && set.moves.map(toID).includes('dragonascent' as ID)) {
 				tierSpecies = dex.species.get('Rayquaza-Mega');
+			} else if (item.id === 'rustedsword' && species.id === 'zacian') {
+				tierSpecies = dex.species.get('Zacian-Crowned');
+			} else if (item.id === 'rustedshield' && species.id === 'zamazenta') {
+				tierSpecies = dex.species.get('Zamazenta-Crowned');
 			}
 		}
 
@@ -696,7 +700,7 @@ export class TeamValidator {
 		}
 
 		let isFromRBYEncounter = false;
-		if (this.gen === 1 && !this.ruleTable.has('allowtradeback')) {
+		if (this.gen === 1 && ruleTable.has('obtainablemisc') && !this.ruleTable.has('allowtradeback')) {
 			let lowestEncounterLevel;
 			for (const encounter of learnsetSpecies.encounters || []) {
 				if (encounter.generation !== 1) continue;
@@ -1299,10 +1303,10 @@ export class TeamValidator {
 		const crowned: {[k: string]: string} = {
 			'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
 		};
-		if (set.species in crowned) {
-			const ironHead = set.moves.map(toID).indexOf('ironhead' as ID);
-			if (ironHead >= 0) {
-				set.moves[ironHead] = crowned[set.species];
+		if (species.name in crowned) {
+			const behemothMove = set.moves.map(toID).indexOf(crowned[species.name] as ID);
+			if (behemothMove >= 0) {
+				set.moves[behemothMove] = 'ironhead';
 			}
 		}
 		return problems;
@@ -1311,6 +1315,14 @@ export class TeamValidator {
 	checkSpecies(set: PokemonSet, species: Species, tierSpecies: Species, setHas: {[k: string]: true}) {
 		const dex = this.dex;
 		const ruleTable = this.ruleTable;
+
+		// https://www.smogon.com/forums/posts/8659168
+		if (
+			(tierSpecies.id === 'zamazentacrowned' && species.id === 'zamazenta') ||
+			(tierSpecies.id === 'zaciancrowned' && species.id === 'zacian')
+		) {
+			species = tierSpecies;
+		}
 
 		setHas['pokemon:' + species.id] = true;
 		setHas['basepokemon:' + toID(species.baseSpecies)] = true;

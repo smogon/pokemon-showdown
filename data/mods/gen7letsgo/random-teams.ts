@@ -131,7 +131,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
-			while (moves.size < 4 && movePool.length) {
+			while (moves.size < this.maxMoveCount && movePool.length) {
 				const moveid = this.sampleNoReplace(movePool);
 				moves.add(moveid);
 			}
@@ -191,7 +191,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 					break;
 				}
 			}
-		} while (moves.size < 4 && movePool.length);
+		} while (moves.size < this.maxMoveCount && movePool.length);
 
 		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 		// Minimize confusion damage
@@ -201,7 +201,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
-			level: 100,
+			level: this.adjustLevel || 100,
 			gender: species.gender,
 			happiness: 70,
 			shiny: this.randomChance(1, 1024),

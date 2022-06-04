@@ -89,6 +89,7 @@ export interface MoveEventMethods {
 	beforeMoveCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon | null, move: ActiveMove) => boolean | void;
 	beforeTurnCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon) => void;
 	damageCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon) => number | false;
+	priorityChargeCallback?: (this: Battle, pokemon: Pokemon) => void;
 
 	onAfterHit?: CommonHandlers['VoidSourceMove'];
 	onAfterSubDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
@@ -179,7 +180,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	forceSwitch?: boolean;
 	selfSwitch?: string | boolean;
 	selfBoost?: {boosts?: SparseBoostsTable};
-	selfdestruct?: string | boolean;
+	selfdestruct?: 'always' | 'ifHit' | boolean;
 	breaksProtect?: boolean;
 	/**
 	 * Note that this is only "true" recoil. Other self-damage, like Struggle,
@@ -454,6 +455,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 
 	constructor(data: AnyObject) {
 		super(data);
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		data = this;
 
 		this.fullname = `move: ${this.name}`;

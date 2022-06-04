@@ -877,7 +877,11 @@ export const commands: Chat.ChatCommands = {
 		for (const manager of ProcessManager.processManagers) {
 			for (const [i, process] of manager.processes.entries()) {
 				const pid = process.getProcess().pid;
-				buf += `<strong>${pid}</strong> - ${manager.basename} ${i} (load ${process.getLoad()}`;
+				let managerName = manager.basename;
+				if (managerName.startsWith('index.')) { // doesn't actually tell us anything abt the process
+					managerName = manager.filename.split(path.sep).slice(-2).join(path.sep);
+				}
+				buf += `<strong>${pid}</strong> - ${managerName} ${i} (load ${process.getLoad()}`;
 				const info = processes.get(`${pid}`)!;
 				const display = [];
 				if (info.cpu) display.push(`CPU: ${info.cpu}`);
@@ -1545,7 +1549,11 @@ export const commands: Chat.ChatCommands = {
 
 export const pages: Chat.PageTable = {
 	bot(args, user, connection) {
-		const [botid, pageid] = args;
+		const [botid, ...pageArgs] = args;
+		const pageid = pageArgs.join('-');
+		if (pageid.length > 300) {
+			return this.errorReply(`The page ID specified is too long.`);
+		}
 		const bot = Users.get(botid);
 		if (!bot) {
 			return `<div class="pad"><h2>The bot "${bot}" is not available.</h2></div>`;
