@@ -1830,25 +1830,17 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "Allows the simulator to recognize that Pok&eacute;mon may have multiple abilities active simulataneously.",
 		// Implemented mainly in sim and data
 		onSwitchOut(pokemon) {
-			if (!pokemon.m.pseudoAbilities) return;
-
 			// Necessary to end e.g. primal weather pseudoAbilities
-			for (const pseudoAbility of pokemon.m.pseudoAbilities) {
-				const volatileName = 'ability:' + pseudoAbility;
-				const volatile = pokemon.getVolatile(volatileName);
-				if (!volatile) continue;
-				this.singleEvent('End', this.dex.abilities.get(pseudoAbility), pokemon.abilityState, pokemon);
+			for (const pseudoAbility of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
+				const pseudoAbilityEffect = this.dex.conditions.get(pseudoAbility) as Effect;
+				this.singleEvent('End', pseudoAbilityEffect, null, pokemon);
 			}
 		},
 		onFaint(pokemon) {
-			if (!pokemon.m.pseudoAbilities) return;
-
 			// Necessary to end e.g. primal weather pseudoAbilities
-			for (const pseudoAbility of pokemon.m.pseudoAbilities) {
-				const volatileName = 'ability:' + pseudoAbility;
-				const volatile = pokemon.getVolatile(volatileName);
-				if (!volatile) continue;
-				this.singleEvent('End', this.dex.abilities.get(pseudoAbility), pokemon.abilityState, pokemon);
+			for (const pseudoAbility of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
+				const pseudoAbilityEffect = this.dex.conditions.get(pseudoAbility) as Effect;
+				this.singleEvent('End', pseudoAbilityEffect, null, pokemon);
 			}
 		},
 	},
@@ -1892,13 +1884,27 @@ export const Rulesets: {[k: string]: FormatData} = {
 				pokemon.m.pseudoAbilities = [...new Set(pokemon.m.pokebilitiesPseudoAbilities.concat(existingPseudoAbilities))];
 			}
 		},
+		onBeforeSwitchIn(pokemon) {
+			// Abilities that must be applied before both sides trigger onSwitchIn to correctly
+			// handle switch-in ability-to-ability interactions, e.g. Intimidate counters
+			const neededBeforeSwitchInIDs = [
+				'clearbody', 'competitive', 'contrary', 'defiant', 'fullmetalbody', 'hypercutter', 'innerfocus',
+				'mirrorarmor', 'oblivious', 'owntempo', 'rattled', 'scrappy', 'simple', 'whitesmoke',
+			];
+			if (pokemon.m.pseudoabilities) {
+				for (const pseudoAbility of pokemon.m.pseudoabilities) {
+					if (!neededBeforeSwitchInIDs.includes(pseudoAbility)) continue;
+					if (pokemon.hasAbility(pseudoAbility)) continue;
+					pokemon.addVolatile("ability:" + pseudoAbility, pokemon);
+				}
+			}
+		},
 		onSwitchInPriority: 3,
 		onSwitchIn(pokemon) {
 			if (pokemon.m.pseudoAbilities) {
 				for (const pseudoAbility of pokemon.m.pseudoAbilities) {
-					const volatileName = 'ability:' + pseudoAbility;
-					if (pokemon.getVolatile(volatileName)) continue;
-					pokemon.addVolatile(volatileName, pokemon);
+					if (pokemon.hasAbility(pseudoAbility)) continue;
+					pokemon.addVolatile("ability:" + pseudoAbility, pokemon);
 				}
 			}
 		},
