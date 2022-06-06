@@ -632,12 +632,15 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 
 			if (['mono', 'monotype'].includes(toID(target))) {
+				if (singleTypeSearch === isNotSearch) return {error: "A search cannot include and exclude 'monotype'."};
+				if (parameters.length > 1) return {error: "The parameter 'monotype' cannot have alternative parameters."};
 				singleTypeSearch = !isNotSearch;
 				orGroup.skip = true;
 				continue;
 			}
 
 			if (target === 'natdex') {
+				if (parameters.length > 1) return {error: "The parameter 'natdex' cannot have alternative parameters."};
 				nationalSearch = true;
 				orGroup.skip = true;
 				continue;
@@ -679,7 +682,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 
 			if (target.endsWith(' asc') || target.endsWith(' desc')) {
-				if (parameters.length > 1) return {error: `The parameter '${target.split(' ')[1]}' cannot have alternative parameters`};
+				if (parameters.length > 1) {
+					return {error: `The parameter '${target.split(' ')[1]}' cannot have alternative parameters.`};
+				}
 				const stat = allStatAliases[toID(target.split(' ')[0])] || toID(target.split(' ')[0]);
 				if (!allStats.includes(stat)) return {error: `'${escapeHTML(target)}' did not contain a valid stat.`};
 				sort = `${stat}${target.endsWith(' asc') ? '+' : '-'}`;
@@ -689,7 +694,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target === 'all') {
 				if (!canAll) return {error: "A search with the parameter 'all' cannot be broadcast."};
-				if (parameters.length > 1) return {error: "The parameter 'all' cannot have alternative parameters"};
+				if (parameters.length > 1) return {error: "The parameter 'all' cannot have alternative parameters."};
 				showAll = true;
 				orGroup.skip = true;
 				break;
@@ -710,7 +715,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target === 'megas' || target === 'mega') {
 				if (megaSearch === isNotSearch) return {error: "A search cannot include and exclude 'mega'."};
-				if (parameters.length > 1) return {error: "The parameter 'mega' cannot have alternative parameters"};
+				if (parameters.length > 1) return {error: "The parameter 'mega' cannot have alternative parameters."};
 				megaSearch = !isNotSearch;
 				orGroup.skip = true;
 				break;
@@ -718,7 +723,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target === 'gmax' || target === 'gigantamax') {
 				if (gmaxSearch === isNotSearch) return {error: "A search cannot include and exclude 'gigantamax'."};
-				if (parameters.length > 1) return {error: "The parameter 'gigantamax' cannot have alternative parameters"};
+				if (parameters.length > 1) return {error: "The parameter 'gigantamax' cannot have alternative parameters."};
 				gmaxSearch = !isNotSearch;
 				orGroup.skip = true;
 				break;
@@ -726,7 +731,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (['fully evolved', 'fullyevolved', 'fe'].includes(target)) {
 				if (fullyEvolvedSearch === isNotSearch) return {error: "A search cannot include and exclude 'fully evolved'."};
-				if (parameters.length > 1) return {error: "The parameter 'fully evolved' cannot have alternative parameters"};
+				if (parameters.length > 1) return {error: "The parameter 'fully evolved' cannot have alternative parameters."};
 				fullyEvolvedSearch = !isNotSearch;
 				orGroup.skip = true;
 				break;
@@ -1344,19 +1349,23 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 			if (target === 'all') {
 				if (!canAll) return {error: "A search with the parameter 'all' cannot be broadcast."};
+				if (parameters.length > 1) return {error: "The parameter 'all' cannot have alternative parameters."};
 				showAll = true;
 				orGroup.skip = true;
 				continue;
 			}
 
 			if (target === 'natdex') {
+				if (parameters.length > 1) return {error: "The parameter 'natdex' cannot have alternative parameters."};
 				nationalSearch = true;
 				orGroup.skip = true;
 				continue;
 			}
 
 			if (target.endsWith(' asc') || target.endsWith(' desc')) {
-				if (parameters.length > 1) return {error: `The parameter '${target.split(' ')[1]}' cannot have alternative parameters`};
+				if (parameters.length > 1) {
+					return {error: `The parameter '${target.split(' ')[1]}' cannot have alternative parameters.`};
+				}
 				let prop = target.split(' ')[0];
 				switch (toID(prop)) {
 				case 'basepower': prop = 'basePower'; break;
