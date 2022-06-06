@@ -17,6 +17,7 @@ import type {GlobalPermission} from '../user-groups';
 const WHITELIST = ["mia"];
 const MUTE_DURATION = 7 * 60 * 1000;
 const DAY = 24 * 60 * 60 * 1000;
+const STAFF_NOTIF_INTERVAL = 10 * 60 * 1000;
 const MAX_MODLOG_TIME = 2 * 365 * DAY;
 const PUNISHMENTS = ['WARN', 'LOCK', 'WEEKLOCK'];
 const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
@@ -642,25 +643,29 @@ function saveReviews() {
 	FS(`config/chat-plugins/artemis-reviews.json`).writeUpdate(() => JSON.stringify(reviews));
 }
 
+export let lastLogTime: number = Chat.oldPlugins['abuse-monitor']?.lastLogTime || 0;
+
 export function notifyStaff() {
 	const staffRoom = Rooms.get('staff');
 	if (staffRoom) {
 		const flagged = getFlaggedRooms();
 		let buf = '';
 		if (flagged.length) {
-			const unclaimed = flagged.filter(f => f in cache && !cache[f].claimed);
-			// if none are unclaimed, remove the notifying property so it's regular grey
-			buf = `<button class="button${!unclaimed.length ? '' : ' notifying'}" name="send" value="/am">`;
-			buf += `${Chat.count(flagged.length, 'flagged battles')}`;
-			// if some are unclaimed, tell staff how many
-			if (unclaimed.length) {
-				buf += ` (${unclaimed.length} unclaimed)`;
-			}
-			buf += `</button>`;
+			buf = `<button class="button" name="send" value="/am">Flagged battles need review</button>`;
 		} else {
 			buf = 'No battles flagged.';
 		}
-		staffRoom.send(`|uhtml|abusemonitor|<div class="infobox">${buf}</div>`);
+		// if it's been 10m, or if there are no flagged battles currently, update the box
+		if ((lastLogTime + STAFF_NOTIF_INTERVAL) < Date.now() || !flagged.length) {
+			staffRoom.send(`|uhtml|abusemonitor|<div class="infobox">${buf}</div>`);
+			// if there are none, don't update the time - no point
+			if (flagged.length) {
+				lastLogTime = Date.now();
+			} else {
+				lastLogTime = 0;
+			}
+		}
+		// always update flags
 		Chat.refreshPageFor('abusemonitor-flagged', staffRoom);
 	}
 }
