@@ -269,17 +269,25 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	disable: {
 		inherit: true,
+		onTryHit(target) {
+			const ppSum = target.moveSlots.reduce((acc, val) => acc + val.pp, 0);
+			if (!ppSum) {
+				return false; // all moves had 0 pp
+			}
+		},
 		condition: {
 			duration: 4,
 			durationCallback(target, source, effect) {
-				const duration = this.random(1, 7);
+				// duration is 0 to 7 turns in gen 1
+				const duration = this.random(0, 7);
 				return duration;
 			},
 			onStart(pokemon) {
 				if (!this.queue.willMove(pokemon)) {
 					this.effectState.duration++;
 				}
-				const moves = pokemon.moves;
+				// disable can only select moves that have pp > 0, hence the onTryHit modification
+				const moves = pokemon.moves.filter((m, indx) => pokemon.moveSlots[indx].pp > 0);
 				const move = this.dex.moves.get(this.sample(moves));
 				this.add('-start', pokemon, 'Disable', move.name);
 				this.effectState.move = move.id;
@@ -303,6 +311,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 		},
+		target: "normal",
 	},
 	dizzypunch: {
 		inherit: true,
@@ -403,20 +412,41 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-clearallboost', '[silent]');
 			for (const pokemon of this.getAllActive()) {
 				pokemon.clearBoosts();
-
 				if (pokemon !== source) {
 					pokemon.cureStatus(true);
 				}
 				if (pokemon.status === 'tox') {
 					pokemon.setStatus('psn');
 				}
-				for (const id of Object.keys(pokemon.volatiles)) {
-					if (id === 'residualdmg') {
-						pokemon.volatiles[id].counter = 0;
-					} else {
-						pokemon.removeVolatile(id);
-						this.add('-end', pokemon, id, '[silent]');
-					}
+				// should only clear a specific set of volatiles and does not clear the toxic counter
+				const silentHack = '|[silent]';
+				if ('disable' in pokemon.volatiles) {
+					pokemon.removeVolatile('disable');
+					this.log[this.log.length - 1] += silentHack;
+				}
+				if ('confusion' in pokemon.volatiles) {
+					pokemon.removeVolatile('confusion');
+					this.log[this.log.length - 1] += silentHack;
+				}
+				if ('mist' in pokemon.volatiles) {
+					pokemon.removeVolatile('mist');
+					this.log[this.log.length - 1] += silentHack;
+				}
+				if ('focusenergy' in pokemon.volatiles) {
+					pokemon.removeVolatile('focusenergy');
+					this.log[this.log.length - 1] += silentHack;
+				}
+				if ('leechseed' in pokemon.volatiles) {
+					pokemon.removeVolatile('leechseed');
+					this.log[this.log.length - 1] += silentHack;
+				}
+				if ('lightscreen' in pokemon.volatiles) {
+					pokemon.removeVolatile('lightscreen');
+					this.log[this.log.length - 1] += silentHack;
+				}
+				if ('reflect' in pokemon.volatiles) {
+					pokemon.removeVolatile('reflect');
+					this.log[this.log.length - 1] += silentHack;
 				}
 			}
 		},
