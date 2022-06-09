@@ -649,7 +649,7 @@ export const commands: Chat.ChatCommands = {
 			return;
 		}
 		this.checkCan('exportinputlog', null, room);
-		if (user.can('forcewin')) {
+		if (user.can('forcewin') || Dex.formats.get(battle.format).team) {
 			if (!battle.inputLog) return this.errorReply(this.tr`No input log found.`);
 			this.addModAction(room.tr`${user.name} has extracted the battle input log.`);
 			const inputLog = battle.inputLog.map(Utils.escapeHTML).join(`<br />`);
@@ -659,8 +659,8 @@ export const commands: Chat.ChatCommands = {
 			);
 		} else if (!battle.allowExtraction[user.id]) {
 			battle.allowExtraction[user.id] = new Set();
-			for (const player of battle.players) {
-				const playerUser = player.getUser();
+			for (const id in battle.playerTable) {
+				const playerUser = Users.get(id);
 				if (!playerUser) continue;
 				if (playerUser.id === user.id) {
 					battle.allowExtraction[user.id].add(user.id);
@@ -675,8 +675,8 @@ export const commands: Chat.ChatCommands = {
 		} else {
 			// Re-request to make the buttons appear again for users who have not allowed extraction
 			let logExported = true;
-			for (const player of battle.players) {
-				const playerUser = player.getUser();
+			for (const id in battle.playerTable) {
+				const playerUser = Users.get(id);
 				if (!playerUser || battle.allowExtraction[user.id].has(playerUser.id)) continue;
 				logExported = false;
 				playerUser.sendTo(
