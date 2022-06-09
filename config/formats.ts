@@ -290,6 +290,12 @@ export const Formats: FormatList = [
 		restricted: ['Restricted Legendary'],
 	},
 	{
+		name: "[Gen 8] Single Battle Cup",
+
+		mod: 'gen8',
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
+	},
+	{
 		name: "[Gen 8] Custom Game",
 
 		mod: 'gen8',
