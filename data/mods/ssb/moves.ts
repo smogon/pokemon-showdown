@@ -911,7 +911,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (move.overrideOffensiveStat && !['atk', 'spa'].includes(move.overrideOffensiveStat)) return;
 				const attacker = move.overrideOffensivePokemon === 'target' ? target : source;
 				if (!attacker) return;
-				move.overrideOffensiveStat = attacker.getStat('atk', false, true) > attacker.getStat('spa', false, true) ? 'spa' : 'atk';
+				const attackerAtk = attacker.getStat('atk', false, true);
+				const attackerSpa = attacker.getStat('spa', false, true);
+				move.overrideOffensiveStat = attackerAtk > attackerSpa ? 'spa' : 'atk';
 			},
 			// Stat modifying in scripts.ts
 			onFieldStart(field, source, effect) {
