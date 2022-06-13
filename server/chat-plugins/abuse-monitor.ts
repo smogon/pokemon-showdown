@@ -243,7 +243,9 @@ export async function runActions(user: User, room: GameRoom, message: string, re
 	// always mute on flag
 	const roomMutes = muted.get(room) || new WeakMap();
 	roomMutes.set(user, Date.now() + MUTE_DURATION);
-	muted.set(room, roomMutes);
+	if (!user.trusted) {
+		muted.set(room, roomMutes);
+	}
 
 	const keys = Utils.sortBy(Object.keys(response), k => -response[k]);
 	const recommended: [string, string, boolean][] = [];
