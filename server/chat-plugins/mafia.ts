@@ -1874,7 +1874,7 @@ export const pages: Chat.PageTable = {
 				if (game.dayNum > 1) {
 					for (let i = 1; i < game.dayNum; i++) {
 						previousActionsPL += `<b>Night ${i}</b><br/>`;
-						previousActionsPL += `${game.playerTable[user.id].actionArr[i] ? `${game.playerTable[user.id].actionArr[i]}` : ''}<br/>`;
+						previousActionsPL += `${game.playerTable[user.id].actionArr?.[i] ? `${game.playerTable[user.id].actionArr[i]}` : ''}<br/>`;
 					}
 					buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Previous Actions</summary>${previousActionsPL}</span></details></p>`;
 				}
