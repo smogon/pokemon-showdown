@@ -877,6 +877,28 @@ export const commands: Chat.ChatCommands = {
 			);
 			return this.parse(`/j view-abusemonitor-flagged`);
 		},
+		unmute(target, room, user) {
+			this.checkCan('lock');
+			room = this.requireRoom();
+			target = toID(target);
+			if (!target) {
+				return this.parse(`/help am`);
+			}
+			const roomMutes = muted.get(room);
+			if (!roomMutes) {
+				return this.errorReply(`No users have Artemis mutes in this room.`);
+			}
+			const targetUser = Users.get(target);
+			if (!targetUser) {
+				return this.errorReply(`User '${target}' not found.`);
+			}
+			if (!roomMutes.has(targetUser)) {
+				return this.errorReply(`That user does not have an Artemis mute in this room.`);
+			}
+			roomMutes.delete(targetUser);
+			this.modlog(`ABUSEMONITOR UNMUTE`, targetUser);
+			this.privateModAction(`${user.name} removed ${targetUser.name}'s Artemis mute.`);
+		},
 		async nojoinpunish(target, room, user) {
 			this.checkCan('lock');
 			const [roomid, type, rest] = Utils.splitFirst(target, ',', 2).map(f => f.trim());
