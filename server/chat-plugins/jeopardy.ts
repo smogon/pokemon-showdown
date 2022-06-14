@@ -724,9 +724,7 @@ export const commands: Chat.ChatCommands = {
 				catStart = 'finals';
 				params.splice(0, 1);
 			} else {
-				// TODO: use Utils.parseExactInt once #8331 is merged
-				const numberRegex = /^(\s+)?\d+(\s+)?$/;
-				if (!numberRegex.test(params[0]) || !numberRegex.test(params[1])) {
+				if (isNaN(Utils.parseExactInt(params[0])) || isNaN(Utils.parseExactInt(params[1]))) {
 					return this.errorReply(`You must specify numeric values for Category Number Start and Question Number Start.`);
 				}
 				catStart = parseInt(params[0]);
