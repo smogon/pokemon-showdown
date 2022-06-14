@@ -291,6 +291,9 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8] Single Battle Cup",
+		threads: [
+			`&bullet; <a href="https://www.pokemon.com/us/pokemon-news/register-now-for-the-single-battle-cup-competition/">Single Battle Cup</a>`,
+		],
 
 		mod: 'gen8',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
