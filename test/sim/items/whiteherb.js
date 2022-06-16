@@ -15,7 +15,7 @@ describe("White Herb", function () {
 			{species: 'torracat', moves: ['partingshot']},
 			{species: 'litten', moves: ['sleeptalk']},
 		], [
-			{species: 'wynaut', ability:'grimneigh', item: 'whiteherb', moves: ['sleeptalk']},
+			{species: 'wynaut', ability: 'grimneigh', item: 'whiteherb', moves: ['sleeptalk']},
 		]]);
 		battle.makeChoices();
 		const wynaut = battle.p2.active[0];
@@ -24,7 +24,7 @@ describe("White Herb", function () {
 		assert.statStage(wynaut, 'spa', 0);
 	});
 
-	it('should activate after Abilities that boost SPA on KOs', function() {
+	it('should activate after Abilities that boost SPA on KOs', function () {
 		//Grim Neigh
 		battle = common.createBattle([[
 			{species: 'litten', level: 1, ability: 'noguard', moves: ['sleeptalk']},
@@ -88,7 +88,7 @@ describe("White Herb", function () {
 			{species: 'litten', ability: 'intimidate', moves: ['sleeptalk']},
 			{species: 'landorustherian', ability: 'intimidate', moves: ['sleeptalk']},
 		], [
-			{species: 'wynaut', ability:'grimneigh', item: 'whiteherb', moves: ['sleeptalk', 'recycle']},
+			{species: 'wynaut', ability: 'grimneigh', item: 'whiteherb', moves: ['sleeptalk', 'recycle']},
 			{species: 'fraxure', moves: ['sleeptalk']},
 		]]);
 
@@ -110,7 +110,5 @@ describe("White Herb", function () {
 		battle.makeChoices('switch 3, switch 4');
 		assert.false.holdsItem(wynaut);
 		assert.statStage(wynaut, 'atk', 0);
-
-
 	});
 });
