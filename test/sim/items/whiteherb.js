@@ -25,19 +25,6 @@ describe("White Herb", function () {
 	});
 
 	it('should activate after Abilities that boost SPA on KOs', function () {
-		//Grim Neigh
-		battle = common.createBattle([[
-			{species: 'litten', level: 1, ability: 'noguard', moves: ['sleeptalk']},
-			{species: 'torracat', moves: ['partingshot']},
-		], [
-			{species: 'wynaut', item: 'whiteherb', ability: 'grimneigh', moves: ['dracometeor']},
-		]]);
-		battle.makeChoices('move sleeptalk', 'move dracometeor');
-		const wynaut = battle.p2.active[0];
-		battle.makeChoices('switch 2');
-		assert.false.holdsItem(wynaut);
-		assert.statStage(wynaut, 'spa', 0);
-
 		//Soul-Heart
 		battle = common.createBattle([[
 			{species: 'litten', level: 1, ability: 'noguard', moves: ['sleeptalk']},
@@ -65,20 +52,6 @@ describe("White Herb", function () {
 		assert.false.holdsItem(wynaut);
 		assert.statStage(wynaut, 'atk', 0);
 		assert.statStage(wynaut, 'def', 0);
-
-		//Chilling Neigh
-		battle = common.createBattle([[
-			{species: 'litten', level: 1, ability: 'noguard', moves: ['sleeptalk']},
-			{species: 'torracat', moves: ['partingshot']},
-		], [
-			{species: 'wynaut', item: 'whiteherb', ability: 'chillingneigh', moves: ['superpower']},
-		]]);
-		battle.makeChoices('move sleeptalk', 'move superpower');
-		const wynaut2 = battle.p2.active[0];
-		battle.makeChoices('switch 2');
-		assert.false.holdsItem(wynaut2);
-		assert.statStage(wynaut2, 'atk', 0);
-		assert.statStage(wynaut2, 'def', 0);
 	});
 
 	it('should activate after two Intimidate switch in at the same time', function () {
