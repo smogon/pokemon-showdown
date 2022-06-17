@@ -9,8 +9,6 @@ const PREFIXES_FILE = 'config/chat-plugins/username-prefixes.json';
 const PREFIX_DURATION = 10 * 24 * 60 * 60 * 1000;
 
 export class PrefixManager {
-	/** prefix:timeout */
-	timeouts = new Map<ID, NodeJS.Timeout>();
 	constructor() {
 		// after a restart/newly using the plugin, load prefixes from config.js
 		if (!Chat.oldPlugins['username-prefixes']) this.refreshConfig(true);
@@ -28,9 +26,6 @@ export class PrefixManager {
 			for (const type in Config.forcedprefixes) {
 				for (const prefix of Config.forcedprefixes[type].map(toID)) {
 					convertedPrefixes.push({type, prefix, expireAt: Date.now() + PREFIX_DURATION});
-					this.timeouts.set(prefix, setTimeout(() => {
-						this.removePrefix(prefix, type as 'privacy' | 'modchat');
-					}, PREFIX_DURATION));
 				}
 			}
 			Config.forcedprefixes = convertedPrefixes;
@@ -38,16 +33,6 @@ export class PrefixManager {
 		if (configJustLoaded) {
 			for (const entry of Config.forcedprefixes) {
 				entry.prefix = toID(entry.prefix);
-				if (!this.timeouts.get(entry.prefix)) {
-					const expireTime = entry.expireAt - Date.now();
-					if (expireTime < 0) {
-						this.removePrefix(entry.prefix, entry.type as 'privacy' | 'modchat');
-						continue;
-					}
-					this.timeouts.set(entry.prefix, setTimeout(() => {
-						this.removePrefix(entry.prefix, entry.type as 'privacy' | 'modchat');
-					}, expireTime));
-				}
 			}
 		}
 
@@ -62,16 +47,6 @@ export class PrefixManager {
 			for (const entry of data) {
 				if (Config.forcedprefixes.includes(entry)) continue;
 				Config.forcedprefixes.push(entry);
-				if (!this.timeouts.get(entry.prefix)) {
-					const expireTime = entry.expireAt - Date.now();
-					if (expireTime < 0) {
-						this.removePrefix(entry.prefix, entry.type as 'privacy' | 'modchat');
-						continue;
-					}
-					this.timeouts.set(entry.prefix, setTimeout(() => {
-						this.removePrefix(entry.prefix, entry.type as 'privacy' | 'modchat');
-					}, expireTime));
-				}
 			}
 		}
 	}
@@ -84,9 +59,6 @@ export class PrefixManager {
 		}
 
 		Config.forcedprefixes.push({type, prefix, expireAt: Date.now() + PREFIX_DURATION});
-		this.timeouts.set(prefix, setTimeout(() => {
-			this.removePrefix(prefix, type);
-		}, PREFIX_DURATION));
 		this.save();
 	}
 
@@ -97,11 +69,6 @@ export class PrefixManager {
 		}
 
 		Config.forcedprefixes.splice(entry, 1);
-		const timeoutEntry = this.timeouts.get(prefix);
-		if (timeoutEntry) {
-			clearTimeout(timeoutEntry);
-			this.timeouts.delete(prefix);
-		}
 		this.save();
 	}
 
@@ -129,7 +96,7 @@ export const commands: Chat.ChatCommands = {
 		delete: 'add',
 		remove: 'add',
 		add(target, room, user, connection, cmd) {
-			this.checkCan('rangeban');
+			this.checkCan('addhtml');
 
 			const isAdding = cmd.includes('add');
 
@@ -150,7 +117,7 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		view(target) {
-			this.checkCan('rangeban');
+			this.checkCan('addhtml');
 
 			const types = target ? [prefixManager.validateType(toID(target))] : ['privacy', 'modchat'];
 
