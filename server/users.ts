@@ -1263,10 +1263,17 @@ export class User extends Chat.MessageContext {
 				return false;
 			}
 		}
-		if ((room as GameRoom).tour) {
+		if (room.tour) {
 			const errorMessage = (room as GameRoom).tour!.onBattleJoin(room as GameRoom, this);
 			if (errorMessage) {
 				connection.sendTo(roomid, `|noinit|joinfailed|${errorMessage}`);
+				return false;
+			}
+		}
+		if (roomid.startsWith('battlechat-')) {
+			const battleRoom = Rooms.get(roomid.replace('battlechat-', 'battle-'));
+			if (battleRoom?.battle?.active && this.id in battleRoom.battle.playerTable) {
+				connection.sendTo(roomid, `|noinit|joinfailed|You can't join the battle chat for a battle you're currently playing.`);
 				return false;
 			}
 		}

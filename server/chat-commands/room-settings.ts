@@ -907,6 +907,38 @@ export const commands: Chat.ChatCommands = {
 		`/subroomgroupchat [roomname] - Creates a subroom groupchat of the current room. Can only be used in a public room you have staff in.`,
 		`Only users who are staff in a public room or global auth can make groupchats.`,
 	],
+	battlechat(target, room, user) {
+		room = this.requireRoom();
+		this.checkChat();
+		if (!room.battle) return this.errorReply("/battlechat must be used in a battle.");
+		const roomid = room.roomid.replace('battle-', 'battlechat-') as RoomID;
+		if (Rooms.get(roomid)) {
+			if (!this.runBroadcast()) return;
+			this.sendReplyBox(`Join the battle chat: <a href="/${roomid}">${roomid}</a>`);
+			return;
+		}
+		if (!user.can('mute', null, room)) {
+			this.sendReply("This battle does not have a side chat.");
+			return;
+		}
+		const targetRoom = Rooms.createChatRoom(roomid, "[BC] " + room.title, {
+			// TODO: come up with a good titling scheme
+			isPersonal: true,
+			isPrivate: 'hidden',
+			creationTime: Date.now(),
+			modjoin: '+',
+		});
+		if (!targetRoom) {
+			return this.errorReply(`An unknown error occurred while trying to create the battle chat.`);
+		}
+		user.joinRoom(targetRoom.roomid);
+		room.addRaw(`Join the battle chat: <a href="/${roomid}">${roomid}</a>`);
+	},
+	battlechathelp: [
+		`/battlechat - Creates a temporary chatroom inaccessible to the players in the current battle. Requires: % @ # &`,
+		`If the room already exists, responds with the link.`,
+		`!battlechat - Shows everyone a link to the battle chatroom. Requires: + % @ #`,
+	],
 	groupchatuptime: 'roomuptime',
 	roomuptime(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
