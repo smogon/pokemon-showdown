@@ -1585,9 +1585,9 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "Prevents Pok\u00e9mon from having moves that would only be obtainable in Pok\u00e9mon Crystal.",
 		// Implemented in mods/gen2/rulesets.ts
 	},
-	agilitypartialtrappingclause: {
+	aptclause: {
 		effectType: 'ValidatorRule',
-		name: 'Agility + Partial Trapping Clause',
+		name: 'APT Clause',
 		desc: "Bans the combination of Agility and partial trapping moves like Wrap.",
 		banlist: ['Agility + Wrap', 'Agility + Fire Spin', 'Agility + Bind', 'Agility + Clamp'],
 	},
