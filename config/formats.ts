@@ -3783,7 +3783,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen1',
 		searchShow: false,
-		ruleset: ['[Gen 1] OU'],
+		ruleset: ['[Gen 1] OU', 'Agility + Partial Trapping Clause'],
 		banlist: ['OU', 'UUBL'],
 	},
 	{
