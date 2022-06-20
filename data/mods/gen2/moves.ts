@@ -167,7 +167,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (type === 'sandstorm') return false;
 			},
 			onInvulnerability(target, source, move) {
-				if (move.id === 'earthquake' || move.id === 'magnitude' || move.id === 'fissure' || move.id === 'spikes') {
+				if (move.id === 'earthquake' || move.id === 'magnitude' || move.id === 'fissure') {
 					return;
 				}
 				if (['attract', 'curse', 'foresight', 'meanlook', 'mimic', 'nightmare', 'spiderweb', 'transform'].includes(move.id)) {
@@ -252,8 +252,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 2,
 			onInvulnerability(target, source, move) {
-				if (move.id === 'gust' || move.id === 'spikes' || move.id === 'twister' || move.id === 'thunder' ||
-				move.id === 'whirlwind') {
+				if (move.id === 'gust' || move.id === 'twister' || move.id === 'thunder' || move.id === 'whirlwind') {
 					return;
 				}
 				if (move.id === 'earthquake' || move.id === 'magnitude' || move.id === 'fissure') {
