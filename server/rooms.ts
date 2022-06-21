@@ -97,6 +97,7 @@ export interface RoomSettings {
 	filterStretching?: boolean;
 	filterEmojis?: boolean;
 	filterCaps?: boolean;
+	filterLinks?: boolean;
 	jeopardyDisabled?: boolean;
 	mafiaDisabled?: boolean;
 	unoDisabled?: boolean;
