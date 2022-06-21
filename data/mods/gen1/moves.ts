@@ -538,15 +538,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onBoost(boost, target, source, effect) {
 				if (effect.effectType === 'Move' && effect.category !== 'Status') return;
 				if (source && target !== source) {
-					let showMsg = false;
 					let i: BoostID;
 					for (i in boost) {
 						if (boost[i]! < 0) {
 							delete boost[i];
-							showMsg = true;
 						}
 					}
-					if (showMsg) this.add('-activate', target, 'move: Mist');
 				}
 			},
 		},
