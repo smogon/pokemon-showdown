@@ -571,20 +571,20 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		if (!target) {
 			return this.sendReply(
-				`This room's emoji filter is currently: ${room.settings.filterEmojis ? "ON" : "OFF"}`
+				`This room's link filter is currently: ${room.settings.filterEmojis ? "ON" : "OFF"}`
 			);
 		}
 		this.checkChat();
 		this.checkCan('editroom', null, room);
 
 		if (this.meansYes(target)) {
-			if (room.settings.filterLinks) return this.errorReply(`This room's emoji link is already ON`);
+			if (room.settings.filterLinks) return this.errorReply(`This room's link filter is already ON`);
 			room.settings.filterLinks = true;
 		} else if (this.meansNo(target)) {
 			if (!room.settings.filterLinks) return this.errorReply(`This room's link filter is already OFF`);
 			room.settings.filterLinks = false;
 		} else {
-			return this.parse("/help emojifilter");
+			return this.parse("/help linkfilter");
 		}
 		const setting = (room.settings.filterLinks ? "ON" : "OFF");
 		this.privateModAction(`${user.name} turned the link filter ${setting}`);
