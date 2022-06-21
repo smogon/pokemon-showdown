@@ -695,7 +695,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["earthquake", "roost", "stealthrock", "stoneedge", "defog"],
 	},
 	munchlax: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	snorlax: {
 		tier: "UU",
