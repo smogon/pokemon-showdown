@@ -120,7 +120,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	flinch: {
 		name: 'flinch',
 		duration: 1,
-		onStart(target) {}, //preventing the interaction in gen1/conditions.ts
+		onStart(target) {}, // preventing the interaction in gen1/conditions.ts
 		onBeforeMovePriority: 4,
 		onBeforeMove(pokemon) {
 			if (!this.runEvent('Flinch', pokemon)) {

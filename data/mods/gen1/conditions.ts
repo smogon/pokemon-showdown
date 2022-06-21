@@ -165,7 +165,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		name: 'flinch',
 		duration: 1,
 		onStart(target) {
-			target.removeVolatile('mustrecharge'); //This should let a recharger move if the flinch move goes second.
+			target.removeVolatile('mustrecharge'); // This should let a recharger move if the flinch move goes second.
 		},
 		onBeforeMovePriority: 4,
 		onBeforeMove(pokemon) {
