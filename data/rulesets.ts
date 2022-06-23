@@ -1834,6 +1834,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: "Rule",
 		name: "Re-Evolution Mod",
 		desc: "Pok&eacute;mon gain the boosts they would gain from evolving again",
+		ruleset: ['Overflow Stat Mod'],
 		onBegin() {
 			this.add('rule', 'Re-Evolution Mod: Pok\u00e9mon gain the boosts they would gain from evolving again');
 		},
@@ -1844,7 +1845,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 			let statid: StatID;
 			newSpecies.bst = 0;
 			for (statid in prevoSpecies.baseStats) {
-				newSpecies.baseStats[statid] += newSpecies.baseStats[statid] - prevoSpecies.baseStats[statid];
+				const change = newSpecies.baseStats[statid] - prevoSpecies.baseStats[statid];
+				newSpecies.baseStats[statid] = this.clampIntRange(newSpecies.baseStats[statid] + change, 1, 255);
 				newSpecies.bst += newSpecies.baseStats[statid];
 			}
 			return newSpecies;
