@@ -1830,4 +1830,26 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
+	reevolutionmod: {
+		effectType: "Rule",
+		name: "Re-Evolution Mod",
+		desc: "Pok&eacute;mon gain the boosts they would gain from evolving again",
+		ruleset: ['Overflow Stat Mod'],
+		onBegin() {
+			this.add('rule', 'Re-Evolution Mod: Pok\u00e9mon gain the boosts they would gain from evolving again');
+		},
+		onModifySpecies(species, target) {
+			const newSpecies = this.dex.deepClone(species);
+			if (!newSpecies.prevo) return;
+			const prevoSpecies = this.dex.species.get(newSpecies.prevo);
+			let statid: StatID;
+			newSpecies.bst = 0;
+			for (statid in prevoSpecies.baseStats) {
+				const change = newSpecies.baseStats[statid] - prevoSpecies.baseStats[statid];
+				newSpecies.baseStats[statid] = this.clampIntRange(newSpecies.baseStats[statid] + change, 1, 255);
+				newSpecies.bst += newSpecies.baseStats[statid];
+			}
+			return newSpecies;
+		},
+	},
 };
