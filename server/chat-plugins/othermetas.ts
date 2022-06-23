@@ -648,7 +648,7 @@ export const commands: Chat.ChatCommands = {
 			if (!isReEvo) {
 				deltas.baseStats[i] = statChange;
 			} else {
-				deltas.baseStats[i] += statChange;
+				deltas.baseStats[i] = Utils.clampIntRange(deltas.baseStats[i] + statChange, 1, 255);
 			}
 			deltas.bst += deltas.baseStats[i];
 		}
