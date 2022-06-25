@@ -165,6 +165,9 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 	flinch: {
 		name: 'flinch',
 		duration: 1,
+		onStart(target) {
+			target.removeVolatile('mustrecharge');
+		},
 		onBeforeMovePriority: 4,
 		onBeforeMove(pokemon) {
 			if (!this.runEvent('Flinch', pokemon)) {
