@@ -3284,8 +3284,8 @@ export const Formats: FormatList = [
 
 		mod: 'gen5',
 		searchShow: false,
-		ruleset: ['[Gen 5] NU', 'Sleep Moves Clause'],
-		banlist: ['NU', 'PUBL'],
+		ruleset: ['[Gen 5] NU', '!Sleep Clause Mod', 'Sleep Moves Clause'],
+		banlist: ['NU', 'PUBL', 'Damp Rock'],
 	},
 	{
 		name: "[Gen 5] LC",
