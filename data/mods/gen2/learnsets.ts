@@ -7593,7 +7593,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			dragonrage: ["1S0"],
 			flail: ["2L30"],
 			reversal: ["2S2"],
-			splash: ["2L1", "2S2", "2S1", "1L1"],
+			splash: ["2L1", "2S2", "2S1", "1L1", "1S0"],
 			tackle: ["2L15", "1L15"],
 		},
 		eventData: [
