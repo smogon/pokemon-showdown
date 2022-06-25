@@ -7597,7 +7597,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			tackle: ["2L15", "1L15"],
 		},
 		eventData: [
-			{generation: 1, level: 5, moves: ["dragonrage"], japan: true},
+			{generation: 1, level: 15, moves: ["splash", "dragonrage"], japan: true},
 			{generation: 2, level: 5, shiny: 1, moves: ["splash", "bubble"]},
 			{generation: 2, level: 5, shiny: 1, moves: ["splash", "reversal"]},
 		],
