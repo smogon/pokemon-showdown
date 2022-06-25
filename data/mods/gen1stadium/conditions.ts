@@ -98,6 +98,10 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.effectState.time = this.random(2, 6);
 		},
 	},
+	flinch: {
+		inherit: true,
+		onStart() {},
+	},
 	partiallytrapped: {
 		name: 'partiallytrapped',
 		duration: 2,
