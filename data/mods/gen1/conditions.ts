@@ -78,6 +78,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 			pokemon.lastMove = null;
 			return false;
 		},
+		onAfterMoveSelfPriority: 3,
 		onAfterMoveSelf(pokemon) {
 			if (pokemon.statusState.time <= 0) pokemon.cureStatus();
 		},
