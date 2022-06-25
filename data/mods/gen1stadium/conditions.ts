@@ -98,6 +98,10 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.effectState.time = this.random(2, 6);
 		},
 	},
+	flinch: {
+		inherit: true,
+		onStart() {},
+	},
 	partiallytrapped: {
 		name: 'partiallytrapped',
 		duration: 2,
@@ -115,19 +119,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]');
-		},
-	},
-	flinch: {
-		name: 'flinch',
-		duration: 1,
-		onStart(target) {}, // preventing the interaction in gen1/conditions.ts
-		onBeforeMovePriority: 4,
-		onBeforeMove(pokemon) {
-			if (!this.runEvent('Flinch', pokemon)) {
-				return;
-			}
-			this.add('cant', pokemon, 'flinch');
-			return false;
 		},
 	},
 };
