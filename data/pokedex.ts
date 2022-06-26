@@ -17419,6 +17419,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		changesFrom: "Venomicon",
 		gen: 8,
 	},
+	saharaja: {
+		num: -68,
+		name: "Saharaja",
+		types: ["Ground"],
+		baseStats: {hp: 70, atk: 120, def: 105, spa: 65, spd: 130, spe: 90},
+		abilities: {0: "Water Absorb", 1: "Serene Grace"},
+		heightm: 2.3,
+		weightkg: 303.9,
+		color: "White",
+		eggGroups: ["Undiscovered"],
+		gen: 8,
+	},
 	// NOTE: PokeStar "formes" are not actually formes and thus do not have a formeOrder
 	pokestarsmeargle: {
 		num: -5000,
