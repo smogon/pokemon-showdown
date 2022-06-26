@@ -78,6 +78,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 			pokemon.lastMove = null;
 			return false;
 		},
+		onAfterMoveSelfPriority: 3,
 		onAfterMoveSelf(pokemon) {
 			if (pokemon.statusState.time <= 0) pokemon.cureStatus();
 		},
@@ -165,7 +166,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		name: 'flinch',
 		duration: 1,
 		onStart(target) {
-			target.removeVolatile('mustrecharge'); // This should let a recharger move if the flinch move goes second.
+			target.removeVolatile('mustrecharge');
 		},
 		onBeforeMovePriority: 4,
 		onBeforeMove(pokemon) {
