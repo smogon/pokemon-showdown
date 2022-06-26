@@ -5,7 +5,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'brn');
-			target.addVolatile('brnattackdrop'); // TESTME: This should be ignored after a boost.
+			target.addVolatile('brnattackdrop');// TESTME: This should be ignored after a boost.
 		},
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf(pokemon) {

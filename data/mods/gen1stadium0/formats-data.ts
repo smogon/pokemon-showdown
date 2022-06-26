@@ -1,5 +1,5 @@
-// Stadium Zero is the first "Dexit" game in Pokemon history. 
-// It removed Pokemon that didn't top the SpaceWorld '97 National Tournament, but did maintain a few for type balance. 
+// Stadium Zero is the first "Dexit" game in Pokemon history.
+// It removed Pokemon that didn't top the SpaceWorld '97 National Tournament, but did maintain a few for type balance.
 // For now, I will tier fully-evolved Pokemon in the game as "OU", except Mewtwo + Mew and Pikachu, which will be Uber and LC respectively.
 // The rest will be set to Illegal + Unobtainable, like SWSH.
 export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {

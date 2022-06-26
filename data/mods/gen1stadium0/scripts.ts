@@ -1,6 +1,6 @@
 /**
- * Stadium Zero, the first Stadium game only released in Japan, is an amalgamation of both RBY and Stadium. 
- * I'm really stupid so I'm just going to keep most of the script rather than cut what's unnecessary. 
+ * Stadium Zero, the first Stadium game only released in Japan, is an amalgamation of both RBY and Stadium.
+ * I'm really stupid so I'm just going to keep most of the script rather than cut what's unnecessary.
  */
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen1stadium', // generally, it is more similar to this, so let's import from there.

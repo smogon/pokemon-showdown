@@ -4,13 +4,13 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 		name: 'Standard',
 		ruleset: ['Obtainable', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Exact HP Mod', 'Cancel Mod'],
 	},
-	expansiondisk: { // Stadium Zero was intended to have an Expansion Disk that legalised all the "dexited" Pokemon. I think including something like this is nice.
+	expansiondisk: { // Stadium Zero was intended to have an Expansion Disk that legalised all the "dexited" Pokemon.
 		effectType: 'ValidatorRule',
 		name: 'Expansion Disk',
 		desc: 'Legalises Pok\u00e9mon unobtainable in Pok\u00e9mon Stadium Zero.',
 		ruleset: ['Obtainable', '+Unobtainable', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Exact HP Mod', 'Cancel Mod'],
 	},
-	nintendocup1997movelegality: { // It's for NC97, but is functionally identical: the only move change is Tamamushi Magikarp being made legal.
+	nintendocup1997movelegality: { // It's for NC97 but is functionally identical: only move change is Tamamushi Magikarp.
 		effectType: 'ValidatorRule',
 		name: 'Nintendo Cup 1997 Move Legality',
 		desc: "Bans move combinations on Pok\u00e9mon that would only be obtainable in Pok\u00e9mon Yellow.",
@@ -59,7 +59,6 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 				tangela: {absorb: 29, growth: 49, vinewhip: 'illegal'},
 				scyther: {wingattack: 'illegal'},
 				pinsir: {bind: 'illegal'},
-				magikarp: {dragonrage: 'illegal'},
 				eevee: {quickattack: 27, tailwhip: 31, bite: 37, growl: 'illegal', focusenergy: 'illegal'},
 				vaporeon: {
 					quickattack: 27, tailwhip: 31, watergun: 31, bite: 37, acidarmor: 42, haze: 44, mist: 48, hydropump: 54,
