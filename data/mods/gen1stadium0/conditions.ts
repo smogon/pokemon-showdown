@@ -27,7 +27,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'par');
-			target.addVolatile('parspeeddrop');  // TESTME: This should be ignored after a boost.
+			target.addVolatile('parspeeddrop'); // TESTME: This should be ignored after a boost.
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove(pokemon) {
