@@ -1674,7 +1674,7 @@ export class TeamValidator {
 			problems.push(`This format is in gen ${dex.gen} and ${name} is from gen ${eventData.generation}${etc}.`);
 		}
 
-		if (eventData.japan && dex.currentMod !== 'gen1jpn') {
+		if (eventData.japan && dex.currentMod !== 'gen1jpn' || 'gen1stadium0') {
 			if (fastReturn) return true;
 			problems.push(`${name} has moves from Japan-only events, but this format simulates International Yellow/Crystal which can't trade with Japanese games.`);
 		}

@@ -3805,6 +3805,20 @@ export const Formats: FormatList = [
 		banlist: ['Uber'],
 	},
 	{
+		name: "[Gen 1] Nintendo Cup 1998",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3695448/9066166">Stadium Cup Format Megathread</a>`,
+		],
+
+		mod: 'gen1stadium0',
+		searchShow: false,
+		ruleset: [
+			'Picked Team Size = 3', 'Max Level = 30',
+			'Obtainable', 'Team Preview', 'Stadium Sleep Clause', 'Species Clause', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Nintendo Cup 1997 Move Legality',
+		],
+		banlist: ['Uber'],
+	},
+	{
 		name: "[Gen 1] Nintendo Cup 1997",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3682412/">Nintendo Cup 1997 Discussion &amp; Resources</a>`,
@@ -3842,6 +3856,14 @@ export const Formats: FormatList = [
 		mod: 'gen1',
 		searchShow: false,
 		ruleset: ['[Gen 1] OU', 'Allow Tradeback'],
+	},
+	{
+		name: "[Gen 1] Stadium Zero OU",
+
+		mod: 'gen1stadium0',
+		searchShow: false,
+		ruleset: ['Standard'],
+		banlist: ['Uber'],
 	},
 	{
 		name: "[Gen 1] Custom Game",
