@@ -580,6 +580,10 @@ export const commands: Chat.ChatCommands = {
 	recommendationhelp: [
 		`/recommendation [key1, key2, key3, ...] - Displays a random recommendation that matches all keys, if one exists.`,
 		`If no arguments are provided, a random recommendation is shown.`,
+		`/addrecommendation artist | song title | url | description | tag1 | tag2 | ... - Adds a song recommendation. Requires: + % @ * # &`,
+		`/removerecommendation artist | song title - Removes a song recommendation. Requires: % @ * # &`,
+		`If you added a recommendation, you can remove it on your own without being one of the required ranks.`,
+		`/suggestrecommendation artist | song title | url | description | tag1 | tag2 | ... - Suggest a song recommendation.`,
 	],
 
 	likerec: 'likerecommendation',
