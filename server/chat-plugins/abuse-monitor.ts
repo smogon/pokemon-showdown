@@ -982,12 +982,13 @@ export const commands: Chat.ChatCommands = {
 			const newAverage = scales.reduce((a, b) => a + b) / scales.length;
 			const oldAverage = oldScales.reduce((a, b) => a + b) / oldScales.length;
 			const round = (num: number) => Number(num.toFixed(4));
-			const change = oldAverage / newAverage;
+			const change = newAverage / oldAverage;
 
 			this.sendReply(`Change average: ${change}`);
 			await this.parse(`/am bs prescale`);
 
 			for (const p of settings.punishments) {
+				if (p.type !== type) continue;
 				if (p.certainty) p.certainty = round(p.certainty * change);
 				if (p.secondaryTypes) {
 					for (const k in p.secondaryTypes) {
