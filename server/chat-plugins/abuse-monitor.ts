@@ -948,6 +948,67 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`DONE. ${Chat.count(unspawned, 'processes', 'process')} unspawned.`);
 			this.addGlobalModAction(`${user.name} used /abusemonitor respawn`);
 		},
+		async rescale(target, room, user) {
+			// people should NOT be fucking with this unless they know what they are doing
+			if (!WHITELIST.includes(user.id)) this.canUseConsole();
+			const examples = target.split(',').filter(Boolean);
+			const type = examples.shift()?.toUpperCase().replace(/\s/g, '_') || "";
+			if (!(type in Artemis.RemoteClassifier.ATTRIBUTES)) {
+				return this.errorReply(`Invalid type: ${type}`);
+			}
+			if (examples.length < 3) {
+				return this.errorReply(`At least 3 examples are needed.`);
+			}
+			const scales = [];
+			const oldScales = [];
+			for (const chunk of examples) {
+				const [message, rawNum] = chunk.split('|');
+				if (!(message && rawNum)) {
+					return this.errorReply(`Invalid example: "${chunk}". Must be in \`\`message|num\`\` format.`);
+				}
+				const num = parseFloat(rawNum);
+				if (isNaN(num)) {
+					return this.errorReply(`Invalid number in example '${chunk}'.`);
+				}
+				const data = await classifier.classify(message);
+				if (!data) {
+					return this.errorReply(`No results found. Try again in a minute?`);
+				}
+				oldScales.push(num);
+				scales.push(data[type]);
+				// take a bit to dodge rate limits
+				await Utils.waitUntil(Date.now() + 1000);
+			}
+			const newAverage = scales.reduce((a, b) => a + b) / scales.length;
+			const oldAverage = oldScales.reduce((a, b) => a + b) / oldScales.length;
+			const round = (num: number) => Number(num.toFixed(4));
+			const change = oldAverage / newAverage;
+
+			this.sendReply(`Change average: ${change}`);
+			await this.parse(`/am bs prescale`);
+
+			for (const p of settings.punishments) {
+				if (p.certainty) p.certainty = round(p.certainty * change);
+				if (p.secondaryTypes) {
+					for (const k in p.secondaryTypes) {
+						p.secondaryTypes[k] = round(p.secondaryTypes[k] * change);
+					}
+				}
+			}
+			if (type in settings.specials) {
+				for (const n in settings.specials[type]) {
+					const num = settings.specials[type][n];
+					delete settings.specials[type][n];
+					settings.specials[type][round(parseFloat(n) * change)] = num;
+				}
+			}
+			saveSettings();
+			this.refreshPage('abusemonitor-settings');
+			this.addGlobalModAction(
+				`${user.name} used /abusemonitor rescale ${type.toLowerCase().replace('_', '')}`
+			);
+			this.globalModlog(`ABUSEMONITOR RESCALE`, null, `${type}: ${examples.join(', ')}`);
+		},
 		async userclear(target, room, user) {
 			checkAccess(this);
 			const {targetUsername, rest} = this.splitUser(target);
