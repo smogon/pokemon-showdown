@@ -882,7 +882,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	mamoswine: {
 		randomBattleMoves: ["earthquake", "endeavor", "iceshard", "stealthrock", "stoneedge", "superpower"],
-		tier: "OU",
+		tier: "(OU)",
 	},
 	corsola: {
 		randomBattleMoves: ["recover", "reflect", "stealthrock", "surf", "toxic"],
