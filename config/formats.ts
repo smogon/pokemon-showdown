@@ -656,6 +656,7 @@ export const Formats: FormatList = [
 			for (const set of team) {
 				if (!set.item) continue;
 				const item = this.dex.items.get(set.item).name;
+				if (!/^tr\d\d/i.test(item)) continue;
 				if (trs.has(item)) {
 					return [`Your team already has a Pok\u00e9mon with ${item}.`];
 				}
