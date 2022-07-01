@@ -708,7 +708,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		// searchShow: false,
-		ruleset: ['Standard', '2 Ability Clause', 'Dynamax Clause'],
+		ruleset: ['Standard', '!Sleep Clause Mod', 'Sleep Moves Clause', '2 Ability Clause', 'Dynamax Clause'],
 		banlist: [
 			'Blacephalon', 'Blaziken', 'Butterfree', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chansey', 'Combusken', 'Cresselia', 'Darmanitan-Galar', 'Dialga', 'Dracovish',
 			'Eternatus', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kartana', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Base', 'Lugia', 'Lunala',
