@@ -3158,7 +3158,7 @@ export const Formats: FormatList = [
 		mod: 'gen6',
 		searchShow: false,
 		ruleset: ['[Gen 6] OU', '+CAP'],
-		banlist: ['Aurumoth', 'Cawmodore', 'Crucibelle-Mega'],
+		banlist: ['Aurumoth', 'Cawmodore'],
 	},
 	{
 		name: "[Gen 6] Battle Spot Singles",
