@@ -664,7 +664,7 @@ export const commands: Chat.ChatCommands = {
 				<button name="openOptions" class="button" aria-label="Options"><i class="fa fa-cog"></i></button> menu in the upper {}
 				right.
 			</p>, <p>
-				Avatars from generations other than 3-5 are hidden. You can find them in this {}
+				Avatars from generations other than 4-5 are hidden. You can find them in this {}
 				<a href="https://play.pokemonshowdown.com/sprites/trainers/"><strong>full list of avatars</strong></a>. {}
 				You can use them by typing <code>/avatar <i>[avatar's name]</i></code> into any chat. For example, {}
 				<code>/avatar erika-gen2</code>.
