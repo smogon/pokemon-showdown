@@ -4082,7 +4082,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	vullaby: {
-		tier: "NFE",
+		tier: "LC",
 	},
 	mandibuzz: {
 		randomBattleMoves: ["bravebird", "defog", "foulplay", "roost", "toxic"],
