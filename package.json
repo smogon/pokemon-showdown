@@ -4,7 +4,7 @@
   "version": "0.11.7",
   "main": ".sim-dist/index.js",
   "dependencies": {
-    "@swc/core": "^1.2.61",
+    "@swc/core": "1.2.205",
     "preact": "^10.5.15",
     "preact-render-to-string": "^5.1.19",
     "probe-image-size": "^5.0.0",
