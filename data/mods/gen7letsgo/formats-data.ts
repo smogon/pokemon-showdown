@@ -320,7 +320,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	alakazam: {
-		tier: "UUB:",
+		tier: "UUBL",
 		doublesTier: "DOU",
 	},
 	alakazammega: {
