@@ -423,7 +423,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	kingler: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DUU",
 		randomBattleMoves: ["agility", "razorshell", "rockslide", "swordsdance", "xscissor"],
 	},
@@ -517,7 +517,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["earthquake", "knockoff", "leechseed", "powerwhip", "sleeppowder", "sludgebomb"],
 	},
 	kangaskhan: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DUU",
 		randomBattleMoves: ["crunch", "doubleedge", "earthquake", "fakeout", "hammerarm"],
 	},
@@ -1196,7 +1196,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	ludicolo: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DOU",
 		randomBattleMoves: ["gigadrain", "hydropump", "icebeam", "raindance", "scald"],
 	},
@@ -1570,7 +1570,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	chimecho: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DUU",
 		randomBattleMoves: ["healingwish", "lightscreen", "psychic", "recover", "reflect", "thunderwave"],
 	},
@@ -1612,7 +1612,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["crunch", "icebeam", "shellsmash", "waterfall"],
 	},
 	gorebyss: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DUU",
 		randomBattleMoves: ["hydropump", "icebeam", "psychic", "shellsmash"],
 	},
@@ -1970,7 +1970,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	abomasnow: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DOU",
 		randomBattleMoves: ["auroraveil", "blizzard", "earthquake", "iceshard", "woodhammer"],
 	},
