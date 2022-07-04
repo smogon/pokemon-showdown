@@ -16,7 +16,7 @@ Installing
 If your distro package manager has an old Node.js version, the simplest way to upgrade is `n` – usually no root necessary:
 
     npm install --global n
-    n latest
+    n 14.18.2
 
 
 Detailed installation instructions
