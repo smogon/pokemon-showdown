@@ -8,13 +8,13 @@ let battle;
 describe(`Instruct`, function () {
 	afterEach(() => battle.destroy());
 
-	it(`should make the targt reuse its last move`, function () {
+	it(`should make the target reuse its last move`, function () {
 		battle = common.createBattle([
 			[{species: "Swalot", moves: ['stockpile']}],
 			[{species: "Oranguru", moves: ['instruct']}],
 		]);
 		battle.makeChoices();
-		assert.strictEqual(battle.p1.active[0].boosts.def, 2);
+		assert.equal(battle.p1.active[0].boosts.def, 2);
 	});
 
 	it(`should not trigger AfterMove effects of the instructed move for the Instruct user`, function () {
