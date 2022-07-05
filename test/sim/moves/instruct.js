@@ -10,7 +10,7 @@ describe(`Instruct`, function () {
 
 	it(`should make the target reuse its last move`, function () {
 		battle = common.createBattle([
-			[{species: "Swalot", moves: ['stockpile']}],
+			[{species: "Cramorant", moves: ['stockpile']}],
 			[{species: "Oranguru", moves: ['instruct']}],
 		]);
 		battle.makeChoices();
