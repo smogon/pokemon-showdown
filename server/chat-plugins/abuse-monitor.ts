@@ -240,13 +240,6 @@ export async function searchModlog(
 export const classifier = new Artemis.RemoteClassifier();
 
 export async function runActions(user: User, room: GameRoom, message: string, response: Record<string, number>) {
-	// always mute on flag
-	const roomMutes = muted.get(room) || new WeakMap();
-	roomMutes.set(user, Date.now() + MUTE_DURATION);
-	if (!user.trusted) {
-		muted.set(room, roomMutes);
-	}
-
 	const keys = Utils.sortBy(Object.keys(response), k => -response[k]);
 	const recommended: [string, string, boolean][] = [];
 	const prevRecommend = cache[room.roomid]?.recommended?.[user.id];
@@ -444,6 +437,13 @@ type PunishmentHandler = (
 ) => void | boolean | Promise<void | boolean>;
 
 const punishmentHandlers: Record<string, PunishmentHandler> = {
+	mute(user, room) {
+		const roomMutes = muted.get(room) || new WeakMap();
+		if (!user.trusted) {
+			muted.set(room, roomMutes);
+			roomMutes.set(user, Date.now() + MUTE_DURATION);
+		}
+	},
 	warn(user, room, response, message) {
 		const reason = `${Users.PLAYER_SYMBOL}${user.name}: ${message}`;
 		if (!user.connected) {
