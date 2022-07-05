@@ -9081,10 +9081,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return false;
 			}
 			this.add('-singleturn', target, 'move: Instruct', '[of] ' + source);
-			const currentMove = this.activeMove;
-			this.actions.runMove(target.lastMove.id, target, target.lastMoveTargetLoc!);
-			// prevent AfterMove event from the instructed move from running for the Instruct user
-			this.activeMove = currentMove;
+			this.queue.prioritizeAction(this.queue.resolveAction({
+				choice: 'move',
+				pokemon: target,
+				moveid: target.lastMove.id,
+				targetLoc: target.lastMoveTargetLoc!,
+			})[0] as MoveAction);
 		},
 		secondary: null,
 		target: "normal",
