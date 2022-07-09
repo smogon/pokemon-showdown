@@ -434,11 +434,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					'reflect': 'Reflect',
 				};
 				for (const v in hazeVolatiles) {
-					if (!pokemon.removeVolatile(v))
+					if (!pokemon.removeVolatile(v)) {
 						continue;
+					}
 					if (silentHackVolatiles.includes(v)) {
 						// these volatiles have their own onEnd method that prints, so to avoid
-						// double printing and ensure they are still silent, we need to tack on a 
+						// double printing and ensure they are still silent, we need to tack on a
 						// silent attribute at the end
 						this.log[this.log.length - 1] += silentHack;
 					} else {
