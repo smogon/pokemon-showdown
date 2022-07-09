@@ -41,7 +41,7 @@ Status
 ------
 Freeze never thaws unless hit by a Fire-type attack or by Haze.
 Sleep lasts 1-7 turns and you wake up at the end of the turn.
-If a pokemon has its sleep or freeze status healed by haze, it will not be able to move on that turn.
+If a Pokemon has its sleep or freeze status healed by Haze, it will not be able to move on that turn.
 
 1/256 miss
 ----------

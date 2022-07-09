@@ -12,7 +12,7 @@ describe('Haze - RBY', function () {
 
 	it('should remove stat changes', function () {
 		battle = common.gen(1).createBattle([
-			[{species: 'Mew', moves: ['agility', 'haze']}],
+			[{species: "Mew", moves: ['agility', 'haze']}],
 			[{species: "Mewtwo", moves: ['swordsdance', 'splash']}],
 		]);
 
@@ -27,7 +27,7 @@ describe('Haze - RBY', function () {
 
 	it('should remove opponent\'s status', function () {
 		battle = common.gen(1).createBattle([
-			[{species: 'Mew', moves: ['thunderwave', 'haze']}],
+			[{species: "Mew", moves: ['thunderwave', 'haze']}],
 			[{species: "Mewtwo", moves: ['splash']}],
 		]);
 
@@ -40,7 +40,7 @@ describe('Haze - RBY', function () {
 
 	it('should not remove user\'s status', function () {
 		battle = common.gen(1).createBattle([
-			[{species: 'Mew', moves: ['thunderwave']}],
+			[{species: "Mew", moves: ['thunderwave']}],
 			[{species: "Mewtwo", moves: ['haze']}],
 		]);
 
@@ -53,7 +53,7 @@ describe('Haze - RBY', function () {
 
 	it('should remove focus energy', function () {
 		battle = common.gen(1).createBattle([
-			[{species: 'Mew', moves: ['splash']}],
+			[{species: "Mew", moves: ['splash']}],
 			[{species: "Mewtwo", moves: ['focusenergy', 'haze']}],
 		]);
 
@@ -66,7 +66,7 @@ describe('Haze - RBY', function () {
 
 	it('should remove reflect and light screen', function () {
 		battle = common.gen(1).createBattle([
-			[{species: 'Mew', moves: ['reflect', 'lightscreen', 'haze']}],
+			[{species: "Mew", moves: ['reflect', 'lightscreen', 'haze']}],
 			[{species: "Mewtwo", moves: ['splash']}],
 		]);
 
@@ -83,8 +83,8 @@ describe('Haze - RBY', function () {
 
 	it('should remove leech seed and confusion', function () {
 		battle = common.gen(1).createBattle([
-			[{species: 'Mew', moves: ['leechseed', 'confuse ray', 'haze']}],
-			[{species: 'Muk', moves: ['splash']}],
+			[{species: "Mew", moves: ['leechseed', 'confuse ray', 'haze']}],
+			[{species: "Muk", moves: ['splash']}],
 		]);
 		const p2volatiles = battle.p2.active[0].volatiles;
 
@@ -100,12 +100,12 @@ describe('Haze - RBY', function () {
 
 	it('should remove disable', function () {
 		battle = common.gen(1).createBattle([
-			[{species: 'Mew', moves: ['disable', 'haze', 'splash']}],
-			[{species: 'Muk', moves: ['splash', 'tackle']}],
+			[{species: "Mew", moves: ['disable', 'haze', 'splash']}],
+			[{species: "Muk", moves: ['splash', 'tackle']}],
 		]);
 		const p2volatiles = battle.p2.active[0].volatiles;
 
-		battle.makeChoices('move disable', 'move splash');
+		battle.makeChoices('move disable', 'move tackle');
 		assert('disable' in p2volatiles);
 
 		battle.makeChoices('move haze', 'move tackle');
@@ -115,8 +115,8 @@ describe('Haze - RBY', function () {
 	it(`should still make previously disabled pokemon (on the same turn) 
 		with 1 move use struggle`, function () {
 		battle = common.gen(1).createBattle([
-			[{species: 'Mew', moves: ['disable', 'haze']}],
-			[{species: 'Muk', moves: ['splash']}],
+			[{species: "Mew", moves: ['disable', 'haze']}],
+			[{species: "Muk", moves: ['tackle']}],
 		]);
 		const p2volatiles = battle.p2.active[0].volatiles;
 		battle.makeChoices('move disable', 'auto');
@@ -129,8 +129,8 @@ describe('Haze - RBY', function () {
 	it(`should convert toxic poisoning to regular poisoning for the user 
 	but not reset the toxic counter`, function () {
 		battle = common.gen(1).createBattle([
-			[{species: 'Mew', moves: ['toxic']}],
-			[{species: 'Abra', moves: ['haze']}],
+			[{species: "Mew", moves: ['toxic']}],
+			[{species: "Abra", moves: ['haze']}],
 		]);
 		battle.makeChoices();
 		assert.equal(battle.p2.active[0].status, 'psn');
@@ -139,8 +139,8 @@ describe('Haze - RBY', function () {
 
 	it('should not remove substitute from either side', function () {
 		battle = common.gen(1).createBattle([
-			[{species: 'Mew', moves: ['substitute', 'haze']}],
-			[{species: 'Muk', moves: ['substitute', 'splash']}],
+			[{species: "Mew", moves: ['substitute', 'haze']}],
+			[{species: "Muk", moves: ['substitute', 'splash']}],
 		]);
 
 		battle.makeChoices('move substitute', 'move substitute');
@@ -151,8 +151,8 @@ describe('Haze - RBY', function () {
 
 	it('should not allow a previously sleeping opponent to move on the same turn', function () {
 		battle = common.gen(1).createBattle([
-			[{species: 'Mew', moves: ['spore', 'haze', 'tackle']}],
-			[{species: 'Muk', moves: ['splash']}],
+			[{species: "Mew", moves: ['spore', 'haze', 'tackle']}],
+			[{species: "Muk", moves: ['splash']}],
 		]);
 		battle.makeChoices('move spore', 'auto');
 		battle.makeChoices('move haze', 'auto');
@@ -164,8 +164,8 @@ describe('Haze - RBY', function () {
 
 	it('should not allow a previously frozen opponent to move on the same turn', function () {
 		battle = common.gen(1).createBattle([
-			[{species: 'Mew', moves: ['haze', 'icebeam']}],
-			[{species: 'Muk', moves: ['splash']}],
+			[{species: "Mew", moves: ['haze', 'icebeam']}],
+			[{species: "Muk", moves: ['splash']}],
 		]);
 		battle.makeChoices('move icebeam', 'auto');
 		battle.p2.active[0].trySetStatus('frz', battle.p2.active[0]);

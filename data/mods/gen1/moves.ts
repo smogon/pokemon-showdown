@@ -268,38 +268,39 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 	},
 	disable: {
-		inherit: true,
+		num: 50,
+		accuracy: 55,
+		basePower: 0,
+		category: "Status",
+		name: "Disable",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, bypasssub: 1},
+		volatileStatus: 'disable',
 		onTryHit(target) {
-			const ppSum = target.moveSlots.reduce((acc, val) => acc + val.pp, 0);
-			if (!ppSum) {
-				return false; // all moves had 0 pp
-			}
+			return target.moveSlots.some(ms => ms.pp > 0) && undefined;
 		},
 		condition: {
-			duration: 4,
-			durationCallback(target, source, effect) {
-				// duration is 0 to 7 turns in gen 1
-				const duration = this.random(0, 7);
-				return duration;
-			},
 			onStart(pokemon) {
-				if (!this.queue.willMove(pokemon)) {
-					this.effectState.duration++;
-				}
 				// disable can only select moves that have pp > 0, hence the onTryHit modification
-				const moves = pokemon.moves.filter((m, indx) => pokemon.moveSlots[indx].pp > 0);
-				const move = this.dex.moves.get(this.sample(moves));
-				this.add('-start', pokemon, 'Disable', move.name);
-				this.effectState.move = move.id;
-				return;
+				const moveSlot = this.sample(pokemon.moveSlots.filter(ms => ms.pp > 0));
+				this.add('-start', pokemon, 'Disable', moveSlot.move);
+				this.effectState.move = moveSlot.id;
+				// 1-8 turns (which will in effect translate to 0-7 missed turns for the target)
+				this.effectState.time = this.random(1, 9);
 			},
-			onResidualOrder: 14,
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Disable');
 			},
-			onBeforeMove(attacker, defender, move) {
+			onBeforeMovePriority: 7,
+			onBeforeMove(pokemon, target, move) {
+				pokemon.volatiles['disable'].time--;
+				if (!pokemon.volatiles['disable'].time) {
+					pokemon.removeVolatile('disable');
+					return;
+				}
 				if (move.id === this.effectState.move) {
-					this.add('cant', attacker, 'Disable', move);
+					this.add('cant', pokemon, 'Disable', move);
 					return false;
 				}
 			},
@@ -311,7 +312,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 		},
+		secondary: null,
 		target: "normal",
+		type: "Normal",
 	},
 	dizzypunch: {
 		inherit: true,
@@ -420,33 +423,25 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				// should only clear a specific set of volatiles and does not clear the toxic counter
 				const silentHack = '|[silent]';
-				if ('disable' in pokemon.volatiles) {
-					pokemon.removeVolatile('disable');
-					this.log[this.log.length - 1] += silentHack;
-				}
-				if ('confusion' in pokemon.volatiles) {
-					pokemon.removeVolatile('confusion');
-					this.log[this.log.length - 1] += silentHack;
-				}
-				if ('mist' in pokemon.volatiles) {
-					pokemon.removeVolatile('mist');
-					this.log[this.log.length - 1] += silentHack;
-				}
-				if ('focusenergy' in pokemon.volatiles) {
-					pokemon.removeVolatile('focusenergy');
-					this.log[this.log.length - 1] += silentHack;
-				}
-				if ('leechseed' in pokemon.volatiles) {
-					pokemon.removeVolatile('leechseed');
-					this.log[this.log.length - 1] += silentHack;
-				}
-				if ('lightscreen' in pokemon.volatiles) {
-					pokemon.removeVolatile('lightscreen');
-					this.log[this.log.length - 1] += silentHack;
-				}
-				if ('reflect' in pokemon.volatiles) {
-					pokemon.removeVolatile('reflect');
-					this.log[this.log.length - 1] += silentHack;
+				const silentVolatiles = ['disable', 'confusion'];
+				const hazeVolatiles: Record<string, string> = {
+					'disable': '',
+					'confusion': '',
+					'mist': 'Mist',
+					'focusenergy': 'move: Focus Energy',
+					'leechseed': 'move: Leech Seed',
+					'lightscreen': 'Light Screen',
+					'reflect': 'Reflect',
+				};
+				for (const v in hazeVolatiles) {
+					if (!pokemon.removeVolatile(v)) {
+						continue;
+					}
+					if (silentVolatiles.includes(v)) {
+						this.log[this.log.length - 1] += silentHack;
+					} else {
+						this.add('-end', pokemon, hazeVolatiles[v], '[silent]');
+					}
 				}
 			}
 		},
