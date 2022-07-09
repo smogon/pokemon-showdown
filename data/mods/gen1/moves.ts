@@ -423,8 +423,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				// should only clear a specific set of volatiles and does not clear the toxic counter
 				const silentHack = '|[silent]';
-				const silentVolatiles = ['disable', 'confusion'];
-				const hazeVolatiles: Record<string, string> = {
+				const silentHackVolatiles = ['disable', 'confusion'];
+				const hazeVolatiles: {[key: string]: string} = {
 					'disable': '',
 					'confusion': '',
 					'mist': 'Mist',
@@ -434,10 +434,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					'reflect': 'Reflect',
 				};
 				for (const v in hazeVolatiles) {
-					if (!pokemon.removeVolatile(v)) {
+					if (!pokemon.removeVolatile(v))
 						continue;
-					}
-					if (silentVolatiles.includes(v)) {
+					if (silentHackVolatiles.includes(v)) {
+						// these volatiles have their own onEnd method that prints, so to avoid
+						// double printing and ensure they are still silent, we need to tack on a 
+						// silent attribute at the end
 						this.log[this.log.length - 1] += silentHack;
 					} else {
 						this.add('-end', pokemon, hazeVolatiles[v], '[silent]');
