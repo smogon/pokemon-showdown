@@ -2549,7 +2549,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen2',
 		ruleset: ['Standard'],
-		banlist: ['Uber'],
+		banlist: ['Uber', 'Mean Look + Baton Pass', 'Spider Web + Baton Pass'],
 	},
 	{
 		name: "[Gen 1] OU",
