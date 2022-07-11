@@ -784,6 +784,18 @@ export class Side {
 				}
 			}
 		}
+		if (this.battle.format.id === 'gen8jumpmagikarp') {
+			let hasMagikarp = false;
+			for (const pos of positions) {
+				if (this.pokemon[pos].species.name === 'Magikarp') {
+					hasMagikarp = true;
+					break;
+				}
+			}
+			if (!hasMagikarp) {
+				return this.emitChoiceError(`You must bring Magikarp to the battle.`);
+			}
+		}
 		for (const [index, pos] of positions.entries()) {
 			this.choice.switchIns.add(pos);
 			this.choice.actions.push({
