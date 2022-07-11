@@ -27,16 +27,15 @@ export const Scripts: ModdedBattleScriptsData = {
 
 				pokemon.maybeDisabled = false;
 				const ally = side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
-				let allyMoves = ally ? this.dex.deepClone(ally.baseMoveSlots) : null;
-				if (allyMoves) {
-					allyMoves = allyMoves.filter(m => !pokemon.baseMoves.includes(m.id));
-					pokemon.moveSlots = pokemon.baseMoveSlots.concat(allyMoves);
-				}
+				let allyMoves = ally ? this.dex.deepClone(ally.baseMoveSlots) : [];
+				allyMoves = allyMoves.filter(m => !pokemon.baseMoves.includes(m.id));
+				pokemon.moveSlots = pokemon.baseMoveSlots.concat(allyMoves);
+
 				for (const moveSlot of pokemon.moveSlots) {
 					moveSlot.disabled = false;
 					moveSlot.disabledSource = '';
 				}
-	
+
 				this.runEvent('DisableMove', pokemon);
 				if (!pokemon.ateBerry) pokemon.disableMove('belch');
 				if (!pokemon.getItem().isBerry) pokemon.disableMove('stuffcheeks');

@@ -93,7 +93,7 @@ export const Formats: FormatList = [
 		],
 		onSwitchInPriority: 2,
 		onSwitchIn(pokemon) {
-			/*for (const side of this.sides) {
+			for (const side of this.sides) {
 				if (side.allies().every(ally => ally && !ally.fainted)) {
 					const a = side.active[0];
 					const b = side.active[1];
@@ -103,7 +103,7 @@ export const Formats: FormatList = [
 					const bInnate = 'ability:' + a.ability;
 					b.volatiles[bInnate] = {id: bInnate, target: b};
 				}
-			}*/
+			}
 			const ally = pokemon.side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
 			if (ally && ally.ability !== pokemon.ability) {
 				if (!pokemon.m.innate) {
