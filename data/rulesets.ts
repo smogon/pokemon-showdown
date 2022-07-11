@@ -1262,6 +1262,19 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
+	gemsclause: {
+		effectType: 'ValidatorRule',
+		name: 'Gems Clause',
+		desc: "Bans all Gems",
+		onValidateSet(set) {
+			if (!set.item) return;
+			const item = this.dex.items.get(set.item);
+			if (item.isGem) {
+				if (this.ruleTable.has(`+item:${item.id}`)) return;
+				return [`${item.name} is banned due to Gems Clause.`];
+			}
+		},
+	},
 	'sketchgen8moves': {
 		effectType: 'ValidatorRule',
 		name: 'Sketch Gen 8 Moves',
