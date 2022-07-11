@@ -454,6 +454,7 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 8] Jump! Magikarp",
+		desc: `Every team must contain Magikarp and bring it to the game.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3704588/">Jump! Magikarp</a>`,
 		],
