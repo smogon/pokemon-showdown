@@ -464,7 +464,7 @@ export const Formats: FormatList = [
 		onValidateTeam(team) {
 			let hasMagikarp = false;
 			for (const set of team) {
-				let species = this.dex.species.get(set.species);
+				const species = this.dex.species.get(set.species);
 				if (species.name === 'Magikarp') {
 					hasMagikarp = true;
 					break;
