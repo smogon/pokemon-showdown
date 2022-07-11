@@ -460,6 +460,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
+		gameType: 'doubles',
 		ruleset: ['Flat Rules', '!! Picked Team Size = 2', '!! Adjust Level = 50', 'Min Source Gen = 8'],
 		banlist: ['Sub-Legendary'],
 		onValidateTeam(team) {
@@ -475,6 +476,7 @@ export const Formats: FormatList = [
 				return [`Your team must contain Magikarp.`];
 			}
 		},
+		// Bringing 1 Magikarp during Team Preview hardcoded in sim/side.ts#chooseTeam
 	},
 	{
 		name: "[Gen 8] Doubles Custom Game",
