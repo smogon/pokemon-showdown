@@ -290,15 +290,6 @@ export const Formats: FormatList = [
 		restricted: ['Restricted Legendary'],
 	},
 	{
-		name: "[Gen 8] Single Battle Cup",
-		threads: [
-			`&bullet; <a href="https://www.pokemon.com/us/pokemon-news/register-now-for-the-single-battle-cup-competition/">Single Battle Cup</a>`,
-		],
-
-		mod: 'gen8',
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
-	},
-	{
 		name: "[Gen 8] Custom Game",
 
 		mod: 'gen8',
@@ -458,6 +449,29 @@ export const Formats: FormatList = [
 			}
 			if (set.moves.length !== 1 || this.dex.moves.get(set.moves[0]).id !== 'metronome') {
 				return [`${set.name || set.species} has illegal moves.`, `(Pok\u00e9mon can only have one Metronome in their moveset)`];
+			}
+		},
+	},
+	{
+		name: "[Gen 8] Jump! Magikarp",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3704588/">Jump! Magikarp</a>`,
+		],
+
+		mod: 'gen8',
+		ruleset: ['Flat Rules', '!! Picked Team Size = 2', '!! Adjust Level = 50', 'Min Source Gen = 8'],
+		banlist: ['Sub-Legendary'],
+		onValidateTeam(team) {
+			let hasMagikarp = false;
+			for (const set of team) {
+				let species = this.dex.species.get(set.species);
+				if (species.name === 'Magikarp') {
+					hasMagikarp = true;
+					break;
+				}
+			}
+			if (!hasMagikarp) {
+				return [`Your team must contain Magikarp.`];
 			}
 		},
 	},
