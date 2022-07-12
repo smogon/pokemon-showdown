@@ -399,6 +399,29 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
+	forceselect: {
+		effectType: 'ValidatorRule',
+		name: 'Force Select',
+		desc: `Forces a Pokemon to be on the team and selected at Team Preview. Usage: Force Select = [Pokemon], e.g. "Force Select = Magikarp"`,
+		hasValue: true,
+		onValidateRule(value) {
+			if (!this.dex.species.get(value).exists) throw new Error(`Misspelled Pokemon "${value}"`);
+		},
+		onValidateTeam(team) {
+			let hasSelection = false;
+			const species = this.dex.species.get(this.ruleTable.valueRules.get('forceselect'));
+			for (const set of team) {
+				if (species.name === set.species) {
+					hasSelection = true;
+					break;
+				}
+			}
+			if (!hasSelection) {
+				return [`Your team must contain ${species.name}.`];
+			}
+		},
+		// hardcoded in sim/side
+	},
 	evlimits: {
 		effectType: 'ValidatorRule',
 		name: 'EV Limits',

@@ -784,16 +784,24 @@ export class Side {
 				}
 			}
 		}
-		if (this.battle.format.id === 'gen8jumpmagikarp') {
-			let hasMagikarp = false;
-			for (const pos of positions) {
-				if (this.pokemon[pos].species.name === 'Magikarp') {
-					hasMagikarp = true;
-					break;
+		if (ruleTable.valueRules.has('forceselect')) {
+			const species = this.battle.dex.species.get(ruleTable.valueRules.get('forceselect'));
+			if (!data) {
+				// autoChoose
+				positions = [...this.pokemon.keys()].filter(pos => this.pokemon[pos].species.name === species.name)
+					.concat([...this.pokemon.keys()].filter(pos => this.pokemon[pos].species.name !== species.name))
+					.slice(0, pickedTeamSize);
+			} else {
+				let hasSelection = false;
+				for (const pos of positions) {
+					if (this.pokemon[pos].species.name === species.name) {
+						hasSelection = true;
+						break;
+					}
 				}
-			}
-			if (!hasMagikarp) {
-				return this.emitChoiceError(`You must bring Magikarp to the battle.`);
+				if (!hasSelection) {
+					return this.emitChoiceError(`You must bring ${species.name} to the battle.`);
+				}
 			}
 		}
 		for (const [index, pos] of positions.entries()) {
