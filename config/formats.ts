@@ -461,22 +461,8 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
-		ruleset: ['Flat Rules', '!! Picked Team Size = 2', '!! Adjust Level = 50', 'Min Source Gen = 8'],
+		ruleset: ['Flat Rules', '!! Picked Team Size = 2', '!! Adjust Level = 50', 'Min Source Gen = 8', 'Force Select = Magikarp'],
 		banlist: ['Sub-Legendary'],
-		onValidateTeam(team) {
-			let hasMagikarp = false;
-			for (const set of team) {
-				const species = this.dex.species.get(set.species);
-				if (species.name === 'Magikarp') {
-					hasMagikarp = true;
-					break;
-				}
-			}
-			if (!hasMagikarp) {
-				return [`Your team must contain Magikarp.`];
-			}
-		},
-		// Bringing 1 Magikarp during Team Preview hardcoded in sim/side.ts#chooseTeam
 	},
 	{
 		name: "[Gen 8] Doubles Custom Game",
