@@ -753,13 +753,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	secretpower: {
 		inherit: true,
-		condition: {
-			duration: 1,
-			onAfterMoveSecondarySelf(source, target, move) {
-				if (this.randomChance(3, 10)) {
-					this.boost({accuracy: -1}, target, source);
-				}
-				source.removeVolatile('secretpower');
+		secondary: {
+			chance: 30,
+			boosts: {
+				accuracy: -1,
 			},
 		},
 	},

@@ -1395,6 +1395,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: 90,
 	},
+	secretpower: {
+		inherit: true,
+		secondary: {
+			chance: 30,
+			status: 'par',
+		},
+	},
 	sketch: {
 		inherit: true,
 		onHit(target, source) {
