@@ -3877,7 +3877,7 @@ export const Formats: FormatList = [
         mod: 'gen1stadium', 
 		searchShow: false,
         ruleset: ['Adjust Level Down = 50', 'Picked Team Size = 3', 
-				'Obtainable', 'Team Preview', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause', 'Exact HP Mod', 'Cancel Mod', 'Nintendo Cup 1999 Move Legality'],
+				'Obtainable', 'Team Preview', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause', 'Exact HP Mod', 'Cancel Mod'],
         banlist: ['Venusaur', 'Dugtrio', 'Alakazam', 'Golem', 'Magneton', 'Gengar', 'Hypno', 'Electrode', 'Exeggutor', 'Chansey', 'Kangaskhan', 'Starmie', 'Jynx', 'Tauros', 'Gyarados', 'Lapras', 'Ditto', 'Vaporeon', 'Jolteon', 'Snorlax', 'Articuno', 'Zapdos', 'Dragonite', 'Mewtwo', 'Mew', 'Flareon + Focus Energy + Ember', 'Nidoking + Fury Attack + Thrash'],
     },
 	{

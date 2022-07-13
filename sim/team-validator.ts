@@ -1653,6 +1653,7 @@ export class TeamValidator {
 	 */
 	validateEvent(set: PokemonSet, eventData: EventInfo, eventSpecies: Species, because = ``, from = `from an event`) {
 		const dex = this.dex;
+		const ruleTable = this.ruleTable;
 		let name = set.species;
 		const species = dex.species.get(set.species);
 		const maxSourceGen = this.ruleTable.has('allowtradeback') ? Utils.clampIntRange(dex.gen + 1, 1, 8) : dex.gen;
@@ -1664,7 +1665,8 @@ export class TeamValidator {
 		const etc = `${because} ${from}`;
 
 		const problems = [];
-
+		
+		
 		if (dex.gen < 8 && this.minSourceGen > eventData.generation) {
 			if (fastReturn) return true;
 			problems.push(`This format requires Pokemon from gen ${this.minSourceGen} or later and ${name} is from gen ${eventData.generation}${etc}.`);
@@ -1673,12 +1675,10 @@ export class TeamValidator {
 			if (fastReturn) return true;
 			problems.push(`This format is in gen ${dex.gen} and ${name} is from gen ${eventData.generation}${etc}.`);
 		}
-
-		if (eventData.japan && dex.currentMod !== 'gen1jpn') {
+		if (eventData.japan && dex.currentMod !== 'gen1jpn' || !this.format.id.startsWith('nintendocup')) {
 			if (fastReturn) return true;
 			problems.push(`${name} has moves from Japan-only events, but this format simulates International Yellow/Crystal which can't trade with Japanese games.`);
 		}
-
 		if (eventData.level && (set.level || 0) < eventData.level) {
 			if (fastReturn) return true;
 			problems.push(`${name} must be at least level ${eventData.level}${etc}.`);
@@ -1753,7 +1753,6 @@ export class TeamValidator {
 			}
 		}
 		// Event-related ability restrictions only matter if we care about illegal abilities
-		const ruleTable = this.ruleTable;
 		if (ruleTable.has('obtainableabilities')) {
 			if (dex.gen <= 5 && eventData.abilities && eventData.abilities.length === 1 && !eventData.isHidden) {
 				if (species.name === eventSpecies.name) {
