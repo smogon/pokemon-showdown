@@ -6,8 +6,8 @@ const common = require('./../../common');
 let battle;
 
 describe('Agility + Swords Dance', function () {
-	afterEach(function () {
-	battle.destroy();
+		afterEach(function () {
+		battle.destroy();
 });
 
 	it('[Gen 1] Agility should negate the paralysis speed drop.', function () {
