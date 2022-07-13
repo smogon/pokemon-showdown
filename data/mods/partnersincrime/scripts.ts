@@ -26,10 +26,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 
 				pokemon.maybeDisabled = false;
+				pokemon.moveSlots = pokemon.moveSlots.filter(move => move.originalPoke === pokemon.m.value);
 				const ally = side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
-				let allyMoves = ally ? this.dex.deepClone(ally.baseMoveSlots) : [];
-				allyMoves = allyMoves.filter(m => !pokemon.baseMoves.includes(m.id));
-				pokemon.moveSlots = pokemon.baseMoveSlots.concat(allyMoves);
+				let allyMoves = ally ? this.dex.deepClone(ally.moveSlots) : [];
+				allyMoves = allyMoves.filter(move => !pokemon.moves.includes(move.id) && move.originalPoke === ally.m.value);
+				pokemon.moveSlots = pokemon.moveSlots.concat(allyMoves);
 
 				for (const moveSlot of pokemon.moveSlots) {
 					moveSlot.disabled = false;
@@ -170,22 +171,129 @@ export const Scripts: ModdedBattleScriptsData = {
 					ally.addVolatile(ally.m.innate);
 				}
 			}
+			// Entrainment
+			if (this.m.innate && this.m.innate.endsWith(ability.id)) {
+				this.removeVolatile(this.m.innate);
+				delete this.m.innate;
+			}
 			this.abilityOrder = this.battle.abilityOrder++;
 			return oldAbility;
 		},
-		hasAbility(ability) {
-			if (!this.ignoringAbility()) {
-				const ownAbility = this.ability;
-				return Array.isArray(ability) ?
-					ability.map(this.battle.toID).includes(ownAbility) :
-					ownAbility === this.battle.toID(ability);
-			}
+		hasAbility(ability: string | string[]) {
+			if (this.ignoringAbility()) return false;
+			const ownAbility = this.ability;
 			const ally = this.side.active.find(mon => mon && mon !== this && !mon.fainted);
-			if (!ally || ally.ignoringAbility()) return false;
-			const allyAbility = ally.ability;
-			return Array.isArray(ability) ?
-				ability.map(this.battle.toID).includes(allyAbility) :
-				allyAbility === this.battle.toID(ability);
+			const allyAbility = ally ? ally.ability : "";
+			if (!Array.isArray(ability)) {
+				if (ownAbility === this.battle.toID(ability) || allyAbility === this.battle.toID(ability)) return true;
+			} else {
+				 if (ability.map(this.battle.toID).includes(ownAbility) || ability.map(this.battle.toID).includes(allyAbility)) return true;
+			}
 		},
+		transformInto(pokemon: Pokemon, effect?: Effect) {
+			const species = pokemon.species;
+			if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
+				(pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5) ||
+				species.name === 'Eternatus-Eternamax') {
+				return false;
+			}
+
+			if (this.battle.dex.currentMod === 'gen1stadium' && (
+				species.name === 'Ditto' ||
+				(this.species.name === 'Ditto' && pokemon.moves.includes('transform'))
+			)) {
+				return false;
+			}
+
+			if (!this.setSpecies(species, effect, true)) return false;
+
+			this.transformed = true;
+			this.weighthg = pokemon.weighthg;
+
+			const types = pokemon.getTypes(true);
+			this.setType(pokemon.volatiles['roost'] ? pokemon.volatiles['roost'].typeWas : types, true);
+			this.addedType = pokemon.addedType;
+			this.knownType = this.isAlly(pokemon) && pokemon.knownType;
+			this.apparentType = pokemon.apparentType;
+
+			let statName: StatIDExceptHP;
+			for (statName in this.storedStats) {
+				this.storedStats[statName] = pokemon.storedStats[statName];
+			}
+			this.moveSlots = [];
+			this.set.ivs = (this.battle.gen >= 5 ? this.set.ivs : pokemon.set.ivs);
+			this.hpType = (this.battle.gen >= 5 ? this.hpType : pokemon.hpType);
+			this.hpPower = (this.battle.gen >= 5 ? this.hpPower : pokemon.hpPower);
+			for (const moveSlot of pokemon.moveSlots) {
+				let moveName = moveSlot.move;
+				if (moveSlot.originalPoke !== pokemon.m.value) continue;
+				if (moveSlot.id === 'hiddenpower') {
+					moveName = 'Hidden Power ' + this.hpType;
+				}
+				this.moveSlots.push({
+					move: moveName,
+					id: moveSlot.id,
+					pp: moveSlot.maxpp === 1 ? 1 : 5,
+					maxpp: this.battle.gen >= 5 ? (moveSlot.maxpp === 1 ? 1 : 5) : moveSlot.maxpp,
+					target: moveSlot.target,
+					disabled: false,
+					originalPoke: this.m.value,
+					used: false,
+					virtual: true,
+				});
+			}
+			let boostName: BoostID;
+			for (boostName in pokemon.boosts) {
+				this.boosts[boostName] = pokemon.boosts[boostName];
+				if (this.battle.gen <= 1) {
+					if (boostName === 'evasion' || boostName === 'accuracy') continue;
+					if (this.boosts[boostName] >= 0) {
+						this.modifyStat!(boostName, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[boostName]]);
+					} else {
+						this.modifyStat!(boostName, [100, 66, 50, 40, 33, 28, 25][-this.boosts[boostName]] / 100);
+					}
+				}
+			}
+			if (this.battle.gen >= 6) {
+				const volatilesToCopy = ['focusenergy', 'gmaxchistrike', 'laserfocus'];
+				for (const volatile of volatilesToCopy) {
+					if (pokemon.volatiles[volatile]) {
+						this.addVolatile(volatile);
+						if (volatile === 'gmaxchistrike') this.volatiles[volatile].layers = pokemon.volatiles[volatile].layers;
+					} else {
+						this.removeVolatile(volatile);
+					}
+				}
+			}
+			if (effect) {
+				this.battle.add('-transform', this, pokemon, '[from] ' + effect.fullname);
+			} else {
+				this.battle.add('-transform', this, pokemon);
+			}
+			if (this.battle.gen > 2) this.setAbility(pokemon.ability, this, true);
+
+			// Change formes based on held items (for Transform)
+			// Only ever relevant in Generation 4 since Generation 3 didn't have item-based forme changes
+			if (this.battle.gen === 4) {
+				if (this.species.num === 487) {
+					// Giratina formes
+					if (this.species.name === 'Giratina' && this.item === 'griseousorb') {
+						this.formeChange('Giratina-Origin');
+					} else if (this.species.name === 'Giratina-Origin' && this.item !== 'griseousorb') {
+						this.formeChange('Giratina');
+					}
+				}
+				if (this.species.num === 493) {
+					// Arceus formes
+					const item = this.getItem();
+					const targetForme = (item?.onPlate ? 'Arceus-' + item.onPlate : 'Arceus');
+					if (this.species.name !== targetForme) {
+						this.formeChange(targetForme);
+					}
+				}
+			}
+
+			return true;
+		}
 	},
 };

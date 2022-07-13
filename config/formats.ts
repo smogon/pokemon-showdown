@@ -89,29 +89,45 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 8] Doubles OU', 'Sleep Clause Mod'],
 		banlist: [
 			'Arctovish', 'Arctozolt', 'Dracovish', 'Dracozolt', 'Golisopod', 'Wimpod',
-			'Huge Power', 'Imposter', 'Normalize', 'Pure Power', 'Trace', 'Wonder Guard',
+			'Huge Power', 'Normalize', 'Pure Power', 'Wonder Guard',
 		],
+		onBegin() {
+			let x = 0;
+			for (const pokemon of this.getAllPokemon()) {
+				pokemon.m.value = x;
+				for (const moveSlot of pokemon.moveSlots) {
+					if (!moveSlot.originalPoke) moveSlot.originalPoke = pokemon.m.value;
+				}
+				for (const moveSlot of pokemon.baseMoveSlots) {
+					if (!moveSlot.originalPoke) moveSlot.originalPoke = pokemon.m.value;
+				}
+				x++;
+			}
+		},
 		onSwitchInPriority: 2,
 		onSwitchIn(pokemon) {
-			for (const side of this.sides) {
-				if (side.allies().every(ally => ally && !ally.fainted)) {
+			// I don't know what this code does, but it seems superfluous
+			/*for (const side of this.sides) {
+			if (side.allies().every(ally => ally && !ally.fainted)) {
 					const a = side.active[0];
 					const b = side.active[1];
-					if (a.ability === b.ability) continue;
+
+					if (a.ability === b.ability || ) continue;
 					const aInnate = 'ability:' + b.ability;
 					a.volatiles[aInnate] = {id: aInnate, target: a};
 					const bInnate = 'ability:' + a.ability;
 					b.volatiles[bInnate] = {id: bInnate, target: b};
 				}
-			}
+			}*/
+			const BAD_ABILITIES = ['trace', 'imposter'];
 			const ally = pokemon.side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
 			if (ally && ally.ability !== pokemon.ability) {
-				if (!pokemon.m.innate) {
+				if (!pokemon.m.innate && !BAD_ABILITIES.includes(this.toID(ally.ability))) {
 					pokemon.m.innate = 'ability:' + ally.ability;
 					delete pokemon.volatiles[pokemon.m.innate];
 					pokemon.addVolatile(pokemon.m.innate);
 				}
-				if (!ally.m.innate) {
+				if (!ally.m.innate && !BAD_ABILITIES.includes(this.toID(pokemon.ability))) {
 					ally.m.innate = 'ability:' + pokemon.ability;
 					delete ally.volatiles[ally.m.innate];
 					ally.addVolatile(ally.m.innate);

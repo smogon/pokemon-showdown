@@ -19,6 +19,7 @@ interface MoveSlot {
 	disabledSource?: string;
 	used: boolean;
 	virtual?: boolean;
+  originalPoke?: number;
 }
 
 interface Attacker {
