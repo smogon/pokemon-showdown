@@ -3867,18 +3867,20 @@ export const Formats: FormatList = [
 		banlist: ['Uber'],
 	},
 	{
-        name: "[Gen 1] Nintendo Cup 1999",
+		name: "[Gen 1] Nintendo Cup 1999",
 		desc: `The Nintendo Cup that banned Pokemon used at the 1997 at Spaceworld 1997, played on Stadium.`,
 		
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/stadium-cup-format-megathread.3695448/post-9066167">Stadium Cup Format Megathread</a>`,
 		],
 		
-        mod: 'gen1stadium', 
+		mod: 'gen1stadium', 
 		searchShow: false,
-        ruleset: ['Adjust Level Down = 50', 'Picked Team Size = 3', 
+		ruleset: ['Adjust Level Down = 50', 'Picked Team Size = 3', 
 				'Obtainable', 'Team Preview', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause', 'Exact HP Mod', 'Cancel Mod'],
-        banlist: ['Venusaur', 'Dugtrio', 'Alakazam', 'Golem', 'Magneton', 'Gengar', 'Hypno', 'Electrode', 'Exeggutor', 'Chansey', 'Kangaskhan', 'Starmie', 'Jynx', 'Tauros', 'Gyarados', 'Lapras', 'Ditto', 'Vaporeon', 'Jolteon', 'Snorlax', 'Articuno', 'Zapdos', 'Dragonite', 'Mewtwo', 'Mew', 'Flareon + Focus Energy + Ember', 'Nidoking + Fury Attack + Thrash'],
+		banlist: ['Venusaur', 'Dugtrio', 'Alakazam', 'Golem', 'Magneton', 'Gengar', 'Hypno', 'Electrode', 'Exeggutor', 'Chansey', 'Kangaskhan', 'Starmie', 
+		'Jynx', 'Tauros', 'Gyarados', 'Lapras', 'Ditto', 'Vaporeon', 'Jolteon', 'Snorlax', 'Articuno', 'Zapdos', 'Dragonite', 'Mewtwo', 'Mew', 
+		'Flareon + Focus Energy + Ember', 'Nidoking + Fury Attack + Thrash'],
     },
 	{
 		name: "[Gen 1] Nintendo Cup 1997",
