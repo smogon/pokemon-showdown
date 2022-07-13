@@ -6,17 +6,17 @@ const common = require('./../../common');
 let battle;
 
 describe('Agility + Swords Dance', function () {
-		afterEach(function () {
-		battle.destroy();
-	});
+	afterEach(function () {
+	battle.destroy();
+});
 
 	it('[Gen 1] Agility should negate the paralysis speed drop.', function () {
 		// If a Pokemon uses a move that boosts a stat affected by a major status effect, the drop from the major status effect is ignored.
 		// This should probably have a seed that prevents any full paralysis but I have absolutely no clue how that works send help
 		battle = common.mod('gen1').createBattle([[
-			{species: 'Zapdos', moves: ['agility', 'pound'], evs: {spe: 252},  ivs: {spe: 31}},
+			{species: 'Zapdos', moves: ['agility', 'pound'], evs: {spe: 252}, ivs: {spe: 31}},
 		], [
-			{species: 'Tauros', moves: ['thunderwave'], evs: {spe: 252},  ivs: {spe: 31}},
+			{species: 'Tauros', moves: ['thunderwave'], evs: {spe: 252}, ivs: {spe: 31}},
 		]]);
 		const initialZapdosSpeed = battle.p1.active[0].speed;
 		battle.makeChoices('move thunderwave', 'move agility');
@@ -40,9 +40,9 @@ describe('Agility + Swords Dance', function () {
 		// Stadium Zero maintains the original stat modification bugs from RBY.
 		// This should probably have a seed that prevents any full paralysis but I have absolutely no clue how that works send help
 		battle = common.mod('gen1stadium0').createBattle([[
-			{species: 'Zapdos', moves: ['agility', 'pound'], evs: {spe: 252},  ivs: {spe: 31}},
+			{species: 'Zapdos', moves: ['agility', 'pound'], evs: {spe: 252}, ivs: {spe: 31}},
 		], [
-			{species: 'Tauros', moves: ['thunderwave'], evs: {spe: 252},  ivs: {spe: 31}},
+			{species: 'Tauros', moves: ['thunderwave'], evs: {spe: 252}, ivs: {spe: 31}},
 		]]);
 		const initialZapdosSpeed = battle.p1.active[0].speed;
 		battle.makeChoices('move thunderwave', 'move agility');
