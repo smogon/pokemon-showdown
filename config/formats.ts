@@ -1929,7 +1929,7 @@ export const Formats: FormatList = [
 			const TeamValidator: typeof import('../sim/team-validator').TeamValidator =
 				require('../sim/team-validator').TeamValidator;
 
-			const validator = new TeamValidator(dex.formats.get(`${this.format.id}@@@${customRules.join(', ')}`));
+			const validator = new TeamValidator(dex.formats.get(`${this.format.id}@@@${customRules.join(',')}`));
 			const moves = set.moves;
 			set.moves = [ability.id];
 			set.ability = dex.species.get(set.species).abilities['0'];
