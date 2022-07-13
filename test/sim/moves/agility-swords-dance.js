@@ -8,7 +8,7 @@ let battle;
 describe('Agility + Swords Dance', function () {
 	afterEach(function () {
 		battle.destroy();
-});
+	});
 
 	it('[Gen 1] Agility should negate the paralysis speed drop.', function () {
 		// If a Pokemon uses a move that boosts a stat affected by a major status effect, the drop from the major status effect is ignored.
