@@ -18,9 +18,9 @@ describe('Agility + Swords Dance', function () {
 		], [
 			{species: 'Tauros', moves: ['thunderwave'], evs: {spe: 252},  ivs: {spe: 31}},
 		]]);
+		const initialZapdosSpeed = battle.p1.active[0].speed;
 		battle.makeChoices('move thunderwave', 'move agility');
-		const zapdos = battle.p1.active[0];
-		assert.equal(zapdos.speed, 596, 'Zapdos should be faster.');
+		assert(battle.p1.active[0].speed > initialZapdosSpeed, 'Zapdos should be faster.');
 	});
 
 	it('[Gen 1] Swords Dance should negate the burn attack drop.', function () {
@@ -44,8 +44,8 @@ describe('Agility + Swords Dance', function () {
 		], [
 			{species: 'Tauros', moves: ['thunderwave'], evs: {spe: 252},  ivs: {spe: 31}},
 		]]);
+		const initialZapdosSpeed = battle.p1.active[0].speed;
 		battle.makeChoices('move thunderwave', 'move agility');
-		const zapdos = battle.p1.active[0];
-		assert.equal(zapdos.speed, 596, 'Zapdos should be faster.');
+		assert(battle.p1.active[0].speed > initialZapdosSpeed, 'Zapdos should be faster.');
 	});
 });
