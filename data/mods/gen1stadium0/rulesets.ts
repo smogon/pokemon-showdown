@@ -7,7 +7,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 	expansiondisk: { // Stadium Zero was intended to have an Expansion Disk that legalised all the "dexited" Pokemon.
 		effectType: 'ValidatorRule',
 		name: 'Expansion Disk',
-		desc: 'Legalises Pok\u00e9mon unobtainable in Pok\u00e9mon Stadium Zero.',
+		desc: 'Legalizes Pok\u00e9mon unobtainable in Pok\u00e9mon Stadium Zero.',
 		ruleset: ['Obtainable', '+Unobtainable', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Exact HP Mod', 'Cancel Mod'],
 	},
 	nintendocup1997movelegality: { // It's for NC97 but is functionally identical: only move change is Tamamushi Magikarp.
