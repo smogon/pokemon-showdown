@@ -28,12 +28,12 @@ describe('Agility + Swords Dance', function () {
 		battle = common.mod('gen1').createBattle([[
 			{species: 'Kingler', moves: ['swordsdance', 'hyperbeam'], evs: {atk: 252}, ivs: {atk: 31}},
 		], [
-			{species: 'Victreebel', moves: ['fireblast', 'splash'], evs: {hp: 252, def: 252}, ivs: {def: 31}},
+			{species: 'Alakazam', moves: ['fireblast', 'splash'], evs: {hp: 252, def: 252}, ivs: {def: 31}},
 		]]);
 		battle.makeChoices('move swordsdance', 'move fireblast');
 		battle.makeChoices('move hyperbeam', 'move splash');
 		const vic = battle.p2.active[0];
-		assert.equal(vic.hp, 0, 'vic should die');
+		assert.equal(vic.hp, 0, 'zam should die');
 	});
 
 	it('[Gen 1 Stadium Zero] Agility should negate the paralysis speed drop.', function () {
