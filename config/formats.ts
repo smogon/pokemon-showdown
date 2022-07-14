@@ -112,25 +112,32 @@ export const Formats: FormatList = [
 					const a = side.active[0];
 					const b = side.active[1];
 
-					if (a.ability === b.ability || ) continue;
+					if (a.ability === b.ability) continue;
 					const aInnate = 'ability:' + b.ability;
 					a.volatiles[aInnate] = {id: aInnate, target: a};
 					const bInnate = 'ability:' + a.ability;
 					b.volatiles[bInnate] = {id: bInnate, target: b};
 				}
 			}*/
-			const BAD_ABILITIES = ['trace', 'imposter'];
+			let ngas = false;
+			for (const poke of this.getAllActive()) {
+				if (['neutralizinggas'].includes(this.toID(poke.ability))) {
+					ngas = true;
+					break;
+				}
+			}
+			const BAD_ABILITIES = ['trace', 'imposter', 'neutralizinggas'];
 			const ally = pokemon.side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
 			if (ally && ally.ability !== pokemon.ability) {
 				if (!pokemon.m.innate && !BAD_ABILITIES.includes(this.toID(ally.ability))) {
 					pokemon.m.innate = 'ability:' + ally.ability;
 					delete pokemon.volatiles[pokemon.m.innate];
-					pokemon.addVolatile(pokemon.m.innate);
+					if (!ngas || ally.getAbility().isPermanent) pokemon.addVolatile(pokemon.m.innate);
 				}
 				if (!ally.m.innate && !BAD_ABILITIES.includes(this.toID(pokemon.ability))) {
 					ally.m.innate = 'ability:' + pokemon.ability;
 					delete ally.volatiles[ally.m.innate];
-					ally.addVolatile(ally.m.innate);
+					if (!ngas || pokemon.getAbility().isPermanent) ally.addVolatile(ally.m.innate);
 				}
 			}
 		},

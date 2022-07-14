@@ -62,10 +62,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					delete target.volatiles['slowstart'];
 					this.add('-end', target, 'Slow Start', '[silent]');
 				}
-				if (target.m.abils?.length) {
-					for (const key of target.m.abils) {
-						if (this.dex.abilities.get(key.slice(8)).isPermanent) continue;
-						target.removeVolatile(key);
+				if (target.m.innate) {
+					if (!this.dex.abilities.get(target.m.innate.slice(8)).isPermanent) {
+						target.removeVolatile(target.m.innate);
 					}
 				}
 			}
@@ -88,12 +87,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					// Will be suppressed by Pokemon#ignoringAbility if needed
 					this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
 				}
-				if (pokemon.m.abils?.length) {
-					for (const innate of pokemon.m.abils) {
-						// permanent abilities
-						if (pokemon.volatiles[innate]) continue;
-						pokemon.addVolatile(innate, pokemon);
-					}
+				if (pokemon.m.innate) {
+					if (!pokemon.volatiles[pokemon.m.innate]) pokemon.addVolatile(pokemon.m.innate, pokemon);
 				}
 			}
 		},
