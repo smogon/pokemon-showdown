@@ -2324,7 +2324,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (pokemon.showCure === undefined) pokemon.showCure = true;
 
 			if (pokemon.showCure) this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure');
-			pokemon.setStatus('');
+			pokemon.clearStatus();
 
 			// only reset .showCure if it's false
 			// (once you know a Pokemon has Natural Cure, its cures are always known)
