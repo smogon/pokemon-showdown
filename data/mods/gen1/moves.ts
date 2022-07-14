@@ -759,7 +759,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			// We only prevent when hp is less than one quarter.
 			// If you use substitute at exactly one quarter, you faint.
-			if (target.hp === target.maxhp / 4) target.faint();
 			if (target.hp < target.maxhp / 4) {
 				this.add('-fail', target, 'move: Substitute', '[weak]');
 				return null;
