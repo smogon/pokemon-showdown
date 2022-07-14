@@ -10,9 +10,9 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 		desc: 'Legalizes Pok\u00e9mon unobtainable in Pok\u00e9mon Stadium Zero.',
 		ruleset: ['Obtainable', '+Unobtainable', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Exact HP Mod', 'Cancel Mod'],
 	},
-	nintendocup1997movelegality: { // It's for NC97 but is functionally identical: only move change is Tamamushi Magikarp.
+	nintendocup1998movelegality: { // It's for NC97 but is functionally identical: only move change is Tamamushi Magikarp.
 		effectType: 'ValidatorRule',
-		name: 'Nintendo Cup 1997 Move Legality',
+		name: 'Nintendo Cup 1998 Move Legality',
 		desc: "Bans move combinations on Pok\u00e9mon that would only be obtainable in Pok\u00e9mon Yellow.",
 		banlist: [
 			// https://www.smogon.com/forums/threads/rby-and-gsc-illegal-movesets.78638/
