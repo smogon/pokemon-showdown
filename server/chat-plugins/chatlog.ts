@@ -727,8 +727,7 @@ export abstract class Searcher {
 				break;
 
 			case 'linesPerUser': case 'totalLines': case 'averagePresent': case 'deadPercent':
-				const [main, dec] = (stats[k] || 0).toString().split('.');
-				buf += `${main}${dec ? `.${dec.slice(0, 2)}` : ``}`;
+				buf += (stats[k] || 0).toFixed(2);
 				break;
 			}
 			buf += `</td>`;
@@ -1202,8 +1201,11 @@ export class RipgrepLogSearcher extends Searcher {
 	}
 	async searchLinecounts(room: RoomID, month: string, user?: ID) {
 		// don't need to check if logs exist since ripgrepSearchMonth does that
-		const regexString = user ? `\\|c\\|${this.constructUserRegex(user)}\\|` : `\\|c\\|`;
+		const regexString = (
+			user ? `\\|c\\|${this.constructUserRegex(user)}\\|` : `\\|c\\|([^|]+)\\|`
+		) + `(?!\\/uhtml(change)?)`;
 		const args: string[] = user ? ['--count'] : [];
+		args.push(`--pcre2`);
 		const {results: rawResults} = await this.ripgrepSearchMonth({
 			search: regexString, raw: true, date: month, room, args,
 		});
@@ -1478,6 +1480,7 @@ export const pages: Chat.PageTable = {
 
 export const commands: Chat.ChatCommands = {
 	chatlogs: 'chatlog',
+	cl: 'chatlog',
 	chatlog(target, room, user) {
 		const [tarRoom, ...opts] = target.split(',');
 		const targetRoom = tarRoom ? Rooms.search(tarRoom) : room;

@@ -3918,7 +3918,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	volcanion: {
 		randomBattleMoves: ["earthpower", "fireblast", "hiddenpowerice", "sludgewave", "steameruption", "substitute", "superpower"],
 		randomDoubleBattleMoves: ["earthquake", "heatwave", "protect", "rockslide", "sludgebomb", "steameruption", "substitute"],
-		tier: "(OU)",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 };

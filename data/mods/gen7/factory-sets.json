@@ -6884,7 +6884,7 @@
 				"species": "Jumpluff",
 				"item": [""],
 				"ability": ["Infiltrator"],
-				"evs": {"atk": 252, "def": 4, "spd": 252},
+				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Jolly",
 				"moves": [["U-turn", "Swords Dance"], ["Acrobatics"], ["Sleep Powder"], ["Strength Sap"]]
 			}]

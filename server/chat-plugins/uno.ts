@@ -151,9 +151,15 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 		}
 	}
 
-	onStart() {
+	onStart(isAutostart?: boolean) {
 		if (this.playerCount < 2) {
-			throw new Chat.ErrorMessage("There must be at least 2 players to start a game of UNO.");
+			if (isAutostart) {
+				this.room.add("The game of UNO was forcibly ended because there aren't enough users.");
+				this.destroy();
+				return false;
+			} else {
+				throw new Chat.ErrorMessage("There must be at least 2 players to start a game of UNO.");
+			}
 		}
 		if (this.autostartTimer) clearTimeout(this.autostartTimer);
 		this.sendToRoom(`|uhtmlchange|uno-${this.gameNumber}|<div class="infobox"><p>The game of UNO has started. <button class="button" name="send" value="/uno spectate">Spectate Game</button></p>${this.suppressMessages ? `<p style="font-size: 6pt">Game messages won't show up unless you're playing or watching.` : ''}</div>`, true);
@@ -759,7 +765,7 @@ export const commands: Chat.ChatCommands = {
 			if (game.state !== 'signups') throw new Chat.ErrorMessage("The game of UNO has already started.");
 			if (game.autostartTimer) clearTimeout(game.autostartTimer);
 			game.autostartTimer = setTimeout(() => {
-				game.onStart();
+				game.onStart(true);
 			}, amount * 1000);
 			this.addModAction(`${user.name} has set the UNO autostart timer to ${amount} seconds.`);
 		},

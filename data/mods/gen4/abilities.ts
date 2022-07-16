@@ -281,7 +281,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			// in gen 3-4, Natural Cure's curing is always known to both players
 
 			this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure');
-			pokemon.setStatus('');
+			pokemon.clearStatus();
 		},
 	},
 	normalize: {

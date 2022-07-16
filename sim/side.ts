@@ -784,6 +784,26 @@ export class Side {
 				}
 			}
 		}
+		if (ruleTable.valueRules.has('forceselect')) {
+			const species = this.battle.dex.species.get(ruleTable.valueRules.get('forceselect'));
+			if (!data) {
+				// autoChoose
+				positions = [...this.pokemon.keys()].filter(pos => this.pokemon[pos].species.name === species.name)
+					.concat([...this.pokemon.keys()].filter(pos => this.pokemon[pos].species.name !== species.name))
+					.slice(0, pickedTeamSize);
+			} else {
+				let hasSelection = false;
+				for (const pos of positions) {
+					if (this.pokemon[pos].species.name === species.name) {
+						hasSelection = true;
+						break;
+					}
+				}
+				if (!hasSelection) {
+					return this.emitChoiceError(`You must bring ${species.name} to the battle.`);
+				}
+			}
+		}
 		for (const [index, pos] of positions.entries()) {
 			this.choice.switchIns.add(pos);
 			this.choice.actions.push({

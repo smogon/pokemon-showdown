@@ -543,8 +543,8 @@ const OFFICIAL_AVATARS_GNOMOWLADNY = new Set([
 
 const OFFICIAL_AVATARS_BRUMIRAGE = new Set([
 	'adaman', 'agatha-lgpe', 'akari', 'allister', 'archie-gen6', 'arezu', 'avery', 'ballguy', 'bea', 'bede',
-	'bede-leader', 'brendan-contest', 'burnet-radar', 'calaba', 'calem', 'chase', 'cogita', 'doctor-gen8',
-	'elaine', 'gloria', 'gordie', 'hop', 'irida', 'kabu', 'klara', 'koga-lgpe', 'leon', 'leon-tower',
+	'bede-leader', 'brendan-contest', 'burnet-radar', 'calaba', 'calem', 'chase', 'cogita', 'cynthia-gen7', 'diantha',
+	'doctor-gen8', 'elaine', 'gloria', 'gordie', 'hop', 'irida', 'kabu', 'klara', 'koga-lgpe', 'leon', 'leon-tower',
 	'lian', 'lisia', 'lorelei-lgpe', 'magnolia', 'mai', 'marnie', 'may-contest', 'melony', 'milo', 'mina-lgpe',
 	'mustard', 'mustard-master', 'nessa', 'oleana', 'opal', 'peonia', 'peony', 'pesselle', 'phoebe-gen6', 'piers',
 	'raihan', 'rei', 'rose', 'sabi', 'sanqua', 'shielbert', 'sonia', 'sonia-professor', 'sordward', 'sordward-shielbert',
@@ -556,12 +556,29 @@ const OFFICIAL_AVATARS_ZACWEAVILE = new Set([
 ]);
 
 const OFFICIAL_AVATARS_KYLEDOVE = new Set([
-	'artist-gen8', 'backpacker-gen8', 'beauty-gen8', 'blackbelt-gen8', 'cabbie', 'cafemaster', 'cameraman-gen8',
-	'clerk-gen8', 'clerkf-gen8', 'cook', 'dancer-gen8', 'doctorf-gen8', 'fisher-gen8', 'gentleman-gen8',
-	'hiker-gen8', 'lass-gen8', 'leaguestaff', 'leaguestafff', 'madame-gen8', 'model-gen8', 'musician-gen8',
-	'pokekid-gen8', 'pokekidf-gen8', 'pokemonbreeder-gen8', 'pokemonbreederf-gen8', 'policeman-gen8', 'postman',
-	'railstaff', 'reporter-gen8', 'schoolkid-gen8', 'schoolkidf-gen8', 'swimmer-gen8', 'swimmerf-gen8',
-	'worker-gen8', 'workerf-gen8', 'youngster-gen8',
+	'acetrainerf-gen6', 'acetrainerf-gen6xy', 'acetrainer-gen6', 'acetrainer-gen6xy', 'aquagrunt', 'aquagruntf',
+	'aromalady-gen6', 'artistf-gen6', 'artist-gen6', 'artist-gen8', 'backpacker-gen6', 'backpacker-gen8',
+	'battlegirl-gen6', 'battlegirl-gen6xy', 'beauty-gen6', 'beauty-gen6xy', 'beauty-gen8', 'birdkeeper-gen6',
+	'blackbelt-gen6', 'blackbelt-gen8', 'bugcatcher-gen6', 'bugmaniac-gen6', 'butler', 'cabbie', 'cafemaster',
+	'cameraman-gen6', 'cameraman-gen8', 'camper-gen6', 'chef', 'clerkf-gen8', 'clerk-gen8', 'collector-gen6',
+	'cook', 'dancer-gen8', 'delinquent', 'doctorf-gen8', 'dragontamer-gen6', 'expertf-gen6', 'expert-gen6',
+	'fairytalegirl', 'fisher-gen8', 'fisherman-gen6', 'fisherman-gen6xy', 'freediver', 'furisodegirl-blue',
+	'furisodegirl-white', 'garcon', 'gardener', 'gentleman-gen6', 'gentleman-gen6xy', 'gentleman-gen8',
+	'guitarist-gen6', 'hexmaniac-gen6', 'hiker-gen6', 'hiker-gen8', 'interviewers-gen6', 'kindler-gen6', 'lady-gen6',
+	'lady-gen6oras', 'lass-gen6', 'lass-gen6oras', 'lass-gen8', 'leaguestaff', 'leaguestafff', 'madame-gen6',
+	'madame-gen8', 'maid-gen6', 'model-gen8', 'musician-gen8', 'ninjaboy-gen6', 'owner', 'parasollady-gen6',
+	'picnicker-gen6', 'pokefanf-gen6', 'pokefanf-gen6xy', 'pokefan-gen6', 'pokefan-gen6xy', 'pokekidf-gen8',
+	'pokekid-gen8', 'pokemaniac-gen6', 'pokemonbreederf-gen6', 'pokemonbreederf-gen6xy', 'pokemonbreederf-gen8',
+	'pokemonbreeder-gen6', 'pokemonbreeder-gen6xy', 'pokemonbreeder-gen8', 'pokemonrangerf-gen6', 'pokemonrangerf-gen6xy',
+	'pokemonranger-gen6', 'pokemonranger-gen6xy', 'policeman-gen8', 'postman', 'preschoolerf-gen6', 'preschooler-gen6',
+	'psychic-gen6', 'punkgirl', 'punkguy', 'railstaff', 'reporter-gen6', 'reporter-gen8', 'richboy-gen6', 'richboy-gen6xy',
+	'risingstarf-gen6', 'risingstar-gen6', 'rollerskater', 'rollerskaterf', 'ruinmaniac-gen6', 'sailor-gen6', 'schoolboy',
+	'schoolgirl', 'schoolkidf-gen6', 'schoolkidf-gen8', 'schoolkid-gen6', 'schoolkid-gen8', 'scientistf-gen6',
+	'scientist-gen6', 'scubadiver', 'skytrainer', 'skytrainerf', 'streetthug', 'swimmerf2-gen6', 'swimmerf-gen6',
+	'swimmerf-gen8', 'swimmer-gen6', 'swimmer-gen8', 'teammates', 'tourist', 'touristf', 'touristf2',
+	'triathletebiker-gen6', 'triathleterunner-gen6', 'triathleteswimmer-gen6', 'tuberf-gen6', 'tuber-gen6', 'twins-gen6',
+	'veteranf-gen6', 'veteran-gen6', 'waitress-gen6', 'worker2-gen6', 'workerf-gen8', 'worker-gen6', 'worker-gen8',
+	'youngcouple-gen6', 'youngster-gen6', 'youngster-gen6xy', 'youngster-gen8',
 ]);
 
 const OFFICIAL_AVATARS_HYOOPPA = new Set([
@@ -664,7 +681,7 @@ export const commands: Chat.ChatCommands = {
 				<button name="openOptions" class="button" aria-label="Options"><i class="fa fa-cog"></i></button> menu in the upper {}
 				right.
 			</p>, <p>
-				Avatars from generations other than 3-5 are hidden. You can find them in this {}
+				Avatars from generations other than 4-5 are hidden. You can find them in this {}
 				<a href="https://play.pokemonshowdown.com/sprites/trainers/"><strong>full list of avatars</strong></a>. {}
 				You can use them by typing <code>/avatar <i>[avatar's name]</i></code> into any chat. For example, {}
 				<code>/avatar erika-gen2</code>.

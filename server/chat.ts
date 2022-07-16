@@ -712,11 +712,25 @@ export class CommandContext extends MessageContext {
 
 	checkFormat(room: BasicRoom | null | undefined, user: User, message: string) {
 		if (!room) return true;
-		if (!room.settings.filterStretching && !room.settings.filterCaps && !room.settings.filterEmojis) return true;
+		if (
+			!room.settings.filterStretching && !room.settings.filterCaps &&
+			!room.settings.filterEmojis && !room.settings.filterLinks
+		) {
+			return true;
+		}
 		if (user.can('mute', null, room)) return true;
 
 		if (room.settings.filterStretching && /(.+?)\1{5,}/i.test(user.name)) {
 			throw new Chat.ErrorMessage(`Your username contains too much stretching, which this room doesn't allow.`);
+		}
+		if (room.settings.filterLinks) {
+			const bannedLinks = this.checkBannedLinks(message);
+			if (bannedLinks.length) {
+				throw new Chat.ErrorMessage(
+					`You have linked to ${bannedLinks.length > 1 ? 'unrecognized external websites' : 'an unrecognized external website'} ` +
+					`(${bannedLinks.join(', ')}), which this room doesn't allow.`
+				);
+			}
 		}
 		if (room.settings.filterCaps && /[A-Z\s]{6,}/.test(user.name)) {
 			throw new Chat.ErrorMessage(`Your username contains too many capital letters, which this room doesn't allow.`);
@@ -1207,19 +1221,7 @@ export class CommandContext extends MessageContext {
 
 		// If the corresponding config option is set, non-AC users cannot send links, except to staff.
 		if (Config.restrictLinks && !user.autoconfirmed) {
-			// eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
-			const links = message.match(Chat.linkRegex);
-			const allLinksWhitelisted = !links || links.every(link => {
-				link = link.toLowerCase();
-				const domainMatches = /^(?:http:\/\/|https:\/\/)?(?:[^/]*\.)?([^/.]*\.[^/.]*)\.?($|\/|:)/.exec(link);
-				const domain = domainMatches?.[1];
-				const hostMatches = /^(?:http:\/\/|https:\/\/)?([^/]*[^/.])\.?($|\/|:)/.exec(link);
-				let host = hostMatches?.[1];
-				if (host?.startsWith('www.')) host = host.slice(4);
-				if (!domain || !host) return null;
-				return LINK_WHITELIST.includes(host) || LINK_WHITELIST.includes(`*.${domain}`);
-			});
-			if (!allLinksWhitelisted && !(targetUser?.can('lock') || room?.settings.isHelp)) {
+			if (this.checkBannedLinks(message).length && !(targetUser?.can('lock') || room?.settings.isHelp)) {
 				throw new Chat.ErrorMessage("Your account must be autoconfirmed to send links to other users, except for global staff.");
 			}
 		}
@@ -1292,6 +1294,21 @@ export class CommandContext extends MessageContext {
 			throw new Chat.ErrorMessage("This user is currently locked, so you cannot send them HTML.");
 		}
 		return true;
+	}
+
+	checkBannedLinks(message: string) {
+		// RegExp#exec only returns one match, String#match returns all of them
+		// eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
+		return (message.match(Chat.linkRegex) || []).filter(link => {
+			link = link.toLowerCase();
+			const domainMatches = /^(?:http:\/\/|https:\/\/)?(?:[^/]*\.)?([^/.]*\.[^/.]*)\.?($|\/|:)/.exec(link);
+			const domain = domainMatches?.[1];
+			const hostMatches = /^(?:http:\/\/|https:\/\/)?([^/]*[^/.])\.?($|\/|:)/.exec(link);
+			let host = hostMatches?.[1];
+			if (host?.startsWith('www.')) host = host.slice(4);
+			if (!domain || !host) return null;
+			return !(LINK_WHITELIST.includes(host) || LINK_WHITELIST.includes(`*.${domain}`));
+		});
 	}
 	/* eslint-enable @typescript-eslint/prefer-optional-chain */
 	checkEmbedURI(uri: string) {

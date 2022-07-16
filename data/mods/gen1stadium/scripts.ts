@@ -7,12 +7,6 @@ export const Scripts: ModdedBattleScriptsData = {
 	// BattlePokemon scripts. Stadium shares gen 1 code but it fixes some problems with it.
 	pokemon: {
 		inherit: true,
-		// Gen 1 function to apply a stat modification that is only active until the stat is recalculated or mon switched.
-		// Modified stats are declared in the Pokemon object in sim/pokemon.js in about line 681.
-		modifyStat(statName, modifier) {
-			if (!(statName in this.storedStats)) throw new Error("Invalid `statName` passed to `modifyStat`");
-			this.modifiedStats![statName] = this.battle.clampIntRange(Math.floor(this.modifiedStats![statName] * modifier), 1);
-		},
 		// This is run on Stadium after boosts and status changes.
 		recalculateStats() {
 			let statName: StatIDExceptHP;

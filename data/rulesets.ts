@@ -399,6 +399,29 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
+	forceselect: {
+		effectType: 'ValidatorRule',
+		name: 'Force Select',
+		desc: `Forces a Pokemon to be on the team and selected at Team Preview. Usage: Force Select = [Pokemon], e.g. "Force Select = Magikarp"`,
+		hasValue: true,
+		onValidateRule(value) {
+			if (!this.dex.species.get(value).exists) throw new Error(`Misspelled Pokemon "${value}"`);
+		},
+		onValidateTeam(team) {
+			let hasSelection = false;
+			const species = this.dex.species.get(this.ruleTable.valueRules.get('forceselect'));
+			for (const set of team) {
+				if (species.name === set.species) {
+					hasSelection = true;
+					break;
+				}
+			}
+			if (!hasSelection) {
+				return [`Your team must contain ${species.name}.`];
+			}
+		},
+		// hardcoded in sim/side
+	},
 	evlimits: {
 		effectType: 'ValidatorRule',
 		name: 'EV Limits',
@@ -1262,6 +1285,19 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
+	gemsclause: {
+		effectType: 'ValidatorRule',
+		name: 'Gems Clause',
+		desc: "Bans all Gems",
+		onValidateSet(set) {
+			if (!set.item) return;
+			const item = this.dex.items.get(set.item);
+			if (item.isGem) {
+				if (this.ruleTable.has(`+item:${item.id}`)) return;
+				return [`${item.name} is banned due to Gems Clause.`];
+			}
+		},
+	},
 	'sketchgen8moves': {
 		effectType: 'ValidatorRule',
 		name: 'Sketch Gen 8 Moves',
@@ -1585,6 +1621,12 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "Prevents Pok\u00e9mon from having moves that would only be obtainable in Pok\u00e9mon Crystal.",
 		// Implemented in mods/gen2/rulesets.ts
 	},
+	aptclause: {
+		effectType: 'ValidatorRule',
+		name: 'APT Clause',
+		desc: "Bans the combination of Agility and partial trapping moves like Wrap.",
+		banlist: ['Agility + Wrap', 'Agility + Fire Spin', 'Agility + Bind', 'Agility + Clamp'],
+	},
 	nintendocup1997movelegality: {
 		effectType: 'ValidatorRule',
 		name: "Nintendo Cup 1997 Move Legality",
@@ -1822,6 +1864,28 @@ export const Rulesets: {[k: string]: FormatData} = {
 				if (!this.dex.types.isName(type)) continue;
 				if (pokemon.moveSlots[i] && move.id === pokemon.moveSlots[i].id) move.type = type;
 			}
+		},
+	},
+	reevolutionmod: {
+		effectType: "Rule",
+		name: "Re-Evolution Mod",
+		desc: "Pok&eacute;mon gain the boosts they would gain from evolving again",
+		ruleset: ['Overflow Stat Mod'],
+		onBegin() {
+			this.add('rule', 'Re-Evolution Mod: Pok\u00e9mon gain the boosts they would gain from evolving again');
+		},
+		onModifySpecies(species, target) {
+			const newSpecies = this.dex.deepClone(species);
+			if (!newSpecies.prevo) return;
+			const prevoSpecies = this.dex.species.get(newSpecies.prevo);
+			let statid: StatID;
+			newSpecies.bst = 0;
+			for (statid in prevoSpecies.baseStats) {
+				const change = newSpecies.baseStats[statid] - prevoSpecies.baseStats[statid];
+				newSpecies.baseStats[statid] = this.clampIntRange(newSpecies.baseStats[statid] + change, 1, 255);
+				newSpecies.bst += newSpecies.baseStats[statid];
+			}
+			return newSpecies;
 		},
 	},
 	multipleabilities: {

@@ -187,6 +187,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 	IDEA: MafiaIDEAPlayerData | null;
 	/** false - used an action, true - idled, null - no response */
 	action: null | boolean | string;
+	actionArr: string[];
 	constructor(user: User, game: Mafia) {
 		super(user, game);
 		this.safeName = Utils.escapeHTML(this.name);
@@ -201,6 +202,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 		this.revealed = '';
 		this.IDEA = null;
 		this.action = null;
+		this.actionArr = [];
 	}
 
 	getRole(button = false) {
@@ -648,6 +650,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 	day(extension: number | null = null, initial = false) {
 		if (this.phase !== 'night' && !initial) return;
+		if (this.dayNum === 0 && extension !== null) return this.sendUser(this.hostid, `|error|You cannot extend on day 0.`);
 		if (this.timer) this.setDeadline(0);
 		if (extension === null) {
 			if (!isNaN(this.hammerCount)) this.hammerCount = Math.floor(Object.keys(this.playerTable).length / 2) + 1;
@@ -1211,7 +1214,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			}
 		}
 		if (this.hasPlurality === oldPlayer.id) this.hasPlurality = newPlayer.id;
-
+		for (let i = 1; i < this.dayNum; i++) {
+			newPlayer.actionArr[i] = oldPlayer.actionArr[i];
+		}
 		if (newUser?.connected) {
 			for (const conn of newUser.connections) {
 				void Chat.resolvePage(`view-mafia-${this.room.roomid}`, newUser, conn);
@@ -1220,7 +1225,6 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 		if (this.started) this.played.push(newPlayer.id);
 		this.sendDeclare(`${oldPlayer.safeName} has been subbed out. ${newPlayer.safeName} has joined the game.`);
-
 		delete this.playerTable[oldPlayer.id];
 		oldPlayer.destroy();
 		this.updatePlayers();
@@ -1858,6 +1862,7 @@ export const pages: Chat.PageTable = {
 		}
 		if (isPlayer) {
 			const role = game.playerTable[user.id].role;
+			let previousActionsPL = `<br/>`;
 			if (role) {
 				buf += `<h3>${game.playerTable[user.id].safeName}, you are a ${game.playerTable[user.id].getRole()}</h3>`;
 				if (!['town', 'solo'].includes(role.alignment)) {
@@ -1866,6 +1871,13 @@ export const pages: Chat.PageTable = {
 				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Role Details</summary>`;
 				buf += `<table><tr><td style="text-align:center;"><img width="75" height="75" src="//${Config.routes.client}/fx/mafia-${role.image || 'villager'}.png"></td><td style="text-align:left;width:100%"><ul>${role.memo.map(m => `<li>${m}</li>`).join('')}</ul></td></tr></table>`;
 				buf += `</details></p>`;
+				if (game.dayNum > 1) {
+					for (let i = 1; i < game.dayNum; i++) {
+						previousActionsPL += `<b>Night ${i}</b><br/>`;
+						previousActionsPL += `${game.playerTable[user.id].actionArr?.[i] ? `${game.playerTable[user.id].actionArr[i]}` : ''}<br/>`;
+					}
+					buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Previous Actions</summary>${previousActionsPL}</span></details></p>`;
+				}
 			}
 		}
 		if (game.phase === "day") {
@@ -1918,6 +1930,17 @@ export const pages: Chat.PageTable = {
 				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Actions</summary>${actions}</span></details></p>`;
 				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">No Response</summary>${noResponses}</span></details></p>`;
 			}
+			let previousActions = `<br/>`;
+			if (game.dayNum > 1) {
+				for (let i = 1; i < game.dayNum; i++) {
+					previousActions += `<b>Night ${i}</b><br/>`;
+					for (const p in game.playerTable) {
+						const player = game.playerTable[p];
+						previousActions += `<b>${player.safeName}</b>:${player.actionArr[i] ? `${player.actionArr[i]}` : ''}<br/>`;
+					}
+					previousActions += `<br/>`;
+				}
+			}
 			buf += `<h3>Host options</h3>`;
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">General Options</summary>`;
 			buf += `<h3>General Options</h3>`;
@@ -1968,6 +1991,9 @@ export const pages: Chat.PageTable = {
 				buf += `: <button class="button" name="send" value="/msgroom ${room.roomid},/mafia revive ${dead.id}">Revive</button></p>`;
 			}
 			buf += `<hr/></details></p>`;
+			if (game.dayNum > 1) {
+				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Previous Night Actions</summary>${previousActions}</span></details></p>`;
+			}
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">How to setup roles</summary>`;
 			buf += `<h3>Setting the roles</h3>`;
 			buf += `<p>To set the roles, use /mafia setroles [comma seperated list of roles] OR /mafia setroles [theme] in ${room.title}.</p>`;
@@ -2449,6 +2475,12 @@ export const commands: Chat.ChatCommands = {
 					if (extension < 1) extension = 1;
 					if (extension > 10) extension = 10;
 				}
+				if (cmd === 'extend') {
+					for (const p in game.playerTable) {
+						const player = game.playerTable[p];
+						player.actionArr[game.dayNum] = '';
+					}
+				}
 				game.day(cmd === 'extend' ? extension : null);
 			}
 			game.logAction(user, `set day/night`);
@@ -2632,6 +2664,7 @@ export const commands: Chat.ChatCommands = {
 			case 'idle':
 				player.action = false;
 				user.sendTo(room, `You have idled.`);
+				player.actionArr[game.dayNum] = 'idle';
 				break;
 			case 'action':
 				player.action = true;
@@ -2646,10 +2679,12 @@ export const commands: Chat.ChatCommands = {
 				} else {
 					user.sendTo(room, `You have decided to use an action. Please submit details about your action.`);
 				}
+				player.actionArr[game.dayNum] = target;
 				break;
 			case 'noresponse': case 'unidle': case 'unaction':
 				player.action = null;
 				user.sendTo(room, `You are no longer submitting an action or idle.`);
+				player.actionArr[game.dayNum] = '';
 				break;
 			}
 			player.updateHtmlRoom();
@@ -3913,7 +3948,8 @@ export const commands: Chat.ChatCommands = {
 			`/mafia deadline - View the deadline for the current game.`,
 			`/mafia sub in - Request to sub into the game, or cancel a request to sub out.`,
 			`/mafia sub out - Request to sub out of the game, or cancel a request to sub in.`,
-			`/mafia [action|idle] - Tells the host if you are using an action or idling.`,
+			`/mafia idle - Tells the host if you are idling.`,
+			`/mafia action [details] - Tells the host you are using an action with the given submission details.`,
 		].join('<br/>');
 		buf += `</details><details><summary class="button">Host Commands</summary>`;
 		buf += [
@@ -3922,6 +3958,7 @@ export const commands: Chat.ChatCommands = {
 			`/mafia close - Closes signups for the current game. Requires host % @ # &`,
 			`/mafia closedsetup [on|off] - Sets if the game is a closed setup. Closed setups don't show the role list to players. Requires host % @ # &`,
 			`/mafia takeidles [on|off] - Sets if idles are accepted by the script or not. Requires host % @ # &`,
+			`/mafia prod - Notifies players that they must submit an action or idle if they haven't yet. Requires host % @ # &`,
 			`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ # &`,
 			`/mafia selfvote [on|hammer|off] - Allows players to self vote either at hammer or anytime. Requires host % @ # &`,
 			`/mafia [enablenl|disablenl] - Allows or disallows players abstain from voting. Requires host % @ # &`,

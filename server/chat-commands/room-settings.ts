@@ -567,6 +567,33 @@ export const commands: Chat.ChatCommands = {
 	},
 	emojifilterhelp: [`/emojifilter [on/off] - Toggles filtering messages in the room for emojis. Requires # &`],
 
+	linkfilter(target, room, user) {
+		room = this.requireRoom();
+		if (!target) {
+			return this.sendReply(
+				`This room's link filter is currently: ${room.settings.filterEmojis ? "ON" : "OFF"}`
+			);
+		}
+		this.checkChat();
+		this.checkCan('editroom', null, room);
+
+		if (this.meansYes(target)) {
+			if (room.settings.filterLinks) return this.errorReply(`This room's link filter is already ON`);
+			room.settings.filterLinks = true;
+		} else if (this.meansNo(target)) {
+			if (!room.settings.filterLinks) return this.errorReply(`This room's link filter is already OFF`);
+			room.settings.filterLinks = false;
+		} else {
+			return this.parse("/help linkfilter");
+		}
+		const setting = (room.settings.filterLinks ? "ON" : "OFF");
+		this.privateModAction(`${user.name} turned the link filter ${setting}`);
+		this.modlog('LINK FILTER', null, setting);
+
+		room.saveSettings();
+	},
+	linkfilterhelp: [`/linkfilter [on/off] - Toggles filtering messages in the room for links. Requires # &`],
+
 	banwords: 'banword',
 	banword: {
 		regexadd: 'add',
@@ -1642,6 +1669,14 @@ export const roomSettings: Chat.SettingsHandler[] = [
 		options: [
 			[`off`, !room.settings.filterEmojis || 'emojifilter off'],
 			[`on`, room.settings.filterEmojis || 'emojifilter on'],
+		],
+	}),
+	room => ({
+		label: "Link filter",
+		permission: 'editroom',
+		options: [
+			[`off`, !room.settings.filterLinks || 'linkfilter off'],
+			[`on`, room.settings.filterLinks || 'linkfilter on'],
 		],
 	}),
 	room => ({

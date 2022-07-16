@@ -381,7 +381,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onSwitchIn(target) {
 				if (!target.fainted) {
 					target.heal(target.maxhp);
-					target.setStatus('');
+					target.clearStatus();
 					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
 					target.side.removeSlotCondition(target, 'healingwish');
 				}
@@ -608,7 +608,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onSwitchIn(target) {
 				if (!target.fainted) {
 					target.heal(target.maxhp);
-					target.setStatus('');
+					target.clearStatus();
 					for (const moveSlot of target.moveSlots) {
 						moveSlot.pp = moveSlot.maxpp;
 					}

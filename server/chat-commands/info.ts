@@ -865,10 +865,12 @@ export const commands: Chat.ChatCommands = {
 	weakness(target, room, user) {
 		if (!target) return this.parse('/help weakness');
 		if (!this.runBroadcast()) return;
-		const {dex, targets} = this.splitFormat(target.split(/[,/]/).map(toID));
+		const {format, dex, targets} = this.splitFormat(target.split(/[,/]/).map(toID));
 
 		let isInverse = false;
-		if (targets[targets.length - 1] === 'inverse') {
+		if (format && Dex.formats.getRuleTable(format).has('inversemod')) {
+			isInverse = true;
+		} else if (targets[targets.length - 1] === 'inverse') {
 			isInverse = true;
 			targets.pop();
 		}

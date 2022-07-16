@@ -759,7 +759,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onSwitchIn(target) {
 				if (target.hp > 0) {
 					target.heal(target.maxhp);
-					target.setStatus('');
+					target.clearStatus();
 					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
 					target.side.removeSlotCondition(target, 'healingwish');
 					target.lastMove = this.lastMove;
@@ -940,7 +940,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				if (target.hp > 0) {
 					target.heal(target.maxhp);
-					target.setStatus('');
+					target.clearStatus();
 					for (const moveSlot of target.moveSlots) {
 						moveSlot.pp = moveSlot.maxpp;
 					}
@@ -1394,6 +1394,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	scaryface: {
 		inherit: true,
 		accuracy: 90,
+	},
+	secretpower: {
+		inherit: true,
+		secondary: {
+			chance: 30,
+			status: 'par',
+		},
 	},
 	sketch: {
 		inherit: true,

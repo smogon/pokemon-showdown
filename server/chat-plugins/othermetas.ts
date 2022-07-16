@@ -609,10 +609,12 @@ export const commands: Chat.ChatCommands = {
 		"/crossevo <base pokemon>, <evolved pokemon> - Shows the type and stats for the Cross Evolved Pok\u00e9mon.",
 	],
 
-	showevo(target, user, room) {
+	reevo: 'showevo',
+	showevo(target, user, room, connection, cmd) {
 		if (!this.runBroadcast()) return;
 		const targetid = toID(target);
-		if (!targetid) return this.parse('/help showevo');
+		const isReEvo = cmd === 'reevo';
+		if (!targetid) return this.parse(`/help ${isReEvo ? 're' : 'show'}evo`);
 		const evo = Dex.species.get(target);
 		if (!evo.exists) {
 			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon ${target} not found.`);
@@ -622,27 +624,33 @@ export const commands: Chat.ChatCommands = {
 		}
 		const prevoSpecies = Dex.species.get(evo.prevo);
 		const deltas = Utils.deepClone(evo);
-		deltas.tier = 'CE';
-		deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
+		if (!isReEvo) {
+			deltas.tier = 'CE';
+			deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
+			deltas.types = [];
+			if (evo.types[0] !== prevoSpecies.types[0]) deltas.types[0] = evo.types[0];
+			if (evo.types[1] !== prevoSpecies.types[1]) {
+				deltas.types[1] = evo.types[1] || evo.types[0];
+			}
+			if (deltas.types.length) {
+				// Undefined type remover
+				deltas.types = deltas.types.filter((type: string | undefined) => type !== undefined);
+
+				if (deltas.types[0] === deltas.types[1]) deltas.types = [deltas.types[0]];
+			} else {
+				deltas.types = null;
+			}
+		}
 		deltas.bst = 0;
 		let i: StatID;
 		for (i in evo.baseStats) {
 			const statChange = evo.baseStats[i] - prevoSpecies.baseStats[i];
-			deltas.baseStats[i] = statChange;
+			if (!isReEvo) {
+				deltas.baseStats[i] = statChange;
+			} else {
+				deltas.baseStats[i] = Utils.clampIntRange(deltas.baseStats[i] + statChange, 1, 255);
+			}
 			deltas.bst += deltas.baseStats[i];
-		}
-		deltas.types = [];
-		if (evo.types[0] !== prevoSpecies.types[0]) deltas.types[0] = evo.types[0];
-		if (evo.types[1] !== prevoSpecies.types[1]) {
-			deltas.types[1] = evo.types[1] || evo.types[0];
-		}
-		if (deltas.types.length) {
-			// Undefined type remover
-			deltas.types = deltas.types.filter((type: string | undefined) => type !== undefined);
-
-			if (deltas.types[0] === deltas.types[1]) deltas.types = [deltas.types[0]];
-		} else {
-			deltas.types = null;
 		}
 		const details = {
 			Gen: evo.gen,
@@ -650,8 +658,13 @@ export const commands: Chat.ChatCommands = {
 			Stage: (Dex.species.get(prevoSpecies.prevo).exists ? 3 : 2),
 		};
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(deltas)}`);
-		this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}&nbsp;|&ThickSpace;<font color="#686868">Stage:</font> ${details["Stage"]}</font>`);
+		if (!isReEvo) {
+			this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}&nbsp;|&ThickSpace;<font color="#686868">Stage:</font> ${details["Stage"]}</font>`);
+		}
 	},
+	reevohelp: [
+		`/reevo <Pok\u00e9mon> - Shows the stats that a Pok\u00e9mon would have in Re-Evolution`,
+	],
 	showevohelp: [
 		`/showevo <Pok\u00e9mon> - Shows the changes that a Pok\u00e9mon applies in Cross Evolution`,
 	],
