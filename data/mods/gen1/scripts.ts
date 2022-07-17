@@ -467,9 +467,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					return false;
 				}
 				if (moveData.boosts && target.hp) {
-					const hitResult = this.battle.boost(moveData.boosts, target, pokemon, move);
-					if (!hitResult) {
-						if (hitResult === false) this.battle.add('-fail', target);
+					const willBoost = this.battle.boost(moveData.boosts, target, pokemon, move);
+					if (!willBoost) {
+						if (willBoost === false) this.battle.add('-fail', target);
 						return false;
 					}
 					didSomething = true;
