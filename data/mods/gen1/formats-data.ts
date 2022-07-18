@@ -414,7 +414,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	slowbro: {
 		randomBattleMoves: ["amnesia", "surf", "thunderwave"],
 		exclusiveMoves: ["blizzard", "psychic", "rest", "rest"],
-		tier: "UUBL",
+		tier: "OU",
 	},
 	magnemite: {
 		randomBattleMoves: ["thunder", "thunderbolt", "thunderwave"],
