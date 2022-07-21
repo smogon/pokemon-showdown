@@ -9,11 +9,22 @@ import {AddressRange} from "../ip-tools";
 import {GlobalPermission} from "../user-groups";
 
 const HOST_SUFFIXES = ['res', 'proxy', 'mobile'];
-
+const SUFFIX_ALIASES: {[k: string]: string} = {
+	residential: 'res',
+};
 const WHITELISTED_USERIDS: ID[] = [];
 
-function checkCanPerform(context: PageContext | CommandContext, user: User, permission: GlobalPermission = 'lockdown') {
+function checkCanPerform(
+	context: Chat.PageContext | Chat.CommandContext, user: User, permission: GlobalPermission = 'lockdown'
+) {
 	if (!WHITELISTED_USERIDS.includes(user.id)) context.checkCan(permission);
+}
+
+function getHostType(type: string) {
+	type = toID(type);
+	if (HOST_SUFFIXES.includes(type)) return type;
+	if (SUFFIX_ALIASES[type]) return SUFFIX_ALIASES[type];
+	throw new Chat.ErrorMessage(`'${type}' is not a valid host type. Please specify one of ${HOST_SUFFIXES.join(', ')}.`);
 }
 
 export function visualizeRangeList(ranges: AddressRange[]) {
@@ -39,14 +50,21 @@ function formatRange(range: AddressRange, includeModlogBrackets?: boolean) {
 	return result;
 }
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	proxies(query, user) {
 		this.title = "[Proxies]";
 		checkCanPerform(this, user, 'globalban');
 
 		const openProxies = [...IPTools.singleIPOpenProxies];
 		const proxyHosts = [...IPTools.proxyHosts];
-		openProxies.sort(IPTools.ipSort);
+		Utils.sortBy(openProxies, ip => {
+			const number = IPTools.ipToNumber(ip);
+			if (number === null) {
+				Rooms.get('upperstaff')?.add(`|error|Invalid IP address in IPTools.singleIPOpenProxies: '${ip}'`);
+				return -1;
+			}
+			return number;
+		});
 		proxyHosts.sort();
 		IPTools.sortRanges();
 
@@ -122,12 +140,19 @@ export const pages: PageTable = {
 			html += visualizeRangeList(IPTools.ranges.filter(range => range.host?.endsWith('/proxy')));
 			html += `</table></div>`;
 		}
+		if (['all', 'openproxy'].includes(type)) {
+			html += `<div class="ladder pad"><h2>Single-IP Open Proxies:</h2><table>`;
+			for (const ip of IPTools.singleIPOpenProxies) {
+				html += `<tr><td>${ip}</td></tr>`;
+			}
+			html += `</table></div>`;
+		}
 		return html;
 	},
 
 	sharedipblacklist(args, user, connection) {
 		this.title = `[Shared IP Blacklist]`;
-		checkCanPerform(this, user, 'globalban');
+		checkCanPerform(this, user, 'lock');
 
 		let buf = `<div class="pad"><h2>IPs blocked from being marked as shared</h2>`;
 		if (!Punishments.sharedIpBlacklist.size) {
@@ -135,9 +160,18 @@ export const pages: PageTable = {
 		} else {
 			buf += `<div class="ladder"><table><tr><th>IP</th><th>Reason</th></tr>`;
 			const sortedSharedIPBlacklist = [...Punishments.sharedIpBlacklist];
-			sortedSharedIPBlacklist.sort((a, b) => IPTools.ipSort(a[0], b[0]));
-
-			for (const [reason, ip] of sortedSharedIPBlacklist) {
+			Utils.sortBy(sortedSharedIPBlacklist, ([ipOrRange]) => {
+				if (IPTools.ipRegex.test(ipOrRange)) {
+					const number = IPTools.ipToNumber(ipOrRange);
+					if (number === null) {
+						Monitor.error(`Invalid blacklisted-from-markshared IP: '${ipOrRange}`);
+						return -1;
+					}
+					return number;
+				}
+				return IPTools.stringToRange(ipOrRange)!.minIP;
+			});
+			for (const [ip, reason] of sortedSharedIPBlacklist) {
 				buf += `<tr><td>${ip}</td><td>${reason}</td></tr>`;
 			}
 			buf += `</table></div>`;
@@ -156,7 +190,14 @@ export const pages: PageTable = {
 		} else {
 			buf += `<div class="ladder"><table><tr><th>IP</th><th>Location</th></tr>`;
 			const sortedSharedIPs = [...Punishments.sharedIps];
-			sortedSharedIPs.sort((a, b) => IPTools.ipSort(a[0], b[0]));
+			Utils.sortBy(sortedSharedIPs, ([ip]) => {
+				const number = IPTools.ipToNumber(ip);
+				if (number === null) {
+					Monitor.error(`Invalid shared IP address: '${ip}'`);
+					return -1;
+				}
+				return number;
+			});
 
 			for (const [ip, location] of sortedSharedIPs) {
 				buf += `<tr><td>${ip}</td><td>${location}</td></tr>`;
@@ -168,7 +209,7 @@ export const pages: PageTable = {
 	},
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	dc: 'ipranges',
 	datacenter: 'ipranges',
 	datacenters: 'ipranges',
@@ -182,7 +223,7 @@ export const commands: ChatCommands = {
 		show: 'view',
 		view(target, room, user) {
 			checkCanPerform(this, user, 'globalban');
-			const types = ['all', 'residential', 'res', 'mobile', 'proxy'];
+			const types = ['all', 'residential', 'res', 'mobile', 'proxy', 'openproxy'];
 			const type = target ? toID(target) : 'all';
 			if (!types.includes(type)) {
 				return this.errorReply(`'${type}' isn't a valid host type. Specify one of ${types.join(', ')}.`);
@@ -202,13 +243,11 @@ export const commands: ChatCommands = {
 			// should be in the format: IP, IP, name, URL
 			const widen = cmd.includes('widen');
 
-			const [type, stringRange, host] = target.split(',').map(part => part.trim());
+			const [typeString, stringRange, host] = target.split(',').map(part => part.trim());
 			if (!host || !IPTools.hostRegex.test(host)) {
 				return this.errorReply(`Invalid data: ${target}`);
 			}
-			if (!HOST_SUFFIXES.includes(type)) {
-				return this.errorReply(`'${type}' is not a valid host type. Please specify one of ${HOST_SUFFIXES.join(', ')}.`);
-			}
+			const type = getHostType(typeString);
 			const range = IPTools.stringToRange(stringRange);
 			if (!range) return this.errorReply(`Couldn't parse IP range '${stringRange}'.`);
 			range.host = `${IPTools.urlToHost(host)}?/${type}`;
@@ -217,7 +256,7 @@ export const commands: ChatCommands = {
 			let result;
 			try {
 				result = IPTools.checkRangeConflicts(range, IPTools.ranges, widen);
-			} catch (e) {
+			} catch (e: any) {
 				return this.errorReply(e.message);
 			}
 			if (typeof result === 'number') {
@@ -399,9 +438,24 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse('/help markshared');
 		checkCanPerform(this, user, 'globalban');
 		const [ip, note] = this.splitOne(target);
-		if (!IPTools.ipRegex.test(ip)) return this.errorReply("Please enter a valid IP address.");
+		if (!IPTools.ipRegex.test(ip)) {
+			const pattern = IPTools.stringToRange(ip);
+			if (!pattern) {
+				return this.errorReply("Please enter a valid IP address.");
+			}
+			if (!user.can('rangeban')) {
+				return this.errorReply('Only upper staff can markshare ranges.');
+			}
+			for (const range of Punishments.sharedRanges.keys()) {
+				if (IPTools.rangeIntersects(range, pattern)) {
+					return this.errorReply(
+						`Range ${IPTools.rangeToString(pattern)} intersects with shared range ${IPTools.rangeToString(range)}`
+					);
+				}
+			}
+		}
 
-		if (Punishments.sharedIps.has(ip)) return this.errorReply("This IP is already marked as shared.");
+		if (Punishments.isSharedIp(ip)) return this.errorReply("This IP is already marked as shared.");
 		if (Punishments.isBlacklistedSharedIp(ip)) {
 			return this.errorReply(`This IP is blacklisted from being marked as shared.`);
 		}
@@ -423,9 +477,24 @@ export const commands: ChatCommands = {
 	unmarkshared(target, room, user) {
 		if (!target) return this.parse('/help unmarkshared');
 		checkCanPerform(this, user, 'globalban');
-		if (!IPTools.ipRegex.test(target)) return this.errorReply("Please enter a valid IP address.");
+		target = target.trim();
+		const pattern = IPTools.stringToRange(target);
+		if (!pattern) return this.errorReply("Please enter a valid IP address.");
+		if (pattern.minIP !== pattern.maxIP && !user.can('rangeban')) {
+			return this.errorReply(`Only administrators can unmarkshare ranges.`);
+		}
 
-		if (!Punishments.sharedIps.has(target)) return this.errorReply("This IP isn't marked as shared.");
+		let shared = false;
+		if (pattern.minIP !== pattern.maxIP) {
+			for (const range of Punishments.sharedRanges.keys()) {
+				shared = range.minIP === pattern.minIP && range.maxIP === pattern.maxIP;
+				if (shared) break;
+			}
+		} else {
+			shared = Punishments.sharedIps.has(target);
+		}
+
+		if (!shared) return this.errorReply(`That IP/range isn't marked as shared.`);
 
 		Punishments.removeSharedIp(target);
 
@@ -450,7 +519,17 @@ export const commands: ChatCommands = {
 			if (Punishments.isBlacklistedSharedIp(ip)) {
 				return this.errorReply(`This IP is already blacklisted from being marked as shared.`);
 			}
-			if (ip.endsWith('*')) { // range
+			// this works because we test ipRangeRegex above, which works for both ranges AND single ips.
+			// so we know here this is one of the two.
+			// If it doesn't work as a single IP, it's a range.
+			if (!IPTools.ipRegex.test(ip)) {
+				// if it doesn't end with *, it doesn't function as a range in IPTools#stringToRange, only as a single IP.
+				// that's valid behavior, but it's detrimental here.
+				if (!ip.endsWith('*')) {
+					this.errorReply(`That looks like a range, but it is invalid.`);
+					this.errorReply(`Append * to the end of the range and try again.`);
+					return;
+				}
 				if (!user.can('bypassall')) {
 					return this.errorReply(`Only Administrators can add ranges.`);
 				}
@@ -463,7 +542,7 @@ export const commands: ChatCommands = {
 					}
 				}
 			} else {
-				if (Punishments.sharedIps.has(ip)) this.parse(`/unmarkshared ${ip}`);
+				if (Punishments.isSharedIp(ip)) this.parse(`/unmarkshared ${ip}`);
 			}
 			const reason = reasonArr.join(',');
 

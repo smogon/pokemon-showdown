@@ -46,7 +46,7 @@ describe('Adrenaline Orb', function () {
 		assert.statStage(battle.p1.active[0], 'spe', 0);
 	});
 
-	it.skip(`should not activate if the holder is at -6 Attack`, function () {
+	it(`should not activate if the holder is at -6 Attack`, function () {
 		battle = common.createBattle([[
 			{species: "Dugtrio", item: 'adrenalineorb', moves: ['bellydrum']},
 		], [
@@ -60,7 +60,24 @@ describe('Adrenaline Orb', function () {
 		assert.holdsItem(battle.p1.active[0]);
 	});
 
-	it.skip(`should not activate if the holder is at +6 Speed`, function () {
+	it(`should activate if the holder is at -5 Attack`, function () {
+		battle = common.createBattle([[
+			{species: "Dugtrio", item: 'adrenalineorb', moves: ['bellydrum', 'curse', 'splash']},
+		], [
+			{species: "Shedinja", moves: ['splash', 'topsyturvy']},
+			{species: "Incineroar", ability: 'intimidate', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices(); //dugtrio +6 atk
+		battle.makeChoices('move splash', 'move topsyturvy'); //dugtrio -6 atk
+		battle.makeChoices('move curse', 'move splash'); // dugtrio -5 atk and -1 speed
+		assert.statStage(battle.p1.active[0], 'spe', -1);
+		battle.makeChoices('move splash', 'switch 2'); // now dugtrio is at -6 and should use orb to be back at 0 speed
+		assert.statStage(battle.p1.active[0], 'spe', 0);
+		assert.false.holdsItem(battle.p1.active[0]);
+	});
+
+	it(`should not activate if the holder is at +6 Speed`, function () {
 		battle = common.createBattle([[
 			{species: "Dugtrio", item: 'adrenalineorb', ability: 'steamengine', moves: ['sleeptalk']},
 		], [
@@ -73,7 +90,7 @@ describe('Adrenaline Orb', function () {
 		assert.holdsItem(battle.p1.active[0]);
 	});
 
-	it.skip(`should not activate if the Contrary holder is at +6 Attack`, function () {
+	it(`should not activate if the Contrary holder is at +6 Attack`, function () {
 		battle = common.createBattle([[
 			{species: "Dugtrio", item: 'adrenalineorb', ability: 'contrary', moves: ['bellydrum']},
 		], [

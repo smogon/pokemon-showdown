@@ -9,7 +9,7 @@
  */
 
 import {FS, Utils} from '../../lib';
-import {ScavMods, TwistEvent} from './scavenger-games.js';
+import {ScavMods, TwistEvent} from './scavenger-games';
 import {ChatHandler} from '../chat';
 
 type GameTypes = 'official' | 'regular' | 'mini' | 'unrated' | 'practice' | 'recycled';
@@ -65,7 +65,7 @@ function getScavsRoom(room?: Room) {
 
 class Ladder {
 	file: string;
-	data: AnyObject;
+	data: {[userid: string]: AnyObject};
 	constructor(file: string) {
 		this.file = file;
 		this.data = {};
@@ -101,26 +101,27 @@ class Ladder {
 		FS(this.file).writeUpdate(() => JSON.stringify(this.data));
 	}
 
+	visualize(sortBy: string): Promise<({rank: number} & AnyObject)[]>;
+	visualize(sortBy: string, userid: ID): Promise<({rank: number} & AnyObject) | undefined>;
 	visualize(sortBy: string, userid?: ID) {
 		// return a promise for async sorting - make this less exploitable
 		return new Promise((resolve, reject) => {
 			let lowestScore = Infinity;
 			let lastPlacement = 1;
 
-			const ladder: AnyObject[] = Object.keys(this.data)
-				.filter(k => this.data[k][sortBy])
-				.sort((a, b) => this.data[b][sortBy] - this.data[a][sortBy])
-				.map((u, i) => {
-					const chunk = this.data[u];
-					if (chunk[sortBy] !== lowestScore) {
-						lowestScore = chunk[sortBy];
-						lastPlacement = i + 1;
-					}
-					return {
-						rank: lastPlacement,
-						...chunk,
-					};
-				}); // identify ties
+			const ladder = Utils.sortBy(
+				Object.entries(this.data).filter(([u, bit]) => sortBy in bit),
+				([u, bit]) => -bit[sortBy]
+			).map(([u, chunk], i) => {
+				if (chunk[sortBy] !== lowestScore) {
+					lowestScore = chunk[sortBy];
+					lastPlacement = i + 1;
+				}
+				return {
+					rank: lastPlacement,
+					...chunk,
+				} as {rank: number} & AnyObject;
+			}); // identify ties
 			if (userid) {
 				const rank = ladder.find(entry => toID(entry.name) === userid);
 				resolve(rank);
@@ -330,9 +331,7 @@ class ScavengerHuntDatabase {
 		return `${hunt.hosts.map(host => host.name).join(',')} | ${hunt.questions.map(question => `${question.text} | ${question.answers.join(';')}`).join(' | ')}`;
 	}
 }
-export class ScavengerHunt extends Rooms.RoomGame {
-	playerTable: {[userid: string]: ScavengerHuntPlayer};
-	players: ScavengerHuntPlayer[];
+export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	gameType: GameTypes;
 	joinedIps: string[];
 	startTime: number;
@@ -360,9 +359,6 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		mod?: string | string[]
 	) {
 		super(room);
-
-		this.playerTable = Object.create(null);
-		this.players = [];
 
 		this.allowRenames = true;
 		this.gameType = gameType;
@@ -525,18 +521,16 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 	// returns whether or not the next action should be stopped
 	runEvent(event_id: string, ...args: any[]) {
-		let events = this.mods['on' + event_id];
+		const events = this.mods['on' + event_id];
 		if (!events) return;
 
-		events = events.sort((a, b) => b.priority - a.priority);
+		Utils.sortBy(events, event => -event.priority);
 		let result = undefined;
 
-		if (events) {
-			for (const event of events) {
-				const subResult = event.exec.call(this, ...args) as any;
-				if (subResult === true) return true;
-				result = subResult;
-			}
+		for (const event of events) {
+			const subResult = event.exec.call(this, ...args) as any;
+			if (subResult === true) return true;
+			result = subResult;
 		}
 
 		return result === false ? true : result;
@@ -684,7 +678,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 				}</td><td>${
 					i + 1 >= qLimit ?
 						`` :
-						Utils.escapeHTML(Utils.forceWrap(q.answer.join(' ; ')))
+						Utils.escapeHTMLForceWrap(q.answer.join(' ; '))
 				}</td></tr>`
 			)).join("") +
 			`</table><div>`
@@ -708,8 +702,11 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		this.completed.push(result);
 		const place = formatOrder(this.completed.length);
 
-		this.runEvent('ConfirmCompletion', player, time, blitz);
-		this.announce(Utils.html`<em>${result.name}</em> has finished the hunt in ${place} place! (${time}${(blitz ? " - BLITZ" : "")})`);
+		const completionMessage = this.runEvent('ConfirmCompletion', player, time, blitz, place, result);
+		this.announce(
+			completionMessage ||
+			Utils.html`<em>${result.name}</em> has finished the hunt in ${place} place! (${time}${(blitz ? " - BLITZ" : "")})`
+		);
 
 		player.destroy(); // remove from user.games;
 	}
@@ -736,8 +733,10 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		if (!reset) {
 			const sliceIndex = this.gameType === 'official' ? 5 : 3;
 
+			const hosts = Chat.toListString(this.hosts.map(h => `<em>${Utils.escapeHTML(h.name)}</em>`));
+
 			this.announce(
-				`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt was ended ${(endedBy ? "by " + Utils.escapeHTML(endedBy.name) : "automatically")}.<br />` +
+				`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt by ${hosts} was ended ${(endedBy ? "by " + Utils.escapeHTML(endedBy.name) : "automatically")}.<br />` +
 				`${this.completed.slice(0, sliceIndex).map((p, i) => `${formatOrder(i + 1)} place: <em>${Utils.escapeHTML(p.name)}</em> <span style="color: lightgreen;">[${p.time}]</span>.<br />`).join("")}${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Utils.escapeHTML(e.name)}</em> <span style="color: lightgreen;">[${e.time}]</span>`).join(', ')}<br />` : ''}<br />` +
 				`<details style="cursor: pointer;"><summary>Solution: </summary><br />${this.questions.map((q, i) => `${i + 1}) ${Chat.formatText(q.hint)} <span style="color: lightgreen">[<em>${Utils.escapeHTML(q.answer.join(' / '))}</em>]</span>`).join("<br />")}</details>`
 			);
@@ -949,7 +948,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		for (const u of hostArray) {
 			const id = toID(u);
 			const user = Users.getExact(id);
-			if (!allowOffline && (!user || !user.connected || !(user.id in room.users))) continue;
+			if (!allowOffline && (!user?.connected || !(user.id in room.users))) continue;
 
 			if (!user) {
 				// simply stick the ID's in there - dont keep any benign symbols passed by the hunt maker
@@ -986,8 +985,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 	}
 }
 
-export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer {
-	game: ScavengerHunt;
+export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer<ScavengerHunt> {
 	lastGuess: number;
 	completed: boolean;
 	joinIps: string[];
@@ -996,7 +994,6 @@ export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer {
 	[k: string]: any; // for purposes of adding new temporary properties for the purpose of twists.
 	constructor(user: User, game: ScavengerHunt) {
 		super(user, game);
-		this.game = game;
 
 		this.joinIps = user.ips.slice();
 
@@ -1035,7 +1032,7 @@ export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer {
 	}
 }
 
-const ScavengerCommands: ChatCommands = {
+const ScavengerCommands: Chat.ChatCommands = {
 	/**
 	 * Player commands
 	 */
@@ -1260,7 +1257,7 @@ const ScavengerCommands: ChatCommands = {
 					game.announce(`${userid} was removed from "${team.name}."`);
 				} else {
 					const targetUser = Users.getExact(userid);
-					if (!targetUser || !targetUser.connected) {
+					if (!targetUser?.connected) {
 						this.errorReply(`User "${userid}" is not currently online.`);
 						continue;
 					}
@@ -1429,7 +1426,7 @@ const ScavengerCommands: ChatCommands = {
 
 		const elapsedMsg = Chat.toDurationString(Date.now() - game.startTime, {hhmmss: true});
 		const gameTypeMsg = game.gameType ? `<em>${game.gameType}</em> ` : '';
-		const hostersMsg = Chat.toListString(game.hosts.map(h => h.name));
+		const hostersMsg = Utils.escapeHTML(Chat.toListString(game.hosts.map(h => h.name)));
 		const hostMsg = game.hosts.some(h => h.id === game.staffHostId) ?
 			'' : Utils.html` (started by - ${game.staffHostName})`;
 		const finishers = Utils.html`${game.completed.map(u => u.name).join(', ')}`;
@@ -1608,6 +1605,13 @@ const ScavengerCommands: ChatCommands = {
 		game.questions[question].spoilers.push(hint);
 
 		room.addByUser(user, `Question #${question + 1} hint - spoiler: ${hint}`);
+		const playersOnQ = game.players.filter(player => player.currentQuestion === question && !player.completed);
+		const notif = `|notify|Scavenger hint for Q${question + 1}`;
+		for (const player of playersOnQ) {
+			const playerObj = Users.get(player.id);
+			if (!playerObj?.connected) continue;
+			room.sendUser(playerObj, notif);
+		}
 	},
 
 	deletehint: 'removehint',
@@ -1657,6 +1661,13 @@ const ScavengerCommands: ChatCommands = {
 		game.questions[question].spoilers[hint] = value;
 
 		room.addByUser(user, `Question #${question + 1} hint - spoiler: ${value}`);
+		const playersOnQ = game.players.filter(player => player.currentQuestion === question && !player.completed);
+		const notif = `|notify|Scavenger hint for Q${question + 1}`;
+		for (const player of playersOnQ) {
+			const playerObj = Users.get(player.id);
+			if (!playerObj?.connected) continue;
+			room.sendUser(playerObj, notif);
+		}
 		return this.sendReply("Hint has been modified.");
 	},
 
@@ -1689,6 +1700,7 @@ const ScavengerCommands: ChatCommands = {
 		}
 		if (!target && this.cmd !== 'queuerecycled') {
 			if (this.cmd === 'queue') {
+				// Necessary for broadcasting: this.runBroadcast();
 				const commandHandler = ScavengerCommands.viewqueue as ChatHandler;
 				commandHandler.call(this, target, room, user, this.connection, this.cmd, this.message);
 				return;
@@ -1782,7 +1794,7 @@ const ScavengerCommands: ChatCommands = {
 		}
 		this.checkCan('mute', null, room);
 
-		if (!room.settings.scavQueue || !room.settings.scavQueue.length) {
+		if (!room.settings.scavQueue?.length) {
 			return this.errorReply("The scavenger hunt queue is currently empty.");
 		}
 		if (room.game) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
@@ -1870,7 +1882,7 @@ const ScavengerCommands: ChatCommands = {
 
 		Leaderboard.addPoints(targetId, 'points', points, true).write();
 
-		this.privateModAction(`${targetId} was given ${points} points on the monthly scavengers ladder by ${user.name}.`);
+		this.privateModAction(`${targetId} was given ${points} points on the current scavengers ladder by ${user.name}.`);
 		this.modlog('SCAV ADDPOINTS', targetId, '' + points);
 	},
 
@@ -1887,7 +1899,7 @@ const ScavengerCommands: ChatCommands = {
 
 		Leaderboard.addPoints(targetId, 'points', -points, true).write();
 
-		this.privateModAction(`${user.name} has taken ${points} points from ${targetId} on the monthly scavengers ladder.`);
+		this.privateModAction(`${user.name} has taken ${points} points from ${targetId} on the current scavengers ladder.`);
 		this.modlog('SCAV REMOVEPOINTS', targetId, '' + points);
 	},
 
@@ -1897,7 +1909,7 @@ const ScavengerCommands: ChatCommands = {
 
 		Leaderboard.reset().write();
 
-		this.privateModAction(`${user.name} has reset the monthly scavengers ladder.`);
+		this.privateModAction(`${user.name} has reset the current scavengers ladder.`);
 		this.modlog('SCAV RESETLADDER');
 	},
 	top: 'ladder',
@@ -2138,10 +2150,9 @@ const ScavengerCommands: ChatCommands = {
 		if (!this.runBroadcast()) return false;
 
 		let buffer = `<table><tr><th>Twist</th><th>Description</th></tr>`;
-		buffer += Object.keys(ScavMods.twists).map(twistid => {
-			const twist = ScavMods.twists[twistid];
-			return Utils.html`<tr><td style="padding: 5px;">${twist.name}</td><td style="padding: 5px;">${twist.desc}</td></tr>`;
-		}).join('');
+		buffer += Object.values(ScavMods.twists).map(twist => (
+			Utils.html`<tr><td style="padding: 5px;">${twist.name}</td><td style="padding: 5px;">${twist.desc}</td></tr>`
+		)).join('');
 		buffer += `</table>`;
 
 		this.sendReply(`|raw|<div class="ladder infobox-limited">${buffer}</div>`);
@@ -2431,7 +2442,7 @@ const ScavengerCommands: ChatCommands = {
 	},
 };
 
-export const pages: PageTable = {
+export const pages: Chat.PageTable = {
 	recycledHunts(query, user, connection) {
 		this.title = 'Recycled Hunts';
 		const room = this.requireRoom();
@@ -2473,7 +2484,7 @@ export const pages: PageTable = {
 	},
 };
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	// general
 	scav: 'scavengers',
 	scavengers: ScavengerCommands,
@@ -2549,8 +2560,8 @@ export const commands: ChatCommands = {
 			"- /scavengerstatus  (or /scav status): Check your status in the current hunt.",
 			"- /scavengers queue (or /scav queue): Showcase the hunts currently in queue, with the answers hidden for any hunt that is not yours.",
 			"- /scavengerhint (or /scav hint): View your latest hint in the current game.",
-			"- /scavladder (or /scav top): View the current bimonthly scavengers leaderboard.",
-			"- /scavrank <em>[user]</em>: View the rank of the user on the monthly scavenger leaderboard. Defaults to the user if no name is provided.",
+			"- /scavladder (or /scav top): View the current scavengers leaderboard.",
+			"- /scavrank <em>[user]</em>: View the rank of the user on the current scavenger leaderboard. Defaults to the user if no name is provided.",
 			"For a more in-depth overview, use /scavhelp staff.",
 		].join('<br />');
 		const staffCommands = [
@@ -2587,7 +2598,7 @@ export const commands: ChatCommands = {
 			"- /scav queuerecycled <em>[number]</em>: Queue a recycled hunt from the database. If <em>[number]</em> is left blank, then a random hunt is queued.",
 			"- /recycledhuntshelp: give more info about the recycled hunts.",
 			"<br />As a <strong>room owner (#)</strong>, you can also use the following scavengers commands:",
-			"- /scav resetladder: Reset the monthly scavenger leaderboard.",
+			"- /scav resetladder: Reset the current scavenger leaderboard.",
 			"- /scav setpoints <em>[1st place]</em>, <em>[2nd place]</em>, <em>[3rd place]</em>, <em>[4th place]</em>, <em>[5th place]</em>, ...: Set the point values for wins of officials, minis and regular hunts.",
 			"- /scav defaulttimer <em>[value]</em>: Set the default timer applied to automatically started hunts from the queue.",
 			"- /scav setblitz <em>[value]</em> ...: Set the blitz award to the given value.",

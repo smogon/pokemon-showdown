@@ -3,6 +3,7 @@
 const {transform} = require("sucrase");
 const fs = require("fs");
 const path = require("path");
+const child_process = require("child_process");
 
 let force = false;
 
@@ -20,11 +21,29 @@ function needsSucrase(source, dest, path = "") {
 	}
 	if (!path.includes(".")) {
 		// probably dir
+		if (source === './config' && path) return false;
 		try {
-			const files = fs.readdirSync(source + path);
-			for (const file of files) {
+			const sourceFiles = fs.readdirSync(source + path);
+			for (const file of sourceFiles) {
 				if (needsSucrase(source, dest, path + "/" + file)) {
 					return true;
+				}
+			}
+			if (path.endsWith('/chat-plugins') || source === './config' || path.includes('/mods/')) {
+				const destFiles = fs.readdirSync(dest + path);
+				for (const file of destFiles) {
+					if (path.endsWith('/config')) console.log(file);
+					if (file.endsWith('.js') && !sourceFiles.includes(file.slice(0, -2) + 'ts') && !sourceFiles.includes(file)) {
+						fs.unlinkSync(dest + path + "/" + file);
+					}
+				}
+			}
+			if (path.endsWith('/mods')) {
+				const destFolders = fs.readdirSync(dest + path);
+				for (const destFolder of destFolders) {
+					if (!destFolder.includes('.') && !sourceFiles.includes(destFolder)) {
+						fs.rmSync(dest + path + "/" + destFolder, {recursive: true});
+					}
 				}
 			}
 		} catch (e) {
@@ -44,10 +63,6 @@ function findFiles(options) {
 	const extensions = options.sucraseOptions.transforms.includes("typescript") ?
 		[".ts", ".tsx"] :
 		[".js", ".jsx"];
-
-	if (!fs.existsSync(outDirPath)) {
-		fs.mkdirSync(outDirPath);
-	}
 
 	const outArr = [];
 	for (const child of fs.readdirSync(srcDirPath)) {
@@ -80,21 +95,22 @@ function findFiles(options) {
 		}
 	}
 
-	if (!fs.existsSync(path.join(outDirPath, "sourceMaps"))) {
-		fs.mkdirSync(path.join(outDirPath, "sourceMaps"));
+	if (!outArr.length) {
+		return outArr;
 	}
+	fs.mkdirSync(path.join(outDirPath, "sourceMaps"), {recursive: true});
 
 	return outArr;
 }
 
 function sucrase(src, out, opts, excludeDirs = []) {
 	try {
-		if (!force && src !== "./config" && !needsSucrase(src, out)) {
+		if (!force && !needsSucrase(src, out) && src !== "./config") {
 			return false;
 		}
-	} catch (e) {}
+	} catch {}
 	const sucraseOptions = {
-		transforms: ["typescript", "imports"],
+		transforms: ["typescript", "imports", "jsx"],
 		enableLegacyTypeScriptModuleInterop: true,
 
 		...opts,
@@ -135,7 +151,7 @@ function replace(file, replacements) {
 		if (err) throw err;
 		if (stats.isSymbolicLink()) return;
 		if (stats.isFile()) {
-			if (!file.endsWith('.js')) return;
+			if (!file.endsWith('.js') && !file.endsWith('.d.ts')) return;
 			fs.readFile(file, "utf-8", function (err, text) {
 				if (err) throw err;
 				let anyMatch = false;
@@ -170,7 +186,7 @@ function copyOverDataJSON(file) {
 	});
 }
 
-exports.transpile = (doForce) => {
+exports.transpile = (doForce, decl) => {
 	if (doForce) force = true;
 	if (sucrase('./config', './.config-dist')) {
 		replace('.config-dist', [
@@ -186,7 +202,8 @@ exports.transpile = (doForce) => {
 
 	if (sucrase('./sim', './.sim-dist')) {
 		replace('.sim-dist', [
-			{regex: /(require\(.*?)(lib)/g, replace: `$1.lib-dist`},
+			{regex: /(require\(.*?)\/(lib|data|config)/g, replace: `$1/.$2-dist`},
+			{regex: /(from '.*?)\/(lib|data|config)/g, replace: `$1/.$2-dist`},
 		]);
 	}
 
@@ -200,15 +217,9 @@ exports.transpile = (doForce) => {
 
 	sucrase('./translations', './.translations-dist');
 
-	if (sucrase('./tools/set-import', './tools/set-import', null, ['sets'])) {
-		replace('./tools/set-import/importer.js', [
-			{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
-		]);
-	}
-
-	if (sucrase('./tools/modlog', './tools/modlog')) {
-		replace('./tools/modlog/converter.js', [
-			{regex: /(require\(.*?)(server|lib)/g, replace: `$1.$2-dist`},
+	if (sucrase('./tools', './tools', null, ['.', 'sets', 'simulate'])) {
+		replace('tools', [
+			{regex: /(require\(.*?)(lib|sim|server)/g, replace: `$1.$2-dist`},
 		]);
 	}
 
@@ -232,4 +243,19 @@ exports.transpile = (doForce) => {
 	copyOverDataJSON('mods/gen6/factory-sets.json');
 
 	// NOTE: replace is asynchronous - add additional replacements for the same path in one call instead of making multiple calls.
+	if (decl) {
+		exports.buildDecls();
+	}
+};
+
+exports.buildDecls = () => {
+	try {
+		child_process.execSync(`node ./node_modules/typescript/bin/tsc -p sim`, {stdio: 'inherit'});
+	} catch {}
+	for (const file of fs.readdirSync(`./.sim-dist/lib/`)) {
+		fs.renameSync(`./.sim-dist/lib/${file}`, `./.lib-dist/${file}`);
+	}
+	for (const file of fs.readdirSync(`./.sim-dist/sim/`)) {
+		fs.renameSync(`./.sim-dist/sim/${file}`, `./.sim-dist/${file}`);
+	}
 };

@@ -429,6 +429,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	ejectpack: {
 		name: "Eject Pack",
 		desc: "If the holder's stat stages are lowered, it switches to a chosen ally. Single use.",
+
+		end: "  [POKEMON] is switched out by the Eject Pack!",
 	},
 	electirizer: {
 		name: "Electirizer",
@@ -925,6 +927,9 @@ export const ItemsText: {[k: string]: ItemText} = {
 	lightball: {
 		name: "Light Ball",
 		desc: "If held by a Pikachu, its Attack and Sp. Atk are doubled.",
+		gen4: {
+			desc: "If held by a Pikachu, its attacks have their power doubled.",
+		},
 		gen3: {
 			desc: "If held by a Pikachu, its Special Attack is doubled.",
 		},
@@ -2332,5 +2337,9 @@ export const ItemsText: {[k: string]: ItemText} = {
 	crucibellite: {
 		name: "Crucibellite",
 		desc: "If held by a Crucibelle, this item allows it to Mega Evolve in battle.",
+	},
+	vilevial: {
+		name: "Vile Vial",
+		desc: "If held by a Venomicon, its Poison- and Flying-type attacks have 1.2x power.",
 	},
 };

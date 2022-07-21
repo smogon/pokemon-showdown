@@ -13,12 +13,6 @@
 		"moves": ["Mach Punch", "Aqua Jet", "Earthquake", "Knock Off"]
 	}],
 	"Astrolotl": [{
-		"item": "Air Balloon",
-		"ability": "Vital Spirit",
-		"evs": {"hp": 252, "spd": 32, "spe": 224},
-		"nature": "Jolly",
-		"moves": ["Fire Lash", "Yawn", "Wish", "Protect"]
-	}, {
 		"item": "Life Orb",
 		"ability": "Vital Spirit",
 		"evs": {"hp": 32, "atk": 252, "spe": 224},
@@ -66,6 +60,14 @@
 		"evs": {"hp": 28, "atk": 252, "spe": 228},
 		"nature": "Jolly",
 		"moves": ["Belly Drum", "Acrobatics", ["Bullet Punch", "Iron Head"], "Drain Punch"]
+	}],
+	"Chromera": [{
+		"item": "Air Balloon",
+		"ability": "Color Change",
+		"evs": {"hp": 252, "def": 152, "spd": 104},
+		"nature": "Bold",
+		"ivs": {"atk": 0},
+		"moves": ["Sludge Bomb", "Scald", "Calm Mind", "Recover"]
 	}],
 	"Colossoil": [{
 		"item": "Flame Orb",
@@ -286,7 +288,7 @@
 		"evs": {"hp": 248, "def": 8, "spd": 252},
 		"nature": "Calm",
 		"ivs": {"atk": 0},
-		"moves": ["Amnesia", "Acid Armor", "Lava Plume", ["Synthesis", "Rest"]]
+		"moves": ["Amnesia", "Iron Defense", "Lava Plume", ["Synthesis", "Rest"]]
 	}],
 	"Revenankh": [{
 		"item": "Choice Band",

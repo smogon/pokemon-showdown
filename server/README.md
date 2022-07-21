@@ -11,7 +11,7 @@ Installing
 
     ./pokemon-showdown
 
-(Requires Node.js v10+)
+(Requires Node.js v12+)
 
 If your distro package manager has an old Node.js version, the simplest way to upgrade is `n` – usually no root necessary:
 

@@ -49,6 +49,7 @@ export const translations: Translations = {
 		"<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.": "",
 		"<strong>hourmute</strong> - Mutes a user for 60 minutes.": "",
 		"<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.": "",
+		"<strong>weekban</strong> - Bans a user from the room for a week.": "",
 		"<strong>blacklist</strong> - Bans a user for a year.": "",
 
 		"<strong>Global punishments</strong>:": "",
@@ -56,6 +57,12 @@ export const translations: Translations = {
 		"<strong>weeklock</strong> - Locks a user for a week.": "",
 		"<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.": "",
 		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "",
+
+		"<strong>Indefinite global punishments</strong>:": "",
+		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "",
+		'These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>': '',
+		" forum after at least 3 months without incident.": "",
+		"<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.": "",
 
 		"<strong>Room drivers (%)</strong> can use:": "",
 		"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules": "",
@@ -128,6 +135,7 @@ export const translations: Translations = {
 		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "",
 		"If you need help, try opening a <a href=\"view-help-request\" class=\"button\">help ticket</a>": "",
 		"You are blocking private messages right now.": "",
+		"You are blocking challenges right now.": "",
 
 		"Your message contained banned words in this room.": "",
 		"You can't send the same message again so soon.": "",
@@ -143,6 +151,8 @@ export const translations: Translations = {
 		"You are already blocking challenges!": "",
 		"You are already available for challenges!": "",
 		"You are available for challenges from now on.": "",
+		"You are now blocking challenges, except from staff and ${rank}.": "",
+		"You are now blocking challenges, except from staff and ${status} users.": "",
 
 		"Staff FAQ": "",
 		"You cannot broadcast all FAQs at once.": "",
@@ -160,5 +170,10 @@ export const translations: Translations = {
 		"pages/ladderhelp": "",
 		"pages/rng": "",
 		"pages/staff": "",
+
+		"- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.": "",
+		"- We log IPs to enforce bans and mutes.": "",
+		"- We use cookies to save your login info and teams, and for Google Analytics and AdSense.": "",
+		'- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>': '',
 	},
 };

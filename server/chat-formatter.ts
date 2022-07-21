@@ -60,7 +60,7 @@ REGEXFREE SOURCE FOR LINKREGEX
 */
 export const linkRegex = /(?:(?:https?:\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)*|www\.[a-z0-9-]+(?:\.[a-z0-9-]+)+|\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:com?|org|net|edu|info|us|jp|[a-z]{2,3}(?=:[0-9]|\/)))(?::[0-9]+)?(?:\/(?:(?:[^\s()&<>]|&amp;|&quot;|\((?:[^\\s()<>&]|&amp;)*\))*(?:[^\s()[\]{}".,!?;:&<>*`^~\\]|\((?:[^\s()<>&]|&amp;)*\)))?)?|[a-z0-9.]+@[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,})(?![^ ]*&gt;)/ig;
 
-type SpanType = '_' | '*' | '~' | '^' | '\\' | '<' | '[' | '`' | 'a' | 'spoiler' | '>' | '(';
+type SpanType = '_' | '*' | '~' | '^' | '\\' | '|' | '<' | '[' | '`' | 'a' | 'spoiler' | '>' | '(';
 
 type FormatSpan = [SpanType, number];
 
@@ -112,8 +112,7 @@ class TextFormatter {
 		this.replaceLinebreaks = this.isTrusted || replaceLinebreaks;
 		this.offset = 0;
 	}
-	// eslint-disable-next-line max-len
-	// debugAt(i=0, j=i+1) { console.log(this.slice(0, i) + '[' + this.slice(i, j) + ']' + this.slice(j, this.str.length)); }
+	// debugAt(i=0, j=i+1) { console.log(`${this.slice(0, i)}[${this.slice(i, j)}]${this.slice(j, this.str.length)}`); }
 
 	slice(start: number, end: number) {
 		return this.str.slice(start, end);
@@ -175,15 +174,17 @@ class TextFormatter {
 		const span = this.stack.pop()!;
 		const startIndex = span[1];
 		let tagName = '';
+		let attrs = '';
 		switch (spanType) {
 		case '_': tagName = 'i'; break;
 		case '*': tagName = 'b'; break;
 		case '~': tagName = 's'; break;
 		case '^': tagName = 'sup'; break;
 		case '\\': tagName = 'sub'; break;
+		case '|': tagName = 'span'; attrs = ' class="spoiler"'; break;
 		}
 		if (tagName) {
-			this.buffers[startIndex] = `<${tagName}>`;
+			this.buffers[startIndex] = `<${tagName}${attrs}>`;
 			this.buffers.push(`</${tagName}>`);
 			this.offset = end;
 		}
@@ -373,6 +374,7 @@ class TextFormatter {
 			case '~':
 			case '^':
 			case '\\':
+			case '|':
 				if (this.at(i + 1) === char && this.at(i + 2) !== char) {
 					if (!(this.at(i - 1) !== ' ' && this.closeSpan(char, i, i + 2))) {
 						if (this.at(i + 2) !== ' ') this.pushSpan(char, i, i + 2);

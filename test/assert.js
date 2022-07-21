@@ -181,6 +181,31 @@ assert.sets = function (getter, value, fn, message) {
 	});
 };
 
+
+// .throws() does not currently work with Promises.
+assert.throwsAsync = async function (fn, message) {
+	try {
+		await fn();
+	} catch (e) {
+		return; // threw
+	}
+	throw new AssertionError({
+		message: message || `Expected function to throw an error.`,
+		stackStartFunction: assert.throwsAsync,
+	});
+};
+
+assert.doesNotThrowAsync = async function (fn, message) {
+	try {
+		await fn();
+	} catch (e) {
+		throw new AssertionError({
+			message: message || `Expected function not to throw an error (threw ${e}).`,
+			stackStartFunction: assert.doesNotThrowAsync,
+		});
+	}
+};
+
 assert.strictEqual = () => {
 	throw new Error(`This API is deprecated; please use assert.equal()`);
 };

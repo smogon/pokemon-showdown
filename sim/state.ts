@@ -2,6 +2,10 @@
  * Simulator State
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
+ * Helper functions for serializing Battle instances to JSON and back.
+ *
+ * (You might also consider using input logs instead.)
+ *
  * @license MIT
  */
 
@@ -33,9 +37,9 @@ type Referable = Battle | Field | Side | Pokemon | Condition | Ability | Item | 
 // need special treatment from these sets are then handled manually.
 
 const BATTLE = new Set([
-	'dex', 'gen', 'ruleTable', 'id', 'log', 'inherit', 'format', 'zMoveTable', 'teamGenerator',
+	'dex', 'gen', 'ruleTable', 'id', 'log', 'inherit', 'format', 'teamGenerator',
 	'HIT_SUBSTITUTE', 'NOT_FAIL', 'FAIL', 'SILENT_FAIL', 'field', 'sides', 'prng', 'hints',
-	'deserialized', 'maxMoveTable', 'queue',
+	'deserialized', 'queue', 'actions',
 ]);
 const FIELD = new Set(['id', 'battle']);
 const SIDE = new Set(['battle', 'team', 'pokemon', 'choice', 'activeRequest']);
@@ -138,7 +142,7 @@ export const State = new class {
 		// states we wouldnt be using, but also because battle.getRequests will mutate
 		// state on occasion (eg. `pokemon.getMoves` sets `pokemon.trapped = true` if locked).
 		if (activeRequests) {
-			const requests = battle.getRequests(battle.requestState, battle.getMaxTeamSize());
+			const requests = battle.getRequests(battle.requestState);
 			for (const [i, side] of state.sides.entries()) {
 				battle.sides[i].activeRequest = side.activeRequest === null ? null : requests[i];
 			}
@@ -268,7 +272,7 @@ export const State = new class {
 	// a bug in the simulator if it ever happened, but if not, the isActiveMove check can
 	// be extended.
 	serializeActiveMove(move: ActiveMove, battle: Battle): /* ActiveMove */ AnyObject {
-		const base = battle.dex.getMove(move.id);
+		const base = battle.dex.moves.get(move.id);
 		const skip = new Set([...ACTIVE_MOVE]);
 		for (const [key, value] of Object.entries(base)) {
 			// This should really be a deepEquals check to see if anything on ActiveMove was
@@ -396,11 +400,11 @@ export const State = new class {
 		switch (type) {
 		case 'Side': return battle.sides[Number(id[1]) - 1];
 		case 'Pokemon': return battle.sides[Number(id[1]) - 1].pokemon[POSITIONS.indexOf(id[2])];
-		case 'Ability': return battle.dex.getAbility(id);
-		case 'Item': return battle.dex.getItem(id);
-		case 'Move': return battle.dex.getMove(id);
-		case 'Condition': return battle.dex.getEffect(id);
-		case 'Species': return battle.dex.getSpecies(id);
+		case 'Ability': return battle.dex.abilities.get(id);
+		case 'Item': return battle.dex.items.get(id);
+		case 'Move': return battle.dex.moves.get(id);
+		case 'Condition': return battle.dex.conditions.get(id);
+		case 'Species': return battle.dex.species.get(id);
 		default: return undefined; // maybe we actually got unlucky and its a string
 		}
 	}

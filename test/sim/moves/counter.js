@@ -113,6 +113,33 @@ describe('Counter', function () {
 		assert(!battle.log.some(line => line.includes('Desync Clause Mod activated')));
 		assert.fullHP(battle.p1.active[0]);
 	});
+
+	it(`[Gen 1 Stadium] should counter Normal/Fighting moves only`, function () {
+		// should counter Normal/Fighting moves
+		battle = common.mod('gen1stadium').createBattle([[
+			{species: 'Mew', moves: ['pound', 'watergun', 'counter', 'thunderwave']},
+		], [
+			{species: 'Persian', moves: ['pound', 'watergun', 'counter', 'thunderwave']},
+		]]);
+		battle.makeChoices('move watergun', 'move counter');
+		assert.fullHP(battle.p1.active[0]);
+		battle.makeChoices('move pound', 'move counter');
+		assert.false.fullHP(battle.p1.active[0]);
+	});
+
+	it(`should not have its target changed by Stalwart`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: "Duraludon", ability: 'stalwart', moves: ['counter']},
+			{species: "Diglett", moves: ['sleeptalk']},
+		], [
+			{species: "Wynaut", moves: ['sleeptalk']},
+			{species: "Noivern", moves: ['dragonclaw']},
+		]]);
+
+		const wynaut = battle.p2.active[0];
+		battle.makeChoices('auto', 'move sleeptalk, move dragonclaw 1');
+		assert.equal(wynaut.maxhp, wynaut.hp);
+	});
 });
 
 describe('Mirror Coat', function () {
@@ -180,7 +207,7 @@ describe('Mirror Coat', function () {
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it.skip(`should not have its target changed by Stalwart`, function () {
+	it(`should not have its target changed by Stalwart`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Duraludon", ability: 'stalwart', moves: ['mirrorcoat']},
 			{species: "Diglett", moves: ['sleeptalk']},

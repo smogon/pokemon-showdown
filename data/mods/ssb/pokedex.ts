@@ -115,7 +115,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	pichu: {
 		inherit: true,
 		types: ["Electric", "Water"],
-		baseStats: {hp: 60, atk: 85, def: 50, spa: 95, spd: 85, spe: 110},
+		baseStats: {hp: 67, atk: 58, def: 57, spa: 81, spd: 67, spe: 101},
 	},
 	// Inactive
 	gyaradosmega: {
@@ -202,6 +202,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	alcremie: {
 		inherit: true,
 		abilities: {0: "Winding Song"},
+	},
+	// tiki
+	snom: {
+		inherit: true,
+		baseStats: {hp: 70, atk: 65, def: 60, spa: 125, spd: 90, spe: 65},
 	},
 	// vivalospride's interaction with Coconut's move
 	darumaka: {

@@ -57,4 +57,14 @@ describe('Fake Out', function () {
 		battle.makeChoices('move fakeout', 'move swift');
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
+
+	it('should not flinch if the target had prepared to Focus Punch', function () {
+		battle = common.createBattle([[
+			{species: 'Hitmontop', ability: 'steadfast', moves: ['fakeout']},
+		], [
+			{species: 'Gallade', ability: 'steadfast', moves: ['focuspunch']},
+		]]);
+		battle.makeChoices();
+		assert.equal(battle.p2.active[0].boosts.spe, 0);
+	});
 });

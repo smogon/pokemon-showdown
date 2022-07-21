@@ -5,7 +5,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	blackbelt: {
 		inherit: true,
-		onBasePower() {},
+		onModifyAtk() {},
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Fighting') {
 				return damage * 1.1;
@@ -14,7 +14,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	blackglasses: {
 		inherit: true,
-		onBasePower() {},
+		onModifySpA() {},
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Dark') {
 				return damage * 1.1;
@@ -31,7 +31,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	charcoal: {
 		inherit: true,
-		onBasePower() {},
+		onModifySpA() {},
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Fire') {
 				return damage * 1.1;
@@ -40,7 +40,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	dragonfang: {
 		inherit: true,
-		onBasePower() {},
+		onModifySpA() {},
 	},
 	dragonscale: {
 		inherit: true,
@@ -49,6 +49,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 				return damage * 1.1;
 			}
 		},
+	},
+	fastball: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	focusband: {
 		inherit: true,
@@ -61,12 +65,16 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	hardstone: {
 		inherit: true,
-		onBasePower() {},
+		onModifyAtk() {},
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Rock') {
 				return damage * 1.1;
 			}
 		},
+	},
+	heavyball: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	kingsrock: {
 		inherit: true,
@@ -86,10 +94,23 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	leftovers: {
+		inherit: true,
+		onResidualOrder: 5,
+		onResidualSubOrder: 1,
+	},
+	levelball: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	lightball: {
 		inherit: true,
 		// In Gen 2 this happens in stat calculation directly.
 		onModifySpA() {},
+	},
+	loveball: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	luckypunch: {
 		inherit: true,
@@ -100,9 +121,13 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	lureball: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	magnet: {
 		inherit: true,
-		onBasePower() {},
+		onModifySpA() {},
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Electric') {
 				return damage * 1.1;
@@ -111,7 +136,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	metalcoat: {
 		inherit: true,
-		onBasePower() {},
+		onModifyAtk() {},
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Steel') {
 				return damage * 1.1;
@@ -126,16 +151,20 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	miracleseed: {
 		inherit: true,
-		onBasePower() {},
+		onModifySpA() {},
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Grass') {
 				return damage * 1.1;
 			}
 		},
 	},
+	moonball: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	mysticwater: {
 		inherit: true,
-		onBasePower() {},
+		onModifySpA() {},
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Water') {
 				return damage * 1.1;
@@ -144,7 +173,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	nevermeltice: {
 		inherit: true,
-		onBasePower() {},
+		onModifySpA() {},
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Ice') {
 				return damage * 1.1;
@@ -153,24 +182,16 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	poisonbarb: {
 		inherit: true,
-		onBasePower() {},
+		onModifyAtk() {},
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Poison') {
 				return damage * 1.1;
 			}
 		},
 	},
-	quickclaw: {
-		inherit: true,
-		onFractionalPriority(priority, pokemon) {
-			if (this.randomChance(60, 256)) {
-				return 0.1;
-			}
-		},
-	},
 	sharpbeak: {
 		inherit: true,
-		onBasePower() {},
+		onModifyAtk() {},
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Flying') {
 				return damage * 1.1;
@@ -179,7 +200,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	silverpowder: {
 		inherit: true,
-		onBasePower() {},
+		onModifyAtk() {},
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Bug') {
 				return damage * 1.1;
@@ -188,7 +209,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	softsand: {
 		inherit: true,
-		onBasePower() {},
+		onModifyAtk() {},
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Ground') {
 				return damage * 1.1;
@@ -197,12 +218,16 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	spelltag: {
 		inherit: true,
-		onBasePower() {},
+		onModifyAtk() {},
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Ghost') {
 				return damage * 1.1;
 			}
 		},
+	},
+	sportball: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	stick: {
 		inherit: true,
@@ -220,7 +245,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	twistedspoon: {
 		inherit: true,
-		onBasePower() {},
+		onModifySpA() {},
 		onModifyDamage(damage, source, target, move) {
 			if (move?.type === 'Psychic') {
 				return damage * 1.1;

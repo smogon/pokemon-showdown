@@ -612,7 +612,7 @@ export class ObjectReadStream<T> {
 	push(elem: T) {
 		if (this.atEOF) return;
 		this.buf.push(elem);
-		if (this.buf.length > this.readSize && this.buf.length >= 16) this._pause();
+		if (this.buf.length > this.readSize && this.buf.length >= 16) void this._pause();
 		this.resolvePush();
 	}
 
@@ -658,8 +658,8 @@ export class ObjectReadStream<T> {
 		throw new Error(`ReadStream needs to be subclassed and the _read function needs to be implemented.`);
 	}
 
-	_destroy() {}
-	_pause() {}
+	_destroy(): void | Promise<void> {}
+	_pause(): void | Promise<void> {}
 
 	async loadIntoBuffer(count: number | true = 1, readError?: boolean) {
 		this[readError ? 'readError' : 'peekError']();

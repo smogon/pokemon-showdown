@@ -115,7 +115,7 @@ describe('Neutralizing Gas', function () {
 		assert.equal(wynaut.getStat('spe'), originalSpeed);
 	});
 
-	it.skip(`should negate Unburden when Neutralizing Gas enters the field`, function () {
+	it(`should negate Unburden when Neutralizing Gas enters the field`, function () {
 		battle = common.createBattle([[
 			{species: "Wynaut", ability: 'unburden', item: 'sitrusberry', evs: {hp: 4}, moves: ['bellydrum']},
 		], [
@@ -227,6 +227,50 @@ describe('Neutralizing Gas', function () {
 		const firstUnnerveIndex = log.indexOf('|-ability|p2a: Rookidee|Unnerve');
 		const secondUnnerveIndex = log.lastIndexOf('|-ability|p2a: Rookidee|Unnerve');
 		assert.equal(firstUnnerveIndex, secondUnnerveIndex, 'Unnerve should have only activated once.');
+	});
+
+	it(`should not announce Neutralizing Gas has worn off, if multiple are active simultenously`, function () {
+		battle = common.createBattle([[
+			{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
+		], [
+			{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
+			{species: "Wynaut", ability: 'intrepidsword', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('move sleeptalk', 'switch 2');
+		assert(battle.log.every(line => !line.startsWith('|-end')));
+		assert.statStage(battle.p2.active[0], 'atk', 0);
+	});
+
+	it(`should not prevent Ice Face from blocking damage nor reform Ice Face when leaving the field`, function () {
+		battle = common.createBattle([[
+			{species: 'Eiscue', ability: 'iceface', moves: ['sleeptalk', 'hail']},
+		], [
+			{species: 'Mewtwo', ability: 'neutralizinggas', moves: ['tackle', 'sleeptalk']},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		]]);
+		const eiscue = battle.p1.active[0];
+		battle.makeChoices();
+		assert.species(eiscue, 'Eiscue-Noice');
+		battle.makeChoices('move hail', 'move sleeptalk');
+		assert.species(eiscue, 'Eiscue');
+		battle.makeChoices();
+		assert.species(eiscue, 'Eiscue-Noice');
+		battle.makeChoices('auto', 'switch 2');
+		assert.species(eiscue, 'Eiscue-Noice');
+	});
+
+	it(`should not work if it was obtained via Transform`, function () {
+		battle = common.createBattle([[
+			{species: 'Ditto', moves: ['transform']},
+		], [
+			{species: 'Weezing', ability: 'neutralizinggas', moves: ['sleeptalk']},
+			{species: 'Zacian', ability: 'intrepidsword', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices();
+		battle.makeChoices('auto', 'switch 2');
+		assert.statStage(battle.p2.active[0], 'atk', 1);
 	});
 
 	describe(`Ability reactivation order`, function () {
