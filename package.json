@@ -21,7 +21,8 @@
     "pg": "^8.7.1",
     "sql-template-strings": "^2.2.2",
     "sqlite": "^3.0.6",
-    "sucrase": "^3.15.0"
+    "sucrase": "^3.15.0",
+    "ripgrep-pkg": "^0.4.1"
   },
   "secretDependencies": {
     "node-oom-heapdump": "^1.2.0"
