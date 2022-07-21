@@ -746,6 +746,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					const invalid = validParameter("moves", move, isNotSearch, target);
 					if (invalid) return {error: invalid};
 					if (isNotSearch) {
+						orGroup.skip = true;
 						const bufferObj: {moves: {[k: string]: boolean}} = {moves: {}};
 						bufferObj.moves[move] = false;
 						searches.push(bufferObj as DexOrGroup);
@@ -765,6 +766,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					const invalid = validParameter("moves", moveid, isNotSearch, target);
 					if (invalid) return {error: invalid};
 					if (isNotSearch) {
+						orGroup.skip = true;
 						const bufferObj: {moves: {[k: string]: boolean}} = {moves: {}};
 						bufferObj.moves[moveid] = false;
 						searches.push(bufferObj as DexOrGroup);
@@ -783,6 +785,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						const invalid = validParameter("moves", moveid, isNotSearch, target);
 						if (invalid) return {error: invalid};
 						if (isNotSearch) {
+							orGroup.skip = true;
 							const bufferObj: {moves: {[k: string]: boolean}} = {moves: {}};
 							bufferObj.moves[moveid] = false;
 							searches.push(bufferObj as DexOrGroup);
@@ -849,6 +852,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						const invalid = validParameter("moves", move, isNotSearch, target);
 						if (invalid) return {error: invalid};
 						if (isNotSearch) {
+							orGroup.skip = true;
 							const bufferObj: {moves: {[k: string]: boolean}} = {moves: {}};
 							bufferObj.moves[move] = false;
 							searches.push(bufferObj as DexOrGroup);
