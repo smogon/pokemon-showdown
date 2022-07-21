@@ -8,7 +8,7 @@
  */
 
 import {FS, Utils} from '../../lib';
-import {LogViewer} from './chatlog';
+import {LogViewer} from './chatlog/view';
 import {roomFaqs, visualizeFaq} from './room-faqs';
 
 const DATA_PATH = 'config/chat-plugins/responder.json';
