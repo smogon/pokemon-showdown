@@ -619,6 +619,7 @@ export const LogSearcher = new class Searcher {
 				buf += `<li>[<a roomid="view-chatlog-${roomid}--${day}">${day}</a>]: `;
 				buf += `${Chat.count(dayResults, 'lines')}</li>`;
 			}
+			buf = buf.replace('{total}', `${total}`);
 		} else {
 			buf += '<hr /><ol>';
 			// squish the results together
