@@ -4,7 +4,7 @@
  * @author mia-pi-git
  */
 'use strict';
-const YoutubeInterface = require('../../../.server-dist/chat-plugins/youtube').YoutubeInterface;
+const YoutubeInterface = require('../../../server/chat-plugins/youtube').YoutubeInterface;
 const assert = require('../../assert');
 
 describe(`Youtube features`, function () {

@@ -6,9 +6,7 @@
 */
 
 
-import {Net} from '../../lib/net';
-import {Utils} from '../../lib/utils';
-
+import {Net, Utils} from '../../lib';
 const SEARCH_PATH = '/api/v1/Search/List/';
 const DETAILS_PATH = '/api/v1/Articles/Details/';
 
@@ -42,7 +40,7 @@ async function getCardDetails(site: string, id: string) {
 	return result.items[id];
 }
 
-export const commands: ChatCommands = {
+export const commands: Chat.ChatCommands = {
 	ygo: 'yugioh',
 	yugioh(target, room, user) {
 		this.checkBroadcast();

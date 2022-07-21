@@ -21,6 +21,6 @@ describe('Natural Cure', function () {
 		});
 		battle.makeChoices('move leechseed', 'move thunderwave');
 		battle.makeChoices('move leechseed', 'move roar');
-		assert.false(battle.p1.pokemon[1].status === 'par');
+		assert.notEqual(battle.p1.pokemon[1].status, 'par');
 	});
 });

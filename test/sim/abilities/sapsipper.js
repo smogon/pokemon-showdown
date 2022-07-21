@@ -10,7 +10,7 @@ describe('Sap Sipper', function () {
 		battle.destroy();
 	});
 
-	it.skip(`should absorb an attack boost from Aromatherapy`, function () {
+	it(`should absorb an attack boost from Aromatherapy`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Comfey", moves: ['aromatherapy']},
 			{species: "Bouffalant", ability: 'sapsipper', moves: ['sleeptalk']},

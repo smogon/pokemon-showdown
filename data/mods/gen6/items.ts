@@ -1,7 +1,6 @@
 export const Items: {[k: string]: ModdedItemData} = {
 	aguavberry: {
 		inherit: true,
-		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -SpD Nature. Single use.",
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -18,10 +17,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	bigroot: {
-		inherit: true,
-		desc: "Holder gains 1.3x HP from draining moves, Aqua Ring, Ingrain, and Leech Seed.",
-	},
 	cornnberry: {
 		inherit: true,
 		isNonstandard: null,
@@ -30,19 +25,12 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	energypowder: {
-		name: "Energy Powder",
-		spritenum: 123,
-		fling: {
-			basePower: 30,
-		},
-		num: 34,
-		gen: 2,
-		desc: "Restores 50 HP to one Pokemon but lowers Happiness.",
+	fastball: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
 	},
 	figyberry: {
 		inherit: true,
-		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Atk Nature. Single use.",
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -55,9 +43,12 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	heavyball: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
 	iapapaberry: {
 		inherit: true,
-		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Def Nature. Single use.",
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -73,24 +64,32 @@ export const Items: {[k: string]: ModdedItemData} = {
 	jabocaberry: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
-			if (move.category === 'Physical') {
+			if (move.category === 'Physical' && !source.hasAbility('magicguard')) {
 				if (target.eatItem()) {
 					this.damage(source.baseMaxhp / 8, source, target, null, true);
 				}
 			}
 		},
 	},
+	levelball: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
 	lifeorb: {
 		inherit: true,
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (source && source !== target && move && move.category !== 'Status' && !move.ohko) {
-				this.damage(source.baseMaxhp / 10, source, source, this.dex.getItem('lifeorb'));
+				this.damage(source.baseMaxhp / 10, source, source, this.dex.items.get('lifeorb'));
 			}
 		},
 	},
-	lightclay: {
+	loveball: {
 		inherit: true,
-		desc: "Holder's use of Light Screen or Reflect lasts 8 turns instead of 5.",
+		isNonstandard: "Unobtainable",
+	},
+	lureball: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
 	},
 	machobrace: {
 		inherit: true,
@@ -98,7 +97,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	magoberry: {
 		inherit: true,
-		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Spe Nature. Single use.",
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -114,6 +112,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 	magostberry: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	moonball: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
 	},
 	nanabberry: {
 		inherit: true,
@@ -150,7 +152,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	rowapberry: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
-			if (move.category === 'Special') {
+			if (move.category === 'Special' && !source.hasAbility('magicguard')) {
 				if (target.eatItem()) {
 					this.damage(source.baseMaxhp / 8, source, target, null, true);
 				}
@@ -163,7 +165,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	souldew: {
 		inherit: true,
-		desc: "If held by a Latias or a Latios, its Sp. Atk and Sp. Def are 1.5x.",
 		onBasePower() {},
 		onModifySpAPriority: 1,
 		onModifySpA(spa, pokemon) {
@@ -188,7 +189,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	wikiberry: {
 		inherit: true,
-		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -SpA Nature. Single use.",
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();

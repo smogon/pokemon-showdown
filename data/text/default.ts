@@ -21,6 +21,10 @@ export const DefaultText: {[k: string]: DefaultText} = {
 		swap: "[POKEMON] and [TARGET] switched places!",
 		swapCenter: "[POKEMON] moved to the center!",
 
+		// Multi Battles only
+		canDynamax: "  [TRAINER] can dynamax now!",
+		canDynamaxOwn: "  Dynamax Energy gathered around [TRAINER]!",
+
 		zEffect: "  [POKEMON] unleashes its full-force Z-Move!",
 		move: "[POKEMON] used **[MOVE]**!",
 		abilityActivation: "[[POKEMON]'s [ABILITY]]",

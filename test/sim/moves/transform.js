@@ -65,7 +65,7 @@ describe('Transform', function () {
 		for (let i = 0; i < p1poke.moves.length; i++) {
 			let move = p1poke.moves[i];
 			assert.equal(move, p2poke.moves[i]);
-			move = battle.dex.getMove(move);
+			move = battle.dex.moves.get(move);
 			const movepp = p1poke.getMoveData(move);
 			assert.equal(movepp.pp, 5);
 		}
@@ -139,7 +139,7 @@ describe('Transform', function () {
 		assert.deepEqual(battle.p1.active[0].getTypes(), ["Fire", "Flying"]);
 	});
 
-	it.skip(`should not announce that its ability was suppressed after Transforming`, function () {
+	it(`should not announce that its ability was suppressed after Transforming`, function () {
 		battle = common.createBattle([[
 			{species: "Mew", ability: 'synchronize', moves: ['transform']},
 		], [
@@ -220,5 +220,17 @@ describe('Transform [Gen 1]', function () {
 		battle.makeChoices('move transform', 'move lick');
 
 		assert(battle.log.every(line => !line.startsWith('|-endability|')));
+	});
+
+	it(`should copy the target's boosted stats`, function () {
+		battle = common.gen(1).createBattle([[
+			{species: 'Ditto', moves: ['transform']},
+		], [
+			{species: 'Gengar', moves: ['amnesia', 'thunderbolt']},
+			{species: 'Starmie', moves: ['swordsdance']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('move thunderbolt', 'switch 2');
+		assert.fainted(battle.p2.active[0]);
 	});
 });

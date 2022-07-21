@@ -93,4 +93,20 @@ describe('Brick Break', function () {
 		battle.makeChoices('move brickbreak', 'move electrify');
 		assert.false(battle.p2.sideConditions['reflect']);
 	});
+
+	it(`should break the foe's Reflect when used against an ally in Gen 3`, function () {
+		battle = common.gen(3).createBattle({gameType: 'doubles'}, [[
+			{species: "mew", moves: ['brickbreak', 'splash']},
+			{species: "mew", moves: ['splash']},
+		], [
+			{species: "gengar", moves: ['reflect', 'splash']},
+			{species: "gengar", moves: ['splash']},
+		]]);
+
+		battle.makeChoices('move splash, move splash', 'move reflect, move splash');
+		assert(battle.p2.sideConditions['reflect']);
+
+		battle.makeChoices('move brickbreak -2, move splash', 'move splash, move splash');
+		assert.false(battle.p2.sideConditions['reflect']);
+	});
 });

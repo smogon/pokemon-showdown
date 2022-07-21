@@ -17,7 +17,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	aguavberry: {
 		inherit: true,
-		desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -SpD Nature. Single use.",
 		onEat(pokemon) {
 			this.heal(pokemon.baseMaxhp / 2);
 			if (pokemon.getNature().minus === 'spd') {
@@ -142,12 +141,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 		isNonstandard: null,
 	},
 	dreamball: {
-		name: "Dream Ball",
-		spritenum: 111,
-		num: 576,
-		gen: 5,
-		isPokeball: true,
-		desc: "A special Poke Ball that appears out of nowhere in a bag at the Entree Forest.",
+		inherit: true,
+		isNonstandard: "Unobtainable",
 	},
 	durinberry: {
 		inherit: true,
@@ -187,7 +182,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	figyberry: {
 		inherit: true,
-		desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Atk Nature. Single use.",
 		onEat(pokemon) {
 			this.heal(pokemon.baseMaxhp / 2);
 			if (pokemon.getNature().minus === 'atk') {
@@ -281,7 +275,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	iapapaberry: {
 		inherit: true,
-		desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Def Nature. Single use.",
 		onEat(pokemon) {
 			this.heal(pokemon.baseMaxhp / 2);
 			if (pokemon.getNature().minus === 'def') {
@@ -292,10 +285,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	icegem: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
-	},
-	icestone: {
-		inherit: true,
-		desc: "Evolves Alolan Sandshrew into Alolan Sandslash and Alolan Vulpix into Alolan Ninetales when used.",
 	},
 	icicleplate: {
 		inherit: true,
@@ -337,10 +326,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	leafstone: {
-		inherit: true,
-		desc: "Evolves Gloom into Vileplume, Weepinbell into Victreebel, Exeggcute into Exeggutor or Alolan Exeggutor, Nuzleaf into Shiftry, and Pansage into Simisage when used.",
-	},
 	lopunnite: {
 		inherit: true,
 		isNonstandard: null,
@@ -367,7 +352,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	magoberry: {
 		inherit: true,
-		desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Spe Nature. Single use.",
 		onEat(pokemon) {
 			this.heal(pokemon.baseMaxhp / 2);
 			if (pokemon.getNature().minus === 'spe') {
@@ -515,6 +499,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	safariball: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
 	sailfossil: {
 		inherit: true,
 		isNonstandard: null,
@@ -567,6 +555,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	sportball: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
 	steelgem: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
@@ -594,10 +586,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	tapuniumz: {
 		inherit: true,
 		isNonstandard: null,
-	},
-	thunderstone: {
-		inherit: true,
-		desc: "Evolves Pikachu into Raichu or Alolan Raichu, Eevee into Jolteon, and Eelektrik into Eelektross when used.",
 	},
 	toxicplate: {
 		inherit: true,
@@ -634,7 +622,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	wikiberry: {
 		inherit: true,
 		isNonstandard: null,
-		desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -SpA Nature. Single use.",
 		onEat(pokemon) {
 			this.heal(pokemon.baseMaxhp / 2);
 			if (pokemon.getNature().minus === 'spa') {

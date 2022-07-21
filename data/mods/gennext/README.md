@@ -1,6 +1,12 @@
 Generation NEXT!
 ========================================================================
 
+Instructions
+------------------------------------------------------------------------
+
+Gen-NEXT hasn't been updated in a very long time, but is still playable by
+using the `/challenge gen6nextou` command in a PM chat box.
+
 Manifesto
 ------------------------------------------------------------------------
 

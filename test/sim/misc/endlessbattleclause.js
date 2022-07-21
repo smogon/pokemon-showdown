@@ -16,7 +16,7 @@ describe('Endless Battle Clause (slow)', () => {
 		skipTurns(battle, 100);
 		for (let i = 0; i < 100; i++) {
 			if (battle.ended) {
-				assert(battle.winner === 'Player 1');
+				assert.equal(battle.winner, 'Player 1');
 				return;
 			}
 			let move;
@@ -73,7 +73,7 @@ describe('Endless Battle Clause (slow)', () => {
 		battle.makeChoices('move block', 'move splash');
 		// Now that Magikarp is trapped, the termination condition should occur.
 		assert(battle.ended);
-		assert(battle.winner === 'Player 2');
+		assert.equal(battle.winner, 'Player 2');
 	});
 
 	it('Fling should cause externally inflicted staleness', () => {
@@ -100,7 +100,7 @@ describe('Endless Battle Clause (slow)', () => {
 		battle.makeChoices('move block', 'move splash');
 		// Now that Magikarp is trapped, the termination condition should occur.
 		assert(battle.ended);
-		assert(battle.winner === 'Player 2');
+		assert.equal(battle.winner, 'Player 2');
 	});
 
 	it('Entrainment should cause externally inflicted staleness', () => {
@@ -134,7 +134,7 @@ describe('Endless Battle Clause (slow)', () => {
 		battle.makeChoices('move block', 'move splash');
 		// Now that Magikarp is trapped, the termination condition should occur.
 		assert(battle.ended);
-		assert(battle.winner === 'Player 2');
+		assert.equal(battle.winner, 'Player 2');
 	});
 
 
@@ -183,7 +183,7 @@ describe('Endless Battle Clause (slow)', () => {
 			{species: "Blissey", moves: ['splash']},
 			{species: "Vaporeon", moves: ['splash']},
 		]});
-		for (let i = 0; i < 999; i++) {
+		for (let i = 0; i < 998; i++) {
 			battle.makeChoices('switch 2', 'switch 2');
 		}
 		assert(!battle.ended);
@@ -192,7 +192,7 @@ describe('Endless Battle Clause (slow)', () => {
 	});
 });
 
-// Endless Battle Caluse doesn't take effect for 100 turns, so we artificially skip turns
+// Endless Battle Clause doesn't take effect for 100 turns, so we artificially skip turns
 // to get the turn counter to be in the range which could possibly trigger the clause
 function skipTurns(battle, turns) {
 	for (let i = 0; i < turns; i++) battle.nextTurn();

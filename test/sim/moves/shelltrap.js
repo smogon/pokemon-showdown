@@ -22,7 +22,7 @@ describe('Shell Trap', function () {
 			],
 		]);
 
-		const move = battle.p1.active[0].getMoveData(Dex.getMove('shelltrap'));
+		const move = battle.p1.active[0].getMoveData(Dex.moves.get('shelltrap'));
 		battle.makeChoices('move shelltrap, move splash', 'move irondefense, move splash');
 		assert.equal(move.pp, move.maxpp - 1);
 

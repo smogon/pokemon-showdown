@@ -30,6 +30,18 @@ describe('Burn', function () {
 		assert.hurtsBy(target, 64, () => battle.makeChoices('move boneclub', 'move willowisp'));
 	});
 
+	it('should reduce atk to 50% of its original value in Stadium', function () {
+		// I know WoW doesn't exist in Stadium, but the engine supports future gen moves
+		// and this is easier than digging for a seed that makes Flamethrower burn
+		battle = common.createBattle({formatid: 'gen1stadiumou@@@!teampreview'}, [
+			[{species: 'Vaporeon', moves: ['growl']}],
+			[{species: 'Jolteon', moves: ['willowisp']}],
+		]);
+		const attack = battle.p1.active[0].getStat('atk');
+		battle.makeChoices('move growl', 'move willowisp');
+		assert.equal(battle.p1.active[0].getStat('atk'), Math.floor(attack * 0.5));
+	});
+
 	it('should not halve damage from moves with set damage', function () {
 		battle = common.createBattle([
 			[{species: 'Machamp', ability: 'noguard', moves: ['seismictoss']}],
@@ -51,6 +63,17 @@ describe('Paralysis', function () {
 		const speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move aquaring', 'move thunderwave');
 		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.5));
+	});
+
+	it(`should apply its Speed reduction after all other Speed modifiers`, function () {
+		battle = common.createBattle([[
+			{species: 'goldeen', item: 'choicescarf', evs: {spe: 252}, moves: ['sleeptalk']}, // 225 Speed
+		], [
+			{species: 'wynaut', moves: ['glare']},
+		]]);
+
+		battle.makeChoices();
+		assert.equal(battle.p1.active[0].getStat('spe'), 168); // would be 169 if both Choice Scarf and paralysis were chained
 	});
 
 	it('should reduce speed to 25% of its original value in Gen 6', function () {
@@ -78,7 +101,7 @@ describe('Paralysis', function () {
 		]);
 		const speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move growl', 'move thunderwave');
-		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
+		assert.equal(battle.p1.active[0].getStat('spe'), Math.floor(speed * 0.25));
 	});
 
 	it('should reapply its speed drop when an opponent uses a stat-altering move in Gen 1', function () {
@@ -179,6 +202,19 @@ describe('Freeze', function () {
 		battle.makeChoices('move sleeptalk', 'move icebeam');
 		assert.equal(battle.p1.active[0].status, 'frz');
 		assert.equal(battle.p1.active[0].species.name, 'Shaymin-Sky');
+	});
+
+	it(`should not be possible to burn a frozen target when using a move that thaws that target`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', ability: 'serenegrace', item: 'widelens', moves: ['sleeptalk', 'sacredfire']},
+		], [
+			{species: 'shuckle', moves: ['meteorassault']},
+		]]);
+		battle.makeChoices(); // Use Meteor Assault to force recharge next turn and skip potential thaw
+		const frozenMon = battle.p2.active[0];
+		frozenMon.setStatus('frz');
+		battle.makeChoices('move sacredfire', 'auto');
+		assert.equal(frozenMon.status, '');
 	});
 });
 
