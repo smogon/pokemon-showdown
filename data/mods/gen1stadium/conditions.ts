@@ -47,6 +47,10 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			// 1-3 turns
 			this.effectState.startTime = this.random(1, 4);
 			this.effectState.time = this.effectState.startTime;
+
+			if (target.removeVolatile('nightmare')) {
+				this.add('-end', target, 'Nightmare', '[silent]');
+			}
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove(pokemon, target, move) {
@@ -91,23 +95,16 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 	},
-	tox: {
-		name: 'tox',
-		effectType: 'Status',
+	confusion: {
+		inherit: true,
 		onStart(target) {
-			this.add('-status', target, 'tox');
+			this.add('-start', target, 'confusion');
+			this.effectState.time = this.random(2, 6);
 		},
-		onAfterMoveSelfPriority: 2,
-		onAfterMoveSelf(pokemon) {
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
-		},
-		onAfterSwitchInSelf(pokemon) {
-			// Regular poison status and damage after a switchout -> switchin.
-			pokemon.setStatus('psn');
-			pokemon.addVolatile('residualdmg');
-			pokemon.volatiles['residualdmg'].counter = 1;
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
-		},
+	},
+	flinch: {
+		inherit: true,
+		onStart() {},
 	},
 	partiallytrapped: {
 		name: 'partiallytrapped',

@@ -26,7 +26,9 @@ export function getCommonBattles(
 			(user1?.inRooms.has(curRoom.roomid) || curRoom.auth.get(userID1) === Users.PLAYER_SYMBOL) &&
 			(user2?.inRooms.has(curRoom.roomid) || curRoom.auth.get(userID2) === Users.PLAYER_SYMBOL)
 		) {
-			if (connection) void curRoom.uploadReplay(connection.user, connection, "forpunishment");
+			if (connection) {
+				void curRoom.uploadReplay(connection.user, connection, "forpunishment");
+			}
 			battles.push(curRoom.roomid);
 		}
 	}
@@ -205,27 +207,28 @@ export const commands: Chat.ChatCommands = {
 				}
 			}
 
-			const battlebanned = Punishments.isBattleBanned(targetUser);
-			if (battlebanned) {
-				buf += `<br />BATTLEBANNED: ${battlebanned.id}`;
-				buf += ` ${Punishments.checkPunishmentExpiration(battlebanned)}`;
-				if (battlebanned.reason) buf += Utils.html` (reason: ${battlebanned.reason})`;
-			}
+			if (user.can('lock')) {
+				const battlebanned = Punishments.isBattleBanned(targetUser);
+				if (battlebanned) {
+					buf += `<br />BATTLEBANNED: ${battlebanned.id}`;
+					buf += ` ${Punishments.checkPunishmentExpiration(battlebanned)}`;
+					if (battlebanned.reason) buf += Utils.html` (reason: ${battlebanned.reason})`;
+				}
 
-			const groupchatbanned = Punishments.isGroupchatBanned(targetUser);
-			if (groupchatbanned) {
-				buf += `<br />Banned from using groupchats${groupchatbanned.id !== targetUser.id ? `: ${groupchatbanned.id}` : ``}`;
-				buf += ` ${Punishments.checkPunishmentExpiration(groupchatbanned)}`;
-				if (groupchatbanned.reason) buf += Utils.html` (reason: ${groupchatbanned.reason})`;
-			}
+				const groupchatbanned = Punishments.isGroupchatBanned(targetUser);
+				if (groupchatbanned) {
+					buf += `<br />Banned from using groupchats${groupchatbanned.id !== targetUser.id ? `: ${groupchatbanned.id}` : ``}`;
+					buf += ` ${Punishments.checkPunishmentExpiration(groupchatbanned)}`;
+					if (groupchatbanned.reason) buf += Utils.html` (reason: ${groupchatbanned.reason})`;
+				}
 
-			const ticketbanned = Punishments.isTicketBanned(targetUser.id);
-			if (ticketbanned) {
-				buf += `<br />Banned from creating help tickets${ticketbanned.id !== targetUser.id ? `: ${ticketbanned.id}` : ``}`;
-				buf += ` ${Punishments.checkPunishmentExpiration(ticketbanned)}`;
-				if (ticketbanned.reason) buf += Utils.html` (reason: ${ticketbanned.reason})`;
+				const ticketbanned = Punishments.isTicketBanned(targetUser.id);
+				if (ticketbanned) {
+					buf += `<br />Banned from creating help tickets${ticketbanned.id !== targetUser.id ? `: ${ticketbanned.id}` : ``}`;
+					buf += ` ${Punishments.checkPunishmentExpiration(ticketbanned)}`;
+					if (ticketbanned.reason) buf += Utils.html` (reason: ${ticketbanned.reason})`;
+				}
 			}
-
 			if (targetUser.semilocked) {
 				buf += `<br />Semilocked: ${user.can('lock') ? targetUser.semilocked : "(reason hidden)"}`;
 			}
@@ -242,7 +245,7 @@ export const commands: Chat.ChatCommands = {
 						status.push(punishMsg);
 					}
 				}
-				if (Punishments.sharedIps.has(ip)) {
+				if (Punishments.isSharedIp(ip)) {
 					let sharedStr = 'shared';
 					if (Punishments.sharedIps.get(ip)) {
 						sharedStr += `: ${Punishments.sharedIps.get(ip)}`;
@@ -390,6 +393,10 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.sendReplyBox(buf);
 	},
+	offlinewhoishelp: [
+		`/offlinewhois [username] - Get details on a username without requiring them to be online.`,
+		`Requires: trusted user. `,
+	],
 
 	sbtl: 'sharedbattles',
 	sharedbattles(target, room) {
@@ -469,7 +476,7 @@ export const commands: Chat.ChatCommands = {
 			// ip
 			this.sendReply(`Users with IP ${ipOrHost}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			for (const curUser of Users.users.values()) {
-				if (curUser.latestIp !== ipOrHost) continue;
+				if (!curUser.ips.some(ip => ip === ipOrHost)) continue;
 				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push(`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`);
 			}
@@ -479,7 +486,7 @@ export const commands: Chat.ChatCommands = {
 			const checker = IPTools.checker(ipOrHost);
 			for (const curUser of Users.users.values()) {
 				if (results.length > 100 && !isAll) continue;
-				if (!checker(curUser.latestIp)) continue;
+				if (!curUser.ips.some(ip => checker(ip))) continue;
 				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push(`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`);
 			}
@@ -533,6 +540,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.errorReply(`You're using a custom client that doesn't support the ignore command.`);
 	},
+	ignorehelp: [`/ignore [user] - Ignore the given [user].`],
 
 	/*********************************************************
 	 * Data Search Dex
@@ -621,7 +629,7 @@ export const commands: Chat.ChatCommands = {
 					};
 					details["Weight"] = `${pokemon.weighthg / 10} kg <em>(${weighthit} BP)</em>`;
 					const gmaxMove = pokemon.canGigantamax || dex.species.get(pokemon.changesFrom).canGigantamax;
-					if (gmaxMove) details["G-Max Move"] = gmaxMove;
+					if (gmaxMove && dex.gen >= 8) details["G-Max Move"] = gmaxMove;
 					if (pokemon.color && dex.gen >= 5) details["Dex Colour"] = pokemon.color;
 					if (pokemon.eggGroups && dex.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
 					const evos: string[] = [];
@@ -711,7 +719,7 @@ export const commands: Chat.ChatCommands = {
 					if (move.flags['bullet']) details["&#10003; Bullet"] = "";
 					if (move.flags['pulse']) details["&#10003; Pulse"] = "";
 					if (!move.flags['protect'] && move.target !== 'self') details["&#10003; Bypasses Protect"] = "";
-					if (move.flags['authentic']) details["&#10003; Bypasses Substitutes"] = "";
+					if (move.flags['bypasssub']) details["&#10003; Bypasses Substitutes"] = "";
 					if (move.flags['defrost']) details["&#10003; Thaws user"] = "";
 					if (move.flags['bite']) details["&#10003; Bite"] = "";
 					if (move.flags['punch']) details["&#10003; Punch"] = "";
@@ -857,10 +865,12 @@ export const commands: Chat.ChatCommands = {
 	weakness(target, room, user) {
 		if (!target) return this.parse('/help weakness');
 		if (!this.runBroadcast()) return;
-		const {dex, targets} = this.splitFormat(target.split(/[,/]/).map(toID));
+		const {format, dex, targets} = this.splitFormat(target.split(/[,/]/).map(toID));
 
 		let isInverse = false;
-		if (targets[targets.length - 1] === 'inverse') {
+		if (format && Dex.formats.getRuleTable(format).has('inversemod')) {
+			isInverse = true;
+		} else if (targets[targets.length - 1] === 'inverse') {
 			isInverse = true;
 			targets.pop();
 		}
@@ -1512,6 +1522,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.sendReplyBox("Uptime: <b>" + uptimeText + "</b>");
 	},
+	uptimehelp: [`/uptime - Shows how long the server has been online for.`],
 
 	st: 'servertime',
 	servertime(target, room, user) {
@@ -1519,6 +1530,7 @@ export const commands: Chat.ChatCommands = {
 		const servertime = new Date();
 		this.sendReplyBox(`Server time: <b>${servertime.toLocaleString()}</b>`);
 	},
+	servertimehelp: [`/servertime - Shows the current time where the server is.`],
 
 	groups(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -1539,7 +1551,8 @@ export const commands: Chat.ChatCommands = {
 		const globalRanks = [
 			`<strong>Global ranks</strong>`,
 			`+ <strong>Global Voice</strong> - They can use ! commands like !groups`,
-			`% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts`,
+			`§ <strong>Section Leader</strong> - They oversee rooms in a particular section`,
+			`% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts`,
 			`@ <strong>Global Moderator</strong> - The above, and they can globally ban users`,
 			`* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot`,
 			`&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally`,
@@ -1581,10 +1594,19 @@ export const commands: Chat.ChatCommands = {
 			`<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.`,
 		];
 
+		const indefinitePunishments = [
+			this.tr`<strong>Indefinite global punishments</strong>:`,
+			this.tr`<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ` +
+				this.tr`These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>` +
+				this.tr` forum after at least 3 months without incident.`,
+			this.tr`<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.`,
+		];
+
 		this.sendReplyBox(
 			(showRoom ? roomPunishments.map(str => this.tr(str)).join('<br />') : ``) +
 			(showRoom && showGlobal ? `<br /><br />` : ``) +
-			(showGlobal ? globalPunishments.map(str => this.tr(str)).join('<br />') : ``)
+			(showGlobal ? globalPunishments.map(str => this.tr(str)).join('<br />') : ``) +
+			(showGlobal ? `<br /><br />${indefinitePunishments.join('<br />')}` : ``)
 		);
 	},
 	punishmentshelp: [
@@ -1615,11 +1637,13 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<a href="https://www.smogon.com/sim/staff_list">Pok&eacute;mon Showdown Staff List</a>`);
 	},
+	staffhelp: [`/staff - View the staff list.`],
 
 	forums(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<a href="https://www.smogon.com/forums/forums/209/">Pok&eacute;mon Showdown Forums</a>`);
 	},
+	forumshelp: [`/forums - Links to the PS forums.`],
 
 	privacypolicy(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -1630,6 +1654,7 @@ export const commands: Chat.ChatCommands = {
 			this.tr`- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>`,
 		].join(`<br />`));
 	},
+	privacypolicyhelp: [`/privacypolicy - Displays PS's privacy policy.`],
 
 	suggest: 'suggestions',
 	suggestion: 'suggestions',
@@ -1637,6 +1662,7 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<a href="https://www.smogon.com/forums/forums/517/">Make a suggestion for Pok&eacute;mon Showdown</a>`);
 	},
+	suggestionshelp: [`/suggestions - Links to the place to make suggestions for Pokemon Showdown.`],
 
 	bugreport: 'bugs',
 	bugreports: 'bugs',
@@ -1652,27 +1678,22 @@ export const commands: Chat.ChatCommands = {
 			);
 		}
 	},
-
-	avatars(target, room, user) {
-		if (!this.runBroadcast()) return;
-		this.sendReplyBox(`You can <button name="avatars">change your avatar</button> by clicking on it in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu in the upper right. Custom avatars are only obtainable by staff.`);
-	},
-	avatarshelp: [
-		`/avatars - Explains how to change avatars.`,
-		`!avatars - Show everyone that information. Requires: + % @ # &`,
-	],
+	bugshelp: [`/bugs - Links to the various bug reporting services.`],
 
 	optionbutton: 'optionsbutton',
 	optionsbutton(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<button name="openOptions" class="button"><i style="font-size: 16px; vertical-align: -1px" class="fa fa-cog"></i> Options</button> (The Sound and Options buttons are at the top right, next to your username)`);
 	},
+	optionsbuttonhelp: [`/optionsbutton - Provides a button to the Options menu.`],
+
 	soundsbutton: 'soundbutton',
 	volumebutton: 'soundbutton',
 	soundbutton(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<button name="openSounds" class="button"><i style="font-size: 16px; vertical-align: -1px" class="fa fa-volume-up"></i> Sound</button> (The Sound and Options buttons are at the top right, next to your username)`);
 	},
+	soundbuttonhelp: [`/soundbutton - Provides a button to the Sounds menu.`],
 
 	introduction: 'intro',
 	intro(target, room, user) {
@@ -1697,11 +1718,12 @@ export const commands: Chat.ChatCommands = {
 	smogintro(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
-			`Welcome to Smogon's official simulator! The <a href="https://www.smogon.com/forums/forums/264">Smogon Info / Intro Hub</a> can help you get integrated into the community.<br />` +
+			`Welcome to Smogon's official simulator! The <a href="https://www.smogon.com/forums/forums/intro_hub">Information & Resources forum</a> can help you get integrated into the community.<br />` +
 			`- <a href="https://www.smogon.com/forums/threads/3526346">Useful Smogon Info</a><br />` +
-			`- <a href="https://www.smogon.com/forums/threads/3498332">Tiering FAQ</a><br />`
+			`- <a href="https://www.smogon.com/forums/threads/3644714">Tiering FAQ</a><br />`
 		);
 	},
+	smogintrohelp: [`/smogintro - Provides an introduction to Smogon.`],
 
 	bsscalc: 'calc',
 	calculator: 'calc',
@@ -1742,7 +1764,7 @@ export const commands: Chat.ChatCommands = {
 			);
 		}
 		this.sendReplyBox(
-			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko &amp; Austin)<br />` +
+			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko, Austin, &amp; Kris)<br />` +
 			`- <a href="https://calc.pokemonshowdown.com/index.html">Damage Calculator</a>`
 		);
 	},
@@ -1780,6 +1802,7 @@ export const commands: Chat.ChatCommands = {
 			`- <a href="https://replay.pokemonshowdown.com/gennextou-130756055">NickMP vs Khalogie</a>`
 		);
 	},
+	gennexthelp: [`/gennext - Provides information on the Gen-NEXT mod.`],
 
 	battlerules(target, room, user) {
 		return this.parse(`/join view-battlerules`);
@@ -1874,6 +1897,10 @@ export const commands: Chat.ChatCommands = {
 		buf.push(`</table>`);
 		return this.sendReply(`|raw|${buf.join("")}`);
 	},
+	formathelphelp: [
+		`/formathelp [format] - Provides information on the given [format].`,
+		`If no format is given, provides information on how tiers work.`,
+	],
 
 	roomhelp(target, room, user) {
 		room = this.requireRoom();
@@ -2120,7 +2147,9 @@ export const commands: Chat.ChatCommands = {
 				formatName = formatName.slice(8);
 				formatId = toID(formatName);
 			}
-			if (formatId === 'battlespotdoubles') {
+			if (formatId === 'anythinggoes') {
+				formatId = 'ag';
+			} else if (formatId === 'battlespotdoubles') {
 				formatId = 'battle_spot_doubles';
 			} else if (formatId === 'battlespottriples') {
 				formatId = 'battle_spot_triples';
@@ -2137,7 +2166,7 @@ export const commands: Chat.ChatCommands = {
 				formatId = 'uber';
 			} else if (formatId.includes('vgc')) {
 				formatId = 'vgc' + formatId.slice(-2);
-				formatName = 'VGC20' + formatId.slice(-2);
+				formatName = 'VGC 20' + formatId.slice(-2);
 			} else if (extraFormat.effectType !== 'Format') {
 				formatName = formatId = '';
 			}
@@ -2148,9 +2177,9 @@ export const commands: Chat.ChatCommands = {
 				german: 'de',
 				portuguese: 'pt',
 			};
-			let id = pokemon.id;
+			let id = pokemon.name.toLowerCase();
 			// Special case for Meowstic-M
-			if (id === 'meowstic') id = 'meowsticm' as ID;
+			if (id === 'meowstic') id = 'meowstic-m';
 			if (['ou', 'uu'].includes(formatId) && generation === 'sm' &&
 				room?.settings.language && room.settings.language in supportedLanguages) {
 				// Limited support for translated analysis
@@ -2191,7 +2220,13 @@ export const commands: Chat.ChatCommands = {
 		if (format.id) {
 			let formatName = format.name;
 			let formatId: string = format.id;
-			if (formatId === 'battlespotdoubles') {
+			if (formatName.startsWith('[Gen ') && formatName.slice(6, 8) === '] ') {
+				formatName = formatName.slice(8);
+				formatId = toID(formatName);
+			}
+			if (formatId === 'anythinggoes') {
+				formatId = 'ag';
+			} else if (formatId === 'battlespotdoubles') {
 				formatId = 'battle_spot_doubles';
 			} else if (formatId === 'battlespottriples') {
 				formatId = 'battle_spot_triples';
@@ -2208,7 +2243,7 @@ export const commands: Chat.ChatCommands = {
 				formatId = 'uber';
 			} else if (formatId.includes('vgc')) {
 				formatId = `vgc${formatId.slice(-2)}`;
-				formatName = `VGC20${formatId.slice(-2)}`;
+				formatName = `VGC 20${formatId.slice(-2)}`;
 			} else if (format.effectType !== 'Format') {
 				formatName = formatId = '';
 			}
@@ -2320,6 +2355,7 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`You will be prompted to register upon winning a rated battle. Alternatively, there is a register button in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu in the upper right.`);
 	},
+	registerhelp: [`/register - Provides information on how to register.`],
 
 	/*********************************************************
 	 * Miscellaneous commands
@@ -2473,9 +2509,12 @@ export const commands: Chat.ChatCommands = {
 		link = encodeURI(link);
 		let dimensions;
 		if (!/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i.test(link)) {
+			if (link.includes('data:image/png;base64')) {
+				throw new Chat.ErrorMessage('Please provide an actual link (you probably copied the URL wrong?).');
+			}
 			try {
 				dimensions = await Chat.fitImage(link);
-			} catch (e) {
+			} catch {
 				throw new Chat.ErrorMessage('Invalid link.');
 			}
 		}
@@ -2558,20 +2597,27 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		return this.parse(`/sl approved showing media from, ${room.roomid}`);
 	},
+	approvalloghelp: [`/approvallog - View a log of past media approvals in the current room. Requires: % @ # &`],
 
 	viewapprovals(target, room, user) {
 		room = this.requireRoom();
 		return this.parse(`/join view-approvals-${room.roomid}`);
 	},
+	viewapprovalshelp: [
+		`/viewapprovals - View a list of users who have requested to show media in the current room.`,
+		`Requires: % @ # &`,
+	],
 
 	async show(target, room, user, connection) {
-		if (!room?.persist && !this.pmTarget) return this.errorReply(`/show cannot be used in temporary rooms.`);
+		if (!room?.persist && !this.pmTarget && !room?.roomid.startsWith('help-')) {
+			return this.errorReply(`/show cannot be used in temporary rooms.`);
+		}
 		if (!toID(target).trim()) return this.parse(`/help show`);
 		if (Monitor.countNetRequests(connection.ip)) {
 			return this.errorReply(`You are using this command too quickly. Wait a bit and try again.`);
 		}
 
-		const [link, comment] = Utils.splitFirst(target, ',');
+		const [link, comment] = Utils.splitFirst(target, ',').map(f => f.trim());
 
 		let buf;
 		if (YouTube.linkRegex.test(link)) {
@@ -2585,15 +2631,23 @@ export const commands: Chat.ChatCommands = {
 			buf = `Watching <b><a class="subtle" href="https://twitch.tv/${info.url}">${info.display_name}</a></b>...<br />`;
 			buf += `<twitch src="${link}" />`;
 		} else {
+			if (link.includes('data:image/png;base64')) {
+				throw new Chat.ErrorMessage('Please provide an actual link (you probably copied it wrong?).');
+			}
 			try {
 				const [width, height, resized] = await Chat.fitImage(link);
 				buf = Utils.html`<img src="${link}" width="${width}" height="${height}" />`;
 				if (resized) buf += Utils.html`<br /><a href="${link}" target="_blank">full-size image</a>`;
-			} catch (err) {
+			} catch {
 				return this.errorReply('Invalid image');
 			}
 		}
-		if (comment) buf += Utils.html`<br />(${comment.trim()})</div>`;
+		if (comment) {
+			if (this.checkChat(comment) !== comment) {
+				return this.errorReply(`You cannot use filtered words in comments.`);
+			}
+			buf += Utils.html`<br />(${comment})</div>`;
+		}
 
 		this.checkBroadcast();
 		if (this.broadcastMessage) {
@@ -2636,7 +2690,7 @@ export const commands: Chat.ChatCommands = {
 		let rawResult;
 		try {
 			rawResult = await Net(`https://${Config.routes.root}/users/${target}.json`).get();
-		} catch (e) {
+		} catch (e: any) {
 			if (e.message.includes('Not found')) throw new Chat.ErrorMessage(`User '${target}' is unregistered.`);
 			throw new Chat.ErrorMessage(e.message);
 		}
@@ -2662,6 +2716,7 @@ export const commands: Chat.ChatCommands = {
 			'How many digits of pi do YOU know? Test it out <a href="http://guangcongluo.com/mempi/">here</a>!'
 		);
 	},
+	pihelp: [`/pi - Displays the first several digits of pi in several notation types.`],
 
 	code(target, room, user, connection) {
 		// target is trimmed by Chat#splitMessage, but leading spaces can be
@@ -2673,16 +2728,15 @@ export const commands: Chat.ChatCommands = {
 			return this.checkChat(`\`\`\`${target}\`\`\``);
 		}
 
+		if (this.room?.settings.isPersonal !== false && this.shouldBroadcast()) {
+			target = this.filter(target)!;
+			if (!target) return this.errorReply(`Invalid code.`);
+		}
+
 		this.checkBroadcast(true, '!code');
 		this.runBroadcast(true);
 
-		const isPMOrPersonalRoom = this.room?.settings.isPersonal !== false;
-
 		if (this.broadcasting) {
-			if (isPMOrPersonalRoom) {
-				target = this.filter(target)!;
-				if (!target) return this.errorReply(`Invalid code.`);
-			}
 			return `/raw <div class="infobox">${Chat.getReadmoreCodeBlock(target)}</div>`;
 		} else {
 			this.sendReplyBox(Chat.getReadmoreCodeBlock(target));
@@ -2726,12 +2780,27 @@ export const pages: Chat.PageTable = {
 			`<h2><u>Rules, mods, and clauses</u></h2>`,
 			`<p>The following rules can be added to challenges/tournaments to modify the style of play. Alternatively, already present rules can be removed from formats by preceding the rule name with <code>!</code></p>`,
 			`<p>However, some rules, like <code>Obtainable</code>, are made of subrules, that can be individually turned on and off.</p>`,
-			`<ul>`,
+			`<div class="ladder"><table><tr><th>Rule Name</th><th>Description</th></tr>`,
 		];
 		for (const rule of rules) {
-			rulesets.push(`<li><code>${rule.name}</code>: ${rule.desc}</li>`);
+			if (rule.hasValue) continue;
+			const desc = rule.desc ? rule.desc : "No description.";
+			rulesets.push(`<tr><td>${rule.name}</td><td>${desc}</td></tr>`);
 		}
-		rulesets.push(`</ul>`);
+		rulesets.push(
+			`</table></div>`,
+			`<h3>Value rules</h3>`,
+			`<ul><li>Value rules are formatted like [Name] = [value], e.g. "Force Monotype = Water" or "Min Team Size = 4"</li>`,
+			`<li>To remove a value rule, use <code>![rule name]</code>.</li>`,
+			`<li>To override another value rule, use <code>!! [Name] = [new value]</code>. For example, overriding the Min Source Gen on [Gen 8] VGC 2021 from 8 to 3 would look like <code>!! Min Source Gen = 3</code>.</li></ul>`,
+			`<div class="ladder"><table><tr><th>Rule Name</th><th>Description</th></tr>`
+		);
+		for (const rule of rules) {
+			if (!rule.hasValue) continue;
+			const desc = rule.desc ? rule.desc : "No description.";
+			rulesets.push(`<tr><td>${rule.name}</td><td>${desc}</td></tr>`);
+		}
+		rulesets.push(`</table></div>`);
 		rulesHTML += `${basics.concat(rulesets).join('')}</div>`;
 		return rulesHTML;
 	},
@@ -2791,6 +2860,7 @@ process.nextTick(() => {
 	Dex.includeData();
 	Chat.multiLinePattern.register(
 		'/htmlbox', '/quote', '/addquote', '!htmlbox', '/addhtmlbox', '/addrankhtmlbox', '/adduhtml',
-		'/changeuhtml', '/addrankuhtmlbox', '/changerankuhtmlbox', '/addrankuhtml', '/addhtmlfaq'
+		'/changeuhtml', '/addrankuhtmlbox', '/changerankuhtmlbox', '/addrankuhtml', '/addhtmlfaq',
+		'/sendhtmlpage',
 	);
 });

@@ -144,10 +144,6 @@ export class QueryProcessWrapper<T, U> implements ProcessWrapper {
 			if (!resolve) throw new Error(`Invalid taskId ${message.slice(0, nlLoc)}`);
 			this.pendingTasks.delete(taskId);
 			const resp = this.safeJSON(message.slice(nlLoc + 1));
-			if (resp instanceof Error) {
-				// we'd fail here anyway if it crashed, so at least this way we can log it
-				return false;
-			}
 			resolve(resp);
 
 			if (this.resolveRelease && !this.getLoad()) this.destroy();
@@ -161,13 +157,13 @@ export class QueryProcessWrapper<T, U> implements ProcessWrapper {
 		}
 		try {
 			return JSON.parse(obj);
-		} catch (e) {
+		} catch (e: any) {
 			// this is in the parent, so it should usually exist, but it's possible
 			// it's also futureproofing in case other external modfules require this
 			// we also specifically do not throw here because this json might be sensitive,
 			// so we only want it to go to emails
 			global.Monitor?.crashlog?.(e, `a ${path.basename(this.file)} process`, {result: obj});
-			return new Error(e);
+			return undefined;
 		}
 	}
 
@@ -408,7 +404,7 @@ export class RawProcessWrapper implements ProcessWrapper, StreamWorker {
 			// already destroyed
 			return;
 		}
-		this.stream.destroy();
+		void this.stream.destroy();
 		this.process.disconnect();
 		return;
 	}
@@ -638,7 +634,7 @@ export class StreamProcessManager extends ProcessManager<StreamProcessWrapper> {
 				let value;
 				({value, done} = await stream.next());
 				process.send!(`${taskId}\nPUSH\n${value}`);
-			} catch (err) {
+			} catch (err: any) {
 				process.send!(`${taskId}\nTHROW\n${err.stack}`);
 			}
 		}
@@ -765,7 +761,7 @@ export class RawProcessManager extends ProcessManager<RawProcessWrapper> {
 				let value;
 				({value, done} = await stream.next());
 				process.send!(value);
-			} catch (err) {
+			} catch (err: any) {
 				process.send!(`THROW\n${err.stack}`);
 			}
 		}

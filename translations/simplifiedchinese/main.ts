@@ -16,10 +16,11 @@ export const translations: Translations = {
 
 		"<strong>Global ranks</strong>": "<strong>全服权限</strong>",
 		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "+ <strong>全服信任用户</strong> -可以使用!广播指令，比如!groups，并可以在限制发言期间发言",
-		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>全服见习管理</strong> - 同上，并可以锁定用户或查看他们的小号",
+		"§ <strong>Section Leader</strong> - They oversee rooms in a particular section": "§ <strong>分部头领</strong> - 负责掌管一个分部的房间",
+		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>全服见习管理</strong> - 同信任用户，并可以锁定用户或查看他们的小号",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>全服管理员</strong> - 同上，并可以将用户从服务器封禁",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>全服机器人</strong> - 跟全服管理员一样，只不过是机器",
-		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp <strong>全服总管</strong> - 可以在服务器做任何事，例如修改你现在看到的这条信息",
+		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>全服总管</strong> - 可以在服务器做任何事，例如修改你现在看到的这条信息",
 
 		"<strong>Room ranks</strong>": "<strong>房权限</strong>",
 		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "",
@@ -49,6 +50,7 @@ export const translations: Translations = {
 		"<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.": "<strong>mute</strong> - 禁言用户（不能发言）七分钟。",
 		"<strong>hourmute</strong> - Mutes a user for 60 minutes.": "<strong>hourmute</strong> - 禁言用户一个小时。",
 		"<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.": "<strong>ban</strong> - 将用户封禁（不能进入该房内）两天。",
+		"<strong>weekban</strong> - Bans a user from the room for a week.": "<strong>weekban</strong> - 将用户封禁（ 不能进入该房内 ）一个星期。",
 		"<strong>blacklist</strong> - Bans a user for a year.": "<strong>blacklist</strong> - 将用户拉黑，一年之内不能进入房里。",
 
 		"<strong>Global punishments</strong>:": "<strong>全服处罚</strong>:",
@@ -56,6 +58,12 @@ export const translations: Translations = {
 		"<strong>weeklock</strong> - Locks a user for a week.": "<strong>weeklock</strong> - 封锁用户一个星期。",
 		"<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.": "<strong>namelock</strong> - 封锁用户ip，两天内不能使用任何用户名。",
 		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "<strong>globalban</strong> - 全服封禁（使用户不能连接和玩游戏）一个星期。",
+
+		"<strong>Indefinite global punishments</strong>:": "<strong>无期限的全服惩罚</strong>:",
+		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "<strong>permalock</strong> - 多是由于反复的糟糕行为，而很少是一次违规所导致。若自惩罚起3个月无再犯，可以在",
+		'These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>': '<a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">纪律申诉</a>',
+		" forum after at least 3 months without incident.": "论坛申诉。",
+		"<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.": "<strong>permaban</strong> - 无法申诉的全服封禁。多是由最严重的冒犯或不当行为导致的。",
 
 		"<strong>Room drivers (%)</strong> can use:": "<strong>见习管理（%）</strong> 可以使用",
 		"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules": "- /warn 或 /k <em>用户名</em>: 警告用户并显示Pok&eacute;mon Showdown的规则",

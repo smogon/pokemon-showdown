@@ -11,7 +11,7 @@ export const prenoms: {[k: string]: [string, AnyObject][]} = JSON.parse(FS(PRENO
 export const otdData: OtdData = JSON.parse(FS(DATA_FILE).readIfExistsSync() || "{}");
 export const otds = new Map<string, OtdHandler>();
 
-const FINISH_HANDLERS: {[k: string]: (winner: AnyObject) => void} = {
+const FINISH_HANDLERS: {[k: string]: (winner: AnyObject) => Promise<void>} = {
 	cotw: async winner => {
 		const {channel, nominator} = winner;
 		const searchResults = await YouTube.searchChannel(channel, 1);
@@ -394,7 +394,7 @@ class OtdHandler {
 			try {
 				const [width, height] = await Chat.fitImage(winner.image, 100, 100);
 				output += Utils.html `<td><img src="${winner.image}" width=${width} height=${height}></td>`;
-			} catch (err) {}
+			} catch {}
 		}
 		output += `<td style="text-align:right;margin:5px;">`;
 		if (winner.event) output += Utils.html `<b>Event:</b> ${winner.event}<br />`;
@@ -694,6 +694,7 @@ export const otdCommands: Chat.ChatCommands = {
 			case 'tagline':
 			case 'match':
 			case 'event':
+			case 'videogame':
 				if (!value.length || value.length > 150) return this.errorReply(`Please enter a valid ${key}.`);
 				break;
 			case 'sport':
@@ -934,4 +935,12 @@ export const handlers: Chat.Handlers = {
 			}
 		}
 	},
+};
+
+export const punishmentfilter: Chat.PunishmentFilter = (user, punishment) => {
+	user = toID(user);
+	if (!['NAMELOCK', 'BAN'].includes(punishment.type)) return;
+	for (const handler of otds.values()) {
+		handler.removeNomination(user);
+	}
 };

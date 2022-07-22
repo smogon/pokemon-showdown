@@ -4,7 +4,7 @@
 'use strict';
 
 const assert = require('../assert');
-const {testHiddenPower, testSet} = require('./tools');
+const {testHiddenPower, testSet, testAlwaysHasMove} = require('./tools');
 
 describe('[Gen 5] Random Battle', () => {
 	const options = {format: 'gen5randombattle'};
@@ -24,5 +24,13 @@ describe('[Gen 5] Random Battle', () => {
 
 	it('should prevent unreleased HAs from being used', () => {
 		testSet('chandelure', options, set => assert.notEqual(set.ability, 'Shadow Tag'));
+	});
+
+	it('should not give Ursaring Eviolite', () => {
+		testSet('ursaring', options, set => assert.notEqual(set.item, 'Eviolite'));
+	});
+
+	it('should always give Watchog Return', () => {
+		testAlwaysHasMove('watchog', options, 'return');
 	});
 });

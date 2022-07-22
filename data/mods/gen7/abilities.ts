@@ -8,6 +8,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+	darkaura: {
+		inherit: true,
+		isBreakable: true,
+	},
+	fairyaura: {
+		inherit: true,
+		isBreakable: true,
+	},
 	innerfocus: {
 		inherit: true,
 		rating: 1,
@@ -65,6 +73,37 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	scrappy: {
 		inherit: true,
 		onBoost() {},
+	},
+	slowstart: {
+		inherit: true,
+		condition: {
+			duration: 5,
+			onResidualOrder: 28,
+			onResidualSubOrder: 2,
+			onStart(target) {
+				this.add('-start', target, 'ability: Slow Start');
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, pokemon, target, move) {
+				// This is because the game checks the move's category in data, rather than what it is currently, unlike e.g. Huge Power
+				if (this.dex.moves.get(move.id).category === 'Physical') {
+					return this.chainModify(0.5);
+				}
+			},
+			onModifySpAPriority: 5,
+			onModifySpA(spa, pokemon, target, move) {
+				// Ordinary Z-moves like Breakneck Blitz will halve the user's Special Attack as well
+				if (this.dex.moves.get(move.id).category === 'Physical') {
+					return this.chainModify(0.5);
+				}
+			},
+			onModifySpe(spe, pokemon) {
+				return this.chainModify(0.5);
+			},
+			onEnd(target) {
+				this.add('-end', target, 'Slow Start');
+			},
+		},
 	},
 	soundproof: {
 		inherit: true,

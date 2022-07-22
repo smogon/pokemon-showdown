@@ -38,7 +38,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 2,
 			durationCallback(target, source, effect) {
-				return this.random(3, 4);
+				return this.random(3, 5);
 			},
 			onStart(pokemon) {
 				this.effectState.totalDamage = 0;
@@ -82,7 +82,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (this.effectState.duration === 1) {
 					this.add('-end', pokemon, 'Bide');
 					if (!this.effectState.totalDamage) {
-						this.debug("Bide failed due to 0 damage taken");
+						this.debug("Bide failed because no damage was taken");
 						this.add('-fail', pokemon);
 						return false;
 					}
@@ -196,12 +196,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	conversion: {
 		inherit: true,
-		volatileStatus: 'conversion',
-		accuracy: true,
 		target: "normal",
 		onHit(target, source) {
-			source.types = target.types;
-			this.add('-start', source, 'typechange', source.types.join(', '), '[from] move: Conversion', '[of] ' + source);
+			source.setType(target.getTypes(true));
+			this.add('-start', source, 'typechange', source.types.join('/'), '[from] move: Conversion', '[of] ' + target);
 		},
 	},
 	counter: {
@@ -401,13 +399,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	haze: {
 		inherit: true,
 		onHit(target, source) {
-			this.add('-clearallboost');
+			this.add('-activate', target, 'move: Haze');
+			this.add('-clearallboost', '[silent]');
 			for (const pokemon of this.getAllActive()) {
 				pokemon.clearBoosts();
 
 				if (pokemon !== source) {
-					// Clears the status from the opponent
-					pokemon.setStatus('');
+					pokemon.cureStatus(true);
 				}
 				if (pokemon.status === 'tox') {
 					pokemon.setStatus('psn');
@@ -417,7 +415,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						pokemon.volatiles[id].counter = 0;
 					} else {
 						pokemon.removeVolatile(id);
-						this.add('-end', pokemon, id);
+						this.add('-end', pokemon, id, '[silent]');
 					}
 				}
 			}
@@ -427,17 +425,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	highjumpkick: {
 		inherit: true,
 		onMoveFail(target, source, move) {
-			if (!target.types.includes('Ghost')) {
-				this.directDamage(1, source, target);
-			}
+			this.directDamage(1, source, target);
 		},
 	},
 	jumpkick: {
 		inherit: true,
 		onMoveFail(target, source, move) {
-			if (!target.types.includes('Ghost')) {
-				this.directDamage(1, source, target);
-			}
+			this.directDamage(1, source, target);
 		},
 	},
 	karatechop: {
@@ -502,9 +496,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	metronome: {
 		inherit: true,
 		noMetronome: ["Metronome", "Struggle"],
-		secondary: null,
-		target: "self",
-		type: "Normal",
 	},
 	mimic: {
 		inherit: true,
@@ -536,6 +527,30 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return false;
 			}
 			this.actions.useMove(foe.lastMove.id, pokemon);
+		},
+	},
+	mist: {
+		inherit: true,
+		condition: {
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Mist');
+			},
+			onBoost(boost, target, source, effect) {
+				if (effect.effectType === 'Move' && effect.category !== 'Status') return;
+				if (source && target !== source) {
+					let showMsg = false;
+					let i: BoostID;
+					for (i in boost) {
+						if (boost[i]! < 0) {
+							delete boost[i];
+							showMsg = true;
+						}
+					}
+					if (showMsg && !(effect as ActiveMove).secondaries) {
+						this.add('-activate', target, 'move: Mist');
+					}
+				}
+			},
 		},
 	},
 	nightshade: {
@@ -749,7 +764,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			// We only prevent when hp is less than one quarter.
 			// If you use substitute at exactly one quarter, you faint.
-			if (target.hp === target.maxhp / 4) target.faint();
 			if (target.hp < target.maxhp / 4) {
 				this.add('-fail', target, 'move: Substitute', '[weak]');
 				return null;

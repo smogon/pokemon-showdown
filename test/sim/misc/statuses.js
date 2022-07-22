@@ -65,6 +65,17 @@ describe('Paralysis', function () {
 		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.5));
 	});
 
+	it(`should apply its Speed reduction after all other Speed modifiers`, function () {
+		battle = common.createBattle([[
+			{species: 'goldeen', item: 'choicescarf', evs: {spe: 252}, moves: ['sleeptalk']}, // 225 Speed
+		], [
+			{species: 'wynaut', moves: ['glare']},
+		]]);
+
+		battle.makeChoices();
+		assert.equal(battle.p1.active[0].getStat('spe'), 168); // would be 169 if both Choice Scarf and paralysis were chained
+	});
+
 	it('should reduce speed to 25% of its original value in Gen 6', function () {
 		battle = common.gen(6).createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]});
@@ -191,6 +202,19 @@ describe('Freeze', function () {
 		battle.makeChoices('move sleeptalk', 'move icebeam');
 		assert.equal(battle.p1.active[0].status, 'frz');
 		assert.equal(battle.p1.active[0].species.name, 'Shaymin-Sky');
+	});
+
+	it(`should not be possible to burn a frozen target when using a move that thaws that target`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', ability: 'serenegrace', item: 'widelens', moves: ['sleeptalk', 'sacredfire']},
+		], [
+			{species: 'shuckle', moves: ['meteorassault']},
+		]]);
+		battle.makeChoices(); // Use Meteor Assault to force recharge next turn and skip potential thaw
+		const frozenMon = battle.p2.active[0];
+		frozenMon.setStatus('frz');
+		battle.makeChoices('move sacredfire', 'auto');
+		assert.equal(frozenMon.status, '');
 	});
 });
 

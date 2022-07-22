@@ -19,7 +19,10 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting'),
 			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire'),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
-			Normal: (movePool, moves, abilities, types, counter) => !counter.get('Normal') && counter.setupType === 'Physical',
+			Normal: (movePool, moves, abilities, types, counter, species) => {
+				if (species.id === 'blissey' && movePool.includes('softboiled')) return true;
+				return !counter.get('Normal') && counter.setupType === 'Physical';
+			},
 			Psychic: (movePool, moves, abilities, types, counter, species) => (
 				types.has('Psychic') &&
 				(movePool.includes('psychic') || movePool.includes('psychoboost')) &&
@@ -32,6 +35,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			// If the Pokémon has this move, the other move will be forced
 			protect: movePool => movePool.includes('wish'),
 			sunnyday: movePool => movePool.includes('solarbeam'),
+			sleeptalk: movePool => movePool.includes('rest'),
 		};
 	}
 
@@ -73,11 +77,13 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		// Not very useful without their supporting moves
 		case 'amnesia': case 'sleeptalk':
+			if (moves.has('roar')) return {cull: true};
+			if (!moves.has('rest')) return {cull: true};
 			if (movePool.length > 1) {
 				const rest = movePool.indexOf('rest');
 				if (rest >= 0) this.fastPop(movePool, rest);
 			}
-			return {cull: !moves.has('rest')};
+			break;
 		case 'barrier':
 			return {cull: !moves.has('calmmind') && !moves.has('batonpass') && !moves.has('mirrorcoat')};
 		case 'batonpass':
@@ -162,6 +168,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			return {cull: !!counter.setupType || moves.has('rest') || !!teamDetails.rapidSpin};
 		case 'reflect':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup')};
+		case 'roar':
+			return {cull: moves.has('sleeptalk') || moves.has('rest')};
 		case 'seismictoss':
 			return {cull: !!counter.setupType || moves.has('thunderbolt')};
 		case 'spikes':
@@ -327,7 +335,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		if (typeof species.battleOnly === 'string') forme = species.battleOnly;
 
-		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
+		const movePool = (species.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool = [];
 		const moves = new Set<string>();
 		let ability = '';
@@ -349,7 +357,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
-			while (moves.size < 4 && movePool.length) {
+			while (moves.size < this.maxMoveCount && movePool.length) {
 				const moveid = this.sampleNoReplace(movePool);
 				if (moveid.startsWith('hiddenpower')) {
 					availableHP--;
@@ -359,7 +367,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				moves.add(moveid);
 			}
 
-			while (moves.size < 4 && rejectedPool.length) {
+			while (moves.size < this.maxMoveCount && rejectedPool.length) {
 				const moveid = this.sampleNoReplace(rejectedPool);
 				if (moveid.startsWith('hiddenpower')) {
 					if (hasHiddenPower) continue;
@@ -383,7 +391,6 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				) {
 					cull = true;
 				}
-
 				const moveIsRejectable = (
 					!move.weather &&
 					(move.category !== 'Status' || !move.flags.heal) &&
@@ -475,7 +482,20 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					break;
 				}
 			}
-		} while (moves.size < 4 && (movePool.length || rejectedPool.length));
+		} while (moves.size < this.maxMoveCount && (movePool.length || rejectedPool.length));
+
+		if (hasHiddenPower) {
+			let hpType;
+			for (const move of moves) {
+				if (move.startsWith('hiddenpower')) hpType = move.substr(11);
+			}
+			if (!hpType) throw new Error(`hasHiddenPower is true, but no Hidden Power move was found.`);
+			const HPivs = this.dex.types.get(hpType).HPivs;
+			let iv: StatID;
+			for (iv in HPivs) {
+				ivs[iv] = HPivs[iv]!;
+			}
+		}
 
 		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a)).filter(a => a.gen === 3);
 		Utils.sortBy(abilityData, abil => -abil.rating);
@@ -516,8 +536,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			Ditto: 99, Unown: 99,
 		};
 		const tier = species.tier;
-		let level = levelScale[tier] || (species.nfe ? 90 : 80);
-		if (customScale[species.name]) level = customScale[species.name];
+		const level = this.adjustLevel || customScale[species.name] || levelScale[tier] || (species.nfe ? 90 : 80);
 
 		// Prepare optimal HP
 		let hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
@@ -553,6 +572,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 	}
 
 	randomTeam() {
+		this.enforceNoDirectCustomBanlistChanges();
+
 		const seed = this.prng.seed;
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];

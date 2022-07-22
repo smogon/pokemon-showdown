@@ -69,19 +69,36 @@ describe("Dynamax", function () {
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
-	it.skip('should revert before the start of the 4th turn, not as an end-of-turn effect on the 3rd turn', function () {
+	it('should execute in order of updated speed when 2 or more Pokemon are Dynamaxing', function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'kingdra', ability: 'swiftswim', moves: ['sleeptalk']},
+			{species: 'wynaut', moves: ['sleeptalk']},
+			{species: 'groudon', ability: 'drought', moves: ['sleeptalk']},
+		], [
+			{species: 'kyogre', ability: 'drizzle', moves: ['sleeptalk']},
+			{species: 'wynaut', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move sleeptalk dynamax, switch 3', 'move sleeptalk dynamax, auto');
+		const log = battle.getDebugLog();
+		const kingdraMaxIndex = log.indexOf('|-start|p1a: Kingdra|Dynamax');
+		const kyogreMaxIndex = log.indexOf('|-start|p2a: Kyogre|Dynamax');
+		assert(kyogreMaxIndex < kingdraMaxIndex, 'Kyogre should have Dynamaxed before Kingdra.');
+	});
+
+	it('should revert before the start of the 4th turn, not as an end-of-turn effect on the 3rd turn', function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['sleeptalk', 'psychic']},
 		], [
 			{species: 'weedle', level: 1, moves: ['sleeptalk']},
 			{species: 'weedle', moves: ['sleeptalk']},
 		]]);
-		battle.makeChoices('move sleep talk dynamax');
-		const dynamaxedHP = battle.p1.active[0].hp;
+		battle.makeChoices('move sleeptalk dynamax', 'auto');
 		battle.makeChoices();
-		battle.makeChoices('move psychic');
-		assert.equal(battle.requestState, 'switch');
-		assert.equal(battle.p1.active[0].hp, dynamaxedHP);
+		battle.makeChoices('move psychic', 'auto');
+		const wynaut = battle.p1.active[0];
+		assert(wynaut.volatiles['dynamax'], 'End of 3rd turn, Wynaut should still be Dynamaxed.');
+		battle.makeChoices('', 'switch 2');
+		assert.false(wynaut.volatiles['dynamax'], 'Start of 4th turn, Wynaut should not be Dynamaxed.');
 	});
 
 	it('should be impossible to Dynamax when all the base moves are disabled', function () {
@@ -164,5 +181,61 @@ describe("Dynamax", function () {
 		const wynaut = battle.p1.active[0];
 		assert.statStage(wynaut, 'def', 0, 'Wynaut should not have used Max Steelspike this turn.');
 		assert(wynaut.volatiles['dynamax'], 'Wynaut should be currently Dynamaxed.');
+	});
+
+	describe(`Hacked Max Moves`, function () {
+		it(`should not activate Max Move side effects when used without Dynamaxing`, function () {
+			battle = common.createBattle([[
+				{species: 'wynaut', moves: ['maxflare', 'maxairstream']},
+			], [
+				{species: 'shuckle', moves: ['sleeptalk']},
+			]]);
+			battle.makeChoices('move maxflare', 'auto');
+			assert.equal(battle.field.weather, '');
+
+			battle.makeChoices('move maxairstream', 'auto');
+			assert.statStage(battle.p1.active[0], 'spe', 0);
+		});
+
+		it(`should treat Max Moves as 0 BP when used without Dynamaxing`, function () {
+			battle = common.createBattle([[
+				{species: 'wynaut', moves: ['maxflare', 'maxairstream']},
+			], [
+				{species: 'shuckle', ability: 'shellarmor', moves: ['sleeptalk']},
+			]]);
+			battle.makeChoices('move maxflare', 'auto');
+			battle.makeChoices('move maxairstream', 'auto');
+
+			const shuckle = battle.p2.active[0];
+			assert.bounded(shuckle.maxhp - shuckle.hp, [2, 4], `0 BP should cause the move's damage to only be 2 after base damage calculation, resulting in 1-2 final damage for each Max Move.`);
+		});
+
+		it(`should treat Max Moves as physical moves when used without Dynamaxing`, function () {
+			battle = common.createBattle([[
+				{species: 'wynaut', moves: ['maxflare']},
+			], [
+				{species: 'shuckle', item: 'keeberry', moves: ['sleeptalk']},
+			]]);
+			battle.makeChoices();
+			assert.statStage(battle.p2.active[0], 'def', 1);
+		});
+
+		it(`should prevent effects that affect regular Max Moves, like Sleep Talk and Instruct`, function () {
+			battle = common.createBattle([[
+				{species: 'wynaut', moves: ['maxflare', 'sleeptalk']},
+			], [
+				{species: 'shuckle', moves: ['instruct', 'spore', 'roost']},
+			]]);
+			battle.makeChoices();
+			const wynaut = battle.p1.active[0];
+			const move = wynaut.getMoveData(Dex.moves.get('maxflare'));
+			assert.equal(move.pp, move.maxpp - 1, `Max Flare should only have been used once.`);
+
+			battle.makeChoices('auto', 'move roost');
+			battle.makeChoices('move sleeptalk', 'move spore');
+			battle.makeChoices('move sleeptalk', 'move spore');
+			const shuckle = battle.p2.active[0];
+			assert.fullHP(shuckle, `Sleep Talk should have failed in calling a move and so not dealt damage.`);
+		});
 	});
 });

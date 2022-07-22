@@ -114,7 +114,7 @@ async function updateserver(context: Chat.CommandContext, codePath: string) {
 		}
 
 		return true;
-	} catch (e) {
+	} catch {
 		// failed while rebasing or popping the stash
 		await exec(`git reset --hard ${oldHash}`);
 		if (stashedChanges) await exec(`git stash pop`);
@@ -140,6 +140,9 @@ export const commands: Chat.ChatCommands = {
 		this.addGlobalModAction(`${user.name} set the PotD to ${species.name}.`);
 		this.globalModlog(`POTD`, null, species.name);
 	},
+	potdhelp: [
+		`/potd [pokemon] - Set the Pokemon of the Day to the given [pokemon]. Requires: &`,
+	],
 
 	/*********************************************************
 	 * Bot commands (chat-log manipulation)
@@ -261,6 +264,9 @@ export const commands: Chat.ChatCommands = {
 		this.runBroadcast(true);
 		this.sendReply(target);
 	},
+	plinehelp: [
+		`/pline [protocol lines] - Adds the given [protocol lines] to the current room. Requires: & console access`,
+	],
 
 	pminfobox(target, room, user, connection) {
 		this.checkChat();
@@ -502,6 +508,9 @@ export const commands: Chat.ChatCommands = {
 		});
 		this.sendReply(`||[Main process] RSS: ${results[0]}, Heap: ${results[1]} / ${results[2]}`);
 	},
+	memoryusagehelp: [
+		`/memoryusage OR /memusage - Get the current memory usage of the server. Requires: &`,
+	],
 
 	forcehotpatch: 'hotpatch',
 	async hotpatch(target, room, user, connection, cmd) {
@@ -663,7 +672,7 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply("Hotpatching tournaments...");
 
 				global.Tournaments = require('../tournaments').Tournaments;
-				Chat.loadPluginData(Tournaments, 'tournaments');
+				Chat.loadPlugin(Tournaments, 'tournaments');
 				this.sendReply("DONE");
 			} else if (target === 'formats' || target === 'battles') {
 				if (lock['formats']) {
@@ -744,7 +753,7 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				return this.errorReply("Your hot-patch command was unrecognized.");
 			}
-		} catch (e) {
+		} catch (e: any) {
 			Rooms.global.notifyRooms(
 				['development', 'staff'] as RoomID[],
 				`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target} - but something failed while trying to hot-patch.`
@@ -868,7 +877,11 @@ export const commands: Chat.ChatCommands = {
 		for (const manager of ProcessManager.processManagers) {
 			for (const [i, process] of manager.processes.entries()) {
 				const pid = process.getProcess().pid;
-				buf += `<strong>${pid}</strong> - ${manager.basename} ${i} (load ${process.getLoad()}`;
+				let managerName = manager.basename;
+				if (managerName.startsWith('index.')) { // doesn't actually tell us anything abt the process
+					managerName = manager.filename.split(path.sep).slice(-2).join(path.sep);
+				}
+				buf += `<strong>${pid}</strong> - ${managerName} ${i} (load ${process.getLoad()}`;
 				const info = processes.get(`${pid}`)!;
 				const display = [];
 				if (info.cpu) display.push(`CPU: ${info.cpu}`);
@@ -908,6 +921,9 @@ export const commands: Chat.ChatCommands = {
 		buf += `</details>`;
 		this.sendReplyBox(buf);
 	},
+	processeshelp: [
+		`/processes - Get information about the running processes on the server. Requires: &.`,
+	],
 
 	async savelearnsets(target, room, user, connection) {
 		this.canUseConsole();
@@ -926,6 +942,9 @@ export const commands: Chat.ChatCommands = {
 		`};\n`);
 		this.sendReply("learnsets.js saved.");
 	},
+	savelearnsetshelp: [
+		`/savelearnsets - Saves the learnset list currently active on the server. Requires: &`,
+	],
 
 	disablecommand(target, room, user) {
 		this.checkCan('makeroom');
@@ -980,6 +999,7 @@ export const commands: Chat.ChatCommands = {
 			if (u.connected) u.send(`|pm|&|${u.tempGroup}${u.name}|/raw <div class="broadcast-red">${innerHTML}</div>`);
 		}
 	},
+	disableladderhelp: [`/disableladder - Stops all rated battles from updating the ladder. Requires: &`],
 
 	enableladder(target, room, user) {
 		this.checkCan('disableladder');
@@ -1003,6 +1023,7 @@ export const commands: Chat.ChatCommands = {
 			if (u.connected) u.send(`|pm|&|${u.tempGroup}${u.name}|/raw <div class="broadcast-green">${innerHTML}</div>`);
 		}
 	},
+	enableladderhelp: [`/enable - Allows all rated games to update the ladder. Requires: &`],
 
 	lockdown(target, room, user) {
 		this.checkCan('lockdown');
@@ -1052,6 +1073,7 @@ export const commands: Chat.ChatCommands = {
 
 		this.privateGlobalModAction(`${user.name} used /prelockdown (disabled tournaments in preparation for server restart)`);
 	},
+	prelockdownhelp: [`/prelockdown - Prevents new tournaments from starting so that the server can be restarted. Requires: &`],
 
 	slowlockdown(target, room, user) {
 		this.checkCan('lockdown');
@@ -1060,6 +1082,10 @@ export const commands: Chat.ChatCommands = {
 
 		this.privateGlobalModAction(`${user.name} used /slowlockdown (lockdown without auto-restart)`);
 	},
+	slowlockdownhelp: [
+		`/slowlockdown - Locks down the server, but disables the automatic restart after all battles end.`,
+		`Requires: &`,
+	],
 
 	crashfixed: 'endlockdown',
 	endlockdown(target, room, user, connection, cmd) {
@@ -1107,6 +1133,9 @@ export const commands: Chat.ChatCommands = {
 
 		this.stafflog(`${user.name} used /emergency.`);
 	},
+	emergencyhelp: [
+		`/emergency - Turns on emergency mode and enables extra logging. Requires: &`,
+	],
 
 	endemergency(target, room, user) {
 		this.checkCan('lockdown');
@@ -1121,6 +1150,9 @@ export const commands: Chat.ChatCommands = {
 
 		this.stafflog(`${user.name} used /endemergency.`);
 	},
+	endemergencyhelp: [
+		`/endemergency - Turns off emergency mode. Requires: &`,
+	],
 
 	async savebattles(target, room, user) {
 		this.checkCan('rangeban'); // admins can restart, so they should be able to do this if needed
@@ -1197,6 +1229,9 @@ export const commands: Chat.ChatCommands = {
 		Rooms.global.sendAll('|refresh|');
 		this.stafflog(`${user.name} used /refreshpage`);
 	},
+	refreshpagehelp: [
+		`/refreshpage - refreshes the page for every user online. Requires: &`,
+	],
 
 	async updateserver(target, room, user, connection) {
 		this.canUseConsole();
@@ -1242,14 +1277,13 @@ export const commands: Chat.ChatCommands = {
 	 * Low-level administration commands
 	 *********************************************************/
 
-	bash(target, room, user, connection) {
+	async bash(target, room, user, connection) {
 		this.canUseConsole();
 		if (!target) return this.parse('/help bash');
-
-		connection.sendTo(room, `$ ${target}`);
-		child_process.exec(target, (error, stdout, stderr) => {
-			connection.sendTo(room, (`${stdout}${stderr}`));
-		});
+		this.sendReply(`$ ${target}`);
+		const [, stdout, stderr] = await bash(target, this);
+		this.runBroadcast();
+		this.sendReply(`${stdout}${stderr}`);
 	},
 	bashhelp: [`/bash [command] - Executes a bash command on the server. Requires: & console access`],
 
@@ -1288,13 +1322,16 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply(`|html|${generateHTML('<', result)}`);
 			}
 			logRoom?.roomlog(`<< ${result}`);
-		} catch (e) {
+		} catch (e: any) {
 			const message = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '');
 			const command = uhtmlId ? `|uhtmlchange|${uhtmlId}|` : '|html|';
 			this.sendReply(`${command}${generateHTML('<', message)}`);
 			logRoom?.roomlog(`<< ${message}`);
 		}
 	},
+	evalhelp: [
+		`/eval [code] - Evaluates the code given and shows results. Requires: & console access.`,
+	],
 
 	async evalsql(target, room) {
 		this.canUseConsole();
@@ -1315,7 +1352,12 @@ export const commands: Chat.ChatCommands = {
 			`<td>${Chat.getReadmoreCodeBlock(query)}</td></tr><table>`
 		);
 		logRoom?.roomlog(`SQLite> ${target}`);
-		const database = SQL(module, {file: `./databases/${db}.db`});
+		const database = SQL(module, {
+			file: `./databases/${db}.db`,
+			onError(err) {
+				return {err: err.message, stack: err.stack};
+			},
+		});
 		function formatResult(result: any[] | string) {
 			if (!Array.isArray(result)) {
 				return (
@@ -1338,16 +1380,25 @@ export const commands: Chat.ChatCommands = {
 			return buffer;
 		}
 
+		function parseError(res: any): never {
+			const err = new Error(res.err);
+			err.stack = res.stack;
+			throw err;
+		}
+
 		let result;
 		try {
 			// presume it's attempting to get data first
 			result = await database.all(query, []);
-		} catch (err) {
+			if ((result as any).err) parseError(result as any);
+		} catch (err: any) {
 			// it's not getting data, but it might still be a valid statement - try to run instead
 			if (err.stack?.includes(`Use run() instead`)) {
 				try {
-					result = Utils.visualize(await database.run(query, []));
-				} catch (e) {
+					result = await database.run(query, []);
+					if ((result as any).err) parseError(result as any);
+					result = Utils.visualize(result);
+				} catch (e: any) {
 					result = ('' + e.stack).replace(/\n *at CommandContext\.evalsql [\s\S]*/m, '');
 				}
 			} else {
@@ -1355,9 +1406,14 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		await database.destroy();
-		logRoom?.roomlog(`SQLite< ${result}`);
-		this.sendReply(`|html|${formatResult(result)}`);
+		const formattedResult = `|html|${formatResult(result)}`;
+		logRoom?.roomlog(formattedResult);
+		this.sendReply(formattedResult);
 	},
+	evalsqlhelp: [
+		`/evalsql [database], [query] - Evaluates the given SQL [query] in the given [database].`,
+		`Requires: & console access`,
+	],
 
 	evalbattle(target, room, user, connection) {
 		room = this.requireRoom();
@@ -1369,6 +1425,9 @@ export const commands: Chat.ChatCommands = {
 
 		void room.battle.stream.write(`>eval ${target.replace(/\n/g, '\f')}`);
 	},
+	evalbattlehelp: [
+		`/evalbattle [code] - Evaluates the code in the battle stream of the current room. Requires: & console access.`,
+	],
 
 	ebat: 'editbattle',
 	editbattle(target, room, user) {
@@ -1393,9 +1452,11 @@ export const commands: Chat.ChatCommands = {
 				this.errorReply("Incorrect command use");
 				return this.parse('/help editbattle');
 			}
-			[player, pokemon, value] = targets.map(toID);
+			[player, pokemon, value] = targets.map(f => f.trim());
+			[player, pokemon] = [player, pokemon].map(toID);
 			void battle.stream.write(
-				`>eval let p=pokemon('${player}', '${pokemon}');p.sethp(${parseInt(value)});if (p.isActive)battle.add('-damage',p,p.getHealth);`
+				`>eval let p=pokemon('${player}', '${pokemon}');p.sethp(${parseInt(value)});` +
+				`if (p.isActive)battle.add('-damage',p,p.getHealth);`
 			);
 			break;
 		case 'status':
@@ -1414,7 +1475,8 @@ export const commands: Chat.ChatCommands = {
 				this.errorReply("Incorrect command use");
 				return this.parse('/help editbattle');
 			}
-			[player, pokemon, move, value] = targets.map(toID);
+			[player, pokemon, move, value] = targets.map(f => f.trim());
+			[player, pokemon, move] = [player, pokemon, move].map(toID);
 			void battle.stream.write(
 				`>eval pokemon('${player}','${pokemon}').getMoveData('${move}').pp = ${parseInt(value)};`
 			);
@@ -1425,7 +1487,8 @@ export const commands: Chat.ChatCommands = {
 				this.errorReply("Incorrect command use");
 				return this.parse('/help editbattle');
 			}
-			[player, pokemon, stat, value] = targets.map(toID);
+			[player, pokemon, stat, value] = targets.map(f => f.trim());
+			[player, pokemon, stat] = [player, pokemon, stat].map(toID);
 			void battle.stream.write(
 				`>eval let p=pokemon('${player}','${pokemon}');battle.boost({${stat}:${parseInt(value)}},p)`
 			);
@@ -1515,7 +1578,11 @@ export const commands: Chat.ChatCommands = {
 
 export const pages: Chat.PageTable = {
 	bot(args, user, connection) {
-		const [botid, pageid] = args;
+		const [botid, ...pageArgs] = args;
+		const pageid = pageArgs.join('-');
+		if (pageid.length > 300) {
+			return this.errorReply(`The page ID specified is too long.`);
+		}
 		const bot = Users.get(botid);
 		if (!bot) {
 			return `<div class="pad"><h2>The bot "${bot}" is not available.</h2></div>`;

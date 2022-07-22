@@ -400,8 +400,9 @@ describe('Trivia', function () {
 		it('should only allow merging approved alts', async () => {
 			for (const user of ['annika', 'heartofetheria', 'somerandomreg']) {
 				await trivia.database.updateLeaderboardForUser(user, {
-					allTime: {score: 0, totalCorrectAnswers: 0, totalPoints: 0},
-					notAllTime: {score: 0, totalCorrectAnswers: 0, totalPoints: 0},
+					alltime: {score: 0, totalCorrectAnswers: 0, totalPoints: 0},
+					nonAlltime: {score: 0, totalCorrectAnswers: 0, totalPoints: 0},
+					cycle: {score: 0, totalCorrectAnswers: 0, totalPoints: 0},
 				});
 			}
 
@@ -418,29 +419,36 @@ describe('Trivia', function () {
 
 		it('should correctly merge alts', async () => {
 			await trivia.database.updateLeaderboardForUser('annika', {
-				allTime: {score: 3, totalCorrectAnswers: 2, totalPoints: 1},
-				notAllTime: {score: 4, totalCorrectAnswers: 3, totalPoints: 2},
+				alltime: {score: 3, totalCorrectAnswers: 2, totalPoints: 1},
+				nonAlltime: {score: 4, totalCorrectAnswers: 3, totalPoints: 2},
+				cycle: {score: 1, totalCorrectAnswers: 1, totalPoints: 1},
 			});
 			await trivia.database.updateLeaderboardForUser('heartofetheria', {
-				allTime: {score: 1, totalCorrectAnswers: 2, totalPoints: 3},
-				notAllTime: {score: 2, totalCorrectAnswers: 3, totalPoints: 4},
+				alltime: {score: 1, totalCorrectAnswers: 2, totalPoints: 3},
+				nonAlltime: {score: 2, totalCorrectAnswers: 3, totalPoints: 4},
+				cycle: {score: 1, totalCorrectAnswers: 2, totalPoints: 1},
 			});
 
 			await trivia.requestAltMerge('heartofetheria', 'annika');
 			await trivia.mergeAlts('heartofetheria', 'annika');
 
 			assert.deepEqual(
-				await trivia.database.getLeaderboardEntry('annika', true),
+				await trivia.database.getLeaderboardEntry('annika', 'alltime'),
 				{score: 4, totalCorrectAnswers: 4, totalPoints: 4}
 			);
 			assert.deepEqual(
-				await trivia.database.getLeaderboardEntry('annika', false),
+				await trivia.database.getLeaderboardEntry('annika', 'nonAlltime'),
 				{score: 6, totalCorrectAnswers: 6, totalPoints: 6}
+			);
+			assert.deepEqual(
+				await trivia.database.getLeaderboardEntry('annika', 'cycle'),
+				{score: 2, totalCorrectAnswers: 3, totalPoints: 2}
 			);
 
 			// make sure it got deleted
-			await assert.throwsAsync(async () => trivia.database.getLeaderboardEntry('heartofetheria', false));
-			await assert.throwsAsync(async () => trivia.database.getLeaderboardEntry('heartofetheria', true));
+			assert.equal(await trivia.database.getLeaderboardEntry('heartofetheria', 'alltime'), null);
+			assert.equal(await trivia.database.getLeaderboardEntry('heartofetheria', 'nonAlltime'), null);
+			assert.equal(await trivia.database.getLeaderboardEntry('heartofetheria', 'cycle'), null);
 		});
 	});
 });
