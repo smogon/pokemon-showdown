@@ -1069,9 +1069,9 @@ export class BattleActions {
 			if (moveData.onAfterHit) {
 				for (const t of damagedTargets) {
 					this.battle.singleEvent('AfterHit', moveData, {}, t, pokemon, move);
-					this.battle.runEvent('TakeDamage', damagedTargets, pokemon, null, damagedDamage);
 				}
 			}
+			this.battle.runEvent('TakeDamage', damagedTargets, pokemon, null, damagedDamage);
 			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP > pokemon.maxhp / 2) {
 				this.battle.runEvent('EmergencyExit', pokemon);
 			}
