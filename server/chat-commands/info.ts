@@ -2974,7 +2974,7 @@ export const pages: Chat.PageTable = {
 		buf += `<div class="ladder"><table><tr><th>Rule Name</th><th>Description</th><th>Toggle</th></tr>`;
 		for (const rule of rules) {
 			if (!rule.hasValue) continue;
-			const desc = rule.desc ? rule.desc : "No description.";
+			const desc = rule.desc || "No description.";
 			buf += `<tr>`;
 			const id = toID(rule.name);
 			const existing = ruleTable.valueRules.get(id);
