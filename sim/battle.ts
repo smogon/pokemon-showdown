@@ -837,7 +837,7 @@ export class Battle {
 
 		// handle haze/thawing in gen 1 here since it needs to be part of the BeforeMove event
 		if (
-			eventid === 'BeforeMove' && 
+			eventid === 'BeforeMove' &&
 			target instanceof Pokemon &&
 			(target.lastStatusCuredThisTurn === 'slp' || target.lastStatusCuredThisTurn === 'frz') &&
 			this.gen === 1
