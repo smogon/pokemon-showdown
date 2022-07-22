@@ -14,7 +14,7 @@ export class PostgresDatabase {
 	constructor(config = PostgresDatabase.getConfig()) {
 		try {
 			this.pool = new (require('pg').Pool)(config);
-		} catch (e) {
+		} catch (e: any) {
 			this.pool = null!;
 		}
 	}
@@ -25,7 +25,7 @@ export class PostgresDatabase {
 		let result;
 		try {
 			result = await this.pool.query(statement, values);
-		} catch (e) {
+		} catch (e: any) {
 			// postgres won't give accurate stacks unless we do this
 			throw new Error(e.message);
 		}
@@ -36,7 +36,7 @@ export class PostgresDatabase {
 		try {
 			config = require('../config/config').usepostgres;
 			if (!config) throw new Error('Missing config for pg database');
-		} catch (e) {}
+		} catch (e: any) {}
 		return config;
 	}
 	async transaction(callback: (conn: PG.PoolClient) => any, depth = 0): Promise<any> {
@@ -46,7 +46,7 @@ export class PostgresDatabase {
 		try {
 			// eslint-disable-next-line callback-return
 			result = await callback(conn);
-		} catch (e) {
+		} catch (e: any) {
 			await conn.query(`ROLLBACK`);
 			// two concurrent transactions conflicted, try again
 			if (e.code === '40001' && depth <= 10) {
