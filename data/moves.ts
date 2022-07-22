@@ -9362,18 +9362,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return this.chainModify(1.5);
 			}
 		},
-		onHit(target, source) {
-			const hasItem = target.getItem();
-			const healingItems = [
-				'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry', 'berryjuice',
-			];
-			if (source.hp && healingItems.includes(hasItem.id)) {
-				const item = target.takeItem();
-				if (item) {
-					this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
-				}
-			}
-		},
 		onAfterHit(target, source) {
 			if (source.hp) {
 				const item = target.takeItem();

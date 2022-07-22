@@ -1066,10 +1066,10 @@ export class BattleActions {
 		const pokemonOriginalHP = pokemon.hp;
 		if (damagedDamage.length && !isSecondary && !isSelf) {
 			this.battle.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
-			this.battle.runEvent('TakeDamage', damagedTargets, pokemon, null, damagedDamage);
 			if (moveData.onAfterHit) {
 				for (const t of damagedTargets) {
 					this.battle.singleEvent('AfterHit', moveData, {}, t, pokemon, move);
+					this.battle.runEvent('TakeDamage', damagedTargets, pokemon, null, damagedDamage);
 				}
 			}
 			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP > pokemon.maxhp / 2) {
