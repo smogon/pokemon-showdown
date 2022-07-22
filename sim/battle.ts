@@ -1878,7 +1878,6 @@ export class Battle {
 			if (source && effect.effectType === 'Move') source.lastDamage = targetDamage;
 
 			const name = effect.fullname === 'tox' ? 'psn' : effect.fullname;
-
 			switch (effect.id) {
 			case 'partiallytrapped':
 				this.add('-damage', target, target.getHealth, '[from] ' + this.effectState.sourceEffect.fullname, '[partiallytrapped]');
@@ -1946,7 +1945,6 @@ export class Battle {
 			if (!source) source = this.event.source;
 			if (!effect) effect = this.effect;
 		}
-
 		return this.spreadDamage([damage], [target], source, effect, instafaint)[0];
 	}
 

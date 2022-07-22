@@ -41,8 +41,8 @@ const Dex = require('../../.sim-dist/dex').Dex;
 global.Config = {allowrequestingties: false};
 Dex.includeModData();
 
-const {ExhaustiveRunner} = require('../../.sim-dist/tools/exhaustive-runner');
-const {MultiRandomRunner} = require('../../.sim-dist/tools/multi-random-runner');
+const {ExhaustiveRunner} = require('../../.sim/tools/exhaustive-runner');
+const {MultiRandomRunner} = require('../../.sim/tools/multi-random-runner');
 
 // Tracks whether some promises threw errors that weren't caught so we can log
 // and exit with a non-zero status to fail any tests. This "shouldn't happen"
