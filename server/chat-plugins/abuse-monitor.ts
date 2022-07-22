@@ -780,7 +780,7 @@ export const commands: Chat.ChatCommands = {
 			target = target.trim();
 			if (!target) return this.parse(`/help abusemonitor`);
 			const [text, scoreText] = Utils.splitFirst(target, ',').map(f => f.trim());
-			const args = Chat.parseArguments(scoreText, ',', '=', false);
+			const args = Chat.parseArguments(scoreText, ',', {useIDs: false});
 			const scores: Record<string, number> = {};
 			for (let k in args) {
 				const vals = args[k];
