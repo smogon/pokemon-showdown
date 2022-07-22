@@ -240,7 +240,7 @@ export const Items: { [itemid: string]: ItemData } = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon, source, effect) {
+		onTakeDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
@@ -394,7 +394,7 @@ export const Items: { [itemid: string]: ItemData } = {
 		fling: {
 			basePower: 30,
 		},
-		onTakeDamage(damage, pokemon, source, effect) {
+		onTakeDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				if (this.runEvent('TryHeal', pokemon) && pokemon.useItem()) {
 					this.heal(20);
@@ -1693,7 +1693,7 @@ export const Items: { [itemid: string]: ItemData } = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon, source, effect) {
+		onTakeDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
@@ -2011,7 +2011,7 @@ export const Items: { [itemid: string]: ItemData } = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon, source, effect) {
+		onTakeDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
@@ -2435,7 +2435,7 @@ export const Items: { [itemid: string]: ItemData } = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon, source, effect) {
+		onTakeDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
@@ -2784,7 +2784,7 @@ export const Items: { [itemid: string]: ItemData } = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon, source, effect) {
+		onTakeDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
@@ -2921,7 +2921,7 @@ export const Items: { [itemid: string]: ItemData } = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon, source, effect) {
+		onTakeDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
@@ -3185,7 +3185,7 @@ export const Items: { [itemid: string]: ItemData } = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon, source, effect) {
+		onTakeDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
@@ -3779,7 +3779,7 @@ export const Items: { [itemid: string]: ItemData } = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon, source, effect) {
+		onTakeDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
@@ -3924,7 +3924,7 @@ export const Items: { [itemid: string]: ItemData } = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon, source, effect) {
+		onTakeDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
@@ -4804,7 +4804,7 @@ export const Items: { [itemid: string]: ItemData } = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon, source, effect) {
+		onTakeDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
@@ -5032,7 +5032,7 @@ export const Items: { [itemid: string]: ItemData } = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon, source, effect) {
+		onTakeDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
@@ -5263,7 +5263,7 @@ export const Items: { [itemid: string]: ItemData } = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon, source, effect) {
+		onTakeDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
@@ -6789,7 +6789,7 @@ export const Items: { [itemid: string]: ItemData } = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon, source, effect) {
+		onTakeDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}

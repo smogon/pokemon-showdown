@@ -1590,15 +1590,11 @@ export class Pokemon {
 
 	eatItem(force?: boolean, source?: Pokemon, sourceEffect?: Effect) {
 		if (!this.item) return false;
-
 		if ((!this.hp && this.item !== 'jabocaberry' && this.item !== 'rowapberry') || !this.isActive) return false;
-
-
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 
 		const item = this.getItem();
-
 		if (
 			this.battle.runEvent('UseItem', this, null, null, item) &&
 			(force || this.battle.runEvent('TryEatItem', this, null, null, item))
