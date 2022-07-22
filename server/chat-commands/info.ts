@@ -2954,13 +2954,13 @@ export const pages: Chat.PageTable = {
 		buf += `Bans/Unbans: <input name="bans" /> <small>(separated by commas)</small><br /><br />`;
 		buf += `<details class="readmore"><summary><u><strong>Clauses</strong></u></summary>`;
 		buf += `<p>The following rules can be added to challenges/tournaments to modify the style of play. `;
-		buf += `Alternatively, already present rules can be removed from formats by preceding the rule name with <code>!</code></p>`;
+		buf += `Alternatively, already present rules can be removed from formats by preceding the rule name with <code>!</code>.</p>`;
 		buf += `<p>However, some rules, like <code>Obtainable</code>, are made of subrules, that can be individually turned on and off.</p>`;
 		buf += `<p>Note that if you do not explicitly check a mod to include it, it will not be included in the final output.</p>`;
 		buf += `<div class="ladder"><table><tr><th>Rule Name</th><th>Description</th><th>Toggle</th></tr>`;
 		for (const rule of rules) {
 			if (rule.hasValue) continue;
-			const desc = rule.desc ? rule.desc : "No description.";
+			const desc = rule.desc || "No description.";
 			const id = toID(rule.name);
 			buf += `<tr>`;
 			buf += `<td>${rule.name}</td><td>${desc}</td>`;
