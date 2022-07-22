@@ -746,6 +746,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					const invalid = validParameter("moves", move, isNotSearch, target);
 					if (invalid) return {error: invalid};
 					if (isNotSearch) {
+						orGroup.skip = true;
 						const bufferObj: {moves: {[k: string]: boolean}} = {moves: {}};
 						bufferObj.moves[move] = false;
 						searches.push(bufferObj as DexOrGroup);
@@ -765,6 +766,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					const invalid = validParameter("moves", moveid, isNotSearch, target);
 					if (invalid) return {error: invalid};
 					if (isNotSearch) {
+						orGroup.skip = true;
 						const bufferObj: {moves: {[k: string]: boolean}} = {moves: {}};
 						bufferObj.moves[moveid] = false;
 						searches.push(bufferObj as DexOrGroup);
@@ -783,6 +785,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						const invalid = validParameter("moves", moveid, isNotSearch, target);
 						if (invalid) return {error: invalid};
 						if (isNotSearch) {
+							orGroup.skip = true;
 							const bufferObj: {moves: {[k: string]: boolean}} = {moves: {}};
 							bufferObj.moves[moveid] = false;
 							searches.push(bufferObj as DexOrGroup);
@@ -849,6 +852,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						const invalid = validParameter("moves", move, isNotSearch, target);
 						if (invalid) return {error: invalid};
 						if (isNotSearch) {
+							orGroup.skip = true;
 							const bufferObj: {moves: {[k: string]: boolean}} = {moves: {}};
 							bufferObj.moves[move] = false;
 							searches.push(bufferObj as DexOrGroup);
@@ -1357,7 +1361,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 			if (target === 'natdex') {
 				if (parameters.length > 1) return {error: "The parameter 'natdex' cannot have alternative parameters."};
-				nationalSearch = true;
+				nationalSearch = !isNotSearch;
 				orGroup.skip = true;
 				continue;
 			}
@@ -1669,6 +1673,8 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		if (alts.skip) continue;
 		for (const moveid in dex) {
 			const move = dex[moveid];
+			const recoveryUndefined = alts.other.recovery === undefined;
+			const zrecoveryUndefined = alts.other.zrecovery === undefined;
 			let matched = false;
 			if (Object.keys(alts.types).length) {
 				if (alts.types[move.type]) continue;
@@ -1748,20 +1754,22 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				if (alts.gens[String(move.gen)]) continue;
 				if (Object.values(alts.gens).includes(false) && alts.gens[String(move.gen)] !== false) continue;
 			}
-			for (const recoveryType in alts.other) {
-				let hasRecovery = false;
-				if (recoveryType === "recovery") {
-					hasRecovery = !!move.drain || !!move.flags.heal;
-				} else if (recoveryType === "zrecovery") {
-					hasRecovery = (move.zMove?.effect === 'heal');
-				}
-				if (hasRecovery === alts.other[recoveryType]) {
-					matched = true;
-					break;
+			if (!zrecoveryUndefined || !recoveryUndefined) {
+				for (const recoveryType in alts.other) {
+					let hasRecovery = false;
+					if (recoveryType === "recovery") {
+						hasRecovery = !!move.drain || !!move.flags.heal;
+					} else if (recoveryType === "zrecovery") {
+						hasRecovery = (move.zMove?.effect === 'heal');
+					}
+					if (hasRecovery === alts.other[recoveryType]) {
+						matched = true;
+						break;
+					}
 				}
 			}
 			if (matched) continue;
-			if (alts.other.recoil) {
+			if (alts.other.recoil !== undefined) {
 				const recoil = move.recoil || move.hasCrashDamage;
 				if (recoil && alts.other.recoil || !(recoil || alts.other.recoil)) matched = true;
 			}
