@@ -53,6 +53,7 @@ describe('Sitrus Berry', function () {
 		battle.makeChoices('move sleeptalk', 'move confuseray');
 		battle.makeChoices('move sleeptalk', 'move sleeptalk'); //Confusion hit is here
 		assert.holdsItem(holder);
+		assert.false.fullHP(holder);
 		battle.makeChoices('move sleeptalk', 'move falseswipe');
 		//Should eat the berry after the false swipe damage
 		assert.false.holdsItem(holder);

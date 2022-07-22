@@ -1,4 +1,4 @@
-export const Items: {[itemid: string]: ItemData} = {
+export const Items: { [itemid: string]: ItemData; } = {
 	abomasite: {
 		name: "Abomasite",
 		spritenum: 575,
@@ -159,7 +159,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onDamagingHit(damage, target, source, move) {
 			this.add('-enditem', target, 'Air Balloon');
 			target.item = '';
-			target.itemState = {id: '', target};
+			target.itemState = { id: '', target };
 			this.runEvent('AfterUseItem', target, null, null, this.dex.items.get('airballoon'));
 		},
 		onAfterSubDamage(damage, target, source, effect) {
@@ -167,7 +167,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (effect.effectType === 'Move') {
 				this.add('-enditem', target, 'Air Balloon');
 				target.item = '';
-				target.itemState = {id: '', target};
+				target.itemState = { id: '', target };
 				this.runEvent('AfterUseItem', target, null, null, this.dex.items.get('airballoon'));
 			}
 		},
@@ -241,13 +241,13 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTakeDamage(damage, pokemon, source, effect) {
-			if (effect?.id === 'confusion') return;
+
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
 		onEat(pokemon) {
-			this.boost({spd: 1});
+			this.boost({ spd: 1 });
 		},
 		num: 205,
 		gen: 3,
@@ -396,7 +396,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 30,
 		},
 		onTakeDamage(damage, pokemon, source, effect) {
-			if (effect?.id === 'confusion') return;
+
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				if (this.runEvent('TryHeal', pokemon) && pokemon.useItem()) {
 					this.heal(20);
@@ -522,7 +522,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 41,
 		onSwitchIn(pokemon) {
 			if (pokemon.isActive && pokemon.baseSpecies.name === 'Kyogre') {
-				this.queue.insertChoice({choice: 'runPrimal', pokemon: pokemon});
+				this.queue.insertChoice({ choice: 'runPrimal', pokemon: pokemon });
 			}
 		},
 		onPrimal(pokemon) {
@@ -1040,8 +1040,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onFractionalPriorityPriority: -2,
 		onFractionalPriority(priority, pokemon) {
 			if (
-				priority <= 0 && this.effect.id !== 'confusion' &&
-				(pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony')))
+				priority <= 0 && (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony')))
 			) {
 				if (pokemon.eatItem()) {
 					this.add('-activate', pokemon, 'item: Custap Berry', '[consumed]');
@@ -1696,7 +1695,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTakeDamage(damage, pokemon, source, effect) {
-			if (effect?.id === 'confusion') return;
+
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
@@ -2015,13 +2014,13 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTakeDamage(damage, pokemon, source, effect) {
-			if (effect?.id === 'confusion') return;
+
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
 		onEat(pokemon) {
-			this.boost({def: 1});
+			this.boost({ def: 1 });
 		},
 		num: 202,
 		gen: 3,
@@ -2440,7 +2439,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTakeDamage(damage, pokemon, source, effect) {
-			if (effect?.id === 'confusion') return;
+
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
@@ -2701,7 +2700,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onEat(pokemon) {
-			this.boost({def: 1});
+			this.boost({ def: 1 });
 		},
 		num: 687,
 		gen: 6,
@@ -2790,7 +2789,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTakeDamage(damage, pokemon, source, effect) {
-			if (effect?.id === 'confusion') return;
+
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
@@ -2928,13 +2927,13 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTakeDamage(damage, pokemon, source, effect) {
-			if (effect?.id === 'confusion') return;
+
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
 		onEat(pokemon) {
-			this.boost({atk: 1});
+			this.boost({ atk: 1 });
 		},
 		num: 201,
 		gen: 3,
@@ -3193,7 +3192,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTakeDamage(damage, pokemon, source, effect) {
-			if (effect?.id === 'confusion') return;
+
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
@@ -3262,7 +3261,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onEat(pokemon) {
-			this.boost({spd: 1});
+			this.boost({ spd: 1 });
 		},
 		num: 688,
 		gen: 6,
@@ -3508,7 +3507,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Rock",
 		},
 		onResidual(pokemon, source, effect) {
-			if (effect?.id === 'confusion') return;
+
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
@@ -3789,7 +3788,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTakeDamage(damage, pokemon, source, effect) {
-			if (effect?.id === 'confusion') return;
+
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
@@ -3935,13 +3934,13 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTakeDamage(damage, pokemon, source, effect) {
-			if (effect?.id === 'confusion') return;
+
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
 		onEat(pokemon) {
-			this.boost({spa: 1});
+			this.boost({ spa: 1 });
 		},
 		num: 204,
 		gen: 3,
@@ -4497,7 +4496,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 390,
 		onSwitchIn(pokemon) {
 			if (pokemon.isActive && pokemon.baseSpecies.name === 'Groudon') {
-				this.queue.insertChoice({choice: 'runPrimal', pokemon: pokemon});
+				this.queue.insertChoice({ choice: 'runPrimal', pokemon: pokemon });
 			}
 		},
 		onPrimal(pokemon) {
@@ -4816,13 +4815,13 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTakeDamage(damage, pokemon, source, effect) {
-			if (effect?.id === 'confusion') return;
+
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
 		onEat(pokemon) {
-			this.boost({spe: 1});
+			this.boost({ spe: 1 });
 		},
 		num: 203,
 		gen: 3,
@@ -5045,7 +5044,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTakeDamage(damage, pokemon, source, effect) {
-			if (effect?.id === 'confusion') return;
+
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
@@ -5277,7 +5276,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTakeDamage(damage, pokemon, source, effect) {
-			if (effect?.id === 'confusion') return;
+
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
@@ -6804,7 +6803,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTakeDamage(damage, pokemon, source, effect) {
-			if (effect?.id === 'confusion') return;
+
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
