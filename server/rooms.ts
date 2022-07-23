@@ -1312,7 +1312,7 @@ export class GlobalRoomState {
 			const [, formatid] = roomid.split('-');
 			const room = Rooms.createBattle({
 				format: formatid,
-				inputLog: input_log.join('\n'),
+				inputLog: input_log,
 				roomid,
 				title,
 				players,
