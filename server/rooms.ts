@@ -28,7 +28,7 @@ const LAST_BATTLE_WRITE_THROTTLE = 10;
 
 const RETRY_AFTER_LOGIN = null;
 
-import {FS, Utils, Streams} from '../lib';
+import {FS, Utils, Streams, PostgresDatabase} from '../lib';
 import {RoomSection, RoomSections} from './chat-commands/room-settings';
 import {QueuedHunt} from './chat-plugins/scavengers';
 import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
@@ -1272,6 +1272,72 @@ export class GlobalRoomState {
 		} catch {}
 		this.lastBattle = Number(lastBattle) || 0;
 		this.lastWrittenBattle = this.lastBattle;
+		void this.loadBattles();
+	}
+
+	async saveBattles() {
+		let count = 0;
+		if (!Config.usepostgres) return 0;
+		const logDatabase = new PostgresDatabase();
+		for (const room of Rooms.rooms.values()) {
+			if (!room.battle || room.battle.ended) continue;
+			room.battle.frozen = true;
+			const log = await room.battle.getLog();
+			const players: ID[] = room.battle.options.players || [];
+			if (!players.length) {
+				for (const num of ['p1', 'p2', 'p3', 'p4'] as const) {
+					if (room.battle[num]?.id) {
+						players.push(room.battle[num].id);
+					}
+				}
+			}
+			if (!players.length || !log?.length) continue; // shouldn't happen???
+			await logDatabase.query(
+				`INSERT INTO stored_battles (roomid, input_log, players, title) VALUES ($1, $2, $3, $4)` +
+				` ON CONFLICT (roomid) DO UPDATE ` +
+				`SET input_log = EXCLUDED.input_log, players = EXCLUDED.players, title = EXCLUDED.title`,
+				[room.roomid, log.join('\n'), players, room.title]
+			);
+			count++;
+		}
+		return count;
+	}
+
+	async loadBattles() {
+		if (!Config.usepostgres) return;
+		const logDatabase = new PostgresDatabase();
+		const query = `DELETE FROM stored_battles WHERE roomid IN (SELECT roomid FROM stored_battles LIMIT 1) RETURNING *`;
+		for await (const battle of logDatabase.stream(query)) {
+			const {input_log, players, roomid, title} = battle;
+			const [, formatid] = roomid.split('-');
+			const room = Rooms.createBattle({
+				format: formatid,
+				inputLog: input_log.join('\n'),
+				roomid,
+				title,
+				players,
+				delayedStart: true,
+			});
+			if (!room || !room.battle) continue; // shouldn't happen???
+			room.battle.start();
+			for (const [i, p] of players.entries()) {
+				room.auth.set(p, Users.PLAYER_SYMBOL);
+				const u = Users.getExact(p);
+				if (u) {
+					room.battle.joinGame(u, `p${i + 1}` as SideID);
+				}
+			}
+		}
+	}
+
+	joinOldBattles(user: User) {
+		for (const room of Rooms.rooms.values()) {
+			const idx = room.battle?.options.players?.indexOf(user.id);
+			if (typeof idx === 'number' && idx > -1) {
+				user.joinRoom(room.roomid);
+				room.battle!.joinGame(user, `p${idx + 1}` as SideID);
+			}
+		}
 	}
 
 	modlog(entry: PartialModlogEntry, overrideID?: string) {
@@ -2000,7 +2066,7 @@ export const Rooms = {
 			options.ratedMessage = p1Special;
 		}
 
-		const roomid = Rooms.global.prepBattleRoom(options.format);
+		const roomid = options.roomid || Rooms.global.prepBattleRoom(options.format);
 		// options.rated is a number representing the lowest player rating, for searching purposes
 		// options.rated < 0 or falsy means "unrated", and will be converted to 0 here
 		// options.rated === true is converted to 1 (used in tests sometimes)
@@ -2015,6 +2081,8 @@ export const Rooms = {
 		} else if (gameType === 'freeforall') {
 			// p1 vs. p2 vs. p3 vs. p4 is too long of a title
 			roomTitle = `${p1name} and friends`;
+		} else if (options.title) {
+			roomTitle = options.title;
 		} else {
 			roomTitle = `${p1name} vs. ${p2name}`;
 		}
