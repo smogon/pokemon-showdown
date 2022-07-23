@@ -2746,6 +2746,109 @@ export const commands: Chat.ChatCommands = {
 		`!code [code] - Broadcasts code to a room. Accepts multi-line arguments. Requires: + % @ & #`,
 		`/code [code] - Shows you code. Accepts multi-line arguments.`,
 	],
+
+	buildformat(target, room, user) {
+		target = toID(target);
+		if (target && this.connection.openPages?.has('buildformat')) {
+			this.closePage('buildformat');
+		}
+		return this.parse(`/j view-buildformat${target ? `-${target}` : ""}`);
+	},
+
+	makecustomchallenge(target, room, user) {
+		target = target.trim();
+		if (!target.length) {
+			return this.popupReply(`No parameters given.`);
+		}
+		const args = Chat.parseArguments(target, ' | ', {
+			allowEmpty: true, useIDs: false,
+		});
+		const format = Dex.formats.get(toID(args.format[0]));
+		if (!format.exists) {
+			return this.popupReply(`The format '${format}' does not exist.`);
+		}
+		delete args.format;
+		const targetUserID = toID(args.user[0]);
+		if (targetUserID) {
+			this.checkChat();
+			if (!Users.get(targetUserID)) {
+				return this.popupReply(`User '${targetUserID}' not found.`);
+			}
+		}
+		delete args.user;
+		const challengeBuf = [];
+		if (args.bans?.[0]) {
+			const bans = args.bans[0].split(',').map(f => f.trim());
+			challengeBuf.push(...bans);
+		}
+		delete args.bans;
+
+		for (const k in args) {
+			if (k.endsWith('-enabled')) continue;
+			let name = k;
+			if (name.endsWith('-val')) {
+				name = name.slice(0, -4);
+			}
+			const rule = Dex.data.Rulesets[name];
+			if (!rule || rule.effectType === 'Format') {
+				return this.popupReply(`Invalid rule or modifier: ${name}`);
+			}
+			const id = rule.id || toID(rule.name);
+			let val = args[k][0];
+			// BUG: when there are numbers in the form elem/param name,
+			// the `{name}` specifier doesn't get removed from the string
+			if (val.startsWith('{')) {
+				val = '';
+			}
+
+			const ruleTable = Dex.formats.getRuleTable(format);
+			if (rule.hasValue) {
+				const enabled = args[`${id}-enabled`][0] || "";
+				val = args[`${id}-val`][0] || "";
+				if (enabled) {
+					const current = ruleTable.valueRules.get(id);
+					if (typeof current !== 'undefined') {
+						if (current !== val) {
+							challengeBuf.push(`!! ${rule.name} = ${val}`);
+						}
+					} else {
+						challengeBuf.push(`${rule.name} = ${val}`);
+					}
+				} else {
+					if (ruleTable.valueRules.has(id)) {
+						challengeBuf.push(`!${rule.name}`);
+					}
+				}
+			} else {
+				// adding one that's already there
+				if (val && ruleTable.has(id)) {
+					continue;
+				}
+				if (!val && !ruleTable.has(id)) {
+					// removing a rule that isn't there
+					continue;
+				}
+				challengeBuf.push(`${!val ? '!' : ""}${rule.name}`);
+			}
+		}
+		const fullFormat = `${format.id}@@@${challengeBuf.join(',')}`;
+		try {
+			Dex.formats.validate(fullFormat);
+		} catch (e: any) {
+			this.refreshPage(`buildformat-${format.id}`);
+			return this.popupReply(e.message);
+		}
+		if (targetUserID) {
+			this.closePage(`buildformat`);
+			return this.parse(`/challenge ${targetUserID},${fullFormat}`);
+		} else {
+			this.connection.send(
+				`>view-buildformat-${format.id}\n|selectorhtml|#output|` +
+				`Here's the string for your desired rules!<br /><code>${fullFormat}</code><br />` +
+				`Use <code>/challenge [user],${fullFormat}</code> to challenge someone with it!`
+			);
+		}
+	},
 };
 
 export const pages: Chat.PageTable = {
@@ -2803,6 +2906,91 @@ export const pages: Chat.PageTable = {
 		rulesets.push(`</table></div>`);
 		rulesHTML += `${basics.concat(rulesets).join('')}</div>`;
 		return rulesHTML;
+	},
+	buildformat(query, user) {
+		this.title = '[Format Customizer]';
+		const rules = Object.values(Dex.data.Rulesets).filter(rule => rule.effectType !== "Format");
+		let buf = `<div class="pad"><h2>Format customizer</h2>`;
+		buf += `<button class="button" name="send" value="/join ${this.pageid}">`;
+		buf += `<i class="fa fa-refresh"></i> ${this.tr`Refresh`}</button>`;
+		buf += `<hr />`;
+		const formatId = toID(query[0]);
+		const format = Dex.formats.get(formatId);
+		if (!formatId || !format.exists) {
+			if (formatId && !format.exists) {
+				buf += `<div class="message-error">The format '${formatId}' does not exist.</div><br />`;
+			}
+			buf += `<form data-submitsend="/buildformat {format}">`;
+			buf += `Choose your format: <input name="format" /><br />`;
+			buf += `<button type="submit" class="button notifying">Continue</button>`;
+			buf += `</form>`;
+			return buf;
+		}
+
+		buf += `<form data-submitsend="{{cmd}}">`;
+		const ruleTable = Dex.formats.getRuleTable(format);
+		const cmd = [`format=${formatId}`, 'user={user}'];
+		buf += `Format: ${format.name}<br />`;
+		buf += `User to challenge: <input name="user" /> <small>(optional)</small>`;
+		buf += `<br /><br />`;
+		buf += `<u><strong>Bans/Unbans</strong></u><br />`;
+		buf += `<details class="readmore">`;
+		buf += `<summary>Bans are a <code>-</code> followed by the thing you want to ban. `;
+		buf += `Using a <code>+</code> instead unbans Pokemon.</summary><small>`;
+		buf += `<h3>Individual bans</h3>`;
+		buf += `<ul><li><code>- Arceus</code>: Ban a Pok&eacute;mon (including all formes)</li>`;
+		buf += `<li><code>- Arceus-Flying</code> or <code>- Giratina-Altered</code>: Ban a Pok&eacute;mon forme</li>`;
+		buf += `<li><code>- Baton Pass</code>: Ban a move/item/ability/etc</li></ul>`;
+		buf += `<h3>Group bans</h3>`;
+		buf += `<ul><li><code>- OU</code> or <code>- DUU</code>: Ban a tier</li>`;
+		buf += `<li><code>- Mega</code> or <code>- CAP</code>: Ban a Pok&eacute;mon category</li></ul>`;
+		buf += `<h3>Complex bans</h3>`;
+		buf += `<ul><li><code>- Blaziken + Speed Boost</code>: Ban a combination of things in a single Pokemon (you can have a Blaziken, and you can have Speed Boost on the same team, but the Blaziken can't have Speed Boost)</li>`;
+		buf += `<li><code>- Drizzle ++ Swift Swim</code>: Ban a combination of things in a team (if any Pokémon on your team have Drizzle, no Pokémon can have Swift Swim)</li></ul>`;
+		buf += `<h2><u>Unbans</u></h2>`;
+		buf += `<p>Using a <code>+</code> instead of a <code>-</code> unbans that category.</p>`;
+		buf += `<ul><li><code>+ Blaziken</code>: Unban/unrestrict a Pok&eacute;mon.</li></ul></small></details><br />`;
+		cmd.push(`bans={bans}`);
+		buf += `Bans/Unbans: <input name="bans" /> <small>(separated by commas)</small><br /><br />`;
+		buf += `<details class="readmore"><summary><u><strong>Clauses</strong></u></summary>`;
+		buf += `<p>The following rules can be added to challenges/tournaments to modify the style of play. `;
+		buf += `Alternatively, already present rules can be removed from formats by preceding the rule name with <code>!</code>.</p>`;
+		buf += `<p>However, some rules, like <code>Obtainable</code>, are made of subrules, that can be individually turned on and off.</p>`;
+		buf += `<p>Note that if you do not explicitly check a mod to include it, it will not be included in the final output.</p>`;
+		buf += `<div class="ladder"><table><tr><th>Rule Name</th><th>Description</th><th>Toggle</th></tr>`;
+		for (const rule of rules) {
+			if (rule.hasValue) continue;
+			const desc = rule.desc || "No description.";
+			const id = toID(rule.name);
+			buf += `<tr>`;
+			buf += `<td>${rule.name}</td><td>${desc}</td>`;
+			buf += `<td><input type="checkbox" name="${id}" ${ruleTable.has(id) ? 'checked' : ""} value="on" /></td>`;
+			buf += `</tr>`;
+			cmd.push(`${id}={${id}}`);
+		}
+		buf += `</table></div></details><br />`;
+		buf += `<details class="readmore"><summary><u><strong>Value Rules</strong></u></summary>`;
+		buf += `Click the "enabled" checkbox and fill in a value to enable a rule - uncheck the box to remove the rule.`;
+		buf += `<div class="ladder"><table><tr><th>Rule Name</th><th>Description</th><th>Toggle</th></tr>`;
+		for (const rule of rules) {
+			if (!rule.hasValue) continue;
+			const desc = rule.desc || "No description.";
+			buf += `<tr>`;
+			const id = toID(rule.name);
+			const existing = ruleTable.valueRules.get(id);
+			buf += `<td>${rule.name}</td><td>${desc}</td>`;
+			buf += `<td>Enabled: <input type="checkbox" name="${id}enabled" value="on" ${existing ? "checked" : ''}/><br />`;
+			buf += `Value: <input name="${id}val" value="${existing || ""}"/>`;
+			cmd.push(`${id}-enabled={${id}enabled}`);
+			cmd.push(`${id}-val={${id}val}`);
+			buf += `</td></tr>`;
+		}
+		buf += `</details>`;
+		buf = buf.replace(`{{cmd}}`, `/makecustomchallenge ${cmd.join(' | ')}`);
+		buf += `<br /><br />`;
+		buf += `<button type="submit" class="button notifying">Create!</button></form>`;
+		buf += `<span id="output"></span>`;
+		return buf;
 	},
 	punishments(query, user) {
 		this.title = 'Punishments';
