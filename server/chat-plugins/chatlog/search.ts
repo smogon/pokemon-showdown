@@ -32,7 +32,7 @@ export async function searchMonth(
 	const path = FS(`logs/chat/${search.room}/${search.date}`);
 
 	const stream = ripgrep({
-		pattern: search.search,
+		pattern: search.search.replace(/\\/g, '\\\\'),
 		path: path.path,
 		separator: search.sep || '\n',
 		engine: 'auto',
@@ -123,6 +123,9 @@ export const commands: Chat.ChatCommands = {
 		if (!date) {
 			date = LogReader.getMonth();
 		}
+		if (!parsed.some(f => f.startsWith('limit='))) {
+			parsed.push('limit-500');
+		}
 		if (!toID(roomid)) {
 			if (!room) return this.errorReply(`Either use this command in a room, or specify a room to search.`);
 			roomid = room.roomid;
@@ -164,12 +167,15 @@ export const pages: Chat.PageTable = {
 			return this.errorReply(Utils.html`No logs for the room ${roomid} found.`);
 		}
 		search.room = roomid;
-		const rawDate = query.shift() || '';
-		const time = new Date(rawDate);
-		if (isNaN(time.getTime())) {
-			return this.errorReply(`Invalid date: ${rawDate}`);
+		let date = query.shift() || '';
+		if (!date) {
+			date = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
+		} else {
+			if (!/^[0-9]{4}-[0-9]{2}$/.test(date)) {
+				return this.errorReply(`Invalid date: '${date}'`);
+			}
 		}
-		search.date = `${time.getFullYear()}-${time.getMonth() + 2}`;
+		search.date = date;
 
 		let limit = MAX_SEARCH_COUNT;
 

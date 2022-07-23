@@ -19,10 +19,10 @@
     "nodemailer": "^6.4.6",
     "permessage-deflate": "^0.1.7",
     "pg": "^8.7.1",
+    "ripgrep-pkg": "^0.4.1",
     "sql-template-strings": "^2.2.2",
     "sqlite": "^3.0.6",
-    "sucrase": "^3.15.0",
-    "ripgrep-pkg": "^0.4.1"
+    "sucrase": "^3.15.0"
   },
   "secretDependencies": {
     "node-oom-heapdump": "^1.2.0"
