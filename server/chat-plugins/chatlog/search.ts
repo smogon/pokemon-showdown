@@ -3,6 +3,7 @@
  * By Mia.
  * @author mia-pi-git
  */
+import e from 'express';
 import {FS, ripgrep, hasRipgrep, Utils} from '../../../lib';
 import {LogViewer, LogReader} from './view';
 
@@ -69,7 +70,13 @@ export function constructRegex(search: ChatlogSearch) {
 		(exclude ? excludes : includes).push(Utils.escapeRegex(term));
 	}
 	if (excludes.length) regex += `(?!.*(${excludes.join('|')}))`;
-	if (includes.length) regex += `(?=.*(${includes.join('|')}))`;
+	if (includes.length) {
+		if (!regex) {
+			regex = `(${includes.map(f => `.*${f}.*`).join('|')})`;
+		} else {
+			regex += `(?=.*(${includes.join('|')}))`;
+		}
+	}
 	return regex;
 }
 
