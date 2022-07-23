@@ -76,7 +76,7 @@ export function constructRegex(search: ChatlogSearch) {
 		} else {
 			regex += `(?=.*(${includes.join('|')}))`;
 		}
-	}
+	}``
 	return regex;
 }
 
@@ -184,6 +184,9 @@ export const pages: Chat.PageTable = {
 		}
 		search.date = date;
 
+		if (!(await FS(`logs/chat/${roomid}/${date}`).exists())) {
+			return this.errorReply(`There are no logs for ${date} on ${roomid}.`);
+		}
 		let limit = MAX_SEARCH_COUNT;
 
 		for (const arg of query) {
