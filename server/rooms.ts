@@ -1324,6 +1324,7 @@ export class GlobalRoomState {
 				room.auth.set(p, Users.PLAYER_SYMBOL);
 				const u = Users.getExact(p);
 				if (u) {
+					u.joinRoom(room);
 					room.battle.joinGame(u, `p${i + 1}` as SideID);
 				}
 			}
