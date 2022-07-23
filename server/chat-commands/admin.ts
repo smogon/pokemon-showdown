@@ -1154,15 +1154,41 @@ export const commands: Chat.ChatCommands = {
 		`/endemergency - Turns off emergency mode. Requires: &`,
 	],
 
-	kill(target, room, user) {
-		this.checkCan('lockdown');
+	async savebattles(target, room, user) {
+		this.checkCan('rangeban'); // admins can restart, so they should be able to do this if needed
+		this.sendReply(`Saving battles...`);
+		const count = await Rooms.global.saveBattles();
+		this.sendReply(`DONE.`);
+		this.sendReply(`${count} battles saved.`);
+		this.addModAction(`${user.name} used /savebattles`);
+	},
 
-		if (Rooms.global.lockdown !== true) {
-			return this.errorReply("For safety reasons, /kill can only be used during lockdown.");
+	async kill(target, room, user) {
+		this.checkCan('lockdown');
+		let noSave = toID(target) === 'nosave';
+		if (!Config.usepostgres) noSave = true;
+
+		if (Rooms.global.lockdown !== true && noSave) {
+			return this.errorReply("For safety reasons, using /kill without saving battles can only be done during lockdown.");
 		}
 
 		if (Monitor.updateServerLock) {
 			return this.errorReply("Wait for /updateserver to finish before using /kill.");
+		}
+
+		if (!noSave) {
+			this.sendReply('Saving battles...');
+			Rooms.global.lockdown = true; // we don't want more battles starting while we save
+			for (const u of Users.users.values()) {
+				u.send(
+					`|pm|&|${u.getIdentity()}|/raw <div class="broadcast-red"><b>The server is restarting soon.</b><br />` +
+					`While battles are being saved, no more can be started. If you're in a battle, it will be paused during saving.<br />` +
+					`After the restart, you will be able to resume your battles from where you left off.`
+				);
+			}
+			const count = await Rooms.global.saveBattles();
+			this.sendReply(`DONE.`);
+			this.sendReply(`${count} battles saved.`);
 		}
 
 		const logRoom = Rooms.get('staff') || Rooms.lobby || room;
@@ -1180,7 +1206,10 @@ export const commands: Chat.ChatCommands = {
 			process.exit();
 		}, 10000);
 	},
-	killhelp: [`/kill - kills the server. Can't be done unless the server is in lockdown state. Requires: &`],
+	killhelp: [
+		`/kill - kills the server. Use the argument \`nosave\` to prevent the saving of battles.`,
+		` If this argument is used, the server must be in lockdown. Requires: &`,
+	],
 
 	loadbanlist(target, room, user, connection) {
 		this.checkCan('lockdown');

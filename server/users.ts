@@ -829,6 +829,7 @@ export class User extends Chat.MessageContext {
 			Punishments.checkName(user, userid, registered);
 
 			Rooms.global.checkAutojoin(user);
+			Rooms.global.joinOldBattles(this);
 			Chat.loginfilter(user, this, userType);
 			return true;
 		}
@@ -844,6 +845,7 @@ export class User extends Chat.MessageContext {
 			return false;
 		}
 		Rooms.global.checkAutojoin(this);
+		Rooms.global.joinOldBattles(this);
 		Chat.loginfilter(this, null, userType);
 		return true;
 	}
