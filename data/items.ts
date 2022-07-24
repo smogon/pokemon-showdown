@@ -394,6 +394,13 @@ export const Items: { [itemid: string]: ItemData } = {
 		fling: {
 			basePower: 30,
 		},
+		onStart(pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
+				if (this.runEvent('TryHeal', pokemon) && pokemon.useItem()) {
+					this.heal(20);
+				}
+			}
+		},
 		onTakeDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				if (this.runEvent('TryHeal', pokemon) && pokemon.useItem()) {
@@ -4809,7 +4816,7 @@ export const Items: { [itemid: string]: ItemData } = {
 				pokemon.eatItem();
 			}
 		},
-		onEat(pokemon) {
+		onEat() {
 			this.boost({spe: 1});
 		},
 		num: 203,
