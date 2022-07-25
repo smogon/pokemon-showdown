@@ -1,4 +1,4 @@
-export const Items: { [itemid: string]: ItemData } = {
+export const Items: {[itemid: string]: ItemData} = {
 	abomasite: {
 		name: "Abomasite",
 		spritenum: 575,
@@ -1549,7 +1549,6 @@ export const Items: { [itemid: string]: ItemData } = {
 			type: "Bug",
 		},
 		onHit(target, source, move) {
-			if (this.effect.id === 'confusion') return false;
 			if (move && target.getMoveHitData(move).typeMod > 0) {
 				if (target.eatItem()) {
 					this.heal(target.baseMaxhp / 4);
@@ -2696,7 +2695,6 @@ export const Items: { [itemid: string]: ItemData } = {
 			type: "Fairy",
 		},
 		onAfterMoveSecondary(target, source, move) {
-			if (this.effect.id === 'confusion') return false;
 			if (move.category === 'Physical') {
 				if (move.id === 'present' && move.heal) return;
 				target.eatItem();
@@ -3506,7 +3504,7 @@ export const Items: { [itemid: string]: ItemData } = {
 			basePower: 100,
 			type: "Rock",
 		},
-		onResidual(pokemon, source, effect) {
+		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
