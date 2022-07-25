@@ -597,7 +597,7 @@ export const Formats: FormatList = [
 				return [`${set.ability} is banned.`];
 			}
 			if (set.species === 'Zacian-Crowned' && (toID(set.item) !== 'rustedsword' || toID(set.ability) !== 'intrepidsword')) {
-				return [set.species + " is banned."];
+				return [`${set.species} is banned.`];
 			}
 		},
 		onChangeSet(set) {
