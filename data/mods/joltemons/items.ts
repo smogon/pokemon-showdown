@@ -9,20 +9,20 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		desc: "Comes back to the user when flung.", 
 	},
  momentumarmor: {
-        name: "Momentum Armor",
-        fling: {
-            basePower: 80,
-        },
-        onModifyAtkPriority: 1,
-        onModifyAtk(atk, pokemon) {
-          const def = pokemon.getStat('def', false, true);
-          const newAtk = atk + (def / 4);
-          return newAtk;
-        },
-        num: -1002,
-        gen: 8,
-        desc: "Boosts the user's Attack by 25% of its Defense.", 
-    },
+		name: "Momentum Armor",
+		fling: {
+			basePower: 80,
+		},
+		onModifyAtkPriority: 1,
+		onModifyAtk(atk, pokemon) {
+		  const def = pokemon.getStat('def', false, true);
+		  const newAtk = atk + (def / 4);
+		  return newAtk;
+		},
+		num: -1002,
+		gen: 8,
+		desc: "Boosts the user's Attack by 25% of its Defense.", 
+	},
  	shellbell: {
 		name: "Shell Bell",
 		spritenum: 438,
@@ -46,7 +46,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		num: -1003,
 		gen: 4,
-    shortDesc: "Pokemon with the ability Honey Gather or Sweet Veil heal 12.5% when holding this item.",
+	shortDesc: "Pokemon with the ability Honey Gather or Sweet Veil heal 12.5% when holding this item.",
 	},
 	eviolith: {
 		name: "Eviolith",
@@ -66,9 +66,9 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 				return this.chainModify(1.5);
 			}
 		},
-     num: -1004,
-     gen: 8,
-     desc: "If holder's species can evolve, its Atk and Sp. Atk are 1.5x.",
+	 num: -1004,
+	 gen: 8,
+	 desc: "If holder's species can evolve, its Atk and Sp. Atk are 1.5x.",
 	},
 	reliccharm: {
 		name: "Relic Charm",
@@ -545,7 +545,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 					return;
 				}
 				if ((pokemon.status === 'slp' || pokemon.hasAbility('comatose'))) {
-           		this.useMove("Sleep Talk", pokemon);
+		   		this.useMove("Sleep Talk", pokemon);
 				}
 			},
 		},
