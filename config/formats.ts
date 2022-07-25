@@ -586,7 +586,6 @@ export const Formats: FormatList = [
 			// Items
 			'Gengarite',
 			// Moves
-			'Chatter', 'Double Iron Bash', 'Octolock',
 			'Chatter', 'Double Iron Bash', 'Octolock', 'Shell Smash',
 			// Other
 			'Comatose + Sleep Talk',
