@@ -155,15 +155,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		id: "graduationscale",
 		name: "Graduation Scale",
 		onStart: function(pokemon) {
-			/*this.add('-item', pokemon, 'Graduation Scale');
-			if (pokemon.baseSpecies.baseSpecies === 'Wishiwashi') {
-				this.add('-formechange', pokemon, 'Wishiwashi-School', '[msg]');
-				pokemon.formeChange("Wishiwashi-School");*/
-				let oldAbility = pokemon.setAbility('intimidate', pokemon, 'intimidate', true);
-				/*if (oldAbility) {
-					this.add('-activate', pokemon, 'ability: Intimidate', oldAbility, '[of] ' + pokemon);
-				}
-			}*/
+			pokemon.setAbility('intimidate', pokemon, 'intimidate', true);
 		},
 		onTakeItem: function(item, source) {
 			if (source.baseSpecies.baseSpecies === 'Wishiwashi' || source.baseSpecies.baseSpecies === 'Wishiwashi-School') return false;
