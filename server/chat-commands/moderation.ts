@@ -1333,14 +1333,23 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.checkCan('receiveauthmessages', null, room);
 		target = target.replace(/\n/g, "; ");
-		const targetUserid = toID(/\[([^\]]+)\]/.exec(target)?.[1]) || null;
+		const targeted = /\[([^\]]+)\]/.exec(target)?.[1] || null;
+		let targetUserid, targetIP;
+
+		if (targeted) {
+			if (IPTools.ipRegex.test(targeted)) {
+				targetIP = targeted;
+			} else {
+				targetUserid = toID(targeted);
+			}
+		}
 		if (
 			['staff', 'upperstaff'].includes(room.roomid) ||
 			(Rooms.Modlog.getSharedID(room.roomid) && user.can('modlog'))
 		) {
-			this.globalModlog('NOTE', targetUserid, target);
+			this.globalModlog('NOTE', targetUserid || null, target, targetIP);
 		} else {
-			this.modlog('NOTE', targetUserid, target);
+			this.modlog('NOTE', targetUserid || null, target);
 		}
 
 		this.privateModAction(`${user.name} notes: ${target}`);
