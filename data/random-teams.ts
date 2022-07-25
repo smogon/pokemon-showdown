@@ -1558,7 +1558,7 @@ export class RandomTeams {
 			// For Scrafty
 			return moves.has('dragondance');
 		case 'Sheer Force':
-			return (!counter.get('sheerforce') || abilities.has('Guts') || species.id === 'druddigon');
+			return (!counter.get('sheerforce') || abilities.has('Guts') || (species.id === 'druddigon' && !isDoubles));
 		case 'Shell Armor':
 			return (species.id === 'omastar' && (moves.has('spikes') || moves.has('stealthrock')));
 		case 'Slush Rush':
