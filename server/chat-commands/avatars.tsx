@@ -580,7 +580,7 @@ const OFFICIAL_AVATARS_KYLEDOVE = new Set([
 	'triathletebiker-gen6', 'triathleterunner-gen6', 'triathleteswimmer-gen6', 'tuberf-gen6', 'tuber-gen6', 'twins-gen6',
 	'veteranf-gen6', 'veteran-gen6', 'waitress-gen6', 'worker2-gen6', 'workerf-gen8', 'worker-gen6', 'worker-gen8',
 	'youngcouple-gen6', 'youngster-gen6', 'youngster-gen6xy', 'youngster-gen8',
-	'acerola-masters', 'bea-masters', 'blue-masters', 'brock-masters', 'burgh-masters', 'caitlin-masters','cynthia-masters2',
+	'acerola-masters', 'bea-masters', 'blue-masters', 'brock-masters', 'burgh-masters', 'caitlin-masters', 'cynthia-masters2',
 	'cyrus-masters', 'dawn-masters', 'dawn-masters2', 'diantha-masters', 'elesa-masters', 'emmet-masters', 'erika-masters',
 	'erika-masters2', 'ethan-masters', 'giovanni-masters', 'gloria-masters', 'grimsley-masters', 'guzma-masters',
 	'hilbert-masters', 'hilda-masters', 'ingo-masters', 'jasmine-masters', 'korrina-masters', 'kris-masters',
