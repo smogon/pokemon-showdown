@@ -460,22 +460,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Pokémon that make contact with this Pokémon have the Ghost-type added to their existing typings until they switch out (Trick-or-Treat effect).",
 		rating: 2.5,
 	},
-/*
-	soullink: {
-		onStart(pokemon) {
-			this.add('-ability', pokemon, 'Soul Link');
-			this.add('-message', `Opponents that make contact will become a part-Ghost-type!`);
-		},
-		onDamagingHitOrder: 1,
-		onDamagingHit(damage, target, source, move) {
-			if (move.flags['contact'] && !source.hasType('Ghost') && !source.addType('Ghost')) {
-           	this.useMove("Trick-or-Treat", target);
-			}
-		},
-		name: "Soul Link",
-		shortDesc: "Pokémon that make contact with this Pokémon have the Ghost-type added to their existing typings until they switch out (Trick-or-Treat effect).",
-	},
-*/
 	wanderingspirit: {
 		shortDesc: "On switch-in, swaps ability with the opponent.",
 		onSwitchIn(pokemon) {
@@ -617,31 +601,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Unimpressed",
 		rating: 3.5,
 	},
-/*
-	counterfeit: {
-		shortDesc: "On switch-in, identifies and copies the effect of the opponent's held item.",
-		onStart(pokemon) {
-			pokemon.addVolatile('counterfeit');
-			let i;
-			for (i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
-				if (
-					!pokemon.side.pokemon[i] || pokemon.side.pokemon[i].fainted ||
-					!pokemon.side.pokemon[i].item || this.dex.getItem(pokemon.side.pokemon[i].item).zMove ||
-					 this.dex.getItem(pokemon.side.pokemon[i].item).megaStone
-				) continue;
-				break;
-			}
-			if (!pokemon.side.pokemon[i]) return;
-			if (pokemon === pokemon.side.pokemon[i]) return;
-			const counterfeit = pokemon.side.pokemon[i];
-			this.add('-ability', pokemon, 'Counterfeit');
-			pokemon.item = counterfeit.item;
-			this.add('-message', `${pokemon.name}'s item became a replica of the ${this.dex.getItem(counterfeit.item).name} belonging to ${counterfeit.name}!`);
-		},
-		name: "Counterfeit",
-		rating: 3.5,
-	},
-*/
 	counterfeit: {
 		shortDesc: "On switch-in, identifies and copies the effect of the opponent's held item.",
 		onStart(pokemon) {
@@ -675,39 +634,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Counterfeit",
 		rating: 3.5,
 	},
-
-/*
-	counterfeit: {
-		shortDesc: "On switch-in, identifies and copies the effect of the opponent's held item.",
-		onStart(pokemon) {
-			for (const target of pokemon.side.foe.active) {
-				if (!target || target.fainted || !this.isAdjacent(target, pokemon)) continue;
-				if (!target.item || this.dex.getItem(target.item).zMove || this.dex.getItem(target.item).megaStone) continue;
-				if (!pokemon.useItem) return;
-				pokemon.ability = target.item;
-				this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name} counterfeited the ${this.dex.getItem(target.item).name} belonging to ${target.illusion ? target.illusion.name : target.name}!`);
-				return;
-			}
-		},
-		name: "Counterfeit",
-		rating: 3.5,
-	},
-
-	counterfeit: {
-		shortDesc: "(Non-functional placeholder) On switch-in, identifies and copies the effect of the opponent's held item.",
-		onStart(pokemon) {
-			for (const target of pokemon.side.foe.active) {
-				if (!target || target.fainted) continue;
-				if (target.item) {
-					this.add('-item', target, target.getItem().name, '[from] ability: Counterfeit', '[of] ' + pokemon, '[identify]');
-				}
-			}
-		},
-		isPermanent: true,
-		name: "Counterfeit",
-		rating: 1.5,
-	},
-*/
 	optimistic: {
 		onBoost(boost, target, source, effect) {
 			if (source && target !== source) return;
@@ -1719,25 +1645,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Cursed Belt",
 	},
-/*
-	chilipepper: {
-		onSetStatus(status, target, source, effect) {
-			if (status.id !== 'brn') return;
-			if ((effect as Move)?.status) {
-				this.add('-immune', target, '[from] item: Chili Pepper');
-			}
-			return false;
-		},
-		onUpdate(pokemon) {
-			if (pokemon.status === 'frz') {
-				this.add('-activate', pokemon, 'item: Chili Pepper');
-				pokemon.cureStatus();
-				pokemon.useItem();
-			}
-		},
-		name: "Chili Pepper",
-	},
-*/
 	focussash: {
 		onStart(pokemon) {
 			pokemon.addVolatile('focussash');
@@ -1776,25 +1683,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Rocky Helmet",
 	},
-/*
-	mentalherb: {
-		onStart(pokemon) {
-			pokemon.addVolatile('mentalherb');
-		},
-		condition: {
-			onAllyTryAddVolatile(status, target, source, effect) {
-				if (['attract', 'disable', 'encore', 'healblock', 'taunt', 'torment'].includes(status.id)) {
-					if (effect.effectType === 'Move') {
-						const effectHolder = this.effectData.target;
-						this.add('-block', target, 'ability: Mental Herb', '[of] ' + effectHolder);
-						target.removeVolatile('mentalherb');
-					}
-					return null;
-				}
-			},
-		name: "Mental Herb",
-	},
-*/
 	blacksludge: {
 		onResidualOrder: 5,
 		onResidualSubOrder: 5,
@@ -2123,77 +2011,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifyDamage(damage, source, target, move) {
 				return this.chainModify([0x1199, 0x1000]);
 		},
-		/*
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect && effect.effectType === 'Move') {
-				this.add('-activate', source, 'item: Soul Blade'); 
-				source.setAbility('soulbladelvl2');
-				this.add('-item', source, source.getItem(), '[from] item: Soul Blade');
-			}
-		},
-		*/
 		name: "Soul Blade",
 	},
-/*
-	soulbladelvl2: {
-		onModifyDamage(damage, source, target, move) {
-				return this.chainModify([0x14CC, 0x1000]);
-		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect && effect.effectType === 'Move') {
-				this.add('-activate', source, 'item: Soul Blade'); 
-				source.setAbility('soulbladelvl3');
-				this.add('-item', source, source.getItem(), '[from] item: Soul Blade');
-			}
-		},
-		name: "Soul Blade Lvl. 2",
-	},
-	soulbladelvl3: {
-		onModifyDamage(damage, source, target, move) {
-				return this.chainModify(1.5);
-		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect && effect.effectType === 'Move') {
-				this.add('-activate', source, 'item: Soul Blade'); 
-				source.setAbility('soulbladelvl4');
-				this.add('-item', source, source.getItem(), '[from] item: Soul Blade');
-			}
-		},
-		name: "Soul Blade Lvl. 3",
-	},
-	soulbladelvl4: {
-		onModifyDamage(damage, source, target, move) {
-				return this.chainModify(1.7);
-		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect && effect.effectType === 'Move') {
-				this.add('-activate', source, 'item: Soul Blade'); 
-				source.setAbility('soulbladelvl5');
-				this.add('-item', source, source.getItem(), '[from] item: Soul Blade');
-			}
-		},
-		name: "Soul Blade Lvl. 4",
-	},
-	soulbladelvl5: {
-		onModifyDamage(damage, source, target, move) {
-				return this.chainModify(1.9);
-		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect && effect.effectType === 'Move') {
-				this.add('-activate', source, 'item: Soul Blade'); 
-				source.setAbility('ultrasoulblade');
-				this.add('-item', source, source.getItem(), '[from] item: Soul Blade');
-			}
-		},
-		name: "Soul Blade Lvl. 5",
-	},
-	ultrasoulblade: {
-		onModifyDamage(damage, source, target, move) {
-				return this.chainModify(2.1);
-		},
-		name: "Ultra Soul Blade",
-	},
-*/
 	fistplate: {
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
