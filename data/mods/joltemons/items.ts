@@ -179,7 +179,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			}
 		},
 		gen: 7,
-		desc: "If holder is a Wishiwashi, it becomes School Form. It's ability becomes Intimidate. Water moves are boosted by 1.2x",
+		desc: "If holder is a Wishiwashi, it becomes School Form. Its ability becomes Intimidate. Water moves are boosted by 1.2x",
 	},
 	blunderpolicy: {
 		name: "Blunder Policy",
