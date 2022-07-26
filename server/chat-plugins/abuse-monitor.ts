@@ -2107,14 +2107,16 @@ export const pages: Chat.PageTable = {
 		reviews() {
 			checkAccess(this);
 			this.title = `[Abuse Monitor] Reviews`;
-			let buf = `<div class="pad"><h2>Artemis recommendation reviews</h2>`;
+			let buf = `<div class="pad"><h2>Artemis recommendation reviews ({{total}})</h2>`;
 			buf += `<button class="button" name="send" value="/msgroom staff,/am reviews">Reload reviews</button>`;
 			buf += `<hr />`;
+			let total = 0;
 			let atLeastOne = false;
 			for (const userid in reviews) {
 				const curReviews = reviews[userid].filter(f => !f.resolved);
 				if (curReviews.length) {
 					buf += `<strong>${Chat.count(curReviews, 'reviews')} from ${userid}:</strong><hr />`;
+					total += curReviews.length;
 				} else {
 					continue;
 				}
@@ -2138,6 +2140,7 @@ export const pages: Chat.PageTable = {
 				buf += `No reviews to display.`;
 				return buf;
 			}
+			buf = buf.replace('{{total}}', `${total}`);
 			return buf;
 		},
 		review() {
