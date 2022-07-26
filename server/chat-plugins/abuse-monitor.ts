@@ -454,6 +454,10 @@ const punishmentHandlers: Record<string, PunishmentHandler> = {
 		globalModlog('WARN', user, reason, room);
 		addGlobalModAction(`${user.name} was warned by Artemis (${reason})`, room);
 		addLogButton(room);
+		const punishments = punishmentCache.get(user) || {};
+		if (!punishments['WARN']) punishments['WARN'] = 0;
+		punishments['WARN']++;
+		punishmentCache.set(user, punishments);
 
 		room.add(`|c|&|/raw ${DISCLAIMER}`).update();
 		room.hideText([user.id], undefined, true);
