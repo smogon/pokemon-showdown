@@ -286,7 +286,7 @@ export async function runActions(user: User, room: GameRoom, message: string, re
 	}
 	if (recommended.length) {
 		Utils.sortBy(recommended, ([punishment]) => -PUNISHMENTS.indexOf(punishment));
-		if (recommended.every(k => k[2])) {
+		if (recommended.filter(k => k[1] !== 'MUTE').every(k => k[2])) {
 			// requiresPunishment is for upgrading. if every one is an upgrade and
 			// there's no independent punishment, do not upgrade it
 			return;
@@ -539,6 +539,9 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 		for (const k in settings.replacements) {
 			message = message.replace(new RegExp(k, 'gi'), settings.replacements[k]);
 		}
+
+		message = message.replace(pokemonRegex, '[Pokemon]');
+
 		const response = await classifier.classify(message);
 		const {score, flags, main} = makeScore(roomid, response || {});
 		if (score) {
@@ -650,6 +653,10 @@ function saveSettings(path?: string) {
 function saveReviews() {
 	FS(`config/chat-plugins/artemis-reviews.json`).writeUpdate(() => JSON.stringify(reviews));
 }
+
+export const pokemonRegex = new RegExp( // we want only base formes and existent stuff
+	`(${Dex.species.all().filter(s => !s.forme && !s.isNonstandard).map(f => f.id).join('|')})`, 'gi'
+);
 
 export let lastLogTime: number = Chat.oldPlugins['abuse-monitor']?.lastLogTime || 0;
 
