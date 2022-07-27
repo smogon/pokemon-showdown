@@ -1558,7 +1558,7 @@ export class RandomTeams {
 			// For Scrafty
 			return moves.has('dragondance');
 		case 'Sheer Force':
-			return (!counter.get('sheerforce') || abilities.has('Guts'));
+			return (!counter.get('sheerforce') || abilities.has('Guts') || (species.id === 'druddigon' && !isDoubles));
 		case 'Shell Armor':
 			return (species.id === 'omastar' && (moves.has('spikes') || moves.has('stealthrock')));
 		case 'Slush Rush':
@@ -1831,6 +1831,9 @@ export class RandomTeams {
 			((counter.get('Physical') >= 3 && moves.has('defog')) || (counter.get('Special') >= 3 && moves.has('healingwish'))) &&
 			!counter.get('priority') && !moves.has('uturn')
 		) return 'Choice Scarf';
+
+		// Palkia sometimes wants Choice items instead
+		if (species.name === 'Palkia') return 'Lustrous Orb';
 
 		// Other items
 		if (
@@ -2401,7 +2404,7 @@ export class RandomTeams {
 			case 'Arceus': case 'Silvally':
 				if (this.randomChance(8, 9) && !isMonotype) continue;
 				break;
-			case 'Aegislash': case 'Basculin': case 'Gourgeist': case 'Meloetta':
+			case 'Aegislash': case 'Basculin': case 'Gourgeist': case 'Meloetta': case 'Rotom':
 				if (this.randomChance(1, 2)) continue;
 				break;
 			case 'Greninja':
