@@ -655,7 +655,7 @@ function saveReviews() {
 }
 
 export const pokemonRegex = new RegExp( // we want only base formes and existent stuff
-	`(${Dex.species.all().filter(s => !s.forme && !s.isNonstandard).map(f => f.id).join('|')})`, 'gi'
+	`(${Dex.species.all().filter(s => !s.forme && s.num > 0).map(f => f.id).join('|')})`, 'gi'
 );
 
 export let lastLogTime: number = Chat.oldPlugins['abuse-monitor']?.lastLogTime || 0;
