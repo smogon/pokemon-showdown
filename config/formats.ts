@@ -291,6 +291,17 @@ export const Formats: FormatList = [
 		restricted: ['Restricted Legendary'],
 	},
 	{
+		name: "[Gen 8] I Choose 'Chu!",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3705481/">I Choose 'Chu! Discussion</a>`,
+		],
+
+		mod: 'gen8',
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
+		banlist: ['All Pokemon'],
+		unbanlist: ['Pichu', 'Pikachu', 'Raichu'],
+	},
+	{
 		name: "[Gen 8] Custom Game",
 
 		mod: 'gen8',
@@ -452,18 +463,6 @@ export const Formats: FormatList = [
 				return [`${set.name || set.species} has illegal moves.`, `(Pok\u00e9mon can only have one Metronome in their moveset)`];
 			}
 		},
-	},
-	{
-		name: "[Gen 8] Jump! Magikarp!",
-		desc: `Every team must contain Magikarp and bring it to the game.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3704588/">Jump! Magikarp!</a>`,
-		],
-
-		mod: 'gen8',
-		gameType: 'doubles',
-		ruleset: ['Flat Rules', '!! Picked Team Size = 2', '!! Adjust Level = 50', 'Min Source Gen = 8', 'Force Select = Magikarp'],
-		banlist: ['Sub-Legendary'],
 	},
 	{
 		name: "[Gen 8] Doubles Custom Game",
