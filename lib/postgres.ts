@@ -91,12 +91,15 @@ export class PostgresDatabase {
 			const stored = await this.query(
 				`SELECT value FROM db_info WHERE key = 'version' AND name = $1`, [opts.table]
 			);
-			if (stored.length) { // should always exist if there's a result, so
-				value = stored[0].value;
+			if (stored.length) {
+				value = stored[0].value || "0";
 			}
 		} catch (e) {
 			await this.query(`CREATE TABLE db_info (name TEXT NOT NULL, key TEXT NOT NULL, value TEXT NOT NULL)`);
-			value = '0';
+		}
+		if (!value) { // means nothing inserted - create row
+			value = "0";
+			await this.query('INSERT INTO db_info (name, key, value) VALUES ($1, $2, $3)', [opts.table, 'version', value]);
 		}
 		value = Number(value);
 		const files = FS(opts.migrationsFolder)
@@ -105,6 +108,7 @@ export class PostgresDatabase {
 			.map(f => Number(f.slice(1).split('.')[0]));
 		Utils.sortBy(files, f => f);
 		const curVer = files[files.length - 1] || 0;
+		console.log({curVer, files, value});
 		if (curVer !== value) {
 			if (!value) {
 				try {
