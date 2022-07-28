@@ -1279,28 +1279,11 @@ export class GlobalRoomState {
 		let count = 0;
 		if (!Config.usepostgres) return 0;
 		const logDatabase = new PostgresDatabase();
-		let [{value}] = await logDatabase.query(`SELECT value FROM battle_db_info WHERE key = 'version'`).catch(
-			() => [{value: "0"}]
-		);
-		value = Number(value);
-		const files = FS(`databases/migrations/storedbattles`)
-			.readdirSync()
-			.map(f => Number(f.slice(1).split('.')[0]));
-		Utils.sortBy(files, f => -f);
-		const curVer = files.length + 1;
-		if (curVer !== value) {
-			if (!value) {
-				try {
-					await logDatabase.query(`SELECT * FROM stored_battles LIMIT 1`);
-				} catch {
-					await logDatabase.query(FS(`databases/schemas/stored-battles.sql`).readSync());
-				}
-			}
-			for (const n of files) {
-				if (n <= value) continue;
-				await logDatabase.query(FS(`databases/migrations/storedbattles/v${n}.sql`).readSync());
-			}
-		}
+		await logDatabase.ensureMigrated({
+			table: 'stored_battles',
+			migrationsFolder: 'databases/migrations/storedbattles',
+			baseSchemaFile: 'databases/schemas/stored-battles.sql',
+		});
 		for (const room of Rooms.rooms.values()) {
 			if (!room.battle || room.battle.ended) continue;
 			room.battle.frozen = true;
