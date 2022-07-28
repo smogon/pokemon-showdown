@@ -108,7 +108,6 @@ export class PostgresDatabase {
 			.map(f => Number(f.slice(1).split('.')[0]));
 		Utils.sortBy(files, f => f);
 		const curVer = files[files.length - 1] || 0;
-		console.log({curVer, files, value});
 		if (curVer !== value) {
 			if (!value) {
 				try {
