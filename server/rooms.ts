@@ -1279,6 +1279,11 @@ export class GlobalRoomState {
 		let count = 0;
 		if (!Config.usepostgres) return 0;
 		const logDatabase = new PostgresDatabase();
+		await logDatabase.ensureMigrated({
+			table: 'stored_battles',
+			migrationsFolder: 'databases/migrations/storedbattles',
+			baseSchemaFile: 'databases/schemas/stored-battles.sql',
+		});
 		for (const room of Rooms.rooms.values()) {
 			if (!room.battle || room.battle.ended) continue;
 			room.battle.frozen = true;
@@ -1292,51 +1297,89 @@ export class GlobalRoomState {
 				}
 			}
 			if (!players.length || !log?.length) continue; // shouldn't happen???
+			const timerData = {
+				...room.battle.timer.settings,
+				active: !!room.battle.timer.timer || false,
+			};
 			await logDatabase.query(
-				`INSERT INTO stored_battles (roomid, input_log, players, title) VALUES ($1, $2, $3, $4)` +
+				`INSERT INTO stored_battles (roomid, input_log, players, title, rated, timer) VALUES ($1, $2, $3, $4, $5, $6)` +
 				` ON CONFLICT (roomid) DO UPDATE ` +
-				`SET input_log = EXCLUDED.input_log, players = EXCLUDED.players, title = EXCLUDED.title`,
-				[room.roomid, log.join('\n'), players, room.title]
+				`SET input_log = EXCLUDED.input_log, players = EXCLUDED.players, title = EXCLUDED.title, rated = EXCLUDED.rated`,
+				[room.roomid, log.join('\n'), players, room.title, room.battle.rated, timerData]
 			);
 			count++;
 		}
 		return count;
 	}
 
+	battlesLoading?: boolean;
 	async loadBattles() {
 		if (!Config.usepostgres) return;
+		this.battlesLoading = true;
+		for (const u of Users.users.values()) {
+			u.send(
+				`|pm|&|${u.getIdentity()}|/uhtml restartmsg,` +
+				`<div class="broadcast-red"><b>Your battles are currently being restored.<br />Please be patient as they load.</div>`
+			);
+		}
 		const logDatabase = new PostgresDatabase();
 		const query = `DELETE FROM stored_battles WHERE roomid IN (SELECT roomid FROM stored_battles LIMIT 1) RETURNING *`;
 		for await (const battle of logDatabase.stream(query)) {
-			const {input_log, players, roomid, title} = battle;
+			const {input_log, players, roomid, title, rated, timer} = battle;
 			const [, formatid] = roomid.split('-');
 			const room = Rooms.createBattle({
 				format: formatid,
 				inputLog: input_log,
 				roomid,
 				title,
+				rated: Number(rated),
 				players,
 				delayedStart: true,
+				delayedTimer: timer.active,
+				restored: true,
 			});
 			if (!room || !room.battle) continue; // shouldn't happen???
 			room.battle.start();
+			if (timer) { // json blob of settings
+				Object.assign(room.battle.timer.settings, timer);
+			}
 			for (const [i, p] of players.entries()) {
 				room.auth.set(p, Users.PLAYER_SYMBOL);
 				const u = Users.getExact(p);
 				if (u) {
-					u.joinRoom(room);
-					room.battle.joinGame(u, `p${i + 1}` as SideID);
+					this.rejoinBattle(room, u, i);
 				}
 			}
 		}
+		for (const u of Users.users.values()) {
+			u.send(`|pm|&|${u.getIdentity()}|/uhtmlchange restartmsg,`);
+		}
+		delete this.battlesLoading;
+	}
+
+	rejoinBattle(room: GameRoom, user: User, idx: number) {
+		if (!room.battle) return;
+		// we reuse these player objects explicitly so if
+		// someone has already started the timer, their settings carry over (should reduce bugs)
+		// and it's safe to do this first because we know these users were already in the battle
+		room.battle.players[idx].id = user.id;
+		room.battle.playerTable[user.id] = room.battle.players[idx];
+		user.joinRoom(room.roomid);
+		// force update panel
+		room.battle.onConnect(user);
+		if (room.battle.options.delayedTimer && !room.battle.timer.timer) {
+			room.battle.timer.start();
+		}
+		user.send(`|pm|&|${user.getIdentity()}|/uhtmlchange restartmsg,`);
 	}
 
 	joinOldBattles(user: User) {
 		for (const room of Rooms.rooms.values()) {
-			const idx = room.battle?.options.players?.indexOf(user.id);
+			const battle = room.battle;
+			if (!battle) continue;
+			const idx = battle.options.players?.indexOf(user.id);
 			if (typeof idx === 'number' && idx > -1) {
-				user.joinRoom(room.roomid);
-				room.battle!.joinGame(user, `p${idx + 1}` as SideID);
+				this.rejoinBattle(room, user, idx);
 			}
 		}
 	}
@@ -1649,6 +1692,12 @@ export class GlobalRoomState {
 		if (Users.users.size > this.maxUsers) {
 			this.maxUsers = Users.users.size;
 			this.maxUsersDate = Date.now();
+		}
+		if (this.battlesLoading) {
+			connection.send(
+				`|pm|&|${user.getIdentity()}|/uhtml restartmsg,` +
+				`<div class="broadcast-red"><b>Your battles are currently being restored.<br />Please be patient as they load.</div>`
+			);
 		}
 	}
 	startLockdown(err: Error | null = null, slow = false) {

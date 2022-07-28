@@ -490,6 +490,9 @@ export interface RoomBattleOptions {
 	seed?: PRNGSeed;
 	roomid?: RoomID;
 	players?: ID[];
+	/** For battles restored after a restart */
+	delayedTimer?: boolean;
+	restored?: boolean;
 }
 
 export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {

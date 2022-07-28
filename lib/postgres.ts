@@ -8,6 +8,14 @@
 import type * as PG from 'pg';
 import type {SQLStatement} from 'sql-template-strings';
 import * as Streams from './streams';
+import {FS} from './fs';
+import * as Utils from './utils';
+
+interface MigrationOptions {
+	table: string;
+	migrationsFolder: string;
+	baseSchemaFile: string;
+}
 
 export class PostgresDatabase {
 	private pool: PG.Pool;
@@ -76,5 +84,37 @@ export class PostgresDatabase {
 				this.buf.push(...result);
 			},
 		});
+	}
+	async ensureMigrated(opts: MigrationOptions) {
+		let value;
+		try {
+			[{value}] = await this.query(`SELECT value FROM db_info WHERE key = 'version' AND name = $1`, [opts.table]);
+		} catch {
+			await this.query(`CREATE TABLE db_info (name TEXT NOT NULL, key TEXT NOT NULL, value TEXT NOT NULL)`);
+			value = '0';
+		}
+		value = Number(value);
+		const files = FS(opts.migrationsFolder)
+			.readdirSync()
+			.filter(f => f.endsWith('.sql'))
+			.map(f => Number(f.slice(1).split('.')[0]));
+		Utils.sortBy(files, f => f);
+		const curVer = files[files.length - 1] || 0;
+		if (curVer !== value) {
+			if (!value) {
+				try {
+					await this.query(`SELECT * FROM ${opts.table} LIMIT 1`);
+				} catch {
+					await this.query(FS(opts.baseSchemaFile).readSync());
+				}
+			}
+			for (const n of files) {
+				if (n <= value) continue;
+				await this.query(FS(`${opts.migrationsFolder}/v${n}.sql`).readSync());
+				await this.query(
+					`UPDATE db_info SET value = $1 WHERE key = 'version' AND name = $2`, [`${n}`, opts.table]
+				);
+			}
+		}
 	}
 }
