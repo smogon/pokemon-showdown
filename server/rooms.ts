@@ -1339,12 +1339,16 @@ export class GlobalRoomState {
 				restored: true,
 			});
 			if (!room || !room.battle) continue; // shouldn't happen???
+			room.battle.started = true; // so that timer works
 			room.battle.start();
 			if (timer) { // json blob of settings
 				Object.assign(room.battle.timer.settings, timer);
 			}
 			for (const [i, p] of players.entries()) {
 				room.auth.set(p, Users.PLAYER_SYMBOL);
+				const player = room.battle.players[i];
+				player.id = p;
+				player.name = p; // temp for if they get timed out before they connect
 				const u = Users.getExact(p);
 				if (u) {
 					this.rejoinBattle(room, u, i);
@@ -1362,8 +1366,10 @@ export class GlobalRoomState {
 		// we reuse these player objects explicitly so if
 		// someone has already started the timer, their settings carry over (should reduce bugs)
 		// and it's safe to do this first because we know these users were already in the battle
-		room.battle.players[idx].id = user.id;
-		room.battle.playerTable[user.id] = room.battle.players[idx];
+		const player = room.battle.players[idx];
+		player.id = user.id;
+		player.name = user.name;
+		room.battle.playerTable[user.id] = player;
 		user.joinRoom(room.roomid);
 		// force update panel
 		room.battle.onConnect(user);
