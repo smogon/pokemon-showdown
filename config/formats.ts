@@ -298,7 +298,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
-		banlist: ['All Pokemon'],
+		banlist: ['All Pokemon', 'Raichu-Alola + Sing'],
 		unbanlist: ['Pichu', 'Pikachu', 'Raichu'],
 	},
 	{
