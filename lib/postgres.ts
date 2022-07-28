@@ -88,8 +88,13 @@ export class PostgresDatabase {
 	async ensureMigrated(opts: MigrationOptions) {
 		let value;
 		try {
-			[{value}] = await this.query(`SELECT value FROM db_info WHERE key = 'version' AND name = $1`, [opts.table]);
-		} catch {
+			const stored = await this.query(
+				`SELECT value FROM db_info WHERE key = 'version' AND name = $1`, [opts.table]
+			);
+			if (stored.length) { // should always exist if there's a result, so
+				value = stored[0].value;
+			}
+		} catch (e) {
 			await this.query(`CREATE TABLE db_info (name TEXT NOT NULL, key TEXT NOT NULL, value TEXT NOT NULL)`);
 			value = '0';
 		}
