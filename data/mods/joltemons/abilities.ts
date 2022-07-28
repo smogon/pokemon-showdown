@@ -36,7 +36,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			return this.chainModify(2);
 		},
 		name: "Light Power",
-    shortDesc: "This Pokemon's Special Attack is doubled.",
+	shortDesc: "This Pokemon's Special Attack is doubled.",
 		rating: 5,
 	},
 	raindish: {
@@ -52,7 +52,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Rain Dish",
-    shortDesc: "Heals 6.25% of user's max HP at the end of each turn. Heals 12.5% in Rain.",
+	shortDesc: "Heals 6.25% of user's max HP at the end of each turn. Heals 12.5% in Rain.",
 		num: 44,
 		rating: 3,
 	},
@@ -69,13 +69,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Ice Body",
-    shortDesc: "Heals 6.25% of user's max HP at the end of each turn. Heals 12.5% in Hail.",
+	shortDesc: "Heals 6.25% of user's max HP at the end of each turn. Heals 12.5% in Hail.",
 		num: 115,
 		rating: 3,
 	},
 	sweetveil: {
 		name: "Sweet Veil",
-      shortDesc: "This Pokemon and its allies can't fall asleep. This Pokemon heals 1/8 of its max HP if it's holding Honey.",
+	  shortDesc: "This Pokemon and its allies can't fall asleep. This Pokemon heals 1/8 of its max HP if it's holding Honey.",
 		onAllySetStatus(status, target, source, effect) {
 			if (status.id === 'slp') {
 				this.debug('Sweet Veil interrupts sleep');
@@ -103,7 +103,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: 175,
 	},
 	libero: {
-      shortDesc: "Non-STAB moves have 1.2x power.",
+	  shortDesc: "Non-STAB moves have 1.2x power.",
 		onBasePowerPriority: 23,
 		onBasePower (basePower, pokemon, target, move) {
 			if (!pokemon.hasType(move.type)) {
@@ -114,28 +114,28 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 4.5,
 		num: 236,
 	},
-    moody: {
-      shortDesc: "This Pokemon's lowest stat goes up by 1 every turn.",
-        onResidualOrder: 26,
-        onResidualSubOrder: 1,
-        onResidual(pokemon) {
-            if (pokemon.activeTurns) {
-            let statName = 'atk';
-            let worstStat = 3000; //The highest possible stat number (with boosts) is 2,676
-            let s: StatNameExceptHP;
-            for (s in pokemon.storedStats) {
-                if (pokemon.storedStats[s] < worstStat) {
-                    statName = s;
-                    worstStat = pokemon.storedStats[s];
-                }
-            }
-            this.boost({[statName]: 1}, pokemon);
-            }
-        },
-        name: "Moody",
-        rating: 3,
-        num: 141,
-    },
+	moody: {
+	  shortDesc: "This Pokemon's lowest stat goes up by 1 every turn.",
+		onResidualOrder: 26,
+		onResidualSubOrder: 1,
+		onResidual(pokemon) {
+			if (pokemon.activeTurns) {
+			let statName = 'atk';
+			let worstStat = 3000; //The highest possible stat number (with boosts) is 2,676
+			let s: StatNameExceptHP;
+			for (s in pokemon.storedStats) {
+				if (pokemon.storedStats[s] < worstStat) {
+					statName = s;
+					worstStat = pokemon.storedStats[s];
+				}
+			}
+			this.boost({[statName]: 1}, pokemon);
+			}
+		},
+		name: "Moody",
+		rating: 3,
+		num: 141,
+	},
 	stickyhold: {
 		onTakeItem(item, pokemon, source) {
 			if (this.suppressingAttackEvents(pokemon) || !pokemon.hp || pokemon.item === 'stickybarb') return;
@@ -383,7 +383,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	  },
 	  name: "Buzz Off",
 	  rating: 4.5,
-    },
+	},
 	magmaarmor: {
 		onUpdate(pokemon) {
 			if (pokemon.status === 'frz') {
@@ -668,7 +668,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	vaporcontrol: {
 		onUpdate(pokemon) {
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather()) && !pokemon.side.getSideCondition('mist')) {
-           	this.useMove("Mist", pokemon);
+		   	this.useMove("Mist", pokemon);
 			}
 		},
 		onBasePowerPriority: 21,
@@ -1615,12 +1615,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Eviolith",
 	},
 	momentumarmor: {
-        onModifyAtkPriority: 1,
-        onModifyAtk(atk, pokemon) {
-          const def = pokemon.getStat('def', false, true);
-          const newAtk = atk + (def / 4);
-          return newAtk;
-        },
+		onModifyAtkPriority: 1,
+		onModifyAtk(atk, pokemon) {
+		  const def = pokemon.getStat('def', false, true);
+		  const newAtk = atk + (def / 4);
+		  return newAtk;
+		},
 		name: "Momentum Armor",
 	},
 	shellbell: {
