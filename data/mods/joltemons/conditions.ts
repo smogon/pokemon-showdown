@@ -1,5 +1,5 @@
 export const Conditions: {[k: string]: ConditionData} = {
-  silvally: {
+	silvally: {
 		name: 'Silvally',
 		onTypePriority: 1,
 		onType(types, pokemon) {
