@@ -3,7 +3,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'Silvally',
 		onTypePriority: 1,
 		onType(types, pokemon) {
-			if (pokemon.transformed || (pokemon.ability !== 'rkssystem' || pokemon.ability !== 'powerofalchemysilvally') && this.gen >= 8) return types;
+			if (pokemon.transformed || !(pokemon.ability === 'rkssystem' || pokemon.ability === 'powerofalchemysilvally') && this.gen >= 8) return types;
 			let type: string | undefined = 'Normal';
 			if (pokemon.ability === 'rkssystem' || pokemon.ability === 'powerofalchemysilvally') {
 				type = pokemon.getItem().onMemory;
@@ -25,7 +25,8 @@ export const Conditions: {[k: string]: ConditionData} = {
 			return 5;
 		},
 		onWeatherModifyDamage(damage, attacker, defender, move) {
-			if (defender.hasItem('utilityumbrella') || attacker.hasItem('utilityumbrella') || defender.hasAbility('utilityumbrella') || attacker.hasAbility('utilityumbrella')) return;
+			if (defender.hasItem('utilityumbrella') || attacker.hasItem('utilityumbrella') ||
+				defender.hasAbility('utilityumbrella') || attacker.hasAbility('utilityumbrella')) return;
 			if (move.type === 'Water') {
 				this.debug('rain water boost');
 				return this.chainModify(1.5);
@@ -58,7 +59,8 @@ export const Conditions: {[k: string]: ConditionData} = {
 		duration: 0,
 		onTryMovePriority: 1,
 		onTryMove(attacker, defender, move) {
-			if (move.type === 'Fire' && move.category !== 'Status' && !attacker.hasItem('utilityumbrella') && !attacker.hasAbility('utilityumbrella')) {
+			if (move.type === 'Fire' && move.category !== 'Status' &&
+				!attacker.hasItem('utilityumbrella') && !attacker.hasAbility('utilityumbrella')) {
 				this.debug('Primordial Sea fire suppress');
 				this.add('-fail', attacker, move, '[from] Primordial Sea');
 				this.attrLastMove('[still]');
@@ -66,7 +68,8 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onWeatherModifyDamage(damage, attacker, defender, move) {
-			if (defender.hasItem('utilityumbrella') || attacker.hasItem('utilityumbrella') || defender.hasAbility('utilityumbrella') || attacker.hasAbility('utilityumbrella')) return;
+			if (defender.hasItem('utilityumbrella') || attacker.hasItem('utilityumbrella') ||
+				defender.hasAbility('utilityumbrella') || attacker.hasAbility('utilityumbrella')) return;
 			if (move.type === 'Water') {
 				this.debug('Rain water boost');
 				return this.chainModify(1.5);
@@ -95,7 +98,8 @@ export const Conditions: {[k: string]: ConditionData} = {
 			return 5;
 		},
 		onWeatherModifyDamage(damage, attacker, defender, move) {
-			if (defender.hasItem('utilityumbrella') || attacker.hasItem('utilityumbrella') || defender.hasAbility('utilityumbrella') || attacker.hasAbility('utilityumbrella')) return;
+			if (defender.hasItem('utilityumbrella') || attacker.hasItem('utilityumbrella') ||
+				defender.hasAbility('utilityumbrella') || attacker.hasAbility('utilityumbrella')) return;
 			if (move.type === 'Fire') {
 				this.debug('Sunny Day fire boost');
 				return this.chainModify(1.5);
@@ -132,7 +136,8 @@ export const Conditions: {[k: string]: ConditionData} = {
 		duration: 0,
 		onTryMovePriority: 1,
 		onTryMove(attacker, defender, move) {
-			if (move.type === 'Water' && move.category !== 'Status' && !attacker.hasItem('utilityumbrella') && !attacker.hasAbility('utilityumbrella')) {
+			if (move.type === 'Water' && move.category !== 'Status' &&
+				!attacker.hasItem('utilityumbrella') && !attacker.hasAbility('utilityumbrella')) {
 				this.debug('Desolate Land water suppress');
 				this.add('-fail', attacker, move, '[from] Desolate Land');
 				this.attrLastMove('[still]');
@@ -140,7 +145,8 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onWeatherModifyDamage(damage, attacker, defender, move) {
-			if (defender.hasItem('utilityumbrella') || attacker.hasItem('utilityumbrella') || defender.hasAbility('utilityumbrella') || attacker.hasAbility('utilityumbrella')) return;
+			if (defender.hasItem('utilityumbrella') || attacker.hasItem('utilityumbrella') ||
+				defender.hasAbility('utilityumbrella') || attacker.hasAbility('utilityumbrella')) return;
 			if (move.type === 'Fire') {
 				this.debug('Sunny Day fire boost');
 				return this.chainModify(1.5);
