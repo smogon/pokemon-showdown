@@ -120,16 +120,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
 			if (pokemon.activeTurns) {
-			let statName = 'atk';
-			let worstStat = 3000; //The highest possible stat number (with boosts) is 2,676
-			let s: StatNameExceptHP;
-			for (s in pokemon.storedStats) {
-				if (pokemon.storedStats[s] < worstStat) {
+				let statName = 'atk';
+				let worstStat = 3000; //The highest possible stat number (with boosts) is 2,676
+				let s: StatNameExceptHP;
+				for (s in pokemon.storedStats) {
+					if (pokemon.storedStats[s] >= worstStat) continue;
 					statName = s;
 					worstStat = pokemon.storedStats[s];
 				}
-			}
-			this.boost({[statName]: 1}, pokemon);
+				this.boost({[statName]: 1}, pokemon);
 			}
 		},
 		name: "Moody",
@@ -162,7 +161,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: 60,
 	},
 	watercompaction: {
-			shortDesc: "This Pokemon's Defense goes up 2 stages when hit by a Water-type move; Water immunity",
+		shortDesc: "This Pokemon's Defense goes up 2 stages when hit by a Water-type move; Water immunity.",
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Water') {
@@ -204,7 +203,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			shortDesc: "This Pokemon's moves that lower its stats have 1.3x power.",
 		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
-			if (move.name === 'Draco Meteor' || move.name === 'Fleur Cannon' || move.name === 'Leaf Storm' || move.name === 'Overheat' || move.name === 'Psycho Boost' || move.name === 'Superpower' || move.name === 'Lightning Lance' || move.name === 'Clanging Scales' || move.name === 'Close Combat' || move.name === 'Dragon Ascent' || move.name === 'Hyperspace Fury' || move.name === 'Scale Shot' || move.name === 'V-Create' || move.name === 'Hammer Arm' || move.name === 'Ice Hammer') {
+			const statLoweringMoves = [
+				'Draco Meteor', 'Fleur Cannon', 'Leaf Storm', 'Overheat', 'Psycho Boost', 'Superpower',
+				'Lightning Lance', 'Clanging Scales', 'Close Combat', 'Dragon Ascent', 'Hyperspace Fury',
+				'Scale Shot', 'V-create', 'Hammer Arm', 'Ice Hammer',
+			];
+			if (statLoweringMoves.includes(move.name)) {
 				return this.chainModify(1.3);
 			}
 		},
@@ -215,12 +219,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			shortDesc: "This Pokemon sets a layer of Spikes when hit by a contact move, or Toxic Spikes if it's a Poison-type or hit by a Poison-type move.",
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
-			if (move.flags['contact'] && (move.type === 'Poison' || target.hasType('Poison'))) {
+			if (move.flags['contact']) {
 				this.add('-ability', target, 'Prickly Coat');
-				target.side.foe.addSideCondition('toxicspikes');
-			} else {
-				if (move.flags['contact']) {
-					this.add('-ability', target, 'Prickly Coat');
+				if (move.type === 'Poison' || target.hasType('Poison')) {
+					target.side.foe.addSideCondition('toxicspikes');
+				} else {
 					target.side.foe.addSideCondition('spikes');
 				}
 			}
@@ -303,7 +306,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	merciless: {
 			shortDesc: "This Pokemon's attacks are critical hits if the target is statused.",
 		onModifyCritRatio(critRatio, source, target) {
-			if (target && ['psn', 'tox', 'brn', 'frz', 'slp', 'par'].includes(target.status)) return 5;
+			if (target?.status) return 5;
 		},
 		name: "Merciless",
 		rating: 1.5,
@@ -374,15 +377,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 4,
 	},
 	buzzoff: {
-	  	shortDesc: "This Pokemon switches out after using a Bug-type move.",
-	  onModifyMove(move, pokemon) {
+		shortDesc: "This Pokemon switches out after using a Bug-type move.",
+		onModifyMove(move, pokemon) {
 			if (move.type === 'Bug') {
-			  move.selfSwitch = true;
-			  this.add('-ability', pokemon, 'Buzz Off');
+				move.selfSwitch = true;
+				this.add('-ability', pokemon, 'Buzz Off');
 			}
-	  },
-	  name: "Buzz Off",
-	  rating: 4.5,
+		},
+		name: "Buzz Off",
+		rating: 4.5,
 	},
 	magmaarmor: {
 		onUpdate(pokemon) {
@@ -392,8 +395,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onImmunity(type, pokemon) {
-			if (type === ('hail')) return false;
-			if (type === ('frz')) return false;
+			if (type === 'hail') return false;
+			if (type === 'frz') return false;
 		},
 		onSourceModifyAtkPriority: 6,
 		onSourceModifyAtk(atk, attacker, defender, move) {
@@ -469,7 +472,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if ((pokemon.side.foe.active.some(
 				foeActive => foeActive && this.isAdjacent(pokemon, foeActive) && foeActive.ability === 'noability'
 			))
-			|| pokemon.species.id !== 'spiritomb' && pokemon.species.id !== 'spectrier' && pokemon.species.id !== 'yamaskgalar' && pokemon.species.id !== 'runerigus' && pokemon.species.id !== 'cofagrigus' && pokemon.species.id !== 'cacturne' && pokemon.species.id !== 'hoopa' && pokemon.species.id !== 'marowak' && pokemon.species.id !== 'rotom') {
+			|| ![
+				'spiritomb', 'spectrier', 'yamaskgalar', 'runerigus', 'cofagrigus', 'cacturne', 'hoopa', 'marowak', 'rotom',
+			].includes(pokemon.species.id)) {
 				this.effectData.gaveUp = true;
 			}
 		},
@@ -575,8 +580,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 4.5,
 		num: 184,
 	},
-  scavenge: {
-			shortDesc: "This Pokemon's heals 33% of its HP when another Pokemon faints.",
+	scavenge: {
+		shortDesc: "This Pokemon's heals 33% of its HP when another Pokemon faints.",
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.add('-activate', source, 'ability: Scavenge'); 
@@ -589,13 +594,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	unimpressed: {
 			shortDesc: "Moves used against this Pokemon don't receive STAB.",
 		onSourceModifyDamage(damage, source, target, move) {
-			if (source.hasType(move.type) && (!source.hasAbility('adaptability'))) {
+			if (source.hasType(move.type)) {
 				this.debug('Unimpressed weaken');
-				return this.chainModify(0.67);
-			}
-			if (source.hasType(move.type) && (source.hasAbility('adaptability'))) {
-				this.debug('Unimpressed weaken');
-				return this.chainModify(0.5);
+				return this.chainModify(source.hasAbility('adaptability') ? 0.5 : 0.67);
 			}
 		},
 		name: "Unimpressed",
@@ -620,7 +621,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				const item = target.getItem();
 				const additionalBannedItems = [
 					// Zen Mode included here for compatability with Gen 5-6
-					'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode',
+					'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter',
+					'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode',
 				];
 				if (!this.singleEvent('TakeItem', item, target.itemData, target, target, item) || additionalBannedItems.includes(target.item)) {
 					possibleTargets.splice(rand, 1);
@@ -673,19 +675,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
-			if (this.field.isWeather('sunnyday') || this.field.isWeather('desolateland')) {
-				if (move.type === 'Water') {
-					this.debug('Vapor Control boost');
+			if ((this.field.isWeather('sunnyday') || this.field.isWeather('desolateland')) &&
+				move.type === 'Water') {
+				this.debug('Vapor Control boost');
 				return this.chainModify(1.5);
-				}
 			}
 		},
 			shortDesc: "If Sun is active, 1.5x power Water moves and sets Mist; Ignores Sun Water drop.",
 		name: "Vapor Control",
 		rating: 3,
 	},
-
-// Edited by proxy
+	// Edited by proxy
 	oblivious: {
 		onUpdate(pokemon) {
 			if (pokemon.volatiles['attract']) {
@@ -754,7 +754,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				const ability = target.getAbility();
 				const additionalBannedAbilities = [
 					// Zen Mode included here for compatability with Gen 5-6
-					'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode', 'wanderingspirit',
+					'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas',
+					'powerofalchemy', 'receiver', 'trace', 'zenmode', 'wanderingspirit',
 				];
 				if (target.getAbility().isPermanent || additionalBannedAbilities.includes(target.ability)) {
 					possibleTargets.splice(rand, 1);
@@ -775,7 +776,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			shortDesc: "While this Pokemon is active, the opponents' held items have no effect.",
 		onStart(source) {
 			let activated = false;
-			for (const pokemon of source.side.foe.active) {
+			for (const pokemon of source.foes()) {
 				if (!activated) {
 					this.add('-ability', source, 'Concussion');
 				}
@@ -788,7 +789,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onAnySwitchIn(pokemon) {
 			const source = this.effectData.target;
 			if (pokemon === source) return;
-			for (const target of source.side.foe.active) {
+			for (const target of source.foes()) {
 				if (!target.volatiles['embargo'] && !target.hasItem('morningblossom')) {
 					target.addVolatile('embargo');
 				}
@@ -796,7 +797,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onEnd(pokemon) {
 			const source = this.effectData.target;
-			for (const target of source.side.foe.active) {
+			for (const target of source.foes()) {
 				target.removeVolatile('embargo');
 			}
 		},
@@ -807,7 +808,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			shortDesc: "While this Pokemon is active, the opponents' held items have no effect.",
 		onStart(source) {
 			let activated = false;
-			for (const pokemon of source.side.foe.active) {
+			for (const pokemon of source.foes()) {
 				if (!activated) {
 					this.add('-ability', source, 'Gorilla Tactics');
 				}
@@ -820,7 +821,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onAnySwitchIn(pokemon) {
 			const source = this.effectData.target;
 			if (pokemon === source) return;
-			for (const target of source.side.foe.active) {
+			for (const target of source.foes()) {
 				if (!target.volatiles['embargo'] && !target.hasItem('morningblossom')) {
 					target.addVolatile('embargo');
 				}
@@ -828,7 +829,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onEnd(pokemon) {
 			const source = this.effectData.target;
-			for (const target of source.side.foe.active) {
+			for (const target of source.foes()) {
 				target.removeVolatile('embargo');
 			}
 		},
@@ -883,10 +884,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 2.5,
 		num: 138,
 	},
-
-// The other Power of Alchemies
-		powerofalchemyweezing: {
-			shortDesc: "All of this Pokemon's abilities are active at once.",
+	// The other Power of Alchemies
+	powerofalchemyweezing: {
+		shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityData.ending = false;
@@ -919,8 +919,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Power of Alchemy (Weezing)",
 		rating: 5,
 	}, 
-		powerofalchemyalcremie: {
-			shortDesc: "All of this Pokemon's abilities are active at once.",
+	powerofalchemyalcremie: {
+		shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Power of Alchemy');
 		},
@@ -964,7 +964,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
 			if (pokemon.hasItem('honey')) {
-					this.heal(pokemon.baseMaxhp / 8);
+				this.heal(pokemon.baseMaxhp / 8);
 			}
 		},
 		isPermanent: true,
@@ -986,11 +986,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-ability', pokemon, 'Power of Alchemy');
 		},
 		onStart(pokemon) {
-			for (const ally of pokemon.side.active) {
-				if (ally !== pokemon) {
-					ally.clearBoosts();
-					this.add('-clearboost', ally, '[from] ability: Curious Medicine', '[of] ' + pokemon);
-				}
+			for (const ally of pokemon.allies()) {
+				ally.clearBoosts();
+				this.add('-clearboost', ally, '[from] ability: Curious Medicine', '[of] ' + pokemon);
 			}
 		},
 		onSwitchOut(pokemon) {
@@ -1115,7 +1113,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			let totaldef = 0;
 			let totalspd = 0;
-			for (const target of pokemon.side.foe.active) {
+			for (const target of pokemon.foes()) {
 				if (!target || target.fainted) continue;
 				totaldef += target.getStat('def', false, true);
 				totalspd += target.getStat('spd', false, true);
@@ -1172,12 +1170,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
-			if (move.flags['contact'] && (move.type === 'Poison' || target.hasType('Poison'))) {
+			if (move.flags['contact'])) {
 				this.add('-ability', target, 'Prickly Coat');
-				target.side.foe.addSideCondition('toxicspikes');
-			} else {
-				if (move.flags['contact']) {
-					this.add('-ability', target, 'Prickly Coat');
+				if (move.type === 'Poison' || target.hasType('Poison')) {
+					target.side.foe.addSideCondition('toxicspikes');
+				} else {
 					target.side.foe.addSideCondition('spikes');
 				}
 			}
@@ -1264,7 +1261,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-ability', pokemon, 'Power of Alchemy');
 		},
 		onModifyCritRatio(critRatio, source, target) {
-			if (target && ['psn', 'tox', 'brn', 'frz', 'slp', 'par'].includes(target.status)) return 5;
+			if (target?.status) return 5;
 		},
 		isPermanent: true,
 		name: "Power of Alchemy (Umbreon)",
@@ -1436,8 +1433,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Power of Alchemy (Sylveon)",
 		rating: 5,
 	},
-	
-// Counterfeit Stuff, never ask me for anything ever again
+	// Counterfeit Stuff, never ask me for anything ever again
 	lifeorb: {
 		onModifyDamage(damage, source, target, move) {
 				return this.chainModify(1.3);
@@ -1627,7 +1623,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onAfterMoveSecondarySelfPriority: -1,
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (move.category !== 'Status') {
-			this.heal(pokemon.baseMaxhp / 8);
+				this.heal(pokemon.baseMaxhp / 8);
 			}
 		},
 		name: "Shell Bell",
@@ -1719,7 +1715,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.heal(pokemon.baseMaxhp / 16);
 			}
 		},
-		onDisableMove: function(pokemon) {
+		onDisableMove(pokemon) {
 			if (!pokemon.hasType('Ghost') && pokemon.lastMove && pokemon.lastMove.id !== 'struggle') pokemon.disableMove(pokemon.lastMove.id);
 		},
 		name: "Reaper Cloth",
