@@ -66,32 +66,32 @@ export const Scripts: {[k: string]: ModdedBattleScriptsData} = {
 			if ('telekinesis' in this.volatiles) return false;
 			return item !== 'airballoon';
 		},
-        ignoringAbility() {
-            // Check if any active pokemon have the ability Neutralizing Gas
-            let neutralizinggas = false;
-            let powerofalchemyweezing = false;
-            for (const pokemon of this.battle.getAllActive()) {
-                // can't use hasAbility because it would lead to infinite recursion
-                if (pokemon.ability === ('neutralizinggas' as ID) || (pokemon.ability === ('powerofalchemyweezing' as ID) && !pokemon.volatiles['gastroacid'] && !pokemon.abilityData.ending)) {
-                    neutralizinggas = true;
-                    powerofalchemyweezing = true;
-                    break;
-                }
-            }
+		ignoringAbility() {
+			// Check if any active pokemon have the ability Neutralizing Gas
+			let neutralizinggas = false;
+			let powerofalchemyweezing = false;
+			for (const pokemon of this.battle.getAllActive()) {
+				// can't use hasAbility because it would lead to infinite recursion
+				if (pokemon.ability === ('neutralizinggas' as ID) || (pokemon.ability === ('powerofalchemyweezing' as ID) && !pokemon.volatiles['gastroacid'] && !pokemon.abilityData.ending)) {
+					neutralizinggas = true;
+					powerofalchemyweezing = true;
+					break;
+				}
+			}
 
-            return !!(
-                (this.battle.gen >= 5 && !this.isActive) ||
-                ((this.volatiles['gastroacid'] || (neutralizinggas && this.ability !== ('neutralizinggas' as ID)) || (powerofalchemyweezing && this.ability !== ('powerofalchemyweezing' as ID)) ) &&
-                !this.getAbility().isPermanent
-                )
-            );
-        },
+			return !!(
+				(this.battle.gen >= 5 && !this.isActive) ||
+				((this.volatiles['gastroacid'] || (neutralizinggas && this.ability !== ('neutralizinggas' as ID)) || (powerofalchemyweezing && this.ability !== ('powerofalchemyweezing' as ID)) ) &&
+				!this.getAbility().isPermanent
+				)
+			);
+		},
 		setStatus(
-        status: string | Condition,
-        source: Pokemon | null = null,
-        sourceEffect: Effect | null = null,
-        ignoreImmunities = false
-    ) {
+		status: string | Condition,
+		source: Pokemon | null = null,
+		sourceEffect: Effect | null = null,
+		ignoreImmunities = false
+	) {
 			  if (!this.hp) return false;
 			  status = this.battle.dex.getEffect(status);
 			  if (this.battle.event) {
@@ -148,8 +148,8 @@ export const Scripts: {[k: string]: ModdedBattleScriptsData} = {
 					return false;
 			  }
 			  return true;
-        }
-    },
+		}
+	},
 		modifyDamage(
 			baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages = false
 		) {
@@ -473,14 +473,14 @@ export const Scripts: {[k: string]: ModdedBattleScriptsData} = {
 
 /*
 	pokemon: {
-        hasAbility(ability) {
-            if (this.ignoringAbility()) return false;
-            ability = toID(ability);
-            return this.ability === ability || !!this.volatiles['ability' + ability];
-            if(this.ability === 'powerofalchemy'){
-                return this.species.abilities.some(checkAbility => toID(checkAbility) === ability || !!this.volatiles['ability' + toID(checkAbility)]);
-            }
-        },
+		hasAbility(ability) {
+			if (this.ignoringAbility()) return false;
+			ability = toID(ability);
+			return this.ability === ability || !!this.volatiles['ability' + ability];
+			if(this.ability === 'powerofalchemy'){
+				return this.species.abilities.some(checkAbility => toID(checkAbility) === ability || !!this.volatiles['ability' + toID(checkAbility)]);
+			}
+		},
 		transformInto(pokemon, effect) {
 			let template = pokemon.template;
 			if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5)) {
