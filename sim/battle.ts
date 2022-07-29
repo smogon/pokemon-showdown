@@ -463,8 +463,6 @@ export class Battle {
 					handler.end.call(...endCallArgs as [any, ...any[]]);
 					if (this.ended) return;
 					continue;
-				} else if (handler.effect.name === "futuremove" && handler.state.source.isActive) {
-					handler.state.moveData.recentForme = handler.state.source.species;
 				}
 			}
 
