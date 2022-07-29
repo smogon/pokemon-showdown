@@ -1088,6 +1088,7 @@ export class RandomTeams {
 
 			return {cull: false, isSetup: true};
 		case 'calmmind': case 'nastyplot':
+			if (species.id === 'togekiss') return {cull: false};
 			if (counter.setupType !== 'Special') return {cull: true};
 			if (
 				(counter.get('Special') + counter.get('specialpool')) < 2 &&
@@ -1670,6 +1671,9 @@ export class RandomTeams {
 			!counter.setupType &&
 			!isDoubles
 		) return 'Rocky Helmet';
+		if (species.name === 'Braviary' && moves.has('uturn')) {
+			return this.randomChance(2, 3) ? 'Choice Scarf' : 'Choice Band';
+		}
 		if (species.name === 'Eternatus' && counter.get('Status') < 2) return 'Metronome';
 		if (species.name === 'Farfetch\u2019d') return 'Leek';
 		if (species.name === 'Froslass' && !isDoubles) return 'Wide Lens';
@@ -2033,10 +2037,13 @@ export class RandomTeams {
 				const isLowBP = move.basePower && move.basePower < 50;
 
 				// Genesect-Douse should never reject Techno Blast
-				const moveIsRejectable = !(species.id === 'genesectdouse' && move.id === 'technoblast') && (
-					move.category === 'Status' ||
-					(!types.has(move.type) && move.id !== 'judgment') ||
-					(isLowBP && !move.multihit && !abilities.has('Technician'))
+				const moveIsRejectable = (
+					!(species.id === 'genesectdouse' && move.id === 'technoblast') &&
+					!(species.id === 'togekiss' && move.id === 'nastyplot') && (
+						move.category === 'Status' ||
+						(!types.has(move.type) && move.id !== 'judgment') ||
+						(isLowBP && !move.multihit && !abilities.has('Technician'))
+					)
 				);
 				// Setup-supported moves should only be rejected under specific circumstances
 				const notImportantSetup = (
@@ -2381,6 +2388,7 @@ export class RandomTeams {
 		const tierCount: {[k: string]: number} = {};
 		const typeCount: {[k: string]: number} = {};
 		const typeComboCount: {[k: string]: number} = {};
+		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
 		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
@@ -2452,12 +2460,18 @@ export class RandomTeams {
 			}
 
 			if (!isMonotype && !this.forceMonotype) {
-				// Limit two of any type
+				// Limit three weak to each type
 				let skip = false;
-				for (const typeName of types) {
-					if (typeCount[typeName] >= 2 * limitFactor) {
-						skip = true;
-						break;
+				for (const typeName of this.dex.types.names()) {
+					// it's weak to the type
+					if (this.dex.getEffectiveness(typeName, species) > 0) {
+						if (!typeWeaknesses[typeName]) typeWeaknesses[typeName] = 0;
+						if (typeWeaknesses[typeName] >= 3 * limitFactor) {
+							skip = true;
+							break;
+						} else {
+							typeWeaknesses[typeName]++;
+						}
 					}
 				}
 				if (skip) continue;
