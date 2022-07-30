@@ -165,13 +165,6 @@ describe('[Gen 8] Random Battle', () => {
 	it('should always give Palossand Shore Up', () => testAlwaysHasMove('palossand', options, 'shoreup'));
 	it('should always give Azumarill Aqua Jet', () => testAlwaysHasMove('azumarill', options, 'aquajet'));
 
-	it('should only give Braviary U-Turn if it has a Choice Item', () => {
-		testSet('braviary', options, set => {
-			if (set.moves.includes('uturn')) {
-				assert(set.item.startsWith('Choice '), `Braviary should have a Choice Item (got ${set.item})`);
-			}
-		});
-	});
 
 	it('should forbid a certain Togekiss set', () => {
 		testSet('togekiss', options, set => {
