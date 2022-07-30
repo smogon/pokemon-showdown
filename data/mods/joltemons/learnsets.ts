@@ -1,4 +1,6 @@
-export const Learnsets = {
+/* eslint-disable max-len */
+
+export const Learnsets: {[k: string]: LearnsetData} = {
 	articunogalar: {
 		learnset: {
 			agility: ["8M", "8L20"],

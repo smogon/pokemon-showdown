@@ -2005,7 +2005,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	soulblade: {
 		onModifyDamage(damage, source, target, move) {
-				return this.chainModify([0x1199, 0x1000]);
+			return this.chainModify([0x1199, 0x1000]);
 		},
 		name: "Soul Blade",
 	},
