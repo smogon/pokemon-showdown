@@ -851,6 +851,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		num: 546,
 		accuracy: 100,
 		basePower: 90,
+		onBasePower(basePower, source) {
+			if (source.hasItem(['burndrive', 'dousedrive', 'chilldrive', 'shockdrive'])) {
+				return this.chainModify(1.2);
+			}
+		},
 		category: "Special",
 		shortDesc: "Type varies based on the held Drive. 1.2x power when holding a Drive.",
 		isViable: true,
