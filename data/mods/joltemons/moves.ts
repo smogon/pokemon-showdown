@@ -920,7 +920,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!source.hasType('Ghost')) {
 				delete move.volatileStatus;
 				move.self = {boosts: {spe: -1, atk: 2, def: 1}};
-			} else if (move.volatileStatus && target.volatiles['curse'] || (target.hasType('Normal') || target.hasType('Ghost') || target.volatiles['protect'] || target.volatiles['spikyshield'] || target.volatiles['banefulbunker'])) {
+			} else if ((move.volatileStatus && target.volatiles['curse']) || target.hasType(['Normal', 'Ghost']) ||
+				target.volatiles['protect'] || target.volatiles['spikyshield'] || target.volatiles['banefulbunker']) {
 				return false;
 			}
 		},
