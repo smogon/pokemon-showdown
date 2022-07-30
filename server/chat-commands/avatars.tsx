@@ -543,12 +543,13 @@ const OFFICIAL_AVATARS_GNOMOWLADNY = new Set([
 
 const OFFICIAL_AVATARS_BRUMIRAGE = new Set([
 	'adaman', 'agatha-lgpe', 'akari', 'allister', 'archie-gen6', 'arezu', 'avery', 'ballguy', 'bea', 'bede',
-	'bede-leader', 'brendan-contest', 'burnet-radar', 'calaba', 'calem', 'chase', 'cogita', 'cynthia-gen7', 'diantha',
-	'doctor-gen8', 'elaine', 'gloria', 'gordie', 'hop', 'irida', 'kabu', 'klara', 'koga-lgpe', 'leon', 'leon-tower',
-	'lian', 'lisia', 'lorelei-lgpe', 'magnolia', 'mai', 'marnie', 'may-contest', 'melony', 'milo', 'mina-lgpe',
-	'mustard', 'mustard-master', 'nessa', 'oleana', 'opal', 'peonia', 'peony', 'pesselle', 'phoebe-gen6', 'piers',
-	'raihan', 'rei', 'rose', 'sabi', 'sanqua', 'shielbert', 'sonia', 'sonia-professor', 'sordward', 'sordward-shielbert',
-	'tateandliza-gen6', 'victor', 'victor-dojo', 'volo', 'yellgrunt', 'yellgruntf', 'zisu',
+	'bede-leader', 'brendan-contest', 'burnet-radar', 'calaba', 'calem', 'chase', 'cogita', 'cynthia-gen7',
+	'cynthia-masters', 'diantha', 'doctor-gen8', 'elaine', 'gloria', 'gordie', 'hilda-masters2', 'hop',
+	'irida', 'kabu', 'klara', 'koga-lgpe', 'leon', 'leon-tower', 'lian', 'lisia', 'lorelei-lgpe', 'magnolia',
+	'mai', 'marnie', 'may-contest', 'melony', 'milo', 'mina-lgpe', 'mustard', 'mustard-master', 'nessa',
+	'oleana', 'opal', 'peony', 'pesselle', 'phoebe-gen6', 'piers', 'raihan', 'rei', 'rose', 'sabi',
+	'sanqua', 'shielbert', 'sonia', 'sonia-professor', 'sordward', 'sordward-shielbert', 'tateandliza-gen6',
+	'victor', 'victor-dojo', 'volo', 'yellgrunt', 'yellgruntf', 'zisu',
 ]);
 
 const OFFICIAL_AVATARS_ZACWEAVILE = new Set([
@@ -579,10 +580,23 @@ const OFFICIAL_AVATARS_KYLEDOVE = new Set([
 	'triathletebiker-gen6', 'triathleterunner-gen6', 'triathleteswimmer-gen6', 'tuberf-gen6', 'tuber-gen6', 'twins-gen6',
 	'veteranf-gen6', 'veteran-gen6', 'waitress-gen6', 'worker2-gen6', 'workerf-gen8', 'worker-gen6', 'worker-gen8',
 	'youngcouple-gen6', 'youngster-gen6', 'youngster-gen6xy', 'youngster-gen8',
+	'acerola-masters', 'bea-masters', 'blue-masters', 'brendan-masters', 'brock-masters', 'burgh-masters', 'caitlin-masters',
+	'cynthia-masters2', 'cyrus-masters', 'dawn-masters', 'dawn-masters2', 'diantha-masters', 'elesa-masters', 'emmet-masters',
+	'erika-masters', 'erika-masters2', 'ethan-masters', 'giovanni-masters', 'gloria-masters', 'grimsley-masters',
+	'guzma-masters', 'hilbert-masters', 'hilda-masters', 'ingo-masters', 'jasmine-masters', 'korrina-masters', 'kris-masters',
+	'lance-masters', 'leaf-masters', 'leon-masters', 'leon-masters2', 'lillie-masters', 'lillie-masters2', 'lillie-masters3',
+	'lusamine-masters', 'lyra-masters', 'lyra-masters2', 'marnie-masters', 'marnie-masters2', 'may-masters', 'may-masters2',
+	'may-masters3', 'misty-masters', 'morty-masters', 'morty-masters2', 'n-masters', 'n-masters2', 'nessa-masters',
+	'raihan-masters', 'red-masters', 'rosa-masters', 'sabrina-masters', 'serena-masters', 'serena-masters2',
+	'siebold-masters', 'skyla-masters', 'sonia-masters', 'steven-masters', 'steven-masters2', 'volkner-masters',
 ]);
 
 const OFFICIAL_AVATARS_HYOOPPA = new Set([
 	'brendan', 'maxie-gen6', 'may',
+]);
+
+const OFFICIAL_AVATARS_GRAPO = new Set([
+	'peonia', 'skyla-masters2', 'volo-ginkgo',
 ]);
 
 for (const avatar of OFFICIAL_AVATARS_BELIOT419) OFFICIAL_AVATARS.add(avatar);
@@ -591,6 +605,7 @@ for (const avatar of OFFICIAL_AVATARS_BRUMIRAGE) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_ZACWEAVILE) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_KYLEDOVE) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_HYOOPPA) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_GRAPO) OFFICIAL_AVATARS.add(avatar);
 
 export const commands: Chat.ChatCommands = {
 	avatar(target, room, user) {
@@ -630,6 +645,9 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (OFFICIAL_AVATARS_HYOOPPA.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/hyo_oppa">hyo-oppa</a>)`);
+			}
+			if (OFFICIAL_AVATARS_GRAPO.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/Grapo_Sprites">Grapo</a>)`);
 			}
 		}
 	},

@@ -286,7 +286,7 @@ export async function runActions(user: User, room: GameRoom, message: string, re
 	}
 	if (recommended.length) {
 		Utils.sortBy(recommended, ([punishment]) => -PUNISHMENTS.indexOf(punishment));
-		if (recommended.every(k => k[2])) {
+		if (recommended.filter(k => k[1] !== 'MUTE').every(k => k[2])) {
 			// requiresPunishment is for upgrading. if every one is an upgrade and
 			// there's no independent punishment, do not upgrade it
 			return;
@@ -454,6 +454,10 @@ const punishmentHandlers: Record<string, PunishmentHandler> = {
 		globalModlog('WARN', user, reason, room);
 		addGlobalModAction(`${user.name} was warned by Artemis (${reason})`, room);
 		addLogButton(room);
+		const punishments = punishmentCache.get(user) || {};
+		if (!punishments['WARN']) punishments['WARN'] = 0;
+		punishments['WARN']++;
+		punishmentCache.set(user, punishments);
 
 		room.add(`|c|&|/raw ${DISCLAIMER}`).update();
 		room.hideText([user.id], undefined, true);
@@ -535,6 +539,9 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 		for (const k in settings.replacements) {
 			message = message.replace(new RegExp(k, 'gi'), settings.replacements[k]);
 		}
+
+		message = message.replace(pokemonRegex, '[Pokemon]');
+
 		const response = await classifier.classify(message);
 		const {score, flags, main} = makeScore(roomid, response || {});
 		if (score) {
@@ -646,6 +653,10 @@ function saveSettings(path?: string) {
 function saveReviews() {
 	FS(`config/chat-plugins/artemis-reviews.json`).writeUpdate(() => JSON.stringify(reviews));
 }
+
+export const pokemonRegex = new RegExp( // we want only base formes and existent stuff
+	`\\b(${Dex.species.all().filter(s => !s.forme && s.num > 0).map(f => f.id).join('|')})\\b`, 'gi'
+);
 
 export let lastLogTime: number = Chat.oldPlugins['abuse-monitor']?.lastLogTime || 0;
 
@@ -780,7 +791,7 @@ export const commands: Chat.ChatCommands = {
 			target = target.trim();
 			if (!target) return this.parse(`/help abusemonitor`);
 			const [text, scoreText] = Utils.splitFirst(target, ',').map(f => f.trim());
-			const args = Chat.parseArguments(scoreText, ',', '=', false);
+			const args = Chat.parseArguments(scoreText, ',', {useIDs: false});
 			const scores: Record<string, number> = {};
 			for (let k in args) {
 				const vals = args[k];
@@ -2103,14 +2114,16 @@ export const pages: Chat.PageTable = {
 		reviews() {
 			checkAccess(this);
 			this.title = `[Abuse Monitor] Reviews`;
-			let buf = `<div class="pad"><h2>Artemis recommendation reviews</h2>`;
+			let buf = `<div class="pad"><h2>Artemis recommendation reviews ({{total}})</h2>`;
 			buf += `<button class="button" name="send" value="/msgroom staff,/am reviews">Reload reviews</button>`;
 			buf += `<hr />`;
+			let total = 0;
 			let atLeastOne = false;
 			for (const userid in reviews) {
 				const curReviews = reviews[userid].filter(f => !f.resolved);
 				if (curReviews.length) {
 					buf += `<strong>${Chat.count(curReviews, 'reviews')} from ${userid}:</strong><hr />`;
+					total += curReviews.length;
 				} else {
 					continue;
 				}
@@ -2134,6 +2147,7 @@ export const pages: Chat.PageTable = {
 				buf += `No reviews to display.`;
 				return buf;
 			}
+			buf = buf.replace('{{total}}', `${total}`);
 			return buf;
 		},
 		review() {

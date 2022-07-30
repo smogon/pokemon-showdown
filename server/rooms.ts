@@ -28,7 +28,7 @@ const LAST_BATTLE_WRITE_THROTTLE = 10;
 
 const RETRY_AFTER_LOGIN = null;
 
-import {FS, Utils, Streams} from '../lib';
+import {FS, Utils, Streams, PostgresDatabase} from '../lib';
 import {RoomSection, RoomSections} from './chat-commands/room-settings';
 import {QueuedHunt} from './chat-plugins/scavengers';
 import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
@@ -1272,6 +1272,122 @@ export class GlobalRoomState {
 		} catch {}
 		this.lastBattle = Number(lastBattle) || 0;
 		this.lastWrittenBattle = this.lastBattle;
+		void this.loadBattles();
+	}
+
+	async saveBattles() {
+		let count = 0;
+		if (!Config.usepostgres) return 0;
+		const logDatabase = new PostgresDatabase();
+		await logDatabase.ensureMigrated({
+			table: 'stored_battles',
+			migrationsFolder: 'databases/migrations/storedbattles',
+			baseSchemaFile: 'databases/schemas/stored-battles.sql',
+		});
+		for (const room of Rooms.rooms.values()) {
+			if (!room.battle || room.battle.ended) continue;
+			room.battle.frozen = true;
+			const log = await room.battle.getLog();
+			const players: ID[] = room.battle.options.players || [];
+			if (!players.length) {
+				for (const num of ['p1', 'p2', 'p3', 'p4'] as const) {
+					if (room.battle[num]?.id) {
+						players.push(room.battle[num].id);
+					}
+				}
+			}
+			if (!players.length || !log?.length) continue; // shouldn't happen???
+			const timerData = {
+				...room.battle.timer.settings,
+				active: !!room.battle.timer.timer || false,
+			};
+			await logDatabase.query(
+				`INSERT INTO stored_battles (roomid, input_log, players, title, rated, timer) VALUES ($1, $2, $3, $4, $5, $6)` +
+				` ON CONFLICT (roomid) DO UPDATE ` +
+				`SET input_log = EXCLUDED.input_log, players = EXCLUDED.players, title = EXCLUDED.title, rated = EXCLUDED.rated`,
+				[room.roomid, log.join('\n'), players, room.title, room.battle.rated, timerData]
+			);
+			count++;
+		}
+		return count;
+	}
+
+	battlesLoading?: boolean;
+	async loadBattles() {
+		if (!Config.usepostgres) return;
+		this.battlesLoading = true;
+		for (const u of Users.users.values()) {
+			u.send(
+				`|pm|&|${u.getIdentity()}|/uhtml restartmsg,` +
+				`<div class="broadcast-red"><b>Your battles are currently being restored.<br />Please be patient as they load.</div>`
+			);
+		}
+		const logDatabase = new PostgresDatabase();
+		const query = `DELETE FROM stored_battles WHERE roomid IN (SELECT roomid FROM stored_battles LIMIT 1) RETURNING *`;
+		for await (const battle of logDatabase.stream(query)) {
+			const {input_log, players, roomid, title, rated, timer} = battle;
+			const [, formatid] = roomid.split('-');
+			const room = Rooms.createBattle({
+				format: formatid,
+				inputLog: input_log,
+				roomid,
+				title,
+				rated: Number(rated),
+				players,
+				delayedStart: true,
+				delayedTimer: timer.active,
+				restored: true,
+			});
+			if (!room || !room.battle) continue; // shouldn't happen???
+			room.battle.started = true; // so that timer works
+			room.battle.start();
+			if (timer) { // json blob of settings
+				Object.assign(room.battle.timer.settings, timer);
+			}
+			for (const [i, p] of players.entries()) {
+				room.auth.set(p, Users.PLAYER_SYMBOL);
+				const player = room.battle.players[i];
+				player.id = p;
+				player.name = p; // temp for if they get timed out before they connect
+				const u = Users.getExact(p);
+				if (u) {
+					this.rejoinBattle(room, u, i);
+				}
+			}
+		}
+		for (const u of Users.users.values()) {
+			u.send(`|pm|&|${u.getIdentity()}|/uhtmlchange restartmsg,`);
+		}
+		delete this.battlesLoading;
+	}
+
+	rejoinBattle(room: GameRoom, user: User, idx: number) {
+		if (!room.battle) return;
+		// we reuse these player objects explicitly so if
+		// someone has already started the timer, their settings carry over (should reduce bugs)
+		// and it's safe to do this first because we know these users were already in the battle
+		const player = room.battle.players[idx];
+		player.id = user.id;
+		player.name = user.name;
+		room.battle.playerTable[user.id] = player;
+		user.joinRoom(room.roomid);
+		// force update panel
+		room.battle.onConnect(user);
+		if (room.battle.options.delayedTimer && !room.battle.timer.timer) {
+			room.battle.timer.start();
+		}
+		user.send(`|pm|&|${user.getIdentity()}|/uhtmlchange restartmsg,`);
+	}
+
+	joinOldBattles(user: User) {
+		for (const room of Rooms.rooms.values()) {
+			const battle = room.battle;
+			if (!battle) continue;
+			const idx = battle.options.players?.indexOf(user.id);
+			if (typeof idx === 'number' && idx > -1) {
+				this.rejoinBattle(room, user, idx);
+			}
+		}
 	}
 
 	modlog(entry: PartialModlogEntry, overrideID?: string) {
@@ -1582,6 +1698,12 @@ export class GlobalRoomState {
 		if (Users.users.size > this.maxUsers) {
 			this.maxUsers = Users.users.size;
 			this.maxUsersDate = Date.now();
+		}
+		if (this.battlesLoading) {
+			connection.send(
+				`|pm|&|${user.getIdentity()}|/uhtml restartmsg,` +
+				`<div class="broadcast-red"><b>Your battles are currently being restored.<br />Please be patient as they load.</div>`
+			);
 		}
 	}
 	startLockdown(err: Error | null = null, slow = false) {
@@ -2000,7 +2122,7 @@ export const Rooms = {
 			options.ratedMessage = p1Special;
 		}
 
-		const roomid = Rooms.global.prepBattleRoom(options.format);
+		const roomid = options.roomid || Rooms.global.prepBattleRoom(options.format);
 		// options.rated is a number representing the lowest player rating, for searching purposes
 		// options.rated < 0 or falsy means "unrated", and will be converted to 0 here
 		// options.rated === true is converted to 1 (used in tests sometimes)
@@ -2015,6 +2137,8 @@ export const Rooms = {
 		} else if (gameType === 'freeforall') {
 			// p1 vs. p2 vs. p3 vs. p4 is too long of a title
 			roomTitle = `${p1name} and friends`;
+		} else if (options.title) {
+			roomTitle = options.title;
 		} else {
 			roomTitle = `${p1name} vs. ${p2name}`;
 		}

@@ -1088,6 +1088,7 @@ export class RandomTeams {
 
 			return {cull: false, isSetup: true};
 		case 'calmmind': case 'nastyplot':
+			if (species.id === 'togekiss') return {cull: false};
 			if (counter.setupType !== 'Special') return {cull: true};
 			if (
 				(counter.get('Special') + counter.get('specialpool')) < 2 &&
@@ -1209,8 +1210,8 @@ export class RandomTeams {
 			const otherMoves = ['curse', 'stompingtantrum', 'rockblast', 'painsplit', 'wish'].some(m => moves.has(m));
 			return {cull: !!counter.get('speedsetup') || !!counter.get('recovery') || otherMoves};
 		case 'facade':
-			// Special cases for Braviary and regular Snorlax, respectively
-			return {cull: !!counter.get('recovery') || movePool.includes('doubleedge')};
+			// Special case for Snorlax
+			return {cull: movePool.includes('doubleedge')};
 		case 'quickattack':
 			// Diggersby wants U-turn on Choiced sets
 			const diggersbyCull = counter.get('Physical') > 3 && movePool.includes('uturn');
@@ -1228,8 +1229,7 @@ export class RandomTeams {
 			return {cull: species.id === 'solgaleo' && moves.has('flamecharge')};
 		case 'overheat':
 			return {cull: moves.has('flareblitz') || (isDoubles && moves.has('calmmind'))};
-		case 'aquatail': case 'flipturn': case 'retaliate':
-			// Retaliate: Special case for Braviary to prevent Retaliate on non-Choice
+		case 'aquatail': case 'flipturn':
 			return {cull: moves.has('aquajet') || !!counter.get('Status')};
 		case 'hydropump':
 			return {cull: moves.has('scald') && (
@@ -1558,7 +1558,7 @@ export class RandomTeams {
 			// For Scrafty
 			return moves.has('dragondance');
 		case 'Sheer Force':
-			return (!counter.get('sheerforce') || abilities.has('Guts'));
+			return (!counter.get('sheerforce') || abilities.has('Guts') || (species.id === 'druddigon' && !isDoubles));
 		case 'Shell Armor':
 			return (species.id === 'omastar' && (moves.has('spikes') || moves.has('stealthrock')));
 		case 'Slush Rush':
@@ -1670,6 +1670,7 @@ export class RandomTeams {
 			!counter.setupType &&
 			!isDoubles
 		) return 'Rocky Helmet';
+
 		if (species.name === 'Eternatus' && counter.get('Status') < 2) return 'Metronome';
 		if (species.name === 'Farfetch\u2019d') return 'Leek';
 		if (species.name === 'Froslass' && !isDoubles) return 'Wide Lens';
@@ -1729,7 +1730,9 @@ export class RandomTeams {
 		if (moves.has('hypnosis') && ability === 'Beast Boost') return 'Blunder Policy';
 		if (moves.has('bellydrum')) return 'Sitrus Berry';
 
-		if (this.dex.getEffectiveness('Rock', species) >= 2 && !isDoubles) return 'Heavy-Duty Boots';
+		if (this.dex.getEffectiveness('Rock', species) >= 2 && !isDoubles) {
+			return 'Heavy-Duty Boots';
+		}
 	}
 
 	/** Item generation specific to Random Doubles */
@@ -1831,6 +1834,9 @@ export class RandomTeams {
 			((counter.get('Physical') >= 3 && moves.has('defog')) || (counter.get('Special') >= 3 && moves.has('healingwish'))) &&
 			!counter.get('priority') && !moves.has('uturn')
 		) return 'Choice Scarf';
+
+		// Palkia sometimes wants Choice items instead
+		if (species.name === 'Palkia') return 'Lustrous Orb';
 
 		// Other items
 		if (
@@ -2030,10 +2036,13 @@ export class RandomTeams {
 				const isLowBP = move.basePower && move.basePower < 50;
 
 				// Genesect-Douse should never reject Techno Blast
-				const moveIsRejectable = !(species.id === 'genesectdouse' && move.id === 'technoblast') && (
-					move.category === 'Status' ||
-					(!types.has(move.type) && move.id !== 'judgment') ||
-					(isLowBP && !move.multihit && !abilities.has('Technician'))
+				const moveIsRejectable = (
+					!(species.id === 'genesectdouse' && move.id === 'technoblast') &&
+					!(species.id === 'togekiss' && move.id === 'nastyplot') && (
+						move.category === 'Status' ||
+						(!types.has(move.type) && move.id !== 'judgment') ||
+						(isLowBP && !move.multihit && !abilities.has('Technician'))
+					)
 				);
 				// Setup-supported moves should only be rejected under specific circumstances
 				const notImportantSetup = (
@@ -2401,7 +2410,7 @@ export class RandomTeams {
 			case 'Arceus': case 'Silvally':
 				if (this.randomChance(8, 9) && !isMonotype) continue;
 				break;
-			case 'Aegislash': case 'Basculin': case 'Gourgeist': case 'Meloetta':
+			case 'Aegislash': case 'Basculin': case 'Gourgeist': case 'Meloetta': case 'Rotom':
 				if (this.randomChance(1, 2)) continue;
 				break;
 			case 'Greninja':
@@ -2449,8 +2458,9 @@ export class RandomTeams {
 			}
 
 			if (!isMonotype && !this.forceMonotype) {
-				// Limit two of any type
+				// TODO: fix type weaknesses
 				let skip = false;
+
 				for (const typeName of types) {
 					if (typeCount[typeName] >= 2 * limitFactor) {
 						skip = true;

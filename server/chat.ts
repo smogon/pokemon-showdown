@@ -2483,13 +2483,17 @@ export const Chat = new class {
 		return probe(url);
 	}
 
-	parseArguments(str: string, delim = ',', paramDelim = '=', useIDs = true) {
+	parseArguments(
+		str: string,
+		delim = ',',
+		opts: Partial<{paramDelim: string, useIDs: boolean, allowEmpty: boolean}> = {useIDs: true}
+	) {
 		const result: Record<string, string[]> = {};
 		for (const part of str.split(delim)) {
-			let [key, val] = Utils.splitFirst(part, paramDelim).map(f => f.trim());
-			if (useIDs) key = toID(key);
-			if (!toID(key) || !toID(val)) {
-				throw new Chat.ErrorMessage(`Invalid option ${part}. Must be in [key]${paramDelim}[value] format.`);
+			let [key, val] = Utils.splitFirst(part, opts.paramDelim ||= "=").map(f => f.trim());
+			if (opts.useIDs) key = toID(key);
+			if (!toID(key) || (!opts.allowEmpty && !toID(val))) {
+				throw new Chat.ErrorMessage(`Invalid option ${part}. Must be in [key]${opts.paramDelim}[value] format.`);
 			}
 			if (!result[key]) result[key] = [];
 			result[key].push(val);

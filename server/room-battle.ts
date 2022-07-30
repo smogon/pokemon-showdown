@@ -488,6 +488,11 @@ export interface RoomBattleOptions {
 	inputLog?: string;
 	ratedMessage?: string;
 	seed?: PRNGSeed;
+	roomid?: RoomID;
+	players?: ID[];
+	/** For battles restored after a restart */
+	delayedTimer?: boolean;
+	restored?: boolean;
 }
 
 export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
@@ -532,6 +537,8 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 	turn: number;
 	rqid: number;
 	requestCount: number;
+	options: RoomBattleOptions;
+	frozen?: boolean;
 	dataResolvers?: [((args: string[]) => void), ((error: Error) => void)][];
 	constructor(room: GameRoom, options: RoomBattleOptions) {
 		super(room);
@@ -539,6 +546,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		this.gameid = 'battle' as ID;
 		this.room = room;
 		this.title = format.name;
+		this.options = options;
 		if (!this.title.endsWith(" Battle")) this.title += " Battle";
 		this.allowRenames = options.allowRenames !== undefined ? !!options.allowRenames : (!options.rated && !options.tour);
 
@@ -633,6 +641,10 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		if (Rooms.global.battleCount === 0) Rooms.global.automaticKillRequest();
 	}
 	choose(user: User, data: string) {
+		if (this.frozen) {
+			user.popup(`Your battle is currently paused, so you cannot move right now.`);
+			return;
+		}
 		const player = this.playerTable[user.id];
 		const [choice, rqid] = data.split('|', 2);
 		if (!player) return;
@@ -672,6 +684,11 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		void this.stream.write(`>${player.slot} undo`);
 	}
 	joinGame(user: User, slot?: SideID, playerOpts?: {team?: string}) {
+		const isMulti = this.gameType === 'multi' || this.gameType === 'freeforall';
+		if (!isMulti && !this.options.players?.includes(user.id)) {
+			user.popup(`You cannot join this battle, as you were not originally playing in it.`);
+			return false;
+		}
 		if (user.id in this.playerTable) {
 			user.popup(`You have already joined this battle.`);
 			return false;
