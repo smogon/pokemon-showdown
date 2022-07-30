@@ -5,8 +5,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		shortDesc: "Badly poisons and lowers the target's Speed by 2",
-		isViable: true,
-		isNonstandard: null,
 		name: "Toxic Thread",
 		pp: 20,
 		priority: 0,
@@ -21,7 +19,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Tough",
 	},
- 	meltdown: {
+	meltdown: {
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
@@ -30,7 +28,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, defrost: 1},
- 		onPrepareHit: function(target, source, move) {
+		onPrepareHit(target, source, move) {
 		  this.attrLastMove('[still]');
 		  this.add('-anim', source, "Scald", target);
 		  this.add('-anim', source, "Acid Armor", target);
@@ -51,12 +49,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		self: {
 			onHit(pokemon) {
-				if (pokemon.hasType('Water')) { 					
-				pokemon.setType(pokemon.getTypes(true).map(type => type === "Ice" ? "???" : type));
-				this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[from] move: Meltdown');
+				if (pokemon.hasType('Water')) {
+					pokemon.setType(pokemon.getTypes(true).map(type => type === "Ice" ? "???" : type));
+					this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[from] move: Meltdown');
 				} else {
-				pokemon.setType(pokemon.getTypes(true).map(type => type === "Ice" ? "Water" : type));
-				this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[from] move: Meltdown');
+					pokemon.setType(pokemon.getTypes(true).map(type => type === "Ice" ? "Water" : type));
+					this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[from] move: Meltdown');
 				}
 			},
 		},
@@ -65,7 +63,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Water",
 		contestType: "Clever",
 	},
-/*
+	/*
  	reconstruct: {
 		accuracy: true,
 		basePower: 0,
@@ -90,16 +88,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 			onTryMove(attacker, defender, move) {
-			if (attacker.removeVolatile(move.id)) {
-				return;
-			}
-			this.add('-prepare', attacker, move.name);
-			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-				return;
-			}
-			attacker.addVolatile('twoturnmove', defender);
-			return null;
-		},
+				if (attacker.removeVolatile(move.id)) return;
+				this.add('-prepare', attacker, move.name);
+				if (!this.runEvent('ChargeMove', attacker, defender, move)) return;
+				attacker.addVolatile('twoturnmove', defender);
+				return null;
+			},
 		},
 		onAfterMove(pokemon) {
 			pokemon.removeVolatile('reconstruct');
@@ -116,7 +110,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				pokemon.setBoost(boosts);
 				this.add('-clearnegativeboost', pokemon, '[silent]');
 				this.add('-message', pokemon.name + "'s negative stat changes were removed!");
-		},
+			},
 		},
 		secondary: null,
 		target: "self",
@@ -155,7 +149,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				pokemon.setBoost(boosts);
 				this.add('-clearnegativeboost', pokemon, '[silent]');
 				this.add('-message', pokemon.name + "'s negative stat changes were removed!");
-		},
+			},
 		},
 		secondary: null,
 		target: "self",
@@ -172,9 +166,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 5,
 		flags: {charge: 1, heal: 1},
 		volatileStatus: 'reconstruct',
- 		onPrepareHit: function(target, source, move) {
-		  this.attrLastMove('[still]');
-		  this.add('-anim', source, "Recover", target);
+ 		onPrepareHit(target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Recover", target);
 		},
 		beforeMoveCallback(pokemon) {
 			if (pokemon.volatiles['reconstruct']) return true;
@@ -229,7 +223,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				pokemon.setBoost(boosts);
 				this.add('-clearnegativeboost', pokemon, '[silent]');
 				this.add('-message', pokemon.name + "'s negative stat changes were removed!");
-		},
+			},
 		},
 		secondary: null,
 		target: "self",
@@ -288,9 +282,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
- 		onPrepareHit: function(target, source, move) {
-		  this.attrLastMove('[still]');
-		  this.add('-anim', source, "Shore Up", target);
+ 		onPrepareHit(target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Shore Up", target);
 		},
 		self: {
 			onHit(pokemon, source, move) {
@@ -393,9 +387,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, defrost: 1},
  		onPrepareHit: function(target, source, move) {
-		  this.attrLastMove('[still]');
-		  this.add('-anim', source, "Charge", target);
-		  this.add('-anim', source, "Sacred Sword", target);
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Charge", target);
+			this.add('-anim', source, "Sacred Sword", target);
 		},
 		self: {
 			boosts: {
@@ -438,10 +432,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
- 		onPrepareHit: function(target, source, move) {
-		  this.attrLastMove('[still]');
-		  this.add('-anim', source, "Confide", target);
-		  this.add('-anim', source, "Gunk Shot", target);
+ 		onPrepareHit(target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Confide", target);
+			this.add('-anim', source, "Gunk Shot", target);
 		},
 		volatileStatus: 'trashtalk',
 		condition: {
@@ -475,10 +469,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
- 		onPrepareHit: function(target, source, move) {
-		  this.attrLastMove('[still]');
-		  this.add('-anim', source, "Hyper Voice", target);
-		  this.add('-anim', source, "Boomburst", target);
+ 		onPrepareHit(target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Hyper Voice", target);
+			this.add('-anim', source, "Boomburst", target);
 		},
 		volatileStatus: 'deafeningshriek',
 		condition: {
@@ -507,9 +501,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, contact: 1, punch: 1},
- 		onPrepareHit: function(target, source, move) {
-		  this.attrLastMove('[still]');
-		  this.add('-anim', source, "Meteor Mash", target);
+ 		onPrepareHit(target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Meteor Mash", target);
 		},
 		secondary: null,
 		target: "normal",
@@ -530,7 +524,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Electric",
 		contestType: "Clever",
-			shortDesc: "Uses user's Spe stat as SpA in damage calculation.",
+		shortDesc: "Uses user's Spe stat as SpA in damage calculation.",
 	},
 	firepunch: {
 		num: 7,
@@ -588,7 +582,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
-			shortDesc: "Hits Flying-types super effectively. Can hit Pokemon using Bounce, Fly, or Sky Drop.",
+		shortDesc: "Hits Flying-types super effectively. Can hit Pokemon using Bounce, Fly, or Sky Drop.",
 		name: "Sky Uppercut",
 		pp: 15,
 		priority: 0,
@@ -602,27 +596,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		contestType: "Cool",
 	},
 	crushclaw: {
-		num: 306,
+		inherit: true,
 		accuracy: 100,
 		basePower: 20,
-		category: "Physical",
 		shortDesc: "Hits twice. Lowers the target's Def after each hit.",
-		isViable: true,
-		name: "Crush Claw",
 		pp: 20,
-		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
 		multihit: 2,
 		secondary: {
 			chance: 100,
 			boosts: {
 				def: -1,
 			},
-	},
-		target: "normal",
+		},
 		type: "Dark",
 		maxMove: {basePower: 100},
-		contestType: "Cool",
 	},
 	poisondart: {
 		accuracy: true,
@@ -634,9 +621,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 30,
 		priority: 1,
 		flags: {protect: 1, mirror: 1},
- 		onPrepareHit: function(target, source, move) {
-		  this.attrLastMove('[still]');
-		  this.add('-anim', source, "Poison Sting", target);
+ 		onPrepareHit(target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Poison Sting", target);
 		},
 		secondary: {
 			chance: 10,
@@ -656,10 +643,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {punch: 1, contact: 1, protect: 1, mirror: 1},
- 		onPrepareHit: function(target, source, move) {
-		  this.attrLastMove('[still]');
-		  this.add('-anim', source, "Poison Jab", target);
-		  this.add('-anim', source, "Corrosive Gas", target);
+ 		onPrepareHit(target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Poison Jab", target);
+			this.add('-anim', source, "Corrosive Gas", target);
 		},
 		onTryHit(pokemon) {
 			// will shatter screens through sub, before you hit
@@ -695,13 +682,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onModifyMove(move, pokemon) {
 			if (!pokemon.hasType('Poison')) return;
-			move.secondaries = [];
-			if (pokemon.hasType('Poison')) {
-				move.secondaries.push({
-					chance: 30,
-					status: 'psn',
-				});
-			}
+			if (!move.secondaries) move.secondaries = [];
+			move.secondaries = move.secondaries.filter(s => s.chance !== 10 && s.status !== 'psn');
+			move.secondaries.push({
+				chance: 30,
+				status: 'psn',
+			});
 		},
 		secondary: {
 			chance: 10,
