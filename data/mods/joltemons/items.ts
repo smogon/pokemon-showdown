@@ -66,9 +66,9 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 				return this.chainModify(1.5);
 			}
 		},
-	 num: -1004,
-	 gen: 8,
-	 desc: "If holder's species can evolve, its Atk and Sp. Atk are 1.5x.",
+	 	num: -1004,
+	 	gen: 8,
+	 	desc: "If holder's species can evolve, its Atk and Sp. Atk are 1.5x.",
 	},
 	reliccharm: {
 		name: "Relic Charm",
