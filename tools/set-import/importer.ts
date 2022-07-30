@@ -45,6 +45,7 @@ export const TIERS = new Set([
 	'doublesou', 'battlespotsingles', 'battlespotdoubles', 'battlestadiumsingles',
 	'vgc2016', 'vgc2017', 'vgc2018', 'vgc2019ultraseries', 'vgc2020', '1v1',
 	'anythinggoes', 'nationaldexag', 'balancedhackmons', 'letsgoou', 'monotype',
+	'purehackmons',
 ]);
 const FORMATS = new Map<ID, {gen: GenerationNum, format: Format}>();
 const VALIDATORS = new Map<ID, TeamValidator>();
