@@ -1210,8 +1210,8 @@ export class RandomTeams {
 			const otherMoves = ['curse', 'stompingtantrum', 'rockblast', 'painsplit', 'wish'].some(m => moves.has(m));
 			return {cull: !!counter.get('speedsetup') || !!counter.get('recovery') || otherMoves};
 		case 'facade':
-			// Special cases for Braviary and regular Snorlax, respectively
-			return {cull: !!counter.get('recovery') || movePool.includes('doubleedge')};
+			// Special case for Snorlax
+			return {cull: movePool.includes('doubleedge')};
 		case 'quickattack':
 			// Diggersby wants U-turn on Choiced sets
 			const diggersbyCull = counter.get('Physical') > 3 && movePool.includes('uturn');
@@ -1229,8 +1229,7 @@ export class RandomTeams {
 			return {cull: species.id === 'solgaleo' && moves.has('flamecharge')};
 		case 'overheat':
 			return {cull: moves.has('flareblitz') || (isDoubles && moves.has('calmmind'))};
-		case 'aquatail': case 'flipturn': case 'retaliate':
-			// Retaliate: Special case for Braviary to prevent Retaliate on non-Choice
+		case 'aquatail': case 'flipturn':
 			return {cull: moves.has('aquajet') || !!counter.get('Status')};
 		case 'hydropump':
 			return {cull: moves.has('scald') && (
@@ -1671,9 +1670,7 @@ export class RandomTeams {
 			!counter.setupType &&
 			!isDoubles
 		) return 'Rocky Helmet';
-		if (species.name === 'Braviary' && moves.has('uturn')) {
-			return this.randomChance(2, 3) ? 'Choice Scarf' : 'Choice Band';
-		}
+
 		if (species.name === 'Eternatus' && counter.get('Status') < 2) return 'Metronome';
 		if (species.name === 'Farfetch\u2019d') return 'Leek';
 		if (species.name === 'Froslass' && !isDoubles) return 'Wide Lens';
@@ -1733,7 +1730,9 @@ export class RandomTeams {
 		if (moves.has('hypnosis') && ability === 'Beast Boost') return 'Blunder Policy';
 		if (moves.has('bellydrum')) return 'Sitrus Berry';
 
-		if (this.dex.getEffectiveness('Rock', species) >= 2 && !isDoubles) return 'Heavy-Duty Boots';
+		if (this.dex.getEffectiveness('Rock', species) >= 2 && !isDoubles) {
+			return 'Heavy-Duty Boots';
+		}
 	}
 
 	/** Item generation specific to Random Doubles */
@@ -2388,7 +2387,6 @@ export class RandomTeams {
 		const tierCount: {[k: string]: number} = {};
 		const typeCount: {[k: string]: number} = {};
 		const typeComboCount: {[k: string]: number} = {};
-		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
 		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
@@ -2460,18 +2458,13 @@ export class RandomTeams {
 			}
 
 			if (!isMonotype && !this.forceMonotype) {
-				// Limit three weak to each type
+				// TODO: fix type weaknesses
 				let skip = false;
-				for (const typeName of this.dex.types.names()) {
-					// it's weak to the type
-					if (this.dex.getEffectiveness(typeName, species) > 0) {
-						if (!typeWeaknesses[typeName]) typeWeaknesses[typeName] = 0;
-						if (typeWeaknesses[typeName] >= 4 * limitFactor) {
-							skip = true;
-							break;
-						} else {
-							typeWeaknesses[typeName]++;
-						}
+
+				for (const typeName of types) {
+					if (typeCount[typeName] >= 2 * limitFactor) {
+						skip = true;
+						break;
 					}
 				}
 				if (skip) continue;
