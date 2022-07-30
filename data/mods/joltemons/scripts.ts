@@ -81,155 +81,155 @@ export const Scripts: {[k: string]: ModdedBattleScriptsData} = {
 
 			return !!(
 				(this.battle.gen >= 5 && !this.isActive) ||
-				((this.volatiles['gastroacid'] || (neutralizinggas && this.ability !== ('neutralizinggas' as ID)) || (powerofalchemyweezing && this.ability !== ('powerofalchemyweezing' as ID)) ) &&
-				!this.getAbility().isPermanent
-				)
+				((this.volatiles['gastroacid'] || (neutralizinggas && this.ability !== ('neutralizinggas' as ID)) || (powerofalchemyweezing &&
+				this.ability !== ('powerofalchemyweezing' as ID))) &&
+				!this.getAbility().isPermanent)
 			);
 		},
 		setStatus(
-		status: string | Condition,
-		source: Pokemon | null = null,
-		sourceEffect: Effect | null = null,
-		ignoreImmunities = false
-	) {
+			status: string | Condition,
+			source: Pokemon | null = null,
+			sourceEffect: Effect | null = null,
+			ignoreImmunities = false
+		) {
 			  if (!this.hp) return false;
 			  status = this.battle.dex.getEffect(status);
 			  if (this.battle.event) {
-					if (!source) source = this.battle.event.source;
-					if (!sourceEffect) sourceEffect = this.battle.effect;
+				if (!source) source = this.battle.event.source;
+				if (!sourceEffect) sourceEffect = this.battle.effect;
 			  }
 			  if (!source) source = this;
 
 			  if (this.status === status.id) {
-					if ((sourceEffect as Move)?.status === this.status) {
-						 this.battle.add('-fail', this, this.status);
-					} else if ((sourceEffect as Move)?.status) {
-						 this.battle.add('-fail', source);
-						 this.battle.attrLastMove('[still]');
-					}
-					return false;
+				if ((sourceEffect as Move)?.status === this.status) {
+					 this.battle.add('-fail', this, this.status);
+				} else if ((sourceEffect as Move)?.status) {
+					 this.battle.add('-fail', source);
+					 this.battle.attrLastMove('[still]');
+				}
+				return false;
 			  }
 			  if (!ignoreImmunities && status.id &&
 						 !(source?.hasAbility(['corrosion', 'powerofalchemymismagius', 'powerofalchemyumbreon']) && ['tox', 'psn'].includes(status.id))) {
-					// the game currently never ignores immunities
-					if (!this.runStatusImmunity(status.id === 'tox' ? 'psn' : status.id)) {
-						 this.battle.debug('immune to status');
-						 if ((sourceEffect as Move)?.status) {
-							  this.battle.add('-immune', this);
-						 }
-						 return false;
-					}
+				// the game currently never ignores immunities
+				if (!this.runStatusImmunity(status.id === 'tox' ? 'psn' : status.id)) {
+					 this.battle.debug('immune to status');
+					 if ((sourceEffect as Move)?.status) {
+						  this.battle.add('-immune', this);
+					 }
+					 return false;
+				}
 			  }
 			  const prevStatus = this.status;
 			  const prevStatusData = this.statusData;
 			  if (status.id) {
-					const result: boolean = this.battle.runEvent('SetStatus', this, source, sourceEffect, status);
-					if (!result) {
-						 this.battle.debug('set status [' + status.id + '] interrupted');
-						 return result;
-					}
+				const result: boolean = this.battle.runEvent('SetStatus', this, source, sourceEffect, status);
+				if (!result) {
+					 this.battle.debug('set status [' + status.id + '] interrupted');
+					 return result;
+				}
 			  }
 			  this.status = status.id;
 			  this.statusData = {id: status.id, target: this};
 			  if (source) this.statusData.source = source;
 			  if (status.duration) this.statusData.duration = status.duration;
 			  if (status.durationCallback) {
-					this.statusData.duration = status.durationCallback.call(this.battle, this, source, sourceEffect);
+				this.statusData.duration = status.durationCallback.call(this.battle, this, source, sourceEffect);
 			  }
 
 			  if (status.id && !this.battle.singleEvent('Start', status, this.statusData, this, source, sourceEffect)) {
-					this.battle.debug('status start [' + status.id + '] interrupted');
-					// cancel the setstatus
-					this.status = prevStatus;
-					this.statusData = prevStatusData;
-					return false;
+				this.battle.debug('status start [' + status.id + '] interrupted');
+				// cancel the setstatus
+				this.status = prevStatus;
+				this.statusData = prevStatusData;
+				return false;
 			  }
 			  if (status.id && !this.battle.runEvent('AfterSetStatus', this, source, sourceEffect, status)) {
-					return false;
+				return false;
 			  }
 			  return true;
-		}
-	},
-		modifyDamage(
-			baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages = false
-		) {
-			const tr = this.trunc;
-			if (!move.type) move.type = '???';
-			const type = move.type;
-
-			baseDamage += 2;
-
-			// multi-target modifier (doubles only)
-			if (move.spreadHit) {
-				const spreadModifier = move.spreadModifier || (this.gameType === 'free-for-all' ? 0.5 : 0.75);
-				this.debug('Spread modifier: ' + spreadModifier);
-				baseDamage = this.modify(baseDamage, spreadModifier);
-			}
-
-			// weather modifier
-			baseDamage = this.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
-
-			// crit - not a modifier
-			const isCrit = target.getMoveHitData(move).crit;
-			if (isCrit) {
-				baseDamage = tr(baseDamage * (move.critModifier || (this.gen >= 6 ? 1.5 : 2)));
-			}
-
-			// random factor - also not a modifier
-			baseDamage = this.randomizer(baseDamage);
-
-			// STAB
-			if (move.forceSTAB || (type !== '???' && pokemon.hasType(type))) {
-				// The "???" type never gets STAB
-				// Not even if you Roost in Gen 4 and somehow manage to use
-				// Struggle in the same turn.
-				// (On second thought, it might be easier to get a MissingNo.)
-				baseDamage = this.modify(baseDamage, move.stab || 1.5);
-			}
-			// types
-			let typeMod = target.runEffectiveness(move);
-			typeMod = this.clampIntRange(typeMod, -6, 6);
-			target.getMoveHitData(move).typeMod = typeMod;
-			if (typeMod > 0) {
-				if (!suppressMessages) this.add('-supereffective', target);
-
-				for (let i = 0; i < typeMod; i++) {
-					baseDamage *= 2;
-				}
-			}
-			if (typeMod < 0) {
-				if (!suppressMessages) this.add('-resisted', target);
-
-				for (let i = 0; i > typeMod; i--) {
-					baseDamage = tr(baseDamage / 2);
-				}
-			}
-
-			if (isCrit && !suppressMessages) this.add('-crit', target);
-
-			if (pokemon.status === 'brn' && move.category === 'Physical' && !(pokemon.hasAbility('guts'))) {
-				if (this.gen < 6 || move.id !== 'facade' || move.id !== 'shadowpunch') {
-					baseDamage = this.modify(baseDamage, 0.5);
-				}
-			}
-
-			// Generation 5, but nothing later, sets damage to 1 before the final damage modifiers
-			if (this.gen === 5 && !baseDamage) baseDamage = 1;
-
-			// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
-			baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
-
-			if (move.isZOrMaxPowered && target.getMoveHitData(move).zBrokeProtect) {
-				baseDamage = this.modify(baseDamage, 0.25);
-				this.add('-zbroken', target);
-			}
-
-			// Generation 6-7 moves the check for minimum 1 damage after the final modifier...
-			if (this.gen !== 5 && !baseDamage) return 1;
-
-			// ...but 16-bit truncation happens even later, and can truncate to 0
-			return tr(baseDamage, 16);
 		},
+	},
+	modifyDamage(
+		baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages = false
+		) {
+		const tr = this.trunc;
+		if (!move.type) move.type = '???';
+		const type = move.type;
+
+		baseDamage += 2;
+
+		// multi-target modifier (doubles only)
+		if (move.spreadHit) {
+			const spreadModifier = move.spreadModifier || (this.gameType === 'free-for-all' ? 0.5 : 0.75);
+			this.debug('Spread modifier: ' + spreadModifier);
+			baseDamage = this.modify(baseDamage, spreadModifier);
+		}
+
+		// weather modifier
+		baseDamage = this.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
+
+		// crit - not a modifier
+		const isCrit = target.getMoveHitData(move).crit;
+		if (isCrit) {
+			baseDamage = tr(baseDamage * (move.critModifier || (this.gen >= 6 ? 1.5 : 2)));
+		}
+
+		// random factor - also not a modifier
+		baseDamage = this.randomizer(baseDamage);
+
+		// STAB
+		if (move.forceSTAB || (type !== '???' && pokemon.hasType(type))) {
+			// The "???" type never gets STAB
+			// Not even if you Roost in Gen 4 and somehow manage to use
+			// Struggle in the same turn.
+			// (On second thought, it might be easier to get a MissingNo.)
+			baseDamage = this.modify(baseDamage, move.stab || 1.5);
+		}
+		// types
+		let typeMod = target.runEffectiveness(move);
+		typeMod = this.clampIntRange(typeMod, -6, 6);
+		target.getMoveHitData(move).typeMod = typeMod;
+		if (typeMod > 0) {
+			if (!suppressMessages) this.add('-supereffective', target);
+
+			for (let i = 0; i < typeMod; i++) {
+				baseDamage *= 2;
+			}
+		}
+		if (typeMod < 0) {
+			if (!suppressMessages) this.add('-resisted', target);
+
+			for (let i = 0; i > typeMod; i--) {
+				baseDamage = tr(baseDamage / 2);
+			}
+		}
+
+		if (isCrit && !suppressMessages) this.add('-crit', target);
+
+		if (pokemon.status === 'brn' && move.category === 'Physical' && !(pokemon.hasAbility('guts'))) {
+			if (this.gen < 6 || move.id !== 'facade' || move.id !== 'shadowpunch') {
+				baseDamage = this.modify(baseDamage, 0.5);
+			}
+		}
+
+		// Generation 5, but nothing later, sets damage to 1 before the final damage modifiers
+		if (this.gen === 5 && !baseDamage) baseDamage = 1;
+
+		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
+		baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
+
+		if (move.isZOrMaxPowered && target.getMoveHitData(move).zBrokeProtect) {
+			baseDamage = this.modify(baseDamage, 0.25);
+			this.add('-zbroken', target);
+		}
+
+		// Generation 6-7 moves the check for minimum 1 damage after the final modifier...
+		if (this.gen !== 5 && !baseDamage) return 1;
+
+		// ...but 16-bit truncation happens even later, and can truncate to 0
+		return tr(baseDamage, 16);
+	},
 	getDamage(
 		pokemon: Pokemon, target: Pokemon, move: string | number | ActiveMove,
 		suppressMessages = false
@@ -379,174 +379,98 @@ export const Scripts: {[k: string]: ModdedBattleScriptsData} = {
 		// Calculate damage modifiers separately (order differs between generations)
 		return this.modifyDamage(baseDamage, pokemon, target, move, suppressMessages);
 	},
-		getAbility() {
-			const item = this.battle.dex.getItem(this.ability);
-			return item.exists ? item as Effect as Ability : this.battle.dex.getAbility(this.ability);
-		},
-		hasItem(item) {
-			if (this.ignoringItem()) return false;
-			if (!Array.isArray(item)) {
-				item = this.battle.toID(item);
-				return item === this.item || item === this.ability;
+	getAbility() {
+		const item = this.battle.dex.getItem(this.ability);
+		return item.exists ? item as Effect as Ability : this.battle.dex.getAbility(this.ability);
+	},
+	hasItem(item) {
+		if (this.ignoringItem()) return false;
+		if (!Array.isArray(item)) {
+			item = this.battle.toID(item);
+			return item === this.item || item === this.ability;
+		}
+		item = item.map(this.battle.toID);
+		return item.includes(this.item) || item.includes(this.ability);
+	},
+	eatItem() {
+		if (!this.hp || !this.isActive) return false;
+		const source = this.battle.event.target;
+		const item = this.battle.effect;
+		if (this.battle.runEvent('UseItem', this, null, null, item) && this.battle.runEvent('TryEatItem', this, null, null, item)) {
+			this.battle.add('-enditem', this, item, '[eat]');
+
+			this.battle.singleEvent('Eat', item, this.itemData, this, source, item);
+			this.battle.runEvent('EatItem', this, null, null, item);
+
+			if (this.item === item.id) {
+				this.lastItem = this.item;
+				this.item = '';
+				this.itemData = {id: '', target: this};
 			}
-			item = item.map(this.battle.toID);
-			return item.includes(this.item) || item.includes(this.ability);
-		},
-		eatItem() {
-			if (!this.hp || !this.isActive) return false;
-			const source = this.battle.event.target;
-			const item = this.battle.effect;
-			if (this.battle.runEvent('UseItem', this, null, null, item) && this.battle.runEvent('TryEatItem', this, null, null, item)) {
-				this.battle.add('-enditem', this, item, '[eat]');
-
-				this.battle.singleEvent('Eat', item, this.itemData, this, source, item);
-				this.battle.runEvent('EatItem', this, null, null, item);
-
-				if (this.item === item.id) {
-					this.lastItem = this.item;
-					this.item = '';
-					this.itemData = {id: '', target: this};
-				}
-				if (this.ability === item.id) {
-					this.lastItem = this.ability;
-					this.baseAbility = this.ability = '';
-					this.abilityData = {id: '', target: this};
-				}
-				this.usedItemThisTurn = true;
-				this.ateBerry = true;
-				this.battle.runEvent('AfterUseItem', this, null, null, item);
-				return true;
-			}
-			return false;
-		},
-		useItem(unused, source) {
-			const item = this.battle.effect as Item;
-			if ((!this.hp && !item.isGem) || !this.isActive) return false;
-			if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
-			if (this.battle.runEvent('UseItem', this, null, null, item)) {
-				switch (item.id) {
-				case 'redcard':
-					this.battle.add('-enditem', this, item, '[of] ' + source);
-					break;
-				default:
-					if (!item.isGem) {
-						this.battle.add('-enditem', this, item);
-					}
-					break;
-				}
-
-				this.battle.singleEvent('Use', item, this.itemData, this, source, item);
-
-				if (this.item === item.id) {
-					this.lastItem = this.item;
-					this.item = '';
-					this.itemData = {id: '', target: this};
-				}
-				if (this.ability === item.id) {
-					this.lastItem = this.ability;
-					this.baseAbility = this.ability = '';
-					this.abilityData = {id: '', target: this};
-				}
-				this.usedItemThisTurn = true;
-				this.battle.runEvent('AfterUseItem', this, null, null, item);
-				return true;
-			}
-			return false;
-		},
-		setAbility(ability, source, isFromFormeChange) {
-			if (this.battle.dex.getItem(this.ability).exists) return false;
-			return Object.getPrototypeOf(this).setAbility.call(this, ability, source, isFromFormeChange);
-		},
-		takeDual(source) {
-			if (!this.isActive) return false;
-			if (!this.ability) return false;
-			if (!source) source = this;
-			const dual = this.getAbility() as any as Item;
-			if (dual.effectType !== 'Item') return false;
-			if (this.battle.runEvent('TakeItem', this, source, null, dual)) {
+			if (this.ability === item.id) {
+				this.lastItem = this.ability;
 				this.baseAbility = this.ability = '';
 				this.abilityData = {id: '', target: this};
-				return dual;
 			}
-			return false;
-		},
-
-/*
-	pokemon: {
-		hasAbility(ability) {
-			if (this.ignoringAbility()) return false;
-			ability = toID(ability);
-			return this.ability === ability || !!this.volatiles['ability' + ability];
-			if(this.ability === 'powerofalchemy'){
-				return this.species.abilities.some(checkAbility => toID(checkAbility) === ability || !!this.volatiles['ability' + toID(checkAbility)]);
-			}
-		},
-		transformInto(pokemon, effect) {
-			let template = pokemon.template;
-			if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5)) {
-				return false;
-			}
-			if (!template.abilities || (pokemon && pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5)) {
-				return false;
-			}
-			if (!this.formeChange(template, null)) {
-				return false;
-			}
-			this.transformed = true;
-
-			this.types = pokemon.types;
-			this.addedType = pokemon.addedType;
-			this.knownType = this.side === pokemon.side && pokemon.knownType;
-
-			for (let statName in this.stats) {
-				this.stats[statName] = pokemon.stats[statName];
-			}
-			this.moveSlots = [];
-			this.set.ivs = (this.battle.gen >= 5 ? this.set.ivs : pokemon.set.ivs);
-			this.hpType = (this.battle.gen >= 5 ? this.hpType : pokemon.hpType);
-			this.hpPower = (this.battle.gen >= 5 ? this.hpPower : pokemon.hpPower);
-			for (let i = 0; i < pokemon.moveSlots.length; i++) {
-				let moveData = pokemon.moveSlots[i];
-				let moveName = moveData.move;
-				if (moveData.id === 'hiddenpower') {
-					moveName = 'Hidden Power ' + this.hpType;
-				}
-				this.moveSlots.push({
-					move: moveName,
-					id: moveData.id,
-					pp: moveData.maxpp === 1 ? 1 : 5,
-					maxpp: this.battle.gen >= 5 ? (moveData.maxpp === 1 ? 1 : 5) : moveData.maxpp,
-					target: moveData.target,
-					disabled: false,
-					used: false,
-					virtual: true,
-				});
-			}
-			for (let j in pokemon.boosts) {
-				// @ts-ignore
-				this.boosts[j] = pokemon.boosts[j];
-			}
-			if (effect) {
-				this.battle.add('-transform', this, pokemon, '[from] ' + effect.fullname);
-			} else {
-				this.battle.add('-transform', this, pokemon);
-			}
-			this.setAbility(pokemon.ability, this, true);
-			if (this.innates) {
-				for (let innate of this.innates) {
-					this.removeVolatile('ability' + innate);
-				}
-			}
-			if (pokemon.innates) {
-				for (let innate of pokemon.innates) {
-					this.addVolatile('ability' + innate, this);
-				}
-			}
+			this.usedItemThisTurn = true;
+			this.ateBerry = true;
+			this.battle.runEvent('AfterUseItem', this, null, null, item);
 			return true;
-		},
+		}
+		return false;
 	},
-*/
-	
+	useItem(unused, source) {
+		const item = this.battle.effect as Item;
+		if ((!this.hp && !item.isGem) || !this.isActive) return false;
+		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+		if (this.battle.runEvent('UseItem', this, null, null, item)) {
+			switch (item.id) {
+			case 'redcard':
+				this.battle.add('-enditem', this, item, '[of] ' + source);
+				break;
+			default:
+				if (!item.isGem) {
+					this.battle.add('-enditem', this, item);
+				}
+				break;
+			}
+
+			this.battle.singleEvent('Use', item, this.itemData, this, source, item);
+
+			if (this.item === item.id) {
+				this.lastItem = this.item;
+				this.item = '';
+				this.itemData = {id: '', target: this};
+			}
+			if (this.ability === item.id) {
+				this.lastItem = this.ability;
+				this.baseAbility = this.ability = '';
+				this.abilityData = {id: '', target: this};
+			}
+			this.usedItemThisTurn = true;
+			this.battle.runEvent('AfterUseItem', this, null, null, item);
+			return true;
+		}
+		return false;
+	},
+	setAbility(ability, source, isFromFormeChange) {
+		if (this.battle.dex.getItem(this.ability).exists) return false;
+		return Object.getPrototypeOf(this).setAbility.call(this, ability, source, isFromFormeChange);
+	},
+	takeDual(source) {
+		if (!this.isActive) return false;
+		if (!this.ability) return false;
+		if (!source) source = this;
+		const dual = this.getAbility() as any as Item;
+		if (dual.effectType !== 'Item') return false;
+		if (this.battle.runEvent('TakeItem', this, source, null, dual)) {
+			this.baseAbility = this.ability = '';
+			this.abilityData = {id: '', target: this};
+			return dual;
+		}
+		return false;
+	},
+
 	init: function () {
 		this.modData('Learnsets', 'wigglytuff').learnset.geomancy = ['8L1'];
 		this.modData('Learnsets', 'articunogalar').learnset.defog = ['8L1'];
