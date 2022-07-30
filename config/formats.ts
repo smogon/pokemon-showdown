@@ -590,16 +590,17 @@ export const Formats: FormatList = [
 			'Comatose + Sleep Talk', 'Imprison + Transform',
 		],
 		onValidateSet(set) {
-			if (toID(set.ability) === 'intrepidsword' &&
-				!toID(set.species).startsWith('zacian') && toID(set.item) !== 'rustedsword') {
+			if (this.toID(set.ability) === 'intrepidsword' &&
+				!this.toID(set.species).startsWith('zacian') && this.toID(set.item) !== 'rustedsword') {
 				return [`${set.ability} is banned.`];
 			}
-			if (set.species === 'Zacian-Crowned' && (toID(set.item) !== 'rustedsword' || toID(set.ability) !== 'intrepidsword')) {
+			if (set.species === 'Zacian-Crowned' &&
+				(this.toID(set.item) !== 'rustedsword' || this.toID(set.ability) !== 'intrepidsword')) {
 				return [`${set.species} is banned.`];
 			}
 		},
 		onChangeSet(set) {
-			const item = toID(set.item);
+			const item = this.toID(set.item);
 			if (set.species === 'Zacian' && item === 'rustedsword') {
 				set.species = 'Zacian-Crowned';
 				set.ability = 'Intrepid Sword';
