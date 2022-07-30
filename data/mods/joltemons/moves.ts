@@ -764,9 +764,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 30,
 		priority: 0,
 		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
- 		onPrepareHit: function(target, source, move) {
-		  this.attrLastMove('[still]');
-		  this.add('-anim', source, "Spore", target);
+		onPrepareHit(target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Spore", target);
 		},
 		status: 'brn',
 		secondary: null,
