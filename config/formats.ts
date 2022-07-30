@@ -621,7 +621,7 @@ export const Formats: FormatList = [
 		onValidateTeam(team) {
 			let arceus = 0;
 			for (const set of team) {
-				const species = this.dex.getSpecies(set.species);
+				const species = this.dex.species.get(set.species);
 				if (species.baseSpecies === "Arceus") arceus++;
 			}
 			if (arceus > 1) {
