@@ -46,7 +46,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		num: -1003,
 		gen: 4,
-	shortDesc: "Pokemon with the ability Honey Gather or Sweet Veil heal 12.5% when holding this item.",
+		shortDesc: "Pokemon with the ability Honey Gather or Sweet Veil heal 12.5% when holding this item.",
 	},
 	eviolith: {
 		name: "Eviolith",
