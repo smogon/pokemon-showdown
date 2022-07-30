@@ -15,9 +15,9 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, pokemon) {
-		  const def = pokemon.getStat('def', false, true);
-		  const newAtk = atk + (def / 4);
-		  return newAtk;
+			const def = pokemon.getStat('def', false, true);
+			const newAtk = atk + (def / 4);
+			return newAtk;
 		},
 		num: -1002,
 		gen: 8,
