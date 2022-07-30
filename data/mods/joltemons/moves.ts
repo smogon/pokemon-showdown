@@ -867,11 +867,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (pokemon.ignoringItem()) return;
 			move.type = this.runEvent('Drive', pokemon, null, move, 'Normal');
 		},
-		onModifyMove(move, pokemon) {
-			if (pokemon.hasItem('burndrive') || pokemon.hasItem('dousedrive') || pokemon.hasItem('chilldrive') || pokemon.hasItem('shockdrive')) {
-				move.basePower *= 1.2;
-			}
-		},
 		secondary: null,
 		target: "normal",
 		type: "Normal",
