@@ -8,7 +8,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "Comes back to the user when flung.", 
 	},
- momentumarmor: {
+	momentumarmor: {
 		name: "Momentum Armor",
 		fling: {
 			basePower: 80,
