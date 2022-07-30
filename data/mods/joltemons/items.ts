@@ -138,7 +138,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			}
 		},
 		onBasePower(basePower, user, target, move) {
-			if (move && (user.species.id === 'darmanitangalarzen') && (move.type === 'Fire')) {
+			if (move && user.species.id === 'darmanitangalarzen' && move.type === 'Fire') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
@@ -154,19 +154,19 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 	"graduationscale": {
 		id: "graduationscale",
 		name: "Graduation Scale",
-		onStart: function(pokemon) {
+		onStart(pokemon) {
 			pokemon.setAbility('intimidate', pokemon, 'intimidate', true);
 		},
-		onTakeItem: function(item, source) {
-			if (source.baseSpecies.baseSpecies === 'Wishiwashi' || source.baseSpecies.baseSpecies === 'Wishiwashi-School') return false;
+		onTakeItem(item, source) {
+			if (source.baseSpecies.baseSpecies === 'Wishiwashi') return false;
 			return true;
 		},
 		fling: {
 			basePower: 20,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function(basePower, user, target, move) {
-			if (move && (user.baseSpecies.num === 746) && (move.type === 'Water')) {
+		onBasePower(basePower, user, target, move) {
+			if (move && user.baseSpecies.num === 746 && move.type === 'Water') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
@@ -205,25 +205,25 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		onModifyDefPriority: 1,
 		onModifyDef(def, pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Emolga' || pokemon.baseSpecies.baseSpecies === 'Dedenne' || pokemon.baseSpecies.baseSpecies === 'Togedemaru' || pokemon.baseSpecies.baseSpecies === 'Pachirisu') {
+			if (['Emolga', 'Dedenne', 'Togedemaru', 'Pachirisu'].includes(pokemon.baseSpecies.baseSpecies)) {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpAPriority: 1,
 		onModifySpA(spa, pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Pikachu' || pokemon.baseSpecies.baseSpecies === 'Raichu' || pokemon.baseSpecies.baseSpecies === 'Raichu-Alola' || pokemon.baseSpecies.baseSpecies === 'Plusle' || pokemon.baseSpecies.baseSpecies === 'Dedenne') {
+			if (['Pikachu', 'Raichu', 'Raichu-Alola', 'Plusle', 'Dedenne'].includes(pokemon.baseSpecies.baseSpecies)) {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpDPriority: 1,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Plusle' || pokemon.baseSpecies.baseSpecies === 'Minun' || pokemon.baseSpecies.baseSpecies === 'Pachirisu' || pokemon.baseSpecies.baseSpecies === 'Morpeko' || pokemon.baseSpecies.baseSpecies === 'Morpeko-Hangry') {
+			if (['Plusle', 'Minun', 'Pachirisu', 'Morpeko'].includes(pokemon.baseSpecies.baseSpecies)) {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpePriority: 1,
 		onModifySpe(spe, pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Pikachu' || pokemon.baseSpecies.baseSpecies === 'Minun' || pokemon.baseSpecies.baseSpecies === 'Emolga') {
+			if (['Pikachu', 'Minun', 'Emolga'].includes(pokemon.baseSpecies.baseSpecies)) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -232,7 +232,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		gen: 2,
 		desc: "If held by Pikachu, Raichu, or a Pikaclone, 2 of its stats are boosted 1.5x.",
 	},
-/*
+	/*
 	soulblade: {
 		name: "Soul Blade",
 		spritenum: 297,
@@ -245,7 +245,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "(Non-functional placeholder) The holder's moves deal 1.1x damage + .2x for every KO it has.",
 	},
-*/
+	*/
 	mentalherb: {
 		name: "Mental Herb",
 		spritenum: 285,
@@ -527,29 +527,29 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 5,
 		onResidual(pokemon) {
-			if ((pokemon.status === 'slp' || pokemon.hasAbility('comatose'))) {
+			if (pokemon.status === 'slp' || pokemon.hasAbility('comatose')) {
 				this.heal(pokemon.baseMaxhp / 8);
 			}
 		},
-/*
+		/*
 		onStart(pokemon) {
-			if ((pokemon.status === 'slp' || pokemon.hasAbility('comatose'))) {
+			if (pokemon.status === 'slp' || pokemon.hasAbility('comatose')) {
 				pokemon.addVolatile('pillow');
 			}
 		},
 		condition: {
 			onTryMovePriority: -2,
 			onTryMove(pokemon, target, move) {
-				if ((!pokemon.hasItem('pillow') || !pokemon.status === 'slp' || !pokemon.hasAbility('comatose'))) {
+				if (!pokemon.hasItem('pillow') || (pokemon.status !== 'slp' && !pokemon.hasAbility('comatose'))) {
 					pokemon.removeVolatile('pillow');
 					return;
 				}
-				if ((pokemon.status === 'slp' || pokemon.hasAbility('comatose'))) {
-		   		this.useMove("Sleep Talk", pokemon);
+				if (pokemon.status === 'slp' || pokemon.hasAbility('comatose')) {
+		   			this.useMove("Sleep Talk", pokemon);
 				}
 			},
 		},
-*/
+		*/
 		gen: 8,
 		desc: "(Bugged) Holder heals 12.5% HP while asleep. If asleep, calls a random attack.",
 	},
@@ -573,8 +573,10 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 				this.heal(pokemon.baseMaxhp / 16);
 			}
 		},
-		onDisableMove: function(pokemon) {
-			if (!pokemon.hasType('Ghost') && pokemon.lastMove && pokemon.lastMove.id !== 'struggle') pokemon.disableMove(pokemon.lastMove.id);
+		onDisableMove(pokemon) {
+			if (!pokemon.hasType('Ghost') && pokemon.lastMove?.id !== 'struggle') {
+				pokemon.disableMove(pokemon.lastMove.id);
+			}
 		},
 		onTakeItem(item, source) {
 			if (source.hasType('Ghost')) return false;
@@ -784,7 +786,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		onSwitchIn(pokemon) {
 			if (pokemon.isActive && pokemon.baseSpecies.baseSpecies === 'Regigigas') {
-					let oldAbility = pokemon.setAbility('thickfat', pokemon, 'thickfat', true);
+				let oldAbility = pokemon.setAbility('thickfat', pokemon, 'thickfat', true);
 				if (oldAbility) {
 					this.add('-activate', pokemon, 'ability: Thick Fat', oldAbility, '[of] ' + pokemon);
 				}
@@ -792,14 +794,16 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		onSourceModifyAtkPriority: 6,
 		onSourceModifyAtk(atk, attacker, defender, move) {
-			if ((move.type === 'Fighting' || move.type === 'Rock') && defender.baseSpecies.baseSpecies === 'Regigigas') {
+			if ((move.type === 'Fighting' || move.type === 'Rock') &&
+				defender.baseSpecies.baseSpecies === 'Regigigas') {
 				this.debug('Sacred Ropes weaken');
 				return this.chainModify(0.75);
 			}
 		},
 		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(atk, attacker, defender, move) {
-			if ((move.type === 'Fighting' || move.type === 'Rock') && defender.baseSpecies.baseSpecies === 'Regigigas') {
+			if ((move.type === 'Fighting' || move.type === 'Rock') &&
+				defender.baseSpecies.baseSpecies === 'Regigigas') {
 				this.debug('Sacred Ropes weaken');
 				return this.chainModify(0.75);
 			}
@@ -811,7 +815,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		itemUser: ["Regigigas"],
 		desc: "If held by Regigigas: Ability becomes Thick Fat, takes 0.75x damage from Fighting and Rock moves.",
 	},
-// soul blades
+	// soul blades
 	soulblade: {
 		name: "Soul Blade",
 		spritenum: 297,
@@ -819,104 +823,19 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			basePower: 100,
 		},
 		onModifyDamage(damage, source, target, move) {
-				return this.chainModify([0x1199, 0x1000]);
+			const soulBladePower = [[0x1199, 0x1000], [0x14CC, 0x1000], 1.5, 1.7, 1.9, 2.1];
+			const soulBladeLevel = source.m.soulBladeLevel || 1;
+			return this.chainModify(soulBladePower[soulBladeLevel - 1]);
 		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				this.add('-activate', source, 'item: Soul Blade'); 
-				source.setItem('soulbladelvl2');
-				this.add('-item', source, source.getItem(), '[from] item: Soul Blade');
+				if (!source.m.soulBladeLevel) source.m.soulBladeLevel = 1;
+				if (source.m.soulBladeLevel < 6) this.add('-activate', source, 'item: Soul Blade');
+				source.m.soulBladeLevel += 1;
+				if (!source.m.soulBladeLevel > 6) source.m.soulBladeLevel = 6;
 			}
 		},
 		gen: 8,
 		desc: "The holder's moves deal 1.1x damage + .2x for every KO it has.",
-	},
-	soulbladelvl2: {
-		name: "Soul Blade Lvl. 2",
-		spritenum: 297,
-		fling: {
-			basePower: 100,
-		},
-		onModifyDamage(damage, source, target, move) {
-				return this.chainModify([0x14CC, 0x1000]);
-		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect && effect.effectType === 'Move') {
-				this.add('-activate', source, 'item: Soul Blade'); 
-				source.setItem('soulbladelvl3');
-				this.add('-item', source, source.getItem(), '[from] item: Soul Blade');
-			}
-		},
-		gen: 8,
-		desc: "The holder's moves deal 1.3x damage + .2x for every additional KO it has.",
-	},
-	soulbladelvl3: {
-		name: "Soul Blade Lvl. 3",
-		spritenum: 297,
-		fling: {
-			basePower: 100,
-		},
-		onModifyDamage(damage, source, target, move) {
-				return this.chainModify(1.5);
-		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect && effect.effectType === 'Move') {
-				this.add('-activate', source, 'item: Soul Blade'); 
-				source.setItem('soulbladelvl4');
-				this.add('-item', source, source.getItem(), '[from] item: Soul Blade');
-			}
-		},
-		gen: 8,
-		desc: "The holder's moves deal 1.5x damage + .2x for every additional KO it has.",
-	},
-	soulbladelvl4: {
-		name: "Soul Blade Lvl. 4",
-		spritenum: 297,
-		fling: {
-			basePower: 100,
-		},
-		onModifyDamage(damage, source, target, move) {
-				return this.chainModify(1.7);
-		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect && effect.effectType === 'Move') {
-				this.add('-activate', source, 'item: Soul Blade'); 
-				source.setItem('soulbladelvl5');
-				this.add('-item', source, source.getItem(), '[from] item: Soul Blade');
-			}
-		},
-		gen: 8,
-		desc: "The holder's moves deal 1.7x damage + .2x for every additional KO it has.",
-	},
-	soulbladelvl5: {
-		name: "Soul Blade Lvl. 5",
-		spritenum: 297,
-		fling: {
-			basePower: 100,
-		},
-		onModifyDamage(damage, source, target, move) {
-				return this.chainModify(1.9);
-		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect && effect.effectType === 'Move') {
-				this.add('-activate', source, 'item: Soul Blade'); 
-				source.setItem('ultrasoulblade');
-				this.add('-item', source, source.getItem(), '[from] item: Soul Blade');
-			}
-		},
-		gen: 8,
-		desc: "The holder's moves deal 1.9x damage + .2x for every additional KO it has.",
-	},
-	ultrasoulblade: {
-		name: "Ultra Soul Blade",
-		spritenum: 297,
-		fling: {
-			basePower: 100,
-		},
-		onModifyDamage(damage, source, target, move) {
-				return this.chainModify(2.1);
-		},
-		gen: 8,
-		desc: "Strongest Soul Blade. The holder's moves deal 2.1x damage.",
 	},
 };
