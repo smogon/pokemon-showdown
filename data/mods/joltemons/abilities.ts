@@ -36,7 +36,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			return this.chainModify(2);
 		},
 		name: "Light Power",
-	shortDesc: "This Pokemon's Special Attack is doubled.",
+		shortDesc: "This Pokemon's Special Attack is doubled.",
 		rating: 5,
 	},
 	raindish: {
@@ -52,7 +52,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Rain Dish",
-	shortDesc: "Heals 6.25% of user's max HP at the end of each turn. Heals 12.5% in Rain.",
+		shortDesc: "Heals 6.25% of user's max HP at the end of each turn. Heals 12.5% in Rain.",
 		num: 44,
 		rating: 3,
 	},
@@ -69,13 +69,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Ice Body",
-	shortDesc: "Heals 6.25% of user's max HP at the end of each turn. Heals 12.5% in Hail.",
+		shortDesc: "Heals 6.25% of user's max HP at the end of each turn. Heals 12.5% in Hail.",
 		num: 115,
 		rating: 3,
 	},
 	sweetveil: {
 		name: "Sweet Veil",
-	  shortDesc: "This Pokemon and its allies can't fall asleep. This Pokemon heals 1/8 of its max HP if it's holding Honey.",
+	  	shortDesc: "This Pokemon and its allies can't fall asleep. This Pokemon heals 1/8 of its max HP if it's holding Honey.",
 		onAllySetStatus(status, target, source, effect) {
 			if (status.id === 'slp') {
 				this.debug('Sweet Veil interrupts sleep');
@@ -103,7 +103,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: 175,
 	},
 	libero: {
-	  shortDesc: "Non-STAB moves have 1.2x power.",
+	  	shortDesc: "Non-STAB moves have 1.2x power.",
 		onBasePowerPriority: 23,
 		onBasePower (basePower, pokemon, target, move) {
 			if (!pokemon.hasType(move.type)) {
@@ -115,7 +115,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: 236,
 	},
 	moody: {
-	  shortDesc: "This Pokemon's lowest stat goes up by 1 every turn.",
+	  	shortDesc: "This Pokemon's lowest stat goes up by 1 every turn.",
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
@@ -162,7 +162,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: 60,
 	},
 	watercompaction: {
-		shortDesc: "This Pokemon's Defense goes up 2 stages when hit by a Water-type move; Water immunity",
+			shortDesc: "This Pokemon's Defense goes up 2 stages when hit by a Water-type move; Water immunity",
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Water') {
@@ -183,7 +183,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: 195,
 	},
 	ironfist: {
-		shortDesc: "This Pokemon's punch attacks have 1.25x power and don't make contact. Sucker Punch is not boosted.",
+			shortDesc: "This Pokemon's punch attacks have 1.25x power and don't make contact. Sucker Punch is not boosted.",
 		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
@@ -201,7 +201,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: 89,
 	},
 	overclock: {
-		shortDesc: "This Pokemon's moves that lower its stats have 1.3x power.",
+			shortDesc: "This Pokemon's moves that lower its stats have 1.3x power.",
 		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.name === 'Draco Meteor' || move.name === 'Fleur Cannon' || move.name === 'Leaf Storm' || move.name === 'Overheat' || move.name === 'Psycho Boost' || move.name === 'Superpower' || move.name === 'Lightning Lance' || move.name === 'Clanging Scales' || move.name === 'Close Combat' || move.name === 'Dragon Ascent' || move.name === 'Hyperspace Fury' || move.name === 'Scale Shot' || move.name === 'V-Create' || move.name === 'Hammer Arm' || move.name === 'Ice Hammer') {
@@ -212,7 +212,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 4,
 	},
 	pricklycoat: {
-		shortDesc: "This Pokemon sets a layer of Spikes when hit by a contact move, or Toxic Spikes if it's a Poison-type or hit by a Poison-type move.",
+			shortDesc: "This Pokemon sets a layer of Spikes when hit by a contact move, or Toxic Spikes if it's a Poison-type or hit by a Poison-type move.",
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
 			if (move.flags['contact'] && (move.type === 'Poison' || target.hasType('Poison'))) {
@@ -230,7 +230,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	sandveil: {
 		desc: "If Sandstorm is active, this Pokemon's SpD is multiplied by 1.5. This Pokemon takes no damage from Sandstorm.",
-		shortDesc: "If Sandstorm is active, this Pokemon's SpD is boosted 1.5x; immunity to Sandstorm.",
+			shortDesc: "If Sandstorm is active, this Pokemon's SpD is boosted 1.5x; immunity to Sandstorm.",
 		onImmunity(type, pokemon) {
 			if (type === 'sandstorm') return false;
 		},
@@ -246,7 +246,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	snowcloak: {
 		desc: "If Hail is active, this Pokemon's Ice, Water, and Fairy-type moves deal 1.3x damage. This Pokemon takes no damage from Hail.",
-		shortDesc: "This Pokemon's Ice/Water/Fairy attacks deal 1.3x damage in Hail; immunity to Hail.",
+			shortDesc: "This Pokemon's Ice/Water/Fairy attacks deal 1.3x damage in Hail; immunity to Hail.",
 		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
 		},
@@ -265,7 +265,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: 81,
 	},
 	powerofalchemy: {
-		shortDesc: "All of this Pokemon's abilities are active at once.",
+			shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Power of Alchemy');
 		},
@@ -275,7 +275,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: 223,
 	},
 	powerofalchemymukalola: {
-		shortDesc: "All of this Pokemon's abilities are active at once.",
+			shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Power of Alchemy');
 		},
@@ -301,7 +301,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 5,
 	},
 	merciless: {
-		shortDesc: "This Pokemon's attacks are critical hits if the target is statused.",
+			shortDesc: "This Pokemon's attacks are critical hits if the target is statused.",
 		onModifyCritRatio(critRatio, source, target) {
 			if (target && ['psn', 'tox', 'brn', 'frz', 'slp', 'par'].includes(target.status)) return 5;
 		},
@@ -310,7 +310,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: 196,
 	},
 	pastelveil: {
-		shortDesc: "This Pokemon and its allies cannot be poisoned. Poison-type moves have 0.5x power against this Pokemon and its allies. On switch-in, cures poisoned allies.",
+			shortDesc: "This Pokemon and its allies cannot be poisoned. Poison-type moves have 0.5x power against this Pokemon and its allies. On switch-in, cures poisoned allies.",
 		onStart(pokemon) {
 			for (const ally of pokemon.allies()) {
 				if (['psn', 'tox'].includes(ally.status)) {
@@ -365,7 +365,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: 257,
 	},
 	gravitas: {
-		shortDesc: "On switch-in, this Pokemon summons Gravity.",
+			shortDesc: "On switch-in, this Pokemon summons Gravity.",
 		onStart(source) {
 			this.add('-ability', source, 'Gravitas');
 			this.field.addPseudoWeather('gravity', source, source.ability);
@@ -374,7 +374,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 4,
 	},
 	buzzoff: {
-	  shortDesc: "This Pokemon switches out after using a Bug-type move.",
+	  	shortDesc: "This Pokemon switches out after using a Bug-type move.",
 	  onModifyMove(move, pokemon) {
 			if (move.type === 'Bug') {
 			  move.selfSwitch = true;
@@ -412,7 +412,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Magma Armor",
 		rating: 2,
 		num: 40,
-		shortDesc: "Water/Ice-type moves against this Pokemon deal damage with a halved attacking stat. Hail & Freeze immunity.",
+			shortDesc: "Water/Ice-type moves against this Pokemon deal damage with a halved attacking stat. Hail & Freeze immunity.",
 	},
 	leafguard: {
 		onSetStatus(status, target, source, effect) {
@@ -446,7 +446,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Leaf Guard",
 		rating: 0.5,
 		num: 102,
-		shortDesc: "Flying/Bug-type moves against this Pokemon deal damage with a halved attacking stat. Can't be statused or flinched by others in Sun.",
+			shortDesc: "Flying/Bug-type moves against this Pokemon deal damage with a halved attacking stat. Can't be statused or flinched by others in Sun.",
 	},
 
 	soullink: {
@@ -457,11 +457,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Soul Link",
-		shortDesc: "Pokémon that make contact with this Pokémon have the Ghost-type added to their existing typings until they switch out (Trick-or-Treat effect).",
+			shortDesc: "Pokémon that make contact with this Pokémon have the Ghost-type added to their existing typings until they switch out (Trick-or-Treat effect).",
 		rating: 2.5,
 	},
 	wanderingspirit: {
-		shortDesc: "On switch-in, swaps ability with the opponent.",
+			shortDesc: "On switch-in, swaps ability with the opponent.",
 		onSwitchIn(pokemon) {
 			this.effectData.switchingIn = true;
 		},
@@ -507,7 +507,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	honeygather: {
 		name: "Honey Gather",
-		shortDesc: "At the end of each turn, if this Pokemon has no item, it gets Honey. Knock Off doesn't get boosted against Pokemon with this ability.",
+			shortDesc: "At the end of each turn, if this Pokemon has no item, it gets Honey. Knock Off doesn't get boosted against Pokemon with this ability.",
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
@@ -529,7 +529,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: 118,
 	},
 	hydration: {
-		shortDesc: "This Pokemon has its status cured at the end of each turn if Rain Dance is active or it gets hit by a Water move; Water immunity. Heals 12.5% HP if hit by a Water move.",
+			shortDesc: "This Pokemon has its status cured at the end of each turn if Rain Dance is active or it gets hit by a Water move; Water immunity. Heals 12.5% HP if hit by a Water move.",
 		onResidualOrder: 5,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -576,7 +576,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: 184,
 	},
   scavenge: {
-		shortDesc: "This Pokemon's heals 33% of its HP when another Pokemon faints.",
+			shortDesc: "This Pokemon's heals 33% of its HP when another Pokemon faints.",
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.add('-activate', source, 'ability: Scavenge'); 
@@ -587,7 +587,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 3.5,
 	},
 	unimpressed: {
-		shortDesc: "Moves used against this Pokemon don't receive STAB.",
+			shortDesc: "Moves used against this Pokemon don't receive STAB.",
 		onSourceModifyDamage(damage, source, target, move) {
 			if (source.hasType(move.type) && (!source.hasAbility('adaptability'))) {
 				this.debug('Unimpressed weaken');
@@ -602,7 +602,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 3.5,
 	},
 	counterfeit: {
-		shortDesc: "On switch-in, identifies and copies the effect of the opponent's held item.",
+			shortDesc: "On switch-in, identifies and copies the effect of the opponent's held item.",
 		onStart(pokemon) {
 			if (pokemon.side.foe.active.some(
 				foeActive => foeActive && this.isAdjacent(pokemon, foeActive) && !foeActive.item
@@ -649,7 +649,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add("-fail", target, "unboost", "[from] ability: Optimistic", "[of] " + target);
 			}
 		},
-		shortDesc: "This Pokemon can't lower its own stats.",
+			shortDesc: "This Pokemon can't lower its own stats.",
 		name: "Optimistic",
 		rating: 5,
 	},
@@ -663,7 +663,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Rivalry",
 		rating: 0,
 		num: 79,
-		shortDesc: "This Pokemon's moves deal 1.33x damage to targets that share a type with it.",
+			shortDesc: "This Pokemon's moves deal 1.33x damage to targets that share a type with it.",
 	},
 	vaporcontrol: {
 		onUpdate(pokemon) {
@@ -680,7 +680,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
-		shortDesc: "If Sun is active, 1.5x power Water moves and sets Mist; Ignores Sun Water drop.",
+			shortDesc: "If Sun is active, 1.5x power Water moves and sets Mist; Ignores Sun Water drop.",
 		name: "Vapor Control",
 		rating: 3,
 	},
@@ -772,7 +772,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	concussion: {
 		id: "concussion",
 		name: "Concussion",
-		shortDesc: "While this Pokemon is active, the opponents' held items have no effect.",
+			shortDesc: "While this Pokemon is active, the opponents' held items have no effect.",
 		onStart(source) {
 			let activated = false;
 			for (const pokemon of source.side.foe.active) {
@@ -804,7 +804,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	gorillatactics: {
 		name: "Gorilla Tactics",
-		shortDesc: "While this Pokemon is active, the opponents' held items have no effect.",
+			shortDesc: "While this Pokemon is active, the opponents' held items have no effect.",
 		onStart(source) {
 			let activated = false;
 			for (const pokemon of source.side.foe.active) {
@@ -836,7 +836,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: 255,
 	},
 	toxicboost: {
-		shortDesc: "1.5x Attack and Defense while poisoned; Immune to poison status damage.",
+			shortDesc: "1.5x Attack and Defense while poisoned; Immune to poison status damage.",
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if ((attacker.status === 'psn' || attacker.status === 'tox') && move.category === 'Physical') {
@@ -860,7 +860,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: 137,
 	},
 	flareboost: {
-		shortDesc: "1.5x SpA and SpD while burned; Immune to burn damage.",
+			shortDesc: "1.5x SpA and SpD while burned; Immune to burn damage.",
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (attacker.status === 'brn' && move.category === 'Special') {
@@ -886,7 +886,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 // The other Power of Alchemies
 		powerofalchemyweezing: {
-		shortDesc: "All of this Pokemon's abilities are active at once.",
+			shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityData.ending = false;
@@ -920,7 +920,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 5,
 	}, 
 		powerofalchemyalcremie: {
-		shortDesc: "All of this Pokemon's abilities are active at once.",
+			shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Power of Alchemy');
 		},
@@ -972,7 +972,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 5,
 	}, 
 	powerofalchemymismagius: {
-		shortDesc: "All of this Pokemon's abilities are active at once.",
+			shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Power of Alchemy');
 		},
@@ -981,7 +981,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 5,
 	},
 	powerofalchemyslowkinggalar: {
-		shortDesc: "All of this Pokemon's abilities are active at once.",
+			shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Power of Alchemy');
 		},
@@ -1001,7 +1001,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 5,
 	},
 	powerofalchemyditto: {
-		shortDesc: "All of this Pokemon's abilities are active at once.",
+			shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Power of Alchemy');
 		},
@@ -1035,7 +1035,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 5,
 	},
 	powerofalchemyvanillite: {
-		shortDesc: "All of this Pokemon's abilities are active at once.",
+			shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Power of Alchemy');
 		},
@@ -1068,7 +1068,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 5,
 	},
 	powerofalchemyvanilluxe: {
-		shortDesc: "All of this Pokemon's abilities are active at once.",
+			shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Power of Alchemy');
 		},
@@ -1091,7 +1091,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 5,
 	},
 	powerofalchemytypenull: {
-		shortDesc: "All of this Pokemon's abilities are active at once.",
+			shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Power of Alchemy');
 		},
@@ -1108,7 +1108,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 5,
 	},
 	powerofalchemysilvally: {
-		shortDesc: "All of this Pokemon's abilities are active at once.",
+			shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Power of Alchemy');
 		},
@@ -1131,7 +1131,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 5,
 	},
 	powerofalchemyvaporeon: {
-		shortDesc: "All of this Pokemon's abilities are active at once.",
+			shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Power of Alchemy');
 		},
@@ -1158,7 +1158,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 5,
 	},
 	powerofalchemyjolteon: {
-		shortDesc: "All of this Pokemon's abilities are active at once.",
+			shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Power of Alchemy');
 		},
@@ -1187,7 +1187,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 5,
 	},
 	powerofalchemyflareon: {
-		shortDesc: "All of this Pokemon's abilities are active at once.",
+			shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Power of Alchemy');
 		},
@@ -1211,7 +1211,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 5,
 	},
 	powerofalchemyespeon: {
-		shortDesc: "All of this Pokemon's abilities are active at once.",
+			shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Power of Alchemy');
 		},
@@ -1259,7 +1259,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 5,
 	},
 	powerofalchemyumbreon: {
-		shortDesc: "All of this Pokemon's abilities are active at once.",
+			shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Power of Alchemy');
 		},
@@ -1271,7 +1271,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 5,
 	},
 	powerofalchemyleafeon: {
-		shortDesc: "All of this Pokemon's abilities are active at once.",
+			shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Power of Alchemy');
 		},
@@ -1313,7 +1313,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 5,
 	},
 	powerofalchemyglaceon: {
-		shortDesc: "All of this Pokemon's abilities are active at once.",
+			shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Power of Alchemy');
 		},
@@ -1337,7 +1337,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 5,
 	},
 	powerofalchemysylveon: {
-		shortDesc: "All of this Pokemon's abilities are active at once.",
+			shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Power of Alchemy');
 		},
@@ -1506,7 +1506,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	choicespecs: {
 		name: "Choice Specs",
-		shortDesc: "This Pokemon's Sp. Atk is 1.5x, but it can only select the first move it executes.",
+			shortDesc: "This Pokemon's Sp. Atk is 1.5x, but it can only select the first move it executes.",
 		onStart(pokemon) {
 			pokemon.abilityData.choiceLock = "";
 		},
