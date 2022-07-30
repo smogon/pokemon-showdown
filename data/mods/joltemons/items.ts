@@ -107,10 +107,10 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			}
 		},
 		onBasePower(basePower, user, target, move) {
-			if (move && (user.species.id === 'darmanitanzen') && (move.type === 'Psychic')) {
-				return this.chainModify([0x1333, 0x1000]);
-			}
-			if (move && (user.species.id === 'darmanitangalarzen') && (move.type === 'Fire')) {
+			if (move && (
+				(user.species.id === 'darmanitanzen' && move.type === 'Psychic') ||
+					(user.species.id === 'darmanitangalarzen') && (move.type === 'Fire')
+			)) {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
