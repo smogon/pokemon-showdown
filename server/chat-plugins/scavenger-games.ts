@@ -304,6 +304,54 @@ const TWISTS: {[k: string]: Twist} = {
 			this.completed = this.preCompleted || [];
 		},
 	},
+
+	speedrun: {
+		name: 'Speedrun',
+		id: 'speedrun',
+		desc: "Time starts when the player starts the hunt!",
+
+		onJoin(user) {
+			if (!Config.noipchecks && this.altIps) {
+				const altIp = user.ips.find(ip => this.altIps[ip] && this.altsIps[ip].id !== user.id);
+				if (altIp) {
+					user.sendTo(this.room, `You already have started the hunt as ${this.altIps[altIp].name}.`);
+					return true;
+				}
+			}
+			if (!this.startTimes) this.startTimes = {};
+			if (!this.startTimes[user.id]) this.startTimes[user.id] = Date.now();
+			if (this.addPlayer(user)) {
+				this.cacheUserIps(user);
+				delete this.leftHunt[user.id];
+				user.sendTo(this.room, "You joined the scavenger hunt! Use the command /scavenge to answer.");
+				this.onSendQuestion(user);
+			} else user.sendTo(this.room, "You have already joined the hunt.");
+			return true;
+		},
+
+		onLeave(user) {
+			if (!this.altIps) this.altIps = {};
+			for (const ip of user.ips) {
+				this.altIps[ip] = {id: user.id, name: user.name};
+			}
+		},
+
+		onComplete(player, time, blitz) {
+			const now = Date.now();
+			const takenTime = Chat.toDurationString(now - this.startTimes[player.id], {hhmmss: true});
+			const result = {name: player.name, id: player.id, time: takenTime, blitz};
+			this.completed.push(result);
+			const place = Utils.formatOrder(this.completed.length);
+
+			this.announce(
+				Utils.html`<em>${result.name}</em> is the ${place} player to finish the hunt! (${takenTime}${(blitz ? " - BLITZ" : "")})`
+			);
+			Utils.sortBy(this.completed, entry => entry.time);
+
+			player.destroy(); // remove from user.games;
+			return true;
+		},
+	},
 };
 
 const MODES: {[k: string]: GameMode | string} = {
