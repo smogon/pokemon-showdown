@@ -326,7 +326,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	completed: AnyObject[];
 	leftHunt: {[userid: string]: 1 | undefined};
 	hosts: FakeUser[];
-	mod: String | null;
+	mod: string | null;
 	mods: {[k: string]: ModEvent[]};
 	staffHostId: string;
 	staffHostName: string;
@@ -1422,7 +1422,11 @@ const ScavengerCommands: Chat.ChatCommands = {
 		let buffer = `<div class="infobox" style="margin-top: 0px;">The current ${gameTypeMsg}scavenger hunt by <em>${hostersMsg}${hostMsg}</em> has been up for: ${elapsedMsg}<br />${!game.timerEnd ? 'The timer is currently off.' : `The hunt ends in: ${Chat.toDurationString(game.timerEnd - Date.now(), {hhmmss: true})}`}<br />Completed (${game.completed.length}): ${finishers}</div>`;
 		if (game.mod === 'speedrun') {
 			const finisher = game.completed.find(player => player.id === user.id);
-			const speedrunMsg = finisher ? `You finished the hunt in: ${finisher.time}.` : (game.startTimes?.[user.id] ? `You joined the hunt ${Chat.toDurationString(Date.now() - game.startTimes[user.id], {hhmmss: true})} ago.` : 'You have not joined the hunt.');
+			const speedrunMsg = finisher ?
+				`You finished the hunt in: ${finisher.time}.` :
+				(game.startTimes?.[user.id] ?
+					`You joined the hunt ${Chat.toDurationString(Date.now() - game.startTimes[user.id], {hhmmss: true})} ago.` :
+					'You have not joined the hunt.');
 			buffer = `<div class="infobox" style="margin-top: 0px;">The current ${gameTypeMsg}scavenger hunt by <em>${hostersMsg}${hostMsg}</em> has been up for: ${elapsedMsg}<br />${speedrunMsg}<br />${!game.timerEnd ? 'The timer is currently off.' : `The hunt ends in: ${Chat.toDurationString(game.timerEnd - Date.now(), {hhmmss: true})}`}<br />Completed (${game.completed.length}): ${finishers}</div>`;
 		}
 

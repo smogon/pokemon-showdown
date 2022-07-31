@@ -325,7 +325,9 @@ const TWISTS: {[k: string]: Twist} = {
 				delete this.leftHunt[user.id];
 				user.sendTo(this.room, "You joined the scavenger hunt! Use the command /scavenge to answer.");
 				this.onSendQuestion(user);
-			} else user.sendTo(this.room, "You have already joined the hunt.");
+			} else {
+				user.sendTo(this.room, "You have already joined the hunt.");
+			}
 			return true;
 		},
 
