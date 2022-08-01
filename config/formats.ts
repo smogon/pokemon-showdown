@@ -3359,6 +3359,7 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['[Gen 5] PU'],
 		banlist: ['PU', 'Articuno', 'Dragonair', 'Glalie', 'Machoke', 'Marowak', 'Omanyte', 'Regigigas', 'Trubbish', 'Whirlipede', 'Baton Pass'],
+		unbanlist: ['Damp Rock'],
 	},
 	{
 		name: "[Gen 5] GBU Singles",
