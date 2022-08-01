@@ -199,7 +199,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, pokemon) {
-			if (['Pikachu', 'Raichu', 'Raichu-Alola', 'Togedemaru', 'Morpeko', 'Morpeko-Hangry'].includes((pokemon.baseSpecies.baseSpecies)) {
+			if (['Pikachu', 'Raichu', 'Raichu-Alola', 'Togedemaru', 'Morpeko', 'Morpeko-Hangry'].includes((pokemon.baseSpecies.baseSpecies))) {
 				return this.chainModify(1.5);
 			}
 		},
