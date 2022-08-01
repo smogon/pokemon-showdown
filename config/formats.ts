@@ -400,7 +400,8 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer', '+Mythical'],
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer'],
+		unbanlist: ['Mythical', 'Restricted Legendary'],
 	},
 	{
 		name: "[Gen 8] VGC 2021",
