@@ -2407,7 +2407,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen3',
-		searchShow: false,
+		// searchShow: false,
 		ruleset: ['Standard', 'Deoxys Camouflage Clause', 'One Baton Pass Clause'],
 		banlist: ['Wobbuffet + Leftovers'],
 	},
@@ -2419,7 +2419,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen5',
-		searchShow: false,
+		// searchShow: false,
 		ruleset: ['[Gen 5] UU', 'Baton Pass Clause', '!Sleep Clause Mod', 'Sleep Moves Clause'],
 		banlist: ['UU', 'RUBL', 'Shadow Tag', 'Shell Smash + Baton Pass'],
 		unbanlist: ['Prankster + Assist', 'Prankster + Copycat', 'Baton Pass'],
@@ -2431,7 +2431,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen7letsgo',
-		searchShow: false,
+		// searchShow: false,
 		ruleset: ['[Gen 7 Let\'s Go] OU'],
 		banlist: ['OU', 'UUBL'],
 	},
