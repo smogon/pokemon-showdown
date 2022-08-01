@@ -310,15 +310,23 @@ const TWISTS: {[k: string]: Twist} = {
 		id: 'speedrun',
 		desc: "Time starts when the player starts the hunt!",
 
+		onAfterLoad() {
+			if (this.questions.length === 3) {
+				this.announce('This twist requires at least four questions.  Please reset the hunt and make it again.');
+				this.huntLocked = true;
+			}
+			this.altIps = {};
+			this.startTimes = {};
+		},
+
 		onJoin(user: User) {
-			if (!Config.noipchecks && this.altIps) {
+			if (!Config.noipchecks) {
 				const altIp = user.ips.find(ip => this.altIps[ip] && this.altsIps[ip].id !== user.id);
 				if (altIp) {
 					user.sendTo(this.room, `You already have started the hunt as ${this.altIps[altIp].name}.`);
 					return true;
 				}
 			}
-			if (!this.startTimes) this.startTimes = {};
 			if (!this.startTimes[user.id]) this.startTimes[user.id] = Date.now();
 			if (this.addPlayer(user)) {
 				this.cacheUserIps(user);
@@ -332,7 +340,6 @@ const TWISTS: {[k: string]: Twist} = {
 		},
 
 		onLeave(user) {
-			if (!this.altIps) this.altIps = {};
 			for (const ip of user.ips) {
 				this.altIps[ip] = {id: user.id, name: user.name};
 			}
