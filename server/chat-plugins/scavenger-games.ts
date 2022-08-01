@@ -310,7 +310,7 @@ const TWISTS: {[k: string]: Twist} = {
 		id: 'speedrun',
 		desc: "Time starts when the player starts the hunt!",
 
-		onJoin(user) {
+		onJoin(user: User) {
 			if (!Config.noipchecks && this.altIps) {
 				const altIp = user.ips.find(ip => this.altIps[ip] && this.altsIps[ip].id !== user.id);
 				if (altIp) {
