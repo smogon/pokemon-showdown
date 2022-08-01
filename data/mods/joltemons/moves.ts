@@ -64,7 +64,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		contestType: "Clever",
 	},
 	/*
- 	reconstruct: {
+	reconstruct: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -73,7 +73,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {charge: 1, heal: 1},
- 		heal: [1, 2],
+		heal: [1, 2],
 		beforeTurnCallback(pokemon) {
 			pokemon.addVolatile('reconstruct');
 		},
@@ -116,7 +116,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "self",
 		type: "Steel",
 	},
- 	reconstruct: {
+	reconstruct: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -125,7 +125,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {charge: 1, heal: 1},
- 		heal: [1, 2],
+		heal: [1, 2],
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -164,9 +164,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Reconstruct",
 		pp: 10,
 		priority: 5,
+		priority: 5,
 		flags: {charge: 1, heal: 1},
 		volatileStatus: 'reconstruct',
- 		onPrepareHit(target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Recover", target);
 		},
@@ -230,7 +231,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Steel",
 		contestType: "Tough",
 	},
- 	focusblast: {
+	focusblast: {
 		num: 411,
 		accuracy: 70,
 		basePower: 120,
@@ -263,7 +264,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
- 		onPrepareHit: function(target, source, move) {
+		onPrepareHit: function(target, source, move) {
 		  this.attrLastMove('[still]');
 		  this.add('-anim', source, "Shore Up", target);
 		},
@@ -282,7 +283,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
- 		onPrepareHit(target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Shore Up", target);
 		},
@@ -367,7 +368,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 15,
 		priority: -1,
 		flags: {protect: 1, mirror: 1},
- 		onPrepareHit: function(target, source, move) {
+		onPrepareHit: function(target, source, move) {
 		  this.attrLastMove('[still]');
 		  this.add('-anim', source, "Psybeam", target);
 		},
@@ -386,7 +387,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, defrost: 1},
- 		onPrepareHit: function(target, source, move) {
+		onPrepareHit: function(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Charge", target);
 			this.add('-anim', source, "Sacred Sword", target);
@@ -432,7 +433,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
- 		onPrepareHit(target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Confide", target);
 			this.add('-anim', source, "Gunk Shot", target);
@@ -469,7 +470,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
- 		onPrepareHit(target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hyper Voice", target);
 			this.add('-anim', source, "Boomburst", target);
@@ -501,7 +502,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, contact: 1, punch: 1},
- 		onPrepareHit(target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Meteor Mash", target);
 		},
@@ -621,7 +622,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 30,
 		priority: 1,
 		flags: {protect: 1, mirror: 1},
- 		onPrepareHit(target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Poison Sting", target);
 		},
@@ -643,7 +644,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {punch: 1, contact: 1, protect: 1, mirror: 1},
- 		onPrepareHit(target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Poison Jab", target);
 			this.add('-anim', source, "Corrosive Gas", target);
@@ -675,7 +676,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
- 		onPrepareHit: function(target, source, move) {
+		onPrepareHit: function(target, source, move) {
 		  this.attrLastMove('[still]');
 		  this.add('-anim', source, "Muddy Water", target);
 		  this.add('-anim', source, "Corrosive Gas", target);
@@ -1059,7 +1060,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
- 		onPrepareHit: function(target, source, move) {
+		onPrepareHit: function(target, source, move) {
 		  this.attrLastMove('[still]');
 		  this.add('-anim', source, "Wrap", target);
 		},
@@ -1113,7 +1114,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, dance: 1},
- 		onPrepareHit: function(target, source, move) {
+		onPrepareHit: function(target, source, move) {
 		  this.attrLastMove('[still]');
 		  this.add('-anim', source, "Quiver Dance", target);
 		  this.add('-anim', source, "Ice Beam", target);
@@ -1140,7 +1141,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, dance: 1},
- 		onPrepareHit: function(target, source, move) {
+		onPrepareHit: function(target, source, move) {
 		  this.attrLastMove('[still]');
 		  this.add('-anim', source, "Quiver Dance", target);
 		  this.add('-anim', source, "Dark Pulse", target);
@@ -1190,7 +1191,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, dance: 1},
- 		onPrepareHit: function(target, source, move) {
+		onPrepareHit: function(target, source, move) {
 		  this.attrLastMove('[still]');
 		  this.add('-anim', source, "Quiver Dance", target);
 		  this.add('-anim', source, "Gust", target);
@@ -1232,7 +1233,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	bouncybubble: {
 		inherit: true,
 		isNonstandard: null,
- 		onPrepareHit: function(target, source, move) {
+		onPrepareHit: function(target, source, move) {
 		  this.attrLastMove('[still]');
 		  this.add('-anim', source, "Bubble", target);
 		},
@@ -1240,7 +1241,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	buzzybuzz: {
 		inherit: true,
 		isNonstandard: null,
- 		onPrepareHit: function(target, source, move) {
+		onPrepareHit: function(target, source, move) {
 		  this.attrLastMove('[still]');
 		  this.add('-anim', source, "Discharge", target);
 		},
@@ -1248,7 +1249,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	sizzlyslide: {
 		inherit: true,
 		isNonstandard: null,
- 		onPrepareHit: function(target, source, move) {
+		onPrepareHit: function(target, source, move) {
 		  this.attrLastMove('[still]');
 		  this.add('-anim', source, "Flame Charge", target);
 		},
@@ -1256,7 +1257,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	glitzyglow: {
 		inherit: true,
 		isNonstandard: null,
- 		onPrepareHit: function(target, source, move) {
+		onPrepareHit: function(target, source, move) {
 		  this.attrLastMove('[still]');
 		  this.add('-anim', source, "Psychic", target);
 		},
@@ -1264,7 +1265,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	baddybad: {
 		inherit: true,
 		isNonstandard: null,
- 		onPrepareHit: function(target, source, move) {
+		onPrepareHit: function(target, source, move) {
 		  this.attrLastMove('[still]');
 		  this.add('-anim', source, "Photon Geyser", target);
 		},
@@ -1272,7 +1273,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	freezyfrost: {
 		inherit: true,
 		isNonstandard: null,
- 		onPrepareHit: function(target, source, move) {
+		onPrepareHit: function(target, source, move) {
 		  this.attrLastMove('[still]');
 		  this.add('-anim', source, "Blizzard", target);
 		},
@@ -1280,7 +1281,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	sappyseed: {
 		inherit: true,
 		isNonstandard: null,
- 		onPrepareHit: function(target, source, move) {
+		onPrepareHit: function(target, source, move) {
 		  this.attrLastMove('[still]');
 		  this.add('-anim', source, "Horn Leech", target);
 		},
@@ -1288,7 +1289,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	sparklyswirl: {
 		inherit: true,
 		isNonstandard: null,
- 		onPrepareHit: function(target, source, move) {
+		onPrepareHit: function(target, source, move) {
 		  this.attrLastMove('[still]');
 		  this.add('-anim', source, "Dazzling Gleam", target);
 		},
