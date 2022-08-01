@@ -1984,7 +1984,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Category Swap Rule',
 		desc: `All physical moves become special, and all special moves become physical.`,
 		onBegin() {
-			this.add('rule', 'Category Swap Rule: All physical moves become special, and all special moves become physical');
+			this.add('rule', 'Category Swap Mod: All physical moves become special, and vice versa');
 		},
 		onModifyMove(move, pokemon, target) {
 			if (move.category === "Status") return;
