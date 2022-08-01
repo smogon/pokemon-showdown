@@ -2018,8 +2018,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 					this.add('-start', source, 'Doom Desire');
 					return this.NOT_FAIL;
 				};
+				break;
 			}
-			break;
 			case 'futuresight': {
 				move.onTry = function (source, subtarget) {
 					if (!subtarget.side.addSlotCondition(subtarget, 'futuremove')) return false;
@@ -2044,15 +2044,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 					this.add('-start', source, 'move: Future Sight');
 					return this.NOT_FAIL;
 				};
+				break;
 			}
-			break;
 			// Moves with dynamic categories will always be physical if not special-cased
 			case 'lightthatburnsthesky':
 			case 'photongeyser': {
 				move.category = 'Special';
 				if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+				break;
 			}
-			break;
 			case 'shellsidearm': {
 				if (!target) return;
 				move.category = 'Special';
@@ -2066,8 +2066,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 					move.category = 'Physical';
 					move.flags.contact = 1;
 				}
+				break;
 			}
-			break;
 			}
 		},
 	},
