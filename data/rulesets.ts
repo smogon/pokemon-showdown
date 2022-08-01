@@ -1981,7 +1981,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 	},
 	categoryswapmod: {
 		effectType: 'Rule',
-		name: 'Category Swap Rule',
+		name: 'Category Swap Mod',
 		desc: `All physical moves become special, and all special moves become physical.`,
 		onBegin() {
 			this.add('rule', 'Category Swap Mod: All physical moves become special, and vice versa');
