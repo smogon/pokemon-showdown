@@ -1,4 +1,4 @@
-export const Pokedex: {[speciesid: string]: SpeciesData} = {
+export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	moltresgalar: {
 		inherit: true,
 		abilities: {0: "Berserk", H: "Regenerator"},
@@ -279,14 +279,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	minun: {
 		inherit: true,
 		abilities: {0: "Minus", 1: "Libero", H: "Volt Absorb"},
-	},
-	claydol: {
-		inherit: true,
-		abilities: {0: "Levitate", H: "Water Compaction"},
-	},
-	baltoy: {
-		inherit: true,
-		abilities: {0: "Levitate", H: "Water Compaction"},
 	},
 	cacnea: {
 		inherit: true,
@@ -616,10 +608,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		inherit: true,
 		abilities: {0: "Counterfeit", 1: "Merciless", H: "Moxie"},
 	},
-	ariados: {
-		inherit: true,
-		abilities: {0: "Swarm", 1: "Merciless", H: "Sniper"},
-	},
 	smeargle: {
 		inherit: true,
 		abilities: {0: "Pastel Veil", 1: "Technician", H: "Moody"},
@@ -820,11 +808,11 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	},
 	entei: {
 		inherit: true,
-		abilities: {0: "Pressure", 1: "Magma Armor",  H: "Inner Focus"},
+		abilities: {0: "Pressure", 1: "Magma Armor", H: "Inner Focus"},
 	},
 	suicune: {
 		inherit: true,
-		abilities: {0: "Pressure", 1: "Hydration",  H: "Inner Focus"},
+		abilities: {0: "Pressure", 1: "Hydration", H: "Inner Focus"},
 	},
 	torkoal: {
 		inherit: true,
@@ -1008,10 +996,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		inherit: true,
 		abilities: {0: "Battle Armor", 1: "Hydration", H: "Swift Swim"},
 	},
-	armaldo: {
-		inherit: true,
-		abilities: {0: "Battle Armor", 1: "Hydration", H: "Swift Swim"},
-	},
 	politoed: {
 		inherit: true,
 		abilities: {0: "Hydration", 1: "Damp", H: "Drizzle"},
@@ -1169,10 +1153,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	mightyena: {
 		inherit: true,
 		abilities: {0: "Intimidate", 1: "Quick Feet", H: "Scavenge"},
-	},
-	noivern: {
-		inherit: true,
-		abilities: {0: "Frisk", 1: "Infiltrator", H: "Scavenge"},
 	},
 	purugly: {
 		inherit: true,
@@ -1386,8 +1366,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		inherit: true,
 		abilities: {0: "Sturdy", 1: "Sand Veil", H: "Contrary"},
 	},
-
-// silvally moment
+	// silvally moment
 	silvallybug: {
 		inherit: true,
 		abilities: {0: "RKS System", 1: "Download", H: "Power of Alchemy (Silvally)"},
