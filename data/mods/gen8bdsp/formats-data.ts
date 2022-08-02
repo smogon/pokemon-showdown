@@ -1575,7 +1575,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["healingwish", "lightscreen", "psychic", "recover", "reflect", "thunderwave"],
 	},
 	absol: {
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "DUU",
 		randomBattleMoves: ["knockoff", "playrough", "suckerpunch", "swordsdance"],
 	},
