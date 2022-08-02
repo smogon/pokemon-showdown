@@ -2651,11 +2651,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 		randomBattleMoves: ["aridabsorption", "poltergeist", "bodypress", "willowisp"],
 	},
-	sableye: {
-		tier: "RU",
-		doublesTier: "DOU",
-		randomBattleMoves: ["recover", "substitute", "knockoff", "curse"],
-	},
 	salazzle: {
 		tier: "RU",
 		doublesTier: "DOU",

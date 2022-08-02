@@ -6,7 +6,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		num: -1001,
 		gen: 8,
-		desc: "Comes back to the user when flung.", 
+		desc: "Comes back to the user when flung.",
 	},
 	momentumarmor: {
 		name: "Momentum Armor",
@@ -21,9 +21,9 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		num: -1002,
 		gen: 8,
-		desc: "Boosts the user's Attack by 25% of its Defense.", 
+		desc: "Boosts the user's Attack by 25% of its Defense.",
 	},
- 	shellbell: {
+	shellbell: {
 		name: "Shell Bell",
 		spritenum: 438,
 		fling: {
@@ -37,7 +37,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		num: 253,
 		gen: 3,
-		desc: "The holder heals 12.5% of their max HP upon successfully damaging a Pokemon with an attack.", 
+		desc: "The holder heals 12.5% of their max HP upon successfully damaging a Pokemon with an attack.",
 	},
 	honey: {
 		name: "Honey",
@@ -66,9 +66,9 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 				return this.chainModify(1.5);
 			}
 		},
-	 	num: -1004,
-	 	gen: 8,
-	 	desc: "If holder's species can evolve, its Atk and Sp. Atk are 1.5x.",
+		num: -1004,
+		gen: 8,
+		desc: "If holder's species can evolve, its Atk and Sp. Atk are 1.5x.",
 	},
 	reliccharm: {
 		name: "Relic Charm",
@@ -99,10 +99,10 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			if (pokemon.isActive && pokemon.baseSpecies.name === 'Darmanitan') {
 				if (!pokemon.species.name.includes('Galar')) {
 					if (pokemon.species.id !== 'darmanitanzen') pokemon.formeChange('Darmanitan-Zen');
-					let oldAbility = pokemon.setAbility('psychicsurge', pokemon, 'psychicsurge', true);
+					pokemon.setAbility('psychicsurge', pokemon, true);
 				} else {
 					if (pokemon.species.id !== 'darmanitangalarzen') pokemon.formeChange('Darmanitan-Galar-Zen');
-					let oldAbility = pokemon.setAbility('snowwarning', pokemon, 'snowwarning', true);
+					pokemon.setAbility('snowwarning', pokemon, true);
 				}
 			}
 		},
@@ -126,12 +126,12 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 	chillpillg: {
 		name: "Chill Pill G",
 		spritenum: 390,
-		onStart: function(pokemon) {
+		onStart(pokemon) {
 			this.add('-item', pokemon, 'Chill Pill');
 			if (pokemon.baseSpecies.baseSpecies === 'Darmanitan' && pokemon.species.name.includes('Galar')) {
 				this.add('-formechange', pokemon, 'Darmanitan-Galar-Zen', '[msg]');
 				pokemon.formeChange("Darmanitan-Galar-Zen");
-				let oldAbility = pokemon.setAbility('snowwarning', pokemon, 'snowwarning', true);
+				const oldAbility = pokemon.setAbility('snowwarning', pokemon, true);
 				if (oldAbility) {
 					this.add('-activate', pokemon, 'ability: Snow Warning', oldAbility, '[of] ' + pokemon);
 				}
@@ -151,11 +151,10 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "If held by Darmanitan: Zen Mode and Hail on entry, 1.2x power Fire-type attacks.",
 	},
-	"graduationscale": {
-		id: "graduationscale",
+	graduationscale: {
 		name: "Graduation Scale",
 		onStart(pokemon) {
-			pokemon.setAbility('intimidate', pokemon, 'intimidate', true);
+			pokemon.setAbility('intimidate', pokemon, true);
 		},
 		onTakeItem(item, source) {
 			if (source.baseSpecies.baseSpecies === 'Wishiwashi') return false;
@@ -199,7 +198,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, pokemon) {
-			if (['Pikachu', 'Raichu', 'Raichu-Alola', 'Togedemaru', 'Morpeko', 'Morpeko-Hangry'].includes((pokemon.baseSpecies.baseSpecies))) {
+			if (['Pikachu', 'Raichu', 'Togedemaru', 'Morpeko'].includes((pokemon.baseSpecies.baseSpecies))) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -412,10 +411,10 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			basePower: 60,
 		},
 		onStart(pokemon) {
-			 if (pokemon.side.getSideCondition('stealthrock') && !pokemon.ignoringItem()) {
-				  pokemon.useItem();
-				  this.boost({spe: 1}, pokemon);
-			 }
+			if (pokemon.side.getSideCondition('stealthrock') && !pokemon.ignoringItem()) {
+				pokemon.useItem();
+				this.boost({spe: 1}, pokemon);
+			}
 		},
 		gen: 8,
 		desc: "If Stealth Rock is on the field, damage is ignored, and the user's Speed is raised by 1. Single use.",
@@ -502,7 +501,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 				return false; // skip charge turn
 			}
 		},
-		onUpdate (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.volatiles['mustrecharge']) {
 				pokemon.removeVolatile('mustrecharge');
 				pokemon.useItem();
@@ -522,7 +521,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		spritenum: 242,
 		fling: {
 			basePower: 10,
-			//status: 'slp', Fixed
+			// status: 'slp', Fixed
 		},
 		onResidualOrder: 5,
 		onResidualSubOrder: 5,
@@ -545,7 +544,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 					return;
 				}
 				if (pokemon.status === 'slp' || pokemon.hasAbility('comatose')) {
-		   			this.useMove("Sleep Talk", pokemon);
+					this.useMove("Sleep Talk", pokemon);
 				}
 			},
 		},
@@ -562,19 +561,12 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 5,
 		onResidual(pokemon) {
-			if (this.field.isTerrain('grassyterrain')) return;
-			if (pokemon.hasType('Ghost')) {
-				this.heal(pokemon.baseMaxhp / 16);
-			} 
-		},
-		onTerrain(pokemon) {
-			if (!this.field.isTerrain('grassyterrain')) return;
 			if (pokemon.hasType('Ghost')) {
 				this.heal(pokemon.baseMaxhp / 16);
 			}
 		},
 		onDisableMove(pokemon) {
-			if (!pokemon.hasType('Ghost') && pokemon.lastMove?.id !== 'struggle') {
+			if (!pokemon.hasType('Ghost') && pokemon.lastMove && pokemon.lastMove.id !== 'struggle') {
 				pokemon.disableMove(pokemon.lastMove.id);
 			}
 		},
@@ -786,7 +778,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		onSwitchIn(pokemon) {
 			if (pokemon.isActive && pokemon.baseSpecies.baseSpecies === 'Regigigas') {
-				let oldAbility = pokemon.setAbility('thickfat', pokemon, 'thickfat', true);
+				const oldAbility = pokemon.setAbility('thickfat', pokemon, true);
 				if (oldAbility) {
 					this.add('-activate', pokemon, 'ability: Thick Fat', oldAbility, '[of] ' + pokemon);
 				}
@@ -832,7 +824,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 				if (!source.m.soulBladeLevel) source.m.soulBladeLevel = 1;
 				if (source.m.soulBladeLevel < 6) this.add('-activate', source, 'item: Soul Blade');
 				source.m.soulBladeLevel += 1;
-				if (!source.m.soulBladeLevel > 6) source.m.soulBladeLevel = 6;
+				if (source.m.soulBladeLevel > 6) source.m.soulBladeLevel = 6;
 			}
 		},
 		gen: 8,
