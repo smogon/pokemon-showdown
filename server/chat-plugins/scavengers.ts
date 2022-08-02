@@ -1421,14 +1421,14 @@ const ScavengerCommands: Chat.ChatCommands = {
 			'' : Utils.html` (started by - ${game.staffHostName})`;
 		const finishers = Utils.html`${game.completed.map(u => u.name).join(', ')}`;
 		let buffer = `<div class="infobox" style="margin-top: 0px;">The current ${gameTypeMsg}scavenger hunt by <em>${hostersMsg}${hostMsg}</em> has been up for: ${elapsedMsg}<br />${!game.timerEnd ? 'The timer is currently off.' : `The hunt ends in: ${Chat.toDurationString(game.timerEnd - Date.now(), {hhmmss: true})}`}<br />Completed (${game.completed.length}): ${finishers}</div>`;
-		if (game.modsList.includes('speedrun')) {
+		if (game.modsList.includes('timetrial')) {
 			const finisher = game.completed.find(player => player.id === user.id);
-			const speedrunMsg = finisher ?
+			const timeTrialMsg = finisher ?
 				`You finished the hunt in: ${finisher.time}.` :
 				(game.startTimes?.[user.id] ?
 					`You joined the hunt ${Chat.toDurationString(Date.now() - game.startTimes[user.id], {hhmmss: true})} ago.` :
 					'You have not joined the hunt.');
-			buffer = `<div class="infobox" style="margin-top: 0px;">The current ${gameTypeMsg}scavenger hunt by <em>${hostersMsg}${hostMsg}</em> has been up for: ${elapsedMsg}<br />${speedrunMsg}<br />${!game.timerEnd ? 'The timer is currently off.' : `The hunt ends in: ${Chat.toDurationString(game.timerEnd - Date.now(), {hhmmss: true})}`}<br />Completed (${game.completed.length}): ${finishers}</div>`;
+			buffer = `<div class="infobox" style="margin-top: 0px;">The current ${gameTypeMsg}scavenger hunt by <em>${hostersMsg}${hostMsg}</em> has been up for: ${elapsedMsg}<br />${timeTrialMsg}<br />${!game.timerEnd ? 'The timer is currently off.' : `The hunt ends in: ${Chat.toDurationString(game.timerEnd - Date.now(), {hhmmss: true})}`}<br />Completed (${game.completed.length}): ${finishers}</div>`;
 		}
 
 		if (game.hosts.some(h => h.id === user.id) || game.staffHostId === user.id) {

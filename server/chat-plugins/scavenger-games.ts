@@ -305,9 +305,9 @@ const TWISTS: {[k: string]: Twist} = {
 		},
 	},
 
-	speedrun: {
-		name: 'Speedrun',
-		id: 'speedrun',
+	timetrial: {
+		name: 'Time Trial',
+		id: 'timetrial',
 		desc: "Time starts when the player starts the hunt!",
 
 		onAfterLoad() {
