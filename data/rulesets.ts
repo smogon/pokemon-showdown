@@ -14,7 +14,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Standard',
 		desc: "The standard ruleset for all offical Smogon singles tiers (Ubers, OU, etc.)",
 		ruleset: [
-			'Obtainable', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
+			'Obtainable', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
 		],
 	},
 	standardnext: {
@@ -651,6 +651,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 			return problems;
 		},
 	},
+	evasionclause: {
+		effectType: 'ValidatorRule',
+		name: 'Evasion Clause',
+		desc: "Bans abilities, items, and moves that boost Evasion",
+		ruleset: ['Evasion Abilities Clause', 'Evasion Items Clause', 'Evasion Moves Clause'],
+		onBegin() {
+			this.add('rule', 'Evasion Clause: Evasion abilities, items, and moves are banned');
+		},
+	},
 	evasionabilitiesclause: {
 		effectType: 'ValidatorRule',
 		name: 'Evasion Abilities Clause',
@@ -658,6 +667,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 		banlist: ['Sand Veil', 'Snow Cloak'],
 		onBegin() {
 			this.add('rule', 'Evasion Abilities Clause: Evasion abilities are banned');
+		},
+	},
+	evasionitemsclause: {
+		effectType: 'ValidatorRule',
+		name: 'Evasion Items Clause',
+		desc: "Bans moves that lower the accuracy of moves used against the user",
+		banlist: ['Bright Powder', 'Lax Incense'],
+		onBegin() {
+			this.add('rule', 'Evasion Items Clause: Evasion items are banned');
 		},
 	},
 	evasionmovesclause: {
