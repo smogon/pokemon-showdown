@@ -71,6 +71,14 @@ export const Rulesets: {[k: string]: FormatData} = {
 			'Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Gravity Sleep Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
 		],
 	},
+	standardoms: {
+		effectType: 'ValidatorRule',
+		name: 'Standard OMs',
+		desc: "The standard ruleset for all Smogon OMs (Almost Any Ability, STABmons, etc.)",
+		ruleset: [
+			'Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'Dynamax Clause', 'HP Percentage Mod', 'Cancel Mod', 'Overflow Stat Mod',
+		],
+	},
 	standardnatdex: {
 		effectType: 'ValidatorRule',
 		name: 'Standard NatDex',
@@ -1870,7 +1878,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: "Rule",
 		name: "Re-Evolution Mod",
 		desc: "Pok&eacute;mon gain the stat changes they would gain from evolving again.",
-		ruleset: ['Overflow Stat Mod'],
 		onBegin() {
 			this.add('rule', 'Re-Evolution Mod: Pok\u00e9mon gain the boosts they would gain from evolving again');
 		},
