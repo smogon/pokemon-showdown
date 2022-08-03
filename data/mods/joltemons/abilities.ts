@@ -919,7 +919,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		isPermanent: true,
 		name: "Power of Alchemy (Weezing)",
 		rating: 5,
-	}, 
+	},
 	powerofalchemyalcremie: {
 		shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
