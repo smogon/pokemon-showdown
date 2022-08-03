@@ -971,7 +971,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		isPermanent: true,
 		name: "Power of Alchemy (Alcremie)",
 		rating: 5,
-	}, 
+	},
 	powerofalchemymismagius: {
 		shortDesc: "All of this Pokemon's abilities are active at once.",
 		onPreStart(pokemon) {
