@@ -198,7 +198,7 @@ export const Tags: {[id: string]: TagData} = {
 			'Aerodactyl-Mega', 'Alakazam', 'Blacephalon', 'Blaziken', 'Diancie-Mega', 'Gallade-Mega', 'Gardevoir-Mega', 'Gengar', 'Gyarados',
 			'Gyarados-Mega', 'Hawlucha', 'Heracross-Mega', 'Hoopa-Unbound', 'Hydreigon', 'Jirachi', 'Latias', 'Latias-Mega', 'Latios',
 			'Latios-Mega', 'Manaphy', 'Medicham-Mega', 'Melmetal', 'Mew', 'Moltres-Galar', 'Pinsir-Mega', 'Sableye-Mega', 'Slowbro-Mega',
-			'Slowking-Galar', 'Thundurus', 'Venusaur-Mega', 'Xurkitree', 'Zapdos-Galar',
+			'Slowking-Galar', 'Thundurus', 'Thundurus-Therian', 'Venusaur-Mega', 'Xurkitree', 'Zapdos-Galar',
 		].includes(species.name),
 	},
 
