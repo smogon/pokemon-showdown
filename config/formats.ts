@@ -396,7 +396,7 @@ export const Formats: FormatList = [
 		restricted: ['Restricted Legendary'],
 	},
 	{
-		name: "[Gen 8] VGC 2022 Series 13",
+		name: "[Gen 8] Battle Stadium Doubles Series 13",
 
 		mod: 'gen8',
 		gameType: 'doubles',
