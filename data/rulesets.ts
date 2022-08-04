@@ -14,7 +14,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Standard',
 		desc: "The standard ruleset for all offical Smogon singles tiers (Ubers, OU, etc.)",
 		ruleset: [
-			'Obtainable', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
+			'Obtainable', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
 		],
 	},
 	standardnext: {
@@ -69,6 +69,14 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "The standard ruleset for all official Smogon doubles tiers",
 		ruleset: [
 			'Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Gravity Sleep Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
+		],
+	},
+	standardoms: {
+		effectType: 'ValidatorRule',
+		name: 'Standard OMs',
+		desc: "The standard ruleset for all Smogon OMs (Almost Any Ability, STABmons, etc.)",
+		ruleset: [
+			'Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'Dynamax Clause', 'HP Percentage Mod', 'Cancel Mod', 'Overflow Stat Mod',
 		],
 	},
 	standardnatdex: {
@@ -643,6 +651,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 			return problems;
 		},
 	},
+	evasionclause: {
+		effectType: 'ValidatorRule',
+		name: 'Evasion Clause',
+		desc: "Bans abilities, items, and moves that boost Evasion",
+		ruleset: ['Evasion Abilities Clause', 'Evasion Items Clause', 'Evasion Moves Clause'],
+		onBegin() {
+			this.add('rule', 'Evasion Clause: Evasion abilities, items, and moves are banned');
+		},
+	},
 	evasionabilitiesclause: {
 		effectType: 'ValidatorRule',
 		name: 'Evasion Abilities Clause',
@@ -650,6 +667,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 		banlist: ['Sand Veil', 'Snow Cloak'],
 		onBegin() {
 			this.add('rule', 'Evasion Abilities Clause: Evasion abilities are banned');
+		},
+	},
+	evasionitemsclause: {
+		effectType: 'ValidatorRule',
+		name: 'Evasion Items Clause',
+		desc: "Bans moves that lower the accuracy of moves used against the user",
+		banlist: ['Bright Powder', 'Lax Incense'],
+		onBegin() {
+			this.add('rule', 'Evasion Items Clause: Evasion items are banned');
 		},
 	},
 	evasionmovesclause: {
@@ -1870,7 +1896,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: "Rule",
 		name: "Re-Evolution Mod",
 		desc: "Pok&eacute;mon gain the stat changes they would gain from evolving again.",
-		ruleset: ['Overflow Stat Mod'],
 		onBegin() {
 			this.add('rule', 'Re-Evolution Mod: Pok\u00e9mon gain the boosts they would gain from evolving again');
 		},
