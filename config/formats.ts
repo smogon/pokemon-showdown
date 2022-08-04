@@ -288,6 +288,15 @@ export const Formats: FormatList = [
 		restricted: ['Restricted Legendary'],
 	},
 	{
+		name: "[Gen 8] Battle Stadium Singles Series 13",
+
+		mod: 'gen8',
+		searchShow: false,
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
+		banlist: ['Eternatus-Eternamax'],
+		unbanlist: ['Mythical', 'Restricted Legendary'],
+	},
+	{
 		name: "[Gen 8] I Choose 'Chu!",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3705481/">I Choose 'Chu! Discussion</a>`,
@@ -382,6 +391,16 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer', 'Limit Two Restricted'],
 		restricted: ['Restricted Legendary'],
+	},
+	{
+		name: "[Gen 8] Battle Stadium Doubles Series 13",
+
+		mod: 'gen8',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer'],
+		banlist: ['Eternatus-Eternamax'],
+		unbanlist: ['Mythical', 'Restricted Legendary'],
 	},
 	{
 		name: "[Gen 8] VGC 2021",
