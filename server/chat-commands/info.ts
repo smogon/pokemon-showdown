@@ -2106,11 +2106,14 @@ export const commands: Chat.ChatCommands = {
 		const format = Dex.formats.get(targets[0]);
 		let atLeastOne = false;
 		let generation = (targets[1] || 'ss').trim().toLowerCase();
-		let genNumber = 8;
+		let genNumber = 9;
 		const extraFormat = Dex.formats.get(targets[2]);
 
-		if (['8', 'gen8', 'eight', 'ss', 'swsh'].includes(generation)) {
+		if (['9', 'gen9', 'nine', 'sv'].includes(generation)) {
+			generation = 'sv';
+		} else if (['8', 'gen8', 'eight', 'ss', 'swsh'].includes(generation)) {
 			generation = 'ss';
+			genNumber = 8;
 		} else if (['7', 'gen7', 'seven', 'sm', 'sumo', 'usm', 'usum'].includes(generation)) {
 			generation = 'sm';
 			genNumber = 7;

@@ -103,6 +103,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
+		// searchShow: false,
 		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: ['AG', 'Shadow Tag', 'Baton Pass'],
 	},
@@ -115,6 +116,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
+		// searchShow: false,
 		ruleset: ['[Gen 8] OU'],
 		banlist: ['OU', 'UUBL', 'Light Clay'],
 	},
@@ -127,6 +129,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
+		// searchShow: false,
 		ruleset: ['[Gen 8] UU'],
 		banlist: ['UU', 'RUBL'],
 	},
@@ -139,6 +142,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
+		// searchShow: false,
 		ruleset: ['[Gen 8] RU'],
 		banlist: ['RU', 'NUBL', 'Drizzle', 'Drought', 'Slush Rush'],
 	},
@@ -150,6 +154,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
+		// searchShow: false,
 		ruleset: ['[Gen 8] NU'],
 		banlist: ['NU', 'PUBL'],
 	},
@@ -162,6 +167,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
+		// searchShow: false,
 		ruleset: ['Little Cup', 'Standard', 'Dynamax Clause'],
 		banlist: [
 			'Corsola-Galar', 'Cutiefly', 'Drifloon', 'Gastly', 'Gothita', 'Magby', 'Rufflet', 'Scraggy', 'Scyther', 'Sneasel', 'Swirlix',
@@ -178,6 +184,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
+		// searchShow: false,
 		ruleset: ['Same Type Clause', 'Standard', 'Dynamax Clause'],
 		banlist: [
 			'Blaziken', 'Calyrex-Ice', 'Calyrex-Shadow', 'Dialga', 'Dracovish', 'Eternatus', 'Genesect', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh',
@@ -197,6 +204,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
+		// searchShow: false,
 		ruleset: [
 			'Picked Team Size = 1', 'Max Team Size = 3',
 			'Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Dynamax Clause', 'Endless Battle Clause',
@@ -218,6 +226,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
+		// searchShow: false,
 		ruleset: ['Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 	},
 	{
@@ -230,6 +239,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
+		// searchShow: false,
 		ruleset: ['[Gen 8] PU'],
 		banlist: [
 			'PU', 'Arctovish', 'Aurorus', 'Basculin', 'Centiskorch', 'Drampa', 'Exeggutor-Alola', 'Gallade', 'Glastrier', 'Haunter', 'Magmortar', 'Magneton',
@@ -264,6 +274,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
+		// searchShow: false,
 		ruleset: ['[Gen 8] OU', '+CAP'],
 		banlist: ['Crucibellite'],
 	},
@@ -331,6 +342,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
+		// searchShow: false,
 		ruleset: ['Standard Doubles', 'Dynamax Clause', 'Swagger Clause'],
 		banlist: ['DUber', 'Power Construct', 'Shadow Tag'],
 	},
@@ -353,6 +365,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
+		// searchShow: false,
 		ruleset: ['[Gen 8] Doubles OU'],
 		banlist: ['DOU', 'DBL'],
 	},
@@ -378,6 +391,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
+		// searchShow: false,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer', 'Limit Two Restricted'],
 		restricted: ['Restricted Legendary'],
 	},
@@ -631,6 +645,57 @@ export const Formats: FormatList = [
 		banlist: ['Uber'],
 	},
 
+	// Scarlet/Violet
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "Scarlet/Violet",
+		column: 2,
+	},
+	{
+		name: "[Gen 9] OU (beta)",
+
+		mod: 'gen9',
+		ruleset: ['Standard'],
+		banlist: ['Uber', 'AG'],
+	},
+	{
+		name: "[Gen 9] Ubers",
+
+		mod: 'gen9',
+		ruleset: ['Standard'],
+		banlist: ['AG'],
+	},
+	{
+		name: "[Gen 9] LC",
+
+		mod: 'gen9',
+		ruleset: ['Little Cup', 'Standard'],
+	},
+	{
+		name: "[Gen 9] Monotype",
+
+		mod: 'gen9',
+		ruleset: ['Same Type Clause', 'Standard'],
+	},
+	{
+		name: "[Gen 9] 1v1",
+		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
+
+		mod: 'gen9',
+		ruleset: [
+			'Picked Team Size = 1', 'Max Team Size = 3',
+			'Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
+		],
+		banlist: ['Focus Sash'],
+	},
+	{
+		name: "[Gen 9] Anything Goes",
+
+		mod: 'gen9',
+		ruleset: ['Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
+	},
+
 	// OM of the Month
 	///////////////////////////////////////////////////////////////////
 
@@ -844,17 +909,6 @@ export const Formats: FormatList = [
 	{
 		section: "BD/SP",
 		column: 2,
-	},
-	{
-		name: "[Gen 8 BDSP] Random Battle",
-		desc: `Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3693955/">BDSP Random Battle Set Discussion</a>`,
-		],
-
-		mod: 'gen8bdsp',
-		team: 'random',
-		ruleset: ['[Gen 8] Random Battle', '!PotD'],
 	},
 	{
 		name: "[Gen 8 BDSP] OU",
@@ -2402,6 +2456,18 @@ export const Formats: FormatList = [
 		],
 	},
 	{
+		name: "[Gen 8 BDSP] Random Battle",
+		desc: `Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3693955/">BDSP Random Battle Set Discussion</a>`,
+		],
+
+		mod: 'gen8bdsp',
+		team: 'random',
+		searchShow: false,
+		ruleset: ['[Gen 8] Random Battle', '!PotD'],
+	},
+	{
 		name: "[Gen 7] Random Battle",
 		desc: `Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable.`,
 		threads: [
@@ -2820,7 +2886,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen7',
-		// searchShow: false,
+		searchShow: false,
 		ruleset: ['Standard', 'Mega Rayquaza Clause'],
 		banlist: ['Baton Pass'],
 	},
@@ -2938,7 +3004,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen7',
-		// searchShow: false,
+		searchShow: false,
 		ruleset: ['Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 	},
 	{
@@ -3024,7 +3090,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen7',
 		gameType: 'doubles',
-		// searchShow: false,
+		searchShow: false,
 		ruleset: ['Standard Doubles', 'Swagger Clause'],
 		banlist: ['DUber', 'Power Construct', 'Eevium Z', 'Dark Void'],
 	},

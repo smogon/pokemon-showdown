@@ -515,6 +515,14 @@ export class TeamValidator {
 				set.hpType = type.name;
 			}
 		}
+		if (set.terastalType) {
+			const type = dex.types.get(set.terastalType);
+			if (!type.exists) {
+				problems.push(`${name}'s Terastal type (${set.terastalType}) is invalid.`);
+			} else {
+				set.terastalType = type.name;
+			}
+		}
 
 		if (ruleTable.has('obtainableformes')) {
 			const canMegaEvo = dex.gen <= 7 || ruleTable.has('standardnatdex');

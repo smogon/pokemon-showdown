@@ -246,6 +246,9 @@ export class Pokemon {
 	canMegaEvo: string | null | undefined;
 	canUltraBurst: string | null | undefined;
 	readonly canGigantamax: string | null;
+	canTerastallize: string | null;
+	terastalType: string | null;
+	terastallized?: string;
 
 	/** A Pokemon's currently 'staleness' with respect to the Endless Battle Clause. */
 	staleness?: 'internal' | 'external';
@@ -305,6 +308,8 @@ export class Pokemon {
 		this.pokeball = this.set.pokeball || 'pokeball';
 		this.dynamaxLevel = typeof set.dynamaxLevel === 'number' ? this.battle.clampIntRange(set.dynamaxLevel, 0, 10) : 10;
 		this.gigantamax = this.set.gigantamax || false;
+		// Every Pokemon has a Terastal type
+		this.terastalType = this.set.terastalType || this.getTypes()[0];
 
 		this.baseMoveSlots = [];
 		this.moveSlots = [];
@@ -440,6 +445,7 @@ export class Pokemon {
 		this.canMegaEvo = this.battle.actions.canMegaEvo(this);
 		this.canUltraBurst = this.battle.actions.canUltraBurst(this);
 		this.canGigantamax = this.baseSpecies.canGigantamax || null;
+		this.canTerastallize = this.battle.actions.canTerastallize(this);
 
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
@@ -990,6 +996,7 @@ export class Pokemon {
 			canZMove?: AnyObject | null,
 			canDynamax?: boolean,
 			maxMoves?: DynamaxOptions,
+			terastalType?: string,
 		} = {
 			moves,
 		};
@@ -1018,6 +1025,7 @@ export class Pokemon {
 
 			if (this.getDynamaxRequest()) data.canDynamax = true;
 			if (data.canDynamax || this.volatiles['dynamax']) data.maxMoves = this.getDynamaxRequest(true);
+			if (this.canTerastallize) data.terastalType = this.canTerastallize;
 		}
 
 		return data;

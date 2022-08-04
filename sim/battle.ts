@@ -2468,6 +2468,9 @@ export class Battle {
 			action.pokemon.side.dynamaxUsed = true;
 			if (action.pokemon.side.allySide) action.pokemon.side.allySide.dynamaxUsed = true;
 			break;
+		case 'terastallize':
+			this.actions.terastallize(action.pokemon);
+			break;
 		case 'beforeTurnMove':
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;

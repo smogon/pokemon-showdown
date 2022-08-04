@@ -1679,6 +1679,10 @@ export class BattleActions {
 			// (On second thought, it might be easier to get a MissingNo.)
 			baseDamage = this.battle.modify(baseDamage, move.stab || 1.5);
 		}
+		// just guessing placement
+		if (pokemon.terastallized && pokemon.hasType(pokemon.terastallized)) {
+			baseDamage = this.battle.modify(baseDamage, 2);
+		}
 		// types
 		let typeMod = target.runEffectiveness(move);
 		typeMod = this.battle.clampIntRange(typeMod, -6, 6);
@@ -1792,6 +1796,35 @@ export class BattleActions {
 
 		this.battle.runEvent('AfterMega', pokemon);
 		return true;
+	}
+
+	canTerastallize(pokemon: Pokemon) {
+		if (!pokemon.side.canTerastallize()) return null;
+		if (pokemon.side.pokemon.some(mon => !!mon.terastallized)) return null;
+		if (
+			pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra" ||
+			pokemon.getItem().zMove || pokemon.canMegaEvo || pokemon.side.canDynamaxNow()
+		) {
+			return null;
+		}
+		return pokemon.terastalType || pokemon.getTypes()[0];
+	}
+
+	terastallize(pokemon: Pokemon) {
+		const type = pokemon.terastalType;
+		if (!type) return false;
+
+		for (const ally of pokemon.side.pokemon) {
+			ally.terastalType = null;
+		}
+
+		pokemon.setType(type);
+
+		pokemon.terastallized = type;
+		pokemon.side.terastalUsed = true;
+		if (pokemon.side.allySide) pokemon.side.allySide.terastalUsed = true;
+
+		this.battle.runEvent('AfterTerastallization', pokemon);
 	}
 
 	// #endregion
