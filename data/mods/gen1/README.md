@@ -55,4 +55,4 @@ TODO. Glitches not implemented
 There are a couple of divisions by zero in the original game in the cartridge. Those have not been implemented.
 
 If a Pokemon has its sleep or freeze status healed by Haze, it will not be able to move on that turn (skip turn glitch).
-This also applies to a frozen pokemon that has just been thawed by a fire type move.
+This also applies to a frozen Pokemon that has just been thawed by a fire type move.
