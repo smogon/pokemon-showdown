@@ -41,7 +41,6 @@ Status
 ------
 Freeze never thaws unless hit by a Fire-type attack or by Haze.
 Sleep lasts 1-7 turns and you wake up at the end of the turn.
-If a Pokemon has its sleep or freeze status healed by Haze, it will not be able to move on that turn.
 
 1/256 miss
 ----------
@@ -54,3 +53,6 @@ Partial trapping moves let either Pokémon switch but target will be unable to m
 TODO. Glitches not implemented
 ------------------------------
 There are a couple of divisions by zero in the original game in the cartridge. Those have not been implemented.
+
+If a Pokemon has its sleep or freeze status healed by Haze, it will not be able to move on that turn (skip turn glitch).
+This also applies to a frozen pokemon that has just been thawed by a fire type move.

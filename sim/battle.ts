@@ -834,7 +834,6 @@ export class Battle {
 			// 	('0000' + (this.event.modifier * 4096).toString(16)).slice(-4).toUpperCase());
 			relayVar = this.modify(relayVar, this.event.modifier);
 		}
-
 		this.event = parentEvent;
 
 		return Array.isArray(target) ? targetRelayVars : relayVar;
