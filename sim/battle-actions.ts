@@ -1816,14 +1816,10 @@ export class BattleActions {
 		const species = this.dex.deepClone(pokemon.species);
 		species.types = [type];
 
-		pokemon.addVolatile('terastal');
 		pokemon.formeChange(species, pokemon.getVolatile('terastal')!, true);
-		delete pokemon.volatiles['terastal'];
-
 		pokemon.terastallized = type;
 
 		this.battle.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
-
 		this.battle.runEvent('AfterTerastallization', pokemon);
 	}
 

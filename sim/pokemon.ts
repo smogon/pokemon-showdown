@@ -308,8 +308,6 @@ export class Pokemon {
 		this.pokeball = this.set.pokeball || 'pokeball';
 		this.dynamaxLevel = typeof set.dynamaxLevel === 'number' ? this.battle.clampIntRange(set.dynamaxLevel, 0, 10) : 10;
 		this.gigantamax = this.set.gigantamax || false;
-		// Every Pokemon has a Terastal type
-		this.terastalType = this.set.terastalType || this.getTypes()[0];
 
 		this.baseMoveSlots = [];
 		this.moveSlots = [];
@@ -408,6 +406,8 @@ export class Pokemon {
 		this.addedType = '';
 		this.knownType = true;
 		this.apparentType = this.baseSpecies.types.join('/');
+		// Every Pokemon has a Terastal type
+		this.terastalType = this.set.terastalType || this.types[0];
 
 		this.switchFlag = false;
 		this.forceSwitchFlag = false;
