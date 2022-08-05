@@ -255,7 +255,6 @@ export class Pokemon {
 
 	// Gen 1 only
 	modifiedStats?: StatsExceptHPTable;
-	lastStatusCuredThisTurn: ID | null; // mainly for handling haze/thawing in gen 1
 	modifyStat?: (this: Pokemon, statName: StatIDExceptHP, modifier: number) => void;
 	// Stadium only
 	recalculateStats?: (this: Pokemon) => void;
@@ -443,7 +442,6 @@ export class Pokemon {
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
 		if (this.battle.gen === 1) this.modifiedStats = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
-		this.lastStatusCuredThisTurn = null;
 
 		this.maxhp = 0;
 		this.baseMaxhp = 0;
@@ -1502,9 +1500,6 @@ export class Pokemon {
 		this.battle.add('-curestatus', this, this.status, silent ? '[silent]' : '[msg]');
 		if (this.status === 'slp' && !this.hasAbility('comatose') && this.removeVolatile('nightmare')) {
 			this.battle.add('-end', this, 'Nightmare', '[silent]');
-		}
-		if (this.isActive) { // this should only be updated if the pokemon is active
-			this.lastStatusCuredThisTurn = this.status;
 		}
 		this.setStatus('');
 		return true;

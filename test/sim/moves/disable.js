@@ -45,8 +45,18 @@ describe('Disable', function () {
 		assert(battle.log.indexOf('|-fail|p1a: Wynaut') > 0, `Disable should have failed vs Struggle`);
 	});
 
-	it(`should work on the first turn in generation 1 
-		if opponent has move with pp`, function () {
+	it(`should fail if the opponent already has a move disabled`, function () {
+		battle = common.createBattle([
+			[{species: "Mew", moves: ['disable']}],
+			[{species: "Muk", moves: ['splash', 'tackle']}],
+		]);
+		battle.makeChoices('auto', 'move tackle');
+		battle.makeChoices('auto', 'move splash');
+		battle.makeChoices('auto', 'move splash');
+		assert(battle.log.includes('|-fail|p1a: Mew'), `Disable should fail if a move is already disabled`);
+	});
+
+	it(`should work on the first turn in generation 1 if opponent has move with pp`, function () {
 		battle = common.gen(1).createBattle([
 			[{species: "Mew", moves: ['disable']}],
 			[{species: "Muk", moves: ['roar']}],

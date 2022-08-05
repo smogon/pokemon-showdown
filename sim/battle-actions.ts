@@ -126,13 +126,11 @@ export class BattleActions {
 			pokemon.position = pos;
 			side.pokemon[pokemon.position] = pokemon;
 			side.pokemon[oldActive.position] = oldActive;
-			oldActive.lastStatusCuredThisTurn = null;
 		}
 		pokemon.isActive = true;
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
 		pokemon.activeMoveActions = 0;
-		pokemon.lastStatusCuredThisTurn = null;
 		for (const moveSlot of pokemon.moveSlots) {
 			moveSlot.used = false;
 		}

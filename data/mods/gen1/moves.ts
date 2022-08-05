@@ -278,7 +278,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {protect: 1, mirror: 1, bypasssub: 1},
 		volatileStatus: 'disable',
 		onTryHit(target) {
-			return target.moveSlots.some(ms => ms.pp > 0) && undefined;
+			// This function should not return if the checks are met. Adding && undefined ensures this happens.
+			return target.moveSlots.some(ms => ms.pp > 0) &&
+				!('disable' in target.volatiles) &&
+				undefined;
 		},
 		condition: {
 			onStart(pokemon) {

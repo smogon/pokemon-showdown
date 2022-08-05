@@ -835,16 +835,6 @@ export class Battle {
 			relayVar = this.modify(relayVar, this.event.modifier);
 		}
 
-		// handle haze/thawing in gen 1 here since it needs to be part of the BeforeMove event
-		if (
-			eventid === 'BeforeMove' &&
-			target instanceof Pokemon &&
-			(target.lastStatusCuredThisTurn === 'slp' || target.lastStatusCuredThisTurn === 'frz') &&
-			this.gen === 1
-		) {
-			relayVar = false;
-		}
-
 		this.event = parentEvent;
 
 		return Array.isArray(target) ? targetRelayVars : relayVar;
@@ -1437,7 +1427,6 @@ export class Battle {
 				pokemon.newlySwitched = false;
 				pokemon.moveLastTurnResult = pokemon.moveThisTurnResult;
 				pokemon.moveThisTurnResult = undefined;
-				pokemon.lastStatusCuredThisTurn = null;
 				if (this.turn !== 1) {
 					pokemon.usedItemThisTurn = false;
 					pokemon.statsRaisedThisTurn = false;
