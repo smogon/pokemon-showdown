@@ -752,6 +752,13 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 	},
 
+	terastal: {
+		name: 'Terastal',
+		effectType: 'Terastal',
+		noCopy: true,
+		duration: 1,
+	},
+
 	// Arceus and Silvally's actual typing is implemented here.
 	// Their true typing for all their formes is Normal, and it's only
 	// Multitype and RKS System, respectively, that changes their type,

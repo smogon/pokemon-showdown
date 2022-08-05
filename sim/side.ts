@@ -38,7 +38,7 @@ export interface ChosenAction {
 	mega?: boolean | null; // true if megaing or ultra bursting
 	zmove?: string; // if zmoving, the name of the zmove
 	maxMove?: string; // if dynamaxed, the name of the max move
-	terastallize?: string; // if terastallizing, the type name
+	terastallize?: boolean; // true if terastallizing
 	priority?: number; // priority of the action
 }
 
@@ -81,7 +81,6 @@ export class Side {
 	 * player per team can dynamax on any given turn of a gen 8 Multi Battle.
 	 */
 	dynamaxUsed: boolean;
-	terastalUsed: boolean;
 
 	faintedLastTurn: Pokemon | null;
 	faintedThisTurn: Pokemon | null;
@@ -137,7 +136,6 @@ export class Side {
 		this.faintedThisTurn = null;
 		this.zMoveUsed = false;
 		this.dynamaxUsed = this.battle.gen !== 8;
-		this.terastalUsed = this.battle.gen < 9;
 
 		this.sideConditions = {};
 		this.slotConditions = [];
@@ -183,10 +181,6 @@ export class Side {
 		//		return false;
 		// }
 		return !this.dynamaxUsed;
-	}
-
-	canTerastallize(): boolean {
-		return !this.terastalUsed;
 	}
 
 	getChoice() {
@@ -622,22 +616,12 @@ export class Side {
 				return this.emitChoiceError(`Can't move: You can only Dynamax once per battle.`);
 			}
 		}
-		let terastallization = (event === 'terastallize');
-		const terastalType = this.activeRequest?.active[this.active.indexOf(pokemon)].terastalType;
-		if (terastallization && (this.choice.terastallize || !terastalType)) {
-			if (pokemon.terastalType) {
-				terastallization = false;
-			} else {
-				if (this.battle.gen < 9) {
-					return this.emitChoiceError(`Can't move: Terastallizing doesn't before Gen 9.`);
-				} else if (pokemon.side.canTerastallize()) {
-					return this.emitChoiceError(`Can't move: ${pokemon.name} can't Terastallize now.`);
-				/* TODO: Figure out how multi-battles interact with terastallization
-				} else if (pokemon.side.allySide?.canTerastallize()) {
-					return this.emitChoiceError(`Can't move: It's your partner's turn to Terastallize.`);
-				*/
-				}
-				return this.emitChoiceError(`Can't move: You can only Terastallize once per battle.`);
+		let terastallize = (event === 'terastallize');
+		if (terastallize && !pokemon.canTerastallize) {
+			if (pokemon.terastallized) {
+				terastallize = false;
+			} else if (this.battle.gen < 9) {
+				return this.emitChoiceError(`Can't move: Terastallizing doesn't before Gen 9.`);
 			}
 		}
 
@@ -649,7 +633,7 @@ export class Side {
 			mega: mega || ultra,
 			zmove: zMove,
 			maxMove: maxMove ? maxMove.id : undefined,
-			terastallize: terastallization ? pokemon.terastalType || pokemon.getTypes()[0] : undefined,
+			terastallize: terastallize,
 		});
 
 		if (pokemon.maybeDisabled) {
@@ -660,7 +644,7 @@ export class Side {
 		if (ultra) this.choice.ultra = true;
 		if (zMove) this.choice.zMove = true;
 		if (dynamax) this.choice.dynamax = true;
-		if (terastallization) this.choice.terastallize = true;
+		if (terastallize) this.choice.terastallize = true;
 
 		return true;
 	}

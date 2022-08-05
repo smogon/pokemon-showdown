@@ -1671,6 +1671,11 @@ export class BattleActions {
 		// random factor - also not a modifier
 		baseDamage = this.battle.randomizer(baseDamage);
 
+		// just guessing placement
+		if (pokemon.terastallized) {
+			move.stab = 2;
+		}
+
 		// STAB
 		if (move.forceSTAB || (type !== '???' && pokemon.hasType(type))) {
 			// The "???" type never gets STAB
@@ -1678,10 +1683,6 @@ export class BattleActions {
 			// Struggle in the same turn.
 			// (On second thought, it might be easier to get a MissingNo.)
 			baseDamage = this.battle.modify(baseDamage, move.stab || 1.5);
-		}
-		// just guessing placement
-		if (pokemon.terastallized && pokemon.hasType(pokemon.terastallized)) {
-			baseDamage = this.battle.modify(baseDamage, 2);
 		}
 		// types
 		let typeMod = target.runEffectiveness(move);
@@ -1799,7 +1800,6 @@ export class BattleActions {
 	}
 
 	canTerastallize(pokemon: Pokemon) {
-		if (!pokemon.side.canTerastallize()) return null;
 		if (pokemon.side.pokemon.some(mon => !!mon.terastallized)) return null;
 		if (
 			pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra" ||
@@ -1807,22 +1807,22 @@ export class BattleActions {
 		) {
 			return null;
 		}
-		return pokemon.terastalType || pokemon.getTypes()[0];
+		return pokemon.terastalType;
 	}
 
 	terastallize(pokemon: Pokemon) {
 		const type = pokemon.terastalType;
-		if (!type) return false;
 
-		for (const ally of pokemon.side.pokemon) {
-			ally.terastalType = null;
-		}
+		const species = this.dex.deepClone(pokemon.species);
+		species.types = [type];
 
-		pokemon.setType(type);
+		pokemon.addVolatile('terastal');
+		pokemon.formeChange(species, pokemon.getVolatile('terastal')!, true);
+		delete pokemon.volatiles['terastal'];
 
 		pokemon.terastallized = type;
-		pokemon.side.terastalUsed = true;
-		if (pokemon.side.allySide) pokemon.side.allySide.terastalUsed = true;
+
+		this.battle.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
 
 		this.battle.runEvent('AfterTerastallization', pokemon);
 	}

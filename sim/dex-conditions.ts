@@ -618,7 +618,7 @@ export type ModdedConditionData = ConditionData & {inherit?: true};
 
 export class Condition extends BasicEffect implements
 	Readonly<BasicEffect & SideConditionData & FieldConditionData & PokemonConditionData> {
-	declare readonly effectType: 'Condition' | 'Weather' | 'Status';
+	declare readonly effectType: 'Condition' | 'Weather' | 'Status' | 'Terastal';
 	declare readonly counterMax?: number;
 
 	declare readonly durationCallback?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect | null) => number;

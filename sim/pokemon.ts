@@ -247,7 +247,7 @@ export class Pokemon {
 	canUltraBurst: string | null | undefined;
 	readonly canGigantamax: string | null;
 	canTerastallize: string | null;
-	terastalType: string | null;
+	terastalType: string;
 	terastallized?: string;
 
 	/** A Pokemon's currently 'staleness' with respect to the Endless Battle Clause. */
@@ -996,7 +996,7 @@ export class Pokemon {
 			canZMove?: AnyObject | null,
 			canDynamax?: boolean,
 			maxMoves?: DynamaxOptions,
-			terastalType?: string,
+			canTerastallize?: boolean,
 		} = {
 			moves,
 		};
@@ -1025,7 +1025,7 @@ export class Pokemon {
 
 			if (this.getDynamaxRequest()) data.canDynamax = true;
 			if (data.canDynamax || this.volatiles['dynamax']) data.maxMoves = this.getDynamaxRequest(true);
-			if (this.canTerastallize) data.terastalType = this.canTerastallize;
+			if (this.canTerastallize) data.canTerastallize = true;
 		}
 
 		return data;
@@ -1314,6 +1314,8 @@ export class Pokemon {
 			} else if (source.effectType === 'Status') {
 				// Shaymin-Sky -> Shaymin
 				this.battle.add('-formechange', this, species.name, message);
+			} else if (source.effectType === 'Terastal') {
+				this.battle.add('-terastallize', this, this.terastalType);
 			}
 		} else {
 			if (source.effectType === 'Ability') {
