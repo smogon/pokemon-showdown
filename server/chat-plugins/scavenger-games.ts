@@ -312,7 +312,7 @@ const TWISTS: {[k: string]: Twist} = {
 
 		onAfterLoad() {
 			if (this.questions.length === 3) {
-				this.announce('This twist requires at least four questions.  Please reset the hunt and make it again.');
+				this.announce('This twist requires at least four questions. Please reset the hunt and make it again.');
 				this.huntLocked = true;
 			}
 			this.altIps = {};
