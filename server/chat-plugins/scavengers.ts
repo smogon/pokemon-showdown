@@ -1720,7 +1720,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 
 			let next;
 			if (target) {
-				const huntNumber = parseInt(target);
+				const huntNumber = parseInt(target) - 1;
 				if (!ScavengerHuntDatabase.hasHunt(huntNumber)) return this.errorReply("You specified an invalid hunt number.");
 				next = scavengersData.recycledHunts[huntNumber];
 			} else {
