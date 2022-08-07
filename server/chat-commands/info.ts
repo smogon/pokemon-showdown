@@ -2178,8 +2178,8 @@ export const commands: Chat.ChatCommands = {
 				portuguese: 'pt',
 			};
 			let id = pokemon.name.toLowerCase();
-			// Special case for Meowstic-M
 			if (id === 'meowstic') id = 'meowstic-m';
+			if (id === 'zygarde-10%') id = 'zygarde-10';
 			if (['ou', 'uu'].includes(formatId) && generation === 'sm' &&
 				room?.settings.language && room.settings.language in supportedLanguages) {
 				// Limited support for translated analysis
