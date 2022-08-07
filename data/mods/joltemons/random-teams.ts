@@ -282,6 +282,13 @@ export class RandomJoltemonsTeams extends RandomTeams {
 		if (item === 'Leftovers' && types.has('Ghost')) return 'Reaper Cloth';
 		return item;
 	}
+
+	randomSet(species: string | Species, teamDetails?: RandomTeamsTypes.TeamDetails, isLead?: boolean, isDoubles?: boolean, isNoDynamax?: boolean): RandomTeamsTypes.RandomSet {
+		const set = super.randomSet(species, teamDetails, isLead, isDoubles, isNoDynamax);
+		// Work around G-Max Gravitas alias conflict
+		if (set.ability === 'G-Max Gravitas') set.ability = 'Gravitas';
+		return set;
+	}
 }
 
 export default RandomJoltemonsTeams;
