@@ -1577,7 +1577,7 @@ export const commands: Chat.ChatCommands = {
 			review.resolved = {
 				by: user.id,
 				time: Date.now(),
-				details: result || "",
+				details: result,
 				result: isAccurate,
 			};
 			displayResolved(review, true);
