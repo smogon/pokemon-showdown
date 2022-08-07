@@ -372,9 +372,9 @@ export const commands: Chat.ChatCommands = {
 			const packedTeam = SampleTeams.addTeam(user, formatid, teamName, team, category);
 			SampleTeams.modlog(
 				this, formatid, 'ADDTEAM', `${category}: ${teamName}: ${packedTeam}`,
-				`${user.name} added a team for ${formatid}${category ? ` in the ${category} category` : ''}.`
+				`${user.name} added a team for ${formatid} in the ${category} category.`
 			);
-			this.sendReply(`Added a team for ${formatid} ${category ? ` in the ${category} category` : ''}.`);
+			this.sendReply(`Added a team for ${formatid} in the ${category} category.`);
 		},
 		remove(target, room, user) {
 			const [formatid, category, teamName] = target.split(',').map(x => x.trim());
@@ -382,9 +382,9 @@ export const commands: Chat.ChatCommands = {
 			const team = SampleTeams.removeTeam(user, formatid, toID(teamName), category);
 			SampleTeams.modlog(
 				this, formatid, 'REMOVETEAM', `${category}: ${teamName}: ${team}`,
-				`${user.name} removed a team from ${formatid}${category ? ` in the ${category} category` : ''}.`
+				`${user.name} removed a team from ${formatid} in the ${category} category.`
 			);
-			this.sendReply(`Removed a team from ${formatid} ${category ? ` in the ${category} category` : ''}.`);
+			this.sendReply(`Removed a team from ${formatid} in the ${category} category.`);
 		},
 		whitelist: {
 			add(target, room, user) {
