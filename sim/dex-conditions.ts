@@ -458,7 +458,6 @@ export interface EventMethods {
 	onModifyPriorityPriority?: number;
 	onModifySpAPriority?: number;
 	onModifySpDPriority?: number;
-	onModifySpePriority?: number;
 	onModifyTypePriority?: number;
 	onModifyWeightPriority?: number;
 	onRedirectTargetPriority?: number;
