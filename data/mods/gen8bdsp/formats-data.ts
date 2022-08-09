@@ -18,7 +18,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	charizard: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DUU",
 		randomBattleMoves: ["airslash", "earthquake", "fireblast", "focusblast", "roost"],
 	},
