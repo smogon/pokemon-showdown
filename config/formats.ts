@@ -919,8 +919,8 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		ruleset: ['Standard OMs', 'Sleep Moves Clause'],
 		banlist: [
-			'Blissey', 'Calyrex-Shadow', 'Chansey', 'Crawdaunt', 'Dragapult', 'Eternatus', 'Hawlucha', 'Marowak-Alola', 'Melmetal', 'Nidoking', 'Nidoking',
-			'Nidoqueen', 'Nidoqueen', 'Pikachu', 'Toxapex', 'Xerneas', 'Zacian', 'Zacian-Crowned', 'Uber > 1', 'AG ++ Uber > 1', 'Arena Trap', 'Huge Power',
+			'Blissey', 'Calyrex-Shadow', 'Chansey', 'Crawdaunt', 'Dragapult', 'Eternatus', 'Hawlucha', 'Marowak-Alola', 'Melmetal', 'Nidoking',
+			'Nidoqueen', 'Pikachu', 'Toxapex', 'Xerneas', 'Zacian', 'Zacian-Crowned', 'Uber > 1', 'AG ++ Uber > 1', 'Arena Trap', 'Huge Power',
 			'Moody', 'Pure Power', 'Shadow Tag', 'Swift Swim', 'Bright Powder', 'Focus Band', 'King\'s Rock', 'Lax Incense', 'Quick Claw',
 			'Baton Pass',
 		],
@@ -3663,7 +3663,7 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 4] PU'],
 		banlist: [
 			'Ampharos', 'Armaldo', 'Bellossom', 'Dragonair', 'Electabuzz', 'Gabite', 'Gastrodon', 'Glaceon', 'Glalie',
-			'Golduck', 'Gorebyss', 'Hippopotas', 'Kadabra', 'Lapras', 'Lapras', 'Machoke', 'Magmar', 'Mantine', 'Marowak', 'Metang',
+			'Golduck', 'Gorebyss', 'Hippopotas', 'Kadabra', 'Lapras', 'Machoke', 'Magmar', 'Mantine', 'Marowak', 'Metang',
 			'Misdreavus', 'Monferno', 'Mr. Mime', 'Muk', 'Murkrow', 'Pinsir', 'Politoed', 'Purugly', 'Quagsire',
 			'Raichu', 'Rampardos', 'Rapidash', 'Regigigas', 'Relicanth', 'Rhydon', 'Scyther', 'Sneasel', 'Snover',
 			'Solrock', 'Tangela', 'Torkoal', 'Victreebel', 'Xatu', 'Zangoose', 'Damp Rock',
@@ -3828,7 +3828,6 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 2] OU'],
 		banlist: ['OU', 'UUBL'],
 		unbanlist: ['Mean Look + Baton Pass', 'Spider Web + Baton Pass'],
-		unbanlist: ['Mean Look + Baton Pass', 'Spider Web + Baton Pass'],
 	},
 	{
 		name: "[Gen 2] NU",
@@ -3919,7 +3918,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen1',
 		searchShow: false,
-		ruleset: ['[Gen 1] UU', '!APT Clause', '!APT Clause'],
+		ruleset: ['[Gen 1] UU', '!APT Clause'],
 		banlist: ['UU', 'NUBL'],
 	},
 	{
