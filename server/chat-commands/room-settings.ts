@@ -908,12 +908,13 @@ export const commands: Chat.ChatCommands = {
 		`Only users who are staff in a public room or global auth can make groupchats.`,
 	],
 	battlechat(target, room, user) {
+		if (!Config.enablebattlechat) throw new Chat.ErrorMessage("The /battlechat command is disabled.");
 		room = this.requireRoom();
 		this.checkChat();
-		if (!room.battle) return this.errorReply("/battlechat must be used in a battle.");
+		if (!room.battle) throw new Chat.ErrorMessage("/battlechat must be used in a battle.");
 		const roomid = room.roomid.replace('battle-', 'battlechat-') as RoomID;
 		if (Rooms.get(roomid)) {
-			if (!this.runBroadcast()) return;
+			this.runBroadcast();
 			this.sendReplyBox(`Join the battle chat: <a href="/${roomid}">${roomid}</a>`);
 			return;
 		}
@@ -921,15 +922,14 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply("This battle does not have a side chat.");
 			return;
 		}
-		const targetRoom = Rooms.createChatRoom(roomid, "[BC] " + room.title, {
-			// TODO: come up with a good titling scheme
+		const targetRoom = Rooms.createChatRoom(roomid, "Chat for " + room.title, {
 			isPersonal: true,
 			isPrivate: 'hidden',
 			creationTime: Date.now(),
 			modjoin: '+',
 		});
 		if (!targetRoom) {
-			return this.errorReply(`An unknown error occurred while trying to create the battle chat.`);
+			throw new Chat.ErrorMessage(`An unknown error occurred while trying to create the battle chat.`);
 		}
 		user.joinRoom(targetRoom.roomid);
 		room.addRaw(`Join the battle chat: <a href="/${roomid}">${roomid}</a>`);

@@ -337,6 +337,14 @@ exports.forcetimer = false;
 exports.forceregisterelo = false;
 
 /**
+ * enable the battle chat feature - if enabled, the /battlechat command, when used
+ * in a battle, will create a groupchat that the players can't join.
+ * Intended for tournament servers.
+ * @type {boolean}
+ */
+exports.enablebattlechat = false;
+
+/**
  * backdoor - allows Pokemon Showdown system operators to provide technical
  *            support for your server
  *   This backdoor gives system operators (such as Zarel) console admin
