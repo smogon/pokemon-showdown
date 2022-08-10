@@ -1857,8 +1857,8 @@ export class ChatRoom extends BasicRoom {
 	// This is not actually used, this is just a fake class to keep
 	// TypeScript happy
 	battle = null;
-	active: false = false;
-	type: 'chat' = 'chat';
+	active: false = false as const;
+	type: 'chat' = 'chat' as const;
 }
 
 export class GameRoom extends BasicRoom {
