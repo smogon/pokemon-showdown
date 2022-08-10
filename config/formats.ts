@@ -950,6 +950,82 @@ export const Formats: FormatList = [
 		banlist: ['Uber', 'Arena Trap', 'Drizzle', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'King\'s Rock', 'Razor Fang', 'Baton Pass'],
 	},
 	{
+		name: "[Gen 8 BDSP] Ubers",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3694036/">BDSP Ubers Discussion &amp; Resources</a>`,
+		],
+
+		mod: 'gen8bdsp',
+		searchShow: false,
+		ruleset: ['Standard'],
+		banlist: ['AG', 'Baton Pass'],
+	},
+	{
+		name: "[Gen 8 BDSP] UU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3694307/">BDSP UU</a>`,
+		],
+
+		mod: 'gen8bdsp',
+		searchShow: false,
+		ruleset: ['[Gen 8 BDSP] OU'],
+		banlist: ['OU', 'UUBL'],
+	},
+	{
+		name: "[Gen 8 BDSP] RU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3695563/">BDSP RU</a>`,
+		],
+
+		mod: 'gen8bdsp',
+		searchShow: false,
+		ruleset: ['[Gen 8 BDSP] UU'],
+		banlist: ['UU', 'RUBL', 'Drought'],
+	},
+	{
+		name: "[Gen 8 BDSP] NU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3697080/">BDSP NU</a>`,
+		],
+
+		mod: 'gen8bdsp',
+		searchShow: false,
+		ruleset: ['[Gen 8 BDSP] RU'],
+		banlist: ['RU', 'NUBL', 'Damp Rock', 'Heat Rock'],
+	},
+	{
+		name: "[Gen 8 BDSP] PU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3700009/">BDSP PU</a>`,
+		],
+
+		mod: 'gen8bdsp',
+		searchShow: false,
+		ruleset: ['[Gen 8 BDSP] NU'],
+		banlist: ['NU', 'PUBL'],
+	},
+	{
+		name: "[Gen 8 BDSP] LC",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3696004/">BDSP LC</a>`,
+		],
+
+		mod: 'gen8bdsp',
+		searchShow: false,
+		ruleset: ['Little Cup', 'Standard'],
+		banlist: ['Gligar', 'Meditite', 'Misdreavus', 'Munchlax', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela', 'Vulpix', 'Yanma', 'Moody', 'Baton Pass', 'Sticky Web'],
+	},
+	{
+		name: "[Gen 8 BDSP] Monotype",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3694267/">BDSP Monotype</a>`,
+		],
+
+		mod: 'gen8bdsp',
+		searchShow: false,
+		ruleset: ['[Gen 8 BDSP] OU', 'Same Type Clause'],
+	},
+	{
 		name: "[Gen 8 BDSP] CAP",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3694238/">BDSP CAP</a>`,
