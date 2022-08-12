@@ -69,6 +69,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (move.isZ || move.isMax) return false;
 			const mimicIndex = source.moves.indexOf('mimic');
 			if (mimicIndex < 0) return false;
+			if (source.moveSlots[mimicIndex].originalPoke !== source.m.value) return false;
 
 			source.moveSlots[mimicIndex] = {
 				move: move.name,
@@ -134,6 +135,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (disallowedMoves.includes(move.id) || move.isZ || move.isMax) return false;
 			const sketchIndex = source.moves.indexOf('sketch');
 			if (sketchIndex < 0) return false;
+			if (source.moveSlots[sketchIndex].originalPoke !== source.m.value) return false;
 			const sketchedMove = {
 				move: move.name,
 				id: move.id,
