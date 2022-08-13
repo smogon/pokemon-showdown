@@ -536,11 +536,12 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 
 	const roomid = room.roomid;
 	void (async () => {
+		message = message.replace(pokemonRegex, '[Pokemon]');
+
 		for (const k in settings.replacements) {
 			message = message.replace(new RegExp(k, 'gi'), settings.replacements[k]);
 		}
 
-		message = message.replace(pokemonRegex, '[Pokemon]');
 
 		const response = await classifier.classify(message);
 		const {score, flags, main} = makeScore(roomid, response || {});
