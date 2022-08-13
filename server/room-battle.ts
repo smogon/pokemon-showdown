@@ -684,8 +684,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		void this.stream.write(`>${player.slot} undo`);
 	}
 	joinGame(user: User, slot?: SideID, playerOpts?: {team?: string}) {
-		const isMulti = this.gameType === 'multi' || this.gameType === 'freeforall';
-		if (!isMulti && !this.options.players?.includes(user.id)) {
+		if (!this.started && this.options.players && !this.options.players.includes(user.id)) {
 			user.popup(`You cannot join this battle, as you were not originally playing in it.`);
 			return false;
 		}
