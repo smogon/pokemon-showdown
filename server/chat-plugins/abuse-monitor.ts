@@ -542,7 +542,6 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 			message = message.replace(new RegExp(k, 'gi'), settings.replacements[k]);
 		}
 
-
 		const response = await classifier.classify(message);
 		const {score, flags, main} = makeScore(roomid, response || {});
 		if (score) {
