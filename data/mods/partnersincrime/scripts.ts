@@ -223,7 +223,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!Array.isArray(ability)) {
 				if (ownAbility === this.battle.toID(ability) || allyAbility === this.battle.toID(ability)) return true;
 			} else {
-				 if (ability.map(this.battle.toID).includes(ownAbility) || ability.map(this.battle.toID).includes(allyAbility)) return true;
+				 if (ability.map(this.battle.toID).includes(ownAbility) || ability.map(this.battle.toID).includes(allyAbility)) {
+					 return true;
+				 }
 			}
 		},
 		transformInto(pokemon: Pokemon, effect?: Effect) {
@@ -330,6 +332,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			return true;
-		}
+		},
 	},
 };

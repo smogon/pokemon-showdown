@@ -2141,14 +2141,14 @@ export const Formats: FormatList = [
 			];
 			const ally = pokemon.side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
 			if (ally && ally.ability !== pokemon.ability) {
-				if (!pokemon.m.innate && !BAD_ABILITIES.includes(this.toID(ally.ability))
-					&& NEEDED_BEFORE_SWITCH_IN_ABILITIES.includes(this.toID(ally.ability))) {
+				if (!pokemon.m.innate && !BAD_ABILITIES.includes(this.toID(ally.ability)) &&
+					NEEDED_BEFORE_SWITCH_IN_ABILITIES.includes(this.toID(ally.ability))) {
 					pokemon.m.innate = 'ability:' + ally.ability;
 					delete pokemon.volatiles[pokemon.m.innate];
 					if (!ngas || ally.getAbility().isPermanent) pokemon.addVolatile(pokemon.m.innate);
 				}
-				if (!ally.m.innate && !BAD_ABILITIES.includes(this.toID(pokemon.ability))
-					&& NEEDED_BEFORE_SWITCH_IN_ABILITIES.includes(this.toID(pokemon.ability))) {
+				if (!ally.m.innate && !BAD_ABILITIES.includes(this.toID(pokemon.ability)) &&
+					NEEDED_BEFORE_SWITCH_IN_ABILITIES.includes(this.toID(pokemon.ability))) {
 					ally.m.innate = 'ability:' + pokemon.ability;
 					delete ally.volatiles[ally.m.innate];
 					if (!ngas || pokemon.getAbility().isPermanent) ally.addVolatile(ally.m.innate);
