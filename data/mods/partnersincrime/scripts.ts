@@ -5,6 +5,32 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.turn++;
 		this.lastSuccessfulMoveThisTurn = null;
 
+		// Partners in Crime moveSlot updating
+		// Must be highest priority so imprison doesn't lag behind.
+		for (const side of this.sides) {
+			for (const pokemon of side.active) {
+				pokemon.moveSlots = pokemon.moveSlots.filter(move => move.originalPoke === pokemon.m.value);
+				const ally = side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
+				let allyMoves = ally ? this.dex.deepClone(ally.moveSlots) : [];
+				allyMoves = allyMoves.filter(move => !pokemon.moves.includes(move.id) && move.originalPoke === ally.m.value);
+				pokemon.moveSlots = pokemon.moveSlots.concat(allyMoves);
+			}
+		}
+
+		const dynamaxEnding: Pokemon[] = [];
+		for (const pokemon of this.getAllActive()) {
+			if (pokemon.volatiles['dynamax']?.turns === 3) {
+				dynamaxEnding.push(pokemon);
+			}
+		}
+		if (dynamaxEnding.length > 1) {
+			this.updateSpeed();
+			this.speedSort(dynamaxEnding);
+		}
+		for (const pokemon of dynamaxEnding) {
+			pokemon.removeVolatile('dynamax');
+		}
+
 		const trappedBySide: boolean[] = [];
 		const stalenessBySide: ('internal' | 'external' | undefined)[] = [];
 		for (const side of this.sides) {
@@ -26,17 +52,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 
 				pokemon.maybeDisabled = false;
-				pokemon.moveSlots = pokemon.moveSlots.filter(move => move.originalPoke === pokemon.m.value);
-				const ally = side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
-				let allyMoves = ally ? this.dex.deepClone(ally.moveSlots) : [];
-				allyMoves = allyMoves.filter(move => !pokemon.moves.includes(move.id) && move.originalPoke === ally.m.value);
-				pokemon.moveSlots = pokemon.moveSlots.concat(allyMoves);
-
 				for (const moveSlot of pokemon.moveSlots) {
 					moveSlot.disabled = false;
 					moveSlot.disabledSource = '';
 				}
-
 				this.runEvent('DisableMove', pokemon);
 				if (!pokemon.ateBerry) pokemon.disableMove('belch');
 				if (!pokemon.getItem().isBerry) pokemon.disableMove('stuffcheeks');
@@ -140,6 +159,23 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 		if (this.gen === 2) this.quickClawRoll = this.randomChance(60, 256);
 		if (this.gen === 3) this.quickClawRoll = this.randomChance(1, 5);
+
+		// Crazyhouse Progress checker because sidebars has trouble keeping track of Pokemon.
+		// Please remove me once there is client support.
+		if (this.ruleTable.has('crazyhouserule')) {
+			for (const side of this.sides) {
+				let buf = `raw|${side.name}'s team:<br />`;
+				for (const pokemon of side.pokemon) {
+					if (!buf.endsWith('<br />')) buf += '/</span>&#8203;';
+					if (pokemon.fainted) {
+						buf += `<span style="white-space:nowrap;"><span style="opacity:.3"><psicon pokemon="${pokemon.species.id}" /></span>`;
+					} else {
+						buf += `<span style="white-space:nowrap"><psicon pokemon="${pokemon.species.id}" />`;
+					}
+				}
+				this.add(`${buf}</span>`);
+			}
+		}
 
 		this.makeRequest('move');
 	},
