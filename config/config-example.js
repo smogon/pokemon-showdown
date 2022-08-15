@@ -274,6 +274,20 @@ exports.nothrottle = false;
 exports.noipchecks = false;
 
 /**
+ * controls the behavior of the /battlesearch command
+ *
+ * valid values are:
+ *   - true: disables battlesearch entirely
+ *   - false: enables the node.js /battlesearch
+ * 	   (uses either node fs or ripgrep for searching)
+ *   - 'psbattletools': defaults to the psbattletools /battlesearch (normally available as /alternatebattlesearch)
+ * 	   (uses psbattletools, which must be installed, for searching)
+ *
+ * @type {boolean | 'psbattletools'}
+ */
+exports.nobattlesearch = false;
+
+/**
  * allow punishmentmonitor to lock users with multiple roombans.
  *	 When set to `true`, this feature will automatically lock any users with three or more
  *	 active roombans, and notify the staff room.
