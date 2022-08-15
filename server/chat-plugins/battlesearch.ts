@@ -380,7 +380,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		try {
-			await ProcessManager.exec(`psbattletools --version`);
+			await ProcessManager.exec(`psbattletools --version`, {env: {PATH: `${process.env.PATH}:${process.env.HOME}/.cargo/bin`}});
 		} catch (e) {
 			return this.popupReply(
 				`|html|You must install <a href="https://crates.io/crates/psbattletools">psbattletools</a> to use the alternate battlesearch.`
@@ -413,7 +413,7 @@ export const commands: Chat.ChatCommands = {
 		buf += `</div>`;
 		connection.send(buf);
 
-		const search = child_process.spawn('psbattletools', ['--threads', '3', 'search', targetUser, ...directories]);
+		const search = child_process.spawn('psbattletools', ['--threads', '3', 'search', targetUser, ...directories], {env: {PATH: `${process.env.PATH}:${process.env.HOME}/.cargo/bin`}});
 		search.stdout.on('data', data => {
 			buf = buf.replace('</div>', `${Chat.formatText(data.toString()).replace(/\n/g, '<br />')}</div>`);
 			connection.send(buf);
