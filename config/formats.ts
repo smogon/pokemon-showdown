@@ -2109,8 +2109,8 @@ export const Formats: FormatList = [
 			'Groudon', 'Ho-Oh', 'Jirachi', 'Kyogre', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna',
 			'Marshadow', 'Melmetal', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia',
 			'Rayquaza', 'Reshiram', 'Solgaleo', 'Urshifu-Base', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned',
-			'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Bolt Beak', 'Fishious Rend', 'Emergency Exit',
-			'Huge Power', 'Moody', 'Power Construct', 'Shadow Tag', 'Wimp Out', 'Wonder Guard',
+			'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Bolt Beak', 'Fishious Rend', 'Shell Smash',
+			'Emergency Exit', 'Huge Power', 'Moody', 'Power Construct', 'Shadow Tag', 'Wimp Out', 'Wonder Guard',
 		],
 		onBegin() {
 			// Tracking moveSlots this way allows Transform, Mimic, etc.
