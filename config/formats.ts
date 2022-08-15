@@ -2102,6 +2102,7 @@ export const Formats: FormatList = [
 
 		mod: 'partnersincrime',
 		gameType: 'doubles',
+		searchShow: false,
 		ruleset: ['Standard Doubles', 'Dynamax Clause'],
 		banlist: [
 			'Calyrex-Ice', 'Calyrex-Shadow', 'Dialga', 'Eternatus', 'Giratina', 'Giratina-Origin',
@@ -2112,6 +2113,8 @@ export const Formats: FormatList = [
 			'Huge Power', 'Moody', 'Power Construct', 'Shadow Tag', 'Wimp Out', 'Wonder Guard',
 		],
 		onBegin() {
+			// Tracking moveSlots this way allows Transform, Mimic, etc.
+			// to work properly and persist at the start of the next turn.
 			let x = 0;
 			for (const pokemon of this.getAllPokemon()) {
 				pokemon.m.value = x;
