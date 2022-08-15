@@ -12,7 +12,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				pokemon.moveSlots = pokemon.moveSlots.filter(move => move.originalPoke === pokemon.m.value);
 				const ally = side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
 				let allyMoves = ally ? this.dex.deepClone(ally.moveSlots) : [];
-				allyMoves = allyMoves.filter(move => !pokemon.moves.includes(move.id) && move.originalPoke === ally.m.value);
+				if (ally) {
+					// @ts-ignore
+					allyMoves = allyMoves.filter(move => !pokemon.moves.includes(move.id) && move.originalPoke === ally.m.value);
+				}
 				pokemon.moveSlots = pokemon.moveSlots.concat(allyMoves);
 			}
 		}
@@ -227,8 +230,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					 return true;
 				 }
 			}
+			return false;
 		},
-		transformInto(pokemon: Pokemon, effect?: Effect) {
+		transformInto(pokemon: Pokemon, effect?: Effect | null) {
 			const species = pokemon.species;
 			if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
 				(pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5) ||
