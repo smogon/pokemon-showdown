@@ -3,7 +3,10 @@
  */
 import {FS, Utils, ProcessManager, Repl} from '../../lib';
 
-import {checkRipgrepAvailability} from '../config-loader';
+import {checkRipgrepAvailability, Config} from '../config-loader';
+
+import * as path from 'path';
+import * as child_process from 'child_process';
 
 const BATTLESEARCH_PROCESS_TIMEOUT = 3 * 60 * 60 * 1000; // 3 hours
 
@@ -333,6 +336,10 @@ export const pages: Chat.PageTable = {
 
 export const commands: Chat.ChatCommands = {
 	battlesearch(target, room, user, connection) {
+		if (Config.nobattlesearch === 'psbattletools') {
+			// use the psbattletools battlesearch command instead
+			return this.parse(`/alternatebattlesearch ${target}`);
+		}
 		if (!target.trim()) return this.parse('/help battlesearch');
 		this.checkCan('forcewin');
 
@@ -347,9 +354,77 @@ export const commands: Chat.ChatCommands = {
 		// Selection on month, tier, and date will be handled in the HTML room
 		return this.parse(`/join view-battlesearch-${ids.map(toID).join('-')}--${turnLimit || ""}`);
 	},
-	battlesearchhelp: [
-		'/battlesearch [args] - Searches rated battle history for the provided [args] and returns information on battles between the userids given.',
-		`If a number is provided in the [args], it is assumed to be a turn limit, else they're assumed to be userids. Requires &`,
+	battlesearchhelp() {
+		if (Config.nobattlesearch === 'psbattletools') {
+			// use the psbattletools battlesearch command instead
+			return this.parse('/help alternatebattlesearch');
+		}
+
+		this.runBroadcast();
+		return this.sendReply(
+			'/battlesearch [args] - Searches rated battle history for the provided [args] and returns information on battles between the userids given.\n' +
+			`If a number is provided in the [args], it is assumed to be a turn limit, else they're assumed to be userids. Requires &`
+		);
+	},
+
+	async alternatebattlesearch(target, room, user, connection) {
+		this.checkCan('forcewin');
+		const [targetUser, formatString, daysString] = target.split(',').map(param => param.trim());
+		const format = toID(formatString);
+		const days = parseInt(daysString);
+		if (!targetUser || !format || isNaN(days)) return this.parse('/help alternatebattlesearch');
+
+		const currentDayOfMonth = (new Date()).getDate();
+		if (days < 1 || days > 15) {
+			return this.errorReply(`Days must be between 1 and 15. To search longer ranges, use psbattletools manually on sim3.`);
+		}
+
+		try {
+			await ProcessManager.exec(`psbattletools --version`);
+		} catch (e) {
+			return this.popupReply(
+				`|html|You must install <a href="https://crates.io/crates/psbattletools">psbattletools</a> to use the alternate battlesearch.`
+			);
+		}
+		if (user.lastCommand !== '/alternatebattlesearch' && [30, 31, 1].includes(currentDayOfMonth)) {
+			this.errorReply(`Warning: Usage stats may be running currently.`);
+			this.errorReply(`Battlesearch can interfere with usage stats processing due to high computational load.`);
+			this.errorReply(`Please exercise caution.`);
+			this.errorReply(`Type the command again to confirm.`);
+			user.lastCommand = '/alternatebattlesearch';
+		}
+		user.lastCommand = '';
+
+		const directories = [];
+		for (let daysAgo = 0; daysAgo < days; daysAgo++) {
+			const date = new Date(Date.now() - 24 * 60 * 60 * 1000 * daysAgo);
+			const year = date.getFullYear();
+			const month = (date.getMonth() + 1).toString().padStart(2, '0');
+			const day = date.getDate().toString().padStart(2, '0');
+
+			directories.push(path.join(__dirname, '..', '..', 'logs', `${year}-${month}`, format, `${year}-${month}-${day}`));
+		}
+
+		// TODO: implement flag?
+		let buf = `>view-battlesearch-${toID(targetUser)}\n|init|html\n|title|[Battlesearch] ${targetUser} in ${format}\n`;
+		buf += `|pagehtml|<div class="pad"><h2>Battlesearch for ${targetUser} in ${format} in the last ${days} days</h2>`;
+		buf += `<div style="white-space:pre-wrap;display:block;"></div>`;
+		buf += `<p>Searching...</p>`;
+		buf += `</div>`;
+		connection.send(buf);
+
+		const search = child_process.spawn('psbattletools', ['--threads', '3', 'search', targetUser, ...directories]);
+		search.stdout.on('data', data => {
+			buf = buf.replace('</div>', `${Chat.formatText(data.toString()).replace(/\n/g, '<br />')}</div>`);
+			connection.send(buf);
+		});
+		search.on('close', () => {
+			buf = buf.replace('Searching...', 'Done!');
+			connection.send(buf);
+		});
+	},
+	alternatebattlesearchhelp: [
+		'/alternatebattlesearch <user>, <format>, <days> - Searches for battles played by <user> in the past <days> days. Requires: &',
 	],
 };
 
