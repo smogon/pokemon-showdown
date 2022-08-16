@@ -233,7 +233,75 @@ function buildResults(
 	return buf;
 }
 
-async function getBattleSearch(
+async function rustBattleSearch(
+	context: Chat.PageContext, targetUser: string, daysString: string, format: ID
+) {
+	const days = parseInt(daysString);
+	if (days < 1 || days > 15) {
+		throw new Chat.ErrorMessage(`Days must be between 1 and 15. To search longer ranges, use psbattletools manually on sim3.`);
+	}
+	if (!targetUser) {
+		throw new Chat.ErrorMessage(`No user specified.`);
+	}
+	const {connection, user} = context;
+	const currentDayOfMonth = (new Date()).getDate();
+	if (days < 1 || days > 15) {
+		return context.errorReply(`Days must be between 1 and 15. To search longer ranges, use psbattletools manually on sim3.`);
+	}
+
+	try {
+		await ProcessManager.exec(`psbattletools --version`, {
+			env: {PATH: `${process.env.PATH}:${process.env.HOME}/.cargo/bin`},
+		});
+	} catch (e) {
+		return context.errorReply(
+			`You must install <a href="https://crates.io/crates/psbattletools">psbattletools</a> to use the alternate battlesearch.`
+		);
+	}
+	if (user.lastCommand !== '/battlesearch' && [30, 31, 1].includes(currentDayOfMonth)) {
+		const buf = [`Warning: Usage stats may be running currently.`];
+		buf.push(`Battlesearch can interfere with usage stats processing due to high computational load.`);
+		buf.push(`Please exercise caution.`);
+		buf.push(`Type the command again to confirm.`);
+		user.lastCommand = '/battlesearch';
+		throw new Chat.ErrorMessage(buf.join('<br />'));
+	}
+	user.lastCommand = '';
+
+	const directories = [];
+	for (let daysAgo = 0; daysAgo < days; daysAgo++) {
+		const date = new Date(Date.now() - 24 * 60 * 60 * 1000 * daysAgo);
+		const year = date.getFullYear();
+		const month = (date.getMonth() + 1).toString().padStart(2, '0');
+		const day = date.getDate().toString().padStart(2, '0');
+
+		directories.push(path.join(__dirname, '..', '..', 'logs', `${year}-${month}`, format, `${year}-${month}-${day}`));
+	}
+
+	// TODO: implement flag?
+	let buf = `>view-battlesearch-${toID(targetUser)}\n|init|html\n|title|[Battlesearch] ${targetUser} in ${format}\n`;
+	buf += `|pagehtml|<div class="pad"><h2>Battlesearch for ${targetUser} in ${format} in the last ${days} days</h2>`;
+	buf += `<div style="white-space:pre-wrap;display:block;"></div>`;
+	buf += `<p>Searching...</p>`;
+	buf += `</div>`;
+	connection.send(buf);
+
+	const search = child_process.spawn(
+		'psbattletools',
+		['--threads', '3', 'search', targetUser, ...directories],
+		{env: {PATH: `${process.env.PATH}:${process.env.HOME}/.cargo/bin`}}
+	);
+	search.stdout.on('data', data => {
+		buf = buf.replace('</div>', `${Chat.formatText(data.toString()).replace(/\n/g, '<br />')}</div>`);
+		connection.send(buf);
+	});
+	search.on('close', () => {
+		buf = buf.replace('Searching...', 'Done!');
+		connection.send(buf);
+	});
+}
+
+async function fsBattleSearch(
 	connection: Connection, userids: string[], month: string,
 	tierid: ID, turnLimit?: number
 ) {
@@ -249,7 +317,12 @@ export const pages: Chat.PageTable = {
 	async battlesearch(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		this.checkCan('forcewin');
-		if (Config.nobattlesearch) return this.errorReply(`Battlesearch has been temporarily disabled due to load issues.`);
+		if (Config.nobattlesearch === true) {
+			return this.errorReply(`Battlesearch has been temporarily disabled due to load issues.`);
+		}
+		if (Config.nobattlesearch === 'psbattletools') {
+			return rustBattleSearch(this, args[0], args[1], toID(args[2]));
+		}
 		const [ids, rawLimit, month, formatid, confirmation] = Utils.splitFirst(this.pageid.slice(18), '--', 5);
 		let turnLimit: number | undefined = parseInt(rawLimit);
 		if (isNaN(turnLimit)) turnLimit = undefined;
@@ -323,7 +396,7 @@ export const pages: Chat.PageTable = {
 		}
 
 		// Run search
-		void getBattleSearch(connection, userids, month, tierid, turnLimit);
+		void fsBattleSearch(connection, userids, month, tierid, turnLimit);
 		return (
 			`<div class="pad ladder"><h2>Battle Search</h2><p>` +
 			`Searching for ${tierid} battles on ${month} where the ` +
@@ -336,10 +409,6 @@ export const pages: Chat.PageTable = {
 
 export const commands: Chat.ChatCommands = {
 	battlesearch(target, room, user, connection) {
-		if (Config.nobattlesearch === 'psbattletools') {
-			// use the psbattletools battlesearch command instead
-			return this.parse(`/alternatebattlesearch ${target}`);
-		}
 		if (!target.trim()) return this.parse('/help battlesearch');
 		this.checkCan('forcewin');
 
@@ -347,9 +416,15 @@ export const commands: Chat.ChatCommands = {
 		let turnLimit;
 		const ids = [];
 		for (const part of parts) {
-			const parsed = parseInt(part);
-			if (!isNaN(parsed)) turnLimit = parsed;
-			else ids.push(part);
+			if (part.startsWith('limit=')) {
+				const n = parseInt(part.slice('limit='.length).trim());
+				if (isNaN(n)) {
+					return this.errorReply(`Invalid limit: ${part.slice('limit='.length)}`);
+				}
+				turnLimit = n;
+				continue;
+			}
+			ids.push(part);
 		}
 		// Selection on month, tier, and date will be handled in the HTML room
 		return this.parse(`/join view-battlesearch-${ids.map(toID).join('-')}--${turnLimit || ""}`);
@@ -357,7 +432,7 @@ export const commands: Chat.ChatCommands = {
 	battlesearchhelp() {
 		if (Config.nobattlesearch === 'psbattletools') {
 			// use the psbattletools battlesearch command instead
-			return this.parse('/help alternatebattlesearch');
+			return this.parse('/help rustbattlesearch');
 		}
 
 		this.runBroadcast();
@@ -366,65 +441,8 @@ export const commands: Chat.ChatCommands = {
 			`If a number is provided in the [args], it is assumed to be a turn limit, else they're assumed to be userids. Requires &`
 		);
 	},
-
-	async alternatebattlesearch(target, room, user, connection) {
-		this.checkCan('forcewin');
-		const [targetUser, formatString, daysString] = target.split(',').map(param => param.trim());
-		const format = toID(formatString);
-		const days = parseInt(daysString);
-		if (!targetUser || !format || isNaN(days)) return this.parse('/help alternatebattlesearch');
-
-		const currentDayOfMonth = (new Date()).getDate();
-		if (days < 1 || days > 15) {
-			return this.errorReply(`Days must be between 1 and 15. To search longer ranges, use psbattletools manually on sim3.`);
-		}
-
-		try {
-			await ProcessManager.exec(`psbattletools --version`, {env: {PATH: `${process.env.PATH}:${process.env.HOME}/.cargo/bin`}});
-		} catch (e) {
-			return this.popupReply(
-				`|html|You must install <a href="https://crates.io/crates/psbattletools">psbattletools</a> to use the alternate battlesearch.`
-			);
-		}
-		if (user.lastCommand !== '/alternatebattlesearch' && [30, 31, 1].includes(currentDayOfMonth)) {
-			this.errorReply(`Warning: Usage stats may be running currently.`);
-			this.errorReply(`Battlesearch can interfere with usage stats processing due to high computational load.`);
-			this.errorReply(`Please exercise caution.`);
-			this.errorReply(`Type the command again to confirm.`);
-			user.lastCommand = '/alternatebattlesearch';
-		}
-		user.lastCommand = '';
-
-		const directories = [];
-		for (let daysAgo = 0; daysAgo < days; daysAgo++) {
-			const date = new Date(Date.now() - 24 * 60 * 60 * 1000 * daysAgo);
-			const year = date.getFullYear();
-			const month = (date.getMonth() + 1).toString().padStart(2, '0');
-			const day = date.getDate().toString().padStart(2, '0');
-
-			directories.push(path.join(__dirname, '..', '..', 'logs', `${year}-${month}`, format, `${year}-${month}-${day}`));
-		}
-
-		// TODO: implement flag?
-		let buf = `>view-battlesearch-${toID(targetUser)}\n|init|html\n|title|[Battlesearch] ${targetUser} in ${format}\n`;
-		buf += `|pagehtml|<div class="pad"><h2>Battlesearch for ${targetUser} in ${format} in the last ${days} days</h2>`;
-		buf += `<div style="white-space:pre-wrap;display:block;"></div>`;
-		buf += `<p>Searching...</p>`;
-		buf += `</div>`;
-		connection.send(buf);
-
-		const search = child_process.spawn('psbattletools', ['--threads', '3', 'search', targetUser, ...directories], {env: {PATH: `${process.env.PATH}:${process.env.HOME}/.cargo/bin`}});
-		search.stdout.on('data', data => {
-			buf = buf.replace('</div>', `${Chat.formatText(data.toString()).replace(/\n/g, '<br />')}</div>`);
-			connection.send(buf);
-		});
-		search.on('close', () => {
-			buf = buf.replace('Searching...', 'Done!');
-			connection.send(buf);
-		});
-	},
-	alternatebattlesearchhelp: [
-		'/alternatebattlesearch <user>, <format>, <days> - Searches for battles played by <user> in the past <days> days. Requires: &',
+	rustbattlesearchhelp: [
+		`/battlesearch <user>, <format>, <days> - Searches for battles played by <user> in the past <days> days. Requires: &`,
 	],
 };
 
