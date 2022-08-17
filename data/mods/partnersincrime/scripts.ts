@@ -232,7 +232,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return false;
 		},
-		transformInto(pokemon: Pokemon, effect?: Effect | null) {
+		transformInto(pokemon, effect) {
 			const species = pokemon.species;
 			if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
 				(pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5) ||
