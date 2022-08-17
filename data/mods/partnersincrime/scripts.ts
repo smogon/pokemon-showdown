@@ -218,7 +218,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.abilityOrder = this.battle.abilityOrder++;
 			return oldAbility;
 		},
-		hasAbility(ability: string | string[]) {
+		hasAbility(ability) {
 			if (this.ignoringAbility()) return false;
 			const ownAbility = this.ability;
 			const ally = this.side.active.find(mon => mon && mon !== this && !mon.fainted);
