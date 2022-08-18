@@ -370,7 +370,7 @@ const TWISTS: {[k: string]: Twist} = {
 		desc: 'After completing the hunt, players will guess what the most common incorrect answer for each question is.',
 		onAfterLoad() {
 			this.guesses = {};
-			this.incorrect = new Array(this.questions.length).fill('').map(() => ({}));
+			this.incorrect = new Array(this.questions.length).fill({});
 
 			this.questions.push({
 				hint: 'Please enter what you think are the most common incorrect answers to each question.  (Enter your guesses in the order of the previous questions, and seperate them with a comma)',
