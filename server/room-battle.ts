@@ -520,6 +520,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 	started: boolean;
 	ended: boolean;
 	active: boolean;
+	needsRejoin: Set<ID> | null;
 	replaySaved: boolean;
 	forcedSettings: {modchat?: string | null, privacy?: string | null} = {};
 	p1: RoomBattlePlayer;
@@ -568,6 +569,8 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		this.p3 = null!;
 		this.p4 = null!;
 		this.inviteOnlySetter = null;
+
+		this.needsRejoin = options.restored ? new Set(options.players) : null;
 
 		// data to be logged
 		this.allowExtraction = {};
@@ -684,9 +687,8 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		void this.stream.write(`>${player.slot} undo`);
 	}
 	joinGame(user: User, slot?: SideID, playerOpts?: {team?: string}) {
-		const isMulti = this.gameType === 'multi' || this.gameType === 'freeforall';
-		if (!isMulti && !this.options.players?.includes(user.id)) {
-			user.popup(`You cannot join this battle, as you were not originally playing in it.`);
+		if (this.needsRejoin?.size && !this.needsRejoin.has(user.id)) {
+			user.popup(`All the original players in this battle must join first.`);
 			return false;
 		}
 		if (user.id in this.playerTable) {
@@ -724,6 +726,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		}
 
 		this.updatePlayer(this[slot], user, playerOpts);
+		this.needsRejoin?.delete(user.id);
 		if (validSlots.length - 1 < 1 && this.missingBattleStartMessage) {
 			const users = this.players.map(player => {
 				const u = player.getUser();
