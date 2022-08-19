@@ -3,7 +3,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 		effectType: 'ValidatorRule',
 		name: 'Standard',
 		ruleset: ['Obtainable', 'Desync Clause Mod', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
-		banlist: ['Dig', 'Fly', 'Rapidash + Pay Day + Growl', 'Rapidash + Pay Day + Tail Whip', 'Fearow + Pay Day + Peck', 'Fearow + Pay Day + Mirror Move', 'Magikarp + Dragon Rage + Tackle'],
+		banlist: ['Dig', 'Fly'],
 	},
 	nintendocup1997movelegality: {
 		effectType: 'ValidatorRule',
