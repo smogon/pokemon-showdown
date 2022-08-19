@@ -483,7 +483,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	weezing: {
 		tier: "PU",
 		doublesTier: "DUU",
-		randomBattleMoves: ["explosion", "fireblast", "painsplit", "sludgebomb", "toxicspikes", "willowisp"],
+		randomBattleMoves: ["fireblast", "painsplit", "sludgebomb", "toxicspikes", "willowisp"],
 	},
 	rhyhorn: {
 		tier: "LC",
@@ -2109,7 +2109,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["calmmind", "earthpower", "fireblast", "icebeam", "judgment", "recover"],
 	},
 	arceusghost: {
-		randomBattleMoves: ["brickbreak", "extremespeed", "recover", "shadowclaw", "swordsdance"],
+		randomBattleMoves: ["judgment", "calmmind", "focusblast", "recover"],
 	},
 	arceusgrass: {
 		randomBattleMoves: ["calmmind", "fireblast", "icebeam", "judgment", "recover"],
