@@ -69,19 +69,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (move.isZ || move.isMax) return false;
 			const mimicIndex = source.moves.indexOf('mimic');
 			if (mimicIndex < 0) return false;
-			if (source.moveSlots[mimicIndex].originalPoke !== source.m.value) return false;
+			if (!source.m.curMoves.includes('mimic')) return false;
 
-			source.moveSlots[mimicIndex] = {
+			const mimickedMove = {
 				move: move.name,
 				id: move.id,
 				pp: move.pp,
 				maxpp: move.pp,
 				target: move.target,
 				disabled: false,
-				originalPoke: source.moveSlots[mimicIndex].originalPoke,
 				used: false,
 				virtual: true,
 			};
+			source.moveSlots[mimicIndex] = mimickedMove;
+			source.m.curMoves[mimicIndex] = mimickedMove.id;
 			this.add('-start', source, 'Mimic', move.name);
 		},
 	},
@@ -135,19 +136,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (disallowedMoves.includes(move.id) || move.isZ || move.isMax) return false;
 			const sketchIndex = source.moves.indexOf('sketch');
 			if (sketchIndex < 0) return false;
-			if (source.moveSlots[sketchIndex].originalPoke !== source.m.value) return false;
+			if (!source.m.curMoves.includes('sketch')) return false;
 			const sketchedMove = {
 				move: move.name,
 				id: move.id,
 				pp: move.pp,
 				maxpp: move.pp,
 				target: move.target,
-				originalPoke: source.moveSlots[sketchIndex].originalPoke,
 				disabled: false,
 				used: false,
 			};
 			source.moveSlots[sketchIndex] = sketchedMove;
 			source.baseMoveSlots[sketchIndex] = sketchedMove;
+			source.m.curMoves[sketchIndex] = sketchedMove.id;
 			this.add('-activate', source, 'move: Sketch', move.name);
 		},
 	},

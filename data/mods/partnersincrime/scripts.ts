@@ -9,12 +9,13 @@ export const Scripts: ModdedBattleScriptsData = {
 		// Must be highest priority so imprison doesn't lag behind.
 		for (const side of this.sides) {
 			for (const pokemon of side.active) {
-				pokemon.moveSlots = pokemon.moveSlots.filter(move => move.originalPoke === pokemon.m.value);
+				pokemon.moveSlots = pokemon.moveSlots.filter(move => pokemon.m.curMoves.includes(move.id));
+				pokemon.m.curMoves = this.dex.deepClone(pokemon.moves);
 				const ally = side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
 				let allyMoves = ally ? this.dex.deepClone(ally.moveSlots) : [];
 				if (ally) {
 					// @ts-ignore
-					allyMoves = allyMoves.filter(move => !pokemon.moves.includes(move.id) && move.originalPoke === ally.m.value);
+					allyMoves = allyMoves.filter(move => !pokemon.moves.includes(move.id) && ally.m.curMoves.includes(move.id));
 				}
 				pokemon.moveSlots = pokemon.moveSlots.concat(allyMoves);
 			}
@@ -268,7 +269,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.hpPower = (this.battle.gen >= 5 ? this.hpPower : pokemon.hpPower);
 			for (const moveSlot of pokemon.moveSlots) {
 				let moveName = moveSlot.move;
-				if (moveSlot.originalPoke !== pokemon.m.value) continue;
+				if (!pokemon.m.curMoves.includes(moveSlot.id)) continue;
 				if (moveSlot.id === 'hiddenpower') {
 					moveName = 'Hidden Power ' + this.hpType;
 				}
@@ -279,11 +280,11 @@ export const Scripts: ModdedBattleScriptsData = {
 					maxpp: this.battle.gen >= 5 ? (moveSlot.maxpp === 1 ? 1 : 5) : moveSlot.maxpp,
 					target: moveSlot.target,
 					disabled: false,
-					originalPoke: this.m.value,
 					used: false,
 					virtual: true,
 				});
 			}
+			this.m.curMoves = pokemon.m.curMoves;
 			let boostName: BoostID;
 			for (boostName in pokemon.boosts) {
 				this.boosts[boostName] = pokemon.boosts[boostName];

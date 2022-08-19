@@ -19,7 +19,6 @@ interface MoveSlot {
 	disabledSource?: string;
 	used: boolean;
 	virtual?: boolean;
-	originalPoke?: number; // Partners in Crime
 }
 
 interface Attacker {

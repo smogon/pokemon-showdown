@@ -2112,25 +2112,11 @@ export const Formats: FormatList = [
 			'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Bolt Beak', 'Fishious Rend', 'Shell Smash',
 			'Emergency Exit', 'Huge Power', 'Moody', 'Power Construct', 'Shadow Tag', 'Wimp Out', 'Wonder Guard',
 		],
-		onBegin() {
-			// Tracking moveSlots this way allows Transform, Mimic, etc.
-			// to work properly and persist at the start of the next turn.
-			let x = 0;
-			for (const pokemon of this.getAllPokemon()) {
-				pokemon.m.value = x;
-				for (const moveSlot of pokemon.moveSlots) {
-					if (!moveSlot.originalPoke) moveSlot.originalPoke = pokemon.m.value;
-				}
-				for (const moveSlot of pokemon.baseMoveSlots) {
-					if (!moveSlot.originalPoke) moveSlot.originalPoke = pokemon.m.value;
-				}
-				x++;
-			}
-		},
 		onBeforeSwitchIn(pokemon) {
+			pokemon.m.curMoves = this.dex.deepClone(pokemon.moves);
 			let ngas = false;
 			for (const poke of this.getAllActive()) {
-				if (['neutralizinggas'].includes(this.toID(poke.ability))) {
+				if (this.toID(poke.ability) === ('neutralizinggas' as ID)) {
 					ngas = true;
 					break;
 				}
@@ -2162,7 +2148,7 @@ export const Formats: FormatList = [
 		onSwitchIn(pokemon) {
 			let ngas = false;
 			for (const poke of this.getAllActive()) {
-				if (['neutralizinggas'].includes(this.toID(poke.ability))) {
+				if (this.toID(poke.ability) === ('neutralizinggas' as ID)) {
 					ngas = true;
 					break;
 				}
