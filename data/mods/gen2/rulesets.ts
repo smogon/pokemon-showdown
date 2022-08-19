@@ -16,10 +16,10 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			'Flareon + Tackle + Growl', 'Flareon + Focus Energy + Ember',
 			
 			// https://github.com/smogon/pokemon-showdown/pull/8869
-			'Rapidash + Pay Day + Growl', 
-			'Rapidash + Pay Day + Tail Whip', 
-			'Fearow + Pay Day + Peck', 
-			'Fearow + Pay Day + Mirror Move', 
+			'Rapidash + Pay Day + Growl',
+			'Rapidash + Pay Day + Tail Whip',
+			'Fearow + Pay Day + Peck',
+			'Fearow + Pay Day + Mirror Move',
 			'Magikarp + Dragon Rage + Tackle'
 		],
 	},
