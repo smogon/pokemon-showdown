@@ -2173,7 +2173,7 @@ export const pages: Chat.PageTable = {
 		log = log.filter(l => l.startsWith('|c|'));
 
 		let buf = '<div class="pad">';
-		buf += `<h2>Logs for ${logData.title}</h2>`;
+		buf += `<h2>Logs for <a href="/${full}">${logData.title}</a></h2>`;
 		buf += `Players: ${Object.values(logData.players).map(toID).filter(Boolean).join(', ')}<hr />`;
 		let atLeastOne = false;
 		for (const line of log) {
