@@ -488,6 +488,11 @@ export interface RoomBattleOptions {
 	inputLog?: string;
 	ratedMessage?: string;
 	seed?: PRNGSeed;
+	roomid?: RoomID;
+	players?: ID[];
+	/** For battles restored after a restart */
+	delayedTimer?: boolean;
+	restored?: boolean;
 }
 
 export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
@@ -515,6 +520,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 	started: boolean;
 	ended: boolean;
 	active: boolean;
+	needsRejoin: Set<ID> | null;
 	replaySaved: boolean;
 	forcedSettings: {modchat?: string | null, privacy?: string | null} = {};
 	p1: RoomBattlePlayer;
@@ -532,6 +538,8 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 	turn: number;
 	rqid: number;
 	requestCount: number;
+	options: RoomBattleOptions;
+	frozen?: boolean;
 	dataResolvers?: [((args: string[]) => void), ((error: Error) => void)][];
 	constructor(room: GameRoom, options: RoomBattleOptions) {
 		super(room);
@@ -539,6 +547,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		this.gameid = 'battle' as ID;
 		this.room = room;
 		this.title = format.name;
+		this.options = options;
 		if (!this.title.endsWith(" Battle")) this.title += " Battle";
 		this.allowRenames = options.allowRenames !== undefined ? !!options.allowRenames : (!options.rated && !options.tour);
 
@@ -560,6 +569,8 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		this.p3 = null!;
 		this.p4 = null!;
 		this.inviteOnlySetter = null;
+
+		this.needsRejoin = options.restored ? new Set(options.players) : null;
 
 		// data to be logged
 		this.allowExtraction = {};
@@ -633,6 +644,10 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		if (Rooms.global.battleCount === 0) Rooms.global.automaticKillRequest();
 	}
 	choose(user: User, data: string) {
+		if (this.frozen) {
+			user.popup(`Your battle is currently paused, so you cannot move right now.`);
+			return;
+		}
 		const player = this.playerTable[user.id];
 		const [choice, rqid] = data.split('|', 2);
 		if (!player) return;
@@ -672,6 +687,10 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		void this.stream.write(`>${player.slot} undo`);
 	}
 	joinGame(user: User, slot?: SideID, playerOpts?: {team?: string}) {
+		if (this.needsRejoin?.size && !this.needsRejoin.has(user.id)) {
+			user.popup(`All the original players in this battle must join first.`);
+			return false;
+		}
 		if (user.id in this.playerTable) {
 			user.popup(`You have already joined this battle.`);
 			return false;
@@ -707,6 +726,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		}
 
 		this.updatePlayer(this[slot], user, playerOpts);
+		this.needsRejoin?.delete(user.id);
 		if (validSlots.length - 1 < 1 && this.missingBattleStartMessage) {
 			const users = this.players.map(player => {
 				const u = player.getUser();

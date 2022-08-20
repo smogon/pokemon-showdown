@@ -30,6 +30,10 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 			// 1-4 turns
 			this.effectState.time = this.random(2, 6);
+
+			if (target.removeVolatile('nightmare')) {
+				this.add('-end', target, 'Nightmare', '[silent]');
+			}
 		},
 		onBeforeMovePriority: 10,
 		onBeforeMove(pokemon, target, move) {

@@ -30,7 +30,7 @@ import {FriendsDatabase, PM} from './friends';
 import {SQL, Repl, FS, Utils} from '../lib';
 import * as Artemis from './artemis';
 import {Dex} from '../sim';
-import {resolve} from 'path';
+import * as pathModule from 'path';
 import * as JSX from './chat-jsx';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
@@ -1818,7 +1818,7 @@ export const Chat = new class {
 		}
 		Utils.sortBy(migrationsToRun, ({version}) => version);
 		for (const {file} of migrationsToRun) {
-			await this.database.runFile(resolve(migrationsFolder, file));
+			await this.database.runFile(pathModule.resolve(migrationsFolder, file));
 		}
 
 		Chat.destroyHandlers.push(() => Chat.database?.destroy());
@@ -1910,15 +1910,21 @@ export const Chat = new class {
 
 	packageData: AnyObject = {};
 
+	getPluginName(file: string) {
+		const nameWithExt = pathModule.relative(__dirname, file).replace(/^chat-(?:commands|plugins)./, '');
+		let name = nameWithExt.slice(0, nameWithExt.lastIndexOf('.'));
+		if (name.endsWith('/index')) name = name.slice(0, -6);
+		return name;
+	}
+
 	loadPluginFile(file: string) {
 		if (!VALID_PLUGIN_ENDINGS.some(ext => file.endsWith(ext))) return;
-		const filename = file.split('/').pop() || "";
-		this.loadPlugin(require(file), filename.slice(0, filename.lastIndexOf('.')) || file);
+		this.loadPlugin(require(file), this.getPluginName(file));
 	}
 
 	loadPluginDirectory(dir: string, depth = 0) {
 		for (const file of FS(dir).readdirSync()) {
-			const path = resolve(dir, file);
+			const path = pathModule.resolve(dir, file);
 			if (FS(path).isDirectorySync()) {
 				depth++;
 				if (depth > MAX_PLUGIN_LOADING_DEPTH) continue;
@@ -2477,13 +2483,17 @@ export const Chat = new class {
 		return probe(url);
 	}
 
-	parseArguments(str: string, delim = ',', paramDelim = '=', useIDs = true) {
+	parseArguments(
+		str: string,
+		delim = ',',
+		opts: Partial<{paramDelim: string, useIDs: boolean, allowEmpty: boolean}> = {useIDs: true}
+	) {
 		const result: Record<string, string[]> = {};
 		for (const part of str.split(delim)) {
-			let [key, val] = Utils.splitFirst(part, paramDelim).map(f => f.trim());
-			if (useIDs) key = toID(key);
-			if (!toID(key) || !toID(val)) {
-				throw new Chat.ErrorMessage(`Invalid option ${part}. Must be in [key]${paramDelim}[value] format.`);
+			let [key, val] = Utils.splitFirst(part, opts.paramDelim ||= "=").map(f => f.trim());
+			if (opts.useIDs) key = toID(key);
+			if (!toID(key) || (!opts.allowEmpty && !toID(val))) {
+				throw new Chat.ErrorMessage(`Invalid option ${part}. Must be in [key]${opts.paramDelim}[value] format.`);
 			}
 			if (!result[key]) result[key] = [];
 			result[key].push(val);

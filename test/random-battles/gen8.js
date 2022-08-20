@@ -164,6 +164,17 @@ describe('[Gen 8] Random Battle', () => {
 
 	it('should always give Palossand Shore Up', () => testAlwaysHasMove('palossand', options, 'shoreup'));
 	it('should always give Azumarill Aqua Jet', () => testAlwaysHasMove('azumarill', options, 'aquajet'));
+
+
+	it('should forbid a certain Togekiss set', () => {
+		testSet('togekiss', options, set => {
+			assert.notDeepEqual(
+				[...set.moves].sort(),
+				['airslash', 'aurasphere', 'fireblast', 'roost'],
+				`got ${set.moves}`
+			);
+		});
+	});
 });
 
 describe('[Gen 8] Random Doubles Battle', () => {

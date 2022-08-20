@@ -14,7 +14,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Standard',
 		desc: "The standard ruleset for all offical Smogon singles tiers (Ubers, OU, etc.)",
 		ruleset: [
-			'Obtainable', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
+			'Obtainable', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
 		],
 	},
 	standardnext: {
@@ -69,6 +69,14 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "The standard ruleset for all official Smogon doubles tiers",
 		ruleset: [
 			'Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Gravity Sleep Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
+		],
+	},
+	standardoms: {
+		effectType: 'ValidatorRule',
+		name: 'Standard OMs',
+		desc: "The standard ruleset for all Smogon OMs (Almost Any Ability, STABmons, etc.)",
+		ruleset: [
+			'Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'Dynamax Clause', 'HP Percentage Mod', 'Cancel Mod', 'Overflow Stat Mod',
 		],
 	},
 	standardnatdex: {
@@ -643,6 +651,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 			return problems;
 		},
 	},
+	evasionclause: {
+		effectType: 'ValidatorRule',
+		name: 'Evasion Clause',
+		desc: "Bans abilities, items, and moves that boost Evasion",
+		ruleset: ['Evasion Abilities Clause', 'Evasion Items Clause', 'Evasion Moves Clause'],
+		onBegin() {
+			this.add('rule', 'Evasion Clause: Evasion abilities, items, and moves are banned');
+		},
+	},
 	evasionabilitiesclause: {
 		effectType: 'ValidatorRule',
 		name: 'Evasion Abilities Clause',
@@ -650,6 +667,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 		banlist: ['Sand Veil', 'Snow Cloak'],
 		onBegin() {
 			this.add('rule', 'Evasion Abilities Clause: Evasion abilities are banned');
+		},
+	},
+	evasionitemsclause: {
+		effectType: 'ValidatorRule',
+		name: 'Evasion Items Clause',
+		desc: "Bans moves that lower the accuracy of moves used against the user",
+		banlist: ['Bright Powder', 'Lax Incense'],
+		onBegin() {
+			this.add('rule', 'Evasion Items Clause: Evasion items are banned');
 		},
 	},
 	evasionmovesclause: {
@@ -1869,8 +1895,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 	reevolutionmod: {
 		effectType: "Rule",
 		name: "Re-Evolution Mod",
-		desc: "Pok&eacute;mon gain the boosts they would gain from evolving again",
-		ruleset: ['Overflow Stat Mod'],
+		desc: "Pok&eacute;mon gain the stat changes they would gain from evolving again.",
 		onBegin() {
 			this.add('rule', 'Re-Evolution Mod: Pok\u00e9mon gain the boosts they would gain from evolving again');
 		},
@@ -1886,6 +1911,189 @@ export const Rulesets: {[k: string]: FormatData} = {
 				newSpecies.bst += newSpecies.baseStats[statid];
 			}
 			return newSpecies;
+		},
+	},
+	brokenrecordmod: {
+		effectType: "Rule",
+		name: "Broken Record Mod",
+		desc: `Pok&eacute;mon can hold a TR to use that move in battle.`,
+		onValidateSet(set) {
+			if (!set.item) return;
+			const item = this.dex.items.get(set.item);
+			if (!/^tr\d\d/i.test(item.name)) return;
+			const moveName = item.desc.split('move ')[1].split('.')[0];
+			if (set.moves.map(this.toID).includes(this.toID(moveName))) {
+				return [
+					`${set.species} can't run ${item.name} (${moveName}) as its item because it already has that move in its moveset.`,
+				];
+			}
+		},
+		onValidateTeam(team) {
+			const trs = new Set<string>();
+			for (const set of team) {
+				if (!set.item) continue;
+				const item = this.dex.items.get(set.item).name;
+				if (!/^tr\d\d/i.test(item)) continue;
+				if (trs.has(item)) {
+					return [`Your team already has a Pok\u00e9mon with ${item}.`];
+				}
+				trs.add(item);
+			}
+		},
+		onTakeItem(item) {
+			return !/^tr\d\d/i.test(item.name);
+		},
+		onModifyMove(move) {
+			if (move.id === 'knockoff') {
+				move.onBasePower = function (basePower, source, target, m) {
+					const item = target.getItem();
+					if (!this.singleEvent('TakeItem', item, target.itemState, target, target, m, item)) return;
+					// Very hardcode but I'd prefer to not make a mod for one damage calculation change
+					if (item.id && !/^tr\d\d/i.test(item.id)) {
+						return this.chainModify(1.5);
+					}
+				};
+			} else if (move.id === 'fling') {
+				move.onPrepareHit = function (target, source, m) {
+					if (source.ignoringItem()) return false;
+					const item = source.getItem();
+					if (!this.singleEvent('TakeItem', item, source.itemState, source, source, m, item)) return false;
+					if (!item.fling) return false;
+					if (/^tr\d\d/i.test(item.id)) return false;
+					m.basePower = item.fling.basePower;
+					if (item.isBerry) {
+						m.onHit = function (foe) {
+							if (this.singleEvent('Eat', item, null, foe, null, null)) {
+								this.runEvent('EatItem', foe, null, null, item);
+								if (item.id === 'leppaberry') foe.staleness = 'external';
+							}
+							if (item.onEat) foe.ateBerry = true;
+						};
+					} else if (item.fling.effect) {
+						m.onHit = item.fling.effect;
+					} else {
+						if (!m.secondaries) m.secondaries = [];
+						if (item.fling.status) {
+							m.secondaries.push({status: item.fling.status});
+						} else if (item.fling.volatileStatus) {
+							m.secondaries.push({volatileStatus: item.fling.volatileStatus});
+						}
+					}
+					source.addVolatile('fling');
+				};
+			}
+		},
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				const item = pokemon.getItem();
+				if (/^tr\d\d/i.test(item.name)) {
+					const move = this.dex.moves.get(item.desc.split('move ')[1].split('.')[0]);
+					pokemon.moveSlots = (pokemon as any).baseMoveSlots = [
+						...pokemon.baseMoveSlots, {
+							id: move.id,
+							move: move.name,
+							pp: move.pp * 8 / 5,
+							maxpp: move.pp * 8 / 5,
+							target: move.target,
+							disabled: false,
+							disabledSource: '',
+							used: false,
+						},
+					];
+				}
+			}
+		},
+	},
+	categoryswapmod: {
+		effectType: 'Rule',
+		name: 'Category Swap Mod',
+		desc: `All physical moves become special, and all special moves become physical.`,
+		onBegin() {
+			this.add('rule', 'Category Swap Mod: All physical moves become special, and vice versa');
+		},
+		onModifyMove(move, pokemon, target) {
+			if (move.category === "Status") return;
+
+			if (move.category === "Physical") {
+				move.category = "Special";
+			} else if (move.category === "Special") {
+				move.category = "Physical";
+			}
+
+			switch (move.id) {
+			case 'doomdesire': {
+				move.onTry = function (source, subtarget) {
+					if (!subtarget.side.addSlotCondition(subtarget, 'futuremove')) return false;
+					Object.assign(subtarget.side.slotConditions[subtarget.position]['futuremove'], {
+						move: 'doomdesire',
+						source: source,
+						moveData: {
+							id: 'doomdesire',
+							name: "Doom Desire",
+							accuracy: 100,
+							basePower: 140,
+							category: "Physical",
+							priority: 0,
+							flags: {},
+							effectType: 'Move',
+							isFutureMove: true,
+							type: 'Steel',
+						},
+					});
+					this.add('-start', source, 'Doom Desire');
+					return this.NOT_FAIL;
+				};
+				break;
+			}
+			case 'futuresight': {
+				move.onTry = function (source, subtarget) {
+					if (!subtarget.side.addSlotCondition(subtarget, 'futuremove')) return false;
+					Object.assign(subtarget.side.slotConditions[subtarget.position]['futuremove'], {
+						duration: 3,
+						move: 'futuresight',
+						source: source,
+						moveData: {
+							id: 'futuresight',
+							name: "Future Sight",
+							accuracy: 100,
+							basePower: 120,
+							category: "Physical",
+							priority: 0,
+							flags: {},
+							ignoreImmunity: false,
+							effectType: 'Move',
+							isFutureMove: true,
+							type: 'Psychic',
+						},
+					});
+					this.add('-start', source, 'move: Future Sight');
+					return this.NOT_FAIL;
+				};
+				break;
+			}
+			// Moves with dynamic categories will always be physical if not special-cased
+			case 'lightthatburnsthesky':
+			case 'photongeyser': {
+				move.category = 'Special';
+				if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+				break;
+			}
+			case 'shellsidearm': {
+				if (!target) return;
+				move.category = 'Special';
+				const atk = pokemon.getStat('atk', false, true);
+				const spa = pokemon.getStat('spa', false, true);
+				const def = target.getStat('def', false, true);
+				const spd = target.getStat('spd', false, true);
+				const physical = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * atk) / def) / 50);
+				const special = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * spa) / spd) / 50);
+				if (physical > special || (physical === special && this.random(2) === 0)) {
+					move.category = 'Physical';
+					move.flags.contact = 1;
+				}
+				break;
+			}
+			}
 		},
 	},
 };

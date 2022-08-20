@@ -134,6 +134,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	substitute: {
 		inherit: true,
+		onTryHit(target) {
+			if (target.volatiles['substitute']) {
+				this.add('-fail', target, 'move: Substitute');
+				return null;
+			}
+			// Stadium fixes the 25% = you die gag
+			if (target.hp <= target.maxhp / 4) {
+				this.add('-fail', target, 'move: Substitute', '[weak]');
+				return null;
+			}
+		},
 		condition: {
 			onStart(target) {
 				this.add('-start', target, 'Substitute');
