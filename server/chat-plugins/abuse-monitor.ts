@@ -300,7 +300,7 @@ export async function runActions(user: User, room: GameRoom, message: string, re
 		if (user.trusted) {
 			// force just logging for any sort of punishment. requested by staff
 			Rooms.get('staff')?.add(
-				`|c|&|/log [Artemis] <<${room.roomid}>> ${punishment} recommended for trusted user ${user.id}` +
+				`|c|&|/log [Artemis] ${getViewLink(room.roomid)} ${punishment} recommended for trusted user ${user.id}` +
 				`${user.trusted !== user.id ? ` [${user.trusted}]` : ''} `
 			).update();
 			return; // we want nothing else to be executed. staff want trusted users to be reviewed manually for now
@@ -357,20 +357,11 @@ function globalModlog(
 	});
 }
 
+const getViewLink = (roomid: RoomID) => `<<view-battlechat-${roomid.replace('battle-', '')}>>`;
+
 function addGlobalModAction(message: string, room: GameRoom) {
 	room.add(`|c|&|/log ${message}`).update();
-	Rooms.get(`staff`)?.add(`|c|&|/log <<${room.roomid}>> ${message}`).update();
-}
-
-function addLogButton(room: Room) {
-	const staff = Rooms.get('staff');
-	if (staff) {
-		staff.add(
-			`|c|&|/raw <button class="button" name="send" value="/msgroom staff,/gbc ${room.roomid}">` +
-			`View logs</button>`
-		);
-		staff.update();
-	}
+	Rooms.get(`staff`)?.add(`|c|&|/log ${getViewLink(room.roomid)} ${message}`).update();
 }
 
 const DISCLAIMER = (
@@ -382,9 +373,8 @@ const DISCLAIMER = (
 export async function lock(user: User, room: GameRoom, reason: string, isWeek?: boolean) {
 	if (settings.recommendOnly) {
 		Rooms.get('staff')?.add(
-			`|c|&|/log [Artemis] <<${room.roomid}>> ${isWeek ? "WEEK" : ""}LOCK recommended for ${user.id}`
+			`|c|&|/log [Artemis] ${getViewLink(room.roomid)} ${isWeek ? "WEEK" : ""}LOCK recommended for ${user.id}`
 		).update();
-		addLogButton(room);
 		room.hideText([user.id], undefined, true);
 		return false;
 	}
@@ -405,7 +395,6 @@ export async function lock(user: User, room: GameRoom, reason: string, isWeek?: 
 			`locked alts: ${affected.slice(1).map(curUser => curUser.getLastName()).join(", ")})`
 		);
 	}
-	addLogButton(room);
 	room.add(`|c|&|/raw ${DISCLAIMER}`).update();
 	room.hideText(affected.map(f => f.id), undefined, true);
 	let message = `|popup||html|${user.name} has locked you from talking in chats, battles, and PMing regular users`;
@@ -453,7 +442,6 @@ const punishmentHandlers: Record<string, PunishmentHandler> = {
 		}
 		globalModlog('WARN', user, reason, room);
 		addGlobalModAction(`${user.name} was warned by Artemis (${reason})`, room);
-		addLogButton(room);
 		const punishments = punishmentCache.get(user) || {};
 		if (!punishments['WARN']) punishments['WARN'] = 0;
 		punishments['WARN']++;
@@ -2168,6 +2156,33 @@ export const pages: Chat.PageTable = {
 			buf += `</form>`;
 			return buf;
 		},
+	},
+	async battlechat(query) {
+		const [format, num, pw] = query.map(toID);
+		this.checkCan('lock');
+		if (!format || !num) {
+			return this.errorReply(`Invalid battle link provided.`);
+		}
+		this.title = `[Battle Logs] ${format}-${num}`;
+		const full = `battle-${format}-${num}${pw ? `-${pw}` : ""}`;
+		const logData = await getBattleLog(full);
+		if (!logData) {
+			return this.errorReply(`No logs found for the battle <code>${full}</code>.`);
+		}
+		let log = logData.log;
+		log = log.filter(l => l.startsWith('|c|'));
+
+		let buf = '<div class="pad">';
+		buf += `<h2>Logs for ${logData.title}</h2>`;
+		buf += `Players: ${Object.values(logData.players).map(toID).filter(Boolean).join(', ')}<hr />`;
+		let atLeastOne = false;
+		for (const line of log) {
+			const [,, username, message] = Utils.splitFirst(line, '|', 3);
+			buf += Utils.html`<div class="chat"><span class="username"><username>${username}:</username></span> ${message}</div>`;
+			atLeastOne = true;
+		}
+		if (!atLeastOne) buf += `None found.`;
+		return buf;
 	},
 };
 
