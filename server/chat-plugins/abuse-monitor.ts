@@ -426,6 +426,20 @@ type PunishmentHandler = (
 
 /** Keep this in descending order of severity */
 const punishmentHandlers: Record<string, PunishmentHandler> = {
+	report(user, room) {
+		for (const k in room.users) {
+			if (k === user.id) continue;
+			const u = room.users[k];
+			if (room.auth.get(u) !== Users.PLAYER_SYMBOL) continue;
+			u.sendTo(
+				room.roomid,
+				`|c|&|/uhtml report,` +
+				`Toxicity has been automatically detected in this battle, ` +
+				`please click below if you would like to report it.<br />` +
+				`<a class="button notifying" href="/view-help-request">Make a report</a>`
+			);
+		}
+	},
 	mute(user, room) {
 		const roomMutes = muted.get(room) || new WeakMap();
 		if (!user.trusted) {
