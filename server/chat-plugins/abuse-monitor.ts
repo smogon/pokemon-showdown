@@ -19,6 +19,7 @@ const MUTE_DURATION = 7 * 60 * 1000;
 const DAY = 24 * 60 * 60 * 1000;
 const STAFF_NOTIF_INTERVAL = 10 * 60 * 1000;
 const MAX_MODLOG_TIME = 2 * 365 * DAY;
+const NON_PUNISHMENTS = ['MUTE', 'REPORT'];
 const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
 	'lock': '/lock',
 	'weeklock': '/weeklock',
@@ -286,7 +287,7 @@ export async function runActions(user: User, room: GameRoom, message: string, re
 	}
 	if (recommended.length) {
 		Utils.sortBy(recommended, ([punishment]) => -PUNISHMENTS.indexOf(punishment));
-		if (recommended.filter(k => k[1] !== 'MUTE').every(k => k[2])) {
+		if (recommended.filter(k => !NON_PUNISHMENTS.includes(k[1])).every(k => k[2])) {
 			// requiresPunishment is for upgrading. if every one is an upgrade and
 			// there's no independent punishment, do not upgrade it
 			return;
@@ -1167,6 +1168,32 @@ export const commands: Chat.ChatCommands = {
 				`|html|Punishment ${num + 1}: <code>` +
 				`${visualizePunishment(punishment).replace(/: /g, ' = ')}</code>`
 			);
+		},
+		changeall(target, room, user) {
+			checkAccess(this);
+			const [to, from] = target.split(',').map(f => toID(f));
+			if (!(to && from)) {
+				return this.errorReply(`Specify a type to change and a type to change to.`);
+			}
+			if (![to, from].every(f => punishmentHandlers[f])) {
+				return this.errorReply(
+					`Invalid types given. Valid types: ${Object.keys(punishmentHandlers).join(', ')}.`
+				);
+			}
+			const changed = [];
+			for (const [i, punishment] of settings.punishments.entries()) {
+				if (toID(punishment.type) === to) {
+					punishment.type = from.toUpperCase();
+					changed.push(i + 1);
+				}
+			}
+			if (!changed.length) {
+				return this.errorReply(`No punishments of type '${to}' found.`);
+			}
+			this.sendReply(`Updated punishment(s) ${changed.join(', ')}`);
+			this.privateGlobalModAction(`${user.name} updated all abuse-monitor punishments of type ${to} to type ${from}`);
+			saveSettings();
+			this.globalModlog(`ABUSEMONITOR CHANGEALL`, null, `${to} to ${from}`);
 		},
 		ep: 'exportpunishments', // exports punishment settings to something easily copy/pastable
 		exportpunishments() {
