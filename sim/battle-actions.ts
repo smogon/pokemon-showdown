@@ -150,6 +150,11 @@ export class BattleActions {
 			this.battle.queue.insertChoice({choice: 'runSwitch', pokemon});
 		}
 
+		// TODO: check for persist
+		if (pokemon.terastallized) {
+			this.battle.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
+		}
+
 		return true;
 	}
 	dragIn(side: Side, pos: number) {
@@ -1673,7 +1678,7 @@ export class BattleActions {
 
 		// just guessing placement
 		if (pokemon.terastallized) {
-			move.stab = 2;
+			move.stab = pokemon.baseSpecies.types.includes(pokemon.terastallized) ? 2 : 1.5;
 		}
 
 		// STAB
@@ -1816,7 +1821,7 @@ export class BattleActions {
 		const species = this.dex.deepClone(pokemon.species);
 		species.types = [type];
 
-		pokemon.formeChange(species, pokemon.getVolatile('terastal')!, true);
+		pokemon.formeChange(species, this.dex.conditions.get('terastal')!, true);
 		pokemon.terastallized = type;
 
 		this.battle.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');

@@ -3527,6 +3527,23 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 239,
 		gen: 2,
 	},
+	mirrorherb: {
+		name: "Mirror Herb",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 0,
+		onUpdate(pokemon) {
+			if (pokemon.foes().some(x => x.statsRaisedThisTurn)) {
+				pokemon.useItem();
+			}
+		},
+		onFoeAfterBoost(boost, target, source, effect) {
+			this.boost(boost, source);
+		},
+		num: 9999,
+		gen: 9,
+	},
 	mistyseed: {
 		name: "Misty Seed",
 		spritenum: 666,

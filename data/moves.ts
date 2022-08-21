@@ -18053,6 +18053,24 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'heal'},
 		contestType: "Cool",
 	},
+	terablast: {
+		num: 99999,
+		accuracy: 100,
+		basePower: 70,
+		category: "Special",
+		name: "Tera Blast",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, ballistic: 1},
+		onModifyType(move, pokemon, target) {
+			if (pokemon.terastallized) {
+				move.type = pokemon.terastalType;
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+	},
 	terrainpulse: {
 		num: 805,
 		accuracy: 100,
