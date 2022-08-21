@@ -1008,6 +1008,19 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 5,
 		isNonstandard: "Past",
 	},
+	covertcloak: {
+		name: "Covert Cloak",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 0,
+		onModifySecondaries(secondaries) {
+			this.debug('Covert Cloak prevent secondary');
+			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
+		},
+		num: 9998,
+		gen: 9,
+	},
 	crackedpot: {
 		name: "Cracked Pot",
 		spritenum: 719,
