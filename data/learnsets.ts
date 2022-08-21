@@ -75217,7 +75217,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			metronome: ["8S0"],
 		},
 		eventData: [
-			{generation: 8, level: 50, abilities: ["cursedbody"], moves: ["memento", "metronome", "aromatherapy", "celebrate"], pokeball: "cherishball"},
+			{generation: 8, level: 50, isHidden: true, moves: ["memento", "metronome", "aromatherapy", "celebrate"], pokeball: "cherishball"},
 		],
 	},
 	polteageist: {
