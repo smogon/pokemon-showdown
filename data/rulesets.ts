@@ -1435,6 +1435,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Team Type Preview',
 		desc: "Allows each player to see the Pok&eacute;mon on their opponent's team and those Pok&eacute;mon's types before they choose their lead Pok&eacute;mon",
 		onTeamPreview() {
+			this.add('clearpoke');
 			for (const side of this.sides) {
 				for (const pokemon of side.pokemon) {
 					const details = pokemon.details.replace(', shiny', '')
