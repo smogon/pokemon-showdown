@@ -531,7 +531,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		searchShow: false,
 		ruleset: ['[Gen 8] National Dex UU'],
-		banlist: ['ND RUBL'],
+		banlist: ['ND UU', 'ND RUBL'],
 	},
 	{
 		name: "[Gen 8] National Dex Monotype",
