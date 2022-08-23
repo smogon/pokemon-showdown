@@ -1877,6 +1877,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleNoDynamaxMoves: ["counter", "destinybond", "encore", "mirrorcoat"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
+		natDexTier: "RU",
 	},
 	girafarig: {
 		isNonstandard: "Past",
@@ -1900,6 +1901,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleLevel: 90,
 		tier: "(PU)",
 		doublesTier: "(DUU)",
+		natDexTier: "RU",
 	},
 	gligar: {
 		isNonstandard: "Past",
