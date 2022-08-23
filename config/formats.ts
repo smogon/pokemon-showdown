@@ -520,7 +520,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] National Dex'],
-		banlist: ['ND UUBL', 'Drizzle', 'Drought', 'Light Clay', 'Slowbronite'],
+		banlist: ['ND OU', 'ND UUBL', 'Drizzle', 'Drought', 'Light Clay', 'Slowbronite'],
 	},
 	{
 		name: "[Gen 8] National Dex RU",
