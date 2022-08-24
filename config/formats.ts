@@ -1056,6 +1056,17 @@ export const Formats: FormatList = [
 		ruleset: ['Standard Doubles'],
 		banlist: ['DUber', 'Dark Void'],
 	},
+	{
+		name: "[Gen 8 BDSP] Battle Festival Doubles",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3694269/">Battle Festival Doubles</a>`,
+		],
+
+		mod: 'gen8bdsp',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Flat Rules', 'Min Source Gen = 8'],
+	},
 
 	// Challengeable OMs
 	///////////////////////////////////////////////////////////////////
