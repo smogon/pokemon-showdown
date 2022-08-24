@@ -1525,6 +1525,7 @@ export const commands: Chat.ChatCommands = {
 		const displayIDToName: {[k: string]: Room['settings']['dataCommandTierDisplay']} = {
 			tiers: 'tiers',
 			doublestiers: 'doubles tiers',
+			nationaldextiers: 'National Dex tiers',
 			numbers: 'numbers',
 		};
 
@@ -1692,6 +1693,10 @@ export const roomSettings: Chat.SettingsHandler[] = [
 		options: [
 			[`tiers`, (room.settings.dataCommandTierDisplay ?? 'tiers') === 'tiers' || `roomtierdisplay tiers`],
 			[`doubles tiers`, room.settings.dataCommandTierDisplay === 'doubles tiers' || `roomtierdisplay doubles tiers`],
+			[
+				`National Dex tiers`,
+				room.settings.dataCommandTierDisplay === 'National Dex tiers' || `roomtierdisplay National Dex tiers`,
+			],
 			[`numbers`, room.settings.dataCommandTierDisplay === 'numbers' || `roomtierdisplay numbers`],
 		],
 	}),
