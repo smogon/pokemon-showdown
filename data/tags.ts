@@ -192,23 +192,6 @@ export const Tags: {[id: string]: TagData} = {
 		name: "AG",
 		speciesFilter: species => species.tier === 'AG',
 	},
-	nduubl: {
-		name: "ND UUBL",
-		speciesFilter: species => [
-			'Aerodactyl-Mega', 'Alakazam', 'Blacephalon', 'Blaziken', 'Gallade-Mega', 'Gardevoir-Mega', 'Gengar', 'Gyarados', 'Gyarados-Mega',
-			'Hawlucha', 'Heracross-Mega', 'Hoopa-Unbound', 'Hydreigon', 'Jirachi', 'Latias', 'Latias-Mega', 'Latios', 'Latios-Mega', 'Manaphy',
-			'Medicham-Mega', 'Melmetal', 'Mew', 'Moltres-Galar', 'Pinsir-Mega', 'Sableye-Mega', 'Slowbro-Mega', 'Slowking-Galar', 'Thundurus',
-			'Thundurus-Therian', 'Venusaur-Mega', 'Xurkitree', 'Zapdos-Galar',
-		].includes(species.name),
-	},
-	ndrubl: {
-		name: "ND RUBL",
-		speciesFilter: species => [
-			'Absol-Mega', 'Aggron-Mega', 'Azumarill', 'Bisharp', 'Buzzwole', 'Crawdaunt', 'Conkeldurr', 'Deoxys-Defense', 'Diggersby', 'Durant',
-			'Dracovish', 'Haxorus', 'Heracross', 'Keldeo', 'Lycanroc-Dusk', 'Necrozma', 'Polteageist', 'Porygon-Z', 'Primarina', 'Reuniclus',
-			'Scolipede', 'Sharpedo-Mega', 'Slowbro-Galar', 'Staraptor', 'Tangrowth', 'Tapu Bulu', 'Terrakion', 'Tornadus', 'Venomoth',
-		].includes(species.name),
-	},
 
 	// Doubles tiers
 	// -------------
@@ -231,6 +214,33 @@ export const Tags: {[id: string]: TagData} = {
 	dnu: {
 		name: "DNU",
 		speciesFilter: species => species.doublesTier === '(DUU)',
+	},
+
+	// Nat Dex tiers
+	// -------------
+	nduber: {
+		name: "ND Uber",
+		speciesFilter: species => species.natDexTier === 'Uber' || species.natDexTier === '(Uber)',
+	},
+	ndou: {
+		name: "ND OU",
+		speciesFilter: species => species.natDexTier === 'OU' || species.natDexTier === '(OU)',
+	},
+	nduubl: {
+		name: "ND UUBL",
+		speciesFilter: species => species.natDexTier === 'UUBL',
+	},
+	nduu: {
+		name: "ND UU",
+		speciesFilter: species => species.natDexTier === 'UU',
+	},
+	ndrubl: {
+		name: "ND RUBL",
+		speciesFilter: species => species.natDexTier === 'RUBL',
+	},
+	ndru: {
+		name: "ND RU",
+		speciesFilter: species => species.natDexTier === 'RU',
 	},
 
 	// Legality tags
