@@ -1306,6 +1306,20 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		const result = Teams.unpack(resultStrings[0]);
 		return result;
 	}
+	async getActivePokemon(user: User) {
+		const id = user.id;
+		const player = this.playerTable[id];
+		if (!player) return;
+		void this.stream.write(`>requestactivepokemon ${player.slot}`);
+		const pokePromise = new Promise<string[]>((resolve, reject) => {
+			if (!this.dataResolvers) this.dataResolvers = [];
+			this.dataResolvers.push([resolve, reject]);
+		});
+		const pokeRaw = await pokePromise;
+		if (!pokeRaw?.[0]) return;
+		const result = JSON.parse(pokeRaw[0]);
+		return result;
+	}
 	onChatMessage(message: string, user: User) {
 		const parts = message.split('\n');
 		for (const line of parts) {

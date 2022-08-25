@@ -10,6 +10,7 @@
  */
 
 import {Streams, Utils} from '../lib';
+import {State} from './state';
 import {Teams} from './teams';
 import {Battle} from './battle';
 
@@ -221,6 +222,26 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			const side = this.battle!.sides[slotNum];
 			const team = Teams.pack(side.team);
 			this.push(`requesteddata\n${team}`);
+			break;
+		case 'requestactivepokemon':
+			message = message.trim();
+			const requestSideSlot = parseInt(message.slice(1)) - 1;
+			if (isNaN(requestSideSlot) || requestSideSlot < 0) {
+				throw new Error(`Active pokemon requested for slot ${message}, but that slot does not exist.`);
+			}
+
+			if (!this.battle || !this.battle.sides || !this.battle.sides[requestSideSlot]) {
+				this.push(`requesteddata\n`);
+				break;
+			}
+			const requestedBattle = this.battle;
+			const requestedSide = this.battle.sides[requestSideSlot];
+
+			const pickledPokemon = requestedSide.active
+				.filter(Boolean)
+				.map((pokemon) => pokemon.toJSON())
+				.map((serializedPokemon) => State.deserializeWithRefs(serializedPokemon, requestedBattle));
+			this.push(`requesteddata\n${JSON.stringify(pickledPokemon)}`);
 			break;
 		case 'version':
 		case 'version-origin':
