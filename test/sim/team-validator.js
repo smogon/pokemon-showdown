@@ -764,7 +764,7 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
-	it('should prevent Pokemon that don\'t evolve via level-up from being underleveled.', function () {
+	it('should prevent Pokemon that don\'t evolve via level-up and evolve from a Pokemon that does evolve via level-up from being underleveled.', function () {
 		let team = [
 			{species: 'nidoking', level: 1, ability: 'sheerforce', moves: ['earthpower'], evs: {hp: 1}},
 			{species: 'mamoswine', level: 1, ability: 'oblivious', moves: ['earthquake'], evs: {hp: 1}},
