@@ -863,8 +863,31 @@ export const commands: Chat.ChatCommands = {
 	weaknesses: 'weakness',
 	weak: 'weakness',
 	resist: 'weakness',
-	weakness(target, room, user) {
-		if (!target) return this.parse('/help weakness');
+	async weakness(target, room, user) {
+		if (!target) {
+			if (room?.battle?.playerTable) {
+				const friendlyChannel = room.battle.playerTable[user.id].channelIndex;
+				const foeUsers = room.battle.players
+					.filter(({channelIndex}) => channelIndex !== friendlyChannel)
+					.map(({id}) => Users.get(id))
+					.filter(Boolean) as User[];
+
+				const activeFoePokemon = await Promise.all(
+					foeUsers.map((foeUser) => room.battle!.getActivePokemon(foeUser)).filter(Boolean)
+				).then((resultList) => resultList.flat());
+
+				const activeFoePokemonSpeciesSet = new Set(
+					activeFoePokemon.map((pokemon) => pokemon.illusion?.speciesState?.id || pokemon.species.id)
+				);
+
+				const firstTruthyResult = Array.from(activeFoePokemonSpeciesSet)
+					.map((pokemonSpecies) => this.parse(`/weakness ${pokemonSpecies}`))
+					.find(Boolean);
+
+				return firstTruthyResult;
+			}
+			return this.parse('/help weakness');
+		}
 		if (!this.runBroadcast()) return;
 		const {format, dex, targets} = this.splitFormat(target.split(/[,/]/).map(toID));
 
@@ -960,6 +983,7 @@ export const commands: Chat.ChatCommands = {
 		this.sendReplyBox(buffer.join('<br />'));
 	},
 	weaknesshelp: [
+		`/weakness - Provides resistances, weaknesses, and immunities for active Pok\u00e9mon on the opposing side, ignoring abilities.`,
 		`/weakness [pokemon] - Provides a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities.`,
 		`/weakness [type 1]/[type 2] - Provides a type or type combination's resistances, weaknesses, and immunities, ignoring abilities.`,
 		`!weakness [pokemon] - Shows everyone a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # &`,
