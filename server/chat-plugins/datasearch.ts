@@ -10,6 +10,7 @@
 
 import {ProcessManager, Utils} from '../../lib';
 import {TeamValidator} from '../../sim/team-validator';
+import {Chat} from '../chat';
 
 interface DexOrGroup {
 	abilities: {[k: string]: boolean};
@@ -2289,10 +2290,7 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 		// add more general quantifier words to descriptions
 		if (/[1-9.]+x/.test(descWords)) descWords += ' increases';
 		descWords = descWords.replace(/super[-\s]effective/g, 'supereffective');
-		const descWordsArray = descWords.toLowerCase()
-			.replace('-', ' ')
-			.replace(/[^a-z0-9\s/]/g, '')
-			.replace(/(\D)\./, (p0, p1) => p1).split(' ');
+		const descWordsArray = Chat.normalize(descWords).split(' ');
 
 		for (const word of searchedWords) {
 			switch (word) {
@@ -2582,6 +2580,8 @@ if (!PM.isParentProcess) {
 }
 
 export const testables = {
+	runAbilitysearch: (target: string, cmd: string, canAll: boolean, message: string) =>
+		runAbilitysearch(target, cmd, canAll, message),
 	runDexsearch: (target: string, cmd: string, canAll: boolean, message: string) =>
 		runDexsearch(target, cmd, canAll, message, true),
 	runMovesearch: (target: string, cmd: string, canAll: boolean, message: string) =>
