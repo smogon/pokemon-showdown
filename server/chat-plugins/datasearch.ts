@@ -928,7 +928,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				(
 					nationalSearch &&
 					species.isNonstandard &&
-					!["Custom", "Glitch", "Pokestar"].includes(species.isNonstandard)
+					!["Custom", "Glitch", "Pokestar", "Future"].includes(species.isNonstandard)
 				) ||
 				(species.tier !== 'Unreleased' && species.tier !== 'Illegal')
 			) &&
