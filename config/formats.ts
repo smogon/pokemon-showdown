@@ -570,41 +570,56 @@ export const Formats: FormatList = [
 		section: "Pet Mods",
 	},
 	{
-		name: "[Gen 8] Restrictions",
-		desc: `A metagame made up of brand new Pok&eacute;mon that are made according to various random and non-random restrictions.`,
+		name: "[Gen 8] National Dex BH",
+		desc: `Balanced Hackmons with National Dex elements mixed in.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3673824/">Restrictions</a>`,
-			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1XsplBqN8njHZJT9cTP_3i3YSFITB9WaVfNOYAbNY75M/edit?usp=sharing">Spreadsheet</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3658587/">National Dex Balanced Hackmons</a>`,
 		],
-		mod: 'restrictions',
-		ruleset: ['Standard', 'Dynamax Clause'],
-		banlist: ['All Pokemon', 'Past'],
-		unbanlist: [
-			'Vulcaraptor', 'Parakinesis', 'Serpaint', 'Torgeist', 'Regolite', 'Polbearab', 'Centhorn', 'Donzyxote', 'Scimicobra', 'Folliclawe', 'Afloof', 'Nimbusteed',
-			'Aerock', 'Borassa', 'Sharm', 'Nunopod', 'Crypterid', 'Abysseil', 'Faerenheit', 'Spiriteal', 'Zoltanka', 'Flydra', 'Coracrab', 'Quadringo', 'Teslaple',
-			'Kapagon', 'Cyknight', 'Dirtoad', 'Crystelf', 'Rancourgar', 'Scalaron', 'Dragraceful', 'Tantrary', 'Modolith', 'Snailord', 'Arbrella', 'Draugelid',
-			'Cinnastar', 'Refluse', 'Kelven', 'Kodokai', 'Cindarner', 'Thucotuco', 'Sorree', 'Gembezzle', 'Winterloper', 'Agapest', 'Volvolpa', 'Punduluum', 'Wraithful',
-			'Panzarma', 'Krachiten', 'Cellsius', 'Borelem', 'Electangle', 'Orchile', 'Shinodori', 'Fluidrake', 'Potossum', 'Twygdrasill',
+		mod: 'gen8',
+		ruleset: ['-Nonexistent', 'Standard NatDex', 'Forme Clause', 'Sleep Moves Clause', '2 Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Dynamax Clause', 'CFZ Clause', '!Obtainable'],
+		banlist: [
+			// Pokemon
+			'Eternatus-Eternamax', 'Groudon-Primal', 'Rayquaza-Mega', 'Shedinja', 'Cramorant-Gorging', 'Calyrex-Shadow',
+			// Abilities
+			'Arena Trap', 'Contrary', 'Gorilla Tactics', 'Huge Power', 'Illusion', 'Innards Out', 'Libero', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard',
+			// Items
+			'Gengarite',
+			// Moves
+			'Chatter', 'Double Iron Bash', 'Octolock', 'Shell Smash', 'Bolt Beak', 'Belly Drum', 'Electrify', 'Court Change',
+			// Other
+			'Comatose + Sleep Talk', 'Imprison + Transform',
 		],
-	},
-	{
-		name: "[Gen 8] Roulettemons Random Battle",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3649106/">Roulettemons</a>`,
-			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1EOA1m7JXTq7Zz0ViVI4n6lBppFjVBa4S1GqhAwkPTZQ/edit?usp=sharing">Spreadsheet</a>`,
-		],
-		team: 'random',
-		mod: 'roulettemons',
-		ruleset: ['Standard NatDex'],
-		onSwitchIn(pokemon) {
-			this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
-		},
-		onChangeSet(set) {
-			if (set.species === 'Chillyte-Mega') {
-				set.species = 'Chillyte';
-				set.ability = 'Grassy Surge';
+		onValidateSet(set) {
+			if (this.toID(set.ability) === 'intrepidsword' &&
+				!this.toID(set.species).startsWith('zacian') && this.toID(set.item) !== 'rustedsword') {
+				return [`${set.ability} is banned.`];
+			}
+			if (set.species === 'Zacian-Crowned' &&
+				(this.toID(set.item) !== 'rustedsword' || this.toID(set.ability) !== 'intrepidsword')) {
+				return [`${set.species} is banned.`];
 			}
 		},
+		onValidateTeam(team) {
+			let arceus = 0;
+			for (const set of team) {
+				const species = this.dex.species.get(set.species);
+				if (species.baseSpecies === "Arceus") arceus++;
+			}
+			if (arceus > 1) {
+				return [`You are limited to one Arceus forme.`, `(You have ${arceus} Arceus formes.)`];
+			}
+		},
+	},
+	{
+		name: "[Gen 8] JolteMons Random Battle",
+		desc: `Pok&eacute;mon, items, abilities, and moves are redesigned for OU, and new items, abilities, and moves are added, all without changing base stats.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3694234/">JolteMons</a>`,
+			`&bullet; <a href="https://docs.google.com/spreadsheets/d/149ZlQY0bJIAqfWB_233Dvbpqs3pVSHYpIoAQQkwquls/edit?usp=sharing">Spreadsheet</a>`,
+		],
+		mod: 'joltemons',
+		team: 'random',
+		ruleset: ['Dynamax Clause', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Mega Data Mod', 'Z-Move Clause'],
 	},
 	{
 		name: "[Gen 6] NEXT OU",
