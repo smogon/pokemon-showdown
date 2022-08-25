@@ -18,9 +18,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return item.megaStone;
 		},
-		modifyDamage(
-			baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages = false
-		) {
+		modifyDamage(baseDamage, pokemon, target, move, suppressMessages) {
 			const tr = this.battle.trunc;
 			if (!move.type) move.type = '???';
 			const type = move.type;
