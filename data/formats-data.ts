@@ -1014,6 +1014,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	marowakalolatotem: {
 		isNonstandard: "Past",
 		tier: "Illegal",
+		natDexTier: "RU",
 	},
 	tyrogue: {
 		tier: "LC",
@@ -6617,6 +6618,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "RU",
 	},
 	sinistea: {
+		tier: "LC",
+	},
+	sinisteaantique: {
 		tier: "LC",
 	},
 	polteageist: {
