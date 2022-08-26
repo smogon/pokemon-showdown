@@ -32,7 +32,7 @@ export function load(invalidate = false) {
 	if (config.usesqlite) {
 		try {
 			require('better-sqlite3');
-		} catch (e) {
+		} catch {
 			throw new Error(`better-sqlite3 is not installed or could not be loaded, but Config.usesqlite is enabled.`);
 		}
 	}
@@ -149,7 +149,7 @@ export function checkRipgrepAvailability() {
 				await ProcessManager.exec(['rg', '--version'], {cwd: `${__dirname}/../`});
 				await ProcessManager.exec(['tac', '--version'], {cwd: `${__dirname}/../`});
 				return true;
-			} catch (error) {
+			} catch {
 				return false;
 			}
 		})();

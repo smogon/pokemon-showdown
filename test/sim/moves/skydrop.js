@@ -52,7 +52,7 @@ describe('Sky Drop', function () {
 		assert.species(battle.p2.active[0], 'Armaldo');
 	});
 
-	it.skip(`should prevent both the user and the target from being forced out by Eject Button`, function () {
+	it(`should prevent both the user and the target from being forced out by Eject Button`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Aerodactyl', item: 'ejectbutton', moves: ['skydrop']},
 			{species: 'Machamp', ability: 'noguard', moves: ['tackle']},

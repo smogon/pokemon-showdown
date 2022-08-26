@@ -32,6 +32,12 @@ interface GameMode {
 	[k: string]: any;
 }
 
+function toSeconds(time: string) {
+	// hhmmss => ss
+	const parts = time.split(':').reverse();
+	return parts.map((value, index) => parseInt(value) * Math.pow(60, index)).reduce((a, b) => a + b);
+}
+
 class Leaderboard {
 	data: {[userid: string]: AnyObject};
 
@@ -213,6 +219,45 @@ const TWISTS: {[k: string]: Twist} = {
 		},
 	},
 
+	spamfilter: {
+		name: 'Spam Filter',
+		id: 'spamfilter',
+
+		desc: 'Every wrong answer adds 30 seconds to your final time!',
+
+		onIncorrectAnswer(player: ScavengerHuntPlayer, value: string) {
+			if (!player.incorrect) player.incorrect = [];
+			const id = `${player.currentQuestion}-${value}`;
+			if (player.incorrect.includes(id)) return;
+
+			player.incorrect.push(id);
+		},
+
+		onComplete(player, time, blitz) {
+			const seconds = toSeconds(time);
+			if (!player.incorrect) return {name: player.name, total: seconds, blitz, time, original_time: time};
+
+			const total = seconds + (30 * player.incorrect.length);
+			const finalTime = Chat.toDurationString(total * 1000, {hhmmss: true});
+			if (total > 60) blitz = false;
+
+			return {name: player.name, total, blitz, time: finalTime, original_time: time};
+		},
+
+		onConfirmCompletion(player, time, blitz, place, result) {
+			blitz = result.blitz;
+			time = result.time;
+			const deductionMessage = player.incorrect?.length ?
+				Chat.count(player.incorrect, 'incorrect guesses', 'incorrect guess') :
+				"Perfect!";
+			return `<em>${Utils.escapeHTML(player.name)}</em> has finished the hunt! (Final Time: ${time} - ${deductionMessage}${(blitz ? " - BLITZ" : "")})`;
+		},
+
+		onEnd() {
+			Utils.sortBy(this.completed, entry => entry.total);
+		},
+	},
+
 	blindincognito: {
 		name: 'Blind Incognito',
 		id: 'blindincognito',
@@ -257,6 +302,63 @@ const TWISTS: {[k: string]: Twist} = {
 
 		onEnd() {
 			this.completed = this.preCompleted || [];
+		},
+	},
+
+	timetrial: {
+		name: 'Time Trial',
+		id: 'timetrial',
+		desc: "Time starts when the player starts the hunt!",
+
+		onAfterLoad() {
+			if (this.questions.length === 3) {
+				this.announce('This twist requires at least four questions. Please reset the hunt and make it again.');
+				this.huntLocked = true;
+			}
+			this.altIps = {};
+			this.startTimes = {};
+		},
+
+		onJoin(user: User) {
+			if (!Config.noipchecks) {
+				const altIp = user.ips.find(ip => this.altIps[ip] && this.altsIps[ip].id !== user.id);
+				if (altIp) {
+					user.sendTo(this.room, `You already have started the hunt as ${this.altIps[altIp].name}.`);
+					return true;
+				}
+			}
+			if (!this.startTimes[user.id]) this.startTimes[user.id] = Date.now();
+			if (this.addPlayer(user)) {
+				this.cacheUserIps(user);
+				delete this.leftHunt[user.id];
+				user.sendTo(this.room, "You joined the scavenger hunt! Use the command /scavenge to answer.");
+				this.onSendQuestion(user);
+			} else {
+				user.sendTo(this.room, "You have already joined the hunt.");
+			}
+			return true;
+		},
+
+		onLeave(user) {
+			for (const ip of user.ips) {
+				this.altIps[ip] = {id: user.id, name: user.name};
+			}
+		},
+
+		onComplete(player, time, blitz) {
+			const now = Date.now();
+			const takenTime = Chat.toDurationString(now - this.startTimes[player.id], {hhmmss: true});
+			const result = {name: player.name, id: player.id, time: takenTime, blitz};
+			this.completed.push(result);
+			const place = Utils.formatOrder(this.completed.length);
+
+			this.announce(
+				Utils.html`<em>${result.name}</em> is the ${place} player to finish the hunt! (${takenTime}${(blitz ? " - BLITZ" : "")})`
+			);
+			Utils.sortBy(this.completed, entry => entry.time);
+
+			player.destroy(); // remove from user.games;
+			return true;
 		},
 	},
 };
@@ -533,7 +635,8 @@ const MODES: {[k: string]: GameMode | string} = {
 		name: 'Team Scavs',
 		id: 'teamscavs',
 		/* {
-			[team_name: string]: {
+			[team
+			name: string]: {
 			  name: string[],
 			  players: UserID[],
 			  answers: string[],

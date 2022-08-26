@@ -2,11 +2,13 @@
  * Async worker thread wrapper around SQLite, written to improve concurrent performance.
  * @author mia-pi-git
  */
-import {ProcessWrapper, ProcessManager} from './process-manager';
-import * as child_process from 'child_process';
-import * as path from 'path';
-import {FS} from './fs';
+import {QueryProcessManager} from './process-manager';
 import type * as sqlite from 'better-sqlite3';
+import {FS} from './fs';
+// @ts-ignore in case not installed
+import type {SQLStatement} from 'sql-template-strings';
+
+export const DB_NOT_FOUND = null;
 
 export interface SQLOptions {
 	file: string;
@@ -14,35 +16,48 @@ export interface SQLOptions {
 	extension?: string;
 	/** options to be passed to better-sqlite3 */
 	sqliteOptions?: sqlite.Options;
+	/**
+	 * You can choose to return custom error information, or just crashlog and return void.
+	 * doing that will make it reject in main as normal.
+	 * (it only returns a diff result if you do, otherwise it's a default error).
+	 * You can also choose to only handle errors in the parent - see the third param, isParentProcess.
+	 */
+	onError?: ErrorHandler;
 }
 
 type DataType = unknown[] | Record<string, unknown>;
-type Statement = string | number;
+export type SQLInput = string | number | null;
+export interface ResultRow {[k: string]: SQLInput}
 
 export interface TransactionEnvironment {
 	db: sqlite.Database;
-	statementsByText: {[k: string]: sqlite.Statement};
-	statementsMap: Map<number, sqlite.Statement>;
+	statements: Map<string, sqlite.Statement>;
 }
 
 type DatabaseQuery = {
 	/** Prepare a statement - data is the statement. */
 	type: 'prepare', data: string,
 } | {
-	/** Get all lines from a statement. Data is the params, num is the statement number. */
-	type: 'all', data: DataType, num: number,
+	/** Get all lines from a statement. Data is the params. */
+	type: 'all', data: DataType, statement: string, noPrepare?: boolean,
 } | {
 	/** Execute raw SQL in the database. */
 	type: "exec", data: string,
 } | {
 	/** Get one line from a prepared statement. */
-	type: 'get', data: DataType, num: number,
+	type: 'get', data: DataType, statement: string, noPrepare?: boolean,
 } | {
 	/** Run a prepared statement. */
-	type: 'run', data: DataType, num: number,
+	type: 'run', data: DataType, statement: string, noPrepare?: boolean,
 } | {
 	type: 'transaction', name: string, data: DataType,
+} | {
+	type: 'start', options: SQLOptions,
+} | {
+	type: 'load-extension', data: string,
 };
+
+type ErrorHandler = (error: Error, data: DatabaseQuery, isParentProcess: boolean) => any;
 
 function getModule() {
 	try {
@@ -52,157 +67,147 @@ function getModule() {
 	}
 }
 
-export class DatabaseWrapper implements ProcessWrapper {
-	statements: Map<string, number>;
-	process: child_process.ChildProcess;
-	pendingRequests: [((data: string | DataType | null) => any), (err: Error) => void][];
-	pendingRelease?: () => void;
-	constructor(options: SQLOptions) {
-		this.statements = new Map();
-		this.pendingRequests = [];
-		this.process = child_process.fork(__filename, [], {
-			env: options as AnyObject, cwd: path.resolve(__dirname, '..'), execArgv: ['-r', 'ts-node/register'],
-		});
-		this.listen();
+export class Statement<R extends DataType = DataType, T = any> {
+	private db: SQLDatabaseManager;
+	private statement: string;
+	constructor(statement: string, db: SQLDatabaseManager) {
+		this.db = db;
+		this.statement = statement;
 	}
-	getProcess() {
-		return this.process;
+	run(data: R) {
+		return this.db.run(this.statement, data);
 	}
-	listen() {
-		this.process.on("message", (message: DataType | string) => {
-			const handlers = this.pendingRequests.shift();
-			if (typeof message === 'string') {
-				if (message.startsWith('THROW\n')) {
-					const error = new Error();
-					error.stack = message.slice(6);
-					if (handlers?.[1]) return handlers[1](error);
-					throw error;
-				}
-				if (message.startsWith('STATEMENTS\n')) {
-					this.statements = new Map(Object.entries(JSON.parse(message.slice(12))));
-					return;
-				}
-			}
-			if (handlers) {
-				if (!this.pendingRequests.length && this.pendingRelease) this.pendingRelease();
-				return handlers[0](message);
-			}
-			throw new Error(`Database wrapper received a message, but there was no pending request.`);
-		});
+	all(data: R) {
+		return this.db.all<T>(this.statement, data);
 	}
-	async release() {
-		await new Promise<void>(resolve => {
-			this.pendingRelease = resolve;
-		});
-		this.process.disconnect();
-		this.statements.clear();
+	get(data: R) {
+		return this.db.get<T>(this.statement, data);
 	}
-	getLoad() {
-		return this.pendingRequests.length;
+	toString() {
+		return this.statement;
 	}
-	destroy() {
-		void this.release();
-	}
-	runFile(filename: string) {
-		const file = FS(filename);
-		if (!file.existsSync()) throw new Error(`File passed to runFile does not exist.`);
-		if (!filename.endsWith('.sql')) throw new Error(`File passed to runFile is not a .sql file.`);
-		const content = file.readSync();
-		const db = this.getDatabase();
-		if (db) return db.exec(content);
-		return this.exec(content);
-	}
-	getDatabase() {
-		return database;
-	}
-	async prepare(statement: string) {
-		const cachedStatement = this.statements.get(statement);
-		if (cachedStatement) {
-			return cachedStatement;
-		}
-		const int = await this.query({type: 'prepare', data: statement});
-		if (typeof int === 'number') this.statements.set(statement, int);
-		return int;
-	}
-	all(statement: Statement, data: DataType = {}) {
-		const num = typeof statement === 'number' ? statement : this.statements.get(statement);
-		if (num === undefined || ![...this.statements.values()].includes(num)) {
-			throw new Error(`Prepare a statement before using another database function with SQLDatabase.prepare.`);
-		}
-		return this.query({type: 'all', num: num, data});
-	}
-	get(statement: Statement, data: DataType = {}) {
-		const num = typeof statement === 'number' ? statement : this.statements.get(statement);
-		if (num === undefined || ![...this.statements.values()].includes(num)) {
-			throw new Error(`Prepare a statement before using another database function with SQLDatabase.prepare.`);
-		}
-		return this.query({type: 'get', data, num});
-	}
-	run(statement: Statement, data: DataType) {
-		const num = typeof statement === 'number' ? statement : this.statements.get(statement);
-		if (num === undefined || ![...this.statements.values()].includes(num)) {
-			throw new Error(`Prepare a statement before using another database function with SQLDatabase.prepare.`);
-		}
-		return this.query({type: 'run', num, data});
-	}
-	/** We don't want these to be prepared statements, since this should be used SPARINGLY. */
-	exec(statement: string) {
-		return this.query({type: 'exec', data: statement});
-	}
-	query(args: DatabaseQuery) {
-		this.process.send(args);
-		return new Promise<any>((resolve, reject) => {
-			this.pendingRequests.push([resolve, reject]);
-		});
-	}
-	transaction(name: string, data: DataType) {
-		return this.query({type: 'transaction', name, data});
+	toJSON() {
+		return this.statement;
 	}
 }
 
-class SQLProcessManager extends ProcessManager {
-	constructor(module: NodeJS.Module) {
-		super(module);
-	}
-	createProcess(options: SQLOptions) {
-		const process: ProcessWrapper = new DatabaseWrapper(options);
-		this.processes.push(process);
-		return process;
-	}
-	listen() {}
-	destroyProcess(process: DatabaseWrapper) {
-		void process.release();
-		this.processes.splice(this.processes.indexOf(process), 1);
-	}
-}
-
-export const PM = new SQLProcessManager(module);
-const Database = getModule();
-
-function crashlog(err: Error, query?: any) {
-	process.send!(`THROW\n@!!@${JSON.stringify([err.name, err.message, 'a SQL process', query])}\n${err.stack}`);
-}
-
-let database: sqlite.Database | null;
-if (!PM.isParentProcess) {
-	let statementNum = 0;
-	const statements: Map<number, sqlite.Statement> = new Map();
-	const transactions: Map<string, sqlite.Transaction> = new Map();
-	let statementTable: {[k: string]: sqlite.Statement} = {};
-
-	const getStatementTable = () => {
-		if (Object.keys(statementTable).length !== statements.size) {
-			statementTable = {};
-			for (const statement of statements.values()) {
-				statementTable[statement.source] = statement;
-			}
-		}
-		return statementTable;
+export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> {
+	options: SQLOptions;
+	database: null | sqlite.Database = null;
+	state: {
+		transactions: Map<string, sqlite.Transaction>,
+		statements: Map<string, sqlite.Statement>,
 	};
+	private dbReady = false;
+	constructor(module: NodeJS.Module, options: SQLOptions) {
+		super(module, query => {
+			if (!this.dbReady) {
+				this.setupDatabase();
+			}
+			try {
+				switch (query.type) {
+				case 'load-extension': {
+					if (!this.database) return null;
+					this.loadExtensionFile(query.data);
+					return true;
+				}
+				case 'transaction': {
+					const transaction = this.state.transactions.get(query.name);
+					// !transaction covers db not existing, typically, but this is just to appease ts
+					if (!transaction || !this.database) {
+						return null;
+					}
+					const env: TransactionEnvironment = {
+						db: this.database,
+						statements: this.state.statements,
+					};
+					return transaction(query.data, env) || null;
+				}
+				case 'exec': {
+					if (!this.database) return {changes: 0};
+					this.database.exec(query.data);
+					return true;
+				}
+				case 'get': {
+					if (!this.database) {
+						return null;
+					}
+					return this.extractStatement(query).get(query.data);
+				}
+				case 'run': {
+					if (!this.database) {
+						return null;
+					}
+					return this.extractStatement(query).run(query.data);
+				}
+				case 'all': {
+					if (!this.database) {
+						return null;
+					}
+					return this.extractStatement(query).all(query.data);
+				}
+				case 'prepare':
+					if (!this.database) {
+						return null;
+					}
+					this.state.statements.set(query.data, this.database.prepare(query.data));
+					return query.data;
+				}
+			} catch (error: any) {
+				return this.onError(error, query);
+			}
+		});
 
-	const {file, extension} = process.env;
-	database = Database ? new Database(file!) : null;
-	if (extension && database) {
+		this.options = options;
+		this.state = {
+			transactions: new Map(),
+			statements: new Map(),
+		};
+		if (!this.isParentProcess) this.setupDatabase();
+	}
+	private onError(err: Error, query: DatabaseQuery) {
+		if (this.options.onError) {
+			const result = this.options.onError(err, query, false);
+			if (result) return result;
+		}
+		return {
+			queryError: {
+				stack: err.stack,
+				message: err.message,
+				query,
+			},
+		};
+	}
+	private cacheStatement(source: string) {
+		source = source.trim();
+		let statement = this.state.statements.get(source);
+		if (!statement) {
+			statement = this.database!.prepare(source);
+			this.state.statements.set(source, statement);
+		}
+		return statement;
+	}
+	private extractStatement(
+		query: DatabaseQuery & {statement: string, noPrepare?: boolean}
+	) {
+		query.statement = query.statement.trim();
+		const statement = query.noPrepare ?
+			this.state.statements.get(query.statement) :
+			this.cacheStatement(query.statement);
+		if (!statement) throw new Error(`Missing cached statement "${query.statement}" where required`);
+		return statement;
+	}
+	setupDatabase() {
+		if (this.dbReady) return;
+		this.dbReady = true;
+		const {file, extension} = this.options;
+		const Database = getModule();
+		this.database = Database ? new Database(file) : null;
+		if (extension) this.loadExtensionFile(extension);
+	}
+
+	loadExtensionFile(extension: string) {
+		if (!this.database) return;
 		const {
 			functions,
 			transactions: storedTransactions,
@@ -212,113 +217,239 @@ if (!PM.isParentProcess) {
 		} = require(`../${extension}`);
 		if (functions) {
 			for (const k in functions) {
-				database.function(k, functions[k]);
+				this.database.function(k, functions[k]);
 			}
 		}
 		if (storedTransactions) {
 			for (const t in storedTransactions) {
-				const transaction = database.transaction(storedTransactions[t]);
-				transactions.set(t, transaction);
+				const transaction = this.database.transaction(storedTransactions[t]);
+				this.state.transactions.set(t, transaction);
 			}
 		}
 		if (storedStatements) {
 			for (const k in storedStatements) {
-				const statement = database.prepare(storedStatements[k]);
-				statements.set(statementNum++, statement); // we use statementNum here to track with the rest
+				const statement = this.database.prepare(storedStatements[k]);
+				this.state.statements.set(statement.source, statement);
 			}
-			process.send!(`STATEMENTS\n${JSON.stringify(Object.fromEntries(statements))}\n`);
 		}
 		if (onDatabaseStart) {
-			onDatabaseStart(database);
+			onDatabaseStart(this.database);
 		}
 	}
-	database?.pragma(`foreign_keys=on`);
-
-
-	process.on('message', (query: DatabaseQuery) => {
-		let statement;
-		let results;
-		try {
-			switch (query.type) {
-			case 'prepare': {
-				if (!database) return process.send!(-1);
-				const {data} = query;
-				const newStatement = database.prepare(data);
-				const nextNum = statementNum++;
-				statements.set(nextNum, newStatement);
-				return process.send!(nextNum);
+	async query(input: DatabaseQuery) {
+		const result = await super.query(input);
+		if (result?.queryError) {
+			const err = new Error(result.queryError.message);
+			err.stack = result.queryError.stack;
+			if (this.options.onError) {
+				const errResult = this.options.onError(err, result.queryError.query, true);
+				if (errResult) return errResult;
 			}
-			case 'all': {
-				if (!database) {
-					results = [];
-					break;
-				}
-				const {num, data} = query;
-				statement = statements.get(num);
-				results = statement?.all(data) || [];
-			}
-				break;
-			case 'get': {
-				if (!database) {
-					results = null;
-					break;
-				}
-				const {num, data} = query;
-				statement = statements.get(num);
-				const args = Array.isArray(data) ? data : [data];
-				results = statement?.get(...args) || null;
-			}
-				break;
-			case 'run': {
-				if (!database) {
-					results = null;
-					break;
-				}
-				const {num, data} = query;
-				statement = statements.get(num);
-				results = statement?.run(...data as any) || null;
-			}
-				break;
-			case 'exec': {
-				const {data} = query;
-				database?.exec(data);
-				results = !!database;
-			}
-				break;
-			case 'transaction': {
-				if (!database) {
-					results = null;
-					break;
-				}
-				const {name, data} = query;
-				const transaction = transactions.get(name);
-				if (!transaction) {
-					results = null;
-					break;
-				}
-				const env: TransactionEnvironment = {
-					db: database,
-					statementsByText: getStatementTable(),
-					statementsMap: statements,
-				};
-				results = transaction(data, env) || null;
-			}
-				break;
-			}
-		} catch (error) {
-			return crashlog(error, {...query, data: JSON.stringify(query.data)});
+			throw err;
 		}
-		process.send!(results);
-	});
+		return result;
+	}
+	all<T = any>(
+		statement: string | Statement, data: DataType = [], noPrepare?: boolean
+	): Promise<T[]> {
+		if (typeof statement !== 'string') statement = statement.toString();
+		return this.query({type: 'all', statement, data, noPrepare});
+	}
+	get<T = any>(
+		statement: string | Statement, data: DataType = [], noPrepare?: boolean
+	): Promise<T> {
+		if (typeof statement !== 'string') statement = statement.toString();
+		return this.query({type: 'get', statement, data, noPrepare});
+	}
+	run(
+		statement: string | Statement, data: DataType = [], noPrepare?: boolean
+	): Promise<sqlite.RunResult> {
+		if (typeof statement !== 'string') statement = statement.toString();
+		return this.query({type: 'run', statement, data, noPrepare});
+	}
+	transaction<T = any>(name: string, data: DataType = []): Promise<T> {
+		return this.query({type: 'transaction', name, data});
+	}
+	async prepare(statement: string): Promise<Statement | null> {
+		const source = await this.query({type: 'prepare', data: statement});
+		if (!source) return null;
+		return new Statement(source, this);
+	}
+	exec(data: string): Promise<{changes: number}> {
+		return this.query({type: 'exec', data});
+	}
+	loadExtension(filepath: string) {
+		return this.query({type: 'load-extension', data: filepath});
+	}
 
-	process.on('uncaughtException', err => crashlog(err));
-	process.on('unhandledRejection', err => crashlog(err as any));
+	async runFile(file: string) {
+		const contents = await FS(file).read();
+		return this.query({type: 'exec', data: contents});
+	}
 }
 
-/**
- * @param options Either an object of filename, extension, or just the string filename
- */
-export function SQL(options: SQLOptions | string): DatabaseWrapper {
-	if (typeof options === 'string') options = {file: options};
-	return PM.createProcess(options) as DatabaseWrapper;
+export const tables = new Map<string, DatabaseTable<any>>();
+
+export class DatabaseTable<T> {
+	database: SQLDatabaseManager;
+	name: string;
+	primaryKeyName: string;
+	constructor(
+		name: string,
+		primaryKeyName: string,
+		database: SQLDatabaseManager
+	) {
+		this.name = name;
+		this.database = database;
+		this.primaryKeyName = primaryKeyName;
+		tables.set(this.name, this);
+	}
+	async selectOne<R = T>(
+		entries: string | string[],
+		where?: SQLStatement
+	): Promise<R | null> {
+		const query = where || SQL.SQL``;
+		query.append(' LIMIT 1');
+		const rows = await this.selectAll<R>(entries, query);
+		return rows?.[0] || null;
+	}
+	selectAll<R = T>(
+		entries: string | string[],
+		where?: SQLStatement
+	): Promise<R[]> {
+		const query = SQL.SQL`SELECT `;
+		if (typeof entries === 'string') {
+			query.append(` ${entries} `);
+		} else {
+			for (let i = 0; i < entries.length; i++) {
+				query.append(entries[i]);
+				if (typeof entries[i + 1] !== 'undefined') query.append(', ');
+			}
+			query.append(' ');
+		}
+		query.append(`FROM ${this.name} `);
+		if (where) {
+			query.append(' WHERE ');
+			query.append(where);
+		}
+		return this.all<R>(query);
+	}
+	get(entries: string | string[], keyId: SQLInput) {
+		const query = SQL.SQL``;
+		query.append(this.primaryKeyName);
+		query.append(SQL.SQL` = ${keyId}`);
+		return this.selectOne(entries, query);
+	}
+	updateAll(toParams: Partial<T>, where?: SQLStatement, limit?: number) {
+		const to = Object.entries(toParams);
+		const query = SQL.SQL`UPDATE `;
+		query.append(this.name + ' SET ');
+		for (let i = 0; i < to.length; i++) {
+			const [k, v] = to[i];
+			query.append(`${k} = `);
+			query.append(SQL.SQL`${v}`);
+			if (typeof to[i + 1] !== 'undefined') {
+				query.append(', ');
+			}
+		}
+
+		if (where) {
+			query.append(` WHERE `);
+			query.append(where);
+		}
+		if (limit) query.append(SQL.SQL` LIMIT ${limit}`);
+		return this.run(query);
+	}
+	updateOne(to: Partial<T>, where?: SQLStatement) {
+		return this.updateAll(to, where, 1);
+	}
+	deleteAll(where?: SQLStatement, limit?: number) {
+		const query = SQL.SQL`DELETE FROM `;
+		query.append(this.name);
+		if (where) {
+			query.append(' WHERE ');
+			query.append(where);
+		}
+		if (limit) {
+			query.append(SQL.SQL` LIMIT ${limit}`);
+		}
+		return this.run(query);
+	}
+	delete(keyEntry: SQLInput) {
+		const query = SQL.SQL``;
+		query.append(this.primaryKeyName);
+		query.append(SQL.SQL` = ${keyEntry}`);
+		return this.deleteOne(query);
+	}
+	deleteOne(where: SQLStatement) {
+		return this.deleteAll(where, 1);
+	}
+	insert(colMap: Partial<T>, rest?: SQLStatement, isReplace = false) {
+		const query = SQL.SQL``;
+		query.append(`${isReplace ? 'REPLACE' : 'INSERT'} INTO ${this.name} (`);
+		const keys = Object.keys(colMap);
+		for (let i = 0; i < keys.length; i++) {
+			query.append(keys[i]);
+			if (typeof keys[i + 1] !== 'undefined') query.append(', ');
+		}
+		query.append(') VALUES (');
+		for (let i = 0; i < keys.length; i++) {
+			const key = keys[i];
+			query.append(SQL.SQL`${colMap[key as keyof T]}`);
+			if (typeof keys[i + 1] !== 'undefined') query.append(', ');
+		}
+		query.append(') ');
+		if (rest) query.append(rest);
+		return this.database.run(query.sql, query.values);
+	}
+	replace(cols: Partial<T>, rest?: SQLStatement) {
+		return this.insert(cols, rest, true);
+	}
+	update(primaryKey: SQLInput, data: Partial<T>) {
+		const query = SQL.SQL``;
+		query.append(this.primaryKeyName + ' = ');
+		query.append(SQL.SQL`${primaryKey}`);
+		return this.updateOne(data, query);
+	}
+
+	// catch-alls for "we can't fit this query into any of the wrapper functions"
+	run(sql: SQLStatement) {
+		return this.database.run(sql.sql, sql.values) as Promise<{changes: number}>;
+	}
+	all<R = T>(sql: SQLStatement) {
+		return this.database.all<R>(sql.sql, sql.values);
+	}
+}
+
+function getSQL(
+	module: NodeJS.Module, input: SQLOptions & {processes?: number}
+) {
+	const {processes} = input;
+	const PM = new SQLDatabaseManager(module, input);
+	if (PM.isParentProcess) {
+		if (processes) PM.spawn(processes);
+	}
+	return PM;
+}
+
+export const SQL = Object.assign(getSQL, {
+	DatabaseTable,
+	SQLDatabaseManager,
+	tables,
+	SQL: (() => {
+		try {
+			return require('sql-template-strings');
+		} catch {
+			return () => {
+				throw new Error("Using SQL-template-strings without it installed");
+			};
+		}
+	})() as typeof import('sql-template-strings').SQL,
+});
+
+export namespace SQL {
+	export type DatabaseManager = import('./sql').SQLDatabaseManager;
+	export type Statement = import('./sql').Statement;
+	export type Options = import('./sql').SQLOptions;
+	export type DatabaseTable<T> = import('./sql').DatabaseTable<T>;
 }

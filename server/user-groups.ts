@@ -276,6 +276,13 @@ export class RoomAuth extends Auth {
 			const replaceGroup = Auth.getGroup(symbol).globalGroupInPersonalRoom;
 			if (replaceGroup) return replaceGroup;
 		}
+		// this is a bit of a hardcode, yeah, but admins need to have admin commands in prooms w/o the symbol
+		// and we want that to include sysops.
+		// Plus, using user.can is cleaner than Users.globalAuth.get(user) === '& and it accounts for more things.
+		// (and no this won't recurse or anything since user.can() with no room doesn't call this)
+		if (this.room.settings.isPrivate === true && user.can('makeroom')) {
+			return '&';
+		}
 		return symbol;
 	}
 	/** gets the room group without inheriting */
@@ -339,12 +346,22 @@ export class GlobalAuth extends Auth {
 			if (!row) continue;
 			const [name, symbol, sectionid] = row.split(",");
 			const id = toID(name);
+			if (!id) {
+				Monitor.warn('Dropping malformed usergroups line (missing ID):');
+				Monitor.warn(row);
+				continue;
+			}
 			this.usernames.set(id, name);
 			if (sectionid) this.sectionLeaders.set(id, sectionid as RoomSection);
 
 			// handle glitched entries where a user has two entries in usergroups.csv due to bugs
 			const newSymbol = symbol.charAt(0) as GroupSymbol;
-			const preexistingSymbol = super.get(id);
+			// Yes, we HAVE to ensure that it exists in the super. super.get here returns either the group symbol,
+			// or the default symbol if it cannot find a symbol in the map.
+			// the default symbol is truthy, and the symbol for trusted user is ` `
+			// meaning that the preexisting && atLeast would return true, which would skip the row and nuke all trusted users
+			// on a fresh load (aka, a restart).
+			const preexistingSymbol = super.has(id) ? super.get(id) : null;
 			// take a user's highest rank in usergroups.csv
 			if (preexistingSymbol && Auth.atLeast(preexistingSymbol, newSymbol)) continue;
 			super.set(id, newSymbol);

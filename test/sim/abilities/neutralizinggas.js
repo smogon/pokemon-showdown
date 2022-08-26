@@ -242,6 +242,37 @@ describe('Neutralizing Gas', function () {
 		assert.statStage(battle.p2.active[0], 'atk', 0);
 	});
 
+	it(`should not prevent Ice Face from blocking damage nor reform Ice Face when leaving the field`, function () {
+		battle = common.createBattle([[
+			{species: 'Eiscue', ability: 'iceface', moves: ['sleeptalk', 'hail']},
+		], [
+			{species: 'Mewtwo', ability: 'neutralizinggas', moves: ['tackle', 'sleeptalk']},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		]]);
+		const eiscue = battle.p1.active[0];
+		battle.makeChoices();
+		assert.species(eiscue, 'Eiscue-Noice');
+		battle.makeChoices('move hail', 'move sleeptalk');
+		assert.species(eiscue, 'Eiscue');
+		battle.makeChoices();
+		assert.species(eiscue, 'Eiscue-Noice');
+		battle.makeChoices('auto', 'switch 2');
+		assert.species(eiscue, 'Eiscue-Noice');
+	});
+
+	it(`should not work if it was obtained via Transform`, function () {
+		battle = common.createBattle([[
+			{species: 'Ditto', moves: ['transform']},
+		], [
+			{species: 'Weezing', ability: 'neutralizinggas', moves: ['sleeptalk']},
+			{species: 'Zacian', ability: 'intrepidsword', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices();
+		battle.makeChoices('auto', 'switch 2');
+		assert.statStage(battle.p2.active[0], 'atk', 1);
+	});
+
 	describe(`Ability reactivation order`, function () {
 		it(`should cause entrance Abilities to reactivate in order of Speed`, function () {
 			battle = common.createBattle({gameType: 'doubles'}, [[

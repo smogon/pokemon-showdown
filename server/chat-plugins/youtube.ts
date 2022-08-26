@@ -170,7 +170,7 @@ export class YoutubeInterface {
 			raw = await Net(`${ROOT}videos`).get({
 				query: {part: 'snippet,statistics', id, key: Config.youtubeKey},
 			});
-		} catch (e) {
+		} catch (e: any) {
 			throw new Chat.ErrorMessage(`Failed to retrieve video data: ${e.message}.`);
 		}
 		const res = JSON.parse(raw);
@@ -336,7 +336,7 @@ export const Twitch = new class {
 				},
 				query: {query: channel},
 			});
-		} catch (e) {
+		} catch (e: any) {
 			throw new Chat.ErrorMessage(`Error retrieving twitch channel: ${e.message}`);
 		}
 		const data = JSON.parse(res);
@@ -362,7 +362,7 @@ export const Twitch = new class {
 	}
 };
 
-export class GroupWatch extends Rooms.RoomGame {
+export class GroupWatch extends Rooms.SimpleRoomGame {
 	url: string;
 	info: VideoData;
 	started: number | null = null;
@@ -435,7 +435,7 @@ export class GroupWatch extends Rooms.RoomGame {
 	}
 }
 
-export class TwitchStream extends Rooms.RoomGame {
+export class TwitchStream extends Rooms.SimpleRoomGame {
 	started = false;
 	data: TwitchChannel;
 	constructor(room: Room, data: TwitchChannel) {

@@ -80,7 +80,7 @@ function setupGlobals() {
 				// by battle prefixes manually specified in config.js
 				Chat.plugins['username-prefixes']?.prefixManager.refreshConfig(true);
 				Monitor.notice('Reloaded ../config/config.js');
-			} catch (e) {
+			} catch (e: any) {
 				Monitor.adminlog("Error reloading ../config/config.js: " + e.stack);
 			}
 		});
@@ -188,7 +188,7 @@ if (Config.startuphook) {
 if (Config.ofemain) {
 	try {
 		require.resolve('node-oom-heapdump');
-	} catch (e) {
+	} catch (e: any) {
 		if (e.code !== 'MODULE_NOT_FOUND') throw e; // should never happen
 		throw new Error(
 			'node-oom-heapdump is not installed, but it is a required dependency if Config.ofe is set to true! ' +

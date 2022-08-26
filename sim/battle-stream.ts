@@ -63,7 +63,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 		} else {
 			try {
 				this._writeLines(chunk);
-			} catch (err) {
+			} catch (err: any) {
 				this.pushError(err, true);
 				return;
 			}
@@ -202,12 +202,15 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 					result = result.replace(/\n/g, '\n||');
 					battle.add('', '<<< ' + result);
 				}
-			} catch (e) {
+			} catch (e: any) {
 				battle.add('', '<<< error: ' + e.message);
 			}
 			break;
 		case 'requestlog':
 			this.push(`requesteddata\n${this.battle!.inputLog.join('\n')}`);
+			break;
+		case 'requestexport':
+			this.push(`requesteddata\n${this.battle!.prngSeed}\n${this.battle!.inputLog.join('\n')}`);
 			break;
 		case 'requestteam':
 			message = message.trim();

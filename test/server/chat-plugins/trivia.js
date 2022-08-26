@@ -3,7 +3,7 @@
 const assert = require('assert').strict;
 
 const {makeUser} = require('../../users-utils');
-const trivia = require('../../../server/chat-plugins/trivia');
+const trivia = require('../../../server/chat-plugins/trivia/trivia');
 const Trivia = trivia.Trivia;
 const FirstModeTrivia = trivia.FirstModeTrivia;
 const TimerModeTrivia = trivia.TimerModeTrivia;
@@ -147,15 +147,15 @@ describe('Trivia', function () {
 		assert.throws(() => this.game.leave(this.user));
 	});
 
-	it('should verify answers correctly', function () {
-		this.game.askQuestion();
+	it('should verify answers correctly', async function () {
+		await this.game.askQuestion();
 		assert.equal(this.game.verifyAnswer('answer'), true);
 		assert.equal(this.game.verifyAnswer('anser'), true);
 		assert.equal(this.game.verifyAnswer('not the right answer'), false);
 	});
 
 	context('marking player absence', function () {
-		beforeEach(function () {
+		beforeEach(async function () {
 			const questions = [null, null].fill({question: '', answers: ['answer'], category: 'ae'});
 			const game = new FirstModeTrivia(this.room, 'first', ['ae'], true, 'short', questions);
 
@@ -170,7 +170,7 @@ describe('Trivia', function () {
 			this.user3.joinRoom(this.room);
 			game.addTriviaPlayer(this.user3);
 			game.start();
-			game.askQuestion();
+			await game.askQuestion();
 			clearTimeout(game.phaseTimeout);
 			game.phaseTimeout = null;
 
@@ -199,7 +199,7 @@ describe('Trivia', function () {
 	});
 
 	context('first mode', function () {
-		beforeEach(function () {
+		beforeEach(async function () {
 			const questions = [{question: '', answers: ['answer'], category: 'ae'}];
 			const game = new FirstModeTrivia(this.room, 'first', ['ae'], true, 'short', questions);
 
@@ -211,7 +211,7 @@ describe('Trivia', function () {
 			game.addTriviaPlayer(this.user2);
 			game.addTriviaPlayer(this.user3);
 			game.start();
-			game.askQuestion();
+			await game.askQuestion();
 
 			this.game = this.room.game = game;
 			this.player = game.playerTable[this.user.id];
@@ -263,7 +263,7 @@ describe('Trivia', function () {
 	});
 
 	context('timer mode', function () {
-		beforeEach(function () {
+		beforeEach(async function () {
 			const questions = [{question: '', answers: ['answer'], category: 'ae'}];
 			const game = new TimerModeTrivia(this.room, 'first', ['ae'], true, 'short', questions);
 
@@ -275,7 +275,7 @@ describe('Trivia', function () {
 			game.addTriviaPlayer(this.user2);
 			game.addTriviaPlayer(this.user3);
 			game.start();
-			game.askQuestion();
+			await game.askQuestion();
 
 			this.game = this.room.game = game;
 			this.player = game.playerTable[this.user.id];
@@ -338,7 +338,7 @@ describe('Trivia', function () {
 	});
 
 	context('number mode', function () {
-		beforeEach(function () {
+		beforeEach(async function () {
 			const questions = [{question: '', answers: ['answer'], category: 'ae'}];
 			const game = new NumberModeTrivia(this.room, 'first', ['ae'], true, 'short', questions);
 
@@ -350,7 +350,7 @@ describe('Trivia', function () {
 			game.addTriviaPlayer(this.user2);
 			game.addTriviaPlayer(this.user3);
 			game.start();
-			game.askQuestion();
+			await game.askQuestion();
 
 			this.game = this.room.game = game;
 			this.player = game.playerTable[this.user.id];
@@ -396,35 +396,59 @@ describe('Trivia', function () {
 		});
 	});
 
-	context('alt merging', () => {
-		it('should only allow merging approved alts', () => {
-			trivia.triviaData.leaderboard = {
-				annika: [0, 0, 0],
-				heartofetheria: [0, 0, 0],
-				somerandomreg: [0, 0, 0],
-			};
+	(Config.usesqlite ? context : context.skip)('alt merging', () => {
+		it('should only allow merging approved alts', async () => {
+			for (const user of ['annika', 'heartofetheria', 'somerandomreg']) {
+				await trivia.database.updateLeaderboardForUser(user, {
+					alltime: {score: 0, totalCorrectAnswers: 0, totalPoints: 0},
+					nonAlltime: {score: 0, totalCorrectAnswers: 0, totalPoints: 0},
+					cycle: {score: 0, totalCorrectAnswers: 0, totalPoints: 0},
+				});
+			}
 
-			assert.throws(() => trivia.mergeAlts('annika', 'heartofetheria'));
+			await assert.throwsAsync(async () => trivia.mergeAlts('annika', 'heartofetheria'));
 
-			trivia.requestAltMerge('annika', 'somerandomreg');
-			trivia.requestAltMerge('heartofetheria', 'somerandomreg');
-			assert.throws(() => trivia.mergeAlts('annika', 'heartofetheria'));
+			await trivia.requestAltMerge('annika', 'somerandomreg');
+			await trivia.requestAltMerge('heartofetheria', 'somerandomreg');
 
-			trivia.requestAltMerge('annika', 'heartofetheria');
-			assert.doesNotThrow(() => trivia.mergeAlts('annika', 'heartofetheria'));
+			await assert.throwsAsync(async () => trivia.mergeAlts('annika', 'heartofetheria'));
+
+			await trivia.requestAltMerge('annika', 'heartofetheria');
+			await assert.doesNotThrowAsync(async () => trivia.mergeAlts('annika', 'heartofetheria'));
 		});
 
-		it('should correctly merge alts', () => {
-			trivia.triviaData.leaderboard = {
-				annika: [3, 2, 1],
-				heartofetheria: [1, 2, 3],
-			};
+		it('should correctly merge alts', async () => {
+			await trivia.database.updateLeaderboardForUser('annika', {
+				alltime: {score: 3, totalCorrectAnswers: 2, totalPoints: 1},
+				nonAlltime: {score: 4, totalCorrectAnswers: 3, totalPoints: 2},
+				cycle: {score: 1, totalCorrectAnswers: 1, totalPoints: 1},
+			});
+			await trivia.database.updateLeaderboardForUser('heartofetheria', {
+				alltime: {score: 1, totalCorrectAnswers: 2, totalPoints: 3},
+				nonAlltime: {score: 2, totalCorrectAnswers: 3, totalPoints: 4},
+				cycle: {score: 1, totalCorrectAnswers: 2, totalPoints: 1},
+			});
 
-			trivia.requestAltMerge('heartofetheria', 'annika');
-			trivia.mergeAlts('heartofetheria', 'annika');
+			await trivia.requestAltMerge('heartofetheria', 'annika');
+			await trivia.mergeAlts('heartofetheria', 'annika');
 
-			assert.deepEqual(trivia.triviaData.leaderboard.annika, [4, 4, 4]);
-			assert.equal(trivia.triviaData.leaderboard.heartofetheria, undefined);
+			assert.deepEqual(
+				await trivia.database.getLeaderboardEntry('annika', 'alltime'),
+				{score: 4, totalCorrectAnswers: 4, totalPoints: 4}
+			);
+			assert.deepEqual(
+				await trivia.database.getLeaderboardEntry('annika', 'nonAlltime'),
+				{score: 6, totalCorrectAnswers: 6, totalPoints: 6}
+			);
+			assert.deepEqual(
+				await trivia.database.getLeaderboardEntry('annika', 'cycle'),
+				{score: 2, totalCorrectAnswers: 3, totalPoints: 2}
+			);
+
+			// make sure it got deleted
+			assert.equal(await trivia.database.getLeaderboardEntry('heartofetheria', 'alltime'), null);
+			assert.equal(await trivia.database.getLeaderboardEntry('heartofetheria', 'nonAlltime'), null);
+			assert.equal(await trivia.database.getLeaderboardEntry('heartofetheria', 'cycle'), null);
 		});
 	});
 });

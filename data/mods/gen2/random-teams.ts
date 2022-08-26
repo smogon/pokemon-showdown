@@ -148,7 +148,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}): RandomTeamsTypes.RandomSet {
 		species = this.dex.species.get(species);
 
-		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
+		const movePool = (species.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool: string[] = [];
 		const moves = new Set<string>();
 
@@ -167,7 +167,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
-			while (moves.size < 4 && movePool.length) {
+			while (moves.size < this.maxMoveCount && movePool.length) {
 				const moveid = this.sampleNoReplace(movePool);
 				if (moveid.startsWith('hiddenpower')) {
 					availableHP--;
@@ -176,7 +176,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				}
 				moves.add(moveid);
 			}
-			while (moves.size < 4 && rejectedPool.length) {
+			while (moves.size < this.maxMoveCount && rejectedPool.length) {
 				const moveid = this.sampleNoReplace(rejectedPool);
 				if (moveid.startsWith('hiddenpower')) {
 					if (hasHiddenPower) continue;
@@ -251,7 +251,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 					break;
 				}
 			}
-		} while (moves.size < 4 && (movePool.length || rejectedPool.length));
+		} while (moves.size < this.maxMoveCount && (movePool.length || rejectedPool.length));
 
 		// Adjust IVs for Hidden Power
 		for (const setMoveid of moves) {
@@ -294,14 +294,13 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		const customScale: {[k: string]: number} = {
 			Ditto: 83, Unown: 87, Wobbuffet: 83,
 		};
-		let level = levelScale[species.tier] || 80;
-		if (customScale[species.name]) level = customScale[species.name];
+		const level = this.adjustLevel || customScale[species.name] || levelScale[species.tier] || 80;
 
 		return {
 			name: species.name,
 			species: species.name,
 			moves: Array.from(moves),
-			ability: 'None',
+			ability: 'No Ability',
 			evs: {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255},
 			ivs,
 			item: this.getItem('None', types, moves, counter, species),

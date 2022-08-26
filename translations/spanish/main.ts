@@ -16,7 +16,8 @@ export const translations: Translations = {
 
 		"<strong>Global ranks</strong>": "<strong>Rangos Globales</strong>",
 		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "+ <strong>Global Voice</strong> - Pueden utilizar comandos con ! como !groups",
-		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>Global Driver</strong> - Lo mismo que arriba y también pueden dar locks y revisar las alts",
+		"§ <strong>Section Leader</strong> - They oversee rooms in a particular section": "§ <strong>Section Leader</strong> - Supervisan las salas de una sección en particular",
+		"% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts": "% <strong>Global Driver</strong> - Como los Voice, y también pueden dar locks y revisar las alts",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global Moderator</strong> - Lo mismo que arriba y además pueden expulsar globalmente del servidor",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Global Bot</strong> - Igual que un moderador, pero el símbolo identifica que es un Bot",
 		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Pueden hacer cualquier cosa, como cambiar lo que dice este mensaje",
@@ -49,6 +50,7 @@ export const translations: Translations = {
 		"<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.": "<strong>mute</strong> - Silencia a un usuario (les impide hablar) por 7 minutos.",
 		"<strong>hourmute</strong> - Mutes a user for 60 minutes.": "<strong>hourmute</strong> - Silencia a un usuario por 60 minutos.",
 		"<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.": "<strong>ban</strong> - Expulsa a un usuario (les impide entrar a la sala) por 2 d&iacute;as.",
+		"<strong>weekban</strong> - Bans a user from the room for a week.": "<strong>weekban</strong> - Expulsa a un usuario por una semana.",
 		"<strong>blacklist</strong> - Bans a user for a year.": "<strong>blacklist</strong> - Expulsa a un usuario de la sala por un a&ntilde;o.",
 
 		"<strong>Global punishments</strong>:": "<strong>Sanciones globales</strong>:",
@@ -56,6 +58,12 @@ export const translations: Translations = {
 		"<strong>weeklock</strong> - Locks a user for a week.": "<strong>weeklock</strong> - Bloquea a un usuario por una semana.",
 		"<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.": "<strong>namelock</strong> - Bloquea a un usuario y le impide tener un nombre de usuario por 2 d&iacute;as.",
 		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "<strong>globalban</strong> - Expulsa globalmente a un usuario (le impide conectarse al servidor y poder jugar) por una semana.",
+
+		"<strong>Indefinite global punishments</strong>:": "<strong>Sanciones globales de duración indeterminada</strong>:",
+		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "<strong>permalock</strong> - Aplicado ante múltiples instancias de mal comportamiento, rara vez por una sola acción. ",
+		'These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>': 'Puede apelarse en el <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">foro de apelaciones disciplinarias</a>',
+		" forum after at least 3 months without incident.": " después de mínimo 3 meses sin incidentes.",
+		"<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.": "<strong>permaban</strong> - Expulsión global inapelable, generalmente aplicada por ofensas extremadamente graves o inapropiadas.",
 
 		"<strong>Room drivers (%)</strong> can use:": "<strong>Los drivers de la sala (%)</strong> pueden usar:",
 		"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules": "- /warn O /k <em>nombre de usuario</em>: advierte a un usuario y les muestra las reglas de Pok&eacute;mon Showdown",
