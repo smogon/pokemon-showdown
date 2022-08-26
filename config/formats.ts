@@ -1019,7 +1019,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8bdsp',
 		team: 'random',
-		ruleset: ['[Gen 8] Random Battle', '!PotD'],
+		ruleset: ['[Gen 8] Random Battle', '!PotD', 'Sketch Gen 8 Moves'],
 	},
 	{
 		name: "[Gen 8 BDSP] OU",
