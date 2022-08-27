@@ -826,10 +826,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 40,
 		flags: {protect: 1, mirror: 1, sound: 1},
 	},
-	spiderweb: {
-		inherit: true,
-		flags: {protect: 1, reflectable: 1, mirror: 1},
-	},
 	soak: {
 		inherit: true,
 		onHit(target) {

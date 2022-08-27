@@ -16358,7 +16358,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Spider Web",
 		pp: 10,
 		priority: 0,
-		flags: {reflectable: 1, mirror: 1},
+		flags: {protect: 1, reflectable: 1, mirror: 1},
 		onHit(target, source, move) {
 			return target.addVolatile('trapped', source, move, 'trapper');
 		},
