@@ -111,11 +111,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
-	block: {
-		inherit: true,
-		accuracy: true,
-		ignoreAccuracy: false,
-	},
 	counter: {
 		inherit: true,
 		damageCallback(pokemon, target) {
