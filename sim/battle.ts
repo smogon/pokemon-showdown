@@ -381,7 +381,7 @@ export class Battle {
 	}
 
 	/** Sort a list, resolving speed ties the way the games do. */
-	speedSort<T>(list: T[], comparator: (a: T, b: T) => number = this.comparePriority) {
+	speedSort<T extends AnyObject>(list: T[], comparator: (a: T, b: T) => number = this.comparePriority) {
 		if (list.length < 2) return;
 		let sorted = 0;
 		// This is a Selection Sort - not the fastest sort in general, but
