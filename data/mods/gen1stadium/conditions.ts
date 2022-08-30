@@ -101,6 +101,29 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add('-start', target, 'confusion');
 			this.effectState.time = this.random(2, 6);
 		},
+		onBeforeMove(pokemon, target) {
+			pokemon.volatiles['confusion'].time--;
+			if (!pokemon.volatiles['confusion'].time) {
+				pokemon.removeVolatile('confusion');
+				return;
+			}
+			this.add('-activate', pokemon, 'confusion');
+			if (!this.randomChance(128, 256)) {
+				const damage = Math.floor(Math.floor((
+					(Math.floor(2 * pokemon.level / 5) + 2) * pokemon.getStat('atk') * 40
+				) / pokemon.getStat('def', false)) / 50) + 2;
+				this.directDamage(damage, pokemon, target);
+				pokemon.removeVolatile('bide');
+				pokemon.removeVolatile('twoturnmove');
+				pokemon.removeVolatile('fly');
+				pokemon.removeVolatile('dig');
+				pokemon.removeVolatile('solarbeam');
+				pokemon.removeVolatile('skullbash');
+				pokemon.removeVolatile('partialtrappinglock');
+				return false;
+			}
+			return;
+		},
 	},
 	flinch: {
 		inherit: true,
