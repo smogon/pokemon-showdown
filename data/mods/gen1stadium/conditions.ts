@@ -125,4 +125,10 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]');
 		},
 	},
+	twoturnmove: {
+		inherit: true,
+		onEnd(target) {
+			target.removeVolatile(this.effectState.move);
+		},
+	},
 };
