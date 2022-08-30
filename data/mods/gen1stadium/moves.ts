@@ -41,9 +41,50 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return 2 * this.lastDamage;
 		},
 	},
+	dig: {
+		inherit: true,
+		basePower: 100,
+		condition: {
+			duration: 2,
+			onLockMove: 'dig',
+			onInvulnerability(target, source, move) {
+				if (move.id === 'swift') return true;
+				this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
+				return false;
+			},
+			onDamage(damage, target, source, move) {
+				if (!move || move.effectType !== 'Move') return;
+				if (!source) return;
+				if (move.id === 'earthquake') {
+					this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
+					return null;
+				}
+			},
+		},
+	},
 	firespin: {
 		inherit: true,
 		// FIXME: onBeforeMove() {},
+	},
+	fly: {
+		inherit: true,
+		condition: {
+			duration: 2,
+			onLockMove: 'fly',
+			onInvulnerability(target, source, move) {
+				if (move.id === 'swift') return true;
+				this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
+				return false;
+			},
+			onDamage(damage, target, source, move) {
+				if (!move || move.effectType !== 'Move') return;
+				if (!source || source.isAlly(target)) return;
+				if (move.id === 'gust' || move.id === 'thunder') {
+					this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
+					return null;
+				}
+			},
+		},
 	},
 	haze: {
 		inherit: true,
