@@ -44,8 +44,6 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 				this.add('cant', pokemon, 'par');
 				pokemon.removeVolatile('bide');
 				pokemon.removeVolatile('twoturnmove');
-				pokemon.removeVolatile('fly');
-				pokemon.removeVolatile('dig');
 				pokemon.removeVolatile('solarbeam');
 				pokemon.removeVolatile('skullbash');
 				pokemon.removeVolatile('partialtrappinglock');
@@ -156,8 +154,6 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 				this.directDamage(damage, pokemon, target);
 				pokemon.removeVolatile('bide');
 				pokemon.removeVolatile('twoturnmove');
-				pokemon.removeVolatile('fly');
-				pokemon.removeVolatile('dig');
 				pokemon.removeVolatile('solarbeam');
 				pokemon.removeVolatile('skullbash');
 				pokemon.removeVolatile('partialtrappinglock');
@@ -267,6 +263,15 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 				this.effectState.counter *= 2;
 			}
 			this.effectState.duration = 2;
+		},
+	},
+	twoturnmove: {
+		// Skull Bash, SolarBeam, etc...
+		inherit: true,
+		onEnd(target) { // this stops dig and fly from being removed
+			target.removeVolatile('solarbeam');
+			target.removeVolatile('skullbash');
+			target.removeVolatile('razorwind');
 		},
 	},
 };

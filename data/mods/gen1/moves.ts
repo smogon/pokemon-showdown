@@ -250,7 +250,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		basePower: 100,
 		condition: {
-			duration: 2,
 			onLockMove: 'dig',
 			onInvulnerability(target, source, move) {
 				if (move.id === 'swift') return true;
@@ -354,7 +353,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	fly: {
 		inherit: true,
 		condition: {
-			duration: 2,
 			onLockMove: 'fly',
 			onInvulnerability(target, source, move) {
 				if (move.id === 'swift') return true;

@@ -13,7 +13,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	dig: {
 		inherit: true,
 		condition: {
-			duration: 2,
 			onLockMove: 'dig',
 			onInvulnerability(target, source, move) {
 				if (move.id === 'swift' && target.volatiles['substitute']) return true;
@@ -33,7 +32,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	fly: {
 		inherit: true,
 		condition: {
-			duration: 2,
 			onLockMove: 'fly',
 			onInvulnerability(target, source, move) {
 				if (move.id === 'swift' && target.volatiles['substitute']) return true;
