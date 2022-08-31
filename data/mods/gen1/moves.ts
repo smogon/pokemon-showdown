@@ -258,7 +258,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return null;
 		},
 		condition: {
-			onStart(pokemon) { // Move lock only happens during the start-up of the move. If the move is interrupted, the lock is removed to trigger the semi-invulnerability glitch.
+			onStart(pokemon) { // Move lock only happens during the start-up of the move. If the move is interrupted, the lock is removed.
 				if (pokemon.volatiles['twoturnmove']) {
 					onLockMove: 'fly';
 				}
@@ -376,7 +376,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return null;
 		},
 		condition: {
-			onStart(pokemon) { // Move lock only happens during the start-up of the move. If the move is interrupted, the lock is removed to trigger the semi-invulnerability glitch.
+			onStart(pokemon) { // Move lock only happens during the start-up of the move. If the move is interrupted, the lock is removed.
 				if (pokemon.volatiles['twoturnmove']) {
 					onLockMove: 'fly';
 				}
