@@ -47,6 +47,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 2,
 			onLockMove: 'dig',
+			onStart(pokemon) {},
 			onInvulnerability(target, source, move) {
 				if (move.id === 'swift') return true;
 				this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
@@ -71,6 +72,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 2,
 			onLockMove: 'fly',
+			onStart(pokemon) {},
 			onInvulnerability(target, source, move) {
 				if (move.id === 'swift') return true;
 				this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');

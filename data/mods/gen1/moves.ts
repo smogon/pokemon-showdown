@@ -249,8 +249,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	dig: {
 		inherit: true,
 		basePower: 100,
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
 		condition: {
-			onLockMove: 'dig',
+			onStart(pokemon) { // Move lock only happens during the start-up of the move. If the move is interrupted, the lock is removed to trigger the semi-invulnerability glitch.
+				if (pokemon.volatiles['twoturnmove']) {
+					onLockMove: 'fly';
+				}
+			},
 			onInvulnerability(target, source, move) {
 				if (move.id === 'swift') return true;
 				this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
@@ -352,8 +364,23 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	fly: {
 		inherit: true,
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
 		condition: {
-			onLockMove: 'fly',
+			onStart(pokemon) { // Move lock only happens during the start-up of the move. If the move is interrupted, the lock is removed to trigger the semi-invulnerability glitch.
+				if (pokemon.volatiles['twoturnmove']) {
+					onLockMove: 'fly';
+				}
+			},
 			onInvulnerability(target, source, move) {
 				if (move.id === 'swift') return true;
 				this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
