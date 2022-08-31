@@ -258,11 +258,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return null;
 		},
 		condition: {
-			onStart(pokemon) { // Move lock only happens during start of move. If move is interrupted, lock is removed.
-				if (pokemon.volatiles['twoturnmove']) {
-					onLockMove: 'fly';
-				}
-			},
 			onInvulnerability(target, source, move) {
 				if (move.id === 'swift') return true;
 				this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
@@ -376,11 +371,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return null;
 		},
 		condition: {
-			onStart(pokemon) { // Move lock only happens during start of move. If move is interrupted, lock is removed.
-				if (pokemon.volatiles['twoturnmove']) {
-					onLockMove: 'fly';
-				}
-			},
 			onInvulnerability(target, source, move) {
 				if (move.id === 'swift') return true;
 				this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
