@@ -25,7 +25,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		condition: {
 			onLockMove(pokemon) {
-			   if (pokemon.volatiles.twoturnmove) return 'fly';
+			   if (pokemon.volatiles.twoturnmove) return 'dig';
 			},
 			onInvulnerability(target, source, move) {
 				if (move.id === 'swift' && target.volatiles['substitute']) return true;
