@@ -31,6 +31,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			   if (pokemon.volatiles.twoturnmove) return 'dig';
 			},
 			onInvulnerability(target, source, move) {
+				if (move.target === 'self') return true;
 				if (move.id === 'swift' && target.volatiles['substitute']) return true;
 				this.add('-message', `The foe ${target.name} can't be hit underground!`);
 				return false;
@@ -66,6 +67,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			   if (pokemon.volatiles.twoturnmove) return 'fly';
 			},
 			onInvulnerability(target, source, move) {
+				if (move.target === 'self') return true;
 				if (move.id === 'swift' && target.volatiles['substitute']) return true;
 				this.add('-message', `The foe ${target.name} can't be hit while flying!`);
 				return false;
