@@ -268,10 +268,10 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 	twoturnmove: {
 		// Skull Bash, SolarBeam, etc...
 		inherit: true,
-		onEnd(target) { // this stops dig and fly from being removed
-			target.removeVolatile('solarbeam');
-			target.removeVolatile('skullbash');
-			target.removeVolatile('razorwind');
+		onEnd(target) {
+			if (this.effectState.move !== 'dig' || this.effectState.move !== 'fly') {
+				target.removeVolatile(this.effectState.move);
+			}
 		},
 	},
 };
