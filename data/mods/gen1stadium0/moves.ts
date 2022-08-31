@@ -59,7 +59,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
-	fly: { 
+	fly: {
 		inherit: true,
 		condition: {
 			duration: 2,
