@@ -261,6 +261,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return null;
 		},
 		condition: {
+			onStart(pokemon) {
+				pokemon.removeVolatile('fly');
+			},
 			onLockMove(pokemon) {
 			   if (pokemon.volatiles.twoturnmove) return 'dig';
 			},
@@ -377,6 +380,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return null;
 		},
 		condition: {
+			onStart(pokemon) {
+				pokemon.removeVolatile('dig');
+			},
 			onLockMove(pokemon) {
 			   if (pokemon.volatiles.twoturnmove) return 'fly';
 			},
