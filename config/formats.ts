@@ -673,6 +673,23 @@ export const Formats: FormatList = [
 		],
 	},
 
+	// Randomized Format Spotlight
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "Randomized Format Spotlight",
+		column: 2,
+	},
+
+
+	{
+		name: "[Gen 3] Challenge Cup",
+
+		mod: 'gen3',
+		team: 'randomCC',
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
 
