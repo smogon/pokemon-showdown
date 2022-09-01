@@ -4,7 +4,7 @@
 'use strict';
 
 const assert = require('../assert');
-const {testSet, testAlwaysHasMove, testHiddenPower, testNotBothMoves} = require('./tools');
+const {testSet, testAlwaysHasMove, testHiddenPower, testNotBothMoves, testTeam} = require('./tools');
 
 describe('[Gen 3] Random Battle', () => {
 	const options = {format: 'gen3randombattle'};
@@ -52,5 +52,40 @@ describe('[Gen 3] Random Battle', () => {
 
 	it('should not give Skarmory Roar + Sleep Talk', () => {
 		testNotBothMoves('skarmory', options, 'roar', 'sleeptalk');
+	});
+});
+
+
+describe('[Gen 3] Challenge Cup', () => {
+	const options = {format: 'gen3challengecup', rounds: 500};
+	const dex = Dex.forFormat(options.format);
+
+	it('should not include any Fairy types', () => {
+		testTeam(options, team => {
+			for (const pkmn of team) {
+				const types = dex.species.get(pkmn.species).types;
+				assert(!types.includes('Fairy'), `Fairy type in Challenge Cup: ${pkmn.name}`);
+			}
+		});
+	});
+
+	it('should not include any new moves', () => {
+		testTeam(options, team => {
+			for (const pkmn of team) {
+				for (const moveName of pkmn.moves) {
+					const move = dex.moves.get(moveName);
+					assert(move.gen <= 3, `New move in Challenge Cup: ${move.name}`);
+				}
+			}
+		});
+	});
+
+	it('should not include any CAP Pokémon', () => {
+		testTeam(options, team => {
+			for (const pkmn of team) {
+				const number = dex.species.get(pkmn.species).num;
+				assert(number > 0, `CAP Pokémon in Challenge Cup: ${pkmn.name}`);
+			}
+		});
 	});
 });
