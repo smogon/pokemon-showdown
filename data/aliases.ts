@@ -667,6 +667,7 @@ export const Aliases: {[alias: string]: string} = {
 	tr97psychicfangs: "TR97",
 	tr98liquidation: "TR98",
 	tr99bodypress: "TR99",
+	umbrella: "Utility Umbrella",
 	wp: "Weakness Policy",
 
 	// pokemon
