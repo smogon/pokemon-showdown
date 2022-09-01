@@ -745,7 +745,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['Chimera 1v1 Rule', 'OHKO Clause', 'Species Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'Dynamax Clause', 'Sleep Moves Clause'],
+		ruleset: ['Chimera 1v1 Rule', 'Standard', 'Dynamax Clause', 'Sleep Moves Clause'],
 		banlist: [
 			'Shedinja', 'Huge Power', 'Moody', 'Neutralizing Gas', 'Truant', 'Perish Body', 'Eviolite', 'Focus Sash', 'Leek', 'Light Ball',
 			'Bolt Beak', 'Disable', 'Double Iron Bash', 'Fishious Rend', 'Perish Song', 'Switcheroo', 'Transform', 'Trick',
