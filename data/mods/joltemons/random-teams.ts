@@ -22,7 +22,7 @@ export class RandomJoltemonsTeams extends RandomTeams {
 		switch (ability) {
 		// Abilities which are primarily useful for certain moves
 		case 'Contrary': case 'Serene Grace': case 'Skill Link': case 'Strong Jaw':
-			return !counter.get(toID(ability));
+			return !counter.get(this.dex.toID(ability));
 		case 'Analytic':
 			return (moves.has('rapidspin') || species.nfe || isDoubles);
 		case 'Blaze':
