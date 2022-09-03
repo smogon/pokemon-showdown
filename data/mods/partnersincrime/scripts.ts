@@ -207,6 +207,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (ability.id && this.battle.gen > 3) {
 				this.battle.singleEvent('Start', ability, this.abilityState, this, source);
 				if (ally && ally.ability !== this.ability) {
+					if (!this.m.innate) {
+						this.m.innate = 'ability:' + ally.getAbility().id;
+						this.addVolatile(this.m.innate);
+					}
 					ally.m.innate = 'ability:' + ability.id;
 					ally.addVolatile(ally.m.innate);
 				}
