@@ -217,6 +217,7 @@ export class RandomJoltemonsTeams extends RandomTeams {
 		isLead: boolean,
 		isDoubles: boolean
 	) {
+		if (ability === 'Honey Gather') return 'Red Card';
 		if (ability === 'Scavenge') return 'Soul Blade';
 		if (ability === 'Sweet Veil') return 'Honey';
 
