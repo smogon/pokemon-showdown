@@ -252,7 +252,7 @@ export class RandomJoltemonsTeams extends RandomTeams {
 		isNoDynamax: boolean
 	) {
 		const item = super.getMediumPriorityItem(ability, moves, counter, species, isLead, isDoubles, isNoDynamax);
-		if (counter.setupType && !item) return 'Cursed Belt';
+		if (counter.setupType === 'Physical' && counter.get('Status') < 2 && !item) return 'Cursed Belt';
 		return item;
 	}
 
