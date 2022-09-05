@@ -2079,7 +2079,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	linoone: {
 		tier: "RU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["quiverdance", "leafstorm", "hiddenpowerfire", "sleeppowder"],
+		randomBattleMoves: ["bellydrum", "extremespeed", "seedbomb", "stompingtantrum"],
 	},
 	lopunny: {
 		tier: "RU",
