@@ -784,11 +784,13 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 
 		const scores = Object.fromEntries(this.getTopPlayers({max: null})
 			.map(player => [player.player.id, player.player.points]));
-		await database.addHistory([{
-			...this.game,
-			length: typeof this.game.length === 'number' ? `${this.game.length} questions` : this.game.length,
-			scores,
-		}]);
+		if (this.game.givesPoints) {
+			await database.addHistory([{
+				...this.game,
+				length: typeof this.game.length === 'number' ? `${this.game.length} questions` : this.game.length,
+				scores,
+			}]);
+		}
 
 		this.destroy();
 	}
