@@ -51,11 +51,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	caterpie: {
-		randomBattleMoves: ["stringshot", "tackle"],
 		tier: "LC",
 	},
 	metapod: {
-		randomBattleMoves: ["harden", "stringshot", "tackle"],
 		tier: "NFE",
 	},
 	butterfree: {
@@ -64,11 +62,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "PU",
 	},
 	weedle: {
-		randomBattleMoves: ["poisonsting", "stringshot"],
 		tier: "LC",
 	},
 	kakuna: {
-		randomBattleMoves: ["poisonsting", "stringshot"],
 		tier: "NFE",
 	},
 	beedrill: {
@@ -655,7 +651,6 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	magikarp: {
-		randomBattleMoves: ["splash", "tackle"],
 		tier: "LC",
 	},
 	gyarados: {
