@@ -118,7 +118,6 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 		/** Pokémon that are not wholly incompatible with the team, but still pretty bad */
 		const rejectedButNotInvalidPool: string[] = [];
-		const handicapMons = ['magikarp', 'weedle', 'kakuna', 'caterpie', 'metapod'];
 		const nuTiers = ['UU', 'UUBL', 'NFE', 'LC', 'NU'];
 		const uuTiers = ['NFE', 'UU', 'UUBL', 'NU'];
 
@@ -127,7 +126,6 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const weaknessCount: {[k: string]: number} = {Electric: 0, Psychic: 0, Water: 0, Ice: 0, Ground: 0};
 		let uberCount = 0;
 		let nuCount = 0;
-		let hasShitmon = false;
 
 		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
@@ -138,16 +136,6 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			// to face each other.
 			if (species.id === 'ditto' && this.battleHasDitto) continue;
 
-			// Really bad Pokémon shouldn't be leads.
-			if (pokemon.length === 0 && handicapMons.includes(species.id)) continue;
-
-			// Bias the tiers so you get less shitmons and only one of the two Ubers.
-			// If you have a shitmon, don't get another
-			if (handicapMons.includes(species.id) && hasShitmon) {
-				rejectedButNotInvalidPool.push(species.id);
-				continue;
-			}
-
 			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
 			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
 
@@ -155,13 +143,13 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			switch (tier) {
 			case 'LC':
 			case 'NFE':
-				// Don't add pre-evo mon if already 4 or more non-OUs, or if already 3 or more non-OUs with one being a shitmon
+				// Don't add pre-evo mon if already 4 or more non-OUs
 				// Regardless, pre-evo mons are slightly less common.
-				if (nuCount >= 4 * limitFactor || (hasShitmon && nuCount >= 4 * limitFactor - 1) || this.randomChance(1, 3)) continue;
+				if (nuCount >= 4 * limitFactor || this.randomChance(1, 3)) continue;
 				break;
 			case 'Uber':
-				// If you have one of the worst mons we allow luck to give you all Ubers.
-				if (uberCount >= 1 * limitFactor && !hasShitmon) continue;
+				// Only allow a single Uber.
+				if (uberCount >= 1 * limitFactor) continue;
 				break;
 			default:
 				// OUs are fine. Otherwise 50% chance to skip mon if already 4 or more non-OUs.
@@ -231,9 +219,6 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			} else if (nuTiers.includes(tier)) {
 				nuCount++;
 			}
-
-			// Is it Magikarp or one of the useless bugs?
-			if (handicapMons.includes(species.id)) hasShitmon = true;
 
 			// Ditto check
 			if (species.id === 'ditto') this.battleHasDitto = true;
