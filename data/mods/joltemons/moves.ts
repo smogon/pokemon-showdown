@@ -19,12 +19,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Tough",
 	},
-	meltdown: {
+	meltingpoint: {
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
 		shortDesc: "Replaces the user's Ice-type with Water. 1.5x power when used by Ice-types. Soaks foe.",
-		name: "Meltdown",
+		name: "Melting Point",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, defrost: 1},
@@ -51,10 +51,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onHit(pokemon) {
 				if (pokemon.hasType('Water')) {
 					pokemon.setType(pokemon.getTypes(true).map(type => type === "Ice" ? "???" : type));
-					this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[from] move: Meltdown');
+					this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[from] move: Melting Point');
 				} else {
 					pokemon.setType(pokemon.getTypes(true).map(type => type === "Ice" ? "Water" : type));
-					this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[from] move: Meltdown');
+					this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[from] move: Melting Point');
 				}
 			},
 		},
