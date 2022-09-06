@@ -1130,7 +1130,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	arctovish: {
 		tier: "RU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["fishiousrend", "iciclecrash", "freezedry", "meltdown"],
+		randomBattleMoves: ["fishiousrend", "iciclecrash", "freezedry", "meltingpoint"],
 	},
 	arctozolt: {
 		tier: "OU",
@@ -1155,7 +1155,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	articuno: {
 		tier: "RU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["meltdown", "freezedry", "hurricane", "uturn"],
+		randomBattleMoves: ["meltingpoint", "freezedry", "hurricane", "uturn"],
 	},
 	articunogalar: {
 		tier: "UU",
@@ -1709,7 +1709,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	frosmoth: {
 		tier: "RU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["quiverdance", "bugbuzz", "meltdown", "snowmanjazz"],
+		randomBattleMoves: ["quiverdance", "bugbuzz", "meltingpoint", "snowmanjazz"],
 	},
 	furfrou: {
 		tier: "RU",
@@ -1754,7 +1754,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	glaceon: {
 		tier: "RU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["blizzard", "freezedry", "meltdown", "hiddenpowerfire"],
+		randomBattleMoves: ["blizzard", "freezedry", "meltingpoint", "hiddenpowerfire"],
 	},
 	glalie: {
 		tier: "RU",
@@ -2044,7 +2044,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	lapras: {
 		tier: "RU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["meltdown", "icebeam", "thunderbolt", "lifedew"],
+		randomBattleMoves: ["meltingpoint", "icebeam", "thunderbolt", "lifedew"],
 	},
 	leafeon: {
 		tier: "RU",
@@ -2079,7 +2079,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	linoone: {
 		tier: "RU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["quiverdance", "leafstorm", "hiddenpowerfire", "sleeppowder"],
+		randomBattleMoves: ["bellydrum", "extremespeed", "seedbomb", "stompingtantrum"],
 	},
 	lopunny: {
 		tier: "RU",
@@ -3038,7 +3038,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	vanilluxe: {
 		tier: "RU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["blizzard", "hiddenpowerfire", "freezedry", "meltdown"],
+		randomBattleMoves: ["blizzard", "hiddenpowerfire", "freezedry", "meltingpoint"],
 	},
 	vaporeon: {
 		tier: "RU",
@@ -3111,7 +3111,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	walrein: {
 		tier: "RU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["meltdown", "toxic", "superfang", "protect"],
+		randomBattleMoves: ["meltingpoint", "toxic", "superfang", "protect"],
 	},
 	watchog: {
 		tier: "RU",
@@ -3256,7 +3256,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	cryogonal: {
 		tier: "RU",
 		doublesTier: "DOU",
-		randomBattleMoves: ["icebeam", "meltdown", "recover", "defog"],
+		randomBattleMoves: ["icebeam", "meltingpoint", "recover", "defog"],
 	},
 	lurantis: {
 		tier: "RU",
