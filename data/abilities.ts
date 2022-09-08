@@ -124,6 +124,41 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 1.5,
 		num: 83,
 	},
+	angershell: {
+		onDamage(damage, target, source, effect) {
+			if (
+				effect.effectType === "Move" &&
+				!effect.multihit &&
+				(!effect.negateSecondary && !(effect.hasSheerForce && source.hasAbility('sheerforce')))
+			) {
+				target.abilityState.checkedAngerShell = false;
+			} else {
+				target.abilityState.checkedAngerShell = true;
+			}
+		},
+		onTryEatItem(item, pokemon) {
+			const healingItems = [
+				'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry', 'berryjuice',
+			];
+			if (healingItems.includes(item.id)) {
+				return pokemon.abilityState.checkedAngerShell;
+			}
+			return true;
+		},
+		onAfterMoveSecondary(target, source, move) {
+			target.abilityState.checkedAngerShell = true;
+			if (!source || source === target || !target.hp || !move.totalDamage) return;
+			const lastAttackedBy = target.getLastAttackedBy();
+			if (!lastAttackedBy) return;
+			const damage = move.multihit ? move.totalDamage : lastAttackedBy.damage;
+			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
+				this.boost({atk: 1, spa: 1, spe: 1, def: -1, spd: -1});
+			}
+		},
+		name: "Anger Shell",
+		rating: 2,
+		num: 20000,
+	},
 	anticipation: {
 		onStart(pokemon) {
 			for (const target of pokemon.foes()) {

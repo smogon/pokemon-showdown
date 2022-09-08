@@ -87,13 +87,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 			'Obtainable', '+Unobtainable', '+Past', 'Sketch Gen 8 Moves', 'Team Preview', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
 		],
 		onValidateSet(set) {
-			// These Pokemon are still unobtainable
-			const unobtainables = [
-				'Eevee-Starter', 'Floette-Eternal', 'Pichu-Spiky-eared', 'Pikachu-Belle', 'Pikachu-Cosplay', 'Pikachu-Libre',
-				'Pikachu-PhD', 'Pikachu-Pop-Star', 'Pikachu-Rock-Star', 'Pikachu-Starter', 'Eternatus-Eternamax',
-			];
 			const species = this.dex.species.get(set.species);
-			if (unobtainables.includes(species.name)) {
+			if (species.natDexTier === 'Illegal') {
 				if (this.ruleTable.has(`+pokemon:${species.id}`)) return;
 				return [`${set.name || set.species} does not exist in the National Dex.`];
 			}

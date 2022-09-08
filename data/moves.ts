@@ -476,6 +476,25 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
+	armorcannon: {
+		num: 828,
+		accuracy: 100,
+		basePower: 120,
+		category: "Special",
+		name: "Armor Cannon",
+		pp: 5,
+		priority: 0,
+		flags: {bullet: 1, protect: 1, pulse: 1, mirror: 1},
+		self: {
+			boosts: {
+				def: -1,
+				spd: -1,
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+	},
 	armthrust: {
 		num: 292,
 		accuracy: 100,
@@ -1278,6 +1297,20 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Dark",
 		contestType: "Tough",
+	},
+	bitterblade: {
+		num: 829,
+		accuracy: 100,
+		basePower: 75,
+		category: "Physical",
+		name: "Bitter Blade",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
+		drain: [1, 2],
+		secondary: null,
+		target: "normal",
+		type: "Fire",
 	},
 	blackholeeclipse: {
 		num: 654,
@@ -15202,6 +15235,45 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Psychic",
 		contestType: "Cool",
+	},
+	shedtail: {
+		num: 827,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Shed Tail",
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1, nonsky: 1},
+		volatileStatus: 'substitute',
+		onTryHit(target) {
+			if (target.volatiles['substitute']) {
+				this.add('-fail', target, 'move: Shed Tail');
+				return null;
+			}
+			if (target.hp <= target.maxhp / 2 || target.maxhp === 1) { // Shedinja clause
+				this.add('-fail', target, 'move: Shed Tail', '[weak]');
+				return null;
+			}
+		},
+		onHit(target) {
+			if (!this.canSwitch(target.side)) {
+				this.attrLastMove('[still]');
+				this.add('-fail', target);
+				return this.NOT_FAIL;
+			}
+			this.directDamage(target.maxhp / 2);
+		},
+		self: {
+			onHit(source) {
+				source.skipBeforeSwitchOutEventFlag = true;
+			},
+		},
+		selfSwitch: 'copyvolatile',
+		secondary: null,
+		target: "self",
+		type: "Normal",
+		zMove: {effect: 'clearnegativeboost'},
 	},
 	sheercold: {
 		num: 329,

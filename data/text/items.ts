@@ -1118,6 +1118,12 @@ export const ItemsText: {[k: string]: ItemText} = {
 			desc: "Holder's Grass-type attacks have 1.1x power.",
 		},
 	},
+	mirrorherb: {
+		name: "Mirror Herb",
+		desc: "Copies an opponent's stat boosts. Single use.",
+
+		activate: "  [POKEMON] used its Mirror Herb to mirror its opponent's stat changes!",
+	},
 	mistyseed: {
 		name: "Misty Seed",
 		desc: "If the terrain is Misty Terrain, raises holder's Sp. Def by 1 stage. Single use.",

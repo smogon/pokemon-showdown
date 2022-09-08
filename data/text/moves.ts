@@ -156,6 +156,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Aqua Tail",
 		shortDesc: "No additional effect.",
 	},
+	armorcannon: {
+		name: "Armor Cannon",
+		desc: "Lowers the user's Defense and Special Defense by 1 stage.",
+		shortDesc: "Lowers the user's Defense and Sp. Def by 1.",
+	},
 	armthrust: {
 		name: "Arm Thrust",
 		desc: "Hits two to five times. Has a 35% chance to hit two or three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
