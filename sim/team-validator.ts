@@ -717,9 +717,16 @@ export class TeamValidator {
 				isFromRBYEncounter = true;
 			}
 		}
-		if (!isFromRBYEncounter && ruleTable.has('obtainablemisc') && set.level < (species.evoLevel || 0)) {
+		if (!isFromRBYEncounter && ruleTable.has('obtainablemisc')) {
 			// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
-			problems.push(`${name} must be at least level ${species.evoLevel} to be evolved.`);
+			let evoSpecies = species;
+			while (evoSpecies.prevo) {
+				if (set.level < (evoSpecies.evoLevel || 0)) {
+					problems.push(`${name} must be at least level ${evoSpecies.evoLevel} to be evolved.`);
+					break;
+				}
+				evoSpecies = dex.species.get(evoSpecies.prevo);
+			}
 		}
 
 		if (ruleTable.has('obtainablemoves') && species.id === 'keldeo' && set.moves.includes('secretsword') &&
