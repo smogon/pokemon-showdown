@@ -7279,8 +7279,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 				return 5;
 			},
-			onFieldStart() {
-				this.add('-fieldstart', 'move: Gravity');
+			onFieldStart(target, source) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-fieldstart', 'move: Gravity', '[ability] Persistent');
+				} else {
+					this.add('-fieldstart', 'move: Gravity');
+				}
 				for (const pokemon of this.getAllActive()) {
 					let applies = false;
 					if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly')) {
@@ -10097,7 +10101,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return 5;
 			},
 			onFieldStart(target, source) {
-				this.add('-fieldstart', 'move: Magic Room', '[of] ' + source);
+				if (source?.hasAbility('persistent')) {
+					this.add('-fieldstart', 'move: Magic Room', '[of] ' + source, '[ability] Persistent');
+				} else {
+					this.add('-fieldstart', 'move: Magic Room', '[of] ' + source);
+				}
 			},
 			onFieldRestart(target, source) {
 				this.field.removePseudoWeather('magicroom');
@@ -14596,8 +14604,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return null;
 				}
 			},
-			onSideStart(side) {
-				this.add('-sidestart', side, 'Safeguard');
+			onSideStart(side, source) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-sidestart', side, 'Safeguard', '[ability] Persistent');
+				} else {
+					this.add('-sidestart', side, 'Safeguard');
+				}
 			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 3,
@@ -17694,8 +17706,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 				return 4;
 			},
-			onSideStart(side) {
-				this.add('-sidestart', side, 'move: Tailwind');
+			onSideStart(side, source) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-sidestart', side, 'move: Tailwind', '[ability] Persistent');
+				} else {
+					this.add('-sidestart', side, 'move: Tailwind');
+				}
 			},
 			onModifySpe(spe, pokemon) {
 				return this.chainModify(2);
@@ -18601,7 +18617,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return 5;
 			},
 			onFieldStart(target, source) {
-				this.add('-fieldstart', 'move: Trick Room', '[of] ' + source);
+				if (source?.hasAbility('persistent')) {
+					this.add('-fieldstart', 'move: Trick Room', '[of] ' + source, '[ability] Persistent');
+				} else {
+					this.add('-fieldstart', 'move: Trick Room', '[of] ' + source);
+				}
 			},
 			onFieldRestart(target, source) {
 				this.field.removePseudoWeather('trickroom');
@@ -19494,7 +19514,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.hint(`${move.name} uses ${statAndBoosts === 'def' ? '' : 'Sp. '}Def boosts when Wonder Room is active.`);
 			},
 			onFieldStart(field, source) {
-				this.add('-fieldstart', 'move: Wonder Room', '[of] ' + source);
+				if (source?.hasAbility('persistent')) {
+					this.add('-fieldstart', 'move: Wonder Room', '[of] ' + source, '[ability] Persistent');
+				} else {
+					this.add('-fieldstart', 'move: Wonder Room', '[of] ' + source);
+				}
 			},
 			onFieldRestart(target, source) {
 				this.field.removePseudoWeather('wonderroom');
