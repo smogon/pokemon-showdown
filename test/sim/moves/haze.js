@@ -169,7 +169,6 @@ describe('Haze - RBY', function () {
 		battle.makeChoices('move icebeam', 'auto');
 		assert.equal(battle.p2.active[0].status, 'frz');
 		battle.makeChoices('move haze', 'auto');
-		console.log(Object.keys(battle));
 		assert.equal(battle.lastMove.name, 'Haze');
 	});
 });
