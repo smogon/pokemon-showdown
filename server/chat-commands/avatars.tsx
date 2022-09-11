@@ -553,7 +553,8 @@ const OFFICIAL_AVATARS_BRUMIRAGE = new Set([
 ]);
 
 const OFFICIAL_AVATARS_ZACWEAVILE = new Set([
-	'gloria-dojo', 'shauna',
+	'alain', 'charm', 'coin', 'elio-usum', 'emma', 'essentia', 'gloria-dojo', 'marnie-league', 'morgan',
+	'shauna', 'skullgrunt', 'skullgruntf',
 ]);
 
 const OFFICIAL_AVATARS_KYLEDOVE = new Set([
@@ -580,6 +581,11 @@ const OFFICIAL_AVATARS_KYLEDOVE = new Set([
 	'triathletebiker-gen6', 'triathleterunner-gen6', 'triathleteswimmer-gen6', 'tuberf-gen6', 'tuber-gen6', 'twins-gen6',
 	'veteranf-gen6', 'veteran-gen6', 'waitress-gen6', 'worker2-gen6', 'workerf-gen8', 'worker-gen6', 'worker-gen8',
 	'youngcouple-gen6', 'youngster-gen6', 'youngster-gen6xy', 'youngster-gen8',
+	'anthea', 'beni', 'beni-ninja', 'birch', 'blaine-lgpe', 'blue-lgpe', 'brigette', 'brock-lgpe', 'caraliss', 'cedricjuniper',
+	'celio', 'charon', 'clover', 'colza', 'concordia', 'cyllene', 'dawn-contest', 'elm', 'erika-lgpe', 'fennel', 'gaeric',
+	'ginter', 'giovanni-lgpe', 'grant', 'ingo-hisui', 'iscan', 'kamado', 'kamado-armor', 'kurt', 'lance-lgpe', 'lanette',
+	'laventon', 'lucas-contest', 'lucy', 'lysandre', 'melli', 'misty-lgpe', 'noland', 'palina', 'plumeria-league', 'rowan',
+	'roxanne-gen6', 'rye', 'sabrina-lgpe', 'scott', 'securitycorps', 'securitycorpsf', 'serena', 'sycamore', 'taohua', 'vessa',
 	'acerola-masters', 'bea-masters', 'blue-masters', 'brendan-masters', 'brock-masters', 'burgh-masters', 'caitlin-masters',
 	'cynthia-masters2', 'cyrus-masters', 'dawn-masters', 'dawn-masters2', 'diantha-masters', 'elesa-masters', 'emmet-masters',
 	'erika-masters', 'erika-masters2', 'ethan-masters', 'giovanni-masters', 'gloria-masters', 'grimsley-masters',
@@ -599,6 +605,10 @@ const OFFICIAL_AVATARS_GRAPO = new Set([
 	'peonia', 'skyla-masters2', 'volo-ginkgo',
 ]);
 
+const OFFICIAL_AVATARS_FIFTY = new Set([
+	'rose-zerosuit',
+]);
+
 for (const avatar of OFFICIAL_AVATARS_BELIOT419) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_GNOMOWLADNY) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_BRUMIRAGE) OFFICIAL_AVATARS.add(avatar);
@@ -606,6 +616,7 @@ for (const avatar of OFFICIAL_AVATARS_ZACWEAVILE) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_KYLEDOVE) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_HYOOPPA) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_GRAPO) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_FIFTY) OFFICIAL_AVATARS.add(avatar);
 
 export const commands: Chat.ChatCommands = {
 	avatar(target, room, user) {
@@ -648,6 +659,9 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (OFFICIAL_AVATARS_GRAPO.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/Grapo_Sprites">Grapo</a>)`);
+			}
+			if (OFFICIAL_AVATARS_FIFTY.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}Fifty Shades of Rez)`);
 			}
 		}
 	},
