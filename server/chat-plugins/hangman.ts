@@ -108,7 +108,7 @@ export class Hangman extends Rooms.SimpleRoomGame {
 			if (!this.guessWord(sanitized, user.name)) {
 				throw new Chat.ErrorMessage(`Your guess "${sanitized}" is invalid.`);
 			} else {
-				this.room.send(`${user.name} guessed "${sanitized}"!`);
+				this.room.addByUser(user, `${user.name} guessed "${sanitized}"!`);
 			}
 		} else {
 			if (!this.guessLetter(sanitized, user.name)) {
