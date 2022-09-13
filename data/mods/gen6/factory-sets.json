@@ -155,7 +155,7 @@
           "species": "Tyranitar",
           "item": "Shuca Berry",
           "ability": "Sand Stream",
-          "evs": {"hp": 248, "atk": 0, "def": 4, "spa": 0, "spd": 252, "spe": 0},
+          "evs": {"hp": 248, "atk": 0, "def": 8, "spa": 0, "spd": 252, "spe": 0},
           "nature": "Careful",
           "moves": [["Stealth Rock"], ["Pursuit"], ["Rock Slide"], ["Thunder Wave", "Roar"]]
         },
@@ -887,7 +887,7 @@
           "species": "Blissey",
           "item": "Leftovers",
           "ability": "Natural Cure",
-          "evs": {"hp": 20, "atk": 0, "def": 232, "spa": 0, "spd": 252, "spe": 0},
+          "evs": {"hp": 20, "atk": 0, "def": 236, "spa": 0, "spd": 252, "spe": 0},
           "nature": "Calm",
           "moves": [["Ice Beam"], ["Toxic"], ["Soft-Boiled", "Wish"], ["Heal Bell", "Protect"]]
         },
@@ -895,7 +895,7 @@
           "species": "Blissey",
           "item": "Shed Shell",
           "ability": "Natural Cure",
-          "evs": {"hp": 20, "atk": 0, "def": 232, "spa": 0, "spd": 252, "spe": 0},
+          "evs": {"hp": 20, "atk": 0, "def": 236, "spa": 0, "spd": 252, "spe": 0},
           "nature": "Calm",
           "moves": [["Toxic"], ["Seismic Toss", "Snatch"], ["Soft-Boiled", "Wish"], ["Heal Bell", "Protect"]]
         }
@@ -1196,7 +1196,7 @@
           "species": "Arceus-Grass",
           "item": "Meadow Plate",
           "ability": "Multitype",
-          "evs": {"hp": 248, "atk": 0, "def": 0, "spa": 0, "spd": 144, "spe": 112},
+          "evs": {"hp": 248, "atk": 0, "def": 0, "spa": 0, "spd": 148, "spe": 112},
           "nature": "Timid",
           "moves": [["Grass Knot"], ["Recover"], ["Ice Beam"], ["Defog"]]
         }
@@ -1401,7 +1401,7 @@
           "species": "Celebi",
           "item": "Leftovers",
           "ability": "Natural Cure",
-          "evs": {"hp": 248, "atk": 0, "def": 0, "spa": 0, "spd": 148, "spe": 108},
+          "evs": {"hp": 248, "atk": 0, "def": 0, "spa": 0, "spd": 152, "spe": 108},
           "nature": "Bold",
           "moves": [["Earth Power"], ["Nasty Plot"], ["Giga Drain"], ["Recover"]]
         },
@@ -1409,7 +1409,7 @@
           "species": "Celebi",
           "item": "Leftovers",
           "ability": "Natural Cure",
-          "evs": {"hp": 252, "atk": 0, "def": 0, "spa": 0, "spd": 84, "spe": 16},
+          "evs": {"hp": 252, "atk": 0, "def": 0, "spa": 0, "spd": 148, "spe": 108},
           "nature": "Calm",
           "moves": [["Thunder Wave"], ["Recover"], ["Giga Drain"], ["Stealth Rock"]]
         }
@@ -1997,7 +1997,7 @@
           "species": "Talonflame",
           "item": "Leftovers",
           "ability": "Gale Wings",
-          "evs": {"hp": 248, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 4},
+          "evs": {"hp": 248, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 8},
           "nature": "Jolly",
           "moves": [["Swords Dance"], ["Brave Bird"], ["Will-O-Wisp"], ["Roost"]]
         }
@@ -3734,7 +3734,7 @@
           "species": "Shaymin",
           "item": "Leftovers",
           "ability": "Natural Cure",
-          "evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 0, "spe": 252},
+          "evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
           "ivs": {"hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31},
           "nature": "Timid",
           "moves": [["Substitute"], ["Leech Seed"], ["Seed Flare"], ["Air Slash"]]
@@ -3796,7 +3796,7 @@
           "species": "Ampharos",
           "item": "Ampharosite",
           "ability": "Static",
-          "evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 0, "spe": 252},
+          "evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
           "ivs": {"hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31},
           "nature": "Modest",
           "moves": [["Agility"], ["Dragon Pulse"], ["Thunderbolt"], ["Focus Blast"]]
@@ -3814,7 +3814,7 @@
           "species": "Ampharos",
           "item": "Ampharosite",
           "ability": "Static",
-          "evs": {"hp": 248, "atk": 0, "def": 252, "spa": 0, "spd": 0, "spe": 0},
+          "evs": {"hp": 248, "atk": 0, "def": 252, "spa": 8, "spd": 0, "spe": 0},
           "ivs": {"hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31},
           "nature": "Bold",
           "moves": [["Rest"], ["Sleep Talk"], ["Volt Switch"], ["Dragon Pulse"]]
@@ -3823,7 +3823,7 @@
           "species": "Ampharos",
           "item": "Ampharosite",
           "ability": "Static",
-          "evs": {"hp": 248, "atk": 0, "def": 0, "spa": 0, "spd": 252, "spe": 0},
+          "evs": {"hp": 248, "atk": 0, "def": 0, "spa": 8, "spd": 252, "spe": 0},
           "ivs": {"hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31},
           "nature": "Calm",
           "moves": [["Rest"], ["Sleep Talk"], ["Volt Switch"], ["Dragon Pulse"]]
@@ -3882,7 +3882,7 @@
           "species": "Azelf",
           "item": "Life Orb",
           "ability": "Levitate",
-          "evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 0, "spe": 252},
+          "evs": {"hp": 0, "atk": 0, "def": 4, "spa": 252, "spd": 0, "spe": 252},
           "nature": "Timid",
           "moves": [["Nasty Plot"], ["Psyshock"], ["Fire Blast"], ["Dazzling Gleam"]]
         }
@@ -4004,7 +4004,7 @@
           "species": "Darmanitan",
           "item": "Choice Band",
           "ability": "Sheer Force",
-          "evs": {"hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 252},
+          "evs": {"hp": 0, "atk": 252, "def": 4, "spa": 0, "spd": 0, "spe": 252},
           "nature": "Jolly",
           "moves": [["Flare Blitz"], ["Rock Slide"], ["Superpower"], ["U-turn"]]
         },
@@ -4012,7 +4012,7 @@
           "species": "Darmanitan",
           "item": "Choice Scarf",
           "ability": "Sheer Force",
-          "evs": {"hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 252},
+          "evs": {"hp": 0, "atk": 252, "def": 4, "spa": 0, "spd": 0, "spe": 252},
           "nature": "Jolly",
           "moves": [["Flare Blitz"], ["Rock Slide"], ["Superpower"], ["U-turn"]]
         },
@@ -4020,7 +4020,7 @@
           "species": "Darmanitan",
           "item": "Life Orb",
           "ability": "Sheer Force",
-          "evs": {"hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 252},
+          "evs": {"hp": 0, "atk": 252, "def": 4, "spa": 0, "spd": 0, "spe": 252},
           "nature": "Jolly",
           "moves": [["Flare Blitz"], ["Rock Slide"], ["Superpower"], ["U-turn"]]
         }
@@ -4109,7 +4109,7 @@
           "species": "Flygon",
           "item": "Leftovers",
           "ability": "Levitate",
-          "evs": {"hp": 248, "atk": 0, "def": 4, "spa": 0, "spd": 0, "spe": 252},
+          "evs": {"hp": 248, "atk": 0, "def": 8, "spa": 0, "spd": 0, "spe": 252},
           "nature": "Jolly",
           "moves": [["Roost"], ["Defog"], ["Earthquake"], ["U-turn"]]
         }
@@ -4200,7 +4200,7 @@
           "species": "Haxorus",
           "item": "Life Orb",
           "ability": "Mold Breaker",
-          "evs": {"hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 252},
+          "evs": {"hp": 0, "atk": 252, "def": 4, "spa": 0, "spd": 0, "spe": 252},
           "nature": "Jolly",
           "moves": [["Dragon Dance"], ["Taunt"], ["Outrage"], ["Earthquake"]]
         },
@@ -4217,7 +4217,7 @@
           "species": "Haxorus",
           "item": "Life Orb",
           "ability": "Mold Breaker",
-          "evs": {"hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 252},
+          "evs": {"hp": 0, "atk": 252, "def": 4, "spa": 0, "spd": 0, "spe": 252},
           "nature": "Jolly",
           "moves": [["Swords Dance"], ["Taunt"], ["Outrage"], ["Earthquake"]]
         }
@@ -4433,7 +4433,7 @@
           "species": "Noivern",
           "item": "Life Orb",
           "ability": "Infiltrator",
-          "evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 0, "spe": 252},
+          "evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
           "ivs": {"hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31},
           "nature": "Timid",
           "moves": [["Roost"], ["Draco Meteor"], ["Hurricane"], ["Flamethrower"]]
@@ -4464,7 +4464,7 @@
           "species": "Porygon-Z",
           "item": "Choice Specs",
           "ability": "Adaptability",
-          "evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 0, "spe": 252},
+          "evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
           "ivs": {"hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31},
           "nature": "Modest",
           "moves": [["Trick"], ["Tri Attack"], ["Thunderbolt"], ["Ice Beam"]]
@@ -4680,7 +4680,7 @@
           "species": "Houndoom",
           "item": "Houndoominite",
           "ability": "Flash Fire",
-          "evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 0, "spe": 252},
+          "evs": {"hp": 0, "atk": 0, "def": 4, "spa": 252, "spd": 0, "spe": 252},
           "ivs": {"hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31},
           "nature": "Timid",
           "moves": [["Nasty Plot"], ["Taunt"], ["Fire Blast"], ["Dark Pulse"]]
@@ -4689,7 +4689,7 @@
           "species": "Houndoom",
           "item": "Houndoominite",
           "ability": "Flash Fire",
-          "evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 0, "spe": 252},
+          "evs": {"hp": 0, "atk": 0, "def": 4, "spa": 252, "spd": 0, "spe": 252},
           "ivs": {"hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31},
           "nature": "Timid",
           "moves": [["Sunny Day"], ["Fire Blast"], ["Dark Pulse"], ["Solar Beam"]]
@@ -4820,7 +4820,7 @@
           "species": "Zoroark",
           "item": "Life Orb",
           "ability": "Illusion",
-          "evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 0, "spe": 252},
+          "evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
           "ivs": {"hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31},
           "nature": "Timid",
           "moves": [["Nasty Plot"], ["Night Daze"], ["Focus Blast"], ["Flamethrower"]]
@@ -4845,7 +4845,7 @@
           "gender": "F",
           "item": "Light Clay",
           "ability": "Levitate",
-          "evs": {"hp": 248, "atk": 0, "def": 4, "spa": 0, "spd": 0, "spe": 252},
+          "evs": {"hp": 248, "atk": 0, "def": 8, "spa": 0, "spd": 0, "spe": 252},
           "ivs": {"hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31},
           "nature": "Timid",
           "moves": [["Lunar Dance"], ["Reflect"], ["Light Screen"], ["Moonblast"]]
@@ -4965,7 +4965,7 @@
           "species": "Cobalion",
           "item": "Life Orb",
           "ability": "Justified",
-          "evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 0, "spe": 252},
+          "evs": {"hp": 0, "atk": 0, "def": 4, "spa": 252, "spd": 0, "spe": 252},
           "nature": "Modest",
           "moves": [["Calm Mind"], ["Focus Blast"], ["Flash Cannon"], ["Hidden Power Ghost"]]
         },
@@ -6440,7 +6440,7 @@
           "species": "Slowking",
           "item": "Colbur Berry",
           "ability": "Regenerator",
-          "evs": {"hp": 160, "atk": 0, "def": 0, "spa": 0, "spd": 0, "spe": 96},
+          "evs": {"hp": 160, "atk": 0, "def": 0, "spa": 252, "spd": 0, "spe": 96},
           "nature": "Bold",
           "moves": [["Scald"], ["Psyshock"], ["Fire Blast"], ["Thunder Wave"]]
         }
@@ -6746,7 +6746,7 @@
           "species": "Archeops",
           "item": "Focus Sash",
           "ability": "Defeatist",
-          "evs": {"hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 252},
+          "evs": {"hp": 0, "atk": 252, "def": 4, "spa": 0, "spd": 0, "spe": 252},
           "nature": "Naive",
           "moves": [["Stealth Rock"], ["Taunt"], ["Endeavor"], ["Head Smash"]]
         }
@@ -9575,7 +9575,7 @@
           "species": "Arbok",
           "item": "Black Sludge",
           "ability": "Shed Skin",
-          "evs": {"hp": 248, "atk": 0, "def": 0, "spa": 0, "spd": 236, "spe": 20},
+          "evs": {"hp": 248, "atk": 0, "def": 0, "spa": 0, "spd": 240, "spe": 20},
           "nature": "Careful",
           "moves": [["Coil"], ["Gunk Shot"], ["Rest"], ["Earthquake"]]
         }
@@ -10313,7 +10313,7 @@
           "species": "Quilladin",
           "item": "Eviolite",
           "ability": "Bulletproof",
-          "evs": {"hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 252},
+          "evs": {"hp": 0, "atk": 252, "def": 4, "spa": 0, "spd": 0, "spe": 252},
           "nature": "Jolly",
           "moves": [["Wood Hammer"], ["Taunt"], ["Spikes"], ["Zen Headbutt", "Drain Punch"]]
         }
