@@ -10,6 +10,7 @@ import {Utils, FS, Net} from '../../lib';
 
 const ROOT = 'https://www.googleapis.com/youtube/v3/';
 const STORAGE_PATH = 'config/chat-plugins/youtube.json';
+const GROUPWATCH_ROOMS = ['youtube', 'pokemongames', 'videogames', 'smashbros'];
 
 export const videoDataCache: Map<string, VideoData> = Chat.oldPlugins.youtube?.videoDataCache || new Map();
 export const searchDataCache: Map<string, string[]> = Chat.oldPlugins.youtube?.searchDataCache || new Map();
@@ -684,7 +685,10 @@ export const commands: Chat.ChatCommands = {
 			this.privateModAction(`${user.name} removed the channel ${channel.name} from the category ${category}.`);
 		},
 		async groupwatch(target, room, user) {
-			room = this.requireRoom('youtube' as RoomID);
+			room = this.requireRoom();
+			if (!GROUPWATCH_ROOMS.includes(room.roomid)) {
+				return this.errorReply(`This room is not allowed to use the groupwatch function.`);
+			}
 			this.checkCan('mute', null, room);
 			const [url, title] = Utils.splitFirst(target, ',').map(p => p.trim());
 			if (!url || !title) return this.errorReply(`You must specify a video to watch and a title for the group watch.`);
