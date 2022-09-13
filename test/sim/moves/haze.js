@@ -80,4 +80,95 @@ describe('Haze - RBY', function () {
 		assert.equal(typeof battle.p1.active[0].volatiles['reflect'], 'undefined');
 		assert.equal(typeof battle.p1.active[0].volatiles['lightscreen'], 'undefined');
 	});
+
+	it('should remove leech seed and confusion', function () {
+		battle = common.gen(1).createBattle([
+			[{species: "Mew", moves: ['leechseed', 'confuse ray', 'haze']}],
+			[{species: "Muk", moves: ['splash']}],
+		]);
+		const p2volatiles = battle.p2.active[0].volatiles;
+
+		battle.makeChoices('move leechseed', 'auto');
+		assert('leechseed' in p2volatiles);
+		battle.makeChoices('move confuse ray', 'auto');
+		assert('confusion' in p2volatiles);
+
+		battle.makeChoices('move haze', 'auto');
+		assert(!('leechseed' in p2volatiles));
+		assert(!('confusion' in p2volatiles));
+	});
+
+	it('should remove disable', function () {
+		battle = common.gen(1).createBattle([
+			[{species: "Mew", moves: ['disable', 'haze', 'splash']}],
+			[{species: "Muk", moves: ['splash', 'tackle']}],
+		]);
+		const p2volatiles = battle.p2.active[0].volatiles;
+
+		battle.makeChoices('move disable', 'move tackle');
+		assert('disable' in p2volatiles);
+
+		battle.makeChoices('move haze', 'move tackle');
+		assert(!('disable' in p2volatiles));
+	});
+
+	it('should still make previously disabled pokemon (on the same turn) with 1 move use struggle', function () {
+		battle = common.gen(1).createBattle([
+			[{species: "Mew", moves: ['disable', 'haze']}],
+			[{species: "Muk", moves: ['tackle']}],
+		]);
+		const p2volatiles = battle.p2.active[0].volatiles;
+		battle.makeChoices('move disable', 'auto');
+		assert('disable' in p2volatiles);
+
+		battle.makeChoices('move haze', 'auto');
+		assert.equal(battle.lastMove.name, 'Struggle');
+	});
+
+	it('should convert toxic poisoning to regular poisoning for the user but not reset the toxic counter', function () {
+		battle = common.gen(1).createBattle([
+			[{species: "Mew", moves: ['toxic']}],
+			[{species: "Abra", moves: ['haze']}],
+		]);
+		battle.makeChoices();
+		assert.equal(battle.p2.active[0].status, 'psn');
+		assert.equal(battle.p2.active[0].volatiles.residualdmg.counter, 1);
+	});
+
+	it('should not remove substitute from either side', function () {
+		battle = common.gen(1).createBattle([
+			[{species: "Mew", moves: ['substitute', 'haze']}],
+			[{species: "Muk", moves: ['substitute', 'splash']}],
+		]);
+
+		battle.makeChoices('move substitute', 'move substitute');
+		battle.makeChoices('move haze', 'move splash');
+		assert('substitute' in battle.p1.active[0].volatiles);
+		assert('substitute' in battle.p2.active[0].volatiles);
+	});
+
+	it.skip('should not allow a previously sleeping opponent to move on the same turn', function () {
+		battle = common.gen(1).createBattle([
+			[{species: "Mew", moves: ['spore', 'haze', 'tackle']}],
+			[{species: "Muk", moves: ['splash']}],
+		]);
+		battle.makeChoices('move spore', 'auto');
+		battle.makeChoices('move haze', 'auto');
+		assert.equal(battle.lastMove.name, 'Haze');
+		battle.makeChoices('move tackle', 'auto');
+		// Muk should be able to move the next turn
+		assert.equal(battle.lastMove.name, 'Splash');
+	});
+
+	it.skip('should not allow a previously frozen opponent to move on the same turn', function () {
+		battle = common.gen(1).createBattle([
+			[{species: "Mew", moves: ['haze', 'icebeam']}],
+			[{species: "Muk", moves: ['splash']}],
+		]);
+		battle.p2.active[0].trySetStatus('frz', battle.p2.active[0]);
+		battle.makeChoices('move icebeam', 'auto');
+		assert.equal(battle.p2.active[0].status, 'frz');
+		battle.makeChoices('move haze', 'auto');
+		assert.equal(battle.lastMove.name, 'Haze');
+	});
 });
