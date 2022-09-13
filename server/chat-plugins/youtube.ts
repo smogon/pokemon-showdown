@@ -10,7 +10,7 @@ import {Utils, FS, Net} from '../../lib';
 
 const ROOT = 'https://www.googleapis.com/youtube/v3/';
 const STORAGE_PATH = 'config/chat-plugins/youtube.json';
-const GROUPWATCH_ROOMS = ['youtube', 'pokemongames', 'videogames', 'smashbros'];
+const GROUPWATCH_ROOMS = ['youtube', 'pokemongames', 'videogames', 'smashbros', 'pokemongo'];
 
 export const videoDataCache: Map<string, VideoData> = Chat.oldPlugins.youtube?.videoDataCache || new Map();
 export const searchDataCache: Map<string, string[]> = Chat.oldPlugins.youtube?.searchDataCache || new Map();
@@ -758,7 +758,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		async watch(target, room, user) {
 			room = this.requireRoom();
-			if (!['youtube', 'pokemongo'].includes(room.roomid)) {
+			if (!GROUPWATCH_ROOMS.includes(room.roomid)) {
 				throw new Chat.ErrorMessage(`You cannot use this command in this room.`);
 			}
 			this.checkCan('mute', null, room);
