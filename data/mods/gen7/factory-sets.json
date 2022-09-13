@@ -1032,7 +1032,7 @@
 				"species": "Wobbuffet",
 				"item": ["Leftovers"],
 				"ability": ["Shadow Tag"],
-				"evs": {"hp": 204, "def": 32, "spd": 252},
+				"evs": {"hp": 224, "def": 32, "spd": 252},
 				"ivs": {"atk": 0},
 				"nature": "Calm",
 				"moves": [["Encore"], ["Counter"], ["Mirror Coat"], ["Safeguard"]]
