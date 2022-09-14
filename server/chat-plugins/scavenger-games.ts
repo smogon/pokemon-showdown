@@ -373,7 +373,7 @@ const TWISTS: {[k: string]: Twist} = {
 			this.incorrect = new Array(this.questions.length).fill('').map(() => ({}));
 
 			this.questions.push({
-				hint: 'Please enter what you think are the most common incorrect answers to each question.  (Enter your guesses in the order of the previous questions, and seperate them with a comma)',
+				hint: 'Please enter what you think are the most common incorrect answers to each question.  (Enter your guesses in the order of the previous questions, and separate them with a comma)',
 				answer: ['Any'],
 				spoilers: [],
 			});
