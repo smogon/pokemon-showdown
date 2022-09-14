@@ -575,21 +575,21 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		return minutes;
 	}
 
-	choose(user: User, value: string) {
+	choose(user: User, originalValue: string) {
 		if (!(user.id in this.playerTable)) {
 			if (!this.joinGame(user)) return false;
 		}
-		value = toID(value);
+		const value = toID(originalValue);
 
 		const player = this.playerTable[user.id];
 
-		if (this.runEvent('AnySubmit', player, value)) return;
+		if (this.runEvent('AnySubmit', player, value, originalValue)) return;
 		if (player.completed) return false;
 
 		this.validatePlayer(player);
 		player.lastGuess = Date.now();
 
-		if (this.runEvent('Submit', player, value)) return false;
+		if (this.runEvent('Submit', player, value, originalValue)) return false;
 
 		if (player.verifyAnswer(value)) {
 			if (this.runEvent('CorrectAnswer', player, value)) return;
@@ -776,7 +776,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 			this.announce("The hunt has been reset automatically, due to the lack of finishers.");
 			this.tryRunQueue(this.room.roomid);
 		}
-		this.runEvent('AfterEnd');
+		this.runEvent('AfterEnd', reset);
 		this.destroy();
 	}
 
