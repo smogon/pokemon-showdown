@@ -300,7 +300,7 @@ export const Formats: FormatList = [
 		unbanlist: [
 			'Venusaur', 'Charizard', 'Blastoise', 'Sandslash-Base', 'Ninetales-Base', 'Arcanine', 'Alakazam', 'Tentacruel', 'Magneton', 'Cloyster',
 			'Exeggutor-Base', 'Rhydon', 'Gyarados', 'Lapras', 'Vaporeon', 'Jolteon', 'Flareon', 'Aerodactyl', 'Dragonite', 'Heracross', 'Skarmory',
-			'Tyranitar', 'Ludicolo', 'Aggron', 'Wailord', 'Altaria', 'Whiscash', 'Claydol', 'Cradily', 'Armaldo', 'Milotic', 'Salamence',
+			'Tyranitar', 'Ludicolo', 'Gardevoir', 'Aggron', 'Wailord', 'Altaria', 'Whiscash', 'Claydol', 'Cradily', 'Armaldo', 'Milotic', 'Salamence',
 			'Metagross', 'Roserade', 'Gastrodon', 'Spiritomb', 'Garchomp', 'Lucario', 'Rhyperior', 'Togekiss', 'Seismitoad', 'Archeops',
 			'Vanilluxe', 'Escavalier', 'Haxorus', 'Accelgor', 'Druddigon', 'Bouffalant', 'Hydreigon', 'Volcarona', 'Aegislash', 'Tyrantrum',
 			'Aurorus', 'Hawlucha', 'Carbink', 'Goodra', 'Gourgeist', 'Rillaboom', 'Cinderace', 'Inteleon', 'Mr. Rime', 'Dragapult',
