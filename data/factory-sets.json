@@ -2253,15 +2253,15 @@
 				"item": ["Life Orb"],
 				"ability": ["Grassy Surge"],
 				"evs": {"atk": 252, "spd": 4, "spe": 252},
-				"nature": ["Adamant", "Jolly"],
-				"moves": [["Horn Leech"], ["Stone Edge"], ["Zen Headbutt"], ["Swords Dance"]]
+				"nature": "Adamant",
+				"moves": [["Horn Leech"], ["Close Combat"], ["Zen Headbutt", "Stone Edge"], ["Swords Dance"]]
 			}, {
 				"species": "Tapu Bulu",
-				"item": ["Heavy-Duty Boots"],
+				"item": ["Choice Scarf", "Choice Band"],
 				"ability": ["Grassy Surge"],
-				"evs": {"hp": 252, "def": 120, "spe": 136},
-				"nature": "Impish",
-				"moves": [["Horn Leech"], ["Dazzling Gleam"], ["Synthesis"], ["Toxic"]]
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
+				"nature": "Jolly",
+				"moves": [["Horn Leech"], ["Close Combat"], ["Stone Edge"], ["Zen Headbutt"]]
 			}]
 		},
 		"suicune": {
