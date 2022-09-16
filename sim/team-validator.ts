@@ -1114,6 +1114,9 @@ export class TeamValidator {
 		let eggGroups = species.eggGroups;
 		if (species.id === 'nidoqueen' || species.id === 'nidorina') {
 			eggGroups = dex.species.get('nidoranf').eggGroups;
+		} else if (species.id === 'shedinja') {
+			// Shedinja and Nincada are different Egg groups; Shedinja itself is genderless
+			eggGroups = dex.species.get('nincada').eggGroups;
 		} else if (dex !== this.dex) {
 			// Gen 1 tradeback; grab the egg groups from Gen 2
 			eggGroups = dex.species.get(species.id).eggGroups;
