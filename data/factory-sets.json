@@ -3205,7 +3205,6 @@
 				"evs": {"hp": 4, "atk": 252, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Shell Smash"], ["Icicle Spear"], ["Rock Blast", "Explosion"], ["Spikes", "Liquidation", "Ice Shard"]]
-			}, {
 			}]
 		},
 		"gigalith": {
