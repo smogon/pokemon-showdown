@@ -2732,7 +2732,15 @@
 				"evs": {"hp": 4, "spa": 252, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": "Timid",
-				"moves": [["Draco Meteor"], ["Flamethrower"], ["U-turn", "Defog"], ["Roost"]]
+				"moves": [["Draco Meteor", "Hurricane"], ["Flamethrower"], ["Taunt", "U-turn", "Defog"], ["Roost"]]
+			}, {
+				"species": "Noivern",
+				"item": ["Choice Specs"],
+				"ability": ["Infiltrator"],
+				"evs": {"def": 4, "spa": 252, "spe": 252},
+				"ivs": {"atk": 0},
+				"nature": "Timid",
+				"moves": [["Draco Meteor"], ["Flamethrower", "Focus Blast"], ["U-turn", "Switcheroo"], ["Hurricane"]]
 			}]
 		},
 		"steelix": {
@@ -2761,7 +2769,7 @@
 				"evs": {"hp": 252, "def": 200, "spe": 56},
 				"ivs": {"atk": 0},
 				"nature": "Bold",
-				"moves": [["Calm Mind"], ["Scald"], ["Rest"], ["Ice Beam"]]
+				"moves": [["Calm Mind"], ["Scald"], ["Rest"], ["Ice Beam", "Sleep Talk"]]
 			}]
 		},
 		"bronzong": {
@@ -2849,7 +2857,7 @@
 				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": ["Timid"],
-				"moves": [["Volt Switch"], ["Scald"], ["Thunderbolt"], ["Toxic"]]
+				"moves": [["Volt Switch"], ["Scald"], ["Thunderbolt"], ["Toxic", "Shadow Ball"]]
 			}, {
 				"species": "Raikou",
 				"item": ["Leftovers"],
@@ -2887,7 +2895,7 @@
 				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": "Timid",
-				"moves": [["Leaf Storm"], ["Nasty Plot"], ["Thunderbolt"], ["Pain Split", "Volt Switch"]]
+				"moves": [["Leaf Storm"], ["Nasty Plot", "Defog"], ["Thunderbolt"], ["Pain Split", "Volt Switch"]]
 			}]
 		},
 		"snorlax": {
@@ -4707,7 +4715,7 @@
 		},
 		"exeggutor": {
 			"sets": [{
-				"species": "Cinccino",
+				"species": "Exeggutor",
 				"item": ["Choice Specs"],
 				"ability": ["Chlorophyll", "Harvest"],
 				"evs": {"atk": 4, "spa": 252, "spe": 252},
@@ -4825,7 +4833,7 @@
 		},
 		"arctovish": {
 			"sets": [{
-				"species": "Poliwrath",
+				"species": "Arctovish",
 				"item": ["Choice Band"],
 				"ability": ["Water Absorb"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
@@ -4835,9 +4843,9 @@
 		},
 		"glastrier": {
 			"sets": [{
-				"species": "Poliwrath",
+				"species": "Glastrier",
 				"item": ["Heavy-Duty Boots"],
-				"ability": ["Water Absorb"],
+				"ability": ["Chilling Neigh"],
 				"evs": {"hp": 4, "atk": 252, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Close Combat"], ["Icicle Crash"], ["Crunch"], ["Swords Dance"]]
