@@ -3349,7 +3349,7 @@
 			}, {
 				"species": "Copperajah",
 				"item": ["Leftovers"],
-				"ability": ["Heavy Metal"],
+				"ability": ["Sheer Force"],
 				"evs": {"hp": 156, "atk": 16, "spd": 252, "spe": 84},
 				"nature": "Adamant",
 				"moves": [["Iron Head"], ["Power Whip"], ["Rock Slide"], ["Stealth Rock"]]
