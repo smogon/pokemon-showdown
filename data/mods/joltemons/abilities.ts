@@ -797,8 +797,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onEnd(pokemon) {
-			const source = this.effectState.target;
-			for (const target of source.foes()) {
+			for (const target of pokemon.foes()) {
 				target.removeVolatile('embargo');
 			}
 		},
@@ -829,8 +828,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onEnd(pokemon) {
-			const source = this.effectState.target;
-			for (const target of source.foes()) {
+			for (const target of pokemon.foes()) {
 				target.removeVolatile('embargo');
 			}
 		},
