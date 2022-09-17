@@ -5388,17 +5388,6 @@
 				"moves": [["Close Combat"], ["Knock Off"], ["Brave Bird"], ["Final Gambit"]]
 			}]
 		},
-		"sinistea": {
-			"sets": [{
-				"species": "Sinistea",
-				"item": ["Eviolite"],
-				"ability": ["Weak Armor"],
-				"evs": {"hp": 36, "spa": 244, "spd": 4, "spe": 196},
-				"ivs": {"atk": 0},
-				"nature": "Modest",
-				"moves": [["Shell Smash"], ["Shadow Ball"], ["Stored Power"], ["Will-O-Wisp"]]
-			}]
-		},
 		"trubbish": {
 			"sets": [{
 				"species": "Trubbish",
