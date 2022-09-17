@@ -2377,7 +2377,7 @@
 				"ability": ["Levitate"],
 				"evs": {"atk": 236, "spd": 20, "spe": 252},
 				"nature": "Jolly",
-				"moves": [["Stone Edge"], ["Earthquake"], ["Outrage", "Toxic"], ["U-turn"]]
+				"moves": [["Stone Edge", "Toxic"], ["Earthquake"], ["Outrage", "Dragon Claw"], ["U-turn"]]
 			}, {
 				"species": "Flygon",
 				"item": ["Choice Band"],
@@ -2411,7 +2411,7 @@
 				"ability": ["Clear Body"],
 				"evs": {"hp": 252, "def": 4, "spd": 252},
 				"nature": "Careful",
-				"moves": [["Stealth Rock"], ["Seismic Toss"], ["Heavy Slam", "Protect"], ["Toxic"]]
+				"moves": [["Stealth Rock"], ["Seismic Toss"], ["Thunder Wave", "Protect"], ["Toxic"]]
 			}, {
 				"species": "Registeel",
 				"item": ["Leftovers"],
@@ -3684,7 +3684,7 @@
 				"moves": [["Knock Off"], ["Heavy Slam"], ["Earthquake", "Drain Punch"], ["Outrage"]]
 			}, {
 				"species": "Guzzlord",
-				"item": ["Choice Band"],
+				"item": ["Leftovers"],
 				"ability": ["Beast Boost"],
 				"evs": {"def": 76, "spd": 252, "spe": 180},
 				"nature": "Careful",
@@ -5232,16 +5232,6 @@
 				"evs": {"hp": 204, "spd": 76, "spe": 212},
 				"nature": "Jolly",
 				"moves": [["Dragon Dance"], ["Rock Blast"], ["Close Combat"], ["Psychic Fangs"]]
-			}]
-		},
-		"zigzagoon": {
-			"sets": [{
-				"species": "Zigzagoon",
-				"item": ["Berry Juice"],
-				"ability": ["Quick Feet"],
-				"evs": {"hp": 132, "atk": 196, "def": 108, "spd": 28, "spe": 36},
-				"nature": "Adamant",
-				"moves": [["Belly Drum"], ["Extreme Speed"], ["Thief"], ["Protect"]]
 			}]
 		},
 		"archen": {
