@@ -322,14 +322,14 @@
 				"species": "Ho-Oh",
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Regenerator"],
-				"evs": {"hp": 248, "208": 208, "spd": 52},
+				"evs": {"hp": 248, "def": 208, "spd": 52},
 				"nature": "Impish",
 				"moves": [["Sacred Fire"], ["Defog"], ["Brave Bird"], ["Toxic", "Thunder Wave", "Whirlwind"]]
 			}, {
 				"species": "Ho-Oh",
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Regenerator"],
-				"evs": {"hp": 248, "208": 208, "spd": 52},
+				"evs": {"hp": 248, "def": 208, "spd": 52},
 				"nature": "Impish",
 				"moves": [["Sacred Fire"], ["Defog"], ["Toxic", "Thunder Wave"], ["Whirlwind"]]
 			}, {
