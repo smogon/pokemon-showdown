@@ -4767,7 +4767,7 @@
 			"sets": [{
 				"species": "Magneton",
 				"item": ["Choice Specs"],
-				"ability": ["Levitate"],
+				"ability": ["Analytic"],
 				"evs": {"def": 4, "spa": 252, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": ["Timid", "Modest"],
