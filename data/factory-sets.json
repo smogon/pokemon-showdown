@@ -375,7 +375,7 @@
 				"species": "Ferrothorn",
 				"item": ["Leftovers"],
 				"ability": ["Iron Barbs"],
-				"evs": {"hp": 252, "def": 252, "spd": 4},
+				"evs": {"hp": 252, "def": 4, "spd": 252},
 				"ivs": {"spe": 0},
 				"nature": "Sassy",
 				"moves": [["Leech Seed"], ["Spikes"], ["Gyro Ball"], ["Knock Off", "Power Whip"]]
