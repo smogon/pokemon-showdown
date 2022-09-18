@@ -578,7 +578,7 @@
 				"species": "Mewtwo",
 				"item": ["Life Orb"],
 				"ability": ["Pressure"],
-				"evs": {"spa": 252, "spd": 4, "spe": 252},
+				"evs": {"def": 4, "spa": 252, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": "Timid",
 				"moves": [["Psystrike"], ["Ice Beam"], ["Fire Blast"], ["Nasty Plot", "Recover", "Shadow Ball"]]
@@ -586,7 +586,7 @@
 				"species": "Mewtwo",
 				"item": ["Expert Belt"],
 				"ability": ["Pressure"],
-				"evs": {"spa": 252, "spd": 4, "spe": 252},
+				"evs": {"def": 4, "spa": 252, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": "Modest",
 				"moves": [["Psystrike"], ["Ice Beam"], ["Fire Blast"], ["Nasty Plot", "Recover", "Shadow Ball"]]
@@ -595,11 +595,18 @@
 		"toxapex": {
 			"sets": [{
 				"species": "Toxapex",
-				"item": ["Rocky Helmet"],
+				"item": ["Rocky Helmet", "Black Sludge"],
 				"ability": ["Regenerator"],
 				"evs": {"hp": 248, "def": 252, "spd": 8},
 				"nature": "Bold",
-				"moves": [["Knock Off"], ["Recover"], ["Haze", "Toxic Spikes"], ["Scald", "Toxic"]]
+				"moves": [["Knock Off"], ["Recover"], ["Haze", "Toxic Spikes"], ["Scald"]]
+      }, {
+				"species": "Toxapex",
+				"item": ["Rocky Helmet", "Black Sludge"],
+				"ability": ["Regenerator"],
+				"evs": {"hp": 248, "def": 252, "spd": 8},
+				"nature": "Impish",
+				"moves": [["Knock Off"], ["Recover"], ["Haze", "Toxic Spikes"], ["Toxic"]]
 			}]
 		},
 		"zamazentacrowned": {
@@ -5155,7 +5162,7 @@
 				"ability": ["Stamina"],
 				"evs": {"hp": 36, "atk": 196, "def": 36, "spe": 236},
 				"nature": "Jolly",
-				"moves": [["Earthquake"], ["Heavy Slam", "Rock Slide"], ["Close Combat"], ["Earthquake"]]
+				"moves": [["Earthquake"], ["Heavy Slam", "Rock Slide"], ["Close Combat"], ["High Horsepower"]]
 			}, {
 				"species": "Mudbray",
 				"item": ["Eviolite"],
