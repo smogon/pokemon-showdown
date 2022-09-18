@@ -659,7 +659,7 @@
 				"species": "Ditto",
 				"item": ["Choice Scarf"],
 				"ability": ["Imposter"],
-				"evs": {"hp": 252, "atk": 8, "def": 252},
+				"evs": {"hp": 252, "atk": 4, "def": 252},
 				"ivs": {"spe": 0},
 				"nature": "Relaxed",
 				"moves": [["Transform"]]
