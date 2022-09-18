@@ -830,6 +830,13 @@
 				"evs": {"hp": 4, "atk": 252, "spe": 252},
 				"nature": ["Jolly", "Adamant"],
 				"moves": [["Knock Off"], ["Triple Axel", "Icicle Crash"], ["Ice Shard"], ["Swords Dance"]]
+      }, {
+        "species": "Weavile",
+				"item": ["Choice Band"],
+				"ability": ["Pressure"],
+				"evs": {"hp": 4, "atk": 252, "spe": 252},
+				"nature": ["Jolly", "Adamant"],
+				"moves": [["Knock Off"], ["Triple Axel", "Icicle Crash"], ["Ice Shard"], ["Low Kick"]]  
 			}]
 		},
 		"clefable": {
@@ -889,7 +896,7 @@
 				"moves": [["Earthquake"], ["Fire Fang"], ["Swords Dance"], ["Scale Shot"]]
 			}, {
 				"species": "Garchomp",
-				"item": ["Leftovers"],
+				"item": ["Leftovers", "Rocky Helmet"],
 				"ability": ["Rough Skin"],
 				"evs": {"hp": 252, "def": 136, "spe": 120},
 				"nature": "Jolly",
@@ -1061,7 +1068,6 @@
 				"item": ["Black Sludge", "Rocky Helmet"],
 				"ability": ["Regenerator"],
 				"evs": {"hp": 252, "def": 252, "spd": 4},
-				"ivs": {"atk": 0},
 				"nature": "Bold",
 				"moves": [["Scald"], ["Recover"], ["Haze"], ["Knock Off", "Toxic Spikes", "Toxic"]]
 			}, {
@@ -1081,7 +1087,7 @@
 				"evs": {"def": 4, "spa": 252, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": "Timid",
-				"moves": [["Shadow Ball"], ["Flamethrower"], ["Trick"], ["Overheat"]]
+				"moves": [["Shadow Ball"], ["Flamethrower"], ["Trick"], ["Fire Blast"]]
 			}, {
 				"species": "Blacephalon",
 				"item": ["Choice Specs"],
@@ -1089,7 +1095,7 @@
 				"evs": {"def": 4, "spa": 252, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": "Timid",
-				"moves": [["Shadow Ball"], ["Flamethrower"], ["Trick"], ["Fire Blast"]]
+				"moves": [["Shadow Ball"], ["Flamethrower"], ["Trick"], ["Overheat"]]
 			}]
 		},
 		"corviknight": {
@@ -1210,7 +1216,7 @@
 				"species": "Volcarona",
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Flame Body"],
-				"evs": {"hp": 4, "spa": 252, "spe": 252},
+				"evs": {"def": 4, "spa": 252, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": "Timid",
 				"moves": [["Quiver Dance"], ["Bug Buzz", "Giga Drain"], ["Flamethrower", "Fire Blast"], ["Psychic"]]
@@ -1333,7 +1339,7 @@
 				"species": "Hippowdon",
 				"item": ["Leftovers"],
 				"ability": ["Sand Stream"],
-				"evs": {"hp": 252, "atk": 4, "spd": 252},
+				"evs": {"hp": 252, "atk": 8, "spd": 248},
 				"nature": "Careful",
 				"moves": [["Earthquake"], ["Slack Off"], ["Stealth Rock"], ["Toxic"]]
 			}]
