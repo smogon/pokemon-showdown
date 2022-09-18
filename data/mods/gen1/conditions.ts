@@ -154,6 +154,8 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 				this.directDamage(damage, pokemon, target);
 				pokemon.removeVolatile('bide');
 				pokemon.removeVolatile('twoturnmove');
+				pokemon.removeVolatile('fly');
+				pokemon.removeVolatile('dig');
 				pokemon.removeVolatile('solarbeam');
 				pokemon.removeVolatile('skullbash');
 				pokemon.removeVolatile('partialtrappinglock');
