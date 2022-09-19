@@ -3540,7 +3540,7 @@ export const PokedexText: {[k: string]: PokedexText} = {
 		name: "Enamorus",
 	},
 	enamorustherian: {
-		name: "Enamorus-Therian"
+		name: "Enamorus-Therian",
 	},
 	missingno: {
 		name: "MissingNo.",
