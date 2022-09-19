@@ -219,6 +219,13 @@ describe('Team Validator', function () {
 		illegal = TeamValidator.get('gen4ou').validateTeam(team);
 		assert(illegal);
 
+		// Shedinja has a different Egg Group (Mineral) than Nincada (Bug); needs to use Nincada's Egg Group
+		team = [
+			{species: 'shedinja', ability: 'wonderguard', moves: ['silverwind', 'gust'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen3ou').validateTeam(team);
+		assert.equal(illegal, null);
+
 		// Chansey can't have Chansey-only egg moves as well as Happiny-only level-up moves
 
 		team = [
