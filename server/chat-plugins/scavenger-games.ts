@@ -393,7 +393,7 @@ const TWISTS: {[k: string]: Twist} = {
 			const currentQuestion = player.currentQuestion;
 
 			if (currentQuestion + 1 === this.questions.length) {
-				this.guesses[player.id] = value.split(',').map((part: string) => part.trim());
+				this.guesses[player.id] = value.split(',').map((part: string) => toID(part));
 
 				this.onComplete(player);
 				return true;
