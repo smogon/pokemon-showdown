@@ -729,24 +729,25 @@ export class TeamValidator {
 			}
 		}
 
-		if (ruleTable.has('obtainablemoves') && species.id === 'keldeo' && set.moves.includes('secretsword') &&
-			this.minSourceGen > 5 && dex.gen <= 7) {
-			problems.push(`${name} has Secret Sword, which is only compatible with Keldeo-Ordinary obtained from Gen 5.`);
-		}
-		const requiresGen3Source = setSources.maxSourceGen() <= 3;
-		if (requiresGen3Source && dex.abilities.get(set.ability).gen === 4 && !species.prevo && dex.gen <= 5) {
-			// Ability Capsule allows this in Gen 6+
-			problems.push(`${name} has a Gen 4 ability and isn't evolved - it can't use moves from Gen 3.`);
-		}
-		const canUseAbilityPatch = dex.gen >= 8 && format.mod !== 'gen8dlc1';
-		if (setSources.isHidden && !canUseAbilityPatch && setSources.maxSourceGen() < 5) {
-			problems.push(`${name} has a Hidden Ability - it can't use moves from before Gen 5.`);
-		}
-		if (
-			species.maleOnlyHidden && setSources.isHidden && setSources.sourcesBefore < 5 &&
-			setSources.sources.every(source => source.charAt(1) === 'E')
-		) {
-			problems.push(`${name} has an unbreedable Hidden Ability - it can't use egg moves.`);
+		if (ruleTable.has('obtainablemoves')) {
+			if (species.id === 'keldeo' && set.moves.includes('secretsword') && this.minSourceGen > 5 && dex.gen <= 7) {
+				problems.push(`${name} has Secret Sword, which is only compatible with Keldeo-Ordinary obtained from Gen 5.`);
+			}
+			const requiresGen3Source = setSources.maxSourceGen() <= 3;
+			if (requiresGen3Source && dex.abilities.get(set.ability).gen === 4 && !species.prevo && dex.gen <= 5) {
+				// Ability Capsule allows this in Gen 6+
+				problems.push(`${name} has a Gen 4 ability and isn't evolved - it can't use moves from Gen 3.`);
+			}
+			const canUseAbilityPatch = dex.gen >= 8 && format.mod !== 'gen8dlc1';
+			if (setSources.isHidden && !canUseAbilityPatch && setSources.maxSourceGen() < 5) {
+				problems.push(`${name} has a Hidden Ability - it can't use moves from before Gen 5.`);
+			}
+			if (
+				species.maleOnlyHidden && setSources.isHidden && setSources.sourcesBefore < 5 &&
+				setSources.sources.every(source => source.charAt(1) === 'E')
+			) {
+				problems.push(`${name} has an unbreedable Hidden Ability - it can't use egg moves.`);
+			}
 		}
 
 		if (teamHas) {
