@@ -1023,7 +1023,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "NFE",
 	},
 	mamoswine: {
-		randomBattleMoves: ["earthquake" "iceshard", "iciclecrash", "stealthrock", "superpower"],
+		randomBattleMoves: ["earthquake", "iceshard", "iciclecrash", "stealthrock", "superpower"],
 		tier: "OU",
 		doublesTier: "DOU",
 	},
