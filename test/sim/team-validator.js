@@ -564,6 +564,14 @@ describe('Team Validator', function () {
 		assert.equal(illegal, null);
 	});
 
+	it.skip('should reject mutually incompatible Dream World moves', function () {
+		const team = [
+			{species: 'spinda', ability: 'contrary', moves: ['superpower', 'fakeout'], evs: {hp: 1}},
+		];
+		const illegal = TeamValidator.get('gen5ou').validateTeam(team);
+		assert.equal(illegal);
+	});
+
 	it('should consider Dream World Abilities as Hidden based on Gen 5 data', function () {
 		let team = [
 			{species: 'kecleon', ability: 'colorchange', moves: ['reflecttype'], evs: {hp: 1}},
