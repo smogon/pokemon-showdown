@@ -436,6 +436,14 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
+	it.skip('should reject Volbeat with both Lunge and Dizzy Punch in Gen 7', function () {
+		const team = [
+			{species: 'volbeat', ability: 'swarm', moves: ['lunge', 'dizzypunch'], evs: {hp: 1}},
+		];
+		const illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
+		assert(illegal);
+	});
+
 	it('should require Hidden Ability status to match event moves', function () {
 		const team = [
 			{species: 'raichu', ability: 'lightningrod', moves: ['extremespeed'], evs: {hp: 1}},
