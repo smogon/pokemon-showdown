@@ -295,17 +295,21 @@ describe('Target Resolution', function () {
 
 	it('should not force charge moves called by another move to target an ally after Ally Switch', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'purrloin', ability: 'prankster', moves: ['copycat', 'sleeptalk']},
-			{species: 'wynaut', moves: ['allyswitch', 'solarbeam']},
+			{species: 'purrloin', ability: 'no guard', moves: ['copycat', 'sleeptalk']},
+			{species: 'wynaut', moves: ['allyswitch', 'fly', 'skullbash']},
 		], [
-			{species: 'swablu', moves: ['sleeptalk']},
-			{species: 'swablu', moves: ['sleeptalk']},
+			{species: 'aron', moves: ['sleeptalk']},
+			{species: 'lairon', moves: ['sleeptalk']},
 		]]);
 
-		battle.makeChoices('move sleeptalk, move solarbeam 1', 'auto');
+		battle.makeChoices('move sleeptalk, move fly 1', 'auto');
 		battle.makeChoices();
 		battle.makeChoices();
-		assert.fullHP(battle.p1.active[0]);
+		battle.makeChoices('move skullbash 1, move sleeptalk', 'auto');
+		battle.makeChoices();
+		battle.makeChoices();
+		// ally switch was used twice, so wynaut will be back where it started
+		assert.fullHP(battle.p1.active[1]);
 	});
 
 	it(`Ally Switch should cause single-target moves to fail if targeting an ally`, function () {
