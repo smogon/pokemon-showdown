@@ -201,8 +201,11 @@ async function getQuestions(
 	} else {
 		const questions = [];
 		for (const category of categories) {
-			if (category === 'all') questions.push(...await database.getQuestions('all', limit, {order}));
-			if (!ALL_CATEGORIES[category]) throw new Chat.ErrorMessage(`"${category}" is an invalid category.`);
+			if (category === 'all') {
+				questions.push(...await database.getQuestions('all', limit, {order}));
+			} else if (!ALL_CATEGORIES[category]) {
+				throw new Chat.ErrorMessage(`"${category}" is an invalid category.`);
+			}
 		}
 		return database.getQuestions(categories.filter(c => c !== 'all'), limit, {order});
 	}
