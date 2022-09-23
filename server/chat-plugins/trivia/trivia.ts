@@ -387,12 +387,12 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 		this.canLateJoin = true;
 
 		this.categories = categories;
-		let category = this.categories
+		const uniqueCategories = new Set(this.categories
 			.map(cat => {
 				if (cat === 'all') return 'All';
 				return ALL_CATEGORIES[CATEGORY_ALIASES[cat] || cat];
-			})
-			.join(' + ');
+			}));
+		let category = [...uniqueCategories].join(' + ');
 		if (isRandomCategory) category = this.room.tr`Random (${category})`;
 
 
