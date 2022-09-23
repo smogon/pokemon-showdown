@@ -76864,7 +76864,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		},
 		eventData: [
 			{generation: 8, level: 60, perfectIVs: 3, moves: ["crosspoison", "dragonpulse", "flamethrower", "dynamaxcannon"]},
-			{generation: 8, level: 100, shiny: true, perfectIVs: 6, moves: ["eternabeam", "dynamaxcannon", "sludgebomb", "flamethrower"]},
+			{generation: 8, level: 100, shiny: true, nature: "Timid", perfectIVs: 6, moves: ["eternabeam", "dynamaxcannon", "sludgebomb", "flamethrower"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
