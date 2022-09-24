@@ -2461,6 +2461,9 @@ export class Battle {
 		case 'megaEvo':
 			this.actions.runMegaEvo(action.pokemon);
 			break;
+		case 'megaEvoY':
+			this.actions.runMegaEvoY(action.pokemon);
+			break;
 		case 'runDynamax':
 			action.pokemon.addVolatile('dynamax');
 			action.pokemon.side.dynamaxUsed = true;

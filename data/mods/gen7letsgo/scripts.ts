@@ -43,4 +43,50 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 		return stats;
 	},
+	
+	actions: {
+		// mega evolution in LGPE does not require anything to be held
+		canMegaEvo(pokemon: Pokemon) {
+			const species = pokemon.baseSpecies;
+			for (let id in species.otherFormes) {
+				let forme = species.otherFormes[id];
+				if (forme.includes("-Mega") && forme !== pokemon.name) {
+					return forme;
+				}
+			}
+			return null;
+		},
+		
+		// lets player select either Charizard or Mewtwo mega evolution during battle
+		canMegaEvoY(pokemon: Pokemon) {
+			const species = pokemon.baseSpecies;
+			for (let id in species.otherFormes) {
+				let forme = species.otherFormes[id];
+				if (forme.includes("-Mega-Y") && forme !== pokemon.name) {
+					return forme;
+				}
+			}
+			return null;
+		},
+		
+		runMegaEvoY(pokemon: Pokemon) {
+			const speciesid = this.canMegaEvoY(pokemon);
+			if (!speciesid) return false;
+
+			pokemon.formeChange(speciesid, pokemon.getItem(), true);
+
+			// Limit one mega evolution
+			const wasMega = pokemon.canMegaEvo;
+			for (const ally of pokemon.side.pokemon) {
+				if (wasMega) {
+					ally.canMegaEvo = null;
+				} else {
+					ally.canUltraBurst = null;
+				}
+			}
+
+			this.battle.runEvent('AfterMega', pokemon);
+			return true;
+		}
+	}
 };

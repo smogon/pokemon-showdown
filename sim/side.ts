@@ -396,7 +396,7 @@ export class Side {
 		return this.choice.actions.length >= this.active.length;
 	}
 
-	chooseMove(moveText?: string | number, targetLoc = 0, megaDynaOrZ: 'mega' | 'zmove' | 'ultra' | 'dynamax' | '' = '') {
+	chooseMove(moveText?: string | number, targetLoc = 0, megaDynaOrZ: 'mega' | 'megay' | 'zmove' | 'ultra' | 'dynamax' | '' = '') {
 		if (this.requestState !== 'move') {
 			return this.emitChoiceError(`Can't move: You need a ${this.requestState} response`);
 		}
@@ -578,6 +578,7 @@ export class Side {
 		// Mega evolution
 
 		const mega = (megaDynaOrZ === 'mega');
+		const megay = (megaDynaOrZ === 'megay');
 		if (mega && !pokemon.canMegaEvo) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve`);
 		}
@@ -614,6 +615,7 @@ export class Side {
 			targetLoc,
 			moveid,
 			mega: mega || ultra,
+			megay: megay,
 			zmove: zMove,
 			maxMove: maxMove ? maxMove.id : undefined,
 		});
@@ -623,6 +625,7 @@ export class Side {
 		}
 
 		if (mega) this.choice.mega = true;
+		if (megay) this.choice.megay = true;
 		if (ultra) this.choice.ultra = true;
 		if (zMove) this.choice.zMove = true;
 		if (dynamax) this.choice.dynamax = true;
@@ -889,9 +892,12 @@ export class Side {
 			switch (choiceType) {
 			case 'move':
 				const original = data;
+				if (data.endsWith(' mega megay')) {
+					return this.emitChoiceError(`Cannot Mega Evolve into X and Y: Please uncheck one box`);
+				}
 				const error = () => this.emitChoiceError(`Conflicting arguments for "move": ${original}`);
 				let targetLoc: number | undefined;
-				let megaDynaOrZ: 'mega' | 'zmove' | 'ultra' | 'dynamax' | '' = '';
+				let megaDynaOrZ: 'mega' | 'megay' | 'zmove' | 'ultra' | 'dynamax' | '' = '';
 				while (true) {
 					// If data ends with a number, treat it as a target location.
 					// We need to special case 'Conversion 2' so it doesn't get
@@ -905,6 +911,10 @@ export class Side {
 						if (megaDynaOrZ) return error();
 						megaDynaOrZ = 'mega';
 						data = data.slice(0, -5);
+					} else if (data.endsWith(' megay')) {
+						if (megaDynaOrZ) return error();
+						megaDynaOrZ = 'megay';
+						data = data.slice(0, -6);
 					} else if (data.endsWith(' zmove')) {
 						if (megaDynaOrZ) return error();
 						megaDynaOrZ = 'zmove';

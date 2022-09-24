@@ -244,6 +244,7 @@ export class Pokemon {
 	abilityOrder: number;
 
 	canMegaEvo: string | null | undefined;
+	canMegaEvoY: string | null | undefined;
 	canUltraBurst: string | null | undefined;
 	readonly canGigantamax: string | null;
 
@@ -438,6 +439,7 @@ export class Pokemon {
 		this.abilityOrder = 0;
 
 		this.canMegaEvo = this.battle.actions.canMegaEvo(this);
+		this.canMegaEvoY = this.battle.actions.canMegaEvoY(this);
 		this.canUltraBurst = this.battle.actions.canUltraBurst(this);
 		this.canGigantamax = this.baseSpecies.canGigantamax || null;
 
@@ -986,6 +988,7 @@ export class Pokemon {
 			trapped?: boolean,
 			maybeTrapped?: boolean,
 			canMegaEvo?: boolean,
+			canMegaEvoY?: boolean,
 			canUltraBurst?: boolean,
 			canZMove?: AnyObject | null,
 			canDynamax?: boolean,
@@ -1012,6 +1015,7 @@ export class Pokemon {
 
 		if (!lockedMove) {
 			if (this.canMegaEvo) data.canMegaEvo = true;
+			if (this.canMegaEvoY) data.canMegaEvoY = true;
 			if (this.canUltraBurst) data.canUltraBurst = true;
 			const canZMove = this.battle.actions.canZMove(this);
 			if (canZMove) data.canZMove = canZMove;
