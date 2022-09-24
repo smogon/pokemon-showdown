@@ -48,8 +48,8 @@ export const Scripts: ModdedBattleScriptsData = {
 		// mega evolution in LGPE does not require anything to be held
 		canMegaEvo(pokemon: Pokemon) {
 			const species = pokemon.baseSpecies;
-			for (let id in species.otherFormes) {
-				let forme = species.otherFormes[id];
+			for (const id in species.otherFormes) {
+				const forme = species.otherFormes[id];
 				if (forme.includes("-Mega") && forme !== pokemon.name) {
 					return forme;
 				}
