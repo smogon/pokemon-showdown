@@ -1721,7 +1721,6 @@
 				"item": ["Choice Specs"],
 				"ability": ["Levitate"],
 				"evs": {"hp": 4, "spa": 252, "spe": 252},
-				"ivs": {"atk": 0},
 				"nature": ["Timid"],
 				"moves": [["Dark Pulse"], ["Draco Meteor"], ["Flamethrower"], ["Roost", "U-turn"]]
 			}, {
@@ -1729,7 +1728,6 @@
 				"item": ["Choice Scarf"],
 				"ability": ["Levitate"],
 				"evs": {"hp": 4, "spa": 252, "spe": 252},
-				"ivs": {"atk": 0},
 				"nature": ["Timid", "Modest"],
 				"moves": [["Dark Pulse"], ["Draco Meteor"], ["U-turn"], ["Defog", "Fire Blast", "Roost"]]
 			}]
