@@ -36,6 +36,7 @@ export interface ChosenAction {
 	index?: number; // the chosen index in Team Preview
 	side?: Side; // the action's side
 	mega?: boolean | null; // true if megaing or ultra bursting
+	megay?: boolean | null; // true if mega y
 	zmove?: string; // if zmoving, the name of the zmove
 	maxMove?: string; // if dynamaxed, the name of the max move
 	priority?: number; // priority of the action
@@ -51,6 +52,7 @@ export interface Choice {
 	switchIns: Set<number>; // indexes of pokemon chosen to switch in
 	zMove: boolean; // true if a Z-move has already been selected
 	mega: boolean; // true if a mega evolution has already been selected
+	megay: boolean; // true if a mega evolution y has already been selected
 	ultra: boolean; // true if an ultra burst has already been selected
 	dynamax: boolean; // true if a dynamax has already been selected
 }
