@@ -95,15 +95,16 @@ describe('Transform', function () {
 		assert.notEqual(battle.p1.active[0].species, battle.p2.active[0].species);
 	});
 
-	it('should fail against Pokemon with Illusion active', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Ditto", ability: 'limber', moves: ['transform']}]});
-		battle.setPlayer('p2', {team: [
-			{species: "Zoroark", ability: 'illusion', moves: ['rest']},
+	it(`should fail if either the user or target have Illusion active`, function () {
+		battle = common.createBattle([[
+			{species: 'Ditto', ability: 'limber', moves: ['transform']},
+		], [
+			{species: "Zoroark", ability: 'illusion', moves: ['transform']},
 			{species: "Mewtwo", ability: 'pressure', moves: ['rest']},
-		]});
-		battle.makeChoices('move transform', 'move rest');
-		assert.notEqual(battle.p1.active[0].species, battle.p2.active[0].species);
+		]]);
+		battle.makeChoices();
+		assert.species(battle.p1.active[0], 'Ditto');
+		assert.species(battle.p2.active[0], 'Zoroark');
 	});
 
 	it('should fail against tranformed Pokemon', function () {
