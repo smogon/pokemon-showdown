@@ -49,7 +49,7 @@
 				"ability": ["Dark Aura"],
 				"evs": {"atk": 4, "spa": 252, "spe": 252},
 				"nature": "Hasty",
-				"moves": [["Dark Pulse"], ["Oblivion Wing"], ["Sucker Punch"], ["Taunt", "Rock Slide"]]
+				"moves": [["Dark Pulse"], ["Oblivion Wing"], ["Sucker Punch"], ["Taunt"]]
 			}, {
 				"species": "Yveltal",
 				"item": ["Choice Scarf"],
@@ -90,7 +90,7 @@
 				"evs": {"hp": 4, "spa": 252, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": "Timid",
-				"moves": [["Meteor Beam"], ["Dynamax Cannon"], ["Flamethrower"], ["Sludge Bomb", "Substitute"]]
+				"moves": [["Meteor Beam"], ["Dynamax Cannon"], ["Flamethrower"], ["Sludge Bomb", "Recover"]]
 			}, {
 				"species": "Eternatus",
 				"item": ["Power Herb"],
@@ -198,7 +198,7 @@
 				"evs": {"hp": 252, "def": 252, "spd": 4},
 				"ivs": {"atk": 0},
 				"nature": "Bold",
-				"moves": [["Calm Mind"], ["Scald"], ["Rest"], ["Ice Beam", "Block"]]
+				"moves": [["Calm Mind"], ["Scald"], ["Rest"], ["Ice Beam"]]
 			}, {
 				"species": "Kyogre",
 				"item": ["Choice Specs"],
@@ -354,13 +354,6 @@
 				"item": ["Leftovers"],
 				"ability": ["Iron Barbs"],
 				"evs": {"hp": 252, "def": 252, "spd": 4},
-				"nature": "Impish",
-				"moves": [["Leech Seed"], ["Spikes"], ["Knock Off"], ["Curse"]]
-			}, {
-				"species": "Ferrothorn",
-				"item": ["Leftovers"],
-				"ability": ["Iron Barbs"],
-				"evs": {"hp": 252, "def": 252, "spd": 4},
 				"ivs": {"atk": 0},
 				"nature": "Bold",
 				"moves": [["Leech Seed"], ["Spikes"], ["Iron Defense"], ["Body Press"]]
@@ -450,7 +443,15 @@
 				"evs": {"hp": 252, "def": 16, "spe": 240},
 				"ivs": {"atk": 0},
 				"nature": "Timid",
-				"moves": [["Ice Beam"], ["Roost"], ["Will-O-Wisp", "Thunder Wave"], ["Hex", "Roar", "Defog"]]
+				"moves": [["Ice Beam"], ["Roost"], ["Thunder Wave"], ["Hex"]]
+			}, {
+				"species": "Lunala",
+				"item": ["Heavy-Duty Boots"],
+				"ability": ["Shadow Shield"],
+				"evs": {"hp": 252, "def": 16, "spe": 240},
+				"ivs": {"atk": 0},
+				"nature": "Timid",
+				"moves": [["Ice Beam"], ["Roost"], ["Will-O-Wisp"], ["Roar", "Defog"]]
 			}, {
 				"species": "Lunala",
 				"item": ["Power Herb"],
@@ -665,7 +666,7 @@
 				"evs": {"hp": 248, "spd": 240, "spe": 20},
 				"ivs": {"atk": 0},
 				"nature": "Calm",
-				"moves": [["Magma Storm"], ["Earth Power"], ["Taunt"], ["Toxic", "Roar", "Stealth Rock"]]
+				"moves": [["Magma Storm"], ["Earth Power"], ["Taunt"], ["Toxic", "Stealth Rock"]]
 			}]
 		},
 		"tyranitar": {
