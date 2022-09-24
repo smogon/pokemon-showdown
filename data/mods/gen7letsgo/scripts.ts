@@ -60,8 +60,8 @@ export const Scripts: ModdedBattleScriptsData = {
 		// lets player select either Charizard or Mewtwo mega evolution during battle
 		canMegaEvoY(pokemon: Pokemon) {
 			const species = pokemon.baseSpecies;
-			for (let id in species.otherFormes) {
-				let forme = species.otherFormes[id];
+			for (const id in species.otherFormes) {
+				const forme = species.otherFormes[id];
 				if (forme.includes("-Mega-Y") && forme !== pokemon.name) {
 					return forme;
 				}
