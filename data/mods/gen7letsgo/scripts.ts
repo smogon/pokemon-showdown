@@ -43,7 +43,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 		return stats;
 	},
-	
+
 	actions: {
 		// mega evolution in LGPE does not require anything to be held
 		canMegaEvo(pokemon: Pokemon) {
@@ -56,7 +56,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return null;
 		},
-		
+
 		// lets player select either Charizard or Mewtwo mega evolution during battle
 		canMegaEvoY(pokemon: Pokemon) {
 			const species = pokemon.baseSpecies;
@@ -68,7 +68,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return null;
 		},
-		
+
 		runMegaEvoY(pokemon: Pokemon) {
 			const speciesid = this.canMegaEvoY(pokemon);
 			if (!speciesid) return false;
@@ -87,6 +87,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			this.battle.runEvent('AfterMega', pokemon);
 			return true;
-		}
-	}
+		},
+	},
 };

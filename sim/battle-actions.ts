@@ -1765,7 +1765,7 @@ export class BattleActions {
 		}
 		return null;
 	}
-	
+
 	canMegaEvoY(pokemon: Pokemon) {
 		// implemented in data/mods/gen7letsgo/scripts
 		return null;
@@ -1799,7 +1799,7 @@ export class BattleActions {
 		this.battle.runEvent('AfterMega', pokemon);
 		return true;
 	}
-	
+
 	runMegaEvoY(pokemon: Pokemon) {
 		// implemented in data/mods/gen7letsgo/scripts
 		return false;
