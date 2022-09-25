@@ -1618,13 +1618,28 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			usedSpecies = Utils.deepClone(mod.species.get(usedSpecies.baseSpecies));
 			usedSpeciesLearnset = Utils.deepClone(mod.species.getLearnset(usedSpecies.id) || {});
 		}
-		const lsetData = new Set(Object.keys(usedSpeciesLearnset));
+		const lsetData = new Set();
+		for (const move in usedSpeciesLearnset) {
+			let learnset = mod.species.getLearnset(usedSpecies.id);
+			if (!learnset) return {error: `'${usedSpecies.id}' does not have a learnset.`};
+			let sources = learnset[move];
+			for (let learned of sources) {
+				const sourceGen = parseInt(learned.charAt(0));
+				if (sourceGen <= mod.gen) lsetData.add(move);
+			}
+		}
 
 		while (usedSpecies.prevo) {
 			usedSpecies = Utils.deepClone(mod.species.get(usedSpecies.prevo));
 			usedSpeciesLearnset = Utils.deepClone(mod.species.getLearnset(usedSpecies.id));
 			for (const move in usedSpeciesLearnset) {
-				lsetData.add(move);
+				let learnset = mod.species.getLearnset(usedSpecies.id);
+				if (!learnset) return {error: `'${usedSpecies.id}' does not have a learnset.`};
+				let sources = learnset[move];
+				for (let learned of sources) {
+					const sourceGen = parseInt(learned.charAt(0));
+					if (sourceGen <= mod.gen) lsetData.add(move);
+				}
 			}
 		}
 
