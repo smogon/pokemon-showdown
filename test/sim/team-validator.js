@@ -444,6 +444,14 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
+	it.skip('should accept this chainbreed on Toxicroak', function () {
+		const team = [
+			{species: 'toxicroak', ability: 'dryskin', moves: ['bulletpunch', 'crosschop', 'fakeout'], evs: {hp: 4}},
+		];
+		const illegal = TeamValidator.get('gen5ou').validateTeam(team);
+		assert.equal(illegal, null);
+	});
+
 	it('should require Hidden Ability status to match event moves', function () {
 		const team = [
 			{species: 'raichu', ability: 'lightningrod', moves: ['extremespeed'], evs: {hp: 1}},
