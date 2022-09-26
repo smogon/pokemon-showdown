@@ -49,7 +49,7 @@
 				"ability": ["Dark Aura"],
 				"evs": {"atk": 4, "spa": 252, "spe": 252},
 				"nature": "Hasty",
-				"moves": [["Dark Pulse"], ["Oblivion Wing"], ["Sucker Punch"], ["Taunt", "Rock Slide"]]
+				"moves": [["Dark Pulse"], ["Oblivion Wing"], ["Sucker Punch"], ["Taunt"]]
 			}, {
 				"species": "Yveltal",
 				"item": ["Choice Scarf"],
@@ -90,7 +90,7 @@
 				"evs": {"hp": 4, "spa": 252, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": "Timid",
-				"moves": [["Meteor Beam"], ["Dynamax Cannon"], ["Flamethrower"], ["Sludge Bomb", "Substitute"]]
+				"moves": [["Meteor Beam"], ["Dynamax Cannon"], ["Flamethrower"], ["Sludge Bomb", "Recover"]]
 			}, {
 				"species": "Eternatus",
 				"item": ["Power Herb"],
@@ -198,7 +198,7 @@
 				"evs": {"hp": 252, "def": 252, "spd": 4},
 				"ivs": {"atk": 0},
 				"nature": "Bold",
-				"moves": [["Calm Mind"], ["Scald"], ["Rest"], ["Ice Beam", "Block"]]
+				"moves": [["Calm Mind"], ["Scald"], ["Rest"], ["Ice Beam"]]
 			}, {
 				"species": "Kyogre",
 				"item": ["Choice Specs"],
@@ -354,13 +354,6 @@
 				"item": ["Leftovers"],
 				"ability": ["Iron Barbs"],
 				"evs": {"hp": 252, "def": 252, "spd": 4},
-				"nature": "Impish",
-				"moves": [["Leech Seed"], ["Spikes"], ["Knock Off"], ["Curse"]]
-			}, {
-				"species": "Ferrothorn",
-				"item": ["Leftovers"],
-				"ability": ["Iron Barbs"],
-				"evs": {"hp": 252, "def": 252, "spd": 4},
 				"ivs": {"atk": 0},
 				"nature": "Bold",
 				"moves": [["Leech Seed"], ["Spikes"], ["Iron Defense"], ["Body Press"]]
@@ -450,7 +443,15 @@
 				"evs": {"hp": 252, "def": 16, "spe": 240},
 				"ivs": {"atk": 0},
 				"nature": "Timid",
-				"moves": [["Ice Beam"], ["Roost"], ["Will-O-Wisp", "Thunder Wave"], ["Hex", "Roar", "Defog"]]
+				"moves": [["Ice Beam"], ["Roost"], ["Thunder Wave"], ["Hex"]]
+			}, {
+				"species": "Lunala",
+				"item": ["Heavy-Duty Boots"],
+				"ability": ["Shadow Shield"],
+				"evs": {"hp": 252, "def": 16, "spe": 240},
+				"ivs": {"atk": 0},
+				"nature": "Timid",
+				"moves": [["Ice Beam"], ["Roost"], ["Will-O-Wisp"], ["Roar", "Defog"]]
 			}, {
 				"species": "Lunala",
 				"item": ["Power Herb"],
@@ -614,17 +615,9 @@
 				"species": "Zamazenta-Crowned",
 				"item": ["Rusted Shield"],
 				"ability": ["Dauntless Shield"],
-				"evs": {"hp": 252, "def": 64, "spd": 196},
+				"evs": {"hp": 248, "def": 64, "spd": 196},
 				"nature": "Careful",
 				"moves": [["Behemoth Bash"], ["Close Combat"], ["Rest"], ["Sleep Talk", "Howl"]]
-			}, {
-				"species": "Zamazenta-Crowned",
-				"item": ["Rusted Shield"],
-				"ability": ["Dauntless Shield"],
-				"evs": {"hp": 252, "def": 64, "spd": 196},
-				"ivs": {"spe": 0},
-				"nature": "Sassy",
-				"moves": [["Behemoth Bash"], ["Close Combat"], ["Rest"], ["Metal Burst"]]
 			}]
 		},
 		"zarude": {
@@ -670,10 +663,10 @@
 				"species": "Heatran",
 				"item": ["Leftovers"],
 				"ability": ["Flash Fire"],
-				"evs": {"hp": 244, "spd": 240, "spe": 20},
+				"evs": {"hp": 248, "spd": 240, "spe": 20},
 				"ivs": {"atk": 0},
 				"nature": "Calm",
-				"moves": [["Magma Storm"], ["Earth Power"], ["Taunt"], ["Toxic", "Roar", "Stealth Rock"]]
+				"moves": [["Magma Storm"], ["Earth Power"], ["Taunt"], ["Toxic", "Stealth Rock"]]
 			}]
 		},
 		"tyranitar": {
@@ -962,7 +955,6 @@
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Regenerator"],
 				"evs": {"hp": 4, "spa": 252, "spe": 252},
-				"ivs": {"atk": 0},
 				"nature": "Timid",
 				"moves": [["Hurricane"], ["Knock Off"], ["Focus Blast", "Heat Wave"], ["Nasty Plot"]]
 			}, {
@@ -970,7 +962,6 @@
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Regenerator"],
 				"evs": {"hp": 252, "spa": 4, "spe": 252},
-				"ivs": {"atk": 0},
 				"nature": "Timid",
 				"moves": [["Hurricane"], ["Knock Off"], ["U-turn"], ["Defog"]]
 			}]
@@ -1068,8 +1059,16 @@
 				"item": ["Black Sludge", "Rocky Helmet"],
 				"ability": ["Regenerator"],
 				"evs": {"hp": 252, "def": 252, "spd": 4},
+        "ivs": {"atk": 0},
 				"nature": "Bold",
-				"moves": [["Scald"], ["Recover"], ["Haze"], ["Knock Off", "Toxic Spikes", "Toxic"]]
+				"moves": [["Scald"], ["Recover"], ["Haze"], ["Toxic Spikes", "Toxic"]]
+			}, {
+				"species": "Toxapex",
+				"item": ["Black Sludge", "Rocky Helmet"],
+				"ability": ["Regenerator"],
+				"evs": {"hp": 252, "def": 252, "spd": 4},
+				"nature": "Relaxed",
+				"moves": [["Scald"], ["Recover"], ["Haze"], ["Knock Off"]]
 			}, {
 				"species": "Toxapex",
 				"item": ["Black Sludge", "Rocky Helmet"],
@@ -1722,7 +1721,6 @@
 				"item": ["Choice Specs"],
 				"ability": ["Levitate"],
 				"evs": {"hp": 4, "spa": 252, "spe": 252},
-				"ivs": {"atk": 0},
 				"nature": ["Timid"],
 				"moves": [["Dark Pulse"], ["Draco Meteor"], ["Flamethrower"], ["Roost", "U-turn"]]
 			}, {
@@ -1730,7 +1728,6 @@
 				"item": ["Choice Scarf"],
 				"ability": ["Levitate"],
 				"evs": {"hp": 4, "spa": 252, "spe": 252},
-				"ivs": {"atk": 0},
 				"nature": ["Timid", "Modest"],
 				"moves": [["Dark Pulse"], ["Draco Meteor"], ["U-turn"], ["Defog", "Fire Blast", "Roost"]]
 			}]
@@ -1848,7 +1845,7 @@
 				"species": "Zarude",
 				"item": ["Choice Scarf"],
 				"ability": ["Leaf Guard"],
-				"evs": {"hp": 4, "atk": 252, "spe": 252},
+				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Jolly",
 				"moves": [["Darkest Lariat"], ["Power Whip"], ["U-turn"], ["Close Combat"]]
 			}]
@@ -1869,7 +1866,7 @@
 				"species": "Conkeldurr",
 				"item": ["Flame Orb"],
 				"ability": ["Guts"],
-				"evs": {"hp": 4, "atk": 252, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Close Combat", "Drain Punch"], ["Facade"], ["Mach Punch"], ["Knock Off"]]
 			}]
@@ -1889,14 +1886,14 @@
 				"species": "Gyarados",
 				"item": ["Heavy-Duty Boots", "Mystic Water", "Lum Berry"],
 				"ability": ["Moxie"],
-				"evs": {"hp": 4, "atk": 252, "spe": 252},
+				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Waterfall"], ["Dragon Dance"], ["Ice Fang"], ["Power Whip"]]
 			}, {
 				"species": "Gyarados",
 				"item": ["Leftovers"],
 				"ability": ["Moxie"],
-				"evs": {"hp": 4, "atk": 252, "spe": 252},
+				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Substitute"], ["Dragon Dance"], ["Bounce"], ["Waterfall"]]
 			}]
@@ -1917,7 +1914,6 @@
 				"item": ["Assault Vest"],
 				"ability": ["Regenerator"],
 				"evs": {"hp": 252, "spa": 16, "spd": 240},
-				"ivs": {"atk": 0},
 				"nature": "Calm",
 				"moves": [["Future Sight", "Ice Beam"], ["Psyshock"], ["Shell Side Arm"], ["Flamethrower"]]
 			}, {
@@ -1953,7 +1949,7 @@
 				"species": "Hatterene",
 				"item": ["Leftovers"],
 				"ability": ["Magic Bounce"],
-				"evs": {"hp": 252, "def": 244, "spa": 12},
+				"evs": {"hp": 252, "def": 244, "spe": 12},
 				"ivs": {"atk": 0},
 				"nature": "Bold",
 				"moves": [["Calm Mind"], ["Draining Kiss"], ["Psyshock", "Psychic"], ["Mystical Fire"]]
@@ -1964,7 +1960,7 @@
 				"species": "Jirachi",
 				"item": ["Leftovers"],
 				"ability": ["Serene Grace"],
-				"evs": {"hp": 4, "atk": 252, "spe": 252},
+				"evs": {"hp": 252, "atk": 4, "spe": 252},
 				"nature": "Jolly",
 				"moves": [["Iron Head"], ["Substitute"], ["Fire Punch"], ["Toxic"]]
 			}, {
@@ -2168,6 +2164,7 @@
 				"item": ["Power Herb"],
 				"ability": ["Prism Armor"],
 				"evs": {"hp": 4, "spa": 252, "spe": 252},
+        "ivs": {"atk": 0},
 				"nature": "Modest",
 				"moves": [["Photon Geyser"], ["Heat Wave"], ["Meteor Beam"], ["Autotomize", "Stealth Rock"]]
 			}, {
@@ -2175,6 +2172,7 @@
 				"item": ["Colbur Berry"],
 				"ability": ["Prism Armor"],
 				"evs": {"hp": 252, "def": 72, "spa": 156, "spe": 28},
+        "ivs": {"atk": 0},
 				"nature": "Bold",
 				"moves": [["Photon Geyser"], ["Heat Wave"], ["Calm Mind"], ["Moonlight"]]
 			}]
@@ -2338,7 +2336,6 @@
 				"item": ["Float Stone", "Leftovers"],
 				"ability": ["Storm Drain"],
 				"evs": {"hp": 252, "def": 84, "spd": 172},
-				"ivs": {"atk": 0},
 				"nature": "Sassy",
 				"moves": [["Scald", "Ice Beam"], ["Earthquake"], ["Recover"], ["Toxic"]]
 			}]
@@ -3666,17 +3663,6 @@
 				"moves": [["Stone Edge"], ["Dual Wingbeat", "Aqua Tail"], ["Earthquake"], ["Dragon Dance"]]
 			}]
 		},
-		"blastoise": {
-			"sets": [{
-				"species": "Blastoise",
-				"item": ["White Herb"],
-				"ability": ["Torrent"],
-				"evs": {"hp": 4, "spa": 252, "spe": 252},
-				"ivs": {"atk": 0},
-				"nature": "Modest",
-				"moves": [["Shell Smash"], ["Surf"], ["Dark Pulse"], ["Ice Beam", "Substitute"]]
-			}]
-		},
 		"diancie": {
 			"sets": [{
 				"species": "Diancie",
@@ -4034,7 +4020,7 @@
 				"ability": ["Moxie"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Jolly",
-				"moves": [["Knock Off"], ["Close Combat", "High Jump Kick"], ["Dragon Dance"], ["Iron Head"]]
+				"moves": [["Knock Off"], ["Close Combat"], ["Dragon Dance"], ["Iron Head"]]
 			}, {
 				"species": "Scrafty",
 				"item": ["Choice Band"],
@@ -4979,14 +4965,7 @@
 				"ability": ["Arena Trap"],
 				"evs": {"hp": 36, "atk": 156, "spd": 76, "spe": 236},
 				"nature": "Jolly",
-				"moves": [["Earthquake"], ["Beat Up"], ["Earth Power"], ["Final Gambit"]]
-			}, {
-				"species": "Diglett",
-				"item": ["Eviolite"],
-				"ability": ["Arena Trap"],
-				"evs": {"hp": 36, "atk": 156, "spd": 76, "spe": 236},
-				"nature": "Jolly",
-				"moves": [["Earthquake"], ["Beat Up"], ["Stealth Rock"], ["Final Gambit", "Earth Power"]]
+				"moves": [["Earthquake"], ["Beat Up"], ["Stealth Rock"], ["Final Gambit", "Memento"]]
 			}, {
 				"species": "Diglett",
 				"item": ["Life Orb"],
@@ -5242,7 +5221,7 @@
 				"species": "Tyrunt",
 				"item": ["Eviolite"],
 				"ability": ["Strong Jaw"],
-				"evs": {"hp": 204, "spd": 76, "spe": 212},
+				"evs": {"atk": 204, "spd": 76, "spe": 212},
 				"nature": "Jolly",
 				"moves": [["Dragon Dance"], ["Rock Blast"], ["Close Combat"], ["Psychic Fangs"]]
 			}]
