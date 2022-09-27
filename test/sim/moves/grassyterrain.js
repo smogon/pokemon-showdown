@@ -122,15 +122,15 @@ describe('Grassy Terrain', function () {
 		battle.makeChoices(); // KO Neutralizing Gas
 		battle.makeChoices(); // Switch
 
-		// Kill turns with Wynaut and Grookey
-		for (let i = 0; i < 5; i++) {
+		// Kill turns with Wynaut and Grookey until turn 5
+		for (let i = 0; i < 4; i++) {
 			battle.makeChoices();
 		}
 
-		assert(battle.field.isTerrain('grassyterrain'), `Grassy Terrain should end turn 6, despite being set turn 1.`);
+		assert(battle.field.isTerrain('grassyterrain'), `Grassy Terrain should still be active turn 5, ending turn 6.`);
 	});
 
-	it.skip(`should not skip healing Pokemon if it was set during the time it would heal Pokemon`, function () {
+	it.skip(`should not skip healing Pokemon if it was set during the block it would heal Pokemon`, function () {
 		battle = common.createBattle([[
 			{species: 'coalossal', ability: 'grassysurge', moves: ['sleeptalk', 'rockthrow']},
 		], [
