@@ -75,7 +75,7 @@
   "devDependencies": {
     "@types/better-sqlite3": "^7.4.0",
     "@types/cloud-env": "^0.2.2",
-    "@types/node": "^14.18.31",
+    "@types/node": "^14.17.12",
     "@types/node-static": "^0.7.7",
     "@types/nodemailer": "^6.4.4",
     "@types/pg": "^8.6.1",
