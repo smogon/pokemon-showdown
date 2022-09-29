@@ -24,12 +24,14 @@ type PokemonSlot = '' | string & {__isSlot: true};
 interface AnyObject {[k: string]: any}
 
 type GenderName = 'M' | 'F' | 'N' | '';
-type StatIDExceptHP = 'atk' | 'def' | 'spa' | 'spd' | 'spe';
-type StatID = 'hp' | StatIDExceptHP;
+const _statIDsExceptHP = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
+const _statIDs = [..._statIDsExceptHP, 'hp'] as const;
 namespace Stats {
-	export const statIDsExceptHP: readonly StatIDExceptHP[] = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
-	export const statIDs: readonly StatID[] = [...statIDsExceptHP, 'hp'] as const;
+	export const statIDsExceptHP = _statIDsExceptHP;
+	export const statIDs = _statIDs;
 }
+type StatIDExceptHP = typeof _statIDsExceptHP[number];
+type StatID = typeof _statIDs[number];
 type StatsExceptHPTable = {[stat in StatIDExceptHP]: number};
 type StatsTable = {[stat in StatID]: number};
 type SparseStatsTable = Partial<StatsTable>;
