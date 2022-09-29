@@ -516,7 +516,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 			}
 			if (statsLowered) {
-				this.add('-ability', target, 'Competitive');
+				if (target.boosts.spa < 6) {
+					this.add('-ability', target, 'Competitive');
+				}
 				this.boost({spa: 2}, target, target, null, true);
 			}
 		},
@@ -706,7 +708,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 			}
 			if (statsLowered) {
-				this.add('-ability', target, 'Defiant');
+				if (target.boosts.atk < 6) {
+					this.add('-ability', target, 'Defiant');
+				}
 				this.boost({atk: 2}, target, target, null, true);
 			}
 		},
