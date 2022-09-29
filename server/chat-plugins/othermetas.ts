@@ -366,8 +366,7 @@ export const commands: Chat.ChatCommands = {
 		if (!(tier in boosts)) return this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 		const boost = boosts[tier as TierShiftTiers];
 		species.bst = species.baseStats.hp;
-		for (const statName of Stats.statIDs) {
-			if (statName === 'hp') continue;
+		for (const statName of Stats.statIDsExceptHP) {
 			if (dex.gen === 1 && statName === 'spd') continue;
 			species.baseStats[statName] = Utils.clampIntRange(species.baseStats[statName] + boost, 1, 255);
 			species.bst += species.baseStats[statName];
