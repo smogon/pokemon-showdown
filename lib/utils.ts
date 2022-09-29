@@ -153,7 +153,6 @@ export function visualize(value: any, depth = 0): string {
 
 /**
  * Compares two variables; intended to be used as a smarter comparator.
- * The two variables must be the same type (TypeScript will not check this).
  *
  * - Numbers are sorted low-to-high, use `-val` to reverse
  * - Strings are sorted A to Z case-semi-insensitively, use `{reverse: val}` to reverse
@@ -162,25 +161,27 @@ export function visualize(value: any, depth = 0): string {
  *
  * In other words: `[num, str]` will be sorted A to Z, `[num, {reverse: str}]` will be sorted Z to A.
  */
-export function compare(a: Comparable, b: Comparable): number {
-	if (typeof a === 'number') {
-		return a - (b as number);
+export function compare<T extends Comparable>(a: T, b: T): number {
+	if (typeof a !== typeof b) throw new Error(`Passed values ${a} and ${b} must be of same type`);
+
+	if (typeof a === 'number' && typeof b === 'number') {
+		return a - b;
 	}
-	if (typeof a === 'string') {
-		return a.localeCompare(b as string);
+	if (typeof a === 'string' && typeof b === "string") {
+		return a.localeCompare(b);
 	}
 	if (typeof a === 'boolean') {
 		return (a ? 1 : 2) - (b ? 1 : 2);
 	}
-	if (Array.isArray(a)) {
+	if (Array.isArray(a) && Array.isArray(b)) {
 		for (let i = 0; i < a.length; i++) {
-			const comparison = compare(a[i], (b as Comparable[])[i]);
+			const comparison = compare(a[i], b[i]);
 			if (comparison) return comparison;
 		}
 		return 0;
 	}
-	if ('reverse' in a) {
-		return compare((b as {reverse: string}).reverse, a.reverse);
+	if ('reverse' in a && !Array.isArray(a) && 'reverse' in b && !Array.isArray(b)) {
+		return compare(b.reverse, a.reverse);
 	}
 	throw new Error(`Passed value ${a} is not comparable`);
 }
