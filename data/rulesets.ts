@@ -1245,7 +1245,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const problem = this.checkCanLearn(move, species, lsetData, set);
 			if (!problem) return null;
 			if (move.isZ || move.isMax || this.ruleTable.isRestricted(`move:${move.id}`)) return problem;
-			if ((set as any).sketchMove) {
+			if (set.sketchMove) {
 				return ` already has ${(set as any).sketchMove} as a sketched move.\n(${species.name} doesn't learn ${move.name}.)`;
 			}
 			(set as any).sketchMove = move.name;

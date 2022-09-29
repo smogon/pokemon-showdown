@@ -319,13 +319,12 @@ export function clearRequireCache(options: {exclude?: string[]} = {}) {
 	}
 }
 
-export function deepClone<T>(obj: T): T {
+export function deepClone<T>(obj: T): Mutable<T> {
 	if (obj === null || typeof obj !== 'object') return obj;
 	if (Array.isArray(obj)) return obj.map(prop => deepClone(prop)) as T;
 	const clone = Object.create(Object.getPrototypeOf(obj));
-	for (const k of Object.keys(obj)) {
-		const key = k as keyof T;
-		clone[key] = deepClone(obj[key]) as T[typeof key];
+	for (const key of Object.keys(obj)) {
+		clone[key] = deepClone(obj[key as keyof typeof obj]);
 	}
 	return clone;
 }
