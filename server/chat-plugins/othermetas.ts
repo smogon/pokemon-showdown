@@ -362,7 +362,7 @@ export const commands: Chat.ChatCommands = {
 			LC: 40,
 		};
 		let tier = species.tier;
-		if (tier[0] === '(') tier = tier.slice(1, -1) as TierTypes.Singles | TierTypes.Other;
+		if (tier.startsWith("(")) tier = tier.slice(1, -1) as TierTypes.Singles | TierTypes.Other;
 		if (!(tier in boosts)) return this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 		const boost = boosts[tier as TierShiftTiers];
 		species.bst = species.baseStats.hp;

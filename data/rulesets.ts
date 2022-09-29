@@ -1853,7 +1853,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			pokemon.bst = pokemon.baseStats['hp'];
 			const boost = boosts[tier];
 			let statName: StatID;
-			for (statName in pokemon.baseStats as StatsTable) {
+			for (statName of Stats.statIDs) {
 				if (statName === 'hp') continue;
 				pokemon.baseStats[statName] = this.clampIntRange(pokemon.baseStats[statName] + boost, 1, 255);
 				pokemon.bst += pokemon.baseStats[statName];
