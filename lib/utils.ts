@@ -164,24 +164,24 @@ export function visualize(value: any, depth = 0): string {
 export function compare<T extends Comparable>(a: T, b: T): number {
 	if (typeof a !== typeof b) throw new Error(`Passed values ${a} and ${b} must be of same type`);
 
-	if (typeof a === 'number' && typeof b === 'number') {
-		return a - b;
+	if (typeof a === 'number') {
+		return a - (b as number);
 	}
-	if (typeof a === 'string' && typeof b === "string") {
-		return a.localeCompare(b);
+	if (typeof a === 'string') {
+		return a.localeCompare(b as string);
 	}
 	if (typeof a === 'boolean') {
 		return (a ? 1 : 2) - (b ? 1 : 2);
 	}
-	if (Array.isArray(a) && Array.isArray(b)) {
+	if (Array.isArray(a)) {
 		for (let i = 0; i < a.length; i++) {
-			const comparison = compare(a[i], b[i]);
+			const comparison = compare(a[i], (b as Comparable[])[i]);
 			if (comparison) return comparison;
 		}
 		return 0;
 	}
-	if ('reverse' in a && !Array.isArray(a) && 'reverse' in b && !Array.isArray(b)) {
-		return compare(b.reverse, a.reverse);
+	if ('reverse' in a) {
+		return compare((b as { reverse: Comparable }).reverse, a.reverse);
 	}
 	throw new Error(`Passed value ${a} is not comparable`);
 }
