@@ -99,10 +99,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				species.types = [species.types[0], deltas.type];
 			}
 			const baseStats = species.baseStats;
-			for (const statName in baseStats) {
+			for (const statName of Stats.statIDs) {
 				baseStats[statName] = this.battle.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
 			}
 			species.weighthg = Math.max(1, species.weighthg + deltas.weighthg);
+			// @ts-ignore
 			species.originalMega = deltas.originalMega;
 			species.requiredItem = deltas.requiredItem;
 			if (deltas.isMega) species.isMega = true;
