@@ -579,11 +579,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	poisongas: {
 		inherit: true,
-		ignoreImmunity: undefined,
+		ignoreImmunity: false,
 	},
 	poisonpowder: {
 		inherit: true,
-		ignoreImmunity: undefined,
+		ignoreImmunity: false,
 	},
 	protect: {
 		inherit: true,
@@ -942,7 +942,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	toxic: {
 		inherit: true,
-		ignoreImmunity: undefined,
+		ignoreImmunity: false,
 	},
 	transform: {
 		inherit: true,
