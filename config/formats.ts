@@ -3663,7 +3663,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen4',
-		// searchShow: false,
+		searchShow: false,
 		ruleset: ['Standard', 'Little Cup', 'Sleep Moves Clause'],
 		banlist: [
 			'Meditite', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela', 'Yanma',
