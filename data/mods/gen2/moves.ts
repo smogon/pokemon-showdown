@@ -402,7 +402,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	meanlook: {
 		inherit: true,
 		accuracy: true,
-		ignoreAccuracy: false,
+		ignoreAccuracy: undefined,
+		ignoreEvasion: undefined,
 		flags: {reflectable: 1, mirror: 1},
 	},
 	metronome: {
@@ -415,7 +416,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	mimic: {
 		inherit: true,
 		accuracy: true,
-		ignoreAccuracy: false,
+		ignoreAccuracy: undefined,
+		ignoreEvasion: undefined,
 		noSketch: true,
 	},
 	mindreader: {
@@ -546,7 +548,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	painsplit: {
 		inherit: true,
 		accuracy: true,
-		ignoreAccuracy: false,
+		ignoreAccuracy: undefined,
+		ignoreEvasion: undefined,
 	},
 	perishsong: {
 		inherit: true,
@@ -576,11 +579,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	poisongas: {
 		inherit: true,
-		ignoreImmunity: false,
+		ignoreImmunity: undefined,
 	},
 	poisonpowder: {
 		inherit: true,
-		ignoreImmunity: false,
+		ignoreImmunity: undefined,
 	},
 	protect: {
 		inherit: true,
@@ -791,7 +794,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	spiderweb: {
 		inherit: true,
 		accuracy: true,
-		ignoreAccuracy: false,
+		ignoreAccuracy: undefined,
+		ignoreEvasion: undefined,
 		flags: {reflectable: 1, mirror: 1},
 	},
 	spikes: {
@@ -938,7 +942,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	toxic: {
 		inherit: true,
-		ignoreImmunity: false,
+		ignoreImmunity: undefined,
 	},
 	transform: {
 		inherit: true,
@@ -966,7 +970,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	vitalthrow: {
 		inherit: true,
 		accuracy: true,
-		ignoreAccuracy: false,
+		ignoreAccuracy: undefined,
+		ignoreEvasion: undefined,
 	},
 	whirlwind: {
 		inherit: true,
