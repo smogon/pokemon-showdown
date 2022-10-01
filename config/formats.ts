@@ -2179,12 +2179,14 @@ export const Formats: FormatList = [
 		section: "Randomized Format Spotlight",
 		column: 2,
 	},
-	{
-		name: "[Gen 3] Challenge Cup",
 
-		mod: 'gen3',
-		team: 'randomCC',
-		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod'],
+	{
+		name: "[Gen 7] Pick-Your-Team Random Battle",
+
+		mod: 'gen7',
+		team: 'random',
+		ruleset: ['[Gen 7] Random Battle', 'Max Team Size = 12', 'Picked Team Size = 6', 'Team Preview'],
+		desc: `Twelve Pokémon sets are randomly chosen, then you pick six for your team!`,
 	},
 
 	// Randomized Metas
