@@ -1811,8 +1811,8 @@ export class Battle {
 					break;
 				}
 				this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
-			} else if (effect && effect.effectType === 'Ability') {
-				if (isSecondary) this.add(msg, target, boostName, boostBy);
+			} else if (effect?.effectType === 'Ability') {
+				if (isSecondary || isSelf) this.add(msg, target, boostName, boostBy);
 			} else if (!isSecondary && !isSelf) {
 				this.add(msg, target, boostName, boostBy);
 			}
