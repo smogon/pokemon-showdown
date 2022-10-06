@@ -5,7 +5,7 @@ try {
 	// technically this was introduced in Node 11, but we'll ask for the most recent LTS with it to be safe
 	[].flatMap(x => x);
 } catch (e) {
-	console.log("We require Node.js version 12 or later; you're using " + process.version);
+	console.log("We require Node.js version 14 or later; you're using " + process.version);
 	process.exit(1);
 }
 
