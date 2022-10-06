@@ -71,12 +71,24 @@ describe('Transform', function () {
 		}
 	});
 
-	it('should copy and activate the target\'s ability', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Ditto", ability: 'limber', moves: ['transform']}]});
-		battle.setPlayer('p2', {team: [{species: "Arcanine", ability: 'intimidate', moves: ['rest']}]});
-		battle.makeChoices('move transform', 'move rest');
-		assert.equal(battle.p2.active[0].boosts['atk'], -1);
+	it(`should copy and activate the target's Ability`, function () {
+		battle = common.createBattle([[
+			{species: 'Ditto', ability: 'limber', moves: ['transform']},
+		], [
+			{species: 'Arcanine', ability: 'intimidate', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		assert.statStage(battle.p2.active[0], 'atk', -1);
+	});
+
+	it.skip(`should copy, but not activate the target's Ability if it is the same as the user's pre-Transform`, function () {
+		battle = common.createBattle([[
+			{species: 'Ditto', ability: 'intimidate', moves: ['transform']},
+		], [
+			{species: 'Arcanine', ability: 'intimidate', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		assert.statStage(battle.p2.active[0], 'atk', -1);
 	});
 
 	it('should not copy speed boosts from Unburden', function () {

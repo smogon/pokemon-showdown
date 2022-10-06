@@ -52,4 +52,16 @@ describe('Sitrus Berry', function () {
 		assert.holdsItem(holder);
 		assert.false.fullHP(holder);
 	});
+
+	it.skip(`should heal 25% HP immediately after any end-of-turn effect`, function () {
+		battle = common.createBattle([[
+			{species: 'mimikyu', moves: ['curse']},
+		], [
+			{species: 'darmanitan', ability: 'zenmode', item: 'sitrusberry', moves: ['sleeptalk'], evs: {hp: 4}},
+		]]);
+		const darm = battle.p2.active[0];
+		battle.makeChoices();
+		battle.makeChoices();
+		assert.species(darm, 'Darmanitan', `Sitrus Berry should heal Darmanitan outside of Zen Mode range.`);
+	});
 });

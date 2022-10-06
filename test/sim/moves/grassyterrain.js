@@ -110,4 +110,42 @@ describe('Grassy Terrain', function () {
 		assert(zamGrassyIndex < rillaGrassyIndex, 'Alakazam should heal from Grassy Terrain before Rillaboom');
 		assert(rillaGrassyIndex < rillaLeftoversIndex, 'Rillaboom should heal from Grassy Terrain before Leftovers');
 	});
+
+	it(`should only decrement turn count when being set before it would decrement in the end-of-turn effects`, function () {
+		battle = common.createBattle([[
+			{species: 'grookey', ability: 'grassysurge', moves: ['sleeptalk']},
+		], [
+			{species: 'shedinja', ability: 'neutralizinggas', item: 'stickybarb', moves: ['sleeptalk']},
+			{species: 'wynaut', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices(); // KO Neutralizing Gas
+		battle.makeChoices(); // Switch
+
+		// Kill turns with Wynaut and Grookey until turn 5
+		for (let i = 0; i < 4; i++) {
+			battle.makeChoices();
+		}
+
+		assert(battle.field.isTerrain('grassyterrain'), `Grassy Terrain should still be active turn 5, ending turn 6.`);
+	});
+
+	it.skip(`should not skip healing Pokemon if it was set during the block it would heal Pokemon`, function () {
+		battle = common.createBattle([[
+			{species: 'coalossal', ability: 'grassysurge', moves: ['sleeptalk', 'rockthrow']},
+		], [
+			{species: 'shedinja', ability: 'neutralizinggas', item: 'focussash', moves: ['dragonrage']},
+			{species: 'wynaut', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('move rockthrow dynamax', 'auto');
+		const coalossal = battle.p1.active[0];
+		assert.equal(coalossal.hp, coalossal.maxhp - 40 + Math.floor(coalossal.maxhp / 2 / 16), `Coalossal should have recovered HP from Grassy Terrain.`);
+		battle.makeChoices();
+		// Kill turns with Wynaut and Coalossal
+		for (let i = 0; i < 4; i++) {
+			battle.makeChoices();
+		}
+		assert.false(battle.field.isTerrain('grassyterrain'), `Grassy Terrain should have ended turn 5.`);
+	});
 });
