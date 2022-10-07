@@ -103,7 +103,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				baseStats[statName] = this.battle.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
 			}
 			species.weighthg = Math.max(1, species.weighthg + deltas.weighthg);
-			// @ts-ignore
+			// @ts-ignore originalMega is not a defined property of the Species class, but we need to add it here
 			species.originalMega = deltas.originalMega;
 			species.requiredItem = deltas.requiredItem;
 			if (deltas.isMega) species.isMega = true;

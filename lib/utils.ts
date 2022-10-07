@@ -162,8 +162,6 @@ export function visualize(value: any, depth = 0): string {
  * In other words: `[num, str]` will be sorted A to Z, `[num, {reverse: str}]` will be sorted Z to A.
  */
 export function compare<T extends Comparable>(a: T, b: T): number {
-	if (typeof a !== typeof b) throw new Error(`Passed values ${a} and ${b} must be of same type`);
-
 	if (typeof a === 'number') {
 		return a - (b as number);
 	}
@@ -181,7 +179,7 @@ export function compare<T extends Comparable>(a: T, b: T): number {
 		return 0;
 	}
 	if ('reverse' in a) {
-		return compare((b as { reverse: Comparable }).reverse, a.reverse);
+		return compare((b as {reverse: Comparable}).reverse, a.reverse);
 	}
 	throw new Error(`Passed value ${a} is not comparable`);
 }
