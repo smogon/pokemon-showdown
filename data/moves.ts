@@ -18136,7 +18136,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1, ballistic: 1},
 		onModifyType(move, pokemon, target) {
 			if (pokemon.terastallized) {
-				move.type = pokemon.terastalType;
+				move.type = pokemon.teraType;
 			}
 		},
 		onModifyMove(move, pokemon) {

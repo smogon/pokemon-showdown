@@ -1812,11 +1812,11 @@ export class BattleActions {
 		) {
 			return null;
 		}
-		return pokemon.terastalType;
+		return pokemon.teraType;
 	}
 
 	terastallize(pokemon: Pokemon) {
-		const type = pokemon.terastalType;
+		const type = pokemon.teraType;
 
 		const species = this.dex.deepClone(pokemon.species);
 		species.types = [type];

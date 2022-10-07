@@ -107,7 +107,7 @@ export interface PokemonSet {
 	/**
 	 * Terastal type
 	 */
-	terastalType?: string;
+	teraType?: string;
 }
 
 export const Teams = new class Teams {
@@ -193,12 +193,12 @@ export const Teams = new class Teams {
 			}
 
 			if (set.pokeball || set.hpType || set.gigantamax ||
-				(set.dynamaxLevel !== undefined && set.dynamaxLevel !== 10) || set.terastalType) {
+				(set.dynamaxLevel !== undefined && set.dynamaxLevel !== 10) || set.teraType) {
 				buf += ',' + (set.hpType || '');
 				buf += ',' + this.packName(set.pokeball || '');
 				buf += ',' + (set.gigantamax ? 'G' : '');
 				buf += ',' + (set.dynamaxLevel !== undefined && set.dynamaxLevel !== 10 ? set.dynamaxLevel : '');
-				buf += ',' + (set.terastalType || '');
+				buf += ',' + (set.teraType || '');
 			}
 		}
 
@@ -329,7 +329,7 @@ export const Teams = new class Teams {
 				set.pokeball = this.unpackName(misc[2] || '', Dex.items);
 				set.gigantamax = !!misc[3];
 				set.dynamaxLevel = (misc[4] ? Number(misc[4]) : 10);
-				set.terastalType = misc[5];
+				set.teraType = misc[5];
 			}
 			if (j < 0) break;
 			i = j + 1;
@@ -405,8 +405,8 @@ export const Teams = new class Teams {
 		if (set.gigantamax) {
 			out += `Gigantamax: Yes  \n`;
 		}
-		if (set.terastalType) {
-			out += `Terastal Type: ${set.terastalType}  \n`;
+		if (set.teraType) {
+			out += `Terastal Type: ${set.teraType}  \n`;
 		}
 
 		// stats
@@ -491,7 +491,7 @@ export const Teams = new class Teams {
 			set.hpType = line;
 		} else if (line.startsWith('Terastal Type: ')) {
 			line = line.slice(15);
-			set.terastalType = line;
+			set.teraType = line;
 		} else if (line === 'Gigantamax: Yes') {
 			set.gigantamax = true;
 		} else if (line.startsWith('EVs: ')) {

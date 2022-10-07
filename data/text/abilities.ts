@@ -79,6 +79,13 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 			desc: "Prevents opposing Pokemon from choosing to switch out unless they are airborne.",
 		},
 	},
+	armortail: {
+		name: "Armor Tail",
+		desc: "While this Pokemon is active, priority moves from opposing Pokemon that target this Pokemon or its allies are prevented from having an effect.",
+		shortDesc: "This Pokemon and its allies are protected from opposing priority moves.",
+
+		block: "#damp",
+	},
 	aromaveil: {
 		name: "Aroma Veil",
 		desc: "This Pokemon and its allies cannot become affected by Attract, Disable, Encore, Heal Block, Taunt, or Torment.",

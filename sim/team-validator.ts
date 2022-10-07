@@ -515,12 +515,12 @@ export class TeamValidator {
 				set.hpType = type.name;
 			}
 		}
-		if (set.terastalType) {
-			const type = dex.types.get(set.terastalType);
+		if (set.teraType) {
+			const type = dex.types.get(set.teraType);
 			if (!type.exists) {
-				problems.push(`${name}'s Terastal type (${set.terastalType}) is invalid.`);
+				problems.push(`${name}'s Terastal type (${set.teraType}) is invalid.`);
 			} else {
-				set.terastalType = type.name;
+				set.teraType = type.name;
 			}
 		}
 

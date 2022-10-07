@@ -247,7 +247,7 @@ export class Pokemon {
 	canUltraBurst: string | null | undefined;
 	readonly canGigantamax: string | null;
 	canTerastallize: string | null;
-	terastalType: string;
+	teraType: string;
 	terastallized?: string;
 
 	/** A Pokemon's currently 'staleness' with respect to the Endless Battle Clause. */
@@ -407,7 +407,7 @@ export class Pokemon {
 		this.knownType = true;
 		this.apparentType = this.baseSpecies.types.join('/');
 		// Every Pokemon has a Terastal type
-		this.terastalType = this.set.terastalType || this.types[0];
+		this.teraType = this.set.teraType || this.types[0];
 
 		this.switchFlag = false;
 		this.forceSwitchFlag = false;
@@ -1315,7 +1315,7 @@ export class Pokemon {
 				// Shaymin-Sky -> Shaymin
 				this.battle.add('-formechange', this, species.name, message);
 			} else if (source.effectType === 'Terastal') {
-				this.battle.add('-terastallize', this, this.terastalType);
+				this.battle.add('-terastallize', this, this.teraType);
 			}
 		} else {
 			if (source.effectType === 'Ability') {

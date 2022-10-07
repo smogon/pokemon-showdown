@@ -198,6 +198,25 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 5,
 		num: 71,
 	},
+	armortail: {
+		onFoeTryMove(target, source, move) {
+			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
+			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
+				return;
+			}
+
+			const armorTailHolder = this.effectState.target;
+			if ((source.isAlly(armorTailHolder) || move.target === 'all') && move.priority > 0.1) {
+				this.attrLastMove('[still]');
+				this.add('cant', armorTailHolder, 'ability: Armor Tail', move, '[of] ' + target);
+				return false;
+			}
+		},
+		isBreakable: true,
+		name: "Armor Tail",
+		rating: 2.5,
+		num: 219,
+	},
 	aromaveil: {
 		onAllyTryAddVolatile(status, target, source, effect) {
 			if (['attract', 'disable', 'encore', 'healblock', 'taunt', 'torment'].includes(status.id)) {

@@ -1233,6 +1233,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 		natDexTier: "OU",
 	},
+	kleavor: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
 	smoochum: {
 		tier: "LC",
 	},
@@ -1936,6 +1940,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
+	overqwil: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
 	shuckle: {
 		randomBattleMoves: ["encore", "knockoff", "stealthrock", "stickyweb", "toxic"],
 		randomBattleLevel: 87,
@@ -1976,6 +1984,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DUU",
 		natDexTier: "OU",
 	},
+	sneasler: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
 	teddiursa: {
 		isNonstandard: "Past",
 		tier: "Illegal",
@@ -1985,6 +1997,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "RU",
+	},
+	ursaluna: {
+		isNonstandard: "Future",
+		tier: "Illegal",
 	},
 	slugma: {
 		isNonstandard: "Past",
@@ -2106,6 +2122,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "RU",
+	},
+	wyrdeer: {
+		isNonstandard: "Future",
+		tier: "Illegal",
 	},
 	smeargle: {
 		isNonstandard: "Past",
@@ -4118,6 +4138,14 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "RU",
 	},
 	basculinwhitestriped: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	basculegion: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	basculegionf: {
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
@@ -7019,34 +7047,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Uber",
 		doublesTier: "DUber",
 		natDexTier: "Uber",
-	},
-	wyrdeer: {
-		isNonstandard: "Future",
-		tier: "Illegal",
-	},
-	kleavor: {
-		isNonstandard: "Future",
-		tier: "Illegal",
-	},
-	ursaluna: {
-		isNonstandard: "Future",
-		tier: "Illegal",
-	},
-	basculegion: {
-		isNonstandard: "Future",
-		tier: "Illegal",
-	},
-	basculegionf: {
-		isNonstandard: "Future",
-		tier: "Illegal",
-	},
-	sneasler: {
-		isNonstandard: "Future",
-		tier: "Illegal",
-	},
-	overqwil: {
-		isNonstandard: "Future",
-		tier: "Illegal",
 	},
 	enamorus: {
 		isNonstandard: "Future",
