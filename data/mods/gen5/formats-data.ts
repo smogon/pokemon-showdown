@@ -1090,7 +1090,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	raikou: {
-		randomBattleMoves: ["aurashpere", "calmmind", "hiddenpowerice", "substitute", "thunderbolt", "voltswitch"],
+		randomBattleMoves: ["aurasphere", "calmmind", "hiddenpowerice", "substitute", "thunderbolt", "voltswitch"],
 		tier: "UU",
 		doublesTier: "DUU",
 	},
