@@ -610,7 +610,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	gyarados: {
-		tier: "RU",
+		tier: "RUBL",
 		doublesTier: "DOU",
 		randomBattleMoves: ["dragondance", "earthquake", "icefang", "stoneedge", "waterfall"],
 	},
@@ -1081,7 +1081,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["bodyslam", "curse", "earthquake", "milkdrink", "stealthrock"],
 	},
 	raikou: {
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "DOU",
 		randomBattleMoves: ["calmmind", "scald", "substitute", "thunderbolt", "voltswitch"],
 	},
@@ -2050,7 +2050,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["aurasphere", "defog", "dracometeor", "shadowball", "willowisp"],
 	},
 	cresselia: {
-		tier: "RU",
+		tier: "RUBL",
 		doublesTier: "DOU",
 		randomBattleMoves: ["calmmind", "moonblast", "moonlight", "psychic", "thunderwave"],
 	},
