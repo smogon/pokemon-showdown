@@ -137,7 +137,7 @@ export const translations: Translations = {
 		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "Este ${Config.groups[targetUser.group].name} está muito ocupado para responder mensagens privadas no momento. Por favor, contate outro membro da staff.",
 		"If you need help, try opening a <a href=\"view-help-request\" class=\"button\">help ticket</a>": "Se você precisa de ajuda, tente abrir um <a href=\"view-help-request\" class=\"button\">pedido de ajuda</a>",
 		"You are blocking private messages right now.": "Você está bloquando mensagens privadas no momento.",
-		"You are blocking challenges right now.": "",
+		"You are blocking challenges right now.": "Você está bloqueando desafios no momento.",
 
 		"Your message contained banned words in this room.": "Sua mensagem continha palavras banidas nesta sala.",
 		"You can't send the same message again so soon.": "Você não pode enviar a mesma mensagem de novo tão cedo.",
@@ -153,8 +153,8 @@ export const translations: Translations = {
 		"You are already blocking challenges!": "Você já está bloqueando desafios",
 		"You are already available for challenges!": "Você já está disponível para desafios!",
 		"You are available for challenges from now on.": "Você está disponível para desafios a partir de agora.",
-		"You are now blocking challenges, except from staff and ${rank}.": "",
-		"You are now blocking challenges, except from staff and ${status} users.": "",
+		"You are now blocking challenges, except from staff and ${rank}.": "Você está bloqueando desafios no momento, exceto de adminstradores e ${rank}.",
+		"You are now blocking challenges, except from staff and ${status} users.": "Você está bloqueando desafios no momento, exceto de adminstradores e usuários ${status}.",
 
 		"Staff FAQ": "Perguntas Frequentes sobre Staff",
 		"You cannot broadcast all FAQs at once.": "Você não pode exibir publicamente todos os FAQs (Perguntas Frequentes) de uma vez.",
@@ -171,9 +171,9 @@ export const translations: Translations = {
 		"pages/rng": "pages/rng",
 		"pages/staff": "pages/staff",
 
-		"- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.": "",
-		"- We log IPs to enforce bans and mutes.": "",
-		"- We use cookies to save your login info and teams, and for Google Analytics and AdSense.": "",
-		'- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>': '',
+		"- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.": "- Nós registramos PMs (Mensagens Privadas) para que você possa denunciá-los - a equipe não pode olhar para eles sem permissão, a menos que haja um motivo de aplicação da lei.",
+		"- We log IPs to enforce bans and mutes.": "- Nós registramos IPs para realizar banimentos e silenciamentos.",
+		"- We use cookies to save your login info and teams, and for Google Analytics and AdSense.": "- Usamos cookies para salvar suas informações de login e equipes, e para Google Analytics e AdSense.",
+		'- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>': '- Para mais informações, você pode ler nossa <a href="https://${Config.routes.root}/privacy">política de privacidade completa.</a>',
 	},
 };
