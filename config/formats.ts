@@ -2585,7 +2585,6 @@ export const Formats: FormatList = [
 		mod: 'gen2',
 		ruleset: ['[Gen 2] OU'],
 		banlist: ['OU'],
-		unbanlist: ['Mean Look + Baton Pass', 'Spider Web + Baton Pass'],
 	},
 
 	// Past Gens OU
