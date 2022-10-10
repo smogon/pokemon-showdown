@@ -10,7 +10,7 @@ describe("Terastallization", function () {
 		battle.destroy();
 	});
 
-	it.only('should change the user\'s type to its Tera type after terastallizing', function () {
+	it('should change the user\'s type to its Tera type after terastallizing', function () {
 		battle = common.createBattle('gen9ou');
 		battle.setPlayer('p1', {team: [
 			{species: 'Ampharos', ability: 'static', moves: ['voltswitch', 'dragonpulse'], teraType: 'Dragon'},
