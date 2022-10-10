@@ -618,11 +618,13 @@ export class Side {
 		}
 		const terastallize = (event === 'terastallize');
 		if (terastallize && !pokemon.canTerastallize) {
-			/* if (pokemon.terastallized) {
-				terastallize = false;
-			} else if (this.battle.gen < 9) {
-				return this.emitChoiceError(`Can't move: Terastallizing doesn't before Gen 9.`);
-			} */
+			return this.emitChoiceError(`Can't move: ${pokemon.name} can't Terastallize.`);
+		}
+		if (terastallize && this.choice.terastallize) {
+			return this.emitChoiceError(`Can't move: You can only Terastallize once per battle.`);
+		}
+		if (terastallize && this.battle.gen !== 9) {
+			return this.emitChoiceError(`Can't move: You can only Terastallize in Gen 9.`);
 		}
 
 		this.choice.actions.push({

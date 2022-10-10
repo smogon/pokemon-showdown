@@ -1805,7 +1805,6 @@ export class BattleActions {
 	}
 
 	canTerastallize(pokemon: Pokemon) {
-		if (pokemon.side.pokemon.some(mon => !!mon.terastallized)) return null;
 		if (
 			pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra" ||
 			pokemon.getItem().zMove || pokemon.canMegaEvo || pokemon.side.canDynamaxNow()
@@ -1818,13 +1817,13 @@ export class BattleActions {
 	terastallize(pokemon: Pokemon) {
 		const type = pokemon.teraType;
 
-		const species = this.dex.deepClone(pokemon.species);
-		species.types = [type];
-
-		pokemon.formeChange(species, this.dex.conditions.get('terastal')!, true);
+		pokemon.setType(type);
+		this.battle.add('-terastallize', pokemon, type);
 		pokemon.terastallized = type;
-
-		this.battle.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
+		for (const ally of pokemon.side.pokemon) {
+			ally.canTerastallize = null;
+		}
+		this.battle.add('-start', pokemon, 'typechange', pokemon.getTypes().join('/'), '[silent]');
 		this.battle.runEvent('AfterTerastallization', pokemon);
 	}
 
