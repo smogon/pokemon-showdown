@@ -32,7 +32,7 @@ export type Comparable = number | string | boolean | Comparable[] | {reverse: Co
  * string or a number.
  */
 
-export function getString(str: any): string {
+export function getString(str: unknown): string {
 	return (typeof str === 'string' || typeof str === 'number') ? '' + str : '';
 }
 
@@ -82,7 +82,7 @@ export function formatOrder(place: number) {
 /**
  * Visualizes eval output in a slightly more readable form
  */
-export function visualize(value: any, depth = 0): string {
+export function visualize(value: unknown, depth = 0): string {
 	if (value === undefined) return `undefined`;
 	if (value === null) return `null`;
 	if (typeof value === 'number' || typeof value === 'boolean') {
@@ -115,14 +115,16 @@ export function visualize(value: any, depth = 0): string {
 
 	switch (baseClass) {
 	case 'Map':
+		const valueMap = value as Map<unknown, unknown>;
 		if (depth > 2) return `Map`;
-		const mapped = [...value.entries()].map(
+		const mapped = [...valueMap.entries()].map(
 			val => `${visualize(val[0], depth + 1)} => ${visualize(val[1], depth + 1)}`
 		);
-		return `${constructor} (${value.size}) { ${mapped.join(', ')} }`;
+		return `${constructor} (${valueMap.size}) { ${mapped.join(', ')} }`;
 	case 'Set':
+		const valueSet = value as Set<unknown>;
 		if (depth > 2) return `Set`;
-		return `${constructor} (${value.size}) { ${[...value].map(v => visualize(v), depth + 1).join(', ')} }`;
+		return `${constructor} (${valueSet.size}) { ${[...valueSet].map(v => visualize(v), depth + 1).join(', ')} }`;
 	}
 
 	if (value.toString) {
@@ -145,7 +147,7 @@ export function visualize(value: any, depth = 0): string {
 		if (buf) buf += `, `;
 		let displayedKey = key;
 		if (!/^[A-Za-z0-9_$]+$/.test(key)) displayedKey = JSON.stringify(key);
-		buf += `${displayedKey}: ` + visualize(value[key], depth + 1);
+		buf += `${displayedKey}: ` + visualize((value as Record<string, unknown>)[key], depth + 1);
 	}
 	if (constructor && !buf && constructor !== 'null') return constructor;
 	return `${constructor}{${buf}}`;
@@ -201,7 +203,7 @@ export function sortBy<T>(array: T[], callback: (a: T) => Comparable): T[];
  */
 export function sortBy<T extends Comparable>(array: T[]): T[];
 export function sortBy<T>(array: T[], callback?: (a: T) => Comparable) {
-	if (!callback) return (array as any[]).sort(compare);
+	if (!callback) return (array as Comparable[]).sort(compare);
 	return array.sort((a, b) => compare(callback(a), callback(b)));
 }
 
@@ -239,7 +241,7 @@ export function splitFirst(str: string, delimiter: string, limit = 1) {
 /**
  * Template string tag function for escaping HTML
  */
-export function html(strings: TemplateStringsArray, ...args: any) {
+export function html(strings: TemplateStringsArray, ...args: (Parameters<typeof escapeHTML>[0])[]) {
 	let buf = strings[0];
 	let i = 0;
 	while (i < args.length) {
@@ -293,7 +295,7 @@ export function randomElement<T>(arr: T[]): T {
 }
 
 /** Forces num to be an integer (between min and max). */
-export function clampIntRange(num: any, min?: number, max?: number): number {
+export function clampIntRange(num: number, min?: number, max?: number): number {
 	if (typeof num !== 'number') num = 0;
 	num = Math.floor(num);
 	if (min !== undefined && num < min) num = min;
@@ -318,11 +320,11 @@ export function clearRequireCache(options: {exclude?: string[]} = {}) {
 	}
 }
 
-export function deepClone(obj: any): any {
+export function deepClone<T>(obj: T): Mutable<T> {
 	if (obj === null || typeof obj !== 'object') return obj;
-	if (Array.isArray(obj)) return obj.map(prop => deepClone(prop));
+	if (Array.isArray(obj)) return obj.map(prop => deepClone(prop)) as T;
 	const clone = Object.create(Object.getPrototypeOf(obj));
-	for (const key of Object.keys(obj)) {
+	for (const key of Object.keys(obj) as (keyof typeof obj)[]) {
 		clone[key] = deepClone(obj[key]);
 	}
 	return clone;
