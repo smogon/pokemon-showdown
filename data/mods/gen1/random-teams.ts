@@ -129,7 +129,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
-			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
+			const species = this.dex.species.get(this.sampleNoReplaceOrError(pokemonPool));
 			if (!species.exists || !species.randomBattleMoves) continue;
 			// Only one Ditto is allowed per battle in Generation 1,
 			// as it can cause an endless battle if two Dittos are forced
@@ -226,7 +226,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 		// if we don't have enough Pokémon, go back to rejects, which are already known to not be invalid.
 		while (pokemon.length < this.maxTeamSize && rejectedButNotInvalidPool.length) {
-			const species = this.sampleNoReplace(rejectedButNotInvalidPool);
+			const species = this.sampleNoReplaceOrError(rejectedButNotInvalidPool);
 			pokemon.push(this.randomSet(species));
 		}
 
@@ -297,7 +297,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		while (moves.size < this.maxMoveCount && movePool.length) {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
 			while (moves.size < this.maxMoveCount && movePool.length) {
-				const moveid = this.sampleNoReplace(movePool);
+				const moveid = this.sampleNoReplaceOrError(movePool);
 				moves.add(moveid);
 			}
 
@@ -397,7 +397,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			// Random unique moves
 			const moves = [];
 			do {
-				const move = this.sampleNoReplace(movePool);
+				const move = this.sampleNoReplaceOrError(movePool);
 				if (move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ')) {
 					moves.push(move.id);
 				}

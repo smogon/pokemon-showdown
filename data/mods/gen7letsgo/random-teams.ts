@@ -132,7 +132,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
 			while (moves.size < this.maxMoveCount && movePool.length) {
-				const moveid = this.sampleNoReplace(movePool);
+				const moveid = this.sampleNoReplaceOrError(movePool);
 				moves.add(moveid);
 			}
 
@@ -240,7 +240,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
-			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
+			const species = this.dex.species.get(this.sampleNoReplaceOrError(pokemonPool));
 			if (!species.exists) continue;
 
 			// Limit to one of each species (Species Clause)

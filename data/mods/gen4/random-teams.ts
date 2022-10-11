@@ -538,7 +538,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
 			while (moves.size < this.maxMoveCount && movePool.length) {
-				const moveid = this.sampleNoReplace(movePool);
+				const moveid = this.sampleNoReplaceOrError(movePool);
 				if (moveid.startsWith('hiddenpower')) {
 					availableHP--;
 					if (hasHiddenPower) continue;
@@ -548,7 +548,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			}
 
 			while (moves.size < this.maxMoveCount && rejectedPool.length) {
-				const moveid = this.sampleNoReplace(rejectedPool);
+				const moveid = this.sampleNoReplaceOrError(rejectedPool);
 				if (moveid.startsWith('hiddenpower')) {
 					if (hasHiddenPower) continue;
 					hasHiddenPower = true;
