@@ -150,6 +150,15 @@ export class Hangman extends Rooms.SimpleRoomGame {
 	guessWord(word: string, guesser: string) {
 		const ourWord = toID(this.word.replace(/[0-9]+/g, ''));
 		const guessedWord = toID(word.replace(/[0-9]+/g, ''));
+
+		// Can't be a correct guess if the lengths don't match
+		if (ourWord.length !== guessedWord.length) return false;
+
+		// Can't be a correct guess if the guess has incorrect letters in already guessed indexes
+		for (let i = 0; i < ourWord.length; i++) {
+			if (ourWord.charAt(i) !== '_' && ourWord.charAt(i) !== guessedWord.charAt(i)) return false;
+		}
+
 		if (ourWord === guessedWord) {
 			for (const [i, letter] of this.wordSoFar.entries()) {
 				if (letter === '_') {
@@ -160,15 +169,13 @@ export class Hangman extends Rooms.SimpleRoomGame {
 			this.guesses.push(word);
 			this.lastGuesser = guesser;
 			this.finish();
-			return true;
-		} else if (ourWord.length === guessedWord.length) {
+		} else {
 			this.incorrectGuesses++;
 			this.guesses.push(word);
 			this.lastGuesser = guesser;
 			this.update();
-			return true;
 		}
-		return false;
+		return true;
 	}
 
 	hangingMan() {
