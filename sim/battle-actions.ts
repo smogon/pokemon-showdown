@@ -1817,7 +1817,10 @@ export class BattleActions {
 	terastallize(pokemon: Pokemon) {
 		const type = pokemon.teraType;
 
-		pokemon.setType(type);
+		const newSpecies = this.dex.deepClone(pokemon.species);
+		newSpecies.types = [type];
+		pokemon.setSpecies(newSpecies, this.dex.conditions.get('terastal'));
+		pokemon.baseSpecies = newSpecies;
 		this.battle.add('-terastallize', pokemon, type);
 		pokemon.terastallized = type;
 		for (const ally of pokemon.side.pokemon) {

@@ -616,15 +616,18 @@ export class Side {
 				return this.emitChoiceError(`Can't move: You can only Dynamax once per battle.`);
 			}
 		}
-		const terastallize = (event === 'terastallize');
+		let terastallize = (event === 'terastallize');
 		if (terastallize && !pokemon.canTerastallize) {
-			return this.emitChoiceError(`Can't move: ${pokemon.name} can't Terastallize.`);
+			// Make this work properly
+			// return this.emitChoiceError(`Can't move: ${pokemon.name} can't Terastallize.`);
+			terastallize = false;
 		}
 		if (terastallize && this.choice.terastallize) {
 			return this.emitChoiceError(`Can't move: You can only Terastallize once per battle.`);
 		}
 		if (terastallize && this.battle.gen !== 9) {
-			return this.emitChoiceError(`Can't move: You can only Terastallize in Gen 9.`);
+			// Make this work properly
+			// return this.emitChoiceError(`Can't move: You can only Terastallize in Gen 9.`);
 		}
 
 		this.choice.actions.push({
