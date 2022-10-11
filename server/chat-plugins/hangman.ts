@@ -101,7 +101,9 @@ export class Hangman extends Rooms.SimpleRoomGame {
 		if (normalized.length < 1) {
 			throw new Chat.ErrorMessage(`Use "/guess [letter]" to guess a letter, or "/guess [phrase]" to guess the entire Hangman phrase.`);
 		}
-		if (sanitized.length > MAX_HANGMAN_LENGTH) throw new Chat.ErrorMessage(`Guesses must be ${MAX_HANGMAN_LENGTH} or fewer letters – "${word}" is too long.`);
+		if (sanitized.length > MAX_HANGMAN_LENGTH) {
+			throw new Chat.ErrorMessage(`Guesses must be ${MAX_HANGMAN_LENGTH} or fewer letters – "${word}" is too long.`);
+		}
 
 		for (const guessid of this.guesses) {
 			if (normalized === toID(guessid)) throw new Chat.ErrorMessage(`Your guess "${word}" has already been guessed.`);
@@ -292,7 +294,9 @@ export class Hangman extends Rooms.SimpleRoomGame {
 		const phrase = params[0].normalize('NFD').trim().replace(/_/g, '\uFF3F');
 
 		if (!phrase.length) throw new Chat.ErrorMessage("Enter a valid word");
-		if (phrase.length > MAX_HANGMAN_LENGTH) throw new Chat.ErrorMessage(`Phrase must be less than ${MAX_HANGMAN_LENGTH} characters long.`);
+		if (phrase.length > MAX_HANGMAN_LENGTH) {
+			throw new Chat.ErrorMessage(`Phrase must be less than ${MAX_HANGMAN_LENGTH} characters long.`);
+		}
 		if (phrase.split(' ').some(w => w.length > MAX_INDIVIDUAL_WORD_LENGTH)) {
 			throw new Chat.ErrorMessage(`Each word in the phrase must be less than ${MAX_INDIVIDUAL_WORD_LENGTH} characters long.`);
 		}
@@ -300,7 +304,9 @@ export class Hangman extends Rooms.SimpleRoomGame {
 		let hint;
 		if (params.length > 1) {
 			hint = params.slice(1).join(',').trim();
-			if (hint.length > MAX_HINT_LENGTH) throw new Chat.ErrorMessage(`Hint must be less than ${MAX_HINT_LENGTH} characters long.`);
+			if (hint.length > MAX_HINT_LENGTH) {
+				throw new Chat.ErrorMessage(`Hint must be less than ${MAX_HINT_LENGTH} characters long.`);
+			}
 		}
 		return {phrase, hint};
 	}
