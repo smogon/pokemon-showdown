@@ -33,7 +33,7 @@ export function visualizeRangeList(ranges: AddressRange[]) {
 		html += `<tr>`;
 		html += `<td>${IPTools.numberToIP(range.minIP)}</td>`;
 		html += `<td>${IPTools.numberToIP(range.maxIP)}</td>`;
-		html += Utils.html`<td>${range.host}</td>`;
+		html += Utils.html`<td>${range.host ?? 'N/A'}</td>`;
 		html += `</tr>`;
 	}
 	return html;

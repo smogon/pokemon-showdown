@@ -2150,7 +2150,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 
 		let buffer = `<table><tr><th>Twist</th><th>Description</th></tr>`;
 		buffer += Object.values(ScavMods.twists).map(twist => (
-			Utils.html`<tr><td style="padding: 5px;">${twist.name}</td><td style="padding: 5px;">${twist.desc}</td></tr>`
+			Utils.html`<tr><td style="padding: 5px;">${twist.name}</td><td style="padding: 5px;">${twist.desc ?? ''}</td></tr>`
 		)).join('');
 		buffer += `</table>`;
 

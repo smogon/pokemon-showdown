@@ -1384,7 +1384,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const newSpecies = this.dex.deepClone(species);
 			if (newSpecies.bst <= 350) {
 				newSpecies.bst = 0;
-				for (const stat in newSpecies.baseStats) {
+				let stat: StatID;
+				for (stat in newSpecies.baseStats) {
 					newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * 2, 1, 255);
 					newSpecies.bst += newSpecies.baseStats[stat];
 				}
@@ -1404,7 +1405,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const newSpecies = this.dex.deepClone(species);
 			const reversedNums = Object.values(newSpecies.baseStats).reverse();
 			for (const [i, statName] of Object.keys(newSpecies.baseStats).entries()) {
-				newSpecies.baseStats[statName] = reversedNums[i];
+				newSpecies.baseStats[statName as StatID] = reversedNums[i];
 			}
 			return newSpecies;
 		},
@@ -1422,7 +1423,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const bstWithoutHp: number = newSpecies.bst - newSpecies.baseStats['hp'];
 			const scale = 600 - newSpecies.baseStats['hp'];
 			newSpecies.bst = newSpecies.baseStats['hp'];
-			for (const stat in newSpecies.baseStats) {
+			let stat: StatID;
+			for (stat in newSpecies.baseStats) {
 				if (stat === 'hp') continue;
 				newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * scale / bstWithoutHp, 1, 255);
 				newSpecies.bst += newSpecies.baseStats[stat];
@@ -1853,7 +1855,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			pokemon.bst = pokemon.baseStats['hp'];
 			const boost = boosts[tier];
 			let statName: StatID;
-			for (statName in pokemon.baseStats as StatsTable) {
+			for (statName in pokemon.baseStats) {
 				if (statName === 'hp') continue;
 				pokemon.baseStats[statName] = this.clampIntRange(pokemon.baseStats[statName] + boost, 1, 255);
 				pokemon.bst += pokemon.baseStats[statName];

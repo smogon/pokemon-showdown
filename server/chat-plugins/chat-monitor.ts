@@ -587,7 +587,7 @@ export const pages: Chat.PageTable = {
 			content += `<tr><th colspan="2"><h3>${Chat.monitors[key].label} <span style="font-size:8pt;">[${key}]</span></h3></tr></th>`;
 			if (filterWords[key].length) {
 				content += filterWords[key].map(({regex, word, reason, publicReason, replacement, hits}) => {
-					let entry = Utils.html`<abbr title="${reason}"><code>${word}</code></abbr>`;
+					let entry = Utils.html`<abbr title="${reason ?? ''}"><code>${word}</code></abbr>`;
 					if (publicReason) entry += Utils.html` <small>(public reason: ${publicReason})</small>`;
 					if (replacement) entry += Utils.html` &rArr; ${replacement}`;
 					return `<tr><td>${entry}</td><td>${hits}</td></tr>`;
