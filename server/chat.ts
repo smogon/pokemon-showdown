@@ -1821,7 +1821,7 @@ export const Chat = new class {
 			await this.database.runFile(pathModule.resolve(migrationsFolder, file));
 		}
 
-		Chat.destroyHandlers.push(() => Chat.database?.destroy());
+		Chat.destroyHandlers.push(() => void Chat.database?.destroy());
 	}
 
 	readonly MessageContext = MessageContext;
