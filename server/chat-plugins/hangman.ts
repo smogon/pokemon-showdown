@@ -7,6 +7,9 @@ import {FS, Utils} from '../../lib';
 const HANGMAN_FILE = 'config/chat-plugins/hangman.json';
 
 const DIACRITICS_AFTER_UNDERSCORE = /_[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]+/g;
+const MAX_HANGMAN_LENGTH = 30;
+const MAX_INDIVIDUAL_WORD_LENGTH = 20;
+const MAX_HINT_LENGTH = 150;
 
 interface HangmanEntry {
 	hints: string[];
@@ -98,7 +101,7 @@ export class Hangman extends Rooms.SimpleRoomGame {
 		if (normalized.length < 1) {
 			throw new Chat.ErrorMessage(`Use "/guess [letter]" to guess a letter, or "/guess [phrase]" to guess the entire Hangman phrase.`);
 		}
-		if (sanitized.length > 30) throw new Chat.ErrorMessage(`Guesses must be 30 or fewer letters – "${word}" is too long.`);
+		if (sanitized.length > MAX_HANGMAN_LENGTH) throw new Chat.ErrorMessage(`Guesses must be ${MAX_HANGMAN_LENGTH} or fewer letters – "${word}" is too long.`);
 
 		for (const guessid of this.guesses) {
 			if (normalized === toID(guessid)) throw new Chat.ErrorMessage(`Your guess "${word}" has already been guessed.`);
@@ -289,15 +292,15 @@ export class Hangman extends Rooms.SimpleRoomGame {
 		const phrase = params[0].normalize('NFD').trim().replace(/_/g, '\uFF3F');
 
 		if (!phrase.length) throw new Chat.ErrorMessage("Enter a valid word");
-		if (phrase.length > 30) throw new Chat.ErrorMessage("Phrase must be less than 30 characters long.");
-		if (phrase.split(' ').some(w => w.length > 20)) {
-			throw new Chat.ErrorMessage("Each word in the phrase must be less than 20 characters long.");
+		if (phrase.length > MAX_HANGMAN_LENGTH) throw new Chat.ErrorMessage(`Phrase must be less than ${MAX_HANGMAN_LENGTH} characters long.`);
+		if (phrase.split(' ').some(w => w.length > MAX_INDIVIDUAL_WORD_LENGTH)) {
+			throw new Chat.ErrorMessage(`Each word in the phrase must be less than ${MAX_INDIVIDUAL_WORD_LENGTH} characters long.`);
 		}
 		if (!/[a-zA-Z]/.test(phrase)) throw new Chat.ErrorMessage("Word must contain at least one letter.");
 		let hint;
 		if (params.length > 1) {
 			hint = params.slice(1).join(',').trim();
-			if (hint.length > 150) throw new Chat.ErrorMessage("Hint too long.");
+			if (hint.length > MAX_HINT_LENGTH) throw new Chat.ErrorMessage(`Hint must be less than ${MAX_HINT_LENGTH} characters long.`);
 		}
 		return {phrase, hint};
 	}
