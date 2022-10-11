@@ -211,7 +211,7 @@ export class Hangman extends Rooms.SimpleRoomGame {
 		wordString = wordString.replace(DIACRITICS_AFTER_UNDERSCORE, '_');
 
 		if (this.hint) output += Utils.html`<div>(Hint: ${this.hint})</div>`;
-		output += `<p style="font-weight:bold;font-size:12pt;letter-spacing:3pt">${wordString}</p>`;
+		output += `<p style="font-weight:bold;font-size:12pt;letter-spacing:3pt">${Utils.escapeHTML(wordString)}</p>`;
 		if (this.guesses.length) {
 			if (this.letterGuesses.length) {
 				output += 'Letters: ' + this.letterGuesses.map(
