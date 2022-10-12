@@ -660,26 +660,26 @@ export const Formats: FormatList = [
 		banlist: ['Uber', 'AG'],
 	},
 	{
-		name: "[Gen 9] Ubers",
+		name: "[Gen 9] Ubers (beta)",
 
 		mod: 'gen9',
 		ruleset: ['Standard'],
 		banlist: ['AG'],
 	},
 	{
-		name: "[Gen 9] LC",
+		name: "[Gen 9] LC (beta)",
 
 		mod: 'gen9',
 		ruleset: ['Little Cup', 'Standard'],
 	},
 	{
-		name: "[Gen 9] Monotype",
+		name: "[Gen 9] Monotype (beta)",
 
 		mod: 'gen9',
 		ruleset: ['Same Type Clause', 'Standard'],
 	},
 	{
-		name: "[Gen 9] 1v1",
+		name: "[Gen 9] 1v1 (beta)",
 		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
 
 		mod: 'gen9',
@@ -689,19 +689,13 @@ export const Formats: FormatList = [
 		],
 		banlist: ['Focus Sash'],
 	},
-	{
-		name: "[Gen 9] Anything Goes",
-
-		mod: 'gen9',
-		ruleset: ['Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
-	},
 
 	// OM of the Month
 	///////////////////////////////////////////////////////////////////
 
 	{
 		section: "OM of the Month",
-		column: 2,
+		// column: 2,
 	},
 	{
 		name: "[Gen 8] Pure Hackmons",
