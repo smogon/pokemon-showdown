@@ -44,8 +44,9 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 				spd: newSpecies.baseStats.atk,
 				spe: newSpecies.baseStats.hp,
 			};
-			for (const i in newSpecies.baseStats) {
-				newSpecies.baseStats[i as StatID] = stats[i as StatID];
+			let stat: StatID;
+			for (stat in newSpecies.baseStats) {
+				newSpecies.baseStats[stat] = stats[stat];
 			}
 			return newSpecies;
 		},
