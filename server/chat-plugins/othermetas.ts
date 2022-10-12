@@ -15,6 +15,7 @@ interface StoneDeltas {
 }
 
 type TierShiftTiers = 'UU' | 'RUBL' | 'RU' | 'NUBL' | 'NU' | 'PUBL' | 'PU' | 'NFE' | 'LC';
+type OtherMetaTier = "MnM" | "NS" | "CE";
 
 function getMegaStone(stone: string, mod = 'gen8'): Item | null {
 	let dex = Dex;
@@ -143,7 +144,7 @@ export const commands: Chat.ChatCommands = {
 			mixedSpecies.bst += mixedSpecies.baseStats[statName];
 		}
 		mixedSpecies.weighthg = Math.max(1, species.weighthg + deltas.weighthg);
-		mixedSpecies.tier = "MnM";
+		(mixedSpecies.tier as OtherMetaTier) = "MnM";
 		let weighthit = 20;
 		if (mixedSpecies.weighthg >= 2000) {
 			weighthit = 120;
@@ -518,7 +519,7 @@ export const commands: Chat.ChatCommands = {
 			const swap = species.baseStats[natureObj.minus];
 			species.baseStats[natureObj.minus] = species.baseStats[natureObj.plus];
 			species.baseStats[natureObj.plus] = swap;
-			species.tier = 'NS';
+			(species.tier as OtherMetaTier) = 'NS';
 		}
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
@@ -582,7 +583,7 @@ export const commands: Chat.ChatCommands = {
 		if (mixedSpecies.weighthg < 1) {
 			mixedSpecies.weighthg = 1;
 		}
-		mixedSpecies.tier = "CE";
+		(mixedSpecies.tier as OtherMetaTier) = "CE";
 		let weighthit = 20;
 		if (mixedSpecies.weighthg >= 2000) {
 			weighthit = 120;
@@ -629,7 +630,7 @@ export const commands: Chat.ChatCommands = {
 		const prevoSpecies = Dex.species.get(evo.prevo);
 		const deltas = Utils.deepClone(evo);
 		if (!isReEvo) {
-			deltas.tier = 'CE';
+			(deltas.tier as OtherMetaTier) = 'CE';
 			deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
 			deltas.types = [];
 			if (evo.types[0] !== prevoSpecies.types[0]) deltas.types[0] = evo.types[0];
