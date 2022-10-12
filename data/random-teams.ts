@@ -292,9 +292,8 @@ export class RandomTeams {
 	 * Same as (@see sampleNoReplace), but throws an error if the list is empty.
 	 */
 	sampleNoReplaceOrError<T>(list: T[]): T {
-		const sample = this.sampleNoReplace(list);
-		if (sample === null) throw new Error(`Tried to sample from empty list`);
-		return sample;
+		if (list.length === 0) throw new Error(`Tried to sample from empty list`);
+		return this.sampleNoReplace(list)!; // We know the value is valid if the list isn't empty
 	}
 
 	/**
@@ -304,10 +303,8 @@ export class RandomTeams {
 	 */
 	multipleSamplesNoReplace<T>(list: T[], n: number): T[] {
 		const samples = [];
-		while (samples.length < n) {
-			const sample = this.sampleNoReplace(list);
-			if (!sample) break;
-			samples.push(sample);
+		while (samples.length < n && list.length) {
+			samples.push(this.sampleNoReplaceOrError(list));
 		}
 
 		return samples;
