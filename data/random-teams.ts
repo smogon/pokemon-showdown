@@ -61,7 +61,7 @@ const ContraryMoves = [
 ];
 // Moves that boost Attack:
 const PhysicalSetup = [
-	'bellydrum', 'bulkup', 'coil', 'curse', 'dragondance', 'honeclaws', 'howl', 'poweruppunch', 'swordsdance',
+	'bellydrum', 'bulkup', 'coil', 'curse', 'dragondance', 'honeclaws', 'howl', 'meditate', 'poweruppunch', 'swordsdance',
 ];
 // Moves which boost Special Attack:
 const SpecialSetup = [
