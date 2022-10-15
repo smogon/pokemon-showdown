@@ -2348,6 +2348,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (pokemon.transformed) return;
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityState.ending = false;
+			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
 			for (const target of this.getAllActive()) {
 				if (target.illusion) {
 					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'neutralizinggas');
@@ -2355,6 +2356,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				if (target.volatiles['slowstart']) {
 					delete target.volatiles['slowstart'];
 					this.add('-end', target, 'Slow Start', '[silent]');
+				}
+				if (strongWeathers.includes(target.getAbility().id)) {
+					this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
 				}
 			}
 		},
