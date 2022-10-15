@@ -82,7 +82,7 @@ describe('Neutralizing Gas', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it.skip(`should negate Primal weather Abilities`, function () {
+	it(`should negate Primal weather Abilities`, function () {
 		battle = common.createBattle([[
 			{species: 'Groudon', item: 'redorb', moves: ['sleeptalk']},
 		], [
