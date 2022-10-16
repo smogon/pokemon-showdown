@@ -2072,7 +2072,7 @@ export const commands: Chat.ChatCommands = {
 		if (showAll || ['vpn', 'proxy'].includes(target)) {
 			buffer.push(`<a href="https://pokemonshowdown.com/${this.tr`pages/proxyhelp`}">${this.tr`Proxy lock help`}</a>`);
 		}
-		if (showAll || ['ca', 'customavatar', 'customavatars'].includes('target')) {
+		if (showAll || ['ca', 'customavatar', 'customavatars'].includes(target)) {
 			buffer.push(this.tr`Custom avatars are given to Global Staff members, contributors (coders and spriters) to Pokemon Showdown, and Smogon badgeholders at the discretion of Zarel. They are also sometimes given out as prizes for major room events or Smogon tournaments.`);
 		}
 		if (showAll || ['privacy', 'private'].includes(target)) {
