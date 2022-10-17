@@ -162,7 +162,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	vileplume: {
-		randomBattleMoves: ["gigadrain", "moonlight", "sleeppowder", "sludgebomb", "stunspore", "swordsdance"],
+		randomBattleMoves: ["hiddenpowergrass", "moonlight", "sleeppowder", "sludgebomb", "stunspore", "swordsdance"],
 		tier: "UU",
 	},
 	bellossom: {
@@ -889,7 +889,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "Uber",
 	},
 	celebi: {
-		randomBattleMoves: ["gigadrain", "healbell", "leechseed", "psychic", "recover", "toxic"],
+		randomBattleMoves: ["hiddenpowergrass", "healbell", "leechseed", "psychic", "recover", "toxic"],
 		tier: "Uber",
 	},
 };
