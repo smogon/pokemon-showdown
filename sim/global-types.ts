@@ -24,14 +24,8 @@ type PokemonSlot = '' | string & {__isSlot: true};
 interface AnyObject {[k: string]: any}
 
 type GenderName = 'M' | 'F' | 'N' | '';
-const _statIDsExceptHP = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
-const _statIDs = [..._statIDsExceptHP, 'hp'] as const;
-namespace Stats {
-	export const statIDsExceptHP = _statIDsExceptHP;
-	export const statIDs = _statIDs;
-}
-type StatIDExceptHP = typeof _statIDsExceptHP[number];
-type StatID = typeof _statIDs[number];
+type StatIDExceptHP = 'atk' | 'def' | 'spa' | 'spd' | 'spe';
+type StatID = 'hp' | StatIDExceptHP;
 type StatsExceptHPTable = {[stat in StatIDExceptHP]: number};
 type StatsTable = {[stat in StatID]: number};
 type SparseStatsTable = Partial<StatsTable>;
@@ -70,7 +64,7 @@ namespace TierTypes {
 	export type Singles = "AG" | "Uber" | "(Uber)" | "OU" | "(OU)" | "UUBL" | "UU" | "RUBL" | "RU" | "NUBL" | "NU" |
 	"(NU)" | "PUBL" | "PU" | "(PU)" | "NFE" | "LC";
 	export type Doubles = "DUber" | "(DUber)" | "DOU" | "(DOU)" | "DBL" | "DUU" | "(DUU)" | "NFE" | "LC";
-	export type Other = "Unreleased" | "Illegal" | "CAP" | "CAP NFE" | "CAP LC" | "MnM" | "NS" | "CE";
+	export type Other = "Unreleased" | "Illegal" | "CAP" | "CAP NFE" | "CAP LC";
 }
 
 interface EventInfo {

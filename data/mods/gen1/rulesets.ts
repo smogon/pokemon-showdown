@@ -17,7 +17,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			const bst = newSpecies.bst;
 			if (bst <= 350) {
 				newSpecies.bst = 0;
-				for (const stat of Stats.statIDs) {
+				for (const stat in newSpecies.baseStats) {
 					if (stat === 'spd') continue;
 					newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * 2, 1, 255);
 					newSpecies.bst += newSpecies.baseStats[stat];
@@ -43,8 +43,8 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 				spd: newSpecies.baseStats.atk,
 				spe: newSpecies.baseStats.hp,
 			};
-			for (const statName of Stats.statIDs) {
-				newSpecies.baseStats[statName] = stats[statName];
+			for (const i in newSpecies.baseStats) {
+				newSpecies.baseStats[i] = stats[i];
 			}
 			return newSpecies;
 		},
@@ -61,7 +61,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			const pst: number = newSpecies.bst - newSpecies.baseStats['hp'];
 			const scale = 500 - newSpecies.baseStats['hp'];
 			newSpecies.bst = newSpecies.baseStats['hp'];
-			for (const stat of Stats.statIDs) {
+			for (const stat in newSpecies.baseStats) {
 				if (stat === 'hp' || stat === 'spd') continue;
 				newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * scale / pst, 1, 255);
 				newSpecies.bst += newSpecies.baseStats[stat];
