@@ -311,7 +311,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		const bst = species.bst;
 		species.bst = 0;
-		for (const i in species.baseStats) {
+		for (const i of Stats.statIDs) {
 			if (dex.gen === 1 && i === 'spd') continue;
 			species.baseStats[i] = species.baseStats[i] * (bst <= 350 ? 2 : 1);
 			species.bst += species.baseStats[i];
@@ -362,12 +362,11 @@ export const commands: Chat.ChatCommands = {
 			LC: 40,
 		};
 		let tier = species.tier;
-		if (tier[0] === '(') tier = tier.slice(1, -1);
+		if (tier.startsWith("(")) tier = tier.slice(1, -1) as TierTypes.Singles | TierTypes.Other;
 		if (!(tier in boosts)) return this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 		const boost = boosts[tier as TierShiftTiers];
 		species.bst = species.baseStats.hp;
-		for (const statName in species.baseStats) {
-			if (statName === 'hp') continue;
+		for (const statName of Stats.statIDsExceptHP) {
 			if (dex.gen === 1 && statName === 'spd') continue;
 			species.baseStats[statName] = Utils.clampIntRange(species.baseStats[statName] + boost, 1, 255);
 			species.bst += species.baseStats[statName];
@@ -410,7 +409,7 @@ export const commands: Chat.ChatCommands = {
 		const bstNoHP = species.bst - species.baseStats.hp;
 		const scale = (dex.gen !== 1 ? 600 : 500) - species.baseStats['hp'];
 		species.bst = 0;
-		for (const stat in species.baseStats) {
+		for (const stat of Stats.statIDs) {
 			if (stat === 'hp') continue;
 			if (dex.gen === 1 && stat === 'spd') continue;
 			species.baseStats[stat] = Utils.clampIntRange(species.baseStats[stat] * scale / bstNoHP, 1, 255);
@@ -462,7 +461,7 @@ export const commands: Chat.ChatCommands = {
 				spd: species.baseStats.atk,
 				spe: species.baseStats.hp,
 			};
-			for (const stat in species.baseStats) {
+			for (const stat of Stats.statIDs) {
 				species.baseStats[stat] = flippedStats[stat];
 			}
 			this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
@@ -470,7 +469,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		const stats = Object.values(species.baseStats).reverse();
 		for (const [i, statName] of Object.keys(species.baseStats).entries()) {
-			species.baseStats[statName] = stats[i];
+			species.baseStats[statName as keyof typeof species.baseStats] = stats[i];
 		}
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
@@ -591,7 +590,7 @@ export const commands: Chat.ChatCommands = {
 		} else if (mixedSpecies.weighthg >= 100) {
 			weighthit = 40;
 		}
-		const details: {[k: string]: string} = {
+		const details: {[k: string]: string | number} = {
 			"Dex#": mixedSpecies.num,
 			Gen: mixedSpecies.gen,
 			Height: mixedSpecies.heightm + " m",
@@ -637,8 +636,6 @@ export const commands: Chat.ChatCommands = {
 				deltas.types = deltas.types.filter((type: string | undefined) => type !== undefined);
 
 				if (deltas.types[0] === deltas.types[1]) deltas.types = [deltas.types[0]];
-			} else {
-				deltas.types = null;
 			}
 		}
 		deltas.bst = 0;

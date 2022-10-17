@@ -1613,7 +1613,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 	const getFullLearnsetOfPokemon = (species: Species) => {
 		let usedSpecies: Species = Utils.deepClone(species);
-		let usedSpeciesLearnset: LearnsetData = Utils.deepClone(mod.species.getLearnset(usedSpecies.id));
+		let usedSpeciesLearnset: LearnsetData | undefined = Utils.deepClone(mod.species.getLearnset(usedSpecies.id));
 		if (!usedSpeciesLearnset) {
 			usedSpecies = Utils.deepClone(mod.species.get(usedSpecies.baseSpecies));
 			usedSpeciesLearnset = Utils.deepClone(mod.species.getLearnset(usedSpecies.id) || {});

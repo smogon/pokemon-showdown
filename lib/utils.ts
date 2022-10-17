@@ -153,7 +153,6 @@ export function visualize(value: any, depth = 0): string {
 
 /**
  * Compares two variables; intended to be used as a smarter comparator.
- * The two variables must be the same type (TypeScript will not check this).
  *
  * - Numbers are sorted low-to-high, use `-val` to reverse
  * - Strings are sorted A to Z case-semi-insensitively, use `{reverse: val}` to reverse
@@ -162,7 +161,7 @@ export function visualize(value: any, depth = 0): string {
  *
  * In other words: `[num, str]` will be sorted A to Z, `[num, {reverse: str}]` will be sorted Z to A.
  */
-export function compare(a: Comparable, b: Comparable): number {
+export function compare<T extends Comparable>(a: T, b: T): number {
 	if (typeof a === 'number') {
 		return a - (b as number);
 	}
@@ -180,7 +179,7 @@ export function compare(a: Comparable, b: Comparable): number {
 		return 0;
 	}
 	if ('reverse' in a) {
-		return compare((b as {reverse: string}).reverse, a.reverse);
+		return compare((b as {reverse: Comparable}).reverse, a.reverse);
 	}
 	throw new Error(`Passed value ${a} is not comparable`);
 }
@@ -318,12 +317,12 @@ export function clearRequireCache(options: {exclude?: string[]} = {}) {
 	}
 }
 
-export function deepClone(obj: any): any {
+export function deepClone<T>(obj: T): Mutable<T> {
 	if (obj === null || typeof obj !== 'object') return obj;
-	if (Array.isArray(obj)) return obj.map(prop => deepClone(prop));
+	if (Array.isArray(obj)) return obj.map(prop => deepClone(prop)) as T;
 	const clone = Object.create(Object.getPrototypeOf(obj));
 	for (const key of Object.keys(obj)) {
-		clone[key] = deepClone(obj[key]);
+		clone[key] = deepClone(obj[key as keyof typeof obj]);
 	}
 	return clone;
 }
