@@ -905,7 +905,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	onChatMessage(msg: string) {
 		let msgId = toID(msg) as string;
 
-		// idenitfy if there is a bot/dt command that failed
+		// identify if there is a bot/dt command that failed
 		// remove it and then match the rest of the post for leaks.
 		const commandMatch = ACCIDENTAL_LEAKS.exec(msg);
 		if (commandMatch) msgId = msgId.slice(toID(commandMatch[0]).length);
@@ -941,7 +941,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 			if (!allowOffline && (!user?.connected || !(user.id in room.users))) continue;
 
 			if (!user) {
-				// simply stick the ID's in there - dont keep any benign symbols passed by the hunt maker
+				// simply stick the ID's in there - don't keep any benign symbols passed by the hunt maker
 				hosts.push({name: id, id: id, noUpdate: true});
 				continue;
 			}
