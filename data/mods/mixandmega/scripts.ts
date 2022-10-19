@@ -1,3 +1,7 @@
+interface SpeciesMixAndMega extends Mutable<Species> {
+	originalMega?: string | Species;
+}
+
 export const Scripts: ModdedBattleScriptsData = {
 	init() {
 		for (const i in this.data.Items) {
@@ -23,14 +27,16 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (pokemon.species.isMega) return false;
 
 			// @ts-ignore
-			const species: Species = this.getMixedSpecies(pokemon.m.originalSpecies, pokemon.canMegaEvo);
+			const species = this.getMixedSpecies(
+				pokemon.m.originalSpecies,
+				pokemon.canMegaEvo
+			) as SpeciesMixAndMega;
 
 			// Do we have a proper sprite for it?
 			if (this.dex.species.get(pokemon.canMegaEvo!).baseSpecies === pokemon.m.originalSpecies) {
 				pokemon.formeChange(species, pokemon.getItem(), true);
 			} else {
 				const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
-				// @ts-ignore
 				const oMegaSpecies = this.dex.species.get(species.originalMega);
 				pokemon.formeChange(species, pokemon.getItem(), true);
 				this.battle.add('-start', pokemon, oMegaSpecies.requiredItem, '[silent]');
@@ -85,7 +91,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		doGetMixedSpecies(speciesOrForme, deltas) {
 			if (!deltas) throw new TypeError("Must specify deltas!");
-			const species = this.dex.deepClone(this.dex.species.get(speciesOrForme));
+			const species = this.dex.deepClone(this.dex.species.get(speciesOrForme)) as SpeciesMixAndMega;
 			species.abilities = {'0': deltas.ability};
 			if (species.types[0] === deltas.type) {
 				species.types = [deltas.type];
@@ -100,7 +106,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				baseStats[statName] = this.battle.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
 			}
 			species.weighthg = Math.max(1, species.weighthg + deltas.weighthg);
-			// @ts-ignore
 			species.originalMega = deltas.originalMega;
 			species.requiredItem = deltas.requiredItem;
 			if (deltas.isMega) species.isMega = true;

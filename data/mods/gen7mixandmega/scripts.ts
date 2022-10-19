@@ -1,3 +1,7 @@
+interface SpeciesMixAndMega extends Mutable<Species> {
+	originalMega?: string | Species;
+}
+
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen7',
 	init() {
@@ -25,7 +29,10 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			const isUltraBurst = !pokemon.canMegaEvo;
 			// @ts-ignore
-			const species: Species = this.getMixedSpecies(pokemon.m.originalSpecies, pokemon.canMegaEvo || pokemon.canUltraBurst);
+			const species = this.getMixedSpecies(
+				pokemon.m.originalSpecies,
+				pokemon.canMegaEvo || pokemon.canUltraBurst
+			) as SpeciesMixAndMega;
 
 			// Do we have a proper sprite for it?
 			// @ts-ignore assert non-null pokemon.canMegaEvo
@@ -33,7 +40,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				pokemon.formeChange(species, pokemon.getItem(), true);
 			} else {
 				const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
-				// @ts-ignore
 				const oMegaSpecies = this.dex.species.get(species.originalMega);
 				pokemon.formeChange(species, pokemon.getItem(), true);
 				this.battle.add('-start', pokemon, oMegaSpecies.requiredItem || oMegaSpecies.requiredMove, '[silent]');
@@ -91,7 +97,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		doGetMixedSpecies(speciesOrSpeciesName, deltas) {
 			if (!deltas) throw new TypeError("Must specify deltas!");
-			const species = this.dex.deepClone(this.dex.species.get(speciesOrSpeciesName));
+			const species = this.dex.deepClone(this.dex.species.get(speciesOrSpeciesName)) as SpeciesMixAndMega;
 			species.abilities = {'0': deltas.ability};
 			if (species.types[0] === deltas.type) {
 				species.types = [deltas.type];
@@ -104,7 +110,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				baseStats[statName] = this.battle.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
 			}
 			species.weighthg = Math.max(1, species.weighthg + deltas.weighthg);
-			// @ts-ignore
 			species.originalMega = deltas.originalMega;
 			species.requiredItem = deltas.requiredItem;
 			if (deltas.isMega) species.isMega = true;
