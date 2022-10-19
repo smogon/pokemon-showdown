@@ -24,14 +24,8 @@ type PokemonSlot = '' | string & {__isSlot: true};
 interface AnyObject {[k: string]: any}
 
 type GenderName = 'M' | 'F' | 'N' | '';
-const _statIDsExceptHP = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
-const _statIDs = [..._statIDsExceptHP, 'hp'] as const;
-namespace Stats {
-	export const statIDsExceptHP = _statIDsExceptHP;
-	export const statIDs = _statIDs;
-}
-type StatIDExceptHP = typeof _statIDsExceptHP[number];
-type StatID = typeof _statIDs[number];
+type StatIDExceptHP = 'atk' | 'def' | 'spa' | 'spd' | 'spe';
+type StatID = 'hp' | StatIDExceptHP;
 type StatsExceptHPTable = {[stat in StatIDExceptHP]: number};
 type StatsTable = {[stat in StatID]: number};
 type SparseStatsTable = Partial<StatsTable>;

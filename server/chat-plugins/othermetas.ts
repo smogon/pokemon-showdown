@@ -311,7 +311,8 @@ export const commands: Chat.ChatCommands = {
 		}
 		const bst = species.bst;
 		species.bst = 0;
-		for (const i of Stats.statIDs) {
+		let i: StatID;
+		for (i in species.baseStats) {
 			if (dex.gen === 1 && i === 'spd') continue;
 			species.baseStats[i] = species.baseStats[i] * (bst <= 350 ? 2 : 1);
 			species.bst += species.baseStats[i];
@@ -366,7 +367,9 @@ export const commands: Chat.ChatCommands = {
 		if (!(tier in boosts)) return this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 		const boost = boosts[tier as TierShiftTiers];
 		species.bst = species.baseStats.hp;
-		for (const statName of Stats.statIDsExceptHP) {
+		let statName: StatID;
+		for (statName in species.baseStats) {
+			if (statName === "hp") continue;
 			if (dex.gen === 1 && statName === 'spd') continue;
 			species.baseStats[statName] = Utils.clampIntRange(species.baseStats[statName] + boost, 1, 255);
 			species.bst += species.baseStats[statName];
@@ -408,8 +411,8 @@ export const commands: Chat.ChatCommands = {
 		}
 		const bstNoHP = species.bst - species.baseStats.hp;
 		const scale = (dex.gen !== 1 ? 600 : 500) - species.baseStats['hp'];
-		species.bst = 0;
-		for (const stat of Stats.statIDs) {
+		let stat: StatID;
+		for (stat in species.baseStats) {
 			if (stat === 'hp') continue;
 			if (dex.gen === 1 && stat === 'spd') continue;
 			species.baseStats[stat] = Utils.clampIntRange(species.baseStats[stat] * scale / bstNoHP, 1, 255);
@@ -461,7 +464,8 @@ export const commands: Chat.ChatCommands = {
 				spd: species.baseStats.atk,
 				spe: species.baseStats.hp,
 			};
-			for (const stat of Stats.statIDs) {
+			let stat: StatID;
+			for (stat in species.baseStats) {
 				species.baseStats[stat] = flippedStats[stat];
 			}
 			this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
