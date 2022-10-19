@@ -304,7 +304,7 @@ export class RandomTeams {
 	multipleSamplesNoReplace<T>(list: T[], n: number): T[] {
 		const samples = [];
 		while (samples.length < n && list.length) {
-			samples.push(this.sampleNoReplaceOrError(list));
+			samples.push(this.sampleNoReplace(list)!);
 		}
 
 		return samples;
