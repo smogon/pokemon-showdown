@@ -443,6 +443,22 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
+	it.skip('should reject Volbeat with both Lunge and Dizzy Punch in Gen 7', function () {
+		const team = [
+			{species: 'volbeat', ability: 'swarm', moves: ['lunge', 'dizzypunch'], evs: {hp: 1}},
+		];
+		const illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
+		assert(illegal);
+	});
+
+	it.skip('should accept this chainbreed on Toxicroak', function () {
+		const team = [
+			{species: 'toxicroak', ability: 'dryskin', moves: ['bulletpunch', 'crosschop', 'fakeout'], evs: {hp: 4}},
+		];
+		const illegal = TeamValidator.get('gen5ou').validateTeam(team);
+		assert.equal(illegal, null);
+	});
+
 	it('should require Hidden Ability status to match event moves', function () {
 		const team = [
 			{species: 'raichu', ability: 'lightningrod', moves: ['extremespeed'], evs: {hp: 1}},
@@ -561,6 +577,14 @@ describe('Team Validator', function () {
 		];
 		const illegal = TeamValidator.get('gen5ou').validateTeam(team);
 		assert.equal(illegal, null);
+	});
+
+	it.skip('should reject mutually incompatible Dream World moves', function () {
+		const team = [
+			{species: 'spinda', ability: 'contrary', moves: ['superpower', 'fakeout'], evs: {hp: 1}},
+		];
+		const illegal = TeamValidator.get('gen5ou').validateTeam(team);
+		assert.equal(illegal);
 	});
 
 	it('should consider Dream World Abilities as Hidden based on Gen 5 data', function () {

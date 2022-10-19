@@ -10,7 +10,7 @@ import {Utils, FS, Net} from '../../lib';
 
 const ROOT = 'https://www.googleapis.com/youtube/v3/';
 const STORAGE_PATH = 'config/chat-plugins/youtube.json';
-const GROUPWATCH_ROOMS = ['youtube', 'pokemongames', 'videogames', 'smashbros', 'pokemongo'];
+const GROUPWATCH_ROOMS = ['youtube', 'pokemongames', 'videogames', 'smashbros', 'pokemongo', 'hindi'];
 
 export const videoDataCache: Map<string, VideoData> = Chat.oldPlugins.youtube?.videoDataCache || new Map();
 export const searchDataCache: Map<string, string[]> = Chat.oldPlugins.youtube?.searchDataCache || new Map();

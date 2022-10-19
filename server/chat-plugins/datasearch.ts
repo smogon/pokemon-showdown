@@ -1618,13 +1618,28 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			usedSpecies = Utils.deepClone(mod.species.get(usedSpecies.baseSpecies));
 			usedSpeciesLearnset = Utils.deepClone(mod.species.getLearnset(usedSpecies.id) || {});
 		}
-		const lsetData = new Set(Object.keys(usedSpeciesLearnset));
+		const lsetData = new Set<string>();
+		for (const move in usedSpeciesLearnset) {
+			const learnset = mod.species.getLearnset(usedSpecies.id);
+			if (!learnset) break;
+			const sources = learnset[move];
+			for (const learned of sources) {
+				const sourceGen = parseInt(learned.charAt(0));
+				if (sourceGen <= mod.gen) lsetData.add(move);
+			}
+		}
 
 		while (usedSpecies.prevo) {
 			usedSpecies = Utils.deepClone(mod.species.get(usedSpecies.prevo));
 			usedSpeciesLearnset = Utils.deepClone(mod.species.getLearnset(usedSpecies.id));
 			for (const move in usedSpeciesLearnset) {
-				lsetData.add(move);
+				const learnset = mod.species.getLearnset(usedSpecies.id);
+				if (!learnset) break;
+				const sources = learnset[move];
+				for (const learned of sources) {
+					const sourceGen = parseInt(learned.charAt(0));
+					if (sourceGen <= mod.gen) lsetData.add(move);
+				}
 			}
 		}
 
@@ -1807,8 +1822,13 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 						matched = true;
 						break;
 					}
-				} else if (move.secondary && move.secondary.self && move.secondary.self.boosts) {
+				} else if (move.secondary?.self?.boosts) {
 					if ((move.secondary.self.boosts[boost as BoostID]! > 0) === alts.boost[boost]) {
+						matched = true;
+						break;
+					}
+				} else if (move.selfBoost?.boosts) {
+					if ((move.selfBoost.boosts[boost as BoostID]! > 0) === alts.boost[boost]) {
 						matched = true;
 						break;
 					}
@@ -1816,22 +1836,20 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 			if (matched) continue;
 			for (const lower in alts.lower) {
-				if (move.boosts && move.boosts !== false) {
+				if (move.boosts) {
 					if ((move.boosts[lower as BoostID]! < 0) === alts.lower[lower]) {
 						matched = true;
 						break;
 					}
-				} else if (move.secondary) {
-					if (move.secondary.boosts) {
-						if ((move.secondary.boosts[lower as BoostID]! < 0) === alts.lower[lower]) {
-							matched = true;
-							break;
-						}
-					} else if (move.secondary.self && move.secondary.self.boosts) {
-						if ((move.secondary.self.boosts[lower as BoostID]! < 0) === alts.lower[lower]) {
-							matched = true;
-							break;
-						}
+				} else if (move.secondary?.boosts) {
+					if ((move.secondary.boosts[lower as BoostID]! < 0) === alts.lower[lower]) {
+						matched = true;
+						break;
+					}
+				} else if (move.self?.boosts) {
+					if ((move.self.boosts[lower as BoostID]! < 0) === alts.lower[lower]) {
+						matched = true;
+						break;
 					}
 				}
 			}
