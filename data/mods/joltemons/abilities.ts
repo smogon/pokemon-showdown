@@ -496,10 +496,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 				target.setAbility('wanderingspirit', pokemon);
 				pokemon.setAbility(ability);
-				this.add('-activate', pokemon, 'ability: Wandering Spirit');
-				this.add('-activate', pokemon, 'Skill Swap', '', '', '[of] ' + target);
-				this.add('-activate', pokemon, 'ability: ' + ability.name);
-				this.add('-activate', target, 'ability: Wandering Spirit');
+				this.add('-activate', pokemon, 'ability: Wandering Spirit', ability.name, 'Wandering Spirit', '[of] ' + target);
 				return;
 			}
 		},
