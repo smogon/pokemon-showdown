@@ -105,7 +105,7 @@ export const SampleTeams = new class SampleTeams {
 		save();
 	}
 
-	sanitizeFormat(formatid: string, checkExists: boolean = false) {
+	sanitizeFormat(formatid: string, checkExists = false) {
 		const format = Dex.formats.get(formatid);
 		if (checkExists && !format.exists) {
 			throw new Chat.ErrorMessage(`Format "${formatid.trim()}" not found. Check spelling?`);
