@@ -682,20 +682,17 @@ export class TeamValidator {
 				if (eventData.length === 1) {
 					problems.push(`${species.name} is only obtainable from an event - it needs to match its event:`);
 				} else {
-					problems.push(`${species.name} is only obtainable from events - it needs to match one of its events, such as:`);
+					problems.push(`${species.name} is only obtainable from events - it needs to match one of its events:`);
 				}
-				let eventInfo = eventData[0];
-				let eventNum = 1;
 				for (const [i, event] of eventData.entries()) {
 					if (event.generation <= dex.gen && event.generation >= this.minSourceGen) {
-						eventInfo = event;
-						eventNum = i + 1;
-						break;
+						const eventInfo = event;
+						const eventNum = i + 1;
+						const eventName = eventData.length > 1 ? ` #${eventNum}` : ``;
+						const eventProblems = this.validateEvent(set, eventInfo, eventSpecies, ` to be`, `from its event${eventName}`);
+						if (eventProblems) problems.push(...eventProblems);
 					}
 				}
-				const eventName = eventData.length > 1 ? ` #${eventNum}` : ``;
-				const eventProblems = this.validateEvent(set, eventInfo, eventSpecies, ` to be`, `from its event${eventName}`);
-				if (eventProblems) problems.push(...eventProblems);
 			}
 		}
 
