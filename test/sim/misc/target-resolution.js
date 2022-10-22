@@ -357,20 +357,23 @@ describe('Target Resolution', function () {
 		assert.false.fullHP(battle.p1.active[1], 'Altaria should not be at full HP, because Phantom Force was redirected and targeted it.');
 	});
 
-	it.skip(`should cause Rollout to target the same slot after being called as a submove`, function () {
+	it(`should cause Rollout to target the same slot after being called as a submove`, function () {
 		// hardcoded RNG seed to show the erroneous targeting behavior
 		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
-			{species: 'purrloin', ability: 'compoundeyes', moves: ['rollout', 'sleeptalk']},
-			{species: 'regieleki', moves: ['healbell', 'spore']},
+			{species: 'azumarill', ability: 'compoundeyes', moves: ['copycat']},
+			{species: 'wobbuffet', ability: 'wonderguard', moves: ['splash']},
 		], [
-			{species: 'aggron', moves: ['sleeptalk']},
+			{species: 'metagross', moves: ['sleeptalk', 'rollout']},
 			{species: 'slowbro', moves: ['sleeptalk']},
 		]]);
 
-		battle.makeChoices('move sleeptalk, move spore -1', 'auto');
+		battle.makeChoices('auto', 'move rollout 2, move sleeptalk');
 		// Determine which slot was damaged on first turn of Rollout
-		const aggron = battle.p2.active[0];
-		const notTargetedPokemon = aggron.hp === aggron.maxhp ? aggron : battle.p2.active[1];
+		const metagross = battle.p2.active[0];
+		const slowbro = battle.p2.active[1];
+		assert(metagross.hp !== metagross.maxhp || slowbro.hp !== slowbro.maxhp,
+			"Neither Metagross nor Slowbro was damaged -- is Azumarill hitting them?");
+		const notTargetedPokemon = metagross.hp === metagross.maxhp ? metagross : slowbro;
 
 		for (let i = 0; i < 4; i++) battle.makeChoices();
 		assert.fullHP(notTargetedPokemon);
