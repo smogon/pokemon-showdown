@@ -1428,7 +1428,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	porygon2: {
 		randomBattleMoves: ["discharge", "icebeam", "recover", "toxic", "triattack"],
 		randomBattleLevel: 82,
-		randomDoubleBattleMoves: ["icebeam", "recover", "thunderbolt", "toxic", "triattack"],
+		randomDoubleBattleMoves: ["icebeam", "recover", "thunderbolt", "toxic", "triattack", "trickroom"],
 		randomDoubleBattleLevel: 83,
 		tier: "RU",
 		doublesTier: "DOU",
@@ -4594,7 +4594,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	golurk: {
 		randomBattleMoves: ["dynamicpunch", "earthquake", "poltergeist", "rockpolish", "stoneedge"],
 		randomBattleLevel: 82,
-		randomDoubleBattleMoves: ["dynamicpunch", "earthquake", "highhorsepower", "icepunch", "poltergeist", "protect"],
+		randomDoubleBattleMoves: ["dynamicpunch", "highhorsepower", "icepunch", "poltergeist", "protect"],
 		randomDoubleBattleLevel: 86,
 		tier: "NU",
 		doublesTier: "(DUU)",
@@ -4927,7 +4927,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	talonflame: {
 		randomBattleMoves: ["bravebird", "defog", "flareblitz", "roost", "swordsdance", "uturn"],
 		randomBattleLevel: 81,
-		randomDoubleBattleMoves: ["bravebird", "defog", "incinerate", "overheat", "tailwind", "u-turn"],
+		randomDoubleBattleMoves: ["bravebird", "defog", "incinerate", "overheat", "tailwind", "u-turn", "willowisp"],
 		randomDoubleBattleLevel: 86,
 		tier: "NU",
 		doublesTier: "(DUU)",
