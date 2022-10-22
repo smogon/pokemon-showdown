@@ -23,8 +23,6 @@ describe('350 Cup Mod', function () {
 		const spd = bulbasaur.getStat('spd');
 		const spe = bulbasaur.getStat('spe');
 
-		console.log(bulbasaur.base)
-
 		assert.equal(atk, 98);
 		assert.equal(def, 124);
 		assert.equal(spa, 130);
