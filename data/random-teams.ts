@@ -1165,7 +1165,7 @@ export class RandomTeams {
 			if (movePool.includes('leechseed') || (movePool.includes('toxic') && !moves.has('wish'))) return {cull: true};
 			if (isDoubles && (
 				['bellydrum', 'fakeout', 'shellsmash', 'spore'].some(m => movePool.includes(m)) ||
-				moves.has('tailwind') || moves.has('waterspout')
+				moves.has('tailwind') || moves.has('waterspout') || counter.get('recovery')
 			)) return {cull: true};
 			return {cull: false};
 		case 'rapidspin':
@@ -1249,6 +1249,8 @@ export class RandomTeams {
 				(counter.get('Special') < 4 && !moves.has('uturn')) ||
 				(species.types.length > 1 && counter.get('stab') < 3)
 			)};
+		case 'muddywater':
+			return {cull: moves.has('liquidation')};
 		case 'scald':
 			// Special case for Clawitzer
 			return {cull: moves.has('waterpulse')};
@@ -1789,7 +1791,9 @@ export class RandomTeams {
 				species.baseStats.spe >= 60 && species.baseStats.spe <= 100 && this.randomChance(1, 2)
 			) ? 'Choice Scarf' : 'Choice Specs';
 		}
-		if (counter.damagingMoves.size >= 4 && defensiveStatTotal >= 280) return 'Assault Vest';
+		// This one is intentionally below the Choice item checks.
+		if ((defensiveStatTotal < 250 && ability === 'Regenerator') || species.name === 'Pheromosa') return 'Life Orb';
+		if (counter.damagingMoves.size >= 4 && defensiveStatTotal >= 275) return 'Assault Vest';
 		if (
 			counter.damagingMoves.size >= 3 &&
 			species.baseStats.spe >= 60 &&
