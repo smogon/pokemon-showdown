@@ -8707,11 +8707,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 30,
 		basePowerCallback(pokemon, target, move) {
 			let bp = move.basePower;
-			if (pokemon.volatiles['iceball'] && pokemon.volatiles['iceball'].hitCount) {
+			if (pokemon.volatiles['iceball']?.hitCount) {
 				bp *= Math.pow(2, pokemon.volatiles['iceball'].hitCount);
 			}
 			if (pokemon.status !== 'slp') pokemon.addVolatile('iceball');
-			if (!pokemon.volatiles['iceball']?.targetSlot) pokemon.volatiles['iceball'].targetSlot = target.getSlot();
+			if (pokemon.volatiles['iceball']) pokemon.volatiles['iceball'].targetSlot ||= target.getSlot();
 			if (pokemon.volatiles['defensecurl']) {
 				bp *= 2;
 			}
@@ -14396,11 +14396,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 30,
 		basePowerCallback(pokemon, target, move) {
 			let bp = move.basePower;
-			if (pokemon.volatiles['rollout'] && pokemon.volatiles['rollout'].hitCount) {
+			if (pokemon.volatiles['rollout']?.hitCount) {
 				bp *= Math.pow(2, pokemon.volatiles['rollout'].hitCount);
 			}
 			if (pokemon.status !== 'slp') pokemon.addVolatile('rollout');
-			if (!pokemon.volatiles['rollout']?.targetSlot) pokemon.volatiles['rollout'].targetSlot = target.getSlot();
+			if (pokemon.volatiles['rollout']) pokemon.volatiles['rollout'].targetSlot ||= target.getSlot();
 			if (pokemon.volatiles['defensecurl']) {
 				bp *= 2;
 			}
