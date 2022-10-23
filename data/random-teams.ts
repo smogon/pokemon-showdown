@@ -1165,7 +1165,7 @@ export class RandomTeams {
 			if (movePool.includes('leechseed') || (movePool.includes('toxic') && !moves.has('wish'))) return {cull: true};
 			if (isDoubles && (
 				['bellydrum', 'fakeout', 'shellsmash', 'spore'].some(m => movePool.includes(m)) ||
-				moves.has('tailwind') || moves.has('waterspout') || (counter.get('recovery') && !moves.has('leechseed'))
+				moves.has('tailwind') || moves.has('waterspout') || counter.get('recovery')
 			)) return {cull: true};
 			return {cull: false};
 		case 'rapidspin':
@@ -1252,6 +1252,8 @@ export class RandomTeams {
 		case 'scald':
 			// Special case for Clawitzer
 			return {cull: moves.has('waterpulse')};
+		case 'muddywater':
+			return {cull: moves.has('liquidation')};
 		case 'thunderbolt':
 			// Special case for Goodra, which only wants one move to hit Water-types
 			return {cull: moves.has('powerwhip')};
