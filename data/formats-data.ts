@@ -2879,8 +2879,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	dusclops: {
-		randomDoubleBattleMoves: ["allyswitch", "haze", "helpinghand", "nightshade", "painsplit", "trickroom", "willowisp"],
-		randomDoubleBattleLevel: 84,
 		tier: "NFE",
 	},
 	dusknoir: {
@@ -5708,7 +5706,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	oranguru: {
 		randomBattleMoves: ["focusblast", "nastyplot", "psychic", "thunderbolt", "trickroom"],
 		randomBattleLevel: 86,
-		randomDoubleBattleMoves: ["afteryou", "allyswitch", "focusblast", "instruct", "psychic", "trickroom"],
+		randomDoubleBattleMoves: ["allyswitch", "focusblast", "instruct", "psychic", "trickroom"],
 		randomDoubleBattleLevel: 88,
 		tier: "(PU)",
 		doublesTier: "(DUU)",
