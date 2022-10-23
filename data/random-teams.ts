@@ -1249,11 +1249,11 @@ export class RandomTeams {
 				(counter.get('Special') < 4 && !moves.has('uturn')) ||
 				(species.types.length > 1 && counter.get('stab') < 3)
 			)};
+		case 'muddywater':
+			return {cull: moves.has('liquidation')};
 		case 'scald':
 			// Special case for Clawitzer
 			return {cull: moves.has('waterpulse')};
-		case 'muddywater':
-			return {cull: moves.has('liquidation')};
 		case 'thunderbolt':
 			// Special case for Goodra, which only wants one move to hit Water-types
 			return {cull: moves.has('powerwhip')};
