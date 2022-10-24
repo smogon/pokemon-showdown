@@ -18,8 +18,8 @@ import type {Battle} from './battle';
 /** A move action */
 export interface MoveAction {
 	/** action type */
-	choice: 'move' | 'beforeTurnMove';
-	order: 3 | 5 | 200 | 201 | 199;
+	choice: 'move' | 'beforeTurnMove' | 'priorityChargeMove';
+	order: 3 | 5 | 200 | 201 | 199 | 106;
 	/** priority of the action (lower first) */
 	priority: number;
 	/** fractional priority of the action (lower first) */
@@ -179,6 +179,7 @@ export class BattleQueue {
 				switch: 103,
 				megaEvo: 104,
 				runDynamax: 105,
+				priorityChargeMove: 106,
 
 				shift: 200,
 				// default is 200 (for moves)
@@ -201,9 +202,7 @@ export class BattleQueue {
 						choice: 'beforeTurnMove', pokemon: action.pokemon, move: action.move, targetLoc: action.targetLoc,
 					}));
 				}
-				if (action.mega) {
-					// TODO: Check that the Pokémon is not affected by Sky Drop.
-					// (This is currently being done in `runMegaEvo`).
+				if (action.mega && !action.pokemon.isSkyDropped()) {
 					actions.unshift(...this.resolveAction({
 						choice: 'megaEvo',
 						pokemon: action.pokemon,
@@ -213,6 +212,13 @@ export class BattleQueue {
 					actions.unshift(...this.resolveAction({
 						choice: 'runDynamax',
 						pokemon: action.pokemon,
+					}));
+				}
+				if (!action.maxMove && !action.zmove && action.move.priorityChargeCallback) {
+					actions.unshift(...this.resolveAction({
+						choice: 'priorityChargeMove',
+						pokemon: action.pokemon,
+						move: action.move,
 					}));
 				}
 				action.fractionalPriority = this.battle.runEvent('FractionalPriority', action.pokemon, null, action.move, 0);

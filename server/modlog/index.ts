@@ -8,7 +8,7 @@
  * @license MIT
  */
 
-import {FS, SQL, Utils} from '../../lib';
+import {SQL, Utils} from '../../lib';
 import {Config} from '../config-loader';
 
 // If a modlog query takes longer than this, it will be logged.
@@ -22,7 +22,8 @@ export const MODLOG_DB_PATH = Config.nofswriting ? ':memory:' : `${__dirname}/..
 const GLOBAL_PUNISHMENTS = [
 	'WEEKLOCK', 'LOCK', 'BAN', 'RANGEBAN', 'RANGELOCK', 'FORCERENAME',
 	'TICKETBAN', 'AUTOLOCK', 'AUTONAMELOCK', 'NAMELOCK', 'AUTOBAN', 'MONTHLOCK',
-	'AUTOWEEKLOCK', 'WEEKNAMELOCK',
+	'AUTOWEEKLOCK', 'WEEKNAMELOCK', 'FORCEWEEKLOCK', 'FORCELOCK', 'FORCEMONTHLOCK',
+	'FORCERENAME OFFLINE',
 ];
 
 const PUNISHMENTS = [
@@ -53,7 +54,6 @@ interface ModlogSQLQuery<T> {
 export interface ModlogSearch {
 	note: {search: string, isExact?: boolean, isExclusion?: boolean}[];
 	user: {search: string, isExact?: boolean, isExclusion?: boolean}[];
-	anyField?: string;
 	ip: {search: string, isExclusion?: boolean}[];
 	action: {search: string, isExclusion?: boolean}[];
 	actionTaker: {search: string, isExclusion?: boolean}[];
@@ -97,9 +97,16 @@ export class Modlog {
 	constructor(databasePath: string, options: Partial<SQL.Options>) {
 		this.queuedEntries = [];
 		this.databaseReady = false;
-		const dbExists = FS(databasePath).existsSync();
+		if (!options.onError) {
+			options.onError = (error, data, isParent) => {
+				if (!isParent) return;
+				Monitor.crashlog(error, 'A modlog SQLite query', {
+					query: JSON.stringify(data),
+				});
+			};
+		}
 		this.database = SQL(module, {
-			file: MODLOG_DB_PATH,
+			file: databasePath,
 			extension: 'server/modlog/transactions.ts',
 			...options,
 		});
@@ -123,18 +130,19 @@ export class Modlog {
 			}
 		}
 
-		this.readyPromise = this.setupDatabase(dbExists).then(result => {
+		this.readyPromise = this.setupDatabase().then(result => {
 			this.databaseReady = result;
 			this.readyPromise = null;
 		});
 	}
 
-	async setupDatabase(dbExists: boolean) {
+	async setupDatabase() {
 		if (!Config.usesqlite) return false;
 		await this.database.exec("PRAGMA foreign_keys = ON;");
 		await this.database.exec(`PRAGMA case_sensitive_like = true;`);
 
 		// Set up tables, etc
+		const dbExists = await this.database.get(`SELECT * FROM sqlite_master WHERE name = 'modlog'`);
 		if (!dbExists) {
 			await this.database.runFile(MODLOG_SCHEMA_PATH);
 		}
@@ -145,9 +153,10 @@ export class Modlog {
 
 		if (hasDBInfo === 0) {
 			// needs v2 migration
-			Monitor.warn(`The modlog database is being migrated to version 2; this may take a while.`);
+			const warnFunction = ('Monitor' in global && Monitor.warn) ? Monitor.warn : console.log;
+			warnFunction(`The modlog database is being migrated to version 2; this may take a while.`);
 			await this.database.runFile(MODLOG_V2_MIGRATION_PATH);
-			Monitor.warn(`Modlog database migration complete.`);
+			warnFunction(`Modlog database migration complete.`);
 		}
 
 		this.modlogInsertionQuery = await this.database.prepare(
@@ -409,22 +418,12 @@ export class Modlog {
 			ands.push({query: roomChecker, args});
 		}
 
-		if (search.anyField) {
-			for (const or of [
-				`action LIKE ?`, `userid LIKE ?`, `autoconfirmed_userid LIKE ?`, `ip LIKE ?`, `action_taker_userid LIKE ?`,
-				`EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND alts.userid LIKE ?)`,
-			]) {
-				ors.push({query: or, args: [search.anyField + '%']});
-			}
-			ors.push({query: `note LIKE ?`, args: [`%${search.anyField}%`]});
-		}
-
 		for (const action of search.action) {
 			const args = [action.search + '%'];
 			if (action.isExclusion) {
 				ands.push({query: `action NOT LIKE ?`, args});
 			} else {
-				ors.push({query: `action LIKE ?`, args});
+				ands.push({query: `action LIKE ?`, args});
 			}
 		}
 		if (onlyPunishments) {
@@ -437,7 +436,7 @@ export class Modlog {
 			if (ip.isExclusion) {
 				ands.push({query: `ip NOT LIKE ?`, args});
 			} else {
-				ors.push({query: `ip LIKE ?`, args});
+				ands.push({query: `ip LIKE ?`, args});
 			}
 		}
 		for (const actionTaker of search.actionTaker) {
@@ -445,7 +444,7 @@ export class Modlog {
 			if (actionTaker.isExclusion) {
 				ands.push({query: `action_taker_userid NOT LIKE ?`, args});
 			} else {
-				ors.push({query: `action_taker_userid LIKE ?`, args});
+				ands.push({query: `action_taker_userid LIKE ?`, args});
 			}
 		}
 
@@ -455,26 +454,25 @@ export class Modlog {
 			if (noteSearch.isExclusion) {
 				ands.push({query: `note ${noteSearch.isExact ? '!' : 'NOT '}${tester}`, args});
 			} else {
-				ors.push({query: `note ${tester}`, args});
+				ands.push({query: `note ${tester}`, args});
 			}
 		}
 
 		for (const user of search.user) {
 			let tester;
-			let args;
+			let param;
 			if (user.isExact) {
 				tester = user.isExclusion ? `!= ?` : `= ?`;
-				args = [user.search.toLowerCase()];
+				param = user.search.toLowerCase();
 			} else {
 				tester = user.isExclusion ? `NOT LIKE ?` : `LIKE ?`;
-				args = [user.search.toLowerCase() + '%'];
+				param = user.search.toLowerCase() + '%';
 			}
 
-			ors.push({query: `userid ${tester}`, args});
-			ors.push({query: `autoconfirmed_userid ${tester}`, args});
+			ors.push({query: `(userid ${tester} OR autoconfirmed_userid ${tester})`, args: [param, param]});
 			ors.push({
 				query: `EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND alts.userid ${tester})`,
-				args,
+				args: [param],
 			});
 		}
 		return this.buildParallelIndexScanQuery(select, ors, ands, sortAndLimit);

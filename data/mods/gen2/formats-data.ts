@@ -162,7 +162,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	vileplume: {
-		randomBattleMoves: ["gigadrain", "moonlight", "sleeppowder", "sludgebomb", "stunspore", "swordsdance"],
+		randomBattleMoves: ["hiddenpowergrass", "moonlight", "sleeppowder", "sludgebomb", "stunspore", "swordsdance"],
 		tier: "UU",
 	},
 	bellossom: {
@@ -691,7 +691,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	azumarill: {
-		randomBattleMoves: ["charm", "rest", "sleeptalk", "surf", "toxic"],
+		randomBattleMoves: ["perishsong", "rest", "surf", "whirlpool"],
 		tier: "NU",
 	},
 	sudowoodo: {
@@ -817,7 +817,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	octillery: {
-		randomBattleMoves: ["fireblast", "hiddenpowerelectric", "icebeam", "rest", "sleeptalk", "surf"],
+		randomBattleMoves: ["flamethrower", "hiddenpowerelectric", "icebeam", "rest", "sleeptalk", "surf"],
 		tier: "NU",
 	},
 	delibird: {
@@ -885,11 +885,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "Uber",
 	},
 	hooh: {
-		randomBattleMoves: ["curse", "earthquake", "hiddenpowerflying", "sacredfire", "recover", "thunder", "thunderbolt"],
+		randomBattleMoves: ["curse", "earthquake", "hiddenpowerflying", "recover", "sacredfire", "thunder", "thunderbolt"],
 		tier: "Uber",
 	},
 	celebi: {
-		randomBattleMoves: ["gigadrain", "healbell", "leechseed", "psychic", "recover", "toxic"],
+		randomBattleMoves: ["hiddenpowergrass", "healbell", "leechseed", "psychic", "recover", "toxic"],
 		tier: "Uber",
 	},
 };

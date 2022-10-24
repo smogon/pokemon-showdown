@@ -86,4 +86,11 @@ describe("Datasearch Plugin", () => {
 		const moveSearch = datasearch.testables.runMovesearch(target, cmd, true, `/${cmd} ${target}`, true);
 		assert.false(moveSearch.results.includes('Belly Drum'));
 	});
+
+	it('should include result where query string in ability is adjacent to special character', () => {
+		const cmd = 'as';
+		const target = 'water';
+		const abilitySearch = datasearch.testables.runAbilitysearch(target, cmd, true, `/${cmd} ${target}`);
+		assert(abilitySearch.reply.includes('Steam Engine'));
+	});
 });

@@ -99,7 +99,7 @@ export class FriendsDatabase {
 			let val;
 			try {
 				val = database.prepare(`SELECT val FROM database_settings WHERE name = 'version'`).get().val;
-			} catch (e) {}
+			} catch {}
 			const actualVersion = FS(`databases/migrations/friends`).readdirIfExistsSync().length;
 			if (val === undefined) {
 				// hasn't been set up before, write new version.
@@ -118,7 +118,7 @@ export class FriendsDatabase {
 		for (const k in ACTIONS) {
 			try {
 				statements[k] = database.prepare(ACTIONS[k as keyof typeof ACTIONS]);
-			} catch (e) {
+			} catch (e: any) {
 				throw new Error(`Friends DB statement crashed: ${ACTIONS[k as keyof typeof ACTIONS]} (${e.message})`);
 			}
 		}
@@ -146,7 +146,14 @@ export class FriendsDatabase {
 		for (const request of sentResults) {
 			sent.add(request.receiver);
 		}
-		const receivedResults = await this.all('getReceived', [user.id]);
+		const receivedResults = await this.all('getReceived', [user.id]) || [];
+		if (!Array.isArray(receivedResults)) {
+			Monitor.crashlog(new Error("Malformed results received"), 'A friends process', {
+				user: user.id,
+				result: JSON.stringify(receivedResults),
+			});
+			return {received, sent};
+		}
 		for (const request of receivedResults) {
 			received.add(request.sender);
 		}
@@ -326,7 +333,7 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 			}
 			if (totalRequests >= MAX_REQUESTS) {
 				throw new FailureMessage(
-					`You already have ${MAX_REQUESTS} outgoing friend requests. Use "/friends view sent" to see your outgoing requests.`
+					`You already have ${MAX_REQUESTS} pending friend requests. Use "/friends view sent" to see your outgoing requests and "/friends view receive" to see your incoming requests.`
 				);
 			}
 			statements.insertRequest.run(senderID, receiverID, Date.now());
@@ -401,7 +408,7 @@ export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, Databa
 			result.result = statements[statement].all(data);
 			break;
 		}
-	} catch (e) {
+	} catch (e: any) {
 		if (!e.name.endsWith('FailureMessage')) {
 			result.error = "Sorry! The database process crashed. We've been notified and will fix this.";
 			Monitor.crashlog(e, "A friends database process", query);
@@ -421,7 +428,7 @@ export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, Databa
 	}
 });
 
-if (!PM.isParentProcess) {
+if (require.main === module) {
 	global.Config = (require as any)('./config-loader').Config;
 	if (Config.usesqlite) {
 		FriendsDatabase.setupDatabase();

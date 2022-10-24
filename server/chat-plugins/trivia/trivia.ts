@@ -4,7 +4,7 @@
  */
 
 import {Utils} from '../../../lib';
-import {TriviaDatabase, TriviaSQLiteDatabase} from './database';
+import {Leaderboard, LEADERBOARD_ENUM, TriviaDatabase, TriviaSQLiteDatabase} from './database';
 
 const MAIN_CATEGORIES: {[k: string]: string} = {
 	ae: 'Arts and Entertainment',
@@ -94,7 +94,7 @@ export interface TriviaQuestion {
 	addedAt?: number;
 }
 
-export interface TriviaLeaderboard {
+export interface TriviaLeaderboardData {
 	[userid: string]: TriviaLeaderboardScore;
 }
 export interface TriviaLeaderboardScore {
@@ -119,8 +119,8 @@ export interface TriviaData {
 	/** category:questions */
 	questions?: {[k: string]: TriviaQuestion[]};
 	submissions?: {[k: string]: TriviaQuestion[]};
-	leaderboard?: TriviaLeaderboard;
-	altLeaderboard?: TriviaLeaderboard;
+	leaderboard?: TriviaLeaderboardData;
+	altLeaderboard?: TriviaLeaderboardData;
 	/* `scores` key is a user ID */
 	history?: TriviaHistory[];
 	moveEventQuestions?: boolean;
@@ -168,7 +168,7 @@ function getMastermindGame(room: Room | null) {
 function getTriviaOrMastermindGame(room: Room | null) {
 	try {
 		return getMastermindGame(room);
-	} catch (e) {
+	} catch {
 		return getTriviaGame(room);
 	}
 }
@@ -186,8 +186,8 @@ function broadcast(room: BasicRoom, title: string, message?: string) {
 }
 
 async function getQuestions(
-	categories: ID[] | 'random' | 'all',
-	order: 'random' | 'time',
+	categories: ID[] | 'random',
+	order: 'newestfirst' | 'oldestfirst' | 'random',
 	limit = 1000
 ): Promise<TriviaQuestion[]> {
 	if (categories === 'random') {
@@ -198,13 +198,16 @@ async function getQuestions(
 				.filter(cat => toID(MAIN_CATEGORIES[cat]) !== lastCategoryID)
 		);
 		return database.getQuestions([randCategory], limit, {order});
-	} else if (categories === 'all') {
-		return database.getQuestions('all', limit, {order});
 	} else {
+		const questions = [];
 		for (const category of categories) {
-			if (!ALL_CATEGORIES[category]) throw new Chat.ErrorMessage(`"${category}" is an invalid category.`);
+			if (category === 'all') {
+				questions.push(...await database.getQuestions('all', limit, {order}));
+			} else if (!ALL_CATEGORIES[category]) {
+				throw new Chat.ErrorMessage(`"${category}" is an invalid category.`);
+			}
 		}
-		return database.getQuestions(categories, limit, {order});
+		return database.getQuestions(categories.filter(c => c !== 'all'), limit, {order});
 	}
 }
 
@@ -214,10 +217,10 @@ async function getQuestions(
  */
 export async function requestAltMerge(from: ID, to: ID) {
 	if (from === to) throw new Chat.ErrorMessage(`You cannot merge leaderboard entries with yourself!`);
-	if (!(await database.getLeaderboardEntry(from, true))) {
+	if (!(await database.getLeaderboardEntry(from, 'alltime'))) {
 		throw new Chat.ErrorMessage(`The user '${from}' does not have an entry in the Trivia leaderboard.`);
 	}
-	if (!(await database.getLeaderboardEntry(to, true))) {
+	if (!(await database.getLeaderboardEntry(to, 'alltime'))) {
 		throw new Chat.ErrorMessage(`The user '${to}' does not have an entry in the Trivia leaderboard.`);
 	}
 	pendingAltMerges.set(from, to);
@@ -233,10 +236,10 @@ export async function mergeAlts(from: ID, to: ID) {
 		throw new Chat.ErrorMessage(`Both '${from}' and '${to}' must use /trivia mergescore to approve the merge.`);
 	}
 
-	if (!(await database.getLeaderboardEntry(to, true))) {
+	if (!(await database.getLeaderboardEntry(to, 'alltime'))) {
 		throw new Chat.ErrorMessage(`The user '${to}' does not have an entry in the Trivia leaderboard.`);
 	}
-	if (!(await database.getLeaderboardEntry(from, true))) {
+	if (!(await database.getLeaderboardEntry(from, 'alltime'))) {
 		throw new Chat.ErrorMessage(`The user '${from}' does not have an entry in the Trivia leaderboard.`);
 	}
 
@@ -246,33 +249,34 @@ export async function mergeAlts(from: ID, to: ID) {
 
 // TODO: fix /trivia review
 class Ladder {
-	cache: {ladder: TriviaLadder, ranks: TriviaLeaderboard} | null;
-	allTimeCache: {ladder: TriviaLadder, ranks: TriviaLeaderboard} | null;
+	cache: Record<Leaderboard, {ladder: TriviaLadder, ranks: TriviaLeaderboardData} | null>;
 	constructor() {
-		this.cache = null;
-		this.allTimeCache = null;
+		this.cache = {
+			alltime: null,
+			nonAlltime: null,
+			cycle: null,
+		};
 	}
 
 	invalidateCache() {
-		this.cache = null;
-		this.allTimeCache = null;
+		let k: keyof Ladder['cache'];
+		for (k in this.cache) {
+			this.cache[k] = null;
+		}
 	}
 
-	async get(allTime = false) {
-		const cache = allTime ? this.allTimeCache : this.cache;
-		if (cache) return cache;
-
-		await this.computeCachedLadder();
-		return allTime ? this.allTimeCache : this.cache;
+	async get(leaderboard: Leaderboard = 'alltime') {
+		if (!this.cache[leaderboard]) await this.computeCachedLadder();
+		return this.cache[leaderboard];
 	}
 
 
 	async computeCachedLadder() {
 		const leaderboards = await database.getLeaderboards();
-		for (const isAllTime of [true, false]) {
-			const leaders = Object.entries(isAllTime ? leaderboards.allTime : leaderboards.notAllTime);
+		for (const [lb, data] of Object.entries(leaderboards) as [Leaderboard, TriviaLeaderboardData][]) {
+			const leaders = Object.entries(data);
 			const ladder: TriviaLadder = [];
-			const ranks: TriviaLeaderboard = {};
+			const ranks: TriviaLeaderboardData = {};
 			for (const [leader] of leaders) {
 				ranks[leader] = {score: 0, totalPoints: 0, totalCorrectAnswers: 0};
 			}
@@ -287,25 +291,21 @@ class Ladder {
 						rank++;
 						max = score;
 					}
-					if (key === 'score' && rank < 15) {
+					if (key === 'score' && rank < 500) {
 						if (!ladder[rank]) ladder[rank] = [];
 						ladder[rank].push(leader as ID);
 					}
 					ranks[leader][key] = rank + 1;
 				}
 			}
-			if (isAllTime) {
-				this.allTimeCache = {ladder, ranks};
-			} else {
-				this.cache = {ladder, ranks};
-			}
+			this.cache[lb] = {ladder, ranks};
 		}
 	}
 }
 
 export const cachedLadder = new Ladder();
 
-class TriviaPlayer extends Rooms.RoomGamePlayer {
+class TriviaPlayer extends Rooms.RoomGamePlayer<Trivia> {
 	points: number;
 	correctAnswers: number;
 	answer: string;
@@ -315,7 +315,7 @@ class TriviaPlayer extends Rooms.RoomGamePlayer {
 	isCorrect: boolean;
 	isAbsent: boolean;
 
-	constructor(user: User, game: RoomGame) {
+	constructor(user: User, game: Trivia) {
 		super(user, game);
 		this.points = 0;
 		this.correctAnswers = 0;
@@ -358,8 +358,7 @@ class TriviaPlayer extends Rooms.RoomGamePlayer {
 	}
 }
 
-export class Trivia extends Rooms.RoomGame {
-	playerTable: {[k: string]: TriviaPlayer};
+export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 	gameid: ID;
 	kickedUsers: Set<string>;
 	canLateJoin: boolean;
@@ -372,14 +371,13 @@ export class Trivia extends Rooms.RoomGame {
 	curQuestion: string;
 	curAnswers: string[];
 	askedAt: number[];
-	categories: ID[] | 'all';
+	categories: ID[];
 	constructor(
-		room: Room, mode: string, categories: ID[] | 'all', givesPoints: boolean,
+		room: Room, mode: string, categories: ID[], givesPoints: boolean,
 		length: keyof typeof LENGTHS | number, questions: TriviaQuestion[], creator: string,
-		isRandomMode = false, isSubGame = false,
+		isRandomMode = false, isSubGame = false, isRandomCategory = false,
 	) {
 		super(room, isSubGame);
-		this.playerTable = {};
 		this.gameid = 'trivia' as ID;
 		this.title = 'Trivia';
 		this.allowRenames = true;
@@ -389,15 +387,14 @@ export class Trivia extends Rooms.RoomGame {
 		this.canLateJoin = true;
 
 		this.categories = categories;
-		let category: string;
-		switch (this.categories[0]) {
-		case 'all':
-			category = this.room.tr`All`; break;
-		case 'random':
-			category = this.room.tr`Random (${ALL_CATEGORIES[questions[0].category]})`; break;
-		default:
-			category = (this.categories as ID[]).map(cat => ALL_CATEGORIES[CATEGORY_ALIASES[cat] || cat]).join(' + ');
-		}
+		const uniqueCategories = new Set(this.categories
+			.map(cat => {
+				if (cat === 'all') return 'All';
+				return ALL_CATEGORIES[CATEGORY_ALIASES[cat] || cat];
+			}));
+		let category = [...uniqueCategories].join(' + ');
+		if (isRandomCategory) category = this.room.tr`Random (${category})`;
+
 
 		this.game = {
 			mode: (isRandomMode ? `Random (${MODES[mode]})` : MODES[mode]),
@@ -624,7 +621,7 @@ export class Trivia extends Rooms.RoomGame {
 			if (!cap.questions && !cap.points) {
 				if (this.game.length === 'infinite') {
 					this.questions = await database.getQuestions(this.categories, 1000, {
-						order: this.game.mode.startsWith('Random') ? 'random' : 'time',
+						order: this.game.mode.startsWith('Random') ? 'random' : 'oldestfirst',
 					});
 				}
 				// If there's no score cap, we declare a winner when we run out of questions,
@@ -646,7 +643,7 @@ export class Trivia extends Rooms.RoomGame {
 		this.phase = QUESTION_PHASE;
 		this.askedAt = process.hrtime();
 
-		const question = this.questions.pop()!;
+		const question = this.questions.shift()!;
 		this.questionNumber++;
 		this.curQuestion = question.question;
 		this.curAnswers = question.answers;
@@ -765,12 +762,17 @@ export class Trivia extends Rooms.RoomGame {
 				if (!player.points) continue;
 
 				void database.updateLeaderboardForUser(userid as ID, {
-					allTime: {
+					alltime: {
 						score: userid === winners[0].id ? prizes[0] : 0,
 						totalPoints: player.points,
 						totalCorrectAnswers: player.correctAnswers,
 					},
-					notAllTime: {
+					nonAlltime: {
+						score: scores.get(userid as ID) || 0,
+						totalPoints: player.points,
+						totalCorrectAnswers: player.correctAnswers,
+					},
+					cycle: {
 						score: scores.get(userid as ID) || 0,
 						totalPoints: player.points,
 						totalCorrectAnswers: player.correctAnswers,
@@ -785,11 +787,13 @@ export class Trivia extends Rooms.RoomGame {
 
 		const scores = Object.fromEntries(this.getTopPlayers({max: null})
 			.map(player => [player.player.id, player.player.points]));
-		await database.addHistory([{
-			...this.game,
-			length: typeof this.game.length === 'number' ? `${this.game.length} questions` : this.game.length,
-			scores,
-		}]);
+		if (this.game.givesPoints) {
+			await database.addHistory([{
+				...this.game,
+				length: typeof this.game.length === 'number' ? `${this.game.length} questions` : this.game.length,
+				scores,
+			}]);
+		}
 
 		this.destroy();
 	}
@@ -1032,11 +1036,13 @@ export class TimerModeTrivia extends Trivia {
 		}
 
 		buffer += '</table>';
-
-		if (winner) return this.win(buffer);
-
 		buffer += `<br />${this.room.tr`The top 5 players are: ${this.formatPlayerList({max: 5})}`}`;
-		broadcast(this.room, this.room.tr`The answering period has ended!`, buffer);
+
+		if (winner) {
+			return this.win(buffer);
+		} else {
+			broadcast(this.room, this.room.tr`The answering period has ended!`, buffer);
+		}
 		this.setPhaseTimeout(() => void this.askQuestion(), INTERMISSION_INTERVAL);
 	}
 }
@@ -1078,10 +1084,11 @@ export class NumberModeTrivia extends Trivia {
 		);
 
 		const points = this.calculatePoints(innerBuffer.length);
+		let winner = false;
 		if (points) {
 			const cap = this.getCap();
 			// We add 1 questionNumber because it starts at 0
-			let winner = cap.questions && this.questionNumber >= cap.questions;
+			winner = !!cap.questions && this.questionNumber >= cap.questions;
 			for (const userid in this.playerTable) {
 				const player = this.playerTable[userid];
 				if (player.isCorrect) player.incrementPoints(points, this.questionNumber);
@@ -1097,8 +1104,6 @@ export class NumberModeTrivia extends Trivia {
 			buffer = this.room.tr`Correct: ${players}` + `<br />` +
 				this.room.tr`Answer(s): ${this.curAnswers.join(', ')}<br />` +
 				`${Chat.plural(innerBuffer, this.room.tr`Each of them gained <strong>${points}</strong> point(s)!`, this.room.tr`They gained <strong>${points}</strong> point(s)!`)}`;
-
-			if (winner) return this.win(buffer);
 		} else {
 			for (const userid in this.playerTable) {
 				const player = this.playerTable[userid];
@@ -1111,7 +1116,12 @@ export class NumberModeTrivia extends Trivia {
 		}
 
 		buffer += `<br />${this.room.tr`The top 5 players are: ${this.formatPlayerList({max: 5})}`}`;
-		broadcast(this.room, this.room.tr`The answering period has ended!`, buffer);
+
+		if (winner) {
+			return this.win(buffer);
+		} else {
+			broadcast(this.room, this.room.tr`The answering period has ended!`, buffer);
+		}
 		this.setPhaseTimeout(() => void this.askQuestion(), INTERMISSION_INTERVAL);
 	}
 }
@@ -1184,7 +1194,7 @@ export class TriumvirateModeTrivia extends Trivia {
  * and the top n players from those personal rounds go on to the finals,
  * which is a game of First mode trivia that ends after a specified interval.
  */
-export class Mastermind extends Rooms.RoomGame {
+export class Mastermind extends Rooms.SimpleRoomGame {
 	/** userid:score Map */
 	leaderboard: Map<ID, {score: number, hasLeft?: boolean}>;
 	phase: string;
@@ -1299,7 +1309,7 @@ export class Mastermind extends Rooms.RoomGame {
 			}
 		}
 
-		const questions = await getQuestions('all', 'random');
+		const questions = await getQuestions(['all' as ID], 'random');
 		if (!questions.length) throw new Chat.ErrorMessage(this.room.tr`There are no questions in the Trivia database.`);
 
 		this.currentRound = new MastermindFinals(this.room, 'all' as ID, questions, this.getTopPlayers(this.numFinalists));
@@ -1517,25 +1527,23 @@ const triviaCommands: Chat.ChatCommands = {
 		if (['triforce', 'tri'].includes(mode)) mode = 'triumvirate';
 		const isRandomMode = (mode === 'random');
 		if (isRandomMode) {
-			const recentHistory = await database.getHistory(10);
-			const recentFirstMode = recentHistory.some(game => game.mode === 'First');
-			const modes = recentFirstMode ? Object.keys(MODES).filter(curMode => curMode !== 'first') : Object.keys(MODES);
-			mode = Utils.shuffle(modes)[0];
+			const acceptableModes = Object.keys(MODES).filter(curMode => curMode !== 'first');
+			mode = Utils.shuffle(acceptableModes)[0];
 		}
 		if (!MODES[mode]) return this.errorReply(this.tr`"${mode}" is an invalid mode.`);
 
-		let categories: ID[] | 'all' | 'random' = targets[1]
+		let categories: ID[] | 'random' = targets[1]
 			.split('+')
 			.map(cat => {
 				const id = toID(cat);
 				return CATEGORY_ALIASES[id] || id;
 			});
-		if (categories[0] === 'all') categories = 'all';
-		if (categories[0] === 'random') categories = 'random';
-		if (categories.length > 1 && (categories.includes('all' as ID) || categories.includes('random' as ID))) {
-			throw new Chat.ErrorMessage(`You cannot combine all or random with another category.`);
+		if (categories[0] === 'random') {
+			if (categories.length > 1) throw new Chat.ErrorMessage(`You cannot combine random with another category.`);
+			categories = 'random';
 		}
-		const questions = await getQuestions(categories, randomizeQuestionOrder ? 'random' : 'time');
+
+		const questions = await getQuestions(categories, randomizeQuestionOrder ? 'random' : 'oldestfirst');
 
 		let length: ID | number = toID(targets[2]);
 		if (!LENGTHS[length]) {
@@ -1551,7 +1559,7 @@ const triviaCommands: Chat.ChatCommands = {
 					this.tr`There are not enough questions in the randomly chosen category to finish a trivia game.`
 				);
 			}
-			if (categories === 'all') {
+			if (categories.length === 0 && categories[0] === 'all') {
 				return this.errorReply(
 					this.tr`There are not enough questions in the trivia database to finish a trivia game.`
 				);
@@ -1572,8 +1580,12 @@ const triviaCommands: Chat.ChatCommands = {
 			_Trivia = TimerModeTrivia;
 		}
 
-		categories = categories === 'random' ? [questions[0].category] as ID[] : categories;
-		room.game = new _Trivia(room, mode, categories, givesPoints, length, questions, user.name, isRandomMode);
+		const isRandomCategory = categories === 'random';
+		categories = isRandomCategory ? [questions[0].category as ID] : categories as ID[];
+		room.game = new _Trivia(
+			room, mode, categories, givesPoints, length, questions,
+			user.name, isRandomMode, false, isRandomCategory
+		);
 	},
 	newhelp: [
 		`/trivia new [mode], [categories], [length] - Begin a new Trivia game.`,
@@ -1622,7 +1634,7 @@ const triviaCommands: Chat.ChatCommands = {
 			const mastermindRound = getMastermindGame(room).currentRound;
 			if (!mastermindRound) throw new Error;
 			game = mastermindRound;
-		} catch (e) {
+		} catch {
 			game = getTriviaGame(room);
 		}
 
@@ -1768,16 +1780,21 @@ const triviaCommands: Chat.ChatCommands = {
 			});
 		}
 
-		const formattedQuestions = questions.map(q => q.question).join("', '");
+		let formattedQuestions = '';
+		for (const [index, question] of questions.entries()) {
+			formattedQuestions += `'${question.question}' in ${question.category}`;
+			if (index !== questions.length - 1) formattedQuestions += ', ';
+		}
+
 		if (cmd === 'add') {
 			await database.addQuestions(questions);
-			this.modlog('TRIVIAQUESTION', null, `added '${formattedQuestions}'`);
-			this.privateModAction(`Questions '${formattedQuestions}' were added to the question database by ${user.name}.`);
+			this.modlog('TRIVIAQUESTION', null, `added ${formattedQuestions}`);
+			this.privateModAction(`Questions ${formattedQuestions} were added to the question database by ${user.name}.`);
 		} else {
 			await database.addQuestionSubmissions(questions);
 			if (!user.can('mute', null, room)) this.sendReply(`Questions '${formattedQuestions}' were submitted for review.`);
-			this.modlog('TRIVIAQUESTION', null, `submitted '${formattedQuestions}'`);
-			this.privateModAction(`Questions '${formattedQuestions}' were submitted to the submission database by ${user.name} for review.`);
+			this.modlog('TRIVIAQUESTION', null, `submitted ${formattedQuestions}`);
+			this.privateModAction(`Questions ${formattedQuestions} were submitted to the submission database by ${user.name} for review.`);
 		}
 	},
 	submithelp: [`/trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Adds question(s) to the submission database for staff to review. Requires: + % @ # &`],
@@ -1820,7 +1837,7 @@ const triviaCommands: Chat.ChatCommands = {
 		if (toID(target) === 'all') {
 			if (isAccepting) await database.addQuestions(submissions);
 			await database.clearSubmissions();
-			this.modlog(`TRIVIAQUESTION`, null, `${(isAccepting ? "added" : "removed")} all from submission database.`);
+			this.modlog(`TRIVIAQUESTION`, null, `${(isAccepting ? "added" : "removed")} all questions from the submission database.`);
 			return this.privateModAction(`${user.name} ${(isAccepting ? " added " : " removed ")} all questions from the submission database.`);
 		}
 
@@ -1886,18 +1903,18 @@ const triviaCommands: Chat.ChatCommands = {
 		this.checkChat();
 
 		target = target.trim();
-		if (!target) return false;
+		if (!target) return this.parse(`/help trivia delete`);
 
 		const question = Utils.escapeHTML(target).trim();
 		if (!question) {
 			return this.errorReply(this.tr`'${target}' is not a valid argument. View /trivia help questions for more information.`);
 		}
 
-		await database.ensureQuestionExists(question);
+		const {category} = await database.ensureQuestionExists(question);
 		await database.deleteQuestion(question);
 
-		this.modlog('TRIVIAQUESTION', null, `removed '${target}'`);
-		return this.privateModAction(room.tr`${user.name} removed question '${target}' from the question database.`);
+		this.modlog('TRIVIAQUESTION', null, `removed '${target}' from ${category}`);
+		return this.privateModAction(room.tr`${user.name} removed question '${target}' (category: ${category}) from the question database.`);
 	},
 	deletehelp: [`/trivia delete [question] - Delete a question from the trivia database. Requires: % @ # &`],
 
@@ -1929,11 +1946,11 @@ const triviaCommands: Chat.ChatCommands = {
 				continue;
 			}
 
-			await database.ensureQuestionExists(question);
+			const {category: oldCat} = await database.ensureQuestionExists(question);
 			await database.moveQuestionToCategory(question, category);
-			this.modlog('TRIVIAQUESTION', null, `changed category for '${param[1].trim()}' to '${param[0]}'`);
+			this.modlog('TRIVIAQUESTION', null, `changed category for '${param[1].trim()}' from '${oldCat}' to '${param[0]}'`);
 			return this.privateModAction(
-				this.tr`${user.name} changed question category to '${param[0]}' for '${param[1].trim()}' ` +
+				this.tr`${user.name} changed question category from '${oldCat}' to '${param[0]}' for '${param[1].trim()}' ` +
 				this.tr`from the question database.`
 			);
 		}
@@ -1977,6 +1994,88 @@ const triviaCommands: Chat.ChatCommands = {
 		`/trivia migrate [source category], [destination category] — Moves all questions in a category to another category. Requires: # &`,
 	],
 
+	async edit(target, room, user) {
+		room = this.requireRoom('questionworkshop' as RoomID);
+		this.checkCan('mute', null, room);
+
+		let isQuestionOnly = false;
+		let isAnswersOnly = false;
+		const args = target.split('|').map(arg => arg.trim());
+
+		let oldQuestionText = args.shift();
+		if (toID(oldQuestionText) === 'question') {
+			isQuestionOnly = true;
+			oldQuestionText = args.shift();
+		} else if (toID(oldQuestionText) === 'answers') {
+			isAnswersOnly = true;
+			oldQuestionText = args.shift();
+		}
+		if (!oldQuestionText) return this.parse(`/help trivia edit`);
+
+		const {category} = await database.ensureQuestionExists(Utils.escapeHTML(oldQuestionText));
+
+		let newQuestionText: string | undefined;
+		if (!isAnswersOnly) {
+			newQuestionText = args.shift();
+			if (!newQuestionText) {
+				isAnswersOnly = true; // for modlog formatting
+			} else {
+				if (newQuestionText.length > MAX_QUESTION_LENGTH) {
+					throw new Chat.ErrorMessage(`The new question text is too long. The limit is ${MAX_QUESTION_LENGTH} characters.`);
+				}
+			}
+		}
+
+		const answers: ID[] = [];
+		if (!isQuestionOnly) {
+			const answerArgs = args.shift();
+			if (!answerArgs) {
+				if (isAnswersOnly) throw new Chat.ErrorMessage(`You must specify new answers.`);
+				isQuestionOnly = true; // for modlog formatting
+			} else {
+				for (const arg of answerArgs?.split(',') || []) {
+					const answer = toID(arg);
+					if (!answer) {
+						throw new Chat.ErrorMessage(`Answers cannot be empty; double-check your syntax.`);
+					}
+					if (answer.length > MAX_ANSWER_LENGTH) {
+						throw new Chat.ErrorMessage(`The answer '${answer}' is too long. The limit is ${MAX_ANSWER_LENGTH} characters.`);
+					}
+					if (answers.includes(answer)) {
+						throw new Chat.ErrorMessage(`You may not specify duplicate answers.`);
+					}
+					answers.push(answer);
+				}
+			}
+		}
+
+		// We _could_ edit it in place but I think this isn't that much overhead and
+		// it keeps the API simpler (we'd still have to SELECT from the questions table to get the ID,
+		// and passing a SQLite ID around is an implementation detail).
+		if (!isQuestionOnly && !answers.length) {
+			throw new Chat.ErrorMessage(`You must specify at least one answer.`);
+		}
+		await database.editQuestion(
+			Utils.escapeHTML(oldQuestionText),
+			// Cast is safe because if `newQuestionText` is undefined, `isAnswersOnly` is true.
+			isAnswersOnly ? undefined : Utils.escapeHTML(newQuestionText!),
+			isQuestionOnly ? undefined : answers
+		);
+
+		let actionString = `edited question '${oldQuestionText}' in ${category}`;
+		if (!isAnswersOnly) actionString += ` to '${newQuestionText}'`;
+		if (answers.length) {
+			actionString += ` and changed the answers to ${answers.join(', ')}`;
+		}
+		this.modlog('TRIVIAQUESTION EDIT', null, actionString);
+		this.privateModAction(`${user.name} ${actionString}.`);
+	},
+	edithelp: [
+		`/trivia edit <old question text> | <new question text> | <answer1, answer2, ...> - Edit a question in the trivia database, replacing answers if specified. Requires: % @ # &`,
+		`/trivia edit question | <old question text> | <new question text> - Alternative syntax for /trivia edit.`,
+		`/trivia edit answers | <old question text> | <new answers> - Alternative syntax for /trivia edit.`,
+	],
+
 	async qs(target, room, user) {
 		room = this.requireRoom('questionworkshop' as RoomID);
 
@@ -2009,7 +2108,7 @@ const triviaCommands: Chat.ChatCommands = {
 			return this.errorReply(this.tr`'${target}' is not a valid category. View /help trivia for more information.`);
 		}
 
-		const list = await database.getQuestions([category], Number.MAX_SAFE_INTEGER, {order: 'time'});
+		const list = await database.getQuestions([category], Number.MAX_SAFE_INTEGER, {order: 'oldestfirst'});
 		if (!list.length) {
 			buffer += `<tr><td>${this.tr`There are no questions in the ${ALL_CATEGORIES[category]} category.`}</td></table></div>`;
 			return this.sendReply(buffer);
@@ -2119,6 +2218,7 @@ const triviaCommands: Chat.ChatCommands = {
 
 	async rank(target, room, user) {
 		room = this.requireRoom('trivia' as RoomID);
+		this.runBroadcast();
 
 		let name;
 		let userid;
@@ -2130,30 +2230,64 @@ const triviaCommands: Chat.ChatCommands = {
 			userid = toID(target);
 		}
 
-		const allTimeScore = await database.getLeaderboardEntry(userid, true);
-		if (!allTimeScore) return this.sendReplyBox(this.tr`User '${name}' has not played any trivia games yet.`);
-		const score = await database.getLeaderboardEntry(userid, false) || {score: 0, totalPoints: 0, totalCorrectAnswers: 0};
+		const allTimeScore = await database.getLeaderboardEntry(userid, 'alltime');
+		if (!allTimeScore) return this.sendReplyBox(this.tr`User '${name}' has not played any Trivia games yet.`);
+		const score = (
+			await database.getLeaderboardEntry(userid, 'nonAlltime') ||
+			{score: 0, totalPoints: 0, totalCorrectAnswers: 0}
+		);
+		const cycleScore = await database.getLeaderboardEntry(userid, 'cycle');
 
-		const ranks = (await cachedLadder.get(false))?.ranks[userid];
-		const allTimeRanks = (await cachedLadder.get(true))?.ranks[userid];
+		const ranks = (await cachedLadder.get('nonAlltime'))?.ranks[userid];
+		const allTimeRanks = (await cachedLadder.get('alltime'))?.ranks[userid];
+		const cycleRanks = (await cachedLadder.get('cycle'))?.ranks[userid];
+
+		function display(
+			scores: TriviaLeaderboardScore | null,
+			ranking: TriviaLeaderboardScore | undefined,
+			key: keyof TriviaLeaderboardScore,
+		) {
+			if (!scores?.[key]) return `<td>N/A</td>`;
+			return Utils.html`<td>${scores[key]}${ranking?.[key] ? ` (rank ${ranking[key]})` : ``}</td>`;
+		}
+
 		this.sendReplyBox(
-			this.tr`User: <strong>${name}</strong>` + `<br />` +
-			`Leaderboard score: <strong>${score.score}</strong>${ranks ? ` (#${ranks.score})` : ""}, ` +
-			`all time: <strong>${allTimeScore.score}</strong>${allTimeRanks ? ` (#${allTimeRanks.score})` : ""}<br />` +
-			`Total game points: <strong>${score.totalPoints}</strong>${ranks ? ` (#${ranks.totalPoints})` : ""}, ` +
-			`all time: <strong>${allTimeScore.totalPoints}</strong>${allTimeRanks ? ` (#${allTimeRanks.totalPoints})` : ""}<br />` +
-			`Total correct answers: <strong>${score.totalCorrectAnswers}</strong>${ranks ? ` (#${ranks.totalCorrectAnswers})` : ""}, ` +
-			`all time: <strong>${allTimeScore.totalCorrectAnswers}</strong>${allTimeRanks ? ` (#${allTimeRanks.totalCorrectAnswers})` : ""}`
+			`<div class="ladder"><table>` +
+			`<tr><th>${name}</th><th>Cycle Ladder</th><th>All-time Score Ladder</th><th>All-time Wins Ladder</th></tr>` +
+			`<tr><td>Leaderboard score</td>` +
+				display(cycleScore, cycleRanks, 'score') +
+				display(score, ranks, 'score') +
+				display(allTimeScore, allTimeRanks, 'score') +
+			`</tr>` +
+			`<tr><td>Total game points</td>` +
+				display(cycleScore, cycleRanks, 'totalPoints') +
+				display(score, ranks, 'totalPoints') +
+				display(allTimeScore, allTimeRanks, 'totalPoints') +
+			`</tr>` +
+			`<tr><td>Total correct answers</td>` +
+				display(cycleScore, cycleRanks, 'totalCorrectAnswers') +
+				display(score, ranks, 'totalCorrectAnswers') +
+				display(allTimeScore, allTimeRanks, 'totalCorrectAnswers') +
+			`</tr>` +
+			`</table></div>`
 		);
 	},
 	rankhelp: [`/trivia rank [username] - View the rank of the specified user. If no name is given, view your own.`],
 
-	alltimeladder: 'ladder',
+	alltimescoreladder: 'ladder',
+	scoreladder: 'ladder',
+	winsladder: 'ladder',
+	alltimewinsladder: 'ladder',
 	async ladder(target, room, user, connection, cmd) {
 		room = this.requireRoom('trivia' as RoomID);
 		if (!this.runBroadcast()) return false;
-		const isAllTime = cmd !== 'ladder';
-		const ladder = (await cachedLadder.get(isAllTime))?.ladder;
+
+		let leaderboard: Leaderboard = 'cycle';
+		// TODO: rename leaderboards in the code once the naming scheme has been stable for a few months
+		if (cmd.includes('wins')) leaderboard = 'alltime';
+		if (cmd.includes('score')) leaderboard = 'nonAlltime';
+
+		const ladder = (await cachedLadder.get(leaderboard))?.ladder;
 		if (!ladder?.length) return this.errorReply(this.tr`No Trivia games have been played yet.`);
 
 		let buffer = "|raw|<div class=\"ladder\" style=\"overflow-y: scroll; max-height: 300px;\"><table>" +
@@ -2164,7 +2298,7 @@ const triviaCommands: Chat.ChatCommands = {
 		for (let i = Math.max(0, num - 100); i < num; i++) {
 			const leaders = ladder[i];
 			for (const leader of leaders) {
-				const rank = await database.getLeaderboardEntry(leader, isAllTime);
+				const rank = await database.getLeaderboardEntry(leader, leaderboard);
 				if (!rank) continue; // should never happen
 				const leaderObj = Users.getExact(leader as unknown as string);
 				const leaderid = leaderObj ? Utils.escapeHTML(leaderObj.name) : leader as unknown as string;
@@ -2175,8 +2309,31 @@ const triviaCommands: Chat.ChatCommands = {
 
 		return this.sendReply(buffer);
 	},
-	ladderhelp: [`/trivia ladder [num] - View information about 15 users on the trivia leaderboard.`],
-	alltimeladderhelp: [`/trivia ladder [num] - View information about 15 users on the all time trivia leaderboard.`],
+	ladderhelp: [
+		`/trivia ladder [n] - Displays the top [n] users on the cycle-specific Trivia leaderboard. If [n] isn't specified, shows 100 users.`,
+		`/trivia alltimewinsladder [n] - Like /trivia ladder, but displays the all-time Trivia leaderboard.`,
+		`/trivia alltimescoreladder [n] - Like /trivia ladder, but displays the Trivia leaderboard which is neither all-time nor cycle-specific.`,
+	],
+
+	resetladder: 'resetcycleleaderboard',
+	resetcycleladder: 'resetcycleleaderboard',
+	async resetcycleleaderboard(target, room, user) {
+		room = this.requireRoom('trivia' as RoomID);
+		this.checkCan('editroom', null, room);
+
+		if (user.lastCommand !== '/trivia resetcycleleaderboard') {
+			user.lastCommand = '/trivia resetcycleleaderboard';
+			this.errorReply(`Are you sure you want to reset the Trivia cycle-specific leaderboard? This action is IRREVERSIBLE.`);
+			this.errorReply(`To confirm, retype the command.`);
+			return;
+		}
+		user.lastCommand = '';
+
+		await database.clearCycleLeaderboard();
+		this.privateModAction(`${user.name} reset the cycle-specific Trivia leaderboard.`);
+		this.modlog('TRIVIA LEADERBOARDRESET', null, 'cycle-specific leaderboard');
+	},
+	resetcycleleaderboardhelp: [`/trivia resetcycleleaderboard - Resets the cycle-specific Trivia leaderboard. Requires: # &`],
 
 	clearquestions: 'clearqs',
 	async clearqs(target, room, user) {
@@ -2245,9 +2402,11 @@ const triviaCommands: Chat.ChatCommands = {
 		if (isNaN(points)) return this.errorReply(`You must specify a number of points to add/remove.`);
 		const isRemoval = cmd === 'removepoints';
 
+		const change = {score: isRemoval ? -points : points, totalPoints: 0, totalCorrectAnswers: 0};
 		await database.updateLeaderboardForUser(userid, {
-			allTime: {score: isRemoval ? -points : points, totalPoints: 0, totalCorrectAnswers: 0},
-			notAllTime: {score: isRemoval ? -points : points, totalPoints: 0, totalCorrectAnswers: 0},
+			alltime: change,
+			nonAlltime: change,
+			cycle: change,
 		});
 		cachedLadder.invalidateCache();
 
@@ -2270,7 +2429,7 @@ const triviaCommands: Chat.ChatCommands = {
 
 		const userid = toID(target);
 		if (!userid) return this.parse('/help trivia removeleaderboardentry');
-		if (!(await database.getLeaderboardEntry(userid, true))) {
+		if (!(await database.getLeaderboardEntry(userid, 'alltime'))) {
 			return this.errorReply(`The user '${userid}' has no Trivia leaderboard entry.`);
 		}
 
@@ -2283,10 +2442,10 @@ const triviaCommands: Chat.ChatCommands = {
 		}
 		user.lastCommand = '';
 
-		await Promise.all([
-			database.deleteLeaderboardEntry(userid, true),
-			database.deleteLeaderboardEntry(userid, false),
-		]);
+		await Promise.all(
+			(Object.keys(LEADERBOARD_ENUM) as Leaderboard[])
+				.map(lb => database.deleteLeaderboardEntry(userid, lb))
+		);
 		cachedLadder.invalidateCache();
 
 		this.modlog(`TRIVIAPOINTS DELETE`, userid);
@@ -2305,7 +2464,7 @@ const triviaCommands: Chat.ChatCommands = {
 		try {
 			await mergeAlts(user.id, altid);
 			return this.sendReply(`Your Trivia leaderboard score has been transferred to '${altid}'!`);
-		} catch (err) {
+		} catch (err: any) {
 			if (!err.message.includes('/trivia mergescore')) throw err;
 
 			await requestAltMerge(altid, user.id);
@@ -2363,10 +2522,13 @@ const triviaCommands: Chat.ChatCommands = {
 				`<li><code>/trivia delete [question]</code> - Delete a question from the trivia database. Requires: % @ # &</li>` +
 				`<li><code>/trivia move [category] | [question]</code> - Change the category of question in the trivia database. Requires: % @ # &</li>` +
 				`<li><code>/trivia migrate [source category], [destination category]</code> — Moves all questions in a category to another category. Requires: # &</li>` +
+				Utils.html`<li><code>${'/trivia edit <old question text> | <new question text> | <answer1, answer2, ...>'}</code>: Edit a question in the trivia database, replacing answers if specified. Requires: % @ # &` +
+				Utils.html`<li><code>${'/trivia edit answers | <old question text> | <new answers>'}</code>: Replaces the answers of a question. Requires: % @ # &</li>` +
+				Utils.html`<li><code>${'/trivia edit question | <old question text> | <new question text>'}</code>: Edits only the text of a question. Requires: % @ # &</li>` +
 				`<li><code>/trivia qs</code> - View the distribution of questions in the question database.</li>` +
 				`<li><code>/trivia qs [category]</code> - View the questions in the specified category. Requires: % @ # &</li>` +
 				`<li><code>/trivia clearqs [category]</code> - Clear all questions in the given category. Requires: # &</li>` +
-				`<li><code>/trivia moveusedevent<code> - Tells you whether or not moving used event questions to a different category is enabled.</li>` +
+				`<li><code>/trivia moveusedevent</code> - Tells you whether or not moving used event questions to a different category is enabled.</li>` +
 				`<li><code>/trivia moveusedevent [on or off]</code> - Toggles moving used event questions to a different category. Requires: # &</li>` +
 			`</ul></details>` +
 			`<details><summary><strong>Informational commands</strong></summary><ul>` +
@@ -2378,8 +2540,10 @@ const triviaCommands: Chat.ChatCommands = {
 				`<li><code>/trivia lastofficialscore</code> - View the scores from the last Trivia game. Intended for bots.</li>` +
 			`</ul></details>` +
 			`<details><summary><strong>Leaderboard commands</strong></summary><ul>` +
-				`<li><code>/trivia ladder</code> - View information about the top 15 users on the Trivia leaderboard.</li>` +
-				`<li><code>/trivia alltimeladder</code> - View information about the top 15 users on the all time Trivia leaderboard.</li>` +
+				`<li><code>/trivia ladder [n]</code> - Displays the top <code>[n]</code> users on the cycle-specific Trivia leaderboard. If <code>[n]</code> isn't specified, shows 100 users.</li>` +
+				`<li><code>/trivia alltimewinsladder</code> - Like <code>/trivia ladder</code>, but displays the all-time wins Trivia leaderboard (formerly all-time).</li>` +
+				`<li><code>/trivia alltimescoreladder</code> - Like <code>/trivia ladder</code>, but displays the all-time score Trivia leaderboard (formerly non—all-time)</li>` +
+				`<li><code>/trivia resetcycleleaderboard</code> - Resets the cycle-specific Trivia leaderboard. Requires: # &` +
 				`<li><code>/trivia mergescore [user]</code> — Merge another user's Trivia leaderboard score with yours.</li>` +
 				`<li><code>/trivia addpoints [user], [points]</code> - Add points to a given user's score on the Trivia leaderboard. Requires: # &</li>` +
 				`<li><code>/trivia removepoints [user], [points]</code> - Remove points from a given user's score on the Trivia leaderboard. Requires: # &</li>` +

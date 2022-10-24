@@ -37,11 +37,11 @@ try {
 	if (save) {
 		FS(HANGMAN_FILE).writeUpdate(() => JSON.stringify(hangmanData));
 	}
-} catch (e) {}
+} catch {}
 
 const maxMistakes = 6;
 
-export class Hangman extends Rooms.RoomGame {
+export class Hangman extends Rooms.SimpleRoomGame {
 	gameNumber: number;
 	creator: ID;
 	word: string;
@@ -108,7 +108,7 @@ export class Hangman extends Rooms.RoomGame {
 			if (!this.guessWord(sanitized, user.name)) {
 				throw new Chat.ErrorMessage(`Your guess "${sanitized}" is invalid.`);
 			} else {
-				this.room.send(`${user.name} guessed "${sanitized}"!`);
+				this.room.addByUser(user, `${user.name} guessed "${sanitized}"!`);
 			}
 		} else {
 			if (!this.guessLetter(sanitized, user.name)) {

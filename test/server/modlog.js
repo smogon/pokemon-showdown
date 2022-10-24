@@ -6,7 +6,7 @@
 'use strict';
 
 const ModlogConstructor = Config.usesqlite ? (require('../../server/modlog')).Modlog : null;
-const modlog = ModlogConstructor ? new ModlogConstructor(':memory:') : null;
+const modlog = ModlogConstructor ? new ModlogConstructor(':memory:', {}) : null;
 const assert = require('assert').strict;
 
 Config.usesqlitemodlog = true;

@@ -45,6 +45,7 @@ export const TIERS = new Set([
 	'doublesou', 'battlespotsingles', 'battlespotdoubles', 'battlestadiumsingles',
 	'vgc2016', 'vgc2017', 'vgc2018', 'vgc2019ultraseries', 'vgc2020', '1v1',
 	'anythinggoes', 'nationaldexag', 'balancedhackmons', 'letsgoou', 'monotype',
+	'purehackmons',
 ]);
 const FORMATS = new Map<ID, {gen: GenerationNum, format: Format}>();
 const VALIDATORS = new Map<ID, TeamValidator>();
@@ -399,7 +400,7 @@ const SMOGON = {
 const getAnalysis = retrying(async (u: string) => {
 	try {
 		return smogon.Analyses.process(await request(u));
-	} catch (err) {
+	} catch (err: any) {
 		// Don't try HTTP errors that we've already retried
 		if (err.message.startsWith('HTTP')) {
 			return Promise.reject(err);
@@ -426,7 +427,7 @@ async function getAnalysesByFormat(pokemon: string, gen: GenerationNum) {
 		}
 
 		return analysesByFormat;
-	} catch (err) {
+	} catch {
 		error(`Unable to process analysis for ${pokemon} in generation ${gen}`);
 		return undefined;
 	}

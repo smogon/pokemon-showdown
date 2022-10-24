@@ -160,6 +160,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-activate', pokemon, 'ability: Forewarn', warnMove);
 		},
 	},
+	frisk: {
+		inherit: true,
+		onStart(pokemon) {
+			for (const target of pokemon.foes()) {
+				if (target.item && !target.itemState.knockedOff) {
+					this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon, '[identify]');
+				}
+			}
+		},
+	},
 	hustle: {
 		inherit: true,
 		onSourceModifyAccuracyPriority: 7,
@@ -223,6 +233,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onTryHit() {},
 		rating: 0,
 	},
+	liquidooze: {
+		inherit: true,
+		onSourceTryHeal(damage, target, source, effect) {
+			this.debug("Heal is occurring: " + target + " <- " + source + " :: " + effect.id);
+			const canOoze = ['drain', 'leechseed'];
+			if (canOoze.includes(effect.id) && this.activeMove?.id !== 'dreameater') {
+				this.damage(damage, null, null, null, true);
+				return 0;
+			}
+		},
+	},
 	magicguard: {
 		onDamage(damage, target, source, effect) {
 			if (effect.effectType !== 'Move') {
@@ -260,7 +281,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			// in gen 3-4, Natural Cure's curing is always known to both players
 
 			this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure');
-			pokemon.setStatus('');
+			pokemon.clearStatus();
 		},
 	},
 	normalize: {
@@ -491,6 +512,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (pokemon.setAbility(ability)) {
 				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 			}
+		},
+	},
+	unburden: {
+		inherit: true,
+		condition: {
+			onModifySpe(spe, pokemon) {
+				if ((!pokemon.item || pokemon.itemState.knockedOff) && !pokemon.ignoringAbility()) {
+					return this.chainModify(2);
+				}
+			},
 		},
 	},
 	vitalspirit: {

@@ -29,7 +29,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	aguavberry: {
 		name: "Aguav Berry",
-		desc: "Restores 33% max HP at 1/4 max HP or less; confuses if -SpD Nature. Single use.",
+		desc: "Restores 1/3 max HP at 1/4 max HP or less; confuses if -SpD Nature. Single use.",
 		gen7: {
 			desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -SpD Nature. Single use.",
 		},
@@ -429,6 +429,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	ejectpack: {
 		name: "Eject Pack",
 		desc: "If the holder's stat stages are lowered, it switches to a chosen ally. Single use.",
+
+		end: "  [POKEMON] is switched out by the Eject Pack!",
 	},
 	electirizer: {
 		name: "Electirizer",
@@ -508,7 +510,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	figyberry: {
 		name: "Figy Berry",
-		desc: "Restores 33% max HP at 1/4 max HP or less; confuses if -Atk Nature. Single use.",
+		desc: "Restores 1/3 max HP at 1/4 max HP or less; confuses if -Atk Nature. Single use.",
 		gen7: {
 			desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Atk Nature. Single use.",
 		},
@@ -766,7 +768,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	iapapaberry: {
 		name: "Iapapa Berry",
-		desc: "Restores 33% max HP at 1/4 max HP or less; confuses if -Def Nature. Single use.",
+		desc: "Restores 1/3 max HP at 1/4 max HP or less; confuses if -Def Nature. Single use.",
 		gen7: {
 			desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Def Nature. Single use.",
 		},
@@ -1007,7 +1009,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	magoberry: {
 		name: "Mago Berry",
-		desc: "Restores 33% max HP at 1/4 max HP or less; confuses if -Spe Nature. Single use.",
+		desc: "Restores 1/3 max HP at 1/4 max HP or less; confuses if -Spe Nature. Single use.",
 		gen7: {
 			desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Spe Nature. Single use.",
 		},
@@ -2248,7 +2250,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	wikiberry: {
 		name: "Wiki Berry",
-		desc: "Restores 33% max HP at 1/4 max HP or less; confuses if -SpA Nature. Single use.",
+		desc: "Restores 1/3 max HP at 1/4 max HP or less; confuses if -SpA Nature. Single use.",
 		gen7: {
 			desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -SpA Nature. Single use.",
 		},
@@ -2335,5 +2337,9 @@ export const ItemsText: {[k: string]: ItemText} = {
 	crucibellite: {
 		name: "Crucibellite",
 		desc: "If held by a Crucibelle, this item allows it to Mega Evolve in battle.",
+	},
+	vilevial: {
+		name: "Vile Vial",
+		desc: "If held by a Venomicon, its Poison- and Flying-type attacks have 1.2x power.",
 	},
 };

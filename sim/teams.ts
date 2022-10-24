@@ -98,6 +98,11 @@ export interface PokemonSet {
 	 * because `ivs` contain post-Battle-Cap values.
 	 */
 	hpType?: string;
+	/**
+	 * Dynamax Level. Affects the amount of HP gained when Dynamaxed.
+	 * This value must be between 0 and 10, inclusive.
+	 */
+	dynamaxLevel?: number;
 	gigantamax?: boolean;
 }
 
@@ -183,10 +188,11 @@ export const Teams = new class Teams {
 				buf += '|';
 			}
 
-			if (set.pokeball || set.hpType || set.gigantamax) {
+			if (set.pokeball || set.hpType || set.gigantamax || (set.dynamaxLevel !== undefined && set.dynamaxLevel !== 10)) {
 				buf += ',' + (set.hpType || '');
 				buf += ',' + this.packName(set.pokeball || '');
 				buf += ',' + (set.gigantamax ? 'G' : '');
+				buf += ',' + (set.dynamaxLevel !== undefined && set.dynamaxLevel !== 10 ? set.dynamaxLevel : '');
 			}
 		}
 
@@ -197,7 +203,11 @@ export const Teams = new class Teams {
 		if (!buf) return null;
 		if (typeof buf !== 'string') return buf;
 		if (buf.startsWith('[') && buf.endsWith(']')) {
-			buf = this.pack(JSON.parse(buf));
+			try {
+				buf = this.pack(JSON.parse(buf));
+			} catch {
+				return null;
+			}
 		}
 
 		const team = [];
@@ -312,6 +322,7 @@ export const Teams = new class Teams {
 				set.hpType = misc[1] || '';
 				set.pokeball = this.unpackName(misc[2] || '', Dex.items);
 				set.gigantamax = !!misc[3];
+				set.dynamaxLevel = (misc[4] ? Number(misc[4]) : 10);
 			}
 			if (j < 0) break;
 			i = j + 1;
@@ -372,7 +383,7 @@ export const Teams = new class Teams {
 		if (set.shiny) {
 			out += `Shiny: Yes  \n`;
 		}
-		if (typeof set.happiness === `number` && set.happiness !== 255 && !isNaN(set.happiness)) {
+		if (typeof set.happiness === 'number' && set.happiness !== 255 && !isNaN(set.happiness)) {
 			out += `Happiness: ${set.happiness}  \n`;
 		}
 		if (set.pokeball) {
@@ -380,6 +391,9 @@ export const Teams = new class Teams {
 		}
 		if (set.hpType) {
 			out += `Hidden Power: ${set.hpType}  \n`;
+		}
+		if (typeof set.dynamaxLevel === 'number' && set.dynamaxLevel !== 10 && !isNaN(set.dynamaxLevel)) {
+			out += `Dynamax Level: ${set.dynamaxLevel}  \n`;
 		}
 		if (set.gigantamax) {
 			out += `Gigantamax: Yes  \n`;
@@ -549,7 +563,7 @@ export const Teams = new class Teams {
 					}
 				}
 				return team;
-			} catch (e) {}
+			} catch {}
 		}
 
 		const lines = buffer.split("\n");

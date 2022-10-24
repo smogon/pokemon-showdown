@@ -111,11 +111,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
-	block: {
-		inherit: true,
-		accuracy: true,
-		ignoreAccuracy: false,
-	},
 	counter: {
 		inherit: true,
 		damageCallback(pokemon, target) {
@@ -129,7 +124,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return false;
 		},
 		beforeTurnCallback() {},
-		onTryHit() {},
+		onTry() {},
 		condition: {},
 		priority: -1,
 	},
@@ -204,9 +199,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.effectState.move = lockedMove;
 				this.add('-start', target, 'Encore');
-				if (!this.queue.willMove(target)) {
-					this.effectState.duration++;
-				}
 			},
 			onOverrideAction(pokemon) {
 				return this.effectState.move;
@@ -307,11 +299,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
+	frustration: {
+		inherit: true,
+		basePowerCallback(pokemon) {
+			return Math.floor(((255 - pokemon.happiness) * 10) / 25) || null;
+		},
+	},
 	healbell: {
 		inherit: true,
 		onHit(target, source) {
 			this.add('-cureteam', source, '[from] move: Heal Bell');
-			for (const pokemon of source.side.pokemon) {
+			for (const pokemon of target.side.pokemon) {
 				pokemon.clearStatus();
 			}
 		},
@@ -404,7 +402,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	meanlook: {
 		inherit: true,
 		accuracy: true,
-		ignoreAccuracy: false,
+		ignoreAccuracy: undefined,
+		ignoreEvasion: undefined,
 		flags: {reflectable: 1, mirror: 1},
 	},
 	metronome: {
@@ -417,7 +416,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	mimic: {
 		inherit: true,
 		accuracy: true,
-		ignoreAccuracy: false,
+		ignoreAccuracy: undefined,
+		ignoreEvasion: undefined,
 		noSketch: true,
 	},
 	mindreader: {
@@ -440,7 +440,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return false;
 		},
 		beforeTurnCallback() {},
-		onTryHit() {},
+		onTry() {},
 		condition: {},
 		priority: -1,
 	},
@@ -459,6 +459,40 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.actions.useMove(lastMove, pokemon);
 		},
 		noSketch: true,
+	},
+	mist: {
+		num: 54,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Mist",
+		pp: 30,
+		priority: 0,
+		flags: {},
+		volatileStatus: 'mist',
+		condition: {
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Mist');
+			},
+			onBoost(boost, target, source, effect) {
+				if (source && target !== source) {
+					let showMsg = false;
+					let i: BoostID;
+					for (i in boost) {
+						if (boost[i]! < 0) {
+							delete boost[i];
+							showMsg = true;
+						}
+					}
+					if (showMsg && !(effect as ActiveMove).secondaries) {
+						this.add('-activate', target, 'move: Mist');
+					}
+				}
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Ice",
 	},
 	moonlight: {
 		inherit: true,
@@ -514,7 +548,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	painsplit: {
 		inherit: true,
 		accuracy: true,
-		ignoreAccuracy: false,
+		ignoreAccuracy: undefined,
+		ignoreEvasion: undefined,
 	},
 	perishsong: {
 		inherit: true,
@@ -640,6 +675,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		secondary: null,
 	},
+	return: {
+		inherit: true,
+		basePowerCallback(pokemon) {
+			return Math.floor((pokemon.happiness * 10) / 25) || null;
+		},
+	},
 	reversal: {
 		inherit: true,
 		noDamageVariance: true,
@@ -753,7 +794,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	spiderweb: {
 		inherit: true,
 		accuracy: true,
-		ignoreAccuracy: false,
+		ignoreAccuracy: undefined,
+		ignoreEvasion: undefined,
 		flags: {reflectable: 1, mirror: 1},
 	},
 	spikes: {
@@ -928,7 +970,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	vitalthrow: {
 		inherit: true,
 		accuracy: true,
-		ignoreAccuracy: false,
+		ignoreAccuracy: undefined,
+		ignoreEvasion: undefined,
 	},
 	whirlwind: {
 		inherit: true,

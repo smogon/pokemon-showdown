@@ -123,6 +123,17 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'switch');
 	});
 
+	it.skip('should request switch-out after taking Mind Blown self-damage', function () {
+		battle = common.createBattle([[
+			{species: "Golisopod", ability: 'emergencyexit', moves: ['mindblown']},
+			{species: "Wynaut", moves: ['sleeptalk']},
+		], [
+			{species: "chansey", moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		assert.equal(battle.requestState, 'switch');
+	});
+
 	it.skip('should request switch-out after taking recoil and dragging in an opponent', function () {
 		battle = common.createBattle([[
 			{species: "Golisopod", ability: 'emergencyexit', moves: ['dragontail']},
@@ -351,6 +362,31 @@ describe(`Emergency Exit`, function () {
 		expectedHP = maxHP - (3 * Math.floor(maxHP / 6)) - (2 * Math.floor(maxHP / 8)); // 3 turns of Volcalith, 2 turns of Sea of Fire
 		assert.equal(amoonguss.hp, expectedHP, `Amoonguss should have taken damage before Golisopod can be replaced.`);
 
+		assert.equal(battle.requestState, 'switch');
+	});
+
+	it(`should request a switchout after taking regular recoil damage`, function () {
+		battle = common.createBattle([[
+			{species: 'Golisopod', ability: 'Emergency Exit', moves: ['flareblitz']},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		], [
+			{species: 'Chansey', moves: ['sleeptalk']},
+		]]);
+		const eePokemon = battle.p1.active[0];
+		battle.makeChoices();
+		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
+		assert.equal(battle.requestState, 'switch');
+	});
+
+	it(`should request a switchout after taking struggle recoil damage`, function () {
+		battle = common.createBattle([[
+			{species: 'Golisopod', item: 'Assault Vest', ability: 'Emergency Exit', moves: ['protect']},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		], [
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices();
 		assert.equal(battle.requestState, 'switch');
 	});
 });

@@ -73,6 +73,35 @@ describe('Target Resolution', function () {
 			redirector = battle.p2.active[2];
 			battle.makeChoices('move watergun 2, auto', 'auto');
 			assert.statStage(redirector, 'spa', 1);
+
+			// Test Storm Drain on the user's side
+			battle.destroy();
+			battle = common.gen(5).createBattle({gameType: 'triples'}, [[
+				{species: 'Shuckle', moves: ['watergun']},
+				{species: 'Gastrodon', ability: 'stormdrain', moves: ['swordsdance']},
+				{species: 'Magikarp', moves: ['swordsdance']},
+			], [
+				{species: 'Beartic', moves: ['swordsdance']},
+				{species: 'Magikarp', moves: ['swordsdance']},
+				{species: 'Victini', moves: ['finalgambit']},
+			]]);
+			redirector = battle.p1.active[1];
+			battle.makeChoices('move watergun 3, auto', 'move swordsdance, move swordsdance, move finalgambit -2');
+			assert.statStage(redirector, 'spa', 1);
+		});
+
+		it(`should not redirect non-pulse/flying moves in Triples if the Pokemon is out of range`, function () {
+			battle = common.gen(6).createBattle({gameType: 'triples'}, [[
+				{species: 'Shuckle', moves: ['watergun']},
+				{species: 'Magikarp', moves: ['swordsdance']},
+				{species: 'Magikarp', moves: ['swordsdance']},
+			], [
+				{species: 'Beartic', moves: ['swordsdance']},
+				{species: 'Magikarp', moves: ['swordsdance']},
+				{species: 'Victini', moves: ['finalgambit']},
+			]]);
+			battle.makeChoices('move watergun 3, auto', 'move swordsdance, move swordsdance, move finalgambit -2');
+			assert.fullHP(battle.p2.active[0], `Beartic should not be damaged by a Water Gun because it is out of range`);
 		});
 
 		it(`should support RedirectTarget event for a fainted ally and type 'any'`, function () {
@@ -266,17 +295,21 @@ describe('Target Resolution', function () {
 
 	it('should not force charge moves called by another move to target an ally after Ally Switch', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'purrloin', ability: 'prankster', moves: ['copycat', 'sleeptalk']},
-			{species: 'wynaut', moves: ['allyswitch', 'solarbeam']},
+			{species: 'purrloin', ability: 'no guard', moves: ['copycat', 'sleeptalk']},
+			{species: 'wynaut', moves: ['allyswitch', 'fly', 'skullbash']},
 		], [
-			{species: 'swablu', moves: ['sleeptalk']},
-			{species: 'swablu', moves: ['sleeptalk']},
+			{species: 'aron', moves: ['sleeptalk']},
+			{species: 'lairon', moves: ['sleeptalk']},
 		]]);
 
-		battle.makeChoices('move sleeptalk, move solarbeam 1', 'auto');
+		battle.makeChoices('move sleeptalk, move fly 1', 'auto');
 		battle.makeChoices();
 		battle.makeChoices();
-		assert.fullHP(battle.p1.active[0]);
+		battle.makeChoices('move skullbash 1, move sleeptalk', 'auto');
+		battle.makeChoices();
+		battle.makeChoices();
+		// ally switch was used twice, so wynaut will be back where it started
+		assert.fullHP(battle.p1.active[1]);
 	});
 
 	it(`Ally Switch should cause single-target moves to fail if targeting an ally`, function () {
