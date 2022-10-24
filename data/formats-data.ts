@@ -1895,7 +1895,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	dunsparce: {
 		randomBattleMoves: ["bodyslam", "coil", "earthquake", "roost"],
 		randomBattleLevel: 90,
-		randomDoubleBattleMoves: ["glare", "headbutt", "helpinghand", "rockslide"],
+		randomDoubleBattleMoves: ["glare", "headbutt", "protect", "rockslide"],
 		randomDoubleBattleLevel: 90,
 		tier: "(PU)",
 		doublesTier: "(DUU)",
@@ -4150,7 +4150,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	darmanitangalar: {
 		randomBattleMoves: ["earthquake", "flareblitz", "iciclecrash", "superpower", "uturn"],
 		randomBattleLevel: 78,
-		randomDoubleBattleMoves: ["earthquake", "flareblitz", "iciclecrash", "superpower", "uturn"],
+		randomDoubleBattleMoves: ["flareblitz", "iciclecrash", "rockslide", "superpower", "uturn"],
 		randomDoubleBattleLevel: 80,
 		tier: "Uber",
 		doublesTier: "(DUU)",
@@ -4661,7 +4661,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	durant: {
 		randomBattleMoves: ["firstimpression", "honeclaws", "ironhead", "rockslide", "superpower"],
 		randomBattleLevel: 78,
-		randomDoubleBattleMoves: ["firstimpression", "ironhead", "protect", "superpower", "xscissor"],
+		randomDoubleBattleMoves: ["firstimpression", "ironhead", "protect", "stompingtantrum", "superpower", "xscissor"],
 		randomDoubleBattleLevel: 82,
 		tier: "RUBL",
 		doublesTier: "(DUU)",
