@@ -441,16 +441,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	iceball: {
 		inherit: true,
 		condition: {
-			duration: 2,
+			duration: 1,
 			onLockMove: 'iceball',
 			onStart() {
-				this.effectState.hitCount = 1;
-			},
-			onRestart() {
-				this.effectState.hitCount++;
-				if (this.effectState.hitCount < 5) {
-					this.effectState.duration = 2;
-				}
+				this.effectState.hitCount = 0;
 			},
 			onResidual(target) {
 				// This is just to ensure the volatile is deleted correctly
@@ -464,16 +458,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	rollout: {
 		inherit: true,
 		condition: {
-			duration: 2,
+			duration: 1,
 			onLockMove: 'rollout',
 			onStart() {
-				this.effectState.hitCount = 1;
-			},
-			onRestart() {
-				this.effectState.hitCount++;
-				if (this.effectState.hitCount < 5) {
-					this.effectState.duration = 2;
-				}
+				this.effectState.hitCount = 0;
 			},
 			onResidual(target) {
 				// This is just to ensure the volatile is deleted correctly
