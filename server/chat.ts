@@ -30,7 +30,6 @@ import {FriendsDatabase, PM} from './friends';
 import {SQL, Repl, FS, Utils} from '../lib';
 import * as Artemis from './artemis';
 import {Dex} from '../sim';
-import {resolve} from 'path';
 import {PrivateMessages} from './private-messages';
 import * as pathModule from 'path';
 import * as JSX from './chat-jsx';
@@ -1825,7 +1824,7 @@ export const Chat = new class {
 		}
 
 		Chat.destroyHandlers.push(
-			() => Chat.database?.destroy(),
+			() => void Chat.database?.destroy(),
 			() => Chat.PrivateMessages.destroy(),
 		);
 	}

@@ -32,6 +32,7 @@ export interface ReceivedPM {
 export const PrivateMessages = new class {
 	database = PM;
 	clearInterval = this.nextClear();
+	offlineIsEnabled = Config.usesqlitepms && Config.usesqlite;
 	async sendOffline(to: string, from: User | string, message: string) {
 		const result = await PM.transaction('send', [toID(from), toID(to), message]);
 		if (result.error) throw new Chat.ErrorMessage(result.error);
@@ -44,7 +45,6 @@ export const PrivateMessages = new class {
 		const id = toID(user);
 		return PM.run(statements.setBlock, [id, val]);
 	}
-	offlineIsEnabled = Config.usesqlitepms && Config.usesqlite;
 	checkCanUse(user: User, forceBool = false) {
 		if (!this.offlineIsEnabled) {
 			if (forceBool) return false;

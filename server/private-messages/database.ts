@@ -136,7 +136,7 @@ export function onDatabaseStart(database: import('better-sqlite3').Database) {
 			database.exec('BEGIN TRANSACTION');
 			try {
 				database.exec(FS(`databases/migrations/pms/${migration}`).readSync());
-			} catch (e) {
+			} catch (e: any) {
 				console.log(`Error in PM migration ${migration} - ${e.message}`);
 				console.log(e.stack);
 				database.exec('ROLLBACK');
