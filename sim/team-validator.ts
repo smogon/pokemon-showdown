@@ -671,7 +671,7 @@ export class TeamValidator {
 			const {species: eventSpecies, eventData} = eventOnlyData;
 			let legal = false;
 			for (const event of eventData) {
-				if (this.validateEvent(set, event, eventSpecies)) continue;
+				if (this.validateEvent(set, event, eventSpecies, setSources)) continue;
 				legal = true;
 				break;
 			}
@@ -689,7 +689,7 @@ export class TeamValidator {
 						const eventInfo = event;
 						const eventNum = i + 1;
 						const eventName = eventData.length > 1 ? ` #${eventNum}` : ``;
-						const eventProblems = this.validateEvent(set, eventInfo, eventSpecies, ` to be`, `from its event${eventName}`);
+						const eventProblems = this.validateEvent(set, eventInfo, eventSpecies, setSources, ` to be`, `from its event${eventName}`);
 						if (eventProblems) problems.push(...eventProblems);
 					}
 				}
@@ -1655,16 +1655,18 @@ export class TeamValidator {
 		return null;
 	}
 
-	validateEvent(set: PokemonSet, eventData: EventInfo, eventSpecies: Species): true | undefined;
+	validateEvent(set: PokemonSet, eventData: EventInfo, eventSpecies: Species, setSources: PokemonSources): true | undefined;
 	validateEvent(
-		set: PokemonSet, eventData: EventInfo, eventSpecies: Species, because: string, from?: string
+		set: PokemonSet, eventData: EventInfo, eventSpecies: Species, setSources: PokemonSources, because: string, from?: string
 	): string[] | undefined;
 	/**
 	 * Returns array of error messages if invalid, undefined if valid
 	 *
 	 * If `because` is not passed, instead returns true if invalid.
 	 */
-	validateEvent(set: PokemonSet, eventData: EventInfo, eventSpecies: Species, because = ``, from = `from an event`) {
+	validateEvent(
+		set: PokemonSet, eventData: EventInfo, eventSpecies: Species, setSources: PokemonSources, because = ``, from = `from an event`
+	) {
 		const dex = this.dex;
 		let name = set.species;
 		const species = dex.species.get(set.species);
@@ -1767,6 +1769,12 @@ export class TeamValidator {
 		}
 		// Event-related ability restrictions only matter if we care about illegal abilities
 		const ruleTable = this.ruleTable;
+		if (ruleTable.has('obtainablemoves')) {
+			if (eventData.generation > setSources.maxSourceGen()) {
+				if (fastReturn) return true;
+				problems.push(`${name} must not have moves only obtainable in gen ${setSources.maxSourceGen()}${etc} - which is a gen ${eventData.generation} event.`);
+			}
+		}
 		if (ruleTable.has('obtainableabilities')) {
 			if (dex.gen <= 5 && eventData.abilities && eventData.abilities.length === 1 && !eventData.isHidden) {
 				if (species.name === eventSpecies.name) {
