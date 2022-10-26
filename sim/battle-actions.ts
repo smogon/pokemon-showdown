@@ -73,9 +73,9 @@ export class BattleActions {
 		const unfaintedActive = oldActive?.hp ? oldActive : null;
 		if (unfaintedActive) {
 			oldActive.beingCalledBack = true;
-			let switchCopyFlag = false;
-			if (sourceEffect && (sourceEffect as Move).selfSwitch === 'copyvolatile') {
-				switchCopyFlag = true;
+			let switchCopyFlag: 'copyvolatile' | 'shedtail' | boolean = false;
+			if (sourceEffect && (sourceEffect as Move).selfSwitch) {
+				switchCopyFlag = (sourceEffect as Move).selfSwitch!;
 			}
 			if (!oldActive.skipBeforeSwitchOutEventFlag && !isDrag) {
 				this.battle.runEvent('BeforeSwitchOut', oldActive);
@@ -111,7 +111,7 @@ export class BattleActions {
 				newMove = oldActive.lastMove;
 			}
 			if (switchCopyFlag) {
-				pokemon.copyVolatileFrom(oldActive);
+				pokemon.copyVolatileFrom(oldActive, switchCopyFlag);
 			}
 			if (newMove) pokemon.lastMove = newMove;
 			oldActive.clearVolatile();

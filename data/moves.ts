@@ -15269,7 +15269,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				source.skipBeforeSwitchOutEventFlag = true;
 			},
 		},
-		selfSwitch: 'copyvolatile',
+		selfSwitch: 'shedtail',
 		secondary: null,
 		target: "self",
 		type: "Normal",
