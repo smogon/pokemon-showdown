@@ -671,7 +671,7 @@ export class TeamValidator {
 			const {species: eventSpecies, eventData} = eventOnlyData;
 			let legal = false;
 			for (const event of eventData) {
-				if (this.validateEvent(set, event, eventSpecies, setSources)) continue;
+				if (this.validateEvent(set, setSources, event, eventSpecies)) continue;
 				legal = true;
 				break;
 			}
@@ -690,7 +690,7 @@ export class TeamValidator {
 						const eventNum = i + 1;
 						const eventName = eventData.length > 1 ? ` #${eventNum}` : ``;
 						const eventProblems = this.validateEvent(
-							set, eventInfo, eventSpecies, setSources, ` to be`, `from its event${eventName}`
+							set, setSources, eventInfo, eventSpecies, ` to be`, `from its event${eventName}`
 						);
 						if (eventProblems) problems.push(...eventProblems);
 					}
@@ -1085,7 +1085,7 @@ export class TeamValidator {
 		}
 
 		// complicated fancy return signature
-		return this.validateEvent(set, eventData, eventSpecies, because as any) as any;
+		return this.validateEvent(set, setSources, eventData, eventSpecies, because as any) as any;
 	}
 
 	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources): boolean;
@@ -1658,10 +1658,10 @@ export class TeamValidator {
 	}
 
 	validateEvent(
-		set: PokemonSet, eventData: EventInfo, eventSpecies: Species, setSources: PokemonSources
+		set: PokemonSet, setSources: PokemonSources, eventData: EventInfo, eventSpecies: Species
 	): true | undefined;
 	validateEvent(
-		set: PokemonSet, eventData: EventInfo, eventSpecies: Species, setSources: PokemonSources,
+		set: PokemonSet, setSources: PokemonSources, eventData: EventInfo, eventSpecies: Species,
 		because: string, from?: string
 	): string[] | undefined;
 	/**
@@ -1670,7 +1670,7 @@ export class TeamValidator {
 	 * If `because` is not passed, instead returns true if invalid.
 	 */
 	validateEvent(
-		set: PokemonSet, eventData: EventInfo, eventSpecies: Species, setSources: PokemonSources,
+		set: PokemonSet, setSources: PokemonSources, eventData: EventInfo, eventSpecies: Species,
 		because = ``, from = `from an event`
 	) {
 		const dex = this.dex;
