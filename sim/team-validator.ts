@@ -689,7 +689,9 @@ export class TeamValidator {
 						const eventInfo = event;
 						const eventNum = i + 1;
 						const eventName = eventData.length > 1 ? ` #${eventNum}` : ``;
-						const eventProblems = this.validateEvent(set, eventInfo, eventSpecies, setSources, ` to be`, `from its event${eventName}`);
+						const eventProblems = this.validateEvent(
+							set, eventInfo, eventSpecies, setSources, ` to be`, `from its event${eventName}`
+						);
 						if (eventProblems) problems.push(...eventProblems);
 					}
 				}
@@ -1655,7 +1657,9 @@ export class TeamValidator {
 		return null;
 	}
 
-	validateEvent(set: PokemonSet, eventData: EventInfo, eventSpecies: Species, setSources: PokemonSources): true | undefined;
+	validateEvent(
+		set: PokemonSet, eventData: EventInfo, eventSpecies: Species, setSources: PokemonSources
+	): true | undefined;
 	validateEvent(
 		set: PokemonSet, eventData: EventInfo, eventSpecies: Species, setSources: PokemonSources, because: string, from?: string
 	): string[] | undefined;
@@ -1665,7 +1669,8 @@ export class TeamValidator {
 	 * If `because` is not passed, instead returns true if invalid.
 	 */
 	validateEvent(
-		set: PokemonSet, eventData: EventInfo, eventSpecies: Species, setSources: PokemonSources, because = ``, from = `from an event`
+		set: PokemonSet, eventData: EventInfo, eventSpecies: Species, setSources: PokemonSources,
+		because = ``, from = `from an event`
 	) {
 		const dex = this.dex;
 		let name = set.species;
