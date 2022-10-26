@@ -1778,7 +1778,7 @@ export class TeamValidator {
 		if (ruleTable.has('obtainablemoves')) {
 			if (eventData.generation > setSources.maxSourceGen() && !(dex.gen <= 2 && eventSpecies.gen === 1)) {
 				if (fastReturn) return true;
-				problems.push(`${name} must not have moves only learnable in gen ${setSource.maxSourceGen()}${etc}.`);
+				problems.push(`${name} must not have moves only learnable in gen ${setSources.maxSourceGen()}${etc}.`);
 			}
 		}
 		if (ruleTable.has('obtainableabilities')) {
