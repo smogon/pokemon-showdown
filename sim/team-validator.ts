@@ -1661,7 +1661,8 @@ export class TeamValidator {
 		set: PokemonSet, eventData: EventInfo, eventSpecies: Species, setSources: PokemonSources
 	): true | undefined;
 	validateEvent(
-		set: PokemonSet, eventData: EventInfo, eventSpecies: Species, setSources: PokemonSources, because: string, from?: string
+		set: PokemonSet, eventData: EventInfo, eventSpecies: Species, setSources: PokemonSources,
+		because: string, from?: string
 	): string[] | undefined;
 	/**
 	 * Returns array of error messages if invalid, undefined if valid
