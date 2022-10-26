@@ -1776,7 +1776,7 @@ export class TeamValidator {
 		// Event-related ability restrictions only matter if we care about illegal abilities
 		const ruleTable = this.ruleTable;
 		if (ruleTable.has('obtainablemoves')) {
-			const tradebackEligible = ruleTable.has('allowtradebacks') || (dex.gen === 2 && species.gen === 1);
+			const tradebackEligible = ruleTable.has('allowtradeback') || (dex.gen === 2 && species.gen === 1);
 			if (eventData.generation > setSources.maxSourceGen() && !tradebackEligible) {
 				if (fastReturn) return true;
 				problems.push(`${name} must not have moves only learnable in gen ${setSources.maxSourceGen()}${etc}.`);
