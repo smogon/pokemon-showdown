@@ -248,6 +248,7 @@ export class Pokemon {
 	readonly canGigantamax: string | null;
 	canTerastallize: string | null;
 	teraType: string;
+	baseTypes: string[];
 	terastallized?: string;
 
 	/** A Pokemon's currently 'staleness' with respect to the Endless Battle Clause. */
@@ -403,6 +404,7 @@ export class Pokemon {
 		this.subFainted = null;
 
 		this.types = this.baseSpecies.types;
+		this.baseTypes = this.types;
 		this.addedType = '';
 		this.knownType = true;
 		this.apparentType = this.baseSpecies.types.join('/');
@@ -996,7 +998,7 @@ export class Pokemon {
 			canZMove?: AnyObject | null,
 			canDynamax?: boolean,
 			maxMoves?: DynamaxOptions,
-			canTerastallize?: boolean,
+			canTerastallize?: string,
 		} = {
 			moves,
 		};
@@ -1025,7 +1027,7 @@ export class Pokemon {
 
 			if (this.getDynamaxRequest()) data.canDynamax = true;
 			if (data.canDynamax || this.volatiles['dynamax']) data.maxMoves = this.getDynamaxRequest(true);
-			if (this.canTerastallize) data.canTerastallize = true;
+			if (this.canTerastallize) data.canTerastallize = this.canTerastallize;
 		}
 
 		return data;

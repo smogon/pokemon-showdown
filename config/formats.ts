@@ -676,7 +676,7 @@ export const Formats: FormatList = [
 		name: "[Gen 9] Monotype (beta)",
 
 		mod: 'gen9',
-		ruleset: ['Same Type Clause', 'Standard'],
+		ruleset: ['Same Type Clause', 'Enforce Same Tera Type', 'Standard'],
 	},
 	{
 		name: "[Gen 9] 1v1 (beta)",
@@ -688,6 +688,13 @@ export const Formats: FormatList = [
 			'Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
 		],
 		banlist: ['Focus Sash'],
+	},
+	{
+		name: "[Gen 9] National Dex (beta)",
+
+		mod: 'gen9',
+		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Sleep Clause Mod'],
+		banlist: ['ND Uber'],
 	},
 
 	// OM of the Month

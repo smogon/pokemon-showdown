@@ -38,7 +38,7 @@ export interface ChosenAction {
 	mega?: boolean | null; // true if megaing or ultra bursting
 	zmove?: string; // if zmoving, the name of the zmove
 	maxMove?: string; // if dynamaxed, the name of the max move
-	terastallize?: boolean; // true if terastallizing
+	terastallize?: string; // if terastallizing, tera type
 	priority?: number; // priority of the action
 }
 
@@ -637,7 +637,7 @@ export class Side {
 			mega: mega || ultra,
 			zmove: zMove,
 			maxMove: maxMove ? maxMove.id : undefined,
-			terastallize: terastallize,
+			terastallize: terastallize ? pokemon.teraType : undefined,
 		});
 
 		if (pokemon.maybeDisabled) {

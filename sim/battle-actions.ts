@@ -1677,8 +1677,11 @@ export class BattleActions {
 		baseDamage = this.battle.randomizer(baseDamage);
 
 		// just guessing placement
-		if (pokemon.terastallized) {
-			move.stab = pokemon.baseSpecies.types.includes(pokemon.terastallized) ? 2 : 1.5;
+		if (pokemon.baseTypes.includes(move.type)) {
+			move.stab = 1.5;
+		}
+		if (pokemon.terastallized && pokemon.baseSpecies.types.includes(pokemon.terastallized)) {
+			move.stab = 2;
 		}
 
 		// STAB

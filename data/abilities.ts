@@ -623,6 +623,32 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2,
 		num: 238,
 	},
+	cudchew: {
+		onEatItem(item, pokemon) {
+			if (!item.isBerry) return;
+			pokemon.abilityState.berry = item;
+			pokemon.addVolatile('cudchew');
+		},
+		condition: {
+			noCopy: true,
+			duration: 2,
+			onEnd(pokemon) {
+				if (pokemon.hp && pokemon.abilityState.berry) {
+					const item = pokemon.abilityState.berry;
+					this.add('-activate', pokemon, 'ability: Cud Chew');
+					this.add('-enditem', pokemon, item.name);
+					if (this.singleEvent('Eat', item, null, pokemon, null, null)) {
+						this.runEvent('EatItem', pokemon, null, null, item);
+					}
+					if (item.onEat) pokemon.ateBerry = true;
+					delete pokemon.abilityState.berry;
+				}
+			},
+		},
+		name: "Cud Chew",
+		rating: 3,
+		num: 1000,
+	},
 	curiousmedicine: {
 		onStart(pokemon) {
 			for (const ally of pokemon.adjacentAllies()) {
@@ -979,6 +1005,15 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Electric Surge",
 		rating: 4,
 		num: 226,
+	},
+	electromorphosis: {
+		onDamagingHit(damage, target, source, move) {
+			// Placeholder
+			target.addVolatile('charge');
+		},
+		name: "Electromorphosis",
+		rating: 3,
+		num: 1000,
 	},
 	emergencyexit: {
 		onEmergencyExit(target) {

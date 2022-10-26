@@ -77690,6 +77690,11 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		],
 		eventOnly: true,
 	},
+	farigiraf: {
+		learnset: {
+			agility: ["9M"],
+		},
+	},
 	tomohawk: {
 		learnset: {
 			acrobatics: ["8M", "7M", "5M"],

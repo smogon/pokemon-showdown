@@ -250,6 +250,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "When this Pokemon is hit by an attack, the Speed of all other Pokemon on the field is lowered by 1 stage.",
 		shortDesc: "If this Pokemon is hit, it lowers the Speed of all other Pokemon on the field 1 stage.",
 	},
+	cudchew: {
+		name: "Cud Chew",
+		desc: "When this Pokemon consumes a berry, it will consume the berry again at the end of the following turn.",
+		shortDesc: "If this Pokemon eats a berry, it will consume the berry again at the end of next turn.",
+	},
 	curiousmedicine: {
 		name: "Curious Medicine",
 		shortDesc: "On switch-in, this Pokemon's allies have their stat stages reset to 0.",

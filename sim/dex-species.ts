@@ -408,6 +408,7 @@ export class DexSpecies {
 			const formeNames: {[k: string]: string[]} = {
 				alola: ['a', 'alola', 'alolan'],
 				galar: ['g', 'galar', 'galarian'],
+				hisui: ['h', 'hisui', 'hisuian'],
 				paldea: ['p', 'paldea', 'paldean'],
 				mega: ['m', 'mega'],
 				primal: ['p', 'primal'],
