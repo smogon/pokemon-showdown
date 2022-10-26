@@ -1776,9 +1776,9 @@ export class TeamValidator {
 		// Event-related ability restrictions only matter if we care about illegal abilities
 		const ruleTable = this.ruleTable;
 		if (ruleTable.has('obtainablemoves')) {
-			if (eventData.generation > setSources.maxSourceGen()) {
+			if (eventData.generation > setSources.maxSourceGen() && !(dex.gen <= 2 && eventSpecies.gen === 1)) {
 				if (fastReturn) return true;
-				problems.push(`${name} must not have moves only obtainable in gen ${setSources.maxSourceGen()}${etc} - which is a gen ${eventData.generation} event.`);
+				problems.push(`${name} must not have moves only learnable in gen ${setSource.maxSourceGen()}${etc}.`);
 			}
 		}
 		if (ruleTable.has('obtainableabilities')) {
