@@ -246,4 +246,56 @@ describe('Transform [Gen 1]', function () {
 		battle.makeChoices('move thunderbolt', 'switch 2');
 		assert.fainted(battle.p2.active[0]);
 	});
+
+	it(`should copy the target's stats (except HP), even if different level`, function () {
+		battle = common.gen(1).createBattle([[
+			{species: 'Ditto', moves: ['transform'], level: 5},
+		], [
+			{species: 'Gengar', moves: ['splash']},
+		]]);
+		battle.makeChoices();
+		const p1poke = battle.p1.active[0];
+		const p2poke = battle.p2.active[0];
+		for (const stat in p1poke.storedStats) {
+			assert.equal(p1poke.storedStats[stat], p2poke.storedStats[stat]);
+			assert.equal(p1poke.modifiedStats[stat], p2poke.modifiedStats[stat]);
+		}
+	});
+
+	it(`should copy the target's status-modified stats`, function () {
+		battle = common.gen(1).createBattle([[
+			{species: 'Ditto', moves: ['transform', 'thunderwave']},
+		], [
+			{species: 'Gengar', moves: ['splash']},
+		]]);
+		battle.makeChoices('move thunderwave', 'move splash');
+		battle.makeChoices('move transform', 'move splash');
+		const p1poke = battle.p1.active[0];
+		const p2poke = battle.p2.active[0];
+		assert.equal(p1poke.storedStats['spe'], p2poke.storedStats['spe']);
+		assert.equal(p1poke.modifiedStats['spe'], p2poke.modifiedStats['spe']);
+	});
+
+	it(`should not re-apply status stat modifier after transforming`, function () {
+		battle = common.gen(1).createBattle([[
+			{species: 'Ditto', moves: ['transform', 'splash']},
+		], [
+			{species: 'Gengar', moves: ['splash', 'thunderwave', 'transform']},
+		]]);
+		battle.makeChoices('move splash', 'move thunderwave');
+		battle.makeChoices('move transform', 'move splash');
+		battle.makeChoices('move transform', 'move splash');
+		battle.makeChoices('move transform', 'move splash');
+		battle.makeChoices('move transform', 'move splash');
+		battle.makeChoices('move transform', 'move splash');
+		battle.makeChoices('move transform', 'move splash');
+		battle.makeChoices('move transform', 'move splash');
+		battle.makeChoices('move transform', 'move splash');
+		battle.makeChoices('move transform', 'move splash');
+		battle.makeChoices('move transform', 'move splash');
+		const p1poke = battle.p1.active[0];
+		const p2poke = battle.p2.active[0];
+		assert.equal(p1poke.storedStats['spe'], p2poke.storedStats['spe']);
+		assert.equal(p1poke.modifiedStats['spe'], p2poke.modifiedStats['spe']);
+	});
 });
