@@ -1875,7 +1875,13 @@ export const pages: Chat.PageTable = {
 					const ticketGame = room.getGame(HelpTicket)!;
 					buf += `<a href="/${roomid}"><button class="button" ${ticketGame.getPreview()}>${this.tr(!ticket.claimed && ticket.open ? 'Claim' : 'View')}</button></a> `;
 				} else if (ticket.text) {
-					buf += `<a class="button" href="/view-help-text-${ticket.userid}">${ticket.claimed ? `Claim` : `View`}</a>`;
+					let title = Object.entries(ticket.notes || {})
+						.map(([userid, note]) => Utils.html`${note} (by ${userid})`)
+						.join('&#10;');
+					if (title) {
+						title = `title="Staff notes:&#10;${title}"`;
+					}
+					buf += `<a class="button" ${title} href="/view-help-text-${ticket.userid}">${ticket.claimed ? `Claim` : `View`}</a>`;
 				}
 				if (logUrl) {
 					buf += `<a href="${logUrl}"><button class="button">${this.tr`Log`}</button></a>`;
