@@ -1406,7 +1406,9 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				const ipPunishments = Punishments.ips.get(ip);
 				if (ipPunishments) {
 					const str = ipPunishments.map(p => (
-						`${Punishments.punishmentTypes.get(p.type)?.desc || p.type} as ${p.id}${p.reason ? ` (${p.reason})` : ''}`
+						`${Punishments.punishmentTypes.get(p.type)?.desc || p.type} as ` +
+						`<a href="https://${Config.routes.root}/users/${p.id}">${p.id}</a>` +
+						`${p.reason ? ` (${p.reason})` : ''}`
 					));
 					if (str) buf += `Punishments: ${str.join(' | ')}<br />`;
 				}
