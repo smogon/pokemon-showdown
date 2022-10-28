@@ -18,7 +18,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		getStat(statName, unmodified) {
 			// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
 			if (statName === 'hp') throw new Error("Please read `maxhp` directly");
-			if (unmodified) return this.storedStats[statName];
+			if (unmodified) return this.baseStoredStats[statName];
 			return this.modifiedStats![statName];
 		},
 		// Gen 1 function to apply a stat modification that is only active until the stat is recalculated or mon switched.
@@ -46,9 +46,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				changed = true;
 				// Recalculate the modified stat
 				if (i === 'evasion' || i === 'accuracy') continue;
-				let stat = this.species.baseStats[i];
-				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[i] + Math.floor(this.set.evs[i] / 4)) * this.level / 100 + 5);
-				this.modifiedStats![i] = this.storedStats[i] = Math.floor(stat);
+				this.modifiedStats![i] = this.storedStats[i];
 				if (this.boosts[i] >= 0) {
 					this.modifyStat!(i, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[i]]);
 				} else {
@@ -63,9 +61,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.boosts[i] = 0;
 				// Recalculate the modified stat
 				if (i === 'evasion' || i === 'accuracy') continue;
-				let stat = this.species.baseStats[i];
-				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[i] + Math.floor(this.set.evs[i] / 4)) * this.level / 100 + 5);
-				this.modifiedStats![i] = this.storedStats[i] = Math.floor(stat);
+				this.modifiedStats![i] = this.storedStats[i];
 			}
 		},
 	},
