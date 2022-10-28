@@ -280,19 +280,12 @@ describe('Transform [Gen 1]', function () {
 		battle = common.gen(1).createBattle([[
 			{species: 'Ditto', moves: ['transform', 'splash']},
 		], [
-			{species: 'Gengar', moves: ['splash', 'thunderwave', 'transform']},
+			{species: 'Gengar', moves: ['splash', 'thunderwave']},
 		]]);
 		battle.makeChoices('move splash', 'move thunderwave');
-		battle.makeChoices('move transform', 'move splash');
-		battle.makeChoices('move transform', 'move splash');
-		battle.makeChoices('move transform', 'move splash');
-		battle.makeChoices('move transform', 'move splash');
-		battle.makeChoices('move transform', 'move splash');
-		battle.makeChoices('move transform', 'move splash');
-		battle.makeChoices('move transform', 'move splash');
-		battle.makeChoices('move transform', 'move splash');
-		battle.makeChoices('move transform', 'move splash');
-		battle.makeChoices('move transform', 'move splash');
+		do {
+			battle.makeChoices('move transform', 'move splash');
+		} while (!battle.p1.active[0].transformed);
 		const p1poke = battle.p1.active[0];
 		const p2poke = battle.p2.active[0];
 		assert.equal(p1poke.storedStats['spe'], p2poke.storedStats['spe']);
