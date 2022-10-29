@@ -1442,7 +1442,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleNoDynamaxMoves: ["icebeam", "nastyplot", "shadowball", "thunderbolt", "triattack", "trick"],
 		tier: "NUBL",
 		doublesTier: "(DUU)",
-		natDexTier: "RUBL",
+		natDexTier: "UUBL",
 	},
 	omanyte: {
 		tier: "LC",
