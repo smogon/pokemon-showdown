@@ -3958,7 +3958,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 1] NU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3668913/">RBY NU Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3679758/">RBY NU Metagame Discussion &amp; Resources</a>`,
 		],
 
 		mod: 'gen1',
