@@ -10,15 +10,15 @@ describe('Room Service', function () {
 		battle.destroy();
 	});
 
-	it.only(`should activate when Trick Room is set`, function () {
+	it(`should activate when Trick Room is set`, function () {
 		battle = common.createBattle([[
 			{species: 'slowpoke', item: 'roomservice', moves: ['sleeptalk']},
 		], [
-			{species: 'whimsicott', moves: ['trickroom']},
+			{species: 'whimsicott', item: 'roomservice', moves: ['trickroom']},
 		]]);
 		battle.makeChoices();
-		console.log(battle.getDebugLog());
 		assert.statStage(battle.p1.active[0], 'spe', -1);
+		assert.statStage(battle.p2.active[0], 'spe', -1);
 	});
 
 	it(`should activate after entrance Abilities`, function () {

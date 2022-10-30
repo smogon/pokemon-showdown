@@ -4581,7 +4581,8 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.useItem();
 			}
 		},
-		onAnyPseudoWeatherStart(pokemon) {
+		onAnyPseudoWeatherStart() {
+			const pokemon = this.effectState.target;
 			if (this.field.getPseudoWeather('trickroom')) {
 				pokemon.useItem();
 			}
