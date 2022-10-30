@@ -13442,7 +13442,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, heal: 1},
 		onHit(target, source) {
-			if (!target.cureStatus()) return this.NOT_FAIL;
+			if (!target.cureStatus()) {
+				this.add('-fail', source);
+				this.attrLastMove('[still]');
+				return this.NOT_FAIL;
+			}
 			this.heal(Math.ceil(source.maxhp * 0.5), source);
 		},
 		secondary: null,
