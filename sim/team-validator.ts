@@ -1773,7 +1773,6 @@ export class TeamValidator {
 				problems.push(`${name} can only use Hidden Power Dark/Dragon/Electric/Steel/Ice because it must have at least 5 perfect IVs${etc}.`);
 			}
 		}
-		// Event-related ability restrictions only matter if we care about illegal abilities
 		const ruleTable = this.ruleTable;
 		if (ruleTable.has('obtainablemoves')) {
 			const tradebackEligible = ruleTable.has('allowtradeback') || (dex.gen === 2 && species.gen === 1);
