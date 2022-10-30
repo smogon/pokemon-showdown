@@ -4576,7 +4576,13 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 100,
 		},
-		onUpdate(pokemon) {
+		onStart(pokemon) {
+			if (!pokemon.ignoringItem() && this.field.getPseudoWeather('trickroom')) {
+				pokemon.useItem();
+			}
+		},
+		onAnyPseudoWeatherStart() {
+			const pokemon = this.effectState.target;
 			if (this.field.getPseudoWeather('trickroom')) {
 				pokemon.useItem();
 			}
