@@ -415,7 +415,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mimic: {
 		inherit: true,
-		accuracy: 100,
 		ignoreAccuracy: undefined,
 		ignoreEvasion: undefined,
 		noSketch: true,
