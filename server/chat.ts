@@ -138,7 +138,7 @@ const LINK_WHITELIST = [
 	'*.smogon.com', '*.pastebin.com', '*.hastebin.com',
 ];
 
-const MAX_MESSAGE_LENGTH = 300;
+const MAX_MESSAGE_LENGTH = 1000;
 
 const BROADCAST_COOLDOWN = 20 * 1000;
 const MESSAGE_COOLDOWN = 5 * 60 * 1000;
