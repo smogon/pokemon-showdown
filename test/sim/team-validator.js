@@ -691,7 +691,7 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
-	it.skip('should not allow events to use moves only obtainable in a previous generation', function () {
+	it('should not allow events to use moves only obtainable in a previous generation', function () {
 		const team = [
 			{species: 'zeraora', ability: 'voltabsorb', shiny: true, moves: ['knockoff'], evs: {hp: 1}},
 		];
