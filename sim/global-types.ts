@@ -26,6 +26,8 @@ interface AnyObject {[k: string]: any}
 type GenderName = 'M' | 'F' | 'N' | '';
 type StatIDExceptHP = 'atk' | 'def' | 'spa' | 'spd' | 'spe';
 type StatID = 'hp' | StatIDExceptHP;
+type StatNameFromID<T extends StatID> = T extends 'spa' ? 'SpA' :
+	T extends 'spd' ? 'SpD' : T extends 'hp' ? 'HP' : Capitalize<T>;
 type StatsExceptHPTable = {[stat in StatIDExceptHP]: number};
 type StatsTable = {[stat in StatID]: number};
 type SparseStatsTable = Partial<StatsTable>;
@@ -87,15 +89,18 @@ interface EventInfo {
 	japan?: boolean;
 }
 
-type Effect = Ability | Item | ActiveMove | Species | Condition | Format;
+type Effect = Ability | Item | ActiveMove | Species & NoEventMethods | Condition | Format;
 
+type EventName = import('./dex-conditions').EventName;
+type EventHandlers<T> = import('./dex-conditions').EventHandlers<T>;
+type NoEventMethods = import('./dex-conditions').NoEventMethods;
 interface CommonHandlers {
 	ModifierEffect: (this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | void;
 	ModifierMove: (this: Battle, relayVar: number, target: Pokemon, source: Pokemon, move: ActiveMove) => number | void;
-	ResultMove: boolean | (
+	ResultMove: false | (
 		(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => boolean | null | "" | void
 	);
-	ExtResultMove: boolean | (
+	ExtResultMove: false | (
 		(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => boolean | null | number | "" | void
 	);
 	VoidEffect: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect) => void;
@@ -106,10 +111,10 @@ interface CommonHandlers {
 	ModifierSourceMove: (
 		this: Battle, relayVar: number, source: Pokemon, target: Pokemon, move: ActiveMove
 	) => number | void;
-	ResultSourceMove: boolean | (
+	ResultSourceMove: false | (
 		(this: Battle, source: Pokemon, target: Pokemon, move: ActiveMove) => boolean | null | "" | void
 	);
-	ExtResultSourceMove: boolean | (
+	ExtResultSourceMove: false | (
 		(this: Battle, source: Pokemon, target: Pokemon, move: ActiveMove) => boolean | null | number | "" | void
 	);
 	VoidSourceEffect: (this: Battle, source: Pokemon, target: Pokemon, effect: Effect) => void;
@@ -146,6 +151,7 @@ interface BasicEffect extends EffectData {
 type ConditionData = import('./dex-conditions').ConditionData;
 type ModdedConditionData = import('./dex-conditions').ModdedConditionData;
 type Condition = import('./dex-conditions').Condition;
+type ConditionEffect = import('./dex-conditions').ConditionEffect;
 
 type MoveData = import('./dex-moves').MoveData;
 type ModdedMoveData = import('./dex-moves').ModdedMoveData;
@@ -156,9 +162,11 @@ type MoveTarget = import('./dex-moves').MoveTarget;
 type ItemData = import('./dex-items').ItemData;
 type ModdedItemData = import('./dex-items').ModdedItemData;
 type Item = import('./dex-items').Item;
+type ItemEffect = import('./dex-items').ItemEffect;
 
 type AbilityData = import('./dex-abilities').AbilityData;
 type ModdedAbilityData = import('./dex-abilities').ModdedAbilityData;
+type AbilityEffect = import('./dex-abilities').AbilityEffect;
 type Ability = import('./dex-abilities').Ability;
 
 type SpeciesData = import('./dex-species').SpeciesData;
@@ -173,6 +181,7 @@ type FormatData = import('./dex-formats').FormatData;
 type FormatList = import('./dex-formats').FormatList;
 type ModdedFormatData = import('./dex-formats').ModdedFormatData;
 type Format = import('./dex-formats').Format;
+type FormatEffect = import('./dex-formats').FormatEffect;
 
 interface NatureData {
 	name: string;

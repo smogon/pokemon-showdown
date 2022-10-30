@@ -1,4 +1,4 @@
-import {PokemonEventMethods} from './dex-conditions';
+import {PokemonSpecificEventMethods} from './dex-conditions';
 import {BasicEffect, toID} from './dex-data';
 
 interface FlingData {
@@ -8,7 +8,18 @@ interface FlingData {
 	effect?: CommonHandlers['ResultMove'];
 }
 
-export interface ItemData extends Partial<Item>, PokemonEventMethods {
+export interface ItemSpecificEventMethods {
+	onEat?: ((this: Battle, pokemon: Pokemon) => void) | false;
+	onPrimal?: (this: Battle, pokemon: Pokemon) => void;
+	onStart?: (this: Battle, target: Pokemon) => void;
+
+	onPlate?: string;
+	onDrive?: string;
+	onMemory?: string;
+}
+type ItemEventMethods = EventHandlers<ItemSpecificEventMethods & PokemonSpecificEventMethods>;
+
+export interface ItemData extends Partial<ItemEffect>, Readonly<ItemEventMethods> {
 	name: string;
 }
 
@@ -17,7 +28,8 @@ export type ModdedItemData = ItemData | Partial<Omit<ItemData, 'name'>> & {
 	onCustap?: (this: Battle, pokemon: Pokemon) => void,
 };
 
-export class Item extends BasicEffect implements Readonly<BasicEffect> {
+export type Item = ItemEffect & ModdedItemData;
+export class ItemEffect extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly effectType: 'Item';
 
 	/** just controls location on the item spritesheet */
@@ -185,7 +197,7 @@ export class DexItems {
 		if (id && this.dex.data.Items.hasOwnProperty(id)) {
 			const itemData = this.dex.data.Items[id] as any;
 			const itemTextData = this.dex.getDescs('Items', id, itemData);
-			item = new Item({
+			item = new ItemEffect({
 				name: id,
 				...itemData,
 				...itemTextData,
@@ -198,7 +210,7 @@ export class DexItems {
 				(item as any).isNonstandard = 'Past';
 			}
 		} else {
-			item = new Item({name: id, exists: false});
+			item = new ItemEffect({name: id, exists: false});
 		}
 
 		if (item.exists) this.itemCache.set(id, item);

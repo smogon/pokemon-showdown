@@ -51,7 +51,7 @@ interface MoveFlags {
 }
 
 export interface HitEffect {
-	onHit?: MoveEventMethods['onHit'];
+	onHit?: MoveSpecificEventMethods['onHit'];
 
 	// set pokemon conditions
 	boosts?: SparseBoostsTable | null;
@@ -85,13 +85,7 @@ export interface SecondaryEffect extends HitEffect {
 	self?: HitEffect;
 }
 
-export interface MoveEventMethods {
-	basePowerCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => number | false | null;
-	/** Return true to stop the move from being used */
-	beforeMoveCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon | null, move: ActiveMove) => boolean | void;
-	beforeTurnCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon) => void;
-	damageCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon) => number | false;
-	priorityChargeCallback?: (this: Battle, pokemon: Pokemon) => void;
+export interface MoveSpecificEventMethods {
 
 	onDisableMove?: (this: Battle, pokemon: Pokemon) => void;
 
@@ -124,15 +118,17 @@ export interface MoveEventMethods {
 	onPrepareHit?: CommonHandlers['ResultMove'];
 	onTry?: CommonHandlers['ResultSourceMove'];
 	onTryHit?: CommonHandlers['ExtResultSourceMove'];
-	onTryHitField?: CommonHandlers['ResultMove'];
-	onTryHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean |
+	onTryHitField?: false | (
+		(this: Battle, target: Pokemon | null, source: Pokemon, move: ActiveMove) => boolean | null | "" | void
+	);
+	onTryHitSide?: (this: Battle, side: Side | null, source: Pokemon, move: ActiveMove) => boolean |
 	 null | "" | void;
 	onTryImmunity?: CommonHandlers['ResultMove'];
 	onTryMove?: CommonHandlers['ResultSourceMove'];
 	onUseMoveMessage?: CommonHandlers['VoidSourceMove'];
 }
 
-export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
+export interface MoveData extends EffectData, EventHandlers<MoveSpecificEventMethods>, HitEffect {
 	name: string;
 	/** move index number, used for Metronome rolls */
 	num?: number;
@@ -263,6 +259,15 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	noSketch?: boolean;
 	stallingMove?: boolean;
 	baseMove?: string;
+
+	// Callbacks
+	// ---------------
+	basePowerCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => number | false | null;
+	/** Return true to stop the move from being used */
+	beforeMoveCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon | null, move: ActiveMove) => boolean | void;
+	beforeTurnCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon) => void;
+	damageCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon) => number | false;
+	priorityChargeCallback?: (this: Battle, pokemon: Pokemon) => void;
 }
 
 export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {

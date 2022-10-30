@@ -7,6 +7,7 @@
 
 import {State} from './state';
 import {toID} from './dex';
+import {PokemonCondition} from './dex-conditions';
 
 /** A Pokemon's move slot. */
 interface MoveSlot {
@@ -570,8 +571,10 @@ export class Pokemon {
 
 		// stat modifier effects
 		if (!unmodified) {
-			const statTable: {[s in StatIDExceptHP]: string} = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
-			stat = this.battle.runEvent('Modify' + statTable[statName], this, null, null, stat);
+			const statTable: {[s in StatIDExceptHP]: StatNameFromID<s>} = {
+				atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe',
+			};
+			stat = this.battle.runEvent(`Modify${statTable[statName]}`, this, null, null, stat);
 		}
 
 		if (statName === 'spe' && stat > 10000 && !this.battle.format.battle?.trunc) stat = 10000;
@@ -1579,7 +1582,7 @@ export class Pokemon {
 		const prevStatus = this.status;
 		const prevStatusState = this.statusState;
 		if (status.id) {
-			const result: boolean = this.battle.runEvent('SetStatus', this, source, sourceEffect, status);
+			const result = !!this.battle.runEvent('SetStatus', this, source, sourceEffect, status);
 			if (!result) {
 				this.battle.debug('set status [' + status.id + '] interrupted');
 				return result;
@@ -1800,11 +1803,11 @@ export class Pokemon {
 	}
 
 	addVolatile(
-		status: string | Condition, source: Pokemon | null = null, sourceEffect: Effect | null = null,
-		linkedStatus: string | Condition | null = null
+		status: string | PokemonCondition, source: Pokemon | null = null, sourceEffect: Effect | null = null,
+		linkedStatus: string | PokemonCondition | null = null
 	): boolean | any {
 		let result;
-		status = this.battle.dex.conditions.get(status);
+		status = this.battle.dex.conditions.get(status) as PokemonCondition;
 		if (!this.hp && !status.affectsFainted) return false;
 		if (linkedStatus && source && !source.hp) return false;
 		if (this.battle.event) {

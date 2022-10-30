@@ -30,12 +30,12 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import * as Data from './dex-data';
-import {Condition, DexConditions} from './dex-conditions';
+import {ConditionEffect, DexConditions} from './dex-conditions';
 import {DataMove, DexMoves} from './dex-moves';
-import {Item, DexItems} from './dex-items';
-import {Ability, DexAbilities} from './dex-abilities';
+import {ItemEffect, DexItems} from './dex-items';
+import {AbilityEffect, DexAbilities} from './dex-abilities';
 import {Species, DexSpecies} from './dex-species';
-import {Format, DexFormats} from './dex-formats';
+import {FormatEffect, DexFormats} from './dex-formats';
 import {Utils} from '../lib';
 
 const BASE_MOD = 'gen9' as ID;
@@ -99,12 +99,12 @@ export const toID = Data.toID;
 
 export class ModdedDex {
 	readonly Data = Data;
-	readonly Condition = Condition;
-	readonly Ability = Ability;
-	readonly Item = Item;
+	readonly Condition = ConditionEffect;
+	readonly Ability = AbilityEffect;
+	readonly Item = ItemEffect;
 	readonly Move = DataMove;
 	readonly Species = Species;
-	readonly Format = Format;
+	readonly Format = FormatEffect;
 	readonly ModdedDex = ModdedDex;
 
 	readonly name = "[ModdedDex]";

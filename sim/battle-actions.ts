@@ -1012,7 +1012,7 @@ export class BattleActions {
 		if (move.target === 'all' && !isSelf) {
 			hitResult = this.battle.singleEvent('TryHitField', moveData, {}, target || null, pokemon, move);
 		} else if ((move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') && !isSelf) {
-			hitResult = this.battle.singleEvent('TryHitSide', moveData, {}, target || null, pokemon, move);
+			hitResult = this.battle.singleEvent('TryHitSide', moveData, {}, target && target.side || null, pokemon, move);
 		} else if (target) {
 			hitResult = this.battle.singleEvent('TryHit', moveData, {}, target, pokemon, move);
 		}
@@ -1611,7 +1611,9 @@ export class BattleActions {
 		let attackStat: StatIDExceptHP = move.overrideOffensiveStat || (isPhysical ? 'atk' : 'spa');
 		const defenseStat: StatIDExceptHP = move.overrideDefensiveStat || (isPhysical ? 'def' : 'spd');
 
-		const statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
+		const statTable: {[s in StatIDExceptHP]: StatNameFromID<s>} = {
+			atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe',
+		};
 
 		let atkBoosts = attacker.boosts[attackStat];
 		let defBoosts = defender.boosts[defenseStat];
@@ -1641,8 +1643,8 @@ export class BattleActions {
 		attackStat = (category === 'Physical' ? 'atk' : 'spa');
 
 		// Apply Stat Modifiers
-		attack = this.battle.runEvent('Modify' + statTable[attackStat], source, target, move, attack);
-		defense = this.battle.runEvent('Modify' + statTable[defenseStat], target, source, move, defense);
+		attack = this.battle.runEvent(`Modify${statTable[attackStat]}`, source, target, move, attack);
+		defense = this.battle.runEvent(`Modify${statTable[defenseStat]}`, target, source, move, defense);
 
 		if (this.battle.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
 			defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);

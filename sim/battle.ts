@@ -24,6 +24,7 @@ import {State} from './state';
 import {BattleQueue, Action} from './battle-queue';
 import {BattleActions} from './battle-actions';
 import {Utils} from '../lib';
+import {EventMethodName, EventNamePrefix} from './dex-conditions';
 declare const __version: any;
 
 interface BattleOptions {
@@ -48,7 +49,7 @@ interface EventListenerWithoutPriority {
 	target?: Pokemon;
 	index?: number;
 	// eslint-disable-next-line @typescript-eslint/ban-types
-	callback?: Function;
+	callback?: Function | string | number | false;
 	state: EffectState | null;
 	// eslint-disable-next-line @typescript-eslint/ban-types
 	end: Function | null;
@@ -73,6 +74,16 @@ type Part = string | number | boolean | Pokemon | Side | Effect | Move | null | 
 //
 // An individual Side's request state is encapsulated in its `activeRequest` field.
 export type RequestState = 'teampreview' | 'move' | 'switch' | '';
+
+type EventHandlerParam<T, U extends 0 | 1 | 2 | 3, Default = never> = T extends undefined ? Default :
+	Exclude<T, string | number | boolean | undefined> extends infer R ?
+		R extends (...args: any) => any ?
+			Parameters<R>[U] :
+			never :
+		Default;
+type EventTarget = string | Pokemon | Side | Field | Battle | null;
+type EventSource = string | Pokemon | Effect | false | null;
+type EventSourceEffect = Effect | string | null;
 
 export class Battle {
 	readonly id: ID;
@@ -417,7 +428,7 @@ export class Battle {
 	/**
 	 * Runs an event with no source on each Pokémon on the field, in Speed order.
 	 */
-	eachEvent(eventid: string, effect?: Effect | null, relayVar?: boolean) {
+	eachEvent(eventid: EventName, effect?: Effect | null, relayVar?: boolean) {
 		const actives = this.getAllActive();
 		if (!effect && this.effect) effect = this.effect;
 		this.speedSort(actives, (a, b) => b.speed - a.speed);
@@ -435,8 +446,8 @@ export class Battle {
 	 *
 	 * Unlike `eachEvent`, this contains a lot of other handling and is intended only for the residual step.
 	 */
-	residualEvent(eventid: string, relayVar?: any) {
-		const callbackName = `on${eventid}`;
+	residualEvent(eventid: EventName, relayVar?: any) {
+		const callbackName: `on${EventName}` = `on${eventid}`;
 		let handlers = this.findBattleEventHandlers(callbackName, 'duration');
 		handlers = handlers.concat(this.findFieldEventHandlers(this.field, `onField${eventid}`, 'duration'));
 		for (const side of this.sides) {
@@ -466,7 +477,7 @@ export class Battle {
 				}
 			}
 
-			let handlerEventid = eventid;
+			let handlerEventid: `${'' | 'Side' | 'Field'}${EventName}` = eventid;
 			if ((handler.effectHolder as Side).sideConditions) handlerEventid = `Side${eventid}`;
 			if ((handler.effectHolder as Field).pseudoWeather) handlerEventid = `Field${eventid}`;
 			if (handler.callback) {
@@ -479,10 +490,26 @@ export class Battle {
 	}
 
 	/** The entire event system revolves around this function and runEvent. */
+	singleEvent<Event extends `${EventNamePrefix}${EventName}`, MainEffect extends Effect>(
+		eventid: Event, effect: MainEffect, state: AnyObject | null,
+		target: EventHandlerParam<MainEffect[`on${Event}`], 0, EventTarget> & EventTarget,
+		source?: EventHandlerParam<MainEffect[`on${Event}`], 1, EventSource> & EventSource,
+		sourceEffect?: EventHandlerParam<MainEffect[`on${Event}`], 2, EventSourceEffect> & EventSourceEffect,
+		relayVar?: undefined, customCallback?: unknown
+	): any;
+	singleEvent<
+		Event extends `${EventNamePrefix}${EventName}`, MainEffect extends Effect,
+		T extends EventHandlerParam<MainEffect[`on${Event}`], 0>,
+	>(
+		eventid: Event, effect: MainEffect, state: AnyObject | null,
+		target: EventHandlerParam<MainEffect[`on${Event}`], 1, EventTarget> & EventTarget,
+		source?: EventHandlerParam<MainEffect[`on${Event}`], 2, EventSource> & EventSource,
+		sourceEffect?: EventHandlerParam<MainEffect[`on${Event}`], 3, EventSourceEffect> & EventSourceEffect,
+		relayVar?: T, customCallback?: unknown
+	): T;
 	singleEvent(
-		eventid: string, effect: Effect, state: AnyObject | null,
-		target: string | Pokemon | Side | Field | Battle | null, source?: string | Pokemon | Effect | false | null,
-		sourceEffect?: Effect | string | null, relayVar?: any, customCallback?: unknown
+		eventid: `${EventNamePrefix}${EventName}`, effect: Effect, state: AnyObject | null, target: EventTarget,
+		source?: EventSource, sourceEffect?: EventSourceEffect, relayVar?: any, customCallback?: unknown
 	) {
 		if (this.eventDepth >= 8) {
 			// oh fuck
@@ -527,7 +554,7 @@ export class Battle {
 			return relayVar;
 		}
 
-		const callback = customCallback || (effect as any)[`on${eventid}`];
+		const callback = customCallback || effect[`on${eventid}`];
 		if (callback === undefined) return relayVar;
 
 		const parentEffect = this.effect;
@@ -661,8 +688,16 @@ export class Battle {
 	 *   variables that are passed as arguments to the event handler, but
 	 *   they're useful for functions called by the event handler.
 	 */
+	runEvent<T extends Pokemon | Pokemon[] | Side | Battle | null>(
+		eventid: EventName, target?: T, source?: string | Pokemon | false | null,
+		sourceEffect?: Effect | null, relayVar?: undefined, onEffect?: boolean, fastExit?: boolean
+	): T extends Pokemon[] ? any[] : any;
+	runEvent<T extends Pokemon | Pokemon[] | Side | Battle | null, U>(
+		eventid: EventName, target?: T, source?: string | Pokemon | false | null,
+		sourceEffect?: Effect | null, relayVar?: U, onEffect?: boolean, fastExit?: boolean
+	): T extends Pokemon[] ? U[] : U;
 	runEvent(
-		eventid: string, target?: Pokemon | Pokemon[] | Side | Battle | null, source?: string | Pokemon | false | null,
+		eventid: EventName, target?: Pokemon | Pokemon[] | Side | Battle | null, source?: string | Pokemon | false | null,
 		sourceEffect?: Effect | null, relayVar?: any, onEffect?: boolean, fastExit?: boolean
 	) {
 		// if (Battle.eventCounter) {
@@ -683,7 +718,6 @@ export class Battle {
 		const handlers = this.findEventHandlers(target, eventid, effectSource);
 		if (onEffect) {
 			if (!sourceEffect) throw new Error("onEffect passed without an effect");
-			// @ts-ignore - dynamic lookup
 			const callback = sourceEffect[`on${eventid}`];
 			if (callback !== undefined) {
 				if (Array.isArray(target)) throw new Error("");
@@ -844,7 +878,7 @@ export class Battle {
 	 * on the first non-undefined value instead of only on null/false.
 	 */
 	priorityEvent(
-		eventid: string, target: Pokemon | Side | Battle, source?: Pokemon | null,
+		eventid: EventName, target: Pokemon | Side | Battle, source?: Pokemon | null,
 		effect?: Effect, relayVar?: any, onEffect?: boolean
 	): any {
 		return this.runEvent(eventid, target, source, effect, relayVar, onEffect, true);
@@ -863,7 +897,7 @@ export class Battle {
 		return handler as EventListener;
 	}
 
-	findEventHandlers(target: Pokemon | Pokemon[] | Side | Battle, eventName: string, source?: Pokemon | null) {
+	findEventHandlers(target: Pokemon | Pokemon[] | Side | Battle, eventName: EventName, source?: Pokemon | null) {
 		let handlers: EventListener[] = [];
 		if (Array.isArray(target)) {
 			for (const [i, pokemon] of target.entries()) {
@@ -908,11 +942,10 @@ export class Battle {
 		return handlers;
 	}
 
-	findPokemonEventHandlers(pokemon: Pokemon, callbackName: string, getKey?: 'duration') {
+	findPokemonEventHandlers(pokemon: Pokemon, callbackName: EventMethodName, getKey?: 'duration') {
 		const handlers: EventListener[] = [];
 
 		const status = pokemon.getStatus();
-		// @ts-ignore - dynamic lookup
 		let callback = status[callbackName];
 		if (callback !== undefined || (getKey && pokemon.statusState[getKey])) {
 			handlers.push(this.resolvePriority({
@@ -922,7 +955,6 @@ export class Battle {
 		for (const id in pokemon.volatiles) {
 			const volatileState = pokemon.volatiles[id];
 			const volatile = this.dex.conditions.getByID(id as ID);
-			// @ts-ignore - dynamic lookup
 			callback = volatile[callbackName];
 			if (callback !== undefined || (getKey && volatileState[getKey])) {
 				handlers.push(this.resolvePriority({
@@ -931,7 +963,6 @@ export class Battle {
 			}
 		}
 		const ability = pokemon.getAbility();
-		// @ts-ignore - dynamic lookup
 		callback = ability[callbackName];
 		if (callback !== undefined || (getKey && pokemon.abilityState[getKey])) {
 			handlers.push(this.resolvePriority({
@@ -939,7 +970,6 @@ export class Battle {
 			}, callbackName));
 		}
 		const item = pokemon.getItem();
-		// @ts-ignore - dynamic lookup
 		callback = item[callbackName];
 		if (callback !== undefined || (getKey && pokemon.itemState[getKey])) {
 			handlers.push(this.resolvePriority({
@@ -947,7 +977,7 @@ export class Battle {
 			}, callbackName));
 		}
 		const species = pokemon.baseSpecies;
-		// @ts-ignore - dynamic lookup
+		// @ts-ignore - Species objects have no event handlers (why is this here?)
 		callback = species[callbackName];
 		if (callback !== undefined) {
 			handlers.push(this.resolvePriority({
@@ -958,7 +988,6 @@ export class Battle {
 		for (const conditionid in side.slotConditions[pokemon.position]) {
 			const slotConditionState = side.slotConditions[pokemon.position][conditionid];
 			const slotCondition = this.dex.conditions.getByID(conditionid as ID);
-			// @ts-ignore - dynamic lookup
 			callback = slotCondition[callbackName];
 			if (callback !== undefined || (getKey && slotConditionState[getKey])) {
 				handlers.push(this.resolvePriority({
@@ -975,20 +1004,18 @@ export class Battle {
 		return handlers;
 	}
 
-	findBattleEventHandlers(callbackName: string, getKey?: 'duration') {
+	findBattleEventHandlers(callbackName: EventMethodName, getKey?: 'duration') {
 		const handlers: EventListener[] = [];
 
-		let callback;
 		const format = this.format;
-		// @ts-ignore - dynamic lookup
-		callback = format[callbackName];
+		let callback = format[callbackName];
 		if (callback !== undefined || (getKey && this.formatData[getKey])) {
 			handlers.push(this.resolvePriority({
 				effect: format, callback, state: this.formatData, end: null, effectHolder: this,
 			}, callbackName));
 		}
 		if (this.events && (callback = this.events[callbackName]) !== undefined) {
-			for (const handler of callback) {
+			for (const handler of callback as unknown as any[]) {
 				const state = (handler.target.effectType === 'Format') ? this.formatData : null;
 				handlers.push({
 					effect: handler.target, callback: handler.callback, state, end: null,
@@ -999,14 +1026,13 @@ export class Battle {
 		return handlers;
 	}
 
-	findFieldEventHandlers(field: Field, callbackName: string, getKey?: 'duration', customHolder?: Pokemon) {
+	findFieldEventHandlers(field: Field, callbackName: EventMethodName, getKey?: 'duration', customHolder?: Pokemon) {
 		const handlers: EventListener[] = [];
 
 		let callback;
 		for (const id in field.pseudoWeather) {
 			const pseudoWeatherState = field.pseudoWeather[id];
 			const pseudoWeather = this.dex.conditions.getByID(id as ID);
-			// @ts-ignore - dynamic lookup
 			callback = pseudoWeather[callbackName];
 			if (callback !== undefined || (getKey && pseudoWeatherState[getKey])) {
 				handlers.push(this.resolvePriority({
@@ -1016,7 +1042,6 @@ export class Battle {
 			}
 		}
 		const weather = field.getWeather();
-		// @ts-ignore - dynamic lookup
 		callback = weather[callbackName];
 		if (callback !== undefined || (getKey && this.field.weatherState[getKey])) {
 			handlers.push(this.resolvePriority({
@@ -1025,7 +1050,6 @@ export class Battle {
 			}, callbackName));
 		}
 		const terrain = field.getTerrain();
-		// @ts-ignore - dynamic lookup
 		callback = terrain[callbackName];
 		if (callback !== undefined || (getKey && field.terrainState[getKey])) {
 			handlers.push(this.resolvePriority({
@@ -1037,13 +1061,12 @@ export class Battle {
 		return handlers;
 	}
 
-	findSideEventHandlers(side: Side, callbackName: string, getKey?: 'duration', customHolder?: Pokemon) {
+	findSideEventHandlers(side: Side, callbackName: EventMethodName, getKey?: 'duration', customHolder?: Pokemon) {
 		const handlers: EventListener[] = [];
 
 		for (const id in side.sideConditions) {
 			const sideConditionData = side.sideConditions[id];
 			const sideCondition = this.dex.conditions.getByID(id as ID);
-			// @ts-ignore - dynamic lookup
 			const callback = sideCondition[callbackName];
 			if (callback !== undefined || (getKey && sideConditionData[getKey])) {
 				handlers.push(this.resolvePriority({
@@ -1071,7 +1094,10 @@ export class Battle {
 	 * provided priority. Priority can either be a number or an object that contains the priority,
 	 * order, and subOrder for the event handler as needed (undefined keys will use default values)
 	 */
-	onEvent(eventid: string, target: Format, ...rest: AnyObject[]) { // rest = [priority, callback]
+	onEvent<T extends `${EventNamePrefix}${EventName}`>(eventid: T, target: Format,
+		...rest: [Format[`on${T}`]] | [
+			{order?: number | false, priority?: number, subOrder?: number} | number, Format[`on${T}`]
+		]) {
 		if (!eventid) throw new TypeError("Event handlers must have an event to listen to");
 		if (!target) throw new TypeError("Event handlers must have a target");
 		if (!rest.length) throw new TypeError("Event handlers must have a callback");
@@ -2393,7 +2419,7 @@ export class Battle {
 			let priority = this.dex.moves.get(move.id).priority;
 			// Grassy Glide priority
 			priority = this.singleEvent('ModifyPriority', move, null, action.pokemon, null, null, priority);
-			priority = this.runEvent('ModifyPriority', action.pokemon, null, move, priority);
+			priority = this.runEvent('ModifyPriority', action.pokemon as Pokemon, null, move, priority);
 			action.priority = priority + action.fractionalPriority;
 			// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
 			if (this.gen > 5) action.move.priority = priority;

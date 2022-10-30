@@ -1,20 +1,23 @@
-import {PokemonEventMethods} from './dex-conditions';
+import {PokemonSpecificEventMethods} from './dex-conditions';
 import {BasicEffect, toID} from './dex-data';
 
-interface AbilityEventMethods {
+export interface AbilitySpecificEventMethods {
 	onCheckShow?: (this: Battle, pokemon: Pokemon) => void;
-	onEnd?: (this: Battle, target: Pokemon & Side & Field) => void;
+	onEnd?: (this: Battle, target: Pokemon) => void;
 	onPreStart?: (this: Battle, pokemon: Pokemon) => void;
 	onStart?: (this: Battle, target: Pokemon) => void;
 }
+export type AbilityEventMethods = EventHandlers<AbilitySpecificEventMethods & PokemonSpecificEventMethods>;
 
-export interface AbilityData extends Partial<Ability>, AbilityEventMethods, PokemonEventMethods {
+export interface AbilityData extends Partial<AbilityEffect>, AbilityEventMethods {
 	name: string;
 }
 
 export type ModdedAbilityData = AbilityData | Partial<AbilityData> & {inherit: true};
 
-export class Ability extends BasicEffect implements Readonly<BasicEffect> {
+export type Ability = AbilityEffect & ModdedAbilityData;
+
+export class AbilityEffect extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly effectType: 'Ability';
 
 	/** Rating from -1 Detrimental to +5 Essential; see `data/abilities.ts` for details. */
@@ -77,7 +80,7 @@ export class DexAbilities {
 		} else if (id && this.dex.data.Abilities.hasOwnProperty(id)) {
 			const abilityData = this.dex.data.Abilities[id] as any;
 			const abilityTextData = this.dex.getDescs('Abilities', id, abilityData);
-			ability = new Ability({
+			ability = new AbilityEffect({
 				name: id,
 				...abilityData,
 				...abilityTextData,
@@ -92,7 +95,7 @@ export class DexAbilities {
 				(ability as any).isNonstandard = null;
 			}
 		} else {
-			ability = new Ability({
+			ability = new AbilityEffect({
 				id, name: id, exists: false,
 			});
 		}
