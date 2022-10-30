@@ -884,16 +884,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			status: 'par',
 		},
 	},
-	thunderwave: {
-		inherit: true,
-		accuracy: 100,
-		onTryHit(target) {
-			if (target.hasType('Ground')) {
-				this.add('-immune', target);
-				return null;
-			}
-		},
-	},
 	triattack: {
 		inherit: true,
 		onHit() {},
