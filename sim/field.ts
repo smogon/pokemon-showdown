@@ -208,6 +208,7 @@ export class Field {
 			delete this.pseudoWeather[status.id];
 			return false;
 		}
+		this.battle.runEvent('PseudoWeatherStart', source, source, status);
 		return true;
 	}
 
