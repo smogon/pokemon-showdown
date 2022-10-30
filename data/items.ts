@@ -4577,7 +4577,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 100,
 		},
 		onStart(pokemon) {
-			if (this.field.getPseudoWeather('trickroom')) {
+			if (!pokemon.ignoringItem() && this.field.getPseudoWeather('trickroom')) {
 				pokemon.useItem();
 			}
 		},
