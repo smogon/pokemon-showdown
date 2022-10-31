@@ -75,18 +75,31 @@ type Part = string | number | boolean | Pokemon | Side | Effect | Move | null | 
 // An individual Side's request state is encapsulated in its `activeRequest` field.
 export type RequestState = 'teampreview' | 'move' | 'switch' | '';
 
-type EventHandlerParam<T, U extends 0 | 1 | 2 | 3, Default = never> = Exclude<T, undefined> extends never ? Default :
-	Exclude<T, string | number | boolean | undefined> extends infer R ?
-		R extends (...args: any) => any ?
-			Parameters<R>[U] extends infer S ?
-				Exclude<S, undefined> extends never ?
-					Default :
-					undefined extends S ?
-						S | null :
-						S :
-				never :
+/**
+ * Extracts the given-numbered parameter from the event handler function in the given handler type.
+ *
+ * If no handler exists (if handler is only `undefined`), results in the given Default value
+ *
+ * If the handler exists and has a function, but the function has no parameter at the given index, results in Default
+ *
+ * If the parameter exists, results in the parameter's type.
+ *
+ * If the parameter is optional, `null` is added to the parameter's Union type, because passing `null` is functionally
+ * equivalent to passing `undefined` in that case.
+ */
+type EventHandlerParam<Handler, ParamIndex extends 0 | 1 | 2 | 3, Default = never> =
+Exclude<Handler, undefined> extends never ? Default :
+Exclude<Handler, string | number | boolean | undefined> extends infer ExtractedFunction ?
+	ExtractedFunction extends (...args: any) => any ?
+		Parameters<ExtractedFunction>[ParamIndex] extends infer ExtractedParameter ?
+			Exclude<ExtractedParameter, undefined> extends never ?
+				Default :
+				undefined extends ExtractedParameter ?
+					ExtractedParameter | null :
+					ExtractedParameter :
 			never :
-		never;
+		never :
+	never;
 type EventTarget = string | Pokemon | Side | Field | Battle | null;
 type EventSource = string | Pokemon | Effect | false | null;
 type EventSourceEffect = Effect | string | null;
