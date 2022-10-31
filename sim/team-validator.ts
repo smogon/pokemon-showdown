@@ -1775,10 +1775,11 @@ export class TeamValidator {
 		}
 		const ruleTable = this.ruleTable;
 		if (ruleTable.has('obtainablemoves')) {
+			const maxSourceGen = setSources.maxSourceGen();
 			const tradebackEligible = dex.gen === 2 && species.gen === 1;
-			if (eventData.generation > setSources.maxSourceGen() && !tradebackEligible) {
+			if (maxSourceGen && eventData.generation > maxSourceGen && !tradebackEligible) {
 				if (fastReturn) return true;
-				problems.push(`${name} must not have moves only learnable in gen ${setSources.maxSourceGen()}${etc}.`);
+				problems.push(`${name} must not have moves only learnable in gen ${maxSourceGen}${etc}.`);
 			}
 		}
 		if (ruleTable.has('obtainableabilities')) {
