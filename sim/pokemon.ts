@@ -1129,7 +1129,7 @@ export class Pokemon {
 
 	transformInto(pokemon: Pokemon, effect?: Effect) {
 		const species = pokemon.species;
-		if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
+		if (pokemon.fainted || this.illusion || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
 			(pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5) ||
 			species.name === 'Eternatus-Eternamax') {
 			return false;
@@ -1156,6 +1156,7 @@ export class Pokemon {
 		let statName: StatIDExceptHP;
 		for (statName in this.storedStats) {
 			this.storedStats[statName] = pokemon.storedStats[statName];
+			if (this.modifiedStats) this.modifiedStats[statName] = pokemon.modifiedStats![statName]; // Gen 1: Copy modified stats.
 		}
 		this.moveSlots = [];
 		this.set.ivs = (this.battle.gen >= 5 ? this.set.ivs : pokemon.set.ivs);
@@ -1180,14 +1181,6 @@ export class Pokemon {
 		let boostName: BoostID;
 		for (boostName in pokemon.boosts) {
 			this.boosts[boostName] = pokemon.boosts[boostName];
-			if (this.battle.gen <= 1) {
-				if (boostName === 'evasion' || boostName === 'accuracy') continue;
-				if (this.boosts[boostName] >= 0) {
-					this.modifyStat!(boostName, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[boostName]]);
-				} else {
-					this.modifyStat!(boostName, [100, 66, 50, 40, 33, 28, 25][-this.boosts[boostName]] / 100);
-				}
-			}
 		}
 		if (this.battle.gen >= 6) {
 			const volatilesToCopy = ['focusenergy', 'gmaxchistrike', 'laserfocus'];

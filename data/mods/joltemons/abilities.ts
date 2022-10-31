@@ -496,10 +496,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 				target.setAbility('wanderingspirit', pokemon);
 				pokemon.setAbility(ability);
-				this.add('-activate', pokemon, 'ability: Wandering Spirit');
-				this.add('-activate', pokemon, 'Skill Swap', '', '', '[of] ' + target);
-				this.add('-activate', pokemon, 'ability: ' + ability.name);
-				this.add('-activate', target, 'ability: Wandering Spirit');
+				this.add('-activate', pokemon, 'ability: Wandering Spirit', ability.name, 'Wandering Spirit', '[of] ' + target);
 				return;
 			}
 		},
@@ -625,7 +622,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter',
 					'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode',
 				];
-				if (!this.singleEvent('TakeItem', item, target.itemState, target, target, item) ||
+				if (!this.singleEvent('TakeItem', item, target.itemState, target, pokemon, this.effect, item) ||
 					additionalBannedItems.includes(target.item)) {
 					possibleTargets.splice(rand, 1);
 					continue;
@@ -797,8 +794,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onEnd(pokemon) {
-			const source = this.effectState.target;
-			for (const target of source.foes()) {
+			for (const target of pokemon.foes()) {
 				target.removeVolatile('embargo');
 			}
 		},
@@ -829,8 +825,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onEnd(pokemon) {
-			const source = this.effectState.target;
-			for (const target of source.foes()) {
+			for (const target of pokemon.foes()) {
 				target.removeVolatile('embargo');
 			}
 		},

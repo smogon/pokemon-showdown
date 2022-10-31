@@ -131,7 +131,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat(pokemon) {
-			this.heal(pokemon.baseMaxhp * 0.33);
+			this.heal(pokemon.baseMaxhp / 3);
 			if (pokemon.getNature().minus === 'spd') {
 				pokemon.addVolatile('confusion');
 			}
@@ -1686,7 +1686,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat(pokemon) {
-			this.heal(pokemon.baseMaxhp * 0.33);
+			this.heal(pokemon.baseMaxhp / 3);
 			if (pokemon.getNature().minus === 'atk') {
 				pokemon.addVolatile('confusion');
 			}
@@ -2418,7 +2418,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat(pokemon) {
-			this.heal(pokemon.baseMaxhp * 0.33);
+			this.heal(pokemon.baseMaxhp / 3);
 			if (pokemon.getNature().minus === 'def') {
 				pokemon.addVolatile('confusion');
 			}
@@ -3152,7 +3152,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat(pokemon) {
-			this.heal(pokemon.baseMaxhp * 0.33);
+			this.heal(pokemon.baseMaxhp / 3);
 			if (pokemon.getNature().minus === 'spe') {
 				pokemon.addVolatile('confusion');
 			}
@@ -4576,7 +4576,13 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 100,
 		},
-		onUpdate(pokemon) {
+		onStart(pokemon) {
+			if (!pokemon.ignoringItem() && this.field.getPseudoWeather('trickroom')) {
+				pokemon.useItem();
+			}
+		},
+		onAnyPseudoWeatherStart() {
+			const pokemon = this.effectState.target;
 			if (this.field.getPseudoWeather('trickroom')) {
 				pokemon.useItem();
 			}
@@ -6726,7 +6732,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat(pokemon) {
-			this.heal(pokemon.baseMaxhp * 0.33);
+			this.heal(pokemon.baseMaxhp / 3);
 			if (pokemon.getNature().minus === 'spa') {
 				pokemon.addVolatile('confusion');
 			}

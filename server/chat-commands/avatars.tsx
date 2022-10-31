@@ -531,7 +531,7 @@ const OFFICIAL_AVATARS_BELIOT419 = new Set([
 	'kukui-stand', 'kukui', 'lana', 'lass-gen7', 'lillie-z', 'lillie', 'lusamine-nihilego', 'lusamine',
 	'mallow', 'mina', 'molayne', 'nanu', 'officeworker', 'olivia', 'plumeria', 'pokemonbreeder-gen7',
 	'pokemonbreederf-gen7', 'preschoolers', 'red-gen7', 'risingstar', 'risingstarf', 'ryuki',
-	'samsonoak', 'selene', 'sightseer', 'sina', 'sophocles', 'teacher-gen7', 'theroyal', 'wally',
+	'samsonoak', 'selene', 'sightseerf', 'sina', 'sophocles', 'teacher-gen7', 'theroyal', 'wally',
 	'wicke', 'youngathlete', 'youngathletef', 'youngster-gen7',
 ]);
 
@@ -553,7 +553,9 @@ const OFFICIAL_AVATARS_BRUMIRAGE = new Set([
 ]);
 
 const OFFICIAL_AVATARS_ZACWEAVILE = new Set([
-	'gloria-dojo', 'shauna',
+	'alain', 'charm', 'coin', 'courtney', 'dulse', 'elio-usum', 'emma', 'essentia', 'gloria-dojo',
+	'magmagrunt', 'magmagruntf', 'marnie-league', 'morgan', 'phyco', 'selene-usum', 'shauna', 'skullgrunt',
+	'skullgruntf', 'soliera', 'zossie',
 ]);
 
 const OFFICIAL_AVATARS_KYLEDOVE = new Set([
@@ -580,6 +582,19 @@ const OFFICIAL_AVATARS_KYLEDOVE = new Set([
 	'triathletebiker-gen6', 'triathleterunner-gen6', 'triathleteswimmer-gen6', 'tuberf-gen6', 'tuber-gen6', 'twins-gen6',
 	'veteranf-gen6', 'veteran-gen6', 'waitress-gen6', 'worker2-gen6', 'workerf-gen8', 'worker-gen6', 'worker-gen8',
 	'youngcouple-gen6', 'youngster-gen6', 'youngster-gen6xy', 'youngster-gen8',
+	'acetrainer-gen7', 'acetrainerf-gen7', 'bellhop', 'blackbelt-gen7', 'collector-gen7', 'cook-gen7', 'dancer-gen7',
+	'firefighter', 'fisherman-gen7', 'gentleman-gen7', 'golfer', 'janitor-gen7', 'madame-gen7', 'officeworkerf',
+	'pokemoncenterlady', 'policeman-gen7', 'preschooler-gen7', 'preschoolerf-gen7', 'punkgirl-gen7', 'punkguy-gen7',
+	'scientist-gen7', 'sightseer', 'surfer', 'swimmer-gen7', 'swimmerf-gen7', 'swimmerf2-gen7', 'trialguide', 'trialguidef',
+	'ultraforestkartenvoy', 'veteran-gen7', 'veteranf-gen7', 'worker-gen7',
+	'anthea', 'beni', 'beni-ninja', 'birch', 'blaine-lgpe', 'blue-lgpe', 'brigette', 'brock-lgpe', 'caraliss', 'cedricjuniper',
+	'celio', 'charon', 'clover', 'colza', 'concordia', 'cyllene', 'dawn-contest', 'elm', 'erika-lgpe', 'fennel', 'gaeric',
+	'ginter', 'giovanni-lgpe', 'grant', 'ingo-hisui', 'iscan', 'kamado', 'kamado-armor', 'kurt', 'lance-lgpe', 'lanette',
+	'laventon', 'lucas-contest', 'lucy', 'lysandre', 'melli', 'misty-lgpe', 'noland', 'palina', 'plumeria-league', 'rowan',
+	'roxanne-gen6', 'rye', 'sabrina-lgpe', 'scott', 'securitycorps', 'securitycorpsf', 'serena', 'sycamore', 'taohua', 'vessa',
+	'anthe', 'anvin', 'burglar-lgpe', 'channeler-lgpe', 'choy', 'cynthia-anime', 'dagero', 'gentleman-lgpe', 'grace',
+	'hayley', 'jasmine-contest', 'johanna-contest', 'johanna', 'mom-alola', 'mom-hoenn', 'mom-johto', 'mom-unova2', 'oak',
+	'piers-league', 'psychic-lgpe', 'rosa-pokestar', 'tuli', 'worker-lgpe',
 	'acerola-masters', 'bea-masters', 'blue-masters', 'brendan-masters', 'brock-masters', 'burgh-masters', 'caitlin-masters',
 	'cynthia-masters2', 'cyrus-masters', 'dawn-masters', 'dawn-masters2', 'diantha-masters', 'elesa-masters', 'emmet-masters',
 	'erika-masters', 'erika-masters2', 'ethan-masters', 'giovanni-masters', 'gloria-masters', 'grimsley-masters',
@@ -588,7 +603,8 @@ const OFFICIAL_AVATARS_KYLEDOVE = new Set([
 	'lusamine-masters', 'lyra-masters', 'lyra-masters2', 'marnie-masters', 'marnie-masters2', 'may-masters', 'may-masters2',
 	'may-masters3', 'misty-masters', 'morty-masters', 'morty-masters2', 'n-masters', 'n-masters2', 'nessa-masters',
 	'raihan-masters', 'red-masters', 'rosa-masters', 'sabrina-masters', 'serena-masters', 'serena-masters2',
-	'siebold-masters', 'skyla-masters', 'sonia-masters', 'steven-masters', 'steven-masters2', 'volkner-masters',
+	'siebold-masters', 'skyla-masters', 'sonia-masters', 'steven-masters', 'steven-masters2', 'volkner-masters', 'bellis',
+	'beauty-masters', 'collector-masters', 'punkgirl-masters', 'streetthug-masters', 'swimmer-masters', 'youngster-masters',
 ]);
 
 const OFFICIAL_AVATARS_HYOOPPA = new Set([
@@ -599,6 +615,10 @@ const OFFICIAL_AVATARS_GRAPO = new Set([
 	'peonia', 'skyla-masters2', 'volo-ginkgo',
 ]);
 
+const OFFICIAL_AVATARS_FIFTY = new Set([
+	'rose-zerosuit',
+]);
+
 for (const avatar of OFFICIAL_AVATARS_BELIOT419) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_GNOMOWLADNY) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_BRUMIRAGE) OFFICIAL_AVATARS.add(avatar);
@@ -606,6 +626,7 @@ for (const avatar of OFFICIAL_AVATARS_ZACWEAVILE) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_KYLEDOVE) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_HYOOPPA) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_GRAPO) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_FIFTY) OFFICIAL_AVATARS.add(avatar);
 
 export const commands: Chat.ChatCommands = {
 	avatar(target, room, user) {
@@ -648,6 +669,9 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (OFFICIAL_AVATARS_GRAPO.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/Grapo_Sprites">Grapo</a>)`);
+			}
+			if (OFFICIAL_AVATARS_FIFTY.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}Fifty Shades of Rez)`);
 			}
 		}
 	},

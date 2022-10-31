@@ -8707,10 +8707,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 30,
 		basePowerCallback(pokemon, target, move) {
 			let bp = move.basePower;
-			if (pokemon.volatiles['iceball'] && pokemon.volatiles['iceball'].hitCount) {
-				bp *= Math.pow(2, pokemon.volatiles['iceball'].hitCount);
+			const iceballData = pokemon.volatiles['iceball'];
+			if (iceballData?.hitCount) {
+				bp *= Math.pow(2, iceballData.hitCount);
 			}
-			if (pokemon.status !== 'slp') pokemon.addVolatile('iceball');
+			if (iceballData && pokemon.status !== 'slp') {
+				iceballData.hitCount++;
+				if (iceballData.hitCount < 5) {
+					iceballData.duration = 2;
+				}
+			}
 			if (pokemon.volatiles['defensecurl']) {
 				bp *= 2;
 			}
@@ -8723,17 +8729,19 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 20,
 		priority: 0,
 		flags: {bullet: 1, contact: 1, protect: 1, mirror: 1},
+		onModifyMove(move, pokemon, target) {
+			if (pokemon.volatiles['iceball'] || pokemon.status === 'slp' || !target) return;
+			pokemon.addVolatile('iceball');
+			// @ts-ignore
+			// TS thinks pokemon.volatiles['iceball'] doesn't exist because of the condition on the return above
+			// but it does exist now because addVolatile created it
+			pokemon.volatiles['iceball'].targetSlot = move.sourceEffect ? pokemon.lastMoveTargetLoc : pokemon.getLocOf(target);
+		},
 		condition: {
-			duration: 2,
+			duration: 1,
 			onLockMove: 'iceball',
 			onStart() {
-				this.effectState.hitCount = 1;
-			},
-			onRestart() {
-				this.effectState.hitCount++;
-				if (this.effectState.hitCount < 5) {
-					this.effectState.duration = 2;
-				}
+				this.effectState.hitCount = 0;
 			},
 			onResidual(target) {
 				if (target.lastMove && target.lastMove.id === 'struggle') {
@@ -13434,7 +13442,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, heal: 1},
 		onHit(target, source) {
-			if (!target.cureStatus()) return this.NOT_FAIL;
+			if (!target.cureStatus()) {
+				this.add('-fail', source);
+				this.attrLastMove('[still]');
+				return this.NOT_FAIL;
+			}
 			this.heal(Math.ceil(source.maxhp * 0.5), source);
 		},
 		secondary: null,
@@ -14390,10 +14402,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 30,
 		basePowerCallback(pokemon, target, move) {
 			let bp = move.basePower;
-			if (pokemon.volatiles['rollout'] && pokemon.volatiles['rollout'].hitCount) {
-				bp *= Math.pow(2, pokemon.volatiles['rollout'].hitCount);
+			const rolloutData = pokemon.volatiles['rollout'];
+			if (rolloutData?.hitCount) {
+				bp *= Math.pow(2, rolloutData.hitCount);
 			}
-			if (pokemon.status !== 'slp') pokemon.addVolatile('rollout');
+			if (rolloutData && pokemon.status !== 'slp') {
+				rolloutData.hitCount++;
+				if (rolloutData.hitCount < 5) {
+					rolloutData.duration = 2;
+				}
+			}
 			if (pokemon.volatiles['defensecurl']) {
 				bp *= 2;
 			}
@@ -14405,17 +14423,19 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
+		onModifyMove(move, pokemon, target) {
+			if (pokemon.volatiles['rollout'] || pokemon.status === 'slp' || !target) return;
+			pokemon.addVolatile('rollout');
+			// @ts-ignore
+			// TS thinks pokemon.volatiles['rollout'] doesn't exist because of the condition on the return above
+			// but it does exist now because addVolatile created it
+			pokemon.volatiles['rollout'].targetSlot = move.sourceEffect ? pokemon.lastMoveTargetLoc : pokemon.getLocOf(target);
+		},
 		condition: {
-			duration: 2,
+			duration: 1,
 			onLockMove: 'rollout',
 			onStart() {
-				this.effectState.hitCount = 1;
-			},
-			onRestart() {
-				this.effectState.hitCount++;
-				if (this.effectState.hitCount < 5) {
-					this.effectState.duration = 2;
-				}
+				this.effectState.hitCount = 0;
 			},
 			onResidual(target) {
 				if (target.lastMove && target.lastMove.id === 'struggle') {

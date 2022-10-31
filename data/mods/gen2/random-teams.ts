@@ -60,13 +60,13 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		// Ineffective to have both
 		case 'doubleedge':
 			return {cull: moves.has('bodyslam') || moves.has('return')};
-		case 'explosion':
-			return {cull: moves.has('softboiled')};
+		case 'explosion': case 'selfdestruct':
+			return {cull: moves.has('softboiled') || restTalk};
 		case 'extremespeed':
 			return {cull: moves.has('bodyslam') || restTalk};
 		case 'hyperbeam':
 			return {cull: moves.has('rockslide')};
-		case 'quickattack': case 'selfdestruct':
+		case 'quickattack':
 			return {cull: moves.has('rest')};
 		case 'rapidspin':
 			return {cull: !!teamDetails.rapidSpin || moves.has('sleeptalk')};

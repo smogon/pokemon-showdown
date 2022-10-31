@@ -15,14 +15,14 @@ export class RandomJoltemonsTeams extends RandomTeams {
 		isNoDynamax: boolean
 	): boolean {
 		if ([
-			'Flare Boost', 'Hydration', 'Ice Body', 'Immunity', 'Innards Out', 'Insomnia', 'Misty Surge',
-			'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
+			'Immunity', 'Innards Out', 'Insomnia', 'Misty Surge',
+			'Quick Feet', 'Snow Cloak', 'Steadfast', 'Steam Engine',
 		].includes(ability)) return true;
 
 		switch (ability) {
 		// Abilities which are primarily useful for certain moves
 		case 'Contrary': case 'Serene Grace': case 'Skill Link': case 'Strong Jaw':
-			return !counter.get(toID(ability));
+			return !counter.get(this.dex.toID(ability));
 		case 'Analytic':
 			return (moves.has('rapidspin') || species.nfe || isDoubles);
 		case 'Blaze':
@@ -217,16 +217,18 @@ export class RandomJoltemonsTeams extends RandomTeams {
 		isLead: boolean,
 		isDoubles: boolean
 	) {
+		if (ability === 'Honey Gather') return 'Red Card';
 		if (ability === 'Scavenge') return 'Soul Blade';
 		if (ability === 'Sweet Veil') return 'Honey';
 
 		if (['stakataka', 'buzzwole', 'donphan'].includes(species.id)) return 'Momentum Armor';
+		if (['scyther', 'sneasel', 'magneton'].includes(species.id)) return 'Eviolith';
 		if (species.id === 'appletun') return 'Sweet Apple';
-		if (species.id.startsWith('darmanitan')) return 'Chill Pill';
+		if (species.id.startsWith('darmanitan') && counter.get('Special') > 2) return 'Chill Pill';
 		if (species.id === 'castform' && (moves.has('raindance') || moves.has('sunnyday'))) return 'Cursed Belt';
 		if (species.id === 'cherrim') return 'Morning Blossom';
 		if (species.id === 'flapple') return 'Tart Apple';
-		if (species.id === 'meloetta') return 'Relic Charm';
+		if (species.id === 'meloetta' && counter.get('Physical') > 2) return 'Relic Charm';
 		if (species.id === 'mimikyu') return 'Nightlight Ball';
 		if (species.id === 'phione') return 'Seawater Bead';
 		if (species.id === 'regigigas') return 'Sacred Ropes';
@@ -236,7 +238,6 @@ export class RandomJoltemonsTeams extends RandomTeams {
 			'pikachu', 'raichu', 'raichualola', 'plusle', 'minun', 'pachirisu',
 			'emolga', 'dedenne', 'togedemaru', 'morpeko',
 		].includes(species.id)) return 'Light Ball';
-
 
 		return super.getHighPriorityItem(ability, types, moves, counter, teamDetails, species, isLead, isDoubles);
 	}
@@ -251,7 +252,7 @@ export class RandomJoltemonsTeams extends RandomTeams {
 		isNoDynamax: boolean
 	) {
 		const item = super.getMediumPriorityItem(ability, moves, counter, species, isLead, isDoubles, isNoDynamax);
-		if (counter.get('Status') < 2 && !item) return 'Soul Blade';
+		if (counter.setupType === 'Physical' && counter.get('Status') < 2 && !item) return 'Cursed Belt';
 		return item;
 	}
 

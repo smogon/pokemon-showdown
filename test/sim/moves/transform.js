@@ -71,12 +71,24 @@ describe('Transform', function () {
 		}
 	});
 
-	it('should copy and activate the target\'s ability', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Ditto", ability: 'limber', moves: ['transform']}]});
-		battle.setPlayer('p2', {team: [{species: "Arcanine", ability: 'intimidate', moves: ['rest']}]});
-		battle.makeChoices('move transform', 'move rest');
-		assert.equal(battle.p2.active[0].boosts['atk'], -1);
+	it(`should copy and activate the target's Ability`, function () {
+		battle = common.createBattle([[
+			{species: 'Ditto', ability: 'limber', moves: ['transform']},
+		], [
+			{species: 'Arcanine', ability: 'intimidate', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		assert.statStage(battle.p2.active[0], 'atk', -1);
+	});
+
+	it.skip(`should copy, but not activate the target's Ability if it is the same as the user's pre-Transform`, function () {
+		battle = common.createBattle([[
+			{species: 'Ditto', ability: 'intimidate', moves: ['transform']},
+		], [
+			{species: 'Arcanine', ability: 'intimidate', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		assert.statStage(battle.p2.active[0], 'atk', -1);
 	});
 
 	it('should not copy speed boosts from Unburden', function () {
@@ -95,15 +107,16 @@ describe('Transform', function () {
 		assert.notEqual(battle.p1.active[0].species, battle.p2.active[0].species);
 	});
 
-	it('should fail against Pokemon with Illusion active', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Ditto", ability: 'limber', moves: ['transform']}]});
-		battle.setPlayer('p2', {team: [
-			{species: "Zoroark", ability: 'illusion', moves: ['rest']},
+	it(`should fail if either the user or target have Illusion active`, function () {
+		battle = common.createBattle([[
+			{species: 'Ditto', ability: 'limber', moves: ['transform']},
+		], [
+			{species: "Zoroark", ability: 'illusion', moves: ['transform']},
 			{species: "Mewtwo", ability: 'pressure', moves: ['rest']},
-		]});
-		battle.makeChoices('move transform', 'move rest');
-		assert.notEqual(battle.p1.active[0].species, battle.p2.active[0].species);
+		]]);
+		battle.makeChoices();
+		assert.species(battle.p1.active[0], 'Ditto');
+		assert.species(battle.p2.active[0], 'Zoroark');
 	});
 
 	it('should fail against tranformed Pokemon', function () {
@@ -232,5 +245,50 @@ describe('Transform [Gen 1]', function () {
 		battle.makeChoices();
 		battle.makeChoices('move thunderbolt', 'switch 2');
 		assert.fainted(battle.p2.active[0]);
+	});
+
+	it(`should copy the target's stats (except HP), even if different level`, function () {
+		battle = common.gen(1).createBattle([[
+			{species: 'Ditto', moves: ['transform'], level: 5},
+		], [
+			{species: 'Gengar', moves: ['splash']},
+		]]);
+		battle.makeChoices();
+		const p1poke = battle.p1.active[0];
+		const p2poke = battle.p2.active[0];
+		for (const stat in p1poke.storedStats) {
+			assert.equal(p1poke.storedStats[stat], p2poke.storedStats[stat]);
+			assert.equal(p1poke.modifiedStats[stat], p2poke.modifiedStats[stat]);
+		}
+	});
+
+	it(`should copy the target's status-modified stats`, function () {
+		battle = common.gen(1).createBattle([[
+			{species: 'Ditto', moves: ['transform', 'thunderwave']},
+		], [
+			{species: 'Gengar', moves: ['splash']},
+		]]);
+		battle.makeChoices('move thunderwave', 'move splash');
+		battle.makeChoices('move transform', 'move splash');
+		const p1poke = battle.p1.active[0];
+		const p2poke = battle.p2.active[0];
+		assert.equal(p1poke.storedStats['spe'], p2poke.storedStats['spe']);
+		assert.equal(p1poke.modifiedStats['spe'], p2poke.modifiedStats['spe']);
+	});
+
+	it(`should not re-apply status stat modifier after transforming`, function () {
+		battle = common.gen(1).createBattle([[
+			{species: 'Ditto', moves: ['transform', 'splash']},
+		], [
+			{species: 'Gengar', moves: ['splash', 'thunderwave']},
+		]]);
+		battle.makeChoices('move splash', 'move thunderwave');
+		do {
+			battle.makeChoices('move transform', 'move splash');
+		} while (!battle.p1.active[0].transformed);
+		const p1poke = battle.p1.active[0];
+		const p2poke = battle.p2.active[0];
+		assert.equal(p1poke.storedStats['spe'], p2poke.storedStats['spe']);
+		assert.equal(p1poke.modifiedStats['spe'], p2poke.modifiedStats['spe']);
 	});
 });

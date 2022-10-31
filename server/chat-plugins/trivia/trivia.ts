@@ -186,7 +186,7 @@ function broadcast(room: BasicRoom, title: string, message?: string) {
 }
 
 async function getQuestions(
-	categories: ID[] | 'random' | 'all',
+	categories: ID[] | 'random',
 	order: 'newestfirst' | 'oldestfirst' | 'random',
 	limit = 1000
 ): Promise<TriviaQuestion[]> {
@@ -198,13 +198,16 @@ async function getQuestions(
 				.filter(cat => toID(MAIN_CATEGORIES[cat]) !== lastCategoryID)
 		);
 		return database.getQuestions([randCategory], limit, {order});
-	} else if (categories === 'all') {
-		return database.getQuestions('all', limit, {order});
 	} else {
+		const questions = [];
 		for (const category of categories) {
-			if (!ALL_CATEGORIES[category]) throw new Chat.ErrorMessage(`"${category}" is an invalid category.`);
+			if (category === 'all') {
+				questions.push(...await database.getQuestions('all', limit, {order}));
+			} else if (!ALL_CATEGORIES[category]) {
+				throw new Chat.ErrorMessage(`"${category}" is an invalid category.`);
+			}
 		}
-		return database.getQuestions(categories, limit, {order});
+		return database.getQuestions(categories.filter(c => c !== 'all'), limit, {order});
 	}
 }
 
@@ -368,9 +371,9 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 	curQuestion: string;
 	curAnswers: string[];
 	askedAt: number[];
-	categories: ID[] | 'all';
+	categories: ID[];
 	constructor(
-		room: Room, mode: string, categories: ID[] | 'all', givesPoints: boolean,
+		room: Room, mode: string, categories: ID[], givesPoints: boolean,
 		length: keyof typeof LENGTHS | number, questions: TriviaQuestion[], creator: string,
 		isRandomMode = false, isSubGame = false, isRandomCategory = false,
 	) {
@@ -384,14 +387,14 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 		this.canLateJoin = true;
 
 		this.categories = categories;
-		let category: string;
-		switch (this.categories) {
-		case 'all':
-			category = this.room.tr`All`; break;
-		default:
-			category = this.categories.map(cat => ALL_CATEGORIES[CATEGORY_ALIASES[cat] || cat]).join(' + ');
-			if (isRandomCategory) category = this.room.tr`Random (${category})`;
-		}
+		const uniqueCategories = new Set(this.categories
+			.map(cat => {
+				if (cat === 'all') return 'All';
+				return ALL_CATEGORIES[CATEGORY_ALIASES[cat] || cat];
+			}));
+		let category = [...uniqueCategories].join(' + ');
+		if (isRandomCategory) category = this.room.tr`Random (${category})`;
+
 
 		this.game = {
 			mode: (isRandomMode ? `Random (${MODES[mode]})` : MODES[mode]),
@@ -784,11 +787,13 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 
 		const scores = Object.fromEntries(this.getTopPlayers({max: null})
 			.map(player => [player.player.id, player.player.points]));
-		await database.addHistory([{
-			...this.game,
-			length: typeof this.game.length === 'number' ? `${this.game.length} questions` : this.game.length,
-			scores,
-		}]);
+		if (this.game.givesPoints) {
+			await database.addHistory([{
+				...this.game,
+				length: typeof this.game.length === 'number' ? `${this.game.length} questions` : this.game.length,
+				scores,
+			}]);
+		}
 
 		this.destroy();
 	}
@@ -1304,7 +1309,7 @@ export class Mastermind extends Rooms.SimpleRoomGame {
 			}
 		}
 
-		const questions = await getQuestions('all', 'random');
+		const questions = await getQuestions(['all' as ID], 'random');
 		if (!questions.length) throw new Chat.ErrorMessage(this.room.tr`There are no questions in the Trivia database.`);
 
 		this.currentRound = new MastermindFinals(this.room, 'all' as ID, questions, this.getTopPlayers(this.numFinalists));
@@ -1527,16 +1532,13 @@ const triviaCommands: Chat.ChatCommands = {
 		}
 		if (!MODES[mode]) return this.errorReply(this.tr`"${mode}" is an invalid mode.`);
 
-		let categories: ID[] | 'all' | 'random' = targets[1]
+		let categories: ID[] | 'random' = targets[1]
 			.split('+')
 			.map(cat => {
 				const id = toID(cat);
 				return CATEGORY_ALIASES[id] || id;
 			});
-		if (categories[0] === 'all') {
-			if (categories.length > 1) throw new Chat.ErrorMessage(`You cannot combine all with another category.`);
-			categories = 'all';
-		} else if (categories[0] === 'random') {
+		if (categories[0] === 'random') {
 			if (categories.length > 1) throw new Chat.ErrorMessage(`You cannot combine random with another category.`);
 			categories = 'random';
 		}
@@ -1557,7 +1559,7 @@ const triviaCommands: Chat.ChatCommands = {
 					this.tr`There are not enough questions in the randomly chosen category to finish a trivia game.`
 				);
 			}
-			if (categories === 'all') {
+			if (categories.length === 0 && categories[0] === 'all') {
 				return this.errorReply(
 					this.tr`There are not enough questions in the trivia database to finish a trivia game.`
 				);
@@ -1579,7 +1581,7 @@ const triviaCommands: Chat.ChatCommands = {
 		}
 
 		const isRandomCategory = categories === 'random';
-		categories = isRandomCategory ? [questions[0].category] as ID[] : categories as 'all' | ID[];
+		categories = isRandomCategory ? [questions[0].category as ID] : categories as ID[];
 		room.game = new _Trivia(
 			room, mode, categories, givesPoints, length, questions,
 			user.name, isRandomMode, false, isRandomCategory

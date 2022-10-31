@@ -122,6 +122,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: 100,
 		ignoreAccuracy: true,
+		ignoreEvasion: true,
 	},
 	brickbreak: {
 		inherit: true,
@@ -441,6 +442,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: 100,
 		ignoreAccuracy: true,
+		ignoreEvasion: true,
 	},
 	megadrain: {
 		inherit: true,
@@ -450,6 +452,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: 100,
 		ignoreAccuracy: true,
+		ignoreEvasion: true,
 	},
 	mirrorcoat: {
 		inherit: true,
@@ -521,6 +524,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: 100,
 		ignoreAccuracy: true,
+		ignoreEvasion: true,
 	},
 	petaldance: {
 		inherit: true,
@@ -538,11 +542,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: 100,
 		ignoreAccuracy: true,
+		ignoreEvasion: true,
 	},
 	skillswap: {
 		inherit: true,
 		accuracy: 100,
 		ignoreAccuracy: true,
+		ignoreEvasion: true,
 	},
 	sleeptalk: {
 		inherit: true,
@@ -571,6 +577,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: 100,
 		ignoreAccuracy: true,
+		ignoreEvasion: true,
 	},
 	spite: {
 		inherit: true,
@@ -694,6 +701,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: 100,
 		ignoreAccuracy: true,
+		ignoreEvasion: true,
 	},
 	volttackle: {
 		inherit: true,
@@ -730,6 +738,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: 100,
 		ignoreAccuracy: true,
+		ignoreEvasion: true,
 	},
 	zapcannon: {
 		inherit: true,

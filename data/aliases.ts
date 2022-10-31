@@ -71,8 +71,8 @@ export const Aliases: {[alias: string]: string} = {
 	gen6ag: "[Gen 6] Anything Goes",
 	crossevo: "[Gen 8] Cross Evolution",
 	mayhem: "[Gen 8] Random Battle Mayhem",
-	omotm: "[Gen 8] Re-Evolution",
-	lcotm: "[Gen 8] Category Swap",
+	omotm: "[Gen 8] Revelationmons",
+	lcotm: "[Gen 8] Tag Team Singles",
 
 	// mega evos
 	fabio: "Ampharos-Mega",
@@ -667,6 +667,7 @@ export const Aliases: {[alias: string]: string} = {
 	tr97psychicfangs: "TR97",
 	tr98liquidation: "TR98",
 	tr99bodypress: "TR99",
+	umbrella: "Utility Umbrella",
 	wp: "Weakness Policy",
 
 	// pokemon
