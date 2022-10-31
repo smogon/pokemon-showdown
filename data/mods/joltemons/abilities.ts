@@ -622,7 +622,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter',
 					'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode',
 				];
-				if (!this.singleEvent('TakeItem', item, target.itemState, target, pokemon, this.effect, item) ||
+				if (!this.singleEvent('TakeItem', item, target.itemState, target, pokemon, null, item) ||
 					additionalBannedItems.includes(target.item)) {
 					possibleTargets.splice(rand, 1);
 					continue;

@@ -9,12 +9,10 @@ type GenericEvent = 'DamagingHit' | 'EmergencyExit' | 'AfterEachBoost' | 'AfterH
 'FractionalPriority' | 'Hit' | 'Immunity' | 'LockMove' | 'MaybeTrapPokemon' | 'ModifyAccuracy' | 'ModifyAtk' |
 'ModifyBoost' | 'ModifyCritRatio' | 'ModifyDamage' | 'ModifyDef' | 'ModifyMove' | 'ModifyPriority' |
 'ModifySecondaries' | 'ModifyType' | 'ModifyTarget' | 'ModifySpA' | 'ModifySpD' | 'ModifySpe' | 'ModifyWeight' |
-'MoveAborted' | 'NegateImmunity' | 'OverrideAction' | 'PrepareHit' | 'RedirectTarget' | 'Residual' | 'SetAbility' |
-'SetStatus' | 'SetWeather' | 'StallMove' | 'SwitchIn' | 'SwitchOut' | 'Swap' | 'TakeItem' | 'WeatherStart' |
-'TrapPokemon' | 'TryAddVolatile' | 'TryEatItem' | 'TryHeal' | 'TryHit' | 'TryHitField' | 'TryHitSide' |
-'Invulnerability' | 'TryMove' | 'TryPrimaryHit' | 'Type' | 'Update' | 'Weather' | 'WeatherModifyDamage' |
-'ModifyDamagePhase1' | 'ModifyDamagePhase2';
-type PokemonEvent = GenericEvent | 'TerrainStart';
+'MoveAborted' | 'NegateImmunity' | 'OverrideAction' | 'PrepareHit' | 'PseudoWeatherStart' | 'RedirectTarget' |
+'Residual' | 'SetAbility' | 'SetStatus' | 'SetWeather' | 'StallMove' | 'SwitchIn' | 'SwitchOut' | 'Swap' | 'TakeItem' | 'TerrainStart' | 'WeatherStart' | 'TrapPokemon' | 'TryAddVolatile' | 'TryEatItem' | 'TryHeal' | 'TryHit' |
+'TryHitField' | 'TryHitSide' | 'Invulnerability' | 'TryMove' | 'TryPrimaryHit' | 'Type' | 'Update' | 'Weather' | 'WeatherModifyDamage' | 'ModifyDamagePhase1' | 'ModifyDamagePhase2';
+type PokemonEvent = GenericEvent;
 type ConditionEvent = GenericEvent | 'Start' | 'Restart' | 'End' | 'Copy';
 type PokemonConditionEvent = PokemonEvent | ConditionEvent;
 type SideConditionEvent = ConditionEvent | 'Residual';
@@ -26,7 +24,8 @@ type MoveEvent = 'AfterHit' | 'AfterSubDamage' | 'AfterMoveSecondarySelf' | 'Aft
 type ItemEvent = PokemonEvent | 'Plate' | 'Drive' | 'Memory' | 'Primal' | 'Eat' | 'Start';
 type AbilityEvent = PokemonEvent | 'CheckShow' | 'End' | 'PreStart' | 'Start';
 type FormatEvent = GenericEvent | 'Begin' | 'ModifySpecies' | 'BattleStart' | 'TeamPreview';
-type UnusedEvent = 'UseItem' | 'Use' | 'Heal' | 'SubDamage' | 'TryTerrain';
+type UnusedEvent = 'UseItem' | 'Use' | 'Heal' | 'SubDamage' | 'TryTerrain' | 'Terrain' | 'TrySecondaryHit' |
+'TryFieldHit';
 
 export type EventName = PokemonConditionEvent | SideConditionEvent | FieldConditionEvent | MoveEvent | ItemEvent |
 AbilityEvent | FormatEvent | UnusedEvent;

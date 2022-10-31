@@ -179,7 +179,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 							this.debug('Move out of PP');
 							return false;
 						} else {
-							if (effect.id === 'cursedbody') {
+							if (effect?.id === 'cursedbody') {
 								this.add('-start', pokemon, 'Disable', moveSlot.move, '[from] ability: Cursed Body', '[of] ' + source);
 							} else {
 								this.add('-start', pokemon, 'Disable', moveSlot.move);

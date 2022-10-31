@@ -439,7 +439,7 @@ export class Battle {
 		if (!effect && this.effect) effect = this.effect;
 		this.speedSort(actives, (a, b) => b.speed - a.speed);
 		for (const pokemon of actives) {
-			this.runEvent(eventid, pokemon, null, effect, relayVar);
+			this.runEvent(eventid, pokemon, null, effect || null, relayVar);
 		}
 		if (eventid === 'Weather' && this.gen >= 7) {
 			// TODO: further research when updates happen
@@ -509,9 +509,9 @@ export class Battle {
 	>(
 		eventid: Event, effect: MainEffect, state: AnyObject | null,
 		target: Extract<EventHandlerParam<MainEffect[`on${Event}`], 1, EventTarget>, EventTarget>,
-		source?: Extract<EventHandlerParam<MainEffect[`on${Event}`], 2, EventSource>, EventSource>,
-		sourceEffect?: Extract<EventHandlerParam<MainEffect[`on${Event}`], 3, EventSourceEffect>, EventSourceEffect>,
-		relayVar?: T, customCallback?: unknown
+		source: Extract<EventHandlerParam<MainEffect[`on${Event}`], 2, EventSource>, EventSource>,
+		sourceEffect: Extract<EventHandlerParam<MainEffect[`on${Event}`], 3, EventSourceEffect>, EventSourceEffect>,
+		relayVar: T, customCallback?: unknown
 	): T;
 	singleEvent(
 		eventid: `${EventNamePrefix}${EventName}`, effect: Effect, state: AnyObject | null, target: EventTarget,
@@ -699,8 +699,8 @@ export class Battle {
 		sourceEffect?: Effect | null, relayVar?: undefined, onEffect?: boolean, fastExit?: boolean
 	): T extends Pokemon[] ? any[] : any;
 	runEvent<T extends Pokemon | Pokemon[] | Side | Battle | null, U>(
-		eventid: EventName, target?: T, source?: string | Pokemon | false | null,
-		sourceEffect?: Effect | null, relayVar?: U, onEffect?: boolean, fastExit?: boolean
+		eventid: EventName, target: T, source: string | Pokemon | false | null,
+		sourceEffect: Effect | null, relayVar: U, onEffect?: boolean, fastExit?: boolean
 	): T extends Pokemon[] ? U[] : U;
 	runEvent(
 		eventid: EventName, target?: Pokemon | Pokemon[] | Side | Battle | null, source?: string | Pokemon | false | null,
@@ -2060,7 +2060,7 @@ export class Battle {
 		if (damage && damage <= 1) damage = 1;
 		damage = this.trunc(damage);
 		// for things like Liquid Ooze, the Heal event still happens when nothing is healed.
-		damage = this.runEvent('TryHeal', target, source, effect, damage);
+		damage = this.runEvent('TryHeal', target || null, source, effect, damage);
 		if (!damage) return damage;
 		if (!target?.hp) return false;
 		if (!target.isActive) return false;
