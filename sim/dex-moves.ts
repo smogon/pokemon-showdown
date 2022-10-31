@@ -93,7 +93,7 @@ export interface MoveSpecificEventMethods {
 	onAfterSubDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
 	onAfterMoveSecondarySelf?: CommonHandlers['VoidSourceMove'];
 	onAfterMoveSecondary?: CommonHandlers['VoidMove'];
-	onAfterMove?: CommonHandlers['VoidSourceMove'];
+	onAfterMove?: (this: Battle, source: Pokemon, target: Pokemon | null, move: ActiveMove) => void;
 	onDamagePriority?: number;
 	onDamage?: (
 		this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect
@@ -109,9 +109,11 @@ export interface MoveSpecificEventMethods {
 	onHitField?: CommonHandlers['ResultMove'];
 	onHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean | null | "" | void;
 	onModifyMove?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon | null) => void;
-	onModifyPriority?: CommonHandlers['ModifierSourceMove'];
+	onModifyPriority?: (
+		this: Battle, relayVar: number, source: Pokemon, target: Pokemon | null, move: ActiveMove
+	) => number | void;
 	onMoveFail?: CommonHandlers['VoidMove'];
-	onModifyType?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon) => void;
+	onModifyType?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target?: Pokemon) => void;
 	onModifyTarget?: (
 		this: Battle, relayVar: {target: Pokemon}, pokemon: Pokemon, target: Pokemon, move: ActiveMove
 	) => void;
@@ -121,7 +123,7 @@ export interface MoveSpecificEventMethods {
 	onTryHitField?: false | (
 		(this: Battle, target: Pokemon | null, source: Pokemon, move: ActiveMove) => boolean | null | "" | void
 	);
-	onTryHitSide?: (this: Battle, side: Side | null, source: Pokemon, move: ActiveMove) => boolean |
+	onTryHitSide?: (this: Battle, side: Pokemon | null, source: Pokemon, move: ActiveMove) => boolean |
 	 null | "" | void;
 	onTryImmunity?: CommonHandlers['ResultMove'];
 	onTryMove?: CommonHandlers['ResultSourceMove'];

@@ -612,8 +612,8 @@ export interface PokemonSpecificEventMethods {
 export type PokemonEventMethods = EventHandlers<PokemonSpecificEventMethods>;
 
 interface SideSpecificEventMethods {
-	onSideStart?: (this: Battle, target: Side, source: Pokemon, sourceEffect: Effect) => void;
-	onSideRestart?: (this: Battle, target: Side, source: Pokemon, sourceEffect: Effect) => void;
+	onSideStart?: (this: Battle, target: Side, source: Pokemon, sourceEffect: Effect | null) => void;
+	onSideRestart?: (this: Battle, target: Side, source: Pokemon, sourceEffect: Effect | null) => void;
 	onSideResidual?: (this: Battle, target: Side, source: Pokemon, effect: Effect) => void;
 	onSideEnd?: (this: Battle, target: Side) => void;
 	onSideResidualOrder?: number;
@@ -623,8 +623,8 @@ interface SideSpecificEventMethods {
 export type SideEventMethods = EventHandlers<SideSpecificEventMethods & ConditionEventMethods>;
 
 interface FieldSpecificEventMethods {
-	onFieldStart?: (this: Battle, target: Field, source: Pokemon, sourceEffect: Effect) => void;
-	onFieldRestart?: (this: Battle, target: Field, source: Pokemon, sourceEffect: Effect) => void;
+	onFieldStart?: (this: Battle, target: Field, source: Pokemon | null, sourceEffect: Effect | null) => void;
+	onFieldRestart?: (this: Battle, target: Field, source: Pokemon | null, sourceEffect: Effect | null) => void;
 	onFieldResidual?: (this: Battle, target: Field, source: Pokemon, effect: Effect) => void;
 	onFieldEnd?: (this: Battle, target: Field) => void;
 	onFieldResidualOrder?: number;
@@ -635,8 +635,8 @@ export type FieldEventMethods = EventHandlers<FieldSpecificEventMethods & Condit
 
 interface PokemonConditionSpecificEventMethods {
 	onEnd?: (this: Battle, target: Pokemon) => void;
-	onRestart?: (this: Battle, target: Pokemon, source: Pokemon, sourceEffect: Effect) => boolean | null | void;
-	onStart?: (this: Battle, target: Pokemon, source: Pokemon, sourceEffect: Effect) => boolean | null | void;
+	onRestart?: (this: Battle, target: Pokemon, source: Pokemon, sourceEffect: Effect | null) => boolean | null | void;
+	onStart?: (this: Battle, target: Pokemon, source: Pokemon, sourceEffect: Effect | null) => boolean | null | void;
 }
 type PokemonConditionEventMethods = EventHandlers<PokemonSpecificEventMethods & PokemonConditionSpecificEventMethods &
 ConditionEventMethods>;

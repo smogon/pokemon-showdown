@@ -75,12 +75,18 @@ type Part = string | number | boolean | Pokemon | Side | Effect | Move | null | 
 // An individual Side's request state is encapsulated in its `activeRequest` field.
 export type RequestState = 'teampreview' | 'move' | 'switch' | '';
 
-type EventHandlerParam<T, U extends 0 | 1 | 2 | 3, Default = never> = T extends undefined ? Default :
+type EventHandlerParam<T, U extends 0 | 1 | 2 | 3, Default = never> = Exclude<T, undefined> extends never ? Default :
 	Exclude<T, string | number | boolean | undefined> extends infer R ?
 		R extends (...args: any) => any ?
-			Parameters<R>[U] :
+			Parameters<R>[U] extends infer S ?
+				Exclude<S, undefined> extends never ?
+					Default :
+					undefined extends S ?
+						S | null :
+						S :
+				never :
 			never :
-		Default;
+		never;
 type EventTarget = string | Pokemon | Side | Field | Battle | null;
 type EventSource = string | Pokemon | Effect | false | null;
 type EventSourceEffect = Effect | string | null;
@@ -492,9 +498,9 @@ export class Battle {
 	/** The entire event system revolves around this function and runEvent. */
 	singleEvent<Event extends `${EventNamePrefix}${EventName}`, MainEffect extends Effect>(
 		eventid: Event, effect: MainEffect, state: AnyObject | null,
-		target: EventHandlerParam<MainEffect[`on${Event}`], 0, EventTarget> & EventTarget,
-		source?: EventHandlerParam<MainEffect[`on${Event}`], 1, EventSource> & EventSource,
-		sourceEffect?: EventHandlerParam<MainEffect[`on${Event}`], 2, EventSourceEffect> & EventSourceEffect,
+		target: Extract<EventHandlerParam<MainEffect[`on${Event}`], 0, EventTarget>, EventTarget>,
+		source?: Extract<EventHandlerParam<MainEffect[`on${Event}`], 1, EventSource>, EventSource>,
+		sourceEffect?: Extract<EventHandlerParam<MainEffect[`on${Event}`], 2, EventSourceEffect>, EventSourceEffect>,
 		relayVar?: undefined, customCallback?: unknown
 	): any;
 	singleEvent<
@@ -502,9 +508,9 @@ export class Battle {
 		T extends EventHandlerParam<MainEffect[`on${Event}`], 0>,
 	>(
 		eventid: Event, effect: MainEffect, state: AnyObject | null,
-		target: EventHandlerParam<MainEffect[`on${Event}`], 1, EventTarget> & EventTarget,
-		source?: EventHandlerParam<MainEffect[`on${Event}`], 2, EventSource> & EventSource,
-		sourceEffect?: EventHandlerParam<MainEffect[`on${Event}`], 3, EventSourceEffect> & EventSourceEffect,
+		target: Extract<EventHandlerParam<MainEffect[`on${Event}`], 1, EventTarget>, EventTarget>,
+		source?: Extract<EventHandlerParam<MainEffect[`on${Event}`], 2, EventSource>, EventSource>,
+		sourceEffect?: Extract<EventHandlerParam<MainEffect[`on${Event}`], 3, EventSourceEffect>, EventSourceEffect>,
 		relayVar?: T, customCallback?: unknown
 	): T;
 	singleEvent(
@@ -2395,7 +2401,7 @@ export class Battle {
 
 	getActionSpeed(action: AnyObject) {
 		if (action.choice === 'move') {
-			let move = action.move;
+			let move: ActiveMove = action.move;
 			if (action.zmove) {
 				const zMoveName = this.actions.getZMove(action.move, action.pokemon, true);
 				if (zMoveName) {
@@ -2418,7 +2424,7 @@ export class Battle {
 			// (instead of compounding every time `getActionSpeed` is called)
 			let priority = this.dex.moves.get(move.id).priority;
 			// Grassy Glide priority
-			priority = this.singleEvent('ModifyPriority', move, null, action.pokemon, null, null, priority);
+			priority = this.singleEvent('ModifyPriority', move, null, action.pokemon as Pokemon, null, move, priority);
 			priority = this.runEvent('ModifyPriority', action.pokemon as Pokemon, null, move, priority);
 			action.priority = priority + action.fractionalPriority;
 			// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.

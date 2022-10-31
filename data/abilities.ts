@@ -4364,10 +4364,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onAllyAfterUseItem(item, pokemon) {
 			if (pokemon.switchFlag) return;
 			const source = this.effectState.target;
-			const myItem = source.takeItem();
+			const myItem: Item | false = source.takeItem();
 			if (!myItem) return;
 			if (
-				!this.singleEvent('TakeItem', myItem, source.itemState, pokemon, source, this.effect, myItem) ||
+				!this.singleEvent('TakeItem', myItem, source.itemState, pokemon, source, this.effect as ActiveMove, myItem) ||
 				!pokemon.setItem(myItem)
 			) {
 				source.item = myItem.id;

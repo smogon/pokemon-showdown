@@ -258,6 +258,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			this.effectState.trueDuration--;
 		},
 		onStart(target, source, effect) {
+			if (!effect) throw new Error('lockedmove volatile added without source effect');
 			this.effectState.trueDuration = this.random(2, 4);
 			this.effectState.move = effect.id;
 		},
@@ -280,6 +281,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'twoturnmove',
 		duration: 2,
 		onStart(attacker, defender, effect) {
+			if (!effect) throw new Error('twoturnmove volatile added without a source effect');
 			// ("attacker" is the Pokemon using the two turn move and the Pokemon this condition is being applied to)
 			this.effectState.move = effect.id;
 			attacker.addVolatile(effect.id);
@@ -398,7 +400,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 
 			this.actions.trySpreadMoveHit([target], data.source, hitMove, true);
 			if (data.source.isActive && data.source.hasItem('lifeorb') && this.gen >= 5) {
-				this.singleEvent('AfterMoveSecondarySelf', data.source.getItem(), data.source.itemState, data.source, target, data.source.getItem());
+				this.singleEvent('AfterMoveSecondarySelf', data.source.getItem() as Item, data.source.itemState, data.source, target, data.source.getItem());
 			}
 			this.activeMove = null;
 
@@ -517,7 +519,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onFieldStart(field, source, effect) {
-			this.add('-weather', 'PrimordialSea', '[from] ability: ' + effect.name, '[of] ' + source);
+			this.add('-weather', 'PrimordialSea', '[from] ability: ' + effect!.name, '[of] ' + source);
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
@@ -591,7 +593,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onFieldStart(field, source, effect) {
-			this.add('-weather', 'DesolateLand', '[from] ability: ' + effect.name, '[of] ' + source);
+			this.add('-weather', 'DesolateLand', '[from] ability: ' + effect!.name, '[of] ' + source);
 		},
 		onImmunity(type, pokemon) {
 			if (pokemon.hasItem('utilityumbrella')) return;
@@ -719,7 +721,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onFieldStart(field, source, effect) {
-			this.add('-weather', 'DeltaStream', '[from] ability: ' + effect.name, '[of] ' + source);
+			this.add('-weather', 'DeltaStream', '[from] ability: ' + effect!.name, '[of] ' + source);
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
