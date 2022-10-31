@@ -1968,7 +1968,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add('-sidestart', targetSide, 'Storm Surge');
 			this.add('-message', `Storm Surge flooded the afflicted side of the battlefield!`);
 		},
-		onEnd(targetSide) {
+		onSideEnd(targetSide) {
 			this.add('-sideend', targetSide, 'Storm Surge');
 			this.add('-message', 'The Storm Surge receded.');
 		},

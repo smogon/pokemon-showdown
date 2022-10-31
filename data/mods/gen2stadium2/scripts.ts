@@ -478,7 +478,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (typeof effect === 'string') effect = this.dex.conditions.get(effect);
 		if (!target?.hp) return 0;
 		let success = null;
-		boost = this.runEvent('Boost', target, source, effect, {...boost});
+		boost = this.runEvent('Boost', target, source || null, effect, {...boost});
 		let i: BoostID;
 		for (i in boost) {
 			const currentBoost: SparseBoostsTable = {};
@@ -503,10 +503,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				} else {
 					this.add(msg, target, i, boostBy, '[from] ' + effect.fullname);
 				}
-				this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
+				this.runEvent('AfterEachBoost', target, source || null, effect, currentBoost);
 			}
 		}
-		this.runEvent('AfterBoost', target, source, effect, boost);
+		this.runEvent('AfterBoost', target, source || null, effect, boost);
 		return success;
 	},
 	/**

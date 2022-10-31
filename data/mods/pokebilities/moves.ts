@@ -13,9 +13,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return false;
 				}
 
-				if (effect.id === 'cutecharm' || effect.id === 'ability:cutecharm') {
+				if (effect?.id === 'cutecharm' || effect?.id === 'ability:cutecharm') {
 					this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', '[of] ' + source);
-				} else if (effect.id === 'destinyknot') {
+				} else if (effect?.id === 'destinyknot') {
 					this.add('-start', pokemon, 'Attract', '[from] item: Destiny Knot', '[of] ' + source);
 				} else {
 					this.add('-start', pokemon, 'Attract');

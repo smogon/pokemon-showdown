@@ -369,7 +369,7 @@ export class BattleActions {
 		if (move.id === 'weatherball' && zMove) {
 			// Z-Weather Ball only changes types if it's used directly,
 			// not if it's called by Z-Sleep Talk or something.
-			this.battle.singleEvent('ModifyType', move, null, pokemon, target || null, move, move);
+			this.battle.singleEvent('ModifyType', move, null, pokemon, target, move, move);
 			if (move.type !== 'Normal') sourceEffect = move;
 		}
 		if (zMove || (move.category !== 'Status' && sourceEffect && (sourceEffect as ActiveMove).isZ)) {
@@ -377,8 +377,8 @@ export class BattleActions {
 		}
 		if (maxMove && move.category !== 'Status') {
 			// Max move outcome is dependent on the move type after type modifications from ability and the move itself
-			this.battle.singleEvent('ModifyType', move, null, pokemon, target || null, move, move);
-			this.battle.runEvent('ModifyType', pokemon, target || null, move, move);
+			this.battle.singleEvent('ModifyType', move, null, pokemon, target, move, move);
+			this.battle.runEvent('ModifyType', pokemon, target, move, move);
 		}
 		if (maxMove || (move.category !== 'Status' && sourceEffect && (sourceEffect as ActiveMove).isMax)) {
 			move = this.getActiveMaxMove(move, pokemon);
@@ -390,7 +390,7 @@ export class BattleActions {
 		}
 		const baseTarget = move.target;
 		let targetRelayVar = {target};
-		targetRelayVar = this.battle.runEvent('ModifyTarget', pokemon, target || null, move, targetRelayVar, true);
+		targetRelayVar = this.battle.runEvent('ModifyTarget', pokemon, target, move, targetRelayVar, true);
 		if (targetRelayVar.target !== undefined) target = targetRelayVar.target;
 		if (target === undefined) target = this.battle.getRandomTarget(pokemon, move);
 		if (move.target === 'self' || move.target === 'allies') {

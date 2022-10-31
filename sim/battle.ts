@@ -84,8 +84,8 @@ export type RequestState = 'teampreview' | 'move' | 'switch' | '';
  *
  * If the parameter exists, results in the parameter's type.
  *
- * If the parameter is optional, `null` is added to the parameter's Union type, because passing `null` is functionally
- * equivalent to passing `undefined` in that case.
+ * If the parameter type includes `undefined`, `null` is added to the parameter's Union type, and vice versa, because
+ * passing `null` is functionally equivalent to passing `undefined` in those cases.
  */
 type EventHandlerParam<Handler, ParamIndex extends 0 | 1 | 2 | 3, Default = never> =
 Exclude<Handler, undefined> extends never ? Default :
@@ -94,15 +94,15 @@ Exclude<Handler, string | number | boolean | undefined> extends infer ExtractedF
 		Parameters<ExtractedFunction>[ParamIndex] extends infer ExtractedParameter ?
 			Exclude<ExtractedParameter, undefined> extends never ?
 				Default :
-				undefined extends ExtractedParameter ?
-					ExtractedParameter | null :
+				Extract<undefined | null, ExtractedParameter> extends never ?
 					ExtractedParameter :
+					ExtractedParameter | null | undefined :
 			never :
 		never :
 	never;
-type EventTarget = string | Pokemon | Side | Field | Battle | null;
-type EventSource = string | Pokemon | Effect | false | null;
-type EventSourceEffect = Effect | string | null;
+type EventTarget = string | Pokemon | Side | Field | Battle | null | undefined;
+type EventSource = string | Pokemon | Effect | false | null | undefined;
+type EventSourceEffect = Effect | string | null | undefined;
 
 export class Battle {
 	readonly id: ID;
@@ -452,7 +452,7 @@ export class Battle {
 		if (!effect && this.effect) effect = this.effect;
 		this.speedSort(actives, (a, b) => b.speed - a.speed);
 		for (const pokemon of actives) {
-			this.runEvent(eventid, pokemon, null, effect || null, relayVar);
+			this.runEvent(eventid, pokemon, null, effect, relayVar);
 		}
 		if (eventid === 'Weather' && this.gen >= 7) {
 			// TODO: further research when updates happen
@@ -712,8 +712,8 @@ export class Battle {
 		sourceEffect?: Effect | null, relayVar?: undefined, onEffect?: boolean, fastExit?: boolean
 	): T extends Pokemon[] ? any[] : any;
 	runEvent<T extends Pokemon | Pokemon[] | Side | Battle | null, U>(
-		eventid: EventName, target: T, source: string | Pokemon | false | null,
-		sourceEffect: Effect | null, relayVar: U, onEffect?: boolean, fastExit?: boolean
+		eventid: EventName, target: T | undefined, source: string | Pokemon | false | null | undefined,
+		sourceEffect: Effect | null | undefined, relayVar: U, onEffect?: boolean, fastExit?: boolean
 	): T extends Pokemon[] ? U[] : U;
 	runEvent(
 		eventid: EventName, target?: Pokemon | Pokemon[] | Side | Battle | null, source?: string | Pokemon | false | null,
@@ -2073,7 +2073,7 @@ export class Battle {
 		if (damage && damage <= 1) damage = 1;
 		damage = this.trunc(damage);
 		// for things like Liquid Ooze, the Heal event still happens when nothing is healed.
-		damage = this.runEvent('TryHeal', target || null, source, effect, damage);
+		damage = this.runEvent('TryHeal', target, source, effect, damage);
 		if (!damage) return damage;
 		if (!target?.hp) return false;
 		if (!target.isActive) return false;
