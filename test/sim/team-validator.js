@@ -716,6 +716,16 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
+	it(`should accept event Pokemon with oldgen tutor moves and HAs in formats with Ability Patch`, function () {
+		const team = [
+			{species: 'heatran', ability: 'flamebody', moves: ['eruption'], evs: {hp: 1}},
+			{species: 'regirock', ability: 'sturdy', moves: ['counter'], evs: {hp: 1}},
+			{species: 'zapdos', ability: 'static', moves: ['aircutter'], evs: {hp: 1}},
+		];
+		const illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
+		assert.equal(illegal, null);
+	});
+
 	it('should not allow Gen 1 JP events', function () {
 		const team = [
 			{species: 'rapidash', moves: ['payday']},
