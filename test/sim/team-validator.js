@@ -716,7 +716,7 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
-	it(`should accept event Pokemon with oldgen tutor moves and HAs in formats with Ability Patch`, function() {
+	it(`should accept event Pokemon with oldgen tutor moves and HAs in formats with Ability Patch`, function () {
 		const team = [
 			{species: 'heatran', ability: 'flamebody', moves: ['eruption'], evs: {hp: 1}},
 			{species: 'regirock', ability: 'sturdy', moves: ['counter'], evs: {hp: 1}},
