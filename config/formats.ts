@@ -284,6 +284,15 @@ export const Formats: FormatList = [
 		name: "[Gen 8] Battle Stadium Singles",
 
 		mod: 'gen8',
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer', 'Limit Two Restricted'],
+		banlist: ['Eternatus-Eternamax'],
+		restricted: ['Restricted Legendary'],
+	},
+	{
+		name: "[Gen 8] Battle Stadium Singles Series 13",
+
+		mod: 'gen8',
+		searchShow: false,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8'],
 		banlist: ['Eternatus-Eternamax'],
 		unbanlist: ['Mythical', 'Restricted Legendary'],
@@ -377,20 +386,11 @@ export const Formats: FormatList = [
 		name: "[Gen 8] Battle Stadium Doubles Series 13",
 
 		mod: 'gen8',
+		searchShow: false,
 		gameType: 'doubles',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer'],
 		banlist: ['Eternatus-Eternamax'],
 		unbanlist: ['Mythical', 'Restricted Legendary'],
-	},
-	{
-		name: "[Gen 8] Ultimate Finale",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3709248/">Ultimate Finale Discussion</a>`,
-		],
-
-		mod: 'gen8',
-		gameType: 'doubles',
-		ruleset: ['Obtainable', 'Team Preview', 'Nickname Clause', 'Adjust Level = 100', 'Cancel Mod', 'Min Source Gen = 8'],
 	},
 	{
 		name: "[Gen 8] Spikemuth Cup",
