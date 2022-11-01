@@ -213,6 +213,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					let i: number;
 					for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 						move.hit = i + 1;
+						if (move.hit === hits) move.lastHit = true;
 						moveDamage = this.moveHit(target, pokemon, move);
 						if (moveDamage === false) break;
 						damage = (moveDamage || 0);
@@ -388,14 +389,17 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Apply move secondaries.
 			if (moveData.secondaries) {
 				for (const secondary of moveData.secondaries) {
-					// We check here whether to negate the probable secondary status if it's para, burn, or freeze.
-					// In the game, this is checked and if true, the random number generator is not called.
-					// That means that a move that does not share the type of the target can status it.
-					// If a move that was not fire-type would exist on Gen 1, it could burn a Pokémon.
-					if (!(secondary.status && ['par', 'brn', 'frz'].includes(secondary.status) && target && target.hasType(move.type))) {
-						const effectChance = Math.floor((secondary.chance || 100) * 255 / 100);
-						if (typeof secondary.chance === 'undefined' || this.battle.randomChance(effectChance + 1, 256)) {
-							this.moveHit(target, pokemon, move, secondary, true, isSelf);
+					// Multi-hit moves only roll for status once
+					if (!move.multihit || move.lastHit) {
+						// We check here whether to negate the probable secondary status if it's para, burn, or freeze.
+						// In the game, this is checked and if true, the random number generator is not called.
+						// That means that a move that does not share the type of the target can status it.
+						// If a move that was not fire-type would exist on Gen 1, it could burn a Pokémon.
+						if (!(secondary.status && ['par', 'brn', 'frz'].includes(secondary.status) && target && target.hasType(move.type))) {
+							const effectChance = Math.floor((secondary.chance || 100) * 255 / 100);
+							if (typeof secondary.chance === 'undefined' || this.battle.randomChance(effectChance + 1, 256)) {
+								this.moveHit(target, pokemon, move, secondary, true, isSelf);
+							}
 						}
 					}
 				}
