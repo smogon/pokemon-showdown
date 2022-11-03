@@ -627,7 +627,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// This occurs when damage was either 2 or 3 prior to applying STAB/Type matchup, and target is 4x resistant to the move.
 			if (damage === 0) return damage;
 
-			// Apply random factor is damage is greater than 1
+			// Apply random factor if damage is greater than 1
 			if (damage > 1) {
 				damage *= this.battle.random(217, 256);
 				damage = Math.floor(damage / 255);
