@@ -2173,12 +2173,94 @@ export const Formats: FormatList = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Pick-Your-Team Random Battle",
+		name: "[Gen 4] Shared Power Random Battle",
+		desc: `[Gen 4] Random Battle with aspects of [Gen 8] Shared Power`,
 
-		mod: 'gen7',
+		mod: 'gen4',
 		team: 'random',
-		ruleset: ['[Gen 7] Random Battle', 'Max Team Size = 12', 'Picked Team Size = 6', 'Team Preview'],
-		desc: `Twelve Pokémon sets are randomly chosen, then you pick six for your team!`,
+		ruleset: ['[Gen 4] Random Battle', 'Team Preview'],
+		getSharedPower(pokemon) {
+			const sharedPower = new Set<string>();
+			for (const ally of pokemon.side.pokemon) {
+				if (ally.previouslySwitchedIn > 0) {
+					if (pokemon.battle.dex.currentMod !== 'sharedpower' && ['trace', 'mirrorarmor'].includes(ally.baseAbility)) {
+						sharedPower.add('noability');
+						continue;
+					}
+					sharedPower.add(ally.baseAbility);
+				}
+			}
+			sharedPower.delete(pokemon.baseAbility);
+			return sharedPower;
+		},
+		onBeforeSwitchIn(pokemon) {
+			let format = this.format;
+			if (!format.getSharedPower) format = this.dex.formats.get('gen8sharedpower');
+			for (const ability of format.getSharedPower!(pokemon)) {
+				const effect = 'ability:' + ability;
+				pokemon.volatiles[effect] = {id: this.toID(effect), target: pokemon};
+				if (!pokemon.m.abils) pokemon.m.abils = [];
+				if (!pokemon.m.abils.includes(effect)) pokemon.m.abils.push(effect);
+			}
+		},
+		onSwitchInPriority: 2,
+		onSwitchIn(pokemon) {
+			let format = this.format;
+			if (!format.getSharedPower) format = this.dex.formats.get('gen8sharedpower');
+			for (const ability of format.getSharedPower!(pokemon)) {
+				if (ability === 'noability') {
+					this.hint(`Mirror Armor and Trace break in Shared Power formats that don't use Shared Power as a base, so they get removed from non-base users.`);
+				}
+				const effect = 'ability:' + ability;
+				delete pokemon.volatiles[effect];
+				pokemon.addVolatile(effect);
+			}
+		},
+		field: {
+			suppressingWeather() {
+				for (const pokemon of this.battle.getAllActive()) {
+					const innates = Object.keys(pokemon.volatiles).filter(x => x.startsWith('ability:'));
+					if (pokemon && !pokemon.ignoringAbility() &&
+						(pokemon.getAbility().suppressWeather || innates.some(x => (
+							this.battle.dex.abilities.get(x.replace('ability:', '')).suppressWeather
+						)))) {
+						return true;
+					}
+				}
+				return false;
+			},
+		},
+		pokemon: {
+			hasAbility(ability) {
+				if (this.ignoringAbility()) return false;
+				if (Array.isArray(ability)) return ability.some(abil => this.hasAbility(abil));
+				const abilityid = this.battle.toID(ability);
+				return this.ability === abilityid || !!this.volatiles['ability:' + abilityid];
+			},
+			ignoringAbility() {
+				// Check if any active pokemon have the ability Neutralizing Gas
+				let neutralizinggas = false;
+				for (const pokemon of this.battle.getAllActive()) {
+					// can't use hasAbility because it would lead to infinite recursion
+					if (
+						(pokemon.ability === ('neutralizinggas' as ID) || pokemon.m.abils?.includes('ability:neutralizinggas')) &&
+						!pokemon.volatiles['gastroacid'] && !pokemon.abilityState.ending
+					) {
+						neutralizinggas = true;
+						break;
+					}
+				}
+
+				return !!(
+					(this.battle.gen >= 5 && !this.isActive) ||
+					((this.volatiles['gastroacid'] ||
+						(neutralizinggas && (this.ability !== ('neutralizinggas' as ID) ||
+							this.m.abils?.includes('ability:neutralizinggas'))
+						)) && !this.getAbility().isPermanent
+					)
+				);
+			},
+		},
 	},
 
 	// Randomized Metas
