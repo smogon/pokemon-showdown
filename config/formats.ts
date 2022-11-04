@@ -2631,7 +2631,7 @@ export const Formats: FormatList = [
 		// searchShow: false,
 		gameType: 'doubles',
 		ruleset: ['Standard', '!Switch Priority Clause Mod'],
-		banlist: ['Uber', 'Soul Dew'],
+		banlist: ['Uber', 'Soul Dew', 'Swagger'],
 		unbanlist: ['Deoxys-Defense', 'Latias', 'Wobbuffet', 'Wynaut'],
 	},
 	{
