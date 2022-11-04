@@ -616,13 +616,14 @@ export const commands: Chat.ChatCommands = {
 		const isReEvo = cmd === 'reevo';
 		if (!targetid) return this.parse(`/help ${isReEvo ? 're' : 'show'}evo`);
 		const evo = Dex.species.get(target);
-		if (!evo.exists) {
+		const bevo = Dex.species.get(evo.baseSpecies);
+		if (!bevo.exists) {
 			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon ${target} not found.`);
 		}
-		if (!evo.prevo) {
+		if (!bevo.prevo) {
 			throw new Chat.ErrorMessage(`Error: ${evo.name} is not an evolution.`);
 		}
-		const prevoSpecies = Dex.species.get(evo.prevo);
+		const prevoSpecies = Dex.species.get(bevo.prevo);
 		const deltas = Utils.deepClone(evo);
 		if (!isReEvo) {
 			deltas.tier = 'CE';
@@ -644,11 +645,18 @@ export const commands: Chat.ChatCommands = {
 		deltas.bst = 0;
 		let i: StatID;
 		for (i in evo.baseStats) {
-			const statChange = evo.baseStats[i] - prevoSpecies.baseStats[i];
+			const statChange = bevo.baseStats[i] - prevoSpecies.baseStats[i];
+			const frmChange = evo.baseStats[i] - bevo.baseStats[i];
 			if (!isReEvo) {
+			    if(!evo.prevo){
+				deltas.baseStats[i] = frmChange;
+				}else
+				{
 				deltas.baseStats[i] = statChange;
+				}				
 			} else {
-				deltas.baseStats[i] = Utils.clampIntRange(deltas.baseStats[i] + statChange, 1, 255);
+			    deltas.baseStats[i] = Utils.clampIntRange(bevo.baseStats[i] + statChange, 1, 255);
+				deltas.baseStats[i] = Utils.clampIntRange(deltas.baseStats[i] + frmChange, 1, 255);
 			}
 			deltas.bst += deltas.baseStats[i];
 		}
