@@ -616,35 +616,34 @@ export const commands: Chat.ChatCommands = {
 		const isReEvo = cmd === 'reevo';
 		if (!targetid) return this.parse(`/help ${isReEvo ? 're' : 'show'}evo`);
 		const evo = Dex.species.get(target);
-		const bevo = Dex.species.get(evo.baseSpecies);
-		if (!bevo.exists) {
+		if (!evo.exists) {
 			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon ${target} not found.`);
 		}
-		if (!bevo.prevo) {
-			throw new Chat.ErrorMessage(`Error: ${evo.name} is not an evolution.`);
-		}
-		const prevoSpecies = Dex.species.get(bevo.prevo);
-		const deltas = Utils.deepClone(evo);
-		if (!isReEvo) {
-			deltas.tier = 'CE';
-			deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
-			deltas.types = [];
-			if (evo.types[0] !== prevoSpecies.types[0]) deltas.types[0] = evo.types[0];
-			if (evo.types[1] !== prevoSpecies.types[1]) {
-				deltas.types[1] = evo.types[1] || evo.types[0];
-			}
-			if (deltas.types.length) {
+		if (!evo.prevo) {
+		    const bevo = Dex.species.get(evo.baseSpecies);
+			if(!bevo.prevo){throw new Chat.ErrorMessage(`Error: ${evo.name} is not an evolution.`);}		
+		    const prevoSpecies = Dex.species.get(bevo.prevo);
+		    const deltas = Utils.deepClone(evo);
+		    if (!isReEvo) {
+			    deltas.tier = 'CE';
+			    deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
+			    deltas.types = [];
+			    if (evo.types[0] !== prevoSpecies.types[0]) deltas.types[0] = evo.types[0];
+			    if (evo.types[1] !== prevoSpecies.types[1]) {
+				    deltas.types[1] = evo.types[1] || evo.types[0];
+			    }
+			    if (deltas.types.length) {
 				// Undefined type remover
-				deltas.types = deltas.types.filter((type: string | undefined) => type !== undefined);
+				    deltas.types = deltas.types.filter((type: string | undefined) => type !== undefined);
 
 				if (deltas.types[0] === deltas.types[1]) deltas.types = [deltas.types[0]];
-			} else {
+			    }   else {
 				deltas.types = null;
-			}
-		}
-		deltas.bst = 0;
-		let i: StatID;
-		for (i in evo.baseStats) {
+			    }
+		    }
+		    deltas.bst = 0;
+		    let i: StatID;
+		    for (i in evo.baseStats) {
 			const statChange = bevo.baseStats[i] - prevoSpecies.baseStats[i];
 			const frmChange = evo.baseStats[i] - bevo.baseStats[i];
 			if (!isReEvo) {
@@ -668,8 +667,51 @@ export const commands: Chat.ChatCommands = {
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(deltas)}`);
 		if (!isReEvo) {
 			this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}&nbsp;|&ThickSpace;<font color="#686868">Stage:</font> ${details["Stage"]}</font>`);
+		}		
+		}else
+		{
+		const prevoSpecies = Dex.species.get(evo.prevo);
+		const deltas = Utils.deepClone(evo);
+		if (!isReEvo) {
+			deltas.tier = 'CE';
+			deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
+			deltas.types = [];
+			if (evo.types[0] !== prevoSpecies.types[0]) deltas.types[0] = evo.types[0];
+			if (evo.types[1] !== prevoSpecies.types[1]) {
+				deltas.types[1] = evo.types[1] || evo.types[0];
+			}
+			if (deltas.types.length) {
+				// Undefined type remover
+				deltas.types = deltas.types.filter((type: string | undefined) => type !== undefined);
+
+				if (deltas.types[0] === deltas.types[1]) deltas.types = [deltas.types[0]];
+			} else {
+				deltas.types = null;
+			}
 		}
-	},
+		deltas.bst = 0;
+		let i: StatID;
+		for (i in evo.baseStats) {
+			const statChange = evo.baseStats[i] - prevoSpecies.baseStats[i];
+			if (!isReEvo) {
+				deltas.baseStats[i] = statChange;
+			} else {
+				deltas.baseStats[i] = Utils.clampIntRange(deltas.baseStats[i] + statChange, 1, 255);
+			}
+			deltas.bst += deltas.baseStats[i];
+		}
+		const details = {
+			Gen: evo.gen,
+			Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
+			Stage: (Dex.species.get(prevoSpecies.prevo).exists ? 3 : 2),
+		};
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(deltas)}`);
+		if (!isReEvo) {
+			this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}&nbsp;|&ThickSpace;<font color="#686868">Stage:</font> ${details["Stage"]}</font>`);
+		}
+		}
+		
+		},
 	reevohelp: [
 		`/reevo <Pok\u00e9mon> - Shows the stats that a Pok\u00e9mon would have in Re-Evolution`,
 	],
