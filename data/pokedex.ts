@@ -820,6 +820,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Pikachu",
 		evoType: "useItem",
 		evoItem: "Thunder Stone",
+		evoRegion: "Alola",
 		eggGroups: ["Field", "Fairy"],
 	},
 	sandshrew: {
@@ -2350,6 +2351,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Exeggcute",
 		evoType: "useItem",
 		evoItem: "Leaf Stone",
+		evoRegion: "Alola",
 		eggGroups: ["Grass"],
 	},
 	cubone: {
@@ -2393,6 +2395,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Cubone",
 		evoLevel: 28,
 		evoCondition: "at night",
+		evoRegion: "Alola",
 		eggGroups: ["Monster"],
 	},
 	marowakalolatotem: {
@@ -2490,6 +2493,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		prevo: "Koffing",
 		evoLevel: 35,
+		evoRegion: "Galar",
 		eggGroups: ["Amorphous"],
 	},
 	rhyhorn: {
@@ -2687,6 +2691,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Mime Jr.",
 		evoType: "levelMove",
 		evoMove: "Mimic",
+		evoRegion: "Galar",
 		evos: ["Mr. Rime"],
 		eggGroups: ["Human-Like"],
 		canHatch: true,

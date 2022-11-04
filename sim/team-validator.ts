@@ -2044,6 +2044,11 @@ export class TeamValidator {
 					// redundant
 					if (learnedGen <= moveSources.sourcesBefore) continue;
 
+					if (baseSpecies.evoRegion === 'Alola' && checkingPrevo && learnedGen >= 8) {
+						cantLearnReason = `is from a ${species.name} that can't be transfered to USUM to evolve into ${baseSpecies.name}.`;
+						continue;
+					}
+
 					const canUseAbilityPatch = dex.gen >= 8 && format.mod !== 'gen8dlc1';
 					if (
 						learnedGen < 7 && setSources.isHidden && !canUseAbilityPatch &&
