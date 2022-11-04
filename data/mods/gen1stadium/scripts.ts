@@ -96,31 +96,147 @@ export const Scripts: ModdedBattleScriptsData = {
 				sourceEffect = move;
 			}
 			this.battle.actions.useMove(move, pokemon, target, sourceEffect);
-			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
+		},
+		// This function deals with AfterMoveSelf events.
+		// This leads with partial trapping moves shenanigans after the move has been used.
+		useMove(moveOrMoveName, pokemon, target, sourceEffect) {
+			const moveResult = this.useMoveInner(moveOrMoveName, pokemon, target, sourceEffect);
 
-			// If target fainted
-			if (target && target.hp <= 0) {
-				// We remove screens
-				target.side.removeSideCondition('reflect');
-				target.side.removeSideCondition('lightscreen');
-			} else {
-				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
+			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
+			const baseMove = this.battle.dex.moves.get(moveOrMoveName);
+			let move = this.battle.dex.getActiveMove(baseMove);
+			if (target === undefined) target = this.battle.getRandomTarget(pokemon, move);
+			if (move.target === 'self') {
+				target = pokemon;
 			}
-			if (pokemon.volatiles['mustrecharge']) this.battle.add('-mustrecharge', pokemon);
+			if (sourceEffect) move.sourceEffect = sourceEffect.id;
 
-			// For partial trapping moves, we are saving the target.
-			if (move.volatileStatus === 'partiallytrapped' && target && target.hp > 0) {
-				// It hit, so let's remove must recharge volatile. Yup, this happens on Stadium.
-				target.removeVolatile('mustrecharge');
-				// Let's check if the lock exists
-				if (pokemon.volatiles['partialtrappinglock'] && target.volatiles['partiallytrapped']) {
-					// Here the partialtrappinglock volatile has been already applied
-					if (!pokemon.volatiles['partialtrappinglock'].locked) {
-						// If it's the first hit, we save the target
-						pokemon.volatiles['partialtrappinglock'].locked = target;
+			this.battle.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
+			if (baseMove.target !== move.target) {
+				// Target changed in ModifyMove, so we must adjust it here
+				target = this.battle.getRandomTarget(pokemon, move);
+			}
+			move = this.battle.runEvent('ModifyMove', pokemon, target, move, move);
+			if (baseMove.target !== move.target) {
+				// Check again, this shouldn't ever happen on Gen 1.
+				target = this.battle.getRandomTarget(pokemon, move);
+			}
+
+			if (move.id !== 'metronome') {
+				if (move.id !== 'mirrormove' ||
+					(!pokemon.side.foe.active[0]?.lastMove || pokemon.side.foe.active[0].lastMove?.id === 'mirrormove')) {
+					// The move is our 'final' move (a failed Mirror Move, or any move that isn't Metronome or Mirror Move).
+					this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
+
+					// If target fainted
+					if (target && target.hp <= 0) {
+						// We remove screens
+						target.side.removeSideCondition('reflect');
+						target.side.removeSideCondition('lightscreen');
+					} else {
+						this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 					}
-				} // If we move to here, the move failed and there's no partial trapping lock
+					if (pokemon.volatiles['mustrecharge']) this.battle.add('-mustrecharge', pokemon);
+
+					// For partial trapping moves, we are saving the target.
+					if (move.volatileStatus === 'partiallytrapped' && target && target.hp > 0) {
+						// It hit, so let's remove must recharge volatile. Yup, this happens on Stadium.
+						target.removeVolatile('mustrecharge');
+						// Let's check if the lock exists
+						if (pokemon.volatiles['partialtrappinglock'] && target.volatiles['partiallytrapped']) {
+							// Here the partialtrappinglock volatile has been already applied
+							if (!pokemon.volatiles['partialtrappinglock'].locked) {
+								// If it's the first hit, we save the target
+								pokemon.volatiles['partialtrappinglock'].locked = target;
+							}
+						} // If we move to here, the move failed and there's no partial trapping lock
+					}
+				}
 			}
+			return moveResult;
+		},
+		// This is the function that actually uses the move, running ModifyMove events.
+		// It uses the move and then deals with the effects after the move.
+		useMoveInner(moveOrMoveName, pokemon, target, sourceEffect) {
+			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
+			const baseMove = this.battle.dex.moves.get(moveOrMoveName);
+			let move = this.battle.dex.getActiveMove(baseMove);
+			if (target === undefined) target = this.battle.getRandomTarget(pokemon, move);
+			if (move.target === 'self') {
+				target = pokemon;
+			}
+			if (sourceEffect) move.sourceEffect = sourceEffect.id;
+
+			this.battle.setActiveMove(move, pokemon, target);
+
+			this.battle.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
+			if (baseMove.target !== move.target) {
+				// Target changed in ModifyMove, so we must adjust it here
+				target = this.battle.getRandomTarget(pokemon, move);
+			}
+			move = this.battle.runEvent('ModifyMove', pokemon, target, move, move);
+			if (baseMove.target !== move.target) {
+				// Check again, this shouldn't ever happen on Gen 1.
+				target = this.battle.getRandomTarget(pokemon, move);
+				this.battle.debug('not a gen 1 mechanic');
+			}
+			if (!move) return false;
+
+			let attrs = '';
+			if (pokemon.fainted) {
+				// Removing screens upon faint.
+				pokemon.side.removeSideCondition('reflect');
+				pokemon.side.removeSideCondition('lightscreen');
+				return false;
+			}
+
+			if (sourceEffect) attrs += '|[from]' + this.battle.dex.conditions.get(sourceEffect);
+			this.battle.addMove('move', pokemon, move.name, target + attrs);
+
+			if (!this.battle.singleEvent('Try', move, null, pokemon, target, move)) {
+				return true;
+			}
+			if (!this.battle.singleEvent('TryMove', move, null, pokemon, target, move) ||
+				!this.battle.runEvent('TryMove', pokemon, target, move)) {
+				return true;
+			}
+
+			if (move.ignoreImmunity === undefined) {
+				move.ignoreImmunity = (move.category === 'Status');
+			}
+
+			let damage: number | undefined | false | '' = false;
+			if (!target || target.fainted) {
+				this.battle.attrLastMove('[notarget]');
+				this.battle.add('-notarget');
+				return true;
+			}
+			damage = this.tryMoveHit(target, pokemon, move);
+
+			// Store 0 damage for last damage if move failed or dealt 0 damage.
+			// This only happens on moves that don't deal damage but call GetDamageVarsForPlayerAttack (disassembly).
+			const neverDamageMoves = [
+				'conversion', 'haze', 'mist', 'focusenergy', 'confuseray', 'supersonic', 'transform', 'lightscreen', 'reflect', 'substitute', 'mimic', 'leechseed', 'splash', 'softboiled', 'recover', 'rest',
+			];
+			if (
+				!damage &&
+				(move.category !== 'Status' || (move.status && !['psn', 'tox', 'par'].includes(move.status))) &&
+				!neverDamageMoves.includes(move.id)
+			) {
+				this.battle.lastDamage = 0;
+			}
+
+			// Go ahead with results of the used move.
+			if (damage === false) {
+				this.battle.singleEvent('MoveFail', move, null, target, pokemon, move);
+				return true;
+			}
+
+			if (!move.negateSecondary) {
+				this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
+				this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
+			}
+			return true;
 		},
 		tryMoveHit(target, pokemon, move) {
 			let damage: number | false | undefined = 0;
