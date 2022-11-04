@@ -67,7 +67,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	actions: {
 		// This function is the main one when running a move.
-		// It deals with the beforeMove event
+		// It deals with the beforeMove event.
 		// It also deals with how PP reduction works on gen 1.
 		runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect) {
 			const target = this.battle.getTarget(pokemon, moveOrMoveName, targetLoc);
