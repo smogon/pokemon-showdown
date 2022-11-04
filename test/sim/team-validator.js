@@ -829,10 +829,10 @@ describe('Team Validator', function () {
 
 		team = [
 			{species: 'exeggutoralola', ability: 'frisk', moves: ['psybeam'], evs: {hp: 1}},
-		]
+		];
 		illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
 		assert(illegal);
-	})
+	});
 
 	/*********************************************************
  	* Custom rules
