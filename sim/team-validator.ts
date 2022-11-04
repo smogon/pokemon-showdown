@@ -2045,7 +2045,7 @@ export class TeamValidator {
 					if (learnedGen <= moveSources.sourcesBefore) continue;
 
 					if (baseSpecies.evoRegion === 'Alola' && checkingPrevo && learnedGen >= 8) {
-						cantLearnReason = `is from a ${species.name} that can't be transfered to USUM to evolve into ${baseSpecies.name}.`;
+						cantLearnReason = `is from a ${species.name} that can't be transferred to USUM to evolve into ${baseSpecies.name}.`;
 						continue;
 					}
 
