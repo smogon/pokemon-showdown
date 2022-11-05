@@ -425,7 +425,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// We get the sub to the target to see if it existed
 			const targetSub = (target) ? target.volatiles['substitute'] : false;
 			const targetHadSub = (targetSub !== null && targetSub !== false && (typeof targetSub !== 'undefined'));
-			let targetHasSub: boolean;
+			let targetHasSub: boolean | undefined = undefined;
 
 			if (target) {
 				hitResult = this.battle.singleEvent('TryHit', moveData, {}, target, pokemon, move);
@@ -588,7 +588,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					return false;
 				}
 			}
-			targetHasSub ??= !!(target?.volatiles['substitute']);
+			if (targetHasSub === undefined) targetHasSub = !!(target?.volatiles['substitute']);
 
 			// Here's where self effects are applied.
 			const doSelf = (targetHadSub && targetHasSub) || !targetHadSub;
