@@ -28,7 +28,7 @@ describe('Quick Claw', function () {
 	});
 
 	it(`[Gen 3] causes Speed ties with every holder when activated`, function () {
-		battle = common.gen(3).createBattle([[
+		battle = common.gen(3).createBattle({seed: [163, 106, 112, 542]}, [[
 			{species: 'snorlax', item: 'quickclaw', moves: ['spore']},
 		], [
 			{species: 'deoxys', item: 'quickclaw', moves: ['seismictoss']},

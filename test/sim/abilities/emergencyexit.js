@@ -239,7 +239,7 @@ describe(`Emergency Exit`, function () {
 	});
 
 	it(`should be suppressed by Sheer Force`, function () {
-		battle = common.createBattle([
+		battle = common.createBattle({seed: [1, 2, 3, 4]}, [
 			[{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 			[{species: "Nidoking", ability: 'sheerforce', moves: ['thunder']}],
 		]);

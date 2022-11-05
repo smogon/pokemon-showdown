@@ -2229,13 +2229,15 @@ export class Battle {
 		// when used without an explicit target.
 
 		move = this.dex.moves.get(move);
-		if (move.target === 'adjacentAlly') {
+		if (['self', 'all', 'allySide', 'allyTeam', 'adjacentAllyOrSelf'].includes(move.target)) {
+			return pokemon;
+		} else if (move.target === 'adjacentAlly') {
+			if (this.gameType === 'singles') return null;
 			const adjacentAllies = pokemon.adjacentAllies();
 			return adjacentAllies.length ? this.sample(adjacentAllies) : null;
 		}
-		if (['self', 'all', 'allySide', 'allyTeam', 'adjacentAllyOrSelf'].includes(move.target)) {
-			return pokemon;
-		}
+		if (this.gameType === 'singles') return pokemon.side.foe.active[0];
+
 		if (this.activePerHalf > 2) {
 			if (move.target === 'adjacentFoe' || move.target === 'normal' || move.target === 'randomNormal') {
 				// even if a move can target an ally, auto-resolution will never make it target an ally
