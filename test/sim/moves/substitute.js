@@ -49,7 +49,7 @@ describe('Substitute', function () {
 	});
 
 	it('should take specific recoil damage in Gen 1', function () {
-		battle = common.gen(1).createBattle({seed: [0, 1, 0, 1]});
+		battle = common.gen(1).createBattle({seed: [1, 10, 1, 10]});
 		battle.setPlayer('p1', {team: [{species: 'Hitmonlee', moves: ['substitute', 'highjumpkick']}]});
 		battle.setPlayer('p2', {team: [{species: 'Hitmonchan', moves: ['substitute', 'agility']}]});
 		battle.makeChoices('move substitute', 'move substitute');
@@ -57,7 +57,7 @@ describe('Substitute', function () {
 		const subhp = battle.p1.active[0].volatiles['substitute'].hp;
 		assert.equal(subhp, battle.p2.active[0].volatiles['substitute'].hp);
 
-		battle.resetRNG(); // Make Hi Jump Kick miss and cause recoil.
+		// High Jump Kick will miss and cause recoil
 		battle.makeChoices('move highjumpkick', 'move agility');
 
 		// Both Pokemon had a substitute, so the *target* Substitute takes recoil damage.

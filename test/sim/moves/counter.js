@@ -74,7 +74,7 @@ describe('Counter', function () {
 
 	it(`[Gen 1] Counter Desync Clause`, function () {
 		// seed chosen so Water Gun succeeds and Pound full paras
-		battle = common.gen(1).createBattle({seed: [1, 2, 3, 6]}, [[
+		battle = common.gen(1).createBattle({seed: [1, 2, 3, 3]}, [[
 			{species: 'Mew', moves: ['pound', 'watergun', 'counter', 'thunderwave']},
 		], [
 			{species: 'Persian', moves: ['pound', 'watergun', 'counter', 'thunderwave']},
@@ -84,7 +84,7 @@ describe('Counter', function () {
 		assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
 
 		// seed chosen so Pound succeeds and Water Gun full paras
-		battle = common.gen(1).createBattle({seed: [1, 2, 3, 6]}, [[
+		battle = common.gen(1).createBattle({seed: [1, 2, 3, 3]}, [[
 			{species: 'Mew', moves: ['pound', 'watergun', 'counter', 'thunderwave']},
 		], [
 			{species: 'Persian', moves: ['pound', 'watergun', 'counter', 'thunderwave']},
