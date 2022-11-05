@@ -148,7 +148,7 @@ describe('Counter', function () {
 		assert.false.fullHP(battle.p1.active[0]);
 	});
 
-	it(`[Gen 1 Stadium] Counter can counter attacks against substitutes`, function () {
+	it(`[Gen 1 Stadium] should counter attacks made against substitutes`, function () {
 		battle = common.mod('gen1stadium').createBattle([[
 			{species: 'Chansey', moves: ['substitute', 'counter']},
 		], [
