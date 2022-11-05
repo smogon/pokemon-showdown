@@ -470,7 +470,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				let didSomething = false;
 
 				damage = this.getDamage(pokemon, target, moveData);
-				
+
 				// getDamage has several possible return values:
 				//
 				//   a number:
