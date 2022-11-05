@@ -114,7 +114,7 @@ describe('Counter', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it(`[Gen 1] Counter can counter attacks against substitutes`, function () {
+	it(`[Gen 1] should counter attacks made against substitutes`, function () {
 		battle = common.gen(1).createBattle([[
 			{species: 'Chansey', moves: ['substitute', 'counter']},
 		], [
