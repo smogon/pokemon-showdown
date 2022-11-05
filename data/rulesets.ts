@@ -1903,8 +1903,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		onModifySpecies(species, target) {
 			const newSpecies = this.dex.deepClone(species);
 			const baseSpe = this.dex.species.get(species.baseSpecies);
-			if(!newSpecies.prevo)
-			{
+			if (!newSpecies.prevo) {
 			    if (!baseSpe.prevo) return;
 			    const prevoSpecies = this.dex.species.get(baseSpe.prevo);
 			    let statid: StatID;
@@ -1916,18 +1915,18 @@ export const Rulesets: {[k: string]: FormatData} = {
 				    newSpecies.baseStats[statid] = this.clampIntRange(newSpecies.baseStats[statid] + frmChange, 1, 255);
 				    newSpecies.bst += newSpecies.baseStats[statid];
 			        }
-			    return newSpecies;	
+					return newSpecies;
 			}
 			    if (!newSpecies.prevo) return;
 			    const prevoSpecies = this.dex.species.get(newSpecies.prevo);
                 let statid: StatID;
-			    newSpecies.bst = 0;
+				newSpecies.bst = 0;
 			    for (statid in prevoSpecies.baseStats) {
 				const change = newSpecies.baseStats[statid] - prevoSpecies.baseStats[statid];
-				newSpecies.baseStats[statid] = this.clampIntRange(newSpecies.baseStats[statid] + change, 1, 255);	
+				newSpecies.baseStats[statid] = this.clampIntRange(newSpecies.baseStats[statid] + change, 1, 255);
 				newSpecies.bst += newSpecies.baseStats[statid];
 			}
-			    return newSpecies;
+			return newSpecies;
 		},
 	},
 	brokenrecordmod: {

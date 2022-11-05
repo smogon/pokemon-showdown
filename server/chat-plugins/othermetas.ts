@@ -621,7 +621,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		if (!evo.prevo) {
 		    const bevo = Dex.species.get(evo.baseSpecies);
-			if(!bevo.prevo){throw new Chat.ErrorMessage(`Error: ${evo.name} is not an evolution.`);}		
+			if (!bevo.prevo){ throw new Chat.ErrorMessage(`Error: ${evo.name} is not an evolution.`); }
 		    const prevoSpecies = Dex.species.get(bevo.prevo);
 		    const deltas = Utils.deepClone(evo);
 		    if (!isReEvo) {
