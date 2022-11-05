@@ -248,7 +248,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				'conversion', 'haze', 'mist', 'focusenergy', 'confuseray', 'supersonic', 'transform', 'lightscreen', 'reflect', 'substitute', 'mimic', 'leechseed', 'splash', 'softboiled', 'recover', 'rest',
 			];
 			if (
-				!damage &&
+				!damage && damage !== 0 &&
 				(move.category !== 'Status' || (move.status && !['psn', 'tox', 'par'].includes(move.status))) &&
 				!neverDamageMoves.includes(move.id)
 			) {
@@ -470,7 +470,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				let didSomething = false;
 
 				damage = this.getDamage(pokemon, target, moveData);
-
 				// getDamage has several possible return values:
 				//
 				//   a number:

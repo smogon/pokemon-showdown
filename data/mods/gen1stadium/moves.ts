@@ -176,6 +176,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (!damage) return damage;
 				target.volatiles['substitute'].hp -= damage;
 				source.lastDamage = damage;
+				this.lastDamage = damage;
 				if (target.volatiles['substitute'].hp <= 0) {
 					this.debug('Substitute broke');
 					target.removeVolatile('substitute');
