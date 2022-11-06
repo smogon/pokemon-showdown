@@ -67,8 +67,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	actions: {
 		// This function is the main one when running a move.
-		// It deals with the beforeMove and AfterMoveSelf events.
-		// This leads with partial trapping moves shennanigans after the move has been used.
+		// It deals with the beforeMove event.
 		// It also deals with how PP reduction works on gen 1.
 		runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect) {
 			const target = this.battle.getTarget(pokemon, moveOrMoveName, targetLoc);
@@ -115,46 +114,79 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			this.useMove(move, pokemon, target, sourceEffect);
-			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
+		},
+		// This function deals with AfterMoveSelf events.
+		// This leads with partial trapping moves shenanigans after the move has been used.
+		useMove(moveOrMoveName, pokemon, target, sourceEffect) {
+			const moveResult = this.useMoveInner(moveOrMoveName, pokemon, target, sourceEffect);
 
-			// If target fainted
-			if (target && target.hp <= 0) {
-				// We remove recharge
-				if (pokemon.volatiles['mustrecharge']) pokemon.removeVolatile('mustrecharge');
-				delete pokemon.volatiles['partialtrappinglock'];
-				// We remove screens
-				target.side.removeSideCondition('reflect');
-				target.side.removeSideCondition('lightscreen');
-				pokemon.removeVolatile('twoturnmove');
-			} else if (pokemon.hp) {
-				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
+			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
+			const baseMove = this.battle.dex.moves.get(moveOrMoveName);
+			let move = this.battle.dex.getActiveMove(baseMove);
+			if (target === undefined) target = this.battle.getRandomTarget(pokemon, move);
+			if (move.target === 'self') {
+				target = pokemon;
 			}
-			if (pokemon.volatiles['mustrecharge']) this.battle.add('-mustrecharge', pokemon);
+			if (sourceEffect) move.sourceEffect = sourceEffect.id;
 
-			// For partial trapping moves, we are saving the target
-			if (move.volatileStatus === 'partiallytrapped' && target && target.hp > 0) {
-				// Let's check if the lock exists
-				if (pokemon.volatiles['partialtrappinglock'] && target.volatiles['partiallytrapped']) {
-					// Here the partialtrappinglock volatile has been already applied
-					const sourceVolatile = pokemon.volatiles['partialtrappinglock'];
-					const targetVolatile = target.volatiles['partiallytrapped'];
-					if (!sourceVolatile.locked) {
-						// If it's the first hit, we save the target
-						sourceVolatile.locked = target;
-					} else if (target !== pokemon && target !== sourceVolatile.locked) {
-						// Our target switched out! Re-roll the duration, damage, and accuracy.
-						const duration = this.battle.sample([2, 2, 2, 3, 3, 3, 4, 5]);
-						sourceVolatile.duration = duration;
-						sourceVolatile.locked = target;
-						// Duration reset thus partially trapped at 2 always.
-						targetVolatile.duration = 2;
+			this.battle.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
+			if (baseMove.target !== move.target) {
+				// Target changed in ModifyMove, so we must adjust it here
+				target = this.battle.getRandomTarget(pokemon, move);
+			}
+			move = this.battle.runEvent('ModifyMove', pokemon, target, move, move);
+			if (baseMove.target !== move.target) {
+				// Check again, this shouldn't ever happen on Gen 1.
+				target = this.battle.getRandomTarget(pokemon, move);
+			}
+
+			if (move.id !== 'metronome') {
+				if (move.id !== 'mirrormove' ||
+					(!pokemon.side.foe.active[0]?.lastMove || pokemon.side.foe.active[0].lastMove?.id === 'mirrormove')) {
+					// The move is our 'final' move (a failed Mirror Move, or any move that isn't Metronome or Mirror Move).
+					this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
+
+					// If target fainted
+					if (target && target.hp <= 0) {
+						// We remove recharge
+						if (pokemon.volatiles['mustrecharge']) pokemon.removeVolatile('mustrecharge');
+						delete pokemon.volatiles['partialtrappinglock'];
+						// We remove screens
+						target.side.removeSideCondition('reflect');
+						target.side.removeSideCondition('lightscreen');
+						pokemon.removeVolatile('twoturnmove');
+					} else if (pokemon.hp) {
+						this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 					}
-				} // If we move to here, the move failed and there's no partial trapping lock.
+					if (pokemon.volatiles['mustrecharge']) this.battle.add('-mustrecharge', pokemon);
+
+					// For partial trapping moves, we are saving the target
+					if (move.volatileStatus === 'partiallytrapped' && target && target.hp > 0) {
+						// Let's check if the lock exists
+						if (pokemon.volatiles['partialtrappinglock'] && target.volatiles['partiallytrapped']) {
+							// Here the partialtrappinglock volatile has been already applied
+							const sourceVolatile = pokemon.volatiles['partialtrappinglock'];
+							const targetVolatile = target.volatiles['partiallytrapped'];
+							if (!sourceVolatile.locked) {
+								// If it's the first hit, we save the target
+								sourceVolatile.locked = target;
+							} else if (target !== pokemon && target !== sourceVolatile.locked) {
+								// Our target switched out! Re-roll the duration, damage, and accuracy.
+								const duration = this.battle.sample([2, 2, 2, 3, 3, 3, 4, 5]);
+								sourceVolatile.duration = duration;
+								sourceVolatile.locked = target;
+								// Duration reset thus partially trapped at 2 always.
+								targetVolatile.duration = 2;
+							}
+						} // If we move to here, the move failed and there's no partial trapping lock.
+					}
+				}
 			}
+			return moveResult;
 		},
 		// This is the function that actually uses the move, running ModifyMove events.
 		// It uses the move and then deals with the effects after the move.
-		useMove(moveOrMoveName, pokemon, target, sourceEffect) {
+		useMoveInner(moveOrMoveName, pokemon, target, sourceEffect) {
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
 			const baseMove = this.battle.dex.moves.get(moveOrMoveName);
 			let move = this.battle.dex.getActiveMove(baseMove);
@@ -393,7 +425,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// We get the sub to the target to see if it existed
 			const targetSub = (target) ? target.volatiles['substitute'] : false;
 			const targetHadSub = (targetSub !== null && targetSub !== false && (typeof targetSub !== 'undefined'));
-			let targetHasSub: boolean;
+			let targetHasSub: boolean | undefined = undefined;
 
 			if (target) {
 				hitResult = this.battle.singleEvent('TryHit', moveData, {}, target, pokemon, move);
@@ -556,7 +588,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					return false;
 				}
 			}
-			targetHasSub ??= !!(target?.volatiles['substitute']);
+			if (targetHasSub === undefined) targetHasSub = !!(target?.volatiles['substitute']);
 
 			// Here's where self effects are applied.
 			const doSelf = (targetHadSub && targetHasSub) || !targetHadSub;

@@ -52,7 +52,7 @@ try {
 	if (Config.allowedavatars) {
 		for (const avatar in Config.customavatars) {
 			for (const userid of Config.customavatars[avatar]) {
-				customAvatars[userid] ??= {allowed: [null]};
+				if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
 				customAvatars[userid].allowed.push(avatar);
 			}
 		}
@@ -141,8 +141,9 @@ export const Avatars = new class {
 	/** does not include validation */
 	setDefault(userid: ID, avatar: AvatarID | null) {
 		if (avatar === this.getDefault(userid)) return;
+		if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
+		const entry = customAvatars[userid];
 
-		const entry = (customAvatars[userid] ??= {allowed: [null]});
 		if (avatar === entry.allowed[0]) {
 			delete entry.default;
 		} else {
@@ -151,11 +152,12 @@ export const Avatars = new class {
 		saveCustomAvatars();
 	}
 	addAllowed(userid: ID, avatar: AvatarID | null) {
-		const entry = (customAvatars[userid] ??= {allowed: [null]});
-		if (entry.allowed.includes(avatar)) return false;
+		if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
 
-		entry.allowed.push(avatar);
-		entry.notNotified = true;
+		if (customAvatars[userid].allowed.includes(avatar)) return false;
+
+		customAvatars[userid].allowed.push(avatar);
+		customAvatars[userid].notNotified = true;
 		this.tryNotify(Users.get(userid));
 		return true;
 	}
@@ -172,7 +174,9 @@ export const Avatars = new class {
 		return true;
 	}
 	addPersonal(userid: ID, avatar: AvatarID | null) {
-		const entry = (customAvatars[userid] ??= {allowed: [null]});
+		if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
+		const entry = customAvatars[userid];
+
 		if (entry.allowed.includes(avatar)) return false;
 
 		entry.timeReceived ||= Date.now();
@@ -951,7 +955,8 @@ export const commands: Chat.ChatCommands = {
 				if (!/[A-Za-z0-9]/.test(arg.charAt(0)) || !/[A-Za-z]/.test(arg)) {
 					throw new Chat.ErrorMessage(`Invalid username "${arg}"`);
 				}
-				(toUpdate[curAvatar] ??= new Set()).add(toID(arg));
+				if (!toUpdate[curAvatar]) toUpdate[curAvatar] = new Set();
+				toUpdate[curAvatar].add(toID(arg));
 			}
 		}
 
