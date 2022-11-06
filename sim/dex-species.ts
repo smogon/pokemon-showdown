@@ -136,7 +136,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	declare readonly evoItem?: string;
 	/** Evolution move. falsy if doesn't evolve. */
 	readonly evoMove?: string;
-	/** Evolution region. falsy if doesn't evolve. */
+	/** Region required to be in for evolution. falsy if doesn't evolve. */
 	readonly evoRegion?: 'Alola' | 'Galar';
 	/** Evolution level. falsy if doesn't evolve. */
 	readonly evoLevel?: number;
