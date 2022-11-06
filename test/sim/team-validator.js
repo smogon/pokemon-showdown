@@ -824,7 +824,7 @@ describe('Team Validator', function () {
 		team = [
 			{species: 'raichualola', ability: 'surgesurfer', moves: ['sing'], evs: {hp: 1}},
 		];
-		illegal = TeamValidator.get('gen8vgc2022').validateTeam(team);
+		illegal = TeamValidator.get('gen8anythinggoes@@@minsourcegen=8').validateTeam(team);
 		assert(illegal);
 
 		team = [
