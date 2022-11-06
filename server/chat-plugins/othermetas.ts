@@ -620,10 +620,10 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon ${target} not found.`);
 		}
 		if (!evo.prevo) {
-		    const bevo = Dex.species.get(evo.baseSpecies);
-			if (!bevo.prevo){ throw new Chat.ErrorMessage(`Error: ${evo.name} is not an evolution.`); }
-		    const prevoSpecies = Dex.species.get(bevo.prevo);
-		    const deltas = Utils.deepClone(evo);
+			const bevo = Dex.species.get(evo.baseSpecies);
+			if (!bevo.prevo) { throw new Chat.ErrorMessage(`Error: ${evo.name} is not an evolution.`); }
+			const prevoSpecies = Dex.species.get(bevo.prevo);
+			const deltas = Utils.deepClone(evo);
 		    if (!isReEvo) {
 			    deltas.tier = 'CE';
 			    deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
@@ -636,81 +636,79 @@ export const commands: Chat.ChatCommands = {
 				// Undefined type remover
 				    deltas.types = deltas.types.filter((type: string | undefined) => type !== undefined);
 
-				if (deltas.types[0] === deltas.types[1]) deltas.types = [deltas.types[0]];
-			    }   else {
-				deltas.types = null;
+					if (deltas.types[0] === deltas.types[1]) deltas.types = [deltas.types[0]];
+			    } else {
+					deltas.types = null;
 			    }
 		    }
 		    deltas.bst = 0;
 		    let i: StatID;
 		    for (i in evo.baseStats) {
-			const statChange = bevo.baseStats[i] - prevoSpecies.baseStats[i];
-			const frmChange = evo.baseStats[i] - bevo.baseStats[i];
+				const statChange = bevo.baseStats[i] - prevoSpecies.baseStats[i];
+				const frmChange = evo.baseStats[i] - bevo.baseStats[i];
+				if (!isReEvo) {
+			    if (!evo.prevo) {
+						deltas.baseStats[i] = frmChange;
+					} else {
+						deltas.baseStats[i] = statChange;
+					}
+				} else {
+					deltas.baseStats[i] = Utils.clampIntRange(bevo.baseStats[i] + statChange, 1, 255);
+					deltas.baseStats[i] = Utils.clampIntRange(deltas.baseStats[i] + frmChange, 1, 255);
+				}
+				deltas.bst += deltas.baseStats[i];
+			}
+			const details = {
+				Gen: evo.gen,
+				Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
+				Stage: (Dex.species.get(prevoSpecies.prevo).exists ? 3 : 2),
+			};
+			this.sendReply(`|raw|${Chat.getDataPokemonHTML(deltas)}`);
 			if (!isReEvo) {
-			    if(!evo.prevo){
-				deltas.baseStats[i] = frmChange;
-				}else
-				{
-				deltas.baseStats[i] = statChange;
-				}				
-			} else {
-			    deltas.baseStats[i] = Utils.clampIntRange(bevo.baseStats[i] + statChange, 1, 255);
-				deltas.baseStats[i] = Utils.clampIntRange(deltas.baseStats[i] + frmChange, 1, 255);
+				this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}&nbsp;|&ThickSpace;<font color="#686868">Stage:</font> ${details["Stage"]}</font>`);
 			}
-			deltas.bst += deltas.baseStats[i];
-		}
-		const details = {
-			Gen: evo.gen,
-			Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
-			Stage: (Dex.species.get(prevoSpecies.prevo).exists ? 3 : 2),
-		};
-		this.sendReply(`|raw|${Chat.getDataPokemonHTML(deltas)}`);
-		if (!isReEvo) {
-			this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}&nbsp;|&ThickSpace;<font color="#686868">Stage:</font> ${details["Stage"]}</font>`);
-		}		
-		}else
-		{
-		const prevoSpecies = Dex.species.get(evo.prevo);
-		const deltas = Utils.deepClone(evo);
-		if (!isReEvo) {
-			deltas.tier = 'CE';
-			deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
-			deltas.types = [];
-			if (evo.types[0] !== prevoSpecies.types[0]) deltas.types[0] = evo.types[0];
-			if (evo.types[1] !== prevoSpecies.types[1]) {
-				deltas.types[1] = evo.types[1] || evo.types[0];
-			}
-			if (deltas.types.length) {
+		} else {
+			const prevoSpecies = Dex.species.get(evo.prevo);
+			const deltas = Utils.deepClone(evo);
+			if (!isReEvo) {
+				deltas.tier = 'CE';
+				deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
+				deltas.types = [];
+				if (evo.types[0] !== prevoSpecies.types[0]) deltas.types[0] = evo.types[0];
+				if (evo.types[1] !== prevoSpecies.types[1]) {
+					deltas.types[1] = evo.types[1] || evo.types[0];
+				}
+				if (deltas.types.length) {
 				// Undefined type remover
-				deltas.types = deltas.types.filter((type: string | undefined) => type !== undefined);
+					deltas.types = deltas.types.filter((type: string | undefined) => type !== undefined);
 
-				if (deltas.types[0] === deltas.types[1]) deltas.types = [deltas.types[0]];
-			} else {
-				deltas.types = null;
+					if (deltas.types[0] === deltas.types[1]) deltas.types = [deltas.types[0]];
+				} else {
+					deltas.types = null;
+				}
 			}
-		}
-		deltas.bst = 0;
-		let i: StatID;
-		for (i in evo.baseStats) {
-			const statChange = evo.baseStats[i] - prevoSpecies.baseStats[i];
+			deltas.bst = 0;
+			let i: StatID;
+			for (i in evo.baseStats) {
+				const statChange = evo.baseStats[i] - prevoSpecies.baseStats[i];
+				if (!isReEvo) {
+					deltas.baseStats[i] = statChange;
+				} else {
+					deltas.baseStats[i] = Utils.clampIntRange(deltas.baseStats[i] + statChange, 1, 255);
+				}
+				deltas.bst += deltas.baseStats[i];
+			}
+			const details = {
+				Gen: evo.gen,
+				Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
+				Stage: (Dex.species.get(prevoSpecies.prevo).exists ? 3 : 2),
+			};
+			this.sendReply(`|raw|${Chat.getDataPokemonHTML(deltas)}`);
 			if (!isReEvo) {
-				deltas.baseStats[i] = statChange;
-			} else {
-				deltas.baseStats[i] = Utils.clampIntRange(deltas.baseStats[i] + statChange, 1, 255);
+				this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}&nbsp;|&ThickSpace;<font color="#686868">Stage:</font> ${details["Stage"]}</font>`);
 			}
-			deltas.bst += deltas.baseStats[i];
 		}
-		const details = {
-			Gen: evo.gen,
-			Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
-			Stage: (Dex.species.get(prevoSpecies.prevo).exists ? 3 : 2),
-		};
-		this.sendReply(`|raw|${Chat.getDataPokemonHTML(deltas)}`);
-		if (!isReEvo) {
-			this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}&nbsp;|&ThickSpace;<font color="#686868">Stage:</font> ${details["Stage"]}</font>`);
-		}
-		}		
-		},
+	},
 	reevohelp: [
 		`/reevo <Pok\u00e9mon> - Shows the stats that a Pok\u00e9mon would have in Re-Evolution`,
 	],
