@@ -137,7 +137,7 @@ export const commands: Chat.ChatCommands = {
 			`<code>/usernameprefix remove [prefix], [type]</code>: Removes a prefix configuration.<br />` +
 			`<code>/usernameprefix view [optional type]</code>: Displays the currently configured username prefixes.<br />` +
 			`Valid types are <code>privacy</code> (which forces battles to take place in public rooms) and <code>modchat</code> (which prevents players from setting moderated chat).<br />` +
-			`Requires: &`
+			`Requires: * &`
 		);
 	},
 };
