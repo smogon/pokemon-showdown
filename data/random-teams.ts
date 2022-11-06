@@ -2689,7 +2689,7 @@ export class RandomTeams {
 	randomFactoryTeam(side: PlayerOptions, depth = 0): RandomTeamsTypes.RandomFactorySet[] {
 		this.enforceNoDirectCustomBanlistChanges();
 
-		const forceResult = (depth >= 4);
+		const forceResult = (depth >= 12);
 		// Leaving Monotype code in comments in case it's used in the future
 		// const isMonotype = !!this.forceMonotype || this.dex.formats.getRuleTable(this.format).has('sametypeclause');
 
