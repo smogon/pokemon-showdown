@@ -1385,7 +1385,7 @@ const commands: Chat.ChatCommands = {
 					if (tourRoom && tourRoom !== room) {
 						tourRoom.addRaw(
 							Utils.html`<div class="infobox"><a href="/${room.roomid}" class="ilink">` +
-							`<strong>${Dex.formats.get(tour.name).name}</strong> tournament created in` +
+							Utils.html`<strong>${Dex.formats.get(tour.name).name}</strong> tournament created in` +
 							` <strong>${room.title}</strong>.</a></div>`
 						).update();
 					}
