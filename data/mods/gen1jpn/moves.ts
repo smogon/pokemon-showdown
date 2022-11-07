@@ -84,6 +84,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				uncappedDamage = this.runEvent('SubDamage', target, source, move, uncappedDamage);
 				if (!uncappedDamage) return uncappedDamage;
 				source.lastDamage = uncappedDamage;
+				this.lastDamage = uncappedDamage;
 				target.volatiles['substitute'].hp -= uncappedDamage > target.volatiles['substitute'].hp ?
 					target.volatiles['substitute'].hp : uncappedDamage;
 				if (target.volatiles['substitute'].hp <= 0) {
