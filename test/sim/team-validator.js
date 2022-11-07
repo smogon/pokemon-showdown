@@ -814,6 +814,26 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
+	it('should correctly enforce per-game evolution restrictions', function () {
+		let team = [
+			{species: 'raichualola', ability: 'surgesurfer', moves: ['doublekick'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
+		assert(illegal);
+
+		team = [
+			{species: 'raichualola', ability: 'surgesurfer', moves: ['sing'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen8anythinggoes@@@minsourcegen=8').validateTeam(team);
+		assert(illegal);
+
+		team = [
+			{species: 'exeggutoralola', ability: 'frisk', moves: ['psybeam'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
+		assert(illegal);
+	});
+
 	/*********************************************************
  	* Custom rules
  	*********************************************************/
