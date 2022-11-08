@@ -135,6 +135,21 @@ describe('Counter', function () {
 		assert.fainted(battle.p2.active[0]);
 	});
 
+	it(`[Gen 1] simultaneous counters should both fail`, function () {
+		battle = common.gen(1).createBattle([[
+			{species: 'Golem', moves: ['bodyslam']},
+			{species: 'Chansey', moves: ['counter']},
+		], [
+			{species: 'Tauros', moves: ['bodyslam']},
+			{species: 'Chansey', moves: ['counter']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('switch 2', 'switch 2');
+		battle.makeChoices();
+		assert.fullHP(battle.p1.active[0]);
+		assert.fullHP(battle.p2.active[0]);
+	});
+
 	it(`[Gen 1 Stadium] should counter Normal/Fighting moves only`, function () {
 		// should counter Normal/Fighting moves
 		battle = common.mod('gen1stadium').createBattle([[
