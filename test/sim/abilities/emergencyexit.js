@@ -123,7 +123,7 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'switch');
 	});
 
-	it.skip('should request switch-out after taking Mind Blown self-damage', function () {
+	it('should request switch-out after taking Mind Blown self-damage', function () {
 		battle = common.createBattle([[
 			{species: "Golisopod", ability: 'emergencyexit', moves: ['mindblown']},
 			{species: "Wynaut", moves: ['sleeptalk']},

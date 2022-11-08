@@ -11162,6 +11162,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get('Mind Blown'), true);
 			}
 		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
+			if (pokemon.hp && pokemon.ability === "emergencyexit" && pokemon.getUndynamaxedHP() <= maxhp / 2) {
+				this.runEvent('EmergencyExit', pokemon);
+			}
+		},
 		secondary: null,
 		target: "allAdjacent",
 		type: "Fire",
@@ -16771,6 +16777,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onAfterMove(pokemon, target, move) {
 			if (move.mindBlownRecoil && !move.multihit) {
 				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get('Steel Beam'), true);
+			}
+		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
+			if (pokemon.hp && pokemon.ability === "emergencyexit" && pokemon.getUndynamaxedHP() <= maxhp / 2) {
+				this.runEvent('EmergencyExit', pokemon);
 			}
 		},
 		secondary: null,
