@@ -16,7 +16,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 2,
 			onLockMove: 'dig',
 			onInvulnerability(target, source, move) {
-				if (move.id === 'swift' && target.volatiles['substitute']) return true;
+				if ((move.id === 'swift' && target.volatiles['substitute']) || move.id === 'transform') return true;
 				this.add('-message', `The foe ${target.name} can't be hit underground!`);
 				return false;
 			},
@@ -36,7 +36,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 2,
 			onLockMove: 'fly',
 			onInvulnerability(target, source, move) {
-				if (move.id === 'swift' && target.volatiles['substitute']) return true;
+				if ((move.id === 'swift' && target.volatiles['substitute']) || move.id === 'transform') return true;
 				this.add('-message', `The foe ${target.name} can't be hit while flying!`);
 				return false;
 			},
