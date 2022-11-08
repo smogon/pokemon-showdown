@@ -1259,7 +1259,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "RU",
 	},
 	magby: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	magmar: {
 		tier: "NFE",
