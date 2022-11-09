@@ -517,6 +517,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		ruleset: ['[Gen 8] National Dex'],
 		banlist: ['ND OU', 'ND UUBL', 'Drizzle', 'Drought', 'Light Clay', 'Slowbronite'],
+		unbanlist: ['Hydreigon'],
 	},
 	{
 		name: "[Gen 8] National Dex RU",
@@ -527,7 +528,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		searchShow: false,
 		ruleset: ['[Gen 8] National Dex UU'],
-		banlist: ['ND UU', 'ND RUBL'],
+		banlist: ['ND UU', 'ND RUBL', 'Hydreigon'],
 	},
 	{
 		name: "[Gen 8] National Dex Monotype",
