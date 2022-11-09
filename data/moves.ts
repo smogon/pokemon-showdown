@@ -11157,11 +11157,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		mindBlownRecoil: true,
-		onAfterMove(pokemon, target, move) {
-			if (move.mindBlownRecoil && !move.multihit) {
-				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get('Mind Blown'), true);
-			}
-		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
 			if (pokemon.hp && pokemon.ability === "emergencyexit" && pokemon.getUndynamaxedHP() <= maxhp / 2) {
@@ -16774,11 +16769,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		mindBlownRecoil: true,
-		onAfterMove(pokemon, target, move) {
-			if (move.mindBlownRecoil && !move.multihit) {
-				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get('Steel Beam'), true);
-			}
-		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
 			if (pokemon.hp && pokemon.ability === "emergencyexit" && pokemon.getUndynamaxedHP() <= maxhp / 2) {
