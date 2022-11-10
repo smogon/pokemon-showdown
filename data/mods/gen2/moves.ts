@@ -302,7 +302,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	frustration: {
 		inherit: true,
 		basePowerCallback(pokemon) {
-			return Math.floor(((255 - pokemon.happiness) * 10) / 25) || null;
+			const bp = Math.floor(((255 - pokemon.happiness) * 10) / 25) || null;
+			this.debug('BP: ' + bp);
+			return bp;
 		},
 	},
 	healbell: {
@@ -677,7 +679,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	return: {
 		inherit: true,
 		basePowerCallback(pokemon) {
-			return Math.floor((pokemon.happiness * 10) / 25) || null;
+			const bp = Math.floor((pokemon.happiness * 10) / 25) || null;
+			this.debug('BP: ' + bp);
+			return bp;
 		},
 	},
 	reversal: {
