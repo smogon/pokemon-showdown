@@ -5783,9 +5783,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback(pokemon) {
-			const bp = Math.floor(((255 - pokemon.happiness) * 10) / 25) || 1;
-			this.debug('BP: ' + bp);
-			return bp;
+			return Math.floor(((255 - pokemon.happiness) * 10) / 25) || 1;
 		},
 		category: "Physical",
 		isNonstandard: "Past",
@@ -14079,9 +14077,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback(pokemon) {
-			const bp = Math.floor((pokemon.happiness * 10) / 25) || 1;
-			this.debug('BP: ' + bp);
-			return bp;
+			return Math.floor((pokemon.happiness * 10) / 25) || 1;
 		},
 		category: "Physical",
 		isNonstandard: "Past",
