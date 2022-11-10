@@ -591,6 +591,48 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
+	singleabilityclause: {
+		effectType: 'ValidatorRule',
+		name: 'Single Ability Clause',
+		desc: "Prevents teams from having more than one Pok&eacute;mon with the same ability",
+		onBegin() {
+			this.add('rule', 'Single Ability Clause: Limit one of each ability');
+		},
+		onValidateTeam(team) {
+			if (this.format.id === 'gen8multibility') return;
+			const abilityTable = new Map<string, boolean>();
+			const base: {[k: string]: string} = {
+				airlock: 'cloudnine',
+				battlearmor: 'shellarmor',
+				clearbody: 'whitesmoke',
+				dazzling: 'queenlymajesty',
+				emergencyexit: 'wimpout',
+				filter: 'solidrock',
+				gooey: 'tanglinghair',
+				insomnia: 'vitalspirit',
+				ironbarbs: 'roughskin',
+				libero: 'protean',
+				minus: 'plus',
+				moxie: 'chillingneigh',
+				powerofalchemy: 'receiver',
+				propellertail: 'stalwart',
+				teravolt: 'moldbreaker',
+				turboblaze: 'moldbreaker',
+			};
+			for (const set of team) {
+				let ability = this.toID(set.ability);
+				if (!ability) continue;
+				if (ability in base) ability = base[ability] as ID;
+				if (abilityTable.get(ability)) {
+					return [
+						`You are limited to one of each ability by 1 Ability Clause.`,
+						`(You have more than one ${this.dex.abilities.get(ability).name} variant)`,
+					];
+				}
+				abilityTable.set(ability, true);
+			}
+		},
+	},
 	"2abilityclause": {
 		effectType: 'ValidatorRule',
 		name: '2 Ability Clause',
