@@ -795,7 +795,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1},
 		sideCondition: 'auroraveil',
 		onTry() {
-			return this.field.isWeather('hail');
+			return this.field.isWeather(['hail', 'snowstorm']);
 		},
 		condition: {
 			duration: 5,
@@ -1373,7 +1373,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onModifyMove(move) {
-			if (this.field.isWeather('hail')) move.accuracy = true;
+			if (this.field.isWeather(['hail', 'snowstorm'])) move.accuracy = true;
 		},
 		secondary: {
 			chance: 10,
@@ -7626,6 +7626,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
+		isNonstandard: "Past",
 		name: "Hail",
 		pp: 10,
 		priority: 0,
@@ -11611,6 +11612,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			case 'primordialsea':
 			case 'sandstorm':
 			case 'hail':
+			case 'snowstorm':
 				factor = 0.25;
 				break;
 			}
@@ -11647,6 +11649,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			case 'primordialsea':
 			case 'sandstorm':
 			case 'hail':
+			case 'snowstorm':
 				factor = 0.25;
 				break;
 			}
@@ -16235,6 +16238,20 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cute",
 	},
+	snowscape: {
+		num: 883,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Snowscape",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		weather: 'snowstorm',
+		secondary: null,
+		target: "all",
+		type: "Ice",
+	},
 	soak: {
 		num: 487,
 		accuracy: 100,
@@ -16301,7 +16318,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			return null;
 		},
 		onBasePower(basePower, pokemon, target) {
-			if (['raindance', 'primordialsea', 'sandstorm', 'hail'].includes(pokemon.effectiveWeather())) {
+			const weakWeathers = ['raindance', 'primordialsea', 'sandstorm', 'hail', 'snowstorm'];
+			if (weakWeathers.includes(pokemon.effectiveWeather())) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
 			}
@@ -16337,7 +16355,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			return null;
 		},
 		onBasePower(basePower, pokemon, target) {
-			if (['raindance', 'primordialsea', 'sandstorm', 'hail'].includes(pokemon.effectiveWeather())) {
+			const weakWeathers = ['raindance', 'primordialsea', 'sandstorm', 'hail', 'snowstorm'];
+			if (weakWeathers.includes(pokemon.effectiveWeather())) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
 			}
@@ -17744,6 +17763,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			case 'primordialsea':
 			case 'sandstorm':
 			case 'hail':
+			case 'snowstorm':
 				factor = 0.25;
 				break;
 			}
@@ -19443,6 +19463,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				move.type = 'Rock';
 				break;
 			case 'hail':
+			case 'snowstorm':
 				move.type = 'Ice';
 				break;
 			}
@@ -19461,6 +19482,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				move.basePower *= 2;
 				break;
 			case 'hail':
+			case 'snowstorm':
 				move.basePower *= 2;
 				break;
 			}
