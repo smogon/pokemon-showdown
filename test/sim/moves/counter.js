@@ -114,6 +114,42 @@ describe('Counter', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
+	it(`[Gen 1] should counter attacks made against substitutes`, function () {
+		battle = common.gen(1).createBattle([[
+			{species: 'Chansey', moves: ['substitute', 'counter']},
+		], [
+			{species: 'Snorlax', moves: ['bodyslam']},
+			{species: 'Chansey', moves: ['softboiled']},
+		]]);
+		battle.makeChoices('move substitute', 'move bodyslam');
+		battle.makeChoices('move counter', 'switch 2');
+		assert.fainted(battle.p2.active[0]);
+
+		battle = common.gen(1).createBattle([[
+			{species: 'Chansey', moves: ['substitute', 'counter']},
+		], [
+			{species: 'Snorlax', moves: ['bodyslam', 'splash']},
+		]]);
+		battle.makeChoices('move substitute', 'move splash');
+		battle.makeChoices('move counter', 'move bodyslam');
+		assert.fainted(battle.p2.active[0]);
+	});
+
+	it(`[Gen 1] simultaneous counters should both fail`, function () {
+		battle = common.gen(1).createBattle([[
+			{species: 'Golem', moves: ['bodyslam']},
+			{species: 'Chansey', moves: ['counter']},
+		], [
+			{species: 'Tauros', moves: ['bodyslam']},
+			{species: 'Chansey', moves: ['counter']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('switch 2', 'switch 2');
+		battle.makeChoices();
+		assert.fullHP(battle.p1.active[0]);
+		assert.fullHP(battle.p2.active[0]);
+	});
+
 	it(`[Gen 1 Stadium] should counter Normal/Fighting moves only`, function () {
 		// should counter Normal/Fighting moves
 		battle = common.mod('gen1stadium').createBattle([[
@@ -125,6 +161,17 @@ describe('Counter', function () {
 		assert.fullHP(battle.p1.active[0]);
 		battle.makeChoices('move pound', 'move counter');
 		assert.false.fullHP(battle.p1.active[0]);
+	});
+
+	it(`[Gen 1 Stadium] should counter attacks made against substitutes`, function () {
+		battle = common.mod('gen1stadium').createBattle([[
+			{species: 'Chansey', moves: ['substitute', 'counter']},
+		], [
+			{species: 'Snorlax', moves: ['bodyslam', 'splash']},
+		]]);
+		battle.makeChoices('move substitute', 'move splash');
+		battle.makeChoices('move counter', 'move bodyslam');
+		assert.false.fullHP(battle.p2.active[0]);
 	});
 
 	it(`should not have its target changed by Stalwart`, function () {
