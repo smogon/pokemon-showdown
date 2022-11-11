@@ -591,12 +591,12 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
-	singleabilityclause: {
+	abilityclause: {
 		effectType: 'ValidatorRule',
-		name: 'Single Ability Clause',
+		name: 'Ability Clause',
 		desc: "Prevents teams from having more than one Pok&eacute;mon with the same ability",
 		onBegin() {
-			this.add('rule', 'Single Ability Clause: Limit one of each ability');
+			this.add('rule', 'Ability Clause: Limit one of each ability');
 		},
 		onValidateTeam(team) {
 			if (this.format.id === 'gen8multibility') return;
@@ -625,7 +625,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				if (ability in base) ability = base[ability] as ID;
 				if (abilityTable.get(ability)) {
 					return [
-						`You are limited to one of each ability by 1 Ability Clause.`,
+						`You are limited to one of each ability by Ability Clause.`,
 						`(You have more than one ${this.dex.abilities.get(ability).name} variant)`,
 					];
 				}
