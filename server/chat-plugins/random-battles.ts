@@ -701,7 +701,9 @@ export const commands: Chat.ChatCommands = {
 		const battle = room?.battle;
 		if (battle) {
 			if (battle.format.includes('nodmax')) return this.parse(`/randombattlenodmax ${target}`);
-			if (battle.format.includes('doubles') || battle.gameType === 'freeforall') return this.parse(`/randomdoublesbattle ${target}`);
+			if (battle.format.includes('doubles') || battle.gameType === 'freeforall') {
+				return this.parse(`/randomdoublesbattle ${target}`);
+			}
 		}
 
 		const args = target.split(',');
