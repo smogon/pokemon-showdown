@@ -503,6 +503,33 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (reset) this.distributeRoles();
 	}
 
+	resetGame() {
+		this.clearVotes();
+		this.dayNum = 0;
+		this.phase = 'night';
+		for (const hostid of [...this.cohostids, this.hostid]) {
+			const host = Users.get(hostid);
+			if (host?.connected) host.send(`>${this.room.roomid}\n|notify|It's night in your game of Mafia!`);
+		}
+		for (const player of Object.values(this.playerTable)) {
+			const user = Users.get(player.id);
+			if (user?.connected) {
+				user.sendTo(this.room.roomid, `|notify|It's night in the game of Mafia! Send in an action or idle.`);
+			}
+		}
+		for (const player in this.playerTable) { 
+			this.playerTable[player].actionArr.splice(0,this.playerTable[player].actionArr.length);
+		}
+		if (this.timer) this.setDeadline(0);
+		this.sendDeclare(`The game  has been reset.`);
+		this.distributeRoles();
+		if (this.takeIdles) {
+			this.sendDeclare(`Night ${this.dayNum}. Submit whether you are using an action or idle. If you are using an action, DM your action to the host.`);
+		} else {
+			this.sendDeclare(`Night ${this.dayNum}. PM the host your action, or idle.`);
+		}
+		return;
+	}
 	static parseRole(roleString: string) {
 		const roleName = roleString.replace(/solo/, '').trim();
 
@@ -2346,6 +2373,21 @@ export const commands: Chat.ChatCommands = {
 			`/mafia resetroles [comma separated roles] - Reset the roles in an ongoing game.`,
 		],
 
+		resetgame: 'gamereset',
+		forceresetgame: 'gamereset',
+		gamereset(target,room,user,connection) {
+			room = this.requireRoom();
+			const game = this.requireGame(Mafia);
+			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
+			if (target) return this.parse('/help mafia resetgame');
+			if (game.phase !== 'day' && game.phase !== 'night') return this.errorReply(`The game has not started yet.`);
+			game.resetGame();
+			game.logAction(user,'reset the game state');
+		},
+		resetgamehelp: [
+			`/mafia resetgame - Resets game data.Does not change settings from the host besides deadlines or add/remove any players.Requires host % @ # &`,
+		],
+
 		idea(target, room, user) {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
@@ -3994,6 +4036,7 @@ export const commands: Chat.ChatCommands = {
 			`/mafia shifthammer [hammer] - sets the hammer count to [hammer] without resetting votes`,
 			`/mafia resethammer - sets the hammer to the default, resetting votes`,
 			`/mafia playerroles - View all the player's roles in chat. Requires host`,
+			`/mafia resetgame - Resets game data.Does not change settings from the host besides deadlines or add/remove any players.Requires host % @ # &`,
 			`/mafia end - End the current game of mafia. Requires host + % @ # &`,
 		].join('<br/>');
 		buf += `</details><details><summary class="button">IDEA Module Commands</summary>`;
