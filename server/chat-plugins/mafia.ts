@@ -611,7 +611,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		return {role, problems};
 	}
 
-	start(user: User, night = false) {
+	start(user: User, day = false) {
 		if (!user) return;
 		if (this.phase !== 'locked' && this.phase !== 'IDEAlocked') {
 			if (this.phase === 'signups') return user.sendTo(this.room, `You need to close the signups first.`);
@@ -635,10 +635,10 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.sendDeclare(`The game of ${this.title} is starting!`);
 		// Mafia#played gets set in distributeRoles
 		this.distributeRoles();
-		if (night) {
-			this.night(false, true);
-		} else {
+		if (day) {
 			this.day(null, true);
+		} else {
+			this.night(false, true);
 		}
 		if (this.IDEA.data && !this.IDEA.discardsHidden) {
 			this.room.add(`|html|<div class="infobox"><details><summary>IDEA discards:</summary>${this.IDEA.discardsHTML}</details></div>`).update();
@@ -1981,7 +1981,11 @@ export const pages: Chat.PageTable = {
 			} else if (game.phase === 'day') {
 				buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia night">Go to Night ${game.dayNum}</button>`;
 			} else if (game.phase === 'night') {
-				buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia day">Go to Day ${game.dayNum + 1}</button> <button class="button" name="send" value="/msgroom ${room.roomid},/mafia extend">Return to Day ${game.dayNum}</button>`;
+				if (game.dayNum !== 0) {
+					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia day">Go to Day ${game.dayNum + 1}</button> <button class="button" name="send" value="/msgroom ${room.roomid},/mafia extend">Return to Day ${game.dayNum}</button>`;
+				} else { 
+					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia day">Go to Day ${game.dayNum + 1}</button>`;
+				}
 			}
 			buf += ` <button class="button" name="send" value="/msgroom ${room.roomid},/mafia selfvote ${game.selfEnabled === true ? 'off' : 'on'}">${game.selfEnabled === true ? 'Disable' : 'Enable'} self voting</button> `;
 			buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia ${game.enableNL ? 'disable' : 'enable'}nl">${game.enableNL ? 'Disable' : 'Enable'} No Vote</button> `;
@@ -2385,7 +2389,7 @@ export const commands: Chat.ChatCommands = {
 			game.logAction(user,'reset the game state');
 		},
 		resetgamehelp: [
-			`/mafia resetgame - Resets game data.Does not change settings from the host besides deadlines or add/remove any players.Requires host % @ # &`,
+			`/mafia resetgame - Resets game data. Does not change settings from the host besides deadlines or add/remove any players. Requires host % @ # &`,
 		],
 
 		idea(target, room, user) {
@@ -2485,6 +2489,7 @@ export const commands: Chat.ChatCommands = {
 			`/mafia ideadiscards on - shows discards to the players. Requires host % @ # &`,
 		],
 
+		daystart: 'start',
 		nightstart: 'start',
 		start(target, room, user, connection, cmd) {
 			room = this.requireRoom();
@@ -2496,7 +2501,7 @@ export const commands: Chat.ChatCommands = {
 				this.parse(`/mafia ${cmd}`);
 				return;
 			}
-			game.start(user, cmd === 'nightstart');
+			game.start(user, cmd === 'daystart');
 			game.logAction(user, `started the game`);
 		},
 		starthelp: [`/mafia start - Start the game of mafia. Signups must be closed. Requires host % @ # &`],
@@ -4036,7 +4041,7 @@ export const commands: Chat.ChatCommands = {
 			`/mafia shifthammer [hammer] - sets the hammer count to [hammer] without resetting votes`,
 			`/mafia resethammer - sets the hammer to the default, resetting votes`,
 			`/mafia playerroles - View all the player's roles in chat. Requires host`,
-			`/mafia resetgame - Resets game data.Does not change settings from the host besides deadlines or add/remove any players.Requires host % @ # &`,
+			`/mafia resetgame - Resets game data. Does not change settings from the host besides deadlines or add/remove any players. Requires host % @ # &`,
 			`/mafia end - End the current game of mafia. Requires host + % @ # &`,
 		].join('<br/>');
 		buf += `</details><details><summary class="button">IDEA Module Commands</summary>`;
