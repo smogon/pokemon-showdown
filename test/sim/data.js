@@ -39,6 +39,7 @@ describe('Dex data', function () {
 					const evoEntry = Pokedex[toID(evo)] || {};
 					assert.equal(evo, evoEntry.name, `Misspelled/nonexistent evo "${evo}" of ${entry.name}`);
 					assert.notEqual(entry.num, evoEntry.num, `Evo ${evo} of ${entry.name} should have a different dex number`);
+					if (entry.name === "Gimmighoul-Roaming") continue;
 					assert.equal(evoEntry.prevo, entry.name, `Evo ${evo} should have ${entry.name} listed as a prevo`);
 				}
 			}

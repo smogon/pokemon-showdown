@@ -289,6 +289,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	nidoqueen: {
 		tier: "OU",
 		doublesTier: "DOU",
+		natDexTier: "OU",
 	},
 	nidoranm: {
 		tier: "LC",
@@ -299,6 +300,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	nidoking: {
 		tier: "OU",
 		doublesTier: "DOU",
+		natDexTier: "OU",
 	},
 	cleffa: {
 		isNonstandard: "Past",
@@ -783,6 +785,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	electrode: {
 		tier: "OU",
 		doublesTier: "DOU",
+		natDexTier: "OU",
 	},
 	electrodehisui: {
 		isNonstandard: "Unobtainable",
@@ -5571,6 +5574,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	orthworm: {
 		tier: "OU",
+		doublesTier: "DOU",
+		natDexTier: "OU",
 	},
 	tandemaus: {
 		tier: "LC",
@@ -5703,9 +5708,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	gimmighoulroaming: {
-		tier: "OU",
-		doublesTier: "DOU",
-		natDexTier: "OU",
+		isNonstandard: "Custom",
+		tier: "Illegal",
 	},
 	gholdengo: {
 		tier: "OU",

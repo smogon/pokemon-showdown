@@ -475,7 +475,8 @@ export const Aliases: {[alias: string]: string} = {
 	unownquestion: "Unown",
 	squawkabillyyellow: "Squawkabilly",
 	squawkabillyred: "Squawkabilly-Blue",
-	mabosstiffnight: "Mabosstiff",
+	tatsugirired: "Tatsugiri",
+	tatsugiriorange: "Tatsugiri",
 
 	pokestargiant2: "Pokestar Giant",
 	pokestarmonica2: "Pokestar Giant",
