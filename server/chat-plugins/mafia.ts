@@ -517,8 +517,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 				user.sendTo(this.room.roomid, `|notify|It's night in the game of Mafia! Send in an action or idle.`);
 			}
 		}
-		for (const player in this.playerTable) { 
-			this.playerTable[player].actionArr.splice(0,this.playerTable[player].actionArr.length);
+		for (const player in this.playerTable) {
+			this.playerTable[player].actionArr.splice(0, this.playerTable[player].actionArr.length);
 		}
 		if (this.timer) this.setDeadline(0);
 		this.sendDeclare(`The game  has been reset.`);
@@ -2379,14 +2379,14 @@ export const commands: Chat.ChatCommands = {
 
 		resetgame: 'gamereset',
 		forceresetgame: 'gamereset',
-		gamereset(target,room,user,connection) {
+		gamereset(target, room, user, connection) {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
 			if (target) return this.parse('/help mafia resetgame');
 			if (game.phase !== 'day' && game.phase !== 'night') return this.errorReply(`The game has not started yet.`);
 			game.resetGame();
-			game.logAction(user,'reset the game state');
+			game.logAction(user, 'reset the game state');
 		},
 		resetgamehelp: [
 			`/mafia resetgame - Resets game data. Does not change settings from the host besides deadlines or add/remove any players. Requires host % @ # &`,
