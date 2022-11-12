@@ -1983,7 +1983,7 @@ export const pages: Chat.PageTable = {
 			} else if (game.phase === 'night') {
 				if (game.dayNum !== 0) {
 					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia day">Go to Day ${game.dayNum + 1}</button> <button class="button" name="send" value="/msgroom ${room.roomid},/mafia extend">Return to Day ${game.dayNum}</button>`;
-				} else { 
+				} else {
 					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia day">Go to Day ${game.dayNum + 1}</button>`;
 				}
 			}
@@ -2390,7 +2390,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		resetgamehelp: [
 			`/mafia resetgame - Resets game data. Does not change settings from the host besides deadlines or add/remove any players. Requires host % @ # &`,
-		],
+		], 
 
 		idea(target, room, user) {
 			room = this.requireRoom();
