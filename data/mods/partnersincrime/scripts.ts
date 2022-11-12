@@ -16,6 +16,16 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (ally) {
 					// @ts-ignore
 					allyMoves = allyMoves.filter(move => !pokemon.moves.includes(move.id) && ally.m.curMoves.includes(move.id));
+					for (const aMove of allyMoves) {
+						const ppData = this.getMoveData(aMove);
+						aMove.pp = this.clampIntRange(aMove.maxpp - (pokemon.m.trackPP.get(aMove.id) || 0), 0);
+						ppData.pp = aMove.pp;
+						if (aMove.pp !== aMove.maxpp) {
+							ppData.used = true;
+						} else {
+							ppData.used = false;
+						}
+					}
 				}
 				pokemon.moveSlots = pokemon.moveSlots.concat(allyMoves);
 			}
@@ -334,6 +344,25 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			return true;
+		},
+		deductPP(move, amount, target) {
+			const gen = this.battle.gen;
+			move = this.battle.dex.moves.get(move);
+			const ppData = this.getMoveData(move);
+			if (!ppData) return 0;
+			ppData.used = true;
+			if (!ppData.pp && gen > 1) return 0;
+
+			if (!amount) amount = 1;
+			ppData.pp -= amount;
+			if (ppData.pp < 0 && gen > 1) {
+				amount += ppData.pp;
+				ppData.pp = 0;
+			}
+			if (!this.m.curMoves.includes(move.id)) {
+				this.m.trackPP.set(move.id, (this.m.trackPP.get(move.id) || 0) + amount);
+			}
+			return amount;
 		},
 	},
 };

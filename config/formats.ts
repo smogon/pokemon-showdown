@@ -1620,6 +1620,7 @@ export const Formats: FormatList = [
 			'Wonder Guard', 'Ally Switch', 'Bolt Beak', 'Fishious Rend', 'Shell Smash', 'Swagger',
 		],
 		onBeforeSwitchIn(pokemon) {
+			if (!pokemon.m.trackPP) pokemon.m.trackPP = new Map<string, number>();
 			pokemon.m.curMoves = this.dex.deepClone(pokemon.moves);
 			let ngas = false;
 			for (const poke of this.getAllActive()) {
