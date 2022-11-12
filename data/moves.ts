@@ -19221,12 +19221,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		critRatio: 2,
 		secondaries: [
 			{
-				chance: 0, // Placeholder
+				chance: 30,
 				boosts: {
 					def: -1,
 				},
 			}, {
-				chance: 0, // Placeholder
+				chance: 10,
 				volatileStatus: 'flinch',
 			}
 		],
