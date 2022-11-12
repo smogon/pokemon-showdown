@@ -2389,7 +2389,7 @@ export const commands: Chat.ChatCommands = {
 			game.logAction(user, 'reset the game state');
 		},
 		resetgamehelp: [
-			`/mafia resetgame - Resets game data. Does not change settings from the host besides deadlines or add/remove any players. Requires host % @ # &`,
+			`/mafia resetgame - Resets game data. Does not change settings from the host (besides deadlines) or add/remove any players. Requires host % @ # &`,
 		],
 
 		idea(target, room, user) {
