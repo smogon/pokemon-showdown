@@ -521,7 +521,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			this.playerTable[player].actionArr.splice(0, this.playerTable[player].actionArr.length);
 		}
 		if (this.timer) this.setDeadline(0);
-		this.sendDeclare(`The game  has been reset.`);
+		this.sendDeclare(`The game has been reset.`);
 		this.distributeRoles();
 		if (this.takeIdles) {
 			this.sendDeclare(`Night ${this.dayNum}. Submit whether you are using an action or idle. If you are using an action, DM your action to the host.`);
