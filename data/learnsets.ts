@@ -11371,7 +11371,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			trickroom: ["9M", "8M"],
 			venomdrench: ["8M"],
 			venoshock: ["9M", "8M"],
-			waterfall: ["9L1"]
+			waterfall: ["9L1"],
 			waterpulse: ["9L18", "9M", "8L18"],
 			weatherball: ["8M"],
 			whirlpool: ["8M"],
