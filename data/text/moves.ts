@@ -307,6 +307,11 @@ export const MovesText: {[k: string]: MoveText} = {
 			desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user become poisoned. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
 		},
 	},
+	barbbarrage: {
+		name: "Barb Barrage",
+		desc: "Has a 30% chance to poison the target. Power doubles if the target is poisoned.",
+		shortDesc: "30% chance to psn. 2x power if target is poisoned.",
+	},
 	barrage: {
 		name: "Barrage",
 		desc: "Hits two to five times. Has a 35% chance to hit two or three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
@@ -443,6 +448,11 @@ export const MovesText: {[k: string]: MoveText} = {
 			shortDesc: "10% chance to make the target flinch.",
 		},
 	},
+	bittermalice: {
+		name: "Bitter Malice",
+		desc: "Has a 100% chance to lower the target's Attack by 1 stage.",
+		shortDesc: "100% chance to lower the target's Attack by 1.",
+	},
 	blackholeeclipse: {
 		name: "Black Hole Eclipse",
 		shortDesc: "Power is equal to the base move's Z-Power.",
@@ -456,6 +466,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Blaze Kick",
 		desc: "Has a 10% chance to burn the target and a higher chance for a critical hit.",
 		shortDesc: "High critical hit ratio. 10% chance to burn.",
+	},
+	bleakwindstorm: {
+		name: "Bleakwind Storm",
+		desc: "Has a 30% chance to lower the target's Speed by 1 stage.",
+		shortDesc: "30% chance to lower the foe(s) Speed by 1.",
 	},
 	blizzard: {
 		name: "Blizzard",
@@ -736,6 +751,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Catastropika",
 		shortDesc: "No additional effect.",
 	},
+	ceaselessedge: {
+		name: "Ceaseless Edge",
+		desc: "Has a higher chance for a critical hit. If this move is successful, it sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in, unless it is a Flying-type Pokemon or has the Levitate Ability. Can be set up to three times before failing. Opponents lose 1/8 of their maximum HP with one layer, 1/6 of their maximum HP with two layers, and 1/4 of their maximum HP with three layers, all rounded down. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
+		shortDesc: "High critical hit ratio. Foes: Spikes.",
+	},
 	celebrate: {
 		name: "Celebrate",
 		shortDesc: "No competitive use.",
@@ -780,6 +800,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Chip Away",
 		desc: "Ignores the target's stat stage changes, including evasiveness.",
 		shortDesc: "Ignores the target's stat stage changes.",
+	},
+	chloroblast: {
+		name: "Chloroblast",
+		desc: "If the target lost HP, the user takes recoil damage equal to 1/2 the HP lost by the target, rounded half up, but not less than 1 HP.",
+		shortDesc: "Has 1/2 recoil.",
 	},
 	circlethrow: {
 		name: "Circle Throw",
@@ -1217,6 +1242,11 @@ export const MovesText: {[k: string]: MoveText} = {
 
 		prepare: "[POKEMON] burrowed its way under the ground!",
 	},
+	direclaw: {
+		name: "Dire Claw",
+		desc: "Has a higher chance for a critical hit. Has a 50% chance to cause the target to either fall asleep, become poisoned, or become paralyzed.",
+		shortDesc: "High critical hit ratio. 50% chance to slp/psn/par target.",
+	},
 	disable: {
 		name: "Disable",
 		desc: "For 4 turns, the target's last move used becomes disabled. Fails if one of the target's moves is already disabled, if the target has not made a move, if the target no longer knows the move, or if the move was a Max or G-Max Move.",
@@ -1635,6 +1665,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Eruption",
 		desc: "Power is equal to (user's current HP * 150 / user's maximum HP), rounded down, but not less than 1.",
 		shortDesc: "Less power as user's HP decreases. Hits foe(s).",
+	},
+	esperwing: {
+		name: "Esper Wing",
+		desc: "Has a higher chance for a critical hit. Has a 100% chance to raise the user's Speed by 1 stage.",
+		shortDesc: "High critical hit ratio. Raises the user's Speed by 1.",
 	},
 	eternabeam: {
 		name: "Eternabeam",
@@ -2621,6 +2656,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "If the target lost HP, the user takes recoil damage equal to 1/4 the HP lost by the target, rounded half up, but not less than 1 HP.",
 		shortDesc: "Has 1/4 recoil.",
 	},
+	headlongrush: {
+		name: "Headlong Rush",
+		desc: "Lowers the user's Defense and Special Defense by 1 stage.",
+		shortDesc: "Lowers the user's Defense and Sp. Def by 1.",
+	},
 	headsmash: {
 		name: "Head Smash",
 		desc: "If the target lost HP, the user takes recoil damage equal to 1/2 the HP lost by the target, rounded half up, but not less than 1 HP.",
@@ -3032,6 +3072,11 @@ export const MovesText: {[k: string]: MoveText} = {
 
 		removeItem: "  [POKEMON]'s [ITEM] was burned up!",
 	},
+	infernalparade: {
+		name: "Infernal Parade",
+		desc: "Has a 30% chance to burn the target. Power doubles if the target has a non-volatile status condition.",
+		shortDesc: "30% chance to burn. 2x power if target is statused.",
+	},
 	inferno: {
 		name: "Inferno",
 		desc: "Has a 100% chance to burn the target.",
@@ -3363,6 +3408,11 @@ export const MovesText: {[k: string]: MoveText} = {
 
 		start: "  Lucky Chant shielded [TEAM] from critical hits!",
 		end: "  [TEAM]'s Lucky Chant wore off!",
+	},
+	lunarblessing: {
+		name: "Lunar Blessing",
+		desc: "Each Pokemon on the user's side restores 1/4 of its maximum HP, rounded half up, and has its status condition cured.",
+		shortDesc: "User and allies: healed 1/4 max HP, status cured.",
 	},
 	lunardance: {
 		name: "Lunar Dance",
@@ -3938,6 +3988,11 @@ export const MovesText: {[k: string]: MoveText} = {
 			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, all of its HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Rain Dance or Sandstorm, all rounded down.",
 		},
 	},
+	mountaingale: {
+		name: "Mountain Gale",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
+	},
 	mudbomb: {
 		name: "Mud Bomb",
 		desc: "Has a 30% chance to lower the target's accuracy by 1 stage.",
@@ -3980,6 +4035,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Mystical Fire",
 		desc: "Has a 100% chance to lower the target's Special Attack by 1 stage.",
 		shortDesc: "100% chance to lower the target's Sp. Atk by 1.",
+	},
+	mysticalpower: {
+		name: "Mystical Power",
+		desc: "Has a 100% chance to raise the user's Special Attack by 1 stage.",
+		shortDesc: "100% chance to raise the user's Sp. Atk by 1.",
 	},
 	nastyplot: {
 		name: "Nasty Plot",
@@ -4386,6 +4446,14 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "The user swaps its Attack and Special Attack stat stage changes with the target.",
 		shortDesc: "Swaps Attack and Sp. Atk stat stages with target.",
 	},
+	powershift: {
+		name: "Power Trick",
+		desc: "The user swaps its Attack and Defense stats, and stat stage changes remain on their respective stats. This move can be used again to swap the stats back. If the user uses Baton Pass, the replacement will have its Attack and Defense stats swapped if the effect is active. If the user has its stats recalculated by changing forme while its stats are swapped, this effect is ignored but is still active for the purposes of Baton Pass.",
+		shortDesc: "Switches user's Attack and Defense stats.",
+
+		start: "  [POKEMON] swapped its offensive stats with its defensive stats!",
+		end: "#.start",
+	},
 	powertrick: {
 		name: "Power Trick",
 		desc: "The user swaps its Attack and Defense stats, and stat stage changes remain on their respective stats. This move can be used again to swap the stats back. If the user uses Baton Pass, the replacement will have its Attack and Defense stats swapped if the effect is active. If the user has its stats recalculated by changing forme while its stats are swapped, this effect is ignored but is still active for the purposes of Baton Pass.",
@@ -4501,6 +4569,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Psycho Shift",
 		desc: "The user's non-volatile status condition is transferred to the target, and the user is then cured. Fails if the user has no non-volatile status condition or if the target already has one.",
 		shortDesc: "Transfers the user's status ailment to the target.",
+	},
+	psyshieldbash: {
+		name: "Psyshield Bash",
+		desc: "Has a 100% chance to raise the user's Defense by 1 stage.",
+		shortDesc: "100% chance to raise the user's Defense by 1.",
 	},
 	psyshock: {
 		name: "Psyshock",
@@ -4627,6 +4700,11 @@ export const MovesText: {[k: string]: MoveText} = {
 
 		start: "#followme",
 		startFromZEffect: "#followme",
+	},
+	ragingfury: {
+		name: "Raging Fury",
+		desc: "The user spends two or three turns locked into this move and becomes confused immediately after its move on the last turn of the effect if it is not already. This move targets an opposing Pokemon at random on each turn. If the user is prevented from moving, is asleep at the beginning of a turn, or the attack is not successful against the target on the first turn of the effect or the second turn of a three-turn effect, the effect ends without causing confusion. If this move is called by Sleep Talk and the user is asleep, the move is used for one turn and does not confuse the user.",
+		shortDesc: "Lasts 2-3 turns. Confuses the user afterwards.",
 	},
 	raindance: {
 		name: "Rain Dance",
@@ -4976,6 +5054,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Lowers the target's accuracy by 1 stage.",
 		shortDesc: "Lowers the target's accuracy by 1.",
 	},
+	sandsearstorm: {
+		name: "Sandsear Storm",
+		desc: "Has a 30% chance to burn the target.",
+		shortDesc: "30% chance to burn foe(s).",
+	},
 	sandstorm: {
 		name: "Sandstorm",
 		desc: "For 5 turns, the weather becomes Sandstorm. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are a Ground, Rock, or Steel type, or have the Magic Guard, Overcoat, Sand Force, Sand Rush, or Sand Veil Abilities. During the effect, the Special Defense of Rock-type Pokemon is multiplied by 1.5 when taking damage from a special attack. Lasts for 8 turns if the user is holding Smooth Rock. Fails if the current weather is Sandstorm.",
@@ -5199,6 +5282,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		start: "  [POKEMON] set a shell trap!",
 		prepare: "  [POKEMON] set a shell trap!",
 		cant: "[POKEMON]'s shell trap didn't work!",
+	},
+	shelter: {
+		name: "Shelter",
+		desc: "Raises the user's Defense by 2 stages.",
+		shortDesc: "Raises the user's Defense by 2.",
 	},
 	shiftgear: {
 		name: "Shift Gear",
@@ -5704,6 +5792,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		start: "#followme",
 		startFromZEffect: "#followme",
 	},
+	springtidestorm: {
+		name: "Springtide Storm",
+		desc: "Has a 30% chance to lower the target's Attack by 1 stage.",
+		shortDesc: "30% chance lower adjacent Pkmn Attack by 1.",
+	},
 	stealthrock: {
 		name: "Stealth Rock",
 		desc: "Sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Fails if the effect is already active on the opposing side. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Rock type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
@@ -5794,6 +5887,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Stomping Tantrum",
 		desc: "Power doubles if the user's last move on the previous turn, including moves called by other moves or those used through Instruct, Magic Coat, Snatch, or the Dancer or Magic Bounce Abilities, failed to do any of its normal effects, not including damage from an unsuccessful High Jump Kick, Jump Kick, or Mind Blown, or if the user was prevented from moving by any effect other than recharging or Sky Drop. A move that was blocked by Baneful Bunker, Detect, King's Shield, Protect, Spiky Shield, Crafty Shield, Mat Block, Quick Guard, or Wide Guard will not double this move's power, nor will Bounce or Fly ending early due to the effect of Gravity, Smack Down, or Thousand Arrows.",
 		shortDesc: "Power doubles if the user's last move failed.",
+	},
+	stoneaxe: {
+		name: "Stone Axe",
+		desc: "Has a higher chance for a critical hit. If this move is successful, it sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Rock type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
+		shortDesc: "High critical hit ratio. Foes: Stealth Rock.",
 	},
 	stoneedge: {
 		name: "Stone Edge",
@@ -6124,6 +6222,11 @@ export const MovesText: {[k: string]: MoveText} = {
 			desc: "If the target lost HP, the user takes recoil damage equal to 1/4 the HP lost by the target, rounded down, but not less than 1 HP. If this move breaks the target's substitute, the user does not take any recoil damage.",
 		},
 	},
+	takeheart: {
+		name: "Take Heart",
+		desc: "The user cures its non-volatiled status condition. Raises the user's Special Attack and Special Defense by 1 stage.",
+		shortDesc: "Cures status. Raises Sp. Atk and Sp. Def by 1.",
+	},
 	tarshot: {
 		name: "Tar Shot",
 		desc: "Lowers the target's Speed by 1 stage. Until the target switches out, the effectiveness of Fire-type moves is doubled against it.",
@@ -6438,6 +6541,11 @@ export const MovesText: {[k: string]: MoveText} = {
 			desc: "For 5 turns, all active Pokemon with lower Speed will move before those with higher Speed, within their priority brackets. If this move is used during the effect, the effect ends.",
 		},
 	},
+	triplearrows: {
+		name: "Triple Arrows",
+		desc: "Has a higher chance for a critical hit. Has a x% chance to lower the target's Defense by 1 stage and a x% chance to make it flinch.",
+		shortDesc: "High critical hit ratio. x% -1 Def. x% to flinch.",
+	},
 	tripleaxel: {
 		name: "Triple Axel",
 		desc: "Hits three times. Power increases to 40 for the second hit and 60 for the third. This move checks accuracy for each hit, and the attack ends if the target avoids a hit. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit three times.",
@@ -6562,6 +6670,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Power doubles if the target is poisoned.",
 		shortDesc: "Power doubles if the target is poisoned.",
 	},
+	victorydance: {
+		name: "Victory Dance",
+		desc: "Raises the user's Attack, Defense, and Speed by 1 stage.",
+		shortDesc: "Raises the user's Attack, Defense, Speed by 1.",
+	},
 	vinewhip: {
 		name: "Vine Whip",
 		shortDesc: "No additional effect.",
@@ -6659,6 +6772,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Power is equal to (user's current HP * 150 / user's maximum HP), rounded down, but not less than 1.",
 		shortDesc: "Less power as user's HP decreases. Hits foe(s).",
 	},
+	wavecrash: {
+		name: "Wave Crash",
+		desc: "If the target lost HP, the user takes recoil damage equal to 33% the HP lost by the target, rounded half up, but not less than 1 HP.",
+		shortDesc: "Has 33% recoil.",
+	},
 	weatherball: {
 		name: "Weather Ball",
 		desc: "Power doubles if a weather condition other than Delta Stream is active, and this move's type changes to match. Ice type during Hail, Water type during Primordial Sea or Rain Dance, Rock type during Sandstorm, and Fire type during Desolate Land or Sunny Day. If the user is holding Utility Umbrella and uses Weather Ball during Primordial Sea, Rain Dance, Desolate Land, or Sunny Day, the move is still Normal-type and does not have a base power boost.",
@@ -6730,6 +6848,11 @@ export const MovesText: {[k: string]: MoveText} = {
 
 		start: "  Wide Guard protected [TEAM]!",
 		block: "  Wide Guard protected [POKEMON]!",
+	},
+	wildboltstorm: {
+		name: "Wildbolt Storm",
+		desc: "Has a 30% chance to paralyze the target.",
+		shortDesc: "30% chance to paralyze foe(s).",
 	},
 	wildcharge: {
 		name: "Wild Charge",
