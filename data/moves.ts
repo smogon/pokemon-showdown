@@ -14091,7 +14091,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			volatileStatus: 'lockedmove',
 		},
 		onAfterMove(pokemon) {
-			if (pokemon.volatiles['lockedmove'] && pokemon.volatiles['lockedmove'].duration === 1) {
+			if (pokemon.volatiles['lockedmove']?.duration === 1) {
 				pokemon.removeVolatile('lockedmove');
 			}
 		},
