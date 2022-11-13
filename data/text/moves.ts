@@ -309,8 +309,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	barbbarrage: {
 		name: "Barb Barrage",
-		desc: "Has a 30% chance to poison the target. Power doubles if the target is poisoned.",
-		shortDesc: "30% chance to psn. 2x power if target is poisoned.",
+		desc: "Has a 50% chance to poison the target. Power doubles if the target is poisoned.",
+		shortDesc: "50% chance to psn. 2x power if target is poisoned.",
 	},
 	barrage: {
 		name: "Barrage",
@@ -803,8 +803,10 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	chloroblast: {
 		name: "Chloroblast",
-		desc: "If the target lost HP, the user takes recoil damage equal to 1/2 the HP lost by the target, rounded half up, but not less than 1 HP.",
-		shortDesc: "Has 1/2 recoil.",
+		desc: "Whether or not this move is successful and even if it would cause fainting, the user loses 1/2 of its maximum HP, rounded up, unless the user has the Magic Guard Ability.",
+		shortDesc: "User loses 50% max HP.",
+
+		damage: "#mindblown",
 	},
 	circlethrow: {
 		name: "Circle Throw",
@@ -5056,8 +5058,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	sandsearstorm: {
 		name: "Sandsear Storm",
-		desc: "Has a 30% chance to burn the target.",
-		shortDesc: "30% chance to burn foe(s).",
+		desc: "Has a 20% chance to burn the target.",
+		shortDesc: "20% chance to burn foe(s).",
 	},
 	sandstorm: {
 		name: "Sandstorm",
@@ -5826,6 +5828,8 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Steel Beam",
 		desc: "Whether or not this move is successful and even if it would cause fainting, the user loses 1/2 of its maximum HP, rounded up, unless the user has the Magic Guard Ability.",
 		shortDesc: "User loses 50% max HP.",
+
+		damage: "#mindblown",
 	},
 	steelroller: {
 		name: "Steel Roller",
@@ -6543,8 +6547,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	triplearrows: {
 		name: "Triple Arrows",
-		desc: "Has a higher chance for a critical hit. Has a x% chance to lower the target's Defense by 1 stage and a x% chance to make it flinch.",
-		shortDesc: "High critical hit ratio. x% -1 Def. x% to flinch.",
+		desc: "Has a higher chance for a critical hit. Has a 50% chance to lower the target's Defense by 1 stage and a 10% chance to make it flinch.",
+		shortDesc: "High critical hit ratio. 50% -1 Def. 10% to flinch.",
 	},
 	tripleaxel: {
 		name: "Triple Axel",
@@ -6851,8 +6855,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	wildboltstorm: {
 		name: "Wildbolt Storm",
-		desc: "Has a 30% chance to paralyze the target.",
-		shortDesc: "30% chance to paralyze foe(s).",
+		desc: "Has a 20% chance to paralyze the target.",
+		shortDesc: "20% chance to paralyze foe(s).",
 	},
 	wildcharge: {
 		name: "Wild Charge",

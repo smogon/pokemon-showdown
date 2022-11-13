@@ -987,16 +987,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 60,
 		category: "Physical",
 		name: "Barb Barrage",
-		pp: 15,
+		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1},
 		onBasePower(basePower, pokemon, target) {
 			if (target.status === 'psn' || target.status === 'tox') {
 				return this.chainModify(2);
 			}
 		},
 		secondary: {
-			chance: 30,
+			chance: 50,
 			status: 'psn',
 		},
 		target: "normal",
@@ -1322,7 +1322,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	bitterblade: {
 		num: 891,
 		accuracy: 100,
-		basePower: 75,
+		basePower: 90,
 		category: "Physical",
 		name: "Bitter Blade",
 		pp: 10,
@@ -1336,10 +1336,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 	bittermalice: {
 		num: 841,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 75,
 		category: "Special",
 		name: "Bitter Malice",
-		pp: 15,
+		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		secondary: {
@@ -1405,10 +1405,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 	bleakwindstorm: {
 		num: 846,
 		accuracy: 80,
-		basePower: 95,
+		basePower: 100,
 		category: "Special",
 		name: "Bleakwind Storm",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		secondary: {
@@ -2105,8 +2105,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	ceaselessedge: {
 		num: 845,
-		accuracy: 65,
-		basePower: 90,
+		accuracy: 90,
+		basePower: 65,
 		category: "Physical",
 		name: "Ceaseless Edge",
 		pp: 15,
@@ -2255,7 +2255,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		recoil: [1, 2],
+		mindBlownRecoil: true,
 		secondary: null,
 		target: "normal",
 		type: "Grass",
@@ -3514,7 +3514,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	direclaw: {
 		num: 827,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 80,
 		category: "Physical",
 		name: "Dire Claw",
 		pp: 15,
@@ -4600,8 +4600,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	esperwing: {
 		num: 840,
-		accuracy: 90,
-		basePower: 75,
+		accuracy: 100,
+		basePower: 80,
 		category: "Special",
 		name: "Esper Wing",
 		pp: 10,
@@ -10157,7 +10157,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Lunar Blessing",
-		pp: 10,
+		pp: 5,
 		priority: 0,
 		flags: {heal: 1, bypasssub: 1, allyanim: 1},
 		onHit(pokemon) {
@@ -11411,12 +11411,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		mindBlownRecoil: true,
-		onAfterMoveSecondarySelf(pokemon, target, move) {
-			const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
-			if (pokemon.hp && pokemon.ability === "emergencyexit" && pokemon.getUndynamaxedHP() <= maxhp / 2) {
-				this.runEvent('EmergencyExit', pokemon);
-			}
-		},
 		secondary: null,
 		target: "allAdjacent",
 		type: "Fire",
@@ -11861,7 +11855,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 100,
 		category: "Physical",
 		name: "Mountain Gale",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		secondary: {
@@ -14086,7 +14080,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Raging Fury",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1},
 		self: {
 			volatileStatus: 'lockedmove',
 		},
@@ -15055,14 +15049,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 	sandsearstorm: {
 		num: 848,
 		accuracy: 80,
-		basePower: 95,
+		basePower: 100,
 		category: "Special",
 		name: "Sandsear Storm",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		secondary: {
-			chance: 30,
+			chance: 20,
 			status: 'brn',
 		},
 		target: "allAdjacentFoes",
@@ -17192,7 +17186,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	springtidestorm: {
 		num: 831,
 		accuracy: 80,
-		basePower: 95,
+		basePower: 100,
 		category: "Special",
 		name: "Springtide Storm",
 		pp: 5,
@@ -17201,7 +17195,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		secondary: {
 			chance: 30,
 			boosts: {
-				def: -1,
+				atk: -1,
 			}
 		},
 		target: "allAdjacent",
@@ -17280,12 +17274,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		mindBlownRecoil: true,
-		onAfterMoveSecondarySelf(pokemon, target, move) {
-			const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
-			if (pokemon.hp && pokemon.ability === "emergencyexit" && pokemon.getUndynamaxedHP() <= maxhp / 2) {
-				this.runEvent('EmergencyExit', pokemon);
-			}
-		},
 		secondary: null,
 		target: "normal",
 		type: "Steel",
@@ -17473,8 +17461,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	stoneaxe: {
 		num: 830,
-		accuracy: 65,
-		basePower: 90,
+		accuracy: 90,
+		basePower: 65,
 		category: "Physical",
 		name: "Stone Axe",
 		pp: 15,
@@ -19212,16 +19200,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 	triplearrows: {
 		num: 843,
 		accuracy: 100,
-		basePower: 50,
+		basePower: 90,
 		category: "Physical",
 		name: "Triple Arrows",
-		pp: 15,
+		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1},
 		critRatio: 2,
 		secondaries: [
 			{
-				chance: 30,
+				chance: 50,
 				boosts: {
 					def: -1,
 				},
@@ -19569,7 +19557,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Victory Dance",
-		pp: 20,
+		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, dance: 1},
 		boosts: {
@@ -20043,14 +20031,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 	wildboltstorm: {
 		num: 847,
 		accuracy: 80,
-		basePower: 95,
+		basePower: 100,
 		category: "Special",
 		name: "Wildbolt Storm",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		secondary: {
-			chance: 30,
+			chance: 20,
 			status: 'par',
 		},
 		target: "allAdjacentFoes",
