@@ -71,8 +71,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					for (const moveSlot of source.moveSlots) {
 						if (moveSlot.id === move.id) {
 							moveSlot.pp = 0;
-							if (!pokemon.m.curMoves.includes(moveSlot.id) && pokemon.m.trackPP.get(moveSlot.id)) {
-				        this.m.trackPP.set(moveSlot.id, moveSlot.maxpp - moveSlot.pp);
+							if (!source.m.curMoves.includes(moveSlot.id) && source.m.trackPP.get(moveSlot.id)) {
+				        source.m.trackPP.set(moveSlot.id, moveSlot.maxpp - moveSlot.pp);
 				      }
 							this.add('-activate', source, 'move: Grudge', move.name);
 						}
