@@ -35,10 +35,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Keen Eye", 1: "Sheer Force", H: "Defiant"},
 	},
-	greninjaash: {
-		inherit: true,
-		baseStats: {hp: 72, atk: 145, def: 67, spa: 153, spd: 71, spe: 132},
-	},
 	sliggoohisui: {
 		inherit: true,
 		abilities: {0: "Sap Sipper", 1: "Overcoat", H: "Gooey"},

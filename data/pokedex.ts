@@ -11650,7 +11650,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		forme: "Ash",
 		types: ["Water", "Dark"],
 		gender: "M",
-		baseStats: {hp: 72, atk: 95, def: 67, spa: 103, spd: 71, spe: 122},
+		baseStats: {hp: 72, atk: 145, def: 67, spa: 153, spd: 71, spe: 132},
 		abilities: {0: "Battle Bond"},
 		heightm: 1.5,
 		weightkg: 40,
