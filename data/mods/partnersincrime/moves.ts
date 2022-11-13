@@ -56,6 +56,64 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
+	grudge: {
+		inherit: true,
+		condition: {
+			onStart(pokemon) {
+				this.add('-singlemove', pokemon, 'Grudge');
+			},
+			onFaint(target, source, effect) {
+				if (!source || source.fainted || !effect) return;
+				if (effect.effectType === 'Move' && !effect.isFutureMove && source.lastMove) {
+					let move: Move = source.lastMove;
+					if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
+
+					for (const moveSlot of source.moveSlots) {
+						if (moveSlot.id === move.id) {
+							moveSlot.pp = 0;
+							if (!pokemon.m.curMoves.includes(moveSlot.id) && pokemon.m.trackPP.get(moveSlot.id)) {
+				        this.m.trackPP.set(moveSlot.id, moveSlot.maxpp - moveSlot.pp);
+				      }
+							this.add('-activate', source, 'move: Grudge', move.name);
+						}
+					}
+				}
+			},
+			onBeforeMovePriority: 100,
+			onBeforeMove(pokemon) {
+				this.debug('removing Grudge before attack');
+				pokemon.removeVolatile('grudge');
+			},
+		},
+	},
+	lunardance: {
+		inherit: true,
+		condition: {
+			onSwap(target) {
+				if (
+					!target.fainted && (
+						target.hp < target.maxhp ||
+						target.status ||
+						target.moveSlots.some(moveSlot => moveSlot.pp < moveSlot.maxpp)
+					)
+				) {
+					target.heal(target.maxhp);
+					target.clearStatus();
+					for (const moveSlot of target.moveSlots) {
+						moveSlot.pp = moveSlot.maxpp;
+					}
+					const keys = Object.keys(target.m.trackPP);
+					if (keys.length) {
+						for (const key of keys) {
+							target.m.trackPP.set(key, 0);
+						}
+					}
+					this.add('-heal', target, target.getHealth, '[from] move: Lunar Dance');
+					target.side.removeSlotCondition(target, 'lunardance');
+				}
+			},
+		},
+	},
 	mimic: {
 		inherit: true,
 		onHit(target, source) {
