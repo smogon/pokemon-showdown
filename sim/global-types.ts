@@ -255,6 +255,7 @@ interface ModdedBattleActions {
 		this: BattleActions, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon,
 		move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
 	) => SpreadMoveDamage;
+	runSwitch?: (this: BattleActions, pokemon: Pokemon) => boolean;
 	runZPower?: (this: BattleActions, move: ActiveMove, pokemon: Pokemon) => void;
 	secondaries?: (
 		this: BattleActions, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
