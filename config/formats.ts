@@ -1632,7 +1632,7 @@ export const Formats: FormatList = [
 					break;
 				}
 			}
-			const BAD_ABILITIES = ['trace', 'imposter', 'neutralizinggas', 'illusion'];
+			const BAD_ABILITIES = ['trace', 'imposter', 'neutralizinggas', 'illusion', 'wanderingspirit'];
 			const ally = pokemon.side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
 			if (ally && ally.ability !== pokemon.ability) {
 				if (!pokemon.m.innate && !BAD_ABILITIES.includes(this.toID(ally.ability))) {

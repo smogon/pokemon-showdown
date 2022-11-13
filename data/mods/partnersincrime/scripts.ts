@@ -236,6 +236,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	pokemon: {
 		setAbility(ability, source, isFromFormeChange) {
 			if (!this.hp) return false;
+			const BAD_ABILITIES = ['trace', 'imposter', 'neutralizinggas', 'illusion', 'wanderingspirit'];
 			if (typeof ability === 'string') ability = this.battle.dex.abilities.get(ability);
 			const oldAbility = this.ability;
 			if (!isFromFormeChange) {
@@ -261,8 +262,10 @@ export const Scripts: ModdedBattleScriptsData = {
 						this.m.innate = 'ability:' + ally.getAbility().id;
 						this.addVolatile(this.m.innate);
 					}
-					ally.m.innate = 'ability:' + ability.id;
-					ally.addVolatile(ally.m.innate);
+					if (!BAD_ABILITIES.includes(ability.id)) {
+						ally.m.innate = 'ability:' + ability.id;
+						ally.addVolatile(ally.m.innate);
+					}
 				}
 			}
 			// Entrainment
