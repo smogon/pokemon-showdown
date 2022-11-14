@@ -3,6 +3,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	allyswitch: {
+		inherit: true,
+		stallingMove: false,
+		onPrepareHit() {},
+		onHit(pokemon) {
+			const newPosition = (pokemon.position === 0 ? pokemon.side.active.length - 1 : 0);
+			if (!pokemon.side.active[newPosition]) return false;
+			if (pokemon.side.active[newPosition].fainted) return false;
+			this.swapPosition(pokemon, newPosition, '[from] move: Ally Switch');
+		},
+	},
 	anchorshot: {
 		inherit: true,
 		isNonstandard: null,
@@ -150,6 +161,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	glaciate: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	grassyglide: {
+		inherit: true,
+		basePower: 70,
 	},
 	grudge: {
 		inherit: true,
@@ -303,6 +318,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	milkdrink: {
+		inherit: true,
+		pp: 10,
+	},
 	mindblown: {
 		inherit: true,
 		isNonstandard: null,
@@ -371,9 +390,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	recover: {
+		inherit: true,
+		pp: 10,
+	},
 	relicsong: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	rest: {
+		inherit: true,
+		pp: 10,
 	},
 	revelationdance: {
 		inherit: true,
@@ -386,6 +413,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	rockwrecker: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	roost: {
+		inherit: true,
+		pp: 10,
 	},
 	sacredfire: {
 		inherit: true,
@@ -407,13 +438,25 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	shoreup: {
+		inherit: true,
+		pp: 10,
+	},
 	skullbash: {
 		inherit: true,
 		isNonstandard: null,
 	},
+	slackoff: {
+		inherit: true,
+		pp: 10,
+	},
 	snaptrap: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	softboiled: {
+		inherit: true,
+		pp: 10,
 	},
 	sparklingaria: {
 		inherit: true,
@@ -470,5 +513,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	vitalthrow: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	wickedblow: {
+		inherit: true,
+		basePower: 80,
 	},
 };

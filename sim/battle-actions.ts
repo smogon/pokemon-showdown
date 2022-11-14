@@ -717,7 +717,7 @@ export class BattleActions {
 		if (move.breaksProtect) {
 			for (const target of targets) {
 				let broke = false;
-				for (const effectid of ['banefulbunker', 'kingsshield', 'obstruct', 'protect', 'spikyshield']) {
+				for (const effectid of ['banefulbunker', 'kingsshield', 'obstruct', 'protect', 'silktrap', 'spikyshield']) {
 					if (target.removeVolatile(effectid)) broke = true;
 				}
 				if (this.battle.gen >= 6 || !target.isAlly(pokemon)) {
