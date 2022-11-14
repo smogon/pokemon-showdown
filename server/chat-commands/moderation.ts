@@ -1201,7 +1201,8 @@ export const commands: Chat.ChatCommands = {
 	deroomvoiceallhelp: [`/deroomvoiceall - Devoice all roomvoiced users. Requires: # &`],
 
 	rangeban: 'banip',
-	banip(target, room, user) {
+	yearbanip: 'banip',
+	banip(target, room, user, connection, cmd) {
 		const [ip, reason] = this.splitOne(target);
 		if (!ip || !/^[0-9.]+(?:\.\*)?$/.test(ip)) return this.parse('/help banip');
 		if (!reason) return this.errorReply("/banip requires a ban reason");
@@ -1209,21 +1210,31 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('rangeban');
 		const ipDesc = `IP ${(ip.endsWith('*') ? `range ` : ``)}${ip}`;
 
+		const year = cmd.startsWith('year');
+		const time = year ? Date.now() + 365 * 24 * 60 * 60 * 1000 : null;
+
 		const curPunishment = Punishments.ipSearch(ip, 'BAN');
-		if (curPunishment?.type === 'BAN') {
+		if (curPunishment?.type === 'BAN' && !time) {
 			return this.errorReply(`The ${ipDesc} is already temporarily banned.`);
 		}
-		Punishments.banRange(ip, reason);
+		Punishments.punishRange(ip, reason, time, 'BAN');
 
+		const duration = year ? 'year' : 'hour';
 		if (!this.room || this.room.roomid !== 'staff') {
-			this.sendReply(`You hour-banned the ${ipDesc}.`);
+			this.sendReply(`You ${duration}-banned the ${ipDesc}.`);
 		}
 		this.room = Rooms.get('staff') || null;
-		this.addModAction(`${user.name} hour-banned the ${ipDesc}: ${reason}`);
-		this.globalModlog(`RANGEBAN`, null, `${ip.endsWith('*') ? ip : `[${ip}]`}: ${reason}`);
+		this.addGlobalModAction(
+			`${user.name} ${duration}-banned the ${ipDesc}: ${reason}`
+		);
+		this.globalModlog(
+			`${year ? "YEAR" : ""}RANGEBAN`,
+			null,
+			`${ip.endsWith('*') ? ip : `[${ip}]`}: ${reason}`
+		);
 	},
 	baniphelp: [
-		`/banip [ip] - Globally bans this IP or IP range for an hour. Accepts wildcards to ban ranges.`,
+		`/banip [ip] OR /yearbanip [ip] - Globally bans this IP or IP range for an hour. Accepts wildcards to ban ranges.`,
 		`Existing users on the IP will not be banned. Requires: &`,
 	],
 
