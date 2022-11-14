@@ -6414,6 +6414,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		condition: {
+			noCopy: true,
 			duration: 2,
 			onSourceModifyDamage() {
 				return this.chainModify(2);
@@ -9196,7 +9197,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Beautiful",
 	},
 	icespinner: {
-		num: 561,
+		num: 861,
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
@@ -10326,7 +10327,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		target: "normal",
-		type: "Pstchic",
+		type: "Psychic",
 	},
 	lunarblessing: {
 		num: 849,
@@ -12718,7 +12719,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		num: 856,
 		accuracy: 100,
 		basePower: 80,
-		category: "Special",
+		category: "Physical",
 		name: "Order Up",
 		pp: 10,
 		priority: 0,
@@ -14790,10 +14791,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Cool",
 	},
 	revivalblessing: {
-		num: 179,
+		num: 863,
 		accuracy: true,
 		basePower: 0,
-		category: "Special",
+		category: "Status",
 		name: "Revival Blessing",
 		pp: 1,
 		noPPBoosts: true,
