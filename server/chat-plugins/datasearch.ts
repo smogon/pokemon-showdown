@@ -2469,8 +2469,9 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 				const source = setSources.sources[sourceIndex];
 				if (source.charAt(1) === 'S' && learnset.eventData) {
 					const eventData = learnset.eventData[parseInt(source.substr(2))];
-					const hiddenAbilityProblem = validator.validateEventHiddenAbility(species.name, true, eventData, 
-						` because it has a move only available from an event`);
+					const hiddenAbilityProblem = validator.validateEventHiddenAbility(
+						species.name, true, eventData, ` because it has a move only available from an event`
+					);
 					if (hiddenAbilityProblem) {
 						setSources.sources.splice(sourceIndex, 1);
 						sourceIndex--;
