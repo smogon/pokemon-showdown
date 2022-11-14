@@ -3657,7 +3657,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {},
 		onHit(target, source, move) {
-			for (const ally of source.side.activeTeam()) {
+			for (const ally of source.alliesAndSelf()) {
 				ally.setAbility(target.ability);
 				this.add('-ability', ally, target.getAbility().name, '[from] move: Doodle');
 			}
@@ -9868,7 +9868,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Last Respects",
 		pp: 10,
 		priority: 0,
-		flags: { protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1},
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
@@ -12707,9 +12707,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, pulse: 1, mirror: 1},
 		onTryHit(source, target, move) {
 			if (source.illusion || source.name !== "Dondozo") return;
-			let activeAllies = source.adjacentAllies();
 			let tatsugiri;
-			for (const ally of activeAllies) {
+			for (const ally of source.allies()) {
 				if (ally.baseSpecies.baseSpecies === "Tatsugiri" && ally.hasAbility('Commander')) {
 					let boost: StatID;
 					switch (ally.baseSpecies.forme) {

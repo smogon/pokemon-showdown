@@ -711,7 +711,7 @@ export class Side {
 			if (!targetPokemon.fainted) {
 				return this.emitChoiceError(`Can't switch: You have to pass to a fainted Pokémon`);
 			}
-			targetPokemon.heal(targetPokemon.maxhp / 2)
+			targetPokemon.heal(targetPokemon.maxhp / 2);
 			this.battle.add('-heal', targetPokemon, targetPokemon.getHealth, '[from] move: Revival Blessing');
 		}
 
