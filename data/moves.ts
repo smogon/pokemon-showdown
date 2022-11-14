@@ -10310,6 +10310,24 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {evasion: 1}},
 		contestType: "Cute",
 	},
+	luminacrash: {
+		num: 855,
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		name: "Lumina Crash",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: {
+			chance: 100,
+			boosts: {
+				spd: -2,
+			},
+		},
+		target: "normal",
+		type: "Pstchic",
+	},
 	lunarblessing: {
 		num: 849,
 		accuracy: true,
