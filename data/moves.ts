@@ -1410,7 +1410,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Bleakwind Storm",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, wind: 1},
 		secondary: {
 			chance: 30,
 			boosts: {
@@ -2111,10 +2111,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Ceaseless Edge",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
-		sideCondition: 'spikes',
-		critRatio: 2,
-		secondary: null,
+		flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
+		// critRatio: 2,
+		secondary: {
+			chance: 100,
+			onHit(target) {
+				target.side.addSideCondition('spikes');
+			},
+		},
 		target: "normal",
 		type: "Dark",
 	},
@@ -3520,7 +3524,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		critRatio: 2,
+		// critRatio: 2,
 		secondary: {
 			chance: 50,
 			onHit(target, source) {
@@ -7887,7 +7891,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Headlong Rush",
 		pp: 5,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		self: {
 			boosts: {
 				def: -1,
@@ -10159,7 +10163,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Lunar Blessing",
 		pp: 5,
 		priority: 0,
-		flags: {heal: 1, bypasssub: 1, allyanim: 1},
+		flags: {snatch: 1, heal: 1},
 		onHit(pokemon) {
 			const success = !!this.heal(this.modify(pokemon.maxhp, 0.25));
 			return pokemon.cureStatus() || success;
@@ -13687,6 +13691,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		secondary: {
+			chance: 100,
 			self: {
 				boosts: {
 					def: 1,
@@ -15045,7 +15050,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Sandsear Storm",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, wind: 1},
 		secondary: {
 			chance: 20,
 			status: 'brn',
@@ -17182,14 +17187,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Springtide Storm",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, wind: 1},
 		secondary: {
 			chance: 30,
 			boosts: {
 				atk: -1,
 			}
 		},
-		target: "allAdjacent",
+		target: "allAdjacentFoes",
 		type: "Fairy",
 	},
 	stealthrock: {
@@ -17459,9 +17464,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		sideCondition: 'stealthrock',
-		critRatio: 2,
-		secondary: null,
+		// critRatio: 2,
+		secondary: {
+			chance: 100,
+			onHit(target) {
+				target.side.addSideCondition('stealthrock');
+			},
+		},
 		target: "normal",
 		type: "Rock",
 	},
@@ -18263,9 +18272,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Take Heart",
-		pp: 10,
+		pp: 15,
 		priority: 0,
-		flags: {snatch: 1, bypasssub: 1},
+		flags: {snatch: 1},
 		onHit(pokemon) {
 			const success = !!this.boost({spa: 1, spd: 1});
 			return pokemon.cureStatus() || success;
@@ -19205,7 +19214,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					def: -1,
 				},
 			}, {
-				chance: 10,
+				chance: 30,
 				volatileStatus: 'flinch',
 			}
 		],
@@ -20027,7 +20036,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Wildbolt Storm",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, wind: 1},
 		secondary: {
 			chance: 20,
 			status: 'par',
