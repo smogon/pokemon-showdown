@@ -1200,6 +1200,57 @@ export const commands: Chat.ChatCommands = {
 	},
 	deroomvoiceallhelp: [`/deroomvoiceall - Devoice all roomvoiced users. Requires: # &`],
 
+	// this is a separate command for two reasons
+	// a - yearticketban is preferred over /ht yearban
+	// b - it would be messy to switch
+	//   from both Punishments.punishRange and #punish in /ht ban
+	//   since this takes ips / userids
+	async yearticketban(target, room, user) {
+		this.checkCan('rangeban');
+		target = target.trim();
+		let reason = '';
+		[target, reason] = this.splitOne(target);
+		let isIP = false;
+		let descriptor = '';
+		if (IPTools.ipRangeRegex.test(target)) {
+			isIP = true;
+			if (IPTools.ipRegex.test(target)) {
+				descriptor = 'the IP ';
+			} else {
+				descriptor = 'the IP range ';
+			}
+		} else {
+			target = toID(target);
+		}
+		if (!target) return this.parse(`/help yearticketban`);
+		const expireTime = Date.now() + 365 * 24 * 60 * 60 * 1000;
+		if (isIP) {
+			Punishments.punishRange(target, reason, expireTime, 'TICKETBAN');
+		} else {
+			await Punishments.punish(target as ID, {
+				type: 'TICKETBAN',
+				id: target as ID,
+				expireTime,
+				reason,
+				rest: [],
+			}, true);
+		}
+		this.addGlobalModAction(
+			`${user.name} banned ${descriptor}${target} from opening tickets for a year` +
+			`${reason ? ` (${reason})` : ""}`
+		);
+		this.globalModlog(
+			'YEARTICKETBAN',
+			isIP ? null : target,
+			reason,
+			isIP ? target : undefined
+		);
+	},
+	yearticketbanhelp: [
+		`/yearticketban [IP/userid] - Ban an IP or a userid from opening tickets for a year. `,
+		`Accepts wildcards to ban ranges. Requires: &`,
+	],
+
 	rangeban: 'banip',
 	yearbanip: 'banip',
 	banip(target, room, user, connection, cmd) {
