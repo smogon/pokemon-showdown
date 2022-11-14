@@ -2462,7 +2462,6 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 	let buffer = `In ${formatName}, `;
 	if (setSources.isHidden) {
 		const canUseAbilityPatch = dex.gen >= 8 && format.mod !== 'gen8dlc1';
-		console.log(setSources.sourcesBefore);
 		if (!setSources.sourcesBefore && !canUseAbilityPatch) {
 			const learnset = dex.species.getLearnsetData(species.id);
 			for (let sourceIndex = 0; sourceIndex < setSources.sources.length; sourceIndex++) {
