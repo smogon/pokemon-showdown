@@ -1872,7 +1872,6 @@ export class TeamValidator {
 		}
 
 		if (problems.length) return problems;
-
 		
 		const canUseAbilityPatch = dex.gen >= 8 && this.format.mod !== 'gen8dlc1';
 		if (setSources.isHidden && !canUseAbilityPatch) {
