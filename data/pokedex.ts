@@ -16886,7 +16886,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	},
 	veluza: {
 		num: 932,
-		name: "Dondozo",
+		name: "Veluza",
 		types: ["Water", "Psychic"],
 		baseStats: {hp: 90, atk: 102, def: 73, spa: 78, spd: 65, spe: 70},
 		abilities: {0: "Mold Breaker", H: "Sharpness"},
@@ -17506,7 +17506,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	},
 	gholdengo: {
 		num: 977,
-		name: "Brambleghast",
+		name: "Gholdengo",
 		types: ["Ghost", "Steel"],
 		baseStats: {hp: 87, atk: 60, def: 95, spa: 133, spd: 91, spe: 84},
 		abilities: {0: "Good as Gold"},
