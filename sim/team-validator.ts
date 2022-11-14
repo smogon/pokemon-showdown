@@ -1870,9 +1870,7 @@ export class TeamValidator {
 				problems.push(`${name} needs to know ${species.evoMove || 'a Fairy-type move'} to evolve, so it can only know 3 other moves from ${species.prevo}.`);
 			}
 		}
-
 		if (problems.length) return problems;
-		
 		const canUseAbilityPatch = dex.gen >= 8 && this.format.mod !== 'gen8dlc1';
 		if (setSources.isHidden && !canUseAbilityPatch) {
 			setSources.sources = setSources.sources.filter(
