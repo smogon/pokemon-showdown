@@ -473,10 +473,8 @@ export const Aliases: {[alias: string]: string} = {
 	unownz: "Unown",
 	unownexclamation: "Unown",
 	unownquestion: "Unown",
-	squawkabillyyellow: "Squawkabilly",
-	squawkabillyred: "Squawkabilly-Blue",
-	tatsugirired: "Tatsugiri",
-	tatsugiriorange: "Tatsugiri",
+	tatsugiridroopy: "Tatsugiri",
+	tatsugiristretchy: "Tatsugiri",
 
 	pokestargiant2: "Pokestar Giant",
 	pokestarmonica2: "Pokestar Giant",
