@@ -489,8 +489,8 @@ export const Teams = new class Teams {
 		} else if (line.startsWith('Hidden Power: ')) {
 			line = line.slice(14);
 			set.hpType = line;
-		} else if (line.startsWith('Terastal Type: ')) {
-			line = line.slice(15);
+		} else if (line.startsWith('Tera Type: ')) {
+			line = line.slice(11);
 			set.teraType = line;
 		} else if (line === 'Gigantamax: Yes') {
 			set.gigantamax = true;
