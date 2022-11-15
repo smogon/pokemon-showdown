@@ -41,7 +41,7 @@ interface SQLQuery {
 	args: (string | number)[];
 }
 interface ModlogResults {
-	results: ModlogEntry[];
+	results: (ModlogEntry & {entryID: number})[];
 	duration: number;
 }
 
@@ -322,8 +322,9 @@ export class Modlog {
 		return {results, duration};
 	}
 
-	dbRowToModlogEntry(row: any): ModlogEntry {
+	dbRowToModlogEntry(row: any): ModlogEntry & {entryID: number} {
 		return {
+			entryID: row.modlog_id,
 			action: row.action,
 			roomID: row.roomid,
 			visualRoomID: row.visual_roomid,
