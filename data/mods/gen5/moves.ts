@@ -214,7 +214,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePowerCallback(pokemon, target) {
 			const ratio = Math.floor(pokemon.getStat('spe') / Math.max(1, target.getStat('spe')));
 			const bp = [40, 60, 80, 120, 150][Math.min(ratio, 4)];
-			this.debug(`${bp} bp`);
+			this.debug('BP: ' + bp);
 			return bp;
 		},
 	},
@@ -344,7 +344,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePowerCallback(pokemon, target) {
 			let power = Math.floor(25 * target.getStat('spe') / Math.max(1, pokemon.getStat('spe'))) + 1;
 			if (power > 150) power = 150;
-			this.debug(`${power} bp`);
+			this.debug('BP: ' + power);
 			return power;
 		},
 	},
@@ -376,7 +376,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		basePower: 0,
 		basePowerCallback(pokemon) {
-			return pokemon.hpPower || 70;
+			const bp = pokemon.hpPower || 70;
+			this.debug('BP: ' + bp);
+			return bp;
 		},
 	},
 	hiddenpowerbug: {

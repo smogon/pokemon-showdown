@@ -393,10 +393,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	hiddenpower: {
 		inherit: true,
-		basePower: 0,
-		basePowerCallback(pokemon) {
-			return pokemon.hpPower || 70;
-		},
 		category: "Physical",
 		onModifyMove(move, pokemon) {
 			move.type = pokemon.hpType || 'Dark';
