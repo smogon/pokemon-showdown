@@ -4,7 +4,6 @@
   "version": "0.11.7",
   "main": ".sim-dist/index.js",
   "dependencies": {
-    "@types/pg": "^8.6.1",
     "@swc/core": "1.2.205",
     "preact": "^10.5.15",
     "preact-render-to-string": "^5.1.19",
@@ -13,13 +12,13 @@
     "ts-node": "^10.0.0"
   },
   "optionalDependencies": {
-    "better-sqlite3": "^7.1.0",
+    "better-sqlite3": "^7.6.2",
     "cloud-env": "^0.2.3",
     "githubhook": "^1.9.3",
     "node-static": "^0.7.11",
     "nodemailer": "^6.4.6",
     "permessage-deflate": "^0.1.7",
-    "pg": "^8.7.1",
+    "pg": "^8.8.0",
     "sql-template-strings": "^2.2.2",
     "sqlite": "^3.0.6",
     "sucrase": "^3.15.0"
@@ -73,12 +72,12 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@types/better-sqlite3": "^7.4.0",
+    "@types/better-sqlite3": "^7.6.2",
     "@types/cloud-env": "^0.2.2",
     "@types/node": "^14.17.12",
     "@types/node-static": "^0.7.7",
     "@types/nodemailer": "^6.4.4",
-    "@types/pg": "^8.6.1",
+    "@types/pg": "^8.6.5",
     "@types/sockjs": "^0.3.33",
     "@typescript-eslint/eslint-plugin": "^5.8.0",
     "@typescript-eslint/parser": "^5.8.0",
