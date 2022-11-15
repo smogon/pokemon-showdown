@@ -1420,20 +1420,43 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onAfterBoost(boost, target, source, effect) {
 			if (this.activeMove?.id === 'partingshot') return;
-			let eject = false;
+			target.abilityState.eject = false;
 			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! < 0) {
-					eject = true;
+					target.abilityState.eject = true;
 				}
 			}
-			if (eject) {
+			if (target.abilityState.eject) {
 				if (target.hp) {
 					if (!this.canSwitch(target.side)) return;
-					for (const pokemon of this.getAllActive()) {
-						if (pokemon.switchFlag === true) return;
+					let lastToMove = true;
+					for (const active of this.getAllActive()) {
+						if (active.switchFlag === true) {
+							return;
+						}
+						if (active.moveThisTurnResult === undefined) lastToMove = false;
 					}
-					if (target.useItem()) target.switchFlag = true;
+					if (lastToMove) {
+						return;
+					}
+					if (target.useItem()) {
+						target.switchFlag = true;
+					}
+				}
+			}
+		},
+		onResidualOrder: 34,
+		onResidual(pokemon) {
+			if (pokemon.abilityState.eject) {
+				if (pokemon.hp) {
+					if (!this.canSwitch(pokemon.side)) return;
+					for (const active of this.getAllActive()) {
+						if (active.switchFlag === true) return;
+					}
+					if (pokemon.useItem()) {
+						pokemon.switchFlag = true;
+					}
 				}
 			}
 		},

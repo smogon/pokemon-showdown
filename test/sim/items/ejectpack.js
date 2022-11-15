@@ -15,10 +15,13 @@ describe(`Eject Pack`, function () {
 			{species: 'Magikarp', item: 'ejectpack', moves: ['splash']},
 			{species: 'Mew', moves: ['splash']},
 		], [
-			{species: 'Machop', moves: ['leer']},
+			{species: 'Regieleki', moves: ['leer']},
 		]]);
 		battle.makeChoices();
+		const magikarp = battle.p1.active[0];
 		assert.equal(battle.p1.requestState, 'switch');
+		const move = Dex.moves.get('splash');
+		assert.equal(magikarp.getMoveData(move).pp, magikarp.getMoveData(move).maxpp);
 	});
 
 	it(`should switch out the holder after Moody's stat drop`, function () {
@@ -68,7 +71,7 @@ describe(`Eject Pack`, function () {
 		assert.equal(battle.p1.requestState, 'switch');
 	});
 
-	it.skip(`should not switch out the user if the user acquired the Eject Pack after the stat drop occurred`, function () {
+	it(`should not switch out the user if the user acquired the Eject Pack after the stat drop occurred`, function () {
 		battle = common.createBattle([[
 			{species: 'Klefki', ability: 'magician', moves: ['lowsweep']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
@@ -112,7 +115,7 @@ describe(`Eject Pack`, function () {
 		assert.species(battle.p2.active[1], 'Wynaut', `Mew should have switched out with its Eject Button.`);
 	});
 
-	it.skip(`should only trigger the fastest Eject Pack when multiple targets with Eject Pack have stats lowered`, function () {
+	it(`should only trigger the fastest Eject Pack when multiple targets with Eject Pack have stats lowered`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Hydreigon', moves: ['leer']},
 			{species: 'Horsea', moves: ['sleeptalk']},
@@ -128,7 +131,7 @@ describe(`Eject Pack`, function () {
 		assert.species(battle.p2.active[1], 'Wynaut');
 	});
 
-	it.skip(`should not trigger until after all entrance abilities have resolved during simultaneous switches`, function () {
+	it(`should not trigger until after all entrance abilities have resolved during simultaneous switches`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Hydreigon', ability: 'intimidate', moves: ['sleeptalk']},
 			{species: 'Wynaut', moves: ['sleeptalk']},

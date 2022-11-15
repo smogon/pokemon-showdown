@@ -422,6 +422,7 @@ export interface EventMethods {
 	// Priorities (incomplete list)
 	onAccuracyPriority?: number;
 	onDamagingHitOrder?: number;
+	onAfterBoostPriority?: number;
 	onAfterMoveSecondaryPriority?: number;
 	onAfterMoveSecondarySelfPriority?: number;
 	onAfterMoveSelfPriority?: number;
