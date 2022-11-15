@@ -573,6 +573,25 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 1121,
 		gen: 8,
 	},
+	boosterenergy: {
+		name: "Booster Energy",
+		spritenum: 0, // TODO
+		onUseItem(item, pokemon) {
+			pokemon.addVolatile('boosterenergy');
+		},
+		condition: {
+			onStart(pokemon) {
+				// POKEMON used its Booster Energy to activate its Quark Drive!
+				// POKEMON used its Booster Energy to activate Protosynthesis!
+				this.add('-start', pokemon, 'item: Booster Energy');
+			},
+			onSwitchOut(pokemon) {
+				this.add('-end', pokemon, 'item: Booster Energy', '[silent]');
+			}
+		},
+		num: 1880,
+		gen: 9,
+	},
 	bottlecap: {
 		name: "Bottle Cap",
 		spritenum: 696,

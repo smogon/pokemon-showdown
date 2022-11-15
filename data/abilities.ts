@@ -157,7 +157,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Anger Shell",
 		rating: 2,
-		num: 20000,
+		num: 271,
 	},
 	anticipation: {
 		onStart(pokemon) {
@@ -215,7 +215,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		isBreakable: true,
 		name: "Armor Tail",
 		rating: 2.5,
-		num: 219,
+		num: 296,
 	},
 	aromaveil: {
 		onAllyTryAddVolatile(status, target, source, effect) {
@@ -344,19 +344,26 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4,
 		num: 210,
 	},
+	beadsofruin: {
+		onStart(pokemon) {
+			if (this.suppressingAbility(pokemon)) return;
+			this.add('-ability', pokemon, 'Beads of Ruin');
+		},
+		onAnyModifySpD(spd, source, target, move) {
+			if (this.effectState.target === source) return;
+			this.debug('Beads of Ruin Spd drop');
+			// TODO Placeholder
+			return this.chainModify(0.75);
+		},
+		name: "Beads of Ruin",
+		rating: 3,
+		num: 284,
+	},
 	beastboost: {
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				let statName = 'atk';
-				let bestStat = 0;
-				let s: StatIDExceptHP;
-				for (s in source.storedStats) {
-					if (source.storedStats[s] > bestStat) {
-						statName = s;
-						bestStat = source.storedStats[s];
-					}
-				}
-				this.boost({[statName]: length}, source);
+				let bestStat = source.getBestStoredStat();
+				this.boost({[bestStat]: length}, source);
 			}
 		},
 		name: "Beast Boost",
@@ -640,7 +647,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Cud Chew",
 		rating: 3,
-		num: 1000,
+		num: 291,
 	},
 	curiousmedicine: {
 		onStart(pokemon) {
@@ -720,7 +727,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	dauntlessshield: {
 		onStart(pokemon) {
-			this.boost({def: 1}, pokemon);
+			if (this.effectState.sheildBoost) return;
+			if (this.boost({def: 1}, pokemon)) {
+				this.effectState.sheildBoost = true;
+			}
 		},
 		name: "Dauntless Shield",
 		rating: 3.5,
@@ -1006,7 +1016,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Electromorphosis",
 		rating: 3,
-		num: 1000,
+		num: 280,
 	},
 	emergencyexit: {
 		onEmergencyExit(target) {
@@ -1344,6 +1354,18 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 1.5,
 		num: 82,
 	},
+	goodasgold: {
+		onTryHit(target, source, move) {
+			if (move.category !== 'Status' || target === source) {
+				return;
+			}
+			this.add('-ability', target, 'Good as Gold');
+			return null;
+		},
+		name: "Good as Gold",
+		rating: 2,
+		num: 283,
+	},
 	gooey: {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target, true)) {
@@ -1425,6 +1447,23 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: 265,
 	},
+	guarddog: {
+		onDragOutPriority: 1,
+		onDragOut(pokemon) {
+			this.add('-activate', pokemon, 'ability: Guard Dog');
+			return null;
+		},
+		// TODO Assuming this means it just undoes the stat drop, check and correct this if needed.
+		onBoost(boost, target, source, effect) {
+			if (effect.name === 'Intimidate') {
+				delete boost.atk;
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Guard Dog', '[of] ' + target);
+			}
+		},
+		name: "Guard Dog",
+		rating: 3,
+		num: 275,
+	},
 	gulpmissile: {
 		onDamagingHit(damage, target, source, move) {
 			if (!source.hp || !source.isActive || target.transformed || target.isSemiInvulnerable()) return;
@@ -1463,6 +1502,23 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Guts",
 		rating: 3,
 		num: 62,
+	},
+	hadronengine: {
+		onStart(source) {
+			this.field.setTerrain('electricterrain');
+		},
+		// TODO How exactly is spa boosted in electric terrain? Assuming 1.5x
+		// "The futuristic engine within the Pokémon also boosts its Sp. Atk stat on Electric terrain."
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (this.field.isTerrain("electricterrain")) {
+				this.debug('Hadron Engine boost');
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Hadron Engine",
+		rating: 3,
+		num: 289,
 	},
 	harvest: {
 		name: "Harvest",
@@ -1826,7 +1882,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	intrepidsword: {
 		onStart(pokemon) {
-			this.boost({atk: 1}, pokemon);
+			if (this.effectState.swordBoost) return;
+			if (this.boost({atk: 1}, pokemon)) {
+				this.effectState.swordBoost = true;
+			}
 		},
 		name: "Intrepid Sword",
 		rating: 4,
@@ -1918,10 +1977,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	libero: {
 		onPrepareHit(source, target, move) {
-			if (move.hasBounced || move.isFutureMove || move.sourceEffect === 'snatch') return;
+			if (this.effectState.libero || move.hasBounced || move.isFutureMove || move.sourceEffect === 'snatch') return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
+				this.effectState.libero = true;
 				this.add('-start', source, 'typechange', type, '[from] ability: Libero');
 			}
 		},
@@ -1962,6 +2022,23 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Lightning Rod",
 		rating: 3,
 		num: 31,
+	},
+	lingeringaroma: {
+		onDamagingHit(damage, target, source, move) {
+			const sourceAbility = source.getAbility();
+			if (sourceAbility.isPermanent || sourceAbility.id === 'lingeringaroma') {
+				return;
+			}
+			if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
+				const oldAbility = source.setAbility('lingeringaroma', target);
+				if (oldAbility) {
+					this.add('-activate', target, 'ability: Lingering Aroma', this.dex.abilities.get(oldAbility).name, '[of] ' + source);
+				}
+			}
+		},
+		name: "Lingering Aroma",
+		rating: 2,
+		num: 268,
 	},
 	limber: {
 		onUpdate(pokemon) {
@@ -2335,6 +2412,24 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2,
 		num: 152,
 	},
+	myceliummight: {
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.category === 'Status') {
+				// TODO what exactly does "The Pokémon will always act more slowly when using status moves" mean?
+				// Assuming -1 priority.
+				return priority - 1;
+			}
+		},
+		// Supress abilities when status moves are involved
+		onModifyMove(move) {
+			if (move.category === 'Status') {
+				move.ignoreAbility = true;
+			}
+		},
+		name: "Mycelium Might",
+		rating: 2,
+		num: 298,
+	},
 	naturalcure: {
 		onCheckShow(pokemon) {
 			// This is complicated
@@ -2545,6 +2640,26 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Oblivious",
 		rating: 1.5,
 		num: 12,
+	},
+	orichalcumpulse: {
+		onStart(source) {
+			for (const action of this.queue) {
+				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'groudon') return;
+				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
+			}
+			this.field.setWeather('sunnyday');
+		},
+		// TODO how exactly is attack boosted? And by how much? Defaulting to solar power (x1.5)
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+				this.debug('Orichalcum boost');
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Orichalcum Pulse",
+		rating: 4,
+		num: 288,
 	},
 	overcoat: {
 		onImmunity(type, pokemon) {
@@ -2916,16 +3031,85 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	protean: {
 		onPrepareHit(source, target, move) {
-			if (move.hasBounced || move.isFutureMove || move.sourceEffect === 'snatch') return;
+			if (this.effectState.protean || move.hasBounced || move.isFutureMove || move.sourceEffect === 'snatch') return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
+				this.effectState.protean = true;
 				this.add('-start', source, 'typechange', type, '[from] ability: Protean');
 			}
+		},
+		onSwitchIn(pokemon) {
+			this.effectState.protean = false;
 		},
 		name: "Protean",
 		rating: 4.5,
 		num: 168,
+	},
+	protosynthesis: {
+		onSwitchIn(pokemon) {
+			if (pokemon.effectiveWeather() === 'sunnyday' ||
+				(pokemon.hasItem('boosterenergy') && pokemon.useItem())) {
+				pokemon.addVolatile('protosynthesis');
+			}
+		},
+		onUpdate(pokemon) {
+			if (!pokemon.getVolatile('protosynthesis')) {
+				if (pokemon.effectiveWeather() === 'sunnyday' ||
+					(!pokemon.getVolatile('boosterenergy') && pokemon.hasItem('boosterenergy') && pokemon.useItem())) {
+					pokemon.addVolatile('protosynthesis');
+				}
+			} else {
+				if (pokemon.effectiveWeather() !== 'sunnyday' &&
+					(pokemon.getVolatile('protosynthesis') && !pokemon.getVolatile('boosterenergy'))) {
+					pokemon.removeVolatile('protosynthesis');
+				}
+			}
+		},
+		condition: {
+			noCopy: true,
+			onStart(pokemon) {
+				// The harsh sunlight activated POKEMON’s Protosynthesis!
+				// POKEMON’s STATNAME was heightened!
+				this.add('-start', pokemon, 'ability: Protosynthesis');
+				// TODO stat boost message, client support for all messages
+			},
+			onModifyAtk(atk, source, target, move) {
+				if (source.getBestStoredStat() !== 'atk') return;
+				this.debug('Protosynthesis atk boost');
+				return this.chainModify(1.5);
+			},
+			onModifyDef(def, target, source, move) {
+				if (source.getBestStoredStat() !== 'def') return;
+				this.debug('Protosynthesis def boost');
+				return this.chainModify(1.5);
+			},
+			onModifySpA(relayVar, source, target, move) {
+				if (source.getBestStoredStat() !== 'spa') return;
+				this.debug('Protosynthesis spa boost');
+				return this.chainModify(1.5);
+			},
+			onModifySpD(relayVar, target, source, move) {
+				if (source.getBestStoredStat() !== 'spd') return;
+				this.debug('Protosynthesis spd boost');
+				return this.chainModify(1.5);
+			},
+			onModifySpe(spe, pokemon) {
+				if (pokemon.getBestStoredStat() !== 'spe') return;
+				this.debug('Protosynthesis spe boost');
+				return this.chainModify(1.5);
+			},
+			onSwitchOut(pokemon) {
+				this.add('-end', pokemon, 'ability: Protosynthesis', '[silent]');
+			},
+			onEnd(pokemon) {
+				// The effects of POKEMON’s Protosynthesis wore off!
+				this.add('-end', pokemon, 'ability: Protosynthesis');
+			},
+		},
+		name: "Protosynthesis",
+		rating: 2,
+		num: 281,
 	},
 	psychicsurge: {
 		onStart(source) {
@@ -2962,6 +3146,96 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Pure Power",
 		rating: 5,
 		num: 74,
+	},
+	purifyingsalt: {
+		onSetStatus(status, target, source, effect) {
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Purifying Salt');
+			}
+			return false;
+		},
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Ghost') {
+				this.debug('Purifying Salt weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(spa, attacker, defender, move) {
+			if (move.type === 'Ghost') {
+				this.debug('Purifying Salt weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		isBreakable: true, // TODO verify the assumption that this can be supprsed by Mold Breaker & friends
+		name: "Purifying Salt",
+		rating: 2,
+	},
+	quarkdrive: {
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('electricterrain') ||
+				(pokemon.hasItem('boosterenergy') && pokemon.useItem())) {
+				pokemon.addVolatile('quarkdrive');
+			}
+		},
+		onUpdate(pokemon) {
+			if (!pokemon.getVolatile('quarkdrive')) {
+				if (this.field.isTerrain('electricterrain') ||
+					(!pokemon.getVolatile('boosterenergy') && pokemon.hasItem('boosterenergy') && pokemon.useItem())) {
+					pokemon.addVolatile('quarkdrive');
+				}
+			} else {
+				if (!this.field.isTerrain('electricterrain') && (pokemon.getVolatile('quarkdrive') &&
+					!pokemon.getVolatile('boosterenergy'))) {
+					pokemon.removeVolatile('quarkdrive');
+				}
+			}
+		},
+		condition: {
+			noCopy: true,
+			onStart(pokemon) {
+				// The Electric Terrain activated POKEMON’s Quark Drive!
+				// POKEMON’s STATNAME was heightened!
+				this.add('-start', pokemon, 'ability: Quark Drive');
+				// TODO stat boost message, client support for all messages
+			},
+			onModifyAtk(atk, source, target, move) {
+				if (source.getBestStoredStat() !== 'atk') return;
+				this.debug('Quark Drive atk boost');
+				return this.chainModify(1.5);
+			},
+			onModifyDef(def, target, source, move) {
+				if (source.getBestStoredStat() !== 'def') return;
+				this.debug('Quark Drive def boost');
+				return this.chainModify(1.5);
+			},
+			onModifySpA(relayVar, source, target, move) {
+				if (source.getBestStoredStat() !== 'spa') return;
+				this.debug('Quark Drive spa boost');
+				return this.chainModify(1.5);
+			},
+			onModifySpD(relayVar, target, source, move) {
+				if (source.getBestStoredStat() !== 'spd') return;
+				this.debug('Quark Drive spd boost');
+				return this.chainModify(1.5);
+			},
+			onModifySpe(spe, pokemon) {
+				if (pokemon.getBestStoredStat() !== 'spe') return;
+				this.debug('Quark Drive spe boost');
+				return this.chainModify(1.5);
+			},
+			onSwitchOut(pokemon) {
+				this.add('-end', pokemon, 'ability: Quark Drive', '[silent]');
+			},
+			onEnd(pokemon) {
+				// The effects of POKEMON’s Quark Drive wore off!
+				this.add('-end', pokemon, 'ability: Quark Drive');
+			},
+		},
+		name: "Quark Drive",
+		rating: 2,
+		num: 282,
 	},
 	queenlymajesty: {
 		onFoeTryMove(target, source, move) {
@@ -3157,6 +3431,25 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: 69,
 	},
+	rockypayload: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Rock') {
+				this.debug('Rocky Payload boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Rock') {
+				this.debug('Rocky Payload boost');
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Rocky Payload",
+		rating: 3,
+		num: 276,
+	},
 	roughskin: {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
@@ -3330,6 +3623,17 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Screen Cleaner",
 		rating: 2,
 		num: 251,
+	},
+	seedsower: {
+		onDamagingHit(damage, target, source, move) {
+			if (this.field.getTerrain().id !== 'grassyterrain') {
+				this.add('-activate', target, 'ability: Seed Sower');
+				this.field.setTerrain('grassyterrain', target);
+			}
+		},
+		name: "Seed Sower",
+		rating: 2,
+		num: 269,
 	},
 	serenegrace: {
 		onModifyMovePriority: -2,
@@ -3955,6 +4259,36 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2,
 		num: 28,
 	},
+	swordofruin: {
+		onStart(pokemon) {
+			if (this.suppressingAbility(pokemon)) return;
+			this.add('-ability', pokemon, 'Sword of Ruin');
+		},
+		onAnyModifyDef(def, source, target, move) {
+			if (this.effectState.target === source) return;
+			this.debug('Sword of Ruin Def drop');
+			// TODO Placeholder
+			return this.chainModify(0.75);
+		},
+		name: "Sword of Ruin",
+		rating: 3,
+		num: 285,
+	},
+	tabletsofruin: {
+		onStart(pokemon) {
+			if (this.suppressingAbility(pokemon)) return;
+			this.add('-ability', pokemon, 'Tablets of Ruin');
+		},
+		onAnyModifyAtk(atk, source, target, move) {
+			if (this.effectState.target === source) return;
+			this.debug('Tablets of Ruin Atk drop');
+			// TODO Placeholder
+			return this.chainModify(0.75);
+		},
+		name: "Tablets of Ruin",
+		rating: 3,
+		num: 284,
+	},
 	tangledfeet: {
 		onModifyAccuracyPriority: -1,
 		onModifyAccuracy(accuracy, target) {
@@ -4016,6 +4350,23 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Teravolt",
 		rating: 3.5,
 		num: 164,
+	},
+	thermalexchange: {
+		onDamagingHit(damage, target, source, move) {
+			if (move.type === 'Fire') {
+				this.boost({atk: 1});
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if (status.id !== 'brn') return;
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Thermal Exchange');
+			}
+			return false;
+		},
+		name: "Thermal Exchange",
+		rating: 2.5,
+		num: 270,
 	},
 	thickfat: {
 		onSourceModifyAtkPriority: 6,
@@ -4088,6 +4439,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Toxic Boost",
 		rating: 2.5,
 		num: 137,
+	},
+	toxicdebris: {
+		onDamagingHit(damage, target, source, move) {
+			// TODO is this contact specific?
+			const toxicSpikes = source.side.sideConditions['toxicspikes'];
+			if (move.category === 'Physical' && (!toxicSpikes || toxicSpikes.layers < 2)) {
+				this.add('-activate', target, 'ability: Toxic Debris');
+				source.side.addSideCondition('toxicspikes', target);
+			}
+		},
+		name: "Toxic Debris",
+		rating: 2,
+		num: 295,
 	},
 	trace: {
 		onStart(pokemon) {
@@ -4246,6 +4610,21 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Unseen Fist",
 		rating: 2,
 		num: 260,
+	},
+	vesselofruin: {
+		onStart(pokemon) {
+			if (this.suppressingAbility(pokemon)) return;
+			this.add('-ability', pokemon, 'Vessel of Ruin');
+		},
+		onAnyModifySpA(spa, source, target, move) {
+			if (this.effectState.target === source) return;
+			this.debug('Vessel of Ruin Spa drop');
+			// TODO Placeholder
+			return this.chainModify(0.75);
+		},
+		name: "Vessel of Ruin",
+		rating: 3,
+		num: 284,
 	},
 	victorystar: {
 		onAnyModifyAccuracyPriority: -1,
@@ -4409,6 +4788,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 1,
 		num: 133,
 	},
+	wellbakedbody: {
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Fire') {
+				if (!this.boost({def: 2})) {
+					this.add('-immune', target, '[from] ability: Well-Baked Body');
+				}
+				return null;
+			}
+		},
+		name: "Well-Baked Body",
+		rating: 2,
+		num: 273,
+	},
 	whitesmoke: {
 		onBoost(boost, target, source, effect) {
 			if (source && target === source) return;
@@ -4443,6 +4835,41 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Wimp Out",
 		rating: 1,
 		num: 193,
+	},
+	windpower: {
+		onDamagingHit(damage, target, source, move) {
+			if (move.type === 'Flying') {
+				this.add('-activate', target, 'ability: Wind Power');
+				target.addVolatile('charge');
+			}
+		},
+		onAllyTryHitSide(self, source, move) {
+			if (move.id === 'tailwind' && !('tailwind' in self.side.sideConditions)) {
+				this.add('-activate', self, 'ability: Wind Power');
+				self.addVolatile('charge');
+			}
+		},
+		name: "Wind Power",
+		rating: 2,
+		num: 277,
+	},
+	windrider: {
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Flying') {
+				if (!this.boost({atk: 1})) {
+					this.add('-immune', target, '[from] ability: Wind Rider');
+				}
+				return null;
+			}
+		},
+		onAllyTryHitSide(self, source, move) {
+			if (move.id === 'tailwind' && !('tailwind' in self.side.sideConditions)) {
+				this.boost({atk: 1}, self);
+			}
+		},
+		name: "Wind Rider",
+		rating: 3,
+		num: 274,
 	},
 	wonderguard: {
 		onTryHit(target, source, move) {

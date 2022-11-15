@@ -18,6 +18,40 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+	dauntlessshield: {
+		inherit: true,
+		onStart(pokemon) {
+			this.boost({def: 1}, pokemon);
+		},
+	},
+	intrepidsword: {
+		inherit: true,
+		onStart(pokemon) {
+			this.boost({atk: 1}, pokemon);
+		},
+	},
+	libero: {
+		inherit: true,
+		onPrepareHit(source, target, move) {
+			if (move.hasBounced || move.isFutureMove || move.sourceEffect === 'snatch') return;
+			const type = move.type;
+			if (type && type !== '???' && source.getTypes().join() !== type) {
+				if (!source.setType(type)) return;
+				this.add('-start', source, 'typechange', type, '[from] ability: Libero');
+			}
+		},
+	},
+	protean: {
+		inherit: true,
+		onPrepareHit(source, target, move) {
+			if (move.hasBounced || move.isFutureMove || move.sourceEffect === 'snatch') return;
+			const type = move.type;
+			if (type && type !== '???' && source.getTypes().join() !== type) {
+				if (!source.setType(type)) return;
+				this.add('-start', source, 'typechange', type, '[from] ability: Protean');
+			}
+		},
+	},
 	snowwarning: {
 		inherit: true,
 		onStart(source) {

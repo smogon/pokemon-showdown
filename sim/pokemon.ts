@@ -586,6 +586,25 @@ export class Pokemon {
 		return this.battle.trunc(speed, 13);
 	}
 
+	/**
+	 * Gets the Pokemon's best storedStat.
+	 * Moved to its own method due to frequent use of the same code.
+	 * Used by Beast Boost, Quark Drive, and Protosynthesis.
+	 */
+	getBestStoredStat(): StatIDExceptHP {
+		let statName: StatIDExceptHP = 'atk';
+		let bestStat = 0;
+		let s: StatIDExceptHP;
+		for (s in this.storedStats) {
+			if (this.storedStats[s] > bestStat) {
+				statName = s;
+				bestStat = this.storedStats[s];
+			}
+		}
+
+		return statName;
+	}
+
 	/* Commented out for now until a use for Combat Power is found in Let's Go
 	getCombatPower() {
 		let statSum = 0;

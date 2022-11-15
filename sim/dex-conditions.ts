@@ -102,6 +102,7 @@ export interface EventMethods {
 	onTryMove?: MoveEventMethods['onTryMove'];
 	onTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => boolean | null | number | void;
 	onType?: (this: Battle, types: string[], pokemon: Pokemon) => string[] | void;
+	onUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onUpdate?: (this: Battle, pokemon: Pokemon) => void;
 	onWeather?: (this: Battle, target: Pokemon, source: null, effect: Condition) => void;
 	onWeatherModifyDamage?: CommonHandlers['ModifierSourceMove'];
