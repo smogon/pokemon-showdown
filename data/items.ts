@@ -3383,6 +3383,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			},
 			onTryMovePriority: -2,
 			onTryMove(pokemon, target, move) {
+				if (move.id === 'copycat' || move.id === 'metronome') return;
 				if (!pokemon.hasItem('metronome')) {
 					pokemon.removeVolatile('metronome');
 					return;
