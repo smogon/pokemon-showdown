@@ -788,4 +788,17 @@ export const Conditions: {[k: string]: ConditionData} = {
 			return [type];
 		},
 	},
+	rolloutstorage: {
+		name: 'rolloutstorage',
+		duration: 2,
+		onBasePower(relayVar, source, target, move) {
+			let bp = Math.max(1, move.basePower);
+			bp *= Math.pow(2, source.volatiles['rolloutstorage'].contactHitCount);
+			if (source.volatiles['defensecurl']) {
+				bp *= 2;
+			}
+			source.removeVolatile('rolloutstorage');
+			return bp;
+		},
+	},
 };

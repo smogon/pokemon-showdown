@@ -765,7 +765,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				effect && effect.effectType === 'Move' &&
 				['mimikyu', 'mimikyutotem'].includes(target.species.id) && !target.transformed
 			) {
-				this.add('-activate', target, 'ability: Disguise');
+				if (this.gen === 7 && ["rollout", "iceball"].includes(effect.id)) {
+					source.volatiles[effect.id].contactHitCount--;
+				}
+
+				this.add("-activate", target, "ability: Disguise");
 				this.effectState.busted = true;
 				return 0;
 			}

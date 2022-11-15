@@ -8709,10 +8709,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 			let bp = move.basePower;
 			const iceballData = pokemon.volatiles['iceball'];
 			if (iceballData?.hitCount) {
-				bp *= Math.pow(2, iceballData.hitCount);
+				bp *= Math.pow(2, iceballData.contactHitCount);
 			}
 			if (iceballData && pokemon.status !== 'slp') {
 				iceballData.hitCount++;
+				iceballData.contactHitCount++;
 				if (iceballData.hitCount < 5) {
 					iceballData.duration = 2;
 				}
@@ -8737,11 +8738,25 @@ export const Moves: {[moveid: string]: MoveData} = {
 			// but it does exist now because addVolatile created it
 			pokemon.volatiles['iceball'].targetSlot = move.sourceEffect ? pokemon.lastMoveTargetLoc : pokemon.getLocOf(target);
 		},
+		onAfterMove(source, target, move) {
+			const iceballData = source.volatiles["iceball"];
+			if (
+				this.gen === 7 &&
+				iceballData.hitCount === 5 &&
+				iceballData.contactHitCount < 5
+			) {
+				source.addVolatile("rolloutstorage");
+				source.volatiles["rolloutstorage"].contactHitCount =
+				iceballData.contactHitCount;
+			}
+		},
+
 		condition: {
 			duration: 1,
 			onLockMove: 'iceball',
 			onStart() {
 				this.effectState.hitCount = 0;
+				this.effectState.contactHitCount = 0;
 			},
 			onResidual(target) {
 				if (target.lastMove && target.lastMove.id === 'struggle') {
@@ -14405,10 +14420,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 			let bp = move.basePower;
 			const rolloutData = pokemon.volatiles['rollout'];
 			if (rolloutData?.hitCount) {
-				bp *= Math.pow(2, rolloutData.hitCount);
+				bp *= Math.pow(2, rolloutData.contactHitCount);
 			}
 			if (rolloutData && pokemon.status !== 'slp') {
 				rolloutData.hitCount++;
+				rolloutData.contactHitCount++;
 				if (rolloutData.hitCount < 5) {
 					rolloutData.duration = 2;
 				}
@@ -14432,11 +14448,24 @@ export const Moves: {[moveid: string]: MoveData} = {
 			// but it does exist now because addVolatile created it
 			pokemon.volatiles['rollout'].targetSlot = move.sourceEffect ? pokemon.lastMoveTargetLoc : pokemon.getLocOf(target);
 		},
+		onAfterMove(source, target, move) {
+			const rolloutData = source.volatiles["rollout"];
+			if (
+				this.gen === 7 &&
+				rolloutData.hitCount === 5 &&
+				rolloutData.contactHitCount < 5
+			) {
+				source.addVolatile("rolloutstorage");
+				source.volatiles["rolloutstorage"].contactHitCount =
+					rolloutData.contactHitCount;
+			}
+		},
 		condition: {
 			duration: 1,
 			onLockMove: 'rollout',
 			onStart() {
 				this.effectState.hitCount = 0;
+				this.effectState.contactHitCount = 0;
 			},
 			onResidual(target) {
 				if (target.lastMove && target.lastMove.id === 'struggle') {
