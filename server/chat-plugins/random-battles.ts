@@ -917,11 +917,9 @@ export const commands: Chat.ChatCommands = {
 	randbatsodds: 'randombattlesetprobabilities',
 	randbatsprobabilities: 'randombattlesetprobabilities',
 	randombattlesetprobabilities(target, room, user) {
-		// Restricted to global staff and randbats room staff
+		// Restricted to global staff and randbats room auth
 		const randbatsRoom = Rooms.get('randombattles');
-		if (randbatsRoom) {
-			if (!user.can('lock')) this.checkCan('mute', null, randbatsRoom);
-		} else {
+		if (!(randbatsRoom && randbatsRoom.auth.has(user.id))) {
 			this.checkCan('lock');
 		}
 
