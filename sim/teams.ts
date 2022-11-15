@@ -105,7 +105,7 @@ export interface PokemonSet {
 	dynamaxLevel?: number;
 	gigantamax?: boolean;
 	/**
-	 * Terastal type
+	 * Tera Type
 	 */
 	teraType?: string;
 }
@@ -406,7 +406,7 @@ export const Teams = new class Teams {
 			out += `Gigantamax: Yes  \n`;
 		}
 		if (set.teraType) {
-			out += `Terastal Type: ${set.teraType}  \n`;
+			out += `Tera Type: ${set.teraType}  \n`;
 		}
 
 		// stats
