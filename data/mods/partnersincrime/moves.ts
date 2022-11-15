@@ -102,11 +102,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					for (const moveSlot of target.moveSlots) {
 						moveSlot.pp = moveSlot.maxpp;
 					}
-					const keys = Object.keys(target.m.trackPP);
-					if (keys.length) {
-						for (const key of keys) {
-							target.m.trackPP.set(key, 0);
-						}
+					for (const key of target.m.trackPP.keys()) {
+						target.m.trackPP.set(key, 0);
 					}
 					this.add('-heal', target, target.getHealth, '[from] move: Lunar Dance');
 					target.side.removeSlotCondition(target, 'lunardance');
