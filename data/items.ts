@@ -3610,13 +3610,20 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		spritenum: 0, // TODO
-		onUpdate(pokemon) {
-			if (pokemon.foes().some(x => x.statsRaisedThisTurn)) {
-				pokemon.useItem();
+		onFoeAfterBoost(boost, target, source) {
+			const boostPlus: SparseBoostsTable = {};
+			let statsRaised = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! > 0) {
+					boostPlus[i] = boost[i];
+					statsRaised = true;
+				}
 			}
-		},
-		onFoeAfterBoost(boost, target, source, effect) {
-			this.boost(boost, source);
+			if (!statsRaised) return;
+			const pokemon = this.effectState.target;
+			pokemon.useItem();
+			this.boost(boostPlus, pokemon);
 		},
 		num: 1883,
 		gen: 9,
