@@ -1412,7 +1412,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			chance: 100,
 			boosts: {
 				atk: -1,
-			}
+			},
 		},
 		target: "normal",
 		type: "Ghost",
@@ -12485,8 +12485,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			self: {
 				boosts: {
 					spa: 1,
-				}
-			}
+				},
+			},
 		},
 		target: "normal",
 		type: "Psychic",
@@ -13722,20 +13722,20 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Power Shift');
 				[pokemon.storedStats.atk, pokemon.storedStats.spa,
-					pokemon.storedStats.def, pokemon.storedStats.spd] = 
+					pokemon.storedStats.def, pokemon.storedStats.spd] =
 				[pokemon.storedStats.def, pokemon.storedStats.spd,
 					pokemon.storedStats.atk, pokemon.storedStats.spa];
 			},
 			onCopy(pokemon) {
 				[pokemon.storedStats.atk, pokemon.storedStats.spa,
-					pokemon.storedStats.def, pokemon.storedStats.spd] = 
+					pokemon.storedStats.def, pokemon.storedStats.spd] =
 				[pokemon.storedStats.def, pokemon.storedStats.spd,
 					pokemon.storedStats.atk, pokemon.storedStats.spa];
 			},
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Power Shift');
 				[pokemon.storedStats.atk, pokemon.storedStats.spa,
-					pokemon.storedStats.def, pokemon.storedStats.spd] = 
+					pokemon.storedStats.def, pokemon.storedStats.spd] =
 				[pokemon.storedStats.def, pokemon.storedStats.spd,
 					pokemon.storedStats.atk, pokemon.storedStats.spa];
 			},
@@ -14228,8 +14228,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			self: {
 				boosts: {
 					def: 1,
-				}
-			}
+				},
+			},
 		},
 		target: "normal",
 		type: "Psychic",
@@ -17891,7 +17891,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			chance: 30,
 			boosts: {
 				atk: -1,
-			}
+			},
 		},
 		target: "allAdjacentFoes",
 		type: "Fairy",
@@ -19966,7 +19966,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}, {
 				chance: 30,
 				volatileStatus: 'flinch',
-			}
+			},
 		],
 		target: "normal",
 		type: "Fighting",
