@@ -137,7 +137,7 @@ for (const move of moves) {
 				], [
 					{species: 'mimikyu', ability: 'disguise', evs: {hp: '252', def: '252'}, nature: 'bold', moves: ['gravity']},
 					{species: 'snorlax', ability: 'battlearmor', moves: ['sleeptalk']},
-					{species: 'snorlax', ability: 'battlearmor', moves: ['rest']},
+					{species: 'wigglytuff', ability: 'battlearmor', moves: ['rest']},
 				]]);
 
 				for (let i = 0; i < 5; i++) { battle.makeChoices(); }
@@ -146,9 +146,9 @@ for (const move of moves) {
 				let damage = snorlax.maxhp - snorlax.hp;
 				assert.bounded(damage, [147, 174]); // 40 * 2^4 BP; would be 40 BP otherwise, range 10-12
 				battle.makeChoices("move watergun", "switch 3");
-				snorlax = battle.p2.active[0];
-				damage = snorlax.maxhp - snorlax.hp;
-				assert.bounded(damage, [10, 12]);
+				const wigglytuff = battle.p2.active[0];
+				damage = wigglytuff.maxhp - wigglytuff.hp;
+				assert.bounded(damage, [18, 22]);
 			});
 
 			it(`should delay the Rollout multiplier when hitting multiple Disguise or Ice Face`, function () {
