@@ -1010,10 +1010,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	electromorphosis: {
 		onDamagingHit(damage, target, source, move) {
-			if (move.flags['wind']) {
-				this.add('-activate', target, 'ability: Electromorphosis', '[move] ' + move.name);
-				target.addVolatile('charge');
-			}
+			this.add('-activate', target, 'ability: Electromorphosis', '[move] ' + move.name);
+			target.addVolatile('charge');
 		},
 		name: "Electromorphosis",
 		rating: 3,
