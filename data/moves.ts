@@ -8741,9 +8741,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onAfterMove(source, target, move) {
 			const iceballData = source.volatiles["iceball"];
 			if (
-				this.gen === 7 &&
 				iceballData.hitCount === 5 &&
 				iceballData.contactHitCount < 5
+				// this conditions can only be met in gen7 and gen8dlc1
+				// see `disguise` and `iceface` abilities in the resp mod folders
 			) {
 				source.addVolatile("rolloutstorage");
 				source.volatiles["rolloutstorage"].contactHitCount =
@@ -14451,9 +14452,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onAfterMove(source, target, move) {
 			const rolloutData = source.volatiles["rollout"];
 			if (
-				this.gen === 7 &&
 				rolloutData.hitCount === 5 &&
 				rolloutData.contactHitCount < 5
+				// this conditions can only be met in gen7 and gen8dlc1
+				// see `disguise` and `iceface` abilities in the resp mod folders
 			) {
 				source.addVolatile("rolloutstorage");
 				source.volatiles["rolloutstorage"].contactHitCount =
