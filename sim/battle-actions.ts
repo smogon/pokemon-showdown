@@ -823,7 +823,7 @@ export class BattleActions {
 			// yes, it's hardcoded... meh
 			if (targetHits[0] === 2 && targetHits[1] === 5) {
 				if (this.battle.gen >= 5) {
-					if (pokemon.item === 'loadeddice') {
+					if (pokemon.hasItem('loadeddice')) {
 						// TODO figure out real odds, making assumption it flips the odds to 15-15-35-35
 						targetHits = this.battle.sample([2, 2, 2, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5]);
 					} else {
