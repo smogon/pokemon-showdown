@@ -3034,7 +3034,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	protean: {
 		onPrepareHit(source, target, move) {
-			if (this.effectState.protean || move.hasBounced || move.isFutureMove || move.sourceEffect === 'snatch') return;
+			if (this.effectState.protean) return;
+			if (move.hasBounced || move.isFutureMove || move.sourceEffect === 'snatch') return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;

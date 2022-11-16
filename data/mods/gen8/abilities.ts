@@ -40,6 +40,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-start', source, 'typechange', type, '[from] ability: Libero');
 			}
 		},
+		onSwitchIn() {},
 	},
 	protean: {
 		inherit: true,
@@ -51,6 +52,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-start', source, 'typechange', type, '[from] ability: Protean');
 			}
 		},
+		onSwitchIn() {},
 	},
 	snowwarning: {
 		inherit: true,
