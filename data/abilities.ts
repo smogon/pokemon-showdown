@@ -351,8 +351,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onAnyModifySpD(spd, source, target, move) {
 			if (this.effectState.target === source) return;
-			this.debug('Beads of Ruin Spd drop');
-			// TODO Placeholder
+			this.debug('Beads of Ruin SpD drop');
 			return this.chainModify(0.75);
 		},
 		name: "Beads of Ruin",
@@ -362,7 +361,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	beastboost: {
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				let bestStat = source.getBestStoredStat();
+				const bestStat = source.getBestStoredStat();
 				this.boost({[bestStat]: length}, source);
 			}
 		},
@@ -727,9 +726,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	dauntlessshield: {
 		onStart(pokemon) {
-			if (this.effectState.sheildBoost) return;
+			if (this.effectState.shieldBoost) return;
 			if (this.boost({def: 1}, pokemon)) {
-				this.effectState.sheildBoost = true;
+				this.effectState.shieldBoost = true;
 			}
 		},
 		name: "Dauntless Shield",
@@ -1513,7 +1512,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		// "The futuristic engine within the Pokémon also boosts its Sp. Atk stat on Electric terrain."
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (this.field.isTerrain("electricterrain")) {
+			if (this.field.isTerrain('electricterrain')) {
 				this.debug('Hadron Engine boost');
 				return this.chainModify(1.5);
 			}
@@ -1979,13 +1978,17 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	libero: {
 		onPrepareHit(source, target, move) {
-			if (this.effectState.libero || move.hasBounced || move.isFutureMove || move.sourceEffect === 'snatch') return;
+			if (this.effectState.libero) return;
+			if (move.hasBounced || move.isFutureMove || move.sourceEffect === 'snatch') return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
 				this.effectState.libero = true;
 				this.add('-start', source, 'typechange', type, '[from] ability: Libero');
 			}
+		},
+		onSwitchIn() {
+			delete this.effectState.libero;
 		},
 		name: "Libero",
 		rating: 4.5,
@@ -3042,7 +3045,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onSwitchIn(pokemon) {
-			this.effectState.protean = false;
+			delete this.effectState.protean;
 		},
 		name: "Protean",
 		rating: 4.5,
