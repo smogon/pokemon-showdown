@@ -142,7 +142,7 @@ for (const move of moves) {
 
 				for (let i = 0; i < 5; i++) { battle.makeChoices(); }
 				battle.makeChoices('move watergun', 'switch 2');
-				let snorlax = battle.p2.active[0];
+				const snorlax = battle.p2.active[0];
 				let damage = snorlax.maxhp - snorlax.hp;
 				assert.bounded(damage, [147, 174]); // 40 * 2^4 BP; would be 40 BP otherwise, range 10-12
 				battle.makeChoices("move watergun", "switch 3");

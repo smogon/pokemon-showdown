@@ -55,7 +55,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.effectState.busted = true;
 				return 0;
 			}
-		}
+		},
 	},
 	transistor: {
 		inherit: true,
