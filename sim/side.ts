@@ -296,6 +296,7 @@ export class Side {
 			delete this.sideConditions[status.id];
 			return false;
 		}
+		this.battle.runEvent('SideConditionStart', source, source, status);
 		return true;
 	}
 

@@ -1011,8 +1011,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	electromorphosis: {
 		onDamagingHit(damage, target, source, move) {
-			// Placeholder
-			target.addVolatile('charge');
+			if (move.flags['wind']) {
+				this.add('-activate', target, 'ability: Electromorphosis', '[move] ' + move.name);
+				target.addVolatile('charge');
+			}
 		},
 		name: "Electromorphosis",
 		rating: 3,
@@ -3047,64 +3049,55 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 168,
 	},
 	protosynthesis: {
-		onSwitchIn(pokemon) {
-			if (pokemon.effectiveWeather() === 'sunnyday' ||
-				(pokemon.hasItem('boosterenergy') && pokemon.useItem())) {
-				pokemon.addVolatile('protosynthesis');
-			}
-		},
 		onUpdate(pokemon) {
-			if (!pokemon.getVolatile('protosynthesis')) {
-				if (pokemon.effectiveWeather() === 'sunnyday' ||
-					(!pokemon.getVolatile('boosterenergy') && pokemon.hasItem('boosterenergy') && pokemon.useItem())) {
-					pokemon.addVolatile('protosynthesis');
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+				if (pokemon.addVolatile('protosynthesis')) {
+					this.add('-activate', pokemon, 'ability: Protosynthesis');
 				}
-			} else {
-				if (pokemon.effectiveWeather() !== 'sunnyday' &&
-					(pokemon.getVolatile('protosynthesis') && !pokemon.getVolatile('boosterenergy'))) {
-					pokemon.removeVolatile('protosynthesis');
+			} else if (!pokemon.volatiles['protosynthesis']?.fromBooster) {
+				pokemon.removeVolatile('protosynthesis');
+			}
+
+			if (pokemon.hasItem('boosterenergy')) {
+				if (pokemon.addVolatile('protosynthesis')) {
+					this.add('-activate', pokemon, 'ability: Protosynthesis', '[fromitem]');
+					pokemon.volatiles['protosynthesis'].fromBooster = true;
 				}
 			}
 		},
 		condition: {
 			noCopy: true,
 			onStart(pokemon) {
-				// The harsh sunlight activated POKEMON’s Protosynthesis!
-				// POKEMON’s STATNAME was heightened!
-				this.add('-start', pokemon, 'ability: Protosynthesis');
-				// TODO stat boost message, client support for all messages
+				this.effectState.bestStat = pokemon.getBestStoredStat();
+				this.add('-start', pokemon, 'protosynthesis' + this.effectState.bestStat);
 			},
 			onModifyAtk(atk, source, target, move) {
-				if (source.getBestStoredStat() !== 'atk') return;
+				if (this.effectState.bestStat !== 'atk') return;
 				this.debug('Protosynthesis atk boost');
 				return this.chainModify(1.5);
 			},
 			onModifyDef(def, target, source, move) {
-				if (source.getBestStoredStat() !== 'def') return;
+				if (this.effectState.bestStat !== 'def') return;
 				this.debug('Protosynthesis def boost');
 				return this.chainModify(1.5);
 			},
 			onModifySpA(relayVar, source, target, move) {
-				if (source.getBestStoredStat() !== 'spa') return;
+				if (this.effectState.bestStat !== 'spa') return;
 				this.debug('Protosynthesis spa boost');
 				return this.chainModify(1.5);
 			},
 			onModifySpD(relayVar, target, source, move) {
-				if (source.getBestStoredStat() !== 'spd') return;
+				if (this.effectState.bestStat !== 'spd') return;
 				this.debug('Protosynthesis spd boost');
 				return this.chainModify(1.5);
 			},
 			onModifySpe(spe, pokemon) {
-				if (pokemon.getBestStoredStat() !== 'spe') return;
+				if (this.effectState.bestStat !== 'spe') return;
 				this.debug('Protosynthesis spe boost');
 				return this.chainModify(1.5);
 			},
-			onSwitchOut(pokemon) {
-				this.add('-end', pokemon, 'ability: Protosynthesis', '[silent]');
-			},
 			onEnd(pokemon) {
-				// The effects of POKEMON’s Protosynthesis wore off!
-				this.add('-end', pokemon, 'ability: Protosynthesis');
+				this.add('-end', pokemon, 'Protosynthesis');
 			},
 		},
 		name: "Protosynthesis",
@@ -3173,64 +3166,55 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2,
 	},
 	quarkdrive: {
-		onSwitchIn(pokemon) {
-			if (this.field.isTerrain('electricterrain') ||
-				(pokemon.hasItem('boosterenergy') && pokemon.useItem())) {
-				pokemon.addVolatile('quarkdrive');
-			}
-		},
 		onUpdate(pokemon) {
-			if (!pokemon.getVolatile('quarkdrive')) {
-				if (this.field.isTerrain('electricterrain') ||
-					(!pokemon.getVolatile('boosterenergy') && pokemon.hasItem('boosterenergy') && pokemon.useItem())) {
-					pokemon.addVolatile('quarkdrive');
+			if (this.field.isTerrain('electricterrain')) {
+				if (pokemon.addVolatile('quarkdrive')) {
+					this.add('-activate', pokemon, 'ability: Quark Drive');
 				}
-			} else {
-				if (!this.field.isTerrain('electricterrain') && (pokemon.getVolatile('quarkdrive') &&
-					!pokemon.getVolatile('boosterenergy'))) {
-					pokemon.removeVolatile('quarkdrive');
+			} else if (!pokemon.volatiles['quarkdrive']?.fromBooster) {
+				pokemon.removeVolatile('quarkdrive');
+			}
+
+			if (pokemon.hasItem('boosterenergy')) {
+				if (pokemon.addVolatile('quarkdrive')) {
+					this.add('-activate', pokemon, 'ability: Quark Drive', '[fromitem]');
+					pokemon.volatiles['quarkdrive'].fromBooster = true;
 				}
 			}
 		},
 		condition: {
 			noCopy: true,
 			onStart(pokemon) {
-				// The Electric Terrain activated POKEMON’s Quark Drive!
-				// POKEMON’s STATNAME was heightened!
-				this.add('-start', pokemon, 'ability: Quark Drive');
-				// TODO stat boost message, client support for all messages
+				this.effectState.bestStat = pokemon.getBestStoredStat();
+				this.add('-start', pokemon, 'quarkdrive' + this.effectState.bestStat);
 			},
 			onModifyAtk(atk, source, target, move) {
-				if (source.getBestStoredStat() !== 'atk') return;
+				if (this.effectState.bestStat !== 'atk') return;
 				this.debug('Quark Drive atk boost');
 				return this.chainModify(1.5);
 			},
 			onModifyDef(def, target, source, move) {
-				if (source.getBestStoredStat() !== 'def') return;
+				if (this.effectState.bestStat !== 'def') return;
 				this.debug('Quark Drive def boost');
 				return this.chainModify(1.5);
 			},
 			onModifySpA(relayVar, source, target, move) {
-				if (source.getBestStoredStat() !== 'spa') return;
+				if (this.effectState.bestStat !== 'spa') return;
 				this.debug('Quark Drive spa boost');
 				return this.chainModify(1.5);
 			},
 			onModifySpD(relayVar, target, source, move) {
-				if (source.getBestStoredStat() !== 'spd') return;
+				if (this.effectState.bestStat !== 'spd') return;
 				this.debug('Quark Drive spd boost');
 				return this.chainModify(1.5);
 			},
 			onModifySpe(spe, pokemon) {
-				if (pokemon.getBestStoredStat() !== 'spe') return;
+				if (this.effectState.bestStat !== 'spe') return;
 				this.debug('Quark Drive spe boost');
 				return this.chainModify(1.5);
 			},
-			onSwitchOut(pokemon) {
-				this.add('-end', pokemon, 'ability: Quark Drive', '[silent]');
-			},
 			onEnd(pokemon) {
-				// The effects of POKEMON’s Quark Drive wore off!
-				this.add('-end', pokemon, 'ability: Quark Drive');
+				this.add('-end', pokemon, 'Quark Drive');
 			},
 		},
 		name: "Quark Drive",
@@ -4838,15 +4822,16 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	windpower: {
 		onDamagingHit(damage, target, source, move) {
-			if (move.type === 'Flying') {
-				this.add('-activate', target, 'ability: Wind Power');
+			if (move.flags['wind']) {
+				this.add('-activate', target, 'ability: Wind Power', '[move] ' + move.name);
 				target.addVolatile('charge');
 			}
 		},
-		onAllyTryHitSide(self, source, move) {
-			if (move.id === 'tailwind' && !('tailwind' in self.side.sideConditions)) {
-				this.add('-activate', self, 'ability: Wind Power');
-				self.addVolatile('charge');
+		onAllySideConditionStart(target, source, sideCondition) {
+			const pokemon = this.effectState.target;
+			if (sideCondition.id === 'tailwind') {
+				this.add('-activate', pokemon, 'ability: Wind Power', '[move] Tailwind');
+				pokemon.addVolatile('charge');
 			}
 		},
 		name: "Wind Power",
@@ -4855,16 +4840,17 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	windrider: {
 		onTryHit(target, source, move) {
-			if (target !== source && move.type === 'Flying') {
+			if (target !== source && move.flags['wind']) {
 				if (!this.boost({atk: 1})) {
 					this.add('-immune', target, '[from] ability: Wind Rider');
 				}
 				return null;
 			}
 		},
-		onAllyTryHitSide(self, source, move) {
-			if (move.id === 'tailwind' && !('tailwind' in self.side.sideConditions)) {
-				this.boost({atk: 1}, self);
+		onAllySideConditionStart(target, source, sideCondition) {
+			const pokemon = this.effectState.target;
+			if (sideCondition.id === 'tailwind') {
+				this.boost({atk: 1}, pokemon, pokemon, this.dex.abilities.get('windrider'), true);
 			}
 		},
 		name: "Wind Rider",

@@ -400,6 +400,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	electromorphosis: {
 		name: "Electromorphosis",
 		shortDesc: "This Pokemon's next Electric-type move has its damage boosted if it takes direct damage.",
+
+		activate: "  Being hit by [MOVE] charged [POKEMON] with power!",
 	},
 	emergencyexit: {
 		name: "Emergency Exit",
@@ -792,6 +794,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	limber: {
 		name: "Limber",
 		shortDesc: "This Pokemon cannot be paralyzed. Gaining this Ability while paralyzed cures it.",
+	},
+	lingeringaroma: {
+		name: "Lingering Aroma",
+
+		changeAbility: "  A lingering aroma clings to [TARGET]!",
 	},
 	liquidooze: {
 		name: "Liquid Ooze",
@@ -1191,6 +1198,14 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type.",
 		shortDesc: "This Pokemon's type changes to match the type of the move it is about to use.",
 	},
+	protosynthesis: {
+		name: "Protosynthesis",
+
+		activate: "  The harsh sunlight activated [POKEMON]'s Protosynthesis!",
+		activateFromItem: "  [POKEMON] used its Booster Energy to activate Protosynthesis!",
+		start: "  [POKEMON]'s [STAT] was heightened!",
+		end: "  The effects of [POKEMON]'s Protosynthesis wore off!",
+	},
 	psychicsurge: {
 		name: "Psychic Surge",
 		shortDesc: "On switch-in, this Pokemon summons Psychic Terrain.",
@@ -1203,6 +1218,14 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	purepower: {
 		name: "Pure Power",
 		shortDesc: "This Pokemon's Attack is doubled.",
+	},
+	quarkdrive: {
+		name: "Quark Drive",
+
+		activate: "  The Electric Terrain activated [POKEMON]'s Protosynthesis!",
+		activateFromItem: "  [POKEMON] used its Booster Energy to activate its Quark Drive!",
+		start: "  [POKEMON]'s [STAT] was heightened!",
+		end: "  The effects of [POKEMON]'s Quark Drive wore off!",
 	},
 	queenlymajesty: {
 		name: "Queenly Majesty",
@@ -1884,6 +1907,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Wimp Out",
 		desc: "When this Pokemon has more than 1/2 its maximum HP and takes damage bringing it to 1/2 or less of its maximum HP, it immediately switches out to a chosen ally. This effect applies after all hits from a multi-hit move. This effect is prevented if the move had a secondary effect removed by the Sheer Force Ability. This effect applies to both direct and indirect damage, except Curse and Substitute on use, Belly Drum, Pain Split, and confusion damage.",
 		shortDesc: "This Pokemon switches out when it reaches 1/2 or less of its maximum HP.",
+	},
+	windpower: {
+		name: "Wind Power",
+
+		activate: "#electromorphosis",
 	},
 	wonderguard: {
 		name: "Wonder Guard",

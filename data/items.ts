@@ -576,19 +576,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	boosterenergy: {
 		name: "Booster Energy",
 		spritenum: 0, // TODO
-		onUseItem(item, pokemon) {
-			pokemon.addVolatile('boosterenergy');
-		},
-		condition: {
-			onStart(pokemon) {
-				// POKEMON used its Booster Energy to activate its Quark Drive!
-				// POKEMON used its Booster Energy to activate Protosynthesis!
-				this.add('-start', pokemon, 'item: Booster Energy');
-			},
-			onSwitchOut(pokemon) {
-				this.add('-end', pokemon, 'item: Booster Energy', '[silent]');
-			}
-		},
+		// implemented in the corresponding thing
 		num: 1880,
 		gen: 9,
 	},
