@@ -1,4 +1,10 @@
 export const ItemsText: {[k: string]: ItemText} = {
+	abilityshield: {
+		name: "Ability Shield",
+		desc: "Holder's Ability cannot be changed by another Pokemon.",
+
+		block: "  [POKEMON]'s Ability is protected by the effects of its Ability Shield!",
+	},
 	abomasite: {
 		name: "Abomasite",
 		desc: "If held by an Abomasnow, this item allows it to Mega Evolve in battle.",
@@ -259,6 +265,12 @@ export const ItemsText: {[k: string]: ItemText} = {
 	clawfossil: {
 		name: "Claw Fossil",
 		desc: "Can be revived into Anorith.",
+	},
+	clearamulet: {
+		name: "Clear Amulet",
+		desc: "Prevents other Pokemon from lowering this Pokemon's stat stages.",
+
+		block: "  The effects of [POKEMON]'s Clear Amulet prevent its stats from being lowered!",
 	},
 	cloversweet: {
 		name: "Clover Sweet",
