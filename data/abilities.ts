@@ -553,6 +553,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4,
 		num: 213,
 	},
+	commander: {
+		
+		name: "Commander",
+		rating: 2,
+		num: 279,
+	},
 	competitive: {
 		onAfterEachBoost(boost, target, source, effect) {
 			if (!source || target.isAlly(source)) {
@@ -605,6 +611,29 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Corrosion",
 		rating: 2.5,
 		num: 212,
+	},
+	costar: {
+		onSwitchIn(pokemon) {
+			const ally = pokemon.allies()[0];
+			if (!ally) return;
+
+			let hasBoost = false;
+			let b: BoostID;
+			for (b in ally.boosts) {
+				if (ally.boosts[b] !== 0) {
+					hasBoost = true;
+					break;
+				}
+			}
+
+			if (hasBoost) {
+				this.add('-activate', pokemon, 'ability: Costar');
+				this.boost(ally.boosts, pokemon);
+			}
+		},
+		name: "Costar",
+		rating: 2.5,
+		num: 294,
 	},
 	cottondown: {
 		onDamagingHit(damage, target, source, move) {
@@ -976,6 +1005,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Dry Skin",
 		rating: 3,
 		num: 87,
+	},
+	eartheater: {
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Ground') {
+				if (!this.heal(target.baseMaxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Earth Eater');
+				}
+				return null;
+			}
+		},
+		name: "Earth Eater",
+		rating: 3,
+		num: 297,
 	},
 	earlybird: {
 		name: "Early Bird",
@@ -2644,6 +2686,26 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 1.5,
 		num: 12,
 	},
+	opportunist: {
+		onFoeAfterBoost(boost, target, source, effect) {
+			if (effect?.id === 'opportunist') return; // Prevent an infinite loop of oppritunist boosts
+			const pokemon = this.effectState.target;
+			let newBoosts: Partial<BoostsTable> = {};
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! > 0) {
+					newBoosts[i] = boost[i];
+				}
+			}
+
+			if (Object.keys(newBoosts).length < 1) return;
+
+			this.boost(boost, pokemon);
+        },
+		name: "Opportunist",
+		rating: 3,
+		num: 290,
+	},
 	orichalcumpulse: {
 		onStart(source) {
 			for (const action of this.queue) {
@@ -3062,6 +3124,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 
 			if (pokemon.hasItem('boosterenergy')) {
 				if (pokemon.addVolatile('protosynthesis')) {
+					pokemon.useItem();
 					this.add('-activate', pokemon, 'ability: Protosynthesis', '[fromitem]');
 					pokemon.volatiles['protosynthesis'].fromBooster = true;
 				}
@@ -3179,6 +3242,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 
 			if (pokemon.hasItem('boosterenergy')) {
 				if (pokemon.addVolatile('quarkdrive')) {
+					pokemon.useItem();
 					this.add('-activate', pokemon, 'ability: Quark Drive', '[fromitem]');
 					pokemon.volatiles['quarkdrive'].fromBooster = true;
 				}
@@ -3663,6 +3727,18 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Shadow Tag",
 		rating: 5,
 		num: 23,
+	},
+	sharpness: {
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['slicing']) {
+				this.debug('Shapness boost');
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Sharpness",
+		rating: 2,
+		num: 292,
 	},
 	shedskin: {
 		onResidualOrder: 5,
@@ -4150,6 +4226,25 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Super Luck",
 		rating: 1.5,
 		num: 105,
+	},
+	supremeoverlord: {
+		onModifyAtk(atk, source, target, move) {
+			const faintedAllies = source.side.pokemon.filter(ally => ally.fainted).length;
+			if (faintedAllies < 1) return;
+			this.debug(`Supreme Overlord atk boost for ${faintedAllies} defeated allies.`);
+			// Placeholder 1.1 -> 1.5
+			return this.chainModify(1 + (0.1 * faintedAllies));
+		},
+		onModifySpA(spa, source, target, move) {
+			const faintedAllies = source.side.pokemon.filter(ally => ally.fainted).length;
+			if (faintedAllies < 1) return;
+			this.debug(`Supreme Overlord spa boost for ${faintedAllies} defeated allies.`);
+			// Placeholder 1.1 -> 1.5
+			return this.chainModify(1 + (0.1 * faintedAllies));
+		},
+		name: "Supreme Overlord",
+		rating: 2.5,
+		num: 293,
 	},
 	surgesurfer: {
 		onModifySpe(spe) {
@@ -4930,6 +5025,24 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Zen Mode",
 		rating: 0,
 		num: 161,
+	},
+	zerotohero: {
+		onSwitchOut(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Palafin') return;
+			if (pokemon.species.forme !== 'Hero') {
+				pokemon.formeChange('Palafin-Hero', this.effect, true, '[silent]');
+			}
+		},
+		onSwitchIn(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Palafin' || pokemon.species.forme !== 'Hero') return;
+			if (!this.effectState.heroMessageDisplayed) {
+				this.add('-activate', pokemon, 'ability: Zero to Hero');
+				this.effectState.heroMessageDisplayed = true;
+			}
+		},
+		name: "Zero to Hero",
+		rating: 2,
+		num: 278,
 	},
 
 	// CAP
