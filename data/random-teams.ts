@@ -185,6 +185,7 @@ export class RandomTeams {
 				].some(moveid => movePool.includes(moveid))
 			),
 			Ghost: (movePool, moves, abilities, types, counter) => {
+				if (moves.has('nightshade')) return false;
 				if (!counter.get('Ghost') && !types.has('Dark')) return true;
 				if (movePool.includes('poltergeist')) return true;
 				return movePool.includes('spectralthief') && !counter.get('Dark');
@@ -1475,7 +1476,7 @@ export class RandomTeams {
 	): boolean {
 		if ([
 			'Flare Boost', 'Hydration', 'Ice Body', 'Immunity', 'Innards Out', 'Insomnia', 'Misty Surge',
-			'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
+			'Perish Body', 'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
 		].includes(ability)) return true;
 
 		switch (ability) {
@@ -2689,7 +2690,7 @@ export class RandomTeams {
 	randomFactoryTeam(side: PlayerOptions, depth = 0): RandomTeamsTypes.RandomFactorySet[] {
 		this.enforceNoDirectCustomBanlistChanges();
 
-		const forceResult = (depth >= 4);
+		const forceResult = (depth >= 12);
 		// Leaving Monotype code in comments in case it's used in the future
 		// const isMonotype = !!this.forceMonotype || this.dex.formats.getRuleTable(this.format).has('sametypeclause');
 

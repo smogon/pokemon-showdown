@@ -1234,7 +1234,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move?.type === 'Flying' && pokemon.hp === pokemon.maxhp) return priority + 1;
 		},
 		name: "Gale Wings",
-		rating: 3,
+		rating: 2.5,
 		num: 177,
 	},
 	galvanize: {

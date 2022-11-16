@@ -2101,7 +2101,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["doubleedge", "dracometeor", "dragondance", "earthquake", "fireblast", "return", "roost"],
 		randomDoubleBattleMoves: ["doubleedge", "dracometeor", "dragonclaw", "dragondance", "earthquake", "fireblast", "protect", "return"],
 		tier: "Uber",
-		doublesTier: "DUber",
+		doublesTier: "DOU",
 	},
 	beldum: {
 		tier: "LC",

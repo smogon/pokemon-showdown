@@ -1,4 +1,86 @@
 export const Moves: {[k: string]: ModdedMoveData} = {
+	bide: {
+		inherit: true,
+		priority: 0,
+		accuracy: true,
+		ignoreEvasion: true,
+		condition: {
+			duration: 2,
+			durationCallback(target, source, effect) {
+				return this.random(3, 5);
+			},
+			onStart(pokemon) {
+				this.effectState.totalDamage = 0;
+				this.effectState.lastDamage = 0;
+				this.add('-start', pokemon, 'Bide');
+			},
+			onHit(target, source, move) {
+				if (source && source !== target && move.category !== 'Physical' && move.category !== 'Special') {
+					const damage = this.effectState.totalDamage;
+					this.effectState.totalDamage += damage;
+					this.effectState.lastDamage = damage;
+					this.effectState.sourceSlot = source.getSlot();
+				}
+			},
+			onDamage(damage, target, source, move) {
+				if (!source || source.isAlly(target)) return;
+				if (!move || move.effectType !== 'Move') return;
+				if (!damage && this.effectState.lastDamage > 0) {
+					damage = this.effectState.totalDamage;
+				}
+				this.effectState.totalDamage += damage;
+				this.effectState.lastDamage = damage;
+				this.effectState.sourceSlot = source.getSlot();
+			},
+			onAfterSetStatus(status, pokemon) {
+				// Sleep, freeze, and partial trap will just pause duration.
+				if (pokemon.volatiles['flinch']) {
+					this.effectState.duration++;
+				} else if (pokemon.volatiles['partiallytrapped']) {
+					this.effectState.duration++;
+				} else {
+					switch (status.id) {
+					case 'slp':
+					case 'frz':
+						this.effectState.duration++;
+						break;
+					}
+				}
+			},
+			onBeforeMove(pokemon, t, move) {
+				if (this.effectState.duration === 1) {
+					this.add('-end', pokemon, 'Bide');
+					if (!this.effectState.totalDamage) {
+						this.debug("Bide failed because no damage was taken");
+						this.add('-fail', pokemon);
+						return false;
+					}
+					const target = this.getAtSlot(this.effectState.sourceSlot);
+					if (target.isSemiInvulnerable()) {
+						this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
+						pokemon.removeVolatile('bide');
+						return false;
+					}
+					this.actions.moveHit(target, pokemon, move, {damage: this.effectState.totalDamage * 2} as ActiveMove);
+					pokemon.removeVolatile('bide');
+					return false;
+				}
+				this.add('-activate', pokemon, 'Bide');
+				return false;
+			},
+			onDisableMove(pokemon) {
+				if (!pokemon.hasMove('bide')) {
+					return;
+				}
+				for (const moveSlot of pokemon.moveSlots) {
+					if (moveSlot.id !== 'bide') {
+						pokemon.disableMove(moveSlot.id);
+					}
+				}
+			},
+		},
+		type: "???", // Will look as Normal but it's STAB-less
+	},
 	bind: {
 		inherit: true,
 		// FIXME: onBeforeMove() {},
@@ -176,6 +258,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (!damage) return damage;
 				target.volatiles['substitute'].hp -= damage;
 				source.lastDamage = damage;
+				this.lastDamage = damage;
 				if (target.volatiles['substitute'].hp <= 0) {
 					this.debug('Substitute broke');
 					target.removeVolatile('substitute');
