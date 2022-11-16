@@ -671,7 +671,7 @@ export const Formats: FormatList = [
 			'Arena Trap', 'Contrary', 'Gorilla Tactics', 'Huge Power', 'Illusion', 'Innards Out', 'Intrepid Sword', 'Libero',
 			'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Stakeout',
 			'Water Bubble', 'Wonder Guard', 'Comatose + Sleep Talk', 'Rusted Sword', 'Belly Drum', 'Bolt Beak', 'Court Change',
-			'Double Iron Bash', 'Octolock', 'Shell Smash',
+			'Double Iron Bash', 'Octolock', 'Shell Smash', 'Transform',
 		],
 	},
 	{
