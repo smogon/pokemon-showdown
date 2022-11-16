@@ -654,7 +654,7 @@ export const commands: Chat.ChatCommands = {
 					}
 				} else {
 					deltas.baseStats[i] = Utils.clampIntRange(evoBaseSpecies.baseStats[i] + statChange, 1, 255);
-					deltas.baseStats[i] = Utils.clampIntRange(deltas.baseStats[i] + frmChange, 1, 255);
+					deltas.baseStats[i] = Utils.clampIntRange(deltas.baseStats[i] + formeChange, 1, 255);
 				}
 				deltas.bst += deltas.baseStats[i];
 			}
