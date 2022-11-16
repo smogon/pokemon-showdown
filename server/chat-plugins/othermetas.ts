@@ -620,9 +620,9 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon ${target} not found.`);
 		}
 		if (!evo.prevo) {
-			const bevo = Dex.species.get(evo.baseSpecies);
-			if (!bevo.prevo) { throw new Chat.ErrorMessage(`Error: ${evo.name} is not an evolution.`); }
-			const prevoSpecies = Dex.species.get(bevo.prevo);
+			const evoBaseSpecies = Dex.species.get(evo.baseSpecies);
+			if (!evoBaseSpecies.prevo) throw new Chat.ErrorMessage(`Error: ${evoBaseSpecies.name} is not an evolution.`);
+			const prevoSpecies = Dex.species.get(evoBaseSpecies.prevo);
 			const deltas = Utils.deepClone(evo);
 		    if (!isReEvo) {
 			    deltas.tier = 'CE';
@@ -644,16 +644,16 @@ export const commands: Chat.ChatCommands = {
 		    deltas.bst = 0;
 		    let i: StatID;
 		    for (i in evo.baseStats) {
-				const statChange = bevo.baseStats[i] - prevoSpecies.baseStats[i];
-				const frmChange = evo.baseStats[i] - bevo.baseStats[i];
+				const statChange = evoBaseSpecies.baseStats[i] - prevoSpecies.baseStats[i];
+				const formeChange = evo.baseStats[i] - evoBaseSpecies.baseStats[i];
 				if (!isReEvo) {
 			    if (!evo.prevo) {
-						deltas.baseStats[i] = frmChange;
+						deltas.baseStats[i] = formeChange;
 					} else {
 						deltas.baseStats[i] = statChange;
 					}
 				} else {
-					deltas.baseStats[i] = Utils.clampIntRange(bevo.baseStats[i] + statChange, 1, 255);
+					deltas.baseStats[i] = Utils.clampIntRange(evoBaseSpecies.baseStats[i] + statChange, 1, 255);
 					deltas.baseStats[i] = Utils.clampIntRange(deltas.baseStats[i] + frmChange, 1, 255);
 				}
 				deltas.bst += deltas.baseStats[i];
@@ -679,7 +679,7 @@ export const commands: Chat.ChatCommands = {
 					deltas.types[1] = evo.types[1] || evo.types[0];
 				}
 				if (deltas.types.length) {
-				// Undefined type remover
+					// Undefined type remover
 					deltas.types = deltas.types.filter((type: string | undefined) => type !== undefined);
 
 					if (deltas.types[0] === deltas.types[1]) deltas.types = [deltas.types[0]];
