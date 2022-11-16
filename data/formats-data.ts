@@ -3487,7 +3487,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	zoruahisui: {
-		tier: "LC",
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	zoroark: {
 		tier: "OU",
@@ -3495,9 +3496,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "OU",
 	},
 	zoroarkhisui: {
-		tier: "OU",
-		doublesTier: "DOU",
-		natDexTier: "OU",
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 	},
 	minccino: {
 		isNonstandard: "Past",
