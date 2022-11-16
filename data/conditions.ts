@@ -674,8 +674,8 @@ export const Conditions: {[k: string]: ConditionData} = {
 			this.add('-weather', 'none');
 		},
 	},
-	snowstorm: {
-		name: 'Snowstorm',
+	snow: {
+		name: 'Snow',
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
@@ -686,22 +686,22 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
-			if (pokemon.hasType('Ice') && this.field.isWeather('snowstorm')) {
+			if (pokemon.hasType('Ice') && this.field.isWeather('snow')) {
 				return this.modify(def, 1.5);
 			}
 		},
 		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
-				this.add('-weather', 'Snowstorm', '[from] ability: ' + effect.name, '[of] ' + source);
+				this.add('-weather', 'Snow', '[from] ability: ' + effect.name, '[of] ' + source);
 			} else {
-				this.add('-weather', 'Snowstorm');
+				this.add('-weather', 'Snow');
 			}
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
-			this.add('-weather', 'Snowstorm', '[upkeep]');
-			if (this.field.isWeather('snowstorm')) this.eachEvent('Weather');
+			this.add('-weather', 'Snow', '[upkeep]');
+			if (this.field.isWeather('snow')) this.eachEvent('Weather');
 		},
 		onFieldEnd() {
 			this.add('-weather', 'none');

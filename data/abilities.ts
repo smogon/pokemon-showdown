@@ -1216,7 +1216,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				if (pokemon.species.id !== 'castformrainy') forme = 'Castform-Rainy';
 				break;
 			case 'hail':
-			case 'snowstorm':
+			case 'snow':
 				if (pokemon.species.id !== 'castformsnowy') forme = 'Castform-Snowy';
 				break;
 			default:
@@ -1594,7 +1594,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	icebody: {
 		onWeather(target, source, effect) {
-			if (effect.id === 'hail' || effect.id === 'snowstorm') {
+			if (effect.id === 'hail' || effect.id === 'snow') {
 				this.heal(target.baseMaxhp / 16);
 			}
 		},
@@ -1607,7 +1607,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	iceface: {
 		onStart(pokemon) {
-			if (this.field.isWeather(['hail', 'snowstorm']) &&
+			if (this.field.isWeather(['hail', 'snow']) &&
 				pokemon.species.id === 'eiscuenoice' && !pokemon.transformed) {
 				this.add('-activate', pokemon, 'ability: Ice Face');
 				this.effectState.busted = false;
@@ -1650,7 +1650,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onAnyWeatherStart() {
 			const pokemon = this.effectState.target;
 			if (!pokemon.hp) return;
-			if (this.field.isWeather(['hail', 'snowstorm']) &&
+			if (this.field.isWeather(['hail', 'snow']) &&
 				pokemon.species.id === 'eiscuenoice' && !pokemon.transformed) {
 				this.add('-activate', pokemon, 'ability: Ice Face');
 				this.effectState.busted = false;
@@ -3526,7 +3526,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	slushrush: {
 		onModifySpe(spe, pokemon) {
-			if (this.field.isWeather(['hail', 'snowstorm'])) {
+			if (this.field.isWeather(['hail', 'snow'])) {
 				return this.chainModify(2);
 			}
 		},
@@ -3552,7 +3552,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyAccuracyPriority: -1,
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
-			if (this.field.isWeather(['hail', 'snowstorm'])) {
+			if (this.field.isWeather(['hail', 'snow'])) {
 				this.debug('Snow Cloak - decreasing accuracy');
 				return this.chainModify([3277, 4096]);
 			}
@@ -3564,7 +3564,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	snowwarning: {
 		onStart(source) {
-			this.field.setWeather('snowstorm');
+			this.field.setWeather('snow');
 		},
 		name: "Snow Warning",
 		rating: 4,
