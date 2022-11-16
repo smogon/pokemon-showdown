@@ -823,12 +823,10 @@ export class BattleActions {
 			// yes, it's hardcoded... meh
 			if (targetHits[0] === 2 && targetHits[1] === 5) {
 				if (this.battle.gen >= 5) {
-					if (pokemon.hasItem('loadeddice')) {
-						// TODO figure out real odds, making assumption it flips the odds to 15-15-35-35
-						targetHits = this.battle.sample([2, 2, 2, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5]);
-					} else {
-						// 35-35-15-15 out of 100 for 2-3-4-5 hits
-						targetHits = this.battle.sample([2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 5, 5, 5]);
+					// 35-35-15-15 out of 100 for 2-3-4-5 hits
+					targetHits = this.battle.sample([2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 5, 5, 5]);
+					if (targetHits < 4 && pokemon.hasItem('loadeddice')) {
+						targetHits = 5 - this.battle.random(2);
 					}
 				} else {
 					targetHits = this.battle.sample([2, 2, 2, 3, 3, 3, 4, 5]);
@@ -837,6 +835,7 @@ export class BattleActions {
 				targetHits = this.battle.random(targetHits[0], targetHits[1] + 1);
 			}
 		}
+		if (targetHits === 10 && pokemon.hasItem('loadeddice')) targetHits -= this.battle.random(7);
 		targetHits = Math.floor(targetHits);
 		let nullDamage = true;
 		let moveDamage: (number | boolean | undefined)[] = [];
