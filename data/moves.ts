@@ -6611,6 +6611,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			volatileStatus: 'glaiverush',
 		},
+		onAfterHit(source, target, move) {
+			if (!target.hp) {
+				if (source.volatiles['glaiverush']) {
+					delete source.volatiles['glaiverush'];
+					source.addVolatile('glaiverush');
+				}
+			}
+		},
 		condition: {
 			noCopy: true,
 			duration: 2,
