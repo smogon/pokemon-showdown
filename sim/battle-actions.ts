@@ -150,7 +150,7 @@ export class BattleActions {
 			this.battle.queue.insertChoice({choice: 'runSwitch', pokemon});
 		}
 
-		// TODO: check for persist
+		// Placeholder until we have proper support
 		if (pokemon.terastallized) {
 			this.battle.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
 		}
@@ -1685,14 +1685,6 @@ export class BattleActions {
 		// random factor - also not a modifier
 		baseDamage = this.battle.randomizer(baseDamage);
 
-		// just guessing placement
-		if (pokemon.baseTypes.includes(move.type)) {
-			move.stab = 1.5;
-		}
-		if (pokemon.terastallized && pokemon.baseSpecies.types.includes(pokemon.terastallized)) {
-			move.stab = 2;
-		}
-
 		// STAB
 		if (move.forceSTAB || (type !== '???' && pokemon.hasType(type))) {
 			// The "???" type never gets STAB
@@ -1701,6 +1693,15 @@ export class BattleActions {
 			// (On second thought, it might be easier to get a MissingNo.)
 			baseDamage = this.battle.modify(baseDamage, move.stab || 1.5);
 		}
+
+		// just guessing placement
+		if (pokemon.baseTypes.includes(move.type) && pokemon.terastallized && !pokemon.baseTypes.includes(pokemon.teraType)) {
+			baseDamage = this.battle.modify(baseDamage, 1.5);
+		}
+		if (pokemon.terastallized && pokemon.hasType(pokemon.teraType)) {
+			baseDamage = this.battle.modify(baseDamage, 4 / 3);
+		}
+
 		// types
 		let typeMod = target.runEffectiveness(move);
 		typeMod = this.battle.clampIntRange(typeMod, -6, 6);
