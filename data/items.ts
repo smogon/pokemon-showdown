@@ -326,6 +326,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Past",
 	},
+	auspiciousarmor: {
+		name: "Auspicious Armor",
+		spritenum: 0, // TODO
+		num: 2344,
+		gen: 9,
+	},
 	babiriberry: {
 		name: "Babiri Berry",
 		spritenum: 17,
@@ -3001,7 +3007,12 @@ export const Items: {[itemid: string]: ItemData} = {
 	loadeddice: {
 		name: "Loaded Dice",
 		spritenum: 0, // TODO
-		// implemented in sim/battle-actions.ts:BattleActions#hitStepMoveHitLoop
+		// partially implemented in sim/battle-actions.ts:BattleActions#hitStepMoveHitLoop
+		onModifyMove(move) {
+			if (move.multiaccuracy) {
+				delete move.multiaccuracy;
+			}
+		},
 		num: 1886,
 		gen: 9,
 	},
@@ -3243,6 +3254,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 137,
 		gen: 2,
 		isNonstandard: "Past",
+	},
+	maliciousarmor: {
+		name: "Malicious Armor",
+		spritenum: 0, // TODO
+		num: 1861,
+		gen: 9,
 	},
 	manectite: {
 		name: "Manectite",
@@ -4344,7 +4361,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onModifyMove(move) {
-			delete move.flags['contact'];
+			if (move.flags['punch']) delete move.flags['contact'];
 		},
 		num: 1884,
 		gen: 9,
