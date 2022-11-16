@@ -3115,19 +3115,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	protosynthesis: {
 		onUpdate(pokemon) {
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
-				if (pokemon.addVolatile('protosynthesis')) {
+				if (!pokemon.volatiles['protosynthesis']) {
 					this.add('-activate', pokemon, 'ability: Protosynthesis');
+					pokemon.addVolatile('protosynthesis');
 				}
 			} else if (!pokemon.volatiles['protosynthesis']?.fromBooster) {
 				pokemon.removeVolatile('protosynthesis');
 			}
 
-			if (pokemon.hasItem('boosterenergy')) {
-				if (pokemon.addVolatile('protosynthesis')) {
-					pokemon.useItem();
-					this.add('-activate', pokemon, 'ability: Protosynthesis', '[fromitem]');
-					pokemon.volatiles['protosynthesis'].fromBooster = true;
-				}
+			if (pokemon.hasItem('boosterenergy') && pokemon.useItem() && !pokemon.volatiles['protosynthesis']) {
+				this.add('-activate', pokemon, 'ability: Protosynthesis', '[fromitem]');
+				pokemon.addVolatile('protosynthesis');
+				// @ts-ignore - addVolatile makes this exist but TS can't tell that
+				pokemon.volatiles['protosynthesis'].fromBooster = true;
 			}
 		},
 		condition: {
@@ -3233,19 +3233,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	quarkdrive: {
 		onUpdate(pokemon) {
 			if (this.field.isTerrain('electricterrain')) {
-				if (pokemon.addVolatile('quarkdrive')) {
-					this.add('-activate', pokemon, 'ability: Quark Drive');
+				if (!pokemon.volatiles['protosynthesis']) {
+					this.add('-activate', pokemon, 'ability: Protosynthesis');
+					pokemon.addVolatile('protosynthesis');
 				}
-			} else if (!pokemon.volatiles['quarkdrive']?.fromBooster) {
-				pokemon.removeVolatile('quarkdrive');
+			} else if (!pokemon.volatiles['protosynthesis']?.fromBooster) {
+				pokemon.removeVolatile('protosynthesis');
 			}
 
-			if (pokemon.hasItem('boosterenergy')) {
-				if (pokemon.addVolatile('quarkdrive')) {
-					pokemon.useItem();
-					this.add('-activate', pokemon, 'ability: Quark Drive', '[fromitem]');
-					pokemon.volatiles['quarkdrive'].fromBooster = true;
-				}
+			if (pokemon.hasItem('boosterenergy') && pokemon.useItem() && !pokemon.volatiles['protosynthesis']) {
+				this.add('-activate', pokemon, 'ability: Protosynthesis', '[fromitem]');
+				pokemon.addVolatile('protosynthesis');
+				// @ts-ignore - addVolatile makes this exist but TS can't tell that
+				pokemon.volatiles['protosynthesis'].fromBooster = true;
 			}
 		},
 		condition: {
