@@ -686,7 +686,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['Standard'],
-		banlist: ['AG'],
+		banlist: ['AG', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 9] LC",
@@ -728,7 +728,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: [
-			'Picked Team Size = 1', 'Max Team Size = 3',
+			'Picked Team Size = 1', 'Max Team Size = 3', 'Min Source Gen = 9',
 			'Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
 		],
 		banlist: ['Koraidon', 'Miraidon', 'Focus Sash'],
