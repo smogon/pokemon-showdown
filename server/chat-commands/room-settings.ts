@@ -671,7 +671,7 @@ export const commands: Chat.ChatCommands = {
 				if (!room.settings.banwords.includes(word)) return this.errorReply(`${word} is not a banned phrase in this room.`);
 			}
 
-			room.settings.banwords = room.settings.banwords.filter(w => !words!.includes(w));
+			room.settings.banwords = room.settings.banwords.filter(w => !words.includes(w));
 			room.banwordRegex = null;
 			if (words.length > 1) {
 				this.privateModAction(`The banwords ${words.map(w => `'${w}'`).join(', ')} were removed by ${user.name}.`);
