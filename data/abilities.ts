@@ -2719,19 +2719,18 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	opportunist: {
 		onFoeAfterBoost(boost, target, source, effect) {
-			if (effect?.id === 'opportunist') return; // Prevent an infinite loop of oppritunist boosts
+			// Prevent an infinite loop of oppritunist boosts
+			if (effect?.id === 'opportunist') return;
 			const pokemon = this.effectState.target;
-			const newBoosts: Partial<BoostsTable> = {};
+			const positiveBoosts: Partial<BoostsTable> = {};
 			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! > 0) {
-					newBoosts[i] = boost[i];
+					positiveBoosts[i] = boost[i];
 				}
 			}
-
-			if (Object.keys(newBoosts).length < 1) return;
-
-			this.boost(boost, pokemon);
+			if (Object.keys(positiveBoosts).length < 1) return;
+			this.boost(positiveBoosts, pokemon);
 		},
 		name: "Opportunist",
 		rating: 3,
