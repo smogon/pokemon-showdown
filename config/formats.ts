@@ -536,8 +536,8 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod'],
-		banlist: ['ND Uber', 'Arena Trap', 'Moody', 'Power Construct', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'Bright Powder', 'King\'s Rock', 'Lax Incense', 'Razor Fang', 'Quick Claw', 'Baton Pass'],
+		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod'],
+		banlist: ['ND Uber', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Quick Claw', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 8] National Dex UU",
@@ -680,6 +680,9 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] Ubers",
+		threads: [
+			`&bullet <a href="https://www.smogon.com/forums/threads/3710870/">Ubers Metagame Discussion</a>`,
+		],
 
 		mod: 'gen9',
 		ruleset: ['Standard'],
@@ -687,20 +690,40 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] LC",
+		threads: [
+			`&bullet <a href="https://www.smogon.com/forums/threads/3710868/">Little Cup Metagame Discussion</a>`,
+		],
 
 		mod: 'gen9',
 		ruleset: ['Little Cup', 'Standard'],
 	},
 	{
 		name: "[Gen 9] Monotype",
+		threads: [
+			`&bullet <a href="https://www.smogon.com/forums/threads/3710724/">Monotype Metagame Discussion</a>`,
+		],
 
 		mod: 'gen9',
 		ruleset: ['Same Type Clause', 'Enforce Same Tera Type', 'Standard'],
 		banlist: ['Koraidon', 'Miraidon'],
 	},
 	{
+		name: "[Gen 9] Doubles OU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3710876/">Doubles OU Sample Teams</a>`,
+		],
+
+		mod: 'gen9',
+		gameType: 'doubles',
+		ruleset: ['Standard Doubles', 'Swagger Clause'],
+		banlist: ['DUber'],
+	},
+	{
 		name: "[Gen 9] 1v1",
 		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3710864/">1v1 Metagame Discussion</a>`,
+		],
 
 		mod: 'gen9',
 		ruleset: [
@@ -711,10 +734,13 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] National Dex",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3710848/">National Dex Metagame Discussion</a>`,
+		],
 
 		mod: 'gen9',
-		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Sleep Clause Mod'],
-		banlist: ['ND Uber'],
+		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Sleep Clause Mod'],
+		banlist: ['ND Uber', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Baton Pass'],
 	},
 
 	// OM of the Month
@@ -735,8 +761,8 @@ export const Formats: FormatList = [
 		ruleset: ['Standard OMs', '!Obtainable Abilities', 'Ability Clause', 'Sleep Moves Clause'],
 		banlist: [
 			'Koraidon', 'Miraidon', 'Arena Trap', 'Comatose', 'Contrary', 'Gorilla Tactics', 'Huge Power', 'Illusion', 'Imposter',
-			'Innards Out', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Pure Power', 'Shadow Tag', 'Simple', 'Speed Boost',
-			'Water Bubble', 'Wonder Guard', 'King\'s Rock', 'Baton Pass',
+			'Innards Out', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Pure Power', 'Shadow Tag', 'Simple',
+			'Speed Boost', 'Water Bubble', 'Wonder Guard', 'King\'s Rock', 'Baton Pass',
 		],
 	},
 	{

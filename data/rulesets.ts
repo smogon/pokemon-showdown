@@ -481,7 +481,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
 				const details = pokemon.details.replace(', shiny', '')
-					.replace(/(Arceus|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu|Tauros-Paldea)(-[a-zA-Z?-]+)?/g, '$1-*')
+					.replace(/(Arceus|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu)(-[a-zA-Z?-]+)?/g, '$1-*')
 					.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*'); // Hacked-in Crowned formes will be revealed
 				this.add('poke', pokemon.side.id, details, '');
 			}
@@ -1175,7 +1175,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 	dynamaxclause: {
 		effectType: 'Rule',
 		name: 'Dynamax Clause',
-		desc: "Prevents Pok&eacute;mon from dynamaxing",
+		desc: "Prevents Pok&eacute;mon from Dynamaxing",
 		onValidateSet(set) {
 			if (set.gigantamax) {
 				return [
@@ -1189,6 +1189,17 @@ export const Rulesets: {[k: string]: FormatData} = {
 				side.dynamaxUsed = true;
 			}
 			this.add('rule', 'Dynamax Clause: You cannot dynamax');
+		},
+	},
+	terastalclause: {
+		effectType: 'Rule',
+		name: 'Terastal Clause',
+		desc: "Prevents Pok&eacute;mon from Terastallizing",
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				pokemon.canTerastallize = null;
+			}
+			this.add('rule', 'Terastal Clause: You cannot Terastallize');
 		},
 	},
 	arceusevlimit: {
@@ -1521,7 +1532,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			for (const side of this.sides) {
 				for (const pokemon of side.pokemon) {
 					const details = pokemon.details.replace(', shiny', '')
-						.replace(/(Arceus|Gourgeist|Pumpkaboo|Silvally|Urshifu|Tauros-Paldea)(-[a-zA-Z?-]+)?/g, '$1-*');
+						.replace(/(Arceus|Gourgeist|Pumpkaboo|Silvally|Urshifu)(-[a-zA-Z?-]+)?/g, '$1-*');
 					this.add('poke', pokemon.side.id, details, '');
 				}
 				let buf = 'raw|';

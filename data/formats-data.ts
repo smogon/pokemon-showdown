@@ -70,7 +70,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	blastoisemega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	blastoisegmax: {
 		isNonstandard: "Past",
@@ -517,7 +517,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	alakazammega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	machop: {
 		isNonstandard: "Past",
@@ -732,7 +732,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	gengarmega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	gengargmax: {
 		isNonstandard: "Past",
@@ -915,7 +915,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	kangaskhanmega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	horsea: {
 		isNonstandard: "Past",
@@ -2462,7 +2462,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	salamencemega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	beldum: {
 		isNonstandard: "Past",
@@ -2482,7 +2482,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	metagrossmega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	regirock: {
 		isNonstandard: "Past",
@@ -2832,7 +2832,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	lucariomega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	hippopotas: {
 		tier: "LC",
@@ -3397,7 +3397,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	darmanitangalar: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	maractus: {
 		isNonstandard: "Past",
@@ -3856,7 +3856,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	landorus: {
 		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	landorustherian: {
 		isNonstandard: "Unobtainable",
@@ -4276,7 +4276,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	zygarde: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	zygarde10: {
 		isNonstandard: "Past",
@@ -4286,7 +4286,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	zygardecomplete: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	diancie: {
 		isNonstandard: "Unobtainable",
@@ -4824,7 +4824,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	pheromosa: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	xurkitree: {
 		isNonstandard: "Past",
@@ -4877,7 +4877,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	marshadow: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	poipole: {
 		isNonstandard: "Past",
@@ -5295,7 +5295,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	dracovish: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	arctovish: {
 		isNonstandard: "Past",
@@ -5335,12 +5335,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	zamazenta: {
 		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
-		natDexTier: "Uber",
+		natDexTier: "OU",
 	},
 	zamazentacrowned: {
 		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
-		natDexTier: "Uber",
+		natDexTier: "OU",
 	},
 	eternatus: {
 		isNonstandard: "Unobtainable",
@@ -5359,7 +5359,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	urshifu: {
 		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	urshifurapidstrike: {
 		isNonstandard: "Unobtainable",
@@ -5400,7 +5400,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	spectrier: {
 		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	calyrex: {
 		isNonstandard: "Unobtainable",
