@@ -33,7 +33,9 @@ import {RoomSection, RoomSections} from './chat-commands/room-settings';
 import {QueuedHunt} from './chat-plugins/scavengers';
 import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
 import {RepeatedPhrase} from './chat-plugins/repeats';
-import {PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, RoomBattleOptions} from "./room-battle";
+import {
+	PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, RoomBattleOptions, PlayerIndex,
+} from "./room-battle";
 import {RoomGame, SimpleRoomGame, RoomGamePlayer} from './room-game';
 import {MinorActivity, MinorActivityData} from './room-minor-activity';
 import {Roomlogs} from './roomlogs';
@@ -1366,7 +1368,13 @@ export class GlobalRoomState {
 		// we reuse these player objects explicitly so if
 		// someone has already started the timer, their settings carry over (should reduce bugs)
 		// and it's safe to do this first because we know these users were already in the battle
-		const player = room.battle.players[idx];
+		let player = room.battle.players[idx];
+		if (!player) {
+			// this can happen sometimes
+			player = room.battle.players[idx] = new Rooms.RoomBattlePlayer(
+				user, room.battle, (idx + 1) as PlayerIndex
+			);
+		}
 		player.id = user.id;
 		player.name = user.name;
 		room.battle.playerTable[user.id] = player;
@@ -1384,6 +1392,14 @@ export class GlobalRoomState {
 			const battle = room.battle;
 			if (!battle) continue;
 			const idx = battle.options.players?.indexOf(user.id);
+			if (battle.ended) {
+				// TODO: Do we want to rejoin the battle room here?
+				// We might need to cache the join so it only happens once -
+				// just running joinRoom would mean they join the room every refresh until the battle expires
+
+				// user.joinRoom(room);
+				continue;
+			}
 			if (typeof idx === 'number' && idx > -1) {
 				this.rejoinBattle(room, user, idx);
 			}
