@@ -3267,6 +3267,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		isBreakable: true, // TODO verify the assumption that this can be supprsed by Mold Breaker & friends
 		name: "Purifying Salt",
 		rating: 2,
+		num: 272,
 	},
 	quarkdrive: {
 		onUpdate(pokemon) {
