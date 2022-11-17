@@ -2711,7 +2711,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onFoeAfterBoost(boost, target, source, effect) {
 			if (effect?.id === 'opportunist') return; // Prevent an infinite loop of oppritunist boosts
 			const pokemon = this.effectState.target;
-			let newBoosts: Partial<BoostsTable> = {};
+			const newBoosts: Partial<BoostsTable> = {};
 			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! > 0) {
@@ -2722,7 +2722,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (Object.keys(newBoosts).length < 1) return;
 
 			this.boost(boost, pokemon);
-        },
+		},
 		name: "Opportunist",
 		rating: 3,
 		num: 290,
@@ -3140,7 +3140,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				pokemon.removeVolatile('protosynthesis');
 			}
 
-			if (pokemon.hasItem('boosterenergy') &&!pokemon.volatiles['protosynthesis'] && pokemon.useItem()) {
+			if (pokemon.hasItem('boosterenergy') && !pokemon.volatiles['protosynthesis'] && pokemon.useItem()) {
 				this.add('-activate', pokemon, 'ability: Protosynthesis', '[fromitem]');
 				pokemon.addVolatile('protosynthesis');
 				// @ts-ignore - addVolatile makes this exist but TS can't tell that

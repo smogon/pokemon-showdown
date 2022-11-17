@@ -827,7 +827,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onBeforeTurn(pokemon) {
 			// Tatsugiri doesn't get an action while commanding
 			this.queue.cancelAction(pokemon);
-		}
+		},
 	},
 
 	// Arceus and Silvally's actual typing is implemented here.
