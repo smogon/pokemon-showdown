@@ -3140,7 +3140,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				pokemon.removeVolatile('protosynthesis');
 			}
 
-			if (pokemon.hasItem('boosterenergy') && pokemon.useItem() && !pokemon.volatiles['protosynthesis']) {
+			if (pokemon.hasItem('boosterenergy') &&!pokemon.volatiles['protosynthesis'] && pokemon.useItem()) {
 				this.add('-activate', pokemon, 'ability: Protosynthesis', '[fromitem]');
 				pokemon.addVolatile('protosynthesis');
 				// @ts-ignore - addVolatile makes this exist but TS can't tell that
@@ -3250,19 +3250,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	quarkdrive: {
 		onUpdate(pokemon) {
 			if (this.field.isTerrain('electricterrain')) {
-				if (!pokemon.volatiles['protosynthesis']) {
-					this.add('-activate', pokemon, 'ability: Protosynthesis');
-					pokemon.addVolatile('protosynthesis');
+				if (!pokemon.volatiles['quarkdrive']) {
+					this.add('-activate', pokemon, 'ability: Quark Drive');
+					pokemon.addVolatile('quarkdrive');
 				}
-			} else if (!pokemon.volatiles['protosynthesis']?.fromBooster) {
-				pokemon.removeVolatile('protosynthesis');
+			} else if (!pokemon.volatiles['quarkdrive']?.fromBooster) {
+				pokemon.removeVolatile('quarkdrive');
 			}
 
-			if (pokemon.hasItem('boosterenergy') && pokemon.useItem() && !pokemon.volatiles['protosynthesis']) {
-				this.add('-activate', pokemon, 'ability: Protosynthesis', '[fromitem]');
-				pokemon.addVolatile('protosynthesis');
+			if (pokemon.hasItem('boosterenergy') && !pokemon.volatiles['quarkdrive'] && pokemon.useItem()) {
+				this.add('-activate', pokemon, 'ability: Quark Drive', '[fromitem]');
+				pokemon.addVolatile('quarkdrive');
 				// @ts-ignore - addVolatile makes this exist but TS can't tell that
-				pokemon.volatiles['protosynthesis'].fromBooster = true;
+				pokemon.volatiles['quarkdrive'].fromBooster = true;
 			}
 		},
 		condition: {

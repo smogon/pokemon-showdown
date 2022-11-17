@@ -795,6 +795,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 	// Commander needs two conditions so they are implemented here
 	// Dodonzo
 	commanded: {
+		noCopy: true,
 		onStart(target) {
 			this.boost({atk: 2, def: 2, spa: 2, spd: 2, spe: 2}, target);
 		},
@@ -807,6 +808,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 	},
 	// Tatsugiri
 	commanding: {
+		noCopy: true,
 		onStart(target) {
 			this.add('-activate', target, 'ability: Commander');
 		},
