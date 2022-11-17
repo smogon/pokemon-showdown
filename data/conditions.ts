@@ -792,6 +792,42 @@ export const Conditions: {[k: string]: ConditionData} = {
 		duration: 1,
 	},
 
+	// Commander needs two conditions so they are implemented here
+	// Dodonzo
+	commanded: {
+		onStart(target) {
+			this.boost({atk: 2, def: 2, spa: 2, spd: 2, spe: 2}, target);
+		},
+		// Prevents Shed Shell allowing a swap
+		onTrapPokemonPriority: -11,
+		onTrapPokemon(pokemon) {
+			// Dodonzo cannot switch out
+			pokemon.trapped = true;
+		},
+	},
+	// Tatsugiri
+	commanding: {
+		onStart(target) {
+			this.add('-activate', target, 'ability: Commander');
+		},
+		// Prevents Shed Shell allowing a swap
+		onTrapPokemonPriority: -11,
+		onTrapPokemon(pokemon) {
+			// Tatsugiri cannot switch out
+			pokemon.trapped = true;
+		},
+		// Override No Guard, TODO test in game
+		onInvulnerabilityPriority: 2,
+		onInvulnerability(target, source, move) {
+			// All attacks miss Tatsugiri
+			return false;
+		},
+		onBeforeTurn(pokemon) {
+			// Tatsugiri doesn't get an action while commanding
+			this.queue.cancelAction(pokemon);
+		}
+	},
+
 	// Arceus and Silvally's actual typing is implemented here.
 	// Their true typing for all their formes is Normal, and it's only
 	// Multitype and RKS System, respectively, that changes their type,

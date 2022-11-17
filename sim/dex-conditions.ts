@@ -453,6 +453,7 @@ export interface EventMethods {
 	onFoeTrapPokemonPriority?: number;
 	onFractionalPriorityPriority?: number;
 	onHitPriority?: number;
+	onInvulnerabilityPriority?: number;
 	onModifyAccuracyPriority?: number;
 	onModifyAtkPriority?: number;
 	onModifyCritRatioPriority?: number;

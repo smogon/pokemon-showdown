@@ -554,7 +554,24 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 213,
 	},
 	commander: {
-		
+		onUpdate(pokemon) {
+			const ally = pokemon.allies()[0];
+			if (!ally || pokemon.species.id !== 'tatsugiri' || ally.species.id !== 'dondozo') return;
+
+			if (!pokemon.getVolatile('commanding')) {
+				// If Dodonzo already was commanded this fails
+				if (ally.getVolatile('commanded')) return;
+				// Cancel all actions this turn for pokemon if applicable
+				this.queue.cancelAction(pokemon);
+				// Add volatiles to both pokemon
+				pokemon.addVolatile('commanding');
+				ally.addVolatile('commanded');
+				// Continued in conditions.ts in the volatiles
+			} else {
+				if (!ally.fainted) return;
+				pokemon.removeVolatile('commanding');
+			}
+		},
 		name: "Commander",
 		rating: 2,
 		num: 279,
@@ -613,7 +630,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 212,
 	},
 	costar: {
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			const ally = pokemon.allies()[0];
 			if (!ally) return;
 
