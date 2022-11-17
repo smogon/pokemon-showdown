@@ -4343,7 +4343,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	orderup: {
 		name: "Order Up",
-		shortDesc: "+1 to stat depending on Tatsugiri color.",
+		shortDesc: "If carrying Tatsugiri, provides buff depending on form.",
 	},
 	originpulse: {
 		name: "Origin Pulse",
