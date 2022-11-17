@@ -662,10 +662,10 @@ export const commands: Chat.ChatCommands = {
 
 			if (!room.settings.banwords) return this.errorReply("This room has no banned phrases.");
 
-			let words = target.match(/[^,]+(,\d*}[^,]*)?/g);
-			if (!words) return this.parse('/help banword');
+			const targets = target.match(/[^,]+(,\d*}[^,]*)?/g);
+			if (!targets) return this.parse('/help banword');
 
-			words = words.map(word => word.replace(/\n/g, '').trim()).filter(word => word.length > 0);
+			const words = targets.map(word => word.replace(/\n/g, '').trim()).filter(word => word.length > 0);
 
 			for (const word of words) {
 				if (!room.settings.banwords.includes(word)) return this.errorReply(`${word} is not a banned phrase in this room.`);
