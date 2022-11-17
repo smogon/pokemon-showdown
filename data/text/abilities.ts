@@ -562,6 +562,12 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "If this Pokemon has a non-volatile status condition, its Attack is multiplied by 1.5. This Pokemon's physical attacks ignore the burn effect of halving damage.",
 		shortDesc: "If this Pokemon is statused, its Attack is 1.5x; ignores burn halving physical damage.",
 	},
+	hadronengine: {
+		name: "Hadron Engine",
+
+		start: "  [POKEMON] turned the ground into Electric Terrain, energizing its futuristic engine!",
+		activate: "  [POKEMON] used the Electric Terrain to energize its futuristic engine!",
+	},
 	harvest: {
 		name: "Harvest",
 		desc: "If the last item this Pokemon used is a Berry, there is a 50% chance it gets restored at the end of each turn. If Sunny Day is active, this chance is 100%.",
@@ -1027,6 +1033,12 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 			desc: "This Pokemon cannot be infatuated. Gaining this Ability while infatuated cures it.",
 			shortDesc: "This Pokemon cannot be infatuated. Gaining this Ability while infatuated cures it.",
 		},
+	},
+	orichalcumpulse: {
+		name: "Orichalcum Pulse",
+
+		start: "  [POKEMON] turned the sunlight harsh, sending its ancient pulse into a frenzy!",
+		activate: "  [POKEMON] basked in the sunlight, sending its ancient pulse into a frenzy!",
 	},
 	overcoat: {
 		name: "Overcoat",

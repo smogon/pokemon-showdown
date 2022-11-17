@@ -1566,16 +1566,26 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 62,
 	},
 	hadronengine: {
-		onStart(source) {
-			this.field.setTerrain('electricterrain');
+		onStart(pokemon) {
+			if (
+				!this.field.setTerrain('electricterrain') &&
+				this.field.isTerrain('electricterrain') && pokemon.isGrounded()
+			) {
+				this.add('-activate', pokemon, 'ability: Hadron Engine');
+			}
 		},
-		// TODO How exactly is spa boosted in electric terrain? Assuming 1.5x
-		// "The futuristic engine within the Pokémon also boosts its Sp. Atk stat on Electric terrain."
+		onAnyTerrainStart(target, source) {
+			const pokemon = this.effectState.target;
+			if (pokemon === source) return;
+			if (this.field.isTerrain('electricterrain') && pokemon.isGrounded()) {
+				this.add('-activate', pokemon, 'ability: Hadron Engine');
+			}
+		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (this.field.isTerrain('electricterrain')) {
+			if (this.field.isTerrain('electricterrain') && attacker.isGrounded()) {
 				this.debug('Hadron Engine boost');
-				return this.chainModify(1.5);
+				return this.chainModify([5325, 4096]);
 			}
 		},
 		name: "Hadron Engine",
@@ -2728,15 +2738,26 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 290,
 	},
 	orichalcumpulse: {
-		onStart(source) {
-			this.field.setWeather('sunnyday');
+		onStart(pokemon) {
+			if (
+				!this.field.setWeather('sunnyday') &&
+				['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())
+			) {
+				this.add('-activate', pokemon, 'ability: Orichalcum Pulse');
+			}
 		},
-		// TODO how exactly is attack boosted? And by how much? Defaulting to solar power (x1.5)
+		onAnyWeatherStart(target, source) {
+			const pokemon = this.effectState.target;
+			if (pokemon === source) return;
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+				this.add('-activate', pokemon, 'ability: Orichalcum Pulse');
+			}
+		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon) {
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
 				this.debug('Orichalcum boost');
-				return this.chainModify(1.5);
+				return this.chainModify([5325, 4096]);
 			}
 		},
 		name: "Orichalcum Pulse",
