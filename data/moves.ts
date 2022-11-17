@@ -15814,7 +15814,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.damage(pokemon.baseMaxhp / this.effectState.boundDivisor);
 			},
 			onEnd(pokemon) {
-				this.add('-end', pokemon, 'Salt Cure', '[partiallytrapped]');
+				this.add('-end', pokemon, 'move: Salt Cure');
 			},
 		},
 		secondary: null,

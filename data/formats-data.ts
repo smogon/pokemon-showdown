@@ -973,7 +973,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "OU",
 	},
 	scyther: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	scizor: {
 		tier: "OU",
@@ -1575,7 +1575,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "OU",
 	},
 	sneasel: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	sneaselhisui: {
 		isNonstandard: "Unobtainable",
@@ -5578,7 +5578,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "OU",
 	},
 	tandemaus: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	maushold: {
 		tier: "OU",

@@ -681,7 +681,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 9] Ubers",
 		threads: [
-			`&bullet <a href="https://www.smogon.com/forums/threads/3710870/">Ubers Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3710870/">Ubers Metagame Discussion</a>`,
 		],
 
 		mod: 'gen9',
@@ -691,16 +691,17 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 9] LC",
 		threads: [
-			`&bullet <a href="https://www.smogon.com/forums/threads/3710868/">Little Cup Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3710868/">Little Cup Metagame Discussion</a>`,
 		],
 
 		mod: 'gen9',
 		ruleset: ['Little Cup', 'Standard'],
+		banlist: ['Scyther', 'Sneasel', 'Tandemaus', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 9] Monotype",
 		threads: [
-			`&bullet <a href="https://www.smogon.com/forums/threads/3710724/">Monotype Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3710724/">Monotype Metagame Discussion</a>`,
 		],
 
 		mod: 'gen9',
