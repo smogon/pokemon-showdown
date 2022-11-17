@@ -19801,6 +19801,41 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Cute",
 	},
+	tidyup: {
+		num: 882,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Tidy Up",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		boosts: {
+			atk: 1,
+			spe: 1,
+		},
+		onHit(source) {
+			let success = false;
+			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			for (const sideCondition of removeAll) {
+				if (source.side.removeSideCondition(sideCondition)) {
+					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Tidy Up', '[of] ' + source);
+					success = true;
+				}
+				if (source.side.foe.removeSideCondition(sideCondition)) {
+					this.add('-sideend', source.side.foe, this.dex.conditions.get(sideCondition).name, '[from] move: Tidy Up', '[of] ' + source);
+					success = true;
+				}
+			}
+			for (const pokemon of this.getAllActive()) {
+				if (pokemon.removeVolatile('substitute')) success = true;
+			}
+			if (success) this.add('-activate', source, 'move: Tidy Up');
+		},
+		secondary: null,
+		target: "self",
+		type: "Normal",
+	},
 	topsyturvy: {
 		num: 576,
 		accuracy: true,

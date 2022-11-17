@@ -6443,6 +6443,12 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Lowers the target's Attack and Defense by 1 stage.",
 		shortDesc: "Lowers the target's Attack and Defense by 1.",
 	},
+	tidyup: {
+		name: "Tidy Up",
+		shortDesc: "",
+
+		activate: "  Tidying up complete!",
+	},
 	topsyturvy: {
 		name: "Topsy-Turvy",
 		desc: "The target's positive stat stages become negative and vice versa. Fails if all of the target's stat stages are 0.",
