@@ -556,7 +556,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	commander: {
 		onUpdate(pokemon) {
 			const ally = pokemon.allies()[0];
-			if (!ally || pokemon.species.id !== 'tatsugiri' || ally.species.id !== 'dondozo') return;
+			if (!ally || pokemon.species.id !== 'tatsugiri' || ally.species.id !== 'dondozo') {
+				// Handle any edge cases
+				if (pokemon.getVolatile('commanding')) pokemon.removeVolatile('commanding');
+				return;
+			}
 
 			if (!pokemon.getVolatile('commanding')) {
 				// If Dodonzo already was commanded this fails
@@ -2725,10 +2729,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	orichalcumpulse: {
 		onStart(source) {
-			for (const action of this.queue) {
-				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'groudon') return;
-				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
-			}
 			this.field.setWeather('sunnyday');
 		},
 		// TODO how exactly is attack boosted? And by how much? Defaulting to solar power (x1.5)
