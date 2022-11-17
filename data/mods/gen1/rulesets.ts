@@ -22,7 +22,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 					newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * 2, 1, 255);
 					newSpecies.bst += newSpecies.baseStats[stat];
 				}
-				newSpecies.baseStats['spd'] = newSpecies.baseStats['spa']
+				newSpecies.baseStats['spd'] = newSpecies.baseStats['spa'];
 			}
 			return newSpecies;
 		},
@@ -67,7 +67,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 				newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * scale / pst, 1, 255);
 				newSpecies.bst += newSpecies.baseStats[stat];
 			}
-			newSpecies.baseStats['spd'] = newSpecies.baseStats['spa']
+			newSpecies.baseStats['spd'] = newSpecies.baseStats['spa'];
 			return newSpecies;
 		},
 	},
