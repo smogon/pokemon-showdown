@@ -29,4 +29,36 @@ describe('Explosion', function () {
 		const damage = hippo.maxhp - hippo.hp;
 		assert.bounded(damage, [327, 385]);
 	});
+
+	it(`[Gen 1] Explosion should build rage, even if it misses`, function () {
+		// Explosion hits
+		battle = common.gen(1).createBattle([[
+			{species: 'golem', moves: ['explosion']},
+		], [
+			{species: 'aerodactyl', moves: ['rage']},
+		]]);
+		battle.makeChoices();
+		assert(battle.log.some(line => line.startsWith('|-boost|')));
+
+		// Explosion misses
+		battle = common.gen(1).createBattle({seed: [2, 2, 2, 2]}, [[
+			{species: 'golem', moves: ['splash', 'explosion']},
+		], [
+			{species: 'aerodactyl', moves: ['sandattack', 'rage']},
+		]]);
+		for (let i = 0; i < 6; i++) {
+			battle.makeChoices();
+		}
+		battle.makeChoices('move explosion', 'move rage');
+		assert(battle.log.some(line => line.startsWith('|-boost|')));
+
+		// Explosion misses against a Ghost-type
+		battle = common.gen(1).createBattle([[
+			{species: 'golem', moves: ['explosion']},
+		], [
+			{species: 'gastly', moves: ['rage']},
+		]]);
+		battle.makeChoices();
+		assert(battle.log.some(line => line.startsWith('|-boost|')));
+	});
 });
