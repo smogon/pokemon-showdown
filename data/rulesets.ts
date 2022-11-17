@@ -109,6 +109,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
+	draft: {
+		effectType: 'ValidatorRule',
+		name: 'Draft',
+		desc: "The custom Draft League ruleset",
+		ruleset: [
+			'Obtainable', '+Unreleased', '+CAP', 'Team Preview', 'Sleep Clause Mod', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'
+		],
+		// timer: {starting: 60 * 60, grace: 0, addPerTurn: 10, maxPerTurn: 100, timeoutAutoChoose: true},
+	},
 	obtainable: {
 		effectType: 'ValidatorRule',
 		name: 'Obtainable',
@@ -583,6 +592,32 @@ export const Rulesets: {[k: string]: FormatData} = {
 					];
 				}
 				itemTable.add(item);
+			}
+		},
+	},
+	doubleitemclause: {
+		effectType: 'ValidatorRule',
+		name: 'Double Item Clause',
+		desc: "Prevents teams from having more than two Pok&eacute;mon with the same item",
+		onBegin() {
+			this.add('rule', 'Double Item Clause: Limit two of each item');
+		},
+		onValidateTeam(team) {
+			const itemTable: {[k: string]: number} = {};
+			for (const set of team) {
+				const item = this.toID(set.item);
+				if (!item) continue;
+				if (item in itemTable) {
+					if (itemTable[item] >= 2) {
+						return [
+							`You are limited to two of each item by Double Item Clause.`,
+							`(You have more than two ${this.dex.items.get(item).name})`,
+						];
+					}
+					itemTable[item]++;
+				} else {
+					itemTable[item] = 1;
+				}
 			}
 		},
 	},

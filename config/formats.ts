@@ -4120,4 +4120,125 @@ export const Formats: FormatList = [
 		battle: {trunc: Math.trunc},
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
+
+	// Draft League
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "Draft",
+		column: 6,
+	},
+	{
+		name: "[Gen 9] Paldea Dex Draft",
+
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['Draft'],
+	},
+	{
+		name: "[Gen 9] 6v6 Doubles Draft",
+
+		mod: 'gen9',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Draft', '!Sleep Clause Mod', '!Evasion Moves Clause'],
+	},
+	{
+		name: "[Gen 9] 4v4 Doubles Draft",
+
+		mod: 'gen9',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Draft', 'Item Clause', '!Sleep Clause Mod', '!OHKO Clause', '!Evasion Moves Clause', 'Adjust Level = 50', 'Picked Team Size = 4'],
+	},
+	{
+		name: "[Gen 9] NatDex Draft",
+
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['Draft', '+Past'],
+	},
+	{
+		name: "[Gen 9] NatDex 6v6 Doubles Draft",
+
+		mod: 'gen9',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['[Gen 9] 6v6 Doubles Draft', '+Past'],
+	},
+	{
+		name: "[Gen 9] NatDex 4v4 Doubles Draft",
+
+		mod: 'gen9',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['[Gen 9] 4v4 Doubles Draft', '+Past'],
+	},
+	{
+		name: "[Gen 9] LC NDex Draft",
+
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['[Gen 9] NatDex Draft', 'Double Item Clause', 'Little Cup'],
+		banlist: ['Dragon Rage', 'Sonic Boom'],
+	},
+	{
+		name: "[Gen 8] Galar Dex Draft",
+
+		mod: 'gen8',
+		searchShow: false,
+		ruleset: ['Draft'],
+	},
+	{
+		name: "[Gen 8] 4v4 Doubles Draft",
+
+		mod: 'gen8',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Draft', 'Item Clause', '!Sleep Clause Mod', '!OHKO Clause', '!Evasion Moves Clause', 'Adjust Level = 50', 'Picked Team Size = 4'],
+	},
+	{
+		name: "[Gen 8] NatDex Draft",
+
+		mod: 'gen8',
+		searchShow: false,
+		ruleset: ['Draft', '+Past'],
+	},
+	{
+		name: "[Gen 8] NatDex 4v4 Doubles Draft",
+
+		mod: 'gen8',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['[Gen 8] 4v4 Doubles Draft', '+Past'],
+	},
+	{
+		name: "[Gen 8] LC NDex Draft",
+
+		mod: 'gen8',
+		searchShow: false,
+		ruleset: ['[Gen 8] NatDex Draft', 'Double Item Clause', 'Little Cup'],
+		banlist: ['Dragon Rage', 'Sonic Boom'],
+	},
+	{
+		name: "[Gen 8 BDSP] Draft",
+
+		mod: 'gen8bdsp',
+		searchShow: false,
+		ruleset: ['Draft'],
+	},
+	{
+		name: "[Gen 7] Draft",
+
+		mod: 'gen7',
+		searchShow: false,
+		ruleset: ['Draft', '+LGPE'],
+	},
+	{
+		name: "[Gen 6] Draft",
+
+		mod: 'gen6',
+		searchShow: false,
+		ruleset: ['Draft'],
+	},
 ];
