@@ -74,7 +74,7 @@ export class BattleActions {
 		if (unfaintedActive) {
 			oldActive.beingCalledBack = true;
 			let switchCopyFlag: 'copyvolatile' | 'shedtail' | boolean = false;
-			if (sourceEffect && (sourceEffect as Move).selfSwitch) {
+			if (sourceEffect && typeof (sourceEffect as Move).selfSwitch === 'string') {
 				switchCopyFlag = (sourceEffect as Move).selfSwitch!;
 			}
 			if (!oldActive.skipBeforeSwitchOutEventFlag && !isDrag) {
