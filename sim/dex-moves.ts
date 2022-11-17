@@ -462,7 +462,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.effectType = 'Move';
 		this.type = Utils.getString(data.type);
 		this.target = data.target;
-		this.basePower = Number(data.basePower!);
+		this.basePower = Number(data.basePower);
 		this.accuracy = data.accuracy!;
 		this.critRatio = Number(data.critRatio) || 1;
 		this.baseMoveType = Utils.getString(data.baseMoveType) || this.type;
@@ -479,7 +479,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.ignoreOffensive = !!data.ignoreOffensive;
 		this.ignoreDefensive = !!data.ignoreDefensive;
 		this.ignoreImmunity = (data.ignoreImmunity !== undefined ? data.ignoreImmunity : this.category === 'Status');
-		this.pp = Number(data.pp!);
+		this.pp = Number(data.pp);
 		this.noPPBoosts = !!data.noPPBoosts;
 		this.isZ = data.isZ || false;
 		this.isMax = data.isMax || false;
