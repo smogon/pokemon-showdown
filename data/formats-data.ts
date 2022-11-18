@@ -77,12 +77,15 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	caterpie: {
+		isNonstandard: "Past",
 		tier: "LC",
 	},
 	metapod: {
+		isNonstandard: "Past",
 		tier: "NFE",
 	},
 	butterfree: {
+		isNonstandard: "Past",
 		tier: "OU",
 		doublesTier: "DOU",
 		natDexTier: "OU",
@@ -5118,6 +5121,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	cramorant: {
+		isNonstandard: "Past",
 		tier: "OU",
 		doublesTier: "DOU",
 		natDexTier: "OU",
