@@ -4280,6 +4280,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			// Placeholder 1.1 -> 1.5
 			return this.chainModify(1 + (0.1 * faintedAllies));
 		},
+		onAllyFaint() {
+			this.add('-activate', this.effectState.target, 'ability: Supreme Overlord');
+		},
 		name: "Supreme Overlord",
 		rating: 2.5,
 		num: 293,
