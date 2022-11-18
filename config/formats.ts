@@ -183,7 +183,7 @@ export const Formats: FormatList = [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3672423/">National Dex AG</a>`,
 		],
 
-		mod: 'gen8',
+		mod: 'gen9',
 		ruleset: ['Standard NatDex'],
 	},
 	{
