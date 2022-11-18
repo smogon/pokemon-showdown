@@ -40,7 +40,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['Standard'],
-		banlist: ['AG', 'Baton Pass'],
+		banlist: ['AG', 'King\'s Rock', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 9] LC",
