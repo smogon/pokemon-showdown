@@ -10,7 +10,6 @@ describe("Terastallization", function () {
 		battle.destroy();
 	});
 
-	// Don't know why this is failing
 	it('should change the user\'s type to its Tera type after terastallizing', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
@@ -24,7 +23,6 @@ describe("Terastallization", function () {
 	});
 
 	// TODO test if actual mechanic
-	// Don't know why this is failing
 	it('should persist the user\'s changed type after switching', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
