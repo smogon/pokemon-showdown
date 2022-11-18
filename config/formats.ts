@@ -780,7 +780,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen9',
-		ruleset: ['Standard OMs', '!Obtainable Abilities', 'Ability Clause', 'Sleep Moves Clause'],
+		ruleset: ['Standard OMs', '!Obtainable Abilities', 'Ability Clause', 'Sleep Moves Clause', 'Min Source Gen = 9'],
 		banlist: [
 			'Koraidon', 'Miraidon', 'Arena Trap', 'Comatose', 'Contrary', 'Gorilla Tactics', 'Huge Power', 'Illusion', 'Imposter',
 			'Innards Out', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Pure Power', 'Shadow Tag', 'Simple',

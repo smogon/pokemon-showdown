@@ -5596,7 +5596,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	frigibax: {
 		tier: "LC",
 	},
-	articbax: {
+	arctibax: {
 		tier: "NFE",
 	},
 	baxcalibur: {

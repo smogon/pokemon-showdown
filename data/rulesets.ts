@@ -79,7 +79,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "The standard ruleset for all Smogon OMs (Almost Any Ability, STABmons, etc.)",
 		ruleset: [
 			'Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Overflow Stat Mod',
-			'Min Source Gen = 9',
+			// 'Min Source Gen = 9', - crashes for some reason
 		],
 	},
 	standardnatdex: {
@@ -1260,7 +1260,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const minSourceGen = parseInt(value);
 			if (minSourceGen > this.dex.gen) {
 				// console.log(this.ruleTable);
-				throw new Error(`Invalid generation ${minSourceGen}${this.ruleTable.blame('minsourcegen')} for a Gen ${this.dex.gen} format`);
+				throw new Error(`Invalid generation ${minSourceGen}${this.ruleTable.blame('minsourcegen')} for a Gen ${this.dex.gen} format (${this.format.name})`);
 			}
 		},
 	},
@@ -1275,7 +1275,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 				const speciesTypes: string[] = [];
 				const moveTypes: string[] = [];
 				// BDSP can't import Pokemon from Home, so it shouldn't grant moves from archaic species types
-				const minObtainableSpeciesGen = this.dex.currentMod === 'gen8bdsp' ? this.dex.gen : species.gen;
+				const minObtainableSpeciesGen = this.dex.currentMod === 'gen8bdsp' || this.dex.gen === 9 ?
+					this.dex.gen : species.gen;
 				for (let i = this.dex.gen; i >= minObtainableSpeciesGen && i >= move.gen; i--) {
 					const dex = this.dex.forGen(i);
 					moveTypes.push(dex.moves.get(move.name).type);
