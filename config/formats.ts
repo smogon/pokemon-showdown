@@ -199,6 +199,16 @@ export const Formats: FormatList = [
 		banlist: ['ND OU', 'ND UUBL', 'Drizzle', 'Drought', 'Light Clay', 'Slowbronite'],
 		unbanlist: ['Hydreigon'],
 	},
+	{
+		name: "[Gen 8] National Dex AG",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3672423/">National Dex AG</a>`,
+		],
+
+		mod: 'gen8',
+		searchShow: false,
+		ruleset: ['Standard NatDex'],
+	},
 
 	// Pet Mods
 	///////////////////////////////////////////////////////////////////
