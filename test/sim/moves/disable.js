@@ -89,4 +89,24 @@ describe('Disable', function () {
 		assert('disable' in p2pkmn.volatiles);
 		assert.equal(p2pkmn.volatiles.disable.move, 'tackle');
 	});
+
+	it(`[Gen 1] Disable should build rage, even if it misses/fails`, function () {
+		// Disable hits
+		battle = common.gen(1).createBattle([[
+			{species: 'Drowzee', moves: ['disable']},
+		], [
+			{species: 'Abra', moves: ['rage']},
+		]]);
+		battle.makeChoices();
+		assert(battle.log.some(line => line.startsWith('|-boost|')));
+
+		// Disable misses
+		battle = common.gen(1).createBattle({seed: [2, 2, 2, 2]}, [[
+			{species: 'Drowzee', moves: ['disable']},
+		], [
+			{species: 'Abra', moves: ['rage']},
+		]]);
+		battle.makeChoices();
+		assert(battle.log.some(line => line.startsWith('|-boost|')));
+	});
 });

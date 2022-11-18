@@ -255,6 +255,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.lastDamage = 0;
 			}
 
+			// Disable and Selfdestruct/Explosion boost rage, regardless of whether they miss/fail.
+			if (target.boosts.atk < 6 && (move.selfdestruct || move.id === 'disable') && target.volatiles['rage']) {
+				this.battle.boost({atk: 1}, target, pokemon, this.dex.conditions.get('rage'));
+			}
+
 			// Go ahead with results of the used move.
 			if (damage === false) {
 				this.battle.singleEvent('MoveFail', move, null, target, pokemon, move);
@@ -394,7 +399,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// The move missed.
-			if (!damage && damage !== 0) {
+			if (damage === false) {
 				// Delete the partial trap lock if necessary.
 				delete pokemon.volatiles['partialtrappinglock'];
 				return false;
