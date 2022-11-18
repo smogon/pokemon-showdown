@@ -2,17 +2,17 @@ import {BasicEffect, toID} from './dex-data';
 import type {SecondaryEffect, MoveSpecificEventMethods} from './dex-moves';
 
 type GenericEvent = 'DamagingHit' | 'EmergencyExit' | 'AfterEachBoost' | 'AfterHit' | 'AfterMega' | 'AfterSetStatus' |
-'AfterSubDamage' | 'AfterSwitchInSelf' | 'AfterUseItem' | 'AfterBoost' | 'AfterFaint' | 'AfterMoveSecondarySelf' |
-'AfterMoveSecondary' | 'AfterMove' | 'AfterMoveSelf' | 'Attract' | 'Accuracy' | 'BasePower' | 'BeforeFaint' |
-'BeforeMove' | 'BeforeSwitchIn' | 'BeforeSwitchOut' | 'BeforeTurn' | 'Boost' | 'ChargeMove' | 'CriticalHit' |
-'Damage' | 'DeductPP' | 'DisableMove' | 'DragOut' | 'EatItem' | 'Effectiveness' | 'EntryHazard' | 'Faint' | 'Flinch' |
-'FractionalPriority' | 'Hit' | 'Immunity' | 'LockMove' | 'MaybeTrapPokemon' | 'ModifyAccuracy' | 'ModifyAtk' |
-'ModifyBoost' | 'ModifyCritRatio' | 'ModifyDamage' | 'ModifyDef' | 'ModifyMove' | 'ModifyPriority' |
+'AfterSubDamage' | 'AfterSwitchInSelf' | 'AfterTerastallization' | 'AfterUseItem' | 'AfterBoost' | 'AfterFaint' |
+'AfterMoveSecondarySelf' | 'AfterMoveSecondary' | 'AfterMove' | 'AfterMoveSelf' | 'Attract' | 'Accuracy' | 'BasePower' |
+'BeforeFaint' | 'BeforeMove' | 'BeforeSwitchIn' | 'BeforeSwitchOut' | 'BeforeTurn' | 'Boost' | 'ChargeMove' |
+'CriticalHit' | 'Damage' | 'DeductPP' | 'DisableMove' | 'DragOut' | 'EatItem' | 'Effectiveness' | 'EntryHazard' |
+'Faint' | 'Flinch' | 'FractionalPriority' | 'Hit' | 'Immunity' | 'LockMove' | 'MaybeTrapPokemon' | 'ModifyAccuracy' |
+'ModifyAtk' | 'ModifyBoost' | 'ModifyCritRatio' | 'ModifyDamage' | 'ModifyDef' | 'ModifyMove' | 'ModifyPriority' |
 'ModifySecondaries' | 'ModifyType' | 'ModifyTarget' | 'ModifySpA' | 'ModifySpD' | 'ModifySpe' | 'ModifyWeight' |
 'MoveAborted' | 'NegateImmunity' | 'OverrideAction' | 'PrepareHit' | 'PseudoWeatherStart' | 'RedirectTarget' |
 'Residual' | 'SetAbility' | 'SetStatus' | 'SetWeather' | 'StallMove' | 'SwitchIn' | 'SwitchOut' | 'Swap' | 'TakeItem' | 'TerrainStart' | 'WeatherStart' | 'TrapPokemon' | 'TryAddVolatile' | 'TryEatItem' | 'TryHeal' | 'TryHit' |
 'TryHitField' | 'TryHitSide' | 'Invulnerability' | 'TryMove' | 'TryPrimaryHit' | 'Type' | 'Update' | 'Weather' | 'WeatherModifyDamage' | 'ModifyDamagePhase1' | 'ModifyDamagePhase2';
-type PokemonEvent = GenericEvent;
+type PokemonEvent = GenericEvent | 'SideConditionStart';
 type ConditionEvent = GenericEvent | 'Start' | 'Restart' | 'End' | 'Copy';
 type PokemonConditionEvent = PokemonEvent | ConditionEvent;
 type SideConditionEvent = ConditionEvent | 'Residual';
@@ -658,7 +658,7 @@ interface ConditionEventMethods {
 }
 export type Condition = ConditionEffect & ModdedConditionData;
 export class ConditionEffect extends BasicEffect implements Readonly<BasicEffect> {
-	declare readonly effectType: 'Condition' | 'Weather' | 'Status';
+	declare readonly effectType: 'Condition' | 'Weather' | 'Status' | 'Terastal';
 	declare readonly counterMax?: number;
 
 	declare readonly durationCallback?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect | null) => number;

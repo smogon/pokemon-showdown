@@ -695,7 +695,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			duration: 2,
 			onEnd(pokemon) {
 				if (pokemon.hp && pokemon.abilityState.berry) {
-					const item = pokemon.abilityState.berry;
+					const item: Item = pokemon.abilityState.berry;
 					this.add('-activate', pokemon, 'ability: Cud Chew');
 					this.add('-enditem', pokemon, item.name);
 					if (this.singleEvent('Eat', item, null, pokemon, null, null)) {
