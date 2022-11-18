@@ -1,4 +1,24 @@
 export const Items: {[itemid: string]: ItemData} = {
+	abilityshield: {
+		name: "Ability Shield",
+		spritenum: 0, // TODO
+		onSetAbility(ability, target, source, effect) {
+			// TODO research behavior with Ability suppression and Mold Breaker effects
+			if (target !== source) {
+				this.add('-activate', target, 'item: Ability Shield');
+				return false;
+			}
+		},
+		onTryHit(source, target, move) {
+			// TODO refactor Skill Swap to use setAbility()
+			if (target !== source && move.id === 'skillswap') {
+				this.add('-activate', target, 'item: Ability Shield');
+				return false;
+			}
+		},
+		num: 1881,
+		gen: 9,
+	},
 	abomasite: {
 		name: "Abomasite",
 		spritenum: 575,
@@ -306,6 +326,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Past",
 	},
+	auspiciousarmor: {
+		name: "Auspicious Armor",
+		spritenum: 0, // TODO
+		num: 2344,
+		gen: 9,
+	},
 	babiriberry: {
 		name: "Babiri Berry",
 		spritenum: 17,
@@ -546,6 +572,13 @@ export const Items: {[itemid: string]: ItemData} = {
 		// Item activation located in scripts.js
 		num: 1121,
 		gen: 8,
+	},
+	boosterenergy: {
+		name: "Booster Energy",
+		spritenum: 0, // TODO
+		// implemented in the corresponding thing
+		num: 1880,
+		gen: 9,
 	},
 	bottlecap: {
 		name: "Bottle Cap",
@@ -928,6 +961,26 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 3,
 		isNonstandard: "Past",
 	},
+	clearamulet: {
+		name: "Clear Amulet",
+		spritenum: 0, // TODO
+		onBoost(boost, target, source, effect) {
+			if (source && target === source) return;
+			let showMsg = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					delete boost[i];
+					showMsg = true;
+				}
+			}
+			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+				this.add("-fail", target, "unboost", "[from] item: Clear Amulet", "[of] " + target);
+			}
+		},
+		num: 1882,
+		gen: 9,
+	},
 	cloversweet: {
 		name: "Clover Sweet",
 		spritenum: 707,
@@ -1007,6 +1060,19 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 572,
 		gen: 5,
 		isNonstandard: "Past",
+	},
+	covertcloak: {
+		name: "Covert Cloak",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 0, // TODO
+		onModifySecondaries(secondaries) {
+			this.debug('Covert Cloak prevent secondary');
+			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
+		},
+		num: 1885,
+		gen: 9,
 	},
 	crackedpot: {
 		name: "Cracked Pot",
@@ -2945,6 +3011,18 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 269,
 		gen: 4,
 	},
+	loadeddice: {
+		name: "Loaded Dice",
+		spritenum: 0, // TODO
+		// partially implemented in sim/battle-actions.ts:BattleActions#hitStepMoveHitLoop
+		onModifyMove(move) {
+			if (move.multiaccuracy) {
+				delete move.multiaccuracy;
+			}
+		},
+		num: 1886,
+		gen: 9,
+	},
 	lopunnite: {
 		name: "Lopunnite",
 		spritenum: 626,
@@ -3183,6 +3261,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 137,
 		gen: 2,
 		isNonstandard: "Past",
+	},
+	maliciousarmor: {
+		name: "Malicious Armor",
+		spritenum: 0, // TODO
+		num: 1861,
+		gen: 9,
 	},
 	manectite: {
 		name: "Manectite",
@@ -3526,6 +3610,30 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 239,
 		gen: 2,
+	},
+	mirrorherb: {
+		name: "Mirror Herb",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 0, // TODO
+		onFoeAfterBoost(boost, target, source) {
+			const boostPlus: SparseBoostsTable = {};
+			let statsRaised = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! > 0) {
+					boostPlus[i] = boost[i];
+					statsRaised = true;
+				}
+			}
+			if (!statsRaised) return;
+			const pokemon = this.effectState.target;
+			pokemon.useItem();
+			this.boost(boostPlus, pokemon);
+		},
+		num: 1883,
+		gen: 9,
 	},
 	mistyseed: {
 		name: "Misty Seed",
@@ -4255,6 +4363,22 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 786,
 		gen: 7,
 		isNonstandard: "Past",
+	},
+	punchingglove: {
+		name: "Punching Glove",
+		spritenum: 0, // TODO
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['punch']) {
+				this.debug('Punching Glove boost');
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		onModifyMove(move) {
+			if (move.flags['punch']) delete move.flags['contact'];
+		},
+		num: 1884,
+		gen: 9,
 	},
 	qualotberry: {
 		name: "Qualot Berry",
