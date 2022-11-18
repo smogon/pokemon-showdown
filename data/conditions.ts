@@ -793,7 +793,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 	},
 
 	// Commander needs two conditions so they are implemented here
-	// Dodonzo
+	// Dondozo
 	commanded: {
 		noCopy: true,
 		onStart(target) {
@@ -802,7 +802,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		// Prevents Shed Shell allowing a swap
 		onTrapPokemonPriority: -11,
 		onTrapPokemon(pokemon) {
-			// Dodonzo cannot switch out
+			// Dondozo cannot switch out
 			pokemon.trapped = true;
 		},
 	},
