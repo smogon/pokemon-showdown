@@ -403,8 +403,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	eartheater: {
 		name: "Earth Eater",
-		desc: "This Pokemon is immune to Ground-type moves and restores 1/3 of its maximum HP, rounded down, when hit by a Ground-type move.",
-		shortDesc: "This Pokemon heals 1/3 of its max HP when hit by Ground moves; Ground immunity.",
+		desc: "This Pokemon is immune to Ground-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Ground-type move.",
+		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Ground moves; Ground immunity.",
 	},
 	effectspore: {
 		name: "Effect Spore",
