@@ -2336,7 +2336,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		target: "normal",
-		type: "Ice",
+		type: "Water",
 		contestType: "Beautiful",
 	},
 	chillyreception: {
