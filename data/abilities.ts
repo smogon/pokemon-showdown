@@ -556,7 +556,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	commander: {
 		onUpdate(pokemon) {
 			const ally = pokemon.allies()[0];
-			if (!ally || pokemon.species.id !== 'tatsugiri' || ally.species.id !== 'dondozo') {
+			if (!ally || pokemon.species.baseSpecies !== 'Tatsugiri' || ally.species.id !== 'dondozo') {
 				// Handle any edge cases
 				if (pokemon.getVolatile('commanding')) pokemon.removeVolatile('commanding');
 				return;
