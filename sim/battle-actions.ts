@@ -1820,7 +1820,7 @@ export class BattleActions {
 	canTerastallize(pokemon: Pokemon) {
 		if (
 			pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra" ||
-			pokemon.getItem().zMove || pokemon.canMegaEvo || pokemon.side.canDynamaxNow()
+			pokemon.getItem().zMove || pokemon.canMegaEvo || pokemon.side.canDynamaxNow() || this.dex.gen !== 9
 		) {
 			return null;
 		}
