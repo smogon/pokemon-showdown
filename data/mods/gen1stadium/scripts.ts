@@ -521,7 +521,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			if (move.selfSwitch && pokemon.hp) {
-				pokemon.switchFlag = move.selfSwitch;
+				pokemon.switchFlag = move.selfSwitch === true ? true : toID(move.selfSwitch);
 			}
 
 			return damage;

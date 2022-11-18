@@ -123,7 +123,11 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 		this.isPokeball = !!data.isPokeball;
 
 		if (!this.gen) {
-			if (this.num >= 689) {
+			if (this.num >= 1124) {
+				this.gen = 9;
+			} else if (this.num >= 927) {
+				this.gen = 8;
+			} else if (this.num >= 689) {
 				this.gen = 7;
 			} else if (this.num >= 577) {
 				this.gen = 6;

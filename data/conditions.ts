@@ -674,6 +674,39 @@ export const Conditions: {[k: string]: ConditionData} = {
 			this.add('-weather', 'none');
 		},
 	},
+	snow: {
+		name: 'Snow',
+		effectType: 'Weather',
+		duration: 5,
+		durationCallback(source, effect) {
+			if (source?.hasItem('icyrock')) {
+				return 8;
+			}
+			return 5;
+		},
+		onModifyDefPriority: 10,
+		onModifyDef(def, pokemon) {
+			if (pokemon.hasType('Ice') && this.field.isWeather('snow')) {
+				return this.modify(def, 1.5);
+			}
+		},
+		onFieldStart(field, source, effect) {
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-weather', 'Snow', '[from] ability: ' + effect.name, '[of] ' + source);
+			} else {
+				this.add('-weather', 'Snow');
+			}
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-weather', 'Snow', '[upkeep]');
+			if (this.field.isWeather('snow')) this.eachEvent('Weather');
+		},
+		onFieldEnd() {
+			this.add('-weather', 'none');
+		},
+	},
 	deltastream: {
 		name: 'DeltaStream',
 		effectType: 'Weather',
@@ -752,6 +785,51 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 	},
 
+	terastal: {
+		name: 'Terastal',
+		effectType: 'Terastal',
+		noCopy: true,
+		duration: 1,
+	},
+
+	// Commander needs two conditions so they are implemented here
+	// Dodonzo
+	commanded: {
+		noCopy: true,
+		onStart(target) {
+			this.boost({atk: 2, def: 2, spa: 2, spd: 2, spe: 2}, target);
+		},
+		// Prevents Shed Shell allowing a swap
+		onTrapPokemonPriority: -11,
+		onTrapPokemon(pokemon) {
+			// Dodonzo cannot switch out
+			pokemon.trapped = true;
+		},
+	},
+	// Tatsugiri
+	commanding: {
+		noCopy: true,
+		onStart(target) {
+			this.add('-activate', target, 'ability: Commander');
+		},
+		// Prevents Shed Shell allowing a swap
+		onTrapPokemonPriority: -11,
+		onTrapPokemon(pokemon) {
+			// Tatsugiri cannot switch out
+			pokemon.trapped = true;
+		},
+		// Override No Guard, TODO test in game
+		onInvulnerabilityPriority: 2,
+		onInvulnerability(target, source, move) {
+			// All attacks miss Tatsugiri
+			return false;
+		},
+		onBeforeTurn(pokemon) {
+			// Tatsugiri doesn't get an action while commanding
+			this.queue.cancelAction(pokemon);
+		},
+	},
+
 	// Arceus and Silvally's actual typing is implemented here.
 	// Their true typing for all their formes is Normal, and it's only
 	// Multitype and RKS System, respectively, that changes their type,
@@ -786,6 +864,19 @@ export const Conditions: {[k: string]: ConditionData} = {
 				}
 			}
 			return [type];
+		},
+	},
+	rolloutstorage: {
+		name: 'rolloutstorage',
+		duration: 2,
+		onBasePower(relayVar, source, target, move) {
+			let bp = Math.max(1, move.basePower);
+			bp *= Math.pow(2, source.volatiles['rolloutstorage'].contactHitCount);
+			if (source.volatiles['defensecurl']) {
+				bp *= 2;
+			}
+			source.removeVolatile('rolloutstorage');
+			return bp;
 		},
 	},
 };

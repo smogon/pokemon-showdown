@@ -19,7 +19,7 @@ import type {Tournament} from './tournaments/index';
 import {RoomSettings} from './rooms';
 
 type ChannelIndex = 0 | 1 | 2 | 3 | 4;
-type PlayerIndex = 1 | 2 | 3 | 4;
+export type PlayerIndex = 1 | 2 | 3 | 4;
 export type ChallengeType = 'rated' | 'unrated' | 'challenge' | 'tour';
 
 interface BattleRequestTracker {
