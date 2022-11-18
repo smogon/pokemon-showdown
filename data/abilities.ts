@@ -569,7 +569,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.queue.cancelAction(pokemon);
 				// Add volatiles to both pokemon
 				pokemon.addVolatile('commanding');
-				ally.addVolatile('commanded');
+				ally.addVolatile('commanded', pokemon);
 				// Continued in conditions.ts in the volatiles
 			} else {
 				if (!ally.fainted) return;
