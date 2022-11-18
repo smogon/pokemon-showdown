@@ -6537,6 +6537,11 @@ export const MovesText: {[k: string]: MoveText} = {
 			shortDesc: "Fails when used.",
 		},
 	},
+	terablast: {
+		name: "Terra Blast",
+		desc: "This move becomes a physical attack if the user's Attack is greater than its Special Attack, including stat stage changes. If the user is Terastallized, this move's type becomes the same its the user's Tera Type.",
+		shortDesc: "Phys. if Atk > SpA. Type = Tera Type if Terastallized.",
+	},
 	terrainpulse: {
 		name: "Terrain Pulse",
 		desc: "Power doubles if the user is grounded and a terrain is active, and this move's type changes to match. Electric type during Electric Terrain, Grass type during Grassy Terrain, Fairy type during Misty Terrain, and Psychic type during Psychic Terrain.",
