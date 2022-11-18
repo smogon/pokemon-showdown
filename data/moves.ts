@@ -15576,6 +15576,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		onAfterMove(source, target, move) {
 			const rolloutData = source.volatiles["rollout"];
+			if (!rolloutData) {
+				// User fainted from something like Destiny Bond when using rollout
+				return;
+			}
 			if (
 				rolloutData.hitCount === 5 &&
 				rolloutData.contactHitCount < 5
