@@ -178,7 +178,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	thawsTarget?: boolean;
 	heal?: number[] | null;
 	forceSwitch?: boolean;
-	selfSwitch?: string | boolean;
+	selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
 	selfBoost?: {boosts?: SparseBoostsTable};
 	selfdestruct?: 'always' | 'ifHit' | boolean;
 	breaksProtect?: boolean;
@@ -317,7 +317,7 @@ export interface ActiveMove extends MutableMove {
 	pranksterBoosted?: boolean;
 	refrigerateBoosted?: boolean;
 	selfDropped?: boolean;
-	selfSwitch?: ID | boolean;
+	selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
 	spreadHit?: boolean;
 	stab?: number;
 	statusRoll?: string;
@@ -424,7 +424,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	};
 	readonly flags: MoveFlags;
 	/** Whether or not the user must switch after using this move. */
-	readonly selfSwitch?: ID | boolean;
+	readonly selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
 	/** Move target only used by Pressure. */
 	readonly pressureTarget: string;
 	/** Move target used if the user is not a Ghost type (for Curse). */
@@ -565,7 +565,9 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		}
 
 		if (!this.gen) {
-			if (this.num >= 743) {
+			if (this.num >= 827) {
+				this.gen = 9;
+			} else if (this.num >= 743) {
 				this.gen = 8;
 			} else if (this.num >= 622) {
 				this.gen = 7;

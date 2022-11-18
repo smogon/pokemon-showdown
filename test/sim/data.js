@@ -39,6 +39,7 @@ describe('Dex data', function () {
 					const evoEntry = Pokedex[toID(evo)] || {};
 					assert.equal(evo, evoEntry.name, `Misspelled/nonexistent evo "${evo}" of ${entry.name}`);
 					assert.notEqual(entry.num, evoEntry.num, `Evo ${evo} of ${entry.name} should have a different dex number`);
+					if (entry.name === "Gimmighoul-Roaming") continue;
 					assert.equal(evoEntry.prevo, entry.name, `Evo ${evo} should have ${entry.name} listed as a prevo`);
 				}
 			}
@@ -186,7 +187,7 @@ describe('Dex data', function () {
 					const LEARN_ORDER = 'MTLREVDSC';
 					for (const learned of entry.learnset[moveid]) {
 						// See the definition of MoveSource in sim/global-types
-						assert(/^[1-8][MTLREDSVC]/.test(learned), `Learn method "${learned}" for ${species.name}'s ${move.name} is invalid`);
+						assert(/^[1-9][MTLREDSVC]/.test(learned), `Learn method "${learned}" for ${species.name}'s ${move.name} is invalid`);
 
 						// the move validator uses early exits, so this isn't purely a consistency thing
 						// MTL must be before REDSVC, and generations must be ordered newest to oldest

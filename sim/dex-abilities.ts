@@ -33,7 +33,9 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 		this.rating = data.rating || 0;
 
 		if (!this.gen) {
-			if (this.num >= 234) {
+			if (this.num >= 268) {
+				this.gen = 9;
+			} else if (this.num >= 234) {
 				this.gen = 8;
 			} else if (this.num >= 192) {
 				this.gen = 7;
