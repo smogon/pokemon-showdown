@@ -77,17 +77,18 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	caterpie: {
-		isNonstandard: "Past",
-		tier: "LC",
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
+		natDexTier: "LC",
 	},
 	metapod: {
-		isNonstandard: "Past",
-		tier: "NFE",
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
+		natDexTier: "NFE",
 	},
 	butterfree: {
-		isNonstandard: "Past",
-		tier: "OU",
-		doublesTier: "DOU",
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 		natDexTier: "OU",
 	},
 	butterfreegmax: {
@@ -5121,9 +5122,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	cramorant: {
-		isNonstandard: "Past",
-		tier: "OU",
-		doublesTier: "DOU",
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 		natDexTier: "OU",
 	},
 	arrokuda: {
