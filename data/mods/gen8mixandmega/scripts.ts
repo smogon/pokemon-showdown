@@ -1,5 +1,6 @@
 export const Scripts: ModdedBattleScriptsData = {
-	gen: 9,
+	inherit: 'gen8',
+	gen: 8,
 	init() {
 		for (const i in this.data.Items) {
 			if (!this.data.Items[i].megaStone) continue;
