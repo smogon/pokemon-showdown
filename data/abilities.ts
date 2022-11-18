@@ -563,7 +563,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 
 			if (!pokemon.getVolatile('commanding')) {
-				// If Dodonzo already was commanded this fails
+				// If Dondozo already was commanded this fails
 				if (ally.getVolatile('commanded')) return;
 				// Cancel all actions this turn for pokemon if applicable
 				this.queue.cancelAction(pokemon);
