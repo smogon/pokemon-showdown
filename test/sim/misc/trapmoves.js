@@ -239,7 +239,7 @@ describe('Partial Trapping Moves [Gen 1]', function () {
 
 	it('Wrap ends when wrapper switches to a Pokemon that dies of residual damage', function () {
 		battle = common.gen(1).createBattle();
-		battle.setPlayer('p1', {team: [{species: "Rhydon", moves: ['splash'], evs: {hp: 255}}, {species: "Dragonite", moves: ['wrap', 'splash']}]});
+		battle.setPlayer('p1', {team: [{species: "Rhydon", moves: ['splash'], evs: {hp: 255}}, {species: "Dragonite", moves: ['wrap']}]});
 		battle.setPlayer('p2', {team: [{species: "Slowbro", moves: ['seismictoss', 'toxic']}]});
 		for (let i = 0; i < 4; i++) {
 			battle.makeChoices();
