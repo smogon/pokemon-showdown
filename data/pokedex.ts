@@ -17922,7 +17922,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Charcadet",
 		evoType: "useItem",
 		evoItem: "Malicious Armor",
-		evoCondition: "in Zapapico",
 		eggGroups: ["Human-Like"],
 	},
 	ceruledge: {
@@ -17937,7 +17936,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Charcadet",
 		evoType: "useItem",
 		evoItem: "Auspicious Armor",
-		evoCondition: "in Zapapico",
 		eggGroups: ["Human-Like"],
 	},
 	toedscool: {
