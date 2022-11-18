@@ -156,7 +156,9 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	beadsofruin: {
 		name: "Beads of Ruin",
-		shortDesc: "The Special Defense stat of all other active Pokemon is reduced by 25%.",
+		shortDesc: "The Sp. Def stat of all other active Pokemon is reduced by 25%.",
+
+		start: "  [POKEMON]'s Beads of Ruin weakened the Sp. Def of all surrounding Pokémon!",
 	},
 	beastboost: {
 		name: "Beast Boost",
@@ -1732,6 +1734,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Supreme Overlord",
 		desc: "This Pokemon's Attack and Special Attack stats are increased by 10% for each fainted teammate.",
 		shortDesc: "This Pokemon's Attack and Special Attack raise by 10% per fainted teammate.",
+
+		activate: "  [POKEMON] gained strength from the fallen!",
 	},
 	surgesurfer: {
 		name: "Surge Surfer",
@@ -1764,6 +1768,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	swordofruin: {
 		name: "Vessel of Ruin",
 		shortDesc: "The Defense stat of all other active Pokemon is reduced by 25%.",
+
+		start: "  [POKEMON]'s Sword of Ruin weakened the Defense of all surrounding Pokémon!",
 	},
 	symbiosis: {
 		name: "Symbiosis",
@@ -1789,6 +1795,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	tabletsofruin: {
 		name: "Tablets of Ruin",
 		shortDesc: "The Attack stat of all other active Pokemon is reduced by 25%.",
+
+		start: "  [POKEMON]'s Tablets of Ruin weakened the Attack of all surrounding Pokémon!",
 	},
 	tangledfeet: {
 		name: "Tangled Feet",
@@ -1952,7 +1960,9 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	vesselofruin: {
 		name: "Vessel of Ruin",
-		shortDesc: "The Special Attack stat of all other active Pokemon is reduced by 25%.",
+		shortDesc: "The Sp. Atk stat of all other active Pokemon is reduced by 25%.",
+
+		start: "  [POKEMON]'s Vessel of Ruin weakened the Sp. Atk of all surrounding Pokémon!",
 	},
 	victorystar: {
 		name: "Victory Star",
@@ -2062,6 +2072,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	zerotohero: {
 		name: "Zero To Hero",
 		shortDesc: "If this Pokemon is Palafin, it changes to Hero Mode when it switches out.",
+
+		activate: "  [POKEMON] underwent a heroic transformation!",
 	},
 
 	// CAP
