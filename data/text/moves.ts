@@ -5459,7 +5459,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "Power is equal to the base move's Z-Power.",
 	},
 	shedtail: {
-		name: "Substitute",
+		name: "Shed Tail",
 		desc: "The user takes 1/2 of its maximum HP, rounded down, and creates a substitute. The user then switches out, passing the substitute to whichever Pokemon is switched in.",
 		shortDesc: "User takes 1/2 its max HP to pass a substitute.",
 	},
