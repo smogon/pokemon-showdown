@@ -1699,7 +1699,7 @@ export class BattleActions {
 			baseDamage = this.battle.modify(baseDamage, 1.5);
 		}
 		if (pokemon.baseTypes.includes(move.type) && pokemon.terastallized &&
-			pokemon.baseTypes.includes(pokemon.teraType) && move.type == pokemon.teraType) {
+			pokemon.baseTypes.includes(pokemon.teraType) && move.type === pokemon.teraType) {
 			baseDamage = this.battle.modify(baseDamage, 4 / 3);
 		}
 
