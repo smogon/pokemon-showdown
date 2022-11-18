@@ -5805,7 +5805,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 		natDexTier: "OU",
 	},
-	chenpao: {
+	chienpao: {
 		tier: "OU",
 		doublesTier: "DOU",
 		natDexTier: "OU",
