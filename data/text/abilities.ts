@@ -156,7 +156,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	beadsofruin: {
 		name: "Beads of Ruin",
-		shortDesc: "The Special Attack stat of all other active Pokemon is reduced by 25%.",
+		shortDesc: "The Special Defense stat of all other active Pokemon is reduced by 25%.",
 	},
 	beastboost: {
 		name: "Beast Boost",
