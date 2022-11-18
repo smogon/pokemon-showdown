@@ -16856,7 +16856,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 928,
 		name: "Farigiraf",
 		types: ["Normal", "Psychic"],
-		baseStats: {hp: 70, atk: 80, def: 65, spa: 90, spd: 65, spe: 85},
+		baseStats: {hp: 120, atk: 90, def: 70, spa: 110, spd: 70, spe: 60},
 		abilities: {0: "Cud Chew", 1: "Armor Tail", H: "Sap Sipper"},
 		heightm: 3.2,
 		weightkg: 160,
