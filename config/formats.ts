@@ -2950,6 +2950,9 @@ export const Formats: FormatList = [
 		],
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
+			if (species.gen > 8) {
+				return [`${species.name} is from gen 9, which Metronome Battle has not been updated to.`];
+			}
 			if (species.types.includes('Steel')) {
 				return [`${species.name} is a Steel-type, which is banned from Metronome Battle.`];
 			}
@@ -2957,6 +2960,9 @@ export const Formats: FormatList = [
 				return [`${species.name} is banned.`, `(Pok\u00e9mon with a BST higher than 625 are banned)`];
 			}
 			const item = this.dex.items.get(set.item);
+			if (item.gen > 8) {
+				return [`${item.name} is from gen 9, which Metronome Battle has not been updated to.`];
+			}
 			if (set.item && item.megaStone) {
 				const megaSpecies = this.dex.species.get(item.megaStone);
 				if (species.baseSpecies === item.megaEvolves && megaSpecies.bst > 625) {
@@ -2964,6 +2970,10 @@ export const Formats: FormatList = [
 						`${set.name || set.species}'s item ${item.name} is banned.`, `(Pok\u00e9mon with a BST higher than 625 are banned)`,
 					];
 				}
+			}
+			const ability = this.dex.abilities.get(set.ability);
+			if (ability.gen > 8) {
+				return [`${ability.name} is from gen 9, which Metronome Battle has not been updated to.`];
 			}
 			if (set.moves.length !== 1 || this.dex.moves.get(set.moves[0]).id !== 'metronome') {
 				return [`${set.name || set.species} has illegal moves.`, `(Pok\u00e9mon can only have one Metronome in their moveset)`];
