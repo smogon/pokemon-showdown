@@ -538,7 +538,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen9',
-		ruleset: ['Standard OMs', 'Not Fully Evolved', 'Sleep Clause Mod', 'Min Source Gen = 9'],
+		ruleset: ['Standard OMs', 'Not Fully Evolved', 'Sleep Moves Clause', 'Min Source Gen = 9'],
 		banlist: ['Magneton', 'Scyther', 'Arena Trap', 'Shadow Tag', 'Baton Pass'],
 	},
 
