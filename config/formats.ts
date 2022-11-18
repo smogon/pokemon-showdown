@@ -716,7 +716,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		gameType: 'doubles',
-		ruleset: ['Standard Doubles', 'Swagger Clause'],
+		ruleset: ['Standard Doubles'],
 		banlist: ['DUber'],
 	},
 	{
