@@ -189,7 +189,7 @@ describe('Choice parser', function () {
 			});
 
 			it('should allow Dynamax use in multiple possible formats', function () {
-				battle = common.createBattle([[
+				battle = common.gen(8).createBattle([[
 					{species: "Mew", moves: ['psychic']},
 				], [
 					{species: "Mew", moves: ['psychic']},
