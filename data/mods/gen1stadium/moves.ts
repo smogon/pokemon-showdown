@@ -168,13 +168,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.effectState.move = 'rage';
 			},
 			onLockMove: 'rage',
-			onTryHit(target, source, move) {
-				if (target.boosts.atk < 6 && move.id === 'disable') {
-					this.boost({atk: 1});
-				}
-			},
 			onHit(target, source, move) {
-				if (target.boosts.atk < 6 && move.category !== 'Status') {
+				if (target.boosts.atk < 6 && (move.category !== 'Status' || move.id === 'disable')) {
 					this.boost({atk: 1});
 				}
 			},
