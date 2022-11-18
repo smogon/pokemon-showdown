@@ -17997,7 +17997,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Annihilape",
 		types: ["Fighting", "Ghost"],
 		baseStats: {hp: 110, atk: 115, def: 80, spa: 50, spd: 90, spe: 90},
-		abilities: {0: "Vial Spirit", 1: "Inner Focus", H: "Defiant"},
+		abilities: {0: "Vital Spirit", 1: "Inner Focus", H: "Defiant"},
 		heightm: 1.2,
 		weightkg: 56,
 		color: "Gray",
