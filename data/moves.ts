@@ -13556,6 +13556,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 100,
 		category: "Physical",
+		isNonstandard: "Past",
 		name: "Plasma Fists",
 		pp: 15,
 		priority: 0,
@@ -21027,7 +21028,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	wickedblow: {
 		num: 817,
 		accuracy: 100,
-		basePower: 80,
+		basePower: 75,
 		category: "Physical",
 		name: "Wicked Blow",
 		pp: 5,
