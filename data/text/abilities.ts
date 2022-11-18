@@ -1786,8 +1786,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 			desc: "If another Pokemon burns, paralyzes, or poisons this Pokemon, that Pokemon receives the same non-volatile status condition. If another Pokemon badly poisons this Pokemon, that Pokemon becomes poisoned.",
 		},
 	},
-	tabletofruin: {
-		name: "Tablet of Ruin",
+	tabletsofruin: {
+		name: "Tablets of Ruin",
 		shortDesc: "The Attack stat of all other active Pokemon is reduced by 25%.",
 	},
 	tangledfeet: {

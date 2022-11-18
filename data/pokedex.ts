@@ -17810,7 +17810,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		types: ["Dark", "Grass"],
 		gender: "N",
 		baseStats: {hp: 85, atk: 85, def: 100, spa: 95, spd: 135, spe: 70},
-		abilities: {0: "Tablet of Ruin"},
+		abilities: {0: "Tablets of Ruin"},
 		heightm: 1.5,
 		weightkg: 74.2,
 		color: "Brown",
