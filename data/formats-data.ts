@@ -1472,7 +1472,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "OU",
 	},
 	murkrow: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	honchkrow: {
 		tier: "OU",
@@ -2078,7 +2078,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "OU",
 	},
 	meditite: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	medicham: {
 		tier: "OU",
