@@ -13153,30 +13153,21 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, pulse: 1, mirror: 1},
-		onTryHit(source, target, move) {
-			if (source.illusion || source.name !== "Dondozo") return;
-			let tatsugiri;
-			for (const ally of source.allies()) {
-				if (ally.baseSpecies.baseSpecies === "Tatsugiri" && ally.hasAbility('Commander')) {
-					let boost: StatID;
-					switch (ally.baseSpecies.forme) {
-					case 'Red':
-						boost = 'def';
-						break;
-					case 'Orange':
-						boost = 'atk';
-						break;
-					default:
-						boost = 'spe';
-						break;
-					}
-					tatsugiri = ally;
-					this.boost({[boost]: 1}, source, source, move);
-					break;
-				}
-			}
-			if (tatsugiri && this.activeTarget === tatsugiri) {
-				this.add('-miss', source, target);
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			if (!pokemon.volatiles['commanded']) return;
+			const tatsugiri = pokemon.volatiles['commanded'].source;
+			if (tatsugiri.baseSpecies.baseSpecies !== 'Tatsugiri') return; // Should never happen
+
+			switch (tatsugiri.baseSpecies.forme) {
+			case 'Droopy':
+				this.boost({def: 1}, pokemon, pokemon);
+				break;
+			case 'Stretchy':
+				this.boost({spe: 1}, pokemon, pokemon);
+				break;
+			default:
+				this.boost({atk: 1}, pokemon, pokemon);
+				break;
 			}
 		},
 		secondary: null,
