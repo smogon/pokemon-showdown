@@ -17364,7 +17364,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 962,
 		name: "Klawf",
 		types: ["Rock"],
-		baseStats: {hp: 50, atk: 50, def: 50, spa: 50, spd: 50, spe: 50},
+		baseStats: {hp: 70, atk: 100, def: 115, spa: 35, spd: 55, spe: 75},
 		abilities: {0: "Anger Shell", 1: "Shell Armor", H: "Regenerator"},
 		heightm: 1.3,
 		weightkg: 79,
