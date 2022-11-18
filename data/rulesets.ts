@@ -1151,6 +1151,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 					typeTable = typeTable.filter(type => species.types.includes(type));
 				}
 				if (!typeTable.length) return [`Your team must share a type.`];
+			}
+			for (const set of team) {
 				if (this.gen === 9 && set.teraType &&
 						!typeTable.includes(set.teraType) && this.ruleTable.has(`enforcesameteratype`)) {
 					return [`${set.species}'s Tera Type must match the team's type.`];
