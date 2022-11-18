@@ -4623,7 +4623,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "Swaps Attack and Sp. Atk stat stages with target.",
 	},
 	powershift: {
-		name: "Power Trick",
+		name: "Power Shift",
 		desc: "The user swaps its Attack and Defense stats, and stat stage changes remain on their respective stats. This move can be used again to swap the stats back. If the user uses Baton Pass, the replacement will have its Attack and Defense stats swapped if the effect is active. If the user has its stats recalculated by changing forme while its stats are swapped, this effect is ignored but is still active for the purposes of Baton Pass.",
 		shortDesc: "Switches user's Attack and Defense stats.",
 
@@ -5459,7 +5459,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "Power is equal to the base move's Z-Power.",
 	},
 	shedtail: {
-		name: "Substitute",
+		name: "Shed Tail",
 		desc: "The user takes 1/2 of its maximum HP, rounded down, and creates a substitute. The user then switches out, passing the substitute to whichever Pokemon is switched in.",
 		shortDesc: "User takes 1/2 its max HP to pass a substitute.",
 	},
@@ -6538,7 +6538,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		},
 	},
 	terablast: {
-		name: "Terra Blast",
+		name: "Tera Blast",
 		desc: "If the user is Terastallized, this move becomes a physical attack if the user's Attack is greater than its Special Attack, including stat stage changes, and it becomes the same its the user's Tera Type.",
 		shortDesc: "If Terastallized: Phys. if Atk > SpA & Type = Tera Type.",
 	},
