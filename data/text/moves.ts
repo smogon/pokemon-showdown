@@ -6538,7 +6538,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		},
 	},
 	terablast: {
-		name: "Terra Blast",
+		name: "Tera Blast",
 		desc: "This move becomes a physical attack if the user's Attack is greater than its Special Attack, including stat stage changes. If the user is Terastallized, this move's type becomes the same its the user's Tera Type.",
 		shortDesc: "Phys. if Atk > SpA. Type = Tera Type if Terastallized.",
 	},
