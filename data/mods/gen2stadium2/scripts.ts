@@ -56,7 +56,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			) {
 				stat *= 2;
 			} else if (this.species.name === 'Ditto' && this.item === 'metalpowder' && ['def', 'spd'].includes(statName)) {
-				stat *= 1.5;
+				stat = Math.floor(stat * 1.5);
 			}
 
 			return stat;
