@@ -1577,6 +1577,9 @@ export class TeamValidator {
 			}
 			if (banReason === '') return null;
 		}
+		if (move.id === 'revivalblessing') {
+			return "Revival Blessing is currently not implemented. It won't be usable until it is.";
+		}
 
 		return null;
 	}
