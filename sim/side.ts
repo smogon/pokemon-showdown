@@ -38,6 +38,7 @@ export interface ChosenAction {
 	mega?: boolean | null; // true if megaing or ultra bursting
 	zmove?: string; // if zmoving, the name of the zmove
 	maxMove?: string; // if dynamaxed, the name of the max move
+	terastallize?: string; // if terastallizing, tera type
 	priority?: number; // priority of the action
 }
 
@@ -53,6 +54,7 @@ export interface Choice {
 	mega: boolean; // true if a mega evolution has already been selected
 	ultra: boolean; // true if an ultra burst has already been selected
 	dynamax: boolean; // true if a dynamax has already been selected
+	terastallize: boolean; // true if a terastallization has already been inputted
 }
 
 export class Side {
@@ -133,7 +135,7 @@ export class Side {
 		this.faintedLastTurn = null;
 		this.faintedThisTurn = null;
 		this.zMoveUsed = false;
-		this.dynamaxUsed = this.battle.gen < 8;
+		this.dynamaxUsed = this.battle.gen !== 8;
 
 		this.sideConditions = {};
 		this.slotConditions = [];
@@ -152,6 +154,7 @@ export class Side {
 			mega: false,
 			ultra: false,
 			dynamax: false,
+			terastallize: false,
 		};
 
 		// old-gens
@@ -170,6 +173,7 @@ export class Side {
 	}
 
 	canDynamaxNow(): boolean {
+		if (this.battle.gen !== 8) return false;
 		// In multi battles, players on a team are alternatingly given the option to dynamax each turn
 		// On turn 1, the players on their team's respective left have the first chance (p1 and p2)
 		if (this.battle.gameType === 'multi' && this.battle.turn % 2 !== [1, 1, 0, 0][this.n]) return false;
@@ -191,6 +195,7 @@ export class Side {
 				if (action.mega) details += (action.pokemon!.item === 'ultranecroziumz' ? ` ultra` : ` mega`);
 				if (action.zmove) details += ` zmove`;
 				if (action.maxMove) details += ` dynamax`;
+				if (action.terastallize) details += ` terastallize`;
 				return `move ${action.moveid}${details}`;
 			case 'switch':
 			case 'instaswitch':
@@ -291,6 +296,7 @@ export class Side {
 			delete this.sideConditions[status.id];
 			return false;
 		}
+		this.battle.runEvent('SideConditionStart', source, source, status);
 		return true;
 	}
 
@@ -396,7 +402,11 @@ export class Side {
 		return this.choice.actions.length >= this.active.length;
 	}
 
-	chooseMove(moveText?: string | number, targetLoc = 0, megaDynaOrZ: 'mega' | 'zmove' | 'ultra' | 'dynamax' | '' = '') {
+	chooseMove(
+		moveText?: string | number,
+		targetLoc = 0,
+		event: 'mega' | 'zmove' | 'ultra' | 'dynamax' | 'terastallize' | '' = ''
+	) {
 		if (this.requestState !== 'move') {
 			return this.emitChoiceError(`Can't move: You need a ${this.requestState} response`);
 		}
@@ -434,23 +444,23 @@ export class Side {
 				targetType = move.target || 'normal';
 				break;
 			}
-			if (!targetType && ['', 'dynamax'].includes(megaDynaOrZ) && request.maxMoves) {
+			if (!targetType && ['', 'dynamax'].includes(event) && request.maxMoves) {
 				for (const [i, moveRequest] of request.maxMoves.maxMoves.entries()) {
 					if (moveid === moveRequest.move) {
 						moveid = request.moves[i].id;
 						targetType = moveRequest.target;
-						megaDynaOrZ = 'dynamax';
+						event = 'dynamax';
 						break;
 					}
 				}
 			}
-			if (!targetType && ['', 'zmove'].includes(megaDynaOrZ) && request.canZMove) {
+			if (!targetType && ['', 'zmove'].includes(event) && request.canZMove) {
 				for (const [i, moveRequest] of request.canZMove.entries()) {
 					if (!moveRequest) continue;
 					if (moveid === toID(moveRequest.move)) {
 						moveid = request.moves[i].id;
 						targetType = moveRequest.target;
-						megaDynaOrZ = 'zmove';
+						event = 'zmove';
 						break;
 					}
 				}
@@ -474,8 +484,8 @@ export class Side {
 
 		// Z-move
 
-		const zMove = megaDynaOrZ === 'zmove' ? this.battle.actions.getZMove(move, pokemon) : undefined;
-		if (megaDynaOrZ === 'zmove' && !zMove) {
+		const zMove = event === 'zmove' ? this.battle.actions.getZMove(move, pokemon) : undefined;
+		if (event === 'zmove' && !zMove) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Z-move`);
 		}
 		if (zMove && this.choice.zMove) {
@@ -486,9 +496,9 @@ export class Side {
 
 		// Dynamax
 		// Is dynamaxed or will dynamax this turn.
-		const maxMove = (megaDynaOrZ === 'dynamax' || pokemon.volatiles['dynamax']) ?
+		const maxMove = (event === 'dynamax' || pokemon.volatiles['dynamax']) ?
 			this.battle.actions.getMaxMove(move, pokemon) : undefined;
-		if (megaDynaOrZ === 'dynamax' && !maxMove) {
+		if (event === 'dynamax' && !maxMove) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Max Move`);
 		}
 
@@ -577,28 +587,28 @@ export class Side {
 
 		// Mega evolution
 
-		const mega = (megaDynaOrZ === 'mega');
+		const mega = (event === 'mega');
 		if (mega && !pokemon.canMegaEvo) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve`);
 		}
 		if (mega && this.choice.mega) {
 			return this.emitChoiceError(`Can't move: You can only mega-evolve once per battle`);
 		}
-		const ultra = (megaDynaOrZ === 'ultra');
+		const ultra = (event === 'ultra');
 		if (ultra && !pokemon.canUltraBurst) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't ultra burst`);
 		}
 		if (ultra && this.choice.ultra) {
 			return this.emitChoiceError(`Can't move: You can only ultra burst once per battle`);
 		}
-		let dynamax = (megaDynaOrZ === 'dynamax');
+		let dynamax = (event === 'dynamax');
 		const canDynamax = this.activeRequest?.active[this.active.indexOf(pokemon)].canDynamax;
 		if (dynamax && (this.choice.dynamax || !canDynamax)) {
 			if (pokemon.volatiles['dynamax']) {
 				dynamax = false;
 			} else {
-				if (this.battle.gen < 8) {
-					return this.emitChoiceError(`Can't move: Dynamaxing doesn't exist before Gen 8.`);
+				if (this.battle.gen !== 8) {
+					return this.emitChoiceError(`Can't move: Dynamaxing doesn't outside of Gen 8.`);
 				} else if (pokemon.side.canDynamaxNow()) {
 					return this.emitChoiceError(`Can't move: ${pokemon.name} can't Dynamax now.`);
 				} else if (pokemon.side.allySide?.canDynamaxNow()) {
@@ -606,6 +616,18 @@ export class Side {
 				}
 				return this.emitChoiceError(`Can't move: You can only Dynamax once per battle.`);
 			}
+		}
+		const terastallize = (event === 'terastallize');
+		if (terastallize && !pokemon.canTerastallize) {
+			// Make this work properly
+			return this.emitChoiceError(`Can't move: ${pokemon.name} can't Terastallize.`);
+		}
+		if (terastallize && this.choice.terastallize) {
+			return this.emitChoiceError(`Can't move: You can only Terastallize once per battle.`);
+		}
+		if (terastallize && this.battle.gen !== 9) {
+			// Make this work properly
+			return this.emitChoiceError(`Can't move: You can only Terastallize in Gen 9.`);
 		}
 
 		this.choice.actions.push({
@@ -616,6 +638,7 @@ export class Side {
 			mega: mega || ultra,
 			zmove: zMove,
 			maxMove: maxMove ? maxMove.id : undefined,
+			terastallize: terastallize ? pokemon.teraType : undefined,
 		});
 
 		if (pokemon.maybeDisabled) {
@@ -626,6 +649,7 @@ export class Side {
 		if (ultra) this.choice.ultra = true;
 		if (zMove) this.choice.zMove = true;
 		if (dynamax) this.choice.dynamax = true;
+		if (terastallize) this.choice.terastallize = true;
 
 		return true;
 	}
@@ -684,8 +708,18 @@ export class Side {
 		}
 		const targetPokemon = this.pokemon[slot];
 
+		if (this.sideConditions['revivalblessing']) {
+			if (!targetPokemon.fainted) {
+				return this.emitChoiceError(`Can't switch: You have to pass to a fainted Pokémon`);
+			}
+			targetPokemon.heal(targetPokemon.maxhp / 2);
+			this.battle.add('-heal', targetPokemon, targetPokemon.getHealth, '[from] move: Revival Blessing');
+		}
+
 		if (targetPokemon.fainted) {
-			return this.emitChoiceError(`Can't switch: You can't switch to a fainted Pokémon`);
+			if (!this.sideConditions['revivalblessing']) {
+				return this.emitChoiceError(`Can't switch: You can't switch to a fainted Pokémon`);
+			}
 		}
 
 		if (this.requestState === 'move') {
@@ -858,6 +892,7 @@ export class Side {
 			mega: false,
 			ultra: false,
 			dynamax: false,
+			terastallize: false,
 		};
 	}
 
@@ -891,7 +926,7 @@ export class Side {
 				const original = data;
 				const error = () => this.emitChoiceError(`Conflicting arguments for "move": ${original}`);
 				let targetLoc: number | undefined;
-				let megaDynaOrZ: 'mega' | 'zmove' | 'ultra' | 'dynamax' | '' = '';
+				let event: 'mega' | 'zmove' | 'ultra' | 'dynamax' | 'terastallize' | '' = '';
 				while (true) {
 					// If data ends with a number, treat it as a target location.
 					// We need to special case 'Conversion 2' so it doesn't get
@@ -902,34 +937,42 @@ export class Side {
 						targetLoc = parseInt(data.slice(-2));
 						data = data.slice(0, -2).trim();
 					} else if (data.endsWith(' mega')) {
-						if (megaDynaOrZ) return error();
-						megaDynaOrZ = 'mega';
+						if (event) return error();
+						event = 'mega';
 						data = data.slice(0, -5);
 					} else if (data.endsWith(' zmove')) {
-						if (megaDynaOrZ) return error();
-						megaDynaOrZ = 'zmove';
+						if (event) return error();
+						event = 'zmove';
 						data = data.slice(0, -6);
 					} else if (data.endsWith(' ultra')) {
-						if (megaDynaOrZ) return error();
-						megaDynaOrZ = 'ultra';
+						if (event) return error();
+						event = 'ultra';
 						data = data.slice(0, -6);
 					} else if (data.endsWith(' dynamax')) {
-						if (megaDynaOrZ) return error();
-						megaDynaOrZ = 'dynamax';
+						if (event) return error();
+						event = 'dynamax';
 						data = data.slice(0, -8);
 					} else if (data.endsWith(' gigantamax')) {
-						if (megaDynaOrZ) return error();
-						megaDynaOrZ = 'dynamax';
+						if (event) return error();
+						event = 'dynamax';
 						data = data.slice(0, -11);
 					} else if (data.endsWith(' max')) {
-						if (megaDynaOrZ) return error();
-						megaDynaOrZ = 'dynamax';
+						if (event) return error();
+						event = 'dynamax';
 						data = data.slice(0, -4);
+					} else if (data.endsWith(' terastal')) {
+						if (event) return error();
+						event = 'terastallize';
+						data = data.slice(0, -9);
+					} else if (data.endsWith(' terastallize')) {
+						if (event) return error();
+						event = 'terastallize';
+						data = data.slice(0, -13);
 					} else {
 						break;
 					}
 				}
-				if (!this.chooseMove(data, targetLoc, megaDynaOrZ)) return false;
+				if (!this.chooseMove(data, targetLoc, event)) return false;
 				break;
 			case 'switch':
 				this.chooseSwitch(data);
@@ -966,7 +1009,10 @@ export class Side {
 			switch (this.requestState) {
 			case 'move':
 				// auto-pass
-				while (index < this.active.length && this.active[index].fainted) {
+				while (
+					index < this.active.length &&
+					(this.active[index].fainted || this.active[index].volatiles['commanding'])
+				) {
 					this.choosePass();
 					index++;
 				}
@@ -998,7 +1044,7 @@ export class Side {
 			}
 			break;
 		case 'move':
-			if (!pokemon.fainted) {
+			if (!pokemon.fainted && !pokemon.volatiles['commanding']) {
 				return this.emitChoiceError(`Can't pass: Your ${pokemon.name} must make a move (or switch)`);
 			}
 			break;

@@ -292,7 +292,9 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		if (Array.isArray(data.changesFrom)) this.changesFrom = data.changesFrom[0];
 
 		if (!this.gen && this.num >= 1) {
-			if (this.num >= 810 || ['Gmax', 'Galar', 'Galar-Zen', 'Hisui'].includes(this.forme)) {
+			if (this.num >= 906 || this.forme.includes('Paldea')) {
+				this.gen = 9;
+			} else if (this.num >= 810 || ['Gmax', 'Galar', 'Galar-Zen', 'Hisui'].includes(this.forme)) {
 				this.gen = 8;
 			} else if (this.num >= 722 || this.forme.startsWith('Alola') || this.forme === 'Starter') {
 				this.gen = 7;
@@ -406,6 +408,8 @@ export class DexSpecies {
 			const formeNames: {[k: string]: string[]} = {
 				alola: ['a', 'alola', 'alolan'],
 				galar: ['g', 'galar', 'galarian'],
+				hisui: ['h', 'hisui', 'hisuian'],
+				paldea: ['p', 'paldea', 'paldean'],
 				mega: ['m', 'mega'],
 				primal: ['p', 'primal'],
 			};

@@ -592,7 +592,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Here's where self effects are applied.
 			const doSelf = (targetHadSub && targetHasSub) || !targetHadSub;
-			if (!!moveData.self && (doSelf || (moveData.self.volatileStatus === 'partialtrappinglock'))) {
+			if (moveData.self && (doSelf || moveData.self.volatileStatus === 'partialtrappinglock')) {
 				this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 			}
 
@@ -619,7 +619,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			if (move.selfSwitch && pokemon.hp) {
-				pokemon.switchFlag = move.selfSwitch;
+				pokemon.switchFlag = move.selfSwitch === true ? true : toID(move.selfSwitch);
 			}
 
 			return damage;

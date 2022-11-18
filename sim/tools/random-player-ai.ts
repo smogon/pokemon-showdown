@@ -66,7 +66,7 @@ export class RandomPlayerAI extends BattlePlayer {
 			this.choose(choices.join(`, `));
 		} else if (request.active) {
 			// move request
-			let [canMegaEvo, canUltraBurst, canZMove, canDynamax] = [true, true, true, true];
+			let [canMegaEvo, canUltraBurst, canZMove, canDynamax, canTerastallize] = [true, true, true, true, true];
 			const pokemon = request.side.pokemon;
 			const chosen: number[] = [];
 			const choices = request.active.map((active: AnyObject, i: number) => {
@@ -76,6 +76,7 @@ export class RandomPlayerAI extends BattlePlayer {
 				canUltraBurst = canUltraBurst && active.canUltraBurst;
 				canZMove = canZMove && !!active.canZMove;
 				canDynamax = canDynamax && !!active.canDynamax;
+				canTerastallize = canTerastallize && !!active.canTerastallize;
 
 				// Determine whether we should change form if we do end up switching
 				const change = (canMegaEvo || canUltraBurst || canDynamax) && this.prng.next() < this.mega;
@@ -160,7 +161,10 @@ export class RandomPlayerAI extends BattlePlayer {
 						canZMove = false;
 						return move;
 					} else if (change) {
-						if (canDynamax) {
+						if (canTerastallize) {
+							canTerastallize = false;
+							return `${move} terastallize`;
+						} else if (canDynamax) {
 							canDynamax = false;
 							return `${move} dynamax`;
 						} else if (canMegaEvo) {
@@ -176,7 +180,7 @@ export class RandomPlayerAI extends BattlePlayer {
 				} else {
 					throw new Error(`${this.constructor.name} unable to make choice ${i}. request='${request}',` +
 						` chosen='${chosen}', (mega=${canMegaEvo}, ultra=${canUltraBurst}, zmove=${canZMove},` +
-						` dynamax='${canDynamax}')`);
+						` dynamax='${canDynamax}', terastallize=${canTerastallize})`);
 				}
 			});
 			this.choose(choices.join(`, `));

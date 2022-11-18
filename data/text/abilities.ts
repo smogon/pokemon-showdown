@@ -46,6 +46,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 
 		boost: "  [POKEMON] maxed its Attack!",
 	},
+	angershell: {
+		name: "Anger Shell",
+		desc: "When this Pokemon has more than 1/2 its maximum HP and takes damage from an attack bringing it to 1/2 or less of its maximum HP, its Attack, Special Attack, and Speed are raised by 1 stage, and its Defense and Speed are lowered by 1 stage. This effect applies after all hits from a multi-hit move. This effect is prevented if the move had a secondary effect removed by the Sheer Force Ability.",
+		shortDesc: "When this Pokemon reaches 1/2 or less of its max HP: +1 Atk, Sp. Atk, and Spe; -1 Def and Sp. Def.",
+	},
 	anticipation: {
 		name: "Anticipation",
 		desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attack that is super effective against this Pokemon, or an OHKO move. This effect considers any move that deals direct damage as an attacking move of its respective type, Hidden Power counts as its determined type, and Judgment, Multi-Attack, Natural Gift, Revelation Dance, Techno Blast, and Weather Ball are considered Normal-type moves.",
@@ -78,6 +83,13 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		gen3: {
 			desc: "Prevents opposing Pokemon from choosing to switch out unless they are airborne.",
 		},
+	},
+	armortail: {
+		name: "Armor Tail",
+		desc: "While this Pokemon is active, priority moves from opposing Pokemon that target this Pokemon or its allies are prevented from having an effect.",
+		shortDesc: "This Pokemon and its allies are protected from opposing priority moves.",
+
+		block: "#damp",
 	},
 	aromaveil: {
 		name: "Aroma Veil",
@@ -141,6 +153,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 
 		activate: "  [POKEMON] became fully charged due to its bond with its Trainer!",
 		transform: "[POKEMON] became Ash-Greninja!",
+	},
+	beadsofruin: {
+		name: "Beads of Ruin",
+		shortDesc: "The Special Attack stat of all other active Pokemon is reduced by 25%.",
 	},
 	beastboost: {
 		name: "Beast Boost",
@@ -215,6 +231,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 
 		start: "  [POKEMON] is drowsing!",
 	},
+	commander: {
+		name: "Commander",
+		desc: "If this Pokemon is Tatsugiri and Dondozo is an active ally, Dondozo will swallow this Pokemon. This prevents this Pokemon from acting and boosts all of Dondozo's stats by 2 stages. Attacks targeted at this Pokemon will fail if it has been swallowed. Tatsugiri can still take indirect damage while swallowed.",
+		shortDesc: "If ally is Dondozo: this Pokemon cannot act or be hit, +2 to all Dondozo's stats.",
+	},
 	competitive: {
 		name: "Competitive",
 		desc: "This Pokemon's Special Attack is raised by 2 stages for each of its stat stages that is lowered by an opposing Pokemon.",
@@ -238,10 +259,19 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Corrosion",
 		shortDesc: "This Pokemon can poison or badly poison a Pokemon regardless of its typing.",
 	},
+	costar: {
+		name: "Costar",
+		shortDesc: "On switch-in, this Pokemon copies an ally's stat changes.",
+	},
 	cottondown: {
 		name: "Cotton Down",
 		desc: "When this Pokemon is hit by an attack, the Speed of all other Pokemon on the field is lowered by 1 stage.",
 		shortDesc: "If this Pokemon is hit, it lowers the Speed of all other Pokemon on the field 1 stage.",
+	},
+	cudchew: {
+		name: "Cud Chew",
+		desc: "When this Pokemon consumes a berry, it will consume the berry again at the end of the following turn.",
+		shortDesc: "If this Pokemon eats a berry, it will consume the berry again at the end of next turn.",
 	},
 	curiousmedicine: {
 		name: "Curious Medicine",
@@ -369,6 +399,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Early Bird",
 		shortDesc: "This Pokemon's sleep counter drops by 2 instead of 1.",
 	},
+	eartheater: {
+		name: "Earth Eater",
+		desc: "This Pokemon is immune to Ground-type moves and restores 1/3 of its maximum HP, rounded down, when hit by a Ground-type move.",
+		shortDesc: "This Pokemon heals 1/3 of its max HP when hit by Ground moves; Ground immunity.",
+	},
 	effectspore: {
 		name: "Effect Spore",
 		desc: "30% chance a Pokemon making contact with this Pokemon will be poisoned, paralyzed, or fall asleep.",
@@ -384,6 +419,13 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	electricsurge: {
 		name: "Electric Surge",
 		shortDesc: "On switch-in, this Pokemon summons Electric Terrain.",
+	},
+	electromorphosis: {
+		name: "Electromorphosis",
+		desc: "This Pokemon's next Electric-type move has its damage boosted if it takes direct damage.",
+		shortDesc: "This Pokemon becomes charged if it takes direct damage.",
+
+		activate: "  Being hit by [MOVE] charged [POKEMON] with power!",
 	},
 	emergencyexit: {
 		name: "Emergency Exit",
@@ -512,6 +554,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "When this Pokemon is holding a Berry that usually activates with 1/4 or less of its maximum HP, it is eaten at 1/2 or less of its maximum HP instead.",
 		shortDesc: "This Pokemon eats Berries at 1/2 max HP or less instead of their usual 1/4 max HP.",
 	},
+	goodasgold: {
+		name: "Good as Gold",
+		shortDesc: "This Pokemon is immune to Status moves.",
+	},
 	gooey: {
 		name: "Gooey",
 		shortDesc: "Pokemon making contact with this Pokemon have their Speed lowered by 1 stage.",
@@ -534,6 +580,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "This Pokemon's Special Attack is raised by 1 stage if it attacks and knocks out another Pokemon.",
 		shortDesc: "This Pokemon's Sp. Atk is raised by 1 stage if it attacks and KOes another Pokemon.",
 	},
+	guarddog: {
+		name: "Guard Dog",
+		shortDesc: "Immune to Intimidate. Intimidated: +1 Attack. Cannot be forced to switch out.",
+	},
 	gulpmissile: {
 		name: "Gulp Missile",
 		desc: "If this Pokemon is a Cramorant, it changes forme when it hits a target with Surf or uses the first turn of Dive successfully. It becomes Gulping Form with an Arrokuda in its mouth if it has more than 1/2 of its maximum HP remaining, or Gorging Form with a Pikachu in its mouth if it has 1/2 or less of its maximum HP remaining. If Cramorant gets hit in Gulping or Gorging Form, it spits the Arrokuda or Pikachu at its attacker, even if it has no HP remaining. The projectile deals damage equal to 1/4 of the target's maximum HP, rounded down; this damage is blocked by the Magic Guard Ability but not by a substitute. An Arrokuda also lowers the target's Defense by 1 stage, and a Pikachu paralyzes the target. Cramorant will return to normal if it spits out a projectile, switches out, or Dynamaxes.",
@@ -543,6 +593,13 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Guts",
 		desc: "If this Pokemon has a non-volatile status condition, its Attack is multiplied by 1.5. This Pokemon's physical attacks ignore the burn effect of halving damage.",
 		shortDesc: "If this Pokemon is statused, its Attack is 1.5x; ignores burn halving physical damage.",
+	},
+	hadronengine: {
+		name: "Hadron Engine",
+		shortDesc: "On switch-in, summons Electric Terrain. Sp. Atk is boosted by 30% in Electric Terrain.",
+
+		start: "  [POKEMON] turned the ground into Electric Terrain, energizing its futuristic engine!",
+		activate: "  [POKEMON] used the Electric Terrain to energize its futuristic engine!",
 	},
 	harvest: {
 		name: "Harvest",
@@ -777,6 +834,13 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Limber",
 		shortDesc: "This Pokemon cannot be paralyzed. Gaining this Ability while paralyzed cures it.",
 	},
+	lingeringaroma: {
+		name: "Lingering Aroma",
+		desc: "Pokemon making contact with this Pokemon have their Ability changed to Lingering Aroma. Does not affect Pokemon with the As One, Battle Bond, Comatose, Disguise, Gulp Missile, Ice Face, Multitype, Mummy, Power Construct, RKS System, Schooling, Shields Down, Stance Change, or Zen Mode Abilities.",
+		shortDesc: "Pokemon making contact with this Pokemon have their Ability changed to Lingering Aroma.",
+
+		changeAbility: "  A lingering aroma clings to [TARGET]!",
+	},
 	liquidooze: {
 		name: "Liquid Ooze",
 		shortDesc: "This Pokemon damages those draining HP from it for as much as they would heal.",
@@ -957,6 +1021,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 
 		changeAbility: "  [TARGET]'s Ability became Mummy!",
 	},
+	myceliummight: {
+		name: "Mycelium Might",
+		shortDesc: "This Pokemon's Status moves have lowered priority and ignore their targets' Abilities.",
+	},
 	naturalcure: {
 		name: "Natural Cure",
 		shortDesc: "This Pokemon has its non-volatile status condition cured when it switches out.",
@@ -1004,6 +1072,17 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 			desc: "This Pokemon cannot be infatuated. Gaining this Ability while infatuated cures it.",
 			shortDesc: "This Pokemon cannot be infatuated. Gaining this Ability while infatuated cures it.",
 		},
+	},
+	opportunist: {
+		name: "Opportunist",
+		shortDesc: "When an opposing Pokemon recieves stat boosts, this Pokemon gets the same boosts.",
+	},
+	orichalcumpulse: {
+		name: "Orichalcum Pulse",
+		shortDesc: "On switch-in, summons Sunny Day. Attack is boosted by 30% in Sunny Day.",
+
+		start: "  [POKEMON] turned the sunlight harsh, sending its ancient pulse into a frenzy!",
+		activate: "  [POKEMON] basked in the sunlight, sending its ancient pulse into a frenzy!",
 	},
 	overcoat: {
 		name: "Overcoat",
@@ -1175,6 +1254,16 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type.",
 		shortDesc: "This Pokemon's type changes to match the type of the move it is about to use.",
 	},
+	protosynthesis: {
+		name: "Protosynthesis",
+		desc: "If Sunny Day is active, or this Pokemon is holding Booster Energy, this Pokemon's highest stat is boosted by 50%.",
+		shortDesc: "If Sunny Day is active or Booster Energy held, the highest stat is 1.5x.",
+
+		activate: "  The harsh sunlight activated [POKEMON]'s Protosynthesis!",
+		activateFromItem: "  [POKEMON] used its Booster Energy to activate Protosynthesis!",
+		start: "  [POKEMON]'s [STAT] was heightened!",
+		end: "  The effects of [POKEMON]'s Protosynthesis wore off!",
+	},
 	psychicsurge: {
 		name: "Psychic Surge",
 		shortDesc: "On switch-in, this Pokemon summons Psychic Terrain.",
@@ -1187,6 +1276,21 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	purepower: {
 		name: "Pure Power",
 		shortDesc: "This Pokemon's Attack is doubled.",
+	},
+	purifyingsalt: {
+		name: "Purifying Salt",
+		desc: "This Pokemon cannot become affected by a status condition or Yawn. If a Pokemon uses a Ghost-type attack against this Pokemon, that Pokemon's offensive stat is halved when calculating the damage to this Pokemon.",
+		shortDesc: "This Pokemon cannot be statused; Ghost power against it is halved.",
+	},
+	quarkdrive: {
+		name: "Quark Drive",
+		desc: "If Electric Terrain is active, or this Pokemon is holding Booster Energy, this Pokemon's highest stat is boosted by 50%.",
+		shortDesc: "If Electric Terrain is active or Booster Energy held, the highest stat is 1.5x.",
+
+		activate: "  The Electric Terrain activated [POKEMON]'s Quark Drive!",
+		activateFromItem: "  [POKEMON] used its Booster Energy to activate its Quark Drive!",
+		start: "  [POKEMON]'s [STAT] was heightened!",
+		end: "  The effects of [POKEMON]'s Quark Drive wore off!",
 	},
 	queenlymajesty: {
 		name: "Queenly Majesty",
@@ -1277,6 +1381,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 			shortDesc: "This Pokemon does not take recoil damage besides Struggle and crash damage.",
 		},
 	},
+	rockypayload: {
+		name: "Rocky Payload",
+		shortDesc: "This Pokemon's offensive stat is multiplied by 1.5 while using a Rock-type attack.",
+	},
 	roughskin: {
 		name: "Rough Skin",
 		desc: "Pokemon making contact with this Pokemon lose 1/8 of their maximum HP, rounded down.",
@@ -1345,6 +1453,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Screen Cleaner",
 		shortDesc: "On switch-in, the effects of Aurora Veil, Light Screen, and Reflect end for both sides.",
 	},
+	seedsower: {
+		name: "Seed Sower",
+		desc: "When this Pokemon is hit by an attack, the effect of Grassy Terrain begins.",
+		shortDesc: "When this Pokemon is hit by an attack, the effect of Grassy Terrain begins.",
+	},
 	serenegrace: {
 		name: "Serene Grace",
 		desc: "This Pokemon's moves have their secondary effect chance doubled. This effect stacks with the Rainbow effect, except for secondary effects that cause the target to flinch.",
@@ -1376,6 +1489,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 			desc: "Prevents opposing Pokemon from choosing to switch out.",
 			shortDesc: "Prevents opposing Pokemon from choosing to switch out.",
 		},
+	},
+	sharpness: {
+		name: "Sharpness",
+		desc: "This Pokemon's slicing attacks have their power multiplied by 1.5.",
+		shortDesc: "This Pokemon's slicing attacks have 1.5x power.",
 	},
 	shedskin: {
 		name: "Shed Skin",
@@ -1610,6 +1728,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Super Luck",
 		shortDesc: "This Pokemon's critical hit ratio is raised by 1 stage.",
 	},
+	supremeoverlord: {
+		name: "Supreme Overlord",
+		desc: "This Pokemon's Attack and Special Attack stats are increased by 10% for each fainted teammate.",
+		shortDesc: "This Pokemon's Attack and Special Attack raise by 10% per fainted teammate.",
+	},
 	surgesurfer: {
 		name: "Surge Surfer",
 		shortDesc: "If Electric Terrain is active, this Pokemon's Speed is doubled.",
@@ -1638,6 +1761,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 			desc: "If Rain Dance is active, this Pokemon's Speed is doubled.",
 		},
 	},
+	swordofruin: {
+		name: "Vessel of Ruin",
+		shortDesc: "The Defense stat of all other active Pokemon is reduced by 25%.",
+	},
 	symbiosis: {
 		name: "Symbiosis",
 		desc: "If an ally uses its item, this Pokemon gives its item to that ally immediately. Does not activate if the ally's item was stolen or knocked off, or if the ally used an Eject Button or Eject Pack.",
@@ -1658,6 +1785,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		gen4: {
 			desc: "If another Pokemon burns, paralyzes, or poisons this Pokemon, that Pokemon receives the same non-volatile status condition. If another Pokemon badly poisons this Pokemon, that Pokemon becomes poisoned.",
 		},
+	},
+	tabletofruin: {
+		name: "Tablet of Ruin",
+		shortDesc: "The Attack stat of all other active Pokemon is reduced by 25%.",
 	},
 	tangledfeet: {
 		name: "Tangled Feet",
@@ -1698,6 +1829,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 
 		start: "  [POKEMON] is radiating a bursting aura!",
 	},
+	thermalexchange: {
+		name: "Thermal Exchange",
+		desc: "This Pokemon's Attack is raised 1 stage after it is damaged by a Fire-type move. This Pokemon cannot be burned.",
+		shortDesc: "This Pokemon's Attack is raised by 1 stage when hit by Fire moves; it can't be burned.",
+	},
 	thickfat: {
 		name: "Thick Fat",
 		desc: "If a Pokemon uses a Fire- or Ice-type attack against this Pokemon, that Pokemon's offensive stat is halved when calculating the damage to this Pokemon.",
@@ -1732,6 +1868,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Toxic Boost",
 		desc: "While this Pokemon is poisoned, the power of its physical attacks is multiplied by 1.5.",
 		shortDesc: "While this Pokemon is poisoned, its physical attacks have 1.5x power.",
+	},
+	toxicdebris: {
+		name: "Toxic Debris",
+		desc: "When this Pokemon is hit by an attack, Toxic Spikes are set on the opposing side of the field.",
+		shortDesc: "When this Pokemon is hit by an attack, Toxic Spikes are set around the attacker.",
 	},
 	trace: {
 		name: "Trace",
@@ -1809,6 +1950,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Unseen Fist",
 		shortDesc: "This Pokemon's contact moves ignore the target's protection, except Max Guard.",
 	},
+	vesselofruin: {
+		name: "Vessel of Ruin",
+		shortDesc: "The Special Attack stat of all other active Pokemon is reduced by 25%.",
+	},
 	victorystar: {
 		name: "Victory Star",
 		shortDesc: "This Pokemon and its allies' moves have their accuracy multiplied by 1.1.",
@@ -1860,6 +2005,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 			shortDesc: "If a physical attack hits this Pokemon, Defense is lowered by 1, Speed is raised by 1.",
 		},
 	},
+	wellbakedbody: {
+		name: "Well-Baked Body",
+		desc: "This Pokemon is immune to Fire-type moves and raises its Defense by 2 stages when hit by a Fire-type move.",
+		shortDesc: "This Pokemon's Defense is raised 2 stages if hit by a Fire move; Fire immunity.",
+	},
 	whitesmoke: {
 		name: "White Smoke",
 		shortDesc: "Prevents other Pokemon from lowering this Pokemon's stat stages.",
@@ -1868,6 +2018,17 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Wimp Out",
 		desc: "When this Pokemon has more than 1/2 its maximum HP and takes damage bringing it to 1/2 or less of its maximum HP, it immediately switches out to a chosen ally. This effect applies after all hits from a multi-hit move. This effect is prevented if the move had a secondary effect removed by the Sheer Force Ability. This effect applies to both direct and indirect damage, except Curse and Substitute on use, Belly Drum, Pain Split, and confusion damage.",
 		shortDesc: "This Pokemon switches out when it reaches 1/2 or less of its maximum HP.",
+	},
+	windpower: {
+		name: "Wind Power",
+		shortDesc: "If this Pokemon is hit by a wind move or Tailwind begins, it becomes charged.",
+
+		activate: "#electromorphosis",
+	},
+	windrider: {
+		name: "Wind Rider",
+		desc: "This Pokemon is immune to wind moves and raises its Attack by 1 stage when hit by a wind move. Attack is also raised when Tailwind begins on this Pokemon's side.",
+		shortDesc: "If hit by a wind move or Tailwind begins: +1 Attack. Wind move immunity.",
 	},
 	wonderguard: {
 		name: "Wonder Guard",
@@ -1897,6 +2058,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 
 		transform: "Zen Mode triggered!",
 		transformEnd: "Zen Mode ended!",
+	},
+	zerotohero: {
+		name: "Zero To Hero",
+		shortDesc: "If this Pokemon is Palafin, it changes to Hero Mode when it switches out.",
 	},
 
 	// CAP
