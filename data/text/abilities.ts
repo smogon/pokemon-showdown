@@ -1766,7 +1766,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		},
 	},
 	swordofruin: {
-		name: "Vessel of Ruin",
+		name: "Sword of Ruin",
 		shortDesc: "The Defense stat of all other active Pokemon is reduced by 25%.",
 
 		start: "  [POKEMON]'s Sword of Ruin weakened the Defense of all surrounding Pokémon!",
