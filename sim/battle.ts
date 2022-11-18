@@ -1443,6 +1443,7 @@ export class Battle {
 				this.runEvent('DisableMove', pokemon);
 				if (!pokemon.ateBerry) pokemon.disableMove('belch');
 				if (!pokemon.getItem().isBerry) pokemon.disableMove('stuffcheeks');
+				if (pokemon.volatiles['gigatonhammer']) pokemon.disableMove('gigatonhammer');
 
 				// If it was an illusion, it's not any more
 				if (pokemon.getLastAttackedBy() && this.gen >= 7) pokemon.knownType = true;
@@ -2467,6 +2468,9 @@ export class Battle {
 			action.pokemon.addVolatile('dynamax');
 			action.pokemon.side.dynamaxUsed = true;
 			if (action.pokemon.side.allySide) action.pokemon.side.allySide.dynamaxUsed = true;
+			break;
+		case 'terastallize':
+			this.actions.terastallize(action.pokemon);
 			break;
 		case 'beforeTurnMove':
 			if (!action.pokemon.isActive) return false;
