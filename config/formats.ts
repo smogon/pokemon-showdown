@@ -729,9 +729,9 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: [
 			'Picked Team Size = 1', 'Max Team Size = 3', 'Min Source Gen = 9',
-			'Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
+			'Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Accuracy Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
 		],
-		banlist: ['Koraidon', 'Miraidon', 'Focus Sash'],
+		banlist: ['Koraidon', 'Miraidon', 'Moody', 'Focus Band', 'Focus Sash', 'Quick Claw', 'Acupressure', 'Hypnosis', 'Perish Song', 'Sing'],
 	},
 	{
 		name: "[Gen 9] National Dex",
