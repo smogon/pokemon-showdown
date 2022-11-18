@@ -812,7 +812,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 			this.checkActive();
 			break;
 
-		case 'sideupdate': {
+		case 'sideupdate':
 			const slot = lines[1] as SideID;
 			const player = this[slot];
 			if (lines[2].startsWith(`|error|[Invalid choice] Can't do anything`)) {
@@ -825,6 +825,10 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 			} else if (lines[2].startsWith(`|request|`)) {
 				this.rqid++;
 				const request = JSON.parse(lines[2].slice(9));
+				if (request === null) {
+					this.forfeitPlayer(player, 'silent');
+					break;
+				}
 				request.rqid = this.rqid;
 				const requestJSON = JSON.stringify(request);
 				this[slot].request = {
@@ -839,7 +843,6 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 			}
 			if (player) player.sendRoom(lines[2]);
 			break;
-		}
 
 		case 'end':
 			this.logData = JSON.parse(lines[1]);
@@ -1064,7 +1067,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		if (this.ended || !this.started) return false;
 
 		if (!message) message = ' forfeited.';
-		this.room.add(`|-message|${player.name}${message}`);
+		if (message !== 'silent') this.room.add(`|-message|${player.name}${message}`);
 		this.endType = 'forfeit';
 		// multi battles, they need to be removed, else they can do things like spam forfeit
 		if (this.playerCap > 2) {
