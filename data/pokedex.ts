@@ -17976,7 +17976,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Black",
 		prevo: "Bisharp",
 		evoType: "other",
-		evoCondition: "Defeat 3 Bisharp holding Leader's Crest while holding Leader's Crest",
+		evoCondition: "Defeat 3 Bisharp holding Leader's Crest and level-up",
 		eggGroups: ["Human-Like"],
 	},
 	clodsire: {
@@ -18003,7 +18003,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		prevo: "Primeape",
 		evoType: "other",
-		evoCondition: "Use Rage Fist 20 times",
+		evoCondition: "Use Rage Fist 20 times and level-up",
 		eggGroups: ["Field"],
 	},
 	missingno: {
