@@ -3618,7 +3618,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		spritenum: 0, // TODO
 		onFoeAfterBoost(boost, target, source, effect) {
-			if (effect?.id.endsWith('mirrorherb') || effect?.id.endsWith('opportunist')) return;
+			if (effect?.effectType !== 'Move') return;
 			const boostPlus: SparseBoostsTable = {};
 			let statsRaised = false;
 			let i: BoostID;
