@@ -3617,7 +3617,8 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		spritenum: 0, // TODO
-		onFoeAfterBoost(boost, target, source) {
+		onFoeAfterBoost(boost, target, source, effect) {
+			if (effect?.effectType !== 'Move') return;
 			const boostPlus: SparseBoostsTable = {};
 			let statsRaised = false;
 			let i: BoostID;
@@ -3628,7 +3629,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				}
 			}
 			if (!statsRaised) return;
-			const pokemon = this.effectState.target;
+			const pokemon: Pokemon = this.effectState.target;
 			pokemon.useItem();
 			this.boost(boostPlus, pokemon);
 		},
