@@ -1052,8 +1052,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "OU",
 	},
 	tauros: {
-		tier: "OU",
-		doublesTier: "DOU",
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 		natDexTier: "OU",
 	},
 	taurospaldea: {
@@ -1468,19 +1468,16 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "OU",
 	},
 	wooper: {
-		tier: "LC",
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
+		natDexTier: "LC",
 	},
 	wooperpaldea: {
 		tier: "LC",
 	},
 	quagsire: {
-		tier: "OU",
-		doublesTier: "DOU",
-		natDexTier: "OU",
-	},
-	quagsirepaldea: {
-		tier: "OU",
-		doublesTier: "DOU",
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 		natDexTier: "OU",
 	},
 	murkrow: {
@@ -4008,8 +4005,18 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	vivillon: {
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
+		natDexTier: "OU",
+	},
+	vivillonfancy: {
 		tier: "OU",
 		doublesTier: "DOU",
+		natDexTier: "OU",
+	},
+	vivillonpokeball: {
+		isNonstandard: "Past",
+		tier: "Illegal",
 		natDexTier: "OU",
 	},
 	litleo: {
@@ -5130,9 +5137,15 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	cramorant: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		isNonstandard: "Past",
+		tier: "Illegal",
 		natDexTier: "OU",
+	},
+	cramorantgulping: {
+		isNonstandard: "Past",
+	},
+	cramorantgorging: {
+		isNonstandard: "Past",
 	},
 	arrokuda: {
 		tier: "LC",

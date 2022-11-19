@@ -11751,7 +11751,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Black",
 		prevo: "Scatterbug",
 		evoLevel: 9,
-		evos: ["Vivillon"],
+		evos: ["Vivillon", "Vivillon-Fancy"],
 		eggGroups: ["Bug"],
 		// TODO: Spewpa technically has the same number of formes as Vivillon
 	},
@@ -11800,10 +11800,12 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		forme: "Fancy",
 		types: ["Bug", "Flying"],
 		baseStats: {hp: 80, atk: 52, def: 50, spa: 90, spd: 50, spe: 89},
-		abilities: {0: "Shield Dust", 1: "Compound Eyes"},
+		abilities: {0: "Shield Dust", 1: "Compound Eyes", H: "Friend Guard"},
 		heightm: 1.2,
 		weightkg: 17,
 		color: "Black",
+		prevo: "Spewpa",
+		evoLevel: 12,
 		eggGroups: ["Bug"],
 	},
 	vivillonpokeball: {
