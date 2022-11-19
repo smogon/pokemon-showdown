@@ -65876,7 +65876,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		eventData: [
 			{generation: 6, level: 12, moves: ["gust", "lightscreen", "strugglebug", "holdhands"], pokeball: "cherishball"},
 		],
-		eventOnly: true,
 	},
 	vivillonpokeball: {
 		learnset: {
