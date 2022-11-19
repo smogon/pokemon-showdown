@@ -6553,6 +6553,16 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
+	cramorantgulping: {
+		tier: "(PU)",
+		doublesTier: "(DUU)",
+		natDexTier: "RU",
+	},
+	cramorantgorging: {
+		tier: "(PU)",
+		doublesTier: "(DUU)",
+		natDexTier: "RU",
+	},
 	arrokuda: {
 		tier: "LC",
 	},
