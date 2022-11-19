@@ -23,7 +23,7 @@ class TestTools {
 		this.currentMod = mod;
 		this.dex = Dex.mod(mod);
 
-		this.modPrefix = this.dex.isBase ? `[gen8] ` : `[${mod}] `;
+		this.modPrefix = this.dex.isBase ? `[gen9] ` : `[${mod}] `;
 	}
 
 	mod(mod) {
@@ -58,10 +58,14 @@ class TestTools {
 		const customRulesID = customRules.length ? `@@@${customRules.join(',')}` : ``;
 
 		let basicFormat = this.currentMod === 'base' && gameType === 'singles' ? 'Anything Goes' : 'Custom Game';
+		let modPrefix = this.modPrefix;
 		if (this.currentMod === 'gen1stadium') basicFormat = 'OU';
-		if (gameType === 'freeforall' || gameType === 'multi') basicFormat = 'randombattle';
+		if (gameType === 'freeforall' || gameType === 'multi') {
+			basicFormat = 'randombattle';
+			modPrefix = `[gen8] `; // Remove when FFA/multis support Gen 9
+		}
 		const gameTypePrefix = gameType === 'singles' ? '' : capitalize(gameType) + ' ';
-		const formatName = `${this.modPrefix}${gameTypePrefix}${basicFormat}${customRulesID}`;
+		const formatName = `${modPrefix}${gameTypePrefix}${basicFormat}${customRulesID}`;
 
 		let format = formatsCache.get(formatName);
 		if (format) return format;
@@ -142,4 +146,4 @@ class TestTools {
 
 const common = exports = module.exports = new TestTools();
 cache.set('base', common);
-cache.set('gen8', common);
+cache.set('gen9', common);

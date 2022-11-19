@@ -105,7 +105,7 @@ describe(`Pressure`, function () {
 	});
 
 	it(`should deduct additional PP from Max Moves`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(8).createBattle([[
 			{species: 'wynaut', moves: ['darkpulse']},
 		], [
 			{species: 'absol', ability: 'pressure', moves: ['sleeptalk']},

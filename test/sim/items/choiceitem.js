@@ -11,7 +11,7 @@ describe("Choice Items", function () {
 	});
 
 	it("should restore the same Choice lock after dynamax ends", function () {
-		battle = common.createBattle([[
+		battle = common.gen(8).createBattle([[
 			{species: 'gyarados', moves: ['sleeptalk', 'splash'], item: 'choicescarf'},
 		], [
 			{species: 'wynaut', moves: ['sleeptalk']},

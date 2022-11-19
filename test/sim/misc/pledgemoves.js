@@ -42,7 +42,7 @@ describe('Pledge Moves', function () {
 	});
 
 	it("should not start a Pledge combo for Max Moves", function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'Weedle', ability: 'sapsipper', moves: ['sleeptalk']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
 		], [
