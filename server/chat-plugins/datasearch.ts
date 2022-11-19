@@ -516,7 +516,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		water2: 'Water 2',
 		water3: 'Water 3',
 	});
-	const allFormes = ['alola', 'galar', 'primal', 'therian', 'totem'];
+	const allFormes = ['alola', 'galar', 'hisui', 'paldea', 'primal', 'therian', 'totem'];
 	const allStats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'bst', 'weight', 'height', 'gen'];
 	const allStatAliases: {[k: string]: string} = {
 		attack: 'atk', defense: 'def', specialattack: 'spa', spc: 'spa', special: 'spa', spatk: 'spa',
@@ -980,7 +980,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				// LC handling, checks for LC Pokemon in higher tiers that need to be handled separately,
 				// as well as event-only Pokemon that are not eligible for LC despite being the first stage
 				let format = Dex.formats.get('gen' + mod.gen + 'lc');
-				if (!format.exists) format = Dex.formats.get('gen8lc');
+				if (!format.exists) format = Dex.formats.get('gen9lc');
 				if (
 					alts.tiers.LC &&
 					!dex[mon].prevo &&
@@ -1112,7 +1112,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			if (matched) continue;
 
 			const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod);
-			const formatStr = format ? format[1].name : 'gen8ou';
+			const formatStr = format ? format[1].name : 'gen9ou';
 			const validator = TeamValidator.get(
 				`${formatStr}${nationalSearch && !Dex.formats.getRuleTable(Dex.formats.get(formatStr)).has('standardnatdex') ? '@@@standardnatdex' : ''}`
 			);
@@ -1219,7 +1219,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const allFlags = [
 		'bypasssub', 'bite', 'bullet', 'charge', 'contact', 'dance', 'defrost', 'gravity', 'highcrit', 'mirror',
 		'multihit', 'ohko', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'secondary',
-		'snatch', 'sound', 'zmove', 'maxmove', 'gmaxmove', 'protection',
+		'snatch', 'sound', 'zmove', 'maxmove', 'gmaxmove', 'protection', 'slicing', 'wind',
 	];
 	const allStatus = ['psn', 'tox', 'brn', 'par', 'frz', 'slp'];
 	const allVolatileStatus = ['flinch', 'confusion', 'partiallytrapped'];
@@ -1330,6 +1330,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			if (target === 'multi' || toID(target) === 'multihit') target = 'multihit';
 			if (target === 'crit' || toID(target) === 'highcrit') target = 'highcrit';
 			if (['thaw', 'thaws', 'melt', 'melts', 'defrosts'].includes(target)) target = 'defrost';
+			if (target === 'slices' || target === 'slice') target = 'slicing';
 			if (target === 'bounceable' || toID(target) === 'magiccoat' || toID(target) === 'magicbounce') target = 'reflectable';
 			if (allFlags.includes(target)) {
 				if ((orGroup.flags[target] && isNotSearch) || (orGroup.flags[target] === false && !isNotSearch)) {
@@ -1612,7 +1613,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		};
 	}
 
-	const getFullLearnsetOfPokemon = (species: Species) => {
+	const getFullLearnsetOfPokemon = (species: Species, natDex: boolean) => {
 		let usedSpecies: Species = Utils.deepClone(species);
 		let usedSpeciesLearnset: LearnsetData = Utils.deepClone(mod.species.getLearnset(usedSpecies.id));
 		if (!usedSpeciesLearnset) {
@@ -1626,7 +1627,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			const sources = learnset[move];
 			for (const learned of sources) {
 				const sourceGen = parseInt(learned.charAt(0));
-				if (sourceGen <= mod.gen) lsetData.add(move);
+				if (sourceGen <= mod.gen && (mod.gen !== 9 || natDex)) lsetData.add(move);
 			}
 		}
 
@@ -1639,7 +1640,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				const sources = learnset[move];
 				for (const learned of sources) {
 					const sourceGen = parseInt(learned.charAt(0));
-					if (sourceGen <= mod.gen) lsetData.add(move);
+					if (sourceGen <= mod.gen && (mod.gen !== 9 || natDex)) lsetData.add(move);
 				}
 			}
 		}
@@ -1652,7 +1653,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const validMoves = new Set(Object.keys(mod.data.Moves));
 	for (const mon of targetMons) {
 		const species = mod.species.get(mon.name);
-		const lsetData = getFullLearnsetOfPokemon(species);
+		const lsetData = getFullLearnsetOfPokemon(species, !!nationalSearch);
 		// This pokemon's learnset needs to be excluded, so we perform a difference operation
 		// on the valid moveset and this pokemon's moveset.
 		if (mon.shouldBeExcluded) {
