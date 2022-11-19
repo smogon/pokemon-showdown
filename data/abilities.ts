@@ -3167,6 +3167,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				pokemon.volatiles['protosynthesis'].fromBooster = true;
 			}
 		},
+		onEnd(pokemon) {
+			pokemon.removeVolatile('protosynthesis');
+		},
 		condition: {
 			noCopy: true,
 			onStart(pokemon) {
@@ -3285,6 +3288,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				// @ts-ignore - addVolatile makes this exist but TS can't tell that
 				pokemon.volatiles['quarkdrive'].fromBooster = true;
 			}
+		},
+		onEnd(pokemon) {
+			pokemon.removeVolatile('quarkdrive');
 		},
 		condition: {
 			noCopy: true,
