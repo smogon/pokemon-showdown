@@ -438,6 +438,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				// Handle here the applying of partial trapping moves to Pokémon with Substitute
 				if (targetSub && moveData.volatileStatus && moveData.volatileStatus === 'partiallytrapped') {
 					target.addVolatile(moveData.volatileStatus, pokemon, move);
+					if (!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].duration > 1) {
+						target.volatiles[moveData.volatileStatus].duration = 2;
+					} else {
+						target.volatiles[moveData.volatileStatus].duration = 1;
+					}
 				}
 
 				if (!hitResult) {
