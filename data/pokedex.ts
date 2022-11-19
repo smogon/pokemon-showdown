@@ -17976,7 +17976,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Black",
 		prevo: "Bisharp",
 		evoType: "other",
-		evoCondition: "Defeat 3 Bisharp holding Leader's Crest and level-up",
+		evoCondition: "Defeat 3 Bisharp leading Pawniard and level-up",
 		eggGroups: ["Human-Like"],
 	},
 	clodsire: {
