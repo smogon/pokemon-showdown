@@ -440,8 +440,6 @@ export const Scripts: ModdedBattleScriptsData = {
 					target.addVolatile(moveData.volatileStatus, pokemon, move);
 					if (!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].duration > 1) {
 						target.volatiles[moveData.volatileStatus].duration = 2;
-					} else {
-						target.volatiles[moveData.volatileStatus].duration = 1;
 					}
 				}
 
