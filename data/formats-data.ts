@@ -1999,7 +1999,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	shedinja: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	whismur: {
 		isNonstandard: "Past",
