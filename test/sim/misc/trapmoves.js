@@ -195,3 +195,60 @@ describe('Partial Trapping Moves', function () {
 		});
 	}
 });
+
+describe('Partial Trapping Moves [Gen 1]', function () {
+	afterEach(function () {
+		battle.destroy();
+	});
+
+	it('Wrap ends when wrapped Pokemon dies of residual damage', function () {
+		battle = common.gen(1).createBattle();
+		battle.setPlayer('p1', {team: [{species: "Arbok", moves: ['wrap', 'toxic']}]});
+		battle.setPlayer('p2', {team: [{species: "Rhydon", moves: ['splash']}, {species: "Exeggutor", moves: ['splash']}]});
+		battle.makeChoices('move toxic', 'move splash');
+		for (let i = 0; i < 6; i++) {
+			battle.makeChoices();
+		}
+		assert(!battle.p1.active[0].volatiles['partialtrappinglock']);
+	});
+
+	it('Wrap ends when wrapped Pokemon switches to a Pokemon that dies of residual damage', function () {
+		battle = common.gen(1).createBattle();
+		battle.setPlayer('p1', {team: [{species: "Dragonite", moves: ['wrap', 'seismictoss', 'toxic'], evs: {hp: 255}}]});
+		battle.setPlayer('p2', {team: [{species: "Mewtwo", moves: ['splash'], evs: {hp: 255}}, {species: "Exeggutor", moves: ['splash']}]});
+		for (let i = 0; i < 4; i++) {
+			battle.makeChoices('move seismictoss', 'auto');
+		}
+		battle.makeChoices('move toxic', 'auto');
+		battle.makeChoices('move wrap', 'switch 2');
+		battle.makeChoices('move wrap', 'switch 2');
+		battle.makeChoices();
+		assert(!battle.p1.active[0].volatiles['partialtrappinglock']);
+	});
+
+	it('Wrap ends when wrapper dies to residual damage', function () {
+		battle = common.gen(1).createBattle();
+		battle.setPlayer('p1', {team: [{species: "Dragonite", moves: ['wrap', 'splash']}, {species: "Exeggutor", moves: ['splash']}]});
+		battle.setPlayer('p2', {team: [{species: "Rhydon", moves: ['toxic']}]});
+		battle.makeChoices('move splash', 'move toxic');
+		for (let i = 0; i < 7; i++) {
+			battle.makeChoices();
+		}
+		assert(!battle.p2.active[0].volatiles['partiallytrapped']);
+	});
+
+	it('Wrap ends when wrapper switches to a Pokemon that dies of residual damage', function () {
+		battle = common.gen(1).createBattle();
+		battle.setPlayer('p1', {team: [{species: "Rhydon", moves: ['splash'], evs: {hp: 255}}, {species: "Dragonite", moves: ['wrap']}]});
+		battle.setPlayer('p2', {team: [{species: "Slowbro", moves: ['seismictoss', 'toxic']}]});
+		for (let i = 0; i < 4; i++) {
+			battle.makeChoices();
+		}
+		battle.makeChoices('move splash', 'move toxic');
+		battle.makeChoices('switch 2', 'auto');
+		battle.makeChoices();
+		battle.makeChoices('switch 2', 'auto');
+		battle.makeChoices();
+		assert(!battle.p2.active[0].volatiles['partiallytrapped']);
+	});
+});

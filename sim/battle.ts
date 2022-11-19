@@ -1415,6 +1415,24 @@ export class Battle {
 			pokemon.removeVolatile('dynamax');
 		}
 
+		// Gen 1 partial trapping ends when either Pokemon or a switch in faints to residual damage
+		if (this.gen === 1) {
+			for (const pokemon of this.getAllActive()) {
+				if (pokemon.volatiles['partialtrappinglock']) {
+					const target = pokemon.volatiles['partialtrappinglock'].locked;
+					if (target.hp <= 0 || !target.volatiles['partiallytrapped']) {
+						delete pokemon.volatiles['partialtrappinglock'];
+					}
+				}
+				if (pokemon.volatiles['partiallytrapped']) {
+					const source = pokemon.volatiles['partiallytrapped'].source;
+					if (source.hp <= 0 || !source.volatiles['partialtrappinglock']) {
+						delete pokemon.volatiles['partiallytrapped'];
+					}
+				}
+			}
+		}
+
 		const trappedBySide: boolean[] = [];
 		const stalenessBySide: ('internal' | 'external' | undefined)[] = [];
 		for (const side of this.sides) {
