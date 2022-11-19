@@ -316,7 +316,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		searchShow: false,
-		ruleset: ['Draft', '+Past'],
+		ruleset: ['Draft', '+Unobtainable', '+Past'],
 	},
 	{
 		name: "[Gen 9] NatDex 6v6 Doubles Draft",
@@ -324,7 +324,7 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['[Gen 9] 6v6 Doubles Draft', '+Past'],
+		ruleset: ['[Gen 9] 6v6 Doubles Draft', '+Unobtainable', '+Past'],
 	},
 	{
 		name: "[Gen 9] NatDex 4v4 Doubles Draft",
@@ -332,7 +332,7 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['[Gen 9] 4v4 Doubles Draft', '+Past'],
+		ruleset: ['[Gen 9] 4v4 Doubles Draft', '+Unobtainable', '+Past'],
 	},
 	{
 		name: "[Gen 9] LC NDex Draft",
