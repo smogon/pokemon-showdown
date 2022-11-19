@@ -2720,7 +2720,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	opportunist: {
 		onFoeAfterBoost(boost, target, source, effect) {
 			// Prevent an infinite loop of oppritunist boosts
-			if (effect?.id === 'opportunist') return;
+			if (effect?.id.endsWith('mirrorherb') || effect?.id.endsWith('opportunist')) return;
 			const pokemon = this.effectState.target;
 			const positiveBoosts: Partial<BoostsTable> = {};
 			let i: BoostID;
