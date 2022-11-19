@@ -4013,8 +4013,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "OU",
 	},
 	vivillonpokeball: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
 		natDexTier: "OU",
 	},
 	litleo: {
