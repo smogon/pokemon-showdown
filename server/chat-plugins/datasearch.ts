@@ -675,7 +675,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			} else if (target.substr(0, 3) === 'gen' && Number.isInteger(parseFloat(target.substr(3)))) {
 				targetInt = parseInt(target.substr(3).trim());
 			}
-			if (0 < targetInt && targetInt < 9) {
+			if (0 < targetInt && targetInt <= mod.gen) {
 				const invalid = validParameter("gens", String(targetInt), isNotSearch, target);
 				if (invalid) return {error: invalid};
 				orGroup.gens[targetInt] = !isNotSearch;
@@ -1347,7 +1347,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				targetInt = parseInt(target.substr(3).trim());
 			}
 
-			if (0 < targetInt && targetInt < 9) {
+			if (0 < targetInt && targetInt <= mod.gen) {
 				if ((orGroup.gens[targetInt] && isNotSearch) || (orGroup.flags[targetInt] === false && !isNotSearch)) {
 					return {error: `A search cannot both exclude and include '${target}'.`};
 				}
@@ -1981,7 +1981,7 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 			if (!isNaN(parsedGen)) {
 				if (maxGen) return {error: "You cannot specify 'maxgen' multiple times."};
 				maxGen = parsedGen;
-				if (maxGen < 2 || maxGen > 8) return {error: "The generation must be between 2 and 8"};
+				if (maxGen < 2 || maxGen > Dex.gen) return {error: "Invalid generation"};
 				continue;
 			}
 		} else if (newWord.substr(0, 3) === 'gen') {
@@ -1989,7 +1989,7 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 			if (!isNaN(parsedGen)) {
 				if (gen) return {error: "You cannot specify 'gen' multiple times."};
 				gen = parsedGen;
-				if (gen < 2 || gen > 8) return {error: "The generation must be between 2 and 8"};
+				if (gen < 2 || gen > Dex.gen) return {error: "Invalid generation"};
 				continue;
 			}
 		}
@@ -2232,7 +2232,7 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 			if (parsedGen) {
 				if (maxGen) return {error: "You cannot specify 'maxgen' multiple times."};
 				maxGen = parsedGen;
-				if (maxGen < 3 || maxGen > 8) return {error: "The generation must be between 3 and 8"};
+				if (maxGen < 3 || maxGen > Dex.gen) return {error: "Invalid generation"};
 				continue;
 			}
 		} else if (newWord.substr(0, 3) === 'gen') {
@@ -2240,7 +2240,7 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 			if (parsedGen) {
 				if (gen) return {error: "You cannot specify 'gen' multiple times."};
 				gen = parsedGen;
-				if (gen < 3 || gen > 8) return {error: "The generation must be between 3 and 8"};
+				if (gen < 3 || gen > Dex.gen) return {error: "Invalid generation"};
 				continue;
 			}
 		}
