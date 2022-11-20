@@ -130,9 +130,9 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		ruleset: [
 			'Picked Team Size = 2', 'Max Team Size = 4',
-			'Standard Doubles', 'Accuracy Moves Clause', 'Terastal Clause', 'Sleep Clause Mod',
+			'Standard Doubles', 'Accuracy Moves Clause', 'Terastal Clause', 'Sleep Clause Mod', 'Evasion Items Clause',
 		],
-		banlist: ['Koraidon', 'Miraidon', 'Focus Sash', 'Ally Switch', 'Perish Song', 'Swagger'],
+		banlist: ['Koraidon', 'Miraidon', 'Commander', 'Focus Sash', 'King\'s Rock', 'Ally Switch', 'Final Gambit', 'Perish Song', 'Swagger'],
 	},
 	{
 		name: "[Gen 9] Doubles Custom Game",
