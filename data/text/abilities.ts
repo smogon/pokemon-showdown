@@ -1880,8 +1880,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	toxicdebris: {
 		name: "Toxic Debris",
-		desc: "When this Pokemon is hit by an attack, Toxic Spikes are set on the opposing side of the field.",
-		shortDesc: "When this Pokemon is hit by an attack, Toxic Spikes are set around the attacker.",
+		desc: "When this Pokemon is hit by a physical attack, Toxic Spikes are set on the opposing side of the field.",
+		shortDesc: "When this Pokemon is hit by a physical attack, Toxic Spikes are set around the attacker.",
 	},
 	trace: {
 		name: "Trace",
