@@ -1036,6 +1036,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return null;
 			}
 		},
+		isBreakable: true,
 		name: "Earth Eater",
 		rating: 3,
 		num: 297,
@@ -1424,6 +1425,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.add('-ability', target, 'Good as Gold');
 			return null;
 		},
+		isBreakable: true,
 		name: "Good as Gold",
 		rating: 2,
 		num: 283,
@@ -1515,11 +1517,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.add('-activate', pokemon, 'ability: Guard Dog');
 			return null;
 		},
-		// TODO Assuming this means it just undoes the stat drop, check and correct this if needed.
 		onBoost(boost, target, source, effect) {
 			if (effect.name === 'Intimidate') {
 				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Guard Dog', '[of] ' + target);
+				this.boost({atk: 1}, target, target, null, false, true);
 			}
 		},
 		name: "Guard Dog",
@@ -3175,21 +3176,25 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.effectState.bestStat = pokemon.getBestStoredStat();
 				this.add('-start', pokemon, 'protosynthesis' + this.effectState.bestStat);
 			},
+			onModifyAtkPriority: 5,
 			onModifyAtk(atk, source, target, move) {
 				if (this.effectState.bestStat !== 'atk') return;
 				this.debug('Protosynthesis atk boost');
 				return this.chainModify(1.5);
 			},
+			onModifyDefPriority: 6,
 			onModifyDef(def, target, source, move) {
 				if (this.effectState.bestStat !== 'def') return;
 				this.debug('Protosynthesis def boost');
 				return this.chainModify(1.5);
 			},
+			onModifySpAPriority: 5,
 			onModifySpA(relayVar, source, target, move) {
 				if (this.effectState.bestStat !== 'spa') return;
 				this.debug('Protosynthesis spa boost');
 				return this.chainModify(1.5);
 			},
+			onModifySpDPriority: 6,
 			onModifySpD(relayVar, target, source, move) {
 				if (this.effectState.bestStat !== 'spd') return;
 				this.debug('Protosynthesis spd boost');
@@ -3303,21 +3308,25 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.effectState.bestStat = pokemon.getBestStoredStat();
 				this.add('-start', pokemon, 'quarkdrive' + this.effectState.bestStat);
 			},
+			onModifyAtkPriority: 5,
 			onModifyAtk(atk, source, target, move) {
 				if (this.effectState.bestStat !== 'atk') return;
 				this.debug('Quark Drive atk boost');
 				return this.chainModify(1.5);
 			},
+			onModifyDefPriority: 6,
 			onModifyDef(def, target, source, move) {
 				if (this.effectState.bestStat !== 'def') return;
 				this.debug('Quark Drive def boost');
 				return this.chainModify(1.5);
 			},
+			onModifySpAPriority: 5,
 			onModifySpA(relayVar, source, target, move) {
 				if (this.effectState.bestStat !== 'spa') return;
 				this.debug('Quark Drive spa boost');
 				return this.chainModify(1.5);
 			},
+			onModifySpDPriority: 6,
 			onModifySpD(relayVar, target, source, move) {
 				if (this.effectState.bestStat !== 'spd') return;
 				this.debug('Quark Drive spd boost');
