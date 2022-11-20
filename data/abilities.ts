@@ -3253,7 +3253,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onTryAddVolatile(status, target) {
 			if (status.id === 'yawn') {
-				this.add('-immune', target, '[from] ability: Shields Down');
+				this.add('-immune', target, '[from] ability: Purifying Salt');
 				return null;
 			}
 		},
