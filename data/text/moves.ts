@@ -1442,7 +1442,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Fails unless the user is an Electric type. If this move is successful, the user's Electric type becomes typeless as long as it remains active.",
 		shortDesc: "User's Electric type becomes typeless; must be Electric.",
 
-		typeChange: "  [POKEMON] ran out of charge!",
+		typeChange: "  [POKEMON] used up all of its electricity!",
 	},
 	doubleslap: {
 		name: "Double Slap",
