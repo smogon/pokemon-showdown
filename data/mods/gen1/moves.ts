@@ -756,6 +756,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			status: 'psn',
 		},
 	},
+	sonicboom: {
+		inherit: true,
+		ignoreImmunity: true,
+	},
 	softboiled: {
 		inherit: true,
 		heal: null,
