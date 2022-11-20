@@ -3168,7 +3168,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onEnd(pokemon) {
-			pokemon.removeVolatile('protosynthesis');
+			delete pokemon.volatiles['protosynthesis'];
+			this.add('-end', pokemon, 'Protosynthesis', '[silent]');
 		},
 		condition: {
 			noCopy: true,
@@ -3300,7 +3301,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onEnd(pokemon) {
-			pokemon.removeVolatile('quarkdrive');
+			delete pokemon.volatiles['quarkdrive'];
+			this.add('-end', pokemon, 'Quark Drive', '[silent]');
 		},
 		condition: {
 			noCopy: true,
