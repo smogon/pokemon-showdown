@@ -16399,7 +16399,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {},
 		volatileStatus: 'substitute',
 		onTryHit(target) {
-			if (target.volatiles['substitute']) {
+			if (target.volatiles['substitute'] || !this.canSwitch(target.side)) {
 				this.add('-fail', target, 'move: Shed Tail');
 				return null;
 			}
@@ -16409,11 +16409,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		onHit(target) {
-			if (!this.canSwitch(target.side)) {
-				this.attrLastMove('[still]');
-				this.add('-fail', target);
-				return this.NOT_FAIL;
-			}
 			this.directDamage(target.maxhp / 2);
 		},
 		self: {
