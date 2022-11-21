@@ -715,21 +715,23 @@ export const commands: Chat.ChatCommands = {
 
 					if (move.isNonstandard === "Past" && dex.gen >= 8) details["&#10007; Past Gens Only"] = "";
 					if (move.secondary || move.secondaries) details["&#10003; Secondary effect"] = "";
-					if (move.flags['contact']) details["&#10003; Contact"] = "";
-					if (move.flags['sound']) details["&#10003; Sound"] = "";
-					if (move.flags['bullet']) details["&#10003; Bullet"] = "";
-					if (move.flags['pulse']) details["&#10003; Pulse"] = "";
+					if (move.flags['contact'] && dex.gen >= 3) details["&#10003; Contact"] = "";
+					if (move.flags['sound'] && dex.gen >= 3) details["&#10003; Sound"] = "";
+					if (move.flags['bullet'] && dex.gen >= 6) details["&#10003; Bullet"] = "";
+					if (move.flags['pulse'] && dex.gen >= 6) details["&#10003; Pulse"] = "";
 					if (!move.flags['protect'] && move.target !== 'self') details["&#10003; Bypasses Protect"] = "";
 					if (move.flags['bypasssub']) details["&#10003; Bypasses Substitutes"] = "";
 					if (move.flags['defrost']) details["&#10003; Thaws user"] = "";
-					if (move.flags['bite']) details["&#10003; Bite"] = "";
-					if (move.flags['punch']) details["&#10003; Punch"] = "";
-					if (move.flags['powder']) details["&#10003; Powder"] = "";
-					if (move.flags['reflectable']) details["&#10003; Bounceable"] = "";
+					if (move.flags['bite'] && dex.gen >= 6) details["&#10003; Bite"] = "";
+					if (move.flags['punch'] && dex.gen >= 4) details["&#10003; Punch"] = "";
+					if (move.flags['powder'] && dex.gen >= 6) details["&#10003; Powder"] = "";
+					if (move.flags['reflectable'] && dex.gen >= 3) details["&#10003; Bounceable"] = "";
 					if (move.flags['charge']) details["&#10003; Two-turn move"] = "";
 					if (move.flags['recharge']) details["&#10003; Has recharge turn"] = "";
 					if (move.flags['gravity'] && dex.gen >= 4) details["&#10007; Suppressed by Gravity"] = "";
 					if (move.flags['dance'] && dex.gen >= 7) details["&#10003; Dance move"] = "";
+					if (move.flags['slicing'] && dex.gen >= 9) details["&#10003; Slicing move"] = "";
+					if (move.flags['wind'] && dex.gen >= 9) details["&#10003; Wind move"] = "";
 
 					if (dex.gen >= 7) {
 						if (move.gen >= 8 && move.isMax) {
