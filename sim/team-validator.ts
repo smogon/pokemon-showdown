@@ -1829,7 +1829,7 @@ export class TeamValidator {
 			}
 			if (species.abilities['H']) {
 				const isHidden = (set.ability === species.abilities['H']);
-				if (!isHidden && eventData.isHidden) {
+				if (!isHidden && eventData.isHidden && dex.gen <= 8) {
 					if (fastReturn) return true;
 					problems.push(`${name} must have its Hidden Ability${etc}.`);
 				}
