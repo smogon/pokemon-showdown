@@ -627,51 +627,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 	abilityclause: {
 		effectType: 'ValidatorRule',
 		name: 'Ability Clause',
-		desc: "Prevents teams from having more than one Pok&eacute;mon with the same ability",
+		desc: "Prevents teams from having Pok&eacute;mon with the same ability than allowed",
+		hasValue: 'positive-integer',
 		onBegin() {
-			this.add('rule', 'Ability Clause: Limit one of each ability');
+			const num = this.ruleTable.valueRules.get('abilityclause');
+			this.add('rule', `${num} Ability Clause: Limit ${num} of each ability`);
 		},
-		onValidateTeam(team) {
-			if (this.format.id === 'gen8multibility') return;
-			const abilityTable = new Map<string, boolean>();
-			const base: {[k: string]: string} = {
-				airlock: 'cloudnine',
-				battlearmor: 'shellarmor',
-				clearbody: 'whitesmoke',
-				dazzling: 'queenlymajesty',
-				emergencyexit: 'wimpout',
-				filter: 'solidrock',
-				gooey: 'tanglinghair',
-				insomnia: 'vitalspirit',
-				ironbarbs: 'roughskin',
-				libero: 'protean',
-				minus: 'plus',
-				moxie: 'chillingneigh',
-				powerofalchemy: 'receiver',
-				propellertail: 'stalwart',
-				teravolt: 'moldbreaker',
-				turboblaze: 'moldbreaker',
-			};
-			for (const set of team) {
-				let ability = this.toID(set.ability);
-				if (!ability) continue;
-				if (ability in base) ability = base[ability] as ID;
-				if (abilityTable.get(ability)) {
-					return [
-						`You are limited to one of each ability by Ability Clause.`,
-						`(You have more than one ${this.dex.abilities.get(ability).name} variant)`,
-					];
-				}
-				abilityTable.set(ability, true);
-			}
-		},
-	},
-	"2abilityclause": {
-		effectType: 'ValidatorRule',
-		name: '2 Ability Clause',
-		desc: "Prevents teams from having more than two Pok&eacute;mon with the same ability",
-		onBegin() {
-			this.add('rule', '2 Ability Clause: Limit two of each ability');
+		onValidateRule(value) {
+			const allowedAbilities = parseInt(value);
+			if (allowedAbilities < 1) throw new Error(`Must allow at least 1 of each ability`);
 		},
 		onValidateTeam(team) {
 			if (this.format.id === 'gen8multibility') return;
@@ -694,14 +658,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 				teravolt: 'moldbreaker',
 				turboblaze: 'moldbreaker',
 			};
+			const num = parseInt(this.ruleTable.valueRules.get('abilityclause')!);
 			for (const set of team) {
 				let ability = this.toID(set.ability);
 				if (!ability) continue;
 				if (ability in base) ability = base[ability] as ID;
-				if ((abilityTable.get(ability) || 0) >= 2) {
+				if ((abilityTable.get(ability) || 0) >= num) {
 					return [
-						`You are limited to two of each ability by 2 Ability Clause.`,
-						`(You have more than two ${this.dex.abilities.get(ability).name} variants)`,
+						`You are limited to ${num} of each ability by Ability Clause.`,
+						`(You have more than ${num} ${this.dex.abilities.get(ability).name} variant${num === 1 ? '' : 's'})`,
 					];
 				}
 				abilityTable.set(ability, (abilityTable.get(ability) || 0) + 1);
