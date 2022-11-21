@@ -5250,7 +5250,8 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Salt Cure",
 		shortDesc: "Deals 1/8 max HP every turn; 1/4 if Steel or Water.",
 
-		start: "  [POKEMON] became covered in salt!",
+		start: "  [POKEMON] is being salt cured!",
+		damage: "  [POKEMON] is hurt by Salt Cure!",
 	},
 	sandattack: {
 		name: "Sand Attack",
