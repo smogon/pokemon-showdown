@@ -709,11 +709,58 @@ export class Side {
 		const targetPokemon = this.pokemon[slot];
 
 		if (this.sideConditions['revivalblessing']) {
+      console.log("stuff");
 			if (!targetPokemon.fainted) {
 				return this.emitChoiceError(`Can't switch: You have to pass to a fainted Pokémon`);
 			}
-			targetPokemon.heal(targetPokemon.maxhp / 2);
+      this.pokemonLeft++;
+      targetPokemon.fainted = false;
+      targetPokemon.faintQueued = false;
+      targetPokemon.subFainted = false;
+      targetPokemon.status = '';
+      targetPokemon.hp = targetPokemon.maxhp / 2;
+      targetPokemon.getHealth = () => {
+    		if (!targetPokemon.hp) return {side: targetPokemon.side.id, secret: '0 fnt', shared: '0 fnt'};
+    		let secret = `${targetPokemon.hp}/${targetPokemon.maxhp}`;
+    		let shared;
+    		const ratio = targetPokemon.hp / targetPokemon.maxhp;
+    		if (this.battle.reportExactHP) {
+    			shared = secret;
+    		} else if (targetPokemon.battle.reportPercentages || targetPokemon.battle.gen >= 8) {
+    			// HP Percentage Mod mechanics
+    			let percentage = Math.ceil(ratio * 100);
+    			if ((percentage === 100) && (ratio < 1.0)) {
+    				percentage = 99;
+    			}
+    			shared = `${percentage}/100`;
+    		} else {
+    			// In-game accurate pixel health mechanics
+    			const pixels = Math.floor(ratio * 48) || 1;
+    			shared = `${pixels}/48`;
+    			if ((pixels === 9) && (ratio > 0.2)) {
+    				shared += 'y'; // force yellow HP bar
+    			} else if ((pixels === 24) && (ratio > 0.5)) {
+    				shared += 'g'; // force green HP bar
+    			}
+    		}
+    		if (targetPokemon.status) {
+    			secret += ` ${targetPokemon.status}`;
+    			shared += ` ${targetPokemon.status}`;
+    		}
+    		return {side: this.id, secret, shared};
+    	};
+      targetPokemon.getDetails = () => {
+    		const health = targetPokemon.getHealth();
+    		let details = targetPokemon.details;
+    		if (targetPokemon.illusion) {
+    			const illusionDetails = targetPokemon.illusion.species.name + (this.level === 100 ? '' : ', L' + this.level) +
+    				(this.illusion.gender === '' ? '' : ', ' + targetPokemon.illusion.gender) + (targetPokemon.illusion.set.shiny ? ', shiny' : '');
+    			details = illusionDetails;
+    		}
+    		return {side: health.side, secret: `${details}|${health.secret}`, shared: `${details}|${health.shared}`};
+    	};
 			this.battle.add('-heal', targetPokemon, targetPokemon.getHealth, '[from] move: Revival Blessing');
+      this.removeSideCondition('revivalblessing');
 		}
 
 		if (targetPokemon.fainted) {

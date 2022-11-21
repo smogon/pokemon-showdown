@@ -15278,13 +15278,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {},
-		selfdestruct: "ifHit",
-		slotCondition: 'revivalblessing',
+		sideCondition: 'revivalblessing',
+		selfSwitch: true,
 		condition: {
-			onSwap(target) {
-				// reviving implemented in side.ts, kind of
-				target.side.removeSlotCondition(target, 'revivalblessing');
-			},
+			duration: 1,
+			// reviving implemented in side.ts, kind of
 		},
 		secondary: null,
 		target: "self",
