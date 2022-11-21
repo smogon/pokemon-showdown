@@ -638,19 +638,15 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const ally = pokemon.allies()[0];
 			if (!ally) return;
 
-			let hasBoost = false;
-			let b: BoostID;
-			for (b in ally.boosts) {
-				if (ally.boosts[b] !== 0) {
-					hasBoost = true;
-					break;
+			let activate = false;
+			let i: BoostID;
+			for (i in ally.boosts) {
+				if (ally.boosts[i]) {
+					pokemon.boosts[i] = ally.boosts[i];
+					activate = true;
 				}
 			}
-
-			if (hasBoost) {
-				this.add('-activate', pokemon, 'ability: Costar');
-				this.boost(ally.boosts, pokemon);
-			}
+			if (activate) this.add('-copyboost', pokemon, ally, '[from] ability: Costar');
 		},
 		name: "Costar",
 		rating: 2.5,

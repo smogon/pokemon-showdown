@@ -264,6 +264,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	costar: {
 		name: "Costar",
 		shortDesc: "On switch-in, this Pokemon copies an ally's stat changes.",
+
+		copyBoost: "  [POKEMON] copied its ally's stat changes!",
 	},
 	cottondown: {
 		name: "Cotton Down",
