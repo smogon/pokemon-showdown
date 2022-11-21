@@ -15834,12 +15834,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1},
 		volatileStatus: 'saltcure',
 		condition: {
-			duration: 0,
-			onResidualOrder: 13,
 			onStart(pokemon, source) {
-				this.add('-activate', pokemon, 'move: Salt Cure', '[of] ' + source);
+				this.add('-start', pokemon, 'move: Salt Cure', '[of] ' + source);
 				this.effectState.boundDivisor = pokemon.hasType(['Water', 'Steel']) ? 4 : 8;
 			},
+			onResidualOrder: 13,
 			onResidual(pokemon) {
 				this.damage(pokemon.baseMaxhp / this.effectState.boundDivisor);
 			},
