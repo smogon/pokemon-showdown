@@ -715,10 +715,10 @@ export const commands: Chat.ChatCommands = {
 
 					if (move.isNonstandard === "Past" && dex.gen >= 8) details["&#10007; Past Gens Only"] = "";
 					if (move.secondary || move.secondaries) details["&#10003; Secondary effect"] = "";
-					if (move.flags['contact'] && gen >= 3) details["&#10003; Contact"] = "";
-					if (move.flags['sound'] && gen >= 3) details["&#10003; Sound"] = "";
-					if (move.flags['bullet'] && gen >= 6) details["&#10003; Bullet"] = "";
-					if (move.flags['pulse'] && gen >= 6) details["&#10003; Pulse"] = "";
+					if (move.flags['contact'] && dex.gen >= 3) details["&#10003; Contact"] = "";
+					if (move.flags['sound'] && dex.gen >= 3) details["&#10003; Sound"] = "";
+					if (move.flags['bullet'] && dex.gen >= 6) details["&#10003; Bullet"] = "";
+					if (move.flags['pulse'] && dex.gen >= 6) details["&#10003; Pulse"] = "";
 					if (!move.flags['protect'] && move.target !== 'self') details["&#10003; Bypasses Protect"] = "";
 					if (move.flags['bypasssub']) details["&#10003; Bypasses Substitutes"] = "";
 					if (move.flags['defrost']) details["&#10003; Thaws user"] = "";
