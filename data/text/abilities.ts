@@ -1272,8 +1272,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	protosynthesis: {
 		name: "Protosynthesis",
-		desc: "If Sunny Day is active, or this Pokemon is holding Booster Energy, this Pokemon's highest stat is boosted by 50%.",
-		shortDesc: "If Sunny Day is active or Booster Energy held, the highest stat is 1.5x.",
+		desc: "If Sunny Day is active or this Pokemon has used a held Booster Energy, this Pokemon's highest stat is multiplied by 1.3, or by 1.5 if the highest stat is Speed.",
+		shortDesc: "While Sunny Day or Booster Energy are active, highest stat is 1.3x, or 1.5x if Speed.",
 
 		activate: "  The harsh sunlight activated [POKEMON]'s Protosynthesis!",
 		activateFromItem: "  [POKEMON] used its Booster Energy to activate Protosynthesis!",
@@ -1300,8 +1300,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	quarkdrive: {
 		name: "Quark Drive",
-		desc: "If Electric Terrain is active, or this Pokemon is holding Booster Energy, this Pokemon's highest stat is boosted by 50%.",
-		shortDesc: "If Electric Terrain is active or Booster Energy held, the highest stat is 1.5x.",
+		desc: "If Electric Terrain is active or this Pokemon has used a held Booster Energy, this Pokemon's highest stat is multiplied by 1.3, or by 1.5 if the highest stat is Speed.",
+		shortDesc: "While Electric Terrain or Booster Energy are active, highest stat is 1.3x, or 1.5x if Speed.",
 
 		activate: "  The Electric Terrain activated [POKEMON]'s Quark Drive!",
 		activateFromItem: "  [POKEMON] used its Booster Energy to activate its Quark Drive!",
