@@ -1231,6 +1231,10 @@ export class Pokemon {
 		} else {
 			this.battle.add('-transform', this, pokemon);
 		}
+		if (this.terastallized && this.terastallized !== this.apparentType) {
+			this.battle.add('-start', this, 'typechange', this.terastallized, '[silent]');
+			this.apparentType = this.terastallized;
+		}
 		if (this.battle.gen > 2) this.setAbility(pokemon.ability, this, true);
 
 		// Change formes based on held items (for Transform)
