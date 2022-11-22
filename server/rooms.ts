@@ -1566,7 +1566,8 @@ export class GlobalRoomState {
 			if (room.parent) continue;
 			if (
 				room.settings.isPrivate === true ||
-				(room.settings.isPrivate === 'voice' && user.tempGroup === ' ')
+				(room.settings.isPrivate === 'voice' && user.tempGroup === ' ') ||
+				room.settings.modjoin
 			) continue;
 			const roomData: ChatRoomTable = {
 				title: room.title,
