@@ -81,6 +81,7 @@ interface Handlers {
 	onBattleRanked: (
 		battle: Rooms.RoomBattle, winner: ID, ratings: (AnyObject | null | undefined)[], players: ID[]
 	) => void;
+	onRename: (user: User, oldID: ID, newID: ID) => void;
 }
 
 export interface ChatPlugin {

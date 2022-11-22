@@ -825,6 +825,7 @@ export class User extends Chat.MessageContext {
 
 		this.isPublicBot = Users.isPublicBot(userid);
 
+		Chat.runHandlers('onRename', this, this.id, userid);
 		let user = users.get(userid);
 		const possibleUser = Users.get(userid);
 		if (possibleUser?.namelocked) {
