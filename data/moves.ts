@@ -15278,7 +15278,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {},
-		sideCondition: 'revivalblessing',
+		slotCondition: 'revivalblessing',
 		selfSwitch: true,
 		condition: {
 			duration: 1,

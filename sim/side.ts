@@ -708,7 +708,7 @@ export class Side {
 		}
 		const targetPokemon = this.pokemon[slot];
 
-		if (this.sideConditions['revivalblessing']) {
+		if (this.slotConditions[pokemon.position]['revivalblessing']) {
 			if (!targetPokemon.fainted) {
 				return this.emitChoiceError(`Can't switch: You have to pass to a fainted Pokémon`);
 			}
@@ -759,7 +759,7 @@ export class Side {
     		return {side: health.side, secret: `${details}|${health.secret}`, shared: `${details}|${health.shared}`};
     	};
 			this.battle.add('-heal', targetPokemon, targetPokemon.getHealth, '[from] move: Revival Blessing');
-      this.removeSideCondition('revivalblessing');
+      this.removeSlotCondition(pokemon, 'revivalblessing');
       this.choice.forcedSwitchesLeft--;
       // this.choice.forcedPassesLeft--;
       if (pokemon.switchFlag) pokemon.switchFlag = false;
