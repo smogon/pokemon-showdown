@@ -2343,6 +2343,7 @@ export const Formats: FormatList = [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3675374/">Information and Suggestions Thread</a>`,
 		],
 
+		mod: 'gen8',
 		team: 'randomBSSFactory',
 		ruleset: ['Flat Rules'],
 	},
