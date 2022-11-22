@@ -208,22 +208,20 @@ export class Hangman extends Rooms.SimpleRoomGame {
 		output += `<p style="text-align:left;font-weight:bold;font-size:10pt;margin:5px 0 0 15px">${message}</p>`;
 		output += `<table><tr><td style="text-align:center;">${this.hangingMan()}</td><td style="text-align:center;width:100%;word-wrap:break-word">`;
 
-		let wordString = this.wordSoFar.join('');
+		let escapedWord = this.wordSoFar.map(Utils.escapeHTML);
 		if (result === 1) {
 			const word = this.word;
-			wordString = wordString.replace(
-				/_+/g,
-				(match, offset) => `<font color="#7af87a">${word.substr(offset, match.length)}</font>`
-			);
+			escapedWord = escapedWord.map((letter, index) =>
+				letter === '_' ? `<font color="#7af87a">${word.charAt(index)}</font>` : letter);
 		}
-		wordString = wordString.replace(DIACRITICS_AFTER_UNDERSCORE, '_');
+		const wordString = escapedWord.join('').replace(DIACRITICS_AFTER_UNDERSCORE, '_');
 
 		if (this.hint) output += Utils.html`<div>(Hint: ${this.hint})</div>`;
-		output += `<p style="font-weight:bold;font-size:12pt;letter-spacing:3pt">${Utils.escapeHTML(wordString)}</p>`;
+		output += `<p style="font-weight:bold;font-size:12pt;letter-spacing:3pt">${wordString}</p>`;
 		if (this.guesses.length) {
 			if (this.letterGuesses.length) {
 				output += 'Letters: ' + this.letterGuesses.map(
-					g => `<strong${g[1] === '1' ? '' : ' style="color: #DBA"'}>${Utils.escapeHTML(g[0])}</strong>`
+					g => `<strong${g[1] === '1' ? '' : ' style="color: #DBA"'}>${g[0]}</strong>`
 				).join(', ');
 			}
 			if (result === 2) {
