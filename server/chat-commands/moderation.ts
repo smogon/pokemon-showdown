@@ -1394,7 +1394,16 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.checkCan('receiveauthmessages', null, room);
 		target = target.replace(/\n/g, "; ");
-		const targeted = /\[([^\]]+)\]/.exec(target)?.[1] || null;
+		let targeted = /\[([^\]]+)\]/.exec(target)?.[1] || null;
+		if (!targeted) {
+			// allow `name, note` and `name - note` syntax
+			targeted = target.split(/[,-]/)[0]?.trim() || "";
+			if (!targeted || !(
+				Users.get(targeted) || Punishments.search(target).length || IPTools.ipRegex.test(targeted)
+			)) {
+				targeted = null;
+			}
+		}
 		let targetUserid, targetIP;
 
 		if (targeted) {
