@@ -960,7 +960,9 @@ export class BattleActions {
 		for (const [i, target] of targetsCopy.entries()) {
 			if (target && pokemon !== target) {
 				target.gotAttacked(move, moveDamage[i] as number | false | undefined, pokemon);
-				target.timesAttacked += hit - 1;
+				if (move.category !== 'Status') {
+					target.timesAttacked += hit - 1;
+				}
 			}
 		}
 
