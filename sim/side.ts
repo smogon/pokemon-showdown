@@ -712,22 +712,22 @@ export class Side {
 			if (!targetPokemon.fainted) {
 				return this.emitChoiceError(`Can't switch: You have to pass to a fainted Pokémon`);
 			}
-      this.pokemonLeft++;
-      targetPokemon.fainted = false;
-      targetPokemon.faintQueued = false;
-      targetPokemon.subFainted = false;
-      targetPokemon.status = '';
-      targetPokemon.hp = 1; // Needed so heal function works, subtract 1 later.
-      targetPokemon.heal((targetPokemon.maxhp / 2) - 1);
+			this.pokemonLeft++;
+			targetPokemon.fainted = false;
+			targetPokemon.faintQueued = false;
+			targetPokemon.subFainted = false;
+			targetPokemon.status = '';
+			targetPokemon.hp = 1; // Needed so heal function works, subtract 1 later.
+			targetPokemon.heal((targetPokemon.maxhp / 2) - 1);
 			this.battle.add('-heal', targetPokemon, targetPokemon.getHealth, '[from] move: Revival Blessing');
-      this.removeSlotCondition(pokemon, 'revivalblessing');
-      this.choice.forcedSwitchesLeft = this.battle.clampIntRange(this.choice.forcedSwitchesLeft - 1, 0);
-      pokemon.switchFlag = false;
-      return this.choosePass();
+			this.removeSlotCondition(pokemon, 'revivalblessing');
+			this.choice.forcedSwitchesLeft = this.battle.clampIntRange(this.choice.forcedSwitchesLeft - 1, 0);
+			pokemon.switchFlag = false;
+			return this.choosePass();
 		}
 
 		if (targetPokemon.fainted) {
-      return this.emitChoiceError(`Can't switch: You can't switch to a fainted Pokémon`);
+			return this.emitChoiceError(`Can't switch: You can't switch to a fainted Pokémon`);
 		}
 
 		if (this.requestState === 'move') {
