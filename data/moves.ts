@@ -2348,11 +2348,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		onTry(source) {
-			return !!this.canSwitch(source.side);
-		},
-		selfSwitch: true,
+		// TODO show prepare message before the "POKEMON used MOVE!" message
+		// This happens even before sleep shows its "POKEMON is fast asleep." message
 		weather: 'snow',
+		selfSwitch: true,
 		secondary: null,
 		target: "all",
 		type: "Ice",
