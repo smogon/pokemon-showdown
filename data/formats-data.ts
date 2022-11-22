@@ -1526,7 +1526,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "OU",
 	},
 	dunsparce: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	dudunsparce: {
 		tier: "OU",
