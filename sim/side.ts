@@ -767,9 +767,7 @@ export class Side {
 		}
 
 		if (targetPokemon.fainted) {
-			if (!this.sideConditions['revivalblessing']) {
-				return this.emitChoiceError(`Can't switch: You can't switch to a fainted Pokémon`);
-			}
+      return this.emitChoiceError(`Can't switch: You can't switch to a fainted Pokémon`);
 		}
 
 		if (this.requestState === 'move') {
