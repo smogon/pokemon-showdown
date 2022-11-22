@@ -155,13 +155,19 @@ export class Hangman extends Rooms.SimpleRoomGame {
 	guessWord(word: string, guesser: string) {
 		const ourWord = toID(this.word.replace(/[0-9]+/g, ''));
 		const guessedWord = toID(word.replace(/[0-9]+/g, ''));
+		const wordSoFar = this.wordSoFar.filter(letter => /[a-zA-Z_]/.test(letter)).join('').toLowerCase();
 
 		// Can't be a correct guess if the lengths don't match
 		if (ourWord.length !== guessedWord.length) return false;
 
-		// Can't be a correct guess if the guess has incorrect letters in already guessed indexes
 		for (let i = 0; i < ourWord.length; i++) {
-			if (ourWord.charAt(i) !== '_' && ourWord.charAt(i) !== guessedWord.charAt(i)) return false;
+			if (wordSoFar.charAt(i) === '_') {
+				// Can't be a correct guess if it contains letters already guessed
+				if (this.letterGuesses.some(guess => guess.toLowerCase().startsWith(guessedWord.charAt(i)))) return false;
+			} else if (wordSoFar.charAt(i) !== guessedWord.charAt(i)) {
+				// Can't be a correct guess if the guess has incorrect letters in already guessed indexes
+				return false;
+			}
 		}
 
 		if (ourWord === guessedWord) {
