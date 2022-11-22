@@ -15278,6 +15278,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {},
+		onTryHit(source) {
+			if (!source.side.pokemon.filter(ally => ally.fainted).length) {
+				return false;
+			}
+		},
 		slotCondition: 'revivalblessing',
 		selfSwitch: true,
 		condition: {
