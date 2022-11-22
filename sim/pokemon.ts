@@ -1080,6 +1080,7 @@ export class Pokemon {
 			baseAbility: this.baseAbility,
 			item: this.item,
 			commanding: !!this.volatiles['commanding'] && !this.fainted,
+			reviving: this.moveThisTurn === 'revivalblessing' && !!this.moveThisTurnResult,
 			pokeball: this.pokeball,
 		};
 		if (this.battle.gen > 6) entry.ability = this.ability;
