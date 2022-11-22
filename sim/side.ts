@@ -721,8 +721,8 @@ export class Side {
       targetPokemon.heal((targetPokemon.maxhp / 2) - 1);
 			this.battle.add('-heal', targetPokemon, targetPokemon.getHealth, '[from] move: Revival Blessing');
       this.removeSlotCondition(pokemon, 'revivalblessing');
-      this.choice.forcedSwitchesLeft--;
-      if (pokemon.switchFlag) pokemon.switchFlag = false;
+      this.choice.forcedSwitchesLeft = this.battle.clampIntRange(this.choice.forcedSwitchesLeft - 1, 0);
+      pokemon.switchFlag = false;
       return this.choosePass();
 		}
 
