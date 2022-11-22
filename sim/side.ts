@@ -717,10 +717,11 @@ export class Side {
 			targetPokemon.faintQueued = false;
 			targetPokemon.subFainted = false;
 			targetPokemon.status = '';
-			targetPokemon.hp = 1; // Needed so heal function works, subtract 1 later.
-			targetPokemon.heal((targetPokemon.maxhp / 2) - 1);
+			targetPokemon.hp = 1; // Needed so hp functions works
+			targetPokemon.sethp(targetPokemon.maxhp / 2);
 			this.battle.add('-heal', targetPokemon, targetPokemon.getHealth, '[from] move: Revival Blessing');
 			this.removeSlotCondition(pokemon, 'revivalblessing');
+			// Should always subtract, but stop at 0 to prevent errors.
 			this.choice.forcedSwitchesLeft = this.battle.clampIntRange(this.choice.forcedSwitchesLeft - 1, 0);
 			pokemon.switchFlag = false;
 			return this.choosePass();
