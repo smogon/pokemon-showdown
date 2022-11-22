@@ -17137,7 +17137,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Cetoddle",
 		types: ["Ice"],
 		baseStats: {hp: 108, atk: 68, def: 45, spa: 30, spd: 40, spe: 43},
-		abilities: {0: "Thick Fat", 1: "Slush Rush", H: "Sheer Force"},
+		abilities: {0: "Thick Fat", 1: "Snow Cloak", H: "Sheer Force"},
 		heightm: 1.2,
 		weightkg: 45,
 		color: "White",
