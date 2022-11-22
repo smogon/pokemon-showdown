@@ -17601,7 +17601,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Brute Bonnet",
 		types: ["Grass", "Dark"],
 		gender: "N",
-		baseStats: {hp: 115, atk: 127, def: 99, spa: 79, spd: 99, spe: 55},
+		baseStats: {hp: 111, atk: 127, def: 99, spa: 79, spd: 99, spe: 55},
 		abilities: {0: "Protosynthesis"},
 		heightm: 1.2,
 		weightkg: 21,
