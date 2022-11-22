@@ -5,7 +5,7 @@ const common = require('../../common');
 
 let battle;
 
-describe('Protective Pads', function () {
+describe('Punching Glove', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
@@ -49,7 +49,7 @@ describe('Protective Pads', function () {
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].item, 'punchingglove', `Attacker should not lose their item`);
-		assert.equal(battle.p2.active[0].item, 'punchingglove', `Target should not steal Punching Glove`);
+		assert.false.holdsItem(battle.p2.active[0], `Target should not steal Punching Glove`);
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9406865
