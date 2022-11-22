@@ -240,6 +240,12 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.add('-notarget');
 				return true;
 			}
+
+			// Disable and Selfdestruct/Explosion boost rage, regardless of whether they miss/fail.
+			if (target.boosts.atk < 6 && (move.selfdestruct || move.id === 'disable') && target.volatiles['rage']) {
+				this.battle.boost({atk: 1}, target, pokemon, this.dex.conditions.get('rage'));
+			}
+
 			damage = this.tryMoveHit(target, pokemon, move);
 
 			// Store 0 damage for last damage if move failed.
@@ -253,11 +259,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				!neverDamageMoves.includes(move.id)
 			) {
 				this.battle.lastDamage = 0;
-			}
-
-			// Disable and Selfdestruct/Explosion boost rage, regardless of whether they miss/fail.
-			if (target.boosts.atk < 6 && (move.selfdestruct || move.id === 'disable') && target.volatiles['rage']) {
-				this.battle.boost({atk: 1}, target, pokemon, this.dex.conditions.get('rage'));
 			}
 
 			// Go ahead with results of the used move.
@@ -282,6 +283,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (hitResult === false) {
 				this.battle.attrLastMove('[miss]');
 				this.battle.add('-miss', pokemon);
+				if (move.selfdestruct) {
+					this.battle.faint(pokemon, pokemon, move);
+				}
 				return false;
 			}
 
