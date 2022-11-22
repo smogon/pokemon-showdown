@@ -846,7 +846,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	chillyreception: {
 		name: "Chilly Reception",
-		desc: "Starts Snow. If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
+		desc: "Starts Snow. The user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
 		shortDesc: "Starts Snow. User switches out.",
 
 		// TODO needs to be implemented
