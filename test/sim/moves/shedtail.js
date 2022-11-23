@@ -6,6 +6,10 @@ const common = require('./../../common');
 let battle;
 
 describe('Shed Tail', () => {
+	afterEach(() => {
+		battle.destroy();
+	});
+
 	it("should make the user switch out and pass a Substitute", () => {
 		battle = common.createBattle([[
 			{species: 'Cyclizar', ability: 'shedskin', moves: ['shedtail']},
