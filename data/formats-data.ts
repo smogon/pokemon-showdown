@@ -2579,7 +2579,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	deoxysspeed: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	turtwig: {
 		isNonstandard: "Past",
@@ -3884,7 +3884,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	kyuremblack: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	kyuremwhite: {
 		isNonstandard: "Past",
@@ -3910,27 +3910,27 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	genesect: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	genesectburn: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	genesectchill: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	genesectdouse: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	genesectshock: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	chespin: {
 		isNonstandard: "Unobtainable",
@@ -4913,7 +4913,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	naganadel: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	stakataka: {
 		isNonstandard: "Past",
@@ -5536,7 +5536,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	houndstone: {
 		tier: "Uber",
 		doublesTier: "DOU",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	flittle: {
 		tier: "LC",
@@ -5570,7 +5570,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	palafin: {
 		tier: "OU",
 		doublesTier: "DOU",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	smoliv: {
 		tier: "LC",
@@ -5781,7 +5781,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	fluttermane: {
 		tier: "Uber",
 		doublesTier: "DOU",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	slitherwing: {
 		tier: "OU",
@@ -5791,7 +5791,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	roaringmoon: {
 		tier: "OU",
 		doublesTier: "DOU",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	irontreads: {
 		tier: "OU",
