@@ -130,6 +130,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 					// If target fainted
 					if (target && target.hp <= 0) {
+						delete pokemon.volatiles['partialtrappinglock'];
 						// We remove screens
 						target.side.removeSideCondition('reflect');
 						target.side.removeSideCondition('lightscreen');
