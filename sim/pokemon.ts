@@ -1231,6 +1231,10 @@ export class Pokemon {
 		} else {
 			this.battle.add('-transform', this, pokemon);
 		}
+		if (this.terastallized && this.terastallized !== this.apparentType) {
+			this.battle.add('-start', this, 'typechange', this.terastallized, '[silent]');
+			this.apparentType = this.terastallized;
+		}
 		if (this.battle.gen > 2) this.setAbility(pokemon.ability, this, true);
 
 		// Change formes based on held items (for Transform)
@@ -1355,6 +1359,10 @@ export class Pokemon {
 			}
 			this.setAbility(species.abilities['0'], null, true);
 			this.baseAbility = this.ability;
+		}
+		if (this.terastallized && this.terastallized !== this.apparentType) {
+			this.battle.add('-start', this, 'typechange', this.terastallized, '[silent]');
+			this.apparentType = this.terastallized;
 		}
 		return true;
 	}
@@ -1913,16 +1921,16 @@ export class Pokemon {
 
 	/**
 	 * Sets a type (except on Arceus, who resists type changes)
-	 * newType can be an array, but this is for OMs only. The game in
-	 * reality doesn't support setting a type to more than one type.
 	 */
 	setType(newType: string | string[], enforce = false) {
-		// First type of Arceus, Silvally cannot be normally changed
 		if (!enforce) {
+			// First type of Arceus, Silvally cannot be normally changed
 			if ((this.battle.gen >= 5 && (this.species.num === 493 || this.species.num === 773)) ||
 				(this.battle.gen === 4 && this.hasAbility('multitype'))) {
 				return false;
 			}
+			// Terastallized Pokemon cannot have their base type changed except via forme change
+			if (this.terastallized) return false;
 		}
 
 		if (!newType) throw new Error("Must pass type to setType");
@@ -1936,11 +1944,17 @@ export class Pokemon {
 
 	/** Removes any types added previously and adds another one. */
 	addType(newType: string) {
+		if (this.terastallized) {
+			// natdex behavior; type-adding effects are currently not in gen 9,
+			// but moves like Soak fail vs terastallized targets so these probably should too
+			return false;
+		}
 		this.addedType = newType;
 		return true;
 	}
 
-	getTypes(excludeAdded?: boolean): string[] {
+	getTypes(excludeAdded?: boolean, preterastallized?: boolean): string[] {
+		if (!preterastallized && this.terastallized) return [this.terastallized];
 		const types = this.battle.runEvent('Type', this, null, null, this.types);
 		if (!excludeAdded && this.addedType) return types.concat(this.addedType);
 		if (types.length) return types;
