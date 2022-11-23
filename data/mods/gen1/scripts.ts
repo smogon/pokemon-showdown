@@ -240,14 +240,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.add('-notarget');
 				return true;
 			}
-
-			// Disable and Selfdestruct/Explosion boost rage, regardless of whether they miss/fail.
-			if (target.boosts.atk < 6 && (move.selfdestruct || move.id === 'disable') && target.volatiles['rage']) {
-				this.battle.boost({atk: 1}, target, pokemon, this.dex.conditions.get('rage'));
-				this.battle.hint(`In Gen 1, using ${move.name} causes the target to build Rage, ` +
-				`even if it misses or fails`, true);
-			}
-
 			damage = this.tryMoveHit(target, pokemon, move);
 
 			// Store 0 damage for last damage if move failed.
@@ -261,6 +253,13 @@ export const Scripts: ModdedBattleScriptsData = {
 				!neverDamageMoves.includes(move.id)
 			) {
 				this.battle.lastDamage = 0;
+			}
+
+			// Disable and Selfdestruct/Explosion boost rage, regardless of whether they miss/fail.
+			if (target.boosts.atk < 6 && (move.selfdestruct || move.id === 'disable') && target.volatiles['rage']) {
+				this.battle.boost({atk: 1}, target, pokemon, this.dex.conditions.get('rage'));
+				this.battle.hint(`In Gen 1, using ${move.name} causes the target to build Rage, ` +
+				`even if it misses or fails`, true);
 			}
 
 			// Go ahead with results of the used move.
