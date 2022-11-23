@@ -552,7 +552,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'Not Fully Evolved', 'Sleep Moves Clause', 'Min Source Gen = 9'],
-		banlist: ['Haunter', 'Magneton', 'Scyther', 'Arena Trap', 'Shadow Tag', 'Baton Pass'],
+		banlist: ['Bisharp', 'Chansey', 'Haunter', 'Magneton', 'Primeape', 'Scyther', 'Arena Trap', 'Shadow Tag', 'Baton Pass'],
 	},
 
 	// Challengeable OMs
