@@ -2,7 +2,7 @@
 
 const assert = require('assert').strict;
 
-const {makeUser} = require('../../users-utils');
+const {makeUser, destroyUser} = require('../../users-utils');
 const trivia = require('../../../server/chat-plugins/trivia/trivia');
 const Trivia = trivia.Trivia;
 const FirstModeTrivia = trivia.FirstModeTrivia;
@@ -14,13 +14,6 @@ function makeTriviaUser(name, ip) {
 	assert.equal(Users.users.get(user.id), user);
 	user.joinRoom('trivia');
 	return user;
-}
-
-function destroyUser(user) {
-	if (!user || !user.connected) return false;
-	user.resetName();
-	user.disconnectAll();
-	user.destroy();
 }
 
 describe('Trivia', function () {

@@ -46,6 +46,8 @@ namespace Rooms {
 	export type GameRoom = import('./rooms').GameRoom;
 	export type BasicRoom = import('./rooms').BasicRoom;
 	export type RoomGame = import('./room-game').RoomGame;
+	export type SimpleRoomGame = import('./room-game').SimpleRoomGame;
+	export type RoomGamePlayer = import('./room-game').RoomGamePlayer;
 	export type MinorActivity = import('./room-minor-activity').MinorActivity;
 	export type MinorActivityData = import('./room-minor-activity').MinorActivityData;
 	export type RoomBattle = import('./room-battle').RoomBattle;
