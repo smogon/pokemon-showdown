@@ -1695,7 +1695,7 @@ export class BattleActions {
 		}
 
 		// just guessing placement
-		if (pokemon.baseTypes.includes(move.type) && pokemon.terastallized) {
+		if (pokemon.getTypes(false, true).includes(move.type) && pokemon.terastallized) {
 			if (move.type === pokemon.teraType) {
 				baseDamage = this.battle.modify(baseDamage, 4 / 3);
 			} else {
@@ -1831,16 +1831,14 @@ export class BattleActions {
 	terastallize(pokemon: Pokemon) {
 		const type = pokemon.teraType;
 
-		const newSpecies = this.dex.deepClone(pokemon.species);
-		newSpecies.types = [type];
-		pokemon.setSpecies(newSpecies, this.dex.conditions.get('terastal'));
-		pokemon.baseSpecies = newSpecies;
 		this.battle.add('-terastallize', pokemon, type);
 		pokemon.terastallized = type;
 		for (const ally of pokemon.side.pokemon) {
 			ally.canTerastallize = null;
 		}
-		this.battle.add('-start', pokemon, 'typechange', pokemon.getTypes().join('/'), '[silent]');
+		this.battle.add('-start', pokemon, 'typechange', type, '[silent]');
+		pokemon.knownType = true;
+		pokemon.apparentType = type;
 		this.battle.runEvent('AfterTerastallization', pokemon);
 	}
 
