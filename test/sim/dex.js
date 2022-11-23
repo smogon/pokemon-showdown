@@ -71,3 +71,11 @@ describe('Dex#getItem', function () {
 		assert.equal(Dex.forGen(8).items.get('Rock Gem').isNonstandard, "Past");
 	});
 });
+
+describe('Dex#getMove', function () {
+	it(`should correctly handle G-Max moves`, function () {
+		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').name, "G-Max Befuddle");
+		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').gen, 8);
+		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').isNonstandard, "Gigantamax");
+	});
+});
