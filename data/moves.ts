@@ -16397,14 +16397,18 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {},
 		volatileStatus: 'substitute',
-		onTryHit(target) {
-			if (target.volatiles['substitute'] || !this.canSwitch(target.side)) {
-				this.add('-fail', target, 'move: Shed Tail');
-				return null;
+		onTryHit(source) {
+			if (!this.canSwitch(source.side)) {
+				this.add('-fail', source);
+				return this.NOT_FAIL;
 			}
-			if (target.hp <= target.maxhp / 2 || target.maxhp === 1) { // Shedinja clause
-				this.add('-fail', target, 'move: Shed Tail', '[weak]');
-				return null;
+			if (source.volatiles['substitute']) {
+				this.add('-fail', source, 'move: Shed Tail');
+				return this.NOT_FAIL;
+			}
+			if (source.hp <= source.maxhp / 2 || source.maxhp === 1) { // Shedinja clause
+				this.add('-fail', source, 'move: Shed Tail', '[weak]');
+				return this.NOT_FAIL;
 			}
 		},
 		onHit(target) {
@@ -18627,14 +18631,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1, nonsky: 1},
 		volatileStatus: 'substitute',
-		onTryHit(target) {
-			if (target.volatiles['substitute']) {
-				this.add('-fail', target, 'move: Substitute');
-				return null;
+		onTryHit(source) {
+			if (source.volatiles['substitute']) {
+				this.add('-fail', source, 'move: Substitute');
+				return this.NOT_FAIL;
 			}
-			if (target.hp <= target.maxhp / 4 || target.maxhp === 1) { // Shedinja clause
-				this.add('-fail', target, 'move: Substitute', '[weak]');
-				return null;
+			if (source.hp <= source.maxhp / 4 || source.maxhp === 1) { // Shedinja clause
+				this.add('-fail', source, 'move: Substitute', '[weak]');
+				return this.NOT_FAIL;
 			}
 		},
 		onHit(target) {
