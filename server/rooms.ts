@@ -90,7 +90,7 @@ export interface RoomSettings {
 	readonly autojoin?: boolean;
 	aliases?: string[];
 	banwords?: string[];
-	isPrivate?: boolean | 'hidden' | 'voice';
+	isPrivate?: PrivacySetting;
 	modjoin?: AuthLevel | true | null;
 	modchat?: AuthLevel | null;
 	staffRoom?: boolean;
@@ -143,6 +143,7 @@ export interface RoomSettings {
 
 export type MessageHandler = (room: BasicRoom, message: string) => void;
 export type Room = GameRoom | ChatRoom;
+export type PrivacySetting = boolean | 'hidden' | 'voice' | 'unlisted';
 
 import type {AnnouncementData} from './chat-plugins/announcements';
 import type {PollData} from './chat-plugins/poll';
@@ -804,7 +805,7 @@ export abstract class BasicRoom {
 		// this doesn't update parentid or subroom user symbols because it's
 		// intended to be used for cleanup only
 	}
-	setPrivate(privacy: boolean | 'voice' | 'hidden') {
+	setPrivate(privacy: PrivacySetting) {
 		this.settings.isPrivate = privacy;
 		this.saveSettings();
 
@@ -1565,9 +1566,9 @@ export class GlobalRoomState {
 			if (!room) continue;
 			if (room.parent) continue;
 			if (
-				room.settings.isPrivate === true ||
-				(room.settings.isPrivate === 'voice' && user.tempGroup === ' ') ||
-				room.settings.modjoin
+				room.settings.modchat ||
+				(room.settings.isPrivate && !(['hidden', 'voice'] as any).includes(room.settings.isPrivate)) ||
+				(room.settings.isPrivate === 'voice' && user.tempGroup === ' ')
 			) continue;
 			const roomData: ChatRoomTable = {
 				title: room.title,
