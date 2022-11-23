@@ -1311,6 +1311,7 @@ export class GlobalRoomState {
 				`SET input_log = EXCLUDED.input_log, players = EXCLUDED.players, title = EXCLUDED.title, rated = EXCLUDED.rated`,
 				[room.roomid, log.join('\n'), players, room.title, room.battle.rated, timerData]
 			);
+			room.battle.timer.stop();
 			count++;
 		}
 		return count;
