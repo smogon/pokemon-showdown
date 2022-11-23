@@ -246,6 +246,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (hitResult === false) {
 				this.battle.attrLastMove('[miss]');
 				this.battle.add('-miss', pokemon);
+				if (move.selfdestruct) {
+					this.battle.faint(pokemon, pokemon, move);
+				}
 				return false;
 			}
 

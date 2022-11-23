@@ -61,4 +61,15 @@ describe('Explosion', function () {
 		battle.makeChoices();
 		assert(battle.log.some(line => line.startsWith('|-boost|')));
 	});
+
+	it(`[Gen 1] Explosion should faint the user when the target is semi-invulnerable`, function () {
+		// Explosion hits
+		battle = common.gen(1).createBattle([[
+			{species: 'golem', moves: ['explosion']},
+		], [
+			{species: 'aerodactyl', moves: ['fly']},
+		]]);
+		battle.makeChoices();
+		assert.fainted(battle.p1.active[0]);
+	});
 });
