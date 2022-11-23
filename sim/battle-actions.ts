@@ -395,7 +395,7 @@ export class BattleActions {
 		}
 		if (sourceEffect) {
 			move.sourceEffect = sourceEffect.id;
-			move.ignoreAbility = false;
+			move.ignoreAbility = (sourceEffect as ActiveMove).ignoreAbility;
 		}
 		let moveResult = false;
 
