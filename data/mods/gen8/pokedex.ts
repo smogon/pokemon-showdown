@@ -55,7 +55,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	decidueyehisui: {
 		inherit: true,
-		abilities: {0: "Overgrow", H: "Scrappy"},
+		abilities: {0: "Overgrow", H: "Long Reach"},
 	},
 	zacian: {
 		inherit: true,
