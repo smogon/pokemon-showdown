@@ -1627,7 +1627,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			const sources = learnset[move];
 			for (const learned of sources) {
 				const sourceGen = parseInt(learned.charAt(0));
-				if (sourceGen <= mod.gen && (mod.gen !== 9 || natDex)) lsetData.add(move);
+				if (sourceGen <= mod.gen && (mod.gen < 9 || sourceGen >= 9 || natDex)) lsetData.add(move);
 			}
 		}
 
@@ -1640,7 +1640,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				const sources = learnset[move];
 				for (const learned of sources) {
 					const sourceGen = parseInt(learned.charAt(0));
-					if (sourceGen <= mod.gen && (mod.gen !== 9 || natDex)) lsetData.add(move);
+					if (sourceGen <= mod.gen && (mod.gen < 9 || sourceGen === 9 || natDex)) lsetData.add(move);
 				}
 			}
 		}
