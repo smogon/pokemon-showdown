@@ -22,6 +22,10 @@ const SPECIAL_CATEGORIES: {[k: string]: string} = {
 	subcat3: 'Sub-Category 3',
 	subcat4: 'Sub-Category 4',
 	subcat5: 'Sub-Category 5',
+	oldae: 'Old Arts and Entertainment',
+	oldsg: 'Old Science and Geography',
+	oldsh: 'Old Society and Humanities',
+	oldpoke: 'Old Pok\u00E9mon',
 };
 
 const ALL_CATEGORIES: {[k: string]: string} = {...SPECIAL_CATEGORIES, ...MAIN_CATEGORIES};
