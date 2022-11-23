@@ -1076,6 +1076,7 @@ export const commands: Chat.ChatCommands = {
 	hiddenroom: 'privateroom',
 	secretroom: 'privateroom',
 	publicroom: 'privateroom',
+	unlistroom: 'privateroom',
 	privateroom(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		if (room.battle) {
@@ -1093,7 +1094,7 @@ export const commands: Chat.ChatCommands = {
 			// higher permissions to modify privacy settings
 			this.checkCan('makeroom');
 		}
-		let setting: boolean | 'hidden';
+		let setting: boolean | 'hidden' | 'unlisted';
 		switch (cmd) {
 		case 'privateroom':
 			return this.parse('/help privateroom');
@@ -1103,6 +1104,10 @@ export const commands: Chat.ChatCommands = {
 		case 'secretroom':
 			this.checkCan('rangeban');
 			setting = true;
+			break;
+		case 'unlistroom':
+			this.checkCan('rangeban');
+			setting = 'unlisted';
 			break;
 		default:
 			if (room.settings.isPrivate === true && target !== 'force') {
