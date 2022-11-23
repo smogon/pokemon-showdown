@@ -1566,7 +1566,7 @@ export class GlobalRoomState {
 			if (!room) continue;
 			if (room.parent) continue;
 			if (
-				room.settings.modchat ||
+				room.settings.modjoin ||
 				(room.settings.isPrivate && !(['hidden', 'voice'] as any).includes(room.settings.isPrivate)) ||
 				(room.settings.isPrivate === 'voice' && user.tempGroup === ' ')
 			) continue;
