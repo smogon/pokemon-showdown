@@ -15841,11 +15841,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			onStart(pokemon, source) {
 				this.add('-start', pokemon, 'move: Salt Cure', '[of] ' + source);
-				this.effectState.boundDivisor = pokemon.hasType(['Water', 'Steel']) ? 4 : 8;
 			},
 			onResidualOrder: 13,
 			onResidual(pokemon) {
-				this.damage(pokemon.baseMaxhp / this.effectState.boundDivisor);
+				this.damage(pokemon.baseMaxhp / (pokemon.hasType(['Water', 'Steel']) ? 4 : 8));
 			},
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'move: Salt Cure');
