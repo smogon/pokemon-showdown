@@ -4245,7 +4245,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	gourgeist: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "LC",
+		natDexTier: "OU",
 	},
 	gourgeistsmall: {
 		isNonstandard: "Past",
