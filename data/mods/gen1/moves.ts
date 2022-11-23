@@ -844,13 +844,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				} else {
 					this.add('-activate', target, 'Substitute', '[damage]');
 				}
-				// Drain/recoil does not happen if the substitute breaks
+				// Drain/recoil/secondary effect confusion do not happen if the substitute breaks
 				if (target.volatiles['substitute']) {
 					if (move.recoil) {
 						this.damage(Math.round(uncappedDamage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
 					}
 					if (move.drain) {
 						this.heal(Math.ceil(uncappedDamage * move.drain[0] / move.drain[1]), source, target, 'drain');
+					}
+					if (move.secondary?.volatileStatus === 'confusion') {
+						const secondary = move.secondary;
+						if (secondary.chance === undefined || this.randomChance(Math.ceil(secondary.chance * 256 / 100) - 1, 256)) {
+							target.addVolatile(move.secondary.volatileStatus, source, move);
+						}
 					}
 				}
 				this.runEvent('AfterSubDamage', target, source, move, uncappedDamage);

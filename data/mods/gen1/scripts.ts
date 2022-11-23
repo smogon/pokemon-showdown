@@ -619,8 +619,15 @@ export const Scripts: ModdedBattleScriptsData = {
 						// That means that a move that does not share the type of the target can status it.
 						// If a move that was not fire-type would exist on Gen 1, it could burn a Pokémon.
 						if (!(secondary.status && ['par', 'brn', 'frz'].includes(secondary.status) && target && target.hasType(move.type))) {
-							if (secondary.chance === undefined || this.battle.randomChance(Math.ceil(secondary.chance * 256 / 100), 256)) {
+							if (secondary.chance === undefined) {
 								this.moveHit(target, pokemon, move, secondary, true, isSelf);
+							} else {
+								let secondaryChance = Math.ceil(secondary.chance * 256 / 100);
+								// If the secondary effect is confusion, the numerator should be decreased by 1 (10% = 25/256 not 26/256).
+								if (secondary?.volatileStatus === 'confusion') secondaryChance--;
+								if (this.battle.randomChance(secondaryChance, 256)) {
+									this.moveHit(target, pokemon, move, secondary, true, isSelf);
+								}
 							}
 						}
 					}
