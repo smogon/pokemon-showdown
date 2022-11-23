@@ -3401,10 +3401,16 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 		natDexTier: "OU",
 	},
+	darmanitanzen: {
+		isNonstandard: "Past",
+	},
 	darmanitangalar: {
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "Uber",
+	},
+	darmanitangalarzen: {
+		isNonstandard: "Past",
 	},
 	maractus: {
 		isNonstandard: "Past",
@@ -4092,6 +4098,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "OU",
+	},
+	aegislashblade: {
+		isNonstandard: "Past",
 	},
 	spritzee: {
 		isNonstandard: "Past",
@@ -5292,6 +5301,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "OU",
+	},
+	morpekohangry: {
+		isNonstandard: "Past",
 	},
 	cufant: {
 		tier: "LC",
