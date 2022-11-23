@@ -17785,7 +17785,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Ting-Lu",
 		types: ["Dark", "Ground"],
 		gender: "N",
-		baseStats: {hp: 155, atk: 110, def: 130, spa: 50, spd: 80, spe: 45},
+		baseStats: {hp: 155, atk: 110, def: 125, spa: 55, spd: 80, spe: 45},
 		abilities: {0: "Vessel of Ruin"},
 		heightm: 2.7,
 		weightkg: 699.7,
