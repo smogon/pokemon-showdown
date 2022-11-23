@@ -856,6 +856,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						const secondary = move.secondary;
 						if (secondary.chance === undefined || this.randomChance(Math.ceil(secondary.chance * 256 / 100) - 1, 256)) {
 							target.addVolatile(move.secondary.volatileStatus, source, move);
+							this.hint(
+								"In Gen 1, moves that inflict confusion as a secondary effect can confuse targets with a Substitute, " +
+								"as long as the move does not break the Substitute."
+							);
 						}
 					}
 				}
