@@ -128,7 +128,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					statName = s;
 					worstStat = pokemon.storedStats[s];
 				}
-				this.boost({[statName]: 1}, pokemon);
+				this.boost({[statName]: 1}, pokemon, pokemon);
 			}
 		},
 		name: "Moody",

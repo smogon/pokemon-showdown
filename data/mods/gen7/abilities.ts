@@ -63,7 +63,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			randomStat = stats.length ? this.sample(stats) : undefined;
 			if (randomStat) boost[randomStat] = -1;
 
-			this.boost(boost);
+			this.boost(boost, pokemon, pokemon);
 		},
 	},
 	oblivious: {
