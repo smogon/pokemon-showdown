@@ -87,6 +87,7 @@ export class PokemonSources {
 
 	babyOnly?: string;
 	sketchMove?: string;
+	dreamWorldMoveCount: number;
 	hm?: string;
 	restrictiveMoves?: string[];
 	/** Obscure learn methods */
@@ -99,6 +100,7 @@ export class PokemonSources {
 		this.isHidden = null;
 		this.limitedEggMoves = undefined;
 		this.moveEvoCarryCount = 0;
+		this.dreamWorldMoveCount = 0;
 	}
 	size() {
 		if (this.sourcesBefore) return Infinity;
@@ -182,6 +184,7 @@ export class PokemonSources {
 			}
 		}
 		this.moveEvoCarryCount += other.moveEvoCarryCount;
+		this.dreamWorldMoveCount += other.dreamWorldMoveCount;
 		if (other.sourcesAfter > this.sourcesAfter) this.sourcesAfter = other.sourcesAfter;
 		if (other.isHidden) this.isHidden = true;
 	}
@@ -1801,6 +1804,10 @@ export class TeamValidator {
 				if (fastReturn) return true;
 				problems.push(`${name} must not have moves only learnable in gen ${ssMaxSourceGen}${etc}.`);
 			}
+
+			if (eventData.from === "Gen 5 Dream World" && setSources.dreamWorldMoveCount > 1) {
+				problems.push(`${name} can only have one Dream World move`);
+			}
 		}
 		if (ruleTable.has('obtainableabilities')) {
 			if (dex.gen <= 5 && eventData.abilities && eventData.abilities.length === 1 && !eventData.isHidden) {
@@ -2162,6 +2169,7 @@ export class TeamValidator {
 						// DW moves:
 						//   only if that was the source
 						moveSources.add(learned + species.id);
+						moveSources.dreamWorldMoveCount++;
 					} else if (learned.charAt(1) === 'V' && this.minSourceGen < learnedGen) {
 						// Virtual Console or Let's Go transfer moves:
 						//   only if that was the source
