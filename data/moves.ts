@@ -14744,7 +14744,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 50,
 		basePowerCallback(pokemon) {
-			return Math.min(300, 50 + 50 * (pokemon.timesAttacked + pokemon.timesHitItselfInConfusion));
+			return Math.min(300, 50 + 50 * (pokemon.timesAttacked));
 		},
 		category: "Physical",
 		name: "Rage Fist",

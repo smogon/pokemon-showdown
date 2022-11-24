@@ -219,7 +219,6 @@ export class Pokemon {
 	lastDamage: number;
 	attackedBy: Attacker[];
 	timesAttacked: number;
-	timesHitItselfInConfusion: number;
 
 	isActive: boolean;
 	activeTurns: number;
@@ -429,7 +428,6 @@ export class Pokemon {
 		this.lastDamage = 0;
 		this.attackedBy = [];
 		this.timesAttacked = 0;
-		this.timesHitItselfInConfusion = 0;
 
 		this.isActive = false;
 		this.activeTurns = 0;
