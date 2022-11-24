@@ -791,6 +791,21 @@ describe('Team Validator', function () {
 		assert.equal(illegal, null);
 	});
 
+	it('should allow Gen 2 events of Gen 1 Pokemon to learn moves exclusive to Gen 1', () => {
+		let team = [
+			{species: 'nidoking', moves: ['lovelykiss', 'counter']},
+		];
+		let illegal = TeamValidator.get('gen2ou').validateTeam(team);
+		assert.equal(illegal, null);
+
+		// Espeon should be allowed to learn moves as an Eevee
+		team = [
+			{species: 'espeon', moves: ['growth', 'substitute']},
+		];
+		illegal = TeamValidator.get('gen2ou').validateTeam(team);
+		assert.equal(illegal, null);
+	});
+
 	it('should tier Zacian and Zamazenta formes seperately', () => {
 		let team = [
 			{species: 'zamazenta-crowned', ability: 'dauntlessshield', item: 'rustedshield', moves: ['howl'], evs: {hp: 1}},
