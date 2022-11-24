@@ -1806,7 +1806,7 @@ export class TeamValidator {
 			}
 
 			if (eventData.from === "Gen 5 Dream World" && setSources.dreamWorldMoveCount > 1) {
-				problems.push(`${name} can only have one Dream World move`);
+				problems.push(`${name} can only have one Dream World move.`);
 			}
 		}
 		if (ruleTable.has('obtainableabilities')) {
