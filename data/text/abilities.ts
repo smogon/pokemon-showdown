@@ -1759,7 +1759,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "This Pokemon's Attack and Special Attack stats are increased by 10% for each fainted teammate.",
 		shortDesc: "This Pokemon's Attack and Special Attack raise by 10% per fainted teammate.",
 
-		start: "  [POKEMON] gained strength from the fallen!",
 		activate: "  [POKEMON] gained strength from the fallen!",
 	},
 	surgesurfer: {

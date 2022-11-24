@@ -4284,8 +4284,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 105,
 	},
 	supremeoverlord: {
-		onStart(target) {
-			this.add('-ability', target, 'Supreme Overlord');
+		onStart(pokemon) {
+			const faintedAllies = pokemon.side.pokemon.filter(ally => ally.fainted).length;
+			if (faintedAllies) {
+				this.add('-activate', pokemon, 'ability: Supreme Overlord');
+			}
 		},
 		onModifyAtk(atk, source, target, move) {
 			const faintedAllies = source.side.pokemon.filter(ally => ally.fainted).length;
