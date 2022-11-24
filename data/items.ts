@@ -975,7 +975,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				}
 			}
 			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
-				this.add("-fail", target, "unboost", "[from] item: Clear Amulet", "[of] " + target);
+				this.add('-fail', target, 'unboost', '[from] item: Clear Amulet', '[of] ' + target);
 			}
 		},
 		num: 1882,
