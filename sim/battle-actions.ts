@@ -135,7 +135,11 @@ export class BattleActions {
 			moveSlot.used = false;
 		}
 		this.battle.runEvent('BeforeSwitchIn', pokemon);
-		this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getDetails, sourceEffect ? '[from] ' + sourceEffect : '');
+		if (sourceEffect) {
+			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getDetails, '[from] ' + sourceEffect);
+		} else {
+			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getDetails);
+		}
 		pokemon.abilityOrder = this.battle.abilityOrder++;
 		if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
 		pokemon.previouslySwitchedIn++;
