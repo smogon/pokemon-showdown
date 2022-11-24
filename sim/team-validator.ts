@@ -1796,7 +1796,7 @@ export class TeamValidator {
 		const ruleTable = this.ruleTable;
 		if (ruleTable.has('obtainablemoves')) {
 			const ssMaxSourceGen = setSources.maxSourceGen();
-			const tradebackEligible = dex.gen === 2 && species.gen === 1;
+			const tradebackEligible = dex.gen === 2 && (species.gen === 1 || eventSpecies.gen === 1);
 			if (ssMaxSourceGen && eventData.generation > ssMaxSourceGen && !tradebackEligible) {
 				if (fastReturn) return true;
 				problems.push(`${name} must not have moves only learnable in gen ${ssMaxSourceGen}${etc}.`);
