@@ -6616,19 +6616,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		// Move disabling implemented in Battle#nextTurn in sim/battle.ts
-		onTry(source) {
-			source.addVolatile('gigatonhammer');
-		},
-		condition: {
-			duration: 2,
-			onBeforeMove(pokemon, target, move) {
-				if (move.id === 'gigatonhammer') {
-					this.add('cant', pokemon, 'move: Gigaton Hammer', move);
-					pokemon.removeVolatile('gigatonhammer');
-					return false;
-				}
-			},
-		},
 		secondary: null,
 		target: "normal",
 		type: "Steel",

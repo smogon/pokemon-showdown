@@ -1461,7 +1461,7 @@ export class Battle {
 				this.runEvent('DisableMove', pokemon);
 				if (!pokemon.ateBerry) pokemon.disableMove('belch');
 				if (!pokemon.getItem().isBerry) pokemon.disableMove('stuffcheeks');
-				if (pokemon.volatiles['gigatonhammer']) pokemon.disableMove('gigatonhammer');
+				if (pokemon.lastMove?.id === 'gigatonhammer') pokemon.disableMove('gigatonhammer');
 
 				// If it was an illusion, it's not any more
 				if (pokemon.getLastAttackedBy() && this.gen >= 7) pokemon.knownType = true;
