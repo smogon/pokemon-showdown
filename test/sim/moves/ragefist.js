@@ -45,11 +45,11 @@ describe('Rage Fist', function () {
 		assert.bounded(rageFistDamage, [17 * rageFistMutliplier, 21 * rageFistMutliplier]); // damage range here isn't exact, but it's enough for this test
 	});
 
-	it.skip('should, when copied with Copycat, inherit the number of times hit', function () {
+	it('should, when copied with Copycat, inherit the number of times hit', function () {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Primeape', ability: 'vitalspirit', moves: ['ragefist']}]});
-		battle.setPlayer('p2', {team: [{species: 'Umbreon', ability: 'shellarmor', moves: ['copycat']}]});
+		battle.setPlayer('p1', {team: [{species: 'Primeape', ability: 'shellarmor', moves: ['ragefist']}]});
+		battle.setPlayer('p2', {team: [{species: 'Umbreon', moves: ['copycat']}]});
 		battle.makeChoices();
-		assert.bounded(battle.p1.active[0].maxhp - battle.p1.active[0].hp, [39, 46]);
+		assert.bounded(battle.p1.active[0].maxhp - battle.p1.active[0].hp, [77, 91]);
 	});
 });
