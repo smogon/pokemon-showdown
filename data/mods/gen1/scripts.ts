@@ -151,9 +151,6 @@ export const Scripts: ModdedBattleScriptsData = {
 						// We remove recharge
 						if (pokemon.volatiles['mustrecharge']) pokemon.removeVolatile('mustrecharge');
 						delete pokemon.volatiles['partialtrappinglock'];
-						// We remove screens
-						target.side.removeSideCondition('reflect');
-						target.side.removeSideCondition('lightscreen');
 						pokemon.removeVolatile('twoturnmove');
 					} else if (pokemon.hp) {
 						this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
@@ -213,9 +210,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			let attrs = '';
 			if (pokemon.fainted) {
-				// Removing screens upon faint.
-				pokemon.side.removeSideCondition('reflect');
-				pokemon.side.removeSideCondition('lightscreen');
 				return false;
 			}
 
