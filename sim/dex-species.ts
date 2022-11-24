@@ -502,7 +502,10 @@ export class DexSpecies {
 			}
 			species.nfe = species.evos.some(evo => {
 				const evoSpecies = this.get(evo);
-				return !evoSpecies.isNonstandard || evoSpecies.isNonstandard === species?.isNonstandard;
+				return !evoSpecies.isNonstandard ||
+					evoSpecies.isNonstandard === species?.isNonstandard ||
+					// Pokemon with Hisui evolutions
+					evoSpecies.isNonstandard === "Unobtainable";
 			});
 			species.canHatch = species.canHatch ||
 				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) && !species.prevo && species.name !== 'Manaphy');
