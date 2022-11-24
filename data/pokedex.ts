@@ -17572,7 +17572,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	gholdengo: {
 		num: 977,
 		name: "Gholdengo",
-		types: ["Ghost", "Steel"],
+		types: ["Steel", "Ghost"],
 		gender: "N",
 		baseStats: {hp: 87, atk: 60, def: 95, spa: 133, spd: 91, spe: 84},
 		abilities: {0: "Good as Gold"},
