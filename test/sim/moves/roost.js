@@ -81,10 +81,11 @@ describe('Roost', function () {
 
 	it('should not remove Flying type during Terastallization', function () {
 		battle = common.createBattle([[
-			{species: "Dudunsparce", ability: "runaway", moves: ['roost'], teraType: "Flying"},
+			{species: "Dudunsparce", ability: "runaway", moves: ['sleeptalk', 'roost'], teraType: "Flying"},
 		], [
-			{species: "Bonsly", ability: "sturdy", moves: ['earthquake']},
+			{species: "Chansey", ability: "naturalcure", moves: ['earthquake']},
 		]]);
+		battle.makeChoices();
 		battle.makeChoices('move roost terastallize', 'auto');
 		assert.fullHP(battle.p1.active[0]);
 	});
