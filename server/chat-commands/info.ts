@@ -1332,6 +1332,15 @@ export const commands: Chat.ChatCommands = {
 				}
 			}
 
+			if (!pokemon) {
+				const testPoke = Dex.species.get(arg);
+				if (testPoke.exists) {
+					pokemon = testPoke.baseStats;
+					baseSet = true;
+					continue;
+				}
+			}
+
 			if (!ivSet) {
 				if (lowercase.endsWith('iv') || lowercase.endsWith('ivs')) {
 					iv = parseInt(arg);
@@ -1400,15 +1409,6 @@ export const commands: Chat.ChatCommands = {
 					return this.sendReplyBox('Modifier should be a number between -6 and +6');
 				}
 				if (modSet) continue;
-			}
-
-			if (!pokemon) {
-				const testPoke = Dex.species.get(arg);
-				if (testPoke.exists) {
-					pokemon = testPoke.baseStats;
-					baseSet = true;
-					continue;
-				}
 			}
 
 			const tempStat = parseInt(arg);
