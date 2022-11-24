@@ -59,7 +59,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen9',
-		ruleset: ['Same Type Clause', 'Enforce Same Tera Type', 'Standard'],
+		ruleset: ['Same Type Clause', 'Terastal Clause', 'Standard'],
 		banlist: ['Koraidon', 'Miraidon', 'Moody', 'Shadow Tag', 'Damp Rock', 'Focus Band', 'King\'s Rock', 'Quick Claw', 'Baton Pass'],
 	},
 	{
