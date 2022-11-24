@@ -1180,7 +1180,7 @@ export class Pokemon {
 		this.transformed = true;
 		this.weighthg = pokemon.weighthg;
 
-		const types = pokemon.getTypes(true);
+		const types = pokemon.getTypes(true, true);
 		this.setType(pokemon.volatiles['roost'] ? pokemon.volatiles['roost'].typeWas : types, true);
 		this.addedType = pokemon.addedType;
 		this.knownType = this.isAlly(pokemon) && pokemon.knownType;
