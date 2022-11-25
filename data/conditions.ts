@@ -785,13 +785,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 	},
 
-	terastal: {
-		name: 'Terastal',
-		effectType: 'Terastal',
-		noCopy: true,
-		duration: 1,
-	},
-
 	// Commander needs two conditions so they are implemented here
 	// Dondozo
 	commanded: {
