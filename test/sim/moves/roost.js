@@ -78,6 +78,17 @@ describe('Roost', function () {
 		battle.makeChoices('move roost', 'move astonish');
 		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp); // Immune to Astonish
 	});
+
+	it('should not remove Flying type during Terastallization', function () {
+		battle = common.createBattle([[
+			{species: "Dudunsparce", ability: "runaway", moves: ['sleeptalk', 'roost'], teraType: "Flying"},
+		], [
+			{species: "Chansey", ability: "naturalcure", moves: ['earthquake']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('move roost terastallize', 'auto');
+		assert.fullHP(battle.p1.active[0]);
+	});
 });
 
 describe('Roost - DPP', function () {
