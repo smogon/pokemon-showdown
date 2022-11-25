@@ -155,7 +155,7 @@ export class BattleActions {
 
 		// Placeholder until we have proper support
 		if (pokemon.terastallized) {
-			this.battle.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
+			this.battle.add('-start', pokemon, 'typechange', pokemon.terastallized, '[silent]');
 		}
 
 		return true;

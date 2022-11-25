@@ -2716,7 +2716,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	opportunist: {
 		onFoeAfterBoost(boost, target, source, effect) {
-			if (effect?.effectType !== 'Move') return;
+			if (effect && ['Opportunist', 'Mirror Herb'].includes(effect.fullname)) return;
 			const pokemon = this.effectState.target;
 			const positiveBoosts: Partial<BoostsTable> = {};
 			let i: BoostID;
@@ -3604,9 +3604,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	sandspit: {
 		onDamagingHit(damage, target, source, move) {
-			if (this.field.getWeather().id !== 'sandstorm') {
-				this.field.setWeather('sandstorm');
-			}
+			this.field.setWeather('sandstorm');
 		},
 		name: "Sand Spit",
 		rating: 2,
@@ -3732,10 +3730,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	seedsower: {
 		onDamagingHit(damage, target, source, move) {
-			if (this.field.getTerrain().id !== 'grassyterrain') {
-				this.add('-activate', target, 'ability: Seed Sower');
-				this.field.setTerrain('grassyterrain', target);
-			}
+			this.field.setTerrain('grassyterrain');
 		},
 		name: "Seed Sower",
 		rating: 2,
