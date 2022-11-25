@@ -152,6 +152,52 @@ export const Formats: FormatList = [
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
+	{
+		name: '[Gen 9] Metronome Battle',
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3632075/">Metronome Battle</a>`,
+		],
+
+		mod: 'gen9',
+		gameType: 'doubles',
+		ruleset: [
+			'Max Team Size = 2',
+			'HP Percentage Mod', 'Cancel Mod',
+		],
+		banlist: [
+			'Pokestar Spirit', 'Shedinja + Sturdy', 'Cheek Pouch', 'Cursed Body', 'Dry Skin', 'Earth Eater', 'Fur Coat', 'Gorilla Tactics',
+			'Grassy Surge', 'Huge Power', 'Ice Body', 'Iron Barbs', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Perish Body', 'Poison Heal',
+			'Power Construct', 'Pressure', 'Pure Power', 'Rain Dish', 'Rough Skin', 'Sand Spit', 'Sand Stream', 'Seed Sower', 'Stamina',
+			'Volt Absorb', 'Water Absorb', 'Wonder Guard', 'Abomasite', 'Aguav Berry', 'Assault Vest', 'Berry', 'Berry Juice', 'Berserk Gene',
+			'Black Sludge', 'Enigma Berry', 'Figy Berry', 'Gold Berry', 'Iapapa Berry', 'Kangaskhanite', 'Leftovers', 'Mago Berry', 'Medichamite',
+			'Steel Memory', 'Oran Berry', 'Rocky Helmet', 'Shell Bell', 'Sitrus Berry', 'Wiki Berry', 'Harvest + Jaboca Berry',
+			'Harvest + Rowap Berry',
+		],
+		onValidateSet(set) {
+			const species = this.dex.species.get(set.species);
+			if (species.types.includes('Steel')) {
+				return [`${species.name} is a Steel-type, which is banned from Metronome Battle.`];
+			}
+			if (set.teraType === 'Steel') {
+				return [`${species.name} has Steel as its Tera type, which is banned from Metronome Battle.`];
+			}
+			if (species.bst > 625) {
+				return [`${species.name} is banned.`, `(Pok\u00e9mon with a BST higher than 625 are banned)`];
+			}
+			const item = this.dex.items.get(set.item);
+			if (set.item && item.megaStone) {
+				const megaSpecies = this.dex.species.get(item.megaStone);
+				if (species.baseSpecies === item.megaEvolves && megaSpecies.bst > 625) {
+					return [
+						`${set.name || set.species}'s item ${item.name} is banned.`, `(Pok\u00e9mon with a BST higher than 625 are banned)`,
+					];
+				}
+			}
+			if (set.moves.length !== 1 || this.dex.moves.get(set.moves[0]).id !== 'metronome') {
+				return [`${set.name || set.species} has illegal moves.`, `(Pok\u00e9mon can only have one Metronome in their moveset)`];
+			}
+		},
+	},
 
 	// National Dex
 	///////////////////////////////////////////////////////////////////
@@ -2958,6 +3004,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
+		searchShow: false,
 		ruleset: [
 			'Max Team Size = 2',
 			'HP Percentage Mod', 'Cancel Mod',
@@ -2973,7 +3020,7 @@ export const Formats: FormatList = [
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
 			if (species.gen > 8) {
-				return [`${species.name} is from gen 9, which Metronome Battle has not been updated to.`];
+				return [`${species.name} is from gen 9, which is banned from [Gen 8] Metronome Battle.`];
 			}
 			if (species.types.includes('Steel')) {
 				return [`${species.name} is a Steel-type, which is banned from Metronome Battle.`];
@@ -2983,7 +3030,7 @@ export const Formats: FormatList = [
 			}
 			const item = this.dex.items.get(set.item);
 			if (item.gen > 8) {
-				return [`${item.name} is from gen 9, which Metronome Battle has not been updated to.`];
+				return [`${species.name} is from gen 9, which is banned from [Gen 8] Metronome Battle.`];
 			}
 			if (set.item && item.megaStone) {
 				const megaSpecies = this.dex.species.get(item.megaStone);
@@ -2995,7 +3042,7 @@ export const Formats: FormatList = [
 			}
 			const ability = this.dex.abilities.get(set.ability);
 			if (ability.gen > 8) {
-				return [`${ability.name} is from gen 9, which Metronome Battle has not been updated to.`];
+				return [`${species.name} is from gen 9, which is banned from [Gen 8] Metronome Battle.`];
 			}
 			if (set.moves.length !== 1 || this.dex.moves.get(set.moves[0]).id !== 'metronome') {
 				return [`${set.name || set.species} has illegal moves.`, `(Pok\u00e9mon can only have one Metronome in their moveset)`];
