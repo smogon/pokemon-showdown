@@ -15631,7 +15631,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 			duration: 1,
 			onResidualOrder: 25,
 			onStart(target) {
-				this.add('-singleturn', target, 'move: Roost');
+				if (!target.terastallized) {
+					this.add('-singleturn', target, 'move: Roost');
+				} else if (target.terastallized === "Flying") {
+					this.add('-hint', "If a Flying Terastallized Pokemon uses Roost, it remains Flying-type.");
+				}
 			},
 			onTypePriority: -1,
 			onType(types, pokemon) {
