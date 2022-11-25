@@ -884,21 +884,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (boost[i]! < 0) {
 					msg = '-unboost';
 					boost[i] = -boost[i]!;
-					// Re-add attack and speed drops if not present
-					if (i === 'atk' && target.status === 'brn' && !target.volatiles['brnattackdrop']) {
-						target.addVolatile('brnattackdrop');
-					}
-					if (i === 'spe' && target.status === 'par' && !target.volatiles['parspeeddrop']) {
-						target.addVolatile('parspeeddrop');
-					}
-				} else {
-					// Check for boost increases deleting attack or speed drops
-					if (i === 'atk' && target.status === 'brn' && target.volatiles['brnattackdrop']) {
-						target.removeVolatile('brnattackdrop');
-					}
-					if (i === 'spe' && target.status === 'par' && target.volatiles['parspeeddrop']) {
-						target.removeVolatile('parspeeddrop');
-					}
 				}
 				if (!effect || effect.effectType === 'Move') {
 					this.add(msg, target, i, boost[i]);
