@@ -623,7 +623,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						// In the game, this is checked and if true, the random number generator is not called.
 						// That means that a move that does not share the type of the target can status it.
 						// If a move that was not fire-type would exist on Gen 1, it could burn a Pokémon.
-						if (!(secondary.status && ['par', 'brn', 'frz'].includes(secondary.status) && target && target.hasType(move.type))) {
+						if (!(secondary.status && ['par', 'brn', 'frz'].includes(secondary.status) && target.hasType(move.type))) {
 							if (secondary.chance === undefined) {
 								this.moveHit(target, pokemon, move, secondary, true, isSelf);
 							} else {
