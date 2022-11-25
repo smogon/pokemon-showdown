@@ -579,12 +579,19 @@ describe('Team Validator', function () {
 		assert.equal(illegal, null);
 	});
 
-	it.skip('should reject mutually incompatible Dream World moves', function () {
-		const team = [
+	it('should reject mutually incompatible Dream World moves', function () {
+		let team = [
 			{species: 'spinda', ability: 'contrary', moves: ['superpower', 'fakeout'], evs: {hp: 1}},
 		];
-		const illegal = TeamValidator.get('gen5ou').validateTeam(team);
-		assert.equal(illegal);
+		let illegal = TeamValidator.get('gen5ou').validateTeam(team);
+		assert(illegal);
+
+		// Both are Dream World moves, but Smack Down is also level-up/TM
+		team = [
+			{species: 'boldore', ability: 'sandforce', moves: ['heavyslam', 'smackdown'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen5ou').validateTeam(team);
+		assert.equal(illegal, null);
 	});
 
 	it('should consider Dream World Abilities as Hidden based on Gen 5 data', function () {
