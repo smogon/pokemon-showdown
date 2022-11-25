@@ -1344,8 +1344,6 @@ export class Pokemon {
 			} else if (source.effectType === 'Status') {
 				// Shaymin-Sky -> Shaymin
 				this.battle.add('-formechange', this, species.name, message);
-			} else if (source.effectType === 'Terastal') {
-				this.battle.add('-terastallize', this, this.teraType);
 			}
 		} else {
 			if (source.effectType === 'Ability') {
