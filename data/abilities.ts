@@ -2716,7 +2716,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	opportunist: {
 		onFoeAfterBoost(boost, target, source, effect) {
-			if (effect?.effectType !== 'Move') return;
+			if (effect && ['Opportunist', 'Mirror Herb'].includes(effect.fullname)) return;
 			const pokemon = this.effectState.target;
 			const positiveBoosts: Partial<BoostsTable> = {};
 			let i: BoostID;
