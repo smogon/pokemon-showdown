@@ -15279,8 +15279,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {},
 		onTryHit(source) {
-			// TODO: Figure out last mon Revival Blessing in Doubles
-			if (!source.side.pokemon.filter(ally => ally.fainted && !(ally.position < ally.side.active.length)).length) {
+			if (!source.side.pokemon.filter(ally => ally.fainted).length) {
 				return false;
 			}
 		},

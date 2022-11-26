@@ -701,7 +701,7 @@ export class Side {
 		}
 		if (slot >= this.pokemon.length) {
 			return this.emitChoiceError(`Can't switch: You do not have a Pokémon in slot ${slot + 1} to switch to`);
-		} else if (slot < this.active.length) {
+		} else if (slot < this.active.length && !this.slotConditions[pokemon.position]['revivalblessing']) {
 			return this.emitChoiceError(`Can't switch: You can't switch to an active Pokémon`);
 		} else if (this.choice.switchIns.has(slot)) {
 			return this.emitChoiceError(`Can't switch: The Pokémon in slot ${slot + 1} can only switch in once`);
@@ -713,6 +713,7 @@ export class Side {
 				return this.emitChoiceError(`Can't switch: You have to pass to a fainted Pokémon`);
 			}
 			this.pokemonLeft++;
+			if (slot < this.active.length) targetPokemon.isActive = true;
 			targetPokemon.fainted = false;
 			targetPokemon.faintQueued = false;
 			targetPokemon.subFainted = false;
