@@ -953,9 +953,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 					this.add(secondmsg, target, i, 1);
 					if (msg === '-boost') {
-						this.hint(`In Gen 1, boosting a stat at 999 will apply a -1 drop afterwards, and the stat stays at 999.`, true);
+						this.hint(`In Gen 1, boosting a stat at 999 will apply a -1 drop afterwards, and the stat remains at 999.`, true);
 					} else {
-						this.hint(`In Gen 1, dropping a stat at 1 will apply a +1 boost afterwards, and the stat stays at 1.`, true);
+						this.hint(`In Gen 1, dropping a stat at 1 will apply a +1 boost afterwards, and the stat remains at 1.`, true);
 					}
 					this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
 				}
