@@ -74,7 +74,10 @@ export const Formats: FormatList = [
 			'Picked Team Size = 1', 'Max Team Size = 3',
 			'Standard', 'Terastal Clause', 'Accuracy Moves Clause', '!Sleep Clause Mod',
 		],
-		banlist: ['Dragonite', 'Koraidon', 'Miraidon', 'Moody', 'Focus Band', 'Focus Sash', 'King\'s Rock', 'Quick Claw', 'Acupressure', 'Hypnosis', 'Perish Song', 'Sing'],
+		banlist: [
+			'Dragonite', 'Koraidon', 'Mimikyu', 'Miraidon', 'Moody', 'Focus Band', 'Focus Sash',
+			'King\'s Rock', 'Quick Claw', 'Acupressure', 'Hypnosis', 'Perish Song', 'Sing',
+		],
 	},
 	{
 		name: "[Gen 9] Anything Goes",
