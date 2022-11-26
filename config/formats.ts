@@ -521,11 +521,11 @@ export const Formats: FormatList = [
 		mod: 'mixandmega',
 		ruleset: ['Standard OMs', 'Evasion Items Clause', 'Evasion Abilities Clause', 'Sleep Moves Clause', 'Min Source Gen = 9'],
 		banlist: [
-			'Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Medichamite',
+			'Miraidon', 'Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Medichamite',
 			'Moody', 'Shadow Tag', 'Baton Pass', 'Electrify', 'Shed Tail', 'Zap Cannon',
 		],
 		restricted: [
-			'Flutter Mane', 'Gengar', 'Koraidon', 'Miraidon', 'Slaking',
+			'Flutter Mane', 'Gengar', 'Iron Bundle', 'Koraidon', 'Slaking',
 		],
 		onValidateTeam(team) {
 			const itemTable = new Set<ID>();
