@@ -17925,7 +17925,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		prevo: "Charcadet",
 		evoType: "useItem",
-		evoItem: "Malicious Armor",
+		evoItem: "Auspicious Armor",
 		eggGroups: ["Human-Like"],
 	},
 	ceruledge: {
@@ -17939,7 +17939,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		prevo: "Charcadet",
 		evoType: "useItem",
-		evoItem: "Auspicious Armor",
+		evoItem: "Malicious Armor",
 		eggGroups: ["Human-Like"],
 	},
 	toedscool: {
