@@ -150,5 +150,6 @@ describe('Ability Shield', function () {
 
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].ability, 'shadowtag', `Holder should retain ability`);
+		assert.equal(battle.p2.active[0].ability, 'levitate', `Opponent should retain ability`);
 	});
 });
