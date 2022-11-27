@@ -11888,6 +11888,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				randomMove = this.sample(moves).id;
 			}
 			if (!randomMove) return false;
+			source.side.lastSelectedMove = this.toID(randomMove);
 			this.actions.useMove(randomMove, target);
 		},
 		secondary: null,
