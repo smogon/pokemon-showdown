@@ -312,4 +312,16 @@ describe('Counter', function () {
 		const exeggutor = battle.p2.active[0];
 		assert.equal(exeggutor.maxhp - exeggutor.hp, (gengar.hp - (gengar.maxhp - 100)) * 2);
 	});
+
+	it(`[Gen 1] Mirror Move can be countered when it calls a counterable move`, function () {
+		battle = common.gen(1).createBattle({seed: [1, 0, 0, 0]}, [[
+			{species: 'Pidgeot', moves: ['mirrormove']},
+		], [
+			{species: 'Alakazam', moves: ['seismictoss', 'counter']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('move mirrormove', 'move counter');
+		const pidgeot = battle.p1.active[0];
+		assert.equal(pidgeot.maxhp - pidgeot.hp, 300);
+	});
 });
