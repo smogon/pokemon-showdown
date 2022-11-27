@@ -2486,14 +2486,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 152,
 	},
 	myceliummight: {
-		onModifyPriority(priority, pokemon, target, move) {
-			if (move?.category === 'Status') {
-				// TODO what exactly does "The Pokémon will always act more slowly when using status moves" mean?
-				// Assuming -1 priority.
-				return priority - 1;
+		onFractionalPriorityPriority: -1,
+		onFractionalPriority(priority, pokemon, target, move) {
+			if (move.category === 'Status') {
+				return -0.1;
 			}
 		},
-		// Supress abilities when status moves are involved
 		onModifyMove(move) {
 			if (move.category === 'Status') {
 				move.ignoreAbility = true;
