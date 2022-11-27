@@ -3824,10 +3824,15 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {},
 		onHit(target, source, move) {
+			let overallSuccess;
 			for (const ally of source.alliesAndSelf()) {
-				ally.setAbility(target.ability);
+				let allySuccess: ReturnType<Pokemon['setAbility']> | true = ally.setAbility(target.ability);
+				if (typeof allySuccess === 'string') allySuccess = true;
+				overallSuccess = this.actions.combineResults(overallSuccess, allySuccess);
+				if (!allySuccess) continue;
 				this.add('-ability', ally, target.getAbility().name, '[from] move: Doodle');
 			}
+			return overallSuccess;
 		},
 		secondary: null,
 		target: "adjacentFoe",
@@ -4855,7 +4860,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (!target.isAlly(source)) target.volatileStaleness = 'external';
 				return;
 			}
-			return false;
+			return oldAbility as false | null;
 		},
 		secondary: null,
 		target: "normal",
@@ -6456,10 +6461,15 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (target.getAbility().isPermanent) {
 				return false;
 			}
+			if (target.hasItem('Ability Shield')) {
+				this.add('-activate', target, 'item: Ability Shield');
+				return null;
+			}
 		},
 		condition: {
-			// Ability suppression implemented in Pokemon.ignoringAbility() within sim/pokemon.js
+			// Ability suppression implemented in Pokemon.ignoringAbility() within sim/pokemon.ts
 			onStart(pokemon) {
+				if (pokemon.hasItem('Ability Shield')) return false;
 				this.add('-endability', pokemon);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, 'gastroacid');
 			},
@@ -15516,7 +15526,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-ability', source, source.getAbility().name, '[from] move: Role Play', '[of] ' + target);
 				return;
 			}
-			return false;
+			return oldAbility as false | null;
 		},
 		secondary: null,
 		target: "normal",
@@ -16734,7 +16744,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-ability', pokemon, 'Simple', '[from] move: Simple Beam');
 				return;
 			}
-			return false;
+			return oldAbility as false | null;
 		},
 		secondary: null,
 		target: "normal",
@@ -16841,13 +16851,20 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1, bypasssub: 1, allyanim: 1},
 		onTryHit(target, source) {
 			const additionalBannedAbilities = ['hungerswitch', 'illusion', 'neutralizinggas', 'wonderguard'];
+			const targetAbility = target.getAbility();
+			const sourceAbility = source.getAbility();
+			// TODO: research in what order these should be checked
 			if (
 				target.volatiles['dynamax'] ||
-				target.getAbility().isPermanent || source.getAbility().isPermanent ||
+				targetAbility.isPermanent || sourceAbility.isPermanent ||
 				additionalBannedAbilities.includes(target.ability) || additionalBannedAbilities.includes(source.ability)
 			) {
 				return false;
 			}
+			const sourceCanBeSet = this.runEvent('SetAbility', source, source, this.effect, targetAbility);
+			if (!sourceCanBeSet) return sourceCanBeSet;
+			const targetCanBeSet = this.runEvent('SetAbility', target, source, this.effect, sourceAbility);
+			if (!targetCanBeSet) return targetCanBeSet;
 		},
 		onHit(target, source, move) {
 			const targetAbility = target.getAbility();
@@ -21312,7 +21329,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 				return;
 			}
-			return false;
+			return oldAbility as false | null;
 		},
 		secondary: null,
 		target: "normal",

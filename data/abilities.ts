@@ -2603,6 +2603,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			pokemon.abilityState.ending = false;
 			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
 			for (const target of this.getAllActive()) {
+				if (target.hasItem('Ability Shield')) {
+					this.add('-activate', target, 'item: Ability Shield');
+					continue;
+				}
 				if (target.illusion) {
 					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'neutralizinggas');
 				}
@@ -3041,8 +3045,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard',
 			];
 			if (target.getAbility().isPermanent || additionalBannedAbilities.includes(target.ability)) return;
-			this.add('-ability', this.effectState.target, ability, '[from] ability: Power of Alchemy', '[of] ' + target);
-			this.effectState.target.setAbility(ability);
+			if (this.effectState.target.setAbility(ability)) {
+				this.add('-ability', this.effectState.target, ability, '[from] ability: Power of Alchemy', '[of] ' + target);
+			}
 		},
 		name: "Power of Alchemy",
 		rating: 0,
@@ -3418,8 +3423,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard',
 			];
 			if (target.getAbility().isPermanent || additionalBannedAbilities.includes(target.ability)) return;
-			this.add('-ability', this.effectState.target, ability, '[from] ability: Receiver', '[of] ' + target);
-			this.effectState.target.setAbility(ability);
+			if (this.effectState.target.setAbility(ability)) {
+				this.add('-ability', this.effectState.target, ability, '[from] ability: Receiver', '[of] ' + target);
+			}
 		},
 		name: "Receiver",
 		rating: 0,
@@ -4599,6 +4605,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (pokemon.adjacentFoes().some(foeActive => foeActive.ability === 'noability')) {
 				this.effectState.gaveUp = true;
 			}
+			// interaction with Ability Shield is similar to No Ability
+			if (pokemon.hasItem('Ability Shield')) {
+				this.add('-activate', pokemon, 'item: Ability Shield');
+				this.effectState.gaveUp = true;
+			}
 		},
 		onUpdate(pokemon) {
 			if (!pokemon.isStarted || this.effectState.gaveUp) return;
@@ -4614,8 +4625,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 
 			const target = this.sample(possibleTargets);
 			const ability = target.getAbility();
-			this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
-			pokemon.setAbility(ability);
+			if (pokemon.setAbility(ability)) {
+				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
+			}
 		},
 		name: "Trace",
 		rating: 2.5,
@@ -4821,6 +4833,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (this.checkMoveMakesContact(move, source, target)) {
 				const sourceAbility = source.setAbility('wanderingspirit', target);
 				if (!sourceAbility) return;
+				const targetCanBeSet = this.runEvent('SetAbility', target, source, this.effect, sourceAbility);
+				if (!targetCanBeSet) return targetCanBeSet;
 				if (target.isAlly(source)) {
 					this.add('-activate', target, 'Skill Swap', '', '', '[of] ' + source);
 				} else {
