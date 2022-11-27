@@ -12,7 +12,7 @@ describe('Ability Shield', function () {
 
 	it(`should protect the holder's ability against ability-changing moves`, function () {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'shadowtag', item: 'abilityshield', moves: ['splash'], level: 5},
+			{species: 'wynaut', ability: 'shadowtag', item: 'abilityshield', moves: ['splash']},
 		], [
 			{species: 'weezinggalar', ability: 'levitate', moves: ['worryseed']},
 		]]);
@@ -110,10 +110,9 @@ describe('Ability Shield', function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'sturdy', moves: ['splash'], level: 5},
 		], [
-			{species: 'weezinggalar', ability: 'levitate', item: 'abilityshield', moves: ['gastroacid', 'trick', 'shadowball']},
+			{species: 'weezinggalar', ability: 'neutralizinggas', item: 'abilityshield', moves: ['trick', 'shadowball']},
 		]]);
 
-		battle.makeChoices('move splash', 'move gastroacid');
 		battle.makeChoices('move splash', 'move trick');
 		battle.makeChoices('move splash', 'move shadowball');
 
@@ -135,11 +134,13 @@ describe('Ability Shield', function () {
 		assert.equal(battle.p1.active[0].ability, 'klutz', `Holder should retain ability`);
 	});
 
+	// TODO Tests for unsuppressing abilities like Intimidate (should they re-trigger)? Or perhaps already covered by current Neutralizing Gas tests?
+
 	// TODO Tests for losing Ability Shield vs Neutralizing Gas/Mold Breaker/Gastro Acid? 
 	//      No confirmed research yet for these, but presumably Neutralizing Gas & Mold 
-	//      Breaker would start to apply again, whereas Gastro Acid & any other 
-	//      "triggered-once" moves/abilities triggered before the loss would not automatically
-	//      trigger unless used again.
+	//      Breaker would start to apply again, whereas Gastro Acid or other "triggered-once" 
+	//      moves/abilities triggered before the loss would not automatically trigger unless 
+	//      used again.
 	
 	// TODO skill swap interaction?
 });
