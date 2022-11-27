@@ -115,8 +115,6 @@ describe('Ability Shield', function () {
 		battle.makeChoices('move splash', 'move trick');
 		battle.makeChoices('move splash', 'move shadowball');
 
-		// TODO assert some sort of block message as well? I don't *think* there should be a message but not confirmed
-
 		assert.equal(battle.p1.active[0].hp, 1, `Holder should survive due to Sturdy`);
 	});
 
@@ -141,6 +139,9 @@ describe('Ability Shield', function () {
 		]]);
 
 		battle.makeChoices();
+
+		// assert logs?
+
 		assert.equal(battle.p1.active[0].ability, 'shadowtag', `Holder should retain ability`);
 		assert.equal(battle.p2.active[0].ability, 'levitate', `Opponent should retain ability`);
 	});
@@ -153,13 +154,27 @@ describe('Ability Shield', function () {
 		]]);
 
 		battle.makeChoices();
+
+		// assert logs?
+
 		assert.equal(battle.p1.active[0].ability, 'shadowtag', `Holder should retain ability`);
 		assert.equal(battle.p2.active[0].ability, 'levitate', `Opponent should retain ability`);
 	});
 
-	// TODO Tests for unsuppressing abilities like Intimidate (should they re-trigger)? Or perhaps already covered by current Neutralizing Gas tests?
+	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9413916
+	it(`should not trigger holder's Intimidate if Ability Shield is acquired after entrance, while Neutralizing Gas is in effect`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', ability: 'intimidate', moves: ['splash']},
+		], [
+			{species: 'weezinggalar', ability: 'neutralizinggas', item: 'abilityshield', moves: ['trick']},
+		]]);
 
-	// TODO Tests for losing Ability Shield vs Neutralizing Gas/Mold Breaker/Gastro Acid?
+		battle.makeChoices();
+		assert.statStage(battle.p2.active[0], 'atk', 0);
+	});
+
+	// TODO Add future tests for losing Ability Shield vs Neutralizing Gas/Mold Breaker/Gastro Acid?
+	//
 	//      No confirmed research yet for these, but presumably Neutralizing Gas & Mold
 	//      Breaker would start to apply again, whereas Gastro Acid or other "triggered-once"
 	//      moves/abilities triggered before the loss would not automatically trigger unless
