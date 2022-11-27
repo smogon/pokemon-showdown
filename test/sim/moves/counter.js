@@ -72,6 +72,106 @@ describe('Counter', function () {
 		assert.fullHP(battle.p2.active[0]);
 	});
 
+	it(`should not have its target changed by Stalwart`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: "Duraludon", ability: 'stalwart', moves: ['counter']},
+			{species: "Diglett", moves: ['sleeptalk']},
+		], [
+			{species: "Wynaut", moves: ['sleeptalk']},
+			{species: "Noivern", moves: ['dragonclaw']},
+		]]);
+
+		const wynaut = battle.p2.active[0];
+		battle.makeChoices('auto', 'move sleeptalk, move dragonclaw 1');
+		assert.equal(wynaut.maxhp, wynaut.hp);
+	});
+});
+
+describe('Mirror Coat', function () {
+	afterEach(function () {
+		battle.destroy();
+	});
+
+	it('should deal damage equal to twice the damage taken from the last Special attack', function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [{species: 'Espeon', ability: 'synchronize', moves: ['sonicboom']}]});
+		battle.setPlayer('p2', {team: [{species: 'Umbreon', ability: 'synchronize', moves: ['mirrorcoat']}]});
+		assert.hurtsBy(battle.p1.active[0], 40, () => battle.makeChoices());
+	});
+
+	it('should deal damage based on the last hit from the last Special attack', function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [{species: 'Espeon', ability: 'synchronize', moves: ['watershuriken']}]});
+		battle.setPlayer('p2', {team: [{species: 'Umbreon', ability: 'synchronize', moves: ['mirrorcoat']}]});
+		let lastDamage = 0;
+		battle.onEvent('Damage', battle.format, function (damage, attacker, defender, move) {
+			if (move.id === 'watershuriken') {
+				lastDamage = damage;
+			}
+		});
+
+		battle.makeChoices();
+		assert.equal(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 2 * lastDamage);
+	});
+
+	it('should fail if user is not damaged by Special attacks this turn', function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [{species: 'Espeon', ability: 'synchronize', moves: ['tackle']}]});
+		battle.setPlayer('p2', {team: [{species: 'Umbreon', ability: 'synchronize', moves: ['mirrorcoat']}]});
+		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices());
+	});
+
+	it('should target the opposing Pokemon that hit the user with a Special attack most recently that turn', function () {
+		battle = common.createBattle({gameType: 'doubles'});
+		battle.setPlayer('p1', {team: [
+			{species: 'Mew', ability: 'synchronize', moves: ['mirrorcoat']},
+			{species: 'Lucario', ability: 'justified', item: 'laggingtail', moves: ['aurasphere']},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: 'Crobat', ability: 'innerfocus', moves: ['venoshock']},
+			{species: 'Avalugg', ability: 'sturdy', moves: ['flashcannon']},
+		]});
+		battle.makeChoices('move mirrorcoat, move aurasphere -1', 'move venoshock 1, move flashcannon 1');
+		assert.fullHP(battle.p1.active[1]);
+		assert.fullHP(battle.p2.active[0]);
+		assert.false.fullHP(battle.p2.active[1]);
+	});
+
+	it('should respect Follow Me', function () {
+		battle = common.createBattle({gameType: 'doubles'});
+		battle.setPlayer('p1', {team: [
+			{species: 'Mew', ability: 'synchronize', moves: ['mirrorcoat']},
+			{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: 'Crobat', ability: 'innerfocus', moves: ['venoshock']},
+			{species: 'Clefable', ability: 'unaware', moves: ['followme']},
+		]});
+		battle.makeChoices('move mirrorcoat, move splash', 'move venoshock 1, move followme');
+		assert.false.fullHP(battle.p2.active[1]);
+		assert.fullHP(battle.p2.active[0]);
+	});
+
+	it(`should not have its target changed by Stalwart`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: "Duraludon", ability: 'stalwart', moves: ['mirrorcoat']},
+			{species: "Diglett", moves: ['sleeptalk']},
+		], [
+			{species: "Wynaut", moves: ['sleeptalk']},
+			{species: "Noivern", moves: ['dragonpulse']},
+		]]);
+
+		const wynaut = battle.p2.active[0];
+		battle.makeChoices('auto', 'move sleeptalk, move dragonpulse 1');
+		assert.equal(wynaut.maxhp, wynaut.hp);
+	});
+});
+
+describe('Counter', function () {
+	afterEach(function () {
+		battle.destroy();
+	});
+
 	it(`[Gen 1] Counter Desync Clause`, function () {
 		// seed chosen so Water Gun succeeds and Pound full paras
 		battle = common.gen(1).createBattle({seed: [1, 2, 3, 3]}, [[
@@ -172,99 +272,5 @@ describe('Counter', function () {
 		battle.makeChoices('move substitute', 'move splash');
 		battle.makeChoices('move counter', 'move bodyslam');
 		assert.false.fullHP(battle.p2.active[0]);
-	});
-
-	it(`should not have its target changed by Stalwart`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: "Duraludon", ability: 'stalwart', moves: ['counter']},
-			{species: "Diglett", moves: ['sleeptalk']},
-		], [
-			{species: "Wynaut", moves: ['sleeptalk']},
-			{species: "Noivern", moves: ['dragonclaw']},
-		]]);
-
-		const wynaut = battle.p2.active[0];
-		battle.makeChoices('auto', 'move sleeptalk, move dragonclaw 1');
-		assert.equal(wynaut.maxhp, wynaut.hp);
-	});
-});
-
-describe('Mirror Coat', function () {
-	afterEach(function () {
-		battle.destroy();
-	});
-
-	it('should deal damage equal to twice the damage taken from the last Special attack', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Espeon', ability: 'synchronize', moves: ['sonicboom']}]});
-		battle.setPlayer('p2', {team: [{species: 'Umbreon', ability: 'synchronize', moves: ['mirrorcoat']}]});
-		assert.hurtsBy(battle.p1.active[0], 40, () => battle.makeChoices());
-	});
-
-	it('should deal damage based on the last hit from the last Special attack', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Espeon', ability: 'synchronize', moves: ['watershuriken']}]});
-		battle.setPlayer('p2', {team: [{species: 'Umbreon', ability: 'synchronize', moves: ['mirrorcoat']}]});
-		let lastDamage = 0;
-		battle.onEvent('Damage', battle.format, function (damage, attacker, defender, move) {
-			if (move.id === 'watershuriken') {
-				lastDamage = damage;
-			}
-		});
-
-		battle.makeChoices();
-		assert.equal(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 2 * lastDamage);
-	});
-
-	it('should fail if user is not damaged by Special attacks this turn', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Espeon', ability: 'synchronize', moves: ['tackle']}]});
-		battle.setPlayer('p2', {team: [{species: 'Umbreon', ability: 'synchronize', moves: ['mirrorcoat']}]});
-		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices());
-	});
-
-	it('should target the opposing Pokemon that hit the user with a Special attack most recently that turn', function () {
-		battle = common.createBattle({gameType: 'doubles'});
-		battle.setPlayer('p1', {team: [
-			{species: 'Mew', ability: 'synchronize', moves: ['mirrorcoat']},
-			{species: 'Lucario', ability: 'justified', item: 'laggingtail', moves: ['aurasphere']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: 'Crobat', ability: 'innerfocus', moves: ['venoshock']},
-			{species: 'Avalugg', ability: 'sturdy', moves: ['flashcannon']},
-		]});
-		battle.makeChoices('move mirrorcoat, move aurasphere -1', 'move venoshock 1, move flashcannon 1');
-		assert.fullHP(battle.p1.active[1]);
-		assert.fullHP(battle.p2.active[0]);
-		assert.false.fullHP(battle.p2.active[1]);
-	});
-
-	it('should respect Follow Me', function () {
-		battle = common.createBattle({gameType: 'doubles'});
-		battle.setPlayer('p1', {team: [
-			{species: 'Mew', ability: 'synchronize', moves: ['mirrorcoat']},
-			{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: 'Crobat', ability: 'innerfocus', moves: ['venoshock']},
-			{species: 'Clefable', ability: 'unaware', moves: ['followme']},
-		]});
-		battle.makeChoices('move mirrorcoat, move splash', 'move venoshock 1, move followme');
-		assert.false.fullHP(battle.p2.active[1]);
-		assert.fullHP(battle.p2.active[0]);
-	});
-
-	it(`should not have its target changed by Stalwart`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: "Duraludon", ability: 'stalwart', moves: ['mirrorcoat']},
-			{species: "Diglett", moves: ['sleeptalk']},
-		], [
-			{species: "Wynaut", moves: ['sleeptalk']},
-			{species: "Noivern", moves: ['dragonpulse']},
-		]]);
-
-		const wynaut = battle.p2.active[0];
-		battle.makeChoices('auto', 'move sleeptalk, move dragonpulse 1');
-		assert.equal(wynaut.maxhp, wynaut.hp);
 	});
 });
