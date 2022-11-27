@@ -850,6 +850,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						this.damage(Math.round(uncappedDamage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
 					}
 					if (move.drain) {
+						const amount = this.clampIntRange(Math.floor(uncappedDamage * move.drain[0] / move.drain[1]), 1);
+						this.lastDamage = amount;
 						this.heal(Math.ceil(uncappedDamage * move.drain[0] / move.drain[1]), source, target, 'drain');
 					}
 					if (move.secondary?.volatileStatus === 'confusion') {
