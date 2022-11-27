@@ -847,7 +847,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// Drain/recoil/secondary effect confusion do not happen if the substitute breaks
 				if (target.volatiles['substitute']) {
 					if (move.recoil) {
-						this.damage(this.clampIntRange(Math.floor(uncappedDamage * move.recoil[0] / move.recoil[1]), 1), source, target, 'recoil');
+						this.damage(this.clampIntRange(Math.floor(uncappedDamage * move.recoil[0] / move.recoil[1]), 1)
+							, source, target, 'recoil');
 					}
 					if (move.drain) {
 						const amount = this.clampIntRange(Math.floor(uncappedDamage * move.drain[0] / move.drain[1]), 1);

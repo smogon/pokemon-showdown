@@ -273,4 +273,43 @@ describe('Counter', function () {
 		battle.makeChoices('move counter', 'move bodyslam');
 		assert.false.fullHP(battle.p2.active[0]);
 	});
+
+	it(`[Gen 1] (High) Jump Kick recoil can be countered`, function () {
+		battle = common.gen(1).createBattle([[
+			{species: 'Gengar', moves: ['counter']},
+		], [
+			{species: 'Hitmonlee', moves: ['highjumpkick']},
+		]]);
+		battle.makeChoices();
+		const hitmonlee = battle.p2.active[0];
+		assert.equal(hitmonlee.maxhp - hitmonlee.hp, 3);
+	});
+
+	it(`[Gen 1] confusion damage can be countered`, function () {
+		battle = common.gen(1).createBattle({seed: [1, 0, 0, 0]}, [[
+			{species: 'Gengar', moves: ['confuseray', 'counter']},
+		], [
+			{species: 'Alakazam', moves: ['seismictoss']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('move counter', 'move seismictoss');
+		const alakazam = battle.p2.active[0];
+		assert.false.fullHP(alakazam);
+		// Confusion damage was countered, not Seismic Toss
+		assert.false.equal(alakazam.maxhp - alakazam.hp, 200);
+	});
+
+	it(`[Gen 1] draining can be countered`, function () {
+		battle = common.gen(1).createBattle({seed: [1, 0, 0, 0]}, [[
+			{species: 'Gengar', moves: ['megadrain', 'counter']},
+		], [
+			{species: 'Alakazam', moves: ['seismictoss']},
+			{species: 'Exeggutor', moves: ['barrage']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('move counter', 'switch 2');
+		const gengar = battle.p1.active[0];
+		const exeggutor = battle.p2.active[0];
+		assert.equal(exeggutor.maxhp - exeggutor.hp, (gengar.hp - (gengar.maxhp - 100)) * 2);
+	});
 });
