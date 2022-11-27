@@ -143,7 +143,7 @@ describe('Ability Shield', function () {
 
 	it.skip(`should protect the holder's ability against Skill Swap, even if used by the holder`, function () {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'shadowtag', item: 'abilityshield', moves: ['skill swap']},
+			{species: 'wynaut', ability: 'shadowtag', item: 'abilityshield', moves: ['skillswap']},
 		], [
 			{species: 'weezinggalar', ability: 'levitate', moves: ['splash']},
 		]]);
