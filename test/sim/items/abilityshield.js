@@ -141,5 +141,14 @@ describe('Ability Shield', function () {
 	//      moves/abilities triggered before the loss would not automatically trigger unless
 	//      used again.
 
-	// TODO skill swap interaction?
+	it.skip(`should protect the holder's ability against Skill Swap, even if used by the holder`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', ability: 'shadowtag', item: 'abilityshield', moves: ['skill swap']},
+		], [
+			{species: 'weezinggalar', ability: 'levitate', moves: ['splash']},
+		]]);
+
+		battle.makeChoices();
+		assert.equal(battle.p1.active[0].ability, 'shadowtag', `Holder should retain ability`);
+	});
 });
