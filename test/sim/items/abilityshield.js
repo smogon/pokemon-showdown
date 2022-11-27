@@ -101,7 +101,6 @@ describe('Ability Shield', function () {
 		battle.makeChoices('move splash', 'move gastroacid');
 		battle.makeChoices('move splash', 'move trick');
 		battle.makeChoices('move splash', 'move shadowball');
-		
 		assert(battle.p1.active[0].fainted, `Holder should not survive attack`);
 	});
 
@@ -116,8 +115,8 @@ describe('Ability Shield', function () {
 		battle.makeChoices('move splash', 'move trick');
 		battle.makeChoices('move splash', 'move shadowball');
 
-		// TODO assert some sort of block message? I don't *think* there should be a message but not confirmed
-		
+		// TODO assert some sort of block message as well? I don't *think* there should be a message but not confirmed
+
 		assert.equal(battle.p1.active[0].hp, 1, `Holder should survive due to Sturdy`);
 	});
 
@@ -136,11 +135,11 @@ describe('Ability Shield', function () {
 
 	// TODO Tests for unsuppressing abilities like Intimidate (should they re-trigger)? Or perhaps already covered by current Neutralizing Gas tests?
 
-	// TODO Tests for losing Ability Shield vs Neutralizing Gas/Mold Breaker/Gastro Acid? 
-	//      No confirmed research yet for these, but presumably Neutralizing Gas & Mold 
-	//      Breaker would start to apply again, whereas Gastro Acid or other "triggered-once" 
-	//      moves/abilities triggered before the loss would not automatically trigger unless 
+	// TODO Tests for losing Ability Shield vs Neutralizing Gas/Mold Breaker/Gastro Acid?
+	//      No confirmed research yet for these, but presumably Neutralizing Gas & Mold
+	//      Breaker would start to apply again, whereas Gastro Acid or other "triggered-once"
+	//      moves/abilities triggered before the loss would not automatically trigger unless
 	//      used again.
-	
+
 	// TODO skill swap interaction?
 });
