@@ -2297,7 +2297,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			trailblaze: ["9M"],
 			uproar: ["8M", "7T", "6T", "5T", "4T"],
 			voltswitch: ["9M", "8M", "7M", "6M", "5M"],
-			volttackle: ["8R", "7R", "6E", "5E", "4E", "4S4", "4S5", "3E"],
+			volttackle: ["9R", "8R", "7R", "6E", "5E", "4E", "4S4", "4S5", "3E"],
 			wildcharge: ["9M", "8M", "7M", "6M", "5M"],
 			wish: ["9E", "8E", "7E", "6E", "5E", "4E", "3E", "3S1"],
 			zapcannon: ["7V"],
