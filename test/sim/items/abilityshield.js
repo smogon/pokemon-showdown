@@ -133,13 +133,17 @@ describe('Ability Shield', function () {
 		assert.equal(battle.p1.active[0].ability, 'klutz', `Holder should retain ability`);
 	});
 
-	// TODO Tests for unsuppressing abilities like Intimidate (should they re-trigger)? Or perhaps already covered by current Neutralizing Gas tests?
+	it(`should protect the holder's ability against Skill Swap`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', ability: 'shadowtag', item: 'abilityshield', moves: ['splash']},
+		], [
+			{species: 'weezinggalar', ability: 'levitate', moves: ['skillswap']},
+		]]);
 
-	// TODO Tests for losing Ability Shield vs Neutralizing Gas/Mold Breaker/Gastro Acid?
-	//      No confirmed research yet for these, but presumably Neutralizing Gas & Mold
-	//      Breaker would start to apply again, whereas Gastro Acid or other "triggered-once"
-	//      moves/abilities triggered before the loss would not automatically trigger unless
-	//      used again.
+		battle.makeChoices();
+		assert.equal(battle.p1.active[0].ability, 'shadowtag', `Holder should retain ability`);
+		assert.equal(battle.p2.active[0].ability, 'levitate', `Opponent should retain ability`);
+	});
 
 	it.skip(`should protect the holder's ability against Skill Swap, even if used by the holder`, function () {
 		battle = common.createBattle([[
@@ -152,4 +156,12 @@ describe('Ability Shield', function () {
 		assert.equal(battle.p1.active[0].ability, 'shadowtag', `Holder should retain ability`);
 		assert.equal(battle.p2.active[0].ability, 'levitate', `Opponent should retain ability`);
 	});
+
+	// TODO Tests for unsuppressing abilities like Intimidate (should they re-trigger)? Or perhaps already covered by current Neutralizing Gas tests?
+
+	// TODO Tests for losing Ability Shield vs Neutralizing Gas/Mold Breaker/Gastro Acid?
+	//      No confirmed research yet for these, but presumably Neutralizing Gas & Mold
+	//      Breaker would start to apply again, whereas Gastro Acid or other "triggered-once"
+	//      moves/abilities triggered before the loss would not automatically trigger unless
+	//      used again.
 });
