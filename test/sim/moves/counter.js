@@ -314,7 +314,7 @@ describe('Counter', function () {
 	});
 
 	it(`[Gen 1] Mirror Move can be countered when it calls a counterable move`, function () {
-		battle = common.gen(1).createBattle({seed: [1, 0, 0, 0]}, [[
+		battle = common.gen(1).createBattle([[
 			{species: 'Pidgeot', moves: ['mirrormove']},
 		], [
 			{species: 'Alakazam', moves: ['seismictoss', 'counter']},
