@@ -361,7 +361,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	beastboost: {
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				const bestStat = source.getBestStoredStat();
+				const bestStat = source.getBestStat(true, true);
 				this.boost({[bestStat]: length}, source);
 			}
 		},
@@ -3154,10 +3154,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				pokemon.removeVolatile('protosynthesis');
 			}
 
-			if (pokemon.hasItem('boosterenergy') && !pokemon.volatiles['protosynthesis'] && pokemon.useItem()) {
+			if (pokemon.hasItem('boosterenergy') && !pokemon.getVolatile('protosynthesis') && pokemon.useItem()) {
 				this.add('-activate', pokemon, 'ability: Protosynthesis', '[fromitem]');
 				pokemon.addVolatile('protosynthesis');
-				// @ts-ignore - addVolatile makes this exist but TS can't tell that
 				pokemon.volatiles['protosynthesis'].fromBooster = true;
 			}
 		},
@@ -3168,7 +3167,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		condition: {
 			noCopy: true,
 			onStart(pokemon) {
-				this.effectState.bestStat = pokemon.getBestStoredStat();
+				this.effectState.bestStat = pokemon.getBestStat(false, true);
 				this.add('-start', pokemon, 'protosynthesis' + this.effectState.bestStat);
 			},
 			onModifyAtkPriority: 5,
@@ -3204,6 +3203,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.add('-end', pokemon, 'Protosynthesis');
 			},
 		},
+		isPermanent: true,
 		name: "Protosynthesis",
 		rating: 2,
 		num: 281,
@@ -3287,10 +3287,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				pokemon.removeVolatile('quarkdrive');
 			}
 
-			if (pokemon.hasItem('boosterenergy') && !pokemon.volatiles['quarkdrive'] && pokemon.useItem()) {
+			if (pokemon.hasItem('boosterenergy') && !pokemon.getVolatile('quarkdrive') && pokemon.useItem()) {
 				this.add('-activate', pokemon, 'ability: Quark Drive', '[fromitem]');
 				pokemon.addVolatile('quarkdrive');
-				// @ts-ignore - addVolatile makes this exist but TS can't tell that
 				pokemon.volatiles['quarkdrive'].fromBooster = true;
 			}
 		},
@@ -3301,7 +3300,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		condition: {
 			noCopy: true,
 			onStart(pokemon) {
-				this.effectState.bestStat = pokemon.getBestStoredStat();
+				this.effectState.bestStat = pokemon.getBestStat(false, true);
 				this.add('-start', pokemon, 'quarkdrive' + this.effectState.bestStat);
 			},
 			onModifyAtkPriority: 5,
@@ -3337,6 +3336,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.add('-end', pokemon, 'Quark Drive');
 			},
 		},
+		isPermanent: true,
 		name: "Quark Drive",
 		rating: 2,
 		num: 282,

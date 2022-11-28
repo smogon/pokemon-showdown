@@ -587,18 +587,18 @@ export class Pokemon {
 	}
 
 	/**
-	 * Gets the Pokemon's best storedStat.
+	 * Gets the Pokemon's best stat.
 	 * Moved to its own method due to frequent use of the same code.
 	 * Used by Beast Boost, Quark Drive, and Protosynthesis.
 	 */
-	getBestStoredStat(): StatIDExceptHP {
+	getBestStat(unboosted?: boolean, unmodified?: boolean): StatIDExceptHP {
 		let statName: StatIDExceptHP = 'atk';
 		let bestStat = 0;
-		let s: StatIDExceptHP;
-		for (s in this.storedStats) {
-			if (this.storedStats[s] > bestStat) {
-				statName = s;
-				bestStat = this.storedStats[s];
+		const stats: StatIDExceptHP[] = ['atk', 'def', 'spa', 'spd', 'spe'];
+		for (const i of stats) {
+			if (this.getStat(i, unboosted, unmodified) > bestStat) {
+				statName = i;
+				bestStat = this.getStat(i, unboosted, unmodified);
 			}
 		}
 
