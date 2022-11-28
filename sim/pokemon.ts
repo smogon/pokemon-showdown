@@ -1741,9 +1741,12 @@ export class Pokemon {
 	}
 
 	hasItem(item: string | string[]) {
-		if (!Array.isArray(item)) item = [item];
-		item = item.map(toID);
-		return item.includes(this.item) && !this.ignoringItem();
+		if (Array.isArray(item)) {
+			if (!item.map(toID).includes(this.item)) return false;
+		} else {
+			if (toID(item) !== this.item) return false;
+		}
+		return !this.ignoringItem();
 	}
 
 	clearItem() {
@@ -1778,9 +1781,12 @@ export class Pokemon {
 	}
 
 	hasAbility(ability: string | string[]) {
-		if (!Array.isArray(ability)) ability = [ability];
-		ability = ability.map(toID);
-		return ability.includes(this.ability) && !this.ignoringAbility();
+		if (Array.isArray(ability)) {
+			if (!ability.map(toID).includes(this.ability)) return false;
+		} else {
+			if (toID(ability) !== this.ability) return false;
+		}
+		return !this.ignoringAbility();
 	}
 
 	clearAbility() {
