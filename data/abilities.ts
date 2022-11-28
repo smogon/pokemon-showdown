@@ -2604,7 +2604,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
 			for (const target of this.getAllActive()) {
 				if (target.hasItem('Ability Shield')) {
-					this.add('-activate', target, 'item: Ability Shield');
+					this.add('-block', target, 'item: Ability Shield');
 					continue;
 				}
 				if (target.illusion) {
@@ -4607,7 +4607,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 			// interaction with Ability Shield is similar to No Ability
 			if (pokemon.hasItem('Ability Shield')) {
-				this.add('-activate', pokemon, 'item: Ability Shield');
+				this.add('-block', pokemon, 'item: Ability Shield');
 				this.effectState.gaveUp = true;
 			}
 		},

@@ -6462,7 +6462,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return false;
 			}
 			if (target.hasItem('Ability Shield')) {
-				this.add('-activate', target, 'item: Ability Shield');
+				this.add('-block', target, 'item: Ability Shield');
 				return null;
 			}
 		},
