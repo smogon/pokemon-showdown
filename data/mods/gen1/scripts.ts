@@ -844,7 +844,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (attack >= 256 || defense >= 256) {
 				attack = this.battle.clampIntRange(Math.floor(attack / 4) % 256, 1);
 				// Defense isn't checked on the cartridge, but we don't want those / 0 bugs on the sim.
-				defense = this.battle.clampIntRange(Math.floor(defense / 4) % 256, 1);
+				defense = Math.floor(defense / 4) % 256;
+				if (defense === 0) {
+					this.battle.hint('Pokemon Showdown avoids division by zero by rounding defense up to 1.' +
+						'In game, the battle would have crashed.');
+					defense = 1;
+				}
 			}
 
 			// Self destruct moves halve defense at this point.
