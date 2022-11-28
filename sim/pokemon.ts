@@ -795,13 +795,13 @@ export class Pokemon {
 		return {targets, pressureTargets};
 	}
 
-	ignoringAbility(noCheckShield?: boolean) {
+	ignoringAbility() {
 		if (this.battle.gen >= 5 && !this.isActive) return true;
 		if (this.getAbility().isPermanent) return false;
 		if (this.volatiles['gastroacid']) return true;
 
 		// Check if any active pokemon have the ability Neutralizing Gas
-		if (!noCheckShield && this.hasItem('Ability Shield') || this.ability === ('neutralizinggas' as ID)) return false;
+		if (this.hasItem('Ability Shield') || this.ability === ('neutralizinggas' as ID)) return false;
 		for (const pokemon of this.battle.getAllActive()) {
 			// can't use hasAbility because it would lead to infinite recursion
 			if (pokemon.ability === ('neutralizinggas' as ID) && !pokemon.volatiles['gastroacid'] &&
@@ -1741,10 +1741,9 @@ export class Pokemon {
 	}
 
 	hasItem(item: string | string[]) {
-		if (this.ignoringItem()) return false;
-		const ownItem = this.item;
-		if (!Array.isArray(item)) return ownItem === toID(item);
-		return item.map(toID).includes(ownItem);
+		if (!Array.isArray(item)) item = [item];
+		item = item.map(toID);
+		return item.includes(this.item) && !this.ignoringItem();
 	}
 
 	clearItem() {
@@ -1779,10 +1778,9 @@ export class Pokemon {
 	}
 
 	hasAbility(ability: string | string[]) {
-		if (this.ignoringAbility(ability === 'klutz')) return false;
-		const ownAbility = this.ability;
-		if (!Array.isArray(ability)) return ownAbility === toID(ability);
-		return ability.map(toID).includes(ownAbility);
+		if (!Array.isArray(ability)) ability = [ability];
+		ability = ability.map(toID);
+		return ability.includes(this.ability) && !this.ignoringAbility();
 	}
 
 	clearAbility() {
