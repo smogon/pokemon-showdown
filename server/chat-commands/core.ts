@@ -1396,9 +1396,7 @@ export const commands: Chat.ChatCommands = {
 		if (!target) return this.errorReply(this.tr`Provide a valid format.`);
 		const originalFormat = Dex.formats.get(target);
 		// Note: The default here of [Gen 9] Anything Goes isn't normally hit; since the web client will send a default format
-		const format = originalFormat.effectType === 'Format' ? originalFormat : Dex.formats.get(
-			'[Gen 9] Anything Goes'
-		);
+		const format = originalFormat.effectType === 'Format' ? originalFormat : Dex.formats.get('[Gen 9] Anything Goes');
 		if (format.effectType !== 'Format') return this.popupReply(this.tr`Please provide a valid format.`);
 
 		return TeamValidatorAsync.get(format.id).validateTeam(user.battleSettings.team).then(result => {
