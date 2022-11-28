@@ -168,13 +168,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.effectState.move = 'rage';
 			},
 			onLockMove: 'rage',
-			onTryHit(target, source, move) {
-				if (target.boosts.atk < 6 && move.id === 'disable') {
-					this.boost({atk: 1});
-				}
-			},
 			onHit(target, source, move) {
-				if (target.boosts.atk < 6 && move.category !== 'Status') {
+				if (target.boosts.atk < 6 && (move.category !== 'Status' || move.id === 'disable')) {
 					this.boost({atk: 1});
 				}
 			},
@@ -253,9 +248,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				if (move.volatileStatus && target === source) return;
 				let damage = this.actions.getDamage(source, target, move);
-				if (!damage) return null;
+				if (!damage && damage !== 0) return null;
 				damage = this.runEvent('SubDamage', target, source, move, damage);
-				if (!damage) return damage;
+				if (!damage && damage !== 0) return damage;
 				target.volatiles['substitute'].hp -= damage;
 				source.lastDamage = damage;
 				this.lastDamage = damage;

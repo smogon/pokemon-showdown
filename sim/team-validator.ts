@@ -87,6 +87,7 @@ export class PokemonSources {
 
 	babyOnly?: string;
 	sketchMove?: string;
+	dreamWorldMoveCount: number;
 	hm?: string;
 	restrictiveMoves?: string[];
 	/** Obscure learn methods */
@@ -99,6 +100,7 @@ export class PokemonSources {
 		this.isHidden = null;
 		this.limitedEggMoves = undefined;
 		this.moveEvoCarryCount = 0;
+		this.dreamWorldMoveCount = 0;
 	}
 	size() {
 		if (this.sourcesBefore) return Infinity;
@@ -182,6 +184,7 @@ export class PokemonSources {
 			}
 		}
 		this.moveEvoCarryCount += other.moveEvoCarryCount;
+		this.dreamWorldMoveCount += other.dreamWorldMoveCount;
 		if (other.sourcesAfter > this.sourcesAfter) this.sourcesAfter = other.sourcesAfter;
 		if (other.isHidden) this.isHidden = true;
 	}
@@ -411,6 +414,10 @@ export class TeamValidator {
 			name = `${set.name} (${set.species})`;
 		}
 
+		if (!set.teraType && this.gen === 9) {
+			set.teraType = species.types[0];
+		}
+
 		if (!set.level) set.level = ruleTable.defaultLevel;
 
 		let adjustLevel = ruleTable.adjustLevel;
@@ -461,7 +468,7 @@ export class TeamValidator {
 		let outOfBattleSpecies = species;
 		let tierSpecies = species;
 		if (ability.id === 'battlebond' && species.id === 'greninja') {
-			outOfBattleSpecies = dex.species.get('greninjaash');
+			if (this.gen < 9) outOfBattleSpecies = dex.species.get('greninjaash');
 			if (ruleTable.has('obtainableformes')) {
 				tierSpecies = outOfBattleSpecies;
 			}
@@ -513,6 +520,14 @@ export class TeamValidator {
 				problems.push(`${name}'s Hidden Power type (${set.hpType}) is invalid.`);
 			} else {
 				set.hpType = type.name;
+			}
+		}
+		if (set.teraType) {
+			const type = dex.types.get(set.teraType);
+			if (!type.exists) {
+				problems.push(`${name}'s Terastal type (${set.teraType}) is invalid.`);
+			} else {
+				set.teraType = type.name;
 			}
 		}
 
@@ -1319,6 +1334,11 @@ export class TeamValidator {
 				set.moves[behemothMove] = 'ironhead';
 			}
 		}
+
+		// Temporary backwards compatability until Pokemon HOME update
+		if (species.baseSpecies === 'Vivillon' && species.forme !== 'Fancy' && dex.gen === 9) {
+			set.species = 'Vivillon-Fancy';
+		}
 		return problems;
 	}
 
@@ -1565,6 +1585,9 @@ export class TeamValidator {
 			}
 			if (banReason === '') return null;
 		}
+		if (move.id === 'revivalblessing') {
+			return "Revival Blessing is currently not implemented. It won't be usable until it is.";
+		}
 
 		return null;
 	}
@@ -1776,10 +1799,14 @@ export class TeamValidator {
 		const ruleTable = this.ruleTable;
 		if (ruleTable.has('obtainablemoves')) {
 			const ssMaxSourceGen = setSources.maxSourceGen();
-			const tradebackEligible = dex.gen === 2 && species.gen === 1;
+			const tradebackEligible = dex.gen === 2 && (species.gen === 1 || eventSpecies.gen === 1);
 			if (ssMaxSourceGen && eventData.generation > ssMaxSourceGen && !tradebackEligible) {
 				if (fastReturn) return true;
 				problems.push(`${name} must not have moves only learnable in gen ${ssMaxSourceGen}${etc}.`);
+			}
+
+			if (eventData.from === "Gen 5 Dream World" && setSources.dreamWorldMoveCount > 1) {
+				problems.push(`${name} can only have one Dream World move.`);
 			}
 		}
 		if (ruleTable.has('obtainableabilities')) {
@@ -1809,7 +1836,7 @@ export class TeamValidator {
 			}
 			if (species.abilities['H']) {
 				const isHidden = (set.ability === species.abilities['H']);
-				if (!isHidden && eventData.isHidden) {
+				if (!isHidden && eventData.isHidden && dex.gen <= 8) {
 					if (fastReturn) return true;
 					problems.push(`${name} must have its Hidden Ability${etc}.`);
 				}
@@ -1968,7 +1995,7 @@ export class TeamValidator {
 		while (species?.name && !alreadyChecked[species.id]) {
 			alreadyChecked[species.id] = true;
 			if (dex.gen <= 2 && species.gen === 1) tradebackEligible = true;
-			const learnset = dex.species.getLearnset(species.id);
+			let learnset = dex.species.getLearnset(species.id);
 			if (!learnset) {
 				if ((species.changesFrom || species.baseSpecies) !== species.name) {
 					// forme without its own learnset
@@ -1983,6 +2010,10 @@ export class TeamValidator {
 					// Formats should replace the `Obtainable Moves` rule if they want to
 					// allow pokemon without learnsets.
 					return ` can't learn any moves at all.`;
+				}
+				if (species.prevo && dex.species.getLearnset(toID(species.prevo))) {
+					learnset = dex.species.getLearnset(toID(species.prevo));
+					continue;
 				}
 				// should never happen
 				throw new Error(`Species with no learnset data: ${species.id}`);
@@ -2138,6 +2169,7 @@ export class TeamValidator {
 						// DW moves:
 						//   only if that was the source
 						moveSources.add(learned + species.id);
+						moveSources.dreamWorldMoveCount++;
 					} else if (learned.charAt(1) === 'V' && this.minSourceGen < learnedGen) {
 						// Virtual Console or Let's Go transfer moves:
 						//   only if that was the source

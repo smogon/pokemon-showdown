@@ -48,7 +48,7 @@ export const commands: Chat.ChatCommands = {
 	om: 'othermetas',
 	othermetas(target, room, user) {
 		target = toID(target);
-		const omLink = `- <a href="https://www.smogon.com/forums/forums/531/">Other Metagames Forum</a><br />`;
+		const omLink = `- <a href="https://www.smogon.com/forums/forums/733/">Other Metagames Forum</a><br />`;
 
 		if (!target) {
 			this.runBroadcast();

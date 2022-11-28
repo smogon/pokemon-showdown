@@ -42,7 +42,7 @@ describe('Rock Head', function () {
 	it('should not block indirect damage', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Rampardos', ability: 'rockhead', moves: ['splash']}]});
-		battle.setPlayer('p2', {team: [{species: 'Abomasnow', ability: 'snowwarning', moves: ['splash']}]});
+		battle.setPlayer('p2', {team: [{species: 'Abomasnow', ability: 'snowwarning', moves: ['toxic']}]});
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices());
 	});
 });

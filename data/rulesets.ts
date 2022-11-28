@@ -15,6 +15,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "The standard ruleset for all offical Smogon singles tiers (Ubers, OU, etc.)",
 		ruleset: [
 			'Obtainable', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
+			'Min Source Gen = 9',
 		],
 	},
 	standardnext: {
@@ -69,6 +70,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "The standard ruleset for all official Smogon doubles tiers",
 		ruleset: [
 			'Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Gravity Sleep Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
+			'Min Source Gen = 9',
 		],
 	},
 	standardoms: {
@@ -76,7 +78,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Standard OMs',
 		desc: "The standard ruleset for all Smogon OMs (Almost Any Ability, STABmons, etc.)",
 		ruleset: [
-			'Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'Dynamax Clause', 'HP Percentage Mod', 'Cancel Mod', 'Overflow Stat Mod',
+			'Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Overflow Stat Mod',
+			// 'Min Source Gen = 9', - crashes for some reason
 		],
 	},
 	standardnatdex: {
@@ -87,17 +90,12 @@ export const Rulesets: {[k: string]: FormatData} = {
 			'Obtainable', '+Unobtainable', '+Past', 'Sketch Gen 8 Moves', 'Team Preview', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
 		],
 		onValidateSet(set) {
-			// These Pokemon are still unobtainable
-			const unobtainables = [
-				'Eevee-Starter', 'Floette-Eternal', 'Pichu-Spiky-eared', 'Pikachu-Belle', 'Pikachu-Cosplay', 'Pikachu-Libre',
-				'Pikachu-PhD', 'Pikachu-Pop-Star', 'Pikachu-Rock-Star', 'Pikachu-Starter', 'Eternatus-Eternamax',
-			];
 			const species = this.dex.species.get(set.species);
-			if (unobtainables.includes(species.name)) {
+			if (species.natDexTier === 'Illegal') {
 				if (this.ruleTable.has(`+pokemon:${species.id}`)) return;
 				return [`${set.name || set.species} does not exist in the National Dex.`];
 			}
-			if (species.tier === "Unreleased") {
+			if (species.natDexTier === "Unreleased") {
 				const basePokemon = this.toID(species.baseSpecies);
 				if (this.ruleTable.has(`+pokemon:${species.id}`) || this.ruleTable.has(`+basepokemon:${basePokemon}`)) {
 					return;
@@ -113,6 +111,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 				return [`${set.name}'s item ${item.name} does not exist in Gen ${this.dex.gen}.`];
 			}
 		},
+	},
+	draft: {
+		effectType: 'ValidatorRule',
+		name: 'Draft',
+		desc: "The custom Draft League ruleset",
+		ruleset: [
+			'Obtainable', '+Unreleased', '+CAP', 'Team Preview', 'Sleep Clause Mod', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
+		],
+		// timer: {starting: 60 * 60, grace: 0, addPerTurn: 10, maxPerTurn: 100, timeoutAutoChoose: true},
 	},
 	obtainable: {
 		effectType: 'ValidatorRule',
@@ -501,6 +508,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Little Cup',
 		desc: "Only allows Pok&eacute;mon that can evolve and don't have any prior evolutions",
 		ruleset: ['Max Level = 5'],
+		banlist: ['Stantler'],
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species || set.name);
 			if (species.prevo && this.dex.species.get(species.prevo).gen <= this.gen) {
@@ -591,12 +599,44 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
-	"2abilityclause": {
+	doubleitemclause: {
 		effectType: 'ValidatorRule',
-		name: '2 Ability Clause',
-		desc: "Prevents teams from having more than two Pok&eacute;mon with the same ability",
+		name: 'Double Item Clause',
+		desc: "Prevents teams from having more than two Pok&eacute;mon with the same item",
 		onBegin() {
-			this.add('rule', '2 Ability Clause: Limit two of each ability');
+			this.add('rule', 'Double Item Clause: Limit two of each item');
+		},
+		onValidateTeam(team) {
+			const itemTable: {[k: string]: number} = {};
+			for (const set of team) {
+				const item = this.toID(set.item);
+				if (!item) continue;
+				if (item in itemTable) {
+					if (itemTable[item] >= 2) {
+						return [
+							`You are limited to two of each item by Double Item Clause.`,
+							`(You have more than two ${this.dex.items.get(item).name})`,
+						];
+					}
+					itemTable[item]++;
+				} else {
+					itemTable[item] = 1;
+				}
+			}
+		},
+	},
+	abilityclause: {
+		effectType: 'ValidatorRule',
+		name: 'Ability Clause',
+		desc: "Prevents teams from having Pok&eacute;mon with the same ability than allowed",
+		hasValue: 'positive-integer',
+		onBegin() {
+			const num = this.ruleTable.valueRules.get('abilityclause');
+			this.add('rule', `${num} Ability Clause: Limit ${num} of each ability`);
+		},
+		onValidateRule(value) {
+			const allowedAbilities = parseInt(value);
+			if (allowedAbilities < 1) throw new Error(`Must allow at least 1 of each ability`);
 		},
 		onValidateTeam(team) {
 			if (this.format.id === 'gen8multibility') return;
@@ -619,14 +659,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 				teravolt: 'moldbreaker',
 				turboblaze: 'moldbreaker',
 			};
+			const num = parseInt(this.ruleTable.valueRules.get('abilityclause')!);
 			for (const set of team) {
 				let ability = this.toID(set.ability);
 				if (!ability) continue;
 				if (ability in base) ability = base[ability] as ID;
-				if ((abilityTable.get(ability) || 0) >= 2) {
+				if ((abilityTable.get(ability) || 0) >= num) {
 					return [
-						`You are limited to two of each ability by 2 Ability Clause.`,
-						`(You have more than two ${this.dex.abilities.get(ability).name} variants)`,
+						`You are limited to ${num} of each ability by Ability Clause.`,
+						`(You have more than ${num} ${this.dex.abilities.get(ability).name} variant${num === 1 ? '' : 's'})`,
 					];
 				}
 				abilityTable.set(ability, (abilityTable.get(ability) || 0) + 1);
@@ -1077,7 +1118,19 @@ export const Rulesets: {[k: string]: FormatData} = {
 				}
 				if (!typeTable.length) return [`Your team must share a type.`];
 			}
+			for (const set of team) {
+				if (this.gen === 9 && set.teraType &&
+						!typeTable.includes(set.teraType) && this.ruleTable.has(`enforcesameteratype`)) {
+					return [`${set.species}'s Tera Type must match the team's type.`];
+				}
+			}
 		},
+	},
+	enforcesameteratype: {
+		effectType: 'ValidatorRule',
+		name: 'Enforce Same Tera Type',
+		desc: "Forces Pok&eacute;mon to have a Tera Type matching one of their original types.",
+		// implemented in sametypeclause
 	},
 	megarayquazaclause: {
 		effectType: 'Rule',
@@ -1093,7 +1146,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 	dynamaxclause: {
 		effectType: 'Rule',
 		name: 'Dynamax Clause',
-		desc: "Prevents Pok&eacute;mon from dynamaxing",
+		desc: "Prevents Pok&eacute;mon from Dynamaxing",
 		onValidateSet(set) {
 			if (set.gigantamax) {
 				return [
@@ -1107,6 +1160,17 @@ export const Rulesets: {[k: string]: FormatData} = {
 				side.dynamaxUsed = true;
 			}
 			this.add('rule', 'Dynamax Clause: You cannot dynamax');
+		},
+	},
+	terastalclause: {
+		effectType: 'Rule',
+		name: 'Terastal Clause',
+		desc: "Prevents Pok&eacute;mon from Terastallizing",
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				pokemon.canTerastallize = null;
+			}
+			this.add('rule', 'Terastal Clause: You cannot Terastallize');
 		},
 	},
 	arceusevlimit: {
@@ -1164,7 +1228,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const minSourceGen = parseInt(value);
 			if (minSourceGen > this.dex.gen) {
 				// console.log(this.ruleTable);
-				throw new Error(`Invalid generation ${minSourceGen}${this.ruleTable.blame('minsourcegen')} for a Gen ${this.dex.gen} format`);
+				throw new Error(`Invalid generation ${minSourceGen}${this.ruleTable.blame('minsourcegen')} for a Gen ${this.dex.gen} format (${this.format.name})`);
 			}
 		},
 	},
@@ -1179,7 +1243,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 				const speciesTypes: string[] = [];
 				const moveTypes: string[] = [];
 				// BDSP can't import Pokemon from Home, so it shouldn't grant moves from archaic species types
-				const minObtainableSpeciesGen = this.dex.currentMod === 'gen8bdsp' ? this.dex.gen : species.gen;
+				const minObtainableSpeciesGen = this.dex.currentMod === 'gen8bdsp' || this.dex.gen === 9 ?
+					this.dex.gen : species.gen;
 				for (let i = this.dex.gen; i >= minObtainableSpeciesGen && i >= move.gen; i--) {
 					const dex = this.dex.forGen(i);
 					moveTypes.push(dex.moves.get(move.name).type);

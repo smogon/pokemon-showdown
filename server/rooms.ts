@@ -33,7 +33,9 @@ import {RoomSection, RoomSections} from './chat-commands/room-settings';
 import {QueuedHunt} from './chat-plugins/scavengers';
 import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
 import {RepeatedPhrase} from './chat-plugins/repeats';
-import {PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, RoomBattleOptions} from "./room-battle";
+import {
+	PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, RoomBattleOptions, PlayerIndex,
+} from "./room-battle";
 import {RoomGame, SimpleRoomGame, RoomGamePlayer} from './room-game';
 import {MinorActivity, MinorActivityData} from './room-minor-activity';
 import {Roomlogs} from './roomlogs';
@@ -59,6 +61,7 @@ interface ChatRoomTable {
 	section?: string;
 	subRooms?: string[];
 	spotlight?: string;
+	privacy: RoomSettings['isPrivate'];
 }
 
 interface ShowRequest {
@@ -87,7 +90,7 @@ export interface RoomSettings {
 	readonly autojoin?: boolean;
 	aliases?: string[];
 	banwords?: string[];
-	isPrivate?: boolean | 'hidden' | 'voice';
+	isPrivate?: PrivacySetting;
 	modjoin?: AuthLevel | true | null;
 	modchat?: AuthLevel | null;
 	staffRoom?: boolean;
@@ -140,6 +143,7 @@ export interface RoomSettings {
 
 export type MessageHandler = (room: BasicRoom, message: string) => void;
 export type Room = GameRoom | ChatRoom;
+export type PrivacySetting = boolean | 'hidden' | 'voice' | 'unlisted';
 
 import type {AnnouncementData} from './chat-plugins/announcements';
 import type {PollData} from './chat-plugins/poll';
@@ -801,7 +805,7 @@ export abstract class BasicRoom {
 		// this doesn't update parentid or subroom user symbols because it's
 		// intended to be used for cleanup only
 	}
-	setPrivate(privacy: boolean | 'voice' | 'hidden') {
+	setPrivate(privacy: PrivacySetting) {
 		this.settings.isPrivate = privacy;
 		this.saveSettings();
 
@@ -1307,6 +1311,7 @@ export class GlobalRoomState {
 				`SET input_log = EXCLUDED.input_log, players = EXCLUDED.players, title = EXCLUDED.title, rated = EXCLUDED.rated`,
 				[room.roomid, log.join('\n'), players, room.title, room.battle.rated, timerData]
 			);
+			room.battle.timer.stop();
 			count++;
 		}
 		return count;
@@ -1366,7 +1371,13 @@ export class GlobalRoomState {
 		// we reuse these player objects explicitly so if
 		// someone has already started the timer, their settings carry over (should reduce bugs)
 		// and it's safe to do this first because we know these users were already in the battle
-		const player = room.battle.players[idx];
+		let player = room.battle.players[idx];
+		if (!player) {
+			// this can happen sometimes
+			player = room.battle.players[idx] = new Rooms.RoomBattlePlayer(
+				user, room.battle, (idx + 1) as PlayerIndex
+			);
+		}
 		player.id = user.id;
 		player.name = user.name;
 		room.battle.playerTable[user.id] = player;
@@ -1384,6 +1395,14 @@ export class GlobalRoomState {
 			const battle = room.battle;
 			if (!battle) continue;
 			const idx = battle.options.players?.indexOf(user.id);
+			if (battle.ended) {
+				// TODO: Do we want to rejoin the battle room here?
+				// We might need to cache the join so it only happens once -
+				// just running joinRoom would mean they join the room every refresh until the battle expires
+
+				// user.joinRoom(room);
+				continue;
+			}
 			if (typeof idx === 'number' && idx > -1) {
 				this.rejoinBattle(room, user, idx);
 			}
@@ -1547,13 +1566,18 @@ export class GlobalRoomState {
 		for (const room of this.chatRooms) {
 			if (!room) continue;
 			if (room.parent) continue;
-			if (room.settings.isPrivate && !(room.settings.isPrivate === 'voice' && user.tempGroup !== ' ')) continue;
+			if (
+				room.settings.modjoin ||
+				(room.settings.isPrivate && !(['hidden', 'voice'] as any).includes(room.settings.isPrivate)) ||
+				(room.settings.isPrivate === 'voice' && user.tempGroup === ' ')
+			) continue;
 			const roomData: ChatRoomTable = {
 				title: room.title,
 				desc: room.settings.desc || '',
 				userCount: room.userCount,
 				section: room.settings.section ?
 					(RoomSections.sectionNames[room.settings.section] || room.settings.section) : undefined,
+				privacy: !room.settings.isPrivate ? undefined : room.settings.isPrivate,
 			};
 			const subrooms = room.getSubRooms().map(r => r.title);
 			if (subrooms.length) roomData.subRooms = subrooms;

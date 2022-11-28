@@ -1,7 +1,7 @@
 import {PRNG, PRNGSeed} from '../../../sim/prng';
-import RandomTeams from '../../random-teams';
+import RandomGen8Teams from '../gen8/random-teams';
 
-export class RandomSharedPowerTeams extends RandomTeams {
+export class RandomSharedPowerTeams extends RandomGen8Teams {
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 	}

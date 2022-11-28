@@ -24,7 +24,7 @@ describe('Spite', function () {
 
 	// Eerie Spell and G-Max Depletion should also behave this way
 	it(`should succeed on Max Moves, and announce the base move that PP was deducted from`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(8).createBattle([[
 			{species: 'Gengar', moves: ['shadowball']},
 		], [
 			{species: 'Snorlax', moves: ['spite']},

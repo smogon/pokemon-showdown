@@ -630,13 +630,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.effectState.move = 'rage';
 			},
 			onLockMove: 'rage',
-			onTryHit(target, source, move) {
-				if (target.boosts.atk < 6 && move.id === 'disable') {
-					this.boost({atk: 1});
-				}
-			},
 			onHit(target, source, move) {
-				if (target.boosts.atk < 6 && move.category !== 'Status') {
+				// Disable and exploding moves boost Rage even if they miss/fail, so they are dealt with separately.
+				if (target.boosts.atk < 6 && (move.category !== 'Status' && !move.selfdestruct)) {
 					this.boost({atk: 1});
 				}
 			},
@@ -760,6 +756,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			status: 'psn',
 		},
 	},
+	sonicboom: {
+		inherit: true,
+		ignoreImmunity: true,
+	},
 	softboiled: {
 		inherit: true,
 		heal: null,
@@ -831,9 +831,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// Substitute, here we deliberately use the uncapped damage when tracking lastDamage etc.
 				// Also, multi-hit moves must always deal the same damage as the first hit for any subsequent hits
 				let uncappedDamage = move.hit > 1 ? source.lastDamage : this.actions.getDamage(source, target, move);
-				if (!uncappedDamage) return null;
+				if (!uncappedDamage && uncappedDamage !== 0) return null;
 				uncappedDamage = this.runEvent('SubDamage', target, source, move, uncappedDamage);
-				if (!uncappedDamage) return uncappedDamage;
+				if (!uncappedDamage && uncappedDamage !== 0) return uncappedDamage;
 				source.lastDamage = uncappedDamage;
 				this.lastDamage = uncappedDamage;
 				target.volatiles['substitute'].hp -= uncappedDamage > target.volatiles['substitute'].hp ?
@@ -844,13 +844,23 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				} else {
 					this.add('-activate', target, 'Substitute', '[damage]');
 				}
-				// Drain/recoil does not happen if the substitute breaks
+				// Drain/recoil/secondary effect confusion do not happen if the substitute breaks
 				if (target.volatiles['substitute']) {
 					if (move.recoil) {
 						this.damage(Math.round(uncappedDamage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
 					}
 					if (move.drain) {
 						this.heal(Math.ceil(uncappedDamage * move.drain[0] / move.drain[1]), source, target, 'drain');
+					}
+					if (move.secondary?.volatileStatus === 'confusion') {
+						const secondary = move.secondary;
+						if (secondary.chance === undefined || this.randomChance(Math.ceil(secondary.chance * 256 / 100) - 1, 256)) {
+							target.addVolatile(move.secondary.volatileStatus, source, move);
+							this.hint(
+								"In Gen 1, moves that inflict confusion as a secondary effect can confuse targets with a Substitute, " +
+								"as long as the move does not break the Substitute."
+							);
+						}
 					}
 				}
 				this.runEvent('AfterSubDamage', target, source, move, uncappedDamage);
