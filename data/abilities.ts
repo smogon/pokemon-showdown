@@ -4831,10 +4831,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 
 			if (this.checkMoveMakesContact(move, source, target)) {
+				const targetCanBeSet = this.runEvent('SetAbility', target, source, this.effect, source.ability);
+				if (!targetCanBeSet) return targetCanBeSet;
 				const sourceAbility = source.setAbility('wanderingspirit', target);
 				if (!sourceAbility) return;
-				const targetCanBeSet = this.runEvent('SetAbility', target, source, this.effect, sourceAbility);
-				if (!targetCanBeSet) return targetCanBeSet;
 				if (target.isAlly(source)) {
 					this.add('-activate', target, 'Skill Swap', '', '', '[of] ' + source);
 				} else {
