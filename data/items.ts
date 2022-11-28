@@ -9,7 +9,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (effect && effect.effectType === 'Ability' && !effect.fullname?.endsWith('Trace')) {
 				this.add('-ability', source, effect);
 			}
-			this.add('-activate', target, 'item: Ability Shield');
+			this.add('-block', target, 'item: Ability Shield');
 			return null;
 		},
 		// Mold Breaker protection implemented in Battle.suppressingAbility() within sim/battle.ts
