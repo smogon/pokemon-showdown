@@ -173,6 +173,29 @@ describe('Ability Shield', function () {
 		assert.statStage(battle.p2.active[0], 'atk', 0);
 	});
 
+	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9414273
+	it(`should not trigger holder's Trace`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', ability: 'trace', item: 'abilityshield', moves: ['splash']},
+		], [
+			{species: 'weezinggalar', ability: 'levitate', moves: ['splash']},
+		]]);
+
+		assert.notEqual(battle.p1.active[0].ability, 'levitate', `Holder should not trace ability`);
+	});
+
+	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9414273
+	it.skip(`should not trigger holder's Trace even after losing the item`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', ability: 'trace', item: 'abilityshield', moves: ['splash']},
+		], [
+			{species: 'weezinggalar', ability: 'levitate', moves: ['trick']},
+		]]);
+
+		battle.makeChoices();
+		assert.notEqual(battle.p1.active[0].ability, 'levitate', `Holder should not trace ability`);
+	});
+
 	// TODO Add future tests for losing Ability Shield vs Neutralizing Gas/Mold Breaker/Gastro Acid?
 	//
 	//      No confirmed research yet for these, but presumably Neutralizing Gas & Mold
