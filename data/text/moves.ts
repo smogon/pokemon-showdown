@@ -5080,6 +5080,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	revivalblessing: {
 		name: "Revival Blessing",
 		shortDesc: "Revives a fainted Pokemon to 50% HP.",
+		heal: "  [POKEMON] was revived and is ready to fight again!",
 	},
 	risingvoltage: {
 		name: "Rising Voltage",
