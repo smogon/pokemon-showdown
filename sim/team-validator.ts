@@ -2130,7 +2130,7 @@ export class TeamValidator {
 						if (learnedGen === dex.gen && learned.charAt(1) !== 'R') {
 							// current-gen level-up, TM or tutor moves:
 							//   always available
-							if (learned !== '8E' && babyOnly) setSources.babyOnly = babyOnly;
+							if (!(learnedGen >= 8 && learned.charAt(1) === 'E') && babyOnly) setSources.babyOnly = babyOnly;
 							if (!moveSources.moveEvoCarryCount) return null;
 						}
 						// past-gen level-up, TM, or tutor moves:
