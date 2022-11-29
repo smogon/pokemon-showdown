@@ -974,7 +974,7 @@ export const Formats: FormatList = [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3660421/">Linked</a>`,
 		],
 
-		mod: 'linked',
+		mod: 'gen8linked',
 		searchShow: false,
 		ruleset: ['Standard OMs', 'Sleep Clause Mod'],
 		banlist: [
