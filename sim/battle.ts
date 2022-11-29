@@ -2615,7 +2615,7 @@ export class Battle {
 
 		for (let i = 0; i < this.sides.length; i++) {
 			let reviveSwitch = false; // Used to ignore the fake switch for Revival Blessing
-			if (switches[i] && !this.canSwitch(this.sides[i]) && !reviveSwitch) {
+			if (switches[i] && !this.canSwitch(this.sides[i])) {
 				for (const pokemon of this.sides[i].active) {
 					if (this.sides[i].slotConditions[pokemon.position]['revivalblessing']) {
 						reviveSwitch = true;

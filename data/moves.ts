@@ -15284,6 +15284,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		slotCondition: 'revivalblessing',
+		// No this not a real switchout move
+		// This is needed to trigger a switch protocol to choose a fainted party member
+		// Feel free to refactor
 		selfSwitch: true,
 		condition: {
 			duration: 1,
