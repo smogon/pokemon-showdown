@@ -600,7 +600,10 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'STABmons Move Legality', 'Sleep Moves Clause', 'Min Source Gen = 9'],
 		banlist: ['Dragapult', 'Flutter Mane', 'Komala', 'Koraidon', 'Miraidon', 'Arena Trap', 'Moody', 'Shadow Tag', 'Booster Energy', 'King\'s Rock', 'Baton Pass'],
-		restricted: ['Acupressure', 'Astral Barrage', 'Belly Drum', 'No Retreat', 'Shed Tail', 'Shell Smash', 'V-create', 'Victory Dance', 'Wicked Blow'],
+		restricted: [
+			'Acupressure', 'Astral Barrage', 'Belly Drum', 'Extreme Speed', 'Fillet Away', 'Last Respects',
+			'No Retreat', 'Shed Tail', 'Shell Smash', 'V-create', 'Victory Dance', 'Wicked Blow',
+		],
 	},
 	{
 		name: "[Gen 9] NFE",
