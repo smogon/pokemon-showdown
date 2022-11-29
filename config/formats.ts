@@ -123,7 +123,7 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles'],
-		banlist: ['DUber'],
+		banlist: ['DUber', 'Shadow Tag'],
 	},
 	{
 		name: "[Gen 9] 2v2 Doubles",
