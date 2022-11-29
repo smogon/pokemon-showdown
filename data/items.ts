@@ -2,20 +2,17 @@ export const Items: {[itemid: string]: ItemData} = {
 	abilityshield: {
 		name: "Ability Shield",
 		spritenum: 0, // TODO
+		ignoreKlutz: true,
+		// Neutralizing Gas protection implemented in Pokemon.ignoringAbility() within sim/pokemon.ts
+		// and in Neutralizing Gas itself within data/abilities.ts
 		onSetAbility(ability, target, source, effect) {
-			// TODO research behavior with Ability suppression and Mold Breaker effects
-			if (target !== source) {
-				this.add('-activate', target, 'item: Ability Shield');
-				return false;
+			if (effect && effect.effectType === 'Ability' && !effect.fullname?.endsWith('Trace')) {
+				this.add('-ability', source, effect);
 			}
+			this.add('-block', target, 'item: Ability Shield');
+			return null;
 		},
-		onTryHit(source, target, move) {
-			// TODO refactor Skill Swap to use setAbility()
-			if (target !== source && move.id === 'skillswap') {
-				this.add('-activate', target, 'item: Ability Shield');
-				return false;
-			}
-		},
+		// Mold Breaker protection implemented in Battle.suppressingAbility() within sim/battle.ts
 		num: 1881,
 		gen: 9,
 	},
