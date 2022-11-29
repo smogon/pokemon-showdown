@@ -15585,11 +15585,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		onAfterMove(source, target, move) {
 			const rolloutData = source.volatiles["rollout"];
-			if (!rolloutData) {
-				// User fainted from something like Destiny Bond when using rollout
-				return;
-			}
 			if (
+				rolloutData &&
 				rolloutData.hitCount === 5 &&
 				rolloutData.contactHitCount < 5
 				// this conditions can only be met in gen7 and gen8dlc1
