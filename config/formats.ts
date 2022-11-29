@@ -60,7 +60,10 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['Same Type Clause', 'Terastal Clause', 'Standard'],
-		banlist: ['Koraidon', 'Miraidon', 'Moody', 'Shadow Tag', 'Damp Rock', 'Focus Band', 'King\'s Rock', 'Quick Claw', 'Baton Pass'],
+		banlist: [
+			'Houndstone', 'Koraidon', 'Miraidon', 'Palafin', 'Moody', 'Shadow Tag', 'Booster Energy',
+			'Damp Rock', 'Focus Band', 'King\'s Rock', 'Quick Claw', 'Baton Pass',
+		],
 	},
 	{
 		name: "[Gen 9] 1v1",
