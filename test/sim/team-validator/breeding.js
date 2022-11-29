@@ -125,7 +125,7 @@ describe('Team Validator', function () {
 			{species: 'marowak', moves: ['swordsdance', 'rockslide', 'bodyslam']},
 		];
 		assert.legalTeam(team, 'gen2ou');
-		assert.legalTeam(team, 'gen2ou');
+		assert.legalTeam(team, 'gen1tradebacksou');
 		assert.false.legalTeam(team, 'gen1ou');
 	});
 
