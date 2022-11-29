@@ -44,8 +44,10 @@ interface MoveFlags {
 	punch?: 1; // Power is multiplied by 1.2 when used by a Pokemon with the Ability Iron Fist.
 	recharge?: 1; // If this move is successful, the user must recharge on the following turn and cannot make a move.
 	reflectable?: 1; // Bounced back to the original user by Magic Coat or the Ability Magic Bounce.
+	slicing?: 1; // Power is multiplied by 1.5 when used by a Pokemon with the Ability Sharpness.
 	snatch?: 1; // Can be stolen from the original user and instead used by another Pokemon using Snatch.
 	sound?: 1; // Has no effect on Pokemon with the Ability Soundproof.
+	wind?: 1; // Activates the Wind Power and Wind Rider Abilities.
 }
 
 export interface HitEffect {
@@ -142,7 +144,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	type: string;
 	priority: number;
 	target: MoveTarget;
-	flags: AnyObject;
+	flags: MoveFlags;
 	/** Hidden Power */
 	realMove?: string;
 
