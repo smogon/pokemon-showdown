@@ -126,6 +126,18 @@ export const Formats: FormatList = [
 		banlist: ['DUber', 'Shadow Tag'],
 	},
 	{
+		name: "[Gen 9] Doubles LC",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3710957/">Doubles LC</a>`,
+		],
+
+		mod: 'gen9',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Standard Doubles', 'Little Cup'],
+		banlist: ['Murkrow', 'Scyther', 'Sneasel'],
+	},
+	{
 		name: "[Gen 9] 2v2 Doubles",
 		desc: `Double battle where you bring four Pok&eacute;mon to Team Preview and choose only two.`,
 		threads: [
