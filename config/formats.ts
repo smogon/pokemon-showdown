@@ -2344,6 +2344,13 @@ export const Formats: FormatList = [
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
 	},
 	{
+		name: "[Gen 8] Random Battle (Blitz)",
+		desc: `gotta go fast!! like Random Battle, but you only have 10 seconds per turn.`,
+		mod: 'gen8',
+		team: 'random',
+		ruleset: ['[Gen 8] Random Battle', 'Blitz'],
+	},
+	{
 		name: "[Gen 8] Free-For-All Random Battle",
 
 		mod: 'gen8',
