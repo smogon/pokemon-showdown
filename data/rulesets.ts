@@ -1240,14 +1240,14 @@ export const Rulesets: {[k: string]: FormatData} = {
 		},
 	},
 
-	specialruleallowsunobtainablemoves: {
+	omunobtainablemoves: {
 		effectType: 'ValidatorRule',
-		name: 'Special Rule Allows Unobtainable Moves',
+		name: 'OM Unobtainable Moves',
 		desc: "Allows special move legality rules to allow moves which are otherwise unobtainable without hacking or glitches",
 		// Hardcoded in team-validator.ts
 		onValidateRule() {
 			if (!this.ruleTable.checkCanLearn?.[0]) {
-				throw new Error(`A format with the "Special Rule Allows Unobtainable Moves"${this.ruleTable.blame('specialruleallowsunobtainablemoves')} rule must also have a special move legality rule.`);
+				throw new Error(`A format with the "OM Unobtainable Moves"${this.ruleTable.blame('omunobtainablemoves')} rule must also have a special move legality rule.`);
 			}
 		},
 	},
@@ -1255,7 +1255,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'ValidatorRule',
 		name: 'STABmons Move Legality',
 		desc: "Allows Pok&eacute;mon to use any move that they or a previous evolution/out-of-battle forme share a type with",
-		ruleset: ['Special Rule Allows Unobtainable Moves'],
+		ruleset: ['OM Unobtainable Moves'],
 		checkCanLearn(move, species, setSources, set) {
 			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('standardnatdex');
 			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted(`move:${move.id}`)) {
@@ -1305,7 +1305,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'ValidatorRule',
 		name: 'Alphabet Cup Move Legality',
 		desc: "Allows Pok&eacute;mon to use any move that shares the same first letter as their name or a previous evolution's name.",
-		ruleset: ['Special Rule Allows Unobtainable Moves'],
+		ruleset: ['OM Unobtainable Moves'],
 		checkCanLearn(move, species, setSources, set) {
 			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('standardnatdex');
 			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted(`move:${move.id}`)) {
@@ -1326,7 +1326,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'ValidatorRule',
 		name: 'Sketchmons Move Legality',
 		desc: "Pok&eacute;mon can learn one of any move they don't normally learn.",
-		ruleset: ['Special Rule Allows Unobtainable Moves'],
+		ruleset: ['OM Unobtainable Moves'],
 		checkCanLearn(move, species, lsetData, set) {
 			const problem = this.checkCanLearn(move, species, lsetData, set);
 			if (!problem) return null;

@@ -644,17 +644,17 @@ export class TeamValidator {
 
 			problem = this.checkMove(set, move, setHas);
 			if (problem) {
-				let allowedBySpecialRule;
+				let allowedByOM;
 				if (problem.endsWith('is not obtainable without hacking or glitches.') &&
-					ruleTable.has('specialruleallowsunobtainablemoves')) {
+					ruleTable.has('omunobtainablemoves')) {
 					problem = `${name}'s ${problem}`;
 					const baseCheckCanLearn = this.checkCanLearn;
 					// tell the custom move legality check that the move is illegal by default
 					this.checkCanLearn = () => problem;
-					allowedBySpecialRule = !ruleTable.checkCanLearn![0].call(this, move, outOfBattleSpecies, setSources, set);
+					allowedByOM = !ruleTable.checkCanLearn![0].call(this, move, outOfBattleSpecies, setSources, set);
 					this.checkCanLearn = baseCheckCanLearn;
 				}
-				if (!allowedBySpecialRule) {
+				if (!allowedByOM) {
 					problems.push(problem);
 				} else {
 					moveLegalityWhitelist[move.id] = true;
