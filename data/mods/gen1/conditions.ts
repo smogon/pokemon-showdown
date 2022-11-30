@@ -14,7 +14,6 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'brn');
-			target.addVolatile('brnattackdrop');
 		},
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf(pokemon) {
@@ -23,9 +22,6 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 			if (pokemon.volatiles['residualdmg']) {
 				this.hint("In Gen 1, Toxic's counter is retained after Rest and applies to PSN/BRN.", true);
 			}
-		},
-		onSwitchIn(pokemon) {
-			pokemon.addVolatile('brnattackdrop');
 		},
 		onAfterSwitchInSelf(pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
@@ -36,7 +32,6 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'par');
-			target.addVolatile('parspeeddrop');
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove(pokemon) {
@@ -51,9 +46,6 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 				pokemon.removeVolatile('partialtrappinglock');
 				return false;
 			}
-		},
-		onSwitchIn(pokemon) {
-			pokemon.addVolatile('parspeeddrop');
 		},
 	},
 	slp: {
