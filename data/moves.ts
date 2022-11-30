@@ -21,8 +21,10 @@ pulse: Power is multiplied by 1.5 when used by a Pokemon with the Mega Launcher 
 punch: Power is multiplied by 1.2 when used by a Pokemon with the Iron Fist Ability.
 recharge: If this move is successful, the user must recharge on the following turn and cannot make a move.
 reflectable: Bounced back to the original user by Magic Coat or the Magic Bounce Ability.
+slicing: Power is multiplied by 1.5 when used by a Pokemon with the Ability Sharpness.
 snatch: Can be stolen from the original user and instead used by another Pokemon using Snatch.
 sound: Has no effect on Pokemon with the Soundproof Ability.
+wind: Activates the Wind Power and Wind Rider Abilities.
 
 */
 
@@ -2204,9 +2206,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		// critRatio: 2,
 		secondary: {
 			chance: 100,
-			onHit(target) {
-				target.side.addSideCondition('spikes');
-			},
+			sideCondition: 'spikes',
 		},
 		target: "normal",
 		type: "Dark",
@@ -16979,7 +16979,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onModifyMove(move, source) {
 			if (!source.volatiles['skydrop']) {
 				move.accuracy = true;
-				move.flags.contact = 0;
+				delete move.flags['contact'];
 			}
 		},
 		onMoveFail(target, source) {
@@ -18408,13 +18408,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Stone Axe",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
 		// critRatio: 2,
 		secondary: {
 			chance: 100,
-			onHit(target) {
-				target.side.addSideCondition('stealthrock');
-			},
+			sideCondition: 'stealthrock',
 		},
 		target: "normal",
 		type: "Rock",
