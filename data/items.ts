@@ -2829,7 +2829,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 206,
 		gen: 3,
-		isNonstandard: "Unobtainable",
 	},
 	latiasite: {
 		name: "Latiasite",
