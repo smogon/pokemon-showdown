@@ -6804,8 +6804,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	triplearrows: {
 		name: "Triple Arrows",
-		desc: "Has a higher chance for a critical hit. Has a 50% chance to lower the target's Defense by 1 stage and a 30% chance to make it flinch.",
-		shortDesc: "High critical hit ratio. 50% -1 Def. 30% to flinch.",
+		desc: "Has a 50% chance to lower the target's Defense by 1 stage, a 30% chance to make it flinch, and a higher chance for a critical hit.",
+		shortDesc: "High critical hit ratio. 50% -1 Def. 30% flinch.",
 	},
 	tripleaxel: {
 		name: "Triple Axel",
