@@ -587,18 +587,18 @@ export class Pokemon {
 	}
 
 	/**
-	 * Gets the Pokemon's best storedStat.
+	 * Gets the Pokemon's best stat.
 	 * Moved to its own method due to frequent use of the same code.
 	 * Used by Beast Boost, Quark Drive, and Protosynthesis.
 	 */
-	getBestStoredStat(): StatIDExceptHP {
+	getBestStat(unboosted?: boolean, unmodified?: boolean): StatIDExceptHP {
 		let statName: StatIDExceptHP = 'atk';
 		let bestStat = 0;
-		let s: StatIDExceptHP;
-		for (s in this.storedStats) {
-			if (this.storedStats[s] > bestStat) {
-				statName = s;
-				bestStat = this.storedStats[s];
+		const stats: StatIDExceptHP[] = ['atk', 'def', 'spa', 'spd', 'spe'];
+		for (const i of stats) {
+			if (this.getStat(i, unboosted, unmodified) > bestStat) {
+				statName = i;
+				bestStat = this.getStat(i, unboosted, unmodified);
 			}
 		}
 
@@ -796,30 +796,28 @@ export class Pokemon {
 	}
 
 	ignoringAbility() {
+		if (this.battle.gen >= 5 && !this.isActive) return true;
+		if (this.getAbility().isPermanent) return false;
+		if (this.volatiles['gastroacid']) return true;
+
 		// Check if any active pokemon have the ability Neutralizing Gas
-		let neutralizinggas = false;
+		if (this.hasItem('Ability Shield') || this.ability === ('neutralizinggas' as ID)) return false;
 		for (const pokemon of this.battle.getAllActive()) {
 			// can't use hasAbility because it would lead to infinite recursion
 			if (pokemon.ability === ('neutralizinggas' as ID) && !pokemon.volatiles['gastroacid'] &&
 				!pokemon.transformed && !pokemon.abilityState.ending) {
-				neutralizinggas = true;
-				break;
+				return true;
 			}
 		}
 
-		return !!(
-			(this.battle.gen >= 5 && !this.isActive) ||
-			((this.volatiles['gastroacid'] || (neutralizinggas && this.ability !== ('neutralizinggas' as ID))) &&
-			!this.getAbility().isPermanent
-			)
-		);
+		return false;
 	}
 
 	ignoringItem() {
 		return !!(
 			this.itemState.knockedOff || // Gen 3-4
 			(this.battle.gen >= 5 && !this.isActive) ||
-			(this.hasAbility('klutz') && !this.getItem().ignoreKlutz) ||
+			(!this.getItem().ignoreKlutz && this.hasAbility('klutz')) ||
 			this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']
 		);
 	}
@@ -1743,10 +1741,12 @@ export class Pokemon {
 	}
 
 	hasItem(item: string | string[]) {
-		if (this.ignoringItem()) return false;
-		const ownItem = this.item;
-		if (!Array.isArray(item)) return ownItem === toID(item);
-		return item.map(toID).includes(ownItem);
+		if (Array.isArray(item)) {
+			if (!item.map(toID).includes(this.item)) return false;
+		} else {
+			if (toID(item) !== this.item) return false;
+		}
+		return !this.ignoringItem();
 	}
 
 	clearItem() {
@@ -1760,7 +1760,8 @@ export class Pokemon {
 		if (!isFromFormeChange) {
 			if (ability.isPermanent || this.getAbility().isPermanent) return false;
 		}
-		if (!this.battle.runEvent('SetAbility', this, source, this.battle.effect, ability)) return false;
+		const setAbilityEvent: boolean | null = this.battle.runEvent('SetAbility', this, source, this.battle.effect, ability);
+		if (!setAbilityEvent) return setAbilityEvent;
 		this.battle.singleEvent('End', this.battle.dex.abilities.get(oldAbility), this.abilityState, this, source);
 		if (this.battle.effect && this.battle.effect.effectType === 'Move' && !isFromFormeChange) {
 			this.battle.add('-endability', this, this.battle.dex.abilities.get(oldAbility), '[from] move: ' +
@@ -1780,10 +1781,12 @@ export class Pokemon {
 	}
 
 	hasAbility(ability: string | string[]) {
-		if (this.ignoringAbility()) return false;
-		const ownAbility = this.ability;
-		if (!Array.isArray(ability)) return ownAbility === toID(ability);
-		return ability.map(toID).includes(ownAbility);
+		if (Array.isArray(ability)) {
+			if (!ability.map(toID).includes(this.ability)) return false;
+		} else {
+			if (toID(ability) !== this.ability) return false;
+		}
+		return !this.ignoringAbility();
 	}
 
 	clearAbility() {

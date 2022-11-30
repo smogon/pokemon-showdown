@@ -47,6 +47,15 @@ assert.atMost = function (value, threshold, message) {
 	});
 };
 
+assert.legalTeam = function (team, format, message) {
+	const actual = require('../sim/team-validator').TeamValidator.get(format).validateTeam(team);
+	if (actual === null) return;
+	throw new AssertionError({
+		message: message || "Expected team to be valid, but it was rejected because:\n" + actual.join("\n"),
+		stackStartFunction: assert.legalTeam,
+	});
+};
+
 assert.species = function (pokemon, species, message) {
 	const actual = pokemon.species.name;
 	if (actual === species) return;

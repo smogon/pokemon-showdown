@@ -15,15 +15,15 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	lansatberry: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	marangaberry: {
 		inherit: true,
 		isNonstandard: null,
 	},
 	micleberry: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	pixieplate: {
 		inherit: true,
 		isNonstandard: null,
 	},

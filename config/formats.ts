@@ -60,7 +60,10 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['Same Type Clause', 'Terastal Clause', 'Standard'],
-		banlist: ['Koraidon', 'Miraidon', 'Moody', 'Shadow Tag', 'Damp Rock', 'Focus Band', 'King\'s Rock', 'Quick Claw', 'Baton Pass'],
+		banlist: [
+			'Houndstone', 'Koraidon', 'Miraidon', 'Palafin', 'Moody', 'Shadow Tag', 'Booster Energy',
+			'Damp Rock', 'Focus Band', 'King\'s Rock', 'Quick Claw', 'Baton Pass',
+		],
 	},
 	{
 		name: "[Gen 9] 1v1",
@@ -120,7 +123,19 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles'],
-		banlist: ['DUber'],
+		banlist: ['DUber', 'Shadow Tag'],
+	},
+	{
+		name: "[Gen 9] Doubles LC",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3710957/">Doubles LC</a>`,
+		],
+
+		mod: 'gen9',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Standard Doubles', 'Little Cup'],
+		banlist: ['Murkrow', 'Scyther', 'Sneasel'],
 	},
 	{
 		name: "[Gen 9] 2v2 Doubles",
@@ -168,10 +183,10 @@ export const Formats: FormatList = [
 			'HP Percentage Mod', 'Cancel Mod',
 		],
 		banlist: [
-			'Pokestar Spirit', 'Shedinja + Sturdy', 'Cheek Pouch', 'Cursed Body', 'Dry Skin', 'Earth Eater', 'Fur Coat', 'Gorilla Tactics',
+			'Pokestar Spirit', 'Shedinja + Sturdy', 'Cheek Pouch', 'Commander', 'Cursed Body', 'Dry Skin', 'Earth Eater', 'Fur Coat', 'Gorilla Tactics',
 			'Grassy Surge', 'Huge Power', 'Ice Body', 'Iron Barbs', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Perish Body', 'Poison Heal',
 			'Power Construct', 'Pressure', 'Pure Power', 'Rain Dish', 'Rough Skin', 'Sand Spit', 'Sand Stream', 'Seed Sower', 'Stamina',
-			'Volt Absorb', 'Water Absorb', 'Wonder Guard', 'Abomasite', 'Aguav Berry', 'Assault Vest', 'Berry', 'Berry Juice', 'Berserk Gene',
+			'Volt Absorb', 'Water Absorb', 'Wonder Guard', 'Aguav Berry', 'Assault Vest', 'Berry', 'Berry Juice', 'Berserk Gene',
 			'Black Sludge', 'Enigma Berry', 'Figy Berry', 'Gold Berry', 'Iapapa Berry', 'Kangaskhanite', 'Leftovers', 'Mago Berry', 'Medichamite',
 			'Steel Memory', 'Oran Berry', 'Rocky Helmet', 'Shell Bell', 'Sitrus Berry', 'Wiki Berry', 'Harvest + Jaboca Berry',
 			'Harvest + Rowap Berry',
@@ -227,10 +242,11 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard NatDex', 'Same Type Clause', 'Enforce Same Tera Type', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Sleep Clause Mod', 'Evasion Items Clause'],
 		banlist: [
-			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Darkrai', 'Deoxys-Base', 'Deoxys-Attack', 'Dialga', 'Eternatus', 'Genesect', 'Giratina',
-			'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Hoopa-Unbound', 'Koraidon', 'Kyogre', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Marshadow',
-			'Mewtwo', 'Miraidon', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Solgaleo', 'Xerneas',
-			'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zekrom', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Baton Pass',
+			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Darkrai', 'Deoxys-Base', 'Deoxys-Attack', 'Dialga', 'Eternatus', 'Genesect', 'Gengar-Mega',
+			'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Hoopa-Unbound', 'Koraidon', 'Kyogre', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna',
+			'Marshadow', 'Mewtwo', 'Miraidon', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Solgaleo',
+			'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Zygarde-Complete', 'Moody', 'Shadow Tag',
+			'Power Construct', 'Focus Band', 'King\'s Rock', 'Quick Claw', 'Terrain Extender', 'Baton Pass',
 		],
 	},
 	{
@@ -596,7 +612,10 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'STABmons Move Legality', 'Sleep Moves Clause', 'Min Source Gen = 9'],
 		banlist: ['Dragapult', 'Flutter Mane', 'Komala', 'Koraidon', 'Miraidon', 'Arena Trap', 'Moody', 'Shadow Tag', 'Booster Energy', 'King\'s Rock', 'Baton Pass'],
-		restricted: ['Acupressure', 'Astral Barrage', 'Belly Drum', 'No Retreat', 'Shed Tail', 'Shell Smash', 'V-create', 'Victory Dance', 'Wicked Blow'],
+		restricted: [
+			'Acupressure', 'Astral Barrage', 'Belly Drum', 'Extreme Speed', 'Fillet Away', 'Last Respects',
+			'No Retreat', 'Shed Tail', 'Shell Smash', 'V-create', 'Victory Dance', 'Wicked Blow',
+		],
 	},
 	{
 		name: "[Gen 9] NFE",
@@ -2090,9 +2109,9 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] OU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3672210/">OU Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3672556/">OU Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3674058/">OU Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3672210/">SS OU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3672556/">SS OU Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3674058/">SS OU Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
@@ -2295,6 +2314,13 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		team: 'random',
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
+	},
+	{
+		name: "[Gen 8] Random Battle (Blitz)",
+		desc: `gotta go fast!! like Random Battle, but you only have 10 seconds per turn.`,
+		mod: 'gen8',
+		team: 'random',
+		ruleset: ['[Gen 8] Random Battle', 'Blitz'],
 	},
 	{
 		name: "[Gen 8] Free-For-All Random Battle",
@@ -2662,9 +2688,9 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3676539/">Ubers Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3675564/">Ubers Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3675194/">Ubers Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3676539/">SS Ubers Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3675564/">SS Ubers Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3675194/">SS Ubers Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
@@ -2726,9 +2752,9 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] LC",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3656348/">LC Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3661419/">LC Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3657374/">LC Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3656348/">SS LC Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3661419/">SS LC Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3657374/">SS LC Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
@@ -2743,9 +2769,9 @@ export const Formats: FormatList = [
 		name: "[Gen 8] Monotype",
 		desc: `All the Pok&eacute;mon on a team must share a type.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3672167/">Monotype Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3702647/">Monotype Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3673165">Monotype Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3672167/">SS Monotype Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3702647/">SS Monotype Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3673165/">SS Monotype Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
@@ -2763,9 +2789,9 @@ export const Formats: FormatList = [
 		name: "[Gen 8] 1v1",
 		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3656364/">1v1 Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3664157/">1v1 Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3657779/">1v1 Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3656364/">SS 1v1 Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3664157/">SS 1v1 Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3657779/">SS 1v1 Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
@@ -2808,7 +2834,7 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 8] PU'],
 		banlist: [
 			'PU', 'Arctovish', 'Aurorus', 'Basculin', 'Centiskorch', 'Drampa', 'Exeggutor-Alola', 'Gallade', 'Glastrier', 'Haunter', 'Magmortar', 'Magneton',
-			'Malamar', 'Ninjask', 'Omastar', 'Rotom-Frost', 'Turtonator', 'Vanilluxe', 'Vikavolt', 'Silvally-Dragon', 'Silvally-Ground', 'Sneasel',
+			'Malamar', 'Ninjask', 'Omastar', 'Perrserker', 'Rotom-Frost', 'Turtonator', 'Vanilluxe', 'Vikavolt', 'Silvally-Dragon', 'Silvally-Ground', 'Sneasel',
 			'Damp Rock', 'Grassy Seed',
 		],
 	},
@@ -2828,9 +2854,9 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] National Dex",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3666135/">National Dex Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3667921/">National Dex Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3666572/">National Dex Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3666135/">SS National Dex Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3667921/">SS National Dex Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3666572/">SS National Dex Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
@@ -2840,7 +2866,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] Free-For-All",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3681641/">Free-For-All</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3681641/">SS Free-For-All</a>`,
 		],
 
 		mod: 'gen8',
@@ -2904,9 +2930,9 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] Doubles OU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3689189/">Doubles OU Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3658826/">Doubles OU Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3673519/">Doubles OU Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3689189/">SS Doubles OU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3658826/">SS Doubles OU Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3673519/">SS Doubles OU Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
