@@ -2203,11 +2203,17 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
-		// critRatio: 2,
-		secondary: {
-			chance: 100,
-			sideCondition: 'spikes',
+		onHit(target, source) {
+			for (const side of source.side.foeSidesWithConditions()) {
+				side.addSideCondition('spikes');
+			}
 		},
+		onAfterSubDamage(damage, target, source, effect) {
+			for (const side of source.side.foeSidesWithConditions()) {
+				side.addSideCondition('spikes');
+			}
+		},
+		// critRatio: 2,
 		target: "normal",
 		type: "Dark",
 	},
