@@ -17,4 +17,8 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			'Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'Dynamax Clause', 'HP Percentage Mod', 'Cancel Mod', 'Overflow Stat Mod',
 		],
 	},
+	obtainablemoves: {
+		inherit: true,
+		banlist: [],
+	},
 };
