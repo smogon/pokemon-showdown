@@ -2900,7 +2900,7 @@ export const pages: Chat.PageTable = {
 		}
 		this.title += ` ${target}`;
 		if (!Config.usesqlite) {
-			return this.errorReply(`The alternate account log is current disabled.`);
+			return this.errorReply(`The alternate account log is currently disabled.`);
 		}
 		const rawLimit = query.shift() || "100";
 		const num = parseInt(rawLimit);
