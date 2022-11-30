@@ -143,9 +143,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				(!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)
 			) {
 				pokemon.deductPP(move, null, target);
-				// On gen 1 moves are stored when they are chosen and a PP is deducted.
-				pokemon.side.lastMove = move;
-				pokemon.lastMove = move;
 			} else {
 				sourceEffect = move;
 			}
@@ -187,6 +184,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (move.id !== 'mirrormove' ||
 					(!pokemon.side.foe.active[0]?.lastMove || pokemon.side.foe.active[0].lastMove?.id === 'mirrormove')) {
 					// The move is our 'final' move (a failed Mirror Move, or any move that isn't Metronome or Mirror Move).
+					pokemon.side.lastMove = move;
+					pokemon.lastMove = move;
 					this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 
 					// If target fainted
