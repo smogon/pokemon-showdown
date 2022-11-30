@@ -1317,7 +1317,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	direclaw: {
 		name: "Dire Claw",
 		desc: "Has a 50% chance to cause the target to either fall asleep, become poisoned, or become paralyzed.",
-		shortDesc: "50% chance to sleep or poison or paralyze target.",
+		shortDesc: "50% chance to sleep, poison, or paralyze target.",
 	},
 	disable: {
 		name: "Disable",
