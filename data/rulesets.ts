@@ -179,6 +179,17 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Obtainable Moves',
 		desc: "Makes sure moves are learnable by the species.",
 		// Hardcoded in team-validator.ts
+		banlist: [
+			// Only obtainable as Egg move, no valid parent
+			'Happiny + Heal Bell', 'Chansey + Heal Bell', 'Blissey + Heal Bell',
+			'Psyduck + Simple Beam', 'Golduck + Simple Beam',
+			'Spoink + Simple Beam', 'Grumpig + Simple Beam',
+			// Only obtainable as Egg move, all parents unobtainable
+			'Qwilfish + Barb Barrage',
+			'Stantler + Psyshield Bash',
+			'Rellor + Cosmic Power', 'Rabsca + Cosmic Power',
+			'Growlithe + Raging Fury', 'Arcanine + Raging Fury',
+		],
 	},
 	obtainableabilities: {
 		effectType: 'ValidatorRule',
