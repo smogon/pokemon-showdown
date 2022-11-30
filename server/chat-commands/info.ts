@@ -2907,8 +2907,8 @@ export const pages: Chat.PageTable = {
 		if (num > 3000) {
 			return this.errorReply(`3000 is the maximum number of results from the alternate account log.`);
 		}
-		if (isNaN(num)) {
-			return this.errorReply(`The max results must be a real number (received "${rawLimit}")`);
+		if (isNaN(num) || num < 1) {
+			return this.errorReply(`The max results must be a real number that is at least one (received "${rawLimit}")`);
 		}
 		const showIPs = user.can('globalban');
 		const results = await Chat.database.all(
