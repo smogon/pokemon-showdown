@@ -1,6 +1,6 @@
 export const Scripts: ModdedBattleScriptsData = {
-	gen: 8,
-	inherit: 'gen8',
+	gen: 9,
+	inherit: 'gen9',
 	nextTurn() {
 		this.turn++;
 		this.lastSuccessfulMoveThisTurn = null;
