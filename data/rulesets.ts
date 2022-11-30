@@ -1412,7 +1412,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 	},
 	'sketchpostgen7moves': {
 		effectType: 'ValidatorRule',
-		name: 'Sketch Post-Gen-7 Moves',
+		name: 'Sketch Post-Gen 7 Moves',
 		desc: "Allows Pokémon who learn Sketch to learn any Gen 8+ move (normally, Sketch is not usable in Gen 8+).",
 		// Implemented in sim/team-validator.ts
 	},
