@@ -424,7 +424,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (pokemon.status === 'tox') {
 					pokemon.setStatus('psn');
 				}
-				// should only clear a specific set of volatiles and does not clear the toxic counter
+				// should only clear a specific set of volatiles
+				// while technically the toxic counter shouldn't be cleared, the preserved toxic counter is never used again
+				// in-game, so it is equivalent to just clear it.
 				const silentHack = '|[silent]';
 				const silentHackVolatiles = ['disable', 'confusion'];
 				const hazeVolatiles: {[key: string]: string} = {
@@ -435,6 +437,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					'leechseed': 'move: Leech Seed',
 					'lightscreen': 'Light Screen',
 					'reflect': 'Reflect',
+					'residualdmg': 'Toxic counter',
 				};
 				for (const v in hazeVolatiles) {
 					if (!pokemon.removeVolatile(v)) {
