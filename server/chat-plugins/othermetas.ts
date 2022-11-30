@@ -633,7 +633,7 @@ export const commands: Chat.ChatCommands = {
 				    deltas.types[1] = evo.types[1] || evo.types[0];
 			    }
 			    if (deltas.types.length) {
-				// Undefined type remover
+					// Undefined type remover
 				    deltas.types = deltas.types.filter((type: string | undefined) => type !== undefined);
 
 					if (deltas.types[0] === deltas.types[1]) deltas.types = [deltas.types[0]];
