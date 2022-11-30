@@ -23,6 +23,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	pixieplate: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	rowapberry: {
 		inherit: true,
 		isNonstandard: null,

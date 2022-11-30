@@ -4076,6 +4076,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Fairy",
 		num: 644,
 		gen: 6,
+		isNonstandard: "Unobtainable",
 	},
 	plumefossil: {
 		name: "Plume Fossil",
