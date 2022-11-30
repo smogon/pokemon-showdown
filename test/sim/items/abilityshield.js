@@ -47,7 +47,7 @@ describe('Ability Shield', function () {
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9411146
-	it.skip(`should protect the holder's ability against Neutralizing Gas`, function () {
+	it(`should protect the holder's ability against Neutralizing Gas`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'sturdy', item: 'abilityshield', moves: ['splash'], level: 5},
 		], [
@@ -62,7 +62,7 @@ describe('Ability Shield', function () {
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9412194
-	it.skip(`should protect the holder's ability against Mold Breaker`, function () {
+	it(`should protect the holder's ability against Mold Breaker`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'sturdy', item: 'abilityshield', moves: ['splash'], level: 5},
 		], [
@@ -76,7 +76,7 @@ describe('Ability Shield', function () {
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9403448
-	it.skip(`should protect the holder's ability against Gastro Acid`, function () {
+	it(`should protect the holder's ability against Gastro Acid`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'sturdy', item: 'abilityshield', moves: ['splash'], level: 5},
 		], [
@@ -105,7 +105,7 @@ describe('Ability Shield', function () {
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9412999
-	it.skip(`should unsuppress the holder's ability if Ability Shield is acquired after Neutralizing Gas has come into effect`, function () {
+	it(`should unsuppress the holder's ability if Ability Shield is acquired after Neutralizing Gas has come into effect`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'sturdy', moves: ['splash'], level: 5},
 		], [
@@ -119,7 +119,7 @@ describe('Ability Shield', function () {
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9412999
-	it.skip(`should not be suppressed by Klutz`, function () {
+	it(`should not be suppressed by Klutz`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'klutz', item: 'abilityshield', moves: ['tackle']},
 		], [
@@ -146,7 +146,7 @@ describe('Ability Shield', function () {
 		assert.equal(battle.p2.active[0].ability, 'levitate', `Opponent should retain ability`);
 	});
 
-	it.skip(`should protect the holder's ability against Skill Swap, even if used by the holder`, function () {
+	it(`should protect the holder's ability against Skill Swap, even if used by the holder`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'shadowtag', item: 'abilityshield', moves: ['skillswap']},
 		], [
@@ -185,7 +185,7 @@ describe('Ability Shield', function () {
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9414273
-	it.skip(`should not trigger holder's Trace even after losing the item`, function () {
+	it(`should not trigger holder's Trace even after losing the item`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'trace', item: 'abilityshield', moves: ['splash']},
 		], [
