@@ -1415,11 +1415,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	goodasgold: {
 		onTryHit(target, source, move) {
-			if (move.category !== 'Status' || target === source) {
-				return;
+			if (move.category === 'Status' && target !== source) {
+				this.add('-immune', target, '[from] ability: Good as Gold');
+				return null;
 			}
-			this.add('-ability', target, 'Good as Gold');
-			return null;
 		},
 		isBreakable: true,
 		name: "Good as Gold",
