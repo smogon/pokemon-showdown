@@ -78,7 +78,7 @@ export const Formats: FormatList = [
 			'Standard', 'Terastal Clause', 'Accuracy Moves Clause', '!Sleep Clause Mod',
 		],
 		banlist: [
-			'Dragonite', 'Koraidon', 'Mimikyu', 'Miraidon', 'Moody', 'Focus Band', 'Focus Sash',
+			'Dragonite', 'Koraidon', 'Mimikyu', 'Miraidon', 'Scream Tail', 'Moody', 'Focus Band', 'Focus Sash',
 			'King\'s Rock', 'Quick Claw', 'Acupressure', 'Hypnosis', 'Perish Song', 'Sing',
 		],
 	},
