@@ -33,13 +33,6 @@ export const Formats: FormatList = [
 		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'King\'s Rock', 'Baton Pass'],
 	},
 	{
-		name: "[Gen 9] UU",
-
-		mod: 'gen9',
-		ruleset: ['[Gen 9] OU'],
-		banlist: ['OU', 'UUBL'],
-	},
-	{
 		name: "[Gen 9] Ubers",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3710870/">Ubers Metagame Discussion</a>`,
@@ -48,6 +41,13 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard'],
 		banlist: ['AG', 'King\'s Rock', 'Baton Pass'],
+	},
+	{
+		name: "[Gen 9] UU",
+
+		mod: 'gen9',
+		ruleset: ['[Gen 9] OU'],
+		banlist: ['OU', 'UUBL'],
 	},
 	{
 		name: "[Gen 9] LC",
