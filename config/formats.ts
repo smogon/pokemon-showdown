@@ -490,7 +490,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'sharedpower',
-		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Sleep Clause Mod', 'Min Source Gen = 9'],
+		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Sleep Moves Clause', 'Min Source Gen = 9'],
 		banlist: [
 			'Chien-Pao', 'Gholdengo', 'Koraidon', 'Komala', 'Miraidon', 'Arena Trap', 'Armor Tail', 'Dazzling', 'Drought', 'Electric Surge',
 			'Guts', 'Huge Power', 'Imposter', 'Magic Bounce', 'Magnet Pull', 'Mold Breaker', 'Moody', 'Pure Power', 'Queenly Majesty',
