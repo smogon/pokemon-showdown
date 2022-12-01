@@ -15,7 +15,6 @@ describe('[Gen 1] Stat Drop Overflow', function () {
 		battle.setPlayer('p1', {team: [{species: "Mewtwo", moves: ['amnesia', 'psychic'], evs: {'spa': 104, 'spd': 104}, ivs: {'spa': 3, 'spd': 3}}]});
 		battle.setPlayer('p2', {team: [{species: "Slowbro", moves: ['amnesia', 'psychic', 'surf'], evs: {'spa': 255, 'spd': 255}, dvs: {'spa': 15, 'spd': 15}}]});
 		const mewtwo = battle.p1.active[0];
-		console.log(mewtwo.storedStats['spa']);
 		assert(mewtwo.storedStats['spa'] === 341);
 		battle.makeChoices();
 		battle.makeChoices();
