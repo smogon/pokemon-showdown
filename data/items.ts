@@ -416,6 +416,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 43,
 		gen: 2,
+		isNonstandard: "Past",
 	},
 	berrysweet: {
 		name: "Berry Sweet",
