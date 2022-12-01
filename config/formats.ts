@@ -99,7 +99,7 @@ export const Formats: FormatList = [
 		banlist: [
 			'Great Tusk', 'Brute Bonnet', 'Sandy Shocks', 'Scream Tail', 'Flutter Mane', 'Slither Wing', 'Roaring Moon',
 			'Iron Treads', 'Iron Moth', 'Iron Hands', 'Iron Jugulis', 'Iron Thorns', 'Iron Bundle', 'Iron Valiant',
-			'Ting-Lu', 'Chienpao', 'Wo-Chien', 'Chi-Yu'
+			'Ting-Lu', 'Chienpao', 'Wo-Chien', 'Chi-Yu',
 		],
 	},
 	{
@@ -166,7 +166,7 @@ export const Formats: FormatList = [
 		banlist: [
 			'Great Tusk', 'Brute Bonnet', 'Sandy Shocks', 'Scream Tail', 'Flutter Mane', 'Slither Wing', 'Roaring Moon',
 			'Iron Treads', 'Iron Moth', 'Iron Hands', 'Iron Jugulis', 'Iron Thorns', 'Iron Bundle', 'Iron Valiant',
-			'Ting-Lu', 'Chienpao', 'Wo-Chien', 'Chi-Yu'
+			'Ting-Lu', 'Chienpao', 'Wo-Chien', 'Chi-Yu',
 		],
 	},
 	{
