@@ -545,19 +545,6 @@ export const Formats: FormatList = [
 		mod: 'fullpotential',
 		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause'],
 		banlist: ['Koraidon', 'Miraidon', 'Arena Trap', 'Chlorophyll', 'Moody', 'Sand Rush', 'Shadow Tag', 'Slush Rush', 'Swift Swim', 'Unburden', 'King\'s Rock', 'Baton Pass'],
-		onModifyMove(move, pokemon, target) {
-			let highestStat: StatIDExceptHP = 'atk';
-			let previousHighestStatNum = 0;
-			for (const statid of Dex.stats.ids()) {
-				if (statid === 'hp') continue;
-				const statNum = pokemon.getStat(statid);
-				if (statNum > previousHighestStatNum) {
-					previousHighestStatNum = statNum;
-					highestStat = statid;
-				}
-			}
-			move.overrideOffensiveStat = highestStat;
-		},
 	},
 
 	// Other Metagames
