@@ -96,11 +96,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer'],
-		banlist: [
-			'Great Tusk', 'Brute Bonnet', 'Sandy Shocks', 'Scream Tail', 'Flutter Mane', 'Slither Wing', 'Roaring Moon',
-			'Iron Treads', 'Iron Moth', 'Iron Hands', 'Iron Jugulis', 'Iron Thorns', 'Iron Bundle', 'Iron Valiant',
-			'Ting-Lu', 'Chienpao', 'Wo-Chien', 'Chi-Yu',
-		],
+		banlist: ['Sub-Legendary'],
 	},
 	{
 		name: "[Gen 9] Custom Game",
@@ -163,11 +159,7 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		gameType: 'doubles',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer'],
-		banlist: [
-			'Great Tusk', 'Brute Bonnet', 'Sandy Shocks', 'Scream Tail', 'Flutter Mane', 'Slither Wing', 'Roaring Moon',
-			'Iron Treads', 'Iron Moth', 'Iron Hands', 'Iron Jugulis', 'Iron Thorns', 'Iron Bundle', 'Iron Valiant',
-			'Ting-Lu', 'Chienpao', 'Wo-Chien', 'Chi-Yu',
-		],
+		banlist: ['Sub-Legendary'],
 	},
 	{
 		name: "[Gen 9] Doubles Custom Game",
