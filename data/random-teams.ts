@@ -792,20 +792,14 @@ export class RandomTeams {
 			} while (m.length < setMoveCount);
 
 			// Random EVs
-			const evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
-			if (this.gen === 6) {
-				let evpool = 510;
-				do {
-					const x = this.sample(Dex.stats.ids());
-					const y = this.random(Math.min(256 - evs[x], evpool + 1));
-					evs[x] += y;
-					evpool -= y;
-				} while (evpool > 0);
-			} else {
-				for (const x of Dex.stats.ids()) {
-					evs[x] = this.random(256);
-				}
-			}
+			const evs: StatsTable = {
+				hp: this.random(256),
+				atk: this.random(256),
+				def: this.random(256),
+				spa: this.random(256),
+				spd: this.random(256),
+				spe: this.random(256),
+			};
 
 			// Random IVs
 			const ivs: StatsTable = {
