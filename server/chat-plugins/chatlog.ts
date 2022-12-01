@@ -559,6 +559,11 @@ export const LogViewer = new class {
 type SearchMatch = readonly [string, string, string, string, string];
 
 export abstract class Searcher {
+	static checkEnabled() {
+		if (Config.disableripgrep) {
+			throw new Chat.ErrorMessage("Log searching functionality is currently disabled.");
+		}
+	}
 	roomstatsCache = new Map<string, RoomStats>();
 	constructUserRegex(user: string) {
 		const id = toID(user);
@@ -1075,6 +1080,9 @@ export class RipgrepLogSearcher extends Searcher {
 		let {raw, search, room: roomid, date: month, args} = opts;
 		let results: string[];
 		let lineCount = 0;
+		if (Config.disableripgrep) {
+			return {lineCount: 0, results: []};
+		}
 		if (!raw) {
 			search = this.constructSearchRegex(search);
 		}
@@ -1388,6 +1396,7 @@ export const pages: Chat.PageTable = {
 		}
 
 		if (date && search) {
+			Searcher.checkEnabled();
 			return LogSearcher.runSearch(this, search, roomid, isAll ? null : date, limit);
 		} else if (date) {
 			if (date === 'today') {
@@ -1402,6 +1411,7 @@ export const pages: Chat.PageTable = {
 		}
 	},
 	roomstats(args, user) {
+		Searcher.checkEnabled();
 		const room = this.extractRoom();
 		if (room) {
 			this.checkCan('mute', null, room);

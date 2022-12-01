@@ -995,6 +995,13 @@ export const commands: Chat.ChatCommands = {
 		`/savelearnsets - Saves the learnset list currently active on the server. Requires: &`,
 	],
 
+	toggleripgrep(target, room, user) {
+		this.checkCan('rangeban');
+		Config.disableripgrep = !Config.disableripgrep;
+		this.addGlobalModAction(`${user.name} ${Config.disableripgrep ? 'disabled' : 'enabled'} Ripgrep-related functionality.`);
+	},
+	toggleripgrephelp: [`/toggleripgrep - Disable/enable all functionality depending on Ripgrep. Requires: &`],
+
 	disablecommand(target, room, user) {
 		this.checkCan('makeroom');
 		if (!toID(target)) {
