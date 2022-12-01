@@ -33,6 +33,13 @@ export const Formats: FormatList = [
 		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'King\'s Rock', 'Baton Pass'],
 	},
 	{
+		name: "[Gen 9] UU",
+
+		mod: 'gen9',
+		ruleset: ['[Gen 9] OU'],
+		banlist: ['OU', 'UUBL'],
+	},
+	{
 		name: "[Gen 9] Ubers",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3710870/">Ubers Metagame Discussion</a>`,
@@ -125,6 +132,14 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles'],
 		banlist: ['DUber', 'Shadow Tag'],
+	},
+	{
+		name: "[Gen 9] Doubles UU",
+
+		mod: 'gen9',
+		gameType: 'doubles',
+		ruleset: ['[Gen 9] Doubles OU'],
+		banlist: ['DOU', 'DBL'],
 	},
 	{
 		name: "[Gen 9] Doubles LC",
@@ -234,6 +249,13 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Sleep Clause Mod'],
 		banlist: ['ND Uber', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Baton Pass'],
+	},
+	{
+		name: "[Gen 9] National Dex UU",
+
+		mod: 'gen9',
+		ruleset: ['[Gen 9] National Dex'],
+		banlist: ['ND OU', 'ND UUBL'],
 	},
 	{
 		name: "[Gen 9] National Dex Monotype",
