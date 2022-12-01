@@ -5782,7 +5782,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	fluttermane: {
 		tier: "Uber",
-		doublesTier: "DUU",
+		doublesTier: "DOU",
 		natDexTier: "Uber",
 	},
 	slitherwing: {
