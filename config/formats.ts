@@ -92,10 +92,15 @@ export const Formats: FormatList = [
 		ruleset: ['Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 	},
 	{
-		name: "[Gen 9] Battle Stadium Singles",
+		name: "[Gen 9] Battle Stadium Singles Series 1",
 
 		mod: 'gen9',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer'],
+		banlist: [
+			'Great Tusk', 'Brute Bonnet', 'Sandy Shocks', 'Scream Tail', 'Flutter Mane', 'Slither Wing', 'Roaring Moon',
+			'Iron Treads', 'Iron Moth', 'Iron Hands', 'Iron Jugulis', 'Iron Thorns', 'Iron Bundle', 'Iron Valiant',
+			'Ting-Lu', 'Chienpao', 'Wo-Chien', 'Chi-Yu'
+		],
 	},
 	{
 		name: "[Gen 9] Custom Game",
@@ -153,11 +158,16 @@ export const Formats: FormatList = [
 		banlist: ['Koraidon', 'Miraidon', 'Commander', 'Focus Sash', 'King\'s Rock', 'Ally Switch', 'Final Gambit', 'Perish Song', 'Swagger'],
 	},
 	{
-		name: "[Gen 9] Battle Stadium Doubles",
+		name: "[Gen 9] VGC 2023 Series 1",
 
 		mod: 'gen9',
 		gameType: 'doubles',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer'],
+		banlist: [
+			'Great Tusk', 'Brute Bonnet', 'Sandy Shocks', 'Scream Tail', 'Flutter Mane', 'Slither Wing', 'Roaring Moon',
+			'Iron Treads', 'Iron Moth', 'Iron Hands', 'Iron Jugulis', 'Iron Thorns', 'Iron Bundle', 'Iron Valiant',
+			'Ting-Lu', 'Chienpao', 'Wo-Chien', 'Chi-Yu'
+		],
 	},
 	{
 		name: "[Gen 9] Doubles Custom Game",
