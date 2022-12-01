@@ -102,13 +102,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 				}
 				return [`${set.name || set.species} does not exist in the National Dex.`];
 			}
-			for (const moveid of set.moves) {
-				const move = this.dex.moves.get(moveid);
-				if (move.isNonstandard === 'Unobtainable' && move.gen === this.dex.gen || move.id === 'lightofruin') {
-					if (this.ruleTable.has(`+move:${move.id}`)) continue;
-					return [`${set.name}'s move ${move.name} does not exist in the National Dex.`];
-				}
-			}
 			// Items other than Z-Crystals and Pokémon-specific items should be illegal
 			if (!set.item) return;
 			const item = this.dex.items.get(set.item);
