@@ -87,7 +87,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Standard NatDex',
 		desc: "The standard ruleset for all National Dex tiers",
 		ruleset: [
-			'Obtainable', '+Unobtainable', '+Past', 'Sketch Gen 8 Moves', 'Team Preview', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
+			'Obtainable', '+Unobtainable', '+Past', 'Sketch Post-Gen 7 Moves', 'Team Preview', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
 		],
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
@@ -101,6 +101,13 @@ export const Rulesets: {[k: string]: FormatData} = {
 					return;
 				}
 				return [`${set.name || set.species} does not exist in the National Dex.`];
+			}
+			for (const moveid of set.moves) {
+				const move = this.dex.moves.get(moveid);
+				if (move.isNonstandard === 'Unobtainable' && move.gen === this.dex.gen || move.id === 'lightofruin') {
+					if (this.ruleTable.has(`+move:${move.id}`)) continue;
+					return [`${set.name}'s move ${move.name} does not exist in the National Dex.`];
+				}
 			}
 			// Items other than Z-Crystals and Pokémon-specific items should be illegal
 			if (!set.item) return;
@@ -1236,10 +1243,22 @@ export const Rulesets: {[k: string]: FormatData} = {
 		},
 	},
 
+	omunobtainablemoves: {
+		effectType: 'ValidatorRule',
+		name: 'OM Unobtainable Moves',
+		desc: "Allows special move legality rules to allow moves which are otherwise unobtainable without hacking or glitches",
+		// Hardcoded in team-validator.ts
+		onValidateRule() {
+			if (!this.ruleTable.checkCanLearn?.[0]) {
+				throw new Error(`A format with the "OM Unobtainable Moves"${this.ruleTable.blame('omunobtainablemoves')} rule must also have a special move legality rule.`);
+			}
+		},
+	},
 	stabmonsmovelegality: {
 		effectType: 'ValidatorRule',
 		name: 'STABmons Move Legality',
 		desc: "Allows Pok&eacute;mon to use any move that they or a previous evolution/out-of-battle forme share a type with",
+		ruleset: ['OM Unobtainable Moves'],
 		checkCanLearn(move, species, setSources, set) {
 			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('standardnatdex');
 			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted(`move:${move.id}`)) {
@@ -1289,6 +1308,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'ValidatorRule',
 		name: 'Alphabet Cup Move Legality',
 		desc: "Allows Pok&eacute;mon to use any move that shares the same first letter as their name or a previous evolution's name.",
+		ruleset: ['OM Unobtainable Moves'],
 		checkCanLearn(move, species, setSources, set) {
 			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('standardnatdex');
 			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted(`move:${move.id}`)) {
@@ -1309,6 +1329,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'ValidatorRule',
 		name: 'Sketchmons Move Legality',
 		desc: "Pok&eacute;mon can learn one of any move they don't normally learn.",
+		ruleset: ['OM Unobtainable Moves'],
 		checkCanLearn(move, species, lsetData, set) {
 			const problem = this.checkCanLearn(move, species, lsetData, set);
 			if (!problem) return null;
@@ -1392,10 +1413,10 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
-	'sketchgen8moves': {
+	'sketchpostgen7moves': {
 		effectType: 'ValidatorRule',
-		name: 'Sketch Gen 8 Moves',
-		desc: "Allows Pokémon who learn Sketch to learn any Gen 8 move (normally, Sketch is not usable in Gen 8).",
+		name: 'Sketch Post-Gen 7 Moves',
+		desc: "Allows Pokémon who learn Sketch to learn any Gen 8+ move (normally, Sketch is not usable in Gen 8+).",
 		// Implemented in sim/team-validator.ts
 	},
 	mimicglitch: {
