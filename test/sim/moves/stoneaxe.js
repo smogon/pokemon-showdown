@@ -14,8 +14,8 @@ describe('Stone Axe', function () {
 
 	it('should set up stealth rock on the side of the opponent', function () {
 		battle = common.createBattle([
-			[{species: "samurotthisui", moves: ['stoneaxe']}],
-			[{species: "regieleki", moves: ['splash']}],
+			[{species: 'kleavor', moves: ['stoneaxe']}],
+			[{species: 'regieleki', moves: ['splash']}],
 		]);
 
 		battle.makeChoices();
@@ -25,11 +25,11 @@ describe('Stone Axe', function () {
 
 	it(`should set up stealth rock on the side of the opponent, not necessarily the target, in a double battle`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: "samurotthisui", moves: ['stoneaxe']},
-			{species: "pikachu", moves: ['splash']},
+			{species: 'kleavor', moves: ['stoneaxe']},
+			{species: 'pikachu', moves: ['splash']},
 		], [
-			{species: "squirtle", moves: ['splash']},
-			{species: "bulbasaur", moves: ['splash']},
+			{species: 'squirtle', moves: ['splash']},
+			{species: 'bulbasaur', moves: ['splash']},
 		]]);
 
 		battle.makeChoices('move stoneaxe -2, move splash', 'move splash, move splash');
@@ -40,8 +40,8 @@ describe('Stone Axe', function () {
 
 	it('should still set up stealth rock on the side of the opponent that is behind a substitute', function () {
 		battle = common.createBattle([
-			[{species: "samurotthisui", moves: ['splash', 'stoneaxe']}],
-			[{species: "regieleki", moves: ['substitute', 'splash']}],
+			[{species: 'kleavor', moves: ['splash', 'stoneaxe']}],
+			[{species: 'regieleki', moves: ['substitute', 'splash']}],
 		]);
 
 		battle.makeChoices('move splash', 'move substitute');
@@ -52,8 +52,8 @@ describe('Stone Axe', function () {
 
 	it('should not set up stealth rock if the move does not hit opponent or its substitute', function () {
 		battle = common.createBattle([
-			[{species: "samurotthisui", moves: ['stoneaxe']}],
-			[{species: "regieleki", moves: ['protect']}],
+			[{species: 'kleavor', moves: ['stoneaxe']}],
+			[{species: 'regieleki', moves: ['protect']}],
 		]);
 
 		battle.makeChoices();
@@ -63,12 +63,23 @@ describe('Stone Axe', function () {
 
 	it('should not be bounced back by Magic Bounce', function () {
 		battle = common.createBattle([
-			[{species: "samurotthisui", moves: ['stoneaxe']}],
-			[{species: "regieleki", moves: ['splash']}],
+			[{species: 'kleavor', moves: ['stoneaxe']}],
+			[{species: 'hatterene', ability: 'magicguard', moves: ['splash']}],
 		]);
 
 		battle.makeChoices();
 		assert.equal(!!(battle.p1.sideConditions.stealthrock), false);
 		assert(battle.p2.sideConditions.stealthrock);
+	});
+
+	it('should have its stealth rock prevented by Sheer Force', function () {
+		battle = common.createBattle([
+			[{species: 'kleavor', ability: 'sheerforce', moves: ['stoneaxe']}],
+			[{species: 'regieleki', moves: ['splash']}],
+		]);
+
+		battle.makeChoices();
+		assert.equal(!!(battle.p1.sideConditions.stealthrock), false);
+		assert.equal(!!(battle.p2.sideConditions.stealthrock), false);
 	});
 });
