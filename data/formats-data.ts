@@ -1487,7 +1487,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "OU",
 	},
 	misdreavus: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	mismagius: {
 		tier: "OU",
@@ -5613,7 +5613,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "OU",
 	},
 	tandemaus: {
-		tier: "NFE",
+		tier: "LC",
 	},
 	maushold: {
 		tier: "OU",

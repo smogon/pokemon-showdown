@@ -50,7 +50,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['Little Cup', 'Standard'],
-		banlist: ['Dunsparce', 'Meditite', 'Murkrow', 'Scyther', 'Sneasel', 'Tandemaus', 'Moody', 'Baton Pass'],
+		banlist: ['Dunsparce', 'Meditite', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Moody', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 9] Monotype",
