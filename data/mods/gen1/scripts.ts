@@ -24,33 +24,76 @@ export const Scripts: ModdedBattleScriptsData = {
 		// Gen 1 function to apply a stat modification that is only active until the stat is recalculated or mon switched.
 		modifyStat(statName, modifier) {
 			if (!(statName in this.storedStats)) throw new Error("Invalid `statName` passed to `modifyStat`");
-			const modifiedStats = this.battle.clampIntRange(Math.floor(this.modifiedStats![statName] * modifier), 1, 999);
+			const modifiedStats = this.battle.clampIntRange(Math.floor(this.modifiedStats![statName] * modifier), 1);
 			this.modifiedStats![statName] = modifiedStats;
 		},
 		// In generation 1, boosting function increases the stored modified stat and checks for opponent's status.
 		boostBy(boost) {
-			let changed = false;
+			let changed: boolean | number = false;
 			let i: BoostID;
 			for (i in boost) {
 				const delta = boost[i];
 				if (delta === undefined) continue;
 				if (delta > 0 && this.boosts[i] >= 6) continue;
 				if (delta < 0 && this.boosts[i] <= -6) continue;
-				this.boosts[i] += delta;
-				if (this.boosts[i] > 6) {
-					this.boosts[i] = 6;
+				if (i === 'evasion' || i === 'accuracy') {
+					this.boosts[i] += delta;
+					if (this.boosts[i] > 6) {
+						this.boosts[i] = 6;
+					}
+					if (this.boosts[i] < -6) {
+						this.boosts[i] = -6;
+					}
+					changed = true;
+					continue;
 				}
-				if (this.boosts[i] < -6) {
-					this.boosts[i] = -6;
+				// Stat being modified is not evasion or accuracy, so change modifiedStats.
+				if (delta > 0) {
+					if (this.modifiedStats![i] === 999) {
+						// Intended max stat value
+						this.boosts[i] += delta;
+						if (this.boosts[i] > 6) {
+							this.boosts[i] = 6;
+						}
+						this.boosts[i]--;
+						// changed = 0 corresponds to increasing stats at 999 (or decreasing at 1).
+						changed = 0;
+					} else {
+						this.boosts[i] += delta;
+						if (this.boosts[i] > 6) {
+							this.boosts[i] = 6;
+						}
+						changed = true;
+					}
 				}
-				changed = true;
+				if (delta < 0) {
+					if (this.modifiedStats![i] === 1) {
+						// Minimum stat value
+						this.boosts[i] += delta;
+						if (this.boosts[i] < -6) {
+							this.boosts[i] = -6;
+						}
+						this.boosts[i]++;
+						// changed = 0 corresponds to increasing stats at 999 (or decreasing at 1).
+						changed = 0;
+					} else {
+						this.boosts[i] += delta;
+						if (this.boosts[i] < -6) {
+							this.boosts[i] = -6;
+						}
+						changed = true;
+					}
+				}
 				// Recalculate the modified stat
-				if (i === 'evasion' || i === 'accuracy') continue;
 				this.modifiedStats![i] = this.storedStats[i];
 				if (this.boosts[i] >= 0) {
 					this.modifyStat!(i, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[i]]);
 				} else {
 					this.modifyStat!(i, [100, 66, 50, 40, 33, 28, 25][-this.boosts[i]] / 100);
+				}
+				if (delta > 0 && this.modifiedStats![i] > 999) {
+					// Cap the stat at 999
+					this.modifiedStats![i] = 999;
 				}
 			}
 			return changed;
@@ -100,9 +143,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				(!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)
 			) {
 				pokemon.deductPP(move, null, target);
-				// On gen 1 moves are stored when they are chosen and a PP is deducted.
-				pokemon.side.lastMove = move;
-				pokemon.lastMove = move;
 			} else {
 				sourceEffect = move;
 			}
@@ -144,6 +184,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (move.id !== 'mirrormove' ||
 					(!pokemon.side.foe.active[0]?.lastMove || pokemon.side.foe.active[0].lastMove?.id === 'mirrormove')) {
 					// The move is our 'final' move (a failed Mirror Move, or any move that isn't Metronome or Mirror Move).
+					pokemon.side.lastMove = move;
+					pokemon.lastMove = move;
 					this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 
 					// If target fainted
@@ -795,7 +837,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (attack >= 256 || defense >= 256) {
 				attack = this.battle.clampIntRange(Math.floor(attack / 4) % 256, 1);
 				// Defense isn't checked on the cartridge, but we don't want those / 0 bugs on the sim.
-				defense = this.battle.clampIntRange(Math.floor(defense / 4) % 256, 1);
+				defense = Math.floor(defense / 4) % 256;
+				if (defense === 0) {
+					this.battle.hint('Pokemon Showdown avoids division by zero by rounding defense up to 1.' +
+						'In game, the battle would have crashed.');
+					defense = 1;
+				}
 			}
 
 			// Self destruct moves halve defense at this point.
@@ -857,7 +904,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			return Math.floor(damage);
 		},
 	},
-	// deals with Pokémon stat boosting, including Gen 1 buggy behaviour with burn and paralyse.
+	// deals with Pokémon stat boosting.
 	boost(boost, target, source = null, effect = null) {
 		if (this.event) {
 			if (!target) target = this.event.target;
@@ -872,34 +919,44 @@ export const Scripts: ModdedBattleScriptsData = {
 		for (i in boost) {
 			const currentBoost: SparseBoostsTable = {};
 			currentBoost[i] = boost[i];
-			if (boost[i] !== 0 && target.boostBy(currentBoost)) {
-				success = true;
-				let msg = '-boost';
-				if (boost[i]! < 0) {
-					msg = '-unboost';
-					boost[i] = -boost[i]!;
-					// Re-add attack and speed drops if not present
-					if (i === 'atk' && target.status === 'brn' && !target.volatiles['brnattackdrop']) {
-						target.addVolatile('brnattackdrop');
+			if (boost[i] !== 0) {
+				const boostResult = target.boostBy(currentBoost);
+				if (boostResult) {
+					success = true;
+					let msg = '-boost';
+					if (boost[i]! < 0) {
+						msg = '-unboost';
+						boost[i] = -boost[i]!;
 					}
-					if (i === 'spe' && target.status === 'par' && !target.volatiles['parspeeddrop']) {
-						target.addVolatile('parspeeddrop');
+					if (!effect || effect.effectType === 'Move') {
+						this.add(msg, target, i, boost[i]);
+					} else {
+						this.add(msg, target, i, boost[i], '[from] ' + effect.fullname);
 					}
-				} else {
-					// Check for boost increases deleting attack or speed drops
-					if (i === 'atk' && target.status === 'brn' && target.volatiles['brnattackdrop']) {
-						target.removeVolatile('brnattackdrop');
-					}
-					if (i === 'spe' && target.status === 'par' && target.volatiles['parspeeddrop']) {
-						target.removeVolatile('parspeeddrop');
-					}
+					this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
 				}
-				if (!effect || effect.effectType === 'Move') {
-					this.add(msg, target, i, boost[i]);
-				} else {
-					this.add(msg, target, i, boost[i], '[from] ' + effect.fullname);
+				// Tried to boost at 999 or unboost at 1. This does not count as a success: par/brn effects are not applied afterwards.
+				if (boostResult === 0) {
+					let msg = '-boost';
+					let secondmsg = '-unboost';
+					if (boost[i]! < 0) {
+						msg = '-unboost';
+						secondmsg = '-boost';
+						boost[i] = -boost[i]!;
+					}
+					if (!effect || effect.effectType === 'Move') {
+						this.add(msg, target, i, boost[i]);
+					} else {
+						this.add(msg, target, i, boost[i], '[from] ' + effect.fullname);
+					}
+					this.add(secondmsg, target, i, 1);
+					if (msg === '-boost') {
+						this.hint(`In Gen 1, boosting a stat at 999 will apply a -1 drop afterwards, and the stat remains at 999.`, true);
+					} else {
+						this.hint(`In Gen 1, dropping a stat at 1 will apply a +1 boost afterwards, and the stat remains at 1.`, true);
+					}
+					this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
 				}
-				this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
 			}
 		}
 		this.runEvent('AfterBoost', target, source, effect, boost);

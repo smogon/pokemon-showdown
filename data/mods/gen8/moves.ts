@@ -78,6 +78,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	cosmicpower: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	craftyshield: {
 		inherit: true,
 		isNonstandard: null,
@@ -175,6 +179,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	headcharge: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	healbell: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -441,6 +449,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	shoreup: {
 		inherit: true,
 		pp: 10,
+	},
+	simplebeam: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	skullbash: {
 		inherit: true,

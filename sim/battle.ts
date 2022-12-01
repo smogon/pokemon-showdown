@@ -322,7 +322,7 @@ export class Battle {
 
 	suppressingAbility(target?: Pokemon) {
 		return this.activePokemon && this.activePokemon.isActive && (this.activePokemon !== target || this.gen < 8) &&
-			this.activeMove && this.activeMove.ignoreAbility;
+			this.activeMove && this.activeMove.ignoreAbility && !target?.hasItem('Ability Shield');
 	}
 
 	setActiveMove(move?: ActiveMove | null, pokemon?: Pokemon | null, target?: Pokemon | null) {
@@ -1925,6 +1925,8 @@ export class Battle {
 				}
 				if (this.gen <= 4 && effect.drain && source) {
 					const amount = this.clampIntRange(Math.floor(targetDamage * effect.drain[0] / effect.drain[1]), 1);
+					// Draining can be countered in gen 1
+					if (this.gen <= 1) this.lastDamage = amount;
 					this.heal(amount, source, target, 'drain');
 				}
 				if (this.gen > 4 && effect.drain && source) {
@@ -1978,21 +1980,25 @@ export class Battle {
 
 		// In Gen 1 BUT NOT STADIUM, Substitute also takes confusion and HJK recoil damage
 		if (this.gen <= 1 && this.dex.currentMod !== 'gen1stadium' &&
-			['confusion', 'jumpkick', 'highjumpkick'].includes(effect.id) && target.volatiles['substitute']) {
-			const hint = "In Gen 1, if a Pokemon with a Substitute hurts itself due to confusion or Jump Kick/Hi Jump Kick recoil and the target";
-			if (source?.volatiles['substitute']) {
-				source.volatiles['substitute'].hp -= damage;
-				if (source.volatiles['substitute'].hp <= 0) {
-					source.removeVolatile('substitute');
-					source.subFainted = true;
+			['confusion', 'jumpkick', 'highjumpkick'].includes(effect.id)) {
+			// Confusion and recoil damage can be countered
+			this.lastDamage = damage;
+			if (target.volatiles['substitute']) {
+				const hint = "In Gen 1, if a Pokemon with a Substitute hurts itself due to confusion or Jump Kick/Hi Jump Kick recoil and the target";
+				if (source?.volatiles['substitute']) {
+					source.volatiles['substitute'].hp -= damage;
+					if (source.volatiles['substitute'].hp <= 0) {
+						source.removeVolatile('substitute');
+						source.subFainted = true;
+					} else {
+						this.add('-activate', source, 'Substitute', '[damage]');
+					}
+					this.hint(hint + " has a Substitute, the target's Substitute takes the damage.");
+					return damage;
 				} else {
-					this.add('-activate', source, 'Substitute', '[damage]');
+					this.hint(hint + " does not have a Substitute there is no damage dealt.");
+					return 0;
 				}
-				this.hint(hint + " has a Substitute, the target's Substitute takes the damage.");
-				return damage;
-			} else {
-				this.hint(hint + " does not have a Substitute there is no damage dealt.");
-				return 0;
 			}
 		}
 

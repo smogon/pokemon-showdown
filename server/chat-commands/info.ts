@@ -2866,9 +2866,93 @@ export const commands: Chat.ChatCommands = {
 			);
 		}
 	},
+	altlog: 'altslog',
+	altslog(target, room, user) {
+		this.checkCan('lock');
+		target = toID(target);
+		if (!target) {
+			return this.parse(`/help altslog`);
+		}
+		return this.parse(`/join view-altslog-${target}`);
+	},
+	altsloghelp: [
+		`/altslog [userid] - View the alternate account history for the given [userid]. Requires: % @ &`,
+	],
+};
+
+export const handlers: Chat.Handlers = {
+	onRename(user, oldID, newID) {
+		if (oldID === newID || !Config.usesqlite || [oldID, newID].some(f => f.startsWith('guest'))) return;
+		void Chat.database.run(
+			`REPLACE INTO alts_log (to_id, from_id, ip) VALUES (?, ?, ?)`,
+			[newID, oldID, user.latestIp]
+		);
+	},
 };
 
 export const pages: Chat.PageTable = {
+	async altslog(query, user) {
+		this.checkCan('lock');
+		this.title = '[Alts Log]';
+		const target = toID(query.shift());
+		if (!target) {
+			return this.errorReply(`Please specify a user to find alternate accounts for.`);
+		}
+		this.title += ` ${target}`;
+		if (!Config.usesqlite) {
+			return this.errorReply(`The alternate account log is currently disabled.`);
+		}
+		const rawLimit = query.shift() || "100";
+		const num = parseInt(rawLimit);
+		if (num > 3000) {
+			return this.errorReply(`3000 is the maximum number of results from the alternate account log.`);
+		}
+		if (isNaN(num) || num < 1) {
+			return this.errorReply(`The max results must be a real number that is at least one (received "${rawLimit}")`);
+		}
+		const showIPs = user.can('globalban');
+		const results = await Chat.database.all(
+			'SELECT to_id, from_id, ip FROM alts_log WHERE (to_id = ? OR from_id = ?) LIMIT ?',
+			[target, target, num]
+		);
+		let buf = `<div class="pad"><h2>Alternate accounts for ${target}</h2>`;
+		buf += `${results.length} found.<hr />`;
+
+		const ipTable = {} as Record<string, number>;
+		const userids = new Set<string>();
+		const useridToIp = new Map<string, string[]>();
+		for (const result of results) {
+			const id = result.from_id === target ? result.to_id : result.from_id;
+			userids.add(id);
+			let prevIps = useridToIp.get(id);
+			if (!prevIps) {
+				prevIps = [];
+			}
+			if (!prevIps.includes(result.ip)) {
+				prevIps.push(result.ip);
+			}
+			useridToIp.set(id, prevIps);
+			if (!ipTable[result.ip]) ipTable[result.ip] = 0;
+			ipTable[result.ip]++;
+		}
+		buf += `<div class="ladder pad"><table><tr><th>Userid</th>${showIPs ? `<th>Latest IP</th>` : ""}</tr>`;
+		for (const id of userids) {
+			const ips = useridToIp.get(id) || [];
+			buf += `<tr><td>`;
+			buf += `<a href="https://${Config.routes.client}/users/${id}">${id}</a></td>`;
+			const ipStr = ips.map(f => `<a href="https://whatismyipaddress/${f}">${f}</a>`).join(', ');
+			buf += `${showIPs ? `<td>${ipStr}</td>` : ""}</tr>`;
+		}
+		buf += `</table></div>`;
+		if (showIPs) {
+			buf += `<br /><div class="ladder pad"><table><tr><th>IP</th><th>Times Used</th></tr>`;
+			for (const ip in ipTable) {
+				buf += `<tr><td>${ip}</td><td>${ipTable[ip]}</td></tr>`;
+			}
+			buf += `</table></div>`;
+		}
+		return buf;
+	},
 	battlerules(query, user) {
 		const rules = Object.values(Dex.data.Rulesets).filter(rule => rule.effectType !== "Format");
 		const tourHelp = `https://www.smogon.com/forums/threads/pok%C3%A9mon-showdown-forum-rules-resources-read-here-first.3570628/#post-6777489`;

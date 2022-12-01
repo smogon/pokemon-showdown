@@ -1487,7 +1487,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "OU",
 	},
 	misdreavus: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	mismagius: {
 		tier: "OU",
@@ -1803,7 +1803,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	blazikenmega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	mudkip: {
 		isNonstandard: "Past",
@@ -5375,7 +5375,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	zamazentacrowned: {
 		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	eternatus: {
 		isNonstandard: "Unobtainable",
@@ -5613,7 +5613,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "OU",
 	},
 	tandemaus: {
-		tier: "NFE",
+		tier: "LC",
 	},
 	maushold: {
 		tier: "OU",
@@ -5828,7 +5828,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	ironbundle: {
 		tier: "Uber",
 		doublesTier: "DOU",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	ironvaliant: {
 		tier: "OU",

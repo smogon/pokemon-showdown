@@ -1,4 +1,8 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	berryjuice: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	custapberry: {
 		inherit: true,
 		isNonstandard: null,
@@ -15,15 +19,15 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	lansatberry: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	marangaberry: {
 		inherit: true,
 		isNonstandard: null,
 	},
 	micleberry: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	pixieplate: {
 		inherit: true,
 		isNonstandard: null,
 	},
