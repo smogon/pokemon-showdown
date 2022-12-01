@@ -701,25 +701,35 @@ export class Side {
 		}
 		if (slot >= this.pokemon.length) {
 			return this.emitChoiceError(`Can't switch: You do not have a Pokémon in slot ${slot + 1} to switch to`);
-		} else if (slot < this.active.length) {
+		} else if (slot < this.active.length && !this.slotConditions[pokemon.position]['revivalblessing']) {
 			return this.emitChoiceError(`Can't switch: You can't switch to an active Pokémon`);
 		} else if (this.choice.switchIns.has(slot)) {
 			return this.emitChoiceError(`Can't switch: The Pokémon in slot ${slot + 1} can only switch in once`);
 		}
 		const targetPokemon = this.pokemon[slot];
 
-		if (this.sideConditions['revivalblessing']) {
+		if (this.slotConditions[pokemon.position]['revivalblessing']) {
 			if (!targetPokemon.fainted) {
 				return this.emitChoiceError(`Can't switch: You have to pass to a fainted Pokémon`);
 			}
-			targetPokemon.heal(targetPokemon.maxhp / 2);
+			this.pokemonLeft++;
+			if (slot < this.active.length) targetPokemon.isActive = true;
+			targetPokemon.fainted = false;
+			targetPokemon.faintQueued = false;
+			targetPokemon.subFainted = false;
+			targetPokemon.status = '';
+			targetPokemon.hp = 1; // Needed so hp functions works
+			targetPokemon.sethp(targetPokemon.maxhp / 2);
 			this.battle.add('-heal', targetPokemon, targetPokemon.getHealth, '[from] move: Revival Blessing');
+			this.removeSlotCondition(pokemon, 'revivalblessing');
+			// Should always subtract, but stop at 0 to prevent errors.
+			this.choice.forcedSwitchesLeft = this.battle.clampIntRange(this.choice.forcedSwitchesLeft - 1, 0);
+			pokemon.switchFlag = false;
+			return this.choosePass();
 		}
 
 		if (targetPokemon.fainted) {
-			if (!this.sideConditions['revivalblessing']) {
-				return this.emitChoiceError(`Can't switch: You can't switch to a fainted Pokémon`);
-			}
+			return this.emitChoiceError(`Can't switch: You can't switch to a fainted Pokémon`);
 		}
 
 		if (this.requestState === 'move') {

@@ -15314,13 +15314,19 @@ export const Moves: {[moveid: string]: MoveData} = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {},
-		selfdestruct: "ifHit",
+		onTryHit(source) {
+			if (!source.side.pokemon.filter(ally => ally.fainted).length) {
+				return false;
+			}
+		},
 		slotCondition: 'revivalblessing',
+		// No this not a real switchout move
+		// This is needed to trigger a switch protocol to choose a fainted party member
+		// Feel free to refactor
+		selfSwitch: true,
 		condition: {
-			onSwap(target) {
-				// reviving implemented in side.ts, kind of
-				target.side.removeSlotCondition(target, 'revivalblessing');
-			},
+			duration: 1,
+			// reviving implemented in side.ts, kind of
 		},
 		secondary: null,
 		target: "self",
