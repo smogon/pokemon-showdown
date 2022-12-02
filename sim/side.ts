@@ -682,7 +682,11 @@ export class Side {
 			}
 			if (!this.choice.forcedSwitchesLeft) return this.choosePass();
 			slot = this.active.length;
-			while (this.choice.switchIns.has(slot) || this.pokemon[slot].fainted) slot++;
+			if (this.slotConditions[pokemon.position]['revivalblessing']) {
+				while (this.choice.switchIns.has(slot) || !this.pokemon[slot].fainted) slot++;
+			} else {
+				while (this.choice.switchIns.has(slot) || this.pokemon[slot].fainted) slot++;
+			}
 		} else {
 			slot = parseInt(slotText) - 1;
 		}
