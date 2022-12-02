@@ -636,17 +636,34 @@ export class TeamValidator {
 			problems.push(...this.validateStats(set, species, setSources));
 		}
 
+		const moveLegalityWhitelist: {[k: string]: true | undefined} = {};
 		for (const moveName of set.moves) {
 			if (!moveName) continue;
 			const move = dex.moves.get(Utils.getString(moveName));
 			if (!move.exists) return [`"${move.name}" is an invalid move.`];
 
 			problem = this.checkMove(set, move, setHas);
-			if (problem) problems.push(problem);
+			if (problem) {
+				let allowedByOM;
+				if (problem.endsWith('is not obtainable without hacking or glitches.') &&
+					ruleTable.has('omunobtainablemoves')) {
+					problem = `${name}'s ${problem}`;
+					const baseCheckCanLearn = this.checkCanLearn;
+					// tell the custom move legality check that the move is illegal by default
+					this.checkCanLearn = () => problem;
+					allowedByOM = !ruleTable.checkCanLearn![0].call(this, move, outOfBattleSpecies, setSources, set);
+					this.checkCanLearn = baseCheckCanLearn;
+				}
+				if (!allowedByOM) {
+					problems.push(problem);
+				} else {
+					moveLegalityWhitelist[move.id] = true;
+				}
+			}
 		}
 
 		if (ruleTable.has('obtainablemoves')) {
-			problems.push(...this.validateMoves(outOfBattleSpecies, set.moves, setSources, set, name));
+			problems.push(...this.validateMoves(outOfBattleSpecies, set.moves, setSources, set, name, moveLegalityWhitelist));
 		}
 
 		const learnsetSpecies = dex.species.getLearnsetData(outOfBattleSpecies.id);
@@ -1565,7 +1582,7 @@ export class TeamValidator {
 			banReason = ruleTable.check('pokemontag:' + toID(move.isNonstandard));
 			if (banReason) {
 				if (move.isNonstandard === 'Unobtainable') {
-					return `${move.name} is not obtainable without hacking or glitches.`;
+					return `${move.name} is not obtainable without hacking or glitches${dex.gen >= 9 && move.gen < dex.gen ? ` in Gen ${dex.gen}` : ``}.`;
 				}
 				if (move.isNonstandard === 'Gigantamax') {
 					return `${move.name} is not usable without Gigantamaxing its user, ${move.isMax}.`;
@@ -1584,9 +1601,6 @@ export class TeamValidator {
 				return `${set.name}'s move ${move.name} does not exist in this game.`;
 			}
 			if (banReason === '') return null;
-		}
-		if (move.id === 'revivalblessing') {
-			return "Revival Blessing is currently not implemented. It won't be usable until it is.";
 		}
 
 		return null;
@@ -1862,16 +1876,17 @@ export class TeamValidator {
 
 	validateMoves(
 		species: Species, moves: string[], setSources: PokemonSources, set?: Partial<PokemonSet>,
-		name: string = species.name
+		name: string = species.name, moveLegalityWhitelist: {[k: string]: true | undefined} = {}
 	) {
 		const dex = this.dex;
 		const ruleTable = this.ruleTable;
 
 		const problems = [];
 
-		const checkCanLearn = (ruleTable.checkCanLearn && ruleTable.checkCanLearn[0] || this.checkCanLearn);
+		const checkCanLearn = (ruleTable.checkCanLearn?.[0] || this.checkCanLearn);
 		for (const moveName of moves) {
 			const move = dex.moves.get(moveName);
+			if (moveLegalityWhitelist[move.id]) continue;
 			const problem = checkCanLearn.call(this, move, species, setSources, set);
 			if (problem) {
 				problems.push(`${name}${problem}`);
@@ -1989,7 +2004,7 @@ export class TeamValidator {
 		/**
 		 * The format allows Sketch to copy moves in Gen 8
 		 */
-		const canSketchGen8Moves = ruleTable.has('sketchgen8moves') || this.dex.currentMod === 'gen8bdsp';
+		const canSketchPostGen7Moves = ruleTable.has('sketchpostgen7moves') || this.dex.currentMod === 'gen8bdsp';
 
 		let tradebackEligible = false;
 		while (species?.name && !alreadyChecked[species.id]) {
@@ -2031,8 +2046,8 @@ export class TeamValidator {
 			} else if (learnset['sketch']) {
 				if (move.noSketch || move.isZ || move.isMax) {
 					cantLearnReason = `can't be Sketched.`;
-				} else if (move.gen > 7 && !canSketchGen8Moves) {
-					cantLearnReason = `can't be Sketched because it's a Gen 8 move and Sketch isn't available in Gen 8.`;
+				} else if (move.gen > 7 && !canSketchPostGen7Moves) {
+					cantLearnReason = `can't be Sketched because it's a Gen ${move.gen} move and Sketch isn't available in Gen ${move.gen}.`;
 				} else {
 					if (!sources) sketch = true;
 					sources = learnset['sketch'].concat(sources || []);
@@ -2125,12 +2140,12 @@ export class TeamValidator {
 						}
 					}
 
-					// Gen 8 egg moves can be taught to any pokemon from any source
-					if (learned === '8E' || 'LMTR'.includes(learned.charAt(1))) {
+					// Gen 8+ egg moves can be taught to any pokemon from any source
+					if (learnedGen >= 8 && learned.charAt(1) === 'E' || 'LMTR'.includes(learned.charAt(1))) {
 						if (learnedGen === dex.gen && learned.charAt(1) !== 'R') {
 							// current-gen level-up, TM or tutor moves:
 							//   always available
-							if (learned !== '8E' && babyOnly) setSources.babyOnly = babyOnly;
+							if (!(learnedGen >= 8 && learned.charAt(1) === 'E') && babyOnly) setSources.babyOnly = babyOnly;
 							if (!moveSources.moveEvoCarryCount) return null;
 						}
 						// past-gen level-up, TM, or tutor moves:

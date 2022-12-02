@@ -424,7 +424,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (pokemon.status === 'tox') {
 					pokemon.setStatus('psn');
 				}
-				// should only clear a specific set of volatiles and does not clear the toxic counter
+				// should only clear a specific set of volatiles
+				// while technically the toxic counter shouldn't be cleared, the preserved toxic counter is never used again
+				// in-game, so it is equivalent to just clear it.
 				const silentHack = '|[silent]';
 				const silentHackVolatiles = ['disable', 'confusion'];
 				const hazeVolatiles: {[key: string]: string} = {
@@ -435,6 +437,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					'leechseed': 'move: Leech Seed',
 					'lightscreen': 'Light Screen',
 					'reflect': 'Reflect',
+					'residualdmg': 'Toxic counter',
 				};
 				for (const v in hazeVolatiles) {
 					if (!pokemon.removeVolatile(v)) {
@@ -557,6 +560,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!foe?.lastMove || foe.lastMove.id === 'mirrormove') {
 				return false;
 			}
+			pokemon.side.lastSelectedMove = foe.lastMove.id;
 			this.actions.useMove(foe.lastMove.id, pokemon);
 		},
 	},
@@ -847,10 +851,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// Drain/recoil/secondary effect confusion do not happen if the substitute breaks
 				if (target.volatiles['substitute']) {
 					if (move.recoil) {
-						this.damage(Math.round(uncappedDamage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
+						this.damage(this.clampIntRange(Math.floor(uncappedDamage * move.recoil[0] / move.recoil[1]), 1)
+							, source, target, 'recoil');
 					}
 					if (move.drain) {
-						this.heal(Math.ceil(uncappedDamage * move.drain[0] / move.drain[1]), source, target, 'drain');
+						const amount = this.clampIntRange(Math.floor(uncappedDamage * move.drain[0] / move.drain[1]), 1);
+						this.lastDamage = amount;
+						this.heal(amount, source, target, 'drain');
 					}
 					if (move.secondary?.volatileStatus === 'confusion') {
 						const secondary = move.secondary;

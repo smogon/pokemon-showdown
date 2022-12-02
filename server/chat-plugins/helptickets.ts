@@ -526,6 +526,9 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 	 * If the [value] is omitted (index 1), searches just for tickets with the given property.
 	 */
 	static async getTextLogs(search: [string, string] | [string], date?: string) {
+		if (Config.disableripgrep) {
+			throw new Chat.ErrorMessage("Helpticket logs are currently disabled.");
+		}
 		const results = [];
 		if (await checkRipgrepAvailability()) {
 			const searchString = search.length > 1 ?

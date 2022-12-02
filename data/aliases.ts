@@ -72,8 +72,8 @@ export const Aliases: {[alias: string]: string} = {
 	gen6ag: "[Gen 6] Anything Goes",
 	crossevo: "[Gen 8] Cross Evolution",
 	mayhem: "[Gen 8] Random Battle Mayhem",
-	omotm: "[Gen 9] Almost Any Ability",
-	lcotm: "[Gen 8] Pure Hackmons",
+	omotm: "[Gen 9] Shared Power",
+	lcotm: "[Gen 9] Full Potential",
 
 	// mega evos
 	fabio: "Ampharos-Mega",
@@ -686,6 +686,7 @@ export const Aliases: {[alias: string]: string} = {
 	azu: "Azumarill",
 	bdrill: "Beedrill",
 	bee: "Beedrill",
+	bigsharp: "Kingambit",
 	birdjesus: "Pidgeot",
 	bish: "Bisharp",
 	blace: "Blacephalon",
@@ -765,6 +766,7 @@ export const Aliases: {[alias: string]: string} = {
 	ogre: "Kyogre",
 	ohmagod: "Plasmanta",
 	p2: "Porygon2",
+	pato: "Psyduck",
 	pert: "Swampert",
 	pex: "Toxapex",
 	phero: "Pheromosa",

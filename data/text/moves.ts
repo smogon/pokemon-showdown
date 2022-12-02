@@ -3674,7 +3674,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	makeitrain: {
 		name: "Make It Rain",
 		desc: "Lowers the user's Special Attack by 1 stage.",
-		shortDesc: "Lowers the user's Sp. Atk by 1. Scatters coins.",
+		shortDesc: "Lowers the user's Sp. Atk by 1. Hits foe(s).",
 
 		activate: "#payday",
 	},
@@ -5085,6 +5085,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	revivalblessing: {
 		name: "Revival Blessing",
 		shortDesc: "Revives a fainted Pokemon to 50% HP.",
+
+		heal: "  [POKEMON] was revived and is ready to fight again!",
 	},
 	risingvoltage: {
 		name: "Rising Voltage",

@@ -267,7 +267,7 @@ describe('Dex data', function () {
 		6: 721,
 		7: 807,
 		8: 664,
-		9: 400,
+		9: 403,
 	};
 	const formes = {
 		// Gens 1 and 2 have no alternate formes
