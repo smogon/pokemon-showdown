@@ -662,7 +662,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["bodyslam", "confuseray", "rest", "sing", "surf"],
 		essentialMove: "blizzard",
 		exclusiveMoves: ["thunderbolt", "thunderbolt"],
-		tier: "UUBL",
+		tier: "UU",
 	},
 	ditto: {
 		randomBattleMoves: ["transform"],
