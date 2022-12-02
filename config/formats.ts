@@ -2132,7 +2132,6 @@ export const Formats: FormatList = [
 		// searchShow: false,
 		ruleset: ['[Gen 1] OU', 'APT Clause', 'Sleep Moves Clause'],
 		banlist: ['OU', 'UUBL'],
-		unbanlist: ['Lapras'],
 	},
 	{
 		name: "[Gen 6] Doubles OU",
@@ -4210,7 +4209,7 @@ export const Formats: FormatList = [
 		mod: 'gen1',
 		searchShow: false,
 		ruleset: ['[Gen 1] UU', '!APT Clause', '!Sleep Moves Clause'],
-		banlist: ['UU', 'NUBL', 'Lapras'],
+		banlist: ['UU', 'NUBL'],
 	},
 	{
 		name: "[Gen 1] 1v1",
