@@ -107,7 +107,12 @@ export const Rulesets: {[k: string]: FormatData} = {
 				const move = this.dex.moves.get(moveid);
 				if (move.isNonstandard === 'Unobtainable' && move.gen === this.dex.gen || move.id === 'lightofruin') {
 					if (this.ruleTable.has(`+move:${move.id}`)) continue;
-					return [`${set.name}'s move ${move.name} does not exist in the National Dex.`];
+					const problem = `${set.name}'s move ${move.name} does not exist in the National Dex.`;
+					if (this.ruleTable.has('omunobtainablemoves')) {
+						const outOfBattleSpecies = this.getValidationSpecies(set)[0];
+						if (!this.omCheckCanLearn(move, outOfBattleSpecies, this.allSources(outOfBattleSpecies), set, problem)) continue;
+					}
+					return [problem];
 				}
 			}
 			// Items other than Z-Crystals and Pokémon-specific items should be illegal
@@ -1351,8 +1356,9 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const problem = this.checkCanLearn(move, species, lsetData, set);
 			if (!problem) return null;
 			if (move.isZ || move.isMax || this.ruleTable.isRestricted(`move:${move.id}`)) return problem;
-			if ((set as any).sketchMove) {
-				return ` already has ${(set as any).sketchMove} as a sketched move.\n(${species.name} doesn't learn ${move.name}.)`;
+			const sketchMove = (set as any).sketchMove;
+			if (sketchMove && sketchMove !== move.name) {
+				return ` already has ${sketchMove} as a sketched move.\n(${species.name} doesn't learn ${move.name}.)`;
 			}
 			(set as any).sketchMove = move.name;
 			return null;
