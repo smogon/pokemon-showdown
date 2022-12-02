@@ -4299,8 +4299,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.debug(`Supreme Overlord spa boost for ${faintedAllies} defeated allies.`);
 			return this.chainModify(1 + (0.1 * faintedAllies));
 		},
-		onAllyFaint(pokemon) {
-			if (pokemon.side.totalFainted > 5) return;
+		onAllyFaint() {
 			this.add('-activate', this.effectState.target, 'ability: Supreme Overlord');
 		},
 		name: "Supreme Overlord",
