@@ -6710,9 +6710,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.effectState.duration = 2;
 			},
 			onBeforeTurn() {
-				if (this.effectState.duration === 1) {
-					this.effectState.activate = true;
-				}
+				this.effectState.activate = true;
 			},
 			onAccuracy(accuracy) {
 				return this.effectState.activate ? true : accuracy;
