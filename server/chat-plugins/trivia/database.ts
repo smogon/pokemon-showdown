@@ -300,8 +300,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		}
 
 		await Chat.database.run(
-			`UPDATE trivia_questions SET is_submission = 1 WHERE question IN (${formatSQLArray(submissions)})`,
-			[submissions]
+			`UPDATE trivia_questions SET is_submission = 0 WHERE question IN (${formatSQLArray(submissions)})`,
+			submissions
 		);
 	}
 
