@@ -157,7 +157,7 @@ import {formatText, linkRegex, stripFormatting} from './chat-formatter';
 
 // @ts-ignore no typedef available
 import ProbeModule = require('probe-image-size');
-import { Monitor } from './monitor';
+import {Monitor} from './monitor';
 const probe: (url: string) => Promise<{width: number, height: number}> = ProbeModule;
 
 const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
@@ -1797,7 +1797,7 @@ export const Chat = new class {
 
 	async prepareDatabase() {
 		// PLEASE NEVER ACTUALLY ADD MIGRATIONS
-		// things break in weird ways that are hard to reason about, probably because of subprocesses 
+		// things break in weird ways that are hard to reason about, probably because of subprocesses
 		// it WILL crash and it WILL make your life and that of your users extremely unpleasant until it is fixed
 		if (!PM.isParentProcess) return; // We don't need a database in a subprocess that requires Chat.
 		if (!Config.usesqlite) return;
