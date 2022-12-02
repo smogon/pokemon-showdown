@@ -4947,6 +4947,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return null;
 			}
 		},
+		isBreakable: true,
 		name: "Well-Baked Body",
 		rating: 2,
 		num: 273,
