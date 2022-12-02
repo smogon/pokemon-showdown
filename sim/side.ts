@@ -680,9 +680,14 @@ export class Side {
 			if (this.requestState !== 'switch') {
 				return this.emitChoiceError(`Can't switch: You need to select a Pokémon to switch in`);
 			}
-			if (!this.choice.forcedSwitchesLeft) return this.choosePass();
-			slot = this.active.length;
-			while (this.choice.switchIns.has(slot) || this.pokemon[slot].fainted) slot++;
+			if (this.slotConditions[pokemon.position]['revivalblessing']) {
+				slot = 0;
+				while (!this.pokemon[slot].fainted) slot++;
+			} else {
+				if (!this.choice.forcedSwitchesLeft) return this.choosePass();
+				slot = this.active.length;
+				while (this.choice.switchIns.has(slot) || this.pokemon[slot].fainted) slot++;
+			}
 		} else {
 			slot = parseInt(slotText) - 1;
 		}
