@@ -10197,7 +10197,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 50,
 		basePowerCallback(pokemon, target, move) {
-			return 50 + 50 * pokemon.side.pokemon.filter(ally => ally.fainted).length;
+			return 50 + 50 * pokemon.side.totalFainted;
 		},
 		category: "Physical",
 		name: "Last Respects",
