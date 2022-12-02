@@ -808,7 +808,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			if ((defType === 'def' && defender.volatiles['reflect']) || (defType === 'spd' && defender.volatiles['lightscreen'])) {
 				this.battle.debug('Screen doubling (Sp)Def');
 				defense *= 2;
-				defense = this.battle.clampIntRange(defense, 1, 1998);
 			}
 
 			// In the event of a critical hit, the offense and defense changes are ignored.
@@ -839,7 +838,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// Defense isn't checked on the cartridge, but we don't want those / 0 bugs on the sim.
 				defense = Math.floor(defense / 4) % 256;
 				if (defense === 0) {
-					this.battle.hint('Pokemon Showdown avoids division by zero by rounding defense up to 1.' +
+					this.battle.hint('Pokemon Showdown avoids division by zero by rounding defense up to 1. ' +
 						'In game, the battle would have crashed.');
 					defense = 1;
 				}
