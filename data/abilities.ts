@@ -4988,6 +4988,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 193,
 	},
 	windpower: {
+		onStart(pokemon) {
+			if (pokemon.side.sideConditions['tailwind']) {
+				this.add('-activate', pokemon, 'ability: Wind Power', '[move] Tailwind');
+				pokemon.addVolatile('charge');
+			}
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (move.flags['wind']) {
 				this.add('-activate', target, 'ability: Wind Power', '[move] ' + move.name);
@@ -5006,6 +5012,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 277,
 	},
 	windrider: {
+		onStart(pokemon) {
+			if (pokemon.side.sideConditions['tailwind']) {
+				this.boost({atk: 1}, pokemon, pokemon, this.dex.abilities.get('windrider'), true);
+			}
+		},
 		onTryHit(target, source, move) {
 			if (target !== source && move.flags['wind']) {
 				if (!this.boost({atk: 1})) {
