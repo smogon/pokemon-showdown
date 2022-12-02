@@ -6710,13 +6710,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.effectState.duration = 2;
 			},
 			onBeforeTurn() {
-				this.effectState.activate = true;
+				this.effectState.isNextTurn = true;
 			},
 			onAccuracy(accuracy) {
-				return this.effectState.activate ? true : accuracy;
+				return this.effectState.isNextTurn ? true : accuracy;
 			},
 			onSourceModifyDamage() {
-				if (this.effectState.activate) {
+				if (this.effectState.isNextTurn) {
 					return this.chainModify(2);
 				}
 			},
