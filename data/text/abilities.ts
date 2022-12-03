@@ -426,10 +426,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	electromorphosis: {
 		name: "Electromorphosis",
-		desc: "This Pokemon's next Electric-type move has its damage boosted if it takes direct damage.",
+		desc: "This Pokemon's next Electric-type attack will have its power doubled if it takes direct damage.",
 		shortDesc: "This Pokemon becomes charged if it takes direct damage.",
 
-		activate: "  Being hit by [MOVE] charged [POKEMON] with power!",
+		start: "  Being hit by [MOVE] charged [POKEMON] with power!",
 	},
 	emergencyexit: {
 		name: "Emergency Exit",
@@ -2055,9 +2055,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	windpower: {
 		name: "Wind Power",
-		shortDesc: "If this Pokemon is hit by a wind move or Tailwind begins, it becomes charged.",
+		desc: "This Pokemon's next Electric-type attack will have its power doubled if it is hit by a wind move or Tailwind begins.",
+		shortDesc: "This Pokemon becomes charged if it is hit by a wind move or Tailwind begins.",
 
-		activate: "#electromorphosis",
+		start: "#electromorphosis",
 	},
 	windrider: {
 		name: "Wind Rider",

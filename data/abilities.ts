@@ -1069,8 +1069,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 226,
 	},
 	electromorphosis: {
+		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
-			this.add('-activate', target, 'ability: Electromorphosis', '[move] ' + move.name);
 			target.addVolatile('charge');
 		},
 		name: "Electromorphosis",
@@ -4988,16 +4988,15 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 193,
 	},
 	windpower: {
+		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
 			if (move.flags['wind']) {
-				this.add('-activate', target, 'ability: Wind Power', '[move] ' + move.name);
 				target.addVolatile('charge');
 			}
 		},
 		onAllySideConditionStart(target, source, sideCondition) {
 			const pokemon = this.effectState.target;
 			if (sideCondition.id === 'tailwind') {
-				this.add('-activate', pokemon, 'ability: Wind Power', '[move] Tailwind');
 				pokemon.addVolatile('charge');
 			}
 		},
@@ -5006,9 +5005,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 277,
 	},
 	windrider: {
+		onStart(pokemon) {
+			if (pokemon.side.sideConditions['tailwind']) {
+				this.boost({atk: 1}, pokemon, pokemon);
+			}
+		},
 		onTryHit(target, source, move) {
 			if (target !== source && move.flags['wind']) {
-				if (!this.boost({atk: 1})) {
+				if (!this.boost({atk: 1}, target, target)) {
 					this.add('-immune', target, '[from] ability: Wind Rider');
 				}
 				return null;
@@ -5017,7 +5021,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onAllySideConditionStart(target, source, sideCondition) {
 			const pokemon = this.effectState.target;
 			if (sideCondition.id === 'tailwind') {
-				this.boost({atk: 1}, pokemon, pokemon, this.dex.abilities.get('windrider'), true);
+				this.boost({atk: 1}, pokemon, pokemon);
 			}
 		},
 		name: "Wind Rider",
