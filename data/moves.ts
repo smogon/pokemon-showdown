@@ -19014,6 +19014,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 			return !target.hasAbility('stickyhold');
 		},
 		onHit(target, source, move) {
+			if (
+				(target.hasItem('Booster Energy') || source.hasItem('Booster Energy')) &&
+				(target.baseSpecies.tags.includes("Paradox") || source.baseSpecies.tags.includes("Paradox"))
+			) {
+				return false;
+			}
 			const yourItem = target.takeItem(source);
 			const myItem = source.takeItem();
 			if (target.item || source.item || (!yourItem && !myItem)) {
@@ -20156,6 +20162,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 			return !target.hasAbility('stickyhold');
 		},
 		onHit(target, source, move) {
+			if (
+				(target.hasItem('Booster Energy') || source.hasItem('Booster Energy')) &&
+				(target.baseSpecies.tags.includes("Paradox") || source.baseSpecies.tags.includes("Paradox"))
+			) {
+				return false;
+			}
 			const yourItem = target.takeItem(source);
 			const myItem = source.takeItem();
 			if (target.item || source.item || (!yourItem && !myItem)) {

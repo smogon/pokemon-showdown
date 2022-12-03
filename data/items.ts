@@ -574,6 +574,9 @@ export const Items: {[itemid: string]: ItemData} = {
 	boosterenergy: {
 		name: "Booster Energy",
 		spritenum: 0, // TODO
+		onTakeItem(item, source) {
+			return source.baseSpecies.tags.includes("Paradox");
+		},
 		// implemented in the corresponding thing
 		num: 1880,
 		gen: 9,
