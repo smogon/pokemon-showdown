@@ -4066,7 +4066,6 @@ export const MovesText: {[k: string]: MoveText} = {
 		gen1: {
 			desc: "While the user remains active, it is protected from having its stat stages lowered by other Pokemon, unless caused by the secondary effect of a move. Fails if the user already has the effect. If any Pokemon uses Haze, this effect ends.",
 			start: "  [POKEMON]'s shrouded in mist!",
-			block: "  But, it failed!",
 		},
 
 		start: "  [TEAM] became shrouded in mist!",
