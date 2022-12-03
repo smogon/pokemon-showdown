@@ -4589,11 +4589,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	toxicdebris: {
 		onDamagingHit(damage, target, source, move) {
-			// TODO is this contact specific?
-			const toxicSpikes = source.side.sideConditions['toxicspikes'];
+			const side = source.isAlly(target) ? source.side.foe : source.side;
+			const toxicSpikes = side.sideConditions['toxicspikes'];
 			if (move.category === 'Physical' && (!toxicSpikes || toxicSpikes.layers < 2)) {
 				this.add('-activate', target, 'ability: Toxic Debris');
-				source.side.addSideCondition('toxicspikes', target);
+				side.addSideCondition('toxicspikes', target);
 			}
 		},
 		name: "Toxic Debris",
