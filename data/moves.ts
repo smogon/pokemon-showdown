@@ -6703,24 +6703,22 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			volatileStatus: 'glaiverush',
 		},
-		onAfterHit(source, target, move) {
-			if (!target.hp) {
-				if (source.volatiles['glaiverush']) {
-					delete source.volatiles['glaiverush'];
-					source.addVolatile('glaiverush');
-				}
-			}
-		},
 		condition: {
 			noCopy: true,
 			duration: 2,
-			onAccuracy(accuracy) {
-				if (this.effectState.duration === 2) return accuracy;
-				return true;
+			onRestart() {
+				this.effectState.duration = 2;
+			},
+			onBeforeTurn() {
+				this.effectState.turnPassed = true;
+			},
+			onSourceAccuracy() {
+				if (this.effectState.turnPassed) return true;
 			},
 			onSourceModifyDamage() {
-				if (this.effectState.duration === 2) return;
-				return this.chainModify(2);
+				if (this.effectState.turnPassed) {
+					return this.chainModify(2);
+				}
 			},
 		},
 		secondary: null,
