@@ -638,15 +638,20 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const ally = pokemon.allies()[0];
 			if (!ally) return;
 
-			let activate = false;
 			let i: BoostID;
 			for (i in ally.boosts) {
-				if (ally.boosts[i]) {
-					pokemon.boosts[i] = ally.boosts[i];
-					activate = true;
+				pokemon.boosts[i] = ally.boosts[i];
+			}
+			const volatilesToCopy = ['focusenergy', 'gmaxchistrike', 'laserfocus'];
+			for (const volatile of volatilesToCopy) {
+				if (ally.volatiles[volatile]) {
+					pokemon.addVolatile(volatile);
+					if (volatile === 'gmaxchistrike') pokemon.volatiles[volatile].layers = ally.volatiles[volatile].layers;
+				} else {
+					pokemon.removeVolatile(volatile);
 				}
 			}
-			if (activate) this.add('-copyboost', pokemon, ally, '[from] ability: Costar');
+			this.add('-copyboost', pokemon, ally, '[from] ability: Costar');
 		},
 		name: "Costar",
 		rating: 0,

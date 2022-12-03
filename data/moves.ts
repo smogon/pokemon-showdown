@@ -5996,7 +5996,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onStart(target, source, effect) {
 				if (effect?.id === 'zpower') {
 					this.add('-start', target, 'move: Focus Energy', '[zeffect]');
-				} else if (effect && (['imposter', 'psychup', 'transform'].includes(effect.id))) {
+				} else if (effect && (['costar', 'imposter', 'psychup', 'transform'].includes(effect.id))) {
 					this.add('-start', target, 'move: Focus Energy', '[silent]');
 				} else {
 					this.add('-start', target, 'move: Focus Energy');
@@ -6874,14 +6874,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 			noCopy: true,
 			onStart(target, source, effect) {
 				this.effectState.layers = 1;
-				if (!['imposter', 'psychup', 'transform'].includes(effect?.id)) {
+				if (!['costar', 'imposter', 'psychup', 'transform'].includes(effect?.id)) {
 					this.add('-start', target, 'move: G-Max Chi Strike');
 				}
 			},
 			onRestart(target, source, effect) {
 				if (this.effectState.layers >= 3) return false;
 				this.effectState.layers++;
-				if (!['imposter', 'psychup', 'transform'].includes(effect?.id)) {
+				if (!['costar', 'imposter', 'psychup', 'transform'].includes(effect?.id)) {
 					this.add('-start', target, 'move: G-Max Chi Strike');
 				}
 			},
@@ -10124,7 +10124,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			duration: 2,
 			onStart(pokemon, source, effect) {
-				if (effect && (['imposter', 'psychup', 'transform'].includes(effect.id))) {
+				if (effect && (['costar', 'imposter', 'psychup', 'transform'].includes(effect.id))) {
 					this.add('-start', pokemon, 'move: Laser Focus', '[silent]');
 				} else {
 					this.add('-start', pokemon, 'move: Laser Focus');
