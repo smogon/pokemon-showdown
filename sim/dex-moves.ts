@@ -372,7 +372,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	 */
 	readonly secondaries: SecondaryEffect[] | null;
 	/**
-	 * Moves manually boosted by Sheer Force that dont have secondary effects.
+	 * Moves manually boosted by Sheer Force that don't have secondary effects.
 	 * e.g. Jet Punch
 	 */
 	readonly hasSheerForce: boolean;
