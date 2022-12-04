@@ -4076,14 +4076,14 @@ export const commands: Chat.ChatCommands = {
 	},
 };
 
-export const roomSettings: Chat.SettingsHandler = room => ({
-	label: "Mafia",
-	permission: 'editroom',
-	options: [
-		[`disabled`, room.settings.mafiaDisabled || 'mafia disable'],
-		[`enabled`, !room.settings.mafiaDisabled || 'mafia enable'],
-	],
-});
+// export const roomSettings: Chat.SettingsHandler = room => ({
+// 	label: "Mafia",
+// 	permission: 'editroom',
+// 	options: [
+// 		[`disabled`, room.settings.mafiaDisabled || 'mafia disable'],
+// 		[`enabled`, !room.settings.mafiaDisabled || 'mafia enable'],
+// 	],
+// });
 
 process.nextTick(() => {
 	Chat.multiLinePattern.register('/mafia (custom|add|overwrite)idea');

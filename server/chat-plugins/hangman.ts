@@ -605,11 +605,11 @@ export const pages: Chat.PageTable = {
 	},
 };
 
-export const roomSettings: Chat.SettingsHandler = room => ({
-	label: "Hangman",
-	permission: 'editroom',
-	options: [
-		[`disabled`, room.settings.hangmanDisabled || 'hangman disable'],
-		[`enabled`, !room.settings.hangmanDisabled || 'hangman enable'],
-	],
-});
+// export const roomSettings: Chat.SettingsHandler = room => ({
+// 	label: "Hangman",
+// 	permission: 'editroom',
+// 	options: [
+// 		[`disabled`, room.settings.hangmanDisabled || 'hangman disable'],
+// 		[`enabled`, !room.settings.hangmanDisabled || 'hangman enable'],
+// 	],
+// });

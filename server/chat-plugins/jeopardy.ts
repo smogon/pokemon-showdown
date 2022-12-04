@@ -955,11 +955,11 @@ export const commands: Chat.ChatCommands = {
 	},
 };
 
-export const roomSettings: Chat.SettingsHandler = room => ({
-	label: "Jeopardy",
-	permission: 'editroom',
-	options: [
-		[`disabled`, room.settings.jeopardyDisabled || 'jeopardy disable'],
-		[`enabled`, !room.settings.jeopardyDisabled || 'jeopardy enable'],
-	],
-});
+// export const roomSettings: Chat.SettingsHandler = room => ({
+// 	label: "Jeopardy",
+// 	permission: 'editroom',
+// 	options: [
+// 		[`disabled`, room.settings.jeopardyDisabled || 'jeopardy disable'],
+// 		[`enabled`, !room.settings.jeopardyDisabled || 'jeopardy enable'],
+// 	],
+// });

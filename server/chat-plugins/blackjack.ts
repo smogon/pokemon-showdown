@@ -763,11 +763,11 @@ export const commands: Chat.ChatCommands = {
 		"/blackjack enable - Allows games of blackjack to be made in the room. Requires: # &",
 	],
 };
-export const roomSettings: Chat.SettingsHandler = room => ({
-	label: "Blackjack",
-	permission: 'editroom',
-	options: [
-		[`disabled`, room.settings.blackjackDisabled || 'blackjack disable'],
-		[`enabled`, !room.settings.blackjackDisabled || 'blackjack enable'],
-	],
-});
+// export const roomSettings: Chat.SettingsHandler = room => ({
+// 	label: "Blackjack",
+// 	permission: 'editroom',
+// 	options: [
+// 		[`disabled`, room.settings.blackjackDisabled || 'blackjack disable'],
+// 		[`enabled`, !room.settings.blackjackDisabled || 'blackjack enable'],
+// 	],
+// });

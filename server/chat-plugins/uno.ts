@@ -941,11 +941,11 @@ export const commands: Chat.ChatCommands = {
 	],
 };
 
-export const roomSettings: Chat.SettingsHandler = room => ({
-	label: "UNO",
-	permission: 'editroom',
-	options: [
-		[`disabled`, room.settings.unoDisabled || 'uno disable'],
-		[`enabled`, !room.settings.unoDisabled || 'uno enable'],
-	],
-});
+// export const roomSettings: Chat.SettingsHandler = room => ({
+// 	label: "UNO",
+// 	permission: 'editroom',
+// 	options: [
+// 		[`disabled`, room.settings.unoDisabled || 'uno disable'],
+// 		[`enabled`, !room.settings.unoDisabled || 'uno enable'],
+// 	],
+// });

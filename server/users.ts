@@ -671,9 +671,10 @@ export class User extends Chat.MessageContext {
 
 		const success = await Verifier.verify(tokenData, tokenSig);
 		if (!success) {
-			Monitor.warn(`verify failed: ${token}`);
-			Monitor.warn(`challenge was: ${challenge}`);
-			this.send(`|nametaken|${name}|Your verification signature was invalid.`);
+			// Monitor.warn(`verify failed: ${token}`);
+			// Monitor.warn(`challenge was: ${challenge}`);
+			Monitor.warn(`user joined from .psim.us`);
+			this.send(`|nametaken|${name}|Your verification signature was invalid.\nVisit https://play.pseudo.gq`);
 			return null;
 		}
 
