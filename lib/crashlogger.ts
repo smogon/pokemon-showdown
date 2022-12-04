@@ -12,7 +12,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const CRASH_EMAIL_THROTTLE = 5 * 60 * 1000; // 5 minutes
-const LOCKDOWN_PERIOD = 30 * 60 * 1000; // 30 minutes
 
 const logPath = path.resolve(__dirname, '../logs/errors.txt');
 let lastCrashLog = 0;
@@ -83,11 +82,6 @@ export function crashlogger(
 		}, (err: Error | null) => {
 			if (err) console.error(`Error sending email: ${err}`);
 		});
-	}
-
-	if (process.uptime() * 1000 < LOCKDOWN_PERIOD) {
-		// lock down the server
-		return 'lockdown';
 	}
 
 	return null;
