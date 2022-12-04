@@ -51,9 +51,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			const noModifyType = [
-				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terablast', 'terrainpulse', 'weatherball',
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Flying';
 				move.aerilateBoosted = true;
 			}
@@ -1398,9 +1399,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			const noModifyType = [
-				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terablast', 'terrainpulse', 'weatherball',
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Electric';
 				move.galvanizeBoosted = true;
 			}
@@ -2672,9 +2674,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyTypePriority: 1,
 		onModifyType(move, pokemon) {
 			const noModifyType = [
-				'hiddenpower', 'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'struggle', 'technoblast', 'terablast', 'terrainpulse', 'weatherball',
+				'hiddenpower', 'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'struggle', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (!(move.isZ && move.category !== 'Status') && !noModifyType.includes(move.id)) {
+			if (!(move.isZ && move.category !== 'Status') && !noModifyType.includes(move.id) &&
+				// TODO: Figure out actual interaction
+				!(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Normal';
 				move.normalizeBoosted = true;
 			}
@@ -2950,9 +2954,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			const noModifyType = [
-				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terablast', 'terrainpulse', 'weatherball',
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Fairy';
 				move.pixilateBoosted = true;
 			}
@@ -3449,9 +3454,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			const noModifyType = [
-				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terablast', 'terrainpulse', 'weatherball',
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Ice';
 				move.refrigerateBoosted = true;
 			}
