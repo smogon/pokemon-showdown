@@ -5996,7 +5996,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onStart(target, source, effect) {
 				if (effect?.id === 'zpower') {
 					this.add('-start', target, 'move: Focus Energy', '[zeffect]');
-				} else if (effect && (['imposter', 'psychup', 'transform'].includes(effect.id))) {
+				} else if (effect && (['costar', 'imposter', 'psychup', 'transform'].includes(effect.id))) {
 					this.add('-start', target, 'move: Focus Energy', '[silent]');
 				} else {
 					this.add('-start', target, 'move: Focus Energy');
@@ -6703,24 +6703,22 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			volatileStatus: 'glaiverush',
 		},
-		onAfterHit(source, target, move) {
-			if (!target.hp) {
-				if (source.volatiles['glaiverush']) {
-					delete source.volatiles['glaiverush'];
-					source.addVolatile('glaiverush');
-				}
-			}
-		},
 		condition: {
 			noCopy: true,
 			duration: 2,
-			onAccuracy(accuracy) {
-				if (this.effectState.duration === 2) return accuracy;
-				return true;
+			onRestart() {
+				this.effectState.duration = 2;
+			},
+			onBeforeTurn() {
+				this.effectState.turnPassed = true;
+			},
+			onSourceAccuracy() {
+				if (this.effectState.turnPassed) return true;
 			},
 			onSourceModifyDamage() {
-				if (this.effectState.duration === 2) return;
-				return this.chainModify(2);
+				if (this.effectState.turnPassed) {
+					return this.chainModify(2);
+				}
 			},
 		},
 		secondary: null,
@@ -6874,14 +6872,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 			noCopy: true,
 			onStart(target, source, effect) {
 				this.effectState.layers = 1;
-				if (!['imposter', 'psychup', 'transform'].includes(effect?.id)) {
+				if (!['costar', 'imposter', 'psychup', 'transform'].includes(effect?.id)) {
 					this.add('-start', target, 'move: G-Max Chi Strike');
 				}
 			},
 			onRestart(target, source, effect) {
 				if (this.effectState.layers >= 3) return false;
 				this.effectState.layers++;
-				if (!['imposter', 'psychup', 'transform'].includes(effect?.id)) {
+				if (!['costar', 'imposter', 'psychup', 'transform'].includes(effect?.id)) {
 					this.add('-start', target, 'move: G-Max Chi Strike');
 				}
 			},
@@ -9897,6 +9895,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		secondary: null,
+		hasSheerForce: true,
 		target: "normal",
 		type: "Water",
 		contestType: "Cool",
@@ -10124,7 +10123,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			duration: 2,
 			onStart(pokemon, source, effect) {
-				if (effect && (['imposter', 'psychup', 'transform'].includes(effect.id))) {
+				if (effect && (['costar', 'imposter', 'psychup', 'transform'].includes(effect.id))) {
 					this.add('-start', pokemon, 'move: Laser Focus', '[silent]');
 				} else {
 					this.add('-start', pokemon, 'move: Laser Focus');
