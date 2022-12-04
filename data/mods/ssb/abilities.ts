@@ -866,7 +866,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-message', `${target.name} is rusting...`);
 			}
 		},
-		onAnyWeatherStart() {
+		onWeatherChange() {
 			const pokemon = this.effectState.target;
 			if (this.field.isWeather(['raindance', 'primordialsea'])) {
 				this.boost({def: 1, spd: 1, spe: -1}, pokemon, pokemon);
@@ -2159,7 +2159,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				pokemon.formeChange('Eiscue', this.effect, true);
 			}
 		},
-		onAnyWeatherStart() {
+		onWeatherChange() {
 			const pokemon = this.effectState.target;
 			if (this.field.isWeather(['heavyhailstorm', 'hail', 'winterhail']) &&
 				pokemon.species.id === 'eiscuenoice' && !pokemon.transformed) {
