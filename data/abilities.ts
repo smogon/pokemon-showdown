@@ -4296,7 +4296,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const faintedAllies = Math.min(5, source.side.totalFainted);
 			if (faintedAllies) {
 				this.debug(`Supreme Overlord spa boost for ${faintedAllies} defeated allies.`);
-    	  return this.chainModify(1 + (0.1 * faintedAllies));
+				return this.chainModify(1 + (0.1 * faintedAllies));
       }
 		},
 		onAllyFaint() {
