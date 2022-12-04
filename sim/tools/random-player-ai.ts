@@ -41,17 +41,17 @@ export class RandomPlayerAI extends BattlePlayer {
 			// switch request
 			const pokemon = request.side.pokemon;
 			const chosen: number[] = [];
-			const choices = request.forceSwitch.map((mustSwitch: AnyObject) => {
+			const choices = request.forceSwitch.map((mustSwitch: AnyObject, i: number) => {
 				if (!mustSwitch) return `pass`;
 
-				const canSwitch = range(1, 6).filter(i => (
-					pokemon[i - 1] &&
+				const canSwitch = range(1, 6).filter(j => (
+					pokemon[j - 1] &&
 					// not active
-					i > request.forceSwitch.length &&
+					j > request.forceSwitch.length &&
 					// not chosen for a simultaneous switch
-					!chosen.includes(i) &&
-					// not fainted
-					!pokemon[i - 1].condition.endsWith(` fnt`)
+					!chosen.includes(j) &&
+					// not fainted or fainted and using Revival Blessing
+					!!(+!!pokemon[i].reviving ^ +!pokemon[j - 1].condition.endsWith(` fnt`))
 				));
 
 				if (!canSwitch.length) return `pass`;
@@ -70,7 +70,7 @@ export class RandomPlayerAI extends BattlePlayer {
 			const pokemon = request.side.pokemon;
 			const chosen: number[] = [];
 			const choices = request.active.map((active: AnyObject, i: number) => {
-				if (pokemon[i].condition.endsWith(` fnt`)) return `pass`;
+				if (pokemon[i].condition.endsWith(` fnt`) || pokemon[i].commanding) return `pass`;
 
 				canMegaEvo = canMegaEvo && active.canMegaEvo;
 				canUltraBurst = canUltraBurst && active.canUltraBurst;
