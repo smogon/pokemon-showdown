@@ -26,122 +26,139 @@ export const Formats: FormatList = [
 
 	{
 		name: "[Gen 9] OUD",
+
+		mod: 'gen9deluxe',
+		ruleset: ['Standard', 'Evasion Clause', 'OUD Terastal Clause'],
+		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Baton Pass', 'Shadow Tag', 'Quick Claw', 'King\'s Rock'],
 	},
 
 	{
 		name: "[Gen 9] UUD",
+
+		mod: 'gen9deluxe',
+		ruleset: ['Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause'],
+		banlist: ['Uber', 'AG', 'OU', 'OUD', 'UUBL', 'Arena Trap', 'Moody', 'Baton Pass', 'Shadow Tag', 'Quick Claw', 'King\'s Rock'],
+	},
+
+	{
+		name: "[Gen 9] Do Not Use",
+
+		mod: 'gen9deluxe',
+		ruleset: ['Standard', 'Evasion Clause', 'Z-Move Clause'],
+		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
+		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass"]
 	},
 
 	// SS Pseudos Metas
 	///////////////////////////////////////////////////////////////////
-	{
-		section: "SS Pseudos Metas",
-	},
-	
-	{
-		name: "[Gen 8] Pseudos",
-		threads: [
-		//      `&bullet; <a href="https://www.smogon.com/forums/threads/3676539/">Ubers Metagame Discussion</a>`,
-		//      `&bullet; <a href="https://www.smogon.com/forums/threads/3675564/">Ubers Sample Teams</a>`,
-		//      `&bullet; <a href="https://www.smogon.com/forums/threads/3675194/">Ubers Viability Rankings</a>`,
-		],
+	// {
+	// 	section: "SS Pseudos Metas",
+	// },
 
-		mod: 'gen8',
-		ruleset: ['Standard', 'Dynamax Clause', 'Evasion Items Clause'],
-		banlist: ['AG', 'Shadow Tag', 'Baton Pass', 'Uber', 'Suspect','Pseubers', /*'Rusted Shield',*/ 'Zygarde-Base + Power Construct', 'Moody', 'Arena Trap']
-	},
-	{
-		name: "[Gen 8] Pseubers",
-		threads: [
-		//      `&bullet; <a href="https://www.smogon.com/forums/threads/3676539/">Ubers Metagame Discussion</a>`,
-		//      `&bullet; <a href="https://www.smogon.com/forums/threads/3675564/">Ubers Sample Teams</a>`,
-		//      `&bullet; <a href="https://www.smogon.com/forums/threads/3675194/">Ubers Viability Rankings</a>`,
-		],
+	// {
+	// 	name: "[Gen 8] Pseudos",
+	// 	threads: [
+	// 	//      `&bullet; <a href="https://www.smogon.com/forums/threads/3676539/">Ubers Metagame Discussion</a>`,
+	// 	//      `&bullet; <a href="https://www.smogon.com/forums/threads/3675564/">Ubers Sample Teams</a>`,
+	// 	//      `&bullet; <a href="https://www.smogon.com/forums/threads/3675194/">Ubers Viability Rankings</a>`,
+	// 	],
 
-		mod: 'gen8',
-		ruleset: ['Standard', 'Dynamax Clause', 'Evasion Items Clause'],
-		banlist: ['AG', 'Shadow Tag', 'Baton Pass', 'Uber', 'Suspect', 'Zygarde-Base + Power Construct', 'Moody',]
-	},
-	{
-		name: "[Gen 8] Pseudos AAA",
-		desc: `Pok&eacute;mon have access to almost any ability.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3656414/">Almost Any Ability</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3682690/">AAA Resources</a>`,
-		],
+	// 	mod: 'gen8',
+	// 	ruleset: ['Standard', 'Dynamax Clause', 'Evasion Items Clause'],
+	// 	banlist: ['AG', 'Shadow Tag', 'Baton Pass', 'Uber', 'Suspect','Pseubers', /*'Rusted Shield',*/ 'Zygarde-Base + Power Construct', 'Moody', 'Arena Trap']
+	// },
+	// {
+	// 	name: "[Gen 8] Pseubers",
+	// 	threads: [
+	// 	//      `&bullet; <a href="https://www.smogon.com/forums/threads/3676539/">Ubers Metagame Discussion</a>`,
+	// 	//      `&bullet; <a href="https://www.smogon.com/forums/threads/3675564/">Ubers Sample Teams</a>`,
+	// 	//      `&bullet; <a href="https://www.smogon.com/forums/threads/3675194/">Ubers Viability Rankings</a>`,
+	// 	],
 
-		mod: 'gen8',
-		ruleset: ['Standard OMs', '!Obtainable Abilities', '2 Ability Clause', 'Sleep Moves Clause'],
-		banlist: [
-			/*'Archeops', 'Blacephalon', 'Buzzwole', */'Calyrex-Ice', 'Calyrex-Shadow',/* 'Dialga', */'Dracovish', /*'Dragapult', 'Dragonite', */'Eternatus', /*'Genesect',
-			'Gengar', */'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh',/* 'Kartana', 'Keldeo', */'Kyogre',/* 'Kyurem', 'Kyurem-Black', 'Kyurem-White', 'Lugia',*/
-			'Lunala', /*'Magearna', */'Marshadow',/* 'Melmetal', */'Mewtwo',/* 'Naganadel', 'Necrozma-Dawn-Wings', */'Necrozma-Dusk-Mane', 'Noivern',/* 'Palkia', 'Pheromosa',
-			*/'Rayquaza',/* 'Regigigas', 'Reshiram', 'Shedinja', 'Solgaleo', 'Spectrier',*/ 'Urshifu',/* 'Urshifu-Rapid-Strike', 'Victini', 'Weavile', */'Xerneas',
-			'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Base', 'Zekrom',/* 'Zeraora', 'Zygarde-Base', */'Arena Trap', 'Comatose', 'Contrary', 'Fluffy',
-			'Fur Coat', 'Gorilla Tactics', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter', 'Innards Out', 'Intrepid Sword', 'Libero', 'Magic Bounce',
-			'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Poison Heal', 'Protean', 'Pure Power', 'Shadow Tag', 'Simple', 'Stakeout',
-			'Speed Boost', 'Unburden', 'Water Bubble', 'Wonder Guard', 'King\'s Rock', 'Baton Pass',
-		],
-	},
-	{
-		name: "[Gen 8] Pseudos AG",
-		threads: [
-		//      `&bullet; <a href="https://www.smogon.com/forums/threads/3676539/">Ubers Metagame Discussion</a>`,
-		//      `&bullet; <a href="https://www.smogon.com/forums/threads/3675564/">Ubers Sample Teams</a>`,
-		//      `&bullet; <a href="https://www.smogon.com/forums/threads/3675194/">Ubers Viability Rankings</a>`,
-		],
+	// 	mod: 'gen8',
+	// 	ruleset: ['Standard', 'Dynamax Clause', 'Evasion Items Clause'],
+	// 	banlist: ['AG', 'Shadow Tag', 'Baton Pass', 'Uber', 'Suspect', 'Zygarde-Base + Power Construct', 'Moody',]
+	// },
+	// {
+	// 	name: "[Gen 8] Pseudos AAA",
+	// 	desc: `Pok&eacute;mon have access to almost any ability.`,
+	// 	threads: [
+	// 		`&bullet; <a href="https://www.smogon.com/forums/threads/3656414/">Almost Any Ability</a>`,
+	// 		`&bullet; <a href="https://www.smogon.com/forums/threads/3682690/">AAA Resources</a>`,
+	// 	],
 
-		mod: 'gen8',
-		ruleset: ['Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
-		banlist: ['AG','Uber', 'Suspect','Pseubers', 'Rusted Shield', 'Zygarde-Base + Power Construct',]
-	},
-	{
-		name: "[Gen 8] Do Not Use",
-		threads: [
-		//      `&bullet; <a href="https://www.smogon.com/forums/threads/3676539/">Ubers Metagame Discussion</a>`,
-		//      `&bullet; <a href="https://www.smogon.com/forums/threads/3675564/">Ubers Sample Teams</a>`,
-		//      `&bullet; <a href="https://www.smogon.com/forums/threads/3675194/">Ubers Viability Rankings</a>`,
-		],
+	// 	mod: 'gen8',
+	// 	ruleset: ['Standard OMs', '!Obtainable Abilities', '2 Ability Clause', 'Sleep Moves Clause'],
+	// 	banlist: [
+	// 		/*'Archeops', 'Blacephalon', 'Buzzwole', */'Calyrex-Ice', 'Calyrex-Shadow',/* 'Dialga', */'Dracovish', /*'Dragapult', 'Dragonite', */'Eternatus', /*'Genesect',
+	// 		'Gengar', */'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh',/* 'Kartana', 'Keldeo', */'Kyogre',/* 'Kyurem', 'Kyurem-Black', 'Kyurem-White', 'Lugia',*/
+	// 		'Lunala', /*'Magearna', */'Marshadow',/* 'Melmetal', */'Mewtwo',/* 'Naganadel', 'Necrozma-Dawn-Wings', */'Necrozma-Dusk-Mane', 'Noivern',/* 'Palkia', 'Pheromosa',
+	// 		*/'Rayquaza',/* 'Regigigas', 'Reshiram', 'Shedinja', 'Solgaleo', 'Spectrier',*/ 'Urshifu',/* 'Urshifu-Rapid-Strike', 'Victini', 'Weavile', */'Xerneas',
+	// 		'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Base', 'Zekrom',/* 'Zeraora', 'Zygarde-Base', */'Arena Trap', 'Comatose', 'Contrary', 'Fluffy',
+	// 		'Fur Coat', 'Gorilla Tactics', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter', 'Innards Out', 'Intrepid Sword', 'Libero', 'Magic Bounce',
+	// 		'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Poison Heal', 'Protean', 'Pure Power', 'Shadow Tag', 'Simple', 'Stakeout',
+	// 		'Speed Boost', 'Unburden', 'Water Bubble', 'Wonder Guard', 'King\'s Rock', 'Baton Pass',
+	// 	],
+	// },
+	// {
+	// 	name: "[Gen 8] Pseudos AG",
+	// 	threads: [
+	// 	//      `&bullet; <a href="https://www.smogon.com/forums/threads/3676539/">Ubers Metagame Discussion</a>`,
+	// 	//      `&bullet; <a href="https://www.smogon.com/forums/threads/3675564/">Ubers Sample Teams</a>`,
+	// 	//      `&bullet; <a href="https://www.smogon.com/forums/threads/3675194/">Ubers Viability Rankings</a>`,
+	// 	],
 
-		mod: 'gen8',
-		ruleset: ['Standard NatDex', 'Dynamax Clause', 'Evasion Items Clause', 'Z-Move Clause'],
-		banlist: ['AG', 'Shadow Tag', 'Baton Pass', 'Uber', 'Suspect', 'OU', 'UU', "RU", "NU", "PU", "ZU", "Huge Power"]
-	},
-	{
-	name: "[Gen 8] UU Deluxe",
-	threads: [
-			//`&bullet; <a href="https://www.smogon.com/forums/threads/3666135/">National Dex Metagame Discussion</a>`,
-			//`&bullet; <a href="https://www.smogon.com/forums/threads/3667921/">National Dex Sample Teams</a>`,
-			//`&bullet; <a href="https://www.smogon.com/forums/threads/3666572/">National Dex Viability Rankings</a>`,
-	],
+	// 	mod: 'gen8',
+	// 	ruleset: ['Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
+	// 	banlist: ['AG','Uber', 'Suspect','Pseubers', 'Rusted Shield', 'Zygarde-Base + Power Construct',]
+	// },
+	// {
+	// 	name: "[Gen 8] Do Not Use",
+	// 	threads: [
+	// 	//      `&bullet; <a href="https://www.smogon.com/forums/threads/3676539/">Ubers Metagame Discussion</a>`,
+	// 	//      `&bullet; <a href="https://www.smogon.com/forums/threads/3675564/">Ubers Sample Teams</a>`,
+	// 	//      `&bullet; <a href="https://www.smogon.com/forums/threads/3675194/">Ubers Viability Rankings</a>`,
+	// 	],
 
-	mod: 'gen8deluxe',
-	ruleset: ['Standard NatDex', 'Mega-Stone Clause','Z-Move Clause','OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod'],
-	banlist: [
-		"Uber", "AG", "OU", "Pseudo", "OUD", "Teleport", "Quick Claw", "Acupressure", "Shadow Tag", "Baton Pass", "King's Rock", "Moody", "Arena Trap",
-	],
-	},
-	{
-		name: "[Gen 8] UU Deluxe Suspect",
+	// 	mod: 'gen8',
+	// 	ruleset: ['Standard NatDex', 'Dynamax Clause', 'Evasion Items Clause', 'Z-Move Clause'],
+	// 	banlist: ['AG', 'Shadow Tag', 'Baton Pass', 'Uber', 'Suspect', 'OU', 'UU', "RU", "NU", "PU", "ZU", "Huge Power"]
+	// },
+	// {
+	// name: "[Gen 8] UU Deluxe",
+	// threads: [
+	// 		//`&bullet; <a href="https://www.smogon.com/forums/threads/3666135/">National Dex Metagame Discussion</a>`,
+	// 		//`&bullet; <a href="https://www.smogon.com/forums/threads/3667921/">National Dex Sample Teams</a>`,
+	// 		//`&bullet; <a href="https://www.smogon.com/forums/threads/3666572/">National Dex Viability Rankings</a>`,
+	// ],
 
-		mod: 'gen8deluxe',
-		ruleset: ['[Gen 8] UU Deluxe'],
-		unbanlist: ['Dracozolt']
-	},
-	{
-	name: "[Gen 8] OU Deluxe",
-	threads: [
-			//`&bullet; <a href="https://www.smogon.com/forums/threads/3666135/">National Dex Metagame Discussion</a>`,
-			//`&bullet; <a href="https://www.smogon.com/forums/threads/3667921/">National Dex Sample Teams</a>`,
-			//`&bullet; <a href="https://www.smogon.com/forums/threads/3666572/">National Dex Viability Rankings</a>`,
-	],
+	// mod: 'gen8deluxe',
+	// ruleset: ['Standard NatDex', 'Mega-Stone Clause','Z-Move Clause','OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod'],
+	// banlist: [
+	// 	"Uber", "AG", "OU", "Pseudo", "OUD", "Teleport", "Quick Claw", "Acupressure", "Shadow Tag", "Baton Pass", "King's Rock", "Moody", "Arena Trap",
+	// ],
+	// },
+	// {
+	// 	name: "[Gen 8] UU Deluxe Suspect",
 
-	mod: 'gen8deluxe',
-	ruleset: ['Standard NatDex', 'Z-Move Clause','OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod'],
-	banlist: [
-		'Uber', 'AG', "Pseudo", 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'Baton Pass', "King's Rock",
-	],
-	},
+	// 	mod: 'gen8deluxe',
+	// 	ruleset: ['[Gen 8] UU Deluxe'],
+	// 	unbanlist: ['Dracozolt']
+	// },
+	// {
+	// name: "[Gen 8] OU Deluxe",
+	// threads: [
+	// 		//`&bullet; <a href="https://www.smogon.com/forums/threads/3666135/">National Dex Metagame Discussion</a>`,
+	// 		//`&bullet; <a href="https://www.smogon.com/forums/threads/3667921/">National Dex Sample Teams</a>`,
+	// 		//`&bullet; <a href="https://www.smogon.com/forums/threads/3666572/">National Dex Viability Rankings</a>`,
+	// ],
+
+	// mod: 'gen8deluxe',
+	// ruleset: ['Standard NatDex', 'Z-Move Clause','OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod'],
+	// banlist: [
+	// 	'Uber', 'AG', "Pseudo", 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'Baton Pass', "King's Rock",
+	// ],
+	// },
 
 //	{
 //              name: "[Gen 8] Pseudos Suspect",

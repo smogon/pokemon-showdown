@@ -669,14 +669,42 @@ export class User extends Chat.MessageContext {
 			return null;
 		}
 
-		const success = await Verifier.verify(tokenData, tokenSig);
-		if (!success) {
+		const success0 = await Verifier.verify(tokenData, tokenSig, Config.loginserverpublickey[0]);
+		const success1 = await Verifier.verify(tokenData, tokenSig, Config.loginserverpublickey[1]);
+		if (!success0 && !success1) {
 			// Monitor.warn(`verify failed: ${token}`);
 			// Monitor.warn(`challenge was: ${challenge}`);
-			Monitor.warn(`user joined from .psim.us`);
-			this.send(`|nametaken|${name}|Your verification signature was invalid.\nVisit https://play.pseudo.gq`);
+			// Monitor.warn(`user joined from .psim.us`);
+			this.send(`|nametaken|${name}|Your verification signature was invalid.` /*+ \nVisit https://play.pseudo.gq`*/);
 			return null;
 		}
+
+		// check to see if the user is in /200gb/pseudos-showdown/config/users.json and if so, get their number.
+		// if the number is 0 but success1 is true, return null and send a message to the user saying that another account has been made with the same name.
+		// if the number is 1 but success0 is true, return null and send a message to the user saying that another account has been made with the same name.
+
+		const location  = "/200gb/pseudos-showdown/config/users.json";
+		const users = JSON.parse(FS(location).readSync());
+
+		if (users[userid]) {
+			if (users[userid] === 0 && success1) {
+				this.send(`|nametaken|${name}|Another account has been made with the same name. Please contact an administrator.`);
+				return null;
+			}
+			if (users[userid] === 1 && success0) {
+				this.send(`|nametaken|${name}|Another account has been made with the same name. Please contact an administrator.`);
+				return null;
+			}
+		}
+
+		// if success0 save to /200gb/pseudos-showdown/config/users.json the user and 0
+		// if success1 save to /200gb/pseudos-showdown/config/users.json the user and 1
+		if (success0) {
+			users[userid] = 0;
+		} else if (success1) {
+			users[userid] = 1;
+		}
+		FS(location).writeSync(JSON.stringify(users));
 
 		// future-proofing
 		this.s1 = tokenDataSplit[5];

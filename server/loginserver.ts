@@ -41,7 +41,7 @@ class LoginServerInstance {
 	disabled: false;
 
 	constructor() {
-		this.uri = Config.loginserver;
+		this.uri = Config.loginserver[1];
 		this.requestQueue = [];
 		this.requestTimer = null;
 		this.requestLog = '';

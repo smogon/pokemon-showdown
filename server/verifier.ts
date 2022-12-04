@@ -15,19 +15,19 @@ import * as crypto from 'crypto';
 
 import {QueryProcessManager} from '../lib/process-manager';
 
-export const PM = new QueryProcessManager<{data: string, signature: string}, boolean>(module, ({data, signature}) => {
+export const PM = new QueryProcessManager<{data: string, signature: string, key: crypto.KeyLike}, boolean>(module, ({data, signature, key}) => {
 	const verifier = crypto.createVerify(Config.loginserverkeyalgo);
 	verifier.update(data);
 	let success = false;
 	try {
-		success = verifier.verify(Config.loginserverpublickey, signature, 'hex');
+		success = verifier.verify(key, signature, 'hex');
 	} catch {}
 
 	return success;
 });
 
-export function verify(data: string, signature: string): Promise<boolean> {
-	return PM.query({data, signature});
+export function verify(data: string, signature: string, key: crypto.KeyLike): Promise<boolean> {
+	return PM.query({data, signature, key});
 }
 
 if (!PM.isParentProcess) {
