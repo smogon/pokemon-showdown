@@ -872,7 +872,7 @@ export class RandomTeams {
 			};
 			if (this.gen === 9) {
 				// Random Tera type
-				set.teraType = this.sample(this.dex.types.all()).id;
+				set.teraType = this.sample(this.dex.types.all()).name;
 			}
 			team.push(set);
 		}
