@@ -2207,10 +2207,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
-		secondary: {
-			chance: 100,
-			sideCondition: 'spikes',
+		self: {
+			onHit(source) {
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('spikes');
+				}
+			},
 		},
+		secondary: {}, // allows sheer force to trigger
 		target: "normal",
 		type: "Dark",
 	},
@@ -18456,10 +18460,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
-		secondary: {
-			chance: 100,
-			sideCondition: 'stealthrock',
+		self: {
+			onHit(source) {
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('stealthrock');
+				}
+			},
 		},
+		secondary: {}, // allows sheer force to trigger
 		target: "normal",
 		type: "Rock",
 	},
