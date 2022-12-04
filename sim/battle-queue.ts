@@ -137,8 +137,8 @@ export class BattleQueue {
 	shift() {
 		return this.list.shift();
 	}
-	peek(): Action | undefined {
-		return this.list[0];
+	peek(end?: boolean): Action | undefined {
+		return this.list[end ? this.list.length - 1 : 0];
 	}
 	push(action: Action) {
 		return this.list.push(action);
