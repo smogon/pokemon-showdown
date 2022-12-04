@@ -2032,6 +2032,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	klutz: {
 		// Item suppression implemented in Pokemon.ignoringItem() within sim/pokemon.js
+		onStart(pokemon) {
+			this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
+		},
 		name: "Klutz",
 		rating: -1,
 		num: 103,
