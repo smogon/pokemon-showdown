@@ -106,6 +106,15 @@ export const Formats: FormatList = [
 		banlist: ['Sub-Legendary'],
 	},
 	{
+		name: "[Gen 9] Hackmons Cup",
+		desc: `Randomized teams of level-balanced Pok&eacute;mon with absolutely any ability, moves, and item.`,
+
+		mod: 'gen9',
+		team: 'randomHC',
+		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+		banlist: ['Nonexistent'],
+	},
+	{
 		name: "[Gen 9] Custom Game",
 
 		mod: 'gen9',
