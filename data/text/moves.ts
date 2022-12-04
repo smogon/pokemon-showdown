@@ -807,8 +807,12 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	charge: {
 		name: "Charge",
-		desc: "Raises the user's Special Defense by 1 stage. If the user uses an Electric-type attack on the next turn, its power will be doubled.",
-		shortDesc: "+1 SpD, user's Electric move next turn 2x power.",
+		desc: "Raises the user's Special Defense by 1 stage. The user's next Electric-type attack will have its power doubled.",
+		shortDesc: "+1 SpD, user's next Electric move 2x power.",
+		gen8: {
+			desc: "Raises the user's Special Defense by 1 stage. If the user uses an Electric-type attack on the next turn, its power will be doubled.",
+			shortDesc: "+1 SpD, user's Electric move next turn 2x power.",
+		},
 		gen3: {
 			desc: "If the user uses an Electric-type attack on the next turn, its power will be doubled.",
 			shortDesc: "The user's Electric attack next turn has 2x power.",
