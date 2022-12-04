@@ -89,6 +89,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		ruleset: [
 			'Obtainable', '+Unobtainable', '+Past', 'Sketch Post-Gen 7 Moves', 'Team Preview', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
 		],
+		unbanlist: ['Bleakwind Storm', 'Lunar Blessing', 'Mystical Power', 'Sandsear Storm', 'Wildbolt Storm'],
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
 			if (species.natDexTier === 'Illegal') {
@@ -101,6 +102,18 @@ export const Rulesets: {[k: string]: FormatData} = {
 					return;
 				}
 				return [`${set.name || set.species} does not exist in the National Dex.`];
+			}
+			for (const moveid of set.moves) {
+				const move = this.dex.moves.get(moveid);
+				if (move.isNonstandard === 'Unobtainable' && move.gen === this.dex.gen || move.id === 'lightofruin') {
+					if (this.ruleTable.has(`+move:${move.id}`)) continue;
+					const problem = `${set.name}'s move ${move.name} does not exist in the National Dex.`;
+					if (this.ruleTable.has('omunobtainablemoves')) {
+						const outOfBattleSpecies = this.getValidationSpecies(set)[0];
+						if (!this.omCheckCanLearn(move, outOfBattleSpecies, this.allSources(outOfBattleSpecies), set, problem)) continue;
+					}
+					return [problem];
+				}
 			}
 			// Items other than Z-Crystals and Pokémon-specific items should be illegal
 			if (!set.item) return;
@@ -1343,8 +1356,9 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const problem = this.checkCanLearn(move, species, lsetData, set);
 			if (!problem) return null;
 			if (move.isZ || move.isMax || this.ruleTable.isRestricted(`move:${move.id}`)) return problem;
-			if ((set as any).sketchMove) {
-				return ` already has ${(set as any).sketchMove} as a sketched move.\n(${species.name} doesn't learn ${move.name}.)`;
+			const sketchMove = (set as any).sketchMove;
+			if (sketchMove && sketchMove !== move.name) {
+				return ` already has ${sketchMove} as a sketched move.\n(${species.name} doesn't learn ${move.name}.)`;
 			}
 			(set as any).sketchMove = move.name;
 			return null;
