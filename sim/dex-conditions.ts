@@ -87,8 +87,8 @@ export interface EventMethods {
 	onTakeItem?: (
 		(this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, move?: ActiveMove) => boolean | void
 	) | boolean;
-	onWeatherChange?: (this: Battle, weather: Condition, target: Pokemon, source: Pokemon, sourceEffect: Effect) => void;
-	onTerrainChange?: (this: Battle, terrain: Condition, target: Pokemon, source: Pokemon, sourceEffect: Effect) => void;
+	onWeatherChange?: (this: Battle, target: Pokemon, source: Pokemon, sourceEffect: Effect) => void;
+	onTerrainChange?: (this: Battle, target: Pokemon, source: Pokemon, sourceEffect: Effect) => void;
 	onTrapPokemon?: (this: Battle, pokemon: Pokemon) => void;
 	onTryAddVolatile?: (
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, sourceEffect: Effect

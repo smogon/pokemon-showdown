@@ -1201,6 +1201,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	flowergift: {
 		onStart(pokemon) {
+			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
+		},
+		onWeatherChange(pokemon) {
 			if (!pokemon.isActive || pokemon.baseSpecies.baseSpecies !== 'Cherrim' || pokemon.transformed) return;
 			if (!pokemon.hp) return;
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
@@ -1212,9 +1215,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					pokemon.formeChange('Cherrim', this.effect, false, '[msg]');
 				}
 			}
-		},
-		onWeatherChange() {
-			(this.effect as AbilityData).onStart?.call(this, this.effectState.target);
 		},
 		onAllyModifyAtkPriority: 3,
 		onAllyModifyAtk(atk, pokemon) {
@@ -1288,6 +1288,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	forecast: {
 		onStart(pokemon) {
+			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
+		},
+		onWeatherChange(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Castform' || pokemon.transformed) return;
 			let forme = null;
 			switch (pokemon.effectiveWeather()) {
@@ -1310,9 +1313,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (pokemon.isActive && forme) {
 				pokemon.formeChange(forme, this.effect, false, '[msg]');
 			}
-		},
-		onWeatherChange() {
-			(this.effect as AbilityData).onStart?.call(this, this.effectState.target);
 		},
 		name: "Forecast",
 		rating: 2,
@@ -1588,9 +1588,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.add('-activate', pokemon, 'ability: Hadron Engine');
 			}
 		},
-		onTerrainChange(target, source) {
-			const pokemon = this.effectState.target;
-			if (pokemon === source) return;
+		onTerrainChange(pokemon) {
+			if (pokemon === this.field.weatherState.source) return;
 			if (this.field.isTerrain('electricterrain') && pokemon.isGrounded()) {
 				this.add('-activate', pokemon, 'ability: Hadron Engine');
 			}
@@ -1789,10 +1788,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				pokemon.formeChange('Eiscue-Noice', this.effect, true);
 			}
 		},
-		onWeatherChange(weather, target, source, sourceEffect) {
+		onWeatherChange(pokemon, source, sourceEffect) {
 			// snow/hail resuming because Cloud Nine/Air Lock ended does not trigger Ice Face
 			if ((sourceEffect as Ability)?.suppressWeather) return;
-			const pokemon = this.effectState.target;
 			if (!pokemon.hp) return;
 			if (this.field.isWeather(['hail', 'snow']) &&
 				pokemon.species.id === 'eiscuenoice' && !pokemon.transformed) {
@@ -2307,52 +2305,35 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	mimicry: {
 		onStart(pokemon) {
-			if (this.field.terrain) {
-				pokemon.addVolatile('mimicry');
-			} else {
-				const types = pokemon.baseSpecies.types;
-				if (pokemon.getTypes().join() === types.join() || !pokemon.setType(types)) return;
-				this.add('-start', pokemon, 'typechange', types.join('/'), '[from] ability: Mimicry');
-				this.hint("Transform Mimicry changes you to your original un-transformed types.");
+			this.singleEvent('TerrainChange', this.effect, this.effectState, pokemon);
+		},
+		onTerrainChange(pokemon) {
+			let types;
+			switch (this.field.terrain) {
+			case 'electricterrain':
+				types = ['Electric'];
+				break;
+			case 'grassyterrain':
+				types = ['Grass'];
+				break;
+			case 'mistyterrain':
+				types = ['Fairy'];
+				break;
+			case 'psychicterrain':
+				types = ['Psychic'];
+				break;
+			default:
+				types = pokemon.baseSpecies.types;
 			}
-		},
-		onTerrainChange() {
-			const pokemon = this.effectState.target;
-			delete pokemon.volatiles['mimicry'];
-			pokemon.addVolatile('mimicry');
-		},
-		onEnd(pokemon) {
-			delete pokemon.volatiles['mimicry'];
-		},
-		condition: {
-			onStart(pokemon) {
-				let newType;
-				switch (this.field.terrain) {
-				case 'electricterrain':
-					newType = 'Electric';
-					break;
-				case 'grassyterrain':
-					newType = 'Grass';
-					break;
-				case 'mistyterrain':
-					newType = 'Fairy';
-					break;
-				case 'psychicterrain':
-					newType = 'Psychic';
-					break;
-				}
-				if (!newType || pokemon.getTypes().join() === newType || !pokemon.setType(newType)) return;
-				this.add('-start', pokemon, 'typechange', newType, '[from] ability: Mimicry');
-			},
-			onUpdate(pokemon) {
-				if (!this.field.terrain) {
-					const types = pokemon.species.types;
-					if (pokemon.getTypes().join() === types.join() || !pokemon.setType(types)) return;
-					this.add('-activate', pokemon, 'ability: Mimicry');
-					this.add('-end', pokemon, 'typechange', '[silent]');
-					pokemon.removeVolatile('mimicry');
-				}
-			},
+			const oldTypes = pokemon.getTypes();
+			if (oldTypes.join() === types.join() || !pokemon.setType(types)) return;
+			if (this.field.terrain || pokemon.transformed) {
+				this.add('-start', pokemon, 'typechange', types.join('/'), '[from] ability: Mimicry');
+				if (!this.field.terrain) this.hint("Transform Mimicry changes you to your original un-transformed types.");
+			} else {
+				this.add('-activate', pokemon, 'ability: Mimicry');
+				this.add('-end', pokemon, 'typechange', '[silent]');
+			}
 		},
 		name: "Mimicry",
 		rating: 0,
@@ -2759,9 +2740,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.add('-activate', pokemon, 'ability: Orichalcum Pulse');
 			}
 		},
-		onWeatherChange(target, source) {
-			const pokemon = this.effectState.target;
-			if (pokemon === source) return;
+		onWeatherChange(pokemon) {
+			if (pokemon === this.field.weatherState.source) return;
 			if (pokemon.effectiveWeather() === 'sunnyday') {
 				this.add('-activate', pokemon, 'ability: Orichalcum Pulse');
 			}
@@ -3166,6 +3146,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	protosynthesis: {
 		onStart(pokemon) {
+			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
+		},
+		onWeatherChange(pokemon) {
 			if (pokemon.transformed) return;
 			if (pokemon.effectiveWeather() === 'sunnyday') {
 				if (!pokemon.volatiles['protosynthesis']) {
@@ -3175,9 +3158,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			} else if (!pokemon.volatiles['protosynthesis']?.fromBooster) {
 				pokemon.removeVolatile('protosynthesis');
 			}
-		},
-		onWeatherChange() {
-			(this.effect as AbilityData).onStart?.call(this, this.effectState.target);
 		},
 		onEnd(pokemon) {
 			delete pokemon.volatiles['protosynthesis'];
@@ -3297,6 +3277,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	quarkdrive: {
 		onStart(pokemon) {
+			this.singleEvent('TerrainChange', this.effect, this.effectState, pokemon);
+		},
+		onTerrainChange(pokemon) {
 			if (pokemon.transformed) return;
 			if (this.field.isTerrain('electricterrain')) {
 				if (!pokemon.volatiles['quarkdrive']) {
@@ -3306,9 +3289,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			} else if (!pokemon.volatiles['quarkdrive']?.fromBooster) {
 				pokemon.removeVolatile('quarkdrive');
 			}
-		},
-		onTerrainChange() {
-			(this.effect as AbilityData).onStart?.call(this, this.effectState.target);
 		},
 		onEnd(pokemon) {
 			delete pokemon.volatiles['quarkdrive'];

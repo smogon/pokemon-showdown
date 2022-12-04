@@ -1574,8 +1574,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.useItem();
 			}
 		},
-		onTerrainChange() {
-			const pokemon = this.effectState.target;
+		onTerrainChange(pokemon) {
 			if (this.field.isTerrain('electricterrain')) {
 				pokemon.useItem();
 			}
@@ -2245,8 +2244,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.useItem();
 			}
 		},
-		onTerrainChange() {
-			const pokemon = this.effectState.target;
+		onTerrainChange(pokemon) {
 			if (this.field.isTerrain('grassyterrain')) {
 				pokemon.useItem();
 			}
@@ -3670,8 +3668,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.useItem();
 			}
 		},
-		onTerrainChange() {
-			const pokemon = this.effectState.target;
+		onTerrainChange(pokemon) {
 			if (this.field.isTerrain('mistyterrain')) {
 				pokemon.useItem();
 			}
@@ -4365,8 +4362,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.useItem();
 			}
 		},
-		onTerrainChange() {
-			const pokemon = this.effectState.target;
+		onTerrainChange(pokemon) {
 			if (this.field.isTerrain('psychicterrain')) {
 				pokemon.useItem();
 			}
