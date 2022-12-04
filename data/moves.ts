@@ -15860,7 +15860,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		volatileStatus: 'saltcure',
 		condition: {
 			onStart(pokemon, source) {
 				this.add('-start', pokemon, 'move: Salt Cure', '[of] ' + source);
@@ -15873,7 +15872,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-end', pokemon, 'move: Salt Cure');
 			},
 		},
-		secondary: null,
+		secondary: {
+			chance: 100,
+			volatileStatus: 'saltcure',
+		},
 		target: "normal",
 		type: "Rock",
 	},
