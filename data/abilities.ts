@@ -53,7 +53,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Flying';
 				move.aerilateBoosted = true;
 			}
@@ -74,7 +75,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.damage(source.baseMaxhp / 4, source, target);
 			}
 		},
-		rating: 2.5,
+		rating: 2,
 		num: 106,
 	},
 	airlock: {
@@ -89,7 +90,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		suppressWeather: true,
 		name: "Air Lock",
-		rating: 2,
+		rating: 1.5,
 		num: 76,
 	},
 	analytic: {
@@ -121,7 +122,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Anger Point",
-		rating: 1.5,
+		rating: 1,
 		num: 83,
 	},
 	angershell: {
@@ -156,7 +157,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Anger Shell",
-		rating: 2,
+		rating: 4,
 		num: 271,
 	},
 	anticipation: {
@@ -341,7 +342,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		isPermanent: true,
 		name: "Battle Bond",
-		rating: 4,
+		rating: 3.5,
 		num: 210,
 	},
 	beadsofruin: {
@@ -355,7 +356,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			return this.chainModify(0.75);
 		},
 		name: "Beads of Ruin",
-		rating: 3,
+		rating: 4.5,
 		num: 284,
 	},
 	beastboost: {
@@ -510,7 +511,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		suppressWeather: true,
 		name: "Cloud Nine",
-		rating: 2,
+		rating: 1.5,
 		num: 13,
 	},
 	colorchange: {
@@ -577,7 +578,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Commander",
-		rating: 2,
+		rating: 0,
 		num: 279,
 	},
 	competitive: {
@@ -638,18 +639,23 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const ally = pokemon.allies()[0];
 			if (!ally) return;
 
-			let activate = false;
 			let i: BoostID;
 			for (i in ally.boosts) {
-				if (ally.boosts[i]) {
-					pokemon.boosts[i] = ally.boosts[i];
-					activate = true;
+				pokemon.boosts[i] = ally.boosts[i];
+			}
+			const volatilesToCopy = ['focusenergy', 'gmaxchistrike', 'laserfocus'];
+			for (const volatile of volatilesToCopy) {
+				if (ally.volatiles[volatile]) {
+					pokemon.addVolatile(volatile);
+					if (volatile === 'gmaxchistrike') pokemon.volatiles[volatile].layers = ally.volatiles[volatile].layers;
+				} else {
+					pokemon.removeVolatile(volatile);
 				}
 			}
-			if (activate) this.add('-copyboost', pokemon, ally, '[from] ability: Costar');
+			this.add('-copyboost', pokemon, ally, '[from] ability: Costar');
 		},
 		name: "Costar",
-		rating: 2.5,
+		rating: 0,
 		num: 294,
 	},
 	cottondown: {
@@ -691,7 +697,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			},
 		},
 		name: "Cud Chew",
-		rating: 3,
+		rating: 2,
 		num: 291,
 	},
 	curiousmedicine: {
@@ -745,7 +751,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		isBreakable: true,
 		name: "Damp",
-		rating: 1,
+		rating: 0.5,
 		num: 6,
 	},
 	dancer: {
@@ -837,7 +843,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Defiant",
-		rating: 2.5,
+		rating: 3,
 		num: 128,
 	},
 	deltastream: {
@@ -1034,7 +1040,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		isBreakable: true,
 		name: "Earth Eater",
-		rating: 3,
+		rating: 3.5,
 		num: 297,
 	},
 	earlybird: {
@@ -1074,7 +1080,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			target.addVolatile('charge');
 		},
 		name: "Electromorphosis",
-		rating: 3,
+		rating: 2,
 		num: 280,
 	},
 	emergencyexit: {
@@ -1395,7 +1401,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Electric';
 				move.galvanizeBoosted = true;
 			}
@@ -1422,7 +1429,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		isBreakable: true,
 		name: "Good as Gold",
-		rating: 2,
+		rating: 5,
 		num: 283,
 	},
 	gooey: {
@@ -1519,7 +1526,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Guard Dog",
-		rating: 3,
+		rating: 2,
 		num: 275,
 	},
 	gulpmissile: {
@@ -1558,7 +1565,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Guts",
-		rating: 3,
+		rating: 3.5,
 		num: 62,
 	},
 	hadronengine: {
@@ -1585,7 +1592,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Hadron Engine",
-		rating: 3,
+		rating: 4.5,
 		num: 289,
 	},
 	harvest: {
@@ -1907,7 +1914,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		isBreakable: true,
 		name: "Inner Focus",
-		rating: 1.5,
+		rating: 1,
 		num: 39,
 	},
 	insomnia: {
@@ -1926,7 +1933,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		isBreakable: true,
 		name: "Insomnia",
-		rating: 2,
+		rating: 1.5,
 		num: 15,
 	},
 	intimidate: {
@@ -2058,7 +2065,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			delete this.effectState.libero;
 		},
 		name: "Libero",
-		rating: 4.5,
+		rating: 4,
 		num: 236,
 	},
 	lightmetal: {
@@ -2141,7 +2148,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Liquid Ooze",
-		rating: 1.5,
+		rating: 2.5,
 		num: 64,
 	},
 	liquidvoice: {
@@ -2219,7 +2226,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Magician",
-		rating: 1.5,
+		rating: 1,
 		num: 170,
 	},
 	magmaarmor: {
@@ -2234,7 +2241,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		isBreakable: true,
 		name: "Magma Armor",
-		rating: 1,
+		rating: 0.5,
 		num: 40,
 	},
 	magnetpull: {
@@ -2335,7 +2342,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			},
 		},
 		name: "Mimicry",
-		rating: 0.5,
+		rating: 0,
 		num: 250,
 	},
 	minus: {
@@ -2388,7 +2395,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			move.ignoreAbility = true;
 		},
 		name: "Mold Breaker",
-		rating: 3.5,
+		rating: 3,
 		num: 104,
 	},
 	moody: {
@@ -2669,7 +2676,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const noModifyType = [
 				'hiddenpower', 'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'struggle', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (!(move.isZ && move.category !== 'Status') && !noModifyType.includes(move.id)) {
+			if (!(move.isZ && move.category !== 'Status') && !noModifyType.includes(move.id) &&
+				// TODO: Figure out actual interaction
+				!(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Normal';
 				move.normalizeBoosted = true;
 			}
@@ -2757,7 +2766,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Orichalcum Pulse",
-		rating: 4,
+		rating: 4.5,
 		num: 288,
 	},
 	overcoat: {
@@ -2947,7 +2956,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Fairy';
 				move.pixilateBoosted = true;
 			}
@@ -3059,7 +3069,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Power Spot",
-		rating: 1,
+		rating: 0,
 		num: 249,
 	},
 	prankster: {
@@ -3082,7 +3092,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			return 1;
 		},
 		name: "Pressure",
-		rating: 2.5,
+		rating: 2,
 		num: 46,
 	},
 	primordialsea: {
@@ -3144,7 +3154,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			delete this.effectState.protean;
 		},
 		name: "Protean",
-		rating: 4.5,
+		rating: 4,
 		num: 168,
 	},
 	protosynthesis: {
@@ -3209,7 +3219,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		isPermanent: true,
 		name: "Protosynthesis",
-		rating: 2,
+		rating: 3,
 		num: 281,
 	},
 	psychicsurge: {
@@ -3277,7 +3287,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		isBreakable: true, // TODO verify the assumption that this can be supprsed by Mold Breaker & friends
 		name: "Purifying Salt",
-		rating: 2,
+		rating: 4,
 		num: 272,
 	},
 	quarkdrive: {
@@ -3342,7 +3352,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		isPermanent: true,
 		name: "Quark Drive",
-		rating: 2,
+		rating: 3,
 		num: 282,
 	},
 	queenlymajesty: {
@@ -3409,7 +3419,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Rattled",
-		rating: 1.5,
+		rating: 1,
 		num: 155,
 	},
 	receiver: {
@@ -3446,7 +3456,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Ice';
 				move.refrigerateBoosted = true;
 			}
@@ -3556,7 +3567,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Rocky Payload",
-		rating: 3,
+		rating: 3.5,
 		num: 276,
 	},
 	roughskin: {
@@ -3610,7 +3621,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.field.setWeather('sandstorm');
 		},
 		name: "Sand Spit",
-		rating: 2,
+		rating: 1,
 		num: 245,
 	},
 	sandstream: {
@@ -3736,7 +3747,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.field.setTerrain('grassyterrain');
 		},
 		name: "Seed Sower",
-		rating: 2,
+		rating: 2.5,
 		num: 269,
 	},
 	serenegrace: {
@@ -3791,7 +3802,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Sharpness",
-		rating: 2,
+		rating: 3.5,
 		num: 292,
 	},
 	shedskin: {
@@ -4042,7 +4053,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		isBreakable: true,
 		name: "Soundproof",
-		rating: 1.5,
+		rating: 2,
 		num: 43,
 	},
 	speedboost: {
@@ -4204,7 +4215,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		isBreakable: true,
 		name: "Sticky Hold",
-		rating: 2,
+		rating: 1.5,
 		num: 60,
 	},
 	stormdrain: {
@@ -4240,7 +4251,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Strong Jaw",
-		rating: 3,
+		rating: 3.5,
 		num: 173,
 	},
 	sturdy: {
@@ -4288,23 +4299,15 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.add('-activate', pokemon, 'ability: Supreme Overlord');
 			}
 		},
-		onModifyAtk(atk, source, target, move) {
-			const faintedAllies = source.side.pokemon.filter(ally => ally.fainted).length;
-			if (faintedAllies < 1) return;
-			this.debug(`Supreme Overlord atk boost for ${faintedAllies} defeated allies.`);
-			return this.chainModify(1 + (0.1 * faintedAllies));
-		},
-		onModifySpA(spa, source, target, move) {
-			const faintedAllies = source.side.pokemon.filter(ally => ally.fainted).length;
-			if (faintedAllies < 1) return;
-			this.debug(`Supreme Overlord spa boost for ${faintedAllies} defeated allies.`);
-			return this.chainModify(1 + (0.1 * faintedAllies));
+		onBasePower(basePower, source, target, move) {
+			const faintedAllies = Math.min(5, source.side.pokemon.filter(ally => ally.fainted).length);
+			if (faintedAllies) return this.chainModify(1 + (0.1 * faintedAllies));
 		},
 		onAllyFaint() {
 			this.add('-activate', this.effectState.target, 'ability: Supreme Overlord');
 		},
 		name: "Supreme Overlord",
-		rating: 2.5,
+		rating: 3.5,
 		num: 293,
 	},
 	surgesurfer: {
@@ -4413,7 +4416,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			return this.chainModify(0.75);
 		},
 		name: "Sword of Ruin",
-		rating: 3,
+		rating: 4.5,
 		num: 285,
 	},
 	tabletsofruin: {
@@ -4428,7 +4431,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			return this.chainModify(0.75);
 		},
 		name: "Tablets of Ruin",
-		rating: 3,
+		rating: 4.5,
 		num: 284,
 	},
 	tangledfeet: {
@@ -4490,7 +4493,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			move.ignoreAbility = true;
 		},
 		name: "Teravolt",
-		rating: 3.5,
+		rating: 3,
 		num: 164,
 	},
 	thermalexchange: {
@@ -4579,20 +4582,20 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Toxic Boost",
-		rating: 2.5,
+		rating: 3,
 		num: 137,
 	},
 	toxicdebris: {
 		onDamagingHit(damage, target, source, move) {
-			// TODO is this contact specific?
-			const toxicSpikes = source.side.sideConditions['toxicspikes'];
+			const side = source.isAlly(target) ? source.side.foe : source.side;
+			const toxicSpikes = side.sideConditions['toxicspikes'];
 			if (move.category === 'Physical' && (!toxicSpikes || toxicSpikes.layers < 2)) {
 				this.add('-activate', target, 'ability: Toxic Debris');
-				source.side.addSideCondition('toxicspikes', target);
+				side.addSideCondition('toxicspikes', target);
 			}
 		},
 		name: "Toxic Debris",
-		rating: 2,
+		rating: 3.5,
 		num: 295,
 	},
 	trace: {
@@ -4685,7 +4688,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			move.ignoreAbility = true;
 		},
 		name: "Turboblaze",
-		rating: 3.5,
+		rating: 3,
 		num: 163,
 	},
 	unaware: {
@@ -4748,7 +4751,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			return !this.effectState.unnerved;
 		},
 		name: "Unnerve",
-		rating: 1.5,
+		rating: 1,
 		num: 127,
 	},
 	unseenfist: {
@@ -4771,7 +4774,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			return this.chainModify(0.75);
 		},
 		name: "Vessel of Ruin",
-		rating: 3,
+		rating: 4.5,
 		num: 284,
 	},
 	victorystar: {
@@ -4801,7 +4804,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		isBreakable: true,
 		name: "Vital Spirit",
-		rating: 2,
+		rating: 1.5,
 		num: 72,
 	},
 	voltabsorb: {
@@ -4947,8 +4950,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return null;
 			}
 		},
+		isBreakable: true,
 		name: "Well-Baked Body",
-		rating: 2,
+		rating: 3.5,
 		num: 273,
 	},
 	whitesmoke: {
@@ -5001,7 +5005,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Wind Power",
-		rating: 2,
+		rating: 1,
 		num: 277,
 	},
 	windrider: {
@@ -5020,7 +5024,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Wind Rider",
-		rating: 3,
+		rating: 3.5,
+		// We do not want Brambleghast to get Infiltrator in Randbats
 		num: 274,
 	},
 	wonderguard: {
@@ -5110,7 +5115,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Zero to Hero",
-		rating: 2,
+		rating: 5,
 		num: 278,
 	},
 

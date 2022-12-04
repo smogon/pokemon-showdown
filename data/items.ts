@@ -416,6 +416,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 43,
 		gen: 2,
+		isNonstandard: "Past",
 	},
 	berrysweet: {
 		name: "Berry Sweet",
@@ -573,6 +574,10 @@ export const Items: {[itemid: string]: ItemData} = {
 	boosterenergy: {
 		name: "Booster Energy",
 		spritenum: 0, // TODO
+		onTakeItem(item, source) {
+			if (source.baseSpecies.tags.includes("Paradox")) return false;
+			return true;
+		},
 		// implemented in the corresponding thing
 		num: 1880,
 		gen: 9,

@@ -1331,6 +1331,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			if (target === 'crit' || toID(target) === 'highcrit') target = 'highcrit';
 			if (['thaw', 'thaws', 'melt', 'melts', 'defrosts'].includes(target)) target = 'defrost';
 			if (target === 'slices' || target === 'slice') target = 'slicing';
+			if (target === 'sheerforce') target = 'secondary';
 			if (target === 'bounceable' || toID(target) === 'magiccoat' || toID(target) === 'magicbounce') target = 'reflectable';
 			if (allFlags.includes(target)) {
 				if ((orGroup.flags[target] && isNotSearch) || (orGroup.flags[target] === false && !isNotSearch)) {
@@ -1720,7 +1721,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 			for (const flag in alts.flags) {
 				if (flag === 'secondary') {
-					if (!(move.secondary || move.secondaries) === !alts.flags[flag]) {
+					if (!(move.secondary || move.secondaries || move.hasSheerForce) === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
