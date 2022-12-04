@@ -4293,17 +4293,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.add('-activate', pokemon, 'ability: Supreme Overlord');
 			}
 		},
-		onModifyAtk(atk, source, target, move) {
-			const faintedAllies = source.side.pokemon.filter(ally => ally.fainted).length;
-			if (faintedAllies < 1) return;
-			this.debug(`Supreme Overlord atk boost for ${faintedAllies} defeated allies.`);
-			return this.chainModify(1 + (0.1 * faintedAllies));
-		},
-		onModifySpA(spa, source, target, move) {
-			const faintedAllies = source.side.pokemon.filter(ally => ally.fainted).length;
-			if (faintedAllies < 1) return;
-			this.debug(`Supreme Overlord spa boost for ${faintedAllies} defeated allies.`);
-			return this.chainModify(1 + (0.1 * faintedAllies));
+		onBasePower(basePower, source, target, move) {
+			const faintedAllies = Math.min(5, source.side.pokemon.filter(ally => ally.fainted).length);
+			if (faintedAllies) return this.chainModify(1 + (0.1 * faintedAllies));
 		},
 		onAllyFaint() {
 			this.add('-activate', this.effectState.target, 'ability: Supreme Overlord');
