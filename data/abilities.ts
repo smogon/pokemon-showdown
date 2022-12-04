@@ -2753,7 +2753,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon) {
-			if (this.field.effectiveWeather() === 'sunnyday') {
+			if (pokemon.effectiveWeather() === 'sunnyday') {
 				this.debug('Orichalcum boost');
 				return this.chainModify([5325, 4096]);
 			}
