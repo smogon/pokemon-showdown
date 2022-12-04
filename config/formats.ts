@@ -1305,6 +1305,7 @@ export const Formats: FormatList = [
 				}
 			}
 		},
+		// Starting innate abilities in scripts#actions
 		onSwitchOut(pokemon) {
 			if (pokemon.m.innate) {
 				pokemon.removeVolatile(pokemon.m.innate);
