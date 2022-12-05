@@ -1482,6 +1482,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onAfterMoveSecondary(target, source, move) {
 			if (source && source !== target && target.hp && move && move.category !== 'Status' && !move.isFutureMove) {
 				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.beingCalledBack || target.isSkyDropped()) return;
+				if (target.volatiles['commanding'] || target.volatiles['commanded']) return;
 				for (const pokemon of this.getAllActive()) {
 					if (pokemon.switchFlag === true) return;
 				}
@@ -1514,6 +1515,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (eject) {
 				if (target.hp) {
 					if (!this.canSwitch(target.side)) return;
+					if (target.volatiles['commanding'] || target.volatiles['commanded']) return;
 					for (const pokemon of this.getAllActive()) {
 						if (pokemon.switchFlag === true) return;
 					}
