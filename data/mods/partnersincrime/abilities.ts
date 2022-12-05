@@ -55,6 +55,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			pokemon.abilityState.ending = false;
 			// Remove setter's innates before the ability starts
 			for (const target of this.getAllActive()) {
+				if (target.hasItem('Ability Shield')) {
+					this.add('-block', target, 'item: Ability Shield');
+					continue;
+				}
 				if (target.illusion) {
 					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'neutralizinggas');
 				}
