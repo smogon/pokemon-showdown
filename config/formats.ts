@@ -2066,6 +2066,16 @@ export const Formats: FormatList = [
 		column: 3,
 	},
 	{
+		name: "[Gen 9] Doubles Hackmons Cup",
+
+		mod: 'gen9',
+		gameType: 'doubles',
+		team: 'randomHC',
+		searchShow: false,
+		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+		banlist: ['Nonexistent'],
+	},
+	{
 		name: "[Gen 8] Random Battle",
 		desc: `Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable.`,
 		threads: [
