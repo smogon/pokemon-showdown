@@ -45,7 +45,6 @@ describe('Commander', function () {
 		]]);
 
 		battle.makeChoices('move closecombat 1, move toxic 1', 'auto');
-		console.log(battle.getDebugLog());
 
 		// Tatsugiri shouldn't be damaged from No Guard CC or Toxic
 		assert.fullHP(battle.p2.active[0]);
