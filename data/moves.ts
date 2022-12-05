@@ -729,9 +729,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return false;
 				}
 
-				if (effect.name === 'Cute Charm') {
+				if (effect?.name === 'Cute Charm') {
 					this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', '[of] ' + source);
-				} else if (effect.name === 'Destiny Knot') {
+				} else if (effect?.name === 'Destiny Knot') {
 					this.add('-start', pokemon, 'Attract', '[from] item: Destiny Knot', '[of] ' + source);
 				} else {
 					this.add('-start', pokemon, 'Attract');
@@ -2273,7 +2273,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					source.removeVolatile('charge');
 				}
 			},
-			onAfterMove(target, source, move) {
+			onAfterMove(source, target, move) {
 				if (move.type === 'Electric' && move.id !== 'charge') {
 					source.removeVolatile('charge');
 				}
@@ -3692,7 +3692,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 						}
 					}
 				}
-				if (effect.effectType === 'Ability') {
+				if (effect?.effectType === 'Ability') {
 					this.add('-start', pokemon, 'Disable', pokemon.lastMove.name, '[from] ability: Cursed Body', '[of] ' + source);
 				} else {
 					this.add('-start', pokemon, 'Disable', pokemon.lastMove.name);
@@ -6894,14 +6894,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 			noCopy: true,
 			onStart(target, source, effect) {
 				this.effectState.layers = 1;
-				if (!['costar', 'imposter', 'psychup', 'transform'].includes(effect?.id)) {
+				if (effect && !['costar', 'imposter', 'psychup', 'transform'].includes(effect.id)) {
 					this.add('-start', target, 'move: G-Max Chi Strike');
 				}
 			},
 			onRestart(target, source, effect) {
 				if (this.effectState.layers >= 3) return false;
 				this.effectState.layers++;
-				if (!['costar', 'imposter', 'psychup', 'transform'].includes(effect?.id)) {
+				if (effect && !['costar', 'imposter', 'psychup', 'transform'].includes(effect.id)) {
 					this.add('-start', target, 'move: G-Max Chi Strike');
 				}
 			},

@@ -656,7 +656,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			let attackStat: StatIDExceptHP = move.overrideOffensiveStat || (isPhysical ? 'atk' : 'spa');
 			const defenseStat: StatIDExceptHP = move.overrideDefensiveStat || (isPhysical ? 'def' : 'spd');
 
-			const statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
+			const statTable: {[s in StatIDExceptHP]: StatNameFromID<s>} = {
+				atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe',
+			};
 
 			let atkBoosts = attacker.boosts[attackStat];
 			let defBoosts = defender.boosts[defenseStat];
@@ -686,8 +688,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			attackStat = (category === 'Physical' ? 'atk' : 'spa');
 
 			// Apply Stat Modifiers
-			attack = this.battle.runEvent('Modify' + statTable[attackStat], source, target, move, attack);
-			defense = this.battle.runEvent('Modify' + statTable[defenseStat], target, source, move, defense);
+			attack = this.battle.runEvent(`Modify${statTable[attackStat]}`, source, target, move, attack);
+			defense = this.battle.runEvent(`Modify${statTable[defenseStat]}`, target, source, move, defense);
 
 			if (this.battle.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
 				defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);
@@ -880,7 +882,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const prevStatus = this.status;
 			const prevStatusState = this.statusState;
 			if (status.id) {
-				const result: boolean = this.battle.runEvent('SetStatus', this, source, sourceEffect, status);
+				const result = !!this.battle.runEvent('SetStatus', this, source, sourceEffect, status);
 				if (!result) {
 					this.battle.debug('set status [' + status.id + '] interrupted');
 					return result;

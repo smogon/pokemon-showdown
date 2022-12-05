@@ -175,6 +175,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 		onStart(target, source, effect) {
+			if (!effect) throw new Error('lockedmove volatile added without a source effect');
 			this.effectState.move = effect.id;
 		},
 		onEnd(target) {

@@ -606,14 +606,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				];
 				const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 				for (const sideCondition of removeAll) {
-					if (source.side.foe.removeSideCondition(sideCondition)) {
+					if (source!.side.foe.removeSideCondition(sideCondition)) {
 						if (!silentRemove.includes(sideCondition)) {
-							this.add('-sideend', source.side.foe, this.dex.conditions.get(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
+							this.add('-sideend', source!.side.foe, this.dex.conditions.get(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
 						}
 					}
-					if (source.side.removeSideCondition(sideCondition)) {
+					if (source!.side.removeSideCondition(sideCondition)) {
 						if (!silentRemove.includes(sideCondition)) {
-							this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
+							this.add('-sideend', source!.side, this.dex.conditions.get(sideCondition).name, '[from] move: Wave Terrain', '[of] ' + source);
 						}
 					}
 				}
@@ -5292,9 +5292,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return false;
 				}
 
-				if (effect.id === 'cutecharm') {
+				if (effect?.id === 'cutecharm') {
 					this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', '[of] ' + source);
-				} else if (effect.id === 'destinyknot') {
+				} else if (effect?.id === 'destinyknot') {
 					this.add('-start', pokemon, 'Attract', '[from] item: Destiny Knot', '[of] ' + source);
 				} else {
 					this.add('-start', pokemon, 'Attract');

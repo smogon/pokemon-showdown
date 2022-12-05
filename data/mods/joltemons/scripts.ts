@@ -186,7 +186,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const prevStatus = this.status;
 			const prevStatusState = this.statusState;
 			if (status.id) {
-				const result: boolean = this.battle.runEvent('SetStatus', this, source, sourceEffect, status);
+				const result = !!this.battle.runEvent('SetStatus', this, source, sourceEffect, status);
 				if (!result) {
 					this.battle.debug('set status [' + status.id + '] interrupted');
 					return result;

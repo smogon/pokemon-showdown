@@ -1,9 +1,10 @@
 export const Scripts: ModdedBattleScriptsData = {
 	getActionSpeed(action) {
+		const pokemon: Pokemon = action.pokemon;
 		if (action.choice === 'move') {
-			let move = action.move;
+			let move: ActiveMove = action.move;
 			if (action.zmove) {
-				const zMoveName = this.actions.getZMove(action.move, action.pokemon, true);
+				const zMoveName = this.actions.getZMove(action.move, pokemon, true);
 				if (zMoveName) {
 					const zMove = this.dex.getActiveMove(zMoveName);
 					if (zMove.exists && zMove.isZ) {
@@ -12,9 +13,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			if (action.maxMove) {
-				const maxMoveName = this.actions.getMaxMove(action.maxMove, action.pokemon);
+				const maxMoveName = this.actions.getMaxMove(action.maxMove, pokemon);
 				if (maxMoveName) {
-					const maxMove = this.actions.getActiveMaxMove(action.move, action.pokemon);
+					const maxMove = this.actions.getActiveMaxMove(action.move, pokemon);
 					if (maxMove.exists && maxMove.isMax) {
 						move = maxMove;
 					}
@@ -24,16 +25,16 @@ export const Scripts: ModdedBattleScriptsData = {
 			// (instead of compounding every time `getActionSpeed` is called)
 			let priority = this.dex.moves.get(move.id).priority;
 			// Grassy Glide priority
-			priority = this.singleEvent('ModifyPriority', move, null, action.pokemon, null, null, priority);
-			priority = this.runEvent('ModifyPriority', action.pokemon, null, move, priority);
+			priority = this.singleEvent('ModifyPriority', move, null, pokemon, null, move, priority);
+			priority = this.runEvent('ModifyPriority', pokemon, null, move, priority);
 			// Linked mod
-			const linkedMoves: [string, string] = action.pokemon.getLinkedMoves();
+			const linkedMoves = (pokemon as Pokemon & ModdedBattlePokemon).getLinkedMoves!();
 			let linkIndex = -1;
-			if (linkedMoves.length && !move.isZ && !move.isMax && (linkIndex = linkedMoves.indexOf(this.toID(action.move))) >= 0) {
+			if (linkedMoves && !move.isZ && !move.isMax && (linkIndex = linkedMoves.indexOf(this.toID(action.move))) >= 0) {
 				const linkedActions = action.linked || linkedMoves.map(moveid => this.dex.getActiveMove(moveid));
 				const altMove = linkedActions[1 - linkIndex];
-				const thisPriority = this.runEvent('ModifyPriority', action.pokemon, null, linkedActions[linkIndex], priority);
-				const thatPriority = this.runEvent('ModifyPriority', action.pokemon, null, altMove, altMove.priority);
+				const thisPriority = this.runEvent('ModifyPriority', pokemon, null, linkedActions[linkIndex], priority);
+				const thatPriority = this.runEvent('ModifyPriority', pokemon, null, altMove, altMove.priority);
 				priority = Math.min(thisPriority, thatPriority);
 				action.priority = priority + action.fractionalPriority;
 				if (this.gen > 5) {
@@ -49,10 +50,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 		}
 
-		if (!action.pokemon) {
+		if (!pokemon) {
 			action.speed = 1;
 		} else {
-			action.speed = action.pokemon.getActionSpeed();
+			action.speed = pokemon.getActionSpeed();
 		}
 	},
 	runAction(action) {
@@ -529,13 +530,13 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		getLinkedMoves(ignoreDisabled) {
 			const linkedMoves = this.moveSlots.slice(0, 2);
-			if (linkedMoves.length !== 2 || linkedMoves[0].pp <= 0 || linkedMoves[1].pp <= 0) return [];
-			const ret = [linkedMoves[0].id, linkedMoves[1].id];
+			if (linkedMoves.length !== 2 || linkedMoves[0].pp <= 0 || linkedMoves[1].pp <= 0) return null;
+			const ret: [string, string] = [linkedMoves[0].id, linkedMoves[1].id];
 			if (ignoreDisabled) return ret;
-			if (!this.ateBerry && ret.includes('belch' as ID)) return [];
+			if (!this.ateBerry && ret.includes('belch' as ID)) return null;
 			if (this.hasItem('assaultvest') &&
 				(this.battle.dex.moves.get(ret[0]).category === 'Status' || this.battle.dex.moves.get(ret[1]).category === 'Status')) {
-				return [];
+				return null;
 			}
 			return ret;
 		},

@@ -695,7 +695,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			duration: 2,
 			onEnd(pokemon) {
 				if (pokemon.hp && pokemon.abilityState.berry) {
-					const item = pokemon.abilityState.berry;
+					const item: Item = pokemon.abilityState.berry;
 					this.add('-activate', pokemon, 'ability: Cud Chew');
 					this.add('-enditem', pokemon, item.name);
 					if (this.singleEvent('Eat', item, null, pokemon, null, null)) {
@@ -4363,11 +4363,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	symbiosis: {
 		onAllyAfterUseItem(item, pokemon) {
 			if (pokemon.switchFlag) return;
-			const source = this.effectState.target;
+			const source: Pokemon = this.effectState.target;
 			const myItem = source.takeItem();
 			if (!myItem) return;
 			if (
-				!this.singleEvent('TakeItem', myItem, source.itemState, pokemon, source, this.effect, myItem) ||
+				!this.singleEvent('TakeItem', myItem, source.itemState, pokemon, source, this.effect as ActiveMove, myItem) ||
 				!pokemon.setItem(myItem)
 			) {
 				source.item = myItem.id;

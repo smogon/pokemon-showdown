@@ -1,11 +1,20 @@
 import {Utils} from '../lib';
 import {toID, BasicEffect} from './dex-data';
-import {EventMethods} from './dex-conditions';
 import {Tags} from '../data/tags';
 
 const DEFAULT_MOD = 'gen9';
 
-export interface FormatData extends Partial<Format>, EventMethods {
+export interface FormatSpecificEventMethods {
+	onBegin?: (this: Battle) => void;
+	onModifySpecies?: (
+		this: Battle, species: Species, target?: Pokemon, source?: Pokemon, effect?: Effect
+	) => Species | void;
+	onBattleStart?: (this: Battle) => void;
+	onTeamPreview?: (this: Battle) => void;
+
+	onModifySpeciesPriority?: number;
+}
+export interface FormatData extends Partial<FormatEffect>, Readonly<EventHandlers<FormatSpecificEventMethods>> {
 	name: string;
 }
 
@@ -323,7 +332,8 @@ export class RuleTable extends Map<string, string> {
 	}
 }
 
-export class Format extends BasicEffect implements Readonly<BasicEffect> {
+export type Format = FormatEffect & ModdedFormatData;
+export class FormatEffect extends BasicEffect implements Readonly<BasicEffect> {
 	readonly mod: string;
 	/**
 	 * Name of the team generator algorithm, if this format uses
@@ -545,7 +555,7 @@ export class DexFormats {
 			if (format.mod === undefined) format.mod = 'gen9';
 			if (!this.dex.dexes[format.mod]) throw new Error(`Format "${format.name}" requires nonexistent mod: '${format.mod}'`);
 
-			const ruleset = new Format(format);
+			const ruleset = new FormatEffect(format);
 			this.rulesetCache.set(id, ruleset);
 			formatsList.push(ruleset);
 		}
@@ -614,9 +624,9 @@ export class DexFormats {
 		}
 		let effect;
 		if (this.dex.data.Rulesets.hasOwnProperty(id)) {
-			effect = new Format({name, ...this.dex.data.Rulesets[id] as any, ...supplementaryAttributes});
+			effect = new FormatEffect({name, ...this.dex.data.Rulesets[id] as any, ...supplementaryAttributes});
 		} else {
-			effect = new Format({id, name, exists: false});
+			effect = new FormatEffect({id, name, exists: false});
 		}
 		return effect;
 	}

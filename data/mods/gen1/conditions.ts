@@ -205,6 +205,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 			}
 		},
 		onStart(target, source, effect) {
+			if (!effect) throw new Error('partialtrappinglock volatile added without a source effect');
 			this.effectState.move = effect.id;
 		},
 		onDisableMove(pokemon) {

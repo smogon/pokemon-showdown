@@ -257,6 +257,12 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (sourceEffect) attrs += '|[from]' + this.battle.dex.conditions.get(sourceEffect);
 			this.battle.addMove('move', pokemon, move.name, target + attrs);
+			if (!target || target.fainted) {
+				// should never happen; this is mostly just for type safety
+				this.battle.attrLastMove('[notarget]');
+				this.battle.add('-notarget');
+				return true;
+			}
 
 			if (!this.battle.singleEvent('Try', move, null, pokemon, target, move)) {
 				return true;
@@ -271,11 +277,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			let damage: number | undefined | false | '' = false;
-			if (!target || target.fainted) {
-				this.battle.attrLastMove('[notarget]');
-				this.battle.add('-notarget');
-				return true;
-			}
 			damage = this.tryMoveHit(target, pokemon, move);
 
 			// Store 0 damage for last damage if move failed.
@@ -904,7 +905,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 	},
 	// deals with Pokémon stat boosting.
-	boost(boost, target, source = null, effect = null) {
+	boost(boost, target, source: Pokemon | null = null, effect: Effect | string | null = null) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;

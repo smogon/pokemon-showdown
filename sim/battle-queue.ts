@@ -102,7 +102,7 @@ export interface PokemonAction {
 	/** `runSwitch` only: the pokemon forcing this pokemon to switch in */
 	dragger?: Pokemon;
 	/** `event` only: the event to run */
-	event?: string;
+	event?: EventName;
 }
 
 export type Action = MoveAction | SwitchAction | TeamAction | FieldAction | PokemonAction;

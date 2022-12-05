@@ -333,7 +333,7 @@ export class Side {
 		status = this.battle.dex.conditions.get(status);
 		if (this.slotConditions[target][status.id]) {
 			if (!status.onRestart) return false;
-			return this.battle.singleEvent('Restart', status, this.slotConditions[target][status.id], this, source, sourceEffect);
+			return this.battle.singleEvent('Restart', status, this.slotConditions[target][status.id], this.active[target], source, sourceEffect);
 		}
 		const conditionState = this.slotConditions[target][status.id] = {
 			id: status.id,
