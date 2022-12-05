@@ -55,12 +55,12 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Handle boosting items
 			if (
-				(['Cubone', 'Marowak'].includes(this.species.name) && this.item === 'thickclub' && statName === 'atk') ||
-				(this.species.name === 'Pikachu' && this.item === 'lightball' && statName === 'spa')
+				(['Cubone', 'Marowak'].includes(this.baseSpecies.name) && this.item === 'thickclub' && statName === 'atk') ||
+				(this.baseSpecies.name === 'Pikachu' && this.item === 'lightball' && statName === 'spa')
 			) {
 				stat *= 2;
-			} else if (this.species.name === 'Ditto' && this.item === 'metalpowder' && ['def', 'spd'].includes(statName)) {
-				stat *= 1.5;
+			} else if (this.baseSpecies.name === 'Ditto' && this.item === 'metalpowder' && ['def', 'spd'].includes(statName)) {
+				stat = Math.floor(stat * 1.5);
 			}
 
 			return stat;

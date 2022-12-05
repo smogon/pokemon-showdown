@@ -56,7 +56,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			) {
 				stat *= 2;
 			} else if (this.species.name === 'Ditto' && this.item === 'metalpowder' && ['def', 'spd'].includes(statName)) {
-				stat *= 1.5;
+				stat = Math.floor(stat * 1.5);
 			}
 
 			return stat;
@@ -530,6 +530,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.runEvent('BeforeFaint', pokemon, faintData.source, faintData.effect)) {
 				this.add('faint', pokemon);
 				pokemon.side.pokemonLeft--;
+				if (pokemon.side.totalFainted < 100) pokemon.side.totalFainted++;
 				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
 				pokemon.clearVolatile(false);

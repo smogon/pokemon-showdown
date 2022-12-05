@@ -410,7 +410,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Life Dew",
 		pp: 10,
 		priority: 0,
-		flags: {snatch: 1, heal: 1, authentic: 1},
+		flags: {snatch: 1, heal: 1, bypasssub: 1},
 		onHit(pokemon) {
 			let factor = 0.5;
 			if (this.field.isWeather('raindance')) {
@@ -430,7 +430,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Trash Talk",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Confide", target);
@@ -467,7 +467,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Deafening Shriek",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hyper Voice", target);
@@ -1256,7 +1256,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Fling",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, mystery: 1},
+		flags: {protect: 1, mirror: 1, allyanim: 1},
 		onPrepareHit(target, source, move) {
 			if (source.ignoringItem()) return false;
 			const item = source.getItem();

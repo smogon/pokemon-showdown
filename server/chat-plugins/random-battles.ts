@@ -698,8 +698,13 @@ export const commands: Chat.ChatCommands = {
 	randbats: 'randombattles',
 	randombattles(target, room, user) {
 		if (!this.runBroadcast()) return;
-		if (room?.battle?.format.includes('nodmax')) return this.parse(`/randombattlenodmax ${target}`);
-		if (room?.battle?.format.includes('doubles')) return this.parse(`/randomdoublesbattle ${target}`);
+		const battle = room?.battle;
+		if (battle) {
+			if (battle.format.includes('nodmax')) return this.parse(`/randombattlenodmax ${target}`);
+			if (battle.format.includes('doubles') || battle.gameType === 'freeforall') {
+				return this.parse(`/randomdoublesbattle ${target}`);
+			}
+		}
 
 		const args = target.split(',');
 		if (!args[0]) return this.parse(`/help randombattles`);
@@ -912,11 +917,9 @@ export const commands: Chat.ChatCommands = {
 	randbatsodds: 'randombattlesetprobabilities',
 	randbatsprobabilities: 'randombattlesetprobabilities',
 	randombattlesetprobabilities(target, room, user) {
-		// Restricted to global staff and randbats room staff
+		// Restricted to global staff and randbats room auth
 		const randbatsRoom = Rooms.get('randombattles');
-		if (randbatsRoom) {
-			if (!user.can('lock')) this.checkCan('mute', null, randbatsRoom);
-		} else {
+		if (!(randbatsRoom && randbatsRoom.auth.has(user.id))) {
 			this.checkCan('lock');
 		}
 

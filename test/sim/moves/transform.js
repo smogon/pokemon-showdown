@@ -163,6 +163,28 @@ describe('Transform', function () {
 		const abilityAnnounceIndex = log.indexOf('|-endability|');
 		assert.equal(abilityAnnounceIndex, -1, `It should not announce the user's ability was suppressed.`);
 	});
+
+	it("should copy the target's old types, not the Tera Type", function () {
+		battle = common.createBattle([[
+			{species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire"},
+		], [
+			{species: "Ampharos", ability: "static", moves: ['sleeptalk'], teraType: "Dragon"},
+		]]);
+		battle.makeChoices('auto', 'move sleeptalk terastallize');
+		assert.equal(battle.p1.active[0].getTypes().join('/'), 'Electric');
+		battle.makeChoices('move sleeptalk terastallize', 'auto');
+		assert.equal(battle.p1.active[0].getTypes().join('/'), 'Fire');
+	});
+
+	it("should keep the user's Tera Type when Terastallized", function () {
+		battle = common.createBattle([[
+			{species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire"},
+		], [
+			{species: "Ampharos", ability: "static", moves: ['sleeptalk'], teraType: "Dragon"},
+		]]);
+		battle.makeChoices('move transform terastallize', 'move sleeptalk terastallize');
+		assert.equal(battle.p1.active[0].getTypes().join('/'), 'Fire');
+	});
 });
 
 describe('Transform [Gen 5]', function () {
