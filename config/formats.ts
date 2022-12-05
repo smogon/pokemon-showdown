@@ -115,6 +115,29 @@ export const Formats: FormatList = [
 		banlist: ['Nonexistent'],
 	},
 	{
+		name: "[Gen 9] Challenge Cup 1v1",
+
+		mod: 'gen9',
+		team: 'randomCC',
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Dynamax Clause', 'Picked Team Size = 1'],
+	},
+	{
+		name: "[Gen 9] Challenge Cup 2v2",
+
+		mod: 'gen9',
+		team: 'randomCC',
+		gameType: 'doubles',
+		ruleset: ['[Gen 9] Challenge Cup 1v1', '!! Picked Team Size = 2'],
+	},
+	{
+		name: "[Gen 9] Challenge Cup 6v6",
+
+		mod: 'gen9',
+		team: 'randomCC',
+		searchShow: false,
+		ruleset: ['[Gen 9] Challenge Cup 1v1', '!Picked Team Size'],
+	},
+	{
 		name: "[Gen 9] Custom Game",
 
 		mod: 'gen9',
