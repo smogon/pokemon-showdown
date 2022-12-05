@@ -5537,7 +5537,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "Uber",
 	},
 	flittle: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	espathra: {
 		tier: "UU",

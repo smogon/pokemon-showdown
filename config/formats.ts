@@ -57,7 +57,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['Little Cup', 'Standard'],
-		banlist: ['Dunsparce', 'Meditite', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Moody', 'Baton Pass'],
+		banlist: ['Dunsparce', 'Flittle', 'Meditite', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Moody', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 9] Monotype",
@@ -113,6 +113,29 @@ export const Formats: FormatList = [
 		team: 'randomHC',
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Nonexistent'],
+	},
+	{
+		name: "[Gen 9] Challenge Cup 1v1",
+
+		mod: 'gen9',
+		team: 'randomCC',
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Dynamax Clause', 'Picked Team Size = 1'],
+	},
+	{
+		name: "[Gen 9] Challenge Cup 2v2",
+
+		mod: 'gen9',
+		team: 'randomCC',
+		gameType: 'doubles',
+		ruleset: ['[Gen 9] Challenge Cup 1v1', '!! Picked Team Size = 2'],
+	},
+	{
+		name: "[Gen 9] Challenge Cup 6v6",
+
+		mod: 'gen9',
+		team: 'randomCC',
+		searchShow: false,
+		ruleset: ['[Gen 9] Challenge Cup 1v1', '!Picked Team Size'],
 	},
 	{
 		name: "[Gen 9] Custom Game",
@@ -555,8 +578,9 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['-Nonexistent', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Moves Clause', 'Endless Battle Clause'],
 		banlist: [
-			'Arena Trap', 'Huge Power', 'Illusion', 'Innards Out', 'Magnet Pull', 'Neutralizing Gas', 'Parental Bond', 'Pure Power', 'Shadow Tag',
-			'Stakeout', 'Water Bubble', 'Wonder Guard', 'Comatose + Sleep Talk', 'Belly Drum', 'Last Respects', 'Shed Tail', 'Shell Smash', 'Rage Fist',
+			'Calyrex-Shadow', 'Slaking', 'Arena Trap', 'Contrary', 'Huge Power', 'Illusion', 'Innards Out', 'Magnet Pull', 'Neutralizing Gas',
+			'Parental Bond', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard', 'Comatose + Sleep Talk', 'Belly Drum',
+			'Last Respects', 'Revival Blessing', 'Shed Tail', 'Shell Smash', 'Rage Fist',
 		],
 	},
 	{
