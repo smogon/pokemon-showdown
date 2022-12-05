@@ -763,6 +763,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	sonicboom: {
 		inherit: true,
 		ignoreImmunity: true,
+		basePower: 1,
 	},
 	softboiled: {
 		inherit: true,
