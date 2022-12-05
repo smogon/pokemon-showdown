@@ -372,7 +372,7 @@ export class RandomTeams {
 		const natures = this.dex.natures.all();
 		const items = this.dex.items.all();
 
-		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype);
+		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype, undefined, undefined, true);
 
 		for (let forme of randomN) {
 			let species = dex.species.get(forme);
