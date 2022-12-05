@@ -1714,7 +1714,6 @@ export class Pokemon {
 			this.item = '';
 			this.itemState = {id: '', target: this};
 			this.pendingStaleness = undefined;
-			this.battle.runEvent('AfterTakeItem', this, null, null, item);
 			return item;
 		}
 		return false;

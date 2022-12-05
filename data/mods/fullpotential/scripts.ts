@@ -80,7 +80,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			const isPhysical = move.category === 'Physical';
 			const defenseStat: StatIDExceptHP = move.overrideDefensiveStat || (isPhysical ? 'def' : 'spd');
 
-			const statTable: {[k in StatIDExceptHP]: string} = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
+			const statTable: {[s in StatIDExceptHP]: StatNameFromID<s>} = {
+				atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe',
+			};
 
 			let maxAttack = 0;
 
@@ -103,21 +105,21 @@ export const Scripts: ModdedBattleScriptsData = {
 			let attack = 0;
 
 			for (const attackStat in statTable) {
-				let atkBoosts = attacker.boosts[attackStat as keyof BoostsTable];
+				let atkBoosts = attacker.boosts[attackStat as StatIDExceptHP];
 				const ignoreOffensive = !!(move.ignoreOffensive || (ignoreNegativeOffensive && atkBoosts < 0));
 				if (ignoreOffensive) {
 					this.battle.debug('Negating (sp)atk boost/penalty.');
 					atkBoosts = 0;
 				}
-				attack = attacker.calculateStat(attackStat as any, atkBoosts);
-				attack = this.battle.runEvent('Modify' + (statTable as any)[attackStat], source, target, move, attack);
+				attack = attacker.calculateStat(attackStat as StatIDExceptHP, atkBoosts);
+				attack = this.battle.runEvent(`Modify${statTable[attackStat as StatIDExceptHP]}`, source, target, move, attack);
 				if (attack > maxAttack) maxAttack = attack;
 			}
 
 			let defense = defender.calculateStat(defenseStat, defBoosts);
 
 			// Apply Stat Modifiers
-			defense = this.battle.runEvent('Modify' + statTable[defenseStat], target, source, move, defense);
+			defense = this.battle.runEvent(`Modify${statTable[defenseStat]}`, target, source, move, defense);
 
 			if (this.battle.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
 				defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);

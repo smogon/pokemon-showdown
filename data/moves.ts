@@ -2273,7 +2273,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					source.removeVolatile('charge');
 				}
 			},
-			onAfterMove(target, source, move) {
+			onAfterMove(source, target, move) {
 				if (move.type === 'Electric' && move.id !== 'charge') {
 					source.removeVolatile('charge');
 				}

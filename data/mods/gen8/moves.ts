@@ -87,7 +87,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					source.removeVolatile('charge');
 				}
 			},
-			onAfterMove(target, source, move) {
+			onAfterMove(source, target, move) {
 				if (move.id !== 'charge') {
 					source.removeVolatile('charge');
 				}

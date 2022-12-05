@@ -9,8 +9,8 @@ type GenericEvent = 'DamagingHit' | 'EmergencyExit' | 'AfterEachBoost' | 'AfterH
 'Faint' | 'Flinch' | 'FractionalPriority' | 'Hit' | 'Immunity' | 'LockMove' | 'MaybeTrapPokemon' | 'ModifyAccuracy' |
 'ModifyAtk' | 'ModifyBoost' | 'ModifyCritRatio' | 'ModifyDamage' | 'ModifyDef' | 'ModifyMove' | 'ModifyPriority' |
 'ModifySecondaries' | 'ModifyType' | 'ModifyTarget' | 'ModifySpA' | 'ModifySpD' | 'ModifySpe' | 'ModifyWeight' |
-'MoveAborted' | 'NegateImmunity' | 'OverrideAction' | 'PrepareHit' | 'PseudoWeatherStart' | 'RedirectTarget' |
-'Residual' | 'SetAbility' | 'SetStatus' | 'SetWeather' | 'StallMove' | 'SwitchIn' | 'SwitchOut' | 'Swap' | 'TakeItem' | 'TerrainStart' | 'WeatherStart' | 'TrapPokemon' | 'TryAddVolatile' | 'TryEatItem' | 'TryHeal' | 'TryHit' |
+'MoveAborted' | 'NegateImmunity' | 'OverrideAction' | 'PrepareHit' | 'PseudoWeatherChange' | 'RedirectTarget' |
+'Residual' | 'SetAbility' | 'SetStatus' | 'SetWeather' | 'StallMove' | 'SwitchIn' | 'SwitchOut' | 'Swap' | 'TakeItem' | 'TerrainChange' | 'WeatherChange' | 'TrapPokemon' | 'TryAddVolatile' | 'TryEatItem' | 'TryHeal' | 'TryHit' |
 'TryHitField' | 'TryHitSide' | 'Invulnerability' | 'TryMove' | 'TryPrimaryHit' | 'Type' | 'Update' | 'Weather' | 'WeatherModifyDamage' | 'ModifyDamagePhase1' | 'ModifyDamagePhase2';
 type PokemonEvent = GenericEvent | 'SideConditionStart';
 type ConditionEvent = GenericEvent | 'Start' | 'Restart' | 'End' | 'Copy';
@@ -42,7 +42,6 @@ export interface EventMethods {
 	onAfterSwitchInSelf?: (this: Battle, pokemon: Pokemon) => void;
 	onAfterTerastallization?: (this: Battle, pokemon: Pokemon) => void;
 	onAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
-	onAfterTakeItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onAfterBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAfterFaint?: (this: Battle, length: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAfterMoveSecondarySelf?: MoveSpecificEventMethods['onAfterMoveSecondarySelf'];

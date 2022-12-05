@@ -904,7 +904,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			return Math.floor(damage);
 		},
 	},
-// deals with Pokémon stat boosting.
+	// deals with Pokémon stat boosting.
 	boost(boost, target, source: Pokemon | null = null, effect: Effect | string | null = null) {
 		if (this.event) {
 			if (!target) target = this.event.target;
