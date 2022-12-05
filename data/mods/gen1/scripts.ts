@@ -24,33 +24,76 @@ export const Scripts: ModdedBattleScriptsData = {
 		// Gen 1 function to apply a stat modification that is only active until the stat is recalculated or mon switched.
 		modifyStat(statName, modifier) {
 			if (!(statName in this.storedStats)) throw new Error("Invalid `statName` passed to `modifyStat`");
-			const modifiedStats = this.battle.clampIntRange(Math.floor(this.modifiedStats![statName] * modifier), 1, 999);
+			const modifiedStats = this.battle.clampIntRange(Math.floor(this.modifiedStats![statName] * modifier), 1);
 			this.modifiedStats![statName] = modifiedStats;
 		},
 		// In generation 1, boosting function increases the stored modified stat and checks for opponent's status.
 		boostBy(boost) {
-			let changed = false;
+			let changed: boolean | number = false;
 			let i: BoostID;
 			for (i in boost) {
 				const delta = boost[i];
 				if (delta === undefined) continue;
 				if (delta > 0 && this.boosts[i] >= 6) continue;
 				if (delta < 0 && this.boosts[i] <= -6) continue;
-				this.boosts[i] += delta;
-				if (this.boosts[i] > 6) {
-					this.boosts[i] = 6;
+				if (i === 'evasion' || i === 'accuracy') {
+					this.boosts[i] += delta;
+					if (this.boosts[i] > 6) {
+						this.boosts[i] = 6;
+					}
+					if (this.boosts[i] < -6) {
+						this.boosts[i] = -6;
+					}
+					changed = true;
+					continue;
 				}
-				if (this.boosts[i] < -6) {
-					this.boosts[i] = -6;
+				// Stat being modified is not evasion or accuracy, so change modifiedStats.
+				if (delta > 0) {
+					if (this.modifiedStats![i] === 999) {
+						// Intended max stat value
+						this.boosts[i] += delta;
+						if (this.boosts[i] > 6) {
+							this.boosts[i] = 6;
+						}
+						this.boosts[i]--;
+						// changed = 0 corresponds to increasing stats at 999 (or decreasing at 1).
+						changed = 0;
+					} else {
+						this.boosts[i] += delta;
+						if (this.boosts[i] > 6) {
+							this.boosts[i] = 6;
+						}
+						changed = true;
+					}
 				}
-				changed = true;
+				if (delta < 0) {
+					if (this.modifiedStats![i] === 1) {
+						// Minimum stat value
+						this.boosts[i] += delta;
+						if (this.boosts[i] < -6) {
+							this.boosts[i] = -6;
+						}
+						this.boosts[i]++;
+						// changed = 0 corresponds to increasing stats at 999 (or decreasing at 1).
+						changed = 0;
+					} else {
+						this.boosts[i] += delta;
+						if (this.boosts[i] < -6) {
+							this.boosts[i] = -6;
+						}
+						changed = true;
+					}
+				}
 				// Recalculate the modified stat
-				if (i === 'evasion' || i === 'accuracy') continue;
 				this.modifiedStats![i] = this.storedStats[i];
 				if (this.boosts[i] >= 0) {
 					this.modifyStat!(i, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[i]]);
 				} else {
 					this.modifyStat!(i, [100, 66, 50, 40, 33, 28, 25][-this.boosts[i]] / 100);
+				}
+				if (delta > 0 && this.modifiedStats![i] > 999) {
+					// Cap the stat at 999
+					this.modifiedStats![i] = 999;
 				}
 			}
 			return changed;
@@ -100,9 +143,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				(!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)
 			) {
 				pokemon.deductPP(move, null, target);
-				// On gen 1 moves are stored when they are chosen and a PP is deducted.
-				pokemon.side.lastMove = move;
-				pokemon.lastMove = move;
 			} else {
 				sourceEffect = move;
 			}
@@ -144,6 +184,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (move.id !== 'mirrormove' ||
 					(!pokemon.side.foe.active[0]?.lastMove || pokemon.side.foe.active[0].lastMove?.id === 'mirrormove')) {
 					// The move is our 'final' move (a failed Mirror Move, or any move that isn't Metronome or Mirror Move).
+					pokemon.side.lastMove = move;
+					pokemon.lastMove = move;
 					this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 
 					// If target fainted
@@ -151,9 +193,6 @@ export const Scripts: ModdedBattleScriptsData = {
 						// We remove recharge
 						if (pokemon.volatiles['mustrecharge']) pokemon.removeVolatile('mustrecharge');
 						delete pokemon.volatiles['partialtrappinglock'];
-						// We remove screens
-						target.side.removeSideCondition('reflect');
-						target.side.removeSideCondition('lightscreen');
 						pokemon.removeVolatile('twoturnmove');
 					} else if (pokemon.hp) {
 						this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
@@ -213,9 +252,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			let attrs = '';
 			if (pokemon.fainted) {
-				// Removing screens upon faint.
-				pokemon.side.removeSideCondition('reflect');
-				pokemon.side.removeSideCondition('lightscreen');
 				return false;
 			}
 
@@ -255,6 +291,13 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.lastDamage = 0;
 			}
 
+			// Disable and Selfdestruct/Explosion boost rage, regardless of whether they miss/fail.
+			if (target.boosts.atk < 6 && (move.selfdestruct || move.id === 'disable') && target.volatiles['rage']) {
+				this.battle.boost({atk: 1}, target, pokemon, this.dex.conditions.get('rage'));
+				this.battle.hint(`In Gen 1, using ${move.name} causes the target to build Rage, ` +
+				`even if it misses or fails`, true);
+			}
+
 			// Go ahead with results of the used move.
 			if (damage === false) {
 				this.battle.singleEvent('MoveFail', move, null, target, pokemon, move);
@@ -277,6 +320,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (hitResult === false) {
 				this.battle.attrLastMove('[miss]');
 				this.battle.add('-miss', pokemon);
+				if (move.selfdestruct) {
+					this.battle.faint(pokemon, pokemon, move);
+				}
 				return false;
 			}
 
@@ -351,7 +397,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					if (Array.isArray(hits)) {
 						// Yes, it's hardcoded... meh
 						if (hits[0] === 2 && hits[1] === 5) {
-							hits = this.battle.sample([2, 2, 3, 3, 4, 5]);
+							hits = this.battle.sample([2, 2, 2, 3, 3, 3, 4, 5]);
 						} else {
 							hits = this.battle.random(hits[0], hits[1] + 1);
 						}
@@ -394,7 +440,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// The move missed.
-			if (!damage && damage !== 0) {
+			if (damage === false) {
 				// Delete the partial trap lock if necessary.
 				delete pokemon.volatiles['partialtrappinglock'];
 				return false;
@@ -433,6 +479,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				// Handle here the applying of partial trapping moves to Pokémon with Substitute
 				if (targetSub && moveData.volatileStatus && moveData.volatileStatus === 'partiallytrapped') {
 					target.addVolatile(moveData.volatileStatus, pokemon, move);
+					if (!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].duration > 1) {
+						target.volatiles[moveData.volatileStatus].duration = 2;
+					}
 				}
 
 				if (!hitResult) {
@@ -592,7 +641,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Here's where self effects are applied.
 			const doSelf = (targetHadSub && targetHasSub) || !targetHadSub;
-			if (moveData.self && (doSelf || (moveData.self !== true && moveData.self.volatileStatus === 'partialtrappinglock'))) {
+			if (moveData.self && (doSelf || moveData.self.volatileStatus === 'partialtrappinglock')) {
 				this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 			}
 
@@ -602,7 +651,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Apply move secondaries.
-			if (moveData.secondaries) {
+			if (moveData.secondaries && target && target.hp > 0) {
 				for (const secondary of moveData.secondaries) {
 					// Multi-hit moves only roll for status once
 					if (!move.multihit || move.lastHit) {
@@ -610,16 +659,23 @@ export const Scripts: ModdedBattleScriptsData = {
 						// In the game, this is checked and if true, the random number generator is not called.
 						// That means that a move that does not share the type of the target can status it.
 						// If a move that was not fire-type would exist on Gen 1, it could burn a Pokémon.
-						if (!(secondary.status && ['par', 'brn', 'frz'].includes(secondary.status) && target && target.hasType(move.type))) {
-							if (secondary.chance === undefined || this.battle.randomChance(Math.ceil(secondary.chance * 256 / 100), 256)) {
+						if (!(secondary.status && ['par', 'brn', 'frz'].includes(secondary.status) && target.hasType(move.type))) {
+							if (secondary.chance === undefined) {
 								this.moveHit(target, pokemon, move, secondary, true, isSelf);
+							} else {
+								let secondaryChance = Math.ceil(secondary.chance * 256 / 100);
+								// If the secondary effect is confusion, the numerator should be decreased by 1 (10% = 25/256 not 26/256).
+								if (secondary?.volatileStatus === 'confusion') secondaryChance--;
+								if (this.battle.randomChance(secondaryChance, 256)) {
+									this.moveHit(target, pokemon, move, secondary, true, isSelf);
+								}
 							}
 						}
 					}
 				}
 			}
 			if (move.selfSwitch && pokemon.hp) {
-				pokemon.switchFlag = move.selfSwitch;
+				pokemon.switchFlag = move.selfSwitch === true ? true : this.dex.toID(move.selfSwitch);
 			}
 
 			return damage;
@@ -752,7 +808,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			if ((defType === 'def' && defender.volatiles['reflect']) || (defType === 'spd' && defender.volatiles['lightscreen'])) {
 				this.battle.debug('Screen doubling (Sp)Def');
 				defense *= 2;
-				defense = this.battle.clampIntRange(defense, 1, 1998);
 			}
 
 			// In the event of a critical hit, the offense and defense changes are ignored.
@@ -781,7 +836,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (attack >= 256 || defense >= 256) {
 				attack = this.battle.clampIntRange(Math.floor(attack / 4) % 256, 1);
 				// Defense isn't checked on the cartridge, but we don't want those / 0 bugs on the sim.
-				defense = this.battle.clampIntRange(Math.floor(defense / 4) % 256, 1);
+				defense = Math.floor(defense / 4) % 256;
+				if (defense === 0) {
+					this.battle.hint('Pokemon Showdown avoids division by zero by rounding defense up to 1. ' +
+						'In game, the battle would have crashed.');
+					defense = 1;
+				}
 			}
 
 			// Self destruct moves halve defense at this point.
@@ -797,7 +857,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			damage *= basePower;
 			damage *= attack;
 			damage = Math.floor(damage / defense);
-			damage = this.battle.clampIntRange(Math.floor(damage / 50), 1, 997);
+			damage = this.battle.clampIntRange(Math.floor(damage / 50), 0, 997);
 			damage += 2;
 
 			// STAB damage bonus, the "???" type never gets STAB
@@ -806,26 +866,26 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Type effectiveness.
-			// The order here is not correct, must change to check the move versus each type.
-			const totalTypeMod = target.runEffectiveness(move);
-			// Super effective attack
-			if (totalTypeMod > 0) {
-				if (!suppressMessages) this.battle.add('-supereffective', target);
-				damage *= 20;
-				damage = Math.floor(damage / 10);
-				if (totalTypeMod >= 2) {
+			// In Gen 1, type effectiveness is applied against each of the target's types.
+			for (const targetType of target.types) {
+				const typeMod = this.battle.dex.getEffectiveness(type, targetType);
+				if (typeMod > 0) {
+					// Super effective against targetType
 					damage *= 20;
 					damage = Math.floor(damage / 10);
 				}
-			}
-			if (totalTypeMod < 0) {
-				if (!suppressMessages) this.battle.add('-resisted', target);
-				damage *= 5;
-				damage = Math.floor(damage / 10);
-				if (totalTypeMod <= -2) {
+				if (typeMod < 0) {
+					// Not very effective against targetType
 					damage *= 5;
 					damage = Math.floor(damage / 10);
 				}
+			}
+			const totalTypeMod = target.runEffectiveness(move);
+			if (totalTypeMod > 0) {
+				if (!suppressMessages) this.battle.add('-supereffective', target);
+			}
+			if (totalTypeMod < 0) {
+				if (!suppressMessages) this.battle.add('-resisted', target);
 			}
 
 			// If damage becomes 0, the move is made to miss.
@@ -843,7 +903,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			return Math.floor(damage);
 		},
 	},
-	// deals with Pokémon stat boosting, including Gen 1 buggy behaviour with burn and paralyse.
+	// deals with Pokémon stat boosting.
 	boost(boost, target, source = null, effect = null) {
 		if (this.event) {
 			if (!target) target = this.event.target;
@@ -858,34 +918,44 @@ export const Scripts: ModdedBattleScriptsData = {
 		for (i in boost) {
 			const currentBoost: SparseBoostsTable = {};
 			currentBoost[i] = boost[i];
-			if (boost[i] !== 0 && target.boostBy(currentBoost)) {
-				success = true;
-				let msg = '-boost';
-				if (boost[i]! < 0) {
-					msg = '-unboost';
-					boost[i] = -boost[i]!;
-					// Re-add attack and speed drops if not present
-					if (i === 'atk' && target.status === 'brn' && !target.volatiles['brnattackdrop']) {
-						target.addVolatile('brnattackdrop');
+			if (boost[i] !== 0) {
+				const boostResult = target.boostBy(currentBoost);
+				if (boostResult) {
+					success = true;
+					let msg = '-boost';
+					if (boost[i]! < 0) {
+						msg = '-unboost';
+						boost[i] = -boost[i]!;
 					}
-					if (i === 'spe' && target.status === 'par' && !target.volatiles['parspeeddrop']) {
-						target.addVolatile('parspeeddrop');
+					if (!effect || effect.effectType === 'Move') {
+						this.add(msg, target, i, boost[i]);
+					} else {
+						this.add(msg, target, i, boost[i], '[from] ' + effect.fullname);
 					}
-				} else {
-					// Check for boost increases deleting attack or speed drops
-					if (i === 'atk' && target.status === 'brn' && target.volatiles['brnattackdrop']) {
-						target.removeVolatile('brnattackdrop');
-					}
-					if (i === 'spe' && target.status === 'par' && target.volatiles['parspeeddrop']) {
-						target.removeVolatile('parspeeddrop');
-					}
+					this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
 				}
-				if (!effect || effect.effectType === 'Move') {
-					this.add(msg, target, i, boost[i]);
-				} else {
-					this.add(msg, target, i, boost[i], '[from] ' + effect.fullname);
+				// Tried to boost at 999 or unboost at 1. This does not count as a success: par/brn effects are not applied afterwards.
+				if (boostResult === 0) {
+					let msg = '-boost';
+					let secondmsg = '-unboost';
+					if (boost[i]! < 0) {
+						msg = '-unboost';
+						secondmsg = '-boost';
+						boost[i] = -boost[i]!;
+					}
+					if (!effect || effect.effectType === 'Move') {
+						this.add(msg, target, i, boost[i]);
+					} else {
+						this.add(msg, target, i, boost[i], '[from] ' + effect.fullname);
+					}
+					this.add(secondmsg, target, i, 1);
+					if (msg === '-boost') {
+						this.hint(`In Gen 1, boosting a stat at 999 will apply a -1 drop afterwards, and the stat remains at 999.`, true);
+					} else {
+						this.hint(`In Gen 1, dropping a stat at 1 will apply a +1 boost afterwards, and the stat remains at 1.`, true);
+					}
+					this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
 				}
-				this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
 			}
 		}
 		this.runEvent('AfterBoost', target, source, effect, boost);

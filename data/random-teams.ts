@@ -372,7 +372,7 @@ export class RandomTeams {
 		const natures = this.dex.natures.all();
 		const items = this.dex.items.all();
 
-		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype);
+		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype, undefined, undefined, true);
 
 		for (let forme of randomN) {
 			let species = dex.species.get(forme);
@@ -511,7 +511,7 @@ export class RandomTeams {
 			// Random shininess
 			const shiny = this.randomChance(1, 1024);
 
-			team.push({
+			const set: RandomTeamsTypes.RandomSet = {
 				name: species.baseSpecies,
 				species: species.name,
 				gender: species.gender,
@@ -524,17 +524,22 @@ export class RandomTeams {
 				level,
 				happiness,
 				shiny,
-			});
+			};
+			if (this.gen === 9) {
+				// Tera type
+				set.teraType = this.sample(this.dex.types.all()).name;
+			}
+			team.push(set);
 		}
 
 		return team;
 	}
 
-	randomNPokemon(n: number, requiredType?: string, minSourceGen?: number, ruleTable?: RuleTable) {
+	randomNPokemon(n: number, requiredType?: string, minSourceGen?: number, ruleTable?: RuleTable, requireMoves = false) {
 		// Picks `n` random pokemon--no repeats, even among formes
 		// Also need to either normalize for formes or select formes at random
 		// Unreleased are okay but no CAP
-		const last = [0, 151, 251, 386, 493, 649, 721, 807, 890][this.gen];
+		const last = [0, 151, 251, 386, 493, 649, 721, 807, 898, 1010][this.gen];
 
 		if (n <= 0 || n > last) throw new Error(`n must be a number between 1 and ${last} (got ${n})`);
 		if (requiredType && !this.dex.types.get(requiredType).exists) {
@@ -549,6 +554,11 @@ export class RandomTeams {
 			speciesPool = [...this.dex.species.all()];
 			for (const species of speciesPool) {
 				if (species.isNonstandard && species.isNonstandard !== 'Unobtainable') continue;
+				if (requireMoves) {
+					const hasMovesInCurrentGen = Object.values(this.dex.species.getLearnset(species.id) || {})
+						.some(sources => sources.some(source => source.startsWith('9')));
+					if (!hasMovesInCurrentGen) continue;
+				}
 				if (requiredType && !species.types.includes(requiredType)) continue;
 				if (minSourceGen && species.gen < minSourceGen) continue;
 				const num = species.num;
@@ -856,7 +866,7 @@ export class RandomTeams {
 			// Random shininess
 			const shiny = this.randomChance(1, 1024);
 
-			team.push({
+			const set: PokemonSet = {
 				name: species.baseSpecies,
 				species: species.name,
 				gender: species.gender,
@@ -869,7 +879,12 @@ export class RandomTeams {
 				level,
 				happiness,
 				shiny,
-			});
+			};
+			if (this.gen === 9) {
+				// Random Tera type
+				set.teraType = this.sample(this.dex.types.all()).name;
+			}
+			team.push(set);
 		}
 
 		return team;
@@ -2405,6 +2420,7 @@ export class RandomTeams {
 		const tierCount: {[k: string]: number} = {};
 		const typeCount: {[k: string]: number} = {};
 		const typeComboCount: {[k: string]: number} = {};
+		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
 		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
@@ -2476,13 +2492,26 @@ export class RandomTeams {
 			}
 
 			if (!isMonotype && !this.forceMonotype) {
-				// TODO: fix type weaknesses
 				let skip = false;
 
+				// Limit two of any type
 				for (const typeName of types) {
 					if (typeCount[typeName] >= 2 * limitFactor) {
 						skip = true;
 						break;
+					}
+				}
+				if (skip) continue;
+
+				// Limit three weak to any type
+				for (const typeName of this.dex.types.names()) {
+					// it's weak to the type
+					if (this.dex.getEffectiveness(typeName, species) > 0) {
+						if (!typeWeaknesses[typeName]) typeWeaknesses[typeName] = 0;
+						if (typeWeaknesses[typeName] >= 3 * limitFactor) {
+							skip = true;
+							break;
+						}
 					}
 				}
 				if (skip) continue;
@@ -2530,6 +2559,14 @@ export class RandomTeams {
 				typeComboCount[typeCombo]++;
 			} else {
 				typeComboCount[typeCombo] = 1;
+			}
+
+			// Increment weakness counter
+			for (const typeName of this.dex.types.names()) {
+				// it's weak to the type
+				if (this.dex.getEffectiveness(typeName, species) > 0) {
+					typeWeaknesses[typeName]++;
+				}
 			}
 
 			// Track what the team has

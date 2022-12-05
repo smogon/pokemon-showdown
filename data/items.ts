@@ -1,4 +1,21 @@
 export const Items: {[itemid: string]: ItemData} = {
+	abilityshield: {
+		name: "Ability Shield",
+		spritenum: 0, // TODO
+		ignoreKlutz: true,
+		// Neutralizing Gas protection implemented in Pokemon.ignoringAbility() within sim/pokemon.ts
+		// and in Neutralizing Gas itself within data/abilities.ts
+		onSetAbility(ability, target, source, effect) {
+			if (effect && effect.effectType === 'Ability' && !effect.fullname?.endsWith('Trace')) {
+				this.add('-ability', source, effect);
+			}
+			this.add('-block', target, 'item: Ability Shield');
+			return null;
+		},
+		// Mold Breaker protection implemented in Battle.suppressingAbility() within sim/battle.ts
+		num: 1881,
+		gen: 9,
+	},
 	abomasite: {
 		name: "Abomasite",
 		spritenum: 575,
@@ -306,6 +323,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Past",
 	},
+	auspiciousarmor: {
+		name: "Auspicious Armor",
+		spritenum: 0, // TODO
+		num: 2344,
+		gen: 9,
+	},
 	babiriberry: {
 		name: "Babiri Berry",
 		spritenum: 17,
@@ -393,6 +416,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 43,
 		gen: 2,
+		isNonstandard: "Past",
 	},
 	berrysweet: {
 		name: "Berry Sweet",
@@ -546,6 +570,32 @@ export const Items: {[itemid: string]: ItemData} = {
 		// Item activation located in scripts.js
 		num: 1121,
 		gen: 8,
+	},
+	boosterenergy: {
+		name: "Booster Energy",
+		spritenum: 0, // TODO
+		onUpdate(pokemon) {
+			if (pokemon.transformed) return;
+			if (this.queue.peek(true)?.choice === 'runSwitch') return;
+
+			function tryEnergyBoost(this: Battle, ability: 'protosynthesis' | 'quarkdrive') {
+				if (pokemon.hasAbility(ability) && !pokemon.getVolatile(ability) && pokemon.useItem()) {
+					this.add('-activate', pokemon, `ability: ${this.dex.abilities.get(ability).name}`, '[fromitem]');
+					pokemon.addVolatile(ability);
+					pokemon.volatiles[ability].fromBooster = true;
+					return true;
+				}
+			}
+
+			if (tryEnergyBoost.call(this, 'protosynthesis')) return;
+			tryEnergyBoost.call(this, 'quarkdrive');
+		},
+		onTakeItem(item, source) {
+			if (source.baseSpecies.tags.includes("Paradox")) return false;
+			return true;
+		},
+		num: 1880,
+		gen: 9,
 	},
 	bottlecap: {
 		name: "Bottle Cap",
@@ -928,6 +978,26 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 3,
 		isNonstandard: "Past",
 	},
+	clearamulet: {
+		name: "Clear Amulet",
+		spritenum: 0, // TODO
+		onBoost(boost, target, source, effect) {
+			if (source && target === source) return;
+			let showMsg = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					delete boost[i];
+					showMsg = true;
+				}
+			}
+			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+				this.add('-fail', target, 'unboost', '[from] item: Clear Amulet', '[of] ' + target);
+			}
+		},
+		num: 1882,
+		gen: 9,
+	},
 	cloversweet: {
 		name: "Clover Sweet",
 		spritenum: 707,
@@ -1008,6 +1078,19 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 5,
 		isNonstandard: "Past",
 	},
+	covertcloak: {
+		name: "Covert Cloak",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 0, // TODO
+		onModifySecondaries(secondaries) {
+			this.debug('Covert Cloak prevent secondary');
+			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
+		},
+		num: 1885,
+		gen: 9,
+	},
 	crackedpot: {
 		name: "Cracked Pot",
 		spritenum: 719,
@@ -1040,6 +1123,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 210,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 	},
 	damprock: {
 		name: "Damp Rock",
@@ -1490,8 +1574,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.useItem();
 			}
 		},
-		onAnyTerrainStart() {
-			const pokemon = this.effectState.target;
+		onTerrainChange(pokemon) {
 			if (this.field.isTerrain('electricterrain')) {
 				pokemon.useItem();
 			}
@@ -1544,6 +1627,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 208,
 		gen: 3,
+		isNonstandard: "Unobtainable",
 	},
 	eviolite: {
 		name: "Eviolite",
@@ -2160,8 +2244,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.useItem();
 			}
 		},
-		onAnyTerrainStart() {
-			const pokemon = this.effectState.target;
+		onTerrainChange(pokemon) {
 			if (this.field.isTerrain('grassyterrain')) {
 				pokemon.useItem();
 			}
@@ -2595,6 +2678,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 211,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 	},
 	jawfossil: {
 		name: "Jaw Fossil",
@@ -2673,6 +2757,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 687,
 		gen: 6,
+		isNonstandard: "Unobtainable",
 	},
 	kelpsyberry: {
 		name: "Kelpsy Berry",
@@ -2945,6 +3030,18 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 269,
 		gen: 4,
 	},
+	loadeddice: {
+		name: "Loaded Dice",
+		spritenum: 0, // TODO
+		// partially implemented in sim/battle-actions.ts:BattleActions#hitStepMoveHitLoop
+		onModifyMove(move) {
+			if (move.multiaccuracy) {
+				delete move.multiaccuracy;
+			}
+		},
+		num: 1886,
+		gen: 9,
+	},
 	lopunnite: {
 		name: "Lopunnite",
 		spritenum: 626,
@@ -3184,6 +3281,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 2,
 		isNonstandard: "Past",
 	},
+	maliciousarmor: {
+		name: "Malicious Armor",
+		spritenum: 0, // TODO
+		num: 1861,
+		gen: 9,
+	},
 	manectite: {
 		name: "Manectite",
 		spritenum: 596,
@@ -3216,6 +3319,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 688,
 		gen: 6,
+		isNonstandard: "Unobtainable",
 	},
 	marshadiumz: {
 		name: "Marshadium Z",
@@ -3479,6 +3583,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 209,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 	},
 	mimikiumz: {
 		name: "Mimikium Z",
@@ -3527,6 +3632,31 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 239,
 		gen: 2,
 	},
+	mirrorherb: {
+		name: "Mirror Herb",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 0, // TODO
+		onFoeAfterBoost(boost, target, source, effect) {
+			if (effect?.fullname?.endsWith('Opportunist') || effect?.fullname?.endsWith('Mirror Herb')) return;
+			const boostPlus: SparseBoostsTable = {};
+			let statsRaised = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! > 0) {
+					boostPlus[i] = boost[i];
+					statsRaised = true;
+				}
+			}
+			if (!statsRaised) return;
+			const pokemon: Pokemon = this.effectState.target;
+			pokemon.useItem();
+			this.boost(boostPlus, pokemon);
+		},
+		num: 1883,
+		gen: 9,
+	},
 	mistyseed: {
 		name: "Misty Seed",
 		spritenum: 666,
@@ -3538,8 +3668,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.useItem();
 			}
 		},
-		onAnyTerrainStart() {
-			const pokemon = this.effectState.target;
+		onTerrainChange(pokemon) {
 			if (this.field.isTerrain('mistyterrain')) {
 				pokemon.useItem();
 			}
@@ -3964,6 +4093,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Fairy",
 		num: 644,
 		gen: 6,
+		isNonstandard: "Unobtainable",
 	},
 	plumefossil: {
 		name: "Plume Fossil",
@@ -4232,8 +4362,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.useItem();
 			}
 		},
-		onAnyTerrainStart() {
-			const pokemon = this.effectState.target;
+		onTerrainChange(pokemon) {
 			if (this.field.isTerrain('psychicterrain')) {
 				pokemon.useItem();
 			}
@@ -4255,6 +4384,22 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 786,
 		gen: 7,
 		isNonstandard: "Past",
+	},
+	punchingglove: {
+		name: "Punching Glove",
+		spritenum: 0, // TODO
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['punch']) {
+				this.debug('Punching Glove boost');
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		onModifyMove(move) {
+			if (move.flags['punch']) delete move.flags['contact'];
+		},
+		num: 1884,
+		gen: 9,
 	},
 	qualotberry: {
 		name: "Qualot Berry",
@@ -4581,7 +4726,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.useItem();
 			}
 		},
-		onAnyPseudoWeatherStart() {
+		onAnyPseudoWeatherChange() {
 			const pokemon = this.effectState.target;
 			if (this.field.getPseudoWeather('trickroom')) {
 				pokemon.useItem();
@@ -4660,6 +4805,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 212,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 	},
 	rustedshield: {
 		name: "Rusted Shield",
@@ -6501,7 +6647,39 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 60,
 		},
-		// Implemented in statuses.js, moves.js, and abilities.js
+		// Partially implemented in Pokemon.effectiveWeather() in sim/pokemon.ts
+		onStart(pokemon) {
+			pokemon.addVolatile('utilityumbrella');
+		},
+		condition: {
+			onStart(pokemon) {
+				if (!pokemon.ignoringItem() &&
+					['sunnyday', 'raindance', 'desolateland', 'primordialsea'].includes(this.field.effectiveWeather())) {
+					this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
+				}
+			},
+			onUpdate(pokemon) {
+				// could break in OMs with bonus items
+				if (pokemon.item !== 'utilityumbrella') {
+					pokemon.removeVolatile('utilityumbrella');
+					return;
+				}
+				if (!['sunnyday', 'raindance', 'desolateland', 'primordialsea'].includes(this.field.effectiveWeather())) return;
+				if (pokemon.ignoringItem() && !this.effectState.inactive) {
+					this.effectState.inactive = true;
+					this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
+				} else if (!pokemon.ignoringItem() && this.effectState.inactive) {
+					this.effectState.inactive = false;
+					this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
+				}
+			},
+			onEnd(pokemon) {
+				if (!this.effectState.inactive &&
+					['sunnyday', 'raindance', 'desolateland', 'primordialsea'].includes(this.field.effectiveWeather())) {
+					this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
+				}
+			},
+		},
 		num: 1123,
 		gen: 8,
 	},

@@ -256,6 +256,55 @@ export const commands: Chat.ChatCommands = {
 		`/changerankuhtml [rank], [name], [message] - Changes the message previously shown with /addrankuhtml [rank], [name]. Requires: * # &`,
 	],
 
+	deletenamecolor: 'setnamecolor',
+	snc: 'setnamecolor',
+	dnc: 'setnamecolor',
+	async setnamecolor(target, room, user, connection, cmd) {
+		this.checkCan('rangeban');
+		if (!toID(target)) {
+			return this.parse(`/help ${cmd}`);
+		}
+		let [userid, source] = this.splitOne(target).map(toID);
+		if (cmd.startsWith('d')) {
+			source = '';
+		} else if (!source || source.length > 18) {
+			return this.errorReply(
+				`Specify a source username to take the color from. Name must be <19 characters.`
+			);
+		}
+		if (!userid || userid.length > 18) {
+			return this.errorReply(`Specify a valid name to set a new color for. Names must be <19 characters.`);
+		}
+		const [res, error] = await LoginServer.request('updatenamecolor', {
+			userid,
+			source,
+			by: user.id,
+		});
+		if (error) {
+			return this.errorReply(error.message);
+		}
+		if (!res || res.actionerror) {
+			return this.errorReply(res?.actionerror || "The loginserver is currently disabled.");
+		}
+		if (source) {
+			return this.sendReply(
+				`|html|<username>${userid}</username>'s namecolor was ` +
+				`successfully updated to match '<username>${source}</username>'. ` +
+				`Refresh your browser for it to take effect.`
+			);
+		} else {
+			return this.sendReply(`${userid}'s namecolor was removed.`);
+		}
+	},
+	setnamecolorhelp: [
+		`/setnamecolor OR /snc [username], [source name] - Set [username]'s name color to match the [source name]'s color.`,
+		`Requires: &`,
+	],
+	deletenamecolorhelp: [
+		`/deletenamecolor OR /dnc [username] - Remove [username]'s namecolor.`,
+		`Requires: &`,
+	],
+
 	pline(target, room, user) {
 		// Secret console admin command
 		this.canUseConsole();
@@ -945,6 +994,13 @@ export const commands: Chat.ChatCommands = {
 	savelearnsetshelp: [
 		`/savelearnsets - Saves the learnset list currently active on the server. Requires: &`,
 	],
+
+	toggleripgrep(target, room, user) {
+		this.checkCan('rangeban');
+		Config.disableripgrep = !Config.disableripgrep;
+		this.addGlobalModAction(`${user.name} ${Config.disableripgrep ? 'disabled' : 'enabled'} Ripgrep-related functionality.`);
+	},
+	toggleripgrephelp: [`/toggleripgrep - Disable/enable all functionality depending on Ripgrep. Requires: &`],
 
 	disablecommand(target, room, user) {
 		this.checkCan('makeroom');

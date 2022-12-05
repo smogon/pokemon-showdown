@@ -11,7 +11,7 @@ describe('Illusion', function () {
 	});
 
 	it(`should not instantly wear off before Dynamaxing`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(8).createBattle([[
 			{species: "Zoroark", ability: 'illusion', moves: ['sleeptalk']},
 			{species: "Diglett", moves: ['sleeptalk']},
 		], [
@@ -23,7 +23,7 @@ describe('Illusion', function () {
 	});
 
 	it(`should prevent the user from Dynamaxed when Illusioning as a Pokemon that cannot Dynamax`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(8).createBattle([[
 			{species: "Zoroark", ability: 'illusion', moves: ['sleeptalk']},
 			{species: "Eternatus", moves: ['sleeptalk']},
 		], [
@@ -34,7 +34,7 @@ describe('Illusion', function () {
 	});
 
 	it(`should be able to wear off normally while Dynamaxed`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(8).createBattle([[
 			{species: "Zoroark", ability: 'illusion', moves: ['machpunch']},
 			{species: "Diglett", moves: ['sleeptalk']},
 		], [
@@ -46,7 +46,7 @@ describe('Illusion', function () {
 	});
 
 	it(`should Illusion as the regular Dynamax version of G-Max Pokemon while Dynamaxed`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(8).createBattle([[
 			{species: "Zoroark", ability: 'illusion', moves: ['sleeptalk']},
 			{species: "Charizard", gigantamax: true, moves: ['ember', 'sleeptalk']},
 		], [

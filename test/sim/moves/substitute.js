@@ -134,4 +134,14 @@ describe('Substitute', function () {
 		battle.makeChoices('move growl', 'move clamp');
 		assert.bounded(hp - pokemon.hp, [91, 108]);
 	});
+
+	it('[Gen 1] Substitute should not block secondary effect confusion if it is unbroken', function () {
+		battle = common.gen(1).createBattle({seed: [2, 2, 1, 2]}, [
+			[{species: 'Kadabra', moves: ['psybeam']}],
+			[{species: 'Alakazam', moves: ['substitute']}],
+		]);
+
+		battle.makeChoices();
+		assert(battle.log.some(line => line.includes('confusion')));
+	});
 });

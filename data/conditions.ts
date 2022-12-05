@@ -674,6 +674,39 @@ export const Conditions: {[k: string]: ConditionData} = {
 			this.add('-weather', 'none');
 		},
 	},
+	snow: {
+		name: 'Snow',
+		effectType: 'Weather',
+		duration: 5,
+		durationCallback(source, effect) {
+			if (source?.hasItem('icyrock')) {
+				return 8;
+			}
+			return 5;
+		},
+		onModifyDefPriority: 10,
+		onModifyDef(def, pokemon) {
+			if (pokemon.hasType('Ice') && this.field.isWeather('snow')) {
+				return this.modify(def, 1.5);
+			}
+		},
+		onFieldStart(field, source, effect) {
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-weather', 'Snow', '[from] ability: ' + effect.name, '[of] ' + source);
+			} else {
+				this.add('-weather', 'Snow');
+			}
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-weather', 'Snow', '[upkeep]');
+			if (this.field.isWeather('snow')) this.eachEvent('Weather');
+		},
+		onFieldEnd() {
+			this.add('-weather', 'none');
+		},
+	},
 	deltastream: {
 		name: 'DeltaStream',
 		effectType: 'Weather',
@@ -752,6 +785,50 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 	},
 
+	// Commander needs two conditions so they are implemented here
+	// Dondozo
+	commanded: {
+		name: "Commanded",
+		noCopy: true,
+		onStart(pokemon) {
+			this.boost({atk: 2, spa: 2, spe: 2, def: 2, spd: 2}, pokemon);
+		},
+		onDragOutPriority: 2,
+		onDragOut() {
+			return false;
+		},
+		// Prevents Shed Shell allowing a swap
+		onTrapPokemonPriority: -11,
+		onTrapPokemon(pokemon) {
+			pokemon.trapped = true;
+		},
+	},
+	// Tatsugiri
+	commanding: {
+		name: "Commanding",
+		noCopy: true,
+		onStart(pokemon) {
+			this.add('-activate', pokemon, 'ability: Commander');
+		},
+		onDragOutPriority: 2,
+		onDragOut() {
+			return false;
+		},
+		// Prevents Shed Shell allowing a swap
+		onTrapPokemonPriority: -11,
+		onTrapPokemon(pokemon) {
+			pokemon.trapped = true;
+		},
+		// Override No Guard
+		onInvulnerabilityPriority: 2,
+		onInvulnerability(target, source, move) {
+			return false;
+		},
+		onBeforeTurn(pokemon) {
+			this.queue.cancelAction(pokemon);
+		},
+	},
+
 	// Arceus and Silvally's actual typing is implemented here.
 	// Their true typing for all their formes is Normal, and it's only
 	// Multitype and RKS System, respectively, that changes their type,
@@ -786,6 +863,19 @@ export const Conditions: {[k: string]: ConditionData} = {
 				}
 			}
 			return [type];
+		},
+	},
+	rolloutstorage: {
+		name: 'rolloutstorage',
+		duration: 2,
+		onBasePower(relayVar, source, target, move) {
+			let bp = Math.max(1, move.basePower);
+			bp *= Math.pow(2, source.volatiles['rolloutstorage'].contactHitCount);
+			if (source.volatiles['defensecurl']) {
+				bp *= 2;
+			}
+			source.removeVolatile('rolloutstorage');
+			return bp;
 		},
 	},
 };

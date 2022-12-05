@@ -526,6 +526,9 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 	 * If the [value] is omitted (index 1), searches just for tickets with the given property.
 	 */
 	static async getTextLogs(search: [string, string] | [string], date?: string) {
+		if (Config.disableripgrep) {
+			throw new Chat.ErrorMessage("Helpticket logs are currently disabled.");
+		}
 		const results = [];
 		if (await checkRipgrepAvailability()) {
 			const searchString = search.length > 1 ?
@@ -1940,7 +1943,8 @@ export const pages: Chat.PageTable = {
 			} else if (ticket.claimed) {
 				buf += `<strong>Claimed:</strong> ${ticket.claimed}<br /><br />`;
 			}
-			buf += `<strong>From: ${ticket.userid}</strong>`;
+			buf += `<strong>From: <a href="https://${Config.routes.root}/users/${ticket.userid}">`;
+			buf += `${ticket.userid}</a></strong>`;
 			buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
 			buf += `<button class="button" name="send" value="/modlog room=global,user='${ticket.userid}'">Global Modlog</button><br />`;
 			buf += await ticketInfo.getReviewDisplay(ticket as TicketState & {text: [string, string]}, user, connection);
