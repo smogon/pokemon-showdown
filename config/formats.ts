@@ -1291,14 +1291,14 @@ export const Formats: FormatList = [
 			if (ally && ally.ability !== pokemon.ability) {
 				if (!pokemon.m.innate && !BAD_ABILITIES.includes(this.toID(ally.ability))) {
 					pokemon.m.innate = 'ability:' + ally.ability;
-					if (!ngas || ally.getAbility().isPermanent) {
+					if (!ngas || ally.getAbility().isPermanent || pokemon.hasItem('Ability Shield')) {
 						pokemon.volatiles[pokemon.m.innate] = {id: pokemon.m.innate, target: pokemon};
 						pokemon.m.startVolatile = true;
 					}
 				}
 				if (!ally.m.innate && !BAD_ABILITIES.includes(this.toID(pokemon.ability))) {
 					ally.m.innate = 'ability:' + pokemon.ability;
-					if (!ngas || pokemon.getAbility().isPermanent) {
+					if (!ngas || pokemon.getAbility().isPermanent || ally.hasItem('Ability Shield')) {
 						ally.volatiles[ally.m.innate] = {id: ally.m.innate, target: ally};
 						ally.m.startVolatile = true;
 					}
