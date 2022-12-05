@@ -535,7 +535,7 @@ export class RandomTeams {
 		return team;
 	}
 
-	randomNPokemon(n: number, requiredType?: string, minSourceGen?: number, ruleTable?: RuleTable) {
+	randomNPokemon(n: number, requiredType?: string, minSourceGen?: number, ruleTable?: RuleTable, requireMoves = false) {
 		// Picks `n` random pokemon--no repeats, even among formes
 		// Also need to either normalize for formes or select formes at random
 		// Unreleased are okay but no CAP
@@ -554,6 +554,11 @@ export class RandomTeams {
 			speciesPool = [...this.dex.species.all()];
 			for (const species of speciesPool) {
 				if (species.isNonstandard && species.isNonstandard !== 'Unobtainable') continue;
+				if (requireMoves) {
+					const hasMovesInCurrentGen = Object.values(this.dex.species.getLearnset(species.id) || {})
+						.some(sources => sources.some(source => source.startsWith('9')));
+					if (!hasMovesInCurrentGen) continue;
+				}
 				if (requiredType && !species.types.includes(requiredType)) continue;
 				if (minSourceGen && species.gen < minSourceGen) continue;
 				const num = species.num;
