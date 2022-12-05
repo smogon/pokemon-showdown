@@ -1,4 +1,6 @@
 export const Scripts: ModdedBattleScriptsData = {
+	inherit: 'gen8',
+	gen: 8,
 	getActionSpeed(action) {
 		if (action.choice === 'move') {
 			let move = action.move;
