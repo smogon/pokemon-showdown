@@ -4284,8 +4284,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onStart(pokemon) {
 			if (pokemon.side.totalFainted) {
 				this.add('-activate', pokemon, 'ability: Supreme Overlord');
-				this.effectState.fallen = Math.min(pokemon.side.totalFainted, 5);
+				const fallen = Math.min(pokemon.side.totalFainted, 5);
+				this.add('-start', pokemon, `fallen${fallen}`, '[silent]');
+				this.effectState.fallen = fallen;
 			}
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, `fallen${this.effectState.fallen}`, '[silent]');
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
