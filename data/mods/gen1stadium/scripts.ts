@@ -550,7 +550,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Is it an OHKO move?
 			if (move.ohko) {
-				return target.maxhp;
+				return 65535;
 			}
 
 			// We edit the damage through move's damage callback if necessary.
