@@ -1432,6 +1432,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Gluttony",
 		rating: 1.5,
 		num: 82,
+		onStart(pokemon) {
+			pokemon.abilityState.gluttony = true;
+		},
+		onDamage(item, pokemon) {
+			pokemon.abilityState.gluttony = true;
+		},
+
 	},
 	goodasgold: {
 		onTryHit(target, source, move) {
@@ -2644,6 +2651,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 
 					// Will be suppressed by Pokemon#ignoringAbility if needed
 					this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
+					if (pokemon.ability === "gluttony") {
+						pokemon.abilityState.gluttony = false;
+					}
 				}
 			}
 		},
