@@ -426,6 +426,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				let didSomething = false;
 
 				damage = this.getDamage(pokemon, target, moveData);
+				if (damage && damage > target.hp) {
+					damage = target.hp;
+				}
 				if ((damage || damage === 0) && !target.fainted) {
 					damage = this.battle.damage(damage, target, pokemon, move);
 					if (!(damage || damage === 0)) return false;
@@ -748,10 +751,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (damage > 1) {
 				damage *= this.battle.random(217, 256);
 				damage = Math.floor(damage / 255);
-				if (damage > target.hp && !target.volatiles['substitute']) damage = target.hp;
-				if (target.volatiles['substitute'] && damage > target.volatiles['substitute'].hp) {
-					damage = target.volatiles['substitute'].hp;
-				}
 			}
 
 			// We are done, this is the final damage.
