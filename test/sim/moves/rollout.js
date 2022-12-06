@@ -130,20 +130,25 @@ for (const move of moves) {
 			assert.equal(hitCount, 1);
 		});
 
-		describe.skip(`Rollout Storage glitch (Gen 7 / Gen 8DLC1)`, function () {
+		describe(`Rollout Storage glitch (Gen 7 / Gen 8DLC1)`, function () {
 			it(`should delay the Rollout multiplier when hitting Disguise or Ice Face`, function () {
 				battle = common.gen(7).createBattle([[
 					{species: 'wynaut', ability: 'compoundeyes', ivs: {atk: '0'}, nature: 'bold', moves: [id, 'watergun']},
 				], [
 					{species: 'mimikyu', ability: 'disguise', evs: {hp: '252', def: '252'}, nature: 'bold', moves: ['gravity']},
 					{species: 'snorlax', ability: 'battlearmor', moves: ['sleeptalk']},
+					{species: 'wigglytuff', ability: 'battlearmor', moves: ['rest']},
 				]]);
 
 				for (let i = 0; i < 5; i++) { battle.makeChoices(); }
 				battle.makeChoices('move watergun', 'switch 2');
 				const snorlax = battle.p2.active[0];
-				const damage = snorlax.maxhp - snorlax.hp;
+				let damage = snorlax.maxhp - snorlax.hp;
 				assert.bounded(damage, [147, 174]); // 40 * 2^4 BP; would be 40 BP otherwise, range 10-12
+				battle.makeChoices("move watergun", "switch 3");
+				const wigglytuff = battle.p2.active[0];
+				damage = wigglytuff.maxhp - wigglytuff.hp;
+				assert.bounded(damage, [18, 22]);
 			});
 
 			it(`should delay the Rollout multiplier when hitting multiple Disguise or Ice Face`, function () {

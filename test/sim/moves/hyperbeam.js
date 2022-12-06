@@ -42,13 +42,13 @@ describe(`Hyper Beam`, function () {
 		assert.false.cantMove(() => battle.choose('p1', 'move tackle'));
 	});
 
-	it.skip(`[Gen 1] should force a recharge turn after damaging, but not breaking a Substitute`, function () {
+	it(`[Gen 1] should force a recharge turn after damaging, but not breaking a Substitute`, function () {
 		battle = common.gen(1).createBattle([[
-			{species: 'chansey', moves: ['hyperbeam', 'tackle']},
+			{species: 'slowbro', moves: ['hyperbeam', 'tackle']},
 		], [
 			{species: 'rhydon', moves: ['substitute']},
 		]]);
 		battle.makeChoices();
-		assert.false.cantMove(() => battle.choose('p1', 'move tackle'));
+		assert.cantMove(() => battle.choose('p1', 'move tackle'));
 	});
 });

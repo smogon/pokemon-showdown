@@ -174,7 +174,7 @@ function getLetsGoMoves(species: string | Species) {
 	return species.randomBattleMoves.map(formatMove).sort().join(`, `);
 }
 
-function battleFactorySets(species: string | Species, tier: string | null, gen = 'gen7', isBSS = false) {
+function battleFactorySets(species: string | Species, tier: string | null, gen = 'gen8', isBSS = false) {
 	species = Dex.species.get(species);
 	if (typeof species.battleOnly === 'string') {
 		species = Dex.species.get(species.battleOnly);
@@ -191,7 +191,7 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 	if (!isBSS) {
 		if (!tier) return {e: `Please provide a valid tier.`};
 		if (!(toID(tier) in TIERS)) return {e: `That tier isn't supported.`};
-		if (['Mono', 'LC'].includes(TIERS[toID(tier)]) && genNum < 7) {
+		if (!(TIERS[toID(tier)] in statsFile)) {
 			return {e: `${TIERS[toID(tier)]} is not included in [Gen ${genNum}] Battle Factory.`};
 		}
 		const t = statsFile[TIERS[toID(tier)]];
@@ -698,8 +698,13 @@ export const commands: Chat.ChatCommands = {
 	randbats: 'randombattles',
 	randombattles(target, room, user) {
 		if (!this.runBroadcast()) return;
-		if (room?.battle?.format.includes('nodmax')) return this.parse(`/randombattlenodmax ${target}`);
-		if (room?.battle?.format.includes('doubles')) return this.parse(`/randomdoublesbattle ${target}`);
+		const battle = room?.battle;
+		if (battle) {
+			if (battle.format.includes('nodmax')) return this.parse(`/randombattlenodmax ${target}`);
+			if (battle.format.includes('doubles') || battle.gameType === 'freeforall') {
+				return this.parse(`/randomdoublesbattle ${target}`);
+			}
+		}
 
 		const args = target.split(',');
 		if (!args[0]) return this.parse(`/help randombattles`);
@@ -829,8 +834,7 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' not found.`);
 			}
 			let mod = 'gen8';
-			// There is only [Gen 7] BSS Factory right now
-			if (args[1] && toID(args[1]) in Dex.dexes && Dex.dexes[toID(args[1])].gen === 7) mod = toID(args[1]);
+			if (args[1] && toID(args[1]) in Dex.dexes && Dex.dexes[toID(args[1])].gen >= 7) mod = toID(args[1]);
 			const bssSets = battleFactorySets(species, null, mod, true);
 			if (!bssSets) return this.parse(`/help battlefactory`);
 			if (typeof bssSets !== 'string') {
@@ -850,7 +854,7 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				tier = 'ou';
 			}
-			const mod = args[2] || 'gen7';
+			const mod = args[2] || 'gen8';
 			let bfSets;
 			if (species.name === 'Necrozma-Ultra') {
 				bfSets = battleFactorySets(Dex.species.get('necrozma-dawnwings'), tier, mod);
@@ -913,11 +917,9 @@ export const commands: Chat.ChatCommands = {
 	randbatsodds: 'randombattlesetprobabilities',
 	randbatsprobabilities: 'randombattlesetprobabilities',
 	randombattlesetprobabilities(target, room, user) {
-		// Restricted to global staff and randbats room staff
+		// Restricted to global staff and randbats room auth
 		const randbatsRoom = Rooms.get('randombattles');
-		if (randbatsRoom) {
-			if (!user.can('lock')) this.checkCan('mute', null, randbatsRoom);
-		} else {
+		if (!(randbatsRoom && randbatsRoom.auth.has(user.id))) {
 			this.checkCan('lock');
 		}
 

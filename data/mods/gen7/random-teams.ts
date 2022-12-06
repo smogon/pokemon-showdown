@@ -1,7 +1,8 @@
-import {MoveCounter, RandomTeams, TeamData} from '../../random-teams';
+import {MoveCounter, TeamData} from '../../random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
+import RandomGen8Teams from '../gen8/random-teams';
 
 export interface BattleFactorySpecies {
 	flags: {megaOnly?: 1, zmoveOnly?: 1, limEevee?: 1};
@@ -29,7 +30,7 @@ const ZeroAttackHPIVs: {[k: string]: SparseStatsTable} = {
 	rock: {def: 30, spd: 30, spe: 30},
 };
 
-export class RandomGen7Teams extends RandomTeams {
+export class RandomGen7Teams extends RandomGen8Teams {
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 
@@ -1299,7 +1300,7 @@ export class RandomGen7Teams extends RandomTeams {
 			} else if (abilities.has('Moxie') && (counter.get('Physical') > 3 || moves.has('bounce')) && !isDoubles) {
 				ability = 'Moxie';
 			} else if (isDoubles) {
-				if (abilities.has('Intimidate')) ability = 'Intimidate';
+				if (abilities.has('Intimidate') && !battleOnly) ability = 'Intimidate';
 				if (abilities.has('Guts') && ability !== 'Intimidate') ability = 'Guts';
 				if (abilities.has('Storm Drain')) ability = 'Storm Drain';
 				if (abilities.has('Harvest')) ability = 'Harvest';
@@ -1743,7 +1744,7 @@ export class RandomGen7Teams extends RandomTeams {
 	randomFactoryTeam(side: PlayerOptions, depth = 0): RandomTeamsTypes.RandomFactorySet[] {
 		this.enforceNoDirectCustomBanlistChanges();
 
-		const forceResult = (depth >= 4);
+		const forceResult = (depth >= 12);
 		const isMonotype = !!this.forceMonotype || this.dex.formats.getRuleTable(this.format).has('sametypeclause');
 
 		// The teams generated depend on the tier choice in such a way that

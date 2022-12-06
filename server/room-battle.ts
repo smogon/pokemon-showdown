@@ -19,7 +19,7 @@ import type {Tournament} from './tournaments/index';
 import {RoomSettings} from './rooms';
 
 type ChannelIndex = 0 | 1 | 2 | 3 | 4;
-type PlayerIndex = 1 | 2 | 3 | 4;
+export type PlayerIndex = 1 | 2 | 3 | 4;
 export type ChallengeType = 'rated' | 'unrated' | 'challenge' | 'tour';
 
 interface BattleRequestTracker {
@@ -50,6 +50,7 @@ const DISCONNECTION_BANK_TIME = 300;
 
 // time after a player disabling the timer before they can re-enable it
 const TIMER_COOLDOWN = 20 * SECONDS;
+const LOCKDOWN_PERIOD = 30 * 60 * 1000; // 30 minutes
 
 export class RoomBattlePlayer extends RoomGames.RoomGamePlayer<RoomBattle> {
 	readonly slot: SideID;
@@ -520,6 +521,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 	started: boolean;
 	ended: boolean;
 	active: boolean;
+	needsRejoin: Set<ID> | null;
 	replaySaved: boolean;
 	forcedSettings: {modchat?: string | null, privacy?: string | null} = {};
 	p1: RoomBattlePlayer;
@@ -568,6 +570,8 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		this.p3 = null!;
 		this.p4 = null!;
 		this.inviteOnlySetter = null;
+
+		this.needsRejoin = options.restored ? new Set(options.players) : null;
 
 		// data to be logged
 		this.allowExtraction = {};
@@ -684,9 +688,8 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		void this.stream.write(`>${player.slot} undo`);
 	}
 	joinGame(user: User, slot?: SideID, playerOpts?: {team?: string}) {
-		const isMulti = this.gameType === 'multi' || this.gameType === 'freeforall';
-		if (!isMulti && !this.options.players?.includes(user.id)) {
-			user.popup(`You cannot join this battle, as you were not originally playing in it.`);
+		if (this.needsRejoin?.size && !this.needsRejoin.has(user.id)) {
+			user.popup(`All the original players in this battle must join first.`);
 			return false;
 		}
 		if (user.id in this.playerTable) {
@@ -724,6 +727,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		}
 
 		this.updatePlayer(this[slot], user, playerOpts);
+		this.needsRejoin?.delete(user.id);
 		if (validSlots.length - 1 < 1 && this.missingBattleStartMessage) {
 			const users = this.players.map(player => {
 				const u = player.getUser();
@@ -835,6 +839,16 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 				break;
 			}
 			if (player) player.sendRoom(lines[2]);
+			break;
+		}
+
+		case 'error': {
+			if (process.uptime() * 1000 < LOCKDOWN_PERIOD) {
+				const error = new Error();
+				error.stack = lines.slice(1).join('\n');
+				// lock down the server
+				Rooms.global.startLockdown(error);
+			}
 			break;
 		}
 
@@ -1335,7 +1349,7 @@ export class RoomBattleStream extends BattleStream {
 		}
 		try {
 			this._writeLines(chunk);
-		} catch (err) {
+		} catch (err: any) {
 			const battle = this.battle;
 			Monitor.crashlog(err, 'A battle', {
 				chunk,
@@ -1351,6 +1365,8 @@ export class RoomBattleStream extends BattleStream {
 					}
 				}
 			}
+			// public crashlogs only have the stack anyways
+			this.push(`error\n${err.stack}`);
 		}
 		if (this.battle) this.battle.sendUpdates();
 		const deltaTime = Date.now() - startTime;

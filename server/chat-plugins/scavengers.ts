@@ -575,21 +575,21 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		return minutes;
 	}
 
-	choose(user: User, value: string) {
+	choose(user: User, originalValue: string) {
 		if (!(user.id in this.playerTable)) {
 			if (!this.joinGame(user)) return false;
 		}
-		value = toID(value);
+		const value = toID(originalValue);
 
 		const player = this.playerTable[user.id];
 
-		if (this.runEvent('AnySubmit', player, value)) return;
+		if (this.runEvent('AnySubmit', player, value, originalValue)) return;
 		if (player.completed) return false;
 
 		this.validatePlayer(player);
 		player.lastGuess = Date.now();
 
-		if (this.runEvent('Submit', player, value)) return false;
+		if (this.runEvent('Submit', player, value, originalValue)) return false;
 
 		if (player.verifyAnswer(value)) {
 			if (this.runEvent('CorrectAnswer', player, value)) return;
@@ -776,7 +776,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 			this.announce("The hunt has been reset automatically, due to the lack of finishers.");
 			this.tryRunQueue(this.room.roomid);
 		}
-		this.runEvent('AfterEnd');
+		this.runEvent('AfterEnd', reset);
 		this.destroy();
 	}
 
@@ -905,7 +905,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	onChatMessage(msg: string) {
 		let msgId = toID(msg) as string;
 
-		// idenitfy if there is a bot/dt command that failed
+		// identify if there is a bot/dt command that failed
 		// remove it and then match the rest of the post for leaks.
 		const commandMatch = ACCIDENTAL_LEAKS.exec(msg);
 		if (commandMatch) msgId = msgId.slice(toID(commandMatch[0]).length);
@@ -941,7 +941,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 			if (!allowOffline && (!user?.connected || !(user.id in room.users))) continue;
 
 			if (!user) {
-				// simply stick the ID's in there - dont keep any benign symbols passed by the hunt maker
+				// simply stick the ID's in there - don't keep any benign symbols passed by the hunt maker
 				hosts.push({name: id, id: id, noUpdate: true});
 				continue;
 			}
@@ -1378,7 +1378,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			if (questions) {
 				const huntNumber = parseInt(questions);
 				if (!ScavengerHuntDatabase.hasHunt(huntNumber)) return this.errorReply("You specified an invalid hunt number.");
-				hunt = scavengersData.recycledHunts[huntNumber];
+				hunt = scavengersData.recycledHunts[huntNumber - 1];
 			} else {
 				hunt = ScavengerHuntDatabase.getRecycledHuntFromDatabase();
 			}
@@ -1719,9 +1719,9 @@ const ScavengerCommands: Chat.ChatCommands = {
 
 			let next;
 			if (target) {
-				const huntNumber = parseInt(target) - 1;
+				const huntNumber = parseInt(target);
 				if (!ScavengerHuntDatabase.hasHunt(huntNumber)) return this.errorReply("You specified an invalid hunt number.");
-				next = scavengersData.recycledHunts[huntNumber];
+				next = scavengersData.recycledHunts[huntNumber - 1];
 			} else {
 				next = ScavengerHuntDatabase.getRecycledHuntFromDatabase();
 			}
