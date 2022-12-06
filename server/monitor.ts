@@ -9,6 +9,7 @@
 
 import {exec, ExecException, ExecOptions} from 'child_process';
 import {crashlogger, FS} from "../lib";
+import {IPTools} from "./ip-tools";
 
 const MONITOR_CLEAN_TIMEOUT = 2 * 60 * 60 * 1000;
 

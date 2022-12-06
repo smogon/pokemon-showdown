@@ -8703,7 +8703,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
-		isNonstandard: "Past",
+		// isNonstandard: "Past",
 		name: "Hidden Power",
 		pp: 15,
 		priority: 0,
