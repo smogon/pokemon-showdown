@@ -680,7 +680,7 @@ export const commands: Chat.ChatCommands = {
 		const canBeMutedFurther = ((room.getMuteTime(targetUser) || 0) <= (muteDuration * 5 / 6));
 		if (targetUser.locked ||
 			(room.isMuted(targetUser) && !canBeMutedFurther) ||
-			Punishments.isRoomBanned(targetUser, room.roomid)) {
+			(!(targetUser.id in room.users) && Punishments.isRoomBanned(targetUser, room.roomid))) {
 			const alreadyPunishment = targetUser.locked ? "locked" : room.isMuted(targetUser) ? "muted" : "room banned";
 			const problem = ` but was already ${alreadyPunishment}`;
 			if (!reason) {
