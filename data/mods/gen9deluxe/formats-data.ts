@@ -343,7 +343,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 	sneasel: { "tier": "NFE" },
 	sneaselhisui: { "tier": "UU"},
 	weavile: { "tier": "OU", "doublesTier": "DUU", "natDexTier": "UU" },
-	sneasler: { "tier": "UU"},
+	sneasler: { "tier": "OU"},
 	teddiursa: { "tier": "LC" },
 	ursaring: { "tier": "UU", "doublesTier": "DUU", "natDexTier": "UU" },
 	ursaluna: { "tier": "UU"},

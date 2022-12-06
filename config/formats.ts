@@ -37,7 +37,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9deluxe',
 		ruleset: ['Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause'],
-		banlist: ['Uber', 'AG', 'OU', 'OUD', 'UUBL', 'Arena Trap', 'Moody', 'Baton Pass', 'Shadow Tag', 'Quick Claw', 'King\'s Rock', 'Revival Blessing', 'Shed Tail', 'Light Clay'],
+		banlist: ['Uber', 'AG', 'OU', 'OUD', 'UUBL', 'Arena Trap', 'Moody', 'Baton Pass', 'Shadow Tag', 'Quick Claw', 'King\'s Rock', 'Revival Blessing', 'Shed Tail', 'Light Clay', 'Last Respects'],
 	},
 
 	{
