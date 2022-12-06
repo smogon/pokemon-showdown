@@ -539,7 +539,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (damage && damage > target.hp) {
 					damage = target.hp;
 				}
-
 				if ((damage || damage === 0) && !target.fainted) {
 					damage = this.battle.damage(damage, target, pokemon, move);
 					if (!(damage || damage === 0)) return false;
