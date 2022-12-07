@@ -226,7 +226,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!lastMoveIsCounterable && !lastSelectedMoveIsCounterable) {
 				this.debug("Gen 1 Counter: last move was not Counterable");
 				this.add('-fail', pokemon);
-				this.lastDamage = 0;
 				return false;
 			}
 			if (this.lastDamage <= 0) {
@@ -237,7 +236,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!lastMoveIsCounterable || !lastSelectedMoveIsCounterable) {
 				this.hint("Desync Clause Mod activated!");
 				this.add('-fail', pokemon);
-				this.lastDamage = 0;
 				return false;
 			}
 
