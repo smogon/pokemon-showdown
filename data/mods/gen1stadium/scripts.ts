@@ -206,20 +206,20 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.add('-notarget');
 				return true;
 			}
-			damage = this.tryMoveHit(target, pokemon, move);
-
-			// Store 0 damage for last damage if move failed.
+			// Store 0 damage for last damage.
 			// This only happens on moves that don't deal damage but call GetDamageVarsForPlayerAttack (disassembly).
 			const neverDamageMoves = [
-				'conversion', 'haze', 'mist', 'focusenergy', 'confuseray', 'supersonic', 'transform', 'lightscreen', 'reflect', 'substitute', 'mimic', 'leechseed', 'splash', 'softboiled', 'recover', 'rest',
+				'conversion', 'haze', 'mist', 'focusenergy', 'confuseray', 'supersonic', 'transform', 'lightscreen', 'reflect', 'substitute', 'mimic', 'leechseed', 'splash', 'softboiled', 'recover', 'rest', 'teleport',
 			];
 			if (
-				!damage && damage !== 0 &&
+				move.id !== 'counter' &&
 				(move.category !== 'Status' || (move.status && !['psn', 'tox', 'par'].includes(move.status))) &&
 				!neverDamageMoves.includes(move.id)
 			) {
 				this.battle.lastDamage = 0;
 			}
+
+			damage = this.tryMoveHit(target, pokemon, move);
 
 			// Go ahead with results of the used move.
 			if (damage === false) {

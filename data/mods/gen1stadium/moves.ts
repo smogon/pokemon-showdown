@@ -104,6 +104,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!lastMoveThisTurn) {
 				this.debug("Stadium 1 Counter: last move was not this turn");
 				this.add('-fail', pokemon);
+				this.lastDamage = 0;
 				return false;
 			}
 
@@ -112,6 +113,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!lastMoveThisTurnIsCounterable) {
 				this.debug(`Stadium 1 Counter: last move ${lastMoveThisTurn.name} was not Counterable`);
 				this.add('-fail', pokemon);
+				this.lastDamage = 0;
 				return false;
 			}
 			if (this.lastDamage <= 0) {

@@ -281,7 +281,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			const neverDamageMoves = [
 				'conversion', 'haze', 'mist', 'focusenergy', 'confuseray', 'supersonic', 'transform', 'lightscreen', 'reflect', 'substitute', 'mimic', 'leechseed', 'splash', 'softboiled', 'recover', 'rest', 'teleport',
 			];
-			if (move.id !== 'counter' &&
+			if (
+				move.id !== 'counter' &&
 				(move.category !== 'Status' || (move.status && !['psn', 'tox', 'par'].includes(move.status))) &&
 				!neverDamageMoves.includes(move.id)
 			) {
