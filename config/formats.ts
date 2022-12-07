@@ -115,6 +115,16 @@ export const Formats: FormatList = [
 		banlist: ['Nonexistent'],
 	},
 	{
+		name: "[Gen 9] Doubles Hackmons Cup",
+		desc: `Randomized teams of level-balanced Pok&eacute;mon with absolutely any ability, moves, and item. Now with TWICE the Pok&eacute;mon per side!`,
+
+		mod: 'gen9',
+		team: 'randomHC',
+		searchShow: false,
+		gameType: 'doubles',
+		ruleset: ['[Gen 9] Hackmons Cup'],
+	},
+	{
 		name: "[Gen 9] Challenge Cup 1v1",
 
 		mod: 'gen9',
