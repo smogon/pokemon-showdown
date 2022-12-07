@@ -770,6 +770,26 @@ export const Rulesets: {[k: string]: FormatData} = {
 			this.add('rule', 'Z-Move Clause: Z-Moves are banned');
 		},
 	},
+	uudclause: {
+		effectType: 'ValidatorRule',
+		name: 'UUD Clause',
+		desc: 'Bans Last Respects, Shed Tail and Revival Blessing',
+		onValidateSet(set) {
+			const banlist = ['Last Respects', 'Shed Tail', 'Revival Blessing']
+			const moves = set.moves;
+			if (!moves) return;
+			const problems: string[] = [];
+			for (const move of moves) {
+				if (banlist.includes(move)) {
+					problems.push(`${move} is banned by UUD Bans Clause.`);
+				}
+			}
+			return problems;
+		},
+		onBegin() {
+			this.add('rule', 'UUD Bans Clause: Last Respects, Shed Tail and Revival Blessing are banned');
+		}
+	},
 	megastoneclause: {
 		effectType: 'ValidatorRule',
 		name: 'Mega-Stone Clause',
@@ -1209,7 +1229,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'OUD Terastal Clause',
 		desc: "Prevents OUD Pok&eacute;mon from Terastallizing",
 		onBegin() {
-			const dex = this.dex;
 			for (const pokemon of this.getAllPokemon()) {
 				if (pokemon.species.tier === 'OUD') {
 					pokemon.canTerastallize = null;
