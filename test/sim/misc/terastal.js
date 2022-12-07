@@ -96,4 +96,45 @@ describe("Terastallization", function () {
 		assert.bounded(damage, [84, 99],
 			"Terastallizing did not keep old changed type's STAB; actual damage: " + damage);
 	});
+
+	describe.skip('Buffing low BP move behavior', function () {
+		it(`should boost the base power of weaker moves with the same Tera Type to 60 BP`, function () {
+			battle = common.createBattle([[
+				{species: 'magnemite', moves: ['nuzzle']},
+			], [
+				{species: 'mew', ability: 'shellarmor', moves: ['sleeptalk']},
+			]]);
+
+			battle.makeChoices('move nuzzle terastallize', 'auto');
+			const mew = battle.p2.active[0];
+			const damageRange = [40, 48];
+			assert.bounded(mew.maxhp - mew.hp, damageRange, `Should be a 60 BP Nuzzle`);
+		});
+
+		it(`should only boost base power 60 BP after all other base power modifiers are applied`, function () {
+			battle = common.createBattle([[
+				{species: 'cufant', ability: 'technician', moves: ['bulletpunch']},
+			], [
+				{species: 'mew', ability: 'shellarmor', moves: ['sleeptalk']},
+			]]);
+
+			battle.makeChoices('move bulletpunch terastallize', 'auto');
+			const mew = battle.p2.active[0];
+			const damageRange = [72, 86];
+			assert.bounded(mew.maxhp - mew.hp, damageRange, `Should be a 60 BP Bullet Punch`);
+		});
+
+		it(`should not boost the base power of moves with variable base power under 60 BP`, function () {
+			battle = common.createBattle([[
+				{species: 'wiglett', ivs: {hp: 0}, moves: ['waterspout']},
+			], [
+				{species: 'mew', ability: 'shellarmor', moves: ['seismictoss']},
+			]]);
+
+			battle.makeChoices('move waterspout terastallize', 'auto');
+			const mew = battle.p2.active[0];
+			const damageRange = [22, 28];
+			assert.bounded(mew.maxhp - mew.hp, damageRange, `Should be a 34 BP Water Spout`);
+		});
+	});
 });
