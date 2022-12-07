@@ -206,7 +206,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				return true;
 			}
 			// Store 0 damage for last damage.
-			// This only happens on moves that don't deal damage but call GetDamageVarsForPlayerAttack (disassembly).
 			const neverDamageMoves = [
 				'conversion', 'haze', 'mist', 'focusenergy', 'confuseray', 'supersonic', 'transform', 'lightscreen', 'reflect', 'substitute', 'mimic', 'leechseed', 'splash', 'softboiled', 'recover', 'rest', 'teleport',
 			];
