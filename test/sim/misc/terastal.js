@@ -97,7 +97,7 @@ describe("Terastallization", function () {
 			"Terastallizing did not keep old changed type's STAB; actual damage: " + damage);
 	});
 
-	describe.skip('Buffing low BP move behavior', function () {
+	describe('Buffing low BP move behavior', function () {
 		it(`should boost the base power of weaker moves with the same Tera Type to 60 BP`, function () {
 			battle = common.createBattle([[
 				{species: 'magnemite', moves: ['nuzzle']},
@@ -135,6 +135,51 @@ describe("Terastallization", function () {
 			const mew = battle.p2.active[0];
 			const damageRange = [22, 28];
 			assert.bounded(mew.maxhp - mew.hp, damageRange, `Should be a 34 BP Water Spout`);
+		});
+
+		it(`should boost STAB moves that weren't STAB moves prior to terastallizing`, function () {
+			battle = common.createBattle([[
+				{species: 'espathra', evs: {atk: 252}, moves: ['peck', 'aerialace'], teraType: 'Flying'},
+			], [
+				{species: 'arceus', ability: 'shellarmor', moves: ['haze']},
+			]]);
+
+			battle.makeChoices('move peck', 'auto');
+			const arceus = battle.p2.active[0];
+			assert.bounded(arceus.maxhp - arceus.hp, [21, 25], `Should be a 35 BP no-STAB Peck`);
+			arceus.hp = arceus.maxhp;
+			battle.makeChoices('move peck terastallize', 'auto');
+			assert.bounded(arceus.maxhp - arceus.hp, [51, 61], `Should be a 60 BP STAB Peck`);
+		});
+
+		it(`should boost Beat Up hits`, function () {
+			battle = common.createBattle([[
+				{species: 'palafinhero', ability: 'technician', moves: ['beatup'], teraType: 'Dark'},
+			], [
+				{species: 'arceus', ability: 'shellarmor', moves: ['haze']},
+			]]);
+
+			battle.makeChoices('move beatup', 'auto');
+			const arceus = battle.p2.active[0];
+			assert.bounded(arceus.maxhp - arceus.hp, [29, 35], `Should be a 21 BP no-STAB Beat Up`);
+			arceus.hp = arceus.maxhp;
+			battle.makeChoices('move beatup terastallize', 'auto');
+			assert.bounded(arceus.maxhp - arceus.hp, [84, 100], `Should be a 60 BP STAB Beat Up`);
+		});
+
+		it(`shouldn't boost non-STAB moves with <60 Base Power`, function () {
+			battle = common.createBattle([[
+				{species: 'palafinhero', ability: 'technician', moves: ['beatup'], teraType: 'Water'},
+			], [
+				{species: 'arceus', ability: 'shellarmor', moves: ['haze']},
+			]]);
+
+			battle.makeChoices('move beatup', 'auto');
+			const arceus = battle.p2.active[0];
+			assert.bounded(arceus.maxhp - arceus.hp, [29, 35], `Should be a 21 BP no-STAB Beat Up`);
+			arceus.hp = arceus.maxhp;
+			battle.makeChoices('move beatup terastallize', 'auto');
+			assert.bounded(arceus.maxhp - arceus.hp, [29, 35], `Should be a 21 BP no-STAB Beat Up`);
 		});
 	});
 });
