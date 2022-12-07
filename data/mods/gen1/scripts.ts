@@ -135,7 +135,6 @@ export const Scripts: ModdedBattleScriptsData = {
 					return;
 				}
 			}
-			pokemon.lastDamage = 0;
 			let lockedMove = this.battle.runEvent('LockMove', pokemon);
 			if (lockedMove === true) lockedMove = false;
 			if (
@@ -392,7 +391,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// If damage is 0 and not false it means it didn't miss, let's calc.
 			if (damage !== false) {
-				pokemon.lastDamage = 0;
 				if (move.multihit) {
 					let hits = move.multihit;
 					if (Array.isArray(hits)) {
