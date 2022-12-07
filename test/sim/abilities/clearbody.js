@@ -11,9 +11,11 @@ describe('Clear Body', function () {
 	});
 
 	it('should negate stat drops from opposing effects', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Tentacruel', ability: 'clearbody', moves: ['recover']}]});
-		battle.setPlayer('p2', {team: [{species: 'Arbok', ability: 'intimidate', moves: ['acidspray', 'leer', 'scaryface', 'charm', 'confide']}]});
+		battle = common.createBattle([[
+			{species: 'Tentacruel', ability: 'clearbody', moves: ['recover']},
+		], [
+			{species: 'Arbok', ability: 'intimidate', moves: ['acidspray', 'leer', 'scaryface', 'charm', 'confide']},
+		]]);
 
 		const stats = ['spd', 'def', 'spe', 'atk', 'spa'];
 		for (const [index, stat] of stats.entries()) {
@@ -26,26 +28,32 @@ describe('Clear Body', function () {
 	});
 
 	it('should not negate stat drops from the user\'s moves', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Tentacruel', ability: 'clearbody', moves: ['superpower']}]});
-		battle.setPlayer('p2', {team: [{species: 'Arbok', ability: 'unnerve', moves: ['coil']}]});
+		battle = common.createBattle([[
+			{species: 'Tentacruel', ability: 'clearbody', moves: ['superpower']},
+		], [
+			{species: 'Arbok', ability: 'unnerve', moves: ['coil']},
+		]]);
 		battle.makeChoices('move Superpower', 'move Coil');
 		assert.statStage(battle.p1.active[0], 'atk', -1);
 		assert.statStage(battle.p1.active[0], 'def', -1);
 	});
 
 	it('should not negate stat boosts from opposing moves', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Tentacruel', ability: 'clearbody', moves: ['shadowsneak']}]});
-		battle.setPlayer('p2', {team: [{species: 'Arbok', ability: 'unnerve', moves: ['swagger']}]});
+		battle = common.createBattle([[
+			{species: 'Tentacruel', ability: 'clearbody', moves: ['shadowsneak']},
+		], [
+			{species: 'Arbok', ability: 'unnerve', moves: ['swagger']},
+		]]);
 		battle.makeChoices('move Shadowsneak', 'move Swagger');
 		assert.statStage(battle.p1.active[0], 'atk', 2);
 	});
 
 	it('should not negate absolute stat changes', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Tentacruel', ability: 'clearbody', moves: ['coil']}]});
-		battle.setPlayer('p2', {team: [{species: 'Arbok', ability: 'unnerve', moves: ['topsyturvy']}]});
+		battle = common.createBattle([[
+			{species: 'Tentacruel', ability: 'clearbody', moves: ['coil']},
+		], [
+			{species: 'Arbok', ability: 'unnerve', moves: ['topsyturvy']},
+		]]);
 		battle.makeChoices('move Coil', 'move Topsyturvy');
 		assert.statStage(battle.p1.active[0], 'atk', -1);
 		assert.statStage(battle.p1.active[0], 'def', -1);
@@ -53,20 +61,22 @@ describe('Clear Body', function () {
 	});
 
 	it('should be suppressed by Mold Breaker', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Tentacruel', ability: 'clearbody', moves: ['recover']}]});
-		battle.setPlayer('p2', {team: [{species: 'Haxorus', ability: 'moldbreaker', moves: ['growl']}]});
+		battle = common.createBattle([[
+			{species: 'Tentacruel', ability: 'clearbody', moves: ['recover']},
+		], [
+			{species: 'Haxorus', ability: 'moldbreaker', moves: ['growl']},
+		]]);
 		battle.makeChoices('move Recover', 'move Growl');
 		assert.statStage(battle.p1.active[0], 'atk', -1);
 	});
 
 	it('should be suppressed by Mold Breaker if it is forced out by a move', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [
+		battle = common.createBattle([[
 			{species: 'Metagross', ability: 'clearbody', moves: ['sleeptalk']},
 			{species: 'Metagross', ability: 'clearbody', moves: ['sleeptalk']},
-		]});
-		battle.setPlayer('p2', {team: [{species: 'Haxorus', ability: 'moldbreaker', moves: ['roar', 'stickyweb']}]});
+		], [
+			{species: 'Haxorus', ability: 'moldbreaker', moves: ['roar', 'stickyweb']},
+		]]);
 		battle.makeChoices('move Sleeptalk', 'move Stickyweb');
 		battle.makeChoices('move Sleeptalk', 'move Roar');
 		battle.makeChoices('switch 2', 'default');
