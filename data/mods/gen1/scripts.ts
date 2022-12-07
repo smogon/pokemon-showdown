@@ -387,6 +387,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.add('-miss', pokemon);
 				if (accuracy === 255) this.battle.hint("In Gen 1, moves with 100% accuracy can still miss 1/256 of the time.");
 				damage = false;
+				this.battle.lastDamage = 0;
 			}
 
 			// If damage is 0 and not false it means it didn't miss, let's calc.

@@ -306,6 +306,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.attrLastMove('[miss]');
 				this.battle.add('-miss', pokemon);
 				damage = false;
+				this.battle.lastDamage = 0;
 			}
 
 			// If damage is 0 and not false it means it didn't miss, let's calc.
