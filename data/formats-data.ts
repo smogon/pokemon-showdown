@@ -5851,7 +5851,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	chiyu: {
 		tier: "OU",
 		doublesTier: "DOU",
-		natDexTier: "UU",
+		natDexTier: "Uber",
 	},
 	koraidon: {
 		tier: "Uber",
