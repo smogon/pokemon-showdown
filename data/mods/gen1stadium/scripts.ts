@@ -503,7 +503,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Now we can save the partial trapping damage.
 			if (pokemon.volatiles['partialtrappinglock']) {
-				pokemon.volatiles['partialtrappinglock'].damage = pokemon.lastDamage;
+				pokemon.volatiles['partialtrappinglock'].damage = this.battle.lastDamage;
 			}
 
 			// Apply move secondaries.
