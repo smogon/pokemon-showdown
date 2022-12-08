@@ -137,4 +137,15 @@ describe("Terastallization", function () {
 			assert.bounded(mew.maxhp - mew.hp, damageRange, `Should be a 34 BP Water Spout`);
 		});
 	});
+
+	it("should combine with Adaptability for an overall STAB of x2.25", () => {
+		battle = common.createBattle([[
+			{species: "Dragalge", ability: 'adaptability', moves: ['acid'], teraType: "Poison"},
+		], [
+			{species: "Mareep", ability: 'static', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move acid terastallize', 'auto');
+		const damage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
+		assert.bounded(damage, [119, 141], "Actual damage: " + damage);
+	});
 });
