@@ -1152,6 +1152,7 @@ export const commands: Chat.ChatCommands = {
 			.map((set: PokemonSet) => {
 				// moves are sometimes given as IDs
 				set.moves = set.moves.map(m => dex.moves.get(m).name);
+				set.item = dex.items.get(set.item).name;
 				return `<details><summary>${set.name}</summary>${Utils.escapeHTML(Teams.exportSet(set))}<br /></details>`;
 			})
 			.join('');

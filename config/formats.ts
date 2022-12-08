@@ -2066,6 +2066,14 @@ export const Formats: FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] Computer-Generated Teams",
+		desc: `Not The Worst Sets You've Ever Seen™ (no need for your own team)`,
+
+		mod: 'gen9',
+		team: 'computerGenerated',
+		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
+	},
+	{
 		name: "[Gen 9] Hackmons Cup",
 		desc: `Randomized teams of level-balanced Pok&eacute;mon with absolutely any ability, moves, and item.`,
 
