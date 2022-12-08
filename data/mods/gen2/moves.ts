@@ -400,9 +400,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	meanlook: {
 		inherit: true,
-		accuracy: true,
-		ignoreAccuracy: undefined,
-		ignoreEvasion: undefined,
 		flags: {reflectable: 1, mirror: 1},
 	},
 	metronome: {
@@ -414,8 +411,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mimic: {
 		inherit: true,
-		ignoreAccuracy: undefined,
-		ignoreEvasion: undefined,
+		accuracy: 100,
 		noSketch: true,
 	},
 	mindreader: {
@@ -542,6 +538,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				pokemon.removeVolatile('lockedmove');
 			}
 		},
+	},
+	painsplit: {
+		inherit: true,
+		accuracy: 100,
 	},
 	perishsong: {
 		inherit: true,
@@ -785,9 +785,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	spiderweb: {
 		inherit: true,
-		accuracy: true,
-		ignoreAccuracy: undefined,
-		ignoreEvasion: undefined,
 		flags: {reflectable: 1, mirror: 1},
 	},
 	spikes: {
@@ -958,12 +955,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		multiaccuracy: false,
 		multihit: [1, 3],
-	},
-	vitalthrow: {
-		inherit: true,
-		accuracy: true,
-		ignoreAccuracy: undefined,
-		ignoreEvasion: undefined,
 	},
 	whirlwind: {
 		inherit: true,
