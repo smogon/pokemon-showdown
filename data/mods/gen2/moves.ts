@@ -415,7 +415,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mindreader: {
 		inherit: true,
-		accuracy: 100,
 		onTryHit(target) {
 			if (target.volatiles['foresight'] || target.volatiles['lockon']) return false;
 		},

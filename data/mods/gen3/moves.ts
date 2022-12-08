@@ -440,6 +440,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: true,
 	},
+	mindreader: {
+		inherit: true,
+		accuracy: 100,
+	},
 	mirrorcoat: {
 		inherit: true,
 		condition: {
