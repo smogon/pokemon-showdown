@@ -436,6 +436,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		pp: 10,
 	},
+	memento: {
+		inherit: true,
+		accuracy: true,
+	},
 	mirrorcoat: {
 		inherit: true,
 		condition: {
