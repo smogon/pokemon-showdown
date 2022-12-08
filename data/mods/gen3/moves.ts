@@ -371,6 +371,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
+	foresight: {
+		inherit: true,
+		accuracy: 100,
+	},
 	furycutter: {
 		inherit: true,
 		onHit(target, source) {
@@ -493,6 +497,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	nightmare: {
 		inherit: true,
 		accuracy: true,
+	},
+	odorsleuth: {
+		inherit: true,
+		accuracy: 100,
 	},
 	outrage: {
 		inherit: true,
