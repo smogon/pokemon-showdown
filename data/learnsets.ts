@@ -70427,7 +70427,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			hyperspacefury: ["9L85", "7L1", "6L1"],
 			hyperspacehole: ["9L85", "7L1", "7S1", "6L1", "6S0"],
 			icepunch: ["9M", "7T", "6T"],
-			knockoff: ["7T", "7L46", "6T", "6L46"],
+			knockoff: ["9L46", "7T", "7L46", "6T", "6L46"],
 			laserfocus: ["7T"],
 			lastresort: ["7T", "6T"],
 			lightscreen: ["9M", "9L15", "7M", "7L15", "6M", "6L15"],
