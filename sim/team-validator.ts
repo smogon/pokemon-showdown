@@ -659,7 +659,7 @@ export class TeamValidator {
 			problem = this.checkMove(set, move, setHas);
 			if (problem) {
 				let allowedByOM;
-				if (problem.endsWith('is not obtainable without hacking or glitches.') &&
+				if (problem.includes('hacking or glitches') &&
 					ruleTable.has('omunobtainablemoves')) {
 					problem = `${name}'s ${problem}`;
 					allowedByOM = !this.omCheckCanLearn(move, outOfBattleSpecies, setSources, set, problem);
