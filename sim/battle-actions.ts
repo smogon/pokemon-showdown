@@ -155,7 +155,7 @@ export class BattleActions {
 
 		// Placeholder until we have proper support
 		if (pokemon.terastallized) {
-			this.battle.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
+			this.battle.add('-start', pokemon, 'typechange', pokemon.terastallized, '[silent]');
 		}
 
 		return true;
@@ -815,7 +815,7 @@ export class BattleActions {
 		return this.moveHit(isFFAHazard ? targets : target, pokemon, move);
 	}
 	hitStepMoveHitLoop(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) { // Temporary name
-		const damage: (number | boolean | undefined)[] = [];
+		let damage: (number | boolean | undefined)[] = [];
 		for (const i of targets.keys()) {
 			damage[i] = 0;
 		}
@@ -854,6 +854,7 @@ export class BattleActions {
 			move.hit = hit;
 			if (move.smartTarget && targets.length > 1) {
 				targetsCopy = [targets[hit - 1]];
+				damage = [damage[hit - 1]];
 			} else {
 				targetsCopy = targets.slice(0);
 			}
@@ -958,12 +959,20 @@ export class BattleActions {
 		}
 
 		// smartTarget messes up targetsCopy, but smartTarget should in theory ensure that targets will never fail, anyway
-		if (move.smartTarget) targetsCopy = targets.slice(0);
+		if (move.smartTarget) {
+			if (move.smartTarget && targets.length > 1) {
+				targetsCopy = [targets[hit - 1]];
+			} else {
+				targetsCopy = targets.slice(0);
+			}
+		}
 
 		for (const [i, target] of targetsCopy.entries()) {
 			if (target && pokemon !== target) {
 				target.gotAttacked(move, moveDamage[i] as number | false | undefined, pokemon);
-				target.timesAttacked += hit - 1;
+				if (move.category !== 'Status') {
+					target.timesAttacked += hit - 1;
+				}
 			}
 		}
 

@@ -1,6 +1,6 @@
 export const Scripts: ModdedBattleScriptsData = {
-	gen: 8,
-	inherit: 'gen8',
+	gen: 9,
+	inherit: 'gen9',
 	nextTurn() {
 		this.turn++;
 		this.lastSuccessfulMoveThisTurn = null;
@@ -16,6 +16,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (ally) {
 					// @ts-ignore
 					allyMoves = allyMoves.filter(move => !pokemon.moves.includes(move.id) && ally.m.curMoves.includes(move.id));
+					for (const aMove of allyMoves) {
+						aMove.pp = this.clampIntRange(aMove.maxpp - (pokemon.m.trackPP.get(aMove.id) || 0), 0);
+					}
 				}
 				pokemon.moveSlots = pokemon.moveSlots.concat(allyMoves);
 			}
@@ -33,6 +36,24 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 		for (const pokemon of dynamaxEnding) {
 			pokemon.removeVolatile('dynamax');
+		}
+
+		// Gen 1 partial trapping ends when either Pokemon or a switch in faints to residual damage
+		if (this.gen === 1) {
+			for (const pokemon of this.getAllActive()) {
+				if (pokemon.volatiles['partialtrappinglock']) {
+					const target = pokemon.volatiles['partialtrappinglock'].locked;
+					if (target.hp <= 0 || !target.volatiles['partiallytrapped']) {
+						delete pokemon.volatiles['partialtrappinglock'];
+					}
+				}
+				if (pokemon.volatiles['partiallytrapped']) {
+					const source = pokemon.volatiles['partiallytrapped'].source;
+					if (source.hp <= 0 || !source.volatiles['partialtrappinglock']) {
+						delete pokemon.volatiles['partiallytrapped'];
+					}
+				}
+			}
 		}
 
 		const trappedBySide: boolean[] = [];
@@ -61,8 +82,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					moveSlot.disabledSource = '';
 				}
 				this.runEvent('DisableMove', pokemon);
-				if (!pokemon.ateBerry) pokemon.disableMove('belch');
-				if (!pokemon.getItem().isBerry) pokemon.disableMove('stuffcheeks');
+				for (const moveSlot of pokemon.moveSlots) {
+					this.singleEvent('DisableMove', this.dex.getActiveMove(moveSlot.id), null, pokemon);
+				}
 
 				// If it was an illusion, it's not any more
 				if (pokemon.getLastAttackedBy() && this.gen >= 7) pokemon.knownType = true;
@@ -183,9 +205,57 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		this.makeRequest('move');
 	},
+	actions: {
+		runSwitch(pokemon) {
+			this.battle.runEvent('Swap', pokemon);
+
+			if (this.battle.gen >= 5) {
+				this.battle.runEvent('SwitchIn', pokemon);
+			}
+
+			this.battle.runEvent('EntryHazard', pokemon);
+
+			if (this.battle.gen <= 4) {
+				this.battle.runEvent('SwitchIn', pokemon);
+			}
+
+			const ally = pokemon.side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
+
+			if (this.battle.gen <= 2 && !pokemon.side.faintedThisTurn && pokemon.draggedIn !== this.battle.turn) {
+				this.battle.runEvent('AfterSwitchInSelf', pokemon);
+			}
+			if (!pokemon.hp) return false;
+			pokemon.isStarted = true;
+			if (!pokemon.fainted) {
+				this.battle.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
+				// Start innates
+				let status;
+				if (pokemon.m.startVolatile && pokemon.m.innate) {
+					status = this.battle.dex.conditions.get(pokemon.m.innate);
+					this.battle.singleEvent('Start', status, pokemon.volatiles[status.id], pokemon);
+					pokemon.m.startVolatile = false;
+				}
+				if (ally && ally.m.startVolatile && ally.m.innate) {
+					status = this.battle.dex.conditions.get(ally.m.innate);
+					this.battle.singleEvent('Start', status, ally.volatiles[status.id], ally);
+					ally.m.startVolatile = false;
+				}
+				// pic end
+				this.battle.singleEvent('Start', pokemon.getItem(), pokemon.itemState, pokemon);
+			}
+			if (this.battle.gen === 4) {
+				for (const foeActive of pokemon.foes()) {
+					foeActive.removeVolatile('substitutebroken');
+				}
+			}
+			pokemon.draggedIn = null;
+			return true;
+		},
+	},
 	pokemon: {
 		setAbility(ability, source, isFromFormeChange) {
 			if (!this.hp) return false;
+			const BAD_ABILITIES = ['trace', 'imposter', 'neutralizinggas', 'illusion', 'wanderingspirit'];
 			if (typeof ability === 'string') ability = this.battle.dex.abilities.get(ability);
 			const oldAbility = this.ability;
 			if (!isFromFormeChange) {
@@ -211,8 +281,10 @@ export const Scripts: ModdedBattleScriptsData = {
 						this.m.innate = 'ability:' + ally.getAbility().id;
 						this.addVolatile(this.m.innate);
 					}
-					ally.m.innate = 'ability:' + ability.id;
-					ally.addVolatile(ally.m.innate);
+					if (!BAD_ABILITIES.includes(ability.id)) {
+						ally.m.innate = 'ability:' + ability.id;
+						ally.addVolatile(ally.m.innate);
+					}
 				}
 			}
 			// Entrainment
@@ -334,6 +406,25 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			return true;
+		},
+		deductPP(move, amount, target) {
+			const gen = this.battle.gen;
+			move = this.battle.dex.moves.get(move);
+			const ppData = this.getMoveData(move);
+			if (!ppData) return 0;
+			ppData.used = true;
+			if (!ppData.pp && gen > 1) return 0;
+
+			if (!amount) amount = 1;
+			ppData.pp -= amount;
+			if (ppData.pp < 0 && gen > 1) {
+				amount += ppData.pp;
+				ppData.pp = 0;
+			}
+			if (!this.m.curMoves.includes(move.id)) {
+				this.m.trackPP.set(move.id, (this.m.trackPP.get(move.id) || 0) + amount);
+			}
+			return amount;
 		},
 	},
 };

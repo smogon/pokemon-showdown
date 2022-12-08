@@ -587,18 +587,18 @@ export class Pokemon {
 	}
 
 	/**
-	 * Gets the Pokemon's best storedStat.
+	 * Gets the Pokemon's best stat.
 	 * Moved to its own method due to frequent use of the same code.
 	 * Used by Beast Boost, Quark Drive, and Protosynthesis.
 	 */
-	getBestStoredStat(): StatIDExceptHP {
+	getBestStat(unboosted?: boolean, unmodified?: boolean): StatIDExceptHP {
 		let statName: StatIDExceptHP = 'atk';
 		let bestStat = 0;
-		let s: StatIDExceptHP;
-		for (s in this.storedStats) {
-			if (this.storedStats[s] > bestStat) {
-				statName = s;
-				bestStat = this.storedStats[s];
+		const stats: StatIDExceptHP[] = ['atk', 'def', 'spa', 'spd', 'spe'];
+		for (const i of stats) {
+			if (this.getStat(i, unboosted, unmodified) > bestStat) {
+				statName = i;
+				bestStat = this.getStat(i, unboosted, unmodified);
 			}
 		}
 
@@ -796,30 +796,28 @@ export class Pokemon {
 	}
 
 	ignoringAbility() {
+		if (this.battle.gen >= 5 && !this.isActive) return true;
+		if (this.getAbility().isPermanent) return false;
+		if (this.volatiles['gastroacid']) return true;
+
 		// Check if any active pokemon have the ability Neutralizing Gas
-		let neutralizinggas = false;
+		if (this.hasItem('Ability Shield') || this.ability === ('neutralizinggas' as ID)) return false;
 		for (const pokemon of this.battle.getAllActive()) {
 			// can't use hasAbility because it would lead to infinite recursion
 			if (pokemon.ability === ('neutralizinggas' as ID) && !pokemon.volatiles['gastroacid'] &&
 				!pokemon.transformed && !pokemon.abilityState.ending) {
-				neutralizinggas = true;
-				break;
+				return true;
 			}
 		}
 
-		return !!(
-			(this.battle.gen >= 5 && !this.isActive) ||
-			((this.volatiles['gastroacid'] || (neutralizinggas && this.ability !== ('neutralizinggas' as ID))) &&
-			!this.getAbility().isPermanent
-			)
-		);
+		return false;
 	}
 
 	ignoringItem() {
 		return !!(
 			this.itemState.knockedOff || // Gen 3-4
 			(this.battle.gen >= 5 && !this.isActive) ||
-			(this.hasAbility('klutz') && !this.getItem().ignoreKlutz) ||
+			(!this.getItem().ignoreKlutz && this.hasAbility('klutz')) ||
 			this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']
 		);
 	}
@@ -1080,6 +1078,7 @@ export class Pokemon {
 			baseAbility: this.baseAbility,
 			item: this.item,
 			commanding: !!this.volatiles['commanding'] && !this.fainted,
+			reviving: this.isActive && !!this.side.slotConditions[this.position]['revivalblessing'],
 			pokeball: this.pokeball,
 		};
 		if (this.battle.gen > 6) entry.ability = this.ability;
@@ -1195,6 +1194,7 @@ export class Pokemon {
 		this.set.ivs = (this.battle.gen >= 5 ? this.set.ivs : pokemon.set.ivs);
 		this.hpType = (this.battle.gen >= 5 ? this.hpType : pokemon.hpType);
 		this.hpPower = (this.battle.gen >= 5 ? this.hpPower : pokemon.hpPower);
+		this.timesAttacked = pokemon.timesAttacked;
 		for (const moveSlot of pokemon.moveSlots) {
 			let moveName = moveSlot.move;
 			if (moveSlot.id === 'hiddenpower') {
@@ -1343,8 +1343,6 @@ export class Pokemon {
 			} else if (source.effectType === 'Status') {
 				// Shaymin-Sky -> Shaymin
 				this.battle.add('-formechange', this, species.name, message);
-			} else if (source.effectType === 'Terastal') {
-				this.battle.add('-terastallize', this, this.teraType);
 			}
 		} else {
 			if (source.effectType === 'Ability') {
@@ -1493,7 +1491,7 @@ export class Pokemon {
 		for (const moveSlot of this.moveSlots) {
 			if (moveSlot.id === moveid && moveSlot.disabled !== true) {
 				moveSlot.disabled = (isHidden || true);
-				moveSlot.disabledSource = (sourceEffect?.fullname || moveSlot.move);
+				moveSlot.disabledSource = (sourceEffect?.name || moveSlot.move);
 			}
 		}
 	}
@@ -1713,6 +1711,7 @@ export class Pokemon {
 			this.item = '';
 			this.itemState = {id: '', target: this};
 			this.pendingStaleness = undefined;
+			this.battle.runEvent('AfterTakeItem', this, null, null, item);
 			return item;
 		}
 		return false;
@@ -1744,10 +1743,12 @@ export class Pokemon {
 	}
 
 	hasItem(item: string | string[]) {
-		if (this.ignoringItem()) return false;
-		const ownItem = this.item;
-		if (!Array.isArray(item)) return ownItem === toID(item);
-		return item.map(toID).includes(ownItem);
+		if (Array.isArray(item)) {
+			if (!item.map(toID).includes(this.item)) return false;
+		} else {
+			if (toID(item) !== this.item) return false;
+		}
+		return !this.ignoringItem();
 	}
 
 	clearItem() {
@@ -1761,7 +1762,8 @@ export class Pokemon {
 		if (!isFromFormeChange) {
 			if (ability.isPermanent || this.getAbility().isPermanent) return false;
 		}
-		if (!this.battle.runEvent('SetAbility', this, source, this.battle.effect, ability)) return false;
+		const setAbilityEvent: boolean | null = this.battle.runEvent('SetAbility', this, source, this.battle.effect, ability);
+		if (!setAbilityEvent) return setAbilityEvent;
 		this.battle.singleEvent('End', this.battle.dex.abilities.get(oldAbility), this.abilityState, this, source);
 		if (this.battle.effect && this.battle.effect.effectType === 'Move' && !isFromFormeChange) {
 			this.battle.add('-endability', this, this.battle.dex.abilities.get(oldAbility), '[from] move: ' +
@@ -1781,10 +1783,12 @@ export class Pokemon {
 	}
 
 	hasAbility(ability: string | string[]) {
-		if (this.ignoringAbility()) return false;
-		const ownAbility = this.ability;
-		if (!Array.isArray(ability)) return ownAbility === toID(ability);
-		return ability.map(toID).includes(ownAbility);
+		if (Array.isArray(ability)) {
+			if (!ability.map(toID).includes(this.ability)) return false;
+		} else {
+			if (toID(ability) !== this.ability) return false;
+		}
+		return !this.ignoringAbility();
 	}
 
 	clearAbility() {
@@ -1968,7 +1972,7 @@ export class Pokemon {
 		const item = (this.ignoringItem() ? '' : this.item);
 		if (item === 'ironball') return true;
 		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
-		if (!negateImmunity && this.hasType('Flying') && !('roost' in this.volatiles)) return false;
+		if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
 		if (this.hasAbility('levitate') && !this.battle.suppressingAbility()) return null;
 		if ('magnetrise' in this.volatiles) return false;
 		if ('telekinesis' in this.volatiles) return false;

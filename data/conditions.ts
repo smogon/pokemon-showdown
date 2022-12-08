@@ -785,25 +785,21 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 	},
 
-	terastal: {
-		name: 'Terastal',
-		effectType: 'Terastal',
-		noCopy: true,
-		duration: 1,
-	},
-
 	// Commander needs two conditions so they are implemented here
 	// Dondozo
 	commanded: {
 		name: "Commanded",
 		noCopy: true,
-		onStart(target) {
-			this.boost({atk: 2, def: 2, spa: 2, spd: 2, spe: 2}, target);
+		onStart(pokemon) {
+			this.boost({atk: 2, spa: 2, spe: 2, def: 2, spd: 2}, pokemon);
+		},
+		onDragOutPriority: 2,
+		onDragOut() {
+			return false;
 		},
 		// Prevents Shed Shell allowing a swap
 		onTrapPokemonPriority: -11,
 		onTrapPokemon(pokemon) {
-			// Dondozo cannot switch out
 			pokemon.trapped = true;
 		},
 	},
@@ -811,23 +807,24 @@ export const Conditions: {[k: string]: ConditionData} = {
 	commanding: {
 		name: "Commanding",
 		noCopy: true,
-		onStart(target) {
-			this.add('-activate', target, 'ability: Commander');
+		onStart(pokemon) {
+			this.add('-activate', pokemon, 'ability: Commander');
+		},
+		onDragOutPriority: 2,
+		onDragOut() {
+			return false;
 		},
 		// Prevents Shed Shell allowing a swap
 		onTrapPokemonPriority: -11,
 		onTrapPokemon(pokemon) {
-			// Tatsugiri cannot switch out
 			pokemon.trapped = true;
 		},
-		// Override No Guard, TODO test in game
+		// Override No Guard
 		onInvulnerabilityPriority: 2,
 		onInvulnerability(target, source, move) {
-			// All attacks miss Tatsugiri
 			return false;
 		},
 		onBeforeTurn(pokemon) {
-			// Tatsugiri doesn't get an action while commanding
 			this.queue.cancelAction(pokemon);
 		},
 	},

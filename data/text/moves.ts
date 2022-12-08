@@ -796,8 +796,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	ceaselessedge: {
 		name: "Ceaseless Edge",
-		desc: "Has a higher chance for a critical hit. If this move is successful, it sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in, unless it is a Flying-type Pokemon or has the Levitate Ability. Can be set up to three times before failing. Opponents lose 1/8 of their maximum HP with one layer, 1/6 of their maximum HP with two layers, and 1/4 of their maximum HP with three layers, all rounded down. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
-		shortDesc: "High critical hit ratio. Foes: Spikes.",
+		desc: "If this move is successful, it sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in, unless it is a Flying-type Pokemon or has the Levitate Ability. Can be set up to three times before failing. Opponents lose 1/8 of their maximum HP with one layer, 1/6 of their maximum HP with two layers, and 1/4 of their maximum HP with three layers, all rounded down. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
+		shortDesc: "Sets a layer of Spikes on the target's side.",
 	},
 	celebrate: {
 		name: "Celebrate",
@@ -807,8 +807,12 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	charge: {
 		name: "Charge",
-		desc: "Raises the user's Special Defense by 1 stage. If the user uses an Electric-type attack on the next turn, its power will be doubled.",
-		shortDesc: "+1 SpD, user's Electric move next turn 2x power.",
+		desc: "Raises the user's Special Defense by 1 stage. The user's next Electric-type attack will have its power doubled.",
+		shortDesc: "+1 SpD, user's next Electric move 2x power.",
+		gen8: {
+			desc: "Raises the user's Special Defense by 1 stage. If the user uses an Electric-type attack on the next turn, its power will be doubled.",
+			shortDesc: "+1 SpD, user's Electric move next turn 2x power.",
+		},
 		gen3: {
 			desc: "If the user uses an Electric-type attack on the next turn, its power will be doubled.",
 			shortDesc: "The user's Electric attack next turn has 2x power.",
@@ -1316,8 +1320,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	direclaw: {
 		name: "Dire Claw",
-		desc: "Has a higher chance for a critical hit. Has a 50% chance to cause the target to either fall asleep, become poisoned, or become paralyzed.",
-		shortDesc: "High critical hit ratio. 50% chance to slp/psn/par target.",
+		desc: "Has a 50% chance to cause the target to either fall asleep, become poisoned, or become paralyzed.",
+		shortDesc: "50% chance to sleep, poison, or paralyze target.",
 	},
 	disable: {
 		name: "Disable",
@@ -3674,7 +3678,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	makeitrain: {
 		name: "Make It Rain",
 		desc: "Lowers the user's Special Attack by 1 stage.",
-		shortDesc: "Lowers the user's Sp. Atk by 1. Scatters coins.",
+		shortDesc: "Lowers the user's Sp. Atk by 1. Hits foe(s).",
 
 		activate: "#payday",
 	},
@@ -5085,6 +5089,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	revivalblessing: {
 		name: "Revival Blessing",
 		shortDesc: "Revives a fainted Pokemon to 50% HP.",
+
+		heal: "  [POKEMON] was revived and is ready to fight again!",
 	},
 	risingvoltage: {
 		name: "Rising Voltage",
@@ -6129,8 +6135,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	stoneaxe: {
 		name: "Stone Axe",
-		desc: "Has a higher chance for a critical hit. If this move is successful, it sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Rock type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
-		shortDesc: "High critical hit ratio. Foes: Stealth Rock.",
+		desc: "If this move is successful, it sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Rock type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
+		shortDesc: "Sets Stealth Rock on the target's side.",
 	},
 	stoneedge: {
 		name: "Stone Edge",
@@ -6804,8 +6810,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	triplearrows: {
 		name: "Triple Arrows",
-		desc: "Has a higher chance for a critical hit. Has a 50% chance to lower the target's Defense by 1 stage and a 10% chance to make it flinch.",
-		shortDesc: "High critical hit ratio. 50% -1 Def. 10% to flinch.",
+		desc: "Has a 50% chance to lower the target's Defense by 1 stage, a 30% chance to make it flinch, and a higher chance for a critical hit.",
+		shortDesc: "High critical hit ratio. 50% -1 Def. 30% flinch.",
 	},
 	tripleaxel: {
 		name: "Triple Axel",

@@ -264,7 +264,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// Drain/recoil does not happen if the substitute breaks
 				if (target.volatiles['substitute']) {
 					if (move.recoil) {
-						this.damage(Math.round(damage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
+						this.damage(this.clampIntRange(Math.floor(damage * move.recoil[0] / move.recoil[1]), 1), source, target, 'recoil');
 					}
 				}
 				this.runEvent('AfterSubDamage', target, source, move, damage);

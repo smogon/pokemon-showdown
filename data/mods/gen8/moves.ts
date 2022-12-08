@@ -58,6 +58,45 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	charge: {
+		inherit: true,
+		condition: {
+			onStart(pokemon, source, effect) {
+				if (effect && ['electromorphosis', 'windpower'].includes(effect.id)) {
+					this.add('-start', pokemon, 'Charge', this.activeMove!.name, '[from] ability: ' + effect.name);
+				} else {
+					this.add('-start', pokemon, 'Charge');
+				}
+			},
+			onRestart(pokemon, source, effect) {
+				if (effect && ['electromorphosis', 'windpower'].includes(effect.id)) {
+					this.add('-start', pokemon, 'Charge', this.activeMove!.name, '[from] ability: ' + effect.name);
+				} else {
+					this.add('-start', pokemon, 'Charge');
+				}
+			},
+			onBasePowerPriority: 9,
+			onBasePower(basePower, attacker, defender, move) {
+				if (move.type === 'Electric') {
+					this.debug('charge boost');
+					return this.chainModify(2);
+				}
+			},
+			onMoveAborted(target, source, move) {
+				if (move.id !== 'charge') {
+					source.removeVolatile('charge');
+				}
+			},
+			onAfterMove(target, source, move) {
+				if (move.id !== 'charge') {
+					source.removeVolatile('charge');
+				}
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Charge', '[silent]');
+			},
+		},
+	},
 	clangingscales: {
 		inherit: true,
 		isNonstandard: null,
@@ -75,6 +114,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	coreenforcer: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	cosmicpower: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -175,6 +218,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	headcharge: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	healbell: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -441,6 +488,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	shoreup: {
 		inherit: true,
 		pp: 10,
+	},
+	simplebeam: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	skullbash: {
 		inherit: true,

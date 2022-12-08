@@ -50,6 +50,7 @@ const DISCONNECTION_BANK_TIME = 300;
 
 // time after a player disabling the timer before they can re-enable it
 const TIMER_COOLDOWN = 20 * SECONDS;
+const LOCKDOWN_PERIOD = 30 * 60 * 1000; // 30 minutes
 
 export class RoomBattlePlayer extends RoomGames.RoomGamePlayer<RoomBattle> {
 	readonly slot: SideID;
@@ -841,6 +842,16 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 			break;
 		}
 
+		case 'error': {
+			if (process.uptime() * 1000 < LOCKDOWN_PERIOD) {
+				const error = new Error();
+				error.stack = lines.slice(1).join('\n');
+				// lock down the server
+				Rooms.global.startLockdown(error);
+			}
+			break;
+		}
+
 		case 'end':
 			this.logData = JSON.parse(lines[1]);
 			this.score = this.logData!.score;
@@ -1338,7 +1349,7 @@ export class RoomBattleStream extends BattleStream {
 		}
 		try {
 			this._writeLines(chunk);
-		} catch (err) {
+		} catch (err: any) {
 			const battle = this.battle;
 			Monitor.crashlog(err, 'A battle', {
 				chunk,
@@ -1354,6 +1365,8 @@ export class RoomBattleStream extends BattleStream {
 					}
 				}
 			}
+			// public crashlogs only have the stack anyways
+			this.push(`error\n${err.stack}`);
 		}
 		if (this.battle) this.battle.sendUpdates();
 		const deltaTime = Date.now() - startTime;
