@@ -386,7 +386,7 @@ export class RandomTeams {
 				do {
 					item = this.sample(items).name;
 					isIllegalItem = this.dex.items.get(item).gen > this.gen || this.dex.items.get(item).isNonstandard;
-					isBadItem = !(item === "Light Ball") && item.endsWith("Ball") || item.startsWith("TR");
+					isBadItem = item.endsWith("Ball") || item.startsWith("TR") && item !== "Light Ball";
 				} while (isIllegalItem || (isBadItem && this.randomChance(19, 20)));
 			}
 
@@ -791,7 +791,7 @@ export class RandomTeams {
 				do {
 					itemData = this.sampleNoReplace(itemPool);
 					item = itemData?.name;
-					isBadItem = item !== "Light Ball" && item.endsWith("Ball") || item.startsWith("TR");
+					isBadItem = item.endsWith("Ball") || item.startsWith("TR") && item !== "Light Ball";
 				} while (isBadItem && this.randomChance(19, 20) && itemPool.length > this.maxTeamSize);
 			}
 
