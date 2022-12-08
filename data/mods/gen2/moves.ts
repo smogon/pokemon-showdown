@@ -376,7 +376,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	lockon: {
 		inherit: true,
-		accuracy: true,
 		onTryHit(target) {
 			if (target.volatiles['foresight'] || target.volatiles['lockon']) return false;
 		},
@@ -543,12 +542,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				pokemon.removeVolatile('lockedmove');
 			}
 		},
-	},
-	painsplit: {
-		inherit: true,
-		accuracy: true,
-		ignoreAccuracy: undefined,
-		ignoreEvasion: undefined,
 	},
 	perishsong: {
 		inherit: true,
