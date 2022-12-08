@@ -148,4 +148,15 @@ describe("Terastallization", function () {
 		const damage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
 		assert.bounded(damage, [119, 141], "Actual damage: " + damage);
 	});
+
+	it("should not give the Adaptability boost on the user's old types", () => {
+		battle = common.createBattle([[
+			{species: "Dragalge", ability: 'adaptability', moves: ['acid'], teraType: "Dragon"},
+		], [
+			{species: "Mareep", ability: 'static', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move acid terastallize', 'auto');
+		const damage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
+		assert.bounded(damage, [79, 94], "Actual damage: " + damage);
+	});
 });
