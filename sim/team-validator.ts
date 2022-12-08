@@ -315,7 +315,7 @@ export class TeamValidator {
 			if (options.removeNicknames) {
 				const species = dex.species.get(set.species);
 				let crossSpecies: Species;
-				if (format.name === '[Gen 8] Cross Evolution' && (crossSpecies = dex.species.get(set.name)).exists) {
+				if (format.name === '[Gen 9] Cross Evolution' && (crossSpecies = dex.species.get(set.name)).exists) {
 					set.name = crossSpecies.name;
 				} else {
 					set.name = species.baseSpecies;
