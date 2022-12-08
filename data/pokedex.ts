@@ -17620,7 +17620,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Field"],
 	},
 	dudunsparcethreesegment: {
-		num: 983,
+		num: 982,
 		name: "Dudunsparce-Three-Segment",
 		baseSpecies: "Dudunsparce",
 		forme: "Three-Segment",
@@ -17636,7 +17636,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Field"],
 	},
 	kingambit: {
-		num: 984,
+		num: 983,
 		name: "Kingambit",
 		types: ["Dark", "Steel"],
 		baseStats: {hp: 100, atk: 135, def: 120, spa: 60, spd: 85, spe: 50},
