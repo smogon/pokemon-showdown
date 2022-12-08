@@ -161,10 +161,10 @@ describe("Terastallization", function () {
 
 			battle.makeChoices('move leafage', 'auto');
 			const arceus = battle.p2.active[0];
-			assert.bounded(arceus.maxhp - arceus.hp, [38, 45], `Should be a 40 BP no-STAB Beat Up`);
+			assert.bounded(arceus.maxhp - arceus.hp, [38, 45], `Should be a 40 BP no-STAB Leafage`);
 			arceus.hp = arceus.maxhp;
 			battle.makeChoices('move leafage terastallize', 'auto');
-			assert.bounded(arceus.maxhp - arceus.hp, [38, 45], `Should be a 21 BP no-STAB Beat Up`);
+			assert.bounded(arceus.maxhp - arceus.hp, [38, 45], `Should be a 40 BP no-STAB Leafage`);
 		});
 	});
 });
