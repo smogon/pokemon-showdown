@@ -294,12 +294,6 @@ export const Formats: FormatList = [
 			'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard', 'Gengarite', 'Belly Drum', 'Bolt Beak', 'Chatter', 'Double Iron Bash', 'Electrify',
 			'Last Respects', 'Octolock', 'Rage Fist', 'Revival Blessing', 'Shed Tail', 'Shell Smash', 'Comatose + Sleep Talk', 'Imprison + Transform',
 		],
-		unbanlist: [
-			'Growlithe-Hisui', 'Arcanine-Hisui', 'Voltorb-Hisui', 'Electrode-Hisui', 'Typhlosion-Hisui', 'Qwilfish-Hisui', 'Sneasel-Hisui', 'Dialga-Origin',
-			'Palkia-Origin', 'Samurott-Hisui', 'Lilligant-Hisui', 'Basculin-White-Striped', 'Zorua-Hisui', 'Zoroark-Hisui', 'Braviary-Hisui', 'Sliggoo-Hisui',
-			'Goodra-Hisui', 'Avalugg-Hisui', 'Decidueye-Hisui', 'Wyrdeer', 'Kleavor', 'Ursaluna', 'Basculegion', 'Basculegion-F', 'Sneasler', 'Overqwil',
-			'Enamorus', 'Enamorus-Therian',
-		],
 		restricted: ['Arceus'],
 		onValidateTeam(team, format) {
 			// baseSpecies:count
