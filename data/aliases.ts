@@ -70,7 +70,7 @@ export const Aliases: {[alias: string]: string} = {
 	gen7bsd: "[Gen 7] Battle Spot Doubles",
 	gen6mono: "[Gen 6] Monotype",
 	gen6ag: "[Gen 6] Anything Goes",
-	crossevo: "[Gen 8] Cross Evolution",
+	crossevo: "[Gen 9] Cross Evolution",
 	mayhem: "[Gen 8] Random Battle Mayhem",
 	omotm: "[Gen 9] Shared Power",
 	lcotm: "[Gen 9] Full Potential",
