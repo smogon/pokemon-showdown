@@ -292,7 +292,7 @@ export const Formats: FormatList = [
 			'Eternatus-Eternamax', 'Groudon-Primal', 'Rayquaza-Mega', 'Shedinja', 'Cramorant-Gorging', 'Calyrex-Shadow', 'Darmanitan-Galar-Zen', 'Arena Trap',
 			'Contrary', 'Gorilla Tactics', 'Huge Power', 'Illusion', 'Innards Out', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Pure Power',
 			'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard', 'Gengarite', 'Belly Drum', 'Bolt Beak', 'Chatter', 'Double Iron Bash', 'Electrify',
-			'Octolock', 'Shell Smash', 'Comatose + Sleep Talk', 'Imprison + Transform',
+			'Last Respects', 'Octolock', 'Rage Fist', 'Revival Blessing', 'Shed Tail', 'Shell Smash', 'Comatose + Sleep Talk', 'Imprison + Transform',
 		],
 		unbanlist: [
 			'Growlithe-Hisui', 'Arcanine-Hisui', 'Voltorb-Hisui', 'Electrode-Hisui', 'Typhlosion-Hisui', 'Qwilfish-Hisui', 'Sneasel-Hisui', 'Dialga-Origin',
