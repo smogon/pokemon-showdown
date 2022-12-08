@@ -140,23 +140,23 @@ describe("Terastallization", function () {
 
 	it("should combine with Adaptability for an overall STAB of x2.25", () => {
 		battle = common.createBattle([[
-			{species: "Dragalge", ability: 'adaptability', moves: ['acid'], teraType: "Poison"},
+			{species: "Dragalge", ability: 'adaptability', moves: ['venoshock'], teraType: "Poison"},
 		], [
 			{species: "Mareep", ability: 'static', moves: ['sleeptalk']},
 		]]);
-		battle.makeChoices('move acid terastallize', 'auto');
+		battle.makeChoices('move venoshock terastallize', 'auto');
 		const damage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
-		assert.bounded(damage, [119, 141], "Actual damage: " + damage);
+		assert.bounded(damage, [191, 227], "Actual damage: " + damage);
 	});
 
 	it("should not give the Adaptability boost on the user's old types", () => {
 		battle = common.createBattle([[
-			{species: "Dragalge", ability: 'adaptability', moves: ['acid'], teraType: "Dragon"},
+			{species: "Dragalge", ability: 'adaptability', moves: ['venoshock'], teraType: "Dragon"},
 		], [
 			{species: "Mareep", ability: 'static', moves: ['sleeptalk']},
 		]]);
-		battle.makeChoices('move acid terastallize', 'auto');
+		battle.makeChoices('move venoshock terastallize', 'auto');
 		const damage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
-		assert.bounded(damage, [79, 94], "Actual damage: " + damage);
+		assert.bounded(damage, [127, 151], "Actual damage: " + damage);
 	});
 });
