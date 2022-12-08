@@ -490,6 +490,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return 60;
 		},
 	},
+	nightmare: {
+		inherit: true,
+		accuracy: true,
+	},
 	outrage: {
 		inherit: true,
 		basePower: 90,

@@ -514,6 +514,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	nightmare: {
 		inherit: true,
+		accuracy: 100,
 		condition: {
 			noCopy: true,
 			onStart(pokemon) {
