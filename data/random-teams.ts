@@ -261,7 +261,7 @@ export class RandomTeams {
 	 * Remove an element from an unsorted array significantly faster
 	 * than .splice
 	 */
-	fastPop(list: any[], index: number) {
+	fastPop<T>(list: T[], index: number): T {
 		// If an array doesn't need to be in order, replacing the
 		// element at the given index with the removed element
 		// is much, much faster than using list.splice(index, 1).
@@ -279,13 +279,22 @@ export class RandomTeams {
 
 	/**
 	 * Remove a random element from an unsorted array and return it.
+	 * If the array is empty, returns null.
 	 * Uses the battle's RNG if in a battle.
 	 */
-	sampleNoReplace(list: any[]) {
+	sampleNoReplace<T>(list: T[]): T | null {
 		const length = list.length;
 		if (length === 0) return null;
 		const index = this.random(length);
 		return this.fastPop(list, index);
+	}
+
+	/**
+	 * Same as (@see sampleNoReplace), but throws an error if the list is empty.
+	 */
+	sampleNoReplaceOrError<T>(list: T[]): T {
+		if (list.length === 0) throw new Error(`Tried to sample from empty list`);
+		return this.sampleNoReplace(list)!; // We know the value is valid if the list isn't empty
 	}
 
 	/**
@@ -296,7 +305,7 @@ export class RandomTeams {
 	multipleSamplesNoReplace<T>(list: T[], n: number): T[] {
 		const samples = [];
 		while (samples.length < n && list.length) {
-			samples.push(this.sampleNoReplace(list));
+			samples.push(this.sampleNoReplace(list)!);
 		}
 
 		return samples;
@@ -614,7 +623,7 @@ export class RandomTeams {
 
 		const hasDexNumber: {[k: string]: number} = {};
 		for (let i = 0; i < n; i++) {
-			const num = this.sampleNoReplace(pool);
+			const num = this.sampleNoReplaceOrError(pool);
 			hasDexNumber[num] = i;
 		}
 
@@ -783,7 +792,9 @@ export class RandomTeams {
 			let itemData;
 			if (doItemsExist) {
 				itemData = this.sampleNoReplace(itemPool);
-				item = itemData?.name;
+				if (itemData) {
+					item = itemData.name;
+				}
 			}
 
 			// Random unique ability
@@ -791,13 +802,15 @@ export class RandomTeams {
 			let abilityData;
 			if (doAbilitiesExist) {
 				abilityData = this.sampleNoReplace(abilityPool);
-				ability = abilityData?.name;
+				if (abilityData) {
+					ability = abilityData.name;
+				}
 			}
 
 			// Random unique moves
 			const m = [];
 			do {
-				const move = this.sampleNoReplace(movePool);
+				const move = this.sampleNoReplaceOrError(movePool);
 				m.push(move.id);
 			} while (m.length < setMoveCount);
 
@@ -2032,7 +2045,7 @@ export class RandomTeams {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
 			const pool = (movePool.length ? movePool : rejectedPool);
 			while (moves.size < this.maxMoveCount && pool.length) {
-				const moveid = this.sampleNoReplace(pool);
+				const moveid = this.sampleNoReplaceOrError(pool);
 				if (moveid.startsWith('hiddenpower')) {
 					if (hasHiddenPower) continue;
 					hasHiddenPower = true;
@@ -2425,7 +2438,7 @@ export class RandomTeams {
 
 		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
-			let species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
+			let species = this.dex.species.get(this.sampleNoReplaceOrError(pokemonPool));
 			if (!species.exists) continue;
 
 			// Check if the forme has moves for random battle
@@ -2603,7 +2616,7 @@ export class RandomTeams {
 		const pokemonPool = Object.keys(this.randomCAP1v1Sets);
 
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
-			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
+			const species = this.dex.species.get(this.sampleNoReplaceOrError(pokemonPool));
 			if (!species.exists) throw new Error(`Invalid Pokemon "${species}" in ${this.format}`);
 			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
 
@@ -2785,7 +2798,7 @@ export class RandomTeams {
 		};
 
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
-			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
+			const species = this.dex.species.get(this.sampleNoReplaceOrError(pokemonPool));
 			if (!species.exists) continue;
 
 			// Lessen the need of deleting sets of Pokemon after tier shifts

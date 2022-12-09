@@ -808,7 +808,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
 			while (moves.size < this.maxMoveCount && movePool.length) {
-				const moveid = this.sampleNoReplace(movePool);
+				const moveid = this.sampleNoReplaceOrError(movePool);
 				if (moveid.startsWith('hiddenpower')) {
 					availableHP--;
 					if (hasHiddenPower) continue;
@@ -818,7 +818,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			}
 
 			while (moves.size < this.maxMoveCount && rejectedPool.length) {
-				const moveid = this.sampleNoReplace(rejectedPool);
+				const moveid = this.sampleNoReplaceOrError(rejectedPool);
 				if (moveid.startsWith('hiddenpower')) {
 					if (hasHiddenPower) continue;
 					hasHiddenPower = true;
@@ -1232,7 +1232,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		};
 
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
-			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
+			const species = this.dex.species.get(this.sampleNoReplaceOrError(pokemonPool));
 			if (!species.exists) continue;
 
 			const speciesFlags = this.randomFactorySets[chosenTier][species.id].flags;

@@ -1074,7 +1074,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
 			while (moves.size < this.maxMoveCount && movePool.length) {
-				const moveid = this.sampleNoReplace(movePool);
+				const moveid = this.sampleNoReplaceOrError(movePool);
 				if (moveid.startsWith('hiddenpower')) {
 					availableHP--;
 					if (hasHiddenPower) continue;
@@ -1083,7 +1083,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				moves.add(moveid);
 			}
 			while (moves.size < this.maxMoveCount && rejectedPool.length) {
-				const moveid = this.sampleNoReplace(rejectedPool);
+				const moveid = this.sampleNoReplaceOrError(rejectedPool);
 				if (moveid.startsWith('hiddenpower')) {
 					if (hasHiddenPower) continue;
 					hasHiddenPower = true;
@@ -1493,7 +1493,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			if (pokemon.length >= this.maxTeamSize) break;
 			const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 			while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
-				const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
+				const species = this.dex.species.get(this.sampleNoReplaceOrError(pokemonPool));
 
 				// Check if the forme has moves for random battle
 				if (this.format.gameType === 'singles') {
@@ -1797,7 +1797,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		};
 
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
-			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
+			const species = this.dex.species.get(this.sampleNoReplaceOrError(pokemonPool));
 			if (!species.exists) continue;
 
 			// Lessen the need of deleting sets of Pokemon after tier shifts
@@ -2060,7 +2060,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		};
 
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
-			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
+			const species = this.dex.species.get(this.sampleNoReplaceOrError(pokemonPool));
 			if (!species.exists) continue;
 
 			const speciesFlags = this.randomBSSFactorySets[species.id].flags;

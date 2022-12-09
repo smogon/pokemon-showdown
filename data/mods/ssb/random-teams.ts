@@ -888,7 +888,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		while (pool.length && team.length < this.maxTeamSize) {
 			if (depth >= 200) throw new Error(`Infinite loop in Super Staff Bros team generation.`);
 			depth++;
-			const name = wiiulegacy ? this.sample(pool) : this.sampleNoReplace(pool);
+			const name = wiiulegacy ? this.sample(pool) : this.sampleNoReplaceOrError(pool);
 			const ssbSet: SSBSet = wiiulegacy ? this.dex.deepClone(afdSSBSets[name]) : this.dex.deepClone(ssbSets[name]);
 			if (ssbSet.skip) continue;
 
@@ -928,10 +928,13 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			const set: PokemonSet = {
 				name: name,
 				species: ssbSet.species,
-				item: Array.isArray(ssbSet.item) ? this.sampleNoReplace(ssbSet.item) : ssbSet.item,
-				ability: Array.isArray(ssbSet.ability) ? this.sampleNoReplace(ssbSet.ability) : ssbSet.ability,
+				item: Array.isArray(ssbSet.item) ? this.sampleNoReplaceOrError(ssbSet.item) : ssbSet.item,
+				ability: Array.isArray(ssbSet.ability) ? this.sampleNoReplaceOrError(ssbSet.ability) : ssbSet.ability,
 				moves: [],
-				nature: ssbSet.nature ? Array.isArray(ssbSet.nature) ? this.sampleNoReplace(ssbSet.nature) : ssbSet.nature : 'Serious',
+				nature: ssbSet.nature ?
+					Array.isArray(ssbSet.nature) ?
+						this.sampleNoReplaceOrError(ssbSet.nature) :
+						ssbSet.nature : 'Serious',
 				gender: ssbSet.gender || this.sample(['M', 'F', 'N']),
 				evs: ssbSet.evs ? {...{hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0}, ...ssbSet.evs} :
 				{hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84},
@@ -941,8 +944,8 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				shiny: typeof ssbSet.shiny === 'number' ? this.randomChance(1, ssbSet.shiny) : !!ssbSet.shiny,
 			};
 			while (set.moves.length < 3 && ssbSet.moves.length > 0) {
-				let move = this.sampleNoReplace(ssbSet.moves);
-				if (Array.isArray(move)) move = this.sampleNoReplace(move);
+				let move = this.sampleNoReplaceOrError(ssbSet.moves);
+				if (Array.isArray(move)) move = this.sampleNoReplaceOrError(move);
 				set.moves.push(move);
 			}
 			set.moves.push(ssbSet.signatureMove);
