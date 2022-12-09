@@ -1156,7 +1156,6 @@ export class RandomTeams {
 	): RandomTeamsTypes.RandomSet {
 		species = this.dex.species.get(species);
 		let forme = species.name;
-		let gmax = false;
 
 		if (typeof species.battleOnly === 'string') {
 			// Only change the forme. The species has custom moves, and may have different typing and requirements.
@@ -1164,10 +1163,6 @@ export class RandomTeams {
 		}
 		if (species.cosmeticFormes) {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
-		}
-		if (species.name.endsWith('-Gmax')) {
-			forme = species.name.slice(0, -5);
-			gmax = true;
 		}
 		const sets = this.randomSets[species.id]["sets"];
 		const possible_sets = [];
@@ -1359,9 +1354,7 @@ export class RandomTeams {
 			} while (rejectAbility);
 
 			// Hardcoded abilities for certain contexts
-			if (forme === 'Copperajah' && gmax) {
-				ability = 'Heavy Metal';
-			} else if (abilities.has('Guts') && (
+			if (abilities.has('Guts') && (
 				species.id === 'gurdurr' || species.id === 'throh' ||
 				moves.has('facade') || (moves.has('rest') && moves.has('sleeptalk'))
 			)) {
@@ -1416,7 +1409,7 @@ export class RandomTeams {
 		if (item === 'Leftovers' && types.has('Poison')) {
 			item = 'Black Sludge';
 		}
-		if (species.baseSpecies === 'Pikachu' && !gmax) {
+		if (species.baseSpecies === 'Pikachu') {
 			forme = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']);
 		}
 
@@ -1484,7 +1477,6 @@ export class RandomTeams {
 			species: forme,
 			gender: species.gender,
 			shiny: this.randomChance(1, 1024),
-			gigantamax: gmax,
 			level,
 			moves: Array.from(moves),
 			ability,
