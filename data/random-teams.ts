@@ -1535,13 +1535,6 @@ export class RandomTeams {
 			let species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) continue;
 
-			// Check if the forme has moves for random battle
-			if (this.format.gameType === 'singles') {
-				if (!species.randomBattleMoves?.length) continue;
-			} else {
-				if (!species.randomDoubleBattleMoves?.length) continue;
-			}
-
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;
 
