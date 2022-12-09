@@ -4880,7 +4880,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	ragefist: {
 		name: "Rage Fist",
-		desc: "Power increases by 50 each time the user is hit, including the user hitting itself in confusion. This does not reset upon switching out or fainting.",
+		desc: "Power increases by 50 each time the user is hit by a damaging attack. This does not reset upon switching out or fainting.",
 		shortDesc: "Power increases by 50 each time user is hit.",
 	},
 	ragepowder: {

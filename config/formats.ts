@@ -115,6 +115,16 @@ export const Formats: FormatList = [
 		banlist: ['Nonexistent'],
 	},
 	{
+		name: "[Gen 9] Doubles Hackmons Cup",
+		desc: `Randomized teams of level-balanced Pok&eacute;mon with absolutely any ability, moves, and item. Now with TWICE the Pok&eacute;mon per side!`,
+
+		mod: 'gen9',
+		team: 'randomHC',
+		searchShow: false,
+		gameType: 'doubles',
+		ruleset: ['[Gen 9] Hackmons Cup'],
+	},
+	{
 		name: "[Gen 9] Challenge Cup 1v1",
 
 		mod: 'gen9',
@@ -234,7 +244,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Sleep Clause Mod'],
-		banlist: ['ND Uber', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Baton Pass'],
+		banlist: ['ND Uber', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Assist', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 9] National Dex UU",
@@ -282,13 +292,7 @@ export const Formats: FormatList = [
 			'Eternatus-Eternamax', 'Groudon-Primal', 'Rayquaza-Mega', 'Shedinja', 'Cramorant-Gorging', 'Calyrex-Shadow', 'Darmanitan-Galar-Zen', 'Arena Trap',
 			'Contrary', 'Gorilla Tactics', 'Huge Power', 'Illusion', 'Innards Out', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Pure Power',
 			'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard', 'Gengarite', 'Belly Drum', 'Bolt Beak', 'Chatter', 'Double Iron Bash', 'Electrify',
-			'Octolock', 'Shell Smash', 'Comatose + Sleep Talk', 'Imprison + Transform',
-		],
-		unbanlist: [
-			'Growlithe-Hisui', 'Arcanine-Hisui', 'Voltorb-Hisui', 'Electrode-Hisui', 'Typhlosion-Hisui', 'Qwilfish-Hisui', 'Sneasel-Hisui', 'Dialga-Origin',
-			'Palkia-Origin', 'Samurott-Hisui', 'Lilligant-Hisui', 'Basculin-White-Striped', 'Zorua-Hisui', 'Zoroark-Hisui', 'Braviary-Hisui', 'Sliggoo-Hisui',
-			'Goodra-Hisui', 'Avalugg-Hisui', 'Decidueye-Hisui', 'Wyrdeer', 'Kleavor', 'Ursaluna', 'Basculegion', 'Basculegion-F', 'Sneasler', 'Overqwil',
-			'Enamorus', 'Enamorus-Therian',
+			'Last Respects', 'Octolock', 'Rage Fist', 'Revival Blessing', 'Shed Tail', 'Shell Smash', 'Comatose + Sleep Talk', 'Imprison + Transform',
 		],
 		restricted: ['Arceus'],
 		onValidateTeam(team, format) {
@@ -541,8 +545,8 @@ export const Formats: FormatList = [
 		mod: 'fullpotential',
 		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause', 'Min Source Gen = 9'],
 		banlist: [
-			'Dragapult', 'Espathra', 'Koraidon', 'Miraidon', 'Arena Trap', 'Chlorophyll', 'Moody', 'Sand Rush',
-			'Shadow Tag', 'Slush Rush', 'Swift Swim', 'Unburden', 'Booster Energy', 'King\'s Rock', 'Baton Pass',
+			'Chien-Pao', 'Cyclizar', 'Dragapult', 'Espathra', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Scream Tail', 'Arena Trap', 'Chlorophyll',
+			'Moody', 'Sand Rush', 'Shadow Tag', 'Slush Rush', 'Swift Swim', 'Unburden', 'Booster Energy', 'King\'s Rock', 'Baton Pass',
 		],
 	},
 
@@ -561,11 +565,12 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen9',
-		ruleset: ['Standard OMs', '!Obtainable Abilities', 'Ability Clause = 1', 'Sleep Moves Clause', 'Min Source Gen = 9'],
+		ruleset: ['Standard OMs', '!Obtainable Abilities', 'Ability Clause = 1', 'Sleep Moves Clause', 'Terastal Clause', 'Min Source Gen = 9'],
 		banlist: [
 			'Annihilape', 'Koraidon', 'Miraidon', 'Slaking', 'Arena Trap', 'Comatose', 'Contrary', 'Gorilla Tactics', 'Huge Power',
-			'Illusion', 'Imposter', 'Innards Out', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Pure Power',
-			'Shadow Tag', 'Simple', 'Speed Boost', 'Water Bubble', 'Wonder Guard', 'King\'s Rock', 'Baton Pass',
+			'Illusion', 'Imposter', 'Innards Out', 'Magic Bounce', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Parental Bond',
+			'Poison Heal', 'Pure Power', 'Shadow Tag', 'Simple', 'Speed Boost', 'Unburden', 'Water Bubble', 'Wonder Guard',
+			'King\'s Rock', 'Baton Pass', 'Revival Blessing',
 		],
 	},
 	{
@@ -656,7 +661,10 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Godly Gift Mod', 'Min Source Gen = 9'],
-		banlist: ['Blissey', 'Chansey', 'Cyclizar', 'Iron Hands', 'Arena Trap', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Booster Energy', 'Baton Pass'],
+		banlist: [
+			'Blissey', 'Chansey', 'Chi-Yu', 'Cyclizar', 'Espathra', 'Great Tusk', 'Iron Hands', 'Iron Valiant',
+			'Arena Trap', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Booster Energy', 'Baton Pass',
+		],
 	},
 	{
 		name: "[Gen 9] STABmons",
@@ -667,11 +675,8 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'STABmons Move Legality', 'Sleep Moves Clause', 'Min Source Gen = 9'],
-		banlist: ['Dragapult', 'Flutter Mane', 'Komala', 'Koraidon', 'Miraidon', 'Arena Trap', 'Moody', 'Shadow Tag', 'Booster Energy', 'King\'s Rock', 'Baton Pass'],
-		restricted: [
-			'Acupressure', 'Astral Barrage', 'Belly Drum', 'Extreme Speed', 'Fillet Away', 'Last Respects',
-			'No Retreat', 'Shed Tail', 'Shell Smash', 'V-create', 'Victory Dance', 'Wicked Blow',
-		],
+		banlist: ['Chi-Yu', 'Dragapult', 'Flutter Mane', 'Iron Bundle', 'Komala', 'Koraidon', 'Miraidon', 'Arena Trap', 'Moody', 'Shadow Tag', 'Booster Energy', 'King\'s Rock', 'Baton Pass'],
+		restricted: ['Acupressure', 'Astral Barrage', 'Belly Drum', 'Extreme Speed', 'Fillet Away', 'Last Respects', 'No Retreat', 'Revival Blessing', 'Shed Tail', 'Shell Smash', 'Shift Gear', 'V-create', 'Victory Dance', 'Wicked Blow'],
 	},
 	{
 		name: "[Gen 9] NFE",
@@ -735,11 +740,7 @@ export const Formats: FormatList = [
 			const problem = this.checkCanLearn(move, set.sp);
 			if (!problem) return null;
 			// @ts-ignore
-			if (!set.crossMovesLeft) return problem;
-			// @ts-ignore
 			if (this.checkCanLearn(move, set.crossSpecies)) return problem;
-			// @ts-ignore
-			set.crossMovesLeft--;
 			return null;
 		},
 		validateSet(set, teamHas) {
@@ -786,8 +787,6 @@ export const Formats: FormatList = [
 			set.sp = species;
 			// @ts-ignore
 			set.crossSpecies = crossSpecies;
-			// @ts-ignore
-			set.crossMovesLeft = 2;
 			problems = this.validateSet(set, teamHas);
 			set.name = crossSpecies.name;
 			set.species = species.name;
@@ -838,7 +837,7 @@ export const Formats: FormatList = [
 		name: "[Gen 9] Partners in Crime",
 		desc: `Doubles-based metagame where both active ally Pok&eacute;mon share abilities and moves.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3706080/">Partners in Crime</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3710997/">Partners in Crime</a>`,
 		],
 
 		mod: 'partnersincrime',
