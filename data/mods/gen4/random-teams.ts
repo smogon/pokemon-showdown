@@ -2,7 +2,7 @@ import RandomGen5Teams from '../gen5/random-teams';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
 import {PRNG} from '../../../sim';
-import type {MoveCounter} from '../../random-teams';
+import type {MoveCounter} from '../gen8/random-teams';
 
 
 // These moves can be used even if we aren't setting up to use them:

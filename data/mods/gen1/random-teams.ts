@@ -1,6 +1,6 @@
 import RandomGen2Teams from '../gen2/random-teams';
 import {Utils} from '../../../lib';
-import {MoveCounter} from '../../random-teams';
+import {MoveCounter} from '../gen8/random-teams';
 
 interface HackmonsCupEntry {
 	types: string[];
