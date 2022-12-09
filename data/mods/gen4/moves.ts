@@ -178,7 +178,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		recoil: [1, 3],
 	},
-		brickbreak: {
+	brickbreak: {
 		inherit: true,
 		ignoreImmunity: true,
 		onTryHit(pokemon, target){
