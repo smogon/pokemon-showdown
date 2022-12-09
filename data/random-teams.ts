@@ -1679,89 +1679,7 @@ export class RandomTeams {
 		isLead: boolean,
 		isDoubles: boolean
 	) {
-		// not undefined — we want "no item" not "go find a different item"
-		if (moves.has('acrobatics') && ability !== 'Ripen') return ability === 'Grassy Surge' ? 'Grassy Seed' : '';
-		if (moves.has('geomancy') || moves.has('meteorbeam')) return 'Power Herb';
-		if (moves.has('shellsmash')) {
-			if (ability === 'Sturdy' && !isLead && !isDoubles) return 'Heavy-Duty Boots';
-			// Shell Smash + Solid Rock is intended for Carracosta, but I think
-			// any Pokémon which can take a SE hit via Solid Rock deserves to have
-			// its Shell Smash considered a good enough speed setup move for WP.
-			if (ability === 'Solid Rock') return 'Weakness Policy';
-			return 'White Herb';
-		}
-		// Techno Blast should always be Water-type
-		if (moves.has('technoblast')) return 'Douse Drive';
-		// Species-specific logic
-		if (
-			['Corsola', 'Garchomp', 'Tangrowth'].includes(species.name) &&
-			counter.get('Status') &&
-			!counter.setupType &&
-			!isDoubles
-		) return 'Rocky Helmet';
-
-		if (species.name === 'Eternatus' && counter.get('Status') < 2) return 'Metronome';
-		if (species.name === 'Farfetch\u2019d') return 'Leek';
-		if (species.name === 'Froslass' && !isDoubles) return 'Wide Lens';
-		if (species.name === 'Latios' && counter.get('Special') === 2 && !isDoubles) return 'Soul Dew';
-		if (species.name === 'Lopunny') return isDoubles ? 'Iron Ball' : 'Toxic Orb';
-		if (species.baseSpecies === 'Marowak') return 'Thick Club';
-		if (species.baseSpecies === 'Pikachu') return 'Light Ball';
-		if (species.name === 'Regieleki' && !isDoubles) return 'Magnet';
-		if (species.name === 'Shedinja') {
-			const noSash = !teamDetails.defog && !teamDetails.rapidSpin && !isDoubles;
-			return noSash ? 'Heavy-Duty Boots' : 'Focus Sash';
-		}
-		if (species.name === 'Shuckle' && moves.has('stickyweb')) return 'Mental Herb';
-		if (species.name === 'Unfezant' || moves.has('focusenergy')) return 'Scope Lens';
-		if (species.name === 'Pincurchin') return 'Shuca Berry';
-		if (species.name === 'Wobbuffet' && moves.has('destinybond')) return 'Custap Berry';
-		if (species.name === 'Scyther' && counter.damagingMoves.size > 3) return 'Choice Band';
-		if (species.name === 'Cinccino' && !moves.has('uturn')) return 'Life Orb';
-		if (moves.has('bellydrum') && moves.has('substitute')) return 'Salac Berry';
-
-		// Misc item generation logic
-		const HDBBetterThanEviolite = (
-			!isLead &&
-			this.dex.getEffectiveness('Rock', species) >= 2 &&
-			!isDoubles
-		);
-		if (species.nfe && !HDBBetterThanEviolite) return 'Eviolite';
-
-		// Ability based logic and miscellaneous logic
-		if (species.name === 'Wobbuffet' || ['Cheek Pouch', 'Harvest', 'Ripen'].includes(ability)) return 'Sitrus Berry';
-		if (ability === 'Gluttony') return this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki']) + ' Berry';
-		if (
-			ability === 'Imposter' ||
-			(ability === 'Magnet Pull' && moves.has('bodypress') && !isDoubles)
-		) return 'Choice Scarf';
-		if (
-			ability === 'Guts' &&
-			(counter.get('Physical') > 2 || isDoubles)
-		) {
-			return types.has('Fire') ? 'Toxic Orb' : 'Flame Orb';
-		}
-		if (ability === 'Magic Guard' && counter.damagingMoves.size > 1) {
-			return moves.has('counter') ? 'Focus Sash' : 'Life Orb';
-		}
-		if (ability === 'Sheer Force' && counter.get('sheerforce')) return 'Life Orb';
-		if (ability === 'Unburden') return (moves.has('closecombat') || moves.has('curse')) ? 'White Herb' : 'Sitrus Berry';
-
-		if (moves.has('trick') || (moves.has('switcheroo') && !isDoubles) || ability === 'Gorilla Tactics') {
-			if (species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && !counter.get('priority') && ability !== 'Triage') {
-				return 'Choice Scarf';
-			} else {
-				return (counter.get('Physical') > counter.get('Special')) ? 'Choice Band' : 'Choice Specs';
-			}
-		}
-		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
-		if (moves.has('rest') && !moves.has('sleeptalk') && ability !== 'Shed Skin') return 'Chesto Berry';
-		if (moves.has('hypnosis') && ability === 'Beast Boost') return 'Blunder Policy';
-		if (moves.has('bellydrum')) return 'Sitrus Berry';
-
-		if (this.dex.getEffectiveness('Rock', species) >= 2 && !isDoubles) {
-			return 'Heavy-Duty Boots';
-		}
+		return 'Dive Ball';
 	}
 
 	/** Item generation specific to Random Doubles */
@@ -1828,71 +1746,7 @@ export class RandomTeams {
 		isDoubles: boolean,
 		isNoDynamax: boolean
 	): string | undefined {
-		const defensiveStatTotal = species.baseStats.hp + species.baseStats.def + species.baseStats.spd;
-
-		// Choice items
-		if (
-			!isDoubles && counter.get('Physical') >= 4 && ability !== 'Serene Grace' &&
-			['fakeout', 'flamecharge', 'rapidspin'].every(m => !moves.has(m))
-		) {
-			const scarfReqs = (
-				(species.baseStats.atk >= 100 || ability === 'Huge Power') &&
-				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
-				ability !== 'Speed Boost' && !counter.get('priority') &&
-				(isNoDynamax || ['bounce', 'dualwingbeat'].every(m => !moves.has(m)))
-			);
-			return (scarfReqs && this.randomChance(2, 3)) ? 'Choice Scarf' : 'Choice Band';
-		}
-		if (!isDoubles && (
-			(counter.get('Special') >= 4 && !moves.has('futuresight')) ||
-			(counter.get('Special') >= 3 && ['flipturn', 'partingshot', 'uturn'].some(m => moves.has(m)))
-		)) {
-			const scarfReqs = (
-				species.baseStats.spa >= 100 &&
-				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
-				ability !== 'Tinted Lens' && !counter.get('Physical')
-			);
-			return (scarfReqs && this.randomChance(2, 3)) ? 'Choice Scarf' : 'Choice Specs';
-		}
-		if (
-			!isDoubles &&
-			counter.get('Physical') >= 3 &&
-			!moves.has('rapidspin') &&
-			['copycat', 'memento', 'partingshot'].some(m => moves.has(m))
-		) return 'Choice Band';
-		if (
-			!isDoubles &&
-			((counter.get('Physical') >= 3 && moves.has('defog')) || (counter.get('Special') >= 3 && moves.has('healingwish'))) &&
-			!counter.get('priority') && !moves.has('uturn')
-		) return 'Choice Scarf';
-
-		// Palkia sometimes wants Choice items instead
-		if (species.name === 'Palkia') return 'Lustrous Orb';
-
-		// Other items
-		if (
-			moves.has('raindance') || moves.has('sunnyday') ||
-			(ability === 'Speed Boost' && !counter.get('hazards')) ||
-			(ability === 'Stance Change' && counter.damagingMoves.size >= 3)
-		) return 'Life Orb';
-		if (
-			!isDoubles &&
-			this.dex.getEffectiveness('Rock', species) >= 1 && (
-				['Defeatist', 'Emergency Exit', 'Multiscale'].includes(ability) ||
-				['courtchange', 'defog', 'rapidspin'].some(m => moves.has(m))
-			)
-		) return 'Heavy-Duty Boots';
-		if (species.name === 'Necrozma-Dusk-Mane' || (
-			this.dex.getEffectiveness('Ground', species) < 2 &&
-			counter.get('speedsetup') &&
-			counter.damagingMoves.size >= 3 &&
-			defensiveStatTotal >= 300
-		)) return 'Weakness Policy';
-		if (counter.damagingMoves.size >= 4 && defensiveStatTotal >= 235) return 'Assault Vest';
-		if (
-			['clearsmog', 'curse', 'haze', 'healbell', 'protect', 'sleeptalk', 'strangesteam'].some(m => moves.has(m)) &&
-			(ability === 'Moody' || !isDoubles)
-		) return 'Leftovers';
+		return 'Dive Ball';
 	}
 
 	getLowPriorityItem(
@@ -1907,65 +1761,7 @@ export class RandomTeams {
 		isDoubles: boolean,
 		isNoDynamax: boolean
 	): string | undefined {
-		const defensiveStatTotal = species.baseStats.hp + species.baseStats.def + species.baseStats.spd;
-
-		if (
-			isLead && !isDoubles &&
-			!['Disguise', 'Sturdy'].includes(ability) && !moves.has('substitute') &&
-			!counter.get('drain') && !counter.get('recoil') && !counter.get('recovery') &&
-			((defensiveStatTotal <= 250 && counter.get('hazards')) || defensiveStatTotal <= 210)
-		) return 'Focus Sash';
-		if (
-			moves.has('clangoroussoul') ||
-			// We manually check for speed-boosting moves, rather than using `counter.get('speedsetup')`,
-			// because we want to check for ANY speed boosting move.
-			// In particular, Shift Gear + Boomburst Toxtricity should get Throat Spray.
-			(moves.has('boomburst') && Array.from(moves).some(m => Dex.moves.get(m).boosts?.spe))
-		) return 'Throat Spray';
-
-		const rockWeaknessCase = (
-			this.dex.getEffectiveness('Rock', species) >= 1 &&
-			(!teamDetails.defog || ability === 'Intimidate' || moves.has('uturn') || moves.has('voltswitch'))
-		);
-		const spinnerCase = (moves.has('rapidspin') && (ability === 'Regenerator' || !!counter.get('recovery')));
-		// Glalie prefers Leftovers
-		if (!isDoubles && (rockWeaknessCase || spinnerCase) && species.id !== 'glalie') return 'Heavy-Duty Boots';
-
-		if (
-			!isDoubles && this.dex.getEffectiveness('Ground', species) >= 2 && !types.has('Poison') &&
-			ability !== 'Levitate' && !abilities.has('Iron Barbs')
-		) return 'Air Balloon';
-		if (
-			!isDoubles &&
-			counter.damagingMoves.size >= 3 &&
-			!counter.get('damage') &&
-			ability !== 'Sturdy' &&
-			(species.baseStats.spe >= 90 || !moves.has('voltswitch')) &&
-			['foulplay', 'rapidspin', 'substitute', 'uturn'].every(m => !moves.has(m)) && (
-				counter.get('speedsetup') ||
-				// No Dynamax Buzzwole doesn't want Life Orb with Bulk Up + 3 attacks
-				(counter.get('drain') && (!isNoDynamax || species.id !== 'buzzwole' || moves.has('roost'))) ||
-				moves.has('trickroom') || moves.has('psystrike') ||
-				(species.baseStats.spe > 40 && defensiveStatTotal < 275)
-			)
-		) return 'Life Orb';
-		if (
-			!isDoubles &&
-			counter.damagingMoves.size >= 4 &&
-			!counter.get('Dragon') &&
-			!counter.get('Normal')
-		) {
-			return 'Expert Belt';
-		}
-		if (
-			!isDoubles &&
-			!moves.has('substitute') &&
-			(moves.has('dragondance') || moves.has('swordsdance')) &&
-			(moves.has('outrage') || (
-				['Bug', 'Fire', 'Ground', 'Normal', 'Poison'].every(type => !types.has(type)) &&
-				!['Pastel Veil', 'Storm Drain'].includes(ability)
-			))
-		) return 'Lum Berry';
+		return 'Dive Ball';
 	}
 
 	randomSet(
