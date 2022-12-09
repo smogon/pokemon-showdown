@@ -1,5 +1,5 @@
 export const Items: {[k: string]: ModdedItemData} = {
-	adamantOrb: {
+	adamantorb: {
 		inherit: true,
 		isNonstandard: null,
 	},
