@@ -497,6 +497,7 @@ namespace RandomTeamsTypes {
 		screens?: number;
 		illusion?: number;
 		statusCure?: number;
+		teraBlast?: number;
 	}
 	export interface FactoryTeamDetails {
 		megaCount?: number;
