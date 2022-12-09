@@ -1583,12 +1583,13 @@ export class RandomTeams {
 			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
 
 			// Limit one Pokemon per tier, two for Monotype
-			if (
-				(tierCount[tier] >= (this.forceMonotype || isMonotype ? 2 : 1) * limitFactor) &&
-				!this.randomChance(1, Math.pow(5, tierCount[tier]))
-			) {
-				continue;
-			}
+			// Disable this for now, since it is still a new gen
+			// if (
+			// 	(tierCount[tier] >= (this.forceMonotype || isMonotype ? 2 : 1) * limitFactor) &&
+			// 	!this.randomChance(1, Math.pow(5, tierCount[tier]))
+			// ) {
+			// 	continue;
+			// }
 
 			if (!isMonotype && !this.forceMonotype) {
 				let skip = false;
@@ -1682,7 +1683,7 @@ export class RandomTeams {
 			if (set.moves.includes('auroraveil') || (set.moves.includes('reflect') && set.moves.includes('lightscreen'))) {
 				teamDetails.screens = 1;
 			}
-			if (set.moves.includes('terablast')) teamDetails.teraBlast = 1;
+			if (set.role === ('Tera Blast user')) teamDetails.teraBlast = 1;
 
 			// For setting Zoroark's level
 			if (set.ability === 'Illusion') teamDetails.illusion = pokemon.length;
