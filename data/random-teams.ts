@@ -791,7 +791,7 @@ export class RandomTeams {
 				do {
 					itemData = this.sampleNoReplace(itemPool);
 					item = itemData?.name;
-					isBadItem = (item.endsWith("Ball") || item.startsWith("TR")) && item !== "Light Ball";
+					isBadItem = item.startsWith("TR") || item.endsWith("Ball") && item !== "Light Ball";
 				} while (isBadItem && this.randomChance(19, 20) && itemPool.length > this.maxTeamSize);
 			}
 
