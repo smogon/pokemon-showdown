@@ -568,9 +568,9 @@ export const Formats: FormatList = [
 		ruleset: ['Standard OMs', '!Obtainable Abilities', 'Ability Clause = 1', 'Sleep Moves Clause', 'Terastal Clause', 'Min Source Gen = 9'],
 		banlist: [
 			'Annihilape', 'Koraidon', 'Miraidon', 'Slaking', 'Arena Trap', 'Comatose', 'Contrary', 'Gorilla Tactics', 'Huge Power',
-			'Illusion', 'Imposter', 'Innards Out', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Pure Power',
-			'Shadow Tag', 'Simple', 'Speed Boost', 'Unburden', 'Water Bubble', 'Wonder Guard', 'King\'s Rock', 'Baton Pass',
-			'Revival Blessing',
+			'Illusion', 'Imposter', 'Innards Out', 'Magic Bounce', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Parental Bond',
+			'Poison Heal', 'Pure Power', 'Shadow Tag', 'Simple', 'Speed Boost', 'Unburden', 'Water Bubble', 'Wonder Guard',
+			'King\'s Rock', 'Baton Pass', 'Revival Blessing',
 		],
 	},
 	{
