@@ -932,7 +932,7 @@ export class RandomTeams {
 				if (types.includes(moveType)) {
 					// STAB:
 					// Certain moves aren't acceptable as a Pokemon's only STAB attack
-					if (!this.noStab.includes(moveid) || types.length === 1)) {
+					if (!this.noStab.includes(moveid) || types.length === 1) {
 						counter.add('stab');
 						// Ties between Physical and Special setup should broken in favor of STABs
 						categories[move.category] += 0.1;
@@ -2229,7 +2229,7 @@ export class RandomTeams {
 		if (item === 'Leftovers' && types.has('Poison')) {
 			item = 'Black Sludge';
 		}
-		if (species.baseSpecies === 'Pikachu' && !gmax && this.dex.currentMod !== 'gen8bdsp') {
+		if (species.baseSpecies === 'Pikachu' && !gmax) {
 			forme = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']);
 		}
 
@@ -2265,24 +2265,6 @@ export class RandomTeams {
 				decidueye: 87, noivern: 85, magnezone: 82, slowking: 81,
 			};
 			level = customScale[species.id] || tierScale[tier] || 80;
-		// BDSP tier levelling
-		} else if (this.dex.currentMod === 'gen8bdsp') {
-			const tierScale: Partial<Record<Species['tier'], number>> = {
-				Uber: 76, Unreleased: 76,
-				OU: 80,
-				UUBL: 81,
-				UU: 82,
-				RUBL: 83,
-				RU: 84,
-				NUBL: 85,
-				NU: 86,
-				PUBL: 87,
-				PU: 88, "(PU)": 88, NFE: 88,
-			};
-			const customScale: {[k: string]: number} = {delibird: 100, glalie: 76, luvdisc: 100, spinda: 100, unown: 100};
-
-			level = customScale[species.id] || tierScale[species.tier] || 80;
-		// Arbitrary levelling base on data files (typically winrate-influenced)
 		} else if (species.randomBattleLevel) {
 			level = species.randomBattleLevel;
 		// Default to level 80
@@ -2361,7 +2343,6 @@ export class RandomTeams {
 		const pokemonPool = [];
 		for (let species of this.dex.species.all()) {
 			if (species.gen > this.gen || exclude.includes(species.id)) continue;
-			if (this.dex.currentMod === 'gen8bdsp' && species.gen > 4) continue;
 			if (isMonotype) {
 				if (!species.types.includes(type)) continue;
 				if (typeof species.battleOnly === 'string') {
@@ -2456,10 +2437,7 @@ export class RandomTeams {
 			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
 
 			// Limit one Pokemon per tier, two for Monotype
-			// This limitation is not applied to BD/SP team generation, because tiering for BD/SP is not yet complete,
-			// meaning that most Pokémon are in OU.
 			if (
-				this.dex.currentMod !== 'gen8bdsp' &&
 				(tierCount[tier] >= (this.forceMonotype || isMonotype ? 2 : 1) * limitFactor) &&
 				!this.randomChance(1, Math.pow(5, tierCount[tier]))
 			) {
