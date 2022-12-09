@@ -2,6 +2,7 @@
 
 import {Utils} from "../lib";
 import {Pokemon} from "../sim/pokemon";
+import {Teams} from "../sim/teams";
 
 // The list of formats is stored in config/formats.js
 export const Rulesets: {[k: string]: FormatData} = {
