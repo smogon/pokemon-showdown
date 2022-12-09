@@ -1037,7 +1037,6 @@ export class RandomTeams {
 		species: Species,
 		isLead: boolean,
 		isDoubles: boolean,
-		isNoDynamax: boolean,
 	): {cull: boolean, isSetup?: boolean} {
 		return {cull: false};
 	}
@@ -1052,7 +1051,6 @@ export class RandomTeams {
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
 		isDoubles: boolean,
-		isNoDynamax: boolean
 	): boolean {
 		return false;
 	}
@@ -1132,7 +1130,6 @@ export class RandomTeams {
 		species: Species,
 		isLead: boolean,
 		isDoubles: boolean,
-		isNoDynamax: boolean
 	): string | undefined {
 		return 'Dive Ball';
 	}
@@ -1147,7 +1144,6 @@ export class RandomTeams {
 		species: Species,
 		isLead: boolean,
 		isDoubles: boolean,
-		isNoDynamax: boolean
 	): string | undefined {
 		return 'Dive Ball';
 	}
@@ -1157,7 +1153,6 @@ export class RandomTeams {
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false,
 		isDoubles = false,
-		isNoDynamax = false
 	): RandomTeamsTypes.RandomSet {
 		species = this.dex.species.get(species);
 		let forme = species.name;
@@ -1177,7 +1172,6 @@ export class RandomTeams {
 
 		const randMoves =
 			(isDoubles && species.randomDoubleBattleMoves) ||
-			(isNoDynamax && species.randomBattleNoDynamaxMoves) ||
 			species.randomBattleMoves;
 		const movePool = (randMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		if (this.format.gameType === 'multi' || this.format.gameType === 'freeforall') {
@@ -1228,7 +1222,7 @@ export class RandomTeams {
 				const move = this.dex.moves.get(moveid);
 				let {cull, isSetup} = this.shouldCullMove(
 					move, types, moves, abilities, counter,
-					movePool, teamDetails, species, isLead, isDoubles, isNoDynamax
+					movePool, teamDetails, species, isLead, isDoubles
 				);
 
 				if (move.id !== 'photongeyser' && (
@@ -1335,7 +1329,7 @@ export class RandomTeams {
 			let rejectAbility = false;
 			do {
 				rejectAbility = this.shouldCullAbility(
-					ability, types, moves, abilities, counter, movePool, teamDetails, species, isDoubles, isNoDynamax
+					ability, types, moves, abilities, counter, movePool, teamDetails, species, isDoubles
 				);
 
 				if (rejectAbility) {
@@ -1397,11 +1391,11 @@ export class RandomTeams {
 				item = this.getDoublesItem(ability, types, moves, abilities, counter, teamDetails, species);
 			}
 			if (item === undefined) {
-				item = this.getMediumPriorityItem(ability, moves, counter, species, isLead, isDoubles, isNoDynamax);
+				item = this.getMediumPriorityItem(ability, moves, counter, species, isLead, isDoubles);
 			}
 			if (item === undefined) {
 				item = this.getLowPriorityItem(
-					ability, types, moves, abilities, counter, teamDetails, species, isLead, isDoubles, isNoDynamax
+					ability, types, moves, abilities, counter, teamDetails, species, isLead, isDoubles
 				);
 			}
 
@@ -1423,32 +1417,6 @@ export class RandomTeams {
 		// doubles levelling
 		} else if (isDoubles && species.randomDoubleBattleLevel) {
 			level = species.randomDoubleBattleLevel;
-		// No Dmax levelling
-		} else if (isNoDynamax) {
-			const tier = species.name.endsWith('-Gmax') ? this.dex.species.get(species.changesFrom).tier : species.tier;
-			const tierScale: Partial<Record<Species['tier'], number>> = {
-				Uber: 76,
-				OU: 80,
-				UUBL: 81,
-				UU: 82,
-				RUBL: 83,
-				RU: 84,
-				NUBL: 85,
-				NU: 86,
-				PUBL: 87,
-				PU: 88, "(PU)": 88, NFE: 88,
-			};
-			const customScale: {[k: string]: number} = {
-				// These Pokemon are too strong and need a lower level
-				zaciancrowned: 65, calyrexshadow: 68, xerneas: 70, necrozmaduskmane: 72, zacian: 72, kyogre: 73, eternatus: 73,
-				zekrom: 74, marshadow: 75, glalie: 78, urshifurapidstrike: 79, haxorus: 80, inteleon: 80,
-				cresselia: 83, octillery: 84, jolteon: 84, swoobat: 84, dugtrio: 84, slurpuff: 84, polteageist: 84,
-				wobbuffet: 86, scrafty: 86,
-				// These Pokemon are too weak and need a higher level
-				delibird: 100, vespiquen: 96, pikachu: 92, shedinja: 92, solrock: 90, arctozolt: 88, reuniclus: 87,
-				decidueye: 87, noivern: 85, magnezone: 82, slowking: 81,
-			};
-			level = customScale[species.id] || tierScale[tier] || 80;
 		} else if (species.randomBattleLevel) {
 			level = species.randomBattleLevel;
 		// Default to level 80
@@ -1660,7 +1628,7 @@ export class RandomTeams {
 			if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
 			const set = this.randomSet(species, teamDetails, pokemon.length === 0,
-				this.format.gameType !== 'singles', this.dex.formats.getRuleTable(this.format).has('dynamaxclause'));
+				this.format.gameType !== 'singles');
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
