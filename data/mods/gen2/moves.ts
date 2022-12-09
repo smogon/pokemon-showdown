@@ -281,7 +281,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	foresight: {
 		inherit: true,
-		accuracy: 100,
 		onTryHit(target) {
 			if (target.volatiles['foresight']) return false;
 		},
@@ -376,7 +375,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	lockon: {
 		inherit: true,
-		accuracy: true,
 		onTryHit(target) {
 			if (target.volatiles['foresight'] || target.volatiles['lockon']) return false;
 		},
@@ -401,9 +399,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	meanlook: {
 		inherit: true,
-		accuracy: true,
-		ignoreAccuracy: undefined,
-		ignoreEvasion: undefined,
 		flags: {reflectable: 1, mirror: 1},
 	},
 	metronome: {
@@ -415,13 +410,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mimic: {
 		inherit: true,
-		ignoreAccuracy: undefined,
-		ignoreEvasion: undefined,
+		accuracy: 100,
 		noSketch: true,
 	},
 	mindreader: {
 		inherit: true,
-		accuracy: 100,
 		onTryHit(target) {
 			if (target.volatiles['foresight'] || target.volatiles['lockon']) return false;
 		},
@@ -546,9 +539,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	painsplit: {
 		inherit: true,
-		accuracy: true,
-		ignoreAccuracy: undefined,
-		ignoreEvasion: undefined,
+		accuracy: 100,
 	},
 	perishsong: {
 		inherit: true,
@@ -792,9 +783,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	spiderweb: {
 		inherit: true,
-		accuracy: true,
-		ignoreAccuracy: undefined,
-		ignoreEvasion: undefined,
 		flags: {reflectable: 1, mirror: 1},
 	},
 	spikes: {
@@ -965,12 +953,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		multiaccuracy: false,
 		multihit: [1, 3],
-	},
-	vitalthrow: {
-		inherit: true,
-		accuracy: true,
-		ignoreAccuracy: undefined,
-		ignoreEvasion: undefined,
 	},
 	whirlwind: {
 		inherit: true,
