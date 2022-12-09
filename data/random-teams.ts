@@ -1525,7 +1525,7 @@ export class RandomTeams {
 	) {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
 		const pokemonPool = [];
-		for (let pokemon of Object.keys(this.randomSets)) {
+		for (const pokemon of Object.keys(this.randomSets)) {
 			const species = this.dex.species.get(pokemon);
 			if (species.gen > this.gen || exclude.includes(species.id)) continue;
 			if (isMonotype) {
