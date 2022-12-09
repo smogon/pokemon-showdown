@@ -1570,6 +1570,20 @@ export const Rulesets: {[k: string]: FormatData} = {
 			this.makeRequest('teampreview');
 		},
 	},
+	openteamsheets: {
+		effectType: 'Rule',
+		name: 'Open Team Sheets',
+		desc: "Allows each player to see the Pok&eacute;mon and all non-stat information about them, before they choose their lead Pok&eacute;mon",
+		onTeamPreview() {
+			let buf = 'raw|';
+			const hideStats = true;
+			for (const side of this.sides) {
+				const resultString = Utils.escapeHTML(Teams.export(side.team, {hideStats}));
+				buf += `<div class="infobox" style="margin-top:5px"><details><summary>Open Team Sheet for ${side.name}</summary>${resultString}</details></div>`;
+			}
+			this.add(buf);
+		},
+	},
 	aaarestrictedabilities: {
 		effectType: 'ValidatorRule',
 		name: 'AAA Restricted Abilities',
