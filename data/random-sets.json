@@ -1,5 +1,5 @@
 {
-    "Charizard": {
+    "charizard": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -13,7 +13,7 @@
             }
         ]
     },
-    "Pikachu": {
+    "pikachu": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -22,7 +22,7 @@
             }
         ]
     },
-    "Raichu": {
+    "raichu": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -31,7 +31,7 @@
             }
         ]
     },
-    "Raichualola": {
+    "raichualola": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -40,7 +40,7 @@
             }
         ]
     },
-    "Wigglytuff": {
+    "wigglytuff": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -49,7 +49,7 @@
             }
         ]
     },
-    "Venomoth": {
+    "venomoth": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -58,7 +58,7 @@
             }
         ]
     },
-    "Dugtrio": {
+    "dugtrio": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -67,7 +67,7 @@
             }
         ]
     },
-    "Dugtrioalola": {
+    "dugtrioalola": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -76,7 +76,7 @@
             }
         ]
     },
-    "Persian": {
+    "persian": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -85,7 +85,7 @@
             }
         ]
     },
-    "Persianalola": {
+    "persianalola": {
         "sets": [
             {
                 "role": "Fast Bulky Setup",
@@ -94,7 +94,7 @@
             }
         ]
     },
-    "Golduck": {
+    "golduck": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -103,7 +103,7 @@
             }
         ]
     },
-    "Annihilape": {
+    "annihilape": {
         "sets": [
             {
                 "role": "Fast Bulky Setup",
@@ -117,7 +117,7 @@
             }
         ]
     },
-    "Arcanine": {
+    "arcanine": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -126,7 +126,7 @@
             }
         ]
     },
-    "Arcaninehisui": {
+    "arcaninehisui": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -135,7 +135,7 @@
             }
         ]
     },
-    "Slowbro": {
+    "slowbro": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -149,7 +149,7 @@
             }
         ]
     },
-    "Slowbrogalar": {
+    "slowbrogalar": {
         "sets": [
             {
                 "role": "AV Pivot",
@@ -163,7 +163,7 @@
             }
         ]
     },
-    "Muk": {
+    "muk": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -172,7 +172,7 @@
             }
         ]
     },
-    "Mukalola": {
+    "mukalola": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -181,7 +181,7 @@
             }
         ]
     },
-    "Cloyster": {
+    "cloyster": {
         "sets": [
             {
                 "role": "Tera Blast user",
@@ -195,7 +195,7 @@
             }
         ]
     },
-    "Gengar": {
+    "gengar": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -209,7 +209,7 @@
             }
         ]
     },
-    "Hypno": {
+    "hypno": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -218,7 +218,7 @@
             }
         ]
     },
-    "Electrode": {
+    "electrode": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -227,7 +227,7 @@
             }
         ]
     },
-    "Electrodehisui": {
+    "electrodehisui": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -241,7 +241,7 @@
             }
         ]
     },
-    "Scyther": {
+    "scyther": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -250,7 +250,7 @@
             }
         ]
     },
-    "Tauros": {
+    "tauros": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -264,7 +264,7 @@
             }
         ]
     },
-    "Taurospaldea": {
+    "taurospaldea": {
         "sets": [
             {
                 "role": "Fast Bulky Setup",
@@ -278,7 +278,7 @@
             }
         ]
     },
-    "Taurospaldeafire": {
+    "taurospaldeafire": {
         "sets": [
             {
                 "role": "Fast Bulky Setup",
@@ -292,7 +292,7 @@
             }
         ]
     },
-    "Taurospaldeawater": {
+    "taurospaldeawater": {
         "sets": [
             {
                 "role": "Fast Bulky Setup",
@@ -306,7 +306,7 @@
             }
         ]
     },
-    "Gyarados": {
+    "gyarados": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -320,16 +320,17 @@
             }
         ]
     },
-    "Ditto": {
+    "ditto": {
         "sets": [
             {
                 "role": "Fast Support",
                 "movepool": ["Transform"],
-                "teraTypes": ["Random (Any)"]
+                "teraTypes": ["Flying", "Dark", "Fire", "Bug", "Water", "Ice", "Fighting", "Electric", "Psychic", 
+                "Poison", "Grass", "Ghost", "Ground", "Rock", "Fairy", "Steel", "Normal", "Dragon"]
             }
         ]
     },
-    "Vaporeon": {
+    "vaporeon": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -338,7 +339,7 @@
             }
         ]
     },
-    "Jolteon": {
+    "jolteon": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -352,7 +353,7 @@
             }
         ]
     },
-    "Flareon": {
+    "flareon": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -361,7 +362,7 @@
             }
         ]
     },
-    "Articuno": {
+    "articuno": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -370,7 +371,7 @@
             }
         ]
     },
-    "Articunogalar": {
+    "articunogalar": {
         "sets": [
             {
                 "role": "Fast Bulky Setup",
@@ -379,7 +380,7 @@
             }
         ]
     },
-    "Zapdos": {
+    "zapdos": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -388,7 +389,7 @@
             }
         ]
     },
-    "Zapdosgalar": {
+    "zapdosgalar": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -397,7 +398,7 @@
             }
         ]
     },
-    "Moltres": {
+    "moltres": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -406,7 +407,7 @@
             }
         ]
     },
-    "Moltresgalar": {
+    "moltresgalar": {
         "sets": [
             {
                 "role": "Fast Bulky Setup",
@@ -415,7 +416,7 @@
             }
         ]
     },
-    "Dragonite": {
+    "dragonite": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -429,7 +430,7 @@
             }
         ]
     },
-    "Mewtwo": {
+    "mewtwo": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -438,7 +439,7 @@
             }
         ]
     },
-    "Mew": {
+    "mew": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -457,7 +458,7 @@
             }
         ]
     },
-    "Typhlosion": {
+    "typhlosion": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -466,7 +467,7 @@
             }
         ]
     },
-    "Typhlosionhisui": {
+    "typhlosionhisui": {
         "sets": [
             {
                 "role": "Fast Bulky Setup",
@@ -480,7 +481,7 @@
             }
         ]
     },
-    "Ampharos": {
+    "ampharos": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -489,7 +490,7 @@
             }
         ]
     },
-    "Azumarill": {
+    "azumarill": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -503,7 +504,7 @@
             }
         ]
     },
-    "Sudowoodo": {
+    "sudowoodo": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -512,7 +513,7 @@
             }
         ]
     },
-    "Jumpluff": {
+    "jumpluff": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -526,7 +527,7 @@
             }
         ]
     },
-    "Sunflora": {
+    "sunflora": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -535,7 +536,7 @@
             }
         ]
     },
-    "Quagsire": {
+    "quagsire": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -544,7 +545,7 @@
             }
         ]
     },
-    "Clodsire": {
+    "clodsire": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -558,7 +559,7 @@
             }
         ]
     },
-    "Espeon": {
+    "espeon": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -567,7 +568,7 @@
             }
         ]
     },
-    "Umbreon": {
+    "umbreon": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -581,7 +582,7 @@
             }
         ]
     },
-    "Slowking": {
+    "slowking": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -595,7 +596,7 @@
             }
         ]
     },
-    "Slowkinggalar": {
+    "slowkinggalar": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -609,7 +610,7 @@
             }
         ]
     },
-    "Girafarig": {
+    "girafarig": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -618,7 +619,7 @@
             }
         ]
     },
-    "Forretress": {
+    "forretress": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -627,7 +628,7 @@
             }
         ]
     },
-    "Dunsparce": {
+    "dunsparce": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -641,7 +642,7 @@
             }
         ]
     },
-    "Qwilfish": {
+    "qwilfish": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -650,7 +651,7 @@
             }
         ]
     },
-    "Qwilfishhisui": {
+    "qwilfishhisui": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -659,7 +660,7 @@
             }
         ]
     },
-    "Overqwil": {
+    "overqwil": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -668,7 +669,7 @@
             }
         ]
     },
-    "Scizor": {
+    "scizor": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -682,7 +683,7 @@
             }
         ]
     },
-    "Heracross": {
+    "heracross": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -696,7 +697,7 @@
             }
         ]
     },
-    "Ursaring": {
+    "ursaring": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -705,7 +706,7 @@
             }
         ]
     },
-    "Delibird": {
+    "delibird": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -719,7 +720,7 @@
             }
         ]
     },
-    "Houndoom": {
+    "houndoom": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -728,7 +729,7 @@
             }
         ]
     },
-    "Donphan": {
+    "donphan": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -742,7 +743,7 @@
             }
         ]
     },
-    "Blissey": {
+    "blissey": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -751,7 +752,7 @@
             }
         ]
     },
-    "Tyranitar": {
+    "tyranitar": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -765,7 +766,7 @@
             }
         ]
     },
-    "Pelipper": {
+    "pelipper": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -774,7 +775,7 @@
             }
         ]
     },
-    "Gardevoir": {
+    "gardevoir": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -783,7 +784,7 @@
             }
         ]
     },
-    "Masquerain": {
+    "masquerain": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -797,7 +798,7 @@
             }
         ]
     },
-    "Breloom": {
+    "breloom": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -806,7 +807,7 @@
             }
         ]
     },
-    "Slaking": {
+    "slaking": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -815,7 +816,7 @@
             }
         ]
     },
-    "Hariyama": {
+    "hariyama": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -829,7 +830,7 @@
             }
         ]
     },
-    "Sableye": {
+    "sableye": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -838,7 +839,7 @@
             }
         ]
     },
-    "Medicham": {
+    "medicham": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -847,7 +848,7 @@
             }
         ]
     },
-    "Swalot": {
+    "swalot": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -861,7 +862,7 @@
             }
         ]
     },
-    "Camerupt": {
+    "camerupt": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -870,7 +871,7 @@
             }
         ]
     },
-    "Torkoal": {
+    "torkoal": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -879,7 +880,7 @@
             }
         ]
     },
-    "Grumpig": {
+    "grumpig": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -888,7 +889,7 @@
             }
         ]
     },
-    "Cacturne": {
+    "cacturne": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -902,7 +903,7 @@
             }
         ]
     },
-    "Altaria": {
+    "altaria": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -916,7 +917,7 @@
             }
         ]
     },
-    "Zangoose": {
+    "zangoose": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -925,7 +926,7 @@
             }
         ]
     },
-    "Seviper": {
+    "seviper": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -934,7 +935,7 @@
             }
         ]
     },
-    "Whiscash": {
+    "whiscash": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -943,7 +944,7 @@
             }
         ]
     },
-    "Banette": {
+    "banette": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -952,7 +953,7 @@
             }
         ]
     },
-    "Tropius": {
+    "tropius": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -961,7 +962,7 @@
             }
         ]
     },
-    "Glalie": {
+    "glalie": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -970,7 +971,7 @@
             }
         ]
     },
-    "Luvdisc": {
+    "luvdisc": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -979,7 +980,7 @@
             }
         ]
     },
-    "Salamence": {
+    "salamence": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -988,7 +989,7 @@
             }
         ]
     },
-    "Kyogre": {
+    "kyogre": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -997,7 +998,7 @@
             }
         ]
     },
-    "Groudon": {
+    "groudon": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1011,7 +1012,7 @@
             }
         ]
     },
-    "Rayquaza": {
+    "rayquaza": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1020,7 +1021,7 @@
             }
         ]
     },
-    "Staraptor": {
+    "staraptor": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1029,7 +1030,7 @@
             }
         ]
     },
-    "Kricketune": {
+    "kricketune": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -1038,7 +1039,7 @@
             }
         ]
     },
-    "Luxray": {
+    "luxray": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1052,7 +1053,7 @@
             }
         ]
     },
-    "Vespiquen": {
+    "vespiquen": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1061,7 +1062,7 @@
             }
         ]
     },
-    "Pachirisu": {
+    "pachirisu": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -1070,7 +1071,7 @@
             }
         ]
     },
-    "Floatzel": {
+    "floatzel": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1079,7 +1080,7 @@
             }
         ]
     },
-    "Gastrodon": {
+    "gastrodon": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1088,7 +1089,7 @@
             }
         ]
     },
-    "Drifblim": {
+    "drifblim": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -1102,7 +1103,7 @@
             }
         ]
     },
-    "Mismagius": {
+    "mismagius": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1111,7 +1112,7 @@
             }
         ]
     },
-    "Honchkrow": {
+    "honchkrow": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1120,7 +1121,7 @@
             }
         ]
     },
-    "Skuntank": {
+    "skuntank": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -1129,7 +1130,7 @@
             }
         ]
     },
-    "Bronzong": {
+    "bronzong": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1138,7 +1139,7 @@
             }
         ]
     },
-    "Spiritomb": {
+    "spiritomb": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1152,7 +1153,7 @@
             }
         ]
     },
-    "Garchomp": {
+    "garchomp": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -1166,7 +1167,7 @@
             }
         ]
     },
-    "Lucario": {
+    "lucario": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1180,7 +1181,7 @@
             }
         ]
     },
-    "Hippowdon": {
+    "hippowdon": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1189,7 +1190,7 @@
             }
         ]
     },
-    "Toxicroak": {
+    "toxicroak": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1203,7 +1204,7 @@
             }
         ]
     },
-    "Lumineon": {
+    "lumineon": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1212,7 +1213,7 @@
             }
         ]
     },
-    "Abomasnow": {
+    "abomasnow": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1221,7 +1222,7 @@
             }
         ]
     },
-    "Weavile": {
+    "weavile": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1230,7 +1231,7 @@
             }
         ]
     },
-    "Sneasler": {
+    "sneasler": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1244,7 +1245,7 @@
             }
         ]
     },
-    "Magnezone": {
+    "magnezone": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1252,13 +1253,13 @@
                 "teraTypes": ["Electric", "Steel"]
             },
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Flash Cannon", "Tera Blast", "Thunderbolt", "Volt Switch"],
                 "teraTypes": ["Fire"]
             }
         ]
     },
-    "Leafeon": {
+    "leafeon": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1267,7 +1268,7 @@
             }
         ]
     },
-    "Glaceon": {
+    "glaceon": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1276,7 +1277,7 @@
             }
         ]
     },
-    "Gallade": {
+    "gallade": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1285,7 +1286,7 @@
             }
         ]
     },
-    "Froslass": {
+    "froslass": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -1294,7 +1295,7 @@
             }
         ]
     },
-    "Rotom": {
+    "rotom": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1303,7 +1304,7 @@
             }
         ]
     },
-    "Rotomwash": {
+    "rotomwash": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1312,7 +1313,7 @@
             }
         ]
     },
-    "Rotomheat": {
+    "rotomheat": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1321,7 +1322,7 @@
             }
         ]
     },
-    "Rotomfrost": {
+    "rotomfrost": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1330,7 +1331,7 @@
             }
         ]
     },
-    "Rotomfan": {
+    "rotomfan": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1339,7 +1340,7 @@
             }
         ]
     },
-    "Rotommow": {
+    "rotommow": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1348,7 +1349,7 @@
             }
         ]
     },
-    "Uxie": {
+    "uxie": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -1357,7 +1358,7 @@
             }
         ]
     },
-    "Mesprit": {
+    "mesprit": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1366,7 +1367,7 @@
             }
         ]
     },
-    "Azelf": {
+    "azelf": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -1380,7 +1381,7 @@
             }
         ]
     },
-    "Dialga": {
+    "dialga": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1389,7 +1390,7 @@
             }
         ]
     },
-    "Dialgaorigin": {
+    "dialgaorigin": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1398,7 +1399,7 @@
             }
         ]
     },
-    "Palkia": {
+    "palkia": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1407,7 +1408,7 @@
             }
         ]
     },
-    "Palkiaorigin": {
+    "palkiaorigin": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1416,7 +1417,7 @@
             }
         ]
     },
-    "Heatran": {
+    "heatran": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1425,7 +1426,7 @@
             }
         ]
     },
-    "Giratina": {
+    "giratina": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1439,7 +1440,7 @@
             }
         ]
     },
-    "Giratinaorigin": {
+    "giratinaorigin": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1448,7 +1449,7 @@
             }
         ]
     },
-    "Cresselia": {
+    "cresselia": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1457,7 +1458,7 @@
             }
         ]
     },
-    "Arceus": {
+    "arceus": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1466,7 +1467,7 @@
             }
         ]
     },
-    "Arceusbug": {
+    "arceusbug": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1475,7 +1476,7 @@
             }
         ]
     },
-    "Arceusdark": {
+    "arceusdark": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1484,7 +1485,7 @@
             }
         ]
     },
-    "Arceusdragon": {
+    "arceusdragon": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1493,7 +1494,7 @@
             }
         ]
     },
-    "Arceuselectric": {
+    "arceuselectric": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1502,7 +1503,7 @@
             }
         ]
     },
-    "Arceusfairy": {
+    "arceusfairy": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1511,7 +1512,7 @@
             }
         ]
     },
-    "Arceusfighting": {
+    "arceusfighting": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1520,7 +1521,7 @@
             }
         ]
     },
-    "Arceusfire": {
+    "arceusfire": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1529,7 +1530,7 @@
             }
         ]
     },
-    "Arceusflying": {
+    "arceusflying": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1538,7 +1539,7 @@
             }
         ]
     },
-    "Arceusghost": {
+    "arceusghost": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1547,7 +1548,7 @@
             }
         ]
     },
-    "Arceusgrass": {
+    "arceusgrass": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1556,7 +1557,7 @@
             }
         ]
     },
-    "Arceusground": {
+    "arceusground": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1565,7 +1566,7 @@
             }
         ]
     },
-    "Arceusice": {
+    "arceusice": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1574,7 +1575,7 @@
             }
         ]
     },
-    "Arceuspoison": {
+    "arceuspoison": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1583,7 +1584,7 @@
             }
         ]
     },
-    "Arceuspsychic": {
+    "arceuspsychic": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1592,7 +1593,7 @@
             }
         ]
     },
-    "Arceusrock": {
+    "arceusrock": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1601,7 +1602,7 @@
             }
         ]
     },
-    "Arceussteel": {
+    "arceussteel": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1610,7 +1611,7 @@
             }
         ]
     },
-    "Arceuswater": {
+    "arceuswater": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1619,7 +1620,7 @@
             }
         ]
     },
-    "Samurott": {
+    "samurott": {
         "sets": [
             {
                 "role": "AV Pivot",
@@ -1633,7 +1634,7 @@
             }
         ]
     },
-    "Samurotthisui": {
+    "samurotthisui": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1642,7 +1643,7 @@
             }
         ]
     },
-    "Lilligant": {
+    "lilligant": {
         "sets": [
             {
                 "role": "Tera Blast user",
@@ -1656,7 +1657,7 @@
             }
         ]
     },
-    "Lilliganthisui": {
+    "lilliganthisui": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1670,7 +1671,7 @@
             }
         ]
     },
-    "Basculin": {
+    "basculin": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1679,7 +1680,7 @@
             }
         ]
     },
-    "Basculinbluestriped": {
+    "basculinbluestriped": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1688,7 +1689,7 @@
             }
         ]
     },
-    "Basculegion": {
+    "basculegion": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1697,7 +1698,7 @@
             }
         ]
     },
-    "Basculegionf": {
+    "basculegionf": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1706,7 +1707,7 @@
             }
         ]
     },
-    "Krookodile": {
+    "krookodile": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1715,7 +1716,7 @@
             }
         ]
     },
-    "Zoroark": {
+    "zoroark": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1724,7 +1725,7 @@
             }
         ]
     },
-    "Zoroarkhisui": {
+    "zoroarkhisui": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1733,7 +1734,7 @@
             }
         ]
     },
-    "Gothitelle": {
+    "gothitelle": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1742,7 +1743,7 @@
             }
         ]
     },
-    "Sawsbuck": {
+    "sawsbuck": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1751,7 +1752,7 @@
             }
         ]
     },
-    "Amoonguss": {
+    "amoonguss": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1760,7 +1761,7 @@
             }
         ]
     },
-    "Alomomola": {
+    "alomomola": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1769,7 +1770,7 @@
             }
         ]
     },
-    "Eelektross": {
+    "eelektross": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1783,7 +1784,7 @@
             }
         ]
     },
-    "Haxorus": {
+    "haxorus": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1792,7 +1793,7 @@
             }
         ]
     },
-    "Beartic": {
+    "beartic": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1801,7 +1802,7 @@
             }
         ]
     },
-    "Cryogonal": {
+    "cryogonal": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1810,7 +1811,7 @@
             }
         ]
     },
-    "Braviary": {
+    "braviary": {
         "sets": [
             {
                 "role": "Fast Bulky Setup",
@@ -1819,7 +1820,7 @@
             }
         ]
     },
-    "Braviaryhisui": {
+    "braviaryhisui": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -1833,7 +1834,7 @@
             }
         ]
     },
-    "Hydreigon": {
+    "hydreigon": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1842,7 +1843,7 @@
             }
         ]
     },
-    "Volcarona": {
+    "volcarona": {
         "sets": [
             {
                 "role": "Fast Bulky Setup",
@@ -1851,7 +1852,7 @@
             }
         ]
     },
-    "Tornadus": {
+    "tornadus": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1860,7 +1861,7 @@
             }
         ]
     },
-    "Tornadustherian": {
+    "tornadustherian": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1869,7 +1870,7 @@
             }
         ]
     },
-    "Thundurus": {
+    "thundurus": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1883,7 +1884,7 @@
             }
         ]
     },
-    "Thundurustherian": {
+    "thundurustherian": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1897,7 +1898,7 @@
             }
         ]
     },
-    "Landorus": {
+    "landorus": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1906,7 +1907,7 @@
             }
         ]
     },
-    "Landorustherian": {
+    "landorustherian": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -1920,7 +1921,7 @@
             }
         ]
     },
-    "Meloetta": {
+    "meloetta": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1929,7 +1930,7 @@
             }
         ]
     },
-    "Meloetta-P": {
+    "meloettapirouette": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1938,7 +1939,7 @@
             }
         ]
     },
-    "Chesnaught": {
+    "chesnaught": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1952,7 +1953,7 @@
             }
         ]
     },
-    "Delphox": {
+    "delphox": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1961,7 +1962,7 @@
             }
         ]
     },
-    "Greninja": {
+    "greninja": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1970,7 +1971,7 @@
             }
         ]
     },
-    "Talonflame": {
+    "talonflame": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -1984,7 +1985,7 @@
             }
         ]
     },
-    "Vivillon": {
+    "vivillon": {
         "sets": [
             {
                 "role": "Fast Bulky Setup",
@@ -1998,7 +1999,7 @@
             }
         ]
     },
-    "Pyroar": {
+    "pyroar": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2007,7 +2008,7 @@
             }
         ]
     },
-    "Florges": {
+    "florges": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -2016,7 +2017,7 @@
             }
         ]
     },
-    "Gogoat": {
+    "gogoat": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -2025,7 +2026,7 @@
             }
         ]
     },
-    "Dragalge": {
+    "dragalge": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2034,7 +2035,7 @@
             }
         ]
     },
-    "Clawitzer": {
+    "clawitzer": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2043,7 +2044,7 @@
             }
         ]
     },
-    "Sylveon": {
+    "sylveon": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -2057,7 +2058,7 @@
             }
         ]
     },
-    "Hawlucha": {
+    "hawlucha": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2066,7 +2067,7 @@
             }
         ]
     },
-    "Dedenne": {
+    "dedenne": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -2075,7 +2076,7 @@
             }
         ]
     },
-    "Carbink": {
+    "carbink": {
         "sets": [
             {
                 "role": "Bulky Attacker (yes, really)",
@@ -2084,7 +2085,7 @@
             }
         ]
     },
-    "Goodra": {
+    "goodra": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2093,7 +2094,7 @@
             }
         ]
     },
-    "Goodrahisui": {
+    "goodrahisui": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2107,7 +2108,7 @@
             }
         ]
     },
-    "Klefki": {
+    "klefki": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2116,7 +2117,7 @@
             }
         ]
     },
-    "Avalugg": {
+    "avalugg": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2125,7 +2126,7 @@
             }
         ]
     },
-    "Avalugghisui": {
+    "avalugghisui": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2134,7 +2135,7 @@
             }
         ]
     },
-    "Noivern": {
+    "noivern": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2148,7 +2149,7 @@
             }
         ]
     },
-    "Diancie": {
+    "diancie": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2157,7 +2158,7 @@
             }
         ]
     },
-    "Hoopa": {
+    "hoopa": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2166,7 +2167,7 @@
             }
         ]
     },
-    "Hoopaunbound": {
+    "hoopaunbound": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2185,7 +2186,7 @@
             }
         ]
     },
-    "Volcanion": {
+    "volcanion": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2194,7 +2195,7 @@
             }
         ]
     },
-    "Decidueye": {
+    "decidueye": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -2208,7 +2209,7 @@
             }
         ]
     },
-    "Decidueyehisui": {
+    "decidueyehisui": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2217,7 +2218,7 @@
             }
         ]
     },
-    "Gumshoos": {
+    "gumshoos": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2226,7 +2227,7 @@
             }
         ]
     },
-    "Crabominable": {
+    "crabominable": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2235,7 +2236,7 @@
             }
         ]
     },
-    "Oricorio": {
+    "oricorio": {
         "sets": [
             {
                 "role": "Setup sweeper",
@@ -2249,7 +2250,7 @@
             }
         ]
     },
-    "Oricoriopompom": {
+    "oricoriopompom": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2263,7 +2264,7 @@
             }
         ]
     },
-    "Oricoriopau": {
+    "oricoriopau": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2277,7 +2278,7 @@
             }
         ]
     },
-    "Oricoriosensu": {
+    "oricoriosensu": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2291,7 +2292,7 @@
             }
         ]
     },
-    "Lycanroc": {
+    "lycanroc": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2300,7 +2301,7 @@
             }
         ]
     },
-    "Lycanrocmidnight": {
+    "lycanrocmidnight": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2309,7 +2310,7 @@
             }
         ]
     },
-    "Lycanrocdusk": {
+    "lycanrocdusk": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2318,7 +2319,7 @@
             }
         ]
     },
-    "Toxapex": {
+    "toxapex": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2327,7 +2328,7 @@
             }
         ]
     },
-    "Mudsdale": {
+    "mudsdale": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2336,7 +2337,7 @@
             }
         ]
     },
-    "Lurantis": {
+    "lurantis": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2345,7 +2346,7 @@
             }
         ]
     },
-    "Salazzle": {
+    "salazzle": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -2354,7 +2355,7 @@
             }
         ]
     },
-    "Tsareena": {
+    "tsareena": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -2363,7 +2364,7 @@
             }
         ]
     },
-    "Oranguru": {
+    "oranguru": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2377,7 +2378,7 @@
             }
         ]
     },
-    "Passimian": {
+    "passimian": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2386,7 +2387,7 @@
             }
         ]
     },
-    "Palossand": {
+    "palossand": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2395,7 +2396,7 @@
             }
         ]
     },
-    "Komala": {
+    "komala": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2404,7 +2405,7 @@
             }
         ]
     },
-    "Mimikyu": {
+    "mimikyu": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2413,7 +2414,7 @@
             }
         ]
     },
-    "Bruxish": {
+    "bruxish": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2422,7 +2423,7 @@
             }
         ]
     },
-    "Magearna": {
+    "magearna": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2436,7 +2437,7 @@
             }
         ]
     },
-    "Rillaboom": {
+    "rillaboom": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2450,7 +2451,7 @@
             }
         ]
     },
-    "Cinderace": {
+    "cinderace": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2459,7 +2460,7 @@
             }
         ]
     },
-    "Inteleon": {
+    "inteleon": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2473,7 +2474,7 @@
             }
         ]
     },
-    "Greedent": {
+    "greedent": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -2482,7 +2483,7 @@
             }
         ]
     },
-    "Corviknight": {
+    "corviknight": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -2496,7 +2497,7 @@
             }
         ]
     },
-    "Drednaw": {
+    "drednaw": {
         "sets": [
             {
                 "role": "Setup Swepeer",
@@ -2505,7 +2506,7 @@
             }
         ]
     },
-    "Coalossal": {
+    "coalossal": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2514,7 +2515,7 @@
             }
         ]
     },
-    "Flapple": {
+    "flapple": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2523,7 +2524,7 @@
             }
         ]
     },
-    "Appletun": {
+    "appletun": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2532,7 +2533,7 @@
             }
         ]
     },
-    "Sandaconda": {
+    "sandaconda": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -2546,7 +2547,7 @@
             }
         ]
     },
-    "Barraskewda": {
+    "barraskewda": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2555,7 +2556,7 @@
             }
         ]
     },
-    "Toxtricity": {
+    "toxtricity": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2564,7 +2565,7 @@
             }
         ]
     },
-    "Toxtricitylowkey": {
+    "toxtricitylowkey": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2573,10 +2574,10 @@
             }
         ]
     },
-    "Polteageist": {
+    "polteageist": {
         "sets": [
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Giga Drain", "Shadow Ball", "Shell Smash", "Stored Power", "Strength Sap", "Tera Blast"],
                 "teraTypes": ["Fighting"]
             },
@@ -2587,7 +2588,7 @@
             }
         ]
     },
-    "Hatterene": {
+    "hatterene": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2596,7 +2597,7 @@
             }
         ]
     },
-    "Grimmsnarl": {
+    "grimmsnarl": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2610,7 +2611,7 @@
             }
         ]
     },
-    "Perrserker": {
+    "perrserker": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2619,7 +2620,7 @@
             }
         ]
     },
-    "Falinks": {
+    "falinks": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2628,7 +2629,7 @@
             }
         ]
     },
-    "Pincurchin": {
+    "pincurchin": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2637,7 +2638,7 @@
             }
         ]
     },
-    "Frosmoth": {
+    "frosmoth": {
         "sets": [
             {
                 "role": "Tera Blast user",
@@ -2651,7 +2652,7 @@
             }
         ]
     },
-    "Stonjourner": {
+    "stonjourner": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2660,7 +2661,7 @@
             }
         ]
     },
-    "Eiscue": {
+    "eiscue": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2674,7 +2675,7 @@
             }
         ]
     },
-    "Indeedee": {
+    "indeedee": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2683,7 +2684,7 @@
             }
         ]
     },
-    "Indeedeef": {
+    "indeedeef": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2692,7 +2693,7 @@
             }
         ]
     },
-    "Copperajah": {
+    "copperajah": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2701,7 +2702,7 @@
             }
         ]
     },
-    "Dragapult": {
+    "dragapult": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2715,7 +2716,7 @@
             }
         ]
     },
-    "Zacian": {
+    "zacian": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2724,7 +2725,7 @@
             }
         ]
     },
-    "Zaciancrowned": {
+    "zaciancrowned": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2733,7 +2734,7 @@
             }
         ]
     },
-    "Zamazenta": {
+    "zamazenta": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2742,7 +2743,7 @@
             }
         ]
     },
-    "Zamazentacrowned": {
+    "zamazentacrowned": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -2751,7 +2752,7 @@
             }
         ]
     },
-    "Eternatus": {
+    "eternatus": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2765,7 +2766,7 @@
             }
         ]
     },
-    "Urshifu": {
+    "urshifu": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2774,7 +2775,7 @@
             }
         ]
     },
-    "Urshifurapidstrike": {
+    "urshifurapidstrike": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2783,7 +2784,7 @@
             }
         ]
     },
-    "Zarude": {
+    "zarude": {
         "sets": [
             {
                 "role": "Fast Bulky Setup",
@@ -2797,7 +2798,7 @@
             }
         ]
     },
-    "Regieleki": {
+    "regieleki": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -2811,7 +2812,7 @@
             }
         ]
     },
-    "Regidrago": {
+    "regidrago": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2825,7 +2826,7 @@
             }
         ]
     },
-    "Glastrier": {
+    "glastrier": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2834,7 +2835,7 @@
             }
         ]
     },
-    "Spectrier": {
+    "spectrier": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2848,7 +2849,7 @@
             }
         ]
     },
-    "Calyrex": {
+    "calyrex": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2857,7 +2858,7 @@
             }
         ]
     },
-    "Calyrexice": {
+    "calyrexice": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2866,7 +2867,7 @@
             }
         ]
     },
-    "Calyrexshadow": {
+    "calyrexshadow": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2875,7 +2876,7 @@
             }
         ]
     },
-    "Wyrdeer": {
+    "wyrdeer": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2884,7 +2885,7 @@
             }
         ]
     },
-    "Kleavor": {
+    "kleavor": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2893,7 +2894,7 @@
             }
         ]
     },
-    "Ursaluna": {
+    "ursaluna": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2902,7 +2903,7 @@
             }
         ]
     },
-    "Enamorus": {
+    "enamorus": {
         "sets": [
             {
                 "role": "Tera Blast user",
@@ -2916,7 +2917,7 @@
             }
         ]
     },
-    "Enamorustherian": {
+    "enamorustherian": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2925,7 +2926,7 @@
             }
         ]
     },
-    "Meowscarada": {
+    "meowscarada": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2934,7 +2935,7 @@
             }
         ]
     },
-    "Skeledirge": {
+    "skeledirge": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2948,7 +2949,7 @@
             }
         ]
     },
-    "Quaquaval": {
+    "quaquaval": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -2962,7 +2963,7 @@
             }
         ]
     },
-    "Oinkologne": {
+    "oinkologne": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -2971,7 +2972,7 @@
             }
         ]
     },
-    "Oinkolognef": {
+    "oinkolognef": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -2980,7 +2981,7 @@
             }
         ]
     },
-    "Dudunsparce": {
+    "dudunsparce": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2994,7 +2995,7 @@
             }
         ]
     },
-    "Dudunsparcethreesegment": {
+    "dudunsparcethreesegment": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3008,7 +3009,7 @@
             }
         ]
     },
-    "Spidops": {
+    "spidops": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3017,7 +3018,7 @@
             }
         ]
     },
-    "Lokix": {
+    "lokix": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3031,7 +3032,7 @@
             }
         ]
     },
-    "Rabsca": {
+    "rabsca": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3040,7 +3041,7 @@
             }
         ]
     },
-    "Houndstone": {
+    "houndstone": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3049,7 +3050,7 @@
             }
         ]
     },
-    "Espathra": {
+    "espathra": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3068,7 +3069,7 @@
             }
         ]
     },
-    "Farigiraf": {
+    "farigiraf": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3077,7 +3078,7 @@
             }
         ]
     },
-    "Wugtrio": {
+    "wugtrio": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3086,7 +3087,7 @@
             }
         ]
     },
-    "Dondozo": {
+    "dondozo": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -3095,7 +3096,7 @@
             }
         ]
     },
-    "Veluza": {
+    "veluza": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3109,7 +3110,7 @@
             }
         ]
     },
-    "Palafin": {
+    "palafin": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3118,7 +3119,7 @@
             }
         ]
     },
-    "Arboliva": {
+    "arboliva": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3132,7 +3133,7 @@
             }
         ]
     },
-    "Scovillain": {
+    "scovillain": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3141,7 +3142,7 @@
             }
         ]
     },
-    "Bellibolt": {
+    "bellibolt": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3150,7 +3151,7 @@
             }
         ]
     },
-    "Revaroom": {
+    "revaroom": {
         "sets": [
             {
                 "role": "Tera Blast user",
@@ -3164,7 +3165,7 @@
             }
         ]
     },
-    "Orthworm": {
+    "orthworm": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -3178,7 +3179,7 @@
             }
         ]
     },
-    "Maushold": {
+    "maushold": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -3187,7 +3188,7 @@
             }
         ]
     },
-    "Mausholdfour": {
+    "mausholdfour": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -3196,7 +3197,7 @@
             }
         ]
     },
-    "Cetitan": {
+    "cetitan": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3210,7 +3211,7 @@
             }
         ]
     },
-    "Baxcalibur": {
+    "baxcalibur": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3224,7 +3225,7 @@
             }
         ]
     },
-    "Tatsugiri": {
+    "tatsugiri": {
         "sets": [
             {
                 "role": "Tera Blast user",
@@ -3238,7 +3239,7 @@
             }
         ]
     },
-    "Cyclizar": {
+    "cyclizar": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -3252,7 +3253,7 @@
             }
         ]
     },
-    "Pawmot": {
+    "pawmot": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3266,7 +3267,7 @@
             }
         ]
     },
-    "Kilowattrel": {
+    "kilowattrel": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -3275,7 +3276,7 @@
             }
         ]
     },
-    "Bombirdier": {
+    "bombirdier": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3284,7 +3285,7 @@
             }
         ]
     },
-    "Squawkabilly": {
+    "squawkabilly": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3293,7 +3294,7 @@
             }
         ]
     },
-    "Squawkabillywhite": {
+    "squawkabillywhite": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3302,7 +3303,7 @@
             }
         ]
     },
-    "Squawkabillyblue": {
+    "squawkabillyblue": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3311,7 +3312,7 @@
             }
         ]
     },
-    "Squawkabillyyellow": {
+    "squawkabillyyellow": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3320,7 +3321,7 @@
             }
         ]
     },
-    "Flamigo": {
+    "flamigo": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3329,7 +3330,7 @@
             }
         ]
     },
-    "Klawf": {
+    "klawf": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3338,7 +3339,7 @@
             }
         ]
     },
-    "Garganacl": {
+    "garganacl": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -3352,7 +3353,7 @@
             }
         ]
     },
-    "Glimmora": {
+    "glimmora": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3361,7 +3362,7 @@
             }
         ]
     },
-    "Grafaiai": {
+    "grafaiai": {
         "sets": [
             {
                 "role": "AV Pivot",
@@ -3380,7 +3381,7 @@
             }
         ]
     },
-    "Dachsbun": {
+    "dachsbun": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3389,7 +3390,7 @@
             }
         ]
     },
-    "Mabosstiff": {
+    "mabosstiff": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3398,7 +3399,7 @@
             }
         ]
     },
-    "Brambleghast": {
+    "brambleghast": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3412,7 +3413,7 @@
             }
         ]
     },
-    "Gholdengo": {
+    "gholdengo": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3426,7 +3427,7 @@
             }
         ]
     },
-    "Great Tusk": {
+    "greattusk": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -3440,7 +3441,7 @@
             }
         ]
     },
-    "Brute Bonnet": {
+    "brutebonnet": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3449,7 +3450,7 @@
             }
         ]
     },
-    "Sandy Shocks": {
+    "sandyshocks": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -3458,7 +3459,7 @@
             }
         ]
     },
-    "Scream Tail": {
+    "screamtail": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3467,7 +3468,7 @@
             }
         ]
     },
-    "Flutter Mane": {
+    "fluttermane": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3476,7 +3477,7 @@
             }
         ]
     },
-    "Slither Wing": {
+    "slitherwing": {
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -3490,7 +3491,7 @@
             }
         ]
     },
-    "Roaring Moon": {
+    "roaringmoon": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -3504,7 +3505,7 @@
             }
         ]
     },
-    "Iron Treads": {
+    "irontreads": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3513,7 +3514,7 @@
             }
         ]
     },
-    "Iron Moth": {
+    "ironmoth": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3527,7 +3528,7 @@
             }
         ]
     },
-    "Iron Hands": {
+    "ironhands": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3536,7 +3537,7 @@
             }
         ]
     },
-    "Iron Jugulis": {
+    "ironjugulis": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3545,7 +3546,7 @@
             }
         ]
     },
-    "Iron Thorns": {
+    "ironthorns": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -3559,7 +3560,7 @@
             }
         ]
     },
-    "Iron Bundle": {
+    "ironbundle": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3573,7 +3574,7 @@
             }
         ]
     },
-    "Iron Valiant": {
+    "ironvaliant": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -3587,7 +3588,7 @@
             }
         ]
     },
-    "Tinglu": {
+    "tinglu": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3596,7 +3597,7 @@
             }
         ]
     },
-    "Chienpao": {
+    "chienpao": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3605,7 +3606,7 @@
             }
         ]
     },
-    "Wochien": {
+    "wochien": {
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3614,7 +3615,7 @@
             }
         ]
     },
-    "Chiyu": {
+    "chiyu": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -3628,7 +3629,7 @@
             }
         ]
     },
-    "Koraidon": {
+    "koraidon": {
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3637,7 +3638,7 @@
             }
         ]
     },
-    "Miraidon": {
+    "miraidon": {
         "sets": [
             {
                 "role": "Fast Bulky Setup",
@@ -3651,7 +3652,7 @@
             }
         ]
     },
-    "Tinkaton": {
+    "tinkaton": {
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3660,7 +3661,7 @@
             }
         ]
     },
-    "Armarouge": {
+    "armarouge": {
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3669,7 +3670,7 @@
             }
         ]
     },
-    "Ceruledge": {
+    "ceruledge": {
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -3678,7 +3679,7 @@
             }
         ]
     },
-    "Toedscruel": {
+    "toedscruel": {
         "sets": [
             {
                 "role": "Fast Support",
@@ -3687,7 +3688,7 @@
             }
         ]
     },
-    "Kingambit": {
+    "kingambit": {
         "sets": [
             {
                 "role": "Wallbreaker",

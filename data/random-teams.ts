@@ -1065,7 +1065,7 @@ export class RandomTeams {
 		isLead: boolean,
 		isDoubles: boolean
 	) {
-		return 'Dive Ball';
+		return 'Leftovers';
 	}
 
 	/** Item generation specific to Random Doubles */
@@ -1169,11 +1169,20 @@ export class RandomTeams {
 			forme = species.name.slice(0, -5);
 			gmax = true;
 		}
+		const sets = this.randomSets[species.id]["sets"];
+		const possible_sets = [];
+		for (const set of sets) {
+			if (teamDetails.teraBlast && set.role === "Tera Blast user") {
+				continue;
+			}
+			possible_sets.push(set);
+		}
+		const set = this.sampleIfArray(possible_sets);
+		const role = set.role;
+		const movePool = set.movepool;
+		const teraTypes = set.teraTypes;
+		const teraType = this.sampleIfArray(teraTypes);
 
-		const randMoves =
-			(isDoubles && species.randomDoubleBattleMoves) ||
-			species.randomBattleMoves;
-		const movePool = (randMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		if (this.format.gameType === 'multi' || this.format.gameType === 'freeforall') {
 			// Random Multi Battle uses doubles move pools, but Ally Switch fails in multi battles
 			// Random Free-For-All also uses doubles move pools, for now
@@ -1470,7 +1479,6 @@ export class RandomTeams {
 			evs.spe = 0;
 			ivs.spe = 0;
 		}
-
 		return {
 			name: species.baseSpecies,
 			species: forme,
@@ -1483,6 +1491,8 @@ export class RandomTeams {
 			evs,
 			ivs,
 			item,
+			teraType,
+			role,
 		};
 	}
 

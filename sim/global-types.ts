@@ -528,6 +528,7 @@ namespace RandomTeamsTypes {
 		dynamaxLevel?: number;
 		gigantamax?: boolean;
 		teraType?: string;
+		role?: string;
 	}
 	export interface RandomFactorySet {
 		name: string;
