@@ -1054,6 +1054,10 @@ export class RandomTeams {
 			let stabtera = false;
 			for (const moveid in moves) {
 				const move = this.dex.moves.get(moveid);
+				if (moveid === 'terablast') {
+					stabtera = true;
+					break;
+				}
 				let moveType = move.type;
 				if (['judgment', 'multiattack', 'revelationdance'].includes(moveid)) moveType = types[0];
 				if (!this.noStab.includes(moveid)) {
@@ -1119,8 +1123,8 @@ export class RandomTeams {
 		const moves = new Set<string>();
 		const rejectedPool = [];
 
-		if (movePool.length <= 4) {
-			// Add all moves and return early
+		// Add all moves and return early
+		if (movePool.length <= this.maxMoveCount) {
 			for (const move of movePool) {
 				moves.add(move);
 			}
