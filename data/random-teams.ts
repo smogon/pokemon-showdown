@@ -784,7 +784,6 @@ export class RandomTeams {
 		types: string[],
 		teraType: string,
 		abilities: Set<string> = new Set(),
-		movePool: string[] = []
 	): MoveCounter {
 		// This is primarily a helper function for random setbuilder functions.
 		const counter = new MoveCounter();
@@ -850,14 +849,6 @@ export class RandomTeams {
 			if (MixedSetup.includes(moveid)) counter.add('mixedsetup');
 			if (SpeedSetup.includes(moveid)) counter.add('speedsetup');
 			if (Hazards.includes(moveid)) counter.add('hazards');
-		}
-
-		// Keep track of the available moves
-		for (const moveid of movePool) {
-			const move = this.dex.moves.get(moveid);
-			if (move.damageCallback) continue;
-			if (move.category === 'Physical') counter.add('physicalpool');
-			if (move.category === 'Special') counter.add('specialpool');
 		}
 
 		// Choose a setup type:
@@ -987,8 +978,7 @@ export class RandomTeams {
 		return counter;
 	}
 
-	shouldCullMove(
-		move: Move,
+	cullMovePool(
 		types: string[],
 		moves: Set<string>,
 		abilities: Set<string>,
@@ -998,10 +988,26 @@ export class RandomTeams {
 		species: Species,
 		isLead: boolean,
 		isDoubles: boolean,
-	): {cull: boolean, isSetup?: boolean} {
-		return {cull: false};
+		teraType: string,
+		role: string,
+	): string[] {
+		if (moves.size + movePool.length <= this.maxMoveCount) {
+			return movePool;
+		}
+		// Remove RestTalk if it can't fit into the moveset
+		if (moves.size === this.maxMoveCount - 1 && movePool.includes('rest') && movePool.includes('sleeptalk')) {
+			this.fastPop(movePool, movePool.indexOf('rest'));
+			this.fastPop(movePool, movePool.indexOf('sleeptalk'));
+		}
+		// Psychic and Psyshock shouldn't appear in the same moveset
+		if (moves.has('psychic') && movePool.includes('psyshock')) {
+			this.fastPop(movePool, movePool.indexOf('psyshock'));
+		}
+		if (moves.has('psyshock') && movePool.includes('psychic')) {
+			this.fastPop(movePool, movePool.indexOf('psychic'));
+		}
+		return movePool;
 	}
-
 
 	// Generate random moveset for a given species, role, tera type.
 	randomMoveset(
@@ -1016,6 +1022,7 @@ export class RandomTeams {
 		role: string,
 	): Set<string> {
 		const moves = new Set<string>();
+		let counter = this.queryMoves(moves, species.types, teraType, abilities);
 
 		// Add all moves and return early
 		if (movePool.length <= this.maxMoveCount) {
@@ -1028,15 +1035,17 @@ export class RandomTeams {
 		if (role === "Tera Blast user") {
 			moves.add('terablast');
 			this.fastPop(movePool, movePool.indexOf('terablast'));
+			counter = this.queryMoves(moves, species.types, teraType, abilities);
+			this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 		}
 		// Add required move (e.g. Relic Song for Meloetta-P)
 		if (species.requiredMove) {
 			const move = this.dex.moves.get(species.requiredMove).id;
 			moves.add(move);
 			this.fastPop(movePool, movePool.indexOf(move));
+			counter = this.queryMoves(moves, species.types, teraType, abilities);
+			this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 		}
-
-		let counter = this.queryMoves(moves, species.types, teraType, abilities, movePool);
 
 		// Add other moves you really want to have, e.g. STAB, recovery, setup, depending on role.
 
@@ -1077,10 +1086,12 @@ export class RandomTeams {
 					const move = this.sample(stabMoves);
 					moves.add(move);
 					this.fastPop(movePool, movePool.indexOf(move));
+					counter = this.queryMoves(moves, species.types, teraType, abilities);
+					this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 				}
 			}
 		});
-		counter = this.queryMoves(moves, species.types, teraType, abilities, movePool);
+		counter = this.queryMoves(moves, species.types, teraType, abilities);
 
 		// For example, recovery:
 		// Bulky Support/Attacker should always have recovery, and Bulky Setup should prefer having recovery.
@@ -1094,6 +1105,8 @@ export class RandomTeams {
 					moves.add('sleeptalk');
 					this.fastPop(movePool, movePool.indexOf('sleeptalk'));
 				}
+				counter = this.queryMoves(moves, species.types, teraType, abilities);
+				this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 			}
 		}
 
@@ -1101,6 +1114,8 @@ export class RandomTeams {
 		while (moves.size < this.maxMoveCount && movePool.length) {
 			const moveid = this.sampleNoReplace(movePool);
 			moves.add(moveid);
+			counter = this.queryMoves(moves, species.types, teraType, abilities);
+			this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 		}
 		return moves;
 	}
