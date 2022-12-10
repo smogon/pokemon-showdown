@@ -6814,36 +6814,23 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		// Partially implemented in Pokemon.effectiveWeather() in sim/pokemon.ts
 		onStart(pokemon) {
-			pokemon.addVolatile('utilityumbrella');
+			if (!pokemon.ignoringItem()) return;
+			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea'].includes(this.field.effectiveWeather())) {
+				this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
+			}
 		},
-		condition: {
-			onStart(pokemon) {
-				if (!pokemon.ignoringItem() &&
-					['sunnyday', 'raindance', 'desolateland', 'primordialsea'].includes(this.field.effectiveWeather())) {
-					this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
-				}
-			},
-			onUpdate(pokemon) {
-				// could break in OMs with bonus items
-				if (pokemon.item !== 'utilityumbrella') {
-					pokemon.removeVolatile('utilityumbrella');
-					return;
-				}
-				if (!['sunnyday', 'raindance', 'desolateland', 'primordialsea'].includes(this.field.effectiveWeather())) return;
-				if (pokemon.ignoringItem() && !this.effectState.inactive) {
-					this.effectState.inactive = true;
-					this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
-				} else if (!pokemon.ignoringItem() && this.effectState.inactive) {
-					this.effectState.inactive = false;
-					this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
-				}
-			},
-			onEnd(pokemon) {
-				if (!this.effectState.inactive &&
-					['sunnyday', 'raindance', 'desolateland', 'primordialsea'].includes(this.field.effectiveWeather())) {
-					this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
-				}
-			},
+		onUpdate(pokemon) {
+			if (!this.effectState.inactive) return;
+			this.effectState.inactive = false;
+			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea'].includes(this.field.effectiveWeather())) {
+				this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
+			}
+		},
+		onEnd(pokemon) {
+			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea'].includes(this.field.effectiveWeather())) {
+				this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
+			}
+			this.effectState.inactive = true;
 		},
 		num: 1123,
 		gen: 8,

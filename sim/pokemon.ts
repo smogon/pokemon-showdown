@@ -1709,8 +1709,10 @@ export class Pokemon {
 		const item = this.getItem();
 		if (this.battle.runEvent('TakeItem', this, source, null, item)) {
 			this.item = '';
+			const oldItemState = this.itemState;
 			this.itemState = {id: '', target: this};
 			this.pendingStaleness = undefined;
+			this.battle.singleEvent('End', item, oldItemState, this);
 			this.battle.runEvent('AfterTakeItem', this, null, null, item);
 			return item;
 		}
@@ -1730,8 +1732,11 @@ export class Pokemon {
 		} else {
 			this.pendingStaleness = undefined;
 		}
+		const oldItem = this.getItem();
+		const oldItemState = this.itemState;
 		this.item = item.id;
 		this.itemState = {id: item.id, target: this};
+		if (oldItem.exists) this.battle.singleEvent('End', oldItem, oldItemState, this);
 		if (item.id) {
 			this.battle.singleEvent('Start', item, this.itemState, this, source, effect);
 		}
