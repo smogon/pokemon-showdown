@@ -1175,7 +1175,7 @@ export class RandomTeams {
 		const set = this.sampleIfArray(possible_sets);
 		const role = set.role;
 		const movePool: string[] = [];
-		for (let movename of set.movepool) {
+		for (const movename of set.movepool) {
 			movePool.push(this.dex.moves.get(movename).id);
 		}
 		const teraTypes = set.teraTypes;
