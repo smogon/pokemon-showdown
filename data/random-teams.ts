@@ -1071,7 +1071,6 @@ export class RandomTeams {
 		counter = this.queryMoves(moves, species.types, teraType, abilities);
 
 		// Tera STAB: 
-
 		// if (!counter.get('stabtera')) {
 		// 	const stabMoves = [];
 		// 	for (const moveid of movePool) {
@@ -1178,32 +1177,8 @@ export class RandomTeams {
 
 		// After sorting, choose the first ability
 		ability = abilityData[0].name;
-		// Hardcoded abilities for certain contexts
-		if (abilities.has('Guts') && (
-			species.id === 'gurdurr' || species.id === 'throh' ||
-			moves.has('facade') || (moves.has('rest') && moves.has('sleeptalk'))
-		)) {
-			ability = 'Guts';
-		} else if (abilities.has('Moxie') && (counter.get('Physical') > 3 || moves.has('bounce')) && !isDoubles) {
-			ability = 'Moxie';
-		} else if (isDoubles) {
-			if (abilities.has('Competitive') && ability !== 'Shadow Tag' && ability !== 'Strong Jaw') ability = 'Competitive';
-			if (abilities.has('Friend Guard')) ability = 'Friend Guard';
-			if (abilities.has('Gluttony') && moves.has('recycle')) ability = 'Gluttony';
-			if (abilities.has('Guts')) ability = 'Guts';
-			if (abilities.has('Harvest')) ability = 'Harvest';
-			if (abilities.has('Healer') && (
-				abilities.has('Natural Cure') ||
-				(abilities.has('Aroma Veil') && this.randomChance(1, 2))
-			)) ability = 'Healer';
-			if (abilities.has('Intimidate')) ability = 'Intimidate';
-			if (abilities.has('Klutz') && ability === 'Limber') ability = 'Klutz';
-			if (abilities.has('Magic Guard') && ability !== 'Friend Guard' && ability !== 'Unaware') ability = 'Magic Guard';
-			if (abilities.has('Ripen')) ability = 'Ripen';
-			if (abilities.has('Stalwart')) ability = 'Stalwart';
-			if (abilities.has('Storm Drain')) ability = 'Storm Drain';
-			if (abilities.has('Telepathy') && (ability === 'Pressure' || abilities.has('Analytic'))) ability = 'Telepathy';
-		}
+		// Force abilities
+		if (species.id === 'arcaninehisui') return 'Rock Head';
 		return ability;
 	}
 
@@ -1566,7 +1541,7 @@ export class RandomTeams {
 			if (species.baseSpecies === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
 			// The sixth slot should not be Zacian/Zamazenta/Eternatus if a Zoroark is present
 			if (
-				pokemon.some(pkmn => pkmn.species === 'Zoroark') &&
+				pokemon.some(pkmn => pkmn.name === 'Zoroark') &&
 				['Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Eternatus'].includes(species.name)
 			) {
 				continue;
@@ -1580,6 +1555,7 @@ export class RandomTeams {
 
 			// Limit one Pokemon per tier, two for Monotype
 			// Disable this for now, since it is still a new gen
+			// Unless you want to have a lot of Ubers!
 			// if (
 			// 	(tierCount[tier] >= (this.forceMonotype || isMonotype ? 2 : 1) * limitFactor) &&
 			// 	!this.randomChance(1, Math.pow(5, tierCount[tier]))
