@@ -984,6 +984,10 @@ export class RandomTeams {
 		// Psychic and Psyshock shouldn't appear in the same moveset
 		if (moves.has('psychic') && movePool.includes('psyshock')) this.fastPop(movePool, movePool.indexOf('psyshock'));
 		if (moves.has('psyshock') && movePool.includes('psychic')) this.fastPop(movePool, movePool.indexOf('psychic'));
+
+		// Add more here
+		if (moves.has('fireblast') && movePool.includes('flamethrower')) this.fastPop(movePool, movePool.indexOf('flamethrower'));
+		if (moves.has('flamethrower') && movePool.includes('fireblast')) this.fastPop(movePool, movePool.indexOf('fireblast'));
 	}
 
 	// Generate random moveset for a given species, role, tera type.
@@ -1068,7 +1072,6 @@ export class RandomTeams {
 				}
 			}
 		});
-		counter = this.queryMoves(moves, species.types, teraType, abilities);
 
 		// Tera STAB: 
 		// if (!counter.get('stabtera')) {
@@ -1092,7 +1095,6 @@ export class RandomTeams {
 		// 		this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 		// 	}
 		// }
-		// counter = this.queryMoves(moves, species.types, teraType, abilities);
 
 		// For example, recovery:
 		if (role === "Bulky Support" || role === "Bulky Attacker") {
@@ -1110,7 +1112,8 @@ export class RandomTeams {
 			}
 		}
 
-		// Add (moves.size < this.maxMoveCount) as a condition if moves is getting larger than 4 moves
+		// Add (moves.size < this.maxMoveCount) as a condition if moves is getting larger than 4 moves.
+		// If you want moves to be favored but not required, add something like && this.randomChance(1, 2) to your condition.
 
 		// Choose remaining moves randomly from movepool and add them to moves list:
 		while (moves.size < this.maxMoveCount && movePool.length) {
@@ -1177,7 +1180,7 @@ export class RandomTeams {
 
 		// After sorting, choose the first ability
 		ability = abilityData[0].name;
-		// Force abilities
+		// Force abilities here
 		if (species.id === 'arcaninehisui') return 'Rock Head';
 		return ability;
 	}
@@ -1313,6 +1316,18 @@ export class RandomTeams {
 		return 'Leftovers';
 	}
 
+	getLevel(
+		species: Species,
+		isDoubles: boolean,
+	): number {
+		if (this.adjustLevel) return this.adjustLevel;
+		// doubles levelling
+		if (isDoubles && this.randomSets[species.id]["level"]) return this.randomSets[species.id]["level"];
+		if (!isDoubles && this.randomSets[species.id]["level"]) return this.randomSets[species.id]["level"];
+		// Default to level 80
+		return 80;
+	}
+
 	randomSet(
 		species: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
@@ -1394,18 +1409,7 @@ export class RandomTeams {
 			forme = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']);
 		}
 
-		let level: number;
-		if (this.adjustLevel) {
-			level = this.adjustLevel;
-		// doubles levelling
-		} else if (isDoubles && species.randomDoubleBattleLevel) {
-			level = species.randomDoubleBattleLevel;
-		} else if (species.randomBattleLevel) {
-			level = species.randomBattleLevel;
-		// Default to level 80
-		} else {
-			level = 80;
-		}
+		let level = this.getLevel(species);
 
 		// Prepare optimal HP
 		const srImmunity = ability === 'Magic Guard' || item === 'Heavy-Duty Boots';
@@ -1445,9 +1449,6 @@ export class RandomTeams {
 			evs.atk = 0;
 			ivs.atk = 0;
 		}
-
-		// Ensure Nihilego's Beast Boost gives it Special Attack boosts instead of Special Defense
-		if (forme === 'Nihilego') evs.spd -= 32;
 
 		if (moves.has('gyroball') || moves.has('trickroom')) {
 			evs.spe = 0;

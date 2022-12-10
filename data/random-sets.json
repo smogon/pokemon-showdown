@@ -707,6 +707,7 @@
         ]
     },
     "delibird": {
+        "level": 100,
         "sets": [
             {
                 "role": "Fast Attacker",
