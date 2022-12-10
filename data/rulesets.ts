@@ -984,7 +984,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 				'salacberry', 'sapsipper', 'sharpen', 'shellsmash', 'shiftgear', 'silverwind', 'skullbash', 'speedboost', 'starfberry',
 				'steadfast', 'steelwing', 'stockpile', 'stormdrain', 'swordsdance', 'tailglow', 'weakarmor', 'withdraw', 'workup',
 			];
-			let passers = 0;
 			for (const set of team) {
 				if (!set.moves.includes('Baton Pass')) continue;
 				let passableBoosts = false;
