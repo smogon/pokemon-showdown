@@ -386,6 +386,8 @@ export const commands: Chat.ChatCommands = {
 			const supportHTML = cmd.includes('html');
 			const multiPoll = cmd.includes('multi');
 			const queue = cmd.includes('queue');
+
+			let params = [];
 			let separator = '';
 			if (text.includes('\n')) {
 				separator = '\n';
@@ -396,7 +398,39 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				return this.errorReply(this.tr`Not enough arguments for /poll new.`);
 			}
-			let params = text.split(separator).map(param => param.trim());
+
+			let currentParam = "";
+			for (let i = 0; i < text.length; ++i) {
+				const currentCharacter = text[i];
+				const nextCharacter = text[i + 1];
+
+				// If the current character is an escape character, insert the next character
+				// into the param and then skip over checking it in our loop.
+				const isEscapeCharacter = currentCharacter === '\\';
+				if (isEscapeCharacter) {
+					if (nextCharacter) {
+						currentParam += nextCharacter;
+						i += 1;
+					} else {
+						return this.errorReply(this.tr`Extra escape character. To end a poll with '\\', enter it as '\\\\'`);
+					}
+					continue;
+				}
+
+				// At this point, we know this separator hasn't been escaped, so split here.
+				const isSeparator = currentCharacter === separator;
+				if (isSeparator) {
+					params.push(currentParam);
+					currentParam = "";
+					continue;
+				}
+
+				// The current character hasn't been escaped and isn't a separator, so it can just be added to the param.
+				currentParam += currentCharacter;
+			}
+			// Be sure to get the last param we constructed into the array.
+			params.push(currentParam);
+			params = params.map(param => param.trim());
 
 			this.checkCan('minigame', null, room);
 			if (supportHTML) this.checkCan('declare', null, room);
