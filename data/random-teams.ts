@@ -1174,7 +1174,10 @@ export class RandomTeams {
 		}
 		const set = this.sampleIfArray(possible_sets);
 		const role = set.role;
-		const movePool = set.movepool;
+		const movePool: string[] = [];
+		for (let movename of set.movepool) {
+			movePool.push(this.dex.moves.get(movename).id);
+		}
 		const teraTypes = set.teraTypes;
 		const teraType = this.sampleIfArray(teraTypes);
 
@@ -1204,6 +1207,11 @@ export class RandomTeams {
 
 		const moves = new Set<string>();
 		let counter: MoveCounter;
+
+		if (set.role === "Tera Blast user") {
+			moves.add('terablast');
+			this.fastPop(movePool, movePool.indexOf('terablast'));
+		}
 
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
