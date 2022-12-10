@@ -2385,6 +2385,7 @@ export const commands: Chat.ChatCommands = {
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
 			if (target) return this.parse('/help mafia resetgame');
 			if (game.phase !== 'day' && game.phase !== 'night') return this.errorReply(`The game has not started yet.`);
+			if (game.IDEA.data) return this.errorReply(`You cannot use this command in IDEA.`);
 			game.resetGame();
 			game.logAction(user, 'reset the game state');
 		},
