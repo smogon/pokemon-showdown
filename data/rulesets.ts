@@ -967,6 +967,42 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
+	batonpassstatclause: {
+		effectType: 'ValidatorRule',
+		name: 'Baton Pass Stat Clause',
+		desc: "Stops teams from having a Pok&eacute;mon with Baton Pass that has any way to boost its stats",
+		onBegin() {
+			this.add('rule', 'Baton Pass Stat Clause: No Baton Passer may have a way to boost its stats');
+		},
+		onValidateTeam(team) {
+			const boostingEffects = [
+				'absorbbulb', 'acidarmor', 'acupressure', 'agility', 'amnesia', 'ancientpower', 'angerpoint', 'apicotberry', 'autotomize',
+				'barrier', 'bellydrum', 'bulkup', 'calmmind', 'cellbattery', 'chargebeam', 'coil', 'cosmicpower', 'cottonguard', 'curse',
+				'defendorder', 'defiant', 'download', 'dragondance', 'fierydance', 'flamecharge', 'ganlonberry', 'growth', 'harden',
+				'honeclaws', 'howl', 'irondefense', 'justified', 'liechiberry', 'lightningrod', 'meditate', 'metalclaw', 'meteormash',
+				'motordrive', 'moxie', 'nastyplot', 'ominouswind', 'petayaberry', 'quiverdance', 'rage', 'rattled', 'rockpolish',
+				'salacberry', 'sapsipper', 'sharpen', 'shellsmash', 'shiftgear', 'silverwind', 'skullbash', 'speedboost', 'starfberry',
+				'steadfast', 'steelwing', 'stockpile', 'stormdrain', 'swordsdance', 'tailglow', 'weakarmor', 'withdraw', 'workup',
+			];
+			let passers = 0;
+			for (const set of team) {
+				if (!set.moves.includes('Baton Pass')) continue;
+				let passableBoosts = false;
+				const item = this.toID(set.item);
+				const ability = this.toID(set.ability);
+				for (const move of set.moves) {
+					if (boostingEffects.includes(this.toID(move))) passableBoosts = true;
+				}
+				if (boostingEffects.includes(item)) passableBoosts = true;
+				if (boostingEffects.includes(ability)) passableBoosts = true;
+				if (passableBoosts) {
+					return [
+						`${set.name || set.species} has Baton Pass and a way to boost its stats, which is banned by Baton Pass Stat Clause.`,
+					];
+				}
+			}
+		},
+	},
 	cfzclause: {
 		effectType: 'ValidatorRule',
 		name: 'CFZ Clause',
