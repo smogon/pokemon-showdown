@@ -1129,6 +1129,8 @@ export class RandomTeams {
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
 		isDoubles: boolean,
+		teraType: string,
+		role: string,
 	): boolean {
 		return false;
 	}
@@ -1141,7 +1143,9 @@ export class RandomTeams {
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
 		isLead: boolean,
-		isDoubles: boolean
+		isDoubles: boolean,
+		teraType: string,
+		role: string,
 	) {
 		return 'Leftovers';
 	}
@@ -1155,6 +1159,8 @@ export class RandomTeams {
 		counter: MoveCounter,
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
+		teraType: string,
+		role: string,
 	) {
 		const defensiveStatTotal = species.baseStats.hp + species.baseStats.def + species.baseStats.spd;
 
@@ -1208,6 +1214,8 @@ export class RandomTeams {
 		species: Species,
 		isLead: boolean,
 		isDoubles: boolean,
+		teraType: string,
+		role: string,
 	): string | undefined {
 		return 'Dive Ball';
 	}
@@ -1222,6 +1230,8 @@ export class RandomTeams {
 		species: Species,
 		isLead: boolean,
 		isDoubles: boolean,
+		teraType: string,
+		role: string,
 	): string | undefined {
 		return 'Dive Ball';
 	}
@@ -1304,7 +1314,7 @@ export class RandomTeams {
 			let rejectAbility = false;
 			do {
 				rejectAbility = this.shouldCullAbility(
-					ability, types, moves, abilities, counter, teamDetails, species, isDoubles
+					ability, types, moves, abilities, counter, teamDetails, species, isDoubles, teraType, role
 				);
 
 				if (rejectAbility) {
@@ -1359,17 +1369,16 @@ export class RandomTeams {
 			item = this.sample(species.requiredItems);
 		// First, the extra high-priority items
 		} else {
-			item = this.getHighPriorityItem(ability, types, moves, counter, teamDetails, species, isLead, isDoubles);
+			item = this.getHighPriorityItem(ability, types, moves, counter, teamDetails, species, isLead, isDoubles, teraType, role);
 			if (item === undefined && isDoubles) {
-				item = this.getDoublesItem(ability, types, moves, abilities, counter, teamDetails, species);
+				item = this.getDoublesItem(ability, types, moves, abilities, counter, teamDetails, species, teraType, role);
 			}
 			if (item === undefined) {
-				item = this.getMediumPriorityItem(ability, moves, counter, species, isLead, isDoubles);
+				item = this.getMediumPriorityItem(ability, moves, counter, species, isLead, isDoubles, teraType, role);
 			}
 			if (item === undefined) {
 				item = this.getLowPriorityItem(
-					ability, types, moves, abilities, counter, teamDetails, species, isLead, isDoubles
-				);
+					ability, types, moves, abilities, counter, teamDetails, species, isLead, isDoubles, teraType, role);
 			}
 
 			// fallback
