@@ -919,7 +919,7 @@ export class RandomTeams {
 				}
 			}
 			if (stab) {
-				if (index === 1) {
+				if (index) {
 					counter.add('stabsecondary');
 				} else {
 					counter.add('stabprimary');
