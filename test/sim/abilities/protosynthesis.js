@@ -66,21 +66,14 @@ describe('Protosynthesis', function () {
 		assert(!!tail.volatiles['protosynthesis'], `Scream Tail's Protosynthesis activated by Booster Energy should still be active when Sun ends`);
 	});
 
-	// test passes, but is based on an assumption. skipped until research confirms one way or the other
-	it.skip(`should be prevented from activating if the user holds Utility Umbrella`, function () {
+	it(`should not be prevented from activating if the user holds Utility Umbrella`, function () {
 		battle = common.createBattle([[
-			{species: 'Scream Tail', ability: 'protosynthesis', item: 'utilityumbrella', moves: ['trick', 'fling']},
+			{species: 'Scream Tail', ability: 'protosynthesis', item: 'utilityumbrella', moves: ['trick']},
 		], [
 			{species: 'Torkoal', ability: 'drought', moves: ['sleeptalk']},
 		]]);
 
 		const tail = battle.p1.active[0];
-		assert(!tail.volatiles['protosynthesis'], `Scream Tail's SpD should not have been boosted by Protosynthesis in Sun while holding Utility Umbrella`);
-		battle.makeChoices();
-		assert.equal(tail.volatiles['protosynthesis'].bestStat, 'spd');
-		battle.makeChoices();
-		assert(!tail.volatiles['protosynthesis'], `Scream Tail's SpD should not have been boosted by Protosynthesis in Sun after obtaining Utility Umbrella`);
-		battle.makeChoices('move fling', 'auto');
-		assert.equal(tail.volatiles['protosynthesis'].bestStat, 'spd', `Scream Tail's SpD should have been boosted by Protosynthesis in Sun after flinging Utility Umbrella`);
+		assert.equal(tail.volatiles['protosynthesis'].bestStat, 'spd', `Scream Tail's SpD should have been boosted by Protosynthesis in Sun while holding Utility Umbrella`);
 	});
 });
