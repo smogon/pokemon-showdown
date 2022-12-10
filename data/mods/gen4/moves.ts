@@ -181,10 +181,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	brickbreak: {
 		inherit: true,
 		ignoreImmunity: true,
-		onTryHit(pokemon, target) {
-			pokemon.side.removeSideCondition('reflect');
-			pokemon.side.removeSideCondition('lightscreen');
-			if (pokemon.hasType('Ghost') && target.ability !== 'scrappy') {
+		onTryHit(target, pokemon) {
+			target.side.removeSideCondition('reflect');
+			target.side.removeSideCondition('lightscreen');
+			if (target.hasType('Ghost') && pokemon.ability !== 'scrappy' && !target.volatiles['foresight']) {
 				this.hint('In generation 4, Brick Break still breaks screens even if the target is immune.');
 				return false;
 			}
