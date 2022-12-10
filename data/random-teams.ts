@@ -990,23 +990,18 @@ export class RandomTeams {
 		isDoubles: boolean,
 		teraType: string,
 		role: string,
-	): string[] {
+	): void {
 		if (moves.size + movePool.length <= this.maxMoveCount) {
-			return movePool;
+			return;
 		}
-		// Remove RestTalk if it can't fit into the moveset
+		// Remove RestTalk (and other paired moves) if it can't fit into the moveset
 		if (moves.size === this.maxMoveCount - 1 && movePool.includes('rest') && movePool.includes('sleeptalk')) {
 			this.fastPop(movePool, movePool.indexOf('rest'));
 			this.fastPop(movePool, movePool.indexOf('sleeptalk'));
 		}
 		// Psychic and Psyshock shouldn't appear in the same moveset
-		if (moves.has('psychic') && movePool.includes('psyshock')) {
-			this.fastPop(movePool, movePool.indexOf('psyshock'));
-		}
-		if (moves.has('psyshock') && movePool.includes('psychic')) {
-			this.fastPop(movePool, movePool.indexOf('psychic'));
-		}
-		return movePool;
+		if (moves.has('psychic') && movePool.includes('psyshock')) this.fastPop(movePool, movePool.indexOf('psyshock'));
+		if (moves.has('psyshock') && movePool.includes('psychic')) this.fastPop(movePool, movePool.indexOf('psychic'));
 	}
 
 	// Generate random moveset for a given species, role, tera type.
@@ -1026,8 +1021,8 @@ export class RandomTeams {
 
 		// If there are only four moves, add all moves and return early
 		if (movePool.length <= this.maxMoveCount) {
-			for (const move of movePool) {
-				moves.add(move);
+			for (const moveid of movePool) {
+				moves.add(moveid);
 			}
 			return moves;
 		}
@@ -1112,6 +1107,12 @@ export class RandomTeams {
 
 		// Choose remaining moves randomly from movepool and add them to moves list:
 		while (moves.size < this.maxMoveCount && movePool.length) {
+			if (moves.size + movePool.length <= this.maxMoveCount) {
+				for (const moveid of movePool) {
+					moves.add(moveid);
+				}
+				break
+			}
 			const moveid = this.sampleNoReplace(movePool);
 			moves.add(moveid);
 			if (moveid === 'rest' && movePool.includes('sleeptalk')) {
@@ -1218,8 +1219,8 @@ export class RandomTeams {
 			return this.sample(species.requiredItems);
 		}
 		// These are just examples, feel free to change.
-		if (species.name === 'Pikachu') return 'Light Ball';
 		if (role === 'AV Pivot') return 'Assault Vest';
+		if (species.name === 'Pikachu') return 'Light Ball';
 		if (ability === 'Imposter') {
 			return 'Choice Scarf';
 		}
