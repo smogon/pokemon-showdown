@@ -1024,7 +1024,7 @@ export class RandomTeams {
 		const moves = new Set<string>();
 		let counter = this.queryMoves(moves, species.types, teraType, abilities);
 
-		// Add all moves and return early
+		// If there are only four moves, add all moves and return early
 		if (movePool.length <= this.maxMoveCount) {
 			for (const move of movePool) {
 				moves.add(move);
@@ -1083,9 +1083,9 @@ export class RandomTeams {
 					}
 				}
 				if (stabMoves.length) {
-					const move = this.sample(stabMoves);
-					moves.add(move);
-					this.fastPop(movePool, movePool.indexOf(move));
+					const moveid = this.sample(stabMoves);
+					moves.add(moveid);
+					this.fastPop(movePool, movePool.indexOf(moveid));
 					counter = this.queryMoves(moves, species.types, teraType, abilities);
 					this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 				}
@@ -1098,10 +1098,10 @@ export class RandomTeams {
 		if (role === "Bulky Support" || role === "Bulky Attacker" || role === "Bulky Setup" && this.randomChance(1, 2)) {
 			const recoveryMoves = movePool.filter(moveid => RecoveryMove.includes(moveid));
 			if (recoveryMoves.length) {
-				const move = this.sample(recoveryMoves);
-				moves.add(move);
-				this.fastPop(movePool, movePool.indexOf(move));
-				if (move === 'rest' && movePool.includes('sleeptalk')) {
+				const moveid = this.sample(recoveryMoves);
+				moves.add(moveid);
+				this.fastPop(movePool, movePool.indexOf(moveid));
+				if (moveid === 'rest' && movePool.includes('sleeptalk')) {
 					moves.add('sleeptalk');
 					this.fastPop(movePool, movePool.indexOf('sleeptalk'));
 				}
@@ -1114,14 +1114,21 @@ export class RandomTeams {
 		while (moves.size < this.maxMoveCount && movePool.length) {
 			const moveid = this.sampleNoReplace(movePool);
 			moves.add(moveid);
+			if (moveid === 'rest' && movePool.includes('sleeptalk')) {
+				moves.add('sleeptalk');
+				this.fastPop(movePool, movePool.indexOf('sleeptalk'));
+			}
+			if (moveid === 'sleeptalk' && movePool.includes('rest')) {
+				moves.add('rest');
+				this.fastPop(movePool, movePool.indexOf('rest'));
+			}
 			counter = this.queryMoves(moves, species.types, teraType, abilities);
 			this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 		}
 		return moves;
 	}
 
-	shouldCullAbility(
-		ability: string,
+	getAbility(
 		types: string[],
 		moves: Set<string>,
 		abilities: Set<string>,
@@ -1131,11 +1138,57 @@ export class RandomTeams {
 		isDoubles: boolean,
 		teraType: string,
 		role: string,
-	): boolean {
-		return false;
+	): string {
+		let ability: string;
+		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
+		Utils.sortBy(abilityData, abil => -abil.rating);
+
+		if (abilityData[1]) {
+			// Sort abilities by rating with an element of randomness
+			if (abilityData[2] && abilityData[1].rating <= abilityData[2].rating && this.randomChance(1, 2)) {
+				[abilityData[1], abilityData[2]] = [abilityData[2], abilityData[1]];
+			}
+			if (abilityData[0].rating <= abilityData[1].rating) {
+				if (this.randomChance(1, 2)) [abilityData[0], abilityData[1]] = [abilityData[1], abilityData[0]];
+			} else if (abilityData[0].rating - 0.6 <= abilityData[1].rating) {
+				if (this.randomChance(2, 3)) [abilityData[0], abilityData[1]] = [abilityData[1], abilityData[0]];
+			}
+
+			// Start with the first abiility and work our way through, culling as we go
+			ability = abilityData[0].name;
+			// Hardcoded abilities for certain contexts
+			if (abilities.has('Guts') && (
+				species.id === 'gurdurr' || species.id === 'throh' ||
+				moves.has('facade') || (moves.has('rest') && moves.has('sleeptalk'))
+			)) {
+				ability = 'Guts';
+			} else if (abilities.has('Moxie') && (counter.get('Physical') > 3 || moves.has('bounce')) && !isDoubles) {
+				ability = 'Moxie';
+			} else if (isDoubles) {
+				if (abilities.has('Competitive') && ability !== 'Shadow Tag' && ability !== 'Strong Jaw') ability = 'Competitive';
+				if (abilities.has('Friend Guard')) ability = 'Friend Guard';
+				if (abilities.has('Gluttony') && moves.has('recycle')) ability = 'Gluttony';
+				if (abilities.has('Guts')) ability = 'Guts';
+				if (abilities.has('Harvest')) ability = 'Harvest';
+				if (abilities.has('Healer') && (
+					abilities.has('Natural Cure') ||
+					(abilities.has('Aroma Veil') && this.randomChance(1, 2))
+				)) ability = 'Healer';
+				if (abilities.has('Intimidate')) ability = 'Intimidate';
+				if (abilities.has('Klutz') && ability === 'Limber') ability = 'Klutz';
+				if (abilities.has('Magic Guard') && ability !== 'Friend Guard' && ability !== 'Unaware') ability = 'Magic Guard';
+				if (abilities.has('Ripen')) ability = 'Ripen';
+				if (abilities.has('Stalwart')) ability = 'Stalwart';
+				if (abilities.has('Storm Drain')) ability = 'Storm Drain';
+				if (abilities.has('Telepathy') && (ability === 'Pressure' || abilities.has('Analytic'))) ability = 'Telepathy';
+			}
+			return ability;
+		} else {
+			return abilityData[0].name;
+		}
 	}
 
-	getHighPriorityItem(
+	getPriorityItem(
 		ability: string,
 		types: string[],
 		moves: Set<string>,
@@ -1154,6 +1207,7 @@ export class RandomTeams {
 			}
 			return this.sample(species.requiredItems);
 		}
+		// These are just examples, feel free to change.
 		if (species.name === 'Pikachu') return 'Light Ball';
 		if (role === 'AV Pivot') return 'Assault Vest';
 		if (ability === 'Imposter') {
@@ -1200,7 +1254,6 @@ export class RandomTeams {
 		ability: string,
 		types: string[],
 		moves: Set<string>,
-		abilities: Set<string>,
 		counter: MoveCounter,
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
@@ -1220,7 +1273,7 @@ export class RandomTeams {
 			moves.has('flipturn') || moves.has('uturn')
 		)) {
 			return (
-				!counter.get('priority') && !abilities.has('Speed Boost') &&
+				!counter.get('priority') && ability !== 'Speed Boost' &&
 				species.baseStats.spe >= 60 && species.baseStats.spe <= 100 &&
 				this.randomChance(1, 2)
 			) ? 'Choice Scarf' : 'Choice Band';
@@ -1324,80 +1377,12 @@ export class RandomTeams {
 		const moves = this.randomMoveset(types, abilities, teamDetails, species, isLead, isDoubles, movePool, teraType, role);
 		const counter = this.queryMoves(moves, species.types, teraType, abilities);
 
-		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
-		Utils.sortBy(abilityData, abil => -abil.rating);
+		ability = this.getAbility(types, moves, abilities, counter, teamDetails, species, isDoubles, teraType, role);
 
-		if (abilityData[1]) {
-			// Sort abilities by rating with an element of randomness
-			if (abilityData[2] && abilityData[1].rating <= abilityData[2].rating && this.randomChance(1, 2)) {
-				[abilityData[1], abilityData[2]] = [abilityData[2], abilityData[1]];
-			}
-			if (abilityData[0].rating <= abilityData[1].rating) {
-				if (this.randomChance(1, 2)) [abilityData[0], abilityData[1]] = [abilityData[1], abilityData[0]];
-			} else if (abilityData[0].rating - 0.6 <= abilityData[1].rating) {
-				if (this.randomChance(2, 3)) [abilityData[0], abilityData[1]] = [abilityData[1], abilityData[0]];
-			}
-
-			// Start with the first abiility and work our way through, culling as we go
-			ability = abilityData[0].name;
-			let rejectAbility = false;
-			do {
-				rejectAbility = this.shouldCullAbility(
-					ability, types, moves, abilities, counter, teamDetails, species, isDoubles, teraType, role
-				);
-
-				if (rejectAbility) {
-					// Lopunny, and other Facade users, don't want Limber, even if other abilities are poorly rated,
-					// since paralysis would arguably be good for them.
-					const limberFacade = moves.has('facade') && ability === 'Limber';
-
-					if (ability === abilityData[0].name && (abilityData[1].rating >= 1 || limberFacade)) {
-						ability = abilityData[1].name;
-					} else if (ability === abilityData[1].name && abilityData[2] && (abilityData[2].rating >= 1 || limberFacade)) {
-						ability = abilityData[2].name;
-					} else {
-						// Default to the highest rated ability if all are rejected
-						ability = abilityData[0].name;
-						rejectAbility = false;
-					}
-				}
-			} while (rejectAbility);
-
-			// Hardcoded abilities for certain contexts
-			if (abilities.has('Guts') && (
-				species.id === 'gurdurr' || species.id === 'throh' ||
-				moves.has('facade') || (moves.has('rest') && moves.has('sleeptalk'))
-			)) {
-				ability = 'Guts';
-			} else if (abilities.has('Moxie') && (counter.get('Physical') > 3 || moves.has('bounce')) && !isDoubles) {
-				ability = 'Moxie';
-			} else if (isDoubles) {
-				if (abilities.has('Competitive') && ability !== 'Shadow Tag' && ability !== 'Strong Jaw') ability = 'Competitive';
-				if (abilities.has('Friend Guard')) ability = 'Friend Guard';
-				if (abilities.has('Gluttony') && moves.has('recycle')) ability = 'Gluttony';
-				if (abilities.has('Guts')) ability = 'Guts';
-				if (abilities.has('Harvest')) ability = 'Harvest';
-				if (abilities.has('Healer') && (
-					abilities.has('Natural Cure') ||
-					(abilities.has('Aroma Veil') && this.randomChance(1, 2))
-				)) ability = 'Healer';
-				if (abilities.has('Intimidate')) ability = 'Intimidate';
-				if (abilities.has('Klutz') && ability === 'Limber') ability = 'Klutz';
-				if (abilities.has('Magic Guard') && ability !== 'Friend Guard' && ability !== 'Unaware') ability = 'Magic Guard';
-				if (abilities.has('Ripen')) ability = 'Ripen';
-				if (abilities.has('Stalwart')) ability = 'Stalwart';
-				if (abilities.has('Storm Drain')) ability = 'Storm Drain';
-				if (abilities.has('Telepathy') && (ability === 'Pressure' || abilities.has('Analytic'))) ability = 'Telepathy';
-			}
-		} else {
-			ability = abilityData[0].name;
-		}
-
-		// item = !isDoubles ? 'Leftovers' : 'Sitrus Berry';
-		// First, the extra high-priority items
-		item = this.getHighPriorityItem(ability, types, moves, counter, teamDetails, species, isLead, isDoubles, teraType, role);
+		// First, the priority items
+		item = this.getPriorityItem(ability, types, moves, counter, teamDetails, species, isLead, isDoubles, teraType, role);
 		if (item === undefined && isDoubles) {
-			item = this.getDoublesItem(ability, types, moves, abilities, counter, teamDetails, species, teraType, role);
+			item = this.getDoublesItem(ability, types, moves, counter, teamDetails, species, teraType, role);
 		}
 		if (item === undefined) {
 			item = this.getItem(ability, moves, counter, species, isLead, isDoubles, teraType, role);
