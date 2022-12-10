@@ -797,7 +797,7 @@ export class RandomTeams {
 			const move = this.dex.moves.get(moveid);
 
 			let moveType = move.type;
-			if (['judgment', 'multiattack', 'revelationdance'].includes(moveid)) moveType = types[0];
+			if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
 			if (move.damage || move.damageCallback) {
 				// Moves that do a set amount of damage:
 				counter.add('damage');
@@ -892,7 +892,7 @@ export class RandomTeams {
 			for (const moveid in moves) {
 				const move = this.dex.moves.get(moveid);
 				let moveType = move.type;
-				if (['judgment', 'multiattack', 'revelationdance'].includes(moveid)) moveType = types[0];
+				if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
 				if (!this.noStab.includes(moveid)) {
 					if (type === moveType) {
 						stab = true;
@@ -945,7 +945,7 @@ export class RandomTeams {
 					break;
 				}
 				let moveType = move.type;
-				if (['judgment', 'multiattack', 'revelationdance'].includes(moveid)) moveType = types[0];
+				if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
 				if (!this.noStab.includes(moveid)) {
 					if (teraType === moveType) {
 						stabtera = true;
@@ -1033,7 +1033,7 @@ export class RandomTeams {
 				for (const moveid of movePool) {
 					const move = this.dex.moves.get(moveid);
 					let moveType = move.type;
-					if (['judgment', 'multiattack', 'revelationdance'].includes(moveid)) moveType = types[0];
+					if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
 					if (!this.noStab.includes(moveid)) {
 						if (type === moveType) {
 							stabMoves.push(moveid);
@@ -1076,7 +1076,7 @@ export class RandomTeams {
 		// 	for (const moveid of movePool) {
 		// 		const move = this.dex.moves.get(moveid);
 		// 		let moveType = move.type;
-		// 		if (['judgment', 'multiattack', 'revelationdance'].includes(moveid)) moveType = types[0];
+		// 		if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
 		// 		if (!this.noStab.includes(moveid)) {
 		// 			if (teraType === moveType) {
 		// 				stabMoves.push(moveid);
@@ -1244,6 +1244,7 @@ export class RandomTeams {
 	}
 
 	/** Item generation specific to Random Doubles */
+	// Unchanged from Gen 8
 	getDoublesItem(
 		ability: string,
 		types: string[],
@@ -1523,7 +1524,7 @@ export class RandomTeams {
 			// Adjust rate for species with multiple sets
 			// TODO: investigate automating this by searching for Pokémon with multiple sets
 			switch (species.baseSpecies) {
-			case 'Arceus': case 'Silvally':
+			case 'Arceus':
 				if (this.randomChance(8, 9) && !isMonotype) continue;
 				break;
 			case 'Basculin': case 'Meloetta': case 'Rotom':
