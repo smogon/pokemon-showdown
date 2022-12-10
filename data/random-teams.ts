@@ -1143,49 +1143,59 @@ export class RandomTeams {
 		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
 		Utils.sortBy(abilityData, abil => -abil.rating);
 
-		if (abilityData[1]) {
-			// Sort abilities by rating with an element of randomness
-			if (abilityData[2] && abilityData[1].rating <= abilityData[2].rating && this.randomChance(1, 2)) {
-				[abilityData[1], abilityData[2]] = [abilityData[2], abilityData[1]];
+		if (!abilityData[1]) return abilityData[0].name;
+
+		// Sort abilities by rating with an element of randomness
+		// All three abilities can be chosen
+		if (abilityData[2] && abilityData[0].rating - 0.5 <= abilityData[2].rating) {
+			if (abilityData[1].rating <= abilityData[2].rating) {
+				if (this.randomChance(1, 2)) [abilityData[1], abilityData[2]] = [abilityData[2], abilityData[1]];
+			} else {
+				if (this.randomChance(1, 3)) [abilityData[1], abilityData[2]] = [abilityData[2], abilityData[1]];
 			}
 			if (abilityData[0].rating <= abilityData[1].rating) {
-				if (this.randomChance(1, 2)) [abilityData[0], abilityData[1]] = [abilityData[1], abilityData[0]];
-			} else if (abilityData[0].rating - 0.6 <= abilityData[1].rating) {
 				if (this.randomChance(2, 3)) [abilityData[0], abilityData[1]] = [abilityData[1], abilityData[0]];
+			} else {
+				if (this.randomChance(1, 2)) [abilityData[1], abilityData[2]] = [abilityData[2], abilityData[1]];
 			}
-
-			// Start with the first abiility and work our way through, culling as we go
-			ability = abilityData[0].name;
-			// Hardcoded abilities for certain contexts
-			if (abilities.has('Guts') && (
-				species.id === 'gurdurr' || species.id === 'throh' ||
-				moves.has('facade') || (moves.has('rest') && moves.has('sleeptalk'))
-			)) {
-				ability = 'Guts';
-			} else if (abilities.has('Moxie') && (counter.get('Physical') > 3 || moves.has('bounce')) && !isDoubles) {
-				ability = 'Moxie';
-			} else if (isDoubles) {
-				if (abilities.has('Competitive') && ability !== 'Shadow Tag' && ability !== 'Strong Jaw') ability = 'Competitive';
-				if (abilities.has('Friend Guard')) ability = 'Friend Guard';
-				if (abilities.has('Gluttony') && moves.has('recycle')) ability = 'Gluttony';
-				if (abilities.has('Guts')) ability = 'Guts';
-				if (abilities.has('Harvest')) ability = 'Harvest';
-				if (abilities.has('Healer') && (
-					abilities.has('Natural Cure') ||
-					(abilities.has('Aroma Veil') && this.randomChance(1, 2))
-				)) ability = 'Healer';
-				if (abilities.has('Intimidate')) ability = 'Intimidate';
-				if (abilities.has('Klutz') && ability === 'Limber') ability = 'Klutz';
-				if (abilities.has('Magic Guard') && ability !== 'Friend Guard' && ability !== 'Unaware') ability = 'Magic Guard';
-				if (abilities.has('Ripen')) ability = 'Ripen';
-				if (abilities.has('Stalwart')) ability = 'Stalwart';
-				if (abilities.has('Storm Drain')) ability = 'Storm Drain';
-				if (abilities.has('Telepathy') && (ability === 'Pressure' || abilities.has('Analytic'))) ability = 'Telepathy';
-			}
-			return ability;
 		} else {
-			return abilityData[0].name;
+			// Third ability cannot be chosen
+			if (abilityData[0].rating <= abilityData[1].rating) {
+				if (this.randomChance(1, 2)) [abilityData[0], abilityData[1]] = [abilityData[1], abilityData[0]];
+			} else if (abilityData[0].rating - 0.5 <= abilityData[1].rating) {
+				if (this.randomChance(1, 3)) [abilityData[0], abilityData[1]] = [abilityData[1], abilityData[0]];
+			}
 		}
+
+		// After sorting, choose the first ability
+		ability = abilityData[0].name;
+		// Hardcoded abilities for certain contexts
+		if (abilities.has('Guts') && (
+			species.id === 'gurdurr' || species.id === 'throh' ||
+			moves.has('facade') || (moves.has('rest') && moves.has('sleeptalk'))
+		)) {
+			ability = 'Guts';
+		} else if (abilities.has('Moxie') && (counter.get('Physical') > 3 || moves.has('bounce')) && !isDoubles) {
+			ability = 'Moxie';
+		} else if (isDoubles) {
+			if (abilities.has('Competitive') && ability !== 'Shadow Tag' && ability !== 'Strong Jaw') ability = 'Competitive';
+			if (abilities.has('Friend Guard')) ability = 'Friend Guard';
+			if (abilities.has('Gluttony') && moves.has('recycle')) ability = 'Gluttony';
+			if (abilities.has('Guts')) ability = 'Guts';
+			if (abilities.has('Harvest')) ability = 'Harvest';
+			if (abilities.has('Healer') && (
+				abilities.has('Natural Cure') ||
+				(abilities.has('Aroma Veil') && this.randomChance(1, 2))
+			)) ability = 'Healer';
+			if (abilities.has('Intimidate')) ability = 'Intimidate';
+			if (abilities.has('Klutz') && ability === 'Limber') ability = 'Klutz';
+			if (abilities.has('Magic Guard') && ability !== 'Friend Guard' && ability !== 'Unaware') ability = 'Magic Guard';
+			if (abilities.has('Ripen')) ability = 'Ripen';
+			if (abilities.has('Stalwart')) ability = 'Stalwart';
+			if (abilities.has('Storm Drain')) ability = 'Storm Drain';
+			if (abilities.has('Telepathy') && (ability === 'Pressure' || abilities.has('Analytic'))) ability = 'Telepathy';
+		}
+		return ability;
 	}
 
 	getPriorityItem(
