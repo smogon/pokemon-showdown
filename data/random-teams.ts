@@ -68,7 +68,7 @@ const MixedSetup = [
 ];
 // Some moves that only boost Speed:
 const SpeedSetup = [
-	'agility', 'aquastep', 'autotomize', 'flamecharge', 'rockpolish', 'trailblaze',
+	'agility', 'aquastep', 'autotomize', 'flamecharge', 'rapidspin', 'rockpolish', 'trailblaze',
 ];
 // Moves that shouldn't be the only STAB moves:
 const NoStab = [
@@ -1037,6 +1037,7 @@ export class RandomTeams {
 
 		// Add other moves you really want to have, e.g. STAB, recovery, setup, depending on role.
 
+
 		// Choose remaining moves randomly from movepool and add them to moves list:
 		while (moves.size < this.maxMoveCount && movePool.length) {
 			const moveid = this.sampleNoReplace(movePool);
@@ -1576,6 +1577,8 @@ export class RandomTeams {
 			if (set.moves.includes('toxicspikes')) teamDetails.toxicSpikes = 1;
 			if (set.moves.includes('defog')) teamDetails.defog = 1;
 			if (set.moves.includes('rapidspin')) teamDetails.rapidSpin = 1;
+			if (set.moves.includes('mortalspin')) teamDetails.rapidSpin = 1;
+			if (set.moves.includes('tidyup')) teamDetails.rapidSpin = 1;
 			if (set.moves.includes('auroraveil') || (set.moves.includes('reflect') && set.moves.includes('lightscreen'))) {
 				teamDetails.screens = 1;
 			}
