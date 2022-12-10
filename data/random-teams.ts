@@ -1405,11 +1405,14 @@ export class RandomTeams {
 		const abilities = new Set(Object.values(species.abilities));
 		if (species.unreleasedHidden) abilities.delete(species.abilities.H);
 
+		// Get moves
 		const moves = this.randomMoveset(types, abilities, teamDetails, species, isLead, isDoubles, movePool, teraType, role);
 		const counter = this.queryMoves(moves, species.types, teraType, abilities);
 
+		// Get ability
 		ability = this.getAbility(types, moves, abilities, counter, teamDetails, species, isDoubles, teraType, role);
 
+		// Get items
 		// First, the priority items
 		item = this.getPriorityItem(ability, types, moves, counter, teamDetails, species, isLead, isDoubles, teraType, role);
 		if (item === undefined && isDoubles) {
@@ -1430,6 +1433,7 @@ export class RandomTeams {
 			forme = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']);
 		}
 
+		// Get level
 		const level = this.getLevel(species, isDoubles);
 
 		// Prepare optimal HP
