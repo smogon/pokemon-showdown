@@ -380,10 +380,14 @@ export class RandomTeams {
 
 			// Random legal item
 			let item = '';
+			let isIllegalItem;
+			let isBadItem;
 			if (this.gen >= 2) {
 				do {
 					item = this.sample(items).name;
-				} while (this.dex.items.get(item).gen > this.gen || this.dex.items.get(item).isNonstandard);
+					isIllegalItem = this.dex.items.get(item).gen > this.gen || this.dex.items.get(item).isNonstandard;
+					isBadItem = item.startsWith("TR") || this.dex.items.get(item).isPokeball;
+				} while (isIllegalItem || (isBadItem && this.randomChance(19, 20)));
 			}
 
 			// Make sure forme is legal
@@ -781,9 +785,14 @@ export class RandomTeams {
 			// Random unique item
 			let item = '';
 			let itemData;
+			let isBadItem;
 			if (doItemsExist) {
-				itemData = this.sampleNoReplace(itemPool);
-				item = itemData?.name;
+				// We discard TRs and Balls with 95% probability because of their otherwise overwhelming presence
+				do {
+					itemData = this.sampleNoReplace(itemPool);
+					item = itemData?.name;
+					isBadItem = item.startsWith("TR") || itemData.isPokeball;
+				} while (isBadItem && this.randomChance(19, 20) && itemPool.length > this.maxTeamSize);
 			}
 
 			// Random unique ability
