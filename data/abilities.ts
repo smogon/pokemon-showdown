@@ -2753,13 +2753,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	orichalcumpulse: {
 		onStart(pokemon) {
-			if (!this.field.setWeather('sunnyday') && pokemon.effectiveWeather() === 'sunnyday') {
+			// not affected by Utility Umbrella
+			if (!this.field.setWeather('sunnyday') && this.field.effectiveWeather() === 'sunnyday') {
 				this.add('-activate', pokemon, 'ability: Orichalcum Pulse');
 			}
 		},
 		onWeatherChange(pokemon) {
 			if (pokemon === this.field.weatherState.source) return;
-			if (pokemon.effectiveWeather() === 'sunnyday') {
+			if (this.field.effectiveWeather() === 'sunnyday') {
 				this.add('-activate', pokemon, 'ability: Orichalcum Pulse');
 			}
 		},
@@ -3168,7 +3169,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onWeatherChange(pokemon) {
 			if (pokemon.transformed) return;
-			if (pokemon.effectiveWeather() === 'sunnyday') {
+			// protosynthesis is not affected by Utility Umbrella
+			if (this.field.effectiveWeather() === 'sunnyday') {
 				if (!pokemon.volatiles['protosynthesis']) {
 					this.add('-activate', pokemon, 'ability: Protosynthesis');
 					pokemon.addVolatile('protosynthesis');
