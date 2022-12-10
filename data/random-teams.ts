@@ -1147,7 +1147,52 @@ export class RandomTeams {
 		teraType: string,
 		role: string,
 	) {
-		return 'Leftovers';
+		if (species.requiredItems) {
+			// Z-Crystals aren't available in Gen 9, so require Plates
+			if (species.baseSpecies === 'Arceus') {
+				return species.requiredItems[0];
+			}
+			return this.sample(species.requiredItems);
+		}
+		if (species.name === 'Pikachu') return 'Light Ball';
+		if (role === 'AV Pivot') return 'Assault Vest';
+		if (ability === 'Imposter') {
+			return 'Choice Scarf';
+		}
+		if (ability === 'Harvest') {
+			return 'Sitrus Berry';
+		}
+		if (ability === 'Poison Heal') return 'Toxic Orb';
+		if (moves.has('switcheroo') || moves.has('trick')) {
+			if (species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && role !== 'Wallbreaker') {
+				return 'Choice Scarf';
+			} else {
+				return (counter.get('Physical') > counter.get('Special')) ? 'Choice Band' : 'Choice Specs';
+			}
+		}
+		if (moves.has('bellydrum')) return 'Sitrus Berry';
+		if (moves.has('shellsmash')) {
+			return (ability === 'Solid Rock' && !!counter.get('priority')) ? 'Weakness Policy' : 'White Herb';
+		}
+		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
+			return (types.includes('Fire') || ability === 'Quick Feet' || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
+		}
+		if (
+			(ability === 'Magic Guard' && counter.damagingMoves.size > 1) ||
+			(ability === 'Sheer Force' && counter.get('sheerforce'))
+		) {
+			return 'Life Orb';
+		}
+		if (ability === 'Unburden') return moves.has('fakeout') ? 'Normal Gem' : 'Sitrus Berry';
+		if (moves.has('acrobatics')) return '';
+
+		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
+		if (
+			moves.has('rest') && !moves.has('sleeptalk') &&
+			ability !== 'Natural Cure' && ability !== 'Shed Skin' && ability !== 'Shadow Tag'
+		) {
+			return 'Chesto Berry';
+		}
 	}
 
 	/** Item generation specific to Random Doubles */
@@ -1207,7 +1252,7 @@ export class RandomTeams {
 		) return (ability === 'Defeatist' || defensiveStatTotal >= 275) ? 'Sitrus Berry' : 'Life Orb';
 	}
 
-	getMediumPriorityItem(
+	getItem(
 		ability: string,
 		moves: Set<string>,
 		counter: MoveCounter,
@@ -1217,23 +1262,7 @@ export class RandomTeams {
 		teraType: string,
 		role: string,
 	): string | undefined {
-		return 'Dive Ball';
-	}
-
-	getLowPriorityItem(
-		ability: string,
-		types: string[],
-		moves: Set<string>,
-		abilities: Set<string>,
-		counter: MoveCounter,
-		teamDetails: RandomTeamsTypes.TeamDetails,
-		species: Species,
-		isLead: boolean,
-		isDoubles: boolean,
-		teraType: string,
-		role: string,
-	): string | undefined {
-		return 'Dive Ball';
+		return 'Leftovers';
 	}
 
 	randomSet(
@@ -1365,25 +1394,17 @@ export class RandomTeams {
 		}
 
 		// item = !isDoubles ? 'Leftovers' : 'Sitrus Berry';
-		if (species.requiredItems) {
-			item = this.sample(species.requiredItems);
 		// First, the extra high-priority items
-		} else {
-			item = this.getHighPriorityItem(ability, types, moves, counter, teamDetails, species, isLead, isDoubles, teraType, role);
-			if (item === undefined && isDoubles) {
-				item = this.getDoublesItem(ability, types, moves, abilities, counter, teamDetails, species, teraType, role);
-			}
-			if (item === undefined) {
-				item = this.getMediumPriorityItem(ability, moves, counter, species, isLead, isDoubles, teraType, role);
-			}
-			if (item === undefined) {
-				item = this.getLowPriorityItem(
-					ability, types, moves, abilities, counter, teamDetails, species, isLead, isDoubles, teraType, role);
-			}
-
-			// fallback
-			if (item === undefined) item = isDoubles ? 'Sitrus Berry' : 'Leftovers';
+		item = this.getHighPriorityItem(ability, types, moves, counter, teamDetails, species, isLead, isDoubles, teraType, role);
+		if (item === undefined && isDoubles) {
+			item = this.getDoublesItem(ability, types, moves, abilities, counter, teamDetails, species, teraType, role);
 		}
+		if (item === undefined) {
+			item = this.getItem(ability, moves, counter, species, isLead, isDoubles, teraType, role);
+		}
+
+		// fallback
+		if (item === undefined) item = isDoubles ? 'Sitrus Berry' : 'Leftovers';
 
 		// For Trick / Switcheroo
 		if (item === 'Leftovers' && types.includes('Poison') && teraType === 'Poison') {
