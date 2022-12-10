@@ -891,6 +891,7 @@ export class RandomTeams {
 	queryMoves(
 		moves: Set<string> | null,
 		types: string[],
+		teraType: string,
 		abilities: Set<string> = new Set(),
 		movePool: string[] = []
 	): MoveCounter {
@@ -903,10 +904,7 @@ export class RandomTeams {
 
 		// Iterate through all moves we've chosen so far and keep track of what they do:
 		for (const moveid of moves) {
-			let move = this.dex.moves.get(moveid);
-			if (move.id === 'naturepower') {
-				if (this.gen === 5) move = this.dex.moves.get('earthquake');
-			}
+			const move = this.dex.moves.get(moveid);
 
 			let moveType = move.type;
 			if (['judgment', 'multiattack', 'revelationdance'].includes(moveid)) moveType = types[0];
@@ -927,25 +925,8 @@ export class RandomTeams {
 			if (move.recoil || move.hasCrashDamage) counter.add('recoil');
 			if (move.drain) counter.add('drain');
 			// Moves which have a base power, but aren't super-weak like Rapid Spin:
-			if (move.basePower > 30 || move.multihit || move.basePowerCallback || moveid === 'infestation') {
+			if (move.basePower > 30 || move.multihit || move.basePowerCallback) {
 				counter.add(moveType);
-				if (types.includes(moveType)) {
-					// STAB:
-					// Certain moves aren't acceptable as a Pokemon's only STAB attack
-					if (!this.noStab.includes(moveid) || types.length === 1) {
-						counter.add('stab');
-						// Ties between Physical and Special setup should broken in favor of STABs
-						categories[move.category] += 0.1;
-					}
-				} else if (
-					// Less obvious forms of STAB
-					(moveType === 'Normal' && (['Aerilate', 'Galvanize', 'Pixilate', 'Refrigerate'].some(abil => abilities.has(abil)))) ||
-					(move.priority === 0 && (abilities.has('Libero') || abilities.has('Protean')) && !this.noStab.includes(moveid)) ||
-					(moveType === 'Steel' && abilities.has('Steelworker'))
-				) {
-					counter.add('stab');
-				}
-
 				if (move.flags['bite']) counter.add('strongjaw');
 				if (move.flags['punch']) counter.add('ironfist');
 				if (move.flags['sound']) counter.add('sound');
@@ -1023,6 +1004,87 @@ export class RandomTeams {
 		counter.set('Special', Math.floor(categories['Special']));
 		counter.set('Status', categories['Status']);
 
+		// Check STABs here
+		types.forEach((type, index) => {
+			let stab = false;
+			for (const moveid in moves) {
+				const move = this.dex.moves.get(moveid);
+				let moveType = move.type;
+				if (['judgment', 'multiattack', 'revelationdance'].includes(moveid)) moveType = types[0];
+				if (!this.noStab.includes(moveid)) {
+					if (type === moveType) {
+						stab = true;
+						break;
+					}
+					if (moveType === 'Normal') {
+						if (abilities.has('Aerilate') && type === 'Flying') {
+							stab = true;
+							break;
+						}
+						if (abilities.has('Galvanize') && type === 'Electric') {
+							stab = true;
+							break;
+						}
+						if (abilities.has('Pixilate') && type === 'Fairy') {
+							stab = true;
+							break;
+						}
+						if (abilities.has('Refrigerate') && type === 'Ice') {
+							stab = true;
+							break;
+						}
+					}
+				}
+			}
+			if (stab) {
+				if (index === 1) {
+					counter.add('stabsecondary');
+				} else {
+					counter.add('stabprimary');
+				}
+			}
+		});
+
+		// Check Tera STAB
+		if (teraType === types[0] && counter.get('stabprimary')) {
+			counter.add('stabtera');
+		} else if (types.length > 1 && teraType === types[1] && counter.get('stabsecondary')) {
+			counter.add('stabtera');
+		} else {
+			let stabtera = false;
+			for (const moveid in moves) {
+				const move = this.dex.moves.get(moveid);
+				let moveType = move.type;
+				if (['judgment', 'multiattack', 'revelationdance'].includes(moveid)) moveType = types[0];
+				if (!this.noStab.includes(moveid)) {
+					if (teraType === moveType) {
+						stabtera = true;
+						break;
+					}
+					if (moveType === 'Normal') {
+						if (abilities.has('Aerilate') && teraType === 'Flying') {
+							stabtera = true;
+							break;
+						}
+						if (abilities.has('Galvanize') && teraType === 'Electric') {
+							stabtera = true;
+							break;
+						}
+						if (abilities.has('Pixilate') && teraType === 'Fairy') {
+							stabtera = true;
+							break;
+						}
+						if (abilities.has('Refrigerate') && teraType === 'Ice') {
+							stabtera = true;
+							break;
+						}
+					}
+				}
+			}
+			if (stabtera) {
+				counter.add('stabtera');
+			}
+		}
 		return counter;
 	}
 
@@ -1059,7 +1121,7 @@ export class RandomTeams {
 
 		if (movePool.length <= 4) {
 			// Add all moves and return early
-			for (const move in movePool) {
+			for (const move of movePool) {
 				moves.add(move);
 			}
 			return moves;
@@ -1076,7 +1138,9 @@ export class RandomTeams {
 			this.fastPop(movePool, movePool.indexOf(move));
 		}
 
-		let counter = this.queryMoves(moves, species.types, abilities, movePool);
+		let counter = this.queryMoves(moves, species.types, teraType, abilities, movePool);
+
+		// Add other moves you really want to have, e.g. STAB, recovery, setup, depending on role.
 
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
@@ -1086,11 +1150,11 @@ export class RandomTeams {
 				moves.add(moveid);
 			}
 
-			counter = this.queryMoves(moves, species.types, abilities, movePool);
+			counter = this.queryMoves(moves, species.types, teraType, abilities, movePool);
 			const runEnforcementChecker = (checkerName: string) => {
 				if (!this.moveEnforcementCheckers[checkerName]) return false;
 				return this.moveEnforcementCheckers[checkerName](
-					movePool, moves, abilities, types, counter, species as Species, teamDetails
+					movePool, moves, abilities, types, counter, species, teamDetails
 				);
 			};
 
@@ -1352,7 +1416,7 @@ export class RandomTeams {
 		if (species.unreleasedHidden) abilities.delete(species.abilities.H);
 
 		const moves = this.randomMoveset(types, abilities, teamDetails, species, isLead, isDoubles, movePool, teraType, role);
-		const counter = this.queryMoves(moves, species.types, abilities)
+		const counter = this.queryMoves(moves, species.types, teraType, abilities);
 
 		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
 		Utils.sortBy(abilityData, abil => -abil.rating);
