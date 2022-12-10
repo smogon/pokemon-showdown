@@ -1551,39 +1551,32 @@ export class RandomTeams {
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
 		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
-		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
-			let species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
-			if (!species.exists) continue;
-
-			// Limit to one of each species (Species Clause)
-			if (baseFormes[species.baseSpecies]) continue;
-
-			// Adjust rate for species with multiple sets
-			// TODO: investigate automating this by searching for Pokémon with multiple sets
-			switch (species.baseSpecies) {
-			case 'Arceus':
-				if (this.randomChance(8, 9) && !isMonotype) continue;
-				break;
-			case 'Basculin': case 'Meloetta': case 'Rotom':
-				if (this.randomChance(1, 2)) continue;
-				break;
-			case 'Calyrex':
-				if (this.randomChance(2, 3)) continue;
-				break;
-			case 'Toxtricity': case 'Zacian': case 'Zamazenta': case 'Urshifu': case 'Giratina':
-				if (this.randomChance(1, 2)) continue;
-				break;
+		const baseSpeciesPool: string[] = [];
+		for (const pokemon of pokemonPool) {
+			let species = this.dex.species.get(pokemon);
+			if (!baseSpeciesPool.includes(species.baseSpecies)) baseSpeciesPool.push(species.baseSpecies);
+		}
+		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
+			let baseSpecies = this.sampleNoReplace(baseSpeciesPool);
+			const currentSpeciesPool: Species[] = [];
+			for (const pokemon of pokemonPool) {
+				let species = this.dex.species.get(pokemon);
+				if (species.baseSpecies === baseSpecies) currentSpeciesPool.push(species);
 			}
+			let species = this.sampleNoReplace(currentSpeciesPool);
+			if (!species.exists) continue;
 
 			// Illusion shouldn't be on the last slot
 			if (species.baseSpecies === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
+			// Bring this back if/when they are given individul levels
 			// The sixth slot should not be Zacian/Zamazenta/Eternatus if a Zoroark is present
-			if (
-				pokemon.some(pkmn => pkmn.name === 'Zoroark') &&
-				['Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Eternatus'].includes(species.name)
-			) {
-				continue;
-			}
+			// if (
+			// 	pokemon.some(pkmn => pkmn.name === 'Zoroark') &&
+			// 	pokemon.length >= (this.maxTeamSize - 1) && 
+			// 	['Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Eternatus'].includes(species.name)
+			// ) {
+			// 	continue;
+			// }
 
 			const tier = species.tier;
 			const types = species.types;
