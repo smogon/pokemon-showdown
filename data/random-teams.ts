@@ -1377,7 +1377,7 @@ export class RandomTeams {
 		}
 
 		// For Trick / Switcheroo
-		if (item === 'Leftovers' && types.includes('Poison')) {
+		if (item === 'Leftovers' && types.includes('Poison') && teraType === 'Poison') {
 			item = 'Black Sludge';
 		}
 		if (species.baseSpecies === 'Pikachu') {
