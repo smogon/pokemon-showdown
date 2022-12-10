@@ -57,15 +57,15 @@ const RecoveryMove = [
 ];
 // Moves that drop stats:
 const ContraryMoves = [
-	'closecombat', 'leafstorm', 'overheat', 'superpower', 'vcreate',
+	'armorcannon', 'closecombat', 'leafstorm', 'makeitrain', 'overheat', 'spinout', 'superpower', 'vcreate',
 ];
 // Moves that boost Attack:
 const PhysicalSetup = [
-	'bellydrum', 'bulkup', 'coil', 'curse', 'dragondance', 'honeclaws', 'howl', 'meditate', 'poweruppunch', 'swordsdance',
+	'bellydrum', 'bulkup', 'coil', 'curse', 'dragondance', 'honeclaws', 'howl', 'meditate', 'poweruppunch', 'swordsdance', 'tidyup'
 ];
 // Moves which boost Special Attack:
 const SpecialSetup = [
-	'calmmind', 'chargebeam', 'geomancy', 'nastyplot', 'quiverdance', 'tailglow',
+	'calmmind', 'chargebeam', 'geomancy', 'nastyplot', 'quiverdance', 'tailglow', 'torchsong',
 ];
 // Moves that boost Attack AND Special Attack:
 const MixedSetup = [
@@ -73,7 +73,7 @@ const MixedSetup = [
 ];
 // Some moves that only boost Speed:
 const SpeedSetup = [
-	'agility', 'autotomize', 'flamecharge', 'rockpolish',
+	'agility', 'aquastep', 'autotomize', 'flamecharge', 'rockpolish', 'trailblaze',
 ];
 // Moves that shouldn't be the only STAB moves:
 const NoStab = [
