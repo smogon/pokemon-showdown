@@ -1182,7 +1182,7 @@ export class RandomTeams {
 
 		// After sorting, choose the first ability
 		const ability = abilityData[0].name;
-		// Force abilities here
+		// Adjust abilities here
 		if (species.id === 'arcaninehisui') return 'Rock Head';
 		return ability;
 	}
