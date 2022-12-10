@@ -1212,6 +1212,14 @@ export class RandomTeams {
 			moves.add('terablast');
 			this.fastPop(movePool, movePool.indexOf('terablast'));
 		}
+		// Add required move (e.g. Relic Song for Meloetta-P)
+		if (species.requiredMove) {
+			const move = this.dex.moves.get(species.requiredMove).id;
+			moves.add(move);
+			this.fastPop(movePool, movePool.indexOf(move));
+		}
+
+		counter = this.queryMoves(moves, species.types, abilities, movePool);
 
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
