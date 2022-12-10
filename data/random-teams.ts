@@ -1318,6 +1318,7 @@ export class RandomTeams {
 		teraType: string,
 		role: string,
 	): string | undefined {
+		if (isDoubles) return 'Sitrus Berry';
 		return 'Leftovers';
 	}
 
