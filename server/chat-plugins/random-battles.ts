@@ -1064,7 +1064,7 @@ export const commands: Chat.ChatCommands = {
 			`Requires: % @ # & (globally or in the Random Battles room)`
 		);
 	},
-	
+
 	genteam: 'generateteam',
 	generateteam(target, room, user) {
 		if (!Rooms.get('randombattles')?.auth.has(user.id)) this.checkCan('lock');
