@@ -2878,7 +2878,7 @@ export const commands: Chat.ChatCommands = {
 			f => f.requiredPermission && canExecute(f.requiredPermission) && f.fullCmd !== this.handler?.fullCmd
 		);
 		cmds = Utils.sortBy(cmds, f => f.fullCmd);
-		let namespaces = new Map<string, string[]>;
+		let namespaces = new Map<string, string[]>();
 		for (const cmd of cmds) {
 			const namespace = cmd.fullCmd.split(' ')[0];
 			const list = namespaces.get(namespace) || [];
