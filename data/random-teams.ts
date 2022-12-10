@@ -1111,7 +1111,7 @@ export class RandomTeams {
 				for (const moveid of movePool) {
 					moves.add(moveid);
 				}
-				break
+				break;
 			}
 			const moveid = this.sampleNoReplace(movePool);
 			moves.add(moveid);
