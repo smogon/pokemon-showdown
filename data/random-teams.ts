@@ -994,7 +994,7 @@ export class RandomTeams {
 		if (moves.size + movePool.length <= this.maxMoveCount) {
 			return;
 		}
-		// Remove RestTalk (and other paired moves) if it can't fit into the moveset
+		// Remove RestTalk if it can't fit into the moveset
 		if (moves.size === this.maxMoveCount - 1 && movePool.includes('rest') && movePool.includes('sleeptalk')) {
 			this.fastPop(movePool, movePool.indexOf('rest'));
 			this.fastPop(movePool, movePool.indexOf('sleeptalk'));
@@ -1089,8 +1089,7 @@ export class RandomTeams {
 		counter = this.queryMoves(moves, species.types, teraType, abilities);
 
 		// For example, recovery:
-		// Bulky Support/Attacker should always have recovery, and Bulky Setup should prefer having recovery.
-		if (role === "Bulky Support" || role === "Bulky Attacker" || role === "Bulky Setup" && this.randomChance(1, 2)) {
+		if (role === "Bulky Support" || role === "Bulky Attacker") {
 			const recoveryMoves = movePool.filter(moveid => RecoveryMove.includes(moveid));
 			if (recoveryMoves.length) {
 				const moveid = this.sample(recoveryMoves);
@@ -1543,28 +1542,19 @@ export class RandomTeams {
 			case 'Arceus': case 'Silvally':
 				if (this.randomChance(8, 9) && !isMonotype) continue;
 				break;
-			case 'Aegislash': case 'Basculin': case 'Gourgeist': case 'Meloetta': case 'Rotom':
+			case 'Basculin': case 'Meloetta': case 'Rotom':
 				if (this.randomChance(1, 2)) continue;
 				break;
-			case 'Greninja':
-				if (this.gen >= 7 && this.randomChance(1, 2)) continue;
-				break;
-			case 'Darmanitan':
-				if (species.gen === 8 && this.randomChance(1, 2)) continue;
-				break;
-			case 'Necrozma': case 'Calyrex':
+			case 'Calyrex':
 				if (this.randomChance(2, 3)) continue;
 				break;
-			case 'Magearna': case 'Toxtricity': case 'Zacian': case 'Zamazenta': case 'Zarude':
-			case 'Appletun': case 'Blastoise': case 'Butterfree': case 'Copperajah': case 'Grimmsnarl':
-			case 'Inteleon': case 'Rillaboom': case 'Snorlax': case 'Urshifu': case 'Giratina': case 'Genesect':
-			case 'Cinderace':
-				if (this.gen >= 8 && this.randomChance(1, 2)) continue;
+			case 'Toxtricity': case 'Zacian': case 'Zamazenta': case 'Urshifu': case 'Giratina':
+				if (this.randomChance(1, 2)) continue;
 				break;
 			}
 
 			// Illusion shouldn't be on the last slot
-			if (species.name === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
+			if (species.baseSpecies === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
 			// The sixth slot should not be Zacian/Zamazenta/Eternatus if a Zoroark is present
 			if (
 				pokemon.some(pkmn => pkmn.species === 'Zoroark') &&
