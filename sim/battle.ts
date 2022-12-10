@@ -877,19 +877,23 @@ export class Battle {
 			}
 			return handlers;
 		}
+		// events usually run through EachEvent should never have any handlers besides `on${eventName}` so don't check for them
+		const prefixedHandlers = !['BeforeTurn', 'Update', 'Weather', 'WeatherChange', 'TerrainChange'].includes(eventName);
 		if (target instanceof Pokemon && (target.isActive || source?.isActive)) {
 			handlers = this.findPokemonEventHandlers(target, `on${eventName}`);
-			for (const allyActive of target.alliesAndSelf()) {
-				handlers.push(...this.findPokemonEventHandlers(allyActive, `onAlly${eventName}`));
-				handlers.push(...this.findPokemonEventHandlers(allyActive, `onAny${eventName}`));
-			}
-			for (const foeActive of target.foes()) {
-				handlers.push(...this.findPokemonEventHandlers(foeActive, `onFoe${eventName}`));
-				handlers.push(...this.findPokemonEventHandlers(foeActive, `onAny${eventName}`));
+			if (prefixedHandlers) {
+				for (const allyActive of target.alliesAndSelf()) {
+					handlers.push(...this.findPokemonEventHandlers(allyActive, `onAlly${eventName}`));
+					handlers.push(...this.findPokemonEventHandlers(allyActive, `onAny${eventName}`));
+				}
+				for (const foeActive of target.foes()) {
+					handlers.push(...this.findPokemonEventHandlers(foeActive, `onFoe${eventName}`));
+					handlers.push(...this.findPokemonEventHandlers(foeActive, `onAny${eventName}`));
+				}
 			}
 			target = target.side;
 		}
-		if (source) {
+		if (source && prefixedHandlers) {
 			handlers.push(...this.findPokemonEventHandlers(source, `onSource${eventName}`));
 		}
 		if (target instanceof Side) {
@@ -897,10 +901,10 @@ export class Battle {
 				if (side.n >= 2 && side.allySide) break;
 				if (side === target || side === target.allySide) {
 					handlers.push(...this.findSideEventHandlers(side, `on${eventName}`));
-				} else {
+				} else if (prefixedHandlers) {
 					handlers.push(...this.findSideEventHandlers(side, `onFoe${eventName}`));
 				}
-				handlers.push(...this.findSideEventHandlers(side, `onAny${eventName}`));
+				if (prefixedHandlers) handlers.push(...this.findSideEventHandlers(side, `onAny${eventName}`));
 			}
 		}
 		handlers.push(...this.findFieldEventHandlers(this.field, `on${eventName}`));
