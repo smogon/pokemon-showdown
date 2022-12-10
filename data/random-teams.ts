@@ -893,7 +893,7 @@ export class RandomTeams {
 				const move = this.dex.moves.get(moveid);
 				let moveType = move.type;
 				if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
-				if (!this.noStab.includes(moveid)) {
+				if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
 					if (type === moveType) {
 						stab = true;
 						break;
@@ -946,7 +946,7 @@ export class RandomTeams {
 				}
 				let moveType = move.type;
 				if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
-				if (!this.noStab.includes(moveid)) {
+				if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
 					if (teraType === moveType) {
 						stabtera = true;
 						break;
@@ -1041,7 +1041,7 @@ export class RandomTeams {
 					const move = this.dex.moves.get(moveid);
 					let moveType = move.type;
 					if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
-					if (!this.noStab.includes(moveid)) {
+					if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
 						if (type === moveType) {
 							stabMoves.push(moveid);
 							break;
@@ -1077,27 +1077,27 @@ export class RandomTeams {
 		});
 
 		// Tera STAB:
-		// if (!counter.get('stabtera')) {
-		// 	const stabMoves = [];
-		// 	for (const moveid of movePool) {
-		// 		const move = this.dex.moves.get(moveid);
-		// 		let moveType = move.type;
-		// 		if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
-		// 		if (!this.noStab.includes(moveid)) {
-		// 			if (teraType === moveType) {
-		// 				stabMoves.push(moveid);
-		// 				break;
-		// 			}
-		// 		}
-		// 	}
-		// 	if (stabMoves.length) {
-		// 		const moveid = this.sample(stabMoves);
-		// 		moves.add(moveid);
-		// 		this.fastPop(movePool, movePool.indexOf(moveid));
-		// 		counter = this.queryMoves(moves, species.types, teraType, abilities);
-		// 		this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
-		// 	}
-		// }
+		if (!counter.get('stabtera')) {
+			const stabMoves = [];
+			for (const moveid of movePool) {
+				const move = this.dex.moves.get(moveid);
+				let moveType = move.type;
+				if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
+				if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
+					if (teraType === moveType) {
+						stabMoves.push(moveid);
+						break;
+					}
+				}
+			}
+			if (stabMoves.length) {
+				const moveid = this.sample(stabMoves);
+				moves.add(moveid);
+				this.fastPop(movePool, movePool.indexOf(moveid));
+				counter = this.queryMoves(moves, species.types, teraType, abilities);
+				this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+			}
+		}
 
 		// For example, recovery:
 		if (role === "Bulky Support" || role === "Bulky Attacker") {
