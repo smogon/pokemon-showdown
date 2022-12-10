@@ -48,7 +48,7 @@ export class MoveCounter extends Utils.Multiset<string> {
 
 // Moves that restore HP:
 const RecoveryMove = [
-	'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'roost', 'shoreup', 'slackoff', 'softboiled', 'strengthsap', 'synthesis',
+	'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'rest', 'roost', 'shoreup', 'slackoff', 'softboiled', 'strengthsap', 'synthesis',
 ];
 // Moves that drop stats:
 const ContraryMoves = [
@@ -56,7 +56,7 @@ const ContraryMoves = [
 ];
 // Moves that boost Attack:
 const PhysicalSetup = [
-	'bellydrum', 'bulkup', 'coil', 'curse', 'dragondance', 'honeclaws', 'howl', 'meditate', 'poweruppunch', 'swordsdance', 'tidyup'
+	'bellydrum', 'bulkup', 'coil', 'curse', 'dragondance', 'honeclaws', 'howl', 'meditate', 'poweruppunch', 'swordsdance', 'tidyup',
 ];
 // Moves which boost Special Attack:
 const SpecialSetup = [
@@ -937,10 +937,14 @@ export class RandomTeams {
 		});
 
 		// Check Tera STAB
-		if (teraType === types[0] && counter.get('stabprimary')) {
-			counter.add('stabtera');
-		} else if (types.length > 1 && teraType === types[1] && counter.get('stabsecondary')) {
-			counter.add('stabtera');
+		if (teraType === types[0]) {
+			if (counter.get('stabprimary')) {
+				counter.add('stabtera');
+			}
+		} else if (types.length > 1 && teraType === types[1]) {
+			if (counter.get('stabsecondary')) {
+				counter.add('stabtera');
+			}
 		} else {
 			let stabtera = false;
 			for (const moveid in moves) {
@@ -985,7 +989,7 @@ export class RandomTeams {
 
 	shouldCullMove(
 		move: Move,
-		types: Set<string>,
+		types: string[],
 		moves: Set<string>,
 		abilities: Set<string>,
 		counter: MoveCounter,
@@ -1001,7 +1005,7 @@ export class RandomTeams {
 
 	// Generate random moveset for a given species, role, tera type.
 	randomMoveset(
-		types: Set<string>,
+		types: string[],
 		abilities: Set<string>,
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
@@ -1012,7 +1016,6 @@ export class RandomTeams {
 		role: string,
 	): Set<string> {
 		const moves = new Set<string>();
-		const rejectedPool = [];
 
 		// Add all moves and return early
 		if (movePool.length <= this.maxMoveCount) {
@@ -1037,6 +1040,62 @@ export class RandomTeams {
 
 		// Add other moves you really want to have, e.g. STAB, recovery, setup, depending on role.
 
+		// For example, STAB:
+		types.forEach((type, index) => {
+			if (!index && !counter.get('stabprimary') || index && !counter.get('stabsecondary')) {
+				const stabMoves = [];
+				for (const moveid of movePool) {
+					const move = this.dex.moves.get(moveid);
+					let moveType = move.type;
+					if (['judgment', 'multiattack', 'revelationdance'].includes(moveid)) moveType = types[0];
+					if (!this.noStab.includes(moveid)) {
+						if (type === moveType) {
+							stabMoves.push(moveid);
+							break;
+						}
+						if (moveType === 'Normal') {
+							if (abilities.has('Aerilate') && type === 'Flying') {
+								stabMoves.push(moveid);
+								break;
+							}
+							if (abilities.has('Galvanize') && type === 'Electric') {
+								stabMoves.push(moveid);
+								break;
+							}
+							if (abilities.has('Pixilate') && type === 'Fairy') {
+								stabMoves.push(moveid);
+								break;
+							}
+							if (abilities.has('Refrigerate') && type === 'Ice') {
+								stabMoves.push(moveid);
+								break;
+							}
+						}
+					}
+				}
+				if (stabMoves.length) {
+					const move = this.sample(stabMoves);
+					moves.add(move);
+					this.fastPop(movePool, movePool.indexOf(move));
+				}
+			}
+		});
+		counter = this.queryMoves(moves, species.types, teraType, abilities, movePool);
+
+		// For example, recovery:
+		// Bulky Support/Attacker should always have recovery, and Bulky Setup should prefer having recovery.
+		if (role === "Bulky Support" || role === "Bulky Attacker" || role === "Bulky Setup" && this.randomChance(1, 2)) {
+			const recoveryMoves = movePool.filter(moveid => RecoveryMove.includes(moveid));
+			if (recoveryMoves.length) {
+				const move = this.sample(recoveryMoves);
+				moves.add(move);
+				this.fastPop(movePool, movePool.indexOf(move));
+				if (move === 'rest' && movePool.includes('sleeptalk')) {
+					moves.add('sleeptalk');
+					this.fastPop(movePool, movePool.indexOf('sleeptalk'));
+				}
+			}
+		}
 
 		// Choose remaining moves randomly from movepool and add them to moves list:
 		while (moves.size < this.maxMoveCount && movePool.length) {
@@ -1048,7 +1107,7 @@ export class RandomTeams {
 
 	shouldCullAbility(
 		ability: string,
-		types: Set<string>,
+		types: string[],
 		moves: Set<string>,
 		abilities: Set<string>,
 		counter: MoveCounter,
@@ -1061,7 +1120,7 @@ export class RandomTeams {
 
 	getHighPriorityItem(
 		ability: string,
-		types: Set<string>,
+		types: string[],
 		moves: Set<string>,
 		counter: MoveCounter,
 		teamDetails: RandomTeamsTypes.TeamDetails,
@@ -1075,7 +1134,7 @@ export class RandomTeams {
 	/** Item generation specific to Random Doubles */
 	getDoublesItem(
 		ability: string,
-		types: Set<string>,
+		types: string[],
 		moves: Set<string>,
 		abilities: Set<string>,
 		counter: MoveCounter,
@@ -1089,9 +1148,9 @@ export class RandomTeams {
 			counter.damagingMoves.size >= 4
 		) return 'Choice Scarf';
 		if (moves.has('blizzard') && ability !== 'Snow Warning' && !teamDetails.hail) return 'Blunder Policy';
-		if (this.dex.getEffectiveness('Rock', species) >= 2 && !types.has('Flying')) return 'Heavy-Duty Boots';
+		if (this.dex.getEffectiveness('Rock', species) >= 2 && !types.includes('Flying')) return 'Heavy-Duty Boots';
 		if (counter.get('Physical') >= 4 && ['fakeout', 'feint', 'rapidspin', 'suckerpunch'].every(m => !moves.has(m)) && (
-			types.has('Dragon') || types.has('Fighting') || types.has('Rock') ||
+			types.includes('Dragon') || types.includes('Fighting') || types.includes('Rock') ||
 			moves.has('flipturn') || moves.has('uturn')
 		)) {
 			return (
@@ -1103,7 +1162,7 @@ export class RandomTeams {
 		if (
 			(
 				counter.get('Special') >= 4 &&
-				(types.has('Dragon') || types.has('Fighting') || types.has('Rock') || moves.has('voltswitch'))
+				(types.includes('Dragon') || types.includes('Fighting') || types.includes('Rock') || moves.has('voltswitch'))
 			) || (
 				(counter.get('Special') >= 3 && (moves.has('flipturn') || moves.has('uturn'))) &&
 				!moves.has('acidspray') && !moves.has('electroweb')
@@ -1140,7 +1199,7 @@ export class RandomTeams {
 
 	getLowPriorityItem(
 		ability: string,
-		types: Set<string>,
+		types: string[],
 		moves: Set<string>,
 		abilities: Set<string>,
 		counter: MoveCounter,
@@ -1204,7 +1263,7 @@ export class RandomTeams {
 		const evs = {hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85};
 		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 
-		const types = new Set(species.types);
+		const types = species.types;
 		const abilities = new Set(Object.values(species.abilities));
 		if (species.unreleasedHidden) abilities.delete(species.abilities.H);
 
@@ -1303,7 +1362,7 @@ export class RandomTeams {
 		}
 
 		// For Trick / Switcheroo
-		if (item === 'Leftovers' && types.has('Poison')) {
+		if (item === 'Leftovers' && types.includes('Poison')) {
 			item = 'Black Sludge';
 		}
 		if (species.baseSpecies === 'Pikachu') {
