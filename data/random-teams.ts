@@ -1041,13 +1041,151 @@ export class RandomTeams {
 		return {cull: false};
 	}
 
+
+	// Generate random moveset for a given species, role, tera type.
+	randomMoveset(
+		types: Set<string>,
+		abilities: Set<string>,
+		teamDetails: RandomTeamsTypes.TeamDetails,
+		species: Species,
+		isLead: boolean,
+		isDoubles: boolean,
+		movePool: string[],
+		teraType: string,
+		role: string,
+	): Set<string> {
+		const moves = new Set<string>();
+		const rejectedPool = [];
+		if (role === "Tera Blast user") {
+			moves.add('terablast');
+			this.fastPop(movePool, movePool.indexOf('terablast'));
+		}
+		// Add required move (e.g. Relic Song for Meloetta-P)
+		if (species.requiredMove) {
+			const move = this.dex.moves.get(species.requiredMove).id;
+			moves.add(move);
+			this.fastPop(movePool, movePool.indexOf(move));
+		}
+
+		let counter = this.queryMoves(moves, species.types, abilities, movePool);
+
+		do {
+			// Choose next 4 moves from learnset/viable moves and add them to moves list:
+			const pool = (movePool.length ? movePool : rejectedPool);
+			while (moves.size < this.maxMoveCount && pool.length) {
+				const moveid = this.sampleNoReplace(pool);
+				moves.add(moveid);
+			}
+
+			counter = this.queryMoves(moves, species.types, abilities, movePool);
+			const runEnforcementChecker = (checkerName: string) => {
+				if (!this.moveEnforcementCheckers[checkerName]) return false;
+				return this.moveEnforcementCheckers[checkerName](
+					movePool, moves, abilities, types, counter, species as Species, teamDetails
+				);
+			};
+
+			// Iterate through the moves again, this time to cull them:
+			for (const moveid of moves) {
+				const move = this.dex.moves.get(moveid);
+				let {cull, isSetup} = this.shouldCullMove(
+					move, types, moves, abilities, counter,
+					movePool, teamDetails, species, isLead, isDoubles
+				);
+
+				if (move.id !== 'photongeyser' && (
+					(move.category === 'Physical' && counter.setupType === 'Special') ||
+					(move.category === 'Special' && counter.setupType === 'Physical')
+				)) {
+					// Reject STABs last in case the setup type changes later on
+					const stabs = counter.get(species.types[0]) + (species.types[1] ? counter.get(species.types[1]) : 0);
+					if (!types.has(move.type) || stabs > 1 || counter.get(move.category) < 2) cull = true;
+				}
+
+				// Pokemon should have moves that benefit their types, stats, or ability
+				const isLowBP = move.basePower && move.basePower < 50;
+
+				// Genesect-Douse should never reject Techno Blast
+				const moveIsRejectable = (
+					!(species.id === 'genesectdouse' && move.id === 'technoblast') &&
+					!(species.id === 'togekiss' && move.id === 'nastyplot') && (
+						move.category === 'Status' ||
+						(!types.has(move.type) && move.id !== 'judgment') ||
+						(isLowBP && !move.multihit && !abilities.has('Technician'))
+					)
+				);
+				// Setup-supported moves should only be rejected under specific circumstances
+				const notImportantSetup = (
+					!counter.setupType ||
+					counter.setupType === 'Mixed' ||
+					(counter.get(counter.setupType) + counter.get('Status') > 3 && !counter.get('hazards')) ||
+					(move.category !== counter.setupType && move.category !== 'Status')
+				);
+
+				if (moveIsRejectable && (
+					!cull && !isSetup && !move.weather && !move.stallingMove && notImportantSetup && !move.damage &&
+					(isDoubles ? this.unrejectableMovesInDoubles(move) : this.unrejectableMovesInSingles(move))
+				)) {
+					// There may be more important moves that this Pokemon needs
+					if (
+						// Pokemon should have at least one STAB move
+						(!counter.get('stab') && counter.get('physicalpool') + counter.get('specialpool') > 0 && move.id !== 'stickyweb') ||
+						// Swords Dance Mew should have Brave Bird
+						(moves.has('swordsdance') && species.id === 'mew' && runEnforcementChecker('Flying')) ||
+						// Dhelmise should have Anchor Shot
+						(abilities.has('Steelworker') && runEnforcementChecker('Steel')) ||
+						// Check for miscellaneous important moves
+						(!isDoubles && runEnforcementChecker('recovery') && move.id !== 'stickyweb') ||
+						runEnforcementChecker('screens') ||
+						runEnforcementChecker('misc') ||
+						(isLead && runEnforcementChecker('lead')) ||
+						(moves.has('leechseed') && runEnforcementChecker('leechseed'))
+					) {
+						cull = true;
+					// Pokemon should have moves that benefit their typing
+					// Don't cull Sticky Web in type-based enforcement, and make sure Azumarill always has Aqua Jet
+					} else if (move.id !== 'stickyweb' && !(species.id === 'azumarill' && move.id === 'aquajet')) {
+						for (const type of types) {
+							if (runEnforcementChecker(type)) {
+								cull = true;
+							}
+						}
+					}
+				}
+
+				// Sleep Talk shouldn't be selected without Rest
+				if (move.id === 'rest' && cull) {
+					const sleeptalk = movePool.indexOf('sleeptalk');
+					if (sleeptalk >= 0) {
+						if (movePool.length < 2) {
+							cull = false;
+						} else {
+							this.fastPop(movePool, sleeptalk);
+						}
+					}
+				}
+
+				// Remove rejected moves from the move list
+				if (cull && movePool.length) {
+					if (move.category !== 'Status' && !move.damage) rejectedPool.push(moveid);
+					moves.delete(moveid);
+					break;
+				}
+				if (cull && rejectedPool.length) {
+					moves.delete(moveid);
+					break;
+				}
+			}
+		} while (moves.size < this.maxMoveCount && (movePool.length || rejectedPool.length));
+		return moves;
+	}
+
 	shouldCullAbility(
 		ability: string,
 		types: Set<string>,
 		moves: Set<string>,
 		abilities: Set<string>,
 		counter: MoveCounter,
-		movePool: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
 		isDoubles: boolean,
@@ -1194,7 +1332,6 @@ export class RandomTeams {
 				}
 			}
 		}
-		const rejectedPool = [];
 		let ability = '';
 		let item = undefined;
 
@@ -1205,131 +1342,9 @@ export class RandomTeams {
 		const abilities = new Set(Object.values(species.abilities));
 		if (species.unreleasedHidden) abilities.delete(species.abilities.H);
 
-		const moves = new Set<string>();
-		let counter: MoveCounter;
-
-		if (set.role === "Tera Blast user") {
-			moves.add('terablast');
-			this.fastPop(movePool, movePool.indexOf('terablast'));
-		}
-		// Add required move (e.g. Relic Song for Meloetta-P)
-		if (species.requiredMove) {
-			const move = this.dex.moves.get(species.requiredMove).id;
-			moves.add(move);
-			this.fastPop(movePool, movePool.indexOf(move));
-		}
-
-		counter = this.queryMoves(moves, species.types, abilities, movePool);
-
-		do {
-			// Choose next 4 moves from learnset/viable moves and add them to moves list:
-			const pool = (movePool.length ? movePool : rejectedPool);
-			while (moves.size < this.maxMoveCount && pool.length) {
-				const moveid = this.sampleNoReplace(pool);
-				moves.add(moveid);
-			}
-
-			counter = this.queryMoves(moves, species.types, abilities, movePool);
-			const runEnforcementChecker = (checkerName: string) => {
-				if (!this.moveEnforcementCheckers[checkerName]) return false;
-				return this.moveEnforcementCheckers[checkerName](
-					movePool, moves, abilities, types, counter, species as Species, teamDetails
-				);
-			};
-
-			// Iterate through the moves again, this time to cull them:
-			for (const moveid of moves) {
-				const move = this.dex.moves.get(moveid);
-				let {cull, isSetup} = this.shouldCullMove(
-					move, types, moves, abilities, counter,
-					movePool, teamDetails, species, isLead, isDoubles
-				);
-
-				if (move.id !== 'photongeyser' && (
-					(move.category === 'Physical' && counter.setupType === 'Special') ||
-					(move.category === 'Special' && counter.setupType === 'Physical')
-				)) {
-					// Reject STABs last in case the setup type changes later on
-					const stabs = counter.get(species.types[0]) + (species.types[1] ? counter.get(species.types[1]) : 0);
-					if (!types.has(move.type) || stabs > 1 || counter.get(move.category) < 2) cull = true;
-				}
-
-				// Pokemon should have moves that benefit their types, stats, or ability
-				const isLowBP = move.basePower && move.basePower < 50;
-
-				// Genesect-Douse should never reject Techno Blast
-				const moveIsRejectable = (
-					!(species.id === 'genesectdouse' && move.id === 'technoblast') &&
-					!(species.id === 'togekiss' && move.id === 'nastyplot') && (
-						move.category === 'Status' ||
-						(!types.has(move.type) && move.id !== 'judgment') ||
-						(isLowBP && !move.multihit && !abilities.has('Technician'))
-					)
-				);
-				// Setup-supported moves should only be rejected under specific circumstances
-				const notImportantSetup = (
-					!counter.setupType ||
-					counter.setupType === 'Mixed' ||
-					(counter.get(counter.setupType) + counter.get('Status') > 3 && !counter.get('hazards')) ||
-					(move.category !== counter.setupType && move.category !== 'Status')
-				);
-
-				if (moveIsRejectable && (
-					!cull && !isSetup && !move.weather && !move.stallingMove && notImportantSetup && !move.damage &&
-					(isDoubles ? this.unrejectableMovesInDoubles(move) : this.unrejectableMovesInSingles(move))
-				)) {
-					// There may be more important moves that this Pokemon needs
-					if (
-						// Pokemon should have at least one STAB move
-						(!counter.get('stab') && counter.get('physicalpool') + counter.get('specialpool') > 0 && move.id !== 'stickyweb') ||
-						// Swords Dance Mew should have Brave Bird
-						(moves.has('swordsdance') && species.id === 'mew' && runEnforcementChecker('Flying')) ||
-						// Dhelmise should have Anchor Shot
-						(abilities.has('Steelworker') && runEnforcementChecker('Steel')) ||
-						// Check for miscellaneous important moves
-						(!isDoubles && runEnforcementChecker('recovery') && move.id !== 'stickyweb') ||
-						runEnforcementChecker('screens') ||
-						runEnforcementChecker('misc') ||
-						(isLead && runEnforcementChecker('lead')) ||
-						(moves.has('leechseed') && runEnforcementChecker('leechseed'))
-					) {
-						cull = true;
-					// Pokemon should have moves that benefit their typing
-					// Don't cull Sticky Web in type-based enforcement, and make sure Azumarill always has Aqua Jet
-					} else if (move.id !== 'stickyweb' && !(species.id === 'azumarill' && move.id === 'aquajet')) {
-						for (const type of types) {
-							if (runEnforcementChecker(type)) {
-								cull = true;
-							}
-						}
-					}
-				}
-
-				// Sleep Talk shouldn't be selected without Rest
-				if (move.id === 'rest' && cull) {
-					const sleeptalk = movePool.indexOf('sleeptalk');
-					if (sleeptalk >= 0) {
-						if (movePool.length < 2) {
-							cull = false;
-						} else {
-							this.fastPop(movePool, sleeptalk);
-						}
-					}
-				}
-
-				// Remove rejected moves from the move list
-				if (cull && movePool.length) {
-					if (move.category !== 'Status' && !move.damage) rejectedPool.push(moveid);
-					moves.delete(moveid);
-					break;
-				}
-				if (cull && rejectedPool.length) {
-					moves.delete(moveid);
-					break;
-				}
-			}
-		} while (moves.size < this.maxMoveCount && (movePool.length || rejectedPool.length));
-
+		const moves = this.randomMoveset(types, abilities, teamDetails, species, isLead, isDoubles, movePool, teraType, role);
+		const counter = this.queryMoves(moves, species.types, abilities)
+		
 		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
 		Utils.sortBy(abilityData, abil => -abil.rating);
 
@@ -1349,7 +1364,7 @@ export class RandomTeams {
 			let rejectAbility = false;
 			do {
 				rejectAbility = this.shouldCullAbility(
-					ability, types, moves, abilities, counter, movePool, teamDetails, species, isDoubles
+					ability, types, moves, abilities, counter, teamDetails, species, isDoubles
 				);
 
 				if (rejectAbility) {
