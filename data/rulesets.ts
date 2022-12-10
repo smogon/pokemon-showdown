@@ -1578,8 +1578,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		onTeamPreview() {
 			let buf = 'raw|';
 			for (const side of this.sides) {
-				const resultString = Utils.escapeHTML(Teams.export(side.team, {hideStats: true}));
-				buf += `<div class="infobox" style="margin-top:5px"><details><summary>Open Team Sheet for ${side.name}</summary>${resultString}</details></div>`;
+				buf += Utils.html`<div class="infobox" style="margin-top:5px"><details><summary>Open Team Sheet for ${side.name}</summary>${Teams.export(side.team, {hideStats: true})}</details></div>`;
 			}
 			this.add(buf);
 		},
