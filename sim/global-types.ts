@@ -484,6 +484,7 @@ namespace RandomTeamsTypes {
 	export interface TeamDetails {
 		megaStone?: number;
 		zMove?: number;
+		snow?: number;
 		hail?: number;
 		rain?: number;
 		sand?: number;

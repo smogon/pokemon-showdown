@@ -986,10 +986,8 @@ export class RandomTeams {
 		if (moves.has('psyshock') && movePool.includes('psychic')) this.fastPop(movePool, movePool.indexOf('psychic'));
 
 		// Add more here
-		if (moves.has('fireblast') && movePool.includes('flamethrower')) this.fastPop(movePool, movePool.indexOf('flamethrower'));
-		if (moves.has('flamethrower') && movePool.includes('fireblast')) this.fastPop(movePool, movePool.indexOf('fireblast'));
 		if (counter.get('priority')) {
-			for (let moveid of movePool) {
+			for (const moveid of movePool) {
 				if (SpeedSetup.includes(moveid)) this.fastPop(movePool, movePool.indexOf(moveid));
 			}
 		}
@@ -1078,7 +1076,7 @@ export class RandomTeams {
 			}
 		});
 
-		// Tera STAB: 
+		// Tera STAB:
 		// if (!counter.get('stabtera')) {
 		// 	const stabMoves = [];
 		// 	for (const moveid of movePool) {
@@ -1155,7 +1153,6 @@ export class RandomTeams {
 		teraType: string,
 		role: string,
 	): string {
-		let ability: string;
 		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
 		Utils.sortBy(abilityData, abil => -abil.rating);
 
@@ -1184,7 +1181,7 @@ export class RandomTeams {
 		}
 
 		// After sorting, choose the first ability
-		ability = abilityData[0].name;
+		const ability = abilityData[0].name;
 		// Force abilities here
 		if (species.id === 'arcaninehisui') return 'Rock Head';
 		return ability;
@@ -1269,7 +1266,7 @@ export class RandomTeams {
 			(['dragonenergy', 'eruption', 'waterspout'].some(m => moves.has(m))) &&
 			counter.damagingMoves.size >= 4
 		) return 'Choice Scarf';
-		if (moves.has('blizzard') && ability !== 'Snow Warning' && !teamDetails.hail) return 'Blunder Policy';
+		if (moves.has('blizzard') && ability !== 'Snow Warning' && !teamDetails.snow) return 'Blunder Policy';
 		if (this.dex.getEffectiveness('Rock', species) >= 2 && !types.includes('Flying')) return 'Heavy-Duty Boots';
 		if (counter.get('Physical') >= 4 && ['fakeout', 'feint', 'rapidspin', 'suckerpunch'].every(m => !moves.has(m)) && (
 			types.includes('Dragon') || types.includes('Fighting') || types.includes('Rock') ||
@@ -1433,7 +1430,7 @@ export class RandomTeams {
 			forme = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']);
 		}
 
-		let level = this.getLevel(species, isDoubles);
+		const level = this.getLevel(species, isDoubles);
 
 		// Prepare optimal HP
 		const srImmunity = ability === 'Magic Guard' || item === 'Heavy-Duty Boots';
@@ -1552,15 +1549,15 @@ export class RandomTeams {
 
 		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 		const baseSpeciesPool: string[] = [];
-		for (const pokemon of pokemonPool) {
-			let species = this.dex.species.get(pokemon);
+		for (const poke of pokemonPool) {
+			const species = this.dex.species.get(poke);
 			if (!baseSpeciesPool.includes(species.baseSpecies)) baseSpeciesPool.push(species.baseSpecies);
 		}
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
-			let baseSpecies = this.sampleNoReplace(baseSpeciesPool);
+			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
 			const currentSpeciesPool: Species[] = [];
-			for (const pokemon of pokemonPool) {
-				let species = this.dex.species.get(pokemon);
+			for (const poke of pokemonPool) {
+				const species = this.dex.species.get(poke);
 				if (species.baseSpecies === baseSpecies) currentSpeciesPool.push(species);
 			}
 			let species = this.sampleNoReplace(currentSpeciesPool);
@@ -1572,7 +1569,7 @@ export class RandomTeams {
 			// The sixth slot should not be Zacian/Zamazenta/Eternatus if a Zoroark is present
 			// if (
 			// 	pokemon.some(pkmn => pkmn.name === 'Zoroark') &&
-			// 	pokemon.length >= (this.maxTeamSize - 1) && 
+			// 	pokemon.length >= (this.maxTeamSize - 1) &&
 			// 	['Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Eternatus'].includes(species.name)
 			// ) {
 			// 	continue;
@@ -1676,7 +1673,9 @@ export class RandomTeams {
 			if (set.ability === 'Drizzle' || set.moves.includes('raindance')) teamDetails.rain = 1;
 			if (set.ability === 'Drought' || set.moves.includes('sunnyday')) teamDetails.sun = 1;
 			if (set.ability === 'Sand Stream') teamDetails.sand = 1;
-			if (set.ability === 'Snow Warning') teamDetails.hail = 1;
+			if (set.ability === 'Snow Warning' || set.moves.includes('snowscape') || set.moves.includes('chillyreception')) {
+				teamDetails.snow = 1;
+			}
 			if (set.moves.includes('spikes')) teamDetails.spikes = (teamDetails.spikes || 0) + 1;
 			if (set.moves.includes('stealthrock')) teamDetails.stealthRock = 1;
 			if (set.moves.includes('stickyweb')) teamDetails.stickyWeb = 1;
