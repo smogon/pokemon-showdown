@@ -679,6 +679,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const abilityTable = new Map<string, number>();
 			const base: {[k: string]: string} = {
 				airlock: 'cloudnine',
+				armortail: 'queenlymajesty',
 				battlearmor: 'shellarmor',
 				clearbody: 'whitesmoke',
 				dazzling: 'queenlymajesty',
