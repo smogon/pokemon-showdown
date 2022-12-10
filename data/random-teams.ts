@@ -951,24 +951,6 @@ export class RandomTeams {
 						stabtera = true;
 						break;
 					}
-					if (moveType === 'Normal') {
-						if (abilities.has('Aerilate') && teraType === 'Flying') {
-							stabtera = true;
-							break;
-						}
-						if (abilities.has('Galvanize') && teraType === 'Electric') {
-							stabtera = true;
-							break;
-						}
-						if (abilities.has('Pixilate') && teraType === 'Fairy') {
-							stabtera = true;
-							break;
-						}
-						if (abilities.has('Refrigerate') && teraType === 'Ice') {
-							stabtera = true;
-							break;
-						}
-					}
 				}
 			}
 			if (stabtera) {
@@ -1088,6 +1070,31 @@ export class RandomTeams {
 		});
 		counter = this.queryMoves(moves, species.types, teraType, abilities);
 
+		// Tera STAB: 
+
+		// if (!counter.get('stabtera')) {
+		// 	const stabMoves = [];
+		// 	for (const moveid of movePool) {
+		// 		const move = this.dex.moves.get(moveid);
+		// 		let moveType = move.type;
+		// 		if (['judgment', 'multiattack', 'revelationdance'].includes(moveid)) moveType = types[0];
+		// 		if (!this.noStab.includes(moveid)) {
+		// 			if (teraType === moveType) {
+		// 				stabMoves.push(moveid);
+		// 				break;
+		// 			}
+		// 		}
+		// 	}
+		// 	if (stabMoves.length) {
+		// 		const moveid = this.sample(stabMoves);
+		// 		moves.add(moveid);
+		// 		this.fastPop(movePool, movePool.indexOf(moveid));
+		// 		counter = this.queryMoves(moves, species.types, teraType, abilities);
+		// 		this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+		// 	}
+		// }
+		// counter = this.queryMoves(moves, species.types, teraType, abilities);
+
 		// For example, recovery:
 		if (role === "Bulky Support" || role === "Bulky Attacker") {
 			const recoveryMoves = movePool.filter(moveid => RecoveryMove.includes(moveid));
@@ -1103,6 +1110,8 @@ export class RandomTeams {
 				this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 			}
 		}
+
+		// Add (moves.size < this.maxMoveCount) as a condition if moves is getting larger than 4 moves
 
 		// Choose remaining moves randomly from movepool and add them to moves list:
 		while (moves.size < this.maxMoveCount && movePool.length) {
