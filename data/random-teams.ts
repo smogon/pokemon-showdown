@@ -68,7 +68,7 @@ const MixedSetup = [
 ];
 // Some moves that only boost Speed:
 const SpeedSetup = [
-	'agility', 'aquastep', 'autotomize', 'flamecharge', 'rapidspin', 'rockpolish', 'trailblaze',
+	'agility', 'aquastep', 'autotomize', 'flamecharge', 'rockpolish', 'trailblaze',
 ];
 // Moves that shouldn't be the only STAB moves:
 const NoStab = [
@@ -988,6 +988,11 @@ export class RandomTeams {
 		// Add more here
 		if (moves.has('fireblast') && movePool.includes('flamethrower')) this.fastPop(movePool, movePool.indexOf('flamethrower'));
 		if (moves.has('flamethrower') && movePool.includes('fireblast')) this.fastPop(movePool, movePool.indexOf('fireblast'));
+		if (counter.get('priority')) {
+			for (let moveid of movePool) {
+				if (SpeedSetup.includes(moveid)) this.fastPop(movePool, movePool.indexOf(moveid));
+			}
+		}
 	}
 
 	// Generate random moveset for a given species, role, tera type.
@@ -1322,10 +1327,23 @@ export class RandomTeams {
 	): number {
 		if (this.adjustLevel) return this.adjustLevel;
 		// doubles levelling
-		if (isDoubles && this.randomSets[species.id]["level"]) return this.randomSets[species.id]["level"];
+		if (isDoubles && this.randomDoublesSets[species.id]["level"]) return this.randomDoublesSets[species.id]["level"];
 		if (!isDoubles && this.randomSets[species.id]["level"]) return this.randomSets[species.id]["level"];
-		// Default to level 80
-		return 80;
+		// Default to tier-based levelling
+		const tier = species.tier;
+		const tierScale: Partial<Record<Species['tier'], number>> = {
+			Uber: 76,
+			OU: 80,
+			UUBL: 81,
+			UU: 82,
+			RUBL: 83,
+			RU: 84,
+			NUBL: 85,
+			NU: 86,
+			PUBL: 87,
+			PU: 88, "(PU)": 88, NFE: 88,
+		};
+		return tierScale[tier] || 80;
 	}
 
 	randomSet(
@@ -1344,7 +1362,12 @@ export class RandomTeams {
 		if (species.cosmeticFormes) {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
-		const sets = this.randomSets[species.id]["sets"];
+		let sets;
+		if (isDoubles) {
+			sets = this.randomDoublesSets[species.id]["sets"];
+		} else {
+			sets = this.randomSets[species.id]["sets"];
+		}
 		const possible_sets = [];
 		for (const set of sets) {
 			if (teamDetails.teraBlast && set.role === "Tera Blast user") {
@@ -1409,7 +1432,7 @@ export class RandomTeams {
 			forme = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']);
 		}
 
-		let level = this.getLevel(species);
+		let level = this.getLevel(species, isDoubles);
 
 		// Prepare optimal HP
 		const srImmunity = ability === 'Magic Guard' || item === 'Heavy-Duty Boots';
@@ -1477,18 +1500,30 @@ export class RandomTeams {
 	) {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
 		const pokemonPool = [];
-		for (const pokemon of Object.keys(this.randomSets)) {
-			const species = this.dex.species.get(pokemon);
-			if (species.gen > this.gen || exclude.includes(species.id)) continue;
-			if (isMonotype) {
-				if (!species.types.includes(type)) continue;
+		if (this.format.gameType !== 'singles') {
+			for (const pokemon of Object.keys(this.randomDoublesSets)) {
+				const species = this.dex.species.get(pokemon);
+				if (species.gen > this.gen || exclude.includes(species.id)) continue;
+				if (isMonotype) {
+					if (!species.types.includes(type)) continue;
+				}
+				pokemonPool.push(pokemon);
 			}
-			pokemonPool.push(pokemon);
+		} else {
+			for (const pokemon of Object.keys(this.randomSets)) {
+				const species = this.dex.species.get(pokemon);
+				if (species.gen > this.gen || exclude.includes(species.id)) continue;
+				if (isMonotype) {
+					if (!species.types.includes(type)) continue;
+				}
+				pokemonPool.push(pokemon);
+			}
 		}
 		return pokemonPool;
 	}
 
 	randomSets: AnyObject = require('./random-sets.json');
+	randomDoublesSets: AnyObject = require('./random-sets.json'); // Doubles sets are the same as singles for now
 
 	randomTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
