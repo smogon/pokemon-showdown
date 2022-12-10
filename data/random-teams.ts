@@ -1056,6 +1056,15 @@ export class RandomTeams {
 	): Set<string> {
 		const moves = new Set<string>();
 		const rejectedPool = [];
+
+		if (movePool.length <= 4) {
+			// Add all moves and return early
+			for (const move in movePool) {
+				moves.add(move);
+			}
+			return moves;
+		}
+
 		if (role === "Tera Blast user") {
 			moves.add('terablast');
 			this.fastPop(movePool, movePool.indexOf('terablast'));
@@ -1344,7 +1353,7 @@ export class RandomTeams {
 
 		const moves = this.randomMoveset(types, abilities, teamDetails, species, isLead, isDoubles, movePool, teraType, role);
 		const counter = this.queryMoves(moves, species.types, abilities)
-		
+
 		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
 		Utils.sortBy(abilityData, abil => -abil.rating);
 
