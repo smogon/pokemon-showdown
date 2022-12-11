@@ -205,17 +205,12 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.add('-notarget');
 				return true;
 			}
-			// Store 0 damage for last damage.
-			const neverDamageMoves = [
-				'conversion', 'haze', 'mist', 'focusenergy', 'confuseray', 'supersonic', 'transform', 'lightscreen', 'reflect', 'substitute', 'mimic', 'leechseed', 'splash', 'softboiled', 'recover', 'rest', 'teleport',
-			];
-			if (
-				move.id !== 'counter' &&
-				(move.category !== 'Status' || (move.status && !['psn', 'tox', 'par'].includes(move.status))) &&
-				!neverDamageMoves.includes(move.id)
-			) {
-				this.battle.lastDamage = 0;
-			}
+			// Store 0 damage for last damage if the move is not in the array.
+			if (![
+				'confuseray', 'conversion', 'counter', 'focusenergy', 'glare', 'haze', 'leechseed', 'lightscreen',
+				'mimic', 'mist', 'poisongas', 'poisonpowder', 'recover', 'reflect', 'rest', 'softboiled',
+				'splash', 'stunspore', 'substitute', 'supersonic', 'teleport', 'thunderwave', 'toxic', 'transform',
+			].includes(move.id)) this.battle.lastDamage = 0;
 
 			damage = this.tryMoveHit(target, pokemon, move);
 
