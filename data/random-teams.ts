@@ -690,11 +690,13 @@ export class RandomTeams {
 			} else {
 				// No non-Speed setup moves, so add any (Speed) setup move
 				const setupMoves = movePool.filter(moveid => Setup.includes(moveid));
-				const moveid = this.sample(setupMoves);
-				moves.add(moveid);
-				this.fastPop(movePool, movePool.indexOf(moveid));
-				counter = this.queryMoves(moves, species.types, teraType, abilities);
-				this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+				if (setupMoves.length) {
+					const moveid = this.sample(setupMoves);
+					moves.add(moveid);
+					this.fastPop(movePool, movePool.indexOf(moveid));
+					counter = this.queryMoves(moves, species.types, teraType, abilities);
+					this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+				}
 			}
 		}
 
