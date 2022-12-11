@@ -86,8 +86,8 @@ const Setup = [
 const NoStab = [
 	'accelerock', 'aquajet', 'beakblast', 'bounce', 'breakingswipe', 'chatter', 'chloroblast', 'clearsmog', 'dragontail', 'eruption',
 	'explosion', 'fakeout', 'firstimpression', 'flamecharge', 'flipturn', 'iceshard', 'icywind', 'incinerate', 'machpunch',
-	'meteorbeam', 'pluck', 'pursuit', 'quickattack', 'reversal', 'saltcure', 'selfdestruct', 'skydrop', 'snarl', 'steelbeam',
-	'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
+	'meteorbeam', 'mortalspin', 'pluck', 'pursuit', 'quickattack', 'reversal', 'saltcure', 'selfdestruct', 'shadowsneak', 'skydrop',
+	'snarl', 'steelbeam', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
 ];
 // Hazard-setting moves
 const Hazards = [
@@ -140,55 +140,42 @@ export class RandomTeams {
 
 		this.moveEnforcementCheckers = {
 			Bug: (movePool) => movePool.includes('megahorn'),
-			Dark: (movePool, moves, abilities, types, counter) => {
-				if (!counter.get('Dark')) return true;
-				return moves.has('suckerpunch') && (movePool.includes('knockoff') || movePool.includes('wickedblow'));
-			},
+			Dark: (movePool, moves, abilities, types, counter) => !counter.get('Dark'),
 			Dragon: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Dragon') &&
-				!moves.has('dragonascent') &&
-				!moves.has('substitute') &&
-				!(moves.has('rest') && moves.has('sleeptalk'))
+				!movePool.includes('dualwingbeat')
 			),
 			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
-			Fairy: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Fairy') &&
-				['dazzlinggleam', 'moonblast', 'fleurcannon', 'playrough', 'strangesteam'].some(moveid => movePool.includes(moveid))
-			),
+			Fairy: (movePool, moves, abilities, types, counter) => !counter.get('Fairy'),
 			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting'),
 			Fire: (movePool, moves, abilities, types, counter, species) => !counter.get('Fire'),
-			Flying: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Flying') && !types.includes('Dragon') && [
-					'airslash', 'bravebird', 'dualwingbeat', 'oblivionwing',
-				].some(moveid => movePool.includes(moveid))
-			),
-			Ghost: (movePool, moves, abilities, types, counter) => {
-				if (!counter.get('Ghost') && !types.includes('Dark')) return true;
-				return !counter.get('Dark');
-			},
+			Flying: (movePool, moves, abilities, types, counter) => !counter.get('Flying'),
+			Ghost: (movePool, moves, abilities, types, counter) => !counter.get('Ghost'),
 			Grass: (movePool, moves, abilities, types, counter, species) => {
 				if (movePool.includes('leafstorm')) return true;
-				return !counter.get('Grass') && species.baseStats.atk >= 100;
+				return !counter.get('Grass') && (species.baseStats.atk >= 100 || types.includes('Electric') || abilities.has('Seed Sower'));
 			},
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
-			Normal: (movePool, moves, abilities, types, counter) => (abilities.has('Guts') && movePool.includes('facade')),
+			Normal: (movePool, moves, abilities, types, counter) => (movePool.includes('boomburst')),
 			Poison: (movePool, moves, abilities, types, counter) => {
-				if (counter.get('Poison')) return false;
-				return types.includes('Ground') || types.includes('Psychic') || types.includes('Grass') || !!counter.get('setup') || movePool.includes('gunkshot');
+				if (types.includes('Ground')) return false;
+				return !counter.get('Poison');
 			},
 			Psychic: (movePool, moves, abilities, types, counter) => {
 				if (counter.get('Psychic')) return false;
-				if (types.includes('Ghost') || types.includes('Steel')) return false;
-				return abilities.has('Psychic Surge') || !!counter.get('setup') || movePool.includes('psychicfangs');
+				if (movePool.includes('calmmind') || movePool.includes('psychicfangs') || movePool.includes('psychocut')) return true;
+				return abilities.has('Psychic Surge') || types.includes('Fire');
 			},
 			Rock: (movePool, moves, abilities, types, counter, species) => !counter.get('Rock') && species.baseStats.atk >= 80,
 			Steel: (movePool, moves, abilities, types, counter, species) => {
 				if (species.baseStats.atk < 95) return false;
-				if (movePool.includes('meteormash')) return true;
 				return !counter.get('Steel');
 			},
-			Water: (movePool, moves, abilities, types, counter, species) => !counter.get('Water'),
+			Water: (movePool, moves, abilities, types, counter, species) => {
+				if (species.id === 'quagsire') return false;
+				return !counter.get('Water');
+			}
 		};
 	}
 
@@ -360,7 +347,7 @@ export class RandomTeams {
 			if (move.drain) counter.add('drain');
 			// Moves which have a base power, but aren't super-weak:
 			if (move.basePower > 30 || move.multihit || move.basePowerCallback) {
-				if (!this.noStab.includes(moveid) || abilities.has('Technician') && moveid === 'machpunch') {
+				if (!this.noStab.includes(moveid)) {
 					counter.add(moveType);
 					if (types.includes(moveType)) counter.stabCounter++;
 					if (teraType === moveType) counter.add('stabtera');
@@ -486,7 +473,7 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'aurasphere', 'focusblast');
 		this.incompatibleMoves(moves, movePool, 'bugbite', 'pounce');
 		this.incompatibleMoves(moves, movePool, 'bittermalice', 'shadowball');
-		this.incompatibleMoves(moves, movePool, 'dragonpulse', 'dracometeor');
+		this.incompatibleMoves(moves, movePool, ['dragonpulse', 'spacialrend'], 'dracometeor');
 
 
 		// These status moves are redundant with each other
@@ -520,7 +507,7 @@ export class RandomTeams {
 		for (const moveid1 of moves) {
 			if (moveArrayB.includes(moveid1)) {
 				for (const moveid2 of moveArrayA) {
-					if (movePool.includes(moveid2)) {
+					if (moveid1 !== moveid2 && movePool.includes(moveid2)) {
 						this.fastPop(movePool, movePool.indexOf(moveid2));
 						if (moves.size + movePool.length <= this.maxMoveCount) return;
 					}
@@ -528,7 +515,7 @@ export class RandomTeams {
 			}
 			if (moveArrayA.includes(moveid1)) {
 				for (const moveid2 of moveArrayB) {
-					if (movePool.includes(moveid2)) {
+					if (moveid1 !== moveid2 && movePool.includes(moveid2)) {
 						this.fastPop(movePool, movePool.indexOf(moveid2));
 						if (moves.size + movePool.length <= this.maxMoveCount) return;
 					}
@@ -618,9 +605,9 @@ export class RandomTeams {
 						if (abilities.has('Refrigerate')) moveType = 'Ice';
 					}
 					if (moveid === 'terablast') moveType = teraType;
-					if (move.basePower > 30 || move.multihit || move.basePowerCallback) {
-						if (!this.noStab.includes(moveid) || abilities.has('Technician') && moveid === 'machpunch') {
-							if (type === moveType) stabMoves.push(moveid);
+					if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
+						if (type === moveType) {
+							stabMoves.push(moveid);
 						}
 					}
 				}
@@ -777,7 +764,7 @@ export class RandomTeams {
 		}
 
 		// Enforce STAB priority
-		if (role === 'Bulky Attacker' || role === 'Bulky Setup' || species.id === 'breloom') {
+		if (role === 'Bulky Attacker' || role === 'Bulky Setup') {
 			const priorityMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
