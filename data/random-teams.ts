@@ -70,12 +70,18 @@ const MixedSetup = [
 const SpeedSetup = [
 	'agility', 'aquastep', 'autotomize', 'flamecharge', 'rockpolish', 'trailblaze',
 ];
+// Conglomerate for ease of access
+const Setup = [
+	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'coil', 'curse', 'dragondance', 'flamecharge',
+	'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'noretreat', 'poweruppunch', 'quiverdance', 'rockpolish',
+	'shellsmash', 'swordsdance', 'tailglow', 'tidyup', 'trailblaze', 'workup'
+];
 // Moves that shouldn't be the only STAB moves:
 const NoStab = [
-	'accelerock', 'aquajet', 'beakblast', 'bounce', 'breakingswipe', 'chatter', 'clearsmog', 'dragontail', 'eruption', 'explosion',
-	'fakeout', 'firstimpression', 'flamecharge', 'flipturn', 'iceshard', 'icywind', 'incinerate', 'machpunch',
-	'meteorbeam', 'pluck', 'pursuit', 'quickattack', 'reversal', 'selfdestruct', 'skydrop', 'snarl', 'suckerpunch', 'uturn', 'watershuriken',
-	'vacuumwave', 'voltswitch', 'waterspout',
+	'accelerock', 'aquajet', 'beakblast', 'bounce', 'breakingswipe', 'chatter', 'chloroblast', 'clearsmog', 'dragontail', 'eruption',
+	'explosion', 'fakeout', 'firstimpression', 'flamecharge', 'flipturn', 'iceshard', 'icywind', 'incinerate', 'machpunch',
+	'meteorbeam', 'pluck', 'pursuit', 'quickattack', 'reversal', 'selfdestruct', 'skydrop', 'snarl', 'steelbeam', 'suckerpunch',
+	'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
 ];
 // Hazard-setting moves
 const Hazards = [
@@ -341,16 +347,42 @@ export class RandomTeams {
 		if (moves.size + movePool.length <= this.maxMoveCount) {
 			return;
 		}
-		// Remove RestTalk if it can't fit into the moveset
+		// These moves are paired, and shouldn't appear if there is not room for them both.
 		if (moves.size === this.maxMoveCount - 1 && movePool.includes('rest') && movePool.includes('sleeptalk')) {
 			this.fastPop(movePool, movePool.indexOf('rest'));
 			this.fastPop(movePool, movePool.indexOf('sleeptalk'));
 		}
-		// Psychic and Psyshock shouldn't appear in the same moveset
-		this.cullMutualExclusive(moves, movePool, 'psychic', 'psyshock');
+		if (moves.size === this.maxMoveCount - 1 && movePool.includes('lightscreen') && movePool.includes('reflect')) {
+			this.fastPop(movePool, movePool.indexOf('lightscreen'));
+			this.fastPop(movePool, movePool.indexOf('reflect'));
+		}
+		if (moves.size === this.maxMoveCount - 1 && movePool.includes('wish') && movePool.includes('protect')) {
+			this.fastPop(movePool, movePool.indexOf('wish'));
+			this.fastPop(movePool, movePool.indexOf('protect'));
+		}
+
+		// Develop additional move lists
+		const pivotingMoves=['chillyreception', 'flipturn', 'partingshot', 'teleport', 'uturn', 'voltswitch']
+		const statusMoves = [];
+		for (const move of this.dex.moves.all()) {
+    		if (move.category === 'Status') statusMoves.push(move.id);
+		}
+
+		// These moves don't mesh well with other aspects of the set
+		if (species.id !== "scyther" && species.id !== "scizor") {
+			this.incompatibleMoves(moves, movePool, Setup, pivotingMoves);
+		}
+		this.incompatibleMoves(moves, movePool, Setup, Hazards);
+		this.incompatibleMoves(moves, movePool, statusMoves, ['healingwish', 'memento', 'switcheroo', 'trick']);
+
+		// These attacks are redundant with each other
+		this.incompatibleMoves(moves, movePool, 'psychic', 'psyshock');
+		this.incompatibleMoves(moves, movePool, ['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']);
+
+		// These status moves are redundant with each other
 	}
 
-	cullMutualExclusive(
+	incompatibleMoves(
 		moves: Set<string>,
 		movePool: string[],
 		movesA: string | string[],
@@ -413,6 +445,7 @@ export class RandomTeams {
 		// Add other moves you really want to have, e.g. STAB, recovery, setup, depending on role.
 
 		// For example, STAB:
+		
 		types.forEach((type, index) => {
 			const stabMoves = [];
 			for (const moveid of movePool) {
