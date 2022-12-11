@@ -550,7 +550,7 @@ export class RandomTeams {
 
 		// Add other moves you really want to have, e.g. STAB, recovery, setup, depending on role.
 
-		// Enforce STAB:
+		// Enforce STAB
 		types.forEach((type, index) => {
 			// Check if a STAB move of that type should be required
 			if (runEnforcementChecker(type)) {
@@ -613,7 +613,7 @@ export class RandomTeams {
 			}
 		}
 
-		// Tera STAB:
+		// Enforce Tera STAB
 		if (!counter.get('stabtera') && role !== "Bulky Support") {
 			const stabMoves = [];
 			for (const moveid of movePool) {
@@ -636,10 +636,34 @@ export class RandomTeams {
 			}
 		}
 
-		// Add Facade if Guts is a possible ability:
+		// Enforce Facade if Guts is a possible ability
 		if (movePool.includes('facade') && abilities.has('Guts')) {
 			moves.add('facade');
 			this.fastPop(movePool, movePool.indexOf('facade'));
+			counter = this.queryMoves(moves, species.types, teraType, abilities);
+			this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+		}
+
+		// Enforce Sticky Web
+		if (movePool.includes('stickyweb')) {
+			moves.add('stickyweb');
+			this.fastPop(movePool, movePool.indexOf('stickyweb'));
+			counter = this.queryMoves(moves, species.types, teraType, abilities);
+			this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+		}
+
+		// Enforce Revival Blessing
+		if (movePool.includes('revivalblessing')) {
+			moves.add('revivalblessing');
+			this.fastPop(movePool, movePool.indexOf('revivalblessing'));
+			counter = this.queryMoves(moves, species.types, teraType, abilities);
+			this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+		}
+
+		// Enforce Toxic on Grafaiai
+		if (movePool.includes('toxic') && species.id === 'grafaiai') {
+			moves.add('toxic');
+			this.fastPop(movePool, movePool.indexOf('toxic'));
 			counter = this.queryMoves(moves, species.types, teraType, abilities);
 			this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 		}
