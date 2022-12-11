@@ -2851,7 +2851,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {},
 		onHit(pokemon) {
 			const noCopycat = [
-				'assist', 'banefulbunker', 'beakblast', 'behemothbash', 'behemothblade', 'belch', 'bestow', 'celebrate', 'chatter', 'circlethrow', 'copycat', 'counter', 'covet', 'craftyshield', 'destinybond', 'detect', 'dragontail', 'dynamaxcannon', 'endure', 'feint', 'focuspunch', 'followme', 'helpinghand', 'holdhands', 'kingsshield', 'matblock', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'naturepower', 'obstruct', 'protect', 'ragepowder', 'roar', 'shelltrap', 'sketch', 'sleeptalk', 'snatch', 'spikyshield', 'spotlight', 'struggle', 'switcheroo', 'thief', 'transform', 'trick', 'whirlwind',
+				'assist', 'banefulbunker', 'beakblast', 'behemothbash', 'behemothblade', 'belch', 'bestow', 'blazingtorque', 'celebrate', 'chatter', 'circlethrow', 'copycat', 'counter', 'covet', 'destinybond', 'detect', 'dragontail', 'dynamaxcannon', 'endure', 'feint', 'focuspunch', 'followme', 'helpinghand', 'holdhands', 'kingsshield', 'magicaltorque', 'matblock', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'noxioustorque', 'protect', 'ragepowder', 'roar', 'shelltrap', 'sketch', 'sleeptalk', 'snatch', 'spikyshield', 'spotlight', 'struggle', 'switcheroo', 'thief', 'transform', 'trick', 'whirlwind', 'wickedtorque',
 			];
 			let move: Move | ActiveMove | null = this.lastMove;
 			if (!move) return;
@@ -4736,7 +4736,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			noCopy: true, // doesn't get copied by Z-Baton Pass
 			onStart(target) {
 				const noEncore = [
-					'assist', 'copycat', 'dynamaxcannon', 'encore', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'sketch', 'sleeptalk', 'struggle', 'transform',
+					'assist', 'blazingtorque', 'combattorque', 'copycat', 'dynamaxcannon', 'encore', 'magicaltorque', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'sketch', 'sleeptalk', 'struggle', 'transform', 'wickedtorque',
 				];
 				let move: Move | ActiveMove | null = target.lastMove;
 				if (!move || target.volatiles['dynamax']) return false;
@@ -6449,7 +6449,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Future Sight",
 		pp: 10,
 		priority: 0,
-		flags: {},
+		flags: {allyanim: 1},
 		ignoreImmunity: true,
 		isFutureMove: true,
 		onTry(source, target) {
@@ -9782,12 +9782,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 			const lastMove = target.lastMove;
 			const moveIndex = target.moves.indexOf(lastMove.id);
 			const noInstruct = [
-				'assist', 'beakblast', 'belch', 'bide', 'celebrate', 'copycat', 'dynamaxcannon', 'focuspunch', 'iceball', 'instruct', 'kingsshield', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'obstruct', 'outrage', 'petaldance', 'rollout', 'shelltrap', 'sketch', 'sleeptalk', 'struggle', 'thrash', 'transform', 'uproar',
+				'assist', 'beakblast', 'belch', 'bide', 'blazingtorque', 'bounce', 'celebrate', 'chatter', 'combattorque', 'copycat', 'dig', 'dive', 'dynamaxcannon', 'fly', 'focuspunch', 'freezeshock', 'geomancy', 'holdhands', 'iceball', 'iceburn', 'instruct', 'kingsshield', 'magicaltorque', 'mefirst', 'meteorassault', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'noxioustorque', 'obstruct', 'outrage', 'petaldance', 'phantomforce', 'razorwind', 'rollout', 'shadowforce', 'shelltrap', 'sketch', 'skullbash', 'skyattack', 'skydrop', 'sleeptalk', 'solarbeam', 'solarblade', 'struggle', 'thrash', 'transform', 'uproar', 'wickedtorque',
 			];
 			if (
 				noInstruct.includes(lastMove.id) || lastMove.isZ || lastMove.isMax ||
 				lastMove.flags['charge'] || lastMove.flags['recharge'] ||
-				target.volatiles['beakblast'] || target.volatiles['focuspunch'] || target.volatiles['shelltrap'] ||
+				target.volatiles['beakblast'] || target.volatiles['bide'] || target.volatiles['focuspunch'] || target.volatiles['shelltrap'] ||
 				(target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)
 			) {
 				return false;
@@ -11662,7 +11662,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (!action) return false;
 
 			const noMeFirst = [
-				'beakblast', 'chatter', 'counter', 'covet', 'focuspunch', 'mefirst', 'metalburst', 'mirrorcoat', 'shelltrap', 'struggle', 'thief',
+				'beakblast', 'belch', 'blazingtorque', 'combattorque', 'comeuppance', 'counter', 'covet', 'focuspunch', 'magicaltorque', 'mefirst', 'metalburst', 'mirrorcoat', 'noxioustorque', 'shelltrap', 'struggle', 'thief', 'wickedtorque',
 			];
 			const move = this.dex.getActiveMove(action.move.id);
 			if (action.zmove || move.isZ || move.isMax) return false;
@@ -11974,7 +11974,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, bypasssub: 1, allyanim: 1},
 		onHit(target, source) {
 			const disallowedMoves = [
-				'behemothbash', 'behemothblade', 'chatter', 'dynamaxcannon', 'mimic', 'sketch', 'struggle', 'transform',
+				'assist', 'behemothbash', 'behemothblade', 'belch', 'blazingtorque', 'celebrate', 'chatter', 'combattorque', 'copycat', 'dynamaxcannon', 'holdhands', 'magicaltorque', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'noxioustorque', 'sketch', 'sleeptalk', 'struggle', 'transform', 'wickedtorque',
 			];
 			const move = target.lastMove;
 			if (source.transformed || !move || disallowedMoves.includes(move.id) || source.moves.includes(move.id)) {
@@ -14808,7 +14808,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Rage Powder",
 		pp: 20,
 		priority: 2,
-		flags: {powder: 1},
+		flags: {},
 		volatileStatus: 'ragepowder',
 		onTry(source) {
 			return this.activePerHalf > 1;
@@ -16207,7 +16207,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Secret Sword",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, slicing: 1},
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
@@ -17222,14 +17222,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		onHit(pokemon) {
 			const noSleepTalk = [
-				'assist', 'beakblast', 'belch', 'bide', 'celebrate', 'chatter', 'copycat', 'dynamaxcannon', 'focuspunch', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'shelltrap', 'sketch', 'sleeptalk', 'uproar',
+				'assist', 'beakblast', 'belch', 'bide', 'blazingtorque', 'bounce', 'celebrate', 'chatter', 'combattorque', 'copycat', 'dig', 'dive', 'dynamaxcannon', 'fly', 'focuspunch', 'freezeshock', 'geomancy', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'noxioustorque', 'phantomforce', 'razorwind', 'shadowforce', 'shelltrap', 'sketch', 'skullbash', 'skyattack', 'skydrop', 'sleeptalk', 'solarbeam', 'solarblade', 'struggle', 'uproar', 'wickedtorque'
 			];
 			const moves = [];
 			for (const moveSlot of pokemon.moveSlots) {
 				const moveid = moveSlot.id;
 				if (!moveid) continue;
 				const move = this.dex.moves.get(moveid);
-				if (noSleepTalk.includes(moveid) || move.flags['charge'] || (move.isZ && move.basePower !== 1) || move.isMax) {
+				if (noSleepTalk.includes(moveid) || (move.isZ && move.basePower !== 1) || move.isMax) {
 					continue;
 				}
 				moves.push(moveid);
