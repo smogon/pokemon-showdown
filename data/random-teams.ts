@@ -815,6 +815,190 @@ export class RandomTeams {
 		return moves;
 	}
 
+	shouldCullAbility(
+		ability: string,
+		types: string[],
+		moves: Set<string>,
+		abilities: Set<string>,
+		counter: MoveCounter,
+		teamDetails: RandomTeamsTypes.TeamDetails,
+		species: Species,
+		isDoubles: boolean,
+		teraType: string,
+		role: string,
+	): boolean {
+		if ([
+			'Flare Boost', 'Hydration', 'Ice Body', 'Immunity', 'Innards Out', 'Insomnia', 'Misty Surge',
+			'Perish Body', 'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
+		].includes(ability)) return true;
+
+		switch (ability) {
+		// Abilities which are primarily useful for certain moves
+		case 'Contrary': case 'Serene Grace': case 'Skill Link': case 'Strong Jaw':
+			return !counter.get(toID(ability));
+		case 'Analytic':
+			return (moves.has('rapidspin') || species.nfe || isDoubles);
+		case 'Blaze':
+			return (isDoubles && abilities.has('Solar Power')) || (!isDoubles && species.id === 'charizard');
+		// case 'Bulletproof': case 'Overcoat':
+		// 	return !!counter.setupType;
+		case 'Chlorophyll':
+			return (species.baseStats.spe > 100 || !counter.get('Fire') && !moves.has('sunnyday') && !teamDetails.sun);
+		case 'Cloud Nine':
+			return (species.id !== 'golduck');
+		case 'Competitive':
+			return (counter.get('Special') < 2 || (moves.has('rest') && moves.has('sleeptalk')));
+		case 'Compound Eyes': case 'No Guard':
+			return !counter.get('inaccurate');
+		case 'Cursed Body':
+			return abilities.has('Infiltrator');
+		case 'Defiant':
+			return !counter.get('Physical');
+		case 'Download':
+			return (counter.damagingMoves.size < 3 || moves.has('trick'));
+		case 'Early Bird':
+			return (types.includes('Grass') && isDoubles);
+		case 'Flash Fire':
+			return (this.dex.getEffectiveness('Fire', species) < -1 || abilities.has('Drought'));
+		case 'Gluttony':
+			return !moves.has('bellydrum');
+		case 'Guts':
+			return (!moves.has('facade') && !moves.has('sleeptalk') && !species.nfe);
+		case 'Harvest':
+			return (abilities.has('Frisk') && !isDoubles);
+		case 'Hustle': case 'Inner Focus':
+			return (counter.get('Physical') < 2 || abilities.has('Iron Fist'));
+		case 'Infiltrator':
+			return (moves.has('rest') && moves.has('sleeptalk')) || (isDoubles && abilities.has('Clear Body'));
+		case 'Intimidate':
+			if (species.id === 'salamence' && moves.has('dragondance')) return true;
+			return ['bodyslam', 'bounce', 'tripleaxel'].some(m => moves.has(m));
+		case 'Iron Fist':
+			return (counter.get('ironfist') < 2 || moves.has('dynamicpunch'));
+		case 'Justified':
+			return (isDoubles && abilities.has('Inner Focus'));
+		case 'Lightning Rod':
+			return (species.types.includes('Ground') || (!!counter.get('physicalsetup')));
+		case 'Limber':
+			return species.types.includes('Electric') || moves.has('facade');
+		case 'Liquid Voice':
+			return !moves.has('hypervoice');
+		case 'Magic Guard':
+			// For Sigilyph
+			return (abilities.has('Tinted Lens') && !counter.get('Status') && !isDoubles);
+		case 'Mold Breaker':
+			return (
+				abilities.has('Adaptability') || abilities.has('Scrappy') || (abilities.has('Unburden') && !!counter.setupType) ||
+				(abilities.has('Sheer Force') && !!counter.get('sheerforce'))
+			);
+		case 'Moxie':
+			return (counter.get('Physical') < 2 || moves.has('stealthrock') || moves.has('defog'));
+		case 'Overgrow':
+			return !counter.get('Grass');
+		case 'Own Tempo':
+			return !moves.has('petaldance');
+		case 'Power Construct':
+			return (species.forme === '10%' && !isDoubles);
+		case 'Prankster':
+			return !counter.get('Status');
+		case 'Pressure':
+			return (!!counter.get('setup') || counter.get('Status') < 2 || isDoubles);
+		case 'Refrigerate':
+			return !counter.get('Normal');
+		case 'Regenerator':
+			// For Reuniclus
+			return abilities.has('Magic Guard');
+		case 'Reckless':
+			return !counter.get('recoil') || moves.has('curse');
+		case 'Rock Head':
+			return !counter.get('recoil');
+		case 'Sand Force': case 'Sand Veil':
+			return !teamDetails.sand;
+		case 'Sand Rush':
+			return (!teamDetails.sand && (!counter.get('setup') || !counter.get('Rock') || moves.has('rapidspin')));
+		case 'Sap Sipper':
+			// For Drampa, which wants Berserk with Roost
+			return moves.has('roost');
+		case 'Scrappy':
+			return (moves.has('earthquake') && species.id === 'miltank');
+		case 'Screen Cleaner':
+			return !!teamDetails.screens;
+		case 'Shed Skin':
+			// For Scrafty
+			return moves.has('dragondance');
+		case 'Sheer Force':
+			return (!counter.get('sheerforce') || abilities.has('Guts') || (species.id === 'druddigon' && !isDoubles));
+		case 'Shell Armor':
+			return (species.id === 'omastar' && (moves.has('spikes') || moves.has('stealthrock')));
+		case 'Slush Rush':
+			return (!teamDetails.hail && !abilities.has('Swift Swim'));
+		case 'Sniper':
+			// Inteleon wants Torrent unless it is Gmax
+			return (species.name === 'Inteleon' || (counter.get('Water') > 1 && !moves.has('focusenergy')));
+		case 'Solar Power':
+			return (!teamDetails.sun);
+		case 'Speed Boost':
+			return (species.id === 'ninjask');
+		case 'Steely Spirit':
+			return (moves.has('fakeout') && !isDoubles);
+		case 'Sturdy':
+			return (moves.has('bulkup') || !!counter.get('recoil') || (abilities.has('Solid Rock')));
+		case 'Swarm':
+			return (!counter.get('Bug') || !!counter.get('recovery'));
+		case 'Sweet Veil':
+			return types.includes('Grass');
+		case 'Swift Swim':
+			return (!moves.has('raindance') && (
+				['Intimidate', 'Rock Head', 'Slush Rush', 'Water Absorb'].some(abil => abilities.has(abil)) ||
+				(abilities.has('Lightning Rod') && !counter.get('setup'))
+			));
+		case 'Synchronize':
+			return counter.get('Status') < 3;
+		case 'Technician':
+			return (
+				!counter.get('technician') ||
+				moves.has('tailslap') ||
+				abilities.has('Punk Rock')
+			);
+		case 'Tinted Lens':
+			return (
+				// For Sigilyph
+				moves.has('defog') ||
+				// For Butterfree
+				(moves.has('hurricane') && abilities.has('Compound Eyes')) ||
+				(counter.get('Status') > 2 && !counter.get('setup'))
+			);
+		case 'Torrent':
+			// For Inteleon-Gmax and Primarina
+			return (moves.has('focusenergy') || moves.has('hypervoice'));
+		case 'Tough Claws':
+			// For Perrserker
+			return (types.includes('Steel') && !moves.has('fakeout'));
+		case 'Unaware':
+			// For Swoobat and Clefable
+			return (!!counter.get('setup') || moves.has('fireblast'));
+		case 'Unburden':
+			return (abilities.has('Prankster') || !counter.get('setup') && !isDoubles);
+		case 'Volt Absorb':
+			return (this.dex.getEffectiveness('Electric', species) < -1);
+		case 'Water Absorb':
+			return (
+				moves.has('raindance') ||
+				['Drizzle', 'Strong Jaw', 'Unaware', 'Volt Absorb'].some(abil => abilities.has(abil))
+			);
+		case 'Weak Armor':
+			// The Speed less than 50 case is intended for Cursola, but could apply to any slow Pokémon.
+			return (
+				(species.baseStats.spe > 50) ||
+				species.id === 'skarmory' ||
+				moves.has('shellsmash') || moves.has('rapidspin')
+			);
+		}
+
+		return false;
+	}
+
+
 	getAbility(
 		types: string[],
 		moves: Set<string>,
@@ -829,7 +1013,7 @@ export class RandomTeams {
 		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
 		Utils.sortBy(abilityData, abil => -abil.rating);
 
-		if (!abilityData[1]) return abilityData[0].name;
+		if (abilityData.length <= 1) return abilityData[0].name;
 
 		// Sort abilities by rating with an element of randomness
 		// All three abilities can be chosen
@@ -853,14 +1037,36 @@ export class RandomTeams {
 			}
 		}
 
-		// After sorting, choose the first ability
-		const ability = abilityData[0].name;
-		// Adjust abilities here
+		// Hard-code abilities here
 		if (species.id === 'arcaninehisui') return 'Rock Head';
 		if (species.id === 'staraptor') return 'Reckless';
 		if (abilities.has('Corrosion') && moves.has('toxic')) return 'Corrosion';
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk'))) return 'Guts';
 		if (abilities.has('Technician') && counter.get('technician')) return 'Technician';
+
+		// After sorting, choose the first ability
+		let ability = abilityData[0].name;
+		// Look for rejected abilities
+		// Start with the first ability and work our way through, culling as we go
+		let rejectAbility = false;
+		do {
+			rejectAbility = this.shouldCullAbility(
+				ability, types, moves, abilities, counter, teamDetails, species, isDoubles, teraType, role
+			);
+
+			if (rejectAbility) {
+				if (ability === abilityData[0].name && (abilityData[1].rating >= 1)) {
+					ability = abilityData[1].name;
+				} else if (ability === abilityData[1].name && abilityData[2] && (abilityData[2].rating >= 1)) {
+					ability = abilityData[2].name;
+				} else {
+					// Default to the highest rated ability if all are rejected
+					ability = abilityData[0].name;
+					rejectAbility = false;
+				}
+			}
+		} while (rejectAbility);
+
 		return ability;
 	}
 
