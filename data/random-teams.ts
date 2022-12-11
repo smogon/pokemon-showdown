@@ -33,13 +33,11 @@ interface BattleFactorySet {
 }
 export class MoveCounter extends Utils.Multiset<string> {
 	damagingMoves: Set<Move>;
-	setupType: string;
 	stabCounter: number;
 
 	constructor() {
 		super();
 		this.damagingMoves = new Set();
-		this.setupType = '';
 		this.stabCounter = 0;
 	}
 
@@ -859,10 +857,8 @@ export class RandomTeams {
 			if (ContraryMoves.includes(moveid)) counter.add('contrary');
 			if (PhysicalSetup.includes(moveid)) {
 				counter.add('physicalsetup');
-				counter.setupType = 'Physical';
 			} else if (SpecialSetup.includes(moveid)) {
 				counter.add('specialsetup');
-				counter.setupType = 'Special';
 			}
 
 			if (MixedSetup.includes(moveid)) counter.add('mixedsetup');
