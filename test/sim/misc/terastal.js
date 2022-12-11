@@ -97,7 +97,7 @@ describe("Terastallization", function () {
 			"Terastallizing did not keep old changed type's STAB; actual damage: " + damage);
 	});
 
-	describe.skip('Buffing low BP move behavior', function () {
+	describe('Buffing low BP move behavior', function () {
 		it(`should boost the base power of weaker moves with the same Tera Type to 60 BP`, function () {
 			battle = common.createBattle([[
 				{species: 'magnemite', moves: ['nuzzle']},
@@ -136,5 +136,57 @@ describe("Terastallization", function () {
 			const damageRange = [22, 28];
 			assert.bounded(mew.maxhp - mew.hp, damageRange, `Should be a 34 BP Water Spout`);
 		});
+
+		it(`should boost STAB moves that weren't STAB moves prior to terastallizing`, function () {
+			battle = common.createBattle([[
+				{species: 'espathra', evs: {atk: 252}, moves: ['peck', 'aerialace'], teraType: 'Flying'},
+			], [
+				{species: 'arceus', ability: 'shellarmor', moves: ['haze']},
+			]]);
+
+			battle.makeChoices('move peck', 'auto');
+			const arceus = battle.p2.active[0];
+			assert.bounded(arceus.maxhp - arceus.hp, [21, 25], `Should be a 35 BP no-STAB Peck`);
+			arceus.hp = arceus.maxhp;
+			battle.makeChoices('move peck terastallize', 'auto');
+			assert.bounded(arceus.maxhp - arceus.hp, [51, 61], `Should be a 60 BP STAB Peck`);
+		});
+
+		it(`shouldn't boost non-STAB moves with <60 Base Power`, function () {
+			battle = common.createBattle([[
+				{species: 'palafinhero', moves: ['leafage'], teraType: 'Electric'},
+			], [
+				{species: 'arceus', ability: 'shellarmor', moves: ['haze']},
+			]]);
+
+			battle.makeChoices('move leafage', 'auto');
+			const arceus = battle.p2.active[0];
+			assert.bounded(arceus.maxhp - arceus.hp, [38, 45], `Should be a 40 BP no-STAB Leafage`);
+			arceus.hp = arceus.maxhp;
+			battle.makeChoices('move leafage terastallize', 'auto');
+			assert.bounded(arceus.maxhp - arceus.hp, [38, 45], `Should be a 40 BP no-STAB Leafage`);
+		});
+	});
+
+	it("should combine with Adaptability for an overall STAB of x2.25", () => {
+		battle = common.createBattle([[
+			{species: "Dragalge", ability: 'adaptability', moves: ['venoshock'], teraType: "Poison"},
+		], [
+			{species: "Mareep", ability: 'static', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move venoshock terastallize', 'auto');
+		const damage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
+		assert.bounded(damage, [191, 227], "Actual damage: " + damage);
+	});
+
+	it("should not give the Adaptability boost on the user's old types", () => {
+		battle = common.createBattle([[
+			{species: "Dragalge", ability: 'adaptability', moves: ['venoshock'], teraType: "Dragon"},
+		], [
+			{species: "Mareep", ability: 'static', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move venoshock terastallize', 'auto');
+		const damage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
+		assert.bounded(damage, [127, 151], "Actual damage: " + damage);
 	});
 });

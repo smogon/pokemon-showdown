@@ -1064,4 +1064,27 @@ export const commands: Chat.ChatCommands = {
 			`Requires: % @ # & (globally or in the Random Battles room)`
 		);
 	},
+
+	genteam: 'generateteam',
+	generateteam(target, room, user) {
+		if (!Rooms.get('randombattles')?.auth.has(user.id)) this.checkCan('lock');
+		this.runBroadcast(true);
+
+		if (!target) return this.parse('/help generateteam');
+		const format = Dex.formats.get(target);
+		if (!format.exists) throw new Chat.ErrorMessage(`"${target}" is not a recognized format.`);
+		if (!format.team) throw new Chat.ErrorMessage(`"${format.name}" requires you to bring your own team.`);
+
+		const team = Teams.getGenerator(format).getTeam();
+		const dex = Dex.forFormat(format);
+		const teamHTML = team
+			.map((set: PokemonSet) => {
+				// moves are sometimes given as IDs
+				set.moves = set.moves.map(m => dex.moves.get(m).name);
+				return `<details><summary>${set.name}</summary>${Utils.escapeHTML(Teams.exportSet(set))}<br /></details>`;
+			})
+			.join('');
+		return this.sendReplyBox(`<strong>Team for ${format.name}</strong>:` + teamHTML);
+	},
+	generateteamhelp: [`/genteam [format] - Generates a team for the given format. Requires: % @ & or Random Battles room auth`],
 };
