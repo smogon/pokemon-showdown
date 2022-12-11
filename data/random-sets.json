@@ -3469,7 +3469,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Encore", "Light Screen", "Play Rough", "Protect", "Reflect", "Stealth Rock", "Thunder Wave", "Wish"],
+                "movepool": ["Encore", "Flamethrower", "Light Screen", "Play Rough", "Protect", "Reflect", "Stealth Rock", "Thunder Wave", "Wish"],
                 "teraTypes": ["Fairy", "Steel"]
             }
         ]
