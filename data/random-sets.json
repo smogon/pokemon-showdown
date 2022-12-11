@@ -2380,7 +2380,7 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["Focus Blast", "Hyper Voice", "Psyshock", "Thunderbolt", "Trick", "Trick Room"],
-                "teraTypes": ["Normal", "Psychic", "Electric"]
+                "teraTypes": ["Psychic", "Electric", "Fighting"]
             }
         ]
     },
