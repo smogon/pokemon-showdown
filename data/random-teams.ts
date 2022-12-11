@@ -414,17 +414,17 @@ export class RandomTeams {
 			return;
 		}
 		// These moves are paired, and shouldn't appear if there is not room for them both.
-		if (moves.size === this.maxMoveCount - 1 && movePool.includes('rest') && movePool.includes('sleeptalk')) {
-			this.fastPop(movePool, movePool.indexOf('rest'));
-			this.fastPop(movePool, movePool.indexOf('sleeptalk'));
-		}
 		if (moves.size === this.maxMoveCount - 1 && movePool.includes('lightscreen') && movePool.includes('reflect')) {
 			this.fastPop(movePool, movePool.indexOf('lightscreen'));
-			this.fastPop(movePool, movePool.indexOf('reflect'));
+			if (movePool.length > 1) this.fastPop(movePool, movePool.indexOf('reflect'));
+		}
+		if (moves.size === this.maxMoveCount - 1 && movePool.includes('rest') && movePool.includes('sleeptalk')) {
+			this.fastPop(movePool, movePool.indexOf('sleeptalk'));
+			if (movePool.length > 1) this.fastPop(movePool, movePool.indexOf('rest'));
 		}
 		if (moves.size === this.maxMoveCount - 1 && movePool.includes('wish') && movePool.includes('protect')) {
-			this.fastPop(movePool, movePool.indexOf('wish'));
 			this.fastPop(movePool, movePool.indexOf('protect'));
+			if (movePool.length > 1) this.fastPop(movePool, movePool.indexOf('wish'));
 		}
 
 		// Develop additional move lists
