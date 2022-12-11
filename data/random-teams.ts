@@ -95,7 +95,7 @@ const Hazards = [
 ];
 
 // Moves that should be paired together when possible
-const movePairs = [['lightscreen', 'reflect'], ['sleeptalk', 'rest'], ['protect', 'wish']];
+const MovePairs = [['lightscreen', 'reflect'], ['sleeptalk', 'rest'], ['protect', 'wish']];
 
 function sereneGraceBenefits(move: Move) {
 	return move.secondary?.chance && move.secondary.chance >= 20 && move.secondary.chance < 100;
@@ -417,7 +417,7 @@ export class RandomTeams {
 		// If we have two unfilled moves and only one unpaired move, cull the unpaired move.
 		if (moves.size === this.maxMoveCount - 2) {
 			const unpairedMoves = Object.assign([], movePool);
-			for (const pair of movePairs) {
+			for (const pair of MovePairs) {
 				if (movePool.includes(pair[0]) && movePool.includes(pair[1])) {
 					this.fastPop(unpairedMoves, unpairedMoves.indexOf(pair[0]));
 					this.fastPop(unpairedMoves, unpairedMoves.indexOf(pair[1]));
@@ -430,7 +430,7 @@ export class RandomTeams {
 
 		// These moves are paired, and shouldn't appear if there is not room for them both.
 		if (moves.size === this.maxMoveCount - 1) {
-			for (const pair of movePairs) {
+			for (const pair of MovePairs) {
 				if (movePool.includes(pair[0]) && movePool.includes(pair[1])) {
 					this.fastPop(movePool, movePool.indexOf(pair[0]));
 					this.fastPop(movePool, movePool.indexOf(pair[1]));
@@ -819,29 +819,15 @@ export class RandomTeams {
 			}
 			const moveid = this.sampleNoReplace(movePool);
 			moves.add(moveid);
-			if (moveid === 'rest' && movePool.includes('sleeptalk')) {
-				moves.add('sleeptalk');
-				this.fastPop(movePool, movePool.indexOf('sleeptalk'));
-			}
-			if (moveid === 'sleeptalk' && movePool.includes('rest')) {
-				moves.add('rest');
-				this.fastPop(movePool, movePool.indexOf('rest'));
-			}
-			if (moveid === 'wish' && movePool.includes('protect')) {
-				moves.add('protect');
-				this.fastPop(movePool, movePool.indexOf('protect'));
-			}
-			if (moveid === 'protect' && movePool.includes('wish')) {
-				moves.add('wish');
-				this.fastPop(movePool, movePool.indexOf('wish'));
-			}
-			if (moveid === 'reflect' && movePool.includes('lightscreen')) {
-				moves.add('lightscreen');
-				this.fastPop(movePool, movePool.indexOf('lightscreen'));
-			}
-			if (moveid === 'lightscreen' && movePool.includes('reflect')) {
-				moves.add('reflect');
-				this.fastPop(movePool, movePool.indexOf('reflect'));
+			for (const pair in MovePairs) {
+				if (moveid === pair[0] && movePool.includes(pair[1])) {
+					moves.add(pair[1]);
+					this.fastPop(movePool, movePool.indexOf(pair[1]));
+				}
+				if (moveid === pair[1] && movePool.includes(pair[0])) {
+					moves.add(pair[0]);
+					this.fastPop(movePool, movePool.indexOf(pair[0]));
+				}
 			}
 			counter = this.queryMoves(moves, species.types, teraType, abilities);
 			this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
