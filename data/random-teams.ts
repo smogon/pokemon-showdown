@@ -678,7 +678,7 @@ export class RandomTeams {
 		}
 
 		// Enforce setup
-		if (role.includes('Setup')) {
+		if (role.includes('Setup') || role === 'Tera Blast user') {
 			// First, try to add a non-Speed setup move
 			const nonSpeedSetupMoves = movePool.filter(moveid => Setup.includes(moveid) && !SpeedSetup.includes(moveid));
 			if (nonSpeedSetupMoves.length) {
@@ -755,7 +755,7 @@ export class RandomTeams {
 					if (abilities.has('Refrigerate')) moveType = 'Ice';
 				}
 				if (types.includes(moveType) && move.priority > 0 && move.category !== 'Status') {
-					priorityMoves.push(moveid)
+					priorityMoves.push(moveid);
 				}
 			}
 			const moveid = this.sample(priorityMoves);
