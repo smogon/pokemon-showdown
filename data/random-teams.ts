@@ -74,7 +74,7 @@ const SpeedSetup = [
 const Setup = [
 	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'coil', 'curse', 'dragondance', 'flamecharge',
 	'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'noretreat', 'poweruppunch', 'quiverdance', 'rockpolish',
-	'shellsmash', 'swordsdance', 'tailglow', 'tidyup', 'trailblaze', 'workup'
+	'shellsmash', 'swordsdance', 'tailglow', 'tidyup', 'trailblaze', 'workup',
 ];
 // Moves that shouldn't be the only STAB moves:
 const NoStab = [
@@ -362,10 +362,10 @@ export class RandomTeams {
 		}
 
 		// Develop additional move lists
-		const pivotingMoves=['chillyreception', 'flipturn', 'partingshot', 'teleport', 'uturn', 'voltswitch']
+		const pivotingMoves = ['chillyreception', 'flipturn', 'partingshot', 'teleport', 'uturn', 'voltswitch'];
 		const statusMoves = [];
 		for (const move of this.dex.moves.all()) {
-    		if (move.category === 'Status') statusMoves.push(move.id);
+			if (move.category === 'Status') statusMoves.push(move.id);
 		}
 
 		// These moves don't mesh well with other aspects of the set
@@ -445,7 +445,7 @@ export class RandomTeams {
 		// Add other moves you really want to have, e.g. STAB, recovery, setup, depending on role.
 
 		// For example, STAB:
-		
+
 		types.forEach((type, index) => {
 			const stabMoves = [];
 			for (const moveid of movePool) {
