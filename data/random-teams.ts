@@ -435,13 +435,16 @@ export class RandomTeams {
 		}
 
 		// Team-based move culls
-		if (teamDetails.stealthRock) this.fastPop(movePool, movePool.indexOf('stealthrock'));
-		if (teamDetails.defog || teamDetails.rapidSpin) {
-			this.fastPop(movePool, movePool.indexOf('defog'));
-			this.fastPop(movePool, movePool.indexOf('rapidspin'));
+		if (teamDetails.stealthRock) {
+			if (movePool.includes('stealthrock')) this.fastPop(movePool, movePool.indexOf('stealthrock'));
 		}
-		if (teamDetails.stickyWeb) this.fastPop(movePool, movePool.indexOf('stickyweb'));
-
+		if (teamDetails.defog || teamDetails.rapidSpin) {
+			if (movePool.includes('defog')) this.fastPop(movePool, movePool.indexOf('defog'));
+			if (movePool.includes('rapidspin')) this.fastPop(movePool, movePool.indexOf('rapidspin'));
+		}
+		if (teamDetails.stickyWeb) {
+			if (movePool.includes('stickyweb')) this.fastPop(movePool, movePool.indexOf('stickyweb'));
+		}
 
 		// These moves don't mesh well with other aspects of the set
 		if (species.id !== "spidops") {
@@ -705,11 +708,13 @@ export class RandomTeams {
 			} else {
 				// No non-Speed setup moves, so add any (Speed) setup move
 				const setupMoves = movePool.filter(moveid => Setup.includes(moveid));
-				const moveid = this.sample(setupMoves);
-				moves.add(moveid);
-				this.fastPop(movePool, movePool.indexOf(moveid));
-				counter = this.queryMoves(moves, species.types, teraType, abilities);
-				this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+				if (setupMoves.length) {
+					const moveid = this.sample(setupMoves);
+					moves.add(moveid);
+					this.fastPop(movePool, movePool.indexOf(moveid));
+					counter = this.queryMoves(moves, species.types, teraType, abilities);
+					this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+				}
 			}
 		}
 
