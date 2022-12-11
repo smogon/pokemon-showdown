@@ -153,7 +153,8 @@ export class RandomTeams {
 			Ghost: (movePool, moves, abilities, types, counter) => !counter.get('Ghost'),
 			Grass: (movePool, moves, abilities, types, counter, species) => {
 				if (movePool.includes('leafstorm')) return true;
-				return !counter.get('Grass') && (species.baseStats.atk >= 100 || types.includes('Electric') || abilities.has('Seed Sower'));
+				return !counter.get('Grass') &&
+					(species.baseStats.atk >= 100 || types.includes('Electric') || abilities.has('Seed Sower'));
 			},
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
@@ -175,7 +176,7 @@ export class RandomTeams {
 			Water: (movePool, moves, abilities, types, counter, species) => {
 				if (species.id === 'quagsire') return false;
 				return !counter.get('Water');
-			}
+			},
 		};
 	}
 
