@@ -361,12 +361,12 @@ export class RandomTeams {
 		for (const moveid1 of moves) {
 			if (moveArrayA.includes(moveid1)) {
 				for (const moveid2 of moveArrayB) {
-					if (movePool.includes(moveid2)) this.fastPop(movePool, movePool.indexOf(moveid2));
+					if (moveid1 !== moveid2 && movePool.includes(moveid2)) this.fastPop(movePool, movePool.indexOf(moveid2));
 				}
 			}
 			if (moveArrayB.includes(moveid1)) {
 				for (const moveid2 of moveArrayA) {
-					if (movePool.includes(moveid2)) this.fastPop(movePool, movePool.indexOf(moveid2));
+					if (moveid1 !== moveid2 && movePool.includes(moveid2)) this.fastPop(movePool, movePool.indexOf(moveid2));
 				}
 			}
 		}
