@@ -1061,8 +1061,7 @@ export class RandomTeams {
 					ability = abilityData[2].name;
 				} else {
 					// Default to the highest rated ability if all are rejected
-					ability = abilityData[0].name;
-					rejectAbility = false;
+					return abilityData[0].name;
 				}
 			}
 		} while (rejectAbility);
