@@ -360,7 +360,7 @@ export class RandomTeams {
 			if (move.drain) counter.add('drain');
 			// Moves which have a base power, but aren't super-weak:
 			if (move.basePower > 30 || move.multihit || move.basePowerCallback) {
-				if (!this.noStab.includes(moveid) || abilities.has('Technician')  && moveid === 'machpunch') {
+				if (!this.noStab.includes(moveid) || abilities.has('Technician') && moveid === 'machpunch') {
 					counter.add(moveType);
 					if (types.includes(moveType)) counter.stabCounter++;
 					if (teraType === moveType) counter.add('stabtera');
