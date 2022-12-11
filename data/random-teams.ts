@@ -47,7 +47,7 @@ export class MoveCounter extends Utils.Multiset<string> {
 }
 
 type MoveEnforcementChecker = (
-	movePool: string[], moves: Set<string>, abilities: Set<string>, types: Set<string>,
+	movePool: string[], moves: Set<string>, abilities: Set<string>, types: string[],
 	counter: MoveCounter, species: Species, teamDetails: RandomTeamsTypes.TeamDetails,
 	isLead: boolean, isDoubles: boolean, teraType: string, role: string,
 ) => boolean;
@@ -110,6 +110,11 @@ export class RandomTeams {
 	readonly maxMoveCount: number;
 	readonly forceMonotype: string | undefined;
 
+	/**
+	 * Checkers for move enforcement based on types or other factors
+	 *
+	 * returns true to try to force the move type, false otherwise.
+	 */
 	moveEnforcementCheckers: {[k: string]: MoveEnforcementChecker};
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
@@ -148,16 +153,14 @@ export class RandomTeams {
 				['dazzlinggleam', 'moonblast', 'fleurcannon', 'playrough', 'strangesteam'].some(moveid => movePool.includes(moveid))
 			),
 			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting'),
-			Fire: (movePool, moves, abilities, types, counter, species) => {
-				return !counter.get('Fire');
-			},
+			Fire: (movePool, moves, abilities, types, counter, species) => !counter.get('Fire'),
 			Flying: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Flying') && !types.has('Dragon') && [
+				!counter.get('Flying') && !types.includes('Dragon') && [
 					'airslash', 'bravebird', 'dualwingbeat', 'oblivionwing',
 				].some(moveid => movePool.includes(moveid))
 			),
 			Ghost: (movePool, moves, abilities, types, counter) => {
-				if (!counter.get('Ghost') && !types.has('Dark')) return true;
+				if (!counter.get('Ghost') && !types.includes('Dark')) return true;
 				return !counter.get('Dark');
 			},
 			Grass: (movePool, moves, abilities, types, counter, species) => {
@@ -165,19 +168,15 @@ export class RandomTeams {
 				return !counter.get('Grass') && species.baseStats.atk >= 100;
 			},
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
-			Ice: (movePool, moves, abilities, types, counter) => {
-				return !counter.get('Ice');
-			},
-			Normal: (movePool, moves, abilities, types, counter) => {
-				return (abilities.has('Guts') && movePool.includes('facade'));
-			},
+			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
+			Normal: (movePool, moves, abilities, types, counter) => (abilities.has('Guts') && movePool.includes('facade')),
 			Poison: (movePool, moves, abilities, types, counter) => {
 				if (counter.get('Poison')) return false;
-				return types.has('Ground') || types.has('Psychic') || types.has('Grass') || !!counter.get('setup') || movePool.includes('gunkshot');
+				return types.includes('Ground') || types.includes('Psychic') || types.includes('Grass') || !!counter.get('setup') || movePool.includes('gunkshot');
 			},
 			Psychic: (movePool, moves, abilities, types, counter) => {
 				if (counter.get('Psychic')) return false;
-				if (types.has('Ghost') || types.has('Steel')) return false;
+				if (types.includes('Ghost') || types.includes('Steel')) return false;
 				return abilities.has('Psychic Surge') || !!counter.get('setup') || movePool.includes('psychicfangs');
 			},
 			Rock: (movePool, moves, abilities, types, counter, species) => !counter.get('Rock') && species.baseStats.atk >= 80,
@@ -186,9 +185,7 @@ export class RandomTeams {
 				if (movePool.includes('meteormash')) return true;
 				return !counter.get('Steel');
 			},
-			Water: (movePool, moves, abilities, types, counter, species) => {
-				return !counter.get('Water');
-			},
+			Water: (movePool, moves, abilities, types, counter, species) => !counter.get('Water'),
 		};
 	}
 
@@ -341,6 +338,7 @@ export class RandomTeams {
 				if (abilities.has('Pixilate')) moveType = 'Fairy';
 				if (abilities.has('Refrigerate')) moveType = 'Ice';
 			}
+			if (moveid === 'terablast') moveType = teraType;
 			if (move.damage || move.damageCallback) {
 				// Moves that do a set amount of damage:
 				counter.add('damage');
@@ -495,6 +493,13 @@ export class RandomTeams {
 			return moves;
 		}
 
+		const runEnforcementChecker = (checkerName: string) => {
+			if (!this.moveEnforcementCheckers[checkerName]) return false;
+			return this.moveEnforcementCheckers[checkerName](
+				movePool, moves, abilities, types, counter, species, teamDetails, isLead, isDoubles, teraType, role
+			);
+		};
+
 		if (role === "Tera Blast user") {
 			moves.add('terablast');
 			this.fastPop(movePool, movePool.indexOf('terablast'));
@@ -515,33 +520,55 @@ export class RandomTeams {
 		// For example, STAB:
 
 		types.forEach((type, index) => {
+			// Check if a STAB move of that type should be required
+			if (runEnforcementChecker(type)) {
+				const stabMoves = [];
+				for (const moveid of movePool) {
+					const move = this.dex.moves.get(moveid);
+					let moveType = move.type;
+					if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
+					if (moveType === 'Normal') {
+						if (abilities.has('Aerilate')) moveType = 'Flying';
+						if (abilities.has('Galvanize')) moveType = 'Electric';
+						if (abilities.has('Pixilate')) moveType = 'Fairy';
+						if (abilities.has('Refrigerate')) moveType = 'Ice';
+					}
+					if (moveid === 'terablast') moveType = teraType;
+					if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
+						if (type === moveType) {
+							stabMoves.push(moveid);
+							break;
+						}
+					}
+				}
+				if (stabMoves.length) {
+					const moveid = this.sample(stabMoves);
+					moves.add(moveid);
+					this.fastPop(movePool, movePool.indexOf(moveid));
+					counter = this.queryMoves(moves, species.types, teraType, abilities);
+					this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+				}
+			}
+		});
+
+		// If no STAB move was added in the previous step, add a STAB move
+		if (!counter.stabCounter) {
 			const stabMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
 				let moveType = move.type;
 				if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
+				if (moveType === 'Normal') {
+					if (abilities.has('Aerilate')) moveType = 'Flying';
+					if (abilities.has('Galvanize')) moveType = 'Electric';
+					if (abilities.has('Pixilate')) moveType = 'Fairy';
+					if (abilities.has('Refrigerate')) moveType = 'Ice';
+				}
+				if (moveid === 'terablast') moveType = teraType;
 				if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
-					if (type === moveType) {
+					if (types.includes(moveType)) {
 						stabMoves.push(moveid);
 						break;
-					}
-					if (moveType === 'Normal') {
-						if (abilities.has('Aerilate') && type === 'Flying') {
-							stabMoves.push(moveid);
-							break;
-						}
-						if (abilities.has('Galvanize') && type === 'Electric') {
-							stabMoves.push(moveid);
-							break;
-						}
-						if (abilities.has('Pixilate') && type === 'Fairy') {
-							stabMoves.push(moveid);
-							break;
-						}
-						if (abilities.has('Refrigerate') && type === 'Ice') {
-							stabMoves.push(moveid);
-							break;
-						}
 					}
 				}
 			}
@@ -552,7 +579,7 @@ export class RandomTeams {
 				counter = this.queryMoves(moves, species.types, teraType, abilities);
 				this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 			}
-		});
+		}
 
 		// For example, Tera STAB:
 		// if (!counter.get('stabtera')) {
