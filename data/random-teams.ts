@@ -1015,6 +1015,13 @@ export class RandomTeams {
 
 		if (abilityData.length <= 1) return abilityData[0].name;
 
+		// Hard-code abilities here
+		if (species.id === 'arcaninehisui') return 'Rock Head';
+		if (species.id === 'staraptor') return 'Reckless';
+		if (abilities.has('Corrosion') && moves.has('toxic')) return 'Corrosion';
+		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk'))) return 'Guts';
+		if (abilities.has('Technician') && counter.get('technician')) return 'Technician';
+
 		// Sort abilities by rating with an element of randomness
 		// All three abilities can be chosen
 		if (abilityData[2] && abilityData[0].rating - 0.5 <= abilityData[2].rating) {
@@ -1036,13 +1043,6 @@ export class RandomTeams {
 				if (this.randomChance(1, 3)) [abilityData[0], abilityData[1]] = [abilityData[1], abilityData[0]];
 			}
 		}
-
-		// Hard-code abilities here
-		if (species.id === 'arcaninehisui') return 'Rock Head';
-		if (species.id === 'staraptor') return 'Reckless';
-		if (abilities.has('Corrosion') && moves.has('toxic')) return 'Corrosion';
-		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk'))) return 'Guts';
-		if (abilities.has('Technician') && counter.get('technician')) return 'Technician';
 
 		// After sorting, choose the first ability
 		let ability = abilityData[0].name;
