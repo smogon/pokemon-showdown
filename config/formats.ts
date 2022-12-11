@@ -981,8 +981,11 @@ export const Formats: FormatList = [
 			for (const evoFamilies of evoFamilyLists) {
 				if (evoFamilies.length !== 1) continue;
 				const [familyId] = evoFamilies;
-				if (!(familyId in requiredFamilies)) requiredFamilies[familyId] = 1;
-				requiredFamilies[familyId]++;
+				if (!(familyId in requiredFamilies)) {
+					requiredFamilies[familyId] = 1;
+				} else {
+					requiredFamilies[familyId]++;
+				}
 				if (requiredFamilies[familyId] > 1) {
 					return [
 						`You are limited to up to one inheritance from each evolution family by the Donor Clause.`,
