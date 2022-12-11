@@ -701,6 +701,7 @@ export class RandomTeams {
 		// Enforce coverage move
 		if (!['AV Pivot', 'Fast Support', 'Bulky Support'].includes(role)) {
 			if (counter.damagingMoves.size <= 1) {
+				// Find the type of the current attacking move
 				let currentAttackType: string;
 				for (const moveid of moves) {
 					const move = this.dex.moves.get(moveid);
@@ -733,7 +734,35 @@ export class RandomTeams {
 						if (currentAttackType! !== moveType) coverageMoves.push(moveid);
 					}
 				}
+				const moveid = this.sample(coverageMoves);
+				moves.add(moveid);
+				this.fastPop(movePool, movePool.indexOf(moveid));
+				counter = this.queryMoves(moves, species.types, teraType, abilities);
+				this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 			}
+		}
+
+		// Enforce STAB priority
+		if (role === 'Bulky Attacker' || role === 'Bulky Setup') {
+			const priorityMoves = [];
+			for (const moveid of movePool) {
+				const move = this.dex.moves.get(moveid);
+				let moveType = move.type;
+				if (moveType === 'Normal') {
+					if (abilities.has('Aerilate')) moveType = 'Flying';
+					if (abilities.has('Galvanize')) moveType = 'Electric';
+					if (abilities.has('Pixilate')) moveType = 'Fairy';
+					if (abilities.has('Refrigerate')) moveType = 'Ice';
+				}
+				if (types.includes(moveType) && move.priority > 0 && move.category !== 'Status') {
+					priorityMoves.push(moveid)
+				}
+			}
+			const moveid = this.sample(priorityMoves);
+			moves.add(moveid);
+			this.fastPop(movePool, movePool.indexOf(moveid));
+			counter = this.queryMoves(moves, species.types, teraType, abilities);
+			this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 		}
 
 		// Add (moves.size < this.maxMoveCount) as a condition if moves is getting larger than 4 moves.
