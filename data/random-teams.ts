@@ -428,10 +428,10 @@ export class RandomTeams {
 		}
 
 		// Develop additional move lists
-		const pivotingMoves=['chillyreception', 'flipturn', 'partingshot', 'teleport', 'uturn', 'voltswitch']
+		const pivotingMoves = ['chillyreception', 'flipturn', 'partingshot', 'teleport', 'uturn', 'voltswitch'];
 		const statusMoves = [];
 		for (const move of this.dex.moves.all()) {
-    		if (move.category === 'Status') statusMoves.push(move.id);
+			if (move.category === 'Status') statusMoves.push(move.id);
 		}
 
 		// These moves don't mesh well with other aspects of the set
@@ -466,7 +466,7 @@ export class RandomTeams {
 		// These status moves are redundant with each other
 		this.incompatibleMoves(moves, movePool, ['taunt', 'strengthsap'], 'encore');
 		this.incompatibleMoves(moves, movePool, 'toxic', 'willowisp');
-		this.incompatibleMoves(moves, movePool, ['thunderwave', 'toxic', 'willowisp'], 'toxicspikes')
+		this.incompatibleMoves(moves, movePool, ['thunderwave', 'toxic', 'willowisp'], 'toxicspikes');
 
 		// This space reserved for assorted hardcodes that otherwise make little sense out of context
 		// Landorus
@@ -477,7 +477,7 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'snowscape', 'swordsdance');
 		// Vaporeon
 		if (species.id === 'vaporeon') {
-			this.incompatibleMoves(moves, movePool, 'calmmind', 'icebeam')
+			this.incompatibleMoves(moves, movePool, 'calmmind', 'icebeam');
 		}
 	}
 
@@ -569,7 +569,6 @@ export class RandomTeams {
 					if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
 						if (type === moveType) {
 							stabMoves.push(moveid);
-							break;
 						}
 					}
 				}
@@ -600,7 +599,6 @@ export class RandomTeams {
 				if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
 					if (types.includes(moveType)) {
 						stabMoves.push(moveid);
-						break;
 					}
 				}
 			}
@@ -623,7 +621,6 @@ export class RandomTeams {
 				if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
 					if (teraType === moveType) {
 						stabMoves.push(moveid);
-						break;
 					}
 				}
 			}
@@ -701,6 +698,44 @@ export class RandomTeams {
 			}
 		}
 
+		// Enforce coverage move
+		if (!['AV Pivot', 'Fast Support', 'Bulky Support'].includes(role)) {
+			if (counter.damagingMoves.size <= 1) {
+				let currentAttackType: string;
+				for (const moveid of moves) {
+					const move = this.dex.moves.get(moveid);
+					if (move.basePower > 30 || move.multihit || move.basePowerCallback) {
+						let moveType = move.type;
+						if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
+						if (moveType === 'Normal') {
+							if (abilities.has('Aerilate')) moveType = 'Flying';
+							if (abilities.has('Galvanize')) moveType = 'Electric';
+							if (abilities.has('Pixilate')) moveType = 'Fairy';
+							if (abilities.has('Refrigerate')) moveType = 'Ice';
+						}
+						if (moveid === 'terablast') moveType = teraType;
+						currentAttackType = move.type;
+					}
+				}
+				// Choose an attacking move that is of different type to the current single attack
+				const coverageMoves = [];
+				for (const moveid of movePool) {
+					const move = this.dex.moves.get(moveid);
+					let moveType = move.type;
+					if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
+					if (moveType === 'Normal') {
+						if (abilities.has('Aerilate')) moveType = 'Flying';
+						if (abilities.has('Galvanize')) moveType = 'Electric';
+						if (abilities.has('Pixilate')) moveType = 'Fairy';
+						if (abilities.has('Refrigerate')) moveType = 'Ice';
+					}
+					if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
+						if (currentAttackType! !== moveType) coverageMoves.push(moveid);
+					}
+				}
+			}
+		}
+
 		// Add (moves.size < this.maxMoveCount) as a condition if moves is getting larger than 4 moves.
 		// If you want moves to be favored but not required, add something like && this.randomChance(1, 2) to your condition.
 
@@ -721,6 +756,22 @@ export class RandomTeams {
 			if (moveid === 'sleeptalk' && movePool.includes('rest')) {
 				moves.add('rest');
 				this.fastPop(movePool, movePool.indexOf('rest'));
+			}
+			if (moveid === 'wish' && movePool.includes('protect')) {
+				moves.add('protect');
+				this.fastPop(movePool, movePool.indexOf('protect'));
+			}
+			if (moveid === 'protect' && movePool.includes('wish')) {
+				moves.add('wish');
+				this.fastPop(movePool, movePool.indexOf('wish'));
+			}
+			if (moveid === 'reflect' && movePool.includes('lightscreen')) {
+				moves.add('lightscreen');
+				this.fastPop(movePool, movePool.indexOf('lightscreen'));
+			}
+			if (moveid === 'lightscreen' && movePool.includes('reflect')) {
+				moves.add('reflect');
+				this.fastPop(movePool, movePool.indexOf('reflect'));
 			}
 			counter = this.queryMoves(moves, species.types, teraType, abilities);
 			this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
