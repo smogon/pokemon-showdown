@@ -360,7 +360,7 @@ export class RandomTeams {
 			if (move.drain) counter.add('drain');
 			// Moves which have a base power, but aren't super-weak:
 			if (move.basePower > 30 || move.multihit || move.basePowerCallback) {
-				if (!this.noStab.includes(moveid)) {
+				if (!this.noStab.includes(moveid) || abilities.has('Technician')  && moveid === 'machpunch') {
 					counter.add(moveType);
 					if (types.includes(moveType)) counter.stabCounter++;
 					if (teraType === moveType) counter.add('stabtera');
@@ -618,9 +618,9 @@ export class RandomTeams {
 						if (abilities.has('Refrigerate')) moveType = 'Ice';
 					}
 					if (moveid === 'terablast') moveType = teraType;
-					if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
-						if (type === moveType) {
-							stabMoves.push(moveid);
+					if (move.basePower > 30 || move.multihit || move.basePowerCallback) {
+						if (!this.noStab.includes(moveid) || abilities.has('Technician') && moveid === 'machpunch') {
+							if (type === moveType) stabMoves.push(moveid);
 						}
 					}
 				}
@@ -777,7 +777,7 @@ export class RandomTeams {
 		}
 
 		// Enforce STAB priority
-		if (role === 'Bulky Attacker' || role === 'Bulky Setup') {
+		if (role === 'Bulky Attacker' || role === 'Bulky Setup' || species.id === 'breloom') {
 			const priorityMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
