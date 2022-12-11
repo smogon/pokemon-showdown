@@ -9782,10 +9782,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 			const lastMove = target.lastMove;
 			const moveIndex = target.moves.indexOf(lastMove.id);
 			const noInstruct = [
-				'assist', 'beakblast', 'belch', 'bide', 'blazingtorque', 'bounce', 'celebrate', 'chatter', 'combattorque', 'copycat', 'dig', 'dive', 'dynamaxcannon', 'fly', 'focuspunch', 'freezeshock', 'geomancy', 'holdhands', 'iceball', 'iceburn', 'instruct', 'kingsshield', 'magicaltorque', 'mefirst', 'meteorassault', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'noxioustorque', 'obstruct', 'outrage', 'petaldance', 'phantomforce', 'razorwind', 'rollout', 'shadowforce', 'shelltrap', 'sketch', 'skullbash', 'skyattack', 'skydrop', 'sleeptalk', 'solarbeam', 'solarblade', 'struggle', 'thrash', 'transform', 'uproar', 'wickedtorque',
+				'assist', 'beakblast', 'belch', 'bide', 'blazingtorque', 'celebrate', 'chatter', 'combattorque', 'copycat', 'dynamaxcannon', 'focuspunch', 'holdhands', 'iceball', 'instruct', 'kingsshield', 'magicaltorque', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'noxioustorque', 'obstruct', 'outrage', 'petaldance', 'rollout', 'shelltrap', 'sketch', 'sleeptalk', 'struggle', 'thrash', 'transform', 'uproar', 'wickedtorque',
 			];
 			if (
 				noInstruct.includes(lastMove.id) || lastMove.isZ || lastMove.isMax ||
+				lastMove.flags['charge'] || lastMove.flags['recharge'] ||
 				target.volatiles['beakblast'] || target.volatiles['bide'] || target.volatiles['focuspunch'] ||
 				target.volatiles['shelltrap'] ||
 				(target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)
@@ -14808,7 +14809,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Rage Powder",
 		pp: 20,
 		priority: 2,
-		flags: {powder: 1},
+		flags: {},
 		volatileStatus: 'ragepowder',
 		onTry(source) {
 			return this.activePerHalf > 1;
