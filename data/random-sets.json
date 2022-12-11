@@ -89,7 +89,7 @@
         "sets": [
             {
                 "role": "Fast Bulky Setup",
-                "movepool": ["Dark Pulse", "Hypnosis", "Nasty Plot", "Parting Shot", "Power Gem", "Thunderbolt"],
+                "movepool": ["Dark Pulse", "Hypnosis", "Nasty Plot", "Power Gem", "Thunderbolt"],
                 "teraTypes": ["Dark"]
             }
         ]
@@ -334,7 +334,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Calm Mind", "Ice Beam", "Protect", "Surf", "Wish", "Yawn"],
+                "movepool": ["Calm Mind", "Ice Beam", "Protect", "Surf", "Wish"],
                 "teraTypes": ["Ghost"]
             }
         ]
