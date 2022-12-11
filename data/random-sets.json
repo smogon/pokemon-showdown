@@ -701,8 +701,8 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Body Slam", "Earthquake", "Rest", "Sleep Talk"],
-                "teraTypes": ["Ground"]
+                "movepool": ["Body Slam", "Crunch", "Earthquake", "Rest", "Sleep Talk"],
+                "teraTypes": ["Ground", "Normal"]
             }
         ]
     },
@@ -1766,7 +1766,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Body Slam", "Liquidation", "Protect", "Wish"],
+                "movepool": ["Body Slam", "Liquidation", "Mirror Coat", "Protect", "Wish"],
                 "teraTypes": ["Steel"]
             }
         ]
@@ -2086,7 +2086,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Body Press", "Light Screen", "Moonblast", "Reflect"],
+                "movepool": ["Body Press", "Light Screen", "Moonblast", "Reflect", "Stealth Rock"],
                 "teraTypes": ["Fighting"]
             }
         ]
@@ -2639,7 +2639,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Discharge", "Memento", "Spikes", "Sucker Punch", "Toxic Spikes"],
+                "movepool": ["Discharge", "Spikes", "Sucker Punch", "Toxic Spikes"],
                 "teraTypes": ["Electric", "Dark"]
             }
         ]
@@ -3451,7 +3451,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Close Combat", "Crunch", "Seed Bomb", "Spore", "Sucker Punch"],
+                "movepool": ["Close Combat", "Crunch", "Seed Bomb", "Spore", "Sucker Punch", "Synthesis"],
                 "teraTypes": ["Dark", "Fighting"]
             }
         ]
@@ -3469,7 +3469,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Encore", "Flamethrower", "Light Screen", "Play Rough", "Protect", "Reflect", "Stealth Rock", "Thunder Wave", "Wish"],
+                "movepool": ["Encore", "Light Screen", "Play Rough", "Protect", "Reflect", "Stealth Rock", "Thunder Wave", "Wish"],
                 "teraTypes": ["Fairy", "Steel"]
             }
         ]
