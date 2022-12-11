@@ -78,9 +78,7 @@ const SpeedSetup = [
 ];
 // Conglomerate for ease of access
 const Setup = [
-	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'coil', 'curse', 'dragondance', 'flamecharge',
-	'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'noretreat', 'poweruppunch', 'quiverdance', 'rockpolish',
-	'shellsmash', 'swordsdance', 'tailglow', 'tidyup', 'trailblaze', 'workup',
+	...PhysicalSetup, ...SpecialSetup, ...MixedSetup, ...SpeedSetup, 
 ];
 // Moves that shouldn't be the only STAB moves:
 const NoStab = [
