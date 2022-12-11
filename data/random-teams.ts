@@ -614,7 +614,6 @@ export class RandomTeams {
 		}
 
 		// Tera STAB:
-
 		if (!counter.get('stabtera') && role !== "Bulky Support") {
 			const stabMoves = [];
 			for (const moveid of movePool) {
@@ -635,6 +634,14 @@ export class RandomTeams {
 				counter = this.queryMoves(moves, species.types, teraType, abilities);
 				this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 			}
+		}
+
+		// Add Facade if Guts is a possible ability:
+		if (movePool.includes('facade') && abilities.has('Guts')) {
+			moves.add('facade');
+			this.fastPop(movePool, movePool.indexOf('facade'));
+			counter = this.queryMoves(moves, species.types, teraType, abilities);
+			this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 		}
 
 		// Enforce recovery
