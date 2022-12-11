@@ -537,6 +537,27 @@ export class RandomTeams {
 		}
 	}
 
+	// Adds a move to the moveset, returns the MoveCounter
+	addMove(
+		move: string,
+		moves: Set<string>,
+		types: string[],
+		abilities: Set<string>,
+		teamDetails: RandomTeamsTypes.TeamDetails,
+		species: Species,
+		isLead: boolean,
+		isDoubles: boolean,
+		movePool: string[],
+		teraType: string,
+		role: string,
+	): MoveCounter {
+		moves.add(move);
+		this.fastPop(movePool, movePool.indexOf(move));
+		const counter = this.queryMoves(moves, species.types, teraType, abilities);
+		this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+		return counter;
+	}
+
 	// Generate random moveset for a given species, role, tera type.
 	randomMoveset(
 		types: string[],
@@ -551,8 +572,8 @@ export class RandomTeams {
 	): Set<string> {
 		const moves = new Set<string>();
 		let counter = this.queryMoves(moves, species.types, teraType, abilities);
-
 		this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+
 		// If there are only four moves, add all moves and return early
 		if (movePool.length <= this.maxMoveCount) {
 			for (const moveid of movePool) {
@@ -569,18 +590,14 @@ export class RandomTeams {
 		};
 
 		if (role === "Tera Blast user") {
-			moves.add('terablast');
-			this.fastPop(movePool, movePool.indexOf('terablast'));
-			counter = this.queryMoves(moves, species.types, teraType, abilities);
-			this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+			counter = this.addMove('terablast', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
 		}
 		// Add required move (e.g. Relic Song for Meloetta-P)
 		if (species.requiredMove) {
 			const move = this.dex.moves.get(species.requiredMove).id;
-			moves.add(move);
-			this.fastPop(movePool, movePool.indexOf(move));
-			counter = this.queryMoves(moves, species.types, teraType, abilities);
-			this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+			counter = this.addMove(move, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
 		}
 
 		// Add other moves you really want to have, e.g. STAB, recovery, setup, depending on role.
@@ -609,10 +626,8 @@ export class RandomTeams {
 				}
 				if (stabMoves.length) {
 					const moveid = this.sample(stabMoves);
-					moves.add(moveid);
-					this.fastPop(movePool, movePool.indexOf(moveid));
-					counter = this.queryMoves(moves, species.types, teraType, abilities);
-					this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+					counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+						movePool, teraType, role);
 				}
 			}
 		});
@@ -639,10 +654,8 @@ export class RandomTeams {
 			}
 			if (stabMoves.length) {
 				const moveid = this.sample(stabMoves);
-				moves.add(moveid);
-				this.fastPop(movePool, movePool.indexOf(moveid));
-				counter = this.queryMoves(moves, species.types, teraType, abilities);
-				this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
 			}
 		}
 
@@ -661,43 +674,33 @@ export class RandomTeams {
 			}
 			if (stabMoves.length) {
 				const moveid = this.sample(stabMoves);
-				moves.add(moveid);
-				this.fastPop(movePool, movePool.indexOf(moveid));
-				counter = this.queryMoves(moves, species.types, teraType, abilities);
-				this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
 			}
 		}
 
 		// Enforce Facade if Guts is a possible ability
 		if (movePool.includes('facade') && abilities.has('Guts')) {
-			moves.add('facade');
-			this.fastPop(movePool, movePool.indexOf('facade'));
-			counter = this.queryMoves(moves, species.types, teraType, abilities);
-			this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+			counter = this.addMove('facade', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
 		}
 
 		// Enforce Sticky Web
 		if (movePool.includes('stickyweb')) {
-			moves.add('stickyweb');
-			this.fastPop(movePool, movePool.indexOf('stickyweb'));
-			counter = this.queryMoves(moves, species.types, teraType, abilities);
-			this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+			counter = this.addMove('stickyweb', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
 		}
 
 		// Enforce Revival Blessing
 		if (movePool.includes('revivalblessing')) {
-			moves.add('revivalblessing');
-			this.fastPop(movePool, movePool.indexOf('revivalblessing'));
-			counter = this.queryMoves(moves, species.types, teraType, abilities);
-			this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+			counter = this.addMove('revivalblessing', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
 		}
 
 		// Enforce Toxic on Grafaiai
 		if (movePool.includes('toxic') && species.id === 'grafaiai') {
-			moves.add('toxic');
-			this.fastPop(movePool, movePool.indexOf('toxic'));
-			counter = this.queryMoves(moves, species.types, teraType, abilities);
-			this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+			counter = this.addMove('toxic', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
 		}
 
 		// Enforce recovery
@@ -705,10 +708,8 @@ export class RandomTeams {
 			const recoveryMoves = movePool.filter(moveid => RecoveryMove.includes(moveid));
 			if (recoveryMoves.length) {
 				const moveid = this.sample(recoveryMoves);
-				moves.add(moveid);
-				this.fastPop(movePool, movePool.indexOf(moveid));
-				counter = this.queryMoves(moves, species.types, teraType, abilities);
-				this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
 			}
 		}
 
@@ -718,19 +719,15 @@ export class RandomTeams {
 			const nonSpeedSetupMoves = movePool.filter(moveid => Setup.includes(moveid) && !SpeedSetup.includes(moveid));
 			if (nonSpeedSetupMoves.length) {
 				const moveid = this.sample(nonSpeedSetupMoves);
-				moves.add(moveid);
-				this.fastPop(movePool, movePool.indexOf(moveid));
-				counter = this.queryMoves(moves, species.types, teraType, abilities);
-				this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
 			} else {
 				// No non-Speed setup moves, so add any (Speed) setup move
 				const setupMoves = movePool.filter(moveid => Setup.includes(moveid));
 				if (setupMoves.length) {
 					const moveid = this.sample(setupMoves);
-					moves.add(moveid);
-					this.fastPop(movePool, movePool.indexOf(moveid));
-					counter = this.queryMoves(moves, species.types, teraType, abilities);
-					this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+					counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+						movePool, teraType, role);
 				}
 			}
 		}
@@ -773,10 +770,8 @@ export class RandomTeams {
 				}
 				if (coverageMoves.length) {
 					const moveid = this.sample(coverageMoves);
-					moves.add(moveid);
-					this.fastPop(movePool, movePool.indexOf(moveid));
-					counter = this.queryMoves(moves, species.types, teraType, abilities);
-					this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+					counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+						movePool, teraType, role);
 				}
 			}
 		}
@@ -799,10 +794,8 @@ export class RandomTeams {
 			}
 			if (priorityMoves.length) {
 				const moveid = this.sample(priorityMoves);
-				moves.add(moveid);
-				this.fastPop(movePool, movePool.indexOf(moveid));
-				counter = this.queryMoves(moves, species.types, teraType, abilities);
-				this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
 			}
 		}
 
@@ -817,20 +810,19 @@ export class RandomTeams {
 				}
 				break;
 			}
-			const moveid = this.sampleNoReplace(movePool);
-			moves.add(moveid);
-			for (const pair in MovePairs) {
+			const moveid = this.sample(movePool);
+			counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
+			for (const pair of MovePairs) {
 				if (moveid === pair[0] && movePool.includes(pair[1])) {
-					moves.add(pair[1]);
-					this.fastPop(movePool, movePool.indexOf(pair[1]));
+					counter = this.addMove(pair[1], moves, types, abilities, teamDetails, species, isLead, isDoubles,
+						movePool, teraType, role);
 				}
 				if (moveid === pair[1] && movePool.includes(pair[0])) {
-					moves.add(pair[0]);
-					this.fastPop(movePool, movePool.indexOf(pair[0]));
+					counter = this.addMove(pair[0], moves, types, abilities, teamDetails, species, isLead, isDoubles,
+						movePool, teraType, role);
 				}
 			}
-			counter = this.queryMoves(moves, species.types, teraType, abilities);
-			this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 		}
 		return moves;
 	}
