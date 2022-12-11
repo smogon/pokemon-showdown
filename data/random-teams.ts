@@ -46,6 +46,12 @@ export class MoveCounter extends Utils.Multiset<string> {
 	}
 }
 
+type MoveEnforcementChecker = (
+	movePool: string[], moves: Set<string>, abilities: Set<string>, types: Set<string>,
+	counter: MoveCounter, species: Species, teamDetails: RandomTeamsTypes.TeamDetails,
+	isLead: boolean, isDoubles: boolean, teraType: string, role: string,
+) => boolean;
+
 // Moves that restore HP:
 const RecoveryMove = [
 	'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'rest', 'roost', 'shoreup', 'slackoff', 'softboiled', 'strengthsap', 'synthesis',
@@ -104,6 +110,8 @@ export class RandomTeams {
 	readonly maxMoveCount: number;
 	readonly forceMonotype: string | undefined;
 
+	moveEnforcementCheckers: {[k: string]: MoveEnforcementChecker};
+
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		format = Dex.formats.get(format);
 		this.dex = Dex.forFormat(format);
@@ -121,6 +129,67 @@ export class RandomTeams {
 		this.factoryTier = '';
 		this.format = format;
 		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
+
+		this.moveEnforcementCheckers = {
+			Bug: (movePool) => movePool.includes('megahorn'),
+			Dark: (movePool, moves, abilities, types, counter) => {
+				if (!counter.get('Dark')) return true;
+				return moves.has('suckerpunch') && (movePool.includes('knockoff') || movePool.includes('wickedblow'));
+			},
+			Dragon: (movePool, moves, abilities, types, counter) => (
+				!counter.get('Dragon') &&
+				!moves.has('dragonascent') &&
+				!moves.has('substitute') &&
+				!(moves.has('rest') && moves.has('sleeptalk'))
+			),
+			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
+			Fairy: (movePool, moves, abilities, types, counter) => (
+				!counter.get('Fairy') &&
+				['dazzlinggleam', 'moonblast', 'fleurcannon', 'playrough', 'strangesteam'].some(moveid => movePool.includes(moveid))
+			),
+			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting'),
+			Fire: (movePool, moves, abilities, types, counter, species) => {
+				return !counter.get('Fire');
+			},
+			Flying: (movePool, moves, abilities, types, counter) => (
+				!counter.get('Flying') && !types.has('Dragon') && [
+					'airslash', 'bravebird', 'dualwingbeat', 'oblivionwing',
+				].some(moveid => movePool.includes(moveid))
+			),
+			Ghost: (movePool, moves, abilities, types, counter) => {
+				if (!counter.get('Ghost') && !types.has('Dark')) return true;
+				return !counter.get('Dark');
+			},
+			Grass: (movePool, moves, abilities, types, counter, species) => {
+				if (movePool.includes('leafstorm')) return true;
+				return !counter.get('Grass') && species.baseStats.atk >= 100;
+			},
+			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
+			Ice: (movePool, moves, abilities, types, counter) => {
+				return !counter.get('Ice');
+			},
+			Normal: (movePool, moves, abilities, types, counter) => {
+				return (abilities.has('Guts') && movePool.includes('facade'));
+			},
+			Poison: (movePool, moves, abilities, types, counter) => {
+				if (counter.get('Poison')) return false;
+				return types.has('Ground') || types.has('Psychic') || types.has('Grass') || !!counter.get('setup') || movePool.includes('gunkshot');
+			},
+			Psychic: (movePool, moves, abilities, types, counter) => {
+				if (counter.get('Psychic')) return false;
+				if (types.has('Ghost') || types.has('Steel')) return false;
+				return abilities.has('Psychic Surge') || !!counter.get('setup') || movePool.includes('psychicfangs');
+			},
+			Rock: (movePool, moves, abilities, types, counter, species) => !counter.get('Rock') && species.baseStats.atk >= 80,
+			Steel: (movePool, moves, abilities, types, counter, species) => {
+				if (species.baseStats.atk < 95) return false;
+				if (movePool.includes('meteormash')) return true;
+				return !counter.get('Steel');
+			},
+			Water: (movePool, moves, abilities, types, counter, species) => {
+				return !counter.get('Water');
+			},
+		};
 	}
 
 	setSeed(prng?: PRNG | PRNGSeed) {
@@ -314,14 +383,11 @@ export class RandomTeams {
 			// Moves that change stats:
 			if (RecoveryMove.includes(moveid)) counter.add('recovery');
 			if (ContraryMoves.includes(moveid)) counter.add('contrary');
-			if (PhysicalSetup.includes(moveid)) {
-				counter.add('physicalsetup');
-			} else if (SpecialSetup.includes(moveid)) {
-				counter.add('specialsetup');
-			}
-
+			if (PhysicalSetup.includes(moveid)) counter.add('physicalsetup');
+			if (SpecialSetup.includes(moveid)) counter.add('specialsetup');
 			if (MixedSetup.includes(moveid)) counter.add('mixedsetup');
 			if (SpeedSetup.includes(moveid)) counter.add('speedsetup');
+			if (Setup.includes(moveid)) counter.add('setup');
 			if (Hazards.includes(moveid)) counter.add('hazards');
 		}
 
