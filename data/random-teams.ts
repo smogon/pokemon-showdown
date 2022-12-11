@@ -335,6 +335,12 @@ export class RandomTeams {
 
 			let moveType = move.type;
 			if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
+			if (moveType === 'Normal') {
+				if (abilities.has('Aerilate')) moveType = 'Flying';
+				if (abilities.has('Galvanize')) moveType = 'Electric';
+				if (abilities.has('Pixilate')) moveType = 'Fairy';
+				if (abilities.has('Refrigerate')) moveType = 'Ice';
+			}
 			if (move.damage || move.damageCallback) {
 				// Moves that do a set amount of damage:
 				counter.add('damage');
@@ -356,12 +362,6 @@ export class RandomTeams {
 				if (!this.noStab.includes(moveid)) {
 					counter.add(moveType);
 					if (types.includes(moveType)) counter.stabCounter++;
-					if (moveType === 'Normal') {
-						if (abilities.has('Aerilate') && types.includes('Flying')) counter.stabCounter++;
-						if (abilities.has('Galvanize') && types.includes('Electric')) counter.stabCounter++;
-						if (abilities.has('Pixilate') && types.includes('Fairy')) counter.stabCounter++;
-						if (abilities.has('Refrigerate') && types.includes('Ice')) counter.stabCounter++;
-					}
 					if (teraType === moveType) counter.add('stabtera');
 				}
 				if (move.flags['bite']) counter.add('strongjaw');
