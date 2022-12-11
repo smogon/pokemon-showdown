@@ -823,6 +823,7 @@ export class RandomTeams {
 		counter: MoveCounter,
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
+		isLead: boolean,
 		isDoubles: boolean,
 		teraType: string,
 		role: string,
@@ -1006,6 +1007,7 @@ export class RandomTeams {
 		counter: MoveCounter,
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
+		isLead: boolean,
 		isDoubles: boolean,
 		teraType: string,
 		role: string,
@@ -1051,7 +1053,7 @@ export class RandomTeams {
 		let rejectAbility = false;
 		do {
 			rejectAbility = this.shouldCullAbility(
-				ability, types, moves, abilities, counter, teamDetails, species, isDoubles, teraType, role
+				ability, types, moves, abilities, counter, teamDetails, species, isLead, isDoubles, teraType, role
 			);
 
 			if (rejectAbility) {
@@ -1189,8 +1191,10 @@ export class RandomTeams {
 
 	getItem(
 		ability: string,
+		types: string[],
 		moves: Set<string>,
 		counter: MoveCounter,
+		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
 		isLead: boolean,
 		isDoubles: boolean,
@@ -1292,7 +1296,7 @@ export class RandomTeams {
 		const counter = this.queryMoves(moves, species.types, teraType, abilities);
 
 		// Get ability
-		ability = this.getAbility(types, moves, abilities, counter, teamDetails, species, isDoubles, teraType, role);
+		ability = this.getAbility(types, moves, abilities, counter, teamDetails, species, isLead, isDoubles, teraType, role);
 
 		// Get items
 		// First, the priority items
@@ -1301,7 +1305,7 @@ export class RandomTeams {
 			item = this.getDoublesItem(ability, types, moves, counter, teamDetails, species, teraType, role);
 		}
 		if (item === undefined) {
-			item = this.getItem(ability, moves, counter, species, isLead, isDoubles, teraType, role);
+			item = this.getItem(ability, types, moves, counter, teamDetails, species, isLead, isDoubles, teraType, role);
 		}
 
 		// fallback
