@@ -94,6 +94,9 @@ const Hazards = [
 	'spikes', 'stealthrock', 'stickyweb', 'toxicspikes',
 ];
 
+// Moves that should be paired together when possible
+const movePairs = [['lightscreen', 'reflect'], ['sleeptalk', 'rest'], ['protect', 'wish']];
+
 function sereneGraceBenefits(move: Move) {
 	return move.secondary?.chance && move.secondary.chance >= 20 && move.secondary.chance < 100;
 }
@@ -410,21 +413,29 @@ export class RandomTeams {
 		teraType: string,
 		role: string,
 	): void {
-		if (moves.size + movePool.length <= this.maxMoveCount) {
-			return;
+		if (moves.size + movePool.length <= this.maxMoveCount) return;
+		// If we have two unfilled moves and only one unpaired move, cull the unpaired move.
+		if (moves.size === this.maxMoveCount - 2) {
+			const unpairedMoves = Object.assign([], movePool);
+			for (const pair of movePairs) {
+				if (movePool.includes(pair[0]) && movePool.includes(pair[1])) {
+					this.fastPop(unpairedMoves, unpairedMoves.indexOf(pair[0]));
+					this.fastPop(unpairedMoves, unpairedMoves.indexOf(pair[1]));
+				}
+			}
+			if (unpairedMoves.length === 1) {
+				this.fastPop(movePool, movePool.indexOf(unpairedMoves[0]));
+			}
 		}
+
 		// These moves are paired, and shouldn't appear if there is not room for them both.
-		if (moves.size === this.maxMoveCount - 1 && movePool.includes('lightscreen') && movePool.includes('reflect')) {
-			this.fastPop(movePool, movePool.indexOf('lightscreen'));
-			this.fastPop(movePool, movePool.indexOf('reflect'));
-		}
-		if (moves.size === this.maxMoveCount - 1 && movePool.includes('rest') && movePool.includes('sleeptalk')) {
-			this.fastPop(movePool, movePool.indexOf('sleeptalk'));
-			this.fastPop(movePool, movePool.indexOf('rest'));
-		}
-		if (moves.size === this.maxMoveCount - 1 && movePool.includes('wish') && movePool.includes('protect')) {
-			this.fastPop(movePool, movePool.indexOf('protect'));
-			this.fastPop(movePool, movePool.indexOf('wish'));
+		if (moves.size === this.maxMoveCount - 1) {
+			for (const pair of movePairs) {
+				if (movePool.includes(pair[0]) && movePool.includes(pair[1])) {
+					this.fastPop(movePool, movePool.indexOf(pair[0]));
+					this.fastPop(movePool, movePool.indexOf(pair[1]));
+				}
+			}
 		}
 
 		// Develop additional move lists
@@ -438,6 +449,7 @@ export class RandomTeams {
 		if (teamDetails.stealthRock) {
 			if (movePool.includes('stealthrock')) this.fastPop(movePool, movePool.indexOf('stealthrock'));
 		}
+		if (moves.size + movePool.length <= this.maxMoveCount) return;
 		if (teamDetails.defog || teamDetails.rapidSpin) {
 			if (movePool.includes('defog')) this.fastPop(movePool, movePool.indexOf('defog'));
 			if (movePool.includes('rapidspin')) this.fastPop(movePool, movePool.indexOf('rapidspin'));
@@ -508,13 +520,13 @@ export class RandomTeams {
 	): void {
 		const moveArrayA = (Array.isArray(movesA)) ? movesA : [movesA];
 		const moveArrayB = (Array.isArray(movesB)) ? movesB : [movesB];
-		// if (moves.size + movePool.length <= this.maxMoveCount) return;
+		if (moves.size + movePool.length <= this.maxMoveCount) return;
 		for (const moveid1 of moves) {
 			if (moveArrayB.includes(moveid1)) {
 				for (const moveid2 of moveArrayA) {
 					if (moveid1 !== moveid2 && movePool.includes(moveid2)) {
 						this.fastPop(movePool, movePool.indexOf(moveid2));
-						// if (moves.size + movePool.length <= this.maxMoveCount) return;
+						if (moves.size + movePool.length <= this.maxMoveCount) return;
 					}
 				}
 			}
@@ -522,7 +534,7 @@ export class RandomTeams {
 				for (const moveid2 of moveArrayB) {
 					if (moveid1 !== moveid2 && movePool.includes(moveid2)) {
 						this.fastPop(movePool, movePool.indexOf(moveid2));
-						// if (moves.size + movePool.length <= this.maxMoveCount) return;
+						if (moves.size + movePool.length <= this.maxMoveCount) return;
 					}
 				}
 			}
@@ -544,6 +556,7 @@ export class RandomTeams {
 		const moves = new Set<string>();
 		let counter = this.queryMoves(moves, species.types, teraType, abilities);
 
+		this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 		// If there are only four moves, add all moves and return early
 		if (movePool.length <= this.maxMoveCount) {
 			for (const moveid of movePool) {
