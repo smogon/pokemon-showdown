@@ -1237,6 +1237,39 @@ export const Rulesets: {[k: string]: FormatData} = {
 			this.add('rule', 'OUD Terastal Clause: You cannot Terastallize an OUD Pok&eacute;mon.');
 		},
 	},
+	sametypeterastalclause: {
+		effectType: 'ValidatorRule',
+		name: 'Same-Type Terastal Clause',
+		desc: "Forces all Pok&eacute;mon on a team to have a Terastal Type that does not match any of their original types.",
+		onValidateSet(set) {
+			const species = this.dex.species.get(set.species);
+			const types = species.types;
+			if (set.teraType && types.includes(set.teraType)) {
+				return [`${set.species}'s Tera Type must not match its original types.`];
+			}
+		},
+		onBegin() {
+			this.add('rule', 'Same-Type Terastal Clause: All Pok&eacute;mon must have a Tera Type that does not match any of their original types.');
+		}
+	},
+	dnusametypeterastalclause: {
+		effectType: 'ValidatorRule',
+		name: 'DNU Same-Type Terastal Clause',
+		desc: "Forces all Pok&eacute;mon on a team to have a Terastal Type that does not match any of their original types. As well as banning Tera Blast",
+		onValidateSet(set) {
+			const species = this.dex.species.get(set.species);
+			const types = species.types;
+			if (set.teraType && types.includes(set.teraType)) {
+				return [`${set.species}'s Tera Type must not match its original types.`];
+			}
+			if (set.moves.includes('Tera Blast')) {
+				return [`${set.species} may not use Tera Blast.`];
+			}
+		},
+		onBegin() {
+			this.add('rule', 'Same-Type Terastal Clause: All Pok&eacute;mon must have a Tera Type that does not match any of their original types.');
+		}
+	},
 	arceusevlimit: {
 		effectType: 'ValidatorRule',
 		name: 'Arceus EV Limit',
