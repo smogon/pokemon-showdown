@@ -241,19 +241,6 @@ export class RandomTeams {
 		throw new Error(`Legal ${effectTypeName} count is insufficient to support ${requiredCountExplanation} (${basicEffectPool.length} / ${requiredCount}).`);
 	}
 
-	unrejectableMovesInSingles(move: Move) {
-		// These moves cannot be rejected in favor of a forced move in singles
-		return (move.category !== 'Status' || !move.flags.heal) && ![
-			'facade', 'leechseed', 'lightscreen', 'reflect', 'sleeptalk', 'spore', 'substitute', 'switcheroo',
-			'teleport', 'toxic', 'trick',
-		].includes(move.id);
-	}
-
-	unrejectableMovesInDoubles(move: Move) {
-		// These moves cannot be rejected in favor of a forced move in doubles
-		return move.id !== 'bodypress';
-	}
-
 	randomCCTeam(): RandomTeamsTypes.RandomSet[] {
 		this.enforceNoDirectCustomBanlistChanges();
 
