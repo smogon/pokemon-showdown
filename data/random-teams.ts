@@ -501,10 +501,6 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'switcheroo', ['fakeout', 'suckerpunch']);
 		// Beartic
 		this.incompatibleMoves(moves, movePool, 'snowscape', 'swordsdance');
-		// Vaporeon
-		if (species.id === 'vaporeon') this.incompatibleMoves(moves, movePool, 'calmmind', 'icebeam');
-		// Giratina
-		this.incompatibleMoves(moves, movePool, 'dragontail', 'willowisp');
 		// Cryogonal
 		if (!teamDetails.defog && !teamDetails.rapidSpin && species.id === 'cryogonal') {
 			this.fastPop(movePool, movePool.indexOf('haze'));
