@@ -78,7 +78,7 @@ const SpeedSetup = [
 ];
 // Conglomerate for ease of access
 const Setup = [
-	...PhysicalSetup, ...SpecialSetup, ...MixedSetup, ...SpeedSetup, 
+	...PhysicalSetup, ...SpecialSetup, ...MixedSetup, ...SpeedSetup,
 ];
 // Moves that shouldn't be the only STAB moves:
 const NoStab = [
