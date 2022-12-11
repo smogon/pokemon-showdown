@@ -80,7 +80,7 @@ const SpeedSetup = [
 const Setup = [
 	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'coil', 'curse', 'dragondance', 'flamecharge',
 	'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'noretreat', 'poweruppunch', 'quiverdance', 'rockpolish',
-	'shellsmash', 'swordsdance', 'tailglow', 'tidyup', 'trailblaze', 'workup',
+	'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'tidyup', 'trailblaze', 'workup',
 ];
 // Moves that shouldn't be the only STAB moves:
 const NoStab = [
@@ -428,23 +428,34 @@ export class RandomTeams {
 		}
 
 		// Develop additional move lists
-		const pivotingMoves = ['chillyreception', 'flipturn', 'partingshot', 'teleport', 'uturn', 'voltswitch'];
+		const pivotingMoves = ['chillyreception', 'flipturn', 'partingshot', 'shedtail', 'teleport', 'uturn', 'voltswitch']
 		const statusMoves = [];
 		for (const move of this.dex.moves.all()) {
-			if (move.category === 'Status') statusMoves.push(move.id);
+    		if (move.category === 'Status') statusMoves.push(move.id);
 		}
 
+		// Team-based move culls
+		if (teamDetails.stealthRock) this.fastPop(movePool, movePool.indexOf('stealthrock'));
+		if (teamDetails.defog || teamDetails.rapidSpin) {
+			this.fastPop(movePool, movePool.indexOf('defog'));
+			this.fastPop(movePool, movePool.indexOf('rapidspin'));
+		}
+		if (teamDetails.stickyWeb) this.fastPop(movePool, movePool.indexOf('stickyweb'));
+
+
 		// These moves don't mesh well with other aspects of the set
+		if (species.id !== "spidops") {
+			this.incompatibleMoves(moves, movePool, statusMoves, ['healingwish', 'memento', 'switcheroo', 'trick'])
+		}
 		if (species.id !== "scyther" && species.id !== "scizor") {
 			this.incompatibleMoves(moves, movePool, Setup, pivotingMoves);
 		}
 		this.incompatibleMoves(moves, movePool, Setup, Hazards);
-		this.incompatibleMoves(moves, movePool, Setup, ['nuzzle', 'toxic', 'waterspout', 'yawn']);
+		this.incompatibleMoves(moves, movePool, Setup, ['defog', 'nuzzle', 'toxic', 'waterspout', 'yawn']);
 		this.incompatibleMoves(moves, movePool, PhysicalSetup, PhysicalSetup);
 		this.incompatibleMoves(moves, movePool, SpecialSetup, 'thunderwave');
-		this.incompatibleMoves(moves, movePool, statusMoves, ['healingwish', 'memento', 'switcheroo', 'trick']);
 		this.incompatibleMoves(moves, movePool, 'substitute', pivotingMoves);
-		this.incompatibleMoves(moves, movePool, SpeedSetup, ['Aqua Jet', 'Rest']);
+		this.incompatibleMoves(moves, movePool, SpeedSetup, ['aquajet', 'rest', 'trickroom']);
 		this.incompatibleMoves(moves, movePool, 'curse', 'rapidspin');
 
 
@@ -455,18 +466,18 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, ['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']);
 		this.incompatibleMoves(moves, movePool, 'knockoff', 'foulplay');
 		this.incompatibleMoves(moves, movePool, 'doubleedge', 'headbutt');
-		this.incompatibleMoves(moves, movePool, 'fireblast', ['fierydance', 'flamethrower', 'torchsong']);
+		this.incompatibleMoves(moves, movePool, 'fireblast', ['fierydance', 'flamethrower']);
 		this.incompatibleMoves(moves, movePool, 'gunkshot', ['direclaw', 'poisonjab']);
 		this.incompatibleMoves(moves, movePool, 'aurasphere', 'focusblast');
-		this.incompatibleMoves(moves, movePool, 'thunderbolt', 'discharge');
 		this.incompatibleMoves(moves, movePool, 'bugbite', 'pounce');
 		this.incompatibleMoves(moves, movePool, 'bittermalice', 'shadowball');
+		this.incompatibleMoves(moves, movePool, 'dragonpulse', 'dracometeor')
 
 
 		// These status moves are redundant with each other
 		this.incompatibleMoves(moves, movePool, ['taunt', 'strengthsap'], 'encore');
 		this.incompatibleMoves(moves, movePool, 'toxic', 'willowisp');
-		this.incompatibleMoves(moves, movePool, ['thunderwave', 'toxic', 'willowisp'], 'toxicspikes');
+		this.incompatibleMoves(moves, movePool, ['thunderwave', 'toxic', 'willowisp'], 'toxicspikes')
 
 		// This space reserved for assorted hardcodes that otherwise make little sense out of context
 		// Landorus
@@ -477,8 +488,12 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'snowscape', 'swordsdance');
 		// Vaporeon
 		if (species.id === 'vaporeon') {
-			this.incompatibleMoves(moves, movePool, 'calmmind', 'icebeam');
+			this.incompatibleMoves(moves, movePool, 'calmmind', 'icebeam')
 		}
+		// Giratina
+		this.incompatibleMoves(moves, movePool, 'dragontail', 'willowisp');
+		// Cryogonal
+		if (!teamDetails.defog && !teamDetails.rapidSpin && species.id === 'cryogonal') this.fastPop(movePool, movePool.indexOf('haze'))
 	}
 
 	incompatibleMoves(
@@ -690,13 +705,11 @@ export class RandomTeams {
 			} else {
 				// No non-Speed setup moves, so add any (Speed) setup move
 				const setupMoves = movePool.filter(moveid => Setup.includes(moveid));
-				if (setupMoves.length) {
-					const moveid = this.sample(setupMoves);
-					moves.add(moveid);
-					this.fastPop(movePool, movePool.indexOf(moveid));
-					counter = this.queryMoves(moves, species.types, teraType, abilities);
-					this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
-				}
+				const moveid = this.sample(setupMoves);
+				moves.add(moveid);
+				this.fastPop(movePool, movePool.indexOf(moveid));
+				counter = this.queryMoves(moves, species.types, teraType, abilities);
+				this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 			}
 		}
 
