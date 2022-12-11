@@ -34,11 +34,13 @@ interface BattleFactorySet {
 export class MoveCounter extends Utils.Multiset<string> {
 	damagingMoves: Set<Move>;
 	setupType: string;
+	stabCounter: number;
 
 	constructor() {
 		super();
 		this.damagingMoves = new Set();
 		this.setupType = '';
+		this.stabCounter = 0;
 	}
 
 	get(key: string): number {
@@ -826,6 +828,14 @@ export class RandomTeams {
 			// Moves which have a base power, but aren't super-weak like Rapid Spin:
 			if (move.basePower > 30 || move.multihit || move.basePowerCallback) {
 				counter.add(moveType);
+				if (types.includes(moveType)) counter.stabCounter++;
+				if (moveType === 'Normal') {
+					if (abilities.has('Aerilate') && types.includes('Flying')) counter.stabCounter++;
+					if (abilities.has('Galvanize') && types.includes('Electric')) counter.stabCounter++;
+					if (abilities.has('Pixilate') && types.includes('Fairy')) counter.stabCounter++;
+					if (abilities.has('Refrigerate') && types.includes('Ice')) counter.stabCounter++;
+				}
+				if (teraType === moveType) counter.add('stabtera');
 				if (move.flags['bite']) counter.add('strongjaw');
 				if (move.flags['punch']) counter.add('ironfist');
 				if (move.flags['sound']) counter.add('sound');
@@ -860,112 +870,9 @@ export class RandomTeams {
 			if (Hazards.includes(moveid)) counter.add('hazards');
 		}
 
-		// Choose a setup type:
-		if (counter.get('mixedsetup')) {
-			counter.setupType = 'Mixed';
-		} else if (counter.get('physicalsetup') && counter.get('specialsetup')) {
-			const pool = {
-				Physical: categories['Physical'] + counter.get('physicalpool'),
-				Special: categories['Special'] + counter.get('specialpool'),
-			};
-			if (pool.Physical === pool.Special) {
-				if (categories['Physical'] > categories['Special']) counter.setupType = 'Physical';
-				if (categories['Special'] > categories['Physical']) counter.setupType = 'Special';
-			} else {
-				counter.setupType = pool.Physical > pool.Special ? 'Physical' : 'Special';
-			}
-		} else if (counter.setupType === 'Physical') {
-			if (
-				(categories['Physical'] < 2 && (!counter.get('stab') || !counter.get('physicalpool'))) &&
-				!(moves.has('rest') && moves.has('sleeptalk'))
-			) {
-				counter.setupType = '';
-			}
-		} else if (counter.setupType === 'Special') {
-			if (
-				(categories['Special'] < 2 && (!counter.get('stab') || !counter.get('specialpool'))) &&
-				!(moves.has('rest') && moves.has('sleeptalk')) &&
-				!(moves.has('wish') && moves.has('protect'))
-			) {
-				counter.setupType = '';
-			}
-		}
-
 		counter.set('Physical', Math.floor(categories['Physical']));
 		counter.set('Special', Math.floor(categories['Special']));
 		counter.set('Status', categories['Status']);
-
-		// Check STABs here
-		types.forEach((type, index) => {
-			let stab = false;
-			for (const moveid in moves) {
-				const move = this.dex.moves.get(moveid);
-				let moveType = move.type;
-				if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
-				if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
-					if (type === moveType) {
-						stab = true;
-						break;
-					}
-					if (moveType === 'Normal') {
-						if (abilities.has('Aerilate') && type === 'Flying') {
-							stab = true;
-							break;
-						}
-						if (abilities.has('Galvanize') && type === 'Electric') {
-							stab = true;
-							break;
-						}
-						if (abilities.has('Pixilate') && type === 'Fairy') {
-							stab = true;
-							break;
-						}
-						if (abilities.has('Refrigerate') && type === 'Ice') {
-							stab = true;
-							break;
-						}
-					}
-				}
-			}
-			if (stab) {
-				if (index) {
-					counter.add('stabsecondary');
-				} else {
-					counter.add('stabprimary');
-				}
-			}
-		});
-
-		// Check Tera STAB
-		if (teraType === types[0]) {
-			if (counter.get('stabprimary')) {
-				counter.add('stabtera');
-			}
-		} else if (types.length > 1 && teraType === types[1]) {
-			if (counter.get('stabsecondary')) {
-				counter.add('stabtera');
-			}
-		} else {
-			let stabtera = false;
-			for (const moveid in moves) {
-				const move = this.dex.moves.get(moveid);
-				if (moveid === 'terablast') {
-					stabtera = true;
-					break;
-				}
-				let moveType = move.type;
-				if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
-				if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
-					if (teraType === moveType) {
-						stabtera = true;
-						break;
-					}
-				}
-			}
-			if (stabtera) {
-				counter.add('stabtera');
-			}
-		}
 		return counter;
 	}
 
@@ -1044,44 +951,42 @@ export class RandomTeams {
 
 		// For example, STAB:
 		types.forEach((type, index) => {
-			if (!index && !counter.get('stabprimary') || index && !counter.get('stabsecondary')) {
-				const stabMoves = [];
-				for (const moveid of movePool) {
-					const move = this.dex.moves.get(moveid);
-					let moveType = move.type;
-					if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
-					if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
-						if (type === moveType) {
+			const stabMoves = [];
+			for (const moveid of movePool) {
+				const move = this.dex.moves.get(moveid);
+				let moveType = move.type;
+				if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
+				if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
+					if (type === moveType) {
+						stabMoves.push(moveid);
+						break;
+					}
+					if (moveType === 'Normal') {
+						if (abilities.has('Aerilate') && type === 'Flying') {
 							stabMoves.push(moveid);
 							break;
 						}
-						if (moveType === 'Normal') {
-							if (abilities.has('Aerilate') && type === 'Flying') {
-								stabMoves.push(moveid);
-								break;
-							}
-							if (abilities.has('Galvanize') && type === 'Electric') {
-								stabMoves.push(moveid);
-								break;
-							}
-							if (abilities.has('Pixilate') && type === 'Fairy') {
-								stabMoves.push(moveid);
-								break;
-							}
-							if (abilities.has('Refrigerate') && type === 'Ice') {
-								stabMoves.push(moveid);
-								break;
-							}
+						if (abilities.has('Galvanize') && type === 'Electric') {
+							stabMoves.push(moveid);
+							break;
+						}
+						if (abilities.has('Pixilate') && type === 'Fairy') {
+							stabMoves.push(moveid);
+							break;
+						}
+						if (abilities.has('Refrigerate') && type === 'Ice') {
+							stabMoves.push(moveid);
+							break;
 						}
 					}
 				}
-				if (stabMoves.length) {
-					const moveid = this.sample(stabMoves);
-					moves.add(moveid);
-					this.fastPop(movePool, movePool.indexOf(moveid));
-					counter = this.queryMoves(moves, species.types, teraType, abilities);
-					this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
-				}
+			}
+			if (stabMoves.length) {
+				const moveid = this.sample(stabMoves);
+				moves.add(moveid);
+				this.fastPop(movePool, movePool.indexOf(moveid));
+				counter = this.queryMoves(moves, species.types, teraType, abilities);
+				this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 			}
 		});
 
