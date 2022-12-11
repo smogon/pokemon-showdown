@@ -550,8 +550,7 @@ export class RandomTeams {
 
 		// Add other moves you really want to have, e.g. STAB, recovery, setup, depending on role.
 
-		// For example, STAB:
-
+		// Enforce STAB:
 		types.forEach((type, index) => {
 			// Check if a STAB move of that type should be required
 			if (runEnforcementChecker(type)) {
@@ -638,17 +637,34 @@ export class RandomTeams {
 			}
 		}
 
-		// For example, recovery:
-		if (role === "Bulky Support" || role === "Bulky Attacker") {
+		// Enforce recovery
+		if (["Bulky Support", "Bulky Attacker", "Bulky Setup"].includes(role)) {
 			const recoveryMoves = movePool.filter(moveid => RecoveryMove.includes(moveid));
 			if (recoveryMoves.length) {
 				const moveid = this.sample(recoveryMoves);
 				moves.add(moveid);
 				this.fastPop(movePool, movePool.indexOf(moveid));
-				if (moveid === 'rest' && movePool.includes('sleeptalk')) {
-					moves.add('sleeptalk');
-					this.fastPop(movePool, movePool.indexOf('sleeptalk'));
-				}
+				counter = this.queryMoves(moves, species.types, teraType, abilities);
+				this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+			}
+		}
+
+		// Enforce setup
+		if (role.includes('Setup')) {
+			// First, try to add a non-Speed setup move
+			const nonSpeedSetupMoves = movePool.filter(moveid => Setup.includes(moveid) && !SpeedSetup.includes(moveid));
+			if (nonSpeedSetupMoves.length) {
+				const moveid = this.sample(nonSpeedSetupMoves);
+				moves.add(moveid);
+				this.fastPop(movePool, movePool.indexOf(moveid));
+				counter = this.queryMoves(moves, species.types, teraType, abilities);
+				this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+			} else {
+				// No non-Speed setup moves, so add any (Speed) setup move
+				const setupMoves = movePool.filter(moveid => Setup.includes(moveid));
+				const moveid = this.sample(setupMoves);
+				moves.add(moveid);
+				this.fastPop(movePool, movePool.indexOf(moveid));
 				counter = this.queryMoves(moves, species.types, teraType, abilities);
 				this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 			}
