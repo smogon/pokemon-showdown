@@ -351,17 +351,19 @@ export class RandomTeams {
 			if (move.multihit && Array.isArray(move.multihit) && move.multihit[1] === 5) counter.add('skilllink');
 			if (move.recoil || move.hasCrashDamage) counter.add('recoil');
 			if (move.drain) counter.add('drain');
-			// Moves which have a base power, but aren't super-weak like Rapid Spin:
+			// Moves which have a base power, but aren't super-weak:
 			if (move.basePower > 30 || move.multihit || move.basePowerCallback) {
-				counter.add(moveType);
-				if (types.includes(moveType)) counter.stabCounter++;
-				if (moveType === 'Normal') {
-					if (abilities.has('Aerilate') && types.includes('Flying')) counter.stabCounter++;
-					if (abilities.has('Galvanize') && types.includes('Electric')) counter.stabCounter++;
-					if (abilities.has('Pixilate') && types.includes('Fairy')) counter.stabCounter++;
-					if (abilities.has('Refrigerate') && types.includes('Ice')) counter.stabCounter++;
+				if (!this.noStab.includes(moveid)) {
+					counter.add(moveType);
+					if (types.includes(moveType)) counter.stabCounter++;
+					if (moveType === 'Normal') {
+						if (abilities.has('Aerilate') && types.includes('Flying')) counter.stabCounter++;
+						if (abilities.has('Galvanize') && types.includes('Electric')) counter.stabCounter++;
+						if (abilities.has('Pixilate') && types.includes('Fairy')) counter.stabCounter++;
+						if (abilities.has('Refrigerate') && types.includes('Ice')) counter.stabCounter++;
+					}
+					if (teraType === moveType) counter.add('stabtera');
 				}
-				if (teraType === moveType) counter.add('stabtera');
 				if (move.flags['bite']) counter.add('strongjaw');
 				if (move.flags['punch']) counter.add('ironfist');
 				if (move.flags['sound']) counter.add('sound');
