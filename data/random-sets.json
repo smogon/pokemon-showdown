@@ -634,11 +634,6 @@
                 "role": "Bulky Setup",
                 "movepool": ["Coil", "Body Slam", "Earthquake", "Roost"],
                 "teraTypes": ["Ground"]
-            },
-            {
-                "role": "Bulky Support",
-                "movepool": ["Glare", "Headbutt", "Roost", "Stealth Rock"],
-                "teraTypes": ["Ghost"]
             }
         ]
     },
@@ -2990,9 +2985,9 @@
     "dudunsparce": {
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["Body Slam", "Coil", "Earthquake", "Roost"],
-                "teraTypes": ["Ground"]
+                "role": "Bulky Support",
+                "movepool": ["Earthquake", "Glare", "Headbutt", "Roost"],
+                "teraTypes": ["Normal", "Ghost", "Ground"]
             },
             {
                 "role": "Bulky Setup",
