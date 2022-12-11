@@ -4,6 +4,12 @@
  * This generation inherits all the changes from older generations, that must be taken into account when editing code.
  */
 
+const SKIP_LASTDAMAGE = new Set([
+	'confuseray', 'conversion', 'counter', 'focusenergy', 'glare', 'haze', 'leechseed', 'lightscreen',
+	'mimic', 'mist', 'poisongas', 'poisonpowder', 'recover', 'reflect', 'rest', 'softboiled',
+	'splash', 'stunspore', 'substitute', 'supersonic', 'teleport', 'thunderwave', 'toxic', 'transform',
+]);
+
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen2',
 	gen: 1,
@@ -276,11 +282,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				return true;
 			}
 			// Store 0 damage for last damage if the move is not in the array.
-			if (![
-				'confuseray', 'conversion', 'counter', 'focusenergy', 'glare', 'haze', 'leechseed', 'lightscreen',
-				'mimic', 'mist', 'poisongas', 'poisonpowder', 'recover', 'reflect', 'rest', 'softboiled',
-				'splash', 'stunspore', 'substitute', 'supersonic', 'teleport', 'thunderwave', 'toxic', 'transform',
-			].includes(move.id)) this.battle.lastDamage = 0;
+			if (!SKIP_LASTDAMAGE.has(move.id)) this.battle.lastDamage = 0;
 
 			damage = this.tryMoveHit(target, pokemon, move);
 
