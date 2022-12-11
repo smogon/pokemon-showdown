@@ -416,15 +416,15 @@ export class RandomTeams {
 		// These moves are paired, and shouldn't appear if there is not room for them both.
 		if (moves.size === this.maxMoveCount - 1 && movePool.includes('lightscreen') && movePool.includes('reflect')) {
 			this.fastPop(movePool, movePool.indexOf('lightscreen'));
-			if (movePool.length > 1) this.fastPop(movePool, movePool.indexOf('reflect'));
+			this.fastPop(movePool, movePool.indexOf('reflect'));
 		}
 		if (moves.size === this.maxMoveCount - 1 && movePool.includes('rest') && movePool.includes('sleeptalk')) {
 			this.fastPop(movePool, movePool.indexOf('sleeptalk'));
-			if (movePool.length > 1) this.fastPop(movePool, movePool.indexOf('rest'));
+			this.fastPop(movePool, movePool.indexOf('rest'));
 		}
 		if (moves.size === this.maxMoveCount - 1 && movePool.includes('wish') && movePool.includes('protect')) {
 			this.fastPop(movePool, movePool.indexOf('protect'));
-			if (movePool.length > 1) this.fastPop(movePool, movePool.indexOf('wish'));
+			this.fastPop(movePool, movePool.indexOf('wish'));
 		}
 
 		// Develop additional move lists
@@ -508,13 +508,13 @@ export class RandomTeams {
 	): void {
 		const moveArrayA = (Array.isArray(movesA)) ? movesA : [movesA];
 		const moveArrayB = (Array.isArray(movesB)) ? movesB : [movesB];
-		if (moves.size + movePool.length <= this.maxMoveCount) return;
+		// if (moves.size + movePool.length <= this.maxMoveCount) return;
 		for (const moveid1 of moves) {
 			if (moveArrayB.includes(moveid1)) {
 				for (const moveid2 of moveArrayA) {
 					if (moveid1 !== moveid2 && movePool.includes(moveid2)) {
 						this.fastPop(movePool, movePool.indexOf(moveid2));
-						if (moves.size + movePool.length <= this.maxMoveCount) return;
+						// if (moves.size + movePool.length <= this.maxMoveCount) return;
 					}
 				}
 			}
@@ -522,7 +522,7 @@ export class RandomTeams {
 				for (const moveid2 of moveArrayB) {
 					if (moveid1 !== moveid2 && movePool.includes(moveid2)) {
 						this.fastPop(movePool, movePool.indexOf(moveid2));
-						if (moves.size + movePool.length <= this.maxMoveCount) return;
+						// if (moves.size + movePool.length <= this.maxMoveCount) return;
 					}
 				}
 			}
