@@ -734,11 +734,13 @@ export class RandomTeams {
 						if (currentAttackType! !== moveType) coverageMoves.push(moveid);
 					}
 				}
-				const moveid = this.sample(coverageMoves);
-				moves.add(moveid);
-				this.fastPop(movePool, movePool.indexOf(moveid));
-				counter = this.queryMoves(moves, species.types, teraType, abilities);
-				this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+				if (coverageMoves.length) {
+					const moveid = this.sample(coverageMoves);
+					moves.add(moveid);
+					this.fastPop(movePool, movePool.indexOf(moveid));
+					counter = this.queryMoves(moves, species.types, teraType, abilities);
+					this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+				}
 			}
 		}
 
@@ -758,11 +760,13 @@ export class RandomTeams {
 					priorityMoves.push(moveid);
 				}
 			}
-			const moveid = this.sample(priorityMoves);
-			moves.add(moveid);
-			this.fastPop(movePool, movePool.indexOf(moveid));
-			counter = this.queryMoves(moves, species.types, teraType, abilities);
-			this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+			if (priorityMoves.length) {
+				const moveid = this.sample(priorityMoves);
+				moves.add(moveid);
+				this.fastPop(movePool, movePool.indexOf(moveid));
+				counter = this.queryMoves(moves, species.types, teraType, abilities);
+				this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
+			}
 		}
 
 		// Add (moves.size < this.maxMoveCount) as a condition if moves is getting larger than 4 moves.
