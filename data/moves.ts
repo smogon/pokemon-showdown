@@ -14809,7 +14809,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Rage Powder",
 		pp: 20,
 		priority: 2,
-		flags: {},
+		flags: {powder: 1},
 		volatileStatus: 'ragepowder',
 		onTry(source) {
 			return this.activePerHalf > 1;
