@@ -86,8 +86,8 @@ const Setup = [
 const NoStab = [
 	'accelerock', 'aquajet', 'beakblast', 'bounce', 'breakingswipe', 'chatter', 'chloroblast', 'clearsmog', 'dragontail', 'eruption',
 	'explosion', 'fakeout', 'firstimpression', 'flamecharge', 'flipturn', 'iceshard', 'icywind', 'incinerate', 'machpunch',
-	'meteorbeam', 'pluck', 'pursuit', 'quickattack', 'reversal', 'selfdestruct', 'skydrop', 'snarl', 'steelbeam', 'suckerpunch',
-	'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
+	'meteorbeam', 'pluck', 'pursuit', 'quickattack', 'reversal', 'saltcure', 'selfdestruct', 'skydrop', 'snarl', 'steelbeam',
+	'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
 ];
 // Hazard-setting moves
 const Hazards = [
@@ -428,10 +428,10 @@ export class RandomTeams {
 		}
 
 		// Develop additional move lists
-		const pivotingMoves = ['chillyreception', 'flipturn', 'partingshot', 'teleport', 'uturn', 'voltswitch'];
+		const pivotingMoves=['chillyreception', 'flipturn', 'partingshot', 'teleport', 'uturn', 'voltswitch']
 		const statusMoves = [];
 		for (const move of this.dex.moves.all()) {
-			if (move.category === 'Status') statusMoves.push(move.id);
+    		if (move.category === 'Status') statusMoves.push(move.id);
 		}
 
 		// These moves don't mesh well with other aspects of the set
@@ -439,13 +439,46 @@ export class RandomTeams {
 			this.incompatibleMoves(moves, movePool, Setup, pivotingMoves);
 		}
 		this.incompatibleMoves(moves, movePool, Setup, Hazards);
+		this.incompatibleMoves(moves, movePool, Setup, ['nuzzle', 'toxic', 'waterspout', 'yawn']);
+		this.incompatibleMoves(moves, movePool, PhysicalSetup, PhysicalSetup);
+		this.incompatibleMoves(moves, movePool, SpecialSetup, 'thunderwave');
 		this.incompatibleMoves(moves, movePool, statusMoves, ['healingwish', 'memento', 'switcheroo', 'trick']);
+		this.incompatibleMoves(moves, movePool, 'substitute', pivotingMoves);
+		this.incompatibleMoves(moves, movePool, SpeedSetup, ['Aqua Jet', 'Rest']);
+		this.incompatibleMoves(moves, movePool, 'curse', 'rapidspin');
+
 
 		// These attacks are redundant with each other
 		this.incompatibleMoves(moves, movePool, 'psychic', 'psyshock');
+		this.incompatibleMoves(moves, movePool, 'surf', 'hydropump');
+		this.incompatibleMoves(moves, movePool, 'wavecrash', 'liquidation');
 		this.incompatibleMoves(moves, movePool, ['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']);
+		this.incompatibleMoves(moves, movePool, 'knockoff', 'foulplay');
+		this.incompatibleMoves(moves, movePool, 'doubleedge', 'headbutt');
+		this.incompatibleMoves(moves, movePool, 'fireblast', ['fierydance', 'flamethrower', 'torchsong']);
+		this.incompatibleMoves(moves, movePool, 'gunkshot', ['direclaw', 'poisonjab']);
+		this.incompatibleMoves(moves, movePool, 'aurasphere', 'focusblast');
+		this.incompatibleMoves(moves, movePool, 'thunderbolt', 'discharge');
+		this.incompatibleMoves(moves, movePool, 'bugbite', 'pounce');
+		this.incompatibleMoves(moves, movePool, 'bittermalice', 'shadowball');
+
 
 		// These status moves are redundant with each other
+		this.incompatibleMoves(moves, movePool, ['taunt', 'strengthsap'], 'encore');
+		this.incompatibleMoves(moves, movePool, 'toxic', 'willowisp');
+		this.incompatibleMoves(moves, movePool, ['thunderwave', 'toxic', 'willowisp'], 'toxicspikes')
+
+		// This space reserved for assorted hardcodes that otherwise make little sense out of context
+		// Landorus
+		this.incompatibleMoves(moves, movePool, 'nastyplot', 'rockslide');
+		// Persian and Seviper
+		this.incompatibleMoves(moves, movePool, 'switcheroo', ['fakeout', 'suckerpunch']);
+		// Beartic
+		this.incompatibleMoves(moves, movePool, 'snowscape', 'swordsdance');
+		// Vaporeon
+		if (species.id === 'vaporeon') {
+			this.incompatibleMoves(moves, movePool, 'calmmind', 'icebeam')
+		}
 	}
 
 	incompatibleMoves(
