@@ -428,10 +428,10 @@ export class RandomTeams {
 		}
 
 		// Develop additional move lists
-		const pivotingMoves = ['chillyreception', 'flipturn', 'partingshot', 'shedtail', 'teleport', 'uturn', 'voltswitch']
+		const pivotingMoves = ['chillyreception', 'flipturn', 'partingshot', 'shedtail', 'teleport', 'uturn', 'voltswitch'];
 		const statusMoves = [];
 		for (const move of this.dex.moves.all()) {
-    		if (move.category === 'Status') statusMoves.push(move.id);
+			if (move.category === 'Status') statusMoves.push(move.id);
 		}
 
 		// Team-based move culls
@@ -445,7 +445,7 @@ export class RandomTeams {
 
 		// These moves don't mesh well with other aspects of the set
 		if (species.id !== "spidops") {
-			this.incompatibleMoves(moves, movePool, statusMoves, ['healingwish', 'memento', 'switcheroo', 'trick'])
+			this.incompatibleMoves(moves, movePool, statusMoves, ['healingwish', 'memento', 'switcheroo', 'trick']);
 		}
 		if (species.id !== "scyther" && species.id !== "scizor") {
 			this.incompatibleMoves(moves, movePool, Setup, pivotingMoves);
@@ -471,13 +471,13 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'aurasphere', 'focusblast');
 		this.incompatibleMoves(moves, movePool, 'bugbite', 'pounce');
 		this.incompatibleMoves(moves, movePool, 'bittermalice', 'shadowball');
-		this.incompatibleMoves(moves, movePool, 'dragonpulse', 'dracometeor')
+		this.incompatibleMoves(moves, movePool, 'dragonpulse', 'dracometeor');
 
 
 		// These status moves are redundant with each other
 		this.incompatibleMoves(moves, movePool, ['taunt', 'strengthsap'], 'encore');
 		this.incompatibleMoves(moves, movePool, 'toxic', 'willowisp');
-		this.incompatibleMoves(moves, movePool, ['thunderwave', 'toxic', 'willowisp'], 'toxicspikes')
+		this.incompatibleMoves(moves, movePool, ['thunderwave', 'toxic', 'willowisp'], 'toxicspikes');
 
 		// This space reserved for assorted hardcodes that otherwise make little sense out of context
 		// Landorus
@@ -487,13 +487,13 @@ export class RandomTeams {
 		// Beartic
 		this.incompatibleMoves(moves, movePool, 'snowscape', 'swordsdance');
 		// Vaporeon
-		if (species.id === 'vaporeon') {
-			this.incompatibleMoves(moves, movePool, 'calmmind', 'icebeam')
-		}
+		if (species.id === 'vaporeon') this.incompatibleMoves(moves, movePool, 'calmmind', 'icebeam');
 		// Giratina
 		this.incompatibleMoves(moves, movePool, 'dragontail', 'willowisp');
 		// Cryogonal
-		if (!teamDetails.defog && !teamDetails.rapidSpin && species.id === 'cryogonal') this.fastPop(movePool, movePool.indexOf('haze'))
+		if (!teamDetails.defog && !teamDetails.rapidSpin && species.id === 'cryogonal') {
+			this.fastPop(movePool, movePool.indexOf('haze'));
+		}
 	}
 
 	incompatibleMoves(
