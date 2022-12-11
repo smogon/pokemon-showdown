@@ -949,7 +949,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["Gunk Shot", "Knock Off", "Shadow Claw", "Shadow Sneak", "Sucker Punch", "Swords Dance", "Will-O-Wisp"],
+                "movepool": ["Gunk Shot", "Knock Off", "Shadow Claw", "Shadow Sneak", "Swords Dance", "Will-O-Wisp"],
                 "teraTypes": ["Dark"]
             }
         ]
@@ -1395,7 +1395,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Draco Meteor", "Dragon Tail", "Fire Blast", "Flash Cannon", "Stealth Rock", "Thunder Wave", "Thunderbolt"],
+                "movepool": ["Draco Meteor", "Fire Blast", "Flash Cannon", "Stealth Rock", "Thunder Wave", "Thunderbolt"],
                 "teraTypes": ["Steel"]
             }
         ]
@@ -2080,8 +2080,13 @@
     "carbink": {
         "sets": [
             {
-                "role": "Bulky Attacker (yes, really)",
+                "role": "Bulky Attacker",
                 "movepool": ["Body Press", "Moonblast", "Power Gem", "Spikes", "Stealth Rock"],
+                "teraTypes": ["Fighting"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Body Press", "Light Screen", "Moonblast", "Reflect"],
                 "teraTypes": ["Fighting"]
             }
         ]
@@ -2871,8 +2876,8 @@
     "calyrexshadow": {
         "sets": [
             {
-                "role": "Setup Sweeper",
-                "movepool": ["Astral Barrage", "Nasty Plot", "Pollen Puff", "Psyshock"],
+                "role": "Fast Attacker",
+                "movepool": ["Astral Barrage", "Nasty Plot", "Pollen Puff", "Psyshock", "Trick"],
                 "teraTypes": ["Ghost"]
             }
         ]
@@ -3386,7 +3391,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Body Press", "Play Rough", "Protect", "Wish", "Yawn"],
+                "movepool": ["Body Press", "Play Rough", "Protect", "Wish"],
                 "teraTypes": ["Fairy"]
             }
         ]
