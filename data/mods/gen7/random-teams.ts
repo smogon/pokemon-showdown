@@ -298,13 +298,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				(abilities.has('Speed Boost') && moves.has('protect')) ||
 				(abilities.has('Protean') && counter.get('Status') > 2) ||
 				!!counter.setupType ||
-				!!counter.get('speedsetup') || (
-					types.has('Bug') &&
-					counter.get('stab') < 2 &&
-					counter.damagingMoves.size > 2 &&
-					!abilities.has('Adaptability') &&
-					!abilities.has('Download')
-				)
+				!!counter.get('speedsetup')
 			)};
 		case 'voltswitch':
 			return {cull: (
