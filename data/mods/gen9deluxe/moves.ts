@@ -3347,7 +3347,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	darkvoid: {
 		num: 464,
-		accuracy: 80,
+		accuracy: 50,
 		basePower: 0,
 		category: "Status",
 		// isNonstandard: "Past",
