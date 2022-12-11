@@ -856,6 +856,10 @@ export class RandomTeams {
 		const ability = abilityData[0].name;
 		// Adjust abilities here
 		if (species.id === 'arcaninehisui') return 'Rock Head';
+		if (species.id === 'staraptor') return 'Reckless';
+		if (abilities.has('Corrosion') && moves.has('toxic')) return 'Corrosion';
+		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk'))) return 'Guts';
+		if (abilities.has('Technician') && counter.get('technician')) return 'Technician';
 		return ability;
 	}
 
