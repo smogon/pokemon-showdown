@@ -894,13 +894,27 @@ export class RandomTeams {
 			this.fastPop(movePool, movePool.indexOf('sleeptalk'));
 		}
 		// Psychic and Psyshock shouldn't appear in the same moveset
-		if (moves.has('psychic') && movePool.includes('psyshock')) this.fastPop(movePool, movePool.indexOf('psyshock'));
-		if (moves.has('psyshock') && movePool.includes('psychic')) this.fastPop(movePool, movePool.indexOf('psychic'));
+		this.cullMutualExclusive(moves, movePool, 'psychic', 'psyshock');
+	}
 
-		// Add more here
-		if (counter.get('priority')) {
-			for (const moveid of movePool) {
-				if (SpeedSetup.includes(moveid)) this.fastPop(movePool, movePool.indexOf(moveid));
+	cullMutualExclusive(
+		moves: Set<string>,
+		movePool: string[],
+		movesA: string | string[],
+		movesB: string | string[],
+	): void {
+		const moveArrayA = (Array.isArray(movesA)) ? movesA : [movesA];
+		const moveArrayB = (Array.isArray(movesB)) ? movesB : [movesB];
+		for (const moveid1 of moves) {
+			if (moveArrayA.includes(moveid1)) {
+				for (const moveid2 of moveArrayB) {
+					if (movePool.includes(moveid2)) this.fastPop(movePool, movePool.indexOf(moveid2));
+				}
+			}
+			if (moveArrayB.includes(moveid1)) {
+				for (const moveid2 of moveArrayA) {
+					if (movePool.includes(moveid2)) this.fastPop(movePool, movePool.indexOf(moveid2));
+				}
 			}
 		}
 	}
