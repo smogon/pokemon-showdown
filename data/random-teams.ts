@@ -499,6 +499,7 @@ export class RandomTeams {
 		}
 	}
 
+	// Checks for and removes incompatible moves, starting with the first move in movesA.
 	incompatibleMoves(
 		moves: Set<string>,
 		movePool: string[],
@@ -507,15 +508,22 @@ export class RandomTeams {
 	): void {
 		const moveArrayA = (Array.isArray(movesA)) ? movesA : [movesA];
 		const moveArrayB = (Array.isArray(movesB)) ? movesB : [movesB];
+		if (moves.size + movePool.length <= this.maxMoveCount) return;
 		for (const moveid1 of moves) {
-			if (moveArrayA.includes(moveid1)) {
-				for (const moveid2 of moveArrayB) {
-					if (moveid1 !== moveid2 && movePool.includes(moveid2)) this.fastPop(movePool, movePool.indexOf(moveid2));
-				}
-			}
 			if (moveArrayB.includes(moveid1)) {
 				for (const moveid2 of moveArrayA) {
-					if (moveid1 !== moveid2 && movePool.includes(moveid2)) this.fastPop(movePool, movePool.indexOf(moveid2));
+					if (moveid1 !== moveid2 && movePool.includes(moveid2)) {
+						this.fastPop(movePool, movePool.indexOf(moveid2));
+						if (moves.size + movePool.length <= this.maxMoveCount) return;
+					}
+				}
+			}
+			if (moveArrayA.includes(moveid1)) {
+				for (const moveid2 of moveArrayB) {
+					if (moveid1 !== moveid2 && movePool.includes(moveid2)) {
+						this.fastPop(movePool, movePool.indexOf(moveid2));
+						if (moves.size + movePool.length <= this.maxMoveCount) return;
+					}
 				}
 			}
 		}
