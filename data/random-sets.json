@@ -3451,7 +3451,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Close Combat", "Crunch", "Seed Bomb", "Spore", "Sucker Punch", "Synthesis"],
+                "movepool": ["Close Combat", "Crunch", "Seed Bomb", "Spore", "Sucker Punch"],
                 "teraTypes": ["Dark", "Fighting"]
             }
         ]
