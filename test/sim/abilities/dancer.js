@@ -145,4 +145,16 @@ describe('Dancer', function () {
 		assert(!allyTargetingOpponent.hurtThisTurn);
 		assert(!opponentNotTargetedByAlly.hurtThisTurn);
 	});
+
+	it('should fail if dance is a result of copycat and there is no enemy to target', function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'oricoriop', ability: 'dancer', moves: ['revelationdance']},
+			{species: 'flamigo', moves: ['copycat']},
+		], [
+			{species: 'fletchinder', level: 1, moves: ['sleeptalk']},
+			{species: 'fletchinder', level: 1, moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		assert(!battle.p1.active[1].hurtThisTurn);
+	});
 });
