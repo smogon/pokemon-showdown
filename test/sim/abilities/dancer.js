@@ -146,7 +146,7 @@ describe('Dancer', function () {
 		assert(!opponentNotTargetedByAlly.hurtThisTurn);
 	});
 
-	it('should fail if dance is a result of copycat and there is no enemy to target', function () {
+	it('should adopt the target selected by copycat', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'oricoriop', ability: 'dancer', moves: ['revelationdance']},
 			{species: 'flamigo', moves: ['copycat']},
