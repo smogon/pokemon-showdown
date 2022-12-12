@@ -1388,7 +1388,7 @@ export class RandomTeams {
 	) {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
 		const pokemonPool = [];
-		const baseSpeciesPool = [];
+		const baseSpeciesPool: string[] = [];
 		if (this.format.gameType !== 'singles') {
 			for (const pokemon of Object.keys(this.randomDoublesSets)) {
 				const species = this.dex.species.get(pokemon);
@@ -1397,7 +1397,7 @@ export class RandomTeams {
 					if (!species.types.includes(type)) continue;
 				}
 				pokemonPool.push(pokemon);
-				baseSpeciesPool.push(species.baseSpecies);
+				if (!baseSpeciesPool.includes(species.baseSpecies)) baseSpeciesPool.push(species.baseSpecies);
 			}
 		} else {
 			for (const pokemon of Object.keys(this.randomSets)) {
@@ -1407,7 +1407,7 @@ export class RandomTeams {
 					if (!species.types.includes(type)) continue;
 				}
 				pokemonPool.push(pokemon);
-				baseSpeciesPool.push(species.baseSpecies);
+				if (!baseSpeciesPool.includes(species.baseSpecies)) baseSpeciesPool.push(species.baseSpecies);
 			}
 		}
 		return [pokemonPool, baseSpeciesPool];
@@ -1439,8 +1439,7 @@ export class RandomTeams {
 		const typeComboCount: {[k: string]: number} = {};
 		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
-
-		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype);
+		let [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype);
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
 			const currentSpeciesPool: Species[] = [];
@@ -1448,7 +1447,7 @@ export class RandomTeams {
 				const species = this.dex.species.get(poke);
 				if (species.baseSpecies === baseSpecies) currentSpeciesPool.push(species);
 			}
-			let species = this.sampleNoReplace(currentSpeciesPool);
+			let species = this.sample(currentSpeciesPool);
 			if (!species.exists) continue;
 			// Illusion shouldn't be on the last slot
 			if (species.baseSpecies === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
