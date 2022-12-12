@@ -1445,7 +1445,8 @@ export class RandomTeams {
 			if (
 				pokemon.some(pkmn => pkmn.name === 'Zoroark') &&
 				pokemon.length >= (this.maxTeamSize - 1) &&
-				this.getLevel(species, isDoubles) < 72
+				this.getLevel(species, isDoubles) < 72 &&
+				!this.adjustLevel
 			) {
 				continue;
 			}
