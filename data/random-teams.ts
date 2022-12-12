@@ -496,6 +496,8 @@ export class RandomTeams {
 		if (!teamDetails.defog && !teamDetails.rapidSpin && species.id === 'cryogonal') {
 			this.fastPop(movePool, movePool.indexOf('haze'));
 		}
+		// Magnezone
+		this.incompatibleMoves(moves, movePool, ['bodypress', 'mirrorcoat', 'steelbeam'], ['bodypress', 'mirrorcoat', 'steelbeam']);
 	}
 
 	// Checks for and removes incompatible moves, starting with the first move in movesA.
