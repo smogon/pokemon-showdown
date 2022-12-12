@@ -1743,7 +1743,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Double-Edge", "Headbutt", "Horn Leech", "Stomping Tantrum", "Swords Dance", ""],
+                "movepool": ["Double-Edge", "Headbutt", "Horn Leech", "Stomping Tantrum", "Swords Dance"],
                 "teraTypes": ["Normal"]
             }
         ]
