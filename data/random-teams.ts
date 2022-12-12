@@ -1029,7 +1029,7 @@ export class RandomTeams {
 		}
 		if (role === 'AV Pivot') return 'Assault Vest';
 		if (role === 'Bulky Setup' && (ability === 'Quark Drive' || ability === 'Protosynthesis')) return 'Booster Energy';
-		if (species.name === 'Pikachu') return 'Light Ball';
+		if (species.id === 'pikachu') return 'Light Ball';
 		if (species.id === 'regieleki') return 'Magnet';
 		if (ability === 'Imposter' || (species.id === 'magnezone' && moves.has('bodypress'))) return 'Choice Scarf';
 		if (moves.has('bellydrum') && moves.has('substitute')) return 'Salac Berry';
