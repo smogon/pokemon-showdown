@@ -844,7 +844,8 @@ export class RandomTeams {
 		case 'Serene Grace': case 'Skill Link': case 'Strong Jaw':
 			return !counter.get(toID(ability));
 		case 'Chlorophyll':
-			return (!abilities.has('Harvest') && !moves.has('sunnyday') && !teamDetails.sun && species.id !== 'lilligant');
+			if (abilities.has('Harvest')) return true;
+			return (!moves.has('sunnyday') && !teamDetails.sun && species.id !== 'lilligant');
 		case 'Cloud Nine':
 			return (species.id !== 'golduck');
 		case 'Competitive':
