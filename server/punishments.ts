@@ -1896,7 +1896,7 @@ export const Punishments = new class {
 						if (punishment.type === 'ROOMBAN') {
 							return punishment;
 						} else if (punishment.type === 'BLACKLIST') {
-							if (Punishments.isSharedIp(ip) && user.autoconfirmed) return;
+							if (Punishments.isSharedIp(ip) && user.autoconfirmed) continue;
 
 							return punishment;
 						}

@@ -255,6 +255,7 @@ interface ModdedBattleActions {
 		this: BattleActions, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon,
 		move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
 	) => SpreadMoveDamage;
+	runSwitch?: (this: BattleActions, pokemon: Pokemon) => boolean;
 	runZPower?: (this: BattleActions, move: ActiveMove, pokemon: Pokemon) => void;
 	secondaries?: (
 		this: BattleActions, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
@@ -312,6 +313,9 @@ interface ModdedBattlePokemon {
 	clearBoosts?: (this: Pokemon) => void;
 	calculateStat?: (this: Pokemon, statName: StatIDExceptHP, boost: number, modifier?: number) => number;
 	cureStatus?: (this: Pokemon, silent?: boolean) => boolean;
+	deductPP?: (
+		this: Pokemon, move: string | Move, amount?: number | null, target?: Pokemon | null | false
+	) => number;
 	eatItem?: (this: Pokemon, force?: boolean, source?: Pokemon, sourceEffect?: Effect) => boolean;
 	formeChange?: (
 		this: Pokemon, speciesId: string | Species, source: Effect, isPermanent?: boolean, message?: string
@@ -522,6 +526,7 @@ namespace RandomTeamsTypes {
 		happiness?: number;
 		dynamaxLevel?: number;
 		gigantamax?: boolean;
+		teraType?: string;
 	}
 	export interface RandomFactorySet {
 		name: string;

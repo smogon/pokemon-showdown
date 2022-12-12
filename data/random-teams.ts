@@ -372,7 +372,7 @@ export class RandomTeams {
 		const natures = this.dex.natures.all();
 		const items = this.dex.items.all();
 
-		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype);
+		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype, undefined, undefined, true);
 
 		for (let forme of randomN) {
 			let species = dex.species.get(forme);
@@ -380,10 +380,14 @@ export class RandomTeams {
 
 			// Random legal item
 			let item = '';
+			let isIllegalItem;
+			let isBadItem;
 			if (this.gen >= 2) {
 				do {
 					item = this.sample(items).name;
-				} while (this.dex.items.get(item).gen > this.gen || this.dex.items.get(item).isNonstandard);
+					isIllegalItem = this.dex.items.get(item).gen > this.gen || this.dex.items.get(item).isNonstandard;
+					isBadItem = item.startsWith("TR") || this.dex.items.get(item).isPokeball;
+				} while (isIllegalItem || (isBadItem && this.randomChance(19, 20)));
 			}
 
 			// Make sure forme is legal
@@ -511,7 +515,7 @@ export class RandomTeams {
 			// Random shininess
 			const shiny = this.randomChance(1, 1024);
 
-			team.push({
+			const set: RandomTeamsTypes.RandomSet = {
 				name: species.baseSpecies,
 				species: species.name,
 				gender: species.gender,
@@ -524,13 +528,18 @@ export class RandomTeams {
 				level,
 				happiness,
 				shiny,
-			});
+			};
+			if (this.gen === 9) {
+				// Tera type
+				set.teraType = this.sample(this.dex.types.all()).name;
+			}
+			team.push(set);
 		}
 
 		return team;
 	}
 
-	randomNPokemon(n: number, requiredType?: string, minSourceGen?: number, ruleTable?: RuleTable) {
+	randomNPokemon(n: number, requiredType?: string, minSourceGen?: number, ruleTable?: RuleTable, requireMoves = false) {
 		// Picks `n` random pokemon--no repeats, even among formes
 		// Also need to either normalize for formes or select formes at random
 		// Unreleased are okay but no CAP
@@ -549,6 +558,11 @@ export class RandomTeams {
 			speciesPool = [...this.dex.species.all()];
 			for (const species of speciesPool) {
 				if (species.isNonstandard && species.isNonstandard !== 'Unobtainable') continue;
+				if (requireMoves) {
+					const hasMovesInCurrentGen = Object.values(this.dex.species.getLearnset(species.id) || {})
+						.some(sources => sources.some(source => source.startsWith('9')));
+					if (!hasMovesInCurrentGen) continue;
+				}
 				if (requiredType && !species.types.includes(requiredType)) continue;
 				if (minSourceGen && species.gen < minSourceGen) continue;
 				const num = species.num;
@@ -771,9 +785,14 @@ export class RandomTeams {
 			// Random unique item
 			let item = '';
 			let itemData;
+			let isBadItem;
 			if (doItemsExist) {
-				itemData = this.sampleNoReplace(itemPool);
-				item = itemData?.name;
+				// We discard TRs and Balls with 95% probability because of their otherwise overwhelming presence
+				do {
+					itemData = this.sampleNoReplace(itemPool);
+					item = itemData?.name;
+					isBadItem = item.startsWith("TR") || itemData.isPokeball;
+				} while (isBadItem && this.randomChance(19, 20) && itemPool.length > this.maxTeamSize);
 			}
 
 			// Random unique ability
@@ -856,7 +875,7 @@ export class RandomTeams {
 			// Random shininess
 			const shiny = this.randomChance(1, 1024);
 
-			team.push({
+			const set: PokemonSet = {
 				name: species.baseSpecies,
 				species: species.name,
 				gender: species.gender,
@@ -869,7 +888,12 @@ export class RandomTeams {
 				level,
 				happiness,
 				shiny,
-			});
+			};
+			if (this.gen === 9) {
+				// Random Tera type
+				set.teraType = this.sample(this.dex.types.all()).name;
+			}
+			team.push(set);
 		}
 
 		return team;

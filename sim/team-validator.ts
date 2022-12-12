@@ -315,7 +315,7 @@ export class TeamValidator {
 			if (options.removeNicknames) {
 				const species = dex.species.get(set.species);
 				let crossSpecies: Species;
-				if (format.name === '[Gen 8] Cross Evolution' && (crossSpecies = dex.species.get(set.name)).exists) {
+				if (format.name === '[Gen 9] Cross Evolution' && (crossSpecies = dex.species.get(set.name)).exists) {
 					set.name = crossSpecies.name;
 				} else {
 					set.name = species.baseSpecies;
@@ -371,6 +371,46 @@ export class TeamValidator {
 		}
 
 		return {species, eventData: learnset.eventData};
+	}
+
+	getValidationSpecies(set: PokemonSet): [Species, Species] {
+		const dex = this.dex;
+		const ruleTable = this.ruleTable;
+		const species = dex.species.get(set.species);
+		const item = dex.items.get(set.item);
+		const ability = dex.abilities.get(set.ability);
+
+		let outOfBattleSpecies = species;
+		let tierSpecies = species;
+		if (ability.id === 'battlebond' && species.id === 'greninja') {
+			if (this.gen < 9) outOfBattleSpecies = dex.species.get('greninjaash');
+			if (ruleTable.has('obtainableformes')) {
+				tierSpecies = outOfBattleSpecies;
+			}
+		}
+		if (ability.id === 'owntempo' && species.id === 'rockruff') {
+			tierSpecies = outOfBattleSpecies = dex.species.get('rockruffdusk');
+		}
+
+		if (ruleTable.has('obtainableformes')) {
+			const canMegaEvo = dex.gen <= 7 || ruleTable.has('standardnatdex');
+			if (item.megaEvolves === species.name) {
+				if (!item.megaStone) throw new Error(`Item ${item.name} has no base form for mega evolution`);
+				tierSpecies = dex.species.get(item.megaStone);
+			} else if (item.id === 'redorb' && species.id === 'groudon') {
+				tierSpecies = dex.species.get('Groudon-Primal');
+			} else if (item.id === 'blueorb' && species.id === 'kyogre') {
+				tierSpecies = dex.species.get('Kyogre-Primal');
+			} else if (canMegaEvo && species.id === 'rayquaza' && set.moves.map(toID).includes('dragonascent' as ID)) {
+				tierSpecies = dex.species.get('Rayquaza-Mega');
+			} else if (item.id === 'rustedsword' && species.id === 'zacian') {
+				tierSpecies = dex.species.get('Zacian-Crowned');
+			} else if (item.id === 'rustedshield' && species.id === 'zamazenta') {
+				tierSpecies = dex.species.get('Zamazenta-Crowned');
+			}
+		}
+
+		return [outOfBattleSpecies, tierSpecies];
 	}
 
 	validateSet(set: PokemonSet, teamHas: AnyObject): string[] | null {
@@ -465,22 +505,14 @@ export class TeamValidator {
 		item = dex.items.get(set.item);
 		ability = dex.abilities.get(set.ability);
 
-		let outOfBattleSpecies = species;
-		let tierSpecies = species;
+		const [outOfBattleSpecies, tierSpecies] = this.getValidationSpecies(set);
 		if (ability.id === 'battlebond' && species.id === 'greninja') {
-			if (this.gen < 9) outOfBattleSpecies = dex.species.get('greninjaash');
-			if (ruleTable.has('obtainableformes')) {
-				tierSpecies = outOfBattleSpecies;
-			}
 			if (ruleTable.has('obtainablemisc')) {
 				if (set.gender && set.gender !== 'M') {
 					problems.push(`Battle Bond Greninja must be male.`);
 				}
 				set.gender = 'M';
 			}
-		}
-		if (ability.id === 'owntempo' && species.id === 'rockruff') {
-			tierSpecies = outOfBattleSpecies = dex.species.get('rockruffdusk');
 		}
 		if (species.id === 'melmetal' && set.gigantamax && this.dex.species.getLearnsetData(species.id).eventData) {
 			setSources.sourcesBefore = 0;
@@ -528,24 +560,6 @@ export class TeamValidator {
 				problems.push(`${name}'s Terastal type (${set.teraType}) is invalid.`);
 			} else {
 				set.teraType = type.name;
-			}
-		}
-
-		if (ruleTable.has('obtainableformes')) {
-			const canMegaEvo = dex.gen <= 7 || ruleTable.has('standardnatdex');
-			if (item.megaEvolves === species.name) {
-				if (!item.megaStone) throw new Error(`Item ${item.name} has no base form for mega evolution`);
-				tierSpecies = dex.species.get(item.megaStone);
-			} else if (item.id === 'redorb' && species.id === 'groudon') {
-				tierSpecies = dex.species.get('Groudon-Primal');
-			} else if (item.id === 'blueorb' && species.id === 'kyogre') {
-				tierSpecies = dex.species.get('Kyogre-Primal');
-			} else if (canMegaEvo && species.id === 'rayquaza' && set.moves.map(toID).includes('dragonascent' as ID)) {
-				tierSpecies = dex.species.get('Rayquaza-Mega');
-			} else if (item.id === 'rustedsword' && species.id === 'zacian') {
-				tierSpecies = dex.species.get('Zacian-Crowned');
-			} else if (item.id === 'rustedshield' && species.id === 'zamazenta') {
-				tierSpecies = dex.species.get('Zamazenta-Crowned');
 			}
 		}
 
@@ -645,17 +659,10 @@ export class TeamValidator {
 			problem = this.checkMove(set, move, setHas);
 			if (problem) {
 				let allowedByOM;
-				if (dex.currentMod === 'gen9deluxe') {
-					allowedByOM = true;
-				}
-				if (problem.endsWith('is not obtainable without hacking or glitches.') &&
+				if (problem.includes('hacking or glitches') &&
 					ruleTable.has('omunobtainablemoves')) {
 					problem = `${name}'s ${problem}`;
-					const baseCheckCanLearn = this.checkCanLearn;
-					// tell the custom move legality check that the move is illegal by default
-					this.checkCanLearn = () => problem;
-					allowedByOM = !ruleTable.checkCanLearn![0].call(this, move, outOfBattleSpecies, setSources, set);
-					this.checkCanLearn = baseCheckCanLearn;
+					allowedByOM = !this.omCheckCanLearn(move, outOfBattleSpecies, setSources, set, problem);
 				}
 				if (!allowedByOM) {
 					problems.push(problem);
@@ -1959,6 +1966,22 @@ export class TeamValidator {
 		}
 
 		return problems;
+	}
+
+	omCheckCanLearn(
+		move: Move,
+		s: Species,
+		setSources = this.allSources(s),
+		set: Partial<PokemonSet> = {},
+		problem = `${set.name || s.name} can't learn ${move.name}`,
+	): string | null {
+		if (!this.ruleTable.checkCanLearn?.[0]) return problem;
+		const baseCheckCanLearn = this.checkCanLearn;
+		// tell the custom move legality check that the move is illegal by default
+		this.checkCanLearn = () => problem;
+		const omVerdict = this.ruleTable.checkCanLearn[0].call(this, move, s, setSources, set);
+		this.checkCanLearn = baseCheckCanLearn;
+		return omVerdict;
 	}
 
 	/** Returns null if you can learn the move, or a string explaining why you can't learn it */

@@ -1,6 +1,13 @@
 /**
  * Stadium mechanics inherit from gen 1 mechanics, but fixes some stuff.
  */
+
+const SKIP_LASTDAMAGE = new Set([
+	'confuseray', 'conversion', 'counter', 'focusenergy', 'glare', 'haze', 'leechseed', 'lightscreen',
+	'mimic', 'mist', 'poisongas', 'poisonpowder', 'recover', 'reflect', 'rest', 'softboiled',
+	'splash', 'stunspore', 'substitute', 'supersonic', 'teleport', 'thunderwave', 'toxic', 'transform',
+]);
+
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen1',
 	gen: 1,
@@ -82,7 +89,6 @@ export const Scripts: ModdedBattleScriptsData = {
 					return;
 				}
 			}
-			pokemon.lastDamage = 0;
 			let lockedMove = this.battle.runEvent('LockMove', pokemon);
 			if (lockedMove === true) lockedMove = false;
 			if (
@@ -206,20 +212,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.add('-notarget');
 				return true;
 			}
-			damage = this.tryMoveHit(target, pokemon, move);
+			// Store 0 damage for last damage if the move is not in the array.
+			if (!SKIP_LASTDAMAGE.has(move.id)) this.battle.lastDamage = 0;
 
-			// Store 0 damage for last damage if move failed.
-			// This only happens on moves that don't deal damage but call GetDamageVarsForPlayerAttack (disassembly).
-			const neverDamageMoves = [
-				'conversion', 'haze', 'mist', 'focusenergy', 'confuseray', 'supersonic', 'transform', 'lightscreen', 'reflect', 'substitute', 'mimic', 'leechseed', 'splash', 'softboiled', 'recover', 'rest',
-			];
-			if (
-				!damage && damage !== 0 &&
-				(move.category !== 'Status' || (move.status && !['psn', 'tox', 'par'].includes(move.status))) &&
-				!neverDamageMoves.includes(move.id)
-			) {
-				this.battle.lastDamage = 0;
-			}
+			damage = this.tryMoveHit(target, pokemon, move);
 
 			// Go ahead with results of the used move.
 			if (damage === false) {
@@ -306,11 +302,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.attrLastMove('[miss]');
 				this.battle.add('-miss', pokemon);
 				damage = false;
+				this.battle.lastDamage = 0;
 			}
 
 			// If damage is 0 and not false it means it didn't miss, let's calc.
 			if (damage !== false) {
-				pokemon.lastDamage = 0;
 				if (move.multihit) {
 					let hits = move.multihit;
 					if (Array.isArray(hits)) {
@@ -426,6 +422,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				let didSomething = false;
 
 				damage = this.getDamage(pokemon, target, moveData);
+				if (damage && damage > target.hp) {
+					damage = target.hp;
+				}
 				if ((damage || damage === 0) && !target.fainted) {
 					damage = this.battle.damage(damage, target, pokemon, move);
 					if (!(damage || damage === 0)) return false;
@@ -500,7 +499,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Now we can save the partial trapping damage.
 			if (pokemon.volatiles['partialtrappinglock']) {
-				pokemon.volatiles['partialtrappinglock'].damage = pokemon.lastDamage;
+				pokemon.volatiles['partialtrappinglock'].damage = this.battle.lastDamage;
 			}
 
 			// Apply move secondaries.
@@ -550,7 +549,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Is it an OHKO move?
 			if (move.ohko) {
-				return target.maxhp;
+				return 65535;
 			}
 
 			// We edit the damage through move's damage callback if necessary.
@@ -748,10 +747,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (damage > 1) {
 				damage *= this.battle.random(217, 256);
 				damage = Math.floor(damage / 255);
-				if (damage > target.hp && !target.volatiles['substitute']) damage = target.hp;
-				if (target.volatiles['substitute'] && damage > target.volatiles['substitute'].hp) {
-					damage = target.volatiles['substitute'].hp;
-				}
 			}
 
 			// We are done, this is the final damage.
