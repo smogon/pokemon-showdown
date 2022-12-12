@@ -148,7 +148,7 @@ describe('Dancer', function () {
 
 	it('should adopt the target selected by copycat', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'oricoriop', ability: 'dancer', moves: ['revelationdance']},
+			{species: 'oricoriopau', ability: 'dancer', moves: ['revelationdance']},
 			{species: 'flamigo', moves: ['copycat']},
 		], [
 			{species: 'fletchinder', level: 1, moves: ['sleeptalk']},
