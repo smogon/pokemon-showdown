@@ -2008,7 +2008,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Dark Pulse", "Draco Meteor", "Earth Power", "Fire Blast", "Flash Cannon", "Nasty Plot", "U-turn"],
+                "movepool": ["Dark Pulse", "Draco Meteor", "Fire Blast", "Flash Cannon", "Nasty Plot", "U-turn"],
                 "teraTypes": ["Dark", "Dragon", "Fire", "Steel"]
             }
         ]
