@@ -1388,6 +1388,7 @@ export class RandomTeams {
 	) {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
 		const pokemonPool = [];
+		const baseSpeciesPool = [];
 		if (this.format.gameType !== 'singles') {
 			for (const pokemon of Object.keys(this.randomDoublesSets)) {
 				const species = this.dex.species.get(pokemon);
@@ -1396,6 +1397,7 @@ export class RandomTeams {
 					if (!species.types.includes(type)) continue;
 				}
 				pokemonPool.push(pokemon);
+				baseSpeciesPool.push(species.baseSpecies);
 			}
 		} else {
 			for (const pokemon of Object.keys(this.randomSets)) {
@@ -1405,9 +1407,10 @@ export class RandomTeams {
 					if (!species.types.includes(type)) continue;
 				}
 				pokemonPool.push(pokemon);
+				baseSpeciesPool.push(species.baseSpecies);
 			}
 		}
-		return pokemonPool;
+		return [pokemonPool, baseSpeciesPool];
 	}
 
 	randomSets: AnyObject = require('./random-sets.json');
@@ -1437,12 +1440,7 @@ export class RandomTeams {
 		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
-		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
-		const baseSpeciesPool: string[] = [];
-		for (const poke of pokemonPool) {
-			const species = this.dex.species.get(poke);
-			if (!baseSpeciesPool.includes(species.baseSpecies)) baseSpeciesPool.push(species.baseSpecies);
-		}
+		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype);
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
 			const currentSpeciesPool: Species[] = [];
@@ -1452,7 +1450,6 @@ export class RandomTeams {
 			}
 			let species = this.sampleNoReplace(currentSpeciesPool);
 			if (!species.exists) continue;
-
 			// Illusion shouldn't be on the last slot
 			if (species.baseSpecies === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
 			// Bring this back if/when they are given individul levels
@@ -1464,6 +1461,9 @@ export class RandomTeams {
 			// ) {
 			// 	continue;
 			// }
+
+			// Pokemon with Last Respects shouldn't be leading
+			if (['Basculegion', 'Houndstone'].includes(species.baseSpecies) && !pokemon.length) continue;
 
 			const tier = species.tier;
 			const types = species.types;
