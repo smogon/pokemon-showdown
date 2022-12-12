@@ -1435,8 +1435,8 @@ export class RandomTeams {
 			if (!species.exists) continue;
 			// Illusion shouldn't be on the last slot
 			if (species.baseSpecies === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
-			
-			The sixth slot should not be Zacian/Zamazenta/Eternatus if a Zoroark is present
+
+			// The sixth slot should not be Zacian/Zamazenta/Eternatus if a Zoroark is present
 			if (
 				pokemon.some(pkmn => pkmn.name === 'Zoroark') &&
 				pokemon.length >= (this.maxTeamSize - 1) &&
