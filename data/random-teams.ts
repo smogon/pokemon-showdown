@@ -1035,7 +1035,7 @@ export class RandomTeams {
 		if (ability === 'Imposter' || (species.id === 'magnezone' && moves.has('bodypress'))) return 'Choice Scarf';
 		if (moves.has('bellydrum') && moves.has('substitute')) return 'Salac Berry';
 		if (
-			ability === 'Harvest' || ability === 'Cud Chew' ||
+			['Cheek Pouch', 'Cud Chew', 'Harvest'].some(m => ability === m) ||
 			moves.has('bellydrum') || moves.has('filletaway')
 		) {
 			return 'Sitrus Berry';
