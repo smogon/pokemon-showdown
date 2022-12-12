@@ -829,171 +829,101 @@ export class RandomTeams {
 		role: string,
 	): boolean {
 		if ([
-			'Flare Boost', 'Hydration', 'Ice Body', 'Immunity', 'Innards Out', 'Insomnia', 'Misty Surge',
-			'Perish Body', 'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
+			'Flare Boost', 'Gluttony', 'Hydration', 'Ice Body', 'Immunity', 'Insomnia',
+			'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
 		].includes(ability)) return true;
 
 		switch (ability) {
 		// Abilities which are primarily useful for certain moves
-		case 'Contrary': case 'Serene Grace': case 'Skill Link': case 'Strong Jaw':
+		case 'Serene Grace': case 'Skill Link': case 'Strong Jaw':
 			return !counter.get(toID(ability));
-		case 'Analytic':
-			return (moves.has('rapidspin') || species.nfe || isDoubles);
-		case 'Blaze':
-			return (isDoubles && abilities.has('Solar Power')) || (!isDoubles && species.id === 'charizard');
-		// case 'Bulletproof': case 'Overcoat':
-		// 	return !!counter.setupType;
 		case 'Chlorophyll':
-			return (species.baseStats.spe > 100 || !counter.get('Fire') && !moves.has('sunnyday') && !teamDetails.sun);
+			return (!abilities.has('Harvest') && !moves.has('sunnyday') && !teamDetails.sun && species.id !== 'lilligant');
 		case 'Cloud Nine':
 			return (species.id !== 'golduck');
 		case 'Competitive':
-			return (counter.get('Special') < 2 || (moves.has('rest') && moves.has('sleeptalk')));
+			return (species.id === 'kilowattrel');
 		case 'Compound Eyes': case 'No Guard':
 			return !counter.get('inaccurate');
+		case 'Contrary':
+			return moves.has('calmmind');
 		case 'Cursed Body':
 			return abilities.has('Infiltrator');
 		case 'Defiant':
-			return !counter.get('Physical');
-		case 'Download':
-			return (counter.damagingMoves.size < 3 || moves.has('trick'));
-		case 'Early Bird':
-			return (types.includes('Grass') && isDoubles);
+			return (!counter.get('Physical') || (abilities.has('Prankster') && (moves.has('thunderwave') || moves.has('taunt'))));
 		case 'Flash Fire':
-			return (this.dex.getEffectiveness('Fire', species) < -1 || abilities.has('Drought'));
-		case 'Gluttony':
-			return !moves.has('bellydrum');
+			return (species.id !== 'houndoom');
 		case 'Guts':
-			return (!moves.has('facade') && !moves.has('sleeptalk') && !species.nfe);
+			return (!moves.has('facade') && !moves.has('sleeptalk'));
 		case 'Harvest':
-			return (abilities.has('Frisk') && !isDoubles);
+			return (!moves.has('substitute'));
 		case 'Hustle': case 'Inner Focus':
-			return (counter.get('Physical') < 2 || abilities.has('Iron Fist'));
+			return (counter.get('Physical') < 2);
 		case 'Infiltrator':
 			return (moves.has('rest') && moves.has('sleeptalk')) || (isDoubles && abilities.has('Clear Body'));
 		case 'Intimidate':
-			if (species.id === 'salamence' && moves.has('dragondance')) return true;
-			return ['bodyslam', 'bounce', 'tripleaxel'].some(m => moves.has(m));
+			if (['salamence', 'squawkabillywhite', 'squawkabillyyellow'].some(m => species.id === (m))) return true;
+			if (abilities.has('Sheer Force') && !!counter.get('sheerforce')) return true;
+			return (abilities.has('Stakeout') || moves.has('substitute'));
 		case 'Iron Fist':
-			return (counter.get('ironfist') < 2 || moves.has('dynamicpunch'));
+			return !counter.get('ironfist');
 		case 'Justified':
-			return (isDoubles && abilities.has('Inner Focus'));
-		case 'Lightning Rod':
-			return (species.types.includes('Ground') || (!!counter.get('physicalsetup')));
-		case 'Limber':
-			return species.types.includes('Electric') || moves.has('facade');
-		case 'Liquid Voice':
-			return !moves.has('hypervoice');
-		case 'Magic Guard':
-			// For Sigilyph
-			return (abilities.has('Tinted Lens') && !counter.get('Status') && !isDoubles);
+			return !counter.get('Physical');
 		case 'Mold Breaker':
-			return (
-				abilities.has('Adaptability') || abilities.has('Scrappy') || (abilities.has('Unburden') && !!counter.get('setup')) ||
-				(abilities.has('Sheer Force') && !!counter.get('sheerforce'))
-			);
+			return abilities.has('Sharpness');
 		case 'Moxie':
-			return (counter.get('Physical') < 2 || moves.has('stealthrock') || moves.has('defog'));
+			return (!counter.get('Physical') || moves.has('stealthrock'));
 		case 'Overgrow':
 			return !counter.get('Grass');
 		case 'Own Tempo':
 			return !moves.has('petaldance');
-		case 'Power Construct':
-			return (species.forme === '10%' && !isDoubles);
 		case 'Prankster':
 			return !counter.get('Status');
 		case 'Pressure':
 			return (!!counter.get('setup') || counter.get('Status') < 2 || isDoubles);
-		case 'Refrigerate':
-			return !counter.get('Normal');
-		case 'Regenerator':
-			// For Reuniclus
-			return abilities.has('Magic Guard');
 		case 'Reckless':
-			return !counter.get('recoil') || moves.has('curse');
+			return !counter.get('recoil');
 		case 'Rock Head':
 			return !counter.get('recoil');
 		case 'Sand Force': case 'Sand Veil':
 			return !teamDetails.sand;
 		case 'Sand Rush':
-			return (!teamDetails.sand && (!counter.get('setup') || !counter.get('Rock') || moves.has('rapidspin')));
+			return !teamDetails.sand;
 		case 'Sap Sipper':
-			// For Drampa, which wants Berserk with Roost
-			return moves.has('roost');
-		case 'Scrappy':
-			return (moves.has('earthquake') && species.id === 'miltank');
-		case 'Screen Cleaner':
-			return !!teamDetails.screens;
+			return species.id === 'wyrdeer';
+		case 'Seed Sower':
+			return moves.has('susbtitute');
 		case 'Shed Skin':
-			// For Scrafty
-			return moves.has('dragondance');
+			return species.id === 'seviper';
 		case 'Sheer Force':
-			return (!counter.get('sheerforce') || abilities.has('Guts') || (species.id === 'druddigon' && !isDoubles));
-		case 'Shell Armor':
-			return (species.id === 'omastar' && (moves.has('spikes') || moves.has('stealthrock')));
+			if (species.id === 'braviaryhisui' && role === 'Wallbreaker') return true;
+			return (!counter.get('sheerforce') || abilities.has('Guts') || abilities.has('Slush Rush'));
 		case 'Slush Rush':
-			return (!teamDetails.hail && !abilities.has('Swift Swim'));
-		case 'Sniper':
-			// Inteleon wants Torrent unless it is Gmax
-			return (species.name === 'Inteleon' || (counter.get('Water') > 1 && !moves.has('focusenergy')));
+			return !moves.has('snowscape');
 		case 'Solar Power':
 			return (!teamDetails.sun);
-		case 'Speed Boost':
-			return (species.id === 'ninjask');
-		case 'Steely Spirit':
-			return (moves.has('fakeout') && !isDoubles);
 		case 'Sturdy':
-			return (moves.has('bulkup') || !!counter.get('recoil') || (abilities.has('Solid Rock')));
+			return !!counter.get('recoil');
 		case 'Swarm':
 			return (!counter.get('Bug') || !!counter.get('recovery'));
 		case 'Sweet Veil':
 			return types.includes('Grass');
 		case 'Swift Swim':
-			return (!moves.has('raindance') && (
-				['Intimidate', 'Rock Head', 'Slush Rush', 'Water Absorb'].some(abil => abilities.has(abil)) ||
-				(abilities.has('Lightning Rod') && !counter.get('setup'))
-			));
+			return (!moves.has('raindance') && !teamDetails.rain);
 		case 'Synchronize':
-			return counter.get('Status') < 3;
+			return (species.id !== 'umbreon' && species.id !== 'rabsca');
 		case 'Technician':
-			return (
-				!counter.get('technician') ||
-				moves.has('tailslap') ||
-				abilities.has('Punk Rock')
-			);
+			return (!counter.get('technician') || abilities.has('Punk Rock'));
 		case 'Tinted Lens':
-			return (
-				// For Sigilyph
-				moves.has('defog') ||
-				// For Butterfree
-				(moves.has('hurricane') && abilities.has('Compound Eyes')) ||
-				(counter.get('Status') > 2 && !counter.get('setup'))
-			);
-		case 'Torrent':
-			// For Inteleon-Gmax and Primarina
-			return (moves.has('focusenergy') || moves.has('hypervoice'));
-		case 'Tough Claws':
-			// For Perrserker
-			return (types.includes('Steel') && !moves.has('fakeout'));
-		case 'Unaware':
-			// For Swoobat and Clefable
-			return (!!counter.get('setup') || moves.has('fireblast'));
+			return (species.id === 'braviaryhisui' && role === 'Fast Support');
 		case 'Unburden':
-			return (abilities.has('Prankster') || !counter.get('setup') && !isDoubles);
+			return (abilities.has('Prankster') || !counter.get('setup'));
 		case 'Volt Absorb':
 			return (this.dex.getEffectiveness('Electric', species) < -1);
 		case 'Water Absorb':
-			return (
-				moves.has('raindance') ||
-				['Drizzle', 'Strong Jaw', 'Unaware', 'Volt Absorb'].some(abil => abilities.has(abil))
-			);
+			return species.id === 'quagsire';
 		case 'Weak Armor':
-			// The Speed less than 50 case is intended for Cursola, but could apply to any slow Pokémon.
-			return (
-				(species.baseStats.spe > 50) ||
-				species.id === 'skarmory' ||
-				moves.has('shellsmash') || moves.has('rapidspin')
-			);
+			return moves.has('shellsmash');
 		}
 
 		return false;
@@ -1022,6 +952,7 @@ export class RandomTeams {
 		if (species.id === 'staraptor') return 'Reckless';
 		if (abilities.has('Corrosion') && moves.has('toxic')) return 'Corrosion';
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk'))) return 'Guts';
+		if (abilities.has('Serene Grace') && moves.has('headbutt')) return 'Serene Grace';
 		if (abilities.has('Technician') && counter.get('technician')) return 'Technician';
 
 		// Sort abilities by rating with an element of randomness
