@@ -33,16 +33,7 @@ export const Formats: FormatList = [
 	},
 
 	{
-		name: "[Gen 9] ND UUD",
-
-		mod: 'gen9deluxe',
-		ruleset: ['Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause', 'UUD Clause'],
-		banlist: ['Uber', 'AG', 'OU', 'OUD', 'UUBL', 'Arena Trap', 'Moody', 'Baton Pass', 'Shadow Tag', 
-		'Quick Claw', 'King\'s Rock', 'Light Clay'],
-	},
-
-	{
-		name: "[Gen 9] UU Deluxe",
+		name: "[Gen 9] UUD",
 
 		mod: 'gen9regionaldeluxe',
 		ruleset: ['Standard', 'Evasion Clause', 'Terastal Clause'],
@@ -144,7 +135,7 @@ export const Formats: FormatList = [
 	// 	banlist: ['AG', 'Shadow Tag', 'Baton Pass', 'Uber', 'Suspect', 'OU', 'UU', "RU", "NU", "PU", "ZU", "Huge Power"]
 	// },
 	// {
-	// name: "[Gen 8] UU Deluxe",
+	// name: "[Gen 8] UUD",
 	// threads: [
 	// 		//`&bullet; <a href="https://www.smogon.com/forums/threads/3666135/">National Dex Metagame Discussion</a>`,
 	// 		//`&bullet; <a href="https://www.smogon.com/forums/threads/3667921/">National Dex Sample Teams</a>`,
@@ -158,10 +149,10 @@ export const Formats: FormatList = [
 	// ],
 	// },
 	// {
-	// 	name: "[Gen 8] UU Deluxe Suspect",
+	// 	name: "[Gen 8] UUD Suspect",
 
 	// 	mod: 'gen8deluxe',
-	// 	ruleset: ['[Gen 8] UU Deluxe'],
+	// 	ruleset: ['[Gen 8] UUD'],
 	// 	unbanlist: ['Dracozolt']
 	// },
 	// {
