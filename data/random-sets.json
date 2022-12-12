@@ -2223,7 +2223,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["Body Slam", "Crunch", "Earthquake", "Facade", "Psychic Fangs", "U-turn"],
+                "movepool": ["Body Slam", "Crunch", "Earthquake", "Psychic Fangs", "U-turn"],
                 "teraTypes": ["Ground"]
             }
         ]
