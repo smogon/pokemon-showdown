@@ -42,7 +42,7 @@ export const Formats: FormatList = [
 	},
 
 	{
-		name: "[Gen 9] UUD",
+		name: "[Gen 9] UU Deluxe",
 
 		mod: 'gen9regionaldeluxe',
 		ruleset: ['Standard', 'Evasion Clause', 'Terastal Clause'],
