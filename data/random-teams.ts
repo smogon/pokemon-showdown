@@ -1167,6 +1167,7 @@ export class RandomTeams {
 		if (counter.damagingMoves.size >= 4 && role !== 'Fast Attacker' && role !== 'Wallbreaker') return 'Assault Vest';
 		if (counter.get('speedsetup') && this.dex.getEffectiveness('Ground', species) < 1) return 'Weakness Policy';
 		if (species.id === 'urshifurapidstrike') return 'Punching Glove';
+		if (species.id === 'lokix' && role === 'Wallbreaker') return 'Life Orb';
 		if (species.id === 'toxtricity' && moves.has('shiftgear')) return 'Throat Spray';
 		if (moves.has('substitute') || ability === 'Moody') return 'Leftovers';
 		if (
