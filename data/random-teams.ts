@@ -1372,11 +1372,12 @@ export class RandomTeams {
 		type: string,
 		pokemonToExclude: RandomTeamsTypes.RandomSet[] = [],
 		isMonotype = false,
+		isDoubles = false,
 	) {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
 		const pokemonPool = [];
 		const baseSpeciesPool: string[] = [];
-		if (this.format.gameType !== 'singles') {
+		if (isDoubles) {
 			for (const pokemon of Object.keys(this.randomDoublesSets)) {
 				const species = this.dex.species.get(pokemon);
 				if (species.gen > this.gen || exclude.includes(species.id)) continue;
@@ -1412,6 +1413,7 @@ export class RandomTeams {
 
 		// For Monotype
 		const isMonotype = !!this.forceMonotype || ruleTable.has('sametypeclause');
+		const isDoubles = !(this.format.gameType !== 'singles');
 		const typePool = this.dex.types.names();
 		const type = this.forceMonotype || this.sample(typePool);
 
@@ -1426,7 +1428,7 @@ export class RandomTeams {
 		const typeComboCount: {[k: string]: number} = {};
 		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
-		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype);
+		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, isDoubles);
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
 			const currentSpeciesPool: Species[] = [];
@@ -1439,11 +1441,11 @@ export class RandomTeams {
 			// Illusion shouldn't be on the last slot
 			if (species.baseSpecies === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
 
-			// The sixth slot should not be Zacian/Zamazenta/Eternatus if a Zoroark is present
+			// If Zoroark is in the team, the sixth slot should not be a Pokemon with extremely low level
 			if (
 				pokemon.some(pkmn => pkmn.name === 'Zoroark') &&
 				pokemon.length >= (this.maxTeamSize - 1) &&
-				['Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Eternatus', 'Calyrex-Shadow'].includes(species.name)
+				this.getLevel(species, isDoubles) < 72
 			) {
 				continue;
 			}
@@ -1499,8 +1501,7 @@ export class RandomTeams {
 			// The Pokemon of the Day
 			if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
-			const set = this.randomSet(species, teamDetails, pokemon.length === 0,
-				this.format.gameType !== 'singles');
+			const set = this.randomSet(species, teamDetails, pokemon.length === 0, isDoubles);
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
