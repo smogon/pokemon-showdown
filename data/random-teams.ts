@@ -1439,7 +1439,7 @@ export class RandomTeams {
 		const typeComboCount: {[k: string]: number} = {};
 		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
-		let [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype);
+		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype);
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
 			const currentSpeciesPool: Species[] = [];
