@@ -432,6 +432,7 @@ export class RandomTeams {
 		for (const move of this.dex.moves.all()) {
 			if (move.category === 'Status') statusMoves.push(move.id);
 		}
+		const magnezoneMoves = ['bodypress', 'mirrorcoat', 'steelbeam'];
 
 		// Team-based move culls
 		if (teamDetails.stealthRock) {
@@ -497,7 +498,7 @@ export class RandomTeams {
 			this.fastPop(movePool, movePool.indexOf('haze'));
 		}
 		// Magnezone
-		this.incompatibleMoves(moves, movePool, ['bodypress', 'mirrorcoat', 'steelbeam'], ['bodypress', 'mirrorcoat', 'steelbeam']);
+		this.incompatibleMoves(moves, movePool, magnezoneMoves, magnezoneMoves);
 	}
 
 	// Checks for and removes incompatible moves, starting with the first move in movesA.
@@ -1033,8 +1034,8 @@ export class RandomTeams {
 		if (ability === 'Imposter' || (species.id === 'magnezone' && moves.has('bodypress'))) return 'Choice Scarf';
 		if (moves.has('bellydrum') && moves.has('substitute')) return 'Salac Berry';
 		if (
-			ability === 'Harvest' || ability === 'Cud Chew'
-			|| moves.has('bellydrum') || moves.has('filletaway')
+			ability === 'Harvest' || ability === 'Cud Chew' ||
+			moves.has('bellydrum') || moves.has('filletaway')
 		) {
 			return 'Sitrus Berry';
 		}
@@ -1067,7 +1068,7 @@ export class RandomTeams {
 			return 'Chesto Berry';
 		}
 		if (species.id === 'scyther') return isLead ? 'Eviolite' : 'Heavy-Duty Boots';
-		if (species.nfe) return 'Eviolite' 
+		if (species.nfe) return 'Eviolite';
 		if (this.dex.getEffectiveness('Rock', species) >= 2) return 'Heavy-Duty Boots';
 	}
 
@@ -1152,7 +1153,7 @@ export class RandomTeams {
 			return (scarfReqs && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Band';
 		}
 		if (counter.get('Physical') === 3 && moves.has('shedtail')) return 'Choice Scarf';
-		if (!
+		if (
 			(counter.get('Special') >= 4) ||
 			(counter.get('Special') >= 3 && ['flipturn', 'partingshot', 'uturn'].some(m => moves.has(m)))
 		) {
@@ -1164,11 +1165,14 @@ export class RandomTeams {
 			return (scarfReqs && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Specs';
 		}
 		if (counter.damagingMoves.size >= 4 && role !== 'Fast Attacker' && role !== 'Wallbreaker') return 'Assault Vest';
-		if (counter.get('speedsetup') && this.dex.getEffectiveness('Ground', species) < 1) return 'Weakness Policy'
+		if (counter.get('speedsetup') && this.dex.getEffectiveness('Ground', species) < 1) return 'Weakness Policy';
 		if (species.id === 'urshifurapidstrike') return 'Punching Glove';
 		if (species.id === 'toxtricity' && moves.has('shiftgear')) return 'Throat Spray';
 		if (moves.has('substitute') || ability === 'Moody') return 'Leftovers';
-		if (!teamDetails.defog && !teamDetails.rapidSpin && this.dex.getEffectiveness('Rock', species) >= 1) return 'Heavy-Duty Boots';
+		if (
+			!teamDetails.defog && !teamDetails.rapidSpin &&
+			this.dex.getEffectiveness('Rock', species) >= 1
+		) return 'Heavy-Duty Boots';
 		if (
 			role === 'Fast Support' &&
 			['defog', 'rapidspin', 'uturn', 'voltswitch'].some(m => moves.has(m)) &&
@@ -1177,18 +1181,20 @@ export class RandomTeams {
 
 		// Low Priority
 		if (moves.has('outrage')) return 'Lum Berry';
-		if (role !== 'Fast Attacker' && role !== 'Tera Blast user' && this.dex.getEffectiveness('Ground', species) >= 2) return 'Air Balloon'
+		if (
+			role !== 'Fast Attacker' && role !== 'Tera Blast user' &&
+			this.dex.getEffectiveness('Ground', species) >= 2
+		) return 'Air Balloon';
 		if (
 			(species.id === 'garchomp' && role === 'Fast Support') ||
 			(ability === 'Regenerator' && types.includes('Water') && species.baseStats.def >= 110 && this.randomChance(1, 3))
 		) return 'Rocky Helmet';
 		if (role === 'Fast Support' && isLead) return 'Focus Sash';
-		if (role !== 'Fast Attacker')
 		if (['Bulky Attacker', 'Bulky Support', 'Bulky Setup'].some(m => role === (m))) return 'Leftovers';
 		if (role === 'Fast Support' || role === 'Fast Bulky Setup') {
 			return (counter.damagingMoves.size >= 3) ? 'Life Orb' : 'Leftovers';
 		}
-		if (['Fast Attacker', 'Setup Sweeper', 'Tera Blast user', 'Wallbreaker'].some(m => role === (m))) return 'Life Orb'
+		if (['Fast Attacker', 'Setup Sweeper', 'Tera Blast user', 'Wallbreaker'].some(m => role === (m))) return 'Life Orb';
 		if (isDoubles) return 'Sitrus Berry';
 		return 'Leftovers';
 	}
