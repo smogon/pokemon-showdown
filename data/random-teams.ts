@@ -1007,7 +1007,7 @@ export class RandomTeams {
 		return ability;
 	}
 
-		getPriorityItem(
+	getPriorityItem(
 		ability: string,
 		types: string[],
 		moves: Set<string>,
