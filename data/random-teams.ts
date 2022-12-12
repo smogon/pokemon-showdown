@@ -74,7 +74,7 @@ const MixedSetup = [
 ];
 // Some moves that only boost Speed:
 const SpeedSetup = [
-	'agility', 'autotomize', 'rockpolish'
+	'agility', 'autotomize', 'rockpolish',
 ];
 // Conglomerate for ease of access
 const Setup = [
