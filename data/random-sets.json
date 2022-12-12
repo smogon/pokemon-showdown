@@ -2240,7 +2240,7 @@
     "oricorio": {
         "sets": [
             {
-                "role": "Setup sweeper",
+                "role": "Setup Sweeper",
                 "movepool": ["Hurricane", "Quiver Dance", "Revelation Dance", "Roost", "Substitute"],
                 "teraTypes": ["Ground"]
             },
