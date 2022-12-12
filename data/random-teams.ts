@@ -841,7 +841,7 @@ export class RandomTeams {
 
 		switch (ability) {
 		// Abilities which are primarily useful for certain moves
-		case 'Serene Grace': case 'Skill Link': case 'Strong Jaw':
+		case 'Contrary': case 'Serene Grace': case 'Skill Link': case 'Strong Jaw':
 			return !counter.get(toID(ability));
 		case 'Chlorophyll':
 			if (abilities.has('Harvest')) return true;
@@ -852,8 +852,6 @@ export class RandomTeams {
 			return (species.id === 'kilowattrel');
 		case 'Compound Eyes': case 'No Guard':
 			return !counter.get('inaccurate');
-		case 'Contrary':
-			return moves.has('calmmind');
 		case 'Cursed Body':
 			return abilities.has('Infiltrator');
 		case 'Defiant':
@@ -957,6 +955,7 @@ export class RandomTeams {
 		// Hard-code abilities here
 		if (species.id === 'arcaninehisui') return 'Rock Head';
 		if (species.id === 'staraptor') return 'Reckless';
+		if (species.id === 'enamorus' && moves.has('calmmind')) return 'Cute Charm';
 		if (abilities.has('Corrosion') && moves.has('toxic')) return 'Corrosion';
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk'))) return 'Guts';
 		if (abilities.has('Serene Grace') && moves.has('headbutt')) return 'Serene Grace';
