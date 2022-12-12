@@ -74,7 +74,7 @@ const MixedSetup = [
 ];
 // Some moves that only boost Speed:
 const SpeedSetup = [
-	'agility', 'aquastep', 'autotomize', 'flamecharge', 'rockpolish', 'trailblaze',
+	'agility', 'autotomize', 'rockpolish'
 ];
 // Conglomerate for ease of access
 const Setup = [
@@ -466,12 +466,15 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'psychic', 'psyshock');
 		this.incompatibleMoves(moves, movePool, 'surf', 'hydropump');
 		this.incompatibleMoves(moves, movePool, 'wavecrash', 'liquidation');
+		this.incompatibleMoves(moves, movePool, 'freezedry', 'icebeam');
 		this.incompatibleMoves(moves, movePool, ['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']);
 		this.incompatibleMoves(moves, movePool, 'knockoff', 'foulplay');
 		this.incompatibleMoves(moves, movePool, 'doubleedge', 'headbutt');
 		this.incompatibleMoves(moves, movePool, 'fireblast', ['fierydance', 'flamethrower']);
+		this.incompatibleMoves(moves, movePool, 'thunderpunch', 'wildcharge');
 		this.incompatibleMoves(moves, movePool, 'gunkshot', ['direclaw', 'poisonjab']);
 		this.incompatibleMoves(moves, movePool, 'aurasphere', 'focusblast');
+		this.incompatibleMoves(moves, movePool, 'closecombat', 'drainpunch');
 		this.incompatibleMoves(moves, movePool, 'bugbite', 'pounce');
 		this.incompatibleMoves(moves, movePool, 'bittermalice', 'shadowball');
 		this.incompatibleMoves(moves, movePool, ['dragonpulse', 'spacialrend'], 'dracometeor');
