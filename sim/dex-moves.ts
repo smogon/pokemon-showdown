@@ -293,7 +293,8 @@ interface MoveHitData {
 }
 
 type MutableMove = BasicEffect & MoveData;
-export interface ActiveMove extends MutableMove {
+type RuinableMove = {[k in `ruined${'Atk' | 'Def' | 'SpA' | 'SpD'}`]?: boolean;};
+export interface ActiveMove extends MutableMove, RuinableMove {
 	readonly name: string;
 	readonly effectType: 'Move';
 	readonly id: ID;
