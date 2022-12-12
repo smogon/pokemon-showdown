@@ -293,7 +293,7 @@ interface MoveHitData {
 }
 
 type MutableMove = BasicEffect & MoveData;
-type RuinableMove = {[k in `ruined${'Atk' | 'Def' | 'SpA' | 'SpD'}`]?: boolean;};
+type RuinableMove = {[k in `ruined${'Atk' | 'Def' | 'SpA' | 'SpD'}`]?: Pokemon;};
 export interface ActiveMove extends MutableMove, RuinableMove {
 	readonly name: string;
 	readonly effectType: 'Move';

@@ -355,9 +355,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Beads of Ruin');
 		},
-		onAnyModifySpD(spd, source, target, move) {
-			if (this.effectState.target === source || move.ruinedSpD) return;
-			move.ruinedSpD = true;
+		onAnyModifySpD(spd, target, source, move) {
+			const abilityHolder = this.effectState.target;
+			if (abilityHolder === target) return;
+			if (!move.ruinedSpD?.hasAbility('Beads of Ruin')) move.ruinedSpD = abilityHolder;
+			if (move.ruinedSpD !== abilityHolder && move.ruinedSpD !== target) return;
 			this.debug('Beads of Ruin SpD drop');
 			return this.chainModify(0.75);
 		},
@@ -779,7 +781,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onAnyBasePowerPriority: 20,
 		onAnyBasePower(basePower, source, target, move) {
 			if (target === source || move.category === 'Status' || move.type !== 'Dark') return;
-			if (!move.auraBooster) move.auraBooster = this.effectState.target;
+			if (!move.auraBooster?.hasAbility('Dark Aura')) move.auraBooster = this.effectState.target;
 			if (move.auraBooster !== this.effectState.target) return;
 			return this.chainModify([move.hasAuraBreak ? 3072 : 5448, 4096]);
 		},
@@ -1117,7 +1119,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onAnyBasePowerPriority: 20,
 		onAnyBasePower(basePower, source, target, move) {
 			if (target === source || move.category === 'Status' || move.type !== 'Fairy') return;
-			if (!move.auraBooster) move.auraBooster = this.effectState.target;
+			if (!move.auraBooster?.hasAbility('Fairy Aura')) move.auraBooster = this.effectState.target;
 			if (move.auraBooster !== this.effectState.target) return;
 			return this.chainModify([move.hasAuraBreak ? 3072 : 5448, 4096]);
 		},
@@ -4419,9 +4421,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Sword of Ruin');
 		},
-		onAnyModifyDef(def, source, target, move) {
-			if (this.effectState.target === source || move.ruinedDef) return;
-			move.ruinedDef = true;
+		onAnyModifyDef(def, target, source, move) {
+			const abilityHolder = this.effectState.target;
+			if (abilityHolder === target) return;
+			if (!move.ruinedDef?.hasAbility('Sword of Ruin')) move.ruinedDef = abilityHolder;
+			if (move.ruinedDef !== abilityHolder && move.ruinedDef !== target) return;
 			this.debug('Sword of Ruin Def drop');
 			// TODO Placeholder
 			return this.chainModify(0.75);
@@ -4436,8 +4440,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.add('-ability', pokemon, 'Tablets of Ruin');
 		},
 		onAnyModifyAtk(atk, source, target, move) {
-			if (this.effectState.target === source || move.ruinedAtk) return;
-			move.ruinedAtk = true;
+			const abilityHolder = this.effectState.target;
+			if (abilityHolder === source) return;
+			if (!move.ruinedAtk) move.ruinedAtk = abilityHolder;
+			if (move.ruinedAtk !== abilityHolder) return;
 			this.debug('Tablets of Ruin Atk drop');
 			// TODO Placeholder
 			return this.chainModify(0.75);
@@ -4780,8 +4786,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.add('-ability', pokemon, 'Vessel of Ruin');
 		},
 		onAnyModifySpA(spa, source, target, move) {
-			if (this.effectState.target === source || move.ruinedSpA) return;
-			move.ruinedSpA = true;
+			const abilityHolder = this.effectState.target;
+			if (abilityHolder === source) return;
+			if (!move.ruinedSpA) move.ruinedSpA = abilityHolder;
+			if (move.ruinedSpA !== abilityHolder) return;
 			this.debug('Vessel of Ruin SpA drop');
 			// TODO Placeholder
 			return this.chainModify(0.75);
