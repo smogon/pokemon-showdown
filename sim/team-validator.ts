@@ -659,6 +659,9 @@ export class TeamValidator {
 			problem = this.checkMove(set, move, setHas);
 			if (problem) {
 				let allowedByOM;
+				if (dex.currentMod.includes("deluxe")) {
+					allowedByOM = true;
+				}
 				if (problem.includes('hacking or glitches') &&
 					ruleTable.has('omunobtainablemoves')) {
 					problem = `${name}'s ${problem}`;
