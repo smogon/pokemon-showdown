@@ -2379,6 +2379,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				ticket.text = [text, contextString];
 				ticket.active = true;
+				Chat.runHandlers('onTicketCreate', ticket, user);
 				tickets[user.id] = ticket;
 				await HelpTicket.modlog({
 					action: 'TEXTTICKET OPEN',

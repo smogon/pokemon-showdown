@@ -82,6 +82,7 @@ interface Handlers {
 		battle: Rooms.RoomBattle, winner: ID, ratings: (AnyObject | null | undefined)[], players: ID[]
 	) => void;
 	onRename: (user: User, oldID: ID, newID: ID) => void;
+	onTicketCreate: (ticket: import('./chat-plugins/helptickets').TicketState, user: User) => void;
 }
 
 export interface ChatPlugin {
