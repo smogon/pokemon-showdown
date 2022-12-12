@@ -898,7 +898,7 @@ export class RandomTeams {
 		case 'Sap Sipper':
 			return species.id === 'wyrdeer';
 		case 'Seed Sower':
-			return moves.has('susbtitute');
+			return role === 'Bulky Support';
 		case 'Shed Skin':
 			return species.id === 'seviper';
 		case 'Sheer Force':
@@ -1146,6 +1146,7 @@ export class RandomTeams {
 			['fakeout', 'firstimpression', 'flamecharge', 'rapidspin', 'ruination', 'superfang'].every(m => !moves.has(m))
 		) {
 			const scarfReqs = (
+				role !== 'Wallbreaker' &&
 				(species.baseStats.atk >= 100 || ability === 'Huge Power' || ability === 'Pure Power') &&
 				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
 				ability !== 'Speed Boost' && !counter.get('priority') && !moves.has('aquastep')
@@ -1158,6 +1159,7 @@ export class RandomTeams {
 			(counter.get('Special') >= 3 && ['flipturn', 'partingshot', 'uturn'].some(m => moves.has(m)))
 		) {
 			const scarfReqs = (
+				role !== 'Wallbreaker' &&
 				species.baseStats.spa >= 100 &&
 				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
 				ability !== 'Speed Boost' && ability !== 'Tinted Lens' && !counter.get('Physical')
