@@ -3106,8 +3106,8 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Fillet Away", "Liquidation", "Ice Fang", "Stored Power"],
-                "teraTypes": ["Psychic"]
+                "movepool": ["Aqua Cutter", "Fillet Away", "Night Slash", "Psycho Cut"],
+                "teraTypes": ["Water", "Psychic", "Dark"]
             }
         ]
     },
