@@ -1435,15 +1435,15 @@ export class RandomTeams {
 			if (!species.exists) continue;
 			// Illusion shouldn't be on the last slot
 			if (species.baseSpecies === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
-			// Bring this back if/when they are given individul levels
-			// The sixth slot should not be Zacian/Zamazenta/Eternatus if a Zoroark is present
-			// if (
-			// 	pokemon.some(pkmn => pkmn.name === 'Zoroark') &&
-			// 	pokemon.length >= (this.maxTeamSize - 1) &&
-			// 	['Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Eternatus'].includes(species.name)
-			// ) {
-			// 	continue;
-			// }
+			
+			The sixth slot should not be Zacian/Zamazenta/Eternatus if a Zoroark is present
+			if (
+				pokemon.some(pkmn => pkmn.name === 'Zoroark') &&
+				pokemon.length >= (this.maxTeamSize - 1) &&
+				['Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Eternatus', 'Calyrex-Shadow'].includes(species.name)
+			) {
+				continue;
+			}
 
 			// Pokemon with Last Respects shouldn't be leading
 			if (['Basculegion', 'Houndstone'].includes(species.baseSpecies) && !pokemon.length) continue;
