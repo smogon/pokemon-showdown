@@ -516,12 +516,12 @@
     "jumpluff": {
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Bulky Support",
                 "movepool": ["Acrobatics", "Leech Seed", "Strength Sap", "Substitute"],
                 "teraTypes": ["Steel"]
             },
             {
-                "role": "Bulky Support",
+                "role": "Fast Support",
                 "movepool": ["Acrobatics", "Encore", "Sleep Powder", "U-turn", "Strength Sap"],
                 "teraTypes": ["Steel"]
             }
@@ -1466,7 +1466,7 @@
     "arceusbug": {
         "sets": [
             {
-                "role": "Bulky Setup",
+                "role": "Setup Sweeper",
                 "movepool": ["Calm Mind", "Earth Power", "Judgment", "Fire Blast", "Recover"],
                 "teraTypes": ["Ground"]
             }
@@ -1601,7 +1601,7 @@
     "arceussteel": {
         "sets": [
             {
-                "role": "Bulky Setup",
+                "role": "Setup Sweeper",
                 "movepool": ["Calm Mind", "Judgment", "Earth Power", "Recover", "Will-O-Wisp"],
                 "teraTypes": ["Ghost"]
             }
@@ -2411,7 +2411,7 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Drain Punch", "Play Rough", "Shadow Claw", "Shadow Sneak", "Swords Dance", "Wood Hammer"],
-                "teraTypes": ["Fighting", "Grass"]
+                "teraTypes": ["Fighting", "Grass", "Fairy", "Ghost"]
             }
         ]
     },
@@ -2602,13 +2602,18 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Light Screen", "Parting Shot", "Reflect", "Spirit Break"],
+                "movepool": ["Light Screen", "Parting Shot", "Reflect", "Spirit Break", "Thunder Wave"],
                 "teraTypes": ["Fairy"]
             },
             {
-                "role": "Bulky Setup",
+                "role": "Fast Bulky Setup",
                 "movepool": ["Bulk Up", "Crunch", "Rest", "Spirit Break", "Sucker Punch", "Thunder Wave"],
                 "teraTypes": ["Dark"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Parting Shot", "Spirit Break", "Sucker Punch", "Taunt", "Thunder Wave"],
+                "teraTypes": ["Fairy"]
             }
         ]
     },
