@@ -867,7 +867,7 @@ export class RandomTeams {
 		case 'Infiltrator':
 			return (moves.has('rest') && moves.has('sleeptalk')) || (isDoubles && abilities.has('Clear Body'));
 		case 'Intimidate':
-			if (abilities.has('Hustle') return true;
+			if (abilities.has('Hustle')) return true;
 			if (abilities.has('Sheer Force') && !!counter.get('sheerforce')) return true;
 			return (abilities.has('Stakeout') || moves.has('substitute'));
 		case 'Iron Fist':
