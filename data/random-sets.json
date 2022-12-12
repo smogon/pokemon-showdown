@@ -4023,7 +4023,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["Earth Power", "Giga Drain", "Knock Off", "Leech Seed", "Rapid Spin", "Spikes", "Spore", "Toxic", "Toxic Spikes"],
+                "movepool": ["Earth Power", "Giga Drain", "Knock Off", "Rapid Spin", "Spikes", "Spore", "Toxic", "Toxic Spikes"],
                 "teraTypes": ["Ground"]
             }
         ]
