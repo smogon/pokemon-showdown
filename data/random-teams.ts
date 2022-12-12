@@ -904,7 +904,7 @@ export class RandomTeams {
 			return species.id === 'seviper';
 		case 'Sheer Force':
 			if (species.id === 'braviaryhisui' && role === 'Wallbreaker') return true;
-			return (!counter.get('sheerforce') || abilities.has('Guts') || abilities.has('Slush Rush'));
+			return (!counter.get('sheerforce') || ['Guts', 'Sharpness', 'Slush Rush'].some(m => abilities.has('m')));
 		case 'Slush Rush':
 			return !moves.has('snowscape');
 		case 'Solar Power':
