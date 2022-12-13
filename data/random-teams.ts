@@ -902,9 +902,9 @@ export class RandomTeams {
 			return species.id === 'seviper';
 		case 'Sheer Force':
 			if (species.id === 'braviaryhisui' && role === 'Wallbreaker') return true;
-			return (!counter.get('sheerforce') || ['Guts', 'Sharpness', 'Slush Rush'].some(m => abilities.has('m')));
+			return (!counter.get('sheerforce') || ['Guts', 'Sharpness', 'Slush Rush'].some(m => abilities.has(m)));
 		case 'Slush Rush':
-			return !moves.has('snowscape');
+			return !teamDetails.snow;
 		case 'Solar Power':
 			return (!teamDetails.sun);
 		case 'Stakeout':
@@ -921,8 +921,6 @@ export class RandomTeams {
 			return (species.id !== 'umbreon' && species.id !== 'rabsca');
 		case 'Technician':
 			return (!counter.get('technician') || abilities.has('Punk Rock'));
-		case 'Thick Fat':
-			return (moves.has('snowscape'));
 		case 'Tinted Lens':
 			return (species.id === 'braviaryhisui' && role === 'Fast Support');
 		case 'Unburden':
@@ -966,6 +964,7 @@ export class RandomTeams {
 		if (abilities.has('Serene Grace') && moves.has('headbutt')) return 'Serene Grace';
 		if (abilities.has('Technician') && counter.get('technician')) return 'Technician';
 		if (abilities.has('Own Tempo') && moves.has('petaldance')) return 'Own Tempo';
+		if (abilities.has('Slush Rush') && moves.has('snowscape')) return 'Slush Rush';
 
 		// Sort abilities by rating with an element of randomness
 		// All three abilities can be chosen
@@ -978,7 +977,7 @@ export class RandomTeams {
 			if (abilityData[0].rating <= abilityData[1].rating) {
 				if (this.randomChance(2, 3)) [abilityData[0], abilityData[1]] = [abilityData[1], abilityData[0]];
 			} else {
-				if (this.randomChance(1, 2)) [abilityData[1], abilityData[2]] = [abilityData[2], abilityData[1]];
+				if (this.randomChance(1, 2)) [abilityData[0], abilityData[1]] = [abilityData[1], abilityData[0]];
 			}
 		} else {
 			// Third ability cannot be chosen
