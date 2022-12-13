@@ -909,7 +909,7 @@
         "level": 88,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Bulky Support",
                 "movepool": ["Encore", "Foul Play", "Knock Off", "Recover", "Taunt", "Thunder Wave", "Will-O-Wisp"],
                 "teraTypes": ["Steel"]
             }
