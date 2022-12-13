@@ -1246,12 +1246,7 @@ export class RandomTeams {
 		if (species.cosmeticFormes) {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
-		let sets;
-		if (isDoubles) {
-			sets = this.randomDoublesSets[species.id]["sets"];
-		} else {
-			sets = this.randomSets[species.id]["sets"];
-		}
+		const sets = (this as any)[`random${isDoubles ? 'Doubles' : ''}Sets`][species.id]["sets"];
 		const possibleSets = [];
 		for (const set of sets) {
 			if (teamDetails.teraBlast && set.role === "Tera Blast user") {
