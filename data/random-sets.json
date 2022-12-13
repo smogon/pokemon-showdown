@@ -1027,6 +1027,11 @@
                 "role": "Bulky Support",
                 "movepool": ["Earthquake", "Liquidation", "Spikes", "Stealth Rock", "Stone Edge"],
                 "teraTypes": ["Ground"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dragon Dance", "Earthquake", "Liquidation", "Stone Edge"],
+                "teraTypes": ["Ground", "Water"]
             }
         ]
     },
@@ -3379,7 +3384,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Aqua Jet", "Liquidation", "Memento", "Stomping Tantrum", "Sucker Punch", "Throat Chop"],
-                "teraTypes": ["Dark"]
+                "teraTypes": ["Water", "Dark"]
             }
         ]
     },
