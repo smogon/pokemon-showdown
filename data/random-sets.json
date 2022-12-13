@@ -685,7 +685,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Body Press", "Gyro Ball", "Rapid Spin", "Spikes", "Stealth Rock", "Volt Switch"],
+                "movepool": ["Body Press", "Iron Head", "Rapid Spin", "Spikes", "Stealth Rock", "Volt Switch"],
                 "teraTypes": ["Fighting"]
             }
         ]
@@ -3709,7 +3709,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Body Press", "Play Rough", "Protect", "Wish"],
-                "teraTypes": ["Fairy"]
+                "teraTypes": ["Steel"]
             }
         ]
     },
