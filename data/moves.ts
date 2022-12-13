@@ -2248,14 +2248,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		volatileStatus: 'charge',
 		condition: {
 			onStart(pokemon, source, effect) {
-				if (effect && ['electromorphosis', 'windpower'].includes(effect.id)) {
+				if (effect && ['Electromorphosis', 'Wind Power'].includes(effect.name)) {
 					this.add('-start', pokemon, 'Charge', this.activeMove!.name, '[from] ability: ' + effect.name);
 				} else {
 					this.add('-start', pokemon, 'Charge');
 				}
 			},
 			onRestart(pokemon, source, effect) {
-				if (effect && ['electromorphosis', 'windpower'].includes(effect.id)) {
+				if (effect && ['Electromorphosis', 'Wind Power'].includes(effect.name)) {
 					this.add('-start', pokemon, 'Charge', this.activeMove!.name, '[from] ability: ' + effect.name);
 				} else {
 					this.add('-start', pokemon, 'Charge');
