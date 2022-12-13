@@ -181,7 +181,6 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles', '!Gravity Sleep Clause'],
-		banlist: [],
 	},
 	{
 		name: "[Gen 9] Doubles UU",
