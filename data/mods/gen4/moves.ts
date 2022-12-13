@@ -1172,6 +1172,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return 100;
 		},
 	},
+	payday: {
+		inherit: true,
+		onHit() {
+			this.add('-fieldactivate', 'move: Pay Day');
+		},
+	},
 	perishsong: {
 		inherit: true,
 		condition: {
