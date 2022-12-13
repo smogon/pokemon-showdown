@@ -12,9 +12,9 @@ describe('Charge', function () {
 
 	it('should double the base power of the next Electric attack', function () {
 		battle = common.createBattle([[
-			{species: 'Kilowattrel', moves: ['charge', 'thunderbolt']}
+			{species: 'Kilowattrel', moves: ['charge', 'thunderbolt']},
 		], [
-			{species: 'Dondozo', ability: 'shellarmor', moves: ['sleeptalk']}
+			{species: 'Dondozo', ability: 'shellarmor', moves: ['sleeptalk']},
 		]]);
 
 		battle.makeChoices();
@@ -24,9 +24,9 @@ describe('Charge', function () {
 
 	it('should remain active until an Electric-type attack is used', function () {
 		battle = common.createBattle([[
-			{species: 'Kilowattrel', moves: ['charge', 'agility', 'airslash', 'thunderbolt']}
+			{species: 'Kilowattrel', moves: ['charge', 'agility', 'airslash', 'thunderbolt']},
 		], [
-			{species: 'Baxcalibur', moves: ['sleeptalk']}
+			{species: 'Baxcalibur', moves: ['sleeptalk']},
 		]]);
 
 		battle.makeChoices();
@@ -40,9 +40,9 @@ describe('Charge', function () {
 
 	it('should wear off after an Electric-type status move that is not Charge is used', function () {
 		battle = common.createBattle([[
-			{species: 'Kilowattrel', moves: ['charge', 'thunderwave']}
+			{species: 'Kilowattrel', moves: ['charge', 'thunderwave']},
 		], [
-			{species: 'Baxcalibur', moves: ['sleeptalk']}
+			{species: 'Baxcalibur', moves: ['sleeptalk']},
 		]]);
 
 		battle.makeChoices();
@@ -60,9 +60,9 @@ describe('Charge [Gen 8]', function () {
 
 	it('should wear off after a move of any type is used', function () {
 		battle = common.gen(8).createBattle([[
-			{species: 'Pikachu', moves: ['charge', 'tackle', 'thundershock']}
+			{species: 'Pikachu', moves: ['charge', 'tackle', 'thundershock']},
 		], [
-			{species: 'Dragapult', moves: ['sleeptalk']}
+			{species: 'Dragapult', moves: ['sleeptalk']},
 		]]);
 
 		battle.makeChoices();
