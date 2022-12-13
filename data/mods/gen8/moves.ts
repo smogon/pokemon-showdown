@@ -62,18 +62,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		condition: {
 			onStart(pokemon, source, effect) {
-				if (effect && ['electromorphosis', 'windpower'].includes(effect.id)) {
-					this.add('-start', pokemon, 'Charge', this.activeMove!.name, '[from] ability: ' + effect.name);
-				} else {
-					this.add('-start', pokemon, 'Charge');
-				}
+				this.add('-start', pokemon, 'Charge');
 			},
 			onRestart(pokemon, source, effect) {
-				if (effect && ['electromorphosis', 'windpower'].includes(effect.id)) {
-					this.add('-start', pokemon, 'Charge', this.activeMove!.name, '[from] ability: ' + effect.name);
-				} else {
-					this.add('-start', pokemon, 'Charge');
-				}
+				this.add('-start', pokemon, 'Charge');
 			},
 			onBasePowerPriority: 9,
 			onBasePower(basePower, attacker, defender, move) {
@@ -82,14 +74,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return this.chainModify(2);
 				}
 			},
-			onMoveAborted(target, source, move) {
+			onMoveAborted(pokemon, target, move) {
 				if (move.id !== 'charge') {
-					source.removeVolatile('charge');
+					pokemon.removeVolatile('charge');
 				}
 			},
-			onAfterMove(target, source, move) {
+			onAfterMove(pokemon, target, move) {
 				if (move.id !== 'charge') {
-					source.removeVolatile('charge');
+					pokemon.removeVolatile('charge');
 				}
 			},
 			onEnd(pokemon) {

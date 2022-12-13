@@ -5639,7 +5639,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	tatsugiri: {
 		tier: "UU",
-		doublesTier: "DOU",
+		doublesTier: "DUber",
 		natDexTier: "UU",
 	},
 	cyclizar: {
@@ -5778,7 +5778,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	fluttermane: {
 		tier: "Uber",
-		doublesTier: "DOU",
+		doublesTier: "DUber",
 		natDexTier: "Uber",
 	},
 	slitherwing: {

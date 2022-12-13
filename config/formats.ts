@@ -341,6 +341,13 @@ export const Formats: FormatList = [
 		banlist: ['DUber', 'Shadow Tag'],
 	},
 	{
+		name: "[Gen 9] Doubles Ubers",
+
+		mod: 'gen9',
+		gameType: 'doubles',
+		ruleset: ['Standard Doubles', '!Gravity Sleep Clause'],
+	},
+	{
 		name: "[Gen 9] Doubles UU",
 
 		mod: 'gen9',
@@ -531,7 +538,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		searchShow: false,
-		ruleset: ['Draft'],
+		ruleset: ['Draft', 'Min Source Gen = 9'],
 	},
 	{
 		name: "[Gen 9] 6v6 Doubles Draft",
@@ -708,10 +715,10 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'fullpotential',
-		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause', 'Min Source Gen = 9'],
+		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause', 'Terastal Clause', 'Min Source Gen = 9'],
 		banlist: [
-			'Chien-Pao', 'Cyclizar', 'Dragapult', 'Espathra', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Scream Tail', 'Arena Trap', 'Chlorophyll',
-			'Moody', 'Sand Rush', 'Shadow Tag', 'Slush Rush', 'Swift Swim', 'Unburden', 'Booster Energy', 'King\'s Rock', 'Baton Pass',
+			'Chien-Pao', 'Cyclizar', 'Dragapult', 'Espathra', 'Flutter Mane', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Scream Tail', 'Arena Trap', 'Chlorophyll',
+			'Drought', 'Moody', 'Sand Rush', 'Shadow Tag', 'Slush Rush', 'Swift Swim', 'Unburden', 'Booster Energy', 'Heat Rock', 'King\'s Rock', 'Baton Pass',
 		],
 	},
 
