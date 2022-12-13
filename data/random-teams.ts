@@ -966,51 +966,44 @@ export class RandomTeams {
 		if (abilities.has('Own Tempo') && moves.has('petaldance')) return 'Own Tempo';
 		if (abilities.has('Slush Rush') && moves.has('snowscape')) return 'Slush Rush';
 
+		let abilityAllowed: Ability[] = [];
+		// Obtain a list of abilities that are allowed (not culled)
+		for (const ability of abilityData) {
+			if (!this.shouldCullAbility(
+				ability.name, types, moves, abilities, counter, teamDetails, species, isLead, isDoubles, teraType, role
+			)) {
+				abilityAllowed.push(ability);
+			}
+		}
+
+		// If all abilities are culled, re-allow all
+		if (!abilityAllowed.length) abilityAllowed = abilityData;
+
+		if (abilityAllowed.length === 1) return abilityAllowed[0].name;
 		// Sort abilities by rating with an element of randomness
 		// All three abilities can be chosen
-		if (abilityData[2] && abilityData[0].rating - 0.5 <= abilityData[2].rating) {
-			if (abilityData[1].rating <= abilityData[2].rating) {
-				if (this.randomChance(1, 2)) [abilityData[1], abilityData[2]] = [abilityData[2], abilityData[1]];
+		if (abilityAllowed[2] && abilityAllowed[0].rating - 0.5 <= abilityAllowed[2].rating) {
+			if (abilityAllowed[1].rating <= abilityAllowed[2].rating) {
+				if (this.randomChance(1, 2)) [abilityAllowed[1], abilityAllowed[2]] = [abilityAllowed[2], abilityAllowed[1]];
 			} else {
-				if (this.randomChance(1, 3)) [abilityData[1], abilityData[2]] = [abilityData[2], abilityData[1]];
+				if (this.randomChance(1, 3)) [abilityAllowed[1], abilityAllowed[2]] = [abilityAllowed[2], abilityAllowed[1]];
 			}
-			if (abilityData[0].rating <= abilityData[1].rating) {
-				if (this.randomChance(2, 3)) [abilityData[0], abilityData[1]] = [abilityData[1], abilityData[0]];
+			if (abilityAllowed[0].rating <= abilityAllowed[1].rating) {
+				if (this.randomChance(2, 3)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
 			} else {
-				if (this.randomChance(1, 2)) [abilityData[0], abilityData[1]] = [abilityData[1], abilityData[0]];
+				if (this.randomChance(1, 2)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
 			}
 		} else {
 			// Third ability cannot be chosen
-			if (abilityData[0].rating <= abilityData[1].rating) {
-				if (this.randomChance(1, 2)) [abilityData[0], abilityData[1]] = [abilityData[1], abilityData[0]];
-			} else if (abilityData[0].rating - 0.5 <= abilityData[1].rating) {
-				if (this.randomChance(1, 3)) [abilityData[0], abilityData[1]] = [abilityData[1], abilityData[0]];
+			if (abilityAllowed[0].rating <= abilityAllowed[1].rating) {
+				if (this.randomChance(1, 2)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
+			} else if (abilityAllowed[0].rating - 0.5 <= abilityAllowed[1].rating) {
+				if (this.randomChance(1, 3)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
 			}
 		}
 
 		// After sorting, choose the first ability
-		let ability = abilityData[0].name;
-		// Look for rejected abilities
-		// Start with the first ability and work our way through, culling as we go
-		let rejectAbility = false;
-		do {
-			rejectAbility = this.shouldCullAbility(
-				ability, types, moves, abilities, counter, teamDetails, species, isLead, isDoubles, teraType, role
-			);
-
-			if (rejectAbility) {
-				if (ability === abilityData[0].name && (abilityData[1].rating >= 1)) {
-					ability = abilityData[1].name;
-				} else if (ability === abilityData[1].name && abilityData[2] && (abilityData[2].rating >= 1)) {
-					ability = abilityData[2].name;
-				} else {
-					// Default to the highest rated ability if all are rejected
-					return abilityData[0].name;
-				}
-			}
-		} while (rejectAbility);
-
-		return ability;
+		return abilityAllowed[0].name;
 	}
 
 	getPriorityItem(
