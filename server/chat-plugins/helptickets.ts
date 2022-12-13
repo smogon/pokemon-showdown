@@ -2487,6 +2487,7 @@ export const commands: Chat.ChatCommands = {
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
 			}
 			const ticketGame = helpRoom.getGame(HelpTicket)!;
+			Chat.runHandlers('onTicketCreate', ticket, user);
 			helpRoom.modlog({action: 'TICKETOPEN', isGlobal: false, loggedBy: user.id, note: ticket.type});
 			ticketGame.addText(`${user.name} opened a new ticket. Issue: ${ticket.type}`, user);
 			void this.parse(`/join help-${user.id}`);
