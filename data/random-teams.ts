@@ -463,6 +463,7 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'substitute', pivotingMoves);
 		this.incompatibleMoves(moves, movePool, SpeedSetup, ['aquajet', 'rest', 'trickroom']);
 		this.incompatibleMoves(moves, movePool, 'curse', 'rapidspin');
+		this.incompatibleMoves(moves, movePool, 'dragondance', 'dracometeor');
 
 
 		// These attacks are redundant with each other
