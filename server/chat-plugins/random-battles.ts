@@ -737,16 +737,30 @@ export const commands: Chat.ChatCommands = {
 			const setsToCheck = [species];
 			if (dex.gen > 7) setsToCheck.push(dex.species.get(`${args[0]}gmax`));
 			if (species.otherFormes) setsToCheck.push(...species.otherFormes.map(pkmn => dex.species.get(pkmn)));
-
-			for (const pokemon of setsToCheck) {
-				if (!pokemon.randomBattleMoves || pokemon.isNonstandard === 'Future') continue;
-				const randomMoves = pokemon.randomBattleMoves.slice();
-				const m = randomMoves.sort().map(formatMove);
-				movesets.push(
-					`<details${!movesets.length ? ' open' : ''}>` +
-					`<summary><span style="color:#999999;">Moves for ${pokemon.name} in ${formatName}:<span style="color:#999999;"></summary>` +
-					`${m.join(`, `)}</details>`
-				);
+			if (dex.gen >= 9) {
+				// Add other formats support later
+				const setsFile = JSON.parse(FS('data/random-sets.json').readIfExistsSync() || '{}');
+				for (const pokemon of setsToCheck) {
+					const sets = setsFile[pokemon.id]?.sets;
+					if (!sets?.length) continue;
+					let buf = `<span style="color:#999999;">Moves for ${pokemon.name} in ${formatName}:</span><br/>`;
+					for (const set of sets) {
+						buf += `<details><summary>${set.role}</summary>` +
+							`${set.movepool.sort().map(formatMove).join(', ')}</details>`;
+					}
+					movesets.push(buf);
+				}
+			} else {
+				for (const pokemon of setsToCheck) {
+					if (!pokemon.randomBattleMoves || pokemon.isNonstandard === 'Future') continue;
+					const randomMoves = pokemon.randomBattleMoves.slice();
+					const m = randomMoves.sort().map(formatMove);
+					movesets.push(
+						`<details${!movesets.length ? ' open' : ''}>` +
+						`<summary><span style="color:#999999;">Moves for ${pokemon.name} in ${formatName}:<span style="color:#999999;"></summary>` +
+						`${m.join(`, `)}</details>`
+					);
+				}
 			}
 		}
 
