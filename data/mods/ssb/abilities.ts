@@ -576,14 +576,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			];
 			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Dragon';
-				// @ts-ignore
-				move.drakeskinBoosted = true;
+				move.typeChangerBoosted = this.effect;
 			}
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			// @ts-ignore
-			if (move.drakeskinBoosted) return this.chainModify([4915, 4096]);
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
 		gen: 8,
 	},
@@ -797,16 +795,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			];
 			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Ice';
-				move.refrigerateBoosted = true;
+				move.typeChangerBoosted = this.effect;
 			}
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.refrigerateBoosted) return this.chainModify([4915, 4096]);
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
 		onModifyMovePriority: -2,
 		onModifyMove(move, attacker) {
-			if (move.refrigerateBoosted) return;
+			if (move.typeChangerBoosted === this.effect) return;
 			move.onTry = function () {
 				this.field.addPseudoWeather('echoedvoiceclone');
 				this.field.pseudoWeather.echoedvoiceclone.lastmove = move.name;
@@ -1039,14 +1037,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			];
 			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Poison';
-				// @ts-ignore
-				move.venomizeBoosted = true;
+				move.typeChangerBoosted = this.effect;
 			}
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			// @ts-ignore
-			if (move.venomizeBoosted) return this.chainModify([4915, 4096]);
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
 		name: "Venomize",
 		gen: 8,
