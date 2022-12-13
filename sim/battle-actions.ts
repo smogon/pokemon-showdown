@@ -328,9 +328,7 @@ export class BattleActions {
 				if (this.battle.faintMessages()) break;
 				if (dancer.fainted) continue;
 				this.battle.add('-activate', dancer, 'ability: Dancer');
-				const dancersTarget = !this.battle.activeTarget!.isAlly(dancer) && pokemon.isAlly(dancer) ?
-					this.battle.activeTarget! :
-					pokemon;
+				const dancersTarget = !target!.isAlly(dancer) && pokemon.isAlly(dancer) ? target! : pokemon;
 				const dancersTargetLoc = dancer.getLocOf(dancersTarget);
 				this.runMove(move.id, dancer, dancersTargetLoc, this.dex.abilities.get('dancer'), undefined, true);
 			}
