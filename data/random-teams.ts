@@ -34,13 +34,13 @@ interface BattleFactorySet {
 export class MoveCounter extends Utils.Multiset<string> {
 	damagingMoves: Set<Move>;
 	stabCounter: number;
-	ironfist: number;
+	ironFist: number;
 
 	constructor() {
 		super();
 		this.damagingMoves = new Set();
 		this.stabCounter = 0;
-		this.ironfist = 0;
+		this.ironFist = 0;
 	}
 
 	get(key: string): number {
@@ -97,7 +97,11 @@ const Hazards = [
 ];
 
 // Moves that should be paired together when possible
-const MovePairs = [['lightscreen', 'reflect'], ['sleeptalk', 'rest'], ['protect', 'wish']];
+const MovePairs = [
+	['lightscreen', 'reflect'],
+	['sleeptalk', 'rest'],
+	['protect', 'wish'],
+];
 
 function sereneGraceBenefits(move: Move) {
 	return move.secondary?.chance && move.secondary.chance >= 20 && move.secondary.chance < 100;
@@ -356,7 +360,7 @@ export class RandomTeams {
 					if (teraType === moveType) counter.add('stabtera');
 				}
 				if (move.flags['bite']) counter.add('strongjaw');
-				if (move.flags['punch']) counter.ironfist++;
+				if (move.flags['punch']) counter.ironFist++;
 				if (move.flags['sound']) counter.add('sound');
 				if (move.priority !== 0 || (moveid === 'grassyglide' && abilities.has('Grassy Surge'))) {
 					counter.add('priority');
@@ -364,7 +368,7 @@ export class RandomTeams {
 				counter.damagingMoves.add(move);
 			}
 			// Moves with secondary effects:
-			if (move.secondary) {
+			if (move.secondary || move.hasSheerForce) {
 				counter.add('sheerforce');
 				if (sereneGraceBenefits(move)) {
 					counter.add('serenegrace');
@@ -406,7 +410,7 @@ export class RandomTeams {
 		if (moves.size + movePool.length <= this.maxMoveCount) return;
 		// If we have two unfilled moves and only one unpaired move, cull the unpaired move.
 		if (moves.size === this.maxMoveCount - 2) {
-			const unpairedMoves = Object.assign([], movePool);
+			const unpairedMoves = [...movePool];
 			for (const pair of MovePairs) {
 				if (movePool.includes(pair[0]) && movePool.includes(pair[1])) {
 					this.fastPop(unpairedMoves, unpairedMoves.indexOf(pair[0]));
@@ -430,10 +434,9 @@ export class RandomTeams {
 
 		// Develop additional move lists
 		const pivotingMoves = ['chillyreception', 'flipturn', 'partingshot', 'shedtail', 'teleport', 'uturn', 'voltswitch'];
-		const statusMoves = [];
-		for (const move of this.dex.moves.all()) {
-			if (move.category === 'Status') statusMoves.push(move.id);
-		}
+		const statusMoves = this.dex.moves.all()
+			.filter(move => move.category === 'Status')
+			.map(move => move.id);
 		const magnezoneMoves = ['bodypress', 'mirrorcoat', 'steelbeam'];
 
 		// Team-based move culls
