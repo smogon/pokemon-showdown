@@ -2268,14 +2268,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return this.chainModify(2);
 				}
 			},
-			onMoveAborted(target, source, move) {
+			onMoveAborted(pokemon, target, move) {
 				if (move.type === 'Electric' && move.id !== 'charge') {
-					source.removeVolatile('charge');
+					pokemon.removeVolatile('charge');
 				}
 			},
-			onAfterMove(target, source, move) {
+			onAfterMove(pokemon, target, move) {
 				if (move.type === 'Electric' && move.id !== 'charge') {
-					source.removeVolatile('charge');
+					pokemon.removeVolatile('charge');
 				}
 			},
 			onEnd(pokemon) {
