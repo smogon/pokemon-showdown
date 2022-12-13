@@ -26,6 +26,17 @@ export const Formats: FormatList = [
 		section: "S/V Singles",
 	},
 	{
+		name: "[Gen 9] Random Battle",
+		desc: `Randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3712619/">Random Battle Suggestions</a>`,
+		],
+
+		mod: 'gen9',
+		team: 'random',
+		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
+	},
+	{
 		name: "[Gen 9] OU",
 
 		mod: 'gen9',
@@ -2051,17 +2062,6 @@ export const Formats: FormatList = [
 	{
 		section: "Randomized Metas",
 		column: 3,
-	},
-	{
-		name: "[Gen 9] Random Battle",
-		desc: `Randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3656537/">Random Battle Suggestions</a>`,
-		],
-
-		mod: 'gen9',
-		team: 'random',
-		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
 	},
 	{
 		name: "[Gen 8] Random Battle",
