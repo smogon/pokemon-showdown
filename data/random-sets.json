@@ -876,7 +876,7 @@
         ]
     },
     "slaking": {
-        "level": 88,
+        "level": 86,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1111,7 +1111,7 @@
         ]
     },
     "staraptor": {
-        "level": 82,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2993,7 +2993,12 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Body Press", "Crunch", "Iron Defense", "Iron Head", "Psychic Fangs", "Stone Edge"],
+                "movepool": ["Close Combat", "Crunch", "Iron Head", "Psychic Fangs", "Stone Edge", "Wild Charge"],
+                "teraTypes": ["Fighting", "Dark"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Body Press", "Crunch", "Iron Defense", "Iron Head", "Rest", "Stone Edge"],
                 "teraTypes": ["Fighting"]
             }
         ]
