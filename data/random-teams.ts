@@ -1252,12 +1252,12 @@ export class RandomTeams {
 		} else {
 			sets = this.randomSets[species.id]["sets"];
 		}
-		const possible_sets = [];
+		const possibleSets = [];
 		for (const set of sets) {
 			if (teamDetails.teraBlast && set.role === "Tera Blast user") {
 				continue;
 			}
-			possible_sets.push(set);
+			possibleSets.push(set);
 		}
 		const set = this.sampleIfArray(possible_sets);
 		const role = set.role;
