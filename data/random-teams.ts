@@ -600,7 +600,7 @@ export class RandomTeams {
 		// Add other moves you really want to have, e.g. STAB, recovery, setup, depending on role.
 
 		// Enforce STAB
-		types.forEach((type, index) => {
+		for (const type of types) {
 			// Check if a STAB move of that type should be required
 			if (runEnforcementChecker(type)) {
 				const stabMoves = [];
@@ -627,7 +627,7 @@ export class RandomTeams {
 						movePool, teraType, role);
 				}
 			}
-		});
+		}
 
 		// If no STAB move was added in the previous step, add a STAB move
 		if (!counter.stabCounter) {
