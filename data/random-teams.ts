@@ -837,7 +837,7 @@ export class RandomTeams {
 		role: string,
 	): boolean {
 		if ([
-			'Flare Boost', 'Gluttony', 'Hydration', 'Ice Body', 'Immunity', 'Insomnia',
+			'Flare Boost', 'Gluttony', 'Hydration', 'Ice Body', 'Immunity', 'Insomnia', 'Own Tempo',
 			'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
 		].includes(ability)) return true;
 
@@ -882,8 +882,6 @@ export class RandomTeams {
 			return (!counter.get('Physical') || moves.has('stealthrock'));
 		case 'Overgrow':
 			return !counter.get('Grass');
-		case 'Own Tempo':
-			return !moves.has('petaldance');
 		case 'Prankster':
 			return !counter.get('Status');
 		case 'Pressure':
@@ -967,6 +965,7 @@ export class RandomTeams {
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk'))) return 'Guts';
 		if (abilities.has('Serene Grace') && moves.has('headbutt')) return 'Serene Grace';
 		if (abilities.has('Technician') && counter.get('technician')) return 'Technician';
+		if (abilities.has('Own Tempo') && moves.has('petaldance')) return 'Own Tempo';
 
 		// Sort abilities by rating with an element of randomness
 		// All three abilities can be chosen
