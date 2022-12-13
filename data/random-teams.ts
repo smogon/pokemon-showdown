@@ -87,7 +87,7 @@ const Setup = [
 // Moves that shouldn't be the only STAB moves:
 const NoStab = [
 	'accelerock', 'aquajet', 'beakblast', 'bounce', 'breakingswipe', 'chatter', 'chloroblast', 'clearsmog', 'dragontail', 'eruption',
-	'explosion', 'fakeout', 'firstimpression', 'flamecharge', 'flipturn', 'iceshard', 'icywind', 'incinerate', 'machpunch',
+	'explosion', 'fakeout', 'flamecharge', 'flipturn', 'iceshard', 'icywind', 'incinerate', 'machpunch',
 	'meteorbeam', 'mortalspin', 'pluck', 'pursuit', 'quickattack', 'reversal', 'saltcure', 'selfdestruct', 'shadowsneak', 'skydrop',
 	'snarl', 'steelbeam', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
 ];
