@@ -499,6 +499,8 @@ export class BattleActions {
 			this.battle.faint(pokemon, pokemon, move);
 		}
 
+		this.battle.setActiveMove(move, pokemon, target);
+
 		if (!moveResult) {
 			this.battle.singleEvent('MoveFail', move, null, target, pokemon, move);
 			return false;
