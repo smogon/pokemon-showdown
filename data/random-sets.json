@@ -133,8 +133,13 @@
         "level": 84,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Bulky Attacker",
                 "movepool": ["Close Combat", "Extreme Speed", "Flare Blitz", "Morning Sun", "Wild Charge", "Will-O-Wisp"],
+                "teraTypes": ["Fire", "Normal"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Close Combat", "Extreme Speed", "Flare Blitz", "Morning Sun", "Wild Charge"],
                 "teraTypes": ["Fire", "Normal"]
             }
         ]
@@ -144,7 +149,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Close Combat", "Extreme Speed", "Flare Blitz", "Head Smash", "Morning Sun", "Wild Charge", "Will-O-Wisp"],
+                "movepool": ["Close Combat", "Extreme Speed", "Flare Blitz", "Head Smash", "Morning Sun", "Wild Charge"],
                 "teraTypes": ["Rock"]
             }
         ]
