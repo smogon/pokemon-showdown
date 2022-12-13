@@ -5,7 +5,7 @@ const common = require('../../common');
 
 let battle;
 
-describe('Charge', function () {
+describe.only('Charge', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
@@ -53,7 +53,7 @@ describe('Charge', function () {
 	});
 });
 
-describe('Charge [Gen 8]', function () {
+describe.only('Charge [Gen 8]', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
@@ -69,7 +69,7 @@ describe('Charge [Gen 8]', function () {
 		battle.makeChoices('move tackle', 'auto');
 		assert.false(battle.p1.active[0].volatiles['charge']);
 		battle.makeChoices();
-		battle.makeChoices('move thunderbolt', 'auto');
+		battle.makeChoices('move thundershock', 'auto');
 		assert.false(battle.p1.active[0].volatiles['charge']);
 	});
 });
