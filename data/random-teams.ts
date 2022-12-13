@@ -907,6 +907,8 @@ export class RandomTeams {
 			return !moves.has('snowscape');
 		case 'Solar Power':
 			return (!teamDetails.sun);
+		case 'Stakeout':
+			return (counter.damagingMoves.size < 1);
 		case 'Sturdy':
 			return !!counter.get('recoil');
 		case 'Swarm':
