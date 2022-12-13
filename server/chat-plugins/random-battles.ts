@@ -746,7 +746,8 @@ export const commands: Chat.ChatCommands = {
 					let buf = `<span style="color:#999999;">Moves for ${pokemon.name} in ${formatName}:</span><br/>`;
 					for (const set of sets) {
 						buf += `<details><summary>${set.role}</summary>` +
-							`${set.movepool.sort().map(formatMove).join(', ')}</details>`;
+							`<b>Tera Type${Chat.plural(set.teraTypes)}</b>: ${set.teraTypes.join(', ')}<br/>` +
+							`<b>Moves:</b> ${set.movepool.sort().map(formatMove).join(', ')}</details>`;
 					}
 					movesets.push(buf);
 				}
