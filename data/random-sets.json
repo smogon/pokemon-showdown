@@ -1095,7 +1095,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["Fire Punch", "Precipice Blades", "Stone Edge", "Swords Dance"],
+                "movepool": ["Fire Punch", "Precipice Blades", "Stone Edge", "Swords Dance", "Thunder Wave"],
                 "teraTypes": ["Ground"]
             }
         ]
