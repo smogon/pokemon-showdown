@@ -176,6 +176,13 @@ export const Formats: FormatList = [
 		banlist: ['DUber', 'Shadow Tag'],
 	},
 	{
+		name: "[Gen 9] Doubles Ubers",
+
+		mod: 'gen9',
+		gameType: 'doubles',
+		ruleset: ['Standard Doubles', '!Gravity Sleep Clause'],
+	},
+	{
 		name: "[Gen 9] Doubles UU",
 
 		mod: 'gen9',
