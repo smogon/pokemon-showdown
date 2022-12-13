@@ -970,7 +970,7 @@ export class RandomTeams {
 		let abilityAllowed: Ability[] = [];
 		// Obtain a list of abilities that are allowed (not culled)
 		for (const ability of abilityData) {
-			if (!this.shouldCullAbility(
+			if (ability.rating >= 1 && !this.shouldCullAbility(
 				ability.name, types, moves, abilities, counter, teamDetails, species, isLead, isDoubles, teraType, role
 			)) {
 				abilityAllowed.push(ability);
