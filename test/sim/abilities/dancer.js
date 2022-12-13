@@ -146,7 +146,7 @@ describe('Dancer', function () {
 		assert(!opponentNotTargetedByAlly.hurtThisTurn);
 	});
 
-	it.skip('should adopt the target selected by copycat', function () {
+	it('should adopt the target selected by copycat', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'oricoriopau', ability: 'dancer', moves: ['revelationdance']},
 			{species: 'flamigo', moves: ['copycat']},
