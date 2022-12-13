@@ -1077,13 +1077,17 @@ export class Pokemon {
 			}),
 			baseAbility: this.baseAbility,
 			item: this.item,
-			teraType: this.teraType,
-			terastallized: !!this.terastallized,
-			commanding: !!this.volatiles['commanding'] && !this.fainted,
-			reviving: this.isActive && !!this.side.slotConditions[this.position]['revivalblessing'],
 			pokeball: this.pokeball,
 		};
 		if (this.battle.gen > 6) entry.ability = this.ability;
+		if (this.battle.gen >= 9) {
+			entry.commanding = !!this.volatiles['commanding'] && !this.fainted;
+			entry.reviving = this.isActive && !!this.side.slotConditions[this.position]['revivalblessing'];
+		}
+		if (this.battle.gen === 9) {
+			entry.teraType = this.teraType;
+			entry.terastallized = !!this.terastallized;
+		}
 		return entry;
 	}
 
