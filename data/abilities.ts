@@ -686,23 +686,25 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	cudchew: {
 		onEatItem(item, pokemon) {
-			if (!item.isBerry) return;
-			pokemon.abilityState.berry = item;
-			pokemon.addVolatile('cudchew');
+			if (item.isBerry) {
+				pokemon.addVolatile('cudchew');
+				pokemon.volatiles['cudchew'].berry = item;
+			}
 		},
 		condition: {
 			noCopy: true,
 			duration: 2,
+			onResidualOrder: 28,
+			onResidualSubOrder: 2,
 			onEnd(pokemon) {
-				if (pokemon.hp && pokemon.abilityState.berry) {
-					const item = pokemon.abilityState.berry;
+				if (pokemon.hp) {
+					const item = this.effectState.berry;
 					this.add('-activate', pokemon, 'ability: Cud Chew');
-					this.add('-enditem', pokemon, item.name);
+					this.add('-enditem', pokemon, item.name, '[eat]');
 					if (this.singleEvent('Eat', item, null, pokemon, null, null)) {
 						this.runEvent('EatItem', pokemon, null, null, item);
 					}
 					if (item.onEat) pokemon.ateBerry = true;
-					delete pokemon.abilityState.berry;
 				}
 			},
 		},
