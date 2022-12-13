@@ -478,6 +478,7 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'knockoff', 'foulplay');
 		this.incompatibleMoves(moves, movePool, 'doubleedge', 'headbutt');
 		this.incompatibleMoves(moves, movePool, 'fireblast', ['fierydance', 'flamethrower']);
+		this.incompatibleMoves(moves, movePool, 'lavaplume', 'magmastorm');
 		this.incompatibleMoves(moves, movePool, 'thunderpunch', 'wildcharge');
 		this.incompatibleMoves(moves, movePool, 'gunkshot', ['direclaw', 'poisonjab']);
 		this.incompatibleMoves(moves, movePool, 'aurasphere', 'focusblast');
