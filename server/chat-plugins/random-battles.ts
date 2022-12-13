@@ -183,7 +183,7 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 	const genNum = parseInt(gen[3]);
 	if (isNaN(genNum) || genNum < 6 || (isBSS && genNum < 7)) return null;
 	const statsFile = JSON.parse(
-		FS(`data${gen === 'gen8' ? '/' : `/mods/${gen}`}/${isBSS ? `bss-` : ``}factory-sets.json`).readIfExistsSync() ||
+		FS(`data${gen === 'gen9' ? '/' : `/mods/${gen}`}/${isBSS ? `bss-` : ``}factory-sets.json`).readIfExistsSync() ||
 		"{}"
 	);
 	if (!Object.keys(statsFile).length) return null;

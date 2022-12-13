@@ -877,7 +877,7 @@ export class RandomTeams {
 			if (abilities.has('Sheer Force') && !!counter.get('sheerforce')) return true;
 			return (abilities.has('Stakeout') || moves.has('substitute'));
 		case 'Iron Fist':
-			return !counter.ironfist;
+			return !counter.ironFist;
 		case 'Justified':
 			return !counter.get('Physical');
 		case 'Mold Breaker':
@@ -930,7 +930,7 @@ export class RandomTeams {
 		case 'Unburden':
 			return (abilities.has('Prankster') || !counter.get('setup'));
 		case 'Volt Absorb':
-			if (abilities.has('Iron Fist') && counter.ironfist >= 2) return true;
+			if (abilities.has('Iron Fist') && counter.ironFist >= 2) return true;
 			return (this.dex.getEffectiveness('Electric', species) < -1);
 		case 'Water Absorb':
 			return species.id === 'quagsire';
@@ -1257,7 +1257,7 @@ export class RandomTeams {
 			}
 			possibleSets.push(set);
 		}
-		const set = this.sampleIfArray(possible_sets);
+		const set = this.sampleIfArray(possibleSets);
 		const role = set.role;
 		const movePool: string[] = [];
 		for (const movename of set.movepool) {
@@ -1612,7 +1612,8 @@ export class RandomTeams {
 		return pokemon;
 	}
 
-	randomFactorySets: {[format: string]: {[species: string]: BattleFactorySpecies}} = require('./factory-sets.json');
+	randomFactorySets: {[format: string]: {[species: string]: BattleFactorySpecies}} =
+		require('./mods/gen8/factory-sets.json');
 
 	randomFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails, tier: string
@@ -1898,7 +1899,7 @@ export class RandomTeams {
 		return pokemon;
 	}
 
-	randomBSSFactorySets: AnyObject = require('./bss-factory-sets.json');
+	randomBSSFactorySets: AnyObject = require('./mods/gen8/bss-factory-sets.json');
 
 	randomBSSFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails

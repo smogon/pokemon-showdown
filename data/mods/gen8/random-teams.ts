@@ -2627,7 +2627,7 @@ export class RandomGen8Teams {
 		return pokemon;
 	}
 
-	randomFactorySets: {[format: string]: {[species: string]: BattleFactorySpecies}} = require('./../../factory-sets.json');
+	randomFactorySets: {[format: string]: {[species: string]: BattleFactorySpecies}} = require('./factory-sets.json');
 
 	randomFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails, tier: string
@@ -2913,7 +2913,7 @@ export class RandomGen8Teams {
 		return pokemon;
 	}
 
-	randomBSSFactorySets: AnyObject = require('./../../bss-factory-sets.json');
+	randomBSSFactorySets: AnyObject = require('./bss-factory-sets.json');
 
 	randomBSSFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails
