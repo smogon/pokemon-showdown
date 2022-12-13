@@ -34,11 +34,13 @@ interface BattleFactorySet {
 export class MoveCounter extends Utils.Multiset<string> {
 	damagingMoves: Set<Move>;
 	stabCounter: number;
+	ironfist: number;
 
 	constructor() {
 		super();
 		this.damagingMoves = new Set();
 		this.stabCounter = 0;
+		this.ironfist = 0;
 	}
 
 	get(key: string): number {
@@ -354,7 +356,7 @@ export class RandomTeams {
 					if (teraType === moveType) counter.add('stabtera');
 				}
 				if (move.flags['bite']) counter.add('strongjaw');
-				if (move.flags['punch']) counter.add('ironfist');
+				if (move.flags['punch']) counter.ironfist++;
 				if (move.flags['sound']) counter.add('sound');
 				if (move.priority !== 0 || (moveid === 'grassyglide' && abilities.has('Grassy Surge'))) {
 					counter.add('priority');
@@ -871,7 +873,7 @@ export class RandomTeams {
 			if (abilities.has('Sheer Force') && !!counter.get('sheerforce')) return true;
 			return (abilities.has('Stakeout') || moves.has('substitute'));
 		case 'Iron Fist':
-			return !counter.get('ironfist');
+			return !counter.ironfist;
 		case 'Justified':
 			return !counter.get('Physical');
 		case 'Mold Breaker':
@@ -922,13 +924,13 @@ export class RandomTeams {
 		case 'Technician':
 			return (!counter.get('technician') || abilities.has('Punk Rock'));
 		case 'Thick Fat':
-			return (moves.has('snowscape');
+			return (moves.has('snowscape'));
 		case 'Tinted Lens':
 			return (species.id === 'braviaryhisui' && role === 'Fast Support');
 		case 'Unburden':
 			return (abilities.has('Prankster') || !counter.get('setup'));
 		case 'Volt Absorb':
-			if (abilities.has('Iron Fist') && counter.get('ironfist') >= 2) return true
+			if (abilities.has('Iron Fist') && counter.ironfist >= 2) return true;
 			return (this.dex.getEffectiveness('Electric', species) < -1);
 		case 'Water Absorb':
 			return species.id === 'quagsire';
