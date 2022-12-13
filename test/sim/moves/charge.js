@@ -5,7 +5,7 @@ const common = require('../../common');
 
 let battle;
 
-describe.only('Charge', function () {
+describe('Charge', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
@@ -53,7 +53,7 @@ describe.only('Charge', function () {
 	});
 });
 
-describe.only('Charge [Gen 8]', function () {
+describe('Charge [Gen 8]', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
