@@ -1404,6 +1404,7 @@ export class RandomTeams {
 		return [pokemonPool, baseSpeciesPool];
 	}
 
+	// TODO: Make types for this
 	randomSets: AnyObject = require('./random-sets.json');
 	randomDoublesSets: AnyObject = require('./random-sets.json'); // Doubles sets are the same as singles for now
 
