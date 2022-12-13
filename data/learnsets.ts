@@ -85302,7 +85302,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			waterpulse: ["9M"],
 		},
 	},
-	mausholdfour: {
+	mausholdthree: {
 		learnset: {
 			aerialace: ["9M"],
 			agility: ["9M"],
