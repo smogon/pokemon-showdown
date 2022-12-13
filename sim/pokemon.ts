@@ -1077,6 +1077,8 @@ export class Pokemon {
 			}),
 			baseAbility: this.baseAbility,
 			item: this.item,
+			teraType: this.teraType,
+			terastallized: !!this.terastallized,
 			commanding: !!this.volatiles['commanding'] && !this.fainted,
 			reviving: this.isActive && !!this.side.slotConditions[this.position]['revivalblessing'],
 			pokeball: this.pokeball,
@@ -1231,8 +1233,8 @@ export class Pokemon {
 		} else {
 			this.battle.add('-transform', this, pokemon);
 		}
-		if (this.terastallized && this.terastallized !== this.apparentType) {
-			this.battle.add('-start', this, 'typechange', this.terastallized, '[silent]');
+		if (this.terastallized) {
+			this.knownType = true;
 			this.apparentType = this.terastallized;
 		}
 		if (this.battle.gen > 2) this.setAbility(pokemon.ability, this, true);
@@ -1358,8 +1360,8 @@ export class Pokemon {
 			this.setAbility(species.abilities['0'], null, true);
 			this.baseAbility = this.ability;
 		}
-		if (this.terastallized && this.terastallized !== this.apparentType) {
-			this.battle.add('-start', this, 'typechange', this.terastallized, '[silent]');
+		if (this.terastallized) {
+			this.knownType = true;
 			this.apparentType = this.terastallized;
 		}
 		return true;

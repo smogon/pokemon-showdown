@@ -153,11 +153,6 @@ export class BattleActions {
 			this.battle.queue.insertChoice({choice: 'runSwitch', pokemon});
 		}
 
-		// Placeholder until we have proper support
-		if (pokemon.terastallized) {
-			this.battle.add('-start', pokemon, 'typechange', pokemon.terastallized, '[silent]');
-		}
-
 		return true;
 	}
 	dragIn(side: Side, pos: number) {
@@ -1858,7 +1853,6 @@ export class BattleActions {
 		for (const ally of pokemon.side.pokemon) {
 			ally.canTerastallize = null;
 		}
-		this.battle.add('-start', pokemon, 'typechange', type, '[silent]');
 		pokemon.knownType = true;
 		pokemon.apparentType = type;
 		this.battle.runEvent('AfterTerastallization', pokemon);
