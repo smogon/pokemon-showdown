@@ -1192,7 +1192,7 @@ export class RandomTeams {
 			(species.id === 'garchomp' && role === 'Fast Support') ||
 			(ability === 'Regenerator' && types.includes('Water') && species.baseStats.def >= 110 && this.randomChance(1, 3))
 		) return 'Rocky Helmet';
-		if (role === 'Fast Support' && isLead) return 'Focus Sash';
+		if (role === 'Fast Support' && isLead && !counter.get('recovery') && !counter.get('recoil')) return 'Focus Sash';
 		if (['Bulky Attacker', 'Bulky Support', 'Bulky Setup'].some(m => role === (m))) return 'Leftovers';
 		if (role === 'Fast Support' || role === 'Fast Bulky Setup') {
 			return (counter.damagingMoves.size >= 3) ? 'Life Orb' : 'Leftovers';
