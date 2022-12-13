@@ -30,7 +30,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Encore", "Focus Blast", "Grass Knot", "Nasty Plot", "Nuzzle", "Surf", "Thunderbolt", "Volt Switch"],
-                "teraTypes": ["Water", "Electric"]
+                "teraTypes": ["Water", "Grass", "Electric"]
             }
         ]
     },
@@ -2343,7 +2343,7 @@
             },
             {
                 "role": "Fast Support",
-                "movepool": ["Defog", "Draco Meteor", "Flamethrower", "Hurricane", "Roost", "Taunt", "U-turn"],
+                "movepool": ["Defog", "Draco Meteor", "Flamethrower", "Hurricane", "Roost", "U-turn"],
                 "teraTypes": ["Fire"]
             }
         ]
