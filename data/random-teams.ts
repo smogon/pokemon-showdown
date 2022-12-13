@@ -928,6 +928,7 @@ export class RandomTeams {
 		case 'Unburden':
 			return (abilities.has('Prankster') || !counter.get('setup'));
 		case 'Volt Absorb':
+			if (abilities.has('Iron Fist') && counter.get('ironfist') >= 2) return true
 			return (this.dex.getEffectiveness('Electric', species) < -1);
 		case 'Water Absorb':
 			return species.id === 'quagsire';
