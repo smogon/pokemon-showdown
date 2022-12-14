@@ -596,7 +596,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Earthquake", "Ice Beam", "Liquidation", "Recover", "Spikes", "Toxic"],
-                "teraTypes": ["Poison"]
+                "teraTypes": ["Poison", "Steel", "Ground", "Fairy"]
             }
         ]
     },
