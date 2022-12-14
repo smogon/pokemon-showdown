@@ -43,10 +43,10 @@ describe('[Gen 9] Random Battle', () => {
 						const stealthRock = Math.floor(i / 2) % 2;
 						const stickyWeb = Math.floor(i / 4) % 2;
 						teamDetails = {'defog': defog, 'stealthRock': stealthRock, 'stickyWeb': stickyWeb};
-						for (let i = 0; i < rounds; i++) {
+						for (let j = 0; j < rounds; j++) {
 							// randomMoveset() deletes moves from the movePool, so create a copy
 							const movePoolCopy = [...movePool];
-							const teraType = teraTypes[i % teraTypes.length];
+							const teraType = teraTypes[j % teraTypes.length];
 							const moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, false, movePoolCopy, teraType, role);
 							if (moveSet.has(move)) {
 								moveObtained = true;
