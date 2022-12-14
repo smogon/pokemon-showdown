@@ -842,8 +842,8 @@ export class RandomTeams {
 		role: string,
 	): boolean {
 		if ([
-			'Flare Boost', 'Gluttony', 'Hydration', 'Ice Body', 'Immunity', 'Insomnia', 'Own Tempo',
-			'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
+			'Battle Bond', 'Flare Boost', 'Gluttony', 'Hydration', 'Ice Body', 'Immunity', 'Insomnia',
+			'Own Tempo', 'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine'
 		].includes(ability)) return true;
 
 		switch (ability) {
@@ -864,7 +864,7 @@ export class RandomTeams {
 		case 'Defiant':
 			return (!counter.get('Physical') || (abilities.has('Prankster') && (moves.has('thunderwave') || moves.has('taunt'))));
 		case 'Flash Fire':
-			return (species.id !== 'houndoom' && this.dex.getEffectiveness('Fire', species) >= 1);
+			return (species.id !== 'houndoom' && this.dex.getEffectiveness('Fire', species) < 0);
 		case 'Guts':
 			return (!moves.has('facade') && !moves.has('sleeptalk'));
 		case 'Harvest':
