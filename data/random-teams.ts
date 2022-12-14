@@ -843,7 +843,7 @@ export class RandomTeams {
 	): boolean {
 		if ([
 			'Battle Bond', 'Flare Boost', 'Gluttony', 'Hydration', 'Ice Body', 'Immunity', 'Insomnia',
-			'Own Tempo', 'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine'
+			'Own Tempo', 'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
 		].includes(ability)) return true;
 
 		switch (ability) {
