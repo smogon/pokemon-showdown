@@ -237,7 +237,7 @@ exports.transpile = (doForce, decl) => {
 
 	// sucrase doesn't copy JSON over, so we'll have to do it ourselves
 	copyOverDataJSON('random-sets.json');
-	copyOverDataJSON('cap-1v1-sets.json');
+	copyOverDataJSON('mods/gen8/cap-1v1-sets.json');
 	copyOverDataJSON('mods/gen8/factory-sets.json');
 	copyOverDataJSON('mods/gen8/bss-factory-sets.json');
 	copyOverDataJSON('mods/gen7/factory-sets.json');
