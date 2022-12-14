@@ -1204,7 +1204,10 @@ export class RandomTeams {
 		if (role === 'Fast Support' || role === 'Fast Bulky Setup') {
 			return (counter.damagingMoves.size >= 3) ? 'Life Orb' : 'Leftovers';
 		}
-		if (['Fast Attacker', 'Setup Sweeper', 'Tera Blast user', 'Wallbreaker'].some(m => role === (m))) return 'Life Orb';
+		if (
+			['flamecharge', 'rapidspin', 'trailblaze'].every(m => !moves.has(m)) &&
+			['Fast Attacker', 'Setup Sweeper', 'Tera Blast user', 'Wallbreaker'].some(m => role === (m))
+		) return 'Life Orb';
 		if (isDoubles) return 'Sitrus Berry';
 		return 'Leftovers';
 	}
