@@ -1435,7 +1435,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Discharge", "Hydro Pump", "Nasty Plot", "Pain Split", "Trick", "Volt Switch", "Will-O-Wisp"],
+                "movepool": ["Discharge", "Hydro Pump", "Nasty Plot", "Trick", "Volt Switch", "Will-O-Wisp"],
                 "teraTypes": ["Water"]
             }
         ]
