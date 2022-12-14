@@ -965,7 +965,6 @@ export class RandomTeams {
 		if (species.id === 'arcaninehisui') return 'Rock Head';
 		if (species.id === 'staraptor') return 'Reckless';
 		if (species.id === 'enamorus' && moves.has('calmmind')) return 'Cute Charm';
-		if (abilities.has('Corrosion') && moves.has('toxic')) return 'Corrosion';
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk'))) return 'Guts';
 		if (abilities.has('Serene Grace') && moves.has('headbutt')) return 'Serene Grace';
 		if (abilities.has('Technician') && counter.get('technician')) return 'Technician';
@@ -1623,7 +1622,7 @@ export class RandomTeams {
 	}
 
 	randomFactorySets: {[format: string]: {[species: string]: BattleFactorySpecies}} =
-		require('./mods/gen8/factory-sets.json');
+	require('./mods/gen8/factory-sets.json');
 
 	randomFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails, tier: string
