@@ -2594,7 +2594,7 @@ export class RandomGen8Teams {
 		return pokemon;
 	}
 
-	randomCAP1v1Sets: AnyObject = require('./../../cap-1v1-sets.json');
+	randomCAP1v1Sets: AnyObject = require('./cap-1v1-sets.json');
 
 	randomCAP1v1Team() {
 		this.enforceNoDirectCustomBanlistChanges();
