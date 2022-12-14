@@ -6735,7 +6735,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onBeforeTurn() {
 				this.effectState.turnPassed = true;
 			},
-			onSourceAccuracy() {
+			onAccuracy() {
 				if (this.effectState.turnPassed) return true;
 			},
 			onSourceModifyDamage() {
