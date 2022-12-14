@@ -1419,12 +1419,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			];
 			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Fairy';
-				move.pixilateBoosted = true;
+				move.typeChangerBoosted = this.effect;
 			}
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.pixilateBoosted) return this.chainModify([0x1333, 0x1000]);
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([0x1333, 0x1000]);
 		},
 		isPermanent: true,
 		name: "Power of Alchemy (Sylveon)",
