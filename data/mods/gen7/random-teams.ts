@@ -1,8 +1,7 @@
-import {MoveCounter, TeamData} from '../../random-teams';
+import {MoveCounter, RandomGen8Teams, TeamData} from '../gen8/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
-import RandomGen8Teams from '../gen8/random-teams';
 
 export interface BattleFactorySpecies {
 	flags: {megaOnly?: 1, zmoveOnly?: 1, limEevee?: 1};

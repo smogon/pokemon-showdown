@@ -1,9 +1,9 @@
 // BDSP team generation logic is currently largely shared with Swsh
 
 import {PRNG, PRNGSeed} from '../../../sim/prng';
-import {MoveCounter, RandomTeams} from '../../random-teams';
+import {MoveCounter, RandomGen8Teams} from '../gen8/random-teams';
 
-export class RandomBDSPTeams extends RandomTeams {
+export class RandomBDSPTeams extends RandomGen8Teams {
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 		this.noStab = [...this.noStab, 'gigaimpact'];

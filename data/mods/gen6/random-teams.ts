@@ -1,4 +1,4 @@
-import {MoveCounter, TeamData} from '../../random-teams';
+import {MoveCounter, TeamData} from '../gen8/random-teams';
 import RandomGen7Teams, {BattleFactorySpecies} from '../gen7/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {Utils} from '../../../lib';

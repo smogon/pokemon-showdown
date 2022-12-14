@@ -1,7 +1,7 @@
 import RandomGen4Teams from '../gen4/random-teams';
 import {Utils} from '../../../lib';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
-import type {MoveCounter} from '../../random-teams';
+import type {MoveCounter} from '../gen8/random-teams';
 
 export class RandomGen3Teams extends RandomGen4Teams {
 	battleHasDitto: boolean;
