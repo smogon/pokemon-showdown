@@ -86767,6 +86767,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	brutebonnet: {
 		learnset: {
+			wickedblow: ["9M"],
 			absorb: ["9M", "9L1"],
 			astonish: ["9M", "9L1"],
 			bodypress: ["9M", "9M"],
