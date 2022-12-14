@@ -841,7 +841,7 @@ export class RandomTeams {
 		role: string,
 	): boolean {
 		if ([
-			'Battle Bond', 'Flare Boost', 'Gluttony', 'Hydration', 'Ice Body', 'Immunity', 'Insomnia',
+			'Battle Bond', 'Flare Boost', 'Gluttony', 'Hydration', 'Ice Body', 'Immunity',
 			'Own Tempo', 'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
 		].includes(ability)) return true;
 
@@ -872,6 +872,8 @@ export class RandomTeams {
 			return (counter.get('Physical') < 2);
 		case 'Infiltrator':
 			return (moves.has('rest') && moves.has('sleeptalk')) || (isDoubles && abilities.has('Clear Body'));
+		case 'Insomnia':
+			return (role === 'Wallbreaker');
 		case 'Intimidate':
 			if (abilities.has('Hustle')) return true;
 			if (abilities.has('Sheer Force') && !!counter.get('sheerforce')) return true;
