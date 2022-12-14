@@ -139,14 +139,16 @@ describe('Dancer', function () {
 		assert.hurts(allyTargetingDancer, () => battle.makeChoices('move sleeptalk, move fierydance -1', 'move sleeptalk, move sleeptalk'));
 
 		const allyTargetingOpponent = battle.p1.active[1];
+		const allyHP = allyTargetingOpponent.hp;
 		const opponentTargetedByAlly = battle.p2.active[1];
 		const opponentNotTargetedByAlly = battle.p2.active[0];
+		const opponentHP = opponentNotTargetedByAlly.hp;
 		assert.hurts(opponentTargetedByAlly, () => battle.makeChoices('move sleeptalk, move fierydance 2', 'move sleeptalk, move sleeptalk'));
-		assert(!allyTargetingOpponent.hurtThisTurn);
-		assert(!opponentNotTargetedByAlly.hurtThisTurn);
+		assert.equal(allyTargetingOpponent.hp, allyHP);
+		assert.equal(opponentNotTargetedByAlly.hp, opponentHP);
 	});
 
-	it.skip('should adopt the target selected by copycat', function () {
+	it('should adopt the target selected by copycat', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'oricoriopau', ability: 'dancer', moves: ['revelationdance']},
 			{species: 'flamigo', moves: ['copycat']},

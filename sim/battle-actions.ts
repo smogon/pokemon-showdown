@@ -324,11 +324,14 @@ export class BattleActions {
 			dancers.sort(
 				(a, b) => -(b.storedStats['spe'] - a.storedStats['spe']) || b.abilityOrder - a.abilityOrder
 			);
+			const targetOf1stDance = this.battle.activeTarget!;
 			for (const dancer of dancers) {
 				if (this.battle.faintMessages()) break;
 				if (dancer.fainted) continue;
 				this.battle.add('-activate', dancer, 'ability: Dancer');
-				const dancersTarget = !target!.isAlly(dancer) && pokemon.isAlly(dancer) ? target! : pokemon;
+				const dancersTarget = !targetOf1stDance.isAlly(dancer) && pokemon.isAlly(dancer) ?
+					targetOf1stDance :
+					pokemon;
 				const dancersTargetLoc = dancer.getLocOf(dancersTarget);
 				this.runMove(move.id, dancer, dancersTargetLoc, this.dex.abilities.get('dancer'), undefined, true);
 			}
@@ -496,6 +499,8 @@ export class BattleActions {
 		if (!pokemon.hp) {
 			this.battle.faint(pokemon, pokemon, move);
 		}
+
+		this.battle.setActiveMove(move, pokemon, target);
 
 		if (!moveResult) {
 			this.battle.singleEvent('MoveFail', move, null, target, pokemon, move);
