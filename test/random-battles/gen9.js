@@ -15,7 +15,7 @@ describe('[Gen 9] Random Battle', () => {
 
 	it('all Pokemon should have 4 moves, except for Ditto (slow)', function () {
 		// This test takes more than 2000ms
-		testTeam(options, team => {
+		testTeam({...options, rounds: 100}, team => {
 			for (const pokemon of team) assert(pokemon.name === 'Ditto' || pokemon.moves.length === 4);
 		});
 	});
