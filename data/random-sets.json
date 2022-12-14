@@ -444,7 +444,7 @@
         "level": 84,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Bulky Attacker",
                 "movepool": ["Brave Bird", "Fire Blast", "Roost", "U-turn", "Will-O-Wisp"],
                 "teraTypes": ["Fire"]
             }
@@ -1016,7 +1016,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Earthquake", "Flamethrower", "Giga Drain", "Gunk Shot", "Sucker Punch", "Switcheroo"],
-                "teraTypes": ["Ground", "Fire", "Poison", "Dark", "Grass"]
+                "teraTypes": ["Ground", "Fire", "Poison", "Grass"]
             }
         ]
     },
@@ -1041,7 +1041,7 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["Gunk Shot", "Knock Off", "Shadow Claw", "Shadow Sneak", "Swords Dance", "Will-O-Wisp"],
-                "teraTypes": ["Dark"]
+                "teraTypes": ["Poison", "Dark"]
             }
         ]
     },
@@ -1170,7 +1170,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["Encore", "Nuzzle", "Super Fang", "U-turn"],
+                "movepool": ["Nuzzle", "Super Fang", "Thunderbolt", "U-turn"],
                 "teraTypes": ["Flying"]
             }
         ]
@@ -2314,7 +2314,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Foul Play", "Magnet Rise", "Play Rough", "Spikes", "Thunder Wave"],
-                "teraTypes": ["Flying"]
+                "teraTypes": ["Water"]
             }
         ]
     },
@@ -2619,7 +2619,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Earth Power", "Hypnosis", "Shadow Ball", "Shore Up", "Stealth Rock"],
-                "teraTypes": ["Ghost", "Ground"]
+                "teraTypes": ["Water"]
             }
         ]
     },
@@ -3292,9 +3292,9 @@
         "level": 88,
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["Body Slam", "Coil", "Earthquake", "Roost"],
-                "teraTypes": ["Ground"]
+                "role": "Bulky Support",
+                "movepool": ["Earthquake", "Glare", "Headbutt", "Roost"],
+                "teraTypes": ["Normal", "Ghost", "Ground"]
             },
             {
                 "role": "Bulky Setup",
@@ -3309,7 +3309,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Memento", "Spikes", "Sticky Web", "Toxic Spikes", "U-turn"],
-                "teraTypes": ["Bug"]
+                "teraTypes": ["Ghost"]
             }
         ]
     },
@@ -3334,7 +3334,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Earth Power", "Psychic", "Recover", "Revival Blessing", "Trick Room"],
-                "teraTypes": ["Bug"]
+                "teraTypes": ["Steel"]
             }
         ]
     },
@@ -3358,8 +3358,8 @@
             },
             {
                 "role": "Fast Bulky Setup",
-                "movepool": ["Calm Mind", "Dazzling Gleam", "Protect", "Stored Power", "Substitute"],
-                "teraTypes": ["Psychic"]
+                "movepool": ["Calm Mind", "Dazzling Gleam", "Protect", "Roost", "Stored Power", "Substitute"],
+                "teraTypes": ["Psychic", "Fairy"]
             },
             {
                 "role": "Tera Blast user",
@@ -3439,11 +3439,11 @@
         ]
     },
     "scovillain": {
-        "level": 78,
+        "level": 80,
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Flamethrower", "Leech Seed", "Protect", "Seed Bomb", "Substitute"],
+                "movepool": ["Flamethrower", "Leech Seed", "Protect", "Substitute"],
                 "teraTypes": ["Fire"]
             }
         ]
@@ -4037,9 +4037,9 @@
         "level": 86,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Bulky Support",
                 "movepool": ["Earth Power", "Giga Drain", "Knock Off", "Rapid Spin", "Spikes", "Spore", "Toxic", "Toxic Spikes"],
-                "teraTypes": ["Ground"]
+                "teraTypes": ["Ground", "Water"]
             }
         ]
     },
