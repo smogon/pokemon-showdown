@@ -283,7 +283,7 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 function CAP1v1Sets(species: string | Species) {
 	species = Dex.species.get(species);
 	const statsFile = JSON.parse(
-		FS(`data/cap-1v1-sets.json`).readIfExistsSync() ||
+		FS(`data/mods/gen8/cap-1v1-sets.json`).readIfExistsSync() ||
 		"{}"
 	);
 	if (!Object.keys(statsFile).length) return null;
