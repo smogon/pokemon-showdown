@@ -119,7 +119,7 @@
         "sets": [
             {
                 "role": "Fast Bulky Setup",
-                "movepool": ["Bulk Up", "Drain Punch", "Rage Fist", "Substitute"],
+                "movepool": ["Bulk Up", "Drain Punch", "Rage Fist", "Rest"],
                 "teraTypes": ["Ghost", "Water"]
             },
             {
@@ -2544,7 +2544,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Chilling Water", "Haze", "Recover", "Toxic", "Toxic Spikes"],
-                "teraTypes": ["Steel"]
+                "teraTypes": ["Steel", "Flying", "Grass", "Fairy"]
             }
         ]
     },
@@ -2574,7 +2574,7 @@
             {
                 "role": "Fast Support",
                 "movepool": ["Flamethrower", "Protect", "Substitute", "Toxic"],
-                "teraTypes": ["Water"]
+                "teraTypes": ["Water", "Flying"]
             }
         ]
     },
@@ -2992,8 +2992,8 @@
         "level": 68,
         "sets": [
             {
-                "role": "Fast Attacker",
-                "movepool": ["Behemoth Blade", "Close Combat", "Crunch", "Play Rough", "Psychic Fangs", "Swords Dance", "Wild Charge"],
+                "role": "Setup Sweeper",
+                "movepool": ["Behemoth Blade", "Close Combat", "Play Rough", "Swords Dance"],
                 "teraTypes": ["Fighting"]
             }
         ]
@@ -3682,7 +3682,7 @@
         "level": 80,
         "sets": [
             {
-                "role": "Bulky Support",
+                "role": "Fast Support",
                 "movepool": ["Earth Power", "Mortal Spin", "Power Gem", "Sludge Wave", "Spikes", "Stealth Rock", "Toxic"],
                 "teraTypes": ["Water"]
             }
