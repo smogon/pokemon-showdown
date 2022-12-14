@@ -484,6 +484,7 @@ namespace RandomTeamsTypes {
 	export interface TeamDetails {
 		megaStone?: number;
 		zMove?: number;
+		snow?: number;
 		hail?: number;
 		rain?: number;
 		sand?: number;
@@ -497,6 +498,7 @@ namespace RandomTeamsTypes {
 		screens?: number;
 		illusion?: number;
 		statusCure?: number;
+		teraBlast?: number;
 	}
 	export interface FactoryTeamDetails {
 		megaCount?: number;
@@ -527,6 +529,7 @@ namespace RandomTeamsTypes {
 		dynamaxLevel?: number;
 		gigantamax?: boolean;
 		teraType?: string;
+		role?: string;
 	}
 	export interface RandomFactorySet {
 		name: string;
