@@ -1561,7 +1561,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Earth Power", "Flash Cannon", "Lava Plume", "Magma Storm", "Protect", "Stealth Rock"],
-                "teraTypes": ["Flying"]
+                "teraTypes": ["Flying", "Grass", "Fire", "Steel"]
             }
         ]
     },
