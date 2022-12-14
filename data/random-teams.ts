@@ -1032,7 +1032,12 @@ export class RandomTeams {
 			return this.sample(species.requiredItems);
 		}
 		if (role === 'AV Pivot') return 'Assault Vest';
-		if (role === 'Bulky Setup' && (ability === 'Quark Drive' || ability === 'Protosynthesis')) return 'Booster Energy';
+		if (
+			!isLead && role === 'Bulky Setup' &&
+			(ability === 'Quark Drive' || ability === 'Protosynthesis')
+		) {
+			return 'Booster Energy';
+		}
 		if (species.id === 'pikachu') return 'Light Ball';
 		if (species.id === 'regieleki') return 'Magnet';
 		if (ability === 'Imposter' || (species.id === 'magnezone' && moves.has('bodypress'))) return 'Choice Scarf';
@@ -1458,8 +1463,8 @@ export class RandomTeams {
 				continue;
 			}
 
-			// Pokemon with Last Respects shouldn't be leading
-			if (['Basculegion', 'Houndstone'].includes(species.baseSpecies) && !pokemon.length) continue;
+			// Pokemon with Last Respects, Intrepid Sword, and Dauntless Shield shouldn't be leading
+			if (['Basculegion', 'Houndstone', 'Zacian', 'Zamazenta'].includes(species.baseSpecies) && !pokemon.length) continue;
 
 			const tier = species.tier;
 			const types = species.types;
