@@ -2334,4 +2334,17 @@ export const Rulesets: {[k: string]: FormatData} = {
 			return newSpecies;
 		},
 	},
+	voltturnmayhemmod: {
+		effectType: 'Rule',
+		name: "VoltTurn Mayhem Mod",
+		desc: `Every move that targets a foe causes the user to switch out after use.`,
+		onBegin() {
+			this.add('rule', 'VoltTurn Mayhem Mod: Every move that targets a foe causes the user to switch out after use');
+		},
+		onModifyMove(move, source, target) {
+			const validTargets = ['adjacentFoe', 'allAdjacent', 'allAdjacentFoes', 'any', 'normal', 'randomNormal', 'scripted'];
+			if (!validTargets.includes(move.target)) return;
+			move.selfSwitch = true;
+		},
+	},
 };
