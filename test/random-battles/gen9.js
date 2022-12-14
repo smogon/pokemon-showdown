@@ -31,32 +31,26 @@ describe('[Gen 9] Random Battle', () => {
 			if (species.unreleasedHidden) abilities.delete(species.abilities.H);
 			for (const set of sets) {
 				const role = set.role;
-				const movePool = set.movepool.map(m => dex.moves.get(m).id);
+				const moves = new Set(set.movepool.map(m => dex.moves.get(m).id));
 				const teraTypes = set.teraTypes;
-				// Every move in the movePool should be obtainable
-				for (const move of movePool) {
-					let moveObtained = false;
-					let teamDetails = {};
-					// Go through all possible teamDetails combinations, if necessary
-					for (let i = 0; i < 8; i++) {
-						const defog = i % 2;
-						const stealthRock = Math.floor(i / 2) % 2;
-						const stickyWeb = Math.floor(i / 4) % 2;
-						teamDetails = {'defog': defog, 'stealthRock': stealthRock, 'stickyWeb': stickyWeb};
-						for (let j = 0; j < rounds; j++) {
-							// randomMoveset() deletes moves from the movePool, so create a copy
-							const movePoolCopy = [...movePool];
-							const teraType = teraTypes[j % teraTypes.length];
-							const moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, false, movePoolCopy, teraType, role);
-							if (moveSet.has(move)) {
-								moveObtained = true;
-								break;
-							}
-						}
-						if (moveObtained) break;
+				let teamDetails = {};
+				// Go through all possible teamDetails combinations, if necessary
+				for (let i = 0; i < 8; i++) {
+					const defog = i % 2;
+					const stealthRock = Math.floor(i / 2) % 2;
+					const stickyWeb = Math.floor(i / 4) % 2;
+					teamDetails = {'defog': defog, 'stealthRock': stealthRock, 'stickyWeb': stickyWeb};
+					for (let j = 0; j < rounds; j++) {
+						// randomMoveset() deletes moves from the movepool, so recreate it every time
+						const movePool = set.movepool.map(m => dex.moves.get(m).id);
+						const teraType = teraTypes[j % teraTypes.length];
+						const moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, false, movePool, teraType, role);
+						for (const move of moveSet) moves.delete(move);
+						if (!moves.size) break;
 					}
-					assert(moveObtained);
+					if (!moves.size) break;
 				}
+				assert(!moves.size);
 			}
 		}
 	});
