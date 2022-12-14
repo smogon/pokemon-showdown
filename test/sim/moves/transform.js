@@ -81,7 +81,7 @@ describe('Transform', function () {
 		assert.statStage(battle.p2.active[0], 'atk', -1);
 	});
 
-	it.skip(`should copy, but not activate the target's Ability if it is the same as the user's pre-Transform`, function () {
+	it(`should copy, but not activate the target's Ability if it is the same as the user's pre-Transform`, function () {
 		battle = common.createBattle([[
 			{species: 'Ditto', ability: 'intimidate', moves: ['transform']},
 		], [

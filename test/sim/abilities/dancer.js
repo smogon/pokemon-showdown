@@ -145,4 +145,16 @@ describe('Dancer', function () {
 		assert(!allyTargetingOpponent.hurtThisTurn);
 		assert(!opponentNotTargetedByAlly.hurtThisTurn);
 	});
+
+	it('should adopt the target selected by copycat', function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'oricoriopau', ability: 'dancer', moves: ['revelationdance']},
+			{species: 'flamigo', moves: ['copycat']},
+		], [
+			{species: 'fletchinder', level: 1, moves: ['sleeptalk']},
+			{species: 'fletchinder', level: 1, moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		assert(!battle.p1.active[1].hurtThisTurn);
+	});
 });

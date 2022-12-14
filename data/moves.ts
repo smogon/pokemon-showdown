@@ -2248,14 +2248,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		volatileStatus: 'charge',
 		condition: {
 			onStart(pokemon, source, effect) {
-				if (effect && ['electromorphosis', 'windpower'].includes(effect.id)) {
+				if (effect && ['Electromorphosis', 'Wind Power'].includes(effect.name)) {
 					this.add('-start', pokemon, 'Charge', this.activeMove!.name, '[from] ability: ' + effect.name);
 				} else {
 					this.add('-start', pokemon, 'Charge');
 				}
 			},
 			onRestart(pokemon, source, effect) {
-				if (effect && ['electromorphosis', 'windpower'].includes(effect.id)) {
+				if (effect && ['Electromorphosis', 'Wind Power'].includes(effect.name)) {
 					this.add('-start', pokemon, 'Charge', this.activeMove!.name, '[from] ability: ' + effect.name);
 				} else {
 					this.add('-start', pokemon, 'Charge');
@@ -2268,14 +2268,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return this.chainModify(2);
 				}
 			},
-			onMoveAborted(target, source, move) {
+			onMoveAborted(pokemon, target, move) {
 				if (move.type === 'Electric' && move.id !== 'charge') {
-					source.removeVolatile('charge');
+					pokemon.removeVolatile('charge');
 				}
 			},
-			onAfterMove(target, source, move) {
+			onAfterMove(pokemon, target, move) {
 				if (move.type === 'Electric' && move.id !== 'charge') {
-					source.removeVolatile('charge');
+					pokemon.removeVolatile('charge');
 				}
 			},
 			onEnd(pokemon) {
@@ -11084,9 +11084,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onHit() {
-			this.add('-fieldactivate', 'move: Make It Rain');
-		},
 		self: {
 			boosts: {
 				spa: -1,
@@ -13397,9 +13394,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onHit() {
-			this.add('-fieldactivate', 'move: Pay Day');
-		},
 		secondary: null,
 		target: "normal",
 		type: "Normal",
