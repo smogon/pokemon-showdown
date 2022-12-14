@@ -39,7 +39,7 @@ describe('[Gen 9] Random Battle', () => {
 					const defog = i % 2;
 					const stealthRock = Math.floor(i / 2) % 2;
 					const stickyWeb = Math.floor(i / 4) % 2;
-					teamDetails = {'defog': defog, 'stealthRock': stealthRock, 'stickyWeb': stickyWeb};
+					teamDetails = {defog, stealthRock, stickyWeb};
 					for (let j = 0; j < rounds; j++) {
 						// randomMoveset() deletes moves from the movepool, so recreate it every time
 						const movePool = set.movepool.map(m => dex.moves.get(m).id);
