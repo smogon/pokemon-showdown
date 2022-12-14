@@ -1,5 +1,5 @@
-import RandomGen8Teams from '../../random-teams';
+import RandomTeams from '../../random-teams';
 
-export class RandomSharedPowerTeams extends RandomGen8Teams {}
+export class RandomSharedPowerTeams extends RandomTeams {}
 
 export default RandomSharedPowerTeams;
