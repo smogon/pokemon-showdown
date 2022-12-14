@@ -689,14 +689,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	cudchew: {
 		onEatItem(item, pokemon) {
-			if (item.isBerry) {
-				pokemon.addVolatile('cudchew');
+			if (item.isBerry && pokemon.addVolatile('cudchew')) {
 				pokemon.volatiles['cudchew'].berry = item;
 			}
+		},
+		onEnd(pokemon) {
+			delete pokemon.volatiles['cudchew'];
 		},
 		condition: {
 			noCopy: true,
 			duration: 2,
+			onRestart() {
+				this.effectState.duration = 2;
+			},
 			onResidualOrder: 28,
 			onResidualSubOrder: 2,
 			onEnd(pokemon) {
