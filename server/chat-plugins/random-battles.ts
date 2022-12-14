@@ -14,6 +14,7 @@ interface SetCriteria {
 	ability: {mustHave?: Ability, mustNotHave: Ability[]};
 	item: {mustHave?: Item, mustNotHave: Item[]};
 	nature: {mustHave?: Nature, mustNotHave: Nature[]};
+	teraType: {mustHave?: TypeInfo, mustNotHave: TypeInfo[]};
 }
 
 
@@ -21,34 +22,41 @@ function getHTMLCriteriaDescription(criteria: SetCriteria) {
 	const format = (list: {name: string}[]) => list.map(m => Utils.html`<strong>${m.name}</strong>`);
 	const parts = [];
 
-	const {moves, ability, item, nature} = criteria;
+	const {moves, ability, item, nature, teraType} = criteria;
 
 	if (moves.mustHave.length) {
-		parts.push(`had the move${Chat.plural(moves.mustHave.length)} ${Chat.toListString(format(moves.mustHave))}`);
+		parts.push(`had the move${Chat.plural(moves.mustHave)} ${Chat.toListString(format(moves.mustHave))}`);
 	}
 	if (moves.mustNotHave.length) {
-		parts.push(`did not have the move${Chat.plural(moves.mustNotHave.length)} ${Chat.toListString(format(moves.mustNotHave), 'or')}`);
+		parts.push(`did not have the move${Chat.plural(moves.mustNotHave)} ${Chat.toListString(format(moves.mustNotHave), 'or')}`);
 	}
 
 	if (ability.mustHave) {
 		parts.push(Utils.html`had the ability <strong>${ability.mustHave.name}</strong>`);
 	}
 	if (ability.mustNotHave.length) {
-		parts.push(`did not have the ${Chat.plural(ability.mustNotHave.length, 'abilities', 'ability')} ${Chat.toListString(format(ability.mustNotHave), 'or')}`);
+		parts.push(`did not have the ${Chat.plural(ability.mustNotHave, 'abilities', 'ability')} ${Chat.toListString(format(ability.mustNotHave), 'or')}`);
 	}
 
 	if (item.mustHave) {
 		parts.push(Utils.html`had the item <strong>${item.mustHave.name}</strong>`);
 	}
 	if (item.mustNotHave.length) {
-		parts.push(`did not have the item${Chat.plural(item.mustNotHave.length)} ${Chat.toListString(format(item.mustNotHave), 'or')}`);
+		parts.push(`did not have the item${Chat.plural(item.mustNotHave)} ${Chat.toListString(format(item.mustNotHave), 'or')}`);
 	}
 
 	if (nature.mustHave) {
 		parts.push(Utils.html`had the nature <strong>${nature.mustHave.name}</strong>`);
 	}
 	if (nature.mustNotHave.length) {
-		parts.push(`did not have the nature${Chat.plural(nature.mustNotHave.length)} ${Chat.toListString(format(nature.mustNotHave), 'or')}`);
+		parts.push(`did not have the nature${Chat.plural(nature.mustNotHave)} ${Chat.toListString(format(nature.mustNotHave), 'or')}`);
+	}
+
+	if (teraType.mustHave) {
+		parts.push(Utils.html`had the Tera Type <strong>${teraType.mustHave.name}</strong>`);
+	}
+	if (teraType.mustNotHave.length) {
+		parts.push(`did not have the Tera Type${Chat.plural(teraType.mustNotHave)} ${Chat.toListString(format(teraType.mustNotHave), 'or')}`);
 	}
 
 	return Chat.toListString(parts, 'and');
@@ -80,6 +88,9 @@ function setProbability(
 
 		if (criteria.nature.mustHave && set.nature !== criteria.nature.mustHave.name) continue;
 		if (criteria.nature.mustNotHave.some(nature => nature.name === set.nature)) continue;
+
+		if (criteria.teraType.mustHave && set.teraType !== criteria.teraType.mustHave.name) continue;
+		if (criteria.teraType.mustNotHave.some(type => type.name === set.teraType)) continue;
 
 		const setHasMove = (move: Move) => {
 			const id = move.id === 'hiddenpower' ? `${move.id}${toID(move.type)}` : move.id;
@@ -131,28 +142,39 @@ function formatItem(item: Item | string) {
 	}
 }
 
+/**
+ * Gets the sets for a Pokemon for a format that uses the new schema.
+ * Old formats will just use Species#randomBattleMoves
+ */
+function getSets(species: string | Species, format = 'gen9randombattle'): any[] | null {
+	const dex = Dex.forFormat(format);
+	species = dex.species.get(species);
+	const setsFile = JSON.parse(
+		FS(`data/${dex.isBase ? '' : `/mods/${dex.currentMod}`}random-sets.json`).readIfExistsSync() || '{}'
+	);
+	const sets = setsFile[species.id]?.sets;
+	if (!sets?.length) return null;
+	return sets;
+}
+
 function getRBYMoves(species: string | Species) {
 	species = Dex.mod(`gen1`).species.get(species);
 	let buf = ``;
 	if (species.randomBattleMoves) {
-		buf += `<details><summary>Randomized moves</summary>`;
+		buf += `<br/><b>Randomized moves</b>: `;
 		buf += species.randomBattleMoves.map(formatMove).sort().join(", ");
-		buf += `</details>`;
 	}
 	if (species.comboMoves) {
-		buf += `<details><summary>Combo moves</summary>`;
+		buf += `<br/><b>Combo moves</b>: `;
 		buf += species.comboMoves.map(formatMove).sort().join(", ");
-		buf += `</details>`;
 	}
 	if (species.exclusiveMoves) {
-		buf += `<details><summary>Exclusive moves</summary>`;
+		buf += `<br/><b>Exclusive moves</b>: `;
 		buf += species.exclusiveMoves.map(formatMove).sort().join(", ");
-		buf += `</details>`;
 	}
 	if (species.essentialMove) {
-		buf += `<details><summary>Essential move</summary>`;
+		buf += `<br/><b>Essential move</b>: `;
 		buf += formatMove(species.essentialMove);
-		buf += `</details>`;
 	}
 	if (
 		!species.randomBattleMoves && !species.comboMoves &&
@@ -720,12 +742,14 @@ export const commands: Chat.ChatCommands = {
 		let formatName = dex.formats.get(`gen${dex.gen}${extraFormatModifier}randombattle`).name;
 
 		const movesets = [];
+		let setCount = 0;
 		if (dex.gen === 1) {
 			const rbyMoves = getRBYMoves(species);
 			if (!rbyMoves) {
 				return this.errorReply(`Error: ${species.name} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
 			}
-			movesets.push(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${rbyMoves}`);
+			movesets.push(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span>${rbyMoves}`);
+			setCount = 1;
 		} else if (isLetsGo) {
 			formatName = `[Gen 7 Let's Go] Random Battle`;
 			const lgpeMoves = getLetsGoMoves(species);
@@ -733,21 +757,21 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`Error: ${species.name} has no Random Battle data in [Gen 7 Let's Go]`);
 			}
 			movesets.push(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${lgpeMoves}`);
+			setCount = 1;
 		} else {
 			const setsToCheck = [species];
 			if (dex.gen > 7) setsToCheck.push(dex.species.get(`${args[0]}gmax`));
 			if (species.otherFormes) setsToCheck.push(...species.otherFormes.map(pkmn => dex.species.get(pkmn)));
 			if (dex.gen >= 9) {
-				// Add other formats support later
-				const setsFile = JSON.parse(FS('data/random-sets.json').readIfExistsSync() || '{}');
 				for (const pokemon of setsToCheck) {
-					const sets = setsFile[pokemon.id]?.sets;
-					if (!sets?.length) continue;
+					const sets = getSets(pokemon);
+					if (!sets) continue;
 					let buf = `<span style="color:#999999;">Moves for ${pokemon.name} in ${formatName}:</span><br/>`;
 					for (const set of sets) {
 						buf += `<details><summary>${set.role}</summary>` +
 							`<b>Tera Type${Chat.plural(set.teraTypes)}</b>: ${set.teraTypes.join(', ')}<br/>` +
-							`<b>Moves:</b> ${set.movepool.sort().map(formatMove).join(', ')}</details>`;
+							`<b>Moves</b>: ${set.movepool.sort().map(formatMove).join(', ')}</details>`;
+						setCount++;
 					}
 					movesets.push(buf);
 				}
@@ -757,10 +781,11 @@ export const commands: Chat.ChatCommands = {
 					const randomMoves = pokemon.randomBattleMoves.slice();
 					const m = randomMoves.sort().map(formatMove);
 					movesets.push(
-						`<details${!movesets.length ? ' open' : ''}>` +
+						`<details>` +
 						`<summary><span style="color:#999999;">Moves for ${pokemon.name} in ${formatName}:<span style="color:#999999;"></summary>` +
 						`${m.join(`, `)}</details>`
 					);
+					setCount++;
 				}
 			}
 		}
@@ -768,7 +793,11 @@ export const commands: Chat.ChatCommands = {
 		if (!movesets.length) {
 			return this.errorReply(`Error: ${species.name} has no Random Battle data in ${formatName}`);
 		}
-		this.sendReplyBox(movesets.join('<hr />'));
+		let buf = movesets.join('<hr/>');
+		if (setCount <= 2) {
+			buf = buf.replace(/<details>/g, '<details open>');
+		}
+		this.sendReplyBox(buf);
 	},
 	randombattleshelp: [
 		`/randombattles OR /randbats [pokemon], [gen] - Displays a Pok\u00e9mon's Random Battle Moves. Defaults to Gen 8. If used in a battle, defaults to the gen of that battle.`,
@@ -945,7 +974,7 @@ export const commands: Chat.ChatCommands = {
 		if (args.length < 2) return this.parse(`/help randombattlesetprobabilities`);
 
 		// Optional format
-		let format = Dex.formats.get('gen8randombattle');
+		let format = Dex.formats.get('gen9randombattle');
 		let formatOrSpecies = args.shift();
 		const possibleFormat = Dex.formats.get(formatOrSpecies);
 		if (possibleFormat.exists) {
@@ -962,9 +991,17 @@ export const commands: Chat.ChatCommands = {
 		if (!species.exists) {
 			throw new Chat.ErrorMessage(`Species ${species.name} does not exist in the specified format.`);
 		}
-		if (!species.randomBattleMoves && !species.randomDoubleBattleMoves && !species.randomBattleNoDynamaxMoves) {
-			const modMessage = dex.currentMod === 'base' ? format.name : dex.currentMod;
-			throw new Chat.ErrorMessage(`${species.name} does not have random battle moves in ${modMessage}.`);
+
+		let setExists: boolean;
+		if (dex.gen >= 9) {
+			setExists = !!getSets(species);
+		} else if (format.gameType === 'doubles' || format.gameType === 'freeforall') {
+			setExists = !!species.randomDoubleBattleMoves;
+		} else {
+			setExists = !!species.randomBattleMoves;
+		}
+		if (!setExists) {
+			throw new Chat.ErrorMessage(`${species.name} does not have random battle moves in ${format.name}.`);
 		}
 
 		// Criteria
@@ -973,6 +1010,7 @@ export const commands: Chat.ChatCommands = {
 			item: {mustNotHave: []},
 			ability: {mustNotHave: []},
 			nature: {mustNotHave: []},
+			teraType: {mustNotHave: []},
 		};
 
 		if (args.length < 1) {
@@ -1052,6 +1090,23 @@ export const commands: Chat.ChatCommands = {
 					criteria.nature.mustHave = nature;
 				}
 				break;
+			case 'tera': case 'teratype':
+				if (dex.gen < 9) throw new Chat.ErrorMessage("Tera Types do not exist in the specified format.");
+				const type = dex.types.get(value);
+				if (!type.exists) {
+					throw new Chat.ErrorMessage(`"${value}" is not a type in the specified format.`);
+				}
+
+				const typeNegation = value.trim().startsWith('!');
+				if (typeNegation) {
+					criteria.teraType.mustNotHave.push(type);
+				} else {
+					if (criteria.teraType.mustHave) {
+						throw new Chat.ErrorMessage(`Impossible situation: two Tera Types (${criteria.teraType.mustHave.name} and ${type.name}) are required.`);
+					}
+					criteria.teraType.mustHave = type;
+				}
+				break;
 			default:
 				throw new Chat.ErrorMessage(`Invalid criterion: ${key}`);
 			}
@@ -1073,6 +1128,7 @@ export const commands: Chat.ChatCommands = {
 			`<li><code>item</code>: matches all generated sets that have the specified item. <code>[matching value]</code> should be an item name.` +
 			`<li><code>ability</code>: matches all generated sets with the specified ability. <code>[matching value]</code> should be an ability name.` +
 			`<li><code>nature</code>: matches all generated sets with the specified nature. <code>[matching value]</code> should be a nature name.` +
+			`<li><code>tera</code>: matches all generated sets with the specified Tera Type. <code>[matching value]</code> should be a type. Gen 9 only.` +
 			`</ul>` +
 			`The given probability is for a set that matches EVERY provided condition. ` +
 			`Conditions can be negated by prefixing the <code>[matching value]</code> with <code>!</code>.<br />` +
