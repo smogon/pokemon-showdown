@@ -2244,16 +2244,6 @@ export const Formats: FormatList = [
 		banlist: ['Nonexistent'],
 	},
 	{
-		name: "[Gen 8] Doubles Hackmons Cup",
-
-		mod: 'gen8',
-		gameType: 'doubles',
-		team: 'randomHC',
-		searchShow: false,
-		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
-		banlist: ['Nonexistent'],
-	},
-	{
 		name: "[Gen 8] CAP 1v1",
 		desc: `Randomly generated 1v1-style teams only including Pok&eacute;mon made by the Create-A-Pok&eacute;mon Project.`,
 		threads: [
@@ -2301,6 +2291,7 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		team: 'random',
 		searchShow: false,
+		challengeShow: false,
 		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
@@ -2310,14 +2301,6 @@ export const Formats: FormatList = [
 		mod: 'gen7',
 		team: 'randomFactory',
 		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
-	},
-	{
-		name: "[Gen 7] Monotype Battle Factory",
-		desc: `Randomized teams of Pok&eacute;mon with competitively-viable sets that all share a type.`,
-
-		mod: 'gen7',
-		team: 'randomFactory',
-		ruleset: ['[Gen 7] Battle Factory', 'Same Type Clause'],
 	},
 	{
 		name: "[Gen 7] BSS Factory",
@@ -2363,6 +2346,7 @@ export const Formats: FormatList = [
 		mod: 'gen6',
 		team: 'randomFactory',
 		searchShow: false,
+		challengeShow: false,
 		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
 	},
 	{
@@ -2406,6 +2390,7 @@ export const Formats: FormatList = [
 		mod: 'gen1',
 		team: 'randomCC',
 		searchShow: false,
+		challengeShow: false,
 		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Sleep Clause Mod', 'Freeze Clause Mod'],
 	},
 	{
@@ -2415,6 +2400,7 @@ export const Formats: FormatList = [
 		mod: 'gen1',
 		team: 'randomHC',
 		searchShow: false,
+		challengeShow: false,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Team Type Preview'],
 		banlist: ['Nonexistent'],
 		onModifySpecies(species, target, source, effect) {
