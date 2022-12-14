@@ -13210,6 +13210,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				break;
 			}
 		},
+		secondary: null,
 		hasSheerForce: true,
 		target: "normal",
 		type: "Dragon",
