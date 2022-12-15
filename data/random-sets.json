@@ -1185,7 +1185,7 @@
             },
             {
                 "role": "Tera Blast user",
-                "movepool": "Bulk Up", "Ice Spinner", "Liquidation", "Tera Blast"
+                "movepool": ["Bulk Up", "Ice Spinner", "Liquidation", "Tera Blast"],
                 "teraTypes": ["Electric", "Grass"]
             }
         ]
