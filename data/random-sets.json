@@ -2548,7 +2548,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Chilling Water", "Haze", "Recover", "Toxic", "Toxic Spikes"],
+                "movepool": ["Haze", "Liquidation", "Recover", "Toxic", "Toxic Spikes"],
                 "teraTypes": ["Steel", "Flying", "Grass", "Fairy"]
             }
         ]
