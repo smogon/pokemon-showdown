@@ -54,7 +54,6 @@ const MAX_WEAK_TO_SAME_TYPE = 3;
 const levelOverride: {[speciesID: string]: number} = {};
 export let levelUpdateInterval: NodeJS.Timeout | null = null;
 
-
 async function updateLevels(database: SQL.DatabaseManager) {
 	const updateSpecies = await database.prepare(
 		'UPDATE gen9computergeneratedteams SET wins = 0, losses = 0, level = ? WHERE species_id = ?'
@@ -74,14 +73,13 @@ async function updateLevels(database: SQL.DatabaseManager) {
 	}
 }
 
-if (Config.usesqlite && Config.usesqliteleveling) {
+if (global.Config && Config.usesqlite && Config.usesqliteleveling) {
 	const database = SQL(module, {file: './databases/battlestats.db'});
 
 	// update every 2 hours
 	void updateLevels(database);
 	levelUpdateInterval = setInterval(() => void updateLevels(database), 1000 * 60 * 60 * 2);
 }
-
 
 export default class TeamGenerator {
 	dex: ModdedDex;
@@ -166,7 +164,7 @@ export default class TeamGenerator {
 			const pairedMove = MOVE_PAIRINGS[moveID];
 			const alreadyHavePairedMove = moves.some(m => m.id === pairedMove);
 			if (
-				moves.length < 4 &&
+				moves.length < 3 &&
 				pairedMove &&
 				!alreadyHavePairedMove &&
 				// We don't check movePool because sometimes paired moves are bad.
@@ -519,16 +517,12 @@ export default class TeamGenerator {
 		switch (item.id) {
 		// Choice Items
 		case 'choiceband':
-			return moves.every(x => x.category !== 'Status') ?
-				moves.filter(x => x.category === 'Physical').length * 15 :
-				0;
+			return moves.every(x => x.category === 'Physical') ? 50 : 0;
 		case 'choicespecs':
-			return moves.every(x => x.category !== 'Status') ?
-				moves.filter(x => x.category === 'Special').length * 15 :
-				0;
+			return moves.every(x => x.category === 'Special') ? 50 : 0;
 		case 'choicescarf':
-			if (moves.every(x => x.category !== 'Status')) return 0;
-			if (species.baseStats.spe > 65 && species.baseStats.spe < 130) return 30;
+			if (moves.some(x => x.category === 'Status')) return 0;
+			if (species.baseStats.spe > 65 && species.baseStats.spe < 120) return 50;
 			return 10;
 
 		// Generally Decent Items
@@ -536,7 +530,8 @@ export default class TeamGenerator {
 			return moves.filter(x => x.category !== 'Status').length * 8;
 		case 'focussash':
 			if (ability === 'Sturdy') return 0;
-			if (species.baseStats.hp < 70 || species.baseStats.def < 70 || species.baseStats.spd < 70) return 35;
+			// frail
+			if (species.baseStats.hp < 80 && species.baseStats.def < 80 && species.baseStats.spd < 80) return 35;
 			return 10;
 		case 'heavydutyboots':
 			switch (this.dex.getEffectiveness('Rock', species)) {
@@ -546,8 +541,7 @@ export default class TeamGenerator {
 			return 5; // not very effective/other
 		case 'assaultvest':
 			if (moves.some(x => x.category === 'Status')) return 0;
-			return 40;
-
+			return 30;
 
 		// status
 		case 'flameorb':
@@ -570,7 +564,7 @@ export default class TeamGenerator {
 			return species.types.includes('Poison') ? 40 : 0;
 
 		// berries
-		case 'sitrusberry':
+		case 'sitrusberry': case 'magoberry':
 			return 20;
 
 		case 'throatspray':

@@ -6,7 +6,6 @@
 
 import {SQL} from "../../lib";
 
-
 export let addPokemon: SQL.Statement | null = null;
 export let incrementWins: SQL.Statement | null = null;
 export let incrementLosses: SQL.Statement | null = null;
