@@ -10,7 +10,7 @@ describe('Copycat', function () {
 		battle.destroy();
 	});
 
-	it.only('should be able to copy called moves', function () {
+	it('should be able to copy called moves', function () {
 		battle = common.createBattle([[
 			{species: 'riolu', ability: 'steadfast', moves: ['copycat']},
 		], [
