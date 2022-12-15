@@ -4,6 +4,17 @@ const assert = require('assert').strict;
 const TeamGenerator = require('../../data/cg-teams').default;
 
 describe('[Gen 9] Computer-Generated Teams', () => {
+	it('should give all species 4 or fewer moves', () => {
+		const generator = new TeamGenerator();
+		const pool = generator.dex.species
+			.all()
+			.filter(s => s.exists && !(s.isNonstandard || s.isNonstandard === 'Unobtainable') && !s.nfe);
+		for (const species of pool) {
+			const set = generator.makeSet(species, {hazardSetters: {}});
+			assert(set.moves.length <= 4, `Species ${species.name} has more than 4 moves (set=${JSON.stringify(set)})`);
+		}
+	});
+
 	// Skipped since it includes randomness; useful for debugging though
 	it.skip('should have an accurate weighted picker', () => {
 		const generator = new TeamGenerator();
