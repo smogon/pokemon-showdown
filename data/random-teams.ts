@@ -341,7 +341,8 @@ export class RandomTeams {
 				counter.add('damage');
 				counter.damagingMoves.add(move);
 			} else {
-				// Are Physical/Special/Status moves:
+				// Are Physical/Special/
+				moves:
 				categories[move.category]++;
 			}
 			// Moves that have a low base power:
@@ -1177,7 +1178,7 @@ export class RandomTeams {
 			);
 			return (scarfReqs && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Specs';
 		}
-		if (counter.get('Status') === 0 && role !== 'Fast Attacker' && role !== 'Wallbreaker') return 'Assault Vest';
+		if (!counter.get('Status') && role !== 'Fast Attacker' && role !== 'Wallbreaker') return 'Assault Vest';
 		if (counter.get('speedsetup') && this.dex.getEffectiveness('Ground', species) < 1) return 'Weakness Policy';
 		if (species.id === 'urshifurapidstrike') return 'Punching Glove';
 		if (species.id === 'lokix' && role === 'Wallbreaker') return 'Life Orb';
