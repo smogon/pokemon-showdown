@@ -1040,6 +1040,7 @@ export class RandomTeams {
 		}
 		if (species.id === 'pikachu') return 'Light Ball';
 		if (species.id === 'regieleki') return 'Magnet';
+		if (species.id === 'pincurchin') return 'Shuca Berry';
 		if (ability === 'Imposter' || (species.id === 'magnezone' && moves.has('bodypress'))) return 'Choice Scarf';
 		if (moves.has('bellydrum') && moves.has('substitute')) return 'Salac Berry';
 		if (
@@ -1151,8 +1152,9 @@ export class RandomTeams {
 		role: string,
 	): string | undefined {
 		if (
-			counter.get('Physical') >= 4 &&
-			['fakeout', 'firstimpression', 'flamecharge', 'rapidspin', 'ruination', 'superfang'].every(m => !moves.has(m))
+			(counter.get('Physical') >= 4 &&
+			['fakeout', 'firstimpression', 'flamecharge', 'rapidspin', 'ruination', 'superfang'].every(m => !moves.has(m))) ||
+			(counter.get('Physical') >= 3 && moves.has('memento'))
 		) {
 			const scarfReqs = (
 				role !== 'Wallbreaker' &&
@@ -1175,7 +1177,7 @@ export class RandomTeams {
 			);
 			return (scarfReqs && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Specs';
 		}
-		if (counter.damagingMoves.size >= 4 && role !== 'Fast Attacker' && role !== 'Wallbreaker') return 'Assault Vest';
+		if (counter.get('Status') === 0 && role !== 'Fast Attacker' && role !== 'Wallbreaker') return 'Assault Vest';
 		if (counter.get('speedsetup') && this.dex.getEffectiveness('Ground', species) < 1) return 'Weakness Policy';
 		if (species.id === 'urshifurapidstrike') return 'Punching Glove';
 		if (species.id === 'lokix' && role === 'Wallbreaker') return 'Life Orb';
