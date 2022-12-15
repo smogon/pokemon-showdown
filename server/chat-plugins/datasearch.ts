@@ -1129,13 +1129,33 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			delete dex[mon];
 		}
 	}
+
+	const stat = sort?.slice(0, -1);
+
+	function getSortValue(name: string) {
+		if (!stat) return 0;
+		const mon = mod.species.get(name);
+		if (stat === 'bst') {
+			return mon.bst;
+		} else if (stat === 'weight') {
+			return mon.weighthg;
+		} else if (stat === 'height') {
+			return mon.heightm;
+		} else if (stat === 'gen') {
+			return mon.gen;
+		} else {
+			return mon.baseStats[stat as StatID];
+		}
+	}
+
 	let results: string[] = [];
 	for (const mon of Object.keys(dex).sort()) {
 		if (singleTypeSearch !== null && (dex[mon].types.length === 1) !== singleTypeSearch) continue;
 		const isRegionalForm = ["Alola", "Galar", "Hisui", "Paldea"].includes(dex[mon].forme) &&
 			dex[mon].name !== "Pikachu-Alola";
 		const allowGmax = (gmaxSearch || tierSearch);
-		if (!isRegionalForm && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
+		if (!isRegionalForm && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies) &&
+			getSortValue(mon) === getSortValue(dex[mon].baseSpecies)) continue;
 		if (dex[mon].isNonstandard === 'Gigantamax' && !allowGmax) continue;
 		results.push(dex[mon].name);
 	}
@@ -1166,24 +1186,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	if (results.length > 1) {
 		results.sort();
 		if (sort) {
-			const stat = sort.slice(0, -1);
 			const direction = sort.slice(-1);
-			Utils.sortBy(results, name => {
-				const mon = mod.species.get(name);
-				let monStat = 0;
-				if (stat === 'bst') {
-					monStat = mon.bst;
-				} else if (stat === 'weight') {
-					monStat = mon.weighthg;
-				} else if (stat === 'height') {
-					monStat = mon.heightm;
-				} else if (stat === 'gen') {
-					monStat = mon.gen;
-				} else {
-					monStat = mon.baseStats[stat as StatID];
-				}
-				return monStat * (direction === '+' ? 1 : -1);
-			});
+			Utils.sortBy(results, name => getSortValue(name) * (direction === '+' ? 1 : -1));
 		}
 		let notShown = 0;
 		if (!showAll && results.length > MAX_RANDOM_RESULTS) {
