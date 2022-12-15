@@ -1622,7 +1622,7 @@ export class RandomTeams {
 	}
 
 	randomFactorySets: {[format: string]: {[species: string]: BattleFactorySpecies}} =
-	require('./mods/gen8/factory-sets.json');
+		require('./mods/gen8/factory-sets.json');
 
 	randomFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails, tier: string
