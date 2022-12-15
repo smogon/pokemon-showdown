@@ -215,7 +215,7 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Hydro Pump", "Icicle Spear", "Rock Blast", "Shell Smash"],
-                "teraTypes": ["Ice"]
+                "teraTypes": ["Ice", "Rock"]
             }
         ]
     },
@@ -1180,8 +1180,13 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Aqua Jet", "Bulk Up", "Crunch", "Ice Spinner", "Liquidation", "Low Kick", "Wave Crash"],
+                "movepool": ["Aqua Jet", "Crunch", "Ice Spinner", "Low Kick", "Wave Crash"],
                 "teraTypes": ["Water"]
+            },
+            {
+                "role": Tera Blast user",
+                "movepool": "Bulk Up", "Ice Spinner", "Liquidation", "Tera Blast"
+                "teraTypes": ["Electric", "Grass"]
             }
         ]
     },
@@ -2297,7 +2302,7 @@
         "level": 86,
         "sets": [
             {
-                "role": "Bulky Attacker",
+                "role": "AV Pivot",
                 "movepool": ["Draco Meteor", "Dragon Tail", "Earthquake", "Fire Blast", "Heavy Slam", "Hydro Pump", "Thunderbolt"],
                 "teraTypes": ["Dragon", "Ground", "Fire", "Steel", "Water", "Electric"]
             },
