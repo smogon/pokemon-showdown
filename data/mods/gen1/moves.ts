@@ -34,33 +34,25 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		priority: 0,
 		accuracy: true,
-		ignoreEvasion: true,
 		condition: {
-			duration: 2,
 			durationCallback(target, source, effect) {
 				return this.random(3, 5);
 			},
 			onStart(pokemon) {
 				this.effectState.totalDamage = 0;
-				this.effectState.lastDamage = 0;
 				this.add('-start', pokemon, 'Bide');
 			},
 			onHit(target, source, move) {
 				if (source && source !== target && move.category !== 'Physical' && move.category !== 'Special') {
 					const damage = this.effectState.totalDamage;
-					this.effectState.totalDamage += damage;
-					this.effectState.lastDamage = damage;
+					this.effectState.totalDamage += this.lastDamage;
 					this.effectState.sourceSlot = source.getSlot();
 				}
 			},
 			onDamage(damage, target, source, move) {
 				if (!source || source.isAlly(target)) return;
 				if (!move || move.effectType !== 'Move') return;
-				if (!damage && this.effectState.lastDamage > 0) {
-					damage = this.effectState.totalDamage;
-				}
-				this.effectState.totalDamage += damage;
-				this.effectState.lastDamage = damage;
+				this.effectState.totalDamage += this.lastDamage;
 				this.effectState.sourceSlot = source.getSlot();
 			},
 			onAfterSetStatus(status, pokemon) {
