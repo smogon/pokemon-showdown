@@ -1184,7 +1184,7 @@
                 "teraTypes": ["Water"]
             },
             {
-                "role": Tera Blast user",
+                "role": "Tera Blast user",
                 "movepool": "Bulk Up", "Ice Spinner", "Liquidation", "Tera Blast"
                 "teraTypes": ["Electric", "Grass"]
             }
