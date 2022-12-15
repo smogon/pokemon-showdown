@@ -19,22 +19,18 @@ describe('Rage Fist', function () {
 		battle.makeChoices();
 		const umbreon = battle.p2.active[0];
 		let rageFistDamage = umbreon.maxhp - umbreon.hp;
-		assert.bounded(rageFistDamage, [17, 21]);
+		assert.bounded(rageFistDamage, [17, 21], `Rage Fist should be 50 BP`);
 
 		battle.makeChoices();
 		rageFistDamage = umbreon.maxhp - rageFistDamage - umbreon.hp;
-		assert.bounded(rageFistDamage, [34, 41]);
-
-		battle.makeChoices();
-		rageFistDamage = umbreon.maxhp - rageFistDamage - umbreon.hp;
-		assert.bounded(rageFistDamage, [52, 61]);
+		assert.bounded(rageFistDamage, [34, 41], `Rage Fist should be 100 BP`);
 	});
 
 	it(`should not increase BP after being hit by status moves`, function () {
 		battle = common.createBattle([[
 			{species: 'Primeape', moves: ['ragefist']},
 		], [
-			{species: 'Umbreon', ability: 'shellarmor', moves: ['tackle']},
+			{species: 'Umbreon', ability: 'shellarmor', moves: ['taunt']},
 		]]);
 
 		battle.makeChoices();
@@ -74,7 +70,7 @@ describe('Rage Fist', function () {
 
 	it(`should not increase BP when the user's Substitute is damaged or broken`, function () {
 		battle = common.createBattle([[
-			{species: 'Primeape', ability: 'shellarmor', moves: ['substitute', 'ragefist']},
+			{species: 'Primeape', moves: ['substitute', 'ragefist']},
 		], [
 			{species: 'Umbreon', ability: 'shellarmor', moves: ['dragonrage', 'sleeptalk']},
 		]]);
