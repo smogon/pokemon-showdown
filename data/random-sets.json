@@ -10,7 +10,6 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Dragon Dance", "Earthquake", "Flare Blitz", "Swords Dance", "Thunder Punch"],
-                "teraTypes": ["Fire", "Ground"]
             }
         ]
     },
