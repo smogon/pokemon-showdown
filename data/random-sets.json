@@ -2892,7 +2892,7 @@
         "level": 88,
         "sets": [
             {
-                "role": "Bulky Support",
+                "role": "Bulky Attacker",
                 "movepool": ["Discharge", "Liquidation", "Spikes", "Sucker Punch", "Toxic Spikes"],
                 "teraTypes": ["Electric", "Water"]
             }
