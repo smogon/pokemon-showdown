@@ -265,11 +265,17 @@ export default class TeamGenerator {
 				if (stats.typeWeaknesses[type.name] === undefined) {
 					stats.typeWeaknesses[type.name] = 0;
 				}
-				stats.typeWeaknesses[type.name]++;
-				if (stats.typeWeaknesses[type.name] > MAX_WEAK_TO_SAME_TYPE) {
+				if (stats.typeWeaknesses[type.name] >= MAX_WEAK_TO_SAME_TYPE) {
 					// too many weaknesses to this type
 					return false;
 				}
+			}
+		}
+		// species passes; increment counters
+		for (const type of this.dex.types.all()) {
+			const effectiveness = this.dex.getEffectiveness(type.name, species.types);
+			if (effectiveness === 1) {
+				stats.typeWeaknesses[type.name]++;
 			}
 		}
 		return true;
