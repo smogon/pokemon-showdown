@@ -90,7 +90,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Aerial Ace", "Double-Edge", "Fake Out", "Foul Play", "Gunk Shot", "Switcheroo", "U-turn"],
-                "teraTypes": ["Normal", "Poison"]
+                "teraTypes": ["Normal", "Poison", "Flying"]
             }
         ]
     },
@@ -976,7 +976,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Dark Pulse", "Focus Blast", "Leaf Storm", "Sucker Punch", "Toxic Spikes"],
-                "teraTypes": ["Dark", "Poison"]
+                "teraTypes": ["Dark", "Poison", "Grass"]
             },
             {
                 "role": "Setup Sweeper",
@@ -1281,7 +1281,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Earthquake", "Fire Fang", "Outrage", "Stone Edge", "Swords Dance"],
-                "teraTypes": ["Ground"]
+                "teraTypes": ["Ground", "Dragon"]
             }
         ]
     },
@@ -1376,7 +1376,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Body Press", "Flash Cannon", "Mirror Coat", "Steel Beam", "Thunderbolt", "Volt Switch"],
-                "teraTypes": ["Electric", "Water"]
+                "teraTypes": ["Electric", "Water", "Flying"]
             },
             {
                 "role": "Tera Blast user",
