@@ -2162,7 +2162,7 @@
         "level": 84,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Bulky Support",
                 "movepool": ["Brave Bird", "Defog", "Overheat", "Roost", "Taunt", "U-turn", "Will-O-Wisp"],
                 "teraTypes": ["Water", "Ground"]
             },
