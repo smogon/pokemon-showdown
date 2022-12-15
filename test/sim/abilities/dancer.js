@@ -149,14 +149,18 @@ describe('Dancer', function () {
 	});
 
 	it('should adopt the target selected by copycat', function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'oricoriopau', ability: 'dancer', moves: ['revelationdance']},
+		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
+			{species: 'oricoriopau', ability: 'dancer', moves: ['featherdance']},
 			{species: 'flamigo', moves: ['copycat']},
 		], [
 			{species: 'fletchinder', level: 1, moves: ['sleeptalk']},
-			{species: 'fletchinder', level: 1, moves: ['sleeptalk']},
+			{species: 'squawkabilly', level: 1, moves: ['sleeptalk']},
 		]]);
-		battle.makeChoices();
-		assert(!battle.p1.active[1].hurtThisTurn);
+		battle.makeChoices('move featherdance 1, move copycat', 'auto');
+		const flamigo = battle.p1.active[1];
+		const [fletchinder, squawkabilly] = battle.p2.active;
+		assert.equal(flamigo.boosts.atk, 0);
+		assert.equal(fletchinder.boosts.atk, -2);
+		assert.equal(squawkabilly.boosts.atk, -4);
 	});
 });
