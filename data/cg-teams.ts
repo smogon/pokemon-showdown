@@ -63,8 +63,8 @@ async function updateLevels(database: SQL.DatabaseManager) {
 		const total = wins + losses;
 
 		if (total > 10) {
-			if (wins / total >= 0.55) level++;
-			if (wins / total <= 0.45) level--;
+			if (wins / total >= 0.55) level--;
+			if (wins / total <= 0.45) level++;
 			level = Math.max(1, Math.min(100, level));
 			await updateSpecies?.run([level, species_id]);
 		}
@@ -101,8 +101,14 @@ export default class TeamGenerator {
 	}
 
 	getTeam(): PokemonSet[] {
-		let speciesPool = this.dex.species.all()
-			.filter(s => s.exists && !(s.isNonstandard || s.isNonstandard === 'Unobtainable') && !s.nfe);
+		let speciesPool = this.dex.species.all().filter(s => {
+			if (!s.exists) return false;
+			if (s.isNonstandard || s.isNonstandard === 'Unobtainable') return false;
+			if (s.nfe) return false;
+			if (s.battleOnly) return false;
+
+			return true;
+		});
 		const teamStats: TeamStats = {
 			hazardSetters: {},
 			typeWeaknesses: {},
@@ -129,7 +135,11 @@ export default class TeamGenerator {
 		const ability = this.weightedRandomPick(abilityPool, abilityWeights);
 
 		const moves: Move[] = [];
-		let movePool = Object.keys(this.dex.species.getLearnset(this.dex.species.get(species.baseSpecies).id) || {});
+		const learnset = this.dex.species.getLearnset(this.dex.species.get(species.baseSpecies).id);
+		let movePool = [];
+		for (const moveid in learnset) {
+			if (learnset[moveid].some(source => source.startsWith('9'))) movePool.push(moveid);
+		}
 		if (!movePool.length) throw new Error(`No moves for ${species.id}`);
 
 		// Consider either the top 15 moves or top 30% of moves, whichever is greater.
@@ -239,7 +249,7 @@ export default class TeamGenerator {
 			ivs,
 			level,
 			teraType,
-			shiny: this.prng.randomChance(1, 250),
+			shiny: this.prng.randomChance(1, 1024),
 			happiness: 255,
 		};
 	}
@@ -336,11 +346,6 @@ export default class TeamGenerator {
 				weight *= 0.3;
 			}
 
-			const sameTypeAttackingMoves = movesSoFar.filter(m => m.type === move.type && m.category !== 'Status').length;
-			if (sameTypeAttackingMoves > 1) {
-				weight *= (1 - (sameTypeAttackingMoves * 0.3));
-			}
-
 			return weight;
 		}
 
@@ -409,7 +414,7 @@ export default class TeamGenerator {
 		if (move.self?.volatileStatus) weight *= 0.8;
 
 		// downweight moves if we already have an attacking move of the same type
-		if (movesSoFar.some(m => m.category !== 'Status' && m.type === move.type)) weight *= 0.75;
+		if (movesSoFar.some(m => m.category !== 'Status' && m.type === move.type && m.basePower >= 60)) weight *= 0.3;
 
 		if (move.selfdestruct) weight *= 0.3;
 		if (move.recoil) weight *= 1 - (move.recoil[0] / move.recoil[1]);
