@@ -341,8 +341,7 @@ export class RandomTeams {
 				counter.add('damage');
 				counter.damagingMoves.add(move);
 			} else {
-				// Are Physical/Special/
-				moves:
+				// Are Physical/Special/Status moves:
 				categories[move.category]++;
 			}
 			// Moves that have a low base power:
@@ -842,7 +841,7 @@ export class RandomTeams {
 		role: string,
 	): boolean {
 		if ([
-			'Battle Bond', 'Flare Boost', 'Gluttony', 'Hydration', 'Ice Body', 'Immunity',
+			'Battle Bond', 'Flare Boost', 'Gluttony', 'Harvest', 'Hydration', 'Ice Body', 'Immunity',
 			'Own Tempo', 'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
 		].includes(ability)) return true;
 
@@ -851,7 +850,6 @@ export class RandomTeams {
 		case 'Contrary': case 'Serene Grace': case 'Skill Link': case 'Strong Jaw':
 			return !counter.get(toID(ability));
 		case 'Chlorophyll':
-			if (abilities.has('Harvest')) return true;
 			return (!moves.has('sunnyday') && !teamDetails.sun && species.id !== 'lilligant');
 		case 'Cloud Nine':
 			return (species.id !== 'golduck');
@@ -867,8 +865,6 @@ export class RandomTeams {
 			return (species.id !== 'houndoom' && this.dex.getEffectiveness('Fire', species) < 0);
 		case 'Guts':
 			return (!moves.has('facade') && !moves.has('sleeptalk'));
-		case 'Harvest':
-			return (!moves.has('substitute'));
 		case 'Hustle': case 'Inner Focus':
 			return (counter.get('Physical') < 2);
 		case 'Infiltrator':
@@ -968,6 +964,7 @@ export class RandomTeams {
 		if (species.id === 'enamorus' && moves.has('calmmind')) return 'Cute Charm';
 		if (abilities.has('Corrosion') && moves.has('toxic') && this.randomChance(1, 2)) return 'Corrosion';
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk'))) return 'Guts';
+		if (abilities.has('Harvest') && moves.has('substitute')) return 'Harvest';
 		if (abilities.has('Serene Grace') && moves.has('headbutt')) return 'Serene Grace';
 		if (abilities.has('Technician') && counter.get('technician')) return 'Technician';
 		if (abilities.has('Own Tempo') && moves.has('petaldance')) return 'Own Tempo';
