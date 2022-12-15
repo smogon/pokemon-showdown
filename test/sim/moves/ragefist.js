@@ -72,6 +72,20 @@ describe.only('Rage Fist', function () {
 		assert.bounded(primeape.maxhp - primeape.hp, [77, 91]);
 	});
 
+	it(`should not increase BP when the user's Substitute is damaged or broken`, function () {
+		battle = common.createBattle([[
+			{species: 'Primeape', ability: 'shellarmor', moves: ['substitute', 'ragefist']},
+		], [
+			{species: 'Umbreon', ability: 'shellarmor', moves: ['dragonrage', 'sleeptalk']},
+		]]);
+
+		battle.makeChoices();
+		battle.makeChoices();
+
+		const primeape = battle.p1.active[0];
+		assert.equal(primeape.timesAttacked, 0);
+	});
+
 	it(`should not increase BP when healed by an ally's Pollen Puff`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Wynaut', moves: ['pollenpuff']},
