@@ -37,27 +37,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			onStart(pokemon) {
 				this.effectState.totalDamage = 0;
-				this.effectState.time = this.random(3, 5);
+				this.effectState.time = this.random(2, 4);
 				this.add('-start', pokemon, 'Bide');
 			},
-			onHit(target, source, move) {
-				if (source && source !== target && move.category !== 'Physical' && move.category !== 'Special') {
-					this.effectState.totalDamage += this.lastDamage;
-					this.effectState.sourceSlot = source.getSlot();
-				}
-			},
-			onDamage(damage, target, source, move) {
-				if (!source || source.isAlly(target)) return;
-				if (!move || move.effectType !== 'Move') return;
-				this.effectState.totalDamage += this.lastDamage;
-				this.effectState.sourceSlot = source.getSlot();
-			},
 			onBeforeMove(pokemon, t, move) {
+				this.effectState.totalDamage += this.lastDamage;
 				this.effectState.time--;
 				if (!this.effectState.time) {
 					this.add('-end', pokemon, 'Bide');
 					if (!this.effectState.totalDamage) {
-						this.debug("Bide failed because no damage was taken");
+						this.debug("Bide failed because no damage was stored");
 						this.add('-fail', pokemon);
 						return false;
 					}
