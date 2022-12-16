@@ -1390,20 +1390,28 @@ export class RandomTeams {
 		const baseSpeciesPool: string[] = [];
 		if (isDoubles) {
 			for (const pokemon of Object.keys(this.randomDoublesSets)) {
-				const species = this.dex.species.get(pokemon);
+				let species = this.dex.species.get(pokemon);
 				if (species.gen > this.gen || exclude.includes(species.id)) continue;
 				if (isMonotype) {
 					if (!species.types.includes(type)) continue;
+					if (typeof species.battleOnly === 'string') {
+						species = this.dex.species.get(species.battleOnly);
+						if (!species.types.includes(type)) continue;
+					}
 				}
 				pokemonPool.push(pokemon);
 				if (!baseSpeciesPool.includes(species.baseSpecies)) baseSpeciesPool.push(species.baseSpecies);
 			}
 		} else {
 			for (const pokemon of Object.keys(this.randomSets)) {
-				const species = this.dex.species.get(pokemon);
+				let species = this.dex.species.get(pokemon);
 				if (species.gen > this.gen || exclude.includes(species.id)) continue;
 				if (isMonotype) {
 					if (!species.types.includes(type)) continue;
+					if (typeof species.battleOnly === 'string') {
+						species = this.dex.species.get(species.battleOnly);
+						if (!species.types.includes(type)) continue;
+					}
 				}
 				pokemonPool.push(pokemon);
 				if (!baseSpeciesPool.includes(species.baseSpecies)) baseSpeciesPool.push(species.baseSpecies);
