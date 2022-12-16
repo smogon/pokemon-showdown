@@ -1150,9 +1150,9 @@ export class RandomTeams {
 		role: string,
 	): string | undefined {
 		if (
-			(counter.get('Physical') >= 4 &&
-			['fakeout', 'firstimpression', 'flamecharge', 'rapidspin', 'ruination', 'superfang'].every(m => !moves.has(m))) ||
-			(counter.get('Physical') >= 3 && moves.has('memento'))
+			(counter.get('Physical') >= 4 ||
+			(counter.get('Physical') >= 3 && moves.has('memento'))) &&
+			['fakeout', 'firstimpression', 'flamecharge', 'rapidspin', 'ruination', 'superfang'].every(m => !moves.has(m))
 		) {
 			const scarfReqs = (
 				role !== 'Wallbreaker' &&
