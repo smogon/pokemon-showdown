@@ -1069,7 +1069,7 @@
         "level": 100,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Bulky Support",
                 "movepool": ["Charm", "Protect", "Surf", "Wish"],
                 "teraTypes": ["Water"]
             }
