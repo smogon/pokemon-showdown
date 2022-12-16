@@ -1777,7 +1777,7 @@ export class Pokemon {
 		this.ability = ability.id;
 		this.abilityState = {id: ability.id, target: this};
 		if (ability.id && this.battle.gen > 3 &&
-			!(!isFromFormeChange && oldAbility === ability.id && this.battle.gen > 4)) {
+			(isFromFormeChange || oldAbility !== ability.id || this.battle.gen <= 4)) {
 			this.battle.singleEvent('Start', ability, this.abilityState, this, source);
 		}
 		this.abilityOrder = this.battle.abilityOrder++;
