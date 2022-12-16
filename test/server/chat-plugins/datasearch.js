@@ -93,4 +93,22 @@ describe("Datasearch Plugin", () => {
 		const abilitySearch = datasearch.testables.runAbilitysearch(target, cmd, true, `/${cmd} ${target}`);
 		assert(abilitySearch.reply.includes('Steam Engine'));
 	});
+
+	it('should exclude formes where the base Pokemon is included', () => {
+		const cmd = 'ds';
+		const target = 'ice, monotype';
+		const search = datasearch.testables.runDexsearch(target, cmd, true, `/${cmd} ${target}`);
+		assert.false(search.reply.includes('Eiscue-Noice'));
+	});
+
+	it('should include formes if a sort differentiates them from the base Pokemon', () => {
+		const cmd = 'ds';
+		let target = 'ice, monotype, spe desc';
+		let search = datasearch.testables.runDexsearch(target, cmd, true, `/${cmd} ${target}`);
+		assert(search.reply.includes('Eiscue-Noice'));
+
+		target = 'ice, monotype, hp desc';
+		search = datasearch.testables.runDexsearch(target, cmd, true, `/${cmd} ${target}`);
+		assert.false(search.reply.includes('Eiscue-Noice'));
+	});
 });
