@@ -6186,6 +6186,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
+	saharascal: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
 	saharaja: {
 		isNonstandard: "CAP",
 		tier: "CAP",
