@@ -82,6 +82,7 @@ describe('Order Up', function () {
 		]]);
 		battle.makeChoices('move sleeptalk, move spore 2', 'move sleeptalk');
 
+		assert(battle.log.some(line => line.includes('ability: Dazzling|Order Up|[of] p2b: Dondozo')));
 		assert.statStage(battle.p2.active[1], 'atk', 2);
 	});
 });
