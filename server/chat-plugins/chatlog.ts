@@ -401,8 +401,12 @@ export const LogViewer = new class {
 		)) return ``;
 
 		const getClass = (name: string) => {
-			if (opts?.trim() === timestamp) name += ` highlighted`;
-			return `class="${name}" data-server="${timestamp}"`;
+			// we use the raw numbers because links don't support colons
+			// so you'd need to put chatlog-roomid--day--time-200000 instead of
+			// chatlog-roomid--day--time-20:00:00
+			const stampNums = toID(timestamp);
+			if (toID(opts) === stampNums) name += ` highlighted`;
+			return `class="${name}" data-server="${stampNums}"`;
 		};
 		if (opts === 'txt') return Utils.html`<div ${getClass('chat')}>${fullLine}</div>`;
 
@@ -1404,7 +1408,7 @@ export const pages: Chat.PageTable = {
 		}
 
 		const isTime = opts?.startsWith('time-');
-		if (isTime && opts) opts = opts.slice(5);
+		if (isTime && opts) opts = toID(opts.slice(5));
 
 		if (date && search) {
 			Searcher.checkEnabled();
