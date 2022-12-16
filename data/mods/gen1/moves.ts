@@ -36,22 +36,23 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		condition: {
 			onStart(pokemon) {
-				this.effectState.totalDamage = 0;
+				this.effectState.damage = 0;
 				this.effectState.time = this.random(2, 4);
 				this.add('-start', pokemon, 'Bide');
 			},
 			onBeforeMove(pokemon, t, move) {
-				this.effectState.totalDamage += this.lastDamage;
+				this.effectState.damage += this.lastDamage;
 				this.effectState.time--;
 				if (!this.effectState.time) {
 					this.add('-end', pokemon, 'Bide');
-					if (!this.effectState.totalDamage) {
+					if (!this.effectState.damage) {
 						this.debug("Bide failed because no damage was stored");
 						this.add('-fail', pokemon);
+						pokemon.removeVolatile('bide');
 						return false;
 					}
 					const target = this.getAtSlot(this.effectState.sourceSlot);
-					this.actions.moveHit(target, pokemon, move, {damage: this.effectState.totalDamage * 2} as ActiveMove);
+					this.actions.moveHit(target, pokemon, move, {damage: this.effectState.damage * 2} as ActiveMove);
 					pokemon.removeVolatile('bide');
 					return false;
 				}
