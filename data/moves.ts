@@ -16458,13 +16458,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-fail', source, 'move: Shed Tail');
 				return this.NOT_FAIL;
 			}
-			if (source.hp <= source.maxhp / 2 || source.maxhp === 1) { // Shedinja clause
+			if (source.hp <= Math.ceil(source.maxhp / 2)) {
 				this.add('-fail', source, 'move: Shed Tail', '[weak]');
 				return this.NOT_FAIL;
 			}
 		},
 		onHit(target) {
-			this.directDamage(target.maxhp / 2);
+			this.directDamage(Math.ceil(target.maxhp / 2));
 		},
 		self: {
 			onHit(source) {

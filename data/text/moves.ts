@@ -5475,7 +5475,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	shedtail: {
 		name: "Shed Tail",
-		desc: "The user takes 1/2 of its maximum HP, rounded down, and creates a substitute. The user then switches out, passing the substitute to whichever Pokemon is switched in.",
+		desc: "The user takes 1/2 of its maximum HP, rounded up, and creates a substitute. The user then switches out, passing the substitute to whichever Pokemon is switched in.",
 		shortDesc: "User takes 1/2 its max HP to pass a substitute.",
 
 		alreadyStarted: "#substitute",
