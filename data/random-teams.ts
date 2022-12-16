@@ -1319,10 +1319,6 @@ export class RandomTeams {
 		// fallback
 		if (item === undefined) item = isDoubles ? 'Sitrus Berry' : 'Leftovers';
 
-		// For Trick / Switcheroo
-		if (item === 'Leftovers' && types.includes('Poison') && teraType === 'Poison') {
-			item = 'Black Sludge';
-		}
 		if (species.baseSpecies === 'Pikachu') {
 			forme = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']);
 		}
