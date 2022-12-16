@@ -2982,7 +2982,7 @@ export const pages: Chat.PageTable = {
 			const ips = useridToIp.get(id) || [];
 			buf += `<tr><td>`;
 			buf += `<a href="https://${Config.routes.client}/users/${id}">${id}</a></td>`;
-			const ipStr = ips.map(f => `<a href="https://whatismyipaddress/${f}">${f}</a>`).join(', ');
+			const ipStr = ips.map(f => `<a href="https://whatismyipaddress.com/ip/${f}">${f}</a>`).join(', ');
 			buf += `${showIPs ? `<td>${ipStr}</td>` : ""}</tr>`;
 		}
 		buf += `</table></div>`;
