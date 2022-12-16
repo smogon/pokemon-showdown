@@ -7,6 +7,12 @@ CREATE TABLE IF NOT EXISTS gen9computergeneratedteams (
 
 CREATE INDEX IF NOT EXISTS gen9computergeneratedteams_species_id_level ON gen9computergeneratedteams(species_id, level);
 
+CREATE TABLE IF NOT EXISTS gen9_historical_levels (
+	species_id TEXT NOT NULL,
+	level NUMBER NOT NULL,
+	timestamp NUMBER NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS db_info (
 	key TEXT PRIMARY KEY,
 	value TEXT NOT NULL

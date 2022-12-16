@@ -58,6 +58,9 @@ async function updateLevels(database: SQL.DatabaseManager) {
 	const updateSpecies = await database.prepare(
 		'UPDATE gen9computergeneratedteams SET wins = 0, losses = 0, level = ? WHERE species_id = ?'
 	);
+	const updateHistory = await database.prepare(
+		`INSERT INTO gen9_historical_levels (level, species_id, timestamp) VALUES (?, ?, ${Date.now()})`
+	);
 	const data = await database.all('SELECT species_id, wins, losses, level FROM gen9computergeneratedteams');
 	for (let {species_id, wins, losses, level} of data) {
 		const total = wins + losses;
@@ -67,6 +70,7 @@ async function updateLevels(database: SQL.DatabaseManager) {
 			if (wins / total <= 0.45) level++;
 			level = Math.max(1, Math.min(100, level));
 			await updateSpecies?.run([level, species_id]);
+			await updateHistory?.run([level, species_id]);
 		}
 
 		levelOverride[species_id] = level;
@@ -135,10 +139,28 @@ export default class TeamGenerator {
 		const ability = this.weightedRandomPick(abilityPool, abilityWeights);
 
 		const moves: Move[] = [];
-		const learnset = this.dex.species.getLearnset(this.dex.species.get(species.baseSpecies).id);
-		let movePool = [];
-		for (const moveid in learnset) {
-			if (learnset[moveid].some(source => source.startsWith('9'))) movePool.push(moveid);
+
+		let learnset = this.dex.species.getLearnset(species.id);
+		let movePool: string[] = [];
+		if (!learnset) {
+			learnset = this.dex.species.getLearnset(this.dex.species.get(species.baseSpecies).id);
+		}
+		if (learnset) {
+			movePool = Object.keys(learnset).filter(
+				moveid => learnset![moveid].find(learned => learned.startsWith('9'))
+			);
+		}
+		if (species.changesFrom) {
+			learnset = this.dex.species.getLearnset(toID(species.changesFrom));
+			const basePool = Object.keys(learnset!).filter(
+				moveid => learnset![moveid].find(learned => learned.startsWith('9'))
+			);
+			movePool = [...new Set(movePool.concat(basePool))];
+		}
+		if (species.baseSpecies) {
+			for (const moveid in learnset) {
+				if (learnset[moveid].some(source => source.startsWith('9'))) movePool.push(moveid);
+			}
 		}
 		if (!movePool.length) throw new Error(`No moves for ${species.id}`);
 
