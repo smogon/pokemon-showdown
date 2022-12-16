@@ -4227,6 +4227,17 @@ export const Formats: FormatList = [
 		banlist: ['UU', 'NUBL'],
 	},
 	{
+		name: "[Gen 1] PU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3700527/">RBY PU Metagame Discussion &amp; Resources</a>`,
+		],
+
+		mod: 'gen1',
+		searchShow: false,
+		ruleset: ['[Gen 1] NU'],
+		banlist: ['NU', 'PUBL'],
+	},
+	{
 		name: "[Gen 1] 1v1",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/posts/8031462">RBY 1v1</a>`,
