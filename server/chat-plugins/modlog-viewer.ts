@@ -119,7 +119,7 @@ function prettifyResults(
 				timestamp = `<a href="/${thisRoomID}">${timestamp}</a>`;
 			} else {
 				const [day, time] = Chat.toTimestamp(date).split(' ');
-				timestamp = `<a href="/view-chatlog-${thisRoomID}--${day}--time-${time}">${timestamp}</a>`;
+				timestamp = `<a href="/view-chatlog-${thisRoomID}--${day}--time-${toID(time)}">${timestamp}</a>`;
 			}
 		}
 		line = Utils.escapeHTML(line.slice(line.indexOf(')') + ` </small>`.length));
