@@ -51,7 +51,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						pokemon.removeVolatile('bide');
 						return false;
 					}
-					const target = this.getAtSlot(this.effectState.sourceSlot);
+					const target = this.getRandomTarget(pokemon, 'Pound');
 					this.actions.moveHit(target, pokemon, move, {damage: this.effectState.damage * 2} as ActiveMove);
 					pokemon.removeVolatile('bide');
 					return false;
@@ -801,6 +801,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// Substitute, here we deliberately use the uncapped damage when tracking lastDamage etc.
 				// Also, multi-hit moves must always deal the same damage as the first hit for any subsequent hits
 				let uncappedDamage = move.hit > 1 ? this.lastDamage : this.actions.getDamage(source, target, move);
+				if (move.id === 'bide') uncappedDamage = source.volatiles['bide'].damage * 2;
 				if (!uncappedDamage && uncappedDamage !== 0) return null;
 				uncappedDamage = this.runEvent('SubDamage', target, source, move, uncappedDamage);
 				if (!uncappedDamage && uncappedDamage !== 0) return uncappedDamage;
