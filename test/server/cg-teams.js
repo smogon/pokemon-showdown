@@ -12,6 +12,7 @@ describe('[Gen 9] Computer-Generated Teams', () => {
 		for (const species of pool) {
 			const set = generator.makeSet(species, {hazardSetters: {}});
 			assert(set.moves.length <= 4, `Species ${species.name} has more than 4 moves (set=${JSON.stringify(set)})`);
+			assert(new Set(set.moves).size === set.moves.length, `Species ${species.name} has duplicate moves (set=${JSON.stringify(set)})`);
 		}
 	});
 
