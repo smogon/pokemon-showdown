@@ -53,4 +53,22 @@ describe('Bide [Gen 1]', function () {
 		assert(!aerodactyl.volatiles['bide']);
 		assert(!gyarados.volatiles['substitute']);
 	});
+
+	it("Bide can accumulate damage as the opponent switches or uses moves that don't reset lastDamage", function () {
+		battle = common.gen(1).createBattle({seed: [1, 1, 1, 1]});
+		battle.setPlayer('p1', {team: [{species: "Aerodactyl", moves: ['bide']}]});
+		battle.setPlayer('p2', {team: [
+			{species: "Gyarados", moves: ['dragonrage', 'splash']},
+			{species: 'Exeggutor', moves: ['barrage']},
+		]});
+		const aerodactyl = battle.p1.active[0];
+		battle.makeChoices();
+		assert.equal(aerodactyl.volatiles['bide'].time, 3);
+		battle.makeChoices('auto', 'move splash');
+		battle.makeChoices('auto', 'switch 2');
+		battle.makeChoices();
+		const exeggutor = battle.p2.active[0];
+		assert(!aerodactyl.volatiles['bide']);
+		assert.equal(exeggutor.maxhp - exeggutor.hp, 240);
+	});
 });
