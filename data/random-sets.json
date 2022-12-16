@@ -715,7 +715,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Crunch", "Destiny Bond", "Gunk Shot", "Spikes", "Taunt", "Thunder Wave", "Toxic Spikes"],
+                "movepool": ["Crunch", "Gunk Shot", "Spikes", "Taunt", "Thunder Wave", "Toxic Spikes"],
                 "teraTypes": ["Poison", "Flying"]
             }
         ]
@@ -1040,7 +1040,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["Gunk Shot", "Knock Off", "Shadow Claw", "Shadow Sneak", "Swords Dance", "Will-O-Wisp"],
+                "movepool": ["Gunk Shot", "Knock Off", "Shadow Claw", "Shadow Sneak", "Swords Dance", "Thunder Wave"],
                 "teraTypes": ["Poison", "Dark"]
             }
         ]
@@ -4014,6 +4014,11 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Gigaton Hammer", "Knock Off", "Play Rough", "Stealth Rock", "Thunder Wave"],
+                "teraTypes": ["Steel"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Gigaton Hammer", "Knock Off", "Play Rough", "Swords Dance"],
                 "teraTypes": ["Steel"]
             }
         ]
