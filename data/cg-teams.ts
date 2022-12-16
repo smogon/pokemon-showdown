@@ -159,7 +159,9 @@ export default class TeamGenerator {
 		}
 		if (species.baseSpecies) {
 			for (const moveid in learnset) {
-				if (learnset[moveid].some(source => source.startsWith('9'))) movePool.push(moveid);
+				if (!movePool.includes(moveid) && learnset[moveid].some(source => source.startsWith('9'))) {
+					movePool.push(moveid);
+				}
 			}
 		}
 		if (!movePool.length) throw new Error(`No moves for ${species.id}`);
