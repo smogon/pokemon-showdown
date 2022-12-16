@@ -35,16 +35,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		accuracy: true,
 		condition: {
-			durationCallback(target, source, effect) {
-				return this.random(3, 5);
-			},
 			onStart(pokemon) {
 				this.effectState.totalDamage = 0;
+				this.effectState.time = this.random(3, 5);
 				this.add('-start', pokemon, 'Bide');
 			},
 			onHit(target, source, move) {
 				if (source && source !== target && move.category !== 'Physical' && move.category !== 'Special') {
-					const damage = this.effectState.totalDamage;
 					this.effectState.totalDamage += this.lastDamage;
 					this.effectState.sourceSlot = source.getSlot();
 				}
@@ -55,23 +52,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.effectState.totalDamage += this.lastDamage;
 				this.effectState.sourceSlot = source.getSlot();
 			},
-			onAfterSetStatus(status, pokemon) {
-				// Sleep, freeze, and partial trap will just pause duration.
-				if (pokemon.volatiles['flinch']) {
-					this.effectState.duration++;
-				} else if (pokemon.volatiles['partiallytrapped']) {
-					this.effectState.duration++;
-				} else {
-					switch (status.id) {
-					case 'slp':
-					case 'frz':
-						this.effectState.duration++;
-						break;
-					}
-				}
-			},
 			onBeforeMove(pokemon, t, move) {
-				if (this.effectState.duration === 1) {
+				this.effectState.time--;
+				if (!this.effectState.time) {
 					this.add('-end', pokemon, 'Bide');
 					if (!this.effectState.totalDamage) {
 						this.debug("Bide failed because no damage was taken");
