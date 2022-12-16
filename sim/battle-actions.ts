@@ -500,8 +500,6 @@ export class BattleActions {
 			this.battle.faint(pokemon, pokemon, move);
 		}
 
-		this.battle.setActiveMove(move, pokemon, target);
-
 		if (!moveResult) {
 			this.battle.singleEvent('MoveFail', move, null, target, pokemon, move);
 			return false;
@@ -1074,11 +1072,16 @@ export class BattleActions {
 			if (!damage[i] && damage[i] !== 0) targets[i] = false;
 		}
 
+		// steps 4 and 5 can mess with this.battle.activeTarget, which needs to be preserved for Dancer
+		const activeTarget = this.battle.activeTarget;
+
 		// 4. self drops (start checking for targets[i] === false here)
 		if (moveData.self && !move.selfDropped) this.selfDrops(targets, pokemon, move, moveData, isSecondary);
 
 		// 5. secondary effects
 		if (moveData.secondaries) this.secondaries(targets, pokemon, move, moveData, isSelf);
+
+		this.battle.activeTarget = activeTarget;
 
 		// 6. force switch
 		if (moveData.forceSwitch) damage = this.forceSwitch(damage, targets, pokemon, move);
