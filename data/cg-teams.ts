@@ -164,6 +164,9 @@ export default class TeamGenerator {
 		}
 		if (!movePool.length) throw new Error(`No moves for ${species.id}`);
 
+		// Remove duplicate moves
+		movePool = [...new Set(movePool)];
+
 		// Consider either the top 15 moves or top 30% of moves, whichever is greater.
 		const numberOfMovesToConsider = Math.min(movePool.length, Math.max(15, Math.trunc(movePool.length * 0.3)));
 		let movePoolIsTrimmed = false;
