@@ -491,6 +491,7 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, ['taunt', 'strengthsap'], 'encore');
 		this.incompatibleMoves(moves, movePool, 'toxic', 'willowisp');
 		this.incompatibleMoves(moves, movePool, ['thunderwave', 'toxic', 'willowisp'], 'toxicspikes');
+		this.incompatibleMoves(moves, movePool, 'thunderwave', 'yawn');
 
 		// This space reserved for assorted hardcodes that otherwise make little sense out of context
 		// Landorus
