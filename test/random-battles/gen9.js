@@ -55,3 +55,13 @@ describe('[Gen 9] Random Battle', () => {
 		}
 	});
 });
+
+describe('[Gen 9] Monotype Random Battle', () => {
+	const options = {format: 'gen9monotyperandombattle'};
+
+	it('all Pokemon should share a common type', function () {
+		testTeam({...options, rounds: 100}, team => {
+			assert.legalTeam(team, 'gen9customgame@@@sametypeclause');
+		});
+	});
+});
