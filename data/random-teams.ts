@@ -2203,20 +2203,33 @@ export class RandomTeams {
 			} else {
 				const formes = ['gastrodoneast', 'pumpkaboosuper', 'zygarde10'];
 				let learnset = this.dex.species.getLearnset(species.id);
+				let learnsetSpecies = species;
 				if (formes.includes(species.id) || !learnset) {
-					learnset = this.dex.species.getLearnset(this.dex.species.get(species.baseSpecies).id);
+					learnsetSpecies = this.dex.species.get(species.baseSpecies);
+					learnset = this.dex.species.getLearnset(learnsetSpecies.id);
 				}
 				if (learnset) {
 					pool = Object.keys(learnset).filter(
 						moveid => learnset![moveid].find(learned => learned.startsWith(String(this.gen)))
 					);
 				}
-				if (species.changesFrom) {
+				if (learnset && learnsetSpecies === species && species.changesFrom) {
 					learnset = this.dex.species.getLearnset(toID(species.changesFrom));
-					const basePool = Object.keys(learnset!).filter(
-						moveid => learnset![moveid].find(learned => learned.startsWith(String(this.gen)))
-					);
-					pool = [...new Set(pool.concat(basePool))];
+					for (const moveid in learnset) {
+						if (!pool.includes(moveid) && learnset[moveid].some(source => source.startsWith(String(this.gen)))) {
+							pool.push(moveid);
+						}
+					}
+				}
+				const evoRegion = learnsetSpecies.evoRegion && learnsetSpecies.gen !== this.gen;
+				while (learnsetSpecies.prevo) {
+					learnsetSpecies = this.dex.species.get(learnsetSpecies.prevo);
+					for (const moveid in learnset) {
+						if (!pool.includes(moveid) &&
+							learnset[moveid].some(source => source.startsWith(String(this.gen)) && !evoRegion)) {
+							pool.push(moveid);
+						}
+					}
 				}
 			}
 
