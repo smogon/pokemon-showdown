@@ -72,7 +72,7 @@ describe('Bide [Gen 1]', function () {
 		assert.equal(exeggutor.maxhp - exeggutor.hp, 240);
 	});
 
-	it("Bide's accumulated damage is zeroed when an enemy faints", function () {
+	it("Bide's accumulated damage is zeroed when an enemy faints (Desync Clause Mod)", function () {
 		battle = common.gen(1).createBattle();
 		battle.setPlayer('p1', {team: [{species: "Aerodactyl", moves: ['bide']}]});
 		battle.setPlayer('p2', {team: [
@@ -94,6 +94,7 @@ describe('Bide [Gen 1]', function () {
 		battle.makeChoices();
 		assert(!aerodactyl.volatiles['bide']);
 		assert.fullHP(battle.p2.active[0]);
+		assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
 	});
 
 	it("Bide's duration is paused when asleep or frozen", function () {
