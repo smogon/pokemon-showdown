@@ -94,6 +94,9 @@ describe("New set format", () => {
 						assert.equal(move, dexMove.name, `${species.name} has misformatted move: ${move}`);
 						assert(validateLearnset(dexMove, {species}, 'anythinggoes', 'gen9'), `${species.name} can't learn ${move}`);
 					}
+					for (let i = 0; i < set.movepool.length - 1; i++) {
+						assert(set.movepool[i + 1] > set.movepool[i], `${species} movepool should be sorted alphabetically`);
+					}
 					for (const type of set.teraTypes) {
 						const dexType = Dex.types.get(type);
 						assert(dexType.exists, `${species.name} has invalid Tera Type: ${type}`);
