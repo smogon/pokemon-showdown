@@ -71,4 +71,28 @@ describe('Bide [Gen 1]', function () {
 		assert(!aerodactyl.volatiles['bide']);
 		assert.equal(exeggutor.maxhp - exeggutor.hp, 240);
 	});
+
+	it("Bide's accumulated damage is zeroed when an enemy faints", function () {
+		battle = common.gen(1).createBattle();
+		battle.setPlayer('p1', {team: [{species: "Aerodactyl", moves: ['bide']}]});
+		battle.setPlayer('p2', {team: [
+			{species: "Gyarados", moves: ['dragonrage', 'leer']},
+			{species: 'Exeggutor', moves: ['barrage']},
+		]});
+		const aerodactyl = battle.p1.active[0];
+		const exeggutor = battle.p2.pokemon[1];
+		// Exeggutor will faint when switched in
+		exeggutor.hp = 1;
+		exeggutor.setStatus('psn');
+		battle.makeChoices();
+		assert.equal(aerodactyl.volatiles['bide'].time, 2);
+		// Leer resets battle.lastDamage to 0
+		battle.makeChoices('auto', 'move leer');
+		battle.makeChoices('auto', 'switch 2');
+		battle.makeChoices();
+		assert.equal(aerodactyl.volatiles['bide'].time, 1);
+		battle.makeChoices();
+		assert(!aerodactyl.volatiles['bide']);
+		assert.fullHP(battle.p2.active[0]);
+	});
 });
