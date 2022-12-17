@@ -95,4 +95,15 @@ describe('Bide [Gen 1]', function () {
 		assert(!aerodactyl.volatiles['bide']);
 		assert.fullHP(battle.p2.active[0]);
 	});
+
+	it("Bide's duration is paused when asleep or frozen", function () {
+		battle = common.gen(1).createBattle();
+		battle.setPlayer('p1', {team: [{species: "Aerodactyl", moves: ['bide']}]});
+		battle.setPlayer('p2', {team: [{species: "Parasect", moves: ['spore']}]});
+		const aerodactyl = battle.p1.active[0];
+		for (let i = 0; i < 10; i++) {
+			battle.makeChoices();
+			assert.equal(aerodactyl.volatiles['bide'].time, 2);
+		}
+	});
 });
