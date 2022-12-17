@@ -618,10 +618,10 @@ export class RandomTeams {
 						if (abilities.has('Refrigerate')) moveType = 'Ice';
 					}
 					if (moveid === 'terablast') moveType = teraType;
-					if (move.basePower > 30 || move.multihit || move.basePowerCallback) {
-						if (!this.noStab.includes(moveid) || abilities.has('Technician') && moveid === 'machpunch') {
-							if (type === moveType) stabMoves.push(moveid);
-						}
+					if (type === moveType &&
+						(move.basePower > 30 || move.multihit || move.basePowerCallback) &&
+						(!this.noStab.includes(moveid) || abilities.has('Technician') && moveid === 'machpunch')) {
+						stabMoves.push(moveid);
 					}
 				}
 				if (stabMoves.length) {
