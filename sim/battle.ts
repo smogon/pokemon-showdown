@@ -1953,7 +1953,11 @@ export class Battle {
 							this.queue.clear();
 							// Fainting clears accumulated Bide damage
 							for (const pokemon of this.getAllActive()) {
-								if (pokemon.volatiles['bide']) pokemon.volatiles['bide'].damage = 0;
+								if (pokemon.volatiles['bide'] && pokemon.volatiles['bide'].damage) {
+									pokemon.volatiles['bide'].damage = 0;
+									this.hint("Desync Clause Mod activated!");
+									this.hint("Bide's accumulated damage is reset to 0 when a Pokemon faints.");
+								}
 							}
 						}
 					}
@@ -2337,7 +2341,11 @@ export class Battle {
 			this.queue.clear();
 			// Fainting clears accumulated Bide damage
 			for (const pokemon of this.getAllActive()) {
-				if (pokemon.volatiles['bide']) pokemon.volatiles['bide'].damage = 0;
+				if (pokemon.volatiles['bide'] && pokemon.volatiles['bide'].damage) {
+					pokemon.volatiles['bide'].damage = 0;
+					this.hint("Desync Clause Mod activated!");
+					this.hint("Bide's accumulated damage is reset to 0 when a Pokemon faints.");
+				}
 			}
 		} else if (this.gen <= 3 && this.gameType === 'singles') {
 			// in gen 3 or earlier, fainting in singles skips to residuals
