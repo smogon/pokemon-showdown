@@ -169,6 +169,9 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] Doubles Ubers",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3712864/">Doubles Ubers</a>`,
+		],
 
 		mod: 'gen9',
 		gameType: 'doubles',
@@ -176,6 +179,9 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] Doubles UU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3712825/">Doubles UU</a>`,
+		],
 
 		mod: 'gen9',
 		gameType: 'doubles',
@@ -3011,6 +3017,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
+		searchShow: false,
 		ruleset: ['Standard Doubles', '!Gravity Sleep Clause'],
 		banlist: [],
 	},
@@ -3022,7 +3029,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
-		// searchShow: false,
+		searchShow: false,
 		ruleset: ['[Gen 8] Doubles OU'],
 		banlist: ['DOU', 'DBL'],
 	},
