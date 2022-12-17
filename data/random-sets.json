@@ -780,7 +780,7 @@
             },
             {
                 "role": "Fast Support",
-                "movepool": ["Freeze Dry", "Memento", "Rapid Spin", "Spikes"],
+                "movepool": ["Freeze-Dry", "Memento", "Rapid Spin", "Spikes"],
                 "teraTypes": ["Ice", "Ghost"]
             }
         ]
@@ -815,7 +815,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Seismic Toss", "Soft Boiled", "Stealth Rock", "Thunder Wave"],
+                "movepool": ["Seismic Toss", "Soft-Boiled", "Stealth Rock", "Thunder Wave"],
                 "teraTypes": ["Steel", "Fairy", "Ghost", "Poison"]
             }
         ]
@@ -1125,7 +1125,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Brave Bird", "Close Combat", "Double Edge", "Quick Attack", "U-turn"],
+                "movepool": ["Brave Bird", "Close Combat", "Double-Edge", "Quick Attack", "U-turn"],
                 "teraTypes": ["Fighting", "Flying"]
             }
         ]
@@ -1390,7 +1390,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Double Edge", "Leaf Blade", "Substitute", "Swords Dance", "Synthesis", "X-Scissor"],
+                "movepool": ["Double-Edge", "Leaf Blade", "Substitute", "Swords Dance", "Synthesis", "X-Scissor"],
                 "teraTypes": ["Normal"]
             }
         ]
@@ -1400,7 +1400,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Calm Mind", "Freeze Dry", "Protect", "Wish"],
+                "movepool": ["Calm Mind", "Freeze-Dry", "Protect", "Wish"],
                 "teraTypes": ["Water"]
             }
         ]
@@ -2742,7 +2742,7 @@
         "level": 82,
         "sets": [
             {
-                "role": "Setup Swepeer",
+                "role": "Setup Sweeper",
                 "movepool": ["Crunch", "Earthquake", "Liquidation", "Shell Smash", "Stone Edge"],
                 "teraTypes": ["Water", "Rock", "Ground", "Dark"]
             }
