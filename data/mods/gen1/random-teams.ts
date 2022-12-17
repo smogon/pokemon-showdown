@@ -341,7 +341,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const customScale: {[k: string]: number} = {
 			Mewtwo: 62,
 			Caterpie: 100, Metapod: 100, Weedle: 100, Kakuna: 100, Magikarp: 100,
-			Ditto: 88,
+			Ditto: 100,
 		};
 		const level = this.adjustLevel || customScale[species.name] || levelScale[species.tier] || 80;
 
