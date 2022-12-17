@@ -2112,7 +2112,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		team: 'randomCC',
-		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Dynamax Clause', 'Picked Team Size = 1'],
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Terastal Clause', 'Picked Team Size = 1'],
 	},
 	{
 		name: "[Gen 9] Challenge Cup 2v2",
@@ -2120,7 +2120,7 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		team: 'randomCC',
 		gameType: 'doubles',
-		ruleset: ['[Gen 9] Challenge Cup 1v1', '!! Picked Team Size = 2'],
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Picked Team Size = 2'],
 	},
 	{
 		name: "[Gen 9] Challenge Cup 6v6",
@@ -2128,7 +2128,7 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		team: 'randomCC',
 		searchShow: false,
-		ruleset: ['[Gen 9] Challenge Cup 1v1', '!Picked Team Size'],
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
 		name: "[Gen 8] Random Battle",
