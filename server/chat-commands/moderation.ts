@@ -869,7 +869,7 @@ export const commands: Chat.ChatCommands = {
 
 		if (!targetUser && !Punishments.search(userid).length && !force) {
 			return this.errorReply(
-				`User '${targetUsername}' not found. Use \`\`/force${month ? 'month' : week ? 'week' : ''}lock\`\` if you need to to lock them anyway.`
+				`User '${targetUsername}' not found. Use \`\`/force${month ? 'month' : (week ? 'week' : '')}lock\`\` if you need to to lock them anyway.`
 			);
 		}
 		if (reason.length > MAX_REASON_LENGTH) {
