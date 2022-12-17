@@ -719,7 +719,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	sunflora: {
-		randomBattleMoves: ["hiddenpowerfire", "leechseed", "razorleaf", "solarbeam", "sunnyday", "synthesis", "toxic"],
+		randomBattleMoves: ["hiddenpowerfire", "leechseed", "razorleaf", "synthesis", "toxic"],
 		tier: "NU",
 	},
 	yanma: {
@@ -976,7 +976,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	shiftry: {
-		randomBattleMoves: ["brickbreak", "explosion", "hiddenpowerfire", "shadowball", "solarbeam", "sunnyday", "swordsdance"],
+		randomBattleMoves: ["brickbreak", "explosion", "shadowball", "swordsdance"],
 		tier: "UU",
 	},
 	taillow: {
