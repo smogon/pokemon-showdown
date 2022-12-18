@@ -162,12 +162,13 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'confusion',
 		// this is a volatile status
 		onStart(target, source, sourceEffect) {
-			if (sourceEffect && sourceEffect.id === 'lockedmove') {
+			if (sourceEffect?.id === 'lockedmove') {
 				this.add('-start', target, 'confusion', '[fatigue]');
 			} else {
 				this.add('-start', target, 'confusion');
 			}
-			this.effectState.time = this.random(2, 6);
+			const min = sourceEffect?.id === 'axekick' ? 3 : 2;
+			this.effectState.time = this.random(min, 6);
 		},
 		onEnd(target) {
 			this.add('-end', target, 'confusion');
