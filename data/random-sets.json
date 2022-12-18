@@ -585,8 +585,8 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["Dazzling Gleam", "Earth Power", "Solar Beam", "Sunny Day"],
-                "teraTypes": ["Grass", "Ground"]
+                "movepool": ["Dazzling Gleam", "Earth Power", "Leaf Storm", "Sludge Bomb"],
+                "teraTypes": ["Grass", "Ground", "Fairy", "Poison"]
             }
         ]
     },
@@ -826,7 +826,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Crunch", "Dragon Dance", "Earthquake", "Fire Punch", "Stone Edge"],
-                "teraTypes": ["Rock"]
+                "teraTypes": ["Rock", "Ghost"]
             },
             {
                 "role": "Bulky Support",
@@ -1015,7 +1015,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Earthquake", "Flamethrower", "Giga Drain", "Gunk Shot", "Switcheroo"],
+                "movepool": ["Earthquake", "Flamethrower", "Giga Drain", "Glare", "Gunk Shot", "Switcheroo"],
                 "teraTypes": ["Ground", "Fire", "Poison", "Grass"]
             }
         ]
@@ -1135,7 +1135,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["Brick Break", "Bug Bite", "Pounce", "Sticky Web", "Taunt"],
+                "movepool": ["Brick Break", "Pounce", "Sticky Web", "Taunt"],
                 "teraTypes": ["Bug", "Ghost"]
             }
         ]
@@ -1306,7 +1306,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Earthquake", "Slack Off", "Stealth Rock", "Stone Edge", "Whirlwind", "Yawn"],
-                "teraTypes": ["Ground", "Fairy"]
+                "teraTypes": ["Fairy", "Rock"]
             }
         ]
     },
@@ -1736,7 +1736,7 @@
         ]
     },
     "arceuspoison": {
-        "level": 80,
+        "level": 72,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1902,7 +1902,7 @@
     "zoroarkhisui": {
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Wallbreaker",
                 "movepool": ["Bitter Malice", "Flamethrower", "Focus Blast", "Hyper Voice", "Nasty Plot", "Shadow Ball", "Trick", "U-turn"],
                 "teraTypes": ["Normal"]
             }
@@ -3289,7 +3289,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Boomburst", "Calm Mind", "Earth Power", "Roost", "Thunder"],
-                "teraTypes": ["Normal"]
+                "teraTypes": ["Normal", "Ghost"]
             }
         ]
     },
@@ -3330,6 +3330,11 @@
                 "role": "Fast Attacker",
                 "movepool": ["Axe Kick", "First Impression", "Sucker Punch", "U-turn"],
                 "teraTypes": ["Bug"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Leech Life", "Sucker Punch", "Swords Dance", "Throat Chop"],
+                "teraTypes": ["Dark"]
             }
         ]
     },
@@ -3338,7 +3343,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Earth Power", "Psychic", "Recover", "Revival Blessing", "Trick Room"],
+                "movepool": ["Bug Buzz", "Earth Power", "Psychic", "Revival Blessing", "Trick Room"],
                 "teraTypes": ["Steel"]
             }
         ]
@@ -3803,7 +3808,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Encore", "Light Screen", "Play Rough", "Protect", "Reflect", "Stealth Rock", "Thunder Wave", "Wish"],
+                "movepool": ["Encore", "Light Screen", "Play Rough", "Protect", "Reflect", "Thunder Wave", "Wish"],
                 "teraTypes": ["Fairy", "Steel"]
             }
         ]
@@ -4048,7 +4053,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Earth Power", "Giga Drain", "Knock Off", "Rapid Spin", "Spikes", "Spore", "Toxic", "Toxic Spikes"],
+                "movepool": ["Earth Power", "Giga Drain", "Knock Off", "Leaf Storm", "Rapid Spin", "Spore", "Toxic", "Toxic Spikes"],
                 "teraTypes": ["Ground", "Water"]
             }
         ]
