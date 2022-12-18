@@ -16,7 +16,7 @@ describe('Curse', function () {
 		], [
 			{species: 'Caterpie', moves: ['sleeptalk']},
 		]]);
-		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'randomNormal');
+		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
 	});
 
 	it(`should request the Ghost target after the user becomes Ghost`, function () {
@@ -27,7 +27,7 @@ describe('Curse', function () {
 		]]);
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
 		battle.makeChoices();
-		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'randomNormal');
+		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
 	});
 
 	it(`should request the Ghost target after the user becomes Ghost`, function () {
@@ -38,7 +38,7 @@ describe('Curse', function () {
 		]]);
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
 		battle.makeChoices();
-		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'randomNormal');
+		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
 	});
 
 	it(`should not request a target after the user stops being Ghost`, function () {
@@ -47,7 +47,7 @@ describe('Curse', function () {
 		], [
 			{species: 'Jellicent', moves: ['soak']},
 		]]);
-		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'randomNormal');
+		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
 	});
@@ -108,6 +108,37 @@ describe('Curse', function () {
 		battle.makeChoices();
 		assert.equal(gengar.hp, gengar.maxhp - Math.floor(gengar.maxhp / 2));
 		assert.equal(caterpie.hp, caterpie.maxhp - curseResidual * 2);
+	});
+
+	it(`should target either random opponent if the target is an ally`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Wynaut', moves: ['sleeptalk']},
+			{species: 'Gengar', moves: ['curse']},
+		], [
+			{species: 'Caterpie', moves: ['sleeptalk']},
+			{species: 'Metapod', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move sleeptalk, move curse -1', 'auto');
+
+		const wynaut = battle.p1.active[0];
+		const caterpie = battle.p2.active[0];
+		const metapod = battle.p2.active[1];
+		assert.fullHP(wynaut);
+		assert(caterpie.maxhp !== caterpie.hp || metapod.maxhp !== metapod.hp, `Either Caterpie or Metapod should have lost HP from Curse`);
+	});
+
+	it(`[Gen 7] should target the ally if the target is an ally`, function () {
+		battle = common.gen(7).createBattle({gameType: 'doubles'}, [[
+			{species: 'Wynaut', moves: ['sleeptalk']},
+			{species: 'Gengar', moves: ['curse']},
+		], [
+			{species: 'Caterpie', moves: ['sleeptalk']},
+			{species: 'Metapod', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move sleeptalk, move curse -1', 'auto');
+
+		const wynaut = battle.p1.active[0];
+		assert.false.fullHP(wynaut);
 	});
 });
 
