@@ -30,17 +30,6 @@ describe('Curse', function () {
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
 	});
 
-	it(`should request the Ghost target after the user becomes Ghost`, function () {
-		battle = common.createBattle([[
-			{species: 'Rapidash', moves: ['curse']},
-		], [
-			{species: 'Trevenant', moves: ['trickortreat']},
-		]]);
-		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
-		battle.makeChoices();
-		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
-	});
-
 	it(`should not request a target after the user stops being Ghost`, function () {
 		battle = common.createBattle([[
 			{species: 'Gengar', moves: ['curse']},
