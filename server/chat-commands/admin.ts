@@ -570,6 +570,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply("Wait for /updateserver to finish before hotpatching.");
 		}
 
+		await this.parse(`/rebuild`);
 		const lock = Monitor.hotpatchLock;
 		const hotpatches = [
 			'chat', 'formats', 'loginserver', 'punishments', 'dnsbl', 'modlog',
@@ -1325,8 +1326,13 @@ export const commands: Chat.ChatCommands = {
 		`/updateserver private - Updates only the server's private code. Requires: console access`,
 	],
 
-	rebuild() {
-		this.errorReply("`/rebuild` is no longer necessary; TypeScript files are automatically transpiled as they are loaded.");
+	async rebuild() {
+		this.canUseConsole();
+		const [, , stderr] = await bash('node ./build', this);
+		if (stderr) {
+			throw new Chat.ErrorMessage(`Crash while rebuilding: ${stderr}`);
+		}
+		this.sendReply('Rebuilt.');
 	},
 
 	/*********************************************************

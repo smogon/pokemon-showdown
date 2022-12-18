@@ -1,7 +1,6 @@
 'use strict';
 
-require('ts-node').register({project: './tsconfig.json', files: true, transpileOnly: true, transpiler: 'ts-node/transpilers/swc-experimental'});
-
+require('../build');
 const path = require('path');
 const fs = require('fs');
 

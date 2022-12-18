@@ -22,12 +22,9 @@ function shell(cmd) {
 
 // Check to make sure the most recently added or updated dependency is installed at the correct version
 try {
-	var sucraseVersion = require('sucrase').getVersion().split('.');
-	if (
-		parseInt(sucraseVersion[0]) < 3 ||
-		(parseInt(sucraseVersion[0]) === 3 && parseInt(sucraseVersion[1]) < 15)
-	) {
-		throw new Error("Sucrase version too old");
+	var version = require('esbuild').version.split('.');
+	if (parseInt(version[1]) < 16) {
+		throw new Error("esbuild version too old");
 	}
 } catch (e) {
 	console.log('Installing dependencies...');

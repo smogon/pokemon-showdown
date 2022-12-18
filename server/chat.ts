@@ -152,7 +152,6 @@ const BROADCAST_TOKEN = '!';
 
 const PLUGIN_DATABASE_PATH = './databases/chat-plugins.db';
 const MAX_PLUGIN_LOADING_DEPTH = 3;
-const VALID_PLUGIN_ENDINGS = ['.jsx', '.tsx', '.js', '.ts'];
 
 import {formatText, linkRegex, stripFormatting} from './chat-formatter';
 
@@ -1707,7 +1706,7 @@ export const Chat = new class {
 			const languageID = Dex.toID(dirname);
 			const files = await dir.readdir();
 			for (const filename of files) {
-				if (!filename.endsWith('.ts')) continue;
+				if (!filename.endsWith('.js')) continue;
 
 				const content: Translations = require(`${TRANSLATION_DIRECTORY}/${dirname}/${filename}`).translations;
 
@@ -1926,7 +1925,7 @@ export const Chat = new class {
 	}
 
 	loadPluginFile(file: string) {
-		if (!VALID_PLUGIN_ENDINGS.some(ext => file.endsWith(ext))) return;
+		if (!file.endsWith('.js')) return;
 		this.loadPlugin(require(file), this.getPluginName(file));
 	}
 
@@ -1990,6 +1989,9 @@ export const Chat = new class {
 		return commandTable;
 	}
 	loadPlugin(plugin: AnyObject, name: string) {
+		// esbuild builds cjs exports in such a way that they use getters, leading to crashes
+		// in the plugin.roomSettings = [plugin.roomSettings] action. So, we have to make them not gettes
+		plugin = {...plugin};
 		if (plugin.commands) {
 			Object.assign(Chat.commands, this.annotateCommands(plugin.commands));
 		}

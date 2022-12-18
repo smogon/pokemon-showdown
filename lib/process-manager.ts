@@ -112,7 +112,7 @@ export class QueryProcessWrapper<T, U> implements ProcessWrapper {
 	file: string;
 
 	constructor(file: string, messageCallback?: (message: string) => any) {
-		this.process = child_process.fork(file, [], {cwd: ROOT_DIR, execArgv: ['-r', 'ts-node/register']});
+		this.process = child_process.fork(file, [], {cwd: ROOT_DIR});
 		this.taskId = 0;
 		this.file = file;
 		this.pendingTasks = new Map();
@@ -231,7 +231,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 	messageCallback?: (message: string) => any;
 
 	constructor(file: string, messageCallback?: (message: string) => any) {
-		this.process = child_process.fork(file, [], {cwd: ROOT_DIR, execArgv: ['-r', 'ts-node/register']});
+		this.process = child_process.fork(file, [], {cwd: ROOT_DIR});
 		this.messageCallback = messageCallback;
 
 		this.process.on('message', (message: string) => {
@@ -370,7 +370,7 @@ export class RawProcessWrapper implements ProcessWrapper, StreamWorker {
 			this.process = cluster.fork(env);
 			this.workerid = this.process.id;
 		} else {
-			this.process = child_process.fork(file, [], {cwd: ROOT_DIR, env, execArgv: ['-r', 'ts-node/register']}) as any;
+			this.process = child_process.fork(file, [], {cwd: ROOT_DIR, env}) as any;
 		}
 
 		this.process.on('message', (message: string) => {
@@ -722,7 +722,6 @@ export class RawProcessManager extends ProcessManager<RawProcessWrapper> {
 				exec: this.filename,
 				// @ts-ignore TODO: update type definition
 				cwd: ROOT_DIR,
-				execArgv: ['-r', 'ts-node/register'],
 			});
 		}
 

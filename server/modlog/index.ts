@@ -107,7 +107,7 @@ export class Modlog {
 		}
 		this.database = SQL(module, {
 			file: databasePath,
-			extension: 'server/modlog/transactions.ts',
+			extension: 'server/modlog/transactions.js',
 			...options,
 		});
 

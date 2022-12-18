@@ -103,8 +103,6 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 
 	constructor(data: AnyObject) {
 		super(data);
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		data = this;
 
 		this.fullname = `item: ${this.name}`;
 		this.effectType = 'Item';
