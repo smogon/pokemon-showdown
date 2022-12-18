@@ -620,7 +620,11 @@ export class Condition extends BasicEffect implements
 
 	constructor(data: AnyObject) {
 		super(data);
+		for (const k in data) {
+			if (!(this as any)[k]) (this as any)[k] = data[k];
+		}
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
+		data = this;
 		this.effectType = (['Weather', 'Status'].includes(data.effectType) ? data.effectType : 'Condition');
 	}
 }
