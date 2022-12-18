@@ -210,7 +210,7 @@ NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,
 
 - `DYNAMAXLEVEL` is left blank for 10.
 
-- `TERATYPE` if left blank will default to the pokemon's first type.
+- `TERATYPE` if left blank, it will default to the pokemon's first type.
 
 - If `POKEBALL`, `HIDDENPOWERTYPE`, `GIGANTAMAX`, `DYNAMAXLEVEL` and `TERATYPE`
   are all blank, the commas will be left off.
