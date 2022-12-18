@@ -157,11 +157,12 @@ export class RandomTeams {
 			Fire: (movePool, moves, abilities, types, counter, species) => !counter.get('Fire'),
 			Flying: (movePool, moves, abilities, types, counter) => !counter.get('Flying'),
 			Ghost: (movePool, moves, abilities, types, counter) => !counter.get('Ghost'),
-			Grass: (movePool, moves, abilities, types, counter, species) => {
-				if (movePool.includes('leafstorm')) return true;
-				return !counter.get('Grass') &&
-					(species.baseStats.atk >= 100 || types.includes('Electric') || abilities.has('Seed Sower'));
-			},
+			Grass: (movePool, moves, abilities, types, counter, species) => (
+				!counter.get('Grass') && (
+					movePool.includes('leafstorm') || species.baseStats.atk >= 100 ||
+					types.includes('Electric') || abilities.has('Seed Sower')
+				)
+			),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
 			Normal: (movePool, moves, abilities, types, counter) => (movePool.includes('boomburst')),
@@ -842,8 +843,8 @@ export class RandomTeams {
 		role: string,
 	): boolean {
 		if ([
-			'Battle Bond', 'Flare Boost', 'Gluttony', 'Harvest', 'Hydration', 'Ice Body', 'Immunity',
-			'Own Tempo', 'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
+			'Armor Tail', 'Battle Bond', 'Flare Boost', 'Gluttony', 'Harvest', 'Hydration', 'Ice Body',
+			'Immunity', 'Own Tempo', 'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
 		].includes(ability)) return true;
 
 		switch (ability) {
@@ -1204,7 +1205,7 @@ export class RandomTeams {
 			(species.baseStats.hp + species.baseStats.def + species.baseStats.spd) < 300
 		) return 'Focus Sash';
 		if (
-			role !== 'Fast Attacker' && role !== 'Tera Blast user' &&
+			role !== 'Fast Attacker' && role !== 'Tera Blast user' && ability !== 'Levitate' &&
 			this.dex.getEffectiveness('Ground', species) >= 2
 		) return 'Air Balloon';
 		if (['Bulky Attacker', 'Bulky Support', 'Bulky Setup'].some(m => role === (m))) return 'Leftovers';
