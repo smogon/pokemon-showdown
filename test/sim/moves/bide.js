@@ -107,4 +107,16 @@ describe('Bide [Gen 1]', function () {
 			assert.equal(aerodactyl.volatiles['bide'].time, 2);
 		}
 	});
+
+	it("Bide's duration is paused when disabled", function () {
+		battle = common.gen(1).createBattle({seed: [1, 1, 1, 0]});
+		battle.setPlayer('p1', {team: [{species: "Aerodactyl", moves: ['bide']}]});
+		battle.setPlayer('p2', {team: [{species: "Voltorb", moves: ['disable']}]});
+		const aerodactyl = battle.p1.active[0];
+		battle.makeChoices();
+		assert.equal(aerodactyl.volatiles['bide'].time, 3);
+		assert(aerodactyl.volatiles['disable'].time > 1);
+		battle.makeChoices();
+		assert.equal(aerodactyl.volatiles['bide'].time, 3);
+	});
 });

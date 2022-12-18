@@ -41,10 +41,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-start', pokemon, 'Bide');
 			},
 			onBeforeMove(pokemon, t, move) {
+				const currentMove = this.dex.getActiveMove('bide');
+				if (pokemon.volatiles['disable']?.move === 'bide') {
+					this.add('cant', pokemon, 'Disable', currentMove);
+					return false;
+				}
 				this.effectState.damage += this.lastDamage;
 				this.effectState.time--;
 				if (!this.effectState.time) {
-					this.add('-end', pokemon, 'Bide');
+					this.add('-end', pokemon, currentMove);
 					if (!this.effectState.damage) {
 						this.debug("Bide failed because no damage was stored");
 						this.add('-fail', pokemon);
@@ -52,22 +57,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						return false;
 					}
 					const target = this.getRandomTarget(pokemon, 'Pound');
-					this.actions.moveHit(target, pokemon, move, {damage: this.effectState.damage * 2} as ActiveMove);
+					this.actions.moveHit(target, pokemon, currentMove, {damage: this.effectState.damage * 2} as ActiveMove);
 					pokemon.removeVolatile('bide');
 					return false;
 				}
 				this.add('-activate', pokemon, 'Bide');
 				return false;
-			},
-			onDisableMove(pokemon) {
-				if (!pokemon.hasMove('bide')) {
-					return;
-				}
-				for (const moveSlot of pokemon.moveSlots) {
-					if (moveSlot.id !== 'bide') {
-						pokemon.disableMove(moveSlot.id);
-					}
-				}
 			},
 		},
 		type: "???", // Will look as Normal but it's STAB-less
