@@ -2553,6 +2553,18 @@ export class Battle {
 				}
 			}
 			break;
+		case 'revivalblessing':
+			action.pokemon.side.pokemonLeft++;
+			if (action.target.position < action.pokemon.side.active.length) action.target.isActive = true;
+			action.target.fainted = false;
+			action.target.faintQueued = false;
+			action.target.subFainted = false;
+			action.target.status = '';
+			action.target.hp = 1; // Needed so hp functions works
+			action.target.sethp(action.pokemon.maxhp / 2);
+			this.add('-heal', action.target, action.target.getHealth, '[from] move: Revival Blessing');
+			action.pokemon.side.removeSlotCondition(action.pokemon, 'revivalblessing');
+			break;
 		case 'runUnnerve':
 			this.singleEvent('PreStart', action.pokemon.getAbility(), action.pokemon.abilityState, action.pokemon);
 			break;
