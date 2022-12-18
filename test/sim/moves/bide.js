@@ -115,6 +115,7 @@ describe('Bide [Gen 1]', function () {
 		const aerodactyl = battle.p1.active[0];
 		battle.makeChoices();
 		assert.equal(aerodactyl.volatiles['bide'].time, 3);
+		assert(aerodactyl.volatiles['disable'].move === 'bide');
 		assert(aerodactyl.volatiles['disable'].time > 1);
 		battle.makeChoices();
 		assert.equal(aerodactyl.volatiles['bide'].time, 3);
