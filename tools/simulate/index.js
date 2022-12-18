@@ -36,7 +36,7 @@ if (process.argv[2]) {
 	}
 }
 
-require('../../build');
+require('child_process').execSync('node ' + __dirname + "/../../build");
 const Dex = require('../../sim/dex').Dex;
 global.Config = {allowrequestingties: false};
 Dex.includeModData();
