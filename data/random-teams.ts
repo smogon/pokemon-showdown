@@ -165,7 +165,10 @@ export class RandomTeams {
 			),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
-			Normal: (movePool, moves, abilities, types, counter) => (movePool.includes('boomburst')),
+			Normal: (movePool, moves, abilities, types, counter) => {
+				if (movePool.includes('boomburst')) return true;
+				return (!counter.get('Normal') && movePool.includes('futuresight'));
+			},
 			Poison: (movePool, moves, abilities, types, counter) => {
 				if (types.includes('Ground')) return false;
 				return !counter.get('Poison');
@@ -177,7 +180,7 @@ export class RandomTeams {
 			},
 			Rock: (movePool, moves, abilities, types, counter, species) => !counter.get('Rock') && species.baseStats.atk >= 80,
 			Steel: (movePool, moves, abilities, types, counter, species) => {
-				if (species.baseStats.atk < 95) return false;
+				if (species.baseStats.atk < 95 && !movePool.includes('makeitrain')) return false;
 				return !counter.get('Steel');
 			},
 			Water: (movePool, moves, abilities, types, counter, species) => {
@@ -507,6 +510,8 @@ export class RandomTeams {
 		}
 		// Magnezone
 		this.incompatibleMoves(moves, movePool, magnezoneMoves, magnezoneMoves);
+		// Amoonguss, though this can work well as a general rule later
+		this.incompatibleMoves(moves, movePool, 'toxic', 'clearsmog');
 	}
 
 	// Checks for and removes incompatible moves, starting with the first move in movesA.
