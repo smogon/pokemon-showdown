@@ -51,10 +51,4 @@ exports.buildDecls = () => {
 	try {
 		child_process.execSync(`node ./node_modules/typescript/bin/tsc -p sim`, {stdio: 'inherit'});
 	} catch {}
-	for (const file of fs.readdirSync(`./.sim-dist/lib/`)) {
-		fs.renameSync(`./.sim-dist/lib/${file}`, `./.lib-dist/${file}`);
-	}
-	for (const file of fs.readdirSync(`./.sim-dist/sim/`)) {
-		fs.renameSync(`./.sim-dist/sim/${file}`, `./.sim-dist/${file}`);
-	}
 };
