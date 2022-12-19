@@ -6,8 +6,8 @@
 'use strict';
 
 const assert = require('assert').strict;
-const IPTools = require('../../server/ip-tools').IPTools;
-const Utils = require('../../lib/utils').Utils;
+const IPTools = require('../../dist/server/ip-tools').IPTools;
+const Utils = require('../../dist/lib/utils').Utils;
 
 describe("IP tools", () => {
 	it('should resolve 127.0.0.1 to localhost', async () => {

@@ -15,7 +15,7 @@ class ArtemisStream extends Streams.ObjectReadWriteStream<string> {
 	constructor() {
 		super();
 		this.process = child_process.spawn('python3', [
-			'-u', __dirname + '/model.py', Config.debugartemisprocesses ? "debug" : "",
+			'-u', __dirname.replace('/dist', '') + '/model.py', Config.debugartemisprocesses ? "debug" : "",
 		].filter(Boolean));
 		this.listen();
 	}

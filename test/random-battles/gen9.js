@@ -5,12 +5,12 @@
 
 const {testTeam} = require('./tools');
 const assert = require('../assert');
-const Teams = require('./../../sim/teams').Teams;
-const Dex = require('./../../sim/dex').Dex;
+const Teams = require('./../../dist/sim/teams').Teams;
+const Dex = require('./../../dist/sim/dex').Dex;
 
 describe('[Gen 9] Random Battle', () => {
 	const options = {format: 'gen9randombattle'};
-	const setsJSON = require(`../../data/random-sets.json`);
+	const setsJSON = require(`../../dist/data/random-sets.json`);
 	const dex = Dex.forFormat(options.format);
 
 	it('all Pokemon should have 4 moves, except for Ditto (slow)', function () {

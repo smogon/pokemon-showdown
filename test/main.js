@@ -36,7 +36,7 @@ config.fakeladder = false;
 // Don't log monitor messages to the console (necessary so that chat monitor tests don't clog up stdout)
 config.loglevel = 3;
 
-require('./../lib/process-manager').ProcessManager.disabled = true;
+require('./../dist/lib/process-manager').ProcessManager.disabled = true;
 
 // stop chatrooms from loading through modifying the require cache
 try {
@@ -45,7 +45,7 @@ try {
 } catch {}
 
 // Don't create a REPL
-require('../lib/repl').Repl.start = noop;
+require('../dist/lib/repl').Repl.start = noop;
 
 // Start the server.
 // NOTE: This used "server" before when we needed "server"

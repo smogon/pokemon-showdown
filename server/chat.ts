@@ -2045,7 +2045,7 @@ export const Chat = new class {
 
 		Chat.commands = Object.create(null);
 		Chat.pages = Object.create(null);
-		this.loadPluginDirectory('server/chat-commands');
+		this.loadPluginDirectory('dist/server/chat-commands');
 		Chat.baseCommands = Chat.commands;
 		Chat.basePages = Chat.pages;
 		Chat.commands = Object.assign(Object.create(null), Chat.baseCommands);
@@ -2055,7 +2055,7 @@ export const Chat = new class {
 		this.loadPlugin(Config, 'config');
 		this.loadPlugin(Tournaments, 'tournaments');
 
-		this.loadPluginDirectory('server/chat-plugins');
+		this.loadPluginDirectory('dist/server/chat-plugins');
 		Chat.oldPlugins = {};
 		// lower priority should run later
 		Utils.sortBy(Chat.filters, filter => -(filter.priority || 0));
