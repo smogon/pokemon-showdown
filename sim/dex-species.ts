@@ -237,6 +237,10 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 
 	constructor(data: AnyObject) {
 		super(data);
+		// FIXME: These shouldn't be necessary, Object.assign in the super should serve this purpose but doesn't
+		// > mia — Today at 10:11 AM
+		// > and all i found was inside the basiceffect constructor, everything was fine
+		// > but in the species/etc constructor after super(), all the data became {[key]: undefined}
 		for (const k in data) {
 			if (!(this as any)[k]) (this as any)[k] = data[k];
 		}

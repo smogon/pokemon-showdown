@@ -1990,7 +1990,7 @@ export const Chat = new class {
 	}
 	loadPlugin(plugin: AnyObject, name: string) {
 		// esbuild builds cjs exports in such a way that they use getters, leading to crashes
-		// in the plugin.roomSettings = [plugin.roomSettings] action. So, we have to make them not gettes
+		// in the plugin.roomSettings = [plugin.roomSettings] action. So, we have to make them not getters
 		plugin = {...plugin};
 		if (plugin.commands) {
 			Object.assign(Chat.commands, this.annotateCommands(plugin.commands));
