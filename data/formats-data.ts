@@ -3769,7 +3769,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "UU",
 	},
 	rufflet: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	braviary: {
 		tier: "UU",
