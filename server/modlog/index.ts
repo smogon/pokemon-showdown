@@ -17,7 +17,7 @@ const LONG_QUERY_DURATION = 2000;
 const MODLOG_SCHEMA_PATH = 'databases/schemas/modlog.sql';
 const MODLOG_V2_MIGRATION_PATH = 'databases/migrations/modlog/v2.sql';
 
-export const MODLOG_DB_PATH = Config.nofswriting ? ':memory:' : `${__dirname}/../../databases/modlog.db`;
+export const MODLOG_DB_PATH = Config.nofswriting ? ':memory:' : `${__dirname}/../../../databases/modlog.db`;
 
 const GLOBAL_PUNISHMENTS = [
 	'WEEKLOCK', 'LOCK', 'BAN', 'RANGEBAN', 'RANGELOCK', 'FORCERENAME',

@@ -34,7 +34,7 @@ function readTeam(stream) {
 }
 
 function ensureBuilt() {
-	if (!fs.existsSync('./server/index.js')) {
+	if (!fs.existsSync('./dist')) {
 		build();
 	}
 }
@@ -46,8 +46,8 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	// when launching with this file the same way app.js normally allows, e.g. to
 	// host on port 9000:
 	// $ ./pokemon-showdown 9000
-	ensureBuilt();
-	require('module')._load('./server/index.js', module, true);
+	build();
+	require('module')._load('./dist/server/index.js', module, true);
 } else {
 	switch (process.argv[2]) {
 	case 'help':
@@ -97,8 +97,8 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	case 'start':
 	{
 		process.argv.splice(2, 1);
-		ensureBuilt();
-		require('module')._load('./server', module, true);
+		build();
+		require('module')._load('./dist/server/index.js', module, true);
 		break;
 	}
 	case 'generate-team':

@@ -30,7 +30,7 @@ function bash(command: string, context: Chat.CommandContext, cwd?: string): Prom
 	context.stafflog(`$ ${command}`);
 	return new Promise(resolve => {
 		child_process.exec(command, {
-			cwd: cwd || `${__dirname}/../..`,
+			cwd: cwd || `${__dirname}/../../..`,
 		}, (error, stdout, stderr) => {
 			let log = `[o] ${stdout}[e] ${stderr}`;
 			if (error) log = `[c] ${error.code}\n${log}`;
@@ -886,8 +886,9 @@ export const commands: Chat.ChatCommands = {
 		const processes = new Map<string, ProcessData>();
 		const ramUnits = ["KiB", "MiB", "GiB", "TiB"];
 
+		const cwd = `${__dirname}/../../..`;
 		await new Promise<void>(resolve => {
-			const child = child_process.exec('ps -o pid,%cpu,time,rss,command', {cwd: `${__dirname}/../..`}, (err, stdout) => {
+			const child = child_process.exec('ps -o pid,%cpu,time,rss,command', {cwd}, (err, stdout) => {
 				if (err) throw err;
 				const rows = stdout.split('\n').slice(1); // first line is the table header
 				for (const row of rows) {
@@ -1313,7 +1314,7 @@ export const commands: Chat.ChatCommands = {
 			if (target !== 'public' && validPrivateCodePath) {
 				success = await updateserver(this, Config.privatecodepath);
 			}
-			success = success && await updateserver(this, path.resolve(`${__dirname}/../..`));
+			success = success && await updateserver(this, path.resolve(`${__dirname}/../../..`));
 			this.addGlobalModAction(`${user.name} used /updateserver${target === 'public' ? ' public' : ''}`);
 		}
 

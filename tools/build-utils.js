@@ -15,7 +15,7 @@ function shell(cmd, ignoreErrors) {
 exports.transpile = (decl) => {
 	shell(
 		'git ls-files "*.ts" "*.tsx" | grep -v global |' +
-		'xargs node_modules/.bin/esbuild --log-level=error --outbase=. --outdir=. --format=cjs'
+		'xargs node_modules/.bin/esbuild --log-level=error --outbase=. --outdir=./dist --format=cjs'
 	);
 
 	const gitignored = ['./server/chat-plugins/private'];
@@ -23,7 +23,7 @@ exports.transpile = (decl) => {
 		if (fs.existsSync(path)) {
 			shell([
 				`find ${path}`, `grep -F ".ts"`, `grep -vF ".d.ts"`, `grep -v global`,
-				`xargs node_modules/.bin/esbuild --log-level=error --outbase=${path} --outdir=${path} --format=cjs`,
+				`xargs node_modules/.bin/esbuild --log-level=error --outbase=${path} --outdir=./dist/${path} --format=cjs`,
 			].join(' | '), true);
 		}
 	}

@@ -17,7 +17,7 @@ import * as Streams from './streams';
 type ChildProcess = child_process.ChildProcess;
 type Worker = cluster.Worker;
 
-const ROOT_DIR = path.resolve(__dirname, '..');
+const ROOT_DIR = path.resolve(__dirname, '..', '..');
 
 export const processManagers: ProcessManager[] = [];
 

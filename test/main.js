@@ -49,7 +49,7 @@ require('../lib/repl').Repl.start = noop;
 
 // Start the server.
 // NOTE: This used "server" before when we needed "server"
-require('../server');
+require('../dist/server');
 
 LoginServer.disabled = true;
 Ladders.disabled = true;
