@@ -2233,7 +2233,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["Aura Sphere", "Dark Pulse", "Dragon Pulse", "Hydro Pump", "U-turn"],
+                "movepool": ["Aura Sphere", "Dark Pulse", "Dragon Pulse", "U-turn", "Water Pulse"],
                 "teraTypes": ["Dark", "Dragon", "Fighting"]
             }
         ]
