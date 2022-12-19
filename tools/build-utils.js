@@ -12,6 +12,17 @@ function shell(cmd, ignoreErrors) {
 	}
 }
 
+const copyOverDataJSON = (file = 'data') => {
+	const files = fs.readdirSync(file);
+	for (const f of files) {
+		if (fs.statSync(`${file}/${f}`).isDirectory()) {
+			copyOverDataJSON(`${file}/${f}`);
+		} else if (f.endsWith('.json')) {
+			fs.copyFileSync(`${file}/${f}`, require('path').resolve('dist', `${file}/${f}`));
+		}
+	}
+};
+
 exports.transpile = (decl) => {
 	shell(
 		'git ls-files "*.ts" "*.tsx" | grep -v global |' +
@@ -27,6 +38,8 @@ exports.transpile = (decl) => {
 			].join(' | '), true);
 		}
 	}
+	fs.copyFileSync('./config/config-example.js', './dist/config/config-example.js');
+	copyOverDataJSON();
 
 	// NOTE: replace is asynchronous - add additional replacements for the same path in one call instead of making multiple calls.
 	if (decl) {
