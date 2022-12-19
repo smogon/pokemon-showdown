@@ -13,7 +13,7 @@ import * as path from 'path';
 
 const CRASH_EMAIL_THROTTLE = 5 * 60 * 1000; // 5 minutes
 
-const logPath = path.resolve(__dirname, '../logs/errors.txt');
+const logPath = path.resolve(__dirname, '../', __dirname.includes('/dist/') ? '..' : '', 'logs/errors.txt');
 let lastCrashLog = 0;
 let transport: any;
 

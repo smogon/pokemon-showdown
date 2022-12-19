@@ -28,10 +28,9 @@ function hasDevAuth(user: User) {
 
 function bash(command: string, context: Chat.CommandContext, cwd?: string): Promise<[number, string, string]> {
 	context.stafflog(`$ ${command}`);
+	if (!cwd) cwd = FS('.').path;
 	return new Promise(resolve => {
-		child_process.exec(command, {
-			cwd: cwd || `${__dirname}/../../..`,
-		}, (error, stdout, stderr) => {
+		child_process.exec(command, {cwd}, (error, stdout, stderr) => {
 			let log = `[o] ${stdout}[e] ${stderr}`;
 			if (error) log = `[c] ${error.code}\n${log}`;
 			context.stafflog(log);
@@ -886,7 +885,7 @@ export const commands: Chat.ChatCommands = {
 		const processes = new Map<string, ProcessData>();
 		const ramUnits = ["KiB", "MiB", "GiB", "TiB"];
 
-		const cwd = `${__dirname}/../../..`;
+		const cwd = FS('.').path;
 		await new Promise<void>(resolve => {
 			const child = child_process.exec('ps -o pid,%cpu,time,rss,command', {cwd}, (err, stdout) => {
 				if (err) throw err;
@@ -1314,7 +1313,7 @@ export const commands: Chat.ChatCommands = {
 			if (target !== 'public' && validPrivateCodePath) {
 				success = await updateserver(this, Config.privatecodepath);
 			}
-			success = success && await updateserver(this, path.resolve(`${__dirname}/../../..`));
+			success = success && await updateserver(this, FS('.').path);
 			this.addGlobalModAction(`${user.name} used /updateserver${target === 'public' ? ' public' : ''}`);
 		}
 

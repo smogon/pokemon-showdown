@@ -26,7 +26,7 @@ import * as pathModule from 'path';
 import {ReadStream, WriteStream} from './streams';
 
 // account for pwd/dist/lib
-const ROOT_PATH = pathModule.resolve(__dirname, '..', '..');
+const ROOT_PATH = pathModule.resolve(__dirname, __dirname.includes('/dist/') ? '..' : '', '..');
 
 interface PendingUpdate {
 	isWriting: boolean; // true: waiting on a call to FS.write, false: waiting on a throttle

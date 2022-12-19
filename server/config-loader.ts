@@ -144,10 +144,11 @@ export function cacheGroupData(config: ConfigType) {
 
 export function checkRipgrepAvailability() {
 	if (Config.ripgrepmodlog === undefined) {
+		const cwd = FS('.').path;
 		Config.ripgrepmodlog = (async () => {
 			try {
-				await ProcessManager.exec(['rg', '--version'], {cwd: `${__dirname}/../`});
-				await ProcessManager.exec(['tac', '--version'], {cwd: `${__dirname}/../`});
+				await ProcessManager.exec(['rg', '--version'], {cwd});
+				await ProcessManager.exec(['tac', '--version'], {cwd});
 				return true;
 			} catch {
 				return false;

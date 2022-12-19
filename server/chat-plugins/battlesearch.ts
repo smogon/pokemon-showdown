@@ -276,7 +276,7 @@ async function rustBattleSearch(
 		const day = date.getDate().toString().padStart(2, '0');
 
 		directories.push(
-			path.join(__dirname, '..', '..', '..', 'logs', `${year}-${month}`, format, `${year}-${month}-${day}`)
+			FS(path.join('logs', `${year}-${month}`, format, `${year}-${month}-${day}`)).path
 		);
 	}
 

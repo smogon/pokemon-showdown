@@ -73,7 +73,11 @@ export const Repl = new class {
 		if (filename === 'app') {
 			// Clean up old REPL sockets.
 			const directory = path.dirname(
-				path.resolve(__dirname, '..', '..', config.replsocketprefix || 'logs/repl', 'app')
+				path.resolve(__dirname,
+					'..',
+					__dirname.includes('/dist/') ? '..' : '',
+					config.replsocketprefix || 'logs/repl',
+					'app')
 			);
 			let files;
 			try {
