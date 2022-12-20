@@ -132,6 +132,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		evoType: "levelExtra",
 		evoCondition: "near a special magnetic field",
 	},
+	crabominable: {
+		inherit: true,
+		evoType: "levelExtra",
+		evoCondition: "at Mount Lanakila",
+	},
 	lycanroc: {
 		inherit: true,
 		evoCondition: "in Pokemon Sun/Ultra Sun",
