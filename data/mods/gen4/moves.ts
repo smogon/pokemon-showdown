@@ -178,6 +178,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		recoil: [1, 3],
 	},
+	brickbreak: {
+		inherit: true,
+		ignoreImmunity: true,
+		onTryHit(target, pokemon) {
+			target.side.removeSideCondition('reflect');
+			target.side.removeSideCondition('lightscreen');
+			if (!target.runImmunity('Fighting')) {
+				this.hint('In generation 4, Brick Break still breaks screens even if the target is immune.');
+				return false;
+			}
+		},
+	},
 	bulletseed: {
 		inherit: true,
 		basePower: 10,
