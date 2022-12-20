@@ -33,7 +33,7 @@ exports.transpile = (decl) => {
 	for (const path of gitignored) {
 		if (fs.existsSync(path)) {
 			shell([
-				`find ${path}`, `grep -F ".ts"`, `grep -vF ".d.ts"`, `grep -v global`,
+				`find ${path}`, `grep "\\.[tj]s\\b"`, `grep -vF ".d.ts"`, `grep -v "node_modules"`, `grep -v global`,
 				`xargs node_modules/.bin/esbuild --log-level=error --outbase=${path} --outdir=./dist/${path} --format=cjs`,
 			].join(' | '), true);
 		}

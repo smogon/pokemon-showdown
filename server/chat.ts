@@ -161,7 +161,7 @@ const probe: (url: string) => Promise<{width: number, height: number}> = ProbeMo
 
 const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
 
-const TRANSLATION_DIRECTORY = FS('./translations').path;
+const TRANSLATION_DIRECTORY = pathModule.resolve(__dirname, '..', 'translations');
 
 class PatternTester {
 	// This class sounds like a RegExp
