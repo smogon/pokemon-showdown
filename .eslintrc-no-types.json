@@ -11,6 +11,7 @@
     "logs/",
     "node_modules/",
     ".*-dist/",
+    "dist/",
     "tools/set-import/importer.js",
     "tools/set-import/sets",
     "tools/modlog/converter.js",
