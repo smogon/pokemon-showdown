@@ -3,9 +3,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		priority: 0,
 		accuracy: true,
-		ignoreEvasion: true,
 		condition: {
-			duration: 2,
 			durationCallback(target, source, effect) {
 				return this.random(3, 5);
 			},
