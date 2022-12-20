@@ -1,11 +1,12 @@
 "use strict";
 
 const fs = require("fs");
+const pathModule = require('path');
 const child_process = require("child_process");
 
 function shell(cmd, ignoreErrors) {
 	try {
-		return child_process.execSync(cmd).toString();
+		return child_process.execSync(cmd, {cwd: pathModule.resolve(__dirname, '..')}).toString();
 	} catch (e) {
 		if (ignoreErrors) return '';
 		throw new Error([e.message, e.stderr, e.stdout].join('\n'));
@@ -26,7 +27,8 @@ const copyOverDataJSON = (file = 'data') => {
 exports.transpile = (decl) => {
 	shell(
 		'git ls-files "*.ts" "*.tsx" | grep -v global |' +
-		'xargs node_modules/.bin/esbuild --log-level=error --outbase=. --outdir=./dist --format=cjs'
+		'xargs node_modules/.bin/esbuild --log-level=error --outbase=. --outdir=./dist ' +
+		`--format=cjs --tsconfig=./tsconfig.json`
 	);
 
 	const gitignored = ['./server/chat-plugins/private'];
@@ -34,7 +36,8 @@ exports.transpile = (decl) => {
 		if (fs.existsSync(path)) {
 			shell([
 				`find ${path}`, `grep "\\.[tj]s\\b"`, `grep -vF ".d.ts"`, `grep -v "node_modules"`, `grep -v global`,
-				`xargs node_modules/.bin/esbuild --log-level=error --outbase=${path} --outdir=./dist/${path} --format=cjs`,
+				`xargs node_modules/.bin/esbuild --log-level=error --outbase=${path} --outdir=./dist/${path} ` +
+				`--format=cjs --tsconfig=./tsconfig.json`,
 			].join(' | '), true);
 		}
 	}

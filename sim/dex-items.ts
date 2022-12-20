@@ -103,9 +103,6 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 
 	constructor(data: AnyObject) {
 		super(data);
-		for (const k in data) {
-			if (!(this as any)[k]) (this as any)[k] = data[k];
-		}
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		data = this;
 

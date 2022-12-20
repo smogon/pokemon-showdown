@@ -28,10 +28,9 @@ try {
 	}
 } catch (e) {
 	console.log('Installing dependencies...');
-	shell('npm install' + (decl ? '' : ' --production'));
-	force = true;
+	shell('npm install');
 }
-// for some reason, sucrase won't be requirable until a tick has passed
+// for some reason, esbuild won't be requirable until a tick has passed
 // see https://stackoverflow.com/questions/53270058/node-cant-find-certain-modules-after-synchronous-install
 setImmediate(() => {
 	require('./tools/build-utils').transpile(force, decl);

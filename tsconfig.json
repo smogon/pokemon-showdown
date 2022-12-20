@@ -14,7 +14,8 @@
         "checkJs": true,
         "incremental": true,
         "allowUnreachableCode": false,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "useDefineForClassFields": false
     },
     "types": ["node"],
     "exclude": [
