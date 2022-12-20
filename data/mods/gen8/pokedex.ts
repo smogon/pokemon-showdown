@@ -93,6 +93,9 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	sneasler: {
 		inherit: true,
 		abilities: {0: "Pressure", H: "Poison Touch"},
+		evoType: "useItem",
+		evoItem: "Razor Claw",
+		evoCondition: "during the day",
 	},
 	enamorus: {
 		inherit: true,
