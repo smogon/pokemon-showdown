@@ -4,20 +4,21 @@
  */
 import {FS, Utils} from '../../lib';
 
+type Image = [string, number, number];
 interface TourEvent {
 	title: string;
 	url: string;
 	desc: string;
-	image?: {url: string, dimensions: [number, number]};
+	image?: Image;
 	id: string;
-	shortdesc: string;
+	shortDesc: string;
 }
 
 interface TourTable {
 	title: string;
 	tours: TourEvent[];
 	whitelist?: string[];
-	icon?: [string, number, number];
+	icon?: Image;
 }
 
 export const tours: Record<string, TourTable> = {
@@ -57,19 +58,18 @@ function saveTours() {
 	FS('config/chat-plugins/smogtours.json').writeUpdate(() => JSON.stringify(tours));
 }
 
-function getTour(category: string, id: string) {
-	category = toID(category);
+function getTour(categoryID: ID, id: string) {
 	id = toID(id);
-	return tours?.[category].tours.find(f => f.id === id) || null;
+	return tours?.[categoryID].tours.find(f => f.id === id) || null;
 }
 
-function checkWhitelisted(category: string, user: User) {
+function checkWhitelisted(category: ID, user: User) {
 	return category ?
 		tours[category].whitelist?.includes(user.id) :
 		Object.values(tours).some(f => f.whitelist?.includes(user.id));
 }
 
-function checkCanEdit(user: User, context: Chat.PageContext | Chat.CommandContext, category?: string) {
+function checkCanEdit(user: User, context: Chat.PageContext | Chat.CommandContext, category?: ID) {
 	category = toID(category);
 	if (!checkWhitelisted(category, user)) {
 		context.checkCan('globalban');
@@ -86,7 +86,7 @@ export const commands: Chat.ChatCommands = {
 			const targets = target.split('|');
 			const isEdit = cmd === 'edit';
 			const tourID = isEdit ? toID(targets.shift()) : null;
-			// {title}|{category}|{url}|{img}|{shortdesc}|{desc}
+			// {title}|{category}|{url}|{img}|{shortDesc}|{desc}
 			const [
 				title, rawSection, url, rawImg, rawShort, rawDesc,
 			] = Utils.splitFirst(targets.join('|'), '|', 4).map(f => f.trim());
@@ -106,7 +106,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				try {
 					const dimensions = await Chat.fitImage(rawImg, 200, 200);
-					image = {url: rawImg, dimensions: dimensions.slice(0, 1) as [number, number]};
+					image = [rawImg, ...dimensions.slice(1)] as Image;
 				} catch (e) {
 					return this.popupReply(`Invalid image URL: ${rawImg}`);
 				}
@@ -115,14 +115,14 @@ export const commands: Chat.ChatCommands = {
 				return this.popupReply(`Must provide both a short description and a full description.`);
 			}
 			const tour: TourEvent = {
-				title, url, image, shortdesc: rawShort, desc: rawDesc, id: tourID || toID(title),
+				title, url, image, shortDesc: rawShort, desc: rawDesc, id: tourID || toID(title),
 			};
 			if (isEdit) {
-				const idx = section.tours.findIndex(t => t.id === tour.id);
-				if (idx < 0) {
+				const index = section.tours.findIndex(t => t.id === tour.id);
+				if (index < 0) {
 					return this.popupReply(`Tour not found. Create one first.`);
 				}
-				section.tours.splice(idx, 1);
+				section.tours.splice(index, 1);
 			}
 			section.tours.push(tour);
 			saveTours();
@@ -202,6 +202,7 @@ export const commands: Chat.ChatCommands = {
 	],
 };
 
+/** Wrapps `inner` in the necessary HTML to show a tab on the sidebar */
 function renderTab(inner: string, isTitle?: boolean, isCur?: boolean) {
 	isTitle = false;
 	let buf = '';
@@ -309,7 +310,7 @@ export const pages: Chat.PageTable = {
 			let buf = `${refresh(this.pageid)}<br />`;
 			buf += `<h2><a href="${tour.url}">${tour.title}</a></h2>`;
 			if (tour.image) {
-				buf += `<img src="${tour.image.url}" width="${tour.image.dimensions[0]}" height="${tour.image.dimensions[1]}" />`;
+				buf += `<img src="${tour.image[0]}" width="${tour.image[1]}" height="${tour.image[2]}" />`;
 			}
 			buf += `<hr />`;
 			buf += Utils.escapeHTML(tour.desc);
@@ -345,7 +346,7 @@ export const pages: Chat.PageTable = {
 				buf += category.tours.map(tour => {
 					let innerBuf = `<div class="infobox">`;
 					innerBuf += `<a href="/view-tournaments-view-${categoryID}-${tour.id}">${tour.title}</a><br />`;
-					innerBuf += Utils.escapeHTML(tour.shortdesc);
+					innerBuf += Utils.escapeHTML(tour.shortDesc);
 					return innerBuf;
 				}).join('<br />');
 			}
@@ -356,7 +357,7 @@ export const pages: Chat.PageTable = {
 			let buf = `${refresh(this.pageid)}<br />`;
 			this.title = '[Tournaments] Add';
 			buf += `<h2>Add new tournament</h2><hr />`;
-			buf += `<form data-submitsend="/smogtours add {title}|{category}|{url}|{img}|{shortdesc}|{desc}">`;
+			buf += `<form data-submitsend="/smogtours add {title}|{category}|{url}|{img}|{shortDesc}|{desc}">`;
 			let possibleCategory = Object.keys(tours)[0];
 			for (const k in tours) {
 				if (tours[k].whitelist?.includes(user.id)) {
@@ -372,7 +373,7 @@ export const pages: Chat.PageTable = {
 			buf += `</select><br />`;
 			buf += `Info link: <input name="url" /><br />`;
 			buf += `Image link (optional): <input name="img" /><br />`;
-			buf += `Short description: <br /><textarea name="shortdesc" rows="6" cols="50"></textarea><br />`;
+			buf += `Short description: <br /><textarea name="shortDesc" rows="6" cols="50"></textarea><br />`;
 			buf += `Full description: <br /><textarea name="desc" rows="20" cols="50"></textarea><br />`;
 			buf += `<button type="submit" class="button notifying">Create!</button></form>`;
 			return renderPageChooser('start', buf, user);
@@ -389,16 +390,16 @@ export const pages: Chat.PageTable = {
 			const tour = section.tours.find(t => t.id === tourID);
 			if (!tour) return error('edit', `Tour with ID "${tourID}" not found.`, user);
 			let buf = `${refresh(this.pageid)}<br /><h2>Edit tournament "${tour.title}"</h2><hr />`;
-			buf += `<form data-submitsend="/smogtours edit ${tour.id}|{title}|{category}|{url}|{img}|{shortdesc}|{desc}">`;
+			buf += `<form data-submitsend="/smogtours edit ${tour.id}|{title}|{category}|{url}|{img}|{shortDesc}|{desc}">`;
 			buf += `Title: <input name="title" value="${tour.title}"/><br />`;
 			buf += `Category: <select name="category">`;
 			const keys = Utils.sortBy(Object.keys(tours), k => [k === sectionID, k]);
 			buf += keys.map(k => `<option>${k}</option>`).join('');
 			buf += `</select><br />`;
 			buf += `Info link: <input name="url" value="${tour.url}" /><br />`;
-			buf += `Image link (optional): <input name="img" value="${tour.image?.url || ""}" /><br />`;
+			buf += `Image link (optional): <input name="img" value="${tour.image?.[0] || ""}" /><br />`;
 			buf += `Short description: <br />`;
-			buf += `<textarea name="shortdesc" rows="6" cols="50">${tour.shortdesc}</textarea><br />`;
+			buf += `<textarea name="shortDesc" rows="6" cols="50">${tour.shortDesc}</textarea><br />`;
 			buf += `Full description: <br /><textarea name="desc" rows="20" cols="50">${tour.desc}</textarea><br />`;
 			buf += `<button type="submit" class="button notifying">Update!</button>`;
 			return renderPageChooser('edit', buf, user);
@@ -411,7 +412,7 @@ export const pages: Chat.PageTable = {
 			buf += Object.keys(tours).map(cat => {
 				let innerBuf = '';
 				try {
-					checkCanEdit(user, this, cat);
+					checkCanEdit(user, this, toID(cat));
 				} catch {
 					return '';
 				}
