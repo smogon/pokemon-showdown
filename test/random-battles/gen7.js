@@ -107,3 +107,19 @@ describe('[Gen 7] Random Battle', () => {
 		});
 	});
 });
+
+describe('[Gen 7] Random Doubles Battle', () => {
+	const options = {format: 'gen7randomdoublesbattle'};
+
+	it("shouldn't give Manectric Intimidate before Mega Evolving", () => {
+		testSet('manectricmega', options, set => {
+			assert.notEqual(set.ability, 'Intimidate');
+		});
+	});
+
+	it("should give Mawile Intimidate before Mega Evolving", () => {
+		testSet('mawilemega', options, set => {
+			assert.equal(set.ability, 'Intimidate');
+		});
+	});
+});

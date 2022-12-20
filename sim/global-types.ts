@@ -131,7 +131,7 @@ type ModdedEffectData = EffectData | Partial<EffectData> & {inherit: true};
 
 type EffectType =
 	'Condition' | 'Pokemon' | 'Move' | 'Item' | 'Ability' | 'Format' |
-	'Nature' | 'Ruleset' | 'Weather' | 'Status' | 'Rule' | 'ValidatorRule';
+	'Nature' | 'Ruleset' | 'Weather' | 'Status' | 'Terastal' | 'Rule' | 'ValidatorRule';
 
 interface BasicEffect extends EffectData {
 	id: ID;
@@ -255,6 +255,7 @@ interface ModdedBattleActions {
 		this: BattleActions, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon,
 		move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
 	) => SpreadMoveDamage;
+	runSwitch?: (this: BattleActions, pokemon: Pokemon) => boolean;
 	runZPower?: (this: BattleActions, move: ActiveMove, pokemon: Pokemon) => void;
 	secondaries?: (
 		this: BattleActions, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
@@ -312,6 +313,9 @@ interface ModdedBattlePokemon {
 	clearBoosts?: (this: Pokemon) => void;
 	calculateStat?: (this: Pokemon, statName: StatIDExceptHP, boost: number, modifier?: number) => number;
 	cureStatus?: (this: Pokemon, silent?: boolean) => boolean;
+	deductPP?: (
+		this: Pokemon, move: string | Move, amount?: number | null, target?: Pokemon | null | false
+	) => number;
 	eatItem?: (this: Pokemon, force?: boolean, source?: Pokemon, sourceEffect?: Effect) => boolean;
 	formeChange?: (
 		this: Pokemon, speciesId: string | Species, source: Effect, isPermanent?: boolean, message?: string
@@ -434,6 +438,7 @@ interface TextFile extends TextObject {
 	gen5?: ModdedTextObject;
 	gen6?: ModdedTextObject;
 	gen7?: ModdedTextObject;
+	gen8?: ModdedTextObject;
 }
 
 interface MovePlines extends Plines {
@@ -457,7 +462,9 @@ interface MovePlines extends Plines {
 }
 
 interface AbilityText extends TextFile, Plines {
+	activateFromItem?: string;
 	activateNoTarget?: string;
+	copyBoost?: string;
 	transformEnd?: string;
 }
 
@@ -477,6 +484,7 @@ namespace RandomTeamsTypes {
 	export interface TeamDetails {
 		megaStone?: number;
 		zMove?: number;
+		snow?: number;
 		hail?: number;
 		rain?: number;
 		sand?: number;
@@ -490,6 +498,7 @@ namespace RandomTeamsTypes {
 		screens?: number;
 		illusion?: number;
 		statusCure?: number;
+		teraBlast?: number;
 	}
 	export interface FactoryTeamDetails {
 		megaCount?: number;
@@ -519,6 +528,8 @@ namespace RandomTeamsTypes {
 		happiness?: number;
 		dynamaxLevel?: number;
 		gigantamax?: boolean;
+		teraType?: string;
+		role?: string;
 	}
 	export interface RandomFactorySet {
 		name: string;

@@ -44,8 +44,10 @@ interface MoveFlags {
 	punch?: 1; // Power is multiplied by 1.2 when used by a Pokemon with the Ability Iron Fist.
 	recharge?: 1; // If this move is successful, the user must recharge on the following turn and cannot make a move.
 	reflectable?: 1; // Bounced back to the original user by Magic Coat or the Ability Magic Bounce.
+	slicing?: 1; // Power is multiplied by 1.5 when used by a Pokemon with the Ability Sharpness.
 	snatch?: 1; // Can be stolen from the original user and instead used by another Pokemon using Snatch.
 	sound?: 1; // Has no effect on Pokemon with the Ability Soundproof.
+	wind?: 1; // Activates the Wind Power and Wind Rider Abilities.
 }
 
 export interface HitEffect {
@@ -90,6 +92,8 @@ export interface MoveEventMethods {
 	beforeTurnCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon) => void;
 	damageCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon) => number | false;
 	priorityChargeCallback?: (this: Battle, pokemon: Pokemon) => void;
+
+	onDisableMove?: (this: Battle, pokemon: Pokemon) => void;
 
 	onAfterHit?: CommonHandlers['VoidSourceMove'];
 	onAfterSubDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
@@ -140,7 +144,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	type: string;
 	priority: number;
 	target: MoveTarget;
-	flags: AnyObject;
+	flags: MoveFlags;
 	/** Hidden Power */
 	realMove?: string;
 
@@ -178,7 +182,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	thawsTarget?: boolean;
 	heal?: number[] | null;
 	forceSwitch?: boolean;
-	selfSwitch?: string | boolean;
+	selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
 	selfBoost?: {boosts?: SparseBoostsTable};
 	selfdestruct?: 'always' | 'ifHit' | boolean;
 	breaksProtect?: boolean;
@@ -196,6 +200,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	secondary?: SecondaryEffect | null;
 	secondaries?: SecondaryEffect[] | null;
 	self?: SecondaryEffect | null;
+	hasSheerForce?: boolean;
 
 	// Hit effect modifiers
 	// --------------------
@@ -288,7 +293,8 @@ interface MoveHitData {
 }
 
 type MutableMove = BasicEffect & MoveData;
-export interface ActiveMove extends MutableMove {
+type RuinableMove = {[k in `ruined${'Atk' | 'Def' | 'SpA' | 'SpD'}`]?: Pokemon;};
+export interface ActiveMove extends MutableMove, RuinableMove {
 	readonly name: string;
 	readonly effectType: 'Move';
 	readonly id: ID;
@@ -298,12 +304,10 @@ export interface ActiveMove extends MutableMove {
 	hit: number;
 	moveHitData?: MoveHitData;
 	ability?: Ability;
-	aerilateBoosted?: boolean;
 	allies?: Pokemon[];
 	auraBooster?: Pokemon;
 	causedCrashDamage?: boolean;
 	forceStatus?: ID;
-	galvanizeBoosted?: boolean;
 	hasAuraBreak?: boolean;
 	hasBounced?: boolean;
 	hasSheerForce?: boolean;
@@ -312,18 +316,18 @@ export interface ActiveMove extends MutableMove {
 	lastHit?: boolean;
 	magnitude?: number;
 	negateSecondary?: boolean;
-	normalizeBoosted?: boolean;
-	pixilateBoosted?: boolean;
 	pranksterBoosted?: boolean;
-	refrigerateBoosted?: boolean;
 	selfDropped?: boolean;
-	selfSwitch?: ID | boolean;
+	selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
 	spreadHit?: boolean;
 	stab?: number;
 	statusRoll?: string;
 	totalDamage?: number | false;
+	typeChangerBoosted?: Effect;
 	willChangeForme?: boolean;
 	infiltrates?: boolean;
+	/** Should Order Up try its after-move boost effect?*/
+	orderUpBoost?: boolean;
 
 	/**
 	 * Has this move been boosted by a Z-crystal or used by a Dynamax Pokemon? Usually the same as
@@ -366,6 +370,11 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	 * secondary).
 	 */
 	readonly secondaries: SecondaryEffect[] | null;
+	/**
+	 * Moves manually boosted by Sheer Force that don't have secondary effects.
+	 * e.g. Jet Punch
+	 */
+	readonly hasSheerForce: boolean;
 	/**
 	 * Move priority. Higher priorities go before lower priorities,
 	 * trumping the Speed stat.
@@ -424,7 +433,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	};
 	readonly flags: MoveFlags;
 	/** Whether or not the user must switch after using this move. */
-	readonly selfSwitch?: ID | boolean;
+	readonly selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
 	/** Move target only used by Pressure. */
 	readonly pressureTarget: string;
 	/** Move target used if the user is not a Ghost type (for Curse). */
@@ -462,12 +471,13 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.effectType = 'Move';
 		this.type = Utils.getString(data.type);
 		this.target = data.target;
-		this.basePower = Number(data.basePower!);
+		this.basePower = Number(data.basePower);
 		this.accuracy = data.accuracy!;
 		this.critRatio = Number(data.critRatio) || 1;
 		this.baseMoveType = Utils.getString(data.baseMoveType) || this.type;
 		this.secondary = data.secondary || null;
 		this.secondaries = data.secondaries || (this.secondary && [this.secondary]) || null;
+		this.hasSheerForce = !!(data.hasSheerForce && !this.secondaries);
 		this.priority = Number(data.priority) || 0;
 		this.category = data.category!;
 		this.overrideOffensiveStat = data.overrideOffensiveStat || undefined;
@@ -479,7 +489,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.ignoreOffensive = !!data.ignoreOffensive;
 		this.ignoreDefensive = !!data.ignoreDefensive;
 		this.ignoreImmunity = (data.ignoreImmunity !== undefined ? data.ignoreImmunity : this.category === 'Status');
-		this.pp = Number(data.pp!);
+		this.pp = Number(data.pp);
 		this.noPPBoosts = !!data.noPPBoosts;
 		this.isZ = data.isZ || false;
 		this.isMax = data.isMax || false;
@@ -565,7 +575,10 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		}
 
 		if (!this.gen) {
-			if (this.num >= 743) {
+			// special handling for gen8 gmax moves (all of them have num 1000 but they are part of gen8)
+			if (this.num >= 827 && !this.isMax) {
+				this.gen = 9;
+			} else if (this.num >= 743) {
 				this.gen = 8;
 			} else if (this.num >= 622) {
 				this.gen = 7;

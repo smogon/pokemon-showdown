@@ -81,6 +81,8 @@ interface Handlers {
 	onBattleRanked: (
 		battle: Rooms.RoomBattle, winner: ID, ratings: (AnyObject | null | undefined)[], players: ID[]
 	) => void;
+	onRename: (user: User, oldID: ID, newID: ID) => void;
+	onTicketCreate: (ticket: import('./chat-plugins/helptickets').TicketState, user: User) => void;
 }
 
 export interface ChatPlugin {
@@ -138,7 +140,7 @@ const LINK_WHITELIST = [
 	'*.smogon.com', '*.pastebin.com', '*.hastebin.com',
 ];
 
-const MAX_MESSAGE_LENGTH = 300;
+const MAX_MESSAGE_LENGTH = 1000;
 
 const BROADCAST_COOLDOWN = 20 * 1000;
 const MESSAGE_COOLDOWN = 5 * 60 * 1000;
@@ -1794,6 +1796,9 @@ export const Chat = new class {
 	databaseReadyPromise: Promise<void> | null = null;
 
 	async prepareDatabase() {
+		// PLEASE NEVER ACTUALLY ADD MIGRATIONS
+		// things break in weird ways that are hard to reason about, probably because of subprocesses
+		// it WILL crash and it WILL make your life and that of your users extremely unpleasant until it is fixed
 		if (!PM.isParentProcess) return; // We don't need a database in a subprocess that requires Chat.
 		if (!Config.usesqlite) return;
 		// check if we have the db_info table, which will always be present unless the schema needs to be initialized
@@ -1814,14 +1819,17 @@ export const Chat = new class {
 		for (const migrationFile of (await FS(migrationsFolder).readdir())) {
 			const migrationVersion = parseInt(/v(\d+)\.sql$/.exec(migrationFile)?.[1] || '');
 			if (!migrationVersion) continue;
-			if (migrationVersion > curVersion) migrationsToRun.push({version: migrationVersion, file: migrationFile});
+			if (migrationVersion > curVersion) {
+				migrationsToRun.push({version: migrationVersion, file: migrationFile});
+				Monitor.adminlog(`Pushing to migrationsToRun: ${migrationVersion} at ${migrationFile} - mainModule ${process.mainModule === module} !process.send ${!process.send}`);
+			}
 		}
 		Utils.sortBy(migrationsToRun, ({version}) => version);
 		for (const {file} of migrationsToRun) {
 			await this.database.runFile(pathModule.resolve(migrationsFolder, file));
 		}
 
-		Chat.destroyHandlers.push(() => Chat.database?.destroy());
+		Chat.destroyHandlers.push(() => void Chat.database?.destroy());
 	}
 
 	readonly MessageContext = MessageContext;

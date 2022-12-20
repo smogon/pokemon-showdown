@@ -343,11 +343,6 @@ export const commands: Chat.ChatCommands = {
 		async undorequest(target, room, user, connection) {
 			Friends.checkCanUse(this);
 			target = toID(target);
-			if (user.settings.blockFriendRequests) {
-				return sendPM(
-					`/error ${this.tr`You are blocking friend requests, and so cannot undo requests, as you have none.`}`, user.id
-				);
-			}
 			await Friends.removeRequest(target as ID, user.id);
 			this.refreshPage('friends-sent');
 			return sendPM(`You removed your friend request to '${target}'.`, user.id);

@@ -169,5 +169,13 @@ function makeUser(name, connectionOrIp) {
 	return user;
 }
 
+function destroyUser(user) {
+	if (!user || !user.connected) return false;
+	user.resetName();
+	user.disconnectAll();
+	user.destroy();
+}
+
 exports.makeConnection = makeConnection;
 exports.makeUser = makeUser;
+exports.destroyUser = destroyUser;

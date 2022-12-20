@@ -2,7 +2,7 @@ import RandomGen6Teams from '../gen6/random-teams';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
 import {PRNG} from '../../../sim';
-import type {MoveCounter} from '../../random-teams';
+import type {MoveCounter} from '../gen8/random-teams';
 
 export class RandomGen5Teams extends RandomGen6Teams {
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {

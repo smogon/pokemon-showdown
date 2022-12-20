@@ -16,7 +16,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 2,
 			onLockMove: 'dig',
 			onInvulnerability(target, source, move) {
-				if (move.id === 'swift' && target.volatiles['substitute']) return true;
+				if ((move.id === 'swift' && target.volatiles['substitute']) || move.id === 'transform') return true;
 				this.add('-message', `The foe ${target.name} can't be hit underground!`);
 				return false;
 			},
@@ -36,7 +36,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 2,
 			onLockMove: 'fly',
 			onInvulnerability(target, source, move) {
-				if (move.id === 'swift' && target.volatiles['substitute']) return true;
+				if ((move.id === 'swift' && target.volatiles['substitute']) || move.id === 'transform') return true;
 				this.add('-message', `The foe ${target.name} can't be hit while flying!`);
 				return false;
 			},
@@ -79,11 +79,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// NOTE: In future generations the damage is capped to the remaining HP of the
 				// Substitute, here we deliberately use the uncapped damage when tracking lastDamage etc.
 				// Also, multi-hit moves must always deal the same damage as the first hit for any subsequent hits
-				let uncappedDamage = move.hit > 1 ? source.lastDamage : this.actions.getDamage(source, target, move);
-				if (!uncappedDamage) return null;
+				let uncappedDamage = move.hit > 1 ? this.lastDamage : this.actions.getDamage(source, target, move);
+				if (!uncappedDamage && uncappedDamage !== 0) return null;
 				uncappedDamage = this.runEvent('SubDamage', target, source, move, uncappedDamage);
-				if (!uncappedDamage) return uncappedDamage;
-				source.lastDamage = uncappedDamage;
+				if (!uncappedDamage && uncappedDamage !== 0) return uncappedDamage;
+				this.lastDamage = uncappedDamage;
 				target.volatiles['substitute'].hp -= uncappedDamage > target.volatiles['substitute'].hp ?
 					target.volatiles['substitute'].hp : uncappedDamage;
 				if (target.volatiles['substitute'].hp <= 0) {

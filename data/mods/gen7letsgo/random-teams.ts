@@ -1,5 +1,5 @@
 import type {PRNG} from '../../../sim';
-import RandomTeams, {MoveCounter} from '../../random-teams';
+import RandomTeams, {MoveCounter} from '../gen8/random-teams';
 
 export class RandomLetsGoTeams extends RandomTeams {
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {

@@ -344,7 +344,7 @@ export const LogViewer = new class {
 			buf += `<p class="message-error">Room "${roomid}" doesn't have logs for ${day}</p>`;
 		} else {
 			for await (const line of stream.byLine()) {
-				buf += this.renderLine(line, opts);
+				buf += this.renderLine(line, opts, {roomid, date: day});
 			}
 		}
 		buf += `</div>`;
@@ -385,10 +385,9 @@ export const LogViewer = new class {
 		return {time: new Date(timestamp + day), username: rest[0], message: rest.join('|')};
 	}
 
-	renderLine(fullLine: string, opts?: string) {
+	renderLine(fullLine: string, opts?: string, data?: {roomid: RoomID, date: string}) {
 		if (!fullLine) return ``;
-		if (opts === 'txt') return Utils.html`<div class="chat">${fullLine}</div>`;
-		let timestamp = fullLine.slice(0, opts ? 8 : 5);
+		let timestamp = fullLine.slice(0, 8);
 		let line;
 		if (/^[0-9:]+$/.test(timestamp)) {
 			line = fullLine.charAt(9) === '|' ? fullLine.slice(10) : '|' + fullLine.slice(9);
@@ -401,49 +400,62 @@ export const LogViewer = new class {
 			line.startsWith('J|') || line.startsWith('L|') || line.startsWith('N|')
 		)) return ``;
 
+		const getClass = (name: string) => {
+			// we use the raw numbers because links don't support colons
+			// so you'd need to put chatlog-roomid--day--time-200000 instead of
+			// chatlog-roomid--day--time-20:00:00
+			const stampNums = toID(timestamp);
+			if (toID(opts) === stampNums) name += ` highlighted`;
+			return `class="${name}" data-server="${stampNums}"`;
+		};
+		if (opts === 'txt') return Utils.html`<div ${getClass('chat')}>${fullLine}</div>`;
+
 		const cmd = line.slice(0, line.indexOf('|'));
 		if (opts?.includes('onlychat')) {
 			if (cmd !== 'c') return '';
-			if (opts.includes('txt')) return `<div class="chat">${Utils.escapeHTML(fullLine)}</div>`;
+			if (opts.includes('txt')) return `<div ${getClass('chat')}>${Utils.escapeHTML(fullLine)}</div>`;
 		}
+		const timeLink = data ?
+			`<a class="subtle" href="/view-chatlog-${data.roomid}--${data.date}--time-${timestamp}">${timestamp}</a>` :
+			timestamp;
 		switch (cmd) {
 		case 'c': {
 			const [, name, message] = Utils.splitFirst(line, '|', 2);
 			if (name.length <= 1) {
-				return `<div class="chat"><small>[${timestamp}] </small><q>${Chat.formatText(message)}</q></div>`;
+				return `<div ${getClass('chat')}><small>[${timeLink}] </small><q>${Chat.formatText(message)}</q></div>`;
 			}
 			if (message.startsWith(`/log `)) {
-				return `<div class="chat"><small>[${timestamp}] </small><q>${Chat.formatText(message.slice(5))}</q></div>`;
+				return `<div ${getClass('chat')}><small>[${timeLink}] </small><q>${Chat.formatText(message.slice(5))}</q></div>`;
 			}
 			if (message.startsWith(`/raw `)) {
-				return `<div class="notice">${message.slice(5)}</div>`;
+				return `<div ${getClass('notice')}>${message.slice(5)}</div>`;
 			}
 			if (message.startsWith(`/uhtml `) || message.startsWith(`/uhtmlchange `)) {
 				if (message.startsWith(`/uhtmlchange `)) return ``;
-				if (opts !== 'all') return `<div class="notice">[uhtml box hidden]</div>`;
-				return `<div class="notice">${message.slice(message.indexOf(',') + 1)}</div>`;
+				if (opts !== 'all') return `<div ${getClass('notice')}>[uhtml box hidden]</div>`;
+				return `<div ${getClass('notice')}>${message.slice(message.indexOf(',') + 1)}</div>`;
 			}
 			const group = !name.startsWith(' ') ? name.charAt(0) : ``;
-			return `<div class="chat">` +
-				Utils.html`<small>[${timestamp}] ${group}</small><username>${name.slice(1)}:</username> ` +
+			return `<div ${getClass('chat')}>` +
+				`<small>[${timeLink}]` + Utils.html` ${group}</small><username>${name.slice(1)}:</username> ` +
 				`<q>${Chat.formatText(message)}</q>` +
 				`</div>`;
 		}
 		case 'html': case 'raw': {
 			const [, html] = Utils.splitFirst(line, '|', 1);
-			return `<div class="notice">${html}</div>`;
+			return `<div ${getClass('notice')}>${html}</div>`;
 		}
 		case 'uhtml': case 'uhtmlchange': {
 			if (cmd !== 'uhtml') return ``;
 			const [, , html] = Utils.splitFirst(line, '|', 2);
-			return `<div class="notice">${html}</div>`;
+			return `<div ${getClass('notice')}>${html}</div>`;
 		}
 		case '!NT':
-			return `<div class="chat">${Utils.escapeHTML(fullLine)}</div>`;
+			return `<div ${getClass('chat')}>${Utils.escapeHTML(fullLine)}</div>`;
 		case '':
-			return `<div class="chat"><small>[${timestamp}] </small>${Utils.escapeHTML(line.slice(1))}</div>`;
+			return `<div ${getClass('chat')}><small>[${timeLink}] </small>${Utils.escapeHTML(line.slice(1))}</div>`;
 		default:
-			return `<div class="chat"><small>[${timestamp}] </small><code>${'|' + Utils.escapeHTML(line)}</code></div>`;
+			return `<div ${getClass('chat')}><small>[${timeLink}] </small><code>${'|' + Utils.escapeHTML(line)}</code></div>`;
 		}
 	}
 
@@ -559,6 +571,11 @@ export const LogViewer = new class {
 type SearchMatch = readonly [string, string, string, string, string];
 
 export abstract class Searcher {
+	static checkEnabled() {
+		if (Config.disableripgrep) {
+			throw new Chat.ErrorMessage("Log searching functionality is currently disabled.");
+		}
+	}
 	roomstatsCache = new Map<string, RoomStats>();
 	constructUserRegex(user: string) {
 		const id = toID(user);
@@ -1075,6 +1092,9 @@ export class RipgrepLogSearcher extends Searcher {
 		let {raw, search, room: roomid, date: month, args} = opts;
 		let results: string[];
 		let lineCount = 0;
+		if (Config.disableripgrep) {
+			return {lineCount: 0, results: []};
+		}
 		if (!raw) {
 			search = this.constructSearchRegex(search);
 		}
@@ -1387,13 +1407,19 @@ export const pages: Chat.PageTable = {
 			return this.errorReply(`Invalid date.`);
 		}
 
+		const isTime = opts?.startsWith('time-');
+		if (isTime && opts) opts = toID(opts.slice(5));
+
 		if (date && search) {
+			Searcher.checkEnabled();
 			return LogSearcher.runSearch(this, search, roomid, isAll ? null : date, limit);
 		} else if (date) {
 			if (date === 'today') {
-				return LogViewer.day(roomid, LogReader.today(), opts);
+				this.setHTML(await LogViewer.day(roomid, LogReader.today(), opts));
+				if (isTime) this.send(`|scroll|div[data-server="${opts}"]`);
 			} else if (date.split('-').length === 3) {
-				return LogViewer.day(roomid, parsedDate.toISOString().slice(0, 10), opts);
+				this.setHTML(await LogViewer.day(roomid, parsedDate.toISOString().slice(0, 10), opts));
+				if (isTime) this.send(`|scroll|div[data-server="${opts}"]`);
 			} else {
 				return LogViewer.month(roomid, parsedDate.toISOString().slice(0, 7));
 			}
@@ -1402,6 +1428,7 @@ export const pages: Chat.PageTable = {
 		}
 	},
 	roomstats(args, user) {
+		Searcher.checkEnabled();
 		const room = this.extractRoom();
 		if (room) {
 			this.checkCan('mute', null, room);
