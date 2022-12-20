@@ -2555,7 +2555,10 @@ export class Battle {
 			break;
 		case 'revivalblessing':
 			action.pokemon.side.pokemonLeft++;
-			if (action.target.position < action.pokemon.side.active.length) action.target.isActive = true;
+			if (action.target.position < action.pokemon.side.active.length) {
+				action.target.isActive = true;
+				this.queue.cancelMove(action.target);
+			}
 			action.target.fainted = false;
 			action.target.faintQueued = false;
 			action.target.subFainted = false;
