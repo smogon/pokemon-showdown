@@ -2556,8 +2556,11 @@ export class Battle {
 		case 'revivalblessing':
 			action.pokemon.side.pokemonLeft++;
 			if (action.target.position < action.pokemon.side.active.length) {
-				action.target.isActive = true;
-				this.queue.cancelMove(action.target);
+				this.queue.addChoice({
+					choice: 'instaswitch',
+					pokemon: action.target,
+					target: action.target,
+				});
 			}
 			action.target.fainted = false;
 			action.target.faintQueued = false;
