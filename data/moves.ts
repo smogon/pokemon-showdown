@@ -6732,16 +6732,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onRestart() {
 				this.effectState.duration = 2;
 			},
-			onBeforeTurn() {
-				this.effectState.turnPassed = true;
-			},
 			onAccuracy() {
-				if (this.effectState.turnPassed) return true;
+				return true;
 			},
 			onSourceModifyDamage() {
-				if (this.effectState.turnPassed) {
-					return this.chainModify(2);
-				}
+				return this.chainModify(2);
 			},
 		},
 		secondary: null,
