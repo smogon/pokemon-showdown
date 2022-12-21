@@ -1141,7 +1141,7 @@
             {
                 "role": "Fast Support",
                 "movepool": ["Brick Break", "Pounce", "Sticky Web", "Taunt"],
-                "teraTypes": ["Bug", "Ghost"]
+                "teraTypes": ["Ghost"]
             }
         ]
     },
