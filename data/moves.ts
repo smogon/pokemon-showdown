@@ -19919,27 +19919,24 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		boosts: {
-			atk: 1,
-			spe: 1,
-		},
-		onHit(source) {
+		onHit(pokemon) {
 			let success = false;
 			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 			for (const sideCondition of removeAll) {
-				if (source.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Tidy Up', '[of] ' + source);
+				if (pokemon.side.removeSideCondition(sideCondition)) {
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(sideCondition).name);
 					success = true;
 				}
-				if (source.side.foe.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side.foe, this.dex.conditions.get(sideCondition).name, '[from] move: Tidy Up', '[of] ' + source);
+				if (pokemon.side.foe.removeSideCondition(sideCondition)) {
+					this.add('-sideend', pokemon.side.foe, this.dex.conditions.get(sideCondition).name);
 					success = true;
 				}
 			}
 			for (const pokemon of this.getAllActive()) {
 				if (pokemon.removeVolatile('substitute')) success = true;
 			}
-			if (success) this.add('-activate', source, 'move: Tidy Up');
+			if (success) this.add('-activate', pokemon, 'move: Tidy Up');
+			return !!this.boost({atk: 1, spe: 1}, pokemon, pokemon, null, false, true) || success;
 		},
 		secondary: null,
 		target: "self",
