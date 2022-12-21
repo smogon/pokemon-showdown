@@ -19921,8 +19921,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {},
 		onHit(pokemon) {
 			let success = false;
-			for (const pokemon of this.getAllActive()) {
-				if (pokemon.removeVolatile('substitute')) success = true;
+			for (const active of this.getAllActive()) {
+				if (active.removeVolatile('substitute')) success = true;
 			}
 			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 			const sides = [pokemon.side, ...pokemon.side.foeSidesWithConditions()];
