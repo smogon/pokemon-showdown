@@ -1479,7 +1479,7 @@ export class Battle {
 					}
 				}
 
-				if (this.gen >= 7) {
+				if (this.gen >= 7 && !pokemon.terastallized) {
 					// In Gen 7, the real type of every Pokemon is visible to all players via the bottom screen while making choices
 					const seenPokemon = pokemon.illusion || pokemon;
 					const realTypeString = seenPokemon.getTypes(true).join('/');
