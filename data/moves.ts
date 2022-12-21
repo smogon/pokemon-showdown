@@ -7888,7 +7888,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onFieldStart(target, source) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-fieldstart', 'move: Gravity', '[from] Persistent');
+					this.add('-fieldstart', 'move: Gravity', '[from] ability: Persistent');
 				} else {
 					this.add('-fieldstart', 'move: Gravity');
 				}
@@ -10918,7 +10918,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onFieldStart(target, source) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-fieldstart', 'move: Magic Room', '[of] ' + source, '[from] Persistent');
+					this.add('-fieldstart', 'move: Magic Room', '[of] ' + source, '[from] ability: Persistent');
 				} else {
 					this.add('-fieldstart', 'move: Magic Room', '[of] ' + source);
 				}
@@ -15871,7 +15871,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onSideStart(side, source) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-sidestart', side, 'Safeguard', '[from] Persistent');
+					this.add('-sidestart', side, 'Safeguard', '[from] ability: Persistent');
 				} else {
 					this.add('-sidestart', side, 'Safeguard');
 				}
@@ -19251,7 +19251,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onSideStart(side, source) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-sidestart', side, 'move: Tailwind', '[from] Persistent');
+					this.add('-sidestart', side, 'move: Tailwind', '[from] ability: Persistent');
 				} else {
 					this.add('-sidestart', side, 'move: Tailwind');
 				}
@@ -20285,7 +20285,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onFieldStart(target, source) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-fieldstart', 'move: Trick Room', '[of] ' + source, '[from] Persistent');
+					this.add('-fieldstart', 'move: Trick Room', '[of] ' + source, '[from] ability: Persistent');
 				} else {
 					this.add('-fieldstart', 'move: Trick Room', '[of] ' + source);
 				}
@@ -21328,7 +21328,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onFieldStart(field, source) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-fieldstart', 'move: Wonder Room', '[of] ' + source, '[from] Persistent');
+					this.add('-fieldstart', 'move: Wonder Room', '[of] ' + source, '[from] ability: Persistent');
 				} else {
 					this.add('-fieldstart', 'move: Wonder Room', '[of] ' + source);
 				}
