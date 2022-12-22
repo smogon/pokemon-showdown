@@ -86,6 +86,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Audinite",
 		desc: "If held by an Audino, this item allows it to Mega Evolve in battle.",
 	},
+	auspiciousarmor: {
+		name: "Auspicious Armor",
+		desc: "Evolves Charcadet into Armarouge when used.",
+	},
 	babiriberry: {
 		name: "Babiri Berry",
 		desc: "Halves damage taken from a supereffective Steel-type attack. Single use.",
@@ -1048,6 +1052,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	mail: {
 		name: "Mail",
 		desc: "Cannot be given to or taken from a Pokemon, except by Covet/Knock Off/Thief.",
+	},
+	maliciousarmor: {
+		name: "Malicious Armor",
+		desc: "Evolves Charcadet into Ceruledge when used.",
 	},
 	manectite: {
 		name: "Manectite",
