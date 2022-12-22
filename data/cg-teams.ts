@@ -159,7 +159,9 @@ export default class TeamGenerator {
 		}
 		if (species.baseSpecies) {
 			for (const moveid in learnset) {
-				if (learnset[moveid].some(source => source.startsWith('9'))) movePool.push(moveid);
+				if (!movePool.includes(moveid) && learnset[moveid].some(source => source.startsWith('9'))) {
+					movePool.push(moveid);
+				}
 			}
 		}
 		if (!movePool.length) throw new Error(`No moves for ${species.id}`);
@@ -331,12 +333,12 @@ export default class TeamGenerator {
 			let weight = 2500;
 
 			// inflicts status
-			if (move.status) weight *= TeamGenerator.statusWeight(move.status);
+			if (move.status) weight *= TeamGenerator.statusWeight(move.status) * 2;
 
 			// hazard setters: very important, but we don't need 2 pokemon to set the same hazard on a team
 			const isHazard = (m: Move) => m.sideCondition && m.target === 'foeSide';
 			if (isHazard(move) && (teamStats.hazardSetters[move.id] || 0) < 1) {
-				weight *= move.id === 'spikes' ? 6 : 8;
+				weight *= move.id === 'spikes' ? 12 : 16;
 
 				// if we are ALREADY setting hazards, setting MORE is really good
 				if (movesSoFar.some(m => isHazard(m))) weight *= 2;
@@ -344,20 +346,20 @@ export default class TeamGenerator {
 			}
 
 			// boosts
-			weight *= this.boostWeight(move, movesSoFar, species);
-			weight *= this.opponentDebuffWeight(move);
+			weight *= this.boostWeight(move, movesSoFar, species) * 2;
+			weight *= this.opponentDebuffWeight(move) * 2;
 
 			// protection moves - useful for bulky/stally pokemon
 			if (species.baseStats.def >= 100 || species.baseStats.spd >= 100 || species.baseStats.hp >= 100) {
 				switch (move.volatileStatus) {
 				case 'endure':
-					weight *= 1.5;
+					weight *= 3;
 					break;
 				case 'protect': case 'kingsshield': case 'silktrap':
-					weight *= 2;
+					weight *= 4;
 					break;
 				case 'banefulbunker': case 'spikyshield':
-					weight *= 2.5;
+					weight *= 5;
 					break;
 				default:
 					break;
@@ -391,6 +393,7 @@ export default class TeamGenerator {
 		// STAB
 		if (species.types.includes(move.type)) powerEstimate *= ability === 'Adaptability' ? 2 : 1.5;
 		if (ability === 'Technician' && move.basePower <= 60) powerEstimate *= 1.5;
+		if (ability === 'Steely Spirit' && move.type === 'Steel') powerEstimate *= 1.5;
 		if (move.multihit) {
 			const numberOfHits = Array.isArray(move.multihit) ?
 				(ability === 'Skill Link' ? move.multihit[1] : (move.multihit[0] + move.multihit[1]) / 2) :

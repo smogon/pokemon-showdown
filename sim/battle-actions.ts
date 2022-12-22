@@ -153,11 +153,6 @@ export class BattleActions {
 			this.battle.queue.insertChoice({choice: 'runSwitch', pokemon});
 		}
 
-		// Placeholder until we have proper support
-		if (pokemon.terastallized) {
-			this.battle.add('-start', pokemon, 'typechange', pokemon.terastallized, '[silent]');
-		}
-
 		return true;
 	}
 	dragIn(side: Side, pos: number) {
@@ -499,8 +494,6 @@ export class BattleActions {
 		if (!pokemon.hp) {
 			this.battle.faint(pokemon, pokemon, move);
 		}
-
-		this.battle.setActiveMove(move, pokemon, target);
 
 		if (!moveResult) {
 			this.battle.singleEvent('MoveFail', move, null, target, pokemon, move);
@@ -975,7 +968,7 @@ export class BattleActions {
 		for (const [i, target] of targetsCopy.entries()) {
 			if (target && pokemon !== target) {
 				target.gotAttacked(move, moveDamage[i] as number | false | undefined, pokemon);
-				if (move.category !== 'Status') {
+				if (typeof moveDamage[i] === 'number') {
 					target.timesAttacked += hit - 1;
 				}
 			}
@@ -1074,11 +1067,16 @@ export class BattleActions {
 			if (!damage[i] && damage[i] !== 0) targets[i] = false;
 		}
 
+		// steps 4 and 5 can mess with this.battle.activeTarget, which needs to be preserved for Dancer
+		const activeTarget = this.battle.activeTarget;
+
 		// 4. self drops (start checking for targets[i] === false here)
 		if (moveData.self && !move.selfDropped) this.selfDrops(targets, pokemon, move, moveData, isSecondary);
 
 		// 5. secondary effects
 		if (moveData.secondaries) this.secondaries(targets, pokemon, move, moveData, isSelf);
+
+		this.battle.activeTarget = activeTarget;
 
 		// 6. force switch
 		if (moveData.forceSwitch) damage = this.forceSwitch(damage, targets, pokemon, move);
@@ -1861,7 +1859,6 @@ export class BattleActions {
 		for (const ally of pokemon.side.pokemon) {
 			ally.canTerastallize = null;
 		}
-		this.battle.add('-start', pokemon, 'typechange', type, '[silent]');
 		pokemon.knownType = true;
 		pokemon.apparentType = type;
 		this.battle.runEvent('AfterTerastallization', pokemon);

@@ -43,23 +43,23 @@ export const HARDCODED_MOVE_WEIGHTS: {[moveID: string]: number} = {
 	hex: 1.2,
 
 	// screens
-	lightscreen: 1.5, reflect: 1.5, auroraveil: 1.5, // TODO: make sure AVeil always gets Snow?
+	lightscreen: 3, reflect: 3, auroraveil: 3, // TODO: make sure AVeil always gets Snow?
 
 	// hazard removal
-	defog: 1.2, rapidspin: 1.2,
+	defog: 2, rapidspin: 1.2,
 
 	// mess with the opponent
-	taunt: 1.5, disable: 1.5, encore: 1.5,
+	taunt: 2, disable: 2, encore: 3,
 
 	// healing moves
 	// TODO: should healing moves be more common on bulkier pokemon?
 	// 25%
-	junglehealing: 1.5, lifedew: 1.5,
+	junglehealing: 3, lifedew: 3,
 	// 50%
-	milkdrink: 2.5, moonlight: 2.5, morningsun: 2.5, recover: 2.5, roost: 2.5,
-	shoreup: 2.5, slackoff: 2.5, softboiled: 2.5, synthesis: 2.5,
+	milkdrink: 5, moonlight: 5, morningsun: 5, recover: 5, roost: 5,
+	shoreup: 5, slackoff: 5, softboiled: 5, synthesis: 5,
 	// delayed/consequence
-	rest: 2.5, // has sleeptalk potential
+	rest: 3, // has sleeptalk potential
 	wish: 2,
 
 	// requires terrain

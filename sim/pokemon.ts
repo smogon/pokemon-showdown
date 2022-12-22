@@ -1077,11 +1077,17 @@ export class Pokemon {
 			}),
 			baseAbility: this.baseAbility,
 			item: this.item,
-			commanding: !!this.volatiles['commanding'] && !this.fainted,
-			reviving: this.isActive && !!this.side.slotConditions[this.position]['revivalblessing'],
 			pokeball: this.pokeball,
 		};
 		if (this.battle.gen > 6) entry.ability = this.ability;
+		if (this.battle.gen >= 9) {
+			entry.commanding = !!this.volatiles['commanding'] && !this.fainted;
+			entry.reviving = this.isActive && !!this.side.slotConditions[this.position]['revivalblessing'];
+		}
+		if (this.battle.gen === 9) {
+			entry.teraType = this.teraType;
+			entry.terastallized = this.terastallized || '';
+		}
 		return entry;
 	}
 
@@ -1231,11 +1237,11 @@ export class Pokemon {
 		} else {
 			this.battle.add('-transform', this, pokemon);
 		}
-		if (this.terastallized && this.terastallized !== this.apparentType) {
-			this.battle.add('-start', this, 'typechange', this.terastallized, '[silent]');
+		if (this.terastallized) {
+			this.knownType = true;
 			this.apparentType = this.terastallized;
 		}
-		if (this.battle.gen > 2) this.setAbility(pokemon.ability, this, true);
+		if (this.battle.gen > 2) this.setAbility(pokemon.ability, this, true, true);
 
 		// Change formes based on held items (for Transform)
 		// Only ever relevant in Generation 4 since Generation 3 didn't have item-based forme changes
@@ -1358,8 +1364,8 @@ export class Pokemon {
 			this.setAbility(species.abilities['0'], null, true);
 			this.baseAbility = this.ability;
 		}
-		if (this.terastallized && this.terastallized !== this.apparentType) {
-			this.battle.add('-start', this, 'typechange', this.terastallized, '[silent]');
+		if (this.terastallized) {
+			this.knownType = true;
 			this.apparentType = this.terastallized;
 		}
 		return true;
@@ -1760,7 +1766,7 @@ export class Pokemon {
 		return this.setItem('');
 	}
 
-	setAbility(ability: string | Ability, source?: Pokemon | null, isFromFormeChange?: boolean) {
+	setAbility(ability: string | Ability, source?: Pokemon | null, isFromFormeChange = false, isTransform = false) {
 		if (!this.hp) return false;
 		if (typeof ability === 'string') ability = this.battle.dex.abilities.get(ability);
 		const oldAbility = this.ability;
@@ -1776,7 +1782,8 @@ export class Pokemon {
 		}
 		this.ability = ability.id;
 		this.abilityState = {id: ability.id, target: this};
-		if (ability.id && this.battle.gen > 3 && !(oldAbility === ability.id && this.battle.gen > 4)) {
+		if (ability.id && this.battle.gen > 3 &&
+			(!isTransform || oldAbility !== ability.id || this.battle.gen <= 4)) {
 			this.battle.singleEvent('Start', ability, this.abilityState, this, source);
 		}
 		this.abilityOrder = this.battle.abilityOrder++;
