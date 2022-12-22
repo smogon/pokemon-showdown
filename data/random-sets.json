@@ -19,7 +19,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Fake Out", "Nuzzle", "Play Rough", "Surf", "Volt Switch", "Volt Tackle"],
+                "movepool": ["Fake Out", "Play Rough", "Surf", "Volt Switch", "Volt Tackle"],
                 "teraTypes": ["Water"]
             }
         ]
@@ -510,8 +510,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Eruption", "Flamethrower", "Focus Blast", "Overheat"],
-                "teraTypes": ["Fire"]
+                "movepool": ["Eruption", "Fire Blast", "Focus Blast", "Shadow Ball"],
+                "teraTypes": ["Fire", "Ghost"]
             }
         ]
     },
@@ -781,7 +781,7 @@
             {
                 "role": "Fast Support",
                 "movepool": ["Freeze-Dry", "Memento", "Rapid Spin", "Spikes"],
-                "teraTypes": ["Ice", "Ghost"]
+                "teraTypes": ["Ghost"]
             }
         ]
     },
@@ -791,7 +791,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Dark Pulse", "Fire Blast", "Flamethrower", "Nasty Plot", "Sludge Bomb", "Sucker Punch"],
-                "teraTypes": ["Dark", "Fire", "Poison"]
+                "teraTypes": ["Dark", "Poison"]
             }
         ]
     },
@@ -841,7 +841,12 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Hurricane", "Hydro Pump", "Ice Beam", "Knock Off", "Roost", "Surf", "U-turn"],
-                "teraTypes": ["Water"]
+                "teraTypes": ["Water", "Ground"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Hurricane", "Hydro Pump", "Ice Beam", "Surf", "U-turn"],
+                "teraTypes": ["Water", "Flying"]
             }
         ]
     },
@@ -1136,7 +1141,7 @@
             {
                 "role": "Fast Support",
                 "movepool": ["Brick Break", "Pounce", "Sticky Web", "Taunt"],
-                "teraTypes": ["Bug", "Ghost"]
+                "teraTypes": ["Ghost"]
             }
         ]
     },
@@ -1169,7 +1174,7 @@
         "level": 94,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "AV Pivot",
                 "movepool": ["Nuzzle", "Super Fang", "Thunderbolt", "U-turn"],
                 "teraTypes": ["Flying"]
             }
@@ -1566,7 +1571,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Earth Power", "Flash Cannon", "Lava Plume", "Magma Storm", "Stealth Rock"],
-                "teraTypes": ["Flying", "Grass", "Fire", "Steel"]
+                "teraTypes": ["Flying", "Grass", "Steel"]
             }
         ]
     },
@@ -1790,7 +1795,7 @@
         "sets": [
             {
                 "role": "AV Pivot",
-                "movepool": ["Grass Knot", "Hydro Pump", "Ice Beam", "Knock Off", "Megahorn", "Sacred Sword"],
+                "movepool": ["Aqua Jet", "Grass Knot", "Hydro Pump", "Ice Beam", "Knock Off", "Megahorn", "Sacred Sword"],
                 "teraTypes": ["Water", "Dark"]
             },
             {
@@ -2569,7 +2574,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Defog", "Leaf Storm", "Pollen Puff", "Synthesis"],
-                "teraTypes": ["Grass"]
+                "teraTypes": ["Steel", "Water"]
             }
         ]
     },
@@ -2768,7 +2773,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Apple Acid", "Dragon Pulse", "Leech Seed", "Recover"],
+                "movepool": ["Apple Acid", "Draco Meteor", "Dragon Pulse", "Leech Seed", "Recover"],
                 "teraTypes": ["Grass", "Steel"]
             }
         ]
@@ -3308,7 +3313,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Memento", "Spikes", "Sticky Web", "Toxic Spikes", "U-turn"],
+                "movepool": ["Circle Throw", "Memento", "Spikes", "Sticky Web", "Toxic Spikes"],
                 "teraTypes": ["Ghost"]
             }
         ]
@@ -3368,8 +3373,8 @@
             },
             {
                 "role": "Tera Blast user",
-                "movepool": ["Dazzling Gleam", "Lumina Crash", "Shadow Ball", "Tera Blast"],
-                "teraTypes": ["Fighting"]
+                "movepool": ["Dazzling Gleam", "Lumina Crash", "Roost", "Tera Blast"],
+                "teraTypes": ["Fire"]
             }
         ]
     },
@@ -3707,8 +3712,8 @@
         "level": 86,
         "sets": [
             {
-                "role": "AV Pivot",
-                "movepool": ["Gunk Shot", "Knock Off", "Super Fang", "U-turn"],
+                "role": "Bulky Attacker",
+                "movepool": ["Gunk Shot", "Knock Off", "Super Fang", "Switcheroo", "U-turn"],
                 "teraTypes": ["Dark"]
             },
             {
@@ -3717,9 +3722,9 @@
                 "teraTypes": ["Dark"]
             },
             {
-                "role": "Wallbreaker",
-                "movepool": ["Gunk Shot", "Knock Off", "Switcheroo", "U-turn"],
-                "teraTypes": ["Poison", "Dark"]
+                "role": "Bulky Support",
+                "movepool": ["Encore", "Gunk Shot", "Knock Off", "Parting Shot"],
+                "teraTypes": ["Dark"]
             }
         ]
     },

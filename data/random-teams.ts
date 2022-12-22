@@ -500,8 +500,8 @@ export class RandomTeams {
 		// This space reserved for assorted hardcodes that otherwise make little sense out of context
 		// Landorus
 		this.incompatibleMoves(moves, movePool, 'nastyplot', 'rockslide');
-		// Persian and Seviper
-		this.incompatibleMoves(moves, movePool, 'switcheroo', ['fakeout', 'suckerpunch']);
+		// Persian and Grafaiai
+		this.incompatibleMoves(moves, movePool, 'switcheroo', ['fakeout', 'superfang']);
 		// Beartic
 		this.incompatibleMoves(moves, movePool, 'snowscape', 'swordsdance');
 		// Cryogonal
@@ -881,7 +881,7 @@ export class RandomTeams {
 		case 'Intimidate':
 			if (abilities.has('Hustle')) return true;
 			if (abilities.has('Sheer Force') && !!counter.get('sheerforce')) return true;
-			return (abilities.has('Stakeout') || moves.has('substitute'));
+			return (abilities.has('Stakeout'));
 		case 'Iron Fist':
 			return !counter.ironFist;
 		case 'Justified':
@@ -969,7 +969,8 @@ export class RandomTeams {
 		if (species.id === 'arcaninehisui') return 'Rock Head';
 		if (species.id === 'staraptor') return 'Reckless';
 		if (species.id === 'enamorus' && moves.has('calmmind')) return 'Cute Charm';
-		if (abilities.has('Corrosion') && moves.has('toxic') && this.randomChance(1, 2)) return 'Corrosion';
+		if (abilities.has('Corrosion') && moves.has('toxic') && !moves.has('earthpower')) return 'Corrosion';
+		if (abilities.has('Cud Chew') && moves.has('substitute')) return 'Cud Chew';
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk'))) return 'Guts';
 		if (abilities.has('Harvest') && moves.has('substitute')) return 'Harvest';
 		if (abilities.has('Serene Grace') && moves.has('headbutt')) return 'Serene Grace';
