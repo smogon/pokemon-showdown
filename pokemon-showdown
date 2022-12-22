@@ -10,7 +10,7 @@
 // Simply doing `require('../build')` here doesn't work because the `replace`
 // step of the build is asynchronous and we can't wait for it to finish easily
 // unless we shell out and use `execSync`. However, the heuristic of simply
-// checking for the presence of './sim/dex' to determine whether a build
+// checking for the presence of './dist/sim/dex' to determine whether a build
 // is required is somewhat risky as it only is valid from a clean repository -
 // if you make edits or have previous build artifacts lying around, this
 // script could potentially be missing additional sources or the compiled output
@@ -76,7 +76,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		console.log('pokemon-showdown simulate-battle');
 		console.log('');
 		console.log('  Simulates a battle, taking input to stdin and writing output to stdout');
-		console.log('  Protocol is documented in ./sim/README.md');
+		console.log('  Protocol is documented in ./dist/sim/README.md');
 		console.log('');
 		console.log('pokemon-showdown json-team');
 		console.log('');
@@ -104,7 +104,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	case 'generate-team':
 		{
 			ensureBuilt();
-			var Teams = require('./sim/teams.js').Teams;
+			var Teams = require('./dist/sim/teams.js').Teams;
 			var seed = process.argv[4] ? process.argv[4].split(',').map(Number) : undefined;
 			console.log(Teams.pack(Teams.generate(process.argv[3], {seed})));
 		}
@@ -112,10 +112,10 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	case 'validate-team':
 		{
 			ensureBuilt();
-			var Teams = require('./sim/teams.js').Teams;
-			var TeamValidator = require('./sim/team-validator.js').TeamValidator;
+			var Teams = require('./dist/sim/teams.js').Teams;
+			var TeamValidator = require('./dist/sim/team-validator.js').TeamValidator;
 			var validator = TeamValidator.get(process.argv[3]);
-			var Streams = require('./lib/streams.js');
+			var Streams = require('./dist/lib/streams.js');
 			var stdin = Streams.stdin();
 
 			readTeam(stdin).then(function (textTeam) {
@@ -136,9 +136,9 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		break;
 	case 'simulate-battle':
 		{
-			sucraseBuild();
-			var BattleTextStream = require('./sim/battle-stream.js').BattleTextStream;
-			var Streams = require('./lib/streams');
+			build();
+			var BattleTextStream = require('./dist/sim/battle-stream.js').BattleTextStream;
+			var Streams = require('./dist/lib/streams');
 			var stdin = Streams.stdin();
 			var stdout = Streams.stdout();
 
@@ -188,9 +188,9 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	case 'unpack-team':
 	case 'json-team':
 		{
-			sucraseBuild();
-			var Teams = require('./sim/teams').Teams;
-			var Streams = require('./lib/streams');
+			build();
+			var Teams = require('./dist/sim/teams').Teams;
+			var Streams = require('./dist/lib/streams');
 			var stdin = Streams.stdin();
 
 			readTeam(stdin).then(function (team) {
@@ -207,9 +207,9 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		break;
 	case 'pack-team':
 		{
-			sucraseBuild();
-			var Teams = require('./sim/teams').Teams;
-			var Streams = require('./lib/streams');
+			build();
+			var Teams = require('./dist/sim/teams').Teams;
+			var Streams = require('./dist/lib/streams');
 			var stdin = Streams.stdin();
 
 			readTeam(stdin).then(function (team) {
@@ -226,9 +226,9 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		break;
 	case 'export-team':
 		{
-			sucraseBuild();
-			var Teams = require('./sim/teams').Teams;
-			var Streams = require('./lib/streams');
+			build();
+			var Teams = require('./dist/sim/teams').Teams;
+			var Streams = require('./dist/lib/streams');
 			var stdin = Streams.stdin();
 
 			readTeam(stdin).then(function (team) {
