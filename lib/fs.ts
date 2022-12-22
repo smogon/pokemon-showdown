@@ -25,8 +25,9 @@ import * as fs from 'fs';
 import * as pathModule from 'path';
 import {ReadStream, WriteStream} from './streams';
 
-// account for pwd/dist/lib
+// not sure why it's necessary to use path.sep, but testing with Windows showed it was
 const DIST = `${pathModule.sep}dist${pathModule.sep}`;
+// account for pwd/dist/lib
 const ROOT_PATH = pathModule.resolve(__dirname, __dirname.includes(DIST) ? '..' : '', '..');
 
 interface PendingUpdate {

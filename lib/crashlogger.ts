@@ -14,6 +14,7 @@ import * as path from 'path';
 const CRASH_EMAIL_THROTTLE = 5 * 60 * 1000; // 5 minutes
 
 const logPath = path.resolve(
+	// not sure why this is necessary, but in Windows testing it was
 	__dirname, '../', __dirname.includes(`${path.sep}dist${path.sep}`) ? '..' : '', 'logs/errors.txt'
 );
 let lastCrashLog = 0;
