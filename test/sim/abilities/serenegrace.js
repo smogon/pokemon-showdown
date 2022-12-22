@@ -27,8 +27,8 @@ describe(`Serene Grace`, function () {
 		assert.statStage(pyuk, 'spe', 0);
 	});
 
-	it(`should overflow when quadrupling a stat drop effect with Pledge Rainbow`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+	it(`[Gen 8] should overflow when quadrupling a stat drop effect with Pledge Rainbow`, function () {
+		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'wynaut', ability: 'serenegrace', moves: ['poweruppunch', 'waterpledge']},
 			{species: 'wobbuffet', ability: 'serenegrace', moves: ['acidspray', 'firepledge']},
 		], [
