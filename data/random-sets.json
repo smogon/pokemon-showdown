@@ -1174,7 +1174,7 @@
         "level": 94,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "AV Pivot",
                 "movepool": ["Nuzzle", "Super Fang", "Thunderbolt", "U-turn"],
                 "teraTypes": ["Flying"]
             }
