@@ -2093,7 +2093,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		transformEnd: "Zen Mode ended!",
 	},
 	zerotohero: {
-		name: "Zero To Hero",
+		name: "Zero to Hero",
 		shortDesc: "If this Pokemon is Palafin, it changes to Hero Mode when it switches out.",
 
 		activate: "  [POKEMON] underwent a heroic transformation!",
