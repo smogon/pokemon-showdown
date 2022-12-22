@@ -144,7 +144,7 @@ export function cacheGroupData(config: ConfigType) {
 
 export function checkRipgrepAvailability() {
 	if (Config.ripgrepmodlog === undefined) {
-		const cwd = FS('.').path;
+		const cwd = FS.ROOT_PATH;
 		Config.ripgrepmodlog = (async () => {
 			try {
 				await ProcessManager.exec(['rg', '--version'], {cwd});
