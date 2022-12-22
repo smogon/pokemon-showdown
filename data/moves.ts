@@ -3288,11 +3288,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {bypasssub: 1},
 		volatileStatus: 'curse',
-		onModifyTarget(targetRelayVar, source, target, move) {
-			if (targetRelayVar.target.isAlly(source)) {
-				move.target = 'randomNormal';
-			}
-		},
 		onModifyMove(move, source, target) {
 			if (!source.hasType('Ghost')) {
 				move.target = move.nonGhostTarget as MoveTarget;
@@ -3320,7 +3315,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		secondary: null,
-		target: "normal",
+		target: "randomNormal",
 		nonGhostTarget: "self",
 		type: "Ghost",
 		zMove: {effect: 'curse'},
