@@ -152,7 +152,6 @@ const BROADCAST_TOKEN = '!';
 
 const PLUGIN_DATABASE_PATH = './databases/chat-plugins.db';
 const MAX_PLUGIN_LOADING_DEPTH = 3;
-const VALID_PLUGIN_ENDINGS = ['.jsx', '.tsx', '.js', '.ts'];
 
 import {formatText, linkRegex, stripFormatting} from './chat-formatter';
 
@@ -161,9 +160,8 @@ import ProbeModule = require('probe-image-size');
 const probe: (url: string) => Promise<{width: number, height: number}> = ProbeModule;
 
 const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
-// to account for Sucrase
-const TRANSLATION_PATH = __dirname.endsWith('.server-dist') ? `../.translations-dist` : `../translations`;
-const TRANSLATION_DIRECTORY = `${__dirname}/${TRANSLATION_PATH}`;
+
+const TRANSLATION_DIRECTORY = pathModule.resolve(__dirname, '..', 'translations');
 
 class PatternTester {
 	// This class sounds like a RegExp
@@ -1707,7 +1705,7 @@ export const Chat = new class {
 			const languageID = Dex.toID(dirname);
 			const files = await dir.readdir();
 			for (const filename of files) {
-				if (!filename.endsWith('.ts')) continue;
+				if (!filename.endsWith('.js')) continue;
 
 				const content: Translations = require(`${TRANSLATION_DIRECTORY}/${dirname}/${filename}`).translations;
 
@@ -1926,7 +1924,7 @@ export const Chat = new class {
 	}
 
 	loadPluginFile(file: string) {
-		if (!VALID_PLUGIN_ENDINGS.some(ext => file.endsWith(ext))) return;
+		if (!file.endsWith('.js')) return;
 		this.loadPlugin(require(file), this.getPluginName(file));
 	}
 
@@ -1990,6 +1988,9 @@ export const Chat = new class {
 		return commandTable;
 	}
 	loadPlugin(plugin: AnyObject, name: string) {
+		// esbuild builds cjs exports in such a way that they use getters, leading to crashes
+		// in the plugin.roomSettings = [plugin.roomSettings] action. So, we have to make them not getters
+		plugin = {...plugin};
 		if (plugin.commands) {
 			Object.assign(Chat.commands, this.annotateCommands(plugin.commands));
 		}
@@ -2043,7 +2044,7 @@ export const Chat = new class {
 
 		Chat.commands = Object.create(null);
 		Chat.pages = Object.create(null);
-		this.loadPluginDirectory('server/chat-commands');
+		this.loadPluginDirectory('dist/server/chat-commands');
 		Chat.baseCommands = Chat.commands;
 		Chat.basePages = Chat.pages;
 		Chat.commands = Object.assign(Object.create(null), Chat.baseCommands);
@@ -2053,7 +2054,7 @@ export const Chat = new class {
 		this.loadPlugin(Config, 'config');
 		this.loadPlugin(Tournaments, 'tournaments');
 
-		this.loadPluginDirectory('server/chat-plugins');
+		this.loadPluginDirectory('dist/server/chat-plugins');
 		Chat.oldPlugins = {};
 		// lower priority should run later
 		Utils.sortBy(Chat.filters, filter => -(filter.priority || 0));

@@ -1,6 +1,6 @@
 'use strict';
 
-const {Hangman} = require('../../../server/chat-plugins/hangman');
+const {Hangman} = require('../../../dist/server/chat-plugins/hangman');
 const {makeUser, destroyUser} = require('../../users-utils');
 const assert = require('../../assert');
 
