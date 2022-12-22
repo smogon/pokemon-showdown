@@ -2574,7 +2574,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Defog", "Leaf Storm", "Pollen Puff", "Synthesis"],
-                "teraTypes": ["Grass"]
+                "teraTypes": ["Steel", "Water"]
             }
         ]
     },
@@ -2773,7 +2773,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Apple Acid", "Dragon Pulse", "Leech Seed", "Recover"],
+                "movepool": ["Apple Acid", "Draco Meteor", "Dragon Pulse", "Leech Seed", "Recover"],
                 "teraTypes": ["Grass", "Steel"]
             }
         ]
@@ -3712,8 +3712,8 @@
         "level": 86,
         "sets": [
             {
-                "role": "AV Pivot",
-                "movepool": ["Gunk Shot", "Knock Off", "Super Fang", "U-turn"],
+                "role": "Bulky Attacker",
+                "movepool": ["Gunk Shot", "Knock Off", "Super Fang", "Switcheroo", "U-turn"],
                 "teraTypes": ["Dark"]
             },
             {
@@ -3722,9 +3722,9 @@
                 "teraTypes": ["Dark"]
             },
             {
-                "role": "Wallbreaker",
-                "movepool": ["Gunk Shot", "Knock Off", "Switcheroo", "U-turn"],
-                "teraTypes": ["Poison", "Dark"]
+                "role": "Bulky Support",
+                "movepool": ["Encore", "Gunk Shot", "Knock Off", "Parting Shot"],
+                "teraTypes": ["Dark"]
             }
         ]
     },
