@@ -14849,7 +14849,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			pokemon.side.removeSideCondition('auroraveil');
 		},
 		onModifyType(move, pokemon) {
-			switch (pokemon.baseSpecies.name) {
+			switch (pokemon.species.name) {
 			case 'Tauros-Paldea':
 				move.type = 'Fighting';
 				break;
