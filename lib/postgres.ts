@@ -42,7 +42,7 @@ export class PostgresDatabase {
 	static getConfig() {
 		let config: AnyObject = {};
 		try {
-			config = require('../config/config').usepostgres;
+			config = require(FS.ROOT_PATH + '/config/config').usepostgres;
 			if (!config) throw new Error('Missing config for pg database');
 		} catch (e: any) {}
 		return config;
