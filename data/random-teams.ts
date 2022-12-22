@@ -463,7 +463,6 @@ export class RandomTeams {
 		if (species.id !== "scyther" && species.id !== "scizor") {
 			this.incompatibleMoves(moves, movePool, Setup, pivotingMoves);
 		}
-		this.incompatibleMoves(moves, movePool, ['switcheroo', 'trick'], 'superfang');
 		this.incompatibleMoves(moves, movePool, Setup, Hazards);
 		this.incompatibleMoves(moves, movePool, Setup, ['defog', 'nuzzle', 'toxic', 'waterspout', 'yawn']);
 		this.incompatibleMoves(moves, movePool, PhysicalSetup, PhysicalSetup);
@@ -501,8 +500,8 @@ export class RandomTeams {
 		// This space reserved for assorted hardcodes that otherwise make little sense out of context
 		// Landorus
 		this.incompatibleMoves(moves, movePool, 'nastyplot', 'rockslide');
-		// Persian and Seviper
-		this.incompatibleMoves(moves, movePool, 'switcheroo', ['fakeout', 'suckerpunch']);
+		// Persian and Grafaiai
+		this.incompatibleMoves(moves, movePool, 'switcheroo', ['fakeout', 'superfang']);
 		// Beartic
 		this.incompatibleMoves(moves, movePool, 'snowscape', 'swordsdance');
 		// Cryogonal
