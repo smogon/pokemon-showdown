@@ -185,7 +185,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			target.side.removeSideCondition('reflect');
 			target.side.removeSideCondition('lightscreen');
 			if (!target.runImmunity('Fighting')) {
-				this.hint('In generation 4, Brick Break still breaks screens even if the target is immune.');
+				this.hint('In Gens 3-4, Brick Break still breaks screens even if the target is immune.');
 				return false;
 			}
 		},
