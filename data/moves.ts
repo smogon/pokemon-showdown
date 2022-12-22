@@ -2622,7 +2622,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (target.runEffectiveness(move) > 0) {
 				// Placeholder
 				this.debug(`collision course super effective buff`);
-				return this.chainModify(1.5);
+				return this.chainModify([5461, 4096]);
 			}
 		},
 		secondary: null,
@@ -4648,7 +4648,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (target.runEffectiveness(move) > 0) {
 				// Placeholder
 				this.debug(`electro drift super effective buff`);
-				return this.chainModify(1.5);
+				return this.chainModify([5461, 4096]);
 			}
 		},
 		secondary: null,

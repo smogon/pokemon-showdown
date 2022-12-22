@@ -934,7 +934,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	collisioncourse: {
 		name: "Collision Course",
-		shortDesc: "Deals 1.3x damage if the move is super effective.",
+		shortDesc: "Deals 1.3333x damage if the move is super effective.",
 	},
 	combattorque: {
 		name: "Combat Torque",
@@ -1658,7 +1658,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	electrodrift: {
 		name: "Electro Drift",
-		shortDesc: "Deals 1.3x damage if the move is super effective.",
+		shortDesc: "Deals 1.3333x damage if the move is super effective.",
 	},
 	electroweb: {
 		name: "Electroweb",
