@@ -2,7 +2,7 @@
 
 const assert = require('assert').strict;
 
-const {ExhaustiveRunner} = require('../../../sim/tools/exhaustive-runner');
+const {ExhaustiveRunner} = require('../../../dist/sim/tools/exhaustive-runner');
 
 describe('ExhaustiveRunner (slow)', async function () {
 	it('should run successfully', async function () {

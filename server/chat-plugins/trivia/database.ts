@@ -663,7 +663,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		);
 
 		await Chat.database.exec("PRAGMA foreign_keys = ON;");
-		await Chat.database.loadExtension('server/chat-plugins/trivia/transactions.ts');
+		await Chat.database.loadExtension('server/chat-plugins/trivia/transactions.js');
 	}
 
 	private async convertLegacyJSON() {

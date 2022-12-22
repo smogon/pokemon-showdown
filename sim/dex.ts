@@ -39,9 +39,7 @@ import {Format, DexFormats} from './dex-formats';
 import {Utils} from '../lib';
 
 const BASE_MOD = 'gen9' as ID;
-// to account for Sucrase
-const DATA_PATH = __dirname.endsWith('.sim-dist') ? `../.data-dist` : `../data`;
-const DATA_DIR = path.resolve(__dirname, DATA_PATH);
+const DATA_DIR = path.resolve(__dirname, '../data');
 const MODS_DIR = path.resolve(DATA_DIR, './mods');
 
 const dexes: {[mod: string]: ModdedDex} = Object.create(null);

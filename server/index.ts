@@ -73,7 +73,7 @@ function setupGlobals() {
 	});
 
 	if (Config.watchconfig) {
-		FS(require.resolve('../config/config')).onModify(() => {
+		FS('config/config.js').onModify(() => {
 			try {
 				global.Config = ConfigLoader.load(true);
 				// ensure that battle prefixes configured via the chat plugin are not overwritten

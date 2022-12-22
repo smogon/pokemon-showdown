@@ -13,11 +13,10 @@ import * as child_process from 'child_process';
 import * as cluster from 'cluster';
 import * as path from 'path';
 import * as Streams from './streams';
+import {FS} from './fs';
 
 type ChildProcess = child_process.ChildProcess;
 type Worker = cluster.Worker;
-
-const ROOT_DIR = path.resolve(__dirname, '..');
 
 export const processManagers: ProcessManager[] = [];
 
@@ -112,7 +111,7 @@ export class QueryProcessWrapper<T, U> implements ProcessWrapper {
 	file: string;
 
 	constructor(file: string, messageCallback?: (message: string) => any) {
-		this.process = child_process.fork(file, [], {cwd: ROOT_DIR, execArgv: ['-r', 'ts-node/register']});
+		this.process = child_process.fork(file, [], {cwd: FS.ROOT_PATH});
 		this.taskId = 0;
 		this.file = file;
 		this.pendingTasks = new Map();
@@ -231,7 +230,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 	messageCallback?: (message: string) => any;
 
 	constructor(file: string, messageCallback?: (message: string) => any) {
-		this.process = child_process.fork(file, [], {cwd: ROOT_DIR, execArgv: ['-r', 'ts-node/register']});
+		this.process = child_process.fork(file, [], {cwd: FS.ROOT_PATH});
 		this.messageCallback = messageCallback;
 
 		this.process.on('message', (message: string) => {
@@ -370,7 +369,7 @@ export class RawProcessWrapper implements ProcessWrapper, StreamWorker {
 			this.process = cluster.fork(env);
 			this.workerid = this.process.id;
 		} else {
-			this.process = child_process.fork(file, [], {cwd: ROOT_DIR, env, execArgv: ['-r', 'ts-node/register']}) as any;
+			this.process = child_process.fork(file, [], {cwd: FS.ROOT_PATH, env}) as any;
 		}
 
 		this.process.on('message', (message: string) => {
@@ -721,8 +720,7 @@ export class RawProcessManager extends ProcessManager<RawProcessWrapper> {
 			cluster.setupMaster({
 				exec: this.filename,
 				// @ts-ignore TODO: update type definition
-				cwd: ROOT_DIR,
-				execArgv: ['-r', 'ts-node/register'],
+				cwd: FS.ROOT_PATH,
 			});
 		}
 

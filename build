@@ -22,19 +22,15 @@ function shell(cmd) {
 
 // Check to make sure the most recently added or updated dependency is installed at the correct version
 try {
-	var sucraseVersion = require('sucrase').getVersion().split('.');
-	if (
-		parseInt(sucraseVersion[0]) < 3 ||
-		(parseInt(sucraseVersion[0]) === 3 && parseInt(sucraseVersion[1]) < 15)
-	) {
-		throw new Error("Sucrase version too old");
+	var version = require('esbuild').version.split('.');
+	if (parseInt(version[1]) < 16) {
+		throw new Error("esbuild version too old");
 	}
 } catch (e) {
 	console.log('Installing dependencies...');
-	shell('npm install' + (decl ? '' : ' --production'));
-	force = true;
+	shell('npm install');
 }
-// for some reason, sucrase won't be requirable until a tick has passed
+// for some reason, esbuild won't be requirable until a tick has passed
 // see https://stackoverflow.com/questions/53270058/node-cant-find-certain-modules-after-synchronous-install
 setImmediate(() => {
 	require('./tools/build-utils').transpile(force, decl);

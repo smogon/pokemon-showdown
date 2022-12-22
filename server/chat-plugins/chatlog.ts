@@ -1110,7 +1110,7 @@ export class RipgrepLogSearcher extends Searcher {
 			}
 			const {stdout} = await ProcessManager.exec(['rg', ...options], {
 				maxBuffer: MAX_MEMORY,
-				cwd: `${__dirname}/../../`,
+				cwd: FS.ROOT_PATH,
 			});
 			results = stdout.split(resultSep);
 		} catch (e: any) {

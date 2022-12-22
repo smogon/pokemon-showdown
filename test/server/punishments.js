@@ -7,7 +7,7 @@
  */
 const assert = require('../assert');
 const {makeUser, makeConnection} = require('../users-utils');
-const {Punishments} = require('../../server/punishments');
+const {Punishments} = require('../../dist/server/punishments');
 
 const TEST_PUNISHMENT_DURATION = 1000; // 1 second
 

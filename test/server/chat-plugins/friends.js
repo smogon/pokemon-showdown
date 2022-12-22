@@ -4,13 +4,12 @@
 */
 'use strict';
 
-const {FriendsDatabase} = require('../../../server/friends.ts');
-const {Config} = require('../../../server/config-loader.ts');
 const assert = require('../../assert');
 
-const test = (Config.usesqlite ? it : it.skip);
-
-describe("Friends lists", () => {
+describe.skip("Friends lists", () => {
+	const {FriendsDatabase} = require('../../../dist/server/friends');
+	const {Config} = require('../../../dist/server/config-loader');
+	const test = (Config.usesqlite ? it : it.skip);
 	test("Should properly setup database", () => {
 		assert.doesNotThrow(() => FriendsDatabase.setupDatabase(':memory:'));
 	});

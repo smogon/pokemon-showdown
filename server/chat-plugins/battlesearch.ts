@@ -275,7 +275,9 @@ async function rustBattleSearch(
 		const month = (date.getMonth() + 1).toString().padStart(2, '0');
 		const day = date.getDate().toString().padStart(2, '0');
 
-		directories.push(path.join(__dirname, '..', '..', 'logs', `${year}-${month}`, format, `${year}-${month}-${day}`));
+		directories.push(
+			FS(path.join('logs', `${year}-${month}`, format, `${year}-${month}-${day}`)).path
+		);
 	}
 
 	// TODO: implement flag?
