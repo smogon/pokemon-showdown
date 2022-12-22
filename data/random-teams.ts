@@ -463,6 +463,7 @@ export class RandomTeams {
 		if (species.id !== "scyther" && species.id !== "scizor") {
 			this.incompatibleMoves(moves, movePool, Setup, pivotingMoves);
 		}
+		this.incompatibleMoves(moves, movePool, ['switcheroo', 'trick'], 'superfang');
 		this.incompatibleMoves(moves, movePool, Setup, Hazards);
 		this.incompatibleMoves(moves, movePool, Setup, ['defog', 'nuzzle', 'toxic', 'waterspout', 'yawn']);
 		this.incompatibleMoves(moves, movePool, PhysicalSetup, PhysicalSetup);
