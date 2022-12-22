@@ -121,6 +121,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	curse: {
+		inherit: true,
+		onModifyTarget() {},
+		target: "randomNormal",
+	},
 	decorate: {
 		inherit: true,
 		isNonstandard: null,
