@@ -2585,7 +2585,7 @@ export class Battle {
 			action.target.subFainted = false;
 			action.target.status = '';
 			action.target.hp = 1; // Needed so hp functions works
-			action.target.sethp(action.pokemon.maxhp / 2);
+			action.target.sethp(action.target.maxhp / 2);
 			this.add('-heal', action.target, action.target.getHealth, '[from] move: Revival Blessing');
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'revivalblessing');
 			break;
