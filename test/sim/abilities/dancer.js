@@ -114,7 +114,7 @@ describe('Dancer', function () {
 	});
 
 	it('should target the user of a Dance move unless it was an ally attacking an opponent', function () {
-		const {battle, p1a, p1b, p2a, p2b} = ctx = common.testCtx({gameType: 'doubles'}, [[
+		const {battle, p1b, p2a, p2b} = ctx = common.testCtx({gameType: 'doubles'}, [[
 			{species: 'Oricorio', level: 98, ability: 'dancer', item: 'laggingtail', moves: ['sleeptalk', 'protect', 'teeterdance']},
 			{species: 'Oricorio', level: 99, ability: 'heatproof', moves: ['fierydance', 'sleeptalk']},
 		], [
