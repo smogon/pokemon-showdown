@@ -581,17 +581,12 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (pokemon.transformed) return;
 			if (this.queue.peek(true)?.choice === 'runSwitch') return;
 
-			function tryEnergyBoost(this: Battle, ability: 'protosynthesis' | 'quarkdrive') {
-				if (pokemon.hasAbility(ability) && !pokemon.getVolatile(ability) && pokemon.useItem()) {
-					this.add('-activate', pokemon, `ability: ${this.dex.abilities.get(ability).name}`, '[fromitem]');
-					pokemon.addVolatile(ability);
-					pokemon.volatiles[ability].fromBooster = true;
-					return true;
-				}
+			if (pokemon.hasAbility('protosynthesis') && !this.field.isWeather('sunnyday') && pokemon.useItem()) {
+				pokemon.addVolatile('protosynthesis');
 			}
-
-			if (tryEnergyBoost.call(this, 'protosynthesis')) return;
-			tryEnergyBoost.call(this, 'quarkdrive');
+			if (pokemon.hasAbility('quarkdrive') && !this.field.isTerrain('electricterrain') && pokemon.useItem()) {
+				pokemon.addVolatile('quarkdrive');
+			}
 		},
 		onTakeItem(item, source) {
 			if (source.baseSpecies.tags.includes("Paradox")) return false;
