@@ -48,8 +48,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	angershell: {
 		name: "Anger Shell",
-		desc: "When this Pokemon has more than 1/2 its maximum HP and takes damage from an attack bringing it to 1/2 or less of its maximum HP, its Attack, Special Attack, and Speed are raised by 1 stage, and its Defense and Speed are lowered by 1 stage. This effect applies after all hits from a multi-hit move. This effect is prevented if the move had a secondary effect removed by the Sheer Force Ability.",
-		shortDesc: "When this Pokemon reaches 1/2 or less of its max HP: +1 Atk, Sp. Atk, and Spe; -1 Def and Sp. Def.",
+		desc: "When this Pokemon has more than 1/2 its maximum HP and takes damage from an attack bringing it to 1/2 or less of its maximum HP, its Attack, Special Attack, and Speed are raised by 1 stage, and its Defense and Special Defense are lowered by 1 stage. This effect applies after all hits from a multi-hit move. This effect is prevented if the move had a secondary effect removed by the Sheer Force Ability.",
+		shortDesc: "At 1/2 or less of this Pokemon's max HP: +1 Atk, Sp. Atk, Spe, and -1 Def, Sp. Def.",
 	},
 	anticipation: {
 		name: "Anticipation",
@@ -86,7 +86,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	armortail: {
 		name: "Armor Tail",
-		desc: "While this Pokemon is active, priority moves from opposing Pokemon that target this Pokemon or its allies are prevented from having an effect.",
+		desc: "Priority moves used by opposing Pokemon targeting this Pokemon or its allies are prevented from having an effect.",
 		shortDesc: "This Pokemon and its allies are protected from opposing priority moves.",
 
 		block: "#damp",
@@ -156,7 +156,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	beadsofruin: {
 		name: "Beads of Ruin",
-		shortDesc: "The Sp. Def stat of all other active Pokemon is reduced by 25%.",
+		shortDesc: "The Special Defense stat of all other active Pokemon is multiplied by 0.75.",
 
 		start: "  [POKEMON]'s Beads of Ruin weakened the Sp. Def of all surrounding Pokémon!",
 	},
@@ -235,7 +235,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	commander: {
 		name: "Commander",
-		desc: "If this Pokemon is Tatsugiri and Dondozo is an active ally, Dondozo will swallow this Pokemon. This prevents this Pokemon from acting and boosts all of Dondozo's stats by 2 stages. Attacks targeted at this Pokemon will fail if it has been swallowed. Tatsugiri can still take indirect damage while swallowed.",
+		desc: "If this Pokemon is a Tatsugiri and a Dondozo is an active ally, this Pokemon goes into the Dondozo's mouth. The Dondozo has its Attack, Special Attack, Speed, Defense, and Special Defense raised by 2 stages. During the effect, the Dondozo cannot be switched out, this Pokemon cannot select an action, and attacks targeted at this Pokemon will be avoided but it will still take indirect damage. If this Pokemon faints during the effect, a Pokemon can be switched in as a replacement but the Dondozo remains unable to be switched out. If the Dondozo faints during the effect, this Pokemon regains the ability to select an action.",
 		shortDesc: "If ally is Dondozo: this Pokemon cannot act or be hit, +2 to all Dondozo's stats.",
 	},
 	competitive: {
@@ -263,7 +263,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	costar: {
 		name: "Costar",
-		shortDesc: "On switch-in, this Pokemon copies an ally's stat changes.",
+		shortDesc: "On switch-in, this Pokemon copies all of its ally's stat stage changes.",
 	},
 	cottondown: {
 		name: "Cotton Down",
@@ -272,8 +272,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	cudchew: {
 		name: "Cud Chew",
-		desc: "When this Pokemon consumes a berry, it will consume the berry again at the end of the following turn.",
-		shortDesc: "If this Pokemon eats a berry, it will consume the berry again at the end of next turn.",
+		shortDesc: "If this Pokemon eats a Berry, it will eat that Berry again at the end of the next turn.",
 	},
 	curiousmedicine: {
 		name: "Curious Medicine",
@@ -333,7 +332,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	dazzling: {
 		name: "Dazzling",
-		desc: "While this Pokemon is active, priority moves from opposing Pokemon that target this Pokemon or its allies are prevented from having an effect.",
+		desc: "Priority moves used by opposing Pokemon targeting this Pokemon or its allies are prevented from having an effect.",
 		shortDesc: "This Pokemon and its allies are protected from opposing priority moves.",
 
 		block: "#damp",
@@ -424,8 +423,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	electromorphosis: {
 		name: "Electromorphosis",
-		desc: "This Pokemon's next Electric-type attack will have its power doubled if it takes direct damage.",
-		shortDesc: "This Pokemon becomes charged if it takes direct damage.",
+		shortDesc: "This Pokemon gains the Charge effect when it takes a hit from an attack.",
 
 		start: "  Being hit by [MOVE] charged [POKEMON] with power!",
 	},
@@ -584,6 +582,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	guarddog: {
 		name: "Guard Dog",
+		desc: "This Pokemon is immune to the effect of the Intimidate Ability and raises its Attack by 1 stage instead. This Pokemon cannot be forced to switch out by another Pokemon's attack or item.",
 		shortDesc: "Immune to Intimidate. Intimidated: +1 Attack. Cannot be forced to switch out.",
 	},
 	gulpmissile: {
@@ -598,7 +597,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	hadronengine: {
 		name: "Hadron Engine",
-		shortDesc: "On switch-in, summons Electric Terrain. Sp. Atk is boosted by 30% in Electric Terrain.",
+		shortDesc: "On switch-in, summons Electric Terrain. During Electric Terrain, Sp. Atk is 1.3333x.",
 
 		start: "  [POKEMON] turned the ground into Electric Terrain, energizing its futuristic engine!",
 		activate: "  [POKEMON] used the Electric Terrain to energize its futuristic engine!",
@@ -671,7 +670,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	iceface: {
 		name: "Ice Face",
 		desc: "If this Pokemon is an Eiscue, the first physical hit it takes in battle deals 0 neutral damage. Its ice face is then broken and it changes forme to Noice Face. Eiscue regains its Ice Face forme when Snow begins or when Eiscue switches in while Snow is active. Confusion damage also breaks the ice face.",
-		shortDesc: "If Eiscue, the first physical hit it takes deals 0 damage. This effect is restored in Snow.",
+		shortDesc: "If Eiscue, the first physical hit it takes deals 0 damage. Effect is restored in Snow.",
 		gen8: {
 			desc: "If this Pokemon is an Eiscue, the first physical hit it takes in battle deals 0 neutral damage. Its ice face is then broken and it changes forme to Noice Face. Eiscue regains its Ice Face forme when Hail begins or when Eiscue switches in while Hail is active. Confusion damage also breaks the ice face.",
 			shortDesc: "If Eiscue, the first physical hit it takes deals 0 damage. This effect is restored in Hail.",
@@ -846,8 +845,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	lingeringaroma: {
 		name: "Lingering Aroma",
-		desc: "Pokemon making contact with this Pokemon have their Ability changed to Lingering Aroma. Does not affect Pokemon with the As One, Battle Bond, Comatose, Disguise, Gulp Missile, Ice Face, Multitype, Mummy, Power Construct, RKS System, Schooling, Shields Down, Stance Change, or Zen Mode Abilities.",
-		shortDesc: "Pokemon making contact with this Pokemon have their Ability changed to Lingering Aroma.",
+		desc: "Pokemon making contact with this Pokemon have their Ability changed to Lingering Aroma. Does not affect Pokemon with the As One, Battle Bond, Comatose, Commander, Disguise, Gulp Missile, Hadron Engine, Ice Face, Lingering Aroma, Multitype, Orichalcum Pulse, Power Construct, Protosynthesis, Quark Drive, RKS System, Schooling, Shields Down, Stance Change, Zen Mode, or Zero to Hero Abilities.",
+		shortDesc: "Making contact with this Pokemon has the attacker's Ability become Lingering Aroma.",
 
 		changeAbility: "  A lingering aroma clings to [TARGET]!",
 	},
@@ -1017,8 +1016,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	mummy: {
 		name: "Mummy",
-		desc: "Pokemon making contact with this Pokemon have their Ability changed to Mummy. Does not affect Pokemon with the As One, Battle Bond, Comatose, Disguise, Gulp Missile, Ice Face, Multitype, Mummy, Power Construct, RKS System, Schooling, Shields Down, Stance Change, or Zen Mode Abilities.",
+		desc: "Pokemon making contact with this Pokemon have their Ability changed to Mummy. Does not affect Pokemon with the As One, Battle Bond, Comatose, Commander, Disguise, Gulp Missile, Hadron Engine, Ice Face, Multitype, Mummy, Orichalcum Pulse, Power Construct, Protosynthesis, Quark Drive, RKS System, Schooling, Shields Down, Stance Change, Zen Mode, or Zero to Hero Abilities.",
 		shortDesc: "Pokemon making contact with this Pokemon have their Ability changed to Mummy.",
+		gen8: {
+			desc: "Pokemon making contact with this Pokemon have their Ability changed to Mummy. Does not affect Pokemon with the As One, Battle Bond, Comatose, Disguise, Gulp Missile, Ice Face, Multitype, Mummy, Power Construct, RKS System, Schooling, Shields Down, Stance Change, or Zen Mode Abilities.",
+		},
 		gen7: {
 			desc: "Pokemon making contact with this Pokemon have their Ability changed to Mummy. Does not affect Pokemon with the Battle Bond, Comatose, Disguise, Multitype, Mummy, Power Construct, RKS System, Schooling, Shields Down, Stance Change, or Zen Mode Abilities.",
 		},
@@ -1033,6 +1035,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	myceliummight: {
 		name: "Mycelium Might",
+		desc: "This Pokemon's Status moves ignore certain Abilities of other Pokemon, and go last among Pokemon using the same or greater priority moves.",
 		shortDesc: "This Pokemon's Status moves go last in their priority bracket and ignore Abilities.",
 	},
 	naturalcure: {
@@ -1085,11 +1088,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	opportunist: {
 		name: "Opportunist",
-		shortDesc: "When an opposing Pokemon recieves stat boosts, this Pokemon gets the same boosts.",
+		shortDesc: "When an opposing Pokemon has a stat stage raised, this Pokemon copies the effect.",
 	},
 	orichalcumpulse: {
 		name: "Orichalcum Pulse",
-		shortDesc: "On switch-in, summons Sunny Day. Attack is boosted by 30% in Sunny Day.",
+		shortDesc: "On switch-in, summons Sunny Day. During Sunny Day, Attack is 1.3333x.",
 
 		start: "  [POKEMON] turned the sunlight harsh, sending its ancient pulse into a frenzy!",
 		activate: "  [POKEMON] basked in the sunlight, sending its ancient pulse into a frenzy!",
@@ -1214,8 +1217,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	powerofalchemy: {
 		name: "Power of Alchemy",
-		desc: "This Pokemon copies the Ability of an ally that faints. Abilities that cannot be copied are As One, Battle Bond, Comatose, Disguise, Flower Gift, Forecast, Gulp Missile, Hunger Switch, Ice Face, Illusion, Imposter, Multitype, Neutralizing Gas, Power Construct, Power of Alchemy, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, Wonder Guard, and Zen Mode.",
+		desc: "This Pokemon copies the Ability of an ally that faints. Abilities that cannot be copied are As One, Battle Bond, Comatose, Commander, Disguise, Flower Gift, Forecast, Gulp Missile, Hadron Engine, Hunger Switch, Ice Face, Illusion, Imposter, Multitype, Neutralizing Gas, Orichalcum Pulse, Power Construct, Power of Alchemy, Protosynthesis, Quark Drive, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, Wonder Guard, Zen Mode, and Zero to Hero.",
 		shortDesc: "This Pokemon copies the Ability of an ally that faints.",
+		gen8: {
+			desc: "This Pokemon copies the Ability of an ally that faints. Abilities that cannot be copied are As One, Battle Bond, Comatose, Disguise, Flower Gift, Forecast, Gulp Missile, Hunger Switch, Ice Face, Illusion, Imposter, Multitype, Neutralizing Gas, Power Construct, Power of Alchemy, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, Wonder Guard, and Zen Mode.",
+		},
 		gen7: {
 			desc: "This Pokemon copies the Ability of an ally that faints. Abilities that cannot be copied are Battle Bond, Comatose, Disguise, Flower Gift, Forecast, Illusion, Imposter, Multitype, Power Construct, Power of Alchemy, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, Wonder Guard, and Zen Mode.",
 		},
@@ -1270,8 +1276,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	protosynthesis: {
 		name: "Protosynthesis",
-		desc: "If Sunny Day is active or this Pokemon has used a held Booster Energy, this Pokemon's highest stat is multiplied by 1.3, or by 1.5 if the highest stat is Speed.",
-		shortDesc: "While Sunny Day or Booster Energy are active, highest stat is 1.3x, or 1.5x if Speed.",
+		desc: "If Sunny Day is active or this Pokemon uses a held Booster Energy, this Pokemon's highest stat is multiplied by 1.3, or by 1.5 if the highest stat is Speed. Stat stage changes are considered at the time this Ability activates. If multiple stats are tied, Attack, Defense, Special Attack, Special Defense, and Speed are prioritized in that order. If this effect was started by Sunny Day, a held Booster Energy will not activate and the effect ends when Sunny Day is no longer active. If this effect was started by a held Booster Energy, it ends when this Pokemon is no longer active.",
+		shortDesc: "Sunny Day active or Booster Energy used: highest stat is 1.3x, or 1.5x if Speed.",
 
 		activate: "  The harsh sunlight activated [POKEMON]'s Protosynthesis!",
 		activateFromItem: "  [POKEMON] used its Booster Energy to activate Protosynthesis!",
@@ -1293,13 +1299,13 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	purifyingsalt: {
 		name: "Purifying Salt",
-		desc: "This Pokemon cannot become affected by a status condition or Yawn. If a Pokemon uses a Ghost-type attack against this Pokemon, that Pokemon's offensive stat is halved when calculating the damage to this Pokemon.",
-		shortDesc: "This Pokemon cannot be statused; Ghost power against it is halved.",
+		desc: "This Pokemon cannot become affected by a non-volatile status condition or Yawn. This Pokemon receives 1/2 damage from Ghost-type moves.",
+		shortDesc: "This Pokemon takes 1/2 damage from Ghost moves and it cannot become statused.",
 	},
 	quarkdrive: {
 		name: "Quark Drive",
-		desc: "If Electric Terrain is active or this Pokemon has used a held Booster Energy, this Pokemon's highest stat is multiplied by 1.3, or by 1.5 if the highest stat is Speed.",
-		shortDesc: "While Electric Terrain or Booster Energy are active, highest stat is 1.3x, or 1.5x if Speed.",
+		desc: "If Electric Terrain is active or this Pokemon uses a held Booster Energy, this Pokemon's highest stat is multiplied by 1.3, or by 1.5 if the highest stat is Speed. Stat stage changes are considered at the time this Ability activates. If multiple stats are tied, Attack, Defense, Special Attack, Special Defense, and Speed are prioritized in that order. If this effect was started by Electric Terrain, a held Booster Energy will not activate and the effect ends when Electric Terrain is no longer active. If this effect was started by a held Booster Energy, it ends when this Pokemon is no longer active.",
+		shortDesc: "Electric Terrain active or Booster Energy used: highest stat is 1.3x, or 1.5x if Speed.",
 
 		activate: "  The Electric Terrain activated [POKEMON]'s Quark Drive!",
 		activateFromItem: "  [POKEMON] used its Booster Energy to activate its Quark Drive!",
@@ -1346,8 +1352,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	receiver: {
 		name: "Receiver",
-		desc: "This Pokemon copies the Ability of an ally that faints. Abilities that cannot be copied are As One, Battle Bond, Comatose, Disguise, Flower Gift, Forecast, Gulp Missile, Hunger Switch, Ice Face, Illusion, Imposter, Multitype, Neutralizing Gas, Power Construct, Power of Alchemy, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, Wonder Guard, and Zen Mode.",
+		desc: "This Pokemon copies the Ability of an ally that faints. Abilities that cannot be copied are As One, Battle Bond, Comatose, Commander, Disguise, Flower Gift, Forecast, Gulp Missile, Hadron Engine, Hunger Switch, Ice Face, Illusion, Imposter, Multitype, Neutralizing Gas, Orichalcum Pulse, Power Construct, Power of Alchemy, Protosynthesis, Quark Drive, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, Wonder Guard, Zen Mode, and Zero to Hero.",
 		shortDesc: "This Pokemon copies the Ability of an ally that faints.",
+		gen8: {
+			desc: "This Pokemon copies the Ability of an ally that faints. Abilities that cannot be copied are As One, Battle Bond, Comatose, Disguise, Flower Gift, Forecast, Gulp Missile, Hunger Switch, Ice Face, Illusion, Imposter, Multitype, Neutralizing Gas, Power Construct, Power of Alchemy, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, Wonder Guard, and Zen Mode.",
+		},
 		gen7: {
 			desc: "This Pokemon copies the Ability of an ally that faints. Abilities that cannot be copied are Battle Bond, Comatose, Disguise, Flower Gift, Forecast, Illusion, Imposter, Multitype, Power Construct, Power of Alchemy, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, Wonder Guard, and Zen Mode.",
 		},
@@ -1429,8 +1438,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	sandspit: {
 		name: "Sand Spit",
-		desc: "When this Pokemon is hit by an attack, the effect of Sandstorm begins. This effect comes after the effects of Max and G-Max Moves.",
 		shortDesc: "When this Pokemon is hit by an attack, the effect of Sandstorm begins.",
+		gen8: {
+			desc: "When this Pokemon is hit by an attack, the effect of Sandstorm begins. This effect comes after the effects of Max and G-Max Moves.",
+		},
 	},
 	sandstream: {
 		name: "Sand Stream",
@@ -1469,7 +1480,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	seedsower: {
 		name: "Seed Sower",
-		desc: "When this Pokemon is hit by an attack, the effect of Grassy Terrain begins.",
 		shortDesc: "When this Pokemon is hit by an attack, the effect of Grassy Terrain begins.",
 	},
 	serenegrace: {
@@ -1506,8 +1516,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	sharpness: {
 		name: "Sharpness",
-		desc: "This Pokemon's slicing attacks have their power multiplied by 1.5.",
-		shortDesc: "This Pokemon's slicing attacks have 1.5x power.",
+		shortDesc: "This Pokemon's slicing moves have their power multiplied by 1.5.",
 	},
 	shedskin: {
 		name: "Shed Skin",
@@ -1754,8 +1763,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	supremeoverlord: {
 		name: "Supreme Overlord",
-		desc: "This Pokemon's Attack and Special Attack stats are increased by 10% for each fainted teammate.",
-		shortDesc: "This Pokemon's Attack and Special Attack raise by 10% per fainted teammate.",
+		desc: "This Pokemon's moves have their power multiplied by 1+(X*0.1), where X is the total number of times any Pokemon has fainted on the user's side when this Ability became active, and X cannot be greater than 5.",
+		shortDesc: "This Pokemon's moves have 0.1x more power for each fainted ally, maximum 1.5x.",
 
 		activate: "  [POKEMON] gained strength from the fallen!",
 	},
@@ -1789,7 +1798,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	swordofruin: {
 		name: "Sword of Ruin",
-		shortDesc: "The Defense stat of all other active Pokemon is reduced by 25%.",
+		shortDesc: "The Defense stat of all other active Pokemon is multiplied by 0.75.",
 
 		start: "  [POKEMON]'s Sword of Ruin weakened the Defense of all surrounding Pokémon!",
 	},
@@ -1816,7 +1825,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	tabletsofruin: {
 		name: "Tablets of Ruin",
-		shortDesc: "The Attack stat of all other active Pokemon is reduced by 25%.",
+		shortDesc: "The Attack stat of all other active Pokemon is multiplied by 0.75.",
 
 		start: "  [POKEMON]'s Tablets of Ruin weakened the Attack of all surrounding Pokémon!",
 	},
@@ -1861,8 +1870,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	thermalexchange: {
 		name: "Thermal Exchange",
-		desc: "This Pokemon's Attack is raised 1 stage after it is damaged by a Fire-type move. This Pokemon cannot be burned.",
-		shortDesc: "This Pokemon's Attack is raised by 1 stage when hit by Fire moves; it can't be burned.",
+		desc: "This Pokemon's Attack is raised 1 stage after it is damaged by a Fire-type move. This Pokemon cannot be burned. Gaining this Ability while burned cures it.",
+		shortDesc: "This Pokemon's Attack is raised by 1 when damaged by Fire moves; can't be burned.",
 	},
 	thickfat: {
 		name: "Thick Fat",
@@ -1901,13 +1910,15 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	toxicdebris: {
 		name: "Toxic Debris",
-		desc: "When this Pokemon is hit by a physical attack, Toxic Spikes are set on the opposing side of the field.",
-		shortDesc: "When this Pokemon is hit by a physical attack, Toxic Spikes are set around the attacker.",
+		shortDesc: "If this Pokemon is hit by a physical attack, Toxic Spikes are set on the opposing side.",
 	},
 	trace: {
 		name: "Trace",
-		desc: "On switch-in, this Pokemon copies a random opposing Pokemon's Ability. Abilities that cannot be copied are As One, Battle Bond, Comatose, Disguise, Flower Gift, Forecast, Gulp Missile, Hunger Switch, Ice Face, Illusion, Imposter, Multitype, Neutralizing Gas, Power Construct, Power of Alchemy, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, and Zen Mode. If no opposing Pokemon has an Ability that can be copied, this Ability will activate as soon as one does.",
+		desc: "On switch-in, this Pokemon copies a random opposing Pokemon's Ability. Abilities that cannot be copied are As One, Battle Bond, Comatose, Commander, Disguise, Flower Gift, Forecast, Gulp Missile, Hadron Engine, Hunger Switch, Ice Face, Illusion, Imposter, Multitype, Neutralizing Gas, Orichalcum Pulse, Power Construct, Power of Alchemy, Protosynthesis, Quark Drive, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, Zen Mode, and Zero to Hero. If no opposing Pokemon has an Ability that can be copied, this Ability will activate as soon as one does.",
 		shortDesc: "On switch-in, or when it can, this Pokemon copies a random adjacent foe's Ability.",
+		gen8: {
+			desc: "On switch-in, this Pokemon copies a random opposing Pokemon's Ability. Abilities that cannot be copied are As One, Battle Bond, Comatose, Disguise, Flower Gift, Forecast, Gulp Missile, Hunger Switch, Ice Face, Illusion, Imposter, Multitype, Neutralizing Gas, Power Construct, Power of Alchemy, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, and Zen Mode. If no opposing Pokemon has an Ability that can be copied, this Ability will activate as soon as one does.",
+		},
 		gen7: {
 			desc: "On switch-in, this Pokemon copies a random opposing Pokemon's Ability. Abilities that cannot be copied are Battle Bond, Comatose, Disguise, Flower Gift, Forecast, Illusion, Imposter, Multitype, Power Construct, Power of Alchemy, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, and Zen Mode. If no opposing Pokemon has an Ability that can be copied, this Ability will activate as soon as one does.",
 		},
@@ -1982,7 +1993,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	vesselofruin: {
 		name: "Vessel of Ruin",
-		shortDesc: "The Sp. Atk stat of all other active Pokemon is reduced by 25%.",
+		shortDesc: "The Special Attack stat of all other active Pokemon is multiplied by 0.75.",
 
 		start: "  [POKEMON]'s Vessel of Ruin weakened the Sp. Atk of all surrounding Pokémon!",
 	},
@@ -2005,8 +2016,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	wanderingspirit: {
 		name: "Wandering Spirit",
-		desc: "Pokemon making contact with this Pokemon have their Ability swapped with this one. Does not affect Pokemon with the As One, Battle Bond, Comatose, Disguise, Gulp Missile, Hunger Switch, Ice Face, Illusion, Multitype, Neutralizing Gas, Power Construct, RKS System, Schooling, Shields Down, Stance Change, Wonder Guard, or Zen Mode Abilities.",
+		desc: "Pokemon making contact with this Pokemon have their Ability swapped with this one. Does not affect Pokemon with the As One, Battle Bond, Comatose, Commander, Disguise, Gulp Missile, Hadron Engine, Hunger Switch, Ice Face, Illusion, Multitype, Neutralizing Gas, Orichalcum Pulse, Power Construct, Protosynthesis, Quark Drive, RKS System, Schooling, Shields Down, Stance Change, Wonder Guard, Zen Mode, or Zero to Hero Abilities.",
 		shortDesc: "Pokemon making contact with this Pokemon have their Ability swapped with this one.",
+		gen8: {
+			desc: "Pokemon making contact with this Pokemon have their Ability swapped with this one. Does not affect Pokemon with the As One, Battle Bond, Comatose, Disguise, Gulp Missile, Hunger Switch, Ice Face, Illusion, Multitype, Neutralizing Gas, Power Construct, RKS System, Schooling, Shields Down, Stance Change, Wonder Guard, or Zen Mode Abilities.",
+		},
 
 		activate: "#skillswap",
 	},
@@ -2053,15 +2067,15 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	windpower: {
 		name: "Wind Power",
-		desc: "This Pokemon's next Electric-type attack will have its power doubled if it is hit by a wind move or Tailwind begins.",
-		shortDesc: "This Pokemon becomes charged if it is hit by a wind move or Tailwind begins.",
+		desc: "This Pokemon gains the Charge effect when it takes a hit from a wind move or when Tailwind begins on this Pokemon's side.",
+		shortDesc: "This Pokemon gains the Charge effect when hit by a wind move or Tailwind begins.",
 
 		start: "#electromorphosis",
 	},
 	windrider: {
 		name: "Wind Rider",
-		desc: "This Pokemon is immune to wind moves and raises its Attack by 1 stage when hit by a wind move. Attack is also raised when Tailwind begins on this Pokemon's side.",
-		shortDesc: "If hit by a wind move or Tailwind begins: +1 Attack. Wind move immunity.",
+		desc: "This Pokemon is immune to wind moves and raises its Attack by 1 stage when hit by a wind move or when Tailwind begins on this Pokemon's side.",
+		shortDesc: "Attack raised by 1 if hit by a wind move or Tailwind begins. Wind move immunity.",
 	},
 	wonderguard: {
 		name: "Wonder Guard",
@@ -2093,8 +2107,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		transformEnd: "Zen Mode ended!",
 	},
 	zerotohero: {
-		name: "Zero To Hero",
-		shortDesc: "If this Pokemon is Palafin, it changes to Hero Mode when it switches out.",
+		name: "Zero to Hero",
+		shortDesc: "If this Pokemon is a Palafin in Zero Form, switching out has it change to Hero Form.",
 
 		activate: "  [POKEMON] underwent a heroic transformation!",
 	},

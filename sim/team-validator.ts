@@ -1622,7 +1622,7 @@ export class TeamValidator {
 
 		setHas['ability:' + ability.id] = true;
 
-		if (this.format.id.startsWith('gen8pokebilities')) {
+		if (this.format.id.startsWith('gen9pokebilities')) {
 			const species = dex.species.get(set.species);
 			const unSeenAbilities = Object.keys(species.abilities)
 				.filter(key => key !== 'S' && (key !== 'H' || !species.unreleasedHidden))

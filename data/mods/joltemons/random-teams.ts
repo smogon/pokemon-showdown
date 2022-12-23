@@ -1,7 +1,7 @@
 import {Species} from '../../../sim/dex-species';
-import RandomTeams, {MoveCounter} from '../../random-teams';
+import RandomGen8Teams, {MoveCounter} from '../gen8/random-teams';
 
-export class RandomJoltemonsTeams extends RandomTeams {
+export class RandomJoltemonsTeams extends RandomGen8Teams {
 	shouldCullAbility(
 		ability: string,
 		types: Set<string>,

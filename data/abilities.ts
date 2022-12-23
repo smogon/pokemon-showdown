@@ -56,12 +56,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Flying';
-				move.aerilateBoosted = true;
+				move.typeChangerBoosted = this.effect;
 			}
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.aerilateBoosted) return this.chainModify([4915, 4096]);
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
 		name: "Aerilate",
 		rating: 4,
@@ -513,7 +513,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onStart(pokemon) {
 			// Cloud Nine does not activate when Skill Swapped or when Neutralizing Gas leaves the field
-			if (!this.effectState.switchingIn) {
+			if (this.effectState.switchingIn) {
 				this.add('-ability', pokemon, 'Cloud Nine');
 				this.effectState.switchingIn = false;
 			}
@@ -689,14 +689,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	cudchew: {
 		onEatItem(item, pokemon) {
-			if (item.isBerry) {
-				pokemon.addVolatile('cudchew');
+			if (item.isBerry && pokemon.addVolatile('cudchew')) {
 				pokemon.volatiles['cudchew'].berry = item;
 			}
+		},
+		onEnd(pokemon) {
+			delete pokemon.volatiles['cudchew'];
 		},
 		condition: {
 			noCopy: true,
 			duration: 2,
+			onRestart() {
+				this.effectState.duration = 2;
+			},
 			onResidualOrder: 28,
 			onResidualSubOrder: 2,
 			onEnd(pokemon) {
@@ -1422,12 +1427,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Electric';
-				move.galvanizeBoosted = true;
+				move.typeChangerBoosted = this.effect;
 			}
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.galvanizeBoosted) return this.chainModify([4915, 4096]);
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
 		name: "Galvanize",
 		rating: 4,
@@ -1612,7 +1617,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifySpA(atk, attacker, defender, move) {
 			if (this.field.isTerrain('electricterrain') && attacker.isGrounded()) {
 				this.debug('Hadron Engine boost');
-				return this.chainModify([5325, 4096]);
+				return this.chainModify([5461, 4096]);
 			}
 		},
 		name: "Hadron Engine",
@@ -2694,12 +2699,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				// TODO: Figure out actual interaction
 				!(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Normal';
-				move.normalizeBoosted = true;
+				move.typeChangerBoosted = this.effect;
 			}
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.normalizeBoosted) return this.chainModify([4915, 4096]);
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
 		name: "Normalize",
 		rating: 0,
@@ -2773,7 +2778,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyAtk(atk, pokemon) {
 			if (pokemon.effectiveWeather() === 'sunnyday') {
 				this.debug('Orichalcum boost');
-				return this.chainModify([5325, 4096]);
+				return this.chainModify([5461, 4096]);
 			}
 		},
 		name: "Orichalcum Pulse",
@@ -2970,12 +2975,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Fairy';
-				move.pixilateBoosted = true;
+				move.typeChangerBoosted = this.effect;
 			}
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.pixilateBoosted) return this.chainModify([4915, 4096]);
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
 		name: "Pixilate",
 		rating: 4,
@@ -3174,12 +3179,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onWeatherChange(pokemon) {
 			if (pokemon.transformed) return;
-			// protosynthesis is not affected by Utility Umbrella
-			if (this.field.effectiveWeather() === 'sunnyday') {
-				if (!pokemon.volatiles['protosynthesis']) {
-					this.add('-activate', pokemon, 'ability: Protosynthesis');
-					pokemon.addVolatile('protosynthesis');
-				}
+			// Protosynthesis is not affected by Utility Umbrella
+			if (this.field.isWeather('sunnyday')) {
+				pokemon.addVolatile('protosynthesis');
 			} else if (!pokemon.volatiles['protosynthesis']?.fromBooster) {
 				pokemon.removeVolatile('protosynthesis');
 			}
@@ -3190,7 +3192,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		condition: {
 			noCopy: true,
-			onStart(pokemon) {
+			onStart(pokemon, source, effect) {
+				if (effect?.id === 'boosterenergy') {
+					this.effectState.fromBooster = true;
+					this.add('-activate', pokemon, 'ability: Protosynthesis', '[fromitem]');
+				} else {
+					this.add('-activate', pokemon, 'ability: Protosynthesis');
+				}
 				this.effectState.bestStat = pokemon.getBestStat(false, true);
 				this.add('-start', pokemon, 'protosynthesis' + this.effectState.bestStat);
 			},
@@ -3307,10 +3315,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onTerrainChange(pokemon) {
 			if (pokemon.transformed) return;
 			if (this.field.isTerrain('electricterrain')) {
-				if (!pokemon.volatiles['quarkdrive']) {
-					this.add('-activate', pokemon, 'ability: Quark Drive');
-					pokemon.addVolatile('quarkdrive');
-				}
+				pokemon.addVolatile('quarkdrive');
 			} else if (!pokemon.volatiles['quarkdrive']?.fromBooster) {
 				pokemon.removeVolatile('quarkdrive');
 			}
@@ -3321,7 +3326,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		condition: {
 			noCopy: true,
-			onStart(pokemon) {
+			onStart(pokemon, source, effect) {
+				if (effect?.id === 'boosterenergy') {
+					this.effectState.fromBooster = true;
+					this.add('-activate', pokemon, 'ability: Quark Drive', '[fromitem]');
+				} else {
+					this.add('-activate', pokemon, 'ability: Quark Drive');
+				}
 				this.effectState.bestStat = pokemon.getBestStat(false, true);
 				this.add('-start', pokemon, 'quarkdrive' + this.effectState.bestStat);
 			},
@@ -3467,12 +3478,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Ice';
-				move.refrigerateBoosted = true;
+				move.typeChangerBoosted = this.effect;
 			}
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.refrigerateBoosted) return this.chainModify([4915, 4096]);
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
 		name: "Refrigerate",
 		rating: 4,

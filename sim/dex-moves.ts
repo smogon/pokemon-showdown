@@ -304,12 +304,10 @@ export interface ActiveMove extends MutableMove, RuinableMove {
 	hit: number;
 	moveHitData?: MoveHitData;
 	ability?: Ability;
-	aerilateBoosted?: boolean;
 	allies?: Pokemon[];
 	auraBooster?: Pokemon;
 	causedCrashDamage?: boolean;
 	forceStatus?: ID;
-	galvanizeBoosted?: boolean;
 	hasAuraBreak?: boolean;
 	hasBounced?: boolean;
 	hasSheerForce?: boolean;
@@ -318,18 +316,18 @@ export interface ActiveMove extends MutableMove, RuinableMove {
 	lastHit?: boolean;
 	magnitude?: number;
 	negateSecondary?: boolean;
-	normalizeBoosted?: boolean;
-	pixilateBoosted?: boolean;
 	pranksterBoosted?: boolean;
-	refrigerateBoosted?: boolean;
 	selfDropped?: boolean;
 	selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
 	spreadHit?: boolean;
 	stab?: number;
 	statusRoll?: string;
 	totalDamage?: number | false;
+	typeChangerBoosted?: Effect;
 	willChangeForme?: boolean;
 	infiltrates?: boolean;
+	/** Should Order Up try its after-move boost effect?*/
+	orderUpBoost?: boolean;
 
 	/**
 	 * Has this move been boosted by a Z-crystal or used by a Dynamax Pokemon? Usually the same as

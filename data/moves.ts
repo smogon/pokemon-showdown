@@ -2622,7 +2622,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (target.runEffectiveness(move) > 0) {
 				// Placeholder
 				this.debug(`collision course super effective buff`);
-				return this.chainModify(1.5);
+				return this.chainModify([5461, 4096]);
 			}
 		},
 		secondary: null,
@@ -4648,7 +4648,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (target.runEffectiveness(move) > 0) {
 				// Placeholder
 				this.debug(`electro drift super effective buff`);
-				return this.chainModify(1.5);
+				return this.chainModify([5461, 4096]);
 			}
 		},
 		secondary: null,
@@ -6661,6 +6661,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onDisableMove(pokemon) {
 			if (pokemon.lastMove?.id === 'gigatonhammer') pokemon.disableMove('gigatonhammer');
 		},
+		onUseMoveMessage(source) {
+			if (source.lastMove?.id === 'gigatonhammer') {
+				this.add('-hint', "Some effects can force a Pokemon to use Gigaton Hammer again in a row.");
+			}
+		},
 		secondary: null,
 		target: "normal",
 		type: "Steel",
@@ -6732,16 +6737,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onRestart() {
 				this.effectState.duration = 2;
 			},
-			onBeforeTurn() {
-				this.effectState.turnPassed = true;
-			},
-			onSourceAccuracy() {
-				if (this.effectState.turnPassed) return true;
+			onAccuracy() {
+				return true;
 			},
 			onSourceModifyDamage() {
-				if (this.effectState.turnPassed) {
-					return this.chainModify(2);
-				}
+				return this.chainModify(2);
 			},
 		},
 		secondary: null,
@@ -7881,13 +7881,17 @@ export const Moves: {[moveid: string]: MoveData} = {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', effect);
+					this.add('-activate', source, 'ability: Persistent', '[move] Gravity');
 					return 7;
 				}
 				return 5;
 			},
-			onFieldStart() {
-				this.add('-fieldstart', 'move: Gravity');
+			onFieldStart(target, source) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-fieldstart', 'move: Gravity', '[persistent]');
+				} else {
+					this.add('-fieldstart', 'move: Gravity');
+				}
 				for (const pokemon of this.getAllActive()) {
 					let applies = false;
 					if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly')) {
@@ -8386,7 +8390,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			duration: 5,
 			durationCallback(target, source, effect) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', effect);
+					this.add('-activate', source, 'ability: Persistent', '[move] Heal Block');
 					return 7;
 				}
 				return 5;
@@ -10908,13 +10912,17 @@ export const Moves: {[moveid: string]: MoveData} = {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', effect);
+					this.add('-activate', source, 'ability: Persistent', '[move] Magic Room');
 					return 7;
 				}
 				return 5;
 			},
 			onFieldStart(target, source) {
-				this.add('-fieldstart', 'move: Magic Room', '[of] ' + source);
+				if (source?.hasAbility('persistent')) {
+					this.add('-fieldstart', 'move: Magic Room', '[of] ' + source, '[persistent]');
+				} else {
+					this.add('-fieldstart', 'move: Magic Room', '[of] ' + source);
+				}
 				for (const mon of this.getAllActive()) {
 					this.singleEvent('End', mon.getItem(), mon.itemState, mon);
 				}
@@ -13195,11 +13203,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, pulse: 1, mirror: 1},
-		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (!pokemon.volatiles['commanded']) return;
+		onUseMoveMessage(source, target, move) {
+			move.orderUpBoost = true;
+		},
+		onAfterMove(pokemon, target, move) {
+			if (!pokemon.volatiles['commanded'] || !move.orderUpBoost) return;
 			const tatsugiri = pokemon.volatiles['commanded'].source;
 			if (tatsugiri.baseSpecies.baseSpecies !== 'Tatsugiri') return; // Should never happen
-
 			switch (tatsugiri.baseSpecies.forme) {
 			case 'Droopy':
 				this.boost({def: 1}, pokemon, pokemon);
@@ -13213,6 +13223,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		secondary: null,
+		hasSheerForce: true,
 		target: "normal",
 		type: "Dragon",
 	},
@@ -14847,7 +14858,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			pokemon.side.removeSideCondition('auroraveil');
 		},
 		onModifyType(move, pokemon) {
-			switch (pokemon.baseSpecies.name) {
+			switch (pokemon.species.name) {
 			case 'Tauros-Paldea':
 				move.type = 'Fighting';
 				break;
@@ -15834,7 +15845,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			duration: 5,
 			durationCallback(target, source, effect) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', effect);
+					this.add('-activate', source, 'ability: Persistent', '[move] Safeguard');
 					return 7;
 				}
 				return 5;
@@ -15859,8 +15870,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 					return null;
 				}
 			},
-			onSideStart(side) {
-				this.add('-sidestart', side, 'Safeguard');
+			onSideStart(side, source) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-sidestart', side, 'Safeguard', '[persistent]');
+				} else {
+					this.add('-sidestart', side, 'Safeguard');
+				}
 			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 3,
@@ -16459,13 +16474,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-fail', source, 'move: Shed Tail');
 				return this.NOT_FAIL;
 			}
-			if (source.hp <= source.maxhp / 2 || source.maxhp === 1) { // Shedinja clause
+			if (source.hp <= Math.ceil(source.maxhp / 2)) {
 				this.add('-fail', source, 'move: Shed Tail', '[weak]');
 				return this.NOT_FAIL;
 			}
 		},
 		onHit(target) {
-			this.directDamage(target.maxhp / 2);
+			this.directDamage(Math.ceil(target.maxhp / 2));
 		},
 		self: {
 			onHit(source) {
@@ -19230,13 +19245,17 @@ export const Moves: {[moveid: string]: MoveData} = {
 			duration: 4,
 			durationCallback(target, source, effect) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', effect);
+					this.add('-activate', source, 'ability: Persistent', '[move] Tailwind');
 					return 6;
 				}
 				return 4;
 			},
-			onSideStart(side) {
-				this.add('-sidestart', side, 'move: Tailwind');
+			onSideStart(side, source) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-sidestart', side, 'move: Tailwind', '[persistent]');
+				} else {
+					this.add('-sidestart', side, 'move: Tailwind');
+				}
 			},
 			onModifySpe(spe, pokemon) {
 				return this.chainModify(2);
@@ -19917,27 +19936,23 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		boosts: {
-			atk: 1,
-			spe: 1,
-		},
-		onHit(source) {
+		onHit(pokemon) {
 			let success = false;
+			for (const active of this.getAllActive()) {
+				if (active.removeVolatile('substitute')) success = true;
+			}
 			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
-			for (const sideCondition of removeAll) {
-				if (source.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Tidy Up', '[of] ' + source);
-					success = true;
-				}
-				if (source.side.foe.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side.foe, this.dex.conditions.get(sideCondition).name, '[from] move: Tidy Up', '[of] ' + source);
-					success = true;
+			const sides = [pokemon.side, ...pokemon.side.foeSidesWithConditions()];
+			for (const side of sides) {
+				for (const sideCondition of removeAll) {
+					if (side.removeSideCondition(sideCondition)) {
+						this.add('-sideend', side, this.dex.conditions.get(sideCondition).name);
+						success = true;
+					}
 				}
 			}
-			for (const pokemon of this.getAllActive()) {
-				if (pokemon.removeVolatile('substitute')) success = true;
-			}
-			if (success) this.add('-activate', source, 'move: Tidy Up');
+			if (success) this.add('-activate', pokemon, 'move: Tidy Up');
+			return !!this.boost({atk: 1, spe: 1}, pokemon, pokemon, null, false, true) || success;
 		},
 		secondary: null,
 		target: "self",
@@ -20260,13 +20275,17 @@ export const Moves: {[moveid: string]: MoveData} = {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', effect);
+					this.add('-activate', source, 'ability: Persistent', '[move] Trick Room');
 					return 7;
 				}
 				return 5;
 			},
 			onFieldStart(target, source) {
-				this.add('-fieldstart', 'move: Trick Room', '[of] ' + source);
+				if (source?.hasAbility('persistent')) {
+					this.add('-fieldstart', 'move: Trick Room', '[of] ' + source, '[persistent]');
+				} else {
+					this.add('-fieldstart', 'move: Trick Room', '[of] ' + source);
+				}
 			},
 			onFieldRestart(target, source) {
 				this.field.removePseudoWeather('trickroom');
@@ -21291,7 +21310,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', effect);
+					this.add('-activate', source, 'ability: Persistent', '[move] Wonder Room');
 					return 7;
 				}
 				return 5;
@@ -21305,7 +21324,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.hint(`${move.name} uses ${statAndBoosts === 'def' ? '' : 'Sp. '}Def boosts when Wonder Room is active.`);
 			},
 			onFieldStart(field, source) {
-				this.add('-fieldstart', 'move: Wonder Room', '[of] ' + source);
+				if (source?.hasAbility('persistent')) {
+					this.add('-fieldstart', 'move: Wonder Room', '[of] ' + source, '[persistent]');
+				} else {
+					this.add('-fieldstart', 'move: Wonder Room', '[of] ' + source);
+				}
 			},
 			onFieldRestart(target, source) {
 				this.field.removePseudoWeather('wonderroom');

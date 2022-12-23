@@ -5,7 +5,7 @@
  */
 
 import * as child_process from 'child_process';
-import {ProcessManager, Streams, Utils, Repl} from '../../lib';
+import {ProcessManager, Streams, Utils, Repl, FS} from '../../lib';
 import {Config} from '../config-loader';
 import {toID} from '../../sim/dex-data';
 
@@ -15,7 +15,7 @@ class ArtemisStream extends Streams.ObjectReadWriteStream<string> {
 	constructor() {
 		super();
 		this.process = child_process.spawn('python3', [
-			'-u', __dirname + '/model.py', Config.debugartemisprocesses ? "debug" : "",
+			'-u', FS('server/artemis/model.py').path, Config.debugartemisprocesses ? "debug" : "",
 		].filter(Boolean));
 		this.listen();
 	}

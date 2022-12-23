@@ -24,9 +24,9 @@ describe('Charge', function () {
 
 	it('should remain active until an Electric-type attack is used', function () {
 		battle = common.createBattle([[
-			{species: 'Kilowattrel', moves: ['charge', 'agility', 'airslash', 'thunderbolt']},
+			{species: 'Kilowattrel', moves: ['charge', 'agility', 'airslash', 'thunderbolt', 'naturepower']},
 		], [
-			{species: 'Baxcalibur', moves: ['sleeptalk']},
+			{species: 'Baxcalibur', moves: ['sleeptalk', 'electricterrain']},
 		]]);
 
 		battle.makeChoices();
@@ -35,6 +35,9 @@ describe('Charge', function () {
 		battle.makeChoices('move airslash', 'auto');
 		assert(battle.p1.active[0].volatiles['charge']);
 		battle.makeChoices('move thunderbolt', 'auto');
+		assert.false(battle.p1.active[0].volatiles['charge']);
+		battle.makeChoices('auto', 'move electricterrain');
+		battle.makeChoices('move naturepower', 'auto');
 		assert.false(battle.p1.active[0].volatiles['charge']);
 	});
 

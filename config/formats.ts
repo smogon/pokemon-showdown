@@ -26,6 +26,33 @@ export const Formats: FormatList = [
 		section: "S/V Singles",
 	},
 	{
+		name: "[Gen 9] Random Battle",
+		desc: `Randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3712619/">Random Battle Suggestions</a>`,
+		],
+
+		mod: 'gen9',
+		team: 'random',
+		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
+	},
+	{
+		name: "[Gen 9] Unrated Random Battle",
+
+		mod: 'gen9',
+		team: 'random',
+		challengeShow: false,
+		rated: false,
+		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
+	},
+	{
+		name: "[Gen 9] Random Battle (Blitz)",
+
+		mod: 'gen9',
+		team: 'random',
+		ruleset: ['[Gen 9] Random Battle', 'Blitz'],
+	},
+	{
 		name: "[Gen 9] OU",
 
 		mod: 'gen9',
@@ -57,7 +84,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['Little Cup', 'Standard'],
-		banlist: ['Dunsparce', 'Flittle', 'Meditite', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Moody', 'Baton Pass'],
+		banlist: ['Dunsparce', 'Flittle', 'Meditite', 'Misdreavus', 'Murkrow', 'Rufflet', 'Scyther', 'Sneasel', 'Moody', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 9] Monotype",
@@ -86,7 +113,7 @@ export const Formats: FormatList = [
 		],
 		banlist: [
 			'Dragonite', 'Koraidon', 'Mimikyu', 'Miraidon', 'Scream Tail', 'Moody', 'Focus Band', 'Focus Sash',
-			'King\'s Rock', 'Quick Claw', 'Acupressure', 'Hypnosis', 'Perish Song', 'Sing',
+			'King\'s Rock', 'Quick Claw', 'Acupressure', 'Hypnosis', 'Perish Song', 'Sing', 'Spore', 'Yawn',
 		],
 	},
 	{
@@ -99,53 +126,18 @@ export const Formats: FormatList = [
 		ruleset: ['Min Source Gen = 9', 'Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 	},
 	{
+		name: "[Gen 9] CAP",
+
+		mod: 'gen9',
+		ruleset: ['[Gen 9] OU', '+CAP'],
+		banlist: ['Crucibellite'],
+	},
+	{
 		name: "[Gen 9] Battle Stadium Singles Series 1",
 
 		mod: 'gen9',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer'],
 		banlist: ['Sub-Legendary'],
-	},
-	{
-		name: "[Gen 9] Hackmons Cup",
-		desc: `Randomized teams of level-balanced Pok&eacute;mon with absolutely any ability, moves, and item.`,
-
-		mod: 'gen9',
-		team: 'randomHC',
-		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
-		banlist: ['Nonexistent'],
-	},
-	{
-		name: "[Gen 9] Doubles Hackmons Cup",
-		desc: `Randomized teams of level-balanced Pok&eacute;mon with absolutely any ability, moves, and item. Now with TWICE the Pok&eacute;mon per side!`,
-
-		mod: 'gen9',
-		team: 'randomHC',
-		searchShow: false,
-		gameType: 'doubles',
-		ruleset: ['[Gen 9] Hackmons Cup'],
-	},
-	{
-		name: "[Gen 9] Challenge Cup 1v1",
-
-		mod: 'gen9',
-		team: 'randomCC',
-		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Dynamax Clause', 'Picked Team Size = 1'],
-	},
-	{
-		name: "[Gen 9] Challenge Cup 2v2",
-
-		mod: 'gen9',
-		team: 'randomCC',
-		gameType: 'doubles',
-		ruleset: ['[Gen 9] Challenge Cup 1v1', '!! Picked Team Size = 2'],
-	},
-	{
-		name: "[Gen 9] Challenge Cup 6v6",
-
-		mod: 'gen9',
-		team: 'randomCC',
-		searchShow: false,
-		ruleset: ['[Gen 9] Challenge Cup 1v1', '!Picked Team Size'],
 	},
 	{
 		name: "[Gen 9] Custom Game",
@@ -177,6 +169,9 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] Doubles Ubers",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3712864/">Doubles Ubers</a>`,
+		],
 
 		mod: 'gen9',
 		gameType: 'doubles',
@@ -184,6 +179,9 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] Doubles UU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3712825/">Doubles UU</a>`,
+		],
 
 		mod: 'gen9',
 		gameType: 'doubles',
@@ -552,8 +550,9 @@ export const Formats: FormatList = [
 		mod: 'fullpotential',
 		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause', 'Terastal Clause', 'Min Source Gen = 9'],
 		banlist: [
-			'Chien-Pao', 'Cyclizar', 'Dragapult', 'Espathra', 'Flutter Mane', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Scream Tail', 'Arena Trap', 'Chlorophyll',
-			'Drought', 'Moody', 'Sand Rush', 'Shadow Tag', 'Slush Rush', 'Swift Swim', 'Unburden', 'Booster Energy', 'Heat Rock', 'King\'s Rock', 'Baton Pass',
+			'Chien-Pao', 'Cyclizar', 'Dragapult', 'Espathra', 'Flutter Mane', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Scream Tail', 'Arena Trap',
+			'Chlorophyll', 'Drought', 'Moody', 'Sand Rush', 'Shadow Tag', 'Slush Rush', 'Swift Swim', 'Unburden', 'Booster Energy', 'Choice Scarf',
+			'Heat Rock', 'King\'s Rock', 'Baton Pass', 'Tailwind',
 		],
 	},
 
@@ -590,9 +589,9 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['-Nonexistent', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Moves Clause', 'Endless Battle Clause'],
 		banlist: [
-			'Calyrex-Shadow', 'Slaking', 'Arena Trap', 'Contrary', 'Huge Power', 'Illusion', 'Innards Out', 'Magnet Pull', 'Neutralizing Gas',
-			'Parental Bond', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard', 'Comatose + Sleep Talk', 'Belly Drum',
-			'Last Respects', 'Revival Blessing', 'Shed Tail', 'Shell Smash', 'Rage Fist',
+			'Calyrex-Shadow', 'Slaking', 'Arena Trap', 'Contrary', 'Huge Power', 'Illusion', 'Innards Out', 'Magnet Pull',
+			'Moody', 'Neutralizing Gas', 'Parental Bond', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard',
+			'Comatose + Sleep Talk', 'Belly Drum', 'Last Respects', 'Revival Blessing', 'Shed Tail', 'Shell Smash', 'Rage Fist',
 		],
 	},
 	{
@@ -1086,6 +1085,84 @@ export const Formats: FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] Pokebilities",
+		desc: `Pok&eacute;mon have all of their released abilities simultaneously.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3679692/">Pok&eacute;bilities</a>`,
+		],
+		mod: 'pokebilities',
+		searchShow: false,
+		ruleset: ['Standard OMs', 'Sleep Clause Mod'],
+		banlist: ['Flutter Mane', 'Houndstone', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Palafin', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Baton Pass'],
+		onValidateSet(set) {
+			const species = this.dex.species.get(set.species);
+			const unSeenAbilities = Object.keys(species.abilities)
+				.filter(key => key !== 'S' && (key !== 'H' || !species.unreleasedHidden))
+				.map(key => species.abilities[key as "0" | "1" | "H" | "S"])
+				.filter(ability => ability !== set.ability);
+			if (unSeenAbilities.length && this.toID(set.ability) !== this.toID(species.abilities['S'])) {
+				for (const abilityName of unSeenAbilities) {
+					const banReason = this.ruleTable.check('ability:' + this.toID(abilityName));
+					if (banReason) {
+						return [`${set.name}'s ability ${abilityName} is ${banReason}.`];
+					}
+				}
+			}
+		},
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				if (pokemon.ability === this.toID(pokemon.species.abilities['S'])) {
+					continue;
+				}
+				pokemon.m.innates = Object.keys(pokemon.species.abilities)
+					.filter(key => key !== 'S' && (key !== 'H' || !pokemon.species.unreleasedHidden))
+					.map(key => this.toID(pokemon.species.abilities[key as "0" | "1" | "H" | "S"]))
+					.filter(ability => ability !== pokemon.ability);
+			}
+		},
+		onBeforeSwitchIn(pokemon) {
+			// Abilities that must be applied before both sides trigger onSwitchIn to correctly
+			// handle switch-in ability-to-ability interactions, e.g. Intimidate counters
+			const neededBeforeSwitchInIDs = [
+				'clearbody', 'competitive', 'contrary', 'defiant', 'fullmetalbody', 'hypercutter', 'innerfocus',
+				'mirrorarmor', 'oblivious', 'owntempo', 'rattled', 'scrappy', 'simple', 'whitesmoke',
+			];
+			if (pokemon.m.innates) {
+				for (const innate of pokemon.m.innates) {
+					if (!neededBeforeSwitchInIDs.includes(innate)) continue;
+					if (pokemon.hasAbility(innate)) continue;
+					pokemon.addVolatile("ability:" + innate, pokemon);
+				}
+			}
+		},
+		onSwitchInPriority: 2,
+		onSwitchIn(pokemon) {
+			if (pokemon.m.innates) {
+				for (const innate of pokemon.m.innates) {
+					if (pokemon.hasAbility(innate)) continue;
+					pokemon.addVolatile("ability:" + innate, pokemon);
+				}
+			}
+		},
+		onSwitchOut(pokemon) {
+			for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
+				pokemon.removeVolatile(innate);
+			}
+		},
+		onFaint(pokemon) {
+			for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
+				const innateEffect = this.dex.conditions.get(innate) as Effect;
+				this.singleEvent('End', innateEffect, null, pokemon);
+			}
+		},
+		onAfterMega(pokemon) {
+			for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
+				pokemon.removeVolatile(innate);
+			}
+			pokemon.m.innates = undefined;
+		},
+	},
+	{
 		name: "[Gen 9] Pure Hackmons",
 		desc: `Anything directly hackable onto a set (EVs, IVs, forme, ability, item, and move) and is usable in local battles is allowed.`,
 		threads: [
@@ -1376,95 +1453,6 @@ export const Formats: FormatList = [
 		},
 	},
 	{
-		name: "[Gen 8] Pokebilities",
-		desc: `Pok&eacute;mon have all of their released abilities simultaneously.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3679692/">Pok&eacute;bilities</a>`,
-		],
-		mod: 'gen8pokebilities',
-		searchShow: false,
-		ruleset: ['Standard OMs', 'Sleep Clause Mod'],
-		banlist: [
-			'Calyrex-Ice', 'Calyrex-Shadow', 'Cinderace', 'Conkeldurr', 'Darmanitan-Galar', 'Dialga', 'Dracovish', 'Dracozolt',
-			'Eternatus', 'Excadrill', 'Genesect', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black',
-			'Kyurem-White', 'Landorus-Base', 'Lugia', 'Lunala', 'Magearna', 'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings',
-			'Necrozma-Dusk-Mane', 'Palkia', 'Pheromosa', 'Porygon-Z', 'Rayquaza', 'Reshiram', 'Solgaleo', 'Spectrier', 'Urshifu-Base',
-			'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Base', 'Zekrom', 'Zygarde-Base', 'Power Construct',
-			'Baton Pass', 'King\'s Rock',
-			// Moody users
-			'Glalie', 'Octillery', 'Remoraid', 'Snorunt',
-			// Shadow Tag/Arena Trap
-			'Diglett-Base', 'Dugtrio-Base', 'Gothita', 'Gothitelle', 'Gothorita', 'Trapinch', 'Wobbuffet', 'Wynaut',
-		],
-		onValidateSet(set) {
-			const species = this.dex.species.get(set.species);
-			const unSeenAbilities = Object.keys(species.abilities)
-				.filter(key => key !== 'S' && (key !== 'H' || !species.unreleasedHidden))
-				.map(key => species.abilities[key as "0" | "1" | "H" | "S"])
-				.filter(ability => ability !== set.ability);
-			if (unSeenAbilities.length && this.toID(set.ability) !== this.toID(species.abilities['S'])) {
-				for (const abilityName of unSeenAbilities) {
-					const banReason = this.ruleTable.check('ability:' + this.toID(abilityName));
-					if (banReason) {
-						return [`${set.name}'s ability ${abilityName} is ${banReason}.`];
-					}
-				}
-			}
-		},
-		onBegin() {
-			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.ability === this.toID(pokemon.species.abilities['S'])) {
-					continue;
-				}
-				pokemon.m.innates = Object.keys(pokemon.species.abilities)
-					.filter(key => key !== 'S' && (key !== 'H' || !pokemon.species.unreleasedHidden))
-					.map(key => this.toID(pokemon.species.abilities[key as "0" | "1" | "H" | "S"]))
-					.filter(ability => ability !== pokemon.ability);
-			}
-		},
-		onBeforeSwitchIn(pokemon) {
-			// Abilities that must be applied before both sides trigger onSwitchIn to correctly
-			// handle switch-in ability-to-ability interactions, e.g. Intimidate counters
-			const neededBeforeSwitchInIDs = [
-				'clearbody', 'competitive', 'contrary', 'defiant', 'fullmetalbody', 'hypercutter', 'innerfocus',
-				'mirrorarmor', 'oblivious', 'owntempo', 'rattled', 'scrappy', 'simple', 'whitesmoke',
-			];
-			if (pokemon.m.innates) {
-				for (const innate of pokemon.m.innates) {
-					if (!neededBeforeSwitchInIDs.includes(innate)) continue;
-					if (pokemon.hasAbility(innate)) continue;
-					pokemon.addVolatile("ability:" + innate, pokemon);
-				}
-			}
-		},
-		onSwitchInPriority: 2,
-		onSwitchIn(pokemon) {
-			if (pokemon.m.innates) {
-				for (const innate of pokemon.m.innates) {
-					if (pokemon.hasAbility(innate)) continue;
-					pokemon.addVolatile("ability:" + innate, pokemon);
-				}
-			}
-		},
-		onSwitchOut(pokemon) {
-			for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
-				pokemon.removeVolatile(innate);
-			}
-		},
-		onFaint(pokemon) {
-			for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
-				const innateEffect = this.dex.conditions.get(innate) as Effect;
-				this.singleEvent('End', innateEffect, null, pokemon);
-			}
-		},
-		onAfterMega(pokemon) {
-			for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
-				pokemon.removeVolatile(innate);
-			}
-			pokemon.m.innates = undefined;
-		},
-	},
-	{
 		name: "[Gen 8] Tag Team Singles",
 		desc: `Bring four Pok&eacute;mon to Team Preview and choose two to battle in a singles battle.`,
 		threads: [
@@ -1695,6 +1683,14 @@ export const Formats: FormatList = [
 					// in gen 1, fainting skips the rest of the turn
 					// residuals don't exist in gen 1
 					this.queue.clear();
+					// Fainting clears accumulated Bide damage
+					for (const pokemon of this.getAllActive()) {
+						if (pokemon.volatiles['bide'] && pokemon.volatiles['bide'].damage) {
+							pokemon.volatiles['bide'].damage = 0;
+							this.hint("Desync Clause Mod activated!");
+							this.hint("In Gen 1, Bide's accumulated damage is reset to 0 when a Pokemon faints.");
+						}
+					}
 				} else if (this.gen <= 3 && this.gameType === 'singles') {
 					// in gen 3 or earlier, fainting in singles skips to residuals
 					for (const pokemon of this.getAllActive()) {
@@ -2053,6 +2049,96 @@ export const Formats: FormatList = [
 		column: 3,
 	},
 	{
+		name: "[Gen 9] Monotype Random Battle",
+
+		mod: 'gen9',
+		team: 'random',
+		ruleset: ['Obtainable', 'Same Type Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
+	},
+	{
+		name: "[Gen 9] Random Battle Mayhem",
+		desc: `[Gen 9] Random Battle with Team Preview and elements of Camomons, Inverse, Scalemons, and Shared Power.`,
+
+		mod: 'sharedpower',
+		team: 'random',
+		ruleset: ['[Gen 9] Random Battle', 'Team Preview', 'Camomons Mod', 'Inverse Mod', 'Scalemons Mod'],
+		onBeforeSwitchIn(pokemon) {
+			let format = this.format;
+			if (!format.getSharedPower) format = this.dex.formats.get('gen9sharedpower');
+			for (const ability of format.getSharedPower!(pokemon)) {
+				const effect = 'ability:' + ability;
+				pokemon.volatiles[effect] = {id: this.toID(effect), target: pokemon};
+				if (!pokemon.m.abils) pokemon.m.abils = [];
+				if (!pokemon.m.abils.includes(effect)) pokemon.m.abils.push(effect);
+			}
+		},
+		onSwitchInPriority: 2,
+		onSwitchIn(pokemon) {
+			let format = this.format;
+			if (!format.getSharedPower) format = this.dex.formats.get('gen9sharedpower');
+			for (const ability of format.getSharedPower!(pokemon)) {
+				if (ability === 'noability') {
+					this.hint(`Mirror Armor and Trace break in Shared Power formats that don't use Shared Power as a base, so they get removed from non-base users.`);
+				}
+				const effect = 'ability:' + ability;
+				delete pokemon.volatiles[effect];
+				pokemon.addVolatile(effect);
+			}
+		},
+	},
+	{
+		name: "[Gen 9] Computer-Generated Teams",
+		desc: `Teams generated automatically based on heuristics (rules), with levels based on previous success/failure in battle. ` +
+			`Not affiliated with Random Battles formats. Some sets will by nature be worse than others, but you can report egregiously bad sets ` +
+			`with <a href="https://forms.gle/DYwQN5qGVegz3YU38">this form</a>.`,
+
+		mod: 'gen9',
+		team: 'computerGenerated',
+		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
+	},
+	{
+		name: "[Gen 9] Hackmons Cup",
+		desc: `Randomized teams of level-balanced Pok&eacute;mon with absolutely any ability, moves, and item.`,
+
+		mod: 'gen9',
+		team: 'randomHC',
+		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+		banlist: ['Nonexistent'],
+	},
+	{
+		name: "[Gen 9] Doubles Hackmons Cup",
+		desc: `Randomized teams of level-balanced Pok&eacute;mon with absolutely any ability, moves, and item. Now with TWICE the Pok&eacute;mon per side!`,
+
+		mod: 'gen9',
+		team: 'randomHC',
+		searchShow: false,
+		gameType: 'doubles',
+		ruleset: ['[Gen 9] Hackmons Cup'],
+	},
+	{
+		name: "[Gen 9] Challenge Cup 1v1",
+
+		mod: 'gen9',
+		team: 'randomCC',
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Terastal Clause', 'Picked Team Size = 1'],
+	},
+	{
+		name: "[Gen 9] Challenge Cup 2v2",
+
+		mod: 'gen9',
+		team: 'randomCC',
+		gameType: 'doubles',
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Picked Team Size = 2'],
+	},
+	{
+		name: "[Gen 9] Challenge Cup 6v6",
+
+		mod: 'gen9',
+		team: 'randomCC',
+		searchShow: false,
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+	{
 		name: "[Gen 8] Random Battle",
 		desc: `Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable.`,
 		threads: [
@@ -2062,13 +2148,6 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		team: 'random',
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
-	},
-	{
-		name: "[Gen 8] Random Battle (Blitz)",
-		desc: `gotta go fast!! like Random Battle, but you only have 10 seconds per turn.`,
-		mod: 'gen8',
-		team: 'random',
-		ruleset: ['[Gen 8] Random Battle', 'Blitz'],
 	},
 	{
 		name: "[Gen 8] Free-For-All Random Battle",
@@ -2094,44 +2173,6 @@ export const Formats: FormatList = [
 			'Max Team Size = 3',
 			'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod',
 		],
-	},
-	{
-		name: "[Gen 8] Monotype Random Battle",
-
-		mod: 'gen8',
-		team: 'random',
-		ruleset: ['Obtainable', 'Same Type Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
-	},
-	{
-		name: "[Gen 8] Random Battle Mayhem",
-		desc: `[Gen 8] Random Battle (No Dmax) with Team Preview and elements of Camomons, Inverse, Scalemons, and Shared Power.`,
-
-		mod: 'gen8sharedpower',
-		team: 'random',
-		ruleset: ['[Gen 8] Random Battle', 'Team Preview', 'Dynamax Clause', 'Camomons Mod', 'Inverse Mod', 'Scalemons Mod'],
-		onBeforeSwitchIn(pokemon) {
-			let format = this.format;
-			if (!format.getSharedPower) format = this.dex.formats.get('gen9sharedpower');
-			for (const ability of format.getSharedPower!(pokemon)) {
-				const effect = 'ability:' + ability;
-				pokemon.volatiles[effect] = {id: this.toID(effect), target: pokemon};
-				if (!pokemon.m.abils) pokemon.m.abils = [];
-				if (!pokemon.m.abils.includes(effect)) pokemon.m.abils.push(effect);
-			}
-		},
-		onSwitchInPriority: 2,
-		onSwitchIn(pokemon) {
-			let format = this.format;
-			if (!format.getSharedPower) format = this.dex.formats.get('gen9sharedpower');
-			for (const ability of format.getSharedPower!(pokemon)) {
-				if (ability === 'noability') {
-					this.hint(`Mirror Armor and Trace break in Shared Power formats that don't use Shared Power as a base, so they get removed from non-base users.`);
-				}
-				const effect = 'ability:' + ability;
-				delete pokemon.volatiles[effect];
-				pokemon.addVolatile(effect);
-			}
-		},
 	},
 	{
 		name: "[Gen 8] Battle Factory",
@@ -2215,37 +2256,11 @@ export const Formats: FormatList = [
 		},
 	},
 	{
-		name: "[Gen 8] Challenge Cup 1v1",
-
-		mod: 'gen8',
-		team: 'randomCC',
-		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Dynamax Clause', 'Picked Team Size = 1'],
-	},
-	{
-		name: "[Gen 8] Challenge Cup 2v2",
-
-		mod: 'gen8',
-		team: 'randomCC',
-		gameType: 'doubles',
-		searchShow: false,
-		ruleset: ['[Gen 8] Challenge Cup 1v1', '!! Picked Team Size = 2'],
-	},
-	{
 		name: "[Gen 8] Hackmons Cup",
 		desc: `Randomized teams of level-balanced Pok&eacute;mon with absolutely any ability, moves, and item.`,
 
 		mod: 'gen8',
 		team: 'randomHC',
-		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
-		banlist: ['Nonexistent'],
-	},
-	{
-		name: "[Gen 8] Doubles Hackmons Cup",
-
-		mod: 'gen8',
-		gameType: 'doubles',
-		team: 'randomHC',
-		searchShow: false,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Nonexistent'],
 	},
@@ -2297,6 +2312,7 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		team: 'random',
 		searchShow: false,
+		challengeShow: false,
 		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
@@ -2306,14 +2322,6 @@ export const Formats: FormatList = [
 		mod: 'gen7',
 		team: 'randomFactory',
 		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
-	},
-	{
-		name: "[Gen 7] Monotype Battle Factory",
-		desc: `Randomized teams of Pok&eacute;mon with competitively-viable sets that all share a type.`,
-
-		mod: 'gen7',
-		team: 'randomFactory',
-		ruleset: ['[Gen 7] Battle Factory', 'Same Type Clause'],
 	},
 	{
 		name: "[Gen 7] BSS Factory",
@@ -2359,6 +2367,7 @@ export const Formats: FormatList = [
 		mod: 'gen6',
 		team: 'randomFactory',
 		searchShow: false,
+		challengeShow: false,
 		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
 	},
 	{
@@ -2402,6 +2411,7 @@ export const Formats: FormatList = [
 		mod: 'gen1',
 		team: 'randomCC',
 		searchShow: false,
+		challengeShow: false,
 		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Sleep Clause Mod', 'Freeze Clause Mod'],
 	},
 	{
@@ -2411,6 +2421,7 @@ export const Formats: FormatList = [
 		mod: 'gen1',
 		team: 'randomHC',
 		searchShow: false,
+		challengeShow: false,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Team Type Preview'],
 		banlist: ['Nonexistent'],
 		onModifySpecies(species, target, source, effect) {
@@ -2913,7 +2924,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
-		// searchShow: false,
+		searchShow: false,
 		ruleset: ['[Gen 8] OU', '+CAP'],
 		banlist: ['Crucibellite'],
 	},
@@ -3014,6 +3025,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
+		searchShow: false,
 		ruleset: ['Standard Doubles', '!Gravity Sleep Clause'],
 		banlist: [],
 	},
@@ -3025,7 +3037,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
-		// searchShow: false,
+		searchShow: false,
 		ruleset: ['[Gen 8] Doubles OU'],
 		banlist: ['DOU', 'DBL'],
 	},
@@ -3546,7 +3558,7 @@ export const Formats: FormatList = [
 		mod: 'gen6',
 		searchShow: false,
 		ruleset: ['[Gen 6] OU', '+CAP'],
-		banlist: ['Aurumoth', 'Cawmodore'],
+		banlist: ['Cawmodore'],
 	},
 	{
 		name: "[Gen 6] Battle Spot Singles",
@@ -3787,6 +3799,18 @@ export const Formats: FormatList = [
 		unbanlist: ['Damp Rock'],
 	},
 	{
+		name: "[Gen 5] CAP",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8967093/">BW2 CAP Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8969768/">BW2 CAP Sample Teams</a>`,
+		],
+
+		mod: 'gen5',
+		searchShow: false,
+		ruleset: ['[Gen 5] OU', '+CAP'],
+		banlist: ['Aurumoth', 'Cawmodore'],
+	},
+	{
 		name: "[Gen 5] GBU Singles",
 
 		mod: 'gen5',
@@ -3977,6 +4001,17 @@ export const Formats: FormatList = [
 			'Raichu', 'Rampardos', 'Rapidash', 'Regigigas', 'Relicanth', 'Rhydon', 'Scyther', 'Sneasel', 'Snover',
 			'Solrock', 'Tangela', 'Torkoal', 'Victreebel', 'Xatu', 'Walrein', 'Zangoose', 'Damp Rock',
 		],
+	},
+	{
+		name: "[Gen 4] CAP",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8851251/">DPP CAP Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8869378/">DPP CAP Sample Teams</a>`,
+		],
+
+		mod: 'gen4',
+		searchShow: false,
+		ruleset: ['[Gen 4] OU', '+CAP'],
 	},
 	{
 		name: "[Gen 4] Custom Game",
@@ -4205,6 +4240,17 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['[Gen 1] UU', '!APT Clause', '!Sleep Moves Clause'],
 		banlist: ['UU', 'NUBL'],
+	},
+	{
+		name: "[Gen 1] PU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3700527/">RBY PU Metagame Discussion &amp; Resources</a>`,
+		],
+
+		mod: 'gen1',
+		searchShow: false,
+		ruleset: ['[Gen 1] NU'],
+		banlist: ['NU', 'PUBL'],
 	},
 	{
 		name: "[Gen 1] 1v1",

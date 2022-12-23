@@ -1,4 +1,4 @@
-﻿// Note: These are the rules that formats use
+// Note: These are the rules that formats use
 
 import {Utils} from "../lib";
 import {Pokemon} from "../sim/pokemon";
@@ -137,7 +137,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Draft',
 		desc: "The custom Draft League ruleset",
 		ruleset: [
-			'Obtainable', '+Unreleased', '+CAP', 'Team Preview', 'Sleep Clause Mod', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
+			'Obtainable', '+Unreleased', '+CAP', 'Sketch Post-Gen 7 Moves', 'Team Preview', 'Sleep Clause Mod', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
 		],
 		// timer: {starting: 60 * 60, grace: 0, addPerTurn: 10, maxPerTurn: 100, timeoutAutoChoose: true},
 	},
@@ -782,14 +782,14 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "Bans all moves that induce sleep, such as Hypnosis",
 		banlist: ['Yawn'],
 		onBegin() {
-			this.add('rule', 'Sleep Clause: Sleep-inducing moves are banned');
+			this.add('rule', 'Sleep Moves Clause: Sleep-inducing moves are banned');
 		},
 		onValidateSet(set) {
 			const problems = [];
 			if (set.moves) {
 				for (const id of set.moves) {
 					const move = this.dex.moves.get(id);
-					if (move.status && move.status === 'slp') problems.push(move.name + ' is banned by Sleep Clause.');
+					if (move.status && move.status === 'slp') problems.push(move.name + ' is banned by Sleep Moves Clause.');
 				}
 			}
 			return problems;
@@ -1086,6 +1086,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 					if (pokemon.hp && pokemon.status === 'slp') {
 						if (!pokemon.statusState.source || !pokemon.statusState.source.isAlly(pokemon)) {
 							this.add('-message', 'Sleep Clause Mod activated.');
+							this.hint("Sleep Clause Mod prevents players from putting more than one of their opponent's Pokémon to sleep at a time");
 							return false;
 						}
 					}
@@ -1125,7 +1126,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 	desyncclausemod: {
 		effectType: 'Rule',
 		name: 'Desync Clause Mod',
-		desc: 'If a desync would happen, the move fails instead. This rule currently covers Psywave and Counter.',
+		desc: 'If a desync would happen, the move fails instead. This rule currently covers Bide, Counter, and Psywave.',
 		onBegin() {
 			this.add('rule', 'Desync Clause Mod: Desyncs changed to move failure.');
 		},
@@ -2332,6 +2333,19 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 			newSpecies.bst += newSpecies.baseStats[stat];
 			return newSpecies;
+		},
+	},
+	voltturnmayhemmod: {
+		effectType: 'Rule',
+		name: "VoltTurn Mayhem Mod",
+		desc: `Every move that targets a foe causes the user to switch out after use.`,
+		onBegin() {
+			this.add('rule', 'VoltTurn Mayhem Mod: Every move that targets a foe causes the user to switch out after use');
+		},
+		onModifyMove(move, source, target) {
+			const validTargets = ['adjacentFoe', 'allAdjacent', 'allAdjacentFoes', 'any', 'normal', 'randomNormal', 'scripted'];
+			if (!validTargets.includes(move.target)) return;
+			move.selfSwitch = true;
 		},
 	},
 };

@@ -1,6 +1,6 @@
 import RandomGen2Teams from '../gen2/random-teams';
 import {Utils} from '../../../lib';
-import {MoveCounter} from '../../random-teams';
+import {MoveCounter} from '../gen8/random-teams';
 
 interface HackmonsCupEntry {
 	types: string[];
@@ -341,7 +341,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const customScale: {[k: string]: number} = {
 			Mewtwo: 62,
 			Caterpie: 100, Metapod: 100, Weedle: 100, Kakuna: 100, Magikarp: 100,
-			Ditto: 88,
+			Ditto: 100,
 		};
 		const level = this.adjustLevel || customScale[species.name] || levelScale[species.tier] || 80;
 

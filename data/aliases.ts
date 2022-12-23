@@ -1,6 +1,6 @@
 export const Aliases: {[alias: string]: string} = {
 	// formats
-	randbats: "[Gen 8] Random Battle",
+	randbats: "[Gen 9] Random Battle",
 	uber: "[Gen 9] Ubers",
 	anythinggoes: "[Gen 8] Anything Goes",
 	ubers: "[Gen 9] Ubers",
@@ -17,10 +17,10 @@ export const Aliases: {[alias: string]: string} = {
 	bsd: "[Gen 8] VGC 2022",
 	randdubs: "[Gen 8] Random Doubles Battle",
 	doubles: "[Gen 8] Doubles OU",
-	dou: "[Gen 8] Doubles OU",
-	dubs: "[Gen 8] Doubles OU",
-	dubers: "[Gen 8] Doubles Ubers",
-	duu: "[Gen 8] Doubles UU",
+	dou: "[Gen 9] Doubles OU",
+	dubs: "[Gen 9] Doubles OU",
+	dubers: "[Gen 9] Doubles Ubers",
+	duu: "[Gen 9] Doubles UU",
 	"2v2": "[Gen 8] 2v2 Doubles",
 	natdex: "[Gen 9] National Dex",
 	gen8natdex: "[Gen 8] National Dex",
@@ -71,7 +71,7 @@ export const Aliases: {[alias: string]: string} = {
 	gen6mono: "[Gen 6] Monotype",
 	gen6ag: "[Gen 6] Anything Goes",
 	crossevo: "[Gen 9] Cross Evolution",
-	mayhem: "[Gen 8] Random Battle Mayhem",
+	mayhem: "[Gen 9] Random Battle Mayhem",
 	omotm: "[Gen 9] Shared Power",
 	lcotm: "[Gen 9] Full Potential",
 
