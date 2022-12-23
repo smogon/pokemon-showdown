@@ -1,0 +1,48 @@
+#!/usr/bin/env node
+'use strict';
+
+const {execArgv} = require("process");
+
+/** Grep polyfill because windows doesn't have it */
+
+const argv = process.argv.slice(2);
+
+const params = [];
+for (const [i, arg] of argv.entries()) {
+	if (arg.startsWith('-')) {
+		argv.splice(i, 1);
+		params.push(arg);
+	}
+}
+let checker;
+let target = argv.join(' ').trim();
+if (target.startsWith('"') && target.endsWith('"')) {
+	target = target.slice(1, -1);
+}
+
+switch (params[0]) {
+case '-v': 
+	checker = (str) => !new RegExp(target).test(str);
+	break;
+case '-vF':
+	checker = (str) => !str.includes(target);
+	break;
+case '-F':
+	checker = (str) => str.includes(target);
+	break;
+default:
+	checker = (str) => new RegExp(target).test(str);
+	break;
+}
+
+console.log({target, params, res: checker('uwu')});
+process.stdin.on('data', d => {
+	d = d.toString().trim();
+	let lines = d.split('\n');
+	for (const l of lines) {
+		if (checker(l)) {
+			console.log(l);
+		}
+	}
+});
+

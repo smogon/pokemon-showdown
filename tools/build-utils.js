@@ -24,9 +24,19 @@ const copyOverDataJSON = (file = 'data') => {
 	}
 };
 
+const getGrepExecutable = () => {
+	try {
+		shell('echo "test" | grep test');
+	} catch {
+		return './tools/grep';
+	}
+	return 'grep';
+};
+
 exports.transpile = (decl) => {
+	const grep = getGrepExecutable();
 	shell(
-		'git ls-files "*.ts" "*.tsx" | grep -v global |' +
+		`git ls-files "*.ts" "*.tsx" | ${grep} -v global |` +
 		'xargs node_modules/.bin/esbuild --log-level=error --outbase=. --outdir=./dist ' +
 		`--format=cjs --tsconfig=./tsconfig.json`
 	);
@@ -35,7 +45,7 @@ exports.transpile = (decl) => {
 	for (const path of gitignored) {
 		if (fs.existsSync(path)) {
 			shell([
-				`find ${path}`, `grep "\\.[tj]s\\b"`, `grep -vF ".d.ts"`, `grep -v "node_modules"`, `grep -v global`,
+				`find ${path}`, `${grep} "\\.[tj]s\\b"`, `${grep} -vF ".d.ts"`, `${grep} -v "node_modules"`, `${grep} -v global`,
 				`xargs node_modules/.bin/esbuild --log-level=error --outbase=${path} --outdir=./dist/${path} ` +
 				`--format=cjs --tsconfig=./tsconfig.json`,
 			].join(' | '), true);
