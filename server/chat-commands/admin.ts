@@ -612,7 +612,7 @@ export const commands: Chat.ChatCommands = {
 
 				const processManagers = ProcessManager.processManagers;
 				for (const manager of processManagers.slice()) {
-					if (manager.filename.startsWith(FS('server/chat-plugins').path)) {
+					if (manager.filename.startsWith(FS(__dirname + '/../chat-plugins/').path)) {
 						void manager.destroy();
 					}
 				}
