@@ -2367,8 +2367,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	glaiverush: {
 		name: "Glaive Rush",
-		desc: "If this move is successful, the user will take double damage from attacks on the next turn.",
-		shortDesc: "Next turn: attacks can't miss user and deal 2x damage.",
+		desc: "If this move is successful, moves targeted at the user deal double damage and do not check accuracy until the end of the next turn.",
+		shortDesc: "Opp 2x damage, sure-hit until end of next turn.",
 	},
 	glare: {
 		name: "Glare",
