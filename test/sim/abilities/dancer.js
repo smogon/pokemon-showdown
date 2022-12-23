@@ -141,7 +141,7 @@ describe('Dancer', function () {
 		assert.equal(opponentNotTargetedByAlly.hp, opponentHP);
 	});
 
-	it.only('should adopt the target selected by copycat', function () {
+	it('should adopt the target selected by copycat', function () {
 		const {battle, flamigo, fletchinder, squawkabilly} = ctx = common.testCtx({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
 			{species: 'oricoriopau', ability: 'dancer', moves: ['featherdance']},
 			{species: 'flamigo', moves: ['copycat']},
