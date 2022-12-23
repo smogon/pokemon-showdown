@@ -14,6 +14,14 @@ function capitalize(word) {
 }
 
 /**
+ * @typedef TestContext
+ * @prop {Sim.Battle} battle - Simulated battle
+ * @prop {Sim.Side} [key: SideID] - Sides: p1, p2...
+ * @prop {Sim.Pokemon} [key: PokemonSlot] - Pokemon: p1a, p1b, p2a...
+ * @prop {Sim.Pokemon} [key: string]
+ */
+
+/**
  * The default random number generator seed used if one is not given.
  */
 const DEFAULT_SEED = [0x09917, 0x06924, 0x0e1c8, 0x06af0];
@@ -110,6 +118,34 @@ class TestTools {
 		}
 
 		return new Sim.Battle(battleOptions);
+	}
+
+	/**
+	 * Creates a new Battle and returns it.
+	 *
+	 * @param {Object} [options]
+	 * @param {Team[]} [teams]
+	 * @returns {TestContext} Test context.
+	 */
+	testCtx(options, teams) {
+		const battle = this.createBattle(options, teams);
+		const ctx = {battle};
+		const bySpecies = new Map();
+		for (const side of battle.sides) {
+			ctx[side.id] = side;
+			for (const [i, pokemon] of side.pokemon.entries()) {
+				ctx[`${side.id}${String.fromCharCode(97 + i)}`] = pokemon;
+				if (bySpecies.has(pokemon.species.id)) {
+					bySpecies.set(pokemon.species.id, null);
+				} else {
+					bySpecies.set(pokemon.species.id, pokemon);
+				}
+			}
+		}
+		for (const [speciesId, pokemon] of bySpecies) {
+			if (pokemon) ctx[speciesId] = pokemon;
+		}
+		return ctx;
 	}
 
 	/**
