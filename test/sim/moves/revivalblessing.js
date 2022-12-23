@@ -23,6 +23,7 @@ describe('Revival Blessing', function () {
 		battle.makeChoices('move revivalblessing', 'auto');
 		battle.makeChoices('switch corviknight', '');
 		assert.equal(battle.p1.pokemonLeft, 3);
+		assert.equal(battle.p1.pokemon[1].hp, Math.floor(battle.p1.pokemon[1].maxhp / 2));
 	});
 
 	it(`should not actually switch the active Pokemon`, function () {
