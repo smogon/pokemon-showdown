@@ -260,6 +260,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	isConfusionSelfHit?: boolean;
 	isFutureMove?: boolean;
 	noMetronome?: string[];
+	noCopycat?: string[];
 	noSketch?: boolean;
 	stallingMove?: boolean;
 	baseMove?: string;
