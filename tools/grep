@@ -1,8 +1,5 @@
 #!/usr/bin/env node
 'use strict';
-
-const {execArgv} = require("process");
-
 /** Grep polyfill because windows doesn't have it */
 
 const argv = process.argv.slice(2);
@@ -35,7 +32,6 @@ default:
 	break;
 }
 
-console.log({target, params, res: checker('uwu')});
 process.stdin.on('data', d => {
 	d = d.toString().trim();
 	let lines = d.split('\n');
