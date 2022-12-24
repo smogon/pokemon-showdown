@@ -121,24 +121,25 @@ class TestTools {
 	}
 
 	/**
-	 * Creates a new Battle and returns it.
+	 * Creates a new TestContext and returns it.
 	 *
 	 * @param {Object} [options]
 	 * @param {Team[]} [teams]
 	 * @returns {TestContext} Test context.
 	 */
-	testCtx(options, teams) {
+	getTestContext(options, teams) {
 		const battle = this.createBattle(options, teams);
 		const ctx = {battle};
 		const bySpecies = new Map();
 		for (const side of battle.sides) {
 			ctx[side.id] = side;
 			for (const [i, pokemon] of side.pokemon.entries()) {
+				const baseSpecies = this.dex.toID(pokemon.species.baseSpecies);
 				ctx[`${side.id}${String.fromCharCode(97 + i)}`] = pokemon;
-				if (bySpecies.has(pokemon.species.id)) {
-					bySpecies.set(pokemon.species.id, null);
+				if (bySpecies.has(baseSpecies)) {
+					bySpecies.set(baseSpecies, null);
 				} else {
-					bySpecies.set(pokemon.species.id, pokemon);
+					bySpecies.set(baseSpecies, pokemon);
 				}
 			}
 		}

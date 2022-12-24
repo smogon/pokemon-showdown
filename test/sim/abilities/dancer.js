@@ -11,7 +11,7 @@ describe('Dancer', function () {
 	});
 
 	it('should only copy dance moves used by other Pokemon', function () {
-		const {battle, p1a, p2a} = ctx = common.testCtx([[
+		const {battle, p1a, p2a} = ctx = common.getTestContext([[
 			{species: 'Oricorio', ability: 'dancer', moves: ['swordsdance']},
 		], [
 			{species: 'Oricorio', ability: 'dancer', moves: ['howl']},
@@ -22,7 +22,7 @@ describe('Dancer', function () {
 	});
 
 	it('should activate in order of lowest to highest raw speed', function () {
-		const {battle, p1b: fastDancer, p2a: wwDanceSource, p2b: foeDancer} = ctx = common.testCtx({gameType: 'doubles'}, [[
+		const {battle, p1b: fastDancer, p2a: wwDanceSource, p2b: foeDancer} = ctx = common.getTestContext({gameType: 'doubles'}, [[
 			{species: 'Shedinja', level: 98, ability: 'dancer', item: 'focussash', moves: ['sleeptalk']},
 			{species: 'Shedinja', level: 99, ability: 'dancer', moves: ['sleeptalk']},
 		], [
@@ -36,7 +36,7 @@ describe('Dancer', function () {
 	});
 
 	it('should activate in order of lowest to highest raw speed inside Trick Room', function () {
-		const {battle, p1b: fastDancer, p2a: wwDanceSource, p2b: foeDancer} = ctx = common.testCtx({gameType: 'doubles'}, [[
+		const {battle, p1b: fastDancer, p2a: wwDanceSource, p2b: foeDancer} = ctx = common.getTestContext({gameType: 'doubles'}, [[
 			{species: 'Shedinja', level: 98, ability: 'dancer', item: 'focussash', moves: ['sleeptalk']},
 			{species: 'Shedinja', level: 99, ability: 'dancer', moves: ['sleeptalk']},
 		], [
@@ -52,7 +52,7 @@ describe('Dancer', function () {
 
 	it('should not copy a move that failed or was blocked by Protect', function () {
 		// hardcoded to RNG seed
-		const {battle, p1a, p1b, p2a, p2b} = ctx = common.testCtx({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
+		const {battle, p1a, p1b, p2a, p2b} = ctx = common.getTestContext({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
 			{species: 'Oricorio', level: 98, ability: 'dancer', item: 'laggingtail', moves: ['dragondance', 'protect', 'teeterdance']},
 			{species: 'Oricorio', level: 99, ability: 'dancer', moves: ['featherdance']},
 		], [
@@ -80,7 +80,7 @@ describe('Dancer', function () {
 	});
 
 	it('should not copy a move that missed', function () {
-		const {battle, p1a: failDanceSource, p2a: evadesPokemon} = ctx = common.testCtx({gameType: 'singles', seed: [1, 2, 3, 4]}, [[
+		const {battle, p1a: failDanceSource, p2a: evadesPokemon} = ctx = common.getTestContext({gameType: 'singles', seed: [1, 2, 3, 4]}, [[
 			{species: 'Oricorio', ability: 'dancer', item: 'choicescarf', moves: ['revelationdance']},
 		], [
 			{species: 'Oricorio', ability: 'dancer', item: 'brightpowder', moves: ['dig']},
@@ -94,7 +94,7 @@ describe('Dancer', function () {
 	});
 
 	it('should copy a move that hit, but did 0 damage', function () {
-		const {battle, p1a: dancer} = ctx = common.testCtx([[
+		const {battle, p1a: dancer} = ctx = common.getTestContext([[
 			{species: 'Oricorio', ability: 'dancer', moves: ['fierydance']},
 		], [
 			{species: 'Shedinja', ability: 'dancer', item: 'focussash', moves: ['meanlook']},
@@ -103,7 +103,7 @@ describe('Dancer', function () {
 	});
 
 	it('should not activate if the holder fainted', function () {
-		const {battle} = ctx = common.testCtx([[
+		const {battle} = ctx = common.getTestContext([[
 			{species: 'Oricoriopompom', ability: 'dancer', moves: ['revelationdance']},
 		], [
 			{species: 'oricorio', ability: 'dancer', level: 1, moves: ['sleeptalk']},
@@ -114,7 +114,7 @@ describe('Dancer', function () {
 	});
 
 	it('should target the user of a Dance move unless it was an ally attacking an opponent', function () {
-		const {battle, p1b, p2a, p2b} = ctx = common.testCtx({gameType: 'doubles'}, [[
+		const {battle, p1b, p2a, p2b} = ctx = common.getTestContext({gameType: 'doubles'}, [[
 			{species: 'Oricorio', level: 98, ability: 'dancer', item: 'laggingtail', moves: ['sleeptalk', 'protect', 'teeterdance']},
 			{species: 'Oricorio', level: 99, ability: 'heatproof', moves: ['fierydance', 'sleeptalk']},
 		], [
@@ -142,7 +142,7 @@ describe('Dancer', function () {
 	});
 
 	it('should adopt the target selected by copycat', function () {
-		const {battle, flamigo, fletchinder, squawkabilly} = ctx = common.testCtx({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
+		const {battle, flamigo, fletchinder, squawkabilly} = ctx = common.getTestContext({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
 			{species: 'oricoriopau', ability: 'dancer', moves: ['featherdance']},
 			{species: 'flamigo', moves: ['copycat']},
 		], [
