@@ -615,7 +615,13 @@ export const Teams = new class Teams {
 	}
 
 	getGenerator(format: Format | string, seed: PRNG | PRNGSeed | null = null) {
-		const TeamGenerator = require(Dex.forFormat(format).dataDir + '/random-teams').default;
+		let TeamGenerator;
+		if (toID(format).includes('gen9computergeneratedteams')) {
+			TeamGenerator = require(Dex.forFormat(format).dataDir + '/cg-teams').default;
+		} else {
+			TeamGenerator = require(Dex.forFormat(format).dataDir + '/random-teams').default;
+		}
+
 		return new TeamGenerator(format, seed);
 	}
 

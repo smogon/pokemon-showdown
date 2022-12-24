@@ -5,7 +5,7 @@
 
 const {testSet, testNotBothMoves, testHasSTAB, testAlwaysHasMove} = require('./tools');
 const assert = require('../assert');
-const {Dex} = require('../../sim/dex');
+const {Dex} = require('../../dist/sim/dex');
 
 describe('[Gen 8] Random Battle', () => {
 	const options = {format: 'gen8randombattle'};

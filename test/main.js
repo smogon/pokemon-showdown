@@ -1,7 +1,6 @@
 'use strict';
 
-require('ts-node').register({project: './tsconfig.json', files: true, transpileOnly: true, transpiler: 'ts-node/transpilers/swc-experimental'});
-
+require('child_process').execSync('node ' + __dirname + "/../build");
 const path = require('path');
 const fs = require('fs');
 
@@ -37,7 +36,7 @@ config.fakeladder = false;
 // Don't log monitor messages to the console (necessary so that chat monitor tests don't clog up stdout)
 config.loglevel = 3;
 
-require('./../lib/process-manager').ProcessManager.disabled = true;
+require('./../dist/lib/process-manager').ProcessManager.disabled = true;
 
 // stop chatrooms from loading through modifying the require cache
 try {
@@ -46,11 +45,11 @@ try {
 } catch {}
 
 // Don't create a REPL
-require('../lib/repl').Repl.start = noop;
+require('../dist/lib/repl').Repl.start = noop;
 
 // Start the server.
 // NOTE: This used "server" before when we needed "server"
-require('../server');
+require('../dist/server');
 
 LoginServer.disabled = true;
 Ladders.disabled = true;

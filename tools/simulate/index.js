@@ -36,8 +36,13 @@ if (process.argv[2]) {
 	}
 }
 
+<<<<<<< HEAD
 require('ts-node').register({project: './tsconfig.json', files: true, transpileOnly: true, transpiler: 'ts-node/transpilers/swc-experimental'});
 const Dex = require('../../..sim-dist-dist/dex').Dex;
+=======
+require('child_process').execSync('node ' + __dirname + "/../../build");
+const Dex = require('../../sim/dex').Dex;
+>>>>>>> 396a7c050cf474d85ce59ef10a226c41a8f9561e
 global.Config = {allowrequestingties: false};
 Dex.includeModData();
 

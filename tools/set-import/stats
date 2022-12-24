@@ -5,7 +5,7 @@
 
 'use strict';
 
-require('ts-node').register();
+require('child_process').execSync('node ' + __dirname + "/../../build");
 const Dex = require('../../sim/dex').Dex;
 global.toID = Dex.getId;
 
