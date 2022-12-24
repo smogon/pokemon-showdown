@@ -45,18 +45,9 @@ export const Formats: FormatList = [
 		name: "[Gen 9] Do Not Use",
 
 		mod: 'gen9deluxe',
-		ruleset: ['Standard', 'Evasion Clause', 'Z-Move Clause'],
+		ruleset: ['Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause'],
 		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
 		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass"]
-	},
-
-	{
-		name: "[Gen 9] Do Not Use Suspect",
-
-		mod: 'gen9deluxe',
-		ruleset: ['Standard', 'Evasion Clause', 'Z-Move Clause', 'DNU Same-Type Terastal Clause'],
-		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
-		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass", "Tera Blast"]
 	},
 
 	// SS Pseudos Metas

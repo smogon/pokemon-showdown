@@ -1767,7 +1767,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	thickclub: {
 		name: "Thick Club",
-		desc: "If held by a Cubone or a Marowak, its Attack is doubled.",
+		desc: "If held by a Cubone, Tinkaton or a Marowak, its Attack is doubled.",
 	},
 	throatspray: {
 		name: "Throat Spray",
