@@ -64,9 +64,6 @@ export const Items: {[itemid: string]: ItemData} = {
 	adamantcrystal: {
 		name: "Adamant Crystal",
 		spritenum: 0, // TODO
-		fling: {
-			basePower: 60,
-		},
 		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseSpecies.num === 483) || pokemon.baseSpecies.num === 483) {
 				return false;
@@ -2333,9 +2330,6 @@ export const Items: {[itemid: string]: ItemData} = {
 	griseouscore: {
 		name: "Griseous Core",
 		spritenum: 0, // TODO
-		fling: {
-			basePower: 60,
-		},
 		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseSpecies.num === 487) || pokemon.baseSpecies.num === 487) {
 				return false;
@@ -3229,9 +3223,6 @@ export const Items: {[itemid: string]: ItemData} = {
 	lustrousglobe: {
 		name: "Lustrous Globe",
 		spritenum: 0, // TODO
-		fling: {
-			basePower: 60,
-		},
 		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseSpecies.num === 484) || pokemon.baseSpecies.num === 484) {
 				return false;
