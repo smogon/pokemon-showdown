@@ -127,7 +127,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 487) || pokemon.baseSpecies.num === 487) {
+			if (source?.baseSpecies.num === 487 || pokemon.baseSpecies.num === 487) {
 				return false;
 			}
 			return true;
