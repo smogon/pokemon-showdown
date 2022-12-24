@@ -63,7 +63,13 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	adamantcrystal: {
 		name: "Adamant Crystal",
-		spritenum: 0, // TODO
+		spritenum: 4, // TODO
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (user.baseSpecies.num === 483 && (move.type === 'Steel' || move.type === 'Dragon')) {
+				return this.chainModify([4915, 4096]);
+			}
+		},
 		onTakeItem(item, pokemon, source) {
 			if (source?.baseSpecies.num === 483 || pokemon.baseSpecies.num === 483) {
 				return false;
@@ -84,7 +90,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
-			if (move && user.baseSpecies.num === 483 && (move.type === 'Steel' || move.type === 'Dragon')) {
+			if (user.baseSpecies.num === 483 && (move.type === 'Steel' || move.type === 'Dragon')) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -2329,7 +2335,13 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	griseouscore: {
 		name: "Griseous Core",
-		spritenum: 0, // TODO
+		spritenum: 180, // TODO
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (user.baseSpecies.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
+				return this.chainModify([4915, 4096]);
+			}
+		},
 		onTakeItem(item, pokemon, source) {
 			if (source?.baseSpecies.num === 487 || pokemon.baseSpecies.num === 487) {
 				return false;
@@ -3222,7 +3234,13 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	lustrousglobe: {
 		name: "Lustrous Globe",
-		spritenum: 0, // TODO
+		spritenum: 265, // TODO
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (user.baseSpecies.num === 484 && (move.type === 'Water' || move.type === 'Dragon')) {
+				return this.chainModify([4915, 4096]);
+			}
+		},
 		onTakeItem(item, pokemon, source) {
 			if (source?.baseSpecies.num === 484 || pokemon.baseSpecies.num === 484) {
 				return false;
@@ -3243,7 +3261,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
-			if (move && user.baseSpecies.num === 484 && (move.type === 'Water' || move.type === 'Dragon')) {
+			if (user.baseSpecies.num === 484 && (move.type === 'Water' || move.type === 'Dragon')) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
