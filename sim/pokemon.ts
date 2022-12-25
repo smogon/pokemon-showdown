@@ -493,6 +493,7 @@ export class Pokemon {
 				(this.illusion.gender === '' ? '' : ', ' + this.illusion.gender) + (this.illusion.set.shiny ? ', shiny' : '');
 			details = illusionDetails;
 		}
+		if (this.terastallized) details += `, tera:${this.terastallized}`;
 		return {side: health.side, secret: `${details}|${health.secret}`, shared: `${details}|${health.shared}`};
 	};
 
