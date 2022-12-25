@@ -40,7 +40,7 @@ const findFilesForPath = path => {
 		}
 	}
 	return out;
-}
+};
 
 /** This is for Windows, where grep / etc aren't supported by default. */
 const fsTranspile = () => {
@@ -70,7 +70,7 @@ const fsTranspile = () => {
 			});
 		}
 	}
-}
+};
 
 /**
  * We're retaining support for this because it's more performant (consistently 4sec or less) as opposed to using FS.
@@ -93,7 +93,7 @@ const commandTranspile = () => {
 			].join(' | '), true);
 		}
 	}
-}
+};
 
 exports.transpile = (decl) => {
 	try {
