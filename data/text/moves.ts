@@ -5514,6 +5514,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "The user takes 1/2 of its maximum HP, rounded up, and creates a substitute that has 1/4 of the user's maximum HP, rounded down. The user is replaced with another Pokemon in its party and the selected Pokemon has the substitute transferred to it. Fails if the user would faint, or if there are no unfainted party members.",
 		shortDesc: "User takes 1/2 its max HP to pass a substitute.",
 
+		start: "  [POKEMON] shed its tail to create a decoy!",
 		alreadyStarted: "#substitute",
 		fail: "#substitute",
 	},
