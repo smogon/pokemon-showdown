@@ -44,6 +44,7 @@ exports.transpile = (decl) => {
 		outbase: '.',
 		format: 'cjs',
 		tsconfig: './tsconfig.json',
+		sourcemap: true,
 	});
 	fs.copyFileSync('./config/config-example.js', './dist/config/config-example.js');
 	copyOverDataJSON();
