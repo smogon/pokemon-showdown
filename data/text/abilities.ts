@@ -757,7 +757,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	intrepidsword: {
 		name: "Intrepid Sword",
-		shortDesc: "Once par game on switch-in, this Pokemon's Attack is raised by 1 stage.",
+		shortDesc: "Once per game on switch-in, this Pokemon's Attack is raised by 1 stage.",
 		gen8: {
 			shortDesc: "On switch-in, this Pokemon's Attack is raised by 1 stage.",
 		},
