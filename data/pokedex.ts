@@ -8590,6 +8590,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 850,
 		color: "White",
 		eggGroups: ["Undiscovered"],
+		requiredItem: "Adamant Crystal",
+		changesFrom: "Dialga",
 		gen: 8,
 	},
 	palkia: {
@@ -8620,6 +8622,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 660,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
+		requiredItem: "Lustrous Globe",
+		changesFrom: "Palkia",
 		gen: 8,
 	},
 	heatran: {
@@ -8676,7 +8680,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 650,
 		color: "Black",
 		eggGroups: ["Undiscovered"],
-		requiredItem: "Griseous Orb",
+		requiredItem: "Griseous Core",
 		changesFrom: "Giratina",
 	},
 	cresselia: {
