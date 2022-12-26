@@ -148,9 +148,12 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	battlebond: {
 		name: "Battle Bond",
-		desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja if it attacks and knocks out another Pokemon. If this Pokemon is an Ash-Greninja, its Water Shuriken has 20 power and always hits three times.",
-		shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",
-
+		desc: "If this Pokemon is a Greninja, it raises its Speed, Attack and Special Attack by one stage if it attacks and knocks out another Pokemon. This ability can only activate once per game.",
+		shortDesc: "Once per game, after KOing a Pokemon: raise Spe, Atk and SpA by 1 stage.",
+		gen8: {
+			desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja if it attacks and knocks out another Pokemon. If this Pokemon is an Ash-Greninja, its Water Shuriken has 20 power and always hits three times.",
+			shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",
+		},
 		activate: "  [POKEMON] became fully charged due to its bond with its Trainer!",
 		transform: "[POKEMON] became Ash-Greninja!",
 	},
