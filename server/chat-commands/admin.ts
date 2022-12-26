@@ -753,6 +753,10 @@ export const commands: Chat.ChatCommands = {
 				FS('config/custom.css').unwatch();
 				global.LoginServer = require('../loginserver').LoginServer;
 				this.sendReply("DONE. New login server requests will use the new code.");
+			} else if (target === 'ladder') {
+				this.sendReply("Hotpatching ladder...");
+				global.Ladders = require('../ladders').Ladders;
+				this.sendReply("DONE. New ladder requests will use the new code.");
 			} else if (target === 'learnsets' || target === 'validator') {
 				if (lock['validator']) {
 					return this.errorReply(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);

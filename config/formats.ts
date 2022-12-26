@@ -50,6 +50,15 @@ export const Formats: FormatList = [
 		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass"]
 	},
 
+	{
+		name: "[Gen 9] DNU Draft League",
+
+		mod: 'gen9deluxe',
+		ruleset: ['Standard', 'Evasion Clause', 'Z-Move Clause'],
+		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
+		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass"]
+	},
+
 	// SS Pseudos Metas
 	///////////////////////////////////////////////////////////////////
 	// {
