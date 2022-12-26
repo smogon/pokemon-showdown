@@ -235,30 +235,4 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 			target.addVolatile('confusion');
 		},
 	},
-	stall: {
-		name: 'stall',
-		// Protect, Detect, Endure counter
-		duration: 2,
-		counterMax: 256,
-		onStart() {
-			this.effectState.counter = 2;
-		},
-		onStallMove() {
-			// this.effectState.counter should never be undefined here.
-			// However, just in case, use 1 if it is undefined.
-			const counter = this.effectState.counter || 1;
-			if (counter >= 256) {
-				// 2^32 - special-cased because Battle.random(n) can't handle n > 2^16 - 1
-				return (this.random() * 4294967296 < 1);
-			}
-			this.debug("Success chance: " + Math.round(100 / counter) + "%");
-			return this.randomChance(1, counter);
-		},
-		onRestart() {
-			if (this.effectState.counter < (this.effect as Condition).counterMax!) {
-				this.effectState.counter *= 2;
-			}
-			this.effectState.duration = 2;
-		},
-	},
 };
