@@ -328,7 +328,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	dauntlessshield: {
 		name: "Dauntless Shield",
-		shortDesc: "On switch-in, this Pokemon's Defense is raised by 1 stage.",
+		shortDesc: "Once per game on switch-in, this Pokemon's Defense is raised by 1 stage.",
+		gen8: {
+			shortDesc: "On switch-in, this Pokemon's Defense is raised by 1 stage.",
+		},
 	},
 	dazzling: {
 		name: "Dazzling",
@@ -754,7 +757,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	intrepidsword: {
 		name: "Intrepid Sword",
-		shortDesc: "On switch-in, this Pokemon's Attack is raised by 1 stage.",
+		shortDesc: "Once par game on switch-in, this Pokemon's Attack is raised by 1 stage.",
+		gen8: {
+			shortDesc: "On switch-in, this Pokemon's Attack is raised by 1 stage.",
+		},
 	},
 	ironbarbs: {
 		name: "Iron Barbs",
@@ -816,8 +822,12 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	libero: {
 		name: "Libero",
-		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type.",
-		shortDesc: "This Pokemon's type changes to match the type of the move it is about to use.",
+		desc: "Once per switch-in, this Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type, and cannot change a terastallized Pokemon's type.",
+		shortDesc: "Once per switch-in, this Pokemon's type changes to match the type of the move it is about to use.",
+		gen8: {
+			desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type.",
+			shortDesc: "This Pokemon's type changes to match the type of the move it is about to use.",
+		},
 	},
 	lightmetal: {
 		name: "Light Metal",
@@ -1271,8 +1281,12 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	protean: {
 		name: "Protean",
-		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type.",
-		shortDesc: "This Pokemon's type changes to match the type of the move it is about to use.",
+		desc: "Once per switch-in, this Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type, and cannot change a terastallized Pokemon's type.",
+		shortDesc: "Once per switch-in, this Pokemon's type changes to match the type of the move it is about to use.",
+		gen8: {
+			desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type.",
+			shortDesc: "This Pokemon's type changes to match the type of the move it is about to use.",
+		},
 	},
 	protosynthesis: {
 		name: "Protosynthesis",
