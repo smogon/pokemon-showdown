@@ -61,6 +61,27 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 545,
 		gen: 5,
 	},
+	adamantcrystal: {
+		name: "Adamant Crystal",
+		spritenum: 4, // TODO
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (user.baseSpecies.num === 483 && (move.type === 'Steel' || move.type === 'Dragon')) {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		onTakeItem(item, pokemon, source) {
+			if (source?.baseSpecies.num === 483 || pokemon.baseSpecies.num === 483) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Dialga-Origin",
+		itemUser: ["Dialga-Origin"],
+		num: 1777,
+		gen: 8,
+		isNonstandard: "Unobtainable",
+	},
 	adamantorb: {
 		name: "Adamant Orb",
 		spritenum: 4,
@@ -69,7 +90,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
-			if (move && user.baseSpecies.name === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon')) {
+			if (user.baseSpecies.num === 483 && (move.type === 'Steel' || move.type === 'Dragon')) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -2312,6 +2333,27 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 286,
 		gen: 4,
 	},
+	griseouscore: {
+		name: "Griseous Core",
+		spritenum: 180, // TODO
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (user.baseSpecies.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		onTakeItem(item, pokemon, source) {
+			if (source?.baseSpecies.num === 487 || pokemon.baseSpecies.num === 487) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Giratina-Origin",
+		itemUser: ["Giratina-Origin"],
+		num: 1779,
+		gen: 8,
+		isNonstandard: "Unobtainable",
+	},
 	griseousorb: {
 		name: "Griseous Orb",
 		spritenum: 180,
@@ -2324,14 +2366,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 487) || pokemon.baseSpecies.num === 487) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Giratina-Origin",
-		itemUser: ["Giratina-Origin"],
+		itemUser: ["Giratina"],
 		num: 112,
 		gen: 4,
 		isNonstandard: "Unobtainable",
@@ -3197,6 +3232,27 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 2,
 		isPokeball: true,
 	},
+	lustrousglobe: {
+		name: "Lustrous Globe",
+		spritenum: 265, // TODO
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (user.baseSpecies.num === 484 && (move.type === 'Water' || move.type === 'Dragon')) {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		onTakeItem(item, pokemon, source) {
+			if (source?.baseSpecies.num === 484 || pokemon.baseSpecies.num === 484) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Palkia-Origin",
+		itemUser: ["Palkia-Origin"],
+		num: 1778,
+		gen: 8,
+		isNonstandard: "Unobtainable",
+	},
 	lustrousorb: {
 		name: "Lustrous Orb",
 		spritenum: 265,
@@ -3205,7 +3261,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
-			if (move && user.baseSpecies.name === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon')) {
+			if (user.baseSpecies.num === 484 && (move.type === 'Water' || move.type === 'Dragon')) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -4437,7 +4493,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
 				this.debug('Punching Glove boost');
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([4506, 4096]);
 			}
 		},
 		onModifyMove(move) {

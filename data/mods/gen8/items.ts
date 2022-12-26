@@ -1,4 +1,8 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	adamantcrystal: {
+		inherit: true,
+		isNonstandard: "Future",
+	},
 	adamantorb: {
 		inherit: true,
 		isNonstandard: null,
@@ -115,9 +119,21 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	griseouscore: {
+		inherit: true,
+		isNonstandard: "Future",
+	},
 	griseousorb: {
 		inherit: true,
 		isNonstandard: null,
+		onTakeItem(item, pokemon, source) {
+			if (source?.baseSpecies.num === 487 || pokemon.baseSpecies.num === 487) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Giratina-Origin",
+		itemUser: ["Giratina-Origin"],
 	},
 	groundmemory: {
 		inherit: true,
@@ -142,6 +158,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 	leek: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	lustrousglobe: {
+		inherit: true,
+		isNonstandard: "Future",
 	},
 	lustrousorb: {
 		inherit: true,
