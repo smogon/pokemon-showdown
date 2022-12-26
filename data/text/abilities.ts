@@ -823,7 +823,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	libero: {
 		name: "Libero",
 		desc: "Once per switch-in, this Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type, and cannot change a terastallized Pokemon's type.",
-		shortDesc: "Once per switch-in, this Pokemon's type changes to match the type of the move it is about to use.",
+		shortDesc: "Once per switch-in, this Pokemon's type changes to match the type of its move.",
 		gen8: {
 			desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type.",
 			shortDesc: "This Pokemon's type changes to match the type of the move it is about to use.",
@@ -1282,7 +1282,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	protean: {
 		name: "Protean",
 		desc: "Once per switch-in, this Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type, and cannot change a terastallized Pokemon's type.",
-		shortDesc: "Once per switch-in, this Pokemon's type changes to match the type of the move it is about to use.",
+		shortDesc: "Once per switch-in, this Pokemon's type changes to match the type of its move.",
 		gen8: {
 			desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type.",
 			shortDesc: "This Pokemon's type changes to match the type of the move it is about to use.",
