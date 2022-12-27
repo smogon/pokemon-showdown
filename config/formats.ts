@@ -1028,7 +1028,7 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Standard Doubles', 'Dynamax Clause'],
-		banlist: ['Koraidon', 'Miraidon', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Ally Switch', 'Swagger'],
+		banlist: ['Flutter Mane', 'Koraidon', 'Miraidon', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Ally Switch', 'Revival Blessing', 'Swagger'],
 		onBeforeSwitchIn(pokemon) {
 			if (!pokemon.m.trackPP) pokemon.m.trackPP = new Map<string, number>();
 			pokemon.m.curMoves = this.dex.deepClone(pokemon.moves);
