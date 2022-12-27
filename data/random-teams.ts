@@ -1187,7 +1187,7 @@ export class RandomTeams {
 		if (species.id === 'urshifurapidstrike') return 'Punching Glove';
 		if (species.id === 'lokix' && role === 'Wallbreaker') return 'Life Orb';
 		if (species.id === 'toxtricity' && moves.has('shiftgear')) return 'Throat Spray';
-		if (species.id === 'Palkia') return 'Lustrous Orb';
+		if (species.id === 'palkia') return 'Lustrous Orb';
 		if (moves.has('substitute') || ability === 'Moody') return 'Leftovers';
 		if (
 			!teamDetails.defog && !teamDetails.rapidSpin &&
