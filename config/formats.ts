@@ -1029,12 +1029,13 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['Standard Doubles', 'Dynamax Clause'],
 		banlist: ['Flutter Mane', 'Koraidon', 'Miraidon', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Ally Switch', 'Revival Blessing', 'Swagger'],
-		onBeforeSwitchIn(pokemon) {
-			if (!pokemon.m.trackPP) pokemon.m.trackPP = new Map<string, number>();
-			pokemon.m.curMoves = this.dex.deepClone(pokemon.moves);
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				pokemon.m.trackPP = new Map<string, number>();
+			}
 		},
-		onSwitchInPriority: 2,
-		onSwitchIn(pokemon) {
+		onBeforeSwitchIn(pokemon) {
+			pokemon.m.curMoves = this.dex.deepClone(pokemon.moves);
 			let ngas = false;
 			for (const poke of this.getAllActive()) {
 				if (this.toID(poke.ability) === ('neutralizinggas' as ID)) {
