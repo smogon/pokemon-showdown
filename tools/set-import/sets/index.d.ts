@@ -29,7 +29,7 @@ export interface FormatData {
 		};
 	};
 }
-export type GenerationNum = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+export type GenerationNum = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 export type Generation = {num: GenerationNum};
 export declare function forGen(gen: Generation | GenerationNum): Promise<GenerationData> | undefined;
 export declare function forFormat(format: string): Promise<FormatData> | undefined;
