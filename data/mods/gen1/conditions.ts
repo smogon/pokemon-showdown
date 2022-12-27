@@ -40,6 +40,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 				pokemon.removeVolatile('bide');
 				pokemon.removeVolatile('twoturnmove');
 				pokemon.removeVolatile('partialtrappinglock');
+				pokemon.removeVolatile('lockedmove');
 				return false;
 			}
 		},
@@ -145,6 +146,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 				pokemon.removeVolatile('bide');
 				pokemon.removeVolatile('twoturnmove');
 				pokemon.removeVolatile('partialtrappinglock');
+				pokemon.removeVolatile('lockedmove');
 				return false;
 			}
 			return;
@@ -216,10 +218,32 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		onStart() {},
 	},
 	lockedmove: {
-		// Outrage, Thrash, Petal Dance...
-		inherit: true,
+		// Thrash, Petal Dance...
+		name: 'lockedmove',
 		durationCallback() {
 			return this.random(3, 5);
+		},
+		onResidual(target) {
+			if ((target.lastMove && target.lastMove.id === 'struggle') || target.status === 'slp') {
+				// don't lock, and bypass confusion for calming
+				delete target.volatiles['lockedmove'];
+			}
+		},
+		onStart(target, source, effect) {
+			this.effectState.move = effect.id;
+		},
+		onLockMove(pokemon) {
+			return this.effectState.move;
+		},
+		onMoveAborted(pokemon) {
+			delete pokemon.volatiles['lockedmove'];
+		},
+		onBeforeTurn(pokemon) {
+			const move = this.dex.moves.get(this.effectState.move);
+			if (move.id) {
+				this.debug('Forcing into ' + move.id);
+				this.queue.changeAction(pokemon, {choice: 'move', moveid: move.id});
+			}
 		},
 		onEnd(target) {
 			// Confusion begins even if already confused
