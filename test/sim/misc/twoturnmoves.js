@@ -65,6 +65,5 @@ describe('Two Turn Moves [Gen 1]', function () {
 		battle.makeChoices('move swift', 'move gust');
 		assert.false.fullHP(pidgeot);
 		assert(pidgeot.volatiles['invulnerability']);
-		console.log(battle.getDebugLog());
 	});
 });

@@ -38,7 +38,12 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 			if (this.randomChance(63, 256)) {
 				this.add('cant', pokemon, 'par');
 				pokemon.removeVolatile('bide');
-				pokemon.removeVolatile('twoturnmove');
+				if (pokemon.removeVolatile('twoturnmove')) {
+					if (pokemon.volatiles['invulnerability']) {
+						this.hint(`In Gen 1, when a Dig/Fly user is fully paralyzed while semi-invulnerable, ` +
+						`it will remain semi-invulnerable until it switches out or fully executes Dig/Fly`, true);
+					}
+				}
 				pokemon.removeVolatile('partialtrappinglock');
 				pokemon.removeVolatile('lockedmove');
 				return false;
