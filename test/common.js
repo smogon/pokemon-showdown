@@ -3,7 +3,7 @@
 const path = require('path');
 const fs = require('fs');
 const assert = require('./assert');
-const Sim = require('./../sim');
+const Sim = require('./../dist/sim');
 const Dex = Sim.Dex;
 
 const cache = new Map();

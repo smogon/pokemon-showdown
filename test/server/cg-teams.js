@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('assert').strict;
-const TeamGenerator = require('../../data/cg-teams').default;
+const TeamGenerator = require('../../dist/data/cg-teams').default;
 
 describe('[Gen 9] Computer-Generated Teams', () => {
 	it('should give all species 4 or fewer moves', () => {

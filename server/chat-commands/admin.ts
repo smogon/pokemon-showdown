@@ -28,10 +28,9 @@ function hasDevAuth(user: User) {
 
 function bash(command: string, context: Chat.CommandContext, cwd?: string): Promise<[number, string, string]> {
 	context.stafflog(`$ ${command}`);
+	if (!cwd) cwd = FS.ROOT_PATH;
 	return new Promise(resolve => {
-		child_process.exec(command, {
-			cwd: cwd || `${__dirname}/../..`,
-		}, (error, stdout, stderr) => {
+		child_process.exec(command, {cwd}, (error, stdout, stderr) => {
 			let log = `[o] ${stdout}[e] ${stderr}`;
 			if (error) log = `[c] ${error.code}\n${log}`;
 			context.stafflog(log);
@@ -570,6 +569,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply("Wait for /updateserver to finish before hotpatching.");
 		}
 
+		await this.parse(`/rebuild`);
 		const lock = Monitor.hotpatchLock;
 		const hotpatches = [
 			'chat', 'formats', 'loginserver', 'punishments', 'dnsbl', 'modlog',
@@ -612,7 +612,7 @@ export const commands: Chat.ChatCommands = {
 
 				const processManagers = ProcessManager.processManagers;
 				for (const manager of processManagers.slice()) {
-					if (manager.filename.startsWith(FS('server/chat-plugins').path)) {
+					if (manager.filename.startsWith(FS(__dirname + '/../chat-plugins/').path)) {
 						void manager.destroy();
 					}
 				}
@@ -885,8 +885,9 @@ export const commands: Chat.ChatCommands = {
 		const processes = new Map<string, ProcessData>();
 		const ramUnits = ["KiB", "MiB", "GiB", "TiB"];
 
+		const cwd = FS.ROOT_PATH;
 		await new Promise<void>(resolve => {
-			const child = child_process.exec('ps -o pid,%cpu,time,rss,command', {cwd: `${__dirname}/../..`}, (err, stdout) => {
+			const child = child_process.exec('ps -o pid,%cpu,time,rss,command', {cwd}, (err, stdout) => {
 				if (err) throw err;
 				const rows = stdout.split('\n').slice(1); // first line is the table header
 				for (const row of rows) {
@@ -1312,7 +1313,7 @@ export const commands: Chat.ChatCommands = {
 			if (target !== 'public' && validPrivateCodePath) {
 				success = await updateserver(this, Config.privatecodepath);
 			}
-			success = success && await updateserver(this, path.resolve(`${__dirname}/../..`));
+			success = success && await updateserver(this, FS.ROOT_PATH);
 			this.addGlobalModAction(`${user.name} used /updateserver${target === 'public' ? ' public' : ''}`);
 		}
 
@@ -1325,8 +1326,13 @@ export const commands: Chat.ChatCommands = {
 		`/updateserver private - Updates only the server's private code. Requires: console access`,
 	],
 
-	rebuild() {
-		this.errorReply("`/rebuild` is no longer necessary; TypeScript files are automatically transpiled as they are loaded.");
+	async rebuild() {
+		this.canUseConsole();
+		const [, , stderr] = await bash('node ./build', this);
+		if (stderr) {
+			throw new Chat.ErrorMessage(`Crash while rebuilding: ${stderr}`);
+		}
+		this.sendReply('Rebuilt.');
 	},
 
 	/*********************************************************

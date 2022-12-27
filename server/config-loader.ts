@@ -7,7 +7,7 @@
 
 import * as defaults from '../config/config-example';
 import type {GroupInfo, EffectiveGroupSymbol} from './user-groups';
-import {ProcessManager} from '../lib';
+import {ProcessManager, FS} from '../lib';
 
 export type ConfigType = typeof defaults & {
 	groups: {[symbol: string]: GroupInfo},
@@ -20,11 +20,11 @@ const FLAG_PRESETS = new Map([
 	['--no-security', ['nothrottle', 'noguestsecurity', 'noipchecks']],
 ]);
 
-const CONFIG_PATH = require.resolve('../config/config');
+const CONFIG_PATH = FS('./config/config.js').path;
 
 export function load(invalidate = false) {
 	if (invalidate) delete require.cache[CONFIG_PATH];
-	const config = ({...defaults, ...require('../config/config')}) as ConfigType;
+	const config = ({...defaults, ...require(CONFIG_PATH)}) as ConfigType;
 	// config.routes is nested - we need to ensure values are set for its keys as well.
 	config.routes = {...defaults.routes, ...config.routes};
 
@@ -144,10 +144,11 @@ export function cacheGroupData(config: ConfigType) {
 
 export function checkRipgrepAvailability() {
 	if (Config.ripgrepmodlog === undefined) {
+		const cwd = FS.ROOT_PATH;
 		Config.ripgrepmodlog = (async () => {
 			try {
-				await ProcessManager.exec(['rg', '--version'], {cwd: `${__dirname}/../`});
-				await ProcessManager.exec(['tac', '--version'], {cwd: `${__dirname}/../`});
+				await ProcessManager.exec(['rg', '--version'], {cwd});
+				await ProcessManager.exec(['tac', '--version'], {cwd});
 				return true;
 			} catch {
 				return false;

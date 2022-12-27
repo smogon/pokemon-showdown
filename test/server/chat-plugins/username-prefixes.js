@@ -5,7 +5,7 @@
 'use strict';
 
 const assert = require('assert').strict;
-const {PrefixManager} = require('../../../server/chat-plugins/username-prefixes');
+const {PrefixManager} = require('../../../dist/server/chat-plugins/username-prefixes');
 const PREFIX_DURATION = 10 * 24 * 60 * 60 * 1000;
 
 describe('PrefixManager', function () {

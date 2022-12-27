@@ -1,7 +1,7 @@
 export const ItemsText: {[k: string]: ItemText} = {
 	abilityshield: {
 		name: "Ability Shield",
-		desc: "Holder's Ability cannot be changed by another Pokemon.",
+		desc: "Holder's Ability cannot be changed by any effect.",
 
 		block: "  [POKEMON]'s Ability is protected by the effects of its Ability Shield!",
 	},
@@ -16,6 +16,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	absorbbulb: {
 		name: "Absorb Bulb",
 		desc: "Raises holder's Sp. Atk by 1 stage if hit by a Water-type attack. Single use.",
+	},
+	adamantcrystal: {
+		name: "Adamant Crystal",
+		desc: "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2x power.",
 	},
 	adamantorb: {
 		name: "Adamant Orb",
@@ -85,6 +89,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	audinite: {
 		name: "Audinite",
 		desc: "If held by an Audino, this item allows it to Mega Evolve in battle.",
+	},
+	auspiciousarmor: {
+		name: "Auspicious Armor",
+		desc: "Evolves Charcadet into Armarouge when used.",
 	},
 	babiriberry: {
 		name: "Babiri Berry",
@@ -167,7 +175,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	boosterenergy: {
 		name: "Booster Energy",
-		desc: "Activates the Protosynthesis or Quark Drive abilities. Single use.",
+		desc: "Activates the Protosynthesis or Quark Drive Abilities. Single use.",
 	},
 	bottlecap: {
 		name: "Bottle Cap",
@@ -272,7 +280,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	clearamulet: {
 		name: "Clear Amulet",
-		desc: "Prevents other Pokemon from lowering this Pokemon's stat stages.",
+		desc: "Prevents other Pokemon from lowering the holder's stat stages.",
 
 		block: "  The effects of [POKEMON]'s Clear Amulet prevent its stats from being lowered!",
 	},
@@ -717,6 +725,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Grip Claw",
 		desc: "Holder's partial-trapping moves always last 7 turns.",
 	},
+	griseouscore: {
+		name: "Griseous Core",
+		desc: "If held by a Giratina, its Ghost- and Dragon-type attacks have 1.2x power.",
+	},
 	griseousorb: {
 		name: "Griseous Orb",
 		desc: "If held by a Giratina, its Ghost- and Dragon-type attacks have 1.2x power.",
@@ -963,7 +975,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	loadeddice: {
 		name: "Loaded Dice",
-		desc: "Holder's 5 hit multi-hit attacks will always hit at least 4 times.",
+		desc: "Holder's moves that hit 2-5 times hit 4-5 times; Population Bomb hits 4-10 times.",
 	},
 	lopunnite: {
 		name: "Lopunnite",
@@ -1003,6 +1015,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	lureball: {
 		name: "Lure Ball",
 		desc: "A Poke Ball for catching Pokemon hooked by a Rod when fishing.",
+	},
+	lustrousglobe: {
+		name: "Lustrous Globe",
+		desc: "If held by a Palkia, its Water- and Dragon-type attacks have 1.2x power.",
 	},
 	lustrousorb: {
 		name: "Lustrous Orb",
@@ -1048,6 +1064,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	mail: {
 		name: "Mail",
 		desc: "Cannot be given to or taken from a Pokemon, except by Covet/Knock Off/Thief.",
+	},
+	maliciousarmor: {
+		name: "Malicious Armor",
+		desc: "Evolves Charcadet into Ceruledge when used.",
 	},
 	manectite: {
 		name: "Manectite",
@@ -1144,7 +1164,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	mirrorherb: {
 		name: "Mirror Herb",
-		desc: "When an opposing Pokemon recieves stat boosts, those boosts are copied. Single use.",
+		desc: "When an opposing Pokemon raises a stat stage, the holder copies it. Single use.",
 
 		activate: "  [POKEMON] used its Mirror Herb to mirror its opponent's stat changes!",
 	},
@@ -1385,7 +1405,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	punchingglove: {
 		name: "Punching Glove",
-		desc: "Holder's punch-based attacks do 1.1x damage and avoid adverse contact effects.",
+		desc: "Holder's punch-based attacks have 1.1x power and do not make contact.",
 	},
 	qualotberry: {
 		name: "Qualot Berry",
