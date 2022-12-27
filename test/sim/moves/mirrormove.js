@@ -12,7 +12,7 @@ describe('Mirror Move [Gen 1]', function () {
 
 	it(`[Gen 1] Mirror Move'd Hyper Beam should force a recharge turn after not KOing a Pokemon`, function () {
 		battle = common.gen(1).createBattle([[
-			{species: 'fearow', moves: ['mirrormove', 'tackle']},
+			{species: 'golem', moves: ['mirrormove', 'tackle']},
 		], [
 			{species: 'aerodactyl', moves: ['hyperbeam']},
 		]]);
