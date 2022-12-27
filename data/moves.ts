@@ -3291,6 +3291,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onModifyMove(move, source, target) {
 			if (!source.hasType('Ghost')) {
 				move.target = move.nonGhostTarget as MoveTarget;
+			} else if (source.isAlly(target)) {
+				move.target = 'randomNormal';
 			}
 		},
 		onTryHit(target, source, move) {
@@ -3315,7 +3317,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		secondary: null,
-		target: "randomNormal",
+		target: "normal",
 		nonGhostTarget: "self",
 		type: "Ghost",
 		zMove: {effect: 'curse'},
