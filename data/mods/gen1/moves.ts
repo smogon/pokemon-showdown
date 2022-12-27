@@ -223,9 +223,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-				return;
-			}
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
@@ -345,9 +342,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-				return;
-			}
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
@@ -622,9 +616,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-				return;
-			}
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
@@ -719,9 +710,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-				return;
-			}
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
@@ -733,9 +721,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-				return;
-			}
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
@@ -758,9 +743,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-				return;
-			}
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
