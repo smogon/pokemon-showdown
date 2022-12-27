@@ -1,6 +1,6 @@
 'use strict';
 
-require('child_process').execSync('node ' + __dirname + "/../build");
+require('child_process').execSync('node "' + __dirname + '/../build"');
 const path = require('path');
 const fs = require('fs');
 
