@@ -230,7 +230,6 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 	twoturnmove: {
 		// Skull Bash, Solar Beam, ...
 		name: 'twoturnmove',
-		duration: 2,
 		onStart(attacker, defender, effect) {
 			// ("attacker" is the Pokemon using the two turn move and the Pokemon this condition is being applied to)
 			this.effectState.move = effect.id;
@@ -259,9 +258,6 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		},
 		onLockMove() {
 			return this.effectState.move;
-		},
-		onMoveAborted(pokemon) {
-			pokemon.removeVolatile('twoturnmove');
 		},
 	},
 };

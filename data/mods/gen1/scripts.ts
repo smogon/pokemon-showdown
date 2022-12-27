@@ -128,8 +128,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.battle.setActiveMove(move, pokemon, target);
 
 			if (pokemon.moveThisTurn || !this.battle.runEvent('BeforeMove', pokemon, target, move)) {
-				// Prevent invulnerability from persisting until the turn ends.
-				pokemon.removeVolatile('twoturnmove');
 				// Rampage moves end without causing confusion
 				delete pokemon.volatiles['lockedmove'];
 				this.battle.clearActiveMove(true);
