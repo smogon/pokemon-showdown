@@ -148,8 +148,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	battlebond: {
 		name: "Battle Bond",
-		desc: "If this Pokemon is a Greninja, it raises its Speed, Attack and Special Attack by one stage if it attacks and knocks out another Pokemon. This ability can only activate once per game.",
-		shortDesc: "Once per game, after KOing a Pokemon: raise Spe, Atk and SpA by 1 stage.",
+		desc: "If this Pokemon is a Greninja, its Attack, Special Attack, and Speed are raised by 1 stage if it attacks and knocks out another Pokemon. This effect can only happen once per battle.",
+		shortDesc: "After KOing a Pokemon: raises Attack, Sp. Atk, Speed by 1 stage. Once per battle.",
 		gen8: {
 			desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja if it attacks and knocks out another Pokemon. If this Pokemon is an Ash-Greninja, its Water Shuriken has 20 power and always hits three times.",
 			shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",
@@ -331,7 +331,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	dauntlessshield: {
 		name: "Dauntless Shield",
-		shortDesc: "Once per game on switch-in, this Pokemon's Defense is raised by 1 stage.",
+		shortDesc: "On switch-in, this Pokemon's Defense is raised by 1 stage. Once per battle.",
 		gen8: {
 			shortDesc: "On switch-in, this Pokemon's Defense is raised by 1 stage.",
 		},
@@ -760,7 +760,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	intrepidsword: {
 		name: "Intrepid Sword",
-		shortDesc: "Once per game on switch-in, this Pokemon's Attack is raised by 1 stage.",
+		shortDesc: "On switch-in, this Pokemon's Attack is raised by 1 stage. Once per battle.",
 		gen8: {
 			shortDesc: "On switch-in, this Pokemon's Attack is raised by 1 stage.",
 		},
@@ -825,8 +825,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	libero: {
 		name: "Libero",
-		desc: "Once per switch-in, this Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type, and cannot change a terastallized Pokemon's type.",
-		shortDesc: "Once per switch-in, this Pokemon's type changes to match the type of its move.",
+		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type. This effect can only happen once per switch-in.",
+		shortDesc: "This Pokemon's type changes to the type of the move it is using. Once per switch-in.",
 		gen8: {
 			desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type.",
 			shortDesc: "This Pokemon's type changes to match the type of the move it is about to use.",
@@ -1284,8 +1284,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	protean: {
 		name: "Protean",
-		desc: "Once per switch-in, this Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type, and cannot change a terastallized Pokemon's type.",
-		shortDesc: "Once per switch-in, this Pokemon's type changes to match the type of its move.",
+		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type. This effect can only happen once per switch-in.",
+		shortDesc: "This Pokemon's type changes to the type of the move it is using. Once per switch-in.",
 		gen8: {
 			desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type.",
 			shortDesc: "This Pokemon's type changes to match the type of the move it is about to use.",
