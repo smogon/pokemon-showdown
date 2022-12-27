@@ -217,14 +217,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
 				return false;
 			},
-			onDamage(damage, target, source, move) {
-				if (!move || move.effectType !== 'Move') return;
-				if (!source) return;
-				if (move.id === 'earthquake') {
-					this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
-					return null;
-				}
-			},
 		},
 	},
 	disable: {
@@ -335,14 +327,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (move.id === 'swift' || move.id === 'transform') return true;
 				this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
 				return false;
-			},
-			onDamage(damage, target, source, move) {
-				if (!move || move.effectType !== 'Move') return;
-				if (!source || source.isAlly(target)) return;
-				if (move.id === 'gust' || move.id === 'thunder') {
-					this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
-					return null;
-				}
 			},
 		},
 	},

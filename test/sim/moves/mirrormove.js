@@ -46,6 +46,41 @@ describe('Mirror Move [Gen 1]', function () {
 		battle.makeChoices();
 		assert.fullHP(battle.p2.active[0]);
 	});
+
+	it(`[Gen 1] Mirror Move should not copy the charging turn of a two-turn attack`, function () {
+		battle = common.gen(1).createBattle([[
+			{species: 'fearow', moves: ['mirrormove']},
+		], [
+			{species: 'dugtrio', moves: ['dig']},
+		]]);
+		const fearow = battle.p1.active[0];
+		battle.makeChoices();
+		assert.false(fearow.volatiles['twoturnmove']);
+		battle.makeChoices();
+		assert(fearow.volatiles['twoturnmove']);
+		battle.makeChoices();
+	});
+
+	it(`[Gen 1] Mirror Move should not copy Metronome if Metronome calls a regular move`, function () {
+		battle = common.gen(1).createBattle({seed: [0, 0, 0, 1]}, [[
+			{species: 'fearow', moves: ['mirrormove']},
+		], [
+			{species: 'alakazam', moves: ['metronome']},
+		]]);
+		battle.makeChoices();
+		assert.false(battle.log.some(line => line.includes('|move|p1a: Fearow|Metronome|p1a: Fearow|[from]Mirror Move')));
+	});
+
+	it(`[Gen 1] Mirror Move should copy Metronome if Metronome calls a two-turn move`, function () {
+		battle = common.gen(1).createBattle({seed: [0, 1, 0, 1]}, [[
+			{species: 'fearow', moves: ['mirrormove']},
+		], [
+			{species: 'alakazam', moves: ['metronome']},
+		]]);
+		battle.makeChoices();
+		assert(battle.p2.active[0].volatiles['twoturnmove']);
+		assert(battle.log.some(line => line.includes('|move|p1a: Fearow|Metronome|p1a: Fearow|[from]Mirror Move')));
+	});
 });
 
 describe('Mirror Move [Gen 2]', function () {

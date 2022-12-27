@@ -10,6 +10,8 @@ const SKIP_LASTDAMAGE = new Set([
 	'splash', 'stunspore', 'substitute', 'supersonic', 'teleport', 'thunderwave', 'toxic', 'transform',
 ]);
 
+const TWO_TURN_MOVES = ['dig', 'fly', 'razorwind', 'skullbash', 'skyattack', 'solarbeam'];
+
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen2',
 	gen: 1,
@@ -163,8 +165,6 @@ export const Scripts: ModdedBattleScriptsData = {
 		// This function deals with AfterMoveSelf events.
 		// This leads with partial trapping moves shenanigans after the move has been used.
 		useMove(moveOrMoveName, pokemon, target, sourceEffect) {
-			const moveResult = this.useMoveInner(moveOrMoveName, pokemon, target, sourceEffect);
-
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
 			const baseMove = this.battle.dex.moves.get(moveOrMoveName);
 			let move = this.battle.dex.getActiveMove(baseMove);
@@ -184,13 +184,16 @@ export const Scripts: ModdedBattleScriptsData = {
 				// Check again, this shouldn't ever happen on Gen 1.
 				target = this.battle.getRandomTarget(pokemon, move);
 			}
+			// The charging turn of a two-turn move does not update pokemon.lastMove
+			if (!TWO_TURN_MOVES.includes(move.id) || pokemon.volatiles['twoturnmove']) pokemon.lastMove = move;
+
+			const moveResult = this.useMoveInner(moveOrMoveName, pokemon, target, sourceEffect);
 
 			if (move.id !== 'metronome') {
 				if (move.id !== 'mirrormove' ||
 					(!pokemon.side.foe.active[0]?.lastMove || pokemon.side.foe.active[0].lastMove?.id === 'mirrormove')) {
 					// The move is our 'final' move (a failed Mirror Move, or any move that isn't Metronome or Mirror Move).
 					pokemon.side.lastMove = move;
-					pokemon.lastMove = move;
 					this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 
 					// If target fainted
