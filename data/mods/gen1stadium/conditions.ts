@@ -24,12 +24,9 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (this.randomChance(63, 256)) {
 				this.add('cant', pokemon, 'par');
 				pokemon.removeVolatile('bide');
-				pokemon.removeVolatile('lockedmovee');
+				pokemon.removeVolatile('lockedmove');
 				pokemon.removeVolatile('twoturnmove');
-				pokemon.removeVolatile('fly');
-				pokemon.removeVolatile('dig');
-				pokemon.removeVolatile('solarbeam');
-				pokemon.removeVolatile('skullbash');
+				pokemon.removeVolatile('invulnerability');
 				pokemon.removeVolatile('partialtrappinglock');
 				return false;
 			}
