@@ -39,10 +39,6 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 				this.add('cant', pokemon, 'par');
 				pokemon.removeVolatile('bide');
 				pokemon.removeVolatile('twoturnmove');
-				pokemon.removeVolatile('fly');
-				pokemon.removeVolatile('dig');
-				pokemon.removeVolatile('solarbeam');
-				pokemon.removeVolatile('skullbash');
 				pokemon.removeVolatile('partialtrappinglock');
 				return false;
 			}
@@ -148,10 +144,6 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 				this.directDamage(damage, pokemon, target);
 				pokemon.removeVolatile('bide');
 				pokemon.removeVolatile('twoturnmove');
-				pokemon.removeVolatile('fly');
-				pokemon.removeVolatile('dig');
-				pokemon.removeVolatile('solarbeam');
-				pokemon.removeVolatile('skullbash');
 				pokemon.removeVolatile('partialtrappinglock');
 				return false;
 			}
@@ -236,7 +228,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		},
 	},
 	twoturnmove: {
-		// Skull Bash, SolarBeam, Sky Drop...
+		// Skull Bash, Solar Beam, ...
 		name: 'twoturnmove',
 		duration: 2,
 		onStart(attacker, defender, effect) {
