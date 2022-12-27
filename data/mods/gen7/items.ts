@@ -72,6 +72,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	blukberry: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
 	buggem: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
@@ -438,6 +442,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 	pikashuniumz: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	pinapberry: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
 	},
 	pinsirite: {
 		inherit: true,

@@ -483,13 +483,6 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Electrium Z",
 		desc: "If holder has an Electric move, this item allows it to use an Electric Z-Move.",
 	},
-	energypowder: {
-		name: "Energy Powder",
-		desc: "Restores 60 HP to one Pokemon.",
-		gen6: {
-			desc: "Restores 50 HP to one Pokemon but lowers Happiness.",
-		},
-	},
 	enigmaberry: {
 		name: "Enigma Berry",
 		desc: "Restores 1/4 max HP after holder is hit by a supereffective move. Single use.",
