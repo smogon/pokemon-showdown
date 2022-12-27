@@ -848,8 +848,8 @@ export class RandomTeams {
 		role: string,
 	): boolean {
 		if ([
-			'Armor Tail', 'Battle Bond', 'Flare Boost', 'Gluttony', 'Harvest', 'Hydration', 'Ice Body',
-			'Immunity', 'Own Tempo', 'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
+			'Armor Tail', 'Battle Bond', 'Early Bird', 'Flare Boost', 'Gluttony', 'Harvest', 'Hydration', 'Ice Body',
+			'Immunity', 'Own Tempo', 'Pressure', 'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
 		].includes(ability)) return true;
 
 		switch (ability) {
@@ -894,8 +894,6 @@ export class RandomTeams {
 			return !counter.get('Grass');
 		case 'Prankster':
 			return !counter.get('Status');
-		case 'Pressure':
-			return (!!counter.get('setup') || counter.get('Status') < 2 || isDoubles);
 		case 'Reckless':
 			return !counter.get('recoil');
 		case 'Rock Head':
@@ -916,7 +914,7 @@ export class RandomTeams {
 		case 'Slush Rush':
 			return !teamDetails.snow;
 		case 'Solar Power':
-			return (!teamDetails.sun);
+			return (!teamDetails.sun || !counter.get('Special'));
 		case 'Stakeout':
 			return (counter.damagingMoves.size < 1);
 		case 'Sturdy':
