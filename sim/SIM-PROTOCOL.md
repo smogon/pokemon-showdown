@@ -203,10 +203,11 @@ Multi, player 1's perspective
 For example: `p1a: Sparky` could be a Charizard named Sparky.
 `p1: Dragonite` could be an inactive Dragonite being healed by Heal Bell.
 
-- `DETAILS` is a comma-separated list of all information about a pokemon
+- `DETAILS` is a comma-separated list of all information about a Pokemon
   visible on the battle screen: species, shininess, gender, and level. So it
   starts with `SPECIES`, adding `, L##` if it's not level 100, `M` if it's male,
   `, F` if it's female, `, shiny` if it's shiny.
+  In Gen 9, `, tera:TYPE` will be appended if the Pokemon has Terastallized.
 
 So, for instance, `Deoxys-Speed` is a level 100 non-shiny genderless
 Deoxys (Speed forme). `Sawsbuck, L50, F, shiny` is a level 50 shiny female
