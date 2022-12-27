@@ -145,6 +145,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 				this.directDamage(damage, pokemon, target);
 				pokemon.removeVolatile('bide');
 				pokemon.removeVolatile('twoturnmove');
+				pokemon.removeVolatile('invulnerability');
 				pokemon.removeVolatile('partialtrappinglock');
 				pokemon.removeVolatile('lockedmove');
 				return false;
@@ -282,6 +283,15 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		},
 		onLockMove() {
 			return this.effectState.move;
+		},
+	},
+	invulnerability: {
+		// Fly/Dig
+		name: 'invulnerability',
+		onInvulnerability(target, source, move) {
+			if (move.id === 'swift' || move.id === 'transform') return true;
+			this.add('-message', 'The foe ' + target.name + ' can\'t be hit while invulnerable!');
+			return false;
 		},
 	},
 };
