@@ -291,7 +291,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		},
 	},
 	invulnerability: {
-		// Fly/Dig
+		// Dig/Fly
 		name: 'invulnerability',
 		onInvulnerability(target, source, move) {
 			if (move.id === 'swift' || move.id === 'transform') return true;

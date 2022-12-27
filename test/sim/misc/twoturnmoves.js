@@ -46,7 +46,7 @@ describe('Two Turn Moves [Gen 1]', function () {
 		assert.false.fullHP(battle.p1.active[0]);
 	});
 
-	it(`Fly/Dig invulnerability glitch`, function () {
+	it(`Dig/Fly invulnerability glitch`, function () {
 		battle = common.gen(1).createBattle({seed: [0, 0, 0, 1]});
 		battle.setPlayer('p1', {team: [{species: "Electrode", moves: ['thunderwave', 'swift', 'thunderbolt']}]});
 		battle.setPlayer('p2', {team: [{species: "Pidgeot", moves: ['fly', 'gust']}]});
