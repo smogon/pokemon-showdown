@@ -272,6 +272,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return (!counter.get('Physical') && !moves.has('batonpass'));
 		case 'Flash Fire':
 			return abilities.has('Drought');
+		case 'Guts':
+			return (!moves.has('facade') && species.id === 'heracross');
 		case 'Hydration': case 'Rain Dish': case 'Swift Swim':
 			return (!moves.has('raindance') && !teamDetails.rain);
 		case 'Hustle':
