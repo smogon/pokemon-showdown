@@ -6739,15 +6739,19 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		condition: {
 			noCopy: true,
-			duration: 2,
-			onRestart() {
-				this.effectState.duration = 2;
+			onStart(pokemon) {
+				this.add('-singlemove', pokemon, 'Glaive Rush', '[silent]');
 			},
 			onAccuracy() {
 				return true;
 			},
 			onSourceModifyDamage() {
 				return this.chainModify(2);
+			},
+			onBeforeMovePriority: 100,
+			onBeforeMove(pokemon) {
+				this.debug('removing Glaive Rush drawback before attack');
+				pokemon.removeVolatile('glaiverush');
 			},
 		},
 		secondary: null,
