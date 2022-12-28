@@ -225,8 +225,12 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return {cull: moves.has('bodyslam')};
 		case 'healbell':
 			return {cull: !!counter.get('speedsetup') || moves.has('magiccoat')};
-		case 'moonlight': case 'painsplit': case 'recover': case 'roost': case 'softboiled': case 'synthesis':
+		case 'moonlight': case 'painsplit': case 'recover': case 'softboiled': case 'synthesis':
 			return {cull: ['leechseed', 'rest', 'wish'].some(m => moves.has(m))};
+		case 'roost':
+			// Prevent Roost + Protect on Gliscor
+			const gliscorCase = species.id === 'gliscor' && moves.has('protect');
+			return {cull: ['leechseed', 'rest', 'wish'].some(m => moves.has(m)) || gliscorCase};
 		case 'substitute':
 			return {cull: (
 				(moves.has('doubleedge') && !abilities.has('rockhead')) ||
@@ -601,6 +605,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 							!counter.get('recovery') &&
 							!counter.setupType &&
 							!moves.has('healingwish') &&
+							!abilities.has('Poison Heal') &&
 							(counter.get('Status') > 1 || (species.nfe && !!counter.get('Status'))) &&
 							(movePool.includes('recover') || movePool.includes('roost') || movePool.includes('softboiled'))
 						) || (
