@@ -26,23 +26,20 @@ const findFilesForPath = path => {
 	const out = [];
 	const files = fs.readdirSync(path);
 	for (const file of files) {
-		if (fs.statSync(`${path}/${file}`).isDirectory()) {
-			out.push(...findFilesForPath(`${path}/${file}`));
-		} else if (shouldBeCompiled(`${path}/${file}`)) {
-			out.push(`${path}/${file}`);
+		const cur = `${path}/${file}`;
+		if (cur.includes('node_modules')) continue;
+		if (fs.statSync(cur).isDirectory()) {
+			out.push(...findFilesForPath(cur));
+		} else if (shouldBeCompiled(cur)) {
+			out.push(cur);
 		}
 	}
 	return out;
 };
 
 exports.transpile = (decl) => {
-	const directories = ['server', 'lib', 'sim', 'data', 'config', 'tools', 'translations'];
-	const out = [];
-	for (const dir of directories) {
-		out.push(...findFilesForPath(dir));
-	}
 	esbuild.buildSync({
-		entryPoints: out,
+		entryPoints: findFilesForPath('./'),
 		outdir: './dist',
 		outbase: '.',
 		format: 'cjs',
