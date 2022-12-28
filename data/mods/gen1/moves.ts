@@ -258,6 +258,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				if (move.id === this.effectState.move) {
 					this.add('cant', pokemon, 'Disable', move);
+					pokemon.removeVolatile('twoturnmove');
 					return false;
 				}
 			},

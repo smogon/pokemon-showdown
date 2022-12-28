@@ -35,6 +35,19 @@ describe('Two Turn Moves [Gen 1]', function () {
 		}
 	});
 
+	it(`two-turn move ends if it fails due to Disable`, function () {
+		battle = common.gen(1).createBattle();
+		battle.setPlayer('p1', {team: [{species: "Aerodactyl", moves: ['skyattack']}]});
+		battle.setPlayer('p2', {team: [{species: "Drowzee", moves: ['disable']}]});
+		const aerodactyl = battle.p1.active[0];
+		battle.makeChoices();
+		assert(aerodactyl.volatiles['disable'].time > 1);
+		assert(aerodactyl.volatiles['twoturnmove']);
+		battle.makeChoices();
+		assert(battle.log.some(line => line.includes('|cant|p1a: Aerodactyl|Disable|Sky Attack')));
+		assert(!aerodactyl.volatiles['twoturnmove']);
+	});
+
 	it(`Fly/Dig dodges all attacks except for Swift, Transform, and Bide`, function () {
 		battle = common.gen(1).createBattle();
 		battle.setPlayer('p1', {team: [{species: "Aerodactyl", moves: ['fly']}]});
