@@ -186,7 +186,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'hurricane':
 			return {cull: !!counter.setupType && moves.has('acrobatics')};
 		case 'gigadrain':
-			return {cull: (!counter.setupType && moves.has('leafstorm')) || moves.has('petaldance') || moves.has('powerwhip') || moves.has('leafblade')};
+			return {cull: (!counter.setupType && moves.has('leafstorm')) ||
+				moves.has('petaldance') || moves.has('powerwhip') || moves.has('leafblade')};
 		case 'solarbeam':
 			return {cull: (!abilities.has('Drought') && !moves.has('sunnyday')) || moves.has('gigadrain')};
 		case 'leafstorm':
@@ -606,7 +607,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 							!counter.setupType &&
 							['healingwish', 'trick', 'trickroom'].every(m => !moves.has(m)) &&
 							!abilities.has('Poison Heal') &&
-							(counter.get('Status')|| (species.nfe && !!counter.get('Status'))) &&
+							(counter.get('Status') || (species.nfe && !!counter.get('Status'))) &&
 							(['recover', 'roost', 'slackoff', 'softboiled'].some(m => movePool.includes(m)))
 						) || (
 							movePool.includes('darkvoid') ||
