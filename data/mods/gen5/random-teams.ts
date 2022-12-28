@@ -187,7 +187,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return {cull: !!counter.setupType && moves.has('acrobatics')};
 		case 'gigadrain':
 			return {cull: (!counter.setupType && moves.has('leafstorm')) ||
-				['leafblade', 'petaldance', 'powerwhip'].some(m => moves.has(m));
+				['leafblade', 'petaldance', 'powerwhip'].some(m => moves.has(m))};
 		case 'solarbeam':
 			return {cull: (!abilities.has('Drought') && !moves.has('sunnyday')) || moves.has('gigadrain')};
 		case 'leafstorm':
