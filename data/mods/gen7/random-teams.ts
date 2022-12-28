@@ -616,7 +616,10 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		case 'Intimidate':
 			return (moves.has('bodyslam') || moves.has('rest') || abilities.has('Reckless') && counter.get('recoil') > 1);
 		case 'Lightning Rod':
-			return species.types.includes('Ground');
+			return (
+				species.types.includes('Ground') || 
+				(!!teamDetails.rain || moves.has('raindance')) && abilities.has('Swift Swim')
+			);
 		case 'Limber':
 			return species.types.includes('Electric');
 		case 'Liquid Voice':
