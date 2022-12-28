@@ -119,14 +119,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 					}
 				}
 			}
-			// Items other than Z-Crystals and Pokémon-specific items should be illegal
+			// Any item that was legal in Gen 7 (Normal Gem for example) should be usable
 			if (!set.item) return;
-			const item = this.dex.items.get(set.item);
-			if (!item.isNonstandard) return;
-			if (
-				(item.isNonstandard === 'Past' || requireObtainable && item.isNonstandard === 'Unobtainable') &&
-				!item.zMove && !item.itemUser && !item.forcedForme && !item.isBerry
-			) {
+			let item = this.dex.items.get(set.item);
+			let gen = this.dex.gen;
+			while (item.isNonstandard && gen >= 7) {
+				item = this.dex.forGen(gen).items.get(item.id);
+				gen--;
+			}
+			if (requireObtainable && item.isNonstandard) {
 				if (this.ruleTable.has(`+item:${item.id}`)) return;
 				return [`${set.name}'s item ${item.name} does not exist in Gen ${this.dex.gen}.`];
 			}

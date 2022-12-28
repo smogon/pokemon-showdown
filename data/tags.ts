@@ -222,6 +222,10 @@ export const Tags: {[id: string]: TagData} = {
 
 	// Nat Dex tiers
 	// -------------
+	ndag: {
+		name: "ND AG",
+		speciesFilter: species => species.natDexTier === 'AG',
+	},
 	nduber: {
 		name: "ND Uber",
 		speciesFilter: species => species.natDexTier === 'Uber' || species.natDexTier === '(Uber)',
