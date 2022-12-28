@@ -144,8 +144,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			let lockedMove = this.battle.runEvent('LockMove', pokemon);
 			if (lockedMove === true) lockedMove = false;
 			if (
-				!lockedMove &&
-				(!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)
+				// Two-turn moves like Sky Attack deduct PP on their second turn if they are not called by another move.
+				(pokemon.volatiles['twoturnmove'] && pokemon.volatiles['twoturnmove'].sourceEffect === move.id) ||
+				(!TWO_TURN_MOVES.includes(move.id) && !lockedMove &&
+				(!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target))
 			) {
 				pokemon.deductPP(move, null, target);
 			} else {

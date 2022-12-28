@@ -58,7 +58,6 @@ describe('Mirror Move [Gen 1]', function () {
 		assert.false(fearow.volatiles['twoturnmove']);
 		battle.makeChoices();
 		assert(fearow.volatiles['twoturnmove']);
-		battle.makeChoices();
 	});
 
 	it(`[Gen 1] Mirror Move should not copy Metronome if Metronome calls a regular move`, function () {

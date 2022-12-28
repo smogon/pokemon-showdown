@@ -241,6 +241,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		onStart(attacker, defender, effect) {
 			// ("attacker" is the Pokemon using the two turn move and the Pokemon this condition is being applied to)
 			this.effectState.move = effect.id;
+			this.effectState.sourceEffect = effect.sourceEffect;
 			attacker.addVolatile(effect.id);
 			// lastMoveTargetLoc is the location of the originally targeted slot before any redirection
 			// note that this is not updated for moves called by other moves
