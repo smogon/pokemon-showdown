@@ -294,6 +294,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		// Dig/Fly
 		name: 'invulnerability',
 		onInvulnerability(target, source, move) {
+			if (target === source) return true;
 			if (move.id === 'swift' || move.id === 'transform') return true;
 			this.add('-message', 'The foe ' + target.name + ' can\'t be hit while invulnerable!');
 			return false;
