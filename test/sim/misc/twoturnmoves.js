@@ -53,13 +53,14 @@ describe('Two Turn Moves [Gen 1]', function () {
 		assert(!aerodactyl.volatiles['twoturnmove']);
 	});
 
-	it(`[Gen 1] does not use PP in its attacking turn if called by Metronome or Mirror Move`, function () {
+	it(`[Gen 1] if called by Metronome or Mirror Move, the calling move uses PP in the attacking turn`, function () {
 		battle = common.gen(1).createBattle({seed: [0, 1, 0, 1]});
 		battle.setPlayer('p1', {team: [{species: 'blastoise', moves: ['metronome', 'skullbash']}]});
 		battle.setPlayer('p2', {team: [{species: 'golem', moves: ['defensecurl']}]});
 		const blastoise = battle.p1.active[0];
 		battle.makeChoices();
 		assert(battle.log.some(line => line.includes('|move|p1a: Blastoise|Skull Bash||[from]Metronome|[still]')));
+		assert.equal(blastoise.moveSlots[0].pp, 16);
 		battle.makeChoices();
 		assert.equal(blastoise.moveSlots[0].pp, 15);
 		// Skull Bash still has all its PP, even though Metronome called Skull Bash

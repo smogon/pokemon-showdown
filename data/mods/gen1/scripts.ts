@@ -144,12 +144,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			let lockedMove = this.battle.runEvent('LockMove', pokemon);
 			if (lockedMove === true) lockedMove = false;
 			if (
-				// Two-turn moves like Sky Attack deduct PP on their second turn if they are not called by another move.
-				(pokemon.volatiles['twoturnmove'] && pokemon.volatiles['twoturnmove'].sourceEffect === move.id) ||
-				(!TWO_TURN_MOVES.includes(move.id) && !lockedMove &&
+				(!lockedMove &&
 				(!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target))
 			) {
 				pokemon.deductPP(move, null, target);
+			} else if (pokemon.volatiles['twoturnmove']) {
+				// Two-turn moves like Sky Attack deduct PP on their second turn.
+				pokemon.deductPP(pokemon.volatiles['twoturnmove'].originalMove, null, target);
 			} else {
 				sourceEffect = move;
 			}
@@ -161,6 +162,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			this.useMove(move, pokemon, target, sourceEffect);
+			// Restore PP if the move is the first turn of a charging move. Save the move from which PP should be deducted if the move succeeds.
+			if (pokemon.volatiles['twoturnmove']) {
+				pokemon.deductPP(move, -1, target);
+				pokemon.volatiles['twoturnmove'].originalMove = move.id;
+			}
 		},
 		// This function deals with AfterMoveSelf events.
 		// This leads with partial trapping moves shenanigans after the move has been used.
