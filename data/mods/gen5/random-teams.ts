@@ -226,9 +226,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return {cull: moves.has('bodyslam')};
 		case 'healbell':
 			return {cull: !!counter.get('speedsetup') || moves.has('magiccoat')};
-		case 'moonlight': case 'painsplit': case 'recover': case 'softboiled': case 'synthesis':
-			return {cull: ['leechseed', 'rest', 'wish'].some(m => moves.has(m))};
-		case 'roost':
+		case 'moonlight': case 'painsplit': case 'recover': case 'roost': case 'softboiled': case 'synthesis':
 			// Prevent Roost + Protect on Gliscor
 			const gliscorCase = species.id === 'gliscor' && moves.has('protect');
 			return {cull: ['leechseed', 'rest', 'wish'].some(m => moves.has(m)) || gliscorCase};
