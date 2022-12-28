@@ -604,10 +604,10 @@ export class RandomGen5Teams extends RandomGen6Teams {
 						) || (
 							!counter.get('recovery') &&
 							!counter.setupType &&
-							!moves.has('healingwish') &&
+							['healingwish', 'trick', 'trickroom'].every(m => !moves.has(m)) &&
 							!abilities.has('Poison Heal') &&
-							(counter.get('Status') > 1 || (species.nfe && !!counter.get('Status'))) &&
-							(movePool.includes('recover') || movePool.includes('roost') || movePool.includes('softboiled'))
+							(counter.get('Status')|| (species.nfe && !!counter.get('Status'))) &&
+							(['recover', 'roost', 'slackoff', 'softboiled'].some(m => movePool.includes(m)))
 						) || (
 							movePool.includes('darkvoid') ||
 							movePool.includes('quiverdance') ||
