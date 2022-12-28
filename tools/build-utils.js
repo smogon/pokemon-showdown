@@ -36,7 +36,7 @@ const findFilesForPath = path => {
 };
 
 exports.transpile = (decl) => {
-	const directories = ['server', 'lib', 'sim', 'data', 'config', 'tools'];
+	const directories = ['server', 'lib', 'sim', 'data', 'config', 'tools', 'translations'];
 	const out = [];
 	for (const dir of directories) {
 		out.push(...findFilesForPath(dir));
