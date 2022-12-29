@@ -6672,6 +6672,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		condition: {
 			duration: 2,
+			onAfterMove(source, target, move) {
+				if (move.id !== 'gigatonhammer') source.removeVolatile('gigatonhammer');
+			}
 		},
 		secondary: null,
 		target: "normal",
