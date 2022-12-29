@@ -281,6 +281,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		)) {
 			return 'Choice Band';
 		}
+		if (species.baseSpecies === "Deoxys" && moves.has('psychoboost')) return 'White Herb';
 
 		// Default to Leftovers
 		return 'Leftovers';
