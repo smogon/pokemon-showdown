@@ -1190,6 +1190,7 @@ export class RandomTeams {
 		if (species.id === 'toxtricity' && moves.has('shiftgear')) return 'Throat Spray';
 		if (species.id === 'palkia') return 'Lustrous Orb';
 		if (moves.has('substitute') || ability === 'Moody') return 'Leftovers';
+		if (moves.has('stickyweb') && isLead) return 'Focus Sash';
 		if (
 			!teamDetails.defog && !teamDetails.rapidSpin &&
 			this.dex.getEffectiveness('Rock', species) >= 1
@@ -1217,7 +1218,7 @@ export class RandomTeams {
 		) return 'Air Balloon';
 		if (['Bulky Attacker', 'Bulky Support', 'Bulky Setup'].some(m => role === (m))) return 'Leftovers';
 		if (role === 'Fast Support' || role === 'Fast Bulky Setup') {
-			return (counter.damagingMoves.size >= 3) ? 'Life Orb' : 'Leftovers';
+			return (counter.damagingMoves.size >= 3 && !moves.has('nuzzle')) ? 'Life Orb' : 'Leftovers';
 		}
 		if (
 			['flamecharge', 'rapidspin', 'trailblaze'].every(m => !moves.has(m)) &&
