@@ -6664,9 +6664,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (pokemon.lastMove?.id === 'gigatonhammer') pokemon.disableMove('gigatonhammer');
 		},
 		onUseMoveMessage(source) {
-			if (source.lastMove?.id === 'gigatonhammer') {
+			if (source.volatiles['gigatonhammer']) {
 				this.add('-hint', "Some effects can force a Pokemon to use Gigaton Hammer again in a row.");
+			} else {
+				source.addVolatile('gigatonhammer');
 			}
+		},
+		condition: {
+			duration: 2,
 		},
 		secondary: null,
 		target: "normal",
