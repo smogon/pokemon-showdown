@@ -19,7 +19,7 @@
 
 'use strict';
 
-require('ts-node').register();
+require('child_process').execSync('node ' + __dirname + "/../../build");
 const child_process = require('child_process');
 const path = require('path');
 const fs = require('fs');
@@ -53,7 +53,7 @@ Chat.plural = function (num, plural = 's', singular = '') {
 	return (num !== 1 ? plural : singular);
 };
 
-const importer = require('./importer.js');
+const importer = require('../../dist/tools/set-import/importer.js');
 
 const SETS = path.resolve(__dirname, 'sets');
 (async () => {
