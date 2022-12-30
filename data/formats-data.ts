@@ -4962,18 +4962,14 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	scorbunny: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
-		natDexTier: "LC",
+		tier: "LC",
 	},
 	raboot: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
-		natDexTier: "NFE",
+		tier: "NFE",
 	},
 	cinderace: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tier: "OU",
+		doublesTier: "DOU",
 		natDexTier: "UU",
 	},
 	cinderacegmax: {
