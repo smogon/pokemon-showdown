@@ -572,7 +572,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Happens after crit calculation.
 			if (basePower) {
-				basePower = this.battle.runEvent('BasePower', source, target, move, basePower);
 				if (basePower && move.basePowerModifier) {
 					basePower *= move.basePowerModifier;
 				}

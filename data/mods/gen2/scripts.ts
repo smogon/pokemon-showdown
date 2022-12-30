@@ -554,10 +554,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// confusion damage
 				if (move.isConfusionSelfHit) {
 					move.type = move.baseMoveType!;
-					basePower = this.battle.runEvent('BasePower', source, target, move, basePower, true);
 					move.type = '???';
-				} else {
-					basePower = this.battle.runEvent('BasePower', source, target, move, basePower, true);
 				}
 				if (basePower && move.basePowerModifier) {
 					basePower *= move.basePowerModifier;
