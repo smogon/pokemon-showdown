@@ -32,4 +32,15 @@ describe('Room Service', function () {
 		battle.makeChoices();
 		assert.statStage(battle.p1.active[0], 'spe', -1, `Ditto-Whimsicott should be at -1 Speed after transforming`);
 	});
+
+	it(`should not trigger Defiant`, function () {
+		battle = common.createBattle([[
+			{species: 'slowpoke', ability: 'defiant', item: 'roomservice', moves: ['sleeptalk']},
+		], [
+			{species: 'whimsicott', moves: ['trickroom']},
+		]]);
+		battle.makeChoices();
+		assert.statStage(battle.p1.active[0], 'atk', 0);
+		assert.statStage(battle.p1.active[0], 'spe', -1);
+	});
 });
