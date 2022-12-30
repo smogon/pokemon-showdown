@@ -3109,7 +3109,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			return 1;
 		},
 		name: "Pressure",
-		rating: 2,
+		rating: 2.5,
 		num: 46,
 	},
 	primordialsea: {
