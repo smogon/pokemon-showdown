@@ -561,11 +561,6 @@ export const Scripts: ModdedBattleScriptsData = {
 						didSomething = true;
 					}
 				}
-				if (moveData.pseudoWeather) {
-					if (this.battle.field.addPseudoWeather(moveData.pseudoWeather, pokemon, move)) {
-						didSomething = true;
-					}
-				}
 				// Hit events
 				hitResult = this.battle.singleEvent('Hit', moveData, {}, target, pokemon, move);
 				if (!isSelf && !isSecondary) {

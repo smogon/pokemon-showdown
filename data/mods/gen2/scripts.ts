@@ -398,10 +398,6 @@ export const Scripts: ModdedBattleScriptsData = {
 					hitResult = this.battle.field.setWeather(moveData.weather, pokemon, move);
 					didSomething = didSomething || hitResult;
 				}
-				if (moveData.pseudoWeather) {
-					hitResult = this.battle.field.addPseudoWeather(moveData.pseudoWeather, pokemon, move);
-					didSomething = didSomething || hitResult;
-				}
 				if (moveData.forceSwitch) {
 					if (this.battle.canSwitch(target.side)) didSomething = true; // at least defer the fail message to later
 				}

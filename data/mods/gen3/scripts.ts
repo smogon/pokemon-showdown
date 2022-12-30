@@ -17,9 +17,6 @@ export const Scripts: ModdedBattleScriptsData = {
 		inherit: true,
 		getActionSpeed() {
 			let speed = this.getStat('spe', false, false);
-			if (this.battle.field.getPseudoWeather('trickroom')) {
-				speed = -speed;
-			}
 			if (this.battle.quickClawRoll && this.hasItem('quickclaw')) {
 				speed = 65535;
 			}
