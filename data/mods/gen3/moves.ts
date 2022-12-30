@@ -116,7 +116,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	blizzard: {
 		inherit: true,
-		onModifyMove() { },
+		onModifyMove() {},
 	},
 	brickbreak: {
 		inherit: true,

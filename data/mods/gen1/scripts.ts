@@ -174,16 +174,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (sourceEffect) move.sourceEffect = sourceEffect.id;
 
-			this.battle.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
-			if (baseMove.target !== move.target) {
-				// Target changed in ModifyMove, so we must adjust it here
-				target = this.battle.getRandomTarget(pokemon, move);
-			}
-			move = this.battle.runEvent('ModifyMove', pokemon, target, move, move);
-			if (baseMove.target !== move.target) {
-				// Check again, this shouldn't ever happen on Gen 1.
-				target = this.battle.getRandomTarget(pokemon, move);
-			}
 			// The charging turn of a two-turn move does not update pokemon.lastMove
 			if (!TWO_TURN_MOVES.includes(move.id) || pokemon.volatiles['twoturnmove']) pokemon.lastMove = move;
 
@@ -231,8 +221,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return moveResult;
 		},
-		// This is the function that actually uses the move, running ModifyMove events.
-		// It uses the move and then deals with the effects after the move.
+		// This is the function that uses the move and then deals with the effects after the move.
 		useMoveInner(moveOrMoveName, pokemon, target, sourceEffect) {
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
 			const baseMove = this.battle.dex.moves.get(moveOrMoveName);
@@ -245,17 +234,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			this.battle.setActiveMove(move, pokemon, target);
 
-			this.battle.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
-			if (baseMove.target !== move.target) {
-				// Target changed in ModifyMove, so we must adjust it here
-				target = this.battle.getRandomTarget(pokemon, move);
-			}
-			move = this.battle.runEvent('ModifyMove', pokemon, target, move, move);
-			if (baseMove.target !== move.target) {
-				// Check again, this shouldn't ever happen on Gen 1.
-				target = this.battle.getRandomTarget(pokemon, move);
-				this.battle.debug('not a gen 1 mechanic');
-			}
 			if (!move) return false;
 
 			let attrs = '';

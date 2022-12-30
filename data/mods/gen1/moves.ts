@@ -875,6 +875,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	thunder: {
 		inherit: true,
+		onModifyMove() {},
 		secondary: {
 			chance: 10,
 			status: 'par',
