@@ -8,6 +8,24 @@ const {testNotBothMoves, testSet, testHiddenPower, testAlwaysHasMove} = require(
 
 describe('[Gen 7] Random Battle', () => {
 	const options = {format: 'gen7randombattle'};
+	const dex = Dex.forFormat(options.format);
+	const generator = Teams.getGenerator(options.format);
+
+	it('All moves on all sets should be obtainable (slow)', () => {
+		const rounds = 500;
+		for (const species of dex.species.all()) {
+			if (!species.randomBattleMoves || species.isNonstandard) continue;
+			const remainingMoves = new Set(species.randomBattleMoves);
+			for (let i = 0; i < rounds; i++) {
+				// Test lead 1/6 of the time
+				const set = generator.randomSet(species, {}, i % 6 === 0);
+				for (const move of set.moves) remainingMoves.delete(move);
+				if (!remainingMoves.size) break;
+			}
+			assert.false(remainingMoves.size,
+				`The following moves on ${species.name} are unused: ${[...remainingMoves].join(', ')}`);
+		}
+	});
 
 	it('should not generate Calm Mind + Yawn', () => {
 		testNotBothMoves('chimecho', options, 'calmmind', 'yawn');
@@ -26,7 +44,6 @@ describe('[Gen 7] Random Battle', () => {
 	});
 
 	it('should not generate Pursuit as the only Dark STAB move', () => {
-		const dex = Dex.forFormat(options.format);
 		const darkTypesWithPursuit = dex.species
 			.all()
 			.filter(pkmn => pkmn.types.includes('Dark') && pkmn.randomBattleMoves?.includes('pursuit'))

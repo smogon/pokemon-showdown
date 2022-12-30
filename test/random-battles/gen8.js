@@ -5,10 +5,27 @@
 
 const {testSet, testNotBothMoves, testHasSTAB, testAlwaysHasMove} = require('./tools');
 const assert = require('../assert');
-const {Dex} = require('../../dist/sim/dex');
 
 describe('[Gen 8] Random Battle', () => {
 	const options = {format: 'gen8randombattle'};
+	const dex = Dex.forFormat(options.format);
+	const generator = Teams.getGenerator(options.format);
+
+	it('All moves on all sets should be obtainable (slow)', () => {
+		const rounds = 500;
+		for (const species of dex.species.all()) {
+			if (!species.randomBattleMoves || species.isNonstandard) continue;
+			const remainingMoves = new Set(species.randomBattleMoves);
+			for (let i = 0; i < rounds; i++) {
+				// Test lead 1/6 of the time
+				const set = generator.randomSet(species, {}, i % 6 === 0);
+				for (const move of set.moves) remainingMoves.delete(move);
+				if (!remainingMoves.size) break;
+			}
+			assert.false(remainingMoves.size,
+				`The following moves on ${species.name} are unused: ${[...remainingMoves].join(', ')}`);
+		}
+	});
 
 	it('should not generate Golisopod without Bug STAB', () => {
 		testSet('golisopod', options, set => {
@@ -100,7 +117,6 @@ describe('[Gen 8] Random Battle', () => {
 	});
 
 	it('Rapidash with Swords Dance should have at least two attacks', () => {
-		const dex = Dex.forFormat(options.format);
 		testSet('rapidash', options, set => {
 			if (!set.moves.includes('swordsdance')) return;
 			assert(set.moves.filter(m => dex.moves.get(m).category !== 'Status').length > 1, `got ${JSON.stringify(set.moves)}`);
@@ -127,7 +143,6 @@ describe('[Gen 8] Random Battle', () => {
 		// This test takes more than 2000ms
 		this.timeout(0);
 
-		const dex = Dex.forFormat(options.format);
 		const pokemon = dex.species
 			.all()
 			.filter(pkmn => pkmn.randomBattleMoves && pkmn.types.includes('Grass') && pkmn.types.includes('Poison'));
@@ -145,7 +160,6 @@ describe('[Gen 8] Random Battle', () => {
 	});
 
 	it('should not generate Noctowl with three attacks and Roost', () => {
-		const dex = Dex.forFormat(options.format);
 		testSet('noctowl', options, set => {
 			const attacks = set.moves.filter(m => dex.moves.get(m).category !== 'Status');
 			assert(
@@ -230,9 +244,9 @@ describe('[Gen 8] Free-for-All Random Battle', () => {
 
 describe('[Gen 8 BDSP] Random Battle', () => {
 	const options = {format: 'gen8bdsprandombattle'};
+	const dex = Dex.forFormat(options.format);
 
 	const okToHaveChoiceMoves = ['switcheroo', 'trick', 'healingwish'];
-	const dex = Dex.forFormat(options.format);
 	for (const species of dex.species.all()) {
 		if (!species.randomBattleMoves) continue;
 

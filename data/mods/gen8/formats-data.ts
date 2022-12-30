@@ -4398,7 +4398,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	amoonguss: {
-		randomBattleMoves: ["clearsmog", "gigadrain", "sludgebomb", "spore", "synthesis", "toxic"],
+		randomBattleMoves: ["gigadrain", "sludgebomb", "spore", "synthesis", "toxic"],
 		randomBattleLevel: 84,
 		randomDoubleBattleMoves: ["clearsmog", "pollenpuff", "protect", "ragepowder", "spore"],
 		randomDoubleBattleLevel: 81,
