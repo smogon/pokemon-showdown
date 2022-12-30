@@ -294,7 +294,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			let critRatio = this.battle.runEvent('ModifyCritRatio', source, target, move, move.critRatio || 0);
 			critRatio = this.battle.clampIntRange(critRatio, 0, 5);
 			const critMult = [0, 16, 8, 4, 3, 2];
-			let isCrit = move.willCrit || false;
+			let isCrit = false;
 			if (typeof move.willCrit === 'undefined') {
 				if (critRatio) {
 					isCrit = this.battle.randomChance(1, critMult[critRatio]);

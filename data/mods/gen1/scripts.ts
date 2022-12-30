@@ -667,7 +667,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!move.type) move.type = '???';
 			const type = move.type;
 
-			// We get the base power and apply basePowerCallback if necessary.
+			// We get the base power.
 			let basePower: number | false | null = move.basePower;
 			if (!basePower) {
 				return basePower === 0 ? undefined : basePower;
@@ -675,7 +675,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			basePower = this.battle.clampIntRange(basePower, 1);
 
 			// Checking for the move's Critical Hit possibility. We check if it's a 100% crit move, otherwise we calculate the chance.
-			let isCrit = move.willCrit || false;
+			let isCrit = false;
 			if (!isCrit) {
 				// In gen 1, the critical chance is based on speed.
 				// First, we get the base speed, divide it by 2 and floor it. This is our current crit chance.
