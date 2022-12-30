@@ -519,9 +519,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// We get the base power and apply basePowerCallback if necessary.
 			let basePower: number | false | null = move.basePower;
-			if (move.basePowerCallback) {
-				basePower = move.basePowerCallback.call(this.battle, source, target, move);
-			}
 			if (!basePower) {
 				return basePower === 0 ? undefined : basePower;
 			}
