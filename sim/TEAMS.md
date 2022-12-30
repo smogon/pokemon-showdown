@@ -170,7 +170,7 @@ Armaldo||leftovers|swiftswim|xscissor,stoneedge,aquatail,rapidspin|Adamant|128,2
 The format is a list of pokemon delimited by `]`, where every Pokémon is:
 
 ```
-NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,POKEBALL,HIDDENPOWERTYPE,GIGANTAMAX,DYNAMAXLEVEL
+NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,POKEBALL,HIDDENPOWERTYPE,GIGANTAMAX,DYNAMAXLEVEL,TERATYPE
 ```
 
 - `SPECIES` is left blank if it's identical to `NICKNAME`
@@ -210,7 +210,9 @@ NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,
 
 - `DYNAMAXLEVEL` is left blank for 10.
 
-- If `POKEBALL`, `HIDDENPOWERTYPE`, `GIGANTAMAX` and `DYNAMAXLEVEL`
+- `TERATYPE` if left blank will default to the Pokémon's first type.
+
+- If `POKEBALL`, `HIDDENPOWERTYPE`, `GIGANTAMAX`, `DYNAMAXLEVEL` and `TERATYPE`
   are all blank, the commas will be left off.
 
 
