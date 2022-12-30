@@ -527,15 +527,6 @@ export const Scripts: ModdedBattleScriptsData = {
 						}
 					}
 				}
-				if (moveData.heal && !target.fainted) {
-					const d = target.heal(Math.floor(target.maxhp * moveData.heal[0] / moveData.heal[1]));
-					if (!d) {
-						this.battle.add('-fail', target);
-						return false;
-					}
-					this.battle.add('-heal', target, target.getHealth);
-					didSomething = true;
-				}
 				if (moveData.status) {
 					// Gen 1 bug: If the target has just used hyperbeam and must recharge, its status will be ignored and put to sleep.
 					// This does NOT revert the paralyse speed drop or the burn attack drop.

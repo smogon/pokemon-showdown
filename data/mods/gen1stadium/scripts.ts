@@ -397,15 +397,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (moveData.boosts && !target.fainted) {
 					this.battle.boost(moveData.boosts, target, pokemon, move);
 				}
-				if (moveData.heal && !target.fainted) {
-					const d = target.heal(Math.floor(target.maxhp * moveData.heal[0] / moveData.heal[1]));
-					if (!d) {
-						this.battle.add('-fail', target);
-						return false;
-					}
-					this.battle.add('-heal', target, target.getHealth);
-					didSomething = true;
-				}
 				if (moveData.status) {
 					if (!target.status) {
 						target.setStatus(moveData.status, pokemon, move);
