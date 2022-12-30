@@ -546,12 +546,13 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 
 				// Now we check for the move's critical hit ratio.
-				if (move.critRatio === 2) {
-					// High crit ratio, we multiply the result so far by 4.
-					critChance = critChance << 2;
-				} else if (move.critRatio === 1) {
+
+				if (move.critRatio === 1) {
 					// Normal hit ratio, we divide the crit chance by 2 and floor the result again.
 					critChance = critChance >> 1;
+				} else {
+					// High crit ratio, we multiply the result so far by 4.
+					critChance = critChance << 2;
 				}
 
 				// Now we make sure it's a number between 1 and 255.

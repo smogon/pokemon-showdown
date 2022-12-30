@@ -699,7 +699,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (move.critRatio === 1) {
 					// Normal hit ratio, we divide the crit chance by 2 and floor the result again.
 					critChance = Math.floor(critChance / 2);
-				} else if (move.critRatio === 2) {
+				} else {
 					// High crit ratio, we multiply the result so far by 4 and cap it at 255.
 					critChance = this.battle.clampIntRange(critChance * 4, 1, 255);
 				}
