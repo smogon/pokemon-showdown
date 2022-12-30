@@ -435,7 +435,7 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply(`You are now allowing your friends to see your ongoing battles.`);
 			} else if (this.meansNo(target)) {
 				if (!user.settings.displayBattlesToFriends) {
-					return this.errorReply(this.tr`You not sharing your battles with friends.`);
+					return this.errorReply(this.tr`You are not sharing your battles with friends already.`);
 				}
 				user.settings.displayBattlesToFriends = false;
 				this.sendReply(`You are now hiding your ongoing battles from your friends.`);
@@ -448,6 +448,37 @@ export const commands: Chat.ChatCommands = {
 		},
 		sharebattleshelp: [
 			`/friends sharebattles [on|off] - Allow or disallow your friends from seeing your ongoing battles.`,
+		],
+		bypassBlockPMs(target, room, user) {
+			Friends.checkCanUse(this);
+			target = toID(target);
+			if (this.meansYes(target)) {
+				if (!user.settings.blockPMs) {
+					return this.errorReply(this.tr`You are not blocking pms`);
+				}
+				if (user.settings.blockPMs === 'friends') {
+					return this.errorReply(this.tr`You are already allowing friends to bypass /blockpms`);
+				}
+				user.settings.blockPMs === friends;
+				this.sendReply(`You are now allowing your friends to bypass blockpms.`);
+			} else if (this.meansNo(target)) {
+				if (user,settings,blockPMs = false) {
+					return this.errorReply(this.tr`You are not blocking PMs`)
+				}
+				if (user.settings.blockPMs === true) {
+					return this.errorReply(this.tr`You are not allowing friends to bypass pms already.`);
+				}
+				user.settings.blockPMs = true;
+				this.sendReply(`You are now hiding your ongoing battles from your friends.`);
+			} else {
+				if (!target) return this.parse('/help friends bypassBlockPMs');
+				return this.errorReply(`Invalid setting '${target}'. Provide 'on' or 'off'.`);
+			}
+			user.update();
+			this.refreshPage('friends-settings');
+		},
+		bypassBlockPMshelp: [
+			`/friends bypassblockPMs [on|off] - Allow or disallow your friends from bypassing /blockPMs [/blockPMs must be on].`,
 		],
 	},
 	friendshelp() {
@@ -466,6 +497,7 @@ export const commands: Chat.ChatCommands = {
 				`<code>/friend listdisplay [on/off]</code> - Opts [in/out] of letting others view your friends list.`,
 				`<code>/friend viewlist [user]</code> - View the given [user]'s friend list, if they're allowing others to see.`,
 				`<code>/friends sharebattles [on|off]</code> - Allow or disallow your friends from seeing your ongoing battles.</details>`,
+				`<code>/friends bypassBlockPMs [on|off]</code> - Allow or disallow your friends from bypassing /blockPMs [/blockPMs must be on].</details>`,
 			].join('<br />'));
 		}
 		return this.parse('/join view-friends-help');
@@ -588,9 +620,9 @@ export const pages: Chat.PageTable = {
 
 			buf += `<strong>Allow friends to see my hidden battles on the spectator list:</strong><br />`;
 			buf += `<button class="button${settings.blockPMs === 'friends' ? `` : ' disabled'}" name="send" `;
-			buf += `value="/friends sharebattles off">Disable</button> `;
+			buf += `value="/friends bypassBlockPMs off">Disable</button> `;
 			buf += `<button class="button${settings.blockPMs === 'friends' ? ` disabled` : ``}" name="send" `;
-			buf += `value="/friends sharebattles on">Enable</button> <br /><br />`;
+			buf += `value="/friends bypassBlockPMs on">Enable</button> <br /><br />`;
 			break;
 		case 'spectate':
 			this.title = `[Friends] Spectating`;
