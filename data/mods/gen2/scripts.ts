@@ -526,9 +526,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			if (isCrit && this.battle.runEvent('CriticalHit', target, null, move)) {
-				target.getMoveHitData(move).crit = true;
-			}
+			if (isCrit) target.getMoveHitData(move).crit = true;
 
 			if (move.isConfusionSelfHit) {
 				move.type = '???';
