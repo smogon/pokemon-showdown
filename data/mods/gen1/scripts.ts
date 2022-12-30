@@ -561,11 +561,6 @@ export const Scripts: ModdedBattleScriptsData = {
 						didSomething = true;
 					}
 				}
-				if (moveData.sideCondition) {
-					if (target.side.addSideCondition(moveData.sideCondition, pokemon, move)) {
-						didSomething = true;
-					}
-				}
 				if (moveData.pseudoWeather) {
 					if (this.battle.field.addPseudoWeather(moveData.pseudoWeather, pokemon, move)) {
 						didSomething = true;
