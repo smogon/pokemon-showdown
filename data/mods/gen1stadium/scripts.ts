@@ -515,49 +515,45 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Checking for the move's Critical Hit possibility. We check if it's a 100% crit move, otherwise we calculate the chance.
 			let isCrit = false;
-			if (!isCrit) {
-				// In Stadium, the critical chance is based on speed.
-				// First, we get the base speed and store it. Then we add 76. This is our current crit chance.
-				let critChance = source.species.baseStats['spe'] + 76;
+			// In Stadium, the critical chance is based on speed.
+			// First, we get the base speed and store it. Then we add 76. This is our current crit chance.
+			let critChance = source.species.baseStats['spe'] + 76;
 
-				// Now we right logical shift it two places, essentially dividing by 4 and flooring it.
-				critChance = critChance >> 2;
+			// Now we right logical shift it two places, essentially dividing by 4 and flooring it.
+			critChance = critChance >> 2;
 
-				// Now we check for focus energy volatile.
-				if (source.volatiles['focusenergy']) {
-					// If it exists, crit chance is multiplied by 4 and floored with a logical left shift.
-					critChance = critChance << 2;
-					// Then we add 160.
-					critChance += 160;
-				} else {
-					// If it is not active, we left shift it by 1.
-					critChance = critChance << 1;
-				}
+			// Now we check for focus energy volatile.
+			if (source.volatiles['focusenergy']) {
+				// If it exists, crit chance is multiplied by 4 and floored with a logical left shift.
+				critChance = critChance << 2;
+				// Then we add 160.
+				critChance += 160;
+			} else {
+				// If it is not active, we left shift it by 1.
+				critChance = critChance << 1;
+			}
 
-				// Now we check for the move's critical hit ratio.
+			// Now we check for the move's critical hit ratio.
 
-				if (move.critRatio === 1) {
-					// Normal hit ratio, we divide the crit chance by 2 and floor the result again.
-					critChance = critChance >> 1;
-				} else {
-					// High crit ratio, we multiply the result so far by 4.
-					critChance = critChance << 2;
-				}
+			if (move.critRatio === 1) {
+				// Normal hit ratio, we divide the crit chance by 2 and floor the result again.
+				critChance = critChance >> 1;
+			} else {
+				// High crit ratio, we multiply the result so far by 4.
+				critChance = critChance << 2;
+			}
 
-				// Now we make sure it's a number between 1 and 255.
-				critChance = this.battle.clampIntRange(critChance, 1, 255);
+			// Now we make sure it's a number between 1 and 255.
+			critChance = this.battle.clampIntRange(critChance, 1, 255);
 
-				// Last, we check deppending on ratio if the move critical hits or not.
-				// We compare our critical hit chance against a random number between 0 and 255.
-				// If the random number is lower, we get a critical hit. This means there is always a 1/255 chance of not hitting critically.
-				if (critChance > 0) {
-					isCrit = this.battle.randomChance(critChance, 256);
-				}
+			// Last, we check deppending on ratio if the move critical hits or not.
+			// We compare our critical hit chance against a random number between 0 and 255.
+			// If the random number is lower, we get a critical hit. This means there is always a 1/255 chance of not hitting critically.
+			if (critChance > 0) {
+				isCrit = this.battle.randomChance(critChance, 256);
 			}
 			// There is a critical hit.
-			if (isCrit && this.battle.runEvent('CriticalHit', target, null, move)) {
-				target.getMoveHitData(move).crit = true;
-			}
+			if (isCrit) target.getMoveHitData(move).crit = true;
 
 			// We now check attacker's and defender's stats.
 			let level = source.level;
