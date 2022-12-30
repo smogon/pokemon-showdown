@@ -850,7 +850,6 @@ export const Scripts: ModdedBattleScriptsData = {
 					} else {
 						this.add(msg, target, i, boost[i], '[from] ' + effect.fullname);
 					}
-					this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
 				}
 				// Tried to boost at 999 or unboost at 1. This does not count as a success: par/brn effects are not applied afterwards.
 				if (boostResult === 0) {
@@ -872,11 +871,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					} else {
 						this.hint(`In Gen 1, dropping a stat at 1 will apply a +1 boost afterwards, and the stat remains at 1.`, true);
 					}
-					this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
 				}
 			}
 		}
-		this.runEvent('AfterBoost', target, source, effect, boost);
 		return success;
 	},
 };

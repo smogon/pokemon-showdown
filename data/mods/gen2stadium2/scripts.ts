@@ -475,10 +475,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				} else {
 					this.add(msg, target, i, boostBy, '[from] ' + effect.fullname);
 				}
-				this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
 			}
 		}
-		this.runEvent('AfterBoost', target, source, effect, boost);
 		return success;
 	},
 	/**
