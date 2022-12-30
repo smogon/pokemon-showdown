@@ -167,7 +167,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		useMove(moveOrMoveName, pokemon, target, sourceEffect) {
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
 			const baseMove = this.battle.dex.moves.get(moveOrMoveName);
-			let move = this.battle.dex.getActiveMove(baseMove);
+			const move = this.battle.dex.getActiveMove(baseMove);
 			if (target === undefined) target = this.battle.getRandomTarget(pokemon, move);
 			if (move.target === 'self') {
 				target = pokemon;
@@ -191,7 +191,6 @@ export const Scripts: ModdedBattleScriptsData = {
 						// We remove recharge
 						if (pokemon.volatiles['mustrecharge']) pokemon.removeVolatile('mustrecharge');
 						delete pokemon.volatiles['partialtrappinglock'];
-						pokemon.removeVolatile('twoturnmove');
 					} else if (pokemon.hp) {
 						this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 					}
@@ -225,7 +224,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		useMoveInner(moveOrMoveName, pokemon, target, sourceEffect) {
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
 			const baseMove = this.battle.dex.moves.get(moveOrMoveName);
-			let move = this.battle.dex.getActiveMove(baseMove);
+			const move = this.battle.dex.getActiveMove(baseMove);
 			if (target === undefined) target = this.battle.getRandomTarget(pokemon, move);
 			if (move.target === 'self') {
 				target = pokemon;
