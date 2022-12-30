@@ -464,13 +464,11 @@ export const Scripts: ModdedBattleScriptsData = {
 						// Special Substitute hit flag
 						if (hitResult !== 0) {
 							return false;
+						} else {
+							targetHasSub = !!(target?.volatiles['substitute']);
+							target = null;
 						}
 					}
-				}
-
-				if (hitResult === 0) {
-					targetHasSub = !!(target?.volatiles['substitute']);
-					target = null;
 				}
 			}
 

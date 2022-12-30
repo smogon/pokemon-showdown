@@ -370,12 +370,10 @@ export const Scripts: ModdedBattleScriptsData = {
 						// Special Substitute hit flag
 						if (hitResult !== 0) {
 							return false;
+						} else {
+							target = null;
 						}
 					}
-				}
-
-				if (hitResult === 0) {
-					target = null;
 				}
 			}
 
