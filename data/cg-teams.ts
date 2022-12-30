@@ -153,7 +153,8 @@ export default class TeamGenerator {
 			);
 		}
 		if (learnset && learnsetSpecies === species && species.changesFrom) {
-			learnset = this.dex.species.getLearnset(toID(species.changesFrom));
+			const changesFrom = this.dex.species.get(species.changesFrom);
+			learnset = this.dex.species.getLearnset(changesFrom.id);
 			for (const moveid in learnset) {
 				if (!movePool.includes(moveid) && learnset[moveid].some(source => source.startsWith('9'))) {
 					movePool.push(moveid);
