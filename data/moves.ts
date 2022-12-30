@@ -6663,11 +6663,15 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onDisableMove(pokemon) {
 			if (pokemon.lastMove?.id === 'gigatonhammer') pokemon.disableMove('gigatonhammer');
 		},
-		onUseMoveMessage(source) {
-			if (source.lastMove?.id === 'gigatonhammer') {
+		beforeMoveCallback(pokemon) {
+			if (pokemon.lastMove?.id === 'gigatonhammer') pokemon.addVolatile('gigatonhammer');
+		},
+		onAfterMove(pokemon) {
+			if (pokemon.removeVolatile('gigatonhammer')) {
 				this.add('-hint', "Some effects can force a Pokemon to use Gigaton Hammer again in a row.");
 			}
 		},
+		condition: {},
 		secondary: null,
 		target: "normal",
 		type: "Steel",
