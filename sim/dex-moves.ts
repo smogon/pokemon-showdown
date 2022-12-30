@@ -307,7 +307,6 @@ export interface ActiveMove extends MutableMove, RuinableMove {
 	allies?: Pokemon[];
 	auraBooster?: Pokemon;
 	causedCrashDamage?: boolean;
-	forceStatus?: ID;
 	hasAuraBreak?: boolean;
 	hasBounced?: boolean;
 	hasSheerForce?: boolean;

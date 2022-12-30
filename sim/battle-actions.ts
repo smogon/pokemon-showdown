@@ -1204,10 +1204,6 @@ export class BattleActions {
 					}
 					didSomething = this.combineResults(didSomething, hitResult);
 				}
-				if (moveData.forceStatus) {
-					hitResult = target.setStatus(moveData.forceStatus, source, move);
-					didSomething = this.combineResults(didSomething, hitResult);
-				}
 				if (moveData.volatileStatus) {
 					hitResult = target.addVolatile(moveData.volatileStatus, source, move);
 					didSomething = this.combineResults(didSomething, hitResult);
