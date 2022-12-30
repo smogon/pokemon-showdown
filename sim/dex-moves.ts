@@ -315,7 +315,6 @@ export interface ActiveMove extends MutableMove, RuinableMove {
 	isExternal?: boolean;
 	lastHit?: boolean;
 	magnitude?: number;
-	negateSecondary?: boolean;
 	pranksterBoosted?: boolean;
 	selfDropped?: boolean;
 	selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;

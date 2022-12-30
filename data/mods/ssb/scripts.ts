@@ -382,7 +382,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (
-				!move.negateSecondary &&
 				!(move.hasSheerForce && pokemon.hasAbility(['sheerforce', 'aquilasblessing'])) &&
 				!this.battle.getAllActive().some(x => x.hasAbility('skilldrain'))
 			) {
@@ -405,7 +404,6 @@ export const Scripts: ModdedBattleScriptsData = {
 		afterMoveSecondaryEvent(targets, pokemon, move) {
 			// console.log(`${targets}, ${pokemon}, ${move}`)
 			if (
-				!move.negateSecondary &&
 				!(move.hasSheerForce && pokemon.hasAbility(['sheerforce', 'aquilasblessing'])) &&
 				!this.battle.getAllActive().some(x => x.hasAbility('skilldrain'))
 			) {
@@ -558,7 +556,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val) as Pokemon[], pokemon, move);
 
 			if (
-				!move.negateSecondary &&
 				!(move.hasSheerForce && pokemon.hasAbility(['sheerforce', 'aquilasblessing'])) &&
 				!this.battle.getAllActive().some(x => x.hasAbility('skilldrain'))
 			) {

@@ -505,7 +505,6 @@ export class BattleActions {
 		}
 
 		if (
-			!move.negateSecondary &&
 			!(move.hasSheerForce && pokemon.hasAbility('sheerforce')) &&
 			!move.isFutureMove
 		) {
@@ -772,7 +771,7 @@ export class BattleActions {
 	}
 	afterMoveSecondaryEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
 		// console.log(`${targets}, ${pokemon}, ${move}`)
-		if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+		if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
 			this.battle.singleEvent('AfterMoveSecondary', move, null, targets[0], pokemon, move);
 			this.battle.runEvent('AfterMoveSecondary', targets, pokemon, move);
 		}
@@ -986,7 +985,7 @@ export class BattleActions {
 
 		this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val) as Pokemon[], pokemon, move);
 
-		if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+		if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
 			for (const [i, d] of damage.entries()) {
 				// There are no multihit spread moves, so it's safe to use move.totalDamage for multihit moves
 				// The previous check was for `move.multihit`, but that fails for Dragon Darts

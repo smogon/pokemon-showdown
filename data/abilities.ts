@@ -135,7 +135,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (
 				effect.effectType === "Move" &&
 				!effect.multihit &&
-				(!effect.negateSecondary && !(effect.hasSheerForce && source.hasAbility('sheerforce')))
+				(!(effect.hasSheerForce && source.hasAbility('sheerforce')))
 			) {
 				target.abilityState.checkedAngerShell = false;
 			} else {
@@ -383,7 +383,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (
 				effect.effectType === "Move" &&
 				!effect.multihit &&
-				(!effect.negateSecondary && !(effect.hasSheerForce && source.hasAbility('sheerforce')))
+				(!(effect.hasSheerForce && source.hasAbility('sheerforce')))
 			) {
 				target.abilityState.checkedBerserk = false;
 			} else {
