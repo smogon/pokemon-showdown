@@ -300,9 +300,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			let hitResult: boolean | number | null = true;
 
 			if (move.target === 'all' && !isSelf) {
-				hitResult = this.battle.singleEvent('TryHitField', moveData, {}, target, pokemon, move);
+				hitResult = true;
 			} else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf) {
-				hitResult = this.battle.singleEvent('TryHitSide', moveData, {}, (target ? target.side : null), pokemon, move);
+				hitResult = true;
 			} else if (target) {
 				hitResult = this.battle.singleEvent('TryHit', moveData, {}, target, pokemon, move);
 			}
