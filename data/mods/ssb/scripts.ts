@@ -744,10 +744,6 @@ export const Scripts: ModdedBattleScriptsData = {
 						}
 						didSomething = this.combineResults(didSomething, hitResult);
 					}
-					if (moveData.forceStatus) {
-						hitResult = target.setStatus(moveData.forceStatus, pokemon, move);
-						didSomething = this.combineResults(didSomething, hitResult);
-					}
 					if (moveData.volatileStatus) {
 						hitResult = target.addVolatile(moveData.volatileStatus, pokemon, move);
 						didSomething = this.combineResults(didSomething, hitResult);

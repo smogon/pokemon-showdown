@@ -386,10 +386,6 @@ export const Scripts: ModdedBattleScriptsData = {
 					if (!hitResult && move.status) return hitResult;
 					didSomething = didSomething || hitResult;
 				}
-				if (moveData.forceStatus) {
-					hitResult = target.setStatus(moveData.forceStatus, pokemon, move);
-					didSomething = didSomething || hitResult;
-				}
 				if (moveData.volatileStatus) {
 					hitResult = target.addVolatile(moveData.volatileStatus, pokemon, move);
 					didSomething = didSomething || hitResult;

@@ -556,13 +556,6 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 					didSomething = true;
 				}
-				if (moveData.forceStatus) {
-					if (target.setStatus(moveData.forceStatus, pokemon, move)) {
-						if (moveData.forceStatus === 'brn') target.modifyStat!('atk', 0.5);
-						if (moveData.forceStatus === 'par') target.modifyStat!('spe', 0.25);
-						didSomething = true;
-					}
-				}
 				if (moveData.volatileStatus) {
 					if (target.addVolatile(moveData.volatileStatus, pokemon, move)) {
 						didSomething = true;
