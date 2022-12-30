@@ -898,7 +898,7 @@ export const commands: Chat.ChatCommands = {
 				Monitor.log(`[CrisisMonitor] ${name} was locked by ${user.name} and demoted from ${from.join(", ")}.`);
 				this.globalModlog("CRISISDEMOTE", targetUser, ` from ${from.join(", ")}`);
 			} else {
-				return this.sendReply(`${name} is a trusted user. If you are sure you would like to lock them use /force${month ? 'month' : week ? 'week' : ''}lock.`);
+				return this.sendReply(`${name} is a trusted user. If you are sure you would like to lock them use /force${month ? 'month' : (week ? 'week' : '')}lock.`);
 			}
 		} else if (force && targetUser) {
 			return this.errorReply(`Use /lock; ${name} is not a trusted user and is online.`);
