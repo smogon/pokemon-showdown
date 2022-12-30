@@ -322,9 +322,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				move.type = '???';
 			}
 
-			if (!basePower) return 0;
-			basePower = this.battle.clampIntRange(basePower, 1);
-
 			// We now check for attacker and defender
 			let level = source.level;
 
