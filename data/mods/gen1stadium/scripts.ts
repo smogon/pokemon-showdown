@@ -83,12 +83,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 				return;
 			}
-			if (move.beforeMoveCallback) {
-				if (move.beforeMoveCallback.call(this.battle, pokemon, target, move)) {
-					this.battle.clearActiveMove(true);
-					return;
-				}
-			}
 			let lockedMove = this.battle.runEvent('LockMove', pokemon);
 			if (lockedMove === true) lockedMove = false;
 			if (
