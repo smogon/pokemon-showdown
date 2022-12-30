@@ -971,7 +971,7 @@ export class RandomTeams {
 		if (abilities.has('Cud Chew') && moves.has('substitute')) return 'Cud Chew';
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk'))) return 'Guts';
 		if (abilities.has('Harvest') && moves.has('substitute')) return 'Harvest';
-		if (abilities.has('Insomnia') && species.id === 'hypno') return 'Insomnia';
+		if (species.id === 'hypno') return 'Insomnia';
 		if (abilities.has('Pressure') && role === 'Bulky Setup') return 'Pressure';
 		if (abilities.has('Serene Grace') && moves.has('headbutt')) return 'Serene Grace';
 		if (abilities.has('Technician') && counter.get('technician')) return 'Technician';
@@ -1190,6 +1190,7 @@ export class RandomTeams {
 		if (species.id === 'toxtricity' && moves.has('shiftgear')) return 'Throat Spray';
 		if (species.id === 'palkia') return 'Lustrous Orb';
 		if (moves.has('substitute') || ability === 'Moody') return 'Leftovers';
+		if (moves.has('stickyweb') && isLead) return 'Focus Sash';
 		if (
 			!teamDetails.defog && !teamDetails.rapidSpin &&
 			this.dex.getEffectiveness('Rock', species) >= 1
@@ -1217,7 +1218,7 @@ export class RandomTeams {
 		) return 'Air Balloon';
 		if (['Bulky Attacker', 'Bulky Support', 'Bulky Setup'].some(m => role === (m))) return 'Leftovers';
 		if (role === 'Fast Support' || role === 'Fast Bulky Setup') {
-			return (counter.damagingMoves.size >= 3) ? 'Life Orb' : 'Leftovers';
+			return (counter.damagingMoves.size >= 3 && !moves.has('nuzzle')) ? 'Life Orb' : 'Leftovers';
 		}
 		if (
 			['flamecharge', 'rapidspin', 'trailblaze'].every(m => !moves.has(m)) &&
