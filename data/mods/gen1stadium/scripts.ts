@@ -195,12 +195,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Go ahead with results of the used move.
 			if (damage === false) {
 				this.battle.singleEvent('MoveFail', move, null, target, pokemon, move);
-				return true;
-			}
-
-			if (!move.negateSecondary) {
-				this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
-				this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
 			}
 			return true;
 		},
