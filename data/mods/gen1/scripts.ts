@@ -233,8 +233,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			this.battle.setActiveMove(move, pokemon, target);
 
-			if (!move) return false;
-
 			let attrs = '';
 			if (pokemon.fainted) {
 				return false;
