@@ -34,6 +34,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		priority: 0,
 		accuracy: true,
+		beforeMoveCallback() {},
 		condition: {
 			onStart(pokemon) {
 				this.effectState.damage = 0;
