@@ -713,15 +713,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (isCrit) target.getMoveHitData(move).crit = true;
 
-			// Happens after crit calculation.
-			if (basePower) {
-				if (basePower && move.basePowerModifier) {
-					basePower *= move.basePowerModifier;
-				}
-			}
-			if (!basePower) return 0;
-			basePower = this.battle.clampIntRange(basePower, 1);
-
 			// We now check attacker's and defender's stats.
 			let level = source.level;
 			const attacker = move.overrideOffensivePokemon === 'target' ? target : source;

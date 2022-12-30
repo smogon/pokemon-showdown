@@ -549,19 +549,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				target.getMoveHitData(move).crit = true;
 			}
 
-			// Happens after crit calculation
-			if (basePower) {
-				// confusion damage
-				if (move.isConfusionSelfHit) {
-					move.type = move.baseMoveType!;
-					move.type = '???';
-				}
-				if (basePower && move.basePowerModifier) {
-					basePower *= move.basePowerModifier;
-				}
+			if (move.isConfusionSelfHit) {
+				move.type = '???';
 			}
-			if (!basePower) return 0;
-			basePower = this.battle.clampIntRange(basePower, 1);
 
 			// We now check for attacker and defender
 			let level = source.level;
