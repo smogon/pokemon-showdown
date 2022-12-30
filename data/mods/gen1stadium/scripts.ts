@@ -572,8 +572,8 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// We now check attacker's and defender's stats.
 			let level = source.level;
-			const attacker = move.overrideOffensivePokemon === 'target' ? target : source;
-			const defender = move.overrideDefensivePokemon === 'source' ? source : target;
+			const attacker = source;
+			const defender = target;
 
 			const isPhysical = move.category === 'Physical';
 			const atkType: StatIDExceptHP = move.overrideOffensiveStat || (isPhysical ? 'atk' : 'spa');
