@@ -668,7 +668,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// We check the category and typing to calculate later on the damage.
 			if (!move.category) move.category = 'Physical';
-			// '???' is typeless damage: used for Struggle and Confusion etc
+			// '???' is typeless damage: used for Confusion etc
 			if (!move.type) move.type = '???';
 			const type = move.type;
 
