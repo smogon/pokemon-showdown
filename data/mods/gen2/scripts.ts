@@ -448,12 +448,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			if (target && target.hp > 0 && pokemon.hp > 0 && moveData.forceSwitch && this.battle.canSwitch(target.side)) {
-				hitResult = this.battle.runEvent('DragOut', target, pokemon, move);
-				if (hitResult) {
-					this.dragIn(target.side, target.position);
-				} else if (hitResult === false) {
-					this.battle.add('-fail', target);
-				}
+				this.dragIn(target.side, target.position);
 			}
 			if (move.selfSwitch && pokemon.hp) {
 				pokemon.switchFlag = move.id;
