@@ -181,28 +181,41 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return {cull: ['fireblast', 'overheat', 'vcreate'].some(m => moves.has(m))};
 		case 'bravebird': case 'pluck':
 			return {cull: moves.has('acrobatics') || moves.has('hurricane')};
+		case 'acrobatics':
+			return {cull: !counter.setupType && moves.has('hurricane')};
+		case 'hurricane':
+			return {cull: !!counter.setupType && moves.has('acrobatics')};
 		case 'gigadrain':
-			return {cull: (!counter.setupType && moves.has('leafstorm')) || moves.has('petaldance') || moves.has('powerwhip')};
+			return {cull: (!counter.setupType && moves.has('leafstorm')) ||
+				['leafblade', 'petaldance', 'powerwhip'].some(m => moves.has(m))};
 		case 'solarbeam':
 			return {cull: (!abilities.has('Drought') && !moves.has('sunnyday')) || moves.has('gigadrain')};
 		case 'leafstorm':
-			return {cull: !!counter.setupType && moves.has('gigadrain')};
+			return {cull: !!counter.setupType && (moves.has('gigadrain') || moves.has('seedbomb'))};
+		case 'seedbomb':
+			return {cull: !counter.setupType && (moves.has('leafstorm'))};
 		case 'bonemerang': case 'earthpower':
 			return {cull: moves.has('earthquake')};
 		case 'extremespeed': case 'headsmash':
 			return {cull: moves.has('roost')};
 		case 'facade':
 			return {cull: moves.has('suckerpunch') && !types.has('Normal')};
+		case 'hydropump':
+			return {cull: moves.has('waterfall') && !!counter.setupType};
 		case 'judgment':
 			return {cull: counter.setupType !== 'Special' && counter.get('stab') > 1};
 		case 'return':
 			return {cull: moves.has('doubleedge')};
+		case 'rockblast':
+			return {cull: moves.has('stoneedge')};
 		case 'poisonjab':
 			return {cull: moves.has('gunkshot')};
 		case 'psychic':
 			return {cull: moves.has('psyshock')};
 		case 'scald': case 'surf':
 			return {cull: moves.has('hydropump') || moves.has('waterfall')};
+		case 'waterfall':
+			return {cull: moves.has('hydropump') && !counter.setupType && !moves.has('raindance') && !teamDetails.rain};
 		case 'waterspout':
 			return {cull: !!counter.get('Status')};
 
@@ -214,7 +227,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'healbell':
 			return {cull: !!counter.get('speedsetup') || moves.has('magiccoat')};
 		case 'moonlight': case 'painsplit': case 'recover': case 'roost': case 'softboiled': case 'synthesis':
-			return {cull: ['leechseed', 'rest', 'wish'].some(m => moves.has(m))};
+			// Prevent Roost + Protect on Gliscor
+			const gliscorCase = species.id === 'gliscor' && moves.has('protect');
+			return {cull: ['leechseed', 'rest', 'wish'].some(m => moves.has(m)) || gliscorCase};
 		case 'substitute':
 			return {cull: (
 				(moves.has('doubleedge') && !abilities.has('rockhead')) ||
@@ -260,6 +275,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return (!counter.get('Physical') && !moves.has('batonpass'));
 		case 'Flash Fire':
 			return abilities.has('Drought');
+		case 'Guts':
+			return (species.id === 'heracross');
 		case 'Hydration': case 'Rain Dish': case 'Swift Swim':
 			return (!moves.has('raindance') && !teamDetails.rain);
 		case 'Hustle':
@@ -586,9 +603,10 @@ export class RandomGen5Teams extends RandomGen6Teams {
 						) || (
 							!counter.get('recovery') &&
 							!counter.setupType &&
-							!moves.has('healingwish') &&
-							(counter.get('Status') > 1 || (species.nfe && !!counter.get('Status'))) &&
-							(movePool.includes('recover') || movePool.includes('roost') || movePool.includes('softboiled'))
+							['healingwish', 'trick', 'trickroom'].every(m => !moves.has(m)) &&
+							!abilities.has('Poison Heal') &&
+							(counter.get('Status') || (species.nfe && !!counter.get('Status'))) &&
+							(['recover', 'roost', 'slackoff', 'softboiled'].some(m => movePool.includes(m)))
 						) || (
 							movePool.includes('darkvoid') ||
 							movePool.includes('quiverdance') ||
