@@ -585,6 +585,12 @@ export const pages: Chat.PageTable = {
 			buf += `value="/friends sharebattles off">Disable</button> `;
 			buf += `<button class="button${settings.displayBattlesToFriends ? ` disabled` : ``}" name="send" `;
 			buf += `value="/friends sharebattles on">Enable</button> <br /><br />`;
+
+			buf += `<strong>Allow friends to see my hidden battles on the spectator list:</strong><br />`;
+			buf += `<button class="button${settings.blockPMs === 'friends' ? `` : ' disabled'}" name="send" `;
+			buf += `value="/friends sharebattles off">Disable</button> `;
+			buf += `<button class="button${settings.blockPMs === 'friends' ? ` disabled` : ``}" name="send" `;
+			buf += `value="/friends sharebattles on">Enable</button> <br /><br />`;
 			break;
 		case 'spectate':
 			this.title = `[Friends] Spectating`;
