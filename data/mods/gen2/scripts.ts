@@ -442,7 +442,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 			}
 			// Secondary effects don't happen if the target faints from the attack
-			if (target?.hp && moveData.secondaries && this.battle.runEvent('TrySecondaryHit', target, pokemon, moveData)) {
+			if (target?.hp && moveData.secondaries) {
 				for (const secondary of moveData.secondaries) {
 					// We check here whether to negate the probable secondary status if it's burn or freeze.
 					// In the game, this is checked and if true, the random number generator is not called.

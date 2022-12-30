@@ -372,15 +372,10 @@ export const Scripts: ModdedBattleScriptsData = {
 							return false;
 						}
 					}
-				} else if (isSecondary && !moveData.self) {
-					hitResult = this.battle.runEvent('TrySecondaryHit', target, pokemon, moveData);
 				}
 
 				if (hitResult === 0) {
 					target = null;
-				} else if (!hitResult) {
-					if (hitResult === false) this.battle.add('-fail', target);
-					return false;
 				}
 			}
 
