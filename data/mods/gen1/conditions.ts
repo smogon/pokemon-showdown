@@ -38,12 +38,14 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 			if (this.randomChance(63, 256)) {
 				this.add('cant', pokemon, 'par');
 				pokemon.removeVolatile('bide');
-				pokemon.removeVolatile('twoturnmove');
-				pokemon.removeVolatile('fly');
-				pokemon.removeVolatile('dig');
-				pokemon.removeVolatile('solarbeam');
-				pokemon.removeVolatile('skullbash');
+				if (pokemon.removeVolatile('twoturnmove')) {
+					if (pokemon.volatiles['invulnerability']) {
+						this.hint(`In Gen 1, when a Dig/Fly user is fully paralyzed while semi-invulnerable, ` +
+						`it will remain semi-invulnerable until it switches out or fully executes Dig/Fly`, true);
+					}
+				}
 				pokemon.removeVolatile('partialtrappinglock');
+				pokemon.removeVolatile('lockedmove');
 				return false;
 			}
 		},
@@ -148,11 +150,9 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 				this.directDamage(damage, pokemon, target);
 				pokemon.removeVolatile('bide');
 				pokemon.removeVolatile('twoturnmove');
-				pokemon.removeVolatile('fly');
-				pokemon.removeVolatile('dig');
-				pokemon.removeVolatile('solarbeam');
-				pokemon.removeVolatile('skullbash');
+				pokemon.removeVolatile('invulnerability');
 				pokemon.removeVolatile('partialtrappinglock');
+				pokemon.removeVolatile('lockedmove');
 				return false;
 			}
 			return;
@@ -235,30 +235,27 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 			target.addVolatile('confusion');
 		},
 	},
-	stall: {
-		name: 'stall',
-		// Protect, Detect, Endure counter
-		duration: 2,
-		counterMax: 256,
-		onStart() {
-			this.effectState.counter = 2;
+	twoturnmove: {
+		// Skull Bash, Solar Beam, ...
+		name: 'twoturnmove',
+		onStart(attacker, defender, effect) {
+			// ("attacker" is the Pokemon using the two turn move and the Pokemon this condition is being applied to)
+			this.effectState.move = effect.id;
+			this.effectState.sourceEffect = effect.sourceEffect;
+			this.attrLastMove('[still]');
 		},
-		onStallMove() {
-			// this.effectState.counter should never be undefined here.
-			// However, just in case, use 1 if it is undefined.
-			const counter = this.effectState.counter || 1;
-			if (counter >= 256) {
-				// 2^32 - special-cased because Battle.random(n) can't handle n > 2^16 - 1
-				return (this.random() * 4294967296 < 1);
-			}
-			this.debug("Success chance: " + Math.round(100 / counter) + "%");
-			return this.randomChance(1, counter);
+		onLockMove() {
+			return this.effectState.move;
 		},
-		onRestart() {
-			if (this.effectState.counter < (this.effect as Condition).counterMax!) {
-				this.effectState.counter *= 2;
-			}
-			this.effectState.duration = 2;
+	},
+	invulnerability: {
+		// Dig/Fly
+		name: 'invulnerability',
+		onInvulnerability(target, source, move) {
+			if (target === source) return true;
+			if (move.id === 'swift' || move.id === 'transform') return true;
+			this.add('-message', 'The foe ' + target.name + ' can\'t be hit while invulnerable!');
+			return false;
 		},
 	},
 };

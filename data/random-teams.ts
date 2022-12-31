@@ -176,7 +176,7 @@ export class RandomTeams {
 			Psychic: (movePool, moves, abilities, types, counter) => {
 				if (counter.get('Psychic')) return false;
 				if (movePool.includes('calmmind') || movePool.includes('psychicfangs') || movePool.includes('psychocut')) return true;
-				return abilities.has('Psychic Surge') || types.includes('Fire');
+				return abilities.has('Psychic Surge') || types.includes('Fire') || types.includes('Electric');
 			},
 			Rock: (movePool, moves, abilities, types, counter, species) => !counter.get('Rock') && species.baseStats.atk >= 80,
 			Steel: (movePool, moves, abilities, types, counter, species) => {
@@ -848,8 +848,8 @@ export class RandomTeams {
 		role: string,
 	): boolean {
 		if ([
-			'Armor Tail', 'Battle Bond', 'Flare Boost', 'Gluttony', 'Harvest', 'Hydration', 'Ice Body',
-			'Immunity', 'Own Tempo', 'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
+			'Armor Tail', 'Battle Bond', 'Early Bird', 'Flare Boost', 'Gluttony', 'Harvest', 'Hydration', 'Ice Body',
+			'Immunity', 'Own Tempo', 'Pressure', 'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
 		].includes(ability)) return true;
 
 		switch (ability) {
@@ -872,7 +872,7 @@ export class RandomTeams {
 			return (species.id !== 'houndoom' && this.dex.getEffectiveness('Fire', species) < 0);
 		case 'Guts':
 			return (!moves.has('facade') && !moves.has('sleeptalk'));
-		case 'Hustle': case 'Inner Focus':
+		case 'Hustle':
 			return (counter.get('Physical') < 2);
 		case 'Infiltrator':
 			return (moves.has('rest') && moves.has('sleeptalk')) || (isDoubles && abilities.has('Clear Body'));
@@ -894,8 +894,6 @@ export class RandomTeams {
 			return !counter.get('Grass');
 		case 'Prankster':
 			return !counter.get('Status');
-		case 'Pressure':
-			return (!!counter.get('setup') || counter.get('Status') < 2 || isDoubles);
 		case 'Reckless':
 			return !counter.get('recoil');
 		case 'Rock Head':
@@ -916,7 +914,7 @@ export class RandomTeams {
 		case 'Slush Rush':
 			return !teamDetails.snow;
 		case 'Solar Power':
-			return (!teamDetails.sun);
+			return (!teamDetails.sun || !counter.get('Special'));
 		case 'Stakeout':
 			return (counter.damagingMoves.size < 1);
 		case 'Sturdy':
@@ -973,6 +971,8 @@ export class RandomTeams {
 		if (abilities.has('Cud Chew') && moves.has('substitute')) return 'Cud Chew';
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk'))) return 'Guts';
 		if (abilities.has('Harvest') && moves.has('substitute')) return 'Harvest';
+		if (species.id === 'hypno') return 'Insomnia';
+		if (abilities.has('Pressure') && role === 'Bulky Setup') return 'Pressure';
 		if (abilities.has('Serene Grace') && moves.has('headbutt')) return 'Serene Grace';
 		if (abilities.has('Technician') && counter.get('technician')) return 'Technician';
 		if (abilities.has('Own Tempo') && moves.has('petaldance')) return 'Own Tempo';
@@ -1073,7 +1073,7 @@ export class RandomTeams {
 		}
 		if (moves.has('shellsmash')) return 'White Herb';
 		if (moves.has('populationbomb')) return 'Wide Lens';
-		if (moves.has('stuffcheeks')) return 'Salac Berry';
+		if (moves.has('stuffcheeks')) return this.randomChance(1, 2) ? 'Liechi Berry' : 'Salac Berry';
 		if (ability === 'Unburden') return moves.has('closecombat') ? 'White Herb' : 'Sitrus Berry';
 		if (moves.has('acrobatics')) return ability === 'Grassy Surge' ? 'Grassy Seed' : '';
 		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
@@ -1188,7 +1188,9 @@ export class RandomTeams {
 		if (species.id === 'urshifurapidstrike') return 'Punching Glove';
 		if (species.id === 'lokix' && role === 'Wallbreaker') return 'Life Orb';
 		if (species.id === 'toxtricity' && moves.has('shiftgear')) return 'Throat Spray';
+		if (species.id === 'palkia') return 'Lustrous Orb';
 		if (moves.has('substitute') || ability === 'Moody') return 'Leftovers';
+		if (moves.has('stickyweb') && isLead) return 'Focus Sash';
 		if (
 			!teamDetails.defog && !teamDetails.rapidSpin &&
 			this.dex.getEffectiveness('Rock', species) >= 1
@@ -1216,7 +1218,7 @@ export class RandomTeams {
 		) return 'Air Balloon';
 		if (['Bulky Attacker', 'Bulky Support', 'Bulky Setup'].some(m => role === (m))) return 'Leftovers';
 		if (role === 'Fast Support' || role === 'Fast Bulky Setup') {
-			return (counter.damagingMoves.size >= 3) ? 'Life Orb' : 'Leftovers';
+			return (counter.damagingMoves.size >= 3 && !moves.has('nuzzle')) ? 'Life Orb' : 'Leftovers';
 		}
 		if (
 			['flamecharge', 'rapidspin', 'trailblaze'].every(m => !moves.has(m)) &&
@@ -1582,6 +1584,7 @@ export class RandomTeams {
 			if (set.moves.includes('spikes')) teamDetails.spikes = (teamDetails.spikes || 0) + 1;
 			if (set.moves.includes('stealthrock')) teamDetails.stealthRock = 1;
 			if (set.moves.includes('stickyweb')) teamDetails.stickyWeb = 1;
+			if (set.moves.includes('stoneaxe')) teamDetails.stealthRock = 1;
 			if (set.moves.includes('toxicspikes')) teamDetails.toxicSpikes = 1;
 			if (set.moves.includes('defog')) teamDetails.defog = 1;
 			if (set.moves.includes('rapidspin')) teamDetails.rapidSpin = 1;
@@ -1670,20 +1673,33 @@ export class RandomTeams {
 			} else {
 				const formes = ['gastrodoneast', 'pumpkaboosuper', 'zygarde10'];
 				let learnset = this.dex.species.getLearnset(species.id);
+				let learnsetSpecies = species;
 				if (formes.includes(species.id) || !learnset) {
-					learnset = this.dex.species.getLearnset(this.dex.species.get(species.baseSpecies).id);
+					learnsetSpecies = this.dex.species.get(species.baseSpecies);
+					learnset = this.dex.species.getLearnset(learnsetSpecies.id);
 				}
 				if (learnset) {
 					pool = Object.keys(learnset).filter(
 						moveid => learnset![moveid].find(learned => learned.startsWith(String(this.gen)))
 					);
 				}
-				if (species.changesFrom) {
+				if (learnset && learnsetSpecies === species && species.changesFrom) {
 					learnset = this.dex.species.getLearnset(toID(species.changesFrom));
-					const basePool = Object.keys(learnset!).filter(
-						moveid => learnset![moveid].find(learned => learned.startsWith(String(this.gen)))
-					);
-					pool = [...new Set(pool.concat(basePool))];
+					for (const moveid in learnset) {
+						if (!pool.includes(moveid) && learnset[moveid].some(source => source.startsWith(String(this.gen)))) {
+							pool.push(moveid);
+						}
+					}
+				}
+				const evoRegion = learnsetSpecies.evoRegion && learnsetSpecies.gen !== this.gen;
+				while (learnsetSpecies.prevo) {
+					learnsetSpecies = this.dex.species.get(learnsetSpecies.prevo);
+					for (const moveid in learnset) {
+						if (!pool.includes(moveid) &&
+							learnset[moveid].some(source => source.startsWith(String(this.gen)) && !evoRegion)) {
+							pool.push(moveid);
+						}
+					}
 				}
 			}
 

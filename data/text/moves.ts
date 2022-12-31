@@ -2383,8 +2383,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	glaiverush: {
 		name: "Glaive Rush",
-		desc: "If this move is successful, moves targeted at the user deal double damage and do not check accuracy until the end of the next turn.",
-		shortDesc: "Opp 2x damage, sure-hit until end of next turn.",
+		desc: "If this move is successful, moves targeted at the user deal double damage and do not check accuracy until the user's next turn.",
+		shortDesc: "User takes sure-hit 2x damage until its next turn.",
 	},
 	glare: {
 		name: "Glare",
@@ -5514,6 +5514,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "The user takes 1/2 of its maximum HP, rounded up, and creates a substitute that has 1/4 of the user's maximum HP, rounded down. The user is replaced with another Pokemon in its party and the selected Pokemon has the substitute transferred to it. Fails if the user would faint, or if there are no unfainted party members.",
 		shortDesc: "User takes 1/2 its max HP to pass a substitute.",
 
+		start: "  [POKEMON] shed its tail to create a decoy!",
 		alreadyStarted: "#substitute",
 		fail: "#substitute",
 	},

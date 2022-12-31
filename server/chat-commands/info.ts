@@ -261,7 +261,7 @@ export const commands: Chat.ChatCommands = {
 		} else if (user === targetUser) {
 			buf += `<br /> IP: <a href="https://whatismyipaddress.com/ip/${connection.ip}" target="_blank">${connection.ip}</a>`;
 		}
-		if (canViewAlts && hiddenrooms) {
+		if ((user === targetUser || canViewAlts) && hiddenrooms) {
 			buf += `<br />Hidden rooms: ${hiddenrooms}`;
 		}
 		if (canViewSecretRooms && privaterooms) {
@@ -2981,7 +2981,7 @@ export const pages: Chat.PageTable = {
 		for (const id of userids) {
 			const ips = useridToIp.get(id) || [];
 			buf += `<tr><td>`;
-			buf += `<a href="https://${Config.routes.client}/users/${id}">${id}</a></td>`;
+			buf += `<a href="https://${Config.routes.root}/users/${id}">${id}</a></td>`;
 			const ipStr = ips.map(f => `<a href="https://whatismyipaddress.com/ip/${f}">${f}</a>`).join(', ');
 			buf += `${showIPs ? `<td>${ipStr}</td>` : ""}</tr>`;
 		}

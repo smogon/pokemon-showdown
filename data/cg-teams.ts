@@ -142,24 +142,31 @@ export default class TeamGenerator {
 
 		let learnset = this.dex.species.getLearnset(species.id);
 		let movePool: string[] = [];
-		if (!learnset) {
-			learnset = this.dex.species.getLearnset(this.dex.species.get(species.baseSpecies).id);
+		let learnsetSpecies = species;
+		if (!learnset || species.id === 'gastrodoneast') {
+			learnsetSpecies = this.dex.species.get(species.baseSpecies);
+			learnset = this.dex.species.getLearnset(learnsetSpecies.id);
 		}
 		if (learnset) {
 			movePool = Object.keys(learnset).filter(
 				moveid => learnset![moveid].find(learned => learned.startsWith('9'))
 			);
 		}
-		if (species.changesFrom) {
-			learnset = this.dex.species.getLearnset(toID(species.changesFrom));
-			const basePool = Object.keys(learnset!).filter(
-				moveid => learnset![moveid].find(learned => learned.startsWith('9'))
-			);
-			movePool = [...new Set(movePool.concat(basePool))];
-		}
-		if (species.baseSpecies) {
+		if (learnset && learnsetSpecies === species && species.changesFrom) {
+			const changesFrom = this.dex.species.get(species.changesFrom);
+			learnset = this.dex.species.getLearnset(changesFrom.id);
 			for (const moveid in learnset) {
 				if (!movePool.includes(moveid) && learnset[moveid].some(source => source.startsWith('9'))) {
+					movePool.push(moveid);
+				}
+			}
+		}
+		const evoRegion = learnsetSpecies.evoRegion;
+		while (learnsetSpecies.prevo) {
+			learnsetSpecies = this.dex.species.get(learnsetSpecies.prevo);
+			for (const moveid in learnset) {
+				if (!movePool.includes(moveid) &&
+					learnset[moveid].some(source => source.startsWith('9') && !evoRegion)) {
 					movePool.push(moveid);
 				}
 			}
