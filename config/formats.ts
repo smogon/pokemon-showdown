@@ -28,21 +28,30 @@ export const Formats: FormatList = [
 		name: "[Gen 9] OUD",
 
 		mod: 'gen9deluxe',
-		ruleset: ['Standard', 'Evasion Clause', 'OUD Terastal Clause'],
-		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Baton Pass', 'Shadow Tag', 'Quick Claw', 'King\'s Rock'],
+		ruleset: ['Standard', 'Evasion Clause', 'Terastal Clause', 'Z-Move Clause', 'OUD Clause'],
+		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Baton Pass', 'Shadow Tag', 'Quick Claw', 'King\'s Rock', 'Assist', 'Last Respects'],
 	},
 
 	{
 		name: "[Gen 9] UUD",
 
 		mod: 'gen9regionaldeluxe',
-		ruleset: ['Standard', 'Evasion Clause', 'Terastal Clause'],
+		ruleset: ['Standard', 'Evasion Clause', 'Terastal Clause', 'Z-Move Clause'],
 		banlist: ['Uber', 'AG', 'OU', 'OUD', 'UUBL', 'Arena Trap', 'Moody', 'Baton Pass', 'Shadow Tag',
 		'Quick Claw', 'Light Clay', 'King\'s Rock', 'Shed Tail', 'Revival Blessing']
 	},
 
 	{
 		name: "[Gen 9] Do Not Use",
+
+		mod: 'gen9deluxe',
+		ruleset: ['Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause'],
+		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
+		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass", "Charcadet", "Jigglypuff", "Gulpin", "Shinx"]
+	},
+
+	{
+		name: "[Gen 9] Do Not Use Suspect",
 
 		mod: 'gen9deluxe',
 		ruleset: ['Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause'],

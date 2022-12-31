@@ -790,6 +790,23 @@ export const Rulesets: {[k: string]: FormatData} = {
 			this.add('rule', 'UUD Bans Clause: Last Respects, Shed Tail and Revival Blessing are banned');
 		}
 	},
+	oudclause: {
+		effectType: 'ValidatorRule',
+		name: 'OUD Clause',
+		desc: 'Bans Last Respects and Assist',
+		onValidateSet(set) {
+			const banlist = ['Last Respects', 'Assist']
+			const moves = set.moves;
+			if (!moves) return;
+			const problems: string[] = [];
+			for (const move of moves) {
+				if (banlist.includes(move)) {
+					problems.push(`${move} is banned.`);
+				}
+			}
+			return problems;
+		},
+	},
 	megastoneclause: {
 		effectType: 'ValidatorRule',
 		name: 'Mega-Stone Clause',
