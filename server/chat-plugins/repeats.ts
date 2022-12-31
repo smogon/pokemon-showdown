@@ -93,7 +93,7 @@ export const Repeats = new class {
 				this.clearRepeats(targetRoom);
 				return;
 			}
-			const topic = toID(getAlias(room.roomid, repeat.id) || repeat.id);
+			const topic = getAlias(room.roomid, repeat.id) || repeat.id;
 			const repeatedPhrase = repeat.faq ?
 				visualizeFaq(roomFaqs[targetRoom.roomid][topic]) : Chat.formatText(phrase, true);
 			const formattedText = repeat.isHTML ? phrase : repeatedPhrase;
@@ -138,7 +138,7 @@ export const pages: Chat.PageTable = {
 		html += `<table><tr><th>${this.tr`Identifier`}</th><th>${this.tr`Phrase`}</th><th>${this.tr`Raw text`}</th><th>${this.tr`Interval`}</th><th>${this.tr`Action`}</th>`;
 		for (const repeat of room.settings.repeats) {
 			const minutes = repeat.interval / (repeat.isByMessages ? 1 : 60 * 1000);
-			const topic = toID(getAlias(room.roomid, repeat.id) || repeat.id);
+			const topic = getAlias(room.roomid, repeat.id) || repeat.id;
 			const repeatText = repeat.faq ? roomFaqs[room.roomid][topic].source : repeat.phrase;
 			const phrase = repeat.faq ? visualizeFaq(roomFaqs[room.roomid][topic]) :
 				repeat.isHTML ? repeat.phrase : Chat.formatText(repeatText, true);
