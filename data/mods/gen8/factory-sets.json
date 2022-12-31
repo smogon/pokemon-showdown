@@ -5164,17 +5164,6 @@
 				"moves": [["Rest"], ["Earthquake"], ["Heavy Slam"], ["Sleep Talk"]]
 			}]
 		},
-		"magby": {
-			"sets": [{
-				"species": "Magby",
-				"item": ["Berry Juice"],
-				"ability": ["Vital Spirit", "Flame Body"],
-				"evs": {"atk": 236, "spe": 252},
-				"ivs": {"hp": 29},
-				"nature": "Jolly",
-				"moves": [["Belly Drum"], ["Fire Punch"], ["Thunder Punch"], ["Mach Punch"]]
-			}]
-		},
 		"morelull": {
 			"sets": [{
 				"species": "Morelull",
