@@ -148,9 +148,12 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	battlebond: {
 		name: "Battle Bond",
-		desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja if it attacks and knocks out another Pokemon. If this Pokemon is an Ash-Greninja, its Water Shuriken has 20 power and always hits three times.",
-		shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",
-
+		desc: "If this Pokemon is a Greninja, its Attack, Special Attack, and Speed are raised by 1 stage if it attacks and knocks out another Pokemon. This effect can only happen once per battle.",
+		shortDesc: "After KOing a Pokemon: raises Attack, Sp. Atk, Speed by 1 stage. Once per battle.",
+		gen8: {
+			desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja if it attacks and knocks out another Pokemon. If this Pokemon is an Ash-Greninja, its Water Shuriken has 20 power and always hits three times.",
+			shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",
+		},
 		activate: "  [POKEMON] became fully charged due to its bond with its Trainer!",
 		transform: "[POKEMON] became Ash-Greninja!",
 	},
@@ -328,7 +331,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	dauntlessshield: {
 		name: "Dauntless Shield",
-		shortDesc: "On switch-in, this Pokemon's Defense is raised by 1 stage.",
+		shortDesc: "On switch-in, this Pokemon's Defense is raised by 1 stage. Once per battle.",
+		gen8: {
+			shortDesc: "On switch-in, this Pokemon's Defense is raised by 1 stage.",
+		},
 	},
 	dazzling: {
 		name: "Dazzling",
@@ -754,7 +760,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	intrepidsword: {
 		name: "Intrepid Sword",
-		shortDesc: "On switch-in, this Pokemon's Attack is raised by 1 stage.",
+		shortDesc: "On switch-in, this Pokemon's Attack is raised by 1 stage. Once per battle.",
+		gen8: {
+			shortDesc: "On switch-in, this Pokemon's Attack is raised by 1 stage.",
+		},
 	},
 	ironbarbs: {
 		name: "Iron Barbs",
@@ -816,8 +825,12 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	libero: {
 		name: "Libero",
-		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type.",
-		shortDesc: "This Pokemon's type changes to match the type of the move it is about to use.",
+		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type. This effect can only happen once per switch-in.",
+		shortDesc: "This Pokemon's type changes to the type of the move it is using. Once per switch-in.",
+		gen8: {
+			desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type.",
+			shortDesc: "This Pokemon's type changes to match the type of the move it is about to use.",
+		},
 	},
 	lightmetal: {
 		name: "Light Metal",
@@ -1271,8 +1284,12 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	protean: {
 		name: "Protean",
-		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type.",
-		shortDesc: "This Pokemon's type changes to match the type of the move it is about to use.",
+		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type. This effect can only happen once per switch-in.",
+		shortDesc: "This Pokemon's type changes to the type of the move it is using. Once per switch-in.",
+		gen8: {
+			desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type.",
+			shortDesc: "This Pokemon's type changes to match the type of the move it is about to use.",
+		},
 	},
 	protosynthesis: {
 		name: "Protosynthesis",

@@ -17,6 +17,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Absorb Bulb",
 		desc: "Raises holder's Sp. Atk by 1 stage if hit by a Water-type attack. Single use.",
 	},
+	adamantcrystal: {
+		name: "Adamant Crystal",
+		desc: "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2x power.",
+	},
 	adamantorb: {
 		name: "Adamant Orb",
 		desc: "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2x power.",
@@ -479,13 +483,6 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Electrium Z",
 		desc: "If holder has an Electric move, this item allows it to use an Electric Z-Move.",
 	},
-	energypowder: {
-		name: "Energy Powder",
-		desc: "Restores 60 HP to one Pokemon.",
-		gen6: {
-			desc: "Restores 50 HP to one Pokemon but lowers Happiness.",
-		},
-	},
 	enigmaberry: {
 		name: "Enigma Berry",
 		desc: "Restores 1/4 max HP after holder is hit by a supereffective move. Single use.",
@@ -720,6 +717,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	gripclaw: {
 		name: "Grip Claw",
 		desc: "Holder's partial-trapping moves always last 7 turns.",
+	},
+	griseouscore: {
+		name: "Griseous Core",
+		desc: "If held by a Giratina, its Ghost- and Dragon-type attacks have 1.2x power.",
 	},
 	griseousorb: {
 		name: "Griseous Orb",
@@ -1007,6 +1008,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	lureball: {
 		name: "Lure Ball",
 		desc: "A Poke Ball for catching Pokemon hooked by a Rod when fishing.",
+	},
+	lustrousglobe: {
+		name: "Lustrous Globe",
+		desc: "If held by a Palkia, its Water- and Dragon-type attacks have 1.2x power.",
 	},
 	lustrousorb: {
 		name: "Lustrous Orb",

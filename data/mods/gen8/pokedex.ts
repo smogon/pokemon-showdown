@@ -19,6 +19,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Steadfast", H: "Justified"},
 	},
+	giratinaorigin: {
+		inherit: true,
+		requiredItem: "Griseous Orb",
+	},
 	cresselia: {
 		inherit: true,
 		baseStats: {hp: 120, atk: 70, def: 120, spa: 75, spd: 130, spe: 85},

@@ -963,7 +963,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "NFE",
 	},
 	gliscor: {
-		randomBattleMoves: ["earthquake", "icefang", "protect", "substitute", "swordsdance", "taunt", "toxic"],
+		randomBattleMoves: ["earthquake", "icefang", "protect", "roost", "substitute", "swordsdance", "taunt", "toxic"],
 		tier: "OU",
 		doublesTier: "DOU",
 	},

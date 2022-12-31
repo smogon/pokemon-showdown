@@ -590,6 +590,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				pokemon.removeVolatile('commanding');
 			}
 		},
+		isPermanent: true,
 		name: "Commander",
 		rating: 0,
 		num: 279,
@@ -3108,7 +3109,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			return 1;
 		},
 		name: "Pressure",
-		rating: 2,
+		rating: 2.5,
 		num: 46,
 	},
 	primordialsea: {

@@ -194,8 +194,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return {cull: !!counter.setupType || !!counter.get('recovery') || moves.has('substitute')};
 		case 'leechseed': case 'roar': case 'whirlwind':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('dragontail')};
-		case 'nightshade': case 'seismictoss': case 'superfang':
-			return {cull: counter.damagingMoves.size > 1 || !!counter.setupType};
+		case 'nightshade': case 'seismictoss':
+			return {cull: !abilities.has("Parental Bond") && (counter.damagingMoves.size > 1 || !!counter.setupType)};
 		case 'protect':
 			const screens = moves.has('lightscreen') && moves.has('reflect');
 			return {cull: moves.has('rest') || screens || (!!counter.setupType && !moves.has('wish'))};
@@ -209,6 +209,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			)};
 		case 'rapidspin':
 			return {cull: !!counter.setupType || !!teamDetails.rapidSpin};
+		case 'superfang':
+			return {cull: !!counter.setupType};
 		case 'stealthrock':
 			return {cull: (
 				!!counter.setupType ||
@@ -231,12 +233,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return {cull: (
 				!!counter.setupType || !!counter.get('speedsetup') ||
 				(abilities.has('Speed Boost') && moves.has('protect')) ||
-				(abilities.has('Protean') && counter.get('Status') > 2) || (
-					types.has('Bug') &&
-					counter.get('stab') < 2 &&
-					counter.damagingMoves.size > 2 &&
-					!abilities.has('Adaptability') && !abilities.has('Download')
-				)
+				(abilities.has('Protean') && counter.get('Status') > 2)
 			)};
 		case 'voltswitch':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('raindance') || moves.has('uturn')};
@@ -281,7 +278,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				)
 			)};
 		case 'machpunch':
-			return {cull: types.has('Fighting') && counter.get('stab') < 2 && !abilities.has('Technician')};
+			return {cull: types.has('Fighting') && counter.get('stab') < species.types.length && !abilities.has('Technician')};
 		case 'stormthrow':
 			return {cull: moves.has('circlethrow') && restTalk};
 		case 'superpower':
@@ -342,7 +339,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'bonemerang': case 'earthpower': case 'precipiceblades':
 			return {cull: moves.has('earthquake')};
 		case 'freezedry':
-			return {cull: moves.has('icebeam') || moves.has('icywind') || counter.get('stab') < 2};
+			return {cull: moves.has('icebeam') || moves.has('icywind') || counter.get('stab') < species.types.length};
 		case 'bodyslam': case 'return':
 			return {cull: (
 				moves.has('doubleedge') ||
@@ -417,8 +414,6 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				!!counter.setupType ||
 				['hypnosis', 'sleeppowder', 'toxicspikes', 'willowisp', 'yawn', 'raindance', 'flamecharge'].some(m => moves.has(m))
 			)};
-		case 'willowisp':
-			return {cull: moves.has('scald')};
 		case 'raindance':
 			return {cull: (
 				counter.get('Physical') + counter.get('Special') < 2 ||
@@ -505,7 +500,10 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'Intimidate':
 			return (moves.has('bodyslam') || moves.has('rest') || abilities.has('Reckless') && counter.get('recoil') > 1);
 		case 'Lightning Rod':
-			return species.types.includes('Ground');
+			return (
+				species.types.includes('Ground') ||
+				(!!teamDetails.rain || moves.has('raindance')) && abilities.has('Swift Swim')
+			);
 		case 'Limber':
 			return species.types.includes('Electric');
 		case 'Magnet Pull':
@@ -888,7 +886,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				if (
 					!cull && !isSetup && !move.weather && !move.damage &&
 					(move.category !== 'Status' || !move.flags.heal) &&
-					!['judgment', 'sleeptalk', 'toxic'].includes(moveid) &&
+					!['judgment', 'sleeptalk', 'toxic', 'lightscreen', 'reflect'].includes(moveid) &&
 					(counter.get('physicalsetup') + counter.get('specialsetup') < 2 && (
 						!counter.setupType || counter.setupType === 'Mixed' ||
 						(move.category !== counter.setupType && move.category !== 'Status') ||

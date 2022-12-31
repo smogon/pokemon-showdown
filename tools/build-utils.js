@@ -1,17 +1,8 @@
 "use strict";
 
 const fs = require("fs");
-const pathModule = require('path');
 const child_process = require("child_process");
-
-function shell(cmd, ignoreErrors) {
-	try {
-		return child_process.execSync(cmd, {cwd: pathModule.resolve(__dirname, '..')}).toString();
-	} catch (e) {
-		if (ignoreErrors) return '';
-		throw new Error([e.message, e.stderr, e.stdout].join('\n'));
-	}
-}
+const esbuild = require('esbuild');
 
 const copyOverDataJSON = (file = 'data') => {
 	const files = fs.readdirSync(file);
@@ -24,33 +15,37 @@ const copyOverDataJSON = (file = 'data') => {
 	}
 };
 
-const getGrepExecutable = () => {
-	try {
-		shell('echo "test" | grep test');
-	} catch {
-		return './tools/grep';
+const shouldBeCompiled = file => {
+	if (file.includes('node_modules/')) return false;
+	if (file.endsWith('.tsx')) return true;
+	if (file.endsWith('.ts')) return !(file.endsWith('.d.ts') || file.includes('global'));
+	return false;
+};
+
+const findFilesForPath = path => {
+	const out = [];
+	const files = fs.readdirSync(path);
+	for (const file of files) {
+		const cur = `${path}/${file}`;
+		if (cur.includes('node_modules')) continue;
+		if (fs.statSync(cur).isDirectory()) {
+			out.push(...findFilesForPath(cur));
+		} else if (shouldBeCompiled(cur)) {
+			out.push(cur);
+		}
 	}
-	return 'grep';
+	return out;
 };
 
 exports.transpile = (decl) => {
-	const grep = getGrepExecutable();
-	shell(
-		`git ls-files "*.ts" "*.tsx" | ${grep} -v global |` +
-		'xargs node_modules/.bin/esbuild --log-level=error --outbase=. --outdir=./dist ' +
-		`--format=cjs --tsconfig=./tsconfig.json`
-	);
-
-	const gitignored = ['./server/chat-plugins/private'];
-	for (const path of gitignored) {
-		if (fs.existsSync(path)) {
-			shell([
-				`find ${path}`, `${grep} "\\.[tj]s\\b"`, `${grep} -vF ".d.ts"`, `${grep} -v "node_modules"`, `${grep} -v global`,
-				`xargs node_modules/.bin/esbuild --log-level=error --outbase=${path} --outdir=./dist/${path} ` +
-				`--format=cjs --tsconfig=./tsconfig.json`,
-			].join(' | '), true);
-		}
-	}
+	esbuild.buildSync({
+		entryPoints: findFilesForPath('./'),
+		outdir: './dist',
+		outbase: '.',
+		format: 'cjs',
+		tsconfig: './tsconfig.json',
+		sourcemap: true,
+	});
 	fs.copyFileSync('./config/config-example.js', './dist/config/config-example.js');
 	copyOverDataJSON();
 
