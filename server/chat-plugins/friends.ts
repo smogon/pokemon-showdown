@@ -589,7 +589,7 @@ export const pages: Chat.PageTable = {
 			buf += `<strong>Block PMs expect from friends (and Staff):</strong><br />`;
 			buf += `<button class="button${settings.blockPMs ? `` : ' disabled'}" name="send" `;
 			buf += `value="/unblockpms">Disable</button> `;
-			buf += `<button class="button${settings.blockPMs ? ` disabled` : ``}" name="send" `
+			buf += `<button class="button${settings.blockPMs ? ` disabled` : ``}" name="send" `;
 			buf += `value="/blockpms friends">Enable</button> <br /><br />`;
 			break;
 		case 'spectate':
