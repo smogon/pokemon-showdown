@@ -57,6 +57,7 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer<RoomBattle> {
 	readonly channelIndex: ChannelIndex;
 	request: BattleRequestTracker;
 	wantsTie: boolean;
+	wantsOpenTeamSheets: boolean | null;
 	active: boolean;
 	eliminated: boolean;
 	/**
@@ -111,6 +112,7 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer<RoomBattle> {
 
 		this.request = {rqid: 0, request: '', isWait: 'cantUndo', choice: ''};
 		this.wantsTie = false;
+		this.wantsOpenTeamSheets = null;
 		this.active = true;
 		this.eliminated = false;
 

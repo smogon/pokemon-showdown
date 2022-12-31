@@ -1614,6 +1614,22 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Open Team Sheets',
 		desc: "Allows each player to see the Pok&eacute;mon and all non-stat information about them, before they choose their lead Pok&eacute;mon",
 		onTeamPreview() {
+			const msg = 'uhtml|ots|<button name="send" value="/acceptopenteamsheets" class="button"><strong>Accept Open Team Sheets</strong></button><button name="send" value="/rejectopenteamsheets" class="button"><strong>Deny Open Team Sheets</strong></button>';
+			for (const side of this.sides) {
+				this.addSplit(side.id, [msg]);
+			}
+		},
+		onBattleStart() {
+			for (const side of this.sides) {
+				this.addSplit(side.id, ['uhtmlchange|ots|']);
+			}
+		},
+	},
+	forceopenteamsheets: {
+		effectType: 'Rule',
+		name: 'Force Open Team Sheets',
+		desc: "Allows each player to see the Pok&eacute;mon and all non-stat information about them, before they choose their lead Pok&eacute;mon",
+		onTeamPreview() {
 			let buf = 'raw|';
 			for (const side of this.sides) {
 				buf += Utils.html`<div class="infobox" style="margin-top:5px"><details><summary>Open Team Sheet for ${side.name}</summary>${Teams.export(side.team, {hideStats: true})}</details></div>`;
