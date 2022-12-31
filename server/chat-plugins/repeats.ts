@@ -93,8 +93,9 @@ export const Repeats = new class {
 				this.clearRepeats(targetRoom);
 				return;
 			}
+			const topic = toID(getAlias(room.roomid, repeat.id) || repeat.id);
 			const repeatedPhrase = repeat.faq ?
-				visualizeFaq(roomFaqs[targetRoom.roomid][repeat.id]) : Chat.formatText(phrase, true);
+				visualizeFaq(roomFaqs[targetRoom.roomid][topic]) : Chat.formatText(phrase, true);
 			const formattedText = repeat.isHTML ? phrase : repeatedPhrase;
 			targetRoom.add(`|uhtml|repeat-${repeat.id}|<div class="infobox">${formattedText}</div>`);
 			targetRoom.update();
@@ -137,8 +138,9 @@ export const pages: Chat.PageTable = {
 		html += `<table><tr><th>${this.tr`Identifier`}</th><th>${this.tr`Phrase`}</th><th>${this.tr`Raw text`}</th><th>${this.tr`Interval`}</th><th>${this.tr`Action`}</th>`;
 		for (const repeat of room.settings.repeats) {
 			const minutes = repeat.interval / (repeat.isByMessages ? 1 : 60 * 1000);
-			const repeatText = repeat.faq ? roomFaqs[room.roomid][repeat.id].source : repeat.phrase;
-			const phrase = repeat.faq ? visualizeFaq(roomFaqs[room.roomid][repeat.id]) :
+			const topic = toID(getAlias(room.roomid, repeat.id) || repeat.id);
+			const repeatText = repeat.faq ? roomFaqs[room.roomid][topic].source : repeat.phrase;
+			const phrase = repeat.faq ? visualizeFaq(roomFaqs[room.roomid][topic]) :
 				repeat.isHTML ? repeat.phrase : Chat.formatText(repeatText, true);
 			html += `<tr><td>${repeat.id}</td><td>${phrase}</td><td>${Chat.getReadmoreCodeBlock(repeatText)}</td><td>${repeat.isByMessages ? this.tr`every ${minutes} chat message(s)` : this.tr`every ${minutes} minute(s)`}</td>`;
 			html += `<td><button class="button" name="send" value="/msgroom ${room.roomid},/removerepeat ${repeat.id}">${this.tr`Remove`}</button></td>`;
@@ -220,7 +222,7 @@ export const commands: Chat.ChatCommands = {
 		if (!roomFaqs[room.roomid]) {
 			throw new Chat.ErrorMessage(`This room has no FAQs.`);
 		}
-		topic = toID(getAlias(room.roomid, topic) || topic);
+		topic = toID(topic);
 		const faq = roomFaqs[room.roomid][topic];
 		if (!faq) {
 			throw new Chat.ErrorMessage(`Invalid topic.`);
