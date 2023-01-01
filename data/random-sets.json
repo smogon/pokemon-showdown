@@ -631,7 +631,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Calm Mind", "Dark Pulse", "Protect", "Wish"],
-                "teraTypes": ["Dark", "Poison"]
+                "teraTypes": ["Poison"]
             },
             {
                 "role": "Bulky Support",
@@ -780,7 +780,7 @@
             },
             {
                 "role": "Fast Support",
-                "movepool": ["Freeze-Dry", "Memento", "Rapid Spin", "Spikes"],
+                "movepool": ["Destiny Bond", "Freeze-Dry", "Rapid Spin", "Spikes"],
                 "teraTypes": ["Ghost"]
             }
         ]
@@ -1271,7 +1271,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Calm Mind", "Dark Pulse", "Rest", "Sleep Talk"],
-                "teraTypes": ["Dark"]
+                "teraTypes": ["Dark", "Steel"]
             }
         ]
     },
@@ -1711,7 +1711,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Calm Mind", "Focus Blast", "Judgment", "Recover"],
-                "teraTypes": ["Ghost"]
+                "teraTypes": ["Fighting"]
             }
         ]
     },
@@ -3193,7 +3193,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Close Combat", "Facade", "Headlong Rush", "Protect", "Swords Dance"],
+                "movepool": ["Crunch", "Facade", "Headlong Rush", "Protect", "Swords Dance"],
                 "teraTypes": ["Normal"]
             }
         ]
@@ -3419,7 +3419,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Curse", "Liquidation", "Rest", "Sleep Talk", "Wave Crash"],
-                "teraTypes": ["Water", "Fairy", "Ground", "Dragon"]
+                "teraTypes": ["Fairy", "Ground", "Dragon"]
             }
         ]
     },
@@ -3458,7 +3458,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Giga Drain", "Hyper Voice", "Leech Seed", "Substitute"],
+                "movepool": ["Hyper Voice", "Leech Seed", "Protect", "Substitute"],
                 "teraTypes": ["Water"]
             }
         ]
@@ -3554,7 +3554,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Earthquake", "Glaive Rush", "Ice Shard", "Icicle Crash"],
-                "teraTypes": ["Ice"]
+                "teraTypes": ["Ice", "Ground"]
             },
             {
                 "role": "Setup Sweeper",
