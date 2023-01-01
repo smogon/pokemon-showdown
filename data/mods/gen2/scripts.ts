@@ -545,8 +545,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			const defender = target;
 
 			const isPhysical = move.category === 'Physical';
-			const atkType: StatIDExceptHP = (isPhysical ? 'atk' : 'spa');
-			const defType: StatIDExceptHP = (isPhysical ? 'def' : 'spd');
+			const atkType: StatIDExceptHP = isPhysical ? 'atk' : 'spa';
+			const defType: StatIDExceptHP = isPhysical ? 'def' : 'spd';
 
 			let unboosted = false;
 			let noburndrop = false;
