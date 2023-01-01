@@ -116,8 +116,8 @@ export const commands: Chat.ChatCommands = {
 			this.parse(`/msgroom ${room.roomid},/removerepeat ${topic}`);
 		}
 		for (const alias of Object.keys(roomFaqs[room.roomid])) {
-			if (getAlias(room!.roomid, alias) === topic) {
-				delete roomFaqs[room!.roomid][alias];
+			if (getAlias(room.roomid, alias) === topic) {
+				delete roomFaqs[room.roomid][alias];
 				if (
 					room.settings.repeats?.length &&
 					room.settings.repeats.filter(x => x.faq && x.id === alias).length
