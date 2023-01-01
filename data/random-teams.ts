@@ -901,9 +901,7 @@ export class RandomTeams {
 			return !counter.get('recoil');
 		case 'Rock Head':
 			return !counter.get('recoil');
-		case 'Sand Force':
-			return !teamDetails.sand;
-		case 'Sand Rush':
+		case 'Sand Force': case 'Sand Rush':
 			return !teamDetails.sand;
 		case 'Sap Sipper':
 			return species.id === 'wyrdeer';
