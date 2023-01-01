@@ -848,8 +848,8 @@ export class RandomTeams {
 		role: string,
 	): boolean {
 		if ([
-			'Armor Tail', 'Battle Bond', 'Early Bird', 'Flare Boost', 'Gluttony', 'Harvest', 'Hydration', 'Ice Body',
-			'Immunity', 'Own Tempo', 'Pressure', 'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Steam Engine',
+			'Armor Tail', 'Battle Bond', 'Early Bird', 'Flare Boost', 'Gluttony', 'Harvest', 'Hydration', 'Ice Body', 'Immunity',
+			'Own Tempo', 'Pressure', 'Quick Feet', 'Rain Dish', 'Sand Veil', 'Snow Cloak', 'Steadfast', 'Steam Engine',
 		].includes(ability)) return true;
 
 		switch (ability) {
@@ -869,7 +869,10 @@ export class RandomTeams {
 		case 'Defiant':
 			return (!counter.get('Physical') || (abilities.has('Prankster') && (moves.has('thunderwave') || moves.has('taunt'))));
 		case 'Flash Fire':
-			return (species.id !== 'houndoom' && this.dex.getEffectiveness('Fire', species) < 0);
+			return (
+				['Flame Body', 'Intimidate', 'Rock Head', 'Weak Armor'].some(m => abilities.has(m)) &&
+				this.dex.getEffectiveness('Fire', species) < 0
+			);
 		case 'Guts':
 			return (!moves.has('facade') && !moves.has('sleeptalk'));
 		case 'Hustle':
@@ -898,9 +901,7 @@ export class RandomTeams {
 			return !counter.get('recoil');
 		case 'Rock Head':
 			return !counter.get('recoil');
-		case 'Sand Force': case 'Sand Veil':
-			return !teamDetails.sand;
-		case 'Sand Rush':
+		case 'Sand Force': case 'Sand Rush':
 			return !teamDetails.sand;
 		case 'Sap Sipper':
 			return species.id === 'wyrdeer';
