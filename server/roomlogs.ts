@@ -94,7 +94,7 @@ export class Roomlog {
 			const line = this.log[i];
 			const split = /\|split\|p(\d)/g.exec(line);
 			if (split) {
-				const canSeePrivileged = (channel === Number(split[0]) || channel === -1);
+				const canSeePrivileged = (channel === Number(split[1]) || channel === -1);
 				const ownLine = this.log[i + (canSeePrivileged ? 1 : 2)];
 				if (ownLine) log.push(ownLine);
 				i += 2;
