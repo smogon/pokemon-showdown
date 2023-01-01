@@ -115,20 +115,17 @@ export const commands: Chat.ChatCommands = {
 		) {
 			this.parse(`/msgroom ${room.roomid},/removerepeat ${topic}`);
 		}
-		Object.keys(roomFaqs[room.roomid]).filter(
-			val => getAlias(room!.roomid, val) === topic
-		).map(
-			val => {
-				delete roomFaqs[room!.roomid][val];
+		for (const alias of Object.keys(roomFaqs[room.roomid])) {
+			if (getAlias(room!.roomid, alias) === topic) {
+				delete roomFaqs[room!.roomid][alias];
 				if (
-					room?.settings.repeats?.length &&
-					room.settings.repeats.filter(x => x.faq && x.id === val).length
+					room.settings.repeats?.length &&
+					room.settings.repeats.filter(x => x.faq && x.id === alias).length
 				) {
-					this.parse(`/msgroom ${room.roomid},/removerepeat ${val}`);
+					this.parse(`/msgroom ${room.roomid},/removerepeat ${alias}`);
 				}
-				return true;
 			}
-		);
+		}
 		delete roomFaqs[room.roomid][topic];
 		if (!Object.keys(roomFaqs[room.roomid]).length) delete roomFaqs[room.roomid];
 		saveRoomFaqs();
