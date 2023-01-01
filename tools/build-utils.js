@@ -27,7 +27,11 @@ const findFilesForPath = path => {
 	const files = fs.readdirSync(path);
 	for (const file of files) {
 		const cur = `${path}/${file}`;
-		if (cur.includes('node_modules')) continue;
+		// HACK: Logs and databases exclusions are a hack. Logs is too big to
+		// traverse, databases adds/removes files which can lead to a filesystem
+		// race between readdirSync and statSync. Please, at some point someone
+		// fix this function to be more robust.
+		if (cur.includes('node_modules') || cur.includes("/logs") || cur.includes("/databases")) continue;
 		if (fs.statSync(cur).isDirectory()) {
 			out.push(...findFilesForPath(cur));
 		} else if (shouldBeCompiled(cur)) {
