@@ -126,6 +126,7 @@ export const commands: Chat.ChatCommands = {
 				) {
 					this.parse(`/msgroom ${room.roomid},/removerepeat ${val}`);
 				}
+				return true;
 			}
 		);
 		delete roomFaqs[room.roomid][topic];
