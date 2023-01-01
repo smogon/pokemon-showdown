@@ -2944,6 +2944,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	dialgaorigin: {
 		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
+		natDexTier: "Uber",
 	},
 	palkia: {
 		isNonstandard: "Unobtainable",
@@ -2953,6 +2954,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	palkiaorigin: {
 		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
+		natDexTier: "Uber",
 	},
 	heatran: {
 		isNonstandard: "Unobtainable",
