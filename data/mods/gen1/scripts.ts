@@ -336,12 +336,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (accuracy !== true) {
 				accuracy = Math.floor(accuracy * 255 / 100);
 				// Check also for accuracy modifiers.
-				if (!move.ignoreAccuracy) {
-					accuracy = Math.floor(accuracy * (boostTable[pokemon.boosts.accuracy + 6] / 100));
-				}
-				if (!move.ignoreEvasion) {
-					accuracy = Math.floor(accuracy * (boostTable[-target.boosts.evasion + 6] / 100));
-				}
+				accuracy = Math.floor(accuracy * (boostTable[pokemon.boosts.accuracy + 6] / 100));
+				accuracy = Math.floor(accuracy * (boostTable[-target.boosts.evasion + 6] / 100));
 				accuracy = Math.min(accuracy, 255);
 			}
 			accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);

@@ -212,19 +212,15 @@ export const Scripts: ModdedBattleScriptsData = {
 						return false;
 					}
 				}
-				if (!move.ignoreAccuracy) {
-					if (pokemon.boosts.accuracy > 0) {
-						accuracy *= positiveBoostTable[pokemon.boosts.accuracy];
-					} else {
-						accuracy *= negativeBoostTable[-pokemon.boosts.accuracy];
-					}
+				if (pokemon.boosts.accuracy > 0) {
+					accuracy *= positiveBoostTable[pokemon.boosts.accuracy];
+				} else {
+					accuracy *= negativeBoostTable[-pokemon.boosts.accuracy];
 				}
-				if (!move.ignoreEvasion) {
-					if (target.boosts.evasion > 0 && !move.ignorePositiveEvasion) {
-						accuracy *= negativeBoostTable[target.boosts.evasion];
-					} else if (target.boosts.evasion < 0) {
-						accuracy *= positiveBoostTable[-target.boosts.evasion];
-					}
+				if (target.boosts.evasion > 0) {
+					accuracy *= negativeBoostTable[target.boosts.evasion];
+				} else if (target.boosts.evasion < 0) {
+					accuracy *= positiveBoostTable[-target.boosts.evasion];
 				}
 				accuracy = Math.min(Math.floor(accuracy), 255);
 				accuracy = Math.max(accuracy, 1);
