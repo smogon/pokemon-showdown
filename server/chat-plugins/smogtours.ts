@@ -25,7 +25,7 @@ export const tours: Record<string, TourTable> = {
 	official: {
 		title: "Smogon Officials",
 		// cap this one's dimensions
-		icon: ['https://www.smogon.com/media/zracknel-beta.svg.m.1', 178, 200],
+		icon: ['https://www.smogon.com/media/zracknel-beta.svg', 178, 200],
 		tours: [],
 	},
 	smogon: {
@@ -33,7 +33,7 @@ export const tours: Record<string, TourTable> = {
 		tours: [],
 	},
 	ps: {
-		title: "Pokemon Showdown!",
+		title: "Pokémon Showdown!",
 		icon: ['https://play.pokemonshowdown.com/pokemonshowdownbeta.png', 146, 44],
 		tours: [],
 	},
@@ -78,6 +78,9 @@ function checkCanEdit(user: User, context: Chat.PageContext | Chat.CommandContex
 
 export const commands: Chat.ChatCommands = {
 	smogtours: {
+		''() {
+			return this.parse('/j view-tournaments-all')
+		},
 		edit: 'add',
 		async add(target, room, user, connection, cmd) {
 			if (!toID(target).length) {
@@ -111,7 +114,7 @@ export const commands: Chat.ChatCommands = {
 					return this.popupReply(`Invalid image URL: ${rawImg}`);
 				}
 			}
-			if (!rawShort.length || !rawDesc.length) {
+			if (!rawShort?.length || !rawDesc?.length) {
 				return this.popupReply(`Must provide both a short description and a full description.`);
 			}
 			const tour: TourEvent = {
@@ -283,13 +286,14 @@ export const pages: Chat.PageTable = {
 		all(query, user) {
 			let buf = `${refresh(this.pageid)}<br /><h2>Welcome!</h2><hr />`;
 			this.title = '[Tournaments] All';
-			buf += `Smogon runs official tournaments across their metagames where the strongest and most `;
-			buf += `experienced competitors duke it out for prizes and recognition!<br />`;
+			buf += `<p>Smogon runs official tournaments across their metagames where the strongest and most `;
+			buf += `experienced competitors duke it out for prizes and recognition!</p><p>`;
 			buf += `You can see a listing of current official tournaments here; `;
-			buf += `by clicking any hyperlink, you will be directed to the forum for any given tournament!<br />`;
+			buf += `by clicking any hyperlink, you will be directed to the forum for any given tournament!</p><p>`;
 			buf += `Be sure to sign-up if you are eager to participate or `;
-			buf += `check it out if you want to spectate the most hyped games out there.<br />`;
+			buf += `check it out if you want to spectate the most hyped games out there.</p><p>`;
 			buf += `For information on tournament rules and etiquette, check out <a href="https://www.smogon.com/forums/threads/3642760/">this information thread</a>.`;
+			buf += `</p>`;
 			return renderPageChooser('', buf, user);
 		},
 		view(query, user) {
