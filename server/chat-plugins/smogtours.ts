@@ -99,11 +99,14 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`Invalid section ID: "${sectionID}"`);
 			}
 			checkCanEdit(user, this, sectionID);
+			// if we don't do this, it starts spitting out false every other time even if it's a valid link
+			//  since global regexes are stateful.
+			// this took me so much pain to debug.
+			// Yes, that is intended JS behavior. Yes, it fills me with unyielding rage.
+			// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test
+			Chat.linkRegex.lastIndex = -1;
 			if (!Chat.linkRegex.test(url)) {
-				return this.popupReply(`Invalid info URL: ${url}`);
-			}
-			if (tours[sectionID][tourID] && !isEdit) {
-				return this.popupReply(`A tour with that name already exists. Edit it in the management page instead.`);
+				return this.popupReply(`Invalid info URL: "${url}"`);
 			}
 			let image;
 			if (rawImg) {
