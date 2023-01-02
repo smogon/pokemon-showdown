@@ -240,6 +240,7 @@ function movesetToPokemonSet(dex: ModdedDex, format: Format, pokemon: string, se
 		ability: fixedAbility(dex, pokemon, set.abilities[0]),
 		item: set.items[0] === 'No Item' ? undefined : set.items[0],
 		nature: set.natures[0],
+		teraType: set.teratypes ? set.teratypes[0] : undefined,
 		ivs: toStatsTable(set.ivconfigs[0], 31),
 		evs: toStatsTable(set.evconfigs[0]),
 	};

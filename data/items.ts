@@ -4496,6 +4496,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				return this.chainModify([4506, 4096]);
 			}
 		},
+		onModifyMovePriority: 1,
 		onModifyMove(move) {
 			if (move.flags['punch']) delete move.flags['contact'];
 		},

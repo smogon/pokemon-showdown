@@ -2777,7 +2777,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon) {
-			if (pokemon.effectiveWeather() === 'sunnyday') {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
 				this.debug('Orichalcum boost');
 				return this.chainModify([5461, 4096]);
 			}
@@ -3109,7 +3109,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			return 1;
 		},
 		name: "Pressure",
-		rating: 2,
+		rating: 2.5,
 		num: 46,
 	},
 	primordialsea: {
