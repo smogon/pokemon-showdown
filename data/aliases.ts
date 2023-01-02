@@ -693,6 +693,7 @@ export const Aliases: {[alias: string]: string} = {
 	bliss: "Blissey",
 	bull: "Tauros",
 	bulu: "Tapu Bulu",
+	bundlechan: "Iron Bundle",
 	camel: "Camerupt",
 	cathy: "Trevenant",
 	chandy: "Chandelure",
