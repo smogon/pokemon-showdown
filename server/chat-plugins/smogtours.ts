@@ -356,6 +356,7 @@ export const pages: Chat.PageTable = {
 					let innerBuf = `<div class="infobox">`;
 					innerBuf += `<a href="/view-tournaments-view-${categoryID}-${tour.id}">${tour.title}</a><br />`;
 					innerBuf += Utils.escapeHTML(tour.shortDesc);
+					innerBuf += `</div>`;
 					return innerBuf;
 				}).join('<br />');
 			}
