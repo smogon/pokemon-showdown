@@ -1723,8 +1723,12 @@ export class RandomGen8Teams {
 		if (moves.has('bellydrum') && moves.has('substitute')) return 'Salac Berry';
 
 		// Misc item generation logic
-		const HDBBetterThanEviolite = this.dex.getEffectiveness('Rock', species) >= 2 && !isDoubles;
-		if (species.nfe && !HDBBetterThanEviolite) return 'Eviolite';
+		const HDBBetterThanEviolite = (
+			!isDoubles &&
+			(!isLead || moves.has('uturn')) &&
+			this.dex.getEffectiveness('Rock', species) >= 2
+		);
+		if (species.nfe) return HDBBetterThanEviolite ? 'Heavy-Duty Boots' : 'Eviolite';
 
 		// Ability based logic and miscellaneous logic
 		if (species.name === 'Wobbuffet' || ['Cheek Pouch', 'Harvest', 'Ripen'].includes(ability)) return 'Sitrus Berry';
@@ -2067,7 +2071,7 @@ export class RandomGen8Teams {
 				// Genesect-Douse should never reject Techno Blast
 				const moveIsRejectable = (
 					!(species.id === 'genesectdouse' && move.id === 'technoblast') &&
-					!(species.id === 'togekiss' && move.id === 'nastyplot') && 
+					!(species.id === 'togekiss' && move.id === 'nastyplot') &&
 					!(species.id === 'shuckle' && ['stealthrock', 'stickyweb'].includes(move.id)) && (
 						move.category === 'Status' ||
 						(!types.has(move.type) && move.id !== 'judgment') ||
