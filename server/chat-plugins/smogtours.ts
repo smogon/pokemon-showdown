@@ -329,7 +329,7 @@ export const pages: Chat.PageTable = {
 				buf += `<img src="${tour.image[0]}" width="${tour.image[1]}" height="${tour.image[2]}" />`;
 			}
 			buf += `<hr />`;
-			buf += Utils.escapeHTML(tour.desc);
+			buf += Utils.escapeHTML(tour.desc).replace(/\n/ig, '<br />');
 			buf += `<br /><br /><a class="button notifying" href="${tour.url}">View information and signups</a>`;
 			try {
 				checkCanEdit(user, this, categoryID);
