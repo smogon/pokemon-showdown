@@ -329,7 +329,7 @@ export const commands: Chat.ChatCommands = {
 			`Get datacenter info from <code>/whois</code>; <code>[low IP]</code>, <code>[high IP]</code> are the range in the last inetnum.`,
 			`<code>/ipranges remove [low IP]-[high IP]</code>: remove IP range(s). Can be multiline. Requires: hosts manager &`,
 			`For example: <code>/ipranges remove 5.152.192.0, 5.152.223.255</code>.`,
-			`<code>/ipranges rename [low IP]-[high IP], [host]</code>: changes the host an IP range resolves to. Requires: hosts manager &`,
+			`<code>/ipranges rename [type], [low IP]-[high IP], [host]</code>: changes the host an IP range resolves to. Requires: hosts manager &`,
 		];
 		return this.sendReply(`|html|<details class="readmore"><summary>${help.join('<br />')}`);
 	},
