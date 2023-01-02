@@ -435,7 +435,7 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply(`You are now allowing your friends to see your ongoing battles.`);
 			} else if (this.meansNo(target)) {
 				if (!user.settings.displayBattlesToFriends) {
-					return this.errorReply(this.tr`You not sharing your battles with friends.`);
+					return this.errorReply(this.tr`You are already not sharing your battles with friends.`);
 				}
 				user.settings.displayBattlesToFriends = false;
 				this.sendReply(`You are now hiding your ongoing battles from your friends.`);

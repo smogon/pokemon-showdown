@@ -115,8 +115,12 @@ function prettifyResults(
 		}
 		const thisRoomID = entryRoom?.split(' ')[0];
 		if (addModlogLinks) {
-			const url = Config.modloglink(date, thisRoomID);
-			if (url) timestamp = `<a href="${url}">${timestamp}</a>`;
+			if (thisRoomID.startsWith('battle-')) {
+				timestamp = `<a href="/${thisRoomID}">${timestamp}</a>`;
+			} else {
+				const [day, time] = Chat.toTimestamp(date).split(' ');
+				timestamp = `<a href="/view-chatlog-${thisRoomID}--${day}--time-${toID(time)}">${timestamp}</a>`;
+			}
 		}
 		line = Utils.escapeHTML(line.slice(line.indexOf(')') + ` </small>`.length));
 		line = line.replace(
@@ -161,7 +165,7 @@ async function getModlog(
 
 	const hideIps = !user.can('lock');
 	const addModlogLinks = !!(
-		Config.modloglink && (user.tempGroup !== ' ' || (targetRoom && targetRoom.settings.isPrivate !== true))
+		(user.tempGroup !== ' ' || (targetRoom && targetRoom.settings.isPrivate !== true))
 	);
 	if (hideIps && search.ip.length) {
 		connection.popup(`You cannot search for IPs.`);

@@ -68,17 +68,15 @@ describe(`Emergency Exit`, function () {
 	});
 
 	it(`should not request switch-out if fainted`, function () {
-		battle = common.createBattle({gameType: 'doubles'});
-		battle.setPlayer('p1', {team: [
+		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Vikavolt', item: 'choicespecs', moves: ['thunderbolt']},
 			{species: 'Pyukumuku', moves: ['batonpass']},
 			{species: 'Magikarp', moves: ['splash']},
-		]});
-		battle.setPlayer('p2', {team: [
+		], [
 			{species: 'Golisopod', ability: 'emergencyexit', moves: ['sleeptalk']},
 			{species: 'Mew', moves: ['sleeptalk']},
 			{species: 'Ditto', moves: ['transform']},
-		]});
+		]]);
 		battle.makeChoices('move thunderbolt 1, move batonpass', 'move sleeptalk, move sleeptalk');
 		assert(!battle.p2.activeRequest.forceSwitch);
 	});

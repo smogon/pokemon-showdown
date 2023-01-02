@@ -543,7 +543,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 			let lines;
 			try {
 				lines = await ProcessManager.exec([
-					`rg`, `${__dirname}/../../logs/tickets/${date ? `${date}.jsonl` : ''}`, ...args,
+					`rg`, FS(`logs/tickets/${date ? `${date}.jsonl` : ''}`).path, ...args,
 				]);
 			} catch (e: any) {
 				if (e.message.includes('No such file or directory')) {
@@ -2379,6 +2379,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				ticket.text = [text, contextString];
 				ticket.active = true;
+				Chat.runHandlers('onTicketCreate', ticket, user);
 				tickets[user.id] = ticket;
 				await HelpTicket.modlog({
 					action: 'TEXTTICKET OPEN',
@@ -2486,6 +2487,7 @@ export const commands: Chat.ChatCommands = {
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
 			}
 			const ticketGame = helpRoom.getGame(HelpTicket)!;
+			Chat.runHandlers('onTicketCreate', ticket, user);
 			helpRoom.modlog({action: 'TICKETOPEN', isGlobal: false, loggedBy: user.id, note: ticket.type});
 			ticketGame.addText(`${user.name} opened a new ticket. Issue: ${ticket.type}`, user);
 			void this.parse(`/join help-${user.id}`);

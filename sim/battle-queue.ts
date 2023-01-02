@@ -49,8 +49,8 @@ export interface MoveAction {
 /** A switch action */
 export interface SwitchAction {
 	/** action type */
-	choice: 'switch' | 'instaswitch';
-	order: 3 | 103;
+	choice: 'switch' | 'instaswitch' | 'revivalblessing';
+	order: 3 | 6 | 103;
 	/** priority of the action (lower first) */
 	priority: number;
 	/** speed of pokemon switching (higher first if priority tie) */
@@ -137,8 +137,8 @@ export class BattleQueue {
 	shift() {
 		return this.list.shift();
 	}
-	peek(): Action | undefined {
-		return this.list[0];
+	peek(end?: boolean): Action | undefined {
+		return this.list[end ? this.list.length - 1 : 0];
 	}
 	push(action: Action) {
 		return this.list.push(action);
@@ -172,6 +172,7 @@ export class BattleQueue {
 				instaswitch: 3,
 				beforeTurn: 4,
 				beforeTurnMove: 5,
+				revivalblessing: 6,
 
 				runUnnerve: 100,
 				runSwitch: 101,

@@ -1013,7 +1013,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	ledian: {
-		randomBattleMoves: ["encore", "knockoff", "lightscreen", "reflect", "roost", "toxic", "uturn"],
+		randomBattleMoves: ["knockoff", "lightscreen", "reflect", "roost", "toxic", "uturn"],
 		randomDoubleBattleMoves: ["bugbuzz", "encore", "knockoff", "lightscreen", "protect", "reflect", "tailwind", "uturn"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
@@ -2147,7 +2147,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	latiasmega: {
-		randomBattleMoves: ["calmmind", "dracometeor", "hiddenpowerfire", "psyshock", "roost", "substitute", "surf"],
+		randomBattleMoves: ["calmmind", "dracometeor", "hiddenpowerfire", "psyshock", "roost", "surf"],
 		randomDoubleBattleMoves: ["dragonpulse", "healpulse", "helpinghand", "lightscreen", "protect", "psychic", "reflect", "tailwind"],
 		tier: "(OU)",
 		doublesTier: "(DUU)",
@@ -3485,7 +3485,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	kyuremwhite: {
-		randomBattleMoves: ["dracometeor", "earthpower", "focusblast", "fusionflare", "icebeam", "roost", "substitute", "toxic"],
+		randomBattleMoves: ["dracometeor", "earthpower", "focusblast", "fusionflare", "icebeam", "roost", "toxic"],
 		randomDoubleBattleMoves: ["dracometeor", "dragonpulse", "earthpower", "focusblast", "fusionflare", "icebeam", "protect", "roost"],
 		tier: "Uber",
 		doublesTier: "DUber",
