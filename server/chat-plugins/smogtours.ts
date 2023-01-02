@@ -92,7 +92,7 @@ export const commands: Chat.ChatCommands = {
 			// {title}|{category}|{url}|{img}|{shortDesc}|{desc}
 			const [
 				title, rawSection, url, rawImg, rawShort, rawDesc,
-			] = Utils.splitFirst(targets.join('|'), '|', 4).map(f => f.trim());
+			] = Utils.splitFirst(targets.join('|'), '|', 5).map(f => f.trim());
 			const sectionID = toID(rawSection);
 			const section = tours[sectionID];
 			if (!section) {
