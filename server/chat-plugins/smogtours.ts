@@ -102,6 +102,9 @@ export const commands: Chat.ChatCommands = {
 			if (!Chat.linkRegex.test(url)) {
 				return this.popupReply(`Invalid info URL: ${url}`);
 			}
+			if (tours[sectionID][tourID] && !isEdit) {
+				return this.popupReply(`A tour with that name already exists. Edit it in the management page instead.`);
+			}
 			let image;
 			if (rawImg) {
 				if (!Chat.linkRegex.test(rawImg)) {
@@ -131,7 +134,7 @@ export const commands: Chat.ChatCommands = {
 			saveTours();
 			this.refreshPage(`tournaments-add`);
 		},
-		end(target, room, user) {
+		end(target, room, user, connection) {
 			const [sectionID, tourID] = target.split(',').map(toID).filter(Boolean);
 			if (!sectionID || !tourID) {
 				return this.parse(`/help smogtours`);
@@ -144,7 +147,9 @@ export const commands: Chat.ChatCommands = {
 				return this.popupReply(`Tour with ID "${tourID}" not found.`);
 			}
 			section.tours.splice(idx, 1);
-			this.refreshPage(`tournament-view-${sectionID}-${tourID}`);
+			for (const page of connection.openPages || []) {
+				if (page.startsWith('tournaments-')) this.refreshPage(page);
+			}
 			this.popupReply(`Tour "${title}" ended.`);
 		},
 		whitelist(target, room, user) {
@@ -344,8 +349,8 @@ export const pages: Chat.PageTable = {
 				buf += `<hr />`;
 			}
 			if (!category.tours.length) {
-				buf += `There are currently no tournaments in this section with open signups.`;
-				buf += `<br />Check back later for new tours.`;
+				buf += `<p>There are currently no tournaments in this section with open signups.</p>`;
+				buf += `<p>Check back later for new tours.</p>`;
 			} else {
 				buf += category.tours.map(tour => {
 					let innerBuf = `<div class="infobox">`;
