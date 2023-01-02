@@ -115,18 +115,12 @@ export const commands: Chat.ChatCommands = {
 		) {
 			this.parse(`/msgroom ${room.roomid},/removerepeat ${topic}`);
 		}
-		for (const alias of Object.keys(roomFaqs[room.roomid])) {
-			if (getAlias(room.roomid, alias) === topic) {
-				delete roomFaqs[room.roomid][alias];
-				if (
-					room.settings.repeats?.length &&
-					room.settings.repeats.filter(x => x.faq && x.id === alias).length
-				) {
-					this.parse(`/msgroom ${room.roomid},/removerepeat ${alias}`);
-				}
-			}
-		}
 		delete roomFaqs[room.roomid][topic];
+		Object.keys(roomFaqs[room.roomid]).filter(
+			val => getAlias(room!.roomid, val) === topic
+		).map(
+			val => delete roomFaqs[room!.roomid][val]
+		);
 		if (!Object.keys(roomFaqs[room.roomid]).length) delete roomFaqs[room.roomid];
 		saveRoomFaqs();
 		this.privateModAction(`${user.name} removed the FAQ for '${topic}'`);
@@ -143,6 +137,9 @@ export const commands: Chat.ChatCommands = {
 		if (!(alias && topic)) return this.parse('/help roomfaq');
 		if (alias.length > 25) return this.errorReply("FAQ topics should not exceed 25 characters.");
 		if (alias === topic) return this.errorReply("You cannot make the alias have the same name as the topic.");
+		if (roomFaqs[room.roomid][alias] && !roomFaqs[room.roomid][alias].alias) {
+			return this.errorReply("You cannot overwrite an existing topic with an alias; please delete the topic first.");
+		}
 
 		if (!(roomFaqs[room.roomid] && topic in roomFaqs[room.roomid])) {
 			return this.errorReply(`The topic ${topic} was not found in this room's faq list.`);
