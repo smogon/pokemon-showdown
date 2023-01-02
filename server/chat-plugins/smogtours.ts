@@ -114,6 +114,8 @@ export const commands: Chat.ChatCommands = {
 			}
 			let image;
 			if (rawImg) {
+				// see above
+				Chat.linkRegex.lastIndex = -1;
 				if (!Chat.linkRegex.test(rawImg)) {
 					return this.popupReply(`Invalid image URL: ${rawImg}`);
 				}
