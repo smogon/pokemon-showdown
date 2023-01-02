@@ -71,10 +71,20 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] UU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3713709/">UU Metagame Discussion</a>`,
+		],
 
 		mod: 'gen9',
 		ruleset: ['[Gen 9] OU'],
 		banlist: ['OU', 'UUBL'],
+	},
+	{
+		name: "[Gen 9] RU",
+
+		mod: 'gen9',
+		ruleset: ['[Gen 9] UU'],
+		banlist: ['UU', 'RUBL'],
 	},
 	{
 		name: "[Gen 9] LC",
@@ -273,7 +283,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['[Gen 9] National Dex'],
-		banlist: ['ND OU', 'ND UUBL'],
+		banlist: ['ND OU', 'ND UUBL', 'Battle Bond'],
 	},
 	{
 		name: "[Gen 9] National Dex Monotype",
