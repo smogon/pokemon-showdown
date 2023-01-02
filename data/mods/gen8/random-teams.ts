@@ -2474,8 +2474,8 @@ export class RandomGen8Teams {
 			// Also Zacian/Zamazenta/Eternatus are rejected as they make dynamax malfunction, regardless of level
 			if (
 				pokemon.some(pkmn => pkmn.name === 'Zoroark') &&
-				(pokemon.length >= (this.maxTeamSize - 1) &&
-				this.getLevel(species,
+				pokemon.length >= (this.maxTeamSize - 1) &&
+				(this.getLevel(species,
 							  this.format.gameType !== 'singles',
 							  this.dex.formats.getRuleTable(this.format).has('dynamaxclause')) < 72 &&
 				!this.adjustLevel ||
