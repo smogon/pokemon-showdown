@@ -19,6 +19,7 @@ interface TourTable {
 	tours: TourEvent[];
 	whitelist?: string[];
 	icon?: Image;
+	desc: string;
 }
 
 export const tours: Record<string, TourTable> = {
@@ -27,15 +28,18 @@ export const tours: Record<string, TourTable> = {
 		// cap this one's dimensions
 		icon: ['https://www.smogon.com/media/zracknel-beta.svg', 178, 200],
 		tours: [],
+		desc: "Tournaments run by Smogon staff.",
 	},
 	smogon: {
 		title: "Open Sign-Ups",
 		tours: [],
+		desc: "Tournaments run by Smogon staff and regular users alike."
 	},
 	ps: {
 		title: "Pokémon Showdown!",
 		icon: ['https://play.pokemonshowdown.com/pokemonshowdownbeta.png', 146, 44],
 		tours: [],
+		desc: "Tournaments run by the rooms of Pokemon Showdown.",
 	},
 };
 try {
@@ -347,10 +351,9 @@ export const pages: Chat.PageTable = {
 			}
 			let buf = `${refresh(this.pageid)}<br /><h2>${category.title}</h2>`;
 			if (category.icon) {
-				buf += `<img src="${category.icon[0]}" width="${category.icon[1]}" height="${category.icon[2]}" /><hr />`;
-			} else {
-				buf += `<hr />`;
+				buf += `<img src="${category.icon[0]}" width="${category.icon[1]}" height="${category.icon[2]}" /><br />`;
 			}
+			buf += `${category.desc}<hr />`;
 			if (!category.tours.length) {
 				buf += `<p>There are currently no tournaments in this section with open signups.</p>`;
 				buf += `<p>Check back later for new tours.</p>`;
