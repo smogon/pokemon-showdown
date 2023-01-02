@@ -97,6 +97,7 @@ describe('[Gen 8] Random Battle', () => {
 					set.moves.includes('stickyweb'),
 					`${pkmn} should always generate Sticky Web (generated moveset: ${set.moves})`
 				);
+				if (pkmn === 'shuckle') assert(set.moves.includes('stealthrock'));
 			});
 		}
 	});
