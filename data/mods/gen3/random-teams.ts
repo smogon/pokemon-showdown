@@ -531,10 +531,11 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			UU: 84,
 			NUBL: 86,
 			NU: 88,
+			PU: 90,
 			NFE: 90,
 		};
 		const customScale: {[k: string]: number} = {
-			Ditto: 99, Unown: 99,
+			Ditto: 100, Unown: 100,
 		};
 		const tier = species.tier;
 		const level = this.adjustLevel || customScale[species.name] || levelScale[tier] || (species.nfe ? 90 : 80);
