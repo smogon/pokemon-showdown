@@ -33,7 +33,7 @@ export const tours: Record<string, TourTable> = {
 	smogon: {
 		title: "Open Sign-Ups",
 		tours: [],
-		desc: "Tournaments run by Smogon staff and regular users alike."
+		desc: "Tournaments run by Smogon staff and regular users alike.",
 	},
 	ps: {
 		title: "Pokémon Showdown!",
@@ -83,7 +83,7 @@ function checkCanEdit(user: User, context: Chat.PageContext | Chat.CommandContex
 export const commands: Chat.ChatCommands = {
 	smogtours: {
 		''() {
-			return this.parse('/j view-tournaments-all')
+			return this.parse('/j view-tournaments-all');
 		},
 		edit: 'add',
 		async add(target, room, user, connection, cmd) {
@@ -224,6 +224,7 @@ function renderTab(inner: string, isTitle?: boolean, isCur?: boolean) {
 	isTitle = false;
 	let buf = '';
 	if (isCur) {
+		// the CSS breaks entirely without the folderhacks.
 		buf += `<div class="folder cur"><div class="folderhack3"><div class="folderhack1">`;
 		buf += `</div><div class="folderhack2"></div>`;
 		buf += `<div class="selectFolder">${inner}</div></div></div>`;
