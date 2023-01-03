@@ -288,7 +288,7 @@ export function renderPageChooser(curPage: string, buffer: string, user?: User) 
 	}
 
 	buf += `<div class="folderlistafter"></div></div></div><div class="teampane">`;
-	buf += `<center>${buffer}</center></div>`;
+	buf += `${buffer}</div>`;
 	return buf;
 }
 
