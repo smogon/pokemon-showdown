@@ -77,7 +77,7 @@ function checkWhitelisted(category: ID, user: User) {
 function checkCanEdit(user: User, context: Chat.PageContext | Chat.CommandContext, category?: ID) {
 	category = toID(category);
 	if (!checkWhitelisted(category, user)) {
-		context.checkCan('globalban');
+		context.checkCan('rangeban');
 	}
 }
 
@@ -400,7 +400,9 @@ export const pages: Chat.PageTable = {
 			}
 			buf += `Title: <input name="title" /><br />`;
 			buf += `Category: <select name="category">`;
-			const keys = Utils.sortBy(Object.keys(tours), k => [k === possibleCategory, k]);
+			const keys = Utils.sortBy(Object.keys(tours), k => [k === possibleCategory, k]).filter(cat => (
+				checkWhitelisted(toID(cat), user) || user.can('rangeban')
+			));
 			buf += keys.map(k => `<option>${k}</option>`).join('');
 			buf += `</select><br />`;
 			buf += `Info link: <input name="url" /><br />`;
