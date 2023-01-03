@@ -311,7 +311,8 @@ function error(page: string, message: string, user: User) {
 export const pages: Chat.PageTable = {
 	tournaments: {
 		all(query, user) {
-			let buf = `${refresh(this.pageid)}<br /><center><h2>Welcome!</h2>`;
+			let buf = `${refresh(this.pageid)}<br /><center>`;
+			buf += `<h2><psicon pokemon="Meloetta-Pirouette" />Welcome!<psicon pokemon="Meloetta-Pirouette" /></h2>`;
 			const icon = tours.official.icon;
 			if (icon) buf += `<img src="${icon[0]}" width="${icon[1]}" height="${icon[2]}"></center>`;
 			buf += `<hr />`;
