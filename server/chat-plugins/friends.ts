@@ -558,33 +558,33 @@ export const pages: Chat.PageTable = {
 			const {public_list, send_login_data} = await Chat.Friends.getSettings(user.id);
 			buf += `<strong>Notify me when my friends come online:</strong><br />`;
 			buf += `<button class="button${settings.allowFriendNotifications ? `` : ` disabled`}" name="send" `;
-			buf += `value="/friends hidenotifs&#10;/friends settings">Disable</button> `;
+			buf += `value="/friends hidenotifs">Disable</button> `;
 			buf += `<button class="button${settings.allowFriendNotifications ? ` disabled` : ``}" name="send" `;
-			buf += `value="/friends viewnotifs&#10;/friends settings">Enable</button> <br /><br />`;
+			buf += `value="/friends viewnotifs">Enable</button> <br /><br />`;
 
 			buf += `<strong>Receive friend requests:</strong><br />`;
 			buf += `<button class="button${settings.blockFriendRequests ? ` disabled` : ''}" name="send" `;
-			buf += `value="/friends toggle off&#10;/friends settings">Disable</button> `;
+			buf += `value="/friends toggle off">Disable</button> `;
 			buf += `<button class="button${settings.blockFriendRequests ? `` : ` disabled`}" name="send" `;
-			buf += `value="/friends toggle on&#10;/friends settings">Enable</button> <br /><br />`;
+			buf += `value="/friends toggle on">Enable</button> <br /><br />`;
 
 			buf += `<strong>Allow others to see your list:</strong><br />`;
 			buf += `<button class="button${public_list ? ` disabled` : ''}" name="send" `;
-			buf += `value="/friends listdisplay yes&#10;/friends settings">Allow</button> `;
+			buf += `value="/friends listdisplay yes">Allow</button> `;
 			buf += `<button class="button${public_list ? `` : ` disabled`}" name="send" `;
-			buf += `value="/friends listdisplay no&#10;/friends settings">Hide</button> <br /><br />`;
+			buf += `value="/friends listdisplay no">Hide</button> <br /><br />`;
 
 			buf += `<strong>Allow others to see my login times</strong><br />`;
 			buf += `<button class="button${send_login_data ? ` disabled` : ''}" name="send" `;
-			buf += `value="/friends hidelogins&#10;/friends settings">Disable</button> `;
+			buf += `value="/friends hidelogins">Disable</button> `;
 			buf += `<button class="button${send_login_data ? `` : ' disabled'}" name="send" `;
-			buf += `value="/friends showlogins&#10;/friends settings">Enable</button><br /><br />`;
+			buf += `value="/friends showlogins">Enable</button><br /><br />`;
 
 			buf += `<strong>Allow friends to see my hidden battles on the spectator list:</strong><br />`;
 			buf += `<button class="button${settings.displayBattlesToFriends ? `` : ' disabled'}" name="send" `;
-			buf += `value="/friends sharebattles off&#10;/friends settings">Disable</button> `;
+			buf += `value="/friends sharebattles off">Disable</button> `;
 			buf += `<button class="button${settings.displayBattlesToFriends ? ` disabled` : ``}" name="send" `;
-			buf += `value="/friends sharebattles on&#10;/friends settings">Enable</button> <br /><br />`;
+			buf += `value="/friends sharebattles on">Enable</button> <br /><br />`;
 
 			buf += `<strong>Block PMs except from friends (and Staff):</strong><br />`;
 			buf += `<button class="button${settings.blockPMs ? `` : ' disabled'}" name="send" `;
