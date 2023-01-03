@@ -290,6 +290,13 @@ export function renderPageChooser(curPage: string, buffer: string, user?: User) 
 			false,
 			curPage === 'edit',
 		);
+		if (user.can('rangeban')) {
+			buf += renderTab(
+				`<i class="fa fa-pencil"></i><a target="replace" href="/view-tournaments-whitelists">Whitelist</a>`,
+				false,
+				curPage === 'whitelist',
+			);
+		}
 	}
 
 	buf += `<div class="folderlistafter"></div></div></div><div class="teampane">`;
@@ -454,6 +461,20 @@ export const pages: Chat.PageTable = {
 				return innerBuf;
 			}).filter(Boolean).join('<hr />');
 			return renderPageChooser('manage', buf, user);
+		},
+		whitelists(query, user) {
+			this.checkCan('rangeban');
+			let buf = `${refresh(this.pageid)}<br /><center><h2>Section whitelists</h2>`;
+			for (const k in tours) {
+				buf += `<strong>${k}</strong><br />`;
+				if (!tours[k].whitelist?.length) {
+					buf += `None.<br />`;
+					continue;
+				}
+				buf += tours[k].whitelist?.map(f => `<li>${f}</li>`).join('<br />');
+				buf += `<br />`;
+			}
+			return renderPageChooser('whitelist', buf, user);
 		},
 	},
 };
