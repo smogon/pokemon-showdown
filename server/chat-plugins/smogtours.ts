@@ -329,7 +329,12 @@ export const pages: Chat.PageTable = {
 			if (!tour) {
 				return error(categoryID, `Tour '${tourID}' not found.`, user);
 			}
-			this.title += `${tour.title}`;
+			// unescaping since it's escaped on client
+			this.title += `${tour.title}`
+				.replace(/&quot;/g, '"')
+				.replace(/&gt;/g, '>')
+				.replace(/&lt;/g, '<')
+				.replace(/&amp;/g, '&');
 			// stuff!
 			let buf = `${refresh(this.pageid)}<br />`;
 			buf += `<center><h2><a href="${tour.url}">${tour.title}</a></h2>`;
