@@ -249,7 +249,6 @@ export function renderPageChooser(curPage: string, buffer: string, user?: User) 
 	let buf = `<div class="folderpane">`;
 	buf += `<div class="folderlist">`;
 	buf += `<div class="folderlistbefore"></div>`;
-	buf += `<div class="foldersep"></div>`;
 
 	const keys = Object.keys(tours);
 	buf += keys.map(cat => {
@@ -302,7 +301,10 @@ function error(page: string, message: string, user: User) {
 export const pages: Chat.PageTable = {
 	tournaments: {
 		all(query, user) {
-			let buf = `${refresh(this.pageid)}<br /><h2>Welcome!</h2><hr />`;
+			let buf = `${refresh(this.pageid)}<br /><center><h2>Welcome!</h2>`;
+			const icon = tours.official.icon;
+			if (icon) buf += `<img src="${icon[0]}" width="${icon[1]}" height="${icon[2]}"></center>`;
+			buf += `<hr />`;
 			this.title = '[Tournaments] All';
 			buf += `<p>Smogon runs official tournaments across their metagames where the strongest and most `;
 			buf += `experienced competitors duke it out for prizes and recognition!</p><p>`;
@@ -330,11 +332,11 @@ export const pages: Chat.PageTable = {
 			this.title += `${tour.title}`;
 			// stuff!
 			let buf = `${refresh(this.pageid)}<br />`;
-			buf += `<h2><a href="${tour.url}">${tour.title}</a></h2>`;
+			buf += `<center><h2><a href="${tour.url}">${tour.title}</a></h2>`;
 			if (tour.image) {
 				buf += `<img src="${tour.image[0]}" width="${tour.image[1]}" height="${tour.image[2]}" />`;
 			}
-			buf += `<hr />`;
+			buf += `</center><hr />`;
 			buf += Utils.escapeHTML(tour.desc).replace(/\n/ig, '<br />');
 			buf += `<br /><br /><a class="button notifying" href="${tour.url}">View information and signups</a>`;
 			try {
@@ -355,11 +357,11 @@ export const pages: Chat.PageTable = {
 			if (!category) {
 				return error('', Utils.html`Invalid section specified: '${categoryID}'`, user);
 			}
-			let buf = `${refresh(this.pageid)}<br /><h2>${category.title}</h2>`;
+			let buf = `${refresh(this.pageid)}<br /><center><h2>${category.title}</h2>`;
 			if (category.icon) {
 				buf += `<img src="${category.icon[0]}" width="${category.icon[1]}" height="${category.icon[2]}" /><br />`;
 			}
-			buf += `${category.desc}<hr />`;
+			buf += `</center>${category.desc}<hr />`;
 			if (!category.tours.length) {
 				buf += `<p>There are currently no tournaments in this section with open signups.</p>`;
 				buf += `<p>Check back later for new tours.</p>`;
@@ -378,7 +380,7 @@ export const pages: Chat.PageTable = {
 			checkCanEdit(user, this); // broad check first
 			let buf = `${refresh(this.pageid)}<br />`;
 			this.title = '[Tournaments] Add';
-			buf += `<h2>Add new tournament</h2><hr />`;
+			buf += `<center><h2>Add new tournament</h2></center><hr />`;
 			buf += `<form data-submitsend="/smogtours add {title}|{category}|{url}|{img}|{shortDesc}|{desc}">`;
 			let possibleCategory = Object.keys(tours)[0];
 			for (const k in tours) {
@@ -411,7 +413,7 @@ export const pages: Chat.PageTable = {
 			if (!section) return error('edit', `Invalid section: "${sectionID}"`, user);
 			const tour = section.tours.find(t => t.id === tourID);
 			if (!tour) return error('edit', `Tour with ID "${tourID}" not found.`, user);
-			let buf = `${refresh(this.pageid)}<br /><h2>Edit tournament "${tour.title}"</h2><hr />`;
+			let buf = `${refresh(this.pageid)}<br /><center><h2>Edit tournament "${tour.title}"</h2></center><hr />`;
 			buf += `<form data-submitsend="/smogtours edit ${tour.id}|{title}|${section}|{url}|{img}|{shortDesc}|{desc}">`;
 			buf += `Title: <input name="title" value="${tour.title}"/><br />`;
 			buf += `Info link: <input name="url" value="${tour.url}" /><br />`;
@@ -426,7 +428,7 @@ export const pages: Chat.PageTable = {
 		manage(query, user) {
 			checkCanEdit(user, this);
 			this.title = '[Tournaments] Manage';
-			let buf = `${refresh(this.pageid)}<br /><h2>Manage ongoing tournaments</h2><hr />`;
+			let buf = `${refresh(this.pageid)}<br /><center><h2>Manage ongoing tournaments</h2></center><hr />`;
 			buf += Object.keys(tours).map(cat => {
 				let innerBuf = '';
 				try {
