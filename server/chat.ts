@@ -2591,6 +2591,17 @@ export const Chat = new class {
 	readonly linkRegex = linkRegex;
 	readonly stripFormatting = stripFormatting;
 
+	/** Helper function to ensure no state issues occur when regex testing for links. */
+	isLink(possibleUrl: string) {
+		// if we don't do this, it starts spitting out false every other time even if it's a valid link
+		//  since global regexes are stateful.
+		// this took me so much pain to debug.
+		// Yes, that is intended JS behavior. Yes, it fills me with unyielding rage.
+		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test
+		this.linkRegex.lastIndex = -1;
+		return this.linkRegex.test(possibleUrl);
+	}
+
 	readonly filterWords: {[k: string]: FilterWord[]} = {};
 	readonly monitors: {[k: string]: Monitor} = {};
 

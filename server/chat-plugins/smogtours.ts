@@ -103,20 +103,12 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`Invalid section ID: "${sectionID}"`);
 			}
 			checkCanEdit(user, this, sectionID);
-			// if we don't do this, it starts spitting out false every other time even if it's a valid link
-			//  since global regexes are stateful.
-			// this took me so much pain to debug.
-			// Yes, that is intended JS behavior. Yes, it fills me with unyielding rage.
-			// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test
-			Chat.linkRegex.lastIndex = -1;
-			if (!Chat.linkRegex.test(url)) {
+			if (!Chat.isLink(url)) {
 				return this.popupReply(`Invalid info URL: "${url}"`);
 			}
 			let image;
 			if (rawImg) {
-				// see above
-				Chat.linkRegex.lastIndex = -1;
-				if (!Chat.linkRegex.test(rawImg)) {
+				if (!Chat.isLink(rawImg)) {
 					return this.popupReply(`Invalid image URL: ${rawImg}`);
 				}
 				try {
@@ -219,7 +211,7 @@ export const commands: Chat.ChatCommands = {
 	],
 };
 
-/** Wrapps `inner` in the necessary HTML to show a tab on the sidebar */
+/** Modifies `inner` in-place to wrap it in the necessary HTML to show a tab on the sidebar. */
 function renderTab(inner: string, isTitle?: boolean, isCur?: boolean) {
 	isTitle = false;
 	let buf = '';
