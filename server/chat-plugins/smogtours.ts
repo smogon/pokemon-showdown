@@ -98,6 +98,9 @@ export const commands: Chat.ChatCommands = {
 				title, rawSection, url, rawImg, rawShort, rawDesc,
 			] = Utils.splitFirst(targets.join('|'), '|', 5).map(f => f.trim());
 			const sectionID = toID(rawSection);
+			if (!toID(title)) {
+				return this.popupReply(`Invalid title. Must have at least one alphanumeric character.`);
+			}
 			const section = tours[sectionID];
 			if (!section) {
 				return this.errorReply(`Invalid section ID: "${sectionID}"`);
