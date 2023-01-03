@@ -97,6 +97,7 @@ describe('[Gen 8] Random Battle', () => {
 					set.moves.includes('stickyweb'),
 					`${pkmn} should always generate Sticky Web (generated moveset: ${set.moves})`
 				);
+				if (pkmn === 'shuckle') assert(set.moves.includes('stealthrock'));
 			});
 		}
 	});
@@ -132,10 +133,19 @@ describe('[Gen 8] Random Battle', () => {
 		testNotBothMoves('landorustherian', options, 'fly', 'stealthrock');
 	});
 
-	it('3 Attacks Scyther should get Heavy-Duty Boots', () => {
+	it('should give Scyther the correct item', () => {
 		testSet('scyther', options, set => {
-			if (set.moves.every(move => Dex.moves.get(move).category !== 'Status')) return;
-			assert.equal(set.item, 'Heavy-Duty Boots', `set=${JSON.stringify(set)}`);
+			let item;
+			if (set.moves.every(move => Dex.moves.get(move).category !== 'Status')) {
+				item = 'Choice Band';
+			} else if (set.moves.includes('uturn')) {
+				item = 'Heavy-Duty Boots';
+			} else {
+				// Test interface currently doesn't tell us if we're testing in the lead slot or not
+				// But FTR it should be Eviolite if it's the lead, Boots otherwise
+				return;
+			}
+			assert.equal(set.item, item, `set=${JSON.stringify(set)}`);
 		});
 	});
 
