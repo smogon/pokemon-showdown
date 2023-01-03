@@ -464,7 +464,7 @@ export const pages: Chat.PageTable = {
 		},
 		whitelists(query, user) {
 			this.checkCan('rangeban');
-			let buf = `${refresh(this.pageid)}<br /><center><h2>Section whitelists</h2>`;
+			let buf = `${refresh(this.pageid)}<br /><center><h2>Section whitelists</center</h2><hr />`;
 			for (const k in tours) {
 				buf += `<strong>${k}</strong><br />`;
 				if (!tours[k].whitelist?.length) {
