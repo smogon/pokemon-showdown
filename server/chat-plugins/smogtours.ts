@@ -12,6 +12,7 @@ interface TourEvent {
 	image?: Image;
 	id: string;
 	shortDesc: string;
+	date: number;
 }
 
 interface TourTable {
@@ -134,6 +135,7 @@ export const commands: Chat.ChatCommands = {
 				shortDesc: rawShort,
 				desc: rawDesc,
 				id: tourID || toID(title),
+				date: Date.now(),
 			};
 			if (isEdit) {
 				const index = section.tours.findIndex(t => t.id === tour.id);
@@ -260,6 +262,7 @@ export function renderPageChooser(curPage: string, buffer: string, user?: User) 
 			curPage === cat
 		);
 		if (tourData.tours.length) {
+			Utils.sortBy(tourData.tours, t => -t.date);
 			innerBuf += tourData.tours.map(t => (
 				renderTab(
 					`<i class="fa fa-trophy"></i><a target="replace" href="/view-tournaments-view-${cat}-${t.id}">${t.title}</a>`,
