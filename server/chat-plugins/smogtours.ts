@@ -252,7 +252,7 @@ export function renderPageChooser(curPage: string, buffer: string, user?: User) 
 		if (tourData.tours.length) {
 			innerBuf += tourData.tours.map(t => (
 				renderTab(
-					`<i class="fa fa-play"></i><a target="replace" href="/view-tournaments-view-${cat}-${t.id}">${t.title}</a>`,
+					`<i class="fa fa-trophy"></i><a target="replace" href="/view-tournaments-view-${cat}-${t.id}">${t.title}</a>`,
 					false,
 					curPage === `${cat}-${t.id}`
 				)
