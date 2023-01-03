@@ -30,7 +30,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	charizard: {
-		tier: "OU",
+		tier: "UUD",
 		doublesTier: "DOU",
 		natDexTier: "UU",
 	},
@@ -985,7 +985,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	scizor: {
-		tier: "OU",
+		tier: "UUD",
 		doublesTier: "DUU",
 		natDexTier: "UU",
 	},
@@ -1969,7 +1969,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	breloom: {
-		tier: "OU",
+		tier: "UUD",
 		doublesTier: "DUU",
 		natDexTier: "UU",
 	},
@@ -2902,7 +2902,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "UU",
 	},
 	rotomwash: {
-		tier: "UUD",
+		tier: "OU",
 		doublesTier: "DOU",
 		natDexTier: "UU",
 	},
@@ -5220,7 +5220,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	hatterene: {
-		tier: "UUD",
+		tier: "OU",
 		doublesTier: "DOU",
 		natDexTier: "UU",
 	},
@@ -5553,7 +5553,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "UU",
 	},
 	dondozo: {
-		tier: "UUD",
+		tier: "OU",
 		doublesTier: "DOU",
 		natDexTier: "UU",
 	},
@@ -5614,7 +5614,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	maushold: {
-		tier: "OU",
+		tier: "UUD",
 		doublesTier: "DOU",
 		natDexTier: "UU",
 	},
@@ -5693,7 +5693,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	garganacl: {
-		tier: "UUD",
+		tier: "OU",
 		doublesTier: "DOU",
 		natDexTier: "UU",
 	},
@@ -5834,7 +5834,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "UU",
 	},
 	tinglu: {
-		tier: "UUD",
+		tier: "OU",
 		doublesTier: "DOU",
 		natDexTier: "UU",
 	},

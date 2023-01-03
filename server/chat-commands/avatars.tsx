@@ -7,6 +7,7 @@
  */
 
 import {FS, Net} from "../../lib";
+const XMLHttpRequest = require('xhr2');
 
 const AVATARS_FILE = 'config/avatars.json';
 
@@ -93,8 +94,23 @@ export const Avatars = new class {
 	}
 	src(avatar: AvatarID) {
 		if (avatar.includes('.')) return '';
-		const avatarUrl = avatar.startsWith('#') ? `trainers-custom/${avatar.slice(1)}.png` : `trainers/${avatar}.png`;
-		return `https://${Config.routes.client}/sprites/${avatarUrl}`;
+		var avatarUrl = avatar.startsWith('#') ? `trainers-custom/${avatar.slice(1)}.png` : `trainers/${avatar}.png`;
+		var url = `https://${Config.routes.client}/sprites/${avatarUrl}`;
+		
+		// check config/avatar_types.json for the avatar
+		// if its in replace .png with .<type>
+		// if its not in use .png
+		try {
+			const avatarTypes = JSON.parse(FS('config/avatar_types.json').readSync());
+			if (avatarTypes[avatar]) {
+				url = url.replace('.png', '.' + avatarTypes[avatar]);
+			}
+		} catch (e) {
+			// do nothing
+		}
+
+		console.log(url);
+		return url;
 	}
 	exists(avatar: string) {
 		if (avatar.includes('.')) {
@@ -224,6 +240,9 @@ function listUsers(users: string[]) {
 }
 
 const OFFICIAL_AVATARS = new Set([
+	'azumarill',
+	'wailord',
+	'crobat',
 	'aaron',
 	'acetrainercouple-gen3', 'acetrainercouple',
 	'acetrainerf-gen1', 'acetrainerf-gen1rb', 'acetrainerf-gen2', 'acetrainerf-gen3', 'acetrainerf-gen3rs', 'acetrainerf-gen4dp', 'acetrainerf-gen4', 'acetrainerf',
@@ -546,7 +565,7 @@ const OFFICIAL_AVATARS_GNOMOWLADNY = new Set([
 ]);
 
 const OFFICIAL_AVATARS_BRUMIRAGE = new Set([
-	'adaman', 'agatha-lgpe', 'akari', 'allister', 'archie-gen6', 'arezu', 'avery', 'ballguy', 'bea', 'bede',
+	'sylveon', 'adaman', 'agatha-lgpe', 'akari', 'allister', 'archie-gen6', 'arezu', 'avery', 'ballguy', 'bea', 'bede',
 	'bede-leader', 'brendan-contest', 'burnet-radar', 'calaba', 'calem', 'chase', 'cogita', 'cynthia-gen7',
 	'cynthia-masters', 'diantha', 'doctor-gen8', 'elaine', 'gloria', 'gordie', 'hilda-masters2', 'hop',
 	'irida', 'kabu', 'klara', 'koga-lgpe', 'leon', 'leon-tower', 'lian', 'lisia', 'lorelei-lgpe', 'magnolia',

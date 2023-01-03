@@ -245,6 +245,23 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
+	uudclause: {
+		effectType: 'ValidatorRule',
+		name: 'UUD Clause',
+		desc: 'Bans Revival Blessing',
+		onValidateSet(set) {
+			const banlist = ['Revival Blessing'];
+			const moves = set.moves;
+			if (!moves) return;
+			const problems: string[] = [];
+			for (const move of moves) {
+				if (banlist.includes(move)) {
+					problems.push(`${move} is banned.`);
+				}
+			}
+			return problems;
+		},
+	},
 	hoennpokedex: {
 		effectType: 'ValidatorRule',
 		name: 'Hoenn Pokedex',

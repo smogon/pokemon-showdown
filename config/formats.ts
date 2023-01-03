@@ -36,9 +36,9 @@ export const Formats: FormatList = [
 		name: "[Gen 9] UUD",
 
 		mod: 'gen9regionaldeluxe',
-		ruleset: ['Standard', 'Evasion Clause', 'Terastal Clause', 'Z-Move Clause'],
+		ruleset: ['Standard', 'Evasion Clause', 'Terastal Clause', 'Z-Move Clause', 'UUD Clause'],
 		banlist: ['Uber', 'AG', 'OU', 'OUD', 'UUBL', 'Arena Trap', 'Moody', 'Baton Pass', 'Shadow Tag',
-		'Quick Claw', 'Light Clay', 'King\'s Rock', 'Shed Tail', 'Revival Blessing']
+		'Quick Claw', 'Light Clay', 'King\'s Rock', 'Revival Blessing']
 	},
 
 	{
