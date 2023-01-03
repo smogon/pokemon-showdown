@@ -442,3 +442,7 @@ export const pages: Chat.PageTable = {
 		},
 	},
 };
+
+process.nextTick(() => {
+	Chat.multiLinePattern.register('/smogtours ');
+});
