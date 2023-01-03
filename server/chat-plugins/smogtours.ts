@@ -122,7 +122,11 @@ export const commands: Chat.ChatCommands = {
 				return this.popupReply(`Must provide both a short description and a full description.`);
 			}
 			const tour: TourEvent = {
-				title, url, image, shortDesc: rawShort, desc: rawDesc, id: tourID || toID(title),
+				title: Utils.escapeHTML(title),
+				url,
+				image,
+				shortDesc: rawShort,
+				desc: rawDesc, id: tourID || toID(title),
 			};
 			if (isEdit) {
 				const index = section.tours.findIndex(t => t.id === tour.id);
@@ -411,7 +415,7 @@ export const pages: Chat.PageTable = {
 			buf += `Image link (optional): <input name="img" value="${tour.image?.[0] || ""}" /><br />`;
 			buf += `Short description: <br />`;
 			buf += `<textarea name="shortDesc" rows="6" cols="50">${tour.shortDesc}</textarea><br />`;
-			buf += `Full description: <br /><textarea name="desc" rows="20" cols="50">${tour.desc}</textarea><br />`;
+			buf += Utils.html`Full description: <br /><textarea name="desc" rows="20" cols="50">${tour.desc}</textarea><br />`;
 			buf += `<button type="submit" class="button notifying">Update!</button>`;
 			return renderPageChooser('edit', buf, user);
 		},
