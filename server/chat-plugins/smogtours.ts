@@ -468,7 +468,7 @@ export const pages: Chat.PageTable = {
 			for (const k in tours) {
 				buf += `<strong>${k}</strong><br />`;
 				if (!tours[k].whitelist?.length) {
-					buf += `None.<br />`;
+					buf += `None.<br /><br />`;
 					continue;
 				}
 				buf += tours[k].whitelist?.map(f => `<li>${f}</li>`).join('<br />');
