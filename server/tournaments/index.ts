@@ -2310,7 +2310,7 @@ const commands: Chat.ChatCommands = {
 		this.sendReplyBox(
 			`Tournament Commands<br/>` +
 			`- create/new &lt;format>, &lt;type>, [ &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />` +
-			`- rules/banlist &lt;comma-separated arguments>: Sets the custom rules for the tournament before it has started.<br />` +
+			`- rules &lt;comma-separated arguments>: Sets the custom rules for the tournament before it has started. <a href="view-battlerules">Custom rules help/list</a><br />` +
 			`- end/stop/delete: Forcibly ends the tournament in the current room.<br />` +
 			`- begin/start: Starts the tournament in the current room.<br /><br />` +
 			`<details class="readmore"><summary>Configuration Commands</summary>` +
