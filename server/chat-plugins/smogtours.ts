@@ -113,7 +113,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				try {
 					const dimensions = await Chat.fitImage(rawImg, 300, 300);
-					image = [rawImg, ...dimensions.slice(1)] as Image;
+					image = [rawImg, ...dimensions.slice(0, -1)] as Image;
 				} catch (e) {
 					return this.popupReply(`Invalid image URL: ${rawImg}`);
 				}
@@ -126,7 +126,8 @@ export const commands: Chat.ChatCommands = {
 				url,
 				image,
 				shortDesc: rawShort,
-				desc: rawDesc, id: tourID || toID(title),
+				desc: rawDesc,
+				id: tourID || toID(title),
 			};
 			if (isEdit) {
 				const index = section.tours.findIndex(t => t.id === tour.id);
