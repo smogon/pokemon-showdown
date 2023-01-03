@@ -197,7 +197,7 @@ export const commands: Chat.ChatCommands = {
 			if (!section) {
 				return this.errorReply(`Invalid section ID: "${sectionID}". Valid IDs: ${Object.keys(tours).join(', ')}`);
 			}
-			const idx = section.whitelist?.indexOf(targetID) || -1;
+			const idx = section.whitelist?.indexOf(targetID) ?? -1;
 			if (!section.whitelist || idx < 0) {
 				return this.errorReply(`${targetID} is not whitelisted in that section.`);
 			}
