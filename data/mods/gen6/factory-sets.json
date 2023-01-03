@@ -3859,35 +3859,6 @@
         }
       ]
     },
-    "azelf": {
-      "flags": {},
-      "sets": [
-        {
-          "species": "Azelf",
-          "item": "Focus Sash",
-          "ability": "Levitate",
-          "evs": {"hp": 0, "atk": 252, "def": 0, "spa": 4, "spd": 0, "spe": 252},
-          "nature": "Hasty",
-          "moves": [["Stealth Rock"], ["Taunt"], ["Knock Off"], ["Explosion"]]
-        },
-        {
-          "species": "Azelf",
-          "item": "Light Clay",
-          "ability": "Levitate",
-          "evs": {"hp": 252, "atk": 4, "def": 0, "spa": 0, "spd": 0, "spe": 252},
-          "nature": "Jolly",
-          "moves": [["Taunt"], ["Reflect"], ["Light Screen"], ["Explosion"]]
-        },
-        {
-          "species": "Azelf",
-          "item": "Life Orb",
-          "ability": "Levitate",
-          "evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 0, "spe": 252},
-          "nature": "Timid",
-          "moves": [["Nasty Plot"], ["Psyshock"], ["Fire Blast"], ["Dazzling Gleam"]]
-        }
-      ]
-    },
     "blissey": {
       "flags": {},
       "sets": [
