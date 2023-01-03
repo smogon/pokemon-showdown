@@ -586,13 +586,13 @@ export const pages: Chat.PageTable = {
 			buf += `<button class="button${settings.displayBattlesToFriends ? ` disabled` : ``}" name="send" `;
 			buf += `value="/friends sharebattles on">Enable</button> <br /><br />`;
 
-			buf += `<strong>Block PMs except from friends (and Staff):</strong><br />`;
+			buf += `<strong>Block PMs except from friends (and staff):</strong><br />`;
 			buf += `<button class="button${settings.blockPMs ? `` : ' disabled'}" name="send" `;
 			buf += `value="/unblockpms&#10;/j view-friends-settings">Disable</button> `;
 			buf += `<button class="button${settings.blockPMs ? ` disabled` : ``}" name="send" `;
 			buf += `value="/blockpms friends&#10;/j view-friends-settings">Enable</button> <br /><br />`;
 
-			buf += `<strong>Block challenges except from friends (and Staff):</strong><br />`;
+			buf += `<strong>Block challenges except from friends (and staff):</strong><br />`;
 			buf += `<button class="button${settings.blockChallenges ? `` : ' disabled'}" name="send" `;
 			buf += `value="/unblockchallenges&#10;/j view-friends-settings">Disable</button> `;
 			buf += `<button class="button${settings.blockChallenges ? ` disabled` : ``}" name="send" `;
