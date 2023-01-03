@@ -99,7 +99,7 @@ export const commands: Chat.ChatCommands = {
 			] = Utils.splitFirst(targets.join('|'), '|', 5).map(f => f.trim());
 			const sectionID = toID(rawSection);
 			if (!toID(title)) {
-				return this.popupReply(`Invalid title. Must have at least one alphanumeric character.`);
+				return this.popupReply(`Invalid title. Must have at least one alphanumeric character.`)
 			}
 			const section = tours[sectionID];
 			if (!section) {
@@ -196,7 +196,7 @@ export const commands: Chat.ChatCommands = {
 			if (!section.whitelist || !idx || idx < 0) {
 				return this.errorReply(`${targetID} is not whitelisted in that section.`);
 			}
-			section.whitelist?.splice(idx, 1);
+			section.whitelist.splice(idx, 1);
 			if (!section.whitelist.length) {
 				delete section.whitelist;
 			}
@@ -409,12 +409,8 @@ export const pages: Chat.PageTable = {
 			const tour = section.tours.find(t => t.id === tourID);
 			if (!tour) return error('edit', `Tour with ID "${tourID}" not found.`, user);
 			let buf = `${refresh(this.pageid)}<br /><h2>Edit tournament "${tour.title}"</h2><hr />`;
-			buf += `<form data-submitsend="/smogtours edit ${tour.id}|{title}|{category}|{url}|{img}|{shortDesc}|{desc}">`;
+			buf += `<form data-submitsend="/smogtours edit ${tour.id}|{title}|${section}|{url}|{img}|{shortDesc}|{desc}">`;
 			buf += `Title: <input name="title" value="${tour.title}"/><br />`;
-			buf += `Category: <select name="category">`;
-			const keys = Utils.sortBy(Object.keys(tours), k => [k === sectionID, k]);
-			buf += keys.map(k => `<option>${k}</option>`).join('');
-			buf += `</select><br />`;
 			buf += `Info link: <input name="url" value="${tour.url}" /><br />`;
 			buf += `Image link (optional): <input name="img" value="${tour.image?.[0] || ""}" /><br />`;
 			buf += `Short description: <br />`;
