@@ -401,7 +401,7 @@ export const pages: Chat.PageTable = {
 			buf += keys.map(k => `<option>${k}</option>`).join('');
 			buf += `</select><br />`;
 			buf += `Info link: <input name="url" /><br />`;
-			buf += `Image link (optional): <input name="img" /><br />`;
+			buf += `<abbr title="Max length and width: 300px">Image link</abbr> (optional): <input name="img" /><br />`;
 			buf += `Short description: <br /><textarea name="shortDesc" rows="6" cols="50"></textarea><br />`;
 			buf += `Full description: <br /><textarea name="desc" rows="20" cols="50"></textarea><br />`;
 			buf += `<button type="submit" class="button notifying">Create!</button></form>`;
