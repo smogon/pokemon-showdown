@@ -3857,15 +3857,24 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {},
 		onHit(target, source, move) {
-			let overallSuccess;
-			for (const ally of source.alliesAndSelf()) {
-				let allySuccess: ReturnType<Pokemon['setAbility']> | true = ally.setAbility(target.ability);
-				if (typeof allySuccess === 'string') allySuccess = true;
-				overallSuccess = this.actions.combineResults(overallSuccess, allySuccess);
-				if (!allySuccess) continue;
-				this.add('-ability', ally, target.getAbility().name, '[from] move: Doodle');
+			let success: boolean | null = false;
+			for (const pokemon of source.alliesAndSelf()) {
+				if (pokemon.ability === target.ability) continue;
+				const oldAbility = pokemon.setAbility(target.ability);
+				if (oldAbility) {
+					this.add('-ability', pokemon, target.getAbility().name, '[from] move: Doodle');
+					success = true;
+				} else if (!success && oldAbility === null) {
+					success = null;
+				}
 			}
-			return overallSuccess;
+			if (!success) {
+				if (success === false) {
+					this.add('-fail', source);
+				}
+				this.attrLastMove('[still]');
+				return this.NOT_FAIL;
+			}
 		},
 		secondary: null,
 		target: "adjacentFoe",
