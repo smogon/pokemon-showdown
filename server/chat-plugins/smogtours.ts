@@ -105,6 +105,9 @@ export const commands: Chat.ChatCommands = {
 			if (!section) {
 				return this.errorReply(`Invalid section ID: "${sectionID}"`);
 			}
+			if (!isEdit && section.tours.find(f => toID(title) === f.id)) {
+				return this.popupReply(`A tour with that ID already exists. Please choose another.`);
+			}
 			checkCanEdit(user, this, sectionID);
 			if (!Chat.isLink(url)) {
 				return this.popupReply(`Invalid info URL: "${url}"`);
@@ -264,7 +267,7 @@ export function renderPageChooser(curPage: string, buffer: string, user?: User) 
 					false,
 					curPage === `${cat}-${t.id}`
 				)
-			)).join('<div class="foldersep"></div>');
+			)).join('');
 		} else {
 			innerBuf += renderTab(`None`, false);
 		}
