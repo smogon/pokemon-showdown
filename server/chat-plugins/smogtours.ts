@@ -197,8 +197,8 @@ export const commands: Chat.ChatCommands = {
 			if (!section) {
 				return this.errorReply(`Invalid section ID: "${sectionID}". Valid IDs: ${Object.keys(tours).join(', ')}`);
 			}
-			const idx = section.whitelist?.indexOf(targetID);
-			if (!section.whitelist || !idx || idx < 0) {
+			const idx = section.whitelist?.indexOf(targetID) || -1;
+			if (!section.whitelist || idx < 0) {
 				return this.errorReply(`${targetID} is not whitelisted in that section.`);
 			}
 			section.whitelist.splice(idx, 1);
@@ -313,7 +313,7 @@ export const pages: Chat.PageTable = {
 			buf += `experienced competitors duke it out for prizes and recognition!</p><p>`;
 			buf += `You can see a listing of current official tournaments here; `;
 			buf += `by clicking any hyperlink, you will be directed to the forum for any given tournament!</p><p>`;
-			buf += `Be sure to sign-up if you are eager to participate or `;
+			buf += `Be sure to sign up if you are eager to participate or `;
 			buf += `check it out if you want to spectate the most hyped games out there.</p><p>`;
 			buf += `For information on tournament rules and etiquette, check out <a href="https://www.smogon.com/forums/threads/3642760/">this information thread</a>.`;
 			buf += `</p>`;
