@@ -561,7 +561,7 @@ export const commands: Chat.ChatCommands = {
 		user.language = languageID;
 		user.update();
 		const languageName = Chat.languages.get(languageID);
-		const langRoom = Rooms.search(languageName);
+		const langRoom = Rooms.search(languageName || "");
 		let language = languageName;
 		if (langRoom) {
 			language = `<a href="/${langRoom.roomid}">${languageName}</a>`;
