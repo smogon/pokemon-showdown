@@ -18677,12 +18677,17 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (!pokemon.getItem().isBerry) pokemon.disableMove('stuffcheeks');
 		},
 		onTry(source) {
-			const item = source.getItem();
-			if (item.isBerry && source.eatItem(true)) {
-				this.boost({def: 2}, source, null, null, false, true);
-			} else {
-				return false;
-			}
+			return source.getItem().isBerry;
+		},
+		onTryHit(pokemon, target, move) {
+			if (!this.boost(move.boosts as SparseBoostsTable)) return null;
+			delete move.boosts;
+		},
+		onHit(pokemon) {
+			pokemon.eatItem(true);
+		},
+		boosts: {
+			def: 2,
 		},
 		secondary: null,
 		target: "self",
