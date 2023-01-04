@@ -3598,7 +3598,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	amoonguss: {
-		tier: "UUD",
+		tier: "OU",
 		doublesTier: "DOU",
 		natDexTier: "UU",
 	},
