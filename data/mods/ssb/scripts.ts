@@ -1,4 +1,5 @@
 export const Scripts: ModdedBattleScriptsData = {
+	gen: 8,
 	inherit: 'gen8',
 	actions: {
 		// 1 mega per pokemon

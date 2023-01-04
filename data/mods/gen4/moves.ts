@@ -248,7 +248,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	crushgrip: {
 		inherit: true,
 		basePowerCallback(pokemon, target) {
-			return Math.floor(target.hp * 120 / target.maxhp) + 1;
+			const bp = Math.floor(target.hp * 120 / target.maxhp) + 1;
+			this.debug('BP for ' + target.hp + '/' + target.maxhp + " HP: " + bp);
+			return bp;
 		},
 	},
 	curse: {
@@ -513,23 +515,23 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	flail: {
 		inherit: true,
 		basePowerCallback(pokemon, target) {
-			const ratio = pokemon.hp * 64 / pokemon.maxhp;
+			const ratio = Math.max(Math.floor(pokemon.hp * 64 / pokemon.maxhp), 1);
+			let bp;
 			if (ratio < 2) {
-				return 200;
+				bp = 200;
+			} else if (ratio < 6) {
+				bp = 150;
+			} else if (ratio < 13) {
+				bp = 100;
+			} else if (ratio < 22) {
+				bp = 80;
+			} else if (ratio < 43) {
+				bp = 40;
+			} else {
+				bp = 20;
 			}
-			if (ratio < 6) {
-				return 150;
-			}
-			if (ratio < 13) {
-				return 100;
-			}
-			if (ratio < 22) {
-				return 80;
-			}
-			if (ratio < 43) {
-				return 40;
-			}
-			return 20;
+			this.debug('BP: ' + bp);
+			return bp;
 		},
 	},
 	flareblitz: {
@@ -623,13 +625,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', effect);
+					this.add('-activate', source, 'ability: Persistent', '[move] Gravity');
 					return 7;
 				}
 				return 5;
 			},
-			onFieldStart() {
-				this.add('-fieldstart', 'move: Gravity');
+			onFieldStart(target, source) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-fieldstart', 'move: Gravity', '[persistent]');
+				} else {
+					this.add('-fieldstart', 'move: Gravity');
+				}
 				for (const pokemon of this.getAllActive()) {
 					let applies = false;
 					if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly')) {
@@ -713,7 +719,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 5,
 			durationCallback(target, source, effect) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', effect);
+					this.add('-activate', source, 'ability: Persistent', '[move] Heal Block');
 					return 7;
 				}
 				return 5;
@@ -1166,7 +1172,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (this.queue.willMove(target)) {
 				return 50;
 			}
+			this.debug('BP doubled');
 			return 100;
+		},
+	},
+	payday: {
+		inherit: true,
+		onHit() {
+			this.add('-fieldactivate', 'move: Pay Day');
 		},
 	},
 	perishsong: {
@@ -1309,23 +1322,23 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	reversal: {
 		inherit: true,
 		basePowerCallback(pokemon, target) {
-			const ratio = pokemon.hp * 64 / pokemon.maxhp;
+			const ratio = Math.max(Math.floor(pokemon.hp * 64 / pokemon.maxhp), 1);
+			let bp;
 			if (ratio < 2) {
-				return 200;
+				bp = 200;
+			} else if (ratio < 6) {
+				bp = 150;
+			} else if (ratio < 13) {
+				bp = 100;
+			} else if (ratio < 22) {
+				bp = 80;
+			} else if (ratio < 43) {
+				bp = 40;
+			} else {
+				bp = 20;
 			}
-			if (ratio < 6) {
-				return 150;
-			}
-			if (ratio < 13) {
-				return 100;
-			}
-			if (ratio < 22) {
-				return 80;
-			}
-			if (ratio < 43) {
-				return 40;
-			}
-			return 20;
+			this.debug('BP: ' + bp);
+			return bp;
 		},
 	},
 	roar: {
@@ -1352,7 +1365,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 5,
 			durationCallback(target, source, effect) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', effect);
+					this.add('-activate', source, 'ability: Persistent', '[move] Safeguard');
 					return 7;
 				}
 				return 5;
@@ -1377,8 +1390,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return null;
 				}
 			},
-			onSideStart(side) {
-				this.add('-sidestart', side, 'Safeguard');
+			onSideStart(side, source) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-sidestart', side, 'Safeguard', '[persistent]');
+				} else {
+					this.add('-sidestart', side, 'Safeguard');
+				}
 			},
 			onSideResidualOrder: 4,
 			onSideEnd(side) {
@@ -1581,13 +1598,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 3,
 			durationCallback(target, source, effect) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', effect);
+					this.add('-activate', source, 'ability: Persistent', '[move] Tailwind');
 					return 5;
 				}
 				return 3;
 			},
-			onSideStart(side) {
-				this.add('-sidestart', side, 'move: Tailwind');
+			onSideStart(side, source) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-sidestart', side, 'move: Tailwind', '[persistent]');
+				} else {
+					this.add('-sidestart', side, 'move: Tailwind');
+				}
 			},
 			onModifySpe(spe) {
 				return spe * 2;
@@ -1688,13 +1709,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', effect);
+					this.add('-activate', source, 'ability: Persistent', '[move] Trick Room');
 					return 7;
 				}
 				return 5;
 			},
 			onFieldStart(target, source) {
-				this.add('-fieldstart', 'move: Trick Room', '[of] ' + source);
+				if (source?.hasAbility('persistent')) {
+					this.add('-fieldstart', 'move: Trick Room', '[of] ' + source, '[persistent]');
+				} else {
+					this.add('-fieldstart', 'move: Trick Room', '[of] ' + source);
+				}
 			},
 			onFieldRestart(target, source) {
 				this.field.removePseudoWeather('trickroom');
@@ -1806,7 +1831,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	wringout: {
 		inherit: true,
 		basePowerCallback(pokemon, target) {
-			return Math.floor(target.hp * 120 / target.maxhp) + 1;
+			const bp = Math.floor(target.hp * 120 / target.maxhp) + 1;
+			this.debug('BP for ' + target.hp + '/' + target.maxhp + " HP: " + bp);
+			return bp;
 		},
 	},
 	yawn: {

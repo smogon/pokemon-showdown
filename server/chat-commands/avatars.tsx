@@ -52,7 +52,7 @@ try {
 	if (Config.allowedavatars) {
 		for (const avatar in Config.customavatars) {
 			for (const userid of Config.customavatars[avatar]) {
-				customAvatars[userid] ??= {allowed: [null]};
+				if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
 				customAvatars[userid].allowed.push(avatar);
 			}
 		}
@@ -141,8 +141,9 @@ export const Avatars = new class {
 	/** does not include validation */
 	setDefault(userid: ID, avatar: AvatarID | null) {
 		if (avatar === this.getDefault(userid)) return;
+		if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
+		const entry = customAvatars[userid];
 
-		const entry = (customAvatars[userid] ??= {allowed: [null]});
 		if (avatar === entry.allowed[0]) {
 			delete entry.default;
 		} else {
@@ -151,11 +152,12 @@ export const Avatars = new class {
 		saveCustomAvatars();
 	}
 	addAllowed(userid: ID, avatar: AvatarID | null) {
-		const entry = (customAvatars[userid] ??= {allowed: [null]});
-		if (entry.allowed.includes(avatar)) return false;
+		if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
 
-		entry.allowed.push(avatar);
-		entry.notNotified = true;
+		if (customAvatars[userid].allowed.includes(avatar)) return false;
+
+		customAvatars[userid].allowed.push(avatar);
+		customAvatars[userid].notNotified = true;
 		this.tryNotify(Users.get(userid));
 		return true;
 	}
@@ -172,7 +174,9 @@ export const Avatars = new class {
 		return true;
 	}
 	addPersonal(userid: ID, avatar: AvatarID | null) {
-		const entry = (customAvatars[userid] ??= {allowed: [null]});
+		if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
+		const entry = customAvatars[userid];
+
 		if (entry.allowed.includes(avatar)) return false;
 
 		entry.timeReceived ||= Date.now();
@@ -555,7 +559,8 @@ const OFFICIAL_AVATARS_BRUMIRAGE = new Set([
 const OFFICIAL_AVATARS_ZACWEAVILE = new Set([
 	'alain', 'charm', 'coin', 'courtney', 'dulse', 'elio-usum', 'emma', 'essentia', 'gloria-dojo',
 	'magmagrunt', 'magmagruntf', 'marnie-league', 'morgan', 'phyco', 'selene-usum', 'shauna', 'skullgrunt',
-	'skullgruntf', 'soliera', 'zossie',
+	'skullgruntf', 'soliera', 'zossie', 'arven-v', 'dexio-gen6', 'flannery-gen6', 'green', 'grusha', 'mela',
+	'norman-gen6', 'penny', 'sina-gen6', 'steven-gen6',
 ]);
 
 const OFFICIAL_AVATARS_KYLEDOVE = new Set([
@@ -605,6 +610,10 @@ const OFFICIAL_AVATARS_KYLEDOVE = new Set([
 	'raihan-masters', 'red-masters', 'rosa-masters', 'sabrina-masters', 'serena-masters', 'serena-masters2',
 	'siebold-masters', 'skyla-masters', 'sonia-masters', 'steven-masters', 'steven-masters2', 'volkner-masters', 'bellis',
 	'beauty-masters', 'collector-masters', 'punkgirl-masters', 'streetthug-masters', 'swimmer-masters', 'youngster-masters',
+	'akari-isekai', 'allister-masters', 'arven-s', 'brassius', 'clavell-s', 'cynthia-anime2', 'cynthia-masters3', 'florian-s',
+	'geeta', 'hassel', 'hilda-masters3', 'iono', 'iris-masters', 'jacq', 'juliana-s', 'katy', 'kofu', 'larry', 'miriam',
+	'nemona-v', 'poppy', 'red-masters2', 'rei-isekai', 'rika', 'rosa-masters2', 'ryme', 'sada', 'stargrunt-s', 'stargrunt-v',
+	'stargruntf-s', 'stargruntf-v', 'steven-masters3', 'tulip', 'turo', 'tyme', 'wally-masters',
 ]);
 
 const OFFICIAL_AVATARS_HYOOPPA = new Set([
@@ -612,7 +621,7 @@ const OFFICIAL_AVATARS_HYOOPPA = new Set([
 ]);
 
 const OFFICIAL_AVATARS_GRAPO = new Set([
-	'peonia', 'skyla-masters2', 'volo-ginkgo',
+	'glacia', 'peonia', 'skyla-masters2', 'volo-ginkgo',
 ]);
 
 const OFFICIAL_AVATARS_FIFTY = new Set([
@@ -951,7 +960,8 @@ export const commands: Chat.ChatCommands = {
 				if (!/[A-Za-z0-9]/.test(arg.charAt(0)) || !/[A-Za-z]/.test(arg)) {
 					throw new Chat.ErrorMessage(`Invalid username "${arg}"`);
 				}
-				(toUpdate[curAvatar] ??= new Set()).add(toID(arg));
+				if (!toUpdate[curAvatar]) toUpdate[curAvatar] = new Set();
+				toUpdate[curAvatar].add(toID(arg));
 			}
 		}
 

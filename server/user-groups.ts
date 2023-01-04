@@ -369,7 +369,7 @@ export class GlobalAuth extends Auth {
 	}
 	set(id: ID, group: GroupSymbol, username?: string) {
 		if (!username) username = id;
-		const user = Users.get(id);
+		const user = Users.get(id, true);
 		if (user) {
 			user.tempGroup = group;
 			user.updateIdentity();

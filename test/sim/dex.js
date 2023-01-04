@@ -5,12 +5,12 @@ const assert = require('./../assert');
 describe('Mod loader', function () {
 	it('should work fine in any order', function () {
 		{
-			const Dex = require('./../../sim/dex').Dex;
+			const Dex = require('./../../dist/sim/dex').Dex;
 			assert.equal(Dex.mod('gen2').species.getLearnset('nidoking').bubblebeam.join(','), '1M');
 			assert.equal(Dex.mod('gen2').moves.get('crunch').secondaries[0].boosts.def, undefined);
 		}
 		{
-			const Dex = require('./../../sim/dex').Dex;
+			const Dex = require('./../../dist/sim/dex').Dex;
 			Dex.mod('gen2').species.getLearnset('nidoking');
 			Dex.mod('gen4').moves.get('crunch');
 			assert.equal(Dex.mod('gen2').species.getLearnset('nidoking').bubblebeam.join(','), '1M');
@@ -69,5 +69,13 @@ describe('Dex#getItem', function () {
 
 		assert.false(Dex.forGen(8).items.get('Normal Gem').isNonstandard);
 		assert.equal(Dex.forGen(8).items.get('Rock Gem').isNonstandard, "Past");
+	});
+});
+
+describe('Dex#getMove', function () {
+	it(`should correctly handle G-Max moves`, function () {
+		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').name, "G-Max Befuddle");
+		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').gen, 8);
+		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').isNonstandard, "Gigantamax");
 	});
 });

@@ -1,4 +1,10 @@
 export const ItemsText: {[k: string]: ItemText} = {
+	abilityshield: {
+		name: "Ability Shield",
+		desc: "Holder's Ability cannot be changed by any effect.",
+
+		block: "  [POKEMON]'s Ability is protected by the effects of its Ability Shield!",
+	},
 	abomasite: {
 		name: "Abomasite",
 		desc: "If held by an Abomasnow, this item allows it to Mega Evolve in battle.",
@@ -10,6 +16,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	absorbbulb: {
 		name: "Absorb Bulb",
 		desc: "Raises holder's Sp. Atk by 1 stage if hit by a Water-type attack. Single use.",
+	},
+	adamantcrystal: {
+		name: "Adamant Crystal",
+		desc: "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2x power.",
 	},
 	adamantorb: {
 		name: "Adamant Orb",
@@ -79,6 +89,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	audinite: {
 		name: "Audinite",
 		desc: "If held by an Audino, this item allows it to Mega Evolve in battle.",
+	},
+	auspiciousarmor: {
+		name: "Auspicious Armor",
+		desc: "Evolves Charcadet into Armarouge when used.",
 	},
 	babiriberry: {
 		name: "Babiri Berry",
@@ -158,6 +172,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	blunderpolicy: {
 		name: "Blunder Policy",
 		desc: "If the holder misses due to accuracy, its Speed is raised by 2 stages. Single use.",
+	},
+	boosterenergy: {
+		name: "Booster Energy",
+		desc: "Activates the Protosynthesis or Quark Drive Abilities. Single use.",
 	},
 	bottlecap: {
 		name: "Bottle Cap",
@@ -260,6 +278,12 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Claw Fossil",
 		desc: "Can be revived into Anorith.",
 	},
+	clearamulet: {
+		name: "Clear Amulet",
+		desc: "Prevents other Pokemon from lowering the holder's stat stages.",
+
+		block: "  The effects of [POKEMON]'s Clear Amulet prevent its stats from being lowered!",
+	},
 	cloversweet: {
 		name: "Clover Sweet",
 		desc: "Evolves Milcery into Alcremie when held and spun around.",
@@ -279,6 +303,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	coverfossil: {
 		name: "Cover Fossil",
 		desc: "Can be revived into Tirtouga.",
+	},
+	covertcloak: {
+		name: "Covert Cloak",
+		desc: "Holder is not affected by the secondary effect of another Pokemon's attack.",
 	},
 	crackedpot: {
 		name: "Cracked Pot",
@@ -454,13 +482,6 @@ export const ItemsText: {[k: string]: ItemText} = {
 	electriumz: {
 		name: "Electrium Z",
 		desc: "If holder has an Electric move, this item allows it to use an Electric Z-Move.",
-	},
-	energypowder: {
-		name: "Energy Powder",
-		desc: "Restores 60 HP to one Pokemon.",
-		gen6: {
-			desc: "Restores 50 HP to one Pokemon but lowers Happiness.",
-		},
 	},
 	enigmaberry: {
 		name: "Enigma Berry",
@@ -696,6 +717,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	gripclaw: {
 		name: "Grip Claw",
 		desc: "Holder's partial-trapping moves always last 7 turns.",
+	},
+	griseouscore: {
+		name: "Griseous Core",
+		desc: "If held by a Giratina, its Ghost- and Dragon-type attacks have 1.2x power.",
 	},
 	griseousorb: {
 		name: "Griseous Orb",
@@ -941,6 +966,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 			desc: "Holder's use of Light Screen or Reflect lasts 8 turns instead of 5.",
 		},
 	},
+	loadeddice: {
+		name: "Loaded Dice",
+		desc: "Holder's moves that hit 2-5 times hit 4-5 times; Population Bomb hits 4-10 times.",
+	},
 	lopunnite: {
 		name: "Lopunnite",
 		desc: "If held by a Lopunny, this item allows it to Mega Evolve in battle.",
@@ -979,6 +1008,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	lureball: {
 		name: "Lure Ball",
 		desc: "A Poke Ball for catching Pokemon hooked by a Rod when fishing.",
+	},
+	lustrousglobe: {
+		name: "Lustrous Globe",
+		desc: "If held by a Palkia, its Water- and Dragon-type attacks have 1.2x power.",
 	},
 	lustrousorb: {
 		name: "Lustrous Orb",
@@ -1024,6 +1057,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	mail: {
 		name: "Mail",
 		desc: "Cannot be given to or taken from a Pokemon, except by Covet/Knock Off/Thief.",
+	},
+	maliciousarmor: {
+		name: "Malicious Armor",
+		desc: "Evolves Charcadet into Ceruledge when used.",
 	},
 	manectite: {
 		name: "Manectite",
@@ -1117,6 +1154,12 @@ export const ItemsText: {[k: string]: ItemText} = {
 		gen3: {
 			desc: "Holder's Grass-type attacks have 1.1x power.",
 		},
+	},
+	mirrorherb: {
+		name: "Mirror Herb",
+		desc: "When an opposing Pokemon raises a stat stage, the holder copies it. Single use.",
+
+		activate: "  [POKEMON] used its Mirror Herb to mirror its opponent's stat changes!",
 	},
 	mistyseed: {
 		name: "Misty Seed",
@@ -1352,6 +1395,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	psychiumz: {
 		name: "Psychium Z",
 		desc: "If holder has a Psychic move, this item allows it to use a Psychic Z-Move.",
+	},
+	punchingglove: {
+		name: "Punching Glove",
+		desc: "Holder's punch-based attacks have 1.1x power and do not make contact.",
 	},
 	qualotberry: {
 		name: "Qualot Berry",

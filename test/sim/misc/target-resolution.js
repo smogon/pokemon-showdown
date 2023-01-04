@@ -189,7 +189,7 @@ describe('Target Resolution', function () {
 
 		it(`should support RedirectTarget event for a fainted foe and type 'any'`, function () {
 			battle = common.createBattle({gameType: 'doubles'}, [[
-				{species: 'Aurorus', ability: 'snowwarning', moves: ['watergun']},
+				{species: 'Hippowdon', ability: 'sandstream', moves: ['waterpulse']},
 				{species: 'Shedinja', ability: 'wonderguard', moves: ['agility']},
 			], [
 				{species: 'Gastrodon', ability: 'stormdrain', moves: ['curse']},
@@ -198,13 +198,13 @@ describe('Target Resolution', function () {
 			const redirector = battle.p2.active[0];
 
 			battle.makeChoices('auto', 'auto'); // Shedinjas faint
-			battle.makeChoices('move watergun 2, pass', 'auto');
+			battle.makeChoices('move waterpulse 2, pass', 'auto');
 			assert.statStage(redirector, 'spa', 2);
 		});
 
 		it(`should support RedirectTarget event for a fainted ally and type 'any'`, function () {
 			battle = common.createBattle({gameType: 'doubles'}, [[
-				{species: 'Aurorus', ability: 'snowwarning', moves: ['watergun']},
+				{species: 'Hippowdon', ability: 'sandstream', moves: ['waterpulse']},
 				{species: 'Shedinja', ability: 'wonderguard', moves: ['agility']},
 			], [
 				{species: 'Gastrodon', ability: 'stormdrain', moves: ['curse']},
@@ -213,7 +213,7 @@ describe('Target Resolution', function () {
 			const redirector = battle.p2.active[0];
 
 			battle.makeChoices('auto', 'auto'); // Shedinjas faint
-			battle.makeChoices('move watergun -2, pass', 'auto');
+			battle.makeChoices('move waterpulse -2, pass', 'auto');
 			assert.statStage(redirector, 'spa', 2);
 		});
 	});

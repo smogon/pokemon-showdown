@@ -1,6 +1,6 @@
 import RandomGen3Teams from '../gen3/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
-import type {MoveCounter} from '../../random-teams';
+import type {MoveCounter} from '../gen8/random-teams';
 
 export class RandomGen2Teams extends RandomGen3Teams {
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {

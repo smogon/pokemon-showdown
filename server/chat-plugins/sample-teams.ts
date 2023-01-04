@@ -92,8 +92,7 @@ export const SampleTeams = new class SampleTeams {
 	}
 
 	unwhitelistRoom(formatid: string, roomid: string) {
-		// Don't sanitize with Dex.formats.get in case format was removed
-		formatid = toID(formatid);
+		formatid = this.sanitizeFormat(formatid, false);
 		const targetRoom = Rooms.search(roomid);
 		if (!targetRoom?.persist) throw new Chat.ErrorMessage(`Room ${roomid} not found. Check spelling?`);
 		if (!teamData.whitelist[formatid]?.length) throw new Chat.ErrorMessage(`No rooms are whitelisted for ${formatid}.`);
@@ -106,9 +105,9 @@ export const SampleTeams = new class SampleTeams {
 		save();
 	}
 
-	sanitizeFormat(formatid: string) {
+	sanitizeFormat(formatid: string, checkExists = false) {
 		const format = Dex.formats.get(formatid);
-		if (!format.exists) {
+		if (checkExists && !format.exists) {
 			throw new Chat.ErrorMessage(`Format "${formatid.trim()}" not found. Check spelling?`);
 		}
 		if (format.team) {
@@ -125,10 +124,14 @@ export const SampleTeams = new class SampleTeams {
 	}
 
 	addCategory(user: User, formatid: string, category: string) {
-		if (!this.checkPermissions(user, teamData.whitelist[formatid])) {
-			throw new Chat.ErrorMessage(`Access denied. You need to be staff in ${Chat.toListString(teamData.whitelist[formatid], "or")} to add teams for ${formatid}.`);
-		}
 		formatid = this.sanitizeFormat(formatid);
+		if (!this.checkPermissions(user, teamData.whitelist[formatid])) {
+			let rankNeeded = `a global administrator`;
+			if (teamData.whitelist[formatid]) {
+				rankNeeded = `staff in ${Chat.toListString(teamData.whitelist[formatid], "or")}`;
+			}
+			throw new Chat.ErrorMessage(`Access denied. You need to be ${rankNeeded} to add teams for ${formatid}`);
+		}
 		category = category.trim();
 		this.initializeFormat(formatid);
 		if (this.findCategory(formatid, category)) {
@@ -139,10 +142,14 @@ export const SampleTeams = new class SampleTeams {
 	}
 
 	removeCategory(user: User, formatid: string, category: string) {
+		formatid = this.sanitizeFormat(formatid, false);
 		if (!this.checkPermissions(user, teamData.whitelist[formatid])) {
-			throw new Chat.ErrorMessage(`Access denied. You need to be staff in ${Chat.toListString(teamData.whitelist[formatid], "or")} to add teams for ${formatid}.`);
+			let rankNeeded = `a global administrator`;
+			if (teamData.whitelist[formatid]) {
+				rankNeeded = `staff in ${Chat.toListString(teamData.whitelist[formatid], "or")}`;
+			}
+			throw new Chat.ErrorMessage(`Access denied. You need to be ${rankNeeded} to add teams for ${formatid}`);
 		}
-		formatid = this.sanitizeFormat(formatid);
 		const categoryName = this.findCategory(formatid, category);
 		if (!categoryName) {
 			throw new Chat.ErrorMessage(`There's no category named "${category.trim()}" for the format ${formatid}.`);
@@ -159,6 +166,7 @@ export const SampleTeams = new class SampleTeams {
 	 * @param category - Category the team will go in, defaults to uncategorized
 	 */
 	addTeam(user: User, formatid: string, teamName: string, team: string, category = "uncategorized") {
+		formatid = this.sanitizeFormat(formatid);
 		if (!this.checkPermissions(user, teamData.whitelist[formatid])) {
 			let rankNeeded = `a global administrator`;
 			if (teamData.whitelist[formatid]?.length) {
@@ -168,7 +176,6 @@ export const SampleTeams = new class SampleTeams {
 		}
 		teamName = teamName.trim();
 		category = category.trim();
-		formatid = this.sanitizeFormat(formatid);
 		this.initializeFormat(formatid);
 		if (this.findTeamName(formatid, category, teamName)) {
 			throw new Chat.ErrorMessage(`There is already a team for ${formatid} with the name ${teamName} in the ${category} category.`);
@@ -180,9 +187,8 @@ export const SampleTeams = new class SampleTeams {
 	}
 
 	removeTeam(user: User, formatid: string, teamid: string, category: string) {
-		formatid = formatid.trim();
+		formatid = this.sanitizeFormat(formatid, false);
 		category = category.trim();
-		// Don't sanitize formatid here in case a team was added for a temporary format that got removed
 		if (!this.checkPermissions(user, teamData.whitelist[formatid])) {
 			let required = `an administrator`;
 			if (teamData.whitelist[formatid]) {

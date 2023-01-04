@@ -11,7 +11,7 @@ describe(`Cursed Body`, function () {
 	});
 
 	it(`should be able to disable Z-moves (not the base of Z-moves)`, function () {
-		battle = common.createBattle({seed: [1, 2, 3, 98]}, [[ // hardcoded seed to force Cursed Body
+		battle = common.createBattle({seed: [1, 2, 3, 5]}, [[ // hardcoded seed to force Cursed Body
 			{species: 'gengar', ability: 'cursedbody', item: 'focussash', moves: ['sleeptalk']},
 		], [
 			{species: 'kommoo', item: 'kommoniumz', moves: ['clangingscales', 'sleeptalk']},

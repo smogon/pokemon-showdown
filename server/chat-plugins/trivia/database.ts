@@ -300,8 +300,8 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		}
 
 		await Chat.database.run(
-			`UPDATE trivia_questions SET is_submission = 1 WHERE question IN (${formatSQLArray(submissions)})`,
-			[submissions]
+			`UPDATE trivia_questions SET is_submission = 0 WHERE question IN (${formatSQLArray(submissions)})`,
+			submissions
 		);
 	}
 
@@ -663,7 +663,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		);
 
 		await Chat.database.exec("PRAGMA foreign_keys = ON;");
-		await Chat.database.loadExtension('server/chat-plugins/trivia/transactions.ts');
+		await Chat.database.loadExtension('server/chat-plugins/trivia/transactions.js');
 	}
 
 	private async convertLegacyJSON() {

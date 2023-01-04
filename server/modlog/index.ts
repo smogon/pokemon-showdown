@@ -8,7 +8,7 @@
  * @license MIT
  */
 
-import {SQL, Utils} from '../../lib';
+import {SQL, Utils, FS} from '../../lib';
 import {Config} from '../config-loader';
 
 // If a modlog query takes longer than this, it will be logged.
@@ -17,7 +17,7 @@ const LONG_QUERY_DURATION = 2000;
 const MODLOG_SCHEMA_PATH = 'databases/schemas/modlog.sql';
 const MODLOG_V2_MIGRATION_PATH = 'databases/migrations/modlog/v2.sql';
 
-export const MODLOG_DB_PATH = Config.nofswriting ? ':memory:' : `${__dirname}/../../databases/modlog.db`;
+export const MODLOG_DB_PATH = Config.nofswriting ? ':memory:' : FS(`databases/modlog.db`).path;
 
 const GLOBAL_PUNISHMENTS = [
 	'WEEKLOCK', 'LOCK', 'BAN', 'RANGEBAN', 'RANGELOCK', 'FORCERENAME',
@@ -41,7 +41,7 @@ interface SQLQuery {
 	args: (string | number)[];
 }
 interface ModlogResults {
-	results: ModlogEntry[];
+	results: (ModlogEntry & {entryID: number})[];
 	duration: number;
 }
 
@@ -107,7 +107,7 @@ export class Modlog {
 		}
 		this.database = SQL(module, {
 			file: databasePath,
-			extension: 'server/modlog/transactions.ts',
+			extension: 'server/modlog/transactions.js',
 			...options,
 		});
 
@@ -322,8 +322,9 @@ export class Modlog {
 		return {results, duration};
 	}
 
-	dbRowToModlogEntry(row: any): ModlogEntry {
+	dbRowToModlogEntry(row: any): ModlogEntry & {entryID: number} {
 		return {
+			entryID: row.modlog_id,
 			action: row.action,
 			roomID: row.roomid,
 			visualRoomID: row.visual_roomid,

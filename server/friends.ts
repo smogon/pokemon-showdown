@@ -12,7 +12,7 @@ import * as path from 'path';
 export const MAX_FRIENDS = 100;
 /** Max friend requests. */
 export const MAX_REQUESTS = 6;
-export const DEFAULT_FILE = `${__dirname}/../databases/friends.db`;
+export const DEFAULT_FILE = FS('databases/friends.db').path;
 const REQUEST_EXPIRY_TIME = 30 * 24 * 60 * 60 * 1000;
 const PM_TIMEOUT = 30 * 60 * 1000;
 
