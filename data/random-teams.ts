@@ -457,9 +457,7 @@ export class RandomTeams {
 		}
 
 		// These moves don't mesh well with other aspects of the set
-		if (species.id !== "spidops") {
-			this.incompatibleMoves(moves, movePool, statusMoves, ['healingwish', 'memento', 'switcheroo', 'trick']);
-		}
+		this.incompatibleMoves(moves, movePool, statusMoves, ['healingwish', 'switcheroo', 'trick']);
 		if (species.id !== "scyther" && species.id !== "scizor") {
 			this.incompatibleMoves(moves, movePool, Setup, pivotingMoves);
 		}
@@ -498,6 +496,9 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'thunderwave', 'yawn');
 
 		// This space reserved for assorted hardcodes that otherwise make little sense out of context
+		if (species.id === "dugtrio" || species.id === "wugtrio") {
+			this.incompatibleMoves(moves, movePool, statusMoves, 'memento');
+		}
 		// Landorus
 		this.incompatibleMoves(moves, movePool, 'nastyplot', 'rockslide');
 		// Persian and Grafaiai
@@ -1171,7 +1172,7 @@ export class RandomTeams {
 			);
 			return (scarfReqs && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Band';
 		}
-		if (counter.get('Physical') === 3 && moves.has('shedtail')) return 'Choice Scarf';
+		if (species.id === 'cyclizar' && role === 'Fast Attacker') return 'Choice Scarf';
 		if (
 			(counter.get('Special') >= 4) ||
 			(counter.get('Special') >= 3 && ['flipturn', 'partingshot', 'uturn'].some(m => moves.has(m)))
