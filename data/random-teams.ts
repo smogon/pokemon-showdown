@@ -497,7 +497,7 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'memento', 'destinybond');
 
 		// This space reserved for assorted hardcodes that otherwise make little sense out of context
-		if (species.id === "dugtrio" || species.id === "wugtrio") {
+		if (species.id === "dugtrio") {
 			this.incompatibleMoves(moves, movePool, statusMoves, 'memento');
 		}
 		// Landorus
