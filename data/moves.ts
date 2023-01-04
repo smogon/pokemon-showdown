@@ -18679,15 +18679,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onTry(source) {
 			return source.getItem().isBerry;
 		},
-		onTryHit(pokemon, target, move) {
-			if (!this.boost(move.boosts as SparseBoostsTable)) return null;
-			delete move.boosts;
-		},
 		onHit(pokemon) {
+			if (!this.boost({def: 2})) return null;
 			pokemon.eatItem(true);
-		},
-		boosts: {
-			def: 2,
 		},
 		secondary: null,
 		target: "self",
