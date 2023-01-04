@@ -60,6 +60,10 @@ export class TournamentPlayer extends Rooms.RoomGamePlayer<Tournament> {
 	isEliminated: boolean;
 	autoDisqualifyWarned: boolean;
 	lastActionTime: number;
+	/**
+	 * If the tournament is team-locked, the player's team is stored here when their first battle starts.
+	 */
+	lockedTeam: string | null;
 	wins: number;
 	losses: number;
 	games: number;
@@ -74,6 +78,7 @@ export class TournamentPlayer extends Rooms.RoomGamePlayer<Tournament> {
 		this.isEliminated = false;
 		this.autoDisqualifyWarned = false;
 		this.lastActionTime = 0;
+		this.lockedTeam = null;
 
 		this.wins = 0;
 		this.losses = 0;
@@ -95,6 +100,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	customRules: string[];
 	generator: Generator;
 	isRated: boolean;
+	teamLock: boolean;
 	allowScouting: boolean;
 	allowModjoin: boolean;
 	forceTimer: boolean;
@@ -136,6 +142,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		this.customRules = [];
 		this.generator = generator;
 		this.isRated = isRated;
+		this.teamLock = false;
 		this.allowScouting = true;
 		this.allowModjoin = false;
 		this.forceTimer = false;
@@ -905,6 +912,10 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		this.autostartcap = true;
 		this.room.add(`The tournament will start once ${this.playerCap} players have joined.`);
 	}
+	setTeamLock(teamLock: boolean) {
+		this.teamLock = teamLock;
+		this.room.add(`|tournament|teamlock|${teamLock ? 'on' : 'off'}`);
+	}
 	showSampleTeams() {
 		if (teamData.teams[this.baseFormat]) {
 			let buf = ``;
@@ -958,7 +969,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		this.isAvailableMatchesInvalidated = true;
 		this.update();
 
-		const ready = await Ladders(this.fullFormat).prepBattle(output.connection, 'tour');
+		const ready = await Ladders(this.fullFormat).prepBattle(output.connection, 'tour', from.lockedTeam);
 		if (!ready) {
 			from.isBusy = false;
 			to.isBusy = false;
@@ -1022,7 +1033,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		const challenge = player.pendingChallenge;
 		if (!challenge?.from) return;
 
-		const ready = await Ladders(this.fullFormat).prepBattle(output.connection, 'tour');
+		const ready = await Ladders(this.fullFormat).prepBattle(output.connection, 'tour', player.lockedTeam);
 		if (!ready) return;
 
 		// Prevent battles between offline users from starting
@@ -1032,6 +1043,12 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		// Prevent double accepts and users that have been disqualified while between these two functions
 		if (!challenge.from.pendingChallenge) return;
 		if (!player.pendingChallenge) return;
+
+		if (this.teamLock) {
+			if (!player.lockedTeam) player.lockedTeam = ready.settings.team;
+			const opponent = this.playerTable[from.id];
+			if (!opponent.lockedTeam) opponent.lockedTeam = challenge.team;
+		}
 
 		const room = Rooms.createBattle({
 			format: this.fullFormat,
@@ -1682,6 +1699,30 @@ const commands: Chat.ChatCommands = {
 			room.addRaw(`<b>The tournament's custom rules were cleared.</b>`);
 			this.privateModAction(`${user.name} cleared the tournament's custom rules.`);
 			this.modlog('TOUR CLEARRULES');
+		},
+		teamlock(target, room, user) {
+			room = this.requireRoom();
+			this.checkCan('tournaments', null, room);
+			const tournament = this.requireGame(Tournament);
+			if (tournament.isTournamentStarted) {
+				throw new Chat.ErrorMessage("Team locking cannot be changed once the tournament has started.");
+			}
+			if (this.meansYes(target)) {
+				if (tournament.teamLock) throw new Chat.ErrorMessage("This tournament is already team-locked.");
+				if (Dex.formats.get(tournament.baseFormat).team) {
+					throw new Chat.ErrorMessage("This tournament uses random teams, and can't be team-locked.");
+				}
+				tournament.setTeamLock(true);
+				this.privateModAction(`${user.name} made this tournament team-locked.`);
+				this.modlog('TOUR TEAMLOCK', null, 'on');
+			} else if (this.meansNo(target)) {
+				if (!tournament.teamLock) throw new Chat.ErrorMessage("Team lock is already off for this tournament.");
+				tournament.setTeamLock(false);
+				this.privateModAction(`${user.name} turned team lock off for this tournament.`);
+				this.modlog('TOUR TEAMLOCK', null, 'off');
+			} else {
+				this.sendReply("Usage: /tour teamlock <on|off>");
+			}
 		},
 		name: 'setname',
 		customname: 'setname',
