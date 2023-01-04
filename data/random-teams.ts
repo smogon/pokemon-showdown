@@ -494,6 +494,7 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'toxic', 'willowisp');
 		this.incompatibleMoves(moves, movePool, ['thunderwave', 'toxic', 'willowisp'], 'toxicspikes');
 		this.incompatibleMoves(moves, movePool, 'thunderwave', 'yawn');
+		this.incompatibleMoves(moves, movePool, 'memento', 'destinybond');
 
 		// This space reserved for assorted hardcodes that otherwise make little sense out of context
 		if (species.id === "dugtrio" || species.id === "wugtrio") {
