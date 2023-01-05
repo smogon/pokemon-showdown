@@ -572,7 +572,7 @@ type SearchMatch = readonly [string, string, string, string, string];
 
 export abstract class Searcher {
 	static checkEnabled() {
-		if (Config.disableripgrep) {
+		if (global.Config.disableripgrep) {
 			throw new Chat.ErrorMessage("Log searching functionality is currently disabled.");
 		}
 	}
