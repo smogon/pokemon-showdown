@@ -76,8 +76,8 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			return {cull: moves.has('hydropump')};
 		case 'thunder':
 			return {cull: moves.has('thunderbolt')};
-		case 'gigadrain':
-			return {cull: moves.has('razorleaf') || moves.has('swordsdance') && movePool.includes('sludgebomb')};
+		case 'razorleaf':
+			return {cull: moves.has('swordsdance') && movePool.includes('sludgebomb')};
 		case 'icebeam':
 			return {cull: moves.has('dragonbreath')};
 		case 'seismictoss':
