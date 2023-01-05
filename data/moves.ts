@@ -19437,12 +19437,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 			}
 			this.add('-fieldactivate', 'move: Teatime');
-			if (targets.length) {
-				for (const pokemon of targets) {
-					pokemon.eatItem(true);
-				}
-			} else {
-				this.add('-nothing');
+			if (!targets.length) {
+				this.add('-fail', source, 'move: Teatime');
+				this.attrLastMove('[still]');
+				return this.NOT_FAIL;
+			}
+			for (const pokemon of targets) {
+				pokemon.eatItem(true);
 			}
 		},
 		secondary: null,

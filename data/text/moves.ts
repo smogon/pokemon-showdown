@@ -6577,6 +6577,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "All active Pokemon consume held Berries.",
 
 		activate: "  It's teatime! Everyone dug in to their Berries!",
+		fail: "  But nothing happened!",
 	},
 	technoblast: {
 		name: "Techno Blast",
