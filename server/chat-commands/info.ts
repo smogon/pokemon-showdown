@@ -2107,7 +2107,7 @@ export const commands: Chat.ChatCommands = {
 		const ability = Dex.abilities.get(targets[0]);
 		const format = Dex.formats.get(targets[0]);
 		let atLeastOne = false;
-		let generation = (targets[1] || 'ss').trim().toLowerCase();
+		let generation = (targets[1] || 'sv').trim().toLowerCase();
 		let genNumber = 9;
 		const extraFormat = Dex.formats.get(targets[2]);
 
