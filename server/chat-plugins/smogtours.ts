@@ -161,9 +161,7 @@ export const commands: Chat.ChatCommands = {
 				return this.popupReply(`Tour with ID "${tourID}" not found.`);
 			}
 			section.tours.splice(idx, 1);
-			for (const page of connection.openPages || []) {
-				if (page.startsWith('tournaments-')) this.refreshPage(page);
-			}
+			this.refreshPage(`tournaments-view-${sectionID}-${tourID}`);
 			this.popupReply(`Tour "${title}" ended.`);
 		},
 		whitelist(target, room, user) {
