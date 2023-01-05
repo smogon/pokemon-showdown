@@ -437,7 +437,7 @@ export const pages: Chat.PageTable = {
 			buf += `Short description: <br />`;
 			buf += `<textarea name="shortDesc" rows="6" cols="50">${tour.shortDesc}</textarea><br />`;
 			const desc = Utils.escapeHTML(tour.desc).replace(/<br \/>/g, '&#10;');
-			buf += Utils.html`Full description: <br /><textarea name="desc" rows="20" cols="50">${desc}</textarea><br />`;
+			buf += `Full description: <br /><textarea name="desc" rows="20" cols="50">${desc}</textarea><br />`;
 			buf += `<button type="submit" class="button notifying">Update!</button>`;
 			return renderPageChooser('edit', buf, user);
 		},
