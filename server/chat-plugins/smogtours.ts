@@ -275,7 +275,7 @@ export function renderPageChooser(curPage: string, buffer: string, user?: User) 
 		}
 		return innerBuf;
 	}).join('<div class="foldersep"></div>');
-	if (user && (checkWhitelisted('', user) || user?.can('globalban'))) {
+	if (user && (checkWhitelisted('', user) || user?.can('rangeban'))) {
 		buf += `<div class="foldersep"></div>`;
 		buf += renderTab(
 			`<strong>Manage</strong>`, true, curPage === 'manage'
