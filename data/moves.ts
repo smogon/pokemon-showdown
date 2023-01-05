@@ -18677,12 +18677,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (!pokemon.getItem().isBerry) pokemon.disableMove('stuffcheeks');
 		},
 		onTry(source) {
-			const item = source.getItem();
-			if (item.isBerry && source.eatItem(true)) {
-				this.boost({def: 2}, source, null, null, false, true);
-			} else {
-				return false;
-			}
+			return source.getItem().isBerry;
+		},
+		onHit(pokemon) {
+			if (!this.boost({def: 2})) return null;
+			pokemon.eatItem(true);
 		},
 		secondary: null,
 		target: "self",
