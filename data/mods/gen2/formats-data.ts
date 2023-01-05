@@ -758,7 +758,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	dunsparce: {
-		randomBattleMoves: ["bodyslam", "curse", "flamethrower", "rest", "return", "shadowball", "sleeptalk", "thunder", "thunderbolt"],
+		randomBattleMoves: ["curse", "flamethrower", "rest", "return", "sleeptalk", "thunder", "thunderbolt"],
 		tier: "NU",
 	},
 	gligar: {
