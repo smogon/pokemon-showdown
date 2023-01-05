@@ -132,8 +132,8 @@ export const commands: Chat.ChatCommands = {
 				title: Utils.escapeHTML(title),
 				url,
 				image,
-				shortDesc: rawShort,
-				desc: rawDesc,
+				shortDesc: rawShort.replace(/&#13;&#10;/g, '\n'),
+				desc: rawDesc.replace(/&#13;&#10;/g, '\n'),
 				id: tourID || toID(title),
 				date: Date.now(),
 			};
@@ -436,7 +436,7 @@ export const pages: Chat.PageTable = {
 			buf += `Image link (optional): <input name="img" value="${tour.image?.[0] || ""}" /><br />`;
 			buf += `Short description: <br />`;
 			buf += `<textarea name="shortDesc" rows="6" cols="50">${tour.shortDesc}</textarea><br />`;
-			const desc = Utils.escapeHTML(tour.desc).replace(/<br \/>/g, '&#10;');
+			const desc = Utils.escapeHTML(tour.desc).replace(/<br \/>/g, '&#13;&#10;');
 			buf += Utils.html`Full description: <br /><textarea name="desc" rows="20" cols="50">${desc}</textarea><br />`;
 			buf += `<button type="submit" class="button notifying">Update!</button>`;
 			return renderPageChooser('edit', buf, user);
