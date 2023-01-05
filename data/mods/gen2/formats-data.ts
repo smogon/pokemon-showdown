@@ -166,7 +166,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	bellossom: {
-		randomBattleMoves: ["hiddenpowerfire", "leechseed", "moonlight", "razorleaf", "sleeppowder", "stunspore"],
+		randomBattleMoves: ["doubleedge", "gigadrain", "hiddenpowerfire", "leechseed", "moonlight", "sleeppowder", "stunspore"],
 		tier: "UU",
 	},
 	paras: {
