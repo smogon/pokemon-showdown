@@ -430,13 +430,14 @@ export const pages: Chat.PageTable = {
 			const tour = section.tours.find(t => t.id === tourID);
 			if (!tour) return error('edit', `Tour with ID "${tourID}" not found.`, user);
 			let buf = `${refresh(this.pageid)}<br /><center><h2>Edit tournament "${tour.title}"</h2></center><hr />`;
-			buf += `<form data-submitsend="/smogtours edit ${tour.id}|{title}|${section}|{url}|{img}|{shortDesc}|{desc}">`;
+			buf += `<form data-submitsend="/smogtours edit ${tour.id}|{title}|${sectionID}|{url}|{img}|{shortDesc}|{desc}">`;
 			buf += `Title: <input name="title" value="${tour.title}"/><br />`;
 			buf += `Info link: <input name="url" value="${tour.url}" /><br />`;
 			buf += `Image link (optional): <input name="img" value="${tour.image?.[0] || ""}" /><br />`;
 			buf += `Short description: <br />`;
 			buf += `<textarea name="shortDesc" rows="6" cols="50">${tour.shortDesc}</textarea><br />`;
-			buf += Utils.html`Full description: <br /><textarea name="desc" rows="20" cols="50">${tour.desc}</textarea><br />`;
+			const desc = Utils.escapeHTML(tour.desc).replace(/<br \/>/g, '&#10;');
+			buf += Utils.html`Full description: <br /><textarea name="desc" rows="20" cols="50">${desc}</textarea><br />`;
 			buf += `<button type="submit" class="button notifying">Update!</button>`;
 			return renderPageChooser('edit', buf, user);
 		},
