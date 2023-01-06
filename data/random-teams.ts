@@ -1050,6 +1050,7 @@ export class RandomTeams {
 		if (species.id === 'pikachu') return 'Light Ball';
 		if (species.id === 'regieleki') return 'Magnet';
 		if (species.id === 'pincurchin') return 'Shuca Berry';
+		if (species.id === 'cyclizar' && role === 'Fast Attacker') return 'Choice Scarf';
 		if (species.id === 'lokix' && role === 'Wallbreaker') return 'Life Orb';
 		if (species.id === 'toxtricity' && moves.has('shiftgear')) return 'Throat Spray';
 		if (ability === 'Imposter' || (species.id === 'magnezone' && moves.has('bodypress'))) return 'Choice Scarf';
@@ -1176,7 +1177,6 @@ export class RandomTeams {
 			);
 			return (scarfReqs && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Band';
 		}
-		if (species.id === 'cyclizar' && role === 'Fast Attacker') return 'Choice Scarf';
 		if (
 			(counter.get('Special') >= 4) ||
 			(counter.get('Special') >= 3 && ['flipturn', 'partingshot', 'uturn'].some(m => moves.has(m)))
