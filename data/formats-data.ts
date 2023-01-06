@@ -5805,7 +5805,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	*/
 	ironmoth: {
 		tier: "OU",
-		doublesTier: "DOU",
+		doublesTier: "DUU",
 		natDexTier: "UU",
 	},
 	ironhands: {
