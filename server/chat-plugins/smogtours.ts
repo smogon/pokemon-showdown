@@ -245,6 +245,11 @@ const refresh = (pageid: string) => (
 	`<i class="fa fa-refresh"></i> Refresh</button>`
 );
 
+const back = (section?: string) => (
+	`<a class="button" target="replace" href="/view-tournaments-${section ? `section-${section}` : 'all'}" style="float: left">` +
+	`<i class="fa fa-arrow-left"></i> Back</a>`
+);
+
 export function renderPageChooser(curPage: string, buffer: string, user?: User) {
 	let buf = `<div class="folderpane">`;
 	buf += `<div class="folderlist">`;
@@ -322,7 +327,12 @@ export const pages: Chat.PageTable = {
 			buf += `Be sure to sign up if you are eager to participate or `;
 			buf += `check it out if you want to spectate the most hyped games out there.</p><p>`;
 			buf += `For information on tournament rules and etiquette, check out <a href="https://www.smogon.com/forums/threads/3642760/">this information thread</a>.`;
-			buf += `</p>`;
+			buf += `</p><center>`;
+			buf += Object.keys(tours).map(catID => (
+				`<a class="button" target="replace" href="/view-tournaments-section-${catID}">` +
+				`<i class="fa fa-play"></i> ${tours[catID].title}</a>`
+			)).join(' ');
+			buf += `</center>`;
 			return renderPageChooser('', buf, user);
 		},
 		view(query, user) {
@@ -345,7 +355,7 @@ export const pages: Chat.PageTable = {
 				.replace(/&lt;/g, '<')
 				.replace(/&amp;/g, '&');
 			// stuff!
-			let buf = `${refresh(this.pageid)}<br />`;
+			let buf = `${back(categoryID)}${refresh(this.pageid)}<br />`;
 			buf += `<center><h2><a href="${tour.url}">${tour.title}</a></h2>`;
 			if (tour.image) {
 				buf += `<img src="${tour.image[0]}" width="${tour.image[1]}" height="${tour.image[2]}" />`;
@@ -371,7 +381,7 @@ export const pages: Chat.PageTable = {
 			if (!category) {
 				return error('', Utils.html`Invalid section specified: '${categoryID}'`, user);
 			}
-			let buf = `${refresh(this.pageid)}<br /><center><h2>${category.title}</h2>`;
+			let buf = `${back()}${refresh(this.pageid)}<br /><center><h2>${category.title}</h2>`;
 			if (category.icon) {
 				buf += `<img src="${category.icon[0]}" width="${category.icon[1]}" height="${category.icon[2]}" /><br />`;
 			}
