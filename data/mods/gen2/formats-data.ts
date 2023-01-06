@@ -6,7 +6,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	venusaur: {
-		randomBattleMoves: ["gigadrain", "growth", "hiddenpowerfire", "hiddenpowerice", "leechseed", "razorleaf", "sleeppowder", "synthesis"],
+		randomBattleMoves: ["growth", "hiddenpowerfire", "hiddenpowerice", "leechseed", "razorleaf", "sleeppowder", "synthesis"],
 		tier: "UUBL",
 	},
 	charmander: {
@@ -166,7 +166,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	bellossom: {
-		randomBattleMoves: ["gigadrain", "hiddenpowerfire", "leechseed", "moonlight", "sleeppowder", "stunspore"],
+		randomBattleMoves: ["doubleedge", "gigadrain", "hiddenpowerfire", "leechseed", "moonlight", "sleeppowder", "stunspore"],
 		tier: "UU",
 	},
 	paras: {
@@ -259,7 +259,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	victreebel: {
-		randomBattleMoves: ["gigadrain", "hiddenpowerground", "sleeppowder", "sludgebomb", "swordsdance", "synthesis"],
+		randomBattleMoves: ["hiddenpowerground", "razorleaf", "sleeppowder", "sludgebomb", "swordsdance", "synthesis"],
 		tier: "UU",
 	},
 	tentacool: {
@@ -674,7 +674,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	xatu: {
-		randomBattleMoves: ["drillpeck", "gigadrain", "haze", "psychic", "rest", "sleeptalk", "thief"],
+		randomBattleMoves: ["drillpeck", "haze", "hiddenpowergrass", "hiddenpowerwater", "psychic", "rest", "sleeptalk", "thief"],
 		tier: "NU",
 	},
 	mareep: {
@@ -716,7 +716,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	sunflora: {
-		randomBattleMoves: ["gigadrain", "growth", "hiddenpowerfire", "hiddenpowerwater", "synthesis"],
+		randomBattleMoves: ["growth", "hiddenpowerfire", "hiddenpowerwater", "razorleaf", "synthesis"],
 		tier: "NU",
 	},
 	yanma: {
@@ -754,11 +754,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	forretress: {
-		randomBattleMoves: ["explosion", "gigadrain", "hiddenpowerbug", "rapidspin", "reflect", "spikes", "toxic"],
+		randomBattleMoves: ["doubleedge", "explosion", "hiddenpowerbug", "rapidspin", "reflect", "spikes", "toxic"],
 		tier: "OU",
 	},
 	dunsparce: {
-		randomBattleMoves: ["bodyslam", "curse", "flamethrower", "rest", "return", "shadowball", "sleeptalk", "thunder", "thunderbolt"],
+		randomBattleMoves: ["curse", "flamethrower", "rest", "return", "sleeptalk", "thunder", "thunderbolt"],
 		tier: "NU",
 	},
 	gligar: {
@@ -777,7 +777,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	shuckle: {
-		randomBattleMoves: ["curse", "rest", "rollout", "toxic"],
+		randomBattleMoves: ["defensecurl", "rest", "rollout", "toxic"],
 		tier: "NU",
 	},
 	heracross: {
