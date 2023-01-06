@@ -324,6 +324,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			const update2 = {
 				challenges: usersToNames(this.availableMatchesCache.challenges.get(this.playerTable[targetUser.id])!),
 				challengeBys: usersToNames(this.availableMatchesCache.challengeBys.get(this.playerTable[targetUser.id])!),
+				teamLocked: !!this.playerTable[targetUser.id].lockedTeam,
 			};
 			connection.sendTo(this.room, `|tournament|update|${JSON.stringify(update2)}`);
 
@@ -1046,8 +1047,10 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 
 		if (this.teamLock) {
 			if (!player.lockedTeam) player.lockedTeam = ready.settings.team;
+			user.sendTo(this.room, '|tournament|update|{"teamLocked":true}');
 			const opponent = this.playerTable[from.id];
 			if (!opponent.lockedTeam) opponent.lockedTeam = challenge.team;
+			from.sendTo(this.room, '|tournament|update|{"teamLocked":true}');
 		}
 
 		const room = Rooms.createBattle({
