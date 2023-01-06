@@ -1311,7 +1311,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Earthquake", "Slack Off", "Stealth Rock", "Stone Edge", "Whirlwind", "Yawn"],
-                "teraTypes": ["Fairy", "Rock"]
+                "teraTypes": ["Fairy", "Rock", "Steel"]
             }
         ]
     },
@@ -1978,7 +1978,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Close Combat", "Dragon Dance", "Earthquake", "Outrage", "Poison Jab", "Swords Dance"],
+                "movepool": ["Close Combat", "Dragon Dance", "Earthquake", "Outrage", "Poison Jab"],
                 "teraTypes": ["Fighting", "Ground"]
             }
         ]
