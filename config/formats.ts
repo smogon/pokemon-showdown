@@ -705,7 +705,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'VoltTurn Mayhem Mod', 'Min Source Gen = 9'],
-		banlist: ['Flutter Mane', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Palafin', 'Fake Out', 'Revival Blessing'],
+		banlist: ['Chien-Pao', 'Chi-Yu', 'Flutter Mane', 'Houndstone', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Palafin', 'Fake Out', 'Revival Blessing'],
 	},
 	{
 		name: "[Gen 9] Partners in Crime",
@@ -899,7 +899,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'STABmons Move Legality', 'Sleep Moves Clause', 'Min Source Gen = 9'],
-		banlist: ['Chi-Yu', 'Dragapult', 'Flutter Mane', 'Iron Bundle', 'Komala', 'Koraidon', 'Miraidon', 'Arena Trap', 'Moody', 'Shadow Tag', 'Booster Energy', 'King\'s Rock', 'Baton Pass'],
+		banlist: ['Chien-Pao', 'Chi-Yu', 'Dragapult', 'Flutter Mane', 'Iron Bundle', 'Komala', 'Koraidon', 'Miraidon', 'Arena Trap', 'Moody', 'Shadow Tag', 'Booster Energy', 'King\'s Rock', 'Baton Pass'],
 		restricted: ['Acupressure', 'Astral Barrage', 'Belly Drum', 'Extreme Speed', 'Fillet Away', 'Last Respects', 'No Retreat', 'Revival Blessing', 'Shed Tail', 'Shell Smash', 'Shift Gear', 'V-create', 'Victory Dance', 'Wicked Blow'],
 	},
 	{
@@ -2373,6 +2373,14 @@ export const Formats: FormatList = [
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
 	},
 	{
+		name: "[Gen 8] Random Doubles Battle",
+
+		mod: 'gen8',
+		gameType: 'doubles',
+		team: 'random',
+		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+	{
 		name: "[Gen 8] Free-For-All Random Battle",
 
 		mod: 'gen8',
@@ -3229,6 +3237,7 @@ export const Formats: FormatList = [
 		name: "[Gen 8] Battle Stadium Singles",
 
 		mod: 'gen8',
+		searchShow: false,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer', 'Limit Two Restricted'],
 		restricted: ['Restricted Legendary'],
 	},
@@ -3249,14 +3258,6 @@ export const Formats: FormatList = [
 	{
 		section: "Sw/Sh Doubles",
 		column: 5,
-	},
-	{
-		name: "[Gen 8] Random Doubles Battle",
-
-		mod: 'gen8',
-		gameType: 'doubles',
-		team: 'random',
-		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
 		name: "[Gen 8] Doubles Ubers",
@@ -3292,16 +3293,9 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
-		// searchShow: false,
+		searchShow: false,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer', 'Limit Two Restricted'],
 		restricted: ['Restricted Legendary'],
-	},
-	{
-		name: "[Gen 8] Spikemuth Cup",
-
-		mod: 'gen8',
-		gameType: 'doubles',
-		ruleset: ['Flat Rules', 'Dynamax Clause', '!! Adjust Level = 50', 'Min Source Gen = 8', 'VGC Timer'],
 	},
 	{
 		name: "[Gen 8] VGC 2021",

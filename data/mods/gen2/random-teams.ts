@@ -66,8 +66,6 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			return {cull: moves.has('bodyslam') || restTalk};
 		case 'hyperbeam':
 			return {cull: moves.has('rockslide')};
-		case 'quickattack':
-			return {cull: moves.has('rest')};
 		case 'rapidspin':
 			return {cull: !!teamDetails.rapidSpin || moves.has('sleeptalk')};
 		case 'return':
@@ -76,8 +74,8 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			return {cull: moves.has('hydropump')};
 		case 'thunder':
 			return {cull: moves.has('thunderbolt')};
-		case 'gigadrain':
-			return {cull: moves.has('razorleaf') || moves.has('swordsdance') && movePool.includes('sludgebomb')};
+		case 'razorleaf':
+			return {cull: moves.has('swordsdance') && movePool.includes('sludgebomb')};
 		case 'icebeam':
 			return {cull: moves.has('dragonbreath')};
 		case 'seismictoss':
@@ -103,7 +101,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		case 'softboiled':
 			return {cull: movePool.includes('swordsdance')};
 		case 'spikes':
-			return {cull: !!teamDetails.spikes || types.has('Ice') && moves.has('rapidspin')};
+			return {cull: !!teamDetails.spikes};
 		case 'substitute':
 			return {cull: moves.has('agility') || moves.has('rest')};
 		case 'synthesis':
