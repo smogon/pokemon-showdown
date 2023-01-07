@@ -1184,7 +1184,7 @@ export class GlobalRoomState {
 	constructor() {
 		this.settingsList = [];
 		try {
-			this.settingsList = require('../config/chatrooms.json');
+			this.settingsList = require(FS('config/chatrooms.json').path);
 			if (!Array.isArray(this.settingsList)) this.settingsList = [];
 		} catch {} // file doesn't exist [yet]
 

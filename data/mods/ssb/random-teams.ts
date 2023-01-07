@@ -1,4 +1,4 @@
-import RandomTeams from '../../random-teams';
+import RandomGen8Teams from '../gen8/random-teams';
 
 export interface SSBSet {
 	species: string;
@@ -869,7 +869,7 @@ const afdSSBSets: SSBSets = {
 	},
 };
 
-export class RandomStaffBrosTeams extends RandomTeams {
+export class RandomStaffBrosTeams extends RandomGen8Teams {
 	randomStaffBrosTeam(options: {inBattle?: boolean} = {}) {
 		this.enforceNoDirectCustomBanlistChanges();
 

@@ -1400,7 +1400,7 @@ export const commands: Chat.ChatCommands = {
 			targeted = target.split(/[,-]/)[0]?.trim() || "";
 			if (!targeted || !(
 				Users.get(targeted) || Punishments.search(target).length || IPTools.ipRegex.test(targeted)
-			)) {
+			) || toID(targeted) === toID(target)) {
 				targeted = null;
 			}
 		}

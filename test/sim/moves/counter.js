@@ -324,4 +324,25 @@ describe('Counter', function () {
 		const pidgeot = battle.p1.active[0];
 		assert.equal(pidgeot.maxhp - pidgeot.hp, 300);
 	});
+
+	it(`[Gen 1] Moves with unique damage calculation don't overdamage a target with less HP`, function () {
+		battle = common.gen(1).createBattle([[
+			{species: 'Gengar', moves: ['seismictoss']},
+		], [
+			{species: 'Abra', moves: ['teleport'], level: 5},
+		]]);
+		battle.makeChoices();
+		assert(battle.lastDamage < 100);
+	});
+
+	it(`[Gen 1] Metronome calling Counter fails`, function () {
+		battle = common.gen(1).createBattle({seed: [1, 3, 1, 7]}, [[
+			{species: 'Persian', moves: ['Swift']},
+		], [
+			{species: 'Chansey', moves: ['Metronome']},
+		]]);
+		battle.makeChoices();
+		assert(battle.log.some(line => line.includes('Chansey|Counter')));
+		assert.fullHP(battle.p1.active[0]);
+	});
 });

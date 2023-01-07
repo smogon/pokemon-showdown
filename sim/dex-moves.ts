@@ -200,6 +200,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	secondary?: SecondaryEffect | null;
 	secondaries?: SecondaryEffect[] | null;
 	self?: SecondaryEffect | null;
+	hasSheerForce?: boolean;
 
 	// Hit effect modifiers
 	// --------------------
@@ -292,7 +293,8 @@ interface MoveHitData {
 }
 
 type MutableMove = BasicEffect & MoveData;
-export interface ActiveMove extends MutableMove {
+type RuinableMove = {[k in `ruined${'Atk' | 'Def' | 'SpA' | 'SpD'}`]?: Pokemon;};
+export interface ActiveMove extends MutableMove, RuinableMove {
 	readonly name: string;
 	readonly effectType: 'Move';
 	readonly id: ID;
@@ -302,12 +304,10 @@ export interface ActiveMove extends MutableMove {
 	hit: number;
 	moveHitData?: MoveHitData;
 	ability?: Ability;
-	aerilateBoosted?: boolean;
 	allies?: Pokemon[];
 	auraBooster?: Pokemon;
 	causedCrashDamage?: boolean;
 	forceStatus?: ID;
-	galvanizeBoosted?: boolean;
 	hasAuraBreak?: boolean;
 	hasBounced?: boolean;
 	hasSheerForce?: boolean;
@@ -316,18 +316,18 @@ export interface ActiveMove extends MutableMove {
 	lastHit?: boolean;
 	magnitude?: number;
 	negateSecondary?: boolean;
-	normalizeBoosted?: boolean;
-	pixilateBoosted?: boolean;
 	pranksterBoosted?: boolean;
-	refrigerateBoosted?: boolean;
 	selfDropped?: boolean;
 	selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
 	spreadHit?: boolean;
 	stab?: number;
 	statusRoll?: string;
 	totalDamage?: number | false;
+	typeChangerBoosted?: Effect;
 	willChangeForme?: boolean;
 	infiltrates?: boolean;
+	/** Should Order Up try its after-move boost effect?*/
+	orderUpBoost?: boolean;
 
 	/**
 	 * Has this move been boosted by a Z-crystal or used by a Dynamax Pokemon? Usually the same as
@@ -370,6 +370,11 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	 * secondary).
 	 */
 	readonly secondaries: SecondaryEffect[] | null;
+	/**
+	 * Moves manually boosted by Sheer Force that don't have secondary effects.
+	 * e.g. Jet Punch
+	 */
+	readonly hasSheerForce: boolean;
 	/**
 	 * Move priority. Higher priorities go before lower priorities,
 	 * trumping the Speed stat.
@@ -472,6 +477,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.baseMoveType = Utils.getString(data.baseMoveType) || this.type;
 		this.secondary = data.secondary || null;
 		this.secondaries = data.secondaries || (this.secondary && [this.secondary]) || null;
+		this.hasSheerForce = !!(data.hasSheerForce && !this.secondaries);
 		this.priority = Number(data.priority) || 0;
 		this.category = data.category!;
 		this.overrideOffensiveStat = data.overrideOffensiveStat || undefined;

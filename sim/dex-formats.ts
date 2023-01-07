@@ -377,7 +377,6 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly queue?: ModdedBattleQueue;
 	declare readonly field?: ModdedField;
 	declare readonly actions?: ModdedBattleActions;
-	declare readonly cannotMega?: string[];
 	declare readonly challengeShow?: boolean;
 	declare readonly searchShow?: boolean;
 	declare readonly threads?: string[];

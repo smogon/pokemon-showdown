@@ -34,75 +34,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		priority: 0,
 		accuracy: true,
-		ignoreEvasion: true,
 		condition: {
-			duration: 2,
-			durationCallback(target, source, effect) {
-				return this.random(3, 5);
-			},
 			onStart(pokemon) {
-				this.effectState.totalDamage = 0;
-				this.effectState.lastDamage = 0;
+				this.effectState.damage = 0;
+				this.effectState.time = this.random(2, 4);
 				this.add('-start', pokemon, 'Bide');
 			},
-			onHit(target, source, move) {
-				if (source && source !== target && move.category !== 'Physical' && move.category !== 'Special') {
-					const damage = this.effectState.totalDamage;
-					this.effectState.totalDamage += damage;
-					this.effectState.lastDamage = damage;
-					this.effectState.sourceSlot = source.getSlot();
-				}
-			},
-			onDamage(damage, target, source, move) {
-				if (!source || source.isAlly(target)) return;
-				if (!move || move.effectType !== 'Move') return;
-				if (!damage && this.effectState.lastDamage > 0) {
-					damage = this.effectState.totalDamage;
-				}
-				this.effectState.totalDamage += damage;
-				this.effectState.lastDamage = damage;
-				this.effectState.sourceSlot = source.getSlot();
-			},
-			onAfterSetStatus(status, pokemon) {
-				// Sleep, freeze, and partial trap will just pause duration.
-				if (pokemon.volatiles['flinch']) {
-					this.effectState.duration++;
-				} else if (pokemon.volatiles['partiallytrapped']) {
-					this.effectState.duration++;
-				} else {
-					switch (status.id) {
-					case 'slp':
-					case 'frz':
-						this.effectState.duration++;
-						break;
-					}
-				}
-			},
 			onBeforeMove(pokemon, t, move) {
-				if (this.effectState.duration === 1) {
-					this.add('-end', pokemon, 'Bide');
-					if (!this.effectState.totalDamage) {
-						this.debug("Bide failed because no damage was taken");
+				const currentMove = this.dex.getActiveMove('bide');
+				if (pokemon.volatiles['disable']?.move === 'bide') {
+					this.add('cant', pokemon, 'Disable', currentMove);
+					return false;
+				}
+				this.effectState.damage += this.lastDamage;
+				this.effectState.time--;
+				if (!this.effectState.time) {
+					this.add('-end', pokemon, currentMove);
+					if (!this.effectState.damage) {
+						this.debug("Bide failed because no damage was stored");
 						this.add('-fail', pokemon);
+						pokemon.removeVolatile('bide');
 						return false;
 					}
-					const target = this.getAtSlot(this.effectState.sourceSlot);
-					this.actions.moveHit(target, pokemon, move, {damage: this.effectState.totalDamage * 2} as ActiveMove);
+					const target = this.getRandomTarget(pokemon, 'Pound');
+					this.actions.moveHit(target, pokemon, currentMove, {damage: this.effectState.damage * 2} as ActiveMove);
 					pokemon.removeVolatile('bide');
 					return false;
 				}
 				this.add('-activate', pokemon, 'Bide');
 				return false;
-			},
-			onDisableMove(pokemon) {
-				if (!pokemon.hasMove('bide')) {
-					return;
-				}
-				for (const moveSlot of pokemon.moveSlots) {
-					if (moveSlot.id !== 'bide') {
-						pokemon.disableMove(moveSlot.id);
-					}
-				}
 			},
 		},
 		type: "???", // Will look as Normal but it's STAB-less
@@ -249,22 +209,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	dig: {
 		inherit: true,
 		basePower: 100,
-		condition: {
-			duration: 2,
-			onLockMove: 'dig',
-			onInvulnerability(target, source, move) {
-				if (move.id === 'swift' || move.id === 'transform') return true;
-				this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
-				return false;
-			},
-			onDamage(damage, target, source, move) {
-				if (!move || move.effectType !== 'Move') return;
-				if (!source) return;
-				if (move.id === 'earthquake') {
-					this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
-					return null;
-				}
-			},
+		condition: {},
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile('twoturnmove')) {
+				attacker.removeVolatile('invulnerability');
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			attacker.addVolatile('twoturnmove', defender);
+			attacker.addVolatile('invulnerability', defender);
+			return null;
 		},
 	},
 	disable: {
@@ -304,6 +258,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				if (move.id === this.effectState.move) {
 					this.add('cant', pokemon, 'Disable', move);
+					pokemon.removeVolatile('twoturnmove');
 					return false;
 				}
 			},
@@ -368,22 +323,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	fly: {
 		inherit: true,
-		condition: {
-			duration: 2,
-			onLockMove: 'fly',
-			onInvulnerability(target, source, move) {
-				if (move.id === 'swift' || move.id === 'transform') return true;
-				this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
-				return false;
-			},
-			onDamage(damage, target, source, move) {
-				if (!move || move.effectType !== 'Move') return;
-				if (!source || source.isAlly(target)) return;
-				if (move.id === 'gust' || move.id === 'thunder') {
-					this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
-					return null;
-				}
-			},
+		condition: {},
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile('twoturnmove')) {
+				attacker.removeVolatile('invulnerability');
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			attacker.addVolatile('twoturnmove', defender);
+			attacker.addVolatile('invulnerability', defender);
+			return null;
 		},
 	},
 	focusenergy: {
@@ -651,6 +600,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		critRatio: 1,
 		target: "normal",
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile('twoturnmove')) {
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
 	},
 	recover: {
 		inherit: true,
@@ -738,13 +695,21 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	skullbash: {
 		inherit: true,
 		onTryMove(attacker, defender, move) {
-			if (attacker.removeVolatile(move.id)) {
+			if (attacker.removeVolatile('twoturnmove')) {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+	},
+	skyattack: {
+		inherit: true,
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile('twoturnmove')) {
 				return;
 			}
+			this.add('-prepare', attacker, move.name);
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
@@ -760,9 +725,21 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			status: 'psn',
 		},
 	},
+	solarbeam: {
+		inherit: true,
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile('twoturnmove')) {
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+	},
 	sonicboom: {
 		inherit: true,
 		ignoreImmunity: true,
+		basePower: 1,
 	},
 	softboiled: {
 		inherit: true,
@@ -834,11 +811,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// NOTE: In future generations the damage is capped to the remaining HP of the
 				// Substitute, here we deliberately use the uncapped damage when tracking lastDamage etc.
 				// Also, multi-hit moves must always deal the same damage as the first hit for any subsequent hits
-				let uncappedDamage = move.hit > 1 ? source.lastDamage : this.actions.getDamage(source, target, move);
+				let uncappedDamage = move.hit > 1 ? this.lastDamage : this.actions.getDamage(source, target, move);
+				if (move.id === 'bide') uncappedDamage = source.volatiles['bide'].damage * 2;
 				if (!uncappedDamage && uncappedDamage !== 0) return null;
 				uncappedDamage = this.runEvent('SubDamage', target, source, move, uncappedDamage);
 				if (!uncappedDamage && uncappedDamage !== 0) return uncappedDamage;
-				source.lastDamage = uncappedDamage;
 				this.lastDamage = uncappedDamage;
 				target.volatiles['substitute'].hp -= uncappedDamage > target.volatiles['substitute'].hp ?
 					target.volatiles['substitute'].hp : uncappedDamage;

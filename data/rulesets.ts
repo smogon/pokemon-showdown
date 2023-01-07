@@ -1,7 +1,8 @@
-﻿// Note: These are the rules that formats use
+// Note: These are the rules that formats use
 
 import {Utils} from "../lib";
 import {Pokemon} from "../sim/pokemon";
+import {Teams} from "../sim/teams";
 
 // The list of formats is stored in config/formats.js
 export const Rulesets: {[k: string]: FormatData} = {
@@ -89,27 +90,44 @@ export const Rulesets: {[k: string]: FormatData} = {
 		ruleset: [
 			'Obtainable', '+Unobtainable', '+Past', 'Sketch Post-Gen 7 Moves', 'Team Preview', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
 		],
+		unbanlist: ['Adamant Crystal', 'Griseous Core', 'Lustrous Globe', 'Bleakwind Storm', 'Lunar Blessing', 'Mystical Power', 'Sandsear Storm', 'Wildbolt Storm'],
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
 			if (species.natDexTier === 'Illegal') {
 				if (this.ruleTable.has(`+pokemon:${species.id}`)) return;
 				return [`${set.name || set.species} does not exist in the National Dex.`];
 			}
-			if (species.natDexTier === "Unreleased") {
-				const basePokemon = this.toID(species.baseSpecies);
-				if (this.ruleTable.has(`+pokemon:${species.id}`) || this.ruleTable.has(`+basepokemon:${basePokemon}`)) {
-					return;
+			const requireObtainable = this.ruleTable.has('obtainable');
+			if (requireObtainable) {
+				if (species.natDexTier === "Unreleased") {
+					const basePokemon = this.toID(species.baseSpecies);
+					if (this.ruleTable.has(`+pokemon:${species.id}`) || this.ruleTable.has(`+basepokemon:${basePokemon}`)) {
+						return;
+					}
+					return [`${set.name || set.species} does not exist in the National Dex.`];
 				}
-				return [`${set.name || set.species} does not exist in the National Dex.`];
+				for (const moveid of set.moves) {
+					const move = this.dex.moves.get(moveid);
+					if (move.isNonstandard === 'Unobtainable' && move.gen === this.dex.gen || move.id === 'lightofruin') {
+						if (this.ruleTable.has(`+move:${move.id}`)) continue;
+						const problem = `${set.name}'s move ${move.name} does not exist in the National Dex.`;
+						if (this.ruleTable.has('omunobtainablemoves')) {
+							const outOfBattleSpecies = this.getValidationSpecies(set)[0];
+							if (!this.omCheckCanLearn(move, outOfBattleSpecies, this.allSources(outOfBattleSpecies), set, problem)) continue;
+						}
+						return [problem];
+					}
+				}
 			}
-			// Items other than Z-Crystals and Pokémon-specific items should be illegal
+			// Any item that was legal in Gen 7 (Normal Gem for example) should be usable
 			if (!set.item) return;
-			const item = this.dex.items.get(set.item);
-			if (!item.isNonstandard) return;
-			if (
-				['Past', 'Unobtainable'].includes(item.isNonstandard) &&
-				!item.zMove && !item.itemUser && !item.forcedForme && !item.isBerry
-			) {
+			let item = this.dex.items.get(set.item);
+			let gen = this.dex.gen;
+			while (item.isNonstandard && gen >= 7) {
+				item = this.dex.forGen(gen).items.get(item.id);
+				gen--;
+			}
+			if (requireObtainable && item.isNonstandard) {
 				if (this.ruleTable.has(`+item:${item.id}`)) return;
 				return [`${set.name}'s item ${item.name} does not exist in Gen ${this.dex.gen}.`];
 			}
@@ -120,7 +138,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Draft',
 		desc: "The custom Draft League ruleset",
 		ruleset: [
-			'Obtainable', '+Unreleased', '+CAP', 'Team Preview', 'Sleep Clause Mod', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
+			'Obtainable', '+Unreleased', '+CAP', 'Sketch Post-Gen 7 Moves', 'Team Preview', 'Sleep Clause Mod', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
 		],
 		// timer: {starting: 60 * 60, grace: 0, addPerTurn: 10, maxPerTurn: 100, timeoutAutoChoose: true},
 	},
@@ -398,7 +416,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		banlist: ['Meowth-Galar', 'Tauros-Base', 'Wooper-Base'],
 		onValidateSet(set, format) {
 			const paldeaDex = [
-				"Sprigatito", "Floragato", "Meowscarada", "Fuecoco", "Crocalor", "Skeledirge", "Quaxly", "Quaxwell", "Quaquaval", "Lechonk", "Oinkologne", "Tarountula", "Spidops", "Nymble", "Lokix", "Hoppip", "Skiploom", "Jumpluff", "Fletchling", "Fletchinder", "Talonflame", "Pawmi", "Pawmo", "Pawmot", "Houndour", "Houndoom", "Yungoos", "Gumshoos", "Skwovet", "Greedent", "Sunkern", "Sunflora", "Kricketot", "Kricketune", "Scatterbug", "Spewpa", "Vivillon", "Combee", "Vespiquen", "Rookidee", "Corvisquire", "Corviknight", "Happiny", "Chansey", "Blissey", "Azurill", "Marill", "Azumarill", "Surskit", "Masquerain", "Buizel", "Floatzel", "Wooper", "Clodsire", "Psyduck", "Golduck", "Chewtle", "Drednaw", "Igglybuff", "Jigglypuff", "Wigglytuff", "Ralts", "Kirlia", "Gardevoir", "Gallade", "Drowzee", "Hypno", "Gastly", "Haunter", "Gengar", "Tandemaus", "Maushold", "Pichu", "Pikachu", "Raichu", "Fidough", "Dachsbun", "Slakoth", "Vigoroth", "Slaking", "Bounsweet", "Steenee", "Tsareena", "Smoliv", "Dolliv", "Arboliva", "Bonsly", "Sudowoodo", "Rockruff", "Lycanroc", "Rolycoly", "Carkol", "Coalossal", "Shinx", "Luxio", "Luxray", "Starly", "Staravia", "Staraptor", "Oricorio", "Mareep", "Flaaffy", "Ampharos", "Petilil", "Lilligant", "Shroomish", "Breloom", "Applin", "Flapple", "Appletun", "Spoink", "Grumpig", "Squawkabilly", "Misdreavus", "Mismagius", "Makuhita", "Hariyama", "Crabrawler", "Crabominable", "Salandit", "Salazzle", "Phanpy", "Donphan", "Cufant", "Copperajah", "Gible", "Gabite", "Garchomp", "Nacli", "Naclstack", "Garganacl", "Wingull", "Pelipper", "Magikarp", "Gyarados", "Arrokuda", "Barraskewda", "Basculin", "Gulpin", "Swalot", "Meowth", "Persian", "Drifloon", "Drifblim", "Flabebe", "Floette", "Florges", "Diglett", "Dugtrio", "Torkoal", "Numel", "Camerupt", "Bronzor", "Bronzong", "Axew", "Fraxure", "Haxorus", "Mankey", "Primeape", "Annihilape", "Meditite", "Medicham", "Riolu", "Lucario", "Charcadet", "Armarouge", "Ceruledge", "Barboach", "Whiscash", "Tadbulb", "Bellibolt", "Goomy", "Sliggoo", "Goodra", "Croagunk", "Toxicroak", "Wattrel", "Kilowattrel", "Eevee", "Vaporeon", "Jolteon", "Flareon", "Espeon", "Umbreon", "Leafeon", "Glaceon", "Sylveon", "Dunsparce", "Dudunsparce", "Deerling", "Sawsbuck", "Girafarig", "Farigiraf", "Grimer", "Muk", "Maschiff", "Mabosstiff", "Toxel", "Toxtricity", "Dedenne", "Pachirisu", "Shroodle", "Grafaiai", "Stantler", "Foongus", "Amoonguss", "Voltorb", "Electrode", "Magnemite", "Magneton", "Magnezone", "Ditto", "Growlithe", "Arcanine", "Teddiursa", "Ursaring", "Zangoose", "Seviper", "Swablu", "Altaria", "Skiddo", "Gogoat", "Tauros", "Litleo", "Pyroar", "Stunky", "Skuntank", "Zorua", "Zoroark", "Sneasel", "Weavile", "Murkrow", "Honchkrow", "Gothita", "Gothorita", "Gothitelle", "Sinistea", "Polteageist", "Mimikyu", "Klefki", "Indeedee", "Bramblin", "Brambleghast", "Toedscool", "Toedscruel", "Tropius", "Fomantis", "Lurantis", "Klawf", "Capsakid", "Scovillain", "Cacnea", "Cacturne", "Rellor", "Rabsca", "Venonat", "Venomoth", "Pineco", "Forretress", "Scyther", "Scizor", "Heracross", "Flittle", "Espathra", "Hippopotas", "Hippowdon", "Sandile", "Krokorok", "Krookodile", "Silicobra", "Sandaconda", "Mudbray", "Mudsdale", "Larvesta", "Volcarona", "Bagon", "Shelgon", "Salamence", "Tinkatink", "Tinkatuff", "Tinkaton", "Hatenna", "Hattrem", "Hatterene", "Impidimp", "Morgrem", "Grimmsnarl", "Wiglett", "Wugtrio", "Bombirdier", "Finizen", "Palafin", "Varoom", "Revavroom", "Cyclizar", "Orthworm", "Sableye", "Shuppet", "Banette", "Falinks", "Hawlucha", "Spiritomb", "Noibat", "Noivern", "Dreepy", "Drakloak", "Dragapult", "Glimmet", "Glimmora", "Rotom", "Greavard", "Houndstone", "Oranguru", "Passimian", "Komala", "Larvitar", "Pupitar", "Tyranitar", "Stonjourner", "Eiscue", "Pincurchin", "Sandygast", "Palossand", "Slowpoke", "Slowbro", "Slowking", "Shellos", "Gastrodon", "Shellder", "Cloyster", "Qwilfish", "Luvdisc", "Finneon", "Lumineon", "Bruxish", "Alomomola", "Skrelp", "Dragalge", "Clauncher", "Clawitzer", "Tynamo", "Eelektrik", "Eelektross", "Mareanie", "Toxapex", "Flamigo", "Dratini", "Dragonair", "Dragonite", "Snom", "Frosmoth", "Snover", "Abomasnow", "Delibird", "Cubchoo", "Beartic", "Snorunt", "Glalie", "Froslass", "Cryogonal", "Cetoddle", "Cetitan", "Bergmite", "Avalugg", "Rufflet", "Braviary", "Pawniard", "Bisharp", "Kingambit", "Deino", "Zweilous", "Hydreigon", "Veluza", "Dondozo", "Tatsugiri", "Great Tusk", "Scream Tail", "Brute Bonnet", "Flutter Mane", "Slither Wing", "Sandy Shocks", "Iron Treads", "Iron Bundle", "Iron Hands", "Iron Jugulis", "Iron Moth", "Iron Thorns", "Frigibax", "Arctibax", "Baxcalibur", "Gimmighoul", "Gholdengo", "Wo-Chien", "Chien-Pao", "Ting-Lu", "Chi-Yu", "Roaring Moon", "Iron Valiant", "Koraidon", "Miraidon",
+				"Sprigatito", "Floragato", "Meowscarada", "Fuecoco", "Crocalor", "Skeledirge", "Quaxly", "Quaxwell", "Quaquaval", "Lechonk", "Oinkologne", "Tarountula", "Spidops", "Nymble", "Lokix", "Hoppip", "Skiploom", "Jumpluff", "Fletchling", "Fletchinder", "Talonflame", "Pawmi", "Pawmo", "Pawmot", "Houndour", "Houndoom", "Yungoos", "Gumshoos", "Skwovet", "Greedent", "Sunkern", "Sunflora", "Kricketot", "Kricketune", "Scatterbug", "Spewpa", "Vivillon", "Combee", "Vespiquen", "Rookidee", "Corvisquire", "Corviknight", "Happiny", "Chansey", "Blissey", "Azurill", "Marill", "Azumarill", "Surskit", "Masquerain", "Buizel", "Floatzel", "Wooper", "Clodsire", "Psyduck", "Golduck", "Chewtle", "Drednaw", "Igglybuff", "Jigglypuff", "Wigglytuff", "Ralts", "Kirlia", "Gardevoir", "Gallade", "Drowzee", "Hypno", "Gastly", "Haunter", "Gengar", "Tandemaus", "Maushold", "Pichu", "Pikachu", "Raichu", "Fidough", "Dachsbun", "Slakoth", "Vigoroth", "Slaking", "Bounsweet", "Steenee", "Tsareena", "Smoliv", "Dolliv", "Arboliva", "Bonsly", "Sudowoodo", "Rockruff", "Lycanroc", "Rolycoly", "Carkol", "Coalossal", "Shinx", "Luxio", "Luxray", "Starly", "Staravia", "Staraptor", "Oricorio", "Mareep", "Flaaffy", "Ampharos", "Petilil", "Lilligant", "Shroomish", "Breloom", "Applin", "Flapple", "Appletun", "Spoink", "Grumpig", "Squawkabilly", "Misdreavus", "Mismagius", "Makuhita", "Hariyama", "Crabrawler", "Crabominable", "Salandit", "Salazzle", "Phanpy", "Donphan", "Cufant", "Copperajah", "Gible", "Gabite", "Garchomp", "Nacli", "Naclstack", "Garganacl", "Wingull", "Pelipper", "Magikarp", "Gyarados", "Arrokuda", "Barraskewda", "Basculin", "Gulpin", "Swalot", "Meowth", "Persian", "Drifloon", "Drifblim", "Flabe\u0301be\u0301", "Floette", "Florges", "Diglett", "Dugtrio", "Torkoal", "Numel", "Camerupt", "Bronzor", "Bronzong", "Axew", "Fraxure", "Haxorus", "Mankey", "Primeape", "Annihilape", "Meditite", "Medicham", "Riolu", "Lucario", "Charcadet", "Armarouge", "Ceruledge", "Barboach", "Whiscash", "Tadbulb", "Bellibolt", "Goomy", "Sliggoo", "Goodra", "Croagunk", "Toxicroak", "Wattrel", "Kilowattrel", "Eevee", "Vaporeon", "Jolteon", "Flareon", "Espeon", "Umbreon", "Leafeon", "Glaceon", "Sylveon", "Dunsparce", "Dudunsparce", "Deerling", "Sawsbuck", "Girafarig", "Farigiraf", "Grimer", "Muk", "Maschiff", "Mabosstiff", "Toxel", "Toxtricity", "Dedenne", "Pachirisu", "Shroodle", "Grafaiai", "Stantler", "Foongus", "Amoonguss", "Voltorb", "Electrode", "Magnemite", "Magneton", "Magnezone", "Ditto", "Growlithe", "Arcanine", "Teddiursa", "Ursaring", "Zangoose", "Seviper", "Swablu", "Altaria", "Skiddo", "Gogoat", "Tauros", "Litleo", "Pyroar", "Stunky", "Skuntank", "Zorua", "Zoroark", "Sneasel", "Weavile", "Murkrow", "Honchkrow", "Gothita", "Gothorita", "Gothitelle", "Sinistea", "Polteageist", "Mimikyu", "Klefki", "Indeedee", "Bramblin", "Brambleghast", "Toedscool", "Toedscruel", "Tropius", "Fomantis", "Lurantis", "Klawf", "Capsakid", "Scovillain", "Cacnea", "Cacturne", "Rellor", "Rabsca", "Venonat", "Venomoth", "Pineco", "Forretress", "Scyther", "Scizor", "Heracross", "Flittle", "Espathra", "Hippopotas", "Hippowdon", "Sandile", "Krokorok", "Krookodile", "Silicobra", "Sandaconda", "Mudbray", "Mudsdale", "Larvesta", "Volcarona", "Bagon", "Shelgon", "Salamence", "Tinkatink", "Tinkatuff", "Tinkaton", "Hatenna", "Hattrem", "Hatterene", "Impidimp", "Morgrem", "Grimmsnarl", "Wiglett", "Wugtrio", "Bombirdier", "Finizen", "Palafin", "Varoom", "Revavroom", "Cyclizar", "Orthworm", "Sableye", "Shuppet", "Banette", "Falinks", "Hawlucha", "Spiritomb", "Noibat", "Noivern", "Dreepy", "Drakloak", "Dragapult", "Glimmet", "Glimmora", "Rotom", "Greavard", "Houndstone", "Oranguru", "Passimian", "Komala", "Larvitar", "Pupitar", "Tyranitar", "Stonjourner", "Eiscue", "Pincurchin", "Sandygast", "Palossand", "Slowpoke", "Slowbro", "Slowking", "Shellos", "Gastrodon", "Shellder", "Cloyster", "Qwilfish", "Luvdisc", "Finneon", "Lumineon", "Bruxish", "Alomomola", "Skrelp", "Dragalge", "Clauncher", "Clawitzer", "Tynamo", "Eelektrik", "Eelektross", "Mareanie", "Toxapex", "Flamigo", "Dratini", "Dragonair", "Dragonite", "Snom", "Frosmoth", "Snover", "Abomasnow", "Delibird", "Cubchoo", "Beartic", "Snorunt", "Glalie", "Froslass", "Cryogonal", "Cetoddle", "Cetitan", "Bergmite", "Avalugg", "Rufflet", "Braviary", "Pawniard", "Bisharp", "Kingambit", "Deino", "Zweilous", "Hydreigon", "Veluza", "Dondozo", "Tatsugiri", "Great Tusk", "Scream Tail", "Brute Bonnet", "Flutter Mane", "Slither Wing", "Sandy Shocks", "Iron Treads", "Iron Bundle", "Iron Hands", "Iron Jugulis", "Iron Moth", "Iron Thorns", "Frigibax", "Arctibax", "Baxcalibur", "Gimmighoul", "Gholdengo", "Wo-Chien", "Chien-Pao", "Ting-Lu", "Chi-Yu", "Roaring Moon", "Iron Valiant", "Koraidon", "Miraidon",
 			];
 			const species = this.dex.species.get(set.species || set.name);
 			if (!paldeaDex.includes(species.baseSpecies) && !paldeaDex.includes(species.name) &&
@@ -503,7 +521,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
 				const details = pokemon.details.replace(', shiny', '')
-					.replace(/(Arceus|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu)(-[a-zA-Z?-]+)?/g, '$1-*')
+					.replace(/(Arceus|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu|Dudunsparce)(-[a-zA-Z?-]+)?/g, '$1-*')
 					.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*'); // Hacked-in Crowned formes will be revealed
 				this.add('poke', pokemon.side.id, details, '');
 			}
@@ -662,6 +680,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const abilityTable = new Map<string, number>();
 			const base: {[k: string]: string} = {
 				airlock: 'cloudnine',
+				armortail: 'queenlymajesty',
 				battlearmor: 'shellarmor',
 				clearbody: 'whitesmoke',
 				dazzling: 'queenlymajesty',
@@ -764,14 +783,14 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "Bans all moves that induce sleep, such as Hypnosis",
 		banlist: ['Yawn'],
 		onBegin() {
-			this.add('rule', 'Sleep Clause: Sleep-inducing moves are banned');
+			this.add('rule', 'Sleep Moves Clause: Sleep-inducing moves are banned');
 		},
 		onValidateSet(set) {
 			const problems = [];
 			if (set.moves) {
 				for (const id of set.moves) {
 					const move = this.dex.moves.get(id);
-					if (move.status && move.status === 'slp') problems.push(move.name + ' is banned by Sleep Clause.');
+					if (move.status && move.status === 'slp') problems.push(move.name + ' is banned by Sleep Moves Clause.');
 				}
 			}
 			return problems;
@@ -949,6 +968,41 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
+	batonpassstatclause: {
+		effectType: 'ValidatorRule',
+		name: 'Baton Pass Stat Clause',
+		desc: "Stops teams from having a Pok&eacute;mon with Baton Pass that has any way to boost its stats",
+		onBegin() {
+			this.add('rule', 'Baton Pass Stat Clause: No Baton Passer may have a way to boost its stats');
+		},
+		onValidateTeam(team) {
+			const boostingEffects = [
+				'absorbbulb', 'acidarmor', 'acupressure', 'agility', 'amnesia', 'ancientpower', 'angerpoint', 'apicotberry', 'autotomize',
+				'barrier', 'bellydrum', 'bulkup', 'calmmind', 'cellbattery', 'chargebeam', 'coil', 'cosmicpower', 'cottonguard', 'curse',
+				'defendorder', 'defiant', 'download', 'dragondance', 'fierydance', 'flamecharge', 'ganlonberry', 'growth', 'harden',
+				'honeclaws', 'howl', 'irondefense', 'justified', 'liechiberry', 'lightningrod', 'meditate', 'metalclaw', 'meteormash',
+				'motordrive', 'moxie', 'nastyplot', 'ominouswind', 'petayaberry', 'quiverdance', 'rage', 'rattled', 'rockpolish',
+				'salacberry', 'sapsipper', 'sharpen', 'shellsmash', 'shiftgear', 'silverwind', 'skullbash', 'speedboost', 'starfberry',
+				'steadfast', 'steelwing', 'stockpile', 'stormdrain', 'swordsdance', 'tailglow', 'weakarmor', 'withdraw', 'workup',
+			];
+			for (const set of team) {
+				if (!set.moves.includes('Baton Pass')) continue;
+				let passableBoosts = false;
+				const item = this.toID(set.item);
+				const ability = this.toID(set.ability);
+				for (const move of set.moves) {
+					if (boostingEffects.includes(this.toID(move))) passableBoosts = true;
+				}
+				if (boostingEffects.includes(item)) passableBoosts = true;
+				if (boostingEffects.includes(ability)) passableBoosts = true;
+				if (passableBoosts) {
+					return [
+						`${set.name || set.species} has Baton Pass and a way to boost its stats, which is banned by Baton Pass Stat Clause.`,
+					];
+				}
+			}
+		},
+	},
 	cfzclause: {
 		effectType: 'ValidatorRule',
 		name: 'CFZ Clause',
@@ -1033,6 +1087,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 					if (pokemon.hp && pokemon.status === 'slp') {
 						if (!pokemon.statusState.source || !pokemon.statusState.source.isAlly(pokemon)) {
 							this.add('-message', 'Sleep Clause Mod activated.');
+							this.hint("Sleep Clause Mod prevents players from putting more than one of their opponent's Pokémon to sleep at a time");
 							return false;
 						}
 					}
@@ -1072,7 +1127,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 	desyncclausemod: {
 		effectType: 'Rule',
 		name: 'Desync Clause Mod',
-		desc: 'If a desync would happen, the move fails instead. This rule currently covers Psywave and Counter.',
+		desc: 'If a desync would happen, the move fails instead. This rule currently covers Bide, Counter, and Psywave.',
 		onBegin() {
 			this.add('rule', 'Desync Clause Mod: Desyncs changed to move failure.');
 		},
@@ -1343,8 +1398,9 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const problem = this.checkCanLearn(move, species, lsetData, set);
 			if (!problem) return null;
 			if (move.isZ || move.isMax || this.ruleTable.isRestricted(`move:${move.id}`)) return problem;
-			if ((set as any).sketchMove) {
-				return ` already has ${(set as any).sketchMove} as a sketched move.\n(${species.name} doesn't learn ${move.name}.)`;
+			const sketchMove = (set as any).sketchMove;
+			if (sketchMove && sketchMove !== move.name) {
+				return ` already has ${sketchMove} as a sketched move.\n(${species.name} doesn't learn ${move.name}.)`;
 			}
 			(set as any).sketchMove = move.name;
 			return null;
@@ -1551,6 +1607,18 @@ export const Rulesets: {[k: string]: FormatData} = {
 				this.add(`${buf}</span>`);
 			}
 			this.makeRequest('teampreview');
+		},
+	},
+	openteamsheets: {
+		effectType: 'Rule',
+		name: 'Open Team Sheets',
+		desc: "Allows each player to see the Pok&eacute;mon and all non-stat information about them, before they choose their lead Pok&eacute;mon",
+		onTeamPreview() {
+			let buf = 'raw|';
+			for (const side of this.sides) {
+				buf += Utils.html`<div class="infobox" style="margin-top:5px"><details><summary>Open Team Sheet for ${side.name}</summary>${Teams.export(side.team, {hideStats: true})}</details></div>`;
+			}
+			this.add(buf);
 		},
 	},
 	aaarestrictedabilities: {
@@ -2266,6 +2334,19 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 			newSpecies.bst += newSpecies.baseStats[stat];
 			return newSpecies;
+		},
+	},
+	voltturnmayhemmod: {
+		effectType: 'Rule',
+		name: "VoltTurn Mayhem Mod",
+		desc: `Every move that targets a foe causes the user to switch out after use.`,
+		onBegin() {
+			this.add('rule', 'VoltTurn Mayhem Mod: Every move that targets a foe causes the user to switch out after use');
+		},
+		onModifyMove(move, source, target) {
+			const validTargets = ['adjacentFoe', 'allAdjacent', 'allAdjacentFoes', 'any', 'normal', 'randomNormal', 'scripted'];
+			if (!validTargets.includes(move.target)) return;
+			move.selfSwitch = true;
 		},
 	},
 };

@@ -58,6 +58,37 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	charge: {
+		inherit: true,
+		condition: {
+			onStart(pokemon, source, effect) {
+				this.add('-start', pokemon, 'Charge');
+			},
+			onRestart(pokemon, source, effect) {
+				this.add('-start', pokemon, 'Charge');
+			},
+			onBasePowerPriority: 9,
+			onBasePower(basePower, attacker, defender, move) {
+				if (move.type === 'Electric') {
+					this.debug('charge boost');
+					return this.chainModify(2);
+				}
+			},
+			onMoveAborted(pokemon, target, move) {
+				if (move.id !== 'charge') {
+					pokemon.removeVolatile('charge');
+				}
+			},
+			onAfterMove(pokemon, target, move) {
+				if (move.id !== 'charge') {
+					pokemon.removeVolatile('charge');
+				}
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Charge', '[silent]');
+			},
+		},
+	},
 	clangingscales: {
 		inherit: true,
 		isNonstandard: null,
@@ -89,6 +120,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	crushgrip: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	curse: {
+		inherit: true,
+		onModifyMove(move, source, target) {
+			if (!source.hasType('Ghost')) {
+				move.target = move.nonGhostTarget as MoveTarget;
+			}
+		},
+		target: "randomNormal",
 	},
 	decorate: {
 		inherit: true,

@@ -4,6 +4,14 @@
  * This generation inherits all the changes from older generations, that must be taken into account when editing code.
  */
 
+const SKIP_LASTDAMAGE = new Set([
+	'confuseray', 'conversion', 'counter', 'focusenergy', 'glare', 'haze', 'leechseed', 'lightscreen',
+	'mimic', 'mist', 'poisongas', 'poisonpowder', 'recover', 'reflect', 'rest', 'softboiled',
+	'splash', 'stunspore', 'substitute', 'supersonic', 'teleport', 'thunderwave', 'toxic', 'transform',
+]);
+
+const TWO_TURN_MOVES = ['dig', 'fly', 'razorwind', 'skullbash', 'skyattack', 'solarbeam'];
+
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen2',
 	gen: 1,
@@ -120,8 +128,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.battle.setActiveMove(move, pokemon, target);
 
 			if (pokemon.moveThisTurn || !this.battle.runEvent('BeforeMove', pokemon, target, move)) {
-				// Prevent invulnerability from persisting until the turn ends.
-				pokemon.removeVolatile('twoturnmove');
 				// Rampage moves end without causing confusion
 				delete pokemon.volatiles['lockedmove'];
 				this.battle.clearActiveMove(true);
@@ -135,14 +141,16 @@ export const Scripts: ModdedBattleScriptsData = {
 					return;
 				}
 			}
-			pokemon.lastDamage = 0;
 			let lockedMove = this.battle.runEvent('LockMove', pokemon);
 			if (lockedMove === true) lockedMove = false;
 			if (
-				!lockedMove &&
-				(!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)
+				(!lockedMove &&
+				(!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target))
 			) {
 				pokemon.deductPP(move, null, target);
+			} else if (pokemon.volatiles['twoturnmove']) {
+				// Two-turn moves like Sky Attack deduct PP on their second turn.
+				pokemon.deductPP(pokemon.volatiles['twoturnmove'].originalMove, null, target);
 			} else {
 				sourceEffect = move;
 			}
@@ -154,12 +162,15 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			this.useMove(move, pokemon, target, sourceEffect);
+			// Restore PP if the move is the first turn of a charging move. Save the move from which PP should be deducted if the move succeeds.
+			if (pokemon.volatiles['twoturnmove']) {
+				pokemon.deductPP(move, -1, target);
+				pokemon.volatiles['twoturnmove'].originalMove = move.id;
+			}
 		},
 		// This function deals with AfterMoveSelf events.
 		// This leads with partial trapping moves shenanigans after the move has been used.
 		useMove(moveOrMoveName, pokemon, target, sourceEffect) {
-			const moveResult = this.useMoveInner(moveOrMoveName, pokemon, target, sourceEffect);
-
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
 			const baseMove = this.battle.dex.moves.get(moveOrMoveName);
 			let move = this.battle.dex.getActiveMove(baseMove);
@@ -179,13 +190,16 @@ export const Scripts: ModdedBattleScriptsData = {
 				// Check again, this shouldn't ever happen on Gen 1.
 				target = this.battle.getRandomTarget(pokemon, move);
 			}
+			// The charging turn of a two-turn move does not update pokemon.lastMove
+			if (!TWO_TURN_MOVES.includes(move.id) || pokemon.volatiles['twoturnmove']) pokemon.lastMove = move;
+
+			const moveResult = this.useMoveInner(moveOrMoveName, pokemon, target, sourceEffect);
 
 			if (move.id !== 'metronome') {
 				if (move.id !== 'mirrormove' ||
 					(!pokemon.side.foe.active[0]?.lastMove || pokemon.side.foe.active[0].lastMove?.id === 'mirrormove')) {
 					// The move is our 'final' move (a failed Mirror Move, or any move that isn't Metronome or Mirror Move).
 					pokemon.side.lastMove = move;
-					pokemon.lastMove = move;
 					this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 
 					// If target fainted
@@ -276,20 +290,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.add('-notarget');
 				return true;
 			}
-			damage = this.tryMoveHit(target, pokemon, move);
+			// Store 0 damage for last damage if the move is not in the array.
+			if (!SKIP_LASTDAMAGE.has(move.id)) this.battle.lastDamage = 0;
 
-			// Store 0 damage for last damage if move failed.
-			// This only happens on moves that don't deal damage but call GetDamageVarsForPlayerAttack (disassembly).
-			const neverDamageMoves = [
-				'conversion', 'haze', 'mist', 'focusenergy', 'confuseray', 'supersonic', 'transform', 'lightscreen', 'reflect', 'substitute', 'mimic', 'leechseed', 'splash', 'softboiled', 'recover', 'rest',
-			];
-			if (
-				!damage && damage !== 0 &&
-				(move.category !== 'Status' || (move.status && !['psn', 'tox', 'par'].includes(move.status))) &&
-				!neverDamageMoves.includes(move.id)
-			) {
-				this.battle.lastDamage = 0;
-			}
+			damage = this.tryMoveHit(target, pokemon, move);
 
 			// Disable and Selfdestruct/Explosion boost rage, regardless of whether they miss/fail.
 			if (target.boosts.atk < 6 && (move.selfdestruct || move.id === 'disable') && target.volatiles['rage']) {
@@ -387,11 +391,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.add('-miss', pokemon);
 				if (accuracy === 255) this.battle.hint("In Gen 1, moves with 100% accuracy can still miss 1/256 of the time.");
 				damage = false;
+				this.battle.lastDamage = 0;
 			}
 
 			// If damage is 0 and not false it means it didn't miss, let's calc.
 			if (damage !== false) {
-				pokemon.lastDamage = 0;
 				if (move.multihit) {
 					let hits = move.multihit;
 					if (Array.isArray(hits)) {
@@ -536,6 +540,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				// basically, these values have the same meanings as they do for event
 				// handlers.
 
+				if (damage && damage > target.hp) {
+					damage = target.hp;
+				}
 				if ((damage || damage === 0) && !target.fainted) {
 					damage = this.battle.damage(damage, target, pokemon, move);
 					if (!(damage || damage === 0)) return false;
@@ -647,7 +654,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Now we can save the partial trapping damage.
 			if (pokemon.volatiles['partialtrappinglock']) {
-				pokemon.volatiles['partialtrappinglock'].damage = pokemon.lastDamage;
+				pokemon.volatiles['partialtrappinglock'].damage = this.battle.lastDamage;
 			}
 
 			// Apply move secondaries.
@@ -704,7 +711,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Is it an OHKO move?
 			if (move.ohko) {
-				return target.maxhp;
+				return 65535;
 			}
 
 			// We edit the damage through move's damage callback if necessary.
@@ -808,7 +815,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			if ((defType === 'def' && defender.volatiles['reflect']) || (defType === 'spd' && defender.volatiles['lightscreen'])) {
 				this.battle.debug('Screen doubling (Sp)Def');
 				defense *= 2;
-				defense = this.battle.clampIntRange(defense, 1, 1998);
 			}
 
 			// In the event of a critical hit, the offense and defense changes are ignored.
@@ -839,7 +845,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// Defense isn't checked on the cartridge, but we don't want those / 0 bugs on the sim.
 				defense = Math.floor(defense / 4) % 256;
 				if (defense === 0) {
-					this.battle.hint('Pokemon Showdown avoids division by zero by rounding defense up to 1.' +
+					this.battle.hint('Pokemon Showdown avoids division by zero by rounding defense up to 1. ' +
 						'In game, the battle would have crashed.');
 					defense = 1;
 				}
@@ -897,7 +903,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (damage > 1) {
 				damage *= this.battle.random(217, 256);
 				damage = Math.floor(damage / 255);
-				if (damage > target.hp && !target.volatiles['substitute']) damage = target.hp;
 			}
 
 			// And we are done.

@@ -560,8 +560,15 @@ export const commands: Chat.ChatCommands = {
 		}
 		user.language = languageID;
 		user.update();
-		const language = Chat.languages.get(languageID);
-		return this.sendReply(this.tr`Pokémon Showdown will now be displayed in ${language} (except in language rooms).`);
+		const languageName = Chat.languages.get(languageID);
+		const langRoom = Rooms.search(languageName || "");
+		let language = languageName;
+		if (langRoom) {
+			language = `<a href="/${langRoom.roomid}">${languageName}</a>`;
+		}
+		return this.sendReply(
+			`|html|` + this.tr`Pokémon Showdown will now be displayed in ${language} (except in language rooms).`
+		);
 	},
 	languagehelp: [
 		`/language - View your current language setting.`,
