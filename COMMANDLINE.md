@@ -34,7 +34,7 @@ Note: Commands that ask for a team want the team in [packed team format](./sim/T
 `./pokemon-showdown generate-team [FORMAT-ID [RANDOM-SEED]]`
 
 - Generates a random team, and writes it to stdout in packed team format
-  (Format defaults to "gen9randombattle")
+  (Format defaults to the latest Random Battles format)
 
 `./pokemon-showdown validate-team [FORMAT-ID]`
 
