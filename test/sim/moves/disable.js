@@ -97,15 +97,20 @@ describe('Disable', function () {
 		], [
 			{species: 'Abra', moves: ['rage']},
 		]]);
+		// Modding accuracy so Disable always hits
+		battle.onEvent('Accuracy', battle.format, true);
 		battle.makeChoices();
 		assert(battle.log.some(line => line.startsWith('|-boost|')));
 
-		// Disable misses
-		battle = common.gen(1).createBattle({seed: [2, 2, 2, 2]}, [[
+		battle = common.gen(1).createBattle([[
 			{species: 'Drowzee', moves: ['disable']},
 		], [
 			{species: 'Abra', moves: ['rage']},
 		]]);
+		// Modding accuracy so Disable always misses
+		battle.onEvent('Accuracy', battle.format, function (accuracy, target, pokemon, move) {
+			return move.id === 'rage';
+		});
 		battle.makeChoices();
 		assert(battle.log.some(line => line.startsWith('|-boost|')));
 	});

@@ -11,12 +11,12 @@ describe("Mycelium Might", function () {
 	});
 
 	it("should cause attacks called by empowered status moves to ignore abilities", function () {
-		battle = common.createBattle({seed: [0, 1, 2, 3]}, [
-			[{species: "Toedscool", ability: 'myceliummight', moves: ['rest', 'sleeptalk', 'mudshot']}],
-			[{species: "Orthworm", ability: 'eartheater', moves: ['tackle']}],
-		]);
+		battle = common.createBattle([[
+			{species: "Pyukumuku", ability: 'myceliummight', moves: ['sleeptalk', 'earthquake']},
+		], [
+			{species: "Orthworm", ability: 'eartheater', moves: ['spore']},
+		]]);
 		battle.makeChoices();
-		battle.makeChoices('move sleeptalk', 'auto');
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 });

@@ -237,12 +237,14 @@ describe(`Emergency Exit`, function () {
 	});
 
 	it(`should be suppressed by Sheer Force`, function () {
-		battle = common.createBattle({seed: [1, 2, 3, 4]}, [
-			[{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
-			[{species: "Nidoking", ability: 'sheerforce', moves: ['thunder']}],
-		]);
+		battle = common.createBattle([[
+			{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], ivs: EMPTY_IVS},
+			{species: "Clefable", moves: ['sleeptalk']},
+		], [
+			{species: "Nidoking", ability: 'sheerforce', moves: ['thunderbolt']},
+		]]);
 		const eePokemon = battle.p1.active[0];
-		battle.makeChoices('move sleeptalk', 'move thunder');
+		battle.makeChoices();
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 		assert.equal(battle.requestState, 'move');
 	});
