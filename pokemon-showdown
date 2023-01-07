@@ -65,7 +65,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		console.log('pokemon-showdown generate-team [FORMAT-ID [RANDOM-SEED]]');
 		console.log('');
 		console.log('  Generates a random team, and writes it to stdout in packed team format');
-		console.log('  (Format defaults to "gen7randombattle")');
+		console.log('  (Format defaults to the latest Random Battles format)');
 		console.log('');
 		console.log('pokemon-showdown validate-team [FORMAT-ID]');
 		console.log('');
