@@ -271,35 +271,36 @@ describe('Toxic Poison [Gen 2]', function () {
 		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 5);
 	});
 
-	it('should pass the damage counter to Pokemon with Baton Pass', function () {
-		battle = common.gen(2).createBattle([
-			[{species: 'Smeargle', moves: ['toxic', 'sacredfire', 'splash']}],
-			[
-				{species: 'Chansey', moves: ['splash']},
-				{species: 'Celebi', moves: ['batonpass', 'splash']},
-			],
-		]);
-		battle.resetRNG(); // Guarantee Sacred Fire burns
-		battle.makeChoices('move sacredfire', 'move splash');
-		const pokemon = battle.p2.active[0];
-		battle.resetRNG(); // Guarantee Toxic hits.
+	it(`should pass the damage counter to Pokemon with Baton Pass`, function () {
+		battle = common.gen(2).createBattle([[
+			{species: 'Smeargle', moves: ['toxic', 'willowisp', 'splash']},
+		], [
+			{species: 'Chansey', moves: ['splash']},
+			{species: 'Celebi', moves: ['batonpass', 'splash']},
+		]]);
+
+		// Modding accuracy so the status moves always hit
+		battle.onEvent('Accuracy', battle.format, true);
+
+		battle.makeChoices('move willowisp', 'move splash');
+		const chansey = battle.p2.active[0];
 		battle.makeChoices('move toxic', 'switch 2');
 		battle.makeChoices('move splash', 'move splash');
 		battle.makeChoices('move splash', 'move splash');
 		battle.makeChoices('move splash', 'move batonpass');
 		battle.makeChoices('', 'switch 2');
-		let hp = pokemon.hp;
+		let hp = chansey.hp;
 		battle.makeChoices('move splash', 'move splash');
-		assert.equal(hp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 4);
+		assert.equal(hp - chansey.hp, Math.floor(chansey.maxhp / 16) * 4, `Chansey should have taken a lot more damage from burn`);
 
 		// Only hint about this once per battle, not every turn.
 		assert.equal(battle.log.filter(m => m.startsWith('|-hint')).length, 1);
 
 		// Damage counter should be removed on regular switch out
 		battle.makeChoices('move splash', 'switch 2');
-		hp = pokemon.hp;
+		hp = chansey.hp;
 		battle.makeChoices('move splash', 'switch 2');
-		assert.equal(hp - pokemon.hp, Math.floor(pokemon.maxhp / 8));
+		assert.equal(hp - chansey.hp, Math.floor(chansey.maxhp / 8), `Chansey should have taken normal damage from burn`);
 	});
 
 	it('should revert to regular poison on switch in, even for Poison types', function () {
@@ -320,24 +321,27 @@ describe('Toxic Poison [Gen 2]', function () {
 	});
 
 	it('should not have its damage counter affected by Heal Bell', function () {
-		battle = common.gen(2).createBattle([
-			[{species: 'Smeargle', moves: ['toxic', 'sacredfire', 'splash']}],
-			[{species: 'Chansey', moves: ['splash', 'healbell']}],
-		]);
+		battle = common.gen(2).createBattle([[
+			{species: 'Smeargle', moves: ['toxic', 'willowisp', 'splash']},
+		], [
+			{species: 'Chansey', moves: ['splash', 'healbell']},
+		]]);
+
+		// Modding accuracy so the status moves always hit
+		battle.onEvent('Accuracy', battle.format, true);
+
 		battle.makeChoices('move toxic', 'move splash');
-		const pokemon = battle.p2.active[0];
+		const chansey = battle.p2.active[0];
 		battle.makeChoices('move splash', 'move healbell');
-		battle.resetRNG(); // Guarantee Sacred Fire burns
-		battle.makeChoices('move sacredfire', 'move splash');
-		let hp = pokemon.hp;
+		battle.makeChoices('move willowisp', 'move splash');
+		let hp = chansey.hp;
 		battle.makeChoices('move splash', 'move splash');
-		assert.equal(hp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 3);
-		hp = pokemon.hp;
+		assert.equal(hp - chansey.hp, Math.floor(chansey.maxhp / 16) * 3);
+		hp = chansey.hp;
 
 		battle.makeChoices('move splash', 'move healbell');
-		battle.resetRNG(); // Guarantee Toxic hits
 		battle.makeChoices('move toxic', 'move splash');
 		// Toxic counter should be reset by a successful Toxic
-		assert.equal(hp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
+		assert.equal(hp - chansey.hp, Math.floor(chansey.maxhp / 16));
 	});
 });
