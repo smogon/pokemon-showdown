@@ -24,10 +24,10 @@ describe('Parental Bond', function () {
 		battle.destroy();
 	});
 
-	it('should cause single-hit attacks to strike twice, with the second hit dealing 0.25x damage', function () {
+	it(`should cause single-hit attacks to strike twice, with the second hit dealing 0.25x damage`, function () {
 		battle.makeChoices('move thunderpunch', 'move rest');
-		const damageRatio = damages[0] / damages[1];
-		assert.bounded(damageRatio, [(0.85 / 0.25 - 0.1), (1 / (0.85 * 0.25) + 0.1)]);
+		assert.bounded(damages[0], [31, 37]);
+		assert.bounded(damages[1], [7, 9]);
 	});
 
 	it('should not have any effect on moves with multiple hits', function () {
@@ -61,10 +61,10 @@ describe('Parental Bond [Gen 6]', function () {
 		battle.destroy();
 	});
 
-	it('should cause single-hit attacks to strike twice, with the second hit dealing 0.5x damage', function () {
+	it(`should cause single-hit attacks to strike twice, with the second hit dealing 0.5x damage`, function () {
 		battle.makeChoices('move thunderpunch', 'move rest');
-		const damageRatio = damages[0] / damages[1];
-		assert.bounded(damageRatio, [(0.85 / 0.5 - 0.1), (1 / (0.85 * 0.5) + 0.1)]);
+		assert.bounded(damages[0], [31, 37]);
+		assert.bounded(damages[1], [15, 18]);
 	});
 
 	it('should not have any effect on moves with multiple hits', function () {
