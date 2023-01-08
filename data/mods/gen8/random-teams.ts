@@ -1724,11 +1724,11 @@ export class RandomGen8Teams {
 
 		// Misc item generation logic
 		const HDBBetterThanEviolite = (
-			!isLead &&
-			this.dex.getEffectiveness('Rock', species) >= 2 &&
-			!isDoubles
+			!isDoubles &&
+			(!isLead || moves.has('uturn')) &&
+			this.dex.getEffectiveness('Rock', species) >= 2
 		);
-		if (species.nfe && !HDBBetterThanEviolite) return 'Eviolite';
+		if (species.nfe) return HDBBetterThanEviolite ? 'Heavy-Duty Boots' : 'Eviolite';
 
 		// Ability based logic and miscellaneous logic
 		if (species.name === 'Wobbuffet' || ['Cheek Pouch', 'Harvest', 'Ripen'].includes(ability)) return 'Sitrus Berry';
@@ -1970,6 +1970,66 @@ export class RandomGen8Teams {
 		) return 'Lum Berry';
 	}
 
+	getLevel(
+		species: Species,
+		isDoubles: boolean,
+		isNoDynamax: boolean,
+	): number {
+		// level set by rules
+		if (this.adjustLevel) return this.adjustLevel;
+		// doubles levelling
+		if (isDoubles && species.randomDoubleBattleLevel) return species.randomDoubleBattleLevel;
+		// No Dmax levelling
+		if (isNoDynamax) {
+			const tier = species.name.endsWith('-Gmax') ? this.dex.species.get(species.changesFrom).tier : species.tier;
+			const tierScale: Partial<Record<Species['tier'], number>> = {
+				Uber: 76,
+				OU: 80,
+				UUBL: 81,
+				UU: 82,
+				RUBL: 83,
+				RU: 84,
+				NUBL: 85,
+				NU: 86,
+				PUBL: 87,
+				PU: 88, "(PU)": 88, NFE: 88,
+			};
+			const customScale: {[k: string]: number} = {
+				// These Pokemon are too strong and need a lower level
+				zaciancrowned: 65, calyrexshadow: 68, xerneas: 70, necrozmaduskmane: 72, zacian: 72, kyogre: 73, eternatus: 73,
+				zekrom: 74, marshadow: 75, glalie: 78, urshifurapidstrike: 79, haxorus: 80, inteleon: 80,
+				cresselia: 83, octillery: 84, jolteon: 84, swoobat: 84, dugtrio: 84, slurpuff: 84, polteageist: 84,
+				wobbuffet: 86, scrafty: 86,
+				// These Pokemon are too weak and need a higher level
+				delibird: 100, vespiquen: 96, pikachu: 92, shedinja: 92, solrock: 90, arctozolt: 88, reuniclus: 87,
+				decidueye: 87, noivern: 85, magnezone: 82, slowking: 81,
+			};
+			return customScale[species.id] || tierScale[tier] || 80;
+		}
+		// BDSP tier levelling
+		if (this.dex.currentMod === 'gen8bdsp') {
+			const tierScale: Partial<Record<Species['tier'], number>> = {
+				Uber: 76, Unreleased: 76,
+				OU: 80,
+				UUBL: 81,
+				UU: 82,
+				RUBL: 83,
+				RU: 84,
+				NUBL: 85,
+				NU: 86,
+				PUBL: 87,
+				PU: 88, "(PU)": 88, NFE: 88,
+			};
+			const customScale: {[k: string]: number} = {delibird: 100, glalie: 76, luvdisc: 100, spinda: 100, unown: 100};
+
+			return customScale[species.id] || tierScale[species.tier] || 80;
+		}
+		// Arbitrary levelling base on data files (typically winrate-influenced)
+		if (species.randomBattleLevel) return species.randomBattleLevel;
+		// Finally default to level 80
+		return 80;
+	}
+
 	randomSet(
 		species: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
@@ -2071,7 +2131,8 @@ export class RandomGen8Teams {
 				// Genesect-Douse should never reject Techno Blast
 				const moveIsRejectable = (
 					!(species.id === 'genesectdouse' && move.id === 'technoblast') &&
-					!(species.id === 'togekiss' && move.id === 'nastyplot') && (
+					!(species.id === 'togekiss' && move.id === 'nastyplot') &&
+					!(species.id === 'shuckle' && ['stealthrock', 'stickyweb'].includes(move.id)) && (
 						move.category === 'Status' ||
 						(!types.has(move.type) && move.id !== 'judgment') ||
 						(isLowBP && !move.multihit && !abilities.has('Technician'))
@@ -2101,7 +2162,7 @@ export class RandomGen8Teams {
 						(!isDoubles && runEnforcementChecker('recovery') && move.id !== 'stickyweb') ||
 						runEnforcementChecker('screens') ||
 						runEnforcementChecker('misc') ||
-						(isLead && runEnforcementChecker('lead')) ||
+						((isLead || species.id === 'shuckle') && runEnforcementChecker('lead')) ||
 						(moves.has('leechseed') && runEnforcementChecker('leechseed'))
 					) {
 						cull = true;
@@ -2228,7 +2289,6 @@ export class RandomGen8Teams {
 			ability = abilityData[0].name;
 		}
 
-		// item = !isDoubles ? 'Leftovers' : 'Sitrus Berry';
 		if (species.requiredItems) {
 			item = this.sample(species.requiredItems);
 		// First, the extra high-priority items
@@ -2258,62 +2318,7 @@ export class RandomGen8Teams {
 			forme = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']);
 		}
 
-		let level: number;
-		if (this.adjustLevel) {
-			level = this.adjustLevel;
-		// doubles levelling
-		} else if (isDoubles && species.randomDoubleBattleLevel) {
-			level = species.randomDoubleBattleLevel;
-		// No Dmax levelling
-		} else if (isNoDynamax) {
-			const tier = species.name.endsWith('-Gmax') ? this.dex.species.get(species.changesFrom).tier : species.tier;
-			const tierScale: Partial<Record<Species['tier'], number>> = {
-				Uber: 76,
-				OU: 80,
-				UUBL: 81,
-				UU: 82,
-				RUBL: 83,
-				RU: 84,
-				NUBL: 85,
-				NU: 86,
-				PUBL: 87,
-				PU: 88, "(PU)": 88, NFE: 88,
-			};
-			const customScale: {[k: string]: number} = {
-				// These Pokemon are too strong and need a lower level
-				zaciancrowned: 65, calyrexshadow: 68, xerneas: 70, necrozmaduskmane: 72, zacian: 72, kyogre: 73, eternatus: 73,
-				zekrom: 74, marshadow: 75, glalie: 78, urshifurapidstrike: 79, haxorus: 80, inteleon: 80,
-				cresselia: 83, octillery: 84, jolteon: 84, swoobat: 84, dugtrio: 84, slurpuff: 84, polteageist: 84,
-				wobbuffet: 86, scrafty: 86,
-				// These Pokemon are too weak and need a higher level
-				delibird: 100, vespiquen: 96, pikachu: 92, shedinja: 92, solrock: 90, arctozolt: 88, reuniclus: 87,
-				decidueye: 87, noivern: 85, magnezone: 82, slowking: 81,
-			};
-			level = customScale[species.id] || tierScale[tier] || 80;
-		// BDSP tier levelling
-		} else if (this.dex.currentMod === 'gen8bdsp') {
-			const tierScale: Partial<Record<Species['tier'], number>> = {
-				Uber: 76, Unreleased: 76,
-				OU: 80,
-				UUBL: 81,
-				UU: 82,
-				RUBL: 83,
-				RU: 84,
-				NUBL: 85,
-				NU: 86,
-				PUBL: 87,
-				PU: 88, "(PU)": 88, NFE: 88,
-			};
-			const customScale: {[k: string]: number} = {delibird: 100, glalie: 76, luvdisc: 100, spinda: 100, unown: 100};
-
-			level = customScale[species.id] || tierScale[species.tier] || 80;
-		// Arbitrary levelling base on data files (typically winrate-influenced)
-		} else if (species.randomBattleLevel) {
-			level = species.randomBattleLevel;
-		// Default to level 80
-		} else {
-			level = 80;
-		}
+		const level: number = this.getLevel(species, isDoubles, isNoDynamax);
 
 		// Prepare optimal HP
 		const srImmunity = ability === 'Magic Guard' || item === 'Heavy-Duty Boots';
@@ -2466,10 +2471,16 @@ export class RandomGen8Teams {
 
 			// Illusion shouldn't be on the last slot
 			if (species.name === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
-			// The sixth slot should not be Zacian/Zamazenta/Eternatus if a Zoroark is present
+			// The sixth slot should not be very low level if a zoroark is present
+			// Also Zacian/Zamazenta/Eternatus are rejected as they make dynamax malfunction, regardless of level
 			if (
-				pokemon.some(pkmn => pkmn.species === 'Zoroark') &&
-				['Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Eternatus'].includes(species.name)
+				pokemon.some(pkmn => pkmn.name === 'Zoroark') &&
+				pokemon.length >= (this.maxTeamSize - 1) &&
+				(this.getLevel(species,
+							  this.format.gameType !== 'singles',
+							  this.dex.formats.getRuleTable(this.format).has('dynamaxclause')) < 72 &&
+				!this.adjustLevel ||
+				['Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Eternatus'].includes(species.name))
 			) {
 				continue;
 			}

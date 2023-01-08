@@ -6575,6 +6575,9 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Teatime",
 		desc: "All active Pokemon consume their held Berries. This effect is not prevented by substitutes, the Klutz or Unnerve Abilities, or the effects of Embargo or Magic Room. Fails if no active Pokemon is holding a Berry.",
 		shortDesc: "All active Pokemon consume held Berries.",
+
+		activate: "  It's teatime! Everyone dug in to their Berries!",
+		fail: "  But nothing happened!",
 	},
 	technoblast: {
 		name: "Techno Blast",
