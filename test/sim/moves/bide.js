@@ -46,7 +46,7 @@ describe('Bide [Gen 1]', function () {
 	});
 
 	it("Bide damage can hit a Substitute", function () {
-		battle = common.gen(1).createBattle();
+		battle = common.gen(1).createBattle({seed: [0, 1, 1, 1]});
 		battle.setPlayer('p1', {team: [{species: "Aerodactyl", moves: ['bide', 'whirlwind']}]});
 		battle.setPlayer('p2', {team: [{species: "Gyarados", moves: ['dragonrage', 'substitute']}]});
 		const aerodactyl = battle.p1.active[0];
