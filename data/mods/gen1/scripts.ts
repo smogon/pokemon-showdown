@@ -148,11 +148,12 @@ export const Scripts: ModdedBattleScriptsData = {
 				(!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target))
 			) {
 				pokemon.deductPP(move, null, target);
-			} else if (pokemon.volatiles['twoturnmove']) {
-				// Two-turn moves like Sky Attack deduct PP on their second turn.
-				pokemon.deductPP(pokemon.volatiles['twoturnmove'].originalMove, null, target);
 			} else {
 				sourceEffect = move;
+				if (pokemon.volatiles['twoturnmove']) {
+					// Two-turn moves like Sky Attack deduct PP on their second turn.
+					pokemon.deductPP(pokemon.volatiles['twoturnmove'].originalMove, null, target);
+				}
 			}
 			if (pokemon.volatiles['partialtrappinglock'] && target !== pokemon.volatiles['partialtrappinglock'].locked) {
 				const moveSlot = pokemon.moveSlots.find(ms => ms.id === move.id);
