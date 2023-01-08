@@ -442,7 +442,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 
 		// Discard remaining privileged messages
 		// Note: the last \n? is for privileged messages that are empty when non-privileged
-		return message.replace(/\n\|split\|(?:[^\n]*)\n(?:[^\n]*)\n\n?/g, '\n');
+		return message.replace(/(?<=\n)\|split\|(?:[^\n]*)\n(?:[^\n]*)\n\n?/g, '');
 	}
 
 	/**

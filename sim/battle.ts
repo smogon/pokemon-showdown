@@ -2934,7 +2934,7 @@ export class Battle {
 
 		// Discard remaining secret data
 		// Note: the last \n? is for secret data that are empty when shared
-		return data.replace(/\n\|split\|(?:[^\n]*)\n(?:[^\n]*)\n\n?/g, '\n');
+		return data.replace(/(?<=\n)\|split\|(?:[^\n]*)\n(?:[^\n]*)\n\n?/g, '');
 	}
 
 	getDebugLog() {
