@@ -775,7 +775,7 @@
             },
             {
                 "role": "Fast Support",
-                "movepool": ["Destiny Bond", "Freeze-Dry", "Memento", "Rapid Spin", "Spikes"],
+                "movepool": ["Freeze-Dry", "Memento", "Rapid Spin", "Spikes"],
                 "teraTypes": ["Ghost"]
             }
         ]
@@ -2433,7 +2433,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Leaf Blade", "Sucker Punch", "Swords Dance", "Synthesis", "Triple Arrows", "U-turn"],
+                "movepool": ["Defog", "Leaf Blade", "Sucker Punch", "Swords Dance", "Synthesis", "Triple Arrows", "U-turn"],
                 "teraTypes": ["Fighting", "Steel"]
             }
         ]
@@ -2468,7 +2468,7 @@
             },
             {
                 "role": "Fast Support",
-                "movepool": ["Defog", "Hurricane", "Revelation Dance", "Roost", "U-turn"],
+                "movepool": ["Defog", "Hurricane", "Revelation Dance", "Roost"],
                 "teraTypes": ["Ground"]
             }
         ]
@@ -2483,7 +2483,7 @@
             },
             {
                 "role": "Fast Support",
-                "movepool": ["Defog", "Hurricane", "Revelation Dance", "Roost", "U-turn"],
+                "movepool": ["Defog", "Hurricane", "Revelation Dance", "Roost"],
                 "teraTypes": ["Electric"]
             }
         ]
@@ -2498,7 +2498,7 @@
             },
             {
                 "role": "Fast Support",
-                "movepool": ["Defog", "Hurricane", "Revelation Dance", "Roost", "U-turn"],
+                "movepool": ["Defog", "Hurricane", "Revelation Dance", "Roost"],
                 "teraTypes": ["Ground"]
             }
         ]
@@ -2513,7 +2513,7 @@
             },
             {
                 "role": "Fast Support",
-                "movepool": ["Defog", "Hurricane", "Revelation Dance", "Roost", "U-turn"],
+                "movepool": ["Defog", "Hurricane", "Revelation Dance", "Roost"],
                 "teraTypes": ["Ghost"]
             }
         ]
