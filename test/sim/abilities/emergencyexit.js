@@ -11,13 +11,15 @@ describe(`Emergency Exit`, function () {
 	afterEach(() => battle.destroy());
 
 	it(`should request switch-out if damaged below 50% HP`, function () {
-		battle = common.createBattle([
-			[{species: "Golisopod", ability: 'emergencyexit', moves: ['superfang'], ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
-			[{species: "Raticate", ability: 'guts', moves: ['superfang']}],
-		]);
+		battle = common.createBattle([[
+			{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], ivs: EMPTY_IVS},
+			{species: "Clefable", ability: 'unaware', moves: ['sleeptalk']},
+		], [
+			{species: "Raticate", ability: 'noguard', moves: ['superfang']},
+		]]);
 		const eePokemon = battle.p1.active[0];
 		const foePokemon = battle.p2.active[0];
-		battle.makeChoices('move superfang', 'move superfang');
+		battle.makeChoices('auto', 'move superfang');
 		assert.equal(foePokemon.hp, foePokemon.maxhp);
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 		assert.equal(battle.requestState, 'switch');
