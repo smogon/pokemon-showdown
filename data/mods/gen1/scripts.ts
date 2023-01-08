@@ -744,9 +744,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			// When either attack or defense are higher than 256, both are divided by 4.
 			// If that's still over 256, it rolls over (%256), which is what causes rollover bugs.
 			if (attack >= 256 || defense >= 256) {
-				if (attack >= 1024 || defense >= 1024) {
-					this.battle.hint("In Gen 1, a stat will roll over to a small number if it is larger than 1024.");
-				}
 				attack = this.battle.clampIntRange(Math.floor(attack / 4) % 256, 1);
 				// Defense isn't checked on the cartridge, but we don't want those / 0 bugs on the sim.
 				defense = Math.floor(defense / 4) % 256;
