@@ -8,10 +8,11 @@ let damages;
 
 describe('Parental Bond', function () {
 	beforeEach(function () {
-		battle = common.createBattle([
-			[{species: 'Kangaskhan', ability: 'parentalbond', item: 'electriumz', moves: ['thunderpunch', 'doublekick']}],
-			[{species: 'Aggron', ability: 'battlearmor', moves: ['rest']}],
-		]);
+		battle = common.createBattle([[
+			{species: 'Kangaskhan', ability: 'parentalbond', item: 'electriumz', moves: ['thunderpunch', 'doublekick']},
+		], [
+			{species: 'Aggron', ability: 'battlearmor', moves: ['rest']},
+		]]);
 
 		damages = [];
 		battle.onEvent('ModifyDamage', battle.format, -9, function (damage, attacker, defender, move) {
@@ -31,8 +32,8 @@ describe('Parental Bond', function () {
 
 	it('should not have any effect on moves with multiple hits', function () {
 		battle.makeChoices('move doublekick', 'move rest');
-		assert.bounded(damages[0], [54, 64]);
-		assert.bounded(damages[1], [54, 64]);
+		assert.bounded(damages[0], [52, 64]);
+		assert.bounded(damages[1], [52, 64]);
 	});
 
 	it('should not have any effect Z-Moves', function () {
@@ -44,10 +45,11 @@ describe('Parental Bond', function () {
 
 describe('Parental Bond [Gen 6]', function () {
 	beforeEach(function () {
-		battle = common.gen(6).createBattle([
-			[{species: 'Kangaskhan', ability: 'parentalbond', moves: ['thunderpunch', 'doublekick']}],
-			[{species: 'Aggron', ability: 'battlearmor', moves: ['rest']}],
-		]);
+		battle = common.gen(6).createBattle([[
+			{species: 'Kangaskhan', ability: 'parentalbond', item: 'electriumz', moves: ['thunderpunch', 'doublekick']},
+		], [
+			{species: 'Aggron', ability: 'battlearmor', moves: ['rest']},
+		]]);
 
 		damages = [];
 		battle.onEvent('ModifyDamage', battle.format, -9, function (damage, attacker, defender, move) {
@@ -67,7 +69,7 @@ describe('Parental Bond [Gen 6]', function () {
 
 	it('should not have any effect on moves with multiple hits', function () {
 		battle.makeChoices('move doublekick', 'move rest');
-		assert.bounded(damages[0], [54, 64]);
-		assert.bounded(damages[1], [54, 64]);
+		assert.bounded(damages[0], [52, 64]);
+		assert.bounded(damages[1], [52, 64]);
 	});
 });
