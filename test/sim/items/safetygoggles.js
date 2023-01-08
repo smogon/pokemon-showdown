@@ -21,13 +21,12 @@ describe('Safety Goggles', function () {
 	});
 
 	it(`should be revealed if the move would have missed`, function () {
-		battle = common.createBattle([[
+		battle = common.createBattle({forceRandomChance: false}, [[
 			{species: 'yveltal', item: 'safetygoggles', moves: ['sleeptalk']},
 		], [
 			{species: 'venusaur', moves: ['sleeppowder']},
 		]]);
-		// Modding accuracy so Sleep Powder always misses
-		battle.onEvent('Accuracy', battle.format, false);
+
 		battle.makeChoices();
 		assert(battle.log.some(line => line.includes('|item: Safety Goggles|')));
 	});

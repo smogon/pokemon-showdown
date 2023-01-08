@@ -98,18 +98,20 @@ describe('Haze - RBY', function () {
 		assert(!('confusion' in p2volatiles));
 	});
 
-	it('should remove disable', function () {
-		battle = common.gen(1).createBattle([
-			[{species: "Mew", moves: ['disable', 'haze', 'splash']}],
-			[{species: "Muk", moves: ['splash', 'tackle']}],
-		]);
+	it('should remove Disable', function () {
+		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
+			{species: 'Mew', moves: ['disable', 'haze', 'splash']},
+		], [
+			{species: 'Muk', moves: ['splash', 'tackle']},
+		]]);
+
 		const p2volatiles = battle.p2.active[0].volatiles;
 
 		battle.makeChoices('move disable', 'move tackle');
 		assert('disable' in p2volatiles);
 
 		battle.makeChoices('move haze', 'move tackle');
-		assert(!('disable' in p2volatiles));
+		assert.false('disable' in p2volatiles);
 	});
 
 	it('should still make previously disabled pokemon (on the same turn) with 1 move use struggle', function () {

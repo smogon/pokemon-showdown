@@ -19,15 +19,16 @@ describe('Burn', function () {
 		assert.hurtsBy(target, Math.floor(target.maxhp / 16), () => battle.makeChoices('move bulkup', 'move willowisp'));
 	});
 
-	it('should halve damage from most Physical attacks', function () {
-		battle = common.createBattle([
-			[{species: 'Machamp', ability: 'noguard', moves: ['boneclub']}],
-			[{species: 'Sableye', ability: 'prankster', moves: ['splash', 'willowisp']}],
-		]);
-		const target = battle.p2.active[0];
-		battle.makeChoices('move boneclub', 'move splash');
-		// hardcoded to RNG
-		assert.hurtsBy(target, 42, () => battle.makeChoices('move boneclub', 'move willowisp'));
+	it(`should halve damage from most Physical attacks`, function () {
+		battle = common.createBattle([[
+			{species: 'Machamp', ability: 'noguard', moves: ['boneclub']},
+		], [
+			{species: 'Sableye', ability: 'prankster', moves: ['willowisp']},
+		]]);
+		battle.makeChoices();
+		const sableye = battle.p2.active[0];
+		const damage = sableye.maxhp - sableye.hp;
+		assert.bounded(damage, [37, 44]);
 	});
 
 	it('should reduce atk to 50% of its original value in Stadium', function () {
@@ -238,17 +239,22 @@ describe('Toxic Poison [Gen 1]', function () {
 		battle.destroy();
 	});
 
-	it('should affect Leech Seed damage counter', function () {
-		battle = common.gen(1).createBattle([
-			[{species: 'Venusaur', moves: ['toxic', 'leechseed']}],
-			[{species: 'Chansey', moves: ['splash']}],
-		]);
+	it(`should affect Leech Seed damage counter`, function () {
+		battle = common.gen(1).createBattle([[
+			{species: 'Venusaur', moves: ['toxic', 'leechseed']},
+		], [
+			{species: 'Chansey', moves: ['splash']},
+		]]);
+
+		// Modding accuracy so the status moves always hit
+		battle.onEvent('Accuracy', battle.format, true);
+
 		battle.makeChoices('move toxic', 'move splash');
-		const pokemon = battle.p2.active[0];
-		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
+		const chansey = battle.p2.active[0];
+		assert.equal(chansey.maxhp - chansey.hp, Math.floor(chansey.maxhp / 16));
 		battle.makeChoices('move leechseed', 'move splash');
 		// (1/16) + (2/16) + (3/16) = (6/16)
-		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 6);
+		assert.equal(chansey.maxhp - chansey.hp, Math.floor(chansey.maxhp / 16) * 6);
 	});
 });
 
