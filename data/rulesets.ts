@@ -2349,4 +2349,32 @@ export const Rulesets: {[k: string]: FormatData} = {
 			move.selfSwitch = true;
 		},
 	},
+	convergencelegality: {
+		effectType: 'ValidatorRule',
+		name: "Convergence Legality",
+		desc: `Allows all Pok&eacute;mon that have identical types to share moves and abilities.`,
+		onValidateSet(set, format) {
+			const curSpecies = this.dex.species.get(set.species);
+			const obtainableAbilityPool = new Set<string>();
+			const matchingSpecies = this.dex.species.all()
+				.filter(species => !species.isNonstandard && species.types.every(type => curSpecies.types.includes(type)));
+			for (const species of matchingSpecies) {
+				for (const abilityName of Object.values(species.abilities)) {
+					const abilityid = this.toID(abilityName);
+					if (this.ruleTable.isRestricted(`ability:${abilityid}`)) continue;
+					obtainableAbilityPool.add(abilityid);
+				}
+			}
+			if (!obtainableAbilityPool.has(this.toID(set.ability))) {
+				return [`${curSpecies.name} doesn't have access to ${this.dex.abilities.get(set.ability).name}.`];
+			}
+		},
+		checkCanLearn(move, species, setSources, set) {
+			const matchingSpecies = this.dex.species.all()
+				.filter(s => !s.isNonstandard && s.types.every(type => species.types.includes(type)));
+			const someCanLearn = matchingSpecies.some(s => this.checkCanLearn(move, s, setSources, set) === null);
+			if (someCanLearn && !this.ruleTable.isRestricted(`move:${move.id}`)) return null;
+			return this.checkCanLearn(move, species, setSources, set);
+		},
+	},
 };
