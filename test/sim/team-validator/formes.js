@@ -87,15 +87,16 @@ describe('Team Validator', function () {
 		assert.false.legalTeam(team, 'gen7anythinggoes');
 	});
 
-	it('should tier Zacian and Zamazenta formes seperately', () => {
+	// Zamazenta is unreleased currently
+	it.skip('should tier Zacian and Zamazenta formes seperately', () => {
 		team = [
 			{species: 'zamazenta-crowned', ability: 'dauntlessshield', item: 'rustedshield', moves: ['howl'], evs: {hp: 1}},
 		];
-		assert.legalTeam(team, 'gen8almostanyability');
+		assert.legalTeam(team, 'gen9almostanyability');
 
 		team = [
 			{species: 'zamazenta', ability: 'dauntlessshield', item: 'lifeorb', moves: ['howl'], evs: {hp: 1}},
 		];
-		assert.false.legalTeam(team, 'gen8almostanyability');
+		assert.false.legalTeam(team, 'gen9almostanyability');
 	});
 });
