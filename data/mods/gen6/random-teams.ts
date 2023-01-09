@@ -911,9 +911,11 @@ export class RandomGen6Teams extends RandomGen7Teams {
 							!moves.has('icebeam') ||
 							species.baseStats.spa >= species.baseStats.spd)
 						) ||
-						(!counter.get('recovery') && !counter.setupType && !moves.has('healingwish') && (
-							movePool.includes('recover') || movePool.includes('roost') || movePool.includes('softboiled')
-						) && (counter.get('Status') > 1 || (species.nfe && !!counter.get('Status')))) ||
+						(!counter.get('recovery') && !counter.setupType &&
+						['healingwish', 'switcheroo', 'trick', 'trickroom'].every(m => !moves.has(m)) &&
+						(['recover', 'roost', 'slackoff', 'softboiled'].some(m => movePool.includes(m))) &&
+						counter.get('Status')
+						) ||
 						(movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb) ||
 						(species.requiredMove && movePool.includes(toID(species.requiredMove))) ||
 						(moves.has('suckerpunch') && counter.get('stab') < species.types.length)
