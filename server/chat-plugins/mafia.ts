@@ -3163,7 +3163,7 @@ export const commands: Chat.ChatCommands = {
 					this.checkChat(null, room);
 					if (game.subs.includes(user.id)) return this.errorReply(`You are already on the sub list.`);
 					if (game.played.includes(user.id)) return this.errorReply(`You cannot sub back into the game.`);
-					game.canJoin(user, true);
+					game.canJoin(user, true); // Change this to game.canJoin(user, true, true) if you're trying to test something sub related locally.
 					game.subs.push(user.id);
 					game.nextSub();
 					// Update spectator's view
@@ -3309,6 +3309,7 @@ export const commands: Chat.ChatCommands = {
 				game.dead[targetUser.id].destroy();
 				delete game.dead[targetUser.id];
 			}
+			if (game.subs.includes(targetUser.id)) game.subs.splice(game.subs.indexOf(targetUser.id), 1);
 			if (cmd.includes('cohost')) {
 				game.cohostids.push(targetUser.id);
 				game.cohosts.push(Utils.escapeHTML(targetUser.name));
@@ -3321,7 +3322,6 @@ export const commands: Chat.ChatCommands = {
 				const oldHostid = game.hostid;
 				const oldHost = Users.get(game.hostid);
 				if (oldHost) oldHost.send(`>view-mafia-${room.roomid}\n|deinit`);
-				if (game.subs.includes(targetUser.id)) game.subs.splice(game.subs.indexOf(targetUser.id), 1);
 				const queueIndex = hostQueue.indexOf(targetUser.id);
 				if (queueIndex > -1) hostQueue.splice(queueIndex, 1);
 				game.host = Utils.escapeHTML(targetUser.name);
