@@ -1045,6 +1045,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			} else if (species.name === 'Lopunny' && moves.has('switcheroo') && this.randomChance(2, 3)) {
 				ability = 'Klutz';
 			}
+			if (species.name === 'Altaria') ability = 'Natural Cure';
 		} else {
 			ability = abilityData[0].name;
 		}
