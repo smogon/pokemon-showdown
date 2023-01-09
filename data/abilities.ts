@@ -5141,18 +5141,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	zerotohero: {
 		onSwitchOut(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Palafin') return;
+			if (pokemon.baseSpecies.baseSpecies !== 'Palafin' || pokemon.transformed) return;
 			if (pokemon.species.forme !== 'Hero') {
-				pokemon.formeChange('Palafin-Hero', this.effect, true, '[silent]');
+				pokemon.formeChange('Palafin-Hero', this.effect, true);
+				this.effectState.sendHeroMessage = true;
 			}
 		},
-		onSwitchIn(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Palafin' || pokemon.species.forme !== 'Hero') return;
-			if (!this.effectState.heroMessageDisplayed) {
+		onStart(pokemon) {
+			if (this.effectState.sendHeroMessage) {
 				this.add('-activate', pokemon, 'ability: Zero to Hero');
-				this.effectState.heroMessageDisplayed = true;
+				this.effectState.sendHeroMessage = false;
 			}
 		},
+		isPermanent: true,
 		name: "Zero to Hero",
 		rating: 5,
 		num: 278,
