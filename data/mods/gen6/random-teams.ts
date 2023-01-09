@@ -104,6 +104,12 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return {cull: !counter.get('recovery') && !moves.has('rest')};
 		case 'focuspunch':
 			return {cull: !moves.has('substitute') || counter.damagingMoves.size < 2};
+		case 'lightscreen':
+			if (movePool.length > 1) {
+				const screen = movePool.indexOf('reflect');
+				if (screen >= 0) this.fastPop(movePool, screen);
+			}
+			return {cull: !moves.has('reflect')};
 		case 'perishsong':
 			return {cull: !moves.has('protect')};
 		case 'reflect':
