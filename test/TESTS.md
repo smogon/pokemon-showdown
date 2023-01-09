@@ -29,32 +29,34 @@ To create the battle, use common.createBattle and pass in two arrays of teams. Y
 - other custom rules, e.g. Inverse Mod: defined in test/common.js
 
 Here are two examples of tests in the preferred style. Don't hesitate to copy tests similar to what you're trying to do!
-	it(`should restore 1/3 HP to the user after eating a Berry`, function () {
-		battle = common.createBattle([[
-			{species: 'wynaut', item: 'lumberry', ability: 'cheekpouch', moves: ['sleeptalk']},
-		], [
-			{species: 'pichu', moves: ['nuzzle']},
-		]]);
-		const wynaut = battle.p1.active[0];
-		battle.makeChoices();
-		assert.fullHP(wynaut);
-	});
-
-	it(`should boost Dondozo's stat even if Sheer Force-boosted`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'wynaut', moves: ['sleeptalk']},
-			{species: 'mew', ability: 'shellarmor', moves: ['sleeptalk']},
-		], [
-			{species: 'tatsugiristretchy', ability: 'commander', moves: ['sleeptalk']},
-			{species: 'dondozo', ability: 'sheerforce', moves: ['orderup']},
-		]]);
-		battle.makeChoices('auto', 'move orderup 2');
-		const mew = battle.p1.active[1];
-		const damage = mew.maxhp - mew.hp;
-		assert.bounded(damage, [149, 176], `Order Up's base power should be increased by Sheer Force`);
-		assert.statStage(battle.p2.active[1], 'spe', 3);
-	});
-
+```
+it(`should restore 1/3 HP to the user after eating a Berry`, function () {
+	battle = common.createBattle([[
+		{species: 'wynaut', item: 'lumberry', ability: 'cheekpouch', moves: ['sleeptalk']},
+	], [
+		{species: 'pichu', moves: ['nuzzle']},
+	]]);
+	const wynaut = battle.p1.active[0];
+	battle.makeChoices();
+	assert.fullHP(wynaut);
+});
+```
+```
+it(`should boost Dondozo's stat even if Sheer Force-boosted`, function () {
+	battle = common.createBattle({gameType: 'doubles'}, [[
+		{species: 'wynaut', moves: ['sleeptalk']},
+		{species: 'mew', ability: 'shellarmor', moves: ['sleeptalk']},
+	], [
+		{species: 'tatsugiristretchy', ability: 'commander', moves: ['sleeptalk']},
+		{species: 'dondozo', ability: 'sheerforce', moves: ['orderup']},
+	]]);
+	battle.makeChoices('auto', 'move orderup 2');
+	const mew = battle.p1.active[1];
+	const damage = mew.maxhp - mew.hp;
+	assert.bounded(damage, [149, 176], `Order Up's base power should be increased by Sheer Force`);
+	assert.statStage(battle.p2.active[1], 'spe', 3);
+});
+```
 Tests ideally should be:
 - Specific. Don't cram too much into one unit test. Don't include Abilities/moves/items that aren't necessary for the test.
 - Readable. If a test fails from some regression, it should not take very long to identify what the test was doing. Making liberal use of comments and assert() descriptions is great!
