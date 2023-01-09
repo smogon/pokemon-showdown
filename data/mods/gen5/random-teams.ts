@@ -609,6 +609,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 							(['recover', 'roost', 'slackoff', 'softboiled'].some(m => movePool.includes(m)))
 						) || (
 							movePool.includes('darkvoid') ||
+							movePool.includes('milkdrink') ||
 							movePool.includes('quiverdance') ||
 							(species.requiredMove && movePool.includes(toID(species.requiredMove)))
 						) || (
