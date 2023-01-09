@@ -1,5 +1,216 @@
 'use strict';
 
+const assert = require('../assert');
+const {_ServerStream: ServerStream} = require('../../dist/server/sockets');
+
+describe('ServerStream', function () {
+	const omniscientPlayer = -1;
+	const spectatorPlayer = 0;
+
+	const createSplit = (player, secret, shared) => ([
+		`|split|p${player}`,
+		secret,
+		shared,
+	]);
+
+	describe('extractChannel', function () {
+		it('should return the same log if no privileged messages are within it', function () {
+			const log = [
+				'|-start|p1a: Hellfrog|ability: Flash Fire',
+				'|-start|p2a: Hellfrog|ability: Flash Fire',
+				'|-start|p3a: Hellfrog|ability: Flash Fire',
+				'|-start|p4a: Hellfrog|ability: Flash Fire',
+			].join('\n');
+			const actualLog = ServerStream.extractChannel(log, omniscientPlayer);
+
+			assert.equal(actualLog, log);
+		});
+
+		it('should return all privileged messages for an omniscient player', function () {
+			const log = [
+				...createSplit(1, '|-start|p1a: Aerodactyl|ability: Pressure', ''),
+				...createSplit(2, '|-start|p2a: Aerodactyl|ability: Pressure', ''),
+				...createSplit(3, '|-start|p3a: Aerodactyl|ability: Pressure', ''),
+				...createSplit(4, '|-start|p4a: Aerodactyl|ability: Pressure', ''),
+			].join('\n');
+			const actualLog = ServerStream.extractChannel(log, omniscientPlayer);
+
+			const expectedLog = [
+				'|-start|p1a: Aerodactyl|ability: Pressure',
+				'|-start|p2a: Aerodactyl|ability: Pressure',
+				'|-start|p3a: Aerodactyl|ability: Pressure',
+				'|-start|p4a: Aerodactyl|ability: Pressure',
+			].join('\n');
+
+			assert.equal(actualLog, expectedLog);
+		});
+
+		it('should return player-privileged messages for each player', function () {
+			const log = [
+				...createSplit(1, '|-start|p1a: Aerodactyl|ability: Pressure', ''),
+				...createSplit(2, '|-start|p2a: Aerodactyl|ability: Pressure', ''),
+				...createSplit(3, '|-start|p3a: Aerodactyl|ability: Pressure', ''),
+				...createSplit(4, '|-start|p4a: Aerodactyl|ability: Pressure', ''),
+			].join('\n');
+
+			for (const player of [1, 2, 3, 4]) {
+				const actualPlayerLog = ServerStream.extractChannel(log, player);
+				const expectedPlayerLog = [
+					`|-start|p${player}a: Aerodactyl|ability: Pressure`,
+				].join('\n');
+				assert.equal(actualPlayerLog, expectedPlayerLog);
+			}
+
+			const actualSpectatorLog = ServerStream.extractChannel(log, spectatorPlayer);
+
+			assert.equal(actualSpectatorLog, '');
+		});
+
+		it('should return privileged messages with non-privileged messages', function () {
+			const log = [
+				'|-start|p2b: Hellfrog|ability: Flash Fire',
+				...createSplit(1, '|-start|p1a: Aerodactyl|ability: Pressure', ''),
+				...createSplit(2, '|-start|p2a: Aerodactyl|ability: Pressure', ''),
+				'|-start|p2b: Hellfrog|ability: Flash Fire',
+			].join('\n');
+
+			const actualOmniscientPlayerLog = ServerStream.extractChannel(log, omniscientPlayer);
+			const actualPlayer1Log = ServerStream.extractChannel(log, 1);
+			const actualPlayer2Log = ServerStream.extractChannel(log, 2);
+			const actualSpectatorLog = ServerStream.extractChannel(log, spectatorPlayer);
+
+			const expectedOmniscientPlayerLog = [
+				'|-start|p2b: Hellfrog|ability: Flash Fire',
+				'|-start|p1a: Aerodactyl|ability: Pressure',
+				'|-start|p2a: Aerodactyl|ability: Pressure',
+				'|-start|p2b: Hellfrog|ability: Flash Fire',
+			].join('\n');
+			const expectedPlayer1Log = [
+				'|-start|p2b: Hellfrog|ability: Flash Fire',
+				'|-start|p1a: Aerodactyl|ability: Pressure',
+				'|-start|p2b: Hellfrog|ability: Flash Fire',
+			].join('\n');
+			const expectedPlayer2Log = [
+				'|-start|p2b: Hellfrog|ability: Flash Fire',
+				'|-start|p2a: Aerodactyl|ability: Pressure',
+				'|-start|p2b: Hellfrog|ability: Flash Fire',
+			].join('\n');
+			const expectedSpectatorLog = [
+				'|-start|p2b: Hellfrog|ability: Flash Fire',
+				'|-start|p2b: Hellfrog|ability: Flash Fire',
+			].join('\n');
+
+			assert.equal(actualOmniscientPlayerLog, expectedOmniscientPlayerLog);
+			assert.equal(actualPlayer1Log, expectedPlayer1Log);
+			assert.equal(actualPlayer2Log, expectedPlayer2Log);
+			assert.equal(actualSpectatorLog, expectedSpectatorLog);
+		});
+
+		it('should return consecutive player-privileged messages for a player', function () {
+			const log = [
+				...createSplit(1, '|-start|p1a: Aerodactyl|ability: Pressure', ''),
+				...createSplit(1, '|-start|p1b: Aerodactyl|ability: Pressure', ''),
+				...createSplit(1, '|-start|p1c: Aerodactyl|ability: Pressure', ''),
+			].join('\n');
+
+			const actualOmniscientPlayerLog = ServerStream.extractChannel(log, omniscientPlayer);
+			const actualPlayerLog = ServerStream.extractChannel(log, 1);
+			const actualSpectatorLog = ServerStream.extractChannel(log, spectatorPlayer);
+
+			const expectedPlayerLog = [
+				'|-start|p1a: Aerodactyl|ability: Pressure',
+				'|-start|p1b: Aerodactyl|ability: Pressure',
+				'|-start|p1c: Aerodactyl|ability: Pressure',
+			].join('\n');
+
+			assert.equal(actualOmniscientPlayerLog, expectedPlayerLog);
+			assert.equal(actualPlayerLog, expectedPlayerLog);
+			assert.equal(actualSpectatorLog, '');
+		});
+
+		it('should return shared messages for non-privileged players', function () {
+			const log = [
+				...createSplit(1, '|-heal|p1a: Rhyperior|420/420', '|-heal|p1a: Rhyperior|100/100'),
+				...createSplit(2, '|-heal|p2a: Rhyperior|420/420', '|-heal|p2a: Rhyperior|100/100'),
+				...createSplit(3, '|-heal|p3a: Rhyperior|420/420', '|-heal|p3a: Rhyperior|100/100'),
+				...createSplit(4, '|-heal|p4a: Rhyperior|420/420', '|-heal|p4a: Rhyperior|100/100'),
+			].join('\n');
+
+			for (const player of [1, 2, 3, 4]) {
+				const actualPlayerLog = ServerStream.extractChannel(log, player);
+				const expectedPlayerLog = [
+					'|-heal|p1a: Rhyperior|100/100',
+					'|-heal|p2a: Rhyperior|100/100',
+					'|-heal|p3a: Rhyperior|100/100',
+					'|-heal|p4a: Rhyperior|100/100',
+				];
+				expectedPlayerLog[player - 1] = `|-heal|p${player}a: Rhyperior|420/420`;
+				assert.equal(actualPlayerLog, expectedPlayerLog.join('\n'));
+			}
+
+			const actualOmniscientPlayerLog = ServerStream.extractChannel(log, omniscientPlayer);
+			const actualSpectatorLog = ServerStream.extractChannel(log, spectatorPlayer);
+
+			const expectedOmniscientPlayerLog = [
+				'|-heal|p1a: Rhyperior|420/420',
+				'|-heal|p2a: Rhyperior|420/420',
+				'|-heal|p3a: Rhyperior|420/420',
+				'|-heal|p4a: Rhyperior|420/420',
+			].join('\n');
+
+			const expectedSpectatorLog = [
+				'|-heal|p1a: Rhyperior|100/100',
+				'|-heal|p2a: Rhyperior|100/100',
+				'|-heal|p3a: Rhyperior|100/100',
+				'|-heal|p4a: Rhyperior|100/100',
+			].join('\n');
+
+			assert.equal(actualOmniscientPlayerLog, expectedOmniscientPlayerLog);
+			assert.equal(actualSpectatorLog, expectedSpectatorLog);
+		});
+
+		it('should return messages made up of secret and shared messages', function () {
+			const log = [
+				...createSplit(1, '|-heal|p1a: Rhyperior|420/420', '|-heal|p1a: Rhyperior|100/100'),
+				...createSplit(1, '|-start|p1a: Aerodactyl|ability: Pressure', ''),
+				...createSplit(2, '|-heal|p2a: Rhyperior|420/420', '|-heal|p2a: Rhyperior|100/100'),
+				...createSplit(2, '|-start|p2a: Aerodactyl|ability: Pressure', ''),
+			].join('\n');
+
+			const actualOmniscientPlayerLog = ServerStream.extractChannel(log, omniscientPlayer);
+			const actualPlayer1Log = ServerStream.extractChannel(log, 1);
+			const actualPlayer2Log = ServerStream.extractChannel(log, 2);
+			const actualSpectatorLog = ServerStream.extractChannel(log, spectatorPlayer);
+
+			const expectedOmniscientPlayerLog = [
+				'|-heal|p1a: Rhyperior|420/420',
+				'|-start|p1a: Aerodactyl|ability: Pressure',
+				'|-heal|p2a: Rhyperior|420/420',
+				'|-start|p2a: Aerodactyl|ability: Pressure',
+			].join('\n');
+			const expectedPlayer1Log = [
+				'|-heal|p1a: Rhyperior|420/420',
+				'|-start|p1a: Aerodactyl|ability: Pressure',
+				'|-heal|p2a: Rhyperior|100/100',
+			].join('\n');
+			const expectedPlayer2Log = [
+				'|-heal|p1a: Rhyperior|100/100',
+				'|-heal|p2a: Rhyperior|420/420',
+				'|-start|p2a: Aerodactyl|ability: Pressure',
+			].join('\n');
+			const expectedSpectatorLog = [
+				'|-heal|p1a: Rhyperior|100/100',
+				'|-heal|p2a: Rhyperior|100/100',
+			].join('\n');
+
+			assert.equal(actualOmniscientPlayerLog, expectedOmniscientPlayerLog);
+			assert.equal(actualPlayer1Log, expectedPlayer1Log);
+			assert.equal(actualPlayer2Log, expectedPlayer2Log);
+			assert.equal(actualSpectatorLog, expectedSpectatorLog);
+		});
+	});
+});
+
 // These tests have not been updated to reflect the latest version of Sockets
 // Anyone should feel free to try to rewrite them to work
 

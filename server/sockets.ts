@@ -257,7 +257,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 			const roomChannel = this.roomChannels.get(roomid);
 			for (const [curSocketid, curSocket] of room) {
 				const channelid = roomChannel?.get(curSocketid) || 0;
-				if (!messages[channelid]) messages[channelid] = this.extractChannel(message, channelid);
+				if (!messages[channelid]) messages[channelid] = ServerStream.extractChannel(message, channelid);
 				curSocket.write(messages[channelid]!);
 			}
 		},
@@ -426,23 +426,23 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 		console.log(`Test your server at http://${config.bindaddress === '0.0.0.0' ? 'localhost' : config.bindaddress}:${config.port}`);
 	}
 
-	extractChannel(message: string, channelid: -1 | ChannelID) {
+	static extractChannel(message: string, channelid: -1 | ChannelID) {
 		if (channelid === -1) {
 			// Grab all privileged messages
-			return message.replace(/\n\|split\|p[1234]\n([^\n]*)\n(?:[^\n]*)/g, '\n$1');
+			return message.replace(/(?:(?<=\n)|^)\|split\|p[1234]\n([^\n]*)\n(?:[^\n]*)/g, '$1').replace(/\n$/g, '');
 		}
 
 		// Grab privileged messages channel has access to
 		switch (channelid) {
-		case 1: message = message.replace(/\n\|split\|p1\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
-		case 2: message = message.replace(/\n\|split\|p2\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
-		case 3: message = message.replace(/\n\|split\|p3\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
-		case 4: message = message.replace(/\n\|split\|p4\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
+		case 1: message = message.replace(/(?:(?<=\n)|^)\|split\|p1\n([^\n]*)\n(?:[^\n]*)/g, '$1'); break;
+		case 2: message = message.replace(/(?:(?<=\n)|^)\|split\|p2\n([^\n]*)\n(?:[^\n]*)/g, '$1'); break;
+		case 3: message = message.replace(/(?:(?<=\n)|^)\|split\|p3\n([^\n]*)\n(?:[^\n]*)/g, '$1'); break;
+		case 4: message = message.replace(/(?:(?<=\n)|^)\|split\|p4\n([^\n]*)\n(?:[^\n]*)/g, '$1'); break;
 		}
 
 		// Discard remaining privileged messages
 		// Note: the last \n? is for privileged messages that are empty when non-privileged
-		return message.replace(/(?<=\n)\|split\|(?:[^\n]*)\n(?:[^\n]*)\n\n?/g, '');
+		return message.replace(/(?:(?<=\n)|^)\|split\|(?:[^\n]*)\n(?:[^\n]*)\n\n?(\n$)?/g, '').replace(/\n$/g, '');
 	}
 
 	/**
