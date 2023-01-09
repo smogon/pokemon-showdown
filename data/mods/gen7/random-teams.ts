@@ -1172,6 +1172,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 						) || (
 							movePool.includes('milkdrink') ||
 							movePool.includes('shoreup') ||
+							(movePool.includes('moonlight') && types.size < 2) ||
 							(movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb)
 						) || (
 							isLead &&

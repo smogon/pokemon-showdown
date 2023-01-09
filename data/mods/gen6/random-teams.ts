@@ -916,6 +916,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 						(['recover', 'roost', 'slackoff', 'softboiled'].some(m => movePool.includes(m))) &&
 						counter.get('Status')
 						) ||
+						movePool.includes('milkdrink') ||
+						(movePool.includes('moonlight') && types.size < 2) ||
 						(movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb) ||
 						(species.requiredMove && movePool.includes(toID(species.requiredMove))) ||
 						(moves.has('suckerpunch') && counter.get('stab') < species.types.length)
