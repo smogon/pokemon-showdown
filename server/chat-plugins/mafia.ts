@@ -3163,7 +3163,8 @@ export const commands: Chat.ChatCommands = {
 					this.checkChat(null, room);
 					if (game.subs.includes(user.id)) return this.errorReply(`You are already on the sub list.`);
 					if (game.played.includes(user.id)) return this.errorReply(`You cannot sub back into the game.`);
-					game.canJoin(user, true); // Change this to game.canJoin(user, true, true) if you're trying to test something sub related locally.
+					// Change this to game.canJoin(user, true, true) if you're trying to test something sub related locally.
+					game.canJoin(user, true);
 					game.subs.push(user.id);
 					game.nextSub();
 					// Update spectator's view
