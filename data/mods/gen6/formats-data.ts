@@ -1236,7 +1236,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	heracrossmega: {
-		randomBattleMoves: ["bulletseed", "closecombat", "pinmissile", "rockblast", "substitute", "swordsdance"],
+		randomBattleMoves: ["closecombat", "pinmissile", "rockblast", "substitute", "swordsdance"],
 		randomDoubleBattleMoves: ["bulletseed", "closecombat", "earthquake", "knockoff", "pinmissile", "protect", "rockblast", "swordsdance"],
 		tier: "(OU)",
 		doublesTier: "(DUU)",
