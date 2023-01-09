@@ -319,7 +319,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		species: Species,
 	) {
 		switch (ability) {
-		case 'Anger Point': case 'Ice Body': case 'Steadfast':
+		case 'Anger Point': case 'Ice Body': case 'Steadfast': case 'Unaware':
 			return true;
 		case 'Blaze':
 			return !counter.get('Fire');
