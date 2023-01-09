@@ -57,13 +57,17 @@ describe('Paralysis', function () {
 		battle.destroy();
 	});
 
-	it('should reduce speed to 50% of its original value', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]});
-		battle.setPlayer('p2', {team: [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]});
-		const speed = battle.p1.active[0].getStat('spe');
-		battle.makeChoices('move aquaring', 'move thunderwave');
-		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.5));
+	it(`should reduce speed to 50% of its original value`, function () {
+		battle = common.createBattle([[
+			{species: 'Vaporeon', moves: ['sleeptalk']},
+		], [
+			{species: 'Jolteon', moves: ['glare']},
+		]]);
+
+		const vaporeon = battle.p1.active[0];
+		const speed = vaporeon.getStat('spe');
+		battle.makeChoices('move sleeptalk', 'move glare');
+		assert.equal(vaporeon.getStat('spe'), battle.modify(speed, 0.5));
 	});
 
 	it(`should apply its Speed reduction after all other Speed modifiers`, function () {
@@ -264,11 +268,12 @@ describe('Toxic Poison [Gen 2]', function () {
 		battle.destroy();
 	});
 
-	it('should not affect Leech Seed damage counter', function () {
-		battle = common.gen(2).createBattle([
-			[{species: 'Venusaur', moves: ['toxic', 'leechseed']}],
-			[{species: 'Chansey', moves: ['splash']}],
-		]);
+	it(`should not affect Leech Seed damage counter`, function () {
+		battle = common.gen(2).createBattle({forceRandomChance: true}, [[
+			{species: 'Venusaur', moves: ['toxic', 'leechseed']},
+		], [
+			{species: 'Chansey', moves: ['splash']},
+		]]);
 		battle.makeChoices('move toxic', 'move splash');
 		const pokemon = battle.p2.active[0];
 		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16));

@@ -32,7 +32,7 @@ describe('[Gen 1] Stat Drop Overflow', function () {
 
 	it(`Not SafeTwo`, function () {
 		battle = common.gen(1).createBattle([[
-			{species: 'Mewtwo', moves: ['amnesia', 'psychic'], evs: {'spa': 255, 'spd': 255}},
+			{species: 'Mewtwo', moves: ['amnesia', 'luckychant'], evs: {'spa': 255, 'spd': 255}},
 		], [
 			{species: 'Slowbro', moves: ['amnesia', 'surf'], evs: {'spa': 255, 'spd': 255}},
 		]]);
@@ -46,7 +46,7 @@ describe('[Gen 1] Stat Drop Overflow', function () {
 		mewtwo.boostBy({spa: -1, spd: -1}); // Drop Special to +5
 		assert.equal(mewtwo.modifiedStats['spa'], 1218);
 		// Mewtwo's Special has overflowed
-		battle.makeChoices('move psychic', 'move surf');
+		battle.makeChoices('move luckychant', 'move surf');
 		assert.fainted(mewtwo);
 	});
 });

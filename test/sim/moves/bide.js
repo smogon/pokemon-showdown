@@ -5,7 +5,7 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Bide [Gen 1]', function () {
+describe('[Gen 1] Bide', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
@@ -79,7 +79,7 @@ describe('Bide [Gen 1]', function () {
 	});
 
 	it("Bide's accumulated damage is zeroed when an enemy faints (Desync Clause Mod)", function () {
-		battle = common.gen(1).createBattle();
+		battle = common.gen(1).createBattle({seed: [1, 1, 1, 2]});
 		battle.setPlayer('p1', {team: [{species: "Aerodactyl", moves: ['bide']}]});
 		battle.setPlayer('p2', {team: [
 			{species: "Gyarados", moves: ['dragonrage', 'leer']},
@@ -104,7 +104,7 @@ describe('Bide [Gen 1]', function () {
 	});
 
 	it("Bide's duration is paused when asleep or frozen", function () {
-		battle = common.gen(1).createBattle();
+		battle = common.gen(1).createBattle({seed: [1, 1, 1, 2]});
 		battle.setPlayer('p1', {team: [{species: "Aerodactyl", moves: ['bide']}]});
 		battle.setPlayer('p2', {team: [{species: "Parasect", moves: ['spore']}]});
 		const aerodactyl = battle.p1.active[0];

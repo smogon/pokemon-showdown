@@ -126,19 +126,20 @@ describe('Substitute', function () {
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
-	it('should track what the actual damage would have been without the substitute in Gen 1', function () {
-		battle = common.gen(1).createBattle([
-			[{species: 'Ponyta', moves: ['substitute', 'growl'], evs: {hp: 252, spd: 252}}],
-			[{species: 'Cloyster', moves: ['clamp'], evs: {spa: 252}}],
-		]);
+	it(`[Gen 1] should track what the actual damage would have been without the Substitute`, function () {
+		battle = common.gen(1).createBattle([[
+			{species: 'Ponyta', moves: ['substitute', 'growl'], evs: {hp: 252, spd: 252}},
+		], [
+			{species: 'Cloyster', moves: ['clamp'], evs: {spa: 252}},
+		]]);
 
-		const pokemon = battle.p1.active[0];
+		const ponyta = battle.p1.active[0];
 		battle.makeChoices('move substitute', 'move clamp');
-		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
+		assert.equal(ponyta.maxhp - ponyta.hp, Math.floor(ponyta.maxhp / 4));
 
-		const hp = pokemon.hp;
+		const hp = ponyta.hp;
 		battle.makeChoices('move growl', 'move clamp');
-		assert.bounded(hp - pokemon.hp, [91, 108]);
+		assert.bounded(hp - ponyta.hp, [91, 108]);
 	});
 
 	it(`[Gen 1] Substitute should not block secondary effect confusion if it is unbroken`, function () {

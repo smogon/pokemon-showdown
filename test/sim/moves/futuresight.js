@@ -140,7 +140,7 @@ describe('Future Sight', function () {
 		battle = common.gen(4).createBattle([[
 			{species: 'wynaut', item: 'lifeorb', moves: ['futuresight']},
 		], [
-			{species: 'mew', moves: ['sleeptalk']},
+			{species: 'mew', ability: 'noguard', moves: ['sleeptalk']},
 		]]);
 
 		battle.makeChoices();
