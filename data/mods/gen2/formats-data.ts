@@ -762,7 +762,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	gligar: {
-		randomBattleMoves: ["counter", "earthquake", "hiddenpowerflying", "return", "screech", "sludgebomb", "thief"],
+		randomBattleMoves: ["counter", "earthquake", "hiddenpowerflying", "screech", "thief"],
 		tier: "UU",
 	},
 	snubbull: {
@@ -877,7 +877,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	tyranitar: {
-		randomBattleMoves: ["crunch", "curse", "earthquake", "fireblast", "pursuit", "rest", "rockslide", "screech", "surf"],
+		randomBattleMoves: ["crunch", "curse", "earthquake", "fireblast", "pursuit", "rest", "roar", "rockslide", "surf"],
 		tier: "OU",
 	},
 	lugia: {
