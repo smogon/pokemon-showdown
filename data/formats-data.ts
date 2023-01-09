@@ -4897,7 +4897,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	magearna: {
 		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	magearnaoriginal: {
 		isNonstandard: "Unobtainable",
@@ -4940,7 +4940,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	melmetal: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	melmetalgmax: {
 		isNonstandard: "Past",
@@ -5418,7 +5418,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	regieleki: {
 		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	regidrago: {
 		isNonstandard: "Unobtainable",
@@ -5841,7 +5841,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	chienpao: {
 		tier: "OU",
 		doublesTier: "DOU",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	wochien: {
 		tier: "UU",
