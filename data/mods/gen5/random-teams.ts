@@ -363,11 +363,11 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (
 			ability === 'Poison Heal' ||
 			ability === 'Toxic Boost' ||
-			(ability === 'Quick Feet' && moves.has('facade')) ||
-			moves.has('psychoshift')
+			(ability === 'Quick Feet' && moves.has('facade'))
 		) {
 			return 'Toxic Orb';
 		}
+		if (moves.has('psychoshift')) return 'Flame Orb';
 		if (moves.has('rest') && !moves.has('sleeptalk') && ability !== 'Natural Cure' && ability !== 'Shed Skin') {
 			return 'Chesto Berry';
 		}
