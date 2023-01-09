@@ -616,7 +616,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (moves.has('shellsmash')) {
 			return (ability === 'Solid Rock' && !!counter.get('priority')) ? 'Weakness Policy' : 'White Herb';
 		}
-		if ((ability === 'Guts' || moves.has('facade') || moves.has('psychoshift')) && !moves.has('sleeptalk')) {
+		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
 			return moves.has('drainpunch') ? 'Flame Orb' : 'Toxic Orb';
 		}
 		if (
@@ -625,6 +625,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		) {
 			return 'Life Orb';
 		}
+		if (moves.has('psychoshift')) return 'Flame Orb';
 		if (ability === 'Poison Heal') return 'Toxic Orb';
 		if (ability === 'Unburden') {
 			if (moves.has('fakeout')) {
