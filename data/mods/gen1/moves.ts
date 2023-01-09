@@ -64,6 +64,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-activate', pokemon, 'Bide');
 				return false;
 			},
+			onDisableMove(pokemon) {
+				if (!pokemon.hasMove('bide')) {
+					return;
+				}
+				for (const moveSlot of pokemon.moveSlots) {
+					if (moveSlot.id !== 'bide') {
+						pokemon.disableMove(moveSlot.id);
+					}
+				}
+			},
 		},
 		type: "???", // Will look as Normal but it's STAB-less
 	},
