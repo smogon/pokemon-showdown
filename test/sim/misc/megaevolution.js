@@ -137,32 +137,12 @@ describe('Mega Evolution', function () {
 			{species: "Rayquaza", ability: 'airlock', moves: ['protect'], evs: {hp: 1}},
 		]];
 
-		it('should be able to Mega Evolve iff it knows Dragon Ascent', () => {
-			battle = common.createBattle({formatid: 'gen6anythinggoes'}, TEAMS);
+		function assertCanMega(formatid) {
+			battle = common.createBattle({formatid}, TEAMS);
 			battle.makeChoices(); // team preview
 			battle.makeChoices('move 1 mega', 'auto');
 			assert.equal(battle.p1.active[0].species.name, "Rayquaza-Mega");
-			assert.throws(() => battle.choose('p2', 'move 1 mega'));
-		});
-
-		it('should be allowed to Mega Evolve in new gen formats allowing "Past" elements', () => {
-			battle = common.createBattle({formatid: 'gen9nationaldexag'}, TEAMS);
-			battle.makeChoices(); // team preview
-			battle.makeChoices('move 1 mega', 'auto');
-			assert.equal(battle.p1.active[0].species.name, "Rayquaza-Mega");
-
-			battle.destroy();
-			battle = common.createBattle({formatid: 'gen9natdexdraft'}, TEAMS);
-			battle.makeChoices();
-			battle.makeChoices('move 1 mega', 'auto');
-			assert.equal(battle.p1.active[0].species.name, "Rayquaza-Mega");
-
-			battle.destroy();
-			battle = common.createBattle({formatid: 'gen8anythinggoes@@@+past'}, TEAMS);
-			battle.makeChoices();
-			battle.makeChoices('move 1 mega', 'auto');
-			assert.equal(battle.p1.active[0].species.name, "Rayquaza-Mega");
-		});
+		}
 
 		function assertLegalButCantMega(formatid) {
 			assert.legalTeam(TEAMS[0], formatid);
@@ -171,13 +151,27 @@ describe('Mega Evolution', function () {
 			assert.throws(() => battle.choose('p1', 'move 1 mega'));
 		}
 
+		it('should be able to Mega Evolve iff it knows Dragon Ascent', () => {
+			assertCanMega('gen6anythinggoes');
+			// battle continues
+			assert.throws(() => battle.choose('p2', 'move 1 mega'));
+		});
+
+		it('should be allowed to Mega Evolve in new gen formats allowing "Past" elements', () => {
+			assertCanMega('gen9nationaldexag');
+			battle.destroy();
+			assertCanMega('gen9natdexdraft');
+			battle.destroy();
+			assertCanMega('gen8anythinggoes@@@+past');
+		});
+
 		it('should not be allowed to Mega Evolve in formats that have the Mega Rayquaza Clause', () => {
 			assertLegalButCantMega('gen6ubers');
 			battle.destroy();
 			assertLegalButCantMega('gen9nationaldexubers');
 		});
 
-		it('should implicitly add the Mega Rayquaza Clause when Rayquaza-Mega is banned', () => {
+		it('should implicitly add the Mega Rayquaza Clause when banned', () => {
 			assertLegalButCantMega('gen9nationaldexag@@@-rayquaza-mega');
 			battle.destroy();
 			assertLegalButCantMega('gen9nationaldexag@@@-mega');
