@@ -68,17 +68,15 @@ describe(`Emergency Exit`, function () {
 	});
 
 	it(`should not request switch-out if fainted`, function () {
-		battle = common.createBattle({gameType: 'doubles'});
-		battle.setPlayer('p1', {team: [
+		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Vikavolt', item: 'choicespecs', moves: ['thunderbolt']},
 			{species: 'Pyukumuku', moves: ['batonpass']},
 			{species: 'Magikarp', moves: ['splash']},
-		]});
-		battle.setPlayer('p2', {team: [
+		], [
 			{species: 'Golisopod', ability: 'emergencyexit', moves: ['sleeptalk']},
 			{species: 'Mew', moves: ['sleeptalk']},
 			{species: 'Ditto', moves: ['transform']},
-		]});
+		]]);
 		battle.makeChoices('move thunderbolt 1, move batonpass', 'move sleeptalk, move sleeptalk');
 		assert(!battle.p2.activeRequest.forceSwitch);
 	});
@@ -118,6 +116,17 @@ describe(`Emergency Exit`, function () {
 			{species: "Wynaut", moves: ['sleeptalk']},
 		], [
 			{species: "stufful", ability: 'compoundeyes', moves: ['superfang']},
+		]]);
+		battle.makeChoices();
+		assert.equal(battle.requestState, 'switch');
+	});
+
+	it('should request switch-out after taking Mind Blown self-damage', function () {
+		battle = common.createBattle([[
+			{species: "Golisopod", ability: 'emergencyexit', moves: ['mindblown']},
+			{species: "Wynaut", moves: ['sleeptalk']},
+		], [
+			{species: "chansey", moves: ['sleeptalk']},
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.requestState, 'switch');
@@ -228,7 +237,7 @@ describe(`Emergency Exit`, function () {
 	});
 
 	it(`should be suppressed by Sheer Force`, function () {
-		battle = common.createBattle([
+		battle = common.createBattle({seed: [1, 2, 3, 4]}, [
 			[{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 			[{species: "Nidoking", ability: 'sheerforce', moves: ['thunder']}],
 		]);
@@ -283,7 +292,7 @@ describe(`Emergency Exit`, function () {
 	});
 
 	it('should request switchout if its HP drops to below 50% while dynamaxed', function () {
-		battle = common.createBattle([
+		battle = common.gen(8).createBattle([
 			[{species: "Golisopod", ability: 'emergencyexit', moves: ['closecombat'], ivs: EMPTY_IVS, level: 30}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 			[{species: "Gengar", ability: 'cursedbody', moves: ['nightshade']}],
 		]);
@@ -294,7 +303,7 @@ describe(`Emergency Exit`, function () {
 	});
 
 	it('should not request switchout if its HP is below 50% when its dynamax ends', function () {
-		battle = common.createBattle([
+		battle = common.gen(8).createBattle([
 			[{species: "Golisopod", ability: 'emergencyexit', moves: ['drillrun'], ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 			[{species: "Landorus", ability: 'sheerforce', moves: ['sludgewave']}],
 		]);

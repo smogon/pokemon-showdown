@@ -1,7 +1,7 @@
 import RandomGen4Teams from '../gen4/random-teams';
 import {Utils} from '../../../lib';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
-import type {MoveCounter} from '../../random-teams';
+import type {MoveCounter} from '../gen8/random-teams';
 
 export class RandomGen3Teams extends RandomGen4Teams {
 	battleHasDitto: boolean;
@@ -281,6 +281,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		)) {
 			return 'Choice Band';
 		}
+		if (moves.has('psychoboost')) return 'White Herb';
 
 		// Default to Leftovers
 		return 'Leftovers';
@@ -530,10 +531,11 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			UU: 84,
 			NUBL: 86,
 			NU: 88,
+			PU: 90,
 			NFE: 90,
 		};
 		const customScale: {[k: string]: number} = {
-			Ditto: 99, Unown: 99,
+			Ditto: 100, Unown: 100,
 		};
 		const tier = species.tier;
 		const level = this.adjustLevel || customScale[species.name] || levelScale[tier] || (species.nfe ? 90 : 80);

@@ -129,7 +129,8 @@ const TWISTS: {[k: string]: Twist} = {
 		},
 
 		onAfterEndPriority: 1,
-		onAfterEnd() {
+		onAfterEnd(isReset) {
+			if (isReset) return;
 			const perfect = this.completed.filter(entry => entry.isPerfect).map(entry => entry.name);
 			if (perfect.length) {
 				this.announce(Utils.html`${Chat.toListString(perfect)} ${perfect.length > 1 ? 'have' : 'has'} completed the hunt without a single wrong answer!`);
@@ -176,7 +177,8 @@ const TWISTS: {[k: string]: Twist} = {
 		},
 
 		onAfterEndPriority: 1,
-		onAfterEnd() {
+		onAfterEnd(isReset) {
+			if (isReset) return;
 			const noSkip = this.completed.filter(entry => entry.noSkip).map(entry => entry.name);
 			if (noSkip.length) {
 				this.announce(Utils.html`${Chat.toListString(noSkip)} ${noSkip.length > 1 ? 'have' : 'has'} completed the hunt without skipping the last question!`);
@@ -359,6 +361,81 @@ const TWISTS: {[k: string]: Twist} = {
 
 			player.destroy(); // remove from user.games;
 			return true;
+		},
+	},
+
+	scavengersfeud: {
+		id: 'scavengersfeud',
+		name: 'Scavengers Feud',
+		desc: 'After completing the hunt, players will guess what the most common incorrect answer for each question is.',
+		onAfterLoad() {
+			this.guesses = {};
+			this.incorrect = new Array(this.questions.length).fill('').map(() => ({}));
+
+			this.questions.push({
+				hint: 'Please enter what you think are the most common incorrect answers to each question.  (Enter your guesses in the order of the previous questions, and separate them with a comma)',
+				answer: ['Any'],
+				spoilers: [],
+			});
+		},
+
+		onIncorrectAnswer(player: ScavengerHuntPlayer, value: string) {
+			const curr = player.currentQuestion;
+
+			if (!this.incorrect[curr][value]) this.incorrect[curr][value] = [];
+			if (this.incorrect[curr][value].includes(player.id)) return;
+
+			this.incorrect[curr][value].push(player.id);
+		},
+
+		onSubmitPriority: 1,
+		onSubmit(player, jumble, value) {
+			const currentQuestion = player.currentQuestion;
+
+			if (currentQuestion + 1 === this.questions.length) {
+				this.guesses[player.id] = value.split(',').map((part: string) => toID(part));
+
+				this.onComplete(player);
+				return true;
+			}
+		},
+
+		onEnd() {
+			this.questions = this.questions.slice(0, -1); // remove the automatically added last question.
+		},
+
+		onAfterEnd(isReset) {
+			if (isReset) return;
+
+			const buffer = [];
+			for (const [idx, data] of this.incorrect.entries()) {
+				// collate the data for each question
+				let collection = [];
+				for (const str in data) {
+					collection.push({count: data[str].length, value: str});
+				}
+				collection = collection.sort((a, b) => b.count - a.count);
+				const maxValue = collection[0]?.count || 0;
+
+				const matches = collection
+					.filter(pair => pair.count === maxValue)
+					.map(pair => pair.value);
+
+				const matchedPlayers = [];
+				for (const playerid in this.guesses) {
+					const guesses = this.guesses[playerid];
+					if (matches.includes(guesses[idx])) matchedPlayers.push(playerid);
+				}
+
+				// display the data
+				const matchDisplay = matches.length ? matches.join(', ') : 'No wrong answers!';
+				const playerDisplay = matches.length ?
+					matchedPlayers.length ? `- ${matchedPlayers.join(', ')}` : '- No one guessed correctly!' :
+					'';
+				buffer.push(`Q${idx + 1}: ${matchDisplay} ${playerDisplay}`);
+			}
+
+			this.announce(`<h3>Most common incorrect answers:</h3>${buffer.join('<br />')}`);
 		},
 	},
 };

@@ -1,6 +1,6 @@
 import RandomGen2Teams from '../gen2/random-teams';
 import {Utils} from '../../../lib';
-import {MoveCounter} from '../../random-teams';
+import {MoveCounter} from '../gen8/random-teams';
 
 interface HackmonsCupEntry {
 	types: string[];
@@ -341,17 +341,29 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const customScale: {[k: string]: number} = {
 			Mewtwo: 62,
 			Caterpie: 100, Metapod: 100, Weedle: 100, Kakuna: 100, Magikarp: 100,
-			Ditto: 88,
+			Ditto: 100,
 		};
 		const level = this.adjustLevel || customScale[species.name] || levelScale[species.tier] || 80;
+
+		const evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255};
+		const ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
+
+		// Should be able to use Substitute four times from full HP without fainting
+		if (moves.has('substitute')) {
+			while (evs.hp > 3) {
+				const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+				if (hp % 4 !== 0) break;
+				evs.hp -= 4;
+			}
+		}
 
 		return {
 			name: species.name,
 			species: species.name,
 			moves: Array.from(moves),
 			ability: 'No Ability',
-			evs: {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255},
-			ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30},
+			evs,
+			ivs,
 			item: '',
 			level,
 			shiny: false,

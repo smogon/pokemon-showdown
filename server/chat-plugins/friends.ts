@@ -343,11 +343,6 @@ export const commands: Chat.ChatCommands = {
 		async undorequest(target, room, user, connection) {
 			Friends.checkCanUse(this);
 			target = toID(target);
-			if (user.settings.blockFriendRequests) {
-				return sendPM(
-					`/error ${this.tr`You are blocking friend requests, and so cannot undo requests, as you have none.`}`, user.id
-				);
-			}
 			await Friends.removeRequest(target as ID, user.id);
 			this.refreshPage('friends-sent');
 			return sendPM(`You removed your friend request to '${target}'.`, user.id);
@@ -440,7 +435,7 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply(`You are now allowing your friends to see your ongoing battles.`);
 			} else if (this.meansNo(target)) {
 				if (!user.settings.displayBattlesToFriends) {
-					return this.errorReply(this.tr`You not sharing your battles with friends.`);
+					return this.errorReply(this.tr`You are already not sharing your battles with friends.`);
 				}
 				user.settings.displayBattlesToFriends = false;
 				this.sendReply(`You are now hiding your ongoing battles from your friends.`);
@@ -590,6 +585,18 @@ export const pages: Chat.PageTable = {
 			buf += `value="/friends sharebattles off">Disable</button> `;
 			buf += `<button class="button${settings.displayBattlesToFriends ? ` disabled` : ``}" name="send" `;
 			buf += `value="/friends sharebattles on">Enable</button> <br /><br />`;
+
+			buf += `<strong>Block PMs except from friends (and staff):</strong><br />`;
+			buf += `<button class="button${settings.blockPMs ? `` : ' disabled'}" name="send" `;
+			buf += `value="/unblockpms&#10;/j view-friends-settings">Disable</button> `;
+			buf += `<button class="button${settings.blockPMs ? ` disabled` : ``}" name="send" `;
+			buf += `value="/blockpms friends&#10;/j view-friends-settings">Enable</button> <br /><br />`;
+
+			buf += `<strong>Block challenges except from friends (and staff):</strong><br />`;
+			buf += `<button class="button${settings.blockChallenges ? `` : ' disabled'}" name="send" `;
+			buf += `value="/unblockchallenges&#10;/j view-friends-settings">Disable</button> `;
+			buf += `<button class="button${settings.blockChallenges ? ` disabled` : ``}" name="send" `;
+			buf += `value="/blockchallenges friends&#10;/j view-friends-settings">Enable</button> <br /><br />`;
 			break;
 		case 'spectate':
 			this.title = `[Friends] Spectating`;

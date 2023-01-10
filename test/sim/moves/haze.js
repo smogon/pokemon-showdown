@@ -125,14 +125,16 @@ describe('Haze - RBY', function () {
 		assert.equal(battle.lastMove.name, 'Struggle');
 	});
 
-	it('should convert toxic poisoning to regular poisoning for the user but not reset the toxic counter', function () {
+	it('should convert toxic poisoning to regular poisoning for the user and effectively reset the toxic counter', function () {
 		battle = common.gen(1).createBattle([
 			[{species: "Mew", moves: ['toxic']}],
 			[{species: "Abra", moves: ['haze']}],
 		]);
+		const abra = battle.p2.active[0];
 		battle.makeChoices();
-		assert.equal(battle.p2.active[0].status, 'psn');
-		assert.equal(battle.p2.active[0].volatiles.residualdmg.counter, 1);
+		assert.equal(abra.status, 'psn');
+		battle.makeChoices();
+		assert.equal(abra.maxhp - abra.hp, Math.floor(abra.maxhp / 16) * 2);
 	});
 
 	it('should not remove substitute from either side', function () {

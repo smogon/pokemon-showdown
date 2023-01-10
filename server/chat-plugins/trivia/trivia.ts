@@ -22,6 +22,10 @@ const SPECIAL_CATEGORIES: {[k: string]: string} = {
 	subcat3: 'Sub-Category 3',
 	subcat4: 'Sub-Category 4',
 	subcat5: 'Sub-Category 5',
+	oldae: 'Old Arts and Entertainment',
+	oldsg: 'Old Science and Geography',
+	oldsh: 'Old Society and Humanities',
+	oldpoke: 'Old Pok\u00E9mon',
 };
 
 const ALL_CATEGORIES: {[k: string]: string} = {...SPECIAL_CATEGORIES, ...MAIN_CATEGORIES};
@@ -201,10 +205,14 @@ async function getQuestions(
 	} else {
 		const questions = [];
 		for (const category of categories) {
-			if (category === 'all') questions.push(...await database.getQuestions('all', limit, {order}));
-			if (!ALL_CATEGORIES[category]) throw new Chat.ErrorMessage(`"${category}" is an invalid category.`);
+			if (category === 'all') {
+				questions.push(...(await database.getQuestions('all', limit, {order})));
+			} else if (!ALL_CATEGORIES[category]) {
+				throw new Chat.ErrorMessage(`"${category}" is an invalid category.`);
+			}
 		}
-		return database.getQuestions(categories.filter(c => c !== 'all'), limit, {order});
+		questions.push(...(await database.getQuestions(categories.filter(c => c !== 'all'), limit, {order})));
+		return questions;
 	}
 }
 
@@ -384,12 +392,12 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 		this.canLateJoin = true;
 
 		this.categories = categories;
-		let category = this.categories
+		const uniqueCategories = new Set(this.categories
 			.map(cat => {
 				if (cat === 'all') return 'All';
 				return ALL_CATEGORIES[CATEGORY_ALIASES[cat] || cat];
-			})
-			.join(' + ');
+			}));
+		let category = [...uniqueCategories].join(' + ');
 		if (isRandomCategory) category = this.room.tr`Random (${category})`;
 
 
@@ -1556,7 +1564,7 @@ const triviaCommands: Chat.ChatCommands = {
 					this.tr`There are not enough questions in the randomly chosen category to finish a trivia game.`
 				);
 			}
-			if (categories.length === 0 && categories[0] === 'all') {
+			if (categories.length === 1 && categories[0] === 'all') {
 				return this.errorReply(
 					this.tr`There are not enough questions in the trivia database to finish a trivia game.`
 				);

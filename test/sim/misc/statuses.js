@@ -27,7 +27,7 @@ describe('Burn', function () {
 		const target = battle.p2.active[0];
 		battle.makeChoices('move boneclub', 'move splash');
 		// hardcoded to RNG
-		assert.hurtsBy(target, 64, () => battle.makeChoices('move boneclub', 'move willowisp'));
+		assert.hurtsBy(target, 42, () => battle.makeChoices('move boneclub', 'move willowisp'));
 	});
 
 	it('should reduce atk to 50% of its original value in Stadium', function () {

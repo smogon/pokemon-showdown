@@ -13,6 +13,7 @@ import * as net from 'net';
 import * as path from 'path';
 import * as repl from 'repl';
 import {crashlogger} from './crashlogger';
+import {FS} from './fs';
 declare const Config: any;
 
 export const Repl = new class {
@@ -72,7 +73,9 @@ export const Repl = new class {
 
 		if (filename === 'app') {
 			// Clean up old REPL sockets.
-			const directory = path.dirname(path.resolve(__dirname, '..', config.replsocketprefix || 'logs/repl', 'app'));
+			const directory = path.dirname(
+				path.resolve(FS.ROOT_PATH, config.replsocketprefix || 'logs/repl', 'app')
+			);
 			let files;
 			try {
 				files = fs.readdirSync(directory);
@@ -108,7 +111,7 @@ export const Repl = new class {
 			socket.on('error', () => socket.destroy());
 		});
 
-		const pathname = path.resolve(__dirname, '..', Config.replsocketprefix || 'logs/repl', filename);
+		const pathname = path.resolve(FS.ROOT_PATH, Config.replsocketprefix || 'logs/repl', filename);
 		try {
 			server.listen(pathname, () => {
 				fs.chmodSync(pathname, Config.replsocketmode || 0o600);

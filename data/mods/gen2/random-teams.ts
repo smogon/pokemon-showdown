@@ -1,6 +1,6 @@
 import RandomGen3Teams from '../gen3/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
-import type {MoveCounter} from '../../random-teams';
+import type {MoveCounter} from '../gen8/random-teams';
 
 export class RandomGen2Teams extends RandomGen3Teams {
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
@@ -60,14 +60,12 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		// Ineffective to have both
 		case 'doubleedge':
 			return {cull: moves.has('bodyslam') || moves.has('return')};
-		case 'explosion':
-			return {cull: moves.has('softboiled')};
+		case 'explosion': case 'selfdestruct':
+			return {cull: moves.has('softboiled') || restTalk};
 		case 'extremespeed':
 			return {cull: moves.has('bodyslam') || restTalk};
 		case 'hyperbeam':
 			return {cull: moves.has('rockslide')};
-		case 'quickattack': case 'selfdestruct':
-			return {cull: moves.has('rest')};
 		case 'rapidspin':
 			return {cull: !!teamDetails.rapidSpin || moves.has('sleeptalk')};
 		case 'return':
@@ -76,8 +74,8 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			return {cull: moves.has('hydropump')};
 		case 'thunder':
 			return {cull: moves.has('thunderbolt')};
-		case 'gigadrain':
-			return {cull: moves.has('razorleaf') || moves.has('swordsdance') && movePool.includes('sludgebomb')};
+		case 'razorleaf':
+			return {cull: moves.has('swordsdance') && movePool.includes('sludgebomb')};
 		case 'icebeam':
 			return {cull: moves.has('dragonbreath')};
 		case 'seismictoss':
@@ -103,7 +101,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		case 'softboiled':
 			return {cull: movePool.includes('swordsdance')};
 		case 'spikes':
-			return {cull: !!teamDetails.spikes || types.has('Ice') && moves.has('rapidspin')};
+			return {cull: !!teamDetails.spikes};
 		case 'substitute':
 			return {cull: moves.has('agility') || moves.has('rest')};
 		case 'synthesis':
