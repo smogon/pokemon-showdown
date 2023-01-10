@@ -880,6 +880,131 @@ export const Formats: FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] Fortemons",
+		desc: `Put a move in the item slot to have all of a Pok&eacute;mon's moves inherit its properties.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3713983/">Fortemons</a>`,
+		],
+
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Min Source Gen = 9'],
+		banlist: ['Koraidon', 'Miraidon', 'Palafin', 'Covert Cloak', 'Fake Out'],
+		restricted: ['Mud Slap', 'Power Trip', 'Rapid Spin', 'Stored Power'],
+		validateSet(set, teamHas) {
+			const item = set.item;
+			const species = this.dex.species.get(set.species);
+			const move = this.dex.moves.get(item);
+			if (!move.exists || move.category === 'Status' || this.ruleTable.isRestricted(`move:${move.id}`) ||
+				move.flags['charge'] || move.priority > 0 || move.damageCallback) {
+				return this.validateSet(set, teamHas);
+			}
+			set.item = '';
+			const problems = this.validateSet(set, teamHas) || [];
+			set.item = item;
+			if (this.checkCanLearn(move, species, this.allSources(species), set)) {
+				problems.push(`${species.name} can't learn ${move.name}.`);
+			}
+			if (move.secondaries?.some(secondary => secondary.boosts?.accuracy && secondary.boosts.accuracy < 0) &&
+				!this.ruleTable.has(`+move:${move.id}`)) {
+				problems.push(`${move.name} can't be used as an item.`);
+			}
+			return problems.length ? problems : null;
+		},
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				const move = this.dex.getActiveMove(pokemon.set.item);
+				if (move.exists && move.category !== 'Status') {
+					pokemon.m.forte = move;
+					pokemon.item = 'mail' as ID;
+				}
+			}
+		},
+		onModifyMovePriority: 1,
+		onModifyMove(move, pokemon, target) {
+			const forte: ActiveMove = pokemon.m.forte;
+			if (move.category !== 'Status' && forte) {
+				move.flags = {...move.flags, ...forte.flags};
+				if (forte.self) {
+					if (forte.self.onHit && move.self?.onHit) {
+						for (const i in forte.self) {
+							if (i.startsWith('onHit')) continue;
+							(move.self as any)[i] = (forte.self as any)[i];
+						}
+					} else {
+						move.self = {...(move.self || {}), ...forte.self};
+					}
+				}
+				if (forte.secondaries) {
+					move.secondaries = [...(move.secondaries || []), ...forte.secondaries];
+				}
+				move.critRatio = (move.critRatio || 0) + (forte.critRatio || 0);
+				const VALID_PROPERTIES: (keyof ActiveMove)[] = [
+					'basePowerCallback', 'breaksProtect', 'drain', 'forceSwitch', 'ignoreAbility', 'ignoreDefensive', 'ignoreEvasion', 'ignoreImmunity',
+					'overrideDefensivePokemon', 'overrideDefensiveStat', 'overrideOffensivePokemon', 'overrideOffensiveStat', 'pseudoWeather', 'recoil',
+					'selfSwitch', 'sleepUsable', 'stealsBoosts', 'thawsTarget', 'volatileStatus', 'willCrit',
+				];
+				for (const property of VALID_PROPERTIES) {
+					if (forte[property]) {
+						if (typeof forte[property] === 'number') {
+							const num = move[property] || 0;
+							(move as any)[property] = num + (forte as any)[property];
+						} else {
+							(move as any)[property] = forte[property];
+						}
+					}
+				}
+			}
+		},
+		onModifyPriority(priority, source, target, move) {
+			if (move.category !== 'Status' && source?.m.forte) {
+				if (source.hasAbility('Triage') && source.m.forte.flags['heal']) {
+					return priority + (move.flags['heal'] ? 0 : 3);
+				}
+				return priority + source.m.forte.priority;
+			}
+		},
+		onHitPriority: 1,
+		onHit(target, source, move) {
+			const forte = source.m.forte;
+			if (move?.category !== 'Status' && forte) {
+				if (forte.onHit) this.singleEvent('Hit', forte, {}, target, source, move);
+				if (forte.self?.onHit) this.singleEvent('Hit', forte.self, {}, source, source, move);
+				if (forte.onAfterHit) this.singleEvent('AfterHit', forte, {}, target, source, move);
+			}
+		},
+		onAfterSubDamage(damage, target, source, move) {
+			const forte = source.m.forte;
+			if (move?.category !== 'Status' && forte?.onAfterSubDamage) {
+				this.singleEvent('AfterSubDamage', forte, null, target, source, move);
+			}
+		},
+		onModifySecondaries(secondaries, target, source, move) {
+			if (secondaries.some(s => !!s.self)) move.selfDropped = false;
+		},
+		onAfterMoveSecondaryPriority: 1,
+		onAfterMoveSecondarySelf(source, target, move) {
+			const forte = source.m.forte;
+			if (move?.category !== 'Status' && forte?.onAfterMoveSecondarySelf) {
+				this.singleEvent('AfterMoveSecondarySelf', forte, null, source, target, move);
+			}
+		},
+		onBasePowerPriority: 1,
+		onBasePower(basePower, source, target, move) {
+			const forte = source.m.forte;
+			if (move.category !== 'Status' && forte?.onBasePower) {
+				this.singleEvent('BasePower', forte, null, source, target, move, basePower);
+			}
+		},
+		pokemon: {
+			getItem() {
+				const move = this.battle.dex.moves.get(this.m.forte);
+				if (!move.exists) return Object.getPrototypeOf(this).getItem.call(this);
+				return {...this.battle.dex.items.get('mail'), ignoreKlutz: true, onTakeItem: false};
+			},
+		},
+	},
+	{
 		name: "[Gen 9] Full Potential",
 		desc: `Pok&eacute;mon's moves hit off of their highest stat.`,
 		threads: [
