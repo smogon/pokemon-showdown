@@ -14,7 +14,7 @@ export const DefaultText: {[k: string]: DefaultText} = {
 		turn: "== Turn [NUMBER] ==",
 		switchIn: "[TRAINER] sent out [FULLNAME]!",
 		switchInOwn: "Go! [FULLNAME]!",
-		switchOut: "[TRAINER] withdrew [NICKNAME]!",
+		switchOut: "[TRAINER] withdrew [FULLNAME]!",
 		switchOutOwn: "[NICKNAME], come back!",
 		drag: "[FULLNAME] was dragged out!",
 		faint: "[POKEMON] fainted!",
