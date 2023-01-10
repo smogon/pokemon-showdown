@@ -47,7 +47,7 @@ export const Formats: FormatList = [
 		mod: 'gen9deluxe',
 		ruleset: ['Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause'],
 		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
-		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass", "Charcadet", "Jigglypuff"]
+		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass"]
 	},
 
 	{
@@ -74,7 +74,7 @@ export const Formats: FormatList = [
 		mod: 'gen9deluxe',
 		ruleset: ['Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause', 'Useless Moves Mod'],
 		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
-		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass", "Jigglypuff"]
+		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass"]
 	},
 
 	// SS Pseudos Metas

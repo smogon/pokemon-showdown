@@ -1279,7 +1279,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 	tinkatink: { "tier": "LC" },
 	tinkatuff: { "tier": "NFE" },
 	tinkaton: { "tier": "UU", "doublesTier": "DOU", "natDexTier": "UU" },
-	charcadet: { "tier": "Suspect" },
+	charcadet: { "tier": "Do Not Use" },
 	armarouge: { "tier": "UU", "doublesTier": "DOU", "natDexTier": "UU" },
 	ceruledge: { "tier": "UU", "doublesTier": "DUU", "natDexTier": "UU" },
 	toedscool: { "tier": "LC" },
