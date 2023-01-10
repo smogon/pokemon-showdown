@@ -1784,7 +1784,6 @@
 				"item": ["Rocky Helmet"],
 				"ability": ["Sturdy"],
 				"evs": {"hp": 252, "def": 160, "spd": 96},
-				"ivs": {"atk": 0},
 				"nature": "Bold",
 				"moves": [["Body Press", "Brave Bird"], ["Toxic", "Whirlwind"], ["Spikes"], ["Roost"]]
 			}]
@@ -2164,7 +2163,7 @@
 				"item": ["Power Herb"],
 				"ability": ["Prism Armor"],
 				"evs": {"hp": 4, "spa": 252, "spe": 252},
-        "ivs": {"atk": 0},
+				"ivs": {"atk": 0},
 				"nature": "Modest",
 				"moves": [["Photon Geyser"], ["Heat Wave"], ["Meteor Beam"], ["Autotomize", "Stealth Rock"]]
 			}, {
@@ -2172,7 +2171,7 @@
 				"item": ["Colbur Berry"],
 				"ability": ["Prism Armor"],
 				"evs": {"hp": 252, "def": 72, "spa": 156, "spe": 28},
-        "ivs": {"atk": 0},
+				"ivs": {"atk": 0},
 				"nature": "Bold",
 				"moves": [["Photon Geyser"], ["Heat Wave"], ["Calm Mind"], ["Moonlight"]]
 			}]
