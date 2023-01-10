@@ -1997,7 +1997,7 @@ export class GameRoom extends BasicRoom {
 
 		// This is only here because of an issue with private logs not getting resent
 		// when a user reloads on a battle and autojoins. This should be removed when that gets fixed.
-		(async () => {
+		void (async () => {
 			if (this.battle) {
 				const player = this.battle.playerTable[user.id];
 				if (player && this.battle.players.every(curPlayer => curPlayer.wantsOpenTeamSheets)) {
