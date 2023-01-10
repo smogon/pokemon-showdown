@@ -1335,9 +1335,6 @@ const commands: Chat.ChatCommands = {
 		announce(target, room, user, connection, cmd) {
 			room = this.requireRoom();
 			this.checkCan('gamemanagement', null, room);
-			if (!Config.tourannouncements.includes(room.roomid)) {
-				return this.errorReply("Tournaments in this room cannot be announced.");
-			}
 			if (!target) {
 				if (room.settings.tournaments?.announcements) {
 					return this.sendReply("Tournament announcements are enabled.");

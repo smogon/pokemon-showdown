@@ -457,9 +457,7 @@ export class RandomTeams {
 		}
 
 		// These moves don't mesh well with other aspects of the set
-		if (species.id !== "spidops") {
-			this.incompatibleMoves(moves, movePool, statusMoves, ['healingwish', 'memento', 'switcheroo', 'trick']);
-		}
+		this.incompatibleMoves(moves, movePool, statusMoves, ['healingwish', 'switcheroo', 'trick']);
 		if (species.id !== "scyther" && species.id !== "scizor") {
 			this.incompatibleMoves(moves, movePool, Setup, pivotingMoves);
 		}
@@ -498,6 +496,9 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'thunderwave', 'yawn');
 
 		// This space reserved for assorted hardcodes that otherwise make little sense out of context
+		if (species.id === "dugtrio") {
+			this.incompatibleMoves(moves, movePool, statusMoves, 'memento');
+		}
 		// Landorus
 		this.incompatibleMoves(moves, movePool, 'nastyplot', 'rockslide');
 		// Persian and Grafaiai
@@ -1048,6 +1049,9 @@ export class RandomTeams {
 		if (species.id === 'pikachu') return 'Light Ball';
 		if (species.id === 'regieleki') return 'Magnet';
 		if (species.id === 'pincurchin') return 'Shuca Berry';
+		if (species.id === 'cyclizar' && role === 'Fast Attacker') return 'Choice Scarf';
+		if (species.id === 'lokix' && role === 'Wallbreaker') return 'Life Orb';
+		if (species.id === 'toxtricity' && moves.has('shiftgear')) return 'Throat Spray';
 		if (ability === 'Imposter' || (species.id === 'magnezone' && moves.has('bodypress'))) return 'Choice Scarf';
 		if (moves.has('bellydrum') && moves.has('substitute')) return 'Salac Berry';
 		if (
@@ -1074,6 +1078,7 @@ export class RandomTeams {
 		}
 		if (moves.has('shellsmash')) return 'White Herb';
 		if (moves.has('populationbomb')) return 'Wide Lens';
+		if (moves.has('courtchange')) return 'Heavy-Duty Boots';
 		if (moves.has('stuffcheeks')) return this.randomChance(1, 2) ? 'Liechi Berry' : 'Salac Berry';
 		if (ability === 'Unburden') return moves.has('closecombat') ? 'White Herb' : 'Sitrus Berry';
 		if (moves.has('acrobatics')) return ability === 'Grassy Surge' ? 'Grassy Seed' : '';
@@ -1084,7 +1089,7 @@ export class RandomTeams {
 		) {
 			return 'Chesto Berry';
 		}
-		if (species.id === 'scyther') return isLead ? 'Eviolite' : 'Heavy-Duty Boots';
+		if (species.id === 'scyther') return (isLead && !moves.has('uturn')) ? 'Eviolite' : 'Heavy-Duty Boots';
 		if (species.nfe) return 'Eviolite';
 		if (this.dex.getEffectiveness('Rock', species) >= 2) return 'Heavy-Duty Boots';
 	}
@@ -1171,7 +1176,6 @@ export class RandomTeams {
 			);
 			return (scarfReqs && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Band';
 		}
-		if (counter.get('Physical') === 3 && moves.has('shedtail')) return 'Choice Scarf';
 		if (
 			(counter.get('Special') >= 4) ||
 			(counter.get('Special') >= 3 && ['flipturn', 'partingshot', 'uturn'].some(m => moves.has(m)))
@@ -1187,8 +1191,6 @@ export class RandomTeams {
 		if (!counter.get('Status') && role !== 'Fast Attacker' && role !== 'Wallbreaker') return 'Assault Vest';
 		if (counter.get('speedsetup') && this.dex.getEffectiveness('Ground', species) < 1) return 'Weakness Policy';
 		if (species.id === 'urshifurapidstrike') return 'Punching Glove';
-		if (species.id === 'lokix' && role === 'Wallbreaker') return 'Life Orb';
-		if (species.id === 'toxtricity' && moves.has('shiftgear')) return 'Throat Spray';
 		if (species.id === 'palkia') return 'Lustrous Orb';
 		if (moves.has('substitute') || ability === 'Moody') return 'Leftovers';
 		if (moves.has('stickyweb') && isLead) return 'Focus Sash';
