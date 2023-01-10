@@ -427,22 +427,31 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 	}
 
 	static extractChannel(message: string, channelid: -1 | ChannelID) {
-		if (channelid === -1) {
-			// Grab all privileged messages
-			return message.replace(/(?:(?<=\n)|^)\|split\|p[1234]\n([^\n]*)\n(?:[^\n]*)/g, '$1').replace(/\n$/g, '');
+		const messages = message.split('\n');
+
+		for (let i = 0; i < messages.length - 2; i++) {
+			const line = messages[i];
+			const splitMatch = /^\|split\|p([1234])$/.exec(line);
+
+			if (!splitMatch) continue;
+
+			const [, playerMatch] = splitMatch;
+
+			const player = parseInt(playerMatch);
+			const secretMessage = messages[i + 1];
+			const sharedMessage = messages[i + 2];
+			const hasPrivilege = (player === channelid) || (channelid === -1);
+
+			let channelMessage = sharedMessage;
+			if (hasPrivilege) channelMessage = secretMessage; // Expose secrets to matching players
+			const isEmptyChannelMessage = channelMessage.length === 0; // If the line is empty, prepare to remove it
+
+			messages[i] = channelMessage;
+			messages.splice(i + 1 - (isEmptyChannelMessage ? 1 : 0), 2 + (isEmptyChannelMessage ? 1 : 0));
+			if (isEmptyChannelMessage) i--;
 		}
 
-		// Grab privileged messages channel has access to
-		switch (channelid) {
-		case 1: message = message.replace(/(?:(?<=\n)|^)\|split\|p1\n([^\n]*)\n(?:[^\n]*)/g, '$1'); break;
-		case 2: message = message.replace(/(?:(?<=\n)|^)\|split\|p2\n([^\n]*)\n(?:[^\n]*)/g, '$1'); break;
-		case 3: message = message.replace(/(?:(?<=\n)|^)\|split\|p3\n([^\n]*)\n(?:[^\n]*)/g, '$1'); break;
-		case 4: message = message.replace(/(?:(?<=\n)|^)\|split\|p4\n([^\n]*)\n(?:[^\n]*)/g, '$1'); break;
-		}
-
-		// Discard remaining privileged messages
-		// Note: the last \n? is for privileged messages that are empty when non-privileged
-		return message.replace(/(?:(?<=\n)|^)\|split\|(?:[^\n]*)\n(?:[^\n]*)\n\n?(\n$)?/g, '').replace(/\n$/g, '');
+		return messages.join('\n');
 	}
 
 	/**
