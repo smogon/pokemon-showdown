@@ -3093,14 +3093,14 @@
 				"species": "Golurk",
 				"item": ["Choice Band"],
 				"ability": ["No Guard"],
-				"evs": {"hp": 4, "atk": 252, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Earthquake"], ["Poltergeist"], ["Close Combat"], ["Trick"]]
 			}, {
 				"species": "Golurk",
 				"item": ["Choice Band"],
 				"ability": ["Iron Fist"],
-				"evs": {"hp": 4, "atk": 252, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Earthquake"], ["Poltergeist"], ["Close Combat"], ["Shadow Punch"]]
 			}]
@@ -3796,7 +3796,7 @@
 				"species": "Golurk",
 				"item": ["Choice Band"],
 				"ability": ["No Guard"],
-				"evs": {"hp": 4, "atk": 252, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Earthquake"], ["Poltergeist"], ["Heat Crash"], ["Darkest Lariat"]]
 			}]
