@@ -1987,6 +1987,40 @@ export class GameRoom extends BasicRoom {
 		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user));
 		if (this.game && this.game.onConnect) this.game.onConnect(user, connection);
 	}
+	onJoin(user: User, connection: Connection) {
+		if (!user) return false; // ???
+		if (this.users[user.id]) return false;
+
+		if (user.named) {
+			this.reportJoin('j', user.getIdentityWithStatus(this), user);
+		}
+
+		// This is only here because of an issue with private logs not getting resent
+		// when a user reloads on a battle and autojoins. This should be removed when that gets fixed.
+		void (async () => {
+			if (this.battle) {
+				const player = this.battle.playerTable[user.id];
+				if (player && this.battle.players.every(curPlayer => curPlayer.wantsOpenTeamSheets)) {
+					let buf = '|uhtml|ots|';
+					for (const curPlayer of this.battle.players) {
+						const team = await this.battle.getTeam(curPlayer.id);
+						if (!team) continue;
+						buf += Utils.html`<div class="infobox" style="margin-top:5px"><details><summary>Open Team Sheet for ${curPlayer.name}</summary>${Teams.export(team, {hideStats: true})}</details></div>`;
+					}
+					player.sendRoom(buf);
+				}
+			}
+		})();
+
+		this.users[user.id] = user;
+		this.userCount++;
+		this.checkAutoModchat(user);
+
+		this.minorActivity?.onConnect?.(user, connection);
+		this.game?.onJoin?.(user, connection);
+		Chat.runHandlers('onRoomJoin', this, user, connection);
+		return true;
+	}
 	/**
 	 * Sends this room's replay to the connection to be uploaded to the replay
 	 * server. To be clear, the replay goes:

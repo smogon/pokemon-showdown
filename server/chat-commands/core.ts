@@ -778,6 +778,71 @@ export const commands: Chat.ChatCommands = {
 		`!showset [number] - shows the set of the pokemon corresponding to that number (in original Team Preview order, not necessarily current order)`,
 	],
 
+	async acceptopenteamsheets(target, room, user, connection, cmd) {
+		room = this.requireRoom();
+		const battle = room.battle;
+		if (!battle) return this.errorReply(this.tr`Must be in a battle room.`);
+		const player = battle.playerTable[user.id];
+		if (!player) {
+			return this.errorReply(this.tr`Must be a player to agree to open team sheets.`);
+		}
+		const format = Dex.formats.get(battle.options.format);
+		if (!Dex.formats.getRuleTable(format).has('openteamsheets')) {
+			return this.errorReply(this.tr`This format does not allow requesting open team sheets. You can both manually agree to it by using !showteam hidestats.`);
+		}
+		if (battle.turn > 0) {
+			return this.errorReply(this.tr`You cannot agree to open team sheets after Team Preview. Each player can still show their own sheet by using this command: !showteam hidestats`);
+		}
+		if (battle.players.some(curPlayer => curPlayer.wantsOpenTeamSheets === false)) {
+			return this.errorReply(this.tr`An opponent has already rejected open team sheets.`);
+		}
+		if (player.wantsOpenTeamSheets !== null) {
+			return this.errorReply(this.tr`You have already made your decision about agreeing to open team sheets.`);
+		}
+		player.wantsOpenTeamSheets = true;
+		player.sendRoom(Utils.html`|uhtmlchange|otsrequest|`);
+
+		this.add(this.tr`${user.name} has agreed to open team sheets.`);
+		if (battle.players.every(curPlayer => curPlayer.wantsOpenTeamSheets)) {
+			let buf = '|uhtml|ots|';
+			for (const curPlayer of battle.players) {
+				const team = await battle.getTeam(curPlayer.id);
+				if (!team) continue;
+				buf += Utils.html`<div class="infobox" style="margin-top:5px"><details><summary>Open Team Sheet for ${curPlayer.name}</summary>${Teams.export(team, {hideStats: true})}</details></div>`;
+			}
+			for (const curPlayer of battle.players) {
+				curPlayer.sendRoom(buf);
+			}
+		}
+	},
+	acceptopenteamsheetshelp: [`/acceptopenteamsheets - Agrees to an open team sheet opportunity during Team Preview, where all information on a team except stats is shared with the opponent. Requires: \u2606`],
+
+	rejectopenteamsheets(target, room, user) {
+		room = this.requireRoom();
+		const battle = room.battle;
+		if (!battle) return this.errorReply(this.tr`Must be in a battle room.`);
+		const player = battle.playerTable[user.id];
+		if (!player) {
+			return this.errorReply(this.tr`Must be a player to reject open team sheets.`);
+		}
+		const format = Dex.formats.get(battle.options.format);
+		if (!Dex.formats.getRuleTable(format).has('openteamsheets')) {
+			return this.errorReply(this.tr`This format does not allow requesting open team sheets.`);
+		}
+		if (battle.turn > 0) {
+			return this.errorReply(this.tr`You cannot reject open team sheets after Team Preview.`);
+		}
+		if (player.wantsOpenTeamSheets !== null) {
+			return this.errorReply(this.tr`You have already made your decision about agreeing to open team sheets.`);
+		}
+		player.wantsOpenTeamSheets = false;
+		for (const otherPlayer of battle.players) {
+			otherPlayer.sendRoom(Utils.html`|uhtmlchange|otsrequest|`);
+		}
+		return this.add(this.tr`${user.name} rejected open team sheets.`);
+	},
+	rejectopenteamsheetshelp: [`/rejectopenteamsheetshelp - Rejects an open team sheet opportunity during Team Preview, where all information on a team except stats is shared with the opponent. Requires: \u2606`],
+
 	acceptdraw: 'offertie',
 	accepttie: 'offertie',
 	offerdraw: 'offertie',
