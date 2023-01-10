@@ -122,138 +122,6 @@ export const PIECES: {[letter: string]: Piece} = {
 	},
 };
 
-export class ChessLadder {
-	entries: Map<ID, LadderEntry> = new Map();
-	static settings: AnyObject & {disabled: boolean} = {disabled: true};
-	static searches: Map<ID, number> = Chat.oldPlugins.chess?.ChessLadder.searches || new Map();
-	static matchInterval = setInterval(() => ChessLadder.runMatch(), MATCH_INTERVAL);
-	constructor() {
-		this.load();
-	}
-	static search(user: User) {
-		if (this.searches.has(user.id)) return false;
-		this.searches.set(user.id, Date.now());
-		this.sortSearches();
-		return true;
-	}
-	static sortSearches() {
-		this.searches = new Map(
-			Utils.sortBy([...this.searches], a => -ChessGame.ladder.getRating(a[0]))
-		);
-	}
-	static runMatch() {
-		const startingSize = this.searches.size;
-		let iterations = 0;
-		this.sortSearches();
-		while (this.searches.size) {
-			const [search1, search2] = Utils.sortBy([...this.searches], a => -ChessGame.ladder.getRating(a[0]));
-			if (!search1 || !search2) break;
-			const [id1] = search1;
-			const [id2] = search2;
-			if (iterations > (startingSize * 10)) {
-				// we've looped over every user originally in it 10 times and can't match any of them, just cut it off here
-				// (to prevent an infinite loop)
-				// Mission failed, we'll get em next time
-				break;
-			}
-			iterations++;
-			const ids = [id1, id2];
-			// they've waited two intervals just match them
-			const force = ids.some(id => Date.now() - this.searches.get(id)! > 2 * MATCH_INTERVAL);
-			const p1rating = ChessGame.ladder.getRating(id1);
-			const p2rating = ChessGame.ladder.getRating(id2);
-			const [highest, lowest] = [p1rating, p2rating].sort();
-			// only match if they're within 50 points of each other
-			// else, skip over them for this round
-			// (unless we've skipped them for 2m+ in which case we do match them)
-			if ((lowest < (highest - 50) || highest > (lowest + 50)) && !force) {
-				continue;
-			}
-			this.searches.delete(id1);
-			this.searches.delete(id2);
-			this.matchUsers(id1, id2);
-		}
-	}
-	static matchUsers(p1: ID, p2: ID) {
-		const p1user = Users.get(p1);
-		const p2user = Users.get(p2);
-		if (!p1user) {
-			if (!p2user) return;
-			this.searches.set(p2, Date.now());
-			return;
-		}
-		if (!p2user) {
-			this.searches.set(p1, Date.now());
-			return;
-		}
-		ChessGame.start(p1user, p2user, true);
-	}
-	calculateRating(previousUserElo: number, score: number, foeElo: number): number {
-		// The K factor determines how much your Elo changes when you win or
-		// lose games. Larger K means more change.
-		// In the "original" Elo, K is constant, but it's common for K to
-		// get smaller as your rating goes up
-		let K = 50;
-
-		// dynamic K-scaling (optional)
-		if (previousUserElo < 1200) {
-			if (score < 0.5) {
-				K = 10 + (previousUserElo - 1000) * 40 / 200;
-			} else if (score > 0.5) {
-				K = 90 - (previousUserElo - 1000) * 40 / 200;
-			}
-		} else if (previousUserElo > 1350 && previousUserElo <= 1600) {
-			K = 40;
-		} else {
-			K = 32;
-		}
-
-		// main Elo formula
-		const E = 1 / (1 + Math.pow(10, (foeElo - previousUserElo) / 400));
-
-		const newElo = previousUserElo + K * (score - E);
-
-		return Math.max(newElo, 1000);
-	}
-	get(name: string) {
-		const id = toID(name);
-		let entry = this.entries.get(id);
-		if (!entry) {
-			entry = {
-				username: name,
-				userid: id,
-				rating: 1000,
-				wins: 0,
-				losses: 0,
-			};
-			this.entries.set(id, entry);
-		}
-		return entry;
-	}
-	load() {
-		const data = JSON.parse(FS('config/chat-plugins/chess.json').readIfExistsSync() || "{}");
-		if (data.settings) ChessLadder.settings = data.settings;
-		if (!data.ratings) data.ratings = [];
-		for (const entry of data.ratings) {
-			if (!entry.userid) continue;
-			this.entries.set(entry.userid, entry);
-		}
-	}
-	save() {
-		return FS(`config/chat-plugins/chess.json`).writeUpdate(() => (
-			JSON.stringify({settings: ChessLadder.settings, ratings: [...this.entries.values()]})
-		));
-	}
-	sorted() {
-		const chessLadder = [...this.entries.values()];
-		Utils.sortBy(chessLadder, a => -a.rating);
-		return chessLadder;
-	}
-	getRating(name: string) {
-		return this.get(name).rating;
-	}
-}
-
 export class ChessBoard {
 	strings: string[][];
 	constructor(strings?: string[][]) {
@@ -312,7 +180,6 @@ export class ChessPlayer extends Rooms.RoomGamePlayer {
 		this.game = game;
 		this.user = user;
 		this.side = this.startingSide();
-		if (game.rated) this.elo = ChessGame.ladder.getRating(user.name);
 	}
 	startingSide(): Side {
 		if (this.game.players[0]) {
@@ -518,8 +385,6 @@ export class ChessGame extends Rooms.RoomGame {
 	sendField(buffer: string) {
 		this.room?.add(`|fieldhtml|${buffer}`).update();
 	}
-
-	static ladder = new ChessLadder();
 
 	static startingBoard(): string[][] {
 		const ROW1 = 'RNBKQBNR';
@@ -841,9 +706,6 @@ export class ChessGame extends Rooms.RoomGame {
 		this.sendBoard();
 		this.add(`<h2>${endMessage}</h2>`);
 		this.addControls("");
-		if (winner) {
-			this.updateRating(winner);
-		}
 		this.state = 'ended';
 		this.room.pokeExpireTimer();
 		for (const p of this.players) {
@@ -894,27 +756,6 @@ export class ChessGame extends Rooms.RoomGame {
 		this.sendBoard();
 		this.add(Utils.html`${user.name} promoted their piece at ${loc} to ${PIECES[pieceType].name}`);
 	}
-	updateRating(winner: ChessPlayer) {
-		if (!this.rated) return;
-
-		for (const player of this.players) {
-			const isWinner = winner.id === player.id;
-			const score = isWinner ? 1 : 0;
-			const resultElo = ChessGame.ladder.calculateRating(player.elo, score, this.oppositePlayer(player).elo);
-			const entry = ChessGame.ladder.get(player.name);
-			entry.username = player.name;
-			entry.rating = resultElo;
-			if (isWinner) {
-				entry.wins++;
-			} else {
-				entry.losses++;
-			}
-			player.elo = Math.round(resultElo);
-			this.room.add(`${player.name} ${isWinner ? 'won the game' : 'lost the game'} with a total of ${player.elo} elo`);
-		}
-		ChessGame.ladder.save();
-		this.room.update();
-	}
 	makePlayer(user: User) {
 		return new ChessPlayer(user, this);
 	}
@@ -939,10 +780,6 @@ export class ChessGame extends Rooms.RoomGame {
 
 function findExistingRoom(user1: string, user2: string) {
 	return Rooms.get(`chess-${user1}-${user2}`) || Rooms.get(`chess-${user2}-${user1}`);
-}
-
-export function destroy() {
-	clearInterval(ChessLadder.matchInterval);
 }
 
 export const commands: Chat.ChatCommands = {
@@ -1055,35 +892,6 @@ export const commands: Chat.ChatCommands = {
 				`${pieceInfo.desc.join('<br />')}`
 			);
 		},
-		random(target, room, user) {
-			this.checkChat();
-			if (ChessLadder.settings.disabled) {
-				return this.errorReply(`The Chess ladder is presently disabled.`);
-			}
-			if (!ChessLadder.search(user)) {
-				return this.errorReply(`You're already searching for a chess ladder match.`);
-			}
-			this.popupReply(`You're now searching for a match on the chess ladder.`);
-		},
-		toggleladder(target, room, user) {
-			this.checkCan('bypassall');
-			target = toID(target);
-			if (target === 'on') {
-				if (!ChessLadder.settings.disabled) return this.errorReply(`The chess ladder is already enabled.`);
-				ChessLadder.settings.disabled = false;
-			} else if (target === 'off') {
-				if (ChessLadder.settings.disabled) return this.errorReply(`The chess ladder is already disabled.`);
-				ChessLadder.settings.disabled = true;
-			} else {
-				return this.errorReply(`Invalid setting.`);
-			}
-			this.globalModlog(`CHESSLADDER`, null, target);
-			this.privateModAction(`${user.name} enabled the chess ladder.`);
-			ChessGame.ladder.save();
-		},
-		ladder() {
-			return this.parse(`/join view-chessladder`);
-		},
 	},
 	chesshelp: [
 		`/chess challenge [user] - Challenges the [user] to a chess game.`,
@@ -1096,24 +904,4 @@ export const commands: Chat.ChatCommands = {
 		`/chess random - Searches for a match on the Chess ladder.`,
 		`/chess ladder - Views the chess ladder rankings.`,
 	],
-};
-
-export const pages: Chat.PageTable = {
-	chessladder() {
-		if (ChessLadder.settings.disabled) {
-			return this.errorReply(`The chess ladder is currently disabled.`);
-		}
-		this.title = `[Chess] Ladder`;
-		let buf = `<div class="pad"><h2>Chess ladder</h2>`;
-		buf += `<div class="ladder pad"><table><tr>`;
-		buf += `<th></th><th>Username</th><th>Elo</th><th>Wins</th><th>Losses</th></tr>`;
-		for (const [i, entry] of ChessGame.ladder.sorted().entries()) {
-			buf += `<tr><td>${i + 1}</td><td>${entry.username}</td>`;
-			buf += `<td>${Math.round(entry.rating)}</td>`;
-			buf += `<td>${entry.wins}</td><td>${entry.losses}</td>`;
-			buf += `</tr>`;
-		}
-		buf += `</table></div>`;
-		return buf;
-	},
 };
