@@ -2,6 +2,9 @@
 
 import {Utils} from "../../../lib";
 import {Pokemon} from "../../../sim/pokemon";
+import {checkIsMoveNotUseless} from "./useless";
+import { Dex, toID } from "@pkmn/dex";
+import { Pokedex } from "./pokedex";
 
 // The list of formats is stored in config/formats.js
 export const Rulesets: {[k: string]: FormatData} = {
@@ -806,6 +809,50 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 			return problems;
 		},
+	},
+	uselessmovesmod: {
+		effectType: 'ValidatorRule',
+		name: 'Useless Moves Mod',
+		desc: 'Bans all non-useless moves, as well as some others specified for the tournament.',
+		onValidateSet(set) {
+			const miscMoves = ['First Impression', 'Belly Drum'];
+			const banned_hp = ['Hidden Power [Grass]', 'Hidden Power [Ice]'];
+			const unown_banned_hp = ['Hidden Power [Psychic]'];
+			
+			const moves = set.moves;
+
+			const IDMoves = [];
+			for (const move of moves) {
+				IDMoves.push(this.toID(move));
+			}
+
+			if (!moves) return;
+			const problems: string[] = [];
+			for (const move of moves) {
+				const id = this.toID(move);
+				if (id === 'hiddenpower') {
+					if (set.species === 'Unown') {
+						if (unown_banned_hp.includes(move)) {
+							problems.push(`${move} is banned on Unown.`);
+						}
+					} else {
+						if (banned_hp.includes(move)) {
+							problems.push(`${move} is banned.`);
+						}
+					}
+				}
+				if (miscMoves.includes(move)) {
+					problems.push(`${move} is banned.`);
+				}
+				if (checkIsMoveNotUseless(id, Pokedex[this.toID(set.species)], IDMoves, set)) {
+					problems.push(`${move} is useful and banned.`);
+				}
+			}
+			return problems;
+		},
+		onBegin() {
+			this.add('rule', 'Useless Moves Mod: All non-useless moves are banned');
+		}
 	},
 	megastoneclause: {
 		effectType: 'ValidatorRule',
