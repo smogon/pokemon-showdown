@@ -890,7 +890,7 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Min Source Gen = 9'],
 		banlist: ['Koraidon', 'Miraidon', 'Palafin', 'Covert Cloak', 'Fake Out'],
-		restricted: ['Mud Slap', 'Power Trip', 'Rapid Spin', 'Stored Power'],
+		restricted: ['Dynamic Punch', 'Inferno', 'Mud Slap', 'Nuzzle', 'Power Trip', 'Rapid Spin', 'Stored Power', 'Zap Cannon'],
 		validateSet(set, teamHas) {
 			const item = set.item;
 			const species = this.dex.species.get(set.species);
@@ -905,7 +905,8 @@ export const Formats: FormatList = [
 			if (this.checkCanLearn(move, species, this.allSources(species), set)) {
 				problems.push(`${species.name} can't learn ${move.name}.`);
 			}
-			if (move.secondaries?.some(secondary => secondary.boosts?.accuracy && secondary.boosts.accuracy < 0) &&
+			if ((move.secondaries?.some(secondary => secondary.boosts?.accuracy && secondary.boosts.accuracy < 0) ||
+				move.multihit || move.id === 'beatup') &&
 				!this.ruleTable.has(`+move:${move.id}`)) {
 				problems.push(`${move.name} can't be used as an item.`);
 			}
