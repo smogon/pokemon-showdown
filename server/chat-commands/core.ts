@@ -800,13 +800,13 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(this.tr`You have already made your decision about agreeing to open team sheets.`);
 		}
 		player.wantsOpenTeamSheets = true;
-		player.sendRoom(Utils.html`|uhtmlchange|ots|`);
+		player.sendRoom(Utils.html`|uhtmlchange|otsrequest|`);
 
 		this.add(this.tr`${user.name} has agreed to open team sheets.`);
 		if (battle.players.every(curPlayer => curPlayer.wantsOpenTeamSheets)) {
-			let buf = '|raw|';
+			let buf = '|uhtml|ots|';
 			for (const curPlayer of battle.players) {
-				const team = await battle.getTeam(user);
+				const team = await battle.getTeam(curPlayer.id);
 				if (!team) continue;
 				buf += Utils.html`<div class="infobox" style="margin-top:5px"><details><summary>Open Team Sheet for ${curPlayer.name}</summary>${Teams.export(team, {hideStats: true})}</details></div>`;
 			}
@@ -837,7 +837,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		player.wantsOpenTeamSheets = false;
 		for (const otherPlayer of battle.players) {
-			otherPlayer.sendRoom(Utils.html`|uhtmlchange|ots|`);
+			otherPlayer.sendRoom(Utils.html`|uhtmlchange|otsrequest|`);
 		}
 		return this.add(this.tr`${user.name} rejected open team sheets.`);
 	},

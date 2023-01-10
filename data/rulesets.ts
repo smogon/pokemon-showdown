@@ -1614,14 +1614,14 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Open Team Sheets',
 		desc: "Allows each player to see the Pok&eacute;mon and all non-stat information about them, before they choose their lead Pok&eacute;mon",
 		onTeamPreview() {
-			const msg = 'uhtml|ots|<button name="send" value="/acceptopenteamsheets" class="button"><strong>Accept Open Team Sheets</strong></button><button name="send" value="/rejectopenteamsheets" class="button"><strong>Deny Open Team Sheets</strong></button>';
+			const msg = 'uhtml|otsrequest|<button name="send" value="/acceptopenteamsheets" class="button"><strong>Accept Open Team Sheets</strong></button><button name="send" value="/rejectopenteamsheets" class="button"><strong>Deny Open Team Sheets</strong></button>';
 			for (const side of this.sides) {
 				this.addSplit(side.id, [msg]);
 			}
 		},
 		onBattleStart() {
 			for (const side of this.sides) {
-				this.addSplit(side.id, ['uhtmlchange|ots|']);
+				this.addSplit(side.id, ['uhtmlchange|otsrequest|']);
 			}
 		},
 	},
