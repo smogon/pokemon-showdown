@@ -2357,7 +2357,10 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const curSpecies = this.dex.species.get(set.species);
 			const obtainableAbilityPool = new Set<string>();
 			const matchingSpecies = this.dex.species.all()
-				.filter(species => !species.isNonstandard && species.types.every(type => curSpecies.types.includes(type)));
+				.filter(species => (
+					!species.isNonstandard && species.types.every(type => curSpecies.types.includes(type)) &&
+					species.types.length === curSpecies.types.length
+				));
 			for (const species of matchingSpecies) {
 				for (const abilityName of Object.values(species.abilities)) {
 					const abilityid = this.toID(abilityName);
@@ -2371,7 +2374,10 @@ export const Rulesets: {[k: string]: FormatData} = {
 		},
 		checkCanLearn(move, species, setSources, set) {
 			const matchingSpecies = this.dex.species.all()
-				.filter(s => !s.isNonstandard && s.types.every(type => species.types.includes(type)));
+				.filter(s => (
+					!s.isNonstandard && s.types.every(type => species.types.includes(type)) &&
+					s.types.length === species.types.length
+				));
 			const someCanLearn = matchingSpecies.some(s => this.checkCanLearn(move, s, setSources, set) === null);
 			if (someCanLearn && !this.ruleTable.isRestricted(`move:${move.id}`)) return null;
 			return this.checkCanLearn(move, species, setSources, set);
