@@ -118,11 +118,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onModifyMove() { },
 	},
-	block: {
-		inherit: true,
-		accuracy: 100,
-		ignoreAccuracy: true,
-	},
 	brickbreak: {
 		inherit: true,
 		onTryHit(target, source) {
@@ -304,9 +299,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.effectState.move = target.lastMove.id;
 				this.add('-start', target, 'Encore');
-				if (!this.queue.willMove(target)) {
-					this.effectState.duration++;
-				}
 			},
 			onOverrideAction(pokemon) {
 				return this.effectState.move;
@@ -379,6 +371,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
+	foresight: {
+		inherit: true,
+		accuracy: 100,
+	},
 	furycutter: {
 		inherit: true,
 		onHit(target, source) {
@@ -395,10 +391,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	hiddenpower: {
 		inherit: true,
-		basePower: 0,
-		basePowerCallback(pokemon) {
-			return pokemon.hpPower || 70;
-		},
 		category: "Physical",
 		onModifyMove(move, pokemon) {
 			move.type = pokemon.hpType || 'Dark';
@@ -440,19 +432,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: 100,
 	},
-	meanlook: {
-		inherit: true,
-		accuracy: 100,
-		ignoreAccuracy: true,
-	},
 	megadrain: {
 		inherit: true,
 		pp: 10,
 	},
-	mimic: {
+	memento: {
+		inherit: true,
+		accuracy: true,
+	},
+	mindreader: {
 		inherit: true,
 		accuracy: 100,
-		ignoreAccuracy: true,
 	},
 	mirrorcoat: {
 		inherit: true,
@@ -512,6 +502,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return 60;
 		},
 	},
+	nightmare: {
+		inherit: true,
+		accuracy: true,
+	},
+	odorsleuth: {
+		inherit: true,
+		accuracy: 100,
+	},
 	outrage: {
 		inherit: true,
 		basePower: 90,
@@ -519,11 +517,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	overheat: {
 		inherit: true,
 		flags: {contact: 1, protect: 1, mirror: 1},
-	},
-	painsplit: {
-		inherit: true,
-		accuracy: 100,
-		ignoreAccuracy: true,
 	},
 	petaldance: {
 		inherit: true,
@@ -537,25 +530,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		basePower: 20,
 	},
-	roleplay: {
-		inherit: true,
-		accuracy: 100,
-		ignoreAccuracy: true,
-	},
-	skillswap: {
-		inherit: true,
-		accuracy: 100,
-		ignoreAccuracy: true,
-	},
 	sleeptalk: {
 		inherit: true,
-		beforeMoveCallback(pokemon) {
-			if (pokemon.volatiles['choicelock'] || pokemon.volatiles['encore']) {
-				this.addMove('move', pokemon, 'Sleep Talk');
-				this.add('-fail', pokemon);
-				return true;
-			}
-		},
 		onHit(pokemon) {
 			const moves = [];
 			for (const moveSlot of pokemon.moveSlots) {
@@ -576,11 +552,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			this.actions.useMove(randomMove.move, pokemon);
 		},
-	},
-	spiderweb: {
-		inherit: true,
-		accuracy: 100,
-		ignoreAccuracy: true,
 	},
 	spite: {
 		inherit: true,
@@ -700,11 +671,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		pp: 10,
 	},
-	vitalthrow: {
-		inherit: true,
-		accuracy: 100,
-		ignoreAccuracy: true,
-	},
 	volttackle: {
 		inherit: true,
 		secondary: null,
@@ -735,11 +701,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			if (this.field.effectiveWeather()) move.basePower *= 2;
 		},
-	},
-	yawn: {
-		inherit: true,
-		accuracy: 100,
-		ignoreAccuracy: true,
 	},
 	zapcannon: {
 		inherit: true,

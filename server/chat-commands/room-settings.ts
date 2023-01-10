@@ -567,6 +567,33 @@ export const commands: Chat.ChatCommands = {
 	},
 	emojifilterhelp: [`/emojifilter [on/off] - Toggles filtering messages in the room for emojis. Requires # &`],
 
+	linkfilter(target, room, user) {
+		room = this.requireRoom();
+		if (!target) {
+			return this.sendReply(
+				`This room's link filter is currently: ${room.settings.filterEmojis ? "ON" : "OFF"}`
+			);
+		}
+		this.checkChat();
+		this.checkCan('editroom', null, room);
+
+		if (this.meansYes(target)) {
+			if (room.settings.filterLinks) return this.errorReply(`This room's link filter is already ON`);
+			room.settings.filterLinks = true;
+		} else if (this.meansNo(target)) {
+			if (!room.settings.filterLinks) return this.errorReply(`This room's link filter is already OFF`);
+			room.settings.filterLinks = false;
+		} else {
+			return this.parse("/help linkfilter");
+		}
+		const setting = (room.settings.filterLinks ? "ON" : "OFF");
+		this.privateModAction(`${user.name} turned the link filter ${setting}`);
+		this.modlog('LINK FILTER', null, setting);
+
+		room.saveSettings();
+	},
+	linkfilterhelp: [`/linkfilter [on/off] - Toggles filtering messages in the room for links. Requires # &`],
+
 	banwords: 'banword',
 	banword: {
 		regexadd: 'add',
@@ -635,16 +662,16 @@ export const commands: Chat.ChatCommands = {
 
 			if (!room.settings.banwords) return this.errorReply("This room has no banned phrases.");
 
-			let words = target.match(/[^,]+(,\d*}[^,]*)?/g);
-			if (!words) return this.parse('/help banword');
+			const regexMatch = target.match(/[^,]+(,\d*}[^,]*)?/g);
+			if (!regexMatch) return this.parse('/help banword');
 
-			words = words.map(word => word.replace(/\n/g, '').trim()).filter(word => word.length > 0);
+			const words = regexMatch.map(word => word.replace(/\n/g, '').trim()).filter(word => word.length > 0);
 
 			for (const word of words) {
 				if (!room.settings.banwords.includes(word)) return this.errorReply(`${word} is not a banned phrase in this room.`);
 			}
 
-			room.settings.banwords = room.settings.banwords.filter(w => !words!.includes(w));
+			room.settings.banwords = room.settings.banwords.filter(w => !words.includes(w));
 			room.banwordRegex = null;
 			if (words.length > 1) {
 				this.privateModAction(`The banwords ${words.map(w => `'${w}'`).join(', ')} were removed by ${user.name}.`);
@@ -1049,6 +1076,7 @@ export const commands: Chat.ChatCommands = {
 	hiddenroom: 'privateroom',
 	secretroom: 'privateroom',
 	publicroom: 'privateroom',
+	unlistroom: 'privateroom',
 	privateroom(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		if (room.battle) {
@@ -1066,7 +1094,7 @@ export const commands: Chat.ChatCommands = {
 			// higher permissions to modify privacy settings
 			this.checkCan('makeroom');
 		}
-		let setting: boolean | 'hidden';
+		let setting: boolean | 'hidden' | 'unlisted';
 		switch (cmd) {
 		case 'privateroom':
 			return this.parse('/help privateroom');
@@ -1076,6 +1104,10 @@ export const commands: Chat.ChatCommands = {
 		case 'secretroom':
 			this.checkCan('rangeban');
 			setting = true;
+			break;
+		case 'unlistroom':
+			this.checkCan('rangeban');
+			setting = 'unlisted';
 			break;
 		default:
 			if (room.settings.isPrivate === true && target !== 'force') {
@@ -1498,6 +1530,7 @@ export const commands: Chat.ChatCommands = {
 		const displayIDToName: {[k: string]: Room['settings']['dataCommandTierDisplay']} = {
 			tiers: 'tiers',
 			doublestiers: 'doubles tiers',
+			nationaldextiers: 'National Dex tiers',
 			numbers: 'numbers',
 		};
 
@@ -1645,6 +1678,14 @@ export const roomSettings: Chat.SettingsHandler[] = [
 		],
 	}),
 	room => ({
+		label: "Link filter",
+		permission: 'editroom',
+		options: [
+			[`off`, !room.settings.filterLinks || 'linkfilter off'],
+			[`on`, room.settings.filterLinks || 'linkfilter on'],
+		],
+	}),
+	room => ({
 		label: "Slowchat",
 		permission: room.userCount < SLOWCHAT_USER_REQUIREMENT ? 'bypassall' as any : 'editroom',
 		options: ['off', 5, 10, 20, 30, 60].map(
@@ -1657,6 +1698,10 @@ export const roomSettings: Chat.SettingsHandler[] = [
 		options: [
 			[`tiers`, (room.settings.dataCommandTierDisplay ?? 'tiers') === 'tiers' || `roomtierdisplay tiers`],
 			[`doubles tiers`, room.settings.dataCommandTierDisplay === 'doubles tiers' || `roomtierdisplay doubles tiers`],
+			[
+				`National Dex tiers`,
+				room.settings.dataCommandTierDisplay === 'National Dex tiers' || `roomtierdisplay National Dex tiers`,
+			],
 			[`numbers`, room.settings.dataCommandTierDisplay === 'numbers' || `roomtierdisplay numbers`],
 		],
 	}),

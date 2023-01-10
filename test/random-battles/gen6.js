@@ -8,6 +8,24 @@ const {testNotBothMoves, testAlwaysHasMove, testHiddenPower, testSet} = require(
 
 describe('[Gen 6] Random Battle', () => {
 	const options = {format: 'gen6randombattle'};
+	const dex = Dex.forFormat(options.format);
+	const generator = Teams.getGenerator(options.format);
+
+	it('All moves on all sets should be obtainable (slow)', () => {
+		const rounds = 500;
+		for (const species of dex.species.all()) {
+			if (!species.randomBattleMoves || species.isNonstandard) continue;
+			const remainingMoves = new Set(species.randomBattleMoves);
+			for (let i = 0; i < rounds; i++) {
+				// Test lead 1/6 of the time
+				const set = generator.randomSet(species, {}, i % 6 === 0);
+				for (const move of set.moves) remainingMoves.delete(move);
+				if (!remainingMoves.size) break;
+			}
+			assert.false(remainingMoves.size,
+				`The following moves on ${species.name} are unused: ${[...remainingMoves].join(', ')}`);
+		}
+	});
 
 	it('should not give mega evolution abilities to base formes', () => {
 		testSet('manectricmega', {rounds: 1, ...options}, set => {
@@ -59,5 +77,9 @@ describe('[Gen 6] Random Battle', () => {
 
 	it('should not give Entei Flash Fire', () => {
 		testSet('entei', options, set => assert.notEqual(set.ability, 'Flash Fire'));
+	});
+
+	it('should only give Charizard one of Air Slash and Acrobatics', () => {
+		testNotBothMoves('charizard', options, 'airslash', 'acrobatics');
 	});
 });

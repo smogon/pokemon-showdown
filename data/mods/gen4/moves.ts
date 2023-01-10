@@ -248,7 +248,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	crushgrip: {
 		inherit: true,
 		basePowerCallback(pokemon, target) {
-			return Math.floor(target.hp * 120 / target.maxhp) + 1;
+			const bp = Math.floor(target.hp * 120 / target.maxhp) + 1;
+			this.debug('BP for ' + target.hp + '/' + target.maxhp + " HP: " + bp);
+			return bp;
 		},
 	},
 	curse: {
@@ -448,9 +450,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.effectState.move = target.lastMove.id;
 				this.add('-start', target, 'Encore');
-				if (!this.queue.willMove(target)) {
-					this.effectState.duration++;
-				}
 			},
 			onOverrideAction(pokemon) {
 				return this.effectState.move;
@@ -516,23 +515,23 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	flail: {
 		inherit: true,
 		basePowerCallback(pokemon, target) {
-			const ratio = pokemon.hp * 64 / pokemon.maxhp;
+			const ratio = Math.max(Math.floor(pokemon.hp * 64 / pokemon.maxhp), 1);
+			let bp;
 			if (ratio < 2) {
-				return 200;
+				bp = 200;
+			} else if (ratio < 6) {
+				bp = 150;
+			} else if (ratio < 13) {
+				bp = 100;
+			} else if (ratio < 22) {
+				bp = 80;
+			} else if (ratio < 43) {
+				bp = 40;
+			} else {
+				bp = 20;
 			}
-			if (ratio < 6) {
-				return 150;
-			}
-			if (ratio < 13) {
-				return 100;
-			}
-			if (ratio < 22) {
-				return 80;
-			}
-			if (ratio < 43) {
-				return 40;
-			}
-			return 20;
+			this.debug('BP: ' + bp);
+			return bp;
 		},
 	},
 	flareblitz: {
@@ -541,12 +540,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	focuspunch: {
 		inherit: true,
-		beforeMoveCallback() { },
+		priorityChargeCallback() {},
+		beforeTurnCallback(pokemon) {
+			pokemon.addVolatile('focuspunch');
+		},
+		beforeMoveCallback() {},
 		onTry(pokemon) {
-			if (pokemon.volatiles['focuspunch'] && pokemon.volatiles['focuspunch'].lostFocus) {
+			if (pokemon.volatiles['focuspunch']?.lostFocus) {
 				this.attrLastMove('[still]');
 				this.add('cant', pokemon, 'Focus Punch', 'Focus Punch');
-				return false;
+				return null;
 			}
 		},
 	},
@@ -622,13 +625,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', effect);
+					this.add('-activate', source, 'ability: Persistent', '[move] Gravity');
 					return 7;
 				}
 				return 5;
 			},
-			onFieldStart() {
-				this.add('-fieldstart', 'move: Gravity');
+			onFieldStart(target, source) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-fieldstart', 'move: Gravity', '[persistent]');
+				} else {
+					this.add('-fieldstart', 'move: Gravity');
+				}
 				for (const pokemon of this.getAllActive()) {
 					let applies = false;
 					if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly')) {
@@ -712,7 +719,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 5,
 			durationCallback(target, source, effect) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', effect);
+					this.add('-activate', source, 'ability: Persistent', '[move] Heal Block');
 					return 7;
 				}
 				return 5;
@@ -758,7 +765,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onSwitchIn(target) {
 				if (target.hp > 0) {
 					target.heal(target.maxhp);
-					target.setStatus('');
+					target.clearStatus();
 					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
 					target.side.removeSlotCondition(target, 'healingwish');
 					target.lastMove = this.lastMove;
@@ -829,10 +836,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	knockoff: {
 		inherit: true,
-		onAfterHit(target, source) {
-			const item = target.takeItem();
-			if (item) {
-				this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
+		onAfterHit(target, source, move) {
+			if (!target.item || target.itemState.knockedOff) return;
+			if (target.ability === 'multitype') return;
+			const item = target.getItem();
+			if (this.runEvent('TakeItem', target, source, move, item)) {
+				target.itemState.knockedOff = true;
+				this.add('-enditem', target, item.name, '[from] move: Knock Off');
+				this.hint("In Gens 3-4, Knock Off only makes the target's item unusable; it cannot obtain a new item.", true);
 			}
 		},
 	},
@@ -935,7 +946,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				if (target.hp > 0) {
 					target.heal(target.maxhp);
-					target.setStatus('');
+					target.clearStatus();
 					for (const moveSlot of target.moveSlots) {
 						moveSlot.pp = moveSlot.maxpp;
 					}
@@ -1161,7 +1172,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (this.queue.willMove(target)) {
 				return 50;
 			}
+			this.debug('BP doubled');
 			return 100;
+		},
+	},
+	payday: {
+		inherit: true,
+		onHit() {
+			this.add('-fieldactivate', 'move: Pay Day');
 		},
 	},
 	perishsong: {
@@ -1304,23 +1322,23 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	reversal: {
 		inherit: true,
 		basePowerCallback(pokemon, target) {
-			const ratio = pokemon.hp * 64 / pokemon.maxhp;
+			const ratio = Math.max(Math.floor(pokemon.hp * 64 / pokemon.maxhp), 1);
+			let bp;
 			if (ratio < 2) {
-				return 200;
+				bp = 200;
+			} else if (ratio < 6) {
+				bp = 150;
+			} else if (ratio < 13) {
+				bp = 100;
+			} else if (ratio < 22) {
+				bp = 80;
+			} else if (ratio < 43) {
+				bp = 40;
+			} else {
+				bp = 20;
 			}
-			if (ratio < 6) {
-				return 150;
-			}
-			if (ratio < 13) {
-				return 100;
-			}
-			if (ratio < 22) {
-				return 80;
-			}
-			if (ratio < 43) {
-				return 40;
-			}
-			return 20;
+			this.debug('BP: ' + bp);
+			return bp;
 		},
 	},
 	roar: {
@@ -1347,7 +1365,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 5,
 			durationCallback(target, source, effect) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', effect);
+					this.add('-activate', source, 'ability: Persistent', '[move] Safeguard');
 					return 7;
 				}
 				return 5;
@@ -1372,8 +1390,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return null;
 				}
 			},
-			onSideStart(side) {
-				this.add('-sidestart', side, 'Safeguard');
+			onSideStart(side, source) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-sidestart', side, 'Safeguard', '[persistent]');
+				} else {
+					this.add('-sidestart', side, 'Safeguard');
+				}
 			},
 			onSideResidualOrder: 4,
 			onSideEnd(side) {
@@ -1389,6 +1411,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	scaryface: {
 		inherit: true,
 		accuracy: 90,
+	},
+	secretpower: {
+		inherit: true,
+		secondary: {
+			chance: 30,
+			status: 'par',
+		},
 	},
 	sketch: {
 		inherit: true,
@@ -1569,13 +1598,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 3,
 			durationCallback(target, source, effect) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', effect);
+					this.add('-activate', source, 'ability: Persistent', '[move] Tailwind');
 					return 5;
 				}
 				return 3;
 			},
-			onSideStart(side) {
-				this.add('-sidestart', side, 'move: Tailwind');
+			onSideStart(side, source) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-sidestart', side, 'move: Tailwind', '[persistent]');
+				} else {
+					this.add('-sidestart', side, 'move: Tailwind');
+				}
 			},
 			onModifySpe(spe) {
 				return spe * 2;
@@ -1645,7 +1678,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-sidestart', side, 'move: Toxic Spikes');
 				this.effectState.layers++;
 			},
-			onSwitchIn(pokemon) {
+			onEntryHazard(pokemon) {
 				if (!pokemon.isGrounded()) return;
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
@@ -1676,13 +1709,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', effect);
+					this.add('-activate', source, 'ability: Persistent', '[move] Trick Room');
 					return 7;
 				}
 				return 5;
 			},
 			onFieldStart(target, source) {
-				this.add('-fieldstart', 'move: Trick Room', '[of] ' + source);
+				if (source?.hasAbility('persistent')) {
+					this.add('-fieldstart', 'move: Trick Room', '[of] ' + source, '[persistent]');
+				} else {
+					this.add('-fieldstart', 'move: Trick Room', '[of] ' + source);
+				}
 			},
 			onFieldRestart(target, source) {
 				this.field.removePseudoWeather('trickroom');
@@ -1794,7 +1831,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	wringout: {
 		inherit: true,
 		basePowerCallback(pokemon, target) {
-			return Math.floor(target.hp * 120 / target.maxhp) + 1;
+			const bp = Math.floor(target.hp * 120 / target.maxhp) + 1;
+			this.debug('BP for ' + target.hp + '/' + target.maxhp + " HP: " + bp);
+			return bp;
 		},
 	},
 	yawn: {

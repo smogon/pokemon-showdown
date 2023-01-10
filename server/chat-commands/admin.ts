@@ -28,10 +28,9 @@ function hasDevAuth(user: User) {
 
 function bash(command: string, context: Chat.CommandContext, cwd?: string): Promise<[number, string, string]> {
 	context.stafflog(`$ ${command}`);
+	if (!cwd) cwd = FS.ROOT_PATH;
 	return new Promise(resolve => {
-		child_process.exec(command, {
-			cwd: cwd || `${__dirname}/../..`,
-		}, (error, stdout, stderr) => {
+		child_process.exec(command, {cwd}, (error, stdout, stderr) => {
 			let log = `[o] ${stdout}[e] ${stderr}`;
 			if (error) log = `[c] ${error.code}\n${log}`;
 			context.stafflog(log);
@@ -254,6 +253,55 @@ export const commands: Chat.ChatCommands = {
 	],
 	changerankuhtmlhelp: [
 		`/changerankuhtml [rank], [name], [message] - Changes the message previously shown with /addrankuhtml [rank], [name]. Requires: * # &`,
+	],
+
+	deletenamecolor: 'setnamecolor',
+	snc: 'setnamecolor',
+	dnc: 'setnamecolor',
+	async setnamecolor(target, room, user, connection, cmd) {
+		this.checkCan('rangeban');
+		if (!toID(target)) {
+			return this.parse(`/help ${cmd}`);
+		}
+		let [userid, source] = this.splitOne(target).map(toID);
+		if (cmd.startsWith('d')) {
+			source = '';
+		} else if (!source || source.length > 18) {
+			return this.errorReply(
+				`Specify a source username to take the color from. Name must be <19 characters.`
+			);
+		}
+		if (!userid || userid.length > 18) {
+			return this.errorReply(`Specify a valid name to set a new color for. Names must be <19 characters.`);
+		}
+		const [res, error] = await LoginServer.request('updatenamecolor', {
+			userid,
+			source,
+			by: user.id,
+		});
+		if (error) {
+			return this.errorReply(error.message);
+		}
+		if (!res || res.actionerror) {
+			return this.errorReply(res?.actionerror || "The loginserver is currently disabled.");
+		}
+		if (source) {
+			return this.sendReply(
+				`|html|<username>${userid}</username>'s namecolor was ` +
+				`successfully updated to match '<username>${source}</username>'. ` +
+				`Refresh your browser for it to take effect.`
+			);
+		} else {
+			return this.sendReply(`${userid}'s namecolor was removed.`);
+		}
+	},
+	setnamecolorhelp: [
+		`/setnamecolor OR /snc [username], [source name] - Set [username]'s name color to match the [source name]'s color.`,
+		`Requires: &`,
+	],
+	deletenamecolorhelp: [
+		`/deletenamecolor OR /dnc [username] - Remove [username]'s namecolor.`,
+		`Requires: &`,
 	],
 
 	pline(target, room, user) {
@@ -521,6 +569,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply("Wait for /updateserver to finish before hotpatching.");
 		}
 
+		await this.parse(`/rebuild`);
 		const lock = Monitor.hotpatchLock;
 		const hotpatches = [
 			'chat', 'formats', 'loginserver', 'punishments', 'dnsbl', 'modlog',
@@ -563,7 +612,7 @@ export const commands: Chat.ChatCommands = {
 
 				const processManagers = ProcessManager.processManagers;
 				for (const manager of processManagers.slice()) {
-					if (manager.filename.startsWith(FS('server/chat-plugins').path)) {
+					if (manager.filename.startsWith(FS(__dirname + '/../chat-plugins/').path)) {
 						void manager.destroy();
 					}
 				}
@@ -836,8 +885,9 @@ export const commands: Chat.ChatCommands = {
 		const processes = new Map<string, ProcessData>();
 		const ramUnits = ["KiB", "MiB", "GiB", "TiB"];
 
+		const cwd = FS.ROOT_PATH;
 		await new Promise<void>(resolve => {
-			const child = child_process.exec('ps -o pid,%cpu,time,rss,command', {cwd: `${__dirname}/../..`}, (err, stdout) => {
+			const child = child_process.exec('ps -o pid,%cpu,time,rss,command', {cwd}, (err, stdout) => {
 				if (err) throw err;
 				const rows = stdout.split('\n').slice(1); // first line is the table header
 				for (const row of rows) {
@@ -877,7 +927,11 @@ export const commands: Chat.ChatCommands = {
 		for (const manager of ProcessManager.processManagers) {
 			for (const [i, process] of manager.processes.entries()) {
 				const pid = process.getProcess().pid;
-				buf += `<strong>${pid}</strong> - ${manager.basename} ${i} (load ${process.getLoad()}`;
+				let managerName = manager.basename;
+				if (managerName.startsWith('index.')) { // doesn't actually tell us anything abt the process
+					managerName = manager.filename.split(path.sep).slice(-2).join(path.sep);
+				}
+				buf += `<strong>${pid}</strong> - ${managerName} ${i} (load ${process.getLoad()}`;
 				const info = processes.get(`${pid}`)!;
 				const display = [];
 				if (info.cpu) display.push(`CPU: ${info.cpu}`);
@@ -941,6 +995,13 @@ export const commands: Chat.ChatCommands = {
 	savelearnsetshelp: [
 		`/savelearnsets - Saves the learnset list currently active on the server. Requires: &`,
 	],
+
+	toggleripgrep(target, room, user) {
+		this.checkCan('rangeban');
+		Config.disableripgrep = !Config.disableripgrep;
+		this.addGlobalModAction(`${user.name} ${Config.disableripgrep ? 'disabled' : 'enabled'} Ripgrep-related functionality.`);
+	},
+	toggleripgrephelp: [`/toggleripgrep - Disable/enable all functionality depending on Ripgrep. Requires: &`],
 
 	disablecommand(target, room, user) {
 		this.checkCan('makeroom');
@@ -1150,15 +1211,41 @@ export const commands: Chat.ChatCommands = {
 		`/endemergency - Turns off emergency mode. Requires: &`,
 	],
 
-	kill(target, room, user) {
-		this.checkCan('lockdown');
+	async savebattles(target, room, user) {
+		this.checkCan('rangeban'); // admins can restart, so they should be able to do this if needed
+		this.sendReply(`Saving battles...`);
+		const count = await Rooms.global.saveBattles();
+		this.sendReply(`DONE.`);
+		this.sendReply(`${count} battles saved.`);
+		this.addModAction(`${user.name} used /savebattles`);
+	},
 
-		if (Rooms.global.lockdown !== true) {
-			return this.errorReply("For safety reasons, /kill can only be used during lockdown.");
+	async kill(target, room, user) {
+		this.checkCan('lockdown');
+		let noSave = toID(target) === 'nosave';
+		if (!Config.usepostgres) noSave = true;
+
+		if (Rooms.global.lockdown !== true && noSave) {
+			return this.errorReply("For safety reasons, using /kill without saving battles can only be done during lockdown.");
 		}
 
 		if (Monitor.updateServerLock) {
 			return this.errorReply("Wait for /updateserver to finish before using /kill.");
+		}
+
+		if (!noSave) {
+			this.sendReply('Saving battles...');
+			Rooms.global.lockdown = true; // we don't want more battles starting while we save
+			for (const u of Users.users.values()) {
+				u.send(
+					`|pm|&|${u.getIdentity()}|/raw <div class="broadcast-red"><b>The server is restarting soon.</b><br />` +
+					`While battles are being saved, no more can be started. If you're in a battle, it will be paused during saving.<br />` +
+					`After the restart, you will be able to resume your battles from where you left off.`
+				);
+			}
+			const count = await Rooms.global.saveBattles();
+			this.sendReply(`DONE.`);
+			this.sendReply(`${count} battles saved.`);
 		}
 
 		const logRoom = Rooms.get('staff') || Rooms.lobby || room;
@@ -1176,7 +1263,10 @@ export const commands: Chat.ChatCommands = {
 			process.exit();
 		}, 10000);
 	},
-	killhelp: [`/kill - kills the server. Can't be done unless the server is in lockdown state. Requires: &`],
+	killhelp: [
+		`/kill - kills the server. Use the argument \`nosave\` to prevent the saving of battles.`,
+		` If this argument is used, the server must be in lockdown. Requires: &`,
+	],
 
 	loadbanlist(target, room, user, connection) {
 		this.checkCan('lockdown');
@@ -1223,7 +1313,7 @@ export const commands: Chat.ChatCommands = {
 			if (target !== 'public' && validPrivateCodePath) {
 				success = await updateserver(this, Config.privatecodepath);
 			}
-			success = success && await updateserver(this, path.resolve(`${__dirname}/../..`));
+			success = success && await updateserver(this, FS.ROOT_PATH);
 			this.addGlobalModAction(`${user.name} used /updateserver${target === 'public' ? ' public' : ''}`);
 		}
 
@@ -1236,8 +1326,13 @@ export const commands: Chat.ChatCommands = {
 		`/updateserver private - Updates only the server's private code. Requires: console access`,
 	],
 
-	rebuild() {
-		this.errorReply("`/rebuild` is no longer necessary; TypeScript files are automatically transpiled as they are loaded.");
+	async rebuild() {
+		this.canUseConsole();
+		const [, , stderr] = await bash('node ./build', this);
+		if (stderr) {
+			throw new Chat.ErrorMessage(`Crash while rebuilding: ${stderr}`);
+		}
+		this.sendReply('Rebuilt.');
 	},
 
 	/*********************************************************
@@ -1545,7 +1640,11 @@ export const commands: Chat.ChatCommands = {
 
 export const pages: Chat.PageTable = {
 	bot(args, user, connection) {
-		const [botid, pageid] = args;
+		const [botid, ...pageArgs] = args;
+		const pageid = pageArgs.join('-');
+		if (pageid.length > 300) {
+			return this.errorReply(`The page ID specified is too long.`);
+		}
 		const bot = Users.get(botid);
 		if (!bot) {
 			return `<div class="pad"><h2>The bot "${bot}" is not available.</h2></div>`;

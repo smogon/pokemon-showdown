@@ -171,7 +171,7 @@ describe('Future Sight', function () {
 		assert.bounded(damage, [22, 27]); // 30, 35 if Life Orb was applied
 	});
 
-	it.skip(`should not cause the user to change typing on either its starting or damaging turn`, function () {
+	it(`should not cause the user to change typing on either its starting or damaging turn`, function () {
 		battle = common.createBattle([[
 			{species: 'roggenrola', ability: 'protean', moves: ['futuresight', 'sleeptalk']},
 		], [

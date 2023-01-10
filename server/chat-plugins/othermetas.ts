@@ -48,7 +48,7 @@ export const commands: Chat.ChatCommands = {
 	om: 'othermetas',
 	othermetas(target, room, user) {
 		target = toID(target);
-		const omLink = `- <a href="https://www.smogon.com/forums/forums/531/">Other Metagames Forum</a><br />`;
+		const omLink = `- <a href="https://www.smogon.com/forums/forums/733/">Other Metagames Forum</a><br />`;
 
 		if (!target) {
 			this.runBroadcast();
@@ -609,49 +609,109 @@ export const commands: Chat.ChatCommands = {
 		"/crossevo <base pokemon>, <evolved pokemon> - Shows the type and stats for the Cross Evolved Pok\u00e9mon.",
 	],
 
-	showevo(target, user, room) {
+	reevo: 'showevo',
+	showevo(target, user, room, connection, cmd) {
 		if (!this.runBroadcast()) return;
 		const targetid = toID(target);
-		if (!targetid) return this.parse('/help showevo');
+		const isReEvo = cmd === 'reevo';
+		if (!targetid) return this.parse(`/help ${isReEvo ? 're' : 'show'}evo`);
 		const evo = Dex.species.get(target);
 		if (!evo.exists) {
 			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon ${target} not found.`);
 		}
 		if (!evo.prevo) {
-			throw new Chat.ErrorMessage(`Error: ${evo.name} is not an evolution.`);
-		}
-		const prevoSpecies = Dex.species.get(evo.prevo);
-		const deltas = Utils.deepClone(evo);
-		deltas.tier = 'CE';
-		deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
-		deltas.bst = 0;
-		let i: StatID;
-		for (i in evo.baseStats) {
-			const statChange = evo.baseStats[i] - prevoSpecies.baseStats[i];
-			deltas.baseStats[i] = statChange;
-			deltas.bst += deltas.baseStats[i];
-		}
-		deltas.types = [];
-		if (evo.types[0] !== prevoSpecies.types[0]) deltas.types[0] = evo.types[0];
-		if (evo.types[1] !== prevoSpecies.types[1]) {
-			deltas.types[1] = evo.types[1] || evo.types[0];
-		}
-		if (deltas.types.length) {
-			// Undefined type remover
-			deltas.types = deltas.types.filter((type: string | undefined) => type !== undefined);
+			const evoBaseSpecies = Dex.species.get(evo.baseSpecies);
+			if (!evoBaseSpecies.prevo) throw new Chat.ErrorMessage(`Error: ${evoBaseSpecies.name} is not an evolution.`);
+			const prevoSpecies = Dex.species.get(evoBaseSpecies.prevo);
+			const deltas = Utils.deepClone(evo);
+		    if (!isReEvo) {
+			    deltas.tier = 'CE';
+			    deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
+			    deltas.types = [];
+			    if (evo.types[0] !== prevoSpecies.types[0]) deltas.types[0] = evo.types[0];
+			    if (evo.types[1] !== prevoSpecies.types[1]) {
+				    deltas.types[1] = evo.types[1] || evo.types[0];
+			    }
+			    if (deltas.types.length) {
+					// Undefined type remover
+				    deltas.types = deltas.types.filter((type: string | undefined) => type !== undefined);
 
-			if (deltas.types[0] === deltas.types[1]) deltas.types = [deltas.types[0]];
+					if (deltas.types[0] === deltas.types[1]) deltas.types = [deltas.types[0]];
+			    } else {
+					deltas.types = null;
+			    }
+		    }
+		    deltas.bst = 0;
+		    let i: StatID;
+		    for (i in evo.baseStats) {
+				const statChange = evoBaseSpecies.baseStats[i] - prevoSpecies.baseStats[i];
+				const formeChange = evo.baseStats[i] - evoBaseSpecies.baseStats[i];
+				if (!isReEvo) {
+			    if (!evo.prevo) {
+						deltas.baseStats[i] = formeChange;
+					} else {
+						deltas.baseStats[i] = statChange;
+					}
+				} else {
+					deltas.baseStats[i] = Utils.clampIntRange(evoBaseSpecies.baseStats[i] + statChange, 1, 255);
+					deltas.baseStats[i] = Utils.clampIntRange(deltas.baseStats[i] + formeChange, 1, 255);
+				}
+				deltas.bst += deltas.baseStats[i];
+			}
+			const details = {
+				Gen: evo.gen,
+				Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
+				Stage: (Dex.species.get(prevoSpecies.prevo).exists ? 3 : 2),
+			};
+			this.sendReply(`|raw|${Chat.getDataPokemonHTML(deltas)}`);
+			if (!isReEvo) {
+				this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}&nbsp;|&ThickSpace;<font color="#686868">Stage:</font> ${details["Stage"]}</font>`);
+			}
 		} else {
-			deltas.types = null;
+			const prevoSpecies = Dex.species.get(evo.prevo);
+			const deltas = Utils.deepClone(evo);
+			if (!isReEvo) {
+				deltas.tier = 'CE';
+				deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
+				deltas.types = [];
+				if (evo.types[0] !== prevoSpecies.types[0]) deltas.types[0] = evo.types[0];
+				if (evo.types[1] !== prevoSpecies.types[1]) {
+					deltas.types[1] = evo.types[1] || evo.types[0];
+				}
+				if (deltas.types.length) {
+					// Undefined type remover
+					deltas.types = deltas.types.filter((type: string | undefined) => type !== undefined);
+
+					if (deltas.types[0] === deltas.types[1]) deltas.types = [deltas.types[0]];
+				} else {
+					deltas.types = null;
+				}
+			}
+			deltas.bst = 0;
+			let i: StatID;
+			for (i in evo.baseStats) {
+				const statChange = evo.baseStats[i] - prevoSpecies.baseStats[i];
+				if (!isReEvo) {
+					deltas.baseStats[i] = statChange;
+				} else {
+					deltas.baseStats[i] = Utils.clampIntRange(deltas.baseStats[i] + statChange, 1, 255);
+				}
+				deltas.bst += deltas.baseStats[i];
+			}
+			const details = {
+				Gen: evo.gen,
+				Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
+				Stage: (Dex.species.get(prevoSpecies.prevo).exists ? 3 : 2),
+			};
+			this.sendReply(`|raw|${Chat.getDataPokemonHTML(deltas)}`);
+			if (!isReEvo) {
+				this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}&nbsp;|&ThickSpace;<font color="#686868">Stage:</font> ${details["Stage"]}</font>`);
+			}
 		}
-		const details = {
-			Gen: evo.gen,
-			Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
-			Stage: (Dex.species.get(prevoSpecies.prevo).exists ? 3 : 2),
-		};
-		this.sendReply(`|raw|${Chat.getDataPokemonHTML(deltas)}`);
-		this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}&nbsp;|&ThickSpace;<font color="#686868">Stage:</font> ${details["Stage"]}</font>`);
 	},
+	reevohelp: [
+		`/reevo <Pok\u00e9mon> - Shows the stats that a Pok\u00e9mon would have in Re-Evolution`,
+	],
 	showevohelp: [
 		`/showevo <Pok\u00e9mon> - Shows the changes that a Pok\u00e9mon applies in Cross Evolution`,
 	],

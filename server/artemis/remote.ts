@@ -19,6 +19,7 @@ export const ATTRIBUTES = {
 	"FLIRTATION": {},
 };
 
+
 export interface PerspectiveRequest {
 	languages: string[];
 	requestedAttributes: AnyObject;
@@ -26,51 +27,24 @@ export interface PerspectiveRequest {
 }
 
 function time() {
-	return Math.floor(Date.now() / 1000);
-}
-
-export class RollingCounter {
-	counts: number[] = [0];
-	readonly size: number;
-	constructor(limit: number) {
-		this.size = limit;
-	}
-	increment() {
-		this.counts[this.counts.length - 1]++;
-	}
-	rollOver(amount: number) {
-		if (amount > this.size) {
-			this.counts = Array(this.size).fill(0);
-			return;
-		}
-		for (let i = 0; i < amount; i++) {
-			this.counts.push(0);
-			if (this.counts.length > this.size) this.counts.shift();
-		}
-	}
-	mean() {
-		let total = 0;
-		for (const elem of this.counts) total += elem;
-		return total / this.counts.length;
-	}
+	return Math.floor(Math.floor(Date.now() / 1000) / 60);
 }
 
 export class Limiter {
-	readonly counter: RollingCounter;
 	readonly max: number;
-	lastCounterRoll = time();
-	constructor(max: number, period: number) {
+	lastTick = time();
+	count = 0;
+	constructor(max: number) {
 		this.max = max;
-		this.counter = new RollingCounter(period);
 	}
 	shouldRequest() {
 		const now = time();
-		this.counter.rollOver(now - this.lastCounterRoll);
-		this.lastCounterRoll = now;
-
-		if (this.counter.mean() > this.max) return false;
-		this.counter.increment();
-		return true;
+		if (this.lastTick !== now) {
+			this.count = 0;
+			this.lastTick = now;
+		}
+		this.count++;
+		return this.count < this.max;
 	}
 }
 
@@ -80,7 +54,7 @@ function isCommon(message: string) {
 }
 
 let throttleTime: number | null = null;
-export const limiter = new Limiter(15, 10);
+export const limiter = new Limiter(800);
 export const PM = new ProcessManager.QueryProcessManager<string, Record<string, number> | null>(module, async text => {
 	if (isCommon(text) || !limiter.shouldRequest()) return null;
 	if (throttleTime && (Date.now() - throttleTime < 10000)) {

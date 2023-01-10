@@ -342,17 +342,24 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 			this.ticket.claimed ? Utils.html`${this.ticket.creator}` : Utils.html`<strong>${this.ticket.creator}</strong>`
 		);
 		const user = Users.get(this.ticket.creator);
-		let namelockedDisplay = '';
+		let details = '';
 		if (user?.namelocked && !this.ticket.state?.namelocked) {
 			if (!this.ticket.state) this.ticket.state = {};
 			this.ticket.state.namelocked = user.namelocked;
 		}
 		if (this.ticket.state?.namelocked) {
-			namelockedDisplay = ` [${this.ticket.state?.namelocked}]`;
+			details += ` [${this.ticket.state?.namelocked}]`;
+		}
+		if (user?.locked) {
+			const punishment = Punishments.userids.getByType(user.locked, 'LOCK');
+			if (punishment?.rest?.length) {
+				// only #artemis uses this rn
+				details += ` [${punishment.rest.join(', ')}]`;
+			}
 		}
 		return (
 			`<a class="button ${color}" href="/help-${this.ticket.userid}"` +
-			` ${this.getPreview()}>Help ${creator}${namelockedDisplay}: ${this.ticket.type}</a> `
+			` ${this.getPreview()}>Help ${creator}${details}: ${this.ticket.type}</a> `
 		);
 	}
 
@@ -519,6 +526,9 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 	 * If the [value] is omitted (index 1), searches just for tickets with the given property.
 	 */
 	static async getTextLogs(search: [string, string] | [string], date?: string) {
+		if (Config.disableripgrep) {
+			throw new Chat.ErrorMessage("Helpticket logs are currently disabled.");
+		}
 		const results = [];
 		if (await checkRipgrepAvailability()) {
 			const searchString = search.length > 1 ?
@@ -533,7 +543,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 			let lines;
 			try {
 				lines = await ProcessManager.exec([
-					`rg`, `${__dirname}/../../logs/tickets/${date ? `${date}.jsonl` : ''}`, ...args,
+					`rg`, FS(`logs/tickets/${date ? `${date}.jsonl` : ''}`).path, ...args,
 				]);
 			} catch (e: any) {
 				if (e.message.includes('No such file or directory')) {
@@ -1399,7 +1409,9 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				const ipPunishments = Punishments.ips.get(ip);
 				if (ipPunishments) {
 					const str = ipPunishments.map(p => (
-						`${Punishments.punishmentTypes.get(p.type)?.desc || p.type} as ${p.id}${p.reason ? ` (${p.reason})` : ''}`
+						`${Punishments.punishmentTypes.get(p.type)?.desc || p.type} as ` +
+						`<a href="https://${Config.routes.root}/users/${p.id}">${p.id}</a>` +
+						`${p.reason ? ` (${p.reason})` : ''}`
 					));
 					if (str) buf += `Punishments: ${str.join(' | ')}<br />`;
 				}
@@ -1868,7 +1880,13 @@ export const pages: Chat.PageTable = {
 					const ticketGame = room.getGame(HelpTicket)!;
 					buf += `<a href="/${roomid}"><button class="button" ${ticketGame.getPreview()}>${this.tr(!ticket.claimed && ticket.open ? 'Claim' : 'View')}</button></a> `;
 				} else if (ticket.text) {
-					buf += `<a class="button" href="/view-help-text-${ticket.userid}">${ticket.claimed ? `Claim` : `View`}</a>`;
+					let title = Object.entries(ticket.notes || {})
+						.map(([userid, note]) => Utils.html`${note} (by ${userid})`)
+						.join('&#10;');
+					if (title) {
+						title = `title="Staff notes:&#10;${title}"`;
+					}
+					buf += `<a class="button" ${title} href="/view-help-text-${ticket.userid}">${ticket.claimed ? `Claim` : `View`}</a>`;
 				}
 				if (logUrl) {
 					buf += `<a href="${logUrl}"><button class="button">${this.tr`Log`}</button></a>`;
@@ -1925,28 +1943,10 @@ export const pages: Chat.PageTable = {
 			} else if (ticket.claimed) {
 				buf += `<strong>Claimed:</strong> ${ticket.claimed}<br /><br />`;
 			}
-			buf += `<strong>From: ${ticket.userid}</strong>`;
+			buf += `<strong>From: <a href="https://${Config.routes.root}/users/${ticket.userid}">`;
+			buf += `${ticket.userid}</a></strong>`;
 			buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
 			buf += `<button class="button" name="send" value="/modlog room=global,user='${ticket.userid}'">Global Modlog</button><br />`;
-			if (ticket.recommended?.length) {
-				if (ticket.recommended.length > 1) {
-					buf += `<details class="readmore"><summary><strong>Recommended from Artemis</strong></summary>`;
-					buf += ticket.recommended.map(Utils.escapeHTML).join('<br />');
-					buf += `</details>`;
-				} else {
-					buf += Utils.html`<strong>Recommended from Artemis:</strong> ${ticket.recommended[0]}`;
-				}
-				if (!ticket.state?.recommendResult) {
-					buf += `<br />`;
-					buf += `Rate accuracy of result: `;
-					for (const [title, result] of [
-						['Accurate (or too lenient)', 'success'], ['Inaccurate (too harsh)', 'failure'],
-					]) {
-						buf += `<button class="button" name="send" value="/aht resolve ${ticket.userid},${result}">${title}</button>`;
-					}
-				}
-				buf += `<br />`;
-			}
 			buf += await ticketInfo.getReviewDisplay(ticket as TicketState & {text: [string, string]}, user, connection);
 			buf += `<br />`;
 			buf += `<div class="infobox">`;
@@ -2379,6 +2379,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				ticket.text = [text, contextString];
 				ticket.active = true;
+				Chat.runHandlers('onTicketCreate', ticket, user);
 				tickets[user.id] = ticket;
 				await HelpTicket.modlog({
 					action: 'TEXTTICKET OPEN',
@@ -2486,6 +2487,7 @@ export const commands: Chat.ChatCommands = {
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
 			}
 			const ticketGame = helpRoom.getGame(HelpTicket)!;
+			Chat.runHandlers('onTicketCreate', ticket, user);
 			helpRoom.modlog({action: 'TICKETOPEN', isGlobal: false, loggedBy: user.id, note: ticket.type});
 			ticketGame.addText(`${user.name} opened a new ticket. Issue: ${ticket.type}`, user);
 			void this.parse(`/join help-${user.id}`);
@@ -2534,12 +2536,6 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (!ticket.text) {
 				return this.popupReply(`That ticket cannot be resolved with /helpticket resolve. Join it instead.`);
-			}
-			if (ticket.recommended?.length && !ticket.state?.recommendResult) {
-				return this.popupReply(
-					`You must rate the accuracy of the Artemis recommendations ` +
-					`(click accurate/inaccurate) before closing the ticket.`
-				);
 			}
 			const {publicReason, privateReason} = this.parseSpoiler(result);
 			ticket.resolved = {

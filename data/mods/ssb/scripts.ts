@@ -1,4 +1,5 @@
 export const Scripts: ModdedBattleScriptsData = {
+	gen: 8,
 	inherit: 'gen8',
 	actions: {
 		// 1 mega per pokemon
@@ -797,6 +798,9 @@ export const Scripts: ModdedBattleScriptsData = {
 							this.battle.runEvent('Hit', target, pokemon, move);
 						}
 					}
+				}
+				if (moveData.selfdestruct === 'ifHit' && damage[i] !== false) {
+					this.battle.faint(pokemon, pokemon, move);
 				}
 				if (moveData.selfSwitch && !this.battle.getAllActive().some(x => x.hasAbility('skilldrain'))) {
 					if (this.battle.canSwitch(pokemon.side)) {

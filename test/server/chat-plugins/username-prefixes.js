@@ -5,7 +5,7 @@
 'use strict';
 
 const assert = require('assert').strict;
-const {PrefixManager} = require('../../../server/chat-plugins/username-prefixes');
+const {PrefixManager} = require('../../../dist/server/chat-plugins/username-prefixes');
 const PREFIX_DURATION = 10 * 24 * 60 * 60 * 1000;
 
 describe('PrefixManager', function () {
@@ -45,15 +45,5 @@ describe('PrefixManager', function () {
 
 		assert.throws(() => this.prefixManager.validateType('gibberish'));
 		assert.throws(() => this.prefixManager.validateType(''));
-	});
-
-	it('should correctly set timeouts', () => {
-		this.prefixManager.addPrefix('forcedpublic', 'privacy');
-
-		assert(this.prefixManager.timeouts.has('forcedpublic'));
-
-		this.prefixManager.removePrefix('forcedpublic', 'privacy');
-
-		assert(!this.prefixManager.timeouts.has('forcedpublic'));
 	});
 });

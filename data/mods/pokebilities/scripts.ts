@@ -1,5 +1,5 @@
 export const Scripts: ModdedBattleScriptsData = {
-	gen: 8,
+	gen: 9,
 	field: {
 		suppressingWeather() {
 			for (const pokemon of this.battle.getAllActive()) {
@@ -44,7 +44,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		transformInto(pokemon, effect) {
 			const species = pokemon.species;
-			if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
+			if (pokemon.fainted || this.illusion || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
 				(pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5) ||
 				species.name === 'Eternatus-Eternamax') {
 				return false;
@@ -55,7 +55,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.transformed = true;
 			this.weighthg = pokemon.weighthg;
 
-			const types = pokemon.getTypes(true);
+			const types = pokemon.getTypes(true, true);
 			this.setType(pokemon.volatiles['roost'] ? pokemon.volatiles['roost'].typeWas : types, true);
 			this.addedType = pokemon.addedType;
 			this.knownType = this.isAlly(pokemon) && pokemon.knownType;
@@ -64,11 +64,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			let statName: StatIDExceptHP;
 			for (statName in this.storedStats) {
 				this.storedStats[statName] = pokemon.storedStats[statName];
+				if (this.modifiedStats) this.modifiedStats[statName] = pokemon.modifiedStats![statName]; // Gen 1: Copy modified stats.
 			}
 			this.moveSlots = [];
 			this.set.ivs = (this.battle.gen >= 5 ? this.set.ivs : pokemon.set.ivs);
 			this.hpType = (this.battle.gen >= 5 ? this.hpType : pokemon.hpType);
 			this.hpPower = (this.battle.gen >= 5 ? this.hpPower : pokemon.hpPower);
+			this.timesAttacked = pokemon.timesAttacked;
 			for (const moveSlot of pokemon.moveSlots) {
 				let moveName = moveSlot.move;
 				if (moveSlot.id === 'hiddenpower') {
@@ -87,7 +89,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			let boostName: BoostID;
 			for (boostName in pokemon.boosts) {
-				this.boosts[boostName] = pokemon.boosts[boostName]!;
+				this.boosts[boostName] = pokemon.boosts[boostName];
 			}
 			if (this.battle.gen >= 6) {
 				const volatilesToCopy = ['focusenergy', 'gmaxchistrike', 'laserfocus'];
@@ -104,6 +106,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.add('-transform', this, pokemon, '[from] ' + effect.fullname);
 			} else {
 				this.battle.add('-transform', this, pokemon);
+			}
+			if (this.terastallized && this.terastallized !== this.apparentType) {
+				this.battle.add('-start', this, 'typechange', this.terastallized, '[silent]');
+				this.apparentType = this.terastallized;
 			}
 			if (this.battle.gen > 2) {
 				this.setAbility(pokemon.ability, this, true);
@@ -140,6 +146,68 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
+			return true;
+		},
+		/**
+		 * Changes this Pokemon's forme to match the given speciesId (or species).
+		 * This function handles all changes to stats, ability, type, species, etc.
+		 * as well as sending all relevant messages sent to the client.
+		 */
+		formeChange(speciesId, source, isPermanent, message) {
+			if (!source) source = this.battle.effect;
+
+			const rawSpecies = this.battle.dex.species.get(speciesId);
+
+			const species = this.setSpecies(rawSpecies, source);
+			if (!species) return false;
+
+			if (this.battle.gen <= 2) return true;
+
+			// The species the opponent sees
+			const apparentSpecies =
+				this.illusion ? this.illusion.species.name : species.baseSpecies;
+			if (isPermanent) {
+				this.baseSpecies = rawSpecies;
+				this.details = species.name + (this.level === 100 ? '' : ', L' + this.level) +
+					(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
+				this.battle.add('detailschange', this, (this.illusion || this).details);
+				if (source.effectType === 'Item') {
+					if (source.zMove) {
+						this.battle.add('-burst', this, apparentSpecies, species.requiredItem);
+						this.moveThisTurnResult = true; // Ultra Burst counts as an action for Truant
+					} else if (source.onPrimal) {
+						if (this.illusion) {
+							this.ability = '';
+							this.battle.add('-primal', this.illusion);
+						} else {
+							this.battle.add('-primal', this);
+						}
+					} else {
+						this.battle.add('-mega', this, apparentSpecies, species.requiredItem);
+						this.moveThisTurnResult = true; // Mega Evolution counts as an action for Truant
+					}
+				} else if (source.effectType === 'Status') {
+					// Shaymin-Sky -> Shaymin
+					this.battle.add('-formechange', this, species.name, message);
+				}
+			} else {
+				if (source.effectType === 'Ability') {
+					this.battle.add('-formechange', this, species.name, message, `[from] ability: ${source.name}`);
+				} else {
+					this.battle.add('-formechange', this, this.illusion ? this.illusion.species.name : species.name, message);
+				}
+			}
+			if (isPermanent && !['disguise', 'iceface', 'ability:disguise', 'ability:iceface'].includes(source.id)) {
+				if (this.illusion) {
+					this.ability = ''; // Don't allow Illusion to wear off
+				}
+				this.setAbility(species.abilities['0'], null, true);
+				this.baseAbility = this.ability;
+			}
+			if (this.terastallized && this.terastallized !== this.apparentType) {
+				this.battle.add('-start', this, 'typechange', this.terastallized, '[silent]');
+				this.apparentType = this.terastallized;
+			}
 			return true;
 		},
 	},

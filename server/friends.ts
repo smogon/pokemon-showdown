@@ -12,7 +12,7 @@ import * as path from 'path';
 export const MAX_FRIENDS = 100;
 /** Max friend requests. */
 export const MAX_REQUESTS = 6;
-export const DEFAULT_FILE = `${__dirname}/../databases/friends.db`;
+export const DEFAULT_FILE = FS('databases/friends.db').path;
 const REQUEST_EXPIRY_TIME = 30 * 24 * 60 * 60 * 1000;
 const PM_TIMEOUT = 30 * 60 * 1000;
 
@@ -333,7 +333,7 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 			}
 			if (totalRequests >= MAX_REQUESTS) {
 				throw new FailureMessage(
-					`You already have ${MAX_REQUESTS} outgoing friend requests. Use "/friends view sent" to see your outgoing requests.`
+					`You already have ${MAX_REQUESTS} pending friend requests. Use "/friends view sent" to see your outgoing requests and "/friends view receive" to see your incoming requests.`
 				);
 			}
 			statements.insertRequest.run(senderID, receiverID, Date.now());

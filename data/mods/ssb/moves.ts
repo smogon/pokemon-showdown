@@ -878,7 +878,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Petal Dance', target);
 		},
 		onModifyMove(move, source, target) {
-			if (target && target.getStat('def') < target.getStat('spd')) {
+			if (target && target.getStat('def', false, true) < target.getStat('spd', false, true)) {
 				move.category = "Physical";
 			}
 		},
@@ -911,7 +911,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (move.overrideOffensiveStat && !['atk', 'spa'].includes(move.overrideOffensiveStat)) return;
 				const attacker = move.overrideOffensivePokemon === 'target' ? target : source;
 				if (!attacker) return;
-				move.overrideOffensiveStat = attacker.getStat('atk') > attacker.getStat('spa') ? 'spa' : 'atk';
+				const attackerAtk = attacker.getStat('atk', false, true);
+				const attackerSpa = attacker.getStat('spa', false, true);
+				move.overrideOffensiveStat = attackerAtk > attackerSpa ? 'spa' : 'atk';
 			},
 			// Stat modifying in scripts.ts
 			onFieldStart(field, source, effect) {
@@ -2419,10 +2421,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
-		onTryHit(pokemon, target, move) {
-			if (!this.canSwitch(pokemon.side)) {
-				delete move.selfdestruct;
-				return false;
+		onTryHit(source) {
+			if (!this.canSwitch(source.side)) {
+				this.attrLastMove('[still]');
+				this.add('-fail', source);
+				return this.NOT_FAIL;
 			}
 		},
 		selfdestruct: "ifHit",
@@ -5325,9 +5328,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 	},
 
-	// :^)
-	// Remnant of an AFD past. Thank u for the memes.
-	/*
+	// Try playing Staff Bros without dynamax and see what happens
 	supermetronome: {
 		accuracy: true,
 		basePower: 0,
@@ -5371,5 +5372,4 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "self",
 		type: "???",
 	},
-	*/
 };

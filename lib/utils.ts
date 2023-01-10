@@ -64,6 +64,22 @@ export function stripHTML(htmlContent: string) {
 }
 
 /**
+ * Maps numbers to their ordinal string.
+ */
+export function formatOrder(place: number) {
+	// anything between 10 and 20 should always end with -th
+	let remainder = place % 100;
+	if (remainder >= 10 && remainder <= 20) return place + 'th';
+
+	// follow standard rules with -st, -nd, -rd, and -th
+	remainder = place % 10;
+	if (remainder === 1) return place + 'st';
+	if (remainder === 2) return place + 'nd';
+	if (remainder === 3) return place + 'rd';
+	return place + 'th';
+}
+
+/**
  * Visualizes eval output in a slightly more readable form
  */
 export function visualize(value: any, depth = 0): string {

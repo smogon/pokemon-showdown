@@ -18,8 +18,8 @@ import type {Battle} from './battle';
 /** A move action */
 export interface MoveAction {
 	/** action type */
-	choice: 'move' | 'beforeTurnMove';
-	order: 3 | 5 | 200 | 201 | 199;
+	choice: 'move' | 'beforeTurnMove' | 'priorityChargeMove';
+	order: 3 | 5 | 200 | 201 | 199 | 106;
 	/** priority of the action (lower first) */
 	priority: number;
 	/** fractional priority of the action (lower first) */
@@ -49,8 +49,8 @@ export interface MoveAction {
 /** A switch action */
 export interface SwitchAction {
 	/** action type */
-	choice: 'switch' | 'instaswitch';
-	order: 3 | 103;
+	choice: 'switch' | 'instaswitch' | 'revivalblessing';
+	order: 3 | 6 | 103;
 	/** priority of the action (lower first) */
 	priority: number;
 	/** speed of pokemon switching (higher first if priority tie) */
@@ -92,7 +92,7 @@ export interface FieldAction {
 /** A generic action done by a single pokemon */
 export interface PokemonAction {
 	/** action type */
-	choice: 'megaEvo' | 'shift' | 'runPrimal' | 'runSwitch' | 'event' | 'runUnnerve' | 'runDynamax';
+	choice: 'megaEvo' | 'shift' | 'runPrimal' | 'runSwitch' | 'event' | 'runUnnerve' | 'runDynamax' | 'terastallize';
 	/** priority of the action (lower first) */
 	priority: number;
 	/** speed of pokemon doing action (higher first if priority tie) */
@@ -137,8 +137,8 @@ export class BattleQueue {
 	shift() {
 		return this.list.shift();
 	}
-	peek(): Action | undefined {
-		return this.list[0];
+	peek(end?: boolean): Action | undefined {
+		return this.list[end ? this.list.length - 1 : 0];
 	}
 	push(action: Action) {
 		return this.list.push(action);
@@ -172,6 +172,7 @@ export class BattleQueue {
 				instaswitch: 3,
 				beforeTurn: 4,
 				beforeTurnMove: 5,
+				revivalblessing: 6,
 
 				runUnnerve: 100,
 				runSwitch: 101,
@@ -179,6 +180,8 @@ export class BattleQueue {
 				switch: 103,
 				megaEvo: 104,
 				runDynamax: 105,
+				terastallize: 106,
+				priorityChargeMove: 107,
 
 				shift: 200,
 				// default is 200 (for moves)
@@ -207,10 +210,23 @@ export class BattleQueue {
 						pokemon: action.pokemon,
 					}));
 				}
+				if (action.terastallize && !action.pokemon.terastallized) {
+					actions.unshift(...this.resolveAction({
+						choice: 'terastallize',
+						pokemon: action.pokemon,
+					}));
+				}
 				if (action.maxMove && !action.pokemon.volatiles['dynamax']) {
 					actions.unshift(...this.resolveAction({
 						choice: 'runDynamax',
 						pokemon: action.pokemon,
+					}));
+				}
+				if (!action.maxMove && !action.zmove && action.move.priorityChargeCallback) {
+					actions.unshift(...this.resolveAction({
+						choice: 'priorityChargeMove',
+						pokemon: action.pokemon,
+						move: action.move,
 					}));
 				}
 				action.fractionalPriority = this.battle.runEvent('FractionalPriority', action.pokemon, null, action.move, 0);
@@ -271,9 +287,10 @@ export class BattleQueue {
 		for (const choice of choices) {
 			const resolvedChoices = this.resolveAction(choice);
 			this.list.push(...resolvedChoices);
-			const resolvedChoice = resolvedChoices[0];
-			if (resolvedChoice && resolvedChoice.choice === 'move' && resolvedChoice.move.id !== 'recharge') {
-				resolvedChoice.pokemon.side.lastSelectedMove = resolvedChoice.move.id;
+			for (const resolvedChoice of resolvedChoices) {
+				if (resolvedChoice && resolvedChoice.choice === 'move' && resolvedChoice.move.id !== 'recharge') {
+					resolvedChoice.pokemon.side.lastSelectedMove = resolvedChoice.move.id;
+				}
 			}
 		}
 	}

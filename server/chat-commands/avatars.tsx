@@ -52,7 +52,7 @@ try {
 	if (Config.allowedavatars) {
 		for (const avatar in Config.customavatars) {
 			for (const userid of Config.customavatars[avatar]) {
-				customAvatars[userid] ??= {allowed: [null]};
+				if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
 				customAvatars[userid].allowed.push(avatar);
 			}
 		}
@@ -141,8 +141,9 @@ export const Avatars = new class {
 	/** does not include validation */
 	setDefault(userid: ID, avatar: AvatarID | null) {
 		if (avatar === this.getDefault(userid)) return;
+		if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
+		const entry = customAvatars[userid];
 
-		const entry = (customAvatars[userid] ??= {allowed: [null]});
 		if (avatar === entry.allowed[0]) {
 			delete entry.default;
 		} else {
@@ -151,11 +152,12 @@ export const Avatars = new class {
 		saveCustomAvatars();
 	}
 	addAllowed(userid: ID, avatar: AvatarID | null) {
-		const entry = (customAvatars[userid] ??= {allowed: [null]});
-		if (entry.allowed.includes(avatar)) return false;
+		if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
 
-		entry.allowed.push(avatar);
-		entry.notNotified = true;
+		if (customAvatars[userid].allowed.includes(avatar)) return false;
+
+		customAvatars[userid].allowed.push(avatar);
+		customAvatars[userid].notNotified = true;
 		this.tryNotify(Users.get(userid));
 		return true;
 	}
@@ -172,7 +174,9 @@ export const Avatars = new class {
 		return true;
 	}
 	addPersonal(userid: ID, avatar: AvatarID | null) {
-		const entry = (customAvatars[userid] ??= {allowed: [null]});
+		if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
+		const entry = customAvatars[userid];
+
 		if (entry.allowed.includes(avatar)) return false;
 
 		entry.timeReceived ||= Date.now();
@@ -271,7 +275,7 @@ const OFFICIAL_AVATARS = new Set([
 	'burgh',
 	'burglar-gen1', 'burglar-gen1rb', 'burglar-gen2', 'burglar-gen3', 'burglar',
 	'byron',
-	'caitlin',
+	'caitlin-gen4', 'caitlin',
 	'cameraman',
 	'camper-gen2', 'camper-gen3', 'camper-gen3rs', 'camper',
 	'candice',
@@ -303,7 +307,7 @@ const OFFICIAL_AVATARS = new Set([
 	'dahlia',
 	'daisy-gen3',
 	'dancer',
-	'darach',
+	'darach-caitlin', 'darach',
 	'dawn-gen4pt', 'dawn',
 	'depotagent',
 	'doctor',
@@ -531,7 +535,7 @@ const OFFICIAL_AVATARS_BELIOT419 = new Set([
 	'kukui-stand', 'kukui', 'lana', 'lass-gen7', 'lillie-z', 'lillie', 'lusamine-nihilego', 'lusamine',
 	'mallow', 'mina', 'molayne', 'nanu', 'officeworker', 'olivia', 'plumeria', 'pokemonbreeder-gen7',
 	'pokemonbreederf-gen7', 'preschoolers', 'red-gen7', 'risingstar', 'risingstarf', 'ryuki',
-	'samsonoak', 'selene', 'sightseer', 'sina', 'sophocles', 'teacher-gen7', 'theroyal', 'wally',
+	'samsonoak', 'selene', 'sightseerf', 'sina', 'sophocles', 'teacher-gen7', 'theroyal', 'wally',
 	'wicke', 'youngathlete', 'youngathletef', 'youngster-gen7',
 ]);
 
@@ -542,16 +546,96 @@ const OFFICIAL_AVATARS_GNOMOWLADNY = new Set([
 ]);
 
 const OFFICIAL_AVATARS_BRUMIRAGE = new Set([
-	'agatha-lgpe', 'allister', 'archie-gen6', 'avery', 'ballguy', 'bea', 'bede', 'bede-leader', 'brendan-contest',
-	'doctor-gen8', 'elaine', 'gloria', 'gordie', 'hop', 'kabu', 'klara', 'koga-lgpe', 'leon', 'leon-tower', 'lisia',
-	'lorelei-lgpe', 'magnolia', 'marnie', 'may-contest', 'melony', 'milo', 'mustard', 'mustard-master', 'nessa',
-	'oleana', 'opal', 'peonia', 'peony', 'phoebe-gen6', 'piers', 'raihan', 'rose', 'shielbert', 'sonia',
-	'sonia-professor', 'sordward', 'tateandliza-gen6', 'victor', 'victor-dojo', 'yellgrunt', 'yellgruntf',
+	'adaman', 'agatha-lgpe', 'akari', 'allister', 'archie-gen6', 'arezu', 'avery', 'ballguy', 'bea', 'bede',
+	'bede-leader', 'brendan-contest', 'burnet-radar', 'calaba', 'calem', 'chase', 'cogita', 'cynthia-gen7',
+	'cynthia-masters', 'diantha', 'doctor-gen8', 'elaine', 'gloria', 'gordie', 'hilda-masters2', 'hop',
+	'irida', 'kabu', 'klara', 'koga-lgpe', 'leon', 'leon-tower', 'lian', 'lisia', 'lorelei-lgpe', 'magnolia',
+	'mai', 'marnie', 'may-contest', 'melony', 'milo', 'mina-lgpe', 'mustard', 'mustard-master', 'nessa',
+	'oleana', 'opal', 'peony', 'pesselle', 'phoebe-gen6', 'piers', 'raihan', 'rei', 'rose', 'sabi',
+	'sanqua', 'shielbert', 'sonia', 'sonia-professor', 'sordward', 'sordward-shielbert', 'tateandliza-gen6',
+	'victor', 'victor-dojo', 'volo', 'yellgrunt', 'yellgruntf', 'zisu',
+]);
+
+const OFFICIAL_AVATARS_ZACWEAVILE = new Set([
+	'alain', 'charm', 'coin', 'courtney', 'dulse', 'elio-usum', 'emma', 'essentia', 'gloria-dojo',
+	'magmagrunt', 'magmagruntf', 'marnie-league', 'morgan', 'phyco', 'selene-usum', 'shauna', 'skullgrunt',
+	'skullgruntf', 'soliera', 'zossie', 'arven-v', 'dexio-gen6', 'flannery-gen6', 'green', 'grusha', 'mela',
+	'norman-gen6', 'penny', 'sina-gen6', 'steven-gen6',
+]);
+
+const OFFICIAL_AVATARS_KYLEDOVE = new Set([
+	'acetrainerf-gen6', 'acetrainerf-gen6xy', 'acetrainer-gen6', 'acetrainer-gen6xy', 'aquagrunt', 'aquagruntf',
+	'aromalady-gen6', 'artistf-gen6', 'artist-gen6', 'artist-gen8', 'backpacker-gen6', 'backpacker-gen8',
+	'battlegirl-gen6', 'battlegirl-gen6xy', 'beauty-gen6', 'beauty-gen6xy', 'beauty-gen8', 'birdkeeper-gen6',
+	'blackbelt-gen6', 'blackbelt-gen8', 'bugcatcher-gen6', 'bugmaniac-gen6', 'butler', 'cabbie', 'cafemaster',
+	'cameraman-gen6', 'cameraman-gen8', 'camper-gen6', 'chef', 'clerkf-gen8', 'clerk-gen8', 'collector-gen6',
+	'cook', 'dancer-gen8', 'delinquent', 'doctorf-gen8', 'dragontamer-gen6', 'expertf-gen6', 'expert-gen6',
+	'fairytalegirl', 'fisher-gen8', 'fisherman-gen6', 'fisherman-gen6xy', 'freediver', 'furisodegirl-blue',
+	'furisodegirl-white', 'garcon', 'gardener', 'gentleman-gen6', 'gentleman-gen6xy', 'gentleman-gen8',
+	'guitarist-gen6', 'hexmaniac-gen6', 'hiker-gen6', 'hiker-gen8', 'interviewers-gen6', 'kindler-gen6', 'lady-gen6',
+	'lady-gen6oras', 'lass-gen6', 'lass-gen6oras', 'lass-gen8', 'leaguestaff', 'leaguestafff', 'madame-gen6',
+	'madame-gen8', 'maid-gen6', 'model-gen8', 'musician-gen8', 'ninjaboy-gen6', 'owner', 'parasollady-gen6',
+	'picnicker-gen6', 'pokefanf-gen6', 'pokefanf-gen6xy', 'pokefan-gen6', 'pokefan-gen6xy', 'pokekidf-gen8',
+	'pokekid-gen8', 'pokemaniac-gen6', 'pokemonbreederf-gen6', 'pokemonbreederf-gen6xy', 'pokemonbreederf-gen8',
+	'pokemonbreeder-gen6', 'pokemonbreeder-gen6xy', 'pokemonbreeder-gen8', 'pokemonrangerf-gen6', 'pokemonrangerf-gen6xy',
+	'pokemonranger-gen6', 'pokemonranger-gen6xy', 'policeman-gen8', 'postman', 'preschoolerf-gen6', 'preschooler-gen6',
+	'psychic-gen6', 'punkgirl', 'punkguy', 'railstaff', 'reporter-gen6', 'reporter-gen8', 'richboy-gen6', 'richboy-gen6xy',
+	'risingstarf-gen6', 'risingstar-gen6', 'rollerskater', 'rollerskaterf', 'ruinmaniac-gen6', 'sailor-gen6', 'schoolboy',
+	'schoolgirl', 'schoolkidf-gen6', 'schoolkidf-gen8', 'schoolkid-gen6', 'schoolkid-gen8', 'scientistf-gen6',
+	'scientist-gen6', 'scubadiver', 'skytrainer', 'skytrainerf', 'streetthug', 'swimmerf2-gen6', 'swimmerf-gen6',
+	'swimmerf-gen8', 'swimmer-gen6', 'swimmer-gen8', 'teammates', 'tourist', 'touristf', 'touristf2',
+	'triathletebiker-gen6', 'triathleterunner-gen6', 'triathleteswimmer-gen6', 'tuberf-gen6', 'tuber-gen6', 'twins-gen6',
+	'veteranf-gen6', 'veteran-gen6', 'waitress-gen6', 'worker2-gen6', 'workerf-gen8', 'worker-gen6', 'worker-gen8',
+	'youngcouple-gen6', 'youngster-gen6', 'youngster-gen6xy', 'youngster-gen8',
+	'acetrainer-gen7', 'acetrainerf-gen7', 'bellhop', 'blackbelt-gen7', 'collector-gen7', 'cook-gen7', 'dancer-gen7',
+	'firefighter', 'fisherman-gen7', 'gentleman-gen7', 'golfer', 'janitor-gen7', 'madame-gen7', 'officeworkerf',
+	'pokemoncenterlady', 'policeman-gen7', 'preschooler-gen7', 'preschoolerf-gen7', 'punkgirl-gen7', 'punkguy-gen7',
+	'scientist-gen7', 'sightseer', 'surfer', 'swimmer-gen7', 'swimmerf-gen7', 'swimmerf2-gen7', 'trialguide', 'trialguidef',
+	'ultraforestkartenvoy', 'veteran-gen7', 'veteranf-gen7', 'worker-gen7',
+	'anthea', 'beni', 'beni-ninja', 'birch', 'blaine-lgpe', 'blue-lgpe', 'brigette', 'brock-lgpe', 'caraliss', 'cedricjuniper',
+	'celio', 'charon', 'clover', 'colza', 'concordia', 'cyllene', 'dawn-contest', 'elm', 'erika-lgpe', 'fennel', 'gaeric',
+	'ginter', 'giovanni-lgpe', 'grant', 'ingo-hisui', 'iscan', 'kamado', 'kamado-armor', 'kurt', 'lance-lgpe', 'lanette',
+	'laventon', 'lucas-contest', 'lucy', 'lysandre', 'melli', 'misty-lgpe', 'noland', 'palina', 'plumeria-league', 'rowan',
+	'roxanne-gen6', 'rye', 'sabrina-lgpe', 'scott', 'securitycorps', 'securitycorpsf', 'serena', 'sycamore', 'taohua', 'vessa',
+	'anthe', 'anvin', 'burglar-lgpe', 'channeler-lgpe', 'choy', 'cynthia-anime', 'dagero', 'gentleman-lgpe', 'grace',
+	'hayley', 'jasmine-contest', 'johanna-contest', 'johanna', 'mom-alola', 'mom-hoenn', 'mom-johto', 'mom-unova2', 'oak',
+	'piers-league', 'psychic-lgpe', 'rosa-pokestar', 'tuli', 'worker-lgpe',
+	'acerola-masters', 'bea-masters', 'blue-masters', 'brendan-masters', 'brock-masters', 'burgh-masters', 'caitlin-masters',
+	'cynthia-masters2', 'cyrus-masters', 'dawn-masters', 'dawn-masters2', 'diantha-masters', 'elesa-masters', 'emmet-masters',
+	'erika-masters', 'erika-masters2', 'ethan-masters', 'giovanni-masters', 'gloria-masters', 'grimsley-masters',
+	'guzma-masters', 'hilbert-masters', 'hilda-masters', 'ingo-masters', 'jasmine-masters', 'korrina-masters', 'kris-masters',
+	'lance-masters', 'leaf-masters', 'leon-masters', 'leon-masters2', 'lillie-masters', 'lillie-masters2', 'lillie-masters3',
+	'lusamine-masters', 'lyra-masters', 'lyra-masters2', 'marnie-masters', 'marnie-masters2', 'may-masters', 'may-masters2',
+	'may-masters3', 'misty-masters', 'morty-masters', 'morty-masters2', 'n-masters', 'n-masters2', 'nessa-masters',
+	'raihan-masters', 'red-masters', 'rosa-masters', 'sabrina-masters', 'serena-masters', 'serena-masters2',
+	'siebold-masters', 'skyla-masters', 'sonia-masters', 'steven-masters', 'steven-masters2', 'volkner-masters', 'bellis',
+	'beauty-masters', 'collector-masters', 'punkgirl-masters', 'streetthug-masters', 'swimmer-masters', 'youngster-masters',
+	'akari-isekai', 'allister-masters', 'arven-s', 'brassius', 'clavell-s', 'cynthia-anime2', 'cynthia-masters3', 'florian-s',
+	'geeta', 'hassel', 'hilda-masters3', 'iono', 'iris-masters', 'jacq', 'juliana-s', 'katy', 'kofu', 'larry', 'miriam',
+	'nemona-v', 'poppy', 'red-masters2', 'rei-isekai', 'rika', 'rosa-masters2', 'ryme', 'sada', 'stargrunt-s', 'stargrunt-v',
+	'stargruntf-s', 'stargruntf-v', 'steven-masters3', 'tulip', 'turo', 'tyme', 'wally-masters',
+]);
+
+const OFFICIAL_AVATARS_HYOOPPA = new Set([
+	'brendan', 'maxie-gen6', 'may',
+]);
+
+const OFFICIAL_AVATARS_GRAPO = new Set([
+	'glacia', 'peonia', 'skyla-masters2', 'volo-ginkgo',
+]);
+
+const OFFICIAL_AVATARS_FIFTY = new Set([
+	'rose-zerosuit',
 ]);
 
 for (const avatar of OFFICIAL_AVATARS_BELIOT419) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_GNOMOWLADNY) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_BRUMIRAGE) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_ZACWEAVILE) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_KYLEDOVE) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_HYOOPPA) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_GRAPO) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_FIFTY) OFFICIAL_AVATARS.add(avatar);
 
 export const commands: Chat.ChatCommands = {
 	avatar(target, room, user) {
@@ -581,7 +665,22 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply(`|raw|(${this.tr`Artist: `}Gnomowladny)`);
 			}
 			if (OFFICIAL_AVATARS_BRUMIRAGE.has(avatar)) {
-				this.sendReply(`|raw|(${this.tr`Artist: `}Brumirage)`);
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/Brumirage">Brumirage</a>)`);
+			}
+			if (OFFICIAL_AVATARS_ZACWEAVILE.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}ZacWeavile)`);
+			}
+			if (OFFICIAL_AVATARS_KYLEDOVE.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/DoveKyle">Kyledove</a>)`);
+			}
+			if (OFFICIAL_AVATARS_HYOOPPA.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/hyo_oppa">hyo-oppa</a>)`);
+			}
+			if (OFFICIAL_AVATARS_GRAPO.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/Grapo_Sprites">Grapo</a>)`);
+			}
+			if (OFFICIAL_AVATARS_FIFTY.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}Fifty Shades of Rez)`);
 			}
 		}
 	},
@@ -633,7 +732,7 @@ export const commands: Chat.ChatCommands = {
 				<button name="openOptions" class="button" aria-label="Options"><i class="fa fa-cog"></i></button> menu in the upper {}
 				right.
 			</p>, <p>
-				Avatars from generations other than 3-5 are hidden. You can find them in this {}
+				Avatars from generations other than 4-5 are hidden. You can find them in this {}
 				<a href="https://play.pokemonshowdown.com/sprites/trainers/"><strong>full list of avatars</strong></a>. {}
 				You can use them by typing <code>/avatar <i>[avatar's name]</i></code> into any chat. For example, {}
 				<code>/avatar erika-gen2</code>.
@@ -861,7 +960,8 @@ export const commands: Chat.ChatCommands = {
 				if (!/[A-Za-z0-9]/.test(arg.charAt(0)) || !/[A-Za-z]/.test(arg)) {
 					throw new Chat.ErrorMessage(`Invalid username "${arg}"`);
 				}
-				(toUpdate[curAvatar] ??= new Set()).add(toID(arg));
+				if (!toUpdate[curAvatar]) toUpdate[curAvatar] = new Set();
+				toUpdate[curAvatar].add(toID(arg));
 			}
 		}
 

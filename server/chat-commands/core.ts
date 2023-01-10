@@ -358,7 +358,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	blockpmshelp: [
 		`/blockpms - Blocks private messages except from staff. Unblock them with /unblockpms.`,
-		`/blockpms [unlocked/ac/trusted/+] - Blocks private messages except from staff and the specified group.`,
+		`/blockpms [unlocked/ac/trusted/+/friends] - Blocks private messages except from staff and the specified group.`,
 	],
 
 	unblockpm: 'unblockpms',
@@ -560,8 +560,15 @@ export const commands: Chat.ChatCommands = {
 		}
 		user.language = languageID;
 		user.update();
-		const language = Chat.languages.get(languageID);
-		return this.sendReply(this.tr`Pokémon Showdown will now be displayed in ${language} (except in language rooms).`);
+		const languageName = Chat.languages.get(languageID);
+		const langRoom = Rooms.search(languageName || "");
+		let language = languageName;
+		if (langRoom) {
+			language = `<a href="/${langRoom.roomid}">${languageName}</a>`;
+		}
+		return this.sendReply(
+			`|html|` + this.tr`Pokémon Showdown will now be displayed in ${language} (except in language rooms).`
+		);
 	},
 	languagehelp: [
 		`/language - View your current language setting.`,
@@ -649,7 +656,7 @@ export const commands: Chat.ChatCommands = {
 			return;
 		}
 		this.checkCan('exportinputlog', null, room);
-		if (user.can('forcewin')) {
+		if (user.can('forcewin') || Dex.formats.get(battle.format).team) {
 			if (!battle.inputLog) return this.errorReply(this.tr`No input log found.`);
 			this.addModAction(room.tr`${user.name} has extracted the battle input log.`);
 			const inputLog = battle.inputLog.map(Utils.escapeHTML).join(`<br />`);
@@ -659,8 +666,8 @@ export const commands: Chat.ChatCommands = {
 			);
 		} else if (!battle.allowExtraction[user.id]) {
 			battle.allowExtraction[user.id] = new Set();
-			for (const player of battle.players) {
-				const playerUser = player.getUser();
+			for (const id in battle.playerTable) {
+				const playerUser = Users.get(id);
 				if (!playerUser) continue;
 				if (playerUser.id === user.id) {
 					battle.allowExtraction[user.id].add(user.id);
@@ -675,8 +682,8 @@ export const commands: Chat.ChatCommands = {
 		} else {
 			// Re-request to make the buttons appear again for users who have not allowed extraction
 			let logExported = true;
-			for (const player of battle.players) {
-				const playerUser = player.getUser();
+			for (const id in battle.playerTable) {
+				const playerUser = Users.get(id);
 				if (!playerUser || battle.allowExtraction[user.id].has(playerUser.id)) continue;
 				logExported = false;
 				playerUser.sendTo(
@@ -770,6 +777,71 @@ export const commands: Chat.ChatCommands = {
 		`!showteam hidestats - show the team you're using in the current battle, without displaying any stat-related information.`,
 		`!showset [number] - shows the set of the pokemon corresponding to that number (in original Team Preview order, not necessarily current order)`,
 	],
+
+	async acceptopenteamsheets(target, room, user, connection, cmd) {
+		room = this.requireRoom();
+		const battle = room.battle;
+		if (!battle) return this.errorReply(this.tr`Must be in a battle room.`);
+		const player = battle.playerTable[user.id];
+		if (!player) {
+			return this.errorReply(this.tr`Must be a player to agree to open team sheets.`);
+		}
+		const format = Dex.formats.get(battle.options.format);
+		if (!Dex.formats.getRuleTable(format).has('openteamsheets')) {
+			return this.errorReply(this.tr`This format does not allow requesting open team sheets. You can both manually agree to it by using !showteam hidestats.`);
+		}
+		if (battle.turn > 0) {
+			return this.errorReply(this.tr`You cannot agree to open team sheets after Team Preview. Each player can still show their own sheet by using this command: !showteam hidestats`);
+		}
+		if (battle.players.some(curPlayer => curPlayer.wantsOpenTeamSheets === false)) {
+			return this.errorReply(this.tr`An opponent has already rejected open team sheets.`);
+		}
+		if (player.wantsOpenTeamSheets !== null) {
+			return this.errorReply(this.tr`You have already made your decision about agreeing to open team sheets.`);
+		}
+		player.wantsOpenTeamSheets = true;
+		player.sendRoom(Utils.html`|uhtmlchange|otsrequest|`);
+
+		this.add(this.tr`${user.name} has agreed to open team sheets.`);
+		if (battle.players.every(curPlayer => curPlayer.wantsOpenTeamSheets)) {
+			let buf = '|uhtml|ots|';
+			for (const curPlayer of battle.players) {
+				const team = await battle.getTeam(curPlayer.id);
+				if (!team) continue;
+				buf += Utils.html`<div class="infobox" style="margin-top:5px"><details><summary>Open Team Sheet for ${curPlayer.name}</summary>${Teams.export(team, {hideStats: true})}</details></div>`;
+			}
+			for (const curPlayer of battle.players) {
+				curPlayer.sendRoom(buf);
+			}
+		}
+	},
+	acceptopenteamsheetshelp: [`/acceptopenteamsheets - Agrees to an open team sheet opportunity during Team Preview, where all information on a team except stats is shared with the opponent. Requires: \u2606`],
+
+	rejectopenteamsheets(target, room, user) {
+		room = this.requireRoom();
+		const battle = room.battle;
+		if (!battle) return this.errorReply(this.tr`Must be in a battle room.`);
+		const player = battle.playerTable[user.id];
+		if (!player) {
+			return this.errorReply(this.tr`Must be a player to reject open team sheets.`);
+		}
+		const format = Dex.formats.get(battle.options.format);
+		if (!Dex.formats.getRuleTable(format).has('openteamsheets')) {
+			return this.errorReply(this.tr`This format does not allow requesting open team sheets.`);
+		}
+		if (battle.turn > 0) {
+			return this.errorReply(this.tr`You cannot reject open team sheets after Team Preview.`);
+		}
+		if (player.wantsOpenTeamSheets !== null) {
+			return this.errorReply(this.tr`You have already made your decision about agreeing to open team sheets.`);
+		}
+		player.wantsOpenTeamSheets = false;
+		for (const otherPlayer of battle.players) {
+			otherPlayer.sendRoom(Utils.html`|uhtmlchange|otsrequest|`);
+		}
+		return this.add(this.tr`${user.name} rejected open team sheets.`);
+	},
+	rejectopenteamsheetshelp: [`/rejectopenteamsheetshelp - Rejects an open team sheet opportunity during Team Preview, where all information on a team except stats is shared with the opponent. Requires: \u2606`],
 
 	acceptdraw: 'offertie',
 	accepttie: 'offertie',
@@ -1395,11 +1467,9 @@ export const commands: Chat.ChatCommands = {
 		}
 		if (!target) return this.errorReply(this.tr`Provide a valid format.`);
 		const originalFormat = Dex.formats.get(target);
-		// Note: The default here of [Gen 8] Anything Goes isn't normally hit; since the web client will send a default format
-		const format = originalFormat.effectType === 'Format' ? originalFormat : Dex.formats.get(
-			'[Gen 8] Anything Goes'
-		);
-		if (format.effectType !== this.tr`Format`) return this.popupReply(this.tr`Please provide a valid format.`);
+		// Note: The default here of Anything Goes isn't normally hit; since the web client will send a default format
+		const format = originalFormat.effectType === 'Format' ? originalFormat : Dex.formats.get('Anything Goes');
+		if (format.effectType !== 'Format') return this.popupReply(this.tr`Please provide a valid format.`);
 
 		return TeamValidatorAsync.get(format.id).validateTeam(user.battleSettings.team).then(result => {
 			const matchMessage = (originalFormat === format ? "" : this.tr`The format '${originalFormat.name}' was not found.`);

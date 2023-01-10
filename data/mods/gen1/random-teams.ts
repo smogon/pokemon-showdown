@@ -1,6 +1,6 @@
 import RandomGen2Teams from '../gen2/random-teams';
 import {Utils} from '../../../lib';
-import {MoveCounter} from '../../random-teams';
+import {MoveCounter} from '../gen8/random-teams';
 
 interface HackmonsCupEntry {
 	types: string[];
@@ -118,7 +118,6 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 		/** Pokémon that are not wholly incompatible with the team, but still pretty bad */
 		const rejectedButNotInvalidPool: string[] = [];
-		const handicapMons = ['magikarp', 'weedle', 'kakuna', 'caterpie', 'metapod'];
 		const nuTiers = ['UU', 'UUBL', 'NFE', 'LC', 'NU'];
 		const uuTiers = ['NFE', 'UU', 'UUBL', 'NU'];
 
@@ -127,7 +126,6 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const weaknessCount: {[k: string]: number} = {Electric: 0, Psychic: 0, Water: 0, Ice: 0, Ground: 0};
 		let uberCount = 0;
 		let nuCount = 0;
-		let hasShitmon = false;
 
 		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
@@ -138,16 +136,6 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			// to face each other.
 			if (species.id === 'ditto' && this.battleHasDitto) continue;
 
-			// Really bad Pokémon shouldn't be leads.
-			if (pokemon.length === 0 && handicapMons.includes(species.id)) continue;
-
-			// Bias the tiers so you get less shitmons and only one of the two Ubers.
-			// If you have a shitmon, don't get another
-			if (handicapMons.includes(species.id) && hasShitmon) {
-				rejectedButNotInvalidPool.push(species.id);
-				continue;
-			}
-
 			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
 			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
 
@@ -155,13 +143,13 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			switch (tier) {
 			case 'LC':
 			case 'NFE':
-				// Don't add pre-evo mon if already 4 or more non-OUs, or if already 3 or more non-OUs with one being a shitmon
+				// Don't add pre-evo mon if already 4 or more non-OUs
 				// Regardless, pre-evo mons are slightly less common.
-				if (nuCount >= 4 * limitFactor || (hasShitmon && nuCount >= 4 * limitFactor - 1) || this.randomChance(1, 3)) continue;
+				if (nuCount >= 4 * limitFactor || this.randomChance(1, 3)) continue;
 				break;
 			case 'Uber':
-				// If you have one of the worst mons we allow luck to give you all Ubers.
-				if (uberCount >= 1 * limitFactor && !hasShitmon) continue;
+				// Only allow a single Uber.
+				if (uberCount >= 1 * limitFactor) continue;
 				break;
 			default:
 				// OUs are fine. Otherwise 50% chance to skip mon if already 4 or more non-OUs.
@@ -231,9 +219,6 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			} else if (nuTiers.includes(tier)) {
 				nuCount++;
 			}
-
-			// Is it Magikarp or one of the useless bugs?
-			if (handicapMons.includes(species.id)) hasShitmon = true;
 
 			// Ditto check
 			if (species.id === 'ditto') this.battleHasDitto = true;
@@ -344,10 +329,11 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const levelScale: {[k: string]: number} = {
 			LC: 88,
 			NFE: 80,
+			PU: 77,
 			NU: 77,
 			NUBL: 76,
 			UU: 74,
-			'(OU)': 71,
+			UUBL: 71,
 			OU: 68,
 			Uber: 65,
 		};
@@ -355,17 +341,29 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const customScale: {[k: string]: number} = {
 			Mewtwo: 62,
 			Caterpie: 100, Metapod: 100, Weedle: 100, Kakuna: 100, Magikarp: 100,
-			Ditto: 88,
+			Ditto: 100,
 		};
 		const level = this.adjustLevel || customScale[species.name] || levelScale[species.tier] || 80;
+
+		const evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255};
+		const ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
+
+		// Should be able to use Substitute four times from full HP without fainting
+		if (moves.has('substitute')) {
+			while (evs.hp > 3) {
+				const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+				if (hp % 4 !== 0) break;
+				evs.hp -= 4;
+			}
+		}
 
 		return {
 			name: species.name,
 			species: species.name,
 			moves: Array.from(moves),
 			ability: 'No Ability',
-			evs: {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255},
-			ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30},
+			evs,
+			ivs,
 			item: '',
 			level,
 			shiny: false,

@@ -2,7 +2,7 @@ import RandomGen5Teams from '../gen5/random-teams';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
 import {PRNG} from '../../../sim';
-import type {MoveCounter} from '../../random-teams';
+import type {MoveCounter} from '../gen8/random-teams';
 
 
 // These moves can be used even if we aren't setting up to use them:
@@ -790,7 +790,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			NU: 88,
 		};
 		const customScale: {[k: string]: number} = {
-			Delibird: 100, Ditto: 100, 'Farfetch\u2019d': 100, Unown: 100,
+			Delibird: 100, Ditto: 100, 'Farfetch\u2019d': 100, Unown: 100, Castform: 100,
 		};
 		const level = this.adjustLevel || customScale[species.name] || levelScale[species.tier] || (species.nfe ? 90 : 80);
 

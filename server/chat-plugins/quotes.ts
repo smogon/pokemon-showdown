@@ -1,7 +1,7 @@
 import {FS, Utils} from '../../lib';
 
 const STORAGE_PATH = 'config/chat-plugins/quotes.json';
-const MAX_QUOTES = 200;
+const MAX_QUOTES = 300;
 
 interface Quote {
 	userid: string;

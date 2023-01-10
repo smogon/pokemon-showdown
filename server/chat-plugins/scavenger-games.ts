@@ -129,7 +129,8 @@ const TWISTS: {[k: string]: Twist} = {
 		},
 
 		onAfterEndPriority: 1,
-		onAfterEnd() {
+		onAfterEnd(isReset) {
+			if (isReset) return;
 			const perfect = this.completed.filter(entry => entry.isPerfect).map(entry => entry.name);
 			if (perfect.length) {
 				this.announce(Utils.html`${Chat.toListString(perfect)} ${perfect.length > 1 ? 'have' : 'has'} completed the hunt without a single wrong answer!`);
@@ -176,7 +177,8 @@ const TWISTS: {[k: string]: Twist} = {
 		},
 
 		onAfterEndPriority: 1,
-		onAfterEnd() {
+		onAfterEnd(isReset) {
+			if (isReset) return;
 			const noSkip = this.completed.filter(entry => entry.noSkip).map(entry => entry.name);
 			if (noSkip.length) {
 				this.announce(Utils.html`${Chat.toListString(noSkip)} ${noSkip.length > 1 ? 'have' : 'has'} completed the hunt without skipping the last question!`);
@@ -302,6 +304,138 @@ const TWISTS: {[k: string]: Twist} = {
 
 		onEnd() {
 			this.completed = this.preCompleted || [];
+		},
+	},
+
+	timetrial: {
+		name: 'Time Trial',
+		id: 'timetrial',
+		desc: "Time starts when the player starts the hunt!",
+
+		onAfterLoad() {
+			if (this.questions.length === 3) {
+				this.announce('This twist requires at least four questions. Please reset the hunt and make it again.');
+				this.huntLocked = true;
+			}
+			this.altIps = {};
+			this.startTimes = {};
+		},
+
+		onJoin(user: User) {
+			if (!Config.noipchecks) {
+				const altIp = user.ips.find(ip => this.altIps[ip] && this.altsIps[ip].id !== user.id);
+				if (altIp) {
+					user.sendTo(this.room, `You already have started the hunt as ${this.altIps[altIp].name}.`);
+					return true;
+				}
+			}
+			if (!this.startTimes[user.id]) this.startTimes[user.id] = Date.now();
+			if (this.addPlayer(user)) {
+				this.cacheUserIps(user);
+				delete this.leftHunt[user.id];
+				user.sendTo(this.room, "You joined the scavenger hunt! Use the command /scavenge to answer.");
+				this.onSendQuestion(user);
+			} else {
+				user.sendTo(this.room, "You have already joined the hunt.");
+			}
+			return true;
+		},
+
+		onLeave(user) {
+			for (const ip of user.ips) {
+				this.altIps[ip] = {id: user.id, name: user.name};
+			}
+		},
+
+		onComplete(player, time, blitz) {
+			const now = Date.now();
+			const takenTime = Chat.toDurationString(now - this.startTimes[player.id], {hhmmss: true});
+			const result = {name: player.name, id: player.id, time: takenTime, blitz};
+			this.completed.push(result);
+			const place = Utils.formatOrder(this.completed.length);
+
+			this.announce(
+				Utils.html`<em>${result.name}</em> is the ${place} player to finish the hunt! (${takenTime}${(blitz ? " - BLITZ" : "")})`
+			);
+			Utils.sortBy(this.completed, entry => entry.time);
+
+			player.destroy(); // remove from user.games;
+			return true;
+		},
+	},
+
+	scavengersfeud: {
+		id: 'scavengersfeud',
+		name: 'Scavengers Feud',
+		desc: 'After completing the hunt, players will guess what the most common incorrect answer for each question is.',
+		onAfterLoad() {
+			this.guesses = {};
+			this.incorrect = new Array(this.questions.length).fill('').map(() => ({}));
+
+			this.questions.push({
+				hint: 'Please enter what you think are the most common incorrect answers to each question.  (Enter your guesses in the order of the previous questions, and separate them with a comma)',
+				answer: ['Any'],
+				spoilers: [],
+			});
+		},
+
+		onIncorrectAnswer(player: ScavengerHuntPlayer, value: string) {
+			const curr = player.currentQuestion;
+
+			if (!this.incorrect[curr][value]) this.incorrect[curr][value] = [];
+			if (this.incorrect[curr][value].includes(player.id)) return;
+
+			this.incorrect[curr][value].push(player.id);
+		},
+
+		onSubmitPriority: 1,
+		onSubmit(player, jumble, value) {
+			const currentQuestion = player.currentQuestion;
+
+			if (currentQuestion + 1 === this.questions.length) {
+				this.guesses[player.id] = value.split(',').map((part: string) => toID(part));
+
+				this.onComplete(player);
+				return true;
+			}
+		},
+
+		onEnd() {
+			this.questions = this.questions.slice(0, -1); // remove the automatically added last question.
+		},
+
+		onAfterEnd(isReset) {
+			if (isReset) return;
+
+			const buffer = [];
+			for (const [idx, data] of this.incorrect.entries()) {
+				// collate the data for each question
+				let collection = [];
+				for (const str in data) {
+					collection.push({count: data[str].length, value: str});
+				}
+				collection = collection.sort((a, b) => b.count - a.count);
+				const maxValue = collection[0]?.count || 0;
+
+				const matches = collection
+					.filter(pair => pair.count === maxValue)
+					.map(pair => pair.value);
+
+				const matchedPlayers = [];
+				for (const playerid in this.guesses) {
+					const guesses = this.guesses[playerid];
+					if (matches.includes(guesses[idx])) matchedPlayers.push(playerid);
+				}
+
+				// display the data
+				const matchDisplay = matches.length ? matches.join(', ') : 'No wrong answers!';
+				const playerDisplay = matches.length ?
+					matchedPlayers.length ? `- ${matchedPlayers.join(', ')}` : '- No one guessed correctly!' :
+					'';
+				buffer.push(`Q${idx + 1}: ${matchDisplay} ${playerDisplay}`);
+			}
+
+			this.announce(`<h3>Most common incorrect answers:</h3>${buffer.join('<br />')}`);
 		},
 	},
 };

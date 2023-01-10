@@ -213,8 +213,8 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	setCustomRules(rules: string) {
 		let format;
 		try {
-			this.fullFormat = Dex.formats.validate(`${this.baseFormat}@@@${rules}`);
-			format = Dex.formats.get(this.fullFormat, true);
+			const tryFormat = Dex.formats.validate(`${this.baseFormat}@@@${rules}`);
+			format = Dex.formats.get(tryFormat, true);
 
 			// In tours of formats with generated teams, custom rule errors should be checked for here,
 			// since users can't edit their teams to avoid them at matching time
@@ -223,6 +223,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 				const testTeamGenerator = Teams.getGenerator(format, testTeamSeed);
 				testTeamGenerator.getTeam(); // Throws error if generation fails
 			}
+			this.fullFormat = tryFormat;
 		} catch (e: any) {
 			throw new Chat.ErrorMessage(`Custom rule error: ${e.message}`);
 		}
@@ -492,7 +493,9 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			for (const otherPlayer of this.players) {
 				if (!otherPlayer) continue;
 				const otherUser = Users.get(otherPlayer.id);
-				if (otherUser && otherUser.latestIp === replacementUser.latestIp) {
+				if (otherUser &&
+					otherUser.latestIp === replacementUser.latestIp &&
+					replacementUser.latestIp !== user.latestIp) {
 					output.errorReply(`${replacementUser.name} already has an alt in the tournament.`);
 					return;
 				}
@@ -1294,7 +1297,7 @@ const commands: Chat.ChatCommands = {
 		const {name, time} = array[0];
 		let buf = `The last tournament ended ${Chat.toDurationString(Date.now() - time)} ago - ${name}`;
 		if (array.length > 1) {
-			buf += `<hr /><strong>Previous tournments:</strong> `;
+			buf += `<hr /><strong>Previous tournaments:</strong> `;
 			buf += array.filter((x, i) => i !== 0).map(x => x.name).join(', ');
 		}
 		this.sendReplyBox(buf);
@@ -1332,9 +1335,6 @@ const commands: Chat.ChatCommands = {
 		announce(target, room, user, connection, cmd) {
 			room = this.requireRoom();
 			this.checkCan('gamemanagement', null, room);
-			if (!Config.tourannouncements.includes(room.roomid)) {
-				return this.errorReply("Tournaments in this room cannot be announced.");
-			}
 			if (!target) {
 				if (room.settings.tournaments?.announcements) {
 					return this.sendReply("Tournament announcements are enabled.");
@@ -1382,7 +1382,7 @@ const commands: Chat.ChatCommands = {
 					if (tourRoom && tourRoom !== room) {
 						tourRoom.addRaw(
 							Utils.html`<div class="infobox"><a href="/${room.roomid}" class="ilink">` +
-							`<strong>${Dex.formats.get(tour.name).name}</strong> tournament created in` +
+							Utils.html`<strong>${Dex.formats.get(tour.name).name}</strong> tournament created in` +
 							` <strong>${room.title}</strong>.</a></div>`
 						).update();
 					}
@@ -2307,7 +2307,7 @@ const commands: Chat.ChatCommands = {
 		this.sendReplyBox(
 			`Tournament Commands<br/>` +
 			`- create/new &lt;format>, &lt;type>, [ &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />` +
-			`- rules/banlist &lt;comma-separated arguments>: Sets the custom rules for the tournament before it has started.<br />` +
+			`- rules &lt;comma-separated arguments>: Sets the custom rules for the tournament before it has started. <a href="view-battlerules">Custom rules help/list</a><br />` +
 			`- end/stop/delete: Forcibly ends the tournament in the current room.<br />` +
 			`- begin/start: Starts the tournament in the current room.<br /><br />` +
 			`<details class="readmore"><summary>Configuration Commands</summary>` +

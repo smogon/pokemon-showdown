@@ -8,6 +8,24 @@ const {testNotBothMoves, testSet, testHiddenPower, testAlwaysHasMove} = require(
 
 describe('[Gen 7] Random Battle', () => {
 	const options = {format: 'gen7randombattle'};
+	const dex = Dex.forFormat(options.format);
+	const generator = Teams.getGenerator(options.format);
+
+	it('All moves on all sets should be obtainable (slow)', () => {
+		const rounds = 500;
+		for (const species of dex.species.all()) {
+			if (!species.randomBattleMoves || species.isNonstandard) continue;
+			const remainingMoves = new Set(species.randomBattleMoves);
+			for (let i = 0; i < rounds; i++) {
+				// Test lead 1/6 of the time
+				const set = generator.randomSet(species, {}, i % 6 === 0);
+				for (const move of set.moves) remainingMoves.delete(move);
+				if (!remainingMoves.size) break;
+			}
+			assert.false(remainingMoves.size,
+				`The following moves on ${species.name} are unused: ${[...remainingMoves].join(', ')}`);
+		}
+	});
 
 	it('should not generate Calm Mind + Yawn', () => {
 		testNotBothMoves('chimecho', options, 'calmmind', 'yawn');
@@ -26,7 +44,6 @@ describe('[Gen 7] Random Battle', () => {
 	});
 
 	it('should not generate Pursuit as the only Dark STAB move', () => {
-		const dex = Dex.forFormat(options.format);
 		const darkTypesWithPursuit = dex.species
 			.all()
 			.filter(pkmn => pkmn.types.includes('Dark') && pkmn.randomBattleMoves?.includes('pursuit'))
@@ -95,4 +112,31 @@ describe('[Gen 7] Random Battle', () => {
 	});
 
 	it('should always give Mega Glalie Return', () => testAlwaysHasMove('glaliemega', options, 'return'));
+
+	it('should not give Zebstrika Thunderbolt and Wild Charge', () => {
+		testNotBothMoves('zebstrika', options, 'thunderbolt', 'wildcharge');
+	});
+
+	it('should always give Mega Diancie Moonblast if it has Calm Mind', () => {
+		testSet('dianciemega', options, set => {
+			if (!set.moves.includes('calmmind')) return;
+			assert(set.moves.includes('moonblast'), `Diancie: got ${set.moves}`);
+		});
+	});
+});
+
+describe('[Gen 7] Random Doubles Battle', () => {
+	const options = {format: 'gen7randomdoublesbattle'};
+
+	it("shouldn't give Manectric Intimidate before Mega Evolving", () => {
+		testSet('manectricmega', options, set => {
+			assert.notEqual(set.ability, 'Intimidate');
+		});
+	});
+
+	it("should give Mawile Intimidate before Mega Evolving", () => {
+		testSet('mawilemega', options, set => {
+			assert.equal(set.ability, 'Intimidate');
+		});
+	});
 });

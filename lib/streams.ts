@@ -481,10 +481,10 @@ export class ReadWriteStream extends ReadStream implements WriteStream {
 			const nodeStream: NodeJS.WritableStream = options.nodeStream;
 			this.nodeWritableStream = nodeStream;
 			options.write = function (data: string | Buffer) {
-				const result = this.nodeWritableStream!.write(data);
+				const result = this.nodeWritableStream.write(data);
 				if (result !== false) return undefined;
 				if (!this.drainListeners.length) {
-					this.nodeWritableStream!.once('drain', () => {
+					this.nodeWritableStream.once('drain', () => {
 						for (const listener of this.drainListeners) listener();
 						this.drainListeners = [];
 					});
@@ -497,7 +497,7 @@ export class ReadWriteStream extends ReadStream implements WriteStream {
 			if (nodeStream !== process.stdout && nodeStream !== process.stderr) {
 				options.writeEnd = function () {
 					return new Promise<void>(resolve => {
-						this.nodeWritableStream!.end(() => resolve());
+						this.nodeWritableStream.end(() => resolve());
 					});
 				};
 			}

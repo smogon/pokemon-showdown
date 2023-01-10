@@ -57,6 +57,10 @@ export const Conditions: {[k: string]: ConditionData} = {
 			// 1-3 turns
 			this.effectState.startTime = this.random(2, 5);
 			this.effectState.time = this.effectState.startTime;
+
+			if (target.removeVolatile('nightmare')) {
+				this.add('-end', target, 'Nightmare', '[silent]');
+			}
 		},
 		onBeforeMovePriority: 10,
 		onBeforeMove(pokemon, target, move) {
@@ -101,7 +105,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onModifyMove(move, pokemon) {
 			if (move.flags['defrost']) {
 				this.add('-curestatus', pokemon, 'frz', '[from] move: ' + move);
-				pokemon.setStatus('');
+				pokemon.clearStatus();
 			}
 		},
 		onAfterMoveSecondary(target, source, move) {
@@ -158,12 +162,13 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'confusion',
 		// this is a volatile status
 		onStart(target, source, sourceEffect) {
-			if (sourceEffect && sourceEffect.id === 'lockedmove') {
+			if (sourceEffect?.id === 'lockedmove') {
 				this.add('-start', target, 'confusion', '[fatigue]');
 			} else {
 				this.add('-start', target, 'confusion');
 			}
-			this.effectState.time = this.random(2, 6);
+			const min = sourceEffect?.id === 'axekick' ? 3 : 2;
+			this.effectState.time = this.random(min, 6);
 		},
 		onEnd(target) {
 			this.add('-end', target, 'confusion');
@@ -283,7 +288,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			// note that this is not updated for moves called by other moves
 			// i.e. if Dig is called by Metronome, lastMoveTargetLoc will still be the user's location
 			let moveTargetLoc: number = attacker.lastMoveTargetLoc!;
-			if (effect.sourceEffect && this.dex.moves.get(effect.id).target === 'normal') {
+			if (effect.sourceEffect && this.dex.moves.get(effect.id).target !== 'self') {
 				// this move was called by another move such as Metronome
 				// and needs a random target to be determined this turn
 				// it will already have one by now if there is any valid target
@@ -670,6 +675,39 @@ export const Conditions: {[k: string]: ConditionData} = {
 			this.add('-weather', 'none');
 		},
 	},
+	snow: {
+		name: 'Snow',
+		effectType: 'Weather',
+		duration: 5,
+		durationCallback(source, effect) {
+			if (source?.hasItem('icyrock')) {
+				return 8;
+			}
+			return 5;
+		},
+		onModifyDefPriority: 10,
+		onModifyDef(def, pokemon) {
+			if (pokemon.hasType('Ice') && this.field.isWeather('snow')) {
+				return this.modify(def, 1.5);
+			}
+		},
+		onFieldStart(field, source, effect) {
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-weather', 'Snow', '[from] ability: ' + effect.name, '[of] ' + source);
+			} else {
+				this.add('-weather', 'Snow');
+			}
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-weather', 'Snow', '[upkeep]');
+			if (this.field.isWeather('snow')) this.eachEvent('Weather');
+		},
+		onFieldEnd() {
+			this.add('-weather', 'none');
+		},
+	},
 	deltastream: {
 		name: 'DeltaStream',
 		effectType: 'Weather',
@@ -677,7 +715,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onEffectivenessPriority: -1,
 		onEffectiveness(typeMod, target, type, move) {
 			if (move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Flying' && typeMod > 0) {
-				this.add('-activate', '', 'deltastream');
+				this.add('-fieldactivate', 'Delta Stream');
 				return 0;
 			}
 		},
@@ -697,8 +735,8 @@ export const Conditions: {[k: string]: ConditionData} = {
 	dynamax: {
 		name: 'Dynamax',
 		noCopy: true,
-		duration: 3,
 		onStart(pokemon) {
+			this.effectState.turns = 0;
 			pokemon.removeVolatile('minimize');
 			pokemon.removeVolatile('substitute');
 			if (pokemon.volatiles['torment']) {
@@ -712,7 +750,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (pokemon.baseSpecies.name === 'Shedinja') return;
 
 			// Changes based on dynamax level, 2 is max (at LVL 10)
-			const ratio = 2; // TODO: Implement Dynamax levels
+			const ratio = 1.5 + (pokemon.dynamaxLevel * 0.05);
 
 			pokemon.maxhp = Math.floor(pokemon.maxhp * ratio);
 			pokemon.hp = Math.floor(pokemon.hp * ratio);
@@ -736,12 +774,59 @@ export const Conditions: {[k: string]: ConditionData} = {
 			return null;
 		},
 		onResidualPriority: -100,
+		onResidual() {
+			this.effectState.turns++;
+		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Dynamax');
 			if (pokemon.baseSpecies.name === 'Shedinja') return;
 			pokemon.hp = pokemon.getUndynamaxedHP();
 			pokemon.maxhp = pokemon.baseMaxhp;
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+		},
+	},
+
+	// Commander needs two conditions so they are implemented here
+	// Dondozo
+	commanded: {
+		name: "Commanded",
+		noCopy: true,
+		onStart(pokemon) {
+			this.boost({atk: 2, spa: 2, spe: 2, def: 2, spd: 2}, pokemon);
+		},
+		onDragOutPriority: 2,
+		onDragOut() {
+			return false;
+		},
+		// Prevents Shed Shell allowing a swap
+		onTrapPokemonPriority: -11,
+		onTrapPokemon(pokemon) {
+			pokemon.trapped = true;
+		},
+	},
+	// Tatsugiri
+	commanding: {
+		name: "Commanding",
+		noCopy: true,
+		onStart(pokemon) {
+			this.add('-activate', pokemon, 'ability: Commander');
+		},
+		onDragOutPriority: 2,
+		onDragOut() {
+			return false;
+		},
+		// Prevents Shed Shell allowing a swap
+		onTrapPokemonPriority: -11,
+		onTrapPokemon(pokemon) {
+			pokemon.trapped = true;
+		},
+		// Override No Guard
+		onInvulnerabilityPriority: 2,
+		onInvulnerability(target, source, move) {
+			return false;
+		},
+		onBeforeTurn(pokemon) {
+			this.queue.cancelAction(pokemon);
 		},
 	},
 
@@ -779,6 +864,19 @@ export const Conditions: {[k: string]: ConditionData} = {
 				}
 			}
 			return [type];
+		},
+	},
+	rolloutstorage: {
+		name: 'rolloutstorage',
+		duration: 2,
+		onBasePower(relayVar, source, target, move) {
+			let bp = Math.max(1, move.basePower);
+			bp *= Math.pow(2, source.volatiles['rolloutstorage'].contactHitCount);
+			if (source.volatiles['defensecurl']) {
+				bp *= 2;
+			}
+			source.removeVolatile('rolloutstorage');
+			return bp;
 		},
 	},
 };
