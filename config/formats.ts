@@ -881,7 +881,7 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] Fortemons",
-		desc: `Put a move in the item slot to have all of a Pok&eacute;mon's moves inherit its properties.`,
+		desc: `Put an attacking move in the item slot to have all of a Pok&eacute;mon's attacks inherit its properties.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3713983/">Fortemons</a>`,
 		],
@@ -908,7 +908,7 @@ export const Formats: FormatList = [
 			if ((move.secondaries?.some(secondary => secondary.boosts?.accuracy && secondary.boosts.accuracy < 0) ||
 				move.multihit || move.id === 'beatup') &&
 				!this.ruleTable.has(`+move:${move.id}`)) {
-				problems.push(`${move.name} can't be used as an item.`);
+				problems.push(`The move ${move.name} can't be used as an item.`);
 			}
 			return problems.length ? problems : null;
 		},
@@ -939,20 +939,15 @@ export const Formats: FormatList = [
 				if (forte.secondaries) {
 					move.secondaries = [...(move.secondaries || []), ...forte.secondaries];
 				}
-				move.critRatio = (move.critRatio || 0) + (forte.critRatio || 0);
-				const VALID_PROPERTIES: (keyof ActiveMove)[] = [
+				move.critRatio = move.critRatio + forte.critRatio - 1;
+				const VALID_PROPERTIES = [
 					'basePowerCallback', 'breaksProtect', 'drain', 'forceSwitch', 'ignoreAbility', 'ignoreDefensive', 'ignoreEvasion', 'ignoreImmunity',
 					'overrideDefensivePokemon', 'overrideDefensiveStat', 'overrideOffensivePokemon', 'overrideOffensiveStat', 'pseudoWeather', 'recoil',
 					'selfSwitch', 'sleepUsable', 'stealsBoosts', 'thawsTarget', 'volatileStatus', 'willCrit',
-				];
+				] as const;
 				for (const property of VALID_PROPERTIES) {
 					if (forte[property]) {
-						if (typeof forte[property] === 'number') {
-							const num = move[property] || 0;
-							(move as any)[property] = num + (forte as any)[property];
-						} else {
-							(move as any)[property] = forte[property];
-						}
+						move[property] = forte[property];
 					}
 				}
 			}
