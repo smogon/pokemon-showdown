@@ -427,31 +427,34 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 	}
 
 	static extractChannel(message: string, channelid: -1 | ChannelID) {
-		const messages = message.split('\n');
+		const lines: (string | undefined)[] = message.split('\n');
 
-		for (let i = 0; i < messages.length - 2; i++) {
-			const line = messages[i];
+		for (let i = 0; i < lines.length - 2; i++) {
+			const line = lines[i];
+			if (!line) continue;
+
 			const splitMatch = /^\|split\|p([1234])$/.exec(line);
-
 			if (!splitMatch) continue;
 
 			const [, playerMatch] = splitMatch;
 
 			const player = parseInt(playerMatch);
-			const secretMessage = messages[i + 1];
-			const sharedMessage = messages[i + 2];
+			const secretMessage = lines[i + 1]!; // Assume anything ahead of us is defined if the line is defined
+			const sharedMessage = lines[i + 2]!;
 			const hasPrivilege = (player === channelid) || (channelid === -1);
 
 			let channelMessage = sharedMessage;
 			if (hasPrivilege) channelMessage = secretMessage; // Expose secrets to matching players
-			const isEmptyChannelMessage = channelMessage.length === 0; // If the line is empty, prepare to remove it
+			const isEmptyChannelMessage = channelMessage.length === 0;
 
-			messages[i] = channelMessage;
-			messages.splice(i + 1 - (isEmptyChannelMessage ? 1 : 0), 2 + (isEmptyChannelMessage ? 1 : 0));
-			if (isEmptyChannelMessage) i--;
+			lines[i] = isEmptyChannelMessage ? undefined : channelMessage;
+			lines[i + 1] = undefined;
+			lines[i + 2] = undefined;
 		}
 
-		return messages.join('\n');
+		return lines
+			.filter((line) => line !== undefined)
+			.join('\n');
 	}
 
 	/**
