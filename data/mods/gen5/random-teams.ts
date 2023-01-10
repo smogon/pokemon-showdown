@@ -608,7 +608,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 							(counter.get('Status') || (species.nfe && !!counter.get('Status'))) &&
 							(['recover', 'roost', 'slackoff', 'softboiled'].some(m => movePool.includes(m)))
 						) || (
-							(movePool.includes('moonlight') && types.size < 2 && !movePool.includes('trickroom')) ||
+							(movePool.includes('moonlight') && types.size < 2 && !moves.has('trickroom')) ||
 							movePool.includes('darkvoid') ||
 							movePool.includes('milkdrink') ||
 							movePool.includes('quiverdance') ||
