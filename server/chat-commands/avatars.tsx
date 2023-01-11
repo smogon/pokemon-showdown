@@ -240,6 +240,7 @@ function listUsers(users: string[]) {
 }
 
 const OFFICIAL_AVATARS = new Set([
+    'demirab',
     'woopa',
     'staraptor',
     'nymble',

@@ -844,7 +844,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				if (miscMoves.includes(move)) {
 					problems.push(`${move} is banned.`);
 				}
-				if (checkIsMoveNotUseless(id, Pokedex[this.toID(set.species)], IDMoves, set)) {
+				if (checkIsMoveNotUseless(id, Pokedex[this.toID(set.species)],/* IDMoves,*/ set)) {
 					problems.push(`${move} is useful and banned.`);
 				}
 			}
