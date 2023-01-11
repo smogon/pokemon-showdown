@@ -235,14 +235,8 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 				this.queue.changeAction(pokemon, {choice: 'move', moveid: move.id});
 			}
 		},
-		onBeforeMove(pokemon) {
+		onBeforeMove() {
 			this.effectState.time--;
-			if (!this.effectState.time) {
-				pokemon.removeVolatile('lockedmove');
-				// Confusion begins even if already confused
-				delete pokemon.volatiles['confusion'];
-				pokemon.addVolatile('confusion');
-			}
 		},
 	},
 	twoturnmove: {

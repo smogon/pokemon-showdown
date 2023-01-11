@@ -320,6 +320,20 @@ export const Scripts: ModdedBattleScriptsData = {
 		tryMoveHit(target, pokemon, move) {
 			let damage: number | false | undefined = 0;
 
+			// Deal with Thrashing effect here
+			if (move?.self?.volatileStatus === 'lockedmove') {
+				if (pokemon.volatiles['lockedmove']) {
+					if (!pokemon.volatiles['lockedmove'].time) {
+						pokemon.removeVolatile('lockedmove');
+						// Confusion begins even if already confused
+						delete pokemon.volatiles['confusion'];
+						pokemon.addVolatile('confusion');
+					}
+				} else {
+					pokemon.addVolatile('lockedmove', pokemon, move);
+				}
+			}
+
 			// First, check if the target is semi-invulnerable
 			let hitResult = this.battle.runEvent('Invulnerability', target, pokemon, move);
 			if (hitResult === false) {
@@ -649,7 +663,8 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Here's where self effects are applied.
 			const doSelf = (targetHadSub && targetHasSub) || !targetHadSub;
-			if (moveData.self && (doSelf || moveData.self.volatileStatus === 'partialtrappinglock')) {
+			if (moveData.self && (moveData.self.volatileStatus !== 'lockedmove') &&
+				(doSelf || moveData.self.volatileStatus === 'partialtrappinglock')) {
 				this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 			}
 
