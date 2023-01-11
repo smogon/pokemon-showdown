@@ -947,7 +947,7 @@ export const Formats: FormatList = [
 				] as const;
 				for (const property of VALID_PROPERTIES) {
 					if (forte[property]) {
-						move[property] = forte[property];
+						move[property] = forte[property] as any;
 					}
 				}
 			}
