@@ -65,4 +65,15 @@ describe('Thrash [Gen 1]', function () {
 		assert(nidoking.volatiles['lockedmove']);
 		assert(alakazam.subFainted);
 	});
+
+	it("Thrash is paused when asleep or frozen", function () {
+		battle = common.gen(1).createBattle();
+		battle.setPlayer('p1', {team: [{species: "Nidoking", moves: ['thrash']}]});
+		battle.setPlayer('p2', {team: [{species: "Parasect", moves: ['spore']}]});
+		const nidoking = battle.p1.active[0];
+		for (let i = 0; i < 10; i++) {
+			battle.makeChoices();
+			assert.equal(nidoking.volatiles['lockedmove'].time, 2);
+		}
+	});
 });
