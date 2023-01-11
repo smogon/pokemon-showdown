@@ -221,12 +221,9 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 	lockedmove: {
 		// Thrash and Petal Dance.
 		name: 'lockedmove',
-		// Outrage, Thrash, Petal Dance...
-		durationCallback() {
-			return this.random(3, 5);
-		},
 		onStart(target, source, effect) {
 			this.effectState.move = effect.id;
+			this.effectState.time = this.random(2, 4);
 		},
 		onEnd(target) {
 			// Confusion begins even if already confused
@@ -241,6 +238,12 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 			if (move.id) {
 				this.debug('Forcing into ' + move.id);
 				this.queue.changeAction(pokemon, {choice: 'move', moveid: move.id});
+			}
+		},
+		onBeforeMove(pokemon, t, move) {
+			this.effectState.time--;
+			if (!this.effectState.time) {
+				pokemon.removeVolatile('lockedmove');
 			}
 		},
 	},
