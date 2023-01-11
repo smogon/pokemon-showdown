@@ -225,11 +225,6 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 			this.effectState.move = effect.id;
 			this.effectState.time = this.random(2, 4);
 		},
-		onEnd(target) {
-			// Confusion begins even if already confused
-			delete target.volatiles['confusion'];
-			target.addVolatile('confusion');
-		},
 		onLockMove() {
 			return this.effectState.move;
 		},
@@ -240,10 +235,13 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 				this.queue.changeAction(pokemon, {choice: 'move', moveid: move.id});
 			}
 		},
-		onBeforeMove(pokemon, t, move) {
+		onBeforeMove(pokemon) {
 			this.effectState.time--;
 			if (!this.effectState.time) {
 				pokemon.removeVolatile('lockedmove');
+				// Confusion begins even if already confused
+				delete pokemon.volatiles['confusion'];
+				pokemon.addVolatile('confusion');
 			}
 		},
 	},
