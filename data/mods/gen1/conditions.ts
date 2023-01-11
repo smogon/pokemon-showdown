@@ -199,11 +199,6 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 			const duration = this.sample([2, 2, 2, 3, 3, 3, 4, 5]);
 			return duration;
 		},
-		onResidual(target) {
-			if (target.lastMove && target.lastMove.id === 'struggle' || target.status === 'slp') {
-				delete target.volatiles['partialtrappinglock'];
-			}
-		},
 		onStart(target, source, effect) {
 			this.effectState.move = effect.id;
 		},
@@ -230,12 +225,6 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		durationCallback() {
 			return this.random(3, 5);
 		},
-		onResidual(target) {
-			if ((target.lastMove && target.lastMove.id === 'struggle') || target.status === 'slp') {
-				// don't lock, and bypass confusion for calming
-				delete target.volatiles['lockedmove'];
-			}
-		},
 		onStart(target, source, effect) {
 			this.effectState.move = effect.id;
 		},
@@ -244,11 +233,8 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 			delete target.volatiles['confusion'];
 			target.addVolatile('confusion');
 		},
-		onLockMove(pokemon) {
+		onLockMove() {
 			return this.effectState.move;
-		},
-		onMoveAborted(pokemon) {
-			delete pokemon.volatiles['lockedmove'];
 		},
 		onBeforeTurn(pokemon) {
 			const move = this.dex.moves.get(this.effectState.move);
