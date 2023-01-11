@@ -939,7 +939,7 @@ export const Formats: FormatList = [
 				if (forte.secondaries) {
 					move.secondaries = [...(move.secondaries || []), ...forte.secondaries];
 				}
-				move.critRatio = move.critRatio + forte.critRatio - 1;
+				move.critRatio = (move.critRatio || 1) + (forte.critRatio || 1) - 1;
 				const VALID_PROPERTIES = [
 					'basePowerCallback', 'breaksProtect', 'drain', 'forceSwitch', 'ignoreAbility', 'ignoreDefensive', 'ignoreEvasion', 'ignoreImmunity',
 					'overrideDefensivePokemon', 'overrideDefensiveStat', 'overrideOffensivePokemon', 'overrideOffensiveStat', 'pseudoWeather', 'recoil',
