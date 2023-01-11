@@ -552,6 +552,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		ignoreImmunity: true,
 		basePower: 1,
 	},
+	petaldance: {
+		inherit: true,
+		onMoveFail() {},
+	},
 	poisonsting: {
 		inherit: true,
 		secondary: {
@@ -881,6 +885,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		ignoreImmunity: true,
 		basePower: 1,
+	},
+	thrash: {
+		inherit: true,
+		onMoveFail() {},
 	},
 	thunder: {
 		inherit: true,

@@ -201,7 +201,6 @@ export const Scripts: ModdedBattleScriptsData = {
 					(!pokemon.side.foe.active[0]?.lastMove || pokemon.side.foe.active[0].lastMove?.id === 'mirrormove')) {
 					// The move is our 'final' move (a failed Mirror Move, or any move that isn't Metronome or Mirror Move).
 					pokemon.side.lastMove = move;
-					this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 
 					// If target fainted
 					if (target && target.hp <= 0) {
