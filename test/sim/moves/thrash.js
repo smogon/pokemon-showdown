@@ -54,4 +54,15 @@ describe('Thrash [Gen 1]', function () {
 		battle.makeChoices();
 		assert(nidoking.volatiles['lockedmove']);
 	});
+
+	it("Thrash locks the user in, even if it targets and breaks a Substitute", function () {
+		battle = common.gen(1).createBattle();
+		battle.setPlayer('p1', {team: [{species: "Nidoking", moves: ['thrash']}]});
+		battle.setPlayer('p2', {team: [{species: "Alakazam", moves: ['substitute']}]});
+		const nidoking = battle.p1.active[0];
+		const alakazam = battle.p2.active[0];
+		battle.makeChoices();
+		assert(nidoking.volatiles['lockedmove']);
+		assert(alakazam.subFainted);
+	});
 });
