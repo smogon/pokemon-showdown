@@ -491,5 +491,5 @@ export const pages: Chat.PageTable = {
 };
 
 process.nextTick(() => {
-	Chat.multiLinePattern.register('/smogtours ');
+	Chat.multiLinePattern.register('/smogtours (add|edit)');
 });
