@@ -76,4 +76,16 @@ describe('Thrash [Gen 1]', function () {
 			assert.equal(nidoking.volatiles['lockedmove'].time, 2);
 		}
 	});
+
+	it("Thrash is paused when disabled", function () {
+		battle = common.gen(1).createBattle({seed: [1, 1, 1, 1]});
+		battle.setPlayer('p1', {team: [{species: "Nidoking", moves: ['thrash']}]});
+		battle.setPlayer('p2', {team: [{species: "Golem", moves: ['disable']}]});
+		const nidoking = battle.p1.active[0];
+		battle.makeChoices();
+		assert.equal(nidoking.volatiles['lockedmove'].time, 3);
+		assert(nidoking.volatiles['disable'].time > 1);
+		battle.makeChoices();
+		assert.equal(nidoking.volatiles['lockedmove'].time, 3);
+	});
 });
