@@ -105,8 +105,12 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	allyswitch: {
 		name: "Ally Switch",
-		desc: "The user swaps positions with its ally. Fails if the user is the only Pokemon on its side.",
-		shortDesc: "The user swaps positions with its ally.",
+		desc: "The user swaps positions with its ally. Fails if the user is the only Pokemon on its side. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Ally Switch.",
+		shortDesc: "User and ally swap positions; using again can fail.",
+		gen8: {
+			desc: "The user swaps positions with its ally. Fails if the user is the only Pokemon on its side.",
+			shortDesc: "The user swaps positions with its ally.",
+		},
 		gen6: {
 			desc: "The user swaps positions with its ally on the opposite side of the field. Fails if there is no Pokemon at that position, if the user is the only Pokemon on its side, or if the user is in the middle.",
 			shortDesc: "Switches position with the ally on the far side.",
@@ -279,7 +283,11 @@ export const MovesText: {[k: string]: MoveText} = {
 	auroraveil: {
 		name: "Aurora Veil",
 		desc: "For 5 turns, the user and its party members take 0.5x damage from physical and special attacks, or 0.66x damage if in a Double Battle; does not reduce damage further with Reflect or Light Screen. Critical hits ignore this protection. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Brick Break and Psychic Fangs remove the effect before damage is calculated. Lasts for 8 turns if the user is holding Light Clay. Fails unless the weather is Hail.",
-		shortDesc: "For 5 turns, damage to allies is halved. Hail only.",
+		shortDesc: "For 5 turns, damage to allies halved. Snow only.",
+		gen8: {
+			desc: "For 5 turns, the user and its party members take 0.5x damage from physical and special attacks, or 0.66x damage if in a Double Battle; does not reduce damage further with Reflect or Light Screen. Critical hits ignore this protection. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Brick Break and Psychic Fangs remove the effect before damage is calculated. Lasts for 8 turns if the user is holding Light Clay. Fails unless the weather is Hail.",
+			shortDesc: "For 5 turns, damage to allies is halved. Hail only.",
+		},
 
 		start: "  Aurora Veil made [TEAM] stronger against physical and special moves!",
 		end: "  [TEAM]'s Aurora Veil wore off!",
@@ -381,11 +389,17 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	behemothbash: {
 		name: "Behemoth Bash",
-		shortDesc: "Damage doubles if the target is Dynamaxed.",
+		shortDesc: "No additional effect.",
+		gen8: {
+			shortDesc: "Damage doubles if the target is Dynamaxed.",
+		},
 	},
 	behemothblade: {
 		name: "Behemoth Blade",
-		shortDesc: "Damage doubles if the target is Dynamaxed.",
+		shortDesc: "No additional effect.",
+		gen8: {
+			shortDesc: "Damage doubles if the target is Dynamaxed.",
+		},
 	},
 	belch: {
 		name: "Belch",
@@ -507,8 +521,12 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	blizzard: {
 		name: "Blizzard",
-		desc: "Has a 10% chance to freeze the target. If the weather is Hail, this move does not check accuracy.",
-		shortDesc: "10% chance to freeze foe(s). Can't miss in hail.",
+		desc: "Has a 10% chance to freeze the target. If the weather is Snow, this move does not check accuracy.",
+		shortDesc: "10% chance to freeze foe(s). Can't miss in Snow.",
+		gen8: {
+			desc: "Has a 10% chance to freeze the target. If the weather is Hail, this move does not check accuracy.",
+			shortDesc: "10% chance to freeze foe(s). Can't miss in Hail.",
+		},
 		gen3: {
 			desc: "Has a 10% chance to freeze the target.",
 			shortDesc: "10% chance to freeze foe(s).",
@@ -741,8 +759,11 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	burnup: {
 		name: "Burn Up",
-		desc: "Fails unless the user is a Fire type. If this move is successful, the user's Fire type becomes typeless as long as it remains active.",
+		desc: "Fails unless the user is a Fire type. If this move is successful and the user is not Terastallized, the user's Fire type becomes typeless as long as it remains active.",
 		shortDesc: "User's Fire type becomes typeless; must be Fire.",
+		gen8: {
+			desc: "Fails unless the user is a Fire type. If this move is successful, the user's Fire type becomes typeless as long as it remains active.",
+		},
 
 		typeChange: "  [POKEMON] burned itself out!",
 	},
@@ -797,7 +818,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	charge: {
 		name: "Charge",
-		desc: "Raises the user's Special Defense by 1 stage. The user's next Electric-type attack will have its power doubled.",
+		desc: "Raises the user's Special Defense by 1 stage. The user's next Electric-type attack will have its power doubled; the effect ends when the user is no longer active, or after the user attempts to use any Electric-type move besides Charge, even if it is not successful.",
 		shortDesc: "+1 SpD, user's next Electric move 2x power.",
 		gen8: {
 			desc: "Raises the user's Special Defense by 1 stage. If the user uses an Electric-type attack on the next turn, its power will be doubled.",
@@ -1446,7 +1467,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	doubleshock: {
 		name: "Double Shock",
-		desc: "Fails unless the user is an Electric type. If this move is successful, the user's Electric type becomes typeless as long as it remains active.",
+		desc: "Fails unless the user is an Electric type. If this move is successful and the user is not Terastallized, the user's Electric type becomes typeless as long as it remains active.",
 		shortDesc: "User's Electric type: typeless; must be Electric.",
 
 		typeChange: "  [POKEMON] used up all of its electricity!",
@@ -1584,7 +1605,10 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	dynamaxcannon: {
 		name: "Dynamax Cannon",
-		shortDesc: "Damage doubles if the target is Dynamaxed.",
+		shortDesc: "No additional effect.",
+		gen8: {
+			shortDesc: "Damage doubles if the target is Dynamaxed.",
+		},
 	},
 	dynamicpunch: {
 		name: "Dynamic Punch",
@@ -3635,20 +3659,16 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	magicpowder: {
 		name: "Magic Powder",
-		desc: "Causes the target to become a Psychic type. Fails if the target is an Arceus or a Silvally, or if the target is already purely Psychic type.",
+		desc: "Causes the target to become a Psychic type. Fails if the target is an Arceus or a Silvally, if the target is already purely Psychic type, or if the target is Terastallized.",
 		shortDesc: "Changes the target's type to Psychic.",
+		gen8: {
+			desc: "Causes the target to become a Psychic type. Fails if the target is an Arceus or a Silvally, or if the target is already purely Psychic type.",
+		},
 	},
 	magicroom: {
 		name: "Magic Room",
 		desc: "For 5 turns, the held items of all active Pokemon have no effect. An item's effect of causing forme changes is unaffected, but any other effects from such items are negated. During the effect, Fling and Natural Gift are prevented from being used by all active Pokemon. If this move is used during the effect, the effect ends.",
 		shortDesc: "For 5 turns, all held items have no effect.",
-	},
-	magikarpsrevenge: {
-		name: "Magikarp's Revenge",
-		desc: "Has a 100% chance to confuse the target and lower its Defense and Special Attack by 1 stage. The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. The user steals the foe's boosts. If this move is successful, the weather changes to rain unless it is already in effect, and the user gains the effects of Aqua Ring and Magic Coat.",
-		shortDesc: "Does many things turn 1. Can't move turn 2.",
-
-		fail: "#darkvoid",
 	},
 	magmastorm: {
 		name: "Magma Storm",
@@ -4138,8 +4158,11 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	moonlight: {
 		name: "Moonlight",
-		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Primordial Sea, Rain Dance, Sandstorm, or Snow, all rounded half down.",
 		shortDesc: "Heals the user by a weather-dependent amount.",
+		gen8: {
+			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+		},
 		gen7: {
 			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
 		},
@@ -4155,8 +4178,11 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	morningsun: {
 		name: "Morning Sun",
-		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Primordial Sea, Rain Dance, Sandstorm, or Snow, all rounded half down.",
 		shortDesc: "Heals the user by a weather-dependent amount.",
+		gen8: {
+			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+		},
 		gen7: {
 			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
 		},
@@ -5047,8 +5073,11 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	reflecttype: {
 		name: "Reflect Type",
-		desc: "Causes the user's types to become the same as the current types of the target. If the target's current types include typeless and a non-added type, typeless is ignored. If the target's current types include typeless and an added type from Forest's Curse or Trick-or-Treat, typeless is copied as the Normal type instead. Fails if the user is an Arceus or a Silvally, or if the target's current type is typeless alone.",
+		desc: "Causes the user's types to become the same as the current types of the target. If the target's current types include typeless and a non-added type, typeless is ignored. If the target's current types include typeless and an added type from Forest's Curse or Trick-or-Treat, typeless is copied as the Normal type instead. Fails if the user is an Arceus or a Silvally, if the user is Terastallized, or if the target's current type is typeless alone.",
 		shortDesc: "User becomes the same type as the target.",
+		gen8: {
+			desc: "Causes the user's types to become the same as the current types of the target. If the target's current types include typeless and a non-added type, typeless is ignored. If the target's current types include typeless and an added type from Forest's Curse or Trick-or-Treat, typeless is copied as the Normal type instead. Fails if the user is an Arceus or a Silvally, or if the target's current type is typeless alone.",
+		},
 		gen6: {
 			desc: "Causes the user's types to become the same as the current types of the target. Fails if the user is an Arceus.",
 		},
@@ -5843,8 +5872,11 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	soak: {
 		name: "Soak",
-		desc: "Causes the target to become a Water type. Fails if the target is an Arceus or a Silvally, or if the target is already purely Water type.",
+		desc: "Causes the target to become a Water type. Fails if the target is an Arceus or a Silvally, if the target is already purely Water type, or if the target is Terastallized.",
 		shortDesc: "Changes the target's type to Water.",
+		gen8: {
+			desc: "Causes the target to become a Water type. Fails if the target is an Arceus or a Silvally, or if the target is already purely Water type.",
+		},
 		gen6: {
 			desc: "Causes the target to become a Water type. Fails if the target is an Arceus, or if the target is already purely Water type.",
 		},
@@ -5865,10 +5897,13 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	solarbeam: {
 		name: "Solar Beam",
-		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Desolate Land or Sunny Day, the move still requires a turn to charge.",
+		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Primordial Sea, Rain Dance, Sandstorm, or Snow and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Desolate Land or Sunny Day, the move still requires a turn to charge.",
 		shortDesc: "Charges turn 1. Hits turn 2. No charge in sunlight.",
+		gen8: {
+			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Desolate Land or Sunny Day, the move still requires a turn to charge.",
+		},
 		gen7: {
-			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn.",
+			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn.",
 		},
 		gen5: {
 			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Rain Dance, or Sandstorm. If the user is holding a Power Herb or the weather is Sunny Day, the move completes in one turn.",
@@ -5893,8 +5928,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Solar Blade",
 		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Desolate Land or Sunny Day, the move still requires a turn to charge.",
 		shortDesc: "Charges turn 1. Hits turn 2. No charge in sunlight.",
+		gen8: {
+			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Primordial Sea, Rain Dance, Sandstorm, or Snow and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Desolate Land or Sunny Day, the move still requires a turn to charge.",
+		},
 		gen7: {
-			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn.",
+			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn.",
 		},
 
 		prepare: "#solarbeam",
@@ -6461,8 +6499,11 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	synthesis: {
 		name: "Synthesis",
-		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Primordial Sea, Rain Dance, Sandstorm, or Snow, all rounded half down.",
 		shortDesc: "Heals the user by a weather-dependent amount.",
+		gen8: {
+			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+		},
 		gen7: {
 			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
 		},
@@ -7126,8 +7167,11 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	weatherball: {
 		name: "Weather Ball",
-		desc: "Power doubles if a weather condition other than Delta Stream is active, and this move's type changes to match. Ice type during Hail, Water type during Primordial Sea or Rain Dance, Rock type during Sandstorm, and Fire type during Desolate Land or Sunny Day. If the user is holding Utility Umbrella and uses Weather Ball during Primordial Sea, Rain Dance, Desolate Land, or Sunny Day, the move is still Normal-type and does not have a base power boost.",
+		desc: "Power doubles if a weather condition other than Delta Stream is active, and this move's type changes to match. Ice type during Snow, Water type during Primordial Sea or Rain Dance, Rock type during Sandstorm, and Fire type during Desolate Land or Sunny Day. If the user is holding Utility Umbrella and uses Weather Ball during Primordial Sea, Rain Dance, Desolate Land, or Sunny Day, this move remains Normal type and does not double in power.",
 		shortDesc: "Power doubles and type varies in each weather.",
+		gen8: {
+			desc: "Power doubles if a weather condition other than Delta Stream is active, and this move's type changes to match. Ice type during Hail, Water type during Primordial Sea or Rain Dance, Rock type during Sandstorm, and Fire type during Desolate Land or Sunny Day. If the user is holding Utility Umbrella and uses Weather Ball during Primordial Sea, Rain Dance, Desolate Land, or Sunny Day, this move remains Normal type and does not double in power.",
+		},
 		gen5: {
 			desc: "Power doubles if a weather condition is active, and this move's type changes to match. Ice type during Hail, Water type during Rain Dance, Rock type during Sandstorm, and Fire type during Sunny Day.",
 		},
