@@ -12,6 +12,7 @@
 import {Streams, Utils} from '../lib';
 import {Teams} from './teams';
 import {Battle} from './battle';
+import {extractChannelMessages} from '../server/sockets';
 
 /**
  * Like string.split(delimiter), but only recognizes the first `limit`
@@ -83,10 +84,11 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 	pushMessage(type: string, data: string) {
 		if (this.replay) {
 			if (type === 'update') {
+				const channelMessages = extractChannelMessages(data);
 				if (this.replay === 'spectator') {
-					this.push(data.replace(/\n\|split\|p[1234]\n(?:[^\n]*)\n([^\n]*)/g, '\n$1'));
+					this.push(channelMessages.get(0)!.join('\n'));
 				} else {
-					this.push(data.replace(/\n\|split\|p[1234]\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'));
+					this.push(channelMessages.get(-1)!.join('\n'));
 				}
 			}
 			return;
@@ -284,12 +286,13 @@ export function getPlayerStreams(stream: BattleStream) {
 			const [type, data] = splitFirst(chunk, `\n`);
 			switch (type) {
 			case 'update':
-				streams.omniscient.push(Battle.extractUpdateForSide(data, 'omniscient'));
-				streams.spectator.push(Battle.extractUpdateForSide(data, 'spectator'));
-				streams.p1.push(Battle.extractUpdateForSide(data, 'p1'));
-				streams.p2.push(Battle.extractUpdateForSide(data, 'p2'));
-				streams.p3.push(Battle.extractUpdateForSide(data, 'p3'));
-				streams.p4.push(Battle.extractUpdateForSide(data, 'p4'));
+				const channelMessages = extractChannelMessages(data);
+				streams.omniscient.push(channelMessages.get(-1)!.join('\n'));
+				streams.spectator.push(channelMessages.get(0)!.join('\n'));
+				streams.p1.push(channelMessages.get(1)!.join('\n'));
+				streams.p2.push(channelMessages.get(2)!.join('\n'));
+				streams.p3.push(channelMessages.get(3)!.join('\n'));
+				streams.p4.push(channelMessages.get(4)!.join('\n'));
 				break;
 			case 'sideupdate':
 				const [side, sideData] = splitFirst(data, `\n`);

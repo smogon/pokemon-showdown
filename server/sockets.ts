@@ -21,6 +21,39 @@ import {IPTools} from './ip-tools';
 type StreamWorker = ProcessManager.StreamWorker;
 type ChannelID = 0 | 1 | 2 | 3 | 4;
 
+export function extractChannelMessages(message: string) {
+	const channelMessages = new Map<ChannelID | -1, string[]>(
+		[-1, 0, 1, 2, 3, 4].map<[ChannelID | -1, string[]]>((channelid) => [channelid as ChannelID | -1, []]),
+	);
+	const messages: string[] = message.split('\n');
+
+	for (let i = 0; i < messages.length; i++) {
+		const line = messages[i];
+		if (!line) continue;
+
+		const splitMatch = /^\|split\|p([1234])$/.exec(line);
+		if (!splitMatch) {
+			channelMessages.forEach((log) => log.push(line));
+			continue;
+		}
+
+		const [, playerMatch] = splitMatch;
+		const player = parseInt(playerMatch);
+		const secretMessage = messages[i + 1];
+		const sharedMessage = messages[i + 2];
+
+		channelMessages.forEach((log, channelid) => {
+			const hasPrivilege = (player === channelid) || (channelid === -1);
+			const channelMessage = hasPrivilege ? secretMessage : sharedMessage;
+			if (channelMessage) log.push(channelMessage);
+		});
+
+		i += 2;
+	}
+
+	return channelMessages;
+}
+
 export const Sockets = new class {
 	async onSpawn(worker: StreamWorker) {
 		const id = worker.workerid;
@@ -254,10 +287,11 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 				null, null, null, null, null,
 			];
 			const message = data.substr(nlLoc + 1);
+			const channelMessages = extractChannelMessages(message);
 			const roomChannel = this.roomChannels.get(roomid);
 			for (const [curSocketid, curSocket] of room) {
 				const channelid = roomChannel?.get(curSocketid) || 0;
-				if (!messages[channelid]) messages[channelid] = ServerStream.extractChannel(message, channelid);
+				if (!messages[channelid]) messages[channelid] = channelMessages.get(channelid)!.join('\n');
 				curSocket.write(messages[channelid]!);
 			}
 		},
@@ -424,37 +458,6 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 		}
 
 		console.log(`Test your server at http://${config.bindaddress === '0.0.0.0' ? 'localhost' : config.bindaddress}:${config.port}`);
-	}
-
-	static extractChannel(message: string, channelid: -1 | ChannelID) {
-		const lines: (string | undefined)[] = message.split('\n');
-
-		for (let i = 0; i < lines.length - 2; i++) {
-			const line = lines[i];
-			if (!line) continue;
-
-			const splitMatch = /^\|split\|p([1234])$/.exec(line);
-			if (!splitMatch) continue;
-
-			const [, playerMatch] = splitMatch;
-
-			const player = parseInt(playerMatch);
-			const secretMessage = lines[i + 1]!; // Assume anything ahead of us is defined if the line is defined
-			const sharedMessage = lines[i + 2]!;
-			const hasPrivilege = (player === channelid) || (channelid === -1);
-
-			let channelMessage = sharedMessage;
-			if (hasPrivilege) channelMessage = secretMessage; // Expose secrets to matching players
-			const isEmptyChannelMessage = channelMessage.length === 0;
-
-			lines[i] = isEmptyChannelMessage ? undefined : channelMessage;
-			lines[i + 1] = undefined;
-			lines[i + 2] = undefined;
-		}
-
-		return lines
-			.filter((line) => line !== undefined)
-			.join('\n');
 	}
 
 	/**

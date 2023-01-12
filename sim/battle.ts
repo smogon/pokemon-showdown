@@ -24,6 +24,7 @@ import {State} from './state';
 import {BattleQueue, Action} from './battle-queue';
 import {BattleActions} from './battle-actions';
 import {Utils} from '../lib';
+import {extractChannelMessages} from '../server/sockets';
 declare const __version: any;
 
 interface BattleOptions {
@@ -2918,38 +2919,9 @@ export class Battle {
 		}
 	}
 
-	static extractUpdateForSide(data: string, side: SideID | 'spectator' | 'omniscient' = 'spectator') {
-		const lines: (string | undefined)[] = data.split('\n');
-
-		for (let i = 0; i < lines.length - 2; i++) {
-			const line = lines[i];
-			if (!line) continue;
-
-			const splitMatch = /^\|split\|(p[1234])$/.exec(line);
-			if (!splitMatch) continue;
-
-			const [, player] = splitMatch;
-
-			const secretMessage = lines[i + 1]!; // Assume anything ahead of us is defined if the line is defined
-			const sharedMessage = lines[i + 2]!;
-			const hasPrivilege = (player === side) || (side === 'omniscient');
-
-			let channelMessage = sharedMessage;
-			if (hasPrivilege) channelMessage = secretMessage; // Expose secrets to matching players
-			const isEmptyChannelMessage = channelMessage.length === 0;
-
-			lines[i] = isEmptyChannelMessage ? undefined : channelMessage;
-			lines[i + 1] = undefined;
-			lines[i + 2] = undefined;
-		}
-
-		return lines
-			.filter((line) => line !== undefined)
-			.join('\n');
-	}
-
 	getDebugLog() {
-		return Battle.extractUpdateForSide(this.log.join('\n'), 'omniscient');
+		const channelMessages = extractChannelMessages(this.log.join('\n'));
+		return (channelMessages.get(-1) || []).join('\n');
 	}
 
 	debugError(activity: string) {
