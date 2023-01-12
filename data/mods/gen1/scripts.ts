@@ -207,7 +207,6 @@ export const Scripts: ModdedBattleScriptsData = {
 						// We remove recharge
 						if (pokemon.volatiles['mustrecharge']) pokemon.removeVolatile('mustrecharge');
 						delete pokemon.volatiles['partialtrappinglock'];
-						pokemon.removeVolatile('twoturnmove');
 					} else if (pokemon.hp) {
 						this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 					}
