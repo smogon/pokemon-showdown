@@ -711,12 +711,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return null;
 			}
 		},
-		onBoost(boost, target, source, effect) {
-			if (effect.id === 'intimidate') {
-				delete boost.atk;
-				this.add('-immune', target, '[from] ability: Oblivious');
-			}
-		},
 		name: "Oblivious",
 		rating: 1.5,
 		num: 12,

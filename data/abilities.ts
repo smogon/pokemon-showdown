@@ -1266,7 +1266,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onAllySetStatus(status, target, source, effect) {
 			if (target.hasType('Grass') && source && target !== source && effect && effect.id !== 'yawn') {
 				this.debug('interrupting setStatus with Flower Veil');
-				if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
+				if (effect.name === 'Synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
 					const effectHolder = this.effectState.target;
 					this.add('-block', target, 'ability: Flower Veil', '[of] ' + effectHolder);
 				}
@@ -2746,7 +2746,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	opportunist: {
 		onFoeAfterBoost(boost, target, source, effect) {
-			if (effect?.fullname?.endsWith('Opportunist') || effect?.fullname?.endsWith('Mirror Herb')) return;
+			if (effect?.name === 'Opportunist' || effect?.name === 'Mirror Herb') return;
 			const pokemon = this.effectState.target;
 			const positiveBoosts: Partial<BoostsTable> = {};
 			let i: BoostID;
@@ -3434,7 +3434,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onAfterBoost(boost, target, source, effect) {
-			if (effect && effect.id === 'intimidate') {
+			if (effect?.name === 'Intimidate') {
 				this.boost({spe: 1});
 			}
 		},

@@ -6,7 +6,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		// Neutralizing Gas protection implemented in Pokemon.ignoringAbility() within sim/pokemon.ts
 		// and in Neutralizing Gas itself within data/abilities.ts
 		onSetAbility(ability, target, source, effect) {
-			if (effect && effect.effectType === 'Ability' && !effect.fullname?.endsWith('Trace')) {
+			if (effect && effect.effectType === 'Ability' && effect.name !== 'Trace') {
 				this.add('-ability', source, effect);
 			}
 			this.add('-block', target, 'item: Ability Shield');
@@ -3733,7 +3733,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		spritenum: 0, // TODO
 		onFoeAfterBoost(boost, target, source, effect) {
-			if (effect?.fullname?.endsWith('Opportunist') || effect?.fullname?.endsWith('Mirror Herb')) return;
+			if (effect?.name === 'Opportunist' || effect?.name === 'Mirror Herb') return;
 			const boostPlus: SparseBoostsTable = {};
 			let statsRaised = false;
 			let i: BoostID;

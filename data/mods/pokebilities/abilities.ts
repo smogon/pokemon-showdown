@@ -1,52 +1,4 @@
 export const Abilities: {[k: string]: ModdedAbilityData} = {
-	damp: {
-		inherit: true,
-		onAnyDamage(damage, target, source, effect) {
-			if (effect && (effect.id === 'aftermath' || effect.id === 'ability:aftermath')) {
-				return false;
-			}
-		},
-	},
-	flowerveil: {
-		inherit: true,
-		onAllySetStatus(status, target, source, effect) {
-			if (target.hasType('Grass') && source && target !== source && effect && effect.id !== 'yawn') {
-				this.debug('interrupting setStatus with Flower Veil');
-				if (effect.id.endsWith('synchronize') || (effect.effectType === 'Move' && !effect.secondaries)) {
-					const effectHolder = this.effectState.target;
-					this.add('-block', target, 'ability: Flower Veil', '[of] ' + effectHolder);
-				}
-				return null;
-			}
-		},
-	},
-	innerfocus: {
-		inherit: true,
-		onBoost(boost, target, source, effect) {
-			if (effect.id === 'intimidate' || effect.id === 'ability:intimidate') {
-				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Inner Focus', '[of] ' + target);
-			}
-		},
-	},
-	mirrorarmor: {
-		inherit: true,
-		onBoost(boost, target, source, effect) {
-			// Don't bounce self stat changes, or boosts that have already bounced
-			if (target === source || !boost || effect.id === 'mirrorarmor' || effect.id === 'ability:mirrorarmor') return;
-			let b: BoostID;
-			for (b in boost) {
-				if (boost[b]! < 0) {
-					if (target.boosts[b] === -6) continue;
-					const negativeBoost: SparseBoostsTable = {};
-					negativeBoost[b] = boost[b];
-					delete boost[b];
-					this.add('-ability', target, 'Mirror Armor');
-					this.boost(negativeBoost, source, target, null, true);
-				}
-			}
-		},
-	},
 	mummy: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
@@ -140,24 +92,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
-	oblivious: {
-		inherit: true,
-		onBoost(boost, target, source, effect) {
-			if (effect.id === 'intimidate' || effect.id === 'ability:intimidate') {
-				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Oblivious', '[of] ' + target);
-			}
-		},
-	},
-	owntempo: {
-		inherit: true,
-		onBoost(boost, target, source, effect) {
-			if (effect.id === 'intimidate' || effect.id === 'ability:intimidate') {
-				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Own Tempo', '[of] ' + target);
-			}
-		},
-	},
 	poisontouch: {
 		inherit: true,
 		// Activate after Sheer Force to make interaction determistic. The ordering for this ability is
@@ -188,14 +122,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
-	rattled: {
-		inherit: true,
-		onAfterBoost(boost, target, source, effect) {
-			if (effect && (effect.id === 'intimidate' || effect.id === 'ability:intimidate')) {
-				this.boost({spe: 1});
-			}
-		},
-	},
 	receiver: {
 		inherit: true,
 		onAllyFaint(ally) {
@@ -217,15 +143,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			} else {
 				pokemon.removeVolatile("ability:receiver");
 				pokemon.addVolatile("ability:" + ability, pokemon);
-			}
-		},
-	},
-	scrappy: {
-		inherit: true,
-		onBoost(boost, target, source, effect) {
-			if (effect.id === 'intimidate' || effect.id === 'ability:intimidate') {
-				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Scrappy', '[of] ' + target);
 			}
 		},
 	},
