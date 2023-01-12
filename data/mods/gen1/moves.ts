@@ -594,6 +594,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			// Rage lock
 			onStart(target, source, effect) {
 				this.effectState.move = 'rage';
+				this.effectState.accuracy = 255;
 			},
 			onLockMove: 'rage',
 			onHit(target, source, move) {

@@ -384,14 +384,23 @@ export const Scripts: ModdedBattleScriptsData = {
 			const boostTable = [25, 28, 33, 40, 50, 66, 100, 150, 200, 250, 300, 350, 400];
 			if (accuracy !== true) {
 				accuracy = Math.floor(accuracy * 255 / 100);
-				// Check also for accuracy modifiers.
-				if (!move.ignoreAccuracy) {
-					accuracy = Math.floor(accuracy * (boostTable[pokemon.boosts.accuracy + 6] / 100));
+				// Rage and Thrash/Petal Dance accuracy bug
+				if (pokemon.volatiles['lockedmove']) accuracy = pokemon.volatiles['lockedmove'].accuracy;
+				if (pokemon.volatiles['rage']) accuracy = pokemon.volatiles['rage'].accuracy;
+
+				// This line is just to satisfy TypeScript, accuracy should never be true at this point
+				if (accuracy !== true) {
+					// Check also for accuracy modifiers.
+					if (!move.ignoreAccuracy) {
+						accuracy = Math.floor(accuracy * (boostTable[pokemon.boosts.accuracy + 6] / 100));
+					}
+					if (!move.ignoreEvasion) {
+						accuracy = Math.floor(accuracy * (boostTable[-target.boosts.evasion + 6] / 100));
+					}
+					accuracy = this.battle.clampIntRange(accuracy, 1, 255);
 				}
-				if (!move.ignoreEvasion) {
-					accuracy = Math.floor(accuracy * (boostTable[-target.boosts.evasion + 6] / 100));
-				}
-				accuracy = Math.min(accuracy, 255);
+				if (pokemon.volatiles['lockedmove']) pokemon.volatiles['lockedmove'].accuracy = accuracy;
+				if (pokemon.volatiles['rage']) pokemon.volatiles['rage'].accuracy = accuracy;
 			}
 			accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
 			// Moves that target the user do not suffer from the 1/256 miss chance.

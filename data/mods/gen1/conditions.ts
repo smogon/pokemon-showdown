@@ -224,6 +224,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		onStart(target, source, effect) {
 			this.effectState.move = effect.id;
 			this.effectState.time = this.random(2, 4);
+			this.effectState.accuracy = 255;
 		},
 		onLockMove() {
 			return this.effectState.move;
