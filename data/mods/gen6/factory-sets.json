@@ -6716,7 +6716,7 @@
           "species": "Archeops",
           "item": "Focus Sash",
           "ability": "Defeatist",
-          "evs": {"hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252},
+          "evs": {"hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 252},
           "nature": "Naive",
           "moves": [["Stealth Rock"], ["Taunt"], ["Endeavor"], ["Head Smash"]]
         }
@@ -7959,7 +7959,7 @@
           "species": "Archeops",
           "item": "Focus Sash",
           "ability": "Defeatist",
-          "evs": {"hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252},
+          "evs": {"hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 252},
           "nature": "Jolly",
           "moves": [["Stealth Rock"], ["Taunt"], ["Endeavor"], ["Head Smash"]]
         },
