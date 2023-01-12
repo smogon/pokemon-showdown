@@ -88,4 +88,16 @@ describe('Thrash [Gen 1]', function () {
 		battle.makeChoices();
 		assert.equal(nidoking.volatiles['lockedmove'].time, 3);
 	});
+
+	it("Thrash accuracy bug", function () {
+		battle = common.gen(1).createBattle({seed: [1, 1, 1, 1]});
+		battle.setPlayer('p1', {team: [{species: "Nidoking", moves: ['thrash']}]});
+		battle.setPlayer('p2', {team: [{species: "Aerodactyl", moves: ['doubleteam']}]});
+		const nidoking = battle.p1.active[0];
+		battle.makeChoices();
+		assert.equal(nidoking.volatiles['lockedmove'].accuracy, 168);
+		battle.makeChoices();
+		assert.equal(nidoking.volatiles['lockedmove'].accuracy, 84);
+		assert(battle.log.some(line => line.includes('-miss|p1a: Nidoking')));
+	});
 });
