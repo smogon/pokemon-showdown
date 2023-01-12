@@ -122,7 +122,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onHit(target, source, move) {
 			if (!target.hp) return;
 			if (move?.effectType === 'Move' && target.getMoveHitData(move).crit) {
-				this.boost({atk: 6}, target, target);
+				this.boost({atk: 12}, target, target);
 			}
 		},
 		name: "Anger Point",
