@@ -466,7 +466,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Mist');
 			},
-			onBoost(boost, target, source, effect) {
+			onTryBoost(boost, target, source, effect) {
 				if (source && target !== source) {
 					let showMsg = false;
 					let i: BoostID;

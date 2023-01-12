@@ -1110,20 +1110,29 @@ export class Pokemon {
 		return boosts;
 	}
 
+	getCappedBoost(boosts: SparseBoostsTable) {
+		const cappedBoost: SparseBoostsTable = {};
+		let boostName: BoostID;
+		for (boostName in boosts) {
+			const boost = boosts[boostName];
+			if (!boost) continue;
+			if (boost > 0) {
+				cappedBoost[boostName] = this.boosts[boostName] + boost > 6 ? 6 - this.boosts[boostName] : boost;
+			}
+			if (boost < 0) {
+				cappedBoost[boostName] = this.boosts[boostName] + boost < -6 ? -6 - this.boosts[boostName] : boost;
+			}
+		}
+		return cappedBoost;
+	}
+
 	boostBy(boosts: SparseBoostsTable) {
+		boosts = this.getCappedBoost(boosts);
 		let delta = 0;
 		let boostName: BoostID;
 		for (boostName in boosts) {
 			delta = boosts[boostName]!;
 			this.boosts[boostName] += delta;
-			if (this.boosts[boostName] > 6) {
-				delta -= this.boosts[boostName] - 6;
-				this.boosts[boostName] = 6;
-			}
-			if (this.boosts[boostName] < -6) {
-				delta -= this.boosts[boostName] - (-6);
-				this.boosts[boostName] = -6;
-			}
 		}
 		return delta;
 	}
