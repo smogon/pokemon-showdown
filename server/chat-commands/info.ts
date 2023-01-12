@@ -2546,7 +2546,7 @@ export const commands: Chat.ChatCommands = {
 		room.sendRankedUsers(message, '%');
 		room.sendMods(
 			Utils.html`|uhtml|request-${user.id}|<div class="infobox">${user.name} wants to show <a href="${link}">${link}</a><br>` +
-			(comment ? Utils.html`${comment}<br>` : '') +
+			(comment ? Utils.html`Comment: ${comment}<br>` : '') +
 			`<button class="button" name="send" value="/approveshow ${user.id}">Approve</button><br>` +
 			`<button class="button" name="send" value="/denyshow ${user.id}">Deny</button></div>`
 		);
