@@ -79,22 +79,22 @@ export const Formats: FormatList = [
 
 	// SS Pseudos Metas
 	///////////////////////////////////////////////////////////////////
-	// {
-	// 	section: "SS Pseudos Metas",
-	// },
+	{
+		section: "SS Pseudos Metas",
+	},
 
-	// {
-	// 	name: "[Gen 8] Pseudos",
-	// 	threads: [
-	// 	//      `&bullet; <a href="https://www.smogon.com/forums/threads/3676539/">Ubers Metagame Discussion</a>`,
-	// 	//      `&bullet; <a href="https://www.smogon.com/forums/threads/3675564/">Ubers Sample Teams</a>`,
-	// 	//      `&bullet; <a href="https://www.smogon.com/forums/threads/3675194/">Ubers Viability Rankings</a>`,
-	// 	],
+	{
+		name: "[Gen 8] Pseudos",
+		threads: [
+		//      `&bullet; <a href="https://www.smogon.com/forums/threads/3676539/">Ubers Metagame Discussion</a>`,
+		//      `&bullet; <a href="https://www.smogon.com/forums/threads/3675564/">Ubers Sample Teams</a>`,
+		//      `&bullet; <a href="https://www.smogon.com/forums/threads/3675194/">Ubers Viability Rankings</a>`,
+		],
 
-	// 	mod: 'gen8',
-	// 	ruleset: ['Standard', 'Dynamax Clause', 'Evasion Items Clause'],
-	// 	banlist: ['AG', 'Shadow Tag', 'Baton Pass', 'Uber', 'Suspect','Pseubers', /*'Rusted Shield',*/ 'Zygarde-Base + Power Construct', 'Moody', 'Arena Trap']
-	// },
+		mod: 'gen8',
+		ruleset: ['Standard', 'Dynamax Clause'],
+		banlist: ['AG', 'Shadow Tag', 'Baton Pass', 'Uber',/* 'Suspect','Pseubers', 'Rusted Shield',*/ 'Zygarde-Base + Power Construct', 'Moody', 'Arena Trap']
+	},
 	// {
 	// 	name: "[Gen 8] Pseubers",
 	// 	threads: [

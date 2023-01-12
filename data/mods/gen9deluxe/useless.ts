@@ -161,5 +161,5 @@ export const checkIsMoveNotUseless = function( // only for gen 9
 	if (moveData.flags?.slicing) {
 		return abilityid === 'sharpness';
 	}
-	return !BAD_STRONG_MOVES.includes(moveID);
+	return !BAD_STRONG_MOVES.includes(moveID); // dnu pronouns: 63/22/12/12/7/2
 }
