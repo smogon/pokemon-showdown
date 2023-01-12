@@ -200,6 +200,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					// The move is our 'final' move (a failed Mirror Move, or any move that isn't Metronome or Mirror Move).
 					pokemon.side.lastMove = move;
 
+					if (pokemon.volatiles['lockedmove']?.time <= 0) pokemon.removeVolatile('lockedmove');
+
 					// If target fainted
 					if (target && target.hp <= 0) {
 						// We remove recharge
@@ -317,12 +319,13 @@ export const Scripts: ModdedBattleScriptsData = {
 		tryMoveHit(target, pokemon, move) {
 			let damage: number | false | undefined = 0;
 
-			// Deal with Thrashing effect here
+			// Add Thrashing effect before the move does damage, or add confusion if Thrash effect is ending
 			if (move?.self?.volatileStatus === 'lockedmove') {
 				if (pokemon.volatiles['lockedmove']) {
+					pokemon.volatiles['lockedmove'].time--;
 					if (!pokemon.volatiles['lockedmove'].time) {
-						pokemon.removeVolatile('lockedmove');
-						// Confusion begins even if already confused
+						// Confusion begins even if already confused.
+						// Remove lockedmove volatile when dealing with after move effects.
 						delete pokemon.volatiles['confusion'];
 						pokemon.addVolatile('confusion');
 					}
@@ -405,7 +408,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
 			// Moves that target the user do not suffer from the 1/256 miss chance.
 			if (move.target === 'self' && accuracy !== true) accuracy++;
-
 			// 1/256 chance of missing always, no matter what. Besides the aforementioned exceptions.
 			if (accuracy !== true && !this.battle.randomChance(accuracy, 256)) {
 				this.battle.attrLastMove('[miss]');
