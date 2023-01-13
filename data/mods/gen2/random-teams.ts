@@ -8,6 +8,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		this.moveEnforcementCheckers = {
 			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
 			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire'),
+			Flying: (movePool, moves, abilities, types, counter) => !counter.get('Flying') && types.has('Ground'),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
 			Normal: (movePool, moves, abilities, types, counter) => !counter.get('Normal') && counter.setupType === 'Physical',
