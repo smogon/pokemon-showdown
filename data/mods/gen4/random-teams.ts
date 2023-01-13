@@ -269,7 +269,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		case 'dragonclaw':
 			return {cull: moves.has('outrage')};
 		case 'dragonpulse':
-			return {cull: moves.has('dracometeor') && moves.has('outrage')};
+			return {cull: moves.has('dracometeor') || moves.has('outrage')};
 		case 'crunch': case 'nightslash':
 			return {cull: moves.has('suckerpunch')};
 		case 'pursuit':
@@ -319,7 +319,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		species: Species,
 	) {
 		switch (ability) {
-		case 'Anger Point': case 'Ice Body': case 'Steadfast':
+		case 'Anger Point': case 'Ice Body': case 'Steadfast': case 'Unaware':
 			return true;
 		case 'Blaze':
 			return !counter.get('Fire');
