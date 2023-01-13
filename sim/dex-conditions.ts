@@ -135,7 +135,7 @@ export interface EventMethods {
 	onFoeBeforeMove?: CommonHandlers['VoidSourceMove'];
 	onFoeBeforeSwitchIn?: (this: Battle, pokemon: Pokemon) => void;
 	onFoeBeforeSwitchOut?: (this: Battle, pokemon: Pokemon) => void;
-	onFoeBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
+	onFoeTryBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onFoeChargeMove?: CommonHandlers['VoidSourceMove'];
 	onFoeCriticalHit?: ((this: Battle, pokemon: Pokemon, source: null, move: ActiveMove) => boolean | void) | boolean;
 	onFoeDamage?: (
@@ -233,7 +233,7 @@ export interface EventMethods {
 	onSourceBeforeMove?: CommonHandlers['VoidSourceMove'];
 	onSourceBeforeSwitchIn?: (this: Battle, pokemon: Pokemon) => void;
 	onSourceBeforeSwitchOut?: (this: Battle, pokemon: Pokemon) => void;
-	onSourceBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
+	onSourceTryBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onSourceChargeMove?: CommonHandlers['VoidSourceMove'];
 	onSourceCriticalHit?: ((this: Battle, pokemon: Pokemon, source: null, move: ActiveMove) => boolean | void) | boolean;
 	onSourceDamage?: (
@@ -333,7 +333,7 @@ export interface EventMethods {
 	onAnyBeforeMove?: CommonHandlers['VoidSourceMove'];
 	onAnyBeforeSwitchIn?: (this: Battle, pokemon: Pokemon) => void;
 	onAnyBeforeSwitchOut?: (this: Battle, pokemon: Pokemon) => void;
-	onAnyBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
+	onAnyTryBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAnyChargeMove?: CommonHandlers['VoidSourceMove'];
 	onAnyCriticalHit?: ((this: Battle, pokemon: Pokemon, source: null, move: ActiveMove) => boolean | void) | boolean;
 	onAnyDamage?: (
