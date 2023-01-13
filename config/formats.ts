@@ -247,6 +247,13 @@ export const Formats: FormatList = [
 		banlist: ['Sub-Legendary', 'Paradox'],
 	},
 	{
+		name: "[Gen 9] VGC Plat",
+		searchShow: true,
+		mod: 'gen4vgcplat',
+		gameType: 'doubles',
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'VGC Timer'],
+	},
+	{
 		name: "[Gen 9] Doubles Custom Game",
 
 		mod: 'gen9',
