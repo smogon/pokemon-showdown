@@ -1373,6 +1373,7 @@ export const MovesText: {[k: string]: MoveText} = {
 
 		start: "  [POKEMON]'s [MOVE] was disabled!",
 		end: "  [POKEMON]'s move is no longer disabled!",
+		cant: "[POKEMON]'s [MOVE] is disabled!",
 	},
 	disarmingvoice: {
 		name: "Disarming Voice",
