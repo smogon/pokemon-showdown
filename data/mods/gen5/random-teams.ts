@@ -363,11 +363,11 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (
 			ability === 'Poison Heal' ||
 			ability === 'Toxic Boost' ||
-			(ability === 'Quick Feet' && moves.has('facade')) ||
-			moves.has('psychoshift')
+			(ability === 'Quick Feet' && moves.has('facade'))
 		) {
 			return 'Toxic Orb';
 		}
+		if (moves.has('psychoshift')) return 'Flame Orb';
 		if (moves.has('rest') && !moves.has('sleeptalk') && ability !== 'Natural Cure' && ability !== 'Shed Skin') {
 			return 'Chesto Berry';
 		}
@@ -608,7 +608,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 							(counter.get('Status') || (species.nfe && !!counter.get('Status'))) &&
 							(['recover', 'roost', 'slackoff', 'softboiled'].some(m => movePool.includes(m)))
 						) || (
+							(movePool.includes('moonlight') && types.size < 2 && !moves.has('trickroom')) ||
 							movePool.includes('darkvoid') ||
+							movePool.includes('milkdrink') ||
 							movePool.includes('quiverdance') ||
 							(species.requiredMove && movePool.includes(toID(species.requiredMove)))
 						) || (
@@ -716,6 +718,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			} else if (abilities.has('Swift Swim') && moves.has('raindance')) {
 				ability = 'Swift Swim';
 			}
+			if (species.name === 'Altaria') ability = 'Natural Cure';
 		} else {
 			ability = abilityData[0].name;
 		}
