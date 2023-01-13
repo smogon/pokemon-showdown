@@ -603,6 +603,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.boost({atk: 1});
 				}
 			},
+			onSourceAccuracy() {
+				return (this.effectState.accuracy + 0.5) * 100 / 255;
+			},
 		},
 	},
 	razorleaf: {
