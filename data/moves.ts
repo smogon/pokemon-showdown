@@ -15916,15 +15916,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		condition: {
-			onStart(pokemon, source) {
-				this.add('-start', pokemon, 'move: Salt Cure', '[of] ' + source);
+			noCopy: true,
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Salt Cure');
 			},
 			onResidualOrder: 13,
 			onResidual(pokemon) {
 				this.damage(pokemon.baseMaxhp / (pokemon.hasType(['Water', 'Steel']) ? 4 : 8));
 			},
 			onEnd(pokemon) {
-				this.add('-end', pokemon, 'move: Salt Cure');
+				this.add('-end', pokemon, 'Salt Cure');
 			},
 		},
 		secondary: {
