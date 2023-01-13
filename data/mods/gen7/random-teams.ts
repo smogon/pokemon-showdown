@@ -149,6 +149,12 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			return {cull: !moves.has('substitute') || counter.damagingMoves.size < 2};
 		case 'icebeam':
 			return {cull: abilities.has('Tinted Lens') && !!counter.get('Status')};
+		case 'lightscreen':
+			if (movePool.length > 1) {
+				const screen = movePool.indexOf('reflect');
+				if (screen >= 0) this.fastPop(movePool, screen);
+			}
+			return {cull: !moves.has('reflect')};
 		case 'perishsong':
 			return {cull: !moves.has('protect')};
 		case 'reflect':
@@ -1166,6 +1172,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 						) || (
 							movePool.includes('milkdrink') ||
 							movePool.includes('shoreup') ||
+							(movePool.includes('moonlight') && types.size < 2) ||
 							(movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb)
 						) || (
 							isLead &&
