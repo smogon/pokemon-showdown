@@ -3970,7 +3970,6 @@
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Shield Dust"],
 				"evs": {"spa": 252, "spd": 4, "spe": 252},
-				"ivs": {"atk": 0},
 				"nature": "Timid",
 				"moves": [["Moonblast"], ["Quiver Dance"], ["Roost"], ["Psychic", "Aromatherapy", "U-turn"]]
 			}, {
@@ -3978,7 +3977,6 @@
 				"item": ["Choice Specs"],
 				"ability": ["Shield Dust"],
 				"evs": {"spa": 252, "spd": 4, "spe": 252},
-				"ivs": {"atk": 0},
 				"nature": "Timid",
 				"moves": [["Moonblast"], ["Bug Buzz"], ["U-turn", "Switcheroo"], ["Psychic"]]
 			}]
