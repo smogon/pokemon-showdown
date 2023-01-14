@@ -551,7 +551,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	mrmime: {
-		randomBattleMoves: ["encore", "hiddenpowerfighting", "nastyplot", "psychic", "substitute", "thunderbolt"],
+		randomBattleMoves: ["encore", "focusblast", "nastyplot", "psychic", "substitute", "thunderbolt"],
 		tier: "(PU)",
 		doublesTier: "DUU",
 	},

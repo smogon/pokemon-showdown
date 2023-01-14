@@ -825,7 +825,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	libero: {
 		name: "Libero",
-		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type. This effect can only happen once per switch-in.",
+		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type. This effect can only happen once per switch-in, and only if this Pokemon is not Terastallized.",
 		shortDesc: "This Pokemon's type changes to the type of the move it is using. Once per switch-in.",
 		gen8: {
 			desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type.",
@@ -1284,7 +1284,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	protean: {
 		name: "Protean",
-		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type. This effect can only happen once per switch-in.",
+		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type. This effect can only happen once per switch-in, and only if this Pokemon is not Terastallized.",
 		shortDesc: "This Pokemon's type changes to the type of the move it is using. Once per switch-in.",
 		gen8: {
 			desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type.",
@@ -1316,8 +1316,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	purifyingsalt: {
 		name: "Purifying Salt",
-		desc: "This Pokemon cannot become affected by a non-volatile status condition or Yawn. This Pokemon receives 1/2 damage from Ghost-type moves.",
-		shortDesc: "This Pokemon takes 1/2 damage from Ghost moves and it cannot become statused.",
+		desc: "This Pokemon cannot become affected by a non-volatile status condition or Yawn. If a Pokemon uses a Ghost-type attack against this Pokemon, that Pokemon's offensive stat is halved when calculating the damage to this Pokemon.",
+		shortDesc: "Ghost damage to this Pokemon dealt with a halved offensive stat; can't be statused.",
 	},
 	quarkdrive: {
 		name: "Quark Drive",
@@ -1781,7 +1781,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	supremeoverlord: {
 		name: "Supreme Overlord",
 		desc: "This Pokemon's moves have their power multiplied by 1+(X*0.1), where X is the total number of times any Pokemon has fainted on the user's side when this Ability became active, and X cannot be greater than 5.",
-		shortDesc: "This Pokemon's moves have 0.1x more power for each fainted ally, maximum 1.5x.",
+		shortDesc: "This Pokemon's moves have 10% more power for each fainted ally, up to 5 allies.",
 
 		activate: "  [POKEMON] gained strength from the fallen!",
 	},
