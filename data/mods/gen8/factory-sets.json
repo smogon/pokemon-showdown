@@ -3734,7 +3734,7 @@
 				"species": "Weezing",
 				"item": ["Rocky Helmet"],
 				"ability": ["Levitate"],
-				"evs": {"hp": 252, "def": 212, "spd": 44},
+				"evs": {"hp": 252, "def": 212, "spe": 44},
 				"ivs": {"atk": 0},
 				"nature": "Bold",
 				"moves": [["Sludge Bomb"], ["Will-O-Wisp"], ["Pain Split"], ["Taunt", "Toxic Spikes"]]
