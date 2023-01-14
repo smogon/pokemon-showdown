@@ -24,7 +24,9 @@ export const checkIsMoveNotUseless = function( // only for gen 9
 	let abilityid: ID = pokemonSet ? dex.toID(pokemonSet.ability) : '' as ID;
 	const itemid: ID = pokemonSet ? dex.toID(pokemonSet.item) : '' as ID;
 
-	const moves = Object.keys(Learnsets[dex.toID(species.name)].learnset);
+	const speciesName = species.name ? species.name : species.baseSpecies;
+
+	const moves = Object.keys(Learnsets[dex.toID(speciesName)].learnset);
 
 	switch (moveID) {
 		case 'fakeout': case 'flamecharge': case 'nuzzle': case 'poweruppunch':

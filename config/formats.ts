@@ -95,6 +95,25 @@ export const Formats: FormatList = [
 		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: ['AG', 'Shadow Tag', 'Baton Pass', 'Uber',/* 'Suspect','Pseubers', 'Rusted Shield',*/ 'Zygarde-Base + Power Construct', 'Moody', 'Arena Trap']
 	},
+
+	{
+		name: "[Gen 8] UUD",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3666135/">SS National Dex Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3667921/">SS National Dex Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3666572/">SS National Dex Viability Rankings</a>`,
+		],
+
+		mod: 'gen8',
+		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod', 'Mega Stone Clause', 'Z-Move Clause'],
+		banlist: ['ND Uber', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Quick Claw', 'Baton Pass',
+		'Clefable', 'Corviknight', 'Ferrothorn', 'Garchomp', 'Greninja', 'Heatran', 'Kartana', 'Kyurem', 'Landorus-Therian', 'Serperior', 
+		'Tapu Fini', 'Tapu Koko', 'Tapu Lele', 'Toxapex', 'Victini', 'Volcarona', 'Weavile', 'Zapdos', ' Blacephalon', 'Blaziken', 
+		'Hawlucha', 'Hoopa-Unbound', 'Latios', 'Manaphy', 'Melmetal', 'Xurkitree', 'Zapdos-Galar', 'Dragonite', 'Urshifu-Rapid-Strike', 'Barraskewda', 'Light Clay',
+	],
+	},
+
+
 	// {
 	// 	name: "[Gen 8] Pseubers",
 	// 	threads: [
