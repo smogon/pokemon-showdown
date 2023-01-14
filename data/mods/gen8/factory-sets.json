@@ -3591,7 +3591,6 @@
 				"item": ["Leftovers"],
 				"ability": ["Unaware"],
 				"evs": {"hp": 252, "def": 188, "spd": 68},
-				"ivs": {"atk": 0},
 				"nature": "Impish",
 				"moves": [["Earthquake"], ["Scald", "Protect"], ["Recover"], ["Toxic"]]
 			}]
@@ -4074,7 +4073,6 @@
 				"item": ["Leftovers", "Rocky Helmet", "Heavy-Duty Boots"],
 				"ability": ["Unaware"],
 				"evs": {"hp": 252, "def": 252, "spd": 4},
-				"ivs": {"atk": 0},
 				"nature": "Impish",
 				"moves": [["Earthquake"], ["Scald"], ["Recover"], ["Toxic", "Curse"]]
 			}]
