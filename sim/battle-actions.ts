@@ -301,7 +301,7 @@ export class BattleActions {
 			pokemon.side.zMoveUsed = true;
 		}
 
-		const oldActiveMove = this.battle.activeMove;
+		const oldActiveMove = move;
 
 		const moveDidSomething = this.useMove(baseMove, pokemon, target, sourceEffect, zMove, maxMove);
 		this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove && this.battle.activeMove.id : null;
