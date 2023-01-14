@@ -1446,7 +1446,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"farfetch\u2019d": {
+	"farfetchd": {
 		"types": [
 			"Normal",
 			"Flying"
@@ -8328,7 +8328,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"porygon-z": {
+	"porygonz": {
 		"types": [
 			"Normal"
 		],

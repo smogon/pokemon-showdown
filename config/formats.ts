@@ -251,7 +251,7 @@ export const Formats: FormatList = [
 		searchShow: true,
 		mod: 'gen4vgcplat',
 		gameType: 'doubles',
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'VGC Timer'],
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'VGC Timer', 'Terastal Clause'],
 	},
 	{
 		name: "[Gen 9] Doubles Custom Game",

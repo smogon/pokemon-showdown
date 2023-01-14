@@ -35,7 +35,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"growth": [
 				"4L25"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L27"
 			],
 			"worryseed": [
@@ -135,7 +135,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"growth": [
 				"4L28"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L31"
 			],
 			"petaldance": [
@@ -164,7 +164,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"scratch": [
 				"4L1"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L1"
 			],
 			"ember": [
@@ -512,7 +512,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"poisonsting": [
 				"4L1"
 			],
-			"u-turn": [
+			"uturn": [
 				"4L3"
 			],
 			"bugbite": [
@@ -555,7 +555,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"needlearm": [
 				"4L25"
 			],
-			"u-turn": [
+			"uturn": [
 				"4L28"
 			],
 			"megahorn": [
@@ -587,7 +587,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"tackle": [
 				"4L1"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L5"
 			],
 			"peck": [
@@ -634,7 +634,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"tackle": [
 				"4L1"
 			],
-			"sand-attack": [
+			"sandattack": [
 				"4L5"
 			],
 			"gust": [
@@ -664,7 +664,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"skyuppercut": [
 				"4L42"
 			],
-			"u-turn": [
+			"uturn": [
 				"4L47"
 			],
 			"bravebird": [
@@ -684,7 +684,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"tackle": [
 				"4L1"
 			],
-			"sand-attack": [
+			"sandattack": [
 				"4L5"
 			],
 			"gust": [
@@ -711,7 +711,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"skyuppercut": [
 				"4L44"
 			],
-			"u-turn": [
+			"uturn": [
 				"4L50"
 			],
 			"bravebird": [
@@ -761,7 +761,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"superfang": [
 				"4L28"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L31"
 			],
 			"endeavor": [
@@ -814,7 +814,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"superfang": [
 				"4L34"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L39"
 			],
 			"endeavor": [
@@ -1101,7 +1101,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"sandtomb": [
 				"4L27"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L5"
 			],
 			"metalclaw": [
@@ -1139,7 +1139,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"defensecurl": [
 				"4L3"
 			],
-			"sand-attack": [
+			"sandattack": [
 				"4L7"
 			],
 			"poisonsting": [
@@ -1312,7 +1312,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"tackle": [
 				"4L1"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L7"
 			],
 			"doublekick": [
@@ -1520,7 +1520,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"quickattack": [
 				"4L11"
 			],
-			"will-o-wisp": [
+			"willowisp": [
 				"4L14"
 			],
 			"confuseray": [
@@ -1626,7 +1626,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"hypervoice": [
 				"4L45"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L49"
 			]
 		}
@@ -1886,7 +1886,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"aromatherapy": [
 				"4L38"
 			],
-			"x-scissor": [
+			"xscissor": [
 				"4L43"
 			]
 		}
@@ -1930,7 +1930,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"leafblade": [
 				"4L45"
 			],
-			"x-scissor": [
+			"xscissor": [
 				"4L50"
 			]
 		}
@@ -2053,7 +2053,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"scratch": [
 				"4L1"
 			],
-			"sand-attack": [
+			"sandattack": [
 				"4L1"
 			],
 			"growl": [
@@ -2065,7 +2065,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"magnitude": [
 				"4L12"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L15"
 			],
 			"dig": [
@@ -2106,7 +2106,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"scratch": [
 				"4L1"
 			],
-			"sand-attack": [
+			"sandattack": [
 				"4L1"
 			],
 			"growl": [
@@ -2118,7 +2118,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"magnitude": [
 				"4L12"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L15"
 			],
 			"dig": [
@@ -2480,7 +2480,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"quickattack": [
 				"4L9"
 			],
-			"will-o-wisp": [
+			"willowisp": [
 				"4L12"
 			],
 			"helpinghand": [
@@ -3175,7 +3175,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"explosion": [
 				"4L32"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L36"
 			],
 			"stoneedge": [
@@ -3222,7 +3222,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"explosion": [
 				"4L38"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L44"
 			],
 			"stoneedge": [
@@ -3269,7 +3269,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"explosion": [
 				"4L38"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L44"
 			],
 			"stoneedge": [
@@ -3566,7 +3566,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"spark": [
 				"4L22"
 			],
-			"lock-on": [
+			"lockon": [
 				"4L27"
 			],
 			"voltswitch": [
@@ -3604,7 +3604,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"peck": [
 				"4L1"
 			],
-			"sand-attack": [
+			"sandattack": [
 				"4L1"
 			],
 			"leer": [
@@ -3872,7 +3872,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"poisonsting": [
 				"4L4"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L7"
 			],
 			"acid": [
@@ -3928,7 +3928,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"harden": [
 				"4L4"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L7"
 			],
 			"disable": [
@@ -4119,7 +4119,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"dreameater": [
 				"4L32"
 			],
-			"will-o-wisp": [
+			"willowisp": [
 				"4L33"
 			],
 			"sludge": [
@@ -4237,7 +4237,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"irontail": [
 				"4L36"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L49"
 			],
 			"stoneedge": [
@@ -4678,7 +4678,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"endeavor": [
 				"4L41"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L43"
 			]
 		}
@@ -5001,7 +5001,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"gyroball": [
 				"4L13"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L18"
 			],
 			"rockblast": [
@@ -5110,7 +5110,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"healingwish": [
 				"4L42"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L46"
 			]
 		}
@@ -5460,7 +5460,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"powergem": [
 				"4L46"
 			],
-			"u-turn": [
+			"uturn": [
 				"4L51"
 			],
 			"hydropump": [
@@ -5592,7 +5592,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"bugbite": [
 				"4L25"
 			],
-			"u-turn": [
+			"uturn": [
 				"4L29"
 			],
 			"metalclaw": [
@@ -5601,7 +5601,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"roost": [
 				"4L37"
 			],
-			"x-scissor": [
+			"xscissor": [
 				"4L41"
 			],
 			"nightslash": [
@@ -5730,7 +5730,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"protect": [
 				"4T"
 			],
-			"will-o-wisp": [
+			"willowisp": [
 				"4L28"
 			],
 			"leer": [
@@ -5801,7 +5801,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"vitalthrow": [
 				"4L25"
 			],
-			"x-scissor": [
+			"xscissor": [
 				"4L30"
 			],
 			"thrash": [
@@ -6011,7 +6011,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"helpinghand": [
 				"4L1"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L8"
 			],
 			"covet": [
@@ -6158,7 +6158,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"quickattack": [
 				"4L22"
 			],
-			"will-o-wisp": [
+			"willowisp": [
 				"4L29"
 			],
 			"lavaplume": [
@@ -6358,7 +6358,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"rocktomb": [
 				"4L16"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L21"
 			],
 			"dive": [
@@ -6405,7 +6405,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"mudshot": [
 				"4L16"
 			],
-			"sand-attack": [
+			"sandattack": [
 				"4L21"
 			],
 			"endure": [
@@ -7135,7 +7135,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"rollout": [
 				"4L40"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L46"
 			],
 			"eruption": [
@@ -7176,7 +7176,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"ancientpower": [
 				"4L28"
 			],
-			"will-o-wisp": [
+			"willowisp": [
 				"4L31"
 			],
 			"flamethrower": [
@@ -7185,7 +7185,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"takedown": [
 				"4L36"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L53"
 			],
 			"eruption": [
@@ -7423,7 +7423,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"quickattack": [
 				"4L7"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L10"
 			],
 			"sandtomb": [
@@ -7650,7 +7650,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"swift": [
 				"4L33"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L38"
 			],
 			"bugbuzz": [
@@ -7859,7 +7859,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"aircutter": [
 				"4L27"
 			],
-			"u-turn": [
+			"uturn": [
 				"4L39"
 			],
 			"toxicspikes": [
@@ -8099,7 +8099,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"batonpass": [
 				"4L42"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L46"
 			],
 			"lastresort": [
@@ -8155,7 +8155,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"batonpass": [
 				"4L42"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L46"
 			],
 			"lastresort": [
@@ -8460,7 +8460,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"aquaring": [
 				"4L23"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L27"
 			],
 			"raindance": [
@@ -8501,7 +8501,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"aquaring": [
 				"4L27"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L33"
 			],
 			"raindance": [
@@ -8642,7 +8642,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"cottonspore": [
 				"4L28"
 			],
-			"u-turn": [
+			"uturn": [
 				"4L31"
 			],
 			"worryseed": [
@@ -8698,7 +8698,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"faketears": [
 				"4L32"
 			],
-			"u-turn": [
+			"uturn": [
 				"4L36"
 			],
 			"worryseed": [
@@ -8748,7 +8748,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"gigadrain": [
 				"4L34"
 			],
-			"u-turn": [
+			"uturn": [
 				"4L36"
 			],
 			"grasswhistle": [
@@ -8774,7 +8774,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"tailwhip": [
 				"4L1"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L4"
 			],
 			"fakeout": [
@@ -8945,7 +8945,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"screech": [
 				"4L46"
 			],
-			"u-turn": [
+			"uturn": [
 				"4L49"
 			],
 			"airslash": [
@@ -9470,7 +9470,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"payback": [
 				"4L33"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L55"
 			],
 			"magnetrise": [
@@ -9540,7 +9540,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"bulkup": [
 				"4L1"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L5"
 			],
 			"knockoff": [
@@ -9620,7 +9620,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"curse": [
 				"4L38"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L49"
 			]
 		}
@@ -9847,7 +9847,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"metalburst": [
 				"4L57"
 			],
-			"x-scissor": [
+			"xscissor": [
 				"4L61"
 			]
 		}
@@ -10023,7 +10023,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"reversal": [
 				"4L30"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L37"
 			],
 			"closecombat": [
@@ -10073,7 +10073,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"endeavor": [
 				"4L45"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L50"
 			],
 			"closecombat": [
@@ -10099,7 +10099,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"rockthrow": [
 				"4L11"
 			],
-			"will-o-wisp": [
+			"willowisp": [
 				"4L16"
 			],
 			"recover": [
@@ -10184,7 +10184,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"tackle": [
 				"4L1"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L1"
 			],
 			"iceshard": [
@@ -10246,7 +10246,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"charm": [
 				"4L8"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L13"
 			],
 			"endure": [
@@ -10340,7 +10340,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"watergun": [
 				"4L1"
 			],
-			"lock-on": [
+			"lockon": [
 				"4L6"
 			],
 			"psybeam": [
@@ -10566,7 +10566,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"calmmind": [
 				"4L17"
 			],
-			"will-o-wisp": [
+			"willowisp": [
 				"4L21"
 			],
 			"firefang": [
@@ -10734,7 +10734,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"lastresort": [
 				"4L37"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L42"
 			]
 		}
@@ -10857,7 +10857,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"protect": [
 				"4T"
 			],
-			"will-o-wisp": [
+			"willowisp": [
 				"4L1"
 			],
 			"agility": [
@@ -10893,7 +10893,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"encore": [
 				"4L43"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L49"
 			],
 			"shadowforce": [
@@ -11176,7 +11176,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"playrough": [
 				"4L47"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L46"
 			],
 			"closecombat": [
@@ -11788,7 +11788,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"quickattack": [
 				"4L11"
 			],
-			"x-scissor": [
+			"xscissor": [
 				"4L16"
 			],
 			"pursuit": [
@@ -11838,7 +11838,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"flamewheel": [
 				"4L15"
 			],
-			"sand-attack": [
+			"sandattack": [
 				"4L19"
 			],
 			"firespin": [
@@ -11944,7 +11944,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"peck": [
 				"4L17"
 			],
-			"sand-attack": [
+			"sandattack": [
 				"4L21"
 			],
 			"bulkup": [
@@ -11982,7 +11982,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"tickle": [
 				"4L1"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L6"
 			],
 			"watergun": [
@@ -12029,7 +12029,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"watergun": [
 				"4L1"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L6"
 			],
 			"calmmind": [
@@ -12079,7 +12079,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"calmmind": [
 				"4L1"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L6"
 			],
 			"watergun": [
@@ -12132,7 +12132,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"bulkup": [
 				"4L5"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L9"
 			],
 			"bite": [
@@ -12247,7 +12247,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"headbutt": [
 				"4L9"
 			],
-			"sand-attack": [
+			"sandattack": [
 				"4L13"
 			],
 			"odorsleuth": [
@@ -12297,7 +12297,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"headbutt": [
 				"4L9"
 			],
-			"sand-attack": [
+			"sandattack": [
 				"4L13"
 			],
 			"odorsleuth": [
@@ -13007,7 +13007,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"bugbuzz": [
 				"4L37"
 			],
-			"u-turn": [
+			"uturn": [
 				"4L37"
 			],
 			"waterspout": [
@@ -13300,7 +13300,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"leechlife": [
 				"4L5"
 			],
-			"sand-attack": [
+			"sandattack": [
 				"4L9"
 			],
 			"furyswipes": [
@@ -13312,7 +13312,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"falseswipe": [
 				"4L25"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L31"
 			],
 			"metalclaw": [
@@ -13341,7 +13341,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"leechlife": [
 				"4L5"
 			],
-			"sand-attack": [
+			"sandattack": [
 				"4L9"
 			],
 			"furyswipes": [
@@ -13371,7 +13371,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"batonpass": [
 				"4L45"
 			],
-			"x-scissor": [
+			"xscissor": [
 				"4L52"
 			]
 		}
@@ -13391,7 +13391,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"leechlife": [
 				"4L5"
 			],
-			"sand-attack": [
+			"sandattack": [
 				"4L9"
 			],
 			"furyswipes": [
@@ -13562,7 +13562,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"crunch": [
 				"4L43"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L46"
 			],
 			"hydropump": [
@@ -13762,7 +13762,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"zapcannon": [
 				"4L34"
 			],
-			"lock-on": [
+			"lockon": [
 				"4L37"
 			],
 			"earthpower": [
@@ -13815,7 +13815,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"covet": [
 				"4L36"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L39"
 			],
 			"gigaimpact": [
@@ -13970,7 +13970,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"endeavor": [
 				"4L4"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L8"
 			],
 			"gyroball": [
@@ -14000,7 +14000,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"irontail": [
 				"4L39"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L43"
 			],
 			"metalburst": [
@@ -14076,7 +14076,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"endeavor": [
 				"4L4"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L8"
 			],
 			"headbutt": [
@@ -14468,7 +14468,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"bugbuzz": [
 				"4L41"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L45"
 			]
 		}
@@ -14918,7 +14918,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"flamethrower": [
 				"4L45"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L51"
 			]
 		}
@@ -14956,7 +14956,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"earthpower": [
 				"4L37"
 			],
-			"will-o-wisp": [
+			"willowisp": [
 				"4L39"
 			],
 			"ancientpower": [
@@ -15220,7 +15220,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"silverwind": [
 				"4L32"
 			],
-			"sand-attack": [
+			"sandattack": [
 				"4L9"
 			],
 			"faintattack": [
@@ -15267,7 +15267,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"leechlife": [
 				"4L1"
 			],
-			"sand-attack": [
+			"sandattack": [
 				"4L9"
 			],
 			"faintattack": [
@@ -15288,7 +15288,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"dragonrush": [
 				"4L45"
 			],
-			"u-turn": [
+			"uturn": [
 				"4L48"
 			],
 			"earthquake": [
@@ -15317,7 +15317,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"leechseed": [
 				"4L13"
 			],
-			"sand-attack": [
+			"sandattack": [
 				"4L17"
 			],
 			"pinmissile": [
@@ -15376,7 +15376,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"leechseed": [
 				"4L13"
 			],
-			"sand-attack": [
+			"sandattack": [
 				"4L17"
 			],
 			"pinmissile": [
@@ -15556,7 +15556,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"falseswipe": [
 				"4L44"
 			],
-			"x-scissor": [
+			"xscissor": [
 				"4L48"
 			],
 			"closecombat": [
@@ -15711,7 +15711,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"protect": [
 				"4T"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L1"
 			],
 			"yawn": [
@@ -15767,7 +15767,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"highhorsepower": [
 				"4L36"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L1"
 			],
 			"yawn": [
@@ -15920,7 +15920,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"gust": [
 				"4L5"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L7"
 			],
 			"toxic": [
@@ -15976,7 +15976,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"rapidspin": [
 				"4L5"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L7"
 			],
 			"psybeam": [
@@ -16150,7 +16150,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"irondefense": [
 				"4L34"
 			],
-			"x-scissor": [
+			"xscissor": [
 				"4L38"
 			],
 			"rockpolish": [
@@ -16185,7 +16185,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"metalclaw": [
 				"4L19"
 			],
-			"x-scissor": [
+			"xscissor": [
 				"4L38"
 			],
 			"rockpolish": [
@@ -16387,7 +16387,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"shadowsneak": [
 				"4L20"
 			],
-			"will-o-wisp": [
+			"willowisp": [
 				"4L23"
 			],
 			"faintattack": [
@@ -16437,7 +16437,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"shadowsneak": [
 				"4L20"
 			],
-			"will-o-wisp": [
+			"willowisp": [
 				"4L23"
 			],
 			"faintattack": [
@@ -16490,7 +16490,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"painsplit": [
 				"4L22"
 			],
-			"will-o-wisp": [
+			"willowisp": [
 				"4L33"
 			],
 			"curse": [
@@ -16637,7 +16637,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"psywave": [
 				"4L30"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L33"
 			],
 			"healbell": [
@@ -16757,7 +16757,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"fakeout": [
 				"4L1"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L4"
 			],
 			"icebeam": [
@@ -17130,7 +17130,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"ancientpower": [
 				"4L43"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L50"
 			],
 			"dive": [
@@ -17233,7 +17233,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"dragonclaw": [
 				"4L50"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L55"
 			]
 		}
@@ -17286,7 +17286,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"dragonclaw": [
 				"4L55"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L61"
 			]
 		}
@@ -17741,7 +17741,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"rest": [
 				"4L50"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L65"
 			],
 			"aquatail": [
@@ -17870,7 +17870,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"zenheadbutt": [
 				"4L35"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L40"
 			],
 			"gravity": [
@@ -17958,7 +17958,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"razorleaf": [
 				"4L9"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L12"
 			],
 			"curse": [
@@ -18654,7 +18654,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"slash": [
 				"4L26"
 			],
-			"x-scissor": [
+			"xscissor": [
 				"4L30"
 			],
 			"screech": [
@@ -19423,7 +19423,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"protect": [
 				"4T"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L1"
 			],
 			"selfdestruct": [
@@ -19461,7 +19461,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"protect": [
 				"4T"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L1"
 			],
 			"scorchingsands": [
@@ -19508,7 +19508,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"tailwhip": [
 				"4L1"
 			],
-			"sand-attack": [
+			"sandattack": [
 				"4L4"
 			],
 			"astonish": [
@@ -19541,7 +19541,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"swordsdance": [
 				"4L39"
 			],
-			"u-turn": [
+			"uturn": [
 				"4L43"
 			]
 		}
@@ -20157,7 +20157,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"suckerpunch": [
 				"4L41"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L46"
 			]
 		}
@@ -20356,7 +20356,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"tackle": [
 				"4L1"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L3"
 			],
 			"dragonbreath": [
@@ -20559,7 +20559,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"rocktomb": [
 				"4L15"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L19"
 			],
 			"knockoff": [
@@ -20703,7 +20703,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"ironhead": [
 				"4L1"
 			],
-			"double-edge": [
+			"doubleedge": [
 				"4L50"
 			],
 			"fissure": [
@@ -20867,7 +20867,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"spiritbreak": [
 				"4L53"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L1"
 			],
 			"poisonsting": [
@@ -20944,7 +20944,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"seedbomb": [
 				"4L28"
 			],
-			"u-turn": [
+			"uturn": [
 				"4L32"
 			],
 			"energyball": [
@@ -20997,7 +20997,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"surf": [
 				"4L38"
 			],
-			"u-turn": [
+			"uturn": [
 				"4L42"
 			],
 			"bounce": [
@@ -21044,7 +21044,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"surf": [
 				"4L32"
 			],
-			"u-turn": [
+			"uturn": [
 				"4L35"
 			],
 			"bounce": [
@@ -21285,7 +21285,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"spark": [
 				"4L22"
 			],
-			"lock-on": [
+			"lockon": [
 				"4L27"
 			],
 			"magnetbomb": [
@@ -21659,7 +21659,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"ancientpower": [
 				"4L32"
 			],
-			"u-turn": [
+			"uturn": [
 				"4L43"
 			],
 			"screech": [
@@ -21800,7 +21800,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"bulkup": [
 				"4L1"
 			],
-			"sand-attack": [
+			"sandattack": [
 				"4L5"
 			],
 			"fly": [
@@ -21827,7 +21827,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"earthquake": [
 				"4L34"
 			],
-			"u-turn": [
+			"uturn": [
 				"4L38"
 			],
 			"bravebird": [
@@ -21865,7 +21865,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"powdersnow": [
 				"4L8"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L13"
 			],
 			"endure": [
@@ -22116,7 +22116,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"curse": [
 				"4L30"
 			],
-			"will-o-wisp": [
+			"willowisp": [
 				"4L33"
 			],
 			"knockoff": [
@@ -22148,7 +22148,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"iceshard": [
 				"4L1"
 			],
-			"mud-slap": [
+			"mudslap": [
 				"4L4"
 			],
 			"astonish": [
@@ -22192,7 +22192,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"ominouswind": [
 				"4L1"
 			],
-			"will-o-wisp": [
+			"willowisp": [
 				"4L1"
 			],
 			"voltswitch": [
@@ -22559,7 +22559,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"suckerpunch": [
 				"4L70"
 			],
-			"will-o-wisp": [
+			"willowisp": [
 				"4L80"
 			],
 			"aurasphere": [
