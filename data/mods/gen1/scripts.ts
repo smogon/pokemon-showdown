@@ -128,8 +128,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.battle.setActiveMove(move, pokemon, target);
 
 			if (pokemon.moveThisTurn || !this.battle.runEvent('BeforeMove', pokemon, target, move)) {
-				// Rampage moves end without causing confusion
-				delete pokemon.volatiles['lockedmove'];
 				this.battle.clearActiveMove(true);
 				// This is only run for sleep.
 				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
@@ -201,14 +199,14 @@ export const Scripts: ModdedBattleScriptsData = {
 					(!pokemon.side.foe.active[0]?.lastMove || pokemon.side.foe.active[0].lastMove?.id === 'mirrormove')) {
 					// The move is our 'final' move (a failed Mirror Move, or any move that isn't Metronome or Mirror Move).
 					pokemon.side.lastMove = move;
-					this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
+
+					if (pokemon.volatiles['lockedmove']?.time <= 0) pokemon.removeVolatile('lockedmove');
 
 					// If target fainted
 					if (target && target.hp <= 0) {
 						// We remove recharge
 						if (pokemon.volatiles['mustrecharge']) pokemon.removeVolatile('mustrecharge');
 						delete pokemon.volatiles['partialtrappinglock'];
-						pokemon.removeVolatile('twoturnmove');
 					} else if (pokemon.hp) {
 						this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 					}
@@ -320,6 +318,21 @@ export const Scripts: ModdedBattleScriptsData = {
 		tryMoveHit(target, pokemon, move) {
 			let damage: number | false | undefined = 0;
 
+			// Add Thrashing effect before the move does damage, or add confusion if Thrash effect is ending
+			if (move?.self?.volatileStatus === 'lockedmove') {
+				if (pokemon.volatiles['lockedmove']) {
+					pokemon.volatiles['lockedmove'].time--;
+					if (!pokemon.volatiles['lockedmove'].time) {
+						// Confusion begins even if already confused.
+						// Remove lockedmove volatile when dealing with after move effects.
+						delete pokemon.volatiles['confusion'];
+						pokemon.addVolatile('confusion');
+					}
+				} else {
+					pokemon.addVolatile('lockedmove', pokemon, move);
+				}
+			}
+
 			// First, check if the target is semi-invulnerable
 			let hitResult = this.battle.runEvent('Invulnerability', target, pokemon, move);
 			if (hitResult === false) {
@@ -373,19 +386,27 @@ export const Scripts: ModdedBattleScriptsData = {
 			const boostTable = [25, 28, 33, 40, 50, 66, 100, 150, 200, 250, 300, 350, 400];
 			if (accuracy !== true) {
 				accuracy = Math.floor(accuracy * 255 / 100);
-				// Check also for accuracy modifiers.
-				if (!move.ignoreAccuracy) {
-					accuracy = Math.floor(accuracy * (boostTable[pokemon.boosts.accuracy + 6] / 100));
+				// Rage and Thrash/Petal Dance accuracy bug
+				if (pokemon.volatiles['lockedmove']) accuracy = pokemon.volatiles['lockedmove'].accuracy;
+				if (pokemon.volatiles['rage']) accuracy = pokemon.volatiles['rage'].accuracy;
+
+				// This line is just to satisfy TypeScript, accuracy should never be true at this point
+				if (accuracy !== true) {
+					// Check also for accuracy modifiers.
+					if (!move.ignoreAccuracy) {
+						accuracy = Math.floor(accuracy * (boostTable[pokemon.boosts.accuracy + 6] / 100));
+					}
+					if (!move.ignoreEvasion) {
+						accuracy = Math.floor(accuracy * (boostTable[-target.boosts.evasion + 6] / 100));
+					}
+					accuracy = this.battle.clampIntRange(accuracy, 1, 255);
 				}
-				if (!move.ignoreEvasion) {
-					accuracy = Math.floor(accuracy * (boostTable[-target.boosts.evasion + 6] / 100));
-				}
-				accuracy = Math.min(accuracy, 255);
+				if (pokemon.volatiles['lockedmove']) pokemon.volatiles['lockedmove'].accuracy = accuracy;
+				if (pokemon.volatiles['rage']) pokemon.volatiles['rage'].accuracy = accuracy;
 			}
 			accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
 			// Moves that target the user do not suffer from the 1/256 miss chance.
 			if (move.target === 'self' && accuracy !== true) accuracy++;
-
 			// 1/256 chance of missing always, no matter what. Besides the aforementioned exceptions.
 			if (accuracy !== true && !this.battle.randomChance(accuracy, 256)) {
 				this.battle.attrLastMove('[miss]');
@@ -649,7 +670,8 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Here's where self effects are applied.
 			const doSelf = (targetHadSub && targetHasSub) || !targetHadSub;
-			if (moveData.self && (doSelf || moveData.self.volatileStatus === 'partialtrappinglock')) {
+			if (moveData.self && (moveData.self.volatileStatus !== 'lockedmove') &&
+				(doSelf || moveData.self.volatileStatus === 'partialtrappinglock')) {
 				this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 			}
 
