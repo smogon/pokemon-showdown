@@ -57,6 +57,9 @@ function getMonth() {
 	return Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
 }
 
+// no, this cannot be baseSpecies - some formes matter, ex arceus formes
+// no, there is no better way to do this.
+// yes, i tried.
 function getSpeciesName(species: string) {
 	if (species.startsWith("Pikachu-")) {
 		return 'Pikachu';
