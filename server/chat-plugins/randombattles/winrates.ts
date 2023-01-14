@@ -189,11 +189,14 @@ export const pages: Chat.PageTable = {
 		this.title = `[Winrates] [${format}] ${month}`;
 		const mons = Utils.sortBy(Object.entries(formatData.mons),
 			([_, data]) => [data.numWins, data.timesGenerated]);
-		buf += `<div class="ladder pad"><table><tr><th>Pokemon</th><th>Win %</th><th>Raw wins</th><th>Times generated</th></tr>`;
+		buf += `<div class="ladder pad"><table><tr><th>Pokemon</th><th>Win %</th><th>Z-Score</th>`;
+		buf += `<th>Raw wins</th><th>Times generated</th></tr>`;
 		for (const [mon, data] of mons) {
 			buf += `<tr><td>${Dex.species.get(mon).name}</td>`;
-			buf += `<td>${((data.numWins / data.timesGenerated) * 100).toFixed(2)}%</td>`;
-			buf += `<td>${data.numWins}</td><td>${data.timesGenerated}</td>`;
+			const {timesGenerated, numWins} = data;
+			buf += `<td>${((numWins / timesGenerated) * 100).toFixed(2)}%</td>`;
+			buf += `<td>${(2 * Math.sqrt(timesGenerated) * (numWins / timesGenerated - 0.5)).toFixed(3)}</td>`;
+			buf += `<td>${numWins}</td><td>${timesGenerated}</td>`;
 			buf += `</tr>`;
 		}
 		buf += `</table></div></div>`;
