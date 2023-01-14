@@ -1242,10 +1242,11 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'trademarked',
+		searchShow: false,
 		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Min Source Gen = 9'],
 		banlist: ['Flutter Mane', 'Koraidon', 'Miraidon', 'Slaking', 'Arena Trap', 'Magnet Pull', 'Moody', 'Shadow Tag', 'Baton Pass'],
 		restricted: [
-			'Baneful Bunker', 'Block', 'Copycat', 'Detect', 'Destiny Bond', 'Encore', 'Fairy Lock', 'Ingrain', 'Instruct', 'Mean Look', 'Metronome', 'Protect',
+			'Baneful Bunker', 'Block', 'Copycat', 'Detect', 'Destiny Bond', 'Encore', 'Fairy Lock', 'Ingrain', 'Instruct', 'Mean Look', 'move:Metronome', 'Protect',
 			'Revival Blessing', 'Roar', 'Silk Trap', 'Spiky Shield', 'Sleep Talk', 'Shed Tail', 'Substitute', 'Whirlwind',
 		],
 		onValidateTeam(team, format, teamHas) {
