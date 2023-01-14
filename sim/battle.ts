@@ -1797,13 +1797,11 @@ export class Battle {
 		let success = null;
 		let boosted = isSecondary;
 		let boostName: BoostID;
-		const boostDelta = boost;
 		for (boostName in boost) {
 			const currentBoost: SparseBoostsTable = {
 				[boostName]: boost[boostName],
 			};
 			let boostBy = target.boostBy(currentBoost);
-			boostDelta[boostName] = boostBy;
 			let msg = '-boost';
 			if (boost[boostName]! < 0) {
 				msg = '-unboost';
@@ -1844,10 +1842,10 @@ export class Battle {
 				this.add(msg, target, boostName, boostBy);
 			}
 		}
-		this.runEvent('AfterBoost', target, source, effect, boostDelta);
+		this.runEvent('AfterBoost', target, source, effect, boost);
 		if (success) {
-			if (Object.values(boostDelta).some(x => x > 0)) target.statsRaisedThisTurn = true;
-			if (Object.values(boostDelta).some(x => x < 0)) target.statsLoweredThisTurn = true;
+			if (Object.values(boost).some(x => x > 0)) target.statsRaisedThisTurn = true;
+			if (Object.values(boost).some(x => x < 0)) target.statsLoweredThisTurn = true;
 		}
 		return success;
 	}
