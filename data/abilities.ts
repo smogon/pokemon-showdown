@@ -357,7 +357,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onAnyModifySpD(spd, target, source, move) {
 			const abilityHolder = this.effectState.target;
-			if (abilityHolder === target) return;
+			if (abilityHolder === target || target.hasAbility('Beads of Ruin')) return;
 			if (!move.ruinedSpD?.hasAbility('Beads of Ruin')) move.ruinedSpD = abilityHolder;
 			if (move.ruinedSpD !== abilityHolder && move.ruinedSpD !== target) return;
 			this.debug('Beads of Ruin SpD drop');
@@ -4437,7 +4437,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onAnyModifyDef(def, target, source, move) {
 			const abilityHolder = this.effectState.target;
-			if (abilityHolder === target) return;
+			if (abilityHolder === target || target.hasAbility('Sword of Ruin')) return;
 			if (!move.ruinedDef?.hasAbility('Sword of Ruin')) move.ruinedDef = abilityHolder;
 			if (move.ruinedDef !== abilityHolder && move.ruinedDef !== target) return;
 			this.debug('Sword of Ruin Def drop');
@@ -4455,7 +4455,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onAnyModifyAtk(atk, source, target, move) {
 			const abilityHolder = this.effectState.target;
-			if (abilityHolder === source) return;
+			if (abilityHolder === source || source.hasAbility('Tablets of Ruin')) return;
 			if (!move.ruinedAtk) move.ruinedAtk = abilityHolder;
 			if (move.ruinedAtk !== abilityHolder) return;
 			this.debug('Tablets of Ruin Atk drop');
@@ -4801,7 +4801,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onAnyModifySpA(spa, source, target, move) {
 			const abilityHolder = this.effectState.target;
-			if (abilityHolder === source) return;
+			if (abilityHolder === source || source.hasAbility('Vessel of Ruin')) return;
 			if (!move.ruinedSpA) move.ruinedSpA = abilityHolder;
 			if (move.ruinedSpA !== abilityHolder) return;
 			this.debug('Vessel of Ruin SpA drop');
