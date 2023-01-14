@@ -907,7 +907,7 @@ export const Formats: FormatList = [
 			if ((move.secondaries?.some(secondary => secondary.boosts?.accuracy && secondary.boosts.accuracy < 0) ||
 				move.multihit || move.id === 'beatup' || move.flags['charge'] || move.priority > 0 || move.damageCallback) &&
 				!this.ruleTable.has(`+move:${move.id}`)) {
-				problems.push(`${move.name} can't be used as an item.`);
+				problems.push(`The move ${move.name} can't be used as an item.`);
 			}
 			return problems.length ? problems : null;
 		},
