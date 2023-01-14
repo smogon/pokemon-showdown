@@ -1,4 +1,4 @@
-Pokemon Showdown uses mocha for its unit tests. To run, use `npm test` on the command line. Certain tests run more slowly (marked as `(slow)` in the test's title); you can use `npm run full-test` for those as well, but it will take longer and usually isn't necessary for most bugfixes. When submitting a pull request, GitHub Actions will 
+Pokemon Showdown uses mocha for its unit tests. To run, use `npm test` on the command line. Certain tests run more slowly (marked as `(slow)` in the test's title); you can use `npm run full-test` for those as well, but it will take longer and usually isn't necessary for most bugfixes. When submitting a pull request, GitHub Actions will automatically run full-test.
 
 To run specific tests, you can change `it` or `describe` to `it.only` or `describe.only`. `npx mocha -g "text"` can let you run tests with "text" in its title (e.g. `npx mocha -g "Gen 1"` for all tests with the string "Gen 1").
 
