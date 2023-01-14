@@ -172,7 +172,7 @@ export const pages: Chat.PageTable = {
 			return this.errorReply(`There are no winrates for that month.`);
 		}
 		const formatTitle = Dex.formats.get(format).name;
-		let buf = `<div class="pad"><h2>Winrates for ${formatTitle}${isOldMonth ? ` in the month of ${month}` : ''}</h2>`;
+		let buf = `<div class="pad"><h2>Winrates for ${formatTitle} (${month})</h2>`;
 		const prevMonth = new Date(new Date(`${month}-15`).getTime() - (30 * 24 * 60 * 60 * 1000)).toISOString().slice(0, 7);
 		if (await FS(STATS_PATH.replace('{{MONTH}}', prevMonth)).exists()) {
 			buf += `<a class="button" style="float: left" href="/view-winrates-${format}--${prevMonth}>Previous month</button>`;
