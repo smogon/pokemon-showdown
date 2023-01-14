@@ -895,8 +895,7 @@ export const Formats: FormatList = [
 			const item = set.item;
 			const species = this.dex.species.get(set.species);
 			const move = this.dex.moves.get(item);
-			if (!move.exists || move.category === 'Status' || this.ruleTable.isRestricted(`move:${move.id}`) ||
-				move.flags['charge'] || move.priority > 0 || move.damageCallback) {
+			if (!move.exists || move.id === 'metronome' || move.category === 'Status') {
 				return this.validateSet(set, teamHas);
 			}
 			set.item = '';
@@ -906,9 +905,9 @@ export const Formats: FormatList = [
 				problems.push(`${species.name} can't learn ${move.name}.`);
 			}
 			if ((move.secondaries?.some(secondary => secondary.boosts?.accuracy && secondary.boosts.accuracy < 0) ||
-				move.multihit || move.id === 'beatup') &&
+				move.multihit || move.id === 'beatup' || move.flags['charge'] || move.priority > 0 || move.damageCallback) &&
 				!this.ruleTable.has(`+move:${move.id}`)) {
-				problems.push(`The move ${move.name} can't be used as an item.`);
+				problems.push(`${move.name} can't be used as an item.`);
 			}
 			return problems.length ? problems : null;
 		},
@@ -936,14 +935,23 @@ export const Formats: FormatList = [
 						move.self = {...(move.self || {}), ...forte.self};
 					}
 				}
+				if (forte.selfBoost?.boosts) {
+					if (!move.selfBoost?.boosts) move.selfBoost = {boosts: {}};
+					let boostid: BoostID;
+					for (boostid in forte.selfBoost.boosts!) {
+						if (!move.selfBoost.boosts![boostid]) move.selfBoost.boosts![boostid] = 0;
+						move.selfBoost.boosts![boostid]! += forte.selfBoost.boosts[boostid]!;
+					}
+				}
 				if (forte.secondaries) {
 					move.secondaries = [...(move.secondaries || []), ...forte.secondaries];
 				}
 				move.critRatio = (move.critRatio || 1) + (forte.critRatio || 1) - 1;
 				const VALID_PROPERTIES = [
-					'basePowerCallback', 'breaksProtect', 'drain', 'forceSwitch', 'ignoreAbility', 'ignoreDefensive', 'ignoreEvasion', 'ignoreImmunity',
-					'overrideDefensivePokemon', 'overrideDefensiveStat', 'overrideOffensivePokemon', 'overrideOffensiveStat', 'pseudoWeather', 'recoil',
-					'selfSwitch', 'sleepUsable', 'stealsBoosts', 'thawsTarget', 'volatileStatus', 'willCrit',
+					'alwaysHit', 'basePowerCallback', 'breaksProtect', 'drain', 'forceSTAB', 'forceSwitch', 'hasCrashDamage', 'hasSheerForce',
+					'ignoreAbility', 'ignoreAccuracy', 'ignoreDefensive', 'ignoreEvasion', 'ignoreImmunity', 'mindBlownRecoil', 'noDamageVariance',
+					'ohko', 'overrideDefensivePokemon', 'overrideDefensiveStat', 'overrideOffensivePokemon', 'overrideOffensiveStat', 'pseudoWeather',
+					'recoil', 'selfdestruct', 'selfSwitch', 'sleepUsable', 'smartTarget', 'stealsBoosts', 'thawsTarget', 'volatileStatus', 'willCrit',
 				] as const;
 				for (const property of VALID_PROPERTIES) {
 					if (forte[property]) {
