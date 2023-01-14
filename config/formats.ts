@@ -938,7 +938,7 @@ export const Formats: FormatList = [
 				if (forte.selfBoost?.boosts) {
 					if (!move.selfBoost?.boosts) move.selfBoost = {boosts: {}};
 					let boostid: BoostID;
-					for (boostid in forte.selfBoost.boosts!) {
+					for (boostid in forte.selfBoost.boosts) {
 						if (!move.selfBoost.boosts![boostid]) move.selfBoost.boosts![boostid] = 0;
 						move.selfBoost.boosts![boostid]! += forte.selfBoost.boosts[boostid]!;
 					}
