@@ -1248,7 +1248,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 122,
 	},
 	flowerveil: {
-		onAllyBoost(boost, target, source, effect) {
+		onAllyTryBoost(boost, target, source, effect) {
 			if ((source && target === source) || !target.hasType('Grass')) return;
 			let showMsg = false;
 			let i: BoostID;

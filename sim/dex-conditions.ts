@@ -498,7 +498,7 @@ export interface PokemonEventMethods extends EventMethods {
 	onAllyBeforeMove?: CommonHandlers['VoidSourceMove'];
 	onAllyBeforeSwitchIn?: (this: Battle, pokemon: Pokemon) => void;
 	onAllyBeforeSwitchOut?: (this: Battle, pokemon: Pokemon) => void;
-	onAllyBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
+	onAllyTryBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAllyChargeMove?: CommonHandlers['VoidSourceMove'];
 	onAllyCriticalHit?: ((this: Battle, pokemon: Pokemon, source: null, move: ActiveMove) => boolean | void) | boolean;
 	onAllyDamage?: (
