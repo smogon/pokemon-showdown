@@ -236,9 +236,6 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 				this.queue.changeAction(pokemon, {choice: 'move', moveid: move.id});
 			}
 		},
-		onSourceAccuracy() {
-			return (this.effectState.accuracy + 0.5) * 100 / 255;
-		},
 	},
 	twoturnmove: {
 		// Skull Bash, Solar Beam, ...
