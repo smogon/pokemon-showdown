@@ -34,7 +34,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	thunderouskick: {
 		num: 823,
 		accuracy: 100,
-		basePower: 90,
+		basePower: 80,
 		category: "Physical",
 		name: "Thunderous Kick",
 		pp: 10,
@@ -155,7 +155,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"swordsdance": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 2,
@@ -327,7 +327,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 85,
 		"category": "Physical",
 		"pp": 20,
-		"type": "Fighting"
+		"type": "Fighting",
+		"self": {},
+		"recoil": [
+			1,
+			4
+		]
 	},
 	"thrash": {
 		"inherit": true,
@@ -335,7 +340,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 100,
 		"category": "Physical",
 		"pp": 20,
-		"type": "Normal"
+		"type": "Normal",
+		"self": {},
+		"recoil": [
+			1,
+			3
+		]
 	},
 	"doubleedge": {
 		"inherit": true,
@@ -343,7 +353,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 105,
 		"category": "Physical",
 		"pp": 15,
-		"type": "Normal"
+		"type": "Normal",
+		"self": {},
+		"recoil": [
+			1,
+			3
+		]
 	},
 	"tailwhip": {
 		"inherit": true,
@@ -467,7 +482,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"mist": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 30,
@@ -543,7 +558,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 120,
 		"category": "Special",
 		"pp": 5,
-		"type": "Normal"
+		"type": "Normal",
+		"self": {},
+		"recoil": [
+			1,
+			3
+		]
 	},
 	"peck": {
 		"inherit": true,
@@ -567,7 +587,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 85,
 		"category": "Physical",
 		"pp": 25,
-		"type": "Fighting"
+		"type": "Fighting",
+		"self": {},
+		"recoil": [
+			1,
+			4
+		]
 	},
 	"lowkick": {
 		"inherit": true,
@@ -627,7 +652,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"growth": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 5,
@@ -679,7 +704,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 90,
 		"category": "Special",
 		"pp": 20,
-		"type": "Grass"
+		"type": "Grass",
+		"self": {},
+		"recoil": [
+			1,
+			3
+		]
 	},
 	"stringshot": {
 		"inherit": true,
@@ -803,7 +833,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"meditate": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 5,
@@ -811,7 +841,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"agility": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 2,
@@ -835,7 +865,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"teleport": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 20,
@@ -851,7 +881,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"mimic": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -867,7 +897,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"doubleteam": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 3,
@@ -875,7 +905,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"recover": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 3,
@@ -883,7 +913,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"harden": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 5,
@@ -891,7 +921,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"minimize": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 3,
@@ -915,7 +945,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"withdraw": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 3,
@@ -923,7 +953,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"defensecurl": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 5,
@@ -931,7 +961,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"barrier": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 2,
@@ -939,7 +969,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"lightscreen": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -947,7 +977,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"haze": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 30,
@@ -955,7 +985,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"reflect": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -963,7 +993,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"focusenergy": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 30,
@@ -971,7 +1001,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"bide": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 1,
 		"category": "Physical",
 		"pp": 10,
@@ -979,7 +1009,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"metronome": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -987,7 +1017,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"mirrormove": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 20,
@@ -1067,7 +1097,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"swift": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 70,
 		"category": "Special",
 		"pp": 20,
@@ -1099,7 +1129,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"amnesia": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 2,
@@ -1115,7 +1145,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"softboiled": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 3,
@@ -1187,7 +1217,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"transform": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -1243,7 +1273,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"acidarmor": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 2,
@@ -1283,7 +1313,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"rest": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 5,
@@ -1307,7 +1337,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"sharpen": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 5,
@@ -1315,7 +1345,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"conversion": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 30,
@@ -1347,7 +1377,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"substitute": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -1355,7 +1385,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"struggle": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 50,
 		"category": "Physical",
 		"pp": 1,
@@ -1363,7 +1393,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"sketch": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 1,
@@ -1387,7 +1417,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"spiderweb": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -1395,7 +1425,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"mindreader": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 5,
@@ -1427,7 +1457,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"curse": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 3,
@@ -1443,7 +1473,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"conversion2": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 30,
@@ -1491,7 +1521,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"protect": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 3,
@@ -1515,7 +1545,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"faintattack": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 60,
 		"category": "Physical",
 		"pp": 20,
@@ -1531,7 +1561,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"bellydrum": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -1563,7 +1593,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"spikes": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 20,
@@ -1579,7 +1609,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"foresight": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 40,
@@ -1587,7 +1617,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"destinybond": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 5,
@@ -1595,7 +1625,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"perishsong": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 5,
@@ -1611,7 +1641,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"detect": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 3,
@@ -1627,7 +1657,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"lockon": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 5,
@@ -1639,11 +1669,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 100,
 		"category": "Physical",
 		"pp": 15,
-		"type": "Dragon"
+		"type": "Dragon",
+		"self": {},
+		"recoil": [
+			1,
+			3
+		]
 	},
 	"sandstorm": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -1659,7 +1694,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"endure": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -1699,7 +1734,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"milkdrink": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 4,
@@ -1731,7 +1766,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"meanlook": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 5,
@@ -1747,7 +1782,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"sleeptalk": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -1755,7 +1790,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"healbell": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 5,
@@ -1787,7 +1822,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"safeguard": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 25,
@@ -1795,7 +1830,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"painsplit": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 20,
@@ -1843,7 +1878,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"batonpass": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 40,
@@ -1899,7 +1934,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"vitalthrow": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 70,
 		"category": "Physical",
 		"pp": 10,
@@ -1907,7 +1942,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"morningsun": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 3,
@@ -1915,7 +1950,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"synthesis": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 3,
@@ -1923,7 +1958,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"moonlight": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 3,
@@ -1955,7 +1990,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"raindance": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -1963,7 +1998,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"sunnyday": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -1987,7 +2022,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"psychup": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -2067,7 +2102,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"stockpile": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 20,
@@ -2083,7 +2118,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"swallow": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -2099,7 +2134,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"hail": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -2163,7 +2198,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"followme": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 20,
@@ -2171,7 +2206,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"naturepower": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 20,
@@ -2179,7 +2214,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"charge": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 20,
@@ -2195,7 +2230,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"helpinghand": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 20,
@@ -2211,7 +2246,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"roleplay": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -2219,7 +2254,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"wish": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 2,
@@ -2227,7 +2262,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"assist": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 20,
@@ -2235,7 +2270,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"ingrain": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 20,
@@ -2247,11 +2282,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 100,
 		"category": "Physical",
 		"pp": 10,
-		"type": "Fighting"
+		"type": "Fighting",
+		"self": {},
+		"recoil": [
+			1,
+			3
+		]
 	},
 	"magiccoat": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 15,
@@ -2259,7 +2299,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"recycle": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -2283,7 +2323,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"yawn": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -2315,7 +2355,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"skillswap": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -2323,7 +2363,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"imprison": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -2331,7 +2371,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"refresh": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 20,
@@ -2339,7 +2379,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"grudge": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 5,
@@ -2347,7 +2387,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"snatch": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -2379,7 +2419,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"camouflage": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 20,
@@ -2387,7 +2427,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"tailglow": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 20,
@@ -2459,7 +2499,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"slackoff": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 3,
@@ -2495,7 +2535,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 120,
 		"category": "Special",
 		"pp": 5,
-		"type": "Fire"
+		"type": "Fire",
+		"self": {},
+		"recoil": [
+			1,
+			3
+		]
 	},
 	"hydrocannon": {
 		"inherit": true,
@@ -2503,7 +2548,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 120,
 		"category": "Special",
 		"pp": 5,
-		"type": "Water"
+		"type": "Water",
+		"self": {},
+		"recoil": [
+			1,
+			3
+		]
 	},
 	"meteormash": {
 		"inherit": true,
@@ -2531,7 +2581,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"aromatherapy": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 5,
@@ -2559,11 +2609,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 110,
 		"category": "Special",
 		"pp": 10,
-		"type": "Fire"
+		"type": "Fire",
+		"self": {},
+		"recoil": [
+			1,
+			3
+		]
 	},
 	"odorsleuth": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 40,
@@ -2611,7 +2666,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"cosmicpower": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 3,
@@ -2635,7 +2690,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"shadowpunch": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 75,
 		"category": "Physical",
 		"pp": 20,
@@ -2691,7 +2746,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"aerialace": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 60,
 		"category": "Physical",
 		"pp": 20,
@@ -2707,7 +2762,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"irondefense": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 2,
@@ -2715,7 +2770,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"block": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 5,
@@ -2723,7 +2778,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"howl": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 3,
@@ -2743,11 +2798,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 120,
 		"category": "Special",
 		"pp": 5,
-		"type": "Grass"
+		"type": "Grass",
+		"self": {},
+		"recoil": [
+			1,
+			3
+		]
 	},
 	"bulkup": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 3,
@@ -2795,7 +2855,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"magicalleaf": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 70,
 		"category": "Special",
 		"pp": 20,
@@ -2811,7 +2871,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"calmmind": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 3,
@@ -2827,7 +2887,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"dragondance": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 5,
@@ -2843,7 +2903,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"shockwave": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 60,
 		"category": "Special",
 		"pp": 20,
@@ -2871,11 +2931,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 110,
 		"category": "Special",
 		"pp": 10,
-		"type": "Psychic"
+		"type": "Psychic",
+		"self": {},
+		"recoil": [
+			1,
+			3
+		]
 	},
 	"roost": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 3,
@@ -2883,7 +2948,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"gravity": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 5,
@@ -2915,7 +2980,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"healingwish": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -2955,7 +3020,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"tailwind": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 30,
@@ -2963,7 +3028,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"acupressure": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -3035,7 +3100,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"trumpcard": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 1,
 		"category": "Physical",
 		"pp": 2,
@@ -3059,7 +3124,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"powertrick": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -3075,7 +3140,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"luckychant": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 30,
@@ -3083,7 +3148,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"mefirst": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 20,
@@ -3091,7 +3156,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"copycat": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 20,
@@ -3099,7 +3164,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"powerswap": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -3107,7 +3172,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"guardswap": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -3147,7 +3212,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"toxicspikes": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 20,
@@ -3155,7 +3220,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"heartswap": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -3163,7 +3228,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"aquaring": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 20,
@@ -3171,7 +3236,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"magnetrise": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -3195,7 +3260,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"aurasphere": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 85,
 		"category": "Special",
 		"pp": 20,
@@ -3203,7 +3268,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"rockpolish": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 20,
@@ -3335,7 +3400,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 100,
 		"category": "Physical",
 		"pp": 15,
-		"type": "Flying"
+		"type": "Flying",
+		"self": {},
+		"recoil": [
+			1,
+			3
+		]
 	},
 	"earthpower": {
 		"inherit": true,
@@ -3359,11 +3429,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 120,
 		"category": "Physical",
 		"pp": 5,
-		"type": "Normal"
+		"type": "Normal",
+		"self": {},
+		"recoil": [
+			1,
+			3
+		]
 	},
 	"nastyplot": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 2,
@@ -3483,7 +3558,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"defog": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 15,
@@ -3491,7 +3566,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"trickroom": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 5,
@@ -3503,7 +3578,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 110,
 		"category": "Special",
 		"pp": 10,
-		"type": "Dragon"
+		"type": "Dragon",
+		"self": {},
+		"recoil": [
+			1,
+			3
+		]
 	},
 	"discharge": {
 		"inherit": true,
@@ -3527,7 +3607,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 110,
 		"category": "Special",
 		"pp": 10,
-		"type": "Grass"
+		"type": "Grass",
+		"self": {},
+		"recoil": [
+			1,
+			3
+		]
 	},
 	"powerwhip": {
 		"inherit": true,
@@ -3543,7 +3628,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 120,
 		"category": "Physical",
 		"pp": 5,
-		"type": "Rock"
+		"type": "Rock",
+		"self": {},
+		"recoil": [
+			1,
+			3
+		]
 	},
 	"crosspoison": {
 		"inherit": true,
@@ -3571,7 +3661,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"magnetbomb": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 70,
 		"category": "Physical",
 		"pp": 20,
@@ -3639,7 +3729,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 100,
 		"category": "Physical",
 		"pp": 15,
-		"type": "Grass"
+		"type": "Grass",
+		"self": {},
+		"recoil": [
+			1,
+			3
+		]
 	},
 	"aquajet": {
 		"inherit": true,
@@ -3659,7 +3754,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"defendorder": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -3667,7 +3762,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"healorder": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,
@@ -3679,7 +3774,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 120,
 		"category": "Physical",
 		"pp": 5,
-		"type": "Rock"
+		"type": "Rock",
+		"self": {},
+		"recoil": [
+			1,
+			2
+		]
 	},
 	"doublehit": {
 		"inherit": true,
@@ -3695,7 +3795,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 120,
 		"category": "Special",
 		"pp": 10,
-		"type": "Dragon"
+		"type": "Dragon",
+		"self": {},
+		"recoil": [
+			1,
+			3
+		]
 	},
 	"spacialrend": {
 		"inherit": true,
@@ -3707,7 +3812,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"lunardance": {
 		"inherit": true,
-		"accuracy": 0,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 10,

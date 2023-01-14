@@ -497,7 +497,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"nidoran\u2640": {
+	"nidoranf": {
 		"types": [
 			"Poison"
 		],
@@ -549,7 +549,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"nidoran\u2642": {
+	"nidoranm": {
 		"types": [
 			"Poison"
 		],
@@ -2129,7 +2129,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"mr. mime": {
+	"mrmime": {
 		"types": [
 			"Psychic"
 		],
@@ -4378,7 +4378,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"ho-oh": {
+	"hooh": {
 		"types": [
 			"Fire",
 			"Flying"
@@ -7712,7 +7712,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"mime jr.": {
+	"mimejr": {
 		"types": [
 			"Psychic"
 		],
@@ -8679,7 +8679,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"egg": {
+	"null": {
 		"types": [
 			"Normal"
 		],
@@ -8696,24 +8696,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"bad egg": {
-		"types": [
-			"Normal"
-		],
-		"baseStats": {
-			"hp": 10,
-			"atk": 10,
-			"def": 10,
-			"spa": 10,
-			"spd": 10,
-			"spe": 10
-		},
-		"abilities": {
-			"0": " -"
-		},
-		"inherit": true
-	},
-	"deoxys (a)": {
+	"deoxysattack": {
 		"types": [
 			"Psychic"
 		],
@@ -8730,7 +8713,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"deoxys (d)": {
+	"deoxysdefense": {
 		"types": [
 			"Psychic"
 		],
@@ -8747,7 +8730,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"deoxys (s)": {
+	"deoxysspeed": {
 		"types": [
 			"Psychic"
 		],
@@ -8764,7 +8747,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"wormadam (s)": {
+	"wormadamsandy": {
 		"types": [
 			"Bug",
 			"Ground"
@@ -8782,7 +8765,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"wormadam (t)": {
+	"wormadamtrash": {
 		"types": [
 			"Bug",
 			"Steel"
@@ -8800,7 +8783,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"giratina (o)": {
+	"giratinaorigin": {
 		"types": [
 			"Ghost",
 			"Dragon"
@@ -8818,7 +8801,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"shaymin (s)": {
+	"shayminsky": {
 		"types": [
 			"Grass",
 			"Flying"
@@ -8836,7 +8819,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"rotom (heat)": {
+	"rotomheat": {
 		"types": [
 			"Electric",
 			"Ghost"
@@ -8854,7 +8837,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"rotom (wash)": {
+	"rotomwash": {
 		"types": [
 			"Electric",
 			"Ghost"
@@ -8872,7 +8855,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"rotom (frost)": {
+	"rotomfrost": {
 		"types": [
 			"Electric",
 			"Ghost"
@@ -8890,7 +8873,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"rotom (fan)": {
+	"rotomfan": {
 		"types": [
 			"Electric",
 			"Ghost"
@@ -8908,7 +8891,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"rotom (mow)": {
+	"rotommow": {
 		"types": [
 			"Electric",
 			"Ghost"
