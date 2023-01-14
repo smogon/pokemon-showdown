@@ -1803,7 +1803,7 @@ export class Battle {
 			};
 			let boostBy = target.boostBy(currentBoost);
 			let msg = '-boost';
-			if (boost[boostName]! < 0) {
+			if (boost[boostName]! < 0 || target.boosts[boostName] === -6) {
 				msg = '-unboost';
 				boostBy = -boostBy;
 			}

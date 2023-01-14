@@ -1116,12 +1116,7 @@ export class Pokemon {
 		for (boostName in boosts) {
 			const boost = boosts[boostName];
 			if (!boost) continue;
-			if (boost > 0) {
-				cappedBoost[boostName] = this.boosts[boostName] + boost > 6 ? 6 - this.boosts[boostName] : boost;
-			}
-			if (boost < 0) {
-				cappedBoost[boostName] = this.boosts[boostName] + boost < -6 ? -6 - this.boosts[boostName] : boost;
-			}
+			cappedBoost[boostName] = this.battle.clampIntRange(this.boosts[boostName] + boost, -6, 6) - this.boosts[boostName];
 		}
 		return cappedBoost;
 	}
