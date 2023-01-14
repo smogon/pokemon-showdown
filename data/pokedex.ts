@@ -17251,7 +17251,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 955,
 		name: "Flittle",
 		types: ["Psychic"],
-		baseStats: {hp: 30, atk: 35, def: 30, spa: 55, spd: 40, spe: 75},
+		baseStats: {hp: 30, atk: 35, def: 30, spa: 55, spd: 30, spe: 75},
 		abilities: {0: "Anticipation", 1: "Frisk", H: "Speed Boost"},
 		heightm: 0.2,
 		weightkg: 1.5,
