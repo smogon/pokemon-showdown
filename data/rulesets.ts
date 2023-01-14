@@ -425,18 +425,18 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
-	vgcplatdex: {
+	vgcplatpokedex: {
 		effectType: 'ValidatorRule',
 		name: 'VGC Plat Pokedex',
-		desc: "Only allows Pok&eacute;mon native to the Paldea region (SV)",
+		desc: "Only allows Pok&eacute;mon Changed in vgc plat",
 		onValidateSet(set, format) {
-			const paldeaDex = [
+			const vgcPlatDex = [
 				"Bulbasaur","Ivysaur","Venusaur","Charmander","Charmeleon","Charizard","Squirtle","Wartortle","Blastoise","Weedle","Kakuna","Beedrill","Pidgey","Pidgeotto","Pidgeot","Ekans","Arbok","Pikachu","Raichu","Sandshrew","Sandslash","Nidoranm","Nidorino","Nidoking","Vulpix","Ninetales","Zubat","Golbat","Paras","Parasect","Mankey","Primeape","Growlithe","Arcanine","Poliwag","Poliwhirl","Poliwrath","Abra","Kadabra","Alakazam","Machop","Machoke","Machamp","Slowpoke","Slowbro","Magnemite","Magneton","Doduo","Dodrio","Grimer","Muk","Shellder","Cloyster","Gastly","Haunter","Gengar","Onix","Voltorb","Electrode","Exeggcute","Exeggutor","Cubone","Marowak","Hitmonlee","Hitmonchan","Rhyhorn","Rhydon","Chansey","Tangela","Horsea","Seadra","Staryu","Starmie","Scyther","Jynx","Electabuzz","Magmar","Tauros","Magikarp","Gyarados","Lapras","Eevee","Vaporeon","Jolteon","Flareon","Porygon","Omanyte","Omastar","Kabuto","Kabutops","Aerodactyl","Snorlax","Articuno","Zapdos","Moltres","Dratini","Dragonair","Dragonite","Mewtwo","Chikorita","Bayleef","Meganium","Cyndaquil","Quilava","Typhlosion","Totodile","Croconaw","Feraligatr","Sentret","Furret","Hoothoot","Noctowl","Ledyba","Ledian","Spinarak","Ariados","Crobat","Pichu","Togepi","Togetic","Natu","Xatu","Mareep","Flaaffy","Ampharos","Sudowoodo","Politoed","Hoppip","Skiploom","Jumpluff","Aipom","Sunkern","Sunflora","Yanma","Espeon","Umbreon","Murkrow","Slowking","Misdreavus","Pineco","Forretress","Dunsparce","Gligar","Steelix","Scizor","Shuckle","Heracross","Sneasel","Teddiursa","Ursaring","Slugma","Magcargo","Swinub","Piloswine","Corsola","Houndour","Houndoom","Kingdra","Porygon2","Stantler","Tyrogue","Hitmontop","Elekid","Magby","Blissey","Raikou","Entei","Suicune","Larvitar","Pupitar","Tyranitar","Treecko","Grovyle","Sceptile","Torchic","Combusken","Blaziken","Mudkip","Marshtomp","Swampert","Poochyena","Mightyena","Seedot","Nuzleaf","Shiftry","Taillow","Swellow","Wingull","Pelipper","Ralts","Kirlia","Gardevoir","Surskit","Masquerain","Shroomish","Breloom","Slakoth","Vigoroth","Slaking","Whismur","Loudred","Exploud","Makuhita","Hariyama","Nosepass","Skitty","Delcatty","Sableye","Mawile","Aron","Lairon","Aggron","Electrike","Manectric","Roselia","Gulpin","Swalot","Wailmer","Wailord","Numel","Camerupt","Spinda","Trapinch","Vibrava","Flygon","Swablu","Altaria","Lunatone","Solrock","Barboach","Whiscash","Baltoy","Claydol","Lileep","Cradily","Anorith","Armaldo","Feebas","Milotic","Shuppet","Banette","Duskull","Dusclops","Tropius","Absol","Wynaut","Snorunt","Glalie","Spheal","Sealeo","Walrein","Bagon","Shelgon","Salamence","Beldum","Metang","Metagross","Regirock","Regice","Registeel","Latias","Latios","Kyogre","Rayquaza","Turtwig","Grotle","Torterra","Chimchar","Monferno","Infernape","Piplup","Prinplup","Empoleon","Starly","Staravia","Staraptor","Shinx","Luxio","Luxray","Budew","Roserade","Cranidos","Rampardos","Shieldon","Bastiodon","Combee","Vespiquen","Pachirisu","Shellos","Gastrodon","Ambipom","Drifloon","Drifblim","Mismagius","Honchkrow","Bronzor","Bronzong","Bonsly","Happiny","Spiritomb","Gible","Gabite","Garchomp","Munchlax","Riolu","Lucario","Hippopotas","Hippowdon","Skorupi","Drapion","Croagunk","Toxicroak","Carnivine","Finneon","Lumineon","Snover","Abomasnow","Weavile","Magnezone","Rhyperior","Tangrowth","Electivire","Magmortar","Togekiss","Yanmega","Leafeon","Glaceon","Gliscor","Mamoswine","Porygon-Z","Gallade","Probopass","Dusknoir","Froslass","Rotom","Uxie","Mesprit","Azelf","Dialga","Palkia","Heatran","Giratina","Cresselia","Darkrai","Shaymin","Arceus"
 			];
 			const species = this.dex.species.get(set.species || set.name);
-			if (!paldeaDex.includes(species.baseSpecies) && !paldeaDex.includes(species.name) &&
+			if (!vgcPlatDex.includes(species.baseSpecies) && !vgcPlatDex.includes(species.name) &&
 				!this.ruleTable.has('+' + species.id)) {
-				return [`${species.baseSpecies} is not in the Paldea Pokédex.`];
+				return [`${species.baseSpecies} is not in the VGC Plat Pokédex.`];
 			}
 		},
 	},
