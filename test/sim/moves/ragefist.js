@@ -45,7 +45,7 @@ describe('Rage Fist', function () {
 
 	it(`should increase BP after each hit of multi-hit moves`, function () {
 		battle = common.createBattle([[
-			{species: 'Primeape', moves: ['sleeptalk', 'ragefist']},
+			{species: 'Primeape', ability: 'noguard', moves: ['sleeptalk', 'ragefist']},
 		], [
 			{species: 'Umbreon', ability: 'shellarmor', moves: ['doublehit', 'sleeptalk']},
 		]]);

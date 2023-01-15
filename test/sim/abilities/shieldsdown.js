@@ -10,35 +10,37 @@ describe('Shields Down', function () {
 		battle.destroy();
 	});
 
-	it('should be immune to status until below 50%', function () {
+	it(`should be immune to status until below 50%`, function () {
 		battle = common.createBattle([[
 			{species: 'Minior', ability: 'shieldsdown', moves: ['splash']},
 		], [
-			{species: 'Mew', ability: 'pickup', moves: ['glare', 'superfang']},
+			{species: 'Mew', ability: 'noguard', moves: ['glare', 'superfang']},
 		]]);
+		const minior = battle.p1.active[0];
 		battle.makeChoices();
-		assert.false(battle.p1.active[0].status);
+		assert.false(minior.status);
 		battle.makeChoices('auto', 'move superfang');
 		battle.makeChoices();
-		assert.false(battle.p1.active[0].status);
+		assert.false(minior.status);
 		battle.makeChoices('auto', 'move superfang');
 		battle.makeChoices();
-		assert.equal(battle.p1.active[0].status, 'par');
+		assert.equal(minior.status, 'par');
 	});
 
-	it('should be immune to status until below 50% in all formes', function () {
+	it(`should be immune to status until below 50% in all formes`, function () {
 		battle = common.createBattle([[
 			{species: 'Minior-Blue', ability: 'shieldsdown', moves: ['splash']},
 		], [
-			{species: 'Mew', ability: 'pickup', moves: ['glare', 'superfang']},
+			{species: 'Mew', ability: 'noguard', moves: ['glare', 'superfang']},
 		]]);
+		const minior = battle.p1.active[0];
 		battle.makeChoices();
-		assert.false(battle.p1.active[0].status);
+		assert.false(minior.status);
 		battle.makeChoices('auto', 'move superfang');
 		battle.makeChoices();
-		assert.false(battle.p1.active[0].status);
+		assert.false(minior.status);
 		battle.makeChoices('auto', 'move superfang');
 		battle.makeChoices();
-		assert.equal(battle.p1.active[0].status, 'par');
+		assert.equal(minior.status, 'par');
 	});
 });

@@ -107,11 +107,12 @@ describe('Cloud Nine', function () {
 		]]);
 		battle.makeChoices('move calmmind', 'move sunnyday');
 		assert.equal(battle.log[battle.lastMoveLine + 1], '|-weather|SunnyDay');
-		for (let i = 0; i < 4; i++) {
-			assert.equal(battle.log[battle.lastMoveLine + 3], '|-weather|SunnyDay|[upkeep]');
+		for (let i = 0; i < 3; i++) {
 			battle.makeChoices('move calmmind', 'move sunnyday');
+			assert.equal(battle.log[battle.lastMoveLine + 4], '|-weather|SunnyDay|[upkeep]', 'here' + i);
 		}
-		assert.equal(battle.log[battle.lastMoveLine + 3], '|-weather|none');
+		battle.makeChoices('move calmmind', 'move sunnyday');
+		assert.equal(battle.log[battle.lastMoveLine + 4], '|-weather|none');
 	});
 
 	it(`should allow Hydration to trigger if the user fainted before Hydration could trigger`, function () {

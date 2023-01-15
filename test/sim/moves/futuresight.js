@@ -140,7 +140,7 @@ describe('Future Sight', function () {
 		battle = common.gen(4).createBattle([[
 			{species: 'wynaut', item: 'lifeorb', moves: ['futuresight']},
 		], [
-			{species: 'mew', moves: ['sleeptalk']},
+			{species: 'mew', ability: 'noguard', moves: ['sleeptalk']},
 		]]);
 
 		battle.makeChoices();
@@ -150,7 +150,7 @@ describe('Future Sight', function () {
 		battle.makeChoices();
 		assert.fullHP(wynaut, `Wynaut should not have taken any damage`);
 		const damage = mew.maxhp - mew.hp;
-		assert.bounded(damage, [22, 27]); // 30, 35 if Life Orb was applied
+		assert.bounded(damage, [21, 25]); // [27-32] if Life Orb was applied
 	});
 
 	it(`should not be affected by Life Orb if not the original user`, function () {

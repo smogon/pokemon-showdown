@@ -12,15 +12,17 @@ describe('Assurance', function () {
 
 	it(`should double its base power if the target already took damage this turn`, function () {
 		battle = common.createBattle([[
-			{species: 'Morpeko', ability: 'hungerswitch', moves: ['assurance']},
+			{species: 'Sneasel', ability: 'sturdy', moves: ['assurance']},
 		], [
-			{species: 'Regieleki', ability: 'transistor', moves: ['wildcharge']},
+			{species: 'Regieleki', ability: 'shellarmor', moves: ['wildcharge']},
 		]]);
-		battle.makeChoices();
+		const sneasel = battle.p1.active[0];
 		const regi = battle.p2.active[0];
-		const recoilRange = [113, 133].map(d => Math.floor(d / 4));
+		regi.boostBy({atk: 6});
+		battle.makeChoices();
+		const recoil = Math.floor((sneasel.maxhp - 1) / 4);
 		const assuRange = [214, 253];
-		assert.bounded(regi.hp, [regi.maxhp - recoilRange[1] - assuRange[1], regi.maxhp - recoilRange[0] - assuRange[0]]);
+		assert.bounded(regi.hp, [regi.maxhp - recoil - assuRange[1], regi.maxhp - recoil - assuRange[0]]);
 	});
 
 	it(`should double the power against damaged Pokemon, not damaged slots`, function () {

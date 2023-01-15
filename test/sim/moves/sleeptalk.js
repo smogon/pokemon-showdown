@@ -23,7 +23,7 @@ describe('Sleep Talk', function () {
 	});
 
 	it('should fail and lose PP on subsequent turns while Choice locked, prior to Gen 5', function () {
-		battle = common.gen(4).createBattle({seed: [1, 1, 1, 1]}, [[
+		battle = common.gen(4).createBattle([[
 			{species: 'Breloom', moves: ['spore', 'snore']},
 		], [
 			{species: 'Chansey', item: 'choiceband', moves: ['sleeptalk', 'pound']},
@@ -34,6 +34,9 @@ describe('Sleep Talk', function () {
 		battle.makeChoices('move spore', 'move sleeptalk');
 		assert.false.fullHP(breloom);
 		assert.equal(move.pp, move.maxpp - 1);
+
+		// Ensure Chansey will not wake up
+		chansey.statusState.time = 6;
 		const hp = breloom.hp;
 		battle.makeChoices('move snore', 'move sleeptalk');
 		assert.equal(chansey.status, 'slp');

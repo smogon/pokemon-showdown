@@ -50,68 +50,52 @@ describe('Mega Evolution', function () {
 	});
 
 	it('should modify speed/priority in gen 7+', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [
-			{species: "Metagross", ability: 'prankster', item: 'metagrossite', moves: ['taunt']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: "Wishiwashi", ability: 'prankster', moves: ['thunderwave']},
-		]});
+		battle = common.createBattle([[
+			{species: 'Metagross', ability: 'prankster', item: 'metagrossite', moves: ['taunt']},
+		], [
+			{species: 'Wishiwashi', ability: 'prankster', moves: ['glare']},
+		]]);
+
 		battle.makeChoices('move taunt mega', 'auto');
 		let megaMon = battle.p1.active[0];
 		assert.equal(megaMon.status, 'par');
 
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [
-			{species: "Garchomp", ability: 'runaway', item: 'garchompite', moves: ['taunt']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: "Jirachi", ability: 'runaway', moves: ['glare']},
-		]});
+		battle = common.createBattle([[
+			{species: 'Garchomp', item: 'garchompite', moves: ['taunt']},
+		], [
+			{species: 'Jirachi', moves: ['glare']},
+		]]);
+
 		battle.makeChoices('move taunt mega', 'auto');
 		megaMon = battle.p1.active[0];
 		assert.equal(megaMon.status, 'par');
 
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [
-			{species: "Diancie", ability: 'runaway', item: 'diancite', moves: ['taunt']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: "Jirachi", ability: 'runaway', moves: ['glare']},
-		]});
+		battle = common.createBattle([[
+			{species: 'Metagross', item: 'metagrossite', moves: ['taunt']},
+		], [
+			{species: 'Jirachi', moves: ['glare']},
+		]]);
+
 		battle.makeChoices('move taunt mega', 'auto');
 		megaMon = battle.p1.active[0];
 		assert.equal(megaMon.status, '');
 
-		battle = common.gen(7).createBattle();
-		battle.setPlayer('p1', {team: [
-			{species: "Metagross", ability: 'prankster', item: 'metagrossite', moves: ['taunt']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: "Wishiwashi", ability: 'prankster', moves: ['thunderwave']},
-		]});
-		battle.makeChoices('move taunt mega', 'auto');
-		megaMon = battle.p1.active[0];
-		assert.equal(megaMon.status, 'par');
+		battle = common.gen(6).createBattle([[
+			{species: 'Metagross', ability: 'prankster', item: 'metagrossite', moves: ['taunt']},
+		], [
+			{species: 'Wishiwashi', ability: 'prankster', moves: ['glare']},
+		]]);
 
-		battle = common.gen(6).createBattle();
-		battle.setPlayer('p1', {team: [
-			{species: "Metagross", ability: 'prankster', item: 'metagrossite', moves: ['taunt']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: "Wishiwashi", ability: 'prankster', moves: ['thunderwave']},
-		]});
 		battle.makeChoices('move taunt mega', 'auto');
 		megaMon = battle.p1.active[0];
 		assert.equal(megaMon.status, '');
 
-		battle = common.gen(6).createBattle();
-		battle.setPlayer('p1', {team: [
-			{species: "Garchomp", ability: 'runaway', item: 'garchompite', moves: ['taunt']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: "Jirachi", ability: 'runaway', moves: ['glare']},
-		]});
+		battle = common.gen(6).createBattle([[
+			{species: 'Garchomp', item: 'garchompite', moves: ['taunt']},
+		], [
+			{species: 'Jirachi', moves: ['glare']},
+		]]);
+
 		battle.makeChoices('move taunt mega', 'auto');
 		megaMon = battle.p1.active[0];
 		assert.equal(megaMon.status, '');

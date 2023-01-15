@@ -10,18 +10,17 @@ describe('Magic Guard', function () {
 		battle.destroy();
 	});
 
-	it('should prevent all non-attack damage', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [
+	it(`should prevent all non-attack damage`, function () {
+		battle = common.createBattle([[
 			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
 			{species: 'Clefable', ability: 'magicguard', item: 'lifeorb', moves: ['doubleedge', 'mindblown', 'highjumpkick']},
-		]});
-		battle.setPlayer('p2', {team: [{species: 'Crobat', ability: 'roughskin', moves: ['spikes', 'toxic', 'protect']}]});
-		battle.makeChoices('move splash', 'move spikes');
+		], [
+			{species: 'Crobat', ability: 'roughskin', moves: ['luckychant', 'spikes', 'toxic', 'protect']},
+		]]);
+
+		battle.makeChoices('auto', 'move spikes');
 		battle.makeChoices('switch 2', 'move toxic');
-		assert.equal(battle.p1.active[0].status, 'tox');
-		assert.fullHP(battle.p1.active[0]);
-		battle.makeChoices('move mindblown', 'move toxic');
+		battle.makeChoices('move mindblown', 'move luckychant');
 		battle.makeChoices('move doubleedge', 'move spikes');
 		battle.makeChoices('move highjumpkick', 'move protect');
 		assert.fullHP(battle.p1.active[0]);

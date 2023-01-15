@@ -49,36 +49,42 @@ describe('Substitute', function () {
 	});
 
 	it('should take specific recoil damage in Gen 1', function () {
-		battle = common.gen(1).createBattle({seed: [1, 10, 1, 10]});
-		battle.setPlayer('p1', {team: [{species: 'Hitmonlee', moves: ['substitute', 'highjumpkick']}]});
-		battle.setPlayer('p2', {team: [{species: 'Hitmonchan', moves: ['substitute', 'agility']}]});
+		battle = common.gen(1).createBattle([[
+			{species: 'Hitmonlee', moves: ['substitute', 'highjumpkick']},
+		], [
+			{species: 'Hitmonchan', moves: ['substitute', 'agility']},
+		]]);
+
+		const hitmonlee = battle.p1.active[0];
+		const hitmonchan = battle.p2.active[0];
 		battle.makeChoices('move substitute', 'move substitute');
 
-		const subhp = battle.p1.active[0].volatiles['substitute'].hp;
-		assert.equal(subhp, battle.p2.active[0].volatiles['substitute'].hp);
+		const subhp = hitmonlee.volatiles['substitute'].hp;
+		assert.equal(subhp, hitmonchan.volatiles['substitute'].hp);
 
-		// High Jump Kick will miss and cause recoil
+		// Modding accuracy so High Jump Kick will miss and cause recoil
+		battle.onEvent('Accuracy', battle.format, false);
 		battle.makeChoices('move highjumpkick', 'move agility');
 
 		// Both Pokemon had a substitute, so the *target* Substitute takes recoil damage.
-		let pokemon = battle.p1.active[0];
-		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
-		assert.equal(pokemon.volatiles['substitute'].hp, subhp);
-		pokemon = battle.p2.active[0];
-		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
-		assert.equal(pokemon.volatiles['substitute'].hp, subhp - 1);
+		assert.equal(hitmonlee.maxhp - hitmonlee.hp, Math.floor(hitmonlee.maxhp / 4));
+		assert.equal(hitmonlee.volatiles['substitute'].hp, subhp);
 
-		// Hi Jump Kick hits and breaks the Substitite.
+		assert.equal(hitmonchan.maxhp - hitmonchan.hp, Math.floor(hitmonchan.maxhp / 4));
+		assert.equal(hitmonchan.volatiles['substitute'].hp, subhp - 1);
+
+		// Modding accuracy so High Jump Kick will hit and break Substitute
+		battle.onEvent('Accuracy', battle.format, true);
 		battle.makeChoices('move highjumpkick', 'move agility');
-		battle.resetRNG(); // Make Hi Jump Kick miss and cause recoil.
+
+		// Modding accuracy so High Jump Kick will miss and cause recoil
+		battle.onEvent('Accuracy', battle.format, true);
 		battle.makeChoices('move highjumpkick', 'move agility');
 
 		// Only P1 has a substitute, so no one takes recoil damage.
-		pokemon = battle.p1.active[0];
-		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
-		assert.equal(pokemon.volatiles['substitute'].hp, subhp);
-		pokemon = battle.p2.active[0];
-		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
+		assert.equal(hitmonlee.maxhp - hitmonlee.hp, Math.floor(hitmonlee.maxhp / 4));
+		assert.equal(hitmonlee.volatiles['substitute'].hp, subhp);
+		assert.equal(hitmonchan.maxhp - hitmonchan.hp, Math.floor(hitmonchan.maxhp / 4));
 	});
 
 	it('should cause recoil damage from an opponent\'s moves to be based on damage dealt to the substitute', function () {
@@ -120,26 +126,28 @@ describe('Substitute', function () {
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
-	it('should track what the actual damage would have been without the substitute in Gen 1', function () {
-		battle = common.gen(1).createBattle([
-			[{species: 'Ponyta', moves: ['substitute', 'growl'], evs: {hp: 252, spd: 252}}],
-			[{species: 'Cloyster', moves: ['clamp'], evs: {spa: 252}}],
-		]);
+	it(`[Gen 1] should track what the actual damage would have been without the Substitute`, function () {
+		battle = common.gen(1).createBattle([[
+			{species: 'Ponyta', moves: ['substitute', 'growl'], evs: {hp: 252, spd: 252}},
+		], [
+			{species: 'Cloyster', moves: ['clamp'], evs: {spa: 252}},
+		]]);
 
-		const pokemon = battle.p1.active[0];
+		const ponyta = battle.p1.active[0];
 		battle.makeChoices('move substitute', 'move clamp');
-		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
+		assert.equal(ponyta.maxhp - ponyta.hp, Math.floor(ponyta.maxhp / 4));
 
-		const hp = pokemon.hp;
+		const hp = ponyta.hp;
 		battle.makeChoices('move growl', 'move clamp');
-		assert.bounded(hp - pokemon.hp, [91, 108]);
+		assert.bounded(hp - ponyta.hp, [91, 108]);
 	});
 
-	it('[Gen 1] Substitute should not block secondary effect confusion if it is unbroken', function () {
-		battle = common.gen(1).createBattle({seed: [2, 2, 1, 2]}, [
-			[{species: 'Kadabra', moves: ['psybeam']}],
-			[{species: 'Alakazam', moves: ['substitute']}],
-		]);
+	it(`[Gen 1] Substitute should not block secondary effect confusion if it is unbroken`, function () {
+		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
+			{species: 'Magikarp', moves: ['psybeam']},
+		], [
+			{species: 'Alakazam', moves: ['substitute']},
+		]]);
 
 		battle.makeChoices();
 		assert(battle.log.some(line => line.includes('confusion')));
