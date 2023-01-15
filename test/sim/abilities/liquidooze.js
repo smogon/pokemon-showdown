@@ -20,11 +20,11 @@ describe('Liquid Ooze', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it('should damage the target after taking damage from leech seed', function () {
+	it(`should damage the target after taking damage from Leech Seed`, function () {
 		battle = common.createBattle([[
 			{species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk']},
 		], [
-			{species: 'serperior', moves: ['leechseed']},
+			{species: 'serperior', ability: 'noguard', moves: ['leechseed']},
 		]]);
 		battle.makeChoices();
 		assert.false.fullHP(battle.p2.active[0]);
@@ -46,11 +46,11 @@ describe('Liquid Ooze [Gen 4]', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it('should damage the target after taking damage from leech seed', function () {
+	it(`should damage the target after taking damage from leech seed`, function () {
 		battle = common.gen(4).createBattle([[
 			{species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk']},
 		], [
-			{species: 'roserade', moves: ['leechseed']},
+			{species: 'roserade', ability: 'noguard', moves: ['leechseed']},
 		]]);
 		battle.makeChoices();
 		assert.false.fullHP(battle.p2.active[0]);
