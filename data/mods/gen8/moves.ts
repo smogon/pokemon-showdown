@@ -170,6 +170,31 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	fly: {
+		inherit: true,
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+
+			// In SwSh, Fly's animation leaks the initial target through a camera focus
+			// The animation leak target itself isn't "accurate"; the target it reveals is as if Fly weren't a charge movee
+			// (Fly, like all other charge moves, will actually target slots on its charging turn, relevant for things like Follow Me)
+			// We use a generic single-target move to represent this
+			if (this.gameType === 'doubles' || this.gameType === 'multi') {
+				const animatedTarget = attacker.getMoveTargets(this.dex.getActiveMove('aerialace'), defender).targets[0];
+				if (animatedTarget) {
+					this.hint(`${move.name}'s animation targeted ${animatedTarget.name}`);
+				}
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+	},
 	forestscurse: {
 		inherit: true,
 		isNonstandard: null,
