@@ -4853,7 +4853,6 @@
 				"item": ["Eviolite"],
 				"ability": ["Natural Cure"],
 				"evs": {"hp": 116, "def": 156, "spe": 236},
-				"ivs": {"atk": 0},
 				"nature": "Timid",
 				"moves": [["Scald"], ["Thunder Wave", "Thunderbolt"], ["Rapid Spin"], ["Recover"]]
 			}, {
