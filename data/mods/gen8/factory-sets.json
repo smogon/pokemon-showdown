@@ -5141,7 +5141,6 @@
 				"item": ["Eviolite"],
 				"ability": ["Aroma Veil"],
 				"evs": {"hp": 212, "def": 196, "spa": 12, "spd": 76, "spe": 12},
-				"ivs": {"atk": 0},
 				"nature": "Bold",
 				"moves": [["Moonblast"], ["Wish"], ["Protect"], ["Psychic", "Covet"]]
 			}, {
@@ -5179,7 +5178,7 @@
 				"species": "Wingull",
 				"item": ["Berry Juice"],
 				"ability": ["Keen Eye"],
-				"evs": {"spa": 236, "spe": 236},
+				"evs": {"spa": 236, "spd": 36, "spe": 236},
 				"ivs": {"hp": 19},
 				"nature": "Hasty",
 				"moves": [["Hurricane"], ["Scald"], ["Knock Off"], ["Substitute"]]
@@ -5211,7 +5210,7 @@
 				"species": "Wynaut",
 				"item": ["Berry Juice"],
 				"ability": ["Shadow Tag"],
-				"evs": {"hp": 212, "spd": 52, "spe": 172},
+				"evs": {"hp": 236, "spd": 52, "spe": 172},
 				"ivs": {"atk": 0},
 				"nature": "Timid",
 				"moves": [["Counter"], ["Mirror Coat"], ["Encore"], ["Destiny Bond"]]
@@ -5451,7 +5450,6 @@
 				"item": ["Berry Juice"],
 				"ability": ["Corrosion"],
 				"evs": {"hp": 52, "spa": 188, "spd": 36, "spe": 220},
-				"ivs": {"atk": 0},
 				"nature": "Timid",
 				"moves": [["Fire Blast"], ["Sludge Bomb"], ["Thief"], ["Substitute"]]
 			}]
