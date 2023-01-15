@@ -566,7 +566,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'Torrent':
 			return (!counter.get('Water') || !!species.isMega);
 		case 'Unaware':
-			return (!!counter.setupType || moves.has('stealthrock'));
+			return (!!counter.setupType || species.id === 'clefable' && moves.has('stealthrock'));
 		case 'Unburden':
 			return (!!species.isMega || abilities.has('Prankster') || !counter.setupType && !moves.has('acrobatics'));
 		case 'Water Absorb':
