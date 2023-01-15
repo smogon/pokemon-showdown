@@ -920,9 +920,10 @@ export const Formats: FormatList = [
 			if (this.checkCanLearn(move, species, this.allSources(species), set)) {
 				problems.push(`${species.name} can't learn ${move.name}.`);
 			}
-			if ((move.secondaries?.some(secondary => secondary.boosts?.accuracy && secondary.boosts.accuracy < 0) ||
-				move.multihit || move.id === 'beatup' || move.flags['charge'] || move.priority > 0 || move.damageCallback) &&
-				!this.ruleTable.has(`+move:${move.id}`)) {
+			if (this.ruleTable.isRestricted(`move:${move.id}`) ||
+				((move.secondaries?.some(secondary => secondary.boosts?.accuracy && secondary.boosts.accuracy < 0) || move.ohko ||
+					move.multihit || move.id === 'beatup' || move.flags['charge'] || move.priority > 0 || move.damageCallback) &&
+					!this.ruleTable.has(`+move:${move.id}`))) {
 				problems.push(`The move ${move.name} can't be used as an item.`);
 			}
 			return problems.length ? problems : null;
@@ -975,13 +976,17 @@ export const Formats: FormatList = [
 					}
 				}
 			}
+			if (forte.onModifyMove) {
+				this.singleEvent('ModifyMove', forte, null, pokemon, target, move);
+			}
 		},
 		onModifyPriority(priority, source, target, move) {
-			if (move.category !== 'Status' && source?.m.forte) {
-				if (source.hasAbility('Triage') && source.m.forte.flags['heal']) {
+			const forte = source?.m.forte;
+			if (move.category !== 'Status' && forte) {
+				if (source.hasAbility('Triage') && forte.flags['heal']) {
 					return priority + (move.flags['heal'] ? 0 : 3);
 				}
-				return priority + source.m.forte.priority;
+				return priority + forte.priority;
 			}
 		},
 		onHitPriority: 1,
@@ -1016,11 +1021,21 @@ export const Formats: FormatList = [
 				this.singleEvent('BasePower', forte, null, source, target, move, basePower);
 			}
 		},
+		onModifyTypePriority: 1,
+		onModifyType(move, source, target) {
+			const forte = source.m.forte;
+			if (move.category !== 'Status' && forte?.onModifyType) {
+				this.singleEvent('ModifyType', forte, null, source, target, move);
+			}
+		},
 		pokemon: {
 			getItem() {
 				const move = this.battle.dex.moves.get(this.m.forte);
 				if (!move.exists) return Object.getPrototypeOf(this).getItem.call(this);
-				return {...this.battle.dex.items.get('mail'), ignoreKlutz: true, onTakeItem: false};
+				return {
+					...this.battle.dex.items.get('mail'),
+					name: move.name, id: move.id, ignoreKlutz: true, onTakeItem: false,
+				};
 			},
 		},
 	},
