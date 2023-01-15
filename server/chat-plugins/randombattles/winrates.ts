@@ -11,8 +11,13 @@ interface Stats {
 	formats: Record<string, FormatData>;
 }
 
+interface MonEntry {
+	timesGenerated: number;
+	numWins: number;
+}
+
 interface FormatData {
-	mons: Record<string, {timesGenerated: number, numWins: number}>;
+	mons: Record<string, MonEntry>;
 	period?: number; // how often it resets - defaults to 1mo
 }
 
@@ -100,6 +105,11 @@ function checkRollover() {
 	}
 }
 
+const getZScore = (data: MonEntry) => (
+	2 * Math.sqrt(data.timesGenerated) * (data.numWins / data.timesGenerated - 0.5)
+);
+
+
 export const handlers: Chat.Handlers = {
 	onBattleEnd(battle, winner, players) {
 		void collectStats(battle, winner, players);
@@ -163,6 +173,10 @@ export const pages: Chat.PageTable = {
 			return this.errorReply(`That format does not have winrates tracked.`);
 		}
 		checkRollover();
+		const sorter = toID(query.shift() || 'zscore');
+		if (!['zscore', 'raw'].includes(sorter)) {
+			return this.errorReply(`Invalid sorting method. Must be either 'zscore' or 'raw'.`);
+		}
 		const month = query.shift() || getMonth();
 		if (!/^[0-9]{4}-[0-9]{2}$/.test(month)) {
 			return this.errorReply(`Invalid month: ${month}`);
@@ -174,13 +188,21 @@ export const pages: Chat.PageTable = {
 		const formatTitle = Dex.formats.get(format).name;
 		let buf = `<div class="pad"><h2>Winrates for ${formatTitle} (${month})</h2>`;
 		const prevMonth = new Date(new Date(`${month}-15`).getTime() - (30 * 24 * 60 * 60 * 1000)).toISOString().slice(0, 7);
+		let hasButton = false;
 		if (await FS(STATS_PATH.replace('{{MONTH}}', prevMonth)).exists()) {
-			buf += `<a class="button" style="float: left" href="/view-winrates-${format}--${prevMonth}>Previous month</button>`;
+			buf += `<a class="button" href="/view-winrates-${format}--${sorter}--${prevMonth}>Previous month</button>`;
+			hasButton = true;
 		}
 		const nextMonth = new Date(new Date(`${month}-15`).getTime() + (30 * 24 * 60 * 60 * 1000)).toISOString().slice(0, 7);
 		if (await FS(STATS_PATH.replace('{{MONTH}}', nextMonth)).exists()) {
-			buf += `<a class="button" style="float: right" href="/view-winrates-${format}--${nextMonth}>Next month</button>`;
+			if (hasButton) buf += ` | `;
+			buf += `<a class="button" href="/view-winrates-${format}--${sorter}--${nextMonth}>Next month</button>`;
+			hasButton = true;
 		}
+		buf += hasButton ? ` | ` : '';
+		const otherSort = sorter === 'zscore' ? 'Raw' : 'Z-Score';
+		buf += `<a class="button" target="replace" href="/view-winrates-${format}--${toID(otherSort)}--${month}">`;
+		buf += `Sort by ${otherSort} descending</a>`;
 		buf += `<hr />`;
 		const statData: Stats = month === stats.month ?
 			stats : JSON.parse(await FS(STATS_PATH.replace('{{MONTH}}', month)).read());
@@ -190,15 +212,23 @@ export const pages: Chat.PageTable = {
 			return buf;
 		}
 		this.title = `[Winrates] [${format}] ${month}`;
-		const mons = Utils.sortBy(Object.entries(formatData.mons),
-			([_, data]) => [-data.numWins, -data.timesGenerated]);
+		let sortFn: (val: [string, MonEntry]) => Utils.Comparable;
+
+		if (sorter === 'zscore') {
+			sortFn = ([_, data]) => [-getZScore(data), -data.timesGenerated];
+		} else {
+			sortFn = ([_, data]) => [
+				-(data.numWins / data.timesGenerated), -data.numWins, -data.timesGenerated,
+			];
+		}
+		const mons = Utils.sortBy(Object.entries(formatData.mons), sortFn);
 		buf += `<div class="ladder pad"><table><tr><th>Pokemon</th><th>Win %</th><th>Z-Score</th>`;
 		buf += `<th>Raw wins</th><th>Times generated</th></tr>`;
 		for (const [mon, data] of mons) {
 			buf += `<tr><td>${Dex.species.get(mon).name}</td>`;
 			const {timesGenerated, numWins} = data;
 			buf += `<td>${((numWins / timesGenerated) * 100).toFixed(2)}%</td>`;
-			buf += `<td>${(2 * Math.sqrt(timesGenerated) * (numWins / timesGenerated - 0.5)).toFixed(3)}</td>`;
+			buf += `<td>${getZScore(data).toFixed(3)}</td>`;
 			buf += `<td>${numWins}</td><td>${timesGenerated}</td>`;
 			buf += `</tr>`;
 		}
