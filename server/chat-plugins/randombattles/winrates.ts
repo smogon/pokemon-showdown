@@ -191,7 +191,7 @@ export const pages: Chat.PageTable = {
 		}
 		this.title = `[Winrates] [${format}] ${month}`;
 		const mons = Utils.sortBy(Object.entries(formatData.mons),
-			([_, data]) => [data.numWins, data.timesGenerated]);
+			([_, data]) => [-data.numWins, -data.timesGenerated]);
 		buf += `<div class="ladder pad"><table><tr><th>Pokemon</th><th>Win %</th><th>Z-Score</th>`;
 		buf += `<th>Raw wins</th><th>Times generated</th></tr>`;
 		for (const [mon, data] of mons) {
