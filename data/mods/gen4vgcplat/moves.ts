@@ -56,7 +56,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 35,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"karatechop": {
 		"inherit": true,
@@ -65,7 +66,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 25,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"doubleslap": {
 		"inherit": true,
@@ -74,7 +76,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Fairy",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"cometpunch": {
 		"inherit": true,
@@ -83,7 +86,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"poweruppunch": {
 		"inherit": true,
@@ -92,7 +96,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 5,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"payday": {
 		"inherit": true,
@@ -101,7 +106,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"firepunch": {
 		"inherit": true,
@@ -110,7 +116,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Fire",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"icepunch": {
 		"inherit": true,
@@ -119,7 +126,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Ice",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"thunderpunch": {
 		"inherit": true,
@@ -128,7 +136,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Electric",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"scratch": {
 		"inherit": true,
@@ -137,7 +146,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 35,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"vicegrip": {
 		"inherit": true,
@@ -146,16 +156,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 30,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"guillotine": {
 		"inherit": true,
 		"accuracy": 30,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Physical",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"razorwind": {
 		"inherit": true,
@@ -164,7 +176,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"swordsdance": {
 		"inherit": true,
@@ -173,7 +186,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 2,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"cut": {
 		"inherit": true,
@@ -182,7 +196,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 30,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"gust": {
 		"inherit": true,
@@ -191,7 +206,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 35,
 		"type": "Flying",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"wingattack": {
 		"inherit": true,
@@ -200,7 +216,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 35,
 		"type": "Flying",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"whirlwind": {
 		"inherit": true,
@@ -209,7 +226,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": -6,
+		"target": "normal"
 	},
 	"fly": {
 		"inherit": true,
@@ -218,7 +236,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Flying",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"bind": {
 		"inherit": true,
@@ -227,7 +246,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"slam": {
 		"inherit": true,
@@ -236,7 +256,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"vinewhip": {
 		"inherit": true,
@@ -245,7 +266,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"stomp": {
 		"inherit": true,
@@ -254,7 +276,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"doublekick": {
 		"inherit": true,
@@ -263,7 +286,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 30,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"jumpkick": {
 		"inherit": true,
@@ -272,7 +296,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 25,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"rollingkick": {
 		"inherit": true,
@@ -281,7 +306,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"sandattack": {
 		"inherit": true,
@@ -290,7 +316,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 15,
 		"type": "Ground",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"headbutt": {
 		"inherit": true,
@@ -299,7 +326,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"hornattack": {
 		"inherit": true,
@@ -308,7 +336,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 25,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"furyattack": {
 		"inherit": true,
@@ -317,16 +346,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Flying",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"horndrill": {
 		"inherit": true,
 		"accuracy": 30,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Physical",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"tackle": {
 		"inherit": true,
@@ -335,7 +366,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 35,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"bodyslam": {
 		"inherit": true,
@@ -344,7 +376,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"wrap": {
 		"inherit": true,
@@ -353,7 +386,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"takedown": {
 		"inherit": true,
@@ -362,12 +396,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Fighting",
+		"priority": 0,
 		"self": {},
 		"recoil": [
 			1,
 			4
 		],
-		"isNonstandard": null
+		"target": "normal"
 	},
 	"thrash": {
 		"inherit": true,
@@ -376,12 +411,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Normal",
+		"priority": 0,
 		"self": {},
 		"recoil": [
 			1,
 			3
 		],
-		"isNonstandard": null
+		"target": "normal"
 	},
 	"doubleedge": {
 		"inherit": true,
@@ -390,12 +426,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Normal",
+		"priority": 0,
 		"self": {},
 		"recoil": [
 			1,
 			3
 		],
-		"isNonstandard": null
+		"target": "normal"
 	},
 	"tailwhip": {
 		"inherit": true,
@@ -404,7 +441,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"poisonsting": {
 		"inherit": true,
@@ -413,7 +451,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 35,
 		"type": "Poison",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"twineedle": {
 		"inherit": true,
@@ -422,7 +461,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Bug",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"pinmissile": {
 		"inherit": true,
@@ -431,7 +471,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Bug",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"leer": {
 		"inherit": true,
@@ -440,7 +481,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"bite": {
 		"inherit": true,
@@ -449,7 +491,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 25,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"growl": {
 		"inherit": true,
@@ -458,7 +501,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"roar": {
 		"inherit": true,
@@ -467,7 +511,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": -6,
+		"target": "normal"
 	},
 	"sing": {
 		"inherit": true,
@@ -476,7 +521,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 2,
 		"type": "Fairy",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"supersonic": {
 		"inherit": true,
@@ -485,16 +531,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"sonicboom": {
 		"inherit": true,
 		"accuracy": 90,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Special",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"disable": {
 		"inherit": true,
@@ -503,7 +551,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"acid": {
 		"inherit": true,
@@ -512,7 +561,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 30,
 		"type": "Poison",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"ember": {
 		"inherit": true,
@@ -521,7 +571,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 25,
 		"type": "Fire",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"flamethrower": {
 		"inherit": true,
@@ -530,7 +581,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 15,
 		"type": "Fire",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"mist": {
 		"inherit": true,
@@ -539,7 +591,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 30,
 		"type": "Ice",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allySide"
 	},
 	"watergun": {
 		"inherit": true,
@@ -548,7 +601,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 25,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"hydropump": {
 		"inherit": true,
@@ -557,7 +611,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"surf": {
 		"inherit": true,
@@ -566,7 +621,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 15,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacent"
 	},
 	"icebeam": {
 		"inherit": true,
@@ -575,7 +631,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Ice",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"blizzard": {
 		"inherit": true,
@@ -584,7 +641,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Ice",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"psybeam": {
 		"inherit": true,
@@ -593,7 +651,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 20,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"bubblebeam": {
 		"inherit": true,
@@ -602,7 +661,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 20,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"aurorabeam": {
 		"inherit": true,
@@ -611,7 +671,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 20,
 		"type": "Ice",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"hyperbeam": {
 		"inherit": true,
@@ -620,12 +681,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 5,
 		"type": "Normal",
+		"priority": 0,
 		"self": {},
 		"recoil": [
 			1,
 			3
 		],
-		"isNonstandard": null
+		"target": "normal"
 	},
 	"peck": {
 		"inherit": true,
@@ -634,7 +696,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 35,
 		"type": "Flying",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"drillpeck": {
 		"inherit": true,
@@ -643,7 +706,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Flying",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"submission": {
 		"inherit": true,
@@ -652,39 +716,42 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 25,
 		"type": "Fighting",
+		"priority": 0,
 		"self": {},
 		"recoil": [
 			1,
 			4
 		],
-		"isNonstandard": null
+		"target": "normal"
 	},
 	"lowkick": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Physical",
 		"pp": 20,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"counter": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Physical",
 		"pp": 20,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": -5
 	},
 	"seismictoss": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Physical",
 		"pp": 20,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"strength": {
 		"inherit": true,
@@ -693,7 +760,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"drainingkiss": {
 		"inherit": true,
@@ -702,7 +770,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 15,
 		"type": "Fairy",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"megadrain": {
 		"inherit": true,
@@ -711,7 +780,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 15,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"leechseed": {
 		"inherit": true,
@@ -720,7 +790,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"growth": {
 		"inherit": true,
@@ -729,7 +800,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"razorleaf": {
 		"inherit": true,
@@ -738,7 +810,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 25,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"solarbeam": {
 		"inherit": true,
@@ -747,7 +820,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"poisonpowder": {
 		"inherit": true,
@@ -756,7 +830,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 35,
 		"type": "Poison",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"stunspore": {
 		"inherit": true,
@@ -765,7 +840,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 30,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"sleeppowder": {
 		"inherit": true,
@@ -774,7 +850,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"petaldance": {
 		"inherit": true,
@@ -783,12 +860,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 20,
 		"type": "Grass",
+		"priority": 0,
 		"self": {},
 		"recoil": [
 			1,
 			3
 		],
-		"isNonstandard": null
+		"target": "normal"
 	},
 	"stringshot": {
 		"inherit": true,
@@ -797,16 +875,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 40,
 		"type": "Bug",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"dragonrage": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Special",
 		"pp": 10,
 		"type": "Dragon",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"firespin": {
 		"inherit": true,
@@ -815,7 +895,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 15,
 		"type": "Fire",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"thundershock": {
 		"inherit": true,
@@ -824,7 +905,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 30,
 		"type": "Electric",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"thunderbolt": {
 		"inherit": true,
@@ -833,7 +915,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 15,
 		"type": "Electric",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"thunderwave": {
 		"inherit": true,
@@ -842,7 +925,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Electric",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"thunder": {
 		"inherit": true,
@@ -851,7 +935,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Electric",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"rockthrow": {
 		"inherit": true,
@@ -860,7 +945,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Rock",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"earthquake": {
 		"inherit": true,
@@ -869,16 +955,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Ground",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacent"
 	},
 	"fissure": {
 		"inherit": true,
 		"accuracy": 30,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Physical",
 		"pp": 5,
 		"type": "Ground",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"dig": {
 		"inherit": true,
@@ -887,7 +975,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Ground",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"toxic": {
 		"inherit": true,
@@ -896,7 +985,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Poison",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"confusion": {
 		"inherit": true,
@@ -905,7 +995,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 25,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"psychic": {
 		"inherit": true,
@@ -914,7 +1005,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"hypnosis": {
 		"inherit": true,
@@ -923,7 +1015,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"meditate": {
 		"inherit": true,
@@ -932,7 +1025,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"agility": {
 		"inherit": true,
@@ -941,7 +1035,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 2,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"quickattack": {
 		"inherit": true,
@@ -950,7 +1045,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 30,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 1,
+		"target": "normal"
 	},
 	"rage": {
 		"inherit": true,
@@ -959,7 +1055,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"teleport": {
 		"inherit": true,
@@ -968,16 +1065,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"nightshade": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Special",
 		"pp": 15,
 		"type": "Ghost",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"mimic": {
 		"inherit": true,
@@ -986,7 +1085,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"screech": {
 		"inherit": true,
@@ -995,7 +1095,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"doubleteam": {
 		"inherit": true,
@@ -1004,7 +1105,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"recover": {
 		"inherit": true,
@@ -1013,7 +1115,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"harden": {
 		"inherit": true,
@@ -1022,7 +1125,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"minimize": {
 		"inherit": true,
@@ -1031,7 +1135,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"smokescreen": {
 		"inherit": true,
@@ -1040,7 +1145,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"confuseray": {
 		"inherit": true,
@@ -1049,7 +1155,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Ghost",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"withdraw": {
 		"inherit": true,
@@ -1058,7 +1165,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"defensecurl": {
 		"inherit": true,
@@ -1067,7 +1175,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"barrier": {
 		"inherit": true,
@@ -1076,7 +1185,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 2,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"lightscreen": {
 		"inherit": true,
@@ -1085,7 +1195,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allySide"
 	},
 	"haze": {
 		"inherit": true,
@@ -1094,7 +1205,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 30,
 		"type": "Ice",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "all"
 	},
 	"reflect": {
 		"inherit": true,
@@ -1103,7 +1215,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allySide"
 	},
 	"focusenergy": {
 		"inherit": true,
@@ -1112,16 +1225,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 30,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"bide": {
 		"inherit": true,
 		"accuracy": true,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Physical",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 1,
+		"target": "self"
 	},
 	"metronome": {
 		"inherit": true,
@@ -1130,7 +1245,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0
 	},
 	"mirrormove": {
 		"inherit": true,
@@ -1139,7 +1254,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Flying",
-		"isNonstandard": null
+		"priority": 0
 	},
 	"selfdestruct": {
 		"inherit": true,
@@ -1148,7 +1263,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 1,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacent"
 	},
 	"eggbomb": {
 		"inherit": true,
@@ -1157,7 +1273,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"lick": {
 		"inherit": true,
@@ -1166,7 +1283,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 30,
 		"type": "Ghost",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"smog": {
 		"inherit": true,
@@ -1175,7 +1293,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 20,
 		"type": "Poison",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"sludge": {
 		"inherit": true,
@@ -1184,7 +1303,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 20,
 		"type": "Poison",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"boneclub": {
 		"inherit": true,
@@ -1193,7 +1313,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Ground",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"fireblast": {
 		"inherit": true,
@@ -1202,7 +1323,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Fire",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"waterfall": {
 		"inherit": true,
@@ -1211,7 +1333,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"clamp": {
 		"inherit": true,
@@ -1220,7 +1343,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"swift": {
 		"inherit": true,
@@ -1229,7 +1353,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"skullbash": {
 		"inherit": true,
@@ -1238,7 +1363,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Rock",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"spikecannon": {
 		"inherit": true,
@@ -1247,7 +1373,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Steel",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"constrict": {
 		"inherit": true,
@@ -1256,7 +1383,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 35,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"amnesia": {
 		"inherit": true,
@@ -1265,7 +1393,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 2,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"kinesis": {
 		"inherit": true,
@@ -1274,7 +1403,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 15,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"softboiled": {
 		"inherit": true,
@@ -1283,7 +1413,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"highjumpkick": {
 		"inherit": true,
@@ -1292,7 +1423,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"glare": {
 		"inherit": true,
@@ -1301,7 +1433,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 15,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"dreameater": {
 		"inherit": true,
@@ -1310,7 +1443,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 15,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"poisongas": {
 		"inherit": true,
@@ -1319,7 +1453,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Poison",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"barrage": {
 		"inherit": true,
@@ -1328,7 +1463,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"leechlife": {
 		"inherit": true,
@@ -1337,7 +1473,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Bug",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"lovelykiss": {
 		"inherit": true,
@@ -1346,7 +1483,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"skyattack": {
 		"inherit": true,
@@ -1355,7 +1493,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 5,
 		"type": "Flying",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"transform": {
 		"inherit": true,
@@ -1364,7 +1503,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"bubble": {
 		"inherit": true,
@@ -1373,7 +1513,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 30,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"dizzypunch": {
 		"inherit": true,
@@ -1382,7 +1523,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"spore": {
 		"inherit": true,
@@ -1391,7 +1533,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 2,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"flash": {
 		"inherit": true,
@@ -1400,16 +1543,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"psywave": {
 		"inherit": true,
 		"accuracy": 80,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Special",
 		"pp": 15,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"splash": {
 		"inherit": true,
@@ -1418,7 +1563,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 40,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacent"
 	},
 	"acidarmor": {
 		"inherit": true,
@@ -1427,7 +1573,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 2,
 		"type": "Poison",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"crabhammer": {
 		"inherit": true,
@@ -1436,7 +1583,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"explosion": {
 		"inherit": true,
@@ -1445,7 +1593,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacent"
 	},
 	"furyswipes": {
 		"inherit": true,
@@ -1454,7 +1603,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"bonemerang": {
 		"inherit": true,
@@ -1463,7 +1613,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Ground",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"rest": {
 		"inherit": true,
@@ -1472,7 +1623,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"rockslide": {
 		"inherit": true,
@@ -1481,7 +1633,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Rock",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"hyperfang": {
 		"inherit": true,
@@ -1490,7 +1643,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Steel",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"sharpen": {
 		"inherit": true,
@@ -1499,7 +1653,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"conversion": {
 		"inherit": true,
@@ -1508,7 +1663,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 30,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"triattack": {
 		"inherit": true,
@@ -1517,16 +1673,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"superfang": {
 		"inherit": true,
 		"accuracy": 90,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Physical",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"slash": {
 		"inherit": true,
@@ -1535,7 +1693,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"substitute": {
 		"inherit": true,
@@ -1544,7 +1703,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"struggle": {
 		"inherit": true,
@@ -1553,7 +1713,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 1,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"sketch": {
 		"inherit": true,
@@ -1562,7 +1723,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 1,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"triplekick": {
 		"inherit": true,
@@ -1571,7 +1733,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"thief": {
 		"inherit": true,
@@ -1580,7 +1743,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"spiderweb": {
 		"inherit": true,
@@ -1589,7 +1753,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Bug",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"mindreader": {
 		"inherit": true,
@@ -1598,7 +1763,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"nightmare": {
 		"inherit": true,
@@ -1607,7 +1773,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 15,
 		"type": "Ghost",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"flamewheel": {
 		"inherit": true,
@@ -1616,7 +1783,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 25,
 		"type": "Fire",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"snore": {
 		"inherit": true,
@@ -1625,7 +1793,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 15,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"curse": {
 		"inherit": true,
@@ -1634,16 +1803,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Ghost",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"flail": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Physical",
 		"pp": 15,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"conversion2": {
 		"inherit": true,
@@ -1652,7 +1823,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 30,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"aeroblast": {
 		"inherit": true,
@@ -1661,7 +1833,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 5,
 		"type": "Flying",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"cottonspore": {
 		"inherit": true,
@@ -1670,16 +1843,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"reversal": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Physical",
 		"pp": 15,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"spite": {
 		"inherit": true,
@@ -1688,7 +1863,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Ghost",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"powdersnow": {
 		"inherit": true,
@@ -1697,7 +1873,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 25,
 		"type": "Ice",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"protect": {
 		"inherit": true,
@@ -1706,7 +1883,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 4,
+		"target": "self"
 	},
 	"machpunch": {
 		"inherit": true,
@@ -1715,7 +1893,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 30,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 1,
+		"target": "normal"
 	},
 	"scaryface": {
 		"inherit": true,
@@ -1724,7 +1903,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"faintattack": {
 		"inherit": true,
@@ -1733,7 +1913,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"sweetkiss": {
 		"inherit": true,
@@ -1742,7 +1923,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 4,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"bellydrum": {
 		"inherit": true,
@@ -1751,7 +1933,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"sludgebomb": {
 		"inherit": true,
@@ -1760,7 +1943,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Poison",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"mudslap": {
 		"inherit": true,
@@ -1769,7 +1953,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Ground",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"octazooka": {
 		"inherit": true,
@@ -1778,7 +1963,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"spikes": {
 		"inherit": true,
@@ -1787,7 +1973,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Ground",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "foeSide"
 	},
 	"zapcannon": {
 		"inherit": true,
@@ -1796,7 +1983,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 5,
 		"type": "Electric",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"foresight": {
 		"inherit": true,
@@ -1805,7 +1993,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 40,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"destinybond": {
 		"inherit": true,
@@ -1814,7 +2003,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Ghost",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"perishsong": {
 		"inherit": true,
@@ -1823,7 +2013,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "all"
 	},
 	"icywind": {
 		"inherit": true,
@@ -1832,7 +2023,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 15,
 		"type": "Ice",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"detect": {
 		"inherit": true,
@@ -1841,7 +2033,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 3,
+		"target": "self"
 	},
 	"bonerush": {
 		"inherit": true,
@@ -1850,7 +2043,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Ground",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"lockon": {
 		"inherit": true,
@@ -1859,7 +2053,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"outrage": {
 		"inherit": true,
@@ -1868,12 +2063,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Dragon",
+		"priority": 0,
 		"self": {},
 		"recoil": [
 			1,
 			3
 		],
-		"isNonstandard": null
+		"target": "normal"
 	},
 	"sandstorm": {
 		"inherit": true,
@@ -1882,7 +2078,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Rock",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "all"
 	},
 	"gigadrain": {
 		"inherit": true,
@@ -1891,7 +2088,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"endure": {
 		"inherit": true,
@@ -1900,7 +2098,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 3,
+		"target": "self"
 	},
 	"charm": {
 		"inherit": true,
@@ -1909,7 +2108,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Fairy",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"rollout": {
 		"inherit": true,
@@ -1918,7 +2118,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Rock",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"falseswipe": {
 		"inherit": true,
@@ -1927,7 +2128,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 40,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"swagger": {
 		"inherit": true,
@@ -1936,7 +2138,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 15,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"milkdrink": {
 		"inherit": true,
@@ -1945,7 +2148,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 4,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"spark": {
 		"inherit": true,
@@ -1954,7 +2158,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Electric",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"furycutter": {
 		"inherit": true,
@@ -1963,7 +2168,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Bug",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"steelwing": {
 		"inherit": true,
@@ -1972,7 +2178,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 25,
 		"type": "Steel",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"meanlook": {
 		"inherit": true,
@@ -1981,7 +2188,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"attract": {
 		"inherit": true,
@@ -1990,7 +2198,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 15,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"sleeptalk": {
 		"inherit": true,
@@ -1999,7 +2208,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0
 	},
 	"healbell": {
 		"inherit": true,
@@ -2008,34 +2217,38 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allySide"
 	},
 	"return": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Physical",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"present": {
 		"inherit": true,
 		"accuracy": 90,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Physical",
 		"pp": 15,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"frustration": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Physical",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"safeguard": {
 		"inherit": true,
@@ -2044,7 +2257,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 25,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allySide"
 	},
 	"painsplit": {
 		"inherit": true,
@@ -2053,7 +2267,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"sacredfire": {
 		"inherit": true,
@@ -2062,16 +2277,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 5,
 		"type": "Fire",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"magnitude": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Physical",
 		"pp": 30,
 		"type": "Ground",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacent"
 	},
 	"dynamicpunch": {
 		"inherit": true,
@@ -2080,7 +2297,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"megahorn": {
 		"inherit": true,
@@ -2089,7 +2307,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Bug",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"dragonbreath": {
 		"inherit": true,
@@ -2098,7 +2317,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 20,
 		"type": "Dragon",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"batonpass": {
 		"inherit": true,
@@ -2107,7 +2327,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 40,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"encore": {
 		"inherit": true,
@@ -2116,7 +2337,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"pursuit": {
 		"inherit": true,
@@ -2125,7 +2347,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"rapidspin": {
 		"inherit": true,
@@ -2134,7 +2357,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 40,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"sweetscent": {
 		"inherit": true,
@@ -2143,7 +2367,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"irontail": {
 		"inherit": true,
@@ -2152,7 +2377,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Steel",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"metalclaw": {
 		"inherit": true,
@@ -2161,7 +2387,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 35,
 		"type": "Steel",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"vitalthrow": {
 		"inherit": true,
@@ -2170,7 +2397,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": -1,
+		"target": "normal"
 	},
 	"morningsun": {
 		"inherit": true,
@@ -2179,7 +2407,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"synthesis": {
 		"inherit": true,
@@ -2188,7 +2417,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"moonlight": {
 		"inherit": true,
@@ -2197,7 +2427,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"hiddenpower": {
 		"inherit": true,
@@ -2206,7 +2437,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 15,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"crosschop": {
 		"inherit": true,
@@ -2215,7 +2447,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 5,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"twister": {
 		"inherit": true,
@@ -2224,7 +2457,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 20,
 		"type": "Dragon",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"raindance": {
 		"inherit": true,
@@ -2233,7 +2467,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "all"
 	},
 	"sunnyday": {
 		"inherit": true,
@@ -2242,7 +2477,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Fire",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "all"
 	},
 	"crunch": {
 		"inherit": true,
@@ -2251,16 +2487,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"mirrorcoat": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Special",
 		"pp": 20,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": -5
 	},
 	"psychup": {
 		"inherit": true,
@@ -2269,7 +2506,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"extremespeed": {
 		"inherit": true,
@@ -2278,7 +2516,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 2,
+		"target": "normal"
 	},
 	"ancientpower": {
 		"inherit": true,
@@ -2287,7 +2526,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 5,
 		"type": "Rock",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"shadowball": {
 		"inherit": true,
@@ -2296,7 +2536,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 15,
 		"type": "Ghost",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"futuresight": {
 		"inherit": true,
@@ -2305,7 +2546,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 15,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"rocksmash": {
 		"inherit": true,
@@ -2314,7 +2556,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"whirlpool": {
 		"inherit": true,
@@ -2323,7 +2566,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 15,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"beatup": {
 		"inherit": true,
@@ -2332,7 +2576,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"fakeout": {
 		"inherit": true,
@@ -2341,7 +2586,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 3,
+		"target": "normal"
 	},
 	"uproar": {
 		"inherit": true,
@@ -2350,7 +2596,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacent"
 	},
 	"stockpile": {
 		"inherit": true,
@@ -2359,16 +2606,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"spitup": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Special",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"swallow": {
 		"inherit": true,
@@ -2377,7 +2626,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"heatwave": {
 		"inherit": true,
@@ -2386,7 +2636,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Fire",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"hail": {
 		"inherit": true,
@@ -2395,7 +2646,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Ice",
-		"isNonstandard": null
+		"priority": 0,
+		"weather": "snow",
+		"target": "all"
 	},
 	"torment": {
 		"inherit": true,
@@ -2404,7 +2657,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 15,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"flatter": {
 		"inherit": true,
@@ -2413,7 +2667,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"willowisp": {
 		"inherit": true,
@@ -2422,7 +2677,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 15,
 		"type": "Fire",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"memento": {
 		"inherit": true,
@@ -2431,7 +2687,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"facade": {
 		"inherit": true,
@@ -2440,7 +2697,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"focuspunch": {
 		"inherit": true,
@@ -2449,7 +2707,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": -3,
+		"target": "normal"
 	},
 	"highhorsepower": {
 		"inherit": true,
@@ -2458,7 +2717,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Ground",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"followme": {
 		"inherit": true,
@@ -2467,7 +2727,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 2,
+		"target": "self"
 	},
 	"naturepower": {
 		"inherit": true,
@@ -2476,7 +2737,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0
 	},
 	"charge": {
 		"inherit": true,
@@ -2485,7 +2746,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Electric",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"taunt": {
 		"inherit": true,
@@ -2494,7 +2756,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"helpinghand": {
 		"inherit": true,
@@ -2503,7 +2766,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 5
 	},
 	"trick": {
 		"inherit": true,
@@ -2512,7 +2775,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"roleplay": {
 		"inherit": true,
@@ -2521,7 +2785,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"wish": {
 		"inherit": true,
@@ -2530,7 +2795,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 2,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"assist": {
 		"inherit": true,
@@ -2539,7 +2805,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0
 	},
 	"ingrain": {
 		"inherit": true,
@@ -2548,7 +2814,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"superpower": {
 		"inherit": true,
@@ -2557,12 +2824,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Fighting",
+		"priority": 0,
 		"self": {},
 		"recoil": [
 			1,
 			3
 		],
-		"isNonstandard": null
+		"target": "normal"
 	},
 	"magiccoat": {
 		"inherit": true,
@@ -2571,7 +2839,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 15,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 4
 	},
 	"recycle": {
 		"inherit": true,
@@ -2580,7 +2848,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"revenge": {
 		"inherit": true,
@@ -2589,7 +2858,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"brickbreak": {
 		"inherit": true,
@@ -2598,7 +2868,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"yawn": {
 		"inherit": true,
@@ -2607,7 +2878,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"knockoff": {
 		"inherit": true,
@@ -2616,16 +2888,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"endeavor": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Physical",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"eruption": {
 		"inherit": true,
@@ -2634,7 +2908,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 5,
 		"type": "Fire",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"skillswap": {
 		"inherit": true,
@@ -2643,7 +2918,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"imprison": {
 		"inherit": true,
@@ -2652,7 +2928,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"refresh": {
 		"inherit": true,
@@ -2661,7 +2938,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"grudge": {
 		"inherit": true,
@@ -2670,7 +2948,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Ghost",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"snatch": {
 		"inherit": true,
@@ -2679,7 +2958,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 4
 	},
 	"secretpower": {
 		"inherit": true,
@@ -2688,7 +2967,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"dive": {
 		"inherit": true,
@@ -2697,7 +2977,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"armthrust": {
 		"inherit": true,
@@ -2706,7 +2987,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"camouflage": {
 		"inherit": true,
@@ -2715,7 +2997,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"tailglow": {
 		"inherit": true,
@@ -2724,7 +3007,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Bug",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"dazzlinggleam": {
 		"inherit": true,
@@ -2733,7 +3017,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Fairy",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"moonblast": {
 		"inherit": true,
@@ -2742,7 +3027,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Fairy",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"featherdance": {
 		"inherit": true,
@@ -2751,7 +3037,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 15,
 		"type": "Flying",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"teeterdance": {
 		"inherit": true,
@@ -2760,7 +3047,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacent"
 	},
 	"blazekick": {
 		"inherit": true,
@@ -2769,7 +3057,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Fire",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"scorchingsands": {
 		"inherit": true,
@@ -2778,7 +3067,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Ground",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"iceball": {
 		"inherit": true,
@@ -2787,7 +3077,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Ice",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"needlearm": {
 		"inherit": true,
@@ -2796,7 +3087,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"slackoff": {
 		"inherit": true,
@@ -2805,7 +3097,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"hypervoice": {
 		"inherit": true,
@@ -2814,7 +3107,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"poisonfang": {
 		"inherit": true,
@@ -2823,7 +3117,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Poison",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"crushclaw": {
 		"inherit": true,
@@ -2832,7 +3127,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"blastburn": {
 		"inherit": true,
@@ -2841,12 +3137,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 5,
 		"type": "Fire",
+		"priority": 0,
 		"self": {},
 		"recoil": [
 			1,
 			3
 		],
-		"isNonstandard": null
+		"target": "normal"
 	},
 	"hydrocannon": {
 		"inherit": true,
@@ -2855,12 +3152,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 5,
 		"type": "Water",
+		"priority": 0,
 		"self": {},
 		"recoil": [
 			1,
 			3
 		],
-		"isNonstandard": null
+		"target": "normal"
 	},
 	"meteormash": {
 		"inherit": true,
@@ -2869,7 +3167,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Steel",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"astonish": {
 		"inherit": true,
@@ -2878,7 +3177,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Ghost",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"weatherball": {
 		"inherit": true,
@@ -2887,7 +3187,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"aromatherapy": {
 		"inherit": true,
@@ -2896,7 +3197,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allySide"
 	},
 	"faketears": {
 		"inherit": true,
@@ -2905,7 +3207,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"aircutter": {
 		"inherit": true,
@@ -2914,7 +3217,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 25,
 		"type": "Flying",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"overheat": {
 		"inherit": true,
@@ -2923,12 +3227,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Fire",
+		"priority": 0,
 		"self": {},
 		"recoil": [
 			1,
 			3
 		],
-		"isNonstandard": null
+		"target": "normal"
 	},
 	"odorsleuth": {
 		"inherit": true,
@@ -2937,7 +3242,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 40,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"rocktomb": {
 		"inherit": true,
@@ -2946,7 +3252,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Rock",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"silverwind": {
 		"inherit": true,
@@ -2955,7 +3262,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 5,
 		"type": "Bug",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"metalsound": {
 		"inherit": true,
@@ -2964,7 +3272,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Steel",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"grasswhistle": {
 		"inherit": true,
@@ -2973,7 +3282,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 2,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"tickle": {
 		"inherit": true,
@@ -2982,7 +3292,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"cosmicpower": {
 		"inherit": true,
@@ -2991,7 +3302,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"waterspout": {
 		"inherit": true,
@@ -3000,7 +3312,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 5,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"signalbeam": {
 		"inherit": true,
@@ -3009,7 +3322,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 15,
 		"type": "Bug",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"shadowpunch": {
 		"inherit": true,
@@ -3018,7 +3332,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Ghost",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"extrasensory": {
 		"inherit": true,
@@ -3027,7 +3342,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 30,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"skyuppercut": {
 		"inherit": true,
@@ -3036,7 +3352,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"sandtomb": {
 		"inherit": true,
@@ -3045,7 +3362,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Ground",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"muddywater": {
 		"inherit": true,
@@ -3054,7 +3372,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"bulletseed": {
 		"inherit": true,
@@ -3063,7 +3382,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 30,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"aerialace": {
 		"inherit": true,
@@ -3072,7 +3392,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Flying",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"iciclespear": {
 		"inherit": true,
@@ -3081,7 +3402,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 30,
 		"type": "Ice",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"irondefense": {
 		"inherit": true,
@@ -3090,7 +3412,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 2,
 		"type": "Steel",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"block": {
 		"inherit": true,
@@ -3099,7 +3422,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"howl": {
 		"inherit": true,
@@ -3108,7 +3432,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allySide"
 	},
 	"dragonclaw": {
 		"inherit": true,
@@ -3117,7 +3442,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Dragon",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"frenzyplant": {
 		"inherit": true,
@@ -3126,12 +3452,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 5,
 		"type": "Grass",
+		"priority": 0,
 		"self": {},
 		"recoil": [
 			1,
 			3
 		],
-		"isNonstandard": null
+		"target": "normal"
 	},
 	"bulkup": {
 		"inherit": true,
@@ -3140,7 +3467,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"bounce": {
 		"inherit": true,
@@ -3149,7 +3477,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Flying",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"mudshot": {
 		"inherit": true,
@@ -3158,7 +3487,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 15,
 		"type": "Ground",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"poisontail": {
 		"inherit": true,
@@ -3167,7 +3497,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 25,
 		"type": "Poison",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"covet": {
 		"inherit": true,
@@ -3176,7 +3507,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 40,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"volttackle": {
 		"inherit": true,
@@ -3185,7 +3517,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Electric",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"magicalleaf": {
 		"inherit": true,
@@ -3194,7 +3527,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 20,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"scald": {
 		"inherit": true,
@@ -3203,7 +3537,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"calmmind": {
 		"inherit": true,
@@ -3212,7 +3547,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"leafblade": {
 		"inherit": true,
@@ -3221,7 +3557,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"dragondance": {
 		"inherit": true,
@@ -3230,7 +3567,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Dragon",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"rockblast": {
 		"inherit": true,
@@ -3239,7 +3577,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Rock",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"shockwave": {
 		"inherit": true,
@@ -3248,7 +3587,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 20,
 		"type": "Electric",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"waterpulse": {
 		"inherit": true,
@@ -3257,7 +3597,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 20,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"doomdesire": {
 		"inherit": true,
@@ -3266,7 +3607,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Steel",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"psychoboost": {
 		"inherit": true,
@@ -3275,12 +3617,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Psychic",
+		"priority": 0,
 		"self": {},
 		"recoil": [
 			1,
 			3
 		],
-		"isNonstandard": null
+		"target": "normal"
 	},
 	"roost": {
 		"inherit": true,
@@ -3289,7 +3632,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Flying",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"gravity": {
 		"inherit": true,
@@ -3298,7 +3642,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "all"
 	},
 	"playrough": {
 		"inherit": true,
@@ -3307,7 +3652,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Fairy",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"hammerarm": {
 		"inherit": true,
@@ -3316,16 +3662,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"gyroball": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Physical",
 		"pp": 15,
 		"type": "Steel",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"healingwish": {
 		"inherit": true,
@@ -3334,7 +3682,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"brine": {
 		"inherit": true,
@@ -3343,7 +3692,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"voltswitch": {
 		"inherit": true,
@@ -3352,7 +3702,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 15,
 		"type": "Electric",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"feint": {
 		"inherit": true,
@@ -3361,7 +3712,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 2,
+		"target": "normal"
 	},
 	"pluck": {
 		"inherit": true,
@@ -3370,7 +3722,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Flying",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"tailwind": {
 		"inherit": true,
@@ -3379,7 +3732,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 30,
 		"type": "Flying",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allySide"
 	},
 	"acupressure": {
 		"inherit": true,
@@ -3388,16 +3742,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0
 	},
 	"metalburst": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Physical",
 		"pp": 10,
 		"type": "Steel",
-		"isNonstandard": null
+		"priority": 0
 	},
 	"uturn": {
 		"inherit": true,
@@ -3406,7 +3760,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Bug",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"closecombat": {
 		"inherit": true,
@@ -3415,7 +3770,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"payback": {
 		"inherit": true,
@@ -3424,7 +3780,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"assurance": {
 		"inherit": true,
@@ -3433,7 +3790,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"snarl": {
 		"inherit": true,
@@ -3442,16 +3800,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 15,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"fling": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Physical",
 		"pp": 10,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"psychoshift": {
 		"inherit": true,
@@ -3460,16 +3820,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"trumpcard": {
 		"inherit": true,
 		"accuracy": true,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Physical",
 		"pp": 2,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"healblock": {
 		"inherit": true,
@@ -3478,16 +3840,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 15,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"wringout": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Special",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"powertrick": {
 		"inherit": true,
@@ -3496,7 +3860,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"gastroacid": {
 		"inherit": true,
@@ -3505,7 +3870,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Poison",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"luckychant": {
 		"inherit": true,
@@ -3514,7 +3880,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 30,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allySide"
 	},
 	"mefirst": {
 		"inherit": true,
@@ -3523,7 +3890,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0
 	},
 	"copycat": {
 		"inherit": true,
@@ -3532,7 +3899,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0
 	},
 	"powerswap": {
 		"inherit": true,
@@ -3541,7 +3908,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"guardswap": {
 		"inherit": true,
@@ -3550,16 +3918,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"punishment": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Physical",
 		"pp": 10,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"lastresort": {
 		"inherit": true,
@@ -3568,7 +3938,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"worryseed": {
 		"inherit": true,
@@ -3577,7 +3948,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"suckerpunch": {
 		"inherit": true,
@@ -3586,7 +3958,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 1,
+		"target": "normal"
 	},
 	"toxicspikes": {
 		"inherit": true,
@@ -3595,7 +3968,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Poison",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "foeSide"
 	},
 	"heartswap": {
 		"inherit": true,
@@ -3604,7 +3978,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"aquaring": {
 		"inherit": true,
@@ -3613,7 +3988,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"magnetrise": {
 		"inherit": true,
@@ -3622,7 +3998,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Electric",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"flareblitz": {
 		"inherit": true,
@@ -3631,7 +4008,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Fire",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"forcepalm": {
 		"inherit": true,
@@ -3640,7 +4018,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"aurasphere": {
 		"inherit": true,
@@ -3649,7 +4028,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 20,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"rockpolish": {
 		"inherit": true,
@@ -3658,7 +4038,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 20,
 		"type": "Rock",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"poisonjab": {
 		"inherit": true,
@@ -3667,7 +4048,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Poison",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"darkpulse": {
 		"inherit": true,
@@ -3676,7 +4058,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 15,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"nightslash": {
 		"inherit": true,
@@ -3685,7 +4068,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"aquatail": {
 		"inherit": true,
@@ -3694,7 +4078,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"seedbomb": {
 		"inherit": true,
@@ -3703,7 +4088,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"airslash": {
 		"inherit": true,
@@ -3712,7 +4098,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 20,
 		"type": "Flying",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"xscissor": {
 		"inherit": true,
@@ -3721,7 +4108,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Bug",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"bugbuzz": {
 		"inherit": true,
@@ -3730,7 +4118,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Bug",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"dragonpulse": {
 		"inherit": true,
@@ -3739,7 +4128,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Dragon",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"dragonrush": {
 		"inherit": true,
@@ -3748,7 +4138,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Dragon",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"powergem": {
 		"inherit": true,
@@ -3757,7 +4148,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 20,
 		"type": "Rock",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"drainpunch": {
 		"inherit": true,
@@ -3766,7 +4158,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"vacuumwave": {
 		"inherit": true,
@@ -3775,7 +4168,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 30,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 1,
+		"target": "normal"
 	},
 	"focusblast": {
 		"inherit": true,
@@ -3784,7 +4178,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Fighting",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"energyball": {
 		"inherit": true,
@@ -3793,7 +4188,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"bravebird": {
 		"inherit": true,
@@ -3802,12 +4198,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Flying",
+		"priority": 0,
 		"self": {},
 		"recoil": [
 			1,
 			3
 		],
-		"isNonstandard": null
+		"target": "normal"
 	},
 	"earthpower": {
 		"inherit": true,
@@ -3816,7 +4213,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Ground",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"switcheroo": {
 		"inherit": true,
@@ -3825,7 +4223,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"gigaimpact": {
 		"inherit": true,
@@ -3834,12 +4233,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 5,
 		"type": "Normal",
+		"priority": 0,
 		"self": {},
 		"recoil": [
 			1,
 			3
 		],
-		"isNonstandard": null
+		"target": "normal"
 	},
 	"nastyplot": {
 		"inherit": true,
@@ -3848,7 +4248,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 2,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"bulletpunch": {
 		"inherit": true,
@@ -3857,7 +4258,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 30,
 		"type": "Steel",
-		"isNonstandard": null
+		"priority": 1,
+		"target": "normal"
 	},
 	"avalanche": {
 		"inherit": true,
@@ -3866,7 +4268,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Ice",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"iceshard": {
 		"inherit": true,
@@ -3875,7 +4278,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 30,
 		"type": "Ice",
-		"isNonstandard": null
+		"priority": 1,
+		"target": "normal"
 	},
 	"shadowclaw": {
 		"inherit": true,
@@ -3884,7 +4288,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Ghost",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"thunderfang": {
 		"inherit": true,
@@ -3893,7 +4298,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Electric",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"icefang": {
 		"inherit": true,
@@ -3902,7 +4308,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Ice",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"firefang": {
 		"inherit": true,
@@ -3911,7 +4318,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Fire",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"shadowsneak": {
 		"inherit": true,
@@ -3920,7 +4328,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 30,
 		"type": "Ghost",
-		"isNonstandard": null
+		"priority": 1,
+		"target": "normal"
 	},
 	"mudbomb": {
 		"inherit": true,
@@ -3929,7 +4338,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Ground",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"psychocut": {
 		"inherit": true,
@@ -3938,7 +4348,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"zenheadbutt": {
 		"inherit": true,
@@ -3947,7 +4358,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"mirrorshot": {
 		"inherit": true,
@@ -3956,7 +4368,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Steel",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"flashcannon": {
 		"inherit": true,
@@ -3965,7 +4378,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Steel",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"rockclimb": {
 		"inherit": true,
@@ -3974,7 +4388,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Rock",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"defog": {
 		"inherit": true,
@@ -3983,7 +4398,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 15,
 		"type": "Flying",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"trickroom": {
 		"inherit": true,
@@ -3992,7 +4408,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 5,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": -7,
+		"target": "all"
 	},
 	"dracometeor": {
 		"inherit": true,
@@ -4001,12 +4418,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Dragon",
+		"priority": 0,
 		"self": {},
 		"recoil": [
 			1,
 			3
 		],
-		"isNonstandard": null
+		"target": "normal"
 	},
 	"discharge": {
 		"inherit": true,
@@ -4015,7 +4433,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 15,
 		"type": "Electric",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacent"
 	},
 	"lavaplume": {
 		"inherit": true,
@@ -4024,7 +4443,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 15,
 		"type": "Fire",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacent"
 	},
 	"leafstorm": {
 		"inherit": true,
@@ -4033,12 +4453,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Grass",
+		"priority": 0,
 		"self": {},
 		"recoil": [
 			1,
 			3
 		],
-		"isNonstandard": null
+		"target": "normal"
 	},
 	"powerwhip": {
 		"inherit": true,
@@ -4047,7 +4468,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"rockwrecker": {
 		"inherit": true,
@@ -4056,12 +4478,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 5,
 		"type": "Rock",
+		"priority": 0,
 		"self": {},
 		"recoil": [
 			1,
 			3
 		],
-		"isNonstandard": null
+		"target": "normal"
 	},
 	"crosspoison": {
 		"inherit": true,
@@ -4070,7 +4493,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Poison",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"gunkshot": {
 		"inherit": true,
@@ -4079,7 +4503,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 5,
 		"type": "Poison",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"ironhead": {
 		"inherit": true,
@@ -4088,7 +4513,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Steel",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"magnetbomb": {
 		"inherit": true,
@@ -4097,7 +4523,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Steel",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"stoneedge": {
 		"inherit": true,
@@ -4106,7 +4533,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Rock",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"captivate": {
 		"inherit": true,
@@ -4115,16 +4543,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Fairy",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"grassknot": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Special",
 		"pp": 20,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"chatter": {
 		"inherit": true,
@@ -4133,7 +4563,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 20,
 		"type": "Flying",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"judgment": {
 		"inherit": true,
@@ -4142,7 +4573,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"bugbite": {
 		"inherit": true,
@@ -4151,7 +4583,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Bug",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"chargebeam": {
 		"inherit": true,
@@ -4160,7 +4593,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Electric",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"woodhammer": {
 		"inherit": true,
@@ -4169,12 +4603,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Grass",
+		"priority": 0,
 		"self": {},
 		"recoil": [
 			1,
 			3
 		],
-		"isNonstandard": null
+		"target": "normal"
 	},
 	"aquajet": {
 		"inherit": true,
@@ -4183,7 +4618,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 20,
 		"type": "Water",
-		"isNonstandard": null
+		"priority": 1,
+		"target": "normal"
 	},
 	"attackorder": {
 		"inherit": true,
@@ -4192,7 +4628,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 15,
 		"type": "Bug",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"defendorder": {
 		"inherit": true,
@@ -4201,7 +4638,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Bug",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"healorder": {
 		"inherit": true,
@@ -4210,7 +4648,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Bug",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"headsmash": {
 		"inherit": true,
@@ -4219,12 +4658,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 5,
 		"type": "Rock",
+		"priority": 0,
 		"self": {},
 		"recoil": [
 			1,
 			2
 		],
-		"isNonstandard": null
+		"target": "normal"
 	},
 	"doublehit": {
 		"inherit": true,
@@ -4233,7 +4673,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"roaroftime": {
 		"inherit": true,
@@ -4242,12 +4683,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Dragon",
+		"priority": 0,
 		"self": {},
 		"recoil": [
 			1,
 			3
 		],
-		"isNonstandard": null
+		"target": "normal"
 	},
 	"spacialrend": {
 		"inherit": true,
@@ -4256,7 +4698,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 10,
 		"type": "Dragon",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"lunardance": {
 		"inherit": true,
@@ -4265,16 +4708,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 10,
 		"type": "Psychic",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "self"
 	},
 	"crushgrip": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 1,
+		"basePower": 0,
 		"category": "Physical",
 		"pp": 5,
 		"type": "Normal",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"magmastorm": {
 		"inherit": true,
@@ -4283,7 +4728,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 5,
 		"type": "Fire",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"darkvoid": {
 		"inherit": true,
@@ -4292,7 +4738,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Dark",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "allAdjacentFoes"
 	},
 	"seedflare": {
 		"inherit": true,
@@ -4301,7 +4748,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 5,
 		"type": "Grass",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"ominouswind": {
 		"inherit": true,
@@ -4310,7 +4758,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 5,
 		"type": "Ghost",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	},
 	"shadowforce": {
 		"inherit": true,
@@ -4319,6 +4768,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 5,
 		"type": "Ghost",
-		"isNonstandard": null
+		"priority": 0,
+		"target": "normal"
 	}
 };
