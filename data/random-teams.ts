@@ -101,6 +101,7 @@ const MovePairs = [
 	['lightscreen', 'reflect'],
 	['sleeptalk', 'rest'],
 	['protect', 'wish'],
+	['leechseed', 'protect'],
 ];
 
 function sereneGraceBenefits(move: Move) {
@@ -184,7 +185,7 @@ export class RandomTeams {
 				return !counter.get('Steel');
 			},
 			Water: (movePool, moves, abilities, types, counter, species) => {
-				if (species.id === 'quagsire') return false;
+				if (types.includes('Ground')) return false;
 				return !counter.get('Water');
 			},
 		};
@@ -911,8 +912,9 @@ export class RandomTeams {
 		case 'Shed Skin':
 			return species.id === 'seviper';
 		case 'Sheer Force':
-			if (species.id === 'braviaryhisui' && role === 'Wallbreaker') return true;
-			return (!counter.get('sheerforce') || ['Guts', 'Sharpness', 'Slush Rush'].some(m => abilities.has(m)));
+			const braviaryCase = (species.id === 'braviaryhisui' && role === 'Wallbreaker');
+			const abilitiesCase = (abilities.has('Guts') || abilities.has('Sharpness'));
+			return (!counter.get('sheerforce') || moves.has('bellydrum') || braviaryCase || abilitiesCase);
 		case 'Slush Rush':
 			return !teamDetails.snow;
 		case 'Solar Power':
@@ -969,6 +971,7 @@ export class RandomTeams {
 		if (species.id === 'arcaninehisui') return 'Rock Head';
 		if (species.id === 'staraptor') return 'Reckless';
 		if (species.id === 'enamorus' && moves.has('calmmind')) return 'Cute Charm';
+		if (species.id === 'cetitan' && role === 'Wallbreaker') return 'Sheer Force';
 		if (abilities.has('Corrosion') && moves.has('toxic') && !moves.has('earthpower')) return 'Corrosion';
 		if (abilities.has('Cud Chew') && moves.has('substitute')) return 'Cud Chew';
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk'))) return 'Guts';
