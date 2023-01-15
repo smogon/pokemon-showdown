@@ -5,8 +5,8 @@
  * Set probability code written by Annika
  */
 
-import {FS, Utils} from '../../lib';
-import {SSBSet, ssbSets} from '../../data/mods/ssb/random-teams';
+import {FS, Utils} from '../../../lib';
+import {SSBSet, ssbSets} from '../../../data/mods/ssb/random-teams';
 
 
 interface SetCriteria {
