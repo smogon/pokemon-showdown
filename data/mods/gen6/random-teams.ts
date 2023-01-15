@@ -10,7 +10,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		this.noStab = [...this.noStab, 'aquajet', 'fakeout', 'iceshard', 'machpunch', 'quickattack', 'vacuumwave'];
 
 		this.moveEnforcementCheckers = {
-			Bug: (movePool, moves, abilities) => movePool.includes('megahorn') || movePool.includes('pinmissile') || abilities.has('Tinted Lens'),
+			Bug: (movePool, moves, abilities, types, counter) => (movePool.includes('megahorn') || movePool.includes('pinmissile') ||
+				!counter.get('Bug') && abilities.has('Tinted Lens')),
 			Dark: (movePool, moves, abilities, types, counter, species) => (
 				(!counter.get('Dark') && !abilities.has('Protean'))
 			),
@@ -32,7 +33,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 					!!counter.setupType || !counter.get('Status')
 				)
 			),
-			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire') || ['eruption', 'quiverdance'].some(m => movePool.includes(m)),
+			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire') ||
+				['eruption', 'quiverdance'].some(m => movePool.includes(m)),
 			Flying: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Flying') && (
 					abilities.has('Gale Wings') ||
