@@ -25,6 +25,8 @@ Check the test/ directory to see if a file already exists for the effect that yo
 To create the battle, use common.createBattle and pass in two arrays of teams. You can add additional flags as well:
 - gameType: 'doubles', 'triples', 'multi', 'freeforall', etc (tests default to singles)
 - forceRandomChance: true, false (any RNG calls that use Battle#randomChance will default to true or false instead of calling RNG)
+  - Examples include accuracy, critical hits, secondary effects, being fully paralyzed, Abilities like Flame Body, and successive Protects.
+  - It won't control things like random targeting, sampling from a list (e.g. Metronome), or rolling variable durations (e.g. number of sleep turns).
 - seed: Array of 4 ints (used to force a specific RNG when the default seed isn't compatible. Avoid relying on RNG if possible)
 - other custom rules, e.g. Inverse Mod: defined in test/common.js
 
