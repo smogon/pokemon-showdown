@@ -10,7 +10,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		this.noStab = [...this.noStab, 'aquajet', 'fakeout', 'iceshard', 'machpunch', 'quickattack', 'vacuumwave'];
 
 		this.moveEnforcementCheckers = {
-			Bug: movePool => movePool.includes('megahorn') || movePool.includes('pinmissile'),
+			Bug: (movePool, moves, abilities) => movePool.includes('megahorn') || movePool.includes('pinmissile') || abilities.has('Tinted Lens'),
 			Dark: (movePool, moves, abilities, types, counter, species) => (
 				(!counter.get('Dark') && !abilities.has('Protean'))
 			),
