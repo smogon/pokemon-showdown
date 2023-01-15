@@ -5073,7 +5073,7 @@
 				"species": "Carvanha",
 				"item": ["Life Orb"],
 				"ability": ["Speed Boost"],
-				"evs": {"atk": 196, "spd": 36, "spe": 236},
+				"evs": {"atk": 196, "def": 36, "spd": 36, "spe": 236},
 				"ivs": {"hp": 9},
 				"nature": "Adamant",
 				"moves": [["Aqua Jet"], ["Crunch"], ["Psychic Fangs"], ["Protect"]]
