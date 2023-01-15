@@ -589,6 +589,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		const tierCount: {[k: string]: number} = {};
 		const typeCount: {[k: string]: number} = {};
 		const typeComboCount: {[k: string]: number} = {};
+		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
 		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
@@ -625,6 +626,19 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				}
 				if (skip) continue;
 
+				// Limit three weak to any type
+				for (const typeName of this.dex.types.names()) {
+					// it's weak to the type
+					if (this.dex.getEffectiveness(typeName, species) > 0) {
+						if (!typeWeaknesses[typeName]) typeWeaknesses[typeName] = 0;
+						if (typeWeaknesses[typeName] >= 3 * limitFactor) {
+							skip = true;
+							break;
+						}
+					}
+				}
+				if (skip) continue;
+
 				// Limit one of any type combination
 				if (!this.forceMonotype && typeComboCount[typeCombo] >= 1 * limitFactor) continue;
 			}
@@ -655,6 +669,14 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				typeComboCount[typeCombo]++;
 			} else {
 				typeComboCount[typeCombo] = 1;
+			}
+
+			// Increment weakness counter
+			for (const typeName of this.dex.types.names()) {
+				// it's weak to the type
+				if (this.dex.getEffectiveness(typeName, species) > 0) {
+					typeWeaknesses[typeName]++;
+				}
 			}
 
 			// Updateeam details
