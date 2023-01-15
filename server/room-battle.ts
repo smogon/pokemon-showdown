@@ -1305,8 +1305,9 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 			}
 		}
 	}
-	async getTeam(user: User | ID) {
-		const id = typeof user === 'object' ? user.id : user;
+	async getTeam(user: User | string) {
+		// toID extracts user.id
+		const id = toID(user);
 		const player = this.playerTable[id];
 		if (!player) return;
 		void this.stream.write(`>requestteam ${player.slot}`);

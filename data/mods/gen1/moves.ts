@@ -552,6 +552,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		ignoreImmunity: true,
 		basePower: 1,
 	},
+	petaldance: {
+		inherit: true,
+		onMoveFail() {},
+	},
 	poisonsting: {
 		inherit: true,
 		secondary: {
@@ -588,9 +592,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		condition: {
 			// Rage lock
-			duration: 255,
 			onStart(target, source, effect) {
 				this.effectState.move = 'rage';
+				this.effectState.accuracy = 255;
 			},
 			onLockMove: 'rage',
 			onHit(target, source, move) {
@@ -881,6 +885,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		ignoreImmunity: true,
 		basePower: 1,
+	},
+	thrash: {
+		inherit: true,
+		onMoveFail() {},
 	},
 	thunder: {
 		inherit: true,

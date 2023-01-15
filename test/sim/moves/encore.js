@@ -37,32 +37,31 @@ describe('Encore', function () {
 		assert.equal(battle.p2.active[0].hp, hp);
 	});
 
-	it('should make Focus Punch always succeed if it changes the user\'s decision', function () {
-		battle = common.createBattle({gameType: 'doubles'}, [
-			[
-				{species: "Smeargle", level: 50, ability: 'owntempo', moves: ['splash', 'focuspunch']},
-				{species: "Abra", level: 1, ability: 'innerfocus', moves: ['knockoff', 'teleport']},
-			],
-			[
-				{species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['encore', 'splash']},
-				{species: "Zigzagoon", level: 1, ability: 'pickup', moves: ['extremespeed']},
-			],
-		]);
+	it(`should make Focus Punch always succeed if it changes the user's decision`, function () {
+		// Hardcoded RNG seed so the random target from Encored Focus Punch will not attack Zigzagoon
+		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
+			{species: 'Smeargle', level: 50, moves: ['splash', 'focuspunch']},
+			{species: 'Abra', level: 1, moves: ['knockoff', 'teleport']},
+		], [
+			{species: 'Smeargle', item: 'laggingtail', moves: ['encore', 'splash']},
+			{species: 'Zigzagoon', level: 1, moves: ['extremespeed']},
+		]]);
 
 		battle.makeChoices('move focuspunch 1, move knockoff 1', 'move splash, move extremespeed 2');
-		let hp = battle.p2.active[0].hp;
-		assert.notEqual(hp, battle.p2.active[0].maxhp);
+		const p2smeargle = battle.p2.active[0];
+		let hp = p2smeargle.hp;
+		assert.false.fullHP(p2smeargle);
 
 		// The Pokemon Encored into Focus Punch is not subject to the negative effects of Focus Punch; that is,
 		// if it is hit at any time before or after the Encore, it still uses Focus Punch like normal. It doesn't matter
 		// in the case of Focus Punch if the user was hit before or after the Encore; Focus Punch will still always work.
 		battle.makeChoices('move splash, move teleport', 'move encore 1, move extremespeed 1');
-		assert.notEqual(battle.p2.active[0].hp, hp);
-		hp = battle.p2.active[0].hp;
+		assert.notEqual(p2smeargle.hp, hp);
+		hp = p2smeargle.hp;
 
 		// During subsequent turns the normal Focus Punch behavior applies.
 		battle.makeChoices('move focuspunch 1, move teleport', 'move splash, move extremespeed 1');
-		assert.equal(battle.p2.active[0].hp, hp);
+		assert.equal(p2smeargle.hp, hp);
 	});
 
 	it('should not affect Shell Trap if the user\'s decision is not changed', function () {

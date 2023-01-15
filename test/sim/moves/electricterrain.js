@@ -97,11 +97,13 @@ describe('Electric Terrain', function () {
 	});
 
 	it.skip(`should block Sleep before the move would have missed`, function () {
-		battle = common.createBattle({seed: [1, 2, 3, 4]}, [[ // Seed ensures Sleep Powder would miss normally
-			{species: 'tapukoko', ability: 'wonderskin', moves: ['electricterrain']},
+		battle = common.createBattle([[
+			{species: 'tapukoko', moves: ['electricterrain']},
 		], [
 			{species: 'venusaur', moves: ['sleeppowder']},
 		]]);
+		// Modding accuracy so Sleep Powder always misses
+		battle.onEvent('Accuracy', battle.format, false);
 		battle.makeChoices();
 		assert(battle.log.some(line => line.includes('|-activate|p1a: Tapu Koko|move: Electric Terrain')));
 	});
