@@ -32,7 +32,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 					!!counter.setupType || !counter.get('Status')
 				)
 			),
-			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire') || movePool.includes('quiverdance'),
+			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire') || ['eruption', 'quiverdance'].some(m => movePool.includes(m)),
 			Flying: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Flying') && (
 					abilities.has('Gale Wings') ||
@@ -140,7 +140,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 					(!moves.has('growth') || moves.has('sunnyday'))
 				)
 			), isSetup: true};
-		case 'calmmind': case 'geomancy': case 'nastyplot': case 'quiverdance': case 'tailglow':
+		case 'calmmind': case 'geomancy': case 'nastyplot': case 'tailglow':
 			if (types.has('Dark') && moves.has('darkpulse')) {
 				counter.setupType = 'Special';
 				return {cull: false, isSetup: true};
@@ -150,6 +150,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				counter.get('specialsetup') > 1 ||
 				(counter.get('Special') + counter.get('specialpool') < 2 && (!moves.has('rest') || !moves.has('sleeptalk')))
 			), isSetup: true};
+		case 'quiverdance':
+			return {cull: false, isSetup: true};
 		case 'growth': case 'shellsmash': case 'workup':
 			return {cull: (
 				counter.setupType !== 'Mixed' ||
@@ -920,7 +922,9 @@ export class RandomGen6Teams extends RandomGen7Teams {
 						(movePool.includes('moonlight') && types.size < 2) ||
 						(movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb) ||
 						(species.requiredMove && movePool.includes(toID(species.requiredMove))) ||
-						(moves.has('suckerpunch') && counter.get('stab') < species.types.length)
+						(moves.has('suckerpunch') && counter.get('stab') < species.types.length) ||
+						(movePool.includes('quiverdance') && ['defog', 'uturn', 'stickyweb'].every(m => !moves.has(m)) &&
+							counter.get('Special') < 4)
 					) {
 						cull = true;
 					} else {
@@ -957,7 +961,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 					if (
 						move.category !== 'Status' &&
 						!move.damage && !move.flags.charge &&
-						(moveid !== 'hiddenpower' || !availableHP)
+						(!moveid.startsWith('hiddenpower') || !availableHP)
 					) rejectedPool.push(moveid);
 					moves.delete(moveid);
 					if (moveid.startsWith('hiddenpower')) hasHiddenPower = false;

@@ -188,7 +188,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				(move.id === 'bulkup' && hasRestTalk) ||
 				(move.id === 'bellydrum' && !abilities.has('Unburden') && !counter.get('priority'))
 			), isSetup: true};
-		case 'calmmind': case 'geomancy': case 'nastyplot': case 'quiverdance': case 'tailglow':
+		case 'calmmind': case 'geomancy': case 'nastyplot': case 'tailglow':
 			if (types.has('Dark') && moves.has('darkpulse')) {
 				counter.setupType = 'Special';
 				return {cull: false, isSetup: true};
@@ -1132,7 +1132,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				}
 
 				const singlesEnforcement = (
-					!['judgment', 'lightscreen', 'reflect', 'sleeptalk', 'toxic'].includes(moveid) && (
+					!['judgment', 'lightscreen', 'quiverdance', 'reflect', 'sleeptalk', 'toxic'].includes(moveid) && (
 						move.category !== 'Status' ||
 						// should allow Meganium to cull a recovery move for the sake of STAB
 						!(move.flags.heal && species.id !== 'meganium')
@@ -1173,7 +1173,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 							movePool.includes('milkdrink') ||
 							movePool.includes('shoreup') ||
 							(movePool.includes('moonlight') && types.size < 2) ||
-							(movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb)
+							(movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb) ||
+							(movePool.includes('quiverdance') && ['defog', 'uturn', 'stickyweb'].every(m => !moves.has(m)) &&
+							counter.get('Special') < 4)
 						) || (
 							isLead &&
 							movePool.includes('stealthrock') &&
