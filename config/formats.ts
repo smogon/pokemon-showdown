@@ -975,9 +975,9 @@ export const Formats: FormatList = [
 						move[property] = forte[property] as any;
 					}
 				}
-			}
-			if (forte.onModifyMove) {
-				this.singleEvent('ModifyMove', forte, null, pokemon, target, move);
+				if (forte.onModifyMove) {
+					this.singleEvent('ModifyMove', forte, null, pokemon, target, move);
+				}
 			}
 		},
 		onModifyPriority(priority, source, target, move) {
