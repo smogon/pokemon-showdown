@@ -1379,6 +1379,92 @@ export const Formats: FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] The Loser's Game",
+		desc: `The first player to lose all of their Pok&eacute;mon wins.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3714223/">The Loser's Game</a>`,
+		],
+
+		mod: 'gen8',
+		searchShow: false,
+		ruleset: ['Standard OMs', 'Sleep Clause Mod', '!OHKO Clause', 'Picked Team Size = 6', 'Adjust Level = 100', 'Min Source Gen = 9'],
+		banlist: ['Infiltrator', 'Choice Scarf', 'Explosion', 'Final Gambit', 'Healing Wish', 'Lunar Dance', 'Magic Room', 'Memento', 'Misty Explosion', 'Self-Destruct'],
+		onValidateTeam(team) {
+			const familyTable = new Set<ID>();
+			for (const set of team) {
+				let species = this.dex.species.get(set.species);
+				while (species.prevo) {
+					species = this.dex.species.get(species.prevo);
+				}
+				if (familyTable.has(species.id)) {
+					return [
+						`You are limited to one Pok&eacute;mon from each family by the Family Clause.`,
+						`(You have more than one evolution of ${species.name}.)`,
+					];
+				}
+				familyTable.add(species.id);
+			}
+		},
+		battle: {
+			tiebreak() {
+				if (this.ended) return false;
+
+				this.inputLog.push(`>tiebreak`);
+				this.add('message', "Time's up! Going to tiebreaker...");
+				const notFainted = this.sides.map(side => (
+					side.pokemon.filter(pokemon => !pokemon.fainted).length
+				));
+				this.add('-message', this.sides.map((side, i) => (
+					`${side.name}: ${notFainted[i]} Pokemon left`
+				)).join('; '));
+				const maxNotFainted = Math.max(...notFainted);
+				let tiedSides = this.sides.filter((side, i) => notFainted[i] === maxNotFainted);
+				if (tiedSides.length <= 1) {
+					return this.win(tiedSides[1]);
+				}
+
+				const hpPercentage = tiedSides.map(side => (
+					side.pokemon.map(pokemon => pokemon.hp / pokemon.maxhp).reduce((a, b) => a + b) * 100 / 6
+				));
+				this.add('-message', tiedSides.map((side, i) => (
+					`${side.name}: ${Math.round(hpPercentage[i])}% total HP left`
+				)).join('; '));
+				const maxPercentage = Math.max(...hpPercentage);
+				tiedSides = tiedSides.filter((side, i) => hpPercentage[i] === maxPercentage);
+				if (tiedSides.length <= 1) {
+					return this.win(tiedSides[1]);
+				}
+
+				const hpTotal = tiedSides.map(side => (
+					side.pokemon.map(pokemon => pokemon.hp).reduce((a, b) => a + b)
+				));
+				this.add('-message', tiedSides.map((side, i) => (
+					`${side.name}: ${Math.round(hpTotal[i])} total HP left`
+				)).join('; '));
+				const maxTotal = Math.max(...hpTotal);
+				tiedSides = tiedSides.filter((side, i) => hpTotal[i] === maxTotal);
+				if (tiedSides.length <= 1) {
+					return this.win(tiedSides[1]);
+				}
+				return this.tie();
+			},
+			checkWin(faintData) {
+				let team1PokemonLeft = this.sides[0].pokemonLeft;
+				let team2PokemonLeft = this.sides[1].pokemonLeft;
+				if (!team1PokemonLeft && !team2PokemonLeft) {
+					this.win(faintData?.target.side || null);
+					return true;
+				}
+				for (const side of this.sides) {
+					if (!side.pokemonLeft) {
+						this.win(side);
+						return true;
+					}
+				}
+			},
+		},
+	},
+	{
 		name: "[Gen 8] Linked",
 		desc: `The first two moves in a Pok&eacute;mon's moveset are used simultaneously.`,
 		threads: [
@@ -1673,150 +1759,6 @@ export const Formats: FormatList = [
 			'Rayquaza', 'Reshiram', 'Solgaleo', 'Spectrier', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned',
 			'Zekrom', 'Moody', 'Power Construct', 'Bright Powder', 'Focus Sash', 'King\'s Rock', 'Lax Incense', 'Final Gambit',
 		],
-	},
-	{
-		name: "[Gen 8] The Loser's Game",
-		desc: `The first player to lose all of their Pok&eacute;mon wins.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3657270/">The Loser's Game</a>`,
-		],
-
-		mod: 'gen8',
-		searchShow: false,
-		ruleset: ['Standard OMs', 'Sleep Clause Mod', '!OHKO Clause', 'Picked Team Size = 6', 'Adjust Level = 100'],
-		banlist: [
-			'Sandshrew-Alola', 'Shedinja', 'Infiltrator', 'Magic Guard', 'Choice Scarf',
-			'Explosion', 'Final Gambit', 'Healing Wish', 'Lunar Dance', 'Magic Room', 'Memento', 'Misty Explosion', 'Self-Destruct',
-		],
-		onValidateTeam(team) {
-			const familyTable = new Set<ID>();
-			for (const set of team) {
-				let species = this.dex.species.get(set.species);
-				while (species.prevo) {
-					species = this.dex.species.get(species.prevo);
-				}
-				if (familyTable.has(species.id)) {
-					return [
-						`You are limited to one Pok&eacute;mon from each family by the Family Clause.`,
-						`(You have more than one evolution of ${species.name}.)`,
-					];
-				}
-				familyTable.add(species.id);
-			}
-		},
-		battle: {
-			tiebreak() {
-				if (this.ended) return false;
-
-				this.inputLog.push(`>tiebreak`);
-				this.add('message', "Time's up! Going to tiebreaker...");
-				const notFainted = this.sides.map(side => (
-					side.pokemon.filter(pokemon => !pokemon.fainted).length
-				));
-				this.add('-message', this.sides.map((side, i) => (
-					`${side.name}: ${notFainted[i]} Pokemon left`
-				)).join('; '));
-				const maxNotFainted = Math.max(...notFainted);
-				let tiedSides = this.sides.filter((side, i) => notFainted[i] === maxNotFainted);
-				if (tiedSides.length <= 1) {
-					return this.win(tiedSides[1]);
-				}
-
-				const hpPercentage = tiedSides.map(side => (
-					side.pokemon.map(pokemon => pokemon.hp / pokemon.maxhp).reduce((a, b) => a + b) * 100 / 6
-				));
-				this.add('-message', tiedSides.map((side, i) => (
-					`${side.name}: ${Math.round(hpPercentage[i])}% total HP left`
-				)).join('; '));
-				const maxPercentage = Math.max(...hpPercentage);
-				tiedSides = tiedSides.filter((side, i) => hpPercentage[i] === maxPercentage);
-				if (tiedSides.length <= 1) {
-					return this.win(tiedSides[1]);
-				}
-
-				const hpTotal = tiedSides.map(side => (
-					side.pokemon.map(pokemon => pokemon.hp).reduce((a, b) => a + b)
-				));
-				this.add('-message', tiedSides.map((side, i) => (
-					`${side.name}: ${Math.round(hpTotal[i])} total HP left`
-				)).join('; '));
-				const maxTotal = Math.max(...hpTotal);
-				tiedSides = tiedSides.filter((side, i) => hpTotal[i] === maxTotal);
-				if (tiedSides.length <= 1) {
-					return this.win(tiedSides[1]);
-				}
-				return this.tie();
-			},
-			faintMessages(lastFirst) {
-				if (this.ended) return;
-				const length = this.faintQueue.length;
-				if (!length) return false;
-				if (lastFirst) {
-					this.faintQueue.unshift(this.faintQueue[this.faintQueue.length - 1]);
-					this.faintQueue.pop();
-				}
-				let faintData;
-				while (this.faintQueue.length) {
-					faintData = this.faintQueue.shift()!;
-					const pokemon: Pokemon = faintData.target;
-					if (!pokemon.fainted &&
-						this.runEvent('BeforeFaint', pokemon, faintData.source, faintData.effect)) {
-						this.add('faint', pokemon);
-						pokemon.side.pokemonLeft--;
-						if (pokemon.side.totalFainted < 100) pokemon.side.totalFainted++;
-						this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
-						this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
-						pokemon.clearVolatile(false);
-						pokemon.fainted = true;
-						pokemon.isActive = false;
-						pokemon.isStarted = false;
-						pokemon.side.faintedThisTurn = pokemon;
-					}
-				}
-
-				if (this.gen <= 1) {
-					// in gen 1, fainting skips the rest of the turn
-					// residuals don't exist in gen 1
-					this.queue.clear();
-					// Fainting clears accumulated Bide damage
-					for (const pokemon of this.getAllActive()) {
-						if (pokemon.volatiles['bide'] && pokemon.volatiles['bide'].damage) {
-							pokemon.volatiles['bide'].damage = 0;
-							this.hint("Desync Clause Mod activated!");
-							this.hint("In Gen 1, Bide's accumulated damage is reset to 0 when a Pokemon faints.");
-						}
-					}
-				} else if (this.gen <= 3 && this.gameType === 'singles') {
-					// in gen 3 or earlier, fainting in singles skips to residuals
-					for (const pokemon of this.getAllActive()) {
-						if (this.gen <= 2) {
-							// in gen 2, fainting skips moves only
-							this.queue.cancelMove(pokemon);
-						} else {
-							// in gen 3, fainting skips all moves and switches
-							this.queue.cancelAction(pokemon);
-						}
-					}
-				}
-
-				if (!this.p1.pokemonLeft && !this.p2.pokemonLeft) {
-					this.win(faintData ? faintData.target.side.foe : null);
-					return true;
-				}
-				if (!this.p1.pokemonLeft) {
-					this.win(this.p1);
-					return true;
-				}
-				if (!this.p2.pokemonLeft) {
-					this.win(this.p2);
-					return true;
-				}
-				if (faintData) {
-					this.runEvent('AfterFaint', faintData.target, faintData.source, faintData.effect, length);
-				}
-				return false;
-			},
-		},
 	},
 
 	// Retro Other Metagames
