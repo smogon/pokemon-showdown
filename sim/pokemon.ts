@@ -150,6 +150,7 @@ export class Pokemon {
 	beingCalledBack: boolean;
 
 	lastMove: ActiveMove | null;
+	secondLastMove: ActiveMove | null;
 	lastMoveUsed: ActiveMove | null;
 	lastMoveTargetLoc?: number;
 	moveThisTurn: string | boolean;
@@ -420,6 +421,7 @@ export class Pokemon {
 		this.beingCalledBack = false;
 
 		this.lastMove = null;
+		this.secondLastMove = null;
 		this.lastMoveUsed = null;
 		this.moveThisTurn = '';
 		this.statsRaisedThisTurn = false;
@@ -841,6 +843,7 @@ export class Pokemon {
 	}
 
 	moveUsed(move: ActiveMove, targetLoc?: number) {
+		this.secondLastMove = this.lastMove;
 		this.lastMove = move;
 		this.lastMoveTargetLoc = targetLoc;
 		this.moveThisTurn = move.id;
@@ -1414,6 +1417,7 @@ export class Pokemon {
 		}
 
 		this.lastMove = null;
+		this.secondLastMove = null;
 		this.lastMoveUsed = null;
 		this.moveThisTurn = '';
 

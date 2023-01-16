@@ -3689,8 +3689,15 @@ export const Moves: {[moveid: string]: MoveData} = {
 					this.debug(`Pokemon hasn't moved yet`);
 					return false;
 				}
+                const moveToDisable: ActiveMove =
+							pokemon.secondLastMove !== null &&
+							["copycat", "metronome"].includes(
+								pokemon.secondLastMove.id
+							)
+								? pokemon.secondLastMove
+								: pokemon.lastMove;
 				for (const moveSlot of pokemon.moveSlots) {
-					if (moveSlot.id === pokemon.lastMove.id) {
+					if (moveSlot.id === moveToDisable.id) {
 						if (!moveSlot.pp) {
 							this.debug('Move out of PP');
 							return false;
@@ -3698,11 +3705,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 					}
 				}
 				if (effect.effectType === 'Ability') {
-					this.add('-start', pokemon, 'Disable', pokemon.lastMove.name, '[from] ability: Cursed Body', '[of] ' + source);
+					this.add('-start', pokemon, 'Disable', moveToDisable.name, '[from] ability: Cursed Body', '[of] ' + source);
 				} else {
-					this.add('-start', pokemon, 'Disable', pokemon.lastMove.name);
+					this.add('-start', pokemon, 'Disable', moveToDisable.name);
 				}
-				this.effectState.move = pokemon.lastMove.id;
+				this.effectState.move = moveToDisable.id;
 			},
 			onResidualOrder: 17,
 			onEnd(pokemon) {
