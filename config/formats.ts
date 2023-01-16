@@ -975,9 +975,8 @@ export const Formats: FormatList = [
 						move[property] = forte[property] as any;
 					}
 				}
-				if (forte.onModifyMove) {
-					this.singleEvent('ModifyMove', forte, null, pokemon, target, move);
-				}
+				forte.onModifyMove?.call(this, move, pokemon, target);
+				if (target) forte.onModifyType?.call(this, move, pokemon, target);
 			}
 		},
 		onModifyPriority(priority, source, target, move) {
@@ -1019,13 +1018,6 @@ export const Formats: FormatList = [
 			const forte = source.m.forte;
 			if (move.category !== 'Status' && forte?.onBasePower) {
 				this.singleEvent('BasePower', forte, null, source, target, move, basePower);
-			}
-		},
-		onModifyTypePriority: 1,
-		onModifyType(move, source, target) {
-			const forte = source.m.forte;
-			if (move.category !== 'Status' && forte?.onModifyType) {
-				this.singleEvent('ModifyType', forte, null, source, target, move);
 			}
 		},
 		pokemon: {
