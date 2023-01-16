@@ -439,7 +439,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 			"spe": 90
 		},
 		"abilities": {
-			"0": "Lightningrod"
+			"0": "Lightning Rod"
 		},
 		"inherit": true
 	},
@@ -457,7 +457,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 			"spe": 100
 		},
 		"abilities": {
-			"0": "Lightningrod"
+			"0": "Lightning Rod"
 		},
 		"inherit": true
 	},
@@ -1830,7 +1830,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 			"spe": 35
 		},
 		"abilities": {
-			"0": "Lightningrod"
+			"0": "Lightning Rod"
 		},
 		"inherit": true
 	},
@@ -1848,7 +1848,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 			"spe": 45
 		},
 		"abilities": {
-			"0": "Lightningrod"
+			"0": "Lightning Rod"
 		},
 		"inherit": true
 	},
@@ -3021,7 +3021,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 			"spe": 60
 		},
 		"abilities": {
-			"0": "Lightningrod"
+			"0": "Lightning Rod"
 		},
 		"inherit": true
 	},
@@ -5436,7 +5436,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 			"spe": 65
 		},
 		"abilities": {
-			"0": "Lightningrod"
+			"0": "Lightning Rod"
 		},
 		"inherit": true
 	},
@@ -5454,7 +5454,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 			"spe": 110
 		},
 		"abilities": {
-			"0": "Lightningrod"
+			"0": "Lightning Rod"
 		},
 		"inherit": true
 	},
