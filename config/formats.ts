@@ -1449,8 +1449,8 @@ export const Formats: FormatList = [
 				return this.tie();
 			},
 			checkWin(faintData) {
-				let team1PokemonLeft = this.sides[0].pokemonLeft;
-				let team2PokemonLeft = this.sides[1].pokemonLeft;
+				const team1PokemonLeft = this.sides[0].pokemonLeft;
+				const team2PokemonLeft = this.sides[1].pokemonLeft;
 				if (!team1PokemonLeft && !team2PokemonLeft) {
 					this.win(faintData?.target.side || null);
 					return true;
