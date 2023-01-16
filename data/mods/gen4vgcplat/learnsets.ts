@@ -64681,6 +64681,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"dracometeor": [
 				"9T"
 			],
+			"psychoboost": [
+				"9T"
+			],
 			"psywave": [
 				"9L1"
 			],
@@ -64915,6 +64918,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 		"inherit": true,
 		"learnset": {
 			"dracometeor": [
+				"9T"
+			],
+			"psychoboost": [
 				"9T"
 			],
 			"psywave": [
