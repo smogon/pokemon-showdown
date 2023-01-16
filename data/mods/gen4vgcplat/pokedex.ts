@@ -8822,10 +8822,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	"rotomheat": {
 		"types": [
 			"Electric",
-			"Ghost"
+			"Fire"
 		],
 		"baseStats": {
-			"hp": 50,
+			"hp": 80,
 			"atk": 65,
 			"def": 107,
 			"spa": 105,
@@ -8840,10 +8840,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	"rotomwash": {
 		"types": [
 			"Electric",
-			"Ghost"
+			"Water"
 		],
 		"baseStats": {
-			"hp": 50,
+			"hp": 80,
 			"atk": 65,
 			"def": 107,
 			"spa": 105,
@@ -8858,10 +8858,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	"rotomfrost": {
 		"types": [
 			"Electric",
-			"Ghost"
+			"Ice"
 		],
 		"baseStats": {
-			"hp": 50,
+			"hp": 80,
 			"atk": 65,
 			"def": 107,
 			"spa": 105,
@@ -8876,10 +8876,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	"rotomfan": {
 		"types": [
 			"Electric",
-			"Ghost"
+			"Flying"
 		],
 		"baseStats": {
-			"hp": 50,
+			"hp": 80,
 			"atk": 65,
 			"def": 107,
 			"spa": 105,
@@ -8887,17 +8887,17 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 			"spe": 86
 		},
 		"abilities": {
-			"0": "Levitate"
+			"0": "Motor Drive"
 		},
 		"inherit": true
 	},
 	"rotommow": {
 		"types": [
 			"Electric",
-			"Ghost"
+			"Grass"
 		],
 		"baseStats": {
-			"hp": 50,
+			"hp": 80,
 			"atk": 65,
 			"def": 107,
 			"spa": 105,

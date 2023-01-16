@@ -14022,8 +14022,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"brine": [
 				"9M"
 			],
-			"icebeam": [
-				"9M"
+			"freezedry": [
+				"9L34"
 			],
 			"takedown": [
 				"9L37"
@@ -14033,6 +14033,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			],
 			"aquatail": [
 				"9T"
+			],
+			"icebeam": [
+				"9M"
 			],
 			"safeguard": [
 				"9M"
@@ -20633,8 +20636,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"drainingkiss": [
 				"9L15"
 			],
-			"icebeam": [
-				"9M"
+			"freezedry": [
+				"9L18"
 			],
 			"calmmind": [
 				"9M"
@@ -20647,6 +20650,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			],
 			"perishsong": [
 				"9L33"
+			],
+			"icebeam": [
+				"9M"
 			],
 			"aurasphere": [
 				"9L40"
@@ -21709,8 +21715,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"avalanche": [
 				"9M"
 			],
-			"icebeam": [
-				"9M"
+			"freezedry": [
+				"9L1"
 			],
 			"scald": [
 				"9L35"
@@ -21732,6 +21738,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			],
 			"perishsong": [
 				"9L27"
+			],
+			"icebeam": [
+				"9M"
 			],
 			"recover": [
 				"9L37"
@@ -22042,8 +22051,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"helpinghand": [
 				"9T"
 			],
-			"icebeam": [
-				"9M"
+			"freezedry": [
+				"9L8"
 			],
 			"watergun": [
 				"9L15"
@@ -22065,6 +22074,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			],
 			"muddywater": [
 				"9L54"
+			],
+			"icebeam": [
+				"9M"
 			],
 			"recover": [
 				"9L63"
@@ -23858,6 +23870,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			],
 			"blizzard": [
 				"9M"
+			],
+			"freezedry": [
+				"9L78"
 			],
 			"followme": [
 				"9L85"
@@ -39067,8 +39082,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"brine": [
 				"9M"
 			],
-			"icebeam": [
-				"9M"
+			"freezedry": [
+				"9L4"
 			],
 			"muddywater": [
 				"9L8"
@@ -39086,6 +39101,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 				"9L23"
 			],
 			"dragonpulse": [
+				"9M"
+			],
+			"icebeam": [
 				"9M"
 			],
 			"hyperbeam": [
@@ -61703,8 +61721,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"mudslap": [
 				"9L4"
 			],
-			"icebeam": [
-				"9M"
+			"freezedry": [
+				"9L10"
 			],
 			"icywind": [
 				"9T"
@@ -61764,6 +61782,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 				"9M"
 			],
 			"hiddenpower": [
+				"9M"
+			],
+			"icebeam": [
 				"9M"
 			],
 			"lightscreen": [
@@ -62022,8 +62043,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"blizzard": [
 				"9M"
 			],
-			"icebeam": [
-				"9M"
+			"freezedry": [
+				"9L49"
 			],
 			"aquatail": [
 				"9T"
@@ -62065,6 +62086,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 				"9M"
 			],
 			"hiddenpower": [
+				"9M"
+			],
+			"icebeam": [
 				"9M"
 			],
 			"irontail": [
@@ -62192,8 +62216,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"blizzard": [
 				"9M"
 			],
-			"icebeam": [
-				"9M"
+			"freezedry": [
+				"9L55"
 			],
 			"aquatail": [
 				"9T"
@@ -62229,6 +62253,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 				"9M"
 			],
 			"hiddenpower": [
+				"9M"
+			],
+			"icebeam": [
 				"9M"
 			],
 			"irontail": [
@@ -62305,8 +62332,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"crunch": [
 				"9L1"
 			],
-			"icebeam": [
-				"9M"
+			"freezedry": [
+				"9L42"
 			],
 			"growl": [
 				"9L1"
@@ -62393,6 +62420,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 				"9M"
 			],
 			"hyperbeam": [
+				"9M"
+			],
+			"icebeam": [
 				"9M"
 			],
 			"ironhead": [
@@ -64284,8 +64314,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"explosion": [
 				"9M"
 			],
-			"icebeam": [
-				"9M"
+			"freezedry": [
+				"9L1"
 			],
 			"icywind": [
 				"9T"
@@ -64360,6 +64390,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 				"9M"
 			],
 			"hyperbeam": [
+				"9M"
+			],
+			"icebeam": [
 				"9M"
 			],
 			"icepunch": [
@@ -65134,6 +65167,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			],
 			"rest": [
 				"9M"
+			],
+			"freezedry": [
+				"9L60"
 			],
 			"doubleedge": [
 				"9L65"
@@ -78357,8 +78393,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"gigadrain": [
 				"9M"
 			],
-			"icebeam": [
-				"9M"
+			"freezedry": [
+				"9L33"
 			],
 			"muddywater": [
 				"9L37"
@@ -78409,6 +78445,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 				"9M"
 			],
 			"hiddenpower": [
+				"9M"
+			],
+			"icebeam": [
 				"9M"
 			],
 			"icepunch": [
@@ -78512,8 +78551,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"followme": [
 				"9L58"
 			],
-			"icebeam": [
-				"9M"
+			"freezedry": [
+				"9L58"
 			],
 			"weatherball": [
 				"9L64"
@@ -78582,6 +78621,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 				"9M"
 			],
 			"hyperbeam": [
+				"9M"
+			],
+			"icebeam": [
 				"9M"
 			],
 			"icepunch": [
@@ -80622,8 +80664,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	"glaceon": {
 		"inherit": true,
 		"learnset": {
-			"icebeam": [
-				"9M"
+			"freezedry": [
+				"9L36"
 			],
 			"calmmind": [
 				"9L1"
@@ -80642,6 +80684,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			],
 			"icywind": [
 				"9T"
+			],
+			"icebeam": [
+				"9M"
 			],
 			"brine": [
 				"9L43"
@@ -81965,8 +82010,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"powdersnow": [
 				"9L1"
 			],
-			"icebeam": [
-				"9M"
+			"freezedry": [
+				"9L44"
 			],
 			"fakeout": [
 				"9L1"
@@ -81987,6 +82032,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 				"9L19"
 			],
 			"shadowball": [
+				"9M"
+			],
+			"icebeam": [
 				"9M"
 			],
 			"charm": [

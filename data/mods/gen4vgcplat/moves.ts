@@ -683,7 +683,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	"icebeam": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 65,
+		"basePower": 85,
 		"category": "Special",
 		"pp": 10,
 		"type": "Ice",
@@ -3854,7 +3854,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	"volttackle": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 100,
+		"basePower": 120,
 		"category": "Physical",
 		"pp": 15,
 		"type": "Electric",
@@ -4157,17 +4157,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"basePower": 50,
 		"category": "Physical",
 		"pp": 10,
-		"type": "Dark",
-		"priority": 0,
-		"isNonstandard": null,
-		"target": "normal"
-	},
-	"snarl": {
-		"inherit": true,
-		"accuracy": 100,
-		"basePower": 65,
-		"category": "Special",
-		"pp": 15,
 		"type": "Dark",
 		"priority": 0,
 		"isNonstandard": null,
@@ -5073,7 +5062,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	"attackorder": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 90,
+		"basePower": 120,
 		"category": "Physical",
 		"pp": 15,
 		"type": "Bug",
