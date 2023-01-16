@@ -3304,7 +3304,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return this.chainModify(0.5);
 			}
 		},
-		isBreakable: true, // TODO verify the assumption that this can be supprsed by Mold Breaker & friends
+		isBreakable: true,
 		name: "Purifying Salt",
 		rating: 4,
 		num: 272,
@@ -4441,7 +4441,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!move.ruinedDef?.hasAbility('Sword of Ruin')) move.ruinedDef = abilityHolder;
 			if (move.ruinedDef !== abilityHolder) return;
 			this.debug('Sword of Ruin Def drop');
-			// TODO Placeholder
 			return this.chainModify(0.75);
 		},
 		name: "Sword of Ruin",
@@ -4459,7 +4458,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!move.ruinedAtk) move.ruinedAtk = abilityHolder;
 			if (move.ruinedAtk !== abilityHolder) return;
 			this.debug('Tablets of Ruin Atk drop');
-			// TODO Placeholder
 			return this.chainModify(0.75);
 		},
 		name: "Tablets of Ruin",
@@ -4805,7 +4803,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!move.ruinedSpA) move.ruinedSpA = abilityHolder;
 			if (move.ruinedSpA !== abilityHolder) return;
 			this.debug('Vessel of Ruin SpA drop');
-			// TODO Placeholder
 			return this.chainModify(0.75);
 		},
 		name: "Vessel of Ruin",
