@@ -1238,7 +1238,7 @@ export const Formats: FormatList = [
 		name: "[Gen 9] Trademarked",
 		desc: `Sacrifice your Pok&eacute;mon's ability for a status move that activates on switch-in.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3656980/">Trademarked</a>`,
+			`&bullet; <a href="tbd">Trademarked</a>`,
 		],
 
 		mod: 'trademarked',

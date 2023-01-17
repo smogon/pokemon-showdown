@@ -5,6 +5,13 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.turn++;
 		this.lastSuccessfulMoveThisTurn = null;
 
+		for (const pokemon of this.getAllPokemon()) {
+			pokemon.m.trademarkUsedThisTurn = false;
+			// Somehow things went terribly wrong and I don't know what happened
+			pokemon.switchFlag = false;
+			pokemon.forceSwitchFlag = false;
+		}
+
 		const dynamaxEnding: Pokemon[] = [];
 		for (const pokemon of this.getAllActive()) {
 			if (pokemon.volatiles['dynamax']?.turns === 3) {
@@ -48,10 +55,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				pokemon.newlySwitched = false;
 				pokemon.moveLastTurnResult = pokemon.moveThisTurnResult;
 				pokemon.moveThisTurnResult = undefined;
-				pokemon.m.trademarkUsedThisTurn = false;
-				// Somehow things went terribly wrong and I don't know what happened
-				pokemon.switchFlag = false;
-				pokemon.forceSwitchFlag = false;
 				if (this.turn !== 1) {
 					pokemon.usedItemThisTurn = false;
 					pokemon.statsRaisedThisTurn = false;
