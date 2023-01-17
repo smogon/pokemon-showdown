@@ -49,6 +49,25 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Fighting",
 	},
+	skyattack: {
+		num: 143,
+		accuracy: 85,
+		basePower: 105,
+		category: "Physical",
+		name: "Sky Attack",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, distance: 1},
+		critRatio: 2,
+		secondary: {
+			chance: 30,
+			volatileStatus: 'flinch',
+		},
+		target: "any",
+		type: "Flying",
+		contestType: "Cool",
+	},
+
 	"pound": {
 		"inherit": true,
 		"accuracy": 100,
@@ -1623,17 +1642,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Status",
 		"pp": 3,
 		"type": "Normal",
-		"priority": 0,
-		"isNonstandard": null,
-		"target": "normal"
-	},
-	"skyattack": {
-		"inherit": true,
-		"accuracy": 85,
-		"basePower": 105,
-		"category": "Physical",
-		"pp": 5,
-		"type": "Flying",
 		"priority": 0,
 		"isNonstandard": null,
 		"target": "normal"
