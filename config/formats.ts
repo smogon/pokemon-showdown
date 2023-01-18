@@ -748,7 +748,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen9',
-		ruleset: ['Standard OMs', 'Not Fully Evolved', 'Sleep Moves Clause', 'Min Source Gen = 9'],
+		ruleset: ['Standard OMs', 'Not Fully Evolved', 'Sleep Moves Clause', 'Terastal Clause', 'Min Source Gen = 9'],
 		banlist: [
 			'Bisharp', 'Chansey', 'Haunter', 'Magneton', 'Primeape', 'Scyther', 'Arena Trap', 'Shadow Tag', 'Baton Pass',
 			// Shouldn't be legal
