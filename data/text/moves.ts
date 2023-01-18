@@ -1373,6 +1373,7 @@ export const MovesText: {[k: string]: MoveText} = {
 
 		start: "  [POKEMON]'s [MOVE] was disabled!",
 		end: "  [POKEMON]'s move is no longer disabled!",
+		cant: "[POKEMON]'s [MOVE] is disabled!",
 	},
 	disarmingvoice: {
 		name: "Disarming Voice",
@@ -4097,10 +4098,10 @@ export const MovesText: {[k: string]: MoveText} = {
 			desc: "The user uses the last move that successfully targeted the user. The copied move is used with no specific target. Fails if no move has targeted the user, if the move missed, failed, or had no effect on the user, or if the move cannot be copied by this move.",
 		},
 		gen2: {
-			desc: "The user uses the last move used by the target. Fails if the target has not made a move, or if the last move used was Metronome, Mimic, Mirror Move, Sketch, Sleep Talk, Transform, or any move the user knows.",
+			desc: "The user uses the last move used by the target. Fails if the target has not made a move since the user switched in, or if the last move used was Metronome, Mimic, Mirror Move, Sketch, Sleep Talk, Transform, or any move the user knows.",
 		},
 		gen1: {
-			desc: "The user uses the last move used by the target. Fails if the target has not made a move, or if the last move used was Mirror Move.",
+			desc: "The user uses the last move used by the target. Fails if the target has not made a move since the user switched in, or if the last move used was Mirror Move.",
 		},
 	},
 	mirrorshot: {

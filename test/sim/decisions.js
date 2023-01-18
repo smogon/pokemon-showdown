@@ -155,14 +155,17 @@ describe('Choices', function () {
 			}
 		});
 
-		it('should allow specifying move targets', function () {
-			battle = common.createBattle({gameType: 'doubles'}, [
-				[{species: "Gastrodon", ability: 'stickyhold', moves: ['gastroacid']}, {species: "Venusaur", ability: 'thickfat', moves: ['leechseed']}],
-				[{species: "Tyranitar", ability: 'unnerve', moves: ['knockoff']}, {species: "Zapdos", ability: 'pressure', moves: ['thunderwave']}],
+		it(`should allow specifying move targets`, function () {
+			battle = common.createBattle({gameType: 'doubles'}, [[
+				{species: "Gastrodon", ability: 'stickyhold', moves: ['gastroacid']},
+				{species: "Venusaur", ability: 'noguard', moves: ['leechseed']},
+			], [
+				{species: "Tyranitar", ability: 'unnerve', moves: ['knockoff']},
+				{species: "Zapdos", ability: 'pressure', moves: ['glare']}],
 			]);
 			const p2active = battle.p2.active;
 
-			battle.makeChoices('move gastroacid 1, move leechseed 2', 'move knockoff -2, move thunderwave -1');
+			battle.makeChoices('move gastroacid 1, move leechseed 2', 'move knockoff -2, move glare -1');
 			assert.equal(battle.turn, 2);
 
 			assert(p2active[0].volatiles['gastroacid']);

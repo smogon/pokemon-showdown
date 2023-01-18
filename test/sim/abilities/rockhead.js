@@ -39,10 +39,14 @@ describe('Rock Head', function () {
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices('move jumpkick', 'move taunt'));
 	});
 
-	it('should not block indirect damage', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Rampardos', ability: 'rockhead', moves: ['splash']}]});
-		battle.setPlayer('p2', {team: [{species: 'Abomasnow', ability: 'snowwarning', moves: ['toxic']}]});
-		assert.hurts(battle.p1.active[0], () => battle.makeChoices());
+	it(`should not block indirect damage`, function () {
+		battle = common.createBattle([[
+			{species: 'Rampardos', ability: 'rockhead', moves: ['splash']},
+		], [
+			{species: 'Crobat', moves: ['toxic']},
+		]]);
+
+		battle.makeChoices();
+		assert.false.fullHP(battle.p1.active[0]);
 	});
 });

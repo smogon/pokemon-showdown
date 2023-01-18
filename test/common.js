@@ -93,6 +93,8 @@ class TestTools {
 		const format = this.getFormat(options);
 
 		const battleOptions = {
+			debug: true,
+			forceRandomChance: null || options.forceRandomChance,
 			format: format,
 			// If a seed for the pseudo-random number generator is not provided,
 			// a default seed (guaranteed to be the same across test executions)
