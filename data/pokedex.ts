@@ -17997,6 +17997,38 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		tags: ["Restricted Legendary"],
 		eggGroups: ["Undiscovered"],
 	},
+		//////////////////////////////////////
+	// DNU CAP
+	//////////////////////////////////////
+	ironspines: {
+		num: 7950,
+		name: "Iron Spines",
+		types: ["Steel", "Dark"],
+		gender: "N",
+		baseStats: {hp: 54, atk: 18, def: 40, spa: 48, spd: 50, spe: 20},
+		abilities: {0: "Iron Barbs", 1: "Volt Absorb", H: "Transistor"},
+		heightm: 0.2,
+		weightkg: 6,
+		color: "Gray",
+		tags: ["Sub-Legendary", "Paradox"],
+		eggGroups: ["Undiscovered"],
+	},
+	infernotail: {
+		num: 7951,
+		name: "Inferno Tail",
+		types: ["Fire", "Flying"],
+		gender: "N",
+		baseStats: {hp: 41, atk: 45, def: 31, spa: 19, spd: 41, spe: 53},
+		abilities: {0: "Inner Focus"/*, 1: "Drought"*/, H: "Justified"},
+		heightm: 0.5,
+		weightkg: 3.1,
+		color: "Red",
+		tags: ["Sub-Legendary", "Paradox"],
+		eggGroups: ["Undiscovered"],
+	},
+	//////////////////////////////////////
+	// END DNU CAP
+	//////////////////////////////////////
 	missingno: {
 		num: 0,
 		name: "MissingNo.",

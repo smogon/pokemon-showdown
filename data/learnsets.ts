@@ -1,6 +1,70 @@
 /* eslint-disable max-len */
 
 export const Learnsets: {[speciesid: string]: LearnsetData} = {
+	///////////// dnu cap
+	infernotail: {
+		learnset: {
+			furyswipes: ["9M"],
+            peck: ["9M"],
+            scratch: ["9M"],
+            quickattack: ["9M"],
+            ember: ["9M"],
+            flamecharge: ["9M"],
+            acrobatics: ["9M"],
+            flamewheel: ["9M"],
+            round: ["9M"],
+            aerialace: ["9M"],
+            facade: ["9M"],
+            steelwing: ["9M"],
+            drillpeck: ["9M"],
+            firelash: ["9M"],
+            fly: ["9M"],
+            solarblade: ["9M"],
+            roost: ["9M"],
+            honeclaws: ["9M"],
+            protect: ["9M"],
+            rest: ["9M"],
+            sleeptalk: ["9M"],
+            substitute: ["9M"],
+            sunnyday: ["9M"],
+            tailwind: ["9M"],
+            sandattack: ["9M"],
+            focusenergy: ["9M"],
+            tailwhip: ["9M"],
+            attract: ["9M"],
+            captivate: ["9M"],
+            doubleteam: ["9M"],
+            swagger: ["9M"],
+            confide: ["9M"],
+		}
+	},
+	ironspines: {
+		learnset: {
+			absorb: ["9M"],
+			spikecannon: ["9M"],
+			pound: ["9M"],
+			thundershock: ["9M"],
+			magnetbomb: ["9M"],
+			round: ["9M"],
+			mirrorshot: ["9M"],
+			paraboliccharge: ["9M"],
+			voltswitch: ["9M"],
+			facade: ["9M"],
+			darkpulse: ["9M"],
+			flashcannon: ["9M"],
+			terablast: ["9M"],
+			explosion: ["9M"],
+			spikyshield: ["9M"],
+			rest: ["9M"],
+			sleeptalk: ["9M"],
+			spikes: ["9M"],
+			protect: ["9M"],
+			doubleteam: ["9M"],
+			swagger: ["9M"],
+			confide: ["9M"],
+		}
+	},
+	///////////// end dnu cap
 	missingno: {
 		learnset: {
 			blizzard: ["3L1"],
