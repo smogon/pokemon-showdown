@@ -205,7 +205,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				onStart(this: Battle, pokemon: Pokemon) {
 					if (pokemon.m.trademarkUsedThisTurn) {
 						// no.
-						this.add('-hint', "A Pokemon can only use its Trademark once per turn to prevent infinite loops.");
+						this.add('cant', pokemon, 'ability: ' + move.name);
+						this.add('-hint', "Each Pokemon can use a trademark only once per turn to prevent infinite loops.");
 					} else {
 						pokemon.m.trademarkUsedThisTurn = true;
 						const trademark = this.dex.getActiveMove(move.id);
