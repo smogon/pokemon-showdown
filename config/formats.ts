@@ -45,7 +45,7 @@ export const Formats: FormatList = [
 		name: "[Gen 9] Do Not Use",
 
 		mod: 'gen9deluxe',
-		ruleset: ['Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause'],
+		ruleset: ['DNU Clause', 'Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause'],
 		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
 		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass"]
 	},
@@ -63,16 +63,32 @@ export const Formats: FormatList = [
 		name: "[Gen 9] DNU Draft League",
 
 		mod: 'gen9deluxe',
-		ruleset: ['Standard', 'Evasion Clause', 'Z-Move Clause'],
+		ruleset: ['DNU Clause', 'Standard', 'Evasion Clause', 'Z-Move Clause'],
 		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
 		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass"]
+	},
+
+
+
+	// DNU OMS
+	{
+		section: "SV Pseudos OMs"
 	},
 
 	{
 		name: "[Gen 9] DNUseless Moves Only",
 
 		mod: 'gen9deluxe',
-		ruleset: ['Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause', 'Useless Moves Mod'],
+		ruleset: ['DNU Clause', 'Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause', 'Useless Moves Mod'],
+		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
+		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass"]
+	},
+
+	{
+		name: "[Gen 9] DNU CAP",
+
+		mod: "gen9dnucap",
+		ruleset: ['DNU Clause', 'Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause'],
 		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
 		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass"]
 	},

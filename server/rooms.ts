@@ -674,7 +674,7 @@ export abstract class BasicRoom {
 	reportJoin(type: 'j' | 'l' | 'n', entry: string, user: User) {
 		const canTalk = this.auth.atLeast(user, this.settings.modchat ?? 'unlocked') && !this.isMuted(user);
 		if (this.reportJoins && (canTalk || this.auth.has(user.id))) {
-			this.add(`|${type}|${entry}`).update();
+			this.add(`|${type}|${entry.replace(":", '👑')}`).update();
 			return;
 		}
 		let ucType = '';
