@@ -97,7 +97,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
-		isNonstandard: "Past",
 		name: "Ominous Wind",
 		pp: 5,
 		priority: 0,
@@ -3914,7 +3913,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	"volttackle": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 120,
+		"basePower": 110,
 		"category": "Physical",
 		"pp": 15,
 		"type": "Electric",
