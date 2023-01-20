@@ -67,6 +67,76 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Flying",
 		contestType: "Cool",
 	},
+	ancientpower: {
+		num: 246,
+		accuracy: 100,
+		basePower: 60,
+		category: "Special",
+		name: "Ancient Power",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: {
+			chance: 20,
+			self: {
+				boosts: {
+					atk: 1,
+					def: 1,
+					spa: 1,
+					spd: 1,
+					spe: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Rock",
+		contestType: "Tough",
+	},
+	ominouswind: {
+		num: 466,
+		accuracy: 100,
+		basePower: 60,
+		category: "Special",
+		isNonstandard: "Past",
+		name: "Ominous Wind",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: {
+			chance: 20,
+			self: {
+				boosts: {
+					atk: 1,
+					def: 1,
+					spa: 1,
+					spd: 1,
+					spe: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Ghost",
+		contestType: "Beautiful",
+	},
+	acid: {
+		num: 51,
+		accuracy: 100,
+		basePower: 70,
+		category: "Special",
+		name: "Acid",
+		pp: 30,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: {
+			chance: 50,
+			boosts: {
+				spd: -1,
+			},
+		},
+		target: "allAdjacentFoes",
+		type: "Poison",
+		contestType: "Clever",
+	},
 
 	"pound": {
 		"inherit": true,
@@ -621,17 +691,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"priority": 0,
 		"isNonstandard": null,
 		"target": "normal"
-	},
-	"acid": {
-		"inherit": true,
-		"accuracy": 100,
-		"basePower": 70,
-		"category": "Special",
-		"pp": 30,
-		"type": "Poison",
-		"priority": 0,
-		"isNonstandard": null,
-		"target": "allAdjacentFoes"
 	},
 	"ember": {
 		"inherit": true,
@@ -1396,7 +1455,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	"selfdestruct": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 200,
+		"basePower": 300,
 		"category": "Physical",
 		"pp": 1,
 		"type": "Normal",
@@ -1444,6 +1503,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 20,
 		"type": "Poison",
+		secondary: {
+			chance: 40,
+			status: 'psn',
+		},
 		"priority": 0,
 		"isNonstandard": null,
 		"target": "allAdjacentFoes"
@@ -1748,7 +1811,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	"explosion": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 250,
+		"basePower": 375,
 		"category": "Physical",
 		"pp": 5,
 		"type": "Normal",
@@ -2499,7 +2562,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"sacredfire": {
 		"inherit": true,
-		"accuracy": 90,
+		"accuracy": 95,
 		"basePower": 100,
 		"category": "Physical",
 		"pp": 5,
@@ -2768,17 +2831,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"pp": 5,
 		"type": "Normal",
 		"priority": 2,
-		"isNonstandard": null,
-		"target": "normal"
-	},
-	"ancientpower": {
-		"inherit": true,
-		"accuracy": 100,
-		"basePower": 60,
-		"category": "Special",
-		"pp": 5,
-		"type": "Rock",
-		"priority": 0,
 		"isNonstandard": null,
 		"target": "normal"
 	},
@@ -4680,6 +4732,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Physical",
 		"pp": 10,
 		"type": "Ice",
+		secondary: {
+			chance: 30,
+			volatileStatus: 'flinch',
+		},
 		"priority": 0,
 		"isNonstandard": null,
 		"target": "allAdjacentFoes"
@@ -5205,17 +5261,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"category": "Special",
 		"pp": 5,
 		"type": "Grass",
-		"priority": 0,
-		"isNonstandard": null,
-		"target": "normal"
-	},
-	"ominouswind": {
-		"inherit": true,
-		"accuracy": 100,
-		"basePower": 60,
-		"category": "Special",
-		"pp": 5,
-		"type": "Ghost",
 		"priority": 0,
 		"isNonstandard": null,
 		"target": "normal"
