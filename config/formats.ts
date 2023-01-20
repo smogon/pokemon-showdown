@@ -558,7 +558,7 @@ export const Formats: FormatList = [
 		mod: 'partnersincrime',
 		gameType: 'doubles',
 		// searchShow: false,
-		ruleset: ['Standard Doubles', 'Dynamax Clause'],
+		ruleset: ['Standard Doubles'],
 		banlist: ['Flutter Mane', 'Koraidon', 'Miraidon', 'Dancer', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Ally Switch', 'Baton Pass', 'Revival Blessing', 'Swagger'],
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
@@ -664,10 +664,7 @@ export const Formats: FormatList = [
 
 		mod: 'mixandmega',
 		ruleset: ['Standard OMs', 'Evasion Items Clause', 'Evasion Abilities Clause', 'Sleep Moves Clause', 'Min Source Gen = 9'],
-		banlist: [
-			'Koraidon', 'Miraidon', 'Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite',
-			'Medichamite', 'Moody', 'Shadow Tag', 'Baton Pass', 'Electrify', 'Shed Tail', 'Zap Cannon',
-		],
+		banlist: ['Koraidon', 'Miraidon', 'Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Moody', 'Shadow Tag', 'Baton Pass', 'Shed Tail', 'Zap Cannon'],
 		restricted: ['Flutter Mane', 'Gengar', 'Iron Bundle', 'Kilowattrel', 'Slaking'],
 		onValidateTeam(team) {
 			const itemTable = new Set<ID>();
