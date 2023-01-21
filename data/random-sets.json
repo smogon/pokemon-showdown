@@ -294,7 +294,7 @@
             }
         ]
     },
-    "taurospaldea": {
+    "taurospaldeacombat": {
         "level": 84,
         "sets": [
             {
@@ -309,7 +309,7 @@
             }
         ]
     },
-    "taurospaldeafire": {
+    "taurospaldeablaze": {
         "level": 84,
         "sets": [
             {
@@ -324,7 +324,7 @@
             }
         ]
     },
-    "taurospaldeawater": {
+    "taurospaldeaaqua": {
         "level": 84,
         "sets": [
             {
