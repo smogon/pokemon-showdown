@@ -985,7 +985,6 @@ export const Formats: FormatList = [
 					}
 				}
 				forte.onModifyMove?.call(this, move, pokemon, target);
-				if (target) forte.onModifyType?.call(this, move, pokemon, target);
 			}
 		},
 		onModifyPriority(priority, source, target, move) {
@@ -997,18 +996,25 @@ export const Formats: FormatList = [
 				return priority + forte.priority;
 			}
 		},
+		onModifyTypePriority: 1,
+		onModifyType(move, pokemon, target) {
+			const forte = pokemon.m.forte;
+			if (move.category !== 'Status' && forte) {
+				this.singleEvent('ModifyType', forte, null, pokemon, target, move, move);
+			}
+		},
 		onHitPriority: 1,
 		onHit(target, source, move) {
 			const forte = source.m.forte;
 			if (move?.category !== 'Status' && forte) {
-				if (forte.onHit) this.singleEvent('Hit', forte, {}, target, source, move);
-				if (forte.self?.onHit) this.singleEvent('Hit', forte.self, {}, source, source, move);
-				if (forte.onAfterHit) this.singleEvent('AfterHit', forte, {}, target, source, move);
+				this.singleEvent('Hit', forte, {}, target, source, move);
+				if (forte.self) this.singleEvent('Hit', forte.self, {}, source, source, move);
+				this.singleEvent('AfterHit', forte, {}, target, source, move);
 			}
 		},
 		onAfterSubDamage(damage, target, source, move) {
 			const forte = source.m.forte;
-			if (move?.category !== 'Status' && forte?.onAfterSubDamage) {
+			if (move?.category !== 'Status' && forte) {
 				this.singleEvent('AfterSubDamage', forte, null, target, source, move);
 			}
 		},
@@ -1018,7 +1024,7 @@ export const Formats: FormatList = [
 		onAfterMoveSecondaryPriority: 1,
 		onAfterMoveSecondarySelf(source, target, move) {
 			const forte = source.m.forte;
-			if (move?.category !== 'Status' && forte?.onAfterMoveSecondarySelf) {
+			if (move?.category !== 'Status' && forte) {
 				this.singleEvent('AfterMoveSecondarySelf', forte, null, source, target, move);
 			}
 		},
