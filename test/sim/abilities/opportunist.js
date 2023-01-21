@@ -15,8 +15,8 @@ describe("Opportunist", () => {
 			{species: 'Espathra', ability: 'Opportunist', moves: ['sleeptalk']},
 		]]);
 		battle.makeChoices();
-		assert.equal(battle.p1.active[0].boosts.spa, 1);
-		assert.equal(battle.p2.active[0].boosts.spa, 1);
+		assert.statStage(battle.p1.active[0], 'spa', 1);
+		assert.statStage(battle.p2.active[0], 'spa', 1);
 	});
 
 	it("should copy Anger Point", () => {
@@ -26,7 +26,7 @@ describe("Opportunist", () => {
 			{species: 'Primeape', ability: 'Anger Point', moves: ['sleeptalk']},
 		]]);
 		battle.makeChoices();
-		assert.equal(battle.p1.active[0].boosts.atk, 6);
+		assert.statStage(battle.p1.active[0], 'atk', 6);
 	});
 
 	it("should only copy the effective boost after the +6 cap", () => {
@@ -38,6 +38,6 @@ describe("Opportunist", () => {
 			{species: 'Gyarados', ability: 'Intimidate', moves: ['sleeptalk']},
 		]]);
 		battle.makeChoices();
-		assert.equal(battle.p1.active[0].boosts.atk, -1 + 6);
+		assert.statStage(battle.p1.active[0], 'atk', -1 + 6);
 	});
 });
