@@ -109,7 +109,7 @@ export default class TeamGenerator {
 			if (!s.exists) return false;
 			if (s.isNonstandard || s.isNonstandard === 'Unobtainable') return false;
 			if (s.nfe) return false;
-			if (s.battleOnly) return false;
+			if (s.battleOnly && !s.requiredItems?.length) return false;
 
 			return true;
 		});
@@ -219,32 +219,30 @@ export default class TeamGenerator {
 		}
 
 		let item = '';
-		// Don't assign an item if the only move is Acrobatics
-		if (moves.every(m => m.id !== 'acrobatics')) {
-			const weights = [];
-			const items = [];
-			for (const i of this.itemPool) {
-				// If the species has a special item, we should use it.
-				if (i.itemUser?.includes(species.name)) {
-					item = i.name;
-					break;
+		if (species.requiredItem) {
+			item = species.requiredItem;
+		} else if (species.requiredItems) {
+			item = this.prng.sample(species.requiredItems.filter(i => !this.dex.items.get(i).isNonstandard));
+		} else if (moves.every(m => m.id !== 'acrobatics')) { // Don't assign an item if the set includes Acrobatics...
+				const weights = [];
+				const items = [];
+				for (const i of this.itemPool) {
+					// If the species has a special item, we should use it.
+					if (i.itemUser?.includes(species.name)) {
+						item = i.name;
+						break;
+					}
+	
+					const weight = this.getItemWeight(i, teamStats, species, moves, ability);
+					if (weight !== 0) {
+						weights.push(weight);
+						items.push(i.name);
+					}
 				}
-				if (species.requiredItem) {
-					item = species.requiredItem;
-					break;
-				}
-				if (species.requiredItems) {
-					item = this.prng.sample(species.requiredItems);
-					break;
-				}
-
-				const weight = this.getItemWeight(i, teamStats, species, moves, ability);
-				if (weight !== 0) {
-					weights.push(weight);
-					items.push(i.name);
-				}
-			}
-			if (!item) item = this.weightedRandomPick(items, weights);
+				if (!item) item = this.weightedRandomPick(items, weights);
+		} else if (['Quark Drive', 'Protosynthesis'].includes(ability)) {
+			// ...unless the Pokemon can use Booster Energy
+			item = 'Booster Energy';
 		}
 
 		const ivs: PokemonSet['ivs'] = {
