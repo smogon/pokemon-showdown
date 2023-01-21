@@ -1026,7 +1026,7 @@ export const Formats: FormatList = [
 		onBasePower(basePower, source, target, move) {
 			const forte = source.m.forte;
 			if (move.category !== 'Status' && forte?.onBasePower) {
-				this.singleEvent('BasePower', forte, null, source, target, move, basePower);
+				forte.onBasePower.call(this, basePower, source, target, move);
 			}
 		},
 		pokemon: {
