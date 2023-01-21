@@ -636,7 +636,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 3.5,
 	},
 	optimistic: {
-		onBoost(boost, target, source, effect) {
+		onTryBoost(boost, target, source, effect) {
 			if (source && target !== source) return;
 			let showMsg = false;
 			let i: BoostID;

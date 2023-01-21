@@ -33,7 +33,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	innerfocus: {
 		inherit: true,
 		rating: 1,
-		onBoost() {},
+		onTryBoost() {},
 	},
 	intimidate: {
 		inherit: true,
@@ -68,11 +68,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	oblivious: {
 		inherit: true,
-		onBoost() {},
+		onTryBoost() {},
 	},
 	owntempo: {
 		inherit: true,
-		onBoost() {},
+		onTryBoost() {},
 	},
 	rattled: {
 		onDamagingHit(damage, target, source, move) {
@@ -86,7 +86,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	scrappy: {
 		inherit: true,
-		onBoost() {},
+		onTryBoost() {},
 	},
 	slowstart: {
 		inherit: true,
