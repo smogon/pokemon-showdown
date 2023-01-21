@@ -1053,17 +1053,17 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Unreleased",
 		natDexTier: "RU",
 	},
-	taurospaldea: {
+	taurospaldeacombat: {
 		tier: "RU",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
-	taurospaldeafire: {
+	taurospaldeablaze: {
 		tier: "RU",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
-	taurospaldeawater: {
+	taurospaldeaaqua: {
 		tier: "UU",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",

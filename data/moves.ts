@@ -14868,13 +14868,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		onModifyType(move, pokemon) {
 			switch (pokemon.species.name) {
-			case 'Tauros-Paldea':
+			case 'Tauros-Paldea-Combat':
 				move.type = 'Fighting';
 				break;
-			case 'Tauros-Paldea-Fire':
+			case 'Tauros-Paldea-Blaze':
 				move.type = 'Fire';
 				break;
-			case 'Tauros-Paldea-Water':
+			case 'Tauros-Paldea-Aqua':
 				move.type = 'Water';
 				break;
 			}

@@ -18870,7 +18870,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			{generation: 1, level: 21},
 		],
 	},
-	taurospaldea: {
+	taurospaldeacombat: {
 		learnset: {
 			assurance: ["9L15"],
 			bodypress: ["9M"],
@@ -18921,7 +18921,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zenheadbutt: ["9M", "9L30"],
 		},
 	},
-	taurospaldeafire: {
+	taurospaldeablaze: {
 		learnset: {
 			bodypress: ["9M"],
 			bodyslam: ["9M"],
@@ -18976,7 +18976,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zenheadbutt: ["9M", "9L30"],
 		},
 	},
-	taurospaldeawater: {
+	taurospaldeaaqua: {
 		learnset: {
 			aquajet: ["9L15"],
 			bodypress: ["9M"],
