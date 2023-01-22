@@ -1604,7 +1604,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	cherrim: {
-		randomBattleMoves: ["aromatherapy", "energyball", "grasswhistle", "hiddenpowerfire", "hiddenpowerground", "synthesis"],
+		randomBattleMoves: ["aromatherapy", "energyball", "hiddenpowerfire", "hiddenpowerground", "synthesis", "toxic"],
 		tier: "NU",
 	},
 	cherrimsunshine: {
