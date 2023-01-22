@@ -68,6 +68,18 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return {cull: !isLead};
 		case 'focuspunch':
 			return {cull: !moves.has('substitute') || counter.damagingMoves.size < 2 || moves.has('swordsdance')};
+		case 'lightscreen':
+			if (movePool.length > 1) {
+				const screen = movePool.indexOf('reflect');
+				if (screen >= 0) this.fastPop(movePool, screen);
+			}
+			return {cull: !moves.has('reflect')};
+		case 'reflect':
+			if (movePool.length > 1) {
+				const screen = movePool.indexOf('lightscreen');
+				if (screen >= 0) this.fastPop(movePool, screen);
+			}
+			return {cull: !moves.has('lightscreen')};
 		case 'rest':
 			return {cull: movePool.includes('sleeptalk')};
 		case 'sleeptalk':
@@ -586,7 +598,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				// Pokemon should have moves that benefit their Type/Ability/Weather, as well as moves required by its forme
 				if (
 					!cull &&
-					!['judgment', 'quiverdance', 'sleeptalk'].includes(moveid) &&
+					!['judgment', 'lightscreen', 'quiverdance', 'reflect', 'sleeptalk'].includes(moveid) &&
 					!isSetup && !move.weather && !move.damage && (move.category !== 'Status' || !move.flags.heal) && (
 						move.category === 'Status' ||
 						!types.has(move.type) ||
