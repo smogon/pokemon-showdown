@@ -190,7 +190,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	dugtrio: {
-		randomBattleMoves: ["earthquake", "nightslash", "stoneedge", "substitute", "suckerpunch"],
+		randomBattleMoves: ["earthquake", "nightslash", "stealthrock", "stoneedge", "substitute", "suckerpunch"],
 		tier: "UU",
 	},
 	meowth: {
@@ -893,7 +893,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	octillery: {
-		randomBattleMoves: ["energyball", "fireblast", "icebeam", "substitute", "surf"],
+		randomBattleMoves: ["energyball", "fireblast", "icebeam", "surf", "thunderwave"],
 		tier: "NU",
 	},
 	delibird: {
@@ -1406,7 +1406,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	relicanth: {
-		randomBattleMoves: ["aquatail", "doubleedge", "earthquake", "headsmash", "rockpolish", "stealthrock", "waterfall"],
+		randomBattleMoves: ["doubleedge", "earthquake", "headsmash", "rockpolish", "stealthrock", "waterfall"],
 		tier: "NU",
 	},
 	luvdisc: {
