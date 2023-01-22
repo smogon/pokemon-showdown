@@ -311,7 +311,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	farfetchd: {
-		randomBattleMoves: ["leafblade", "nightslash", "return", "slash", "swordsdance", "uturn"],
+		randomBattleMoves: ["leafblade", "nightslash", "return", "swordsdance", "uturn"],
 		tier: "NU",
 	},
 	doduo: {
