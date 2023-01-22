@@ -914,8 +914,8 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		searchShow: false,
 		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Min Source Gen = 9'],
-		banlist: ['Koraidon', 'Miraidon', 'Palafin', 'Covert Cloak', 'Fake Out'],
-		restricted: ['Dynamic Punch', 'Inferno', 'Mud Slap', 'Nuzzle', 'Power Trip', 'Rapid Spin', 'Stored Power', 'Zap Cannon'],
+		banlist: ['Houndstone', 'Koraidon', 'Miraidon', 'Palafin', 'Covert Cloak', 'Fake Out'],
+		restricted: ['Air Slash', 'Astonish', 'Bite', 'Dark Pulse', 'Dragon Rush', 'Dynamic Punch', 'Extrasensory', 'Fiery Wrath', 'Fire Fang', 'Flame Charge', 'Fury Cutter', 'Headbutt', 'Ice Fang', 'Icicle Crash', 'Iron Head', 'Inferno', 'Mud Slap', 'Nuzzle', 'Power Trip', 'Rapid Spin', 'Rock Slide', 'Snore', 'Stomp', 'Stored Power', 'Thunder Fang', 'Twister', 'Waterfall', 'Zap Cannon', 'Zen Headbutt', 'Zing Zap'],
 		validateSet(set, teamHas) {
 			const item = set.item;
 			const species = this.dex.species.get(set.species);
