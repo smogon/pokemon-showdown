@@ -1360,7 +1360,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "Uber",
 	},
 	latios: {
-		randomBattleMoves: ["calmmind", "dragonclaw", "hiddenpowerfire", "psychic", "recover", "refresh", "thunderbolt"],
+		randomBattleMoves: ["calmmind", "dragonclaw", "hiddenpowerfire", "psychic", "recover", "thunderbolt"],
 		tier: "Uber",
 	},
 	kyogre: {

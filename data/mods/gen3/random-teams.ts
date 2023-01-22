@@ -65,7 +65,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			return {
 				cull: (
 					counter.setupType !== 'Special' ||
-					(counter.get('Special') + counter.get('specialpool') < 2 && !moves.has('batonpass') && !restTalk)
+					(counter.get('Special') + counter.get('specialpool') < 2 && !moves.has('batonpass') &&
+					!moves.has('refresh') && !restTalk)
 				),
 				isSetup: true,
 			};
@@ -434,7 +435,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					// There may be more important moves that this Pokemon needs
 					if (
 						requiresStab ||
-						(counter.setupType && counter.get(counter.setupType) < 2) ||
+						(counter.setupType && counter.get(counter.setupType) < 2 && !moves.has('refresh')) ||
 						(moves.has('substitute') && movePool.includes('morningsun')) ||
 						['meteormash', 'spore', 'recover'].some(m => movePool.includes(m))
 					) {
