@@ -915,7 +915,7 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Min Source Gen = 9'],
 		banlist: ['Houndstone', 'Koraidon', 'Miraidon', 'Palafin', 'Covert Cloak', 'Fake Out'],
-		restricted: ['Air Slash', 'Astonish', 'Bite', 'Dark Pulse', 'Dragon Rush', 'Dynamic Punch', 'Extrasensory', 'Fiery Wrath', 'Fire Fang', 'Flame Charge', 'Fury Cutter', 'Headbutt', 'Ice Fang', 'Icicle Crash', 'Iron Head', 'Inferno', 'Mud Slap', 'Nuzzle', 'Power Trip', 'Rapid Spin', 'Rock Slide', 'Snore', 'Stomp', 'Stored Power', 'Thunder Fang', 'Twister', 'Waterfall', 'Zap Cannon', 'Zen Headbutt', 'Zing Zap'],
+		restricted: ['Dynamic Punch', 'Flame Charge', 'Fury Cutter', 'Inferno', 'Nuzzle', 'Power Trip', 'Rapid Spin', 'Stored Power', 'Zap Cannon'],
 		validateSet(set, teamHas) {
 			const item = set.item;
 			const species = this.dex.species.get(set.species);
@@ -929,10 +929,13 @@ export const Formats: FormatList = [
 			if (this.checkCanLearn(move, species, this.allSources(species), set)) {
 				problems.push(`${species.name} can't learn ${move.name}.`);
 			}
+			const accuracyLoweringMove =
+				move.secondaries?.some(secondary => secondary.boosts?.accuracy && secondary.boosts?.accuracy < 0);
+			const flinchMove = move.volatileStatus === 'flinch' ||
+				move.secondaries?.some(secondary => secondary.volatileStatus === 'flinch');
 			if (this.ruleTable.isRestricted(`move:${move.id}`) ||
-				((move.secondaries?.some(secondary => secondary.boosts?.accuracy && secondary.boosts.accuracy < 0) || move.ohko ||
-					move.multihit || move.id === 'beatup' || move.flags['charge'] || move.priority > 0 || move.damageCallback) &&
-					!this.ruleTable.has(`+move:${move.id}`))) {
+				((accuracyLoweringMove || move.ohko || move.multihit || move.id === 'beatup' || move.flags['charge'] ||
+					move.priority > 0 || move.damageCallback || flinchMove) && !this.ruleTable.has(`+move:${move.id}`))) {
 				problems.push(`The move ${move.name} can't be used as an item.`);
 			}
 			return problems.length ? problems : null;
