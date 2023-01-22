@@ -24,7 +24,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			Dark: (movePool, moves, abilities, types, counter) => (
 				((!counter.get('Dark') || (counter.get('Dark') === 1 && moves.has('pursuit'))) &&
 				movePool.includes('suckerpunch') && counter.setupType !== 'Special') ||
-				!counter.get('Dark') && types.has('Poison')
+				(!counter.get('Dark') && types.has('Poison'))
 			),
 			Dragon: (movePool, moves, abilities, types, counter) => !counter.get('Dragon'),
 			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
