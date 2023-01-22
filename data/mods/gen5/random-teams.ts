@@ -154,8 +154,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'switcheroo': case 'trick':
 			return {cull: (
 				counter.get('Physical') + counter.get('Special') < 3 ||
-				!!counter.get('priority') ||
-				moves.has('rapidspin')
+				['fakeout', 'rapidspin', 'suckerpunch'].some(m => moves.has(m))
 			)};
 		case 'toxic':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('trickroom')};
