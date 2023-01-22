@@ -229,7 +229,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	politoed: {
-		randomBattleMoves: ["counter", "hiddenpowergrass", "hypnosis", "icebeam", "surf", "toxic"],
+		randomBattleMoves: ["hiddenpowergrass", "hypnosis", "icebeam", "rest", "surf", "toxic"],
 		tier: "UU",
 	},
 	abra: {
@@ -835,7 +835,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	skarmory: {
-		randomBattleMoves: ["drillpeck", "hiddenpowerground", "protect", "rest", "roar", "sleeptalk", "spikes", "toxic"],
+		randomBattleMoves: ["drillpeck", "hiddenpowerground", "protect", "rest", "sleeptalk", "spikes", "toxic", "whirlwind"],
 		tier: "OU",
 	},
 	houndour: {
