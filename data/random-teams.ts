@@ -669,14 +669,14 @@ export class RandomTeams {
 		}
 
 		// Enforce Tera STAB
-		if (!counter.get('stabtera') && role !== "Bulky Support") {
+		if (!counter.get('stabtera') && role !== "Bulky Support" && species.baseSpecies !== 'Dudunsparce') {
 			const stabMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
 				let moveType = move.type;
 				if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
 				if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
-					if (teraType === moveType && species.baseSpecies !== 'Dudunsparce') {
+					if (teraType === moveType) {
 						stabMoves.push(moveid);
 					}
 				}
