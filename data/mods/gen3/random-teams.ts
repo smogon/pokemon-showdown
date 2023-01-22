@@ -180,7 +180,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			// This cull condition otherwise causes mono-solarbeam Entei
 			return {cull: restOrDD || (species.id !== 'entei' && !moves.has('batonpass') && movePool.includes('calmmind'))};
 		case 'thunderwave':
-			return {cull: !!counter.setupType || moves.has('bodyslam') || moves.has('substitute') || restTalk};
+			return {cull: !!counter.setupType || moves.has('bodyslam') ||
+				moves.has('substitute') && movePool.includes('toxic') || restTalk};
 		case 'toxic':
 			return {cull: (
 				!!counter.setupType ||
