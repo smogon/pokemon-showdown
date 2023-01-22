@@ -416,7 +416,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				species.baseStats.spa >= 100 &&
 				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
 				!moves.has('uturn') &&
-				(ability === 'Download' || moves.has('eruption') || moves.has('waterspout') || this.randomChance(2, 3))
+				(ability === 'Download' || this.randomChance(2, 3))
 			) ? 'Choice Scarf' : 'Choice Specs';
 		}
 
