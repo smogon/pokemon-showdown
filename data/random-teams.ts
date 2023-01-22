@@ -181,7 +181,7 @@ export class RandomTeams {
 			},
 			Rock: (movePool, moves, abilities, types, counter, species) => !counter.get('Rock') && species.baseStats.atk >= 80,
 			Steel: (movePool, moves, abilities, types, counter, species) => {
-				if (species.baseStats.atk < 95 && !movePool.includes('makeitrain')) return false;
+				if (species.baseStats.atk <= 95 && !movePool.includes('makeitrain')) return false;
 				return !counter.get('Steel');
 			},
 			Water: (movePool, moves, abilities, types, counter, species) => {
@@ -676,7 +676,7 @@ export class RandomTeams {
 				let moveType = move.type;
 				if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
 				if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
-					if (teraType === moveType) {
+					if (teraType === moveType && species.baseSpecies !== 'Dudunsparce') {
 						stabMoves.push(moveid);
 					}
 				}
@@ -970,6 +970,7 @@ export class RandomTeams {
 		// Hard-code abilities here
 		if (species.id === 'arcaninehisui') return 'Rock Head';
 		if (species.id === 'staraptor') return 'Reckless';
+		if (species.id === 'vespiquen') return 'Pressure';
 		if (species.id === 'enamorus' && moves.has('calmmind')) return 'Cute Charm';
 		if (species.id === 'cetitan' && role === 'Wallbreaker') return 'Sheer Force';
 		if (abilities.has('Corrosion') && moves.has('toxic') && !moves.has('earthpower')) return 'Corrosion';
@@ -977,7 +978,6 @@ export class RandomTeams {
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk'))) return 'Guts';
 		if (abilities.has('Harvest') && moves.has('substitute')) return 'Harvest';
 		if (species.id === 'hypno') return 'Insomnia';
-		if (abilities.has('Pressure') && role === 'Bulky Setup') return 'Pressure';
 		if (abilities.has('Serene Grace') && moves.has('headbutt')) return 'Serene Grace';
 		if (abilities.has('Technician') && counter.get('technician')) return 'Technician';
 		if (abilities.has('Own Tempo') && moves.has('petaldance')) return 'Own Tempo';
@@ -1055,6 +1055,7 @@ export class RandomTeams {
 		if (species.id === 'cyclizar' && role === 'Fast Attacker') return 'Choice Scarf';
 		if (species.id === 'lokix' && role === 'Wallbreaker') return 'Life Orb';
 		if (species.id === 'toxtricity' && moves.has('shiftgear')) return 'Throat Spray';
+		if (species.baseSpecies === 'Magearna' && moves.has('shiftgear')) return 'Weakness Policy';
 		if (ability === 'Imposter' || (species.id === 'magnezone' && moves.has('bodypress'))) return 'Choice Scarf';
 		if (moves.has('bellydrum') && moves.has('substitute')) return 'Salac Berry';
 		if (
