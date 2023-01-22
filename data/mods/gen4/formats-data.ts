@@ -1306,7 +1306,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	claydol: {
-		randomBattleMoves: ["earthquake", "explosion", "icebeam", "lightscreen", "rapidspin", "reflect", "stealthrock"],
+		randomBattleMoves: ["earthquake", "explosion", "icebeam", "psychic", "rapidspin", "stealthrock"],
 		tier: "UU",
 	},
 	lileep: {
