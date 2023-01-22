@@ -3272,6 +3272,18 @@ export const Formats: FormatList = [
 		banlist: ['Battle Bond'],
 	},
 	{
+		name: "[Gen 7 Let's Go] Doubles OU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3671748/#post-8685222">LGPE Doubles OU</a>`,
+		],
+
+		mod: 'gen7letsgo',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Standard Doubles', 'Sleep Clause Mod'],
+		banlist: ['Mewtwo'],
+	},
+	{
 		name: "[Gen 7] Doubles Custom Game",
 
 		mod: 'gen7',
