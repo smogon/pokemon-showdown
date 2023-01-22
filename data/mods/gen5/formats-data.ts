@@ -732,7 +732,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	mewtwo: {
-		randomBattleMoves: ["aurasphere", "calmmind", "fireblast", "icebeam", "psystrike", "recover", "taunt"],
+		randomBattleMoves: ["aurasphere", "calmmind", "fireblast", "psystrike", "recover", "shadowball"],
 		tier: "Uber",
 		doublesTier: "DUber",
 	},

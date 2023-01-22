@@ -214,6 +214,11 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return {cull: moves.has('psyshock')};
 		case 'scald': case 'surf':
 			return {cull: moves.has('hydropump') || moves.has('waterfall')};
+		case 'shadowball':
+			// mono-Psychic types with Calm Mind shouldn't have Shadow Ball as their only coverage
+			// Chimecho is exempt since Shadow Ball is its only coverage move
+			return {cull: types.has('Psychic') && types.size < 2 && counter.get('Special') < 3 &&
+				moves.has('calmmind') && species.id !== 'chimecho'};
 		case 'waterfall':
 			return {cull: moves.has('hydropump') && !counter.setupType && !moves.has('raindance') && !teamDetails.rain};
 		case 'waterspout':
