@@ -123,6 +123,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return {cull: !!counter.setupType || !!counter.get('recovery') || moves.has('substitute')};
 		case 'haze': case 'magiccoat': case 'pursuit': case 'spikes':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('rest') || moves.has('trickroom')};
+		case 'iceshard':
+			return {cull: moves.has('shellsmash')};
 		case 'leechseed': case 'roar': case 'whirlwind':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('dragontail')};
 		case 'nightshade': case 'seismictoss': case 'superfang':
