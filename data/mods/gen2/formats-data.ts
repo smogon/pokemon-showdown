@@ -573,7 +573,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UUBL",
 	},
 	zapdos: {
-		randomBattleMoves: ["hiddenpowerice", "rest", "roar", "sleeptalk", "thunder", "thunderwave"],
+		randomBattleMoves: ["hiddenpowerice", "rest", "sleeptalk", "thunder"],
 		tier: "OU",
 	},
 	moltres: {
