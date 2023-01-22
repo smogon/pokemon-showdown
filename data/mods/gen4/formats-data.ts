@@ -1776,7 +1776,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["aurasphere", "calmmind", "dracometeor", "dragonpulse", "hiddenpowerfire", "outrage", "shadowball", "shadowsneak", "substitute"],
 	},
 	cresselia: {
-		randomBattleMoves: ["calmmind", "hiddenpowerfire", "icebeam", "moonlight", "psychic", "thunderwave", "toxic"],
+		randomBattleMoves: ["calmmind", "hiddenpowerfire", "icebeam", "moonlight", "psychic", "substitute", "thunderwave", "toxic"],
 		tier: "UUBL",
 	},
 	phione: {
