@@ -87,6 +87,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	pikachu: {
+		randomBattleMoves: ["grassknot", "hiddenpowerice", "substitute", "surf", "thunderbolt", "volttackle"],
 		tier: "NU",
 	},
 	raichu: {

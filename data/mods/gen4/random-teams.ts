@@ -362,7 +362,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		case 'Technician':
 			return !counter.get('technician') || moves.has('toxic');
 		case 'Tinted Lens':
-			return counter.get('damage') >= counter.damagingMoves.size;
+			return moves.has('protect');
 		case 'Torrent':
 			return !counter.get('Water');
 		}
@@ -383,6 +383,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (species.requiredItems) return this.sample(species.requiredItems);
 		if (species.name === 'Farfetch\u2019d') return 'Stick';
 		if (species.name === 'Marowak') return 'Thick Club';
+		if (species.name === 'Pikachu') return 'Light Ball';
 		if (species.name === 'Shedinja' || species.name === 'Smeargle') return 'Focus Sash';
 		if (species.name === 'Unown') return 'Choice Specs';
 		if (species.name === 'Wobbuffet') {
