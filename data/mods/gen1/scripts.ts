@@ -326,7 +326,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						// Confusion begins even if already confused.
 						// Remove lockedmove volatile when dealing with after move effects.
 						delete pokemon.volatiles['confusion'];
-						pokemon.addVolatile('confusion');
+						pokemon.addVolatile('confusion', pokemon, this.dex.conditions.get('lockedmove'));
 					}
 				} else {
 					pokemon.addVolatile('lockedmove', pokemon, move);
