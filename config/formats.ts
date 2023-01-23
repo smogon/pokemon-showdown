@@ -1519,11 +1519,11 @@ export const Formats: FormatList = [
 			const validator = new TeamValidator(dex.formats.get(`${this.format.id}@@@${customRules.join(',')}`));
 			const moves = set.moves;
 			set.moves = [ability.id];
-			set.ability = dex.species.get(set.species).abilities['0'];
+			set.ability = 'runaway';
 			let problems = validator.validateSet(set, {}) || [];
 			if (problems.length) return problems;
 			set.moves = moves;
-			set.ability = dex.species.get(set.species).abilities['0'];
+			set.ability = 'runaway';
 			problems = problems.concat(validator.validateSet(set, teamHas) || []);
 			set.ability = ability.id;
 			if (!teamHas.trademarks) teamHas.trademarks = {};
