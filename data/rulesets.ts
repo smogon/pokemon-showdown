@@ -517,16 +517,44 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'Rule',
 		name: 'Team Preview',
 		desc: "Allows each player to see the Pok&eacute;mon on their opponent's team before they choose their lead Pok&eacute;mon",
+
+		onBegin() {
+			if (this.ruleTable.has(`teratypepreview`)) {
+				this.add('rule', 'Tera Type Preview Clause: Allows each player to see the tera type of each Pokémon on their opponent\'s team');
+			}
+		},
+
 		onTeamPreview() {
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
-				const details = pokemon.details.replace(', shiny', '')
+				let detailBuf = pokemon.details.replace(', shiny', '')
 					.replace(/(Arceus|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu|Dudunsparce)(-[a-zA-Z?-]+)?/g, '$1-*')
 					.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*'); // Hacked-in Crowned formes will be revealed
+				if (this.ruleTable.has(`teratypepreview`)) {
+					detailBuf = detailBuf.concat(`, teratype:${pokemon.teraType}`);
+				}
+				const details = detailBuf;
 				this.add('poke', pokemon.side.id, details, '');
+			}
+			if (this.ruleTable.has(`teratypepreview`)) {
+				for (const side of this.sides) {
+					let buf = 'raw|';
+					for (const pokemon of side.pokemon) {
+						if (!buf.endsWith('|')) buf += '/</span>&#8203;';
+						buf += `<span style="white-space:nowrap"><psicon pokemon="${pokemon.species.id}" />`;
+						buf += `<span style="display:inline-block">Tera<br /><psicon type="${pokemon.teraType}" /> `;
+					}
+					this.add(`${buf}</span></span>`);
+				}
 			}
 			this.makeRequest('teampreview');
 		},
+	},
+	teratypepreview: {
+		effectType: 'Rule',
+		name: 'Tera Type Preview',
+		desc: "Allows each player to see the tera type of each Pok&eacute;mon on their opponent's team",
+		// implemented in team preview
 	},
 	onevsone: {
 		effectType: 'Rule',
