@@ -575,9 +575,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	tangela: {
-		randomBattleMoves: ["bodyslam", "sleeppowder", "swordsdance"],
+		randomBattleMoves: ["bodyslam", "sleeppowder"],
 		essentialMove: "megadrain",
-		comboMoves: ["growth", "stunspore"],
+		exclusiveMoves: ["growth", "stunspore", "stunspore", "stunspore", "swordsdance", "swordsdance"],
 		tier: "UU",
 	},
 	kangaskhan: {

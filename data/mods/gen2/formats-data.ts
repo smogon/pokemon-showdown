@@ -88,7 +88,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	raichu: {
-		randomBattleMoves: ["hiddenpowerice", "rest", "sleeptalk", "surf", "thunder", "thunderbolt"],
+		randomBattleMoves: ["encore", "hiddenpowerice", "rest", "sleeptalk", "surf", "thunder", "thunderbolt"],
 		tier: "NUBL",
 	},
 	sandshrew: {
@@ -166,7 +166,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	bellossom: {
-		randomBattleMoves: ["doubleedge", "gigadrain", "hiddenpowerfire", "leechseed", "moonlight", "sleeppowder", "stunspore"],
+		randomBattleMoves: ["doubleedge", "hiddenpowerfire", "leechseed", "moonlight", "razorleaf", "sleeppowder", "stunspore"],
 		tier: "UU",
 	},
 	paras: {
@@ -276,7 +276,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	golem: {
-		randomBattleMoves: ["curse", "earthquake", "explosion", "fireblast", "rockslide"],
+		randomBattleMoves: ["curse", "earthquake", "explosion", "fireblast", "rapidspin", "rockslide"],
 		tier: "OU",
 	},
 	ponyta: {
@@ -573,7 +573,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UUBL",
 	},
 	zapdos: {
-		randomBattleMoves: ["hiddenpowerice", "rest", "roar", "sleeptalk", "thunder", "thunderwave"],
+		randomBattleMoves: ["hiddenpowerice", "rest", "sleeptalk", "thunder"],
 		tier: "OU",
 	},
 	moltres: {
@@ -821,7 +821,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	delibird: {
-		randomBattleMoves: ["hiddenpowerflying", "icebeam", "present", "spikes", "thief"],
+		randomBattleMoves: ["hiddenpowerflying", "icebeam", "rapidspin", "spikes", "thief"],
 		tier: "NU",
 	},
 	mantine: {
