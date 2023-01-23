@@ -68,6 +68,18 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return {cull: !isLead};
 		case 'focuspunch':
 			return {cull: !moves.has('substitute') || counter.damagingMoves.size < 2 || moves.has('swordsdance')};
+		case 'lightscreen':
+			if (movePool.length > 1) {
+				const screen = movePool.indexOf('reflect');
+				if (screen >= 0) this.fastPop(movePool, screen);
+			}
+			return {cull: !moves.has('reflect')};
+		case 'reflect':
+			if (movePool.length > 1) {
+				const screen = movePool.indexOf('lightscreen');
+				if (screen >= 0) this.fastPop(movePool, screen);
+			}
+			return {cull: !moves.has('lightscreen')};
 		case 'rest':
 			return {cull: movePool.includes('sleeptalk')};
 		case 'sleeptalk':
@@ -123,6 +135,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return {cull: !!counter.setupType || !!counter.get('recovery') || moves.has('substitute')};
 		case 'haze': case 'magiccoat': case 'pursuit': case 'spikes':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('rest') || moves.has('trickroom')};
+		case 'iceshard':
+			return {cull: moves.has('shellsmash')};
 		case 'leechseed': case 'roar': case 'whirlwind':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('dragontail')};
 		case 'nightshade': case 'seismictoss': case 'superfang':
@@ -140,8 +154,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'switcheroo': case 'trick':
 			return {cull: (
 				counter.get('Physical') + counter.get('Special') < 3 ||
-				!!counter.get('priority') ||
-				moves.has('rapidspin')
+				['fakeout', 'rapidspin', 'suckerpunch'].some(m => moves.has(m))
 			)};
 		case 'toxic':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('trickroom')};
@@ -214,6 +227,11 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return {cull: moves.has('psyshock')};
 		case 'scald': case 'surf':
 			return {cull: moves.has('hydropump') || moves.has('waterfall')};
+		case 'shadowball':
+			// mono-Psychic types with Calm Mind shouldn't have Shadow Ball as their only coverage
+			// Chimecho is exempt since Shadow Ball is its only coverage move
+			return {cull: types.has('Psychic') && types.size < 2 && counter.get('Special') < 3 &&
+				moves.has('calmmind') && species.id !== 'chimecho'};
 		case 'waterfall':
 			return {cull: moves.has('hydropump') && !counter.setupType && !moves.has('raindance') && !teamDetails.rain};
 		case 'waterspout':
@@ -416,7 +434,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				species.baseStats.spa >= 100 &&
 				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
 				!moves.has('uturn') &&
-				(ability === 'Download' || moves.has('eruption') || moves.has('waterspout') || this.randomChance(2, 3))
+				(ability === 'Download' || this.randomChance(2, 3))
 			) ? 'Choice Scarf' : 'Choice Specs';
 		}
 
@@ -579,7 +597,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				// Pokemon should have moves that benefit their Type/Ability/Weather, as well as moves required by its forme
 				if (
 					!cull &&
-					!['judgment', 'quiverdance', 'sleeptalk'].includes(moveid) &&
+					!['judgment', 'lightscreen', 'quiverdance', 'reflect', 'sleeptalk'].includes(moveid) &&
 					!isSetup && !move.weather && !move.damage && (move.category !== 'Status' || !move.flags.heal) && (
 						move.category === 'Status' ||
 						!types.has(move.type) ||
@@ -831,7 +849,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			case 'Rotom':
 				if (this.gen < 5 && this.randomChance(5, 6) && !isMonotype) continue;
 				break;
-			case 'Basculin': case 'Castform': case 'Cherrim': case 'Meloetta':
+			case 'Basculin': case 'Castform': case 'Meloetta':
 				if (this.randomChance(1, 2)) continue;
 				break;
 			}

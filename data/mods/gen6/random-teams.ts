@@ -732,7 +732,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return 'Lustrous Orb';
 		}
 		if (counter.damagingMoves.size >= 4) {
-			return (!!counter.get('Dragon') || !!counter.get('Dark') || !!counter.get('Normal')) ? 'Life Orb' : 'Expert Belt';
+			return (counter.get('Dragon') || moves.has('suckerpunch') || counter.get('Normal')) ? 'Life Orb' : 'Expert Belt';
 		}
 		if (counter.damagingMoves.size >= 3 && counter.get('speedsetup') && defensiveStatTotal >= 300) return 'Weakness Policy';
 		if (
