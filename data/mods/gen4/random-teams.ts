@@ -22,10 +22,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				!counter.get('Bug') && (movePool.includes('bugbuzz') || movePool.includes('megahorn'))
 			),
 			Dark: (movePool, moves, abilities, types, counter) => (
-				((!counter.get('Dark') || (counter.get('Dark') === 1 && moves.has('pursuit'))) &&
-				movePool.includes('suckerpunch') && counter.setupType !== 'Special') ||
-				(!counter.get('Dark') && types.has('Poison'))
-			),
+				(!counter.get('Dark') || (counter.get('Dark') < 2 && moves.has('pursuit') && movePool.includes('suckerpunch'))
+			)),
 			Dragon: (movePool, moves, abilities, types, counter) => !counter.get('Dragon'),
 			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
 			Fighting: (movePool, moves, abilities, types, counter) => (
@@ -287,7 +285,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		case 'dragonpulse':
 			return {cull: moves.has('dracometeor') || moves.has('outrage')};
 		case 'crunch': case 'nightslash':
-			return {cull: moves.has('suckerpunch')};
+			return {cull: moves.has('suckerpunch') && !types.has('Dark')};
 		case 'pursuit':
 			return {cull: !!counter.setupType || moves.has('payback')};
 		case 'flashcannon':
