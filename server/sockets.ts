@@ -21,10 +21,17 @@ import {IPTools} from './ip-tools';
 type StreamWorker = ProcessManager.StreamWorker;
 type ChannelID = 0 | 1 | 2 | 3 | 4;
 
+export type ChannelMessages = Record<ChannelID | -1, string[]>;
+
 export function extractChannelMessages(message: string) {
-	const channelMessages = new Map<ChannelID | -1, string[]>(
-		[-1, 0, 1, 2, 3, 4].map<[ChannelID | -1, string[]]>((channelid) => [channelid as ChannelID | -1, []]),
-	);
+	const channelMessages: ChannelMessages = {
+		[-1]: [],
+		0: [],
+		1: [],
+		2: [],
+		3: [],
+		4: [],
+	};
 	const messages: string[] = message.split('\n');
 
 	for (let i = 0; i < messages.length; i++) {
@@ -33,17 +40,17 @@ export function extractChannelMessages(message: string) {
 
 		const splitMatch = /^\|split\|p([1234])$/.exec(line);
 		if (!splitMatch) {
-			channelMessages.forEach((log) => log.push(line));
+			Object.values(channelMessages).forEach((log) => log.push(line));
 			continue;
 		}
 
 		const [, playerMatch] = splitMatch;
-		const player = parseInt(playerMatch);
+		const player = playerMatch;
 		const secretMessage = messages[i + 1];
 		const sharedMessage = messages[i + 2];
 
-		channelMessages.forEach((log, channelid) => {
-			const hasPrivilege = (player === channelid) || (channelid === -1);
+		Object.entries(channelMessages).forEach(([channelId, log]) => {
+			const hasPrivilege = (player === channelId) || (channelId === "-1");
 			const channelMessage = hasPrivilege ? secretMessage : sharedMessage;
 			if (channelMessage) log.push(channelMessage);
 		});
@@ -291,7 +298,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 			const roomChannel = this.roomChannels.get(roomid);
 			for (const [curSocketid, curSocket] of room) {
 				const channelid = roomChannel?.get(curSocketid) || 0;
-				if (!messages[channelid]) messages[channelid] = channelMessages.get(channelid)!.join('\n');
+				if (!messages[channelid]) messages[channelid] = channelMessages[channelid].join('\n');
 				curSocket.write(messages[channelid]!);
 			}
 		},

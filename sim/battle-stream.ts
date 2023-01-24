@@ -86,9 +86,9 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			if (type === 'update') {
 				const channelMessages = extractChannelMessages(data);
 				if (this.replay === 'spectator') {
-					this.push(channelMessages.get(0)!.join('\n'));
+					this.push(channelMessages[0].join('\n'));
 				} else {
-					this.push(channelMessages.get(-1)!.join('\n'));
+					this.push(channelMessages[-1].join('\n'));
 				}
 			}
 			return;
@@ -287,12 +287,12 @@ export function getPlayerStreams(stream: BattleStream) {
 			switch (type) {
 			case 'update':
 				const channelMessages = extractChannelMessages(data);
-				streams.omniscient.push(channelMessages.get(-1)!.join('\n'));
-				streams.spectator.push(channelMessages.get(0)!.join('\n'));
-				streams.p1.push(channelMessages.get(1)!.join('\n'));
-				streams.p2.push(channelMessages.get(2)!.join('\n'));
-				streams.p3.push(channelMessages.get(3)!.join('\n'));
-				streams.p4.push(channelMessages.get(4)!.join('\n'));
+				streams.omniscient.push(channelMessages[-1].join('\n'));
+				streams.spectator.push(channelMessages[0].join('\n'));
+				streams.p1.push(channelMessages[1].join('\n'));
+				streams.p2.push(channelMessages[2].join('\n'));
+				streams.p3.push(channelMessages[3].join('\n'));
+				streams.p4.push(channelMessages[4].join('\n'));
 				break;
 			case 'sideupdate':
 				const [side, sideData] = splitFirst(data, `\n`);

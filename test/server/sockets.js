@@ -23,7 +23,7 @@ describe('ServerStream', function () {
 			].join('\n');
 			const actualChannelMessages = extractChannelMessages(messages);
 
-			assert.equal(actualChannelMessages.get(omniscientPlayer).join('\n'), messages);
+			assert.equal(actualChannelMessages[omniscientPlayer].join('\n'), messages);
 		});
 
 		it('should return all privileged messages for an omniscient player', function () {
@@ -42,7 +42,7 @@ describe('ServerStream', function () {
 				'|-start|p4a: Aerodactyl|ability: Pressure',
 			].join('\n');
 
-			assert.equal(actualChannelMessages.get(omniscientPlayer).join('\n'), expectedMessages);
+			assert.equal(actualChannelMessages[omniscientPlayer].join('\n'), expectedMessages);
 		});
 
 		it('should return player-privileged messages for each player', function () {
@@ -55,14 +55,14 @@ describe('ServerStream', function () {
 			const actualChannelMessages = extractChannelMessages(expectedMessages);
 
 			for (const player of [1, 2, 3, 4]) {
-				const actualPlayerMessages = actualChannelMessages.get(player).join('\n');
+				const actualPlayerMessages = actualChannelMessages[player].join('\n');
 				const expectedPlayerMessages = [
 					`|-start|p${player}a: Aerodactyl|ability: Pressure`,
 				].join('\n');
 				assert.equal(actualPlayerMessages, expectedPlayerMessages);
 			}
 
-			assert.equal(actualChannelMessages.get(spectatorPlayer).join('\n'), '');
+			assert.equal(actualChannelMessages[spectatorPlayer].join('\n'), '');
 		});
 
 		it('should return privileged messages with non-privileged messages', function () {
@@ -95,10 +95,10 @@ describe('ServerStream', function () {
 				'|-start|p2b: Hellfrog|ability: Flash Fire',
 			].join('\n');
 
-			assert.equal(actualChannelMessages.get(omniscientPlayer).join('\n'), expectedOmniscientPlayerMessages);
-			assert.equal(actualChannelMessages.get(1).join('\n'), expectedPlayer1Messages);
-			assert.equal(actualChannelMessages.get(2).join('\n'), expectedPlayer2Messages);
-			assert.equal(actualChannelMessages.get(0).join('\n'), expectedSpectatorMessages);
+			assert.equal(actualChannelMessages[omniscientPlayer].join('\n'), expectedOmniscientPlayerMessages);
+			assert.equal(actualChannelMessages[1].join('\n'), expectedPlayer1Messages);
+			assert.equal(actualChannelMessages[2].join('\n'), expectedPlayer2Messages);
+			assert.equal(actualChannelMessages[0].join('\n'), expectedSpectatorMessages);
 		});
 
 		it('should return consecutive player-privileged messages for a player', function () {
@@ -115,9 +115,9 @@ describe('ServerStream', function () {
 				'|-start|p1c: Aerodactyl|ability: Pressure',
 			].join('\n');
 
-			assert.equal(actualChannelMessages.get(omniscientPlayer).join('\n'), expectedPlayerMessages);
-			assert.equal(actualChannelMessages.get(1).join('\n'), expectedPlayerMessages);
-			assert.equal(actualChannelMessages.get(spectatorPlayer).join('\n'), '');
+			assert.equal(actualChannelMessages[omniscientPlayer].join('\n'), expectedPlayerMessages);
+			assert.equal(actualChannelMessages[1].join('\n'), expectedPlayerMessages);
+			assert.equal(actualChannelMessages[spectatorPlayer].join('\n'), '');
 		});
 
 		it('should return shared messages for non-privileged players', function () {
@@ -137,7 +137,7 @@ describe('ServerStream', function () {
 					'|-heal|p4a: Rhyperior|100/100',
 				];
 				expectedPlayerMessages[player - 1] = `|-heal|p${player}a: Rhyperior|420/420`;
-				assert.equal(actualChannelMessages.get(player).join('\n'), expectedPlayerMessages.join('\n'));
+				assert.equal(actualChannelMessages[player].join('\n'), expectedPlayerMessages.join('\n'));
 			}
 
 			const expectedOmniscientPlayerMessages = [
@@ -154,8 +154,8 @@ describe('ServerStream', function () {
 				'|-heal|p4a: Rhyperior|100/100',
 			].join('\n');
 
-			assert.equal(actualChannelMessages.get(omniscientPlayer).join('\n'), expectedOmniscientPlayerMessages);
-			assert.equal(actualChannelMessages.get(spectatorPlayer).join('\n'), expectedSpectatorMessages);
+			assert.equal(actualChannelMessages[omniscientPlayer].join('\n'), expectedOmniscientPlayerMessages);
+			assert.equal(actualChannelMessages[spectatorPlayer].join('\n'), expectedSpectatorMessages);
 		});
 
 		it('should return messages made up of secret and shared messages', function () {
@@ -188,10 +188,10 @@ describe('ServerStream', function () {
 				'|-heal|p2a: Rhyperior|100/100',
 			].join('\n');
 
-			assert.equal(actualChannelMessages.get(omniscientPlayer).join('\n'), expectedOmniscientPlayerMessages);
-			assert.equal(actualChannelMessages.get(1).join('\n'), expectedPlayer1Messages);
-			assert.equal(actualChannelMessages.get(2).join('\n'), expectedPlayer2Messages);
-			assert.equal(actualChannelMessages.get(spectatorPlayer).join('\n'), expectedSpectatorMessages);
+			assert.equal(actualChannelMessages[omniscientPlayer].join('\n'), expectedOmniscientPlayerMessages);
+			assert.equal(actualChannelMessages[1].join('\n'), expectedPlayer1Messages);
+			assert.equal(actualChannelMessages[2].join('\n'), expectedPlayer2Messages);
+			assert.equal(actualChannelMessages[spectatorPlayer].join('\n'), expectedSpectatorMessages);
 		});
 	});
 });

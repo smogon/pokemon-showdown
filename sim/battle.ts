@@ -2921,7 +2921,7 @@ export class Battle {
 
 	getDebugLog() {
 		const channelMessages = extractChannelMessages(this.log.join('\n'));
-		return (channelMessages.get(-1) || []).join('\n');
+		return channelMessages[-1].join('\n');
 	}
 
 	debugError(activity: string) {
