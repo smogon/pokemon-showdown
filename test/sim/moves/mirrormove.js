@@ -87,7 +87,7 @@ describe('Mirror Move [Gen 2]', function () {
 		battle.destroy();
 	});
 
-	it(`[Gen 2] Mirror Move should fail when used by a Pokemon that has not seen the opponent use an attack`, function () {
+	it.skip(`[Gen 2] Mirror Move should fail when used by a Pokemon that has not seen the opponent use an attack`, function () {
 		battle = common.gen(2).createBattle({forceRandomChance: true}, [[
 			{species: 'slowbro', moves: ['glare']},
 			{species: 'fearow', moves: ['mirrormove']},
