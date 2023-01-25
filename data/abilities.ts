@@ -5140,13 +5140,18 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Palafin' || pokemon.transformed) return;
 			if (pokemon.species.forme !== 'Hero') {
 				pokemon.formeChange('Palafin-Hero', this.effect, true);
-				this.effectState.sendHeroMessage = true;
 			}
 		},
+		onSwitchIn() {
+			this.effectState.switchingIn = true;
+		},
 		onStart(pokemon) {
-			if (this.effectState.sendHeroMessage) {
+			if (!this.effectState.switchingIn) return;
+			this.effectState.switchingIn = false;
+			if (pokemon.baseSpecies.baseSpecies !== 'Palafin' || pokemon.transformed) return;
+			if (!this.effectState.heroMessageDisplayed && pokemon.species.forme === 'Hero') {
 				this.add('-activate', pokemon, 'ability: Zero to Hero');
-				this.effectState.sendHeroMessage = false;
+				this.effectState.heroMessageDisplayed = true;
 			}
 		},
 		isPermanent: true,
