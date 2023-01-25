@@ -65,14 +65,17 @@ describe('Ability Shield', function () {
 	it(`should protect the holder's ability against Mold Breaker`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'sturdy', item: 'abilityshield', moves: ['splash'], level: 5},
+			{species: 'gastly', ability: 'levitate', item: 'abilityshield', moves: ['sleeptalk']},
 		], [
-			{species: 'weezinggalar', ability: 'moldbreaker', moves: ['shadowball']},
+			{species: 'weezinggalar', ability: 'moldbreaker', moves: ['shadowball', 'earthpower']},
 		]]);
 
 		assert(battle.log.every(line => !line.includes('Ability Shield')), `Ability Shield should not trigger a block message`);
 
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].hp, 1, `Holder should survive from sturdy`);
+		battle.makeChoices('switch gastly', 'move earthpower');
+		assert.fullHP(battle.p1.active[0], `Holder should be ungrounded through levitate`);
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9403448
