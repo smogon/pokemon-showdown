@@ -100,7 +100,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 			return (scarfReqs && this.randomChance(2, 3)) ? 'Choice Scarf' : 'Choice Band';
 		}
 		if (moves.has('sunnyday')) return 'Heat Rock';
-		if (counter.get('Special') >= 4 && !moves.has('uturn')) {
+		if (counter.get('Special') >= 4 || (counter.get('Special') >= 3 && moves.has('uturn'))) {
 			const scarfReqs = (
 				species.baseStats.spa >= 100 &&
 				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
