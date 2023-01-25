@@ -43,6 +43,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		if (ability === 'Guts' && counter.get('Physical') > 2) {
 			return types.has('Fire') ? 'Toxic Orb' : 'Flame Orb';
 		}
+		if (ability === 'Quick Feet' && moves.has('facade')) return 'Toxic Orb';
 		if (ability === 'Toxic Boost' || ability === 'Poison Heal') return 'Toxic Orb';
 		if (ability === 'Magic Guard' && counter.damagingMoves.size > 1) {
 			return moves.has('counter') ? 'Focus Sash' : 'Life Orb';
