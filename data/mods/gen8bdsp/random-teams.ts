@@ -310,7 +310,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 			if (
 				!isDoubles &&
 				counter.get('Status') < 2 &&
-				['Speed Boost', 'Moody'].every(m => !abilities.has(m))
+				['Guts', 'Quick Feet', 'Speed Boost', 'Moody'].every(m => !abilities.has(m))
 			) return {cull: true};
 			if (movePool.includes('leechseed') || (movePool.includes('toxic') && !moves.has('wish'))) return {cull: true};
 			if (isDoubles && (
@@ -337,7 +337,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 				['rest', 'substitute', 'trickroom', 'teleport'].some(m => moves.has(m)),
 			};
 		case 'stickyweb':
-			return {cull: counter.setupType === 'Special' || !!teamDetails.stickyWeb};
+			return {cull: !!teamDetails.stickyWeb};
 		case 'taunt':
 			return {cull: moves.has('encore') || moves.has('nastyplot') || moves.has('swordsdance')};
 		case 'thunderwave': case 'voltswitch':
@@ -449,11 +449,11 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 				movePool.includes('spikes'),
 			};
 		case 'stoneedge':
-			const gutsCullCondition = abilities.has('Guts') && (!moves.has('dynamicpunch') || moves.has('spikes'));
+			const machampCullCondition = species.id === 'machamp' && !moves.has('dynamicpunch');
 			const rockSlidePlusStatusPossible = counter.get('Status') && movePool.includes('rockslide');
 			const otherRockMove = moves.has('rockblast') || moves.has('rockslide');
 			const lucarioCull = species.id === 'lucario' && !!counter.setupType;
-			return {cull: gutsCullCondition || (!isDoubles && rockSlidePlusStatusPossible) || otherRockMove || lucarioCull};
+			return {cull: machampCullCondition || (!isDoubles && rockSlidePlusStatusPossible) || otherRockMove || lucarioCull};
 		case 'shadowball':
 			return {cull:
 				(isDoubles && moves.has('phantomforce')) ||
@@ -533,7 +533,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		isDoubles: boolean,
 	): boolean {
 		if ([
-			'Flare Boost', 'Hydration', 'Ice Body', 'Immunity', 'Insomnia', 'Quick Feet', 'Rain Dish',
+			'Flare Boost', 'Hydration', 'Ice Body', 'Immunity', 'Insomnia', 'Rain Dish',
 			'Snow Cloak', 'Steadfast',
 		].includes(ability)) return true;
 
@@ -566,7 +566,8 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		case 'Gluttony':
 			return !moves.has('bellydrum');
 		case 'Guts':
-			return (!moves.has('facade') && !moves.has('sleeptalk') && !species.nfe);
+			return (!moves.has('facade') && !moves.has('sleeptalk') && !species.nfe ||
+				abilities.has('Quick Feet') && !!counter.setupType);
 		case 'Harvest':
 			return (abilities.has('Frisk') && !isDoubles);
 		case 'Hustle': case 'Inner Focus':

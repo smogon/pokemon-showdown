@@ -2260,7 +2260,9 @@ export class RandomGen8Teams {
 			// Hardcoded abilities for certain contexts
 			if (forme === 'Copperajah' && gmax) {
 				ability = 'Heavy Metal';
-			} else if (abilities.has('Guts') && (
+			} else if (abilities.has('Guts') &&
+				// for Ursaring in BDSP
+				!abilities.has('Quick Feet') && (
 				species.id === 'gurdurr' || species.id === 'throh' ||
 				moves.has('facade') || (moves.has('rest') && moves.has('sleeptalk'))
 			)) {
