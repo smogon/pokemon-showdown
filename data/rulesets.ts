@@ -517,7 +517,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'Rule',
 		name: 'Team Preview',
 		desc: "Allows each player to see the Pok&eacute;mon on their opponent's team before they choose their lead Pok&eacute;mon",
-
 		onBegin() {
 			if (this.ruleTable.has(`teratypepreview`)) {
 				this.add('rule', 'Tera Type Preview Clause: Allows each player to see the tera type of each Pokémon on their opponent\'s team');
