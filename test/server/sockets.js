@@ -21,7 +21,7 @@ describe('ServerStream', function () {
 				'|-start|p3a: Hellfrog|ability: Flash Fire',
 				'|-start|p4a: Hellfrog|ability: Flash Fire',
 			].join('\n');
-			const actualChannelMessages = extractChannelMessages(messages);
+			const actualChannelMessages = extractChannelMessages(messages, [omniscientPlayer]);
 
 			assert.equal(actualChannelMessages[omniscientPlayer].join('\n'), messages);
 		});
@@ -33,7 +33,7 @@ describe('ServerStream', function () {
 				...createSplit(3, '|-start|p3a: Aerodactyl|ability: Pressure', ''),
 				...createSplit(4, '|-start|p4a: Aerodactyl|ability: Pressure', ''),
 			].join('\n');
-			const actualChannelMessages = extractChannelMessages(messages);
+			const actualChannelMessages = extractChannelMessages(messages, [omniscientPlayer]);
 
 			const expectedMessages = [
 				'|-start|p1a: Aerodactyl|ability: Pressure',
@@ -52,7 +52,7 @@ describe('ServerStream', function () {
 				...createSplit(3, '|-start|p3a: Aerodactyl|ability: Pressure', ''),
 				...createSplit(4, '|-start|p4a: Aerodactyl|ability: Pressure', ''),
 			].join('\n');
-			const actualChannelMessages = extractChannelMessages(expectedMessages);
+			const actualChannelMessages = extractChannelMessages(expectedMessages, [spectatorPlayer, 1, 2, 3, 4]);
 
 			for (const player of [1, 2, 3, 4]) {
 				const actualPlayerMessages = actualChannelMessages[player].join('\n');
@@ -72,7 +72,7 @@ describe('ServerStream', function () {
 				...createSplit(2, '|-start|p2a: Aerodactyl|ability: Pressure', ''),
 				'|-start|p2b: Hellfrog|ability: Flash Fire',
 			].join('\n');
-			const actualChannelMessages = extractChannelMessages(messages);
+			const actualChannelMessages = extractChannelMessages(messages, [omniscientPlayer, spectatorPlayer, 1, 2]);
 
 			const expectedOmniscientPlayerMessages = [
 				'|-start|p2b: Hellfrog|ability: Flash Fire',
@@ -98,7 +98,7 @@ describe('ServerStream', function () {
 			assert.equal(actualChannelMessages[omniscientPlayer].join('\n'), expectedOmniscientPlayerMessages);
 			assert.equal(actualChannelMessages[1].join('\n'), expectedPlayer1Messages);
 			assert.equal(actualChannelMessages[2].join('\n'), expectedPlayer2Messages);
-			assert.equal(actualChannelMessages[0].join('\n'), expectedSpectatorMessages);
+			assert.equal(actualChannelMessages[spectatorPlayer].join('\n'), expectedSpectatorMessages);
 		});
 
 		it('should return consecutive player-privileged messages for a player', function () {
@@ -107,7 +107,7 @@ describe('ServerStream', function () {
 				...createSplit(1, '|-start|p1b: Aerodactyl|ability: Pressure', ''),
 				...createSplit(1, '|-start|p1c: Aerodactyl|ability: Pressure', ''),
 			].join('\n');
-			const actualChannelMessages = extractChannelMessages(messages);
+			const actualChannelMessages = extractChannelMessages(messages, [omniscientPlayer, spectatorPlayer, 1]);
 
 			const expectedPlayerMessages = [
 				'|-start|p1a: Aerodactyl|ability: Pressure',
@@ -127,7 +127,7 @@ describe('ServerStream', function () {
 				...createSplit(3, '|-heal|p3a: Rhyperior|420/420', '|-heal|p3a: Rhyperior|100/100'),
 				...createSplit(4, '|-heal|p4a: Rhyperior|420/420', '|-heal|p4a: Rhyperior|100/100'),
 			].join('\n');
-			const actualChannelMessages = extractChannelMessages(messages);
+			const actualChannelMessages = extractChannelMessages(messages, [omniscientPlayer, spectatorPlayer, 1, 2, 3, 4]);
 
 			for (const player of [1, 2, 3, 4]) {
 				const expectedPlayerMessages = [
@@ -165,7 +165,7 @@ describe('ServerStream', function () {
 				...createSplit(2, '|-heal|p2a: Rhyperior|420/420', '|-heal|p2a: Rhyperior|100/100'),
 				...createSplit(2, '|-start|p2a: Aerodactyl|ability: Pressure', ''),
 			].join('\n');
-			const actualChannelMessages = extractChannelMessages(messages);
+			const actualChannelMessages = extractChannelMessages(messages, [omniscientPlayer, spectatorPlayer, 1, 2]);
 
 			const expectedOmniscientPlayerMessages = [
 				'|-heal|p1a: Rhyperior|420/420',
@@ -192,6 +192,30 @@ describe('ServerStream', function () {
 			assert.equal(actualChannelMessages[1].join('\n'), expectedPlayer1Messages);
 			assert.equal(actualChannelMessages[2].join('\n'), expectedPlayer2Messages);
 			assert.equal(actualChannelMessages[spectatorPlayer].join('\n'), expectedSpectatorMessages);
+		});
+
+		it('should not extract channel messages for unspecified channels', function () {
+			const messages = [
+				...createSplit(1, '|-heal|p1a: Rhyperior|420/420', '|-heal|p1a: Rhyperior|100/100'),
+				...createSplit(2, '|-heal|p2a: Rhyperior|420/420', '|-heal|p2a: Rhyperior|100/100'),
+				...createSplit(3, '|-heal|p3a: Rhyperior|420/420', '|-heal|p3a: Rhyperior|100/100'),
+				...createSplit(4, '|-heal|p4a: Rhyperior|420/420', '|-heal|p4a: Rhyperior|100/100'),
+			].join('\n');
+
+			const expectedOmniscientPlayerMessages = [
+				'|-heal|p1a: Rhyperior|420/420',
+				'|-heal|p2a: Rhyperior|420/420',
+				'|-heal|p3a: Rhyperior|420/420',
+				'|-heal|p4a: Rhyperior|420/420',
+			].join('\n');
+
+			const actualChannelMessages = extractChannelMessages(messages, [omniscientPlayer]);
+			assert.equal(actualChannelMessages[omniscientPlayer].join('\n'), expectedOmniscientPlayerMessages);
+			assert.equal(actualChannelMessages[1].join('\n'), '');
+			assert.equal(actualChannelMessages[2].join('\n'), '');
+			assert.equal(actualChannelMessages[3].join('\n'), '');
+			assert.equal(actualChannelMessages[4].join('\n'), '');
+			assert.equal(actualChannelMessages[spectatorPlayer].join('\n'), '');
 		});
 	});
 });

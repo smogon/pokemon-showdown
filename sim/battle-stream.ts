@@ -84,10 +84,11 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 	pushMessage(type: string, data: string) {
 		if (this.replay) {
 			if (type === 'update') {
-				const channelMessages = extractChannelMessages(data);
 				if (this.replay === 'spectator') {
+					const channelMessages = extractChannelMessages(data, [0]);
 					this.push(channelMessages[0].join('\n'));
 				} else {
+					const channelMessages = extractChannelMessages(data, [-1]);
 					this.push(channelMessages[-1].join('\n'));
 				}
 			}
@@ -286,7 +287,7 @@ export function getPlayerStreams(stream: BattleStream) {
 			const [type, data] = splitFirst(chunk, `\n`);
 			switch (type) {
 			case 'update':
-				const channelMessages = extractChannelMessages(data);
+				const channelMessages = extractChannelMessages(data, [-1, 0, 1, 2, 3, 4]);
 				streams.omniscient.push(channelMessages[-1].join('\n'));
 				streams.spectator.push(channelMessages[0].join('\n'));
 				streams.p1.push(channelMessages[1].join('\n'));

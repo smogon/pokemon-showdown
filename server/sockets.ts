@@ -21,10 +21,11 @@ import {IPTools} from './ip-tools';
 type StreamWorker = ProcessManager.StreamWorker;
 type ChannelID = 0 | 1 | 2 | 3 | 4;
 
-export type ChannelMessages = Record<ChannelID | -1, string[]>;
+export type ChannelMessages<T extends ChannelID | -1> = Record<T, string[]>;
 
-export function extractChannelMessages(message: string) {
-	const channelMessages: ChannelMessages = {
+export function extractChannelMessages<T extends ChannelID | -1>(message: string, channelIds: T[]): ChannelMessages<T> {
+	const channelIdSet = new Set(channelIds);
+	const channelMessages: ChannelMessages<ChannelID | -1> = {
 		[-1]: [],
 		0: [],
 		1: [],
@@ -32,6 +33,7 @@ export function extractChannelMessages(message: string) {
 		3: [],
 		4: [],
 	};
+
 	const messages: string[] = message.split('\n');
 
 	for (let i = 0; i < messages.length; i++) {
@@ -40,20 +42,24 @@ export function extractChannelMessages(message: string) {
 
 		const splitMatch = /^\|split\|p([1234])$/.exec(line);
 		if (!splitMatch) {
-			Object.values(channelMessages).forEach((log) => log.push(line));
+			for (const channelId of channelIdSet) {
+				const log = channelMessages[channelId];
+				log.push(line);
+			}
 			continue;
 		}
 
 		const [, playerMatch] = splitMatch;
-		const player = playerMatch;
+		const player = parseInt(playerMatch);
 		const secretMessage = messages[i + 1];
 		const sharedMessage = messages[i + 2];
 
-		Object.entries(channelMessages).forEach(([channelId, log]) => {
-			const hasPrivilege = (player === channelId) || (channelId === "-1");
+		for (const channelId of channelIdSet) {
+			const log = channelMessages[channelId];
+			const hasPrivilege = (player === channelId) || (channelId === -1);
 			const channelMessage = hasPrivilege ? secretMessage : sharedMessage;
 			if (channelMessage) log.push(channelMessage);
-		});
+		}
 
 		i += 2;
 	}
@@ -294,7 +300,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 				null, null, null, null, null,
 			];
 			const message = data.substr(nlLoc + 1);
-			const channelMessages = extractChannelMessages(message);
+			const channelMessages = extractChannelMessages(message, [0, 1, 2, 3, 4]);
 			const roomChannel = this.roomChannels.get(roomid);
 			for (const [curSocketid, curSocket] of room) {
 				const channelid = roomChannel?.get(curSocketid) || 0;
