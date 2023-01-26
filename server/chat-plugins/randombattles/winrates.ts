@@ -4,7 +4,6 @@
  */
 
 import {FS, Utils} from '../../../lib';
-import {Dex} from '../../../sim';
 
 interface Stats {
 	elo: number;
@@ -69,6 +68,8 @@ function getMonth() {
 function getSpeciesName(set: PokemonSet) {
 	const species = set.species;
 	const item = Dex.items.get(set.item);
+	const moves = set.moves;
+	const ability = set.ability;
 	if (species.startsWith("Pikachu-")) {
 		return 'Pikachu';
 	} else if (species.startsWith("Unown-")) {
@@ -111,6 +112,18 @@ function getSpeciesName(set: PokemonSet) {
 		return "Kyogre-Primal";
 	} else if (species === "Groudon" && item.name === "Red Orb") {
 		return "Groudon-Primal";
+	} else if (species === "Meloetta" && moves.includes('Relic Song')) {
+		return "Meloetta-Pirouette";
+	} else if (species === "Greninja" && ability === 'Battle Bond') {
+		return "Greninja-Ash";
+	} else if (species === "Castform" && moves.includes('Sunny Day')) {
+		return "Castform-Sunny";
+	} else if (species === "Castform" && moves.includes('Rain Dance')) {
+		return "Castform-Rainy";
+	} else if (species === "Castform" && moves.includes('Hail')) {
+		return "Castform-Snowy";
+	} else if (species === "Aegislash" && moves.includes('Iron Head')) {
+		return "Aegislash-Blade";
 	} else if (item.megaStone) {
 		return item.megaStone;
 	} else {
