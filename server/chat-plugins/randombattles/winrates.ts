@@ -124,7 +124,7 @@ function getSpeciesName(set: PokemonSet, gen: number) {
 		return "Castform-Rainy";
 	} else if (species === "Castform" && moves.includes('Hail')) {
 		return "Castform-Snowy";
-	} else if (species === "Aegislash" && moves.includes('Iron Head')) {
+	} else if (species === "Aegislash" && moves.includes('Iron Head') && gen < 9) {
 		return "Aegislash-Blade";
 	} else {
 		return species;
