@@ -65,7 +65,8 @@ function getMonth() {
 // no, this cannot be baseSpecies - some formes matter, ex arceus formes
 // no, there is no better way to do this.
 // yes, i tried.
-function getSpeciesName(species: string) {
+function getSpeciesName(set: PokemonSet) {
+	const species = set.species;
 	if (species.startsWith("Pikachu-")) {
 		return 'Pikachu';
 	} else if (species.startsWith("Unown-")) {
@@ -135,7 +136,7 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 	for (const p of players) {
 		const team = await battle.getTeam(p);
 		if (!team) return; // ???
-		const mons = team.map(f => getSpeciesName(f.species));
+		const mons = team.map(f => getSpeciesName(f));
 		for (const mon of mons) {
 			if (!formatData.mons[mon]) formatData.mons[mon] = {timesGenerated: 0, numWins: 0};
 			formatData.mons[mon].timesGenerated++;
