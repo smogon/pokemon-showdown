@@ -4,6 +4,7 @@
  */
 
 import {FS, Utils} from '../../../lib';
+import {Dex} from '../../../sim';
 
 interface Stats {
 	elo: number;
@@ -67,6 +68,7 @@ function getMonth() {
 // yes, i tried.
 function getSpeciesName(set: PokemonSet) {
 	const species = set.species;
+	const item = Dex.items.get(set.item);
 	if (species.startsWith("Pikachu-")) {
 		return 'Pikachu';
 	} else if (species.startsWith("Unown-")) {
@@ -101,6 +103,16 @@ function getSpeciesName(set: PokemonSet) {
 		return 'Toxtricity';
 	} else if (species.startsWith("Tatsugiri-")) {
 		return 'Tatsugiri';
+	} else if (species === "Zacian" && item.name === "Rusted Sword") {
+		return 'Zacian-Crowned';
+	} else if (species === "Zamazenta" && item.name === "Rusted Shield") {
+		return "Zamazenta-Crowned";
+	} else if (species === "Kyogre" && item.name === "Blue Orb") {
+		return "Kyogre-Primal";
+	} else if (species === "Groudon" && item.name === "Red Orb") {
+		return "Groudon-Primal";
+	} else if (item.megaStone) {
+		return item.megaStone;
 	} else {
 		return species;
 	}
