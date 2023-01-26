@@ -76,6 +76,14 @@ function getSpeciesName(species: string) {
 	  return "Magearna";
 	} else if (species === "Genesect-Douse") {
 		return "Genesect";
+	} else if (species === "Dudunsparce-Three-Segment") {
+		return 'Dudunsparce';
+	} else if (species === "Maushold-Four") {
+		return 'Maushold';
+	} else if (species === "Squawkabilly-Blue") {
+		return "Squawkabilly";
+	} else if (species === "Squawkabilly-White") {
+		return "Squawkabilly-Yellow";
 	} else if (species.startsWith("Basculin-")) {
 		return "Basculin";
 	} else if (species.startsWith("Sawsbuck-")) {
@@ -92,6 +100,8 @@ function getSpeciesName(species: string) {
 		return "Gourgeist";
 	} else if (species.startsWith("Toxtricity-")) {
 		return 'Toxtricity';
+	} else if (species.startsWith("Tatsugiri-")) {
+		return 'Tatsugiri';
 	} else {
 		return species;
 	}
