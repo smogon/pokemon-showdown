@@ -603,6 +603,8 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 			return !counter.get('Status');
 		case 'Pressure':
 			return (!!counter.setupType || counter.get('Status') < 2 || isDoubles);
+		case 'Quick Feet':
+			return (!moves.has('facade'));
 		case 'Reckless':
 			return !counter.get('recoil') || moves.has('curse');
 		case 'Rock Head':
