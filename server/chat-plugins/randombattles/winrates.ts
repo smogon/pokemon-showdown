@@ -112,10 +112,12 @@ function getSpeciesName(set: PokemonSet) {
 		return "Kyogre-Primal";
 	} else if (species === "Groudon" && item.name === "Red Orb") {
 		return "Groudon-Primal";
-	} else if (species === "Meloetta" && moves.includes('Relic Song')) {
-		return "Meloetta-Pirouette";
+	} else if (item.megaStone) {
+		return item.megaStone;
 	} else if (species === "Greninja" && ability === 'Battle Bond') {
 		return "Greninja-Ash";
+	} else if (species === "Meloetta" && moves.includes('Relic Song')) {
+		return "Meloetta-Pirouette";
 	} else if (species === "Castform" && moves.includes('Sunny Day')) {
 		return "Castform-Sunny";
 	} else if (species === "Castform" && moves.includes('Rain Dance')) {
@@ -124,8 +126,6 @@ function getSpeciesName(set: PokemonSet) {
 		return "Castform-Snowy";
 	} else if (species === "Aegislash" && moves.includes('Iron Head')) {
 		return "Aegislash-Blade";
-	} else if (item.megaStone) {
-		return item.megaStone;
 	} else {
 		return species;
 	}
