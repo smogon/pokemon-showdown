@@ -96,8 +96,6 @@ function getSpeciesName(species: string) {
 		return "Furfrou";
 	} else if (species.startsWith("Minior-")) {
 		return "Minior";
-	} else if (species.startsWith("Gourgeist-")) {
-		return "Gourgeist";
 	} else if (species.startsWith("Toxtricity-")) {
 		return 'Toxtricity';
 	} else if (species.startsWith("Tatsugiri-")) {
