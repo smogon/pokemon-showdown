@@ -19,7 +19,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		super(format, prng);
 		this.moveEnforcementCheckers = {
 			Bug: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Bug') && (movePool.includes('bugbuzz') || movePool.includes('megahorn'))
+				(movePool.includes('bugbuzz') || movePool.includes('megahorn'))
 			),
 			Dark: (movePool, moves, abilities, types, counter) => (
 				!counter.get('damage') &&
@@ -156,9 +156,12 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			)};
 		case 'wish':
 			return {cull: (
+				!(moves.has('ironhead') && abilities.has('Serene Grace')) &&
+				(
 				!['batonpass', 'protect', 'uturn'].some(m => moves.has(m)) ||
 				moves.has('rest') ||
 				!!counter.get('speedsetup')
+				)
 			)};
 		case 'rapidspin':
 			return {cull: !!teamDetails.rapidSpin || (!!counter.setupType && counter.get('Physical') + counter.get('Special') < 2)};
@@ -193,7 +196,6 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			)};
 		case 'uturn':
 			return {cull: (
-				(types.has('Bug') && counter.get('stab') < 2 && counter.damagingMoves.size > 1) ||
 				(abilities.has('Speed Boost') && moves.has('protect')) ||
 				!!counter.setupType ||
 				!!counter.get('speedsetup') ||
@@ -204,6 +206,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		// Attacks:
 		case 'bodyslam': case 'slash':
 			return {cull: moves.has('facade') || moves.has('return')};
+		case 'bugbite':
+			return {cull: moves.has('uturn')};
 		case 'doubleedge':
 			return {cull: ['bodyslam', 'facade', 'return'].some(m => moves.has(m))};
 		case 'endeavor':
@@ -218,10 +222,13 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			return {cull: moves.has('thunderwave')};
 		case 'firepunch': case 'flamethrower':
 			return {cull: moves.has('fireblast') || moves.has('overheat') && !counter.setupType};
+		case 'flareblitz':
+			return {cull: moves.has('superpower') && !!counter.get('speedsetup')};
 		case 'lavaplume': case 'fireblast':
 			if (move.id === 'fireblast' && moves.has('lavaplume') && !counter.get('speedsetup')) return {cull: true};
 			if (move.id === 'lavaplume' && moves.has('fireblast') && counter.get('speedsetup')) return {cull: true};
-			if (moves.has('flareblitz') && counter.setupType !== 'Special') return {cull: true};
+			if (moves.has('flareblitz') && counter.setupType !== 'Special' &&
+				(!moves.has('superpower') || !counter.get('speedsetup'))) return {cull: true};
 			break;
 		case 'overheat':
 			return {cull: counter.setupType === 'Special' || ['batonpass', 'fireblast', 'flareblitz'].some(m => moves.has(m))};
@@ -267,7 +274,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		case 'seismictoss':
 			return {cull: moves.has('nightshade') || counter.get('Physical') + counter.get('Special') >= 1};
 		case 'superpower':
-			return {cull: moves.has('dragondance') || !!counter.get('speedsetup')};
+			return {cull: moves.has('dragondance') || !!counter.get('speedsetup') && !types.has('Fighting')};
 		case 'gunkshot':
 			return {cull: moves.has('poisonjab')};
 		case 'earthpower':
@@ -310,7 +317,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				movePool.includes('spore')
 			)};
 		case 'substitute':
-			return {cull: ['pursuit', 'rapidspin', 'rest', 'taunt'].some(m => moves.has(m))};
+			return {cull: ['lightscreen', 'pursuit', 'rapidspin', 'reflect', 'rest', 'taunt'].some(m => moves.has(m))};
 		case 'thunderwave':
 			return {cull: (
 				!!counter.setupType ||
@@ -489,6 +496,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		) {
 			return 'Focus Sash';
 		}
+		if (counter.get('Dark') >= 3) return 'Black Glasses';
 		if (counter.damagingMoves.size >= 4) {
 			return (
 				counter.get('Normal') || counter.get('Dragon') > 1 || moves.has('chargebeam') || moves.has('suckerpunch')

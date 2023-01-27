@@ -1192,7 +1192,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	illumise: {
-		randomBattleMoves: ["bugbuzz", "encore", "hiddenpowerground", "hiddenpowerice", "thunderbolt", "uturn"],
+		randomBattleMoves: ["bugbuzz", "encore", "hiddenpowerground", "hiddenpowerice", "thunderbolt", "uturn", "wish"],
 		tier: "NU",
 	},
 	budew: {
@@ -1776,7 +1776,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["aurasphere", "calmmind", "dracometeor", "dragonpulse", "hiddenpowerfire", "outrage", "shadowball", "shadowsneak", "substitute"],
 	},
 	cresselia: {
-		randomBattleMoves: ["calmmind", "hiddenpowerfire", "icebeam", "moonlight", "psychic", "substitute", "thunderwave", "toxic"],
+		randomBattleMoves: ["calmmind", "hiddenpowerfire", "icebeam", "lightscreen", "moonlight", "psychic", "reflect", "substitute", "thunderwave", "toxic"],
 		tier: "UUBL",
 	},
 	phione: {
