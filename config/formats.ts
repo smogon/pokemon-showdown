@@ -1506,7 +1506,7 @@ export const Formats: FormatList = [
 			}
 			// Absolute trademark bans
 			if (ability.category !== 'Status') {
-				return [`${ability.name} is not a status move, and cannot be used as a trademark.`];
+				return [`${ability.name} is not a status move and cannot be used as a trademark.`];
 			}
 			// Contingent trademark bans
 			if (this.ruleTable.isRestricted(`move:${ability.id}`)) {
