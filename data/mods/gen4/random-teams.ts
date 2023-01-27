@@ -22,7 +22,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				!counter.get('Bug') && (movePool.includes('bugbuzz') || movePool.includes('megahorn'))
 			),
 			Dark: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Dark') || (counter.get('Dark') < 2 && moves.has('pursuit') && movePool.includes('suckerpunch'))),
+				!counter.get('damage') &&
+				(!counter.get('Dark') || (counter.get('Dark') < 2 && moves.has('pursuit') && movePool.includes('suckerpunch')))),
 			Dragon: (movePool, moves, abilities, types, counter) => !counter.get('Dragon'),
 			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
 			Fighting: (movePool, moves, abilities, types, counter) => (
@@ -207,6 +208,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			return {cull: ['bodyslam', 'facade', 'return'].some(m => moves.has(m))};
 		case 'endeavor':
 			return {cull: !isLead};
+		case 'facade':
+			return {cull: moves.has('substitute')};
 		case 'headbutt':
 			return {cull: !moves.has('bodyslam') && !moves.has('thunderwave')};
 		case 'judgment': case 'swift':
@@ -374,6 +377,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			return counter.get('Status') < 2;
 		case 'Technician':
 			return !counter.get('technician') || moves.has('toxic');
+		case 'Thick Fat':
+			return (moves.has('facade') || moves.has('fakeout')) && abilities.has('Guts');
 		case 'Tinted Lens':
 			return moves.has('protect');
 		case 'Torrent':

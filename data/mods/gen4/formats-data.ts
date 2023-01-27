@@ -559,7 +559,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	espeon: {
-		randomBattleMoves: ["batonpass", "calmmind", "hiddenpowerground", "morningsun", "psychic", "shadowball", "substitute"],
+		randomBattleMoves: ["batonpass", "calmmind", "hiddenpowerfire", "morningsun", "psychic", "shadowball", "substitute"],
 		tier: "NUBL",
 	},
 	umbreon: {
@@ -1005,7 +1005,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	mightyena: {
-		randomBattleMoves: ["firefang", "return", "suckerpunch", "superfang", "taunt", "toxic"],
+		randomBattleMoves: ["crunch", "firefang", "suckerpunch", "superfang", "taunt", "toxic"],
 		tier: "NU",
 	},
 	zigzagoon: {
@@ -1113,7 +1113,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "(OU)",
 	},
 	shedinja: {
-		randomBattleMoves: ["shadowsneak", "suckerpunch", "swordsdance", "willowisp", "xscissor"],
+		randomBattleMoves: ["batonpass", "shadowsneak", "swordsdance", "willowisp", "xscissor"],
 		tier: "NU",
 	},
 	whismur: {
@@ -1130,7 +1130,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	hariyama: {
-		randomBattleMoves: ["bulletpunch", "closecombat", "fakeout", "focuspunch", "icepunch", "payback", "stoneedge", "substitute"],
+		randomBattleMoves: ["bulletpunch", "closecombat", "facade", "fakeout", "focuspunch", "icepunch", "payback", "stoneedge", "substitute"],
 		tier: "UU",
 	},
 	nosepass: {
@@ -1148,7 +1148,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	sableye: {
-		randomBattleMoves: ["nightshade", "recover", "seismictoss", "taunt", "toxic", "willowisp"],
+		randomBattleMoves: ["recover", "seismictoss", "taunt", "toxic", "willowisp"],
 		tier: "NU",
 	},
 	mawile: {
