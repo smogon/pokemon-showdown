@@ -440,6 +440,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 		if (counter.setupType && moves.has('outrage')) return 'Lum Berry';
 		if (this.dex.getEffectiveness('Ground', species) >= 2 && ability !== 'Levitate') return 'Air Balloon';
+		if (counter.get('Dark') >= 3) return 'Black Glasses';
 		if (
 			types.has('Poison') ||
 			['bodyslam', 'dragontail', 'protect', 'scald', 'sleeptalk', 'substitute'].some(m => moves.has(m))
@@ -766,7 +767,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			'(PU)': 90,
 		};
 		const customScale: {[forme: string]: number} = {
-			Delibird: 100, 'Farfetch\u2019d': 100, Luvdisc: 100, Unown: 100,
+			'Castform-Rainy': 100, 'Castform-Sunny': 100, Delibird: 100, 'Farfetch\u2019d': 100, Luvdisc: 100, Unown: 100,
 		};
 		const level = this.adjustLevel || customScale[species.name] || levelScale[species.tier] || (species.nfe ? 90 : 80);
 
