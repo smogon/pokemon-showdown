@@ -69,7 +69,7 @@ function getSpeciesName(set: PokemonSet, format: Format) {
 	const species = set.species;
 	const item = Dex.items.get(set.item);
 	const moves = set.moves;
-	const megaRayquazaPossible = format.gen < 8 && !format.ruleset.includes('Mega Rayquaza Clause');
+	const megaRayquazaPossible = (format.gen === 6 || format.gen === 7) && !format.ruleset.includes('Mega Rayquaza Clause');
 	if (species.startsWith("Pikachu-")) {
 		return 'Pikachu';
 	} else if (species.startsWith("Unown-")) {
