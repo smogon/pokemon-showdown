@@ -1504,6 +1504,10 @@ export const Formats: FormatList = [
 			if (!ability.exists) { // Not even a real move
 				return this.validateSet(set, teamHas);
 			}
+			// Absolute trademark bans
+			if (ability.category !== 'Status') {
+				return [`${ability.name} is not a status move, and cannot be used as a trademark.`];
+			}
 			// Contingent trademark bans
 			if (this.ruleTable.isRestricted(`move:${ability.id}`)) {
 				return [`${ability.name} is restricted from being used as a trademark.`];
