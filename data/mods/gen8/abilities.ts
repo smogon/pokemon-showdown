@@ -119,6 +119,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				move.multihit = 3;
 			}
 		},
+		isNonstandard: null,
 		rating: 4,
 	},
 	beastboost: {
