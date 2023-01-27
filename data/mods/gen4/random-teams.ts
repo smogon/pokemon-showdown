@@ -158,7 +158,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			return {cull: (
 				!(moves.has('ironhead') && abilities.has('Serene Grace')) &&
 				(
-				!['batonpass', 'protect', 'uturn'].some(m => moves.has(m)) ||
+				!['batonpass', 'protect', 'softboiled', 'uturn'].some(m => moves.has(m)) ||
 				moves.has('rest') ||
 				!!counter.get('speedsetup')
 				)
@@ -247,7 +247,6 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			return {cull: moves.has('thunderbolt')};
 		case 'energyball':
 			return {cull: (
-				moves.has('leafblade') ||
 				moves.has('woodhammer') ||
 				(moves.has('sunnyday') && moves.has('solarbeam')) ||
 				(moves.has('leafstorm') && counter.get('Physical') + counter.get('Special') < 4)
@@ -259,6 +258,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				!!counter.setupType ||
 				moves.has('batonpass') ||
 				moves.has('powerwhip') ||
+				moves.has('leafblade') ||
 				(moves.has('sunnyday') && moves.has('solarbeam'))
 			)};
 		case 'solarbeam':

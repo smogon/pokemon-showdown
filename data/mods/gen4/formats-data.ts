@@ -886,7 +886,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "(OU)",
 	},
 	corsola: {
-		randomBattleMoves: ["recover", "reflect", "stealthrock", "surf", "toxic"],
+		randomBattleMoves: ["explosion", "recover", "stealthrock", "surf", "toxic"],
 		tier: "NU",
 	},
 	remoraid: {
@@ -1022,7 +1022,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	beautifly: {
-		randomBattleMoves: ["bugbuzz", "hiddenpowerground", "psychic", "stunspore", "uturn"],
+		randomBattleMoves: ["bugbuzz", "hiddenpowerground", "psychic", "uturn"],
 		tier: "NU",
 	},
 	cascoon: {
@@ -1359,7 +1359,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "(OU)",
 	},
 	tropius: {
-		randomBattleMoves: ["aerialace", "airslash", "earthquake", "energyball", "leafblade", "roost", "swordsdance", "toxic", "whirlwind"],
+		randomBattleMoves: ["aerialace", "curse", "dragondance", "earthquake", "leafblade", "leafstorm", "leechseed", "roost", "swordsdance", "toxic", "whirlwind"],
 		tier: "NU",
 	},
 	chingling: {
@@ -1579,7 +1579,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	mothim: {
-		randomBattleMoves: ["airslash", "bugbuzz", "hiddenpowerground", "roost", "shadowball", "uturn"],
+		randomBattleMoves: ["airslash", "bugbuzz", "hiddenpowerfighting", "hiddenpowerground", "shadowball", "uturn"],
 		tier: "NU",
 	},
 	combee: {
