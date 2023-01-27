@@ -69,7 +69,7 @@ function getSpeciesName(set: PokemonSet, format: Format) {
 	const species = set.species;
 	const item = Dex.items.get(set.item);
 	const moves = set.moves;
-	const megaRayquazaPossible = (format.gen === 6 || format.gen === 7) && !format.ruleset.includes('Mega Rayquaza Clause');
+	const megaRayquazaPossible = ['gen6', 'gen7'].includes(format.mod) && !format.ruleset.includes('Mega Rayquaza Clause');
 	if (species.startsWith("Pikachu-")) {
 		return 'Pikachu';
 	} else if (species.startsWith("Unown-")) {
@@ -150,7 +150,7 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 	const formatData = stats.formats[battle.format];
 	let eloFloor = stats.elo;
 	const format = Dex.formats.get(battle.format);
-	if (Dex.gen !== format.gen) {
+	if (format.mod !== `gen${Dex.gen}`) {
 		eloFloor = 1300;
 	}
 	if (!formatData || battle.rated < eloFloor) return;
