@@ -1256,7 +1256,10 @@ export const Formats: FormatList = [
 		mod: 'pokebilities',
 		searchShow: false,
 		ruleset: ['Standard OMs', 'Sleep Clause Mod'],
-		banlist: ['Flutter Mane', 'Houndstone', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Palafin', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Baton Pass'],
+		banlist: [
+			'Chi-Yu', 'Flutter Mane', 'Houndstone', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Palafin', 'Arena Trap', 'Moody', 'Shadow Tag',
+			'King\'s Rock', 'Baton Pass'
+		],
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
 			const unSeenAbilities = Object.keys(species.abilities)
