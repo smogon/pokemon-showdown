@@ -252,8 +252,9 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'voltswitch':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('raindance') || moves.has('uturn')};
 		case 'wish':
+			if (species.baseStats.hp >= 130) return {cull: false};
 			if (abilities.has('Regenerator')) return {cull: false};
-			return {cull: (!['ironhead', 'protect', 'softboiled', 'spikyshield', 'uturn'].some(m => moves.has(m)))};
+			return {cull: (!['ironhead', 'protect', 'spikyshield', 'uturn'].some(m => moves.has(m)))};
 
 		// Bit redundant to have both
 		// Attacks:

@@ -320,8 +320,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				['electricterrain', 'raindance', 'uturn'].some(m => moves.has(m))
 			)};
 		case 'wish':
+			if (species.baseStats.hp >= 130) return {cull: false};
 			if (abilities.has('Regenerator')) return {cull: false};
-			return {cull: (!['ironhead', 'protect', 'softboiled', 'spikyshield', 'uturn'].some(m => moves.has(m)))};
+			return {cull: (!['ironhead', 'protect', 'spikyshield', 'uturn'].some(m => moves.has(m)))};
 
 		// Bit redundant to have both
 		// Attacks:
