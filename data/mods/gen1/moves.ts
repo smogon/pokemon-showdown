@@ -492,6 +492,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mimic: {
 		inherit: true,
+		onTryHit() {},
 		onHit(target, source) {
 			const moveslot = source.moves.indexOf('mimic');
 			if (moveslot < 0) return false;
@@ -514,6 +515,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mirrormove: {
 		inherit: true,
+		onTryHit() {},
 		onHit(pokemon) {
 			const foe = pokemon.side.foe.active[0];
 			if (!foe?.lastMove || foe.lastMove.id === 'mirrormove') {
