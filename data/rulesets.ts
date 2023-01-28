@@ -553,13 +553,11 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'Rule',
 		name: 'Tera Type Preview',
 		desc: "Allows each player to see the tera type of each Pok&eacute;mon on their opponent's team",
-
 		onValidateRule() {
 			if (!this.ruleTable.has('teampreview')) {
 				throw new Error(`The "Tera Type Preview" rule${this.ruleTable.blame('teratypepreview')} requires Team Preview.`);
 			}
 		},
-
 		// implemented in team preview
 	},
 	onevsone: {
