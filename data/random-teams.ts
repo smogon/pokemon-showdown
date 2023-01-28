@@ -88,7 +88,7 @@ const Setup = [
 const NoStab = [
 	'accelerock', 'aquajet', 'beakblast', 'bounce', 'breakingswipe', 'chatter', 'chloroblast', 'clearsmog', 'dragontail', 'eruption',
 	'explosion', 'fakeout', 'flamecharge', 'flipturn', 'iceshard', 'icywind', 'incinerate', 'machpunch', 'meteorbeam',
-	'mortalspin', 'pluck', 'pursuit', 'quickattack', 'rapidspin', 'reversal', 'saltcure', 'selfdestruct', 'shadowsneak',
+	'mortalspin', 'pluck', 'pursuit', 'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak',
 	'skydrop', 'snarl', 'steelbeam', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
 ];
 // Hazard-setting moves
@@ -609,7 +609,37 @@ export class RandomTeams {
 				movePool, teraType, role);
 		}
 
-		// Add other moves you really want to have, e.g. STAB, recovery, setup, depending on role.
+		// Add other moves you really want to have, e.g. STAB, recovery, setup.
+
+		// Enforce Facade if Guts is a possible ability
+		if (movePool.includes('facade') && abilities.has('Guts')) {
+			counter = this.addMove('facade', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
+		}
+
+		// Enforce Sticky Web
+		if (movePool.includes('stickyweb')) {
+			counter = this.addMove('stickyweb', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
+		}
+
+		// Enforce Revival Blessing
+		if (movePool.includes('revivalblessing')) {
+			counter = this.addMove('revivalblessing', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
+		}
+
+		// Enforce Salt Cure
+		if (movePool.includes('saltcure')) {
+			counter = this.addMove('saltcure', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
+		}
+
+		// Enforce Toxic on Grafaiai
+		if (movePool.includes('toxic') && species.id === 'grafaiai') {
+			counter = this.addMove('toxic', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
+		}
 
 		// Enforce STAB
 		for (const type of types) {
@@ -686,30 +716,6 @@ export class RandomTeams {
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);
 			}
-		}
-
-		// Enforce Facade if Guts is a possible ability
-		if (movePool.includes('facade') && abilities.has('Guts')) {
-			counter = this.addMove('facade', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
-		}
-
-		// Enforce Sticky Web
-		if (movePool.includes('stickyweb')) {
-			counter = this.addMove('stickyweb', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
-		}
-
-		// Enforce Revival Blessing
-		if (movePool.includes('revivalblessing')) {
-			counter = this.addMove('revivalblessing', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
-		}
-
-		// Enforce Toxic on Grafaiai
-		if (movePool.includes('toxic') && species.id === 'grafaiai') {
-			counter = this.addMove('toxic', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
 		}
 
 		// Enforce recovery
