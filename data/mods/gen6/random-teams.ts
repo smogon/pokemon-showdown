@@ -119,7 +119,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				const screen = movePool.indexOf('lightscreen');
 				if (screen >= 0) this.fastPop(movePool, screen);
 			}
-			return {cull: !moves.has('calmmind') && !moves.has('lightscreen')};
+			return {cull: !moves.has('lightscreen')};
 		case 'rest':
 			return {cull: movePool.includes('sleeptalk')};
 		case 'sleeptalk':
