@@ -729,7 +729,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	ampharos: {
-		randomBattleMoves: ["discharge", "focusblast", "hiddenpowerice", "signalbeam", "substitute", "thunderbolt"],
+		randomBattleMoves: ["discharge", "focusblast", "healbell", "hiddenpowerice", "lightscreen", "reflect", "signalbeam", "thunderbolt"],
 		tier: "NU",
 	},
 	azurill: {

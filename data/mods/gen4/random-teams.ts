@@ -303,6 +303,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			return {cull: ['roar', 'taunt', 'whirlwind'].some(m => moves.has(m)) || restTalk};
 		case 'haze': case 'taunt':
 			return {cull: restTalk};
+		case 'healbell':
+			return {cull: moves.has('reflect') && moves.has('lightscreen')};
 		case 'leechseed': case 'painsplit':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('rest')};
 		case 'recover': case 'slackoff':
