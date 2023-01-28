@@ -1258,7 +1258,7 @@ export const Formats: FormatList = [
 		ruleset: ['Standard OMs', 'Sleep Clause Mod'],
 		banlist: [
 			'Chi-Yu', 'Flutter Mane', 'Houndstone', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Palafin', 'Arena Trap', 'Moody', 'Shadow Tag',
-			'King\'s Rock', 'Baton Pass'
+			'King\'s Rock', 'Baton Pass',
 		],
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
