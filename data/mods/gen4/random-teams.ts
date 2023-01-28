@@ -155,13 +155,11 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				!['toxic', 'wish'].some(m => moves.has(m))
 			)};
 		case 'wish':
+			if (moves.has('ironhead') && abilities.has('Serene Grace')) return {cull: false};
 			return {cull: (
-				!(moves.has('ironhead') && abilities.has('Serene Grace')) &&
-				(
 				!['batonpass', 'protect', 'softboiled', 'uturn'].some(m => moves.has(m)) ||
 				moves.has('rest') ||
 				!!counter.get('speedsetup')
-				)
 			)};
 		case 'rapidspin':
 			return {cull: !!teamDetails.rapidSpin || (!!counter.setupType && counter.get('Physical') + counter.get('Special') < 2)};
