@@ -262,7 +262,12 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				movePool.includes('bellydrum') ||
 				movePool.includes('shellsmash')
 			);
-			const singlesCondition = counter.setupType && !moves.has('wish');
+			const singlesCondition = (
+				(counter.setupType && !moves.has('wish')) ||
+				(!['Guts', 'Harvest', 'Poison Heal', 'Quick Feet', 'Speed Boost'].some(abil => abilities.has(abil)) &&
+				!['leechseed', 'perishsong', 'toxic', 'wish'].some(m => moves.has(m)) &&
+				species.id !== 'sharpedomega')
+			);
 			return {cull: (
 				(isDoubles ? doublesCondition : singlesCondition) ||
 				!!counter.get('speedsetup') ||
@@ -314,6 +319,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				!!counter.get('speedsetup') ||
 				['electricterrain', 'raindance', 'uturn'].some(m => moves.has(m))
 			)};
+		case 'wish':
+			if (abilities.has('Regenerator')) return {cull: false};
+			return {cull: (!['ironhead', 'protect', 'softboiled', 'spikyshield', 'uturn'].some(m => moves.has(m)))};
 
 		// Bit redundant to have both
 		// Attacks:
@@ -548,7 +556,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 			return {cull};
 		case 'painsplit': case 'recover': case 'roost': case 'synthesis':
-			return {cull: moves.has('leechseed') || moves.has('rest')};
+			return {cull: moves.has('leechseed') || moves.has('rest') || moves.has('wish') && moves.has('protect')};
 		case 'substitute':
 			return {cull: (
 				moves.has('dracometeor') ||

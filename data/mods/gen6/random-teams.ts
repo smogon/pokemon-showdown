@@ -208,7 +208,12 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return {cull: !abilities.has("Parental Bond") && (counter.damagingMoves.size > 1 || !!counter.setupType)};
 		case 'protect':
 			const screens = moves.has('lightscreen') && moves.has('reflect');
-			return {cull: moves.has('rest') || screens || (!!counter.setupType && !moves.has('wish'))};
+			return {cull:
+				moves.has('rest') || screens || (!!counter.setupType && !moves.has('wish')) ||
+				(!['Guts', 'Harvest', 'Poison Heal', 'Quick Feet', 'Speed Boost'].some(abil => abilities.has(abil)) &&
+				!['leechseed', 'perishsong', 'toxic', 'wish'].some(m => moves.has(m)) &&
+				species.id !== 'sharpedomega')
+			};
 		case 'pursuit':
 			return {cull: (
 				moves.has('nightslash') ||
@@ -247,6 +252,9 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			)};
 		case 'voltswitch':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('raindance') || moves.has('uturn')};
+		case 'wish':
+			if (abilities.has('Regenerator')) return {cull: false};
+			return {cull: (!['ironhead', 'protect', 'softboiled', 'spikyshield', 'uturn'].some(m => moves.has(m)))};
 
 		// Bit redundant to have both
 		// Attacks:
@@ -450,7 +458,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 			return {cull};
 		case 'milkdrink': case 'moonlight': case 'painsplit': case 'recover': case 'roost': case 'synthesis':
-			return {cull: ['leechseed', 'rest', 'wish'].some(m => moves.has(m))};
+			return {cull: ['leechseed', 'rest'].some(m => moves.has(m) || moves.has('wish') && moves.has('protect'))};
 		case 'safeguard':
 			return {cull: moves.has('destinybond')};
 		case 'substitute':
