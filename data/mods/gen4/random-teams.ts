@@ -295,8 +295,6 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			return {cull: moves.has('suckerpunch') && !types.has('Dark')};
 		case 'pursuit':
 			return {cull: !!counter.setupType || moves.has('payback')};
-		case 'suckerpunch':
-			return {cull: counter.damagingMoves.size < 3 && !moves.has('batonpass') && !types.has('Dark')};
 		case 'flashcannon':
 			return {cull: (moves.has('ironhead') || movePool.includes('ironhead')) && counter.setupType !== 'Special'};
 
