@@ -305,6 +305,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		case 'haze': case 'taunt':
 			return {cull: restTalk};
 		case 'healbell':
+			// Ampharos doesn't want both
 			return {cull: moves.has('reflect') && moves.has('lightscreen')};
 		case 'leechseed': case 'painsplit':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('rest')};
