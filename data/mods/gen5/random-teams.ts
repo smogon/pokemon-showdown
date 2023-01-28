@@ -62,8 +62,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		const hasRestTalk = moves.has('rest') && moves.has('sleeptalk');
 		switch (move.id) {
 		// Not very useful without their supporting moves
-		case 'batonpass':
-			return {cull: !counter.setupType && !counter.get('speedsetup') && !moves.has('substitute') && !moves.has('wish')};
 		case 'endeavor':
 			return {cull: !isLead};
 		case 'focuspunch':
@@ -97,13 +95,11 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'bellydrum': case 'bulkup': case 'coil': case 'curse': case 'dragondance': case 'honeclaws': case 'swordsdance':
 			return {cull: (counter.setupType !== 'Physical' || counter.get('physicalsetup') > 1 || (
 				counter.get('Physical') + counter.get('physicalpool') < 2 &&
-				!moves.has('batonpass') &&
 				!hasRestTalk
 			)), isSetup: true};
 		case 'calmmind': case 'nastyplot': case 'tailglow':
 			return {cull: (counter.setupType !== 'Special' || counter.get('specialsetup') > 1 || (
 				counter.get('Special') + counter.get('specialpool') < 2 &&
-				!moves.has('batonpass') &&
 				!hasRestTalk
 			)), isSetup: true};
 		case 'growth': case 'shellsmash': case 'workup':
@@ -120,7 +116,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'agility': case 'autotomize': case 'rockpolish':
 			return {
 				cull: (
-					(counter.damagingMoves.size < 2 && !counter.setupType && !moves.has('batonpass')) ||
+					(counter.damagingMoves.size < 2 && !counter.setupType) ||
 					hasRestTalk
 				),
 				isSetup: !counter.setupType,
@@ -170,12 +166,12 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'uturn':
 			// Infernape doesn't want mixed sets with U-turn
 			const infernapeCase = species.id === 'infernape' && !!counter.get('Special');
-			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('batonpass') || infernapeCase};
+			return {cull: !!counter.setupType || !!counter.get('speedsetup') || infernapeCase};
 		case 'voltswitch':
 			return {cull: (
 				!!counter.setupType ||
 				!!counter.get('speedsetup') ||
-				['batonpass', 'magnetrise', 'uturn'].some(m => moves.has(m))
+				['magnetrise', 'uturn'].some(m => moves.has(m))
 			)};
 
 		// Ineffective having both
@@ -292,7 +288,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Contrary': case 'Iron Fist': case 'Skill Link':
 			return !counter.get(toID(ability));
 		case 'Defiant': case 'Moxie':
-			return (!counter.get('Physical') && !moves.has('batonpass'));
+			return !counter.get('Physical');
 		case 'Flash Fire':
 			return abilities.has('Drought');
 		case 'Guts':
@@ -564,7 +560,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					counter.setupType !== 'Mixed' &&
 					move.category !== counter.setupType &&
 					counter.get(counter.setupType) < 2 &&
-					!moves.has('batonpass') &&
 					(move.category !== 'Status' || !move.flags.heal) &&
 					moveid !== 'sleeptalk' && (
 						move.category !== 'Status' || (
