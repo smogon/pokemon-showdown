@@ -111,6 +111,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
+	conversion2: {
+		inherit: true,
+		onTryHit(target, source) {
+			if (!target.volatiles['canmirrormove']) return false;
+		}
+	},
 	counter: {
 		inherit: true,
 		damageCallback(pokemon, target) {
