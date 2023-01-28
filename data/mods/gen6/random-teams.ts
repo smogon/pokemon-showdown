@@ -208,12 +208,11 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return {cull: !abilities.has("Parental Bond") && (counter.damagingMoves.size > 1 || !!counter.setupType)};
 		case 'protect':
 			const screens = moves.has('lightscreen') && moves.has('reflect');
-			return {cull:
+			return {cull: (
 				moves.has('rest') || screens || (!!counter.setupType && !moves.has('wish')) ||
 				(!['Guts', 'Harvest', 'Poison Heal', 'Quick Feet', 'Speed Boost'].some(abil => abilities.has(abil)) &&
-				!['leechseed', 'perishsong', 'toxic', 'wish'].some(m => moves.has(m)) &&
-				species.id !== 'sharpedomega')
-			};
+				!['leechseed', 'perishsong', 'toxic', 'wish'].some(m => moves.has(m)) && species.id !== 'sharpedomega')
+			)};
 		case 'pursuit':
 			return {cull: (
 				moves.has('nightslash') ||
