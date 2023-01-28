@@ -152,6 +152,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		case 'protect':
 			return {cull: (
 				['rest', 'softboiled'].some(m => moves.has(m)) ||
+				(!!counter.setupType && !moves.has('wish')) ||
 				!['Guts', 'Quick Feet', 'Speed Boost'].some(abil => abilities.has(abil)) &&
 				!['toxic', 'wish'].some(m => moves.has(m))
 			)};
