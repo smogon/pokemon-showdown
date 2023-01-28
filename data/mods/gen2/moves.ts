@@ -115,7 +115,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onTryHit(target) {
 			if (!target.volatiles['canmirrormove']) return false;
-		}
+		},
 	},
 	counter: {
 		inherit: true,
@@ -427,9 +427,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		noSketch: true,
 		onTryHit(target) {
-			if (!target.volatiles['canmirrormove']) {
-				return false;
-			}
+			if (!target.volatiles['canmirrormove']) return false;
 		},
 	},
 	mindreader: {
@@ -822,6 +820,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const damageAmounts = [0, 3];
 				this.damage(damageAmounts[this.effectState.layers] * pokemon.maxhp / 24);
 			},
+		},
+	},
+	spite: {
+		inherit: true,
+		onTryHit(target) {
+			if (!target.volatiles['canmirrormove']) return false;
 		},
 	},
 	substitute: {
