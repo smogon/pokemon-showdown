@@ -185,6 +185,8 @@ export class BattleActions {
 			// pokemon.lastMove is reset for all Pokemon on the field after a switch. This affects Mirror Move.
 			if (this.battle.gen <= 1) {
 				for (const poke of this.battle.getAllActive()) poke.lastMove = null;
+			} else {
+				for (const poke of this.battle.getAllActive()) poke.removeVolatile('canmirrormove');
 			}
 			if (!pokemon.side.faintedThisTurn && pokemon.draggedIn !== this.battle.turn) {
 				this.battle.runEvent('AfterSwitchInSelf', pokemon);

@@ -442,6 +442,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const noMirror = ['metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'transform'];
 			const target = pokemon.side.foe.active[0];
 			const lastMove = target?.lastMove && target?.lastMove.id;
+			if (!target.volatiles['canmirrormove']) return false;
 			if (!lastMove || (!pokemon.activeTurns && !target.moveThisTurn)) {
 				return false;
 			}
