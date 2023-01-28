@@ -105,7 +105,9 @@ const MovePairs = [
 ];
 
 // Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type
-const PriorityPokemon = ['banette', 'breloom', 'brutebonnet', 'cacturne', 'giratinaorigin', 'mimikyu', 'lycanrocdusk', 'scizor']
+const PriorityPokemon = [
+	'banette', 'breloom', 'brutebonnet', 'cacturne', 'giratinaorigin', 'mimikyu', 'lycanrocdusk', 'scizor'
+];
 
 function sereneGraceBenefits(move: Move) {
 	return move.secondary?.chance && move.secondary.chance > 20 && move.secondary.chance < 100;
