@@ -426,6 +426,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: 100,
 		noSketch: true,
+		onTryHit(target) {
+			if (!target.volatiles['canmirrormove']) {
+				return false;
+			}
+		},
 	},
 	mindreader: {
 		inherit: true,
