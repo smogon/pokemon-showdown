@@ -1137,7 +1137,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	sceptile: {
-		randomBattleMoves: ["acrobatics", "earthquake", "gigadrain", "hiddenpowerfire", "leafblade", "leechseed", "substitute", "swordsdance"],
+		randomBattleMoves: ["acrobatics", "earthquake", "leafblade", "substitute", "swordsdance"],
 		tier: "RU",
 		doublesTier: "DUU",
 	},

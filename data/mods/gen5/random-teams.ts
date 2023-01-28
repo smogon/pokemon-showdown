@@ -200,7 +200,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return {cull: !!counter.setupType && moves.has('acrobatics')};
 		case 'gigadrain':
 			return {cull: (!counter.setupType && moves.has('leafstorm')) ||
-				['leafblade', 'petaldance', 'powerwhip'].some(m => moves.has(m))};
+				['petaldance', 'powerwhip'].some(m => moves.has(m))};
 		case 'solarbeam':
 			return {cull: (!abilities.has('Drought') && !moves.has('sunnyday')) || moves.has('gigadrain')};
 		case 'leafstorm':
@@ -251,7 +251,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'substitute':
 			return {cull: (
 				(moves.has('doubleedge') && !abilities.has('rockhead')) ||
-				['pursuit', 'rest', 'superpower', 'uturn', 'voltswitch'].some(m => moves.has(m))
+				['pursuit', 'rest', 'superpower', 'uturn', 'voltswitch'].some(m => moves.has(m)) ||
+				// Sceptile wants Swords Dance
+				(moves.has('acrobatics') && moves.has('earthquake'))
 			)};
 		case 'thunderwave':
 			return {cull: (
