@@ -1717,27 +1717,27 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UUBL",
 	},
 	rotom: {
-		randomBattleMoves: ["hiddenpowerfighting", "hiddenpowerice", "painsplit", "shadowball", "substitute", "thunderbolt", "trick", "willowisp"],
+		randomBattleMoves: ["hiddenpowerfighting", "hiddenpowerfire", "shadowball", "thunderbolt", "trick"],
 		tier: "UU",
 	},
 	rotomheat: {
-		randomBattleMoves: ["hiddenpowerice", "overheat", "shadowball", "thunderbolt", "trick", "willowisp"],
+		randomBattleMoves: ["discharge", "lightscreen", "overheat", "painsplit", "reflect", "shadowball", "thunderbolt", "trick", "willowisp"],
 		tier: "OU",
 	},
 	rotomwash: {
-		randomBattleMoves: ["hiddenpowerice", "hydropump", "painsplit", "rest", "shadowball", "sleeptalk", "substitute", "thunderbolt", "trick", "willowisp"],
+		randomBattleMoves: ["discharge", "hydropump", "lightscreen", "reflect", "rest", "shadowball", "sleeptalk", "thunderbolt", "trick", "willowisp"],
 		tier: "OU",
 	},
 	rotomfrost: {
-		randomBattleMoves: ["blizzard", "painsplit", "rest", "shadowball", "sleeptalk", "substitute", "thunderbolt", "trick", "willowisp"],
+		randomBattleMoves: ["blizzard", "discharge", "lightscreen", "reflect", "rest", "shadowball", "sleeptalk", "thunderbolt", "trick", "willowisp"],
 		tier: "OU",
 	},
 	rotomfan: {
-		randomBattleMoves: ["airslash", "discharge", "hiddenpowerice", "painsplit", "rest", "shadowball", "sleeptalk", "substitute", "willowisp"],
+		randomBattleMoves: ["discharge", "lightscreen", "painsplit", "reflect", "rest", "shadowball", "sleeptalk", "thunderbolt", "willowisp"],
 		tier: "OU",
 	},
 	rotommow: {
-		randomBattleMoves: ["hiddenpowerice", "leafstorm", "shadowball", "thunderbolt", "trick", "willowisp"],
+		randomBattleMoves: ["discharge", "leafstorm", "lightscreen", "painsplit", "reflect", "shadowball", "thunderbolt", "trick", "willowisp"],
 		tier: "OU",
 	},
 	uxie: {

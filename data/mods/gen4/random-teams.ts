@@ -103,7 +103,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		case 'refresh':
 			return {cull: !(moves.has('calmmind') && (moves.has('recover') || moves.has('roost')))};
 		case 'rest':
-			return {cull: movePool.includes('sleeptalk') || (abilities.has('Hydration') && !moves.has('raindance'))};
+			return {cull: movePool.includes('sleeptalk') || (abilities.has('Hydration') && !moves.has('raindance')) ||
+				moves.has('reflect') && moves.has('lightscreen')};
 		case 'sleeptalk':
 			if (movePool.length > 1) {
 				const rest = movePool.indexOf('rest');
@@ -242,7 +243,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		case 'chargebeam':
 			return {cull: moves.has('thunderbolt') && counter.get('Special') < 3};
 		case 'discharge':
-			return {cull: moves.has('thunderbolt')};
+			return {cull: moves.has('thunderbolt') || moves.has('shadowball')};
 		case 'energyball':
 			return {cull: (
 				moves.has('woodhammer') ||
