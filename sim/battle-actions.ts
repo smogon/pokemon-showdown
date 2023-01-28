@@ -182,10 +182,11 @@ export class BattleActions {
 		}
 
 		if (this.battle.gen <= 2) {
-			// pokemon.lastMove is reset for all Pokemon on the field after a switch. This affects Mirror Move.
 			if (this.battle.gen <= 1) {
+				// pokemon.lastMove is reset for all Pokemon on the field after a switch. This affects Mirror Move.
 				for (const poke of this.battle.getAllActive()) poke.lastMove = null;
 			} else {
+				// Removing this volatile indicates that Mirror Move and other related moves will fail when used against this Pokemon.
 				for (const poke of this.battle.getAllActive()) poke.removeVolatile('canmirrormove');
 			}
 			if (!pokemon.side.faintedThisTurn && pokemon.draggedIn !== this.battle.turn) {

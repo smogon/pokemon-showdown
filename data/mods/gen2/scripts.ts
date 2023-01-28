@@ -135,6 +135,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			pokemon.moveUsed(move);
+			// This volatile indicates that Mirror Move and other related moves can work when used against this Pokemon
 			pokemon.addVolatile('canmirrormove');
 			this.battle.actions.useMove(move, pokemon, target, sourceEffect);
 			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
