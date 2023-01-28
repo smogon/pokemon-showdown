@@ -113,7 +113,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	conversion2: {
 		inherit: true,
-		onTryHit(target, source) {
+		onTryHit(target) {
 			if (!target.volatiles['canmirrormove']) return false;
 		}
 	},
@@ -183,6 +183,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return this.chainModify(2);
 				}
 			},
+		},
+	},
+	disable: {
+		inherit: true,
+		onTryHit(target) {
+			if (!target.volatiles['canmirrormove'] || !target.lastMove || target.lastMove.id === 'struggle') {
+				return false;
+			}
 		},
 	},
 	doubleedge: {
