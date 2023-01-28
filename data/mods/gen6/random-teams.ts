@@ -348,6 +348,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			)};
 		case 'bonemerang': case 'earthpower': case 'precipiceblades':
 			return {cull: moves.has('earthquake')};
+		case 'earthquake':
+			return {cull: moves.has('closecombat') && abilities.has('Aerilate')};
 		case 'freezedry':
 			return {cull: moves.has('icebeam') || moves.has('icywind') || counter.get('stab') < species.types.length};
 		case 'bodyslam': case 'return':

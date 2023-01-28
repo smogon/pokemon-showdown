@@ -428,7 +428,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		case 'earthpower':
 			return {cull: moves.has('earthquake') && counter.setupType !== 'Special'};
 		case 'earthquake':
-			return {cull: isDoubles && moves.has('highhorsepower')};
+			return {cull: isDoubles && moves.has('highhorsepower') || moves.has('closecombat') && abilities.has('Aerilate')};
 		case 'freezedry':
 			return {cull: moves.has('icebeam') || moves.has('icywind') || counter.get('stab') < species.types.length};
 		case 'bodyslam': case 'return':
