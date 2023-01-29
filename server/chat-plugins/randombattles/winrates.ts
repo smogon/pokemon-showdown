@@ -129,7 +129,7 @@ function getSpeciesName(set: PokemonSet, format: Format) {
 		return "Rayquaza-Mega";
 	} else if (species === "Greninja" && ability === 'Battle Bond' && ['gen6', 'gen7'].includes(format.mod)) {
 		return "Greninja-Ash";
-	} else if (species === "Aegislash" && moves.includes('Iron Head')) {
+	} else if (species === "Aegislash" && moves.includes('Iron Head') && ['gen6', 'gen7', 'gen8'].includes(format.mod)) {
 		return "Aegislash-Blade";
 	} else {
 		return species;
