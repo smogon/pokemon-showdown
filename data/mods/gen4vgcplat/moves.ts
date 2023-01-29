@@ -776,6 +776,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"pp": 10,
 		"type": "Ice",
 		"priority": 0,
+		onModifyMove(move) {
+			if (this.field.isWeather('snow')) move.accuracy = true;
+		},
 		"isNonstandard": null,
 		"target": "allAdjacentFoes"
 	},

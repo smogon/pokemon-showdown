@@ -591,6 +591,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 			grace: 90, timeoutAutoChoose: true, dcTimerBank: false,
 		},
 	},
+	drafttimer: {
+		effectType: 'Rule',
+		name: 'Draft Timer',
+		desc: "VGC's timer: 120 second Team Preview, 11 minutes Your Time, 1.5 minute per turn",
+		timer: {
+			starting: 11 * 60, addPerTurn: 0, maxPerTurn: 90, maxFirstTurn: 120,
+			grace: 90, timeoutAutoChoose: true, dcTimerBank: false,
+		},
+	},
 	speciesclause: {
 		effectType: 'ValidatorRule',
 		name: 'Species Clause',
