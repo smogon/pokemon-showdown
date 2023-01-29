@@ -120,6 +120,8 @@ function getSpeciesName(set: PokemonSet, format: Format) {
 		return "Castform-Rainy";
 	} else if (species === "Castform" && moves.includes('Hail')) {
 		return "Castform-Snowy";
+	} else if (species === "Cherrim" && moves.includes('Sunny Day')) {
+		return "Cherrim-Sunshine";
 	} else if (species === "Rayquaza" && moves.includes('Dragon Ascent') && megaRayquazaPossible) {
 		return "Rayquaza-Mega";
 	} else {
