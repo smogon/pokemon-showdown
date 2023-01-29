@@ -906,6 +906,8 @@ export class RandomTeams {
 			return (abilities.has('Sharpness') || abilities.has('Unburden'));
 		case 'Moxie':
 			return (!counter.get('Physical') || moves.has('stealthrock'));
+		case 'Natural Cure':
+			return species.id === 'pawmot';
 		case 'Overgrow':
 			return !counter.get('Grass');
 		case 'Prankster':
