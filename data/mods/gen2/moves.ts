@@ -111,12 +111,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
-	conversion2: {
-		inherit: true,
-		onTryHit(target) {
-			if (!target.volatiles['canmirrormove']) return false;
-		},
-	},
 	counter: {
 		inherit: true,
 		damageCallback(pokemon, target) {
@@ -185,14 +179,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
-	disable: {
-		inherit: true,
-		onTryHit(target) {
-			if (!target.volatiles['canmirrormove'] || !target.lastMove || target.lastMove.id === 'struggle') {
-				return false;
-			}
-		},
-	},
 	doubleedge: {
 		inherit: true,
 		recoil: [25, 100],
@@ -205,7 +191,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onStart(target) {
 				const noEncore = ['encore', 'metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'struggle', 'transform'];
-				const lockedMove = target.lastMove?.id || '';
+				const lockedMove = target.lastMoveEncore?.id || '';
 				const moveIndex = lockedMove ? target.moves.indexOf(lockedMove) : -1;
 				if (moveIndex < 0 || noEncore.includes(lockedMove) || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed
@@ -426,9 +412,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: 100,
 		noSketch: true,
-		onTryHit(target) {
-			if (!target.volatiles['canmirrormove']) return false;
-		},
 	},
 	mindreader: {
 		inherit: true,
@@ -458,7 +441,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(pokemon) {
 			const noMirror = ['metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'transform'];
 			const target = pokemon.side.foe.active[0];
-			if (!target.volatiles['canmirrormove']) return false;
 			const lastMove = target?.lastMove && target?.lastMove.id;
 			if (!lastMove || (!pokemon.activeTurns && !target.moveThisTurn)) {
 				return false;
@@ -820,12 +802,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const damageAmounts = [0, 3];
 				this.damage(damageAmounts[this.effectState.layers] * pokemon.maxhp / 24);
 			},
-		},
-	},
-	spite: {
-		inherit: true,
-		onTryHit(target) {
-			if (!target.volatiles['canmirrormove']) return false;
 		},
 	},
 	substitute: {
