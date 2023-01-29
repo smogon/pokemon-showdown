@@ -850,6 +850,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			case 'Basculin': case 'Castform': case 'Meloetta':
 				if (this.randomChance(1, 2) && this.gen === 5) continue;
 				break;
+			case 'Cherrim':
+				if (this.randomChance(1, 2) && this.gen === 4) continue;
+				break;
 			}
 
 			// Illusion shouldn't be in the last slot
