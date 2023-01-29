@@ -18127,7 +18127,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 7,
 		color: "Gray",
 		evos: ["Tactite"],
-		eggGroups: ["Undiscovered"],
+		eggGroups: ["Mineral"],
 		gen: 4,
 	},
 	tactite: {
@@ -18143,7 +18143,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Rebble",
 		evoLevel: 28,
 		evos: ["Stratagem"],
-		eggGroups: ["Undiscovered"],
+		eggGroups: ["Mineral"],
 		gen: 4,
 	},
 	stratagem: {
@@ -18158,7 +18158,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		prevo: "Tactite",
 		evoType: "trade",
-		eggGroups: ["Undiscovered"],
+		eggGroups: ["Mineral"],
 		gen: 4,
 	},
 	privatyke: {
