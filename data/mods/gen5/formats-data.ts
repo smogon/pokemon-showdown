@@ -1874,6 +1874,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "DUU",
 	},
+	cherrimsunshine: {},
 	shellos: {
 		tier: "LC",
 	},
