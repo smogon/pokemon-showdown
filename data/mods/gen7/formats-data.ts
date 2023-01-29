@@ -1319,7 +1319,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	shuckle: {
-		randomBattleMoves: ["encore", "infestation", "knockoff", "stealthrock", "stickyweb", "toxic"],
+		randomBattleMoves: ["encore", "knockoff", "stealthrock", "stickyweb", "toxic"],
 		randomDoubleBattleMoves: ["encore", "guardsplit", "helpinghand", "knockoff", "stealthrock", "stickyweb", "toxic"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
