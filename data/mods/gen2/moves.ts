@@ -191,7 +191,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onStart(target) {
 				const noEncore = ['encore', 'metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'struggle', 'transform'];
-				const lockedMove = target.lastMove?.id || '';
+				const lockedMove = target.lastMoveEncore?.id || '';
 				const moveIndex = lockedMove ? target.moves.indexOf(lockedMove) : -1;
 				if (moveIndex < 0 || noEncore.includes(lockedMove) || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed

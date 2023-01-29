@@ -135,3 +135,25 @@ describe('Encore', function () {
 		assert(battle.log.every(line => !line.includes('Raichu|Destiny Bond')));
 	});
 });
+
+describe('Encore [Gen 2]', function () {
+	afterEach(function () {
+		battle.destroy();
+	});
+
+	it(`[Gen 2] Encore succeeds when used against an opponent that last attacked before the Encore user switched in`, function () {
+		battle = common.gen(2).createBattle({forceRandomChance: true}, [[
+			{species: 'slowbro', moves: ['glare']},
+			{species: 'fearow', moves: ['encore']},
+		], [
+			{species: 'chansey', moves: ['seismictoss']},
+		]]);
+		const chansey = battle.p2.active[0];
+		battle.makeChoices();
+		battle.makeChoices('switch 2', 'auto');
+		// Chansey is fully paralysed
+		assert.fullHP(battle.p1.active[0]);
+		battle.makeChoices();
+		assert.equal(chansey.volatiles['encore'].move, 'seismictoss');
+	});
+});
