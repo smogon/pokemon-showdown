@@ -848,7 +848,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				if (this.gen < 5 && this.randomChance(5, 6) && !isMonotype) continue;
 				break;
 			case 'Basculin': case 'Castform': case 'Meloetta':
-				if (this.randomChance(1, 2)) continue;
+				if (this.randomChance(1, 2) && this.gen === 5) continue;
 				break;
 			}
 
