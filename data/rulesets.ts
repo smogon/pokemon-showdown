@@ -519,40 +519,34 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "Allows each player to see the Pok&eacute;mon on their opponent's team before they choose their lead Pok&eacute;mon",
 		onBegin() {
 			if (this.ruleTable.has(`teratypepreview`)) {
-				this.add('rule', 'Tera Type Preview Clause: Allows each player to see the tera type of each Pokémon on their opponent\'s team');
+				this.add('rule', 'Tera Type Preview: Tera Types are shown at Team Preview');
 			}
 		},
-
 		onTeamPreview() {
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
-				let detailBuf = pokemon.details.replace(', shiny', '')
+				const details = pokemon.details.replace(', shiny', '')
 					.replace(/(Arceus|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu|Dudunsparce)(-[a-zA-Z?-]+)?/g, '$1-*')
 					.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*'); // Hacked-in Crowned formes will be revealed
-				if (this.ruleTable.has(`teratypepreview`)) {
-					detailBuf = detailBuf.concat(`, teratype:${pokemon.teraType}`);
-				}
-				const details = detailBuf;
 				this.add('poke', pokemon.side.id, details, '');
 			}
+			this.makeRequest('teampreview');
 			if (this.ruleTable.has(`teratypepreview`)) {
 				for (const side of this.sides) {
-					let buf = 'raw|';
+					let buf = ``;
 					for (const pokemon of side.pokemon) {
-						if (!buf.endsWith('|')) buf += '/</span>&#8203;';
-						buf += `<span style="white-space:nowrap"><psicon pokemon="${pokemon.species.id}" />`;
-						buf += `<span style="display:inline-block">Tera<br /><psicon type="${pokemon.teraType}" /> `;
+						buf += buf ? ` / ` : `raw|${side.name}'s Tera Types:<br />`;
+						buf += `<psicon pokemon="${pokemon.species.id}" /><psicon type="${pokemon.teraType}" />`;
 					}
-					this.add(`${buf}</span></span>`);
+					this.add(`${buf}`);
 				}
 			}
-			this.makeRequest('teampreview');
 		},
 	},
 	teratypepreview: {
 		effectType: 'Rule',
 		name: 'Tera Type Preview',
-		desc: "Allows each player to see the tera type of each Pok&eacute;mon on their opponent's team",
+		desc: "Allows each player to see the Tera Type of the Pok&eacute;mon on their opponent's team before they choose their lead Pok&eacute;mon",
 		onValidateRule() {
 			if (!this.ruleTable.has('teampreview')) {
 				throw new Error(`The "Tera Type Preview" rule${this.ruleTable.blame('teratypepreview')} requires Team Preview.`);
