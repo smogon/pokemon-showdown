@@ -114,12 +114,6 @@ function getSpeciesName(set: PokemonSet, format: Format) {
 		return "Groudon-Primal";
 	} else if (item.megaStone) {
 		return item.megaStone;
-	} else if (species === "Castform" && moves.includes('Sunny Day')) {
-		return "Castform-Sunny";
-	} else if (species === "Castform" && moves.includes('Rain Dance')) {
-		return "Castform-Rainy";
-	} else if (species === "Castform" && moves.includes('Hail')) {
-		return "Castform-Snowy";
 	} else if (species === "Rayquaza" && moves.includes('Dragon Ascent') && megaRayquazaPossible) {
 		return "Rayquaza-Mega";
 	} else {
