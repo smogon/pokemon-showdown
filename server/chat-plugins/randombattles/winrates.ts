@@ -69,7 +69,6 @@ function getSpeciesName(set: PokemonSet, format: Format) {
 	const species = set.species;
 	const item = Dex.items.get(set.item);
 	const moves = set.moves;
-	const ability = set.ability;
 	const megaRayquazaPossible = ['gen6', 'gen7'].includes(format.mod) && !format.ruleset.includes('Mega Rayquaza Clause');
 	if (species.startsWith("Pikachu-")) {
 		return 'Pikachu';
@@ -121,16 +120,8 @@ function getSpeciesName(set: PokemonSet, format: Format) {
 		return "Castform-Rainy";
 	} else if (species === "Castform" && moves.includes('Hail')) {
 		return "Castform-Snowy";
-	} else if (species === "Cherrim" && moves.includes('Sunny Day')) {
-		return "Cherrim-Sunshine";
-	} else if (species === "Meloetta" && moves.includes('Relic Song')) {
-		return "Meloetta-Pirouette";
 	} else if (species === "Rayquaza" && moves.includes('Dragon Ascent') && megaRayquazaPossible) {
 		return "Rayquaza-Mega";
-	} else if (species === "Greninja" && ability === 'Battle Bond' && ['gen6', 'gen7'].includes(format.mod)) {
-		return "Greninja-Ash";
-	} else if (species === "Aegislash" && moves.includes('Iron Head') && ['gen6', 'gen7', 'gen8'].includes(format.mod)) {
-		return "Aegislash-Blade";
 	} else {
 		return species;
 	}
