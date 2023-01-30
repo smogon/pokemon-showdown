@@ -481,7 +481,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Aura Sphere", "Fire Blast", "Nasty Plot", "Psystrike", "Recover", "Shadow Ball"],
-                "teraTypes": ["Psychic", "Fighting", "Fire", "Ghost"]
+                "teraTypes": ["Psychic", "Fighting", "Fire"]
             }
         ]
     },
@@ -1880,7 +1880,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Agility", "Last Respects", "Psychic Fangs", "Wave Crash"],
+                "movepool": ["Aqua Jet", "Head Smash", "Last Respects", "Wave Crash"],
                 "teraTypes": ["Ghost"]
             }
         ]
@@ -1890,7 +1890,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["Agility", "Hydro Pump", "Ice Beam", "Last Respects"],
+                "movepool": ["Hydro Pump", "Ice Beam", "Last Respects", "Wave Crash"],
                 "teraTypes": ["Ghost"]
             }
         ]
@@ -2683,7 +2683,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["Agility", "Calm Mind", "Flash Cannon", "Fleur Cannon"],
+                "movepool": ["Calm Mind", "Flash Cannon", "Fleur Cannon", "Shift Gear"],
                 "teraTypes": ["Water", "Steel", "Fairy", "Flying"]
             },
             {
@@ -3489,7 +3489,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Muddy Water", "Slack Off", "Thunder Wave", "Thunderbolt", "Volt Switch"],
-                "teraTypes": ["Electric"]
+                "teraTypes": ["Electric", "Water"]
             }
         ]
     },
@@ -3839,7 +3839,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Encore", "Light Screen", "Play Rough", "Protect", "Reflect", "Thunder Wave", "Wish"],
-                "teraTypes": ["Fairy", "Steel"]
+                "teraTypes": ["Steel"]
             }
         ]
     },
@@ -4033,7 +4033,7 @@
         "sets": [
             {
                 "role": "Fast Bulky Setup",
-                "movepool": ["Calm Mind", "Dragon Pulse", "Electro Drift", "Substitute"],
+                "movepool": ["Calm Mind", "Draco Meteor", "Electro Drift", "Substitute"],
                 "teraTypes": ["Electric"]
             },
             {
