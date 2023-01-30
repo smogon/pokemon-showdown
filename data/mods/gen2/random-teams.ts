@@ -120,7 +120,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		species: Species,
 	) {
 		// First, the high-priority items
-		if (species.name === 'Ditto') return this.sample(['Metal Powder', 'Quick Claw']);
+		if (species.name === 'Ditto') return 'Metal Powder';
 		if (species.name === 'Farfetch\u2019d') return 'Stick';
 		if (species.name === 'Marowak') return 'Thick Club';
 		if (species.name === 'Pikachu') return 'Light Ball';
