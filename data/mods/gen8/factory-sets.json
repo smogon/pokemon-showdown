@@ -417,7 +417,7 @@
 				"nature": "Jolly",
 				"moves": [["Icicle Crash"], ["Flare Blitz"], ["U-turn"], ["Earthquake", "Rock Slide"]]
 			}]
-    },
+		},
 		"weavile": {
 			"sets": [{
 				"species": "Weavile",
