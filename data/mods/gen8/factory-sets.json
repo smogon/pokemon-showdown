@@ -416,13 +416,6 @@
 				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": "Jolly",
 				"moves": [["Icicle Crash"], ["Flare Blitz"], ["U-turn"], ["Earthquake", "Rock Slide"]]
-			}, {
-				"species": "Darmanitan-Galar",
-				"item": ["Choice Band"],
-				"ability": ["Gorilla Tactics"],
-				"evs": {"atk": 252, "spd": 4, "spe": 252},
-				"nature": ["Jolly", "Adamant"],
-				"moves": [["Icicle Crash"], ["Flare Blitz"], ["U-turn", "Rock Slide"], ["Earthquake"]]
 			}]
 		},
 		"weavile": {
