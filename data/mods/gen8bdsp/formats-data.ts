@@ -1816,7 +1816,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	wormadamtrash: {
 		tier: "PU",
 		doublesTier: "DUU",
-		randomBattleMoves: ["bugbuzz", "flashcannon", "gigadrain", "quiverdance", "stealthrock"],
+		randomBattleMoves: ["bugbuzz", "flashcannon", "gigadrain", "quiverdance"],
 	},
 	mothim: {
 		tier: "PU",
