@@ -4,7 +4,7 @@ const potdPokemon = [
 	"hoopa", "groudon", "dachsbun", "squawkabilly", "cacturne", "typhlosion", "jolteon", "masquerain", "falinks",
 	"wyrdeer", "gardevoir", "decidueye", "hawlucha", "azelf", "gothitelle", "donphan", "pikachu", "zaciancrowned",
 	"quagsire", "uxie", "dondozo", "orthworm", "klawf", "dunsparce", "avalugg", "pawmot", "qwilfish", "lilliganthisui",
-]
+];
 
 export class RandomPOTDTeams extends RandomTeams {
 	randomTeam() {
@@ -34,7 +34,9 @@ export class RandomPOTDTeams extends RandomTeams {
 		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, isDoubles);
 
 		// Remove PotD from baseSpeciesPool
-		if (baseSpeciesPool.includes(potd.baseSpecies)) this.fastPop(baseSpeciesPool, baseSpeciesPool.indexOf(potd.baseSpecies));
+		if (baseSpeciesPool.includes(potd.baseSpecies)) {
+			this.fastPop(baseSpeciesPool, baseSpeciesPool.indexOf(potd.baseSpecies));
+		}
 
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
