@@ -68,7 +68,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		case 'hyperbeam':
 			return {cull: moves.has('rockslide')};
 		case 'rapidspin':
-			return {cull: !!teamDetails.rapidSpin || moves.has('sleeptalk')};
+			return {cull: !!teamDetails.rapidSpin || !!counter.setupType || moves.has('sleeptalk')};
 		case 'return':
 			return {cull: moves.has('bodyslam')};
 		case 'surf':
@@ -91,12 +91,10 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			return {cull: types.has('Ground') && movePool.includes('earthquake')};
 
 		// Status and illegal move rejections
-		case 'confuseray': case 'roar': case 'whirlwind':
+		case 'confuseray': case 'encore': case 'roar': case 'whirlwind':
 			return {cull: restTalk};
-		case 'encore':
-			return {cull: moves.has('bodyslam') || moves.has('surf') || restTalk};
 		case 'lovelykiss':
-			return {cull: ['healbell', 'moonlight', 'morningsun'].some(m => moves.has(m)) || restTalk};
+			return {cull: ['healbell', 'moonlight', 'morningsun', 'sleeptalk'].some(m => moves.has(m))};
 		case 'sleeptalk':
 			return {cull: moves.has('curse') && counter.get('stab') >= 2};
 		case 'softboiled':
@@ -122,7 +120,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		species: Species,
 	) {
 		// First, the high-priority items
-		if (species.name === 'Ditto') return this.sample(['Metal Powder', 'Quick Claw']);
+		if (species.name === 'Ditto') return 'Metal Powder';
 		if (species.name === 'Farfetch\u2019d') return 'Stick';
 		if (species.name === 'Marowak') return 'Thick Club';
 		if (species.name === 'Pikachu') return 'Light Ball';

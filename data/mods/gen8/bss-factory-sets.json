@@ -1603,7 +1603,6 @@
         "item": ["Assault Vest", "Choice Specs"],
         "ability": ["Torrent"],
         "evs": {"hp": 252, "def": 28, "spa": 228},
-        "ivs": {"atk": 0},
         "nature": "Modest",
         "moves": [["Moonblast"], ["Sparkling Aria"], ["Energy Ball"], ["Psychic", "Aqua Jet"]]
       },
@@ -1612,7 +1611,6 @@
         "item": ["Focus Sash"],
         "ability": ["Torrent"],
         "evs": {"def": 4, "spa": 252, "spe": 252},
-        "ivs": {"atk": 0},
         "nature": "Modest",
         "moves": [["Moonblast"], ["Sparkling Aria"], ["Energy Ball"], ["Aqua Jet"]]
       }

@@ -326,7 +326,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						// Confusion begins even if already confused.
 						// Remove lockedmove volatile when dealing with after move effects.
 						delete pokemon.volatiles['confusion'];
-						pokemon.addVolatile('confusion');
+						pokemon.addVolatile('confusion', pokemon, this.dex.conditions.get('lockedmove'));
 					}
 				} else {
 					pokemon.addVolatile('lockedmove', pokemon, move);
@@ -945,7 +945,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (typeof effect === 'string') effect = this.dex.conditions.get(effect);
 		if (!target?.hp) return 0;
 		let success = null;
-		boost = this.runEvent('Boost', target, source, effect, {...boost});
+		boost = this.runEvent('TryBoost', target, source, effect, {...boost});
 		let i: BoostID;
 		for (i in boost) {
 			const currentBoost: SparseBoostsTable = {};

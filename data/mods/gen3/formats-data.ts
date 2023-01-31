@@ -229,7 +229,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	politoed: {
-		randomBattleMoves: ["counter", "hiddenpowergrass", "hypnosis", "icebeam", "surf", "toxic"],
+		randomBattleMoves: ["hiddenpowergrass", "hypnosis", "icebeam", "rest", "surf", "toxic"],
 		tier: "UU",
 	},
 	abra: {
@@ -305,7 +305,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	farfetchd: {
-		randomBattleMoves: ["agility", "batonpass", "hiddenpowerflying", "slash", "swordsdance"],
+		randomBattleMoves: ["agility", "batonpass", "hiddenpowerflying", "return", "swordsdance"],
 		tier: "PU",
 	},
 	doduo: {
@@ -591,7 +591,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UUBL",
 	},
 	mewtwo: {
-		randomBattleMoves: ["calmmind", "flamethrower", "icebeam", "psychic", "recover", "selfdestruct", "substitute", "thunderbolt"],
+		randomBattleMoves: ["calmmind", "flamethrower", "icebeam", "psychic", "recover", "substitute", "thunderbolt"],
 		tier: "Uber",
 	},
 	mew: {
@@ -835,7 +835,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	skarmory: {
-		randomBattleMoves: ["drillpeck", "hiddenpowerground", "protect", "rest", "roar", "sleeptalk", "spikes", "toxic"],
+		randomBattleMoves: ["drillpeck", "hiddenpowerground", "protect", "rest", "sleeptalk", "spikes", "toxic", "whirlwind"],
 		tier: "OU",
 	},
 	houndour: {
@@ -1089,7 +1089,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	medicham: {
-		randomBattleMoves: ["brickbreak", "bulkup", "fakeout", "recover", "rockslide", "shadowball", "substitute"],
+		randomBattleMoves: ["brickbreak", "bulkup", "recover", "rockslide", "shadowball", "substitute"],
 		tier: "UUBL",
 	},
 	electrike: {
@@ -1360,7 +1360,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "Uber",
 	},
 	latios: {
-		randomBattleMoves: ["calmmind", "dragonclaw", "hiddenpowerfire", "psychic", "recover", "refresh", "thunderbolt"],
+		randomBattleMoves: ["calmmind", "dragonclaw", "hiddenpowerfire", "psychic", "recover", "thunderbolt"],
 		tier: "Uber",
 	},
 	kyogre: {
