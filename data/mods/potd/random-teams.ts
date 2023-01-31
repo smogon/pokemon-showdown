@@ -3,7 +3,7 @@ import {RandomTeams} from './../../random-teams';
 const potdPokemon = [
 	"hoopa", "groudon", "dachsbun", "squawkabilly", "cacturne", "typhlosion", "jolteon", "masquerain", "falinks",
 	"wyrdeer", "gardevoir", "decidueye", "hawlucha", "azelf", "gothitelle", "donphan", "pikachu", "zaciancrowned",
-	"quagsire", "uxie", "dondozo", "orthworm", "klawf", "dunsparce", "avalugg", "pawmot", "qwilfish",
+	"quagsire", "uxie", "dondozo", "orthworm", "klawf", "dunsparce", "avalugg", "pawmot", "qwilfish", "lilliganthisui",
 ]
 
 export class RandomPOTDTeams extends RandomTeams {
@@ -21,8 +21,8 @@ export class RandomPOTDTeams extends RandomTeams {
 		const type = this.forceMonotype || this.sample(typePool);
 
 		// PotD stuff
-		const usePotD = global.Config && Config.potd && ruleTable.has('potd');
-		const potd = usePotD ? this.dex.species.get(Config.potd) : null;
+		const day = new Date().getDate();
+		const potd = this.dex.species.get(potdPokemon[day > 28 ? 27 : day - 1]);
 
 		const baseFormes: {[k: string]: number} = {};
 
@@ -32,6 +32,10 @@ export class RandomPOTDTeams extends RandomTeams {
 		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, isDoubles);
+
+		// Remove PotD from baseSpeciesPool
+		if (baseSpeciesPool.includes(potd.baseSpecies)) this.fastPop(baseSpeciesPool, baseSpeciesPool.indexOf(potd.baseSpecies));
+
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
 			const currentSpeciesPool: Species[] = [];
@@ -182,4 +186,4 @@ export class RandomPOTDTeams extends RandomTeams {
 	}
 }
 
-export default RandomTeams;
+export default RandomPOTDTeams;

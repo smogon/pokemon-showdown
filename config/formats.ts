@@ -1975,12 +1975,12 @@ export const Formats: FormatList = [
 		column: 3,
 	},
 	{
-		name: "[Gen 1] Random Battle (Blitz)",
-		desc: `[Gen 1] Random Battle with a shortened timer.`,
+		name: "[Gen 9] Random Battle (POTD)",
+		desc: `[Gen 9] Random Battle with Pokemon-of-the-Day.`,
 
-		mod: 'gen1',
+		mod: 'potd',
 		team: 'random',
-		ruleset: ['[Gen 1] Random Battle', 'Blitz'],
+		ruleset: ['[Gen 9] Random Battle'],
 	},
 
 	// Randomized Metas
