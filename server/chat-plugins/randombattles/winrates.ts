@@ -215,13 +215,13 @@ export const pages: Chat.PageTable = {
 		const prevMonth = new Date(new Date(`${month}-15`).getTime() - (30 * 24 * 60 * 60 * 1000)).toISOString().slice(0, 7);
 		let hasButton = false;
 		if (await FS(STATS_PATH.replace('{{MONTH}}', prevMonth)).exists()) {
-			buf += `<a class="button" href="/view-winrates-${format}--${sorter}--${prevMonth}>Previous month</button>`;
+			buf += `<a class="button" href="/view-winrates-${format}--${sorter}--${prevMonth}">Previous month</a>`;
 			hasButton = true;
 		}
 		const nextMonth = new Date(new Date(`${month}-15`).getTime() + (30 * 24 * 60 * 60 * 1000)).toISOString().slice(0, 7);
 		if (await FS(STATS_PATH.replace('{{MONTH}}', nextMonth)).exists()) {
 			if (hasButton) buf += ` | `;
-			buf += `<a class="button" href="/view-winrates-${format}--${sorter}--${nextMonth}>Next month</button>`;
+			buf += `<a class="button" href="/view-winrates-${format}--${sorter}--${nextMonth}">Next month</a>`;
 			hasButton = true;
 		}
 		buf += hasButton ? ` | ` : '';
