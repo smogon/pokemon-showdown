@@ -63,6 +63,9 @@ export class RandomPOTDTeams extends RandomTeams {
 			// Pokemon with Last Respects, Intrepid Sword, and Dauntless Shield shouldn't be leading
 			if (['Basculegion', 'Houndstone', 'Zacian', 'Zamazenta'].includes(species.baseSpecies) && !pokemon.length) continue;
 
+			// The Pokemon of the Day
+			if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
+
 			const tier = species.tier;
 			const types = species.types;
 			const typeCombo = types.slice().sort().join();
@@ -107,9 +110,6 @@ export class RandomPOTDTeams extends RandomTeams {
 
 			// Limit one of any type combination, two in Monotype
 			if (!this.forceMonotype && typeComboCount[typeCombo] >= (isMonotype ? 2 : 1) * limitFactor) continue;
-
-			// The Pokemon of the Day
-			if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
 			const set = this.randomSet(species, teamDetails, pokemon.length === 0, isDoubles);
 
