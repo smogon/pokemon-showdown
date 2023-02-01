@@ -813,6 +813,16 @@ export class DexFormats {
 
 		ruleTable.resolveNumbers(format, this.dex);
 
+		const canMegaEvo = this.dex.gen <= 7 || ruleTable.has('+pokemontag:past');
+		if (ruleTable.has('obtainableformes') && canMegaEvo &&
+			ruleTable.isBannedSpecies(this.dex.species.get('rayquazamega')) &&
+			!ruleTable.isBannedSpecies(this.dex.species.get('rayquaza'))
+		) {
+			// Banning Rayquaza-Mega implicitly adds Mega Rayquaza Clause
+			// note that already having it explicitly in the ruleset is ok
+			ruleTable.set('megarayquazaclause', '');
+		}
+
 		for (const rule of ruleTable.keys()) {
 			if ("+*-!".includes(rule.charAt(0))) continue;
 			const subFormat = this.dex.formats.get(rule);
