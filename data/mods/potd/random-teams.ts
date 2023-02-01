@@ -81,33 +81,35 @@ export class RandomPOTDTeams extends RandomTeams {
 			// ) {
 			// 	continue;
 			// }
-			if (pokemon.length !== 1 && this.maxTeamSize !== 1) {
-				if (!isMonotype && !this.forceMonotype) {
-					let skip = false;
 
-					// Limit two of any type
-					for (const typeName of types) {
-						if (typeCount[typeName] >= 2 * limitFactor) {
+			if (!isMonotype && !this.forceMonotype) {
+				let skip = false;
+
+				// Limit two of any type
+				for (const typeName of types) {
+					if (typeCount[typeName] >= 2 * limitFactor) {
+						skip = true;
+						break;
+					}
+				}
+				if (skip) continue;
+
+				// Limit three weak to any type
+				for (const typeName of this.dex.types.names()) {
+					// it's weak to the type
+					if (this.dex.getEffectiveness(typeName, species) > 0) {
+						if (!typeWeaknesses[typeName]) typeWeaknesses[typeName] = 0;
+						if (typeWeaknesses[typeName] >= 3 * limitFactor) {
 							skip = true;
 							break;
 						}
 					}
-					if (skip) continue;
-
-					// Limit three weak to any type
-					for (const typeName of this.dex.types.names()) {
-						// it's weak to the type
-						if (this.dex.getEffectiveness(typeName, species) > 0) {
-							if (!typeWeaknesses[typeName]) typeWeaknesses[typeName] = 0;
-							if (typeWeaknesses[typeName] >= 3 * limitFactor) {
-								skip = true;
-								break;
-							}
-						}
-					}
-					if (skip) continue;
 				}
+				if (skip) continue;
+			}
 
+			// Exempt POTD from type combo check
+			if (pokemon.length !== 1 && this.maxTeamSize !== 1) {
 				// Limit one of any type combination, two in Monotype
 				if (!this.forceMonotype && typeComboCount[typeCombo] >= (isMonotype ? 2 : 1) * limitFactor) continue;
 			}
