@@ -107,10 +107,10 @@ export class RandomPOTDTeams extends RandomTeams {
 					}
 					if (skip) continue;
 				}
-			}
 
-			// Limit one of any type combination, two in Monotype
-			if (!this.forceMonotype && typeComboCount[typeCombo] >= (isMonotype ? 2 : 1) * limitFactor) continue;
+				// Limit one of any type combination, two in Monotype
+				if (!this.forceMonotype && typeComboCount[typeCombo] >= (isMonotype ? 2 : 1) * limitFactor) continue;
+			}
 
 			const set = this.randomSet(species, teamDetails, pokemon.length === 0, isDoubles);
 
