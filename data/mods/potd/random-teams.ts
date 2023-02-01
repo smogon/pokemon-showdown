@@ -64,7 +64,7 @@ export class RandomPOTDTeams extends RandomTeams {
 			if (['Basculegion', 'Houndstone', 'Zacian', 'Zamazenta'].includes(species.baseSpecies) && !pokemon.length) continue;
 
 			// The Pokemon of the Day
-			if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
+			if (pokemon.length === 1 || this.maxTeamSize === 1) species = potd;
 
 			const tier = species.tier;
 			const types = species.types;
@@ -81,31 +81,32 @@ export class RandomPOTDTeams extends RandomTeams {
 			// ) {
 			// 	continue;
 			// }
+			if (pokemon.length !== 1 && this.maxTeamSize !== 1) {
+				if (!isMonotype && !this.forceMonotype) {
+					let skip = false;
 
-			if (!isMonotype && !this.forceMonotype) {
-				let skip = false;
-
-				// Limit two of any type
-				for (const typeName of types) {
-					if (typeCount[typeName] >= 2 * limitFactor) {
-						skip = true;
-						break;
-					}
-				}
-				if (skip) continue;
-
-				// Limit three weak to any type
-				for (const typeName of this.dex.types.names()) {
-					// it's weak to the type
-					if (this.dex.getEffectiveness(typeName, species) > 0) {
-						if (!typeWeaknesses[typeName]) typeWeaknesses[typeName] = 0;
-						if (typeWeaknesses[typeName] >= 3 * limitFactor) {
+					// Limit two of any type
+					for (const typeName of types) {
+						if (typeCount[typeName] >= 2 * limitFactor) {
 							skip = true;
 							break;
 						}
 					}
+					if (skip) continue;
+
+					// Limit three weak to any type
+					for (const typeName of this.dex.types.names()) {
+						// it's weak to the type
+						if (this.dex.getEffectiveness(typeName, species) > 0) {
+							if (!typeWeaknesses[typeName]) typeWeaknesses[typeName] = 0;
+							if (typeWeaknesses[typeName] >= 3 * limitFactor) {
+								skip = true;
+								break;
+							}
+						}
+					}
+					if (skip) continue;
 				}
-				if (skip) continue;
 			}
 
 			// Limit one of any type combination, two in Monotype
