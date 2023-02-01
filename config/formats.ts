@@ -343,6 +343,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen9',
+		searchShow: false,
 		ruleset: ['Standard NatDex'],
 	},
 	{
