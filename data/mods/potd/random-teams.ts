@@ -64,7 +64,7 @@ export class RandomPOTDTeams extends RandomTeams {
 			if (['Basculegion', 'Houndstone', 'Zacian', 'Zamazenta'].includes(species.baseSpecies) && !pokemon.length) continue;
 
 			// The Pokemon of the Day
-			if (pokemon.length === 1 || this.maxTeamSize === 1) species = potd;
+			if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
 			const tier = species.tier;
 			const types = species.types;
