@@ -556,7 +556,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen9',
-		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Convergence Legality', 'Min Source Gen = 9'],
+		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Convergence Legality', '!Obtainable Abilities', 'Min Source Gen = 9'],
 		banlist: [
 			'Cyclizar', 'Flutter Mane', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Slaking', 'Arena Trap', 'Comatose', 'Imposter', 'Moody',
 			'Pure Power', 'Shadow Tag', 'Damp Rock', 'Baton Pass', 'Last Respects', 'Revival Blessing', 'Shell Smash', 'Spore',
