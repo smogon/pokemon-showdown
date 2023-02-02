@@ -38,6 +38,20 @@ export class RandomPOTDTeams extends RandomTeams {
 			this.fastPop(baseSpeciesPool, baseSpeciesPool.indexOf(potd.baseSpecies));
 		}
 
+		// Add PotD to type counts
+		for (const typeName of potd.types) {
+			typeCount[typeName] = 1;
+		}
+		typeComboCount[potd.types.slice().sort().join()] = 1;
+
+		// Increment weakness counter
+		for (const typeName of this.dex.types.names()) {
+			// it's weak to the type
+			if (this.dex.getEffectiveness(typeName, potd) > 0) {
+				typeWeaknesses[typeName] = 1;
+			}
+		}
+
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
 			const currentSpeciesPool: Species[] = [];
@@ -62,9 +76,6 @@ export class RandomPOTDTeams extends RandomTeams {
 
 			// Pokemon with Last Respects, Intrepid Sword, and Dauntless Shield shouldn't be leading
 			if (['Basculegion', 'Houndstone', 'Zacian', 'Zamazenta'].includes(species.baseSpecies) && !pokemon.length) continue;
-
-			// The Pokemon of the Day
-			if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
 			const tier = species.tier;
 			const types = species.types;
@@ -108,11 +119,11 @@ export class RandomPOTDTeams extends RandomTeams {
 				if (skip) continue;
 			}
 
-			// Exempt POTD from type combo check
-			if (pokemon.length !== 1 && this.maxTeamSize !== 1) {
-				// Limit one of any type combination, two in Monotype
-				if (!this.forceMonotype && typeComboCount[typeCombo] >= (isMonotype ? 2 : 1) * limitFactor) continue;
-			}
+			// Limit one of any type combination, two in Monotype
+			if (!this.forceMonotype && typeComboCount[typeCombo] >= (isMonotype ? 2 : 1) * limitFactor) continue;
+
+			// The Pokemon of the Day
+			if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
 			const set = this.randomSet(species, teamDetails, pokemon.length === 0, isDoubles);
 
@@ -137,25 +148,28 @@ export class RandomPOTDTeams extends RandomTeams {
 				tierCount[tier] = 1;
 			}
 
-			// Increment type counters
-			for (const typeName of types) {
-				if (typeName in typeCount) {
-					typeCount[typeName]++;
-				} else {
-					typeCount[typeName] = 1;
+			// Don't increment type/weakness counters for POTD, since they were added at the beginning
+			if (pokemon.length !== 1 && this.maxTeamSize !== 1) {
+				// Increment type counters
+				for (const typeName of types) {
+					if (typeName in typeCount) {
+						typeCount[typeName]++;
+					} else {
+						typeCount[typeName] = 1;
+					}
 				}
-			}
-			if (typeCombo in typeComboCount) {
-				typeComboCount[typeCombo]++;
-			} else {
-				typeComboCount[typeCombo] = 1;
-			}
+				if (typeCombo in typeComboCount) {
+					typeComboCount[typeCombo]++;
+				} else {
+					typeComboCount[typeCombo] = 1;
+				}
 
-			// Increment weakness counter
-			for (const typeName of this.dex.types.names()) {
-				// it's weak to the type
-				if (this.dex.getEffectiveness(typeName, species) > 0) {
-					typeWeaknesses[typeName]++;
+				// Increment weakness counter
+				for (const typeName of this.dex.types.names()) {
+					// it's weak to the type
+					if (this.dex.getEffectiveness(typeName, species) > 0) {
+						typeWeaknesses[typeName]++;
+					}
 				}
 			}
 
