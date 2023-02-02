@@ -882,6 +882,9 @@ export const Formats: FormatList = [
 			if (this.checkCanLearn(move, species, this.allSources(species), set)) {
 				problems.push(`${species.name} can't learn ${move.name}.`);
 			}
+			if (set.moves.map(this.toID).includes(move.id)) {
+				problems.push(`Moves in the item slot can't be in the moveslots as well.`);
+			}
 			const accuracyLoweringMove =
 				move.secondaries?.some(secondary => secondary.boosts?.accuracy && secondary.boosts?.accuracy < 0);
 			const flinchMove = move.secondaries?.some(secondary => secondary.volatileStatus === 'flinch');
