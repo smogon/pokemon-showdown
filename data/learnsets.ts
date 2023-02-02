@@ -94154,4 +94154,14 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			{generation: 5, level: 47, moves: ["darkpulse", "flamethrower", "hyperbeam", "icebeam"]},
 		],
 	},
+	alcitron: {
+		learnset: {
+			uturn: ["9L1"],
+			earthquake: ["9L1"],
+			stealthrock: ["9L1"],
+			ancientpower: ["9L1"],
+			earthpower: ["9L1"],
+			fakeout: ["9L1"],
+		},
+	},
 };

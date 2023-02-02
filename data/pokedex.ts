@@ -19225,4 +19225,17 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		gen: 5,
 	},
+	alcitron: {
+		num: 1009,
+		name: "Alcitron",
+		types: ["Ground", "Rock"],
+		gender: "M",
+		baseStats: {hp: 60, atk: 129, def: 40, spa: 130, spd: 40, spe: 118},
+		abilities: {0: "Regenerator"},
+		heightm: 1.829,
+		weightkg: 72.575,
+		color: "Yellow",
+		eggGroups: ["Undiscovered"],
+		gen: 8,
+	},
 };
