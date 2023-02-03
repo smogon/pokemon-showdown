@@ -439,7 +439,10 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		case 'earthquake':
 			return {cull: isDoubles && moves.has('highhorsepower') || moves.has('closecombat') && abilities.has('Aerilate')};
 		case 'freezedry':
-			return {cull: moves.has('icebeam') || moves.has('icywind') || counter.get('stab') < species.types.length};
+			return {cull: (
+				moves.has('icebeam') || moves.has('icywind') || counter.get('stab') < species.types.length ||
+				(moves.has('blizzard') && !!counter.setupType)
+			)};
 		case 'bodyslam': case 'return':
 			return {cull: (
 				moves.has('doubleedge') ||
@@ -620,7 +623,10 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		case 'Hustle':
 			return counter.get('Physical') < 2;
 		case 'Hydration': case 'Rain Dish': case 'Swift Swim':
-			return (species.baseStats.spe > 100 || !moves.has('raindance') && !teamDetails.rain);
+			return (
+				species.baseStats.spe > 100 || !moves.has('raindance') && !teamDetails.rain ||
+				!moves.has('raindance') && ['Rock Head', 'Water Absorb'].some(abil => abilities.has(abil))
+			);
 		case 'Slush Rush': case 'Snow Cloak':
 			return !teamDetails.hail;
 		case 'Immunity': case 'Snow Warning':
