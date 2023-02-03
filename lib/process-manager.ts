@@ -161,7 +161,7 @@ export class QueryProcessWrapper<T, U> implements ProcessWrapper {
 			// it's also futureproofing in case other external modfules require this
 			// we also specifically do not throw here because this json might be sensitive,
 			// so we only want it to go to emails
-			global.Monitor?.crashlog?.(e, `a ${path.basename(this.file)} process`, {result: obj});
+			//global.Monitor?.crashlog?.(e, `a ${path.basename(this.file)} process`, {result: obj});
 			return undefined;
 		}
 	}

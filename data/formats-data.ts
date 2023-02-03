@@ -6267,8 +6267,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	alcitron: {
-		tier: "OU",
-		doublesTier: "DUU",
-		natDexTier: "OU",
+		isNonstandard: "AlciTribeTier",
+		tier: "AlciTribeTier",
 	},
 };

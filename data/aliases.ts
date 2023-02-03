@@ -1,5 +1,6 @@
 export const Aliases: {[alias: string]: string} = {
 	// formats
+	alcitribeformat: "The Dragon League",
 	randbats: "[Gen 9] Random Battle",
 	uber: "[Gen 9] Ubers",
 	anythinggoes: "[Gen 8] Anything Goes",

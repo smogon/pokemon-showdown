@@ -60,11 +60,11 @@ type DatabaseQuery = {
 type ErrorHandler = (error: Error, data: DatabaseQuery, isParentProcess: boolean) => any;
 
 function getModule() {
-	try {
-		return require('better-sqlite3') as typeof sqlite.default;
-	} catch {
+	//try {
+		//return require('better-sqlite3') as typeof sqlite.default;
+	//} catch {
 		return null;
-	}
+	//}
 }
 
 export class Statement<R extends DataType = DataType, T = any> {
@@ -202,7 +202,7 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 		this.dbReady = true;
 		const {file, extension} = this.options;
 		const Database = getModule();
-		this.database = Database ? new Database(file) : null;
+		this.database = null; //Database ? new Database(file) : null;
 		if (extension) this.loadExtensionFile(extension);
 	}
 

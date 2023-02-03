@@ -19,9 +19,23 @@ The column value will be ignored for repeat sections.
 
 export const Formats: FormatList = [
 
+	// Alci Singles
+	///////////////////////////////////////////////////////////////////
+	
+	{
+		section: "Alcitron's Pokemon League",
+	},
+	{
+		name: "[Gen 7] The Dragon League",
+
+		mod: 'gen7',
+		ruleset: ['AlciTribeRule'],
+		banlist: ['Moody', 'King\'s Rock'],
+	},
+
 	// S/V Singles
 	///////////////////////////////////////////////////////////////////
-
+	
 	{
 		section: "S/V Singles",
 	},

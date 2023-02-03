@@ -45,7 +45,7 @@ export const TIERS = new Set([
 	'doublesou', 'battlespotsingles', 'battlespotdoubles', 'battlestadiumsingles',
 	'vgc2016', 'vgc2017', 'vgc2018', 'vgc2019ultraseries', 'vgc2020', '1v1',
 	'anythinggoes', 'nationaldexag', 'balancedhackmons', 'letsgoou', 'monotype',
-	'purehackmons',
+	'purehackmons', 'alcitribetier',
 ]);
 const FORMATS = new Map<ID, {gen: GenerationNum, format: Format}>();
 const VALIDATORS = new Map<ID, TeamValidator>();
@@ -122,6 +122,8 @@ async function importGen(gen: GenerationNum, index: string) {
 }
 
 function eligible(dex: ModdedDex, id: ID) {
+	if (id >= 1009) return true;
+	
 	const gen = toGen(dex, id);
 	if (!gen || gen > dex.gen) return false;
 
@@ -148,6 +150,7 @@ function toGen(dex: ModdedDex, name: string): GenerationNum | undefined {
 	if (!pokemon.exists || (pokemon.isNonstandard && pokemon.isNonstandard !== 'CAP')) return undefined;
 
 	const n = pokemon.num;
+	if (n >= 1009) return 7;
 	if (n > 905) return 9;
 	if (n > 810) return 8;
 	if (n > 721 || (n <= -23 && n >= -28) || (n <= -120 && n >= -126)) return 7;
