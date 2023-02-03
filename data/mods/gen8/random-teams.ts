@@ -1015,6 +1015,7 @@ export class RandomGen8Teams {
 		} else if (counter.setupType === 'Special') {
 			if (
 				(categories['Special'] < 2 && (!counter.get('stab') || !counter.get('specialpool'))) &&
+				!moves.has('quiverdance') &&
 				!(moves.has('rest') && moves.has('sleeptalk')) &&
 				!(moves.has('wish') && moves.has('protect')) &&
 				!moves.has('batonpass')
