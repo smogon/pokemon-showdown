@@ -1994,7 +1994,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	dusknoir: {
-		randomBattleMoves: ["earthquake", "focuspunch", "icepunch", "painsplit", "shadowsneak", "substitute", "willowisp"],
+		randomBattleMoves: ["earthquake", "icepunch", "painsplit", "shadowsneak", "substitute", "willowisp"],
 		randomDoubleBattleMoves: ["earthquake", "helpinghand", "icepunch", "painsplit", "protect", "shadowsneak", "trickroom", "willowisp"],
 		tier: "PU",
 		doublesTier: "(DUU)",
@@ -3709,7 +3709,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	malamar: {
-		randomBattleMoves: ["knockoff", "psychocut", "substitute", "superpower", "trickroom"],
+		randomBattleMoves: ["knockoff", "psychocut", "rest", "sleeptalk", "superpower"],
 		randomDoubleBattleMoves: ["knockoff", "protect", "psychocut", "rockslide", "superpower", "trickroom"],
 		tier: "NU",
 		doublesTier: "(DUU)",

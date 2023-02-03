@@ -205,7 +205,10 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'leechseed': case 'roar': case 'whirlwind':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('dragontail')};
 		case 'nightshade': case 'seismictoss':
-			return {cull: !abilities.has("Parental Bond") && (counter.damagingMoves.size > 1 || !!counter.setupType)};
+			return {cull: (
+				(!abilities.has("Parental Bond") && (counter.damagingMoves.size > 1 || !!counter.setupType)) ||
+				moves.has('poweruppunch')
+			)};
 		case 'protect':
 			const screens = moves.has('lightscreen') && moves.has('reflect');
 			return {cull: (
@@ -512,7 +515,10 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'Hustle':
 			return counter.get('Physical') < 2;
 		case 'Hydration': case 'Rain Dish': case 'Swift Swim':
-			return (species.baseStats.spe > 100 || !moves.has('raindance') && !teamDetails.rain);
+			return (
+				species.baseStats.spe > 100 || !moves.has('raindance') && !teamDetails.rain ||
+				!moves.has('raindance') && ['Rock Head', 'Water Absorb'].some(abil => abilities.has(abil))
+			);
 		case 'Ice Body':
 			return !teamDetails.hail;
 		case 'Immunity': case 'Snow Warning':
