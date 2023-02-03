@@ -23,6 +23,8 @@ type ChannelID = 0 | 1 | 2 | 3 | 4;
 
 export type ChannelMessages<T extends ChannelID | -1> = Record<T, string[]>;
 
+const splitRegex = /^\|split\|p([1234])\n(.*)\n(.*)|.+/gm;
+
 export function extractChannelMessages<T extends ChannelID | -1>(message: string, channelIds: T[]): ChannelMessages<T> {
 	const channelIdSet = new Set(channelIds);
 	const channelMessages: ChannelMessages<ChannelID | -1> = {
@@ -34,34 +36,16 @@ export function extractChannelMessages<T extends ChannelID | -1>(message: string
 		4: [],
 	};
 
-	const messages: string[] = message.split('\n');
-
-	for (let i = 0; i < messages.length; i++) {
-		const line = messages[i];
-		if (!line) continue;
-
-		const splitMatch = /^\|split\|p([1234])$/.exec(line);
-		if (!splitMatch) {
-			for (const channelId of channelIdSet) {
-				const log = channelMessages[channelId];
-				log.push(line);
-			}
-			continue;
-		}
-
-		const [, playerMatch] = splitMatch;
-		const player = parseInt(playerMatch);
-		const secretMessage = messages[i + 1];
-		const sharedMessage = messages[i + 2];
-
+	for (const [lineMatch, playerMatch, secretMessage, sharedMessage] of message.matchAll(splitRegex)) {
+		const player = playerMatch ? parseInt(playerMatch) : 0;
 		for (const channelId of channelIdSet) {
-			const log = channelMessages[channelId];
-			const hasPrivilege = (player === channelId) || (channelId === -1);
-			const channelMessage = hasPrivilege ? secretMessage : sharedMessage;
-			if (channelMessage) log.push(channelMessage);
+			let line = lineMatch;
+			if (player) {
+				line = channelId === -1 || player === channelId ? secretMessage : sharedMessage;
+				if (!line) continue;
+			}
+			channelMessages[channelId].push(line);
 		}
-
-		i += 2;
 	}
 
 	return channelMessages;
