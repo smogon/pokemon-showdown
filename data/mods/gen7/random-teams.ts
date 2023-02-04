@@ -1535,10 +1535,10 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				case 'Castform': case 'Floette':
 					if (this.randomChance(2, 3)) continue;
 					break;
-				case 'Aegislash': case 'Basculin': case 'Cherrim': case 'Gourgeist': case 'Groudon': case 'Kyogre': case 'Meloetta':
+				case 'Aegislash': case 'Basculin': case 'Gourgeist': case 'Groudon': case 'Kyogre': case 'Meloetta':
 					if (this.randomChance(1, 2)) continue;
 					break;
-				case 'Greninja':
+				case 'Cherrim': case 'Greninja':
 					if (this.gen >= 7 && this.randomChance(1, 2)) continue;
 					break;
 				}

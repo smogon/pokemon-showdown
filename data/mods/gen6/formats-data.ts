@@ -2378,13 +2378,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	cherrim: {
-		randomBattleMoves: ["dazzlinggleam", "energyball", "healingwish", "hiddenpowerfire", "synthesis"],
+		randomBattleMoves: ["dazzlinggleam", "energyball", "healingwish", "hiddenpowerfire", "hiddenpowerice", "synthesis"],
 		randomDoubleBattleMoves: ["gigadrain", "protect", "solarbeam", "sunnyday", "weatherball"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
 	cherrimsunshine: {
-		randomBattleMoves: ["gigadrain", "hiddenpowerice", "solarbeam", "sunnyday", "weatherball"],
 		randomDoubleBattleMoves: ["gigadrain", "protect", "solarbeam", "sunnyday", "weatherball"],
 	},
 	shellos: {
