@@ -105,14 +105,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 30,
 		},
-		onBoostPriority: 1,
-		onBoost(boost, target) {
-			target.itemState.lastAtk = target.boosts['atk'];
-		},
 		onAfterBoost(boost, target, source, effect) {
-			const noAtkChange = boost.atk! < 0 && target.boosts['atk'] === -6 && target.itemState.lastAtk === -6;
-			const noContraryAtkChange = boost.atk! > 0 && target.boosts['atk'] === 6 && target.itemState.lastAtk === 6;
-			if (target.boosts['spe'] === 6 || noAtkChange || noContraryAtkChange) {
+			// Adrenaline Orb activates if Intimidate is blocked by an ability like Hyper Cutter,
+			// which deletes boost.atk,
+			// but not if the holder's attack is already at -6 (or +6 if it has Contrary),
+			// which sets boost.atk to 0
+			if (target.boosts['spe'] === 6 || boost.atk === 0) {
 				return;
 			}
 			if (effect.name === 'Intimidate') {
@@ -1005,7 +1003,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	clearamulet: {
 		name: "Clear Amulet",
 		spritenum: 0, // TODO
-		onBoost(boost, target, source, effect) {
+		onTryBoost(boost, target, source, effect) {
 			if (source && target === source) return;
 			let showMsg = false;
 			let i: BoostID;

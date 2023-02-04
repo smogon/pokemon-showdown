@@ -138,7 +138,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Draft',
 		desc: "The custom Draft League ruleset",
 		ruleset: [
-			'Obtainable', '+Unreleased', '+CAP', 'Sketch Post-Gen 7 Moves', 'Team Preview', 'Sleep Clause Mod', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
+			'Obtainable', '+Unreleased', '+CAP', 'Sketch Post-Gen 7 Moves', 'Team Preview', 'Sleep Clause Mod', 'OHKO Clause', 'Evasion Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
 		],
 		// timer: {starting: 60 * 60, grace: 0, addPerTurn: 10, maxPerTurn: 100, timeoutAutoChoose: true},
 	},
@@ -534,6 +534,11 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'Rule',
 		name: 'Team Preview',
 		desc: "Allows each player to see the Pok&eacute;mon on their opponent's team before they choose their lead Pok&eacute;mon",
+		onBegin() {
+			if (this.ruleTable.has(`teratypepreview`)) {
+				this.add('rule', 'Tera Type Preview: Tera Types are shown at Team Preview');
+			}
+		},
 		onTeamPreview() {
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
@@ -543,7 +548,28 @@ export const Rulesets: {[k: string]: FormatData} = {
 				this.add('poke', pokemon.side.id, details, '');
 			}
 			this.makeRequest('teampreview');
+			if (this.ruleTable.has(`teratypepreview`)) {
+				for (const side of this.sides) {
+					let buf = ``;
+					for (const pokemon of side.pokemon) {
+						buf += buf ? ` / ` : `raw|${side.name}'s Tera Types:<br />`;
+						buf += `<psicon pokemon="${pokemon.species.id}" /><psicon type="${pokemon.teraType}" />`;
+					}
+					this.add(`${buf}`);
+				}
+			}
 		},
+	},
+	teratypepreview: {
+		effectType: 'Rule',
+		name: 'Tera Type Preview',
+		desc: "Allows each player to see the Tera Type of the Pok&eacute;mon on their opponent's team before they choose their lead Pok&eacute;mon",
+		onValidateRule() {
+			if (!this.ruleTable.has('teampreview')) {
+				throw new Error(`The "Tera Type Preview" rule${this.ruleTable.blame('teratypepreview')} requires Team Preview.`);
+			}
+		},
+		// implemented in team preview
 	},
 	onevsone: {
 		effectType: 'Rule',
@@ -2392,12 +2418,11 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const matchingSpecies = this.dex.species.all()
 				.filter(species => (
 					!species.isNonstandard && species.types.every(type => curSpecies.types.includes(type)) &&
-					species.types.length === curSpecies.types.length
+					species.types.length === curSpecies.types.length && !this.ruleTable.isBannedSpecies(species)
 				));
 			for (const species of matchingSpecies) {
 				for (const abilityName of Object.values(species.abilities)) {
 					const abilityid = this.toID(abilityName);
-					if (this.ruleTable.isRestricted(`ability:${abilityid}`)) continue;
 					obtainableAbilityPool.add(abilityid);
 				}
 			}
@@ -2409,10 +2434,10 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const matchingSpecies = this.dex.species.all()
 				.filter(s => (
 					!s.isNonstandard && s.types.every(type => species.types.includes(type)) &&
-					s.types.length === species.types.length
+					s.types.length === species.types.length && !this.ruleTable.isBannedSpecies(s)
 				));
 			const someCanLearn = matchingSpecies.some(s => this.checkCanLearn(move, s, setSources, set) === null);
-			if (someCanLearn && !this.ruleTable.isRestricted(`move:${move.id}`)) return null;
+			if (someCanLearn) return null;
 			return this.checkCanLearn(move, species, setSources, set);
 		},
 	},

@@ -1480,6 +1480,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 					}
 				}
 			}
+			// 'Innocent Discard' causes chosen role to become Town, when discarded.
+			if (player.IDEA.choices.includes('Innocent Discard')) player.role.alignment = 'town';
 		}
 		this.IDEA.discardsHTML = `<b>Discards:</b><br />`;
 		for (const p of Object.keys(this.playerTable).sort()) {

@@ -36,7 +36,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		this.noStab = [...this.noStab, 'voltswitch'];
 
 		this.moveEnforcementCheckers = {
-			Bug: movePool => movePool.includes('megahorn') || movePool.includes('pinmissile'),
+			Bug: (movePool, moves, abilities, types, counter) => (['megahorn', 'pinmissile'].some(m => movePool.includes(m)) ||
+				!counter.get('Bug') && abilities.has('Tinted Lens')),
 			Dark: (movePool, moves, abilities, types, counter, species) => (
 				(!counter.get('Dark') && !abilities.has('Protean')) ||
 				(moves.has('pursuit') && species.types.length > 1 && counter.get('Dark') === 1)
@@ -188,7 +189,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				(move.id === 'bulkup' && hasRestTalk) ||
 				(move.id === 'bellydrum' && !abilities.has('Unburden') && !counter.get('priority'))
 			), isSetup: true};
-		case 'calmmind': case 'geomancy': case 'nastyplot': case 'quiverdance': case 'tailglow':
+		case 'calmmind': case 'geomancy': case 'nastyplot': case 'tailglow':
 			if (types.has('Dark') && moves.has('darkpulse')) {
 				counter.setupType = 'Special';
 				return {cull: false, isSetup: true};
@@ -261,7 +262,12 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				movePool.includes('bellydrum') ||
 				movePool.includes('shellsmash')
 			);
-			const singlesCondition = counter.setupType && !moves.has('wish');
+			const singlesCondition = (
+				(counter.setupType && !moves.has('wish')) ||
+				(!['Guts', 'Harvest', 'Poison Heal', 'Quick Feet', 'Speed Boost'].some(abil => abilities.has(abil)) &&
+				!['leechseed', 'perishsong', 'toxic', 'wish'].some(m => moves.has(m)) &&
+				species.id !== 'sharpedomega')
+			);
 			return {cull: (
 				(isDoubles ? doublesCondition : singlesCondition) ||
 				!!counter.get('speedsetup') ||
@@ -313,6 +319,10 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				!!counter.get('speedsetup') ||
 				['electricterrain', 'raindance', 'uturn'].some(m => moves.has(m))
 			)};
+		case 'wish':
+			if (species.baseStats.hp >= 130) return {cull: false};
+			if (abilities.has('Regenerator')) return {cull: false};
+			return {cull: (!['ironhead', 'protect', 'spikyshield', 'uturn'].some(m => moves.has(m)))};
 
 		// Bit redundant to have both
 		// Attacks:
@@ -427,7 +437,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		case 'earthpower':
 			return {cull: moves.has('earthquake') && counter.setupType !== 'Special'};
 		case 'earthquake':
-			return {cull: isDoubles && moves.has('highhorsepower')};
+			return {cull: isDoubles && moves.has('highhorsepower') || moves.has('closecombat') && abilities.has('Aerilate')};
 		case 'freezedry':
 			return {cull: moves.has('icebeam') || moves.has('icywind') || counter.get('stab') < species.types.length};
 		case 'bodyslam': case 'return':
@@ -547,7 +557,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 			return {cull};
 		case 'painsplit': case 'recover': case 'roost': case 'synthesis':
-			return {cull: moves.has('leechseed') || moves.has('rest')};
+			return {cull: moves.has('leechseed') || moves.has('rest') || moves.has('wish') && moves.has('protect')};
 		case 'substitute':
 			return {cull: (
 				moves.has('dracometeor') ||
@@ -964,7 +974,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			return 'Lustrous Orb';
 		}
 		if (counter.damagingMoves.size >= 4) {
-			return (counter.get('Dragon') || counter.get('Dark') || counter.get('Normal')) ? 'Life Orb' : 'Expert Belt';
+			return (counter.get('Dragon') || moves.has('suckerpunch') || counter.get('Normal')) ? 'Life Orb' : 'Expert Belt';
 		}
 		if (counter.damagingMoves.size >= 3 && !!counter.get('speedsetup') && defensiveStatTotal >= 300) {
 			return 'Weakness Policy';
@@ -1132,7 +1142,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				}
 
 				const singlesEnforcement = (
-					!['judgment', 'lightscreen', 'reflect', 'sleeptalk', 'toxic'].includes(moveid) && (
+					!['judgment', 'lightscreen', 'quiverdance', 'reflect', 'sleeptalk', 'toxic'].includes(moveid) && (
 						move.category !== 'Status' ||
 						// should allow Meganium to cull a recovery move for the sake of STAB
 						!(move.flags.heal && species.id !== 'meganium')
@@ -1173,7 +1183,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 							movePool.includes('milkdrink') ||
 							movePool.includes('shoreup') ||
 							(movePool.includes('moonlight') && types.size < 2) ||
-							(movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb)
+							(movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb) ||
+							(movePool.includes('quiverdance') && ['defog', 'uturn', 'stickyweb'].every(m => !moves.has(m)) &&
+							counter.get('Special') < 4)
 						) || (
 							isLead &&
 							movePool.includes('stealthrock') &&
@@ -1480,6 +1492,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		const tierCount: {[k: string]: number} = {};
 		const typeCount: {[k: string]: number} = {};
 		const typeComboCount: {[k: string]: number} = {};
+		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
 		// We make at most two passes through the potential Pokemon pool when creating a team - if the first pass doesn't
@@ -1554,6 +1567,19 @@ export class RandomGen7Teams extends RandomGen8Teams {
 							}
 						}
 						if (skip) continue;
+
+						// Limit three weak to any type
+						for (const typeName of this.dex.types.names()) {
+							// it's weak to the type
+							if (this.dex.getEffectiveness(typeName, species) > 0) {
+								if (!typeWeaknesses[typeName]) typeWeaknesses[typeName] = 0;
+								if (typeWeaknesses[typeName] >= 3 * limitFactor) {
+									skip = true;
+									break;
+								}
+							}
+						}
+						if (skip) continue;
 					}
 
 					// Limit one of any type combination, two in Monotype
@@ -1606,6 +1632,14 @@ export class RandomGen7Teams extends RandomGen8Teams {
 					typeComboCount[typeCombo]++;
 				} else {
 					typeComboCount[typeCombo] = 1;
+				}
+
+				// Increment weakness counter
+				for (const typeName of this.dex.types.names()) {
+					// it's weak to the type
+					if (this.dex.getEffectiveness(typeName, species) > 0) {
+						typeWeaknesses[typeName]++;
+					}
 				}
 
 				// Track what the team has

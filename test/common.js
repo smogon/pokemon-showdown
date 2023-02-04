@@ -60,10 +60,12 @@ class TestTools {
 		let basicFormat = this.currentMod === 'base' && gameType === 'singles' ? 'Anything Goes' : 'Custom Game';
 		let modPrefix = this.modPrefix;
 		if (this.currentMod === 'gen1stadium') basicFormat = 'OU';
-		if (gameType === 'freeforall' || gameType === 'multi') {
+		if (gameType === 'multi') {
 			basicFormat = 'randombattle';
-			modPrefix = `[gen8] `; // Remove when FFA/multis support Gen 9
+			modPrefix = `[gen8] `; // Remove when multis support Gen 9
 		}
+		// Re-integrate to the above if statement when gen 9 ffa randbats is added
+		if (gameType === 'freeforall') basicFormat = '';
 		const gameTypePrefix = gameType === 'singles' ? '' : capitalize(gameType) + ' ';
 		const formatName = `${modPrefix}${gameTypePrefix}${basicFormat}${customRulesID}`;
 
@@ -93,6 +95,8 @@ class TestTools {
 		const format = this.getFormat(options);
 
 		const battleOptions = {
+			debug: true,
+			forceRandomChance: null || options.forceRandomChance,
 			format: format,
 			// If a seed for the pseudo-random number generator is not provided,
 			// a default seed (guaranteed to be the same across test executions)

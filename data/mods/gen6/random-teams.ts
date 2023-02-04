@@ -10,7 +10,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		this.noStab = [...this.noStab, 'aquajet', 'fakeout', 'iceshard', 'machpunch', 'quickattack', 'vacuumwave'];
 
 		this.moveEnforcementCheckers = {
-			Bug: movePool => movePool.includes('megahorn') || movePool.includes('pinmissile'),
+			Bug: (movePool, moves, abilities, types, counter) => (['megahorn', 'pinmissile'].some(m => movePool.includes(m)) ||
+				!counter.get('Bug') && abilities.has('Tinted Lens')),
 			Dark: (movePool, moves, abilities, types, counter, species) => (
 				(!counter.get('Dark') && !abilities.has('Protean'))
 			),
@@ -32,7 +33,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 					!!counter.setupType || !counter.get('Status')
 				)
 			),
-			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire') || movePool.includes('quiverdance'),
+			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire') ||
+				['eruption', 'quiverdance'].some(m => movePool.includes(m)),
 			Flying: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Flying') && (
 					abilities.has('Gale Wings') ||
@@ -117,7 +119,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				const screen = movePool.indexOf('lightscreen');
 				if (screen >= 0) this.fastPop(movePool, screen);
 			}
-			return {cull: !moves.has('calmmind') && !moves.has('lightscreen')};
+			return {cull: !moves.has('lightscreen')};
 		case 'rest':
 			return {cull: movePool.includes('sleeptalk')};
 		case 'sleeptalk':
@@ -140,7 +142,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 					(!moves.has('growth') || moves.has('sunnyday'))
 				)
 			), isSetup: true};
-		case 'calmmind': case 'geomancy': case 'nastyplot': case 'quiverdance': case 'tailglow':
+		case 'calmmind': case 'geomancy': case 'nastyplot': case 'tailglow':
 			if (types.has('Dark') && moves.has('darkpulse')) {
 				counter.setupType = 'Special';
 				return {cull: false, isSetup: true};
@@ -150,6 +152,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				counter.get('specialsetup') > 1 ||
 				(counter.get('Special') + counter.get('specialpool') < 2 && (!moves.has('rest') || !moves.has('sleeptalk')))
 			), isSetup: true};
+		case 'quiverdance':
+			return {cull: false, isSetup: true};
 		case 'growth': case 'shellsmash': case 'workup':
 			return {cull: (
 				counter.setupType !== 'Mixed' ||
@@ -204,7 +208,11 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return {cull: !abilities.has("Parental Bond") && (counter.damagingMoves.size > 1 || !!counter.setupType)};
 		case 'protect':
 			const screens = moves.has('lightscreen') && moves.has('reflect');
-			return {cull: moves.has('rest') || screens || (!!counter.setupType && !moves.has('wish'))};
+			return {cull: (
+				moves.has('rest') || screens || (!!counter.setupType && !moves.has('wish')) ||
+				(!['Guts', 'Harvest', 'Poison Heal', 'Quick Feet', 'Speed Boost'].some(abil => abilities.has(abil)) &&
+				!['leechseed', 'perishsong', 'toxic', 'wish'].some(m => moves.has(m)) && species.id !== 'sharpedomega')
+			)};
 		case 'pursuit':
 			return {cull: (
 				moves.has('nightslash') ||
@@ -243,6 +251,10 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			)};
 		case 'voltswitch':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('raindance') || moves.has('uturn')};
+		case 'wish':
+			if (species.baseStats.hp >= 130) return {cull: false};
+			if (abilities.has('Regenerator')) return {cull: false};
+			return {cull: (!['ironhead', 'protect', 'spikyshield', 'uturn'].some(m => moves.has(m)))};
 
 		// Bit redundant to have both
 		// Attacks:
@@ -344,6 +356,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			)};
 		case 'bonemerang': case 'earthpower': case 'precipiceblades':
 			return {cull: moves.has('earthquake')};
+		case 'earthquake':
+			return {cull: moves.has('closecombat') && abilities.has('Aerilate')};
 		case 'freezedry':
 			return {cull: moves.has('icebeam') || moves.has('icywind') || counter.get('stab') < species.types.length};
 		case 'bodyslam': case 'return':
@@ -444,7 +458,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 			return {cull};
 		case 'milkdrink': case 'moonlight': case 'painsplit': case 'recover': case 'roost': case 'synthesis':
-			return {cull: ['leechseed', 'rest', 'wish'].some(m => moves.has(m))};
+			return {cull: ['leechseed', 'rest'].some(m => moves.has(m) || moves.has('wish') && moves.has('protect'))};
 		case 'safeguard':
 			return {cull: moves.has('destinybond')};
 		case 'substitute':
@@ -562,7 +576,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'Torrent':
 			return (!counter.get('Water') || !!species.isMega);
 		case 'Unaware':
-			return (!!counter.setupType || moves.has('stealthrock'));
+			return (!!counter.setupType || species.id === 'clefable' && moves.has('stealthrock'));
 		case 'Unburden':
 			return (!!species.isMega || abilities.has('Prankster') || !counter.setupType && !moves.has('acrobatics'));
 		case 'Water Absorb':
@@ -728,7 +742,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return 'Lustrous Orb';
 		}
 		if (counter.damagingMoves.size >= 4) {
-			return (!!counter.get('Dragon') || !!counter.get('Dark') || !!counter.get('Normal')) ? 'Life Orb' : 'Expert Belt';
+			return (counter.get('Dragon') || moves.has('suckerpunch') || counter.get('Normal')) ? 'Life Orb' : 'Expert Belt';
 		}
 		if (counter.damagingMoves.size >= 3 && counter.get('speedsetup') && defensiveStatTotal >= 300) return 'Weakness Policy';
 		if (
@@ -920,7 +934,9 @@ export class RandomGen6Teams extends RandomGen7Teams {
 						(movePool.includes('moonlight') && types.size < 2) ||
 						(movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb) ||
 						(species.requiredMove && movePool.includes(toID(species.requiredMove))) ||
-						(moves.has('suckerpunch') && counter.get('stab') < species.types.length)
+						(moves.has('suckerpunch') && counter.get('stab') < species.types.length) ||
+						(movePool.includes('quiverdance') && ['defog', 'uturn', 'stickyweb'].every(m => !moves.has(m)) &&
+							counter.get('Special') < 4)
 					) {
 						cull = true;
 					} else {
@@ -957,7 +973,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 					if (
 						move.category !== 'Status' &&
 						!move.damage && !move.flags.charge &&
-						(moveid !== 'hiddenpower' || !availableHP)
+						(!moveid.startsWith('hiddenpower') || !availableHP)
 					) rejectedPool.push(moveid);
 					moves.delete(moveid);
 					if (moveid.startsWith('hiddenpower')) hasHiddenPower = false;
@@ -1069,7 +1085,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			// Banned Ability
 			Dugtrio: 82, Gothitelle: 82, Ninetales: 84, Politoed: 84, Wobbuffet: 82,
 			// Holistic judgement
-			Castform: 100, Delibird: 100, 'Genesect-Douse': 80, Luvdisc: 100, Spinda: 100, Unown: 100,
+			'Castform-Rainy': 100, 'Castform-Snowy': 100, 'Castform-Sunny': 100, Delibird: 100, 'Genesect-Douse': 80, Luvdisc: 100, Spinda: 100, Unown: 100,
 		};
 		const tier = toID(species.tier).replace('bl', '');
 		const level = this.adjustLevel || customScale[species.name] || levelScale[tier] || (species.nfe ? 90 : 80);

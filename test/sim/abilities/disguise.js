@@ -27,13 +27,14 @@ describe('Disguise', function () {
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices());
 	});
 
-	it('should block a hit from confusion', function () {
-		battle = common.gen(7).createBattle([[
+	it(`should bust Disguise on self-hit confusion`, function () {
+		battle = common.gen(7).createBattle({forceRandomChance: true}, [[
 			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
 		], [
 			{species: 'Sableye', ability: 'prankster', moves: ['confuseray']},
 		]]);
-		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices());
+
+		battle.makeChoices();
 		assert(battle.p1.active[0].abilityState.busted);
 	});
 
