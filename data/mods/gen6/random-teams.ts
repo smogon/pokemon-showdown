@@ -757,7 +757,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			isLead &&
 			ability !== 'Regenerator' && ability !== 'Sturdy' &&
 			!counter.get('recoil') && !counter.get('recovery') &&
-			defensiveStatTotal <= 275
+			defensiveStatTotal < 255
 		) {
 			return 'Focus Sash';
 		}
