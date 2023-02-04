@@ -659,7 +659,7 @@ export class TeamValidator {
 			problem = this.checkMove(set, move, setHas);
 			if (problem) {
 				let allowedByOM;
-				if (dex.currentMod.includes("deluxe")) {
+				if (dex.currentMod.includes("deluxe") || dex.currentMod.includes("dnucap")) {
 					allowedByOM = true;
 				}
 				if (problem.includes('hacking or glitches') &&

@@ -1072,7 +1072,10 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	getDefaultCustomName() {
 		return Dex.formats.get(this.fullFormat).name + " (with custom rules)";
 	}
-	forfeit(user: User) {
+	forfeit(user: User, gorfeit: boolean) {
+		return this.disqualifyUser(user.id, null, "You left the tournament", true);
+	}
+	gorfeit(user: User) {
 		return this.disqualifyUser(user.id, null, "You left the tournament", true);
 	}
 	onConnect(user: User, connection: Connection) {

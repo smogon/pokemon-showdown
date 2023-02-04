@@ -1748,7 +1748,14 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.nextSub();
 	}
 
-	forfeit(user: User) {
+	forfeit(user: User, gorfeit: boolean) {
+		// Add the player to the sub list.
+		if (!(user.id in this.playerTable)) return;
+		this.requestedSub.push(user.id);
+		this.nextSub();
+	}
+
+	gorfeit(user: User) {
 		// Add the player to the sub list.
 		if (!(user.id in this.playerTable)) return;
 		this.requestedSub.push(user.id);

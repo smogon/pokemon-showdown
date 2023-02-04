@@ -316,7 +316,18 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		}
 	}
 
-	forfeit(user: User) {
+	forfeit(user: User, gorfeit: boolean) {
+		if (!(user.id in this.playerTable)) return;
+		this.removePlayer(user);
+		if (!this.ticket.open) return;
+		this.room.modlog({action: 'TICKETABANDON', isGlobal: false, loggedBy: user.id});
+		this.addText(`${user.name} is no longer interested in this ticket.`, user);
+		if (this.playerCount - 1 > 0) return; // There are still users in the ticket room, dont close the ticket
+		this.close(!!(this.firstClaimTime), user);
+		return true;
+	}
+
+	gorfeit(user: User) {
 		if (!(user.id in this.playerTable)) return;
 		this.removePlayer(user);
 		if (!this.ticket.open) return;

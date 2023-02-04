@@ -1065,18 +1065,42 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 	tiebreak() {
 		void this.stream.write(`>tiebreak`);
 	}
-	forfeit(user: User | string, message = '') {
+	forfeit(user: User | string, message = '', gorfeit: boolean) {
+		if (typeof user !== 'string') user = user.id;
+		else user = toID(user);
+
+		// if (gorfeit) message = ' gorfeited.'
+
+		if (!(user in this.playerTable)) return false;
+		return this.forfeitPlayer(this.playerTable[user], message);
+	}
+	gorfeit(user: User | string, message = '') {
 		if (typeof user !== 'string') user = user.id;
 		else user = toID(user);
 
 		if (!(user in this.playerTable)) return false;
-		return this.forfeitPlayer(this.playerTable[user], message);
+		return this.gorfeitPlayer(this.playerTable[user], message);
 	}
 
 	forfeitPlayer(player: RoomBattlePlayer, message = '') {
 		if (this.ended || !this.started) return false;
 
 		if (!message) message = ' forfeited.';
+		this.room.add(`|-message|${player.name}${message}`);
+		this.endType = 'forfeit';
+		// multi battles, they need to be removed, else they can do things like spam forfeit
+		if (this.playerCap > 2) {
+			player.sendRoom(`|request|null`);
+			this.removePlayer(player);
+		}
+		void this.stream.write(`>forcelose ${player.slot}`);
+		return true;
+	}
+
+	gorfeitPlayer(player: RoomBattlePlayer, message = '') {
+		if (this.ended || !this.started) return false;
+
+		if (!message) message = ' gorfeited.';
 		this.room.add(`|-message|${player.name}${message}`);
 		this.endType = 'forfeit';
 		// multi battles, they need to be removed, else they can do things like spam forfeit

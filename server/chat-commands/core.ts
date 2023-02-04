@@ -933,10 +933,22 @@ export const commands: Chat.ChatCommands = {
 		if (!room.game.forfeit) {
 			return this.errorReply(this.tr`This kind of game can't be forfeited.`);
 		}
-		room.game.forfeit(user);
+		room.game.forfeit(user, false);
 	},
 	forfeithelp: [
 		`/forfeit - Forfeits your currently active game, if it supports that.`,
+	],
+
+	gorfeit(target, room, user) {
+		room = this.requireRoom();
+		if (!room.game) return this.errorReply(this.tr`This room doesn't have an active game.`);
+		if (!room.game.forfeit) {
+			return this.errorReply(this.tr`This kind of game can't be gorfeited.`);
+		}
+		room.game.forfeit(user, ' gorfeited.', true);
+	},
+	gorfeithelp: [
+		`/gorfeit - you gorfeit 💀`,
 	],
 
 	guess: 'choose',

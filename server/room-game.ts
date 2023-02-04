@@ -224,7 +224,7 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 	 * extremely unlikely to keep playing after this function is
 	 * called.
 	 */
-	forfeit?(user: User): void;
+	forfeit?(user: User, gorfeit: boolean): void;
 
 	/**
 	 * Called when a user uses /choose [text]
