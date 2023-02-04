@@ -782,6 +782,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (ability === 'Super Luck') return 'Scope Lens';
 		if (
 			counter.damagingMoves.size >= 3 && ability !== 'Sturdy' &&
+			(species.baseStats.spe >= 90 || !moves.has('voltswitch')) &&
 			['acidspray', 'dragontail', 'foulplay', 'rapidspin', 'superfang', 'uturn'].every(m => !moves.has(m))
 		) {
 			return (

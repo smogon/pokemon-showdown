@@ -1015,6 +1015,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			!isDoubles &&
 			counter.damagingMoves.size >= 3 &&
 			ability !== 'Sturdy' &&
+			(species.baseStats.spe >= 90 || !moves.has('voltswitch')) &&
 			['acidspray', 'dragontail', 'foulplay', 'rapidspin', 'superfang', 'uturn'].every(m => !moves.has(m)) && (
 				counter.get('speedsetup') ||
 				moves.has('trickroom') ||
