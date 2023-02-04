@@ -54,7 +54,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting') || !counter.get('stab'),
 			Fire: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Fire') || ['eruption', 'quiverdance'].some(m => movePool.includes(m)) ||
-				moves.has('flamecharge') && movePool.includes('flareblitz')
+				moves.has('flamecharge') && (movePool.includes('flareblitz') || movePool.includes('blueflare'))
 			),
 			Flying: (movePool, moves, abilities, types, counter, species) => (
 				!counter.get('Flying') && (
