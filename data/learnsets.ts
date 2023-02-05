@@ -2537,7 +2537,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			{generation: 8, level: 5, gender: "M", nature: "Serious", moves: ["celebrate", "playnice", "thundershock", "quickattack"], pokeball: "cherishball"},
 			{generation: 8, level: 21, gender: "M", nature: "Brave", moves: ["thunderbolt", "swift", "wish", "celebrate"], pokeball: "cherishball"},
 			{generation: 8, level: 25, isHidden: true, moves: ["sing", "encore", "celebrate", "electroball"], pokeball: "cherishball"},
-			{generation: 9, level: 5, gender: "M", moves: ["fly", "tailwhip", "thundershock", "quickattack"], pokeball: "pokeball"},
+			{generation: 9, level: 5, moves: ["fly", "tailwhip", "thundershock", "quickattack"], pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 1, level: 3},
