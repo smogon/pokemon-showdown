@@ -202,10 +202,15 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return {cull: !!counter.get('speedsetup')};
 		case 'healingwish': case 'memento':
 			return {cull: !!counter.setupType || !!counter.get('recovery') || moves.has('substitute')};
+		case 'iceshard':
+			return {cull: moves.has('shellsmash')};
 		case 'leechseed': case 'roar': case 'whirlwind':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('dragontail')};
 		case 'nightshade': case 'seismictoss':
-			return {cull: !abilities.has("Parental Bond") && (counter.damagingMoves.size > 1 || !!counter.setupType)};
+			return {cull: (
+				(!abilities.has("Parental Bond") && (counter.damagingMoves.size > 1 || !!counter.setupType)) ||
+				moves.has('poweruppunch')
+			)};
 		case 'protect':
 			const screens = moves.has('lightscreen') && moves.has('reflect');
 			return {cull: (
@@ -512,7 +517,10 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'Hustle':
 			return counter.get('Physical') < 2;
 		case 'Hydration': case 'Rain Dish': case 'Swift Swim':
-			return (species.baseStats.spe > 100 || !moves.has('raindance') && !teamDetails.rain);
+			return (
+				species.baseStats.spe > 100 || !moves.has('raindance') && !teamDetails.rain ||
+				!moves.has('raindance') && ['Rock Head', 'Water Absorb'].some(abil => abilities.has(abil))
+			);
 		case 'Ice Body':
 			return !teamDetails.hail;
 		case 'Immunity': case 'Snow Warning':
@@ -749,7 +757,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			isLead &&
 			ability !== 'Regenerator' && ability !== 'Sturdy' &&
 			!counter.get('recoil') && !counter.get('recovery') &&
-			defensiveStatTotal <= 275
+			defensiveStatTotal < 255
 		) {
 			return 'Focus Sash';
 		}
@@ -774,6 +782,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (ability === 'Super Luck') return 'Scope Lens';
 		if (
 			counter.damagingMoves.size >= 3 && ability !== 'Sturdy' &&
+			(species.baseStats.spe >= 90 || !moves.has('voltswitch')) &&
 			['acidspray', 'dragontail', 'foulplay', 'rapidspin', 'superfang', 'uturn'].every(m => !moves.has(m))
 		) {
 			return (

@@ -536,7 +536,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UUBL",
 	},
 	umbreon: {
-		randomBattleMoves: ["batonpass", "hiddenpowerdark", "meanlook", "protect", "toxic", "wish"],
+		randomBattleMoves: ["batonpass", "hiddenpowerdark", "protect", "toxic", "wish"],
 		tier: "UUBL",
 	},
 	porygon: {
@@ -783,7 +783,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	shuckle: {
-		randomBattleMoves: ["encore", "protect", "rest", "toxic", "wrap"],
+		randomBattleMoves: ["encore", "rest", "toxic", "wrap"],
 		tier: "PU",
 	},
 	heracross: {
@@ -849,7 +849,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	donphan: {
-		randomBattleMoves: ["earthquake", "hiddenpowerbug", "rapidspin", "rest", "roar", "rockslide", "sleeptalk", "toxic"],
+		randomBattleMoves: ["earthquake", "rapidspin", "rest", "rockslide", "sleeptalk", "toxic"],
 		tier: "UUBL",
 	},
 	stantler: {
@@ -1057,7 +1057,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UUBL",
 	},
 	nosepass: {
-		randomBattleMoves: ["earthquake", "explosion", "rockslide", "thunderbolt", "thunderwave", "toxic"],
+		randomBattleMoves: ["earthquake", "explosion", "rockslide", "thunderwave", "toxic"],
 		tier: "PU",
 	},
 	skitty: {
@@ -1082,7 +1082,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	aggron: {
-		randomBattleMoves: ["counter", "doubleedge", "earthquake", "focuspunch", "irontail", "rockslide", "substitute", "thunderwave", "toxic"],
+		randomBattleMoves: ["doubleedge", "earthquake", "focuspunch", "irontail", "rockslide", "substitute", "thunderwave", "toxic"],
 		tier: "UU",
 	},
 	meditite: {

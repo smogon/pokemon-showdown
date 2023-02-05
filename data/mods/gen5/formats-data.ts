@@ -94,7 +94,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	pikachu: {
-		randomBattleMoves: ["extremespeed", "grassknot", "hiddenpowerice", "thunderbolt", "voltswitch"],
+		randomBattleMoves: ["extremespeed", "grassknot", "hiddenpowerice", "voltswitch", "volttackle"],
 		tier: "NFE",
 	},
 	raichu: {
@@ -210,7 +210,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	dugtrio: {
-		randomBattleMoves: ["aerialace", "earthquake", "memento", "stealthrock", "stoneedge", "suckerpunch"],
+		randomBattleMoves: ["aerialace", "earthquake", "stealthrock", "stoneedge"],
 		tier: "(OU)",
 		doublesTier: "DUU",
 	},

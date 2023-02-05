@@ -157,10 +157,12 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			)};
 		case 'wish':
 			return {cull: (
-				!['batonpass', 'ironhead', 'protect', 'softboiled', 'uturn'].some(m => moves.has(m)) ||
+				!['batonpass', 'ironhead', 'moonlight', 'protect', 'softboiled', 'uturn'].some(m => moves.has(m)) ||
 				moves.has('rest') ||
 				!!counter.get('speedsetup')
 			)};
+		case 'moonlight':
+			return {cull: (moves.has('wish') && moves.has('protect'))};
 		case 'rapidspin':
 			return {cull: !!teamDetails.rapidSpin || (!!counter.setupType && counter.get('Physical') + counter.get('Special') < 2)};
 		case 'fakeout':
@@ -407,7 +409,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 	): string | undefined {
 		if (species.requiredItem) return species.requiredItem;
 		if (species.requiredItems) return this.sample(species.requiredItems);
-		if (species.name === 'Farfetch\u2019d' && moves.has('swordsdance')) return 'Stick';
+		if (species.name === 'Ditto') return this.sample(['Salac Berry', 'Sitrus Berry']);
+		if (species.name === 'Farfetch\u2019d' && counter.get('Physical') < 4) return 'Stick';
 		if (species.name === 'Marowak') return 'Thick Club';
 		if (species.name === 'Pikachu') return 'Light Ball';
 		if (species.name === 'Shedinja' || species.name === 'Smeargle') return 'Focus Sash';

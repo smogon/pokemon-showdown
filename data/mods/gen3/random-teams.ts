@@ -275,7 +275,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		if ((moves.has('substitute') || moves.has('raindance')) && counter.get('Special') >= 3) return 'Petaya Berry';
 		if (counter.get('Physical') >= 4 && !moves.has('fakeout')) return 'Choice Band';
 		if (counter.get('Physical') >= 3 && !moves.has('rapidspin') && (
-			['firepunch', 'icebeam', 'overheat'].some(m => moves.has(m)) ||
+			['fireblast', 'icebeam', 'overheat'].some(m => moves.has(m)) ||
 			Array.from(moves).some(m => {
 				const moveData = this.dex.moves.get(m);
 				return moveData.category === 'Special' && types.has(moveData.type);
@@ -406,7 +406,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				const requiresStab = (
 					!counter.get('stab') &&
 					!moves.has('seismictoss') && !moves.has('nightshade') &&
-					species.id !== 'castform' &&
+					species.id !== 'castform' && species.id !== 'umbreon' &&
 					// If a Flying-type has Psychic, it doesn't need STAB
 					!(moves.has('psychic') && types.has('Flying')) &&
 					!(types.has('Ghost') && species.baseStats.spa > species.baseStats.atk) &&
