@@ -13211,7 +13211,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Order Up",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, pulse: 1, mirror: 1},
+		flags: {protect: 1},
 		onUseMoveMessage(source, target, move) {
 			move.orderUpBoost = true;
 		},
