@@ -2205,6 +2205,16 @@ export const Formats: FormatList = [
 		mod: 'potd',
 		team: 'random',
 		ruleset: ['[Gen 9] Random Battle'],
+		onBegin() {
+			const potdPokemon = [
+				"hoopa", "groudon", "dachsbun", "squawkabilly", "cacturne", "typhlosion", "jolteon", "masquerain", "falinks",
+				"wyrdeer", "gardevoir", "decidueye", "hawlucha", "azelf", "gothitelle", "donphan", "pikachu", "zaciancrowned",
+				"quagsire", "uxie", "dondozo", "orthworm", "klawf", "dunsparce", "avalugg", "pawmot", "qwilfish", "lilliganthisui",
+			];
+			const day = new Date().getDate();
+			const species = this.dex.species.get(potdPokemon[day > 28 ? 27 : day - 1]);
+			this.add(`raw|<div class='broadcast-blue'><b>Pokemon-of-the-Day: ${species.name}</b></div>`);
+		},
 	},
 
 	// Randomized Metas
