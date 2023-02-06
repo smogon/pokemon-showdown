@@ -1367,6 +1367,11 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		let level: number;
 		if (this.adjustLevel) {
 			level = this.adjustLevel;
+		} else if (!isDoubles && species.randomBattleLevel) {
+			// Use explicit level if we got it
+			level = species.randomBattleLevel;
+		} else if (isDoubles && species.randomDoubleBattleLevel) {
+			level = species.randomDoubleBattleLevel;
 		} else if (!isDoubles) {
 			const levelScale: {[k: string]: number} = {uber: 76, ou: 80, uu: 82, ru: 84, nu: 86, pu: 88};
 			const customScale: {[k: string]: number} = {
