@@ -93,6 +93,33 @@ export const Formats: FormatList = [
 		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass"]
 	},
 
+	// SV OU Rebalanced
+	///////////////////////////////////////////////////////////////////
+	
+	{
+		section: "SV Rebalanced",
+	},
+
+	{
+			name: "[Gen 9] Rebalanced OU",
+
+			mod: 'rebalanced',
+			ruleset: ['Standard'],
+			banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'King\'s Rock', 'Baton Pass',
+					'Quick Draw', 'Quick Claw', 'Focus Band'],
+	},
+	{
+			name: "[Gen 9] Rebalanced Ubers",
+			threads: [
+					`&bullet; <a href="https://www.smogon.com/forums/threads/3710870/">Ubers Metagame Discussion</a>`,
+			],
+
+			mod: 'rebalanced',
+			ruleset: ['Standard'],
+			banlist: ['AG', 'King\'s Rock', 'Baton Pass'],
+	},
+
+
 	// SS Pseudos Metas
 	///////////////////////////////////////////////////////////////////
 	{
