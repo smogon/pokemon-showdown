@@ -104,7 +104,7 @@ export const Formats: FormatList = [
 			name: "[Gen 9] Rebalanced OU",
 
 			mod: 'rebalanced',
-			ruleset: ['Standard'],
+			ruleset: ['Standard', 'Terastal Clause'],
 			banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'King\'s Rock', 'Baton Pass',
 					'Quick Draw', 'Quick Claw', 'Focus Band'],
 	},
@@ -115,7 +115,7 @@ export const Formats: FormatList = [
 			],
 
 			mod: 'rebalanced',
-			ruleset: ['Standard'],
+			ruleset: ['Standard', 'Terastal Clause'],
 			banlist: ['AG', 'King\'s Rock', 'Baton Pass'],
 	},
 

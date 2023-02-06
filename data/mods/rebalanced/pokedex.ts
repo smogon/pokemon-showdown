@@ -365,7 +365,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Pidgeotto",
 		types: ["Normal", "Flying"],
 		baseStats: {hp: 63, atk: 60, def: 55, spa: 50, spd: 50, spe: 71},
-		abilitiesL: {0: "Keen Eye", 1: "Tangled Feet", H: "Big Pecks"},
+		abilities: {0: "Keen Eye", 1: "Tangled Feet", H: "Big Pecks"},
 		heightm: 1.1,
 		weightkg: 30,
 		color: "Brown",
@@ -16919,7 +16919,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Squawkabilly-Blue",
 		baseSpecies: "Squawkabilly",
 		forme: "Blue",
-		types: ["Normal", "Flying"]
+		types: ["Normal", "Flying"],
 		baseStats: {hp: 82, atk: 166, def: 61, spa: 45, spd: 51, spe: 92},
 		abilities: {0: "Intimidate", 1: "Hustle", H: "Guts"},
 		heightm: 0.6,
@@ -17680,7 +17680,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	},
 	brutebonnet: {
 		num: 986,
-		name: "Brute Bonnet",i
+		name: "Brute Bonnet",
 		types: ["Grass", "Dark"],
 		gender: "N",
 		baseStats: {hp: 111, atk: 127, def: 99, spa: 79, spd: 99, spe: 55},
