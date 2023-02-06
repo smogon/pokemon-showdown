@@ -103,7 +103,7 @@ export const Formats: FormatList = [
 	{
 			name: "[Gen 9] Rebalanced OU",
 
-			mod: 'rebalanced',
+			mod: 'gen9rebalanced',
 			ruleset: ['Standard', 'Terastal Clause'],
 			banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'King\'s Rock', 'Baton Pass',
 					'Quick Draw', 'Quick Claw', 'Focus Band'],
@@ -114,7 +114,7 @@ export const Formats: FormatList = [
 					`&bullet; <a href="https://www.smogon.com/forums/threads/3710870/">Ubers Metagame Discussion</a>`,
 			],
 
-			mod: 'rebalanced',
+			mod: 'gen9rebalanced',
 			ruleset: ['Standard', 'Terastal Clause'],
 			banlist: ['AG', 'King\'s Rock', 'Baton Pass'],
 	},
