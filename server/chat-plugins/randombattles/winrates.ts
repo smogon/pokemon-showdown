@@ -65,7 +65,11 @@ function getMonth() {
 // no, this cannot be baseSpecies - some formes matter, ex arceus formes
 // no, there is no better way to do this.
 // yes, i tried.
-function getSpeciesName(species: string) {
+function getSpeciesName(set: PokemonSet, format: Format) {
+	const species = set.species;
+	const item = Dex.items.get(set.item);
+	const moves = set.moves;
+	const megaRayquazaPossible = ['gen6', 'gen7'].includes(format.mod) && !format.ruleset.includes('Mega Rayquaza Clause');
 	if (species.startsWith("Pikachu-")) {
 		return 'Pikachu';
 	} else if (species.startsWith("Unown-")) {
@@ -76,6 +80,14 @@ function getSpeciesName(species: string) {
 	  return "Magearna";
 	} else if (species === "Genesect-Douse") {
 		return "Genesect";
+	} else if (species === "Dudunsparce-Three-Segment") {
+		return 'Dudunsparce';
+	} else if (species === "Maushold-Four") {
+		return 'Maushold';
+	} else if (species === "Squawkabilly-Blue") {
+		return "Squawkabilly";
+	} else if (species === "Squawkabilly-White") {
+		return "Squawkabilly-Yellow";
 	} else if (species.startsWith("Basculin-")) {
 		return "Basculin";
 	} else if (species.startsWith("Sawsbuck-")) {
@@ -88,10 +100,22 @@ function getSpeciesName(species: string) {
 		return "Furfrou";
 	} else if (species.startsWith("Minior-")) {
 		return "Minior";
-	} else if (species.startsWith("Gourgeist-")) {
-		return "Gourgeist";
 	} else if (species.startsWith("Toxtricity-")) {
 		return 'Toxtricity';
+	} else if (species.startsWith("Tatsugiri-")) {
+		return 'Tatsugiri';
+	} else if (species === "Zacian" && item.name === "Rusted Sword") {
+		return 'Zacian-Crowned';
+	} else if (species === "Zamazenta" && item.name === "Rusted Shield") {
+		return "Zamazenta-Crowned";
+	} else if (species === "Kyogre" && item.name === "Blue Orb") {
+		return "Kyogre-Primal";
+	} else if (species === "Groudon" && item.name === "Red Orb") {
+		return "Groudon-Primal";
+	} else if (item.megaStone) {
+		return item.megaStone;
+	} else if (species === "Rayquaza" && moves.includes('Dragon Ascent') && megaRayquazaPossible) {
+		return "Rayquaza-Mega";
 	} else {
 		return species;
 	}
@@ -119,7 +143,8 @@ export const handlers: Chat.Handlers = {
 async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 	const formatData = stats.formats[battle.format];
 	let eloFloor = stats.elo;
-	if (Dex.gen !== Dex.formats.get(battle.format).gen) {
+	const format = Dex.formats.get(battle.format);
+	if (format.mod !== `gen${Dex.gen}`) {
 		eloFloor = 1300;
 	}
 	if (!formatData || battle.rated < eloFloor) return;
@@ -127,7 +152,7 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 	for (const p of players) {
 		const team = await battle.getTeam(p);
 		if (!team) return; // ???
-		const mons = team.map(f => getSpeciesName(f.species));
+		const mons = team.map(f => getSpeciesName(f, format));
 		for (const mon of mons) {
 			if (!formatData.mons[mon]) formatData.mons[mon] = {timesGenerated: 0, numWins: 0};
 			formatData.mons[mon].timesGenerated++;
@@ -190,13 +215,13 @@ export const pages: Chat.PageTable = {
 		const prevMonth = new Date(new Date(`${month}-15`).getTime() - (30 * 24 * 60 * 60 * 1000)).toISOString().slice(0, 7);
 		let hasButton = false;
 		if (await FS(STATS_PATH.replace('{{MONTH}}', prevMonth)).exists()) {
-			buf += `<a class="button" href="/view-winrates-${format}--${sorter}--${prevMonth}>Previous month</button>`;
+			buf += `<a class="button" href="/view-winrates-${format}--${sorter}--${prevMonth}">Previous month</a>`;
 			hasButton = true;
 		}
 		const nextMonth = new Date(new Date(`${month}-15`).getTime() + (30 * 24 * 60 * 60 * 1000)).toISOString().slice(0, 7);
 		if (await FS(STATS_PATH.replace('{{MONTH}}', nextMonth)).exists()) {
 			if (hasButton) buf += ` | `;
-			buf += `<a class="button" href="/view-winrates-${format}--${sorter}--${nextMonth}>Next month</button>`;
+			buf += `<a class="button" href="/view-winrates-${format}--${sorter}--${nextMonth}">Next month</a>`;
 			hasButton = true;
 		}
 		buf += hasButton ? ` | ` : '';

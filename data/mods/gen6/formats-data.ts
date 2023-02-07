@@ -1994,7 +1994,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	dusknoir: {
-		randomBattleMoves: ["earthquake", "focuspunch", "icepunch", "painsplit", "shadowsneak", "substitute", "willowisp"],
+		randomBattleMoves: ["earthquake", "icepunch", "painsplit", "shadowsneak", "substitute", "willowisp"],
 		randomDoubleBattleMoves: ["earthquake", "helpinghand", "icepunch", "painsplit", "protect", "shadowsneak", "trickroom", "willowisp"],
 		tier: "PU",
 		doublesTier: "(DUU)",
@@ -2378,13 +2378,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	cherrim: {
-		randomBattleMoves: ["dazzlinggleam", "energyball", "healingwish", "hiddenpowerfire", "synthesis"],
+		randomBattleMoves: ["dazzlinggleam", "energyball", "healingwish", "hiddenpowerfire", "hiddenpowerice", "synthesis"],
 		randomDoubleBattleMoves: ["gigadrain", "protect", "solarbeam", "sunnyday", "weatherball"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
 	cherrimsunshine: {
-		randomBattleMoves: ["gigadrain", "hiddenpowerice", "solarbeam", "sunnyday", "weatherball"],
 		randomDoubleBattleMoves: ["gigadrain", "protect", "solarbeam", "sunnyday", "weatherball"],
 	},
 	shellos: {
@@ -3702,14 +3701,14 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	slurpuff: {
 		randomBattleMoves: ["bellydrum", "drainpunch", "playrough", "return"],
 		randomDoubleBattleMoves: ["bellydrum", "dazzlinggleam", "drainpunch", "flamethrower", "playrough", "protect", "psychic", "return", "surf"],
-		tier: "RUBL",
+		tier: "UUBL",
 		doublesTier: "(DUU)",
 	},
 	inkay: {
 		tier: "LC",
 	},
 	malamar: {
-		randomBattleMoves: ["knockoff", "psychocut", "substitute", "superpower", "trickroom"],
+		randomBattleMoves: ["knockoff", "psychocut", "rest", "sleeptalk", "superpower"],
 		randomDoubleBattleMoves: ["knockoff", "protect", "psychocut", "rockslide", "superpower", "trickroom"],
 		tier: "NU",
 		doublesTier: "(DUU)",

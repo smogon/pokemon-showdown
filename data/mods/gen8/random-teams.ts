@@ -1015,6 +1015,7 @@ export class RandomGen8Teams {
 		} else if (counter.setupType === 'Special') {
 			if (
 				(categories['Special'] < 2 && (!counter.get('stab') || !counter.get('specialpool'))) &&
+				!moves.has('quiverdance') &&
 				!(moves.has('rest') && moves.has('sleeptalk')) &&
 				!(moves.has('wish') && moves.has('protect')) &&
 				!moves.has('batonpass')
@@ -2022,7 +2023,9 @@ export class RandomGen8Teams {
 				PUBL: 87,
 				PU: 88, "(PU)": 88, NFE: 88,
 			};
-			const customScale: {[k: string]: number} = {delibird: 100, glalie: 76, luvdisc: 100, spinda: 100, unown: 100};
+			const customScale: {[k: string]: number} = {
+				delibird: 100, dugtrio: 76, glalie: 76, luvdisc: 100, spinda: 100, unown: 100,
+			};
 
 			return customScale[species.id] || tierScale[species.tier] || 80;
 		}
@@ -2262,7 +2265,9 @@ export class RandomGen8Teams {
 			// Hardcoded abilities for certain contexts
 			if (forme === 'Copperajah' && gmax) {
 				ability = 'Heavy Metal';
-			} else if (abilities.has('Guts') && (
+			} else if (abilities.has('Guts') &&
+				// for Ursaring in BDSP
+				!abilities.has('Quick Feet') && (
 				species.id === 'gurdurr' || species.id === 'throh' ||
 				moves.has('facade') || (moves.has('rest') && moves.has('sleeptalk'))
 			)) {

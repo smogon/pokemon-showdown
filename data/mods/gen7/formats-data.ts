@@ -257,13 +257,13 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	ninetales: {
-		randomBattleMoves: ["fireblast", "nastyplot", "psyshock", "solarbeam", "substitute", "willowisp"],
+		randomBattleMoves: ["fireblast", "hiddenpowerice", "nastyplot", "solarbeam", "substitute", "willowisp"],
 		randomDoubleBattleMoves: ["fireblast", "heatwave", "nastyplot", "protect", "solarbeam", "willowisp"],
 		tier: "RU",
 		doublesTier: "DUU",
 	},
 	ninetalesalola: {
-		randomBattleMoves: ["auroraveil", "blizzard", "freezedry", "hiddenpowerfire", "moonblast", "nastyplot", "substitute"],
+		randomBattleMoves: ["auroraveil", "blizzard", "freezedry", "hiddenpowerfire", "moonblast", "nastyplot"],
 		randomDoubleBattleMoves: ["auroraveil", "blizzard", "encore", "freezedry", "hiddenpowerfire", "moonblast", "protect"],
 		tier: "UUBL",
 		doublesTier: "DOU",
@@ -2089,7 +2089,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	dusknoir: {
-		randomBattleMoves: ["earthquake", "focuspunch", "icepunch", "painsplit", "shadowsneak", "substitute", "willowisp"],
+		randomBattleMoves: ["earthquake", "icepunch", "painsplit", "shadowsneak", "substitute", "willowisp"],
 		randomDoubleBattleMoves: ["allyswitch", "helpinghand", "icepunch", "painsplit", "protect", "shadowsneak", "trickroom", "willowisp"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",

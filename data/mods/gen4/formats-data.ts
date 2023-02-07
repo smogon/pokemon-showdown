@@ -56,7 +56,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	pidgeot: {
-		randomBattleMoves: ["bravebird", "doubleedge", "pursuit", "quickattack", "uturn"],
+		randomBattleMoves: ["bravebird", "doubleedge", "heatwave", "pursuit", "quickattack", "uturn"],
 		tier: "NU",
 	},
 	rattata: {
@@ -70,7 +70,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	fearow: {
-		randomBattleMoves: ["doubleedge", "drillpeck", "pursuit", "quickattack", "return", "uturn"],
+		randomBattleMoves: ["doubleedge", "drillpeck", "heatwave", "pursuit", "quickattack", "return", "uturn"],
 		tier: "NU",
 	},
 	ekans: {
@@ -311,7 +311,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	farfetchd: {
-		randomBattleMoves: ["leafblade", "nightslash", "return", "swordsdance", "uturn"],
+		randomBattleMoves: ["heatwave", "leafblade", "nightslash", "return", "swordsdance", "uturn"],
 		tier: "NU",
 	},
 	doduo: {
@@ -798,7 +798,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	mismagius: {
-		randomBattleMoves: ["hiddenpowerfighting", "nastyplot", "painsplit", "shadowball", "substitute", "taunt", "thunderbolt", "willowisp"],
+		randomBattleMoves: ["hiddenpowerfighting", "nastyplot", "painsplit", "shadowball", "substitute", "taunt", "thunderbolt", "trick", "willowisp"],
 		tier: "UU",
 	},
 	unown: {

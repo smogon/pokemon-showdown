@@ -159,7 +159,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	beadsofruin: {
 		name: "Beads of Ruin",
-		shortDesc: "The Special Defense stat of all other active Pokemon is multiplied by 0.75.",
+		shortDesc: "Active Pokemon without this Ability have their Special Defense multiplied by 0.75.",
 
 		start: "  [POKEMON]'s Beads of Ruin weakened the Sp. Def of all surrounding Pokémon!",
 	},
@@ -1815,7 +1815,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	swordofruin: {
 		name: "Sword of Ruin",
-		shortDesc: "The Defense stat of all other active Pokemon is multiplied by 0.75.",
+		shortDesc: "Active Pokemon without this Ability have their Defense multiplied by 0.75.",
 
 		start: "  [POKEMON]'s Sword of Ruin weakened the Defense of all surrounding Pokémon!",
 	},
@@ -1842,7 +1842,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	tabletsofruin: {
 		name: "Tablets of Ruin",
-		shortDesc: "The Attack stat of all other active Pokemon is multiplied by 0.75.",
+		shortDesc: "Active Pokemon without this Ability have their Attack multiplied by 0.75.",
 
 		start: "  [POKEMON]'s Tablets of Ruin weakened the Attack of all surrounding Pokémon!",
 	},
@@ -2010,7 +2010,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	vesselofruin: {
 		name: "Vessel of Ruin",
-		shortDesc: "The Special Attack stat of all other active Pokemon is multiplied by 0.75.",
+		shortDesc: "Active Pokemon without this Ability have their Special Attack multiplied by 0.75.",
 
 		start: "  [POKEMON]'s Vessel of Ruin weakened the Sp. Atk of all surrounding Pokémon!",
 	},
