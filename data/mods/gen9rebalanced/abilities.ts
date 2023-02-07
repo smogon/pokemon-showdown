@@ -383,7 +383,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!move.ruinedSpD?.hasAbility('Beads of Ruin')) move.ruinedSpD = abilityHolder;
 			if (move.ruinedSpD !== abilityHolder) return;
 			this.debug('Beads of Ruin SpD drop');
-			return this.chainModify(0.75);
+			return this.chainModify(0.80);
 		},
 		name: "Beads of Ruin",
 		rating: 4.5,
@@ -1780,35 +1780,33 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 115,
 	},
 	iceface: {
-		onStart(pokemon) {
-			if (this.field.isWeather(['hail', 'snow']) &&
-				pokemon.species.id === 'eiscuenoice' && !pokemon.transformed) {
-				this.add('-activate', pokemon, 'ability: Ice Face');
-				this.effectState.busted = false;
-				pokemon.formeChange('Eiscue', this.effect, true);
-			}
-		},
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
 			if (
-				effect && effect.effectType === 'Move' && effect.category === 'Physical' &&
-				target.species.id === 'eiscue' && !target.transformed
+				effect && effect.effectType === 'Move' &&
+				['eiscue'].includes(target.species.id) && !target.transformed
 			) {
-				this.add('-activate', target, 'ability: Ice Face');
+				this.add('-activate', target, 'ability: Disguise');
 				this.effectState.busted = true;
 				return 0;
 			}
 		},
-		onCriticalHit(target, type, move) {
+		onCriticalHit(target, source, move) {
 			if (!target) return;
-			if (move.category !== 'Physical' || target.species.id !== 'eiscue' || target.transformed) return;
-			if (target.volatiles['substitute'] && !(move.flags['bypasssub'] || move.infiltrates)) return;
+			if (!['eiscue'].includes(target.species.id) || target.transformed) {
+				return;
+			}
+			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+			if (hitSub) return;
+
 			if (!target.runImmunity(move.type)) return;
 			return false;
 		},
 		onEffectiveness(typeMod, target, type, move) {
-			if (!target) return;
-			if (move.category !== 'Physical' || target.species.id !== 'eiscue' || target.transformed) return;
+			if (!target || move.category === 'Status') return;
+			if (!['eiscue'].includes(target.species.id) || target.transformed) {
+				return;
+			}
 
 			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 			if (hitSub) return;
@@ -1817,25 +1815,16 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			return 0;
 		},
 		onUpdate(pokemon) {
-			if (pokemon.species.id === 'eiscue' && this.effectState.busted) {
-				pokemon.formeChange('Eiscue-Noice', this.effect, true);
-			}
-		},
-		onWeatherChange(pokemon, source, sourceEffect) {
-			// snow/hail resuming because Cloud Nine/Air Lock ended does not trigger Ice Face
-			if ((sourceEffect as Ability)?.suppressWeather) return;
-			if (!pokemon.hp) return;
-			if (this.field.isWeather(['hail', 'snow']) &&
-				pokemon.species.id === 'eiscuenoice' && !pokemon.transformed) {
-				this.add('-activate', pokemon, 'ability: Ice Face');
-				this.effectState.busted = false;
-				pokemon.formeChange('Eiscue', this.effect, true);
+			if (['eiscue'].includes(pokemon.species.id) && this.effectState.busted) {
+				const speciesid = 'Eiscue-Noice';
+				pokemon.formeChange(speciesid, this.effect, true);
+				// this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon, this.dex.species.get(speciesid));
 			}
 		},
 		isBreakable: true,
 		isPermanent: true,
-		name: "Ice Face",
-		rating: 3,
+		name: "Disguise",
+		rating: 3.5,
 		num: 248,
 	},
 	icescales: {
@@ -2524,19 +2513,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 152,
 	},
 	myceliummight: {
-		onFractionalPriorityPriority: -1,
-		onFractionalPriority(priority, pokemon, target, move) {
-			if (move.category === 'Status') {
-				return -0.1;
-			}
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Mycelium Might');
 		},
 		onModifyMove(move) {
-			if (move.category === 'Status') {
-				move.ignoreAbility = true;
-			}
+			move.ignoreAbility = true;
 		},
 		name: "Mycelium Might",
-		rating: 2,
+		rating: 3,
 		num: 298,
 	},
 	naturalcure: {
@@ -3502,7 +3486,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	regenerator: {
 		onSwitchOut(pokemon) {
-			pokemon.heal(pokemon.baseMaxhp / 3);
+			pokemon.heal(pokemon.baseMaxhp / 4);
 		},
 		name: "Regenerator",
 		rating: 4.5,
@@ -4458,7 +4442,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!move.ruinedDef?.hasAbility('Sword of Ruin')) move.ruinedDef = abilityHolder;
 			if (move.ruinedDef !== abilityHolder) return;
 			this.debug('Sword of Ruin Def drop');
-			return this.chainModify(0.75);
+			return this.chainModify(0.80);
 		},
 		name: "Sword of Ruin",
 		rating: 4.5,
@@ -4475,7 +4459,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!move.ruinedAtk) move.ruinedAtk = abilityHolder;
 			if (move.ruinedAtk !== abilityHolder) return;
 			this.debug('Tablets of Ruin Atk drop');
-			return this.chainModify(0.75);
+			return this.chainModify(0.80);
 		},
 		name: "Tablets of Ruin",
 		rating: 4.5,
@@ -4826,7 +4810,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!move.ruinedSpA) move.ruinedSpA = abilityHolder;
 			if (move.ruinedSpA !== abilityHolder) return;
 			this.debug('Vessel of Ruin SpA drop');
-			return this.chainModify(0.75);
+			return this.chainModify(0.80);
 		},
 		name: "Vessel of Ruin",
 		rating: 4.5,

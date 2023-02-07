@@ -3773,13 +3773,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 		secondary: {
 			chance: 50,
 			onHit(target, source) {
-				const result = this.random(3);
+				const result = this.random(2);
 				if (result === 0) {
 					target.trySetStatus('psn', source);
 				} else if (result === 1) {
 					target.trySetStatus('par', source);
-				} else {
-					target.trySetStatus('slp', source);
+				// } else {
+				// 	target.trySetStatus('slp', source);
 				}
 			},
 		},
@@ -11968,7 +11968,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Milk Drink",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		heal: [1, 2],
@@ -12410,7 +12410,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Moonlight",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		onHit(pokemon) {
@@ -12447,7 +12447,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Morning Sun",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		onHit(pokemon) {
@@ -14802,18 +14802,18 @@ export const Moves: {[moveid: string]: MoveData} = {
 	ragefist: {
 		num: 889,
 		accuracy: 100,
-		basePower: 50,
-		basePowerCallback(pokemon) {
-			return Math.min(350, 50 + 50 * pokemon.timesAttacked);
-		},
+		basePower: 85,
 		category: "Physical",
 		name: "Rage Fist",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
+		flags: {contact: 1, protect: 1, mirror: 1},
+		ignoreEvasion: true,
+		ignoreDefensive: true,
 		secondary: null,
 		target: "normal",
-		type: "Ghost",
+		type: "Dark",
+		contestType: "Cool",
 	},
 	ragepowder: {
 		num: 476,
@@ -15037,7 +15037,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Recover",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		heal: [1, 2],
@@ -15198,7 +15198,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Rest",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		onTry(source) {
@@ -15695,7 +15695,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Roost",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		heal: [1, 2],
@@ -15904,7 +15904,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 40,
 		category: "Physical",
 		name: "Salt Cure",
-		pp: 15,
+		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		condition: {
@@ -16679,7 +16679,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Shore Up",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		onHit(pokemon) {
@@ -17172,7 +17172,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Slack Off",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		heal: [1, 2],
@@ -17589,7 +17589,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Soft-Boiled",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		heal: [1, 2],
@@ -19145,7 +19145,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Synthesis",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		onHit(pokemon) {
@@ -21145,8 +21145,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1},
 		secondary: {
-			chance: 10,
-			status: 'slp',
+			chance: 20,
+			volatileStatus: 'flinch',
 		},
 		target: "normal",
 		type: "Dark",
