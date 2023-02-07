@@ -4175,13 +4175,16 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 80,
 	},
 	steamengine: {
+		onTryHit(target, source, move) {
+			if (move.type === 'Water') {
+				this.add('-immune', target, '[from] ability: Steam Engine');
+				this.boost({spe: 6});
+				return null;
+			}
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (['Water', 'Fire'].includes(move.type)) {
 				this.boost({spe: 6});
-			}
-			if (move.type === 'Water') {
-				this.add('-immune', target, '[from] ability: Water Absorb');
-				return null;
 			}
 		},
 		name: "Steam Engine",
