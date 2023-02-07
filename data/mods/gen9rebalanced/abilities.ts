@@ -1786,7 +1786,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				effect && effect.effectType === 'Move' &&
 				['eiscue'].includes(target.species.id) && !target.transformed
 			) {
-				this.add('-activate', target, 'ability: Disguise');
+				this.add('-activate', target, 'ability: Ice Face');
 				this.effectState.busted = true;
 				return 0;
 			}
