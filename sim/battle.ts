@@ -1797,7 +1797,9 @@ export class Battle {
 		if (!target?.hp) return 0;
 		if (!target.isActive) return false;
 		if (this.gen > 5 && !target.side.foePokemonLeft()) return false;
-		boost = this.runEvent('Boost', target, source, effect, {...boost});
+		boost = this.runEvent('ChangeBoost', target, source, effect, {...boost});
+		boost = target.getCappedBoost(boost);
+		boost = this.runEvent('TryBoost', target, source, effect, {...boost});
 		let success = null;
 		let boosted = isSecondary;
 		let boostName: BoostID;
@@ -1807,15 +1809,15 @@ export class Battle {
 			};
 			let boostBy = target.boostBy(currentBoost);
 			let msg = '-boost';
-			if (boost[boostName]! < 0) {
+			if (boost[boostName]! < 0 || target.boosts[boostName] === -6) {
 				msg = '-unboost';
 				boostBy = -boostBy;
 			}
 			if (boostBy) {
 				success = true;
 				switch (effect?.id) {
-				case 'bellydrum':
-					this.add('-setboost', target, 'atk', target.boosts['atk'], '[from] move: Belly Drum');
+				case 'bellydrum': case 'angerpoint':
+					this.add('-setboost', target, 'atk', target.boosts['atk'], '[from] ' + effect.fullname);
 					break;
 				case 'bellydrum2':
 					this.add(msg, target, boostName, boostBy, '[silent]');

@@ -1007,7 +1007,8 @@ export class RandomGen8Teams {
 		} else if (counter.setupType === 'Physical') {
 			if (
 				(categories['Physical'] < 2 && (!counter.get('stab') || !counter.get('physicalpool'))) &&
-				!(moves.has('rest') && moves.has('sleeptalk'))
+				!(moves.has('rest') && moves.has('sleeptalk')) &&
+				!moves.has('batonpass')
 			) {
 				counter.setupType = '';
 			}
@@ -1015,7 +1016,8 @@ export class RandomGen8Teams {
 			if (
 				(categories['Special'] < 2 && (!counter.get('stab') || !counter.get('specialpool'))) &&
 				!(moves.has('rest') && moves.has('sleeptalk')) &&
-				!(moves.has('wish') && moves.has('protect'))
+				!(moves.has('wish') && moves.has('protect')) &&
+				!moves.has('batonpass')
 			) {
 				counter.setupType = '';
 			}

@@ -755,6 +755,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-end', pokemon, 'Attract', '[silent]');
 			},
 		},
+		onTryImmunity(target, source) {
+			return (target.gender === 'M' && source.gender === 'F') || (target.gender === 'F' && source.gender === 'M');
+		},
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -12237,7 +12240,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		sideCondition: 'mist',
 		condition: {
 			duration: 5,
-			onBoost(boost, target, source, effect) {
+			onTryBoost(boost, target, source, effect) {
 				if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
 				if (source && target !== source) {
 					let showMsg = false;
@@ -14865,13 +14868,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		onModifyType(move, pokemon) {
 			switch (pokemon.species.name) {
-			case 'Tauros-Paldea':
+			case 'Tauros-Paldea-Combat':
 				move.type = 'Fighting';
 				break;
-			case 'Tauros-Paldea-Fire':
+			case 'Tauros-Paldea-Blaze':
 				move.type = 'Fire';
 				break;
-			case 'Tauros-Paldea-Water':
+			case 'Tauros-Paldea-Aqua':
 				move.type = 'Water';
 				break;
 			}

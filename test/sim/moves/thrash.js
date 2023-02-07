@@ -19,6 +19,7 @@ describe('Thrash [Gen 1]', function () {
 		assert.equal(nidoking.volatiles['lockedmove'].time, 2);
 		battle.makeChoices();
 		battle.makeChoices();
+		assert(battle.log.includes('|-start|p1a: Nidoking|confusion|[silent]'));
 		assert(!nidoking.volatiles['lockedmove']);
 		assert(nidoking.volatiles['confusion']);
 	});
@@ -33,6 +34,7 @@ describe('Thrash [Gen 1]', function () {
 		battle.makeChoices();
 		battle.makeChoices();
 		battle.makeChoices();
+		assert(battle.log.includes('|-start|p1a: Nidoking|confusion|[silent]'));
 		assert(!nidoking.volatiles['lockedmove']);
 		assert(nidoking.volatiles['confusion']);
 	});

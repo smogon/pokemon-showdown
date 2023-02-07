@@ -5277,7 +5277,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// genderless infatuation for nui's Condition Override
 	attract: {
 		inherit: true,
-		volatileStatus: 'attract',
 		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon, source, effect) {
@@ -5325,6 +5324,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Attract', '[silent]');
 			},
+		},
+		onTryImmunity(target, source) {
+			if (source.hasAbility('conditionoverride')) return true;
+			return (target.gender === 'M' && source.gender === 'F') || (target.gender === 'F' && source.gender === 'M');
 		},
 	},
 

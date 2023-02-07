@@ -253,7 +253,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	poliwrath: {
-		randomBattleMoves: ["bulkup", "circlethrow", "focuspunch", "rest", "sleeptalk", "substitute", "toxic", "waterfall"],
+		randomBattleMoves: ["circlethrow", "rest", "scald", "sleeptalk"],
 		tier: "RU",
 		doublesTier: "DUU",
 	},
@@ -281,7 +281,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	machamp: {
-		randomBattleMoves: ["bulkup", "bulletpunch", "dynamicpunch", "icepunch", "payback", "stoneedge", "substitute"],
+		randomBattleMoves: ["bulkup", "bulletpunch", "dynamicpunch", "icepunch", "payback", "stoneedge"],
 		tier: "UU",
 		doublesTier: "DUU",
 	},
@@ -610,7 +610,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	gyarados: {
-		randomBattleMoves: ["bounce", "dragondance", "earthquake", "icefang", "stoneedge", "substitute", "waterfall"],
+		randomBattleMoves: ["dragondance", "earthquake", "icefang", "stoneedge", "waterfall"],
 		tier: "OU",
 		doublesTier: "DOU",
 	},
@@ -732,7 +732,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	mewtwo: {
-		randomBattleMoves: ["aurasphere", "calmmind", "fireblast", "icebeam", "psystrike", "recover", "taunt"],
+		randomBattleMoves: ["aurasphere", "calmmind", "fireblast", "psystrike", "recover", "shadowball"],
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
@@ -1137,7 +1137,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	sceptile: {
-		randomBattleMoves: ["acrobatics", "earthquake", "gigadrain", "hiddenpowerfire", "leafblade", "leechseed", "substitute", "swordsdance"],
+		randomBattleMoves: ["acrobatics", "earthquake", "leafblade", "substitute", "swordsdance"],
 		tier: "RU",
 		doublesTier: "DUU",
 	},
@@ -1874,9 +1874,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "DUU",
 	},
-	cherrimsunshine: {
-		randomBattleMoves: ["naturepower", "solarbeam", "sunnyday", "weatherball"],
-	},
+	cherrimsunshine: {},
 	shellos: {
 		tier: "LC",
 	},

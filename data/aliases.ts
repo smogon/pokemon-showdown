@@ -279,6 +279,9 @@ export const Aliases: {[alias: string]: string} = {
 	urshifurapid: "Urshifu-Rapid-Strike",
 	calyrexir: "Calyrex-Ice",
 	calyrexsr: "Calyrex-Shadow",
+	taurospaldea: "Tauros-Paldea-Combat",
+	taurospaldeafire: "Tauros-Paldea-Blaze",
+	taurospaldeawater: "Tauros-Paldea-Aqua",
 
 	// base formes
 	nidoranfemale: "Nidoran-F",
