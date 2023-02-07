@@ -3487,7 +3487,6 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	zoroark: {
 		randomBattleMoves: ["darkpulse", "flamethrower", "focusblast", "nastyplot", "sludgebomb", "trick"],
-		randomBattleLevel: 84,
 		randomDoubleBattleMoves: ["darkpulse", "flamethrower", "focusblast", "knockoff", "nastyplot", "protect", "suckerpunch", "uturn"],
 		tier: "RUBL",
 		doublesTier: "(DUU)",
