@@ -625,8 +625,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			dig: ["9M", "8M", "8V", "7V", "6M", "5M", "4M", "3M"],
 			doubleedge: ["7V", "3T"],
 			doubleteam: ["7M", "7V", "6M", "5M", "4M", "3M"],
-			dracometeor: ["9M"]
-			uturn: ["9M"]
+			dracometeor: ["9M"],
+			uturn: ["9M"],
 			dragonbreath: ["9L12", "8L12", "7V"],
 			dragonclaw: ["9M", "9L1", "8M", "8L1", "7M", "7L1", "7S6", "7S7", "6M", "6L1", "6S2", "5M", "5L1", "4M", "4L1", "3M"],
 			dragondance: ["9M", "8M", "7S9"],
