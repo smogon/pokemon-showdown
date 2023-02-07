@@ -1087,21 +1087,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			item = 'Black Sludge';
 		}
 
-		const levelScale: {[k: string]: number} = {
-			uber: 76, ou: 80, uu: 82, ru: 84, nu: 86, pu: 88,
-		};
-		const customScale: {[k: string]: number} = {
-			// Banned Ability
-			Dugtrio: 82, Gothitelle: 82, Ninetales: 84, Politoed: 84, Wobbuffet: 82,
-			// Holistic judgement
-			'Castform-Rainy': 100, 'Castform-Snowy': 100, 'Castform-Sunny': 100, Delibird: 100, 'Genesect-Douse': 80, Luvdisc: 100, Spinda: 100, Unown: 100,
-		};
-		const tier = toID(species.tier).replace('bl', '');
-		const level = this.adjustLevel ||
-					  species.randomBattleLevel ||
-					  customScale[species.name] ||
-					  levelScale[tier] ||
-					  (species.nfe ? 90 : 80);
+		const level = this.adjustLevel || species.randomBattleLevel || (species.nfe ? 90 : 80);
 
 		// Prepare optimal HP
 		const srWeakness = this.dex.getEffectiveness('Rock', species);
