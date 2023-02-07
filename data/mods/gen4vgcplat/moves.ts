@@ -1571,7 +1571,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	"skullbash": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 100,
+		"basePower": 135,
 		"category": "Physical",
 		"pp": 15,
 		"type": "Rock",
@@ -1835,7 +1835,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	"bonemerang": {
 		"inherit": true,
 		"accuracy": 95,
-		"basePower": 45,
+		"basePower": 50,
 		"category": "Physical",
 		"pp": 10,
 		"type": "Ground",
@@ -5160,7 +5160,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"headsmash": {
 		"inherit": true,
-		"accuracy": 80,
+		"accuracy": 85,
 		"basePower": 120,
 		"category": "Physical",
 		"pp": 5,

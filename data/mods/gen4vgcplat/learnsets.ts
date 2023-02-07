@@ -33432,6 +33432,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	"murkrow": {
 		"inherit": true,
 		"learnset": {
+			"focusenergy": ["9M"],
 			"peck": [
 				"9L1"
 			],
@@ -36343,6 +36344,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	"sneasel": {
 		"inherit": true,
 		"learnset": {
+			"focusenergy": ["9M"],
 			"scratch": [
 				"9L1"
 			],
@@ -50304,6 +50306,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	"hariyama": {
 		"inherit": true,
 		"learnset": {
+			"wideguard": ["9M"],
 			"seismictoss": [
 				"9L1"
 			],
@@ -61020,6 +61023,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	"tropius": {
 		"inherit": true,
 		"learnset": {
+			"wideguard": ["9M"],
 			"dracometeor": [
 				"9L57"
 			],
@@ -61414,6 +61418,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	"absol": {
 		"inherit": true,
 		"learnset": {
+			"focusenergy": ["9M"],
 			"bite": [
 				"9L1"
 			],
@@ -70926,6 +70931,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	"pachirisu": {
 		"inherit": true,
 		"learnset": {
+			"nuzzle": ["9M"],
 			"thunderwave": [
 				"9M"
 			],
@@ -76901,6 +76907,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	"skorupi": {
 		"inherit": true,
 		"learnset": {
+			"focusenergy": ["9M"],
 			"bite": [
 				"9L1"
 			],
@@ -77295,6 +77302,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	"croagunk": {
 		"inherit": true,
 		"learnset": {
+			"focusenergy": ["9M"],
 			"cut": [
 				"9L1"
 			],
@@ -81383,6 +81391,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	"gallade": {
 		"inherit": true,
 		"learnset": {
+			"focusenergy": ["9M"],
+			"wideguard": ["9M"],
 			"leafblade": [
 				"9L1"
 			],
