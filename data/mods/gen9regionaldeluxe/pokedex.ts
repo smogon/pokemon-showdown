@@ -3903,7 +3903,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Sunflora",
 		types: ["Grass"],
 		baseStats: {hp: 75, atk: 75, def: 55, spa: 105, spd: 85, spe: 30},
-		abilities: {0: "Chlorophyll", 1: "Solar Power", H: "Early Bird"},
+		abilities: {0: "Chlorophyll", 1: "Solar Power", H: "Drought"},
 		heightm: 0.8,
 		weightkg: 8.5,
 		color: "Yellow",
