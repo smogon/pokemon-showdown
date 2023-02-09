@@ -5384,7 +5384,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	eternatuseternamax: {
 		// isNonstandard: "Past",
-		tier: "OU",
+		tier: "AG",
 	},
 	kubfu: {
 //		isNonstandard: "Unobtainable",
@@ -5393,7 +5393,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	urshifu: {
 //		isNonstandard: "Unobtainable",
-		tier: "OU",
+		tier: "Uber",
 		natDexTier: "Uber",
 	},
 	urshifurapidstrike: {
