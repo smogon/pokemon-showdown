@@ -1745,7 +1745,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Eartquake", "Extreme Speed", "Stone Edge", "Swords Dance"],
+                "movepool": ["Earthquake", "Extreme Speed", "Stone Edge", "Swords Dance"],
                 "teraTypes": ["Normal"]
             }
         ]
