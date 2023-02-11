@@ -329,12 +329,12 @@
         "sets": [
             {
                 "role": "Fast Bulky Setup",
-                "movepool": ["Bulk Up", "Close Combat", "Liquidation", "Raging Bull", "Substitute"],
+                "movepool": ["Bulk Up", "Close Combat", "Liquidation", "Substitute"],
                 "teraTypes": ["Water"]
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["Aqua Jet", "Bulk Up", "Close Combat", "Raging Bull", "Stone Edge", "Wave Crash"],
+                "movepool": ["Aqua Jet", "Bulk Up", "Close Combat", "Liquidation", "Stone Edge", "Wave Crash"],
                 "teraTypes": ["Water"]
             }
         ]
