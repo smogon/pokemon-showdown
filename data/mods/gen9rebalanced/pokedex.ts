@@ -2702,7 +2702,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Scyther",
 		types: ["Bug", "Flying"],
 		baseStats: {hp: 70, atk: 110, def: 80, spa: 55, spd: 80, spe: 105},
-		abilities: {0: "Swarm", 1: "Technician", H: "Steadfast"},
+		abilities: {0: "Swarm", 1: "Technician", H: "Sharpness"},
 		heightm: 1.5,
 		weightkg: 56,
 		color: "Green",
