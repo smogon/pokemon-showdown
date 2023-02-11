@@ -337,7 +337,7 @@ export class RandomTeams {
 		for (const moveid of moves) {
 			const move = this.dex.moves.get(moveid);
 
-			let moveType = this.getMoveType(move, species, abilities, teraType);
+			const moveType = this.getMoveType(move, species, abilities, teraType);
 			if (move.damage || move.damageCallback) {
 				// Moves that do a set amount of damage:
 				counter.add('damage');
@@ -568,21 +568,21 @@ export class RandomTeams {
 	getMoveType(move: Move, species: Species, abilities: Set<string>, teraType: string): string {
 		if (move.id === 'terablast') return teraType;
 		if (['judgment', 'revelationdance'].includes(move.id)) return species.types[0];
-		
+
 		if (move.name === "Raging Bull" && species.name.startsWith("Tauros-Paldea")) {
 			if (species.name.endsWith("Combat")) return "Fighting";
 			if (species.name.endsWith("Blaze")) return "Fire";
 			if (species.name.endsWith("Aqua")) return "Water";
 		}
-		
-		let moveType = move.type;
+
+		const moveType = move.type;
 		if (moveType === 'Normal') {
 			if (abilities.has('Aerilate')) return 'Flying';
 			if (abilities.has('Galvanize')) return 'Electric';
 			if (abilities.has('Pixilate')) return 'Fairy';
 			if (abilities.has('Refrigerate')) return 'Ice';
 		}
-		return moveType
+		return moveType;
 	}
 
 	// Generate random moveset for a given species, role, tera type.
@@ -664,7 +664,7 @@ export class RandomTeams {
 			const priorityMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
-				let moveType = this.getMoveType(move, species, abilities, teraType);
+				const moveType = this.getMoveType(move, species, abilities, teraType);
 				if (types.includes(moveType) && move.priority > 0 && move.category !== 'Status') {
 					priorityMoves.push(moveid);
 				}
@@ -683,7 +683,7 @@ export class RandomTeams {
 				const stabMoves = [];
 				for (const moveid of movePool) {
 					const move = this.dex.moves.get(moveid);
-					let moveType = this.getMoveType(move, species, abilities, teraType);
+					const moveType = this.getMoveType(move, species, abilities, teraType);
 					if (type === moveType &&
 						(move.basePower > 30 || move.multihit || move.basePowerCallback) &&
 						(!this.noStab.includes(moveid) || abilities.has('Technician') && moveid === 'machpunch')) {
@@ -703,7 +703,7 @@ export class RandomTeams {
 			const stabMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
-				let moveType = this.getMoveType(move, species, abilities, teraType);
+				const moveType = this.getMoveType(move, species, abilities, teraType);
 				if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
 					if (types.includes(moveType)) {
 						stabMoves.push(moveid);
@@ -722,8 +722,7 @@ export class RandomTeams {
 			const stabMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
-				let moveType = move.type;
-				if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
+				const moveType = this.getMoveType(move, species, abilities, teraType);
 				if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
 					if (teraType === moveType) {
 						stabMoves.push(moveid);
@@ -774,7 +773,7 @@ export class RandomTeams {
 				for (const moveid of moves) {
 					const move = this.dex.moves.get(moveid);
 					if (move.basePower > 30 || move.multihit || move.basePowerCallback) {
-						let moveType = this.getMoveType(move, species, abilities, teraType);
+						const moveType = this.getMoveType(move, species, abilities, teraType);
 						currentAttackType = moveType;
 					}
 				}
@@ -782,7 +781,7 @@ export class RandomTeams {
 				const coverageMoves = [];
 				for (const moveid of movePool) {
 					const move = this.dex.moves.get(moveid);
-					let moveType = this.getMoveType(move, species, abilities, teraType);
+					const moveType = this.getMoveType(move, species, abilities, teraType);
 					if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
 						if (currentAttackType! !== moveType) coverageMoves.push(moveid);
 					}
