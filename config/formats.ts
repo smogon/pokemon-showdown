@@ -119,6 +119,17 @@ export const Formats: FormatList = [
 			banlist: ['AG', 'King\'s Rock', 'Baton Pass'],
 	},
 
+	{
+		name: "[Gen 9] UU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3713709/">UU Metagame Discussion</a>`,
+		],
+
+		mod: 'gen9rebalanced',
+		ruleset: ['[Gen 9] Rebalanced OU'],
+		banlist: ['OU', 'UUBL'],
+	},
+
 
 	// SS Pseudos Metas
 	///////////////////////////////////////////////////////////////////
