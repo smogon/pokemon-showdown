@@ -1717,6 +1717,11 @@
                 "role": "Bulky Support",
                 "movepool": ["Focus Blast", "Hex", "Recover", "Will-O-Wisp"],
                 "teraTypes": ["Fighting", "Normal"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Focus Blast", "Judgment", "Recover"],
+                "teraTypes": ["Fighting", "Normal", "Ghost"]
             }
         ]
     },
