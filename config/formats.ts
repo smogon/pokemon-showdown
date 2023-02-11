@@ -120,7 +120,7 @@ export const Formats: FormatList = [
 	},
 
 	{
-		name: "[Gen 9] UU",
+		name: "[Gen 9] Rebalanced UU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3713709/">UU Metagame Discussion</a>`,
 		],
