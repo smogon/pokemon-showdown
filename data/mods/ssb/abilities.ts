@@ -99,7 +99,7 @@ export function changeMoves(context: Battle, pokemon: Pokemon, newMoves: (string
 export const Abilities: {[k: string]: ModdedAbilityData} = {
 	/*
 	// Example
-	"abilityid": {
+	abilityid: {
 		desc: "", // long description
 		shortDesc: "", // short description, shows up in /dt
 		name: "Ability Name",

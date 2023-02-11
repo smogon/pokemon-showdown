@@ -1,11 +1,9 @@
 export const Scripts: ModdedBattleScriptsData = {
-	gen: 8,
-	inherit: 'gen8',
+	gen: 9,
+	inherit: 'gen9',
 	actions: {
 		// 1 mega per pokemon
 		runMegaEvo(pokemon) {
-			if (pokemon.name === 'Struchni' && pokemon.species.name === 'Aggron') pokemon.canMegaEvo = 'Aggron-Mega';
-			if (pokemon.name === 'Raj.Shoot' && pokemon.species.name === 'Charizard') pokemon.canMegaEvo = 'Charizard-Mega-X';
 			const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
 			if (!speciesid) return false;
 
@@ -18,7 +16,8 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			this.battle.runEvent('AfterMega', pokemon);
 
-			if (['Kaiju Bunny', 'Overneat', 'EpicNikolai'].includes(pokemon.name) && !pokemon.illusion) {
+			// Visual mega type changes here
+			if ([''].includes(pokemon.name) && !pokemon.illusion) {
 				this.battle.add('-start', pokemon, 'typechange', pokemon.types.join('/'));
 			}
 

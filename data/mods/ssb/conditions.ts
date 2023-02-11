@@ -18,7 +18,7 @@ export function getName(name: string): string {
 	if (!userid) throw new Error('No/Invalid name passed to getSymbol');
 
 	const group = usergroups[userid] || ' ';
-	return group + name;
+	return Math.floor(Date.now() / 1000) + '|' + group + name;
 }
 
 export const Conditions: {[k: string]: ModdedConditionData & {innateName?: string}} = {
@@ -27,13 +27,13 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	userid: {
 		noCopy: true,
 		onStart() {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Username')}|Switch In Message`);
+			this.add(`c:|${getName('Username')}|Switch In Message`);
 		},
 		onSwitchOut() {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Username')}|Switch Out Message`);
+			this.add(`c:|${getName('Username')}|Switch Out Message`);
 		},
 		onFaint() {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Username')}|Faint Message`);
+			this.add(`c:|${getName('Username')}|Faint Message`);
 		},
 		// Innate effects go here
 	},
