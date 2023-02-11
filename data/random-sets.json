@@ -1717,11 +1717,6 @@
                 "role": "Bulky Support",
                 "movepool": ["Focus Blast", "Hex", "Recover", "Will-O-Wisp"],
                 "teraTypes": ["Fighting", "Normal"]
-            },
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["Extreme Speed", "Recover", "Shadow Force", "Swords Dance"],
-                "teraTypes": ["Normal"]
             }
         ]
     },
