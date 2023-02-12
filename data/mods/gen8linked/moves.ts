@@ -20,13 +20,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryHit(target, pokemon) {
 			const action = this.queue.willMove(target);
 			if (action) {
-				const noMeFirst = [
-					'chatter', 'counter', 'covet', 'focuspunch', 'mefirst', 'metalburst', 'mirrorcoat', 'struggle', 'thief',
-				];
 				// Mod-specific: Me First copies the first move in the link
 				// @ts-ignore
 				const move = this.dex.getActiveMove(action.linked?.[0] || action.move);
-				if (move.category !== 'Status' && !noMeFirst.includes(move.id)) {
+				if (move.category !== 'Status' && !move.flags['mefirst']) {
 					pokemon.addVolatile('mefirst');
 					this.actions.useMove(move, pokemon, target);
 					return null;

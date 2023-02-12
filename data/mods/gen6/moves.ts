@@ -97,7 +97,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mefirst: {
 		inherit: true,
-		flags: {},
+		flags: {protect: 1, bypasssub: 1, mefirst: 1},
 	},
 	minimize: {
 		inherit: true,

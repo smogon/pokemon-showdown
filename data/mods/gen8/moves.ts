@@ -89,6 +89,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
+	chatter: {
+		inherit: true,
+		flags: {protect: 1, mirror: 1, sound: 1, distance: 1, bypasssub: 1, mefirst: 1},
+	},
 	clangingscales: {
 		inherit: true,
 		isNonstandard: null,
