@@ -193,7 +193,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const noEncore = ['encore', 'metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'struggle', 'transform'];
 				const lockedMove = target.lastMoveEncore?.id || '';
 				const moveIndex = lockedMove ? target.moves.indexOf(lockedMove) : -1;
-				if (moveIndex < 0 || noEncore.includes(lockedMove) || target.moveSlots[moveIndex].pp <= 0) {
+				if (moveIndex < 0 || target.lastMoveEncore?.flags['encore'] || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed
 					return false;
 				}
@@ -403,6 +403,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	metronome: {
 		inherit: true,
+		flags: {encore: 1},
 		noMetronome: [
 			"Counter", "Destiny Bond", "Detect", "Endure", "Metronome", "Mimic", "Mirror Coat", "Protect", "Sketch", "Sleep Talk", "Struggle", "Thief",
 		],
@@ -757,6 +758,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	sleeptalk: {
 		inherit: true,
+		flags: {encore: 1},
 		onHit(pokemon) {
 			const NoSleepTalk = ['bide', 'sleeptalk'];
 			const moves = [];

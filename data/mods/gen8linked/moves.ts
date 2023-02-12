@@ -217,21 +217,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 3,
 			noCopy: true, // doesn't get copied by Z-Baton Pass
 			onStart(target) {
-				const noEncore = [
-					'assist', 'copycat', 'encore', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'sketch', 'sleeptalk', 'struggle', 'transform',
-				];
 				let lastMove: Move | ActiveMove | null = target.m.lastMoveAbsolute;
 				if (!lastMove || target.volatiles['dynamax']) return false;
 				if ((lastMove as ActiveMove).isZOrMaxPowered) lastMove = this.dex.moves.get(lastMove.baseMove);
 				// @ts-ignore
 				const linkedMoves: [string, string] = target.getLinkedMoves(true);
 				const moveIndex = target.moves.indexOf(lastMove.id);
-				if (linkedMoves.includes(lastMove.id) && noEncore.includes(linkedMoves[0]) && noEncore.includes(linkedMoves[1])) {
+				if (linkedMoves.includes(lastMove.id) && this.dex.moves.get((linkedMoves[0])).flags['encore'] && this.dex.moves.get((linkedMoves[1])).flags['encore']) {
 					// both moves cannot be encored
 					delete target.volatiles['encore'];
 					return false;
 				}
-				if (lastMove.isZ || noEncore.includes(lastMove.id) ||
+				if (lastMove.isZ || lastMove.flags['encore'] ||
 					(target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)) {
 					// it failed
 					delete target.volatiles['encore'];
