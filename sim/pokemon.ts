@@ -778,7 +778,7 @@ export class Pokemon {
 			} else {
 				targets.push(target);
 			}
-			if (target.fainted && !move.isFutureMove) {
+			if (target.fainted && !move.flags['futuremove']) {
 				return {targets: [], pressureTargets: []};
 			}
 			if (selectedTarget !== target) {

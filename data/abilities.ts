@@ -735,7 +735,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	cursedbody: {
 		onDamagingHit(damage, target, source, move) {
 			if (source.volatiles['disable']) return;
-			if (!move.isMax && !move.isFutureMove && move.id !== 'struggle') {
+			if (!move.isMax && !move.flags['futuremove'] && move.id !== 'struggle') {
 				if (this.randomChance(3, 10)) {
 					source.addVolatile('disable', this.effectState.target);
 				}
@@ -2078,7 +2078,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	libero: {
 		onPrepareHit(source, target, move) {
 			if (this.effectState.libero) return;
-			if (move.hasBounced || move.isFutureMove || move.sourceEffect === 'snatch') return;
+			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
@@ -3147,7 +3147,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	protean: {
 		onPrepareHit(source, target, move) {
 			if (this.effectState.protean) return;
-			if (move.hasBounced || move.isFutureMove || move.sourceEffect === 'snatch') return;
+			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;

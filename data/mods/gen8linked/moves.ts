@@ -351,7 +351,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onFaint(target, source, effect) {
 				if (!source || source.fainted || !effect) return;
 				const lastMove: Move | ActiveMove | null = source.m.lastMoveAbsolute;
-				if (effect.effectType === 'Move' && !effect.isFutureMove && lastMove) {
+				if (effect.effectType === 'Move' && !effect.flags['futuremove'] && lastMove) {
 					for (const moveSlot of source.moveSlots) {
 						if (moveSlot.id === lastMove.id) {
 							moveSlot.pp = 0;
@@ -411,7 +411,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onFaint(target, source, effect) {
 				if (!source || !effect || target.side === source.side) return;
-				if (effect.effectType === 'Move' && !effect.isFutureMove) {
+				if (effect.effectType === 'Move' && !effect.flags['futuremove']) {
 					if (source.volatiles['dynamax']) {
 						this.add('-hint', "Dynamaxed Pokémon are immune to Destiny Bond.");
 						return;

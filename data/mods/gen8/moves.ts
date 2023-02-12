@@ -217,7 +217,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	futuresight: {
 		inherit: true,
-		flags: {},
+		flags: {futuremove: 1},
 	},
 	geargrind: {
 		inherit: true,

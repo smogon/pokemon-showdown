@@ -367,10 +367,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				name: "Doom Desire",
 				basePower: 120,
 				category: "Special",
-				flags: {},
+				flags: {futuremove: 1},
 				willCrit: false,
 				type: '???',
-				isFutureMove: true,
 			} as unknown as ActiveMove;
 			const damage = this.actions.getDamage(source, target, moveData, true);
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
@@ -384,9 +383,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					basePower: 0,
 					damage: damage,
 					category: "Special",
-					flags: {},
+					flags: {futuremove: 1},
 					effectType: 'Move',
-					isFutureMove: true,
 					type: '???',
 				},
 			});
@@ -583,10 +581,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				name: "Future Sight",
 				basePower: 80,
 				category: "Special",
-				flags: {},
+				flags: {futuremove: 1},
 				willCrit: false,
 				type: '???',
-				isFutureMove: true,
 			} as unknown as ActiveMove;
 			const damage = this.actions.getDamage(source, target, moveData, true);
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
@@ -600,9 +597,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					basePower: 0,
 					damage: damage,
 					category: "Special",
-					flags: {},
+					flags: {futuremove: 1},
 					effectType: 'Move',
-					isFutureMove: true,
 					type: '???',
 				},
 			});

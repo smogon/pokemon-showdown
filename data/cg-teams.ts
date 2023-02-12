@@ -457,7 +457,7 @@ export default class TeamGenerator {
 		if (move.selfdestruct) weight *= 0.3;
 		if (move.recoil) weight *= 1 - (move.recoil[0] / move.recoil[1]);
 		if (move.mindBlownRecoil) weight *= 0.25;
-		if (move.isFutureMove) weight *= 0.3;
+		if (move.flags['futuremove']) weight *= 0.3;
 		// TODO: account for normal higher-crit-chance moves
 		if (move.willCrit) weight *= 1.45;
 

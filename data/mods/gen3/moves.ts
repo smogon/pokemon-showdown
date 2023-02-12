@@ -269,9 +269,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					basePower: 0,
 					damage: damage,
 					category: "Physical",
-					flags: {},
+					flags: {futuremove: 1},
 					effectType: 'Move',
-					isFutureMove: true,
 					type: '???',
 				},
 			});

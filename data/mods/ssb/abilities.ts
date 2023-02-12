@@ -1931,7 +1931,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (source.volatiles['leechseed']) return;
-			if (!move.isFutureMove) {
+			if (!move.flags['futuremove']) {
 				source.addVolatile('leechseed', this.effectState.target);
 			}
 		},
