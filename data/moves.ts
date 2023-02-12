@@ -6452,7 +6452,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Future Sight",
 		pp: 10,
 		priority: 0,
-		flags: {},
+		flags: {allyanim: 1},
 		ignoreImmunity: true,
 		isFutureMove: true,
 		onTry(source, target) {
