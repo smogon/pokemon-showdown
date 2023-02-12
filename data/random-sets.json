@@ -2235,6 +2235,11 @@
                 "role": "Bulky Setup",
                 "movepool": ["Calm Mind", "Moonblast", "Protect", "Wish"],
                 "teraTypes": ["Steel"]
+            },
+            {
+                "role": "Tera Blast user",
+                "movepool": ["Calm Mind", "Moonblast", "Synthesis", "Tera Blast"],
+                "teraTypes": ["Ground"]
             }
         ]
     },
@@ -2274,12 +2279,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Calm Mind", "Hyper Voice", "Protect", "Wish"],
-                "teraTypes": ["Fairy", "Steel"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Calm Mind", "Hyper Voice", "Tera Blast", "Trailblaze"],
-                "teraTypes": ["Ground"]
+                "teraTypes": ["Steel"]
             }
         ]
     },
@@ -2915,6 +2915,11 @@
                 "role": "Fast Attacker",
                 "movepool": ["Close Combat", "Megahorn", "No Retreat", "Poison Jab", "Rock Slide"],
                 "teraTypes": ["Fighting", "Ghost"]
+            },
+            {
+                "role": "Tera Blast user",
+                "movepool": ["Close Combat", "No Retreat", "Poison Jab", "Tera Blast"],
+                "teraTypes": ["Ghost"]
             }
         ]
     },
