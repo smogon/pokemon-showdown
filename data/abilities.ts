@@ -2112,7 +2112,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onAnyRedirectTarget(target, source, source2, move) {
-			if (move.type !== 'Electric' || ['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
+			if (move.type !== 'Electric' || move.flags['pledgecombo']) return;
 			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
 			if (this.validTarget(this.effectState.target, source, redirectTarget)) {
 				if (move.smartTarget) move.smartTarget = false;
@@ -4236,7 +4236,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onAnyRedirectTarget(target, source, source2, move) {
-			if (move.type !== 'Water' || ['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
+			if (move.type !== 'Water' || move.flags['pledgecombo']) return;
 			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
 			if (this.validTarget(this.effectState.target, source, redirectTarget)) {
 				if (move.smartTarget) move.smartTarget = false;
