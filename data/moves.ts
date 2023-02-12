@@ -9596,7 +9596,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Imprison",
 		pp: 10,
 		priority: 0,
-		flags: {snatch: 1, bypasssub: 1},
+		flags: {snatch: 1, bypasssub: 1, mustpressure: 1},
 		volatileStatus: 'imprison',
 		condition: {
 			noCopy: true,
@@ -9619,7 +9619,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		secondary: null,
-		pressureTarget: "foeSide",
 		target: "self",
 		type: "Psychic",
 		zMove: {boost: {spd: 2}},
@@ -17443,7 +17442,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Snatch",
 		pp: 10,
 		priority: 4,
-		flags: {bypasssub: 1},
+		flags: {bypasssub: 1, mustpressure: 1},
 		volatileStatus: 'snatch',
 		condition: {
 			duration: 1,
@@ -17464,7 +17463,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		secondary: null,
-		pressureTarget: "foeSide",
 		target: "self",
 		type: "Dark",
 		zMove: {boost: {spe: 2}},
@@ -17849,7 +17847,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Spikes",
 		pp: 20,
 		priority: 0,
-		flags: {reflectable: 1, nonsky: 1},
+		flags: {reflectable: 1, nonsky: 1, mustpressure: 1},
 		sideCondition: 'spikes',
 		condition: {
 			// this is a side condition
@@ -18176,7 +18174,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Stealth Rock",
 		pp: 20,
 		priority: 0,
-		flags: {reflectable: 1},
+		flags: {reflectable: 1, mustpressure: 1},
 		sideCondition: 'stealthrock',
 		condition: {
 			// this is a side condition
@@ -18318,7 +18316,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		secondary: null,
-		pressureTarget: "self",
 		target: "foeSide",
 		type: "Bug",
 		zMove: {boost: {spe: 1}},
@@ -19535,7 +19532,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Tera Blast",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, mustpressure: 1},
 		onModifyType(move, pokemon, target) {
 			if (pokemon.terastallized) {
 				move.type = pokemon.teraType;
@@ -20040,7 +20037,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Toxic Spikes",
 		pp: 20,
 		priority: 0,
-		flags: {reflectable: 1, nonsky: 1},
+		flags: {reflectable: 1, nonsky: 1, mustpressure: 1},
 		sideCondition: 'toxicspikes',
 		condition: {
 			// this is a side condition
