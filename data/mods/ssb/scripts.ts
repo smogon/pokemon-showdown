@@ -1,6 +1,83 @@
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	inherit: 'gen9',
+	pokemon: {
+		// Modified for Change Tempo
+		getMoveTargets(move, target) {
+			let targets: Pokemon[] = [];
+
+			switch (move.target) {
+			case 'all':
+			case 'foeSide':
+			case 'allySide':
+			case 'allyTeam':
+				if (!move.target.startsWith('foe')) {
+					targets.push(...this.alliesAndSelf());
+				}
+				if (!move.target.startsWith('ally')) {
+					targets.push(...this.foes(true));
+				}
+				if (targets.length && !targets.includes(target)) {
+					this.battle.retargetLastMove(targets[targets.length - 1]);
+				}
+				break;
+			case 'allAdjacent':
+				targets.push(...this.adjacentAllies());
+				// falls through
+			case 'allAdjacentFoes':
+				targets.push(...this.adjacentFoes());
+				if (targets.length && !targets.includes(target)) {
+					this.battle.retargetLastMove(targets[targets.length - 1]);
+				}
+				break;
+			case 'allies':
+				targets = this.alliesAndSelf();
+				break;
+			default:
+				const selectedTarget = target;
+				if (!target || (target.fainted && !target.isAlly(this)) && this.battle.gameType !== 'freeforall') {
+					// If a targeted foe faints, the move is retargeted
+					const possibleTarget = this.battle.getRandomTarget(this, move);
+					if (!possibleTarget) return {targets: [], pressureTargets: []};
+					target = possibleTarget;
+				}
+				if (this.battle.activePerHalf > 1 && !move.tracksTarget) {
+					const isCharging = move.flags['charge'] && !this.volatiles['twoturnmove'] &&
+						!(move.id.startsWith('solarb') && this.battle.field.isWeather(['sunnyday', 'desolateland'])) &&
+						!((this.hasItem('powerherb') || this.hasAbility('changetempo')) && move.id !== 'skydrop');
+					if (!isCharging) {
+						target = this.battle.priorityEvent('RedirectTarget', this, this, move, target);
+					}
+				}
+				if (move.smartTarget) {
+					targets = this.getSmartTargets(target, move);
+					target = targets[0];
+				} else {
+					targets.push(target);
+				}
+				if (target.fainted && !move.isFutureMove) {
+					return {targets: [], pressureTargets: []};
+				}
+				if (selectedTarget !== target) {
+					this.battle.retargetLastMove(target);
+				}
+			}
+
+			// Resolve apparent targets for Pressure.
+			let pressureTargets = targets;
+			switch (move.pressureTarget) {
+			case 'foeSide':
+				pressureTargets = this.foes();
+				break;
+			case 'self':
+				pressureTargets = [];
+				break;
+			// At the moment, there are no other supported targets.
+			}
+
+			return {targets, pressureTargets};
+		},
+	},
 	actions: {
 		// 1 mega per pokemon
 		runMegaEvo(pokemon) {
