@@ -25,25 +25,34 @@ export type MoveTarget =
 
 /** Possible move flags. */
 interface MoveFlags {
+	allyanim?: 1; // The move plays its animation when used on an ally.
+	assist?: 1; // Cannot be selected by Assist.
 	bypasssub?: 1; // Ignores a target's substitute.
 	bite?: 1; // Power is multiplied by 1.5 when used by a Pokemon with the Ability Strong Jaw.
 	bullet?: 1; // Has no effect on Pokemon with the Ability Bulletproof.
 	charge?: 1; // The user is unable to make a move between turns.
 	contact?: 1; // Makes contact.
+	copycat?: 1; // Cannot be selected by Copycat.
 	dance?: 1; // When used by a Pokemon, other Pokemon with the Ability Dancer can attempt to execute the same move.
 	defrost?: 1; // Thaws the user if executed successfully while the user is frozen.
 	distance?: 1; // Can target a Pokemon positioned anywhere in a Triple Battle.
+	encore?: 1; // Encore fails if target used this move.
+	futuremove?: 1; // Targets a slot, and in 2 turns damages that slot.
 	gravity?: 1; // Prevented from being executed or selected during Gravity's effect.
 	heal?: 1; // Prevented from being executed or selected during Heal Block's effect.
 	mirror?: 1; // Can be copied by Mirror Move.
-	allyanim?: 1; // The move has an animation when used on an ally.
+	mustpressure?: 1; // Additional PP is deducted due to Pressure when it ordinarily would not.
+	mustsheerforce?: 1; // Boosted by Sheer Force when it ordinarily would not.
 	nonsky?: 1; // Prevented from being executed or selected in a Sky Battle.
+	parentalbond?: 1; // Cannot be made to hit twice via Parental Bond.
+	pledgecombo?: 1; // Gems will not activate. Cannot be redirected by Storm Drain / Lightning Rod.
 	powder?: 1; // Has no effect on Pokemon which are Grass-type, have the Ability Overcoat, or hold Safety Goggles.
 	protect?: 1; // Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield.
 	pulse?: 1; // Power is multiplied by 1.5 when used by a Pokemon with the Ability Mega Launcher.
 	punch?: 1; // Power is multiplied by 1.2 when used by a Pokemon with the Ability Iron Fist.
 	recharge?: 1; // If this move is successful, the user must recharge on the following turn and cannot make a move.
 	reflectable?: 1; // Bounced back to the original user by Magic Coat or the Ability Magic Bounce.
+	sleeptalk?: 1; // Cannot be selected by Sleep Talk.
 	slicing?: 1; // Power is multiplied by 1.5 when used by a Pokemon with the Ability Sharpness.
 	snatch?: 1; // Can be stolen from the original user and instead used by another Pokemon using Snatch.
 	sound?: 1; // Has no effect on Pokemon with the Ability Soundproof.
