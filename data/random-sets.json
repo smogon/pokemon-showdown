@@ -28,13 +28,8 @@
         "level": 88,
         "sets": [
             {
-                "role": "Fast Support",
-                "movepool": ["Encore", "Nuzzle", "Surf", "Thunderbolt", "Volt Switch"],
-                "teraTypes": ["Water"]
-            },
-            {
                 "role": "Fast Attacker",
-                "movepool": ["Focus Blast", "Grass Knot", "Nasty Plot", "Surf", "Thunderbolt", "Volt Switch"],
+                "movepool": ["Encore", "Focus Blast", "Grass Knot", "Nasty Plot", "Nuzzle", "Surf", "Thunderbolt", "Volt Switch"],
                 "teraTypes": ["Water", "Grass"]
             }
         ]
