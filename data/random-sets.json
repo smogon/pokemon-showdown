@@ -406,7 +406,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Air Slash", "Freeze-Dry", "Haze", "Hurricane", "Roost", "Substitute", "U-turn"],
-                "teraTypes": ["Flying", "Steel"]
+                "teraTypes": ["Flying", "Steel", "Ground", "Poison"]
             }
         ]
     },
