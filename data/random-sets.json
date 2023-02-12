@@ -29,7 +29,12 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["Encore", "Focus Blast", "Grass Knot", "Nasty Plot", "Nuzzle", "Surf", "Thunderbolt", "Volt Switch"],
+                "movepool": ["Encore", "Nuzzle", "Surf", "Thunderbolt", "Volt Switch"],
+                "teraTypes": ["Water"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Focus Blast", "Grass Knot", "Nasty Plot", "Surf", "Thunderbolt", "Volt Switch"],
                 "teraTypes": ["Water", "Grass"]
             }
         ]
@@ -2619,7 +2624,7 @@
             {
                 "role": "Fast Support",
                 "movepool": ["High Jump Kick", "Play Rough", "Power Whip", "Rapid Spin", "Synthesis", "U-turn"],
-                "teraTypes": ["Fighting", "Grass"]
+                "teraTypes": ["Fighting", "Steel"]
             }
         ]
     },
