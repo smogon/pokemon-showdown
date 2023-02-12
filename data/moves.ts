@@ -985,7 +985,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Baddy Bad",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, mirror: 1},
 		self: {
 			sideCondition: 'reflect',
 		},
@@ -1773,7 +1773,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Bouncy Bubble",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1, heal: 1},
+		flags: {protect: 1, mirror: 1, heal: 1},
 		drain: [1, 2],
 		secondary: null,
 		target: "normal",
@@ -2103,7 +2103,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Buzzy Buzz",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, mirror: 1},
 		secondary: {
 			chance: 100,
 			status: 'par',
@@ -5843,7 +5843,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Floaty Fall",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, gravity: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1},
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch',
@@ -6273,7 +6273,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Freezy Frost",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, mirror: 1},
 		onHit() {
 			this.add('-clearallboost');
 			for (const pokemon of this.getAllActive()) {
@@ -6784,7 +6784,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Glitzy Glow",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, mirror: 1},
 		self: {
 			sideCondition: 'lightscreen',
 		},
@@ -7786,7 +7786,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Grassy Glide",
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, protect: 1},
+		flags: {contact: 1, protect: 1, mirror: 1},
 		onModifyPriority(priority, source, target, move) {
 			if (this.field.isTerrain('grassyterrain') && source.isGrounded()) {
 				return priority + 1;
@@ -13579,7 +13579,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Pika Papow",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, mirror: 1},
 		secondary: null,
 		target: "normal",
 		type: "Electric",
@@ -16002,7 +16002,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Sappy Seed",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1},
+		flags: {protect: 1, reflectable: 1, mirror: 1},
 		onHit(target, source) {
 			if (target.hasType('Grass')) return null;
 			target.addVolatile('leechseed', source);
@@ -16868,7 +16868,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Sizzly Slide",
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, protect: 1, defrost: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, defrost: 1},
 		secondary: {
 			chance: 100,
 			status: 'brn',
@@ -17772,7 +17772,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Sparkly Swirl",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, mirror: 1},
 		self: {
 			onHit(pokemon, source, move) {
 				this.add('-activate', source, 'move: Aromatherapy');
@@ -18130,7 +18130,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Splishy Splash",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, mirror: 1},
 		secondary: {
 			chance: 30,
 			status: 'par',
@@ -20657,7 +20657,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Veevee Volley",
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, protect: 1},
+		flags: {contact: 1, protect: 1, mirror: 1},
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -21579,7 +21579,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Zippy Zap",
 		pp: 10,
 		priority: 2,
-		flags: {contact: 1, protect: 1},
+		flags: {contact: 1, protect: 1, mirror: 1},
 		secondary: {
 			chance: 100,
 			self: {
