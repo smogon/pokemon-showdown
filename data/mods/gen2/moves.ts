@@ -190,7 +190,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return this.random(3, 7);
 			},
 			onStart(target) {
-				const noEncore = ['encore', 'metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'struggle', 'transform'];
 				const lockedMove = target.lastMoveEncore?.id || '';
 				const moveIndex = lockedMove ? target.moves.indexOf(lockedMove) : -1;
 				if (moveIndex < 0 || target.lastMoveEncore?.flags['encore'] || target.moveSlots[moveIndex].pp <= 0) {

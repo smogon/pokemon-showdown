@@ -220,7 +220,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// @ts-ignore
 				const linkedMoves: [string, string] = target.getLinkedMoves(true);
 				const moveIndex = target.moves.indexOf(lastMove.id);
-				if (linkedMoves.includes(lastMove.id) && this.dex.moves.get((linkedMoves[0])).flags['encore'] && this.dex.moves.get((linkedMoves[1])).flags['encore']) {
+				if (linkedMoves.includes(lastMove.id) && this.dex.moves.get((linkedMoves[0])).flags['encore'] &&
+					this.dex.moves.get((linkedMoves[1])).flags['encore']) {
 					// both moves cannot be encored
 					delete target.volatiles['encore'];
 					return false;
