@@ -1,4 +1,4 @@
-import RandomGen8Teams from '../gen8/random-teams';
+import RandomTeams from '../../random-teams';
 
 export interface SSBSet {
 	species: string;
@@ -14,7 +14,7 @@ export interface SSBSet {
 	level?: number;
 	happiness?: number;
 	skip?: string;
-	teraType?: string;
+	teraType?: string | string[];
 }
 interface SSBSets {[k: string]: SSBSet}
 
@@ -44,7 +44,7 @@ export const ssbSets: SSBSets = {
 	},
 };
 
-export class RandomStaffBrosTeams extends RandomGen8Teams {
+export class RandomStaffBrosTeams extends RandomTeams {
 	randomStaffBrosTeam(options: {inBattle?: boolean} = {}) {
 		this.enforceNoDirectCustomBanlistChanges();
 
@@ -106,13 +106,15 @@ export class RandomStaffBrosTeams extends RandomGen8Teams {
 				ability: Array.isArray(ssbSet.ability) ? this.sampleNoReplace(ssbSet.ability) : ssbSet.ability,
 				moves: [],
 				nature: ssbSet.nature ? Array.isArray(ssbSet.nature) ? this.sampleNoReplace(ssbSet.nature) : ssbSet.nature : 'Serious',
-				gender: ssbSet.gender || this.sample(['M', 'F', 'N']),
+				gender: ssbSet.gender ? this.sampleIfArray(ssbSet.gender) : this.sample(['M', 'F', 'N']),
 				evs: ssbSet.evs ? {...{hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0}, ...ssbSet.evs} :
 				{hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84},
 				ivs: {...{hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, ...ssbSet.ivs},
 				level: this.adjustLevel || ssbSet.level || 100,
 				happiness: typeof ssbSet.happiness === 'number' ? ssbSet.happiness : 255,
 				shiny: typeof ssbSet.shiny === 'number' ? this.randomChance(1, ssbSet.shiny) : !!ssbSet.shiny,
+				teraType: !ssbSet.teraType ? undefined :
+					Array.isArray(ssbSet.teraType) ? this.sampleNoReplace(ssbSet.teraType) : ssbSet.teraType,
 			};
 			while (set.moves.length < 3 && ssbSet.moves.length > 0) {
 				let move = this.sampleNoReplace(ssbSet.moves);

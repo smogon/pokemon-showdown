@@ -1,5 +1,4 @@
-import {getName} from './conditions';
-import {changeSet, changeMoves} from "./abilities";
+import {changeSet, changeMoves, getName} from "./scripts";
 import {ssbSets} from "./random-teams";
 
 export const Moves: {[k: string]: ModdedMoveData} = {
