@@ -541,6 +541,7 @@ export const Formats: FormatList = [
 		mod: 'gen6',
 		searchShow: false,
 		ruleset: ['Draft'],
+		banlist: ['Soul Dew'],
 	},
 
 	// OM of the Month
