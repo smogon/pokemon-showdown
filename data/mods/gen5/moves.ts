@@ -25,30 +25,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 	},
-	assist: {
-		inherit: true,
-		onHit(target) {
-			const moves = [];
-			for (const pokemon of target.side.pokemon) {
-				if (pokemon === target) continue;
-				for (const moveSlot of pokemon.moveSlots) {
-					const moveid = moveSlot.id;
-					const noAssist = [
-						'assist', 'bestow', 'chatter', 'circlethrow', 'copycat', 'counter', 'covet', 'destinybond', 'detect', 'dragontail', 'endure', 'feint', 'focuspunch', 'followme', 'helpinghand', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'naturepower', 'protect', 'ragepowder', 'sketch', 'sleeptalk', 'snatch', 'struggle', 'switcheroo', 'thief', 'transform', 'trick',
-					];
-					if (moveid && !noAssist.includes(moveid)) {
-						moves.push(moveid);
-					}
-				}
-			}
-			let randomMove = '';
-			if (moves.length) randomMove = this.sample(moves);
-			if (!randomMove) {
-				return false;
-			}
-			this.actions.useMove(randomMove, target);
-		},
-	},
 	assurance: {
 		inherit: true,
 		basePower: 50,
@@ -101,6 +77,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	block: {
 		inherit: true,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
+	},
+	bounce: {
+		inherit: true,
+		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, sleeptalk: 1},
 	},
 	bubble: {
 		inherit: true,
@@ -188,6 +168,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			}
 		},
+	},
+	dig: {
+		inherit: true,
+		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1, sleeptalk: 1},
+	},
+	dive: {
+		inherit: true,
+		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1, sleeptalk: 1},
 	},
 	dracometeor: {
 		inherit: true,
@@ -761,6 +749,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
+	shadowforce: {
+		inherit: true,
+		flags: {contact: 1, charge: 1, mirror: 1, sleeptalk: 1},
+	},
 	sing: {
 		inherit: true,
 		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1},
@@ -785,6 +777,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	skydrop: {
 		inherit: true,
+		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, sleeptalk: 1},
 		onTryHit(target, source, move) {
 			if (target.fainted) return false;
 			if (source.removeVolatile(move.id)) {

@@ -153,7 +153,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	dive: {
 		inherit: true,
-		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1},
+		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1, sleeptalk: 1, assist: 1},
 	},
 	dizzypunch: {
 		inherit: true,

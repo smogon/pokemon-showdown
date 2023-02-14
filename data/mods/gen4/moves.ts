@@ -47,29 +47,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
-	assist: {
-		inherit: true,
-		onHit(target) {
-			const moves = [];
-			for (const pokemon of target.side.pokemon) {
-				if (pokemon === target) continue;
-				for (const move of pokemon.moves) {
-					const noAssist = [
-						'assist', 'chatter', 'copycat', 'counter', 'covet', 'destinybond', 'detect', 'endure', 'feint', 'focuspunch', 'followme', 'helpinghand', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'protect', 'sketch', 'sleeptalk', 'snatch', 'struggle', 'switcheroo', 'thief', 'trick',
-					];
-					if (move && !noAssist.includes(move)) {
-						moves.push(move);
-					}
-				}
-			}
-			let randomMove = '';
-			if (moves.length) randomMove = this.sample(moves);
-			if (!randomMove) {
-				return false;
-			}
-			this.actions.useMove(randomMove, target);
-		},
-	},
 	beatup: {
 		inherit: true,
 		basePower: 10,
@@ -1131,6 +1108,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	naturepower: {
 		inherit: true,
+		flags: {},
 		onHit(pokemon) {
 			this.actions.useMove('triattack', pokemon);
 		},
@@ -1690,7 +1668,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	transform: {
 		inherit: true,
-		flags: {bypasssub: 1},
+		flags: {bypasssub: 1, encore: 1},
 	},
 	trick: {
 		inherit: true,
