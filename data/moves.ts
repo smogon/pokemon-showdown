@@ -4110,7 +4110,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Dragon Darts",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, parentalbond: 1},
 		multihit: 2,
 		smartTarget: true,
 		secondary: null,
@@ -4347,7 +4347,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Dynamax Cannon",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, encore: 1, sleeptalk: 1},
+		flags: {protect: 1, encore: 1, sleeptalk: 1, parentalbond: 1},
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
@@ -4771,7 +4771,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Endeavor",
 		pp: 5,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, parentalbond: 1},
 		onTryImmunity(target, pokemon) {
 			return pokemon.hp < target.hp;
 		},
@@ -4966,7 +4966,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Explosion",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, parentalbond: 1},
 		selfdestruct: "always",
 		secondary: null,
 		target: "allAdjacent",
@@ -5301,7 +5301,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Final Gambit",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, parentalbond: 1},
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
@@ -5738,7 +5738,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Fling",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, allyanim: 1},
+		flags: {protect: 1, mirror: 1, allyanim: 1, parentalbond: 1},
 		onPrepareHit(target, source, move) {
 			if (source.ignoringItem()) return false;
 			const item = source.getItem();
@@ -9350,7 +9350,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Ice Ball",
 		pp: 20,
 		priority: 0,
-		flags: {bullet: 1, contact: 1, protect: 1, mirror: 1},
+		flags: {bullet: 1, contact: 1, protect: 1, mirror: 1, parentalbond: 1},
 		onModifyMove(move, pokemon, target) {
 			if (pokemon.volatiles['iceball'] || pokemon.status === 'slp' || !target) return;
 			pokemon.addVolatile('iceball');
@@ -15602,7 +15602,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Rollout",
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, parentalbond: 1},
 		onModifyMove(move, pokemon, target) {
 			if (pokemon.volatiles['rollout'] || pokemon.status === 'slp' || !target) return;
 			pokemon.addVolatile('rollout');
@@ -16246,7 +16246,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Self-Destruct",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, parentalbond: 1},
 		selfdestruct: "always",
 		secondary: null,
 		target: "allAdjacent",
