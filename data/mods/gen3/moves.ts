@@ -441,6 +441,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: 100,
 	},
+	mimic: {
+		inherit: true,
+		flags: {protect: 1, bypasssub: 1, allyanim: 1, encore: 1},
+	},
 	mirrorcoat: {
 		inherit: true,
 		condition: {
@@ -487,6 +491,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	naturepower: {
 		inherit: true,
+		flags: {},
 		accuracy: 95,
 		onHit(target) {
 			this.actions.useMove('swift', target);
@@ -527,16 +532,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		basePower: 20,
 	},
+	sketch: {
+		inherit: true,
+		flags: {bypasssub: 1, encore: 1},
+	},
 	sleeptalk: {
 		inherit: true,
 		onHit(pokemon) {
 			const moves = [];
 			for (const moveSlot of pokemon.moveSlots) {
-				const move = moveSlot.id;
+				const moveid = moveSlot.id;
 				const pp = moveSlot.pp;
-				const NoSleepTalk = ['assist', 'bide', 'focuspunch', 'metronome', 'mirrormove', 'sleeptalk', 'uproar'];
-				if (move && !(NoSleepTalk.includes(move) || this.dex.moves.get(move).flags['charge'])) {
-					moves.push({move: move, pp: pp});
+				if (moveid && !this.dex.moves.get(moveid).flags['sleeptalk']) {
+					moves.push({move: moveid, pp: pp});
 				}
 			}
 			if (!moves.length) {
@@ -583,6 +591,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	struggle: {
 		inherit: true,
+		flags: {contact: 1, protect: 1},
 		accuracy: 100,
 		recoil: [1, 4],
 		struggleRecoil: false,

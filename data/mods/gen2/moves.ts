@@ -438,6 +438,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mirrormove: {
 		inherit: true,
+		flags: {encore: 1},
 		onHit(pokemon) {
 			const noMirror = ['metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'transform'];
 			const target = pokemon.side.foe.active[0];
@@ -759,11 +760,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		flags: {encore: 1},
 		onHit(pokemon) {
-			const NoSleepTalk = ['bide', 'sleeptalk'];
 			const moves = [];
 			for (const moveSlot of pokemon.moveSlots) {
 				const move = moveSlot.id;
-				if (move && !NoSleepTalk.includes(move) && !this.dex.moves.get(move).flags['charge']) {
+				if (move && !this.dex.moves.get(move).flags['sleeptalk']) {
 					moves.push(move);
 				}
 			}

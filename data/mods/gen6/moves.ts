@@ -169,7 +169,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	naturepower: {
 		inherit: true,
-		flags: {},
+		flags: {sleeptalk: 1},
 	},
 	paraboliccharge: {
 		inherit: true,
@@ -209,7 +209,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	sleeptalk: {
 		inherit: true,
-		flags: {},
+		flags: {sleeptalk: 1},
 	},
 	stockpile: {
 		inherit: true,
