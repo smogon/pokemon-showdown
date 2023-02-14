@@ -43,7 +43,6 @@ interface MoveFlags {
 	mefirst?: 1; // Cannot be selected by Me First.
 	mirror?: 1; // Can be copied by Mirror Move.
 	mustpressure?: 1; // Additional PP is deducted due to Pressure when it ordinarily would not.
-	mustsheerforce?: 1; // Boosted by Sheer Force when it ordinarily would not.
 	nonsky?: 1; // Prevented from being executed or selected in a Sky Battle.
 	parentalbond?: 1; // Cannot be made to hit twice via Parental Bond.
 	pledgecombo?: 1; // Gems will not activate. Cannot be redirected by Storm Drain / Lightning Rod.
