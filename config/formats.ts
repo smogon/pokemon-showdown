@@ -561,9 +561,9 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Convergence Legality', '!Obtainable Abilities', 'Min Source Gen = 9'],
 		banlist: [
-			'Chi-Yu', 'Cyclizar', 'Dondozo', 'Flutter Mane', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Palafin', 'Slaking', 'Arena Trap', 'Comatose', 'Imposter',
-			'Moody', 'Pure Power', 'Shadow Tag', 'Speed Boost', 'Damp Rock', 'King\'s Rock', 'Baton Pass', 'Extreme Speed', 'Last Respects', 'Rage Fist', 'Revival Blessing',
-			'Shell Smash', 'Spore', 'Transform',
+			'Chi-Yu', 'Cyclizar', 'Dondozo', 'Flutter Mane', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Palafin', 'Slaking', 'Arena Trap',
+			'Comatose', 'Imposter', 'Moody', 'Pure Power', 'Shadow Tag', 'Speed Boost', 'Damp Rock', 'King\'s Rock', 'Baton Pass',
+			'Extreme Speed', 'Last Respects', 'Rage Fist', 'Revival Blessing', 'Shell Smash', 'Spore', 'Transform',
 		],
 	},
 	{
