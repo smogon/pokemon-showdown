@@ -42,6 +42,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Memes That Burn The Sky',
 		evs: {hp: 252, spa: 252, spd: 4}, ivs: {spe: 0}, nature: 'Quiet', teraType: 'Rock',
 	},
+	trace: {
+		species: 'Delphox', ability: 'Eyes of Eternity', item: 'Life Orb', gender: 'F',
+		moves: ['Calm Mind', 'Inferno', 'Recover'],
+		signatureMove: 'Chronostasis',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest', teraType: 'Psychic',
+	},
 };
 
 export class RandomStaffBrosTeams extends RandomTeams {

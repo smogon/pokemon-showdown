@@ -31,4 +31,16 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Aeonic')}|i guess they never miss huh`);
 		},
 	},
+	traceuser: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('trace')}|I'm both the beginning and the end.`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('trace')}|Why does the violence never end?`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('trace')}|How disappointingly short a dream lasts.`);
+		},
+	},
 };
