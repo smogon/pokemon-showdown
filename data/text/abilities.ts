@@ -550,8 +550,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 			shortDesc: "This Pokemon's Flying-type moves have their priority increased by 1.",
 		},
 	},
-	galvanize: {
-		name: "Galvanize",
+	Galvanise: {
+		name: "Galvanise",
 		desc: "This Pokemon's Normal-type moves become Electric-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
 		shortDesc: "This Pokemon's Normal-type moves become Electric type and have 1.2x power.",
 	},

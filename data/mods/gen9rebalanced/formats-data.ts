@@ -1954,7 +1954,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "RU",
 	},
 	gallade: {
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DUU",
 		natDexTier: "RU",
 	},
@@ -2092,7 +2092,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	medicham: {
-		tier: "OU",
+		tier: "UUBL",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
@@ -5813,12 +5813,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	*/
 	ironmoth: {
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "DUU",
 		natDexTier: "UU",
 	},
 	ironhands: {
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "DOU",
 		natDexTier: "RU",
 	},

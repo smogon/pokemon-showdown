@@ -341,7 +341,7 @@ export class RandomTeams {
 			if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
 			if (moveType === 'Normal') {
 				if (abilities.has('Aerilate')) moveType = 'Flying';
-				if (abilities.has('Galvanize')) moveType = 'Electric';
+				if (abilities.has('Galvanise')) moveType = 'Electric';
 				if (abilities.has('Pixilate')) moveType = 'Fairy';
 				if (abilities.has('Refrigerate')) moveType = 'Ice';
 			}
@@ -654,7 +654,7 @@ export class RandomTeams {
 				let moveType = move.type;
 				if (moveType === 'Normal') {
 					if (abilities.has('Aerilate')) moveType = 'Flying';
-					if (abilities.has('Galvanize')) moveType = 'Electric';
+					if (abilities.has('Galvanise')) moveType = 'Electric';
 					if (abilities.has('Pixilate')) moveType = 'Fairy';
 					if (abilities.has('Refrigerate')) moveType = 'Ice';
 				}
@@ -680,7 +680,7 @@ export class RandomTeams {
 					if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
 					if (moveType === 'Normal') {
 						if (abilities.has('Aerilate')) moveType = 'Flying';
-						if (abilities.has('Galvanize')) moveType = 'Electric';
+						if (abilities.has('Galvanise')) moveType = 'Electric';
 						if (abilities.has('Pixilate')) moveType = 'Fairy';
 						if (abilities.has('Refrigerate')) moveType = 'Ice';
 					}
@@ -708,7 +708,7 @@ export class RandomTeams {
 				if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
 				if (moveType === 'Normal') {
 					if (abilities.has('Aerilate')) moveType = 'Flying';
-					if (abilities.has('Galvanize')) moveType = 'Electric';
+					if (abilities.has('Galvanise')) moveType = 'Electric';
 					if (abilities.has('Pixilate')) moveType = 'Fairy';
 					if (abilities.has('Refrigerate')) moveType = 'Ice';
 				}
@@ -787,7 +787,7 @@ export class RandomTeams {
 						if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
 						if (moveType === 'Normal') {
 							if (abilities.has('Aerilate')) moveType = 'Flying';
-							if (abilities.has('Galvanize')) moveType = 'Electric';
+							if (abilities.has('Galvanise')) moveType = 'Electric';
 							if (abilities.has('Pixilate')) moveType = 'Fairy';
 							if (abilities.has('Refrigerate')) moveType = 'Ice';
 						}
@@ -803,7 +803,7 @@ export class RandomTeams {
 					if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
 					if (moveType === 'Normal') {
 						if (abilities.has('Aerilate')) moveType = 'Flying';
-						if (abilities.has('Galvanize')) moveType = 'Electric';
+						if (abilities.has('Galvanise')) moveType = 'Electric';
 						if (abilities.has('Pixilate')) moveType = 'Fairy';
 						if (abilities.has('Refrigerate')) moveType = 'Ice';
 					}
