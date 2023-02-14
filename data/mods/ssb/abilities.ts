@@ -1,9 +1,3 @@
-import {SSBSet, ssbSets} from "./random-teams";
-import {getName} from './scripts';
-
-// Used in many abilities, placed here to reduce the number of updates needed and to reduce the chance of errors
-const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream'];
-
 export const Abilities: {[k: string]: ModdedAbilityData} = {
 	/*
 	// Example

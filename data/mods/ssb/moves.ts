@@ -1,6 +1,3 @@
-import {changeSet, changeMoves, getName} from "./scripts";
-import {ssbSets} from "./random-teams";
-
 export const Moves: {[k: string]: ModdedMoveData} = {
 	/*
 	// Example

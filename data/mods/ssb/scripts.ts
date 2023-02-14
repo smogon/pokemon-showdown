@@ -27,7 +27,7 @@ export function getName(name: string): string {
  * @param pokemon the Pokemon to assign the set to
  * @param newSet the SSBSet to assign
  */
- export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, changeAbility = false) {
+export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, changeAbility = false) {
 	if (pokemon.transformed) return;
 	const evs: StatsTable = {
 		hp: newSet.evs?.hp || 0,
