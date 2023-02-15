@@ -85,6 +85,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		isBreakable: true,
 	},
 
+	// BreadLoeuf
+	painfulexit: {
+		desc: "When this Pokemon switches out, foes lose 25% HP.",
+		name: "Painful Exit",
+		onSwitchOut(pokemon) {
+			this.add(`c:|${getName('BreadLoeuf')}|Just kidding!! Take this KNUCKLE SANDWICH`);
+			for (const foe of pokemon.foes()) {
+				if (!foe || foe.fainted || !foe.hp) continue;
+				this.add(`-anim`, pokemon, "Tackle", foe);
+				this.damage(foe.hp / 4, foe, pokemon);
+			}
+		},
+	},
+
 	// Mia
 	hacking: {
 		name: "Hacking",

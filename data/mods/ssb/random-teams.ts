@@ -54,6 +54,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Sire Switch',
 		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful', teraType: 'Poison', skip: 'A Quag To The Past',
 	},
+	BreadLoeuf: {
+		species: 'Dachsbun', ability: 'Painful Exit', item: 'Leftovers', gender: '',
+		moves: ['Wish', 'Rest', 'Play Rough'],
+		signatureMove: "Baker's Douze Off",
+		evs: {hp: 252, def: 252, spd: 4}, nature: 'Impish', teraType: 'Fairy',
+	},
 	Mia: {
 		species: 'Mewtwo', ability: 'Hacking', item: 'Mewtwonite X', gender: 'F',
 		moves: ['Photon Geyser', 'Drain Punch', 'Iron Head'],

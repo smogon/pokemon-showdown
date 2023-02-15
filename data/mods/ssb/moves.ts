@@ -132,6 +132,31 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ground",
 	},
 
+	// BreadLoeuf
+	bakersdouzeoff: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "User wakes up, then switches out.",
+		name: "Baker's Douze Off",
+		gen: 9,
+		pp: 15,
+		priority: 0,
+		flags: {},
+		sleepUsable: true,
+		onTry(pokemon) {
+			return !!this.canSwitch(pokemon.side);
+		},
+		onPrepareHit(pokemon) {
+			this.attrLastMove('[anim] Teleport');
+			if (pokemon.status === 'slp') pokemon.cureStatus();
+		},
+		selfSwitch: true,
+		secondary: null,
+		target: "self",
+		type: "Normal",
+	},
+
 	// Mia
 	testinginproduction: {
 		accuracy: true,

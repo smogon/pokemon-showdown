@@ -72,6 +72,23 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 	},
+	breadloeuf: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('BreadLoeuf')}|I loeuf you <3`);
+		},
+		// onSwitchOut implemented in ability instead
+		onFaint() {
+			this.add(`c:|${getName('BreadLoeuf')}|Oh, ma vie... c'est 'pitable'...`);
+		},
+		onFoeFaint(target, source, effect) {
+			if (source === this.effectState.target && effect?.name === 'Painful Exit') {
+				this.add(`c:|${getName('BreadLoeuf')}|Ashes to ashes, crust to crust.`);
+			} else {
+				this.add(`c:|${getName('BreadLoeuf')}|Ope, someone's swallowing fishes.`);
+			}
+		},
+	},
 	mia: {
 		noCopy: true,
 		onStart() {
