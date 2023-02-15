@@ -42,6 +42,7 @@ interface MoveFlags {
 	heal?: 1; // Prevented from being executed or selected during Heal Block's effect.
 	instruct?: 1; // Cannot be repeated by Instruct.
 	mefirst?: 1; // Cannot be selected by Me First.
+	mimic?: 1; // Cannot be copied by Mimic.
 	mirror?: 1; // Can be copied by Mirror Move.
 	mustpressure?: 1; // Additional PP is deducted due to Pressure when it ordinarily would not.
 	nonsky?: 1; // Prevented from being executed or selected in a Sky Battle.
