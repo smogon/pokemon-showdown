@@ -5077,7 +5077,7 @@
 				"species": "Mareanie",
 				"item": ["Eviolite"],
 				"ability": ["Regenerator"],
-				"evs": {"hp": 116, "atk": 12, "def": 180, "spa": 12, "spd": 100, "spe": 180},
+				"evs": {"hp": 116, "atk": 12, "def": 180, "spa": 12, "spd": 180},
 				"nature": "Bold",
 				"moves": [["Knock Off"], ["Scald"], ["Sludge Bomb"], ["Recover"]]
 			}]
