@@ -160,6 +160,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	eternabeam: {
 		inherit: true,
+		flags: {recharge: 1, protect: 1, mirror: 1, instruct: 1},
 		isNonstandard: null,
 	},
 	fishiousrend: {

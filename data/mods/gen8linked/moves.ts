@@ -125,11 +125,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const lastMove: Move | ActiveMove | null = target.m.lastMoveAbsolute;
 			if (!lastMove || target.volatiles['dynamax']) return false;
 			const moveIndex = target.moves.indexOf(lastMove.id);
-			const noInstruct = [
-				'assist', 'beakblast', 'belch', 'bide', 'celebrate', 'copycat', 'dynamaxcannon', 'focuspunch', 'iceball', 'instruct', 'kingsshield', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'obstruct', 'outrage', 'petaldance', 'rollout', 'shelltrap', 'sketch', 'sleeptalk', 'struggle', 'thrash', 'transform', 'uproar',
-			];
 			if (
-				noInstruct.includes(lastMove.id) || lastMove.isZ || lastMove.isMax ||
+				lastMove.flags['instruct'] || lastMove.isZ || lastMove.isMax ||
 				lastMove.flags['charge'] || lastMove.flags['recharge'] ||
 				target.volatiles['beakblast'] || target.volatiles['focuspunch'] || target.volatiles['shelltrap'] ||
 				(target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)

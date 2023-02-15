@@ -40,6 +40,7 @@ interface MoveFlags {
 	futuremove?: 1; // Targets a slot, and in 2 turns damages that slot.
 	gravity?: 1; // Prevented from being executed or selected during Gravity's effect.
 	heal?: 1; // Prevented from being executed or selected during Heal Block's effect.
+	instruct?: 1; // Cannot be repeated by Instruct.
 	mefirst?: 1; // Cannot be selected by Me First.
 	mirror?: 1; // Can be copied by Mirror Move.
 	mustpressure?: 1; // Additional PP is deducted due to Pressure when it ordinarily would not.
