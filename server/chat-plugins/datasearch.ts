@@ -1229,9 +1229,13 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const allContestTypes = ['beautiful', 'clever', 'cool', 'cute', 'tough'];
 	const allProperties = ['basePower', 'accuracy', 'priority', 'pp'];
 	const allFlags = [
-		'bypasssub', 'bite', 'bullet', 'charge', 'contact', 'dance', 'defrost', 'gravity', 'highcrit', 'mirror',
-		'multihit', 'ohko', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'secondary',
-		'snatch', 'sound', 'zmove', 'maxmove', 'gmaxmove', 'protection', 'slicing', 'wind',
+		'allyanim', 'assist', 'bypasssub', 'bite', 'bullet', 'charge', 'contact', 'copycat', 'dance', 'defrost', 'distance', 'encore',
+		'futuremove', 'gravity', 'heal', 'instruct', 'mefirst', 'mimic', 'mirror', 'mustpressure', 'nonsky', 'parentalbond', 'pledgecombo',
+		'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'sleeptalk', 'slicing', 'snatch', 'sound', 'wind',
+
+		// Not flags directly from move data, but still useful to sort by
+		'highcrit', 'multihit', 'ohko', 'protection', 'secondary',
+		'zmove', 'maxmove', 'gmaxmove',
 	];
 	const allStatus = ['psn', 'tox', 'brn', 'par', 'frz', 'slp'];
 	const allVolatileStatus = ['flinch', 'confusion', 'partiallytrapped'];
