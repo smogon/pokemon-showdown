@@ -2711,7 +2711,6 @@
         "ability": ["Quick Draw"],
         "evs": {"hp": 252, "spa": 252, "spd": 4},
         "nature": "Modest",
-        "ivs": {"atk": 0},
         "moves": [["Shell Side Arm"], ["Psyshock", "Expanding Force"], ["Flamethrower"], ["Nasty Plot"]]
       }
     ]
