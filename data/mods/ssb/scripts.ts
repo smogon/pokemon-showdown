@@ -53,6 +53,10 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	let percent = (pokemon.hp / pokemon.baseMaxhp);
 	if (newSet.species === 'Shedinja') percent = 1;
 	pokemon.formeChange(newSet.species, context.effect, true);
+	if (!pokemon.terastallized && newSet.teraType) {
+		pokemon.teraType = Array.isArray(newSet.teraType) ?
+			newSet.teraType[Math.floor(Math.random() * newSet.teraType.length)] : newSet.teraType;
+	}
 	const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
 		(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 	if (oldShiny !== pokemon.set.shiny) context.add('replace', pokemon, details);

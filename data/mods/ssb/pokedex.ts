@@ -11,6 +11,19 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 57, atk: 90, def: 95, spa: 75, spd: 103, spe: 29},
 	},
+
+	// A Quag To The Past
+	quagsire: {
+		inherit: true,
+		baseStats: {hp: 130, atk: 100, def: 75, spa: 20, spd: 60, spe: 45},
+		abilities: {0: "Quag of Ruin"},
+	},
+	clodsire: {
+		inherit: true,
+		baseStats: {hp: 130, atk: 60, def: 75, spa: 40, spd: 100, spe: 20},
+		abilities: {0: "Clod of Ruin"},
+	},
+
 	// mia
 	mewtwomegax: {
 		inherit: true,

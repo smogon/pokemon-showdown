@@ -31,6 +31,47 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Aeonic')}|i guess they never miss huh`);
 		},
 	},
+	aquagtothepast: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('A Quag To The Past')}|I'm coming out of my cage and I've been doing just fine`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('A Quag To The Past')}|so true`);
+		},
+		onFoeSwitchIn(pokemon) {
+			if (pokemon.name === 'Aeonic') {
+				this.add(`c:|${getName('A Quag To The Past')}|!randpoke natdex`);
+				this.add(`c:|${getName('Aeonic')}|!randpoke natdex`);
+			}
+		},
+		onFaint() {
+			const lines = [
+				'Anger he felt',
+				'Before Showderp he knelt',
+				'A moderator so quiet',
+				'Inventing his riot',
+				'[[]]',
+				'Onward he gazed',
+				'As his cattle had grazed',
+				'Wolves on the hills',
+				'Mom paying his bills',
+				'[[]]',
+				'His keyboard he used',
+				'His power: abused',
+				'"Silent as me"',
+				'"You must be"',
+				'[[]]',
+				'The chatroom is dead',
+				'Yet quickly he fled',
+				'Before retaliation, he made fast',
+				'A Quag To The Past',
+			];
+			for (const line of lines) {
+				this.add(`c:|${getName('A Quag To The Past')}|${line}`);
+			}
+		},
+	},
 	mia: {
 		noCopy: true,
 		onStart() {
@@ -41,7 +82,8 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${getName('Mia')}|git checkout --detach HEAD && git commit -m "war crimes"`);
-  },
+		},
+	},
 	traceuser: {
 		noCopy: true,
 		onStart() {

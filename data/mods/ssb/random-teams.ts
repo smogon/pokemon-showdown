@@ -31,7 +31,7 @@ export const ssbSets: SSBSets = {
 	// Gender can be M, F, N, or left as an empty string
 	// each slot in moves needs to be a string (the move name, captialized properly ex: Hydro Pump), or an array of strings (also move names)
 	// signatureMove also needs to be capitalized properly ex: Scripting
-	// You can skip Evs (defaults to 82 all) and/or Ivs (defaults to 31 all), or just skip part of the Evs (skipped evs are 0) and/or Ivs (skipped Ivs are 31)
+	// You can skip Evs (defaults to 84 all) and/or Ivs (defaults to 31 all), or just skip part of the Evs (skipped evs are 0) and/or Ivs (skipped Ivs are 31)
 	// You can also skip shiny, defaults to false. Level can be skipped (defaults to 100).
 	// Nature needs to be a valid nature with the first letter capitalized ex: Modest
 	*/
@@ -42,12 +42,24 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Memes That Burn The Sky',
 		evs: {hp: 252, spa: 252, spd: 4}, ivs: {spe: 0}, nature: 'Quiet', teraType: 'Rock',
 	},
+	"A Quag To The Past": {
+		species: 'Quagsire', ability: 'Quag of Ruin', item: 'Leftovers', gender: 'M',
+		moves: ['Surging Strikes', 'Precipice Blades', 'Gunk Shot'],
+		signatureMove: 'Sire Switch',
+		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful', teraType: 'Water',
+	},
+	"A Quag To The Past-Clodsire": {
+		species: 'Clodsire', ability: 'Clod of Ruin', item: 'Leftovers', gender: 'M',
+		moves: ['Coil', 'Strength Sap', 'Toxic'],
+		signatureMove: 'Sire Switch',
+		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful', teraType: 'Poison', skip: 'A Quag To The Past',
+	},
 	Mia: {
 		species: 'Mewtwo', ability: 'Hacking', item: 'Mewtwonite X', gender: 'F',
 		moves: ['Photon Geyser', 'Drain Punch', 'Iron Head'],
 		signatureMove: 'Testing in Production',
 		evs: {atk: 252, spe: 252, spa: 4}, nature: 'Jolly',
-  },
+	},
 	trace: {
 		species: 'Delphox', ability: 'Eyes of Eternity', item: 'Life Orb', gender: 'F',
 		moves: ['Calm Mind', 'Inferno', 'Recover'],

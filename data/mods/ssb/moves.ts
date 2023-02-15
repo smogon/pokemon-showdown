@@ -1,3 +1,6 @@
+import {ssbSets} from "./random-teams";
+import {changeSet, getName} from "./scripts";
+
 export const Moves: {[k: string]: ModdedMoveData} = {
 	/*
 	// Example
@@ -41,7 +44,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	memesthatburnthesky: {
 		accuracy: 100,
 		basePower: 140,
-		category: "Status",
+		category: "Special",
 		shortDesc: "No additional effect.",
 		name: "Memes That Burn The Sky",
 		gen: 9,
@@ -59,6 +62,76 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Rock",
 	},
+
+	// A Quag To The Past
+	sireswitch: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Quag: Protect; Clod: Recover. Switch to other sire.",
+		name: "Sire Switch",
+		gen: 9,
+		pp: 20,
+		priority: 4,
+		onModifyPriority(relayVar, source, target, move) {
+			if (source.species.name === 'Clodsire') {
+				return -6;
+			}
+		},
+		flags: {},
+		onPrepareHit(pokemon) {
+			this.attrLastMove('[anim] Max Guard');
+			if (pokemon.species.name === 'Quagsire') {
+				this.attrLastMove('[anim] Protect');
+			} else {
+				this.attrLastMove('[anim] Recover');
+			}
+		},
+		secondary: null,
+		onHit(pokemon) {
+			if (pokemon.species.name === 'Quagsire') {
+				pokemon.addVolatile('sireswitch');
+				pokemon.formeChange('clodsire', this.effect, true);
+				changeSet(this, pokemon, ssbSets['A Quag To The Past-Clodsire'], true);
+			} else {
+				this.heal(pokemon.maxhp / 2, pokemon, pokemon, this.effect);
+				pokemon.formeChange('quagsire', this.effect, true);
+				changeSet(this, pokemon, ssbSets['A Quag To The Past'], true);
+			}
+		},
+		condition: {
+			duration: 1,
+			onStart(target) {
+				if (target.species.name !== 'Quagsire') return;
+				this.add('-singleturn', target, 'Protect');
+			},
+			onTryHitPriority: 3,
+			onTryHit(target, source, move) {
+				if (target.species.name !== 'Quagsire') return;
+				if (!move.flags['protect']) {
+					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+					return;
+				}
+				if (move.smartTarget) {
+					move.smartTarget = false;
+				} else {
+					this.add('-activate', target, 'move: Protect');
+				}
+				const lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				return this.NOT_FAIL;
+			},
+		},
+		target: "self",
+		type: "Ground",
+	},
+
 	// Mia
 	testinginproduction: {
 		accuracy: true,
@@ -136,7 +209,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Electric",
-  },
+	},
+
 	// trace
 	chronostasis: {
 		accuracy: 90,

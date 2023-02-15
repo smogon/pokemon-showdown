@@ -1,3 +1,5 @@
+import {getName} from "./scripts";
+
 export const Abilities: {[k: string]: ModdedAbilityData} = {
 	/*
 	// Example
@@ -12,7 +14,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Please keep abilites organized alphabetically based on staff member name!
 	// Aeonic
 	changetempo: {
-		desc: "Summons Trick Room on switch-in.",
+		shortDesc: "Summons Trick Room on switch-in and negates the user's charge/recharge.",
 		name: "Change Tempo",
 		onStart(target) {
 			if (!this.field.getPseudoWeather('trickroom')) {
@@ -29,6 +31,60 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (pokemon.volatiles['mustrecharge']) pokemon.removeVolatile('mustrecharge');
 		},
 	},
+
+	// A Quag To The Past
+	quagofruin: {
+		shortDesc: "Active Pokemon without this Ability have their Def multiplied by 0.85. Ignores abilities.",
+		name: "Quag of Ruin",
+		onStart(pokemon) {
+			if (this.suppressingAbility(pokemon)) return;
+			this.add('-ability', pokemon, 'Quag of Ruin');
+		},
+		onAnyModifyDef(def, target, source, move) {
+			const abilityHolder = this.effectState.target;
+			if (target.hasAbility('Quag of Ruin')) return;
+			if (!move.ruinedDef?.hasAbility('Quag of Ruin')) move.ruinedDef = abilityHolder;
+			if (move.ruinedDef !== abilityHolder) return;
+			this.debug('Quag of Ruin Def drop');
+			return this.chainModify(0.85);
+		},
+		onModifyMove(move) {
+			move.ignoreAbility = true;
+		},
+	},
+	clodofruin: {
+		shortDesc: "Active Pokemon without this Ability have their Atk multiplied by 0.85. Ignores stat changes.",
+		name: "Quag of Ruin",
+		onStart(pokemon) {
+			if (this.suppressingAbility(pokemon)) return;
+			this.add('-ability', pokemon, 'Clod of Ruin');
+		},
+		onAnyModifyAtk(atk, target, source, move) {
+			const abilityHolder = this.effectState.target;
+			if (target.hasAbility('Clod of Ruin')) return;
+			if (!move.ruinedAtk?.hasAbility('Clod of Ruin')) move.ruinedAtk = abilityHolder;
+			if (move.ruinedAtk !== abilityHolder) return;
+			this.debug('Clod of Ruin Atk drop');
+			return this.chainModify(0.85);
+		},
+		onAnyModifyBoost(boosts, pokemon) {
+			const unawareUser = this.effectState.target;
+			if (unawareUser === pokemon) return;
+			if (unawareUser === this.activePokemon && pokemon === this.activeTarget) {
+				boosts['def'] = 0;
+				boosts['spd'] = 0;
+				boosts['evasion'] = 0;
+			}
+			if (pokemon === this.activePokemon && unawareUser === this.activeTarget) {
+				boosts['atk'] = 0;
+				boosts['def'] = 0;
+				boosts['spa'] = 0;
+				boosts['accuracy'] = 0;
+			}
+		},
+		isBreakable: true,
+	},
+
 	// Mia
 	hacking: {
 		name: "Hacking",
@@ -72,7 +128,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					`${warnTarget.name}'s move ${warnMoveName} drew her eye.`
 			);
 			this.add(`c:|${getName('Mia')}|Interesting. With that in mind, bring it!`);
-  },
+		},
+	},
+
 	// trace
 	eyesofeternity: {
 		shortDesc: "Moves used by/against this Pokemon always hit; only damaged by attacks.",
