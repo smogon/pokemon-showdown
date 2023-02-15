@@ -59,6 +59,84 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Rock",
 	},
+	// Mia
+	testinginproduction: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Testing in Production",
+		gen: 9,
+		pp: 5,
+		priority: 0,
+		flags: {},
+		onPrepareHit() {
+			this.attrLastMove('[anim] Curse');
+		},
+		onHit(pokemon) {
+			this.add(`c:|${getName('Mia')}|Please don't break...`);
+			let stats: BoostID[] = [];
+			const boost: SparseBoostsTable = {};
+			let statPlus: BoostID;
+			for (statPlus in pokemon.boosts) {
+				if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
+				if (pokemon.boosts[statPlus] < 6) {
+					stats.push(statPlus);
+				}
+			}
+			let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+			if (randomStat) boost[randomStat] = 2;
+
+			stats = [];
+			let statMinus: BoostID;
+			for (statMinus in pokemon.boosts) {
+				if (statMinus === 'accuracy' || statMinus === 'evasion') continue;
+				if (pokemon.boosts[statMinus] > -6) {
+					stats.push(statMinus);
+				}
+			}
+			randomStat = stats.length ? this.sample(stats) : undefined;
+			if (randomStat) {
+				if (boost[randomStat]) {
+					boost[randomStat] = 0;
+					this.add(`c:|${getName('Mia')}|Well. Guess that broke. Time to roll back.`);
+				} else {
+					boost[randomStat] = -2;
+				}
+			}
+
+			this.boost(boost, pokemon, pokemon);
+		},
+		onAfterMove(pokemon) {
+			if (this.randomChance(1, 10)) {
+				this.add(`c:|${getName('Mia')}|Ouch! That crash is really getting on my nerves...`);
+				this.damage(pokemon.baseMaxhp / 10);
+				if (pokemon.hp <= 0) return;
+			}
+
+			if (this.randomChance(1, 20)) {
+				const status = this.sample(['frz', 'brn', 'psn', 'par']);
+				let statusText = status;
+				if (status === 'frz') {
+					statusText = 'froze';
+				} else if (status === 'brn') {
+					statusText = 'burned';
+				} else if (status === 'par') {
+					statusText = 'paralyzed';
+				} else if (status === 'psn') {
+					statusText = 'poisoned';
+				}
+
+				this.add(
+					`c:|${getName('Mia')}|` +
+					`Darn. A bug ${statusText} me. Guess I should have tested this first.`
+				);
+				pokemon.setStatus(status);
+			}
+		},
+		secondary: null,
+		target: "self",
+		type: "Electric",
+  },
 	// trace
 	chronostasis: {
 		accuracy: 90,

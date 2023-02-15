@@ -31,6 +31,17 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Aeonic')}|i guess they never miss huh`);
 		},
 	},
+	mia: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Mia')}|git pull ps mia`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Mia')}|git switch`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Mia')}|git checkout --detach HEAD && git commit -m "war crimes"`);
+  },
 	traceuser: {
 		noCopy: true,
 		onStart() {
