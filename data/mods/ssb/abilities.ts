@@ -204,6 +204,100 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Mad Monty
+	climatechange: {
+		shortDesc: "1.5x SpA in sun, 1.5x Def/SpD in snow, heals 50% in rain. Changes forme/weather.",
+		name: "Climate Change",
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			switch (pokemon.effectiveWeather()) {
+			case 'sunnyday':
+				this.field.setWeather('raindance');
+				break;
+			case 'raindance':
+				this.field.setWeather('snow');
+				break;
+			default:
+				this.field.setWeather('sunnyday');
+				break;
+			}
+		},
+		onStart(pokemon) {
+			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
+		},
+		onWeatherChange(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Castform' || pokemon.transformed) return;
+			let forme = null;
+			let relevantMove = null;
+			switch (pokemon.effectiveWeather()) {
+			case 'sunnyday':
+			case 'desolateland':
+				if (pokemon.species.id !== 'castformsunny') {
+					forme = 'Castform-Sunny';
+					relevantMove = 'Solar Beam';
+				}
+				break;
+			case 'raindance':
+			case 'primordialsea':
+				if (pokemon.species.id !== 'castformrainy') {
+					forme = 'Castform-Rainy';
+					relevantMove = 'Thunder';
+					this.heal(pokemon.baseMaxhp / 2);
+				}
+				break;
+			case 'hail':
+			case 'snow':
+				if (pokemon.species.id !== 'castformsnowy') {
+					forme = 'Castform-Snowy';
+					relevantMove = 'Aurora Veil';
+				}
+				break;
+			default:
+				if (pokemon.species.id !== 'castform') forme = 'Castform';
+				break;
+			}
+			if (pokemon.isActive && forme) {
+				pokemon.formeChange(forme, this.effect, false, '[msg]');
+
+				if (!relevantMove) return;
+				const move = this.dex.moves.get(relevantMove);
+
+				const sketchIndex = Math.max(
+					pokemon.moves.indexOf("solarbeam"), pokemon.moves.indexOf("thunder"), pokemon.moves.indexOf("auroraveil")
+				);
+				if (sketchIndex < 0) return;
+				const carryOver = pokemon.moveSlots[sketchIndex].pp / pokemon.moveSlots[sketchIndex].maxpp;
+				const sketchedMove = {
+					move: move.name,
+					id: move.id,
+					pp: Math.floor((move.pp * 8 / 5) * carryOver),
+					maxpp: (move.pp * 8 / 5),
+					target: move.target,
+					disabled: false,
+					used: false,
+				};
+				pokemon.moveSlots[sketchIndex] = sketchedMove;
+				pokemon.baseMoveSlots[sketchIndex] = sketchedMove;
+			}
+		},
+		onModifySpA(spa, pokemon) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifyDef(def, pokemon) {
+			if (['hail', 'snow'].includes(pokemon.effectiveWeather())) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpD(spd, pokemon) {
+			if (['hail', 'snow'].includes(pokemon.effectiveWeather())) {
+				return this.chainModify(1.5);
+			}
+		},
+	},
+
 	// Mia
 	hacking: {
 		name: "Hacking",

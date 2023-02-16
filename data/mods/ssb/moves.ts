@@ -97,7 +97,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				changeSet(this, pokemon, ssbSets['A Quag To The Past-Clodsire'], true);
 			} else {
 				this.heal(pokemon.maxhp / 2, pokemon, pokemon, this.effect);
-				pokemon.formeChange('quagsire', this.effect, true);
 				changeSet(this, pokemon, ssbSets['A Quag To The Past'], true);
 			}
 		},
@@ -314,6 +313,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Fairy",
+	},
+
+	// Mad Monty
+	stormshelter: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Storm Shelter",
+		shortDesc: "User protects and sets up a substitute.",
+		pp: 5,
+		priority: 4,
+		flags: {},
+		stallingMove: true,
+		volatileStatus: 'protect',
+		onPrepareHit(pokemon) {
+			this.attrLastMove('[anim] Protect');
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+			this.actions.useMove('Substitute', pokemon);
+			if (!Object.values(pokemon.boosts).some(x => x >= 6)) {
+				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1, accuracy: 1, evasion: 1}, pokemon);
+				this.add(`c:|${getName('Mad Monty')}|Ope! Wrong button, sorry.`);
+				this.boost({atk: -1, def: -1, spa: -1, spd: -1, spe: -1, accuracy: -1, evasion: -1}, pokemon);
+			}
+		},
+		secondary: null,
+		target: "self",
+		type: "Normal",
 	},
 
 	// Mia

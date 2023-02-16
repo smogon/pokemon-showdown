@@ -175,6 +175,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Kris')}|ok`);
 		},
 	},
+	madmonty: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Mad Monty')}|I'm here to make sure you don't get eaten by llamas!`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Mad Monty')}|Ope! The Library's on fire. Gotta tend to that for a sec...`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Mad Monty')}|Well great. Now the llamas are gonna come back. Is that what you wanted?`);
+		},
+	},
 	mia: {
 		noCopy: true,
 		onStart() {

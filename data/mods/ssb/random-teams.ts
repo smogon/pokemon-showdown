@@ -60,6 +60,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: "Baker's Douze Off",
 		evs: {hp: 252, def: 252, spd: 4}, nature: 'Impish', teraType: 'Fairy',
 	},
+	'Mad Monty': {
+		species: 'Castform', ability: 'Climate Change', item: 'Heavy-Duty Boots', gender: 'M',
+		moves: ['Weather Ball', 'Defog', ['Solar Beam', 'Thunder', 'Aurora Veil']],
+		signatureMove: 'Storm Shelter',
+		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Modest', teraType: 'Rock',
+	},
 	Mia: {
 		species: 'Mewtwo', ability: 'Hacking', item: 'Mewtwonite X', gender: 'F',
 		moves: ['Photon Geyser', 'Drain Punch', 'Iron Head'],
