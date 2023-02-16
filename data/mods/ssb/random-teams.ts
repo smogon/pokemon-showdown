@@ -78,6 +78,16 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'ok',
 		evs: {hp: 252, def: 4, spa: 252}, nature: 'Quiet', teraType: 'Normal',
 	},
+	TheJesucristoOsAma: {
+		species: 'Arceus', ability: 'The Grace Of Jesus Christ', gender: 'N',
+		item: [
+			'Draco Plate', 'Dread Plate', 'Earth Plate', 'Fist Plate', 'Flame Plate', 'Icicle Plate', 'Insect Plate', 'Iron Plate', 'Meadow Plate',
+			'Mind Plate', 'Pixie Plate', 'Sky Plate', 'Splash Plate', 'Spooky Plate', 'Stone Plate', 'Toxic Plate', 'Zap Plate',
+		],
+		moves: ['Earthquake', 'Surf', 'Judgment'],
+		signatureMove: 'The Love Of Christ',
+		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
+	},
 	trace: {
 		species: 'Delphox', ability: 'Eyes of Eternity', item: 'Life Orb', gender: 'F',
 		moves: ['Calm Mind', 'Inferno', 'Recover'],

@@ -199,4 +199,56 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('trace')}|How disappointingly short a dream lasts.`);
 		},
 	},
+	thejesucristoosama: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('TheJesucristoOsAma')}|In the name of the Father, the Son and the Holy Spirit. I bless you, Amen.`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('TheJesucristoOsAma')}|Oh well, I think it's time to call my apostles.`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('TheJesucristoOsAma')}|And that's how I've died for the third time, I'll go to host a game at eventos.`);
+		},
+	},
+	// Effects needed to be overriden for things to happen
+	attract: {
+		onStart(pokemon, source, effect) {
+			if (!(pokemon.gender === 'M' && source.gender === 'F') && !(pokemon.gender === 'F' && source.gender === 'M')) {
+				if (effect.name !== 'The Love Of Christ') {
+					this.debug('incompatible gender');
+					return false;
+				}
+			}
+			if (!this.runEvent('Attract', pokemon, source)) {
+				this.debug('Attract event failed');
+				return false;
+			}
+
+			if (effect.name === 'Cute Charm') {
+				this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', '[of] ' + source);
+			} else if (effect.name === 'Destiny Knot') {
+				this.add('-start', pokemon, 'Attract', '[from] item: Destiny Knot', '[of] ' + source);
+			} else {
+				this.add('-start', pokemon, 'Attract');
+			}
+		},
+		onUpdate(pokemon) {
+			if (this.effectState.source && !this.effectState.source.isActive && pokemon.volatiles['attract']) {
+				this.debug('Removing Attract volatile on ' + pokemon);
+				pokemon.removeVolatile('attract');
+			}
+		},
+		onBeforeMovePriority: 2,
+		onBeforeMove(pokemon, target, move) {
+			this.add('-activate', pokemon, 'move: Attract', '[of] ' + this.effectState.source);
+			if (this.randomChance(1, 2)) {
+				this.add('cant', pokemon, 'Attract');
+				return false;
+			}
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'Attract', '[silent]');
+		},
+	},
 };

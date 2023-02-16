@@ -203,6 +203,16 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 	},
 	actions: {
+		canTerastallize(pokemon: Pokemon) {
+			if (
+				pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra" ||
+				pokemon.getItem().zMove || pokemon.canMegaEvo || pokemon.side.canDynamaxNow() || this.dex.gen !== 9
+			) {
+				return null;
+			}
+			if (pokemon.baseSpecies.id === 'arceus') return null;
+			return pokemon.teraType;
+		},
 		// 1 mega per pokemon
 		runMegaEvo(pokemon) {
 			const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
