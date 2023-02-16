@@ -43,4 +43,27 @@ describe('Sleep Talk', function () {
 		assert.equal(breloom.hp, hp);
 		assert.equal(move.pp, move.maxpp - 2);
 	});
+
+	it('should not be able to choose rest in Gen 3 battles', function() {
+		battle = common.gen(3).createBattle([[
+			{species: 'snorlax', ability: 'noguard', moves: ['sleeptalk', 'rest']},
+		], [
+			{species: 'magikarp', moves: ['tackle', 'splash']},
+		]]);
+		const snorlax = battle.p1.active[0];
+		battle.makeChoices('move sleeptalk', 'move tackle');
+		assert.notEqual(snorlax.hp, snorlax.maxhp);
+
+		battle.makeChoices('move rest', 'move splash');
+		assert.fullHP(snorlax);
+		assert.equal(snorlax.status, 'slp');
+		snorlax.statusState.time = 6;
+
+		battle.makeChoices('move sleeptalk', 'move tackle');
+		assert.notEqual(snorlax.hp, snorlax.maxhp);
+		assert.equal(snorlax.status, 'slp');
+
+		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-fail'));
+		assert.notEqual(battle.log[battle.lastMoveLine].split('|')[3], 'Rest')
+	});
 });
