@@ -240,10 +240,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-activate', target, 'move: Anfield Terrain');
 					return null;
 				}
-				for (const pokemon of this.getAllActive()) {
-					if (!pokemon.hp || pokemon.fainted) continue;
-					pokemon.addVolatile(status, null, this.effect);
-				}
 			},
 			onDamage(damage, target, source, effect) {
 				if (effect && ['stealthrock', 'spikes', 'gmaxsteelsurge'].includes(effect.id)) {
