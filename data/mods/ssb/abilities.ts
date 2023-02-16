@@ -126,11 +126,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (success) {
 				this.add('-activate', target, 'ability: Anfield');
 			}
-			this.field.addPseudoWeather('anfieldterrain', target, target.getAbility());
+			this.field.addPseudoWeather('anfieldatmosphere', target, target.getAbility());
 		},
 	},
 	youllneverwalkalone: {
-		shortDesc: "Boosts Atk, Def, SpD, and Spe by 25% under Anfield Atmosphere",
+		shortDesc: "Boosts Atk, Def, SpD, and Spe by 25% under Anfield Atmosphere.",
 		name: "You'll Never Walk Alone",
 		onStart(pokemon) {
 			this.singleEvent('AnyPseudoWeatherChange', this.effect, this.effectState, pokemon);

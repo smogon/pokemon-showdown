@@ -127,7 +127,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 		onFaint() {
-			this.add(`c:|${getName('A Quag To The Past')}|FUCK OFF, REALLY?????`);
+			this.add(`c:|${getName('Kennedy')}|FUCK OFF, REALLY?????`);
 		},
 		onSourceAfterFaint(length, target, source, effect) {
 			const message = this.sample(['ALLEZZZZZ', 'VAMOSSSSS', 'FORZAAAAA', 'LET\'S GOOOOO']);
@@ -136,6 +136,13 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				!source.transformed && effect?.effectType === 'Move' && source.hp && source.side.foePokemonLeft()) {
 				this.add('-activate', source, 'ability: Battle Bond');
 				source.formeChange('Cinderace-Gmax', this.effect, true);
+				source.baseMaxhp = Math.floor(Math.floor(
+					2 * source.species.baseStats['hp'] + source.set.ivs['hp'] + Math.floor(source.set.evs['hp'] / 4) + 100
+				) * source.level / 100 + 10);
+				const newMaxHP = source.volatiles['dynamax'] ? (2 * source.baseMaxhp) : source.baseMaxhp;
+				source.hp = newMaxHP - (source.maxhp - source.hp);
+				source.maxhp = newMaxHP;
+				this.add('-heal', source, source.getHealth, '[silent]');
 			}
 		},
 		onUpdate(pokemon) {

@@ -84,7 +84,7 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 		// @ts-ignore Necessary so pokemon doesn't get 8 moves
 		pokemon.baseMoveSlots = newMoves;
 	}
-	context.add('-ability', pokemon, `${pokemon.getAbility().name}`);
+	if (pokemon.name !== 'A Quag To The Past') context.add('-ability', pokemon, `${pokemon.getAbility().name}`);
 	context.add('message', `${pokemon.name} changed form!`);
 }
 

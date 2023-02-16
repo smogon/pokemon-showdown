@@ -83,14 +83,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[anim] Max Guard');
 			if (pokemon.species.name === 'Quagsire') {
 				this.attrLastMove('[anim] Protect');
+				return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
 			} else {
 				this.attrLastMove('[anim] Recover');
 			}
 		},
 		secondary: null,
+		volatileStatus: 'sireswitch',
 		onHit(pokemon) {
 			if (pokemon.species.name === 'Quagsire') {
-				pokemon.addVolatile('sireswitch');
+				pokemon.addVolatile('stall');
 				pokemon.formeChange('clodsire', this.effect, true);
 				changeSet(this, pokemon, ssbSets['A Quag To The Past-Clodsire'], true);
 			} else {
@@ -299,6 +301,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (boost[randomStat]) {
 					boost[randomStat] = 0;
 					this.add(`c:|${getName('Mia')}|Well. Guess that broke. Time to roll back.`);
+					return;
 				} else {
 					boost[randomStat] = -2;
 				}
