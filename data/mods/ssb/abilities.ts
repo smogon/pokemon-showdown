@@ -87,7 +87,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// BreadLoeuf
 	painfulexit: {
-		desc: "When this Pokemon switches out, foes lose 25% HP.",
+		shortDesc: "When this Pokemon switches out, foes lose 25% HP.",
 		name: "Painful Exit",
 		onSwitchOut(pokemon) {
 			this.add(`c:|${getName('BreadLoeuf')}|Just kidding!! Take this KNUCKLE SANDWICH`);
@@ -99,10 +99,92 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Kennedy
+	anfield: {
+		shortDesc: "Clears terrain/hazards/pseudo weathers. Summons Anfield Atmosphere.",
+		name: "Anfield",
+		onStart(target) {
+			let success = false;
+			if (this.field.terrain) {
+				success = this.field.clearTerrain();
+			}
+			for (const side of this.sides) {
+				const remove = [
+					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
+				];
+				for (const sideCondition of remove) {
+					if (side.removeSideCondition(sideCondition)) {
+						success = true;
+					}
+				}
+			}
+			if (Object.keys(this.field.pseudoWeather).length) {
+				for (const pseudoWeather in this.field.pseudoWeather) {
+					if (this.field.removePseudoWeather(pseudoWeather)) success = true;
+				}
+			}
+			if (success) {
+				this.add('-activate', target, 'ability: Anfield');
+			}
+			this.field.addPseudoWeather('anfieldterrain', target, target.getAbility());
+		},
+	},
+	youllneverwalkalone: {
+		shortDesc: "Boosts Atk, Def, SpD, and Spe by 25% under Anfield Atmosphere",
+		name: "You'll Never Walk Alone",
+		onStart(pokemon) {
+			this.singleEvent('AnyPseudoWeatherChange', this.effect, this.effectState, pokemon);
+		},
+		onAnyPseudoWeatherChange(pokemon, source, pseudoWeather) {
+			if (pokemon.transformed) return;
+			if (this.field.getPseudoWeather('anfieldatmosphere')) {
+				pokemon.addVolatile('youllneverwalkalone');
+			} else {
+				pokemon.removeVolatile('youllneverwalkalone');
+			}
+		},
+		onEnd(pokemon) {
+			delete pokemon.volatiles['youllneverwalkalone'];
+			this.add('-end', pokemon, 'You\'ll Never Walk Alone', '[silent]');
+		},
+		condition: {
+			noCopy: true,
+			onStart(pokemon, source, effect) {
+				this.add('-activate', pokemon, 'ability: You\'ll Never Walk Alone');
+				for (const stat of ['atk', 'def', 'spd', 'spe']) {
+					this.add('-start', pokemon, 'ynwa' + stat);
+				}
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, source, target, move) {
+				this.debug('You\'ll Never Walk Alone atk boost');
+				return this.chainModify([5120, 4096]);
+			},
+			onModifyDefPriority: 6,
+			onModifyDef(def, target, source, move) {
+				this.debug('You\'ll Never Walk Alone def boost');
+				return this.chainModify([5120, 4096]);
+			},
+			onModifySpDPriority: 6,
+			onModifySpD(spd, target, source, move) {
+				this.debug('You\'ll Never Walk Alone spd boost');
+				return this.chainModify([5120, 4096]);
+			},
+			onModifySpe(spe, pokemon) {
+				this.debug('You\'ll Never Walk Alone spe boost');
+				return this.chainModify([5120, 4096]);
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'You\'ll Never Walk Alone');
+			},
+		},
+		isPermanent: true,
+	},
+
 	// Mia
 	hacking: {
 		name: "Hacking",
-		desc: "Hacks into PS and finds out if the enemy has any super effective moves.",
+		shortDesc: "Hacks into PS and finds out if the enemy has any super effective moves.",
 		onStart(pokemon) {
 			this.add(`c:|${getName('Mia')}|One moment, please. One does not simply go into battle blind.`);
 			const side = pokemon.side.id === 'p1' ? 'p2' : 'p1';

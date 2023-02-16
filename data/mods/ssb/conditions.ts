@@ -89,6 +89,70 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 	},
+	kennedy: {
+		noCopy: true,
+		innateName: "Battle Bond",
+		shortDesc: "After KOing a Pokemon: becomes Cinderace-Gmax.",
+		onStart(target, source, effect) {
+			const message = this.sample(['Justice for the 97', 'up the reds']);
+			this.add(`c:|${getName('Kennedy')}|${message}`);
+			if (source && source.name === 'Clementine') {
+				if (source.volatiles['flipped']) {
+					source.removeVolatile('flipped');
+					this.add(`c:|${getName('Kennedy')}|┬──┬◡ﾉ(° -°ﾉ)`);
+				} else {
+					source.addVolatile('flipped', target, this.effect);
+					this.add(`c:|${getName('Kennedy')}|(╯°o°）╯︵ ┻━┻`);
+				}
+			}
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Kennedy')}|!lastfm`);
+			this.add(`c:|${getName('Kennedy')}|Whilst I'm gone, stream this ^`);
+		},
+		onFoeSwitchIn(pokemon) {
+			switch ((pokemon.illusion || pokemon).name) {
+			case 'Links':
+				this.add(`c:|${getName('Kennedy')}|Blue and white shite, blue and white shite, hello, hello.`);
+				this.add(`c:|${getName('Kennedy')}|Blue and white shite, blue and white shite, hello, hello.`);
+				break;
+			case 'Clementine':
+				this.add(`c:|${getName('Kennedy')}|Not the Fr*nch....`);
+				break;
+			case 'Kris':
+				this.add(`c:|${getName('Kennedy')}|fuck that`);
+				this.effectState.target.faint();
+				this.add('message', 'Kennedy fainted mysteriously.....');
+				break;
+			}
+		},
+		onFaint() {
+			this.add(`c:|${getName('A Quag To The Past')}|FUCK OFF, REALLY?????`);
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			const message = this.sample(['ALLEZZZZZ', 'VAMOSSSSS', 'FORZAAAAA', 'LET\'S GOOOOO']);
+			this.add(`c:|${getName('Kennedy')}|${message}`);
+			if (source.species.id === 'Cinderace' && this.field.pseudoWeather['anfieldatmosphere'] &&
+				!source.transformed && effect?.effectType === 'Move' && source.hp && source.side.foePokemonLeft()) {
+				this.add('-activate', source, 'ability: Battle Bond');
+				source.formeChange('Cinderace-Gmax', this.effect, true);
+			}
+		},
+		onUpdate(pokemon) {
+			if (pokemon.volatiles['attract']) {
+				this.add(`c:|${getName('Kennedy')}|NAAA FUCK OFF, I'd rather be dead`);
+				pokemon.faint();
+				this.add('message', 'Kennedy would have been infatuated but fainted mysteriously');
+			}
+		},
+		onSourceCriticalHit(pokemon, source, move) {
+			this.add(`c:|${getName('Kennedy')}|LOOOOOOL ffs`);
+		},
+		onFlinch(pokemon) {
+			if (pokemon.illusion) return;
+			this.add(`c:|${getName('Kennedy')}|LOOOOOOL ffs`);
+		},
+	},
 	mia: {
 		noCopy: true,
 		onStart() {

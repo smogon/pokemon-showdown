@@ -54,8 +54,12 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	if (newSet.species === 'Shedinja') percent = 1;
 	pokemon.formeChange(newSet.species, context.effect, true);
 	if (!pokemon.terastallized && newSet.teraType) {
-		pokemon.teraType = Array.isArray(newSet.teraType) ?
-			newSet.teraType[Math.floor(Math.random() * newSet.teraType.length)] : newSet.teraType;
+		const allTypes = context.dex.types.all().map(x => x.name);
+		pokemon.teraType = newSet.teraType === 'Any' ?
+			allTypes[Math.floor(Math.random() * allTypes.length)] :
+			Array.isArray(newSet.teraType) ?
+				newSet.teraType[Math.floor(Math.random() * newSet.teraType.length)] :
+				newSet.teraType;
 	}
 	const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
 		(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');

@@ -64,7 +64,13 @@ export const ssbSets: SSBSets = {
 		species: 'Mewtwo', ability: 'Hacking', item: 'Mewtwonite X', gender: 'F',
 		moves: ['Photon Geyser', 'Drain Punch', 'Iron Head'],
 		signatureMove: 'Testing in Production',
-		evs: {atk: 252, spe: 252, spa: 4}, nature: 'Jolly',
+		evs: {atk: 252, spa: 4, spe: 252}, nature: 'Jolly',
+	},
+	Kennedy: {
+		species: 'Cinderace', ability: 'Anfield', item: 'Berserk Gene', gender: 'M',
+		moves: ['Blaze Kick', ['Triple Kick', 'Trop Kick'], 'U-turn'],
+		signatureMove: 'Hat-Trick',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Any',
 	},
 	trace: {
 		species: 'Delphox', ability: 'Eyes of Eternity', item: 'Life Orb', gender: 'F',
@@ -129,6 +135,13 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				}
 			}
 
+			let teraType: string | undefined;
+			if (ssbSet.teraType) {
+				teraType = ssbSet.teraType === 'Any' ?
+					this.sample(this.dex.types.all().map(x => x.name)) :
+					this.sampleIfArray(ssbSet.teraType);
+			}
+
 			const set: PokemonSet = {
 				name: name,
 				species: ssbSet.species,
@@ -143,8 +156,6 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				level: this.adjustLevel || ssbSet.level || 100,
 				happiness: typeof ssbSet.happiness === 'number' ? ssbSet.happiness : 255,
 				shiny: typeof ssbSet.shiny === 'number' ? this.randomChance(1, ssbSet.shiny) : !!ssbSet.shiny,
-				teraType: !ssbSet.teraType ? undefined :
-				Array.isArray(ssbSet.teraType) ? this.sampleNoReplace(ssbSet.teraType) : ssbSet.teraType,
 			};
 			while (set.moves.length < 3 && ssbSet.moves.length > 0) {
 				let move = this.sampleNoReplace(ssbSet.moves);
@@ -152,6 +163,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				set.moves.push(move);
 			}
 			set.moves.push(ssbSet.signatureMove);
+			if (teraType) set.teraType = teraType;
 
 			// Any set specific tweaks occur here.
 

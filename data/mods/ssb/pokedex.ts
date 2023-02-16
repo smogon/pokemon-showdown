@@ -24,7 +24,20 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Clod of Ruin"},
 	},
 
-	// mia
+	// Kennedy
+	cinderace: {
+		inherit: true,
+		otherFormes: ["Cinderace-Gmax"],
+	},
+	cinderacegmax: {
+		inherit: true,
+		types: ["Fire", "Ice"],
+		baseStats: {hp: 84, atk: 119, def: 78, spa: 77, spd: 81, spe: 105},
+		abilities: {0: "You'll Never Walk Alone"},
+		weightkg: 103,
+	},
+
+	// Mia
 	mewtwomegax: {
 		inherit: true,
 		abilities: {0: 'Hacking'},

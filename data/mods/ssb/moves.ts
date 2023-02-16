@@ -157,6 +157,108 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// Kennedy
+	hattrick: {
+		accuracy: 98,
+		basePower: 19,
+		category: "Physical",
+		shortDesc: "3 hits. Last always crits. 3.5% chance to curse.",
+		name: "Hat-Trick",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Focus Energy', source);
+			this.add('-anim', source, 'High Jump Kick', target);
+			this.add('-anim', target, 'Boomburst', source);
+			this.add('-anim', source, 'Aqua Step', target);
+			this.add('-anim', source, 'Aqua Step', target);
+		},
+		onHit(target, source, move) {
+			if (move.hit === 3) {
+				move.willCrit = true;
+			}
+		},
+		secondary: {
+			chance: 3.5,
+			volatileStatus: 'curse',
+		},
+		multihit: 3,
+		target: "normal",
+		type: "Ice",
+	},
+	anfieldatmosphere: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Anfield Atmosphere",
+		pp: 5,
+		priority: 0,
+		flags: {mirror: 1},
+		pseudoWeather: 'anfieldatmosphere',
+		condition: {
+			duration: 6,
+			durationCallback(source, effect) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-activate', source, 'ability: Persistent', '[move] Anfield Atmosphere');
+					return 8;
+				}
+				return 6;
+			},
+			onFieldStart(target, source) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-fieldstart', 'move: Anfield Atmosphere', '[of] ' + source, '[persistent]');
+				} else {
+					this.add('-fieldstart', 'move: Anfield Atmosphere', '[of] ' + source);
+				}
+			},
+			onFieldRestart(target, source) {
+				this.field.removePseudoWeather('anfieldatmosphere');
+			},
+			onAnySetWeather(target, source, weather) {
+				return false;
+			},
+			onSetStatus(status, target, source, effect) {
+				if (status.id === 'slp' && !target.isSemiInvulnerable()) {
+					this.add('-activate', target, 'move: Anfield Terrain');
+					return false;
+				}
+				for (const pokemon of this.getAllActive()) {
+					if (!pokemon.hp || pokemon.fainted) continue;
+					pokemon.trySetStatus(status, source, this.effect);
+				}
+			},
+			onTryAddVolatile(status, target) {
+				if (target.isSemiInvulnerable()) return;
+				if (status.id === 'yawn') {
+					this.add('-activate', target, 'move: Anfield Terrain');
+					return null;
+				}
+				for (const pokemon of this.getAllActive()) {
+					if (!pokemon.hp || pokemon.fainted) continue;
+					pokemon.addVolatile(status, null, this.effect);
+				}
+			},
+			onDamage(damage, target, source, effect) {
+				if (effect && ['stealthrock', 'spikes', 'gmaxsteelsurge'].includes(effect.id)) {
+					return damage / 2;
+				}
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 1,
+			onFieldEnd() {
+				this.add('-fieldend', 'move: Anfield Atmosphere');
+			},
+		},
+		secondary: null,
+		target: "all",
+		type: "Psychic",
+	},
+
 	// Mia
 	testinginproduction: {
 		accuracy: true,
