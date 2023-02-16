@@ -418,6 +418,26 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ice",
 	},
 
+	// Scotteh
+	purification: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Purification",
+		pp: 5,
+		priority: 0,
+		flags: {heal: 1, bypasssub: 1, allyanim: 1},
+		onPrepareHit() {
+			this.attrLastMove('[anim] Moonlight');
+		},
+		onHit(pokemon) {
+			const success = !!this.heal(this.modify(pokemon.maxhp, 0.5));
+			return pokemon.cureStatus() || success;
+		},
+		secondary: null,
+		target: "self",
+		type: "Water",
+	},
 	// TheJesucristoOsAma
 	theloveofchrist: {
 		accuracy: 100,

@@ -199,6 +199,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('phoopes')}|Jynx! Knock on wood`);
 		},
 	},
+	scotteh: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Scotteh')}|\`\`Compilation completed successfully. Executing...\`\``);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Scotteh')}|\`\`Execution temporarily paused.\`\``);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Scotteh')}|\`\`Segmentation fault (core dumped)\`\``);
+		},
+	},
 	thejesucristoosama: {
 		noCopy: true,
 		onStart() {

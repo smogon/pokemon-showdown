@@ -84,6 +84,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Gen 1 Blizzard',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Ice',
 	},
+	Scotteh: {
+		species: 'Suicune', ability: 'Water Absorb', item: 'Leftovers', gender: '',
+		moves: ['Calm Mind', 'Scald', 'Ice Beam'],
+		signatureMove: 'Purification',
+		evs: {hp: 252, def: 252, spd: 4}, nature: 'Bold', teraType: 'Water',
+	},
 	TheJesucristoOsAma: {
 		species: 'Arceus', ability: 'The Grace Of Jesus Christ', gender: 'N',
 		item: [
