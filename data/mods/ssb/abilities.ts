@@ -181,6 +181,29 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		isPermanent: true,
 	},
 
+	// Kris
+	cacophony: {
+		name: "Cacophony",
+		shortDesc: "Sound moves: 1.5x BP, ignore type-based immunities. Opposing sound fails.",
+		onBasePowerPriority: 7,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['sound']) {
+				this.debug('Cacophony boost');
+				return this.chainModify([6144, 4096]);
+			}
+		},
+		onAnyTryMove(source, target, move) {
+			if (source !== target && move.flags['sound']) {
+				this.add('-immune', target, '[from] ability: Cacophony');
+				return null;
+			}
+		},
+		onModifyMovePriority: -5,
+		onModifyMove(move) {
+			move.ignoreImmunity = true;
+		},
+	},
+
 	// Mia
 	hacking: {
 		name: "Hacking",

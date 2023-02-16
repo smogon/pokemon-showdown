@@ -163,6 +163,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Kennedy')}|LOOOOOOL ffs`);
 		},
 	},
+	kris: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Kris')}|ok`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Kris')}|ok`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Kris')}|ok`);
+		},
+	},
 	mia: {
 		noCopy: true,
 		onStart() {

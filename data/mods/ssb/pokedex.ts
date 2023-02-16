@@ -37,6 +37,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 103,
 	},
 
+	// Kris
+	nymble: {
+		inherit: true,
+		baseStats: {hp: 110, atk: 200, def: 99, spa: 101, spd: 99, spe: 35},
+		abilities: {0: "Cacophony"},
+	},
+
 	// Mia
 	mewtwomegax: {
 		inherit: true,

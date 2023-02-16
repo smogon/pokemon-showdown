@@ -257,6 +257,65 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Psychic",
 	},
 
+	// Kris
+	ok: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "20% Atk -> SpA/Spe; else SpA boosts -> other stats.",
+		name: "ok",
+		gen: 9,
+		pp: 15,
+		priority: 4,
+		flags: {},
+		stallingMove: true,
+		volatileStatus: 'protect',
+		// TODO move anims
+		onPrepareHit(pokemon) {
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+			if (this.random(100) > 20) {
+				if (!pokemon.boosts['spa'] || pokemon.boosts['spa'] < 0) return null;
+				let spaBoosts = pokemon.boosts['spa'];
+				let modifiableSpaBoosts = spaBoosts;
+				const randomStat: SparseBoostsTable = {};
+				while (modifiableSpaBoosts > 0) {
+					const randomStatID: BoostID = this.sample(['atk', 'def', 'spd', 'spe']);
+					if (!randomStat[randomStatID]) randomStat[randomStatID] = 0;
+					randomStat[randomStatID]! += 1;
+					modifiableSpaBoosts -= 1;
+				}
+				this.boost({spa: -spaBoosts, ...randomStat}, pokemon, pokemon, this.effect);
+			} else {
+				if (!pokemon.volatiles['ok']) pokemon.addVolatile('ok');
+			}
+		},
+		condition: {
+			noCopy: true,
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'ok');
+				this.effectState.atk = pokemon.storedStats.atk;
+				this.effectState.spa = pokemon.storedStats.spa;
+				this.effectState.spe = pokemon.storedStats.spe;
+				pokemon.storedStats.spa = Math.floor(pokemon.storedStats.atk / 10) + pokemon.storedStats.spa;
+				pokemon.storedStats.spe = Math.floor(pokemon.storedStats.atk * 9 / 10) + pokemon.storedStats.spe;
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'ok');
+				pokemon.storedStats.spa = this.effectState.spa;
+				pokemon.storedStats.spe = this.effectState.spe;
+			},
+			onRestart(pokemon) {
+				pokemon.removeVolatile('ok');
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Fairy",
+	},
+
 	// Mia
 	testinginproduction: {
 		accuracy: true,
