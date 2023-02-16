@@ -105,9 +105,12 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 					this.add(`c:|${getName('Kennedy')}|(╯°o°）╯︵ ┻━┻`);
 				}
 			}
+			if (target.species.id === 'cinderacegmax' && !target.terastallized) {
+				this.add('-start', target, 'typechange', target.getTypes(true, true).join('/'), '[silent]');
+			}
 		},
 		onSwitchOut() {
-			this.add(`c:|${getName('Kennedy')}|!lastfm`);
+			this.add(`c:|${getName('Kennedy')}|!lastfm`); // TODO replace
 			this.add(`c:|${getName('Kennedy')}|Whilst I'm gone, stream this ^`);
 		},
 		onFoeSwitchIn(pokemon) {
@@ -132,7 +135,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onSourceAfterFaint(length, target, source, effect) {
 			const message = this.sample(['ALLEZZZZZ', 'VAMOSSSSS', 'FORZAAAAA', 'LET\'S GOOOOO']);
 			this.add(`c:|${getName('Kennedy')}|${message}`);
-			if (source.species.id === 'Cinderace' && this.field.pseudoWeather['anfieldatmosphere'] &&
+			if (source.species.id === 'cinderace' && this.field.pseudoWeather['anfieldatmosphere'] &&
 				!source.transformed && effect?.effectType === 'Move' && source.hp && source.side.foePokemonLeft()) {
 				this.add('-activate', source, 'ability: Battle Bond');
 				source.formeChange('Cinderace-Gmax', this.effect, true);
