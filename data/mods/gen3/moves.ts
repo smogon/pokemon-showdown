@@ -537,7 +537,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (const moveSlot of pokemon.moveSlots) {
 				const move = moveSlot.id;
 				const pp = moveSlot.pp;
-				const NoSleepTalk = ['assist', 'bide', 'focuspunch', 'metronome', 'mirrormove', 'sleeptalk', 'uproar'];
+				const NoSleepTalk = ['assist', 'bide', 'focuspunch', 'metronome', 'mirrormove', 'rest', 'sleeptalk', 'uproar'];
 				if (move && !(NoSleepTalk.includes(move) || this.dex.moves.get(move).flags['charge'])) {
 					moves.push({move: move, pp: pp});
 				}
