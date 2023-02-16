@@ -454,4 +454,23 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Normal",
 	},
+
+	// UT
+	wingover: {
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		shortDesc: "Damages foe and pivots out.",
+		name: "Wingover",
+		pp: 20,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onPrepareHit() {
+			this.attrLastMove('[anim] U-turn');
+		},
+		selfSwitch: true,
+		secondary: null,
+		target: "normal",
+		type: "Flying",
+	},
 };
