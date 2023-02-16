@@ -250,6 +250,28 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// phoopes
+	ididitagain: {
+		shortDesc: "Bypasses Sleep Clause Mod once per battle.",
+		name: "I Did It Again",
+		// implemented in rulesets.ts
+	},
+
+	// TheJesucristoOsAma
+	thegraceofjesuschrist: {
+		shortDesc: "Changes plates at the end of every turn.",
+		name: "The Grace Of Jesus Christ",
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			const plates = this.dex.items.all().filter(item => item.onPlate && !item.zMove);
+			const item = this.sample(plates.filter(plate => this.toID(plate) !== this.toID(pokemon.item)));
+			pokemon.item = '';
+			this.add('-item', pokemon, this.dex.items.get(item), '[from] ability: The Grace Of Jesus Christ');
+			pokemon.setItem(item);
+		},
+	},
+
 	// trace
 	eyesofeternity: {
 		shortDesc: "Moves used by/against this Pokemon always hit; only damaged by attacks.",
@@ -269,20 +291,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
 				return false;
 			}
-		},
-	},
-	// TheJesucristoOsAma
-	thegraceofjesuschrist: {
-		shortDesc: "Changes plates at the end of every turn.",
-		name: "The Grace Of Jesus Christ",
-		onResidualOrder: 28,
-		onResidualSubOrder: 2,
-		onResidual(pokemon) {
-			const plates = this.dex.items.all().filter(item => item.onPlate && !item.zMove);
-			const item = this.sample(plates.filter(plate => this.toID(plate) !== this.toID(pokemon.item)));
-			pokemon.item = '';
-			this.add('-item', pokemon, this.dex.items.get(item), '[from] ability: The Grace Of Jesus Christ');
-			pokemon.setItem(item);
 		},
 	},
 

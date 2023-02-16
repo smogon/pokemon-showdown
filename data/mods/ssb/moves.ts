@@ -396,6 +396,53 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Electric",
 	},
 
+	// phoopes
+	gen1blizzard: {
+		accuracy: 90,
+		basePower: 120,
+		category: "Special",
+		name: "Gen 1 Blizzard",
+		desc: "Has a 10% chance to freeze the target.",
+		shortDesc: "10% chance to freeze the target.",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit() {
+			this.attrLastMove('[anim] Blizzard');
+		},
+		secondary: {
+			chance: 10,
+			status: 'frz',
+		},
+		target: "normal",
+		type: "Ice",
+	},
+
+	// TheJesucristoOsAma
+	theloveofchrist: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Attracts and confuses the target.",
+		name: "The Love Of Christ",
+		gen: 9,
+		pp: 1,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {protect: 1},
+		onPrepareHit() {
+			this.attrLastMove('[anim] Morning Sun');
+			this.attrLastMove('[anim] Lovely Kiss');
+		},
+		onHit(target, source) {
+			target.addVolatile('attract', source);
+			target.addVolatile('confusion', source);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+	},
+
 	// trace
 	chronostasis: {
 		accuracy: 90,
@@ -429,30 +476,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-	},
-	// TheJesucristoOsAma
-	theloveofchrist: {
-		accuracy: 100,
-		basePower: 0,
-		category: "Status",
-		shortDesc: "Attracts and confuses the target.",
-		name: "The Love Of Christ",
-		gen: 9,
-		pp: 1,
-		noPPBoosts: true,
-		priority: 0,
-		flags: {protect: 1},
-		onPrepareHit() {
-			this.attrLastMove('[anim] Morning Sun');
-			this.attrLastMove('[anim] Lovely Kiss');
-		},
-		onHit(target, source) {
-			target.addVolatile('attract', source);
-			target.addVolatile('confusion', source);
-		},
-		secondary: null,
-		target: "normal",
-		type: "Normal",
 	},
 
 	// UT

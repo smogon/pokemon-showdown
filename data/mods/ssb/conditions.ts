@@ -187,16 +187,16 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Mia')}|git checkout --detach HEAD && git commit -m "war crimes"`);
 		},
 	},
-	traceuser: {
+	phoopes: {
 		noCopy: true,
 		onStart() {
-			this.add(`c:|${getName('trace')}|I'm both the beginning and the end.`);
+			this.add(`c:|${getName('phoopes')}|phoopes! (There It Is)`);
 		},
 		onSwitchOut() {
-			this.add(`c:|${getName('trace')}|Why does the violence never end?`);
+			this.add(`c:|${getName('phoopes')}|phoopes! (There He Goes)`);
 		},
 		onFaint() {
-			this.add(`c:|${getName('trace')}|How disappointingly short a dream lasts.`);
+			this.add(`c:|${getName('phoopes')}|Jynx! Knock on wood`);
 		},
 	},
 	thejesucristoosama: {
@@ -209,6 +209,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${getName('TheJesucristoOsAma')}|And that's how I've died for the third time, I'll go to host a game at eventos.`);
+		},
+	},
+	traceuser: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('trace')}|I'm both the beginning and the end.`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('trace')}|Why does the violence never end?`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('trace')}|How disappointingly short a dream lasts.`);
 		},
 	},
 	ut: {
