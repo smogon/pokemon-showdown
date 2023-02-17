@@ -317,6 +317,19 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('UT')}|screaming, crying, perfect storm`);
 		},
 	},
+	zee: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('zee')}|So is this your first VGC tournament?`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('zee')}|Sorry, I've got a plane to catch!`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('zee')}|Hey everyone it's been a great time working with you all in this Super Staff Bros battle but I think it's the right time for me to step down. Thank you all and see you around.`);
+		},
+	},
+
 	// Effects needed to be overriden for things to happen
 	attract: {
 		onStart(pokemon, source, effect) {

@@ -142,6 +142,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Wingover',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant', teraType: 'Flying',
 	},
+	zee: {
+		species: 'Lilligant-Hisui', ability: 'Chlorophyll', item: 'Heat Rock', gender: 'F',
+		moves: [['Close Combat', 'Axe Kick'], ['Solar Blade', 'Seed Bomb'], 'Victory Dance'],
+		signatureMove: 'Solar Summon',
+		evs: {hp: 80, atk: 176, spe: 252}, nature: 'Adamant', teraType: 'Fire',
+	},
 };
 
 export class RandomStaffBrosTeams extends RandomTeams {

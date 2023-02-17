@@ -691,4 +691,37 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Flying",
 	},
+
+	// zee
+	solarsummon: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Sets up Sunny Day and creates a Substitute.",
+		name: "Solar Summon",
+		gen: 9,
+		pp: 5,
+		priority: 0,
+		flags: {},
+		onPrepareHit() {
+			this.attrLastMove('[anim] Sunny Day');
+		},
+		onHit(pokemon) {
+			let success = false;
+			if (this.field.setWeather('sunnyday')) success = true;
+			if (!pokemon.volatiles['substitute']) {
+				if (pokemon.hp <= pokemon.maxhp / 4 || pokemon.maxhp === 1) { // Shedinja clause
+					this.add('-fail', pokemon, 'move: Substitute', '[weak]');
+				} else {
+					pokemon.addVolatile('substitute');
+					this.directDamage(pokemon.maxhp / 4);
+					success = true;
+				}
+			}
+			return success;
+		},
+		secondary: null,
+		target: "self",
+		type: "Fire",
+	},
 };
