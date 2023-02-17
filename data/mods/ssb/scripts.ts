@@ -87,9 +87,6 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	pokemon.canMegaEvo = context.actions.canMegaEvo(pokemon);
 	pokemon.canUltraBurst = context.actions.canUltraBurst(pokemon);
 	pokemon.canTerastallize = context.actions.canTerastallize(pokemon);
-	if (!['A Quag To The Past', 'sharp_claw'].includes(pokemon.name)) {
-		context.add('-ability', pokemon, `${pokemon.getAbility().name}`);
-	}
 	context.add('message', `${pokemon.name} changed form!`);
 }
 
