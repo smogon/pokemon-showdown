@@ -60,6 +60,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: "Baker's Douze Off",
 		evs: {hp: 252, def: 252, spd: 4}, nature: 'Impish', teraType: 'Fairy',
 	},
+	ironwater: {
+		species: 'Jirachi', ability: 'Good as Gold', item: 'Leftovers', gender: 'N',
+		moves: ['Swords Dance', 'Zen Headbutt', 'Hammer Arm'],
+		signatureMove: 'Jirachi Ban Hammer',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Steel',
+	},
 	"Irpachuza!": {
 		species: 'Mr. Mime', ability: 'Mime knows best', item: 'Irpatuzinium Z', gender: 'M',
 		moves: [['Destiny Bond', 'Lunar Dance'], 'Parting Shot', 'Taunt'],

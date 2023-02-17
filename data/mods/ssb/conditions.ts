@@ -89,6 +89,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 	},
+	ironwater: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('ironwater')}|Jirachi Ban Hammer!`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('ironwater')}|Let me grab a bigger hammer`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('ironwater')}|I'll ban you in the next game...`);
+		},
+	},
 	irpachuza: {
 		noCopy: true,
 		onStart() {

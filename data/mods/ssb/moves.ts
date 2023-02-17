@@ -158,6 +158,29 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// ironwater
+	jirachibanhammer: {
+		accuracy: 100,
+		basePower: 120,
+		category: "Physical",
+		shortDesc: "Prevents the target from switching out.",
+		name: "Jirachi Ban Hammer",
+		pp: 5,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onPrepareHit() {
+			this.attrLastMove('[anim] Gigaton Hammer');
+		},
+		secondary: {
+			chance: 100,
+			onHit(target, source, move) {
+				if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+			},
+		},
+		target: "normal",
+		type: "Steel",
+	},
+
 	// Irpachuza
 	bibbidibobbidirands: {
 		accuracy: true,
