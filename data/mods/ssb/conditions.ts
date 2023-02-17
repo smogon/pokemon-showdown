@@ -89,6 +89,28 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 	},
+	irpachuza: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Irpachuza!')}|Hf. I never say gl because I sincerely don't want my oppo to have better luck than me in rands n.n`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Irpachuza!')}|bye and HOOP HOOP n.n`);
+		},
+		onFaint(source) {
+			const enemy = source.side.foe;
+			this.add(`c:|${getName('Irpachuza!')}|how DARE YOU ${enemy} ;-; n.n`);
+		},
+		innateName: "Prankster",
+		desc: "This Pokemon's non-damaging moves have their priority increased by 1. Opposing Dark-type Pokemon are immune to these moves, and any move called by these moves, if the resulting user of the move has this Ability.",
+		shortDesc: "This Pokemon's Status moves have priority raised by 1, but Dark types are immune.",
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.category === 'Status') {
+				move.pranksterBoosted = true;
+				return priority + 1;
+			}
+		},
+	},
 	kennedy: {
 		noCopy: true,
 		innateName: "Battle Bond",

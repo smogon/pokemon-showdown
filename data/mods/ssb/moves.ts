@@ -1,5 +1,6 @@
 import {ssbSets} from "./random-teams";
 import {changeSet, getName} from "./scripts";
+import {Teams} from '../../../sim/teams';
 
 export const Moves: {[k: string]: ModdedMoveData} = {
 	/*
@@ -93,7 +94,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(pokemon) {
 			if (pokemon.species.name === 'Quagsire') {
 				pokemon.addVolatile('stall');
-				pokemon.formeChange('clodsire', this.effect, true);
 				changeSet(this, pokemon, ssbSets['A Quag To The Past-Clodsire'], true);
 			} else {
 				this.heal(pokemon.maxhp / 2, pokemon, pokemon, this.effect);
@@ -156,6 +156,51 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
+	},
+
+	// Irpachuza
+	bibbidibobbidirands: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Changes target to a Randbats set.",
+		name: "Bibbidi-Bobbidi-Rands",
+		gen: 9,
+		pp: 1,
+		priority: 0,
+		flags: {protect: 1},
+		onPrepareHit(target, source) {
+			this.attrLastMove('[anim] Doom Desire');
+		},
+		onHit(target) {
+			const formats = ['gen9randombattle', 'gen9hackmonscup', 'gen9challengecup', 'gen9computergeneratedteams'];
+			const randFormat = this.sample(formats);
+			let msg;
+			switch (randFormat) {
+			case 'gen9randombattle':
+				msg = "Ta-dah! You are now blessed with a set from the most popular format on the sim, hope you like it! n.n";
+				break;
+			case 'gen9hackmonscup':
+				msg = "Hackmons Cup is like Rands but scrambled eggs, cheese and pasta. I'm sure you'll love it too n.n";
+				break;
+			case 'gen9challengecup':
+				msg = "The only difference between a Challenge Cup Pokémon and my in-game one is that the former actually surpassed lvl. 60, enjoy n.n";
+				break;
+			case 'gen9computergeneratedteams':
+				msg = "We asked an AI to make a randbats set. YOU WON'T BELIEVE WHAT IT CAME UP WITH N.N";
+				break;
+			}
+			// TODO: ban mons with custom stats
+			const team = Teams.generate(randFormat, {name: target.side.name});
+			this.addMove('-anim', target, 'Wish', target);
+			// @ts-ignore set wants a sig but randbats sets don't have one
+			changeSet(this, target, team[0], true);
+			this.add(`c:|${getName('Irpachuza!')}|${msg}`);
+		},
+		isZ: "irpatuziniumz",
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
 	},
 
 	// Kennedy

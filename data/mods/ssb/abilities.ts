@@ -99,6 +99,22 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Irpachuza
+	mimeknowsbest: {
+		desc: "Uses a random screen/protect move on switch in.",
+		name: "Mime knows best",
+		onStart(target) {
+			const randomMove = [
+				"Light Screen", "Reflect", "Protect", "Detect", "Barrier", "Spiky Shield", "Baneful Bunker",
+				"Safeguard", "Mist", "King's Shield", "Magic Coat", "Aurora Veil",
+			];
+			const move = this.dex.deepClone(this.dex.moves.get(this.sample(randomMove)));
+			// allows use of Aurora Veil without hail
+			if (move.name === "Aurora Veil") delete move.onTry;
+			this.actions.useMove(move, target);
+		},
+	},
+
 	// Kennedy
 	anfield: {
 		shortDesc: "Clears terrain/hazards/pseudo weathers. Summons Anfield Atmosphere.",

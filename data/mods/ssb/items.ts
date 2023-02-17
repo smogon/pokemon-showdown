@@ -9,4 +9,13 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		desc: "At the end of every turn, holder restores 1/16 of its max HP.",
 	},
+	// Irpachuza
+	irpatuziniumz: {
+		name: "Irpatuzinium Z",
+		onTakeItem: false,
+		zMove: "Bibbidi-Bobbidi-Rands",
+		zMoveFrom: "Fleur Cannon",
+		itemUser: ["Mr. Mime"],
+		desc: "If held by a Mr. Mime with Fleur Cannon, it can use Bibbidi-Bobbidi-Rands.",
+	},
 };
