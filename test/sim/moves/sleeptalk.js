@@ -44,26 +44,27 @@ describe('Sleep Talk', function () {
 		assert.equal(move.pp, move.maxpp - 2);
 	});
 
-	it('should not be able to choose rest in Gen 3 battles', function() {
+	it('should call rest only for rest to fail in Gen 3', function() {
 		battle = common.gen(3).createBattle([[
 			{species: 'snorlax', ability: 'noguard', moves: ['sleeptalk', 'rest']},
 		], [
-			{species: 'magikarp', moves: ['tackle', 'splash']},
+			{species: 'magikarp', moves: ['flail', 'splash']},
 		]]);
 		const snorlax = battle.p1.active[0];
-		battle.makeChoices('move sleeptalk', 'move tackle');
+		const rest = snorlax.getMoveData(Dex.moves.get('rest'));
+		battle.makeChoices('move sleeptalk', 'move flail');
 		assert.notEqual(snorlax.hp, snorlax.maxhp);
 
 		battle.makeChoices('move rest', 'move splash');
 		assert.fullHP(snorlax);
 		assert.equal(snorlax.status, 'slp');
 		snorlax.statusState.time = 6;
+		const preSleeptalkPP = rest.pp
+		assert.equal(preSleeptalkPP, rest.maxpp - 1);
 
-		battle.makeChoices('move sleeptalk', 'move tackle');
+		battle.makeChoices('move sleeptalk', 'move flail');
+		assert(battle.log[battle.lastMoveLine+2].startsWith('|-fail'), 'should log that Rest fails when called by Sleep Talk');
+		assert.equal(rest.pp, preSleeptalkPP, 'Rest\'s pp should not reduce after failure');
 		assert.notEqual(snorlax.hp, snorlax.maxhp);
-		assert.equal(snorlax.status, 'slp');
-
-		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-fail'));
-		assert.notEqual(battle.log[battle.lastMoveLine].split('|')[3], 'Rest')
 	});
 });

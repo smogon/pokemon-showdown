@@ -537,7 +537,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (const moveSlot of pokemon.moveSlots) {
 				const move = moveSlot.id;
 				const pp = moveSlot.pp;
-				const NoSleepTalk = ['assist', 'bide', 'focuspunch', 'metronome', 'mirrormove', 'rest', 'sleeptalk', 'uproar'];
+				const NoSleepTalk = ['assist', 'bide', 'focuspunch', 'metronome', 'mirrormove', 'sleeptalk', 'uproar'];
 				if (move && !(NoSleepTalk.includes(move) || this.dex.moves.get(move).flags['charge'])) {
 					moves.push({move: move, pp: pp});
 				}
@@ -548,6 +548,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const randomMove = this.sample(moves);
 			if (!randomMove.pp) {
 				this.add('cant', pokemon, 'nopp', randomMove.move);
+				return;
+			}
+			if (randomMove.move === 'rest') {
+				this.debug("Rest will fail when called by sleep talk");
+				this.add('-fail', pokemon, 'move: Rest', '[from] Sleep Talk');
 				return;
 			}
 			this.actions.useMove(randomMove.move, pokemon);
