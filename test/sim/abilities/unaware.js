@@ -101,7 +101,7 @@ describe('Unaware', function () {
 		]]);
 
 		battle.makeChoices();
- 		battle.makeChoices('auto', 'move foulplay');
+		battle.makeChoices('auto', 'move foulplay');
 
 		const clef = battle.p1.active[0];
 		const damage = clef.maxhp - Math.floor(clef.maxhp / 2) - clef.hp;
