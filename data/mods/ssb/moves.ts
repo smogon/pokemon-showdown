@@ -333,7 +333,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
-			this.actions.useMove('Substitute', pokemon);
+			if (!pokemon.volatiles['substitute']) {
+				if (pokemon.hp <= pokemon.maxhp / 4 || pokemon.maxhp === 1) { // Shedinja clause
+					this.add('-fail', pokemon, 'move: Substitute', '[weak]');
+				} else {
+					pokemon.addVolatile('substitute');
+					this.directDamage(pokemon.maxhp / 4);
+				}
+			}
 			if (!Object.values(pokemon.boosts).some(x => x >= 6)) {
 				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1, accuracy: 1, evasion: 1}, pokemon);
 				this.add(`c:|${getName('Mad Monty')}|Ope! Wrong button, sorry.`);
