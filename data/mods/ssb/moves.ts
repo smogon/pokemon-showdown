@@ -519,6 +519,42 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "self",
 		type: "Water",
 	},
+
+	// sharp_claw
+	treacheroustraversal: {
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		shortDesc: "Clears hazards, sets spikes, and pivots out.",
+		name: "Treacherous Traversal",
+		gen: 9,
+		pp: 20,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Defog', source);
+			this.add('-anim', source, 'Extreme Speed', target);
+		},
+		selfSwitch: true,
+		self: {
+			onHit(source) {
+				for (const side of source.side.foeSidesWithConditions()) {
+					if (source.species.name === 'Sneasel') {
+						side.addSideCondition('spikes');
+					} else {
+						side.addSideCondition('toxicspikes');
+					}
+				}
+			},
+		},
+		secondary: {}, // allows sheer force to trigger
+		target: "normal",
+		type: "Rock",
+	},
+
 	// TheJesucristoOsAma
 	theloveofchrist: {
 		accuracy: 100,

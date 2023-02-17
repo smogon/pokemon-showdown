@@ -49,4 +49,16 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: 'Hacking'},
 	},
+
+	// sharp_claw
+	sneasel: {
+		inherit: true,
+		baseStats: {hp: 55, atk: 105, def: 95, spa: 35, spd: 95, spe: 135},
+		abilities: {0: 'Rough and Tumble'},
+	},
+	sneaselhisui: {
+		inherit: true,
+		baseStats: {hp: 55, atk: 135, def: 75, spa: 35, spd: 85, spe: 135},
+		abilities: {0: 'Rough and Tumble'},
+	},
 };

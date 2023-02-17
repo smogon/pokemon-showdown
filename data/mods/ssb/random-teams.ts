@@ -102,6 +102,18 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Purification',
 		evs: {hp: 252, def: 252, spd: 4}, nature: 'Bold', teraType: 'Water',
 	},
+	'sharp_claw': {
+		species: 'Sneasel', ability: 'Rough and Tumble', item: 'Heavy-Duty Boots', gender: 'F',
+		moves: ['Knock Off', 'Ice Spinner', 'Ice Shard'],
+		signatureMove: 'Treacherous Traversal',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Poison',
+	},
+	'sharp_claw-Rough': {
+		species: 'Sneasel-Hisui', ability: 'Rough and Tumble', item: 'Heavy-Duty Boots', gender: 'M',
+		moves: ['Combat Torque', 'Noxious Torque', 'Mach Punch'],
+		signatureMove: 'Treacherous Traversal',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Poison', skip: 'sharp_claw',
+	},
 	'snake_rattler': {
 		species: 'Fidgit', ability: 'Persistent', item: ['Mental Herb', 'Covert Cloak'], gender: 'M',
 		moves: ['Tailwind', 'Healing Wish', 'Taunt'],

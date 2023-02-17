@@ -1,4 +1,5 @@
-import {getName} from "./scripts";
+import {ssbSets} from "./random-teams";
+import {changeSet, getName} from "./scripts";
 
 export const Abilities: {[k: string]: ModdedAbilityData} = {
 	/*
@@ -365,6 +366,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Bypasses Sleep Clause Mod once per battle.",
 		name: "I Did It Again",
 		// implemented in rulesets.ts
+	},
+
+	// sharp_claw
+	roughandtumble: {
+		shortDesc: "Restores 1/3 HP and changes forme on switch out.",
+		name: "Rough and Tumble",
+		onSwitchOutPriority: -1,
+		onSwitchOut(pokemon) {
+			pokemon.heal(pokemon.baseMaxhp / 3);
+			if (pokemon.species.name === 'Sneasel') {
+				changeSet(this, pokemon, ssbSets['sharp_claw-Rough']);
+			} else {
+				changeSet(this, pokemon, ssbSets['sharp_claw']);
+			}
+		},
 	},
 
 	// TheJesucristoOsAma

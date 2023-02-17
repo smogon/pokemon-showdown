@@ -245,6 +245,30 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Scotteh')}|\`\`Segmentation fault (core dumped)\`\``);
 		},
 	},
+	sharpclaw: {
+		noCopy: true,
+		onStart(pokemon) {
+			if (pokemon.species.name === 'Sneasel') {
+				this.add(`c:|${getName('sharp_claw')}|Hi, I'm Tumble! hf :D`);
+			} else {
+				this.add(`c:|${getName('sharp_claw')}|Hi, I'm Rough! gl >:)`);
+			}
+		},
+		onSwitchOut(pokemon) {
+			if (pokemon.species.name === 'Sneasel') {
+				this.add(`c:|${getName('sharp_claw')}|brb, getting my brother :3`);
+			} else {
+				this.add(`c:|${getName('sharp_claw')}|brb, getting my sister C:`);
+			}
+		},
+		onFaint(pokemon) {
+			if (pokemon.species.name === 'Sneasel') {
+				this.add(`c:|${getName('sharp_claw')}|ur no fun ;~;`);
+			} else {
+				this.add(`c:|${getName('sharp_claw')}|ur no fun T_T`);
+			}
+		},
+	},
 	snakerattler: {
 		noCopy: true,
 		onStart() {
