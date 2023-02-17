@@ -96,6 +96,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Purification',
 		evs: {hp: 252, def: 252, spd: 4}, nature: 'Bold', teraType: 'Water',
 	},
+	'snake_rattler': {
+		species: 'Fidgit', ability: 'Persistent', item: ['Mental Herb', 'Covert Cloak'], gender: 'M',
+		moves: ['Tailwind', 'Healing Wish', 'Taunt'],
+		signatureMove: 'Concept Relevant',
+		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Water',
+	},
 	TheJesucristoOsAma: {
 		species: 'Arceus', ability: 'The Grace Of Jesus Christ', gender: 'N',
 		item: [
