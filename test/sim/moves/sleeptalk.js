@@ -44,7 +44,7 @@ describe('Sleep Talk', function () {
 		assert.equal(move.pp, move.maxpp - 2);
 	});
 
-	it('should call rest only for rest to fail in Gen 3', function() {
+	it('should call rest only for rest to fail in Gen 3', function () {
 		battle = common.gen(3).createBattle([[
 			{species: 'snorlax', ability: 'noguard', moves: ['sleeptalk', 'rest']},
 		], [
@@ -59,11 +59,11 @@ describe('Sleep Talk', function () {
 		assert.fullHP(snorlax);
 		assert.equal(snorlax.status, 'slp');
 		snorlax.statusState.time = 6;
-		const preSleeptalkPP = rest.pp
+		const preSleeptalkPP = rest.pp;
 		assert.equal(preSleeptalkPP, rest.maxpp - 1);
 
 		battle.makeChoices('move sleeptalk', 'move flail');
-		assert(battle.log[battle.lastMoveLine+2].startsWith('|-fail'), 'should log that Rest fails when called by Sleep Talk');
+		assert(battle.log[battle.lastMoveLine + 2].startsWith('|-fail'), 'should log that Rest fails when called by Sleep Talk');
 		assert.equal(rest.pp, preSleeptalkPP, 'Rest\'s pp should not reduce after failure');
 		assert.notEqual(snorlax.hp, snorlax.maxhp);
 	});
