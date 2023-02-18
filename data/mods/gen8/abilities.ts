@@ -341,7 +341,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		rating: 2.5,
 	},
-	Galvanize: {
+	galvanize: {
 		inherit: true,
 		rating: 4,
 	},

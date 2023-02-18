@@ -1006,14 +1006,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Dragon') {
 				this.debug('Dragon\'s Maw boost');
-				return this.chainModify(1.5);
+				return this.chainModify(1.2);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Dragon') {
 				this.debug('Dragon\'s Maw boost');
-				return this.chainModify(1.5);
+				return this.chainModify(1.2);
 			}
 		},
 		name: "Dragon's Maw",
@@ -1441,7 +1441,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2.5,
 		num: 177,
 	},
-	Galvanize: {
+	galvanize: {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			const noModifyType = [
@@ -4675,14 +4675,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Electric') {
 				this.debug('Transistor boost');
-				return this.chainModify(1.5);
+				return this.chainModify(1.2);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Electric') {
 				this.debug('Transistor boost');
-				return this.chainModify(1.5);
+				return this.chainModify(1.2);
 			}
 		},
 		name: "Transistor",
