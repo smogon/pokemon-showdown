@@ -82,6 +82,10 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			),
 			'Bad Dreams': movePool => movePool.includes('darkvoid'),
 			'Slow Start': movePool => movePool.includes('substitute'),
+			protect: movePool => movePool.includes('wish'),
+			wish: (movePool, moves, abilities, types, counter, species) => (
+				species.baseStats.hp < 110 && !abilities.has('Regenerator') && movePool.includes('protect')
+			),
 		};
 	}
 
@@ -194,7 +198,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				counter.get('Dark') > 2 ||
 				moves.has('clearsmog') ||
 				restTalk ||
-				counter.damagingMoves.size - 1 === counter.get('priority')
+				(!!counter.get('priority') && counter.damagingMoves.size - 1 === counter.get('priority'))
 			)};
 		case 'haze': case 'spikes':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('trickroom')};
@@ -257,9 +261,12 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'voltswitch':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('raindance') || moves.has('uturn')};
 		case 'wish':
-			if (species.baseStats.hp >= 130) return {cull: false};
-			if (abilities.has('Regenerator')) return {cull: false};
-			return {cull: (!['ironhead', 'protect', 'spikyshield', 'uturn'].some(m => moves.has(m)))};
+			return {cull: (
+				species.baseStats.hp < 110 &&
+				!abilities.has('Regenerator') &&
+				!movePool.includes('protect') &&
+				!['ironhead', 'protect', 'spikyshield', 'uturn'].some(m => moves.has(m))
+			)}
 
 		// Bit redundant to have both
 		// Attacks:
@@ -468,7 +475,10 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 			return {cull};
 		case 'milkdrink': case 'moonlight': case 'painsplit': case 'recover': case 'roost': case 'synthesis':
-			return {cull: ['leechseed', 'rest'].some(m => moves.has(m) || moves.has('wish') && moves.has('protect'))};
+			return {cull: (
+				['leechseed', 'rest'].some(m => moves.has(m)) ||
+				(moves.has('wish') && (moves.has('protect') || movePool.includes('protect')))
+			)};
 		case 'safeguard':
 			return {cull: moves.has('destinybond')};
 		case 'substitute':
@@ -919,7 +929,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 				// Pokemon should have moves that benefit their Type/Ability/Weather, as well as moves required by its forme
 				if (
-					!cull && !isSetup && !move.weather && !move.damage &&
+					!cull && !isSetup && !move.weather && !move.stallingMove && !move.damage &&
 					(move.category !== 'Status' || !move.flags.heal) &&
 					!['judgment', 'sleeptalk', 'toxic', 'lightscreen', 'reflect'].includes(moveid) &&
 					(counter.get('physicalsetup') + counter.get('specialsetup') < 2 && (
@@ -961,6 +971,11 @@ export class RandomGen6Teams extends RandomGen7Teams {
 						}
 						for (const abil of abilities) {
 							if (runEnforcementChecker(abil)) {
+								cull = true;
+							}
+						}
+						for (const move of moves) {
+							if (runEnforcementChecker(move)) {
 								cull = true;
 							}
 						}

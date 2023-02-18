@@ -119,6 +119,10 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				!counter.get('contrary') && species.name !== 'Shuckle'
 			),
 			'Slow Start': movePool => movePool.includes('substitute'),
+			protect: movePool => movePool.includes('wish'),
+			wish: (movePool, moves, abilities, types, counter, species) => (
+				species.baseStats.hp < 110 && !abilities.has('Regenerator') && movePool.includes('protect')
+			),
 		};
 	}
 
@@ -235,7 +239,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				!!counter.get('speedsetup') ||
 				counter.get('Dark') > 2 ||
 				moves.has('clearsmog') ||
-				counter.damagingMoves.size - 1 === counter.get('priority') ||
+				(!!counter.get('priority') && counter.damagingMoves.size - 1 === counter.get('priority')) ||
 				hasRestTalk
 			)};
 		case 'haze': case 'spikes':
@@ -320,9 +324,12 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				['electricterrain', 'raindance', 'uturn'].some(m => moves.has(m))
 			)};
 		case 'wish':
-			if (species.baseStats.hp >= 130) return {cull: false};
-			if (abilities.has('Regenerator')) return {cull: false};
-			return {cull: (!['ironhead', 'protect', 'spikyshield', 'uturn'].some(m => moves.has(m)))};
+			return {cull: (
+				species.baseStats.hp < 110 &&
+				!abilities.has('Regenerator') &&
+				!movePool.includes('protect') &&
+				!['ironhead', 'protect', 'spikyshield', 'uturn'].some(m => moves.has(m))
+			)}
 
 		// Bit redundant to have both
 		// Attacks:
@@ -560,7 +567,10 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 			return {cull};
 		case 'painsplit': case 'recover': case 'roost': case 'synthesis':
-			return {cull: moves.has('leechseed') || moves.has('rest') || moves.has('wish') && moves.has('protect')};
+			return {cull: (
+				moves.has('leechseed') || moves.has('rest') ||
+				(moves.has('wish') && (moves.has('protect') || movePool.includes('protect')))
+			)};
 		case 'substitute':
 			return {cull: (
 				moves.has('dracometeor') ||
@@ -1214,6 +1224,11 @@ export class RandomGen7Teams extends RandomGen8Teams {
 						}
 						for (const abil of abilities) {
 							if (runEnforcementChecker(abil)) {
+								cull = true;
+							}
+						}
+						for (const move of moves) {
+							if (runEnforcementChecker(move)) {
 								cull = true;
 							}
 						}
