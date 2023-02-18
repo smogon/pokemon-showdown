@@ -396,8 +396,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return false;
 			},
 			onSetStatus(status, target, source, effect) {
+				if (effect.id === 'anfieldatmosphere') return;
 				if (status.id === 'slp' && !target.isSemiInvulnerable()) {
-					this.add('-activate', target, 'move: Anfield Terrain');
+					this.add('-activate', target, 'move: Anfield Atmosphere');
 					return false;
 				}
 				for (const pokemon of this.getAllActive()) {
@@ -408,7 +409,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onTryAddVolatile(status, target) {
 				if (target.isSemiInvulnerable()) return;
 				if (status.id === 'yawn') {
-					this.add('-activate', target, 'move: Anfield Terrain');
+					this.add('-activate', target, 'move: Anfield Atmosphere');
 					return null;
 				}
 			},
