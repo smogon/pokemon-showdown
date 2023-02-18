@@ -566,7 +566,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				moves.has('dracometeor') ||
 				(moves.has('leafstorm') && !abilities.has('Contrary')) ||
 				['encore', 'pursuit', 'rest', 'taunt', 'uturn', 'voltswitch', 'whirlwind'].some(m => moves.has(m)) ||
-				movePool.includes('copycat')
+				movePool.includes('copycat') || movePool.includes('dragondance')
 			)};
 		case 'powersplit':
 			return {cull: moves.has('guardsplit')};

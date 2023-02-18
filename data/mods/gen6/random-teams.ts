@@ -470,7 +470,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return {cull: (
 				['dracometeor', 'pursuit', 'rest', 'taunt', 'uturn', 'voltswitch', 'whirlwind'].some(m => moves.has(m)) ||
 				(moves.has('leafstorm') && !abilities.has('Contrary')) ||
-				movePool.includes('copycat')
+				movePool.includes('copycat') || movePool.includes('dragondance')
 			)};
 		}
 
