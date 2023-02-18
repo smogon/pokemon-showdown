@@ -82,4 +82,18 @@ describe('Revival Blessing', function () {
 		battle.makeChoices('switch 2', '');
 		assert.equal(battle.p1.active[1].boosts.evasion, 0, "Lycanroc should not have used Double Team");
 	});
+
+	it(`should not retain fainted Pokemon's Terastallization upon revival`, () => {
+		battle = common.createBattle([[
+			{species: 'corviknight', ability: 'runaway', moves: ['memento'], teraType: "Steel"},
+			{species: 'zoroark', ability: 'runaway', moves: ['revivalblessing']},
+		], [
+			{species: 'goodra', ability: 'gooey', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move memento terastallize', 'auto');
+		battle.makeChoices('switch zoroark', '');
+		battle.makeChoices('move revivalblessing', 'auto');
+		battle.makeChoices('switch corviknight', '');
+		assert.equal(battle.p1.pokemon[1].terastallized, undefined);
+	});
 });
