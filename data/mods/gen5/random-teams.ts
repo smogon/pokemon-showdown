@@ -27,7 +27,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				!counter.get('Flying') && (types.has('Normal') || abilities.has('Serene Grace'))
 			),
 			Ghost: (movePool, moves, abilities, types, counter) => !types.has('Dark') && !counter.get('Ghost'),
-			Grass: movePool => movePool.includes('hornleech') || movePool.includes('seedflare'),
+			Grass: movePool => (['hornleech', 'seedflare', 'woodhammer'].some(m => movePool.includes(m))),
 			Ground: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Ground') && !moves.has('rest') && !moves.has('sleeptalk')
 			),
