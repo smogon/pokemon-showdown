@@ -89,6 +89,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 	},
+	deftinwolf: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('deftinwolf')}|Run, little rabbit.`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('deftinwolf')}|I'll give you a moment to say your prayers.`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('deftinwolf')}|Death is only the beginning.`);
+		},
+	},
 	ironwater: {
 		noCopy: true,
 		onStart() {

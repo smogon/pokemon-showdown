@@ -60,6 +60,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: "Baker's Douze Off",
 		evs: {hp: 252, def: 252, spd: 4}, nature: 'Impish', teraType: 'Fairy',
 	},
+	deftinwolf: {
+		species: 'Yveltal', ability: 'Sharpness', item: 'Dread Plate', gender: '',
+		moves: ['Aerial Ace', 'Ceaseless Edge', 'Cross Poison'],
+		signatureMove: "Trivial Pursuit",
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant', teraType: 'Poison',
+	},
 	ironwater: {
 		species: 'Jirachi', ability: 'Good as Gold', item: 'Leftovers', gender: 'N',
 		moves: ['Swords Dance', 'Zen Headbutt', 'Hammer Arm'],
