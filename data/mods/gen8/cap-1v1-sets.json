@@ -43,13 +43,13 @@
 	}],
 	"Caribolt": [{
 		"item": ["Choice Band", "Choice Scarf"],
-		"ability": "Galvanise",
+		"ability": "Galvanize",
 		"evs": {"atk": 252, "spd": 4, "spe": 252},
 		"nature": "Jolly",
 		"moves": ["Giga Impact", "Power Whip", "Knock Off", "Brick Break"]
 	}, {
 		"item": "Life Orb",
-		"ability": "Galvanise",
+		"ability": "Galvanize",
 		"evs": {"atk": 252, "spd": 4, "spe": 252},
 		"nature": "Jolly",
 		"moves": ["Giga Impact", "Power Whip", "Knock Off", "Swords Dance"]

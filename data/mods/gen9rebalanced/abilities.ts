@@ -1441,7 +1441,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2.5,
 		num: 177,
 	},
-	Galvanise: {
+	Galvanize: {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			const noModifyType = [
@@ -1457,7 +1457,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
-		name: "Galvanise",
+		name: "Galvanize",
 		rating: 4,
 		num: 206,
 	},

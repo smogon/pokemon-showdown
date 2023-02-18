@@ -10807,21 +10807,21 @@
 			"sets": [{
 				"species": "Golem-Alola",
 				"item": ["Leftovers"],
-				"ability": ["Galvanise"],
+				"ability": ["Galvanize"],
 				"evs": {"hp": 252, "spd": 52, "spe": 204},
 				"nature": "Careful",
 				"moves": [["Stealth Rock"], ["Return"], ["Stone Edge"], ["Earthquake"]]
 			}, {
 				"species": "Golem-Alola",
 				"item": ["Life Orb"],
-				"ability": ["Galvanise"],
+				"ability": ["Galvanize"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Jolly",
 				"moves": [["Stealth Rock"], ["Return"], ["Stone Edge"], ["Explosion"]]
 			}, {
 				"species": "Golem-Alola",
 				"item": ["Focus Sash"],
-				"ability": ["Galvanise"],
+				"ability": ["Galvanize"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Stealth Rock"], ["Return"], ["Stone Edge"], ["Explosion"]]
@@ -10849,14 +10849,14 @@
 			}, {
 				"species": "Golem-Alola",
 				"item": ["Choice Band"],
-				"ability": ["Galvanise"],
+				"ability": ["Galvanize"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Double-Edge"], ["Earthquake"], ["Fire Punch", "Stone Edge"], ["Explosion"]]
 			}, {
 				"species": "Golem-Alola",
 				"item": ["Choice Band"],
-				"ability": ["Galvanise"],
+				"ability": ["Galvanize"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Return"], ["Earthquake"], ["Fire Punch", "Stone Edge"], ["Explosion"]]

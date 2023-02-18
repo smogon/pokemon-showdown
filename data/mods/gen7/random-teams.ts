@@ -594,7 +594,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		case 'Battle Bond': case 'Dazzling': case 'Flare Boost': case 'Hyper Cutter':
 		case 'Ice Body': case 'Innards Out': case 'Moody': case 'Steadfast':
 			return true;
-		case 'Aerilate': case 'Galvanise': case 'Pixilate': case 'Refrigerate':
+		case 'Aerilate': case 'Galvanize': case 'Pixilate': case 'Refrigerate':
 			return !counter.get('Normal');
 		case 'Analytic': case 'Download':
 			return species.nfe;

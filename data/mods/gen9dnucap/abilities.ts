@@ -1394,7 +1394,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2.5,
 		num: 177,
 	},
-	Galvanise: {
+	Galvanize: {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			const noModifyType = [
@@ -1402,14 +1402,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			];
 			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Electric';
-				move.GalvaniseBoosted = true;
+				move.GalvanizeBoosted = true;
 			}
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.GalvaniseBoosted) return this.chainModify([4915, 4096]);
+			if (move.GalvanizeBoosted) return this.chainModify([4915, 4096]);
 		},
-		name: "Galvanise",
+		name: "Galvanize",
 		rating: 4,
 		num: 206,
 	},

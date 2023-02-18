@@ -5,7 +5,7 @@ const common = require('../../common');
 
 let battle;
 
-const ates = {Refrigerate: 'Ice', Pixilate: 'Fairy', Aerilate: 'Flying', Galvanise: 'Electric'};
+const ates = {Refrigerate: 'Ice', Pixilate: 'Fairy', Aerilate: 'Flying', Galvanize: 'Electric'};
 
 for (const ate in ates) {
 	describe(ate, function () {
