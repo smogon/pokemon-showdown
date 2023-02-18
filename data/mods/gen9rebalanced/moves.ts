@@ -3480,7 +3480,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Defog",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
+		flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, wind: 1},
 		onHit(target, source, move) {
 			let success = false;
 			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({evasion: -1});
