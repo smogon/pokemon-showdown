@@ -163,7 +163,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				!movePool.includes('protect')
 			)};
 		case 'moonlight':
-			return {cull: (moves.has('wish') && moves.has('protect'))};
+			return {cull: (moves.has('wish') && (moves.has('protect') || movePool.includes('protect')))};
 		case 'rapidspin':
 			return {cull: !!teamDetails.rapidSpin || (!!counter.setupType && counter.get('Physical') + counter.get('Special') < 2)};
 		case 'fakeout':
