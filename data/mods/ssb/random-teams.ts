@@ -60,6 +60,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: "Baker's Douze Off",
 		evs: {hp: 252, def: 252, spd: 4}, nature: 'Impish', teraType: 'Fairy',
 	},
+	Coolcodename: {
+		species: 'Victini', ability: 'Firewall', item: 'Heavy-Duty Boots', gender: 'M',
+		moves: ['Searing Shot', 'Psychic', 'Dazzling Gleam'],
+		signatureMove: "Haxer's Will",
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', teraType: 'Fairy', shiny: 1024,
+	},
 	deftinwolf: {
 		species: 'Yveltal', ability: 'Sharpness', item: 'Dread Plate', gender: '',
 		moves: ['Aerial Ace', 'Ceaseless Edge', 'Cross Poison'],

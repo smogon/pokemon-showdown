@@ -89,6 +89,17 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 	},
+	coolcodename: {
+		onStart(pokemon) {
+			this.add(`c:|${getName('Coolcodename')}|LFGI ${pokemon.side.name}`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Coolcodename')}|right, i forgot i have a skill issue`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Coolcodename')}|mb LOL`);
+		},
+	},
 	deftinwolf: {
 		noCopy: true,
 		onStart() {

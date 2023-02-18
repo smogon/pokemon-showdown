@@ -100,6 +100,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Coolcodename
+	firewall: {
+		shortDesc: "Burns opponents that attempt to use status moves on this Pokemon; Status move immunity.",
+		name: "Firewall",
+		onTryHit(target, source, move) {
+			if (move.category === 'Status' && target !== source) {
+				if (!source.trySetStatus('brn', target)) {
+					this.add('-immune', target, '[from] ability: Firewall');
+				}
+				return null;
+			}
+		},
+		isBreakable: true,
+	},
+
 	// Irpachuza
 	mimeknowsbest: {
 		desc: "Uses a random screen/protect move on switch in.",

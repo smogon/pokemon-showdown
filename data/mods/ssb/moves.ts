@@ -158,6 +158,37 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// Coolcodename
+	haxerswill: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "",
+		name: "Haxer's Will",
+		gen: 9,
+		pp: 15,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Clangorous Soul', source);
+			this.add('-anim', source, 'Focus Energy', source);
+		},
+		onHit(pokemon) {
+			if (this.randomChance(7, 10)) {
+				this.boost({spa: 1, spe: 1});
+				pokemon.addVolatile('focusenergy');
+			} else {
+				pokemon.clearBoosts();
+				this.add('-clearboost', pokemon);
+			}
+		},
+		target: "self",
+		type: "Normal",
+	},
+
 	// deftinwolf
 	trivialpursuit: {
 		accuracy: 100,
