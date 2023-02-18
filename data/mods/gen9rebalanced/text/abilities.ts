@@ -382,7 +382,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	dragonsmaw: {
 		name: "Dragon's Maw",
-		shortDesc: "This Pokemon's offensive stat is multiplied by 1.5 while using a Dragon-type attack.",
+		shortDesc: "This Pokemon's offensive stat is multiplied by 1.2 while using a Dragon-type attack.",
 	},
 	drizzle: {
 		name: "Drizzle",
@@ -1956,7 +1956,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	transistor: {
 		name: "Transistor",
-		shortDesc: "This Pokemon's offensive stat is multiplied by 1.5 while using an Electric-type attack.",
+		shortDesc: "This Pokemon's offensive stat is multiplied by 1.2 while using an Electric-type attack.",
 	},
 	triage: {
 		name: "Triage",
