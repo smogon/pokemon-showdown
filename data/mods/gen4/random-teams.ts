@@ -57,6 +57,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			),
 			Guts: (movePool, moves, abilities, types) => types.has('Normal') && movePool.includes('facade'),
 			'Slow Start': movePool => movePool.includes('substitute'),
+			protect: movePool => movePool.includes('wish'),
+			wish: movePool => movePool.includes('protect'),
 		};
 	}
 	shouldCullMove(
@@ -157,9 +159,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			)};
 		case 'wish':
 			return {cull: (
-				!['batonpass', 'ironhead', 'moonlight', 'protect', 'softboiled', 'uturn'].some(m => moves.has(m)) ||
-				moves.has('rest') ||
-				!!counter.get('speedsetup')
+				!['batonpass', 'ironhead', 'moonlight', 'protect', 'softboiled', 'uturn'].some(m => moves.has(m)) &&
+				!movePool.includes('protect')
 			)};
 		case 'moonlight':
 			return {cull: (moves.has('wish') && moves.has('protect'))};
@@ -716,6 +717,9 @@ export class RandomGen4Teams extends RandomGen5Teams {
 						}
 						for (const abil of abilities) {
 							if (runEnforcementChecker(abil)) cull = true;
+						}
+						for (const move of moves) {
+							if (runEnforcementChecker(move)) cull = true;
 						}
 					}
 				}
