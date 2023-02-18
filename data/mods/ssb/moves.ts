@@ -163,7 +163,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "",
+		shortDesc: "70% boost Spa/Spe by 1 & Focus Energy, else lose boosts.",
 		name: "Haxer's Will",
 		gen: 9,
 		pp: 15,
