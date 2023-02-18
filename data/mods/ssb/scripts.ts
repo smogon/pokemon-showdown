@@ -14,6 +14,22 @@ for (const row of usergroupData) {
 	usergroups[toID(cells[0])] = cells[1].trim() || ' ';
 }
 
+const roomauth: {[roomid: string]: {[userid: string]: string}} = {};
+/**
+ * Given a username and room, returns the auth they have in that room. Used for some conditional messages/effects.
+ * Each room is cached on the first call until the process is restarted.
+ */
+export function getRoomauth(name: string, room: string) {
+	const userid = toID(name);
+	const roomid = toID(room);
+	if (roomauth[roomid]) return roomauth[roomid][userid] || null;
+	const roomsList: any[] = JSON.parse(FS('config/chatrooms.json').readIfExistsSync() || '[]');
+	const roomData = roomsList.find(r => toID(r.title) === roomid);
+	if (!roomData) return null;
+	roomauth[roomid] = roomData.auth;
+	return roomauth[roomid][userid] || null;
+}
+
 export function getName(name: string): string {
 	const userid = toID(name);
 	if (!userid) throw new Error('No/Invalid name passed to getSymbol');
