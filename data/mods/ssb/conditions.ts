@@ -197,6 +197,30 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Kennedy')}|LOOOOOOL ffs`);
 		},
 	},
+	kolochu: {
+		noCopy: true,
+		onStart(pokemon) {
+			const foe = pokemon.foes()[0];
+			if (foe?.name === 'Rumia') {
+				this.add(`c:|${getName('kolochu ✮彡')}|You come around here often?`);
+			} else if (foe?.name === 'spoo') {
+				this.add(`c:|${getName('kolochu ✮彡')}|Big bald head spotted...`);
+			} else if (foe?.name === 'ausma') {
+				this.add(`c:|${getName('kolochu ✮彡')}|The weekly Smogon furry convention starts NOW`);
+			} else if (foe?.name === 'Peary') {
+				this.add(`c:|${getName('kolochu ✮彡')}|Any arters or culturers?`);
+			} else {
+				this.add(`c:|${getName('kolochu ✮彡')}|Hey, howzit!`);
+			}
+		},
+		onSwitchOut() {
+			const gif = "https://cdn.discordapp.com/emojis/659987060794327051.gif?size=160&quality=lossless";
+			this.add(`c:|${getName('kolochu ✮彡')}|/html <img src="${gif}" width="50" height="50" />`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('kolochu ✮彡')}|Tell.. My wife... She STINKS!!`);
+		},
+	},
 	kris: {
 		noCopy: true,
 		onStart() {
@@ -243,6 +267,33 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${getName('phoopes')}|Jynx! Knock on wood`);
+		},
+	},
+	rumia: {
+		noCopy: true,
+		onStart(pokemon) {
+			const foe = pokemon.foes()[0];
+			if (foe?.name === 'Kolochu') {
+				this.add(`c:|${getName('Rumia')}|OMG who could that be (⁠●⁠♡⁠∀⁠♡⁠)`);
+			} else {
+				this.add(`c:|${getName('Rumia')}|is the mon in front of me the edible kind?`);
+			}
+		},
+		onSwitchOut(pokemon) {
+			const foe = pokemon.foes()[0];
+			if (foe?.name === 'Kolochu') {
+				this.add(`c:|${getName('Rumia')}|i cant bring myself to do this...`);
+			} else {
+				this.add(`c:|${getName('Rumia')}|brb ^_^`);
+			}
+		},
+		onFaint(pokemon) {
+			const foe = pokemon.foes()[0];
+			if (foe?.name === 'Kolochu') {
+				this.add(`c:|${getName('Rumia')}|this is the best way to go out...`);
+			} else {
+				this.add(`c:|${getName('Rumia')}|is that sooooo...`);
+			}
 		},
 	},
 	scotteh: {

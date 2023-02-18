@@ -90,6 +90,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Hat-Trick',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Any',
 	},
+	kolochu: {
+		species: 'Pikachu', ability: 'Soul Surfer', item: 'Light Ball', gender: '',
+		moves: ['Thunder', 'Volt Switch', 'Bouncy Bubble'],
+		signatureMove: 'Hang Ten',
+		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Water',
+	},
 	Kris: {
 		species: 'Nymble', ability: 'Cacophony', item: 'Heavy-Duty Boots', gender: 'N',
 		moves: ['Boomburst', 'Bug Buzz', 'Torch Song'],
@@ -101,6 +107,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Lovely Kiss', 'Psychic', 'Toxic'],
 		signatureMove: 'Gen 1 Blizzard',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Ice',
+	},
+	Rumia: {
+		species: 'Duskull', ability: 'Youkai of the Dusk', item: 'Eviolite', gender: 'F',
+		moves: ['Infernal Parade', 'Strength Sap', 'Mortal Spin'],
+		signatureMove: 'Midnight Bird',
+		evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold', teraType: 'Dark',
 	},
 	Scotteh: {
 		species: 'Suicune', ability: 'Water Absorb', item: 'Leftovers', gender: '',

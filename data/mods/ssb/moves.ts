@@ -324,6 +324,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Psychic",
 	},
 
+	// Kolochu
+	hangten: {
+		accuracy: 100,
+		basePower: 75,
+		category: "Special",
+		name: "Hang Ten",
+		shortDesc: "User sets Electric Terrain on hit.",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Stoked Sparksurfer', target);
+			this.add('-anim', source, 'Surf', target);
+		},
+		secondary: {
+			chance: 100,
+			self: {
+				onHit() {
+					this.field.setTerrain('electricterrain');
+				},
+			},
+		},
+		target: "normal",
+		type: "Water",
+	},
+
 	// Kris
 	ok: {
 		accuracy: true,
@@ -541,6 +570,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Water",
+	},
+
+	// Rumia
+	midnightbird: {
+		accuracy: 100,
+		basePower: 85,
+		category: "Special",
+		name: "Midnight Bird",
+		shortDesc: "+1 Special Attack on hit.",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Memento', target);
+			this.attrLastMove('[anim] Brutal Swing');
+		},
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					spa: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Dark",
 	},
 
 	// sharp_claw

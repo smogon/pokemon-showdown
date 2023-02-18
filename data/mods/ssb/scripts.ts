@@ -312,8 +312,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 		},
 		runMove(
-			moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number, sourceEffect?: Effect | null,
-			zMove?: string, externalMove?: boolean, maxMove?: string, originalTarget?: Pokemon
+			moveOrMoveName, pokemon, targetLoc, sourceEffect,
+			zMove, externalMove, maxMove, originalTarget
 		) {
 			pokemon.activeMoveActions++;
 			let target = this.battle.getTarget(pokemon, maxMove || zMove || moveOrMoveName, targetLoc, originalTarget);
@@ -442,6 +442,30 @@ export const Scripts: ModdedBattleScriptsData = {
 				// In gen 4, the outermost move is considered the last move for Copycat
 				this.battle.activeMove = oldActiveMove;
 			}
+		},
+		hitStepTryImmunity(targets, pokemon, move) {
+			const hitResults = [];
+			for (const [i, target] of targets.entries()) {
+				if (this.battle.gen >= 6 && move.flags['powder'] && target !== pokemon && !this.dex.getImmunity('powder', target)) {
+					this.battle.debug('natural powder immunity');
+					this.battle.add('-immune', target);
+					hitResults[i] = false;
+				} else if (!this.battle.singleEvent('TryImmunity', move, {}, target, pokemon, move)) {
+					this.battle.add('-immune', target);
+					hitResults[i] = false;
+				} else if (this.battle.gen >= 7 && move.pranksterBoosted &&
+					// Prankster Clone immunity
+					(pokemon.hasAbility('prankster') || pokemon.hasAbility('youkaiofthedusk') || pokemon.volatiles['irpachuza']) &&
+					!targets[i].isAlly(pokemon) && !this.dex.getImmunity('prankster', target)) {
+					this.battle.debug('natural prankster immunity');
+					if (!target.illusion) this.battle.hint("Since gen 7, Dark is immune to Prankster moves.");
+					this.battle.add('-immune', target);
+					hitResults[i] = false;
+				} else {
+					hitResults[i] = true;
+				}
+			}
+			return hitResults;
 		},
 	},
 };

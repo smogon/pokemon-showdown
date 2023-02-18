@@ -198,6 +198,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		isPermanent: true,
 	},
 
+	// Kolochu
+	soulsurfer: {
+		name: "Soul Surfer",
+		shortDesc: "Rain on entry; Speed: x2 in Electric Terrain.",
+		onStart(source) {
+			this.field.setWeather('raindance');
+		},
+		onModifySpe(spe) {
+			if (this.field.isTerrain('electricterrain')) {
+				return this.chainModify(2);
+			}
+		},
+	},
+
 	// Kris
 	cacophony: {
 		name: "Cacophony",
@@ -366,6 +380,22 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Bypasses Sleep Clause Mod once per battle.",
 		name: "I Did It Again",
 		// implemented in rulesets.ts
+	},
+
+	// Rumia
+	youkaiofthedusk: {
+		shortDesc: "Defense: x2. Status moves: +1 Priority.",
+		name: "Youkai of the Dusk",
+		onModifyDefPriority: 6,
+		onModifyDef(def) {
+			return this.chainModify(2);
+		},
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.category === 'Status') {
+				move.pranksterBoosted = true;
+				return priority + 1;
+			}
+		},
 	},
 
 	// sharp_claw
