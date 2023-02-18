@@ -266,7 +266,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				!abilities.has('Regenerator') &&
 				!movePool.includes('protect') &&
 				!['ironhead', 'protect', 'spikyshield', 'uturn'].some(m => moves.has(m))
-			)}
+			)};
 
 		// Bit redundant to have both
 		// Attacks:
@@ -974,8 +974,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 								cull = true;
 							}
 						}
-						for (const move of moves) {
-							if (runEnforcementChecker(move)) {
+						for (const m of moves) {
+							if (runEnforcementChecker(m)) {
 								cull = true;
 							}
 						}

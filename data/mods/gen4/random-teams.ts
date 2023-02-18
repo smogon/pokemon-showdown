@@ -718,8 +718,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 						for (const abil of abilities) {
 							if (runEnforcementChecker(abil)) cull = true;
 						}
-						for (const move of moves) {
-							if (runEnforcementChecker(move)) cull = true;
+						for (const m of moves) {
+							if (runEnforcementChecker(m)) cull = true;
 						}
 					}
 				}
