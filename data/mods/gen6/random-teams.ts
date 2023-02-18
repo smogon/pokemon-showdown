@@ -382,7 +382,12 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'extremespeed':
 			return {cull: counter.setupType !== 'Physical' && moves.has('vacuumwave')};
 		case 'hiddenpower':
-			return {cull: moves.has('rest') || !counter.get('stab') && counter.damagingMoves.size < 2};
+			return {cull: (
+				moves.has('rest') ||
+				(!counter.get('stab') && counter.damagingMoves.size < 2) ||
+				// Force Moonblast on Special-setup Fairies
+				(counter.setupType === 'Special' && types.has('Fairy') && movePool.includes('moonblast'))
+			)};
 		case 'hypervoice':
 			return {cull: moves.has('blizzard') || moves.has('return')};
 		case 'judgment':
