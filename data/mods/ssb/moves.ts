@@ -330,7 +330,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Aqua Step', target);
 			this.add('-anim', source, 'Aqua Step', target);
 		},
-		onHit(target, source, move) {
+		onTryHit(target, source, move) {
 			if (move.hit === 3) {
 				move.willCrit = true;
 			}
