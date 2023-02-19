@@ -124,8 +124,8 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Bulk Up", "Close Combat", "Rage Fist", "Stone Edge", "U-turn"],
-                "teraTypes": ["Ghost", "Fighting"]
+                "movepool": ["Bulk Up", "Close Combat", "Rage Fist", "Stone Edge"],
+                "teraTypes": ["Ghost", "Fighting", "Steel"]
             }
         ]
     },
@@ -1394,8 +1394,8 @@
         "level": 91,
         "sets": [
             {
-                "role": "Bulky Setup",
-                "movepool": ["Calm Mind", "Freeze-Dry", "Protect", "Wish"],
+                "role": "Bulky Support",
+                "movepool": ["Calm Mind", "Freeze-Dry", "Protect", "Wish", "Yawn"],
                 "teraTypes": ["Water"]
             }
         ]
@@ -1846,7 +1846,7 @@
             {
                 "role": "Tera Blast user",
                 "movepool": ["Giga Drain", "Pollen Puff", "Quiver Dance", "Sleep Powder", "Tera Blast"],
-                "teraTypes": ["Fire"]
+                "teraTypes": ["Fire", "Rock"]
             },
             {
                 "role": "Setup Sweeper",
@@ -2417,14 +2417,14 @@
                 "teraTypes": ["Dark", "Fighting", "Poison"]
             },
             {
-                "role": "Fast Attacker",
-                "movepool": ["Dark Pulse", "Focus Blast", "Nasty Plot", "Psyshock", "Trick"],
+                "role": "Setup Sweeper",
+                "movepool": ["Dark Pulse", "Focus Blast", "Nasty Plot", "Psyshock"],
                 "teraTypes": ["Dark", "Fighting", "Psychic"]
             },
             {
-                "role": "AV Pivot",
-                "movepool": ["Focus Blast", "Gunk Shot", "Hyperspace Fury", "Psychic"],
-                "teraTypes": ["Dark", "Fighting", "Psychic", "Poison"]
+                "role": "Bulky Attacker",
+                "movepool": ["Focus Blast", "Gunk Shot", "Hyperspace Fury", "Psychic", "Trick"],
+                "teraTypes": ["Fighting", "Poison"]
             }
         ]
     },
@@ -2744,7 +2744,7 @@
             {
                 "role": "Tera Blast user",
                 "movepool": ["Hydro Pump", "Ice Beam", "Tera Blast", "U-turn"],
-                "teraTypes": ["Electric"]
+                "teraTypes": ["Electric", "Grass"]
             }
         ]
     },
@@ -3248,7 +3248,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Earth Power", "Healing Wish", "Moonblast", "Mystical Fire", "Psychic", "Superpower"],
+                "movepool": ["Earth Power", "Moonblast", "Mystical Fire", "Psychic", "Superpower"],
                 "teraTypes": ["Fairy", "Ground"]
             }
         ]
@@ -3853,7 +3853,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Encore", "Light Screen", "Play Rough", "Protect", "Reflect", "Thunder Wave", "Wish"],
+                "movepool": ["Encore", "Play Rough", "Protect", "Thunder Wave", "Wish"],
                 "teraTypes": ["Steel"]
             }
         ]
@@ -3978,7 +3978,7 @@
             },
             {
                 "role": "Fast Attacker",
-                "movepool": ["Aura Sphere", "Calm Mind", "Focus Blast", "Moonblast", "Psyshock", "Shadow Ball"],
+                "movepool": ["Calm Mind", "Close Combat", "Moonblast", "Psychic"],
                 "teraTypes": ["Fighting", "Fairy"]
             }
         ]
