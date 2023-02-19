@@ -217,8 +217,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			return {cull: moves.has('substitute')};
 		case 'headbutt':
 			return {cull: !moves.has('bodyslam') && !moves.has('thunderwave')};
-		case 'judgment': case 'swift':
-			return {cull: counter.setupType !== 'Special' && counter.get('stab') > 1};
+		case 'swift':
+			return {cull: counter.setupType !== 'Special'};
 		case 'quickattack':
 			return {cull: moves.has('thunderwave')};
 		case 'firepunch': case 'flamethrower':
