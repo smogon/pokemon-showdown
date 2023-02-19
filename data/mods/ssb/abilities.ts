@@ -238,8 +238,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify([6144, 4096]);
 			}
 		},
-		onAnyTryMove(source, target, move) {
-			if (source !== target && move.flags['sound']) {
+		onTryHit(target, source, move) {
+			if (target !== source && move.flags['sound']) {
 				this.add('-immune', target, '[from] ability: Cacophony');
 				return null;
 			}
