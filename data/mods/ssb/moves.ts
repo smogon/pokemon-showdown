@@ -80,55 +80,34 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		flags: {},
-		onPrepareHit(pokemon) {
-			this.attrLastMove('[anim] Max Guard');
-			if (pokemon.species.name === 'Quagsire') {
-				this.attrLastMove('[anim] Protect');
-				return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Max Guard', source);
+			if (source.species.name === 'Quagsire') {
+				this.add('-anim', source, 'Protect', source);
+				return !!this.queue.willAct() && this.runEvent('StallMove', source);
 			} else {
-				this.attrLastMove('[anim] Recover');
+				this.add('-anim', source, 'Recover', source);
 			}
 		},
-		secondary: null,
-		volatileStatus: 'sireswitch',
+		volatileStatus: 'protect',
+		onModifyMove(move, pokemon) {
+			if (pokemon.species.name === 'Clodsire') {
+				move.heal = [1, 2];
+				delete move.volatileStatus;
+			}
+		},
 		onHit(pokemon) {
 			if (pokemon.species.name === 'Quagsire') {
 				pokemon.addVolatile('stall');
 				changeSet(this, pokemon, ssbSets['A Quag To The Past-Clodsire'], true);
 			} else {
-				this.heal(pokemon.maxhp / 2, pokemon, pokemon, this.effect);
 				changeSet(this, pokemon, ssbSets['A Quag To The Past'], true);
 			}
 		},
-		condition: {
-			duration: 1,
-			onStart(target) {
-				if (target.species.name !== 'Quagsire') return;
-				this.add('-singleturn', target, 'Protect');
-			},
-			onTryHitPriority: 3,
-			onTryHit(target, source, move) {
-				if (target.species.name !== 'Quagsire') return;
-				if (!move.flags['protect']) {
-					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
-					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
-					return;
-				}
-				if (move.smartTarget) {
-					move.smartTarget = false;
-				} else {
-					this.add('-activate', target, 'move: Protect');
-				}
-				const lockedmove = source.getVolatile('lockedmove');
-				if (lockedmove) {
-					// Outrage counter is reset
-					if (source.volatiles['lockedmove'].duration === 2) {
-						delete source.volatiles['lockedmove'];
-					}
-				}
-				return this.NOT_FAIL;
-			},
-		},
+		secondary: null,
 		target: "self",
 		type: "Ground",
 	},
