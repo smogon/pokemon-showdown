@@ -413,7 +413,10 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'psychic':
 			return {cull: moves.has('psyshock')};
 		case 'psychocut': case 'zenheadbutt':
-			return {cull: (moves.has('psychic') || moves.has('psyshock')) && counter.setupType !== 'Physical'};
+			return {cull: (
+				((moves.has('psychic') || moves.has('psyshock')) && counter.setupType !== 'Physical') ||
+				(abilities.has('Contrary') && !counter.setupType && !!counter.get('physicalpool'))
+			)};
 		case 'psyshock':
 			const psychic = movePool.indexOf('psychic');
 			if (psychic >= 0) this.fastPop(movePool, psychic);
