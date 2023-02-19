@@ -132,9 +132,8 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onSwitchOut() {
 			this.add(`c:|${getName('Irpachuza!')}|bye and HOOP HOOP n.n`);
 		},
-		onFaint(source) {
-			const enemy = source.side.foe;
-			this.add(`c:|${getName('Irpachuza!')}|how DARE YOU ${enemy} ;-; n.n`);
+		onFaint(pokemon) {
+			this.add(`c:|${getName('Irpachuza!')}|how DARE YOU ${pokemon.side.foe.name} ;-; n.n`);
 		},
 		innateName: "Prankster",
 		desc: "This Pokemon's non-damaging moves have their priority increased by 1. Opposing Dark-type Pokemon are immune to these moves, and any move called by these moves, if the resulting user of the move has this Ability.",
