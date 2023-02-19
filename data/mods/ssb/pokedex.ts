@@ -56,6 +56,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: 'Hacking'},
 	},
 
+	// Rumia
+	duskull: {
+		inherit: true,
+		baseStats: {hp: 50, atk: 55, def: 90, spa: 90, spd: 55, spe: 55},
+		abilities: {0: 'Youkai of the Dusk'},
+	},
+
 	// sharp_claw
 	sneasel: {
 		inherit: true,
