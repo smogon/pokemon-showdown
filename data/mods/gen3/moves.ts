@@ -526,6 +526,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		pp: 20,
 	},
+	rest: {
+		inherit: true,
+		onTryMove(source, target, move) {
+			if (source.status === 'slp') {
+				this.debug("Rest will fail when called by sleep talk");
+				this.add('-fail', source, 'move: Rest', '[from] sleep talk');
+				return false
+			}
+		}
+	},
 	rocksmash: {
 		inherit: true,
 		basePower: 20,
@@ -548,11 +558,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const randomMove = this.sample(moves);
 			if (!randomMove.pp) {
 				this.add('cant', pokemon, 'nopp', randomMove.move);
-				return;
-			}
-			if (randomMove.move === 'rest') {
-				this.debug("Rest will fail when called by sleep talk");
-				this.add('-fail', pokemon, 'move: Rest', '[from] Sleep Talk');
 				return;
 			}
 			this.actions.useMove(randomMove.move, pokemon);
