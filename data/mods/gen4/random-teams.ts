@@ -57,6 +57,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			),
 			Guts: (movePool, moves, abilities, types) => types.has('Normal') && movePool.includes('facade'),
 			'Slow Start': movePool => movePool.includes('substitute'),
+			protect: movePool => movePool.includes('wish'),
+			wish: movePool => movePool.includes('protect'),
 		};
 	}
 	shouldCullMove(
@@ -157,12 +159,11 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			)};
 		case 'wish':
 			return {cull: (
-				!['batonpass', 'ironhead', 'moonlight', 'protect', 'softboiled', 'uturn'].some(m => moves.has(m)) ||
-				moves.has('rest') ||
-				!!counter.get('speedsetup')
+				!['batonpass', 'ironhead', 'moonlight', 'protect', 'softboiled', 'uturn'].some(m => moves.has(m)) &&
+				!movePool.includes('protect')
 			)};
 		case 'moonlight':
-			return {cull: (moves.has('wish') && moves.has('protect'))};
+			return {cull: (moves.has('wish') && (moves.has('protect') || movePool.includes('protect')))};
 		case 'rapidspin':
 			return {cull: !!teamDetails.rapidSpin || (!!counter.setupType && counter.get('Physical') + counter.get('Special') < 2)};
 		case 'fakeout':
@@ -216,8 +217,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			return {cull: moves.has('substitute')};
 		case 'headbutt':
 			return {cull: !moves.has('bodyslam') && !moves.has('thunderwave')};
-		case 'judgment': case 'swift':
-			return {cull: counter.setupType !== 'Special' && counter.get('stab') > 1};
+		case 'swift':
+			return {cull: counter.setupType !== 'Special'};
 		case 'quickattack':
 			return {cull: moves.has('thunderwave')};
 		case 'firepunch': case 'flamethrower':
@@ -716,6 +717,9 @@ export class RandomGen4Teams extends RandomGen5Teams {
 						}
 						for (const abil of abilities) {
 							if (runEnforcementChecker(abil)) cull = true;
+						}
+						for (const m of moves) {
+							if (runEnforcementChecker(m)) cull = true;
 						}
 					}
 				}

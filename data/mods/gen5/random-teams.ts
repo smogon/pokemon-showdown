@@ -27,7 +27,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				!counter.get('Flying') && (types.has('Normal') || abilities.has('Serene Grace'))
 			),
 			Ghost: (movePool, moves, abilities, types, counter) => !types.has('Dark') && !counter.get('Ghost'),
-			Grass: movePool => movePool.includes('hornleech') || movePool.includes('seedflare'),
+			Grass: movePool => (['hornleech', 'seedflare', 'woodhammer'].some(m => movePool.includes(m))),
 			Ground: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Ground') && !moves.has('rest') && !moves.has('sleeptalk')
 			),
@@ -439,14 +439,14 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (counter.setupType && moves.has('outrage')) return 'Lum Berry';
 		if (this.dex.getEffectiveness('Ground', species) >= 2 && ability !== 'Levitate') return 'Air Balloon';
 		if (counter.get('Dark') >= 3) return 'Black Glasses';
+		if (species.name === 'Palkia' && (moves.has('dracometeor') || moves.has('spacialrend'))) {
+			return 'Lustrous Orb';
+		}
 		if (
 			types.has('Poison') ||
 			['bodyslam', 'dragontail', 'protect', 'scald', 'sleeptalk', 'substitute'].some(m => moves.has(m))
 		) {
 			return 'Leftovers';
-		}
-		if (species.name === 'Palkia' && (moves.has('dracometeor') || moves.has('spacialrend')) && moves.has('hydropump')) {
-			return 'Lustrous Orb';
 		}
 		if (counter.damagingMoves.size >= 4 && ability !== 'Sturdy') {
 			return moves.has('uturn') ? 'Expert Belt' : 'Life Orb';
