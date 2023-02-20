@@ -905,6 +905,8 @@ export class RandomTeams {
 			return (!counter.get('sheerforce') || moves.has('bellydrum') || braviaryCase || abilitiesCase);
 		case 'Slush Rush':
 			return !teamDetails.snow;
+		case 'Sniper':
+			return abilities.has('Torrent');
 		case 'Solar Power':
 			return (!teamDetails.sun || !counter.get('Special'));
 		case 'Stakeout':
