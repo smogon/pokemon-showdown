@@ -532,9 +532,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (source.status === 'slp') {
 				this.debug("Rest will fail when called by sleep talk");
 				this.add('-fail', source, 'move: Rest', '[from] sleep talk');
-				return false
+				return false;
 			}
-		}
+		},
 	},
 	rocksmash: {
 		inherit: true,

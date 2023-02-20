@@ -32,4 +32,4 @@ describe('Rest', function () {
 		assert(battle.log[battle.lastMoveLine + 2].startsWith('|-fail'), 'should log that Rest fails when called by Sleep Talk');
 		assert.equal(rest.pp, preSleeptalkPP, 'Rest\'s pp should not reduce after failure');
 	});
-})
+});
