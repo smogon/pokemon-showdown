@@ -1691,7 +1691,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	jirachi: {
 		tier: "OU",
 		doublesTier: "DUU",
-		randomBattleMoves: ["healingwish", "stealthrock", "thunderwave", "uturn", "zenheadbutt"],
+		randomBattleMoves: ["calmmind", "dazzlinggleam", "flashcannon", "psychic", "shadowball", "thunderbolt", "uturn"],
 	},
 	deoxys: {
 		tier: "Uber",
