@@ -2010,7 +2010,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["psychic", "stealthrock", "thunderwave", "uturn", "yawn"],
 	},
 	mesprit: {
-		tier: "NUBL",
+		tier: "NU",
 		doublesTier: "DUU",
 		randomBattleMoves: ["energyball", "healingwish", "icebeam", "nastyplot", "psychic", "thunderbolt", "uturn"],
 	},
