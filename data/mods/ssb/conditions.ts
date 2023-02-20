@@ -267,6 +267,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Mad Monty')}|Well great. Now the llamas are gonna come back. Is that what you wanted?`);
 		},
 	},
+	mex: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Mex')}|Time to make the donuts.`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Mex')}|Brb, there's a Dialga raid.`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Mex')}|pain.`);
+		},
+	},
 	mia: {
 		noCopy: true,
 		onStart() {

@@ -344,6 +344,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Mex
+	timedilation: {
+		shortDesc: "+10% BP for every 10 turns passed in battle, max 200%.",
+		name: "Time Dilation",
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			const turnMultiplier = Math.floor(this.turn / 10);
+			let bpMod = 1 + (0.1 * turnMultiplier);
+			if (bpMod > 2) bpMod = 2;
+			return this.chainModify(bpMod);
+		},
+	},
+
 	// Mia
 	hacking: {
 		name: "Hacking",

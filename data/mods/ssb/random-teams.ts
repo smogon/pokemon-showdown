@@ -84,18 +84,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Fleur Cannon',
 		evs: {hp: 252, spa: 4, spd: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
-	'Mad Monty': {
-		species: 'Castform', ability: 'Climate Change', item: 'Heavy-Duty Boots', gender: 'M',
-		moves: ['Weather Ball', 'Defog', ['Solar Beam', 'Thunder', 'Aurora Veil']],
-		signatureMove: 'Storm Shelter',
-		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Modest', teraType: 'Rock',
-	},
-	Mia: {
-		species: 'Mewtwo', ability: 'Hacking', item: 'Mewtwonite X', gender: 'F',
-		moves: ['Photon Geyser', 'Drain Punch', 'Iron Head'],
-		signatureMove: 'Testing in Production',
-		evs: {atk: 252, spa: 4, spe: 252}, nature: 'Jolly',
-	},
 	Kennedy: {
 		species: 'Cinderace', ability: 'Anfield', item: 'Berserk Gene', gender: 'M',
 		moves: ['Blaze Kick', ['Triple Kick', 'Trop Kick'], 'U-turn'],
@@ -113,6 +101,24 @@ export const ssbSets: SSBSets = {
 		moves: ['Boomburst', 'Bug Buzz', 'Torch Song'],
 		signatureMove: 'ok',
 		evs: {hp: 252, def: 4, spa: 252}, nature: 'Quiet', teraType: 'Normal',
+	},
+	'Mad Monty': {
+		species: 'Castform', ability: 'Climate Change', item: 'Heavy-Duty Boots', gender: 'M',
+		moves: ['Weather Ball', 'Defog', ['Solar Beam', 'Thunder', 'Aurora Veil']],
+		signatureMove: 'Storm Shelter',
+		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Modest', teraType: 'Rock',
+	},
+	Mex: {
+		species: 'Dialga', ability: 'Time Dilation', item: 'Adamant Orb', gender: 'N',
+		moves: ['Dragon Pulse', 'Flash Cannon', ['Aura Sphere', 'Volt Switch', 'Meteor Beam']],
+		signatureMove: 'Time Skip',
+		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', teraType: 'Steel', shiny: true,
+	},
+	Mia: {
+		species: 'Mewtwo', ability: 'Hacking', item: 'Mewtwonite X', gender: 'F',
+		moves: ['Photon Geyser', 'Drain Punch', 'Iron Head'],
+		signatureMove: 'Testing in Production',
+		evs: {atk: 252, spa: 4, spe: 252}, nature: 'Jolly',
 	},
 	phoopes: {
 		species: 'Jynx', ability: 'I Did It Again', item: 'Red Card', gender: 'F',

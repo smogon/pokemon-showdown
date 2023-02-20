@@ -533,6 +533,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// Mex
+	timeskip: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Time Skip",
+		shortDesc: "Clears hazards. +10 turns.",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		onPrepareHit() {
+			this.attrLastMove('[anim] Trick Room');
+		},
+		self: {
+			onHit(pokemon) {
+				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+				for (const condition of sideConditions) {
+					if (pokemon.side.removeSideCondition(condition)) {
+						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Time Skip', '[of] ' + pokemon);
+					}
+				}
+				// 9 turn addition so the +1 from nextTurn totals to 10 turns
+				this.turn += 9;
+			},
+		},
+		secondary: null,
+		target: "all",
+		type: "Dragon",
+	},
+
 	// Mia
 	testinginproduction: {
 		accuracy: true,
