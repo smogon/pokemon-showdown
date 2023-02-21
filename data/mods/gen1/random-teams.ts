@@ -8,6 +8,9 @@ interface HackmonsCupEntry {
 }
 
 export class RandomGen1Teams extends RandomGen2Teams {
+	// TODO: Make types for this
+	randomSets: AnyObject = require('./random-sets.json');
+
 	// Challenge Cup or CC teams are basically fully random teams.
 	randomCCTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
@@ -130,7 +133,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
-			if (!species.exists || !species.randomBattleMoves) continue;
+			if (!species.exists || !this.randomSets[species.id] || !this.randomSets[species.id].randomBattleMoves) continue;
 			// Only one Ditto is allowed per battle in Generation 1,
 			// as it can cause an endless battle if two Dittos are forced
 			// to face each other.
@@ -267,7 +270,8 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		species = this.dex.species.get(species);
 		if (!species.exists) species = this.dex.species.get('pikachu'); // Because Gen 1.
 
-		const movePool = species.randomBattleMoves ? species.randomBattleMoves.slice() : [];
+		const species_set = this.randomSets[species.id];
+		const movePool = species_set.randomBattleMoves ? species_set.randomBattleMoves.slice() : [];
 		const moves = new Set<string>();
 		const types = new Set(species.types);
 
@@ -279,19 +283,19 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const SpecialSetup = ['amnesia', 'growth'];
 
 		// Either add all moves or add none
-		if (species.comboMoves && species.comboMoves.length <= this.maxMoveCount && this.randomChance(1, 2)) {
-			for (const m of species.comboMoves) moves.add(m);
+		if (species_set.comboMoves && species_set.comboMoves.length <= this.maxMoveCount && this.randomChance(1, 2)) {
+			for (const m of species_set.comboMoves) moves.add(m);
 		}
 
 		// Add one of the semi-mandatory moves
 		// Often, these are used so that the Pokemon only gets one of the less useful moves
-		if (moves.size < this.maxMoveCount && species.exclusiveMoves) {
-			moves.add(this.sample(species.exclusiveMoves));
+		if (moves.size < this.maxMoveCount && species_set.exclusiveMoves) {
+			moves.add(this.sample(species_set.exclusiveMoves));
 		}
 
 		// Add the mandatory move. SD Mew and Amnesia Snorlax are exceptions.
-		if (moves.size < this.maxMoveCount && species.essentialMove) {
-			moves.add(species.essentialMove);
+		if (moves.size < this.maxMoveCount && species_set.essentialMove) {
+			moves.add(species_set.essentialMove);
 		}
 
 		while (moves.size < this.maxMoveCount && movePool.length) {
@@ -312,10 +316,10 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				}
 
 				for (const moveid of moves) {
-					if (moveid === species.essentialMove) continue;
+					if (moveid === species_set.essentialMove) continue;
 					const move = this.dex.moves.get(moveid);
 					if (
-						(!species.essentialMove || moveid !== species.essentialMove) &&
+						(!species_set.essentialMove || moveid !== species_set.essentialMove) &&
 						this.shouldCullMove(move, types, moves, counter).cull
 					) {
 						moves.delete(moveid);

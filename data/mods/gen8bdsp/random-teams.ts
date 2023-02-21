@@ -4,6 +4,9 @@ import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {MoveCounter, RandomGen8Teams} from '../gen8/random-teams';
 
 export class RandomBDSPTeams extends RandomGen8Teams {
+	// TODO: Make types for this
+	randomSets: AnyObject = require('./random-sets.json');
+
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 		this.noStab = [...this.noStab, 'gigaimpact'];

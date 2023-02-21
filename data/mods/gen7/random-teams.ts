@@ -30,6 +30,9 @@ const ZeroAttackHPIVs: {[k: string]: SparseStatsTable} = {
 };
 
 export class RandomGen7Teams extends RandomGen8Teams {
+	// TODO: Make types for this
+	randomSets: AnyObject = require('./random-sets.json');
+
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 
@@ -1054,9 +1057,11 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
 
+		const species_set = this.randomSets[species.id];
+
 		const randMoves = isDoubles ?
-			(species.randomDoubleBattleMoves || species.randomBattleMoves) :
-			species.randomBattleMoves;
+			(species_set.randomDoubleBattleMoves || species_set.randomBattleMoves) :
+			species_set.randomBattleMoves;
 		const movePool = (randMoves || Object.keys(Dex.species.getLearnset(species.id)!)).slice();
 		if (this.format.gameType === 'multi') {
 			// Random Multi Battle uses doubles move pools, but Ally Switch fails in multi battles
@@ -1528,9 +1533,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 				// Check if the forme has moves for random battle
 				if (this.format.gameType === 'singles') {
-					if (!species.randomBattleMoves) continue;
+					if (!this.randomSets[species.id] || !this.randomSets[species.id].randomBattleMoves) continue;
 				} else {
-					if (!species.randomDoubleBattleMoves) continue;
+					if (!this.randomSets[species.id] || !this.randomSets[species.id].randomDoubleBattleMoves) continue;
 				}
 				if (!species.exists) continue;
 

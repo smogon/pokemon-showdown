@@ -103,6 +103,9 @@ export class RandomGen8Teams {
 	readonly maxMoveCount: number;
 	readonly forceMonotype: string | undefined;
 
+	// TODO: Make types for this
+	randomSets: AnyObject = require('./random-sets.json');
+
 	/**
 	 * Checkers for move enforcement based on a Pokémon's types or other factors
 	 *
@@ -1978,10 +1981,11 @@ export class RandomGen8Teams {
 		isDoubles: boolean,
 		isNoDynamax: boolean,
 	): number {
+		const species_set = this.randomSets[species.id];
 		// level set by rules
 		if (this.adjustLevel) return this.adjustLevel;
 		// doubles levelling
-		if (isDoubles && species.randomDoubleBattleLevel) return species.randomDoubleBattleLevel;
+		if (isDoubles && species_set.randomDoubleBattleLevel) return species_set.randomDoubleBattleLevel;
 		// No Dmax levelling
 		if (isNoDynamax) {
 			const tier = species.name.endsWith('-Gmax') ? this.dex.species.get(species.changesFrom).tier : species.tier;
@@ -2030,7 +2034,7 @@ export class RandomGen8Teams {
 			return customScale[species.id] || tierScale[species.tier] || 80;
 		}
 		// Arbitrary levelling base on data files (typically winrate-influenced)
-		if (species.randomBattleLevel) return species.randomBattleLevel;
+		if (species_set.randomBattleLevel) return species_set.randomBattleLevel;
 		// Finally default to level 80
 		return 80;
 	}
@@ -2058,10 +2062,12 @@ export class RandomGen8Teams {
 			gmax = true;
 		}
 
+		const species_set = this.randomSets[species.id];
+
 		const randMoves =
-			(isDoubles && species.randomDoubleBattleMoves) ||
-			(isNoDynamax && species.randomBattleNoDynamaxMoves) ||
-			species.randomBattleMoves;
+			(isDoubles && species_set.randomDoubleBattleMoves) ||
+			(isNoDynamax && species_set.randomBattleNoDynamaxMoves) ||
+			species_set.randomBattleMoves;
 		const movePool = (randMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		if (this.format.gameType === 'multi' || this.format.gameType === 'freeforall') {
 			// Random Multi Battle uses doubles move pools, but Ally Switch fails in multi battles
@@ -2442,9 +2448,9 @@ export class RandomGen8Teams {
 
 			// Check if the forme has moves for random battle
 			if (this.format.gameType === 'singles') {
-				if (!species.randomBattleMoves?.length) continue;
+				if (!this.randomSets[species.id] || !this.randomSets[species.id].randomBattleMoves) continue;
 			} else {
-				if (!species.randomDoubleBattleMoves?.length) continue;
+				if (!this.randomSets[species.id] || !this.randomSets[species.id].randomDoubleBattleMoves) continue;
 			}
 
 			// Limit to one of each species (Species Clause)

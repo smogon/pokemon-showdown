@@ -15,6 +15,9 @@ const recoveryMoves = [
 ];
 const defensiveStatusMoves = ['aromatherapy', 'haze', 'healbell', 'roar', 'whirlwind', 'willowisp', 'yawn'];
 export class RandomGen4Teams extends RandomGen5Teams {
+	// TODO: Make types for this
+	randomSets: AnyObject = require('./random-sets.json');
+
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 		this.moveEnforcementCheckers = {
@@ -547,7 +550,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
 
-		const movePool = (species.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
+		const species_set = this.randomSets[species.id];
+		const movePool = (species_set.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool: string[] = [];
 		const moves = new Set<string>();
 		let ability = '';

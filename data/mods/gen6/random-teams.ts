@@ -5,6 +5,9 @@ import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
 
 export class RandomGen6Teams extends RandomGen7Teams {
+	// TODO: Make types for this
+	randomSets: AnyObject = require('./random-sets.json');
+
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 		this.noStab = [...this.noStab, 'aquajet', 'fakeout', 'iceshard', 'machpunch', 'quickattack', 'vacuumwave'];
@@ -828,7 +831,9 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
 
-		const movePool = (species.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
+		const species_set = this.randomSets[species.id];
+
+		const movePool = (species_set.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool = [];
 		let ability = '';
 

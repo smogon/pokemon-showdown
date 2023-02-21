@@ -2,6 +2,9 @@ import type {PRNG} from '../../../sim';
 import RandomTeams, {MoveCounter} from '../gen8/random-teams';
 
 export class RandomLetsGoTeams extends RandomTeams {
+	// TODO: Make types for this
+	randomSets: AnyObject = require('./random-sets.json');
+
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 		this.moveEnforcementCheckers = {
@@ -123,7 +126,9 @@ export class RandomLetsGoTeams extends RandomTeams {
 			forme = species.battleOnly;
 		}
 
-		const movePool = (species.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
+		const species_set = this.randomSets[species.id];
+
+		const movePool = (species_set.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const types = new Set(species.types);
 
 		const moves = new Set<string>();
@@ -226,7 +231,8 @@ export class RandomLetsGoTeams extends RandomTeams {
 				(species.num > 151 && ![808, 809].includes(species.num)) ||
 				species.gen > 7 ||
 				species.nfe ||
-				!species.randomBattleMoves?.length ||
+				!this.randomSets[species.id] ||
+				!this.randomSets[species.id].randomBattleMoves ||
 				(this.forceMonotype && !species.types.includes(this.forceMonotype))
 			) {
 				continue;

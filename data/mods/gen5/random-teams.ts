@@ -5,6 +5,9 @@ import {PRNG} from '../../../sim';
 import type {MoveCounter} from '../gen8/random-teams';
 
 export class RandomGen5Teams extends RandomGen6Teams {
+	// TODO: Make types for this
+	randomSets: AnyObject = require('./random-sets.json');
+
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 		this.moveEnforcementCheckers = {
@@ -490,7 +493,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
 
-		const movePool = (species.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
+		const species_set = this.randomSets[species.id];
+
+		const movePool = (species_set.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool = [];
 		const moves = new Set<string>();
 		let ability = '';
@@ -834,7 +839,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
-			if (!species.exists || !species.randomBattleMoves) continue;
+			if (!species.exists || !this.randomSets[species.id] || !this.randomSets[species.id].randomBattleMoves) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;
