@@ -112,6 +112,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('deftinwolf')}|Death is only the beginning.`);
 		},
 	},
+	havi: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('havi')}|kos, or some say kosm`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('havi')}|grant us eyes, grant us eyes`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('havi')}|the nightmare swirls and churns unending n_n`);
+		},
+	},
 	ironwater: {
 		noCopy: true,
 		onStart() {

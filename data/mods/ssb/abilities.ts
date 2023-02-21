@@ -115,6 +115,31 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		isBreakable: true,
 	},
 
+	// havi
+	mensiscage: {
+		shortDesc: "Immune to status and is considered to be asleep. 30% chance to disable when hit.",
+		name: "Mensis Cage",
+		onDamagingHit(damage, target, source, move) {
+			if (source.volatiles['disable']) return;
+			if (!move.isMax && !move.isFutureMove && move.id !== 'struggle') {
+				if (this.randomChance(3, 10)) {
+					source.addVolatile('disable', this.effectState.target);
+				}
+			}
+		},
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Mensis Cage');
+		},
+		onSetStatus(status, target, source, effect) {
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Mensis Cage');
+			}
+			return false;
+		},
+		// Permanent sleep "status" implemented in the relevant sleep-checking effects
+		isPermanent: true,
+	},
+
 	// Irpachuza
 	mimeknowsbest: {
 		desc: "Uses a random screen/protect move on switch in.",
@@ -517,6 +542,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			pokemon.takeItem();
 			this.field.setTerrain('scarletaeoniaterrain');
+		},
+	},
+
+	// Modified Bad Dreams to support havi's ability
+	baddreams: {
+		inherit: true,
+		onResidual(pokemon) {
+			if (!pokemon.hp) return;
+			for (const target of pokemon.foes()) {
+				if (target.status === 'slp' || target.hasAbility(['comatose', 'mensiscage'])) {
+					this.damage(target.baseMaxhp / 8, target, pokemon);
+				}
+			}
 		},
 	},
 };

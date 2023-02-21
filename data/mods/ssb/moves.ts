@@ -241,6 +241,25 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Dark",
 	},
 
+	// havi
+	augurofebrietas: {
+		accuracy: 100,
+		basePower: 70,
+		category: "Special",
+		shortDesc: "Disables the target's last move and pivots out.",
+		name: "Augur of Ebrietas",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit() {
+			this.attrLastMove('[anim] Spirit Shackle');
+		},
+		selfSwitch: true,
+		volatileStatus: 'disable',
+		target: "normal",
+		type: "Ghost",
+	},
+
 	// ironwater
 	jirachibanhammer: {
 		accuracy: 100,
@@ -989,5 +1008,83 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Fire",
+	},
+
+	// Modified various moves to support havi's ability
+	dreameater: {
+		inherit: true,
+		onTryImmunity(target) {
+			return target.status === 'slp' || target.hasAbility(['comatose', 'mensiscage']);
+		},
+	},
+	hex: {
+		inherit: true,
+		basePowerCallback(pokemon, target, move) {
+			if (target.status || target.hasAbility(['comatose', 'mensiscage'])) {
+				this.debug('BP doubled from status condition');
+				return move.basePower * 2;
+			}
+			return move.basePower;
+		},
+	},
+	infernalparade: {
+		inherit: true,
+		basePowerCallback(pokemon, target, move) {
+			if (target.status || target.hasAbility(['comatose', 'mensiscage'])) return move.basePower * 2;
+			return move.basePower;
+		},
+	},
+	nightmare: {
+		inherit: true,
+		condition: {
+			noCopy: true,
+			onStart(pokemon) {
+				if (pokemon.status !== 'slp' && !pokemon.hasAbility(['comatose', 'mensiscage'])) {
+					return false;
+				}
+				this.add('-start', pokemon, 'Nightmare');
+			},
+			onResidualOrder: 11,
+			onResidual(pokemon) {
+				this.damage(pokemon.baseMaxhp / 4);
+			},
+		},
+	},
+	rest: {
+		inherit: true,
+		onTry(source) {
+			if (source.status === 'slp' || source.hasAbility(['comatose', 'mensiscage'])) return false;
+
+			if (source.hp === source.maxhp) {
+				this.add('-fail', source, 'heal');
+				return null;
+			}
+			if (source.hasAbility(['insomnia', 'vitalspirit'])) {
+				this.add('-fail', source, '[from] ability: ' + source.getAbility().name, '[of] ' + source);
+				return null;
+			}
+		},
+	},
+	sleeptalk: {
+		inherit: true,
+		onTry(source) {
+			return source.status === 'slp' || source.hasAbility(['comatose', 'mensiscage']);
+		},
+	},
+	snore: {
+		inherit: true,
+		onTry(source) {
+			return source.status === 'slp' || source.hasAbility(['comatose', 'mensiscage']);
+		},
+	},
+	wakeupslap: {
+		inherit: true,
+		basePowerCallback(pokemon, target, move) {
+			if (target.status === 'slp' || target.hasAbility(['comatose', 'mensiscage'])) {
+				this.debug('BP doubled on sleeping target');
+				return move.basePower * 2;
+			}
+			return move.basePower;
+		},
 	},
 };

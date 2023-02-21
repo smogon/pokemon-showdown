@@ -72,6 +72,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: "Trivial Pursuit",
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant', teraType: 'Poison',
 	},
+	havi: {
+		species: 'Gastly', ability: 'Mensis Cage', item: 'Leftovers', gender: 'F',
+		moves: ['Astral Barrage', 'Moonblast', 'Substitute'],
+		signatureMove: 'Augur of Ebrietas',
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', teraType: 'Ghost',
+	},
 	ironwater: {
 		species: 'Jirachi', ability: 'Good as Gold', item: 'Leftovers', gender: 'N',
 		moves: ['Swords Dance', 'Zen Headbutt', 'Hammer Arm'],
