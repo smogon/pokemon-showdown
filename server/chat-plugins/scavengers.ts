@@ -1699,7 +1699,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		}
 		if (!target && this.cmd !== 'queuerecycled') {
 			if (this.cmd === 'queue') {
-				// Necessary for broadcasting: this.runBroadcast();
+				this.runBroadcast();
 				const commandHandler = ScavengerCommands.viewqueue as ChatHandler;
 				commandHandler.call(this, target, room, user, this.connection, this.cmd, this.message);
 				return;
