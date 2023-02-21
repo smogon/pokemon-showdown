@@ -1,0 +1,1569 @@
+{
+    "venusaur": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["hiddenpowerfire", "hiddenpowerice", "leechseed", "naturepower", "powerwhip", "sleeppowder", "sludgebomb", "swordsdance", "synthesis"]
+    },
+    "charizard": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["airslash", "dragonpulse", "fireblast", "focusblast", "hiddenpowergrass", "roost"]
+    },
+    "blastoise": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["icebeam", "protect", "rapidspin", "scald", "toxic"]
+    },
+    "butterfree": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["bugbuzz", "hiddenpowerrock", "psychic", "quiverdance", "sleeppowder", "substitute"]
+    },
+    "beedrill": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["drillrun", "poisonjab", "tailwind", "toxicspikes", "uturn"]
+    },
+    "pidgeot": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["bravebird", "heatwave", "quickattack", "return", "roost", "uturn", "workup"]
+    },
+    "raticate": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["crunch", "facade", "flamewheel", "suckerpunch", "swordsdance", "uturn"]
+    },
+    "fearow": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["doubleedge", "drillpeck", "drillrun", "pursuit", "quickattack", "return", "roost", "uturn"]
+    },
+    "arbok": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["aquatail", "coil", "earthquake", "glare", "gunkshot", "rest", "seedbomb", "suckerpunch"]
+    },
+    "pikachu": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["extremespeed", "grassknot", "hiddenpowerice", "voltswitch", "volttackle"]
+    },
+    "raichu": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["encore", "focusblast", "grassknot", "hiddenpowerice", "nastyplot", "thunderbolt", "voltswitch"]
+    },
+    "sandslash": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["earthquake", "rapidspin", "stealthrock", "stoneedge", "swordsdance", "xscissor"]
+    },
+    "nidoqueen": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["earthpower", "fireblast", "icebeam", "sludgewave", "stealthrock", "toxicspikes"]
+    },
+    "nidoking": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["earthpower", "fireblast", "icebeam", "sludgewave", "substitute", "superpower"]
+    },
+    "clefable": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["calmmind", "doubleedge", "icebeam", "softboiled", "stealthrock", "thunderbolt", "thunderwave"]
+    },
+    "ninetales": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["fireblast", "nastyplot", "painsplit", "solarbeam", "substitute", "willowisp"]
+    },
+    "wigglytuff": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["doubleedge", "fireblast", "healbell", "protect", "stealthrock", "toxic", "wish"]
+    },
+    "vileplume": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["aromatherapy", "gigadrain", "hiddenpowerfire", "leechseed", "sleeppowder", "sludgebomb", "synthesis"]
+    },
+    "parasect": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["aromatherapy", "leechseed", "seedbomb", "spore", "stunspore", "synthesis", "xscissor"]
+    },
+    "venomoth": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["bugbuzz", "quiverdance", "roost", "sleeppowder", "substitute"]
+    },
+    "dugtrio": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["aerialace", "earthquake", "stealthrock", "stoneedge"]
+    },
+    "persian": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["bite", "fakeout", "return", "switcheroo", "taunt", "uturn", "waterpulse"]
+    },
+    "golduck": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["calmmind", "encore", "focusblast", "hydropump", "icebeam", "psyshock", "scald"]
+    },
+    "primeape": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["closecombat", "honeclaws", "icepunch", "stoneedge", "uturn"]
+    },
+    "arcanine": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["closecombat", "extremespeed", "flareblitz", "hiddenpowergrass", "morningsun", "wildcharge", "willowisp"]
+    },
+    "poliwrath": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["circlethrow", "rest", "scald", "sleeptalk"]
+    },
+    "alakazam": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["calmmind", "encore", "focusblast", "psychic", "psyshock", "shadowball"]
+    },
+    "machamp": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["bulkup", "bulletpunch", "dynamicpunch", "icepunch", "payback", "stoneedge"]
+    },
+    "victreebel": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["powerwhip", "sleeppowder", "sludgebomb", "suckerpunch", "sunnyday", "weatherball"]
+    },
+    "tentacruel": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["gigadrain", "icebeam", "protect", "rapidspin", "scald", "toxic", "toxicspikes"]
+    },
+    "golem": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["earthquake", "explosion", "rockblast", "stealthrock", "suckerpunch", "toxic"]
+    },
+    "rapidash": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["drillrun", "flareblitz", "megahorn", "morningsun", "wildcharge", "willowisp"]
+    },
+    "slowbro": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["calmmind", "icebeam", "psyshock", "scald", "slackoff", "thunderwave", "toxic"]
+    },
+    "farfetchd": {
+        "randomBattleLevel": 100,
+        "randomBattleMoves": ["bravebird", "leafblade", "quickattack", "return", "swordsdance"]
+    },
+    "dodrio": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["bravebird", "pursuit", "quickattack", "return", "roost"]
+    },
+    "dewgong": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["icebeam", "protect", "rest", "sleeptalk", "surf", "toxic"]
+    },
+    "muk": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["brickbreak", "curse", "firepunch", "gunkshot", "icepunch", "poisonjab", "rest", "shadowsneak"]
+    },
+    "cloyster": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["hydropump", "iceshard", "iciclespear", "rapidspin", "rockblast", "shellsmash", "spikes"]
+    },
+    "gengar": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["focusblast", "shadowball", "sludgewave", "substitute", "trick", "willowisp"]
+    },
+    "hypno": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["foulplay", "protect", "psychic", "thunderwave", "toxic", "wish"]
+    },
+    "kingler": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["agility", "crabhammer", "return", "superpower", "swordsdance", "xscissor"]
+    },
+    "electrode": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["foulplay", "hiddenpowergrass", "hiddenpowerice", "taunt", "thunderbolt", "voltswitch"]
+    },
+    "exeggutor": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["gigadrain", "hiddenpowerfire", "leechseed", "protect", "psychic", "sleeppowder", "substitute"]
+    },
+    "marowak": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["bonemerang", "doubleedge", "earthquake", "firepunch", "stealthrock", "stoneedge"]
+    },
+    "hitmonlee": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["closecombat", "earthquake", "fakeout", "stoneedge", "suckerpunch"]
+    },
+    "hitmonchan": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["bulkup", "closecombat", "drainpunch", "icepunch", "machpunch", "rapidspin", "stoneedge"]
+    },
+    "weezing": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["fireblast", "haze", "painsplit", "sludgebomb", "willowisp"]
+    },
+    "rhydon": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["earthquake", "megahorn", "stealthrock", "stoneedge", "toxic"]
+    },
+    "chansey": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["aromatherapy", "seismictoss", "softboiled", "stealthrock", "toxic"]
+    },
+    "kangaskhan": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["doubleedge", "earthquake", "fakeout", "focuspunch", "return", "substitute", "suckerpunch"]
+    },
+    "seaking": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["drillrun", "icebeam", "megahorn", "return", "waterfall"]
+    },
+    "starmie": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["hydropump", "icebeam", "psyshock", "rapidspin", "recover", "scald", "thunderbolt", "trick"]
+    },
+    "mrmime": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["encore", "focusblast", "nastyplot", "psychic", "substitute", "thunderbolt"]
+    },
+    "scyther": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["aerialace", "brickbreak", "bugbite", "quickattack", "roost", "swordsdance"]
+    },
+    "jynx": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["focusblast", "icebeam", "lovelykiss", "nastyplot", "psyshock", "substitute", "trick"]
+    },
+    "pinsir": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["closecombat", "earthquake", "quickattack", "stealthrock", "stoneedge", "swordsdance", "xscissor"]
+    },
+    "tauros": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["doubleedge", "earthquake", "pursuit", "retaliate", "stoneedge"]
+    },
+    "gyarados": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["dragondance", "earthquake", "icefang", "stoneedge", "waterfall"]
+    },
+    "lapras": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["healbell", "hydropump", "icebeam", "substitute", "thunderbolt", "toxic"]
+    },
+    "ditto": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["transform"]
+    },
+    "vaporeon": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["icebeam", "protect", "roar", "scald", "toxic", "wish"]
+    },
+    "jolteon": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["hiddenpowerice", "signalbeam", "thunderbolt", "voltswitch"]
+    },
+    "flareon": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["facade", "flamecharge", "rest", "sleeptalk"]
+    },
+    "omastar": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["hiddenpowergrass", "icebeam", "shellsmash", "spikes", "stealthrock", "surf"]
+    },
+    "kabutops": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["aquajet", "rapidspin", "stealthrock", "stoneedge", "superpower", "swordsdance", "waterfall"]
+    },
+    "aerodactyl": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["aquatail", "doubleedge", "earthquake", "roost", "stealthrock", "stoneedge", "taunt"]
+    },
+    "snorlax": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["bodyslam", "crunch", "curse", "earthquake", "firepunch", "pursuit", "rest"]
+    },
+    "articuno": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["hurricane", "icebeam", "roost", "substitute", "toxic"]
+    },
+    "zapdos": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["heatwave", "hiddenpowerice", "roost", "substitute", "thunderbolt", "toxic", "uturn"]
+    },
+    "moltres": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["fireblast", "hiddenpowergrass", "hurricane", "roost", "substitute", "toxic", "uturn", "willowisp"]
+    },
+    "dragonair": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["dragondance", "outrage", "rest", "sleeptalk", "waterfall"]
+    },
+    "dragonite": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["dragondance", "earthquake", "extremespeed", "firepunch", "outrage", "roost"]
+    },
+    "mewtwo": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["aurasphere", "calmmind", "fireblast", "psystrike", "recover", "shadowball"]
+    },
+    "mew": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["aurasphere", "fireblast", "nastyplot", "psychic", "softboiled", "stealthrock", "taunt", "uturn", "willowisp"]
+    },
+    "meganium": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["aromatherapy", "dragontail", "gigadrain", "leechseed", "lightscreen", "reflect", "synthesis", "toxic"]
+    },
+    "typhlosion": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["eruption", "fireblast", "focusblast", "hiddenpowergrass", "hiddenpowerrock"]
+    },
+    "feraligatr": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["aquajet", "dragondance", "earthquake", "icepunch", "superpower", "swordsdance", "waterfall"]
+    },
+    "furret": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["aquatail", "doubleedge", "firepunch", "shadowclaw", "trick", "uturn"]
+    },
+    "noctowl": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["airslash", "magiccoat", "nightshade", "roost", "toxic", "whirlwind"]
+    },
+    "ledian": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["encore", "lightscreen", "reflect", "roost", "toxic", "uturn"]
+    },
+    "ariados": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["poisonjab", "suckerpunch", "toxicspikes", "xscissor"]
+    },
+    "crobat": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["bravebird", "heatwave", "roost", "sludgebomb", "superfang", "taunt", "toxic", "uturn"]
+    },
+    "lanturn": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["healbell", "icebeam", "scald", "thunderbolt", "thunderwave", "voltswitch"]
+    },
+    "xatu": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["heatwave", "psychic", "roost", "thunderwave", "toxic", "uturn"]
+    },
+    "ampharos": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["agility", "focusblast", "healbell", "hiddenpowergrass", "hiddenpowerice", "thunderbolt", "toxic", "voltswitch"]
+    },
+    "bellossom": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["gigadrain", "hiddenpowerfire", "hiddenpowerrock", "leafstorm", "leechseed", "sleeppowder", "stunspore", "synthesis"]
+    },
+    "azumarill": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["aquajet", "doubleedge", "icepunch", "superpower", "waterfall"]
+    },
+    "sudowoodo": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["earthquake", "stealthrock", "stoneedge", "suckerpunch", "toxic", "woodhammer"]
+    },
+    "politoed": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["encore", "focusblast", "hiddenpowergrass", "hypnosis", "icebeam", "protect", "scald", "toxic"]
+    },
+    "jumpluff": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["acrobatics", "encore", "energyball", "leechseed", "sleeppowder", "uturn"]
+    },
+    "sunflora": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["earthpower", "encore", "gigadrain", "hiddenpowerrock", "solarbeam", "sunnyday"]
+    },
+    "quagsire": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["earthquake", "encore", "recover", "scald", "toxic"]
+    },
+    "espeon": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["calmmind", "hiddenpowerfire", "morningsun", "psychic", "psyshock", "signalbeam"]
+    },
+    "umbreon": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["foulplay", "protect", "toxic", "wish"]
+    },
+    "murkrow": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["foulplay", "roost", "taunt", "thunderwave", "toxic"]
+    },
+    "slowking": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["calmmind", "fireblast", "grassknot", "icebeam", "psychic", "slackoff", "surf", "trickroom"]
+    },
+    "unown": {
+        "randomBattleLevel": 100,
+        "randomBattleMoves": ["hiddenpowerpsychic"]
+    },
+    "wobbuffet": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["counter", "destinybond", "encore", "mirrorcoat"]
+    },
+    "girafarig": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["calmmind", "hiddenpowerfire", "hypervoice", "psychic", "psyshock", "thunderbolt"]
+    },
+    "forretress": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["gyroball", "rapidspin", "spikes", "stealthrock", "toxic", "voltswitch"]
+    },
+    "dunsparce": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["bite", "bodyslam", "coil", "glare", "headbutt", "rockslide", "roost"]
+    },
+    "gligar": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["earthquake", "roost", "stealthrock", "taunt", "toxic", "uturn"]
+    },
+    "steelix": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["curse", "earthquake", "gyroball", "roar", "stealthrock", "stoneedge", "toxic"]
+    },
+    "granbull": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["closecombat", "crunch", "healbell", "return", "thunderwave", "toxic"]
+    },
+    "qwilfish": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["destinybond", "poisonjab", "spikes", "taunt", "thunderwave", "toxicspikes", "waterfall"]
+    },
+    "scizor": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["bugbite", "bulletpunch", "pursuit", "roost", "superpower", "swordsdance", "uturn"]
+    },
+    "shuckle": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["encore", "protect", "stealthrock", "toxic", "wrap"]
+    },
+    "heracross": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["closecombat", "earthquake", "facade", "megahorn", "stoneedge"]
+    },
+    "ursaring": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["closecombat", "crunch", "earthquake", "facade", "protect", "swordsdance"]
+    },
+    "magcargo": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["hiddenpowerrock", "lavaplume", "recover", "stealthrock", "toxic"]
+    },
+    "corsola": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["powergem", "recover", "scald", "stealthrock", "toxic"]
+    },
+    "octillery": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["energyball", "fireblast", "hydropump", "icebeam", "thunderwave"]
+    },
+    "delibird": {
+        "randomBattleLevel": 100,
+        "randomBattleMoves": ["aerialace", "icebeam", "iceshard", "rapidspin"]
+    },
+    "mantine": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["airslash", "hydropump", "icebeam", "raindance", "rest", "scald", "sleeptalk"]
+    },
+    "skarmory": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["bravebird", "roost", "spikes", "stealthrock", "whirlwind"]
+    },
+    "houndoom": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["darkpulse", "fireblast", "hiddenpowergrass", "nastyplot", "suckerpunch"]
+    },
+    "kingdra": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["dracometeor", "dragondance", "hiddenpowerelectric", "hydropump", "icebeam", "outrage", "raindance", "waterfall"]
+    },
+    "donphan": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["earthquake", "headsmash", "iceshard", "rapidspin", "seedbomb", "stealthrock"]
+    },
+    "porygon2": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["discharge", "icebeam", "recover", "toxic", "triattack"]
+    },
+    "stantler": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["doubleedge", "earthquake", "jumpkick", "megahorn", "suckerpunch"]
+    },
+    "smeargle": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["memento", "spikes", "spore", "stealthrock", "whirlwind"]
+    },
+    "hitmontop": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["closecombat", "machpunch", "rapidspin", "stoneedge", "suckerpunch", "toxic"]
+    },
+    "miltank": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["bodyslam", "earthquake", "healbell", "milkdrink", "stealthrock", "toxic"]
+    },
+    "blissey": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["aromatherapy", "seismictoss", "softboiled", "stealthrock", "thunderwave", "toxic"]
+    },
+    "raikou": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["aurasphere", "calmmind", "hiddenpowerice", "substitute", "thunderbolt", "voltswitch"]
+    },
+    "entei": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["bulldoze", "extremespeed", "flareblitz", "hiddenpowergrass", "stoneedge"]
+    },
+    "suicune": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["calmmind", "hiddenpowerelectric", "hydropump", "icebeam", "rest", "roar", "scald", "sleeptalk"]
+    },
+    "tyranitar": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["crunch", "fireblast", "pursuit", "stealthrock", "stoneedge", "superpower"]
+    },
+    "lugia": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["aeroblast", "earthquake", "roost", "substitute", "toxic", "whirlwind"]
+    },
+    "hooh": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["bravebird", "earthquake", "roost", "sacredfire", "substitute", "toxic"]
+    },
+    "celebi": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["earthpower", "gigadrain", "hiddenpowerice", "leafstorm", "nastyplot", "psychic", "recover", "stealthrock", "uturn"]
+    },
+    "sceptile": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["acrobatics", "earthquake", "leafblade", "substitute", "swordsdance"]
+    },
+    "blaziken": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["flareblitz", "highjumpkick", "protect", "stoneedge", "swordsdance"]
+    },
+    "swampert": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["earthquake", "icebeam", "protect", "roar", "scald", "stealthrock", "toxic"]
+    },
+    "mightyena": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["crunch", "facade", "firefang", "howl", "suckerpunch"]
+    },
+    "linoone": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["bellydrum", "extremespeed", "seedbomb", "shadowclaw"]
+    },
+    "beautifly": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["bugbuzz", "hiddenpowerground", "psychic", "quiverdance"]
+    },
+    "dustox": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["bugbuzz", "quiverdance", "roost", "sludgebomb"]
+    },
+    "ludicolo": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["gigadrain", "hydropump", "icebeam", "raindance", "scald"]
+    },
+    "shiftry": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["darkpulse", "hiddenpowerfire", "leafstorm", "naturepower", "seedbomb", "suckerpunch", "swordsdance"]
+    },
+    "swellow": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["bravebird", "facade", "protect", "quickattack", "uturn"]
+    },
+    "pelipper": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["hurricane", "icebeam", "roost", "scald", "tailwind", "toxic", "uturn"]
+    },
+    "gardevoir": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["calmmind", "focusblast", "painsplit", "psychic", "substitute", "thunderbolt", "trick", "willowisp"]
+    },
+    "masquerain": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["airslash", "bugbuzz", "hydropump", "quiverdance", "roost"]
+    },
+    "breloom": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["bulletseed", "machpunch", "spore", "stoneedge", "swordsdance"]
+    },
+    "vigoroth": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["bulkup", "earthquake", "return", "slackoff", "taunt", "toxic"]
+    },
+    "slaking": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["earthquake", "nightslash", "pursuit", "retaliate", "return"]
+    },
+    "ninjask": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["aerialace", "substitute", "swordsdance", "xscissor"]
+    },
+    "shedinja": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["shadowclaw", "shadowsneak", "swordsdance", "willowisp", "xscissor"]
+    },
+    "exploud": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["fireblast", "focusblast", "hypervoice", "lowkick", "surf"]
+    },
+    "hariyama": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["bulletpunch", "closecombat", "facade", "fakeout", "stoneedge"]
+    },
+    "delcatty": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["doubleedge", "fakeout", "icebeam", "suckerpunch", "thunderwave"]
+    },
+    "sableye": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["foulplay", "nightshade", "recover", "taunt", "willowisp"]
+    },
+    "mawile": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["firefang", "ironhead", "stealthrock", "suckerpunch", "swordsdance"]
+    },
+    "aggron": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["aquatail", "earthquake", "headsmash", "heavyslam", "rockpolish", "stealthrock", "thunderwave"]
+    },
+    "medicham": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["bulletpunch", "highjumpkick", "icepunch", "thunderpunch", "trick", "zenheadbutt"]
+    },
+    "manectric": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["flamethrower", "hiddenpowerice", "overheat", "switcheroo", "thunderbolt", "voltswitch"]
+    },
+    "plusle": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["grassknot", "hiddenpowerice", "nastyplot", "thunderbolt", "voltswitch"]
+    },
+    "minun": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["encore", "hiddenpowerice", "nastyplot", "substitute", "thunderbolt"]
+    },
+    "volbeat": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["bugbuzz", "encore", "roost", "thunderwave", "uturn"]
+    },
+    "illumise": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["bugbuzz", "encore", "roost", "substitute", "thunderwave", "wish"]
+    },
+    "swalot": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["earthquake", "encore", "painsplit", "protect", "sludgebomb", "toxic"]
+    },
+    "sharpedo": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["crunch", "earthquake", "icebeam", "protect", "waterfall", "zenheadbutt"]
+    },
+    "wailord": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["hiddenpowergrass", "hydropump", "icebeam", "surf", "waterspout"]
+    },
+    "camerupt": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["earthquake", "hiddenpowergrass", "lavaplume", "roar", "stealthrock"]
+    },
+    "torkoal": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["earthquake", "lavaplume", "protect", "rapidspin", "stealthrock", "toxic", "yawn"]
+    },
+    "grumpig": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["focusblast", "healbell", "psychic", "shadowball", "thunderwave", "trick", "whirlwind"]
+    },
+    "spinda": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["return", "suckerpunch", "superpower", "trickroom"]
+    },
+    "flygon": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["earthquake", "firepunch", "outrage", "roost", "stoneedge", "superpower", "uturn"]
+    },
+    "cacturne": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["drainpunch", "seedbomb", "spikes", "substitute", "suckerpunch", "swordsdance"]
+    },
+    "altaria": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["dracometeor", "dragondance", "earthquake", "fireblast", "healbell", "outrage", "roost"]
+    },
+    "zangoose": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["closecombat", "facade", "nightslash", "quickattack", "swordsdance"]
+    },
+    "seviper": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["earthquake", "flamethrower", "gigadrain", "sludgebomb", "suckerpunch", "switcheroo"]
+    },
+    "lunatone": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["earthpower", "hiddenpowerrock", "moonlight", "psychic", "stealthrock", "toxic"]
+    },
+    "solrock": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["explosion", "lightscreen", "morningsun", "reflect", "rockslide", "stealthrock", "willowisp"]
+    },
+    "whiscash": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["dragondance", "earthquake", "icebeam", "waterfall"]
+    },
+    "crawdaunt": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["crunch", "dragondance", "superpower", "waterfall"]
+    },
+    "claydol": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["earthquake", "icebeam", "psychic", "rapidspin", "stealthrock", "toxic"]
+    },
+    "cradily": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["earthquake", "recover", "rockslide", "seedbomb", "stealthrock", "swordsdance", "toxic"]
+    },
+    "armaldo": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["aquatail", "earthquake", "rapidspin", "stealthrock", "stoneedge", "swordsdance", "xscissor"]
+    },
+    "milotic": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["dragontail", "haze", "icebeam", "recover", "scald", "toxic"]
+    },
+    "castformsunny": {
+        "randomBattleLevel": 100,
+        "randomBattleMoves": ["icebeam", "solarbeam", "sunnyday", "weatherball"]
+    },
+    "castformrainy": {
+        "randomBattleLevel": 100,
+        "randomBattleMoves": ["icebeam", "raindance", "thunder", "weatherball"]
+    },
+    "kecleon": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["foulplay", "recover", "stealthrock", "thunderwave", "toxic"]
+    },
+    "banette": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["pursuit", "shadowclaw", "shadowsneak", "trick", "willowisp"]
+    },
+    "dusclops": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["nightshade", "rest", "sleeptalk", "willowisp"]
+    },
+    "tropius": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["airslash", "leechseed", "protect", "substitute", "toxic"]
+    },
+    "chimecho": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["calmmind", "healingwish", "psychic", "recover", "shadowball", "toxic", "yawn"]
+    },
+    "absol": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["fireblast", "nightslash", "psychocut", "pursuit", "suckerpunch", "superpower", "swordsdance"]
+    },
+    "glalie": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["earthquake", "explosion", "icebeam", "spikes", "taunt"]
+    },
+    "walrein": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["encore", "icebeam", "protect", "roar", "surf", "toxic"]
+    },
+    "huntail": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["icebeam", "return", "shellsmash", "waterfall"]
+    },
+    "gorebyss": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["hiddenpowergrass", "hydropump", "icebeam", "shellsmash"]
+    },
+    "relicanth": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["doubleedge", "earthquake", "headsmash", "stealthrock", "waterfall"]
+    },
+    "luvdisc": {
+        "randomBattleLevel": 100,
+        "randomBattleMoves": ["icebeam", "protect", "surf", "sweetkiss", "toxic"]
+    },
+    "salamence": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["aquatail", "brickbreak", "dracometeor", "dragondance", "earthquake", "fireblast", "outrage", "roost"]
+    },
+    "metagross": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["agility", "bulletpunch", "earthquake", "meteormash", "pursuit", "stealthrock", "zenheadbutt"]
+    },
+    "regirock": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["drainpunch", "protect", "rockslide", "stealthrock", "thunderwave", "toxic"]
+    },
+    "regice": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["focusblast", "icebeam", "rest", "rockpolish", "sleeptalk", "thunderbolt"]
+    },
+    "registeel": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["curse", "ironhead", "protect", "rest", "sleeptalk", "stealthrock", "toxic"]
+    },
+    "latias": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["calmmind", "dracometeor", "healingwish", "hiddenpowerfire", "psyshock", "roost", "surf"]
+    },
+    "latios": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["dracometeor", "hiddenpowerfire", "psyshock", "roost", "surf", "trick"]
+    },
+    "kyogre": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["calmmind", "icebeam", "rest", "sleeptalk", "surf", "thunder", "waterspout"]
+    },
+    "groudon": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["earthquake", "firepunch", "stealthrock", "stoneedge", "swordsdance", "thunderwave"]
+    },
+    "rayquaza": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["dracometeor", "dragondance", "earthquake", "extremespeed", "outrage", "swordsdance", "vcreate"]
+    },
+    "jirachi": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["bodyslam", "firepunch", "icepunch", "ironhead", "substitute", "uturn", "wish"]
+    },
+    "deoxys": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["extremespeed", "hiddenpowerfire", "icebeam", "psychoboost", "stealthrock", "superpower"]
+    },
+    "deoxysattack": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["extremespeed", "hiddenpowerfire", "icebeam", "psychoboost", "stealthrock", "superpower"]
+    },
+    "deoxysdefense": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["magiccoat", "recover", "seismictoss", "spikes", "taunt", "toxic"]
+    },
+    "deoxysspeed": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["icebeam", "lightscreen", "psychoboost", "reflect", "spikes", "stealthrock", "superpower", "taunt"]
+    },
+    "torterra": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["earthquake", "rockpolish", "stealthrock", "stoneedge", "synthesis", "woodhammer"]
+    },
+    "infernape": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["closecombat", "flareblitz", "hiddenpowerice", "machpunch", "overheat", "swordsdance", "thunderpunch", "uturn"]
+    },
+    "empoleon": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["agility", "grassknot", "hydropump", "icebeam", "protect", "scald", "stealthrock", "toxic"]
+    },
+    "staraptor": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["bravebird", "closecombat", "doubleedge", "quickattack", "roost", "uturn"]
+    },
+    "bibarel": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["curse", "quickattack", "rest", "waterfall"]
+    },
+    "kricketune": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["brickbreak", "bugbite", "nightslash", "return", "swordsdance"]
+    },
+    "luxray": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["crunch", "facade", "icefang", "superpower", "voltswitch", "wildcharge"]
+    },
+    "roserade": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["gigadrain", "hiddenpowerfire", "leafstorm", "sleeppowder", "sludgebomb", "spikes", "synthesis", "toxicspikes"]
+    },
+    "rampardos": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["crunch", "earthquake", "firepunch", "headsmash", "rockpolish", "superpower"]
+    },
+    "bastiodon": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["metalburst", "protect", "roar", "rockblast", "stealthrock", "toxic"]
+    },
+    "wormadam": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["gigadrain", "hiddenpowerrock", "leafstorm", "protect", "signalbeam", "toxic"]
+    },
+    "wormadamsandy": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["earthquake", "protect", "rockblast", "stealthrock", "toxic"]
+    },
+    "wormadamtrash": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["ironhead", "protect", "stealthrock", "toxic"]
+    },
+    "mothim": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["airslash", "bugbuzz", "hiddenpowerground", "quiverdance", "substitute"]
+    },
+    "vespiquen": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["attackorder", "protect", "roost", "substitute", "toxic"]
+    },
+    "pachirisu": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["protect", "superfang", "thunderwave", "toxic", "voltswitch"]
+    },
+    "floatzel": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["aquajet", "bulkup", "crunch", "icepunch", "switcheroo", "taunt", "waterfall"]
+    },
+    "cherrim": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["energyball", "healingwish", "hiddenpowerrock", "hiddenpowerfire", "naturepower"]
+    },
+    "gastrodon": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["earthquake", "icebeam", "recover", "scald", "toxic"]
+    },
+    "ambipom": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["fakeout", "lowkick", "pursuit", "return", "switcheroo", "uturn"]
+    },
+    "drifblim": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["acrobatics", "destinybond", "disable", "shadowball", "substitute", "willowisp"]
+    },
+    "lopunny": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["firepunch", "healingwish", "icepunch", "jumpkick", "return", "switcheroo", "thunderpunch"]
+    },
+    "mismagius": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["hiddenpowerfighting", "nastyplot", "shadowball", "substitute", "taunt", "thunderbolt", "willowisp"]
+    },
+    "honchkrow": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["bravebird", "heatwave", "pursuit", "roost", "substitute", "suckerpunch", "superpower"]
+    },
+    "purugly": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["fakeout", "hypnosis", "return", "suckerpunch", "uturn"]
+    },
+    "skuntank": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["crunch", "fireblast", "poisonjab", "pursuit", "suckerpunch", "taunt"]
+    },
+    "bronzong": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["earthquake", "hypnosis", "psychic", "stealthrock", "toxic"]
+    },
+    "chatot": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["chatter", "heatwave", "hiddenpowerground", "hypervoice", "nastyplot", "substitute", "uturn"]
+    },
+    "spiritomb": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["calmmind", "darkpulse", "foulplay", "rest", "shadowsneak", "sleeptalk", "willowisp"]
+    },
+    "garchomp": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["aquatail", "earthquake", "fireblast", "outrage", "stealthrock", "stoneedge", "swordsdance"]
+    },
+    "lucario": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["closecombat", "crunch", "extremespeed", "icepunch", "swordsdance"]
+    },
+    "hippowdon": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["earthquake", "slackoff", "stealthrock", "stoneedge", "toxic", "whirlwind"]
+    },
+    "drapion": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["aquatail", "crunch", "earthquake", "poisonjab", "pursuit", "swordsdance", "taunt", "toxicspikes"]
+    },
+    "toxicroak": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["drainpunch", "icepunch", "poisonjab", "substitute", "suckerpunch", "swordsdance"]
+    },
+    "carnivine": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["leechseed", "powerwhip", "return", "sleeppowder", "substitute", "swordsdance"]
+    },
+    "lumineon": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["icebeam", "protect", "scald", "toxic", "uturn"]
+    },
+    "abomasnow": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["blizzard", "earthquake", "hiddenpowerfire", "iceshard", "leechseed", "woodhammer"]
+    },
+    "weavile": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["icepunch", "iceshard", "lowkick", "nightslash", "pursuit", "swordsdance"]
+    },
+    "magnezone": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["flashcannon", "hiddenpowerfire", "thunderbolt", "toxic", "voltswitch"]
+    },
+    "lickilicky": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["bodyslam", "earthquake", "healbell", "powerwhip", "protect", "swordsdance", "toxic", "wish"]
+    },
+    "rhyperior": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["earthquake", "icepunch", "megahorn", "rockpolish", "stoneedge"]
+    },
+    "tangrowth": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["earthquake", "hiddenpowerfire", "leechseed", "powerwhip", "rockslide", "sleeppowder", "synthesis"]
+    },
+    "electivire": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["crosschop", "earthquake", "flamethrower", "icepunch", "voltswitch", "wildcharge"]
+    },
+    "magmortar": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["fireblast", "focusblast", "hiddenpowergrass", "substitute", "thunderbolt"]
+    },
+    "togekiss": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["airslash", "aurasphere", "nastyplot", "roost", "thunderwave"]
+    },
+    "yanmega": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["airslash", "bugbuzz", "hiddenpowerground", "protect", "uturn"]
+    },
+    "leafeon": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["leafblade", "return", "swordsdance", "xscissor"]
+    },
+    "glaceon": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["hiddenpowerground", "icebeam", "protect", "shadowball", "toxic", "wish"]
+    },
+    "gliscor": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["earthquake", "icefang", "protect", "roost", "substitute", "swordsdance", "taunt", "toxic"]
+    },
+    "mamoswine": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["earthquake", "iceshard", "iciclecrash", "stealthrock", "superpower"]
+    },
+    "porygonz": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["agility", "darkpulse", "hiddenpowerfighting", "icebeam", "nastyplot", "thunderbolt", "triattack", "trick"]
+    },
+    "gallade": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["closecombat", "drainpunch", "nightslash", "substitute", "swordsdance", "trick", "zenheadbutt"]
+    },
+    "probopass": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["earthpower", "powergem", "stealthrock", "toxic", "voltswitch"]
+    },
+    "dusknoir": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["earthquake", "icepunch", "painsplit", "shadowsneak", "trick", "willowisp"]
+    },
+    "froslass": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["destinybond", "icebeam", "shadowball", "spikes", "taunt", "thunderwave"]
+    },
+    "rotom": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["hiddenpowerice", "painsplit", "shadowball", "substitute", "thunderbolt", "trick", "voltswitch", "willowisp"]
+    },
+    "rotomheat": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["hiddenpowergrass", "overheat", "painsplit", "thunderbolt", "thunderwave", "trick", "voltswitch", "willowisp"]
+    },
+    "rotomwash": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["hiddenpowerice", "hydropump", "painsplit", "thunderbolt", "thunderwave", "trick", "voltswitch", "willowisp"]
+    },
+    "rotomfrost": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["blizzard", "hiddenpowerfire", "painsplit", "substitute", "thunderbolt", "trick", "voltswitch", "willowisp"]
+    },
+    "rotomfan": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["airslash", "painsplit", "substitute", "thunderbolt", "trick", "voltswitch", "willowisp"]
+    },
+    "rotommow": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["hiddenpowerfire", "leafstorm", "painsplit", "thunderbolt", "thunderwave", "trick", "voltswitch", "willowisp"]
+    },
+    "uxie": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["healbell", "lightscreen", "memento", "psychic", "reflect", "stealthrock", "thunderwave", "uturn", "yawn"]
+    },
+    "mesprit": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["calmmind", "hiddenpowerfire", "icebeam", "psychic", "stealthrock", "thunderbolt", "trick", "uturn"]
+    },
+    "azelf": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["energyball", "fireblast", "nastyplot", "psychic", "stealthrock", "taunt", "trick", "uturn"]
+    },
+    "dialga": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["aurasphere", "dracometeor", "dragontail", "fireblast", "stealthrock", "thunderbolt"]
+    },
+    "palkia": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["dracometeor", "dragontail", "fireblast", "hydropump", "spacialrend", "surf", "thunderbolt"]
+    },
+    "heatran": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["earthpower", "fireblast", "flashcannon", "hiddenpowerice", "lavaplume", "protect", "roar", "stealthrock", "toxic"]
+    },
+    "regigigas": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["confuseray", "return", "rockslide", "substitute", "thunderwave"]
+    },
+    "giratinaorigin": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["dracometeor", "earthquake", "hiddenpowerfire", "shadowsneak", "willowisp"]
+    },
+    "giratina": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["calmmind", "dragonpulse", "dragontail", "rest", "sleeptalk", "willowisp"]
+    },
+    "cresselia": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["calmmind", "hiddenpowerfighting", "moonlight", "psychic", "thunderwave", "toxic"]
+    },
+    "phione": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["healbell", "icebeam", "scald", "toxic", "uturn"]
+    },
+    "manaphy": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["energyball", "icebeam", "surf", "tailglow"]
+    },
+    "darkrai": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["darkpulse", "darkvoid", "focusblast", "nastyplot", "substitute"]
+    },
+    "shaymin": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["earthpower", "hiddenpowerfire", "leechseed", "psychic", "rest", "seedflare"]
+    },
+    "shayminsky": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["airslash", "earthpower", "hiddenpowerfire", "hiddenpowerice", "leechseed", "seedflare", "substitute"]
+    },
+    "arceus": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["earthquake", "extremespeed", "recover", "shadowclaw", "swordsdance"]
+    },
+    "arceusbug": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["earthquake", "recover", "stoneedge", "swordsdance", "xscissor"]
+    },
+    "arceusdark": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["calmmind", "judgment", "recover", "refresh"]
+    },
+    "arceusdragon": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["earthquake", "extremespeed", "outrage", "recover", "swordsdance"]
+    },
+    "arceuselectric": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["calmmind", "icebeam", "judgment", "recover"]
+    },
+    "arceusfighting": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["calmmind", "darkpulse", "icebeam", "judgment", "recover"]
+    },
+    "arceusfire": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["calmmind", "fireblast", "judgment", "recover", "thunderbolt"]
+    },
+    "arceusflying": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["calmmind", "earthpower", "judgment", "recover", "substitute"]
+    },
+    "arceusghost": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["calmmind", "focusblast", "judgment", "recover", "roar", "willowisp"]
+    },
+    "arceusgrass": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["calmmind", "earthpower", "icebeam", "judgment", "recover", "thunderwave"]
+    },
+    "arceusground": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["calmmind", "icebeam", "judgment", "recover", "willowisp"]
+    },
+    "arceusice": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["calmmind", "fireblast", "icebeam", "recover", "thunderbolt"]
+    },
+    "arceuspoison": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["flamethrower", "icebeam", "recover", "sludgebomb", "stealthrock", "willowisp"]
+    },
+    "arceuspsychic": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["calmmind", "darkpulse", "focusblast", "judgment", "recover"]
+    },
+    "arceusrock": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["earthquake", "recover", "stoneedge", "swordsdance"]
+    },
+    "arceussteel": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["calmmind", "judgment", "recover", "thunderbolt", "willowisp"]
+    },
+    "arceuswater": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["brickbreak", "extremespeed", "recover", "swordsdance", "waterfall"]
+    },
+    "victini": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["blueflare", "boltstrike", "energyball", "focusblast", "glaciate", "trick", "uturn", "vcreate"]
+    },
+    "serperior": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["calmmind", "dragonpulse", "gigadrain", "hiddenpowerfire", "leechseed", "substitute"]
+    },
+    "emboar": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["earthquake", "fireblast", "flareblitz", "grassknot", "headsmash", "superpower", "wildcharge"]
+    },
+    "samurott": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["aquajet", "grassknot", "icebeam", "megahorn", "superpower", "swordsdance", "waterfall"]
+    },
+    "watchog": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["crunch", "hypnosis", "return", "substitute", "superfang", "swordsdance"]
+    },
+    "stoutland": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["crunch", "return", "superpower", "thunderwave", "wildcharge"]
+    },
+    "liepard": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["darkpulse", "encore", "hiddenpowerfire", "nastyplot", "thunderwave"]
+    },
+    "simisage": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["focusblast", "gigadrain", "hiddenpowerrock", "leechseed", "nastyplot", "substitute"]
+    },
+    "simisear": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["fireblast", "focusblast", "grassknot", "hiddenpowerrock", "nastyplot", "substitute"]
+    },
+    "simipour": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["focusblast", "hiddenpowergrass", "hydropump", "icebeam", "nastyplot", "substitute"]
+    },
+    "musharna": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["calmmind", "healbell", "hiddenpowerground", "moonlight", "psychic", "signalbeam", "toxic", "trickroom"]
+    },
+    "unfezant": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["hypnosis", "pluck", "return", "roost", "tailwind", "uturn"]
+    },
+    "zebstrika": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["hiddenpowergrass", "overheat", "thunderbolt", "voltswitch", "wildcharge"]
+    },
+    "gigalith": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["earthquake", "explosion", "rockblast", "stealthrock", "stoneedge", "superpower"]
+    },
+    "swoobat": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["airslash", "calmmind", "heatwave", "roost", "storedpower"]
+    },
+    "excadrill": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["earthquake", "ironhead", "rapidspin", "rockslide", "swordsdance"]
+    },
+    "audino": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["doubleedge", "healbell", "magiccoat", "protect", "toxic", "wish"]
+    },
+    "conkeldurr": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["bulkup", "drainpunch", "icepunch", "machpunch", "thunderpunch"]
+    },
+    "seismitoad": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["earthquake", "hydropump", "raindance", "sludgebomb", "stealthrock", "toxic"]
+    },
+    "throh": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["bulkup", "icepunch", "payback", "rest", "sleeptalk", "stormthrow"]
+    },
+    "sawk": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["bulkup", "closecombat", "earthquake", "icepunch", "stoneedge"]
+    },
+    "leavanny": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["leafblade", "swordsdance", "synthesis", "xscissor"]
+    },
+    "scolipede": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["aquatail", "earthquake", "megahorn", "rockslide", "spikes", "swordsdance"]
+    },
+    "whimsicott": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["encore", "gigadrain", "leechseed", "stunspore", "taunt", "uturn"]
+    },
+    "lilligant": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["gigadrain", "hiddenpowerfire", "hiddenpowerrock", "petaldance", "quiverdance", "sleeppowder"]
+    },
+    "basculinbluestriped": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["aquajet", "crunch", "superpower", "waterfall", "zenheadbutt"]
+    },
+    "basculin": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["aquajet", "crunch", "superpower", "waterfall", "zenheadbutt"]
+    },
+    "krookodile": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["crunch", "earthquake", "pursuit", "stealthrock", "stoneedge", "superpower"]
+    },
+    "darmanitan": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["earthquake", "flareblitz", "rockslide", "superpower", "uturn"]
+    },
+    "maractus": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["gigadrain", "hiddenpowerfire", "leechseed", "spikes", "toxic"]
+    },
+    "crustle": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["earthquake", "rockblast", "shellsmash", "spikes", "stealthrock", "stoneedge", "xscissor"]
+    },
+    "scrafty": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["crunch", "dragondance", "highjumpkick", "icepunch", "zenheadbutt"]
+    },
+    "sigilyph": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["cosmicpower", "psychoshift", "roost", "storedpower"]
+    },
+    "cofagrigus": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["haze", "hiddenpowerfighting", "nastyplot", "painsplit", "shadowball", "trickroom", "willowisp"]
+    },
+    "carracosta": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["aquajet", "earthquake", "icebeam", "shellsmash", "stealthrock", "stoneedge", "waterfall"]
+    },
+    "archeops": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["acrobatics", "earthquake", "headsmash", "pluck", "roost", "stoneedge", "uturn"]
+    },
+    "garbodor": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["drainpunch", "gunkshot", "haze", "painsplit", "spikes", "toxicspikes"]
+    },
+    "zoroark": {
+        "randomBattleMoves": ["darkpulse", "flamethrower", "focusblast", "nastyplot", "uturn"]
+    },
+    "cinccino": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["bulletseed", "rockblast", "tailslap", "uturn"]
+    },
+    "gothitelle": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["calmmind", "hiddenpowerfighting", "psychic", "rest", "thunderbolt", "trick"]
+    },
+    "reuniclus": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["calmmind", "focusblast", "psychic", "recover", "shadowball", "trickroom"]
+    },
+    "swanna": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["hurricane", "icebeam", "raindance", "roost", "surf"]
+    },
+    "vanilluxe": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["autotomize", "explosion", "flashcannon", "hiddenpowerground", "icebeam"]
+    },
+    "sawsbuck": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["doubleedge", "hornleech", "megahorn", "naturepower", "return", "substitute", "swordsdance"]
+    },
+    "emolga": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["acrobatics", "encore", "roost", "thunderbolt", "toxic", "uturn"]
+    },
+    "escavalier": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["ironhead", "megahorn", "pursuit", "return", "swordsdance"]
+    },
+    "amoonguss": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["clearsmog", "gigadrain", "hiddenpowerfire", "spore", "stunspore", "synthesis"]
+    },
+    "jellicent": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["icebeam", "recover", "scald", "shadowball", "toxic", "willowisp"]
+    },
+    "alomomola": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["protect", "scald", "toxic", "waterfall", "wish"]
+    },
+    "galvantula": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["bugbuzz", "gigadrain", "hiddenpowerice", "thunder", "voltswitch"]
+    },
+    "ferrothorn": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["gyroball", "leechseed", "powerwhip", "protect", "spikes", "stealthrock", "toxic"]
+    },
+    "klinklang": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["geargrind", "return", "shiftgear", "substitute", "wildcharge"]
+    },
+    "eelektross": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["flamethrower", "gigadrain", "hiddenpowerice", "superpower", "thunderbolt", "uturn"]
+    },
+    "beheeyem": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["hiddenpowerfighting", "psychic", "thunderbolt", "trick", "trickroom"]
+    },
+    "chandelure": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["calmmind", "energyball", "fireblast", "hiddenpowerfighting", "shadowball", "substitute"]
+    },
+    "haxorus": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["aquatail", "dragondance", "earthquake", "outrage", "superpower", "swordsdance"]
+    },
+    "beartic": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["aquajet", "iciclecrash", "stoneedge", "superpower", "swordsdance"]
+    },
+    "cryogonal": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["hiddenpowerfire", "icebeam", "rapidspin", "recover", "toxic"]
+    },
+    "accelgor": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["bugbuzz", "encore", "focusblast", "gigadrain", "hiddenpowerrock", "spikes", "yawn"]
+    },
+    "stunfisk": {
+        "randomBattleLevel": 88,
+        "randomBattleMoves": ["discharge", "earthpower", "foulplay", "rest", "scald", "sleeptalk", "stealthrock", "toxic"]
+    },
+    "mienshao": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["highjumpkick", "stoneedge", "substitute", "swordsdance", "uturn"]
+    },
+    "druddigon": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["dragontail", "earthquake", "glare", "outrage", "stealthrock", "suckerpunch", "superpower"]
+    },
+    "golurk": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["drainpunch", "earthquake", "icepunch", "rockpolish", "shadowpunch", "stealthrock"]
+    },
+    "bisharp": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["ironhead", "lowkick", "nightslash", "suckerpunch", "swordsdance"]
+    },
+    "bouffalant": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["earthquake", "headcharge", "megahorn", "stoneedge", "swordsdance"]
+    },
+    "braviary": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["bravebird", "bulkup", "return", "roost", "superpower", "uturn"]
+    },
+    "mandibuzz": {
+        "randomBattleLevel": 86,
+        "randomBattleMoves": ["bravebird", "foulplay", "roost", "taunt", "toxic", "whirlwind"]
+    },
+    "heatmor": {
+        "randomBattleLevel": 90,
+        "randomBattleMoves": ["fireblast", "gigadrain", "suckerpunch", "superpower"]
+    },
+    "durant": {
+        "randomBattleLevel": 84,
+        "randomBattleMoves": ["honeclaws", "ironhead", "rockslide", "superpower", "xscissor"]
+    },
+    "hydreigon": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["darkpulse", "dracometeor", "flamethrower", "focusblast", "roost", "uturn"]
+    },
+    "volcarona": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["bugbuzz", "fierydance", "fireblast", "gigadrain", "hiddenpowerground", "quiverdance", "roost"]
+    },
+    "cobalion": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["closecombat", "hiddenpowerice", "ironhead", "stealthrock", "stoneedge", "swordsdance", "taunt", "thunderwave", "voltswitch"]
+    },
+    "terrakion": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["closecombat", "earthquake", "quickattack", "stealthrock", "stoneedge", "swordsdance"]
+    },
+    "virizion": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["closecombat", "leafblade", "stoneedge", "swordsdance"]
+    },
+    "tornadus": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["acrobatics", "bulkup", "focusblast", "heatwave", "hurricane", "superpower", "taunt", "uturn"]
+    },
+    "tornadustherian": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["focusblast", "heatwave", "hurricane", "superpower", "uturn"]
+    },
+    "thundurus": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["focusblast", "hiddenpowerice", "nastyplot", "thunderbolt", "thunderwave", "voltswitch"]
+    },
+    "thundurustherian": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["agility", "focusblast", "grassknot", "hiddenpowerice", "nastyplot", "thunderbolt"]
+    },
+    "reshiram": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["blueflare", "dracometeor", "roost", "stoneedge", "tailwind"]
+    },
+    "zekrom": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["boltstrike", "dracometeor", "focusblast", "honeclaws", "outrage", "roost", "substitute", "voltswitch"]
+    },
+    "landorus": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["earthpower", "focusblast", "psychic", "rockpolish", "rockslide", "sludgewave"]
+    },
+    "landorustherian": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["earthquake", "rockpolish", "stealthrock", "stoneedge", "superpower", "swordsdance", "uturn"]
+    },
+    "kyurem": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["dracometeor", "earthpower", "focusblast", "icebeam", "outrage", "roost", "substitute"]
+    },
+    "kyuremblack": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["dragonclaw", "earthpower", "fusionbolt", "icebeam", "roost", "substitute"]
+    },
+    "kyuremwhite": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["dracometeor", "earthpower", "focusblast", "fusionflare", "icebeam", "roost", "substitute"]
+    },
+    "keldeo": {
+        "randomBattleLevel": 80,
+        "randomBattleMoves": ["calmmind", "hiddenpowergrass", "hydropump", "icywind", "scald", "secretsword", "substitute"]
+    },
+    "meloetta": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["calmmind", "focusblast", "psychic", "shadowball", "uturn"]
+    },
+    "meloettapirouette": {
+        "randomBattleLevel": 82,
+        "randomBattleMoves": ["closecombat", "icepunch", "relicsong", "return", "shadowclaw"]
+    },
+    "genesect": {
+        "randomBattleLevel": 76,
+        "randomBattleMoves": ["bugbuzz", "flamethrower", "icebeam", "ironhead", "rockpolish", "thunderbolt", "uturn"]
+    }
+}
