@@ -768,10 +768,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			PU: 88,
 			'(PU)': 90,
 		};
-		const customScale: {[forme: string]: number} = {
-			'Castform-Rainy': 100, 'Castform-Sunny': 100, Delibird: 100, 'Farfetch\u2019d': 100, Luvdisc: 100, Unown: 100,
-		};
-		const level = this.adjustLevel || customScale[species.name] || levelScale[species.tier] || (species.nfe ? 90 : 80);
+		const level = this.adjustLevel || species_set.randomBattleLevel || levelScale[species.tier] || (species.nfe ? 90 : 80);
 
 		// Prepare optimal HP
 		const srWeakness = this.dex.getEffectiveness('Rock', species);

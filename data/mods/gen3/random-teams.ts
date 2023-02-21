@@ -541,11 +541,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			PU: 90,
 			NFE: 90,
 		};
-		const customScale: {[k: string]: number} = {
-			Ditto: 100, Unown: 100,
-		};
 		const tier = species.tier;
-		const level = this.adjustLevel || customScale[species.name] || levelScale[tier] || (species.nfe ? 90 : 80);
+		const level = this.adjustLevel || species_set.randomBattleLevel || levelScale[tier] || (species.nfe ? 90 : 80);
 
 		// Prepare optimal HP
 		let hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
