@@ -414,6 +414,24 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('UT')}|screaming, crying, perfect storm`);
 		},
 	},
+	violet: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Vio͜͡let')}|...Heed my words. I am Malenia, Blade of Miquella. And I have never known defeat.`);
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				if (source?.m.phaseChange) {
+					this.add(`c:|${getName('Vio͜͡let')}|Let your flesh be consumed. By the scarlet rot.`);
+				} else {
+					this.add(`c:|${getName('Vio͜͡let')}|I am Malenia, Blade of Miquella.`);
+				}
+			}
+		},
+		onFaint() {
+			this.add(`c:|${getName('Vio͜͡let')}|Your strength, extraordinary… The mark... of a true Lord…`);
+		},
+	},
 	zee: {
 		noCopy: true,
 		onStart() {

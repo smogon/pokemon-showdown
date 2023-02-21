@@ -492,4 +492,31 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (move?.type === 'Flying') return priority + 1;
 		},
 	},
+
+	// Violet
+	scarletaeonia: {
+		shortDesc: "50% HP: +Flying-type, summons Scarlet Aeonia Terrain, loses item.",
+		name: "Scarlet Aeonia",
+		onStart(pokemon) {
+			if (pokemon.m.phaseChange) {
+				if (pokemon.addType('Flying')) {
+					this.add('-start', pokemon, 'typeadd', 'Flying', '[from] ability: Scarlet Aeonia');
+				}
+				this.field.setTerrain('scarletaeoniaterrain');
+			}
+		},
+		onResidualOrder: 29,
+		onResidual(pokemon) {
+			if (!pokemon.hp) return;
+			if (pokemon.hp > pokemon.maxhp / 2) return;
+			this.add('-activate', pokemon, 'ability: Scarlet Aeonia');
+			this.add(`c:|${getName('Vio͜͡let')}|The scarlet bloom flowers once more. You will witness true horror. Now, rot!`);
+			pokemon.m.phaseChange = true;
+			if (pokemon.addType('Flying')) {
+				this.add('-start', pokemon, 'typeadd', 'Flying', '[from] ability: Scarlet Aeonia');
+			}
+			pokemon.takeItem();
+			this.field.setTerrain('scarletaeoniaterrain');
+		},
+	},
 };

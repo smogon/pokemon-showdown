@@ -178,6 +178,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Wingover',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant', teraType: 'Flying',
 	},
+	'Vio͜͡let': {
+		species: 'Iron Valiant', ability: 'Scarlet Aeonia', item: 'Auspicious Armor', gender: 'F',
+		moves: ['Bitter Blade', 'Cross Poison', 'No Retreat'],
+		signatureMove: 'Waterfowl Dance',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant', teraType: 'Fairy', shiny: true,
+	},
 	zee: {
 		species: 'Lilligant-Hisui', ability: 'Chlorophyll', item: 'Heat Rock', gender: 'F',
 		moves: [['Close Combat', 'Axe Kick'], ['Solar Blade', 'Seed Bomb'], 'Victory Dance'],

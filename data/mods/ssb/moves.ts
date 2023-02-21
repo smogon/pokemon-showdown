@@ -56,8 +56,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.attrLastMove('[anim] Light That Burns The Sky');
-			this.attrLastMove('[anim] Rock Wrecker');
+			this.add('-anim', source, 'Light That Burns The Sky', target);
+			this.add('-anim', source, 'Rock Wrecker', target);
 		},
 		secondary: null,
 		target: "normal",
@@ -701,7 +701,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Memento', target);
-			this.attrLastMove('[anim] Brutal Swing');
+			this.add('-anim', source, 'Brutal Swing', target);
 		},
 		secondary: {
 			chance: 100,
@@ -762,9 +762,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {protect: 1},
-		onPrepareHit() {
-			this.attrLastMove('[anim] Morning Sun');
-			this.attrLastMove('[anim] Lovely Kiss');
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Morning Sun', source);
+			this.add('-anim', source, 'Lovely Kiss', target);
 		},
 		onHit(target, source) {
 			target.addVolatile('attract', source);
@@ -790,9 +793,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.attrLastMove('[anim] Mortal Spin');
-			this.attrLastMove('[anim] Spikes');
-			this.attrLastMove('[anim] U-turn');
+			this.add('-anim', source, 'Mortal Spin', target);
+			this.add('-anim', source, 'Spikes', target);
+			this.add('-anim', source, 'U-turn', target);
 		},
 		onAfterHit(target, pokemon) {
 			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
@@ -885,6 +888,74 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Flying",
+	},
+
+	// Violet
+	waterfowldance: {
+		accuracy: 95,
+		basePower: 7,
+		category: "Physical",
+		shortDesc: "Hits 10 times. Heals 100% of damage dealt.",
+		name: "Waterfowl Dance",
+		gen: 9,
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, heal: 1, dance: 1},
+		drain: [1, 1],
+		onPrepareHit() {
+			this.attrLastMove('[anim] Sacred Sword');
+		},
+		multihit: 10,
+		multiaccuracy: true,
+		secondary: null,
+		target: "normal",
+		type: "Flying",
+	},
+	scarletaeoniaterrain: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Scarlet Aeonia Terrain",
+		shortDesc: "5 turns: Contact moves have 25% to badly psn vs grounded.",
+		pp: 10,
+		priority: 0,
+		flags: {nonsky: 1},
+		pseudoWeather: 'scarletaeoniaterrain',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onFieldStart(field, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Scarlet Aeonia Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Scarlet Aeonia Terrain');
+				}
+			},
+			onModifyMove(move, source, target) {
+				if (!target?.isGrounded()) return;
+				if (!move?.flags['contact'] || move.target === 'self') return;
+				if (!move.secondaries) {
+					move.secondaries = [];
+				}
+				move.secondaries.push({
+					chance: 25,
+					status: 'tox',
+				});
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 1,
+			onFieldEnd() {
+				this.add('-fieldend', 'move: Scarlet Aeonia Terrain');
+			},
+		},
+		secondary: null,
+		target: "all",
+		type: "Poison",
 	},
 
 	// zee
