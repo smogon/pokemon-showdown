@@ -1542,11 +1542,7 @@ export const commands: Chat.ChatCommands = {
 		let targetRoom: RoomID | undefined = room?.roomid;
 		for (const arg of args) {
 			if (arg.startsWith('room=')) {
-				const id = arg.slice(5).trim().toLowerCase() as RoomID;
-				if (!FS(`logs/chat/${id}`).existsSync()) {
-					return this.errorReply(`Room "${id}" not found.`);
-				}
-				targetRoom = id;
+				targetRoom = arg.slice(5).trim().toLowerCase() as RoomID;
 			} else if (arg.startsWith('limit=')) {
 				limit = arg.slice(6);
 			} else if (arg.startsWith('date=')) {
