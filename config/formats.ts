@@ -493,14 +493,6 @@ export const Formats: FormatList = [
 		ruleset: ['Draft'],
 	},
 	{
-		name: "[Gen 8] 4v4 Doubles Draft",
-
-		mod: 'gen8',
-		gameType: 'doubles',
-		searchShow: false,
-		ruleset: ['Draft', 'Item Clause', '!Sleep Clause Mod', '!OHKO Clause', '!Evasion Moves Clause', 'Adjust Level = 50', 'Picked Team Size = 4'],
-	},
-	{
 		name: "[Gen 8] NatDex Draft",
 
 		mod: 'gen8',
@@ -513,22 +505,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['[Gen 8] 4v4 Doubles Draft', '+Past'],
-	},
-	{
-		name: "[Gen 8] NatDex LC Draft",
-
-		mod: 'gen8',
-		searchShow: false,
-		ruleset: ['[Gen 8] NatDex Draft', 'Double Item Clause', 'Little Cup'],
-		banlist: ['Dragon Rage', 'Sonic Boom'],
-	},
-	{
-		name: "[Gen 8 BDSP] Draft",
-
-		mod: 'gen8bdsp',
-		searchShow: false,
-		ruleset: ['Draft'],
+		ruleset: ['Draft', 'Item Clause', '!Sleep Clause Mod', '!OHKO Clause', '!Evasion Moves Clause', 'Adjust Level = 50', 'Picked Team Size = 4', '+Past'],
 	},
 	{
 		name: "[Gen 7] Draft",
