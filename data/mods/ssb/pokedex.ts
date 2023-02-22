@@ -55,6 +55,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 110, atk: 200, def: 99, spa: 101, spd: 99, spe: 35},
 		abilities: {0: "Cacophony"},
 	},
+	// Krytocon
+	mawile: {
+		inherit: true,
+		abilities: {0: "Curse of Dexit"},
+	},
 
 	// Mia
 	mewtwomegax: {

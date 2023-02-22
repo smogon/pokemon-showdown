@@ -108,6 +108,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'ok',
 		evs: {hp: 252, def: 4, spa: 252}, nature: 'Quiet', teraType: 'Normal',
 	},
+	Krytocon: {
+		species: 'Mawile', ability: 'Curse of Dexit', item: 'Mawilite', gender: 'M',
+		moves: ['Sucker Punch', 'Fire Lash', 'Play Rough'],
+		signatureMove: 'Attack of Opportunity',
+		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant', teraType: 'Any', shiny: 1024,
+	},
 	'Mad Monty': {
 		species: 'Castform', ability: 'Climate Change', item: 'Heavy-Duty Boots', gender: 'M',
 		moves: ['Weather Ball', 'Defog', ['Solar Beam', 'Thunder', 'Aurora Veil']],

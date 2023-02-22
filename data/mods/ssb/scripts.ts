@@ -543,8 +543,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Pursuit Clones support
+			const pursuitClones = ['pursuit', 'trivialpursuit', 'attackofopportunity'];
 			const callerMoveForPressure = sourceEffect && (sourceEffect as ActiveMove).pp ? sourceEffect as ActiveMove : null;
-			if (!sourceEffect || callerMoveForPressure || ['pursuit', 'trivialpursuit'].includes(sourceEffect.id)) {
+			if (!sourceEffect || callerMoveForPressure || pursuitClones.includes(sourceEffect.id)) {
 				let extraPP = 0;
 				for (const source of pressureTargets) {
 					const ppDrop = this.battle.runEvent('DeductPP', source, pokemon, move);

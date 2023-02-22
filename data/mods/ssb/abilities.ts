@@ -275,6 +275,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Krytocon
+	curseofdexit: {
+		name: "Curse of Dexit",
+		shortDesc: "User sets Curse against foe on entry; 25% of max HP lost.",
+		onStart(pokemon) {
+			let activated = false;
+			for (const target of pokemon.adjacentFoes()) {
+				if (!activated) {
+					this.add('-ability', pokemon, 'Curse of Dexit');
+					this.directDamage(pokemon.maxhp / 4, pokemon, pokemon);
+					activated = true;
+				}
+				target.addVolatile('curse');
+			}
+		},
+	},
+
 	// Mad Monty
 	climatechange: {
 		shortDesc: "1.5x SpA in sun, 1.5x Def/SpD in snow, heals 50% in rain. Changes forme/weather.",

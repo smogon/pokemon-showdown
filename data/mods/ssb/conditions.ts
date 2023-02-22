@@ -267,6 +267,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Kris')}|ok`);
 		},
 	},
+	krytocon: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Krytocon')}|:3`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Krytocon')}|PartMan is a nerd`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Krytocon')}|D:`);
+		},
+	},
 	madmonty: {
 		noCopy: true,
 		onStart() {
