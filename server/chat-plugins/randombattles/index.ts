@@ -795,7 +795,7 @@ export const commands: Chat.ChatCommands = {
 				}
 			} else {
 				for (const pokemon of setsToCheck) {
-					const data = getData(pokemon, formatName)
+					const data = getData(pokemon, formatName);
 					if (!data) continue;
 					if (!data.randomBattleMoves || pokemon.isNonstandard === 'Future') continue;
 					const randomMoves = data.randomBattleMoves.slice();
@@ -846,7 +846,7 @@ export const commands: Chat.ChatCommands = {
 
 		const movesets = [];
 		for (const pokemon of setsToCheck) {
-			const data = getData(pokemon, formatName)
+			const data = getData(pokemon, formatName);
 			if (!data) continue;
 			if (!data.randomDoubleBattleMoves) continue;
 			const moves: string[] = [...data.randomDoubleBattleMoves];
@@ -875,12 +875,12 @@ export const commands: Chat.ChatCommands = {
 		let randomMoves = data ? (data.randomBattleNoDynamaxMoves || data.randomBattleMoves) : null;
 		if (!randomMoves) {
 			const gmaxSpecies = dex.species.get(`${target}gmax`);
-			const data = getData(gmaxSpecies, 'gen8randombattle');
-			if (!data || !data.exists || !data.randomBattleMoves) {
+			const gmaxdata = getData(gmaxSpecies, 'gen8randombattle');
+			if (!gmaxdata || !gmaxdata.exists || !gmaxdata.randomBattleMoves) {
 				return this.errorReply(`Error: No move data found for ${species.name} in [Gen 8] Random Battle (No Dmax).`);
 			}
 			species = gmaxSpecies;
-			randomMoves = data.randomBattleNoDynamaxMoves || data.randomBattleMoves;
+			randomMoves = gmaxdata.randomBattleNoDynamaxMoves || gmaxdata.randomBattleMoves;
 		}
 
 		const m = [...randomMoves].sort().map(formatMove);
