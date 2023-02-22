@@ -390,6 +390,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Mathy
+	dynamictyping: {
+		shortDesc: "Moves used by all Pokemon are ??? type.",
+		name: "Dynamic Typing",
+		onStart(pokemon) {
+			this.add('-ability', pokemon, "Dynamic Typing");
+		},
+		onModifyTypePriority: 2,
+		onAnyModifyType(move, pokemon, target) {
+			move.type = "???";
+		},
+	},
+
 	// Mex
 	timedilation: {
 		shortDesc: "+10% BP for every 10 turns passed in battle, max 200%.",

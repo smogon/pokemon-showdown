@@ -61,6 +61,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Curse of Dexit"},
 	},
 
+	// Mathy
+	furret: {
+		inherit: true,
+		baseStats: {hp: 105, atk: 96, def: 84, spa: 45, spd: 75, spe: 110},
+	},
+
 	// Mia
 	mewtwomegax: {
 		inherit: true,

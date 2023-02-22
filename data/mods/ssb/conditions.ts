@@ -302,6 +302,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Mad Monty')}|Well great. Now the llamas are gonna come back. Is that what you wanted?`);
 		},
 	},
+	mathy: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Mathy')}|Nooooo i broke tera again`);
+		},
+		onSwitchOut(pokemon) {
+			this.add(`c:|${getName('Mathy')}|whatever i'll make ${pokemon.foes()[0].name} fix it`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Mathy')}|thanks for making my job harder :/`);
+		},
+	},
 	mex: {
 		noCopy: true,
 		onStart() {

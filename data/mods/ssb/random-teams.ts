@@ -120,6 +120,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Storm Shelter',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Modest', teraType: 'Rock',
 	},
+	Mathy: {
+		species: 'Furret', ability: 'Dynamic Typing', item: 'Big Root', gender: 'M',
+		moves: ['Bitter Blade', 'Swords Dance', 'Taunt'],
+		signatureMove: 'Breaking Change',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Ghost',
+	},
 	Mex: {
 		species: 'Dialga', ability: 'Time Dilation', item: 'Adamant Orb', gender: 'N',
 		moves: ['Dragon Pulse', 'Flash Cannon', ['Aura Sphere', 'Volt Switch', 'Meteor Beam']],

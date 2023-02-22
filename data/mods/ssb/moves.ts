@@ -628,6 +628,31 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// Mathy
+	breakingchange: {
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		shortDesc: "Ignores target's Ability; disables it on hit.",
+		name: "Breaking Change",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit() {
+			this.attrLastMove('[anim] Salt Cure');
+		},
+		onHit(target) {
+			if (target.getAbility().isPermanent) return;
+			if (!target.addVolatile('gastroacid')) return;
+			this.add(`c:|${getName('Mathy')}|Sorry i tried to fix smth but accidentally broke your ability :( will fix it next week`);
+		},
+		ignoreAbility: true,
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+	},
+
 	// Mex
 	timeskip: {
 		accuracy: true,
