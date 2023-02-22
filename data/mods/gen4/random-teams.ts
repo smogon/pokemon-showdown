@@ -818,17 +818,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			item = 'Black Sludge';
 		}
 
-		const levelScale: {[k: string]: number} = {
-			AG: 74,
-			Uber: 76,
-			OU: 80,
-			'(OU)': 82,
-			UUBL: 82,
-			UU: 84,
-			NUBL: 86,
-			NU: 88,
-		};
-		const level = this.adjustLevel || species_set.randomBattleLevel || levelScale[species.tier] || (species.nfe ? 90 : 80);
+		const level = this.adjustLevel || species_set.randomBattleLevel || (species.nfe ? 90 : 80);
 
 		// Prepare optimal HP
 		let hp = Math.floor(

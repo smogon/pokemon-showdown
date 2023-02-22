@@ -1116,11 +1116,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			item = 'Black Sludge';
 		}
 
-		const levelScale: {[k: string]: number} = {
-			uber: 76, ou: 80, uu: 82, ru: 84, nu: 86, pu: 88,
-		};
-		const tier = toID(species.tier).replace('bl', '');
-		const level = this.adjustLevel || species_set.randomBattleLevel || levelScale[tier] || (species.nfe ? 90 : 80);
+		const level = this.adjustLevel || species_set.randomBattleLevel || (species.nfe ? 90 : 80);
 
 		// Prepare optimal HP
 		const srWeakness = this.dex.getEffectiveness('Rock', species);
