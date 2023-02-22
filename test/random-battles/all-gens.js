@@ -21,6 +21,7 @@ describe('value rule support', () => {
 
 	for (let gen = 1; gen <= 8; gen++) {
 		const formatID = `gen${gen}randombattle`;
+		const dataJSON = require(`../../dist/data/mods/gen${gen}/random-sets.json`);
 		const dex = Dex.forFormat(formatID);
 		for (const count of [1, 3, 24]) {
 			// This is tough to test in Gen 1 because we don't know how many moves a Pokémon ought to have,
@@ -41,7 +42,7 @@ describe('value rule support', () => {
 						// just see all those moves
 						let totalMoves = 0;
 						let seenHP = false;
-						for (const move of dex.species.get(species).randomBattleMoves) {
+						for (const move of dataJSON[dex.species.get(species).id].randomBattleMoves) {
 							if (move.startsWith('hiddenpower')) {
 								if (seenHP) continue;
 								seenHP = true;

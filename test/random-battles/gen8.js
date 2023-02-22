@@ -8,14 +8,17 @@ const assert = require('../assert');
 
 describe('[Gen 8] Random Battle', () => {
 	const options = {format: 'gen8randombattle'};
+	const dataJSON = require(`../../dist/data/mods/gen8/random-sets.json`);
 	const dex = Dex.forFormat(options.format);
 	const generator = Teams.getGenerator(options.format);
 
 	it('All moves on all sets should be obtainable (slow)', () => {
 		const rounds = 500;
-		for (const species of dex.species.all()) {
-			if (!species.randomBattleMoves || species.isNonstandard) continue;
-			const remainingMoves = new Set(species.randomBattleMoves);
+		for (const pokemon of Object.keys(dataJSON)) {
+			const species = dex.species.get(pokemon);
+			const data = dataJSON[pokemon];
+			if (!data.randomBattleMoves || species.isNonstandard) continue;
+			const remainingMoves = new Set(data.randomBattleMoves);
 			for (let i = 0; i < rounds; i++) {
 				// Test lead 1/6 of the time
 				const set = generator.randomSet(species, {}, i % 6 === 0);
