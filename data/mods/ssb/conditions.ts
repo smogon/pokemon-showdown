@@ -74,16 +74,27 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 	breadloeuf: {
 		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('BreadLoeuf')}|I loeuf you <3`);
+		onStart(pokemon) {
+			if (pokemon.foes()[0].name === "Mad Monty") {
+				this.add(`c:|${getName('BreadLoeuf')}|Ope, sorry`);
+			} else {
+				this.add(`c:|${getName('BreadLoeuf')}|I loeuf you <3`);
+			}
 		},
 		// onSwitchOut implemented in ability instead
+		onFoeSwitchIn(pokemon) {
+			if (pokemon.name === "Mad Monty") {
+				this.add(`c:|${getName('BreadLoeuf')}|Ope, sorry`);
+			}
+		},
 		onFaint() {
 			this.add(`c:|${getName('BreadLoeuf')}|Oh, ma vie... c'est 'pitable'...`);
 		},
 		onFoeFaint(target, source, effect) {
 			if (source === this.effectState.target && effect?.name === 'Painful Exit') {
 				this.add(`c:|${getName('BreadLoeuf')}|Ashes to ashes, crust to crust.`);
+			} else if (target.name === "Mad Monty") {
+				this.add(`c:|${getName('BreadLoeuf')}|G.G, weather you like it or not`);
 			} else {
 				this.add(`c:|${getName('BreadLoeuf')}|Ope, someone's swallowing fishes.`);
 			}
