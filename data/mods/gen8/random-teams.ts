@@ -1981,11 +1981,11 @@ export class RandomGen8Teams {
 		isDoubles: boolean,
 		isNoDynamax: boolean,
 	): number {
-		const species_set = this.randomSets[species.id];
+		const data = this.randomSets[species.id];
 		// level set by rules
 		if (this.adjustLevel) return this.adjustLevel;
 		// doubles levelling
-		if (isDoubles && species_set.randomDoubleBattleLevel) return species_set.randomDoubleBattleLevel;
+		if (isDoubles && data.randomDoubleBattleLevel) return data.randomDoubleBattleLevel;
 		// No Dmax levelling
 		if (isNoDynamax) {
 			const tier = species.name.endsWith('-Gmax') ? this.dex.species.get(species.changesFrom).tier : species.tier;
@@ -2034,7 +2034,7 @@ export class RandomGen8Teams {
 			return customScale[species.id] || tierScale[species.tier] || 80;
 		}
 		// Arbitrary levelling base on data files (typically winrate-influenced)
-		if (species_set.randomBattleLevel) return species_set.randomBattleLevel;
+		if (data.randomBattleLevel) return data.randomBattleLevel;
 		// Finally default to level 80
 		return 80;
 	}
@@ -2062,12 +2062,12 @@ export class RandomGen8Teams {
 			gmax = true;
 		}
 
-		const species_set = this.randomSets[species.id];
+		const data = this.randomSets[species.id];
 
 		const randMoves =
-			(isDoubles && species_set.randomDoubleBattleMoves) ||
-			(isNoDynamax && species_set.randomBattleNoDynamaxMoves) ||
-			species_set.randomBattleMoves;
+			(isDoubles && data.randomDoubleBattleMoves) ||
+			(isNoDynamax && data.randomBattleNoDynamaxMoves) ||
+			data.randomBattleMoves;
 		const movePool = (randMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		if (this.format.gameType === 'multi' || this.format.gameType === 'freeforall') {
 			// Random Multi Battle uses doubles move pools, but Ally Switch fails in multi battles

@@ -339,11 +339,11 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		species = this.dex.species.get(species);
 		let forme = species.name;
 
-		const species_set = this.randomSets[species.id];
+		const data = this.randomSets[species.id];
 
 		if (typeof species.battleOnly === 'string') forme = species.battleOnly;
 
-		const movePool = (species_set.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
+		const movePool = (data.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool = [];
 		const moves = new Set<string>();
 		let ability = '';
@@ -531,7 +531,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		}
 
 		const item = this.getItem(ability, types, moves, counter, species);
-		const level = this.adjustLevel || species_set.randomBattleLevel || (species.nfe ? 90 : 80);
+		const level = this.adjustLevel || data.randomBattleLevel || (species.nfe ? 90 : 80);
 
 		// Prepare optimal HP
 		let hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);

@@ -270,8 +270,8 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		species = this.dex.species.get(species);
 		if (!species.exists) species = this.dex.species.get('pikachu'); // Because Gen 1.
 
-		const species_set = this.randomSets[species.id];
-		const movePool = species_set.randomBattleMoves ? species_set.randomBattleMoves.slice() : [];
+		const data = this.randomSets[species.id];
+		const movePool = data.randomBattleMoves ? data.randomBattleMoves.slice() : [];
 		const moves = new Set<string>();
 		const types = new Set(species.types);
 
@@ -283,19 +283,19 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const SpecialSetup = ['amnesia', 'growth'];
 
 		// Either add all moves or add none
-		if (species_set.comboMoves && species_set.comboMoves.length <= this.maxMoveCount && this.randomChance(1, 2)) {
-			for (const m of species_set.comboMoves) moves.add(m);
+		if (data.comboMoves && data.comboMoves.length <= this.maxMoveCount && this.randomChance(1, 2)) {
+			for (const m of data.comboMoves) moves.add(m);
 		}
 
 		// Add one of the semi-mandatory moves
 		// Often, these are used so that the Pokemon only gets one of the less useful moves
-		if (moves.size < this.maxMoveCount && species_set.exclusiveMoves) {
-			moves.add(this.sample(species_set.exclusiveMoves));
+		if (moves.size < this.maxMoveCount && data.exclusiveMoves) {
+			moves.add(this.sample(data.exclusiveMoves));
 		}
 
 		// Add the mandatory move. SD Mew and Amnesia Snorlax are exceptions.
-		if (moves.size < this.maxMoveCount && species_set.essentialMove) {
-			moves.add(species_set.essentialMove);
+		if (moves.size < this.maxMoveCount && data.essentialMove) {
+			moves.add(data.essentialMove);
 		}
 
 		while (moves.size < this.maxMoveCount && movePool.length) {
@@ -316,10 +316,10 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				}
 
 				for (const moveid of moves) {
-					if (moveid === species_set.essentialMove) continue;
+					if (moveid === data.essentialMove) continue;
 					const move = this.dex.moves.get(moveid);
 					if (
-						(!species_set.essentialMove || moveid !== species_set.essentialMove) &&
+						(!data.essentialMove || moveid !== data.essentialMove) &&
 						this.shouldCullMove(move, types, moves, counter).cull
 					) {
 						moves.delete(moveid);

@@ -1057,11 +1057,11 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
 
-		const species_set = this.randomSets[species.id];
+		const data = this.randomSets[species.id];
 
 		const randMoves = isDoubles ?
-			(species_set.randomDoubleBattleMoves || species_set.randomBattleMoves) :
-			species_set.randomBattleMoves;
+			(data.randomDoubleBattleMoves || data.randomBattleMoves) :
+			data.randomBattleMoves;
 		const movePool = (randMoves || Object.keys(Dex.species.getLearnset(species.id)!)).slice();
 		if (this.format.gameType === 'multi') {
 			// Random Multi Battle uses doubles move pools, but Ally Switch fails in multi battles
@@ -1389,7 +1389,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (this.adjustLevel) {
 			level = this.adjustLevel;
 		} else if (!isDoubles) {
-			level = species_set.randomBattleLevel || (species.nfe ? 90 : 80);;
+			level = data.randomBattleLevel || (species.nfe ? 90 : 80);;
 		} else {
 			// We choose level based on BST. Min level is 70, max level is 99. 600+ BST is 70, less than 300 is 99. Calculate with those values.
 			// Every 10.34 BST adds a level from 70 up to 99. Results are floored. Uses the Mega's stats if holding a Mega Stone

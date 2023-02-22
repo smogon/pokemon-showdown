@@ -150,7 +150,7 @@ function getSets(species: string | Species, format = 'gen9randombattle'): any[] 
 	const dex = Dex.forFormat(format);
 	species = dex.species.get(species);
 	const setsFile = JSON.parse(
-		FS(`data/${dex.isBase ? '' : `/mods/${dex.currentMod}`}random-sets.json`).readIfExistsSync() || '{}'
+		FS(`data/${dex.isBase ? '' : `mods/${dex.currentMod}/`}random-sets.json`).readIfExistsSync() || '{}'
 	);
 	const sets = setsFile[species.id]?.sets;
 	if (!sets?.length) return null;
