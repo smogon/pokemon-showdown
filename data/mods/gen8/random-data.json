@@ -1,8 +1,7 @@
 {
     "venusaur": {
         "randomBattleLevel": 82,
-        "randomBattleMoves": ["gigadrain", "leechseed", "sleeppowder", "sludgebomb", "substitute"],
-        "randomDoubleBattleLevel": 82
+        "randomBattleMoves": ["gigadrain", "leechseed", "sleeppowder", "sludgebomb", "substitute"]
     },
     "venusaurgmax": {
         "randomDoubleBattleLevel": 80,
@@ -291,13 +290,11 @@
     },
     "rhydon": {
         "randomBattleLevel": 87,
-        "randomBattleMoves": ["earthquake", "megahorn", "stealthrock", "stoneedge", "toxic"],
-        "randomDoubleBattleLevel": 87
+        "randomBattleMoves": ["earthquake", "megahorn", "stealthrock", "stoneedge", "toxic"]
     },
     "chansey": {
         "randomBattleLevel": 84,
-        "randomBattleMoves": ["healbell", "seismictoss", "softboiled", "stealthrock", "toxic"],
-        "randomDoubleBattleLevel": 84
+        "randomBattleMoves": ["healbell", "seismictoss", "softboiled", "stealthrock", "toxic"]
     },
     "kangaskhan": {
         "randomBattleLevel": 84,
@@ -325,8 +322,7 @@
     },
     "mrmimegalar": {
         "randomBattleLevel": 86,
-        "randomBattleMoves": ["focusblast", "freezedry", "nastyplot", "psychic", "rapidspin"],
-        "randomDoubleBattleLevel": 86
+        "randomBattleMoves": ["focusblast", "freezedry", "nastyplot", "psychic", "rapidspin"]
     },
     "scyther": {
         "randomBattleLevel": 81,
@@ -408,8 +404,7 @@
     },
     "snorlax": {
         "randomBattleLevel": 82,
-        "randomBattleMoves": ["darkestlariat", "doubleedge", "earthquake", "facade", "heatcrash"],
-        "randomDoubleBattleLevel": 82
+        "randomBattleMoves": ["darkestlariat", "doubleedge", "earthquake", "facade", "heatcrash"]
     },
     "snorlaxgmax": {
         "randomBattleLevel": 82,
@@ -608,8 +603,7 @@
     },
     "corsolagalar": {
         "randomBattleLevel": 84,
-        "randomBattleMoves": ["haze", "nightshade", "stealthrock", "strengthsap", "willowisp"],
-        "randomDoubleBattleLevel": 84
+        "randomBattleMoves": ["haze", "nightshade", "stealthrock", "strengthsap", "willowisp"]
     },
     "octillery": {
         "randomBattleLevel": 86,
@@ -1316,8 +1310,7 @@
     },
     "gurdurr": {
         "randomBattleLevel": 83,
-        "randomBattleMoves": ["bulkup", "defog", "drainpunch", "knockoff", "machpunch"],
-        "randomDoubleBattleLevel": 83
+        "randomBattleMoves": ["bulkup", "defog", "drainpunch", "knockoff", "machpunch"]
     },
     "conkeldurr": {
         "randomBattleLevel": 80,
@@ -1394,8 +1387,7 @@
     },
     "darmanitangalarzen": {
         "randomBattleLevel": 78,
-        "randomBattleMoves": ["bellydrum", "earthquake", "firepunch", "iciclecrash", "substitute"],
-        "randomDoubleBattleLevel": 78
+        "randomBattleMoves": ["bellydrum", "earthquake", "firepunch", "iciclecrash", "substitute"]
     },
     "maractus": {
         "randomBattleLevel": 95,
@@ -1730,8 +1722,7 @@
     },
     "genesectdouse": {
         "randomBattleLevel": 74,
-        "randomBattleMoves": ["bugbuzz", "extremespeed", "flamethrower", "icebeam", "ironhead", "technoblast", "thunderbolt", "uturn"],
-        "randomDoubleBattleLevel": 74
+        "randomBattleMoves": ["bugbuzz", "extremespeed", "flamethrower", "icebeam", "ironhead", "technoblast", "thunderbolt", "uturn"]
     },
     "diggersby": {
         "randomBattleLevel": 80,
@@ -1765,8 +1756,7 @@
     },
     "doublade": {
         "randomBattleLevel": 82,
-        "randomBattleMoves": ["closecombat", "ironhead", "shadowclaw", "shadowsneak", "swordsdance"],
-        "randomDoubleBattleLevel": 82
+        "randomBattleMoves": ["closecombat", "ironhead", "shadowclaw", "shadowsneak", "swordsdance"]
     },
     "aegislash": {
         "randomBattleLevel": 80,
@@ -2089,8 +2079,7 @@
     },
     "typenull": {
         "randomBattleLevel": 86,
-        "randomBattleMoves": ["crushclaw", "payback", "rest", "sleeptalk", "swordsdance"],
-        "randomDoubleBattleLevel": 86
+        "randomBattleMoves": ["crushclaw", "payback", "rest", "sleeptalk", "swordsdance"]
     },
     "silvally": {
         "randomBattleLevel": 84,
@@ -2391,8 +2380,7 @@
     },
     "rillaboomgmax": {
         "randomBattleLevel": 78,
-        "randomBattleMoves": ["acrobatics", "grassyglide", "highhorsepower", "knockoff", "swordsdance"],
-        "randomDoubleBattleLevel": 78
+        "randomBattleMoves": ["acrobatics", "grassyglide", "highhorsepower", "knockoff", "swordsdance"]
     },
     "cinderace": {
         "randomBattleLevel": 74,
@@ -2402,8 +2390,7 @@
     },
     "cinderacegmax": {
         "randomBattleLevel": 74,
-        "randomBattleMoves": ["bulkup", "highjumpkick", "pyroball", "suckerpunch"],
-        "randomDoubleBattleLevel": 74
+        "randomBattleMoves": ["bulkup", "highjumpkick", "pyroball", "suckerpunch"]
     },
     "inteleon": {
         "randomBattleLevel": 80,
@@ -2431,8 +2418,7 @@
     },
     "orbeetle": {
         "randomBattleLevel": 86,
-        "randomBattleMoves": ["bodypress", "bugbuzz", "calmmind", "psychic", "recover", "stickyweb", "uturn"],
-        "randomDoubleBattleLevel": 86
+        "randomBattleMoves": ["bodypress", "bugbuzz", "calmmind", "psychic", "recover", "stickyweb", "uturn"]
     },
     "orbeetlegmax": {
         "randomDoubleBattleLevel": 88,
@@ -2489,13 +2475,11 @@
     },
     "appletungmax": {
         "randomBattleLevel": 90,
-        "randomBattleMoves": ["appleacid", "dracometeor", "leechseed", "recover"],
-        "randomDoubleBattleLevel": 90
+        "randomBattleMoves": ["appleacid", "dracometeor", "leechseed", "recover"]
     },
     "sandaconda": {
         "randomBattleLevel": 84,
-        "randomBattleMoves": ["coil", "earthquake", "glare", "rest", "stealthrock", "stoneedge"],
-        "randomDoubleBattleLevel": 84
+        "randomBattleMoves": ["coil", "earthquake", "glare", "rest", "stealthrock", "stoneedge"]
     },
     "sandacondagmax": {
         "randomDoubleBattleLevel": 86,
@@ -2515,13 +2499,11 @@
     },
     "toxtricity": {
         "randomBattleLevel": 82,
-        "randomBattleMoves": ["boomburst", "overdrive", "shiftgear", "sludgewave", "voltswitch"],
-        "randomDoubleBattleLevel": 82
+        "randomBattleMoves": ["boomburst", "overdrive", "shiftgear", "sludgewave", "voltswitch"]
     },
     "toxtricitylowkey": {
         "randomBattleLevel": 82,
-        "randomBattleMoves": ["boomburst", "overdrive", "sludgewave", "voltswitch"],
-        "randomDoubleBattleLevel": 82
+        "randomBattleMoves": ["boomburst", "overdrive", "sludgewave", "voltswitch"]
     },
     "toxtricitygmax": {
         "randomDoubleBattleLevel": 84,
@@ -2561,8 +2543,7 @@
     },
     "grimmsnarl": {
         "randomBattleLevel": 82,
-        "randomBattleMoves": ["lightscreen", "reflect", "spiritbreak", "taunt", "thunderwave"],
-        "randomDoubleBattleLevel": 82
+        "randomBattleMoves": ["lightscreen", "reflect", "spiritbreak", "taunt", "thunderwave"]
     },
     "grimmsnarlgmax": {
         "randomBattleLevel": 82,
@@ -2669,8 +2650,7 @@
     },
     "copperajahgmax": {
         "randomBattleLevel": 84,
-        "randomBattleMoves": ["earthquake", "heatcrash", "heavyslam", "powerwhip", "stoneedge"],
-        "randomDoubleBattleLevel": 84
+        "randomBattleMoves": ["earthquake", "heatcrash", "heavyslam", "powerwhip", "stoneedge"]
     },
     "dracozolt": {
         "randomBattleLevel": 78,
@@ -2753,13 +2733,11 @@
     },
     "urshifugmax": {
         "randomBattleLevel": 76,
-        "randomBattleMoves": ["bulkup", "drainpunch", "substitute", "wickedblow"],
-        "randomDoubleBattleLevel": 76
+        "randomBattleMoves": ["bulkup", "drainpunch", "substitute", "wickedblow"]
     },
     "urshifurapidstrikegmax": {
         "randomBattleLevel": 78,
-        "randomBattleMoves": ["bulkup", "closecombat", "icepunch", "surgingstrikes", "uturn"],
-        "randomDoubleBattleLevel": 78
+        "randomBattleMoves": ["bulkup", "closecombat", "icepunch", "surgingstrikes", "uturn"]
     },
     "zarude": {
         "randomBattleLevel": 78,
