@@ -5550,7 +5550,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	maushold: {
 		tier: "UU",
 		doublesTier: "DOU",
-		natDexTier: "Uber",
+		natDexTier: "UU",
 	},
 	fidough: {
 		tier: "LC",
