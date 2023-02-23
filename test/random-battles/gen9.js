@@ -61,7 +61,7 @@ describe('[Gen 9] Random Battle', () => {
 		}
 	});
 
-	it("should always give Iron Bundle Freeze Dry", () => {
+	it("should always give Iron Bundle Freeze-Dry", () => {
 		testAlwaysHasMove('ironbundle', options, 'freezedry');
 	});
 });
