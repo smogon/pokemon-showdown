@@ -2753,7 +2753,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	gastrodon: {
-		tier: "RU",
+		tier: "UU",
 		doublesTier: "DUU",
 		natDexTier: "UU",
 	},
@@ -3120,7 +3120,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	samurotthisui: {
 //		isNonstandard: "Unobtainable",
-		tier: "RU",
+		tier: "UU",
 	},
 	patrat: {
 		isNonstandard: "Past",
@@ -3769,7 +3769,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	bisharp: {
-		tier: "NFE",
+		tier: "RU",
 		doublesTier: "NFE",
 		natDexTier: "NFE",
 	},

@@ -130,6 +130,17 @@ export const Formats: FormatList = [
 		banlist: ['OU', 'UUBL', 'Light Clay'],
 	},
 
+	{
+		name: "[Gen 9] Rebalanced RU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3713711/">RU Metagame Discussion</a>`,
+		],
+
+		mod: 'gen9rebalanced',
+		ruleset: ['[Gen 9] Rebalanced UU'],
+		banlist: ['UU', 'RUBL'],
+	},
+
 
 	// SS Pseudos Metas
 	///////////////////////////////////////////////////////////////////
