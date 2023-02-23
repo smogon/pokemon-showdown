@@ -1006,14 +1006,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Dragon') {
 				this.debug('Dragon\'s Maw boost');
-				return this.chainModify(1.2);
+				return this.chainModify(1.3);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Dragon') {
 				this.debug('Dragon\'s Maw boost');
-				return this.chainModify(1.2);
+				return this.chainModify(1.3);
 			}
 		},
 		name: "Dragon's Maw",
@@ -4675,14 +4675,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Electric') {
 				this.debug('Transistor boost');
-				return this.chainModify(1.2);
+				return this.chainModify(1.3);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Electric') {
 				this.debug('Transistor boost');
-				return this.chainModify(1.2);
+				return this.chainModify(1.3);
 			}
 		},
 		name: "Transistor",

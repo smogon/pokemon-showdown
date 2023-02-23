@@ -1299,7 +1299,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	typhlosion: {
 //		isNonstandard: "Unobtainable",
-		tier: "UU",
+		tier: "OU",
 		natDexTier: "RU",
 	},
 	typhlosionhisui: {
