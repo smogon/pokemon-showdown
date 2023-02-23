@@ -876,7 +876,7 @@ export const commands: Chat.ChatCommands = {
 		if (!randomMoves) {
 			const gmaxSpecies = dex.species.get(`${target}gmax`);
 			const gmaxdata = getData(gmaxSpecies, 'gen8randombattle');
-			if (!gmaxdata || !gmaxdata.exists || !gmaxdata.randomBattleMoves) {
+			if (!gmaxSpecies.exists || !gmaxdata || !gmaxdata.randomBattleMoves) {
 				return this.errorReply(`Error: No move data found for ${species.name} in [Gen 8] Random Battle (No Dmax).`);
 			}
 			species = gmaxSpecies;
