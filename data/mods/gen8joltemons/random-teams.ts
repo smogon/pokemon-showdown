@@ -3,7 +3,7 @@ import RandomGen8Teams, {MoveCounter} from '../gen8/random-teams';
 
 export class RandomJoltemonsTeams extends RandomGen8Teams {
 	// TODO: Make types for this
-	randomSets: AnyObject = require('./random-sets.json');
+	randomData: AnyObject = require('./random-data.json');
 
 	shouldCullAbility(
 		ability: string,

@@ -6,7 +6,7 @@ import {toID} from '../../../sim/dex';
 
 export class RandomGen6Teams extends RandomGen7Teams {
 	// TODO: Make types for this
-	randomSets: AnyObject = require('./random-sets.json');
+	randomData: AnyObject = require('./random-data.json');
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
@@ -831,7 +831,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
 
-		const data = this.randomSets[species.id];
+		const data = this.randomData[species.id];
 
 		const movePool = (data.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool = [];

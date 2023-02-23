@@ -8,7 +8,7 @@ const {testNotBothMoves, testSet, testHiddenPower, testAlwaysHasMove} = require(
 
 describe('[Gen 7] Random Battle', () => {
 	const options = {format: 'gen7randombattle'};
-	const dataJSON = require(`../../dist/data/mods/gen7/random-sets.json`);
+	const dataJSON = require(`../../dist/data/mods/gen7/random-data.json`);
 	const dex = Dex.forFormat(options.format);
 	const generator = Teams.getGenerator(options.format);
 

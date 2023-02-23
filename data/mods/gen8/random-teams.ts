@@ -104,7 +104,7 @@ export class RandomGen8Teams {
 	readonly forceMonotype: string | undefined;
 
 	// TODO: Make types for this
-	randomSets: AnyObject = require('./random-sets.json');
+	randomData: AnyObject = require('./random-data.json');
 
 	/**
 	 * Checkers for move enforcement based on a Pokémon's types or other factors
@@ -1981,7 +1981,7 @@ export class RandomGen8Teams {
 		isDoubles: boolean,
 		isNoDynamax: boolean,
 	): number {
-		const data = this.randomSets[species.id];
+		const data = this.randomData[species.id];
 		// level set by rules
 		if (this.adjustLevel) return this.adjustLevel;
 		// doubles levelling
@@ -2062,7 +2062,7 @@ export class RandomGen8Teams {
 			gmax = true;
 		}
 
-		const data = this.randomSets[species.id];
+		const data = this.randomData[species.id];
 
 		const randMoves =
 			(isDoubles && data.randomDoubleBattleMoves) ||
@@ -2448,9 +2448,9 @@ export class RandomGen8Teams {
 
 			// Check if the forme has moves for random battle
 			if (this.format.gameType === 'singles') {
-				if (!this.randomSets[species.id] || !this.randomSets[species.id].randomBattleMoves) continue;
+				if (!this.randomData[species.id] || !this.randomData[species.id].randomBattleMoves) continue;
 			} else {
-				if (!this.randomSets[species.id] || !this.randomSets[species.id].randomDoubleBattleMoves) continue;
+				if (!this.randomData[species.id] || !this.randomData[species.id].randomDoubleBattleMoves) continue;
 			}
 
 			// Limit to one of each species (Species Clause)

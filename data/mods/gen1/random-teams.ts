@@ -9,7 +9,7 @@ interface HackmonsCupEntry {
 
 export class RandomGen1Teams extends RandomGen2Teams {
 	// TODO: Make types for this
-	randomSets: AnyObject = require('./random-sets.json');
+	randomData: AnyObject = require('./random-data.json');
 
 	// Challenge Cup or CC teams are basically fully random teams.
 	randomCCTeam() {
@@ -133,7 +133,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
-			if (!species.exists || !this.randomSets[species.id] || !this.randomSets[species.id].randomBattleMoves) continue;
+			if (!species.exists || !this.randomData[species.id] || !this.randomData[species.id].randomBattleMoves) continue;
 			// Only one Ditto is allowed per battle in Generation 1,
 			// as it can cause an endless battle if two Dittos are forced
 			// to face each other.
@@ -270,7 +270,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		species = this.dex.species.get(species);
 		if (!species.exists) species = this.dex.species.get('pikachu'); // Because Gen 1.
 
-		const data = this.randomSets[species.id];
+		const data = this.randomData[species.id];
 		const movePool = data.randomBattleMoves ? data.randomBattleMoves.slice() : [];
 		const moves = new Set<string>();
 		const types = new Set(species.types);

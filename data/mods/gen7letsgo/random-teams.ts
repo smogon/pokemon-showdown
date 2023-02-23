@@ -3,7 +3,7 @@ import RandomTeams, {MoveCounter} from '../gen8/random-teams';
 
 export class RandomLetsGoTeams extends RandomTeams {
 	// TODO: Make types for this
-	randomSets: AnyObject = require('./random-sets.json');
+	randomData: AnyObject = require('./random-data.json');
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
@@ -126,7 +126,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 			forme = species.battleOnly;
 		}
 
-		const data = this.randomSets[species.id];
+		const data = this.randomData[species.id];
 
 		const movePool = (data.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const types = new Set(species.types);
@@ -231,8 +231,8 @@ export class RandomLetsGoTeams extends RandomTeams {
 				(species.num > 151 && ![808, 809].includes(species.num)) ||
 				species.gen > 7 ||
 				species.nfe ||
-				!this.randomSets[species.id] ||
-				!this.randomSets[species.id].randomBattleMoves ||
+				!this.randomData[species.id] ||
+				!this.randomData[species.id].randomBattleMoves ||
 				(this.forceMonotype && !species.types.includes(this.forceMonotype))
 			) {
 				continue;

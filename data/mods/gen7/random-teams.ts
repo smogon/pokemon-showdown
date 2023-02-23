@@ -31,7 +31,7 @@ const ZeroAttackHPIVs: {[k: string]: SparseStatsTable} = {
 
 export class RandomGen7Teams extends RandomGen8Teams {
 	// TODO: Make types for this
-	randomSets: AnyObject = require('./random-sets.json');
+	randomData: AnyObject = require('./random-data.json');
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
@@ -1057,7 +1057,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
 
-		const data = this.randomSets[species.id];
+		const data = this.randomData[species.id];
 
 		const randMoves = isDoubles ?
 			(data.randomDoubleBattleMoves || data.randomBattleMoves) :
@@ -1524,9 +1524,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 				// Check if the forme has moves for random battle
 				if (this.format.gameType === 'singles') {
-					if (!this.randomSets[species.id] || !this.randomSets[species.id].randomBattleMoves) continue;
+					if (!this.randomData[species.id] || !this.randomData[species.id].randomBattleMoves) continue;
 				} else {
-					if (!this.randomSets[species.id] || !this.randomSets[species.id].randomDoubleBattleMoves) continue;
+					if (!this.randomData[species.id] || !this.randomData[species.id].randomDoubleBattleMoves) continue;
 				}
 				if (!species.exists) continue;
 

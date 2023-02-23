@@ -163,12 +163,12 @@ function getSets(species: string | Species, format = 'gen9randombattle'): any[] 
 function getData(species: string | Species, format: string | Format): any | null {
 	const dex = Dex.forFormat(format);
 	species = dex.species.get(species);
-	const setsFile = JSON.parse(
-		FS(`data/mods/${dex.currentMod}/random-sets.json`).readIfExistsSync() || '{}'
+	const dataFile = JSON.parse(
+		FS(`data/mods/${dex.currentMod}/random-data.json`).readIfExistsSync() || '{}'
 	);
-	const sets = setsFile[species.id];
-	if (!sets) return null;
-	return sets;
+	const data = dataFile[species.id];
+	if (!data) return null;
+	return data;
 }
 
 function getRBYMoves(species: string | Species) {

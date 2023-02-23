@@ -6,7 +6,7 @@ import type {MoveCounter} from '../gen8/random-teams';
 
 export class RandomGen5Teams extends RandomGen6Teams {
 	// TODO: Make types for this
-	randomSets: AnyObject = require('./random-sets.json');
+	randomData: AnyObject = require('./random-data.json');
 
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
@@ -493,7 +493,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
 
-		const data = this.randomSets[species.id];
+		const data = this.randomData[species.id];
 
 		const movePool = (data.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool = [];
@@ -821,7 +821,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
-			if (!species.exists || !this.randomSets[species.id] || !this.randomSets[species.id].randomBattleMoves) continue;
+			if (!species.exists || !this.randomData[species.id] || !this.randomData[species.id].randomBattleMoves) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;

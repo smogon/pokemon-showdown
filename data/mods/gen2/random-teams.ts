@@ -4,7 +4,7 @@ import type {MoveCounter} from '../gen8/random-teams';
 
 export class RandomGen2Teams extends RandomGen3Teams {
 	// TODO: Make types for this
-	randomSets: AnyObject = require('./random-sets.json');
+	randomData: AnyObject = require('./random-data.json');
 
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
@@ -148,7 +148,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}): RandomTeamsTypes.RandomSet {
 		species = this.dex.species.get(species);
 
-		const data = this.randomSets[species.id];
+		const data = this.randomData[species.id];
 		const movePool = (data.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool: string[] = [];
 		const moves = new Set<string>();

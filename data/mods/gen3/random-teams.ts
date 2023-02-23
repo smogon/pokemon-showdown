@@ -8,7 +8,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 	battleHasWobbuffet: boolean;
 
 	// TODO: Make types for this
-	randomSets: AnyObject = require('./random-sets.json');
+	randomData: AnyObject = require('./random-data.json');
 
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
@@ -339,7 +339,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		species = this.dex.species.get(species);
 		let forme = species.name;
 
-		const data = this.randomSets[species.id];
+		const data = this.randomData[species.id];
 
 		if (typeof species.battleOnly === 'string') forme = species.battleOnly;
 
@@ -589,7 +589,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
-			if (!species.exists || !this.randomSets[species.id] || !this.randomSets[species.id].randomBattleMoves) continue;
+			if (!species.exists || !this.randomData[species.id] || !this.randomData[species.id].randomBattleMoves) continue;
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;
 
