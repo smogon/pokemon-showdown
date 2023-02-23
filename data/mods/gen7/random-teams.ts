@@ -1524,9 +1524,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 				// Check if the forme has moves for random battle
 				if (this.format.gameType === 'singles') {
-					if (!this.randomData[species.id] || !this.randomData[species.id].randomBattleMoves) continue;
+					if (!this.randomData[species.id]?.randomBattleMoves) continue;
 				} else {
-					if (!this.randomData[species.id] || !this.randomData[species.id].randomDoubleBattleMoves) continue;
+					if (!this.randomData[species.id]?.randomDoubleBattleMoves) continue;
 				}
 				if (!species.exists) continue;
 

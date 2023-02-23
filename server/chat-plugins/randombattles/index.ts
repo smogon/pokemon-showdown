@@ -875,12 +875,12 @@ export const commands: Chat.ChatCommands = {
 		let randomMoves = data ? (data.randomBattleNoDynamaxMoves || data.randomBattleMoves) : null;
 		if (!randomMoves) {
 			const gmaxSpecies = dex.species.get(`${target}gmax`);
-			const gmaxdata = getData(gmaxSpecies, 'gen8randombattle');
-			if (!gmaxSpecies.exists || !gmaxdata || !gmaxdata.randomBattleMoves) {
+			const gmaxData = getData(gmaxSpecies, 'gen8randombattle');
+			if (!gmaxSpecies.exists || !gmaxData || !gmaxData.randomBattleMoves) {
 				return this.errorReply(`Error: No move data found for ${species.name} in [Gen 8] Random Battle (No Dmax).`);
 			}
 			species = gmaxSpecies;
-			randomMoves = gmaxdata.randomBattleNoDynamaxMoves || gmaxdata.randomBattleMoves;
+			randomMoves = gmaxData.randomBattleNoDynamaxMoves || gmaxData.randomBattleMoves;
 		}
 
 		const m = [...randomMoves].sort().map(formatMove);

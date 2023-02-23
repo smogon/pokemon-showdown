@@ -2448,9 +2448,9 @@ export class RandomGen8Teams {
 
 			// Check if the forme has moves for random battle
 			if (this.format.gameType === 'singles') {
-				if (!this.randomData[species.id] || !this.randomData[species.id].randomBattleMoves) continue;
+				if (!this.randomData[species.id]?.randomBattleMoves) continue;
 			} else {
-				if (!this.randomData[species.id] || !this.randomData[species.id].randomDoubleBattleMoves) continue;
+				if (!this.randomData[species.id]?.randomDoubleBattleMoves) continue;
 			}
 
 			// Limit to one of each species (Species Clause)

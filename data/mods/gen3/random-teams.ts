@@ -589,7 +589,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
-			if (!species.exists || !this.randomData[species.id] || !this.randomData[species.id].randomBattleMoves) continue;
+			if (!species.exists || !this.randomData[species.id]?.randomBattleMoves) continue;
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;
 

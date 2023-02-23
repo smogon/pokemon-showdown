@@ -231,8 +231,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 				(species.num > 151 && ![808, 809].includes(species.num)) ||
 				species.gen > 7 ||
 				species.nfe ||
-				!this.randomData[species.id] ||
-				!this.randomData[species.id].randomBattleMoves ||
+				!this.randomData[species.id]?.randomBattleMoves ||
 				(this.forceMonotype && !species.types.includes(this.forceMonotype))
 			) {
 				continue;
