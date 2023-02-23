@@ -202,6 +202,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Waterfowl Dance',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant', teraType: 'Fairy', shiny: true,
 	},
+	Zalm: {
+		species: 'Weedle', ability: 'Water Bubble', item: 'Clear Amulet', gender: '',
+		moves: ['Surging Strikes', 'Attack Order', 'Dire Claw'],
+		signatureMove: 'Dud ur a fish',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant', teraType: 'Water',
+	},
 	zee: {
 		species: 'Lilligant-Hisui', ability: 'Chlorophyll', item: 'Heat Rock', gender: 'F',
 		moves: [['Close Combat', 'Axe Kick'], ['Solar Blade', 'Seed Bomb'], 'Victory Dance'],

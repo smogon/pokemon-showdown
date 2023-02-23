@@ -1078,6 +1078,39 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Poison",
 	},
 
+	// Zalm
+	dudurafish: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Heals 25% HP and sets Aqua Ring.",
+		name: "Dud ur a fish",
+		pp: 5,
+		priority: 0,
+		flags: {heal: 1, snatch: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', target, "Recover", source);
+			this.add('-anim', target, "Aqua Ring", source);
+		},
+		onHit(pokemon) {
+			let didSomething: boolean;
+			if (pokemon.hasType("Water")) {
+				didSomething = !!this.heal(this.modify(pokemon.baseMaxhp, 1, 2));
+				didSomething = pokemon.cureStatus() || didSomething;
+			} else {
+				didSomething = !!this.heal(this.modify(pokemon.baseMaxhp, 1, 4));
+			}
+			didSomething = pokemon.addVolatile('aquaring') || didSomething;
+			return didSomething;
+		},
+		secondary: null,
+		target: "self",
+		type: "Water",
+	},
+
 	// zee
 	solarsummon: {
 		accuracy: 100,

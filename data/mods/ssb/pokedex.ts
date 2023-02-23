@@ -91,4 +91,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 55, atk: 135, def: 75, spa: 35, spd: 85, spe: 135},
 		abilities: {0: 'Rough and Tumble'},
 	},
+
+	// Zalm
+	weedle: {
+		inherit: true,
+		baseStats: {hp: 100, atk: 90, def: 100, spa: 35, spd: 90, spe: 100},
+	},
 };

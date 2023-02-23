@@ -479,6 +479,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Vio͜͡let')}|Your strength, extraordinary… The mark... of a true Lord…`);
 		},
 	},
+	zalm: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Zalm')}|<(:O)00000>`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Zalm')}|brb gonna check if my lasagne didn't explode e-e`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Zalm')}|I should have picked an actual fish pokémon like veluza instead...`);
+		},
+	},
 	zee: {
 		noCopy: true,
 		onStart() {
