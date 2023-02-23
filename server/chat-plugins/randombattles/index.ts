@@ -820,7 +820,7 @@ export const commands: Chat.ChatCommands = {
 		this.sendReplyBox(buf);
 	},
 	randombattleshelp: [
-		`/randombattles OR /randbats [pokemon], [gen] - Displays a Pok\u00e9mon's Random Battle Moves. Defaults to Gen 8. If used in a battle, defaults to the gen of that battle.`,
+		`/randombattles OR /randbats [pokemon], [gen] - Displays a Pok\u00e9mon's Random Battle Moves. Defaults to Gen 9. If used in a battle, defaults to the gen of that battle.`,
 	],
 
 	randdubs: 'randomdoublesbattle',
