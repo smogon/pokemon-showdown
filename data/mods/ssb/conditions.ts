@@ -123,6 +123,19 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('deftinwolf')}|Death is only the beginning.`);
 		},
 	},
+	eli: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Eli')}|any`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Eli')}|ok bye`);
+		},
+		onFaint(pokemon) {
+			const foePokemon = (pokemon.foes()[0].illusion || pokemon.foes()[0]).name;
+			this.add(`c:|${getName('Eli')}|that wasn't very nice, ${foePokemon}.`);
+		},
+	},
 	havi: {
 		noCopy: true,
 		onStart() {
@@ -501,6 +514,65 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${getName('zee')}|Hey everyone it's been a great time working with you all in this Super Staff Bros battle but I think it's the right time for me to step down. Thank you all and see you around.`);
+		},
+	},
+
+	// Custom effects
+	stormsurge: {
+		name: 'StormSurge',
+		effectType: 'Weather',
+		duration: 5,
+		durationCallback(source, effect) {
+			if (source?.hasItem('damprock')) {
+				return 8;
+			}
+			return 5;
+		},
+		onEffectivenessPriority: -1,
+		onEffectiveness(typeMod, target, type, move) {
+			if (move?.effectType === 'Move' && move.category !== 'Status' && type === 'Flying' && typeMod > 0) {
+				this.add('-fieldactivate', 'Storm Surge');
+				return 0;
+			}
+		},
+		onWeatherModifyDamage(damage, attacker, defender, move) {
+			if (defender.hasItem('utilityumbrella')) return;
+			if (move.flags['wind']) {
+				this.debug('Storm Surge wind boost');
+				return this.chainModify(1.2);
+			}
+			if (move.type === 'Water') {
+				this.debug('Storm Surge water boost');
+				return this.chainModify(1.5);
+			}
+			if (move.type === 'Fire') {
+				this.debug('Storm Surge fire suppress');
+				return this.chainModify(0.5);
+			}
+		},
+		onAccuracy(accuracy, attacker, defender, move) {
+			if (move?.flags['wind'] && !attacker.hasItem('utilityumbrella')) return true;
+			return accuracy;
+		},
+		onFieldStart(battle, source, effect) {
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-weather', 'StormSurge', '[from] ability: ' + effect.name, '[of] ' + source);
+			} else {
+				this.add('-weather', 'StormSurge');
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (pokemon.hasItem('utilityumbrella')) return;
+			if (type === 'frz') return false;
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-weather', 'StormSurge', '[upkeep]');
+			this.eachEvent('Weather');
+		},
+		onFieldEnd() {
+			this.add('-weather', 'none');
 		},
 	},
 

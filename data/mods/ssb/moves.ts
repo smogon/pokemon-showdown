@@ -181,6 +181,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return move.basePower;
 		},
 		category: "Physical",
+		shortDesc: "If foe is switching out, 2x power. Doesn't KO.",
 		name: "Trivial Pursuit",
 		pp: 5,
 		priority: 0,
@@ -239,6 +240,26 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
+	},
+
+	// Eli
+	sustainedwinds: {
+		accuracy: 90,
+		basePower: 20,
+		category: "Special",
+		shortDesc: "Hits 5x. Heals 20% of damage dealt on each hit.",
+		name: "Sustained Winds",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, heal: 1, wind: 1},
+		onPrepareHit() {
+			this.attrLastMove('[anim] Bleakwind Storm');
+		},
+		drain: [1, 5],
+		multihit: 5,
+		secondary: null,
+		target: 'normal',
+		type: "Flying",
 	},
 
 	// havi

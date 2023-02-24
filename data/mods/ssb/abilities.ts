@@ -55,7 +55,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	clodofruin: {
 		shortDesc: "Active Pokemon without this Ability have their Atk multiplied by 0.85. Ignores stat changes.",
-		name: "Quag of Ruin",
+		name: "Clod of Ruin",
 		onStart(pokemon) {
 			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Clod of Ruin');
@@ -117,6 +117,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		isBreakable: true,
+	},
+
+	// Eli
+	stormsurge: {
+		shortDesc: "On switch-in, this Pokemon summons Storm Surge.",
+		name: "Storm Surge",
+		onStart(source) {
+			this.field.setWeather('stormsurge');
+		},
 	},
 
 	// havi
