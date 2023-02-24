@@ -257,11 +257,14 @@ describe('[Gen 8] Free-for-All Random Battle', () => {
 
 describe('[Gen 8 BDSP] Random Battle', () => {
 	const options = {format: 'gen8bdsprandombattle'};
+	const dataJSON = require(`../../dist/data/mods/gen8bdsp/random-data.json`);
 	const dex = Dex.forFormat(options.format);
 
 	const okToHaveChoiceMoves = ['switcheroo', 'trick', 'healingwish'];
-	for (const species of dex.species.all()) {
-		if (!species.moves) continue;
+	for (const pokemon of Object.keys(dataJSON)) {
+		const species = dex.species.get(pokemon);
+		const data = dataJSON[pokemon];
+		if (!data.moves) continue;
 
 		// Pokémon with Sniper should never have Scope Lens
 		if (Object.values(species.abilities).includes('Sniper')) {
@@ -274,7 +277,7 @@ describe('[Gen 8 BDSP] Random Battle', () => {
 		}
 
 		// Pokemon with Fake Out should not have Choice Items
-		if (species.moves.includes('fakeout')) {
+		if (data.moves.includes('fakeout')) {
 			it(`should not give ${species} a Choice Item if it has Fake Out`, () => {
 				testSet(species, options, set => {
 					if (!set.moves.includes('fakeout')) return;
