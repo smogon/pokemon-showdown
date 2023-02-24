@@ -47,10 +47,8 @@ describe('[Gen 7] Random Battle', () => {
 	});
 
 	it('should not generate Pursuit as the only Dark STAB move', () => {
-		const darkTypesWithPursuit = dex.species
-			.all()
-			.filter(pkmn => pkmn.types.includes('Dark') && pkmn.moves?.includes('pursuit'))
-			.map(pkmn => pkmn.id);
+		const darkTypesWithPursuit = Object.keys(dataJSON)
+			.filter(pkmn => dex.species.get(pkmn).types.includes('Dark') && dataJSON[pkmn].moves?.includes('pursuit'));
 		for (const pokemon of darkTypesWithPursuit) {
 			testSet(pokemon, options, set => {
 				if (!set.moves.includes('pursuit')) return;

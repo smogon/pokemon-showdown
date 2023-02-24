@@ -156,11 +156,13 @@ describe('[Gen 8] Random Battle', () => {
 		// This test takes more than 2000ms
 		this.timeout(0);
 
-		const pokemon = dex.species
-			.all()
-			.filter(pkmn => pkmn.moves && pkmn.types.includes('Grass') && pkmn.types.includes('Poison'));
+		const pokemon = Object.keys(dataJSON)
+			.filter(pkmn =>
+				dataJSON[pkmn].moves &&
+				dex.species.get(pkmn).types.includes('Grass') && dex.species.get(pkmn).types.includes('Poison')
+			);
 		for (const pkmn of pokemon) {
-			testHasSTAB(pkmn.name, options, ['Poison']);
+			testHasSTAB(pkmn, options, ['Poison']);
 		}
 	});
 
