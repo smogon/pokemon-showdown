@@ -531,7 +531,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		}
 
 		const item = this.getItem(ability, types, moves, counter, species);
-		const level = this.adjustLevel || data.randomBattleLevel || (species.nfe ? 90 : 80);
+		const level = this.adjustLevel || data.level || (species.nfe ? 90 : 80);
 
 		// Prepare optimal HP
 		let hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);

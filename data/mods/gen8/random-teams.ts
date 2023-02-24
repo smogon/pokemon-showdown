@@ -1985,7 +1985,7 @@ export class RandomGen8Teams {
 		// level set by rules
 		if (this.adjustLevel) return this.adjustLevel;
 		// doubles levelling
-		if (isDoubles && data.randomDoubleBattleLevel) return data.randomDoubleBattleLevel;
+		if (isDoubles && data.doublesLevel) return data.doublesLevel;
 		// No Dmax levelling
 		if (isNoDynamax) {
 			const tier = species.name.endsWith('-Gmax') ? this.dex.species.get(species.changesFrom).tier : species.tier;
@@ -2034,7 +2034,7 @@ export class RandomGen8Teams {
 			return customScale[species.id] || tierScale[species.tier] || 80;
 		}
 		// Arbitrary levelling base on data files (typically winrate-influenced)
-		if (data.randomBattleLevel) return data.randomBattleLevel;
+		if (data.level) return data.level;
 		// Finally default to level 80
 		return 80;
 	}
