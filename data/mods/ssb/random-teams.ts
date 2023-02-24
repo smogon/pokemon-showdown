@@ -84,6 +84,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Augur of Ebrietas',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', teraType: 'Ghost',
 	},
+	hsy: {
+		species: 'Ursaluna', ability: 'Hustle', item: 'Blunder Policy', gender: 'M',
+		moves: ['Drill Peck', 'Egg Bomb', 'Metronome'],
+		signatureMove: 'Wonder Wing',
+		evs: {hp: 252, atk: 252, spe: 4}, nature: 'Adamant', teraType: 'Flying',
+	},
 	ironwater: {
 		species: 'Jirachi', ability: 'Good as Gold', item: 'Leftovers', gender: 'N',
 		moves: ['Swords Dance', 'Zen Headbutt', 'Hammer Arm'],

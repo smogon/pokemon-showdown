@@ -143,6 +143,17 @@ export function changeMoves(context: Battle, pokemon: Pokemon, newMoves: (string
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	inherit: 'gen9',
+	checkMoveMakesContact(move, attacker, defender, announcePads) {
+		if (move.flags['contact'] && attacker.hasItem('protectivepads')) {
+			if (announcePads) {
+				this.add('-activate', defender, this.effect.fullname);
+				this.add('-activate', attacker, 'item: Protective Pads');
+			}
+			return false;
+		}
+		if (move.id === 'wonderwing') return false;
+		return !!move.flags['contact'];
+	},
 	pokemon: {
 		// Modified for Change Tempo
 		getMoveTargets(move, target) {

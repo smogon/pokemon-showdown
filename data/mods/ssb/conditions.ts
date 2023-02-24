@@ -148,6 +148,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('havi')}|the nightmare swirls and churns unending n_n`);
 		},
 	},
+	hsy: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('hsy')}|BANJO!`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('hsy')}|LEMME SCRAP COWARD`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('hsy')}|https://www.youtube.com/watch?v=g104OJIh9hs`);
+		},
+	},
 	ironwater: {
 		noCopy: true,
 		onStart() {

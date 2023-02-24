@@ -281,6 +281,53 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ghost",
 	},
 
+	// hsy
+	wonderwing: {
+		accuracy: 90,
+		basePower: 150,
+		category: "Physical",
+		shortDesc: "No dmg rest of turn. Next turn user moves -1 prio.",
+		name: "Wonder Wing",
+		pp: 5,
+		priority: -1,
+		flags: {contact: 1},
+		// No negative contact effects implemented in Battle#checkMovesMakeContact
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Electric Terrain', source);
+			this.add('-anim', source, 'Giga Impact', target);
+		},
+		self: {
+			volatileStatus: 'wonderwing',
+		},
+		condition: {
+			noCopy: true,
+			duration: 2,
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Wonder Wing');
+			},
+			onRestart(target, source, sourceEffect) {
+				target.removeVolatile('wonderwing');
+			},
+			onDamage(damage, target, source, effect) {
+				if (this.effectState.duration < 2) return;
+				this.add('-activate', source, 'move: Wonder Wing');
+				return false;
+			},
+			onModifyPriority(relayVar, source, target, move) {
+				return -1;
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Wonder Wing', '[silent]');
+			},
+		},
+		target: "normal",
+		type: "Flying",
+
+	},
+
 	// ironwater
 	jirachibanhammer: {
 		accuracy: 100,
