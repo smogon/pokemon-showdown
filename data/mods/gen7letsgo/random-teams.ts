@@ -128,7 +128,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 
 		const data = this.randomData[species.id];
 
-		const movePool = (data.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
+		const movePool = (data.moves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const types = new Set(species.types);
 
 		const moves = new Set<string>();
@@ -231,7 +231,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 				(species.num > 151 && ![808, 809].includes(species.num)) ||
 				species.gen > 7 ||
 				species.nfe ||
-				!this.randomData[species.id]?.randomBattleMoves ||
+				!this.randomData[species.id]?.moves ||
 				(this.forceMonotype && !species.types.includes(this.forceMonotype))
 			) {
 				continue;

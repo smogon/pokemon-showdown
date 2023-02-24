@@ -343,7 +343,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		if (typeof species.battleOnly === 'string') forme = species.battleOnly;
 
-		const movePool = (data.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
+		const movePool = (data.moves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool = [];
 		const moves = new Set<string>();
 		let ability = '';
@@ -589,7 +589,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
-			if (!species.exists || !this.randomData[species.id]?.randomBattleMoves) continue;
+			if (!species.exists || !this.randomData[species.id]?.moves) continue;
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;
 

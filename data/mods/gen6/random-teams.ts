@@ -833,7 +833,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 		const data = this.randomData[species.id];
 
-		const movePool = (data?.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
+		const movePool = (data?.moves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool = [];
 		let ability = '';
 

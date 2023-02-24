@@ -2065,9 +2065,9 @@ export class RandomGen8Teams {
 		const data = this.randomData[species.id];
 
 		const randMoves =
-			(isDoubles && data.randomDoubleBattleMoves) ||
-			(isNoDynamax && data.randomBattleNoDynamaxMoves) ||
-			data.randomBattleMoves;
+			(isDoubles && data.doublesMoves) ||
+			(isNoDynamax && data.noDynamaxMoves) ||
+			data.moves;
 		const movePool = (randMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		if (this.format.gameType === 'multi' || this.format.gameType === 'freeforall') {
 			// Random Multi Battle uses doubles move pools, but Ally Switch fails in multi battles
@@ -2448,9 +2448,9 @@ export class RandomGen8Teams {
 
 			// Check if the forme has moves for random battle
 			if (this.format.gameType === 'singles') {
-				if (!this.randomData[species.id]?.randomBattleMoves) continue;
+				if (!this.randomData[species.id]?.moves) continue;
 			} else {
-				if (!this.randomData[species.id]?.randomDoubleBattleMoves) continue;
+				if (!this.randomData[species.id]?.doublesMoves) continue;
 			}
 
 			// Limit to one of each species (Species Clause)

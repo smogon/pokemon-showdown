@@ -17,8 +17,8 @@ describe('[Gen 8] Random Battle', () => {
 		for (const pokemon of Object.keys(dataJSON)) {
 			const species = dex.species.get(pokemon);
 			const data = dataJSON[pokemon];
-			if (!data.randomBattleMoves || species.isNonstandard) continue;
-			const remainingMoves = new Set(data.randomBattleMoves);
+			if (!data.moves || species.isNonstandard) continue;
+			const remainingMoves = new Set(data.moves);
 			for (let i = 0; i < rounds; i++) {
 				// Test lead 1/6 of the time
 				const set = generator.randomSet(species, {}, i % 6 === 0);
@@ -158,7 +158,7 @@ describe('[Gen 8] Random Battle', () => {
 
 		const pokemon = dex.species
 			.all()
-			.filter(pkmn => pkmn.randomBattleMoves && pkmn.types.includes('Grass') && pkmn.types.includes('Poison'));
+			.filter(pkmn => pkmn.moves && pkmn.types.includes('Grass') && pkmn.types.includes('Poison'));
 		for (const pkmn of pokemon) {
 			testHasSTAB(pkmn.name, options, ['Poison']);
 		}
@@ -261,7 +261,7 @@ describe('[Gen 8 BDSP] Random Battle', () => {
 
 	const okToHaveChoiceMoves = ['switcheroo', 'trick', 'healingwish'];
 	for (const species of dex.species.all()) {
-		if (!species.randomBattleMoves) continue;
+		if (!species.moves) continue;
 
 		// Pokémon with Sniper should never have Scope Lens
 		if (Object.values(species.abilities).includes('Sniper')) {
@@ -274,7 +274,7 @@ describe('[Gen 8 BDSP] Random Battle', () => {
 		}
 
 		// Pokemon with Fake Out should not have Choice Items
-		if (species.randomBattleMoves.includes('fakeout')) {
+		if (species.moves.includes('fakeout')) {
 			it(`should not give ${species} a Choice Item if it has Fake Out`, () => {
 				testSet(species, options, set => {
 					if (!set.moves.includes('fakeout')) return;

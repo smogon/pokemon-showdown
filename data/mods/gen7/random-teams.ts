@@ -1060,8 +1060,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		const data = this.randomData[species.id];
 
 		const randMoves = isDoubles ?
-			(data.randomDoubleBattleMoves || data.randomBattleMoves) :
-			data.randomBattleMoves;
+			(data.doublesMoves || data.moves) :
+			data.moves;
 		const movePool = (randMoves || Object.keys(Dex.species.getLearnset(species.id)!)).slice();
 		if (this.format.gameType === 'multi') {
 			// Random Multi Battle uses doubles move pools, but Ally Switch fails in multi battles
@@ -1524,9 +1524,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 				// Check if the forme has moves for random battle
 				if (this.format.gameType === 'singles') {
-					if (!this.randomData[species.id]?.randomBattleMoves) continue;
+					if (!this.randomData[species.id]?.moves) continue;
 				} else {
-					if (!this.randomData[species.id]?.randomDoubleBattleMoves) continue;
+					if (!this.randomData[species.id]?.doublesMoves) continue;
 				}
 				if (!species.exists) continue;
 

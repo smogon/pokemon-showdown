@@ -17,8 +17,8 @@ describe('[Gen 7] Random Battle', () => {
 		for (const pokemon of Object.keys(dataJSON)) {
 			const species = dex.species.get(pokemon);
 			const data = dataJSON[pokemon];
-			if (!data.randomBattleMoves || species.isNonstandard) continue;
-			const remainingMoves = new Set(data.randomBattleMoves);
+			if (!data.moves || species.isNonstandard) continue;
+			const remainingMoves = new Set(data.moves);
 			for (let i = 0; i < rounds; i++) {
 				// Test lead 1/6 of the time
 				const set = generator.randomSet(species, {}, i % 6 === 0);
@@ -49,7 +49,7 @@ describe('[Gen 7] Random Battle', () => {
 	it('should not generate Pursuit as the only Dark STAB move', () => {
 		const darkTypesWithPursuit = dex.species
 			.all()
-			.filter(pkmn => pkmn.types.includes('Dark') && pkmn.randomBattleMoves?.includes('pursuit'))
+			.filter(pkmn => pkmn.types.includes('Dark') && pkmn.moves?.includes('pursuit'))
 			.map(pkmn => pkmn.id);
 		for (const pokemon of darkTypesWithPursuit) {
 			testSet(pokemon, options, set => {

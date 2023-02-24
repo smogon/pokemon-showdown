@@ -176,9 +176,9 @@ function getRBYMoves(species: string | Species) {
 	const data = getData(species, 'gen1randombattle');
 	if (!data) return false;
 	let buf = ``;
-	if (data.randomBattleMoves) {
+	if (data.moves) {
 		buf += `<br/><b>Randomized moves</b>: `;
-		buf += data.randomBattleMoves.map(formatMove).sort().join(", ");
+		buf += data.moves.map(formatMove).sort().join(", ");
 	}
 	if (data.comboMoves) {
 		buf += `<br/><b>Combo moves</b>: `;
@@ -193,7 +193,7 @@ function getRBYMoves(species: string | Species) {
 		buf += formatMove(data.essentialMove);
 	}
 	if (
-		!data.randomBattleMoves && !data.comboMoves &&
+		!data.moves && !data.comboMoves &&
 		!data.exclusiveMoves && !data.essentialMove
 	) {
 		return false;
@@ -210,8 +210,8 @@ function getLetsGoMoves(species: string | Species) {
 		(!species.forme || ['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme))
 	);
 	if (!isLetsGoLegal) return false;
-	if (!data.randomBattleMoves?.length) return false;
-	return data.randomBattleMoves.map(formatMove).sort().join(`, `);
+	if (!data.moves?.length) return false;
+	return data.moves.map(formatMove).sort().join(`, `);
 }
 
 function battleFactorySets(species: string | Species, tier: string | null, gen = 'gen8', isBSS = false) {
@@ -797,8 +797,8 @@ export const commands: Chat.ChatCommands = {
 				for (const pokemon of setsToCheck) {
 					const data = getData(pokemon, formatName);
 					if (!data) continue;
-					if (!data.randomBattleMoves || pokemon.isNonstandard === 'Future') continue;
-					const randomMoves = data.randomBattleMoves.slice();
+					if (!data.moves || pokemon.isNonstandard === 'Future') continue;
+					const randomMoves = data.moves.slice();
 					const m = randomMoves.sort().map(formatMove);
 					movesets.push(
 						`<details>` +
@@ -848,8 +848,8 @@ export const commands: Chat.ChatCommands = {
 		for (const pokemon of setsToCheck) {
 			const data = getData(pokemon, formatName);
 			if (!data) continue;
-			if (!data.randomDoubleBattleMoves) continue;
-			const moves: string[] = [...data.randomDoubleBattleMoves];
+			if (!data.doublesMoves) continue;
+			const moves: string[] = [...data.doublesMoves];
 			const m = moves.sort().map(formatMove);
 			movesets.push(`<span style="color:#999999;">Doubles moves for ${pokemon.name} in ${formatName}:</span><br />${m.join(`, `)}`);
 		}
@@ -872,15 +872,15 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		const data = getData(species, 'gen8randombattle');
-		let randomMoves = data ? (data.randomBattleNoDynamaxMoves || data.randomBattleMoves) : null;
+		let randomMoves = data ? (data.noDynamaxMoves || data.moves) : null;
 		if (!randomMoves) {
 			const gmaxSpecies = dex.species.get(`${target}gmax`);
 			const gmaxData = getData(gmaxSpecies, 'gen8randombattle');
-			if (!gmaxSpecies.exists || !gmaxData || !gmaxData.randomBattleMoves) {
+			if (!gmaxSpecies.exists || !gmaxData || !gmaxData.moves) {
 				return this.errorReply(`Error: No move data found for ${species.name} in [Gen 8] Random Battle (No Dmax).`);
 			}
 			species = gmaxSpecies;
-			randomMoves = gmaxData.randomBattleNoDynamaxMoves || gmaxData.randomBattleMoves;
+			randomMoves = gmaxData.noDynamaxMoves || gmaxData.moves;
 		}
 
 		const m = [...randomMoves].sort().map(formatMove);
@@ -1024,9 +1024,9 @@ export const commands: Chat.ChatCommands = {
 			if (!data) {
 				setExists = false;
 			} else if (format.gameType === 'doubles' || format.gameType === 'freeforall') {
-				setExists = !!data.randomDoubleBattleMoves;
+				setExists = !!data.doublesMoves;
 			} else {
-				setExists = !!data.randomBattleMoves;
+				setExists = !!data.moves;
 			}
 		}
 		if (!setExists) {

@@ -551,7 +551,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		}
 
 		const data = this.randomData[species.id];
-		const movePool = (data.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
+		const movePool = (data.moves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool: string[] = [];
 		const moves = new Set<string>();
 		let ability = '';

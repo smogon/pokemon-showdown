@@ -1,608 +1,608 @@
 {
     "bulbasaur": {
-        "randomBattleMoves": ["bodyslam", "sleeppowder"],
+        "moves": ["bodyslam", "sleeppowder"],
         "essentialMove": "razorleaf",
         "exclusiveMoves": ["megadrain", "swordsdance", "swordsdance"]
     },
     "ivysaur": {
-        "randomBattleMoves": ["bodyslam", "sleeppowder", "swordsdance"],
+        "moves": ["bodyslam", "sleeppowder", "swordsdance"],
         "essentialMove": "razorleaf"
     },
     "venusaur": {
-        "randomBattleMoves": ["bodyslam", "hyperbeam", "sleeppowder", "swordsdance"],
+        "moves": ["bodyslam", "hyperbeam", "sleeppowder", "swordsdance"],
         "essentialMove": "razorleaf"
     },
     "charmander": {
-        "randomBattleMoves": ["bodyslam", "slash"],
+        "moves": ["bodyslam", "slash"],
         "essentialMove": "fireblast",
         "exclusiveMoves": ["counter", "seismictoss"],
         "comboMoves": ["bodyslam", "fireblast", "submission", "swordsdance"]
     },
     "charmeleon": {
-        "randomBattleMoves": ["bodyslam", "slash"],
+        "moves": ["bodyslam", "slash"],
         "essentialMove": "fireblast",
         "exclusiveMoves": ["counter", "swordsdance"],
         "comboMoves": ["bodyslam", "fireblast", "submission", "swordsdance"]
     },
     "charizard": {
-        "randomBattleMoves": ["bodyslam", "earthquake", "slash"],
+        "moves": ["bodyslam", "earthquake", "slash"],
         "essentialMove": "fireblast",
         "comboMoves": ["hyperbeam", "swordsdance"]
     },
     "squirtle": {
-        "randomBattleMoves": ["blizzard", "hydropump", "seismictoss", "surf"],
+        "moves": ["blizzard", "hydropump", "seismictoss", "surf"],
         "exclusiveMoves": ["bodyslam", "counter"]
     },
     "wartortle": {
-        "randomBattleMoves": ["blizzard", "bodyslam", "hydropump", "surf"],
+        "moves": ["blizzard", "bodyslam", "hydropump", "surf"],
         "exclusiveMoves": ["counter", "rest", "seismictoss"]
     },
     "blastoise": {
-        "randomBattleMoves": ["blizzard", "bodyslam", "hydropump", "surf"],
+        "moves": ["blizzard", "bodyslam", "hydropump", "surf"],
         "exclusiveMoves": ["earthquake", "rest"]
     },
     "butterfree": {
-        "randomBattleMoves": ["psychic", "sleeppowder", "stunspore"],
+        "moves": ["psychic", "sleeppowder", "stunspore"],
         "exclusiveMoves": ["megadrain", "psywave"]
     },
     "beedrill": {
-        "randomBattleMoves": ["megadrain", "swordsdance", "twineedle"],
+        "moves": ["megadrain", "swordsdance", "twineedle"],
         "exclusiveMoves": ["doubleedge", "doubleedge", "hyperbeam"],
         "comboMoves": ["agility", "hyperbeam", "swordsdance", "twineedle"]
     },
     "pidgey": {
-        "randomBattleMoves": ["agility", "doubleedge", "skyattack"],
+        "moves": ["agility", "doubleedge", "skyattack"],
         "exclusiveMoves": ["mimic", "mirrormove", "reflect", "sandattack", "substitute", "quickattack", "toxic"]
     },
     "pidgeotto": {
-        "randomBattleMoves": ["agility", "doubleedge", "skyattack"],
+        "moves": ["agility", "doubleedge", "skyattack"],
         "exclusiveMoves": ["mimic", "mirrormove", "reflect", "sandattack", "substitute", "quickattack", "toxic"]
     },
     "pidgeot": {
-        "randomBattleMoves": ["agility", "doubleedge", "hyperbeam"],
+        "moves": ["agility", "doubleedge", "hyperbeam"],
         "exclusiveMoves": ["mimic", "mirrormove", "reflect", "sandattack", "skyattack", "skyattack", "substitute", "quickattack", "toxic"]
     },
     "rattata": {
-        "randomBattleMoves": ["blizzard", "bodyslam"],
+        "moves": ["blizzard", "bodyslam"],
         "essentialMove": "superfang",
         "exclusiveMoves": ["thunderbolt", "thunderbolt", "quickattack"]
     },
     "raticate": {
-        "randomBattleMoves": ["blizzard", "bodyslam", "hyperbeam"],
+        "moves": ["blizzard", "bodyslam", "hyperbeam"],
         "essentialMove": "superfang"
     },
     "spearow": {
-        "randomBattleMoves": ["agility", "doubleedge", "drillpeck"],
+        "moves": ["agility", "doubleedge", "drillpeck"],
         "exclusiveMoves": ["leer", "mimic", "mirrormove", "substitute", "toxic"]
     },
     "fearow": {
-        "randomBattleMoves": ["agility", "doubleedge", "drillpeck", "hyperbeam"]
+        "moves": ["agility", "doubleedge", "drillpeck", "hyperbeam"]
     },
     "ekans": {
-        "randomBattleMoves": ["bodyslam", "earthquake", "glare", "rockslide"]
+        "moves": ["bodyslam", "earthquake", "glare", "rockslide"]
     },
     "arbok": {
-        "randomBattleMoves": ["earthquake", "glare", "hyperbeam"],
+        "moves": ["earthquake", "glare", "hyperbeam"],
         "exclusiveMoves": ["bodyslam", "rockslide"]
     },
     "pikachu": {
-        "randomBattleMoves": ["surf", "thunderwave"],
+        "moves": ["surf", "thunderwave"],
         "essentialMove": "thunderbolt",
         "exclusiveMoves": ["agility", "bodyslam", "seismictoss", "thunder"]
     },
     "raichu": {
-        "randomBattleMoves": ["surf", "thunderwave"],
+        "moves": ["surf", "thunderwave"],
         "essentialMove": "thunderbolt",
         "exclusiveMoves": ["agility", "bodyslam", "hyperbeam", "seismictoss", "thunder"]
     },
     "sandshrew": {
-        "randomBattleMoves": ["bodyslam", "rockslide", "swordsdance"],
+        "moves": ["bodyslam", "rockslide", "swordsdance"],
         "essentialMove": "earthquake"
     },
     "sandslash": {
-        "randomBattleMoves": ["bodyslam", "rockslide", "swordsdance"],
+        "moves": ["bodyslam", "rockslide", "swordsdance"],
         "essentialMove": "earthquake"
     },
     "nidoranf": {
-        "randomBattleMoves": ["blizzard", "bodyslam", "thunderbolt"],
+        "moves": ["blizzard", "bodyslam", "thunderbolt"],
         "exclusiveMoves": ["doubleedge", "doublekick"]
     },
     "nidorina": {
-        "randomBattleMoves": ["blizzard", "bodyslam", "thunderbolt"],
+        "moves": ["blizzard", "bodyslam", "thunderbolt"],
         "exclusiveMoves": ["bubblebeam", "doubleedge", "doublekick"]
     },
     "nidoqueen": {
-        "randomBattleMoves": ["blizzard", "bodyslam", "thunderbolt"],
+        "moves": ["blizzard", "bodyslam", "thunderbolt"],
         "essentialMove": "earthquake"
     },
     "nidoranm": {
-        "randomBattleMoves": ["blizzard", "bodyslam", "thunderbolt"],
+        "moves": ["blizzard", "bodyslam", "thunderbolt"],
         "exclusiveMoves": ["doubleedge", "doublekick"]
     },
     "nidorino": {
-        "randomBattleMoves": ["blizzard", "bodyslam", "thunderbolt"],
+        "moves": ["blizzard", "bodyslam", "thunderbolt"],
         "exclusiveMoves": ["bubblebeam", "doubleedge", "doublekick"]
     },
     "nidoking": {
-        "randomBattleMoves": ["blizzard", "bodyslam"],
+        "moves": ["blizzard", "bodyslam"],
         "essentialMove": "earthquake",
         "exclusiveMoves": ["rockslide", "thunder", "thunderbolt"]
     },
     "clefairy": {
-        "randomBattleMoves": ["bodyslam", "thunderbolt", "thunderwave"],
+        "moves": ["bodyslam", "thunderbolt", "thunderwave"],
         "essentialMove": "blizzard",
         "exclusiveMoves": ["counter", "psychic", "seismictoss", "sing", "sing"]
     },
     "clefable": {
-        "randomBattleMoves": ["bodyslam", "thunderbolt", "thunderwave"],
+        "moves": ["bodyslam", "thunderbolt", "thunderwave"],
         "essentialMove": "blizzard",
         "exclusiveMoves": ["counter", "hyperbeam", "psychic", "sing", "sing"]
     },
     "vulpix": {
-        "randomBattleMoves": ["bodyslam", "confuseray", "fireblast"],
+        "moves": ["bodyslam", "confuseray", "fireblast"],
         "exclusiveMoves": ["flamethrower", "reflect", "substitute"]
     },
     "ninetales": {
-        "randomBattleMoves": ["bodyslam", "confuseray", "fireblast"],
+        "moves": ["bodyslam", "confuseray", "fireblast"],
         "exclusiveMoves": ["flamethrower", "hyperbeam", "reflect", "substitute"]
     },
     "jigglypuff": {
-        "randomBattleMoves": ["blizzard", "bodyslam", "seismictoss", "thunderwave"],
+        "moves": ["blizzard", "bodyslam", "seismictoss", "thunderwave"],
         "exclusiveMoves": ["counter", "sing"]
     },
     "wigglytuff": {
-        "randomBattleMoves": ["blizzard", "bodyslam", "thunderwave"],
+        "moves": ["blizzard", "bodyslam", "thunderwave"],
         "exclusiveMoves": ["counter", "hyperbeam", "sing"]
     },
     "zubat": {
-        "randomBattleMoves": ["confuseray", "doubleedge", "megadrain", "toxic"]
+        "moves": ["confuseray", "doubleedge", "megadrain", "toxic"]
     },
     "golbat": {
-        "randomBattleMoves": ["confuseray", "doubleedge", "hyperbeam", "megadrain"]
+        "moves": ["confuseray", "doubleedge", "hyperbeam", "megadrain"]
     },
     "oddish": {
-        "randomBattleMoves": ["doubleedge", "sleeppowder"],
+        "moves": ["doubleedge", "sleeppowder"],
         "essentialMove": "megadrain",
         "exclusiveMoves": ["stunspore", "stunspore", "swordsdance"]
     },
     "gloom": {
-        "randomBattleMoves": ["doubleedge", "sleeppowder"],
+        "moves": ["doubleedge", "sleeppowder"],
         "essentialMove": "megadrain",
         "exclusiveMoves": ["stunspore", "stunspore", "swordsdance"]
     },
     "vileplume": {
-        "randomBattleMoves": ["bodyslam", "sleeppowder", "stunspore", "swordsdance"],
+        "moves": ["bodyslam", "sleeppowder", "stunspore", "swordsdance"],
         "essentialMove": "megadrain"
     },
     "paras": {
-        "randomBattleMoves": ["bodyslam", "megadrain"],
+        "moves": ["bodyslam", "megadrain"],
         "essentialMove": "spore",
         "exclusiveMoves": ["growth", "slash", "stunspore", "stunspore", "swordsdance"]
     },
     "parasect": {
-        "randomBattleMoves": ["bodyslam", "megadrain"],
+        "moves": ["bodyslam", "megadrain"],
         "essentialMove": "spore",
         "exclusiveMoves": ["growth", "hyperbeam", "slash", "stunspore", "stunspore", "swordsdance"]
     },
     "venonat": {
-        "randomBattleMoves": ["psychic", "sleeppowder", "stunspore"],
+        "moves": ["psychic", "sleeppowder", "stunspore"],
         "exclusiveMoves": ["doubleedge", "megadrain", "psywave"]
     },
     "venomoth": {
-        "randomBattleMoves": ["psychic", "sleeppowder", "stunspore"],
+        "moves": ["psychic", "sleeppowder", "stunspore"],
         "exclusiveMoves": ["doubleedge", "megadrain", "megadrain"]
     },
     "diglett": {
-        "randomBattleMoves": ["bodyslam", "rockslide", "slash"],
+        "moves": ["bodyslam", "rockslide", "slash"],
         "essentialMove": "earthquake"
     },
     "dugtrio": {
-        "randomBattleMoves": ["bodyslam", "rockslide", "slash"],
+        "moves": ["bodyslam", "rockslide", "slash"],
         "essentialMove": "earthquake"
     },
     "meowth": {
-        "randomBattleMoves": ["bodyslam", "bubblebeam"],
+        "moves": ["bodyslam", "bubblebeam"],
         "essentialMove": "slash",
         "exclusiveMoves": ["thunder", "thunderbolt"]
     },
     "persian": {
-        "randomBattleMoves": ["bodyslam", "bubblebeam"],
+        "moves": ["bodyslam", "bubblebeam"],
         "essentialMove": "slash",
         "exclusiveMoves": ["hyperbeam", "hyperbeam", "thunder", "thunderbolt"]
     },
     "psyduck": {
-        "randomBattleMoves": ["amnesia", "blizzard"],
+        "moves": ["amnesia", "blizzard"],
         "essentialMove": "surf",
         "exclusiveMoves": ["bodyslam", "hydropump", "rest", "seismictoss"]
     },
     "golduck": {
-        "randomBattleMoves": ["amnesia", "blizzard"],
+        "moves": ["amnesia", "blizzard"],
         "essentialMove": "surf",
         "exclusiveMoves": ["bodyslam", "hydropump", "rest", "seismictoss"]
     },
     "mankey": {
-        "randomBattleMoves": ["bodyslam", "rockslide", "submission"],
+        "moves": ["bodyslam", "rockslide", "submission"],
         "exclusiveMoves": ["counter", "megakick"]
     },
     "primeape": {
-        "randomBattleMoves": ["bodyslam", "rockslide", "submission"],
+        "moves": ["bodyslam", "rockslide", "submission"],
         "exclusiveMoves": ["counter", "hyperbeam", "hyperbeam"]
     },
     "growlithe": {
-        "randomBattleMoves": ["bodyslam", "fireblast", "flamethrower", "reflect"]
+        "moves": ["bodyslam", "fireblast", "flamethrower", "reflect"]
     },
     "arcanine": {
-        "randomBattleMoves": ["bodyslam", "fireblast", "hyperbeam"],
+        "moves": ["bodyslam", "fireblast", "hyperbeam"],
         "exclusiveMoves": ["flamethrower", "reflect"]
     },
     "poliwag": {
-        "randomBattleMoves": ["blizzard", "surf"],
+        "moves": ["blizzard", "surf"],
         "essentialMove": "amnesia",
         "exclusiveMoves": ["hypnosis", "hypnosis", "psychic"]
     },
     "poliwhirl": {
-        "randomBattleMoves": ["blizzard", "surf"],
+        "moves": ["blizzard", "surf"],
         "essentialMove": "amnesia",
         "exclusiveMoves": ["counter", "hypnosis", "hypnosis", "psychic"]
     },
     "poliwrath": {
-        "randomBattleMoves": ["blizzard", "bodyslam", "earthquake", "submission"],
+        "moves": ["blizzard", "bodyslam", "earthquake", "submission"],
         "essentialMove": "surf",
         "exclusiveMoves": ["hypnosis", "hypnosis", "psychic"],
         "comboMoves": ["amnesia", "blizzard"]
     },
     "abra": {
-        "randomBattleMoves": ["psychic", "seismictoss", "thunderwave"],
+        "moves": ["psychic", "seismictoss", "thunderwave"],
         "exclusiveMoves": ["counter", "reflect"]
     },
     "kadabra": {
-        "randomBattleMoves": ["psychic", "recover", "thunderwave"],
+        "moves": ["psychic", "recover", "thunderwave"],
         "exclusiveMoves": ["counter", "reflect", "reflect", "seismictoss", "seismictoss"]
     },
     "alakazam": {
-        "randomBattleMoves": ["psychic", "recover", "thunderwave"],
+        "moves": ["psychic", "recover", "thunderwave"],
         "exclusiveMoves": ["counter", "reflect", "reflect", "seismictoss", "seismictoss"]
     },
     "machop": {
-        "randomBattleMoves": ["bodyslam", "earthquake", "submission"],
+        "moves": ["bodyslam", "earthquake", "submission"],
         "exclusiveMoves": ["counter", "rockslide", "rockslide"]
     },
     "machoke": {
-        "randomBattleMoves": ["bodyslam", "earthquake", "submission"],
+        "moves": ["bodyslam", "earthquake", "submission"],
         "exclusiveMoves": ["counter", "rockslide", "rockslide"]
     },
     "machamp": {
-        "randomBattleMoves": ["bodyslam", "earthquake", "submission"],
+        "moves": ["bodyslam", "earthquake", "submission"],
         "exclusiveMoves": ["counter", "hyperbeam", "rockslide", "rockslide"]
     },
     "bellsprout": {
-        "randomBattleMoves": ["doubleedge", "sleeppowder", "stunspore", "swordsdance"],
+        "moves": ["doubleedge", "sleeppowder", "stunspore", "swordsdance"],
         "essentialMove": "razorleaf"
     },
     "weepinbell": {
-        "randomBattleMoves": ["doubleedge", "sleeppowder", "stunspore", "swordsdance"],
+        "moves": ["doubleedge", "sleeppowder", "stunspore", "swordsdance"],
         "essentialMove": "razorleaf"
     },
     "victreebel": {
-        "randomBattleMoves": ["bodyslam", "sleeppowder", "stunspore"],
+        "moves": ["bodyslam", "sleeppowder", "stunspore"],
         "essentialMove": "razorleaf",
         "comboMoves": ["hyperbeam", "swordsdance"]
     },
     "tentacool": {
-        "randomBattleMoves": ["barrier", "hydropump", "surf"],
+        "moves": ["barrier", "hydropump", "surf"],
         "essentialMove": "blizzard",
         "exclusiveMoves": ["megadrain", "megadrain"],
         "comboMoves": ["hydropump", "surf"]
     },
     "tentacruel": {
-        "randomBattleMoves": ["blizzard", "hydropump", "hyperbeam", "surf"],
+        "moves": ["blizzard", "hydropump", "hyperbeam", "surf"],
         "essentialMove": "swordsdance"
     },
     "geodude": {
-        "randomBattleMoves": ["bodyslam", "earthquake", "explosion", "rockslide"]
+        "moves": ["bodyslam", "earthquake", "explosion", "rockslide"]
     },
     "graveler": {
-        "randomBattleMoves": ["bodyslam", "earthquake", "explosion", "rockslide"]
+        "moves": ["bodyslam", "earthquake", "explosion", "rockslide"]
     },
     "golem": {
-        "randomBattleMoves": ["bodyslam", "earthquake", "explosion", "rockslide"]
+        "moves": ["bodyslam", "earthquake", "explosion", "rockslide"]
     },
     "ponyta": {
-        "randomBattleMoves": ["agility", "bodyslam", "fireblast", "reflect"]
+        "moves": ["agility", "bodyslam", "fireblast", "reflect"]
     },
     "rapidash": {
-        "randomBattleMoves": ["agility", "bodyslam", "fireblast", "hyperbeam"]
+        "moves": ["agility", "bodyslam", "fireblast", "hyperbeam"]
     },
     "slowpoke": {
-        "randomBattleMoves": ["earthquake", "surf"],
+        "moves": ["earthquake", "surf"],
         "essentialMove": "thunderwave",
         "exclusiveMoves": ["blizzard", "psychic", "rest"],
         "comboMoves": ["amnesia", "surf"]
     },
     "slowbro": {
-        "randomBattleMoves": ["amnesia", "surf", "thunderwave"],
+        "moves": ["amnesia", "surf", "thunderwave"],
         "exclusiveMoves": ["blizzard", "psychic", "rest", "rest"]
     },
     "magnemite": {
-        "randomBattleMoves": ["thunder", "thunderbolt", "thunderwave"],
+        "moves": ["thunder", "thunderbolt", "thunderwave"],
         "exclusiveMoves": ["doubleedge", "mimic", "substitute", "toxic"]
     },
     "magneton": {
-        "randomBattleMoves": ["thunder", "thunderbolt", "thunderwave"],
+        "moves": ["thunder", "thunderbolt", "thunderwave"],
         "exclusiveMoves": ["doubleedge", "hyperbeam", "hyperbeam", "mimic", "substitute", "toxic"]
     },
     "farfetchd": {
-        "randomBattleMoves": ["agility", "bodyslam", "swordsdance"],
+        "moves": ["agility", "bodyslam", "swordsdance"],
         "essentialMove": "slash"
     },
     "doduo": {
-        "randomBattleMoves": ["agility", "bodyslam", "doubleedge", "drillpeck"]
+        "moves": ["agility", "bodyslam", "doubleedge", "drillpeck"]
     },
     "dodrio": {
-        "randomBattleMoves": ["agility", "bodyslam", "drillpeck", "hyperbeam"]
+        "moves": ["agility", "bodyslam", "drillpeck", "hyperbeam"]
     },
     "seel": {
-        "randomBattleMoves": ["blizzard", "bodyslam", "surf"],
+        "moves": ["blizzard", "bodyslam", "surf"],
         "exclusiveMoves": ["mimic", "rest"]
     },
     "dewgong": {
-        "randomBattleMoves": ["blizzard", "bodyslam", "surf"],
+        "moves": ["blizzard", "bodyslam", "surf"],
         "exclusiveMoves": ["hyperbeam", "mimic", "rest", "rest"]
     },
     "grimer": {
-        "randomBattleMoves": ["bodyslam", "sludge"],
+        "moves": ["bodyslam", "sludge"],
         "essentialMove": "explosion",
         "exclusiveMoves": ["fireblast", "megadrain", "megadrain", "screech"]
     },
     "muk": {
-        "randomBattleMoves": ["bodyslam", "sludge"],
+        "moves": ["bodyslam", "sludge"],
         "essentialMove": "explosion",
         "exclusiveMoves": ["fireblast", "hyperbeam", "megadrain", "megadrain"]
     },
     "shellder": {
-        "randomBattleMoves": ["blizzard", "doubleedge", "explosion", "surf"]
+        "moves": ["blizzard", "doubleedge", "explosion", "surf"]
     },
     "cloyster": {
-        "randomBattleMoves": ["blizzard", "explosion", "surf"],
+        "moves": ["blizzard", "explosion", "surf"],
         "exclusiveMoves": ["doubleedge", "hyperbeam", "hyperbeam"]
     },
     "gastly": {
-        "randomBattleMoves": ["explosion", "megadrain", "nightshade", "psychic"],
+        "moves": ["explosion", "megadrain", "nightshade", "psychic"],
         "essentialMove": "thunderbolt",
         "exclusiveMoves": ["confuseray", "hypnosis", "hypnosis"]
     },
     "haunter": {
-        "randomBattleMoves": ["explosion", "megadrain", "nightshade", "psychic"],
+        "moves": ["explosion", "megadrain", "nightshade", "psychic"],
         "essentialMove": "thunderbolt",
         "exclusiveMoves": ["confuseray", "hypnosis", "hypnosis"]
     },
     "gengar": {
-        "randomBattleMoves": ["explosion", "megadrain", "nightshade", "psychic"],
+        "moves": ["explosion", "megadrain", "nightshade", "psychic"],
         "essentialMove": "thunderbolt",
         "exclusiveMoves": ["confuseray", "hypnosis", "hypnosis"]
     },
     "onix": {
-        "randomBattleMoves": ["bodyslam", "earthquake", "explosion", "rockslide"]
+        "moves": ["bodyslam", "earthquake", "explosion", "rockslide"]
     },
     "drowzee": {
-        "randomBattleMoves": ["hypnosis", "psychic", "thunderwave"],
+        "moves": ["hypnosis", "psychic", "thunderwave"],
         "exclusiveMoves": ["counter", "reflect", "rest", "seismictoss", "seismictoss"]
     },
     "hypno": {
-        "randomBattleMoves": ["hypnosis", "psychic", "thunderwave"],
+        "moves": ["hypnosis", "psychic", "thunderwave"],
         "exclusiveMoves": ["counter", "reflect", "rest", "rest", "seismictoss", "seismictoss"]
     },
     "krabby": {
-        "randomBattleMoves": ["blizzard", "bodyslam", "crabhammer", "swordsdance"]
+        "moves": ["blizzard", "bodyslam", "crabhammer", "swordsdance"]
     },
     "kingler": {
-        "randomBattleMoves": ["bodyslam", "crabhammer", "hyperbeam", "swordsdance"]
+        "moves": ["bodyslam", "crabhammer", "hyperbeam", "swordsdance"]
     },
     "voltorb": {
-        "randomBattleMoves": ["explosion", "thunderbolt", "thunderwave"],
+        "moves": ["explosion", "thunderbolt", "thunderwave"],
         "exclusiveMoves": ["screech", "thunder", "toxic"]
     },
     "electrode": {
-        "randomBattleMoves": ["explosion", "thunderbolt", "thunderwave"],
+        "moves": ["explosion", "thunderbolt", "thunderwave"],
         "exclusiveMoves": ["hyperbeam", "screech", "thunder", "toxic"]
     },
     "exeggcute": {
-        "randomBattleMoves": ["sleeppowder", "stunspore"],
+        "moves": ["sleeppowder", "stunspore"],
         "essentialMove": "psychic",
         "exclusiveMoves": ["doubleedge", "explosion", "explosion"]
     },
     "exeggutor": {
-        "randomBattleMoves": ["explosion", "psychic", "sleeppowder"],
+        "moves": ["explosion", "psychic", "sleeppowder"],
         "exclusiveMoves": ["doubleedge", "eggbomb", "hyperbeam", "megadrain", "megadrain", "stunspore", "stunspore", "stunspore"]
     },
     "cubone": {
-        "randomBattleMoves": ["blizzard", "bodyslam", "earthquake", "seismictoss"]
+        "moves": ["blizzard", "bodyslam", "earthquake", "seismictoss"]
     },
     "marowak": {
-        "randomBattleMoves": ["blizzard", "bodyslam", "earthquake", "seismictoss"]
+        "moves": ["blizzard", "bodyslam", "earthquake", "seismictoss"]
     },
     "hitmonlee": {
-        "randomBattleMoves": ["bodyslam", "highjumpkick", "seismictoss"],
+        "moves": ["bodyslam", "highjumpkick", "seismictoss"],
         "exclusiveMoves": ["counter", "counter", "meditate"]
     },
     "hitmonchan": {
-        "randomBattleMoves": ["bodyslam", "seismictoss", "submission"],
+        "moves": ["bodyslam", "seismictoss", "submission"],
         "exclusiveMoves": ["agility", "counter", "counter"]
     },
     "lickitung": {
-        "randomBattleMoves": ["hyperbeam", "swordsdance"],
+        "moves": ["hyperbeam", "swordsdance"],
         "essentialMove": "bodyslam",
         "exclusiveMoves": ["blizzard", "earthquake", "earthquake", "earthquake"]
     },
     "koffing": {
-        "randomBattleMoves": ["explosion", "fireblast", "sludge", "thunderbolt"]
+        "moves": ["explosion", "fireblast", "sludge", "thunderbolt"]
     },
     "weezing": {
-        "randomBattleMoves": ["explosion", "fireblast", "sludge", "thunderbolt"]
+        "moves": ["explosion", "fireblast", "sludge", "thunderbolt"]
     },
     "rhyhorn": {
-        "randomBattleMoves": ["bodyslam", "earthquake", "rockslide", "substitute"]
+        "moves": ["bodyslam", "earthquake", "rockslide", "substitute"]
     },
     "rhydon": {
-        "randomBattleMoves": ["bodyslam", "earthquake", "rockslide"],
+        "moves": ["bodyslam", "earthquake", "rockslide"],
         "exclusiveMoves": ["hyperbeam", "substitute", "substitute"]
     },
     "chansey": {
-        "randomBattleMoves": ["icebeam", "thunderwave"],
+        "moves": ["icebeam", "thunderwave"],
         "essentialMove": "softboiled",
         "exclusiveMoves": ["counter", "reflect", "seismictoss", "sing", "thunderbolt", "thunderbolt", "thunderbolt"]
     },
     "tangela": {
-        "randomBattleMoves": ["bodyslam", "sleeppowder"],
+        "moves": ["bodyslam", "sleeppowder"],
         "essentialMove": "megadrain",
         "exclusiveMoves": ["growth", "stunspore", "stunspore", "stunspore", "swordsdance", "swordsdance"]
     },
     "kangaskhan": {
-        "randomBattleMoves": ["bodyslam", "earthquake", "hyperbeam"],
+        "moves": ["bodyslam", "earthquake", "hyperbeam"],
         "exclusiveMoves": ["counter", "rockslide", "rockslide", "surf"]
     },
     "horsea": {
-        "randomBattleMoves": ["agility", "blizzard"],
+        "moves": ["agility", "blizzard"],
         "essentialMove": "surf",
         "exclusiveMoves": ["doubleedge", "hydropump", "smokescreen"]
     },
     "seadra": {
-        "randomBattleMoves": ["agility", "blizzard"],
+        "moves": ["agility", "blizzard"],
         "essentialMove": "surf",
         "exclusiveMoves": ["doubleedge", "hydropump", "hyperbeam", "smokescreen"]
     },
     "goldeen": {
-        "randomBattleMoves": ["agility", "blizzard", "doubleedge", "surf"]
+        "moves": ["agility", "blizzard", "doubleedge", "surf"]
     },
     "seaking": {
-        "randomBattleMoves": ["blizzard", "doubleedge", "surf"],
+        "moves": ["blizzard", "doubleedge", "surf"],
         "exclusiveMoves": ["agility", "agility", "hyperbeam"]
     },
     "staryu": {
-        "randomBattleMoves": ["blizzard", "thunderbolt", "thunderwave"],
+        "moves": ["blizzard", "thunderbolt", "thunderwave"],
         "essentialMove": "recover",
         "exclusiveMoves": ["hydropump", "surf", "surf"]
     },
     "starmie": {
-        "randomBattleMoves": ["blizzard", "thunderbolt", "thunderwave"],
+        "moves": ["blizzard", "thunderbolt", "thunderwave"],
         "essentialMove": "recover",
         "exclusiveMoves": ["hydropump", "psychic", "surf", "surf"]
     },
     "mrmime": {
-        "randomBattleMoves": ["psychic", "seismictoss", "thunderbolt", "thunderwave"]
+        "moves": ["psychic", "seismictoss", "thunderbolt", "thunderwave"]
     },
     "scyther": {
-        "randomBattleMoves": ["agility", "hyperbeam", "slash", "swordsdance"]
+        "moves": ["agility", "hyperbeam", "slash", "swordsdance"]
     },
     "jynx": {
-        "randomBattleMoves": ["blizzard", "lovelykiss", "psychic"],
+        "moves": ["blizzard", "lovelykiss", "psychic"],
         "exclusiveMoves": ["bodyslam", "counter", "counter", "mimic", "seismictoss"]
     },
     "electabuzz": {
-        "randomBattleMoves": ["psychic", "seismictoss", "thunderbolt", "thunderwave"]
+        "moves": ["psychic", "seismictoss", "thunderbolt", "thunderwave"]
     },
     "magmar": {
-        "randomBattleMoves": ["bodyslam", "confuseray", "fireblast"],
+        "moves": ["bodyslam", "confuseray", "fireblast"],
         "exclusiveMoves": ["hyperbeam", "psychic"]
     },
     "pinsir": {
-        "randomBattleMoves": ["bodyslam", "hyperbeam", "swordsdance"],
+        "moves": ["bodyslam", "hyperbeam", "swordsdance"],
         "exclusiveMoves": ["seismictoss", "submission", "submission"]
     },
     "tauros": {
-        "randomBattleMoves": ["bodyslam", "earthquake", "hyperbeam"],
+        "moves": ["bodyslam", "earthquake", "hyperbeam"],
         "exclusiveMoves": ["blizzard", "blizzard", "blizzard", "thunderbolt"]
     },
     "gyarados": {
-        "randomBattleMoves": ["blizzard", "bodyslam", "hyperbeam", "thunderbolt"],
+        "moves": ["blizzard", "bodyslam", "hyperbeam", "thunderbolt"],
         "exclusiveMoves": ["hydropump", "surf"]
     },
     "lapras": {
-        "randomBattleMoves": ["bodyslam", "confuseray", "rest", "sing", "surf"],
+        "moves": ["bodyslam", "confuseray", "rest", "sing", "surf"],
         "essentialMove": "blizzard",
         "exclusiveMoves": ["thunderbolt", "thunderbolt"]
     },
     "ditto": {
-        "randomBattleMoves": ["transform"]
+        "moves": ["transform"]
     },
     "eevee": {
-        "randomBattleMoves": ["doubleedge", "quickattack", "reflect"],
+        "moves": ["doubleedge", "quickattack", "reflect"],
         "essentialMove": "bodyslam",
         "exclusiveMoves": ["bide", "mimic", "sandattack", "tailwhip"]
     },
     "vaporeon": {
-        "randomBattleMoves": ["blizzard", "rest"],
+        "moves": ["blizzard", "rest"],
         "essentialMove": "surf",
         "exclusiveMoves": ["bodyslam", "hydropump", "mimic"]
     },
     "jolteon": {
-        "randomBattleMoves": ["bodyslam", "thunderbolt", "thunderwave"],
+        "moves": ["bodyslam", "thunderbolt", "thunderwave"],
         "exclusiveMoves": ["agility", "agility", "doublekick", "pinmissile", "pinmissile"]
     },
     "flareon": {
-        "randomBattleMoves": ["bodyslam", "fireblast", "hyperbeam", "quickattack"]
+        "moves": ["bodyslam", "fireblast", "hyperbeam", "quickattack"]
     },
     "porygon": {
-        "randomBattleMoves": ["blizzard", "thunderwave"],
+        "moves": ["blizzard", "thunderwave"],
         "essentialMove": "recover",
         "exclusiveMoves": ["doubleedge", "psychic", "thunderbolt", "triattack"]
     },
     "omanyte": {
-        "randomBattleMoves": ["bodyslam", "hydropump", "rest", "surf"],
+        "moves": ["bodyslam", "hydropump", "rest", "surf"],
         "essentialMove": "blizzard"
     },
     "omastar": {
-        "randomBattleMoves": ["blizzard", "hydropump", "seismictoss", "surf"],
+        "moves": ["blizzard", "hydropump", "seismictoss", "surf"],
         "exclusiveMoves": ["bodyslam", "rest"]
     },
     "kabuto": {
-        "randomBattleMoves": ["blizzard", "bodyslam", "slash", "surf"]
+        "moves": ["blizzard", "bodyslam", "slash", "surf"]
     },
     "kabutops": {
-        "randomBattleMoves": ["hyperbeam", "surf", "swordsdance"],
+        "moves": ["hyperbeam", "surf", "swordsdance"],
         "exclusiveMoves": ["bodyslam", "slash"]
     },
     "aerodactyl": {
-        "randomBattleMoves": ["doubleedge", "fireblast", "hyperbeam", "skyattack"]
+        "moves": ["doubleedge", "fireblast", "hyperbeam", "skyattack"]
     },
     "snorlax": {
-        "randomBattleMoves": ["bodyslam", "rest", "selfdestruct", "thunderbolt"],
+        "moves": ["bodyslam", "rest", "selfdestruct", "thunderbolt"],
         "essentialMove": "amnesia",
         "exclusiveMoves": ["blizzard", "blizzard"],
         "comboMoves": ["bodyslam", "earthquake", "hyperbeam", "selfdestruct"]
     },
     "articuno": {
-        "randomBattleMoves": ["agility", "hyperbeam", "icebeam", "mimic", "reflect"],
+        "moves": ["agility", "hyperbeam", "icebeam", "mimic", "reflect"],
         "essentialMove": "blizzard",
         "comboMoves": ["icebeam", "reflect", "rest"]
     },
     "zapdos": {
-        "randomBattleMoves": ["agility", "drillpeck", "thunderbolt", "thunderwave"]
+        "moves": ["agility", "drillpeck", "thunderbolt", "thunderwave"]
     },
     "moltres": {
-        "randomBattleMoves": ["agility", "fireblast", "hyperbeam"],
+        "moves": ["agility", "fireblast", "hyperbeam"],
         "exclusiveMoves": ["doubleedge", "reflect", "skyattack"]
     },
     "dratini": {
-        "randomBattleMoves": ["bodyslam", "hyperbeam", "thunderbolt", "thunderwave"],
+        "moves": ["bodyslam", "hyperbeam", "thunderbolt", "thunderwave"],
         "essentialMove": "blizzard"
     },
     "dragonair": {
-        "randomBattleMoves": ["bodyslam", "hyperbeam", "thunderbolt", "thunderwave"],
+        "moves": ["bodyslam", "hyperbeam", "thunderbolt", "thunderwave"],
         "essentialMove": "blizzard"
     },
     "dragonite": {
-        "randomBattleMoves": ["bodyslam", "hyperbeam", "thunderbolt", "thunderwave"],
+        "moves": ["bodyslam", "hyperbeam", "thunderbolt", "thunderwave"],
         "essentialMove": "blizzard"
     },
     "mewtwo": {
-        "randomBattleMoves": ["blizzard", "recover", "thunderbolt"],
+        "moves": ["blizzard", "recover", "thunderbolt"],
         "essentialMove": "amnesia",
         "exclusiveMoves": ["psychic", "psychic"],
         "comboMoves": ["barrier", "rest"]
     },
     "mew": {
-        "randomBattleMoves": ["blizzard", "earthquake", "thunderbolt", "thunderwave"],
+        "moves": ["blizzard", "earthquake", "thunderbolt", "thunderwave"],
         "essentialMove": "psychic",
         "exclusiveMoves": ["explosion", "softboiled", "softboiled"],
         "comboMoves": ["earthquake", "hyperbeam", "swordsdance"]

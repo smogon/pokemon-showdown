@@ -1,1850 +1,1850 @@
 {
     "venusaur": {
-        "randomBattleMoves": ["sunnyday", "weatherball", "solarbeam", "earthpower"]
+        "moves": ["sunnyday", "weatherball", "solarbeam", "earthpower"]
     },
     "venusaurmega": {
-        "randomBattleMoves": ["rashpowder", "sludgebomb", "gigadrain", "synthesis"]
+        "moves": ["rashpowder", "sludgebomb", "gigadrain", "synthesis"]
     },
     "charizard": {
-        "randomBattleMoves": ["roost", "fireblast", "hurricane", "defog"]
+        "moves": ["roost", "fireblast", "hurricane", "defog"]
     },
     "charizardmegax": {
-        "randomBattleMoves": ["dragondance", "flareblitz", "dragonclaw", "thunderpunch"]
+        "moves": ["dragondance", "flareblitz", "dragonclaw", "thunderpunch"]
     },
     "charizardmegay": {
-        "randomBattleMoves": ["weatherball", "focusblast", "solarbeam", "roost"]
+        "moves": ["weatherball", "focusblast", "solarbeam", "roost"]
     },
     "blastoise": {
-        "randomBattleMoves": ["scald", "rapidspin", "lifedew", "flipturn"]
+        "moves": ["scald", "rapidspin", "lifedew", "flipturn"]
     },
     "butterfree": {
-        "randomBattleMoves": ["quiverdance", "hurricane", "substitute", "sleeppowder"]
+        "moves": ["quiverdance", "hurricane", "substitute", "sleeppowder"]
     },
     "beedrillmega": {
-        "randomBattleMoves": ["uturn", "knockoff", "mudspike", "toxicthread"]
+        "moves": ["uturn", "knockoff", "mudspike", "toxicthread"]
     },
     "beedrill": {
-        "randomBattleMoves": ["swordsdance", "poisondart", "xscissor", "mudspike"]
+        "moves": ["swordsdance", "poisondart", "xscissor", "mudspike"]
     },
     "pidgeot": {
-        "randomBattleMoves": ["doubleedge", "bravebird", "uturn", "quickattack"]
+        "moves": ["doubleedge", "bravebird", "uturn", "quickattack"]
     },
     "pidgeotmega": {
-        "randomBattleMoves": ["heatwave", "hurricane", "roost", "uturn"]
+        "moves": ["heatwave", "hurricane", "roost", "uturn"]
     },
     "raticate": {
-        "randomBattleMoves": ["facade", "uturn", "suckerpunch", "stompingtantrum"]
+        "moves": ["facade", "uturn", "suckerpunch", "stompingtantrum"]
     },
     "raticatealola": {
-        "randomBattleMoves": ["swordsdance", "knockoff", "suckerpunch", "doubleedge"]
+        "moves": ["swordsdance", "knockoff", "suckerpunch", "doubleedge"]
     },
     "fearow": {
-        "randomBattleMoves": ["bravebird", "drillrun", "uturn", "rapidspin"]
+        "moves": ["bravebird", "drillrun", "uturn", "rapidspin"]
     },
     "arbok": {
-        "randomBattleMoves": ["coil", "gunkshot", "earthquake", "suckerpunch"]
+        "moves": ["coil", "gunkshot", "earthquake", "suckerpunch"]
     },
     "pikachu": {
-        "randomBattleMoves": ["electroball", "petaldance", "surf", "voltswitch"]
+        "moves": ["electroball", "petaldance", "surf", "voltswitch"]
     },
     "raichu": {
-        "randomBattleMoves": ["volttackle", "fakeout", "extremespeed", "knockoff"]
+        "moves": ["volttackle", "fakeout", "extremespeed", "knockoff"]
     },
     "raichualola": {
-        "randomBattleMoves": ["electroball", "psychic", "focusblast", "nastyplot"]
+        "moves": ["electroball", "psychic", "focusblast", "nastyplot"]
     },
     "sandslashalola": {
-        "randomBattleMoves": ["swordsdance", "earthquake", "tripleaxel", "ironhead"]
+        "moves": ["swordsdance", "earthquake", "tripleaxel", "ironhead"]
     },
     "sandslash": {
-        "randomBattleMoves": ["aridabsorption", "earthquake", "knockoff", "swordsdance"]
+        "moves": ["aridabsorption", "earthquake", "knockoff", "swordsdance"]
     },
     "nidoqueen": {
-        "randomBattleMoves": ["acidicfists", "mudspike", "poisondart", "firepunch"]
+        "moves": ["acidicfists", "mudspike", "poisondart", "firepunch"]
     },
     "nidoking": {
-        "randomBattleMoves": ["acidicfists", "mudspike", "poisondart", "icepunch"]
+        "moves": ["acidicfists", "mudspike", "poisondart", "icepunch"]
     },
     "clefable": {
-        "randomBattleMoves": ["moonblast", "lifedew", "stealthrock", "flamethrower"]
+        "moves": ["moonblast", "lifedew", "stealthrock", "flamethrower"]
     },
     "ninetalesalola": {
-        "randomBattleMoves": ["auroraveil", "blizzard", "moonblast", "freezedry"]
+        "moves": ["auroraveil", "blizzard", "moonblast", "freezedry"]
     },
     "ninetales": {
-        "randomBattleMoves": ["nastyplot", "fireblast", "solarbeam", "scorchingsands"]
+        "moves": ["nastyplot", "fireblast", "solarbeam", "scorchingsands"]
     },
     "wigglytuff": {
-        "randomBattleMoves": ["geomancy", "dazzlinggleam", "focusblast", "thunderbolt"]
+        "moves": ["geomancy", "dazzlinggleam", "focusblast", "thunderbolt"]
     },
     "vileplume": {
-        "randomBattleMoves": ["rashpowder", "strengthsap", "sludgebomb", "gigadrain"]
+        "moves": ["rashpowder", "strengthsap", "sludgebomb", "gigadrain"]
     },
     "parasect": {
-        "randomBattleMoves": ["spore", "leechlife", "mudspike", "synthesis"]
+        "moves": ["spore", "leechlife", "mudspike", "synthesis"]
     },
     "venomoth": {
-        "randomBattleMoves": ["quiverdance", "sleeppowder", "bugbuzz", "sludgebomb"]
+        "moves": ["quiverdance", "sleeppowder", "bugbuzz", "sludgebomb"]
     },
     "dugtrioalola": {
-        "randomBattleMoves": ["earthquake", "stoneedge", "suckerpunch", "ironhead"]
+        "moves": ["earthquake", "stoneedge", "suckerpunch", "ironhead"]
     },
     "dugtrio": {
-        "randomBattleMoves": ["earthquake", "stoneedge", "suckerpunch", "memento"]
+        "moves": ["earthquake", "stoneedge", "suckerpunch", "memento"]
     },
     "persian": {
-        "randomBattleMoves": ["fakeout", "doubleedge", "crushclaw", "uturn"]
+        "moves": ["fakeout", "doubleedge", "crushclaw", "uturn"]
     },
     "persianalola": {
-        "randomBattleMoves": ["darkpulse", "trashtalk", "nastyplot", "thunderbolt"]
+        "moves": ["darkpulse", "trashtalk", "nastyplot", "thunderbolt"]
     },
     "golduck": {
-        "randomBattleMoves": ["hydropump", "icebeam", "petaldance", "flipturn", "focusblast"]
+        "moves": ["hydropump", "icebeam", "petaldance", "flipturn", "focusblast"]
     },
     "primeape": {
-        "randomBattleMoves": ["closecombat", "aggravate", "uturn", "gunkshot"]
+        "moves": ["closecombat", "aggravate", "uturn", "gunkshot"]
     },
     "arcanine": {
-        "randomBattleMoves": ["flareblitz", "closecombat", "extremespeed", "morningsun"]
+        "moves": ["flareblitz", "closecombat", "extremespeed", "morningsun"]
     },
     "poliwrath": {
-        "randomBattleMoves": ["liquidation", "closecombat", "acidicfists", "flipturn"]
+        "moves": ["liquidation", "closecombat", "acidicfists", "flipturn"]
     },
     "alakazam": {
-        "randomBattleMoves": ["psychic", "focusblast", "dazzlinggleam", "calmmind"]
+        "moves": ["psychic", "focusblast", "dazzlinggleam", "calmmind"]
     },
     "alakazammega": {
-        "randomBattleMoves": ["psychic", "shadowball", "focusblast", "recover"]
+        "moves": ["psychic", "shadowball", "focusblast", "recover"]
     },
     "machamp": {
-        "randomBattleMoves": ["dynamicpunch", "stoneedge", "bulletpunch", "knockoff"]
+        "moves": ["dynamicpunch", "stoneedge", "bulletpunch", "knockoff"]
     },
     "victreebel": {
-        "randomBattleMoves": ["swordsdance", "powerwhip", "poisonjab", "mudspike"]
+        "moves": ["swordsdance", "powerwhip", "poisonjab", "mudspike"]
     },
     "tentacruel": {
-        "randomBattleMoves": ["scald", "rapidspin", "knockoff", "sludgebomb"]
+        "moves": ["scald", "rapidspin", "knockoff", "sludgebomb"]
     },
     "golem": {
-        "randomBattleMoves": ["stealthrock", "stoneedge", "earthquake", "rapidspin"]
+        "moves": ["stealthrock", "stoneedge", "earthquake", "rapidspin"]
     },
     "golemalola": {
-        "randomBattleMoves": ["lightninglance", "firepunch", "earthquake", "rapidspin"]
+        "moves": ["lightninglance", "firepunch", "earthquake", "rapidspin"]
     },
     "rapidash": {
-        "randomBattleMoves": ["swordsdance", "flareblitz", "highhorsepower", "wildcharge"]
+        "moves": ["swordsdance", "flareblitz", "highhorsepower", "wildcharge"]
     },
     "rapidashgalar": {
-        "randomBattleMoves": ["swordsdance", "playrough", "highhorsepower", "morningsun"]
+        "moves": ["swordsdance", "playrough", "highhorsepower", "morningsun"]
     },
     "slowbromega": {
-        "randomBattleMoves": ["scald", "futuresight", "slackoff", "teleport"]
+        "moves": ["scald", "futuresight", "slackoff", "teleport"]
     },
     "slowbro": {
-        "randomBattleMoves": ["scald", "futuresight", "slackoff", "teleport"]
+        "moves": ["scald", "futuresight", "slackoff", "teleport"]
     },
     "slowbrogalar": {
-        "randomBattleMoves": ["nastyplot", "shellsidearm", "psychic", "focusblast"]
+        "moves": ["nastyplot", "shellsidearm", "psychic", "focusblast"]
     },
     "magneton": {
-        "randomBattleMoves": ["thunderbolt", "flashcannon", "hiddenpowerfire", "voltswitch"]
+        "moves": ["thunderbolt", "flashcannon", "hiddenpowerfire", "voltswitch"]
     },
     "farfetchd": {
-        "randomBattleMoves": ["bravebird", "closecombat", "uturn", "leafblade"]
+        "moves": ["bravebird", "closecombat", "uturn", "leafblade"]
     },
     "dodrio": {
-        "randomBattleMoves": ["earthquake", "bravebird", "tripleaxel", "jumpkick"]
+        "moves": ["earthquake", "bravebird", "tripleaxel", "jumpkick"]
     },
     "dewgong": {
-        "randomBattleMoves": ["whirlpool", "lifedew", "perishsong", "protect"]
+        "moves": ["whirlpool", "lifedew", "perishsong", "protect"]
     },
     "muk": {
-        "randomBattleMoves": ["recover", "acidicfists", "mudspike", "curse"]
+        "moves": ["recover", "acidicfists", "mudspike", "curse"]
     },
     "mukalola": {
-        "randomBattleMoves": ["knockoff", "recover", "acidicfists", "pursuit"]
+        "moves": ["knockoff", "recover", "acidicfists", "pursuit"]
     },
     "cloyster": {
-        "randomBattleMoves": ["shellsmash", "iciclespear", "rockblast", "liquidation"]
+        "moves": ["shellsmash", "iciclespear", "rockblast", "liquidation"]
     },
     "gengar": {
-        "randomBattleMoves": ["shadowball", "sludgewave", "nastyplot", "focusblast"]
+        "moves": ["shadowball", "sludgewave", "nastyplot", "focusblast"]
     },
     "gengarmega": {
-        "randomBattleMoves": ["hex", "trashtalk", "substitute", "toxic"]
+        "moves": ["hex", "trashtalk", "substitute", "toxic"]
     },
     "hypno": {
-        "randomBattleMoves": ["bellydrum", "zenheadbutt", "hypnosis", "drainpunch"]
+        "moves": ["bellydrum", "zenheadbutt", "hypnosis", "drainpunch"]
     },
     "kingler": {
-        "randomBattleMoves": ["liquidation", "mudspike", "rockslide", "swordsdance"]
+        "moves": ["liquidation", "mudspike", "rockslide", "swordsdance"]
     },
     "electrode": {
-        "randomBattleMoves": ["electroball", "rapidspin", "technoblast", "voltswitch"]
+        "moves": ["electroball", "rapidspin", "technoblast", "voltswitch"]
     },
     "exeggutoralola": {
-        "randomBattleMoves": ["leafstorm", "dracometeor", "flamethrower", "trickroom"]
+        "moves": ["leafstorm", "dracometeor", "flamethrower", "trickroom"]
     },
     "exeggutor": {
-        "randomBattleMoves": ["leafstorm", "psychic", "hiddenpowerfire", "gigadrain"]
+        "moves": ["leafstorm", "psychic", "hiddenpowerfire", "gigadrain"]
     },
     "marowakalola": {
-        "randomBattleMoves": ["bonemerang", "poltergeist", "flareblitz", "swordsdance"]
+        "moves": ["bonemerang", "poltergeist", "flareblitz", "swordsdance"]
     },
     "marowak": {
-        "randomBattleMoves": ["bonemerang", "earthquake", "knockoff", "swordsdance"]
+        "moves": ["bonemerang", "earthquake", "knockoff", "swordsdance"]
     },
     "hitmonlee": {
-        "randomBattleMoves": ["closecombat", "knockoff", "stoneedge", "poisonjab"]
+        "moves": ["closecombat", "knockoff", "stoneedge", "poisonjab"]
     },
     "hitmonchan": {
-        "randomBattleMoves": ["drainpunch", "shadowpunch", "machpunch", "icepunch"]
+        "moves": ["drainpunch", "shadowpunch", "machpunch", "icepunch"]
     },
     "weezing": {
-        "randomBattleMoves": ["trashtalk", "flamethrower", "willowisp", "painsplit"]
+        "moves": ["trashtalk", "flamethrower", "willowisp", "painsplit"]
     },
     "weezinggalar": {
-        "randomBattleMoves": ["strangesteam", "willowisp", "sludgebomb", "defog"]
+        "moves": ["strangesteam", "willowisp", "sludgebomb", "defog"]
     },
     "rhydon": {
-        "randomBattleMoves": ["earthquake", "megahorn", "stealthrock", "stoneedge", "toxic"]
+        "moves": ["earthquake", "megahorn", "stealthrock", "stoneedge", "toxic"]
     },
     "chansey": {
-        "randomBattleMoves": ["softboiled", "teleport", "toxic", "seismictoss"]
+        "moves": ["softboiled", "teleport", "toxic", "seismictoss"]
     },
     "kangaskhan": {
-        "randomBattleMoves": ["fakeout", "doubleedge", "suckerpunch", "poweruppunch"]
+        "moves": ["fakeout", "doubleedge", "suckerpunch", "poweruppunch"]
     },
     "kangaskhanmega": {
-        "randomBattleMoves": ["fakeout", "suckerpunch", "doubleedge", "poweruppunch"]
+        "moves": ["fakeout", "suckerpunch", "doubleedge", "poweruppunch"]
     },
     "seaking": {
-        "randomBattleMoves": ["swordsdance", "waterfall", "lightninglance", "megahorn"]
+        "moves": ["swordsdance", "waterfall", "lightninglance", "megahorn"]
     },
     "starmie": {
-        "randomBattleMoves": ["hydropump", "blizzard", "flipturn", "thunder"]
+        "moves": ["hydropump", "blizzard", "flipturn", "thunder"]
     },
     "mrmime": {
-        "randomBattleMoves": ["trick", "focusblast", "dazzlinggleam", "psychic"]
+        "moves": ["trick", "focusblast", "dazzlinggleam", "psychic"]
     },
     "mrmimegalar": {
-        "randomBattleMoves": ["focusblast", "freezedry", "nastyplot", "psychic", "rapidspin"]
+        "moves": ["focusblast", "freezedry", "nastyplot", "psychic", "rapidspin"]
     },
     "scyther": {
-        "randomBattleMoves": ["dualwingbeat", "uturn", "swordsdance", "knockoff"]
+        "moves": ["dualwingbeat", "uturn", "swordsdance", "knockoff"]
     },
     "jynx": {
-        "randomBattleMoves": ["lovelykiss", "snowmanjazz", "focusblast", "nastyplot"]
+        "moves": ["lovelykiss", "snowmanjazz", "focusblast", "nastyplot"]
     },
     "pinsir": {
-        "randomBattleMoves": ["swordsdance", "xscissor", "closecombat", "earthquake"]
+        "moves": ["swordsdance", "xscissor", "closecombat", "earthquake"]
     },
     "pinsirmega": {
-        "randomBattleMoves": ["swordsdance", "quickattack", "closecombat", "doubleedge"]
+        "moves": ["swordsdance", "quickattack", "closecombat", "doubleedge"]
     },
     "tauros": {
-        "randomBattleMoves": ["bodyslam", "aggravate", "closecombat", "ironhead"]
+        "moves": ["bodyslam", "aggravate", "closecombat", "ironhead"]
     },
     "gyaradosmega": {
-        "randomBattleMoves": ["waterfall", "crunch", "rapidspin", "lifedew"]
+        "moves": ["waterfall", "crunch", "rapidspin", "lifedew"]
     },
     "gyarados": {
-        "randomBattleMoves": ["dragondance", "waterfall", "earthquake", "powerwhip"]
+        "moves": ["dragondance", "waterfall", "earthquake", "powerwhip"]
     },
     "lapras": {
-        "randomBattleMoves": ["meltingpoint", "icebeam", "thunderbolt", "lifedew"]
+        "moves": ["meltingpoint", "icebeam", "thunderbolt", "lifedew"]
     },
     "ditto": {
-        "randomBattleMoves": ["transform"]
+        "moves": ["transform"]
     },
     "vaporeon": {
-        "randomBattleMoves": ["scald", "teleport", "lifedew", "toxic"]
+        "moves": ["scald", "teleport", "lifedew", "toxic"]
     },
     "jolteon": {
-        "randomBattleMoves": ["thunderbolt", "buzzybuzz", "aurorabeam", "spikes", "voltswitch"]
+        "moves": ["thunderbolt", "buzzybuzz", "aurorabeam", "spikes", "voltswitch"]
     },
     "flareon": {
-        "randomBattleMoves": ["firelash", "morningsun", "teleport", "sizzlyslide"]
+        "moves": ["firelash", "morningsun", "teleport", "sizzlyslide"]
     },
     "omastar": {
-        "randomBattleMoves": ["shellsmash", "earthpower", "hydropump", "icebeam"]
+        "moves": ["shellsmash", "earthpower", "hydropump", "icebeam"]
     },
     "kabutops": {
-        "randomBattleMoves": ["swordsdance", "liquidation", "stoneedge", "superpower"]
+        "moves": ["swordsdance", "liquidation", "stoneedge", "superpower"]
     },
     "aerodactyl": {
-        "randomBattleMoves": ["dragondance", "stoneedge", "dualwingbeat", "icefang"]
+        "moves": ["dragondance", "stoneedge", "dualwingbeat", "icefang"]
     },
     "aerodactylmega": {
-        "randomBattleMoves": ["dualwingbeat", "stoneedge", "earthquake", "roost"]
+        "moves": ["dualwingbeat", "stoneedge", "earthquake", "roost"]
     },
     "snorlax": {
-        "randomBattleMoves": ["bodyslam", "curse", "payback", "earthquake"]
+        "moves": ["bodyslam", "curse", "payback", "earthquake"]
     },
     "articunogalar": {
-        "randomBattleMoves": ["hurricane", "defog", "recover", "uturn"]
+        "moves": ["hurricane", "defog", "recover", "uturn"]
     },
     "articuno": {
-        "randomBattleMoves": ["meltingpoint", "freezedry", "hurricane", "uturn"]
+        "moves": ["meltingpoint", "freezedry", "hurricane", "uturn"]
     },
     "zapdosgalar": {
-        "randomBattleMoves": ["thunderouskick", "bravebird", "crushclaw", "uturn"]
+        "moves": ["thunderouskick", "bravebird", "crushclaw", "uturn"]
     },
     "zapdos": {
-        "randomBattleMoves": ["thunderbolt", "hurricane", "heatwave", "uturn"]
+        "moves": ["thunderbolt", "hurricane", "heatwave", "uturn"]
     },
     "moltresgalar": {
-        "randomBattleMoves": ["fierywrath", "toxic", "defog", "uturn"]
+        "moves": ["fierywrath", "toxic", "defog", "uturn"]
     },
     "moltres": {
-        "randomBattleMoves": ["roost", "fireblast", "hurricane", "hiddenpowergrass"]
+        "moves": ["roost", "fireblast", "hurricane", "hiddenpowergrass"]
     },
     "dragonite": {
-        "randomBattleMoves": ["dragondance", "dualwingbeat", "firepunch", "icepunch"]
+        "moves": ["dragondance", "dualwingbeat", "firepunch", "icepunch"]
     },
     "mew": {
-        "randomBattleMoves": ["nastyplot", "psychic", "focusblast", "thunder"]
+        "moves": ["nastyplot", "psychic", "focusblast", "thunder"]
     },
     "meganium": {
-        "randomBattleMoves": ["curse", "lifedew", "petalblizzard", "earthquake"]
+        "moves": ["curse", "lifedew", "petalblizzard", "earthquake"]
     },
     "typhlosion": {
-        "randomBattleMoves": ["eruption", "fireblast", "earthpower", "meteorbeam"]
+        "moves": ["eruption", "fireblast", "earthpower", "meteorbeam"]
     },
     "feraligatr": {
-        "randomBattleMoves": ["swordsdance", "liquidation", "aggravate", "suckerpunch"]
+        "moves": ["swordsdance", "liquidation", "aggravate", "suckerpunch"]
     },
     "furret": {
-        "randomBattleMoves": ["coil", "doubleedge", "knockoff", "firepunch"]
+        "moves": ["coil", "doubleedge", "knockoff", "firepunch"]
     },
     "noctowl": {
-        "randomBattleMoves": ["nastyplot", "hurricane", "roost", "heatwave"]
+        "moves": ["nastyplot", "hurricane", "roost", "heatwave"]
     },
     "ledian": {
-        "randomBattleMoves": ["reflect", "lightscreen", "uturn", "skysoiree"]
+        "moves": ["reflect", "lightscreen", "uturn", "skysoiree"]
     },
     "ariados": {
-        "randomBattleMoves": ["stickyweb", "megahorn", "toxicthread", "suckerpunch"]
+        "moves": ["stickyweb", "megahorn", "toxicthread", "suckerpunch"]
     },
     "crobat": {
-        "randomBattleMoves": ["crosspoison", "curse", "bravebird", "aggravate"]
+        "moves": ["crosspoison", "curse", "bravebird", "aggravate"]
     },
     "lanturn": {
-        "randomBattleMoves": ["scald", "voltswitch", "protect", "toxic", "discharge"]
+        "moves": ["scald", "voltswitch", "protect", "toxic", "discharge"]
     },
     "xatu": {
-        "randomBattleMoves": ["psychic", "roost", "teleport", "heatwave"]
+        "moves": ["psychic", "roost", "teleport", "heatwave"]
     },
     "ampharos": {
-        "randomBattleMoves": ["slackoff", "discharge", "hiddenpowerice", "voltswitch"]
+        "moves": ["slackoff", "discharge", "hiddenpowerice", "voltswitch"]
     },
     "ampharosmega": {
-        "randomBattleMoves": ["slackoff", "dracometeor", "focusblast", "thunderbolt"]
+        "moves": ["slackoff", "dracometeor", "focusblast", "thunderbolt"]
     },
     "bellossom": {
-        "randomBattleMoves": ["quiverdance", "strengthsap", "gigadrain", "moonlitwaltz"]
+        "moves": ["quiverdance", "strengthsap", "gigadrain", "moonlitwaltz"]
     },
     "azumarill": {
-        "randomBattleMoves": ["bellydrum", "aquajet", "enchantedpunch", "mudspike"]
+        "moves": ["bellydrum", "aquajet", "enchantedpunch", "mudspike"]
     },
     "sudowoodo": {
-        "randomBattleMoves": ["headsmash", "stealthrock", "earthquake", "woodhammer"]
+        "moves": ["headsmash", "stealthrock", "earthquake", "woodhammer"]
     },
     "politoed": {
-        "randomBattleMoves": ["scald", "lifedew", "icebeam", "flipturn"]
+        "moves": ["scald", "lifedew", "icebeam", "flipturn"]
     },
     "jumpluff": {
-        "randomBattleMoves": ["skysoiree", "uturn", "strengthsap", "sleeppowder"]
+        "moves": ["skysoiree", "uturn", "strengthsap", "sleeppowder"]
     },
     "sunflora": {
-        "randomBattleMoves": ["leafstorm", "earthpower", "hiddenpowerfire", "gigadrain"]
+        "moves": ["leafstorm", "earthpower", "hiddenpowerfire", "gigadrain"]
     },
     "quagsire": {
-        "randomBattleMoves": ["scald", "earthquake", "recover", "curse"]
+        "moves": ["scald", "earthquake", "recover", "curse"]
     },
     "espeon": {
-        "randomBattleMoves": ["psychic", "focusblast", "meteorbeam", "shadowball"]
+        "moves": ["psychic", "focusblast", "meteorbeam", "shadowball"]
     },
     "umbreon": {
-        "randomBattleMoves": ["aggravate", "toxicthread", "teleport", "moonlight"]
+        "moves": ["aggravate", "toxicthread", "teleport", "moonlight"]
     },
     "slowkinggalar": {
-        "randomBattleMoves": ["futuresight", "sludgebomb", "scald", "fireblast"]
+        "moves": ["futuresight", "sludgebomb", "scald", "fireblast"]
     },
     "slowking": {
-        "randomBattleMoves": ["scald", "futuresight", "slackoff", "teleport"]
+        "moves": ["scald", "futuresight", "slackoff", "teleport"]
     },
     "unown": {
-        "randomBattleMoves": ["hiddenpowerpsychic"]
+        "moves": ["hiddenpowerpsychic"]
     },
     "wobbuffet": {
-        "randomBattleMoves": ["counter", "mirrorcoat", "encore", "destinybond"]
+        "moves": ["counter", "mirrorcoat", "encore", "destinybond"]
     },
     "girafarig": {
-        "randomBattleMoves": ["nastyplot", "hypervoice", "psychic", "focusblast"]
+        "moves": ["nastyplot", "hypervoice", "psychic", "focusblast"]
     },
     "forretress": {
-        "randomBattleMoves": ["spikes", "rapidspin", "voltswitch", "gyroball"]
+        "moves": ["spikes", "rapidspin", "voltswitch", "gyroball"]
     },
     "dunsparce": {
-        "randomBattleMoves": ["coil", "glare", "headbutt", "roost"]
+        "moves": ["coil", "glare", "headbutt", "roost"]
     },
     "steelixmega": {
-        "randomBattleMoves": ["aridabsorption", "stealthrock", "irontail", "earthquake"]
+        "moves": ["aridabsorption", "stealthrock", "irontail", "earthquake"]
     },
     "steelix": {
-        "randomBattleMoves": ["aridabsorption", "curse", "heavyslam", "earthquake"]
+        "moves": ["aridabsorption", "curse", "heavyslam", "earthquake"]
     },
     "granbull": {
-        "randomBattleMoves": ["smother", "thunderwave", "earthquake", "healbell"]
+        "moves": ["smother", "thunderwave", "earthquake", "healbell"]
     },
     "qwilfish": {
-        "randomBattleMoves": ["swordsdance", "liquidation", "poisondart", "mudspike"]
+        "moves": ["swordsdance", "liquidation", "poisondart", "mudspike"]
     },
     "scizor": {
-        "randomBattleMoves": ["swordsdance", "bulletpunch", "uturn", "knockoff"]
+        "moves": ["swordsdance", "bulletpunch", "uturn", "knockoff"]
     },
     "scizormega": {
-        "randomBattleMoves": ["bulkup", "bulletpunch", "knockoff", "roost"]
+        "moves": ["bulkup", "bulletpunch", "knockoff", "roost"]
     },
     "shuckle": {
-        "randomBattleMoves": ["aridabsorption", "stealthrock", "toxicthread", "knockoff"]
+        "moves": ["aridabsorption", "stealthrock", "toxicthread", "knockoff"]
     },
     "heracross": {
-        "randomBattleMoves": ["swordsdance", "megahorn", "closecombat", "knockoff"]
+        "moves": ["swordsdance", "megahorn", "closecombat", "knockoff"]
     },
     "heracrossmega": {
-        "randomBattleMoves": ["armthrust", "pinmissile", "knockoff", "swordsdance"]
+        "moves": ["armthrust", "pinmissile", "knockoff", "swordsdance"]
     },
     "sneasel": {
-        "randomBattleMoves": ["knockoff", "tripleaxel", "iceshard", "pursuit"]
+        "moves": ["knockoff", "tripleaxel", "iceshard", "pursuit"]
     },
     "ursaring": {
-        "randomBattleMoves": ["facade", "closecombat", "payback", "swordsdance"]
+        "moves": ["facade", "closecombat", "payback", "swordsdance"]
     },
     "magcargo": {
-        "randomBattleMoves": ["lavaplume", "earthpower", "recover", "stealthrock"]
+        "moves": ["lavaplume", "earthpower", "recover", "stealthrock"]
     },
     "corsolagalar": {
-        "randomBattleMoves": ["stealthrock", "nightshade", "willowisp", "strengthsap"]
+        "moves": ["stealthrock", "nightshade", "willowisp", "strengthsap"]
     },
     "corsola": {
-        "randomBattleMoves": ["stealthrock", "lifedew", "scald", "earthpower"]
+        "moves": ["stealthrock", "lifedew", "scald", "earthpower"]
     },
     "octillery": {
-        "randomBattleMoves": ["hydropump", "fireblast", "icebeam", "energyball"]
+        "moves": ["hydropump", "fireblast", "icebeam", "energyball"]
     },
     "delibird": {
-        "randomBattleMoves": ["spikes", "tripleaxel", "bravebird", "drillrun"]
+        "moves": ["spikes", "tripleaxel", "bravebird", "drillrun"]
     },
     "mantine": {
-        "randomBattleMoves": ["scald", "roost", "toxic", "defog"]
+        "moves": ["scald", "roost", "toxic", "defog"]
     },
     "skarmory": {
-        "randomBattleMoves": ["bodypress", "roost", "spikes", "irondefense"]
+        "moves": ["bodypress", "roost", "spikes", "irondefense"]
     },
     "houndoom": {
-        "randomBattleMoves": ["darkpulse", "fireblast", "trashtalk", "hiddenpowergrass"]
+        "moves": ["darkpulse", "fireblast", "trashtalk", "hiddenpowergrass"]
     },
     "houndoommega": {
-        "randomBattleMoves": ["darkpulse", "fireblast", "trashtalk", "nastyplot"]
+        "moves": ["darkpulse", "fireblast", "trashtalk", "nastyplot"]
     },
     "kingdra": {
-        "randomBattleMoves": ["hydropump", "icebeam", "dracometeor", "flipturn"]
+        "moves": ["hydropump", "icebeam", "dracometeor", "flipturn"]
     },
     "donphan": {
-        "randomBattleMoves": ["earthquake", "knockoff", "rapidspin", "iceshard"]
+        "moves": ["earthquake", "knockoff", "rapidspin", "iceshard"]
     },
     "porygon2": {
-        "randomBattleMoves": ["icebeam", "foulplay", "recover", "thunderwave"]
+        "moves": ["icebeam", "foulplay", "recover", "thunderwave"]
     },
     "stantler": {
-        "randomBattleMoves": ["doubleedge", "suckerpunch", "earthquake", "jumpkick"]
+        "moves": ["doubleedge", "suckerpunch", "earthquake", "jumpkick"]
     },
     "smeargle": {
-        "randomBattleMoves": ["stickyweb", "stealthrock", "spore", "rapidspin"]
+        "moves": ["stickyweb", "stealthrock", "spore", "rapidspin"]
     },
     "hitmontop": {
-        "randomBattleMoves": ["rapidspin", "tripleaxel", "closecombat", "payback"]
+        "moves": ["rapidspin", "tripleaxel", "closecombat", "payback"]
     },
     "miltank": {
-        "randomBattleMoves": ["milkdrink", "bodyslam", "curse", "bodypress"]
+        "moves": ["milkdrink", "bodyslam", "curse", "bodypress"]
     },
     "blissey": {
-        "randomBattleMoves": ["lifedew", "teleport", "stealthrock", "counterspell"]
+        "moves": ["lifedew", "teleport", "stealthrock", "counterspell"]
     },
     "raikou": {
-        "randomBattleMoves": ["thunderbolt", "aurorabeam", "aurasphere", "voltswitch"]
+        "moves": ["thunderbolt", "aurorabeam", "aurasphere", "voltswitch"]
     },
     "entei": {
-        "randomBattleMoves": ["sacredfire", "extremespeed", "stoneedge", "flareblitz"]
+        "moves": ["sacredfire", "extremespeed", "stoneedge", "flareblitz"]
     },
     "suicune": {
-        "randomBattleMoves": ["calmmind", "scald", "substitute", "protect"]
+        "moves": ["calmmind", "scald", "substitute", "protect"]
     },
     "tyranitar": {
-        "randomBattleMoves": ["stealthrock", "stoneedge", "crunch", "pursuit"]
+        "moves": ["stealthrock", "stoneedge", "crunch", "pursuit"]
     },
     "tyranitarmega": {
-        "randomBattleMoves": ["dragondance", "stoneedge", "crunch", "icepunch"]
+        "moves": ["dragondance", "stoneedge", "crunch", "icepunch"]
     },
     "celebi": {
-        "randomBattleMoves": ["leafstorm", "earthpower", "nastyplot", "psychic"]
+        "moves": ["leafstorm", "earthpower", "nastyplot", "psychic"]
     },
     "sceptilemega": {
-        "randomBattleMoves": ["leafstorm", "dragonpulse", "focusblast", "toxic"]
+        "moves": ["leafstorm", "dragonpulse", "focusblast", "toxic"]
     },
     "sceptile": {
-        "randomBattleMoves": ["swordsdance", "earthquake", "leafblade", "rockslide"]
+        "moves": ["swordsdance", "earthquake", "leafblade", "rockslide"]
     },
     "blazikenmega": {
-        "randomBattleMoves": ["overheat", "closecombat", "uturn", "protect"]
+        "moves": ["overheat", "closecombat", "uturn", "protect"]
     },
     "blaziken": {
-        "randomBattleMoves": ["flareblitz", "closecombat", "thunderpunch", "swordsdance"]
+        "moves": ["flareblitz", "closecombat", "thunderpunch", "swordsdance"]
     },
     "swampert": {
-        "randomBattleMoves": ["flipturn", "earthquake", "toxic", "stealthrock"]
+        "moves": ["flipturn", "earthquake", "toxic", "stealthrock"]
     },
     "swampertmega": {
-        "randomBattleMoves": ["liquidation", "flipturn", "earthquake", "acidicfists"]
+        "moves": ["liquidation", "flipturn", "earthquake", "acidicfists"]
     },
     "mightyena": {
-        "randomBattleMoves": ["aggravate", "suckerpunch", "irontail", "playrough"]
+        "moves": ["aggravate", "suckerpunch", "irontail", "playrough"]
     },
     "linoone": {
-        "randomBattleMoves": ["bellydrum", "extremespeed", "seedbomb", "stompingtantrum"]
+        "moves": ["bellydrum", "extremespeed", "seedbomb", "stompingtantrum"]
     },
     "beautifly": {
-        "randomBattleMoves": ["quiverdance", "skysoiree", "bugbuzz", "hiddenpowerground"]
+        "moves": ["quiverdance", "skysoiree", "bugbuzz", "hiddenpowerground"]
     },
     "dustox": {
-        "randomBattleMoves": ["rashpowder", "venoshock", "roost", "moonlitwaltz"]
+        "moves": ["rashpowder", "venoshock", "roost", "moonlitwaltz"]
     },
     "ludicolo": {
-        "randomBattleMoves": ["hydropump", "petaldance", "icebeam", "flipturn"]
+        "moves": ["hydropump", "petaldance", "icebeam", "flipturn"]
     },
     "shiftry": {
-        "randomBattleMoves": ["leafstorm", "moonlitwaltz", "focusblast", "nastyplot"]
+        "moves": ["leafstorm", "moonlitwaltz", "focusblast", "nastyplot"]
     },
     "swellow": {
-        "randomBattleMoves": ["boomburst", "hurricane", "heatwave", "uturn"]
+        "moves": ["boomburst", "hurricane", "heatwave", "uturn"]
     },
     "pelipper": {
-        "randomBattleMoves": ["scald", "roost", "defog", "uturn"]
+        "moves": ["scald", "roost", "defog", "uturn"]
     },
     "gardevoir": {
-        "randomBattleMoves": ["trick", "psychic", "moonblast", "mysticalfire"]
+        "moves": ["trick", "psychic", "moonblast", "mysticalfire"]
     },
     "gardevoirmega": {
-        "randomBattleMoves": ["hypervoice", "rapidspin", "psyshock", "focusblast"]
+        "moves": ["hypervoice", "rapidspin", "psyshock", "focusblast"]
     },
     "masquerain": {
-        "randomBattleMoves": ["stickyweb", "skysoiree", "hydropump", "quiverdance"]
+        "moves": ["stickyweb", "skysoiree", "hydropump", "quiverdance"]
     },
     "breloom": {
-        "randomBattleMoves": ["swordsdance", "spore", "machpunch", "bulletseed"]
+        "moves": ["swordsdance", "spore", "machpunch", "bulletseed"]
     },
     "slaking": {
-        "randomBattleMoves": ["doubleedge", "aggravate", "earthquake", "lowkick"]
+        "moves": ["doubleedge", "aggravate", "earthquake", "lowkick"]
     },
     "ninjask": {
-        "randomBattleMoves": ["swordsdance", "uturn", "dualwingbeat", "mudspike"]
+        "moves": ["swordsdance", "uturn", "dualwingbeat", "mudspike"]
     },
     "shedinja": {
-        "randomBattleMoves": ["hex", "toxic", "curse", "protect"]
+        "moves": ["hex", "toxic", "curse", "protect"]
     },
     "exploud": {
-        "randomBattleMoves": ["boomburst", "focusblast", "overheat", "hydropump"]
+        "moves": ["boomburst", "focusblast", "overheat", "hydropump"]
     },
     "hariyama": {
-        "randomBattleMoves": ["closecombat", "fakeout", "icepunch", "knockoff"]
+        "moves": ["closecombat", "fakeout", "icepunch", "knockoff"]
     },
     "delcatty": {
-        "randomBattleMoves": ["fakeout", "doubleedge", "suckerpunch", "thunderwave"]
+        "moves": ["fakeout", "doubleedge", "suckerpunch", "thunderwave"]
     },
     "sableye": {
-        "randomBattleMoves": ["recover", "substitute", "knockoff", "curse"]
+        "moves": ["recover", "substitute", "knockoff", "curse"]
     },
     "sableyemega": {
-        "randomBattleMoves": ["recover", "knockoff", "willowisp", "taunt"]
+        "moves": ["recover", "knockoff", "willowisp", "taunt"]
     },
     "mawile": {
-        "randomBattleMoves": ["stealthrock", "playrough", "superfang", "toxic"]
+        "moves": ["stealthrock", "playrough", "superfang", "toxic"]
     },
     "mawilemega": {
-        "randomBattleMoves": ["enchantedpunch", "icepunch", "thunderpunch", "firefang"]
+        "moves": ["enchantedpunch", "icepunch", "thunderpunch", "firefang"]
     },
     "aggron": {
-        "randomBattleMoves": ["headsmash", "heavyslam", "earthquake", "icepunch"]
+        "moves": ["headsmash", "heavyslam", "earthquake", "icepunch"]
     },
     "aggronmega": {
-        "randomBattleMoves": ["reconstruct", "stealthrock", "heavyslam", "earthquake"]
+        "moves": ["reconstruct", "stealthrock", "heavyslam", "earthquake"]
     },
     "medicham": {
-        "randomBattleMoves": ["fakeout", "highjumpkick", "enchantedpunch", "icepunch"]
+        "moves": ["fakeout", "highjumpkick", "enchantedpunch", "icepunch"]
     },
     "medichammega": {
-        "randomBattleMoves": ["fakeout", "highjumpkick", "shadowpunch", "skyuppercut"]
+        "moves": ["fakeout", "highjumpkick", "shadowpunch", "skyuppercut"]
     },
     "manectric": {
-        "randomBattleMoves": ["thunderbolt", "overheat", "voltswitch", "switcheroo"]
+        "moves": ["thunderbolt", "overheat", "voltswitch", "switcheroo"]
     },
     "manectricmega": {
-        "randomBattleMoves": ["thunderbolt", "overheat", "hiddenpowerice", "voltswitch"]
+        "moves": ["thunderbolt", "overheat", "hiddenpowerice", "voltswitch"]
     },
     "plusle": {
-        "randomBattleMoves": ["nastyplot", "thunderbolt", "hiddenpowerice", "grassknot"]
+        "moves": ["nastyplot", "thunderbolt", "hiddenpowerice", "grassknot"]
     },
     "minun": {
-        "randomBattleMoves": ["nastyplot", "batonpass", "thunderbolt", "hiddenpowerice"]
+        "moves": ["nastyplot", "batonpass", "thunderbolt", "hiddenpowerice"]
     },
     "volbeat": {
-        "randomBattleMoves": ["tailglow", "batonpass", "bugbuzz", "thunderbolt"]
+        "moves": ["tailglow", "batonpass", "bugbuzz", "thunderbolt"]
     },
     "illumise": {
-        "randomBattleMoves": ["roost", "thunderwave", "uturn", "bugbuzz"]
+        "moves": ["roost", "thunderwave", "uturn", "bugbuzz"]
     },
     "swalot": {
-        "randomBattleMoves": ["acidicfists", "earthquake", "icepunch", "aggravate"]
+        "moves": ["acidicfists", "earthquake", "icepunch", "aggravate"]
     },
     "sharpedo": {
-        "randomBattleMoves": ["liquidation", "aggravate", "closecombat", "protect"]
+        "moves": ["liquidation", "aggravate", "closecombat", "protect"]
     },
     "sharpedomega": {
-        "randomBattleMoves": ["icefang", "crunch", "closecombat", "protect"]
+        "moves": ["icefang", "crunch", "closecombat", "protect"]
     },
     "wailord": {
-        "randomBattleMoves": ["liquidation", "lifedew", "curse", "earthquake"]
+        "moves": ["liquidation", "lifedew", "curse", "earthquake"]
     },
     "camerupt": {
-        "randomBattleMoves": ["fireblast", "earthpower", "stealthrock", "aridabsorption"]
+        "moves": ["fireblast", "earthpower", "stealthrock", "aridabsorption"]
     },
     "cameruptmega": {
-        "randomBattleMoves": ["fireblast", "earthpower", "stealthrock", "aridabsorption"]
+        "moves": ["fireblast", "earthpower", "stealthrock", "aridabsorption"]
     },
     "torkoal": {
-        "randomBattleMoves": ["stealthrock", "lavaplume", "bodypress", "aridabsorption"]
+        "moves": ["stealthrock", "lavaplume", "bodypress", "aridabsorption"]
     },
     "grumpig": {
-        "randomBattleMoves": ["psychic", "focusblast", "shadowball", "trick"]
+        "moves": ["psychic", "focusblast", "shadowball", "trick"]
     },
     "spinda": {
-        "randomBattleMoves": ["fakeout", "doubleedge", "superpower", "suckerpunch"]
+        "moves": ["fakeout", "doubleedge", "superpower", "suckerpunch"]
     },
     "flygon": {
-        "randomBattleMoves": ["earthquake", "outrage", "stoneedge", "dragondance"]
+        "moves": ["earthquake", "outrage", "stoneedge", "dragondance"]
     },
     "cacturne": {
-        "randomBattleMoves": ["spikes", "seedbomb", "aggravate", "suckerpunch"]
+        "moves": ["spikes", "seedbomb", "aggravate", "suckerpunch"]
     },
     "altaria": {
-        "randomBattleMoves": ["defog", "roost", "skysoiree", "flamethrower"]
+        "moves": ["defog", "roost", "skysoiree", "flamethrower"]
     },
     "altariamega": {
-        "randomBattleMoves": ["roost", "dragondance", "return", "earthquake"]
+        "moves": ["roost", "dragondance", "return", "earthquake"]
     },
     "zangoose": {
-        "randomBattleMoves": ["facade", "quickattack", "knockoff", "closecombat"]
+        "moves": ["facade", "quickattack", "knockoff", "closecombat"]
     },
     "seviper": {
-        "randomBattleMoves": ["swordsdance", "poisondart", "poisonjab", "knockoff", "earthquake"]
+        "moves": ["swordsdance", "poisondart", "poisonjab", "knockoff", "earthquake"]
     },
     "lunatone": {
-        "randomBattleMoves": ["meteorbeam", "psyshock", "earthpower", "rockpolish"]
+        "moves": ["meteorbeam", "psyshock", "earthpower", "rockpolish"]
     },
     "solrock": {
-        "randomBattleMoves": ["swordsdance", "stoneedge", "flareblitz", "earthquake"]
+        "moves": ["swordsdance", "stoneedge", "flareblitz", "earthquake"]
     },
     "whiscash": {
-        "randomBattleMoves": ["dragondance", "liquidation", "earthquake", "stoneedge"]
+        "moves": ["dragondance", "liquidation", "earthquake", "stoneedge"]
     },
     "crawdaunt": {
-        "randomBattleMoves": ["swordsdance", "knockoff", "crabhammer", "aquajet"]
+        "moves": ["swordsdance", "knockoff", "crabhammer", "aquajet"]
     },
     "claydol": {
-        "randomBattleMoves": ["rapidspin", "stealthrock", "scorchingsands", "teleport"]
+        "moves": ["rapidspin", "stealthrock", "scorchingsands", "teleport"]
     },
     "cradily": {
-        "randomBattleMoves": ["stealthrock", "recover", "gigadrain", "toxic"]
+        "moves": ["stealthrock", "recover", "gigadrain", "toxic"]
     },
     "armaldo": {
-        "randomBattleMoves": ["rapidspin", "stoneedge", "knockoff", "aridabsorption"]
+        "moves": ["rapidspin", "stoneedge", "knockoff", "aridabsorption"]
     },
     "milotic": {
-        "randomBattleMoves": ["scald", "lifedew", "flipturn", "dragontail"]
+        "moves": ["scald", "lifedew", "flipturn", "dragontail"]
     },
     "castform": {
-        "randomBattleMoves": ["raindance", "hydropump", "snowmanjazz", "thunder"]
+        "moves": ["raindance", "hydropump", "snowmanjazz", "thunder"]
     },
     "kecleon": {
-        "randomBattleMoves": ["knockoff", "mudspike", "suckerpunch", "drainpunch"]
+        "moves": ["knockoff", "mudspike", "suckerpunch", "drainpunch"]
     },
     "banette": {
-        "randomBattleMoves": ["swordsdance", "poltergeist", "gunkshot", "superpower"]
+        "moves": ["swordsdance", "poltergeist", "gunkshot", "superpower"]
     },
     "banettemega": {
-        "randomBattleMoves": ["shiftgear", "poltergeist", "ironhead", "superpower"]
+        "moves": ["shiftgear", "poltergeist", "ironhead", "superpower"]
     },
     "tropius": {
-        "randomBattleMoves": ["dragondance", "roost", "earthquake", "leafblade"]
+        "moves": ["dragondance", "roost", "earthquake", "leafblade"]
     },
     "chimecho": {
-        "randomBattleMoves": ["healingwish", "psychic", "recover", "thunderwave"]
+        "moves": ["healingwish", "psychic", "recover", "thunderwave"]
     },
     "absol": {
-        "randomBattleMoves": ["nightslash", "stoneedge", "suckerpunch", "psychocut"]
+        "moves": ["nightslash", "stoneedge", "suckerpunch", "psychocut"]
     },
     "absolmega": {
-        "randomBattleMoves": ["closecombat", "knockoff", "playrough", "suckerpunch"]
+        "moves": ["closecombat", "knockoff", "playrough", "suckerpunch"]
     },
     "glalie": {
-        "randomBattleMoves": ["iceshard", "iciclecrash", "earthquake", "protect"]
+        "moves": ["iceshard", "iciclecrash", "earthquake", "protect"]
     },
     "glaliemega": {
-        "randomBattleMoves": ["spikes", "doubleedge", "earthquake", "explosion"]
+        "moves": ["spikes", "doubleedge", "earthquake", "explosion"]
     },
     "walrein": {
-        "randomBattleMoves": ["meltingpoint", "toxic", "superfang", "protect"]
+        "moves": ["meltingpoint", "toxic", "superfang", "protect"]
     },
     "huntail": {
-        "randomBattleMoves": ["waterfall", "shellsmash", "suckerpunch", "icefang"]
+        "moves": ["waterfall", "shellsmash", "suckerpunch", "icefang"]
     },
     "gorebyss": {
-        "randomBattleMoves": ["shellsmash", "hydropump", "icebeam", "hiddenpowergrass"]
+        "moves": ["shellsmash", "hydropump", "icebeam", "hiddenpowergrass"]
     },
     "relicanth": {
-        "randomBattleMoves": ["curse", "liquidation", "headsmash", "earthquake"]
+        "moves": ["curse", "liquidation", "headsmash", "earthquake"]
     },
     "luvdisc": {
-        "randomBattleMoves": ["scald", "icebeam", "mistyexplosion", "flipturn"]
+        "moves": ["scald", "icebeam", "mistyexplosion", "flipturn"]
     },
     "salamence": {
-        "randomBattleMoves": ["dracometeor", "hurricane", "flamethrower", "roost"]
+        "moves": ["dracometeor", "hurricane", "flamethrower", "roost"]
     },
     "metagross": {
-        "randomBattleMoves": ["meteormash", "icepunch", "thunderpunch", "bulletpunch"]
+        "moves": ["meteormash", "icepunch", "thunderpunch", "bulletpunch"]
     },
     "metagrossmega": {
-        "randomBattleMoves": ["meteormash", "thunderpunch", "icepunch", "earthquake"]
+        "moves": ["meteormash", "thunderpunch", "icepunch", "earthquake"]
     },
     "regirock": {
-        "randomBattleMoves": ["curse", "rockblast", "bodypress", "reconstruct"]
+        "moves": ["curse", "rockblast", "bodypress", "reconstruct"]
     },
     "regice": {
-        "randomBattleMoves": ["icebeam", "focusblast", "thunderbolt", "rockpolish"]
+        "moves": ["icebeam", "focusblast", "thunderbolt", "rockpolish"]
     },
     "registeel": {
-        "randomBattleMoves": ["bodypress", "reconstruct", "heavyslam", "stealthrock"]
+        "moves": ["bodypress", "reconstruct", "heavyslam", "stealthrock"]
     },
     "latias": {
-        "randomBattleMoves": ["defog", "healingwish", "dracometeor", "psychic"]
+        "moves": ["defog", "healingwish", "dracometeor", "psychic"]
     },
     "latiasmega": {
-        "randomBattleMoves": ["calmmind", "psyshock", "mysticalfire", "roost"]
+        "moves": ["calmmind", "psyshock", "mysticalfire", "roost"]
     },
     "latios": {
-        "randomBattleMoves": ["calmmind", "agility", "psychic", "aurasphere"]
+        "moves": ["calmmind", "agility", "psychic", "aurasphere"]
     },
     "latiosmega": {
-        "randomBattleMoves": ["psychic", "aurasphere", "icebeam", "recover"]
+        "moves": ["psychic", "aurasphere", "icebeam", "recover"]
     },
     "kyogre": {
-        "randomBattleMoves": ["waterspout", "thunder", "icebeam", "originpulse"]
+        "moves": ["waterspout", "thunder", "icebeam", "originpulse"]
     },
     "kyogreprimal": {
-        "randomBattleMoves": ["calmmind", "thunder", "icebeam", "originpulse"]
+        "moves": ["calmmind", "thunder", "icebeam", "originpulse"]
     },
     "groudon": {
-        "randomBattleMoves": ["precipiceblades", "heatcrash", "swordsdance", "aridabsorption"]
+        "moves": ["precipiceblades", "heatcrash", "swordsdance", "aridabsorption"]
     },
     "groudonprimal": {
-        "randomBattleMoves": ["precipiceblades", "heatcrash", "stealthrock", "aridabsorption"]
+        "moves": ["precipiceblades", "heatcrash", "stealthrock", "aridabsorption"]
     },
     "rayquaza": {
-        "randomBattleMoves": ["hurricane", "focusblast", "icebeam", "thunderbolt"]
+        "moves": ["hurricane", "focusblast", "icebeam", "thunderbolt"]
     },
     "rayquazamega": {
-        "randomBattleMoves": ["dragonascent", "vcreate", "extremespeed", "swordsdance"]
+        "moves": ["dragonascent", "vcreate", "extremespeed", "swordsdance"]
     },
     "jirachi": {
-        "randomBattleMoves": ["ironhead", "uturn", "icepunch", "trick"]
+        "moves": ["ironhead", "uturn", "icepunch", "trick"]
     },
     "deoxysdefense": {
-        "randomBattleMoves": ["nightshade", "cosmicpower", "taunt", "recover"]
+        "moves": ["nightshade", "cosmicpower", "taunt", "recover"]
     },
     "torterra": {
-        "randomBattleMoves": ["swordsdance", "woodhammer", "earthquake", "avalanche"]
+        "moves": ["swordsdance", "woodhammer", "earthquake", "avalanche"]
     },
     "infernape": {
-        "randomBattleMoves": ["overheat", "closecombat", "gunkshot", "uturn"]
+        "moves": ["overheat", "closecombat", "gunkshot", "uturn"]
     },
     "empoleon": {
-        "randomBattleMoves": ["scald", "lifedew", "flipturn", "flashcannon"]
+        "moves": ["scald", "lifedew", "flipturn", "flashcannon"]
     },
     "staraptor": {
-        "randomBattleMoves": ["bravebird", "doubleedge", "closecombat", "uturn"]
+        "moves": ["bravebird", "doubleedge", "closecombat", "uturn"]
     },
     "bibarel": {
-        "randomBattleMoves": ["swordsdance", "rapidspin", "liquidation", "return"]
+        "moves": ["swordsdance", "rapidspin", "liquidation", "return"]
     },
     "kricketune": {
-        "randomBattleMoves": ["leechlife", "stickyweb", "taunt", "brickbreak"]
+        "moves": ["leechlife", "stickyweb", "taunt", "brickbreak"]
     },
     "luxray": {
-        "randomBattleMoves": ["lightninglance", "superpower", "voltswitch", "icefang"]
+        "moves": ["lightninglance", "superpower", "voltswitch", "icefang"]
     },
     "roserade": {
-        "randomBattleMoves": ["spikes", "gigadrain", "sludgebomb", "hiddenpowerfire"]
+        "moves": ["spikes", "gigadrain", "sludgebomb", "hiddenpowerfire"]
     },
     "rampardos": {
-        "randomBattleMoves": ["headsmash", "firepunch", "superpower", "zenheadbutt"]
+        "moves": ["headsmash", "firepunch", "superpower", "zenheadbutt"]
     },
     "bastiodon": {
-        "randomBattleMoves": ["reconstruct", "rockslide", "metalburst", "stealthrock"]
+        "moves": ["reconstruct", "rockslide", "metalburst", "stealthrock"]
     },
     "wormadam": {
-        "randomBattleMoves": ["quiverdance", "gigadrain", "earthpower", "thunderbolt"]
+        "moves": ["quiverdance", "gigadrain", "earthpower", "thunderbolt"]
     },
     "wormadamsandy": {
-        "randomBattleMoves": ["spikes", "recover", "earthquake", "uturn"]
+        "moves": ["spikes", "recover", "earthquake", "uturn"]
     },
     "wormadamtrash": {
-        "randomBattleMoves": ["rapidspin", "flashcannon", "uturn", "stealthrock"]
+        "moves": ["rapidspin", "flashcannon", "uturn", "stealthrock"]
     },
     "mothim": {
-        "randomBattleMoves": ["lunge", "mudspike", "uturn", "roost"]
+        "moves": ["lunge", "mudspike", "uturn", "roost"]
     },
     "vespiquen": {
-        "randomBattleMoves": ["attackorder", "toxicthread", "healorder", "signalbeam"]
+        "moves": ["attackorder", "toxicthread", "healorder", "signalbeam"]
     },
     "pachirisu": {
-        "randomBattleMoves": ["electroball", "hiddenpowerice", "grassknot", "voltswitch"]
+        "moves": ["electroball", "hiddenpowerice", "grassknot", "voltswitch"]
     },
     "floatzel": {
-        "randomBattleMoves": ["liquidation", "flipturn", "icepunch", "lowkick"]
+        "moves": ["liquidation", "flipturn", "icepunch", "lowkick"]
     },
     "cherrim": {
-        "randomBattleMoves": ["solarblade", "weatherball", "growth", "hiddenpowerground"]
+        "moves": ["solarblade", "weatherball", "growth", "hiddenpowerground"]
     },
     "gastrodon": {
-        "randomBattleMoves": ["recover", "scald", "earthpower", "toxic"]
+        "moves": ["recover", "scald", "earthpower", "toxic"]
     },
     "ambipom": {
-        "randomBattleMoves": ["tailslap", "armthrust", "knockoff", "uturn"]
+        "moves": ["tailslap", "armthrust", "knockoff", "uturn"]
     },
     "drifblim": {
-        "randomBattleMoves": ["shadowball", "calmmind", "strengthsap", "thunderbolt"]
+        "moves": ["shadowball", "calmmind", "strengthsap", "thunderbolt"]
     },
     "lopunny": {
-        "randomBattleMoves": ["return", "closecombat", "switcheroo", "healingwish"]
+        "moves": ["return", "closecombat", "switcheroo", "healingwish"]
     },
     "lopunnymega": {
-        "randomBattleMoves": ["fakeout", "return", "closecombat", "uturn"]
+        "moves": ["fakeout", "return", "closecombat", "uturn"]
     },
     "mismagius": {
-        "randomBattleMoves": ["hex", "toxic", "moonblast", "taunt"]
+        "moves": ["hex", "toxic", "moonblast", "taunt"]
     },
     "honchkrow": {
-        "randomBattleMoves": ["suckerpunch", "aggravate", "bravebird", "superpower"]
+        "moves": ["suckerpunch", "aggravate", "bravebird", "superpower"]
     },
     "purugly": {
-        "randomBattleMoves": ["fakeout", "bodyslam", "knockoff", "uturn"]
+        "moves": ["fakeout", "bodyslam", "knockoff", "uturn"]
     },
     "skuntank": {
-        "randomBattleMoves": ["strengthsap", "willowisp", "knockoff", "partingshot"]
+        "moves": ["strengthsap", "willowisp", "knockoff", "partingshot"]
     },
     "bronzong": {
-        "randomBattleMoves": ["stealthrock", "heavyslam", "earthquake", "toxic"]
+        "moves": ["stealthrock", "heavyslam", "earthquake", "toxic"]
     },
     "chatot": {
-        "randomBattleMoves": ["boomburst", "skysoiree", "heatwave", "nastyplot"]
+        "moves": ["boomburst", "skysoiree", "heatwave", "nastyplot"]
     },
     "spiritomb": {
-        "randomBattleMoves": ["poltergeist", "suckerpunch", "pursuit", "willowisp"]
+        "moves": ["poltergeist", "suckerpunch", "pursuit", "willowisp"]
     },
     "garchompmega": {
-        "randomBattleMoves": ["swordsdance", "earthquake", "scaleshot", "firefang"]
+        "moves": ["swordsdance", "earthquake", "scaleshot", "firefang"]
     },
     "garchomp": {
-        "randomBattleMoves": ["earthquake", "dracometeor", "fireblast", "aridabsorption"]
+        "moves": ["earthquake", "dracometeor", "fireblast", "aridabsorption"]
     },
     "lucario": {
-        "randomBattleMoves": ["swordsdance", "closecombat", "meteormash", "extremespeed"]
+        "moves": ["swordsdance", "closecombat", "meteormash", "extremespeed"]
     },
     "lucariomega": {
-        "randomBattleMoves": ["swordsdance", "closecombat", "meteormash", "skyuppercut"]
+        "moves": ["swordsdance", "closecombat", "meteormash", "skyuppercut"]
     },
     "hippowdon": {
-        "randomBattleMoves": ["slackoff", "earthquake", "stealthrock", "stoneedge"]
+        "moves": ["slackoff", "earthquake", "stealthrock", "stoneedge"]
     },
     "drapion": {
-        "randomBattleMoves": ["knockoff", "poisonjab", "pursuit", "earthquake"]
+        "moves": ["knockoff", "poisonjab", "pursuit", "earthquake"]
     },
     "toxicroak": {
-        "randomBattleMoves": ["swordsdance", "gunkshot", "armthrust", "suckerpunch"]
+        "moves": ["swordsdance", "gunkshot", "armthrust", "suckerpunch"]
     },
     "carnivine": {
-        "randomBattleMoves": ["swordsdance", "powerwhip", "knockoff", "mudspike"]
+        "moves": ["swordsdance", "powerwhip", "knockoff", "mudspike"]
     },
     "lumineon": {
-        "randomBattleMoves": ["surf", "icebeam", "hiddenpowergrass", "uturn"]
+        "moves": ["surf", "icebeam", "hiddenpowergrass", "uturn"]
     },
     "abomasnow": {
-        "randomBattleMoves": ["blizzard", "auroraveil", "leafstorm", "focusblast"]
+        "moves": ["blizzard", "auroraveil", "leafstorm", "focusblast"]
     },
     "abomasnowmega": {
-        "randomBattleMoves": ["rototiller", "grassyglide", "avalanche", "rockslide"]
+        "moves": ["rototiller", "grassyglide", "avalanche", "rockslide"]
     },
     "weavile": {
-        "randomBattleMoves": ["knockoff", "tripleaxel", "iceshard", "swordsdance"]
+        "moves": ["knockoff", "tripleaxel", "iceshard", "swordsdance"]
     },
     "magnezone": {
-        "randomBattleMoves": ["thunderbolt", "hiddenpowerfire", "flashcannon", "voltswitch"]
+        "moves": ["thunderbolt", "hiddenpowerfire", "flashcannon", "voltswitch"]
     },
     "lickilicky": {
-        "randomBattleMoves": ["wish", "rapidspin", "protect", "knockoff"]
+        "moves": ["wish", "rapidspin", "protect", "knockoff"]
     },
     "rhyperior": {
-        "randomBattleMoves": ["aridabsorption", "rapidspin", "earthquake", "stoneedge"]
+        "moves": ["aridabsorption", "rapidspin", "earthquake", "stoneedge"]
     },
     "tangrowth": {
-        "randomBattleMoves": ["gigadrain", "knockoff", "focusblast", "smother"]
+        "moves": ["gigadrain", "knockoff", "focusblast", "smother"]
     },
     "electivire": {
-        "randomBattleMoves": ["thunderpunch", "knockoff", "icepunch", "suckerpunch"]
+        "moves": ["thunderpunch", "knockoff", "icepunch", "suckerpunch"]
     },
     "magmortar": {
-        "randomBattleMoves": ["fireblast", "focusblast", "recover", "thunderbolt"]
+        "moves": ["fireblast", "focusblast", "recover", "thunderbolt"]
     },
     "togekiss": {
-        "randomBattleMoves": ["nastyplot", "skysoiree", "flamethrower", "roost"]
+        "moves": ["nastyplot", "skysoiree", "flamethrower", "roost"]
     },
     "yanmega": {
-        "randomBattleMoves": ["bugbuzz", "airslash", "gigadrain", "uturn"]
+        "moves": ["bugbuzz", "airslash", "gigadrain", "uturn"]
     },
     "leafeon": {
-        "randomBattleMoves": ["sappyseed", "strengthsap", "teleport", "mudspike"]
+        "moves": ["sappyseed", "strengthsap", "teleport", "mudspike"]
     },
     "glaceon": {
-        "randomBattleMoves": ["blizzard", "freezedry", "meltingpoint", "hiddenpowerfire"]
+        "moves": ["blizzard", "freezedry", "meltingpoint", "hiddenpowerfire"]
     },
     "gliscor": {
-        "randomBattleMoves": ["uturn", "earthquake", "knockoff", "roost"]
+        "moves": ["uturn", "earthquake", "knockoff", "roost"]
     },
     "mamoswine": {
-        "randomBattleMoves": ["iceshard", "earthquake", "iciclecrash", "superpower"]
+        "moves": ["iceshard", "earthquake", "iciclecrash", "superpower"]
     },
     "porygonz": {
-        "randomBattleMoves": ["technoblast", "shadowball", "icebeam", "nastyplot"]
+        "moves": ["technoblast", "shadowball", "icebeam", "nastyplot"]
     },
     "gallademega": {
-        "randomBattleMoves": ["closecombat", "knockoff", "swordsdance", "tripleaxel"]
+        "moves": ["closecombat", "knockoff", "swordsdance", "tripleaxel"]
     },
     "gallade": {
-        "randomBattleMoves": ["swordsdance", "closecombat", "knockoff", "rapidspin"]
+        "moves": ["swordsdance", "closecombat", "knockoff", "rapidspin"]
     },
     "probopass": {
-        "randomBattleMoves": ["stealthrock", "powergem", "earthpower", "aurorabeam"]
+        "moves": ["stealthrock", "powergem", "earthpower", "aurorabeam"]
     },
     "dusknoir": {
-        "randomBattleMoves": ["poltergeist", "bodypress", "strengthsap", "icepunch"]
+        "moves": ["poltergeist", "bodypress", "strengthsap", "icepunch"]
     },
     "froslass": {
-        "randomBattleMoves": ["snowmanjazz", "spikes", "taunt", "shadowball"]
+        "moves": ["snowmanjazz", "spikes", "taunt", "shadowball"]
     },
     "rotom": {
-        "randomBattleMoves": ["nastyplot", "thunderbolt", "shadowball", "painsplit"]
+        "moves": ["nastyplot", "thunderbolt", "shadowball", "painsplit"]
     },
     "rotomheat": {
-        "randomBattleMoves": ["nastyplot", "overheat", "discharge", "painsplit"]
+        "moves": ["nastyplot", "overheat", "discharge", "painsplit"]
     },
     "rotomwash": {
-        "randomBattleMoves": ["voltswitch", "hydropump", "defog", "willowisp"]
+        "moves": ["voltswitch", "hydropump", "defog", "willowisp"]
     },
     "rotomfrost": {
-        "randomBattleMoves": ["hypervoice", "thunderbolt", "voltswitch", "nastyplot"]
+        "moves": ["hypervoice", "thunderbolt", "voltswitch", "nastyplot"]
     },
     "rotomfan": {
-        "randomBattleMoves": ["nastyplot", "electroball", "airslash", "protect"]
+        "moves": ["nastyplot", "electroball", "airslash", "protect"]
     },
     "rotommow": {
-        "randomBattleMoves": ["thunderbolt", "leafstorm", "voltswitch", "trick"]
+        "moves": ["thunderbolt", "leafstorm", "voltswitch", "trick"]
     },
     "uxie": {
-        "randomBattleMoves": ["stealthrock", "teleport", "doomdesire", "taunt"]
+        "moves": ["stealthrock", "teleport", "doomdesire", "taunt"]
     },
     "mesprit": {
-        "randomBattleMoves": ["psychic", "moonblast", "hiddenpowerfire", "nastyplot"]
+        "moves": ["psychic", "moonblast", "hiddenpowerfire", "nastyplot"]
     },
     "azelf": {
-        "randomBattleMoves": ["psychic", "focusblast", "thunderbolt", "uturn"]
+        "moves": ["psychic", "focusblast", "thunderbolt", "uturn"]
     },
     "dialga": {
-        "randomBattleMoves": ["dracometeor", "flashcannon", "fireblast", "stealthrock"]
+        "moves": ["dracometeor", "flashcannon", "fireblast", "stealthrock"]
     },
     "palkia": {
-        "randomBattleMoves": ["hydropump", "spacialrend", "thunder", "fireblast"]
+        "moves": ["hydropump", "spacialrend", "thunder", "fireblast"]
     },
     "heatran": {
-        "randomBattleMoves": ["stealthrock", "earthpower", "magmastorm", "flashcannon"]
+        "moves": ["stealthrock", "earthpower", "magmastorm", "flashcannon"]
     },
     "regigigas": {
-        "randomBattleMoves": ["return", "earthquake", "knockoff", "reconstruct"]
+        "moves": ["return", "earthquake", "knockoff", "reconstruct"]
     },
     "giratina": {
-        "randomBattleMoves": ["defog", "curse", "willowisp", "rest"]
+        "moves": ["defog", "curse", "willowisp", "rest"]
     },
     "giratinaorigin": {
-        "randomBattleMoves": ["poltergeist", "shadowsneak", "dracometeor", "earthquake"]
+        "moves": ["poltergeist", "shadowsneak", "dracometeor", "earthquake"]
     },
     "cresselia": {
-        "randomBattleMoves": ["moonblast", "psyshock", "moonlight", "calmmind"]
+        "moves": ["moonblast", "psyshock", "moonlight", "calmmind"]
     },
     "phione": {
-        "randomBattleMoves": ["scald", "knockoff", "uturn", "lifedew"]
+        "moves": ["scald", "knockoff", "uturn", "lifedew"]
     },
     "manaphy": {
-        "randomBattleMoves": ["tailglow", "surf", "psychic", "energyball"]
+        "moves": ["tailglow", "surf", "psychic", "energyball"]
     },
     "darkrai": {
-        "randomBattleMoves": ["hypnosis", "moonlitwaltz", "focusblast", "nastyplot"]
+        "moves": ["hypnosis", "moonlitwaltz", "focusblast", "nastyplot"]
     },
     "shayminsky": {
-        "randomBattleMoves": ["seedflare", "skysoiree", "earthpower", "healingwish"]
+        "moves": ["seedflare", "skysoiree", "earthpower", "healingwish"]
     },
     "shaymin": {
-        "randomBattleMoves": ["seedflare", "earthpower", "substitute", "leechseed"]
+        "moves": ["seedflare", "earthpower", "substitute", "leechseed"]
     },
     "victini": {
-        "randomBattleMoves": ["vcreate", "boltstrike", "glaciate", "uturn"]
+        "moves": ["vcreate", "boltstrike", "glaciate", "uturn"]
     },
     "serperior": {
-        "randomBattleMoves": ["leafstorm", "hiddenpowerfire", "substitute", "glare"]
+        "moves": ["leafstorm", "hiddenpowerfire", "substitute", "glare"]
     },
     "emboar": {
-        "randomBattleMoves": ["flareblitz", "revenge", "earthquake", "suckerpunch"]
+        "moves": ["flareblitz", "revenge", "earthquake", "suckerpunch"]
     },
     "samurott": {
-        "randomBattleMoves": ["shellsmash", "hydropump", "focusblast", "blizzard"]
+        "moves": ["shellsmash", "hydropump", "focusblast", "blizzard"]
     },
     "watchog": {
-        "randomBattleMoves": ["focusblast", "shadowball", "nastyplot", "thunder"]
+        "moves": ["focusblast", "shadowball", "nastyplot", "thunder"]
     },
     "stoutland": {
-        "randomBattleMoves": ["return", "superpower", "playrough", "bonemerang"]
+        "moves": ["return", "superpower", "playrough", "bonemerang"]
     },
     "liepard": {
-        "randomBattleMoves": ["nastyplot", "darkpulse", "trashtalk", "copycat"]
+        "moves": ["nastyplot", "darkpulse", "trashtalk", "copycat"]
     },
     "simisage": {
-        "randomBattleMoves": ["rototiller", "seedbomb", "superpower", "knockoff"]
+        "moves": ["rototiller", "seedbomb", "superpower", "knockoff"]
     },
     "simisear": {
-        "randomBattleMoves": ["nastyplot", "overheat", "focusblast", "grassknot"]
+        "moves": ["nastyplot", "overheat", "focusblast", "grassknot"]
     },
     "simipour": {
-        "randomBattleMoves": ["hydropump", "icebeam", "focusblast", "flipturn"]
+        "moves": ["hydropump", "icebeam", "focusblast", "flipturn"]
     },
     "musharna": {
-        "randomBattleMoves": ["lifedew", "calmmind", "psyshock", "moonblast"]
+        "moves": ["lifedew", "calmmind", "psyshock", "moonblast"]
     },
     "unfezant": {
-        "randomBattleMoves": ["uturn", "quickattack", "aggravate", "bravebird"]
+        "moves": ["uturn", "quickattack", "aggravate", "bravebird"]
     },
     "zebstrika": {
-        "randomBattleMoves": ["lightninglance", "hiddenpowerice", "overheat", "voltswitch"]
+        "moves": ["lightninglance", "hiddenpowerice", "overheat", "voltswitch"]
     },
     "gigalith": {
-        "randomBattleMoves": ["stealthrock", "stoneedge", "avalanche", "earthquake"]
+        "moves": ["stealthrock", "stoneedge", "avalanche", "earthquake"]
     },
     "swoobat": {
-        "randomBattleMoves": ["calmmind", "roost", "storedpower", "skysoiree"]
+        "moves": ["calmmind", "roost", "storedpower", "skysoiree"]
     },
     "excadrill": {
-        "randomBattleMoves": ["swordsdance", "earthquake", "ironhead", "aridabsorption"]
+        "moves": ["swordsdance", "earthquake", "ironhead", "aridabsorption"]
     },
     "audinomega": {
-        "randomBattleMoves": ["calmmind", "lifedew", "moonblast", "flamethrower"]
+        "moves": ["calmmind", "lifedew", "moonblast", "flamethrower"]
     },
     "audino": {
-        "randomBattleMoves": ["lifedew", "toxic", "knockoff", "healbell"]
+        "moves": ["lifedew", "toxic", "knockoff", "healbell"]
     },
     "gurdurr": {
-        "randomBattleMoves": ["bulkup", "defog", "drainpunch", "knockoff", "machpunch"]
+        "moves": ["bulkup", "defog", "drainpunch", "knockoff", "machpunch"]
     },
     "conkeldurr": {
-        "randomBattleMoves": ["closecombat", "knockoff", "machpunch", "icepunch"]
+        "moves": ["closecombat", "knockoff", "machpunch", "icepunch"]
     },
     "seismitoad": {
-        "randomBattleMoves": ["stealthrock", "earthquake", "scald", "toxic"]
+        "moves": ["stealthrock", "earthquake", "scald", "toxic"]
     },
     "throh": {
-        "randomBattleMoves": ["circlethrow", "knockoff", "rest", "sleeptalk"]
+        "moves": ["circlethrow", "knockoff", "rest", "sleeptalk"]
     },
     "sawk": {
-        "randomBattleMoves": ["closecombat", "knockoff", "poisonjab", "skyuppercut"]
+        "moves": ["closecombat", "knockoff", "poisonjab", "skyuppercut"]
     },
     "leavanny": {
-        "randomBattleMoves": ["stickyweb", "xscissor", "knockoff", "leafblade"]
+        "moves": ["stickyweb", "xscissor", "knockoff", "leafblade"]
     },
     "scolipede": {
-        "randomBattleMoves": ["swordsdance", "earthquake", "megahorn", "poisonjab"]
+        "moves": ["swordsdance", "earthquake", "megahorn", "poisonjab"]
     },
     "whimsicott": {
-        "randomBattleMoves": ["rashpowder", "uturn", "moonblast", "energyball"]
+        "moves": ["rashpowder", "uturn", "moonblast", "energyball"]
     },
     "lilligant": {
-        "randomBattleMoves": ["quiverdance", "leafstorm", "hiddenpowerfire", "sleeppowder"]
+        "moves": ["quiverdance", "leafstorm", "hiddenpowerfire", "sleeppowder"]
     },
     "basculin": {
-        "randomBattleMoves": ["flipturn", "liquidation", "superpower", "psychicfangs"]
+        "moves": ["flipturn", "liquidation", "superpower", "psychicfangs"]
     },
     "basculinbluestriped": {
-        "randomBattleMoves": ["hydropump", "flipturn", "icebeam", "finalgambit"]
+        "moves": ["hydropump", "flipturn", "icebeam", "finalgambit"]
     },
     "krookodile": {
-        "randomBattleMoves": ["rapidspin", "earthquake", "knockoff", "aridabsorption"]
+        "moves": ["rapidspin", "earthquake", "knockoff", "aridabsorption"]
     },
     "darmanitan": {
-        "randomBattleMoves": ["flareblitz", "thunderpunch", "uturn", "earthquake"]
+        "moves": ["flareblitz", "thunderpunch", "uturn", "earthquake"]
     },
     "darmanitanzen": {
-        "randomBattleMoves": ["fireblast", "expandingforce", "uturn", "focusblast"]
+        "moves": ["fireblast", "expandingforce", "uturn", "focusblast"]
     },
     "darmanitangalar": {
-        "randomBattleMoves": ["icepunch", "flareblitz", "uturn", "earthquake"]
+        "moves": ["icepunch", "flareblitz", "uturn", "earthquake"]
     },
     "darmanitangalarzen": {
-        "randomBattleMoves": ["icepunch", "flareblitz", "uturn", "earthquake"]
+        "moves": ["icepunch", "flareblitz", "uturn", "earthquake"]
     },
     "maractus": {
-        "randomBattleMoves": ["rototiller", "grassyglide", "knockoff", "drainpunch"]
+        "moves": ["rototiller", "grassyglide", "knockoff", "drainpunch"]
     },
     "crustle": {
-        "randomBattleMoves": ["shellsmash", "stoneedge", "earthquake", "spikes"]
+        "moves": ["shellsmash", "stoneedge", "earthquake", "spikes"]
     },
     "scrafty": {
-        "randomBattleMoves": ["curse", "knockoff", "drainpunch", "acidicfists"]
+        "moves": ["curse", "knockoff", "drainpunch", "acidicfists"]
     },
     "sigilyph": {
-        "randomBattleMoves": ["psychic", "heatwave", "roost", "defog", "dazzlinggleam"]
+        "moves": ["psychic", "heatwave", "roost", "defog", "dazzlinggleam"]
     },
     "cofagrigus": {
-        "randomBattleMoves": ["shadowball", "bodypress", "irondefense", "willowisp"]
+        "moves": ["shadowball", "bodypress", "irondefense", "willowisp"]
     },
     "carracosta": {
-        "randomBattleMoves": ["shellsmash", "stoneedge", "aquajet", "liquidation"]
+        "moves": ["shellsmash", "stoneedge", "aquajet", "liquidation"]
     },
     "archeops": {
-        "randomBattleMoves": ["stoneedge", "bravebird", "uturn", "earthquake"]
+        "moves": ["stoneedge", "bravebird", "uturn", "earthquake"]
     },
     "garbodor": {
-        "randomBattleMoves": ["gunkshot", "mudspike", "spikes", "corrosivegas"]
+        "moves": ["gunkshot", "mudspike", "spikes", "corrosivegas"]
     },
     "zoroark": {
-        "randomBattleMoves": ["nastyplot", "trashtalk", "moonlitwaltz", "flamethrower"]
+        "moves": ["nastyplot", "trashtalk", "moonlitwaltz", "flamethrower"]
     },
     "cinccino": {
-        "randomBattleMoves": ["tailslap", "bulletseed", "uturn", "rockblast"]
+        "moves": ["tailslap", "bulletseed", "uturn", "rockblast"]
     },
     "gothitelle": {
-        "randomBattleMoves": ["cosmicpower", "storedpower", "rest", "sleeptalk"]
+        "moves": ["cosmicpower", "storedpower", "rest", "sleeptalk"]
     },
     "reuniclus": {
-        "randomBattleMoves": ["calmmind", "recover", "psyshock", "focusblast"]
+        "moves": ["calmmind", "recover", "psyshock", "focusblast"]
     },
     "swanna": {
-        "randomBattleMoves": ["hurricane", "scald", "flipturn", "icebeam"]
+        "moves": ["hurricane", "scald", "flipturn", "icebeam"]
     },
     "vanilluxe": {
-        "randomBattleMoves": ["blizzard", "hiddenpowerfire", "freezedry", "meltingpoint"]
+        "moves": ["blizzard", "hiddenpowerfire", "freezedry", "meltingpoint"]
     },
     "sawsbuck": {
-        "randomBattleMoves": ["rototiller", "hornleech", "doubleedge", "jumpkick"]
+        "moves": ["rototiller", "hornleech", "doubleedge", "jumpkick"]
     },
     "emolga": {
-        "randomBattleMoves": ["electroball", "energyball", "voltswitch", "roost"]
+        "moves": ["electroball", "energyball", "voltswitch", "roost"]
     },
     "escavalier": {
-        "randomBattleMoves": ["curse", "ironhead", "revenge", "knockoff"]
+        "moves": ["curse", "ironhead", "revenge", "knockoff"]
     },
     "amoonguss": {
-        "randomBattleMoves": ["gigadrain", "spore", "venoshock", "hiddenpowerfire"]
+        "moves": ["gigadrain", "spore", "venoshock", "hiddenpowerfire"]
     },
     "jellicent": {
-        "randomBattleMoves": ["willowisp", "hex", "scald", "strengthsap"]
+        "moves": ["willowisp", "hex", "scald", "strengthsap"]
     },
     "alomomola": {
-        "randomBattleMoves": ["scald", "wish", "flipturn", "toxic"]
+        "moves": ["scald", "wish", "flipturn", "toxic"]
     },
     "galvantula": {
-        "randomBattleMoves": ["stickyweb", "bugbuzz", "voltswitch", "thunder"]
+        "moves": ["stickyweb", "bugbuzz", "voltswitch", "thunder"]
     },
     "ferrothorn": {
-        "randomBattleMoves": ["spikes", "powerwhip", "knockoff", "leechseed"]
+        "moves": ["spikes", "powerwhip", "knockoff", "leechseed"]
     },
     "klang": {
-        "randomBattleMoves": ["geargrind", "rapidspin", "voltswitch", "toxic"]
+        "moves": ["geargrind", "rapidspin", "voltswitch", "toxic"]
     },
     "klinklang": {
-        "randomBattleMoves": ["geargrind", "shiftgear", "electroball", "substitute"]
+        "moves": ["geargrind", "shiftgear", "electroball", "substitute"]
     },
     "eelektross": {
-        "randomBattleMoves": ["lightninglance", "gunkshot", "uturn", "icepunch"]
+        "moves": ["lightninglance", "gunkshot", "uturn", "icepunch"]
     },
     "beheeyem": {
-        "randomBattleMoves": ["teleport", "psychic", "thunderbolt", "signalbeam"]
+        "moves": ["teleport", "psychic", "thunderbolt", "signalbeam"]
     },
     "chandelure": {
-        "randomBattleMoves": ["shadowball", "fireblast", "energyball", "hex"]
+        "moves": ["shadowball", "fireblast", "energyball", "hex"]
     },
     "haxorus": {
-        "randomBattleMoves": ["swordsdance", "scaleshot", "closecombat", "poisonjab"]
+        "moves": ["swordsdance", "scaleshot", "closecombat", "poisonjab"]
     },
     "beartic": {
-        "randomBattleMoves": ["swordsdance", "icepunch", "thunderpunch", "superpower"]
+        "moves": ["swordsdance", "icepunch", "thunderpunch", "superpower"]
     },
     "cryogonal": {
-        "randomBattleMoves": ["icebeam", "meltingpoint", "recover", "defog"]
+        "moves": ["icebeam", "meltingpoint", "recover", "defog"]
     },
     "accelgor": {
-        "randomBattleMoves": ["spikes", "bugbuzz", "focusblast", "sludgebomb"]
+        "moves": ["spikes", "bugbuzz", "focusblast", "sludgebomb"]
     },
     "stunfisk": {
-        "randomBattleMoves": ["flipturn", "stealthrock", "discharge", "earthpower"]
+        "moves": ["flipturn", "stealthrock", "discharge", "earthpower"]
     },
     "stunfiskgalar": {
-        "randomBattleMoves": ["earthquake", "stealthrock", "stoneedge", "toxic"]
+        "moves": ["earthquake", "stealthrock", "stoneedge", "toxic"]
     },
     "mienshao": {
-        "randomBattleMoves": ["closecombat", "icepunch", "knockoff", "uturn"]
+        "moves": ["closecombat", "icepunch", "knockoff", "uturn"]
     },
     "druddigon": {
-        "randomBattleMoves": ["dragontail", "glare", "stealthrock", "earthquake"]
+        "moves": ["dragontail", "glare", "stealthrock", "earthquake"]
     },
     "golurk": {
-        "randomBattleMoves": ["poltergeist", "closecombat", "earthquake", "trick"]
+        "moves": ["poltergeist", "closecombat", "earthquake", "trick"]
     },
     "bisharp": {
-        "randomBattleMoves": ["swordsdance", "knockoff", "suckerpunch", "ironhead"]
+        "moves": ["swordsdance", "knockoff", "suckerpunch", "ironhead"]
     },
     "bouffalant": {
-        "randomBattleMoves": ["headcharge", "closecombat", "payback", "earthquake"]
+        "moves": ["headcharge", "closecombat", "payback", "earthquake"]
     },
     "braviary": {
-        "randomBattleMoves": ["bravebird", "closecombat", "roost", "curse"]
+        "moves": ["bravebird", "closecombat", "roost", "curse"]
     },
     "mandibuzz": {
-        "randomBattleMoves": ["foulplay", "roost", "defog", "uturn"]
+        "moves": ["foulplay", "roost", "defog", "uturn"]
     },
     "heatmor": {
-        "randomBattleMoves": ["curse", "firelash", "suckerpunch", "drainpunch"]
+        "moves": ["curse", "firelash", "suckerpunch", "drainpunch"]
     },
     "durant": {
-        "randomBattleMoves": ["firstimpression", "ironhead", "superpower", "mudspike"]
+        "moves": ["firstimpression", "ironhead", "superpower", "mudspike"]
     },
     "hydreigon": {
-        "randomBattleMoves": ["dracometeor", "darkpulse", "trashtalk", "superpower"]
+        "moves": ["dracometeor", "darkpulse", "trashtalk", "superpower"]
     },
     "volcarona": {
-        "randomBattleMoves": ["bugbuzz", "fierydance", "psychic", "quiverdance"]
+        "moves": ["bugbuzz", "fierydance", "psychic", "quiverdance"]
     },
     "cobalion": {
-        "randomBattleMoves": ["stealthrock", "bodypress", "ironhead", "voltswitch"]
+        "moves": ["stealthrock", "bodypress", "ironhead", "voltswitch"]
     },
     "terrakion": {
-        "randomBattleMoves": ["accelerock", "stoneedge", "earthquake", "closecombat"]
+        "moves": ["accelerock", "stoneedge", "earthquake", "closecombat"]
     },
     "virizion": {
-        "randomBattleMoves": ["sleeppowder", "swordsdance", "powerwhip", "closecombat"]
+        "moves": ["sleeppowder", "swordsdance", "powerwhip", "closecombat"]
     },
     "tornadus": {
-        "randomBattleMoves": ["nastyplot", "hurricane", "focusblast", "darkpulse"]
+        "moves": ["nastyplot", "hurricane", "focusblast", "darkpulse"]
     },
     "tornadustherian": {
-        "randomBattleMoves": ["hurricane", "focusblast", "heatwave", "nastyplot", "uturn"]
+        "moves": ["hurricane", "focusblast", "heatwave", "nastyplot", "uturn"]
     },
     "thundurus": {
-        "randomBattleMoves": ["lightninglance", "uturn", "knockoff", "superpower"]
+        "moves": ["lightninglance", "uturn", "knockoff", "superpower"]
     },
     "thundurustherian": {
-        "randomBattleMoves": ["nastyplot", "thunderbolt", "focusblast", "hiddenpowerice"]
+        "moves": ["nastyplot", "thunderbolt", "focusblast", "hiddenpowerice"]
     },
     "landorustherian": {
-        "randomBattleMoves": ["earthquake", "uturn", "stoneedge", "stealthrock"]
+        "moves": ["earthquake", "uturn", "stoneedge", "stealthrock"]
     },
     "kyurem": {
-        "randomBattleMoves": ["icebeam", "freezedry", "roost", "earthpower"]
+        "moves": ["icebeam", "freezedry", "roost", "earthpower"]
     },
     "kyuremblack": {
-        "randomBattleMoves": ["dragondance", "iciclespear", "fusionbolt", "fling"]
+        "moves": ["dragondance", "iciclespear", "fusionbolt", "fling"]
     },
     "kyuremwhite": {
-        "randomBattleMoves": ["icebeam", "freezedry", "earthpower", "fusionflare"]
+        "moves": ["icebeam", "freezedry", "earthpower", "fusionflare"]
     },
     "keldeo": {
-        "randomBattleMoves": ["calmmind", "taunt", "scald", "secretsword"]
+        "moves": ["calmmind", "taunt", "scald", "secretsword"]
     },
     "keldeoresolute": {
-        "randomBattleMoves": ["hydropump", "secretsword", "aurorabeam", "flipturn"]
+        "moves": ["hydropump", "secretsword", "aurorabeam", "flipturn"]
     },
     "meloetta": {
-        "randomBattleMoves": ["psychic", "fierydance", "moonlitwaltz", "uturn"]
+        "moves": ["psychic", "fierydance", "moonlitwaltz", "uturn"]
     },
     "meloettapirouette": {
-        "randomBattleMoves": ["return", "closecombat", "knockoff", "rapidspin"]
+        "moves": ["return", "closecombat", "knockoff", "rapidspin"]
     },
     "chesnaught": {
-        "randomBattleMoves": ["spikes", "synthesis", "woodhammer", "drainpunch"]
+        "moves": ["spikes", "synthesis", "woodhammer", "drainpunch"]
     },
     "delphox": {
-        "randomBattleMoves": ["calmmind", "fierydance", "psyshock", "focusblast"]
+        "moves": ["calmmind", "fierydance", "psyshock", "focusblast"]
     },
     "greninja": {
-        "randomBattleMoves": ["spikes", "hydropump", "icebeam", "uturn"]
+        "moves": ["spikes", "hydropump", "icebeam", "uturn"]
     },
     "greninjaash": {
-        "randomBattleMoves": ["hydropump", "darkpulse", "watershuriken", "spikes"]
+        "moves": ["hydropump", "darkpulse", "watershuriken", "spikes"]
     },
     "diggersby": {
-        "randomBattleMoves": ["uturn", "return", "earthquake", "skyuppercut"]
+        "moves": ["uturn", "return", "earthquake", "skyuppercut"]
     },
     "talonflame": {
-        "randomBattleMoves": ["bravebird", "roost", "flareblitz", "uturn"]
+        "moves": ["bravebird", "roost", "flareblitz", "uturn"]
     },
     "vivillon": {
-        "randomBattleMoves": ["quiverdance", "hurricane", "sleeppowder", "substitute"]
+        "moves": ["quiverdance", "hurricane", "sleeppowder", "substitute"]
     },
     "pyroar": {
-        "randomBattleMoves": ["overheat", "hypervoice", "hiddenpowergrass", "fireblast"]
+        "moves": ["overheat", "hypervoice", "hiddenpowergrass", "fireblast"]
     },
     "florges": {
-        "randomBattleMoves": ["moonblast", "lifedew", "hiddenpowerfire", "calmmind"]
+        "moves": ["moonblast", "lifedew", "hiddenpowerfire", "calmmind"]
     },
     "gogoat": {
-        "randomBattleMoves": ["bulkup", "hornleech", "earthquake", "milkdrink"]
+        "moves": ["bulkup", "hornleech", "earthquake", "milkdrink"]
     },
     "pangoro": {
-        "randomBattleMoves": ["closecombat", "knockoff", "acidicfists", "partingshot"]
+        "moves": ["closecombat", "knockoff", "acidicfists", "partingshot"]
     },
     "furfrou": {
-        "randomBattleMoves": ["return", "thunderwave", "uturn", "suckerpunch"]
+        "moves": ["return", "thunderwave", "uturn", "suckerpunch"]
     },
     "meowstic": {
-        "randomBattleMoves": ["lightscreen", "reflect", "thunderwave", "psyshock"]
+        "moves": ["lightscreen", "reflect", "thunderwave", "psyshock"]
     },
     "meowsticf": {
-        "randomBattleMoves": ["psychic", "signalbeam", "thunderbolt", "nastyplot"]
+        "moves": ["psychic", "signalbeam", "thunderbolt", "nastyplot"]
     },
     "doublade": {
-        "randomBattleMoves": ["swordsdance", "shadowclaw", "shadowsneak", "closecombat"]
+        "moves": ["swordsdance", "shadowclaw", "shadowsneak", "closecombat"]
     },
     "aegislash": {
-        "randomBattleMoves": ["shadowball", "closecombat", "ironhead", "kingsshield"]
+        "moves": ["shadowball", "closecombat", "ironhead", "kingsshield"]
     },
     "aegislashblade": {
-        "randomBattleMoves": ["closecombat", "ironhead", "shadowclaw", "shadowsneak", "swordsdance"]
+        "moves": ["closecombat", "ironhead", "shadowclaw", "shadowsneak", "swordsdance"]
     },
     "aromatisse": {
-        "randomBattleMoves": ["moonblast", "trickroom", "thunderbolt", "nastyplot"]
+        "moves": ["moonblast", "trickroom", "thunderbolt", "nastyplot"]
     },
     "slurpuff": {
-        "randomBattleMoves": ["bellydrum", "enchantedpunch", "firepunch", "thunderpunch"]
+        "moves": ["bellydrum", "enchantedpunch", "firepunch", "thunderpunch"]
     },
     "malamar": {
-        "randomBattleMoves": ["knockoff", "superpower", "flipturn", "psychocut"]
+        "moves": ["knockoff", "superpower", "flipturn", "psychocut"]
     },
     "barbaracle": {
-        "randomBattleMoves": ["shellsmash", "liquidation", "icepunch", "crosschop"]
+        "moves": ["shellsmash", "liquidation", "icepunch", "crosschop"]
     },
     "dragalge": {
-        "randomBattleMoves": ["dracometeor", "sludgewave", "focusblast", "flipturn"]
+        "moves": ["dracometeor", "sludgewave", "focusblast", "flipturn"]
     },
     "clawitzer": {
-        "randomBattleMoves": ["octazooka", "aurasphere", "technoblast", "darkpulse"]
+        "moves": ["octazooka", "aurasphere", "technoblast", "darkpulse"]
     },
     "heliolisk": {
-        "randomBattleMoves": ["thunderbolt", "surf", "voltswitch", "hypervoice"]
+        "moves": ["thunderbolt", "surf", "voltswitch", "hypervoice"]
     },
     "tyrantrum": {
-        "randomBattleMoves": ["dragondance", "headsmash", "earthquake", "scaleshot"]
+        "moves": ["dragondance", "headsmash", "earthquake", "scaleshot"]
     },
     "aurorus": {
-        "randomBattleMoves": ["ancientpower", "blizzard", "earthpower", "freezedry", "stealthrock", "thunderwave"]
+        "moves": ["ancientpower", "blizzard", "earthpower", "freezedry", "stealthrock", "thunderwave"]
     },
     "sylveon": {
-        "randomBattleMoves": ["sparklyswirl", "moonlight", "lovelykiss", "mysticalfire"]
+        "moves": ["sparklyswirl", "moonlight", "lovelykiss", "mysticalfire"]
     },
     "hawlucha": {
-        "randomBattleMoves": ["closecombat", "acrobatics", "swordsdance", "substitute"]
+        "moves": ["closecombat", "acrobatics", "swordsdance", "substitute"]
     },
     "dedenne": {
-        "randomBattleMoves": ["voltswitch", "thunderbolt", "dazzlinggleam", "hiddenpowerice"]
+        "moves": ["voltswitch", "thunderbolt", "dazzlinggleam", "hiddenpowerice"]
     },
     "carbink": {
-        "randomBattleMoves": ["moonblast", "toxic", "stealthrock", "reconstruct"]
+        "moves": ["moonblast", "toxic", "stealthrock", "reconstruct"]
     },
     "goodra": {
-        "randomBattleMoves": ["dracometeor", "sludgewave", "fireblast", "lifedew"]
+        "moves": ["dracometeor", "sludgewave", "fireblast", "lifedew"]
     },
     "klefki": {
-        "randomBattleMoves": ["spikes", "dazzlinggleam", "thunderwave", "foulplay"]
+        "moves": ["spikes", "dazzlinggleam", "thunderwave", "foulplay"]
     },
     "trevenant": {
-        "randomBattleMoves": ["rototiller", "poltergeist", "grassyglide", "drainpunch"]
+        "moves": ["rototiller", "poltergeist", "grassyglide", "drainpunch"]
     },
     "gourgeist": {
-        "randomBattleMoves": ["poltergeist", "powerwhip", "shadowsneak", "synthesis"]
+        "moves": ["poltergeist", "powerwhip", "shadowsneak", "synthesis"]
     },
     "gourgeistsmall": {
-        "randomBattleMoves": ["deafeningshriek", "energyball", "focusblast", "nastyplot"]
+        "moves": ["deafeningshriek", "energyball", "focusblast", "nastyplot"]
     },
     "gourgeistlarge": {
-        "randomBattleMoves": ["poltergeist", "powerwhip", "willowisp", "synthesis"]
+        "moves": ["poltergeist", "powerwhip", "willowisp", "synthesis"]
     },
     "gourgeistsuper": {
-        "randomBattleMoves": ["deafeningshriek", "energyball", "fireblast", "trickroom"]
+        "moves": ["deafeningshriek", "energyball", "fireblast", "trickroom"]
     },
     "avalugg": {
-        "randomBattleMoves": ["avalanche", "recover", "bodypress", "rapidspin"]
+        "moves": ["avalanche", "recover", "bodypress", "rapidspin"]
     },
     "noivern": {
-        "randomBattleMoves": ["dracometeor", "hurricane", "uturn", "flamethrower"]
+        "moves": ["dracometeor", "hurricane", "uturn", "flamethrower"]
     },
     "xerneas": {
-        "randomBattleMoves": ["geomancy", "focusblast", "moonblast", "lifedew"]
+        "moves": ["geomancy", "focusblast", "moonblast", "lifedew"]
     },
     "yveltal": {
-        "randomBattleMoves": ["knockoff", "oblivionwing", "taunt", "defog"]
+        "moves": ["knockoff", "oblivionwing", "taunt", "defog"]
     },
     "zygarde10": {
-        "randomBattleMoves": ["thousandarrows", "toxic", "extremespeed", "outrage"]
+        "moves": ["thousandarrows", "toxic", "extremespeed", "outrage"]
     },
     "diancie": {
-        "randomBattleMoves": ["trickroom", "diamondstorm", "moonblast", "bodypress"]
+        "moves": ["trickroom", "diamondstorm", "moonblast", "bodypress"]
     },
     "dianciemega": {
-        "randomBattleMoves": ["diamondstorm", "moonblast", "earthpower", "stealthrock"]
+        "moves": ["diamondstorm", "moonblast", "earthpower", "stealthrock"]
     },
     "hoopa": {
-        "randomBattleMoves": ["nastyplot", "psychic", "focusblast", "shadowball"]
+        "moves": ["nastyplot", "psychic", "focusblast", "shadowball"]
     },
     "hoopaunbound": {
-        "randomBattleMoves": ["hyperspacefury", "gunkshot", "firepunch", "enchantedpunch"]
+        "moves": ["hyperspacefury", "gunkshot", "firepunch", "enchantedpunch"]
     },
     "volcanion": {
-        "randomBattleMoves": ["steameruption", "fireblast", "earthpower", "aridabsorption"]
+        "moves": ["steameruption", "fireblast", "earthpower", "aridabsorption"]
     },
     "decidueye": {
-        "randomBattleMoves": ["swordsdance", "leafblade", "spiritshackle", "bravebird"]
+        "moves": ["swordsdance", "leafblade", "spiritshackle", "bravebird"]
     },
     "incineroar": {
-        "randomBattleMoves": ["knockoff", "flareblitz", "rapidspin", "partingshot"]
+        "moves": ["knockoff", "flareblitz", "rapidspin", "partingshot"]
     },
     "primarina": {
-        "randomBattleMoves": ["hydropump", "moonblast", "snowmanjazz", "flipturn"]
+        "moves": ["hydropump", "moonblast", "snowmanjazz", "flipturn"]
     },
     "toucannon": {
-        "randomBattleMoves": ["boomburst", "heatwave", "skysoiree", "roost"]
+        "moves": ["boomburst", "heatwave", "skysoiree", "roost"]
     },
     "gumshoos": {
-        "randomBattleMoves": ["return", "uturn", "payback", "earthquake"]
+        "moves": ["return", "uturn", "payback", "earthquake"]
     },
     "vikavolt": {
-        "randomBattleMoves": ["agility", "thunderbolt", "bugbuzz", "energyball"]
+        "moves": ["agility", "thunderbolt", "bugbuzz", "energyball"]
     },
     "crabominable": {
-        "randomBattleMoves": ["drainpunch", "icehammer", "earthquake", "thunderpunch"]
+        "moves": ["drainpunch", "icehammer", "earthquake", "thunderpunch"]
     },
     "oricorio": {
-        "randomBattleMoves": ["revelationdance", "hurricane", "petaldance", "calmmind"]
+        "moves": ["revelationdance", "hurricane", "petaldance", "calmmind"]
     },
     "oricoriopompom": {
-        "randomBattleMoves": ["revelationdance", "hurricane", "snowmanjazz", "calmmind"]
+        "moves": ["revelationdance", "hurricane", "snowmanjazz", "calmmind"]
     },
     "oricoriopau": {
-        "randomBattleMoves": ["revelationdance", "hurricane", "moonlitwaltz", "calmmind"]
+        "moves": ["revelationdance", "hurricane", "moonlitwaltz", "calmmind"]
     },
     "oricoriosensu": {
-        "randomBattleMoves": ["revelationdance", "skysoiree", "hiddenpowerfighting", "calmmind"]
+        "moves": ["revelationdance", "skysoiree", "hiddenpowerfighting", "calmmind"]
     },
     "ribombee": {
-        "randomBattleMoves": ["stickyweb", "moonblast", "uturn", "rashpowder"]
+        "moves": ["stickyweb", "moonblast", "uturn", "rashpowder"]
     },
     "lycanroc": {
-        "randomBattleMoves": ["accelerock", "stoneedge", "closecombat", "stealthrock"]
+        "moves": ["accelerock", "stoneedge", "closecombat", "stealthrock"]
     },
     "lycanrocmidnight": {
-        "randomBattleMoves": ["bonemerang", "stoneedge", "closecombat", "swordsdance"]
+        "moves": ["bonemerang", "stoneedge", "closecombat", "swordsdance"]
     },
     "lycanrocdusk": {
-        "randomBattleMoves": ["accelerock", "stoneedge", "closecombat", "swordsdance"]
+        "moves": ["accelerock", "stoneedge", "closecombat", "swordsdance"]
     },
     "wishiwashischool": {
-        "randomBattleMoves": ["earthquake", "hydropump", "icebeam", "scald", "uturn"]
+        "moves": ["earthquake", "hydropump", "icebeam", "scald", "uturn"]
     },
     "wishiwashi": {
-        "randomBattleMoves": ["scald", "coreenforcer", "recover", "uturn"]
+        "moves": ["scald", "coreenforcer", "recover", "uturn"]
     },
     "toxapex": {
-        "randomBattleMoves": ["toxic", "recover", "scald", "haze"]
+        "moves": ["toxic", "recover", "scald", "haze"]
     },
     "mudsdale": {
-        "randomBattleMoves": ["aridabsorption", "earthquake", "avalanche", "stealthrock"]
+        "moves": ["aridabsorption", "earthquake", "avalanche", "stealthrock"]
     },
     "araquanid": {
-        "randomBattleMoves": ["substitute", "liquidation", "toxicthread", "leechlife"]
+        "moves": ["substitute", "liquidation", "toxicthread", "leechlife"]
     },
     "lurantis": {
-        "randomBattleMoves": ["leafstorm", "superpower", "defog", "synthesis"]
+        "moves": ["leafstorm", "superpower", "defog", "synthesis"]
     },
     "shiinotic": {
-        "randomBattleMoves": ["strengthsap", "moonblast", "spore", "gigadrain"]
+        "moves": ["strengthsap", "moonblast", "spore", "gigadrain"]
     },
     "salazzle": {
-        "randomBattleMoves": ["nastyplot", "sludgewave", "fierydance", "hiddenpowergrass"]
+        "moves": ["nastyplot", "sludgewave", "fierydance", "hiddenpowergrass"]
     },
     "bewear": {
-        "randomBattleMoves": ["curse", "doubleedge", "drainpunch", "darkestlariat"]
+        "moves": ["curse", "doubleedge", "drainpunch", "darkestlariat"]
     },
     "tsareena": {
-        "randomBattleMoves": ["tropkick", "rapidspin", "knockoff", "uturn", "tripleaxel"]
+        "moves": ["tropkick", "rapidspin", "knockoff", "uturn", "tripleaxel"]
     },
     "comfey": {
-        "randomBattleMoves": ["calmmind", "drainingkiss", "substitute", "leechseed"]
+        "moves": ["calmmind", "drainingkiss", "substitute", "leechseed"]
     },
     "oranguru": {
-        "randomBattleMoves": ["nastyplot", "psychic", "focusblast", "trickroom"]
+        "moves": ["nastyplot", "psychic", "focusblast", "trickroom"]
     },
     "passimian": {
-        "randomBattleMoves": ["closecombat", "knockoff", "icepunch", "uturn"]
+        "moves": ["closecombat", "knockoff", "icepunch", "uturn"]
     },
     "golisopod": {
-        "randomBattleMoves": ["firstimpression", "spikes", "liquidation", "crushclaw"]
+        "moves": ["firstimpression", "spikes", "liquidation", "crushclaw"]
     },
     "palossand": {
-        "randomBattleMoves": ["shoreup", "scorchingsands", "hex", "toxic"]
+        "moves": ["shoreup", "scorchingsands", "hex", "toxic"]
     },
     "pyukumuku": {
-        "randomBattleMoves": ["rest", "recover", "block", "spite"]
+        "moves": ["rest", "recover", "block", "spite"]
     },
     "typenull": {
-        "randomBattleMoves": ["uturn", "return", "rest", "sleeptalk"]
+        "moves": ["uturn", "return", "rest", "sleeptalk"]
     },
     "silvally": {
-        "randomBattleMoves": ["multiattack", "explosion", "earthquake", "uturn"]
+        "moves": ["multiattack", "explosion", "earthquake", "uturn"]
     },
     "silvallybug": {
-        "randomBattleMoves": ["multiattack", "blazekick", "earthquake", "uturn"]
+        "moves": ["multiattack", "blazekick", "earthquake", "uturn"]
     },
     "silvallydark": {
-        "randomBattleMoves": ["multiattack", "pursuit", "ironhead", "uturn"]
+        "moves": ["multiattack", "pursuit", "ironhead", "uturn"]
     },
     "silvallydragon": {
-        "randomBattleMoves": ["dracometeor", "trashtalk", "flamethrower", "partingshot"]
+        "moves": ["dracometeor", "trashtalk", "flamethrower", "partingshot"]
     },
     "silvallyelectric": {
-        "randomBattleMoves": ["thunderbolt", "icebeam", "flamethrower", "uturn"]
+        "moves": ["thunderbolt", "icebeam", "flamethrower", "uturn"]
     },
     "silvallyfairy": {
-        "randomBattleMoves": ["multiattack", "defog", "toxic", "uturn"]
+        "moves": ["multiattack", "defog", "toxic", "uturn"]
     },
     "silvallyfighting": {
-        "randomBattleMoves": ["multiattack", "aggravate", "earthquake", "swordsdance"]
+        "moves": ["multiattack", "aggravate", "earthquake", "swordsdance"]
     },
     "silvallyfire": {
-        "randomBattleMoves": ["multiattack", "flamecharge", "earthquake", "swordsdance"]
+        "moves": ["multiattack", "flamecharge", "earthquake", "swordsdance"]
     },
     "silvallyflying": {
-        "randomBattleMoves": ["multiattack", "crushclaw", "earthquake", "defog"]
+        "moves": ["multiattack", "crushclaw", "earthquake", "defog"]
     },
     "silvallyghost": {
-        "randomBattleMoves": ["multiattack", "superpower", "earthquake", "uturn"]
+        "moves": ["multiattack", "superpower", "earthquake", "uturn"]
     },
     "silvallygrass": {
-        "randomBattleMoves": ["multiattack", "blazekick", "earthquake", "partingshot"]
+        "moves": ["multiattack", "blazekick", "earthquake", "partingshot"]
     },
     "silvallyground": {
-        "randomBattleMoves": ["multiattack", "flamecharge", "rockslide", "swordsdance"]
+        "moves": ["multiattack", "flamecharge", "rockslide", "swordsdance"]
     },
     "silvallyice": {
-        "randomBattleMoves": ["icebeam", "flamethrower", "thunderbolt", "partingshot"]
+        "moves": ["icebeam", "flamethrower", "thunderbolt", "partingshot"]
     },
     "silvallypoison": {
-        "randomBattleMoves": ["poisonfang", "defog", "earthquake", "partingshot"]
+        "moves": ["poisonfang", "defog", "earthquake", "partingshot"]
     },
     "silvallypsychic": {
-        "randomBattleMoves": ["multiattack", "blazekick", "earthquake", "explosion"]
+        "moves": ["multiattack", "blazekick", "earthquake", "explosion"]
     },
     "silvallyrock": {
-        "randomBattleMoves": ["multiattack", "superpower", "earthquake", "swordsdance"]
+        "moves": ["multiattack", "superpower", "earthquake", "swordsdance"]
     },
     "silvallysteel": {
-        "randomBattleMoves": ["multiattack", "defog", "earthquake", "uturn"]
+        "moves": ["multiattack", "defog", "earthquake", "uturn"]
     },
     "silvallywater": {
-        "randomBattleMoves": ["surf", "defog", "thunderbolt", "partingshot"]
+        "moves": ["surf", "defog", "thunderbolt", "partingshot"]
     },
     "minior": {
-        "randomBattleMoves": ["shellsmash", "acrobatics", "stoneedge", "earthquake"]
+        "moves": ["shellsmash", "acrobatics", "stoneedge", "earthquake"]
     },
     "komala": {
-        "randomBattleMoves": ["return", "curse", "suckerpunch", "firepunch"]
+        "moves": ["return", "curse", "suckerpunch", "firepunch"]
     },
     "turtonator": {
-        "randomBattleMoves": ["shellsmash", "overheat", "dracometeor", "scorchingsands"]
+        "moves": ["shellsmash", "overheat", "dracometeor", "scorchingsands"]
     },
     "togedemaru": {
-        "randomBattleMoves": ["lightninglance", "ironhead", "uturn", "fakeout"]
+        "moves": ["lightninglance", "ironhead", "uturn", "fakeout"]
     },
     "mimikyu": {
-        "randomBattleMoves": ["swordsdance", "shadowpunch", "shadowsneak", "playrough"]
+        "moves": ["swordsdance", "shadowpunch", "shadowsneak", "playrough"]
     },
     "bruxish": {
-        "randomBattleMoves": ["liquidation", "psychicfangs", "icefang", "flipturn"]
+        "moves": ["liquidation", "psychicfangs", "icefang", "flipturn"]
     },
     "drampa": {
-        "randomBattleMoves": ["dracometeor", "hypervoice", "focusblast", "fireblast"]
+        "moves": ["dracometeor", "hypervoice", "focusblast", "fireblast"]
     },
     "dhelmise": {
-        "randomBattleMoves": ["rototiller", "poltergeist", "grassyglide", "rapidspin"]
+        "moves": ["rototiller", "poltergeist", "grassyglide", "rapidspin"]
     },
     "kommoo": {
-        "randomBattleMoves": ["clangoroussoul", "clangingscales", "focusblast", "boomburst"]
+        "moves": ["clangoroussoul", "clangingscales", "focusblast", "boomburst"]
     },
     "tapukoko": {
-        "randomBattleMoves": ["wildcharge", "enchantedpunch", "bravebird", "uturn"]
+        "moves": ["wildcharge", "enchantedpunch", "bravebird", "uturn"]
     },
     "tapulele": {
-        "randomBattleMoves": ["psyshock", "psychic", "focusblast", "moonblast"]
+        "moves": ["psyshock", "psychic", "focusblast", "moonblast"]
     },
     "tapubulu": {
-        "randomBattleMoves": ["swordsdance", "woodhammer", "superpower", "enchantedpunch"]
+        "moves": ["swordsdance", "woodhammer", "superpower", "enchantedpunch"]
     },
     "tapufini": {
-        "randomBattleMoves": ["defog", "scald", "moonblast", "taunt"]
+        "moves": ["defog", "scald", "moonblast", "taunt"]
     },
     "nihilego": {
-        "randomBattleMoves": ["meteorbeam", "sludgewave", "grassknot", "powergem"]
+        "moves": ["meteorbeam", "sludgewave", "grassknot", "powergem"]
     },
     "buzzwole": {
-        "randomBattleMoves": ["closecombat", "thunderpunch", "icepunch", "roost"]
+        "moves": ["closecombat", "thunderpunch", "icepunch", "roost"]
     },
     "pheromosa": {
-        "randomBattleMoves": ["bugbuzz", "focusblast", "icebeam", "shockwave"]
+        "moves": ["bugbuzz", "focusblast", "icebeam", "shockwave"]
     },
     "xurkitree": {
-        "randomBattleMoves": ["hypnosis", "thunderbolt", "energyball", "tailglow"]
+        "moves": ["hypnosis", "thunderbolt", "energyball", "tailglow"]
     },
     "celesteela": {
-        "randomBattleMoves": ["autotomize", "fireblast", "airslash", "flashcannon"]
+        "moves": ["autotomize", "fireblast", "airslash", "flashcannon"]
     },
     "kartana": {
-        "randomBattleMoves": ["swordsdance", "leafblade", "knockoff", "sacredsword"]
+        "moves": ["swordsdance", "leafblade", "knockoff", "sacredsword"]
     },
     "guzzlord": {
-        "randomBattleMoves": ["partingshot", "glare", "knockoff", "earthquake"]
+        "moves": ["partingshot", "glare", "knockoff", "earthquake"]
     },
     "necrozma": {
-        "randomBattleMoves": ["photongeyser", "earthquake", "xscissor", "dragondance"]
+        "moves": ["photongeyser", "earthquake", "xscissor", "dragondance"]
     },
     "magearna": {
-        "randomBattleMoves": ["fleurcannon", "voltswitch", "icebeam", "focusblast"]
+        "moves": ["fleurcannon", "voltswitch", "icebeam", "focusblast"]
     },
     "magearnaoriginal": {
-        "randomBattleMoves": ["agility", "calmmind", "flashcannon", "fleurcannon"]
+        "moves": ["agility", "calmmind", "flashcannon", "fleurcannon"]
     },
     "naganadel": {
-        "randomBattleMoves": ["rapidspin", "dracometeor", "sludgewave", "flamethrower"]
+        "moves": ["rapidspin", "dracometeor", "sludgewave", "flamethrower"]
     },
     "stakataka": {
-        "randomBattleMoves": ["trickroom", "gyroball", "stoneedge", "earthquake"]
+        "moves": ["trickroom", "gyroball", "stoneedge", "earthquake"]
     },
     "blacephalon": {
-        "randomBattleMoves": ["shadowball", "overheat", "flamethrower", "electroball"]
+        "moves": ["shadowball", "overheat", "flamethrower", "electroball"]
     },
     "zeraora": {
-        "randomBattleMoves": ["electroball", "closecombat", "hiddenpowerice", "voltswitch"]
+        "moves": ["electroball", "closecombat", "hiddenpowerice", "voltswitch"]
     },
     "melmetal": {
-        "randomBattleMoves": ["doubleironbash", "thunderwave", "icepunch", "armthrust"]
+        "moves": ["doubleironbash", "thunderwave", "icepunch", "armthrust"]
     },
     "rillaboom": {
-        "randomBattleMoves": ["grassyglide", "woodhammer", "knockoff", "uturn"]
+        "moves": ["grassyglide", "woodhammer", "knockoff", "uturn"]
     },
     "cinderace": {
-        "randomBattleMoves": ["pyroball", "suckerpunch", "uturn", "highjumpkick"]
+        "moves": ["pyroball", "suckerpunch", "uturn", "highjumpkick"]
     },
     "inteleon": {
-        "randomBattleMoves": ["hydropump", "icebeam", "signalbeam", "uturn"]
+        "moves": ["hydropump", "icebeam", "signalbeam", "uturn"]
     },
     "greedent": {
-        "randomBattleMoves": ["curse", "bodyslam", "firepunch", "smother"]
+        "moves": ["curse", "bodyslam", "firepunch", "smother"]
     },
     "corviknight": {
-        "randomBattleMoves": ["uturn", "bravebird", "defog", "roost"]
+        "moves": ["uturn", "bravebird", "defog", "roost"]
     },
     "orbeetle": {
-        "randomBattleMoves": ["hypnosis", "stickyweb", "uturn", "bodypress"]
+        "moves": ["hypnosis", "stickyweb", "uturn", "bodypress"]
     },
     "thievul": {
-        "randomBattleMoves": ["nastyplot", "darkpulse", "trashtalk", "burningjealousy"]
+        "moves": ["nastyplot", "darkpulse", "trashtalk", "burningjealousy"]
     },
     "eldegoss": {
-        "randomBattleMoves": ["lifedew", "sleeppowder", "gigadrain", "leechseed"]
+        "moves": ["lifedew", "sleeppowder", "gigadrain", "leechseed"]
     },
     "dubwool": {
-        "randomBattleMoves": ["cottonguard", "bodypress", "rest", "rapidspin"]
+        "moves": ["cottonguard", "bodypress", "rest", "rapidspin"]
     },
     "drednaw": {
-        "randomBattleMoves": ["swordsdance", "liquidation", "stoneedge", "earthquake"]
+        "moves": ["swordsdance", "liquidation", "stoneedge", "earthquake"]
     },
     "boltund": {
-        "randomBattleMoves": ["thunderfang", "firefang", "crunch", "voltswitch"]
+        "moves": ["thunderfang", "firefang", "crunch", "voltswitch"]
     },
     "coalossal": {
-        "randomBattleMoves": ["stealthrock", "flamethrower", "rapidspin", "aridabsorption"]
+        "moves": ["stealthrock", "flamethrower", "rapidspin", "aridabsorption"]
     },
     "flapple": {
-        "randomBattleMoves": ["gravapple", "dragonrush", "uturn", "suckerpunch"]
+        "moves": ["gravapple", "dragonrush", "uturn", "suckerpunch"]
     },
     "appletun": {
-        "randomBattleMoves": ["recover", "appleacid", "bodypress", "leechseed"]
+        "moves": ["recover", "appleacid", "bodypress", "leechseed"]
     },
     "sandaconda": {
-        "randomBattleMoves": ["aridabsorption", "earthquake", "glare", "stealthrock"]
+        "moves": ["aridabsorption", "earthquake", "glare", "stealthrock"]
     },
     "cramorant": {
-        "randomBattleMoves": ["surf", "attackorder", "roost", "endure"]
+        "moves": ["surf", "attackorder", "roost", "endure"]
     },
     "barraskewda": {
-        "randomBattleMoves": ["liquidation", "closecombat", "poisonjab", "flipturn"]
+        "moves": ["liquidation", "closecombat", "poisonjab", "flipturn"]
     },
     "toxtricity": {
-        "randomBattleMoves": ["boomburst", "overdrive", "shiftgear", "technoblast"]
+        "moves": ["boomburst", "overdrive", "shiftgear", "technoblast"]
     },
     "centiskorch": {
-        "randomBattleMoves": ["firelash", "uturn", "recover", "firstimpression"]
+        "moves": ["firelash", "uturn", "recover", "firstimpression"]
     },
     "grapploct": {
-        "randomBattleMoves": ["closecombat", "suckerpunch", "flipturn", "acidicfists"]
+        "moves": ["closecombat", "suckerpunch", "flipturn", "acidicfists"]
     },
     "polteageist": {
-        "randomBattleMoves": ["shellsmash", "shadowball", "gigadrain", "storedpower"]
+        "moves": ["shellsmash", "shadowball", "gigadrain", "storedpower"]
     },
     "polteageistantique": {
-        "randomBattleMoves": ["strengthsap", "hex", "willowisp", "curse"]
+        "moves": ["strengthsap", "hex", "willowisp", "curse"]
     },
     "hatterene": {
-        "randomBattleMoves": ["lifedew", "nuzzle", "mysticalfire", "dazzlinggleam"]
+        "moves": ["lifedew", "nuzzle", "mysticalfire", "dazzlinggleam"]
     },
     "grimmsnarl": {
-        "randomBattleMoves": ["bulkup", "payback", "playrough", "suckerpunch"]
+        "moves": ["bulkup", "payback", "playrough", "suckerpunch"]
     },
     "obstagoon": {
-        "randomBattleMoves": ["obstruct", "facade", "knockoff", "closecombat"]
+        "moves": ["obstruct", "facade", "knockoff", "closecombat"]
     },
     "perrserker": {
-        "randomBattleMoves": ["ironhead", "closecombat", "uturn", "fakeout"]
+        "moves": ["ironhead", "closecombat", "uturn", "fakeout"]
     },
     "cursola": {
-        "randomBattleMoves": ["shadowball", "hydropump", "earthpower", "burningjealousy"]
+        "moves": ["shadowball", "hydropump", "earthpower", "burningjealousy"]
     },
     "sirfetchd": {
-        "randomBattleMoves": ["closecombat", "firstimpression", "lightninglance", "knockoff"]
+        "moves": ["closecombat", "firstimpression", "lightninglance", "knockoff"]
     },
     "mrrime": {
-        "randomBattleMoves": ["rapidspin", "focusblast", "icebeam", "psychic"]
+        "moves": ["rapidspin", "focusblast", "icebeam", "psychic"]
     },
     "runerigus": {
-        "randomBattleMoves": ["aridabsorption", "poltergeist", "bodypress", "willowisp"]
+        "moves": ["aridabsorption", "poltergeist", "bodypress", "willowisp"]
     },
     "alcremie": {
-        "randomBattleMoves": ["dazzlinggleam", "mysticalfire", "rapidspin", "recover"]
+        "moves": ["dazzlinggleam", "mysticalfire", "rapidspin", "recover"]
     },
     "falinks": {
-        "randomBattleMoves": ["noretreat", "closecombat", "throatchop", "poisonjab"]
+        "moves": ["noretreat", "closecombat", "throatchop", "poisonjab"]
     },
     "pincurchin": {
-        "randomBattleMoves": ["risingvoltage", "recover", "spikes", "signalbeam"]
+        "moves": ["risingvoltage", "recover", "spikes", "signalbeam"]
     },
     "frosmoth": {
-        "randomBattleMoves": ["quiverdance", "bugbuzz", "meltingpoint", "snowmanjazz"]
+        "moves": ["quiverdance", "bugbuzz", "meltingpoint", "snowmanjazz"]
     },
     "stonjourner": {
-        "randomBattleMoves": ["stoneedge", "heatcrash", "earthquake", "stealthrock"]
+        "moves": ["stoneedge", "heatcrash", "earthquake", "stealthrock"]
     },
     "eiscue": {
-        "randomBattleMoves": ["bellydrum", "icepunch", "liquidation", "zenheadbutt"]
+        "moves": ["bellydrum", "icepunch", "liquidation", "zenheadbutt"]
     },
     "indeedee": {
-        "randomBattleMoves": ["expandingforce", "hypervoice", "mysticalfire", "trick"]
+        "moves": ["expandingforce", "hypervoice", "mysticalfire", "trick"]
     },
     "indeedeef": {
-        "randomBattleMoves": ["expandingforce", "dazzlinggleam", "lifedew", "calmmind"]
+        "moves": ["expandingforce", "dazzlinggleam", "lifedew", "calmmind"]
     },
     "morpeko": {
-        "randomBattleMoves": ["aurawheel", "partingshot", "protect", "seedbomb"]
+        "moves": ["aurawheel", "partingshot", "protect", "seedbomb"]
     },
     "copperajah": {
-        "randomBattleMoves": ["heavyslam", "powerwhip", "stoneedge", "heatcrash"]
+        "moves": ["heavyslam", "powerwhip", "stoneedge", "heatcrash"]
     },
     "dracozolt": {
-        "randomBattleMoves": ["boltbeak", "fireblast", "earthquake", "dracometeor"]
+        "moves": ["boltbeak", "fireblast", "earthquake", "dracometeor"]
     },
     "arctozolt": {
-        "randomBattleMoves": ["boltbeak", "iciclecrash", "freezedry", "lowkick"]
+        "moves": ["boltbeak", "iciclecrash", "freezedry", "lowkick"]
     },
     "dracovish": {
-        "randomBattleMoves": ["fishiousrend", "crunch", "psychicfangs", "earthquake"]
+        "moves": ["fishiousrend", "crunch", "psychicfangs", "earthquake"]
     },
     "arctovish": {
-        "randomBattleMoves": ["fishiousrend", "iciclecrash", "freezedry", "meltingpoint"]
+        "moves": ["fishiousrend", "iciclecrash", "freezedry", "meltingpoint"]
     },
     "duraludon": {
-        "randomBattleMoves": ["dracometeor", "flashcannon", "technoblast", "stealthrock"]
+        "moves": ["dracometeor", "flashcannon", "technoblast", "stealthrock"]
     },
     "dragapult": {
-        "randomBattleMoves": ["dracometeor", "shadowball", "uturn", "flamethrower"]
+        "moves": ["dracometeor", "shadowball", "uturn", "flamethrower"]
     },
     "zacian": {
-        "randomBattleMoves": ["playrough", "closecombat", "lightninglance", "swordsdance"]
+        "moves": ["playrough", "closecombat", "lightninglance", "swordsdance"]
     },
     "zaciancrowned": {
-        "randomBattleMoves": ["playrough", "closecombat", "lightninglance", "behemothblade"]
+        "moves": ["playrough", "closecombat", "lightninglance", "behemothblade"]
     },
     "zamazenta": {
-        "randomBattleMoves": ["crunch", "closecombat", "howl", "wildcharge"]
+        "moves": ["crunch", "closecombat", "howl", "wildcharge"]
     },
     "zamazentacrowned": {
-        "randomBattleMoves": ["reconstruct", "closecombat", "crunch", "behemothbash"]
+        "moves": ["reconstruct", "closecombat", "crunch", "behemothbash"]
     },
     "urshifu": {
-        "randomBattleMoves": ["wickedblow", "closecombat", "uturn", "icepunch"]
+        "moves": ["wickedblow", "closecombat", "uturn", "icepunch"]
     },
     "urshifurapidstrike": {
-        "randomBattleMoves": ["closecombat", "surgingstrikes", "uturn", "thunderpunch"]
+        "moves": ["closecombat", "surgingstrikes", "uturn", "thunderpunch"]
     },
     "zarude": {
-        "randomBattleMoves": ["bulkup", "powerwhip", "aggravate", "junglehealing"]
+        "moves": ["bulkup", "powerwhip", "aggravate", "junglehealing"]
     },
     "zarudedada": {
-        "randomBattleMoves": ["powerwhip", "aggravate", "uturn", "closecombat"]
+        "moves": ["powerwhip", "aggravate", "uturn", "closecombat"]
     },
     "regieleki": {
-        "randomBattleMoves": ["lightninglance", "voltswitch", "rapidspin", "explosion"]
+        "moves": ["lightninglance", "voltswitch", "rapidspin", "explosion"]
     },
     "regidrago": {
-        "randomBattleMoves": ["dragonenergy", "dracometeor", "dragonpulse", "explosion"]
+        "moves": ["dragonenergy", "dracometeor", "dragonpulse", "explosion"]
     },
     "glastrier": {
-        "randomBattleMoves": ["swordsdance", "avalanche", "highhorsepower", "closecombat"]
+        "moves": ["swordsdance", "avalanche", "highhorsepower", "closecombat"]
     },
     "spectrier": {
-        "randomBattleMoves": ["substitute", "curse", "shadowball", "calmmind"]
+        "moves": ["substitute", "curse", "shadowball", "calmmind"]
     },
     "calyrex": {
-        "randomBattleMoves": ["rototiller", "seedbomb", "zenheadbutt", "batonpass"]
+        "moves": ["rototiller", "seedbomb", "zenheadbutt", "batonpass"]
     }
 }

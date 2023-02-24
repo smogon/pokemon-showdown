@@ -42,7 +42,7 @@ describe('value rule support', () => {
 						// just see all those moves
 						let totalMoves = 0;
 						let seenHP = false;
-						for (const move of dataJSON[dex.species.get(species).id].randomBattleMoves) {
+						for (const move of dataJSON[dex.species.get(species).id].moves) {
 							if (move.startsWith('hiddenpower')) {
 								if (seenHP) continue;
 								seenHP = true;
