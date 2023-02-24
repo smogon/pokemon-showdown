@@ -159,8 +159,7 @@ describe('[Gen 8] Random Battle', () => {
 		const pokemon = Object.keys(dataJSON)
 			.filter(pkmn =>
 				dataJSON[pkmn].moves &&
-				dex.species.get(pkmn).types.includes('Grass') && dex.species.get(pkmn).types.includes('Poison')
-			);
+				dex.species.get(pkmn).types.includes('Grass') && dex.species.get(pkmn).types.includes('Poison'));
 		for (const pkmn of pokemon) {
 			testHasSTAB(pkmn, options, ['Poison']);
 		}
