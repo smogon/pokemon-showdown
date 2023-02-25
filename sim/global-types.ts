@@ -331,6 +331,7 @@ interface ModdedBattlePokemon {
 	getStat?: (
 		this: Pokemon, statName: StatIDExceptHP, unboosted?: boolean, unmodified?: boolean, fastReturn?: boolean
 	) => number;
+	getTypes?: (this: Pokemon, excludeAdded?: boolean, preterastallized?: boolean) => string[];
 	getWeight?: (this: Pokemon) => number;
 	hasAbility?: (this: Pokemon, ability: string | string[]) => boolean;
 	hasItem?: (this: Pokemon, item: string | string[]) => boolean;
