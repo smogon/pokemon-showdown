@@ -883,27 +883,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ice",
 	},
 
-	// Scotteh
-	purification: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Purification",
-		pp: 5,
-		priority: 0,
-		flags: {heal: 1, bypasssub: 1, allyanim: 1},
-		onPrepareHit() {
-			this.attrLastMove('[anim] Moonlight');
-		},
-		onHit(pokemon) {
-			const success = !!this.heal(this.modify(pokemon.maxhp, 0.5));
-			return pokemon.cureStatus() || success;
-		},
-		secondary: null,
-		target: "self",
-		type: "Water",
-	},
-
 	// Rumia
 	midnightbird: {
 		accuracy: 100,
@@ -931,6 +910,27 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		target: "normal",
 		type: "Dark",
+	},
+
+	// Scotteh
+	purification: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Purification",
+		pp: 5,
+		priority: 0,
+		flags: {heal: 1, bypasssub: 1, allyanim: 1},
+		onPrepareHit() {
+			this.attrLastMove('[anim] Moonlight');
+		},
+		onHit(pokemon) {
+			const success = !!this.heal(this.modify(pokemon.maxhp, 0.5));
+			return pokemon.cureStatus() || success;
+		},
+		secondary: null,
+		target: "self",
+		type: "Water",
 	},
 
 	// sharp_claw
@@ -966,34 +966,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: {}, // allows sheer force to trigger
 		target: "normal",
 		type: "Rock",
-	},
-
-	// TheJesucristoOsAma
-	theloveofchrist: {
-		accuracy: 100,
-		basePower: 0,
-		category: "Status",
-		shortDesc: "Attracts and confuses the target.",
-		name: "The Love Of Christ",
-		gen: 9,
-		pp: 1,
-		noPPBoosts: true,
-		priority: 0,
-		flags: {protect: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Morning Sun', source);
-			this.add('-anim', source, 'Lovely Kiss', target);
-		},
-		onHit(target, source) {
-			target.addVolatile('attract', source);
-			target.addVolatile('confusion', source);
-		},
-		secondary: null,
-		target: "normal",
-		type: "Normal",
 	},
 
 	// snake_rattler
@@ -1102,6 +1074,34 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
+	},
+
+	// TheJesucristoOsAma
+	theloveofchrist: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Attracts and confuses the target.",
+		name: "The Love Of Christ",
+		gen: 9,
+		pp: 1,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Morning Sun', source);
+			this.add('-anim', source, 'Lovely Kiss', target);
+		},
+		onHit(target, source) {
+			target.addVolatile('attract', source);
+			target.addVolatile('confusion', source);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
 	},
 
 	// trace
