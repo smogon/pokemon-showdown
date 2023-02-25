@@ -126,6 +126,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Attack of Opportunity',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant', teraType: 'Any', shiny: 1024,
 	},
+	Lumari: {
+		species: 'Ponyta-Galar', ability: 'Pyrotechnic', item: 'Eviolite', gender: 'F',
+		moves: ['Substitute', ['Sappy Seed', 'Sizzly Slide'], 'Magical Torque'],
+		signatureMove: 'Mystical Bonfire',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Fairy',
+	},
 	'Mad Monty': {
 		species: 'Castform', ability: 'Climate Change', item: 'Heavy-Duty Boots', gender: 'M',
 		moves: ['Weather Ball', 'Defog', ['Solar Beam', 'Thunder', 'Aurora Veil']],
