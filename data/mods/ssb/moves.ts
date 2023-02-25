@@ -918,6 +918,34 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ice",
 	},
 
+	// ReturnToMonkey
+	monkemagic: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Monke Magic",
+		shortDesc: "Sets Trick Room; user SpA +1.",
+		pp: 5,
+		priority: -7,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Trick', target);
+			this.add('-anim', source, 'Trick Room', target);
+			this.add('-anim', source, 'Nasty Plot', target);
+		},
+		pseudoWeather: 'trickroom',
+		self: {
+			boosts: {
+				spa: 1,
+			},
+		},
+		target: "all",
+		type: "Psychic",
+	},
+
 	// Rumia
 	midnightbird: {
 		accuracy: 100,

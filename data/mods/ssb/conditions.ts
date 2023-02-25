@@ -396,6 +396,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('phoopes')}|Jynx! Knock on wood`);
 		},
 	},
+	returntomonkey: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('ReturnToMonkey')}|Where banana`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('ReturnToMonkey')}|**Monkey Scream**`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('ReturnToMonkey')}|Reject the humanity...if you dare...`);
+		},
+	},
 	rumia: {
 		noCopy: true,
 		onStart(pokemon) {

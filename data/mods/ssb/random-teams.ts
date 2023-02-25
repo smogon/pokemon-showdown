@@ -175,6 +175,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Gen 1 Blizzard',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Ice',
 	},
+	ReturnToMonkey: {
+		species: 'Oranguru', ability: 'Monke See Monke Do', item: 'Twisted Spoon', gender: 'M',
+		moves: ['Hyper Voice', 'Psyshock', 'Focus Blast'],
+		signatureMove: 'Monke Magic',
+		evs: {hp: 252, def: 4, spa: 252}, ivs: {spe: 0}, nature: 'Quiet', teraType: 'Fighting',
+	},
 	Rumia: {
 		species: 'Duskull', ability: 'Youkai of the Dusk', item: 'Eviolite', gender: 'F',
 		moves: ['Infernal Parade', 'Strength Sap', 'Mortal Spin'],
