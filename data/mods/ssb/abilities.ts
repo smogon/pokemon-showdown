@@ -647,6 +647,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		isPermanent: true,
 	},
 
+	// Theia
+	powerabuse: {
+		shortDesc: "Summons Sun; attacks do 66% less damage to this Pokemon; may burn physical attackers.",
+		name: "Power Abuse",
+		onStart() {
+			this.field.setWeather('sunnyday');
+		},
+		onSourceModifyDamage() {
+			return this.chainModify(0.34);
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (move.category === "Physical" && this.randomChance(1, 5)) {
+				source.trySetStatus('brn', target);
+			}
+		},
+		isBreakable: true,
+	},
+
 	// TheJesucristoOsAma
 	thegraceofjesuschrist: {
 		shortDesc: "Changes plates at the end of every turn.",

@@ -508,6 +508,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('spoo')}|dies`);
 		},
 	},
+	theia: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('Theia')}|gm ${pokemon.foes()[0].name}`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Theia')}|(cat)ch you later`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Theia')}|gn`);
+		},
+	},
 	thejesucristoosama: {
 		noCopy: true,
 		onStart() {
