@@ -1054,6 +1054,56 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Bug",
 	},
 
+	// spoo
+	spoo: {
+		accuracy: 100,
+		basePower: 100,
+		basePowerCallback(pokemon, target, move) {
+			if (pokemon.baseSpecies.baseSpecies === 'Mumbao') {
+				return 90;
+			}
+			return move.basePower;
+		},
+		category: "Special",
+		shortDesc: "Changes Form. Mumbao: Fairy, 90BP, Clears boosts.",
+		name: "spoo",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies === 'Mumbao') {
+				this.attrLastMove('[anim] Fleur Cannon');
+			} else {
+				this.attrLastMove('[anim] Frenzy Plant');
+			}
+		},
+		onModifyType(move, pokemon) {
+			if (pokemon.baseSpecies.baseSpecies === 'Mumbao') {
+				move.type = 'Fairy';
+			}
+		},
+		onHit(target, pokemon, move) {
+			if (['Mumbao', 'Jumbao'].includes(pokemon.baseSpecies.baseSpecies) && !pokemon.transformed) {
+				move.willChangeForme = true;
+				if (pokemon.baseSpecies.baseSpecies === 'Mumbao') {
+					target.clearBoosts();
+					this.add('-clearboost', target);
+				}
+			}
+		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			if (move.willChangeForme) {
+				this.add('-anim', pokemon, 'Geomancy', pokemon);
+				const spooForme = pokemon.species.id === 'jumbao' ? '' : '-Jumbao';
+				changeSet(this, pokemon, ssbSets['spoo' + spooForme], true);
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Grass",
+	},
+
 	// trace
 	chronostasis: {
 		accuracy: 90,

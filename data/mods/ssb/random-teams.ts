@@ -192,6 +192,18 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Concept Relevant',
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Water',
 	},
+	spoo: {
+		species: 'Mumbao', ability: 'Dazzling', item: 'Heavy-Duty Boots', gender: 'M',
+		moves: ['Will-O-Wisp', 'Strength Sap', 'Parting Shot'],
+		signatureMove: 'spoo',
+		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Timid', teraType: 'Steel',
+	},
+	'spoo-Jumbao': {
+		species: 'Jumbao', ability: 'Drought', item: 'Heavy-Duty Boots', gender: 'M',
+		moves: ['Moonblast', 'Giga Drain', 'Fiery Dance'],
+		signatureMove: 'spoo',
+		evs: {hp: 252, spa: 252, spd: 4}, nature: 'Modest', teraType: 'Fire', skip: 'spoo',
+	},
 	TheJesucristoOsAma: {
 		species: 'Arceus', ability: 'The Grace Of Jesus Christ', gender: 'N',
 		item: [

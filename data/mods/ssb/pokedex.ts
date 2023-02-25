@@ -92,6 +92,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: 'Rough and Tumble'},
 	},
 
+	// spoo
+	mumbao: {
+		inherit: true,
+		baseStats: {hp: 92, atk: 63, def: 96, spa: 104, spd: 97, spe: 124},
+	},
+
 	// Zalm
 	weedle: {
 		inherit: true,
