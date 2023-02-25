@@ -205,6 +205,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Treacherous Traversal',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Poison', skip: 'sharp_claw',
 	},
+	'smely socks': {
+		species: 'Mimikyu', ability: 'Masquerade', item: 'Ghostium Z', gender: 'F',
+		moves: ['Protect', 'Substitute', 'Phantom Force'],
+		signatureMove: 'Stockholm Syndrome',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
+	},
 	'snake_rattler': {
 		species: 'Fidgit', ability: 'Persistent', item: ['Mental Herb', 'Covert Cloak'], gender: 'M',
 		moves: ['Tailwind', 'Healing Wish', 'Taunt'],

@@ -1031,6 +1031,38 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Rock",
 	},
 
+	// smely socks
+	stockholmsyndrome: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Curses and traps foe. User loses 1/2 HP.",
+		name: "Stockholm Syndrome",
+		pp: 5,
+		priority: 0,
+		flags: {bypasssub: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Curse', target);
+			this.add('-anim', source, 'Block', target);
+		},
+		onHit(target, source, move) {
+			let success = false;
+			if (!target.volatiles['curse']) {
+				this.directDamage(source.maxhp / 2, source, source);
+				target.addVolatile('curse');
+				success = true;
+			}
+			return target.addVolatile('trapped', source, move, 'trapper') || success;
+		},
+		zMove: {effect: 'heal'},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
+
 	// snake_rattler
 	conceptrelevant: {
 		accuracy: 100,

@@ -92,6 +92,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: 'Rough and Tumble'},
 	},
 
+	// smely socks
+	mimikyubusted: {
+		inherit: true,
+		abilities: {0: 'Masquerade'},
+	},
+
 	// spoo
 	mumbao: {
 		inherit: true,
