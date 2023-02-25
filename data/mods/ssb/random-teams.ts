@@ -42,13 +42,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Memes That Burn The Sky',
 		evs: {hp: 252, spa: 252, spd: 4}, ivs: {spe: 0}, nature: 'Quiet', teraType: 'Rock',
 	},
-	"A Quag To The Past": {
+	'A Quag To The Past': {
 		species: 'Quagsire', ability: 'Quag of Ruin', item: 'Leftovers', gender: 'M',
 		moves: ['Surging Strikes', 'Precipice Blades', 'Gunk Shot'],
 		signatureMove: 'Sire Switch',
 		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful', teraType: 'Water',
 	},
-	"A Quag To The Past-Clodsire": {
+	'A Quag To The Past-Clodsire': {
 		species: 'Clodsire', ability: 'Clod of Ruin', item: 'Leftovers', gender: 'M',
 		moves: ['Coil', 'Strength Sap', 'Toxic'],
 		signatureMove: 'Sire Switch',
@@ -57,25 +57,38 @@ export const ssbSets: SSBSets = {
 	BreadLoeuf: {
 		species: 'Dachsbun', ability: 'Painful Exit', item: 'Leftovers', gender: '',
 		moves: ['Wish', 'Rest', 'Play Rough'],
-		signatureMove: "Baker's Douze Off",
+		signatureMove: 'Baker\'s Douze Off',
 		evs: {hp: 252, def: 252, spd: 4}, nature: 'Impish', teraType: 'Fairy',
+	},
+	Cake: {
+		species: 'Dudunsparce-Three-Segment', ability: 'Not Enough Removal', item: 'Leftovers', gender: 'N',
+		moves: [
+			['Silk Trap', 'Obstruct', 'Max Guard', 'Spiky Shield', 'King\'s Shield', 'Protect', 'Detect', 'Baneful Bunker'],
+			['Rapid Spin', 'Mortal Spin'],
+			[
+				'Rest', 'Lunar Blessing', 'Healing Wish', 'Aromatherapy',
+				'Heal Bell', 'Copycat', 'Grass Whistle', 'Tearful Look', 'Transform',
+			],
+		],
+		signatureMove: 'Shawn',
+		evs: {hp: 252, def: 252, spd: 4}, nature: 'Impish', teraType: 'Ghost', shiny: 957,
 	},
 	Coolcodename: {
 		species: 'Victini', ability: 'Firewall', item: 'Heavy-Duty Boots', gender: 'M',
 		moves: ['Searing Shot', 'Psychic', 'Dazzling Gleam'],
-		signatureMove: "Haxer's Will",
+		signatureMove: 'Haxer\'s Will',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', teraType: 'Fairy', shiny: 1024,
 	},
 	deftinwolf: {
 		species: 'Yveltal', ability: 'Sharpness', item: 'Dread Plate', gender: '',
 		moves: ['Aerial Ace', 'Ceaseless Edge', 'Cross Poison'],
-		signatureMove: "Trivial Pursuit",
+		signatureMove: 'Trivial Pursuit',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant', teraType: 'Poison',
 	},
 	Eli: {
 		species: 'Thundurus', ability: 'Storm Surge', item: 'Heavy-Duty Boots', gender: 'F',
 		moves: ['Wildbolt Storm', 'Sandsear Storm', 'Volt Switch'],
-		signatureMove: "Sustained Winds",
+		signatureMove: 'Sustained Winds',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', teraType: 'Ground',
 	},
 	havi: {
@@ -96,7 +109,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Jirachi Ban Hammer',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Steel',
 	},
-	"Irpachuza!": {
+	'Irpachuza!': {
 		species: 'Mr. Mime', ability: 'Mime knows best', item: 'Irpatuzinium Z', gender: 'M',
 		moves: [['Destiny Bond', 'Lunar Dance'], 'Parting Shot', 'Taunt'],
 		signatureMove: 'Fleur Cannon',

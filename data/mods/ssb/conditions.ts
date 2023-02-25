@@ -100,6 +100,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 	},
+	cake: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Cake')}|Hello, and welcome to the Random Battles experience. Please enjoy your hazards.`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Cake')}|can't remove all of these randbats devs pls fix`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Cake')}|/wall moist`);
+		},
+	},
 	coolcodename: {
 		onStart(pokemon) {
 			this.add(`c:|${getName('Coolcodename')}|LFGI ${pokemon.side.name}`);
