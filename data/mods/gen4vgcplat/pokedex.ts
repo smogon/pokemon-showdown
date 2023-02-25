@@ -1002,6 +1002,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		"abilities": {
 			"0": "Thick Fat"
 		},
+		evos: ["Annihilape"],
 		"inherit": true
 	},
 	"growlithe": {
@@ -3565,6 +3566,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		"abilities": {
 			"0": "Inner Focus"
 		},
+		evos: ["Farigiraf"],
 		"inherit": true
 	},
 	"pineco": {
@@ -3619,6 +3621,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		"abilities": {
 			"0": "Serene Grace"
 		},
+		evos: ["Dudunsparce", "Dudunsparce-Three-Segment"],
 		"inherit": true
 	},
 	"gligar": {

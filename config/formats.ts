@@ -23,6 +23,16 @@ export const Formats: FormatList = [
 	///////////////////////////////////////////////////////////////////
 
 	{
+		section: "Custom Modes",
+	},
+	{
+		name: "[Gen 9] VGC Plat",
+		searchShow: true,
+		mod: 'gen4vgcplat',
+		gameType: 'doubles',
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Draft Timer', 'Terastal Clause', 'VGC Plat Pokedex'],
+	},
+	{
 		section: "S/V Singles",
 	},
 	{
@@ -256,13 +266,6 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
 		banlist: ['Sub-Legendary'],
-	},
-	{
-		name: "[Gen 9] VGC Plat",
-		searchShow: true,
-		mod: 'gen4vgcplat',
-		gameType: 'doubles',
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Draft Timer', 'Terastal Clause', 'VGC Plat Pokedex'],
 	},
 	{
 		name: "[Gen 9] Doubles Custom Game",
