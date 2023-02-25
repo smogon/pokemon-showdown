@@ -1403,6 +1403,55 @@ export const Formats: FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] Tera Donation",
+		desc: `The first Pok&eacute;mon sent out immediately terastallizes. The other Pok&eacute;mon in the party inherit that Tera Type as an additional type.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3715801/">Tera Donation</a>`,
+		],
+
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Tera Type Preview', 'Min Source Gen = 9'],
+		banlist: ['Flutter Mane', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Palafin', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Baton Pass'],
+		onSwitchIn(pokemon) {
+			if (this.turn === 0) {
+				this.actions.terastallize(pokemon);
+			}
+			if (!pokemon.terastallized) {
+				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
+			}
+		},
+		onModifyMove(move, pokemon, target) {
+			if (move.id === 'terablast') {
+				const teraType = pokemon.side.pokemon.find(p => p.terastallized)?.teraType;
+				if (teraType && pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) {
+					move.category = 'Physical';
+				}
+			}
+		},
+		onModifyType(move, pokemon, target) {
+			if (move.id === 'terablast') {
+				const teraType = pokemon.side.pokemon.find(p => p.terastallized)?.teraType;
+				if (teraType) {
+					move.type = teraType;
+				}
+			}
+		},
+		pokemon: {
+			getTypes(excludeAdded, preterastallized) {
+				if (!preterastallized && this.terastallized) return [this.terastallized];
+				const types = this.battle.runEvent('Type', this, null, null, this.types);
+				if (!excludeAdded && this.addedType) return types.concat(this.addedType);
+				const addTeraType = this.side.pokemon.find(poke => poke.terastallized)?.teraType;
+				if (types.length) {
+					if (addTeraType) return [...types, addTeraType];
+					return types;
+				}
+				return [this.battle.gen >= 5 ? 'Normal' : '???'];
+			},
+		},
+	},
+	{
 		name: "[Gen 9] The Loser's Game",
 		desc: `The first player to lose all of their Pok&eacute;mon wins.`,
 		threads: [
