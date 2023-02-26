@@ -112,7 +112,7 @@ describe('Foul Play', function () {
 			{species: "Chansey", moves: ['swordsdance', 'foulplay'], ability: 'unaware'},
 		], [
 			{species: "Deoxys-Defense", moves: ['splash']},
-	]]);
+		]]);
 		battle.makeChoices('move 1', 'move 1');
 		battle.makeChoices('move 1', 'move 1');
 		battle.makeChoices('move 1', 'move 1');
