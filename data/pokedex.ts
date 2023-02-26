@@ -2790,15 +2790,15 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.4,
 		weightkg: 88.4,
 		color: "Brown",
-		otherFormes: ["Tauros-Paldea", "Tauros-Paldea-Fire", "Tauros-Paldea-Water"],
-		formeOrder: ["Tauros", "Tauros-Paldea", "Tauros-Paldea-Fire", "Tauros-Paldea-Water"],
+		otherFormes: ["Tauros-Paldea-Combat", "Tauros-Paldea-Blaze", "Tauros-Paldea-Aqua"],
+		formeOrder: ["Tauros", "Tauros-Paldea-Combat", "Tauros-Paldea-Blaze", "Tauros-Paldea-Aqua"],
 		eggGroups: ["Field"],
 	},
-	taurospaldea: {
+	taurospaldeacombat: {
 		num: 128,
-		name: "Tauros-Paldea",
+		name: "Tauros-Paldea-Combat",
 		baseSpecies: "Tauros",
-		forme: "Paldea",
+		forme: "Paldea-Combat",
 		types: ["Fighting"],
 		gender: "M",
 		baseStats: {hp: 75, atk: 110, def: 105, spa: 30, spd: 70, spe: 100},
@@ -2808,11 +2808,11 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Black",
 		eggGroups: ["Field"],
 	},
-	taurospaldeafire: {
+	taurospaldeablaze: {
 		num: 128,
-		name: "Tauros-Paldea-Fire",
+		name: "Tauros-Paldea-Blaze",
 		baseSpecies: "Tauros",
-		forme: "Paldea-Fire",
+		forme: "Paldea-Blaze",
 		types: ["Fighting", "Fire"],
 		gender: "M",
 		baseStats: {hp: 75, atk: 110, def: 105, spa: 30, spd: 70, spe: 100},
@@ -2822,11 +2822,11 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Black",
 		eggGroups: ["Field"],
 	},
-	taurospaldeawater: {
+	taurospaldeaaqua: {
 		num: 128,
-		name: "Tauros-Paldea-Water",
+		name: "Tauros-Paldea-Aqua",
 		baseSpecies: "Tauros",
-		forme: "Paldea-Water",
+		forme: "Paldea-Aqua",
 		types: ["Fighting", "Water"],
 		gender: "M",
 		baseStats: {hp: 75, atk: 110, def: 105, spa: 30, spd: 70, spe: 100},
@@ -17251,7 +17251,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 955,
 		name: "Flittle",
 		types: ["Psychic"],
-		baseStats: {hp: 30, atk: 35, def: 30, spa: 55, spd: 40, spe: 75},
+		baseStats: {hp: 30, atk: 35, def: 30, spa: 55, spd: 30, spe: 75},
 		abilities: {0: "Anticipation", 1: "Frisk", H: "Speed Boost"},
 		heightm: 0.2,
 		weightkg: 1.5,
@@ -17662,7 +17662,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2.2,
 		weightkg: 320,
 		color: "Purple",
-		tags: ["Sub-Legendary", "Paradox"],
+		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	screamtail: {
@@ -17675,7 +17675,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.2,
 		weightkg: 8,
 		color: "Pink",
-		tags: ["Sub-Legendary", "Paradox"],
+		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	brutebonnet: {
@@ -17688,7 +17688,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.2,
 		weightkg: 21,
 		color: "Gray",
-		tags: ["Sub-Legendary", "Paradox"],
+		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	fluttermane: {
@@ -17701,7 +17701,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.4,
 		weightkg: 4,
 		color: "Gray",
-		tags: ["Sub-Legendary", "Paradox"],
+		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	slitherwing: {
@@ -17714,7 +17714,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 3.2,
 		weightkg: 92,
 		color: "Red",
-		tags: ["Sub-Legendary", "Paradox"],
+		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	sandyshocks: {
@@ -17727,7 +17727,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2.3,
 		weightkg: 60,
 		color: "Gray",
-		tags: ["Sub-Legendary", "Paradox"],
+		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	irontreads: {
@@ -17740,7 +17740,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.9,
 		weightkg: 240,
 		color: "Gray",
-		tags: ["Sub-Legendary", "Paradox"],
+		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	ironbundle: {
@@ -17753,7 +17753,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.6,
 		weightkg: 11,
 		color: "Red",
-		tags: ["Sub-Legendary", "Paradox"],
+		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	ironhands: {
@@ -17766,7 +17766,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.8,
 		weightkg: 380.7,
 		color: "Gray",
-		tags: ["Sub-Legendary", "Paradox"],
+		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	ironjugulis: {
@@ -17779,7 +17779,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.3,
 		weightkg: 111,
 		color: "Blue",
-		tags: ["Sub-Legendary", "Paradox"],
+		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	ironmoth: {
@@ -17792,7 +17792,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.2,
 		weightkg: 36,
 		color: "Yellow",
-		tags: ["Sub-Legendary", "Paradox"],
+		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	ironthorns: {
@@ -17805,7 +17805,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.6,
 		weightkg: 303,
 		color: "Green",
-		tags: ["Sub-Legendary", "Paradox"],
+		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	frigibax: {
@@ -17955,7 +17955,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2,
 		weightkg: 380,
 		color: "Green",
-		tags: ["Sub-Legendary", "Paradox"],
+		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	ironvaliant: {
@@ -17968,7 +17968,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.4,
 		weightkg: 35,
 		color: "White",
-		tags: ["Sub-Legendary", "Paradox"],
+		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	koraidon: {
@@ -18127,7 +18127,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 7,
 		color: "Gray",
 		evos: ["Tactite"],
-		eggGroups: ["Undiscovered"],
+		eggGroups: ["Mineral"],
 		gen: 4,
 	},
 	tactite: {
@@ -18143,7 +18143,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Rebble",
 		evoLevel: 28,
 		evos: ["Stratagem"],
-		eggGroups: ["Undiscovered"],
+		eggGroups: ["Mineral"],
 		gen: 4,
 	},
 	stratagem: {
@@ -18158,7 +18158,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		prevo: "Tactite",
 		evoType: "trade",
-		eggGroups: ["Undiscovered"],
+		eggGroups: ["Mineral"],
 		gen: 4,
 	},
 	privatyke: {

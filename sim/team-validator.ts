@@ -383,7 +383,7 @@ export class TeamValidator {
 		let outOfBattleSpecies = species;
 		let tierSpecies = species;
 		if (ability.id === 'battlebond' && species.id === 'greninja') {
-			if (this.gen < 9) outOfBattleSpecies = dex.species.get('greninjaash');
+			outOfBattleSpecies = dex.species.get('greninjaash');
 			if (ruleTable.has('obtainableformes')) {
 				tierSpecies = outOfBattleSpecies;
 			}
@@ -393,7 +393,7 @@ export class TeamValidator {
 		}
 
 		if (ruleTable.has('obtainableformes')) {
-			const canMegaEvo = dex.gen <= 7 || ruleTable.has('standardnatdex');
+			const canMegaEvo = dex.gen <= 7 || ruleTable.has('+pokemontag:past');
 			if (item.megaEvolves === species.name) {
 				if (!item.megaStone) throw new Error(`Item ${item.name} has no base form for mega evolution`);
 				tierSpecies = dex.species.get(item.megaStone);
@@ -401,7 +401,8 @@ export class TeamValidator {
 				tierSpecies = dex.species.get('Groudon-Primal');
 			} else if (item.id === 'blueorb' && species.id === 'kyogre') {
 				tierSpecies = dex.species.get('Kyogre-Primal');
-			} else if (canMegaEvo && species.id === 'rayquaza' && set.moves.map(toID).includes('dragonascent' as ID)) {
+			} else if (canMegaEvo && species.id === 'rayquaza' && set.moves.map(toID).includes('dragonascent' as ID) &&
+					!ruleTable.has('megarayquazaclause')) {
 				tierSpecies = dex.species.get('Rayquaza-Mega');
 			} else if (item.id === 'rustedsword' && species.id === 'zacian') {
 				tierSpecies = dex.species.get('Zacian-Crowned');
@@ -889,7 +890,7 @@ export class TeamValidator {
 		}
 
 		const cantBreedNorEvolve = (species.eggGroups[0] === 'Undiscovered' && !species.prevo && !species.nfe);
-		const isLegendary = (cantBreedNorEvolve && ![
+		const isLegendary = (cantBreedNorEvolve && !species.tags.includes('Paradox') && ![
 			'Pikachu', 'Unown', 'Dracozolt', 'Arctozolt', 'Dracovish', 'Arctovish',
 		].includes(species.baseSpecies)) || [
 			'Manaphy', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala',
@@ -1360,11 +1361,6 @@ export class TeamValidator {
 			if (behemothMove >= 0) {
 				set.moves[behemothMove] = 'ironhead';
 			}
-		}
-
-		// Temporary backwards compatability until Pokemon HOME update
-		if (species.baseSpecies === 'Vivillon' && species.forme !== 'Fancy' && dex.gen === 9) {
-			set.species = 'Vivillon-Fancy';
 		}
 		return problems;
 	}

@@ -346,7 +346,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	magneton: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "NFE",
 	},
 	magnezone: {
@@ -1117,7 +1117,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["earthquake", "roost", "sacredfire", "substitute", "thunderwave"],
 	},
 	celebi: {
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "DOU",
 		randomBattleMoves: ["dazzlinggleam", "gigadrain", "leafstorm", "nastyplot", "psychic", "recover", "uturn"],
 	},
@@ -1691,7 +1691,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	jirachi: {
 		tier: "OU",
 		doublesTier: "DUU",
-		randomBattleMoves: ["healingwish", "stealthrock", "thunderwave", "uturn", "zenheadbutt"],
+		randomBattleMoves: ["calmmind", "dazzlinggleam", "flashcannon", "psychic", "shadowball", "thunderbolt", "uturn"],
 	},
 	deoxys: {
 		tier: "Uber",
@@ -1816,7 +1816,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	wormadamtrash: {
 		tier: "PU",
 		doublesTier: "DUU",
-		randomBattleMoves: ["bugbuzz", "flashcannon", "gigadrain", "quiverdance", "stealthrock"],
+		randomBattleMoves: ["bugbuzz", "flashcannon", "gigadrain", "quiverdance"],
 	},
 	mothim: {
 		tier: "PU",
@@ -1990,7 +1990,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["hydropump", "nastyplot", "thunderbolt", "trick", "voltswitch", "willowisp"],
 	},
 	rotomfrost: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DUU",
 		randomBattleMoves: ["blizzard", "nastyplot", "thunderbolt", "trick", "voltswitch", "willowisp"],
 	},
@@ -2010,7 +2010,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["psychic", "stealthrock", "thunderwave", "uturn", "yawn"],
 	},
 	mesprit: {
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "DUU",
 		randomBattleMoves: ["energyball", "healingwish", "icebeam", "nastyplot", "psychic", "thunderbolt", "uturn"],
 	},

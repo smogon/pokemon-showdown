@@ -8,6 +8,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		this.moveEnforcementCheckers = {
 			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
 			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire'),
+			Flying: (movePool, moves, abilities, types, counter) => !counter.get('Flying') && types.has('Ground'),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
 			Normal: (movePool, moves, abilities, types, counter) => !counter.get('Normal') && counter.setupType === 'Physical',
@@ -66,18 +67,16 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			return {cull: moves.has('bodyslam') || restTalk};
 		case 'hyperbeam':
 			return {cull: moves.has('rockslide')};
-		case 'quickattack':
-			return {cull: moves.has('rest')};
 		case 'rapidspin':
-			return {cull: !!teamDetails.rapidSpin || moves.has('sleeptalk')};
+			return {cull: !!teamDetails.rapidSpin || !!counter.setupType || moves.has('sleeptalk')};
 		case 'return':
 			return {cull: moves.has('bodyslam')};
 		case 'surf':
 			return {cull: moves.has('hydropump')};
 		case 'thunder':
 			return {cull: moves.has('thunderbolt')};
-		case 'gigadrain':
-			return {cull: moves.has('razorleaf') || moves.has('swordsdance') && movePool.includes('sludgebomb')};
+		case 'razorleaf':
+			return {cull: moves.has('swordsdance') && movePool.includes('sludgebomb')};
 		case 'icebeam':
 			return {cull: moves.has('dragonbreath')};
 		case 'seismictoss':
@@ -92,18 +91,16 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			return {cull: types.has('Ground') && movePool.includes('earthquake')};
 
 		// Status and illegal move rejections
-		case 'confuseray': case 'roar': case 'whirlwind':
+		case 'confuseray': case 'encore': case 'roar': case 'whirlwind':
 			return {cull: restTalk};
-		case 'encore':
-			return {cull: moves.has('bodyslam') || moves.has('surf') || restTalk};
 		case 'lovelykiss':
-			return {cull: ['healbell', 'moonlight', 'morningsun'].some(m => moves.has(m)) || restTalk};
+			return {cull: ['healbell', 'moonlight', 'morningsun', 'sleeptalk'].some(m => moves.has(m))};
 		case 'sleeptalk':
 			return {cull: moves.has('curse') && counter.get('stab') >= 2};
 		case 'softboiled':
 			return {cull: movePool.includes('swordsdance')};
 		case 'spikes':
-			return {cull: !!teamDetails.spikes || types.has('Ice') && moves.has('rapidspin')};
+			return {cull: !!teamDetails.spikes};
 		case 'substitute':
 			return {cull: moves.has('agility') || moves.has('rest')};
 		case 'synthesis':
@@ -123,7 +120,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		species: Species,
 	) {
 		// First, the high-priority items
-		if (species.name === 'Ditto') return this.sample(['Metal Powder', 'Quick Claw']);
+		if (species.name === 'Ditto') return 'Metal Powder';
 		if (species.name === 'Farfetch\u2019d') return 'Stick';
 		if (species.name === 'Marowak') return 'Thick Club';
 		if (species.name === 'Pikachu') return 'Light Ball';

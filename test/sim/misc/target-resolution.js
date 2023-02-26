@@ -313,7 +313,7 @@ describe('Target Resolution', function () {
 	});
 
 	it(`Ally Switch should cause single-target moves to fail if targeting an ally`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'purrloin', moves: ['thunder', 'ironhead']},
 			{species: 'wynaut', moves: ['allyswitch']},
 		], [

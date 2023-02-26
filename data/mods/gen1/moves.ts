@@ -64,6 +64,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-activate', pokemon, 'Bide');
 				return false;
 			},
+			onDisableMove(pokemon) {
+				if (!pokemon.hasMove('bide')) {
+					return;
+				}
+				for (const moveSlot of pokemon.moveSlots) {
+					if (moveSlot.id !== 'bide') {
+						pokemon.disableMove(moveSlot.id);
+					}
+				}
+			},
 		},
 		type: "???", // Will look as Normal but it's STAB-less
 	},
@@ -519,7 +529,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Mist');
 			},
-			onBoost(boost, target, source, effect) {
+			onTryBoost(boost, target, source, effect) {
 				if (effect.effectType === 'Move' && effect.category !== 'Status') return;
 				if (source && target !== source) {
 					let showMsg = false;
@@ -541,6 +551,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		ignoreImmunity: true,
 		basePower: 1,
+	},
+	petaldance: {
+		inherit: true,
+		onMoveFail() {},
 	},
 	poisonsting: {
 		inherit: true,
@@ -578,9 +592,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		condition: {
 			// Rage lock
-			duration: 255,
 			onStart(target, source, effect) {
 				this.effectState.move = 'rage';
+				this.effectState.accuracy = 255;
 			},
 			onLockMove: 'rage',
 			onHit(target, source, move) {
@@ -871,6 +885,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		ignoreImmunity: true,
 		basePower: 1,
+	},
+	thrash: {
+		inherit: true,
+		onMoveFail() {},
 	},
 	thunder: {
 		inherit: true,

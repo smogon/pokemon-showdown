@@ -24,6 +24,7 @@ import {State} from './state';
 import {BattleQueue, Action} from './battle-queue';
 import {BattleActions} from './battle-actions';
 import {Utils} from '../lib';
+import {extractChannelMessages} from '../server/sockets';
 declare const __version: any;
 
 interface BattleOptions {
@@ -39,6 +40,7 @@ interface BattleOptions {
 	p3?: PlayerOptions; // Player 3 data
 	p4?: PlayerOptions; // Player 4 data
 	debug?: boolean; // show debug mode option
+	forceRandomChance?: boolean; // force Battle#randomChance to always return true or false (used in some tests)
 	deserialized?: boolean;
 	strictChoices?: boolean; // whether invalid choices should throw
 }
@@ -77,6 +79,7 @@ export type RequestState = 'teampreview' | 'move' | 'switch' | '';
 export class Battle {
 	readonly id: ID;
 	readonly debugMode: boolean;
+	readonly forceRandomChance: boolean | null;
 	readonly deserialized: boolean;
 	readonly strictChoices: boolean;
 	readonly format: Format;
@@ -174,6 +177,9 @@ export class Battle {
 
 		this.id = '';
 		this.debugMode = format.debug || !!options.debug;
+		// Require debug mode and explicitly passed true/false
+		this.forceRandomChance = (this.debugMode && typeof options.forceRandomChance === 'boolean') ?
+			options.forceRandomChance : null;
 		this.deserialized = !!options.deserialized;
 		this.strictChoices = !!options.strictChoices;
 		this.formatData = {id: format.id};
@@ -307,6 +313,7 @@ export class Battle {
 	}
 
 	randomChance(numerator: number, denominator: number) {
+		if (this.forceRandomChance !== null) return this.forceRandomChance;
 		return this.prng.randomChance(numerator, denominator);
 	}
 
@@ -1791,7 +1798,9 @@ export class Battle {
 		if (!target?.hp) return 0;
 		if (!target.isActive) return false;
 		if (this.gen > 5 && !target.side.foePokemonLeft()) return false;
-		boost = this.runEvent('Boost', target, source, effect, {...boost});
+		boost = this.runEvent('ChangeBoost', target, source, effect, {...boost});
+		boost = target.getCappedBoost(boost);
+		boost = this.runEvent('TryBoost', target, source, effect, {...boost});
 		let success = null;
 		let boosted = isSecondary;
 		let boostName: BoostID;
@@ -1801,15 +1810,15 @@ export class Battle {
 			};
 			let boostBy = target.boostBy(currentBoost);
 			let msg = '-boost';
-			if (boost[boostName]! < 0) {
+			if (boost[boostName]! < 0 || target.boosts[boostName] === -6) {
 				msg = '-unboost';
 				boostBy = -boostBy;
 			}
 			if (boostBy) {
 				success = true;
 				switch (effect?.id) {
-				case 'bellydrum':
-					this.add('-setboost', target, 'atk', target.boosts['atk'], '[from] move: Belly Drum');
+				case 'bellydrum': case 'angerpoint':
+					this.add('-setboost', target, 'atk', target.boosts['atk'], '[from] ' + effect.fullname);
 					break;
 				case 'bellydrum2':
 					this.add(msg, target, boostName, boostBy, '[silent]');
@@ -2687,12 +2696,12 @@ export class Battle {
 						reviveSwitch = true;
 						continue;
 					}
-				  pokemon.switchFlag = false;
+					pokemon.switchFlag = false;
 				}
 				if (!reviveSwitch) switches[i] = false;
 			} else if (switches[i]) {
 				for (const pokemon of this.sides[i].active) {
-					if (pokemon.switchFlag && !pokemon.skipBeforeSwitchOutEventFlag) {
+					if (pokemon.switchFlag && pokemon.switchFlag !== 'revivalblessing' && !pokemon.skipBeforeSwitchOutEventFlag) {
 						this.runEvent('BeforeSwitchOut', pokemon);
 						pokemon.skipBeforeSwitchOutEventFlag = true;
 						this.faintMessages(); // Pokemon may have fainted in BeforeSwitchOut
@@ -2918,27 +2927,9 @@ export class Battle {
 		}
 	}
 
-	static extractUpdateForSide(data: string, side: SideID | 'spectator' | 'omniscient' = 'spectator') {
-		if (side === 'omniscient') {
-			// Grab all secret data
-			return data.replace(/\n\|split\|p[1234]\n([^\n]*)\n(?:[^\n]*)/g, '\n$1');
-		}
-
-		// Grab secret data side has access to
-		switch (side) {
-		case 'p1': data = data.replace(/\n\|split\|p1\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
-		case 'p2': data = data.replace(/\n\|split\|p2\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
-		case 'p3': data = data.replace(/\n\|split\|p3\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
-		case 'p4': data = data.replace(/\n\|split\|p4\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
-		}
-
-		// Discard remaining secret data
-		// Note: the last \n? is for secret data that are empty when shared
-		return data.replace(/\n\|split\|(?:[^\n]*)\n(?:[^\n]*)\n\n?/g, '\n');
-	}
-
 	getDebugLog() {
-		return Battle.extractUpdateForSide(this.log.join('\n'), 'omniscient');
+		const channelMessages = extractChannelMessages(this.log.join('\n'), [-1]);
+		return channelMessages[-1].join('\n');
 	}
 
 	debugError(activity: string) {

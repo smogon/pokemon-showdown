@@ -848,6 +848,7 @@ export const commands: Chat.ChatCommands = {
 	dt6: 'details',
 	dt7: 'details',
 	dt8: 'details',
+	dt9: 'details',
 	details(target) {
 		if (!target) return this.parse('/help details');
 		this.run('data');
@@ -2080,6 +2081,9 @@ export const commands: Chat.ChatCommands = {
 		if (showAll || ['privacy', 'private'].includes(target)) {
 			buffer.push(`<a href="https://pokemonshowdown.com/${this.tr`pages/privacy`}">${this.tr`Pokémon Showdown privacy policy`}</a>`);
 		}
+		if (showAll || ['lostpassword', 'password', 'lostpass'].includes(target)) {
+			buffer.push(`If you need your Pokémon Showdown password reset, you can fill out a <a href="https://www.smogon.com/forums/password-reset-form/">${this.tr`Password Reset Form`}</a>. You will need to make a Smogon account to be able to fill out the form, as password resets are processed through the Smogon forums.`);
+		}
 		if (!buffer.length && target) {
 			this.errorReply(`'${target}' is an invalid FAQ.`);
 			return this.parse(`/help faq`);
@@ -2107,7 +2111,7 @@ export const commands: Chat.ChatCommands = {
 		const ability = Dex.abilities.get(targets[0]);
 		const format = Dex.formats.get(targets[0]);
 		let atLeastOne = false;
-		let generation = (targets[1] || 'ss').trim().toLowerCase();
+		let generation = (targets[1] || 'sv').trim().toLowerCase();
 		let genNumber = 9;
 		const extraFormat = Dex.formats.get(targets[2]);
 
@@ -2530,6 +2534,9 @@ export const commands: Chat.ChatCommands = {
 				throw new Chat.ErrorMessage('Invalid link.');
 			}
 		}
+		if (comment && this.checkChat(comment) !== comment) {
+			return this.errorReply(`You cannot use filtered words in comments.`);
+		}
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
 		room.pendingApprovals.set(user.id, {
 			name: user.name,
@@ -2543,6 +2550,7 @@ export const commands: Chat.ChatCommands = {
 		room.sendRankedUsers(message, '%');
 		room.sendMods(
 			Utils.html`|uhtml|request-${user.id}|<div class="infobox">${user.name} wants to show <a href="${link}">${link}</a><br>` +
+			(comment ? Utils.html`Comment: ${comment}<br>` : '') +
 			`<button class="button" name="send" value="/approveshow ${user.id}">Approve</button><br>` +
 			`<button class="button" name="send" value="/denyshow ${user.id}">Deny</button></div>`
 		);
@@ -3003,7 +3011,7 @@ export const pages: Chat.PageTable = {
 		const basics = [
 			`<p>Pok&eacute;mon Showdown! supports custom rules in three ways:</p>`,
 			`<ul><li>Challenging another user, using the command <code>/challenge USERNAME, FORMAT @@@ RULES</code></li>`,
-			`<li>Tournaments, using the command <code>/tour rules RULES</code> (see the <a href="${tourHelp}">Tournament command help)</a></li>`,
+			`<li>Tournaments, using the command <code>/tour rules RULES</code> (see the <a href="${tourHelp}">Tournament command help</a>)</li>`,
 			`<li>Custom rules on your own server</li></ul>`,
 			`<h2><u>Bans</u></h2>`,
 			`<p>Bans are just a <code>-</code> followed by the thing you want to ban.</p>`,

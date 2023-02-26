@@ -313,7 +313,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		randomBattleMoves: ["blizzard", "surf"],
 		essentialMove: "amnesia",
 		exclusiveMoves: ["counter", "hypnosis", "hypnosis", "psychic"],
-		tier: "NU",
+		tier: "NUBL",
 	},
 	poliwrath: {
 		randomBattleMoves: ["blizzard", "bodyslam", "earthquake", "submission"],
@@ -575,9 +575,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	tangela: {
-		randomBattleMoves: ["bodyslam", "sleeppowder", "swordsdance"],
+		randomBattleMoves: ["bodyslam", "sleeppowder"],
 		essentialMove: "megadrain",
-		comboMoves: ["growth", "stunspore"],
+		exclusiveMoves: ["growth", "stunspore", "stunspore", "stunspore", "swordsdance", "swordsdance"],
 		tier: "UU",
 	},
 	kangaskhan: {

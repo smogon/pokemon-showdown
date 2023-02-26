@@ -636,7 +636,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 3.5,
 	},
 	optimistic: {
-		onBoost(boost, target, source, effect) {
+		onTryBoost(boost, target, source, effect) {
 			if (source && target !== source) return;
 			let showMsg = false;
 			let i: BoostID;
@@ -709,12 +709,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (move.id === 'attract' || move.id === 'captivate' || move.id === 'taunt') {
 				this.add('-immune', pokemon, '[from] ability: Oblivious');
 				return null;
-			}
-		},
-		onBoost(boost, target, source, effect) {
-			if (effect.id === 'intimidate') {
-				delete boost.atk;
-				this.add('-immune', target, '[from] ability: Oblivious');
 			}
 		},
 		name: "Oblivious",
