@@ -580,11 +580,11 @@ export class RandomGen8Teams {
 					n--;
 
 					// Manipulate rule table to prevent force-selected Pokemon from also being randomly selected
-					var ruleTableCopy = new RuleTable();
+					let ruleTableCopy = new RuleTable();
 					ruleTableCopy = Object.assign(ruleTableCopy, ruleTable);
-					ruleTable!.forEach((value, key) => { ruleTableCopy.set(key, value); } );
+					ruleTable!.forEach((value, key) => { ruleTableCopy.set(key, value); });
 					ruleTable = ruleTableCopy;
- 
+
 					const pokemonToken = `pokemon:${toID(validForceSelectForme)}`;
 					if (ruleTable.has(`+${pokemonToken}`)) {
 						ruleTable.delete(`+${pokemonToken}`);
