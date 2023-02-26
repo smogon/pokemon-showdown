@@ -263,6 +263,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Waterfowl Dance',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant', teraType: 'Fairy', shiny: true,
 	},
+	'Yellow Paint': {
+		species: 'Rotom-Frost', ability: 'Yellow Magic', item: 'Chilan Berry', gender: 'N',
+		moves: ['Thunderbolt', 'Blizzard', 'Ion Deluge'],
+		signatureMove: 'Whiteout',
+		evs: {hp: 252, spa: 252, spe: 4}, nature: 'Modest', teraType: 'Steel', shiny: 2,
+	},
 	Zalm: {
 		species: 'Weedle', ability: 'Water Bubble', item: 'Clear Amulet', gender: '',
 		moves: ['Surging Strikes', 'Attack Order', 'Dire Claw'],

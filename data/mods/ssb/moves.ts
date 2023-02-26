@@ -1342,6 +1342,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Poison",
 	},
 
+	// Yellow Paint
+	whiteout: {
+		accuracy: 85,
+		basePower: 70,
+		category: "Special",
+		shortDesc: "Sets up Snow. Target's ability becomes Normalize.",
+		name: "Whiteout",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, bullet: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Weather Ball", target);
+			this.add('-anim', source, "Snowscape", source);
+		},
+		onHit(target) {
+			this.field.setWeather('snow');
+			if (target.setAbility('normalize')) {
+				this.add('-ability', target, 'Normalize', '[from] move: Whiteout');
+			}
+			this.add(`c:|${getName('Yellow Paint')}|A blank canvas.`);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ice",
+	},
+
 	// Zalm
 	dudurafish: {
 		accuracy: true,

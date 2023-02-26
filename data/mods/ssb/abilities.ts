@@ -744,6 +744,43 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Yellow Paint
+	yellowmagic: {
+		shortDesc: "+25% HP, +1 SpA, +1 Spe, Charge, or Paralyzes attacker when hit by an Electric move; Electric immunity.",
+		name: "Yellow Magic",
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Electric') {
+				let didSomething = false;
+				switch (this.random(5)) {
+				case 0:
+					didSomething = !!this.heal(target.baseMaxhp / 4);
+					break;
+				case 1:
+					didSomething = !!this.boost({spa: 1}, target, target);
+					break;
+				case 2:
+					didSomething = !!this.boost({spe: 1}, target, target);
+					break;
+				case 3:
+					if (!target.volatiles['charge']) {
+						this.add('-ability', target, 'Yellow Magic');
+						target.addVolatile('charge', target);
+						didSomething = true;
+					}
+					break;
+				case 4:
+					didSomething = source.trySetStatus('par', target);
+					break;
+				}
+				if (!didSomething) {
+					this.add('-immune', target, '[from] ability: Yellow Magic');
+				}
+				return null;
+			}
+		},
+		isBreakable: true,
+	},
+
 	// Modified Bad Dreams to support havi's ability
 	baddreams: {
 		inherit: true,
