@@ -896,6 +896,40 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Electric",
 	},
 
+	// Peary
+	"1000gears": {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "1000 Gears",
+		shortDesc: "Heals 100% HP,cures status,+1 def/spd,+5 levels",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(pokemon) {
+			this.add('-anim', pokemon, 'Shift Gear', pokemon);
+			this.add('-anim', pokemon, 'Belly Drum', pokemon);
+		},
+		onHit(target, pokemon, move) {
+			this.heal(pokemon.maxhp, pokemon, pokemon, move);
+			pokemon.cureStatus();
+			this.boost({def: 1, spd: 1});
+			(pokemon as any).level += 5;
+			pokemon.details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
+				(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+			this.add('-anim', pokemon, 'Geomancy', pokemon);
+			this.add('replace', pokemon, pokemon.details);
+			this.add('-message', `${pokemon.name} gained 5 levels!`);
+		},
+		isZ: "pearyumz",
+		secondary: null,
+		target: "self",
+		type: "Steel",
+	},
+
 	// phoopes
 	gen1blizzard: {
 		accuracy: 90,

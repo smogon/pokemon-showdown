@@ -18,4 +18,13 @@ export const Items: {[k: string]: ModdedItemData} = {
 		itemUser: ["Mr. Mime"],
 		desc: "If held by a Mr. Mime with Fleur Cannon, it can use Bibbidi-Bobbidi-Rands.",
 	},
+	// Peary
+	pearyumz: {
+		name: "Pearyum Z",
+		onTakeItem: false,
+		zMove: "1000 Gears",
+		zMoveFrom: "Gear Grind",
+		itemUser: ["Klinklang"],
+		desc: "If held by a Klinklang with Gear Grind, it can use 1000 Gears.",
+	},
 };

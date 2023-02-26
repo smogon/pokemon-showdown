@@ -384,6 +384,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Mia')}|git checkout --detach HEAD && git commit -m "war crimes"`);
 		},
 	},
+	peary: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Peary')}|This bout to grind yalls gears`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Peary')}|Did my Part, no Man`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Peary')}|Blood all on my gears... damn`);
+		},
+	},
 	phoopes: {
 		noCopy: true,
 		onStart() {

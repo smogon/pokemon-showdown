@@ -169,6 +169,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Testing in Production',
 		evs: {atk: 252, spa: 4, spe: 252}, nature: 'Jolly',
 	},
+	Peary: {
+		species: 'Klinklang', ability: 'Levitate', item: 'Pearyum Z', gender: '',
+		moves: ['Lock On', 'Sheer Cold', 'Substitute'],
+		signatureMove: 'Gear Grind',
+		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly',
+	},
 	phoopes: {
 		species: 'Jynx', ability: 'I Did It Again', item: 'Red Card', gender: 'F',
 		moves: ['Lovely Kiss', 'Psychic', 'Toxic'],
