@@ -103,6 +103,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Wonder Wing',
 		evs: {hp: 252, atk: 252, spe: 4}, nature: 'Adamant', teraType: 'Flying',
 	},
+	'in the hills': {
+		species: 'Gligar', ability: 'Illiterit', item: 'Eviolite', gender: 'M',
+		moves: ['Roost', 'Knock Off', 'Tidy Up'],
+		signatureMove: '10-20-40',
+		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful', teraType: 'Water',
+	},
 	ironwater: {
 		species: 'Jirachi', ability: 'Good as Gold', item: 'Leftovers', gender: 'N',
 		moves: ['Swords Dance', 'Zen Headbutt', 'Hammer Arm'],

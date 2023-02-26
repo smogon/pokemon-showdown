@@ -363,6 +363,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 	},
 
+	// in the hills
+	"102040": {
+		accuracy: 100,
+		basePower: 10,
+		category: "Physical",
+		name: "10-20-40",
+		shortDesc: "Hits 3 times, 3rd hit always crits. sets Safeguard.",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		basePowerCallback(pokemon, target, move) {
+			return [10, 20, 40][move.hit - 1];
+		},
+		onTryHit(target, source, move) {
+			if (move.hit === 3) {
+				move.willCrit = true;
+			}
+		},
+		onPrepareHit() {
+			this.attrLastMove('[anim] Triple Kick');
+		},
+		self: {
+			sideCondition: 'safeguard',
+		},
+		secondary: null,
+		multihit: 3,
+		target: "normal",
+		type: "Ground",
+	},
+
 	// ironwater
 	jirachibanhammer: {
 		accuracy: 100,

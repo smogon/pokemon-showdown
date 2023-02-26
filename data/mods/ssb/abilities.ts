@@ -182,6 +182,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		isPermanent: true,
 	},
 
+	// in the hills
+	illiterit: {
+		shortDesc: "Immune to moves with 12 or more alphanumeric characters.",
+		name: "Illiterit",
+		onTryHit(target, source, move) {
+			if (target !== source && move.id.length >= 12) {
+				this.add('-immune', target, '[from] ability: Illiterit');
+				this.add(`c:|${getName('in the hills')}|Gee ${source.name}, maybe I should get a dictionary so I can understand what move you just used.`);
+				return null;
+			}
+		},
+		isBreakable: true,
+	},
+
 	// Irpachuza
 	mimeknowsbest: {
 		desc: "Uses a random screen/protect move on switch in.",

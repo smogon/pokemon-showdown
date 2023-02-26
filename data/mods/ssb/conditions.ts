@@ -172,6 +172,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('hsy')}|https://www.youtube.com/watch?v=g104OJIh9hs`);
 		},
 	},
+	inthehills: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('in the hills')}|in (the hills)`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('in the hills')}|i'll be out back`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('in the hills')}|im starting to feel kinda stupid can i please leave`);
+		},
+	},
 	ironwater: {
 		noCopy: true,
 		onStart() {
