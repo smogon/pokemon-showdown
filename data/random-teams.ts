@@ -679,22 +679,21 @@ export class RandomTeams {
 		// Enforce STAB
 		for (const type of types) {
 			// Check if a STAB move of that type should be required
-			if (runEnforcementChecker(type)) {
-				const stabMoves = [];
-				for (const moveid of movePool) {
-					const move = this.dex.moves.get(moveid);
-					const moveType = this.getMoveType(move, species, abilities, teraType);
-					if (type === moveType &&
-						(move.basePower > 30 || move.multihit || move.basePowerCallback) &&
-						(!this.noStab.includes(moveid) || abilities.has('Technician') && moveid === 'machpunch')) {
-						stabMoves.push(moveid);
-					}
+			const stabMoves = [];
+			for (const moveid of movePool) {
+				const move = this.dex.moves.get(moveid);
+				const moveType = this.getMoveType(move, species, abilities, teraType);
+				if (type === moveType &&
+					(move.basePower > 30 || move.multihit || move.basePowerCallback) &&
+					(!this.noStab.includes(moveid) || abilities.has('Technician') && moveid === 'machpunch')) {
+					stabMoves.push(moveid);
 				}
-				if (stabMoves.length) {
-					const moveid = this.sample(stabMoves);
-					counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
-						movePool, teraType, role);
-				}
+			}
+			while (runEnforcementChecker(type)) {
+				if (!stabMoves.length) break;
+				const moveid = this.sampleNoReplace(stabMoves);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
 			}
 		}
 
@@ -704,10 +703,9 @@ export class RandomTeams {
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
 				const moveType = this.getMoveType(move, species, abilities, teraType);
-				if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
-					if (types.includes(moveType)) {
-						stabMoves.push(moveid);
-					}
+				if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback) &&
+					types.includes(moveType)) {
+					stabMoves.push(moveid);
 				}
 			}
 			if (stabMoves.length) {
