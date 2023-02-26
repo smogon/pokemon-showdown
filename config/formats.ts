@@ -1416,6 +1416,10 @@ export const Formats: FormatList = [
 		onSwitchIn(pokemon) {
 			if (this.turn === 0) {
 				this.actions.terastallize(pokemon);
+				const teraType = pokemon.teraType;
+				for (const poke of pokemon.side.pokemon) {
+					poke.m.thirdType = teraType;
+				}
 			}
 			if (!pokemon.terastallized) {
 				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
@@ -1423,7 +1427,7 @@ export const Formats: FormatList = [
 		},
 		onModifyMove(move, pokemon, target) {
 			if (move.id === 'terablast') {
-				const teraType = pokemon.side.pokemon.find(p => p.terastallized)?.teraType;
+				const teraType = pokemon.m.thirdType;
 				if (teraType && pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) {
 					move.category = 'Physical';
 				}
@@ -1431,7 +1435,7 @@ export const Formats: FormatList = [
 		},
 		onModifyType(move, pokemon, target) {
 			if (move.id === 'terablast') {
-				const teraType = pokemon.side.pokemon.find(p => p.terastallized)?.teraType;
+				const teraType = pokemon.m.teraType;
 				if (teraType) {
 					move.type = teraType;
 				}
@@ -1442,9 +1446,9 @@ export const Formats: FormatList = [
 				if (!preterastallized && this.terastallized) return [this.terastallized];
 				const types = this.battle.runEvent('Type', this, null, null, this.types);
 				if (!excludeAdded && this.addedType) return types.concat(this.addedType);
-				const addTeraType = this.side.pokemon.find(poke => poke.terastallized)?.teraType;
+				const addTeraType = this.m.thirdType;
 				if (types.length) {
-					if (addTeraType) return [...types, addTeraType];
+					if (addTeraType) return Array.from(new Set([...types, addTeraType]));
 					return types;
 				}
 				return [this.battle.gen >= 5 ? 'Normal' : '???'];
