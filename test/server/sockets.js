@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('../assert');
-const {extractChannelMessages} = require('../../dist/server/sockets');
+const {extractChannelMessages} = require('../../dist/sim/battle');
 
 describe('ServerStream', function () {
 	const omniscientPlayer = -1;
