@@ -310,7 +310,6 @@ export class RandomGen8Teams {
 		// Force Select is functionally a ban on not including a specific Pokemon.
 		// It may be enforced in-battle even if included nested from another format rather than customRules.
 		if (this.format.ruleTable?.valueRules.get('forceselect')) return true;
-		
 		if (!this.format.customRules) return false;
 		for (const rule of this.format.customRules) {
 			for (const banlistOperator of ['-', '+', '*']) {
