@@ -41,6 +41,16 @@ export const Scripts: ModdedBattleScriptsData = {
 					.replace(/Poison/g, 'Dark');
 				this.modData('Items', id).onPlate = type;
 			}
+			if (item.onDrive) {
+				const type = item.onDrive
+					.replace(/(Ghost|Fairy)/g, 'Psychic')
+					.replace(/Bug/g, 'Grass')
+					.replace(/Ice/g, 'Water')
+					.replace(/(Rock|Ground)/g, 'Fighting')
+					.replace(/Flying/g, 'Normal')
+					.replace(/Poison/g, 'Dark');
+				this.modData('Items', id).onDrive = type;
+			}
 			if (item.onMemory) {
 				const type = item.onMemory
 					.replace(/(Ghost|Fairy)/g, 'Psychic')
