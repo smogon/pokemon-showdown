@@ -89,7 +89,7 @@ const NoStab = [
 	'accelerock', 'aquajet', 'beakblast', 'bounce', 'breakingswipe', 'chatter', 'chloroblast', 'clearsmog', 'dragontail', 'eruption',
 	'explosion', 'fakeout', 'flamecharge', 'flipturn', 'iceshard', 'icywind', 'incinerate', 'machpunch', 'meteorbeam',
 	'mortalspin', 'pluck', 'pursuit', 'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak',
-	'skydrop', 'snarl', 'steelbeam', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
+	'skydrop', 'snarl', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
 ];
 // Hazard-setting moves
 const Hazards = [
@@ -439,7 +439,6 @@ export class RandomTeams {
 		const statusMoves = this.dex.moves.all()
 			.filter(move => move.category === 'Status')
 			.map(move => move.id);
-		const magnezoneMoves = ['bodypress', 'mirrorcoat', 'steelbeam'];
 
 		// Team-based move culls
 		if (teamDetails.stealthRock) {
@@ -508,7 +507,7 @@ export class RandomTeams {
 			this.fastPop(movePool, movePool.indexOf('haze'));
 		}
 		// Magnezone
-		this.incompatibleMoves(moves, movePool, magnezoneMoves, magnezoneMoves);
+		this.incompatibleMoves(moves, movePool, 'bodypress', 'mirrorcoat');
 		// Amoonguss, though this can work well as a general rule later
 		this.incompatibleMoves(moves, movePool, 'toxic', 'clearsmog');
 	}
