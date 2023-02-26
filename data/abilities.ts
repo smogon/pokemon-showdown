@@ -4719,13 +4719,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Unaware",
 		onAnyModifyBoost(boosts, pokemon) {
 			const unawareUser = this.effectState.target;
-			if (unawareUser === pokemon) return;
+			const foulPlay = this.activeMove?.overrideOffensivePokemon === 'target';
+			if (unawareUser === pokemon && !foulPlay) return;
 			if (unawareUser === this.activePokemon && pokemon === this.activeTarget) {
 				boosts['def'] = 0;
 				boosts['spd'] = 0;
 				boosts['evasion'] = 0;
 			}
-			if (pokemon === this.activePokemon && unawareUser === this.activeTarget) {
+			if ((pokemon === this.activePokemon && unawareUser === this.activeTarget) || foulPlay) {
 				boosts['atk'] = 0;
 				boosts['def'] = 0;
 				boosts['spa'] = 0;
