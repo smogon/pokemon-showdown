@@ -961,7 +961,6 @@ export class RandomTeams {
 		if (species.id === 'vespiquen') return 'Pressure';
 		if (species.id === 'enamorus' && moves.has('calmmind')) return 'Cute Charm';
 		if (species.id === 'cetitan' && role === 'Wallbreaker') return 'Sheer Force';
-		if (abilities.has('Corrosion') && moves.has('toxic') && !moves.has('earthpower')) return 'Corrosion';
 		if (abilities.has('Cud Chew') && moves.has('substitute')) return 'Cud Chew';
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk'))) return 'Guts';
 		if (abilities.has('Harvest') && moves.has('substitute')) return 'Harvest';

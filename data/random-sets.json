@@ -40,7 +40,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Focus Blast", "Grass Knot", "Nasty Plot", "Psychic", "Psyshock", "Surf", "Thunderbolt", "Volt Switch"],
-                "teraTypes": ["Electric"]
+                "teraTypes": ["Water", "Grass", "Fighting"]
             }
         ]
     },
@@ -885,7 +885,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Body Slam", "Earthquake", "Fire Punch", "Giga Impact", "Hammer Arm", "Throat Chop"],
+                "movepool": ["Body Slam", "Earthquake", "Giga Impact", "Throat Chop"],
                 "teraTypes": ["Normal", "Ground"]
             }
         ]
@@ -1370,7 +1370,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Body Press", "Flash Cannon", "Mirror Coat", "Steel Beam", "Thunderbolt", "Volt Switch"],
+                "movepool": ["Body Press", "Flash Cannon", "Mirror Coat", "Thunderbolt", "Volt Switch"],
                 "teraTypes": ["Electric", "Water", "Flying"]
             },
             {
@@ -1799,7 +1799,7 @@
         "level": 70,
         "sets": [
             {
-                "role": "Setup Sweeper",
+                "role": "Bulky Support",
                 "movepool": ["Calm Mind", "Earth Power", "Judgment", "Recover", "Will-O-Wisp"],
                 "teraTypes": ["Ghost"]
             }
@@ -2459,7 +2459,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Defog", "Leaf Blade", "Sucker Punch", "Swords Dance", "Synthesis", "Triple Arrows", "U-turn"],
-                "teraTypes": ["Fighting", "Steel"]
+                "teraTypes": ["Steel"]
             }
         ]
     },
@@ -2643,7 +2643,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Close Combat", "Gunk Shot", "Knock Off", "Rock Slide", "U-turn"],
+                "movepool": ["Close Combat", "Earthquake", "Gunk Shot", "Knock Off", "Rock Slide", "U-turn"],
                 "teraTypes": ["Dark"]
             }
         ]
@@ -3739,7 +3739,7 @@
             {
                 "role": "Fast Support",
                 "movepool": ["Earth Power", "Energy Ball", "Mortal Spin", "Power Gem", "Sludge Wave", "Spikes", "Stealth Rock", "Toxic"],
-                "teraTypes": ["Water"]
+                "teraTypes": ["Ground"]
             }
         ]
     },
@@ -3929,7 +3929,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Close Combat", "Drain Punch", "Fake Out", "Heavy Slam", "Ice Punch", "Thunder Punch", "Volt Switch", "Wild Charge"],
-                "teraTypes": ["Electric", "Fighting"]
+                "teraTypes": ["Electric"]
             }
         ]
     },
