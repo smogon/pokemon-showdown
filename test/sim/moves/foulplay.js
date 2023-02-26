@@ -4,7 +4,7 @@ const assert = require('./../../assert');
 const common = require('./../../common');
 
 let battle;
-describe.only('Foul Play', function () {
+describe('Foul Play', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
