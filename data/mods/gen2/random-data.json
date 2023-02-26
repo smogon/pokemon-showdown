@@ -189,6 +189,7 @@
         "moves": ["icebeam", "rest", "sing", "sleeptalk", "surf", "thunder", "thunderbolt", "toxic"]
     },
     "ditto": {
+        "level": 83,
         "moves": ["transform"]
     },
     "vaporeon": {
@@ -309,9 +310,11 @@
         "moves": ["meanlook", "painsplit", "perishsong", "psychic", "shadowball", "thief", "thunderbolt"]
     },
     "unown": {
+        "level": 87,
         "moves": ["hiddenpowerpsychic"]
     },
     "wobbuffet": {
+        "level": 83,
         "moves": ["counter", "mimic", "mirrorcoat", "safeguard"]
     },
     "girafarig": {

@@ -292,10 +292,8 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			OU: 65,
 			Uber: 61,
 		};
-		const customScale: {[k: string]: number} = {
-			Ditto: 83, Unown: 87, Wobbuffet: 83,
-		};
-		const level = this.adjustLevel || customScale[species.name] || levelScale[species.tier] || 80;
+
+		const level = this.adjustLevel || data.level || levelScale[species.tier] || 80;
 
 		return {
 			name: species.name,

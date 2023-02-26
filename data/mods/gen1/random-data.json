@@ -523,6 +523,7 @@
         "exclusiveMoves": ["thunderbolt", "thunderbolt"]
     },
     "ditto": {
+        "level": 100,
         "moves": ["transform"]
     },
     "eevee": {
@@ -596,6 +597,7 @@
         "essentialMove": "blizzard"
     },
     "mewtwo": {
+        "level": 62,
         "moves": ["blizzard", "recover", "thunderbolt"],
         "essentialMove": "amnesia",
         "exclusiveMoves": ["psychic", "psychic"],
