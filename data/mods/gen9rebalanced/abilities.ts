@@ -1839,8 +1839,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 246,
 	},
 	illuminate: {
+		onSourceModifyAccuracyPriority: -1,
+		onSourceModifyAccuracy(accuracy) {
+			if (typeof accuracy !== 'number') return;
+			this.debug('compoundeyes - enhancing accuracy');
+			return this.chainModify([5325, 4096]);
+		},
 		name: "Illuminate",
-		rating: 0,
+		rating: 3,
 		num: 35,
 	},
 	illusion: {
@@ -4160,7 +4166,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	steamengine: {
 		onTryHit(target, source, move) {
-			if (move.type === 'Water') {
+			if (move.type === 'Water' || move.type === 'Fire') {
 				this.add('-immune', target, '[from] ability: Steam Engine');
 				this.boost({spe: 6});
 				return null;
@@ -4528,9 +4534,16 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 164,
 	},
 	thermalexchange: {
-		onDamagingHit(damage, target, source, move) {
-			if (move.type === 'Fire') {
-				this.boost({atk: 1});
+		// onDamagingHit(damage, target, source, move) {
+		// 	if (move.type === 'Fire') {
+		// 		this.boost({atk: 1});
+		// 	}
+		// },
+		onTryHit(this, source, target, move) {
+			if (move.type === 'Fire' && move.category !== 'Status') {
+				this.boost({atk: 1}, source);
+				this.add('-immune', target, '[from] ability: Thermal Exchange');
+				return null;
 			}
 		},
 		onUpdate(pokemon) {

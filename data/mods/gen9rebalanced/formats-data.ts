@@ -803,7 +803,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	electrodehisui: {
 //		isNonstandard: "Unobtainable",
-		tier: "RU",
+		tier: "RUBL",
 	},
 	exeggcute: {
 		isNonstandard: "Past",
@@ -1576,7 +1576,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "RU",
 	},
 	heracross: {
-		tier: "RU",
+		tier: "RUBL",
 		doublesTier: "DUU",
 		natDexTier: "RU",
 	},
@@ -1590,7 +1590,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	sneaselhisui: {
 //		isNonstandard: "Unobtainable",
-		tier: "RU",
+		tier: "RUBL",
 	},
 	weavile: {
 		tier: "UU",
@@ -1944,7 +1944,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	gardevoir: {
-		tier: "RU",
+		tier: "RUBL",
 		doublesTier: "DUU",
 		natDexTier: "RU",
 	},
@@ -3379,7 +3379,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	basculegionf: {
 //		isNonstandard: "Unobtainable",
-		tier: "OU",
+		tier: "UU",
 	},
 	sandile: {
 		tier: "LC",
@@ -3967,7 +3967,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	delphox: {
 //		isNonstandard: "Unobtainable",
-		tier: "RU",
+		tier: "RUBL",
 		natDexTier: "RU",
 	},
 	froakie: {

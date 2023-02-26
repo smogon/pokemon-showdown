@@ -30871,6 +30871,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	wyrdeer: {
 		learnset: {
+			swordsdance: ["9M"],
 			healbell: ["9M"],
 			agility: ["9M"],
 			astonish: ["9L7"],
@@ -50138,6 +50139,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	abomasnow: {
 		learnset: {
+			mountaingale: ["9M"],
 			attract: ["8M", "7M", "6M", "5M", "4M"],
 			auroraveil: ["9L1", "8L1"],
 			avalanche: ["9M", "8M", "4M"],
@@ -61395,6 +61397,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	beartic: {
 		learnset: {
+			mountaingale: ["9M"],
 			icespinner: ["9M", ],
 			aerialace: ["9M", "7M", "6M", "5M"],
 			aquajet: ["9L1", "8L1", "7L1", "6L1", "5L1"],
@@ -64658,6 +64661,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	meloetta: {
 		learnset: {
+			nastyplot: ["9M"],
+			flamethrower: ["9M"],
 			healbell: ["9M"],
 			acrobatics: ["9M", "9L26", "7M", "7L26", "6M", "6L26", "5M", "5L26"],
 			allyswitch: ["7T"],
@@ -70259,6 +70264,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	avalugg: {
 		learnset: {
+			mountaingale: ["9M"],
 			afteryou: ["7T", "6T"],
 			attract: ["8M", "7M", "6M"],
 			avalanche: ["9M", "9L18", "8M", "8L18", "7L42", "6L42"],
@@ -70337,6 +70343,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	avalugghisui: {
 		learnset: {
+			trickroom: ["9M"],
 			diamondstorm: ["9M"],
 			revivalblessing: ["9M"],
 			iceshard: ["9M"],
@@ -80581,7 +80588,9 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		learnset: {
 			machpunch: ["9M"],
 			zingzap: ["9M"],
-			barbbarrage: ["9M"],
+			// barbbarrage: ["9M"],
+			poisonfang: ["9M"],
+			direclaw: ["9M"],
 			quickattack: ["9M"],
 			superpower: ["9M"],
 			shiftgear: ["9M"],
@@ -83355,6 +83364,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	glastrier: {
 		learnset: {
+			highhorsepower: ["9M"],
+			mountaingale: ["9M"],
 			iceshard: ["9M"],
 			assurance: ["8M"],
 			avalanche: ["9M", "9L12", "8M", "8L12"],
@@ -83371,7 +83382,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			gigaimpact: ["9M", "8M"],
 			hail: ["8M"],
 			heavyslam: ["9M", "8M"],
-			highhorsepower: ["8M"],
+			// highhorsepower: ["8M"],
 			hyperbeam: ["9M", "8M"],
 			icebeam: ["9M", "8M"],
 			iciclecrash: ["9L36", "8L36", "8S0"],
@@ -85995,6 +86006,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	cetitan: {
 		learnset: {
+			mountaingale: ["9M"],
 			swordsdance: ["9M"],
 			amnesia: ["9M", "9L40"],
 			avalanche: ["9M", "9L27"],
@@ -87237,6 +87249,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	mabosstiff: {
 		learnset: {
+			bulkup: ["9M"],
 			partingshot: ["9M"],
 			bite: ["9L14"],
 			bodyslam: ["9M"],
