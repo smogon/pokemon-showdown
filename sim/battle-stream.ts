@@ -11,8 +11,7 @@
 
 import {Streams, Utils} from '../lib';
 import {Teams} from './teams';
-import {Battle} from './battle';
-import {extractChannelMessages} from '../server/sockets';
+import {Battle, extractChannelMessages} from './battle';
 
 /**
  * Like string.split(delimiter), but only recognizes the first `limit`

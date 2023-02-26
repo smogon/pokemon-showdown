@@ -17,39 +17,9 @@ import * as https from 'https';
 import * as path from 'path';
 import {crashlogger, ProcessManager, Streams, Repl} from '../lib';
 import {IPTools} from './ip-tools';
+import {ChannelID, extractChannelMessages} from '../sim/battle';
 
 type StreamWorker = ProcessManager.StreamWorker;
-type ChannelID = 0 | 1 | 2 | 3 | 4;
-
-export type ChannelMessages<T extends ChannelID | -1> = Record<T, string[]>;
-
-const splitRegex = /^\|split\|p([1234])\n(.*)\n(.*)|.+/gm;
-
-export function extractChannelMessages<T extends ChannelID | -1>(message: string, channelIds: T[]): ChannelMessages<T> {
-	const channelIdSet = new Set(channelIds);
-	const channelMessages: ChannelMessages<ChannelID | -1> = {
-		[-1]: [],
-		0: [],
-		1: [],
-		2: [],
-		3: [],
-		4: [],
-	};
-
-	for (const [lineMatch, playerMatch, secretMessage, sharedMessage] of message.matchAll(splitRegex)) {
-		const player = playerMatch ? parseInt(playerMatch) : 0;
-		for (const channelId of channelIdSet) {
-			let line = lineMatch;
-			if (player) {
-				line = channelId === -1 || player === channelId ? secretMessage : sharedMessage;
-				if (!line) continue;
-			}
-			channelMessages[channelId].push(line);
-		}
-	}
-
-	return channelMessages;
-}
 
 export const Sockets = new class {
 	async onSpawn(worker: StreamWorker) {
