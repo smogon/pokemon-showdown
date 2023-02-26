@@ -1101,7 +1101,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			target.addVolatile('charge');
 		},
 		name: "Electromorphosis",
-		rating: 2,
+		rating: 2.5,
 		num: 280,
 	},
 	emergencyexit: {
@@ -4321,7 +4321,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Supreme Overlord",
-		rating: 3.5,
+		rating: 4,
 		num: 293,
 	},
 	surgesurfer: {
