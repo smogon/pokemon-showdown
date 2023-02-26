@@ -3,7 +3,7 @@
  */
 'use strict';
 
-const {testTeam} = require('./tools');
+const {testTeam, testAlwaysHasMove} = require('./tools');
 const assert = require('../assert');
 const Teams = require('./../../dist/sim/teams').Teams;
 const Dex = require('./../../dist/sim/dex').Dex;
@@ -59,6 +59,10 @@ describe('[Gen 9] Random Battle', () => {
 				assert(!moves.size);
 			}
 		}
+	});
+
+	it("should always give Iron Bundle Freeze-Dry", () => {
+		testAlwaysHasMove('ironbundle', options, 'freezedry');
 	});
 });
 
