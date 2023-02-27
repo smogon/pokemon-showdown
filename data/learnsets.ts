@@ -88523,7 +88523,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			waterpulse: ["9M", "9L14"],
 		},
 		eventData: [
-			{generation: 9, level: 75, perfectIVs: 3, moves: ["hydrosteam", "dragonpulse", "nobleroar", "flamethrower"], pokeball: "pokeball"},
+			{generation: 9, level: 75, perfectIVs: 3, moves: ["hydrosteam", "dragonpulse", "nobleroar", "flamethrower"]},
 		],
 		eventOnly: true,
 	},
@@ -88583,7 +88583,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			xscissor: ["9M"],
 		},
 		eventData: [
-			{generation: 9, level: 75, perfectIVs: 3, moves: ["psyblade", "leafblade", "megahorn", "swordsdance"], pokeball: "pokeball"},
+			{generation: 9, level: 75, perfectIVs: 3, moves: ["psyblade", "leafblade", "megahorn", "swordsdance"]},
 		],
 		eventOnly: true,
 	},
