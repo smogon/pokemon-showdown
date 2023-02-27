@@ -2,7 +2,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	/////////// dnu cap
 	ironspines: { "tier": "Illegal", "doublesTier": "Illegal", "natDexTier": "Illegal"},
 	infernotail: { "tier": "Illegal", "doublesTier": "Illegal", "natDexTier": "Illegal"},
-	Iron Strikes: { "tier": "Illegal", "doublesTier": "Illegal", "natDexTier": "Illegal"},
+	ironstrikes: { "tier": "Illegal", "doublesTier": "Illegal", "natDexTier": "Illegal"},
 	/////////// end dnu cap
 	bulbasaur: {
 		isNonstandard: "Past",

@@ -18051,7 +18051,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		tags: ["Sub-Legendary", "Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
-	Iron Strikes: {
+	ironstrikes: {
 		num: 7953,
 		name: "Iron Strikes",
 		types: ["Fighting", "Grass"],
