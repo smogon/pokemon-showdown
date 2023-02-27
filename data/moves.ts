@@ -1412,7 +1412,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 75,
 		category: "Special",
-		isNonstandard: "Unobtainable",
 		name: "Bitter Malice",
 		pp: 10,
 		priority: 0,
