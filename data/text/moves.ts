@@ -3084,7 +3084,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	hydrosteam: {
 		name: "Hydro Steam",
 		desc: "This attack has its power multiplied by 1.5 while the weather is Sunny Day. Damage reduction for water type moves during Sunny Day is ignored.",
-		shortDesc: "x1.5 power in sunlight."
+		shortDesc: "x1.5 power in sunlight.",
 	},
 	hydrovortex: {
 		name: "Hydro Vortex",
@@ -4773,7 +4773,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	psyblade: {
 		name: "Psyblade",
 		desc: "This attack has its power multiplied by 1.5 while the user is affected by Electric Terrain.",
-		shortDesc: "x1.5 power in Electric Terain."
+		shortDesc: "x1.5 power in Electric Terain.",
 	},
 	psychup: {
 		name: "Psych Up",
