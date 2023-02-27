@@ -218,7 +218,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		getMoves(lockedMove, restrictData) {
 			if (lockedMove) {
-				lockedMove = toID(lockedMove);
+				lockedMove = this.battle.toID(lockedMove);
 				this.trapped = true;
 				if (lockedMove === 'recharge') {
 					return [{
