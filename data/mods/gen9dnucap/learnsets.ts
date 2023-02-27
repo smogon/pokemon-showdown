@@ -88324,7 +88324,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			confide: ["9M"],
 		}
 	},
-	ironstrikes: {
+	Iron Strikes: {
 		learnset: {
 			closecombat: ["9M"],
 			submission: ["9M"],

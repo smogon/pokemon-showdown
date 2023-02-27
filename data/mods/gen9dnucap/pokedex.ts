@@ -18051,9 +18051,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		tags: ["Sub-Legendary", "Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
-	ironstrikes: {
+	Iron Strikes: {
 		num: 7953,
-		name: "IronStrikes",
+		name: "Iron Strikes",
 		types: ["Fighting", "Grass"],
 		gender: "N",
 		baseStats: {hp: 52, atk: 48, def: 44, spa: 30, spd: 24, spe: 42},
@@ -18063,8 +18063,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "White",
 		tags: ["Sub-Legendary", "Paradox"],
 		eggGroups: ["Undiscovered"],
-		cosmeticFormes: ["IronStrikes-Red", "IronStrikes-Blue"],
-		formeOrder: ["IronStrikes", "IronStrikes-Red", "IronStrikes-Blue"],
+		cosmeticFormes: ["Iron Strikes-Red", "Iron Strikes-Blue"],
+		formeOrder: ["Iron Strikes", "Iron Strikes-Red", "Iron Strikes-Blue"],
 	},
 	//////////////////////////////////////
 	// END DNU CAP
