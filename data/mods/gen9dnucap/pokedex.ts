@@ -18063,7 +18063,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "White",
 		tags: ["Sub-Legendary", "Paradox"],
 		eggGroups: ["Undiscovered"],
-		cosmeticFormes: ["Iron Strikes-Red", "Iron Strikes-Blue"]
+		cosmeticFormes: ["Iron Strikes-Red", "Iron Strikes-Blue"],
+		formeOrder: ["Iron Strikes", "Iron Strikes-Red", "Iron Strikes-Blue"],
 	},
 	//////////////////////////////////////
 	// END DNU CAP
