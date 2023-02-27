@@ -31,10 +31,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Torrent", H: "Shell Armor"},
 	},
-	zoroarkhisui: {
-		inherit: true,
-		baseStats: {hp: 55, atk: 100, def: 60, spa: 125, spd: 60, spe: 110},
-	},
 	braviaryhisui: {
 		inherit: true,
 		abilities: {0: "Keen Eye", 1: "Sheer Force", H: "Defiant"},
