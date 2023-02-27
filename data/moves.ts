@@ -14292,7 +14292,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		target: "normal",
-		type: "Water",
+		type: "Psychic",
 	},
 	psychup: {
 		num: 244,
