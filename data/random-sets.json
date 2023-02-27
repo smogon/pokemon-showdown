@@ -3897,6 +3897,16 @@
             }
         ]
     },
+    "walkingwake": {
+        "level": 82,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Draco Meteor", "Flamethrower", "Hurricane", "Hydro Pump"],
+                "teraTypes": ["Fire"]
+            }
+        ]
+    },
     "irontreads": {
         "level": 78,
         "sets": [
@@ -3979,6 +3989,21 @@
                 "role": "Fast Attacker",
                 "movepool": ["Calm Mind", "Close Combat", "Moonblast", "Psychic"],
                 "teraTypes": ["Fighting", "Fairy"]
+            }
+        ]
+    },
+    "ironleaves": {
+        "level": 82,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Close Combat", "Leaf Blade", "Psyblade", "Swords Dance", "Wild Charge"],
+                "teraTypes": ["Fighting"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Close Combat", "Leaf Blade", "Megahorn", "Psyblade", "Wild Charge"],
+                "teraTypes": ["Fighting"]
             }
         ]
     },
