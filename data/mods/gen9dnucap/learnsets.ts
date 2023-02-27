@@ -88324,6 +88324,32 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			confide: ["9M"],
 		}
 	},
+	ironstrikes: {
+		learnset: {
+			closecombat: ["9M"],
+			submission: ["9M"],
+			lowkick: ["9M"],
+			pound: ["9M"],
+			protect: ["9M"],
+			rest: ["9M"],
+			sleeptalk: ["9M"],
+			agility: ["9M"],
+			workup: ["9M"],
+			rockthrow: ["9M"],
+			woodhammer: ["9M"],
+			swagger: ["9M"],
+			foulplay: ["9M"],
+			taunt: ["9M"],
+			trailblaze: ["9M"],
+			pyroball: ["9M"],
+			facade: ["9M"],
+			doubleteam: ["9M"],
+			round: ["9M"],
+			confide: ["9M"],
+			branchpoke: ["9M"],
+			courtchange: ["9M"],
+		}
+	},
 	///////////// end dnu cap
 	tomohawk: {
 		learnset: {

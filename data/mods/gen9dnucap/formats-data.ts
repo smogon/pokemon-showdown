@@ -1290,6 +1290,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 	/////////// dnu cap
 	ironspines: { "tier": "Do Not Use", "doublesTier": "DUU", "natDexTier": "UU"},
 	infernotail: { "tier": "Do Not Use", "doublesTier": "DUU", "natDexTier": "UU"},
+	ironstrikes: { "tier": "Do Not Use", "doublesTier": "DUU", "natDexTier": "UU"},
 	/////////// end dnu cap
 	missingno: { "isNonstandard": "Custom", "tier": "Illegal" },
 	syclar: { "isNonstandard": "CAP", "tier": "CAP LC" },
