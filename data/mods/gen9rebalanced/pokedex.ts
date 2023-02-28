@@ -18030,6 +18030,32 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	//////////////////////////////////////
 	// END DNU CAP
 	//////////////////////////////////////
+	walkingwake: {
+		num: 1009,
+		name: "Walking Wake",
+		types: ["Water", "Dragon"],
+		gender: "N",
+		baseStats: {hp: 99, atk: 83, def: 91, spa: 125, spd: 83, spe: 109},
+		abilities: {0: "Protosynthesis"},
+		heightm: 3.5,
+		weightkg: 280,
+		color: "Blue",
+		tags: ["Paradox"],
+		eggGroups: ["Undiscovered"],
+	},
+	ironleaves: {
+		num: 1010,
+		name: "Iron Leaves",
+		types: ["Grass", "Psychic"],
+		gender: "N",
+		baseStats: {hp: 90, atk: 130, def: 88, spa: 70, spd: 108, spe: 104},
+		abilities: {0: "Quark Drive"},
+		heightm: 1.5,
+		weightkg: 125,
+		color: "Green",
+		tags: ["Paradox"],
+		eggGroups: ["Undiscovered"],
+	},
 	missingno: {
 		num: 0,
 		name: "MissingNo.",
