@@ -197,6 +197,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		isPermanent: true,
 	},
 
+	// HoeenHero
+	misspelled: {
+		shortDesc: "SpA 1.5x, Accuracy 0.8x, Never misses, only misspells moves.",
+		name: "Misspelled",
+		onModifySpAPriority: 5,
+		onModifySpA(spa) {
+			return this.modify(spa, 1.5);
+		},
+		onSourceModifyAccuracyPriority: -1,
+		onSourceModifyAccuracy(accuracy, target, source, move) {
+			if (move.category === 'Special' && typeof accuracy === 'number') {
+				return this.chainModify([3277, 4096]);
+			}
+		},
+		// Misspelling implemented in scripts.ts#hitStepAccuracy
+	},
+
 	// in the hills
 	illiterit: {
 		shortDesc: "Immune to moves with 12 or more alphanumeric characters.",

@@ -174,6 +174,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('havi')}|the nightmare swirls and churns unending n_n`);
 		},
 	},
+	hoeenhero: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('HoeenHero')}|Ok what did Hippopotas break now?`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('HoeenHero')}|TODO think of a switch out message later.`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('HoeenHero')}|I should of reprogrammed the RNG to be in my favor too...`);
+		},
+	},
 	hsy: {
 		noCopy: true,
 		onStart() {
@@ -712,6 +724,22 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFieldEnd() {
 			this.add('-weather', 'none');
+		},
+	},
+
+	// HoeenHero
+	virus: {
+		name: 'Virus',
+		onStart(target, source, sourceEffect) {
+			this.effectState.stage = 0;
+			this.add('-start', target, 'virus');
+		},
+		onResidualOrder: 9,
+		onResidual(pokemon) {
+			if (this.effectState.stage < 15) {
+				this.effectState.stage++;
+			}
+			this.damage(this.clampIntRange(pokemon.baseMaxhp / 16, 1) * this.effectState.stage);
 		},
 	},
 

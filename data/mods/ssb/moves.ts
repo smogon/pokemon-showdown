@@ -338,6 +338,52 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ghost",
 	},
 
+	// HoeenHero
+	reprogram: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Rain or Lock-On or typeless Toxic.",
+		name: "Re-Program",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Calm Mind', source);
+			this.add('-anim', source, 'Geomancy', target);
+		},
+		onModifyMove(move, pokemon, target) {
+			const BLOCKING_WEATHERS = ['raindance', 'desolateland', 'primordialsea', 'deltastream'];
+			if (!BLOCKING_WEATHERS.includes(this.field.getWeather().id) && this.randomChance(1, 3)) {
+				move.target = 'self';
+			}
+		},
+		onHit(target, source, move) {
+			this.add('-message', 'HoeenHero reprograms the battle to be more beneficial to them!');
+			if (move.target === 'self') {
+				// Set weather to rain
+				this.add('-message', 'HoeenHero made the environment easier to work with!');
+				this.field.setWeather('raindance', source, move);
+			} else {
+				if (target.getVolatile('virus') || this.randomChance(1, 2)) {
+					// Lock on to target
+					this.add('-message', 'HoeenHero double checked their work and fixed any errors!');
+					this.add('-activate', source, 'move: Lock-On', '[of] ' + target);
+					source.addVolatile('lockon', target);
+				} else {
+					// Deploy virus
+					this.add('-message', `HoeenHero launched a virus at ${target.name} to weaken them!`);
+					target.trySetStatus('virus', source, move);
+				}
+			}
+		},
+		target: "normal",
+		type: "Psychic",
+	},
+
 	// hsy
 	wonderwing: {
 		accuracy: 90,

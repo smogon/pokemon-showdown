@@ -103,6 +103,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Augur of Ebrietas',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', teraType: 'Ghost',
 	},
+	HoeenHero: {
+		species: 'Ludicolo', ability: 'Misspelled', item: 'Life Orb', gender: 'M',
+		moves: [['Hydro Pump', 'Surf'], 'Giga Drain', 'Ice Beam'],
+		signatureMove: 'Re-Program',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', teraType: 'Water',
+	},
 	hsy: {
 		species: 'Ursaluna', ability: 'Hustle', item: 'Blunder Policy', gender: 'M',
 		moves: ['Drill Peck', 'Egg Bomb', 'Metronome'],
@@ -310,7 +316,15 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const monotype = ruleTable.has('sametypeclause') ? this.sample([...this.dex.types.names()]) : false;
 
-		let pool = debug.length ? debug : Object.keys(ssbSets);
+		let pool = Object.keys(ssbSets);
+		if (debug.length) {
+			while (debug.length < 6) {
+				const staff = this.sampleNoReplace(pool);
+				if (debug.includes(staff)) continue;
+				debug.push(staff);
+			}
+			pool = debug;
+		}
 		if (monotype && !debug.length) {
 			pool = pool.filter(x => this.dex.species.get(ssbSets[x].species).types.includes(monotype));
 		}
