@@ -88317,7 +88317,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
             shoreup: ["9M"],
             refresh: ["9M"],
             haze: ["9M"],
-            stealthrocks: ["9M"],
+            stealthrock: ["9M"],
             healbell: ["9M"],
             mistyterrain: ["9M"],
             wish: ["9M"],
