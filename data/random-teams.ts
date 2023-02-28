@@ -277,6 +277,7 @@ export class RandomTeams {
 	 * Doesn't count bans nested inside other formats/rules.
 	 */
 	private hasDirectCustomBanlistChanges() {
+		if (this.format.banlist || this.format.restricted || this.format.unbanlist) return true;
 		if (!this.format.customRules) return false;
 		for (const rule of this.format.customRules) {
 			for (const banlistOperator of ['-', '+', '*']) {
