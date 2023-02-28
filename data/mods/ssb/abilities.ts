@@ -88,7 +88,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Blitz
 	blitzofruin: {
-		shortDesc: "Active Pokemon without this Ability have their Speed multiplied by 0.75.",
+		shortDesc: "Active Pokemon without this Ability have their Speed multiplied by 0.75. Also Dazzling.",
 		name: "Blitz of Ruin",
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Blitz of Ruin');
@@ -99,6 +99,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(0.75);
 			}
 		},
+		onFoeTryMove(target, source, move) {
+			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
+			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
+				return;
+			}
+
+			const dazzlingHolder = this.effectState.target;
+			if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
+				this.attrLastMove('[still]');
+				this.add('cant', dazzlingHolder, 'ability: Blitz of Ruin', move, '[of] ' + target);
+				return false;
+			}
+		},
+		isBreakable: true,
 	},
 
 	// BreadLoeuf
