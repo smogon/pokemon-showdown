@@ -1193,7 +1193,7 @@ export class GlobalRoomState {
 				title: 'Lobby',
 				auth: {},
 				creationTime: Date.now(),
-				autojoin: true,
+				autojoin: false,
 				section: 'official',
 			}, {
 				title: 'Staff',
