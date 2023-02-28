@@ -9218,7 +9218,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Beautiful",
 	},
 	hydrosteam: {
-		num: 875,
+		num: 876,
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
@@ -14276,7 +14276,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Beautiful",
 	},
 	psyblade: {
-		num: 876,
+		num: 875,
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
