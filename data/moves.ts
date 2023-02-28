@@ -14282,7 +14282,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Psyblade",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
 		secondary: null,
 		onBasePower(basePower, source) {
 			if (this.field.getPseudoWeather('electricterrain') && source.isGrounded()) {
