@@ -305,6 +305,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 		onEnd(target) {
 			target.removeVolatile(this.effectState.move);
+			pokemon.moveThisTurnResult = null;
 		},
 		onLockMove() {
 			return this.effectState.move;
