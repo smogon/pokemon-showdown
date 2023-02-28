@@ -1787,7 +1787,7 @@ export const Formats: FormatList = [
 			"Beads of Ruin", "Stone Plate", "Zekrom", "Bolt Strike", "Beast Boost", "Draco Plate", "Reshiram", "Boomburst",
 			"Desolate Land", "King's Rock", "Giratina-Origin", "Bouncy Bubble", "Primordial Sea", "Liechi Berry", "Giratina",
 			"Brave Bird", "Drought", "Zap Plate", "Palkia-Origin", "Bug Buzz", "Drizzle", "Lum Berry", "Palkia", "Bullet Punch",
-			"Electric Surge", "Iron Plate", "Dialga-Origin", "Buzzy Buzz", "Psychic Surge", "itemmetronome", "Dialga",
+			"Electric Surge", "Iron Plate", "Dialga-Origin", "Buzzy Buzz", "Psychic Surge", "item: Metronome", "Dialga",
 			"Calm Mind", "Grassy Surge", "Meadow Plate", "Rayquaza", "Catastropika", "Muscle Band", "Ho-Oh", "Ceaseless Edge",
 			"Filter", "Splash Plate", "Lugia", "Chatter", "Solid Rock", "Icicle Plate", "Mewtwo", "Chilly Reception",
 			"Good as Gold", "Petaya Berry", "Miraidon", "Circle Throw", "Hadron Engine", "Toxic Plate", "Koraidon",
