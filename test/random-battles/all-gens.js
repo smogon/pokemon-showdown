@@ -11,14 +11,15 @@ const {default: Dex} = require('../../dist/sim/dex');
 
 describe('value rule support', () => {
 	it('should generate teams of the proper length for the format (i.e. support Max Team Size)', () => {
-		testTeam({format: 'gen8randombattle', rounds: 100}, team => assert.equal(team.length, 6));
-		testTeam({format: 'gen8challengecup1v1', rounds: 100}, team => assert.equal(team.length, 6));
-		testTeam({format: 'gen8hackmonscup', rounds: 100}, team => assert.equal(team.length, 6));
+		testTeam({format: 'gen9randombattle', rounds: 100}, team => assert.equal(team.length, 6));
+		testTeam({format: 'gen9challengecup1v1', rounds: 100}, team => assert.equal(team.length, 6));
+		testTeam({format: 'gen9hackmonscup', rounds: 100}, team => assert.equal(team.length, 6));
 
 		testTeam({format: 'gen8multirandombattle', rounds: 100}, team => assert.equal(team.length, 3));
 		testTeam({format: 'gen8cap1v1', rounds: 100}, team => assert.equal(team.length, 3));
 	});
 
+	// TODO: Support gen 9 set format
 	for (let gen = 1; gen <= 8; gen++) {
 		const formatID = `gen${gen}randombattle`;
 		const dex = Dex.forFormat(formatID);
