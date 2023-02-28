@@ -24,6 +24,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Clod of Ruin"},
 	},
 
+	// Blitz
+	chiyu: {
+		inherit: true,
+		types: ['Water', 'Dark'],
+	},
+
 	// havi
 	gastly: {
 		inherit: true,

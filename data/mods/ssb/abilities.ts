@@ -86,6 +86,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		isBreakable: true,
 	},
 
+	// Blitz
+	blitzofruin: {
+		shortDesc: "Active Pokemon without this Ability have their Speed multiplied by 0.75.",
+		name: "Blitz of Ruin",
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Blitz of Ruin');
+			this.add('-message', `${pokemon.name}'s Blitz of Ruin lowered the Speed of all surrounding Pokémon!`);
+		},
+		onAnyModifySpe(spe, pokemon) {
+			if (!pokemon.hasAbility('Blitz of Ruin')) {
+				return this.chainModify(0.75);
+			}
+		},
+	},
+
 	// BreadLoeuf
 	painfulexit: {
 		shortDesc: "When this Pokemon switches out, foes lose 25% HP.",

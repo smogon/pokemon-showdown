@@ -72,6 +72,20 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 	},
+	blitzuser: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('Blitz')}|Hey guys, did you know that Chi-Yu is a Water/Dark-type Pokémon introduced in Generation IX? Chi-Yu is number 1004 in the National Dex, and a member of the Undiscovered egg group. Chi-Yu has no evolutionary relatives. Chi-Yu has a base stat total of 570, as do all the Treasures of Ruin, and it has the ability Blitz of Ruin. Chi-Yu learns various strong moves, such as Fiery Wrath, Lava Plume, and Nasty Plot. Chi-Yu is a blue Pokémon with a fish-like build, weighing in at 10.8 pounds and standing 1'04" feet tall. Chi-Yu's design is inspired by goldfish, flames, and beads. Chi-Yu controls flames burning at over 5,400 degrees Fahrenheit, and casually swims through the sea of lava it creates by melting rock and sand, according to various Pokedex entries. Chi-Yu is the only Treasure of Ruin in Generation IX that was quickbanned from Smogon's OverUsed tier. Many Trainers like Chi-Yu for its design, which mixes cool and cute, as well as its good stats and movepool.`);
+			this.add('-start', pokemon, 'typechange', 'Water/Dark', '[silent]');
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Blitz')}|Splashyyy!`);
+		},
+		onFaint() {
+			const img = "https://discord.com/assets/2d827842d29f3408d9eb56fcdd96e589.svg";
+			this.add(`c:|${getName('Blitz')}|/html <img src="${img}" width="32" height="32" />`);
+		},
+	},
 	breadloeuf: {
 		noCopy: true,
 		onStart(pokemon) {
@@ -739,6 +753,34 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Attract', '[silent]');
+		},
+	},
+	raindance: {
+		inherit: true,
+		onWeatherModifyDamage(damage, attacker, defender, move) {
+			if (defender.hasItem('utilityumbrella') || move.id === 'geyserblast') return;
+			if (move.type === 'Water') {
+				this.debug('rain water boost');
+				return this.chainModify(1.5);
+			}
+			if (move.type === 'Fire') {
+				this.debug('rain fire suppress');
+				return this.chainModify(0.5);
+			}
+		},
+	},
+	sunnyday: {
+		inherit: true,
+		onWeatherModifyDamage(damage, attacker, defender, move) {
+			if (defender.hasItem('utilityumbrella') || move.id === 'geyserblast') return;
+			if (move.type === 'Fire') {
+				this.debug('Sunny Day fire boost');
+				return this.chainModify(1.5);
+			}
+			if (move.type === 'Water') {
+				this.debug('Sunny Day water suppress');
+				return this.chainModify(0.5);
+			}
 		},
 	},
 };

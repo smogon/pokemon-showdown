@@ -112,6 +112,28 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ground",
 	},
 
+	// Blitz
+	geyserblast: {
+		accuracy: 95,
+		basePower: 100,
+		category: "Special",
+		shortDesc: "Combines Fire in its type effectiveness; Ignores weather.",
+		name: "Geyser Blast",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit() {
+			this.attrLastMove('[anim] Steam Eruption');
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			return typeMod + this.dex.getEffectiveness('Fire', type);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Water",
+	},
+
 	// BreadLoeuf
 	bakersdouzeoff: {
 		accuracy: true,

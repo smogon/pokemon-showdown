@@ -54,6 +54,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Sire Switch',
 		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful', teraType: 'Poison', skip: 'A Quag To The Past',
 	},
+	Blitz: {
+		species: 'Chi-Yu', ability: 'Blitz of Ruin', item: 'Life Orb', gender: 'N',
+		moves: ['Fiery Wrath', 'Lava Plume', 'Nasty Plot'],
+		signatureMove: 'Geyser Blast',
+		evs: {def: 4, spa: 252, spe: 252}, nature: 'Modest', teraType: 'Water', shiny: true,
+	},
 	BreadLoeuf: {
 		species: 'Dachsbun', ability: 'Painful Exit', item: 'Leftovers', gender: '',
 		moves: ['Wish', 'Rest', 'Play Rough'],
