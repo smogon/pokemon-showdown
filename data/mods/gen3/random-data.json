@@ -428,7 +428,7 @@
         "moves": ["earthquake", "explosion", "hiddenpowerbug", "rapidspin", "spikes", "toxic"]
     },
     "dunsparce": {
-        "level": 80,
+        "level": 88,
         "moves": ["bodyslam", "curse", "headbutt", "rest", "rockslide", "shadowball", "thunderwave"]
     },
     "gligar": {
