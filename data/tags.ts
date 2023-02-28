@@ -50,6 +50,10 @@ export const Tags: {[id: string]: TagData} = {
 		name: "Paradox",
 		speciesFilter: species => species.tags.includes("Paradox"),
 	},
+	insurgence: {
+		name: "Insurgence",
+		speciesFilter: species => species.tags.includes("Insurgence"),
+	},
 
 	// Move tags
 	// ---------
