@@ -9218,14 +9218,15 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Beautiful",
 	},
 	hydrosteam: {
-		num: 875,
+		num: 876,
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
 		name: "Hydro Steam",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, defrost: 1},
+		thawsTarget: true,
 		secondary: null,
 		onBasePower(basePower, source) {
 			if (source.effectiveWeather() === 'sunnyday') {
@@ -14275,14 +14276,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Beautiful",
 	},
 	psyblade: {
-		num: 876,
+		num: 875,
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
 		name: "Psyblade",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
 		secondary: null,
 		onBasePower(basePower, source) {
 			if (this.field.getPseudoWeather('electricterrain') && source.isGrounded()) {
