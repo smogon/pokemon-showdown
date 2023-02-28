@@ -1430,13 +1430,6 @@ export const Formats: FormatList = [
 				const teraType = pokemon.m.thirdType;
 				if (teraType && pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) {
 					move.category = 'Physical';
-				}
-			}
-		},
-		onModifyType(move, pokemon, target) {
-			if (move.id === 'terablast') {
-				const teraType = pokemon.m.teraType;
-				if (teraType) {
 					move.type = teraType;
 				}
 			}
