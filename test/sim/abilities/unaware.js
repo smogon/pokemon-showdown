@@ -92,4 +92,19 @@ describe('Unaware', function () {
 		assert.equal(battle.p2.active[0].hp, 1);
 		assert.equal(battle.p2.active[1].hp, 1);
 	});
+
+	it(`should ignore attack stage changes when Pokemon with it are attacked with Foul Play`, function () {
+		battle = common.createBattle([[
+			{species: 'Clefable', ability: 'unaware', moves: ['bellydrum']},
+		], [
+			{species: 'Wynaut', ability: 'superluck', moves: ['focusenergy', 'foulplay']},
+		]]);
+
+		battle.makeChoices();
+		battle.makeChoices('auto', 'move foulplay');
+
+		const clef = battle.p1.active[0];
+		const damage = clef.maxhp - Math.floor(clef.maxhp / 2) - clef.hp;
+		assert.bounded(damage, [50, 59]);
+	});
 });
