@@ -133,6 +133,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Fleur Cannon',
 		evs: {hp: 252, spa: 4, spd: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
+	Isaiah: {
+		species: 'Stakataka', ability: 'Anchor Arms', item: 'Life Orb', gender: 'M',
+		moves: ['Trick Room', 'Hammer Arm', 'Wave Crash'],
+		signatureMove: 'Anchor Toss',
+		evs: {hp: 252, atk: 252, def: 4}, ivs: {atk: 0}, nature: 'Brave', teraType: 'Water', shiny: true,
+	},
 	Kennedy: {
 		species: 'Cinderace', ability: 'Anfield', item: 'Berserk Gene', gender: 'M',
 		moves: ['Blaze Kick', ['Triple Kick', 'Trop Kick'], 'U-turn'],

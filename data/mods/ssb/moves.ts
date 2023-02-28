@@ -529,6 +529,33 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fairy",
 	},
 
+	// Isaiah
+	anchortoss: {
+		accuracy: 100,
+		basePower: 200,
+		category: "Physical",
+		name: "Anchor Toss",
+		shortDesc: "+1 Atk/Def before damage. The user faints.",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove(source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Bulk Up', source);
+			this.boost({atk: 1, def: 1}, source);
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Self-Destruct', target);
+		},
+		onHit() {
+			this.add(`c:|${getName('Isaiah')}|Oh, this is it. They're all gonna find out I'm a fake. I can't give up. I've got to try. I can do it! I've got Anchor Arms! I'm no wimp, I'm a jerk!`);
+		},
+		selfdestruct: "always",
+		secondary: null,
+		target: "allAdjacent",
+		type: "Water",
+	},
+
 	// Kennedy
 	hattrick: {
 		accuracy: 98,

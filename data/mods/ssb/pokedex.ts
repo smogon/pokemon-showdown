@@ -36,6 +36,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 60, atk: 65, def: 60, spa: 130, spd: 75, spe: 110},
 	},
 
+	// Isaiah
+	stakataka: {
+		inherit: true,
+		types: ["Water", "Fighting"],
+	},
+
 	// Kennedy
 	cinderace: {
 		inherit: true,
