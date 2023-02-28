@@ -89,7 +89,7 @@ const NoStab = [
 	'accelerock', 'aquajet', 'beakblast', 'bounce', 'breakingswipe', 'chatter', 'chloroblast', 'clearsmog', 'dragontail', 'eruption',
 	'explosion', 'fakeout', 'flamecharge', 'flipturn', 'iceshard', 'icywind', 'incinerate', 'machpunch', 'meteorbeam',
 	'mortalspin', 'pluck', 'pursuit', 'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak',
-	'skydrop', 'snarl', 'steelbeam', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
+	'skydrop', 'snarl', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
 ];
 // Hazard-setting moves
 const Hazards = [
@@ -337,15 +337,7 @@ export class RandomTeams {
 		for (const moveid of moves) {
 			const move = this.dex.moves.get(moveid);
 
-			let moveType = move.type;
-			if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
-			if (moveType === 'Normal') {
-				if (abilities.has('Aerilate')) moveType = 'Flying';
-				if (abilities.has('Galvanize')) moveType = 'Electric';
-				if (abilities.has('Pixilate')) moveType = 'Fairy';
-				if (abilities.has('Refrigerate')) moveType = 'Ice';
-			}
-			if (moveid === 'terablast') moveType = teraType;
+			const moveType = this.getMoveType(move, species, abilities, teraType);
 			if (move.damage || move.damageCallback) {
 				// Moves that do a set amount of damage:
 				counter.add('damage');
@@ -447,7 +439,6 @@ export class RandomTeams {
 		const statusMoves = this.dex.moves.all()
 			.filter(move => move.category === 'Status')
 			.map(move => move.id);
-		const magnezoneMoves = ['bodypress', 'mirrorcoat', 'steelbeam'];
 
 		// Team-based move culls
 		if (teamDetails.stealthRock) {
@@ -480,7 +471,7 @@ export class RandomTeams {
 		// These attacks are redundant with each other
 		this.incompatibleMoves(moves, movePool, 'psychic', 'psyshock');
 		this.incompatibleMoves(moves, movePool, 'surf', 'hydropump');
-		this.incompatibleMoves(moves, movePool, 'wavecrash', 'liquidation');
+		this.incompatibleMoves(moves, movePool, ['liquidation', 'ragingbull'], ['liquidation', 'wavecrash']);
 		this.incompatibleMoves(moves, movePool, ['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']);
 		this.incompatibleMoves(moves, movePool, 'knockoff', 'foulplay');
 		this.incompatibleMoves(moves, movePool, 'doubleedge', 'headbutt');
@@ -516,7 +507,7 @@ export class RandomTeams {
 			this.fastPop(movePool, movePool.indexOf('haze'));
 		}
 		// Magnezone
-		this.incompatibleMoves(moves, movePool, magnezoneMoves, magnezoneMoves);
+		this.incompatibleMoves(moves, movePool, 'bodypress', 'mirrorcoat');
 		// Amoonguss, though this can work well as a general rule later
 		this.incompatibleMoves(moves, movePool, 'toxic', 'clearsmog');
 	}
@@ -570,6 +561,27 @@ export class RandomTeams {
 		const counter = this.queryMoves(moves, species, teraType, abilities);
 		this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
 		return counter;
+	}
+
+	// Returns the type of a given move for STAB/coverage enforcement purposes
+	getMoveType(move: Move, species: Species, abilities: Set<string>, teraType: string): string {
+		if (move.id === 'terablast') return teraType;
+		if (['judgment', 'revelationdance'].includes(move.id)) return species.types[0];
+
+		if (move.name === "Raging Bull" && species.name.startsWith("Tauros-Paldea")) {
+			if (species.name.endsWith("Combat")) return "Fighting";
+			if (species.name.endsWith("Blaze")) return "Fire";
+			if (species.name.endsWith("Aqua")) return "Water";
+		}
+
+		const moveType = move.type;
+		if (moveType === 'Normal') {
+			if (abilities.has('Aerilate')) return 'Flying';
+			if (abilities.has('Galvanize')) return 'Electric';
+			if (abilities.has('Pixilate')) return 'Fairy';
+			if (abilities.has('Refrigerate')) return 'Ice';
+		}
+		return moveType;
 	}
 
 	// Generate random moveset for a given species, role, tera type.
@@ -651,13 +663,7 @@ export class RandomTeams {
 			const priorityMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
-				let moveType = move.type;
-				if (moveType === 'Normal') {
-					if (abilities.has('Aerilate')) moveType = 'Flying';
-					if (abilities.has('Galvanize')) moveType = 'Electric';
-					if (abilities.has('Pixilate')) moveType = 'Fairy';
-					if (abilities.has('Refrigerate')) moveType = 'Ice';
-				}
+				const moveType = this.getMoveType(move, species, abilities, teraType);
 				if (types.includes(moveType) && move.priority > 0 && move.category !== 'Status') {
 					priorityMoves.push(moveid);
 				}
@@ -672,30 +678,21 @@ export class RandomTeams {
 		// Enforce STAB
 		for (const type of types) {
 			// Check if a STAB move of that type should be required
-			if (runEnforcementChecker(type)) {
-				const stabMoves = [];
-				for (const moveid of movePool) {
-					const move = this.dex.moves.get(moveid);
-					let moveType = move.type;
-					if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
-					if (moveType === 'Normal') {
-						if (abilities.has('Aerilate')) moveType = 'Flying';
-						if (abilities.has('Galvanize')) moveType = 'Electric';
-						if (abilities.has('Pixilate')) moveType = 'Fairy';
-						if (abilities.has('Refrigerate')) moveType = 'Ice';
-					}
-					if (moveid === 'terablast') moveType = teraType;
-					if (type === moveType &&
-						(move.basePower > 30 || move.multihit || move.basePowerCallback) &&
-						(!this.noStab.includes(moveid) || abilities.has('Technician') && moveid === 'machpunch')) {
-						stabMoves.push(moveid);
-					}
+			const stabMoves = [];
+			for (const moveid of movePool) {
+				const move = this.dex.moves.get(moveid);
+				const moveType = this.getMoveType(move, species, abilities, teraType);
+				if (type === moveType &&
+					(move.basePower > 30 || move.multihit || move.basePowerCallback) &&
+					(!this.noStab.includes(moveid) || abilities.has('Technician') && moveid === 'machpunch')) {
+					stabMoves.push(moveid);
 				}
-				if (stabMoves.length) {
-					const moveid = this.sample(stabMoves);
-					counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
-						movePool, teraType, role);
-				}
+			}
+			while (runEnforcementChecker(type)) {
+				if (!stabMoves.length) break;
+				const moveid = this.sampleNoReplace(stabMoves);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
 			}
 		}
 
@@ -704,19 +701,10 @@ export class RandomTeams {
 			const stabMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
-				let moveType = move.type;
-				if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
-				if (moveType === 'Normal') {
-					if (abilities.has('Aerilate')) moveType = 'Flying';
-					if (abilities.has('Galvanize')) moveType = 'Electric';
-					if (abilities.has('Pixilate')) moveType = 'Fairy';
-					if (abilities.has('Refrigerate')) moveType = 'Ice';
-				}
-				if (moveid === 'terablast') moveType = teraType;
-				if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
-					if (types.includes(moveType)) {
-						stabMoves.push(moveid);
-					}
+				const moveType = this.getMoveType(move, species, abilities, teraType);
+				if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback) &&
+					types.includes(moveType)) {
+					stabMoves.push(moveid);
 				}
 			}
 			if (stabMoves.length) {
@@ -731,8 +719,7 @@ export class RandomTeams {
 			const stabMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
-				let moveType = move.type;
-				if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
+				const moveType = this.getMoveType(move, species, abilities, teraType);
 				if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
 					if (teraType === moveType) {
 						stabMoves.push(moveid);
@@ -783,30 +770,15 @@ export class RandomTeams {
 				for (const moveid of moves) {
 					const move = this.dex.moves.get(moveid);
 					if (move.basePower > 30 || move.multihit || move.basePowerCallback) {
-						let moveType = move.type;
-						if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
-						if (moveType === 'Normal') {
-							if (abilities.has('Aerilate')) moveType = 'Flying';
-							if (abilities.has('Galvanize')) moveType = 'Electric';
-							if (abilities.has('Pixilate')) moveType = 'Fairy';
-							if (abilities.has('Refrigerate')) moveType = 'Ice';
-						}
-						if (moveid === 'terablast') moveType = teraType;
-						currentAttackType = move.type;
+						const moveType = this.getMoveType(move, species, abilities, teraType);
+						currentAttackType = moveType;
 					}
 				}
 				// Choose an attacking move that is of different type to the current single attack
 				const coverageMoves = [];
 				for (const moveid of movePool) {
 					const move = this.dex.moves.get(moveid);
-					let moveType = move.type;
-					if (['judgment', 'revelationdance'].includes(moveid)) moveType = types[0];
-					if (moveType === 'Normal') {
-						if (abilities.has('Aerilate')) moveType = 'Flying';
-						if (abilities.has('Galvanize')) moveType = 'Electric';
-						if (abilities.has('Pixilate')) moveType = 'Fairy';
-						if (abilities.has('Refrigerate')) moveType = 'Ice';
-					}
+					const moveType = this.getMoveType(move, species, abilities, teraType);
 					if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
 						if (currentAttackType! !== moveType) coverageMoves.push(moveid);
 					}
@@ -930,6 +902,8 @@ export class RandomTeams {
 			return (!counter.get('sheerforce') || moves.has('bellydrum') || braviaryCase || abilitiesCase);
 		case 'Slush Rush':
 			return !teamDetails.snow;
+		case 'Sniper':
+			return abilities.has('Torrent');
 		case 'Solar Power':
 			return (!teamDetails.sun || !counter.get('Special'));
 		case 'Stakeout':
@@ -986,7 +960,6 @@ export class RandomTeams {
 		if (species.id === 'vespiquen') return 'Pressure';
 		if (species.id === 'enamorus' && moves.has('calmmind')) return 'Cute Charm';
 		if (species.id === 'cetitan' && role === 'Wallbreaker') return 'Sheer Force';
-		if (abilities.has('Corrosion') && moves.has('toxic') && !moves.has('earthpower')) return 'Corrosion';
 		if (abilities.has('Cud Chew') && moves.has('substitute')) return 'Cud Chew';
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk'))) return 'Guts';
 		if (abilities.has('Harvest') && moves.has('substitute')) return 'Harvest';
@@ -1241,8 +1214,9 @@ export class RandomTeams {
 		if (role === 'Fast Support' || role === 'Fast Bulky Setup') {
 			return (counter.damagingMoves.size >= 3 && !moves.has('nuzzle')) ? 'Life Orb' : 'Leftovers';
 		}
+		if (role === 'Tera Blast user' && counter.get('recovery') && counter.damagingMoves.size < 3) return 'Leftovers';
 		if (
-			['flamecharge', 'rapidspin', 'trailblaze'].every(m => !moves.has(m)) &&
+			['flamecharge', 'rapidspin'].every(m => !moves.has(m)) &&
 			['Fast Attacker', 'Setup Sweeper', 'Tera Blast user', 'Wallbreaker'].some(m => role === (m))
 		) return 'Life Orb';
 		if (isDoubles) return 'Sitrus Berry';
@@ -1391,13 +1365,17 @@ export class RandomTeams {
 			evs.spe = 0;
 			ivs.spe = 0;
 		}
+
+		// shuffle moves to add more randomness to camomons
+		const shuffledMoves = Array.from(moves);
+		this.prng.shuffle(shuffledMoves);
 		return {
 			name: species.baseSpecies,
 			species: forme,
 			gender: species.gender,
 			shiny: this.randomChance(1, 1024),
 			level,
-			moves: Array.from(moves),
+			moves: shuffledMoves,
 			ability,
 			evs,
 			ivs,

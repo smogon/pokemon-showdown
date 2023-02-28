@@ -26,6 +26,39 @@ import {BattleActions} from './battle-actions';
 import {Utils} from '../lib';
 declare const __version: any;
 
+export type ChannelID = 0 | 1 | 2 | 3 | 4;
+
+export type ChannelMessages<T extends ChannelID | -1> = Record<T, string[]>;
+
+const splitRegex = /^\|split\|p([1234])\n(.*)\n(.*)|.+/gm;
+
+export function extractChannelMessages<T extends ChannelID | -1>(message: string, channelIds: T[]): ChannelMessages<T> {
+	const channelIdSet = new Set(channelIds);
+	const channelMessages: ChannelMessages<ChannelID | -1> = {
+		[-1]: [],
+		0: [],
+		1: [],
+		2: [],
+		3: [],
+		4: [],
+	};
+
+	for (const [lineMatch, playerMatch, secretMessage, sharedMessage] of message.matchAll(splitRegex)) {
+		const player = playerMatch ? parseInt(playerMatch) : 0;
+		for (const channelId of channelIdSet) {
+			let line = lineMatch;
+			if (player) {
+				line = channelId === -1 || player === channelId ? secretMessage : sharedMessage;
+				if (!line) continue;
+			}
+			channelMessages[channelId].push(line);
+		}
+	}
+
+	return channelMessages;
+}
+
+
 interface BattleOptions {
 	format?: Format;
 	formatid: ID;
@@ -2926,27 +2959,9 @@ export class Battle {
 		}
 	}
 
-	static extractUpdateForSide(data: string, side: SideID | 'spectator' | 'omniscient' = 'spectator') {
-		if (side === 'omniscient') {
-			// Grab all secret data
-			return data.replace(/\n\|split\|p[1234]\n([^\n]*)\n(?:[^\n]*)/g, '\n$1');
-		}
-
-		// Grab secret data side has access to
-		switch (side) {
-		case 'p1': data = data.replace(/\n\|split\|p1\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
-		case 'p2': data = data.replace(/\n\|split\|p2\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
-		case 'p3': data = data.replace(/\n\|split\|p3\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
-		case 'p4': data = data.replace(/\n\|split\|p4\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
-		}
-
-		// Discard remaining secret data
-		// Note: the last \n? is for secret data that are empty when shared
-		return data.replace(/\n\|split\|(?:[^\n]*)\n(?:[^\n]*)\n\n?/g, '\n');
-	}
-
 	getDebugLog() {
-		return Battle.extractUpdateForSide(this.log.join('\n'), 'omniscient');
+		const channelMessages = extractChannelMessages(this.log.join('\n'), [-1]);
+		return channelMessages[-1].join('\n');
 	}
 
 	debugError(activity: string) {
