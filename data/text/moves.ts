@@ -3081,6 +3081,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Hydro Pump",
 		shortDesc: "No additional effect.",
 	},
+	hydrosteam: {
+		name: "Hydro Steam",
+		desc: "If the current weather is Sunny Day, this move's power is multiplied by 1.5 and is not weakened for being Water type.",
+		shortDesc: "During Sunny Day: 1.5x power and not weakened.",
+	},
 	hydrovortex: {
 		name: "Hydro Vortex",
 		shortDesc: "Power is equal to the base move's Z-Power.",
@@ -4764,6 +4769,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Psybeam",
 		desc: "Has a 10% chance to confuse the target.",
 		shortDesc: "10% chance to confuse the target.",
+	},
+	psyblade: {
+		name: "Psyblade",
+		desc: "If the current terrain is Electric Terrain, this move's power is multiplied by 1.5.",
+		shortDesc: "During Electric Terain: 1.5x power.",
 	},
 	psychup: {
 		name: "Psych Up",
