@@ -459,6 +459,43 @@ export const Conditions: {[k: string]: ConditionData} = {
 
 	// weather is implemented here since it's so important to the game
 
+	newmoon: {
+		name: 'NewMoon',
+		effectType: 'Weather',
+		duration: 5,
+		durationCallback(source, effect) {
+			if (source?.hasItem('darkrock')) {
+				return 8;
+			}
+			return 5;
+		},
+		onWeatherModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Dark' || move.type === 'Ghost') {
+				this.debug('New Moon damage boost');
+				return this.chainModify(1.35);
+			}
+			if (move.type === 'Fairy') {
+				this.debug('New Moon fairy weaken');
+				return this.chainModify(0.75);
+			}
+		},
+		onFieldStart(field, source, effect) {
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-weather', 'NewMoon', '[from] ability: ' + effect.name, '[of] ' + source);
+			} else {
+				this.add('-weather', 'NewMoon');
+			}
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-weather', 'NewMoon', '[upkeep]');
+			if (this.field.isWeather('newmoon')) this.eachEvent('Weather');
+		},
+		onFieldEnd() {
+			this.add('-weather', 'none');
+		},
+	},
 	raindance: {
 		name: 'RainDance',
 		effectType: 'Weather',
