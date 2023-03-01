@@ -19252,7 +19252,10 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		gen: 5,
 	},
 
-	// Insurgence pokemon
+	////////////////////////
+	// Insurgence pokemon //
+	////////////////////////
+	
 	bulbasaurdelta: {
 		tags: ["Insurgence"],
 		num: 1,
@@ -20036,6 +20039,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		requiredItem: "Delta Typhlosionite",
 	},
 	typhlosiondeltamegaactive: {
+		tags: ["Insurgence"],
 		num: 157,
 		name: "Typhlosion-Delta-Mega-Active",
 		baseSpecies: "Typhlosion-Delta",
@@ -22298,6 +22302,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		formeOrder: ["Emolga-Delta", "Emolga-Delta-Fired"],
 	},
 	emolgadeltafired: {
+		tags: ["Insurgence"],
 		num: 587,
 		name: "Emolga-Delta-Fired",
 		baseSpecies: "Emolga-Delta",
@@ -22961,7 +22966,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		tags: ["Mythical", "Insurgence"],
 		eggGroups: ["Undiscovered"],
-		gen: 6,
 	},
 
 	// Mega additions
@@ -23158,8 +23162,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2,
 		weightkg: 122,
 		color: "Purple",
-		eggGroups: ["Undiscovered", "Insurgence"],
-		tags: ["Restricted Legendary"],
+		eggGroups: ["Undiscovered"],
+		tags: ["Restricted Legendary", "Insurgence"],
 		otherFormes: ["Mewtwo-Shadow-Mega"],
 		formeOrder: ["Mewtwo-Shadow", "Mewtwo-Shadow-Mega"],
 		gen: 6,
@@ -23306,6 +23310,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		requiredItem: "Etigirafarigite",
 	},
 	steelixmegafire: {
+		tags: ["Insurgence"],
 		num: 208,
 		name: "Steelix-Mega-Fire",
 		baseSpecies: "Steelix",
@@ -23641,6 +23646,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		requiredItem: "Hydreigonite",
 	},
 	hydreigonmegasix: {
+		tags: ["Insurgence"],
 		num: 635,
 		name: "Hydreigon-Mega-Six",
 		baseSpecies: "Hydreigon",
@@ -23655,6 +23661,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		requiredItem: "Hydreigonite",
 	},
 	hydreigonmegaseven: {
+		tags: ["Insurgence"],
 		num: 635,
 		name: "Hydreigon-Mega-Seven",
 		baseSpecies: "Hydreigon",
@@ -23669,6 +23676,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		requiredItem: "Hydreigonite",
 	},
 	hydreigonmegaeight: {
+		tags: ["Insurgence"],
 		num: 635,
 		name: "Hydreigon-Mega-Eight",
 		baseSpecies: "Hydreigon",
@@ -23683,6 +23691,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		requiredItem: "Hydreigonite",
 	},
 	hydreigonmeganine: {
+		tags: ["Insurgence"],
 		num: 635,
 		name: "Hydreigon-Mega-Nine",
 		baseSpecies: "Hydreigon",
@@ -23777,6 +23786,5 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Zekrom Armor",
 		changesFrom: "Zekrom",
-		gen: 6,
 	},
 };
