@@ -531,35 +531,204 @@ export const Formats: FormatList = [
 		column: 2,
 	},
 	{
-		name: "[Gen 9] Convergence",
-		desc: `Allows all Pok&eacute;mon that have identical types to share moves and abilities.`,
+		name: "[Gen 9] Fortemons",
+		desc: `Put an attacking move in the item slot to have all of a Pok&eacute;mon's attacks inherit its properties.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3714048/">Convergence</a>`,
-		],
-
-		mod: 'gen9',
-		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Convergence Legality', '!Obtainable Abilities', 'Min Source Gen = 9'],
-		banlist: [
-			'Chi-Yu', 'Cyclizar', 'Dondozo', 'Flutter Mane', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Palafin', 'Slaking', 'Arena Trap',
-			'Comatose', 'Imposter', 'Moody', 'Pure Power', 'Shadow Tag', 'Speed Boost', 'Damp Rock', 'King\'s Rock', 'Baton Pass',
-			'Extreme Speed', 'Last Respects', 'Rage Fist', 'Revival Blessing', 'Shell Smash', 'Spore', 'Transform',
-		],
-	},
-	{
-		name: "[Gen 9] Camomons",
-		desc: `Pok&eacute;mon have their types set to match their first two moves.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3711340/">Camomons</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3713983/">Fortemons</a>`,
 		],
 
 		mod: 'gen9',
 		// searchShow: false,
-		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Evasion Items Clause', 'Evasion Abilities Clause', 'Terastal Clause', 'Camomons Mod', 'Min Source Gen = 9'],
-		banlist: [
-			'Baxcalibur', 'Chi-Yu', 'Chien-Pao', 'Cyclizar', 'Dragonite', 'Drednaw', 'Espathra', 'Flutter Mane', 'Houndstone',
-			'Iron Bundle', 'Koraidon', 'Miraidon', 'Palafin', 'Roaring Moon', 'Volcarona', 'Arena Trap', 'Moody', 'Shadow Tag',
-			'Booster Energy', 'King\'s Rock', 'Baton Pass',
+		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Min Source Gen = 9'],
+		banlist: ['Cloyster', 'Houndstone', 'Koraidon', 'Miraidon', 'Palafin', 'Riolu', 'Serene Grace', 'Covert Cloak', 'Baton Pass', 'Fake Out'],
+		restricted: ['Dynamic Punch', 'Flame Charge', 'Fury Cutter', 'Grass Knot', 'Inferno', 'Low Kick', 'Nuzzle', 'Power Trip', 'Rapid Spin', 'Spit Up', 'Stored Power', 'Zap Cannon'],
+		validateSet(set, teamHas) {
+			const item = set.item;
+			const species = this.dex.species.get(set.species);
+			const move = this.dex.moves.get(item);
+			if (!move.exists || move.id === 'metronome' || move.category === 'Status') {
+				return this.validateSet(set, teamHas);
+			}
+			set.item = '';
+			const problems = this.validateSet(set, teamHas) || [];
+			set.item = item;
+			if (this.checkCanLearn(move, species, this.allSources(species), set)) {
+				problems.push(`${species.name} can't learn ${move.name}.`);
+			}
+			if (set.moves.map(this.toID).includes(move.id)) {
+				problems.push(`Moves in the item slot can't be in the moveslots as well.`);
+			}
+			const accuracyLoweringMove =
+				move.secondaries?.some(secondary => secondary.boosts?.accuracy && secondary.boosts?.accuracy < 0);
+			const flinchMove = move.secondaries?.some(secondary => secondary.volatileStatus === 'flinch');
+			if (this.ruleTable.isRestricted(`move:${move.id}`) ||
+				((accuracyLoweringMove || move.ohko || move.multihit || move.id === 'beatup' || move.flags['charge'] ||
+					move.priority > 0 || move.damageCallback || flinchMove) && !this.ruleTable.has(`+move:${move.id}`))) {
+				problems.push(`The move ${move.name} can't be used as an item.`);
+			}
+			return problems.length ? problems : null;
+		},
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				const move = this.dex.getActiveMove(pokemon.set.item);
+				if (move.exists && move.category !== 'Status') {
+					pokemon.m.forte = move;
+					pokemon.item = 'mail' as ID;
+				}
+			}
+		},
+		onModifyMovePriority: 1,
+		onModifyMove(move, pokemon, target) {
+			const forte: ActiveMove = pokemon.m.forte;
+			if (move.category !== 'Status' && forte) {
+				move.flags = {...move.flags, ...forte.flags};
+				if (forte.self) {
+					if (forte.self.onHit && move.self?.onHit) {
+						for (const i in forte.self) {
+							if (i.startsWith('onHit')) continue;
+							(move.self as any)[i] = (forte.self as any)[i];
+						}
+					} else {
+						move.self = {...(move.self || {}), ...forte.self};
+					}
+				}
+				if (forte.selfBoost?.boosts) {
+					if (!move.selfBoost?.boosts) move.selfBoost = {boosts: {}};
+					let boostid: BoostID;
+					for (boostid in forte.selfBoost.boosts) {
+						if (!move.selfBoost.boosts![boostid]) move.selfBoost.boosts![boostid] = 0;
+						move.selfBoost.boosts![boostid]! += forte.selfBoost.boosts[boostid]!;
+					}
+				}
+				if (forte.secondaries) {
+					move.secondaries = [...(move.secondaries || []), ...forte.secondaries];
+				}
+				move.critRatio = (move.critRatio || 1) + (forte.critRatio || 1) - 1;
+				const VALID_PROPERTIES = [
+					'alwaysHit', 'basePowerCallback', 'breaksProtect', 'drain', 'forceSTAB', 'forceSwitch', 'hasCrashDamage', 'hasSheerForce',
+					'ignoreAbility', 'ignoreAccuracy', 'ignoreDefensive', 'ignoreEvasion', 'ignoreImmunity', 'mindBlownRecoil', 'noDamageVariance',
+					'ohko', 'overrideDefensivePokemon', 'overrideDefensiveStat', 'overrideOffensivePokemon', 'overrideOffensiveStat', 'pseudoWeather',
+					'recoil', 'selfdestruct', 'selfSwitch', 'sleepUsable', 'smartTarget', 'stealsBoosts', 'thawsTarget', 'volatileStatus', 'willCrit',
+				] as const;
+				for (const property of VALID_PROPERTIES) {
+					if (forte[property]) {
+						move[property] = forte[property] as any;
+					}
+				}
+				forte.onModifyMove?.call(this, move, pokemon, target);
+			}
+		},
+		onModifyPriority(priority, source, target, move) {
+			const forte = source?.m.forte;
+			if (move.category !== 'Status' && forte) {
+				if (source.hasAbility('Triage') && forte.flags['heal']) {
+					return priority + (move.flags['heal'] ? 0 : 3);
+				}
+				return priority + forte.priority;
+			}
+		},
+		onModifyTypePriority: 1,
+		onModifyType(move, pokemon, target) {
+			const forte = pokemon.m.forte;
+			if (move.category !== 'Status' && forte) {
+				this.singleEvent('ModifyType', forte, null, pokemon, target, move, move);
+			}
+		},
+		onHitPriority: 1,
+		onHit(target, source, move) {
+			const forte = source.m.forte;
+			if (move?.category !== 'Status' && forte) {
+				this.singleEvent('Hit', forte, {}, target, source, move);
+				if (forte.self) this.singleEvent('Hit', forte.self, {}, source, source, move);
+				this.singleEvent('AfterHit', forte, {}, target, source, move);
+			}
+		},
+		onAfterSubDamage(damage, target, source, move) {
+			const forte = source.m.forte;
+			if (move?.category !== 'Status' && forte) {
+				this.singleEvent('AfterSubDamage', forte, null, target, source, move);
+			}
+		},
+		onModifySecondaries(secondaries, target, source, move) {
+			if (secondaries.some(s => !!s.self)) move.selfDropped = false;
+		},
+		onAfterMoveSecondaryPriority: 1,
+		onAfterMoveSecondarySelf(source, target, move) {
+			const forte = source.m.forte;
+			if (move?.category !== 'Status' && forte) {
+				this.singleEvent('AfterMoveSecondarySelf', forte, null, source, target, move);
+			}
+		},
+		onBasePowerPriority: 1,
+		onBasePower(basePower, source, target, move) {
+			const forte = source.m.forte;
+			if (move.category !== 'Status' && forte?.onBasePower) {
+				forte.onBasePower.call(this, basePower, source, target, move);
+			}
+		},
+		pokemon: {
+			getItem() {
+				const move = this.battle.dex.moves.get(this.m.forte);
+				if (!move.exists) return Object.getPrototypeOf(this).getItem.call(this);
+				return {
+					...this.battle.dex.items.get('mail'),
+					name: move.name, id: move.id, ignoreKlutz: true, onTakeItem: false,
+				};
+			},
+		},
+	},
+	{
+		name: "[Gen 9] Tera Donation",
+		desc: `The first Pok&eacute;mon sent out immediately terastallizes. The other Pok&eacute;mon in the party inherit that Tera Type as an additional type.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3715801/">Tera Donation</a>`,
 		],
+
+		mod: 'gen9',
+		// searchShow: false,
+		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Tera Type Preview', 'Min Source Gen = 9'],
+		banlist: ['Flutter Mane', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Palafin', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Baton Pass'],
+		onSwitchIn(pokemon) {
+			if (this.turn === 0) {
+				this.actions.terastallize(pokemon);
+				const teraType = pokemon.teraType;
+				for (const poke of pokemon.side.pokemon) {
+					poke.m.thirdType = teraType;
+				}
+			}
+			if (!pokemon.terastallized) {
+				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
+			}
+		},
+		onModifyMove(move, pokemon, target) {
+			if (move.id === 'terablast') {
+				const teraType = pokemon.m.thirdType;
+				if (teraType && pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) {
+					move.category = 'Physical';
+				}
+			}
+		},
+		onModifyType(move, pokemon, target) {
+			if (move.id === 'terablast') {
+				const teraType = pokemon.m.thirdType;
+				if (teraType) {
+					move.type = teraType;
+				}
+			}
+		},
+		pokemon: {
+			getTypes(excludeAdded, preterastallized) {
+				if (!preterastallized && this.terastallized) return [this.terastallized];
+				const types = this.battle.runEvent('Type', this, null, null, this.types);
+				if (!excludeAdded && this.addedType) return types.concat(this.addedType);
+				const addTeraType = this.m.thirdType;
+				if (types.length) {
+					if (addTeraType) return Array.from(new Set([...types, addTeraType]));
+					return types;
+				}
+				return [this.battle.gen >= 5 ? 'Normal' : '???'];
+			},
+		},
 	},
 
 	// Other Metagames
@@ -845,153 +1014,6 @@ export const Formats: FormatList = [
 			for (const pokemon of this.getAllPokemon()) {
 				pokemon.baseSpecies = pokemon.species;
 			}
-		},
-	},
-	{
-		name: "[Gen 9] Fortemons",
-		desc: `Put an attacking move in the item slot to have all of a Pok&eacute;mon's attacks inherit its properties.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3713983/">Fortemons</a>`,
-		],
-
-		mod: 'gen9',
-		searchShow: false,
-		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Min Source Gen = 9'],
-		banlist: ['Cloyster', 'Houndstone', 'Koraidon', 'Miraidon', 'Palafin', 'Riolu', 'Serene Grace', 'Covert Cloak', 'Baton Pass', 'Fake Out'],
-		restricted: ['Dynamic Punch', 'Flame Charge', 'Fury Cutter', 'Grass Knot', 'Inferno', 'Low Kick', 'Nuzzle', 'Power Trip', 'Rapid Spin', 'Spit Up', 'Stored Power', 'Zap Cannon'],
-		validateSet(set, teamHas) {
-			const item = set.item;
-			const species = this.dex.species.get(set.species);
-			const move = this.dex.moves.get(item);
-			if (!move.exists || move.id === 'metronome' || move.category === 'Status') {
-				return this.validateSet(set, teamHas);
-			}
-			set.item = '';
-			const problems = this.validateSet(set, teamHas) || [];
-			set.item = item;
-			if (this.checkCanLearn(move, species, this.allSources(species), set)) {
-				problems.push(`${species.name} can't learn ${move.name}.`);
-			}
-			if (set.moves.map(this.toID).includes(move.id)) {
-				problems.push(`Moves in the item slot can't be in the moveslots as well.`);
-			}
-			const accuracyLoweringMove =
-				move.secondaries?.some(secondary => secondary.boosts?.accuracy && secondary.boosts?.accuracy < 0);
-			const flinchMove = move.secondaries?.some(secondary => secondary.volatileStatus === 'flinch');
-			if (this.ruleTable.isRestricted(`move:${move.id}`) ||
-				((accuracyLoweringMove || move.ohko || move.multihit || move.id === 'beatup' || move.flags['charge'] ||
-					move.priority > 0 || move.damageCallback || flinchMove) && !this.ruleTable.has(`+move:${move.id}`))) {
-				problems.push(`The move ${move.name} can't be used as an item.`);
-			}
-			return problems.length ? problems : null;
-		},
-		onBegin() {
-			for (const pokemon of this.getAllPokemon()) {
-				const move = this.dex.getActiveMove(pokemon.set.item);
-				if (move.exists && move.category !== 'Status') {
-					pokemon.m.forte = move;
-					pokemon.item = 'mail' as ID;
-				}
-			}
-		},
-		onModifyMovePriority: 1,
-		onModifyMove(move, pokemon, target) {
-			const forte: ActiveMove = pokemon.m.forte;
-			if (move.category !== 'Status' && forte) {
-				move.flags = {...move.flags, ...forte.flags};
-				if (forte.self) {
-					if (forte.self.onHit && move.self?.onHit) {
-						for (const i in forte.self) {
-							if (i.startsWith('onHit')) continue;
-							(move.self as any)[i] = (forte.self as any)[i];
-						}
-					} else {
-						move.self = {...(move.self || {}), ...forte.self};
-					}
-				}
-				if (forte.selfBoost?.boosts) {
-					if (!move.selfBoost?.boosts) move.selfBoost = {boosts: {}};
-					let boostid: BoostID;
-					for (boostid in forte.selfBoost.boosts) {
-						if (!move.selfBoost.boosts![boostid]) move.selfBoost.boosts![boostid] = 0;
-						move.selfBoost.boosts![boostid]! += forte.selfBoost.boosts[boostid]!;
-					}
-				}
-				if (forte.secondaries) {
-					move.secondaries = [...(move.secondaries || []), ...forte.secondaries];
-				}
-				move.critRatio = (move.critRatio || 1) + (forte.critRatio || 1) - 1;
-				const VALID_PROPERTIES = [
-					'alwaysHit', 'basePowerCallback', 'breaksProtect', 'drain', 'forceSTAB', 'forceSwitch', 'hasCrashDamage', 'hasSheerForce',
-					'ignoreAbility', 'ignoreAccuracy', 'ignoreDefensive', 'ignoreEvasion', 'ignoreImmunity', 'mindBlownRecoil', 'noDamageVariance',
-					'ohko', 'overrideDefensivePokemon', 'overrideDefensiveStat', 'overrideOffensivePokemon', 'overrideOffensiveStat', 'pseudoWeather',
-					'recoil', 'selfdestruct', 'selfSwitch', 'sleepUsable', 'smartTarget', 'stealsBoosts', 'thawsTarget', 'volatileStatus', 'willCrit',
-				] as const;
-				for (const property of VALID_PROPERTIES) {
-					if (forte[property]) {
-						move[property] = forte[property] as any;
-					}
-				}
-				forte.onModifyMove?.call(this, move, pokemon, target);
-			}
-		},
-		onModifyPriority(priority, source, target, move) {
-			const forte = source?.m.forte;
-			if (move.category !== 'Status' && forte) {
-				if (source.hasAbility('Triage') && forte.flags['heal']) {
-					return priority + (move.flags['heal'] ? 0 : 3);
-				}
-				return priority + forte.priority;
-			}
-		},
-		onModifyTypePriority: 1,
-		onModifyType(move, pokemon, target) {
-			const forte = pokemon.m.forte;
-			if (move.category !== 'Status' && forte) {
-				this.singleEvent('ModifyType', forte, null, pokemon, target, move, move);
-			}
-		},
-		onHitPriority: 1,
-		onHit(target, source, move) {
-			const forte = source.m.forte;
-			if (move?.category !== 'Status' && forte) {
-				this.singleEvent('Hit', forte, {}, target, source, move);
-				if (forte.self) this.singleEvent('Hit', forte.self, {}, source, source, move);
-				this.singleEvent('AfterHit', forte, {}, target, source, move);
-			}
-		},
-		onAfterSubDamage(damage, target, source, move) {
-			const forte = source.m.forte;
-			if (move?.category !== 'Status' && forte) {
-				this.singleEvent('AfterSubDamage', forte, null, target, source, move);
-			}
-		},
-		onModifySecondaries(secondaries, target, source, move) {
-			if (secondaries.some(s => !!s.self)) move.selfDropped = false;
-		},
-		onAfterMoveSecondaryPriority: 1,
-		onAfterMoveSecondarySelf(source, target, move) {
-			const forte = source.m.forte;
-			if (move?.category !== 'Status' && forte) {
-				this.singleEvent('AfterMoveSecondarySelf', forte, null, source, target, move);
-			}
-		},
-		onBasePowerPriority: 1,
-		onBasePower(basePower, source, target, move) {
-			const forte = source.m.forte;
-			if (move.category !== 'Status' && forte?.onBasePower) {
-				forte.onBasePower.call(this, basePower, source, target, move);
-			}
-		},
-		pokemon: {
-			getItem() {
-				const move = this.battle.dex.moves.get(this.m.forte);
-				if (!move.exists) return Object.getPrototypeOf(this).getItem.call(this);
-				return {
-					...this.battle.dex.items.get('mail'),
-					name: move.name, id: move.id, ignoreKlutz: true, onTakeItem: false,
-				};
-			},
 		},
 	},
 	{
@@ -1400,59 +1422,6 @@ export const Formats: FormatList = [
 				delete pokemon.volatiles[effect];
 				pokemon.addVolatile(effect);
 			}
-		},
-	},
-	{
-		name: "[Gen 9] Tera Donation",
-		desc: `The first Pok&eacute;mon sent out immediately terastallizes. The other Pok&eacute;mon in the party inherit that Tera Type as an additional type.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3715801/">Tera Donation</a>`,
-		],
-
-		mod: 'gen9',
-		searchShow: false,
-		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Tera Type Preview', 'Min Source Gen = 9'],
-		banlist: ['Flutter Mane', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Palafin', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Baton Pass'],
-		onSwitchIn(pokemon) {
-			if (this.turn === 0) {
-				this.actions.terastallize(pokemon);
-				const teraType = pokemon.teraType;
-				for (const poke of pokemon.side.pokemon) {
-					poke.m.thirdType = teraType;
-				}
-			}
-			if (!pokemon.terastallized) {
-				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
-			}
-		},
-		onModifyMove(move, pokemon, target) {
-			if (move.id === 'terablast') {
-				const teraType = pokemon.m.thirdType;
-				if (teraType && pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) {
-					move.category = 'Physical';
-				}
-			}
-		},
-		onModifyType(move, pokemon, target) {
-			if (move.id === 'terablast') {
-				const teraType = pokemon.m.teraType;
-				if (teraType) {
-					move.type = teraType;
-				}
-			}
-		},
-		pokemon: {
-			getTypes(excludeAdded, preterastallized) {
-				if (!preterastallized && this.terastallized) return [this.terastallized];
-				const types = this.battle.runEvent('Type', this, null, null, this.types);
-				if (!excludeAdded && this.addedType) return types.concat(this.addedType);
-				const addTeraType = this.m.thirdType;
-				if (types.length) {
-					if (addTeraType) return Array.from(new Set([...types, addTeraType]));
-					return types;
-				}
-				return [this.battle.gen >= 5 ? 'Normal' : '???'];
-			},
 		},
 	},
 	{
@@ -2388,42 +2357,37 @@ export const Formats: FormatList = [
 		column: 4,
 	},
 	{
-		name: "[Gen 3] UU",
+		name: "[Gen 4] UU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3585923/">ADV UU Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3548578/">ADV UU Viability Rankings</a>`,
-		],
-
-		mod: 'gen3',
-		// searchShow: false,
-		ruleset: ['Standard'],
-		banlist: ['Uber', 'OU', 'UUBL', 'Smeargle + Ingrain', 'Arena Trap', 'Baton Pass', 'Swagger'],
-	},
-	{
-		name: "[Gen 5] RU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/6431094/">BW2 Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3473124/">BW2 RU Viability Rankings</a>`,
-		],
-
-		mod: 'gen5',
-		// searchShow: false,
-		ruleset: ['[Gen 5] UU', 'Baton Pass Clause', '!Sleep Clause Mod', 'Sleep Moves Clause'],
-		banlist: ['UU', 'RUBL', 'Shadow Tag', 'Shell Smash + Baton Pass'],
-		unbanlist: ['Prankster + Assist', 'Prankster + Copycat', 'Baton Pass'],
-	},
-	{
-		name: "[Gen 4] NU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3583742/">DPP NU Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3512254/">DPP NU Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3532624/">DPP UU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3503638/">DPP UU Viability Rankings</a>`,
 		],
 
 		mod: 'gen4',
 		// searchShow: false,
-		ruleset: ['[Gen 4] UU', 'Baton Pass Clause'],
-		banlist: ['UU', 'NUBL'],
-		unbanlist: ['Sand Veil', 'Baton Pass'],
+		ruleset: ['[Gen 4] OU', '!Freeze Clause Mod'],
+		banlist: ['OU', 'UUBL'],
+		unbanlist: ['Arena Trap', 'Swagger'],
+	},
+	{
+		name: "[Gen 3] Challenge Cup",
+
+		mod: 'gen3',
+		team: 'randomCC',
+		// searchShow: false,
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+	{
+		name: "[Gen 5] ZU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8034680/">BW2 ZU</a>`,
+		],
+
+		mod: 'gen5',
+		// searchShow: false,
+		ruleset: ['[Gen 5] PU'],
+		banlist: ['PU', 'Articuno', 'Dragonair', 'Glalie', 'Machoke', 'Marowak', 'Omanyte', 'Regigigas', 'Trubbish', 'Whirlipede', 'Baton Pass'],
+		unbanlist: ['Damp Rock'],
 	},
 
 	// Past Gens OU
@@ -3554,6 +3518,19 @@ export const Formats: FormatList = [
 		banlist: ['Uber', 'OU', 'UUBL', 'Arena Trap', 'Drought', 'Sand Stream', 'Snow Warning', 'Prankster + Assist', 'Prankster + Copycat', 'Baton Pass'],
 	},
 	{
+		name: "[Gen 5] RU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/6431094/">BW2 Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3473124/">BW2 RU Viability Rankings</a>`,
+		],
+
+		mod: 'gen5',
+		searchShow: false,
+		ruleset: ['[Gen 5] UU', 'Baton Pass Clause', '!Sleep Clause Mod', 'Sleep Moves Clause'],
+		banlist: ['UU', 'RUBL', 'Shadow Tag', 'Shell Smash + Baton Pass'],
+		unbanlist: ['Prankster + Assist', 'Prankster + Copycat', 'Baton Pass'],
+	},
+	{
 		name: "[Gen 5] NU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/posts/6431094/">BW2 Sample Teams</a>`,
@@ -3618,18 +3595,6 @@ export const Formats: FormatList = [
 		],
 		banlist: ['Uber', 'Cottonee', 'Dragonite', 'Jirachi', 'Kyurem-Black', 'Mew', 'Togekiss', 'Whimsicott', 'Victini', 'Focus Band', 'Focus Sash', 'Quick Claw', 'Soul Dew', 'Perish Song'],
 		unbanlist: ['Genesect', 'Landorus', 'Manaphy', 'Thundurus', 'Tornadus-Therian'],
-	},
-	{
-		name: "[Gen 5] ZU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8034680/">BW2 ZU</a>`,
-		],
-
-		mod: 'gen5',
-		searchShow: false,
-		ruleset: ['[Gen 5] PU'],
-		banlist: ['PU', 'Articuno', 'Dragonair', 'Glalie', 'Machoke', 'Marowak', 'Omanyte', 'Regigigas', 'Trubbish', 'Whirlipede', 'Baton Pass'],
-		unbanlist: ['Damp Rock'],
 	},
 	{
 		name: "[Gen 5] CAP",
@@ -3738,17 +3703,17 @@ export const Formats: FormatList = [
 		banlist: ['AG'],
 	},
 	{
-		name: "[Gen 4] UU",
+		name: "[Gen 4] NU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3532624/">DPP UU Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3503638/">DPP UU Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3583742/">DPP NU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3512254/">DPP NU Viability Rankings</a>`,
 		],
 
 		mod: 'gen4',
 		searchShow: false,
-		ruleset: ['[Gen 4] OU', '!Freeze Clause Mod'],
-		banlist: ['OU', 'UUBL'],
-		unbanlist: ['Arena Trap', 'Swagger'],
+		ruleset: ['[Gen 4] UU', 'Baton Pass Clause'],
+		banlist: ['UU', 'NUBL'],
+		unbanlist: ['Sand Veil', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 4] PU",
@@ -3899,6 +3864,18 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['Standard', 'Deoxys Camouflage Clause', 'One Baton Pass Clause'],
 		banlist: ['Wobbuffet + Leftovers'],
+	},
+	{
+		name: "[Gen 3] UU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3585923/">ADV UU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3548578/">ADV UU Viability Rankings</a>`,
+		],
+
+		mod: 'gen3',
+		searchShow: false,
+		ruleset: ['Standard'],
+		banlist: ['Uber', 'OU', 'UUBL', 'Smeargle + Ingrain', 'Arena Trap', 'Baton Pass', 'Swagger'],
 	},
 	{
 		name: "[Gen 3] NU",
