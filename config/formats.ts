@@ -193,7 +193,6 @@ export const Formats: FormatList = [
 
 	{
 		section: "Other Metagames",
-		column: 2,
 	},
 	{
 		name: "[Gen 9] Balanced Hackmons",
