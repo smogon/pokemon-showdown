@@ -669,7 +669,17 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (this.field.isWeather('hail')) this.eachEvent('Weather');
 		},
 		onWeather(target) {
-			this.damage(target.baseMaxhp / 16);
+			let sleet = false;
+			for (const pokemon of this.getAllActive()) {
+				if (pokemon.hasAbility('sleet')) {
+					sleet = true;
+				}
+			}
+			if (sleet) {
+				this.damage(target.baseMaxhp / 5);
+			} else {
+				this.damage(target.baseMaxhp / 16);
+			}
 		},
 		onFieldEnd() {
 			this.add('-weather', 'none');

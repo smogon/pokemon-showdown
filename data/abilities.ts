@@ -6005,6 +6005,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	shadowdance: {
 		onModifySpe(spe, pokemon) {
 			if (this.field.isWeather('newmoon')) {
+				this.add('-anim', pokemon, 'Rain Dance', pokemon);
+				this.add('-message', `${pokemon.name} got its groove on!`);
+				this.add('-anim', pokemon, 'Rain Dance', pokemon);
 				return this.chainModify(2);
 			}
 		},

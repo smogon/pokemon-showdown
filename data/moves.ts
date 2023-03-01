@@ -21970,8 +21970,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Rain Dance', target);
-			this.add('-message', `${source.name} got its groove on!`);
-			this.add('-anim', source, 'Rain Dance', target);
+			this.add('-message', `The party is getting started!`);
 		},
 		weather: 'NewMoon',
 		secondary: null,
