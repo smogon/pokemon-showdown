@@ -302,7 +302,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!pokemon.hp) return;
 			for (const target of pokemon.foes()) {
 				if (target.status === 'slp' || target.hasAbility('comatose')) {
-					this.damage(target.baseMaxhp / 8, target, pokemon);
+					if (this.field.isWeather(['newmoon'])) {
+						this.damage(target.baseMaxhp / 4, target, pokemon);
+					} else {
+						this.damage(target.baseMaxhp / 8, target, pokemon);
+					}
 				}
 			}
 		},
@@ -791,7 +795,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (target === source || move.category === 'Status' || move.type !== 'Dark') return;
 			if (!move.auraBooster?.hasAbility('Dark Aura')) move.auraBooster = this.effectState.target;
 			if (move.auraBooster !== this.effectState.target) return;
-			return this.chainModify([move.hasAuraBreak ? 3072 : 5448, 4096]);
+			if (this.field.isWeather(['newmoon'])) {
+				return this.chainModify([move.hasAuraBreak ? 12 : 25, 20]);
+			}
+			else {
+				return this.chainModify([move.hasAuraBreak ? 3072 : 5448, 4096]);
+			}
 		},
 		name: "Dark Aura",
 		rating: 3,
@@ -1126,6 +1135,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onAnyBasePowerPriority: 20,
 		onAnyBasePower(basePower, source, target, move) {
+			if (this.field.isWeather(['newmoon'])) return;
 			if (target === source || move.category === 'Status' || move.type !== 'Fairy') return;
 			if (!move.auraBooster?.hasAbility('Fairy Aura')) move.auraBooster = this.effectState.target;
 			if (move.auraBooster !== this.effectState.target) return;
@@ -1828,6 +1838,15 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 246,
 	},
 	illuminate: {
+		onModifyAccuracyPriority: -1,
+		onModifyAccuracy(accuracy) {
+			if (typeof accuracy !== 'number') return;
+			if (this.field.isWeather(['newmoon'])) {
+				this.debug('Illuminate - decreasing accuracy');
+				return this.chainModify([3277, 4096]);
+			}
+		},
+		isBreakable: true,
 		name: "Illuminate",
 		rating: 0,
 		num: 35,
@@ -3094,7 +3113,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onDeductPP(target, source) {
 			if (target.isAlly(source)) return;
-			return 1;
+			if (this.field.isWeather(['newmoon'])) {
+				return 2;
+			} else {
+				return 1;
+			}
 		},
 		name: "Pressure",
 		rating: 2.5,
