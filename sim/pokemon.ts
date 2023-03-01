@@ -506,7 +506,7 @@ export class Pokemon {
 		this.speed = this.getActionSpeed();
 	}
 
-	calculateStat(statName: StatIDExceptHP, boost: number, modifier?: number) {
+	calculateStat(statName: StatIDExceptHP, boost: number, modifier?: number, statUser?: Pokemon) {
 		statName = toID(statName) as StatIDExceptHP;
 		// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
 		if (statName === 'hp') throw new Error("Please read `maxhp` directly");
@@ -527,7 +527,7 @@ export class Pokemon {
 		let boosts: SparseBoostsTable = {};
 		const boostName = statName as BoostID;
 		boosts[boostName] = boost;
-		boosts = this.battle.runEvent('ModifyBoost', this, null, null, boosts);
+		boosts = this.battle.runEvent('ModifyBoost', statUser || this, null, null, boosts);
 		boost = boosts[boostName]!;
 		const boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
 		if (boost > 6) boost = 6;
