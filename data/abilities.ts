@@ -796,7 +796,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!move.auraBooster?.hasAbility('Dark Aura')) move.auraBooster = this.effectState.target;
 			if (move.auraBooster !== this.effectState.target) return;
 			if (this.field.isWeather(['newmoon'])) {
-				return this.chainModify([move.hasAuraBreak ? 12 : 25, 20]);
+				return this.chainModify([move.hasAuraBreak ? 9 : 25, 15]);
 			}
 			else {
 				return this.chainModify([move.hasAuraBreak ? 3072 : 5448, 4096]);
