@@ -1296,7 +1296,7 @@ export class RandomTeams {
 			}
 		}
 		let ability = '';
-		let item = undefined;
+		let item: string | undefined = undefined;
 
 		const evs = {hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85};
 		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
@@ -1354,7 +1354,7 @@ export class RandomTeams {
 		const noAttackStatMoves = [...moves].every(m => {
 			const move = this.dex.moves.get(m);
 			if (move.damageCallback || move.damage) return true;
-			if (move.id === 'shellsidearm') return false;
+			if (['shellsidearm', 'terablast'].includes(move.id) && item !== 'Choice Specs') return false;
 			return move.category !== 'Physical' || move.id === 'bodypress' || move.id === 'foulplay';
 		});
 		if (noAttackStatMoves && !moves.has('transform')) {
