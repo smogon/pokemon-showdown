@@ -1051,7 +1051,6 @@ export const Aliases: {[alias: string]: string} = {
 	vinelash: "G-Max Vine Lash",
 	volcalith: "G-Max Volcalith",
 	voltcrash: "G-Max Volt Crash",
-	wildfire: "G-Max Wildfire",
 	windrage: "G-Max Wind Rage",
 
 	// Japanese names
