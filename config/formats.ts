@@ -264,20 +264,7 @@ export const Formats: FormatList = [
 
         mod: 'gen9',
         gameType: 'doubles',
-        ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer'],
-        onValidateTeam(team) {
-            const RESTRICTED_LEGENDS = [
-                'Koraidon', 'Miraidon',
-            ];
-            let restrictedCount = 0;
-            for (const set of team) {
-                const species = this.dex.getSpecies(set.species);
-                if (RESTRICTED_LEGENDS.includes(species.baseSpecies)) restrictedCount++;
-            }
-            if (restrictedCount > 1) {
-                return [`You are limited to one restricted legend.`, `(You have ${restrictedCount} restricted legends.)`];
-            }
-        },
+        ruleset: ['Limit One Restricted', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer'],
     },
 	{
 		name: "[Gen 9] Doubles Custom Game",
