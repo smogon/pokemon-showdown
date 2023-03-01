@@ -1707,9 +1707,9 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Star Sweet",
 		desc: "Evolves Milcery into Alcremie when held and spun around.",
 	},
-	steelixite: {
-		name: "Steelixite",
-		desc: "If held by a Steelix, this item allows it to Mega Evolve in battle.",
+	steelixitesteel: {
+		name: "Steelixite Steel",
+		desc: "If held by a Steelix, this item allows it to Mega Evolve to its steel forme in battle.",
 	},
 	steelgem: {
 		name: "Steel Gem",
