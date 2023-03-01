@@ -14286,7 +14286,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
 		secondary: null,
 		onBasePower(basePower, source) {
-			if (this.field.getPseudoWeather('electricterrain') && source.isGrounded()) {
+			if (this.field.isTerrain('electricterrain')) {
 				this.debug('psyblade electric terrain boost');
 				return this.chainModify(1.5);
 			}
