@@ -545,7 +545,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 				this.debug('Sunny Day fire boost');
 				return this.chainModify(1.5);
 			}
-			if (move.type === 'Water' && move.id !== 'hydrosteam') {
+			if (move.type === 'Water' && (move.id !== 'hydrosteam' || attacker.hasItem('utilityumbrella'))) {
 				this.debug('Sunny Day water suppress');
 				return this.chainModify(0.5);
 			}
