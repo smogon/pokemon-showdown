@@ -18013,7 +18013,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	ironleaves: {
 		num: 1010,
 		name: "Iron Leaves",
-		types: ["Grass", "Psychic", "Dark"],
+		types: ["Grass", "Psychic"],
 		gender: "N",
 		baseStats: {hp: 90, atk: 130, def: 88, spa: 70, spd: 108, spe: 104},
 		abilities: {0: "Quark Drive"},
