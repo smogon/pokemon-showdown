@@ -73,13 +73,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 92, atk: 130, def: 145, spa: 80, spd: 145, spe: 128},
 	},
-	kubfu: {
-		inherit: true,
-		abilities: {0: "Inner Focus"},
-	},
 	kleavor: {
 		inherit: true,
-		baseStats: {hp: 70, atk: 135, def: 95, spa: 45, spd: 70, spe: 85},
 		abilities: {0: "Swarm", 1: "Sheer Force", H: "Steadfast"},
 	},
 	basculegion: {
