@@ -351,6 +351,16 @@ export const Formats: FormatList = [
 		ruleset: ['Standard NatDex'],
 	},
 	{
+		name: "[Gen 9] National Dex Insurgence",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3672423/">National Dex AG</a>`,
+		],
+
+		mod: 'insurgence',
+		searchShow: false,
+		ruleset: ['Standard NatDex'],
+	},
+	{
 		name: "[Gen 9] National Dex BH",
 		desc: `Balanced Hackmons with National Dex elements mixed in.`,
 		threads: [
