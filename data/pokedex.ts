@@ -4154,14 +4154,14 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "trade",
 		evoItem: "Metal Coat",
 		eggGroups: ["Mineral"],
-		otherFormes: ["Steelix-Mega-Steel"],
-		formeOrder: ["Steelix", "Steelix-Mega-Steel"],
+		otherFormes: ["Steelix-Mega"],
+		formeOrder: ["Steelix", "Steelix-Mega"],
 	},
-	steelixmegasteel: {
+	steelixmega: {
 		num: 208,
-		name: "Steelix-Mega-Steel",
+		name: "Steelix-Mega",
 		baseSpecies: "Steelix",
-		forme: "Mega-Steel",
+		forme: "Mega",
 		types: ["Steel", "Ground"],
 		baseStats: {hp: 75, atk: 125, def: 230, spa: 55, spd: 95, spe: 30},
 		abilities: {0: "Sand Force"},
@@ -4169,7 +4169,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 740,
 		color: "Gray",
 		eggGroups: ["Mineral"],
-		requiredItem: "Steelixite Steel",
+		requiredItem: "Steelixite",
 	},
 	snubbull: {
 		num: 209,
@@ -19255,7 +19255,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	////////////////////////
 	// Insurgence pokemon //
 	////////////////////////
-	
+
 	bulbasaurdelta: {
 		tags: ["Insurgence"],
 		num: 1,

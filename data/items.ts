@@ -7664,10 +7664,10 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Past",
 	},
-	steelixitesteel: {
-		name: "Steelixite Steel",
+	steelixite: {
+		name: "Steelixite",
 		spritenum: 621,
-		megaStone: "Steelix-Mega-Steel",
+		megaStone: "Steelix-Mega",
 		megaEvolves: "Steelix",
 		itemUser: ["Steelix"],
 		onTakeItem(item, source) {

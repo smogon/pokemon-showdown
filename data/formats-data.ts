@@ -7548,7 +7548,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 		natDexTier: "RU",
     },
-	steelixmegasteel: {
+	steelixmega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "RU",

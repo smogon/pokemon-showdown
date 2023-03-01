@@ -687,10 +687,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	steelixitesteel: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	macargonite: {
 		inherit: true,
 		isNonstandard: null,
