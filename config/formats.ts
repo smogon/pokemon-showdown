@@ -259,13 +259,14 @@ export const Formats: FormatList = [
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
 		banlist: ['Sub-Legendary'],
 	},
-    {
-        name: "[Gen 9] Paldea Prologue",
+	{
+		name: "[Gen 9] Paldea Prologue",
 
-        mod: 'gen9',
-        gameType: 'doubles',
-        ruleset: ['Limit One Restricted', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer'],
-    },
+		mod: 'gen9',
+		gameType: 'doubles',
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer'],
+		restricted: ['Limit One Restricted'],
+	},
 	{
 		name: "[Gen 9] Doubles Custom Game",
 
