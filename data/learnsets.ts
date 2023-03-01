@@ -83008,7 +83008,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		learnset: {
 			agility: ["9M", "8M"],
 			allyswitch: ["8M"],
-			aromatherapy: ["9L40", "8L40"],
+			aromatherapy: ["8L40"],
 			assurance: ["8M"],
 			avalanche: ["9M", "9L1", "8M", "8L1"],
 			batonpass: ["9M", "8M"],
@@ -83070,7 +83070,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			protect: ["9M", "8M"],
 			psybeam: ["9M"],
 			psychic: ["9M", "9L56", "8M", "8L56", "8S0"],
-			psychicterrain: ["9M", "8M"],
+			psychicterrain: ["9M", "9L40", "8M"],
 			psyshock: ["9M", "9L24", "8M", "8L24"],
 			reflect: ["9M", "8M"],
 			rest: ["9M", "8M"],
