@@ -94364,6 +94364,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			worryseed: ["6T"],
 			zenheadbutt: ["6T"],
 			terablast: ["9M"],
+			coreenforcer: ["POA"]
 		},
 	},
 	ivysaurdelta: {
