@@ -1781,24 +1781,24 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "RU"
 	},
 	"rotomheat": {
-		"doublesTier": "DUU",
-		"tier": "UU"
+		"isNonstandard": "Unobtainable",
+		"tier": "Unreleased"
 	},
 	"rotomwash": {
-		"doublesTier": "DOU",
-		"tier": "OU"
+		"isNonstandard": "Unobtainable",
+		"tier": "Unreleased"
 	},
 	"rotomfrost": {
-		"doublesTier": "DUU",
-		"tier": "PU"
+		"isNonstandard": "Unobtainable",
+		"tier": "Unreleased"
 	},
 	"rotomfan": {
-		"doublesTier": "DUU",
-		"tier": "PU"
+		"isNonstandard": "Unobtainable",
+		"tier": "Unreleased"
 	},
 	"rotommow": {
-		"doublesTier": "DUU",
-		"tier": "UU"
+		"isNonstandard": "Unobtainable",
+		"tier": "Unreleased"
 	},
 	"uxie": {
 		"doublesTier": "DUU",

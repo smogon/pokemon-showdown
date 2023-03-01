@@ -5374,7 +5374,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	"aggron": {
 		"types": [
 			"Steel",
-			"Rock"
 		],
 		"baseStats": {
 			"hp": 70,
