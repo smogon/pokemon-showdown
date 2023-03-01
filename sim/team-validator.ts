@@ -401,6 +401,12 @@ export class TeamValidator {
 				tierSpecies = dex.species.get('Groudon-Primal');
 			} else if (item.id === 'blueorb' && species.id === 'kyogre') {
 				tierSpecies = dex.species.get('Kyogre-Primal');
+			} else if (item.id === 'crystalpiece' && species.id === 'giratina') {
+				tierSpecies = dex.species.get('Giratina-Primal');
+			} else if (item.id === 'crystalpiece' && species.id === 'arceus') {
+				tierSpecies = dex.species.get('Arceus-Primal');
+			} else if (item.id === 'crystalpiece' && species.id === 'regigigas') {
+				tierSpecies = dex.species.get('Regigigas-Primal');
 			} else if (canMegaEvo && species.id === 'rayquaza' && set.moves.map(toID).includes('dragonascent' as ID) &&
 					!ruleTable.has('megarayquazaclause')) {
 				tierSpecies = dex.species.get('Rayquaza-Mega');
