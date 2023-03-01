@@ -33,6 +33,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	bulbasaur: {
 		learnset: {
+			coreenforcer: ["INS"],
 			amnesia: ["8M", "7E", "6E", "5E", "4E"],
 			attract: ["8M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			bide: ["7V"],
@@ -94364,7 +94365,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			worryseed: ["6T"],
 			zenheadbutt: ["6T"],
 			terablast: ["9M"],
-			coreenforcer: ["INS"]
 		},
 	},
 	ivysaurdelta: {
