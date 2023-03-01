@@ -32,7 +32,7 @@ describe('Hydro Stream', function () {
 		assert.bounded(koraidon.maxhp - koraidon.hp, [27, 32]);
 	});
 
-	it(`should not be affected by the target holing Utility Umbrella`, function () {
+	it(`should not be affected by the target holding Utility Umbrella`, function () {
 		battle = common.createBattle([[
 			{species: 'Volcanion', ability: 'waterabsorb', moves: ['hydrosteam']},
 		], [
