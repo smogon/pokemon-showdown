@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Hydro Stream', function () {
+describe('Hydro Steam', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
 
-	it(`should have its base power multiplied by 1.5 in Sunny Day and not have its damaged halved`, function () {
+	it(`should have its damage multiplied by 1.5 in Sunny Day`, function () {
 		battle = common.createBattle([[
 			{species: 'Volcanion', ability: 'waterabsorb', moves: ['hydrosteam']},
 		], [
@@ -21,7 +21,7 @@ describe('Hydro Stream', function () {
 		assert.bounded(koraidon.maxhp - koraidon.hp, [81, 96]);
 	});
 
-	it(`should not have its base power multiplied by 1.5 in Sunny Day and should have its damaged halved if the user holds a Utility Umbrella`, function () {
+	it(`should have its damaged halved if the user holds a Utility Umbrella`, function () {
 		battle = common.createBattle([[
 			{species: 'Volcanion', ability: 'waterabsorb', item: 'utilityumbrella', moves: ['hydrosteam']},
 		], [
@@ -32,7 +32,7 @@ describe('Hydro Stream', function () {
 		assert.bounded(koraidon.maxhp - koraidon.hp, [27, 32]);
 	});
 
-	it(`should not be affected if only the target holds Utility Umbrella`, function () {
+	it(`should have its damage multiplied by 1.5 if only the target holds Utility Umbrella`, function () {
 		battle = common.createBattle([[
 			{species: 'Volcanion', ability: 'waterabsorb', moves: ['hydrosteam']},
 		], [
@@ -43,7 +43,7 @@ describe('Hydro Stream', function () {
 		assert.bounded(koraidon.maxhp - koraidon.hp, [81, 96]);
 	});
 
-	it(`should be deal full damage but without a BP boost if both the user and target hold Utility Umbrellas`, function () {
+	it(`should not have its damage changed if both the user and target hold Utility Umbrellas`, function () {
 		battle = common.createBattle([[
 			{species: 'Volcanion', ability: 'waterabsorb', item: 'utilityumbrella', moves: ['hydrosteam']},
 		], [
