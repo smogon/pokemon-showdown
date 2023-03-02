@@ -3083,8 +3083,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	hydrosteam: {
 		name: "Hydro Steam",
-		desc: "If the current weather is Sunny Day, this move's power is multiplied by 1.5 and is not weakened for being Water type.",
-		shortDesc: "During Sunny Day: 1.5x power and not weakened.",
+		desc: "If the current weather is Sunny Day and the user is not holding Utility Umbrella, this move's damage is multiplied by 1.5 instead of halved for being Water type.",
+		shortDesc: "During Sunny Day: 1.5x damage instead of half.",
 	},
 	hydrovortex: {
 		name: "Hydro Vortex",
@@ -4773,7 +4773,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	psyblade: {
 		name: "Psyblade",
 		desc: "If the current terrain is Electric Terrain, this move's power is multiplied by 1.5.",
-		shortDesc: "During Electric Terain: 1.5x power.",
+		shortDesc: "During Electric Terrain: 1.5x power.",
 	},
 	psychup: {
 		name: "Psych Up",
