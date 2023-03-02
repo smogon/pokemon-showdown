@@ -4654,7 +4654,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 			// interaction with Ability Shield is similar to No Ability
 			if (pokemon.hasItem('Ability Shield')) {
-				this.add('-block', pokemon, 'item: Ability Shield');
+				if (!['zoroark', 'zoroarkmega'].includes(pokemon.species.id)) {
+					this.add('-block', pokemon, 'item: Ability Shield');
+				}
 				this.effectState.gaveUp = true;
 			}
 		},
@@ -4673,7 +4675,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const target = this.sample(possibleTargets);
 			const ability = target.getAbility();
 			if (pokemon.setAbility(ability)) {
-				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
+				if (!['zoroark', 'zoroarkmega'].includes(pokemon.species.id)) {
+					this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
+				}
 			}
 		},
 		name: "Trace",
