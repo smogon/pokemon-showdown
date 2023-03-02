@@ -1355,6 +1355,8 @@ export class RandomTeams {
 			const move = this.dex.moves.get(m);
 			if (move.damageCallback || move.damage) return true;
 			if (move.id === 'shellsidearm') return false;
+			// Magearna, though this can work well as a general rule
+			if (move.id === 'terablast' && moves.has('shiftgear')) return false;
 			return move.category !== 'Physical' || move.id === 'bodypress' || move.id === 'foulplay';
 		});
 		if (noAttackStatMoves && !moves.has('transform')) {
