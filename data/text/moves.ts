@@ -3083,7 +3083,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	hydrosteam: {
 		name: "Hydro Steam",
-		desc: "If the current weather is Sunny Day, this move's damage is multiplied by 1.5 and is not weakened for being Water type.",
+		desc: "If the current weather is Sunny Day and the user is not holding Utility Umbrella, this move's damage is multiplied by 1.5 and is not weakened for being Water type.",
 		shortDesc: "During Sunny Day: 1.5x damage and not weakened.",
 	},
 	hydrovortex: {
