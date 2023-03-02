@@ -4677,8 +4677,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (pokemon.setAbility(ability)) {
 				if (!['zoroark', 'zoroarkmega'].includes(pokemon.species.id)) {
 					this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
-				} else {
-					this.add('-ability', pokemon, ability, '');
 				}
 			}
 		},
