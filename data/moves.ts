@@ -9235,14 +9235,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, defrost: 1},
+		// Damage boost in Sun applied in conditions.ts
 		thawsTarget: true,
 		secondary: null,
-		onBasePower(basePower, source) {
-			if (source.effectiveWeather() === 'sunnyday') {
-				this.debug('hydro steam sun boost');
-				return this.chainModify(1.5);
-			}
-		},
 		target: "normal",
 		type: "Water",
 	},
@@ -13250,11 +13245,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1},
-		onUseMoveMessage(source, target, move) {
-			move.orderUpBoost = true;
-		},
-		onAfterMove(pokemon, target, move) {
-			if (!pokemon.volatiles['commanded'] || !move.orderUpBoost) return;
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			if (!pokemon.volatiles['commanded']) return;
 			const tatsugiri = pokemon.volatiles['commanded'].source;
 			if (tatsugiri.baseSpecies.baseSpecies !== 'Tatsugiri') return; // Should never happen
 			switch (tatsugiri.baseSpecies.forme) {
@@ -14310,7 +14302,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
 		secondary: null,
 		onBasePower(basePower, source) {
-			if (this.field.getPseudoWeather('electricterrain') && source.isGrounded()) {
+			if (this.field.isTerrain('electricterrain')) {
 				this.debug('psyblade electric terrain boost');
 				return this.chainModify(1.5);
 			}
