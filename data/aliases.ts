@@ -7,8 +7,8 @@ export const Aliases: {[alias: string]: string} = {
 	overused: "[Gen 9] OU",
 	underused: "[Gen 9] UU",
 	rarelyused: "[Gen 9] RU",
-	neverused: "[Gen 8] NU",
-	pu: "[Gen 8] PU",
+	neverused: "[Gen 9] NU",
+	pu: "[Gen 9] PU",
 	zeroused: "[Gen 8] ZU",
 	mono: "[Gen 9] Monotype",
 	ag: "[Gen 9] Anything Goes",
@@ -86,8 +86,8 @@ export const Aliases: {[alias: string]: string} = {
 	gen6ag: "[Gen 6] Anything Goes",
 	crossevo: "[Gen 9] Cross Evolution",
 	mayhem: "[Gen 9] Random Battle Mayhem",
-	omotm: "[Gen 9] Convergence",
-	lcotm: "[Gen 9] Camomons",
+	omotm: "[Gen 9] Fortemons",
+	lcotm: "[Gen 9] Tera Donation",
 
 	// mega evos
 	fabio: "Ampharos-Mega",

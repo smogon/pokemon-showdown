@@ -89,7 +89,7 @@ const NoStab = [
 	'accelerock', 'aquajet', 'beakblast', 'bounce', 'breakingswipe', 'chatter', 'chloroblast', 'clearsmog', 'dragontail', 'eruption',
 	'explosion', 'fakeout', 'flamecharge', 'flipturn', 'iceshard', 'icywind', 'incinerate', 'machpunch', 'meteorbeam',
 	'mortalspin', 'pluck', 'pursuit', 'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak',
-	'skydrop', 'snarl', 'steelbeam', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
+	'skydrop', 'snarl', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
 ];
 // Hazard-setting moves
 const Hazards = [
@@ -277,6 +277,7 @@ export class RandomTeams {
 	 * Doesn't count bans nested inside other formats/rules except Force Select.
 	 */
 	private hasDirectCustomBanlistChanges() {
+		if (this.format.banlist.length || this.format.restricted.length || this.format.unbanlist.length) return true;
 		// Force Select is functionally a ban on not including a specific Pokemon.
 		// It may be enforced in-battle even if included nested from another format rather than customRules.
 		if (this.format.ruleTable?.valueRules.get('forceselect')) return true;
@@ -442,7 +443,6 @@ export class RandomTeams {
 		const statusMoves = this.dex.moves.all()
 			.filter(move => move.category === 'Status')
 			.map(move => move.id);
-		const magnezoneMoves = ['bodypress', 'mirrorcoat', 'steelbeam'];
 
 		// Team-based move culls
 		if (teamDetails.stealthRock) {
@@ -511,7 +511,7 @@ export class RandomTeams {
 			this.fastPop(movePool, movePool.indexOf('haze'));
 		}
 		// Magnezone
-		this.incompatibleMoves(moves, movePool, magnezoneMoves, magnezoneMoves);
+		this.incompatibleMoves(moves, movePool, 'bodypress', 'mirrorcoat');
 		// Amoonguss, though this can work well as a general rule later
 		this.incompatibleMoves(moves, movePool, 'toxic', 'clearsmog');
 	}
@@ -964,7 +964,6 @@ export class RandomTeams {
 		if (species.id === 'vespiquen') return 'Pressure';
 		if (species.id === 'enamorus' && moves.has('calmmind')) return 'Cute Charm';
 		if (species.id === 'cetitan' && role === 'Wallbreaker') return 'Sheer Force';
-		if (abilities.has('Corrosion') && moves.has('toxic') && !moves.has('earthpower')) return 'Corrosion';
 		if (abilities.has('Cud Chew') && moves.has('substitute')) return 'Cud Chew';
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk'))) return 'Guts';
 		if (abilities.has('Harvest') && moves.has('substitute')) return 'Harvest';
@@ -1359,6 +1358,8 @@ export class RandomTeams {
 			const move = this.dex.moves.get(m);
 			if (move.damageCallback || move.damage) return true;
 			if (move.id === 'shellsidearm') return false;
+			// Magearna, though this can work well as a general rule
+			if (move.id === 'terablast' && moves.has('shiftgear')) return false;
 			return move.category !== 'Physical' || move.id === 'bodypress' || move.id === 'foulplay';
 		});
 		if (noAttackStatMoves && !moves.has('transform')) {
