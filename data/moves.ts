@@ -3046,7 +3046,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {mirror: 1},
 		onHitField(target, source) {
 			const sideConditions = [
-				'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire',
+				'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'livewire', 'permafrost', 'hotcoals', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire',
 			];
 			let success = false;
 			if (this.gameType === "freeforall") {
@@ -3484,10 +3484,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 			let success = false;
 			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({evasion: -1});
 			const removeTarget = [
-				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
+				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'livewire', 'permafrost', 'hotcoals', 'stickyweb', 'gmaxsteelsurge',
 			];
 			const removeAll = [
-				'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
+				'spikes', 'toxicspikes', 'stealthrock', 'livewire', 'permafrost', 'hotcoals', 'stickyweb', 'gmaxsteelsurge',
 			];
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
@@ -7637,9 +7637,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onHit(source) {
 				let success = false;
 				const removeTarget = [
-					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
+					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'livewire', 'permafrost', 'hotcoals','stickyweb',
 				];
-				const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+				const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'livewire', 'permafrost', 'hotcoals', 'stickyweb', 'gmaxsteelsurge'];
 				for (const targetCondition of removeTarget) {
 					if (source.side.foe.removeSideCondition(targetCondition)) {
 						if (!removeAll.includes(targetCondition)) continue;
@@ -12520,7 +12520,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
 				this.add('-end', pokemon, 'Leech Seed', '[from] move: Mortal Spin', '[of] ' + pokemon);
 			}
-			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'livewire', 'permafrost', 'hotcoals', 'stickyweb', 'gmaxsteelsurge'];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Mortal Spin', '[of] ' + pokemon);
@@ -12534,7 +12534,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
 				this.add('-end', pokemon, 'Leech Seed', '[from] move: Mortal Spin', '[of] ' + pokemon);
 			}
-			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'livewire', 'permafrost', 'hotcoals', 'stickyweb', 'gmaxsteelsurge'];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Mortal Spin', '[of] ' + pokemon);
@@ -14988,7 +14988,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
 				this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + pokemon);
 			}
-			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'livewire', 'permafrost', 'hotcoals', 'stickyweb', 'gmaxsteelsurge'];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
@@ -15002,7 +15002,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
 				this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + pokemon);
 			}
-			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'livewire', 'permafrost', 'hotcoals', 'stickyweb', 'gmaxsteelsurge'];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
@@ -20028,7 +20028,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			for (const active of this.getAllActive()) {
 				if (active.removeVolatile('substitute')) success = true;
 			}
-			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'livewire', 'permafrost', 'hotcoals', 'stickyweb', 'gmaxsteelsurge'];
 			const sides = [pokemon.side, ...pokemon.side.foeSidesWithConditions()];
 			for (const side of sides) {
 				for (const sideCondition of removeAll) {
@@ -22174,6 +22174,33 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fairy",
 		contestType: "Tough",
+	},
+	hotcoals: {
+		num: 446,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Hot Coals",
+		pp: 20,
+		priority: 0,
+		flags: {reflectable: 1},
+		sideCondition: 'hotcoals',
+		condition: {
+			// this is a side condition
+			onSideStart(side) {
+				this.add('-sidestart', side, 'move: Hot Coals');
+			},
+			onEntryHazard(pokemon) {
+				if (pokemon.hasItem('heavydutyboots')) return;
+				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('hotcoals')), -6, 6);
+				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
+			},
+		},
+		secondary: null,
+		target: "foeSide",
+		type: "Fire",
+		zMove: {boost: {def: 1}},
+		contestType: "Cool",
 	},
 	wildfire: {
 		num: -19,

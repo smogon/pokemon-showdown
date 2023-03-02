@@ -5418,7 +5418,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onTryMovePriority: -2,
 		onTryMove(pokemon, target, move) {
 			if (move.id === 'stealthrock') {
-				this.actions.useMove('stealthcoal', pokemon, target);
+				this.actions.useMove('hotcoals', pokemon, target);
 				return null;
 			}
 		},
