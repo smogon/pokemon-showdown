@@ -620,6 +620,12 @@ export const Formats: FormatList = [
 						move[property] = forte[property] as any;
 					}
 				}
+				// Added here because onEffectiveness doesn't have an easy way to reference the source
+				if (forte.onEffectiveness) {
+					move.onEffectiveness = function (typeMod, t, type, m) {
+						return forte.onEffectiveness!.call(this, typeMod, t, type, m);
+					};
+				}
 				forte.onModifyMove?.call(this, move, pokemon, target);
 			}
 		},
