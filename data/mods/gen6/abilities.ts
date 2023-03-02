@@ -68,6 +68,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		rating: 4.5,
 	},
+	intoxicate: {
+		inherit: true,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([5325, 4096]);
+		},
+		rating: 4.5,
+	},
 	refrigerate: {
 		inherit: true,
 		onBasePower(basePower, pokemon, target, move) {
