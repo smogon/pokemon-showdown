@@ -184,6 +184,13 @@ export const Formats: FormatList = [
 		banlist: ['Sub-Legendary'],
 	},
 	{
+		name: "[Gen 9] Battle Stadium Singles Regulation C",
+
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer'],
+	},
+	{
 		name: "[Gen 9] Custom Game",
 
 		mod: 'gen9',
@@ -265,6 +272,13 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
 		banlist: ['Sub-Legendary'],
+	},
+	{
+		name: "[Gen 9] VGC 2023 Regulation C",
+
+		mod: 'gen9',
+		gameType: 'doubles',
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
 	},
 	{
 		name: "[Gen 9] Paldea Prologue",
