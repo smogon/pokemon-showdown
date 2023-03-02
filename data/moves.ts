@@ -9226,14 +9226,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, defrost: 1},
+		// Damage boost in Sun applied in conditions.ts
 		thawsTarget: true,
 		secondary: null,
-		onBasePower(basePower, source) {
-			if (source.effectiveWeather() === 'sunnyday') {
-				this.debug('hydro steam sun boost');
-				return this.chainModify(1.5);
-			}
-		},
 		target: "normal",
 		type: "Water",
 	},
