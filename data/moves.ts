@@ -1412,7 +1412,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 75,
 		category: "Special",
-		isNonstandard: "Unobtainable",
 		name: "Bitter Malice",
 		pp: 10,
 		priority: 0,
@@ -9218,6 +9217,21 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
+	hydrosteam: {
+		num: 876,
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		name: "Hydro Steam",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, defrost: 1},
+		// Damage boost in Sun applied in conditions.ts
+		thawsTarget: true,
+		secondary: null,
+		target: "normal",
+		type: "Water",
+	},
 	hydrovortex: {
 		num: 642,
 		accuracy: true,
@@ -13212,11 +13226,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1},
-		onUseMoveMessage(source, target, move) {
-			move.orderUpBoost = true;
-		},
-		onAfterMove(pokemon, target, move) {
-			if (!pokemon.volatiles['commanded'] || !move.orderUpBoost) return;
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			if (!pokemon.volatiles['commanded']) return;
 			const tatsugiri = pokemon.volatiles['commanded'].source;
 			if (tatsugiri.baseSpecies.baseSpecies !== 'Tatsugiri') return; // Should never happen
 			switch (tatsugiri.baseSpecies.forme) {
@@ -14255,6 +14266,25 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Psychic",
 		contestType: "Beautiful",
+	},
+	psyblade: {
+		num: 875,
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		name: "Psyblade",
+		pp: 15,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
+		secondary: null,
+		onBasePower(basePower, source) {
+			if (this.field.isTerrain('electricterrain')) {
+				this.debug('psyblade electric terrain boost');
+				return this.chainModify(1.5);
+			}
+		},
+		target: "normal",
+		type: "Psychic",
 	},
 	psychup: {
 		num: 244,
