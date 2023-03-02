@@ -307,7 +307,6 @@ export class RandomGen8Teams {
 	 * Doesn't count bans nested inside other formats/rules except Force Select.
 	 */
 	private hasDirectCustomBanlistChanges() {
-		if (this.format.banlist.length || this.format.restricted.length || this.format.unbanlist.length) return true;
 		// Force Select is functionally a ban on not including a specific Pokemon.
 		// It may be enforced in-battle even if included nested from another format rather than customRules.
 		if (this.format.ruleTable?.valueRules.get('forceselect')) return true;
