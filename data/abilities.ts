@@ -1858,7 +1858,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			for (let i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
 				const possibleTarget = pokemon.side.pokemon[i];
 				if (!possibleTarget.fainted) {
-					pokemon.illusion = possibleTarget;
+					// pokemon.illusion = possibleTarget;
+					pokemon.illusion = possibleTarget.illusionClone();
 					break;
 				}
 			}
@@ -1866,16 +1867,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onDamagingHit(damage, target, source, move) {
 			if (target.illusion) {
 				this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, source, move);
-			}
-		},
-		onEnd(pokemon) {
-			if (pokemon.illusion) {
-				this.debug('illusion cleared');
-				pokemon.illusion = null;
-				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
-					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-				this.add('replace', pokemon, details);
-				this.add('-end', pokemon, 'Illusion');
 			}
 		},
 		onFaint(pokemon) {

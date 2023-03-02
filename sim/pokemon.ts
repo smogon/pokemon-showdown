@@ -467,6 +467,87 @@ export class Pokemon {
 		this.hp = this.maxhp;
 	}
 
+	illusionClone(): Pokemon {
+		const clone = new Pokemon(this.set, this.side);
+
+		clone.moveSlots = this.moveSlots;
+		clone.hpType = this.hpType;
+		clone.hpPower = this.hpPower;
+		clone.position = this.position;
+		clone.details = this.details;
+		clone.baseSpecies = this.baseSpecies;
+		clone.species = this.species;
+		clone.speciesState = this.speciesState;
+		clone.status = this.status;
+		clone.statusState = this.statusState;
+		clone.volatiles = this.volatiles;
+		clone.showCure = this.showCure;
+		clone.baseStoredStats = this.baseStoredStats;
+		clone.storedStats = this.storedStats;
+		clone.boosts = this.boosts;
+		clone.baseAbility = this.baseAbility;
+		clone.ability = this.ability;
+		clone.abilityState = this.abilityState;
+		clone.item = this.item;
+		clone.itemState = this.itemState;
+		clone.lastItem = this.lastItem;
+		clone.usedItemThisTurn = this.usedItemThisTurn;
+		clone.ateBerry = this.ateBerry;
+		clone.trapped = this.trapped;
+		clone.maybeTrapped = this.maybeTrapped;
+		clone.maybeDisabled = this.maybeDisabled;
+		clone.illusion = this.illusion;
+		clone.transformed = this.transformed;
+		clone.maxhp = this.maxhp;
+		clone.baseMaxhp = this.baseMaxhp;
+		clone.hp = this.hp;
+		clone.fainted = this.fainted;
+		clone.faintQueued = this.faintQueued;
+		clone.subFainted = this.subFainted;
+		clone.types = this.types;
+		clone.addedType = this.addedType;
+		clone.knownType = this.knownType;
+		clone.apparentType = this.apparentType;
+		clone.switchFlag = this.switchFlag;
+		clone.forceSwitchFlag = this.forceSwitchFlag;
+		clone.skipBeforeSwitchOutEventFlag = this.skipBeforeSwitchOutEventFlag;
+		clone.draggedIn = this.draggedIn;
+		clone.newlySwitched = this.newlySwitched;
+		clone.beingCalledBack = this.beingCalledBack;
+		clone.lastMove = this.lastMove;
+		clone.lastMoveUsed = this.lastMoveUsed;
+		clone.lastMoveTargetLoc = this.lastMoveTargetLoc;
+		clone.moveThisTurn = this.moveThisTurn;
+		clone.statsRaisedThisTurn = this.statsRaisedThisTurn;
+		clone.statsLoweredThisTurn = this.statsLoweredThisTurn;
+		clone.moveLastTurnResult = this.moveLastTurnResult;
+		clone.moveThisTurnResult = this.moveThisTurnResult;
+		clone.hurtThisTurn = this.hurtThisTurn;
+		clone.lastDamage = this.lastDamage;
+		clone.attackedBy = this.attackedBy;
+		clone.isActive = this.isActive;
+		clone.activeTurns = this.activeTurns;
+		clone.activeMoveActions = this.activeMoveActions;
+		clone.previouslySwitchedIn = this.previouslySwitchedIn;
+		clone.truantTurn = this.truantTurn;
+		clone.isStarted = this.isStarted;
+		clone.duringMove = this.duringMove;
+		clone.weighthg = this.weighthg;
+		clone.speed = this.speed;
+		clone.abilityOrder = this.abilityOrder;
+		clone.canMegaEvo = this.canMegaEvo;
+		clone.canUltraBurst = this.canUltraBurst;
+		clone.staleness = this.staleness;
+		clone.pendingStaleness = this.pendingStaleness;
+		clone.volatileStaleness = this.volatileStaleness;
+		clone.modifiedStats = this.modifiedStats;
+		clone.modifyStat = this.modifyStat;
+		clone.recalculateStats = this.recalculateStats;
+		clone.m = this.m;
+
+		return clone;
+	}
+
 	toJSON(): AnyObject {
 		return State.serializePokemon(this);
 	}
