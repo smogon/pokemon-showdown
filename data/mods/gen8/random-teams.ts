@@ -766,7 +766,6 @@ export class RandomGen8Teams {
 				}
 				// There is no 'nature:nonature' rule so do not constrain pool size
 			}
-
 		}
 
 		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype, undefined,
