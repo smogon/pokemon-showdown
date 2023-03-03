@@ -217,6 +217,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Gen 1 Blizzard',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Ice',
 	},
+	PYRO: {
+		species: 'Kingambit', ability: 'Hardcore Hustle', item: 'Leftovers', gender: 'M',
+		moves: ['Kowtow Cleave', 'Sucker Punch', 'Swords Dance'],
+		signatureMove: 'Meat Grinder',
+		evs: {hp: 252, atk: 252, def: 4}, nature: 'Adamant', teraType: 'Flying',
+	},
 	ReturnToMonkey: {
 		species: 'Oranguru', ability: 'Monke See Monke Do', item: 'Twisted Spoon', gender: 'M',
 		moves: ['Hyper Voice', 'Psyshock', 'Focus Blast'],

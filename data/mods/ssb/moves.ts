@@ -1122,6 +1122,49 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ice",
 	},
 
+	// PYRO
+	meatgrinder: {
+		accuracy: 100,
+		basePower: 75,
+		category: "Physical",
+		name: "Meat Grinder",
+		shortDesc: "Deals 1/8 max HP each turn; 1/4 on Fairy, Normal. Heals user 1/8 each turn.",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit() {
+			this.attrLastMove('[anim] Guillotine');
+		},
+		condition: {
+			noCopy: true,
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Meat Grinder');
+			},
+			onResidualOrder: 13,
+			onResidual(pokemon) {
+				this.damage(pokemon.baseMaxhp / (pokemon.hasType(['Normal', 'Fairy']) ? 4 : 8));
+				if (!pokemon || pokemon.fainted || pokemon.hp <= 0) {
+					this.add(`c:|${getName('PYRO')}|Tripping off the beat kinda, dripping off the meat grinder`);
+				}
+				const target = this.getAtSlot(pokemon.volatiles['meatgrinder'].sourceSlot);
+				if (!target || target.fainted || target.hp <= 0) {
+					this.debug('Nothing to heal');
+					return;
+				}
+				this.heal(target.baseMaxhp / 8, target, pokemon);
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Meat Grinder');
+			},
+		},
+		secondary: {
+			chance: 100,
+			volatileStatus: 'meatgrinder',
+		},
+		target: "normal",
+		type: "Steel",
+	},
+
 	// ReturnToMonkey
 	monkemagic: {
 		accuracy: true,

@@ -287,7 +287,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "Swaps Attack and Defense while Trick Room is up.",
 		name: "Anchor Arms",
 		onUpdate(pokemon) {
-			if (this.field.getPseudoWeather('trickroom') && !pokemon.volatiles['powertrick']) {
+			if (this.field.getPseudoWeather('trickroom')) {
+				if (pokemon.volatiles['powertrick']) return;
 				this.add('-ability', pokemon, 'Anchor Arms');
 				pokemon.addVolatile('powertrick');
 			} else {
@@ -600,6 +601,39 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Bypasses Sleep Clause Mod once per battle.",
 		name: "I Did It Again",
 		// implemented in rulesets.ts
+	},
+
+	// PYRO
+	hardcorehustle: {
+		shortDesc: "Moves have 15% more power and -5% Acc for each fainted ally, up to 5 allies.",
+		name: "Hardcore Hustle",
+		onStart(pokemon) {
+			if (pokemon.side.totalFainted) {
+				this.add('-activate', pokemon, 'ability: Hardcore Hustle');
+				const fallen = Math.min(pokemon.side.totalFainted, 5);
+				this.add('-start', pokemon, `fallen${fallen}`, '[silent]');
+				this.effectState.fallen = fallen;
+			}
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, `fallen${this.effectState.fallen}`, '[silent]');
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.effectState.fallen) {
+				const powMod = [1, 1.15, 1.3, 1.45, 1.6, 1.75];
+				this.debug(`Hardcore Hustle boost: ${powMod[this.effectState.fallen]}`);
+				return this.chainModify(powMod[this.effectState.fallen]);
+			}
+		},
+		onSourceModifyAccuracyPriority: -1,
+		onSourceModifyAccuracy(accuracy, target, source, move) {
+			if (this.effectState.fallen) {
+				const accMod = [1, 0.95, 0.90, 0.85, 0.80, 0.75];
+				this.debug(`Hardcore Hustle debuff: ${accMod[this.effectState.fallen]}`);
+				return this.chainModify(accMod[this.effectState.fallen]);
+			}
+		},
 	},
 
 	// ReturnToMonkey

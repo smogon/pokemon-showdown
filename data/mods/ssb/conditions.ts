@@ -472,6 +472,30 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('phoopes')}|Jynx! Knock on wood`);
 		},
 	},
+	pyro: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('PYRO')}|and I'm your host, the Supervillain`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('PYRO')}|Operation: Lifesaver is in effect, as of right now`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('PYRO')}|Just remember ALL CAPS when you spell the man name...`);
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				if (effect.id === 'meatgrinder') {
+					this.add(`c:|${getName('PYRO')}|Tripping off the beat kinda, dripping off the meat grinder`);
+					return;
+				}
+				if (!source.m.msgPlayed) {
+					this.add(`c:|${getName('PYRO')}|This Villain was a ruthless mass conqueror, with aspirations to dominate the universe`);
+					source.m.msgPlayed = true;
+				}
+			}
+		},
+	},
 	returntomonkey: {
 		noCopy: true,
 		onStart() {
