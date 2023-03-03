@@ -4187,7 +4187,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "UU",
 	},
 	hawlucha: {
-		tier: "UUBL",
+		tier: "UUD",
 		doublesTier: "DUU",
 		natDexTier: "UU",
 	},
@@ -5553,7 +5553,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "UU",
 	},
 	dondozo: {
-		tier: "OU",
+		tier: "UUD",
 		doublesTier: "DOU",
 		natDexTier: "UU",
 	},
@@ -5792,7 +5792,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "Uber",
 	},
 	irontreads: {
-		tier: "OU",
+		tier: "UUD",
 		doublesTier: "DUU",
 		natDexTier: "OU",
 	},
