@@ -505,7 +505,7 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'snowscape', 'swordsdance');
 		// Cryogonal
 		if (!teamDetails.defog && !teamDetails.rapidSpin && species.id === 'cryogonal') {
-			this.fastPop(movePool, movePool.indexOf('haze'));
+			if (movePool.includes('haze')) this.fastPop(movePool, movePool.indexOf('haze'));
 		}
 		// Magnezone
 		this.incompatibleMoves(moves, movePool, 'bodypress', 'mirrorcoat');
