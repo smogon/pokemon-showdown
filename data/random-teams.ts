@@ -2004,30 +2004,31 @@ export class RandomTeams {
 		let naturePool: Nature[] = [];
 		if (doNaturesExist) {
 			if (!hasCustomBans) {
-				if (!hasCustomBans) {
-					naturePool = [...this.dex.natures.all()];
-				} else {
-					const hasAllNaturesBan = ruleTable.check('pokemontag:allnatures');
-					for (const nature of this.dex.natures.all()) {
-						let banReason = ruleTable.check('nature:' + nature.id);
-						if (banReason) continue;
-						if (banReason !== '' && nature.id) {
-							if (hasAllNaturesBan) continue;
-							if (nature.isNonstandard) {
-								banReason = ruleTable.check('pokemontag:' + toID(nature.isNonstandard));
-								if (banReason) continue;
-								if (banReason !== '' && nature.isNonstandard !== 'Unobtainable') {
-									if (hasNonexistentBan) continue;
-									if (!hasNonexistentWhitelist) continue;
-								}
+				naturePool = [...this.dex.natures.all()];
+			} else {
+				const hasAllNaturesBan = ruleTable.check('pokemontag:allnatures');
+				for (const nature of this.dex.natures.all()) {
+					let banReason = ruleTable.check('nature:' + nature.id);
+					console.log(banReason);
+					console.log(nature);
+					if (banReason) continue;
+					if (banReason !== '' && nature.id) {
+						if (hasAllNaturesBan) continue;
+						if (nature.isNonstandard) {
+							banReason = ruleTable.check('pokemontag:' + toID(nature.isNonstandard));
+							if (banReason) continue;
+							if (banReason !== '' && nature.isNonstandard !== 'Unobtainable') {
+								if (hasNonexistentBan) continue;
+								if (!hasNonexistentWhitelist) continue;
 							}
 						}
-						naturePool.push(nature);
 					}
-					// There is no 'nature:nonature' rule so do not constrain pool size
+					naturePool.push(nature);
 				}
+				// There is no 'nature:nonature' rule so do not constrain pool size
 			}
 		}
+		console.log(naturePool);
 
 		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype, undefined,
 			hasCustomBans ? ruleTable : undefined);
