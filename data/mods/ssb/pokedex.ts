@@ -30,6 +30,16 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		types: ['Water', 'Dark'],
 	},
 
+	// Dawn of Artemis
+	necrozma: {
+		inherit: true,
+		abilities: {0: "Form Change"},
+	},
+	necrozmaultra: {
+		inherit: true,
+		abilities: {0: "Form Change"},
+	},
+
 	// havi
 	gastly: {
 		inherit: true,

@@ -177,6 +177,30 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		isBreakable: true,
 	},
 
+	// Dawn of Artemis
+	formchange: {
+		shortDesc: ">50% HP Necrozma, else Necrozma-Ultra. SpA boosts become Atk boosts and vice versa.",
+		name: "Form Change",
+		onResidual(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Necrozma' || pokemon.transformed || !pokemon.hp) return;
+			let newSet = 'Dawn of Artemis';
+			if (pokemon.hp > pokemon.maxhp / 2) {
+				if (pokemon.species.id === 'necrozma') return;
+				this.add(`c:|${getName('Dawn of Artemis')}|Good, I'm healthy again, time to swap back.`);
+			} else {
+				if (pokemon.species.id === 'necrozmaultra') return;
+				this.add(`c:|${getName('Dawn of Artemis')}|Time for me to transform and you to witness the power of Ares now!`);
+				newSet += '-Ultra';
+			}
+			this.add('-activate', pokemon, 'ability: Form Change');
+			changeSet(this, pokemon, ssbSets[newSet]);
+			[pokemon.boosts['atk'], pokemon.boosts['spa']] = [pokemon.boosts['spa'], pokemon.boosts['atk']];
+			this.add('-setboost', pokemon, 'spa', pokemon.boosts['spa'], '[silent]');
+			this.add('-setboost', pokemon, 'atk', pokemon.boosts['atk'], '[silent]');
+			this.add('-message', `${pokemon.name} swapped its Attack and Special Attack boosts!`);
+		},
+	},
+
 	// Eli
 	stormsurge: {
 		shortDesc: "On switch-in, this Pokemon summons Storm Surge.",

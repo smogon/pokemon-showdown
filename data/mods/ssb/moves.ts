@@ -225,6 +225,51 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// Dawn of Artemis
+	magicalfocus: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		name: "Magical Focus",
+		shortDesc: "Fire/Electric/Ice depending on turn. Sets Reflect. Cannot be used by Necrozma-Ultra.",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove(target, source, move) {
+			switch (move.type) {
+			case 'Fire':
+				this.attrLastMove('[anim] Flamethrower');
+				break;
+			case 'Electric':
+				this.attrLastMove('[anim] Thunderbolt');
+				break;
+			case 'Ice':
+				this.attrLastMove('[anim] Ice Beam');
+				break;
+			default:
+				this.attrLastMove('[anim] Hyper Beam');
+				break;
+			}
+		},
+		onModifyType(move) {
+			if (this.turn % 3 === 1) {
+				move.type = 'Fire';
+			} else if (this.turn % 3 === 2) {
+				move.type = 'Electric';
+			} else {
+				move.type = 'Ice';
+			}
+		},
+		onDisableMove(pokemon) {
+			if (pokemon.species.id === 'necrozmaultra') pokemon.disableMove('magicalfocus');
+		},
+		self: {
+			sideCondition: 'reflect',
+		},
+		target: "normal",
+		type: "Normal",
+	},
+
 	// deftinwolf
 	trivialpursuit: {
 		accuracy: 100,

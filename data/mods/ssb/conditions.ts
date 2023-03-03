@@ -137,6 +137,19 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Coolcodename')}|mb LOL`);
 		},
 	},
+	dawnofartemis: {
+		noCopy: true,
+		onStart(pokemon) {
+			const god = (pokemon.species.id === 'necrozmaultra') ? 'Ares' : 'Artemis';
+			this.add(`c:|${getName('Dawn of Artemis')}|Time for you to witness the power of ${god}!`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Dawn of Artemis')}|You'll witness it again later.`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Dawn of Artemis')}|Sad.`);
+		},
+	},
 	deftinwolf: {
 		noCopy: true,
 		onStart() {

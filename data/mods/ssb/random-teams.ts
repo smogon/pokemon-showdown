@@ -85,6 +85,18 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Haxer\'s Will',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', teraType: 'Fairy', shiny: 1024,
 	},
+	'Dawn of Artemis': {
+		species: 'Necrozma', ability: 'Form Change', item: 'Expert Belt', gender: 'F',
+		moves: ['Calm Mind', 'Photon Geyser', 'Earth Power'],
+		signatureMove: 'Magical Focus',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', teraType: 'Psychic', shiny: 8192,
+	},
+	'Dawn of Artemis-Ultra': {
+		species: 'Necrozma-Ultra', ability: 'Form Change', item: 'Expert Belt', gender: 'F',
+		moves: ['Swords Dance', 'Photon Geyser', 'Outrage'],
+		signatureMove: 'Magical Focus',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Dragon', skip: 'Dawn of Artemis',
+	},
 	deftinwolf: {
 		species: 'Yveltal', ability: 'Sharpness', item: 'Dread Plate', gender: '',
 		moves: ['Aerial Ace', 'Ceaseless Edge', 'Cross Poison'],
