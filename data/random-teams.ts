@@ -2009,8 +2009,6 @@ export class RandomTeams {
 				const hasAllNaturesBan = ruleTable.check('pokemontag:allnatures');
 				for (const nature of this.dex.natures.all()) {
 					let banReason = ruleTable.check('nature:' + nature.id);
-					console.log(banReason);
-					console.log(nature);
 					if (banReason) continue;
 					if (banReason !== '' && nature.id) {
 						if (hasAllNaturesBan) continue;
@@ -2028,7 +2026,6 @@ export class RandomTeams {
 				// There is no 'nature:nonature' rule so do not constrain pool size
 			}
 		}
-		console.log(naturePool);
 
 		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype, undefined,
 			hasCustomBans ? ruleTable : undefined);
