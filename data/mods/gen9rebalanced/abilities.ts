@@ -1823,7 +1823,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		isBreakable: true,
 		isPermanent: true,
-		name: "Disguise",
+		name: "Ice Face",
 		rating: 3.5,
 		num: 248,
 	},
