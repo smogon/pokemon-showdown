@@ -271,6 +271,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'spoo',
 		evs: {hp: 252, spa: 252, spd: 4}, nature: 'Modest', teraType: 'Fire', skip: 'spoo',
 	},
+	Swiffix: {
+		species: 'Piplup', ability: 'Stinky', item: 'Loaded Dice', gender: 'M',
+		moves: ['Water Shuriken', 'Nasty Plot', 'Vacuum Wave'],
+		signatureMove: 'Stink Bomb',
+		evs: {hp: 252, def: 4, spa: 252}, nature: 'Modest', teraType: 'Water',
+	},
 	Theia: {
 		species: 'Litwick', ability: 'Power Abuse', item: 'Eviolite', gender: 'F',
 		moves: ['Shadow Ball', 'Flamethrower', 'Giga Drain'],

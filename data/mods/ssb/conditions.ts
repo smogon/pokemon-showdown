@@ -584,6 +584,19 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('spoo')}|dies`);
 		},
 	},
+	swiffix: {
+		noCopy: true,
+		onStart() {
+			const img = "https://cdn.discordapp.com/emojis/995771554904408234.png?size=64&quality=lossless";
+			this.add(`c:|${getName('Swiffix')}|/html <img src="${img}" width="50" height="50" />`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Swiffix')}|brb, gonna get some ketchup for my pizza`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Swiffix')}|Remember: it's pp, not pfp!`);
+		},
+	},
 	theia: {
 		noCopy: true,
 		onStart(pokemon) {

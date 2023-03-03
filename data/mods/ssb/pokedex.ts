@@ -124,6 +124,17 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	mumbao: {
 		inherit: true,
 		baseStats: {hp: 92, atk: 63, def: 96, spa: 104, spd: 97, spe: 124},
+		abilities: {0: 'Dazzling'},
+	},
+	jumbao: {
+		inherit: true,
+		abilities: {0: 'Drought'},
+	},
+
+	// Swiffix
+	piplup: {
+		inherit: true,
+		baseStats: {hp: 84, atk: 66, def: 88, spa: 81, spd: 101, spe: 50},
 	},
 
 	// Zalm

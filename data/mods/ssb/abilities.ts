@@ -733,6 +733,30 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		isPermanent: true,
 	},
 
+	// Swiffix
+	stinky: {
+		desc: "10% chance to either Poison or Paralayze the Pokemon on hit.",
+		name: "Stinky",
+		onModifyMovePriority: -1,
+		onModifyMove(move) {
+			if (move.category !== "Status") {
+				this.debug('Adding Stinky psn/par');
+				if (!move.secondaries) move.secondaries = [];
+				move.secondaries.push({
+					chance: 10,
+					onHit(target, source) {
+						const result = this.random(2);
+						if (result === 0) {
+							target.trySetStatus('par', source);
+						} else {
+							target.trySetStatus('psn', source);
+						}
+					},
+				});
+			}
+		},
+	},
+
 	// Theia
 	powerabuse: {
 		shortDesc: "Summons Sun; attacks do 66% less damage to this Pokemon; may burn physical attackers.",

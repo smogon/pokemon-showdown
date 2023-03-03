@@ -1375,6 +1375,32 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Grass",
 	},
 
+	// Swiffix
+	stinkbomb: {
+		accuracy: 85,
+		basePower: 10,
+		category: "Special",
+		desc: "Hits ten times. This move checks accuracy for each hit, and the attack ends if the target avoids a hit. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit ten times. If the user is holding Loaded Dice, this move hits four to ten times at random without checking accuracy between hits.",
+		shortDesc: "Hits 10 times. Each hit can miss.",
+		name: "Stink Bomb",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Population Bomb', target);
+			this.add('-anim', source, 'Venoshock', target);
+		},
+		multihit: 10,
+		multiaccuracy: true,
+		secondary: null,
+		target: "normal",
+		type: "Poison",
+	},
+
 	// Theia
 	bodycount: {
 		accuracy: 100,
