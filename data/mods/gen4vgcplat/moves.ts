@@ -1,54 +1,54 @@
 export const Moves: {[k: string]: ModdedMoveData} = {
-	accelerock: {
-		num: 709,
-		accuracy: 100,
-		basePower: 40,
-		category: "Physical",
-		name: "Accelerock",
-		pp: 20,
-		priority: 1,
-		flags: {contact: 1, protect: 1, mirror: 1},
-		secondary: null,
-		target: "normal",
-		type: "Rock",
-		contestType: "Cool",
-	},
-	spiritbreak: {
-		num: 789,
-		accuracy: 100,
-		basePower: 75,
-		category: "Physical",
-		name: "Spirit Break",
-		pp: 15,
-		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
-		secondary: {
-			chance: 100,
-			boosts: {
-				spa: -1,
-			},
-		},
-		target: "normal",
-		type: "Fairy",
-	},
-	thunderouskick: {
-		num: 823,
-		accuracy: 100,
-		basePower: 80,
-		category: "Physical",
-		name: "Thunderous Kick",
-		pp: 10,
-		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
-		secondary: {
-			chance: 100,
-			boosts: {
-				def: -1,
-			},
-		},
-		target: "normal",
-		type: "Fighting",
-	},
+	// accelerock: {
+	// 	num: 709,
+	// 	accuracy: 100,
+	// 	basePower: 40,
+	// 	category: "Physical",
+	// 	name: "Accelerock",
+	// 	pp: 20,
+	// 	priority: 1,
+	// 	flags: {contact: 1, protect: 1, mirror: 1},
+	// 	secondary: null,
+	// 	target: "normal",
+	// 	type: "Rock",
+	// 	contestType: "Cool",
+	// },
+	// spiritbreak: {
+	// 	num: 789,
+	// 	accuracy: 100,
+	// 	basePower: 75,
+	// 	category: "Physical",
+	// 	name: "Spirit Break",
+	// 	pp: 15,
+	// 	priority: 0,
+	// 	flags: {contact: 1, protect: 1, mirror: 1},
+	// 	secondary: {
+	// 		chance: 100,
+	// 		boosts: {
+	// 			spa: -1,
+	// 		},
+	// 	},
+	// 	target: "normal",
+	// 	type: "Fairy",
+	// },
+	// thunderouskick: {
+	// 	num: 823,
+	// 	accuracy: 100,
+	// 	basePower: 80,
+	// 	category: "Physical",
+	// 	name: "Thunderous Kick",
+	// 	pp: 10,
+	// 	priority: 0,
+	// 	flags: {contact: 1, protect: 1, mirror: 1},
+	// 	secondary: {
+	// 		chance: 100,
+	// 		boosts: {
+	// 			def: -1,
+	// 		},
+	// 	},
+	// 	target: "normal",
+	// 	type: "Fighting",
+	// },
 	skyattack: {
 		num: 143,
 		accuracy: 85,
@@ -67,56 +67,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Flying",
 		contestType: "Cool",
 	},
-	ancientpower: {
-		num: 246,
-		accuracy: 100,
-		basePower: 60,
-		category: "Special",
-		name: "Ancient Power",
-		pp: 5,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		secondary: {
-			chance: 20,
-			self: {
-				boosts: {
-					atk: 1,
-					def: 1,
-					spa: 1,
-					spd: 1,
-					spe: 1,
-				},
-			},
-		},
-		target: "normal",
-		type: "Rock",
-		contestType: "Tough",
-	},
-	ominouswind: {
-		num: 466,
-		accuracy: 100,
-		basePower: 60,
-		category: "Special",
-		name: "Ominous Wind",
-		pp: 5,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		secondary: {
-			chance: 20,
-			self: {
-				boosts: {
-					atk: 1,
-					def: 1,
-					spa: 1,
-					spd: 1,
-					spe: 1,
-				},
-			},
-		},
-		target: "normal",
-		type: "Ghost",
-		contestType: "Beautiful",
-	},
 	acid: {
 		num: 51,
 		accuracy: 100,
@@ -127,7 +77,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		secondary: {
-			chance: 50,
+			chance: 45,
 			boosts: {
 				spd: -1,
 			},
@@ -2748,6 +2698,66 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"priority": 0,
 		"isNonstandard": null,
 		"target": "normal"
+	},
+	"hiddenpowerbug": {
+		"inherit": true,
+		"isNonstandard": null,
+	},
+	"hiddenpowerdark": {
+		"inherit": true,
+		"isNonstandard": null,
+	},
+	"hiddenpowerdragon": {
+		"inherit": true,
+		"isNonstandard": null,
+	},
+	"hiddenpowerelectric": {
+		"inherit": true,
+		"isNonstandard": null,
+	},
+	"hiddenpowerfighting": {
+		"inherit": true,
+		"isNonstandard": null,
+	},
+	"hiddenpowerfire": {
+		"inherit": true,
+		"isNonstandard": null,
+	},
+	"hiddenpowerflying": {
+		"inherit": true,
+		"isNonstandard": null,
+	},
+	"hiddenpowerghost": {
+		"inherit": true,
+		"isNonstandard": null,
+	},
+	"hiddenpowergrass": {
+		"inherit": true,
+		"isNonstandard": null,
+	},
+	"hiddenpowerice": {
+		"inherit": true,
+		"isNonstandard": null,
+	},
+	"hiddenpowerpoison": {
+		"inherit": true,
+		"isNonstandard": null,
+	},
+	"hiddenpowerpsychic": {
+		"inherit": true,
+		"isNonstandard": null,
+	},
+	"hiddenpowerrock": {
+		"inherit": true,
+		"isNonstandard": null,
+	},
+	"hiddenpowersteel": {
+		"inherit": true,
+		"isNonstandard": null,
+	},
+	"hiddenpowerwater": {
+		"inherit": true,
+		"isNonstandard": null,
 	},
 	"crosschop": {
 		"inherit": true,
