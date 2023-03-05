@@ -38,6 +38,12 @@ export function getName(name: string): string {
 	return Math.floor(Date.now() / 1000) + '|' + group + name;
 }
 
+export function enemyStaff(pokemon: Pokemon): string {
+	const foePokemon = pokemon.foes()[0];
+	if (foePokemon.illusion) return foePokemon.illusion.name;
+	return foePokemon.name;
+}
+
 /**
  * Assigns a new set to a Pokémon
  * @param pokemon the Pokemon to assign the set to

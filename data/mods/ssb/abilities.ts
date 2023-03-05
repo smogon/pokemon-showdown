@@ -1,5 +1,5 @@
 import {ssbSets} from "./random-teams";
-import {changeSet, getName} from "./scripts";
+import {changeSet, getName, enemyStaff} from "./scripts";
 
 export const Abilities: {[k: string]: ModdedAbilityData} = {
 	/*
@@ -120,7 +120,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "When this Pokemon switches out, foes lose 25% HP.",
 		name: "Painful Exit",
 		onSwitchOut(pokemon) {
-			if (pokemon.foes()[0].name === "Mad Monty") {
+			if (enemyStaff(pokemon) === "Mad Monty") {
 				this.add(`c:|${getName('BreadLoeuf')}|Welp`);
 			} else {
 				this.add(`c:|${getName('BreadLoeuf')}|Just kidding!! Take this KNUCKLE SANDWICH`);

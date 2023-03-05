@@ -1,4 +1,4 @@
-import {getName} from './scripts';
+import {getName, enemyStaff} from './scripts';
 
 export const Conditions: {[k: string]: ModdedConditionData & {innateName?: string}} = {
 	/*
@@ -89,7 +89,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	breadloeuf: {
 		noCopy: true,
 		onStart(pokemon) {
-			if (pokemon.foes()[0].name === "Mad Monty") {
+			if (enemyStaff(pokemon) === "Mad Monty") {
 				this.add(`c:|${getName('BreadLoeuf')}|Ope, sorry`);
 			} else {
 				this.add(`c:|${getName('BreadLoeuf')}|I loeuf you <3`);
@@ -171,8 +171,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Eli')}|ok bye`);
 		},
 		onFaint(pokemon) {
-			const foePokemon = (pokemon.foes()[0].illusion || pokemon.foes()[0]).name;
-			this.add(`c:|${getName('Eli')}|that wasn't very nice, ${foePokemon}.`);
+			this.add(`c:|${getName('Eli')}|that wasn't very nice, ${enemyStaff(pokemon)}.`);
 		},
 	},
 	havi: {
@@ -250,6 +249,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		desc: "This Pokemon's non-damaging moves have their priority increased by 1. Opposing Dark-type Pokemon are immune to these moves, and any move called by these moves, if the resulting user of the move has this Ability.",
 		shortDesc: "This Pokemon's Status moves have priority raised by 1, but Dark types are immune.",
 		onModifyPriority(priority, pokemon, target, move) {
+			if (pokemon.illusion) return;
 			if (move?.category === 'Status') {
 				move.pranksterBoosted = true;
 				return priority + 1;
@@ -346,14 +346,14 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	kolochu: {
 		noCopy: true,
 		onStart(pokemon) {
-			const foe = pokemon.foes()[0];
-			if (foe?.name === 'Rumia') {
+			const foe = enemyStaff(pokemon);
+			if (foe === 'Rumia') {
 				this.add(`c:|${getName('kolochu ✮彡')}|You come around here often?`);
-			} else if (foe?.name === 'spoo') {
+			} else if (foe === 'spoo') {
 				this.add(`c:|${getName('kolochu ✮彡')}|Big bald head spotted...`);
-			} else if (foe?.name === 'ausma') {
+			} else if (foe === 'ausma') {
 				this.add(`c:|${getName('kolochu ✮彡')}|The weekly Smogon furry convention starts NOW`);
-			} else if (foe?.name === 'Peary') {
+			} else if (foe === 'Peary') {
 				this.add(`c:|${getName('kolochu ✮彡')}|Any arters or culturers?`);
 			} else {
 				this.add(`c:|${getName('kolochu ✮彡')}|Hey, howzit!`);
@@ -395,6 +395,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		noCopy: true,
 		// quotes added later
 		onSwitchOut(pokemon) {
+			if (pokemon.illusion) return;
 			pokemon.heal(pokemon.baseMaxhp / 3);
 		},
 		innateName: "Regenerator",
@@ -418,7 +419,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Mathy')}|Nooooo i broke tera again`);
 		},
 		onSwitchOut(pokemon) {
-			this.add(`c:|${getName('Mathy')}|whatever i'll make ${pokemon.foes()[0].name} fix it`);
+			this.add(`c:|${getName('Mathy')}|whatever i'll make ${enemyStaff(pokemon)} fix it`);
 		},
 		onFaint() {
 			this.add(`c:|${getName('Mathy')}|thanks for making my job harder :/`);
@@ -511,24 +512,21 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	rumia: {
 		noCopy: true,
 		onStart(pokemon) {
-			const foe = pokemon.foes()[0];
-			if (foe?.name === 'Kolochu') {
+			if (enemyStaff(pokemon) === 'Kolochu') {
 				this.add(`c:|${getName('Rumia')}|OMG who could that be (⁠●⁠♡⁠∀⁠♡⁠)`);
 			} else {
 				this.add(`c:|${getName('Rumia')}|is the mon in front of me the edible kind?`);
 			}
 		},
 		onSwitchOut(pokemon) {
-			const foe = pokemon.foes()[0];
-			if (foe?.name === 'Kolochu') {
+			if (enemyStaff(pokemon) === 'Kolochu') {
 				this.add(`c:|${getName('Rumia')}|i cant bring myself to do this...`);
 			} else {
 				this.add(`c:|${getName('Rumia')}|brb ^_^`);
 			}
 		},
 		onFaint(pokemon) {
-			const foe = pokemon.foes()[0];
-			if (foe?.name === 'Kolochu') {
+			if (enemyStaff(pokemon) === 'Kolochu') {
 				this.add(`c:|${getName('Rumia')}|this is the best way to go out...`);
 			} else {
 				this.add(`c:|${getName('Rumia')}|is that sooooo...`);
@@ -624,7 +622,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	theia: {
 		noCopy: true,
 		onStart(pokemon) {
-			this.add(`c:|${getName('Theia')}|gm ${pokemon.foes()[0].name}`);
+			this.add(`c:|${getName('Theia')}|gm ${enemyStaff(pokemon)}`);
 		},
 		onSwitchOut() {
 			this.add(`c:|${getName('Theia')}|(cat)ch you later`);
