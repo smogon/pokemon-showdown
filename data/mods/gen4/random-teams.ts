@@ -658,7 +658,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				// Toxic is only defensive if used with another status move other than Protect (Toxic + 3 attacks and Toxic + Protect are ok).
 				if (
 					!Array.from(moves).some(id => recoveryMoves.includes(id)) &&
-					recoveryMoves.some(id => movePool.includes(id)) && (
+					movePool.some(id => recoveryMoves.includes(id)) && (
 						defensiveStatusMoves.includes(moveid) ||
 						(moveid === 'toxic' && ((counter.get('Status') > 1 && !moves.has('protect')) || counter.get('Status') > 2))
 					)
