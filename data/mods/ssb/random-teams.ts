@@ -350,7 +350,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		if (debug.length) {
 			while (debug.length < 6) {
 				const staff = this.sampleNoReplace(pool);
-				if (debug.includes(staff)) continue;
+				if (debug.includes(staff) || ssbSets[staff].skip) continue;
 				debug.push(staff);
 			}
 			pool = debug;
