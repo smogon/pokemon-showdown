@@ -808,6 +808,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Pursuit', target);
 			this.add('-anim', source, 'Behemoth Blade', target);
 		},
 		beforeTurnCallback(pokemon) {
