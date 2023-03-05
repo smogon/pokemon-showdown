@@ -3908,7 +3908,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Draco Meteor", "Flamethrower", "Hydro Steam", "Sunny Day"],
-                "teratypes": ["Fire"]
+                "teraTypes": ["Fire"]
             }
         ]
     },
