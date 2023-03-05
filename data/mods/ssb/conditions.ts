@@ -290,8 +290,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 		onSwitchOut() {
-			this.add(`c:|${getName('Kennedy')}|!lastfm`); // TODO replace
-			this.add(`c:|${getName('Kennedy')}|Whilst I'm gone, stream this ^`);
+			this.add(`c:|${getName('Kennedy')}|Stream some Taylor Swift whilst I’m gone!`); // TODO replace
 		},
 		onFoeSwitchIn(pokemon) {
 			switch ((pokemon.illusion || pokemon).name) {
