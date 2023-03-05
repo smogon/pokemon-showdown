@@ -472,7 +472,7 @@ export class RandomTeams {
 		// These attacks are redundant with each other
 		this.incompatibleMoves(moves, movePool, 'psychic', 'psyshock');
 		this.incompatibleMoves(moves, movePool, 'surf', 'hydropump');
-		this.incompatibleMoves(moves, movePool, ['liquidation', 'ragingbull'], ['liquidation', 'wavecrash']);
+		this.incompatibleMoves(moves, movePool, 'liquidation', 'wavecrash');
 		this.incompatibleMoves(moves, movePool, ['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']);
 		this.incompatibleMoves(moves, movePool, 'knockoff', 'foulplay');
 		this.incompatibleMoves(moves, movePool, 'doubleedge', 'headbutt');
@@ -1204,7 +1204,7 @@ export class RandomTeams {
 		) return 'Rocky Helmet';
 		if (
 			role === 'Fast Support' && isLead &&
-			!counter.get('recovery') && !counter.get('recoil') &&
+			!counter.get('recovery') && !counter.get('recoil') && !moves.has('protect') &&
 			(species.baseStats.hp + species.baseStats.def + species.baseStats.spd) < 300
 		) return 'Focus Sash';
 		if (
