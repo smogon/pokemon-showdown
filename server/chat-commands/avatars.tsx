@@ -95,7 +95,8 @@ export const Avatars = new class {
 	src(avatar: AvatarID) {
 		if (avatar.includes('.')) return '';
 		var avatarUrl = avatar.startsWith('#') ? `trainers-custom/${avatar.slice(1)}.png` : `trainers/${avatar}.png`;
-		var url = `https://${Config.routes.client}/sprites/${avatarUrl}`;
+		// var url = `https://${Config.routes.client}/sprites/${avatarUrl}`;
+		var url = `https://raw.githubusercontent.com/eyalmen/sprites/master/sprites/${avatarUrl}`;
 		
 		// check config/avatar_types.json for the avatar
 		// if its in replace .png with .<type>
@@ -104,6 +105,7 @@ export const Avatars = new class {
 			const avatarTypes = JSON.parse(FS('config/avatar_types.json').readSync());
 			if (avatarTypes[avatar]) {
 				url = url.replace('.png', '.' + avatarTypes[avatar]);
+				url = url.replace('trainers/', 'trainers-custom/');
 			}
 		} catch (e) {
 			// do nothing
