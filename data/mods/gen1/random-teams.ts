@@ -9,10 +9,10 @@ interface HackmonsCupEntry {
 
 interface Gen1RandomBattleSpecies {
 	level?: number;
-	moves?: string[];
-	essentialMove?: string;
-	exclusiveMoves?: string[];
-	comboMoves?: string[];
+	moves?: ID[];
+	essentialMove?: ID;
+	exclusiveMoves?: ID[];
+	comboMoves?: ID[];
 }
 
 export class RandomGen1Teams extends RandomGen2Teams {

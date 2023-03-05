@@ -24,10 +24,10 @@ export interface BattleFactorySpecies {
 }
 export interface OldRandomBattleSpecies {
 	level?: number;
-	moves?: string[];
+	moves?: ID[];
 	doublesLevel?: number;
-	doublesMoves?: string[];
-	noDynamaxMoves?: string[];
+	doublesMoves?: ID[];
+	noDynamaxMoves?: ID[];
 }
 interface BattleFactorySet {
 	species: string;
