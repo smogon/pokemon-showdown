@@ -1,4 +1,4 @@
-import {MoveCounter, RandomGen8Teams, TeamData} from '../gen8/random-teams';
+import {MoveCounter, RandomGen8Teams, TeamData, OldRandomBattleSpecies} from '../gen8/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
@@ -30,8 +30,7 @@ const ZeroAttackHPIVs: {[k: string]: SparseStatsTable} = {
 };
 
 export class RandomGen7Teams extends RandomGen8Teams {
-	// TODO: Make types for this
-	randomData: AnyObject = require('./random-data.json');
+	randomData: {[species: string]: OldRandomBattleSpecies} = require('./random-data.json');
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);

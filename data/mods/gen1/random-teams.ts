@@ -7,9 +7,16 @@ interface HackmonsCupEntry {
 	baseStats: StatsTable;
 }
 
+interface Gen1RandomBattleSpecies {
+	level?: number;
+	moves?: string[];
+	essentialMove?: string;
+	exclusiveMoves?: string[];
+	comboMoves?: string[];
+}
+
 export class RandomGen1Teams extends RandomGen2Teams {
-	// TODO: Make types for this
-	randomData: AnyObject = require('./random-data.json');
+	randomData: {[species: string]: Gen1RandomBattleSpecies} = require('./random-data.json');
 
 	// Challenge Cup or CC teams are basically fully random teams.
 	randomCCTeam() {

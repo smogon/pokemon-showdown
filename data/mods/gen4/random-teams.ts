@@ -2,7 +2,7 @@ import RandomGen5Teams from '../gen5/random-teams';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
 import {PRNG} from '../../../sim';
-import type {MoveCounter} from '../gen8/random-teams';
+import type {MoveCounter, OldRandomBattleSpecies} from '../gen8/random-teams';
 
 
 // These moves can be used even if we aren't setting up to use them:
@@ -15,8 +15,7 @@ const recoveryMoves = [
 ];
 const defensiveStatusMoves = ['aromatherapy', 'haze', 'healbell', 'roar', 'whirlwind', 'willowisp', 'yawn'];
 export class RandomGen4Teams extends RandomGen5Teams {
-	// TODO: Make types for this
-	randomData: AnyObject = require('./random-data.json');
+	randomData: {[species: string]: OldRandomBattleSpecies} = require('./random-data.json');
 
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);

@@ -1,12 +1,11 @@
-import {MoveCounter, TeamData} from '../gen8/random-teams';
+import {MoveCounter, TeamData, OldRandomBattleSpecies} from '../gen8/random-teams';
 import RandomGen7Teams, {BattleFactorySpecies} from '../gen7/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
 
 export class RandomGen6Teams extends RandomGen7Teams {
-	// TODO: Make types for this
-	randomData: AnyObject = require('./random-data.json');
+	randomData: {[species: string]: OldRandomBattleSpecies} = require('./random-data.json');
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);

@@ -22,6 +22,13 @@ export interface BattleFactorySpecies {
 	flags: {limEevee?: 1};
 	sets: BattleFactorySet[];
 }
+export interface OldRandomBattleSpecies {
+	level?: number;
+	moves?: string[];
+	doublesLevel?: number;
+	doublesMoves?: string[];
+	noDynamaxMoves?: string[];
+}
 interface BattleFactorySet {
 	species: string;
 	item: string;
@@ -103,8 +110,7 @@ export class RandomGen8Teams {
 	readonly maxMoveCount: number;
 	readonly forceMonotype: string | undefined;
 
-	// TODO: Make types for this
-	randomData: AnyObject = require('./random-data.json');
+	randomData: {[species: string]: OldRandomBattleSpecies} = require('./random-data.json');
 
 	/**
 	 * Checkers for move enforcement based on a Pokémon's types or other factors
