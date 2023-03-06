@@ -323,6 +323,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Wingover',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant', teraType: 'Flying',
 	},
+	Venous: {
+		species: 'Mantine', ability: 'Concrete Over Water', item: 'Leftovers', gender: '',
+		moves: ['Scald', 'Roost', 'Clear Smog'],
+		signatureMove: 'Your Crippling Interest',
+		evs: {hp: 248, def: 244, spd: 16}, nature: 'Calm', teraType: 'Normal', shiny: 5,
+	},
 	'Vio͜͡let': {
 		species: 'Iron Valiant', ability: 'Scarlet Aeonia', item: 'Auspicious Armor', gender: 'F',
 		moves: ['Bitter Blade', 'Cross Poison', 'No Retreat'],

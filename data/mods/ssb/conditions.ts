@@ -700,6 +700,19 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('UT')}|screaming, crying, perfect storm`);
 		},
 	},
+	venous: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Venous')}|bro the flute on stal is bonkers`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('2013 hindi room')}|when i said tine wins i didnt mean now`);
+			this.add(`c:|${getName('Venous')}|dw watch this`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Venous')}|teachin bitches how to swim`);
+		},
+	},
 	violet: {
 		noCopy: true,
 		onStart() {

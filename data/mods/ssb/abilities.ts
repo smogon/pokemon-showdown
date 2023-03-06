@@ -896,6 +896,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Venous
+	concreteoverwater: {
+		shortDesc: "+1 Def/Spd before getting hit by a Super Effective move",
+		name: "Concrete Over Water",
+		onTryHit(target, source, move) {
+			if (target === source || move.category === 'Status') return;
+			if (target.runEffectiveness(move) > 0) {
+				this.boost({def: 1, spd: 1}, target);
+			}
+		},
+	},
+
 	// Violet
 	scarletaeonia: {
 		shortDesc: "50% HP: +Flying-type, summons Scarlet Aeonia Terrain, loses item.",
