@@ -58073,6 +58073,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"zenheadbutt": [
 				"9T"
 			],
+			"dragondance": [
+				"9L38"
+			],
 			"highhorsepower": [
 				"9L36"
 			],
@@ -59730,6 +59733,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 		"learnset": {
 			"dracometeor": [
 				"9L37"
+			],
+			"dragondance": [
+				"9L38"
 			],
 			"watergun": [
 				"9L1"
@@ -75275,6 +75281,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	"spiritomb": {
 		"inherit": true,
 		"learnset": {
+			"nightmare": [
+				"9L50"
+			],
 			"ancientpower": [
 				"9L1"
 			],

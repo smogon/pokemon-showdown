@@ -49,6 +49,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// 	target: "normal",
 	// 	type: "Fighting",
 	// },
+	ominouswind: {
+		inherit: true,
+		"isNonstandard": null,
+	},
 	skyattack: {
 		num: 143,
 		accuracy: 85,
@@ -3839,7 +3843,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"type": "Normal",
 		"priority": 0,
 		"isNonstandard": null,
-		"target": "allySide"
 	},
 	"dragonclaw": {
 		"inherit": true,
