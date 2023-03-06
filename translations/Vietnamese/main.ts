@@ -1,7 +1,7 @@
 import type {Translations} from '../../server/chat';
 
 export const translations: Translations = {
-	name: "Vietnamese",
+	name: "Tiếng Việt",
 	strings: {
 		"namelocked": "namelocked",
 		"locked": "locked",
