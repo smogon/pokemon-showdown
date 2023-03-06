@@ -1301,9 +1301,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		natDexTier: "UU",
     },
 	hydreigonmegafive: {
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 		tier: "Illegal",
-		natDexTier: "Illegal",
+		natDexTier: "Uber",
 	},
 	hydreigonmegasix: {
 		isNonstandard: "Unobtainable",
