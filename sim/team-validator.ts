@@ -470,6 +470,9 @@ export class TeamValidator {
 		if (!set.teraType && this.gen === 9) {
 			set.teraType = species.types[0];
 		}
+		if (!set.cmType) {
+			set.cmType = "Normal";
+		}
 
 		if (!set.level) set.level = ruleTable.defaultLevel;
 
@@ -573,6 +576,14 @@ export class TeamValidator {
 				problems.push(`${name}'s Terastal type (${set.teraType}) is invalid.`);
 			} else {
 				set.teraType = type.name;
+			}
+		}
+		if (set.cmType) {
+			const type = dex.types.get(set.cmType);
+			if (!type.exists) {
+				problems.push(`${name}'s Custom Move type (${set.cmType}) is invalid.`);
+			} else {
+				set.cmType = type.name;
 			}
 		}
 

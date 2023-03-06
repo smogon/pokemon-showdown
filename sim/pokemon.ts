@@ -1097,6 +1097,7 @@ export class Pokemon {
 			entry.teraType = this.teraType;
 			entry.terastallized = this.terastallized || '';
 		}
+		entry.cmType = this.cmType;
 		return entry;
 	}
 
