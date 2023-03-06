@@ -329,12 +329,12 @@
         "sets": [
             {
                 "role": "Fast Bulky Setup",
-                "movepool": ["Bulk Up", "Close Combat", "Liquidation", "Raging Bull", "Substitute"],
+                "movepool": ["Bulk Up", "Close Combat", "Liquidation", "Substitute"],
                 "teraTypes": ["Water"]
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["Aqua Jet", "Bulk Up", "Close Combat", "Raging Bull", "Stone Edge", "Wave Crash"],
+                "movepool": ["Aqua Jet", "Bulk Up", "Close Combat", "Liquidation", "Stone Edge", "Wave Crash"],
                 "teraTypes": ["Water"]
             }
         ]
@@ -480,7 +480,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Aura Sphere", "Fire Blast", "Nasty Plot", "Psystrike", "Recover", "Shadow Ball"],
-                "teraTypes": ["Psychic", "Fighting", "Fire"]
+                "teraTypes": ["Psychic", "Fighting", "Fire", "Ghost"]
             }
         ]
     },
@@ -1335,7 +1335,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Aurora Veil", "Blizzard", "Earthquake", "Ice Shard", "Wood Hammer"],
-                "teraTypes": ["Ice"]
+                "teraTypes": ["Ice", "Water"]
             }
         ]
     },
@@ -3068,12 +3068,12 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Dynamax Cannon", "Fire Blast", "Recover", "Sludge Bomb"],
-                "teraTypes": ["Dragon"]
+                "teraTypes": ["Dragon", "Fire"]
             },
             {
                 "role": "Bulky Support",
                 "movepool": ["Dynamax Cannon", "Flamethrower", "Recover", "Toxic", "Toxic Spikes"],
-                "teraTypes": ["Dragon"]
+                "teraTypes": ["Dragon", "Water"]
             }
         ]
     },
@@ -3901,8 +3901,13 @@
         "level": 82,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Wallbreaker",
                 "movepool": ["Draco Meteor", "Flamethrower", "Hurricane", "Hydro Pump"],
+                "teraTypes": ["Water", "Fire"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Draco Meteor", "Flamethrower", "Hydro Steam", "Sunny Day"],
                 "teraTypes": ["Fire"]
             }
         ]
