@@ -251,6 +251,7 @@ export class Pokemon {
 	readonly canGigantamax: string | null;
 	canTerastallize: string | null;
 	teraType: string;
+	cmType: string;
 	baseTypes: string[];
 	terastallized?: string;
 
@@ -413,6 +414,7 @@ export class Pokemon {
 		this.apparentType = this.baseSpecies.types.join('/');
 		// Every Pokemon has a Terastal type
 		this.teraType = this.set.teraType || this.types[0];
+		this.cmType = this.set.cmType || 'Normal';
 
 		this.switchFlag = false;
 		this.forceSwitchFlag = false;

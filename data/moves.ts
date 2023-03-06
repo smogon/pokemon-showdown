@@ -22266,4 +22266,20 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Ghost",
 	},
+	custommove: {
+		num: -22,
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		name: "Custom Move",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onModifyType(move, pokemon, target) {
+			move.type = pokemon.cmType;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+	},
 };
