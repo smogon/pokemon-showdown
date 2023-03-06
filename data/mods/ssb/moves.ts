@@ -194,6 +194,32 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Bird",
 	},
 
+	detodaslasflores: {
+		accuracy: 90,
+		basePower: 90,
+		category: "Physical",
+		shortDesc: "Sets Grassy Terrain before attack. -50% HP if it misses.",
+		name: "De Todas las Flores",
+		gen: 9,
+		pp: 15,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1},
+		hasCrashDamage: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.field.setTerrain('grassyterrain');
+			this.add('-anim', source, 'High Jump Kick', target);
+		},
+		onMoveFail(target, source, move) {
+			this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
+		},
+		secondary: null,
+		target: "normal",
+		type: "Grass",
+	},
+
 	// Coolcodename
 	haxerswill: {
 		accuracy: 100,

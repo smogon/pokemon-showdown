@@ -79,6 +79,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Shawn',
 		evs: {hp: 252, def: 252, spd: 4}, nature: 'Impish', teraType: 'Ghost', shiny: 957,
 	},
+	Chloe: {
+		species: 'Tsareena', ability: 'Acetosa', item: 'Assualt Vest', gender: 'F',
+		moves: ['Rapid Spin', 'Fishious Rend', 'Stone Axe'],
+		signatureMove: 'De Todas las Flores',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Grass', shiny: true,
+	},
 	Coolcodename: {
 		species: 'Victini', ability: 'Firewall', item: 'Heavy-Duty Boots', gender: 'M',
 		moves: ['Searing Shot', 'Psychic', 'Dazzling Gleam'],

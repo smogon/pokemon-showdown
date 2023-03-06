@@ -126,6 +126,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Cake')}|/wall moist`);
 		},
 	},
+	chloe: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Chloe')}|hey!`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Chloe')}|cya soon o/`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Chloe')}|ouch :(`);
+		},
+	},
 	coolcodename: {
 		onStart(pokemon) {
 			this.add(`c:|${getName('Coolcodename')}|LFGI ${pokemon.side.name}`);
