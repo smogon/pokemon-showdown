@@ -1705,6 +1705,11 @@ export class BattleActions {
 			const bondModifier = this.battle.gen > 6 ? 0.25 : 0.5;
 			this.battle.debug(`Parental Bond modifier: ${bondModifier}`);
 			baseDamage = this.battle.modify(baseDamage, bondModifier);
+		} else if (move.multihitType === 'lernean' && typeof move.multihit === 'number' && move.multihit > 0) {
+			// Lernean modifier
+			const lerneanModifier = (((0.075 * (move.multihit - 3)) * (move.multihit - move.hit)) / (0.5 * (move.multihit - 1)) + 1) / move.multihit;
+			this.battle.debug(`Lernean modifier: ${lerneanModifier}`);
+			baseDamage = this.battle.modify(baseDamage, lerneanModifier);
 		}
 
 		// weather modifier
