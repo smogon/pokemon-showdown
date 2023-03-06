@@ -335,6 +335,7 @@ export const Teams = new class Teams {
 				set.gigantamax = !!misc[3];
 				set.dynamaxLevel = (misc[4] ? Number(misc[4]) : 10);
 				set.teraType = misc[5];
+				set.cmType = misc[6];
 			}
 			if (j < 0) break;
 			i = j + 1;
