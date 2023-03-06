@@ -1482,7 +1482,7 @@ export const Formats: FormatList = [
 		mod: 'thecardgame',
 		searchShow: false,
 		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Min Source Gen = 9'],
-		banlist: ['Annihilape', 'Espathra', 'Houndstone', 'Koraidon', 'Miraidon', 'Palafin', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass'],
+		banlist: ['Annihilape', 'Cyclizar', 'Dragonite', 'Espathra', 'Houndstone', 'Koraidon', 'Miraidon', 'Noivern', 'Palafin', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass'],
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
 				pokemon.hpType = pokemon.hpType.replace(/(Ghost|Fairy)/g, 'Psychic')

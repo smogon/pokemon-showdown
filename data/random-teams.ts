@@ -472,7 +472,7 @@ export class RandomTeams {
 		// These attacks are redundant with each other
 		this.incompatibleMoves(moves, movePool, 'psychic', 'psyshock');
 		this.incompatibleMoves(moves, movePool, 'surf', 'hydropump');
-		this.incompatibleMoves(moves, movePool, ['liquidation', 'ragingbull'], ['liquidation', 'wavecrash']);
+		this.incompatibleMoves(moves, movePool, 'liquidation', 'wavecrash');
 		this.incompatibleMoves(moves, movePool, ['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']);
 		this.incompatibleMoves(moves, movePool, 'knockoff', 'foulplay');
 		this.incompatibleMoves(moves, movePool, 'doubleedge', 'headbutt');
@@ -1204,7 +1204,7 @@ export class RandomTeams {
 		) return 'Rocky Helmet';
 		if (
 			role === 'Fast Support' && isLead &&
-			!counter.get('recovery') && !counter.get('recoil') &&
+			!counter.get('recovery') && !counter.get('recoil') && !moves.has('protect') &&
 			(species.baseStats.hp + species.baseStats.def + species.baseStats.spd) < 300
 		) return 'Focus Sash';
 		if (
@@ -2004,28 +2004,26 @@ export class RandomTeams {
 		let naturePool: Nature[] = [];
 		if (doNaturesExist) {
 			if (!hasCustomBans) {
-				if (!hasCustomBans) {
-					naturePool = [...this.dex.natures.all()];
-				} else {
-					const hasAllNaturesBan = ruleTable.check('pokemontag:allnatures');
-					for (const nature of this.dex.natures.all()) {
-						let banReason = ruleTable.check('nature:' + nature.id);
-						if (banReason) continue;
-						if (banReason !== '' && nature.id) {
-							if (hasAllNaturesBan) continue;
-							if (nature.isNonstandard) {
-								banReason = ruleTable.check('pokemontag:' + toID(nature.isNonstandard));
-								if (banReason) continue;
-								if (banReason !== '' && nature.isNonstandard !== 'Unobtainable') {
-									if (hasNonexistentBan) continue;
-									if (!hasNonexistentWhitelist) continue;
-								}
+				naturePool = [...this.dex.natures.all()];
+			} else {
+				const hasAllNaturesBan = ruleTable.check('pokemontag:allnatures');
+				for (const nature of this.dex.natures.all()) {
+					let banReason = ruleTable.check('nature:' + nature.id);
+					if (banReason) continue;
+					if (banReason !== '' && nature.id) {
+						if (hasAllNaturesBan) continue;
+						if (nature.isNonstandard) {
+							banReason = ruleTable.check('pokemontag:' + toID(nature.isNonstandard));
+							if (banReason) continue;
+							if (banReason !== '' && nature.isNonstandard !== 'Unobtainable') {
+								if (hasNonexistentBan) continue;
+								if (!hasNonexistentWhitelist) continue;
 							}
 						}
-						naturePool.push(nature);
 					}
-					// There is no 'nature:nonature' rule so do not constrain pool size
+					naturePool.push(nature);
 				}
+				// There is no 'nature:nonature' rule so do not constrain pool size
 			}
 		}
 
