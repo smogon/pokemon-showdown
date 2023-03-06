@@ -83,6 +83,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Curse of Dexit"},
 	},
 
+	// Lalaya
+	murkrow: {
+		inherit: true,
+		types: ["Dark", "Fairy"],
+	},
+
 	// Mathy
 	furret: {
 		inherit: true,

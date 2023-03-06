@@ -181,6 +181,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Attack of Opportunity',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant', teraType: 'Any', shiny: 1024,
 	},
+	Lalaya: {
+		species: 'Murkrow', ability: 'Workaholic', item: 'Loaded Dice', gender: 'F',
+		moves: ['Knock Off', 'Bone Rush', 'Flip Turn'],
+		signatureMove: 'Sugar Rush',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Fairy', shiny: true,
+	},
 	Lumari: {
 		species: 'Ponyta-Galar', ability: 'Pyrotechnic', item: 'Eviolite', gender: 'F',
 		moves: ['Substitute', ['Sappy Seed', 'Sizzly Slide'], 'Magical Torque'],
