@@ -103,7 +103,7 @@ export const translations: Translations = {
 		"- /tour start: start the tournament in the current room": "- /tour start: Bắt đầu giải đấu trong phòng hiện tại",
 		"- /tour banlist [pokemon], [talent], [...]: ban moves, abilities, Pokémon or items from being used in a tournament (it must be created first)": "- /tour banlist [pokemon], [tuyệt kĩ], [...]: chiếu thức cấm, kỹ năng, Pok&eacute;mon bị cấm trong giải (phải được tạo trước)",
 
-		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6777489/\">tournaments guide</a>": "Una ayuda m&aacute;s detallada puede encontrarse en la <a href=\"https://www.smogon.com/forums/posts/6777489/\">gu&iacute;a de torneos</a>",
+		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6777489/\">tournaments guide</a>": "Thông tin chi tiết có thể được tìm thấy ở <a href=\"https://www.smogon.com/forums/posts/6777489/\">hướng dẫn đấu giải</a>",
 
 		"Your status cannot be updated while you are locked or semilocked.": "Tu estado no puede ser actualizado mientras estás locked (bloqueado) o semilocked (semibloqueado).",
 		"Your status is too long; it must be under ${maxLength} characters.": "Tu estado es muy largo; debe ser menor de ${maxLength} caracteres.",
