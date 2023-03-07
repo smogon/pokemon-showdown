@@ -1,4 +1,4 @@
-import {MoveCounter, RandomGen8Teams, TeamData} from '../gen8/random-teams';
+import {MoveCounter, RandomGen8Teams, TeamData, OldRandomBattleSpecies} from '../gen8/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
@@ -30,6 +30,8 @@ const ZeroAttackHPIVs: {[k: string]: SparseStatsTable} = {
 };
 
 export class RandomGen7Teams extends RandomGen8Teams {
+	randomData: {[species: string]: OldRandomBattleSpecies} = require('./random-data.json');
+
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 
@@ -1054,9 +1056,11 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
 
+		const data = this.randomData[species.id];
+
 		const randMoves = isDoubles ?
-			(species.randomDoubleBattleMoves || species.randomBattleMoves) :
-			species.randomBattleMoves;
+			(data.doublesMoves || data.moves) :
+			data.moves;
 		const movePool = (randMoves || Object.keys(Dex.species.getLearnset(species.id)!)).slice();
 		if (this.format.gameType === 'multi') {
 			// Random Multi Battle uses doubles move pools, but Ally Switch fails in multi battles
@@ -1384,16 +1388,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (this.adjustLevel) {
 			level = this.adjustLevel;
 		} else if (!isDoubles) {
-			const levelScale: {[k: string]: number} = {uber: 76, ou: 80, uu: 82, ru: 84, nu: 86, pu: 88};
-			const customScale: {[k: string]: number} = {
-				// Banned Ability
-				Dugtrio: 82, Gothitelle: 82, Pelipper: 84, Politoed: 84, Torkoal: 84, Wobbuffet: 82,
-				// Holistic judgement
-				'Castform-Rainy': 100, 'Castform-Snowy': 100, 'Castform-Sunny': 100, Delibird: 100, Luvdisc: 100, Spinda: 100, Unown: 100,
-			};
-			const tier = toID(species.tier).replace('bl', '');
-			level = levelScale[tier] || (species.nfe ? 90 : 80);
-			if (customScale[species.name]) level = customScale[species.name];
+			level = data.level || (species.nfe ? 90 : 80);
 		} else {
 			// We choose level based on BST. Min level is 70, max level is 99. 600+ BST is 70, less than 300 is 99. Calculate with those values.
 			// Every 10.34 BST adds a level from 70 up to 99. Results are floored. Uses the Mega's stats if holding a Mega Stone
@@ -1528,9 +1523,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 				// Check if the forme has moves for random battle
 				if (this.format.gameType === 'singles') {
-					if (!species.randomBattleMoves) continue;
+					if (!this.randomData[species.id]?.moves) continue;
 				} else {
-					if (!species.randomDoubleBattleMoves) continue;
+					if (!this.randomData[species.id]?.doublesMoves) continue;
 				}
 				if (!species.exists) continue;
 

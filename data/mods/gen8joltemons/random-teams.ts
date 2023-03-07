@@ -1,7 +1,9 @@
 import {Species} from '../../../sim/dex-species';
-import RandomGen8Teams, {MoveCounter} from '../gen8/random-teams';
+import {MoveCounter, RandomGen8Teams, OldRandomBattleSpecies} from '../gen8/random-teams';
 
 export class RandomJoltemonsTeams extends RandomGen8Teams {
+	randomData: {[species: string]: OldRandomBattleSpecies} = require('./random-data.json');
+
 	shouldCullAbility(
 		ability: string,
 		types: Set<string>,

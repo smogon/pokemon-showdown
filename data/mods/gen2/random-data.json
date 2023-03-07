@@ -1,0 +1,425 @@
+{
+    "venusaur": {
+        "moves": ["growth", "hiddenpowerfire", "hiddenpowerice", "leechseed", "razorleaf", "sleeppowder", "synthesis"]
+    },
+    "charizard": {
+        "moves": ["bellydrum", "earthquake", "fireblast", "hyperbeam", "rockslide"]
+    },
+    "blastoise": {
+        "moves": ["icebeam", "rapidspin", "rest", "sleeptalk", "surf", "toxic", "zapcannon"]
+    },
+    "butterfree": {
+        "moves": ["nightmare", "psychic", "sleeppowder", "stunspore", "substitute"]
+    },
+    "beedrill": {
+        "moves": ["agility", "hiddenpowerground", "sludgebomb", "substitute", "swordsdance"]
+    },
+    "pidgeot": {
+        "moves": ["curse", "hiddenpowerground", "reflect", "rest", "return", "sleeptalk", "toxic", "whirlwind"]
+    },
+    "raticate": {
+        "moves": ["irontail", "rest", "return", "sleeptalk", "superfang"]
+    },
+    "fearow": {
+        "moves": ["doubleedge", "drillpeck", "hiddenpowerground", "rest", "sleeptalk", "substitute"]
+    },
+    "arbok": {
+        "moves": ["curse", "earthquake", "glare", "haze", "rest", "sludgebomb"]
+    },
+    "pikachu": {
+        "moves": ["encore", "hiddenpowerice", "substitute", "surf", "thunderbolt"]
+    },
+    "raichu": {
+        "moves": ["encore", "hiddenpowerice", "rest", "sleeptalk", "surf", "thunder", "thunderbolt"]
+    },
+    "sandslash": {
+        "moves": ["earthquake", "hiddenpowerbug", "rockslide", "substitute", "swordsdance"]
+    },
+    "nidoqueen": {
+        "moves": ["earthquake", "fireblast", "icebeam", "lovelykiss", "moonlight", "thunder"]
+    },
+    "nidoking": {
+        "moves": ["earthquake", "fireblast", "icebeam", "lovelykiss", "morningsun", "thunder"]
+    },
+    "clefable": {
+        "moves": ["bellydrum", "encore", "fireblast", "moonlight", "return", "shadowball"]
+    },
+    "ninetales": {
+        "moves": ["confuseray", "fireblast", "hiddenpowergrass", "hypnosis", "sunnyday"]
+    },
+    "wigglytuff": {
+        "moves": ["bodyslam", "charm", "curse", "doubleedge", "fireblast", "rest", "sleeptalk", "thunderwave"]
+    },
+    "vileplume": {
+        "moves": ["hiddenpowergrass", "moonlight", "sleeppowder", "sludgebomb", "stunspore", "swordsdance"]
+    },
+    "parasect": {
+        "moves": ["bodyslam", "gigadrain", "hiddenpowerbug", "spore", "swordsdance", "synthesis"]
+    },
+    "venomoth": {
+        "moves": ["disable", "gigadrain", "psychic", "sleeppowder", "sludgebomb", "stunspore"]
+    },
+    "dugtrio": {
+        "moves": ["earthquake", "rockslide", "sludgebomb", "substitute", "swagger"]
+    },
+    "persian": {
+        "moves": ["bodyslam", "hypnosis", "irontail", "rest", "return", "thunder"]
+    },
+    "golduck": {
+        "moves": ["crosschop", "hiddenpowerelectric", "hydropump", "hypnosis", "icebeam", "psychic", "surf"]
+    },
+    "primeape": {
+        "moves": ["crosschop", "doubleedge", "hiddenpowerghost", "meditate", "rest", "rockslide", "substitute"]
+    },
+    "arcanine": {
+        "moves": ["bodyslam", "crunch", "extremespeed", "fireblast", "hiddenpowergrass", "rest", "sleeptalk"]
+    },
+    "poliwrath": {
+        "moves": ["bellydrum", "bodyslam", "earthquake", "lovelykiss"]
+    },
+    "alakazam": {
+        "moves": ["encore", "firepunch", "icepunch", "psychic", "recover", "thunderpunch", "thunderwave"]
+    },
+    "machamp": {
+        "moves": ["bodyslam", "crosschop", "curse", "earthquake", "hiddenpowerghost", "rest", "rockslide", "sleeptalk"]
+    },
+    "victreebel": {
+        "moves": ["hiddenpowerground", "razorleaf", "sleeppowder", "sludgebomb", "swordsdance", "synthesis"]
+    },
+    "tentacruel": {
+        "moves": ["hydropump", "sludgebomb", "substitute", "swordsdance"]
+    },
+    "golem": {
+        "moves": ["curse", "earthquake", "explosion", "fireblast", "rapidspin", "rockslide"]
+    },
+    "rapidash": {
+        "moves": ["bodyslam", "fireblast", "hiddenpowergrass", "hypnosis", "sunnyday"]
+    },
+    "slowbro": {
+        "moves": ["fireblast", "psychic", "rest", "sleeptalk", "surf", "thunderwave", "toxic"]
+    },
+    "magneton": {
+        "moves": ["hiddenpowerice", "substitute", "thunderbolt", "thunderwave"]
+    },
+    "farfetchd": {
+        "moves": ["agility", "batonpass", "return", "swordsdance"]
+    },
+    "dodrio": {
+        "moves": ["doubleedge", "drillpeck", "hiddenpowerground", "rest", "substitute"]
+    },
+    "dewgong": {
+        "moves": ["bodyslam", "encore", "icebeam", "rest", "sleeptalk", "surf", "toxic"]
+    },
+    "muk": {
+        "moves": ["curse", "explosion", "fireblast", "hiddenpowerground", "sludgebomb"]
+    },
+    "cloyster": {
+        "moves": ["explosion", "icebeam", "spikes", "surf", "toxic"]
+    },
+    "gengar": {
+        "moves": ["destinybond", "explosion", "firepunch", "hypnosis", "icepunch", "thunderbolt"]
+    },
+    "hypno": {
+        "moves": ["hypnosis", "lightscreen", "psychic", "reflect", "seismictoss", "thunderwave"]
+    },
+    "kingler": {
+        "moves": ["hiddenpowerground", "rest", "return", "surf", "swordsdance"]
+    },
+    "electrode": {
+        "moves": ["explosion", "hiddenpowerice", "lightscreen", "reflect", "thunderbolt", "thunderwave"]
+    },
+    "exeggutor": {
+        "moves": ["explosion", "gigadrain", "hiddenpowerfire", "psychic", "sleeppowder", "stunspore", "synthesis"]
+    },
+    "marowak": {
+        "moves": ["earthquake", "hiddenpowerbug", "rockslide", "swordsdance"]
+    },
+    "hitmonlee": {
+        "moves": ["bodyslam", "hiddenpowerghost", "highjumpkick", "meditate", "rest"]
+    },
+    "hitmonchan": {
+        "moves": ["bodyslam", "counter", "curse", "hiddenpowerghost", "highjumpkick"]
+    },
+    "lickitung": {
+        "moves": ["bodyslam", "earthquake", "fireblast", "rest", "sleeptalk", "swordsdance"]
+    },
+    "weezing": {
+        "moves": ["explosion", "fireblast", "hiddenpowergrass", "painsplit", "sludgebomb", "thunder"]
+    },
+    "rhydon": {
+        "moves": ["curse", "earthquake", "fireblast", "rest", "roar", "rockslide", "sleeptalk", "zapcannon"]
+    },
+    "tangela": {
+        "moves": ["gigadrain", "growth", "hiddenpowerice", "sleeppowder", "synthesis"]
+    },
+    "kangaskhan": {
+        "moves": ["bodyslam", "curse", "earthquake", "rest", "return", "roar", "sleeptalk"]
+    },
+    "seaking": {
+        "moves": ["agility", "return", "substitute", "surf", "swordsdance"]
+    },
+    "starmie": {
+        "moves": ["psychic", "rapidspin", "recover", "surf", "thunderbolt", "thunderwave"]
+    },
+    "mrmime": {
+        "moves": ["encore", "firepunch", "hypnosis", "icepunch", "psychic", "thief", "thunderbolt", "thunderwave"]
+    },
+    "scyther": {
+        "moves": ["batonpass", "hiddenpowerbug", "hiddenpowerground", "swordsdance", "wingattack"]
+    },
+    "jynx": {
+        "moves": ["icebeam", "lovelykiss", "nightmare", "psychic", "substitute", "thief"]
+    },
+    "electabuzz": {
+        "moves": ["crosschop", "icepunch", "psychic", "pursuit", "thunder", "thunderbolt"]
+    },
+    "magmar": {
+        "moves": ["crosschop", "fireblast", "hiddenpowerground", "sunnyday", "thief", "thunderpunch"]
+    },
+    "pinsir": {
+        "moves": ["bodyslam", "doubleedge", "hiddenpowerbug", "rest", "submission", "swordsdance"]
+    },
+    "tauros": {
+        "moves": ["curse", "doubleedge", "earthquake", "rest", "return", "sleeptalk"]
+    },
+    "gyarados": {
+        "moves": ["bodyslam", "doubleedge", "hiddenpowerflying", "hydropump", "rest", "sleeptalk", "thunder"]
+    },
+    "lapras": {
+        "moves": ["icebeam", "rest", "sing", "sleeptalk", "surf", "thunder", "thunderbolt", "toxic"]
+    },
+    "ditto": {
+        "level": 83,
+        "moves": ["transform"]
+    },
+    "vaporeon": {
+        "moves": ["growth", "hiddenpowerelectric", "icebeam", "rest", "sleeptalk", "surf"]
+    },
+    "jolteon": {
+        "moves": ["batonpass", "growth", "hiddenpowerice", "hiddenpowerwater", "substitute", "thunderbolt", "thunderwave"]
+    },
+    "flareon": {
+        "moves": ["batonpass", "doubleedge", "fireblast", "growth", "hiddenpowergrass", "zapcannon"]
+    },
+    "omastar": {
+        "moves": ["hiddenpowerelectric", "icebeam", "rest", "sleeptalk", "surf"]
+    },
+    "kabutops": {
+        "moves": ["ancientpower", "hiddenpowerground", "return", "submission", "surf", "swordsdance"]
+    },
+    "aerodactyl": {
+        "moves": ["ancientpower", "curse", "earthquake", "hiddenpowerflying", "reflect", "whirlwind"]
+    },
+    "snorlax": {
+        "moves": ["curse", "doubleedge", "earthquake", "fireblast", "lovelykiss", "rest", "return", "sleeptalk"]
+    },
+    "articuno": {
+        "moves": ["hiddenpowerelectric", "icebeam", "rest", "sleeptalk", "toxic"]
+    },
+    "zapdos": {
+        "moves": ["hiddenpowerice", "rest", "sleeptalk", "thunder"]
+    },
+    "moltres": {
+        "moves": ["fireblast", "hiddenpowergrass", "rest", "sleeptalk", "sunnyday"]
+    },
+    "dragonite": {
+        "moves": ["haze", "hiddenpowerflying", "icebeam", "lightscreen", "reflect", "rest", "thunder"]
+    },
+    "mewtwo": {
+        "moves": ["fireblast", "icebeam", "psychic", "recover", "thunderbolt", "thunderwave"]
+    },
+    "mew": {
+        "moves": ["earthquake", "explosion", "psychic", "shadowball", "softboiled", "submission", "swordsdance"]
+    },
+    "meganium": {
+        "moves": ["hiddenpowerfire", "leechseed", "lightscreen", "razorleaf", "reflect", "synthesis"]
+    },
+    "typhlosion": {
+        "moves": ["earthquake", "fireblast", "rest", "sleeptalk", "thunderpunch"]
+    },
+    "feraligatr": {
+        "moves": ["crunch", "earthquake", "icebeam", "rest", "rockslide", "sleeptalk", "surf"]
+    },
+    "furret": {
+        "moves": ["curse", "doubleedge", "rest", "shadowball", "sleeptalk", "surf"]
+    },
+    "noctowl": {
+        "moves": ["hypnosis", "nightshade", "reflect", "thief", "toxic", "whirlwind"]
+    },
+    "ledian": {
+        "moves": ["agility", "barrier", "batonpass", "lightscreen"]
+    },
+    "ariados": {
+        "moves": ["batonpass", "curse", "sludgebomb", "spiderweb"]
+    },
+    "crobat": {
+        "moves": ["gigadrain", "haze", "hiddenpowerground", "rest", "whirlwind", "wingattack"]
+    },
+    "lanturn": {
+        "moves": ["icebeam", "raindance", "rest", "sleeptalk", "surf", "thunder"]
+    },
+    "togetic": {
+        "moves": ["fireblast", "solarbeam", "sunnyday", "zapcannon"]
+    },
+    "xatu": {
+        "moves": ["drillpeck", "haze", "hiddenpowergrass", "hiddenpowerwater", "psychic", "rest", "sleeptalk", "thief"]
+    },
+    "ampharos": {
+        "moves": ["firepunch", "hiddenpowerice", "lightscreen", "reflect", "rest", "sleeptalk", "thunderbolt", "thunderwave"]
+    },
+    "bellossom": {
+        "moves": ["doubleedge", "hiddenpowerfire", "leechseed", "moonlight", "razorleaf", "sleeppowder", "stunspore"]
+    },
+    "azumarill": {
+        "moves": ["perishsong", "rest", "surf", "whirlpool"]
+    },
+    "sudowoodo": {
+        "moves": ["curse", "earthquake", "rest", "rockslide", "selfdestruct", "sleeptalk"]
+    },
+    "politoed": {
+        "moves": ["growth", "hiddenpowerelectric", "icebeam", "lovelykiss", "rest", "sleeptalk", "surf"]
+    },
+    "jumpluff": {
+        "moves": ["gigadrain", "hiddenpowerice", "hiddenpowerwater", "leechseed", "sleeppowder", "stunspore"]
+    },
+    "aipom": {
+        "moves": ["agility", "batonpass", "curse", "return", "shadowball"]
+    },
+    "sunflora": {
+        "moves": ["growth", "hiddenpowerfire", "hiddenpowerwater", "razorleaf", "synthesis"]
+    },
+    "yanma": {
+        "moves": ["gigadrain", "hiddenpowerbug", "hiddenpowerflying", "return", "screech", "thief"]
+    },
+    "quagsire": {
+        "moves": ["bellydrum", "bodyslam", "earthquake", "rest", "surf"]
+    },
+    "espeon": {
+        "moves": ["batonpass", "bite", "growth", "hiddenpowerfire", "morningsun", "psychic", "substitute"]
+    },
+    "umbreon": {
+        "moves": ["batonpass", "growth", "hiddenpowerdark", "meanlook", "moonlight"]
+    },
+    "murkrow": {
+        "moves": ["drillpeck", "haze", "hiddenpowerdark", "hiddenpowerfire", "pursuit", "thief", "toxic"]
+    },
+    "slowking": {
+        "moves": ["fireblast", "psychic", "rest", "sleeptalk", "surf", "thunderwave", "toxic"]
+    },
+    "misdreavus": {
+        "moves": ["meanlook", "painsplit", "perishsong", "psychic", "shadowball", "thief", "thunderbolt"]
+    },
+    "unown": {
+        "level": 87,
+        "moves": ["hiddenpowerpsychic"]
+    },
+    "wobbuffet": {
+        "level": 83,
+        "moves": ["counter", "mimic", "mirrorcoat", "safeguard"]
+    },
+    "girafarig": {
+        "moves": ["crunch", "curse", "earthquake", "psychic", "rest", "return", "thunderbolt"]
+    },
+    "forretress": {
+        "moves": ["doubleedge", "explosion", "hiddenpowerbug", "rapidspin", "reflect", "spikes", "toxic"]
+    },
+    "dunsparce": {
+        "moves": ["curse", "flamethrower", "rest", "return", "sleeptalk", "thunder", "thunderbolt"]
+    },
+    "gligar": {
+        "moves": ["counter", "earthquake", "hiddenpowerflying", "screech", "thief"]
+    },
+    "steelix": {
+        "moves": ["curse", "earthquake", "explosion", "irontail", "rest", "roar", "sleeptalk", "toxic"]
+    },
+    "granbull": {
+        "moves": ["curse", "healbell", "hiddenpowerground", "lovelykiss", "rest", "return", "sleeptalk"]
+    },
+    "qwilfish": {
+        "moves": ["curse", "haze", "hydropump", "sludgebomb", "spikes"]
+    },
+    "scizor": {
+        "moves": ["agility", "batonpass", "hiddenpowerbug", "return", "swordsdance"]
+    },
+    "shuckle": {
+        "moves": ["defensecurl", "rest", "rollout", "toxic"]
+    },
+    "heracross": {
+        "moves": ["curse", "earthquake", "megahorn", "rest", "seismictoss", "sleeptalk"]
+    },
+    "sneasel": {
+        "moves": ["icebeam", "moonlight", "return", "screech", "shadowball", "thief"]
+    },
+    "ursaring": {
+        "moves": ["curse", "earthquake", "rest", "return", "roar", "sleeptalk"]
+    },
+    "magcargo": {
+        "moves": ["curse", "earthquake", "fireblast", "rest", "rockslide", "sleeptalk"]
+    },
+    "piloswine": {
+        "moves": ["ancientpower", "bodyslam", "curse", "earthquake", "icebeam", "rest", "sleeptalk"]
+    },
+    "corsola": {
+        "moves": ["curse", "recover", "rockslide", "surf", "toxic"]
+    },
+    "octillery": {
+        "moves": ["flamethrower", "hiddenpowerelectric", "icebeam", "rest", "sleeptalk", "surf"]
+    },
+    "delibird": {
+        "moves": ["hiddenpowerflying", "icebeam", "rapidspin", "spikes", "thief"]
+    },
+    "mantine": {
+        "moves": ["haze", "hiddenpowerelectric", "icebeam", "rest", "sleeptalk", "surf", "toxic"]
+    },
+    "skarmory": {
+        "moves": ["curse", "drillpeck", "rest", "sleeptalk", "toxic"]
+    },
+    "houndoom": {
+        "moves": ["crunch", "fireblast", "pursuit", "solarbeam", "sunnyday"]
+    },
+    "kingdra": {
+        "moves": ["dragonbreath", "hiddenpowerelectric", "icebeam", "rest", "sleeptalk", "surf"]
+    },
+    "donphan": {
+        "moves": ["ancientpower", "curse", "earthquake", "hiddenpowerbug", "rapidspin", "rest", "roar", "sleeptalk"]
+    },
+    "porygon2": {
+        "moves": ["curse", "doubleedge", "icebeam", "recover", "return", "thunderbolt", "thunderwave"]
+    },
+    "stantler": {
+        "moves": ["confuseray", "curse", "earthquake", "rest", "return", "sleeptalk"]
+    },
+    "smeargle": {
+        "moves": ["agility", "batonpass", "spikes", "spore"]
+    },
+    "hitmontop": {
+        "moves": ["curse", "hiddenpowerghost", "highjumpkick", "rest", "sleeptalk"]
+    },
+    "miltank": {
+        "moves": ["bodyslam", "curse", "earthquake", "healbell", "milkdrink"]
+    },
+    "blissey": {
+        "moves": ["flamethrower", "healbell", "icebeam", "present", "sing", "softboiled", "toxic"]
+    },
+    "raikou": {
+        "moves": ["crunch", "hiddenpowerice", "hiddenpowerwater", "reflect", "rest", "roar", "sleeptalk", "thunder", "thunderbolt"]
+    },
+    "entei": {
+        "moves": ["fireblast", "hiddenpowerrock", "return", "solarbeam", "sunnyday"]
+    },
+    "suicune": {
+        "moves": ["hiddenpowerelectric", "icebeam", "rest", "roar", "sleeptalk", "surf", "toxic"]
+    },
+    "tyranitar": {
+        "moves": ["crunch", "curse", "earthquake", "fireblast", "pursuit", "rest", "roar", "rockslide", "surf"]
+    },
+    "lugia": {
+        "moves": ["aeroblast", "curse", "earthquake", "icebeam", "recover", "whirlwind"]
+    },
+    "hooh": {
+        "moves": ["curse", "earthquake", "hiddenpowerflying", "recover", "sacredfire", "thunder", "thunderbolt"]
+    },
+    "celebi": {
+        "moves": ["hiddenpowergrass", "healbell", "leechseed", "psychic", "recover", "toxic"]
+    }
+}
