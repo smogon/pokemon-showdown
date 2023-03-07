@@ -1,11 +1,13 @@
 import RandomGen4Teams from '../gen4/random-teams';
 import {Utils} from '../../../lib';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
-import type {MoveCounter} from '../gen8/random-teams';
+import type {MoveCounter, OldRandomBattleSpecies} from '../gen8/random-teams';
 
 export class RandomGen3Teams extends RandomGen4Teams {
 	battleHasDitto: boolean;
 	battleHasWobbuffet: boolean;
+
+	randomData: {[species: string]: OldRandomBattleSpecies} = require('./random-data.json');
 
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
@@ -336,9 +338,11 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		species = this.dex.species.get(species);
 		let forme = species.name;
 
+		const data = this.randomData[species.id];
+
 		if (typeof species.battleOnly === 'string') forme = species.battleOnly;
 
-		const movePool = (species.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
+		const movePool = (data.moves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool = [];
 		const moves = new Set<string>();
 		let ability = '';
@@ -526,21 +530,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		}
 
 		const item = this.getItem(ability, types, moves, counter, species);
-		const levelScale: {[k: string]: number} = {
-			Uber: 76,
-			OU: 80,
-			UUBL: 82,
-			UU: 84,
-			NUBL: 86,
-			NU: 88,
-			PU: 90,
-			NFE: 90,
-		};
-		const customScale: {[k: string]: number} = {
-			Ditto: 100, Unown: 100,
-		};
-		const tier = species.tier;
-		const level = this.adjustLevel || customScale[species.name] || levelScale[tier] || (species.nfe ? 90 : 80);
+		const level = this.adjustLevel || data.level || (species.nfe ? 90 : 80);
 
 		// Prepare optimal HP
 		let hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
@@ -598,7 +588,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
-			if (!species.exists || !species.randomBattleMoves) continue;
+			if (!species.exists || !this.randomData[species.id]?.moves) continue;
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;
 
