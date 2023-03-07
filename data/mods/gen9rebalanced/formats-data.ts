@@ -3,6 +3,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	ironspines: { "tier": "Illegal", "doublesTier": "Illegal", "natDexTier": "Illegal"},
 	infernotail: { "tier": "Illegal", "doublesTier": "Illegal", "natDexTier": "Illegal"},
 	/////////// end dnu cap
+	ironleaves: {
+		tier: "UU",
+	},
+	walkingwake: {
+		tier: "OU",
+	},
 	bulbasaur: {
 		isNonstandard: "Past",
 		tier: "Illegal",
@@ -3357,7 +3363,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	lilliganthisui: {
 //		isNonstandard: "Unobtainable",
-		tier: "UU",
+		tier: "UUBL",
 	},
 	basculin: {
 		tier: "RU",
