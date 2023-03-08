@@ -62,7 +62,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (['adamantcrystal', 'griseouscore', 'lustrousglobe'].includes(item.id) &&
 				item.forcedForme !== pokemon.species.name) {
 				// @ts-ignore
-				const rawSpecies = this.actions.getMixedSpecies(pokemon.m.originalSpecies, item.forcedForme!);
+				const rawSpecies = this.actions.getMixedSpecies(pokemon.m.originalSpecies, item.forcedForme!, pokemon);
 				const species = pokemon.setSpecies(rawSpecies);
 				if (!species) continue;
 				pokemon.baseSpecies = rawSpecies;
@@ -110,10 +110,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				const item = pokemon.getItem();
 				if (item.id === 'rustedsword') {
 					// @ts-ignore
-					rawSpecies = this.actions.getMixedSpecies(pokemon.m.originalSpecies, 'Zacian-Crowned');
+					rawSpecies = this.actions.getMixedSpecies(pokemon.m.originalSpecies, 'Zacian-Crowned', pokemon);
 				} else if (item.id === 'rustedshield') {
 					// @ts-ignore
-					rawSpecies = this.actions.getMixedSpecies(pokemon.m.originalSpecies, 'Zamazenta-Crowned');
+					rawSpecies = this.actions.getMixedSpecies(pokemon.m.originalSpecies, 'Zamazenta-Crowned', pokemon);
 				}
 				if (!rawSpecies) continue;
 				const species = pokemon.setSpecies(rawSpecies);
@@ -408,7 +408,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (pokemon.species.isMega) return false;
 
 			// @ts-ignore
-			const species: Species = this.getMixedSpecies(pokemon.m.originalSpecies, pokemon.canMegaEvo);
+			const species: Species = this.getMixedSpecies(pokemon.m.originalSpecies, pokemon.canMegaEvo, pokemon);
 
 			// Do we have a proper sprite for it?
 			if (this.dex.species.get(pokemon.canMegaEvo!).baseSpecies === pokemon.m.originalSpecies) {
@@ -427,17 +427,17 @@ export const Scripts: ModdedBattleScriptsData = {
 			pokemon.canMegaEvo = null;
 			return true;
 		},
-		getMixedSpecies(originalForme, megaForme) {
+		getMixedSpecies(originalForme, megaForme, pokemon) {
 			const originalSpecies = this.dex.species.get(originalForme);
 			const megaSpecies = this.dex.species.get(megaForme);
 			if (originalSpecies.baseSpecies === megaSpecies.baseSpecies) return megaSpecies;
 			// @ts-ignore
-			const deltas = this.getFormeChangeDeltas(megaSpecies);
+			const deltas = this.getFormeChangeDeltas(megaSpecies, pokemon);
 			// @ts-ignore
 			const species = this.mutateOriginalSpecies(originalSpecies, deltas);
 			return species;
 		},
-		getFormeChangeDeltas(formeChangeSpecies) {
+		getFormeChangeDeltas(formeChangeSpecies, pokemon) {
 			const baseSpecies = this.dex.species.get(formeChangeSpecies.baseSpecies);
 			const deltas: {
 				ability: string,
@@ -470,6 +470,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (formeChangeSpecies.isPrimal) formeType = 'Primal';
 			if (formeChangeSpecies.name.endsWith('Crowned')) formeType = 'Crowned';
 			if (formeType) deltas.formeType = formeType;
+			if (!deltas.formeType && pokemon) deltas.ability = pokemon.ability;
 			return deltas;
 		},
 		mutateOriginalSpecies(speciesOrForme, deltas) {

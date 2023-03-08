@@ -297,8 +297,8 @@ interface ModdedBattleActions {
 
 	// oms
 	mutateOriginalSpecies?: (this: BattleActions, species: Species, deltas: AnyObject) => Species;
-	getFormeChangeDeltas?: (this: BattleActions, formeChangeSpecies: Species) => AnyObject;
-	getMixedSpecies?: (this: BattleActions, originalName: string, megaName: string) => Species;
+	getFormeChangeDeltas?: (this: BattleActions, formeChangeSpecies: Species, pokemon?: Pokemon) => AnyObject;
+	getMixedSpecies?: (this: BattleActions, originalName: string, megaName: string, pokemon?: Pokemon) => Species;
 }
 
 interface ModdedBattleSide {

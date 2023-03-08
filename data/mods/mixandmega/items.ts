@@ -9,8 +9,12 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	adamantcrystal: {
 		inherit: true,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Steel' || move.type === 'Dragon') {
+				return this.chainModify([4915, 4096]);
+			}
+		},
 		onTakeItem: false,
-		isNonstandard: null,
 	},
 	aerodactylite: {
 		inherit: true,
@@ -61,7 +65,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		onPrimal(pokemon) {
 			// @ts-ignore
-			const species: Species = this.actions.getMixedSpecies(pokemon.m.originalSpecies, 'Kyogre-Primal');
+			const species: Species = this.actions.getMixedSpecies(pokemon.m.originalSpecies, 'Kyogre-Primal', pokemon);
 			if (pokemon.m.originalSpecies === 'Kyogre') {
 				pokemon.formeChange(species, this.effect, true);
 			} else {
@@ -112,8 +116,12 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	griseouscore: {
 		inherit: true,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Ghost' || move.type === 'Dragon') {
+				return this.chainModify([4915, 4096]);
+			}
+		},
 		onTakeItem: false,
-		isNonstandard: null,
 	},
 	gyaradosite: {
 		inherit: true,
@@ -149,8 +157,12 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	lustrousglobe: {
 		inherit: true,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Water' || move.type === 'Dragon') {
+				return this.chainModify([4915, 4096]);
+			}
+		},
 		onTakeItem: false,
-		isNonstandard: null,
 	},
 	manectite: {
 		inherit: true,
@@ -193,7 +205,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		onPrimal(pokemon) {
 			// @ts-ignore
-			const species: Species = this.actions.getMixedSpecies(pokemon.m.originalSpecies, 'Groudon-Primal');
+			const species: Species = this.actions.getMixedSpecies(pokemon.m.originalSpecies, 'Groudon-Primal', pokemon);
 			if (pokemon.m.originalSpecies === 'Groudon') {
 				pokemon.formeChange(species, this.effect, true);
 			} else {
