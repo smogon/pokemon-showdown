@@ -68,7 +68,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	bestow: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, assist: 1},
+		flags: {protect: 1, mirror: 1, assist: 1, copycat: 1},
 	},
 	blizzard: {
 		inherit: true,
@@ -111,7 +111,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			chance: 10,
 			volatileStatus: 'confusion',
 		},
-		flags: {protect: 1, sound: 1, distance: 1, assist: 1},
+		flags: {protect: 1, sound: 1, distance: 1, assist: 1, copycat: 1},
 	},
 	conversion: {
 		inherit: true,
@@ -216,7 +216,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	feint: {
 		inherit: true,
-		flags: {assist: 1},
+		flags: {assist: 1, copycat: 1},
 	},
 	finalgambit: {
 		inherit: true,
@@ -682,7 +682,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	ragepowder: {
 		inherit: true,
 		priority: 3,
-		flags: {assist: 1},
+		flags: {assist: 1, copycat: 1},
 	},
 	reflect: {
 		inherit: true,
