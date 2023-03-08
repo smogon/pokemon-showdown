@@ -8,8 +8,7 @@ Navigation: [Website][1] | **Server repository** | [Client repository][2] | [Dex
   [3]: https://github.com/Zarel/Pokemon-Showdown-Dex
 
 [![Build Status](https://github.com/smogon/pokemon-showdown/workflows/Node.js%20CI/badge.svg)](https://github.com/smogon/pokemon-showdown/actions?query=workflow%3A%22Node.js+CI%22)
-[![Dependency Status](https://david-dm.org/smogon/pokemon-showdown.svg)](https://david-dm.org/smogon/pokemon-showdown)
-[![devDependency Status](https://david-dm.org/smogon/pokemon-showdown/dev-status.svg)](https://david-dm.org/smogon/pokemon-showdown?type=dev)
+[![Dependency Status](https://img.shields.io/librariesio/github/smogon/pokemon-showdown)](https://libraries.io/github/smogon/pokemon-showdown)
 
 
 Introduction
