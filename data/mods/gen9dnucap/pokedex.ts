@@ -18066,6 +18066,19 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		cosmeticFormes: ["Iron Strikes-Red", "Iron Strikes-Blue"],
 		formeOrder: ["Iron Strikes", "Iron Strikes-Red", "Iron Strikes-Blue"],
 	},
+	ironwick: {
+		num: 7954,
+		name: "Iron Wick",
+		types: ["Ghost", "Electric"],
+		gender: "N",
+		baseStats: {hp: 34, atk: 28, def: 54, spa: 42, spd: 40, spe: 62},
+		abilities: {0: "Dazzling", 1: "Surge Surfer", H: "Technician"},
+		heightm: 0.3,
+		weightkg: 2.3,
+		color: "Yellow",
+		tags: ["Sub-Legendary", "Paradox"],
+		eggGroups: ["Undiscovered"],
+	},
 	//////////////////////////////////////
 	// END DNU CAP
 	//////////////////////////////////////
