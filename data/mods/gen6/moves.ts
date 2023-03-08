@@ -5,11 +5,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	assist: {
 		inherit: true,
-		flags: {assist: 1, copycat: 1},
+		flags: {assist: 1, copycat: 1, sleeptalk: 1},
 	},
 	copycat: {
 		inherit: true,
-		flags: {assist: 1, copycat: 1},
+		flags: {assist: 1, copycat: 1, sleeptalk: 1},
 	},
 	darkvoid: {
 		inherit: true,
@@ -97,7 +97,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mefirst: {
 		inherit: true,
-		flags: {protect: 1, bypasssub: 1, mefirst: 1, assist: 1, copycat: 1},
+		flags: {protect: 1, bypasssub: 1, assist: 1, copycat: 1, mefirst: 1, sleeptalk: 1},
 	},
 	minimize: {
 		inherit: true,
@@ -124,7 +124,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	metronome: {
 		inherit: true,
-		flags: {assist: 1, copycat: 1},
+		flags: {assist: 1, copycat: 1, sleeptalk: 1},
 	},
 	mistyterrain: {
 		inherit: true,

@@ -989,6 +989,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mimic: {
 		inherit: true,
+		flags: {protect: 1, bypasssub: 1, allyanim: 1, assist: 1, copycat: 1, encore: 1, instruct: 1, mimic: 1},
 		onHit(target, source) {
 			const disallowedMoves = ['chatter', 'metronome', 'mimic', 'sketch', 'struggle', 'transform'];
 			if (source.transformed || !target.lastMove || target.volatiles['substitute']) {
@@ -1394,6 +1395,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	sketch: {
 		inherit: true,
+		flags: {bypasssub: 1, allyanim: 1, encore: 1, assist: 1, copycat: 1, instruct: 1, mimic: 1},
 		onHit(target, source) {
 			const disallowedMoves = ['chatter', 'sketch', 'struggle'];
 			if (source.transformed || !target.lastMove || target.volatiles['substitute']) {
@@ -1473,6 +1475,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	struggle: {
 		inherit: true,
+		flags: {contact: 1, protect: 1, encore: 1, mefirst: 1, assist: 1, copycat: 1, instruct: 1, mimic: 1},
 		onModifyMove(move) {
 			move.type = '???';
 		},

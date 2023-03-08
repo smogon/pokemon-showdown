@@ -543,7 +543,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (const moveSlot of pokemon.moveSlots) {
 				const moveid = moveSlot.id;
 				const pp = moveSlot.pp;
-				if (moveid && !this.dex.moves.get(moveid).flags['sleeptalk']) {
+				const move = this.dex.moves.get(moveid);
+				if (moveid && !move.flags['sleeptalk'] && !move.flags['charge']) {
 					moves.push({move: moveid, pp: pp});
 				}
 			}

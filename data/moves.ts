@@ -17194,7 +17194,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				const moveid = moveSlot.id;
 				if (!moveid) continue;
 				const move = this.dex.moves.get(moveid);
-				if (move.flags['sleeptalk'] || (move.isZ && move.basePower !== 1) || move.isMax) {
+				if (move.flags['sleeptalk'] || move.flags['charge'] || (move.isZ && move.basePower !== 1) || move.isMax) {
 					continue;
 				}
 				moves.push(moveid);

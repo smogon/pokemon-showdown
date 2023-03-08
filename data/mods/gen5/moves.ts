@@ -111,7 +111,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			chance: 10,
 			volatileStatus: 'confusion',
 		},
-		flags: {protect: 1, sound: 1, distance: 1, assist: 1, copycat: 1},
+		flags: {protect: 1, sound: 1, distance: 1, assist: 1, copycat: 1, sleeptalk: 1},
 	},
 	conversion: {
 		inherit: true,
@@ -965,7 +965,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	uproar: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, sound: 1},
+		flags: {protect: 1, mirror: 1, sound: 1, sleeptalk: 1},
 	},
 	vinewhip: {
 		inherit: true,

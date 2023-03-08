@@ -758,13 +758,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	sleeptalk: {
 		inherit: true,
-		flags: {encore: 1},
+		flags: {encore: 1, sleeptalk: 1},
 		onHit(pokemon) {
 			const moves = [];
 			for (const moveSlot of pokemon.moveSlots) {
-				const move = moveSlot.id;
-				if (move && !this.dex.moves.get(move).flags['sleeptalk']) {
-					moves.push(move);
+				const moveid = moveSlot.id;
+				const move = this.dex.moves.get(moveid);
+				if (moveid && !move.flags['sleeptalk'] && !move.flags['charge']) {
+					moves.push(moveid);
 				}
 			}
 			let randomMove = '';
