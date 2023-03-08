@@ -1439,6 +1439,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	snatch: {
 		inherit: true,
+		flags: {bypasssub: 1, assist: 1, copycat: 1},
 		condition: {
 			duration: 1,
 			onStart(pokemon) {
