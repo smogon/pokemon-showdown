@@ -1113,7 +1113,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Beak Blast",
 		pp: 15,
 		priority: -3,
-		flags: {bullet: 1, protect: 1, mefirst: 1, sleeptalk: 1, copycat: 1, instruct: 1},
+		flags: {bullet: 1, protect: 1, assist: 1, mefirst: 1, sleeptalk: 1, copycat: 1, instruct: 1},
 		priorityChargeCallback(pokemon) {
 			pokemon.addVolatile('beakblast');
 		},
