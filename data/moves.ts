@@ -2820,7 +2820,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Copycat",
 		pp: 20,
 		priority: 0,
-		flags: {encore: 1, sleeptalk: 1, assist: 1, copycat: 1, mimic: 1},
+		flags: {encore: 1, sleeptalk: 1, assist: 1, copycat: 1, instruct: 1, mimic: 1},
 		onHit(pokemon) {
 			let move: Move | ActiveMove | null = this.lastMove;
 			if (!move) return;
