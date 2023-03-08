@@ -4,6 +4,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	infernotail: { "tier": "Illegal", "doublesTier": "Illegal", "natDexTier": "Illegal"},
 	ironstrikes: { "tier": "Illegal", "doublesTier": "Illegal", "natDexTier": "Illegal"},
 	stormyblossom: { "tier": "Illegal", "doublesTier": "Illegal", "natDexTier": "Illegal"},
+	ironwick: { "tier": "Illegal", "doublesTier": "Illegal", "natDexTier": "Illegal"},
 	/////////// end dnu cap
 	bulbasaur: {
 		isNonstandard: "Past",
