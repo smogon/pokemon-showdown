@@ -731,6 +731,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Vio͜͡let')}|Your strength, extraordinary… The mark... of a true Lord…`);
 		},
 	},
+	wigglytree: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('WigglyTree')}|hi ur qt :3`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('WigglyTree')}|Is that a watering can I see?`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('WigglyTree')}|Keep wiggling!`);
+		},
+	},
 	yellowpaint: {
 		noCopy: true,
 		onStart() {

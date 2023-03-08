@@ -1721,6 +1721,59 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Poison",
 	},
 
+	// WigglyTree
+	perfectmimic: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Endures hit and hits opponent with 1.5x power.",
+		name: "Perfect Mimic",
+		gen: 9,
+		pp: 10,
+		priority: 4,
+		flags: {},
+		volatileStatus: 'perfectmimic',
+		onTryMove() {
+			this.attrLastMove('[anim] Endure');
+		},
+		onDisableMove(pokemon) {
+			if (pokemon.lastMove?.id === 'perfectmimic') pokemon.disableMove('perfectmimic');
+		},
+		condition: {
+			duration: 1,
+			onStart(target) {
+				this.add('-singleturn', target, 'move: Endure');
+			},
+			onDamagePriority: -10,
+			onDamage(damage, target, source, effect) {
+				if (effect?.effectType === 'Move') {
+					this.effectState.move = effect.id;
+					if (damage >= target.hp) {
+						this.add('-activate', target, 'move: Endure');
+						return target.hp - 1;
+					}
+				}
+			},
+			onSourceAfterMove(source, target) {
+				if (source === this.effectState.target || target !== this.effectState.target) return;
+				if (!source.hp || !this.effectState.move) return;
+				const move = this.dex.moves.get(this.effectState.move);
+				if (move.isZ || move.isMax || move.category === 'Status') return;
+				this.add('-message', target.name + ' tried to copy the move!');
+				this.add('-anim', target, "Me First", source);
+				this.actions.useMove(move, target, source);
+				delete this.effectState.move;
+			},
+			onBasePowerPriority: 12,
+			onBasePower() {
+				return this.chainModify(1.5);
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Normal",
+	},
+
 	// Yellow Paint
 	whiteout: {
 		accuracy: 85,

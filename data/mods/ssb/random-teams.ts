@@ -335,6 +335,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Waterfowl Dance',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant', teraType: 'Fairy', shiny: true,
 	},
+	WigglyTree: {
+		species: 'Sudowoodo', ability: 'Tree Stance', item: 'Liechi Berry', gender: 'M',
+		moves: ['Victory Dance', 'Wood Hammer', 'Head Smash'],
+		signatureMove: 'Perfect Mimic',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant', teraType: 'Grass',
+	},
 	'Yellow Paint': {
 		species: 'Rotom-Frost', ability: 'Yellow Magic', item: 'Chilan Berry', gender: 'N',
 		moves: ['Thunderbolt', 'Blizzard', 'Ion Deluge'],

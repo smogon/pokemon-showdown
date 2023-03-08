@@ -935,6 +935,25 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// WigglyTree
+	treestance: {
+		shortDesc: "No recoil; 3/4 damage from supereffective attacks.",
+		name: "Tree Stance",
+		onDamage(damage, target, source, effect) {
+			if (effect.id === 'recoil') {
+				if (!this.activeMove) throw new Error("Battle.activeMove is null");
+				if (this.activeMove.id !== 'struggle') return null;
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod > 0) {
+				this.debug('Tree Stance neutralize');
+				return this.chainModify(0.75);
+			}
+		},
+		isBreakable: true,
+	},
+
 	// Yellow Paint
 	yellowmagic: {
 		shortDesc: "+25% HP, +1 SpA, +1 Spe, Charge, or Paralyzes attacker when hit by an Electric move; Electric immunity.",
