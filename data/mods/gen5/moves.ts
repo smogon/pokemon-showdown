@@ -135,10 +135,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	copycat: {
 		inherit: true,
 		onHit(pokemon) {
-			const noCopycat = [
-				'assist', 'bestow', 'chatter', 'circlethrow', 'copycat', 'counter', 'covet', 'destinybond', 'detect', 'dragontail', 'endure', 'feint', 'focuspunch', 'followme', 'helpinghand', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'naturepower', 'protect', 'ragepowder', 'sketch', 'sleeptalk', 'snatch', 'struggle', 'switcheroo', 'thief', 'transform', 'trick',
-			];
-			if (!this.lastMove || noCopycat.includes(this.lastMove.id)) {
+			if (!this.lastMove || this.dex.moves.get(this.lastMove.id).flags['copycat']) {
 				return false;
 			}
 			this.actions.useMove(this.lastMove.id, pokemon);

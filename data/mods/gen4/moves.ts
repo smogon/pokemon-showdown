@@ -198,18 +198,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-start', target, 'typechange', type);
 		},
 	},
-	copycat: {
-		inherit: true,
-		onHit(pokemon) {
-			const noCopycat = [
-				'assist', 'chatter', 'copycat', 'counter', 'covet', 'destinybond', 'detect', 'endure', 'feint', 'focuspunch', 'followme', 'helpinghand', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'protect', 'sketch', 'sleeptalk', 'snatch', 'struggle', 'switcheroo', 'thief', 'trick',
-			];
-			if (!this.lastMove || noCopycat.includes(this.lastMove.id)) {
-				return false;
-			}
-			this.actions.useMove(this.lastMove.id, pokemon);
-		},
-	},
 	cottonspore: {
 		inherit: true,
 		accuracy: 85,
