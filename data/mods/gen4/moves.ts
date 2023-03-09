@@ -969,6 +969,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
+	metalburst: {
+		inherit: true,
+		flags: {protect: 1, mirror: 1},
+	},
 	metronome: {
 		inherit: true,
 		noMetronome: [
