@@ -975,6 +975,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	metronome: {
 		inherit: true,
+		flags: {assist: 1, copycat: 1, sleeptalk: 1, mimic: 1},
 		noMetronome: [
 			"Assist", "Chatter", "Copycat", "Counter", "Covet", "Destiny Bond", "Detect", "Endure", "Feint", "Focus Punch", "Follow Me", "Helping Hand", "Me First", "Metronome", "Mimic", "Mirror Coat", "Mirror Move", "Protect", "Sketch", "Sleep Talk", "Snatch", "Struggle", "Switcheroo", "Thief", "Trick",
 		],
@@ -983,11 +984,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		flags: {protect: 1, bypasssub: 1, allyanim: 1, assist: 1, copycat: 1, encore: 1, instruct: 1, mimic: 1},
 		onHit(target, source) {
-			const disallowedMoves = ['chatter', 'metronome', 'mimic', 'sketch', 'struggle', 'transform'];
 			if (source.transformed || !target.lastMove || target.volatiles['substitute']) {
 				return false;
 			}
-			if (disallowedMoves.includes(target.lastMove.id) || source.moves.includes(target.lastMove.id)) {
+			if (target.lastMove.flags['mimic'] || source.moves.includes(target.lastMove.id)) {
 				return false;
 			}
 			const mimicIndex = source.moves.indexOf('mimic');
