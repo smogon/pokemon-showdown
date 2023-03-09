@@ -775,6 +775,7 @@ export const Formats: FormatList = [
 		desc: `Pok&eacute;mon have access to almost any ability.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3710568/">Almost Any Ability</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3710571/">AAA Resources</a>`,
 		],
 
 		mod: 'gen9',
@@ -792,6 +793,7 @@ export const Formats: FormatList = [
 		desc: `Anything directly hackable onto a set (EVs, IVs, forme, ability, item, and move) and is usable in local battles is allowed.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3710859/">Balanced Hackmons</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3712766/">BH Resources</a>`,
 		],
 
 		mod: 'gen9',
@@ -804,9 +806,10 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] Mix and Mega",
-		desc: `Mega evolve any Pok&eacute;mon with any mega stone and no limit. Boosts based on mega evolution from gen 7.`,
+		desc: `Mega evolve any Pok&eacute;mon with any mega stone, or transform them with Primal orbs, Origin orbs, and Rusted items with no limit. Mega and Primal boosts based on form changes from gen 7.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3710921/">Mix and Mega</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3716385/">Mix and Mega Resources</a>`,
 		],
 
 		mod: 'mixandmega',
@@ -885,6 +888,7 @@ export const Formats: FormatList = [
 		desc: `Pok&eacute;mon can use any move of their typing, in addition to the moves they can normally learn.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3710577/">STABmons</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3714664/">STABmons Resources</a>`,
 		],
 
 		mod: 'gen9',
@@ -903,6 +907,7 @@ export const Formats: FormatList = [
 		desc: `Only Pok&eacute;mon that can evolve are allowed.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3710638/">NFE</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3712567/">NFE Resources</a>`,
 		],
 
 		mod: 'gen9',
