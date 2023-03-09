@@ -314,7 +314,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			buf += `<span style="float:left;min-height:26px">`;
 			buf += `<span class="col abilitycol">${megaSpecies.abilities['0']}</span>`;
-			buf += `<span class="col abilitycol">${`<em>${megaSpecies.abilities['H']}</em>` || ''}</span>`;
+			buf += `<span class="col abilitycol">${megaSpecies.abilities['H'] ? `<em>${megaSpecies.abilities['H']}</em>` : ''}</span>`;
 			buf += `</span>`;
 			buf += `<span style="float:left;min-height:26px">`;
 			buf += `<span class="col statcol"><em>HP</em><br />0</span> `;
