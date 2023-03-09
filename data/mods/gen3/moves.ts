@@ -491,7 +491,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	naturepower: {
 		inherit: true,
-		flags: {},
 		accuracy: 95,
 		onHit(target) {
 			this.actions.useMove('swift', target);
