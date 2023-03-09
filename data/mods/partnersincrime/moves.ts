@@ -75,7 +75,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onHit(target, source) {
 			const move = target.lastMove;
-			if (source.transformed || !move || move.flags['mimic']  || source.moves.includes(move.id)) {
+			if (source.transformed || !move || move.flags['mimic'] || source.moves.includes(move.id)) {
 				return false;
 			}
 			if (move.isZ || move.isMax) return false;
