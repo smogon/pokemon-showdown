@@ -470,9 +470,9 @@ export class TeamValidator {
 		if (!set.teraType && this.gen === 9) {
 			set.teraType = species.types[0];
 		}
-		if (!set.cmType) {
-			set.cmType = "Normal";
-		}
+		// if (!set.cmType) {
+		// 	set.cmType = "Normal";
+		// }
 
 		if (!set.level) set.level = ruleTable.defaultLevel;
 
