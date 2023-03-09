@@ -296,9 +296,9 @@ interface ModdedBattleActions {
 	) => void;
 
 	// oms
-	doGetMixedSpecies?: (this: BattleActions, species: Species, deltas: AnyObject) => Species;
-	getMegaDeltas?: (this: BattleActions, megaSpecies: Species) => AnyObject;
-	getMixedSpecies?: (this: BattleActions, originalName: string, megaName: string) => Species;
+	mutateOriginalSpecies?: (this: BattleActions, species: Species, deltas: AnyObject) => Species;
+	getFormeChangeDeltas?: (this: BattleActions, formeChangeSpecies: Species, pokemon?: Pokemon) => AnyObject;
+	getMixedSpecies?: (this: BattleActions, originalName: string, megaName: string, pokemon?: Pokemon) => Species;
 }
 
 interface ModdedBattleSide {
@@ -392,6 +392,7 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	nextTurn?: (this: Battle) => void;
 	runAction?: (this: Battle, action: Action) => void;
 	spreadModify?: (this: Battle, baseStats: StatsTable, set: PokemonSet) => StatsTable;
+	start?: (this: Battle) => void;
 	suppressingWeather?: (this: Battle) => boolean;
 	trunc?: (n: number) => number;
 	win?: (this: Battle, side?: SideID | '' | Side | null) => boolean;
