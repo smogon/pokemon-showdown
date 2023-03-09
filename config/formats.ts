@@ -87,9 +87,9 @@ export const Formats: FormatList = [
 			'Mightyena', 'Elekid', 'Ponyta', 'Trapinch', 'Pachirisu', 'Graveler',
 			'Lileep', 'Aron', 'Lickitung', 'Prinplup', 'Dratini', 'Staravia',
 			'Shellder', 'Shieldon', 'Ledian', 'Noctowl', 'Togetic', 'Bayleef',
-			'Mankey', 'Masquerian', 'Nosepass', 'Baltoy', 'Delibird', 'Duskull',
+			'Mankey', 'Masquerain', 'Nosepass', 'Baltoy', 'Delibird', 'Duskull',
 			'Nuzleaf', 'Onix', 'Meowth', 'Lumineon', 'Combusken', 'Charmeleon',
-			'Tailow', 'Lombre', 'Castform', 'Wormadam-Sandy', 'Tropius', 'Clefairy',
+			'Taillow', 'Lombre', 'Castform', 'Wormadam-Sandy', 'Tropius', 'Clefairy',
 			'Sandshrew', 'Aipom'
 		],
 	},
