@@ -84,7 +84,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	pichuspikyeared: {
-		tier: "NU",
+		tier: "8U",
 	},
 	pikachu: {
 		randomBattleMoves: ["grassknot", "hiddenpowerice", "substitute", "surf", "thunderbolt", "volttackle"],
@@ -392,7 +392,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	marowak: {
 		randomBattleMoves: ["doubleedge", "earthquake", "firepunch", "substitute", "swordsdance", "thunderpunch"],
-		tier: "NU",
+		tier: "PU",
 	},
 	tyrogue: {
 		tier: "LC",
@@ -1114,7 +1114,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	shedinja: {
 		randomBattleMoves: ["batonpass", "shadowsneak", "swordsdance", "willowisp", "xscissor"],
-		tier: "NU",
+		tier: "8U",
 	},
 	whismur: {
 		tier: "LC",
@@ -1246,7 +1246,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	spinda: {
 		randomBattleMoves: ["bodyslam", "encore", "hypnosis", "seismictoss", "substitute", "teeterdance", "toxic"],
-		tier: "NU",
+		tier: "8U",
 	},
 	trapinch: {
 		tier: "7U",
@@ -1411,7 +1411,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	luvdisc: {
 		randomBattleMoves: ["icebeam", "protect", "surf", "sweetkiss", "toxic"],
-		tier: "NU",
+		tier: "8U",
 	},
 	bagon: {
 		tier: "LC",
@@ -1537,7 +1537,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	kricketune: {
 		randomBattleMoves: ["brickbreak", "nightslash", "return", "swordsdance", "xscissor"],
-		tier: "NU",
+		tier: "8U",
 	},
 	shinx: {
 		tier: "LC",
