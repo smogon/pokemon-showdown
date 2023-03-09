@@ -470,7 +470,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (formeChangeSpecies.isPrimal) formeType = 'Primal';
 			if (formeChangeSpecies.name.endsWith('Crowned')) formeType = 'Crowned';
 			if (formeType) deltas.formeType = formeType;
-			if (!deltas.formeType && pokemon) deltas.ability = pokemon.ability;
+			if (!deltas.formeType && pokemon) deltas.ability = pokemon.getAbility().name;
 			return deltas;
 		},
 		mutateOriginalSpecies(speciesOrForme, deltas) {
