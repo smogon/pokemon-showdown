@@ -59,7 +59,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 		for (const pokemon of this.getAllPokemon()) {
 			const item = pokemon.getItem();
-			if (['adamantcrystal', 'griseouscore', 'lustrousglobe'].includes(item.id) &&
+			if (['adamantcrystal', 'griseouscore', 'lustrousglobe', 'vilevial'].includes(item.id) &&
 				item.forcedForme !== pokemon.species.name) {
 				// @ts-ignore
 				const rawSpecies = this.actions.getMixedSpecies(pokemon.m.originalSpecies, item.forcedForme!, pokemon);
@@ -470,7 +470,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (formeChangeSpecies.isPrimal) formeType = 'Primal';
 			if (formeChangeSpecies.name.endsWith('Crowned')) formeType = 'Crowned';
 			if (formeType) deltas.formeType = formeType;
-			if (!deltas.formeType && pokemon) deltas.ability = pokemon.getAbility().name;
+			if (!deltas.formeType && formeChangeSpecies.abilities['H'] &&
+				pokemon && pokemon.baseSpecies.abilities['H'] === pokemon.getAbility().name) {
+				deltas.ability = formeChangeSpecies.abilities['H'];
+			}
 			return deltas;
 		},
 		mutateOriginalSpecies(speciesOrForme, deltas) {

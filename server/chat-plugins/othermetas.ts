@@ -40,7 +40,7 @@ function getMegaStone(stone: string, mod = 'gen9'): Item | null {
 			return null;
 		}
 	}
-	if (!item.megaStone && !item.onPrimal &&
+	if (!item.megaStone && !item.onPrimal && !item.forcedForme?.endsWith('Epilogue') &&
 		!item.forcedForme?.endsWith('Origin') && !item.name.startsWith('Rusted')) return null;
 	return item;
 }
@@ -121,9 +121,10 @@ export const commands: Chat.ChatCommands = {
 			baseSpecies = dex.species.get("Zacian");
 			break;
 		default:
-			if (stone.forcedForme?.endsWith('Origin')) {
-				megaSpecies = dex.species.get(stone.forcedForme);
-				baseSpecies = dex.species.get(stone.forcedForme.split('-')[0]);
+			const forcedForme = stone.forcedForme;
+			if (forcedForme && (forcedForme.endsWith('Origin') || forcedForme.endsWith('Epilogue'))) {
+				megaSpecies = dex.species.get(forcedForme);
+				baseSpecies = dex.species.get(forcedForme.split('-')[0]);
 			} else {
 				megaSpecies = dex.species.get(stone.megaStone);
 				baseSpecies = dex.species.get(stone.megaEvolves);
@@ -216,11 +217,11 @@ export const commands: Chat.ChatCommands = {
 		const stone = getMegaStone(targetid, sep[1]);
 		const stones = [];
 		if (!stone) {
-			const species = dex.species.get(targetid.replace(/(?:mega[xy]?|primal|origin|crowned)$/, ''));
+			const species = dex.species.get(targetid.replace(/(?:mega[xy]?|primal|origin|crowned|epilogue)$/, ''));
 			if (!species.exists) throw new Chat.ErrorMessage(`Error: Mega Stone not found.`);
 			if (!species.otherFormes) throw new Chat.ErrorMessage(`Error: Mega Evolution not found.`);
 			for (const poke of species.otherFormes) {
-				if (!/(?:-Crowned|-Origin|-Primal|-Mega(?:-[XY])?)$/.test(poke)) continue;
+				if (!/(?:-Crowned|-Epilogue|-Origin|-Primal|-Mega(?:-[XY])?)$/.test(poke)) continue;
 				const megaPoke = dex.species.get(poke);
 				const flag = megaPoke.requiredMove === 'Dragon Ascent' ? megaPoke.requiredMove : megaPoke.requiredItem;
 				if (/mega[xy]$/.test(targetid) && toID(megaPoke.name) !== toID(dex.species.get(targetid))) continue;
@@ -252,9 +253,10 @@ export const commands: Chat.ChatCommands = {
 				baseSpecies = dex.species.get("Zacian");
 				break;
 			default:
-				if (aStone.forcedForme?.endsWith('Origin')) {
-					megaSpecies = dex.species.get(aStone.forcedForme);
-					baseSpecies = dex.species.get(aStone.forcedForme.split('-')[0]);
+				const forcedForme = aStone.forcedForme;
+				if (forcedForme && (forcedForme.endsWith('Origin') || forcedForme.endsWith('Epilogue'))) {
+					megaSpecies = dex.species.get(forcedForme);
+					baseSpecies = dex.species.get(forcedForme.split('-')[0]);
 				} else {
 					megaSpecies = dex.species.get(aStone.megaStone);
 					baseSpecies = dex.species.get(aStone.megaEvolves);
@@ -312,7 +314,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			buf += `<span style="float:left;min-height:26px">`;
 			buf += `<span class="col abilitycol">${megaSpecies.abilities['0']}</span>`;
-			buf += `<span class="col abilitycol"></span>`;
+			buf += `<span class="col abilitycol">${`<em>${megaSpecies.abilities['H']}</em>` || ''}</span>`;
 			buf += `</span>`;
 			buf += `<span style="float:left;min-height:26px">`;
 			buf += `<span class="col statcol"><em>HP</em><br />0</span> `;

@@ -278,4 +278,13 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	vilevial: {
+		inherit: true,
+		onBasePower(basePower, user, target, move) {
+			if (['Poison', 'Flying'].includes(move.type)) {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		onTakeItem: false,
+	},
 };

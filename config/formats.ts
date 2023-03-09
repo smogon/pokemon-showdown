@@ -833,7 +833,10 @@ export const Formats: FormatList = [
 					return [`${species.name} is not allowed to hold ${item.name}.`];
 				}
 				if (itemTable.has(item.id)) {
-					return [`You are limited to one of each mega stone/orb/rusted item/sinnoh item.`, `(You have more than one ${item.name})`];
+					return [
+						`You are limited to one of each mega stone/orb/rusted item/sinnoh item.`,
+						`(You have more than one ${item.name})`,
+					];
 				}
 				itemTable.add(item.id);
 			}
