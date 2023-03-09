@@ -39992,6 +39992,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	vibrava: {
 		learnset: {
+			ancientroar: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
 			aircutter: ["4T"],
@@ -40079,6 +40080,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	flygon: {
 		learnset: {
+			ancientroar: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
 			aerialace: ["7M", "6M", "5M", "4M"],
