@@ -9,6 +9,15 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		desc: "At the end of every turn, holder restores 1/16 of its max HP.",
 	},
+	// Archas
+	lilligantiumz: {
+		name: "Lilligantium Z",
+		onTakeItem: false,
+		zMove: "Aura Rain",
+		zMoveFrom: "Quiver Dance",
+		itemUser: ["Lilligant"],
+		desc: "If held by a Lilligant with Quiver Dance, it can use Aura Rain.",
+	},
 	// Irpachuza
 	irpatuziniumz: {
 		name: "Irpatuzinium Z",

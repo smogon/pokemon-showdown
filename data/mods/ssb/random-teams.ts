@@ -54,6 +54,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Sire Switch',
 		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful', teraType: 'Poison', skip: 'A Quag To The Past',
 	},
+	Archas: {
+		species: 'Lilligant', ability: 'Saintly Bullet', item: 'Lilligantium Z', gender: 'F',
+		moves: ['Giga Drain', 'Snipe Shot', 'Hurricane'],
+		signatureMove: 'Quiver Dance',
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
+	},
 	Blitz: {
 		species: 'Chi-Yu', ability: 'Blitz of Ruin', item: 'Life Orb', gender: 'N',
 		moves: ['Fiery Wrath', 'Lava Plume', 'Nasty Plot'],

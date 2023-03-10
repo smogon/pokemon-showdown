@@ -72,6 +72,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 	},
+	archas: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Archas')}|We'll get over this barrier together!`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Archas')}|Stand your ground, everyone!`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Archas')}|What would Grandfather... think of me now...`);
+		},
+	},
 	blitzuser: {
 		noCopy: true,
 		onStart(pokemon) {

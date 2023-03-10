@@ -112,6 +112,44 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ground",
 	},
 
+	// Archas
+	aurarain: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Cures status conditions and heals 25% HP for entire party except the user.",
+		name: "Aura Rain",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Rain Dance', source);
+			this.add('-anim', source, 'Water Sport', source);
+			this.add('-anim', source, 'Aromatherapy', source);
+		},
+		onHit(pokemon) {
+			this.add('-message', 'An alleviating aura rains down on the field!');
+			let success = false;
+			const allies = [...pokemon.side.pokemon, ...pokemon.side.allySide?.pokemon || []];
+			for (const ally of allies) {
+				if (ally === pokemon) continue;
+				if (ally.heal(this.modify(ally.maxhp, 0.25))) {
+					this.add('-heal', ally, ally.getHealth);
+					success = true;
+				}
+				if (ally.cureStatus()) success = true;
+			}
+			return success;
+		},
+		isZ: "lilligantiumz",
+		secondary: null,
+		target: "allyTeam",
+		type: "Grass",
+	},
+
 	// Blitz
 	geyserblast: {
 		accuracy: 95,
