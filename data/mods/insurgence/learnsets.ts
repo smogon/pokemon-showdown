@@ -553,6 +553,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	charizard: {
 		learnset: {
+			dragonify: ["6M"],
 			jetstream: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
@@ -4293,6 +4294,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	nidoqueen: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
@@ -4617,6 +4619,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	nidoking: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
@@ -8643,6 +8646,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	arcanine: {
 		learnset: {
+			dragonify: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
@@ -13608,6 +13612,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	onix: {
 		learnset: {
+			dragonify: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
@@ -13707,6 +13712,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	steelix: {
 		learnset: {
+			dragonify: ["6M"],
 			dracojet: ["6M"],
 			darkmatter: ["6M"],
 			achillesheel: ["6M"],
@@ -16048,6 +16054,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	rhyhorn: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
@@ -16163,6 +16170,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	rhydon: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
@@ -16313,6 +16321,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	rhyperior: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
@@ -17147,6 +17156,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	horsea: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
@@ -17230,6 +17240,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	seadra: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
@@ -17312,6 +17323,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	kingdra: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
@@ -19661,6 +19673,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	gyarados: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
@@ -19781,6 +19794,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	lapras: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
@@ -21438,6 +21452,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	aerodactyl: {
 		learnset: {
+			dragonify: ["6M"],
 			jetstream: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
@@ -22339,6 +22354,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	dratini: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
@@ -22436,6 +22452,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	dragonair: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
@@ -22533,6 +22550,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	dragonite: {
 		learnset: {
+			dragonify: ["6M"],
 			jetstream: ["6M"],
 			permafrost: ["6M"],
 			wildfire: ["6M"],
@@ -22881,6 +22899,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	mew: {
 		learnset: {
+			dragonify: ["6M"],
 			jetstream: ["6M"],
 			livewire: ["6M"],
 			lunarcannon: ["6M"],
@@ -24045,6 +24064,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	feraligatr: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
@@ -25785,6 +25805,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	ampharos: {
 		learnset: {
+			dragonify: ["6M"],
 			livewire: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
@@ -27048,6 +27069,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	yanmega: {
 		learnset: {
+			dragonify: ["6M"],
 			jetstream: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
@@ -32304,6 +32326,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	tyranitar: {
 		learnset: {
+			dragonify: ["6M"],
 			lunarcannon: ["6M"],
 			permafrost: ["6M"],
 			wildfire: ["6M"],
@@ -32459,6 +32482,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	lugia: {
 		learnset: {
+			dragonify: ["6M"],
 			jetstream: ["6M"],
 			permafrost: ["6M"],
 			dracojet: ["6M"],
@@ -33039,6 +33063,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	sceptile: {
 		learnset: {
+			dragonify: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
@@ -38100,6 +38125,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	aggron: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
@@ -40425,6 +40451,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	vibrava: {
 		learnset: {
+			dragonify: ["6M"],
 			drakonvoice: ["6M"],
 			jetstream: ["6M"],
 			dracojet: ["6M"],
@@ -40516,6 +40543,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	flygon: {
 		learnset: {
+			dragonify: ["6M"],
 			drakonvoice: ["6M"],
 			jetstream: ["6M"],
 			wildfire: ["6M"],
@@ -40857,6 +40885,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	swablu: {
 		learnset: {
+			dragonify: ["6M"],
 			jetstream: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
@@ -40951,6 +40980,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	altaria: {
 		learnset: {
+			dragonify: ["6M"],
 			jetstream: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
@@ -42406,6 +42436,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	feebas: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
@@ -42468,6 +42499,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	milotic: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
@@ -43269,6 +43301,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	tropius: {
 		learnset: {
+			dragonify: ["6M"],
 			jetstream: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
@@ -44497,6 +44530,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	bagon: {
 		learnset: {
+			dragonify: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
@@ -44582,6 +44616,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	shelgon: {
 		learnset: {
+			dragonify: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
@@ -44661,6 +44696,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	salamence: {
 		learnset: {
+			dragonify: ["6M"],
 			jetstream: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
@@ -45287,6 +45323,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	latias: {
 		learnset: {
+			dragonify: ["6M"],
 			drakonvoice: ["6M"],
 			jetstream: ["6M"],
 			dracojet: ["6M"],
@@ -45424,6 +45461,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	latios: {
 		learnset: {
+			dragonify: ["6M"],
 			drakonvoice: ["6M"],
 			jetstream: ["6M"],
 			dracojet: ["6M"],
@@ -45650,6 +45688,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	groudon: {
 		learnset: {
+			dragonify: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
@@ -45779,6 +45818,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	rayquaza: {
 		learnset: {
+			dragonify: ["6M"],
 			jetstream: ["6M"],
 			permafrost: ["6M"],
 			wildfire: ["6M"],
@@ -47649,6 +47689,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	cranidos: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
@@ -47740,6 +47781,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	rampardos: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
@@ -50111,6 +50153,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	gible: {
 		learnset: {
+			dragonify: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
@@ -50195,6 +50238,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	gabite: {
 		learnset: {
+			dragonify: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
@@ -50281,6 +50325,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	garchomp: {
 		learnset: {
+			dragonify: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
@@ -50491,6 +50536,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	lucario: {
 		learnset: {
+			dragonify: ["6M"],
 			dracojet: ["6M"],
 			darkmatter: ["6M"],
 			achillesheel: ["6M"],
@@ -52053,6 +52099,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	dialga: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
@@ -52172,6 +52219,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	palkia: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
@@ -52298,6 +52346,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	heatran: {
 		learnset: {
+			dragonify: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
 			darkmatter: ["6M"],
@@ -52502,6 +52551,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	giratina: {
 		learnset: {
+			dragonify: ["6M"],
 			lunarcannon: ["6M"],
 			newmoon: ["6M"],
 			dracojet: ["6M"],
@@ -53054,6 +53104,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	arceus: {
 		learnset: {
+			dragonify: ["6M"],
 			jetstream: ["6M"],
 			lunarcannon: ["6M"],
 			permafrost: ["6M"],
@@ -53554,6 +53605,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	serperior: {
 		learnset: {
+			dragonify: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
@@ -57964,6 +58016,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	krookodile: {
 		learnset: {
+			dragonify: ["6M"],
 			dracojet: ["6M"],
 			darkmatter: ["6M"],
 			achillesheel: ["6M"],
@@ -58599,6 +58652,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	scraggy: {
 		learnset: {
+			dragonify: ["6M"],
 			dracojet: ["6M"],
 			darkmatter: ["6M"],
 			achillesheel: ["6M"],
@@ -58699,6 +58753,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	scrafty: {
 		learnset: {
+			dragonify: ["6M"],
 			dracojet: ["6M"],
 			darkmatter: ["6M"],
 			achillesheel: ["6M"],
@@ -59349,6 +59404,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	archen: {
 		learnset: {
+			dragonify: ["6M"],
 			jetstream: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
@@ -59435,6 +59491,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	archeops: {
 		learnset: {
+			dragonify: ["6M"],
 			jetstream: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
@@ -62793,6 +62850,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	axew: {
 		learnset: {
+			dragonify: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
@@ -62883,6 +62941,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	fraxure: {
 		learnset: {
+			dragonify: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
@@ -62967,6 +63026,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	haxorus: {
 		learnset: {
+			dragonify: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
@@ -63781,6 +63841,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	druddigon: {
 		learnset: {
+			dragonify: ["6M"],
 			dracojet: ["6M"],
 			darkmatter: ["6M"],
 			achillesheel: ["6M"],
@@ -64935,6 +64996,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	deino: {
 		learnset: {
+			dragonify: ["6M"],
 			lunarcannon: ["6M"],
 			newmoon: ["6M"],
 			dracojet: ["6M"],
@@ -65014,6 +65076,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	zweilous: {
 		learnset: {
+			dragonify: ["6M"],
 			lunarcannon: ["6M"],
 			newmoon: ["6M"],
 			dracojet: ["6M"],
@@ -65093,6 +65156,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	hydreigon: {
 		learnset: {
+			dragonify: ["6M"],
 			jetstream: ["6M"],
 			lunarcannon: ["6M"],
 			newmoon: ["6M"],
@@ -65845,6 +65909,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	reshiram: {
 		learnset: {
+			dragonify: ["6M"],
 			jetstream: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
@@ -65949,6 +66014,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	zekrom: {
 		learnset: {
+			dragonify: ["6M"],
 			jetstream: ["6M"],
 			livewire: ["6M"],
 			dracojet: ["6M"],
@@ -66149,6 +66215,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	kyurem: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
@@ -70386,6 +70453,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	dragalge: {
 		learnset: {
+			dragonify: ["6M"],
 			corrode: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
@@ -70691,6 +70759,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	heliolisk: {
 		learnset: {
+			dragonify: ["6M"],
 			livewire: ["6M"],
 			darkmatter: ["6M"],
 			achillesheel: ["6M"],
@@ -70776,6 +70845,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	tyrunt: {
 		learnset: {
+			dragonify: ["6M"],
 			dracojet: ["6M"],
 			darkmatter: ["6M"],
 			achillesheel: ["6M"],
@@ -70862,6 +70932,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	tyrantrum: {
 		learnset: {
+			dragonify: ["6M"],
 			dracojet: ["6M"],
 			darkmatter: ["6M"],
 			achillesheel: ["6M"],
@@ -71492,6 +71563,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	goomy: {
 		learnset: {
+			dragonify: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
 			absorb: ["9L1", "8L1", "7L5", "6L5"],
@@ -71551,6 +71623,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	sliggoo: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
@@ -71659,6 +71732,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	goodra: {
 		learnset: {
+			dragonify: ["6M"],
 			permafrost: ["6M"],
 			wildfire: ["6M"],
 			achillesheel: ["6M"],
@@ -72449,6 +72523,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	noibat: {
 		learnset: {
+			dragonify: ["6M"],
 			jetstream: ["6M"],
 			dracojet: ["6M"],
 			darkmatter: ["6M"],
@@ -72530,6 +72605,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	noivern: {
 		learnset: {
+			dragonify: ["6M"],
 			jetstream: ["6M"],
 			dracojet: ["6M"],
 			darkmatter: ["6M"],
@@ -72790,6 +72866,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	zygarde: {
 		learnset: {
+			dragonify: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
 			bind: ["8L1", "8S9", "7T", "7L18", "7S2", "7S3", "7S4", "6T", "6L18"],
