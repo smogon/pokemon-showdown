@@ -1675,7 +1675,7 @@ export const commands: Chat.ChatCommands = {
 			this.refreshPage('abusemonitor-settings');
 		},
 		edithistory(target, room, user) {
-			checkAccess(this);
+			this.checkCan('globalban');
 			target = toID(target);
 			if (!target) {
 				return this.parse(`/help abusemonitor`);
@@ -1684,7 +1684,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		ignoremodlog: {
 			add(target, room, user) {
-				checkAccess(this);
+				this.checkCan('globalban');
 				let targetUser: string;
 				[targetUser, target] = this.splitOne(target).map(f => f.trim());
 				targetUser = toID(targetUser);
@@ -1717,7 +1717,7 @@ export const commands: Chat.ChatCommands = {
 				this.refreshPage(`abusemonitor-edithistory-${targetUser}`);
 			},
 			remove(target, room, user) {
-				checkAccess(this);
+				this.checkCan('globalban');
 				let [targetUser, rawNum] = this.splitOne(target).map(f => f.trim());
 				targetUser = toID(targetUser);
 				const num = Number(rawNum);

@@ -1,10 +1,12 @@
-import {MoveCounter, TeamData} from '../gen8/random-teams';
+import {MoveCounter, TeamData, OldRandomBattleSpecies} from '../gen8/random-teams';
 import RandomGen7Teams, {BattleFactorySpecies} from '../gen7/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
 
 export class RandomGen6Teams extends RandomGen7Teams {
+	randomData: {[species: string]: OldRandomBattleSpecies} = require('./random-data.json');
+
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 		this.noStab = [...this.noStab, 'aquajet', 'fakeout', 'iceshard', 'machpunch', 'quickattack', 'vacuumwave'];
@@ -828,7 +830,9 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
 
-		const movePool = (species.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
+		const data = this.randomData[species.id];
+
+		const movePool = (data?.moves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool = [];
 		let ability = '';
 
@@ -1111,17 +1115,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			item = 'Black Sludge';
 		}
 
-		const levelScale: {[k: string]: number} = {
-			uber: 76, ou: 80, uu: 82, ru: 84, nu: 86, pu: 88,
-		};
-		const customScale: {[k: string]: number} = {
-			// Banned Ability
-			Dugtrio: 82, Gothitelle: 82, Ninetales: 84, Politoed: 84, Wobbuffet: 82,
-			// Holistic judgement
-			'Castform-Rainy': 100, 'Castform-Snowy': 100, 'Castform-Sunny': 100, Delibird: 100, 'Genesect-Douse': 80, Luvdisc: 100, Spinda: 100, Unown: 100,
-		};
-		const tier = toID(species.tier).replace('bl', '');
-		const level = this.adjustLevel || customScale[species.name] || levelScale[tier] || (species.nfe ? 90 : 80);
+		const level = this.adjustLevel || data.level || (species.nfe ? 90 : 80);
 
 		// Prepare optimal HP
 		const srWeakness = this.dex.getEffectiveness('Rock', species);

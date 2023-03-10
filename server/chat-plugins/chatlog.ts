@@ -1412,6 +1412,7 @@ export const pages: Chat.PageTable = {
 
 		if (date && search) {
 			Searcher.checkEnabled();
+			this.checkCan('bypassall');
 			return LogSearcher.runSearch(this, search, roomid, isAll ? null : date, limit);
 		} else if (date) {
 			if (date === 'today') {
