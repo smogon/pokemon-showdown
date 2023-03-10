@@ -1857,4 +1857,16 @@ export const Aliases: {[alias: string]: string} = {
 	zugadoon: "Blacephalon",
 	merutan: "Meltan",
 	merumetaru: "Melmetal",
+
+	// Insurgence
+	mukdeltawater: "Muk-Delta",
+	mukdeltagrass: "Muk-Delta",
+	mukdeltafire: "Muk-Delta",
+	mukdeltadark: "Muk-Delta",
+	mukdeltanormal: "Muk-Delta",
+	mukdeltapsychic: "Muk-Delta",
+	snorlaxdeltasummer: "Snorlax-Delta",
+	snorlaxdeltaautumn: "Snorlax-Delta",
+	snorlaxdeltawinter: "Snorlax-Delta",
+	snorlaxdeltasakura: "Snorlax-Delta",
 };
