@@ -40425,6 +40425,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	vibrava: {
 		learnset: {
+			drakonvoice: ["6M"],
 			jetstream: ["6M"],
 			dracojet: ["6M"],
 			ancientroar: ["6M"],
@@ -40515,6 +40516,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	flygon: {
 		learnset: {
+			drakonvoice: ["6M"],
 			jetstream: ["6M"],
 			wildfire: ["6M"],
 			dracojet: ["6M"],
@@ -45285,6 +45287,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	latias: {
 		learnset: {
+			drakonvoice: ["6M"],
 			jetstream: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
@@ -45421,6 +45424,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	latios: {
 		learnset: {
+			drakonvoice: ["6M"],
 			jetstream: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
