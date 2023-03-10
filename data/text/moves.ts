@@ -7410,4 +7410,117 @@ export const MovesText: {[k: string]: MoveText} = {
 			shortDesc: "Nearly always goes first. Always crits.",
 		},
 	},
+
+	// Insurgence Descriptions
+	// : {
+	// 	name: "",
+	// 	desc: "",
+	// 	shortDesc: "",
+	// },
+	achillesheel: {
+		name: "Achilles Heel",
+		desc: "A damaging move that will always deal super effective (2x) damage, except against types that would normally be immune to it.",
+		shortDesc: "Always does super-effective damage.",
+	},
+	ancientroar: {
+		name: "Ancient Roar",
+		shortDesc: "No additional effect.",
+	},
+	corrode: {
+		name: "Corrode",
+		desc: "Deals damage and has no secondary effect. If used on Steel type Pokémon, this move ignores the type effectiveness of this move's type against Steel and treats it as being super effective against Steel types instead.",
+		shortDesc: "Super effective on Steel, bypasses Steel immunity.",
+	},
+	crystalrush: {
+		name: "Crystal Rush",
+		desc: "No additional effect.",
+		shortDesc: "Usually goes first.",
+	},
+	custommove: {
+		name: "Custom Move",
+		desc: "Deals damage and has no secondary effect. Custom Move is unaffected by Normalize.",
+		shortDesc: "Varies in type based on user's Custom Move typing.",
+	},
+	darkmatter: {
+		name: "Dark Matter",
+		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
+		shortDesc: "User cannot move next turn.",
+	},
+	dracojet: {
+		name: "Draco Jet",
+		desc: "No additional effect.",
+		shortDesc: "Usually goes first.",
+	},
+	dragonify: {
+		name: "Dragonify",
+		desc: "Causes the target to become a Dragon type. Fails if the target is an Arceus or a Silvally, if the target is already purely Dragon type, or if the target is Terastallized.",
+		shortDesc: "Changes the target's type to Dragon.",
+	},
+	drakonvoice: {
+		name: "Drakon Voice",
+		shortDesc: "No additional effect.",
+	},
+	jetstream: {
+		name: "Jet Stream",
+		desc: "Increases the priority of the user and its allies' moves by 1 during the next turn.",
+		shortDesc: "Next turn, allies usually go first.",
+	},
+	livewire: {
+		name: "Livewire",
+		desc: "Sets an entry hazard around the target Pokémon, which will paralyze them upon switching in. It can stack up to 5 times, with each layer adding a 20% chance of incoming Pokemon being paralyzed upon switching in. This chance is doubled in the Rain.",
+		shortDesc: "Chance to paralyze grounded foes on switch-in. Max 5 layers."
+	},
+	lunarcannon: {
+		name: "Lunar Cannon",
+		desc: "This attack charges on the first turn and executes on the second. If the user is holding a Power Herb or the weather is Darkness, the move completes in one turn.",
+		shortDesc: "Charges turn 1. Hits turn 2. No charge in darkness.",
+	},
+	medusaray: {
+		name: "Medusa Ray",
+		desc: "Causes the target to become a Rock type. Fails if the target is an Arceus or a Silvally, if the target is already purely Rock type, or if the target is Terastallized.",
+		shortDesc: "Changes the target's type to Rock.",
+	},
+	morph: {
+		name: "Morph",
+		desc: "Functions the same as Transform; however, if a Delta species of the target exists, the user will turn into that instead. If the target has multiple Delta Species, it will select one of them at random.",
+		shortDesc: "Transforms into the opponent, prioritizes Delta Form.",
+	},
+	nanorepair: {
+		name: "Nanorepair",
+		desc: "Restores up to 50% of the user's maximum HP and increases the user's Defense by 1 stage. The Defense boost is applied even if the user's current HP is already equal to its maximum HP.",
+		shortDesc: "Heals the user by 50% and raises Defense by 1.",
+	},
+	newmoon: {
+		name: "New Moon",
+		desc: "Darkness will begin to cover the field. This effect will last for 5 turns; if the user is holding a Dark Rock, the duration is increased to 8 turns.",
+		shortDesc: "For 5 turns, covers the field in darkness.",
+	},
+	permafrost: {
+		name: "Permafrost",
+		desc: "Sets an entry hazard around the target Pokémon, which will Freeze them upon switching in. It can stack up to 5 times, with each layer adding a 10% chance of incoming Pokemon being frozen upon switching in. This chance is doubled under Hail.",
+		shortDesc: "Chance to freeze grounded foes on switch-in. Max 5 layers.",
+	},
+	retrograde: {
+		name: "Retrograde",
+		shortDesc: "If the target is Mega Evolved, they turn back to normal."
+	},
+	spiritaway: {
+		name: "Spirit Away",
+		desc: "On the turn it is selected, Spirit Away takes the target away. While away, the target cannot act. While away, both the user and the target avoid any move targeted at them. The next turn, the target is brought back and receives damage. Spirit Away will fail if the target is behind a substitute, or if used on a target that is already semi-invulnerable due to moves such as Fly, Bounce, Sky Drop, or another Spirit Away.",
+		shortDesc: "The target is whisked away on turn 1. Damages on turn 2.",
+	},
+	wildfire: {
+		name: "Wildfire",
+		desc: "Inflicts burns on the target if it manages to hit them. It will hit both targets in double battles. Additionally, if the target is a Grass-type Pokémon, Wildfire will also burn every Pokémon in the target player's party that possesses a weakness to Fire-type attacks.",
+		shortDesc: "Burns the target. If target is Grass type, burns all Fire weaknesses",
+	},
+	wormhole: {
+		name: "Wormhole",
+		desc: "No additional effect.",
+		shortDesc: "Usually goes first.",
+	},
+	zombiestrike: {
+		name: "Zombie Strike",
+		shortDesc: "No additional effect.",
+	},
 };

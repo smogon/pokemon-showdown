@@ -2149,4 +2149,179 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 
 		activate: "  [POKEMON] extends [MOVE] by 2 turns!",
 	},
+
+	// Insurgence
+	absolution: {
+		name: "Absolution",
+		desc: "If Darkness is active, this Pokemon's Special Attack is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn.",
+		shortDesc: "If Darkness is active, this Pokemon's Sp. Atk is 1.5x; loses 1/8 max HP per turn.",
+	},
+	amplifier: {
+		name: "Amplifier",
+		shortDesc: "This Pokemon's sound-based moves do 1.25x damage.",
+	},
+	ancientpresence: {
+		name: "Ancient Presence",
+		desc: "All damaging moves which follow the standard damage formula gain the same-type attack bonus even if the moves are not the same type as the user. Moves used by the wielder of Ancient Presence will always deal neutral damage, meaning all attacks ignore standard type-effectiveness relationships. Moves used under the effects of Ancient Presence still adhere to item or ability-based type-immunity such as Air Balloon or Levitate.",
+		shortDesc: "User's moves and user's type becomes neutral.",
+	},
+	athenian: {
+		name: "Athenian",
+		shortDesc: "This Pokemon's Special Attack is doubled.",
+	},
+	blazeboost: {
+		name: "Blaze Boost",
+		desc: "Immediately before the user uses a Fire-type attack its Attack, Special Attack, and Speed are increased by 1 stage. When Blaze Boost is activated by Delta Emolga, its form changes. When in this form, there is a 10% chance that Pokémon using a contact move against Delta Emolga will become burned.",
+		shortDesc: "Fire moves raise user's Atk, Sp. Atk and Speed. Opponents who make contact may be Burned."
+	},
+	chlorofury: {
+		name: "Chlorofury",
+		desc: "When a Pokémon with Chlorofury enters the battle, its Speed is raised by one stage and its Special Attack is raised by one stage for each fainted Pokémon on the user's team. After two turns, these stat changes are removed.",
+		shortDesc: "For every fainted ally, user gains +1 Speed and +1 Sp. Atk for 2 turns.",
+	},
+	etherealshroud: {
+		name: "Ethereal Shroud",
+		desc: "Causes the user to gain Ghost-type-associated immunities and resistances, effectively giving them three defensive types in the event that the user already possesses a primary type and a secondary type. Does not give Ghost-type moves a damage increase via same-type attack bonus, and it also does not give the user weaknesses associated with its new Ghost typing.",
+		shortDesc: "Grants the user Ghost-type associated immunities and resistances.",
+	},
+	eventhorizon: {
+		name: "Event Horizon",
+		shortDesc: "If the opponent makes contact with this Pokemon, it becomes trapped.",
+	},
+	foundry: {
+		name: "Foundry",
+		desc: "This Pokemon's Rock-type moves become Fire-type moves and have their power multiplied by 1.2. Stealth Rock becomes Hot Coals.",
+		shortDesc: "This Pokemon's Rock-type moves become Fire type and have 1.2x power.",
+	},
+	heliophobia: {
+		name: "Heliophobia",
+		desc: "During harsh sunlight, a Pokémon with Heliophobia will lose 1/8 of its maximum HP at the end of each turn. During intense darkness, a Pokémon with Heliophobia will regain 1/8 of its maximum HP at the end of each turn.",
+		shortDesc: "User takes damage during Sunlight, gains health during Darkness.",
+	},
+	hubris: {
+		name: "Hubris",
+		desc: "This Pokemon's Special Attack is raised by 1 stage if it attacks and knocks out another Pokemon.",
+		shortDesc: "This Pokemon's Special Attack is raised by 1 stage if it attacks and KOes another Pokemon.",
+	},
+	intoxicate: {
+		name: "Intoxicate",
+		desc: "This Pokemon's Normal-type moves become Poison-type moves and have their power multiplied by 1.2.",
+		shortDesc: "This Pokemon's Normal-type moves become Poison type and have 1.2x power.",
+	},
+	irrelephant: {
+		name: "Irrelephant",
+		shortDesc: "This Pokemon's moves ignore type-based immunities.",
+	},
+	lernean: {
+		name: "Lernean",
+		desc: "The user gains heads if their HP decreases below 80%, 60%, 40%, or 20%, gaining multiple heads if their HP falls below multiple of these thresholds at once. Restoring HP does not remove heads and more heads will not generate if a threshold has previously been reached. Lernean then splits the power of the user's damaging moves across each head.",
+		shortDesc: "User's attacks become multihit. Lower HP = higher number of hits.",
+	},
+	noctem: {
+		name: "Noctem",
+		shortDesc: "On switch-in, this Pokemon summons New Moon.",
+	},
+	omnitype: {
+		name: "Omnitype",
+		desc: "All moves used against the target will factor in the weaknesses and resistances of every type at once.",
+		shortDesc: "Defensively, the user has every type.",
+	},
+	pendulum: {
+		name: "Pendulum",
+		shortDesc: "Damage of moves used on consecutive turns is increased. Max 2x after 5 turns.",
+	},
+	periodicorbit: {
+		name: "Periodic Orbit",
+		desc: "When the moves Doom Desire, Future Sight, or Wish are used, they will activate twice after a single use. Wish will activate one and three turns after the move is originally used. Doom Desire and Future Sight will activate two and five turns after the move is originally used, and each will block further uses of Doom Desire or Future Sight until the second activation lands.",
+		shortDesc: "Delayed moves will active twice but longer duration in between.",
+	},
+	phototroph: {
+		name: "Phototroph",
+		shortDesc: "The user restores 1/16 max HP every turn. Doubled during Sunlight; No effect in Rain or Darkness.",
+	},
+	prismguard: {
+		name: "Prism Guard",
+		desc: "When a Pokémon with Prism Guard is hit with an attack that does not make contact, the attacker takes damage equal to 1/8 of its own HP, after all turn-based damage is dealt. If Prism Guard causes both the user and the attacker to faint, then the attacker will faint first. It is the non-contact counterpart to Iron Barbs and Rough Skin.",
+		shortDesc: "Pokemon that damage without making contact lose 1/8 of their max HP.",
+	},
+	proteanmaxima: {
+		name: "Protean Maxima",
+		desc: "At the start of the turn, if directed to use a move of a type that corresponds to an Eeveelution, Mega Eevee will transform into the form corresponding to that Eeveelution, giving it the type, base stats (including HP) and ability of that Eeveelution. Using a Normal-type move changes Eevee back to its base Mega Evolution form. Protean Maxima is not replaced by the new ability; using a move of a different applicable type will cause Eevee to transform again.",
+		shortDesc: "Changes the user's form, stats and ability based on the type of move it uses.",
+	},
+	psychocall: {
+		name: "Psycho Call",
+		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its offensive stat is multiplied by 1.5 while using a Psychic-type attack.",
+		shortDesc: "At 1/3 or less of its max HP, this Pokemon's offensive stat is 1.5x with Psychic attacks.",
+	},
+	regurgitation: {
+		name: "Regurgitation",
+		desc: "When a Pokémon with the Ability Regurgitation successfully using an attack or targetable status move, it will deal additional damage against the target. This damage is equal to 1/6 of the target's maximum HP multiplied by the effectiveness of the Regurgitation type against the target, which is determined by the primary typing of the Pokémon within Delta Muk's mouth.",
+		shortDesc: "After landing an attack, the Pokemon deals additional damage with variable type.",
+	},
+	shadowcall: {
+		name: "Shadow Call",
+		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its offensive stat is multiplied by 1.5 while using a Dark-type attack.",
+		shortDesc: "At 1/3 or less of its max HP, this Pokemon's offensive stat is 1.5x with Dark attacks.",
+	},
+	shadowdance: {
+		name: "Shadow Dance",
+		shortDesc: "If New Moon is active, this Pokemon's Speed is doubled.",
+	},
+	shadowsynergy: {
+		name: "Shadow Synergy",
+		shortDesc: "This Pokemon's offensive stat is multiplied by 1.5 when using a Dark-type attack."
+	},
+	sleet: {
+		name: "Sleet",
+		desc: "Sleet summons and increases the damage of Snow. Pokémon that are not immune to hail damage are damaged for 20% of their maximum HP at the end of each turn while Sleet is active. Sleet's effects are removed when Pokémon with Sleet are no longer on the field or snow stops. If snow stops but becomes active again while a Pokémon with Sleet is on the field, Sleet will immediately begin modifying the damage of snow.",
+		shortDesc: "Summons and increases the damage of Snow.",
+	},
+	spectraljaws: {
+		name: "Spectral Jaws",
+		shortDesc: "User's biting moves become Special; power is increased by 1.3x.",
+	},
+	speedswap: {
+		name: "Speed Swap",
+		shortDesc: "On Switch-in, this Pokemon summons Trick Room; if Trick Room is active its effects are removed.",
+	},
+	spiritcall: {
+		name: "Spirit Call",
+		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its offensive stat is multiplied by 1.5 while using a Ghost-type attack.",
+		shortDesc: "At 1/3 or less of its max HP, this Pokemon's offensive stat is 1.5x with Ghost attacks.",
+	},
+	supercell: {
+		name: "Supercell",
+		shortDesc: "If New Moon or Rain Dance is active, this Pokemon's Sp. Atk is 1.5x.",
+	},
+	syntheticalloy: {
+		name: "Synthetic Alloy",
+		shortDesc: "This Pokemon takes neutral damage from Fire-type attacks.",
+	},
+	unleafed: {
+		name: "Unleafed",
+		desc: "When a Pokémon with Unleafed enters the battle, its Attack, Defense, Special Attack, Special Defense, and Speed are increased by one stage each. These boosts last X + 1 turns, where X is the number of fainted Pokémon on this Pokémon´s team at the time of the ability's activation. After X + 1 turns, the stat changes are removed.",
+		shortDesc: "For every fainted ally, users gains a temporary omniboost.",
+	},
+	vampiric: {
+		name: "Vampiric",
+		shortDesc: "This Pokemon's contact moves heals the user for 1/4 of the HP dealt.",
+	},
+	vaporization: {
+		name: "Vaporization",
+		shortDesc: "Causes Water-type Moves to fail. Damages Water-type Pokemon for 1/8 of their max HP.",
+	},
+	venomous: {
+		name: "Venomous",
+		shortDesc: "This Pokemon always badly poisons.",
+	},
+	windforce: {
+		name: "Wind Force",
+		shortDesc: "This Pokemon's Speed is raised by 1 stage if hit by a Flying move; Flying immunity.",
+	},
+	winterjoy: {
+		name: "Winter Joy",
+		desc: "During the months of November, December, January, and February, the Attack and Special Attack of Pokémon with this Ability are increased by 40%. During the months of May, June, July, and August the Attack and Special Attack of Pokémon with this ability are decreased by 30%. During the remaining four months, stats are unchanged.",
+		shortDesc: "This Pokemon's attacks do more damage during Winter; reduced damage during Summer.",
+	},
 };
