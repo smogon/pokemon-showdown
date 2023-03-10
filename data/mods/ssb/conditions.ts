@@ -506,6 +506,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Mia')}|git checkout --detach HEAD && git commit -m "war crimes"`);
 		},
 	},
+	neycwang: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('neycwang')}|Hi I'm Ney. I love mischiefs.`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('neycwang')}|Unloading more tricks.`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('neycwang')}|How long am I banned for?`);
+		},
+	},
 	peary: {
 		noCopy: true,
 		onStart() {

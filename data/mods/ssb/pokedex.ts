@@ -107,6 +107,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: 'Hacking'},
 	},
 
+	// neycwang
+	banettemega: {
+		inherit: true,
+		abilities: {0: 'Prankster Plus'},
+	},
+
 	// Rumia
 	duskull: {
 		inherit: true,

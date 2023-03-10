@@ -1195,6 +1195,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Electric",
 	},
 
+	// neycwang
+	shadowdance: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		shortDesc: "100% chance to raise the user's Attack by 1.",
+		name: "Shadow Dance",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, dance: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Shadow Claw', target);
+			this.add('-anim', source, 'Dragon Dance', source);
+		},
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					atk: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Ghost",
+	},
+
 	// Peary
 	"1000gears": {
 		accuracy: true,

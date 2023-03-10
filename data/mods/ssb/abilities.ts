@@ -674,6 +674,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// neycwang
+	pranksterplus: {
+		shortDesc: "This Pokemon's Status moves have priority raised by 1. Dark types are not immune.",
+		name: "Prankster Plus",
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.category === 'Status') {
+				return priority + 1;
+			}
+		},
+	},
+
 	// phoopes
 	ididitagain: {
 		shortDesc: "Bypasses Sleep Clause Mod once per battle.",
