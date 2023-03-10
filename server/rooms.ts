@@ -1195,7 +1195,7 @@ export class GlobalRoomState {
 				creationTime: Date.now(),
 				autojoin: false,
 				section: 'official',
-				introMessage: `<div style="text-align: center"><table style="margin:auto;"><tr><td><img src="//${Config.routes.client}/fx/groupchat.png" width=120 height=100></td><td><h2>hiya!</h2><p>Follow the <a href="/rules">Pokémon Showdown Global Rules</a>!<br>Don't be disruptive to the rest of the site.</p></td></tr></table></div>`,
+				introMessage: `<div style="text-align:center"><table style="margin:auto"><tr><td><img src="https://static.wikia.nocookie.net/pokemon/images/5/57/771Pyukumuku_Dream_3.png" width="145" height="150"></td><td style="text-align:left"><h2>Welcome to Plan of Attack!</h2><p>Make sure to join our<a href="https://discord.gg/SAX3VnwPwj">Discord</a>for tournaments, custom content, and other fun events!</p><p>While you're here, please follow the<a href="https://pokemonshowdown.com/rules">Showdown Rules</a>, and the rules in the Discord.</p></td></tr></table></div>`,
 			}, {
 				title: 'Staff',
 				auth: {},
