@@ -2389,4 +2389,231 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Vile Vial",
 		desc: "If held by a Venomicon, its Poison- and Flying-type attacks have 1.2x power.",
 	},
+
+	// Insurgence Items
+
+	trickrock: {
+		name: "Trick Rock",
+		desc: "Holder's use of Trick Room lasts 8 turns instead of 5.",
+	},
+	darkrock: {
+		name: "Dark Rock",
+		desc: "Holder's use of New Moon lasts 8 turns instead of 5.",
+	},
+	bisharpite: {
+		name: "Bisharpite",
+		desc: "If held by a Bisharp, this item allows it to Mega Evolve in battle.",
+	},
+	cacturnite: {
+		name: "Cacturnite",
+		desc: "If held by a Cacturne, this item allows it to Mega Evolve in battle.",
+	},
+	chatotite: {
+		name: "Chatotite",
+		desc: "If held by a Chatot, this item allows it to Mega Evolve in battle.",
+	},
+	crawdite: {
+		name: "Crawdite",
+		desc: "If held by a Crawdaunt, this item allows it to Mega Evolve in battle.",
+	},
+	cryogonite: {
+		name: "Cryogonite",
+		desc: "If held by a Cryogonal, this item allows it to Mega Evolve in battle.",
+	},
+	crystalfragment: {
+		name: "Crystal Fragment",
+		desc: "If held by a Delta Metagross (Ruin), this item allows it to Mega Evolve in battle.",
+	},
+	deltabisharpite: {
+		name: "Delta Bisharpite",
+		desc: "If held by a Delta Bisharp, this item allows it to Mega Evolve in battle.",
+	},
+	deltacameruptite: {
+		name: "Delta Cameruptite",
+		desc: "If held by a Delta Camerupt, this item allows it to Mega Evolve in battle.",
+	},
+	deltacharizardite: {
+		name: "Delta Charizardite",
+		desc: "If held by a Delta Charizard, this item allows it to Mega Evolve in battle.",
+	},
+	deltaetigirafarigite: {
+		name: "Delta Etigirafarigite",
+		desc: "If held by a Delta Girafarig, this item allows it to Mega Evolve in battle.",
+	},
+	deltafroslassite: {
+		name: "Delta Froslassite",
+		desc: "If held by a Delta Froslass, this item allows it to Mega Evolve in battle.",
+	},
+	deltagalladite: {
+		name: "Delta Galladite",
+		desc: "If held by a Delta Gallade, this item allows it to Mega Evolve in battle.",
+	},
+	deltagardevoirite: {
+		name: "Delta Gardevoirite",
+		desc: "If held by a Delta Gardevoir, this item allows it to Mega Evolve in battle.",
+	},
+	deltaglalitite: {
+		name: "Delta Glalitite",
+		desc: "If held by a Delta Glalie, this item allows it to Mega Evolve in battle.",
+	},
+	deltalopunnite: {
+		name: "Delta Lopunnite",
+		desc: "If held by a Delta Lopunny, this item allows it to Mega Evolve in battle.",
+	},
+	deltalucarionite: {
+		name: "Delta Lucarionite",
+		desc: "If held by a Delta Lucario, this item allows it to Mega Evolve in battle.",
+	},
+	deltamawilite: {
+		name: "Delta Mawilite",
+		desc: "If held by a Delta Mawile, this item allows it to Mega Evolve in battle.",
+	},
+	deltamedichamite: {
+		name: "Delta Medichamite",
+		desc: "If held by a Delta Medicham, this item allows it to Mega Evolve in battle.",
+	},
+	deltametagrossiteruin: {
+		name: "Delta Metagrossite (Ruin)",
+		desc: "If held by a Delta Metagross (Ruin), this item allows it to Mega Evolve in battle.",
+	},
+	deltametagrossitespider: {
+		name: "Delta Metagrossite (Spider)",
+		desc: "If held by a Delta Metagross (Spider), this item allows it to Mega Evolve in battle.",
+	},
+	deltamilotite: {
+		name: "Delta Milotite",
+		desc: "If held by a Delta Milotic, this item allows it to Mega Evolve in battle.",
+	},
+	deltapidgeotite: {
+		name: "Delta Pidgeotite",
+		desc: "If held by a Delta Pidgeot, this item allows it to Mega Evolve in battle.",
+	},
+	deltasablenite: {
+		name: "Delta Sablenite",
+		desc: "If held by a Delta Sableye, this item allows it to Mega Evolve in battle.",
+	},
+	deltascizorite: {
+		name: "Delta Scizorite",
+		desc: "If held by a Delta Scizor, this item allows it to Mega Evolve in battle.",
+	},
+	deltasunflorite: {
+		name: "Delta Sunflorite",
+		desc: "If held by a Delta Sunflora, this item allows it to Mega Evolve in battle.",
+	},
+	deltatyphlosionite: {
+		name: "Delta Typhlosionite",
+		desc: "If held by a Delta Typhlosion, this item allows it to Mega Evolve in battle.",
+	},
+	deltavenusaurite: {
+		name: "Delta Venusaurite",
+		desc: "If held by a Delta Venusaur, this item allows it to Mega Evolve in battle.",
+	},
+	donphanite: {
+		name: "Donphanite",
+		desc: "If held by a Donphan, this item allows it to Mega Evolve in battle.",
+	},
+	eevite: {
+		name: "Eevite",
+		desc: "If held by a Eevee, this item allows it to Mega Evolve in battle.",
+	},
+	etigirafarigite: {
+		name: "Etigirafarigite",
+		desc: "If held by a Girafarig, this item allows it to Mega Evolve in battle.",
+	},
+	feraligatite: {
+		name: "Feralgatite",
+		desc: "If held by a Feraligatr, this item allows it to Mega Evolve in battle.",
+	},
+	flygonite: {
+		name: "Flygonite",
+		desc: "If held by a Flygon, this item allows it to Mega Evolve in battle.",
+	},
+	froslassite: {
+		name: "Froslassite",
+		desc: "If held by a Froslass, this item allows it to Mega Evolve in battle.",
+	},
+	gothitite: {
+		name: "Gothitite",
+		desc: "If held by a Gothitelle, this item allows it to Mega Evolve in battle.",
+	},
+	haxorite: {
+		name: "Haxorite",
+		desc: "If held by a Haxorus, this item allows it to Mega Evolve in battle.",
+	},
+	hydreigonite: {
+		name: "Hydreigonite",
+		desc: "If held by a Hydreigon, this item allows it to Mega Evolve in battle.",
+	},
+	jirachite: {
+		name: "Jirachite",
+		desc: "If held by a Jirachi, this item allows it to Mega Evolve in battle.",
+	},
+	magcargonite: {
+		name: "Magcargonite",
+		desc: "If held by a Magcargo, this item allows it to Mega Evolve in battle.",
+	},
+	marowite: {
+		name: "Marowite",
+		desc: "If held by a Donphan, this item allows it to Mega Evolve in battle.",
+	},
+	meganiumite: {
+		name: "Meganiumite",
+		desc: "If held by a Meganium, this item allows it to Mega Evolve in battle.",
+	},
+	milotite: {
+		name: "Milotite",
+		desc: "If held by a Milotic, this item allows it to Mega Evolve in battle.",
+	},
+	miltankite: {
+		name: "Miltankite",
+		desc: "If held by a Miltank, this item allows it to Mega Evolve in battle.",
+	},
+	politoedite: {
+		name: "Politoedite",
+		desc: "If held by a Politoed, this item allows it to Mega Evolve in battle.",
+	},
+	poliwrathite: {
+		name: "Poliwrathite",
+		desc: "If held by a Poliwrath, this item allows it to Mega Evolve in battle.",
+	},
+	reuniclite: {
+		name: "Reuniclite",
+		desc: "If held by a Reuniclus, this item allows it to Mega Evolve in battle.",
+	},
+	shiftrite: {
+		name: "Shiftrite",
+		desc: "If held by a Shiftry, this item allows it to Mega Evolve in battle.",
+	},
+	spiritombite: {
+		name: "Spiritombite",
+		desc: "If held by a Spiritomb, this item allows it to Mega Evolve in battle.",
+	},
+	steelixitefire: {
+		name: "Steelixite (Fire)",
+		desc: "If held by a Steelix, this item allows it to Mega Evolve in battle.",
+	},
+	stunfiskite: {
+		name: "Stunfiskite",
+		desc: "If held by a Stunfisk, this item allows it to Mega Evolve in battle.",
+	},
+	sudowoodite: {
+		name: "Sudowoodite",
+		desc: "If held by a Sudowoodo, this item allows it to Mega Evolve in battle.",
+	},
+	sunflorite: {
+		name: "Sunflorite",
+		desc: "If held by a Sunflora, this item allows it to Mega Evolve in battle.",
+	},
+	typhlosionite: {
+		name: "Typhlosionite",
+		desc: "If held by a Typhlosion, this item allows it to Mega Evolve in battle.",
+	},
+	zebstrikite: {
+		name: "Zebstrikite",
+		desc: "If held by a Zebstrika, this item allows it to Mega Evolve in battle.",
+	},
+	zoronite: {
+		name: "Zoronite",
+		desc: "If held by a Zoroark, this item allows it to Mega Evolve in battle.",
+	},
 };
