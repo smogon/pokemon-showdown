@@ -186,6 +186,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Eli')}|that wasn't very nice, ${enemyStaff(pokemon)}.`);
 		},
 	},
+	ganjafin: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Ganjafin')}|How's it going guys, Ganjafin here`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Ganjafin')}|And I'll see you guys, in the next one`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Ganjafin')}|I knew I'd die before Silksong came out`);
+		},
+	},
 	havi: {
 		noCopy: true,
 		onStart() {

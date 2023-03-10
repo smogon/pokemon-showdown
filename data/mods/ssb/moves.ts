@@ -390,6 +390,39 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Flying",
 	},
 
+	// Ganjafin
+	wigglingstrike: {
+		accuracy: 95,
+		basePower: 10,
+		category: "Physical",
+		shortDesc: "Salt cures the target and sets a layer of spikes.",
+		name: "Wiggling Strike",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Water Pulse', target);
+			this.add('-anim', target, 'Aqua Ring', target);
+		},
+		self: {
+			onHit(source) {
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('spikes');
+				}
+			},
+		},
+		secondary: {
+			chance: 100,
+			volatileStatus: 'saltcure',
+		},
+		target: "normal",
+		type: "Water",
+	},
+
 	// havi
 	augurofebrietas: {
 		accuracy: 100,

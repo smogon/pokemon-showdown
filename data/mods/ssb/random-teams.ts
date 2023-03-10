@@ -115,6 +115,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Sustained Winds',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', teraType: 'Ground',
 	},
+	Ganjafin: {
+		species: 'Wiglett', ability: 'Gambling Addiction', item: 'Eviolite', gender: 'M',
+		moves: ['Wrap', 'Cosmic Power', 'Strength Sap'],
+		signatureMove: 'Wiggling Strike',
+		evs: {hp: 252, def: 4, spe: 252}, nature: 'Timid', teraType: 'Grass', shiny: 2,
+	},
 	havi: {
 		species: 'Gastly', ability: 'Mensis Cage', item: 'Leftovers', gender: 'F',
 		moves: ['Astral Barrage', 'Moonblast', 'Substitute'],

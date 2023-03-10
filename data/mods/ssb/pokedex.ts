@@ -40,6 +40,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Form Change"},
 	},
 
+	// Ganjafin
+	wiglett: {
+		inherit: true,
+		baseStats: {hp: 80, atk: 60, def: 80, spa: 60, spd: 80, spe: 100},
+	},
+
 	// havi
 	gastly: {
 		inherit: true,

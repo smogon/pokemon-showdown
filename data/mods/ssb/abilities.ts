@@ -232,6 +232,32 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Ganjafin
+	gamblingaddiction: {
+		shortDesc: "When under 1/4 max HP: +1 Spe, heal to full HP, and all moves become Final Gambit.",
+		name: "Gambling Addiction",
+		onResidualOrder: 29,
+		onResidual(pokemon) {
+			if (!this.effectState.gamblingAddiction && pokemon.hp && pokemon.hp < pokemon.maxhp / 4) {
+				this.boost({spe: 1});
+				this.heal(pokemon.maxhp);
+				const move = this.dex.moves.get('finalgambit');
+				const finalGambit = {
+					move: move.name,
+					id: move.id,
+					pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+					maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+					target: move.target,
+					disabled: false,
+					used: false,
+				};
+				pokemon.moveSlots.fill(finalGambit);
+				pokemon.baseMoveSlots.fill(finalGambit);
+				this.effectState.gamblingAddiction = true;
+			}
+		},
+	},
+
 	// havi
 	mensiscage: {
 		shortDesc: "Immune to status and is considered to be asleep. 30% chance to disable when hit.",
