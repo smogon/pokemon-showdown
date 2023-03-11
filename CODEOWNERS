@@ -19,7 +19,7 @@ server/chat-plugins/repeats.ts @AnnikaCodes
 server/chat-plugins/responder.ts @mia-pi-git
 server/chat-plugins/rock-paper-scissors.ts @mia-pi-git
 server/chat-plugins/sample-teams.ts @KrisXV
-server/chat-plugins/scavenger*.ts @xfix @sparkychildcharlie
+server/chat-plugins/scavenger*.ts @xfix @sparkychildcharlie @PartMan7
 server/chat-plugins/the-studio.ts @KrisXV
 server/chat-plugins/trivia/ @AnnikaCodes
 server/chat-plugins/username-prefixes.ts @AnnikaCodes
