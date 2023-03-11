@@ -20372,6 +20372,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 					this.add('-activate', source, 'ability: Persistent', '[move] Trick Room');
 					return 7;
 				}
+				if (source?.hasItem('trickrock')) {
+					this.add('-activate', source, 'item: Trick Rock', effect);
+					return 8;
+				}
 				return 5;
 			},
 			onFieldStart(target, source) {
@@ -22019,7 +22023,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			this.add('-anim', source, 'Rain Dance', target);
 			this.add('-message', `The party is getting started!`);
 		},
-		weather: 'NewMoon',
+		weather: 'New Moon',
 		secondary: null,
 		target: "all",
 		type: "Dark",
