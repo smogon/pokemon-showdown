@@ -53,6 +53,10 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice') && !abilities.has('Refrigerate'),
 			Normal: movePool => movePool.includes('facade'),
+			Poison: (movePool, moves, abilities, types, counter) => (
+				!counter.get('Poison') &&
+				(!!counter.setupType || abilities.has('Adaptability') || abilities.has('Sheer Force') || movePool.includes('gunkshot'))
+			),
 			Psychic: (movePool, moves, abilities, types, counter, species) => (
 				!!counter.get('Psychic') &&
 				!types.has('Flying') &&
