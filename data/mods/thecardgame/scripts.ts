@@ -90,7 +90,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					.replace(/Flying/g, 'Normal')
 					.replace(/Poison/g, 'Dark'));
 			}
-	
+
 			for (const typeName of type) {
 				if (thisTypes.includes(typeName
 					.replace(/(Ghost|Fairy)/g, 'Psychic')
@@ -100,8 +100,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					.replace(/Flying/g, 'Normal')
 					.replace(/Poison/g, 'Dark'))
 				) {
-					return true
-				};
+					return true;
+				}
 			}
 			return false;
 		},
