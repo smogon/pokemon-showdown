@@ -2400,7 +2400,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const obtainableAbilityPool = new Set<string>();
 			const matchingSpecies = this.dex.species.all()
 				.filter(species => (
-					!species.isNonstandard && species.types.every(type => curSpecies.types.includes(type)) &&
+					(!species.isNonstandard || this.ruleTable.has(`+pokemontag:${this.toID(species.isNonstandard)}`)) &&
+					species.types.every(type => curSpecies.types.includes(type)) &&
 					species.types.length === curSpecies.types.length && !this.ruleTable.isBannedSpecies(species)
 				));
 			for (const species of matchingSpecies) {
@@ -2416,7 +2417,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 		checkCanLearn(move, species, setSources, set) {
 			const matchingSpecies = this.dex.species.all()
 				.filter(s => (
-					!s.isNonstandard && s.types.every(type => species.types.includes(type)) &&
+					(!s.isNonstandard || this.ruleTable.has(`+pokemontag:${this.toID(s.isNonstandard)}`)) &&
+					s.types.every(type => species.types.includes(type)) &&
 					s.types.length === species.types.length && !this.ruleTable.isBannedSpecies(s)
 				));
 			const someCanLearn = matchingSpecies.some(s => this.checkCanLearn(move, s, setSources, set) === null);
