@@ -2172,7 +2172,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	blazeboost: {
 		name: "Blaze Boost",
 		desc: "Immediately before the user uses a Fire-type attack its Attack, Special Attack, and Speed are increased by 1 stage. When Blaze Boost is activated by Delta Emolga, its form changes. When in this form, there is a 10% chance that Pokémon using a contact move against Delta Emolga will become burned.",
-		shortDesc: "Fire moves raise user's Atk, Sp. Atk and Speed. Opponents who make contact may be Burned."
+		shortDesc: "Fire moves raise user's Atk, Sp. Atk and Speed. 10% chance to burn foes who contact."
 	},
 	chlorofury: {
 		name: "Chlorofury",
@@ -2237,7 +2237,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	phototroph: {
 		name: "Phototroph",
-		shortDesc: "The user restores 1/16 max HP every turn. Doubled during Sunlight; No effect in Rain or Darkness.",
+		shortDesc: "The user restores 1/16 max HP every turn. 1/8 in Sun; No effect in Rain or Darkness.",
 	},
 	prismguard: {
 		name: "Prism Guard",
