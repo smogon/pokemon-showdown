@@ -1468,9 +1468,16 @@ export class Pokemon {
 			this.illusion ? this.illusion.species.name : species.baseSpecies;
 		if (isPermanent) {
 			this.baseSpecies = rawSpecies;
-			this.details = species.name + (this.level === 100 ? '' : ', L' + this.level) +
+			let details;
+			if (this.illusion) {
+				this.illusion.details = this.illusion.species.name + (this.illusion.level === 100 ? '' : ', L' + this.illusion.level) +
+				(this.illusion.gender === '' ? '' : ', ' + this.illusion.gender) + (this.set.shiny ? ', shiny' : '');
+				details = this.illusion.details;
+			} else {
+				this.details = species.name + (this.level === 100 ? '' : ', L' + this.level) +
 				(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
-			let details = (this.illusion || this).details;
+				details = this.details;
+			}
 			if (this.terastallized) details += `, tera:${this.terastallized}`;
 			this.battle.add('detailschange', this, details);
 			if (source.effectType === 'Item') {
