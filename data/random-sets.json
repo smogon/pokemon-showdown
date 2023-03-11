@@ -2387,7 +2387,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Defog", "Draco Meteor", "Flamethrower", "Roost", "Taunt", "U-turn"],
+                "movepool": ["Defog", "Draco Meteor", "Flamethrower", "Roost", "Taunt"],
                 "teraTypes": ["Steel"]
             }
         ]
