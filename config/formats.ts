@@ -124,7 +124,7 @@ export const Formats: FormatList = [
 
 		mod: 'insurgence',
 		searchShow: false,
-		ruleset: ['Standard NatDex', 'Max Level = 120', 'Default Level = 120'],
+		ruleset: ['Standard NatDex', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120'],
 	},
 	{
 		name: "[Gen 9] Insurgence National Dex Ubers",
@@ -135,7 +135,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'insurgence',
-		ruleset: ['Standard NatDex', 'Max Level = 120', 'Default Level = 120', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Species Clause', 'Sleep Clause Mod', 'Mega Rayquaza Clause'],
+		ruleset: ['Standard NatDex', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Species Clause', 'Sleep Clause Mod', 'Mega Rayquaza Clause'],
 		banlist: ['ND AG', 'Assist', 'Baton Pass'],
 	},
 	{
@@ -145,7 +145,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'insurgence',
-		ruleset: ['Standard NatDex', 'Max Level = 120', 'Default Level = 120', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Sleep Clause Mod'],
+		ruleset: ['Standard NatDex', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Sleep Clause Mod'],
 		banlist: ['ND Uber', 'ND AG', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Assist', 'Baton Pass'],
 	},
 
