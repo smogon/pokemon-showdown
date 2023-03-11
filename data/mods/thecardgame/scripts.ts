@@ -1,5 +1,3 @@
-import {RESTORATIVE_BERRIES} from "../../../sim/pokemon";
-
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	inherit: 'gen9',
