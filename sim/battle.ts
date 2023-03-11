@@ -1633,7 +1633,7 @@ export class Battle {
 		// These are checked before the 100 turn minimum as the battle cannot progress if they are true
 		if (this.gen <= 1) {
 			const noProgressPossible = this.sides.every(side => {
-				const foeAllGhosts = side.foe.pokemon.every(pokemon => pokemon.fainted || pokemon.types.includes('Ghost'));
+				const foeAllGhosts = side.foe.pokemon.every(pokemon => pokemon.fainted || pokemon.hasType('Ghost'));
 				const foeAllTransform = side.foe.pokemon.every(pokemon => (
 					pokemon.fainted ||
 					// true if transforming into this pokemon would lead to an endless battle

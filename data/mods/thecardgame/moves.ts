@@ -15,48 +15,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-start', target, 'typechange', newType);
 		},
 	},
-	curse: {
-		inherit: true,
-		onModifyMove(move, source, target) {
-			if (!source.hasType('Psychic')) {
-				move.target = move.nonGhostTarget as MoveTarget;
-			} else if (source.isAlly(target)) {
-				move.target = 'randomNormal';
-			}
-		},
-		onTryHit(target, source, move) {
-			if (!source.hasType('Psychic')) {
-				delete move.volatileStatus;
-				delete move.onHit;
-				move.self = {boosts: {spe: -1, atk: 1, def: 1}};
-			} else if (move.volatileStatus && target.volatiles['curse']) {
-				return false;
-			}
-		},
-	},
 	flyingpress: {
 		inherit: true,
 		onEffectiveness(typeMod, target, type, move) {
 			return typeMod + this.dex.getEffectiveness('Normal', type);
-		},
-	},
-	gmaxvolcalith: {
-		inherit: true,
-		condition: {
-			duration: 4,
-			onSideStart(targetSide) {
-				this.add('-sidestart', targetSide, 'G-Max Volcalith');
-			},
-			onResidualOrder: 5,
-			onResidualSubOrder: 1,
-			onResidual(target) {
-				if (!target.hasType('Fighting')) this.damage(target.baseMaxhp / 6, target);
-			},
-			onSideResidualOrder: 26,
-			onSideResidualSubOrder: 11,
-			onSideEnd(targetSide) {
-				this.add('-sideend', targetSide, 'G-Max Volcalith');
-			},
 		},
 	},
 	roost: {
@@ -76,31 +38,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.effectState.typeWas = types;
 				return types.filter(type => type !== 'Normal');
 			},
-		},
-	},
-	skydrop: {
-		inherit: true,
-		onTryHit(target, source, move) {
-			if (source.removeVolatile(move.id)) {
-				if (target !== source.volatiles['twoturnmove'].source) return false;
-
-				if (target.hasType('Normal')) {
-					this.add('-immune', target);
-					return null;
-				}
-			} else {
-				if (target.volatiles['substitute'] || target.isAlly(source)) {
-					return false;
-				}
-				if (target.getWeight() >= 2000) {
-					this.add('-fail', target, 'move: Sky Drop', '[heavy]');
-					return null;
-				}
-
-				this.add('-prepare', source, move.name, target);
-				source.addVolatile('twoturnmove', target);
-				return null;
-			}
 		},
 	},
 	terrainpulse: {
@@ -132,34 +69,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		ignoreImmunity: {'Fighting': true},
-	},
-	toxicspikes: {
-		inherit: true,
-		condition: {
-			// this is a side condition
-			onSideStart(side) {
-				this.add('-sidestart', side, 'move: Toxic Spikes');
-				this.effectState.layers = 1;
-			},
-			onSideRestart(side) {
-				if (this.effectState.layers >= 2) return false;
-				this.add('-sidestart', side, 'move: Toxic Spikes');
-				this.effectState.layers++;
-			},
-			onEntryHazard(pokemon) {
-				if (!pokemon.isGrounded()) return;
-				if (pokemon.hasType('Dark')) {
-					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
-					pokemon.side.removeSideCondition('toxicspikes');
-				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots')) {
-					return;
-				} else if (this.effectState.layers >= 2) {
-					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
-				} else {
-					pokemon.trySetStatus('psn', pokemon.side.foe.active[0]);
-				}
-			},
-		},
 	},
 	trickortreat: {
 		inherit: true,
