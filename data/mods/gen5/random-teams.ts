@@ -251,7 +251,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				(moves.has('doubleedge') && !abilities.has('rockhead')) ||
 				['pursuit', 'rest', 'superpower', 'uturn', 'voltswitch'].some(m => moves.has(m)) ||
 				// Sceptile wants Swords Dance
-				(moves.has('acrobatics') && moves.has('earthquake'))
+				(moves.has('acrobatics') && moves.has('earthquake')) ||
+				movePool.includes('shiftgear')
 			)};
 		case 'thunderwave':
 			return {cull: (

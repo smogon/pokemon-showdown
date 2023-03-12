@@ -574,11 +574,12 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				(moves.has('wish') && (moves.has('protect') || movePool.includes('protect')))
 			)};
 		case 'substitute':
+			const moveBasedCull = ['copycat', 'dragondance', 'shiftgear'].some(m => movePool.includes(m));
 			return {cull: (
 				moves.has('dracometeor') ||
 				(moves.has('leafstorm') && !abilities.has('Contrary')) ||
 				['encore', 'pursuit', 'rest', 'taunt', 'uturn', 'voltswitch', 'whirlwind'].some(m => moves.has(m)) ||
-				movePool.includes('copycat') || movePool.includes('dragondance')
+				moveBasedCull
 			)};
 		case 'powersplit':
 			return {cull: moves.has('guardsplit')};
@@ -1351,11 +1352,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		}
 
 		if (species.name === 'Genesect' && moves.has('technoblast')) forme = 'Genesect-Douse';
-		if (!isDoubles && species.id === 'pikachu') {
-			const pikachuForme = this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner']);
-			forme = `Pikachu${pikachuForme}`;
-			if (forme !== 'Pikachu') ability = 'Static';
-		}
 
 		if (
 			!moves.has('photongeyser') &&
@@ -1459,11 +1455,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			ivs.spa = 0;
 		}
 
-		if (['gyroball', 'metalburst', 'trickroom'].some(m => moves.has(m))) {
-			evs.spe = 0;
-			ivs.spe = 0;
-		}
-
 		// Fix IVs for non-Bottle Cap-able sets
 		if (hasHiddenPower && level < 100) {
 			let hpType;
@@ -1476,6 +1467,11 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			for (iv in HPivs) {
 				ivs[iv] = HPivs[iv]!;
 			}
+		}
+
+		if (['gyroball', 'metalburst', 'trickroom'].some(m => moves.has(m))) {
+			evs.spe = 0;
+			ivs.spe = (hasHiddenPower && level < 100) ? ivs.spe - 30 : 0;
 		}
 
 		return {

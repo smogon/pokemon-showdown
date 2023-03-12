@@ -232,9 +232,7 @@
     },
     "kingler": {
         "level": 84,
-        "moves": ["agility", "liquidation", "rockslide", "superpower", "swordsdance", "xscissor"],
-        "doublesLevel": 86,
-        "doublesMoves": ["agility", "knockoff", "liquidation", "protect", "superpower", "xscissor"]
+        "moves": ["agility", "liquidation", "rockslide", "superpower", "swordsdance", "xscissor"]
     },
     "kinglergmax": {
         "doublesLevel": 86,
@@ -719,7 +717,7 @@
         "level": 80,
         "moves": ["earthquake", "flipturn", "icebeam", "protect", "scald", "stealthrock", "toxic"],
         "doublesLevel": 86,
-        "doublesMoves": ["highhorsepower", "icywind", "liquidation", "muddywater", "protect", "stealthrock", "wideguard"]
+        "doublesMoves": ["highhorsepower", "icywind", "muddywater", "protect", "stealthrock", "wideguard"]
     },
     "linoone": {
         "level": 84,
@@ -1328,7 +1326,7 @@
         "level": 86,
         "moves": ["bulkup", "circlethrow", "icepunch", "knockoff", "rest", "sleeptalk", "stormthrow"],
         "doublesLevel": 86,
-        "doublesMoves": ["facade", "knockoff", "protect", "stoneedge", "stormthrow", "wideguard"]
+        "doublesMoves": ["facade", "knockoff", "protect", "stormthrow", "wideguard"]
     },
     "sawk": {
         "level": 86,
