@@ -8327,7 +8327,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTakeItem(item, source) {
-			if (source.baseSpecies.baseSpecies === 'Arceus' || source.baseSpecies.name === 'Giratina' || source.baseSpecies.name === 'Regigigas') return false;
+			if (source.baseSpecies.baseSpecies === 'Arceus' || source.baseSpecies.baseSpecies === 'Giratina' || source.baseSpecies.baseSpecies === 'Regigigas') return false;
 			return true;
 		},
 		num: -59,
