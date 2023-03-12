@@ -469,7 +469,6 @@ export interface EventMethods {
 	onSourceModifyDamagePriority?: number;
 	onSourceModifySpAPriority?: number;
 	onSwitchInPriority?: number;
-	onSwitchOutPriority?: number;
 	onTrapPokemonPriority?: number;
 	onTryEatItemPriority?: number;
 	onTryHealPriority?: number;

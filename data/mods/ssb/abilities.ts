@@ -136,7 +136,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	painfulexit: {
 		shortDesc: "When this Pokemon switches out, foes lose 25% HP.",
 		name: "Painful Exit",
-		onSwitchOut(pokemon) {
+		onBeforeSwitchOutPriority: -1,
+		onBeforeSwitchOut(pokemon) {
 			if (enemyStaff(pokemon) === "Mad Monty") {
 				this.add(`c:|${getName('BreadLoeuf')}|Welp`);
 			} else {
@@ -785,21 +786,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (move?.category === 'Status') {
 				move.pranksterBoosted = true;
 				return priority + 1;
-			}
-		},
-	},
-
-	// sharp_claw
-	roughandtumble: {
-		shortDesc: "Restores 1/3 HP and changes forme on switch out.",
-		name: "Rough and Tumble",
-		onSwitchOutPriority: -1,
-		onSwitchOut(pokemon) {
-			pokemon.heal(pokemon.baseMaxhp / 3);
-			if (pokemon.species.name === 'Sneasel') {
-				changeSet(this, pokemon, ssbSets['sharp_claw-Rough']);
-			} else {
-				changeSet(this, pokemon, ssbSets['sharp_claw']);
 			}
 		},
 	},

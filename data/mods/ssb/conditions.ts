@@ -1,4 +1,5 @@
-import {getName, enemyStaff} from './scripts';
+import {ssbSets} from "./random-teams";
+import {changeSet, getName, enemyStaff} from './scripts';
 
 export const Conditions: {[k: string]: ModdedConditionData & {innateName?: string}} = {
 	/*
@@ -626,8 +627,12 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onSwitchOut(pokemon) {
 			if (pokemon.species.name === 'Sneasel') {
 				this.add(`c:|${getName('sharp_claw')}|brb, getting my brother :3`);
+				if (pokemon.illusion) return;
+				changeSet(this, pokemon, ssbSets['sharp_claw-Rough']);
 			} else {
 				this.add(`c:|${getName('sharp_claw')}|brb, getting my sister C:`);
+				if (pokemon.illusion) return;
+				changeSet(this, pokemon, ssbSets['sharp_claw']);
 			}
 		},
 		onFaint(pokemon) {
@@ -637,6 +642,8 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				this.add(`c:|${getName('sharp_claw')}|ur no fun T_T`);
 			}
 		},
+		innateName: "Rough and Tumble",
+		shortDesc: "Changes Sneasel forme on switch out.",
 	},
 	smelysocks: {
 		noCopy: true,
