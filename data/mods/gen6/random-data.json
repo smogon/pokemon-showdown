@@ -6,7 +6,7 @@
     },
     "venusaurmega": {
         "level": 80,
-        "moves": ["earthquake", "gigadrain", "hiddenpowerfire", "leechseed", "sludgebomb", "synthesis"],
+        "moves": ["earthquake", "gigadrain", "hiddenpowerfire", "sleeppowder", "sludgebomb", "synthesis"],
         "doublesMoves": ["gigadrain", "hiddenpowerfire", "hiddenpowerice", "powerwhip", "protect", "sleeppowder", "sludgebomb"]
     },
     "charizardmegax": {
@@ -551,7 +551,7 @@
     },
     "wobbuffet": {
         "level": 82,
-        "moves": ["counter", "destinybond", "encore", "mirrorcoat", "safeguard"]
+        "moves": ["counter", "destinybond", "encore", "mirrorcoat"]
     },
     "girafarig": {
         "level": 88,
@@ -1551,7 +1551,7 @@
     },
     "rotomfrost": {
         "level": 88,
-        "moves": ["blizzard", "painsplit", "substitute", "thunderbolt", "trick", "voltswitch", "willowisp"],
+        "moves": ["blizzard", "painsplit", "thunderbolt", "trick", "voltswitch", "willowisp"],
         "doublesMoves": ["blizzard", "electroweb", "painsplit", "protect", "substitute", "thunderbolt", "trick", "voltswitch", "willowisp"]
     },
     "rotomfan": {
@@ -1696,7 +1696,7 @@
     },
     "arceusground": {
         "level": 76,
-        "moves": ["earthquake", "icebeam", "judgment", "recover", "stealthrock", "stoneedge", "swordsdance", "toxic"],
+        "moves": ["earthquake", "icebeam", "recover", "stealthrock", "stoneedge", "swordsdance", "toxic"],
         "doublesMoves": ["calmmind", "earthquake", "icebeam", "judgment", "protect", "recover", "rockslide", "stoneedge", "swordsdance"]
     },
     "arceusice": {
@@ -2075,7 +2075,7 @@
     },
     "durant": {
         "level": 84,
-        "moves": ["honeclaws", "ironhead", "stoneedge", "superpower", "xscissor"],
+        "moves": ["honeclaws", "ironhead", "rockslide", "superpower", "xscissor"],
         "doublesMoves": ["honeclaws", "ironhead", "protect", "rockslide", "superpower", "xscissor"]
     },
     "hydreigon": {
@@ -2380,7 +2380,7 @@
     },
     "yveltal": {
         "level": 76,
-        "moves": ["darkpulse", "foulplay", "oblivionwing", "roost", "suckerpunch", "taunt", "toxic", "uturn"],
+        "moves": ["darkpulse", "foulplay", "knockoff", "oblivionwing", "roost", "suckerpunch", "taunt", "toxic", "uturn"],
         "doublesMoves": ["darkpulse", "focusblast", "hurricane", "oblivionwing", "protect", "roost", "skydrop", "snarl", "suckerpunch", "taunt"]
     },
     "zygarde": {
@@ -2395,7 +2395,7 @@
     },
     "dianciemega": {
         "level": 80,
-        "moves": ["calmmind", "diamondstorm", "earthpower", "hiddenpowerfire", "moonblast"],
+        "moves": ["calmmind", "diamondstorm", "earthpower", "hiddenpowerfire", "moonblast", "protect"],
         "doublesMoves": ["calmmind", "dazzlinggleam", "diamondstorm", "earthpower", "hiddenpowerfire", "moonblast", "protect", "psyshock"]
     },
     "hoopa": {

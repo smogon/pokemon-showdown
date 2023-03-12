@@ -6,7 +6,7 @@
     },
     "venusaurmega": {
         "level": 82,
-        "moves": ["earthquake", "gigadrain", "hiddenpowerfire", "leechseed", "sludgebomb", "synthesis"],
+        "moves": ["earthquake", "gigadrain", "hiddenpowerfire", "sleeppowder", "sludgebomb", "synthesis"],
         "doublesMoves": ["gigadrain", "hiddenpowerfire", "hiddenpowerice", "powerwhip", "protect", "sleeppowder", "sludgebomb"]
     },
     "charizard": {
@@ -1753,7 +1753,7 @@
     },
     "arceusground": {
         "level": 76,
-        "moves": ["earthquake", "icebeam", "judgment", "recover", "stealthrock", "stoneedge", "swordsdance", "toxic"],
+        "moves": ["earthquake", "icebeam", "recover", "stealthrock", "stoneedge", "swordsdance", "toxic"],
         "doublesMoves": ["calmmind", "earthquake", "icebeam", "judgment", "protect", "recover", "rockslide", "stoneedge", "swordsdance"]
     },
     "arceusice": {
@@ -2441,7 +2441,7 @@
     },
     "yveltal": {
         "level": 76,
-        "moves": ["darkpulse", "focusblast", "foulplay", "oblivionwing", "roost", "suckerpunch", "taunt", "toxic", "uturn"],
+        "moves": ["darkpulse", "focusblast", "foulplay", "knockoff", "oblivionwing", "roost", "suckerpunch", "taunt", "toxic", "uturn"],
         "doublesMoves": ["darkpulse", "heatwave", "oblivionwing", "protect", "roost", "skydrop", "snarl", "suckerpunch", "taunt"]
     },
     "zygarde": {
