@@ -226,7 +226,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return {cull: (
 				moves.has('rest') || screens || (!!counter.setupType && !moves.has('wish')) ||
 				(!['Guts', 'Harvest', 'Poison Heal', 'Quick Feet', 'Speed Boost'].some(abil => abilities.has(abil)) &&
-				!['leechseed', 'perishsong', 'toxic', 'wish'].some(m => moves.has(m)) && species.id !== 'sharpedomega')
+				!['leechseed', 'perishsong', 'toxic', 'wish'].some(m => moves.has(m)) &&
+				!['sharpedomega', 'dianciemega'].includes(species.id))
 			)};
 		case 'pursuit':
 			return {cull: (
@@ -642,9 +643,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (species.name === 'Shedinja' || species.name === 'Smeargle') return 'Focus Sash';
 		if (species.name === 'Unfezant' && counter.get('Physical') >= 2) return 'Scope Lens';
 		if (species.name === 'Unown') return 'Choice Specs';
-		if (species.name === 'Wobbuffet') {
-			return moves.has('destinybond') ? 'Custap Berry' : this.sample(['Leftovers', 'Sitrus Berry']);
-		}
+		if (species.name === 'Wobbuffet') return 'Custap Berry';
 		if (ability === 'Harvest') return 'Sitrus Berry';
 		if (ability === 'Imposter') return 'Choice Scarf';
 		if (moves.has('switcheroo') || moves.has('trick')) {
@@ -852,7 +851,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		}
 
 		// These moves can be used even if we aren't setting up to use them:
-		const SetupException = ['closecombat', 'diamondstorm', 'extremespeed', 'suckerpunch', 'superpower', 'dracometeor'];
+		const SetupException = ['closecombat', 'diamondstorm', 'extremespeed', 'suckerpunch', 'superpower'];
 
 		const moves = new Set<string>();
 		let counter: MoveCounter;
