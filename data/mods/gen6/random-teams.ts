@@ -492,10 +492,10 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'safeguard':
 			return {cull: moves.has('destinybond')};
 		case 'substitute':
+			const moveBasedCull = ['copycat', 'dragondance', 'shiftgear'].some(m => movePool.includes(m));
 			return {cull: (
 				['dracometeor', 'pursuit', 'rest', 'taunt', 'uturn', 'voltswitch', 'whirlwind'].some(m => moves.has(m)) ||
-				(moves.has('leafstorm') && !abilities.has('Contrary')) ||
-				movePool.includes('copycat') || movePool.includes('dragondance')
+				(moves.has('leafstorm') && !abilities.has('Contrary')) || moveBasedCull
 			)};
 		}
 

@@ -574,11 +574,12 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				(moves.has('wish') && (moves.has('protect') || movePool.includes('protect')))
 			)};
 		case 'substitute':
+			const moveBasedCull = ['copycat', 'dragondance', 'shiftgear'].some(m => movePool.includes(m));
 			return {cull: (
 				moves.has('dracometeor') ||
 				(moves.has('leafstorm') && !abilities.has('Contrary')) ||
 				['encore', 'pursuit', 'rest', 'taunt', 'uturn', 'voltswitch', 'whirlwind'].some(m => moves.has(m)) ||
-				movePool.includes('copycat') || movePool.includes('dragondance')
+				moveBasedCull
 			)};
 		case 'powersplit':
 			return {cull: moves.has('guardsplit')};
