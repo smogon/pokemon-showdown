@@ -481,7 +481,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.directDamage(pokemon.maxhp / 4, pokemon, pokemon);
 					activated = true;
 				}
-				target.addVolatile('curse');
+				target.addVolatile('curse', pokemon);
 			}
 		},
 	},

@@ -191,7 +191,7 @@ export const ssbSets: SSBSets = {
 		species: 'Mawile', ability: 'Curse of Dexit', item: 'Mawilite', gender: 'M',
 		moves: ['Sucker Punch', 'Fire Lash', 'Play Rough'],
 		signatureMove: 'Attack of Opportunity',
-		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant', teraType: 'Any', shiny: 1024,
+		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant', shiny: 1024,
 	},
 	Lalaya: {
 		species: 'Murkrow', ability: 'Workaholic', item: 'Loaded Dice', gender: 'F',
