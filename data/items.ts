@@ -5511,6 +5511,20 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 5,
 		isNonstandard: "Past",
 	},
+	steelixite: {
+		name: "Steelixite",
+		spritenum: 621,
+		megaStone: "Steelix-Mega",
+		megaEvolves: "Steelix",
+		itemUser: ["Steelix"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -13,
+		gen: 6,
+		isNonstandard: "Past",
+	},
 	steelmemory: {
 		name: "Steel Memory",
 		spritenum: 675,
@@ -7536,7 +7550,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -3,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	marowite: {
 		name: "Marowite",
@@ -7550,7 +7564,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -4,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	eevite: {
 		name: "Eevite",
@@ -7564,7 +7578,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -5,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	meganiumite: {
 		name: "Meganiumite",
@@ -7578,7 +7592,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -6,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	typhlosionite: {
 		name: "Typhlosionite",
@@ -7592,7 +7606,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -7,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	feraligatite: {
 		name: "Feraligatite",
@@ -7606,7 +7620,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -8,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	sudowoodite: {
 		name: "Sudowoodite",
@@ -7620,7 +7634,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -9,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	politoedite: {
 		name: "Politoedite",
@@ -7634,7 +7648,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -10,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	sunflorite: {
 		name: "Sunflorite",
@@ -7648,7 +7662,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -11,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	etigirafarigite: {
 		name: "Etigirafarigite",
@@ -7662,21 +7676,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -12,
 		gen: 6,
-		isNonstandard: "Past",
-	},
-	steelixite: {
-		name: "Steelixite",
-		spritenum: 621,
-		megaStone: "Steelix-Mega",
-		megaEvolves: "Steelix",
-		itemUser: ["Steelix"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: -13,
-		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	steelixitefire: {
 		name: "Steelixite Fire",
@@ -7690,7 +7690,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -14,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	magcargonite: {
 		name: "Magcargonite",
@@ -7704,7 +7704,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -15,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	donphanite: {
 		name: "Donphanite",
@@ -7718,7 +7718,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -16,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	miltankite: {
 		name: "Miltankite",
@@ -7732,7 +7732,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -17,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	shiftrite: {
 		name: "Shiftrite",
@@ -7746,7 +7746,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -18,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	flygonite: {
 		name: "Flygonite",
@@ -7760,7 +7760,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -19,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	cacturnite: {
 		name: "Cacturnite",
@@ -7774,7 +7774,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -20,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	crawdite: {
 		name: "Crawdite",
@@ -7788,7 +7788,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -21,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	milotite: {
 		name: "Milotite",
@@ -7802,7 +7802,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -22,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	jirachite: {
 		name: "Jirachite",
@@ -7816,7 +7816,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -23,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	chatotite: {
 		name: "Chatotite",
@@ -7830,7 +7830,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -24,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	spiritombite: {
 		name: "Spiritombite",
@@ -7844,7 +7844,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -25,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	froslassite: {
 		name: "Froslassite",
@@ -7858,7 +7858,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -26,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	zebstrikite: {
 		name: "Zebstrikite",
@@ -7872,7 +7872,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -27,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	zoronite: {
 		name: "Zoronite",
@@ -7886,7 +7886,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -28,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	gothitite: {
 		name: "Gothitite",
@@ -7900,7 +7900,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -29,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	reuniclite: {
 		name: "Reuniclite",
@@ -7914,7 +7914,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -30,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	cryogonite: {
 		name: "Cryogonite",
@@ -7928,7 +7928,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -31,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	haxorite: {
 		name: "Haxorite",
@@ -7942,7 +7942,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -32,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	stunfiskite: {
 		name: "Stunfiskite",
@@ -7956,7 +7956,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -33,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	bisharpite: {
 		name: "Bisharpite",
@@ -7970,7 +7970,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -34,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	hydreigonite: {
 		name: "Hydreigonite",
@@ -7984,7 +7984,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -35,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltavenusaurite: {
 		name: "Delta Venusaurite",
@@ -7998,7 +7998,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -36,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltacharizardite: {
 		name: "Delta Charizardite",
@@ -8012,7 +8012,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -37,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltablastoisinite: {
 		name: "Delta Blastoisinite",
@@ -8026,7 +8026,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -38,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltabisharpite: {
 		name: "Delta Bisharpite",
@@ -8040,7 +8040,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -39,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltagardevoirite: {
 		name: "Delta Gardevoirite",
@@ -8054,7 +8054,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -40,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltagalladite: {
 		name: "Delta Galladite",
@@ -8068,7 +8068,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -41,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltasunflorite: {
 		name: "Delta Sunflorite",
@@ -8082,7 +8082,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -42,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltascizorite: {
 		name: "Delta Scizorite",
@@ -8096,7 +8096,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -43,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltaglalitite: {
 		name: "Delta Glalitite",
@@ -8110,7 +8110,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -44,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltafroslassite: {
 		name: "Delta Froslassite",
@@ -8124,7 +8124,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -45,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltatyphlosionite: {
 		name: "Delta Typhlosionite",
@@ -8138,7 +8138,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -46,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltapidgeotite: {
 		name: "Delta Pidgeotite",
@@ -8152,7 +8152,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -47,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltaetigirafarigite: {
 		name: "Delta Etigirafarigite",
@@ -8166,7 +8166,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -48,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltasablenite: {
 		name: "Delta Sablenite",
@@ -8180,7 +8180,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -49,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltamawilite: {
 		name: "Delta Mawilite",
@@ -8194,7 +8194,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -50,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltamedichamite: {
 		name: "Delta Medichamite",
@@ -8208,7 +8208,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -51,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltacameruptite: {
 		name: "Delta Cameruptite",
@@ -8222,7 +8222,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -52,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltamilotite: {
 		name: "Delta Milotite",
@@ -8236,7 +8236,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -53,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltametagrossitespider: {
 		name: "Delta Metagrossite Spider",
@@ -8250,7 +8250,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -54,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltametagrossiteruin: {
 		name: "Delta Metagrossite Ruin",
@@ -8264,7 +8264,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -55,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	crystalfragment: {
 		name: "Crystal Fragment",
@@ -8278,7 +8278,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -56,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltalopunnite: {
 		name: "Delta Lopunnite",
@@ -8292,7 +8292,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -57,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	deltalucarionite: {
 		name: "Delta Lucarionite",
@@ -8306,7 +8306,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -58,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	crystalpiece: {
 		name: "Crystal Piece",
@@ -8332,7 +8332,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: -59,
 		gen: 6,
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 	},
 	flygonarmor: {
 		name: "Flygon Armor",
