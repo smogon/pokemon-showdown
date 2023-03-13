@@ -1486,7 +1486,7 @@ export class Pokemon {
 					}
 				} else {
 					if (this.illusion && this.illusion.canMegaEvo) {
-						this.battle.add('-mega', this.illusion, apparentSpecies, this.illusion.species.requiredItem);
+						this.battle.add('-mega', this.illusion, apparentSpecies, this.illusion.baseSpecies.requiredItem);
 					} else {
 						this.battle.add('-mega', this, apparentSpecies, species.requiredItem);
 					}
