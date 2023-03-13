@@ -1829,6 +1829,13 @@ export class BattleActions {
 		return null;
 	}
 
+	canMegaEvoNoItem(pokemon: Pokemon) {
+		const species = pokemon.baseSpecies;
+		const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
+		if (altForme?.isMega) return altForme.name;
+		return null;
+	}
+
 	canUltraBurst(pokemon: Pokemon) {
 		if (['Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane'].includes(pokemon.baseSpecies.name) &&
 			pokemon.getItem().id === 'ultranecroziumz') {

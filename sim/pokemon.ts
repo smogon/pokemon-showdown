@@ -247,6 +247,7 @@ export class Pokemon {
 	abilityOrder: number;
 
 	canMegaEvo: string | null | undefined;
+	canMegaEvoNoItem: string | null | undefined;
 	canUltraBurst: string | null | undefined;
 	readonly canGigantamax: string | null;
 	canTerastallize: string | null;
@@ -454,6 +455,7 @@ export class Pokemon {
 		this.abilityOrder = 0;
 
 		this.canMegaEvo = this.battle.actions.canMegaEvo(this);
+		this.canMegaEvoNoItem = this.battle.actions.canMegaEvoNoItem(this);
 		this.canUltraBurst = this.battle.actions.canUltraBurst(this);
 		this.canGigantamax = this.baseSpecies.canGigantamax || null;
 		this.canTerastallize = this.battle.actions.canTerastallize(this);
@@ -1488,8 +1490,8 @@ export class Pokemon {
 					}
 				} else {
 					if (this.illusion) {
-						if (this.illusion.canMegaEvo) {
-							const illusionRawSpecies = this.battle.dex.species.get(this.illusion.canMegaEvo);
+						if (this.illusion.canMegaEvoNoItem) {
+							const illusionRawSpecies = this.battle.dex.species.get(this.illusion.canMegaEvoNoItem);
 							const illusionDetails = this.illusion.setSpecies(illusionRawSpecies, source).name + (this.level === 100 ? '' : ', L' + this.level) + (this.illusion.gender === '' ? '' : ', ' + this.illusion.gender) + (this.illusion.set.shiny ? ', shiny' : '');
 							this.battle.add('detailschange', this, illusionDetails);
 							//this.battle.add('replace', this, details);
