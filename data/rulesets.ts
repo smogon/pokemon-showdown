@@ -1096,8 +1096,12 @@ export const Rulesets: {[k: string]: FormatData} = {
 			this.supportCancel = true;
 		},
 		onDamagingHit(damage, target, source, move) {
-			if (target.illusion) {
-				this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, source, move);
+				if (target.illusion) {
+				target.illusion = null;
+				const details = target.species.name + (target.level === 100 ? '' : ', L' + target.level) +
+					(target.gender === '' ? '' : ', ' + target.gender) + (target.set.shiny ? ', shiny' : '');
+				this.add('replace', target, details);
+				this.add('-end', target, 'Illusion');
 			}
 		},
 		onFaint(pokemon) {
