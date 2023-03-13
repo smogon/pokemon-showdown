@@ -1485,7 +1485,23 @@ export class Pokemon {
 						this.battle.add('-primal', this);
 					}
 				} else {
-					this.battle.add('-mega', this, apparentSpecies, species.requiredItem);
+					if (this.illusion) {
+						if (!this.illusion.species.isMega && this.illusion.canMegaEvo) {
+							const illusionMega = this.illusion.canMegaEvo;
+							const illusionRawSpecies = this.battle.dex.species.get(illusionMega);
+							if (illusionRawSpecies) {
+								const illusionSpecies = this.illusion.setSpecies(illusionRawSpecies, source);
+								if (illusionSpecies) {
+									const illusionStone = illusionRawSpecies.requiredItem;
+									if (illusionStone) {
+										this.battle.add('-mega', this, illusionSpecies.baseSpecies, illusionStone);
+									}
+								}
+							}
+						}
+					} else {
+						this.battle.add('-mega', this, apparentSpecies, species.requiredItem);
+					}
 					this.moveThisTurnResult = true; // Mega Evolution counts as an action for Truant
 				}
 			} else if (source.effectType === 'Status') {
