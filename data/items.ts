@@ -3080,7 +3080,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				return this.chainModify(2);
 			}
 		},
-		itemUser: ["Pikachu", "Pikachu-Cosplay", "Pikachu-Rock-Star", "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner", "Pikachu-Starter", "Pikachu-World"],
+		itemUser: ["Pikachu", "Pikachu-Cosplay", "Pikachu-Rock-Star", "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner", "Pikachu-Starter", "Pikachu-World", "Pikachu-Delta"],
 		num: 236,
 		gen: 2,
 	},
@@ -3553,11 +3553,11 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 287,
 		onModifyDefPriority: 2,
 		onModifyDef(def, pokemon) {
-			if (pokemon.species.name === 'Ditto' && !pokemon.transformed) {
+			if (pokemon.baseSpecies.baseSpecies === 'Ditto' && !pokemon.transformed) {
 				return this.chainModify(2);
 			}
 		},
-		itemUser: ["Ditto"],
+		itemUser: ["Ditto", "Ditto-Delta"],
 		num: 257,
 		gen: 2,
 		isNonstandard: "Past",
@@ -4543,11 +4543,11 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onModifySpe(spe, pokemon) {
-			if (pokemon.species.name === 'Ditto' && !pokemon.transformed) {
+			if (pokemon.baseSpecies.baseSpecies === 'Ditto' && !pokemon.transformed) {
 				return this.chainModify(2);
 			}
 		},
-		itemUser: ["Ditto"],
+		itemUser: ["Ditto", "Ditto-Delta"],
 		num: 274,
 		gen: 4,
 		isNonstandard: "Past",

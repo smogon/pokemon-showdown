@@ -256,4 +256,26 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	dragonfang: {
+		inherit: true,
+		desc: "If held by a Clamperl-Delta, its Attack is doubled. Dragon attacks have 1.2x power.",
+		onModifyAtkPriority: 1,
+		onModifyAtk(atk, pokemon) {
+			if (pokemon.species.name === 'Clamperl-Delta') {
+				return this.chainModify(2);
+			}
+		},
+		itemUser: ["Clamperl-Delta"]
+	},
+	dragonscale: {
+		inherit: true,
+		desc: "If held by a Clamperl-Delta, its Defense is doubled",
+		onModifyDefPriority: 1,
+		onModifyDef(def, pokemon) {
+			if (pokemon.species.name === 'Clamperl-Delta') {
+				return this.chainModify(2);
+			}
+		},
+		itemUser: ["Clamperl-Delta"]
+	},
 };
