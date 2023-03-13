@@ -1863,24 +1863,24 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 			}
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (target.illusion) {
-				this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, source, move);
-			}
-		},
-		onEnd(pokemon) {
-			if (pokemon.illusion) {
-				this.debug('illusion cleared');
-				pokemon.illusion = null;
-				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
-					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-				this.add('replace', pokemon, details);
-				this.add('-end', pokemon, 'Illusion');
-			}
-		},
-		onFaint(pokemon) {
-			pokemon.illusion = null;
-		},
+		// onDamagingHit(damage, target, source, move) {
+		// 	if (target.illusion) {
+		// 		this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, source, move);
+		// 	}
+		// },
+		// onEnd(pokemon) {
+		// 	if (pokemon.illusion) {
+		// 		this.debug('illusion cleared');
+		// 		pokemon.illusion = null;
+		// 		const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
+		// 			(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+		// 		this.add('replace', pokemon, details);
+		// 		this.add('-end', pokemon, 'Illusion');
+		// 	}
+		// },
+		// onFaint(pokemon) {
+		// 	pokemon.illusion = null;
+		// },
 		name: "Illusion",
 		rating: 4.5,
 		num: 149,

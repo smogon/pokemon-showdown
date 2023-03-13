@@ -1095,6 +1095,14 @@ export const Rulesets: {[k: string]: FormatData} = {
 		onBegin() {
 			this.supportCancel = true;
 		},
+		onDamagingHit(damage, target, source, move) {
+			if (target.illusion) {
+				this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, source, move);
+			}
+		},
+		onFaint(pokemon) {
+			pokemon.illusion = null;
+		},
 	},
 	sleepclausemod: {
 		effectType: 'Rule',
