@@ -1472,12 +1472,14 @@ export class Pokemon {
 				(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 			let details = (this.illusion || this).details;
 			if (this.terastallized) details += `, tera:${this.terastallized}`;
-			this.battle.add('detailschange', this, details);
+			
 			if (source.effectType === 'Item') {
 				if (source.zMove) {
+					this.battle.add('detailschange', this, details);
 					this.battle.add('-burst', this, apparentSpecies, species.requiredItem);
 					this.moveThisTurnResult = true; // Ultra Burst counts as an action for Truant
 				} else if (source.onPrimal) {
+					this.battle.add('detailschange', this, details);
 					if (this.illusion) {
 						this.ability = '';
 						this.battle.add('-primal', this.illusion);
@@ -1488,9 +1490,10 @@ export class Pokemon {
 					if (this.illusion) {
 						if (this.illusion.canMegaEvo) {
 							const illusionRawSpecies = this.battle.dex.species.get(this.illusion.canMegaEvo);
-							const details = this.illusion.setSpecies(illusionRawSpecies, source).name + (this.level === 100 ? '' : ', L' + this.level) + (this.illusion.gender === '' ? '' : ', ' + this.illusion.gender) + (this.illusion.set.shiny ? ', shiny' : '');
+							const illusionDetails = this.illusion.setSpecies(illusionRawSpecies, source).name + (this.level === 100 ? '' : ', L' + this.level) + (this.illusion.gender === '' ? '' : ', ' + this.illusion.gender) + (this.illusion.set.shiny ? ', shiny' : '');
+							this.battle.add('detailschange', this, illusionDetails);
+							//this.battle.add('replace', this, details);
 							this.battle.add('-mega', this, apparentSpecies, illusionRawSpecies.requiredItem);
-							this.battle.add('replace', this, details);
 						}
 					} else {
 						this.battle.add('-mega', this, apparentSpecies, species.requiredItem);
