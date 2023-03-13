@@ -370,7 +370,7 @@ const TWISTS: {[k: string]: Twist} = {
 		desc: 'After completing the hunt, players will guess what the most common incorrect answer for each question is.',
 		onAfterLoad() {
 			this.guesses = {};
-			this.incorrect = new Array(this.questions.length).fill('').map(() => ({}));
+			this.incorrect = Array.from({length: this.questions.length}).map(() => ({}));
 
 			this.questions.push({
 				hint: 'Please enter what you think are the most common incorrect answers to each question.  (Enter your guesses in the order of the previous questions, and separate them with a comma)',
@@ -438,6 +438,80 @@ const TWISTS: {[k: string]: Twist} = {
 			this.announce(`<h3>Most common incorrect answers:</h3>${buffer.join('<br />')}`);
 		},
 	},
+
+	minesweeper: {
+		id: 'minesweeper',
+		name: 'Minesweeper',
+		desc: 'The huntmaker can add incorrect \'mines\' to the hunt - they get points every time a player scavenges it, and players that dodge all the mines in the hunt get points.',
+		onAfterLoad() {
+			this.guesses = Array.from({length: this.questions.length}).map(() => ({}));
+			this.mines = Array.from({length: this.questions.length}).map(() => ({}));
+			for (const [index, question] of this.questions.entries()) {
+				this.mines[index] = question.answers.filter(ans => ans.startsWith('!'));
+				question.answers = question.answers.filter(ans => !ans.startsWith('!'));
+			}
+		},
+
+		onEditQuestion(number: number, question_answer: string, value: string) {
+			if (question_answer === 'question') question_answer = 'hint';
+			if (!['hint', 'answer'].includes(question_answer)) return false;
+
+			let answer: string[] = [];
+			if (question_answer === 'answer') {
+				answer = value.split(';').map(p => p.trim());
+			}
+
+			if (!number || number < 1 || number > this.questions.length || (!answer && !value)) return false;
+
+			number--; // indexOf starts at 0
+
+			if (question_answer === 'answer') {
+				// These two lines are the only difference from the original
+				this.mines[number] = answer.filter(ans => ans.startsWith('!'));
+				this.questions[number].answer = answer.filter(ans => !ans.startsWith('!'));
+			} else {
+				this.questions[number].hint = value;
+			}
+
+			this.announce(`The ${question_answer} for question ${number + 1} has been edited.`);
+			if (question_answer === 'hint') {
+				for (const p in this.playerTable) {
+					this.playerTable[p].onNotifyChange(number);
+				}
+			}
+			return true;
+		},
+
+		onIncorrectAnswer(player: ScavengerHuntPlayer, value: string) {
+			const curr = player.currentQuestion;
+
+			if (!this.guesses[curr][player.id]) this.guesses[curr][player.id] = new Set();
+			this.guesses[curr][player.id].add(toID(value));
+		},
+
+		onAfterEndPriority: 1,
+		onAfterEnd(isReset) {
+			if (isReset) return;
+			for (const [q, guessObj] of this.guesses.entries()) {
+				const mines = this.mines[q].map(toID);
+				for (const [playerId, guesses] of Object.entries(guessObj)) {
+					const player = this.playerTable[playerId];
+					if (!player.mines) player.mines = 0;
+					player.mines += mines.filter(mine => guesses.has(mine)).length;
+				}
+			}
+			const mineLess = [];
+			for (const { name } of this.completed) {
+				const player = this.playerTable[toID(name)];
+				if (!player) continue;
+				if (!player.mines) mineLess.push(name);
+			}
+			if (mineLess.length) {
+				this.announce(Utils.html`${Chat.toListString(mineLess)} ${mineLess.length > 1 ? 'have' : 'has'} completed the hunt without hitting a single mine!`);
+				// Award points!
+			}
+		},
+	}
 };
 
 const MODES: {[k: string]: GameMode | string} = {
