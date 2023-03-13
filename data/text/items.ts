@@ -382,7 +382,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	dragonfang: {
 		name: "Dragon Fang",
-		desc: "Holder's Dragon-type attacks have 1.2x power.",
+		desc: "If held by a Clamperl-Delta, its Attack is doubled. Dragon attacks have 1.2x power.",
 		gen3: {
 			desc: "Holder's Dragon-type attacks have 1.1x power.",
 		},
@@ -403,7 +403,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	dragonscale: {
 		name: "Dragon Scale",
-		desc: "Evolves Seadra into Kingdra when traded.",
+		desc: "If held by a Clamperl-Delta, its Defense is doubled",
 		gen2: {
 			desc: "Holder's Dragon-type attacks have 1.1x power. Evolves Seadra (trade).",
 		},
