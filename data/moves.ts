@@ -12439,11 +12439,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onHit(pokemon) {
 			let factor = 0.5;
 			switch (pokemon.effectiveWeather()) {
-			case 'sunnyday':
-			case 'desolateland':
+			case 'newmoon':
 				factor = 0.667;
 				break;
-			case 'newmoon':
+			case 'sunnyday':
+			case 'desolateland':
 				factor = 0.667;
 				break;
 			case 'raindance':
