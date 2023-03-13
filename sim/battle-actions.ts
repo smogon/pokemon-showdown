@@ -1838,16 +1838,10 @@ export class BattleActions {
 	}
 
 	runMegaEvo(pokemon: Pokemon) {
-		let speciesid;
-		if (pokemon.illusion) {
-			speciesid = pokemon.illusion.canMegaEvo || pokemon.illusion.canUltraBurst;
-			if (!speciesid) return false;
-			pokemon.formeChange(speciesid, pokemon.illusion.getItem(), true);
-		} else {
-			speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
-			if (!speciesid) return false;
-			pokemon.formeChange(speciesid, pokemon.getItem(), true);
-		}
+		const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
+		if (!speciesid) return false;
+
+		pokemon.formeChange(speciesid, pokemon.getItem(), false);
 
 		// Limit one mega evolution
 		const wasMega = pokemon.canMegaEvo;
