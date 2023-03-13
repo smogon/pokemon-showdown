@@ -1485,8 +1485,13 @@ export class Pokemon {
 						this.battle.add('-primal', this);
 					}
 				} else {
-					if (this.illusion && this.illusion.canMegaEvo) {
-						this.battle.add('-mega', this, apparentSpecies, this.battle.dex.species.get(this.illusion.canMegaEvo).requiredItem);
+					if (this.illusion) {
+						if (this.illusion.canMegaEvo) {
+							const illusionRawSpecies = this.battle.dex.species.get(this.illusion.canMegaEvo);
+							const details = this.illusion.setSpecies(illusionRawSpecies, source).name + (this.level === 100 ? '' : ', L' + this.level) + (this.illusion.gender === '' ? '' : ', ' + this.illusion.gender) + (this.illusion.set.shiny ? ', shiny' : '');
+							this.battle.add('replace', this, details);
+							this.battle.add('-mega', this, apparentSpecies, illusionRawSpecies.requiredItem);
+						}
 					} else {
 						this.battle.add('-mega', this, apparentSpecies, species.requiredItem);
 					}
