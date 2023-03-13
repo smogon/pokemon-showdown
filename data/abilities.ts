@@ -5778,9 +5778,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	prismguard: {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
-			if (!this.checkMoveMakesContact(move, source, target, true) && source.item !== "protectivepads") {
-				this.damage(source.baseMaxhp / 8, source, target);
-			}
+			if (this.checkMoveMakesContact(move, source, target, true)) return;
+			if (this.checkMoveMakesContact(move, source, target, true) && source.item === "protectivepads") return;
+			this.damage(source.baseMaxhp / 8, source, target);
 		},
 		name: "Prism Guard",
 		rating: 2.5,
