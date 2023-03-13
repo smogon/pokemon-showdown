@@ -265,7 +265,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 				return this.chainModify(2);
 			}
 		},
-		itemUser: ["Clamperl-Delta"]
+		itemUser: ["Clamperl-Delta"],
 	},
 	dragonscale: {
 		inherit: true,
@@ -276,6 +276,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 				return this.chainModify(2);
 			}
 		},
-		itemUser: ["Clamperl-Delta"]
+		itemUser: ["Clamperl-Delta"],
 	},
 };
