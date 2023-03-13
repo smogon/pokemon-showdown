@@ -1239,7 +1239,11 @@ export const Rulesets: {[k: string]: FormatData} = {
 		onBegin() {
 			this.add('rule', 'Mega Rayquaza Clause: You cannot mega evolve Rayquaza');
 			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.species.id === 'rayquaza') pokemon.canMegaEvo = null;
+				if (pokemon.species.id === 'rayquaza') {
+					pokemon.canMegaEvo = null;
+					// ability to terastal was determined before the clause activated, causing incorrect behavior
+					pokemon.canTerastallize = this.actions.canTerastallize(pokemon);
+				}
 			}
 		},
 	},
