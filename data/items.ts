@@ -1349,6 +1349,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				return this.chainModify([4915, 4096]);
 			}
 		},
+		itemUser: ["Clamperl-Delta"],
 		num: 250,
 		gen: 2,
 	},
@@ -1390,6 +1391,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 235,
 		gen: 2,
+		itemUser: ["Clamperl-Delta"],
 		isNonstandard: "Past",
 	},
 	dragoniumz: {
