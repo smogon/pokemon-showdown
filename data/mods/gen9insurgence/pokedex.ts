@@ -26,5 +26,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	delibird: {
 		inherit: true,
 		abilities: {0: "Vital Spirit", 1: "Hustle", H: "Winter Joy"},
+	},
+	arceus: {
+		inherit: true,
+		abilities: {0: "Multitype", H: "Protean"},
+	},
+	solrock: {
+		inherit: true,
+		abilities: {0: "Levitate", H: "Drought"},
 	}
 };
