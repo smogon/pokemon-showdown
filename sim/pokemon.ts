@@ -1498,6 +1498,7 @@ export class Pokemon {
 							this.battle.add('-mega', this, apparentSpecies, illusionRawSpecies.requiredItem);
 						}
 					} else {
+						this.battle.add('detailschange', this, details);
 						this.battle.add('-mega', this, apparentSpecies, species.requiredItem);
 					}
 					this.moveThisTurnResult = true; // Mega Evolution counts as an action for Truant
