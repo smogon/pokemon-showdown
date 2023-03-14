@@ -1326,6 +1326,37 @@ export const commands: Chat.ChatCommands = {
 		`/updateserver private - Updates only the server's private code. Requires: console access`,
 	],
 
+	async updateloginserver(target, room, user) {
+		this.canUseConsole();
+		this.sendReply('Restarting...');
+		const [result, err] = await LoginServer.request('restart');
+		if (err) {
+			Rooms.global.notifyRooms(
+				['staff', 'development'],
+				`|c|&|/log ${user.name} used /updateloginserver - but something failed while updating.`
+			);
+			return this.errorReply(err.message + '\n' + err.stack);
+		}
+		if (!result) return this.errorReply('No result received.');
+		this.stafflog(`[o] ${result.success || ""} [e] ${result.actionerror || ""}`);
+		if (result.actionerror) {
+			return this.errorReply(result.actionerror);
+		}
+		let message = `${user.name} used /updateloginserver`;
+		if (result.updated) {
+			this.sendReply(`DONE. Server updated and restarted.`);
+		} else {
+			message += ` - but something failed while updating.`;
+			this.errorReply(`FAILED. Conflicts were found while updating - the restart was aborted.`);
+		}
+		Rooms.global.notifyRooms(
+			['staff', 'development'], `|c|&|/log ${message}`
+		);
+	},
+	updateloginserverhelp: [
+		`/updateloginserver - Updates and restarts the loginserver. Requires: console access`,
+	],
+
 	async rebuild() {
 		this.canUseConsole();
 		const [, , stderr] = await bash('node ./build', this);
