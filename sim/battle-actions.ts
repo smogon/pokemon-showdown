@@ -677,7 +677,9 @@ export class BattleActions {
 					if (!target.volatiles['dynamax'] && pokemon.level >= target.level &&
 						(move.ohko === true || !target.hasType(move.ohko))) {
 						accuracy += (pokemon.level - target.level);
-					} else {
+					} 
+					if (move.name === "Coinflip") accuracy = true;
+					else {
 						this.battle.add('-immune', target, '[ohko]');
 						hitResults[i] = false;
 						continue;
@@ -1744,7 +1746,7 @@ export class BattleActions {
 
 		// types
 		let typeMod = target.runEffectiveness(move);
-		
+
 		if(move.id === 'achillesheel') {
 			if (this.battle.ruleTable.has('inversemod')) {
 				if (typeMod > -1) typeMod = -1;

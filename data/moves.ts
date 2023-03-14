@@ -22287,7 +22287,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 	},
 
-	// Point of Attack
+	// Plan of Attack
 	coinflip: {
 		num: 90,
 		basePower: 0,
