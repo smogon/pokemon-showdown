@@ -36,7 +36,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	eitgirafarigite: {
+	etigirafarigite: {
 		inherit: true,
 		isNonstandard: null,
 	},
