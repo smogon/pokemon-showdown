@@ -3922,7 +3922,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "useItem",
 		evoItem: "Sun Stone",
 		eggGroups: ["Grass"],
-		otherFormes: ["Sunflora-Mega-M, Sunflora-Mega-F"],
+		otherFormes: ["Sunflora-Mega-M", "Sunflora-Mega-F"],
 		formeOrder: ["Sunflora", "Sunflora-Mega-M", "Sunflora-Mega-F"],
 	},
 	yanma: {
