@@ -9533,6 +9533,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	machop: {
 		learnset: {
+			drainpunch: ["6M"],
 			wildfire: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
@@ -9639,6 +9640,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	machoke: {
 		learnset: {
+			drainpunch: ["6M"],
 			wildfire: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
@@ -9743,6 +9745,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	machamp: {
 		learnset: {
+			drainpunch: ["6M"],
 			wildfire: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
@@ -14910,6 +14913,10 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	marowak: {
 		learnset: {
+			shadowclaw: ["6M"],
+			shadowball: ["6M"],
+			phantomforce: ["6L65"],
+			shadowsneak: ["6L1"],
 			permafrost: ["6M"],
 			wildfire: ["6M"],
 			achillesheel: ["6M"],
@@ -19927,6 +19934,23 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	eevee: {
 		learnset: {
+			gigaimpact: ["6M"],
+			dazzlinggleam: ["6M"],
+			blizzard: ["6M"],
+			gigadrain: ["6M"],
+			pursuit: ["6M"],
+			psyshock: ["6M"],
+			voltswitch: ["6M"],
+			scald: ["6M"],
+			fireblast: ["6M"],
+			moonblast: ["6M"],
+			icebeam: ["6M"],
+			leafblade: ["6M"],
+			foulplay: ["6M"],
+			psychic: ["6M"],
+			thunderbolt: ["6M"],
+			hydropump: ["6M"],
+			flareblitz: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
 			attract: ["8M", "7M", "7V", "6M", "5M", "5S2", "4M", "4S0", "3M"],
@@ -23306,6 +23330,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	chikorita: {
 		learnset: {
+			moonblast: ["6M"],
+			dazzlinggleam: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
 			ancientpower: ["7E", "7V", "6E", "5E", "4T", "4E", "3E", "3S1"],
@@ -23385,6 +23411,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	bayleef: {
 		learnset: {
+			moonblast: ["6M"],
+			dazzlinggleam: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
 			ancientpower: ["4T"],
@@ -23451,6 +23479,9 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	meganium: {
 		learnset: {
+			moonblast: ["6M"],
+			dazzlinggleam: ["6M"],
+			calmmind: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
 			ancientpower: ["4T"],
@@ -26855,6 +26886,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	sunkern: {
 		learnset: {
+			weatherball: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
 			absorb: ["9L7", "7L1", "7V", "6L1", "5L1", "4L1", "3L1", "3S0"],
@@ -26926,6 +26958,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	sunflora: {
 		learnset: {
+			weatherball: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
 			absorb: ["9L7", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
@@ -27937,6 +27970,10 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	girafarig: {
 		learnset: {
+			thunderfang: ["6M"],
+			icefang: ["6M"],
+			firefang: ["6M"],
+			hyperfang: ["6L25"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
 			agility: ["9M", "9L23", "7L23", "7V", "6L14", "5L14", "4L14", "3L31"],
@@ -36299,6 +36336,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	slakoth: {
 		learnset: {
+			knockoff: ["6M"],
 			permafrost: ["6M"],
 			wildfire: ["6M"],
 			achillesheel: ["6M"],
@@ -36403,6 +36441,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	vigoroth: {
 		learnset: {
+			knockoff: ["6M"],
 			permafrost: ["6M"],
 			wildfire: ["6M"],
 			achillesheel: ["6M"],
@@ -36517,6 +36556,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	slaking: {
 		learnset: {
+			knockoff: ["6M"],
 			permafrost: ["6M"],
 			wildfire: ["6M"],
 			achillesheel: ["6M"],
@@ -42499,6 +42539,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	milotic: {
 		learnset: {
+			moonblast: ["6M"],
+			dazzlinggleam: ["6M"],
 			dragonify: ["6M"],
 			permafrost: ["6M"],
 			dracojet: ["6M"],
@@ -42593,6 +42635,25 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	castform: {
 		learnset: {
+			suckerpunch: ["6M"],
+			stealthrock: ["6M"],
+			mudslap: ["6M"],
+			foulplay: ["6M"],
+			earthpower: ["6M"],
+			surf: ["6M"],
+			smackdown: ["6M"],
+			rockslide: ["6M"],
+			torment: ["6M"],
+			embargo: ["6M"],
+			rockpolish: ["6M"],
+			rocktomb: ["6M"],
+			stoneedge: ["6M"],
+			taunt: ["6M"],
+			darkpulse: ["6M"],
+			nastyplot: ["6M"],
+			mudbomb: ["6M"],
+			sandtomb: ["6L5"],
+			rockthrow: ["6L10"],
 			jetstream: ["6M"],
 			lunarcannon: ["6M"],
 			newmoon: ["6M"],
@@ -50056,6 +50117,13 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	spiritomb: {
 		learnset: {
+			revenge: ["6M"],
+			brickbreak: ["6M"],
+			stoneedge: ["6M"],
+			rockslide: ["6M"],
+			zenheadbutt: ["6M"],
+			rockblast: ["6M"],
+			knockoff: ["6M"],
 			lunarcannon: ["6M"],
 			newmoon: ["6M"],
 			darkmatter: ["6M"],
@@ -50536,6 +50604,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	lucario: {
 		learnset: {
+			ironhead: ["6M"],
 			dragonify: ["6M"],
 			dracojet: ["6M"],
 			darkmatter: ["6M"],
@@ -55564,6 +55633,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	blitzle: {
 		learnset: {
+			playrough: ["6M"],
 			livewire: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
@@ -55621,6 +55691,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	zebstrika: {
 		learnset: {
+			playrough: ["6M"],
+			dazzlinggleam: ["6M"],
 			livewire: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
@@ -56997,6 +57069,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	leavanny: {
 		learnset: {
+			uturn: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
 			aerialace: ["7M", "6M", "5M"],
@@ -63026,6 +63099,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	haxorus: {
 		learnset: {
+			metalclaw: ["6M"],
 			dragonify: ["6M"],
 			dracojet: ["6M"],
 			achillesheel: ["6M"],
@@ -63521,6 +63595,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	stunfisk: {
 		learnset: {
+			voltswitch: ["6M"],
 			livewire: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
