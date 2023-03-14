@@ -1744,6 +1744,13 @@ export class BattleActions {
 
 		// types
 		let typeMod = target.runEffectiveness(move);
+		
+		if(move.id === 'achillesheel') {
+			if (this.battle.ruleTable.has('inversemod')) {
+				if (typeMod > -1) typeMod = -1;
+			} else if (typeMod < 1) typeMod = 1;
+		}
+
 		typeMod = this.battle.clampIntRange(typeMod, -6, 6);
 		target.getMoveHitData(move).typeMod = typeMod;
 		if (typeMod > 0) {
