@@ -309,7 +309,7 @@ export const Formats: FormatList = [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3711724/">Free-For-All</a>`,
 		],
 
-		mod: 'insurgence',
+		mod: 'gen9insurgence',
 		gameType: 'freeforall',
 		rated: false,
 		tournamentShow: false,
