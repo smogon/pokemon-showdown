@@ -2071,7 +2071,7 @@ export class TeamValidator {
 				} else if (move.gen > 7 && !canSketchPostGen7Moves) {
 					cantLearnReason = `can't be Sketched because it's a Gen ${move.gen} move and Sketch isn't available in Gen ${move.gen}.`;
 				} else {
-					if (!sources) sketch = true;
+					if (!sources || !moveSources.size()) sketch = true;
 					sources = learnset['sketch'].concat(sources || []);
 				}
 			}
