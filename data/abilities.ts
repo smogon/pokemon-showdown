@@ -1316,6 +1316,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Castform' || pokemon.transformed) return;
 			let forme = null;
 			switch (pokemon.effectiveWeather()) {
+			case 'newmoon':
+				if (pokemon.species.id !== 'castformcloudy') forme = 'Castform-Cloudy';
+				break;
+			case 'sandstorm':
+				if (pokemon.species.id !== 'castformsandy') forme = 'Castform-Sandy';
+				break;	
 			case 'sunnyday':
 			case 'desolateland':
 				if (pokemon.species.id !== 'castformsunny') forme = 'Castform-Sunny';
