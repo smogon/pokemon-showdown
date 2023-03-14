@@ -11,7 +11,7 @@ export const prenoms: {[k: string]: [string, AnyObject][]} = JSON.parse(FS(PRENO
 export const otdData: OtdData = JSON.parse(FS(DATA_FILE).readIfExistsSync() || "{}");
 export const otds = new Map<string, OtdHandler>();
 
-const FINISH_HANDLERS: {[k: string]: (winner: AnyObject) => void} = {
+const FINISH_HANDLERS: {[k: string]: (winner: AnyObject) => Promise<void>} = {
 	cotw: async winner => {
 		const {channel, nominator} = winner;
 		const searchResults = await YouTube.searchChannel(channel, 1);
@@ -678,7 +678,9 @@ export const otdCommands: Chat.ChatCommands = {
 			key = key.trim();
 			const value = values.join(':').trim();
 
-			if (!handler.keys.includes(key)) return this.errorReply(`Invalid value for property: ${key}`);
+			if (!handler.keys.includes(key)) {
+				return this.errorReply(`Invalid key: '${key}'. Valid keys: ${handler.keys.join(', ')}`);
+			}
 
 			switch (key) {
 			case 'artist':
@@ -694,6 +696,7 @@ export const otdCommands: Chat.ChatCommands = {
 			case 'tagline':
 			case 'match':
 			case 'event':
+			case 'videogame':
 				if (!value.length || value.length > 150) return this.errorReply(`Please enter a valid ${key}.`);
 				break;
 			case 'sport':
@@ -716,7 +719,11 @@ export const otdCommands: Chat.ChatCommands = {
 				if (isNaN(num) || num < 1 || num > 100) return this.errorReply('Please enter a valid number as an age');
 				break;
 			default:
-				return this.errorReply(`Invalid value for property: ${key}`);
+				// another custom key w/o validation
+				if (!toNominationId(value)) {
+					return this.errorReply(`No value provided for key ${key}.`);
+				}
+				break;
 			}
 
 			changelist[key] = value;
@@ -934,4 +941,12 @@ export const handlers: Chat.Handlers = {
 			}
 		}
 	},
+};
+
+export const punishmentfilter: Chat.PunishmentFilter = (user, punishment) => {
+	user = toID(user);
+	if (!['NAMELOCK', 'BAN'].includes(punishment.type)) return;
+	for (const handler of otds.values()) {
+		handler.removeNomination(user);
+	}
 };

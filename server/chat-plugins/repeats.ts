@@ -96,7 +96,7 @@ export const Repeats = new class {
 			const repeatedPhrase = repeat.faq ?
 				visualizeFaq(roomFaqs[targetRoom.roomid][repeat.id]) : Chat.formatText(phrase, true);
 			const formattedText = repeat.isHTML ? phrase : repeatedPhrase;
-			targetRoom.add(`|html|<div class="infobox">${formattedText}</div>`);
+			targetRoom.add(`|uhtml|repeat-${repeat.id}|<div class="infobox">${formattedText}</div>`);
 			targetRoom.update();
 		};
 
@@ -293,5 +293,5 @@ export const commands: Chat.ChatCommands = {
 };
 
 process.nextTick(() => {
-	Chat.multiLinePattern.register('/repeat ');
+	Chat.multiLinePattern.register('/repeat(html|faq)?(bymessages)? ');
 });

@@ -7,7 +7,7 @@ interface SpeciesAbility {
 	S?: string;
 }
 
-type SpeciesTag = "Mythical" | "Restricted Legendary" | "Sub-Legendary";
+type SpeciesTag = "Mythical" | "Restricted Legendary" | "Sub-Legendary" | "Paradox";
 
 export interface SpeciesData extends Partial<Species> {
 	name: string;
@@ -24,17 +24,10 @@ export interface SpeciesData extends Partial<Species> {
 export type ModdedSpeciesData = SpeciesData | Partial<Omit<SpeciesData, 'name'>> & {inherit: true};
 
 export interface SpeciesFormatsData {
-	comboMoves?: readonly string[];
 	doublesTier?: TierTypes.Doubles | TierTypes.Other;
-	essentialMove?: string;
-	exclusiveMoves?: readonly string[];
 	gmaxUnreleased?: boolean;
 	isNonstandard?: Nonstandard | null;
-	randomBattleMoves?: readonly string[];
-	randomBattleLevel?: number;
-	randomDoubleBattleMoves?: readonly string[];
-	randomDoubleBattleLevel?: number;
-	randomBattleNoDynamaxMoves?: readonly string[];
+	natDexTier?: TierTypes.Singles | TierTypes.Other;
 	tier?: TierTypes.Singles | TierTypes.Other;
 }
 
@@ -135,6 +128,8 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	declare readonly evoItem?: string;
 	/** Evolution move. falsy if doesn't evolve. */
 	readonly evoMove?: string;
+	/** Region required to be in for evolution. falsy if doesn't evolve. */
+	readonly evoRegion?: 'Alola' | 'Galar';
 	/** Evolution level. falsy if doesn't evolve. */
 	readonly evoLevel?: number;
 	/** Is NFE? True if this Pokemon can evolve (Mega evolution doesn't count). */
@@ -219,17 +214,14 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * Doubles Tier. The Pokemon's location in the Smogon doubles tier system.
 	 */
 	readonly doublesTier: TierTypes.Doubles | TierTypes.Other;
-	declare readonly randomBattleMoves?: readonly ID[];
-	declare readonly randomBattleLevel?: number;
-	declare readonly randomDoubleBattleMoves?: readonly ID[];
-	declare readonly randomDoubleBattleLevel?: number;
-	declare readonly randomBattleNoDynamaxMoves?: readonly ID[];
-	declare readonly exclusiveMoves?: readonly ID[];
-	declare readonly comboMoves?: readonly ID[];
-	declare readonly essentialMove?: ID;
+	/**
+	 * National Dex Tier. The Pokemon's location in the Smogon National Dex tier system.
+	 */
+	readonly natDexTier: TierTypes.Singles | TierTypes.Other;
 
 	constructor(data: AnyObject) {
 		super(data);
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		data = this;
 
 		this.fullname = `pokemon: ${data.name}`;
@@ -248,6 +240,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.prevo = data.prevo || '';
 		this.tier = data.tier || '';
 		this.doublesTier = data.doublesTier || '';
+		this.natDexTier = data.natDexTier || '';
 		this.evos = data.evos || [];
 		this.evoType = data.evoType || undefined;
 		this.evoMove = data.evoMove || undefined;
@@ -283,7 +276,9 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		if (Array.isArray(data.changesFrom)) this.changesFrom = data.changesFrom[0];
 
 		if (!this.gen && this.num >= 1) {
-			if (this.num >= 810 || ['Gmax', 'Galar', 'Galar-Zen'].includes(this.forme)) {
+			if (this.num >= 906 || this.forme.includes('Paldea')) {
+				this.gen = 9;
+			} else if (this.num >= 810 || ['Gmax', 'Galar', 'Galar-Zen', 'Hisui'].includes(this.forme)) {
 				this.gen = 8;
 			} else if (this.num >= 722 || this.forme.startsWith('Alola') || this.forme === 'Starter') {
 				this.gen = 7;
@@ -397,6 +392,8 @@ export class DexSpecies {
 			const formeNames: {[k: string]: string[]} = {
 				alola: ['a', 'alola', 'alolan'],
 				galar: ['g', 'galar', 'galarian'],
+				hisui: ['h', 'hisui', 'hisuian'],
+				paldea: ['p', 'paldea', 'paldean'],
 				mega: ['m', 'mega'],
 				primal: ['p', 'primal'],
 			};
@@ -439,16 +436,19 @@ export class DexSpecies {
 					if (!(key in species)) (species as any)[key] = baseSpeciesStatuses[key];
 				}
 			}
-			if (!species.tier && !species.doublesTier && species.baseSpecies !== species.name) {
+			if (!species.tier && !species.doublesTier && !species.natDexTier && species.baseSpecies !== species.name) {
 				if (species.baseSpecies === 'Mimikyu') {
 					species.tier = this.dex.data.FormatsData[toID(species.baseSpecies)].tier || 'Illegal';
 					species.doublesTier = this.dex.data.FormatsData[toID(species.baseSpecies)].doublesTier || 'Illegal';
+					species.natDexTier = this.dex.data.FormatsData[toID(species.baseSpecies)].natDexTier || 'Illegal';
 				} else if (species.id.endsWith('totem')) {
 					species.tier = this.dex.data.FormatsData[species.id.slice(0, -5)].tier || 'Illegal';
 					species.doublesTier = this.dex.data.FormatsData[species.id.slice(0, -5)].doublesTier || 'Illegal';
+					species.natDexTier = this.dex.data.FormatsData[species.id.slice(0, -5)].natDexTier || 'Illegal';
 				} else if (species.battleOnly) {
 					species.tier = this.dex.data.FormatsData[toID(species.battleOnly)].tier || 'Illegal';
 					species.doublesTier = this.dex.data.FormatsData[toID(species.battleOnly)].doublesTier || 'Illegal';
+					species.natDexTier = this.dex.data.FormatsData[toID(species.battleOnly)].natDexTier || 'Illegal';
 				} else {
 					const baseFormatsData = this.dex.data.FormatsData[toID(species.baseSpecies)];
 					if (!baseFormatsData) {
@@ -456,31 +456,50 @@ export class DexSpecies {
 					}
 					species.tier = baseFormatsData.tier || 'Illegal';
 					species.doublesTier = baseFormatsData.doublesTier || 'Illegal';
+					species.natDexTier = baseFormatsData.natDexTier || 'Illegal';
 				}
 			}
 			if (!species.tier) species.tier = 'Illegal';
 			if (!species.doublesTier) species.doublesTier = species.tier as any;
+			if (!species.natDexTier) species.natDexTier = species.tier;
 			if (species.gen > this.dex.gen) {
 				species.tier = 'Illegal';
 				species.doublesTier = 'Illegal';
+				species.natDexTier = 'Illegal';
 				species.isNonstandard = 'Future';
 			}
 			if (this.dex.currentMod === 'gen7letsgo' && !species.isNonstandard) {
 				const isLetsGo = (
 					(species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
-					(!species.forme || ['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme))
+					(!species.forme || (['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme) &&
+					species.name !== 'Pikachu-Alola'))
 				);
 				if (!isLetsGo) species.isNonstandard = 'Past';
 			}
-			species.nfe = !!(species.evos.length && this.get(species.evos[0]).gen <= this.dex.gen);
+			if (this.dex.currentMod === 'gen8bdsp' &&
+				(!species.isNonstandard || ["Gigantamax", "CAP"].includes(species.isNonstandard))) {
+				if (species.gen > 4 || (species.num < 1 && species.isNonstandard !== 'CAP') ||
+					species.id === 'pichuspikyeared') {
+					species.isNonstandard = 'Future';
+					species.tier = species.doublesTier = species.natDexTier = 'Illegal';
+				}
+			}
+			species.nfe = species.evos.some(evo => {
+				const evoSpecies = this.get(evo);
+				return !evoSpecies.isNonstandard ||
+					evoSpecies.isNonstandard === species?.isNonstandard ||
+					// Pokemon with Hisui evolutions
+					evoSpecies.isNonstandard === "Unobtainable";
+			});
 			species.canHatch = species.canHatch ||
 				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) && !species.prevo && species.name !== 'Manaphy');
 			if (this.dex.gen === 1) species.bst -= species.baseStats.spd;
 			if (this.dex.gen < 5) delete species.abilities['H'];
+			if (this.dex.gen === 3 && this.dex.abilities.get(species.abilities['1']).gen === 4) delete species.abilities['1'];
 		} else {
 			species = new Species({
 				id, name: id,
-				exists: false, tier: 'Illegal', doublesTier: 'Illegal', isNonstandard: 'Custom',
+				exists: false, tier: 'Illegal', doublesTier: 'Illegal', natDexTier: 'Illegal', isNonstandard: 'Custom',
 			});
 		}
 		if (species.exists) this.speciesCache.set(id, species);

@@ -56,7 +56,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			) {
 				stat *= 2;
 			} else if (this.species.name === 'Ditto' && this.item === 'metalpowder' && ['def', 'spd'].includes(statName)) {
-				stat *= 1.5;
+				stat = Math.floor(stat * 1.5);
 			}
 
 			return stat;
@@ -93,6 +93,22 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (!this.battle.singleEvent('Try', move, null, pokemon, target, move)) {
 				return false;
+			}
+
+			if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
+				if (move.target === 'all') {
+					hitResult = this.battle.runEvent('TryHitField', target, pokemon, move);
+				} else {
+					hitResult = this.battle.runEvent('TryHitSide', target, pokemon, move);
+				}
+				if (!hitResult) {
+					if (hitResult === false) {
+						this.battle.add('-fail', pokemon);
+						this.battle.attrLastMove('[still]');
+					}
+					return false;
+				}
+				return this.moveHit(target, pokemon, move);
 			}
 
 			hitResult = this.battle.runEvent('Invulnerability', target, pokemon, move);
@@ -227,7 +243,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return damage;
 		},
-		getDamage(pokemon, target, move, suppressMessages) {
+		getDamage(source, target, move, suppressMessages) {
 			// First of all, we get the move.
 			if (typeof move === 'string') {
 				move = this.dex.getActiveMove(move);
@@ -255,12 +271,12 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// We edit the damage through move's damage callback
 			if (move.damageCallback) {
-				return move.damageCallback.call(this.battle, pokemon, target);
+				return move.damageCallback.call(this.battle, source, target);
 			}
 
 			// We take damage from damage=level moves
 			if (move.damage === 'level') {
-				return pokemon.level;
+				return source.level;
 			}
 
 			// If there's a fix move damage, we run it
@@ -270,7 +286,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// We check the category and typing to calculate later on the damage
 			move.category = this.battle.getCategory(move);
-			if (!move.defensiveCategory) move.defensiveCategory = move.category;
 			// '???' is typeless damage: used for Struggle and Confusion etc
 			if (!move.type) move.type = '???';
 			const type = move.type;
@@ -278,7 +293,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// We get the base power and apply basePowerCallback if necessary
 			let basePower: number | false | null | undefined = move.basePower;
 			if (move.basePowerCallback) {
-				basePower = move.basePowerCallback.call(this.battle, pokemon, target, move);
+				basePower = move.basePowerCallback.call(this.battle, source, target, move);
 			}
 
 			// We check for Base Power
@@ -289,7 +304,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			basePower = this.battle.clampIntRange(basePower, 1);
 
 			// Checking for the move's Critical Hit ratio
-			let critRatio = this.battle.runEvent('ModifyCritRatio', pokemon, target, move, move.critRatio || 0);
+			let critRatio = this.battle.runEvent('ModifyCritRatio', source, target, move, move.critRatio || 0);
 			critRatio = this.battle.clampIntRange(critRatio, 0, 5);
 			const critMult = [0, 16, 8, 4, 3, 2];
 			let isCrit = move.willCrit || false;
@@ -308,10 +323,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				// confusion damage
 				if (move.isConfusionSelfHit) {
 					move.type = move.baseMoveType!;
-					basePower = this.battle.runEvent('BasePower', pokemon, target, move, basePower, true);
+					basePower = this.battle.runEvent('BasePower', source, target, move, basePower, true);
 					move.type = '???';
 				} else {
-					basePower = this.battle.runEvent('BasePower', pokemon, target, move, basePower, true);
+					basePower = this.battle.runEvent('BasePower', source, target, move, basePower, true);
 				}
 				if (basePower && move.basePowerModifier) {
 					basePower *= move.basePowerModifier;
@@ -321,20 +336,21 @@ export const Scripts: ModdedBattleScriptsData = {
 			basePower = this.battle.clampIntRange(basePower, 1);
 
 			// We now check for attacker and defender
-			let level = pokemon.level;
+			let level = source.level;
 
 			// Using Beat Up
 			if (move.allies) {
-				this.battle.add('-activate', pokemon, 'move: Beat Up', '[of] ' + move.allies[0].name);
+				this.battle.add('-activate', source, 'move: Beat Up', '[of] ' + move.allies[0].name);
 				level = move.allies[0].level;
 			}
 
-			let attacker = pokemon;
-			const defender = target;
-			if (move.useTargetOffensive) attacker = target;
-			let atkType: StatIDExceptHP = (move.category === 'Physical') ? 'atk' : 'spa';
-			const defType: StatIDExceptHP = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
-			if (move.useSourceDefensiveAsOffensive) atkType = defType;
+			const attacker = move.overrideOffensivePokemon === 'target' ? target : source;
+			const defender = move.overrideDefensivePokemon === 'source' ? source : target;
+
+			const isPhysical = move.category === 'Physical';
+			const atkType: StatIDExceptHP = move.overrideOffensiveStat || (isPhysical ? 'atk' : 'spa');
+			const defType: StatIDExceptHP = move.overrideDefensiveStat || (isPhysical ? 'def' : 'spd');
+
 			let unboosted = false;
 			let noburndrop = false;
 
@@ -347,7 +363,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					noburndrop = true;
 				}
 			}
-			// Get stats now.
+
 			let attack = attacker.getStat(atkType, unboosted, noburndrop);
 			let defense = defender.getStat(defType, unboosted);
 
@@ -364,6 +380,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// The attack drop from the burn is only applied when attacker's attack level is higher than defender's defense level.
 				attack = attacker.getStat(atkType, true, true);
 			}
+
 			if (move.ignoreDefensive) {
 				this.battle.debug('Negating (sp)def boost/penalty.');
 				defense = target.getStat(defType, true, true);
@@ -407,7 +424,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// STAB damage bonus, the "???" type never gets STAB
-			if (type !== '???' && pokemon.hasType(type)) {
+			if (type !== '???' && source.hasType(type)) {
 				damage += Math.floor(damage / 2);
 			}
 
@@ -430,7 +447,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			// Apply random factor is damage is greater than 1, except for Flail and Reversal
+			// Apply random factor if damage is greater than 1, except for Flail and Reversal
 			if (!move.noDamageVariance && damage > 1) {
 				damage *= this.battle.random(217, 256);
 				damage = Math.floor(damage / 255);
@@ -461,7 +478,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (typeof effect === 'string') effect = this.dex.conditions.get(effect);
 		if (!target?.hp) return 0;
 		let success = null;
-		boost = this.runEvent('Boost', target, source, effect, {...boost});
+		boost = this.runEvent('TryBoost', target, source, effect, {...boost});
 		let i: BoostID;
 		for (i in boost) {
 			const currentBoost: SparseBoostsTable = {};
@@ -513,6 +530,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.runEvent('BeforeFaint', pokemon, faintData.source, faintData.effect)) {
 				this.add('faint', pokemon);
 				pokemon.side.pokemonLeft--;
+				if (pokemon.side.totalFainted < 100) pokemon.side.totalFainted++;
 				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
 				pokemon.clearVolatile(false);
@@ -527,6 +545,14 @@ export const Scripts: ModdedBattleScriptsData = {
 			// in gen 1, fainting skips the rest of the turn
 			// residuals don't exist in gen 1
 			this.queue.clear();
+			// Fainting clears accumulated Bide damage
+			for (const pokemon of this.getAllActive()) {
+				if (pokemon.volatiles['bide'] && pokemon.volatiles['bide'].damage) {
+					pokemon.volatiles['bide'].damage = 0;
+					this.hint("Desync Clause Mod activated!");
+					this.hint("In Gen 1, Bide's accumulated damage is reset to 0 when a Pokemon faints.");
+				}
+			}
 		} else if (this.gen <= 3 && this.gameType === 'singles') {
 			// in gen 3 or earlier, fainting in singles skips to residuals
 			for (const pokemon of this.getAllActive()) {

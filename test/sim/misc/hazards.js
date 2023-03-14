@@ -67,7 +67,7 @@ describe('Hazards', function () {
 		assert.statStage(battle.p1.active[0], 'spe', -1);
 	});
 
-	it.skip(`should apply hazards in the order they were set up`, function () {
+	it(`should apply hazards in the order they were set up`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['sleeptalk', 'uturn']},
 			{species: 'whismur', moves: ['sleeptalk']},

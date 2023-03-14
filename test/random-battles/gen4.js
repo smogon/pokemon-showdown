@@ -14,4 +14,11 @@ describe('[Gen 4] Random Battle', () => {
 	});
 
 	it('should prevent double Hidden Power', () => testHiddenPower('magnezone', options));
+
+	it('should give Yanmega Speed Boost if it has Protect', () => {
+		testSet('yanmega', options, set => {
+			if (set.ability !== 'Speed Boost') return;
+			assert(set.moves.includes('protect'), `got ${set.moves}`);
+		});
+	});
 });

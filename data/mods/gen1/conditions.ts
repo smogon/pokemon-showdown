@@ -14,7 +14,6 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'brn');
-			target.addVolatile('brnattackdrop');
 		},
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf(pokemon) {
@@ -23,9 +22,6 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 			if (pokemon.volatiles['residualdmg']) {
 				this.hint("In Gen 1, Toxic's counter is retained after Rest and applies to PSN/BRN.", true);
 			}
-		},
-		onSwitchIn(pokemon) {
-			pokemon.addVolatile('brnattackdrop');
 		},
 		onAfterSwitchInSelf(pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
@@ -36,24 +32,22 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'par');
-			target.addVolatile('parspeeddrop');
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove(pokemon) {
 			if (this.randomChance(63, 256)) {
 				this.add('cant', pokemon, 'par');
 				pokemon.removeVolatile('bide');
-				pokemon.removeVolatile('twoturnmove');
-				pokemon.removeVolatile('fly');
-				pokemon.removeVolatile('dig');
-				pokemon.removeVolatile('solarbeam');
-				pokemon.removeVolatile('skullbash');
+				if (pokemon.removeVolatile('twoturnmove')) {
+					if (pokemon.volatiles['invulnerability']) {
+						this.hint(`In Gen 1, when a Dig/Fly user is fully paralyzed while semi-invulnerable, ` +
+						`it will remain semi-invulnerable until it switches out or fully executes Dig/Fly`, true);
+					}
+				}
 				pokemon.removeVolatile('partialtrappinglock');
+				pokemon.removeVolatile('lockedmove');
 				return false;
 			}
-		},
-		onSwitchIn(pokemon) {
-			pokemon.addVolatile('parspeeddrop');
 		},
 	},
 	slp: {
@@ -68,6 +62,10 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 			// 1-7 turns
 			this.effectState.startTime = this.random(1, 8);
 			this.effectState.time = this.effectState.startTime;
+
+			if (target.removeVolatile('nightmare')) {
+				this.add('-end', target, 'Nightmare', '[silent]');
+			}
 		},
 		onBeforeMovePriority: 10,
 		onBeforeMove(pokemon, target, move) {
@@ -78,6 +76,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 			pokemon.lastMove = null;
 			return false;
 		},
+		onAfterMoveSelfPriority: 3,
 		onAfterMoveSelf(pokemon) {
 			if (pokemon.statusState.time <= 0) pokemon.cureStatus();
 		},
@@ -151,11 +150,9 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 				this.directDamage(damage, pokemon, target);
 				pokemon.removeVolatile('bide');
 				pokemon.removeVolatile('twoturnmove');
-				pokemon.removeVolatile('fly');
-				pokemon.removeVolatile('dig');
-				pokemon.removeVolatile('solarbeam');
-				pokemon.removeVolatile('skullbash');
+				pokemon.removeVolatile('invulnerability');
 				pokemon.removeVolatile('partialtrappinglock');
+				pokemon.removeVolatile('lockedmove');
 				return false;
 			}
 			return;
@@ -164,6 +161,9 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 	flinch: {
 		name: 'flinch',
 		duration: 1,
+		onStart(target) {
+			target.removeVolatile('mustrecharge');
+		},
 		onBeforeMovePriority: 4,
 		onBeforeMove(pokemon) {
 			if (!this.runEvent('Flinch', pokemon)) {
@@ -199,11 +199,6 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 			const duration = this.sample([2, 2, 2, 3, 3, 3, 4, 5]);
 			return duration;
 		},
-		onResidual(target) {
-			if (target.lastMove && target.lastMove.id === 'struggle' || target.status === 'slp') {
-				delete target.volatiles['partialtrappinglock'];
-			}
-		},
 		onStart(target, source, effect) {
 			this.effectState.move = effect.id;
 		},
@@ -224,41 +219,45 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		onStart() {},
 	},
 	lockedmove: {
-		// Outrage, Thrash, Petal Dance...
-		inherit: true,
-		durationCallback() {
-			return this.random(3, 5);
+		// Thrash and Petal Dance.
+		name: 'lockedmove',
+		onStart(target, source, effect) {
+			this.effectState.move = effect.id;
+			this.effectState.time = this.random(2, 4);
+			this.effectState.accuracy = 255;
 		},
-		onEnd(target) {
-			// Confusion begins even if already confused
-			delete target.volatiles['confusion'];
-			target.addVolatile('confusion');
+		onLockMove() {
+			return this.effectState.move;
+		},
+		onBeforeTurn(pokemon) {
+			const move = this.dex.moves.get(this.effectState.move);
+			if (move.id) {
+				this.debug('Forcing into ' + move.id);
+				this.queue.changeAction(pokemon, {choice: 'move', moveid: move.id});
+			}
 		},
 	},
-	stall: {
-		name: 'stall',
-		// Protect, Detect, Endure counter
-		duration: 2,
-		counterMax: 256,
-		onStart() {
-			this.effectState.counter = 2;
+	twoturnmove: {
+		// Skull Bash, Solar Beam, ...
+		name: 'twoturnmove',
+		onStart(attacker, defender, effect) {
+			// ("attacker" is the Pokemon using the two turn move and the Pokemon this condition is being applied to)
+			this.effectState.move = effect.id;
+			this.effectState.sourceEffect = effect.sourceEffect;
+			this.attrLastMove('[still]');
 		},
-		onStallMove() {
-			// this.effectState.counter should never be undefined here.
-			// However, just in case, use 1 if it is undefined.
-			const counter = this.effectState.counter || 1;
-			if (counter >= 256) {
-				// 2^32 - special-cased because Battle.random(n) can't handle n > 2^16 - 1
-				return (this.random() * 4294967296 < 1);
-			}
-			this.debug("Success chance: " + Math.round(100 / counter) + "%");
-			return this.randomChance(1, counter);
+		onLockMove() {
+			return this.effectState.move;
 		},
-		onRestart() {
-			if (this.effectState.counter < (this.effect as Condition).counterMax!) {
-				this.effectState.counter *= 2;
-			}
-			this.effectState.duration = 2;
+	},
+	invulnerability: {
+		// Dig/Fly
+		name: 'invulnerability',
+		onInvulnerability(target, source, move) {
+			if (target === source) return true;
+			if (move.id === 'swift' || move.id === 'transform') return true;
+			this.add('-message', 'The foe ' + target.name + ' can\'t be hit while invulnerable!');
+			return false;
 		},
 	},
 };

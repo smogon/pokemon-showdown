@@ -26,7 +26,8 @@ namespace Chat {
 	export type CRQHandler = import('./chat').CRQHandler;
 	export type AnnotatedChatCommands = import('./chat').AnnotatedChatCommands;
 	export type AnnotatedChatHandler = import('./chat').AnnotatedChatHandler;
-	export type Handlers = import('./chat').Handlers;
+	export type Handlers = import('./chat').HandlerTable;
+	export type VNode = import('preact').VNode;
 }
 
 // Rooms
@@ -45,6 +46,8 @@ namespace Rooms {
 	export type GameRoom = import('./rooms').GameRoom;
 	export type BasicRoom = import('./rooms').BasicRoom;
 	export type RoomGame = import('./room-game').RoomGame;
+	export type SimpleRoomGame = import('./room-game').SimpleRoomGame;
+	export type RoomGamePlayer = import('./room-game').RoomGamePlayer;
 	export type MinorActivity = import('./room-minor-activity').MinorActivity;
 	export type MinorActivityData = import('./room-minor-activity').MinorActivityData;
 	export type RoomBattle = import('./room-battle').RoomBattle;
@@ -61,6 +64,10 @@ namespace Streams {
 	export type ObjectWriteStream<T> = import('../lib/streams').ObjectWriteStream<T>;
 	export type ObjectReadStream<T> = import('../lib/streams').ObjectReadStream<T>;
 	export type ObjectReadWriteStream<T> = import('../lib/streams').ObjectReadWriteStream<T>;
+}
+
+namespace JSX {
+	export type IntrinsicElements = import('./chat-jsx').PSElements;
 }
 
 // Users

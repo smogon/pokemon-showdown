@@ -19,7 +19,7 @@ describe('Pain Split', function () {
 	});
 
 	it('should calculate HP changes against a dynamaxed target properly', function () {
-		battle = common.createBattle();
+		battle = common.gen(8).createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Drifblim', ability: 'unburden', moves: ['painsplit']}]});
 		battle.setPlayer('p2', {team: [{species: 'Blissey', ability: 'serenegrace', moves: ['doubleedge']}]});
 

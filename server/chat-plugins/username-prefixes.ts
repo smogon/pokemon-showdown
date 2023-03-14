@@ -6,6 +6,7 @@
 import {FS} from '../../lib';
 
 const PREFIXES_FILE = 'config/chat-plugins/username-prefixes.json';
+const PREFIX_DURATION = 10 * 24 * 60 * 60 * 1000;
 
 export class PrefixManager {
 	constructor() {
@@ -14,50 +15,60 @@ export class PrefixManager {
 	}
 
 	save() {
-		FS(PREFIXES_FILE).writeUpdate(() => JSON.stringify(Config.forcedprefixes || {}));
+		FS(PREFIXES_FILE).writeUpdate(() => JSON.stringify(Config.forcedprefixes || []));
 	}
 
 	refreshConfig(configJustLoaded = false) {
-		if (!Config.forcedprefixes) Config.forcedprefixes = {};
+		if (!Config.forcedprefixes) Config.forcedprefixes = [];
+		// ensure everything is in the right format
+		if (!Array.isArray(Config.forcedprefixes)) {
+			const convertedPrefixes = [];
+			for (const type in Config.forcedprefixes) {
+				for (const prefix of Config.forcedprefixes[type].map(toID)) {
+					convertedPrefixes.push({type, prefix, expireAt: Date.now() + PREFIX_DURATION});
+				}
+			}
+			Config.forcedprefixes = convertedPrefixes;
+		}
 		if (configJustLoaded) {
-			// if we just loaded the config file, ensure that all prefixes are IDs
-			if (Config.forcedprefixes.privacy) Config.forcedprefixes.privacy = Config.forcedprefixes.privacy.map(toID);
-			if (Config.forcedprefixes.modchat) Config.forcedprefixes.modchat = Config.forcedprefixes.modchat.map(toID);
+			for (const entry of Config.forcedprefixes) {
+				entry.prefix = toID(entry.prefix);
+			}
 		}
 
-		let data: AnyObject;
+		let data: AnyObject[];
 		try {
 			data = JSON.parse(FS(PREFIXES_FILE).readSync());
 		} catch (e: any) {
 			if (e.code !== 'ENOENT') throw e;
 			return;
 		}
-		for (const [type, prefixes] of Object.entries(data)) {
-			if (!prefixes?.length) continue;
-			if (!Config.forcedprefixes[type]) Config.forcedprefixes[type] = [];
-			for (const prefix of prefixes) {
-				if (Config.forcedprefixes[type].includes(prefix)) continue;
-				Config.forcedprefixes[type].push(prefix);
+		if (data.length) {
+			for (const entry of data) {
+				if (Config.forcedprefixes.includes(entry)) continue;
+				Config.forcedprefixes.push(entry);
 			}
 		}
 	}
 
 	addPrefix(prefix: ID, type: 'privacy' | 'modchat') {
-		if (!Config.forcedprefixes[type]) Config.forcedprefixes[type] = [];
-		if (Config.forcedprefixes[type].includes(prefix)) {
+		if (!Config.forcedprefixes) Config.forcedprefixes = [];
+		const entry = Config.forcedprefixes.find((x: AnyObject) => x.prefix === prefix && x.type === type);
+		if (entry) {
 			throw new Chat.ErrorMessage(`Username prefix '${prefix}' is already configured to force ${type}.`);
 		}
 
-		Config.forcedprefixes[type].push(prefix);
+		Config.forcedprefixes.push({type, prefix, expireAt: Date.now() + PREFIX_DURATION});
 		this.save();
 	}
 
 	removePrefix(prefix: ID, type: 'privacy' | 'modchat') {
-		if (!Config.forcedprefixes[type]?.includes(prefix)) {
+		const entry = Config.forcedprefixes.findIndex((x: AnyObject) => x.prefix === prefix && x.type === type);
+		if (entry < 0) {
 			throw new Chat.ErrorMessage(`Username prefix '${prefix}' is not configured to force ${type}!`);
 		}
 
-		Config.forcedprefixes[type] = Config.forcedprefixes[type].filter((curPrefix: ID) => curPrefix !== prefix);
+		Config.forcedprefixes.splice(entry, 1);
 		this.save();
 	}
 
@@ -72,6 +83,7 @@ export class PrefixManager {
 export const prefixManager = new PrefixManager();
 
 export const commands: Chat.ChatCommands = {
+	forceprefix: 'usernameprefix',
 	forcedprefix: 'usernameprefix',
 	forcedprefixes: 'usernameprefix',
 	usernameprefixes: 'usernameprefix',
@@ -84,7 +96,7 @@ export const commands: Chat.ChatCommands = {
 		delete: 'add',
 		remove: 'add',
 		add(target, room, user, connection, cmd) {
-			this.checkCan('rangeban');
+			this.checkCan('addhtml');
 
 			const isAdding = cmd.includes('add');
 
@@ -105,13 +117,16 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		view(target) {
-			this.checkCan('rangeban');
+			this.checkCan('addhtml');
 
 			const types = target ? [prefixManager.validateType(toID(target))] : ['privacy', 'modchat'];
 
+			const entries = Config.forcedprefixes.filter((x: any) => types.includes(x.type));
+
 			return this.sendReplyBox(types.map(type => {
-				const info = Config.forcedprefixes[type].length ?
-					`<code>${Config.forcedprefixes[type].join('</code>, <code>')}</code>` : `none`;
+				const prefixes = entries.filter((x: any) => x.type === type).map((x: any) => x.prefix);
+				const info = prefixes.length ?
+					`<code>${prefixes.join('</code>, <code>')}</code>` : `none`;
 				return `Username prefixes that disable <strong>${type}</strong>: ${info}.`;
 			}).join(`<br />`));
 		},
@@ -122,7 +137,7 @@ export const commands: Chat.ChatCommands = {
 			`<code>/usernameprefix remove [prefix], [type]</code>: Removes a prefix configuration.<br />` +
 			`<code>/usernameprefix view [optional type]</code>: Displays the currently configured username prefixes.<br />` +
 			`Valid types are <code>privacy</code> (which forces battles to take place in public rooms) and <code>modchat</code> (which prevents players from setting moderated chat).<br />` +
-			`Requires: &`
+			`Requires: * &`
 		);
 	},
 };

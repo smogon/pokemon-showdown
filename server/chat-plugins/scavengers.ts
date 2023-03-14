@@ -249,19 +249,6 @@ function formatQueue(queue: QueuedHunt[] | undefined, viewer: User, room: Room, 
 	return template;
 }
 
-function formatOrder(place: number) {
-	// anything between 10 and 20 should always end with -th
-	let remainder = place % 100;
-	if (remainder >= 10 && remainder <= 20) return place + 'th';
-
-	// follow standard rules with -st, -nd, -rd, and -th
-	remainder = place % 10;
-	if (remainder === 1) return place + 'st';
-	if (remainder === 2) return place + 'nd';
-	if (remainder === 3) return place + 'rd';
-	return place + 'th';
-}
-
 class ScavengerHuntDatabase {
 	static getRecycledHuntFromDatabase() {
 		// Return a random hunt from the database.
@@ -331,9 +318,7 @@ class ScavengerHuntDatabase {
 		return `${hunt.hosts.map(host => host.name).join(',')} | ${hunt.questions.map(question => `${question.text} | ${question.answers.join(';')}`).join(' | ')}`;
 	}
 }
-export class ScavengerHunt extends Rooms.RoomGame {
-	playerTable: {[userid: string]: ScavengerHuntPlayer};
-	players: ScavengerHuntPlayer[];
+export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	gameType: GameTypes;
 	joinedIps: string[];
 	startTime: number;
@@ -341,6 +326,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 	completed: AnyObject[];
 	leftHunt: {[userid: string]: 1 | undefined};
 	hosts: FakeUser[];
+	modsList: string[];
 	mods: {[k: string]: ModEvent[]};
 	staffHostId: string;
 	staffHostName: string;
@@ -362,9 +348,6 @@ export class ScavengerHunt extends Rooms.RoomGame {
 	) {
 		super(room);
 
-		this.playerTable = Object.create(null);
-		this.players = [];
-
 		this.allowRenames = true;
 		this.gameType = gameType;
 		this.playerCap = Infinity;
@@ -379,6 +362,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 		this.hosts = hosts;
 
+		this.modsList = [];
 		this.mods = {};
 
 		this.timer = null;
@@ -426,6 +410,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		} else {
 			twist = modData;
 		}
+		this.modsList.push(twist.id);
 		for (const key in twist) {
 			if (!key.startsWith('on')) continue;
 			const priority = twist[key + 'Priority'] || 0;
@@ -590,21 +575,21 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		return minutes;
 	}
 
-	choose(user: User, value: string) {
+	choose(user: User, originalValue: string) {
 		if (!(user.id in this.playerTable)) {
 			if (!this.joinGame(user)) return false;
 		}
-		value = toID(value);
+		const value = toID(originalValue);
 
 		const player = this.playerTable[user.id];
 
-		if (this.runEvent('AnySubmit', player, value)) return;
+		if (this.runEvent('AnySubmit', player, value, originalValue)) return;
 		if (player.completed) return false;
 
 		this.validatePlayer(player);
 		player.lastGuess = Date.now();
 
-		if (this.runEvent('Submit', player, value)) return false;
+		if (this.runEvent('Submit', player, value, originalValue)) return false;
 
 		if (player.verifyAnswer(value)) {
 			if (this.runEvent('CorrectAnswer', player, value)) return;
@@ -702,13 +687,16 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 		player.completed = true;
 		let result = this.runEvent('Complete', player, time, blitz);
-		if (result === false) return;
+		if (result === true) return;
 		result = result || {name: player.name, time: time, blitz: blitz};
 		this.completed.push(result);
-		const place = formatOrder(this.completed.length);
+		const place = Utils.formatOrder(this.completed.length);
 
-		this.runEvent('ConfirmCompletion', player, time, blitz);
-		this.announce(Utils.html`<em>${result.name}</em> has finished the hunt in ${place} place! (${time}${(blitz ? " - BLITZ" : "")})`);
+		const completionMessage = this.runEvent('ConfirmCompletion', player, time, blitz, place, result);
+		this.announce(
+			completionMessage ||
+			Utils.html`<em>${result.name}</em> has finished the hunt in ${place} place! (${time}${(blitz ? " - BLITZ" : "")})`
+		);
 
 		player.destroy(); // remove from user.games;
 	}
@@ -739,7 +727,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 			this.announce(
 				`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt by ${hosts} was ended ${(endedBy ? "by " + Utils.escapeHTML(endedBy.name) : "automatically")}.<br />` +
-				`${this.completed.slice(0, sliceIndex).map((p, i) => `${formatOrder(i + 1)} place: <em>${Utils.escapeHTML(p.name)}</em> <span style="color: lightgreen;">[${p.time}]</span>.<br />`).join("")}${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Utils.escapeHTML(e.name)}</em> <span style="color: lightgreen;">[${e.time}]</span>`).join(', ')}<br />` : ''}<br />` +
+				`${this.completed.slice(0, sliceIndex).map((p, i) => `${Utils.formatOrder(i + 1)} place: <em>${Utils.escapeHTML(p.name)}</em> <span style="color: lightgreen;">[${p.time}]</span>.<br />`).join("")}${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Utils.escapeHTML(e.name)}</em> <span style="color: lightgreen;">[${e.time}]</span>`).join(', ')}<br />` : ''}<br />` +
 				`<details style="cursor: pointer;"><summary>Solution: </summary><br />${this.questions.map((q, i) => `${i + 1}) ${Chat.formatText(q.hint)} <span style="color: lightgreen">[<em>${Utils.escapeHTML(q.answer.join(' / '))}</em>]</span>`).join("<br />")}</details>`
 			);
 
@@ -788,7 +776,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 			this.announce("The hunt has been reset automatically, due to the lack of finishers.");
 			this.tryRunQueue(this.room.roomid);
 		}
-		this.runEvent('AfterEnd');
+		this.runEvent('AfterEnd', reset);
 		this.destroy();
 	}
 
@@ -917,7 +905,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 	onChatMessage(msg: string) {
 		let msgId = toID(msg) as string;
 
-		// idenitfy if there is a bot/dt command that failed
+		// identify if there is a bot/dt command that failed
 		// remove it and then match the rest of the post for leaks.
 		const commandMatch = ACCIDENTAL_LEAKS.exec(msg);
 		if (commandMatch) msgId = msgId.slice(toID(commandMatch[0]).length);
@@ -953,7 +941,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 			if (!allowOffline && (!user?.connected || !(user.id in room.users))) continue;
 
 			if (!user) {
-				// simply stick the ID's in there - dont keep any benign symbols passed by the hunt maker
+				// simply stick the ID's in there - don't keep any benign symbols passed by the hunt maker
 				hosts.push({name: id, id: id, noUpdate: true});
 				continue;
 			}
@@ -987,8 +975,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 	}
 }
 
-export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer {
-	game: ScavengerHunt;
+export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer<ScavengerHunt> {
 	lastGuess: number;
 	completed: boolean;
 	joinIps: string[];
@@ -997,7 +984,6 @@ export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer {
 	[k: string]: any; // for purposes of adding new temporary properties for the purpose of twists.
 	constructor(user: User, game: ScavengerHunt) {
 		super(user, game);
-		this.game = game;
 
 		this.joinIps = user.ips.slice();
 
@@ -1392,7 +1378,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			if (questions) {
 				const huntNumber = parseInt(questions);
 				if (!ScavengerHuntDatabase.hasHunt(huntNumber)) return this.errorReply("You specified an invalid hunt number.");
-				hunt = scavengersData.recycledHunts[huntNumber];
+				hunt = scavengersData.recycledHunts[huntNumber - 1];
 			} else {
 				hunt = ScavengerHuntDatabase.getRecycledHuntFromDatabase();
 			}
@@ -1434,7 +1420,16 @@ const ScavengerCommands: Chat.ChatCommands = {
 		const hostMsg = game.hosts.some(h => h.id === game.staffHostId) ?
 			'' : Utils.html` (started by - ${game.staffHostName})`;
 		const finishers = Utils.html`${game.completed.map(u => u.name).join(', ')}`;
-		const buffer = `<div class="infobox" style="margin-top: 0px;">The current ${gameTypeMsg}scavenger hunt by <em>${hostersMsg}${hostMsg}</em> has been up for: ${elapsedMsg}<br />${!game.timerEnd ? 'The timer is currently off.' : `The hunt ends in: ${Chat.toDurationString(game.timerEnd - Date.now(), {hhmmss: true})}`}<br />Completed (${game.completed.length}): ${finishers}</div>`;
+		let buffer = `<div class="infobox" style="margin-top: 0px;">The current ${gameTypeMsg}scavenger hunt by <em>${hostersMsg}${hostMsg}</em> has been up for: ${elapsedMsg}<br />${!game.timerEnd ? 'The timer is currently off.' : `The hunt ends in: ${Chat.toDurationString(game.timerEnd - Date.now(), {hhmmss: true})}`}<br />Completed (${game.completed.length}): ${finishers}</div>`;
+		if (game.modsList.includes('timetrial')) {
+			const finisher = game.completed.find(player => player.id === user.id);
+			const timeTrialMsg = finisher ?
+				`You finished the hunt in: ${finisher.time}.` :
+				(game.startTimes?.[user.id] ?
+					`You joined the hunt ${Chat.toDurationString(Date.now() - game.startTimes[user.id], {hhmmss: true})} ago.` :
+					'You have not joined the hunt.');
+			buffer = `<div class="infobox" style="margin-top: 0px;">The current ${gameTypeMsg}scavenger hunt by <em>${hostersMsg}${hostMsg}</em> has been up for: ${elapsedMsg}<br />${timeTrialMsg}<br />${!game.timerEnd ? 'The timer is currently off.' : `The hunt ends in: ${Chat.toDurationString(game.timerEnd - Date.now(), {hhmmss: true})}`}<br />Completed (${game.completed.length}): ${finishers}</div>`;
+		}
 
 		if (game.hosts.some(h => h.id === user.id) || game.staffHostId === user.id) {
 			let str = `<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><th><b>Question</b></th><th><b>Users on this Question</b></th>`;
@@ -1704,7 +1699,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		}
 		if (!target && this.cmd !== 'queuerecycled') {
 			if (this.cmd === 'queue') {
-				// Necessary for broadcasting: this.runBroadcast();
+				this.runBroadcast();
 				const commandHandler = ScavengerCommands.viewqueue as ChatHandler;
 				commandHandler.call(this, target, room, user, this.connection, this.cmd, this.message);
 				return;
@@ -1726,7 +1721,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			if (target) {
 				const huntNumber = parseInt(target);
 				if (!ScavengerHuntDatabase.hasHunt(huntNumber)) return this.errorReply("You specified an invalid hunt number.");
-				next = scavengersData.recycledHunts[huntNumber];
+				next = scavengersData.recycledHunts[huntNumber - 1];
 			} else {
 				next = ScavengerHuntDatabase.getRecycledHuntFromDatabase();
 			}

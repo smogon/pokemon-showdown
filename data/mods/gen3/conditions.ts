@@ -12,6 +12,10 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.effectState.time = this.random(2, 6);
 			// Turns spent using Sleep Talk/Snore immediately before switching out while asleep
 			this.effectState.skippedTime = 0;
+
+			if (target.removeVolatile('nightmare')) {
+				this.add('-end', target, 'Nightmare', '[silent]');
+			}
 		},
 		onSwitchIn(target) {
 			this.effectState.time += this.effectState.skippedTime;

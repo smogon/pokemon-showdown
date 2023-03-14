@@ -576,14 +576,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			];
 			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Dragon';
-				// @ts-ignore
-				move.drakeskinBoosted = true;
+				move.typeChangerBoosted = this.effect;
 			}
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			// @ts-ignore
-			if (move.drakeskinBoosted) return this.chainModify([4915, 4096]);
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
 		gen: 8,
 	},
@@ -797,16 +795,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			];
 			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Ice';
-				move.refrigerateBoosted = true;
+				move.typeChangerBoosted = this.effect;
 			}
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.refrigerateBoosted) return this.chainModify([4915, 4096]);
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
 		onModifyMovePriority: -2,
 		onModifyMove(move, attacker) {
-			if (move.refrigerateBoosted) return;
+			if (move.typeChangerBoosted === this.effect) return;
 			move.onTry = function () {
 				this.field.addPseudoWeather('echoedvoiceclone');
 				this.field.pseudoWeather.echoedvoiceclone.lastmove = move.name;
@@ -866,7 +864,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-message', `${target.name} is rusting...`);
 			}
 		},
-		onAnyWeatherStart() {
+		onWeatherChange() {
 			const pokemon = this.effectState.target;
 			if (this.field.isWeather(['raindance', 'primordialsea'])) {
 				this.boost({def: 1, spd: 1, spe: -1}, pokemon, pokemon);
@@ -876,7 +874,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onSwitchOut(pokemon) {
 			pokemon.heal(pokemon.baseMaxhp / 3);
 		},
-		onBoost(boost, target, source, effect) {
+		onTryBoost(boost, target, source, effect) {
 			if (source && target === source) return;
 			let showMsg = false;
 			let i: BoostID;
@@ -1039,14 +1037,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			];
 			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Poison';
-				// @ts-ignore
-				move.venomizeBoosted = true;
+				move.typeChangerBoosted = this.effect;
 			}
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			// @ts-ignore
-			if (move.venomizeBoosted) return this.chainModify([4915, 4096]);
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
 		name: "Venomize",
 		gen: 8,
@@ -1472,7 +1468,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (source.species.baseSpecies !== 'Chandelure') return;
 				if (source.set.shiny) return;
 				source.m.nowShiny = true;
-				this.add(`c|${getName('PartMan')}|THE LIGHT! IT BURNS!`);
+				this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('PartMan')}|THE LIGHT! IT BURNS!`);
 				changeSet(this, source, ssbSets['PartMan-Shiny']);
 			}
 		},
@@ -1572,7 +1568,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (!pokemon.hp) return;
 			const types = pokemon.moveSlots.map(slot => this.dex.moves.get(slot.id).type);
 			const type = types.length ? this.sample(types) : '???';
-			if (pokemon.setType(type)) {
+			if (this.dex.types.isName(type) && pokemon.setType(type)) {
 				this.add('-ability', pokemon, 'Wild Magic Surge');
 				this.add('-start', pokemon, 'typechange', type);
 			}
@@ -1713,10 +1709,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onTryMove(pokemon, target, move) {
 			const moveData = pokemon.getMoveData(move.id);
-			if (!moveData) return;
+			if (!moveData || moveData.pp < 0.5) return;
 			// Lost 1 PP due to move usage, restore 0.5 PP to make it so that only 0.5 PP
 			// would be used.
-			moveData.pp = (Math.round(moveData.pp * 100) + 50) / 100;
+			moveData.pp += 0.5;
 		},
 		gen: 8,
 	},
@@ -2159,7 +2155,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				pokemon.formeChange('Eiscue', this.effect, true);
 			}
 		},
-		onAnyWeatherStart() {
+		onWeatherChange() {
 			const pokemon = this.effectState.target;
 			if (this.field.isWeather(['heavyhailstorm', 'hail', 'winterhail']) &&
 				pokemon.species.id === 'eiscuenoice' && !pokemon.transformed) {

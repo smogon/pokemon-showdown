@@ -12,7 +12,7 @@ import * as path from 'path';
 export const MAX_FRIENDS = 100;
 /** Max friend requests. */
 export const MAX_REQUESTS = 6;
-export const DEFAULT_FILE = `${__dirname}/../databases/friends.db`;
+export const DEFAULT_FILE = FS('databases/friends.db').path;
 const REQUEST_EXPIRY_TIME = 30 * 24 * 60 * 60 * 1000;
 const PM_TIMEOUT = 30 * 60 * 1000;
 
@@ -147,6 +147,13 @@ export class FriendsDatabase {
 			sent.add(request.receiver);
 		}
 		const receivedResults = await this.all('getReceived', [user.id]) || [];
+		if (!Array.isArray(receivedResults)) {
+			Monitor.crashlog(new Error("Malformed results received"), 'A friends process', {
+				user: user.id,
+				result: JSON.stringify(receivedResults),
+			});
+			return {received, sent};
+		}
 		for (const request of receivedResults) {
 			received.add(request.sender);
 		}
@@ -326,7 +333,7 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 			}
 			if (totalRequests >= MAX_REQUESTS) {
 				throw new FailureMessage(
-					`You already have ${MAX_REQUESTS} outgoing friend requests. Use "/friends view sent" to see your outgoing requests.`
+					`You already have ${MAX_REQUESTS} pending friend requests. Use "/friends view sent" to see your outgoing requests and "/friends view receive" to see your incoming requests.`
 				);
 			}
 			statements.insertRequest.run(senderID, receiverID, Date.now());
@@ -403,7 +410,7 @@ export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, Databa
 	}
 });
 
-if (!PM.isParentProcess) {
+if (require.main === module) {
 	global.Config = (require as any)('./config-loader').Config;
 	if (Config.usesqlite) {
 		FriendsDatabase.setupDatabase();
@@ -424,6 +431,6 @@ if (!PM.isParentProcess) {
 	});
 	// eslint-disable-next-line no-eval
 	Repl.start(`friends-${process.pid}`, cmd => eval(cmd));
-} else {
+} else if (!process.send) {
 	PM.spawn(Config.friendsprocesses || 1);
 }

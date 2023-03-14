@@ -46,7 +46,7 @@ export const SampleTeams = new class SampleTeams {
 		for (const roomid of roomids) {
 			const room = Rooms.search(roomid);
 			// Malformed entry from botched room rename
-			if (!room) throw new Error(`Room ${roomid} not found`);
+			if (!room) continue;
 			matched = room.auth.isStaff(user.id);
 			if (matched) break;
 		}
@@ -68,7 +68,7 @@ export const SampleTeams = new class SampleTeams {
 		return Utils.sortBy(teamData.whitelist[formatid], (x) => {
 			if (!names) return x;
 			const room = Rooms.search(x);
-			if (!room) throw new Error(`Room ${x} not found`);
+			if (!room) return x;
 			return room.title;
 		});
 	}
@@ -92,8 +92,7 @@ export const SampleTeams = new class SampleTeams {
 	}
 
 	unwhitelistRoom(formatid: string, roomid: string) {
-		// Don't sanitize with Dex.formats.get in case format was removed
-		formatid = toID(formatid);
+		formatid = this.sanitizeFormat(formatid, false);
 		const targetRoom = Rooms.search(roomid);
 		if (!targetRoom?.persist) throw new Chat.ErrorMessage(`Room ${roomid} not found. Check spelling?`);
 		if (!teamData.whitelist[formatid]?.length) throw new Chat.ErrorMessage(`No rooms are whitelisted for ${formatid}.`);
@@ -106,9 +105,9 @@ export const SampleTeams = new class SampleTeams {
 		save();
 	}
 
-	sanitizeFormat(formatid: string) {
+	sanitizeFormat(formatid: string, checkExists = false) {
 		const format = Dex.formats.get(formatid);
-		if (!format.exists) {
+		if (checkExists && !format.exists) {
 			throw new Chat.ErrorMessage(`Format "${formatid.trim()}" not found. Check spelling?`);
 		}
 		if (format.team) {
@@ -125,10 +124,14 @@ export const SampleTeams = new class SampleTeams {
 	}
 
 	addCategory(user: User, formatid: string, category: string) {
-		if (!this.checkPermissions(user, teamData.whitelist[formatid])) {
-			throw new Chat.ErrorMessage(`Access denied. You need to be staff in ${Chat.toListString(teamData.whitelist[formatid], "or")} to add teams for ${formatid}.`);
-		}
 		formatid = this.sanitizeFormat(formatid);
+		if (!this.checkPermissions(user, teamData.whitelist[formatid])) {
+			let rankNeeded = `a global administrator`;
+			if (teamData.whitelist[formatid]) {
+				rankNeeded = `staff in ${Chat.toListString(teamData.whitelist[formatid], "or")}`;
+			}
+			throw new Chat.ErrorMessage(`Access denied. You need to be ${rankNeeded} to add teams for ${formatid}`);
+		}
 		category = category.trim();
 		this.initializeFormat(formatid);
 		if (this.findCategory(formatid, category)) {
@@ -139,10 +142,14 @@ export const SampleTeams = new class SampleTeams {
 	}
 
 	removeCategory(user: User, formatid: string, category: string) {
+		formatid = this.sanitizeFormat(formatid, false);
 		if (!this.checkPermissions(user, teamData.whitelist[formatid])) {
-			throw new Chat.ErrorMessage(`Access denied. You need to be staff in ${Chat.toListString(teamData.whitelist[formatid], "or")} to add teams for ${formatid}.`);
+			let rankNeeded = `a global administrator`;
+			if (teamData.whitelist[formatid]) {
+				rankNeeded = `staff in ${Chat.toListString(teamData.whitelist[formatid], "or")}`;
+			}
+			throw new Chat.ErrorMessage(`Access denied. You need to be ${rankNeeded} to add teams for ${formatid}`);
 		}
-		formatid = this.sanitizeFormat(formatid);
 		const categoryName = this.findCategory(formatid, category);
 		if (!categoryName) {
 			throw new Chat.ErrorMessage(`There's no category named "${category.trim()}" for the format ${formatid}.`);
@@ -159,6 +166,7 @@ export const SampleTeams = new class SampleTeams {
 	 * @param category - Category the team will go in, defaults to uncategorized
 	 */
 	addTeam(user: User, formatid: string, teamName: string, team: string, category = "uncategorized") {
+		formatid = this.sanitizeFormat(formatid);
 		if (!this.checkPermissions(user, teamData.whitelist[formatid])) {
 			let rankNeeded = `a global administrator`;
 			if (teamData.whitelist[formatid]?.length) {
@@ -168,7 +176,6 @@ export const SampleTeams = new class SampleTeams {
 		}
 		teamName = teamName.trim();
 		category = category.trim();
-		formatid = this.sanitizeFormat(formatid);
 		this.initializeFormat(formatid);
 		if (this.findTeamName(formatid, category, teamName)) {
 			throw new Chat.ErrorMessage(`There is already a team for ${formatid} with the name ${teamName} in the ${category} category.`);
@@ -180,11 +187,14 @@ export const SampleTeams = new class SampleTeams {
 	}
 
 	removeTeam(user: User, formatid: string, teamid: string, category: string) {
-		formatid = formatid.trim();
+		formatid = this.sanitizeFormat(formatid, false);
 		category = category.trim();
-		// Don't sanitize formatid here in case a team was added for a temporary format that got removed
 		if (!this.checkPermissions(user, teamData.whitelist[formatid])) {
-			throw new Chat.ErrorMessage(`Access denied. You need to be staff in ${Chat.toListString(teamData.whitelist[formatid], "or")} to add teams for ${formatid}`);
+			let required = `an administrator`;
+			if (teamData.whitelist[formatid]) {
+				required = `staff in ${Chat.toListString(teamData.whitelist[formatid], "or")}`;
+			}
+			throw new Chat.ErrorMessage(`Access denied. You need to be ${required} to add teams for ${formatid}`);
 		}
 		const categoryName = this.findCategory(formatid, category);
 		if (!categoryName) {
@@ -194,9 +204,9 @@ export const SampleTeams = new class SampleTeams {
 		if (!teamName) {
 			throw new Chat.ErrorMessage(`There is no team for ${formatid} with the name of "${teamid}". Check spelling?`);
 		}
-		const oldTeam = teamData.teams[formatid][category][teamName];
-		delete teamData.teams[formatid][category][teamName];
-		if (!Object.keys(teamData.teams[formatid][category]).length) delete teamData.teams[formatid][category];
+		const oldTeam = teamData.teams[formatid][categoryName][teamName];
+		delete teamData.teams[formatid][categoryName][teamName];
+		if (!Object.keys(teamData.teams[formatid][categoryName]).length) delete teamData.teams[formatid][categoryName];
 		if (!Object.keys(teamData.teams[formatid]).filter(x => x !== 'uncategorized').length) delete teamData.teams[formatid];
 		save();
 		return oldTeam;
@@ -223,7 +233,7 @@ export const SampleTeams = new class SampleTeams {
 		if (whitelistedRooms?.length) {
 			for (const roomid of whitelistedRooms) {
 				const room = Rooms.get(roomid);
-				if (!room) throw new Error(`Room ${roomid} not found`);
+				if (!room) continue;
 				context.room = room;
 				context.modlog(action, null, `${formatid}: ${note}`);
 				context.privateModAction(log);
@@ -364,23 +374,23 @@ export const commands: Chat.ChatCommands = {
 		},
 		add(target, room, user) {
 			const [formatid, category, teamName, team] = target.split(',');
-			if (!(formatid && category && teamName && team)) return this.parse('/j view-sampleteams-add');
-			const packedTeam = SampleTeams.addTeam(user, formatid, teamName, team, category.trim() || "uncategorized");
+			if (!(formatid && category?.trim() && teamName && team)) return this.parse('/j view-sampleteams-add');
+			const packedTeam = SampleTeams.addTeam(user, formatid, teamName, team, category);
 			SampleTeams.modlog(
-				this, formatid, 'ADDTEAM', `${category || "uncategorized"}: ${teamName}: ${packedTeam}`,
-				`${user.name} added a team for ${formatid}${category ? ` in the ${category} category` : ''}.`
+				this, formatid, 'ADDTEAM', `${category}: ${teamName}: ${packedTeam}`,
+				`${user.name} added a team for ${formatid} in the ${category} category.`
 			);
-			this.sendReply(`Added a team for ${formatid} ${category ? ` in the ${category} category` : ''}.`);
+			this.sendReply(`Added a team for ${formatid} in the ${category} category.`);
 		},
 		remove(target, room, user) {
 			const [formatid, category, teamName] = target.split(',').map(x => x.trim());
 			if (!(formatid && category && teamName)) return this.parse(`/help sampleteams`);
-			const team = SampleTeams.removeTeam(user, formatid, teamName, category || 'uncategorized');
+			const team = SampleTeams.removeTeam(user, formatid, toID(teamName), category);
 			SampleTeams.modlog(
-				this, formatid, 'REMOVETEAM', `${category || "uncategorized"}: ${teamName}: ${team}`,
-				`${user.name} removed a team from ${formatid}${category ? ` in the ${category} category` : ''}.`
+				this, formatid, 'REMOVETEAM', `${category}: ${teamName}: ${team}`,
+				`${user.name} removed a team from ${formatid} in the ${category} category.`
 			);
-			this.sendReply(`Removed a team from ${formatid} ${category ? ` in the ${category} category` : ''}.`);
+			this.sendReply(`Removed a team from ${formatid} in the ${category} category.`);
 		},
 		whitelist: {
 			add(target, room, user) {
@@ -418,7 +428,7 @@ export const commands: Chat.ChatCommands = {
 	sampleteamshelp: [
 		`/sampleteams [format] - Lists the sample teams for [format], if there are any.`,
 		`/sampleteams addcategory/removecategory [format], [category] - Adds/removes categories for [format].`,
-		`/sampleteams add [format], [category], [team name], [team] - Adds a sample team for [format]. If there's no dedicated [category] for the team, just leave the category blank. Team can be in the multi-line form. Requires: Room staff in dedicated tier room, &`,
+		`/sampleteams add - Pulls up the interface to add sample teams. Requires: Room staff in dedicated tier room, &`,
 		`/sampleteams remove [format], [category], [team name] - Removes a sample team for [format] in [category].`,
 		`/sampleteams whitelist add [formatid], [formatid] | [roomid], [roomid], ... - Whitelists room staff for the provided roomids to add sample teams. Requires: &`,
 		`/sampleteams whitelist remove [formatid], [roomid] - Unwhitelists room staff for the provided room to add sample teams. Requires: &`,

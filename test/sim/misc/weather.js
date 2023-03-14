@@ -37,7 +37,7 @@ describe('Weather damage calculation', function () {
 	});
 
 	it('should make Hail/Sandstorm damage some pokemon but not others', function () {
-		battle = common.createBattle();
+		battle = common.gen(8).createBattle();
 		battle.randomizer = dmg => dmg; // max damage
 		battle.setPlayer('p1', {team: [{species: 'Abomasnow', ability: 'snowwarning', moves: ['protect']}]});
 		battle.setPlayer('p2', {team: [{species: 'Sandslash', ability: 'sandveil', moves: ['protect']}]});
