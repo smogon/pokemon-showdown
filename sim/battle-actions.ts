@@ -676,9 +676,12 @@ export class BattleActions {
 					}
 					if (!target.volatiles['dynamax'] && pokemon.level >= target.level &&
 						(move.ohko === true || !target.hasType(move.ohko))) {
-						accuracy += (pokemon.level - target.level);
+						if (move.name === "Coinflip"){
+							accuracy = true;
+						} else {
+							accuracy += (pokemon.level - target.level);
+						}
 					} 
-					if (move.name === "Coinflip") accuracy = true;
 					else {
 						this.battle.add('-immune', target, '[ohko]');
 						hitResults[i] = false;
