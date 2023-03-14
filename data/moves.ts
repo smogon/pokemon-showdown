@@ -22286,4 +22286,36 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Normal",
 	},
+
+	// Point of Attack
+	coinflip: {
+		num: 90,
+		basePower: 0,
+		accuracy: true,
+		category: "Special",
+		name: "Coinflip",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onModifyMove(move, pokemon, target){
+			const choice = this.random(2);
+			const side = (choice === 1) ? "Heads" : "Tails";
+			this.add('-message', `${pokemon.name} chose ${side}!`);
+			const result = this.random(2);
+			const resultSide = (result === 1) ? "Heads" : "Tails";
+			this.add('-message', `It landed on ${resultSide}.`);
+			if (result === choice) {
+				move.ohko = true;
+			} else {
+				this.add('-message', `${pokemon.name} gambled its life away.`);
+				pokemon.faint();
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Dark",
+		zMove: {basePower: 180},
+		maxMove: {basePower: 130},
+		contestType: "Tough",
+	},
 };
