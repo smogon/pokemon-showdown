@@ -1974,11 +1974,7 @@ export class Pokemon {
 
 	/** Removes any types added previously and adds another one. */
 	addType(newType: string) {
-		if (this.terastallized) {
-			// natdex behavior; type-adding effects are currently not in gen 9,
-			// but moves like Soak fail vs terastallized targets so these probably should too
-			return false;
-		}
+		if (this.terastallized) return false;
 		this.addedType = newType;
 		return true;
 	}
