@@ -543,7 +543,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const moveid = moveSlot.id;
 				const pp = moveSlot.pp;
 				const move = this.dex.moves.get(moveid);
-				if (moveid && !move.flags['sleeptalk'] && !move.flags['charge']) {
+				if (moveid && !move.flags['nosleeptalk'] && !move.flags['charge']) {
 					moves.push({move: moveid, pp: pp});
 				}
 			}

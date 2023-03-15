@@ -760,13 +760,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	sleeptalk: {
 		inherit: true,
-		flags: {failencore: 1, sleeptalk: 1},
+		flags: {failencore: 1, nosleeptalk: 1},
 		onHit(pokemon) {
 			const moves = [];
 			for (const moveSlot of pokemon.moveSlots) {
 				const moveid = moveSlot.id;
 				const move = this.dex.moves.get(moveid);
-				if (moveid && !move.flags['sleeptalk'] && !move.flags['charge']) {
+				if (moveid && !move.flags['nosleeptalk'] && !move.flags['charge']) {
 					moves.push(moveid);
 				}
 			}

@@ -975,7 +975,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	metronome: {
 		inherit: true,
-		flags: {assist: 1, copycat: 1, sleeptalk: 1, mimic: 1},
+		flags: {assist: 1, copycat: 1, nosleeptalk: 1, mimic: 1},
 		noMetronome: [
 			"Assist", "Chatter", "Copycat", "Counter", "Covet", "Destiny Bond", "Detect", "Endure", "Feint", "Focus Punch", "Follow Me", "Helping Hand", "Me First", "Metronome", "Mimic", "Mirror Coat", "Mirror Move", "Protect", "Sketch", "Sleep Talk", "Snatch", "Struggle", "Switcheroo", "Thief", "Trick",
 		],
@@ -1467,7 +1467,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	struggle: {
 		inherit: true,
-		flags: {contact: 1, protect: 1, failencore: 1, mefirst: 1, assist: 1, copycat: 1, instruct: 1, mimic: 1},
+		flags: {contact: 1, protect: 1, failencore: 1, failmefirst: 1, assist: 1, copycat: 1, instruct: 1, mimic: 1},
 		onModifyMove(move) {
 			move.type = '???';
 		},

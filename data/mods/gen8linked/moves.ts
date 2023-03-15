@@ -23,7 +23,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// Mod-specific: Me First copies the first move in the link
 				// @ts-ignore
 				const move = this.dex.getActiveMove(action.linked?.[0] || action.move);
-				if (move.category !== 'Status' && !move.flags['mefirst']) {
+				if (move.category !== 'Status' && !move.flags['failmefirst']) {
 					pokemon.addVolatile('mefirst');
 					this.actions.useMove(move, pokemon, target);
 					return null;

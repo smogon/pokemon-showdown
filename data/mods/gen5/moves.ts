@@ -80,7 +80,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	bounce: {
 		inherit: true,
-		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, sleeptalk: 1},
+		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nosleeptalk: 1},
 	},
 	bubble: {
 		inherit: true,
@@ -111,7 +111,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			chance: 10,
 			volatileStatus: 'confusion',
 		},
-		flags: {protect: 1, sound: 1, distance: 1, assist: 1, copycat: 1, mefirst: 1, sleeptalk: 1, mimic: 1},
+		flags: {protect: 1, sound: 1, distance: 1, assist: 1, copycat: 1, failmefirst: 1, nosleeptalk: 1, mimic: 1},
 	},
 	conversion: {
 		inherit: true,
@@ -168,11 +168,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	dig: {
 		inherit: true,
-		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1, sleeptalk: 1},
+		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1, nosleeptalk: 1},
 	},
 	dive: {
 		inherit: true,
-		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1, sleeptalk: 1},
+		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1, nosleeptalk: 1},
 	},
 	dracometeor: {
 		inherit: true,
@@ -752,7 +752,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	shadowforce: {
 		inherit: true,
-		flags: {contact: 1, charge: 1, mirror: 1, sleeptalk: 1},
+		flags: {contact: 1, charge: 1, mirror: 1, nosleeptalk: 1},
 	},
 	sing: {
 		inherit: true,
@@ -778,7 +778,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	skydrop: {
 		inherit: true,
-		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, sleeptalk: 1},
+		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nosleeptalk: 1},
 		onTryHit(target, source, move) {
 			if (target.fainted) return false;
 			if (source.removeVolatile(move.id)) {
@@ -962,7 +962,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	uproar: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, sound: 1, sleeptalk: 1},
+		flags: {protect: 1, mirror: 1, sound: 1, nosleeptalk: 1},
 	},
 	vinewhip: {
 		inherit: true,
