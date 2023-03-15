@@ -125,7 +125,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!lastMove || target.volatiles['dynamax']) return false;
 			const moveIndex = target.moves.indexOf(lastMove.id);
 			if (
-				lastMove.flags['instruct'] || lastMove.isZ || lastMove.isMax ||
+				lastMove.flags['failinstruct'] || lastMove.isZ || lastMove.isMax ||
 				lastMove.flags['charge'] || lastMove.flags['recharge'] ||
 				target.volatiles['beakblast'] || target.volatiles['focuspunch'] || target.volatiles['shelltrap'] ||
 				(target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)

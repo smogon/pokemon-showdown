@@ -36,18 +36,18 @@ interface MoveFlags {
 	distance?: 1; // Can target a Pokemon positioned anywhere in a Triple Battle.
 	failcopycat?: 1; // Cannot be selected by Copycat.
 	failencore?: 1; // Encore fails if target used this move.
+	failinstruct?: 1; // Cannot be repeated by Instruct.
 	failmefirst?: 1; // Cannot be selected by Me First.
 	failmimic?: 1; // Cannot be copied by Mimic.
 	futuremove?: 1; // Targets a slot, and in 2 turns damages that slot.
 	gravity?: 1; // Prevented from being executed or selected during Gravity's effect.
 	heal?: 1; // Prevented from being executed or selected during Heal Block's effect.
-	instruct?: 1; // Cannot be repeated by Instruct.
 	mirror?: 1; // Can be copied by Mirror Move.
 	mustpressure?: 1; // Additional PP is deducted due to Pressure when it ordinarily would not.
 	noassist?: 1; // Cannot be selected by Assist.
 	nonsky?: 1; // Prevented from being executed or selected in a Sky Battle.
 	nosleeptalk?: 1; // Cannot be selected by Sleep Talk.
-	parentalbond?: 1; // Cannot be made to hit twice via Parental Bond.
+	noparentalbond?: 1; // Cannot be made to hit twice via Parental Bond.
 	pledgecombo?: 1; // Gems will not activate. Cannot be redirected by Storm Drain / Lightning Rod.
 	powder?: 1; // Has no effect on Pokemon which are Grass-type, have the Ability Overcoat, or hold Safety Goggles.
 	protect?: 1; // Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield.

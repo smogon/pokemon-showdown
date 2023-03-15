@@ -982,7 +982,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mimic: {
 		inherit: true,
-		flags: {protect: 1, bypasssub: 1, allyanim: 1, noassist: 1, failcopycat: 1, failencore: 1, instruct: 1, failmimic: 1},
+		flags: {protect: 1, bypasssub: 1, allyanim: 1, noassist: 1, failcopycat: 1, failencore: 1, failinstruct: 1, failmimic: 1},
 		onHit(target, source) {
 			if (source.transformed || !target.lastMove || target.volatiles['substitute']) {
 				return false;
@@ -1387,7 +1387,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	sketch: {
 		inherit: true,
-		flags: {bypasssub: 1, allyanim: 1, failencore: 1, noassist: 1, failcopycat: 1, instruct: 1, failmimic: 1},
+		flags: {bypasssub: 1, allyanim: 1, failencore: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
 		onHit(target, source) {
 			const disallowedMoves = ['chatter', 'sketch', 'struggle'];
 			if (source.transformed || !target.lastMove || target.volatiles['substitute']) {
@@ -1467,7 +1467,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	struggle: {
 		inherit: true,
-		flags: {contact: 1, protect: 1, failencore: 1, failmefirst: 1, noassist: 1, failcopycat: 1, instruct: 1, failmimic: 1},
+		flags: {contact: 1, protect: 1, failencore: 1, failmefirst: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
 		onModifyMove(move) {
 			move.type = '???';
 		},
