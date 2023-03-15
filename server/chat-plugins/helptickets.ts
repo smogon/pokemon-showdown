@@ -1871,9 +1871,9 @@ export const pages: Chat.PageTable = {
 				let logUrl = '';
 				const created = new Date(ticket.created);
 				if (ticket.text) {
-					logUrl = `/view-help-logs-${ticket.userid}--${created.toISOString().slice(0, 7)}`;
+					logUrl = `/view-help-logs-${ticket.userid}--${Chat.toTimestamp(created).split(' ')[0].slice(0, -3)}`;
 				} else {
-					logUrl = `/view-chatlog-help-${ticket.userid}--${created.toISOString().slice(0, 10)}`;
+					logUrl = `/view-chatlog-help-${ticket.userid}--${Chat.toTimestamp(created).split(' ')[0]}`;
 				}
 				const room = Rooms.get(roomid);
 				if (room) {
