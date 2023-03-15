@@ -178,7 +178,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	covet: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, assist: 1},
+		flags: {protect: 1, mirror: 1, noassist: 1},
 	},
 	crunch: {
 		inherit: true,
@@ -443,7 +443,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mimic: {
 		inherit: true,
-		flags: {protect: 1, bypasssub: 1, allyanim: 1, failencore: 1, assist: 1, mimic: 1},
+		flags: {protect: 1, bypasssub: 1, allyanim: 1, failencore: 1, noassist: 1, mimic: 1},
 	},
 	mirrorcoat: {
 		inherit: true,
@@ -533,7 +533,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	sketch: {
 		inherit: true,
-		flags: {bypasssub: 1, failencore: 1, assist: 1, mimic: 1},
+		flags: {bypasssub: 1, failencore: 1, noassist: 1, mimic: 1},
 	},
 	sleeptalk: {
 		inherit: true,
@@ -591,7 +591,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	struggle: {
 		inherit: true,
-		flags: {contact: 1, protect: 1, assist: 1, failencore: 1, mimic: 1},
+		flags: {contact: 1, protect: 1, noassist: 1, failencore: 1, mimic: 1},
 		accuracy: 100,
 		recoil: [1, 4],
 		struggleRecoil: false,

@@ -26,7 +26,6 @@ export type MoveTarget =
 /** Possible move flags. */
 interface MoveFlags {
 	allyanim?: 1; // The move plays its animation when used on an ally.
-	assist?: 1; // Cannot be selected by Assist.
 	bypasssub?: 1; // Ignores a target's substitute.
 	bite?: 1; // Power is multiplied by 1.5 when used by a Pokemon with the Ability Strong Jaw.
 	bullet?: 1; // Has no effect on Pokemon with the Ability Bulletproof.
@@ -45,6 +44,7 @@ interface MoveFlags {
 	mimic?: 1; // Cannot be copied by Mimic.
 	mirror?: 1; // Can be copied by Mirror Move.
 	mustpressure?: 1; // Additional PP is deducted due to Pressure when it ordinarily would not.
+	noassist?: 1; // Cannot be selected by Assist.
 	nonsky?: 1; // Prevented from being executed or selected in a Sky Battle.
 	nosleeptalk?: 1; // Cannot be selected by Sleep Talk.
 	parentalbond?: 1; // Cannot be made to hit twice via Parental Bond.

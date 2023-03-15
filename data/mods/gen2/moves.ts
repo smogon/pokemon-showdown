@@ -412,7 +412,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: 100,
 		noSketch: true,
-		flags: {protect: 1, bypasssub: 1, allyanim: 1, failencore: 1, assist: 1},
+		flags: {protect: 1, bypasssub: 1, allyanim: 1, failencore: 1, noassist: 1},
 	},
 	mindreader: {
 		inherit: true,
@@ -734,7 +734,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	sketch: {
 		inherit: true,
-		flags: {bypasssub: 1, failencore: 1, assist: 1},
+		flags: {bypasssub: 1, failencore: 1, noassist: 1},
 		onHit() {
 			// Sketch always fails in Link Battles
 			this.add('-nothing');

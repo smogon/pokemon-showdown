@@ -5,11 +5,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	assist: {
 		inherit: true,
-		flags: {assist: 1, copycat: 1, nosleeptalk: 1},
+		flags: {noassist: 1, copycat: 1, nosleeptalk: 1},
 	},
 	copycat: {
 		inherit: true,
-		flags: {assist: 1, copycat: 1, nosleeptalk: 1},
+		flags: {noassist: 1, copycat: 1, nosleeptalk: 1},
 	},
 	darkvoid: {
 		inherit: true,
@@ -97,7 +97,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mefirst: {
 		inherit: true,
-		flags: {protect: 1, bypasssub: 1, assist: 1, copycat: 1, failmefirst: 1, nosleeptalk: 1},
+		flags: {protect: 1, bypasssub: 1, noassist: 1, copycat: 1, failmefirst: 1, nosleeptalk: 1},
 	},
 	minimize: {
 		inherit: true,
@@ -124,7 +124,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	metronome: {
 		inherit: true,
-		flags: {assist: 1, copycat: 1, nosleeptalk: 1},
+		flags: {noassist: 1, copycat: 1, nosleeptalk: 1},
 	},
 	mistyterrain: {
 		inherit: true,
@@ -169,7 +169,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	naturepower: {
 		inherit: true,
-		flags: {nosleeptalk: 1, assist: 1, copycat: 1},
+		flags: {nosleeptalk: 1, noassist: 1, copycat: 1},
 	},
 	paraboliccharge: {
 		inherit: true,
@@ -209,7 +209,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	sleeptalk: {
 		inherit: true,
-		flags: {nosleeptalk: 1, assist: 1, copycat: 1},
+		flags: {nosleeptalk: 1, noassist: 1, copycat: 1},
 	},
 	stockpile: {
 		inherit: true,
