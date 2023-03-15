@@ -22297,10 +22297,18 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onModifyMove(move, pokemon, target){
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onModifyMove(move, pokemon, target) {
+			if (!target) {
+				this.add('-fail', pokemon, 'move: Coinflip');
+				return null;
+			} 
 			const choice = this.random(2);
 			const side = (choice === 1) ? "Heads" : "Tails";
 			this.add('-message', `${pokemon.name} chose ${side}!`);
+			this.add('-anim', pokemon, 'Revival Blessing', pokemon);
 			const result = this.random(2);
 			const resultSide = (result === 1) ? "Heads" : "Tails";
 			this.add('-message', `It landed on ${resultSide}.`);
@@ -22308,7 +22316,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				move.ohko = true;
 			} else {
 				this.add('-message', `${pokemon.name} gambled its life away.`);
-				pokemon.faint();
+				this.damage(pokemon.baseMaxhp, pokemon, pokemon, this.dex.conditions.get('Coinflip'));
 			}
 		},
 		secondary: null,
