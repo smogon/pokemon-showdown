@@ -192,7 +192,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onStart(target) {
 				const lockedMove = target.lastMoveEncore?.id || '';
 				const moveIndex = lockedMove ? target.moves.indexOf(lockedMove) : -1;
-				if (moveIndex < 0 || target.lastMoveEncore?.flags['encore'] || target.moveSlots[moveIndex].pp <= 0) {
+				if (moveIndex < 0 || target.lastMoveEncore?.flags['failencore'] || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed
 					return false;
 				}
@@ -402,7 +402,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	metronome: {
 		inherit: true,
-		flags: {encore: 1},
+		flags: {failencore: 1},
 		noMetronome: [
 			"Counter", "Destiny Bond", "Detect", "Endure", "Metronome", "Mimic", "Mirror Coat", "Protect", "Sketch", "Sleep Talk", "Struggle", "Thief",
 		],
@@ -412,7 +412,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: 100,
 		noSketch: true,
-		flags: {protect: 1, bypasssub: 1, allyanim: 1, encore: 1, assist: 1},
+		flags: {protect: 1, bypasssub: 1, allyanim: 1, failencore: 1, assist: 1},
 	},
 	mindreader: {
 		inherit: true,
@@ -439,7 +439,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mirrormove: {
 		inherit: true,
-		flags: {encore: 1},
+		flags: {failencore: 1},
 		onHit(pokemon) {
 			const noMirror = ['metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'transform'];
 			const target = pokemon.side.foe.active[0];
@@ -734,7 +734,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	sketch: {
 		inherit: true,
-		flags: {bypasssub: 1, encore: 1, assist: 1},
+		flags: {bypasssub: 1, failencore: 1, assist: 1},
 		onHit() {
 			// Sketch always fails in Link Battles
 			this.add('-nothing');
@@ -760,7 +760,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	sleeptalk: {
 		inherit: true,
-		flags: {encore: 1, sleeptalk: 1},
+		flags: {failencore: 1, sleeptalk: 1},
 		onHit(pokemon) {
 			const moves = [];
 			for (const moveSlot of pokemon.moveSlots) {

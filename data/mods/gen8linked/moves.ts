@@ -216,13 +216,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// @ts-ignore
 				const linkedMoves: [string, string] = target.getLinkedMoves(true);
 				const moveIndex = target.moves.indexOf(lastMove.id);
-				if (linkedMoves.includes(lastMove.id) && this.dex.moves.get((linkedMoves[0])).flags['encore'] &&
-					this.dex.moves.get((linkedMoves[1])).flags['encore']) {
+				if (linkedMoves.includes(lastMove.id) && this.dex.moves.get((linkedMoves[0])).flags['failencore'] &&
+					this.dex.moves.get((linkedMoves[1])).flags['failencore']) {
 					// both moves cannot be encored
 					delete target.volatiles['encore'];
 					return false;
 				}
-				if (lastMove.isZ || lastMove.flags['encore'] ||
+				if (lastMove.isZ || lastMove.flags['failencore'] ||
 					(target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)) {
 					// it failed
 					delete target.volatiles['encore'];

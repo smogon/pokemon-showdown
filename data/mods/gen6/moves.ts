@@ -41,7 +41,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onStart(target) {
 				const moveIndex = target.lastMove ? target.moves.indexOf(target.lastMove.id) : -1;
 				if (
-					!target.lastMove || target.lastMove.flags['encore'] ||
+					!target.lastMove || target.lastMove.flags['failencore'] ||
 					!target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0
 				) {
 					// it failed

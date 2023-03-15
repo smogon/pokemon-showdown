@@ -24,7 +24,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	assist: {
 		inherit: true,
-		flags: {encore: 1, sleeptalk: 1, assist: 1, copycat: 1, instruct: 1},
+		flags: {failencore: 1, sleeptalk: 1, assist: 1, copycat: 1, instruct: 1},
 	},
 	aurawheel: {
 		inherit: true,
@@ -126,7 +126,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	copycat: {
 		inherit: true,
-		flags: {encore: 1, sleeptalk: 1, assist: 1, copycat: 1, instruct: 1},
+		flags: {failencore: 1, sleeptalk: 1, assist: 1, copycat: 1, instruct: 1},
 	},
 	coreenforcer: {
 		inherit: true,
@@ -421,7 +421,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mefirst: {
 		inherit: true,
-		flags: {protect: 1, bypasssub: 1, encore: 1, mefirst: 1, sleeptalk: 1, assist: 1, copycat: 1, instruct: 1},
+		flags: {protect: 1, bypasssub: 1, failencore: 1, mefirst: 1, sleeptalk: 1, assist: 1, copycat: 1, instruct: 1},
 	},
 	meteorassault: {
 		inherit: true,
@@ -429,7 +429,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	metronome: {
 		inherit: true,
-		flags: {encore: 1, sleeptalk: 1, assist: 1, copycat: 1, instruct: 1},
+		flags: {failencore: 1, sleeptalk: 1, assist: 1, copycat: 1, instruct: 1},
 	},
 	milkdrink: {
 		inherit: true,
@@ -449,7 +449,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mirrormove: {
 		inherit: true,
-		flags: {encore: 1, sleeptalk: 1, assist: 1, copycat: 1, instruct: 1},
+		flags: {failencore: 1, sleeptalk: 1, assist: 1, copycat: 1, instruct: 1},
 	},
 	mistball: {
 		inherit: true,
@@ -466,7 +466,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	naturepower: {
 		inherit: true,
 		isNonstandard: null,
-		flags: {encore: 1, sleeptalk: 1, assist: 1, copycat: 1, instruct: 1},
+		flags: {failencore: 1, sleeptalk: 1, assist: 1, copycat: 1, instruct: 1},
 	},
 	naturesmadness: {
 		inherit: true,
@@ -578,7 +578,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	sleeptalk: {
 		inherit: true,
-		flags: {encore: 1, sleeptalk: 1, assist: 1, copycat: 1, instruct: 1},
+		flags: {failencore: 1, sleeptalk: 1, assist: 1, copycat: 1, instruct: 1},
 	},
 	snaptrap: {
 		inherit: true,
