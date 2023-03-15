@@ -1234,7 +1234,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const allFlags = [
 		'allyanim', 'bypasssub', 'bite', 'bullet', 'charge', 'contact', 'dance', 'defrost', 'distance', 'failcopycat', 'failencore', 'failinstruct',
 		'failmefirst', 'failmimic', 'futuremove', 'gravity', 'heal', 'mirror', 'mustpressure', 'noassist', 'nonsky', 'noparentalbond', 'nosleeptalk',
-		'pledgecombo', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable',  'slicing', 'snatch', 'sound', 'wind',
+		'pledgecombo', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'slicing', 'snatch', 'sound', 'wind',
 
 		// Not flags directly from move data, but still useful to sort by
 		'highcrit', 'multihit', 'ohko', 'protection', 'secondary',

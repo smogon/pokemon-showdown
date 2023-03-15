@@ -1453,7 +1453,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Blazing Torque",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+		flags: {
+			protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
+		},
 		secondary: {
 			chance: 30,
 			status: 'brn',
@@ -1697,7 +1699,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Bounce",
 		pp: 5,
 		priority: 0,
-		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1},
+		flags: {
+			contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
+		},
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -2310,7 +2314,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 20,
 		priority: 0,
 		flags: {
-			protect: 1, mirror: 1, sound: 1, distance: 1, bypasssub: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
+			protect: 1, mirror: 1, sound: 1, distance: 1, bypasssub: 1, nosleeptalk: 1, noassist: 1,
+			failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
 		noSketch: true,
 		secondary: {
@@ -2611,7 +2616,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Combat Torque",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+		flags: {
+			protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
+		},
 		secondary: {
 			chance: 30,
 			status: 'par',
@@ -3760,7 +3767,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Dive",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1, allyanim: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1},
+		flags: {
+			contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1, allyanim: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
+		},
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -5901,7 +5910,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Fly",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1},
+		flags: {
+			contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
+		},
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -10790,7 +10801,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Magical Torque",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+		flags: {
+			protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
+		},
 		secondary: {
 			chance: 30,
 			volatileStatus: 'confusion',
@@ -11626,7 +11639,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Me First",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1, bypasssub: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+		flags: {
+			protect: 1, bypasssub: 1,
+			failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
+		},
 		onTryHit(target, pokemon) {
 			const action = this.queue.willMove(target);
 			if (!action) return false;
@@ -11937,7 +11953,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Mimic",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, bypasssub: 1, allyanim: 1, failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+		flags: {
+			protect: 1, bypasssub: 1, allyanim: 1,
+			failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
+		},
 		onHit(target, source) {
 			const move = target.lastMove;
 			if (source.transformed || !move || move.flags['failmimic'] || source.moves.includes(move.id)) {
@@ -12935,7 +12954,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Noxious Torque",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+		flags: {
+			protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
+		},
 		secondary: {
 			chance: 30,
 			status: 'psn',
@@ -16835,7 +16856,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
-		flags: {bypasssub: 1, allyanim: 1, failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+		flags: {
+			bypasssub: 1, allyanim: 1, failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
+		},
 		onHit(target, source) {
 			const disallowedMoves = ['chatter', 'sketch', 'struggle'];
 			const move = target.lastMove;
@@ -16996,7 +17019,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Sky Drop",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1},
+		flags: {
+			contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
+		},
 		onModifyMove(move, source) {
 			if (!source.volatiles['skydrop']) {
 				move.accuracy = true;
@@ -18569,7 +18594,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
-		flags: {contact: 1, protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+		flags: {
+			contact: 1, protect: 1,
+			failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
+		},
 		noSketch: true,
 		onModifyMove(move, pokemon, target) {
 			move.type = '???';
@@ -21086,7 +21114,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Wicked Torque",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+		flags: {
+			protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
+		},
 		secondary: {
 			chance: 10,
 			status: 'slp',

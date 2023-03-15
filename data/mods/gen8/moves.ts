@@ -421,7 +421,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mefirst: {
 		inherit: true,
-		flags: {protect: 1, bypasssub: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
+		flags: {
+			protect: 1, bypasssub: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1,
+		},
 	},
 	meteorassault: {
 		inherit: true,
