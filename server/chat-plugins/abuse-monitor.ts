@@ -2307,7 +2307,7 @@ export const pages: Chat.PageTable = {
 			return buf;
 		},
 		async edithistory(query, user) {
-			checkAccess(this);
+			this.checkCan('globalban');
 			const targetUser = toID(query[0]);
 			if (!targetUser) {
 				return this.errorReply(`Specify a user.`);
