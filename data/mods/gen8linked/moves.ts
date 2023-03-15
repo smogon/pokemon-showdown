@@ -98,7 +98,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onHit(target, source) {
 			const lastMove: Move = target.m.lastMoveAbsolute;
-			if (source.transformed || !lastMove || lastMove.flags['mimic'] ||
+			if (source.transformed || !lastMove || lastMove.flags['failmimic'] ||
 				source.moves.includes(lastMove.id) || lastMove.isZ) return false;
 			const mimicIndex = source.moves.indexOf('mimic');
 			if (mimicIndex < 0) return false;

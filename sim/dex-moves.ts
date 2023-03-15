@@ -31,17 +31,17 @@ interface MoveFlags {
 	bullet?: 1; // Has no effect on Pokemon with the Ability Bulletproof.
 	charge?: 1; // The user is unable to make a move between turns.
 	contact?: 1; // Makes contact.
-	copycat?: 1; // Cannot be selected by Copycat.
 	dance?: 1; // When used by a Pokemon, other Pokemon with the Ability Dancer can attempt to execute the same move.
 	defrost?: 1; // Thaws the user if executed successfully while the user is frozen.
 	distance?: 1; // Can target a Pokemon positioned anywhere in a Triple Battle.
+	failcopycat?: 1; // Cannot be selected by Copycat.
 	failencore?: 1; // Encore fails if target used this move.
 	failmefirst?: 1; // Cannot be selected by Me First.
+	failmimic?: 1; // Cannot be copied by Mimic.
 	futuremove?: 1; // Targets a slot, and in 2 turns damages that slot.
 	gravity?: 1; // Prevented from being executed or selected during Gravity's effect.
 	heal?: 1; // Prevented from being executed or selected during Heal Block's effect.
 	instruct?: 1; // Cannot be repeated by Instruct.
-	mimic?: 1; // Cannot be copied by Mimic.
 	mirror?: 1; // Can be copied by Mirror Move.
 	mustpressure?: 1; // Additional PP is deducted due to Pressure when it ordinarily would not.
 	noassist?: 1; // Cannot be selected by Assist.

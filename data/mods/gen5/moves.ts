@@ -68,7 +68,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	bestow: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, noassist: 1, copycat: 1},
+		flags: {protect: 1, mirror: 1, noassist: 1, failcopycat: 1},
 	},
 	blizzard: {
 		inherit: true,
@@ -111,7 +111,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			chance: 10,
 			volatileStatus: 'confusion',
 		},
-		flags: {protect: 1, sound: 1, distance: 1, noassist: 1, copycat: 1, failmefirst: 1, nosleeptalk: 1, mimic: 1},
+		flags: {protect: 1, sound: 1, distance: 1, noassist: 1, failcopycat: 1, failmefirst: 1, nosleeptalk: 1, failmimic: 1},
 	},
 	conversion: {
 		inherit: true,
@@ -135,7 +135,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	copycat: {
 		inherit: true,
 		onHit(pokemon) {
-			if (!this.lastMove || this.dex.moves.get(this.lastMove.id).flags['copycat']) {
+			if (!this.lastMove || this.dex.moves.get(this.lastMove.id).flags['failcopycat']) {
 				return false;
 			}
 			this.actions.useMove(this.lastMove.id, pokemon);
@@ -213,7 +213,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	feint: {
 		inherit: true,
-		flags: {noassist: 1, copycat: 1},
+		flags: {noassist: 1, failcopycat: 1},
 	},
 	finalgambit: {
 		inherit: true,
@@ -679,7 +679,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	ragepowder: {
 		inherit: true,
 		priority: 3,
-		flags: {noassist: 1, copycat: 1},
+		flags: {noassist: 1, failcopycat: 1},
 	},
 	reflect: {
 		inherit: true,
