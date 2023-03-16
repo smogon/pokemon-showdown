@@ -21373,8 +21373,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (target && !target.fainted && this.effectState.duration === 2) {
 					this.debug(this.effectState.hp);
 					const damage = this.heal(this.effectState.hp, target, target);
+					this.debug(damage.toString());
 					if (damage) {
-						this.debug(damage.toString());
 						this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.source.name);
 					}
 				}
