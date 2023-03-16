@@ -21362,14 +21362,15 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, heal: 1},
 		slotCondition: 'Wish',
 		condition: {
-			duration: 4,
+			duration: 2,
 			onStart(pokemon, source) {
+				if (pokemon.ability === "periodicorbit") this.effectState.duration = 4;
 				this.effectState.hp = source.maxhp / 2;
 			},
-			onBeforeTurn(pokemon) {
+			onResidualOrder: 4,
+			onResidual(target, source, effect) {
 				this.debug(this.effectState.duration.toString());
 			},
-			onResidualOrder: 4,
 			onEnd(target) {
 				if (target && !target.fainted) {
 					const damage = this.heal(this.effectState.hp, target, target);
