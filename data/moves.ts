@@ -21364,8 +21364,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			duration: 4,
 			onStart(pokemon, source) {
-				this.debug(this.effectState.duration.toString())
 				this.effectState.hp = source.maxhp / 2;
+			},
+			onBeforeTurn(pokemon) {
+				this.debug(this.effectState.duration.toString());
 			},
 			onResidualOrder: 4,
 			onEnd(target) {
