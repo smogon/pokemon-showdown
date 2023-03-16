@@ -21369,6 +21369,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onResidualOrder: 4,
 			onResidual(target, pokemon, effect) {
+				this.debug(this.effectState.duration);
 				if (target && !target.fainted && this.effectState.duration === 2) {
 					const damage = this.heal(this.effectState.hp, target, target);
 					if (damage) {
