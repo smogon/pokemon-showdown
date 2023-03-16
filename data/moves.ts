@@ -21362,8 +21362,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, heal: 1},
 		slotCondition: 'Wish',
 		condition: {
-			duration: 2,
+			duration: 4,
 			onStart(pokemon, source) {
+				this.debug(this.effectState.duration.toString())
 				this.effectState.hp = source.maxhp / 2;
 			},
 			onResidualOrder: 4,
