@@ -21361,11 +21361,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		onTry(source) {
-			this.debug((!!source.side.getSlotCondition(source, 'wish')).toString());
-			this.debug((!!source.side.getSlotCondition(source, 'orbitalwish')).toString());
-			if (!source.side.addSlotCondition(source, 'wish')) return false;
-			if (source.hasAbility('periodicorbit')) source.side.addSlotCondition(source, 'orbitalwish');
-			return this.NOT_FAIL;
+			if (!source.side.getSlotCondition(source, 'orbitalwish')) {
+				if (!source.side.addSlotCondition(source, 'wish')) return false;
+			} else {
+				return false;
+			}
+			if (source.hasAbility('periodicorbit')) {
+				if (!source.side.addSlotCondition(source, 'orbitalwish')) return false;
+			}
 		},
 		secondary: null,
 		target: "self",

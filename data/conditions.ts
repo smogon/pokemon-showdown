@@ -959,7 +959,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (target && !target.fainted) {
 				const damage = this.heal(this.effectState.hp, target, target);
 				if (damage) {
-					this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.source.name);
+					this.add('-heal', target, target.getHealth, '[from] move: Orbital Wish', '[wisher] ' + this.effectState.source.name);
 				}
 			}
 		},
