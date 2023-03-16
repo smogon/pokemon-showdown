@@ -964,4 +964,42 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 	},
+	futuremoveperiodic: {
+		// this is a slot condition
+		name: 'futuremoveperiodic',
+		duration: 3,
+		onResidualOrder: 3,
+		onEnd(target) {
+			const data = this.effectState;
+			// time's up; time to hit! :D
+			const move = this.dex.moves.get(data.move);
+			if (target.fainted || target === data.source) {
+				this.hint(`${move.name} did not hit because the target is ${(target.fainted ? 'fainted' : 'the user')}.`);
+				return;
+			}
+
+			this.add('-end', target, 'move: ' + move.name);
+			target.removeVolatile('Protect');
+			target.removeVolatile('Endure');
+
+			if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
+				data.moveData.infiltrates = true;
+			}
+			if (data.source.hasAbility('normalize') && this.gen >= 6) {
+				data.moveData.type = 'Normal';
+			}
+			if (data.source.hasAbility('adaptability') && this.gen >= 6) {
+				data.moveData.stab = 2;
+			}
+			const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
+
+			this.actions.trySpreadMoveHit([target], data.source, hitMove, true);
+			if (data.source.isActive && data.source.hasItem('lifeorb') && this.gen >= 5) {
+				this.singleEvent('AfterMoveSecondarySelf', data.source.getItem(), data.source.itemState, data.source, target, data.source.getItem());
+			}
+			this.activeMove = null;
+
+			this.checkWin();
+		},
+	},
 };
