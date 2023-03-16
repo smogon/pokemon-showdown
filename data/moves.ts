@@ -21371,8 +21371,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidual(target, pokemon, effect) {
 				this.debug(this.effectState.duration.toString());
 				this.debug(target.toString());
-				this.debug(pokemon.toString());
-				this.debug(effect.toString());
 			},
 			onEnd(target) {
 				if (target && !target.fainted) {
