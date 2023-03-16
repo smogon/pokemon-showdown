@@ -7495,6 +7495,10 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Darkness will begin to cover the field. This effect will last for 5 turns; if the user is holding a Dark Rock, the duration is increased to 8 turns.",
 		shortDesc: "For 5 turns, covers the field in darkness.",
 	},
+	orbitalwish: {
+		name: "Orbital Wish",
+		heal: "  [NICKNAME]'s orbital wish came true!",
+	},
 	permafrost: {
 		name: "Permafrost",
 		desc: "Sets an entry hazard around the target Pokémon, which will Freeze them upon switching in. It can stack up to 5 times, with each layer adding a 10% chance of incoming Pokemon being frozen upon switching in. This chance is doubled under Hail.",
