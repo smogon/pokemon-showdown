@@ -21369,8 +21369,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onResidualOrder: 4,
 			onResidual(target, pokemon, effect) {
-				this.debug(this.effectState.duration.toString());
-				this.debug(target.toString());
+				if (target && !target.fainted && this.effectState.duration === 2) {
+					const damage = this.heal(this.effectState.hp, target, target);
+					if (damage) {
+						this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.source.name);
+					}
+				}
 			},
 			onEnd(target) {
 				if (target && !target.fainted) {
