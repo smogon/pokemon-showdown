@@ -441,13 +441,21 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: `Forces all teams to have the same type. Usage: Force Monotype = [Type], e.g. "Force Monotype = Water"`,
 		hasValue: true,
 		onValidateRule(value) {
-			if (!this.dex.types.get(value).exists) throw new Error(`Misspelled type "${value}"`);
+			const type = this.dex.types.get(value);
+			if (!type.exists) throw new Error(`Misspelled type "${value}"`);
+			// Temporary hardcode until types support generations
+			if (
+				(['Dark', 'Steel'].includes(type.name) && this.dex.gen < 2) ||
+				(type.name === 'Fairy' && this.dex.gen < 6)
+			) {
+				throw new Error(`Invalid type "${type.name}" in Generation ${this.dex.gen}`);
+			}
 		},
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
 			const type = this.dex.types.get(this.ruleTable.valueRules.get('forcemonotype')!);
 			if (!species.types.map(this.toID).includes(type.id)) {
-				return [`${set.species} must have type ${type.name}`];
+				return [`${set.species} must have ${type.name} type.`];
 			}
 		},
 	},
@@ -1251,7 +1259,11 @@ export const Rulesets: {[k: string]: FormatData} = {
 		onBegin() {
 			this.add('rule', 'Mega Rayquaza Clause: You cannot mega evolve Rayquaza');
 			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.species.id === 'rayquaza') pokemon.canMegaEvo = null;
+				if (pokemon.species.id === 'rayquaza') {
+					pokemon.canMegaEvo = null;
+					// ability to terastal was determined before the clause activated, causing incorrect behavior
+					pokemon.canTerastallize = this.actions.canTerastallize(pokemon);
+				}
 			}
 		},
 	},

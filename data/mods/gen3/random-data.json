@@ -477,7 +477,7 @@
     },
     "corsola": {
         "level": 90,
-        "moves": ["calmmind", "confuseray", "icebeam", "recover", "surf", "toxic"]
+        "moves": ["calmmind", "icebeam", "recover", "surf", "toxic"]
     },
     "octillery": {
         "level": 88,
