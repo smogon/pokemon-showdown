@@ -2097,6 +2097,8 @@ export class Battle {
 		case 'drain':
 			this.add('-heal', target, target.getHealth, '[from] drain', '[of] ' + source);
 			break;
+		case 'orbitalwish':
+			break;
 		case 'wish':
 			break;
 		case 'zpower':
