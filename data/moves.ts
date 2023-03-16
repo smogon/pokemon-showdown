@@ -21360,32 +21360,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		slotCondition: 'Wish',
-		condition: {
-			duration: 2,
-			onStart(pokemon, source) {
-				if (pokemon.ability === "periodicorbit") this.effectState.duration = 4;
-				this.effectState.hp = source.maxhp / 2;
-			},
-			onResidualOrder: 4,
-			onResidual(target) {
-				this.debug(this.effectState.duration);
-				if (target && !target.fainted && this.effectState.duration === 2) {
-					this.debug(this.effectState.hp);
-					const damage = this.heal(this.effectState.hp, target, target);
-					this.debug(target.hp.toString() + "/" + target.maxhp.toString());
-					this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.source.name);
-					return;
-				}
-			},
-			onEnd(target) {
-				if (target && !target.fainted) {
-					const damage = this.heal(this.effectState.hp, target, target);
-					if (damage) {
-						this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.source.name);
-					}
-				}
-			},
+		onTry(source) {
+			if (!source.side.addSlotCondition(source, 'wish')) return false;
+			if (source.hasAbility('periodicorbit')) source.side.addSlotCondition(source, 'wishperiodic');
+			return this.NOT_FAIL;
 		},
 		secondary: null,
 		target: "self",

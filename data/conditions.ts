@@ -930,4 +930,42 @@ export const Conditions: {[k: string]: ConditionData} = {
 			return bp;
 		},
 	},
+
+	// Insurgence Changes
+	wish: {
+		name: 'wish',
+		duration: 2,
+		durationCallback(pokemon) {
+			if (pokemon.hasAbility('periodicorbit')) return 4;
+			return 2;
+		},
+		onStart(pokemon, source) {
+			this.effectState.hp = source.maxhp / 2;
+		},
+		onResidualOrder: 4,
+		onEnd(target) {
+			if (target && !target.fainted) {
+				const damage = this.heal(this.effectState.hp, target, target);
+				if (damage) {
+					this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.source.name);
+				}
+			}
+		},
+	},
+	wishperiodic: {
+		name: 'wishperiodic',
+		duration: 2,
+		onStart(pokemon, source) {
+			this.effectState.hp = source.maxhp / 2;
+		},
+		onResidualOrder: 4,
+		onEnd(target) {
+			if (target && !target.fainted) {
+				const damage = this.heal(this.effectState.hp, target, target);
+				if (damage) {
+					this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.source.name);
+				}
+			}
+		},
+	},
 };
