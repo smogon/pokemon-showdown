@@ -21368,8 +21368,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.effectState.hp = source.maxhp / 2;
 			},
 			onResidualOrder: 4,
-			onResidual(target, source, effect) {
+			onResidual(target, pokemon, effect) {
 				this.debug(this.effectState.duration.toString());
+				this.debug(target.toString());
+				this.debug(pokemon.toString());
+				this.debug(effect.toString());
 			},
 			onEnd(target) {
 				if (target && !target.fainted) {
