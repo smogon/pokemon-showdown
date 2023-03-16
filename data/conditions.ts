@@ -933,12 +933,8 @@ export const Conditions: {[k: string]: ConditionData} = {
 
 	// Insurgence Changes
 	wish: {
-		name: 'wish',
+		name: 'Wish',
 		duration: 2,
-		durationCallback(pokemon) {
-			if (pokemon.hasAbility('periodicorbit')) return 4;
-			return 2;
-		},
 		onStart(pokemon, source) {
 			this.effectState.hp = source.maxhp / 2;
 		},
@@ -952,9 +948,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 	},
-	wishperiodic: {
-		name: 'wishperiodic',
-		duration: 2,
+	orbitalwish: {
+		name: 'Orbital Wish',
+		duration: 4,
 		onStart(pokemon, source) {
 			this.effectState.hp = source.maxhp / 2;
 		},
