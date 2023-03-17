@@ -55,7 +55,6 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen9insurgence',
-		searchShow: false,
 		ruleset: ['Standard NatDex', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120'],
 	},
 	{
@@ -178,7 +177,6 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen9',
-		searchShow: false,
 		ruleset: ['Standard NatDex'],
 	},
 	{
