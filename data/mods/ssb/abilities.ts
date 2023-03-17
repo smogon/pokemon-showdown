@@ -13,6 +13,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Aelita
+	fortifiedmetal: {
+		shortDesc: "This Pokemon's weight is doubled and Attack is 1.5x when statused.",
+		name: "Fortified Metal",
+		onModifyWeightPriority: 1,
+		onModifyWeight(weighthg) {
+			return weighthg * 2;
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			if (pokemon.status) {
+				return this.chainModify(1.5);
+			}
+		},
+		isBreakable: true,
+	},
+
 	// Aeonic
 	changetempo: {
 		shortDesc: "Summons Trick Room on switch-in and negates the user's charge/recharge.",

@@ -20,6 +20,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	IMPORTANT: Obtain the username from getName
 	*/
 	// Please keep statuses organized alphabetically based on staff member name!
+	aelita: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Aelita')}|You know, no one appreciates the work that goes into making weapons and towers.`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Aelita')}|Gotta use this tower to change sectors, BRB.`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Aelita')}|Well, I hope the Lyoko Warriors are at least well equipped.`);
+		},
+	},
 	aeonic: {
 		noCopy: true,
 		onStart() {

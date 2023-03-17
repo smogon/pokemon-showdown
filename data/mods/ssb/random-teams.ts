@@ -36,6 +36,12 @@ export const ssbSets: SSBSets = {
 	// Nature needs to be a valid nature with the first letter capitalized ex: Modest
 	*/
 	// Please keep sets organized alphabetically based on staff member name!
+	Aelita: {
+		species: 'Melmetal', ability: 'Fortified Metal', item: 'Leftovers', gender: '',
+		moves: ['Heavy Slam', 'Bitter Blade', 'Liquidation'],
+		signatureMove: 'Smelt',
+		evs: {hp: 252, atk: 4, spd: 252}, nature: 'Careful', teraType: 'Steel', shiny: true,
+	},
 	Aeonic: {
 		species: 'Nosepass', ability: 'Change Tempo', item: 'Fossilized Fish', gender: 'M',
 		moves: ['Ice Burn', 'Electro Drift', 'Milk Drink'],

@@ -41,6 +41,34 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	*/
 	// Please keep sets organized alphabetically based on staff member name!
+	// Aelita
+	smelt: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "User protects, burns itself, and gains +2 Spe/+1 Atk.",
+		name: "Smelt",
+		gen: 9,
+		pp: 10,
+		priority: 4,
+		flags: {},
+		stallingMove: true,
+		volatileStatus: 'protect',
+		onPrepareHit(pokemon) {
+			this.attrLastMove('[anim] Protect');
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+			pokemon.trySetStatus('brn');
+			this.add('-anim', pokemon, 'Shift Gear', pokemon);
+			this.boost({spe: 2, atk: 1});
+		},
+		secondary: null,
+		target: "self",
+		type: "Steel",
+	},
+
 	// Aeonic
 	memesthatburnthesky: {
 		accuracy: 100,
