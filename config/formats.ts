@@ -19,6 +19,68 @@ The column value will be ignored for repeat sections.
 
 export const Formats: FormatList = [
 
+	// Insurgence Singles
+	//////////////////////////////////////////////////////////////////
+
+	{
+		section: "Insurgence Singles",
+	},
+	{
+		name: "[Gen 6] Insurgence OU",
+		mod: 'gen6insurgence',
+		ruleset: ['Standard', 'Swagger Clause'],
+		banlist: ['Uber', 'Arena Trap', 'Shadow Tag', 'Soul Dew', 'Baton Pass'],
+	},
+	{
+		name: "[Gen 6] Insurgence Ubers",
+		mod: 'gen6insurgence',
+		ruleset: ['Standard', 'Swagger Clause', 'Mega Rayquaza Clause'],
+	},
+	{
+		name: "[Gen 6] Insurgence Anything Goes",
+		mod: 'gen6insurgence',
+		ruleset: ['Obtainable', 'Team Preview', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+
+	// Insurgence National Dex
+	//////////////////////////////////////////////////////////////////
+
+	{
+		section: "Insurgence National Dex",
+	},
+	{
+		name: "[Gen 9] Insurgence National Dex AG",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3672423/">National Dex AG</a>`,
+		],
+
+		mod: 'gen9insurgence',
+		searchShow: false,
+		ruleset: ['Standard NatDex', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120'],
+	},
+	{
+		name: "[Gen 9] Insurgence National Dex Ubers",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3712168/">National Dex Ubers Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3712170/">National Dex Ubers Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3712169/">National Dex Ubers Viability List</a>`,
+		],
+
+		mod: 'gen9insurgence',
+		ruleset: ['Standard NatDex', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Species Clause', 'Sleep Clause Mod', 'Mega Rayquaza Clause'],
+		banlist: ['ND AG', 'Assist', 'Baton Pass'],
+	},
+	{
+		name: "[Gen 9] Insurgence National Dex",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3710848/">National Dex Metagame Discussion</a>`,
+		],
+
+		mod: 'gen9insurgence',
+		ruleset: ['Standard NatDex', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Sleep Clause Mod'],
+		banlist: ['ND Uber', 'ND AG', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Assist', 'Baton Pass'],
+	},
+	
 	// S/V Singles
 	///////////////////////////////////////////////////////////////////
 
@@ -264,75 +326,6 @@ export const Formats: FormatList = [
 				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, source, target, effect);
 			}
 		},
-	},
-
-	// Insurgence Singles
-	//////////////////////////////////////////////////////////////////
-
-	{
-		section: "Insurgence Singles",
-		column: 2,
-	},
-	{
-		name: "[Gen 6] Insurgence OU",
-		mod: 'gen6insurgence',
-		ruleset: ['Standard', 'Swagger Clause'],
-		banlist: ['Uber', 'Arena Trap', 'Shadow Tag', 'Soul Dew', 'Baton Pass'],
-	},
-	{
-		name: "[Gen 6] Insurgence Ubers",
-		mod: 'gen6insurgence',
-		ruleset: ['Standard', 'Swagger Clause', 'Mega Rayquaza Clause'],
-	},
-	{
-		name: "[Gen 6] Insurgence Anything Goes",
-		mod: 'gen6insurgence',
-		ruleset: ['Obtainable', 'Team Preview', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
-	},
-
-	// Insurgence National Dex
-	//////////////////////////////////////////////////////////////////
-
-	{
-		section: "Insurgence National Dex",
-		column: 2,
-	},
-	{
-		name: "[Gen 9] Insurgence National Dex AG",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3672423/">National Dex AG</a>`,
-		],
-
-		mod: 'gen9insurgence',
-		searchShow: false,
-		ruleset: ['Standard NatDex', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120'],
-	},
-	{
-		name: "[Gen 9] Insurgence National Dex Ubers",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3712168/">National Dex Ubers Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3712170/">National Dex Ubers Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3712169/">National Dex Ubers Viability List</a>`,
-		],
-
-		mod: 'gen9insurgence',
-		ruleset: ['Standard NatDex', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Species Clause', 'Sleep Clause Mod', 'Mega Rayquaza Clause'],
-		banlist: ['ND AG', 'Assist', 'Baton Pass'],
-	},
-	{
-		name: "[Gen 9] Insurgence National Dex",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3710848/">National Dex Metagame Discussion</a>`,
-		],
-
-		mod: 'gen9insurgence',
-		ruleset: ['Standard NatDex', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Sleep Clause Mod'],
-		banlist: ['ND Uber', 'ND AG', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Assist', 'Baton Pass'],
-	},
-
-	{
-		section: "Other Insurgence Metagames",
-		column: 2,
 	},
 	{
 		name: "[Gen 9] Insurgence Free-For-All AG",
