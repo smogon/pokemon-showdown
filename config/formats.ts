@@ -80,7 +80,7 @@ export const Formats: FormatList = [
 		ruleset: ['Standard NatDex', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Sleep Clause Mod'],
 		banlist: ['ND Uber', 'ND AG', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Assist', 'Baton Pass'],
 	},
-	
+
 	// S/V Singles
 	///////////////////////////////////////////////////////////////////
 
@@ -151,14 +151,6 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles'],
 		banlist: ['DUber', 'Shadow Tag'],
-	},
-	{
-		name: "[Gen 9] VGC 2023 Series 2",
-
-		mod: 'gen9',
-		gameType: 'doubles',
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
-		banlist: ['Sub-Legendary'],
 	},
 	{
 		name: "[Gen 9] Doubles Custom Game",
