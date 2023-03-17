@@ -4339,12 +4339,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	arceusprimal: {
 		inherit: true,
 		isNonstandard: null,
-		tier: "Uber",
+		tier: "AG",
     },
 	giratinaprimal: {
 		inherit: true,
 		isNonstandard: null,
-		tier: "Uber",
+		tier: "AG",
     },
 	regigigasprimal: {
 		inherit: true,
