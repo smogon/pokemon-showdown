@@ -47,7 +47,7 @@ export const Formats: FormatList = [
 		name: "[Gen 6] Insurgence OU",
 
 		mod: 'gen6insurgence',
-		ruleset: ['Standard'],
+		ruleset: ['Standard', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120'],
 		banlist: ['Uber', 'AG', 'Arena Trap', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'King\'s Rock', 'Baton Pass'],
 	},
 	{
