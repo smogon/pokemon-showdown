@@ -48,7 +48,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen6insurgence',
 		ruleset: ['Standard'],
-		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'King\'s Rock', 'Baton Pass'],
+		banlist: ['Uber', 'AG', 'Arena Trap', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'King\'s Rock', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 9] Ubers",
