@@ -241,6 +241,30 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// DaWoblefet
+	shadowartifice: {
+		shortDesc: "Traps adjacent foes. If KOed with a move, that move's user loses an equal amount of HP.",
+		name: "Shadow Artifice",
+		onFoeTrapPokemon(pokemon) {
+			if (!pokemon.hasAbility(['shadowtag', 'shadowartifice']) && pokemon.isAdjacent(this.effectState.target)) {
+				pokemon.tryTrap(true);
+			}
+		},
+		onFoeMaybeTrapPokemon(pokemon, source) {
+			if (!source) source = this.effectState.target;
+			if (!source || !pokemon.isAdjacent(source)) return;
+			if (!pokemon.hasAbility(['shadowtag', 'shadowartifice'])) {
+				pokemon.maybeTrapped = true;
+			}
+		},
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			if (!target.hp) {
+				this.damage(target.getUndynamaxedHP(damage), source, target);
+			}
+		},
+	},
+
 	// Eli
 	stormsurge: {
 		shortDesc: "On switch-in, this Pokemon summons Storm Surge.",

@@ -175,6 +175,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Dawn of Artemis')}|Sad.`);
 		},
 	},
+	dawoblefet: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('DaWoblefet')}|What's going on guys? This is DaWoblefet, and welcome to Mechanics Monday.`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('DaWoblefet')}|Until next time, have a good one.`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('DaWoblefet')}|mished`);
+		},
+	},
 	deftinwolf: {
 		noCopy: true,
 		onStart() {

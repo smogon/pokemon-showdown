@@ -334,6 +334,34 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// DaWoblefet
+	superegoinflation: {
+		accuracy: true,
+		basePower: 0,
+		category: "Special",
+		shortDesc: "User heals 25% HP; Target +2 Atk/SpA + Taunt.",
+		name: "Super Ego Inflation",
+		gen: 9,
+		pp: 5,
+		priority: -7,
+		flags: {protect: 1, mirror: 1, bypasssub: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Follow Me', source);
+			this.add('-anim', target, 'Swords Dance', target);
+			this.add('-anim', target, 'Nasty Plot', target);
+		},
+		onHit(target, source) {
+			this.heal(source.maxhp / 4, source);
+			this.boost({atk: 2, spa: 2});
+			target.addVolatile('taunt');
+		},
+		target: "normal",
+		type: "Normal",
+	},
+
 	// deftinwolf
 	trivialpursuit: {
 		accuracy: 100,

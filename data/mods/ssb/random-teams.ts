@@ -109,6 +109,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Magical Focus',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Dragon', skip: 'Dawn of Artemis',
 	},
+	DaWoblefet: {
+		species: 'Wobbuffet', ability: 'Shadow Artifice', item: 'Iapapa Berry', gender: 'M',
+		moves: ['Counter', 'Mirror Coat', 'Encore'],
+		signatureMove: 'Super Ego Inflation',
+		evs: {hp: 252, def: 252, spd: 4}, ivs: {spe: 0}, nature: 'Relaxed', teraType: 'Fairy',
+	},
 	deftinwolf: {
 		species: 'Yveltal', ability: 'Sharpness', item: 'Dread Plate', gender: '',
 		moves: ['Aerial Ace', 'Ceaseless Edge', 'Cross Poison'],
