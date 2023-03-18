@@ -281,7 +281,7 @@ export const DefaultText: {[k: string]: DefaultText} = {
 		weatherName: "Darkness",
 		start: "  A shadow has fallen across the battlefield!",
 		end: "  The darkness subsided.",
-		upkeep: "  (Darkness shrouds the field.)",
+		upkeep: "  (Darkness shrouds the battlefield.)",
 	},
 	raindance: {
 		weatherName: "Rain",
