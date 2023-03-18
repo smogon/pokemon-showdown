@@ -1412,16 +1412,17 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 75,
 		category: "Special",
-// 		isNonstandard: "Unobtainable",
 		name: "Bitter Malice",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		secondary: {
-			chance: 100,
-			boosts: {
-				atk: -1,
-			},
+			// chance: 100,
+			// boosts: {
+			// 	atk: -1,
+			// },
+			chance: 30,
+			status: 'frz',
 		},
 		target: "normal",
 		type: "Ghost",
@@ -2351,6 +2352,22 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "any",
 		type: "Flying",
 		contestType: "Cute",
+	},
+	chillingtouch: {
+		num: 9555,
+		accuracy: 85,
+		basePower: 0,
+		category: "Status",
+		name: "Chilling Touch",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1},
+		status: 'frz',
+		secondary: null,
+		target: "normal",
+		type: "Ice",
+		zMove: {boost: {atk: 1}},
+		contestType: "Beautiful",
 	},
 	chillingwater: {
 		num: 886,
@@ -14817,21 +14834,18 @@ export const Moves: {[moveid: string]: MoveData} = {
 	ragefist: {
 		num: 889,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 50,
+		basePowerCallback(pokemon) {
+			return Math.min(170, 50 + 20 * pokemon.timesAttacked);
+		},
 		category: "Physical",
 		name: "Rage Fist",
-		pp: 20,
+		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
-		onBasePower(basePower, pokemon) {
-			if (pokemon.status && pokemon.status !== 'slp') {
-				return this.chainModify(2);
-			}
-		},
+		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
-		contestType: "Cute",
 	},
 	ragepowder: {
 		num: 476,
@@ -21238,14 +21252,17 @@ export const Moves: {[moveid: string]: MoveData} = {
 	wildcharge: {
 		num: 528,
 		accuracy: 100,
-		basePower: 90,
+		basePower: 120,
 		category: "Physical",
 		name: "Wild Charge",
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		recoil: [1, 4],
-		secondary: null,
+		recoil: [1, 3],
+		secondary: {
+			chance: 10,
+			status: 'par',
+		},
 		target: "normal",
 		type: "Electric",
 		contestType: "Tough",

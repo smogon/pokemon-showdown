@@ -1764,6 +1764,14 @@ export class BattleActions {
 			}
 		}
 
+		if (this.dex.currentMod === 'gen9rebalanced') {
+			if (pokemon.status === 'frz' && move.category === 'Special') {
+				if (this.battle.gen < 6 || move.id !== 'facade') {
+					baseDamage = this.battle.modify(baseDamage, 0.5);
+				}
+			}
+		}
+
 		// Generation 5, but nothing later, sets damage to 1 before the final damage modifiers
 		if (this.battle.gen === 5 && !baseDamage) baseDamage = 1;
 

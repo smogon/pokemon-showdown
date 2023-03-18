@@ -92,15 +92,21 @@ export const Conditions: {[k: string]: ConditionData} = {
 				target.formeChange('Shaymin', this.effect, true);
 			}
 		},
-		onBeforeMovePriority: 10,
-		onBeforeMove(pokemon, target, move) {
-			if (move.flags['defrost']) return;
-			if (this.randomChance(1, 5)) {
-				pokemon.cureStatus();
-				return;
-			}
-			this.add('cant', pokemon, 'frz');
-			return false;
+		// onBeforeMovePriority: 10,
+		// onBeforeMove(pokemon, target, move) {
+		// 	if (move.flags['defrost']) return;
+		// 	if (this.randomChance(1, 5)) {
+		// 		pokemon.cureStatus();
+		// 		return;
+		// 	}
+		// 	this.add('cant', pokemon, 'frz');
+		// 	return false;
+		// },
+
+		// Damage reduction is handled directly in the sim/battle.js damage function
+		onResidualOrder: 10,
+		onResidual(pokemon) {
+			this.damage(pokemon.baseMaxhp / 16);
 		},
 		onModifyMove(move, pokemon) {
 			if (move.flags['defrost']) {

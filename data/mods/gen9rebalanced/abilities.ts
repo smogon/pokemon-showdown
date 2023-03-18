@@ -821,10 +821,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	dauntlessshield: {
 		onStart(pokemon) {
-			if (this.effectState.shieldBoost) return;
-			if (this.boost({def: 1}, pokemon)) {
-				this.effectState.shieldBoost = true;
-			}
+			// if (this.effectState.shieldBoost) return;
+			// if (this.boost({def: 1}, pokemon)) {
+			// 	this.effectState.shieldBoost = true;
+			// }
+			this.boost({def: 1}, pokemon);
 		},
 		name: "Dauntless Shield",
 		rating: 3.5,
