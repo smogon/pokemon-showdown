@@ -1,0 +1,38 @@
+name: Release
+on:
+  push:
+    tags:        
+      - 'v*'
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+  npm-publish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      # Bump the version in package.json
+      # https://docs.github.com/en/actions/learn-github-actions/contexts#github-context
+      - run: npm version ${{ github.ref_name }}
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # After publish, open a PR to update the version in package.json
+      - uses: peter-evans/create-pull-request@v4
+        with:
+          title: Bump package.json version to ${{ github.ref_name }}
+          body: |
+            Bump package.json version to ${{ github.ref_name }}
+          commit-message: Bump version to ${{ github.ref_name }}
+          branch: npm-version-bump
+          base: master
+          labels: |
+            dependencies
+            version-bump
+    
