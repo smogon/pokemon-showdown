@@ -29,7 +29,6 @@ jobs:
           title: Bump package.json version to ${{ github.ref_name }}
           body: |
             Bump package.json version to ${{ github.ref_name }}
-          commit-message: Bump version to ${{ github.ref_name }}
           branch: npm-version-bump
           base: master
           labels: |
