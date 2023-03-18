@@ -95,7 +95,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "PU",
 	},
 	sandshrew: {
-		tier: "7U",
+		tier: "8U",
 	},
 	sandslash: {
 		randomBattleMoves: ["earthquake", "nightslash", "rapidspin", "stealthrock", "stoneedge", "substitute", "swordsdance"],
@@ -125,7 +125,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	clefairy: {
-		tier: "7U",
+		tier: "8U",
 	},
 	clefable: {
 		randomBattleMoves: ["calmmind", "doubleedge", "fireblast", "icebeam", "softboiled", "stealthrock", "thunderbolt"],
@@ -177,7 +177,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	parasect: {
 		randomBattleMoves: ["seedbomb", "spore", "stunspore", "synthesis", "xscissor"],
-		tier: "8U",
+		tier: "7U",
 	},
 	venonat: {
 		tier: "LC",
@@ -326,7 +326,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	dewgong: {
 		randomBattleMoves: ["encore", "icebeam", "raindance", "rest", "surf", "toxic"],
-		tier: "6U",
+		tier: "ZU",
 	},
 	grimer: {
 		tier: "LC",
@@ -388,7 +388,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	cubone: {
-		tier: "LC",
+		tier: "8U",
 	},
 	marowak: {
 		randomBattleMoves: ["doubleedge", "earthquake", "firepunch", "substitute", "swordsdance", "thunderpunch"],
@@ -458,7 +458,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "8U",
 	},
 	seadra: {
-		tier: "6U",
+		tier: "ZU",
 	},
 	kingdra: {
 		randomBattleMoves: ["dracometeor", "dragondance", "hydropump", "icebeam", "outrage", "rest", "sleeptalk", "substitute", "waterfall"],
@@ -696,7 +696,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	ariados: {
 		randomBattleMoves: ["bugbite", "poisonjab", "shadowsneak", "suckerpunch", "toxicspikes"],
-		tier: "8U",
+		tier: "7U",
 	},
 	chinchou: {
 		tier: "8U",
@@ -1030,13 +1030,13 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	dustox: {
 		randomBattleMoves: ["bugbuzz", "protect", "roost", "toxic", "whirlwind"],
-		tier: "ZU",
+		tier: "6U",
 	},
 	lotad: {
 		tier: "LC",
 	},
 	lombre: {
-		tier: "7U",
+		tier: "8U",
 	},
 	ludicolo: {
 		randomBattleMoves: ["energyball", "icebeam", "leechseed", "raindance", "substitute", "surf"],
@@ -1120,7 +1120,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	loudred: {
-		tier: "NFE",
+		tier: "8U",
 	},
 	exploud: {
 		randomBattleMoves: ["crunch", "earthquake", "fireblast", "icebeam", "return", "surf"],
@@ -1181,7 +1181,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	plusle: {
 		randomBattleMoves: ["batonpass", "encore", "hiddenpowerice", "nastyplot", "thunderbolt"],
-		tier: "6U",
+		tier: "ZU",
 	},
 	minun: {
 		randomBattleMoves: ["batonpass", "encore", "hiddenpowerice", "nastyplot", "thunderbolt"],
@@ -1374,7 +1374,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	snorunt: {
-		tier: "LC",
+		tier: "8U",
 	},
 	glalie: {
 		randomBattleMoves: ["earthquake", "explosion", "icebeam", "spikes", "taunt"],
@@ -1388,7 +1388,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	sealeo: {
-		tier: "NFE",
+		tier: "8U",
 	},
 	walrein: {
 		randomBattleMoves: ["encore", "icebeam", "protect", "rest", "roar", "sleeptalk", "surf", "toxic"],
@@ -1399,7 +1399,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	huntail: {
 		randomBattleMoves: ["doubleedge", "hiddenpowergrass", "hydropump", "icebeam", "raindance", "suckerpunch", "surf"],
-		tier: "6U",
+		tier: "ZU",
 	},
 	gorebyss: {
 		randomBattleMoves: ["hiddenpowergrass", "hydropump", "icebeam", "raindance", "surf"],
@@ -1417,7 +1417,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	shelgon: {
-		tier: "6U",
+		tier: "ZU",
 	},
 	salamence: {
 		randomBattleMoves: ["dracometeor", "dragondance", "earthquake", "fireblast", "outrage", "roost"],
@@ -1557,7 +1557,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "PU",
 	},
 	shieldon: {
-		tier: "LC",
+		tier: "7U",
 	},
 	bastiodon: {
 		randomBattleMoves: ["earthquake", "metalburst", "protect", "roar", "rockslide", "stealthrock", "toxic"],
@@ -1572,11 +1572,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	wormadamsandy: {
 		randomBattleMoves: ["earthquake", "rest", "sleeptalk", "toxic"],
-		tier: "7U",
+		tier: "ZU",
 	},
 	wormadamtrash: {
 		randomBattleMoves: ["gyroball", "protect", "stealthrock", "toxic"],
-		tier: "6U",
+		tier: "ZU",
 	},
 	mothim: {
 		randomBattleMoves: ["airslash", "bugbuzz", "hiddenpowerfighting", "hiddenpowerground", "shadowball", "uturn"],
@@ -1700,7 +1700,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	carnivine: {
 		randomBattleMoves: ["powerwhip", "return", "sleeppowder", "substitute", "swordsdance", "synthesis"],
-		tier: "6U",
+		tier: "ZU",
 	},
 	finneon: {
 		tier: "LC",
@@ -1781,7 +1781,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	phione: {
 		randomBattleMoves: ["icebeam", "raindance", "rest", "surf", "toxic"],
-		tier: "6U",
+		tier: "ZU",
 	},
 	manaphy: {
 		randomBattleMoves: ["energyball", "icebeam", "surf", "tailglow"],
