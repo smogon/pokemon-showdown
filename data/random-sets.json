@@ -1791,11 +1791,6 @@
                 "role": "Bulky Setup",
                 "movepool": ["Body Press", "Cosmic Power", "Recover", "Stored Power"],
                 "teraTypes": ["Steel"]
-            },
-            {
-                "role": "Setup Sweeper", 
-                "movepool": ["Calm Mind", "Focus Blast", "Judgment", "Recover"],
-                "teraTypes": ["Steel", "Fighting"]
             }
         ]
     },
