@@ -21866,6 +21866,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Hyper Voice', target);
+			this.add('-anim', source, 'Spacial Rend', target);
+		},
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Dragon",
@@ -21894,6 +21901,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onSideEnd(side) {
 				this.add('-sideend', side, 'move: Jet Stream');
 			},
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Dragon Dance', source);
+			this.add('-anim', source, 'Tailwind', source);
 		},
 		secondary: null,
 		target: "allySide",
