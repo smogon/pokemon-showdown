@@ -28,18 +28,18 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 6] Insurgence OU",
 		mod: 'gen6insurgence',
-		ruleset: ['Standard', 'Swagger Clause'],
+		ruleset: ['Standard', 'Swagger Clause', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120'],
 		banlist: ['Uber', 'Arena Trap', 'Shadow Tag', 'Soul Dew', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 6] Insurgence Ubers",
 		mod: 'gen6insurgence',
-		ruleset: ['Standard', 'Swagger Clause', 'Mega Rayquaza Clause'],
+		ruleset: ['Standard', 'Swagger Clause', 'Mega Rayquaza Clause', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120'],
 	},
 	{
 		name: "[Gen 6] Insurgence Anything Goes",
 		mod: 'gen6insurgence',
-		ruleset: ['Obtainable', 'Team Preview', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Obtainable', 'Team Preview', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120'],
 	},
 
 	// Insurgence National Dex

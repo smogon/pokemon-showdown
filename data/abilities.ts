@@ -5322,7 +5322,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onBeforeMovePriority: 0.5,
 		onBeforeMove(attacker, defender, move) {
 			if (move.category === 'Status') return;
-			if (move.type === 'Fire' || (move.id === 'custommove' && attacker.cmType === 'Fire') || (move.id === 'weatherball' &&  attacker.effectiveWeather() === "sunnyday")) {
+			if (move.type === 'Fire' || (move.id === 'custommove' && attacker.cmType === 'Fire') || 
+			(move.id === 'weatherball' &&  attacker.effectiveWeather() === "sunnyday") || (move.id === 'terablast' &&  attacker.terastallized === 'Fire')) {
 				this.boost({spa: 1, atk: 1, spe: 1}, attacker);
 				if (attacker.species.id === 'emolgadelta') {
 					attacker.formeChange('Emolga-Delta-Fired');
