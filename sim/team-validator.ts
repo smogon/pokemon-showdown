@@ -1884,8 +1884,8 @@ export class TeamValidator {
 					problems.push(`${name} must have its Hidden Ability${etc}.`);
 				}
 
-				const canUseAbilityPatch = dex.gen >= 8 && this.format.mod !== 'gen8dlc1' && this.format.mod !== 'gen6insurgence';
-				if (isHidden && !eventData.isHidden && !canUseAbilityPatch) {
+				const canUseAbilityPatch = dex.gen >= 8 && this.format.mod !== 'gen8dlc1';
+				if (isHidden && !eventData.isHidden && !canUseAbilityPatch && !species.id.startsWith("arceus")) {
 					if (fastReturn) return true;
 					problems.push(`${name} must not have its Hidden Ability${etc}.`);
 				}
@@ -2143,7 +2143,7 @@ export class TeamValidator {
 					const canUseAbilityPatch = dex.gen >= 8 && format.mod !== 'gen8dlc1';
 					if (
 						learnedGen < 7 && setSources.isHidden && !canUseAbilityPatch &&
-						!dex.mod('gen' + learnedGen).species.get(baseSpecies.name).abilities['H']
+						!dex.mod(format.mod).species.get(baseSpecies.name).abilities['H']
 					) {
 						cantLearnReason = `can only be learned in gens without Hidden Abilities.`;
 						continue;
