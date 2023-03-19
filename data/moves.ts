@@ -22161,6 +22161,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (pokemon.species.baseSpecies === 'Muk-Delta' && pokemon.species.name !== 'Muk-Delta' && target && !target.fainted) {
 				move.type = pokemon.species.name.slice(10);
 				move.damage = Math.floor((2 ** this.dex.getEffectiveness(move.type, target)) * target.baseMaxhp / 6);
+			} else {
+				return null;
 			}
 		},
 		secondary: null,
