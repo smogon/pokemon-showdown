@@ -498,13 +498,13 @@ const TWISTS: {[k: string]: Twist} = {
 			for (const index in this.mines) {
 				this.questions[index].mines = [];
 				for (const mine of this.mines[index]) {
-					this.questions[index].mines.push({ mine: mine.substr(1), users: [] });
+					this.questions[index].mines.push({mine: mine.substr(1), users: []});
 				}
 			}
 
 			for (const player of Object.values(this.playerTable)) {
 				if (player.mines) {
-					for (const { index, mine } of player.mines) {
+					for (const {index, mine} of player.mines) {
 						this.questions[index].mines.find(obj => obj.mine === mine)?.users.push(player.name);
 					}
 				}
@@ -515,7 +515,7 @@ const TWISTS: {[k: string]: Twist} = {
 			this.announce(
 				`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt by ${hosts} was ended ${(endedBy ? "by " + Utils.escapeHTML(endedBy.name) : "automatically")}.<br />` +
 				`${this.completed.slice(0, sliceIndex).map((p, i) => `${Utils.formatOrder(i + 1)} place: <em>${Utils.escapeHTML(p.name)}</em> <span style="color: lightgreen;">[${p.time}]</span>.<br />`).join("")}${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Utils.escapeHTML(e.name)}</em> <span style="color: lightgreen;">[${e.time}]</span>`).join(', ')}<br />` : ''}<br />` +
-				`<details style="cursor: pointer;"><summary>Solution: </summary><br />${this.questions.map((q, i) => `${i + 1}) ${Chat.formatText(q.hint)} <span style="color: lightgreen">[<em>${Utils.escapeHTML(q.answer.join(' / '))}</em>]</span><br/><details style="cursor: pointer;"><summary>Mines: </summary>${q.mines.map(({ mine, users }) => Utils.escapeHTML(`${mine}: ${users.join(' / ') || '-'}`)).join('<br />')}</details>`).join("<br />")}</details>`
+				`<details style="cursor: pointer;"><summary>Solution: </summary><br />${this.questions.map((q, i) => `${i + 1}) ${Chat.formatText(q.hint)} <span style="color: lightgreen">[<em>${Utils.escapeHTML(q.answer.join(' / '))}</em>]</span><br/><details style="cursor: pointer;"><summary>Mines: </summary>${q.mines.map(({mine, users}) => Utils.escapeHTML(`${mine}: ${users.join(' / ') || '-'}`)).join('<br />')}</details>`).join("<br />")}</details>`
 			);
 			return true;
 		},
@@ -527,7 +527,7 @@ const TWISTS: {[k: string]: Twist} = {
 				for (const [playerId, guesses] of Object.entries(guessObj)) {
 					const player = this.playerTable[playerId];
 					if (!player.mines) player.mines = [];
-					player.mines.push(...mines.filter(mine => guesses.has(toID(mine))).map(mine => ({ index: q, mine: mine.substr(1) })));
+					player.mines.push(...mines.filter(mine => guesses.has(toID(mine))).map(mine => ({index: q, mine: mine.substr(1)})));
 				}
 			}
 		},
@@ -536,7 +536,7 @@ const TWISTS: {[k: string]: Twist} = {
 		onAfterEnd(isReset) {
 			if (isReset) return;
 			const mineLess = [];
-			for (const { name } of this.completed) {
+			for (const {name} of this.completed) {
 				const player = this.playerTable[toID(name)];
 				if (!player) continue;
 				if (!player.mines?.length) mineLess.push(name);
@@ -546,7 +546,7 @@ const TWISTS: {[k: string]: Twist} = {
 				// Points are awarded manually
 			}
 		},
-	}
+	},
 };
 
 const MODES: {[k: string]: GameMode | string} = {
