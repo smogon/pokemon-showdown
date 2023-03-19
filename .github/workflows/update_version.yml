@@ -7,6 +7,7 @@ on:
           required: true
           type: choice
           description: Version type
+          default: patch
           options: 
           - major
           - minor
