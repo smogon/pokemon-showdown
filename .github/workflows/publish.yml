@@ -4,7 +4,7 @@ on:
     branches:
       - master
     paths:
-      - 'package*.json'
+      - 'package.json'
 jobs:
   test:
     uses: ./.github/workflows/test.yml
