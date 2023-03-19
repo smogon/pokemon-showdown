@@ -21984,6 +21984,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Mean Look', target);
+		},
 		onHit(target) {
 			if (target.getTypes().join() === 'Rock' || !target.setType('Rock')) {
 				// Soak should animate even when it fails.
@@ -22123,6 +22129,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Terablast', target);
+			this.add('-message', `Buuuuuuurp`);
+		},
 		onModifyMove(move, pokemon, target) {
 			if (pokemon.species.baseSpecies === 'Muk-Delta' && pokemon.species.name !== 'Muk-Delta' && target && !target.fainted) {
 				move.type = pokemon.species.name.slice(10);
