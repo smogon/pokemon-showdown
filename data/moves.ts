@@ -21797,6 +21797,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 30,
 		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Rock Polish', target);
+			this.add('-anim', source, 'Head Smash', target);
+		},
 		secondary: null,
 		target: "normal",
 		type: "Crystal",
