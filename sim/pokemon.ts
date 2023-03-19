@@ -778,7 +778,7 @@ export class Pokemon {
 			} else {
 				targets.push(target);
 			}
-			if (target.fainted && !move.isFutureMove) {
+			if (target.fainted && !move.flags['futuremove']) {
 				return {targets: [], pressureTargets: []};
 			}
 			if (selectedTarget !== target) {
@@ -788,14 +788,11 @@ export class Pokemon {
 
 		// Resolve apparent targets for Pressure.
 		let pressureTargets = targets;
-		switch (move.pressureTarget) {
-		case 'foeSide':
-			pressureTargets = this.foes();
-			break;
-		case 'self':
+		if (move.target === 'foeSide') {
 			pressureTargets = [];
-			break;
-		// At the moment, there are no other supported targets.
+		}
+		if (move.flags['mustpressure']) {
+			pressureTargets = this.foes();
 		}
 
 		return {targets, pressureTargets};
