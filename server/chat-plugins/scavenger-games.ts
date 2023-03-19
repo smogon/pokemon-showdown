@@ -447,17 +447,17 @@ const TWISTS: {[k: string]: Twist} = {
 			this.guesses = Array.from({length: this.questions.length}).map(() => ({}));
 			this.mines = Array.from({length: this.questions.length}).map(() => ({}));
 			for (const [index, question] of this.questions.entries()) {
-				this.mines[index] = question.answers.filter(ans => ans.startsWith('!'));
-				question.answers = question.answers.filter(ans => !ans.startsWith('!'));
+				this.mines[index] = question.answer.filter(ans => ans.startsWith('!'));
+				question.answer = question.answer.filter(ans => !ans.startsWith('!'));
 			}
 		},
 
-		onEditQuestion(number: number, question_answer: string, value: string) {
-			if (question_answer === 'question') question_answer = 'hint';
-			if (!['hint', 'answer'].includes(question_answer)) return false;
+		onEditQuestion(number: number, questionAnswer: string, value: string) {
+			if (questionAnswer === 'question') questionAnswer = 'hint';
+			if (!['hint', 'answer'].includes(questionAnswer)) return false;
 
 			let answer: string[] = [];
-			if (question_answer === 'answer') {
+			if (questionAnswer === 'answer') {
 				answer = value.split(';').map(p => p.trim());
 			}
 
@@ -465,7 +465,7 @@ const TWISTS: {[k: string]: Twist} = {
 
 			number--; // indexOf starts at 0
 
-			if (question_answer === 'answer') {
+			if (questionAnswer === 'answer') {
 				// These two lines are the only difference from the original
 				this.mines[number] = answer.filter(ans => ans.startsWith('!'));
 				this.questions[number].answer = answer.filter(ans => !ans.startsWith('!'));
@@ -473,8 +473,8 @@ const TWISTS: {[k: string]: Twist} = {
 				this.questions[number].hint = value;
 			}
 
-			this.announce(`The ${question_answer} for question ${number + 1} has been edited.`);
-			if (question_answer === 'hint') {
+			this.announce(`The ${questionAnswer} for question ${number + 1} has been edited.`);
+			if (questionAnswer === 'hint') {
 				for (const p in this.playerTable) {
 					this.playerTable[p].onNotifyChange(number);
 				}
@@ -487,28 +487,63 @@ const TWISTS: {[k: string]: Twist} = {
 
 			if (!this.guesses[curr][player.id]) this.guesses[curr][player.id] = new Set();
 			this.guesses[curr][player.id].add(toID(value));
+
+			throw new Chat.ErrorMessage("That is not the answer - try again!");
+		},
+
+		onShowEndBoard(endedBy?: User) {
+			const sliceIndex = this.gameType === 'official' ? 5 : 3;
+			const hosts = Chat.toListString(this.hosts.map(h => `<em>${Utils.escapeHTML(h.name)}</em>`));
+
+			for (const index in this.mines) {
+				this.questions[index].mines = [];
+				for (const mine of this.mines[index]) {
+					this.questions[index].mines.push({ mine: mine.substr(1), users: [] });
+				}
+			}
+
+			for (const player of Object.values(this.playerTable)) {
+				if (player.mines) {
+					for (const { index, mine } of player.mines) {
+						this.questions[index].mines.find(obj => obj.mine === mine)?.users.push(player.name);
+					}
+				}
+			}
+
+			for (const question of this.questions) question.mines.sort();
+
+			this.announce(
+				`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt by ${hosts} was ended ${(endedBy ? "by " + Utils.escapeHTML(endedBy.name) : "automatically")}.<br />` +
+				`${this.completed.slice(0, sliceIndex).map((p, i) => `${Utils.formatOrder(i + 1)} place: <em>${Utils.escapeHTML(p.name)}</em> <span style="color: lightgreen;">[${p.time}]</span>.<br />`).join("")}${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Utils.escapeHTML(e.name)}</em> <span style="color: lightgreen;">[${e.time}]</span>`).join(', ')}<br />` : ''}<br />` +
+				`<details style="cursor: pointer;"><summary>Solution: </summary><br />${this.questions.map((q, i) => `${i + 1}) ${Chat.formatText(q.hint)} <span style="color: lightgreen">[<em>${Utils.escapeHTML(q.answer.join(' / '))}</em>]</span><br/><details style="cursor: pointer;"><summary>Mines: </summary>${q.mines.map(({ mine, users }) => Utils.escapeHTML(`${mine}: ${users.join(' / ') || '-'}`)).join('<br />')}</details>`).join("<br />")}</details>`
+			);
+			return true;
+		},
+
+		onEnd(isReset) {
+			if (isReset) return;
+			for (const [q, guessObj] of this.guesses.entries()) {
+				const mines = this.mines[q];
+				for (const [playerId, guesses] of Object.entries(guessObj)) {
+					const player = this.playerTable[playerId];
+					if (!player.mines) player.mines = [];
+					player.mines.push(...mines.filter(mine => guesses.has(toID(mine))).map(mine => ({ index: q, mine: mine.substr(1) })));
+				}
+			}
 		},
 
 		onAfterEndPriority: 1,
 		onAfterEnd(isReset) {
 			if (isReset) return;
-			for (const [q, guessObj] of this.guesses.entries()) {
-				const mines = this.mines[q].map(toID);
-				for (const [playerId, guesses] of Object.entries(guessObj)) {
-					const player = this.playerTable[playerId];
-					if (!player.mines) player.mines = 0;
-					player.mines += mines.filter(mine => guesses.has(mine)).length;
-				}
-			}
 			const mineLess = [];
 			for (const { name } of this.completed) {
 				const player = this.playerTable[toID(name)];
 				if (!player) continue;
-				if (!player.mines) mineLess.push(name);
+				if (!player.mines?.length) mineLess.push(name);
 			}
 			if (mineLess.length) {
 				this.announce(Utils.html`${Chat.toListString(mineLess)} ${mineLess.length > 1 ? 'have' : 'has'} completed the hunt without hitting a single mine!`);
-				// Award points!
+				// Points are awarded manually
 			}
 		},
 	}
