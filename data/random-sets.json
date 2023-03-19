@@ -109,7 +109,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Encore", "Grass Knot", "Hydro Pump", "Ice Beam", "Nasty Plot", "Psyshock", "Taunt"],
+                "movepool": ["Encore", "Grass Knot", "Hydro Pump", "Ice Beam", "Nasty Plot", "Psyshock"],
                 "teraTypes": ["Water"]
             }
         ]
@@ -885,7 +885,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Body Slam", "Earthquake", "Giga Impact", "Throat Chop"],
-                "teraTypes": ["Normal", "Ground"]
+                "teraTypes": ["Normal", "Ground", "Ghost"]
             }
         ]
     },
@@ -1686,6 +1686,11 @@
                 "role": "Bulky Setup",
                 "movepool": ["Body Press", "Cosmic Power", "Recover", "Stored Power"],
                 "teraTypes": ["Steel", "Psychic"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Calm Mind", "Judgment", "Recover", "Shadow Ball"],
+                "teraTypes": ["Steel", "Ghost"]
             }
         ]
     },
@@ -2002,8 +2007,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Close Combat", "Dragon Dance", "Earthquake", "Outrage", "Poison Jab"],
-                "teraTypes": ["Fighting", "Ground"]
+                "movepool": ["Close Combat", "Dragon Dance", "Earthquake", "Iron Head", "Outrage"],
+                "teraTypes": ["Fighting", "Ground", "Steel"]
             }
         ]
     },
@@ -2692,7 +2697,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Aura Sphere", "Flash Cannon", "Fleur Cannon", "Ice Beam", "Pain Split", "Spikes", "Volt Switch"],
+                "movepool": ["Aura Sphere", "Flash Cannon", "Fleur Cannon", "Pain Split", "Spikes", "Volt Switch"],
                 "teraTypes": ["Fairy", "Steel", "Fighting", "Water"]
             },
             {
@@ -3408,7 +3413,7 @@
             {
                 "role": "Tera Blast user",
                 "movepool": ["Dazzling Gleam", "Lumina Crash", "Roost", "Tera Blast"],
-                "teraTypes": ["Fire"]
+                "teraTypes": ["Fire", "Fighting"]
             }
         ]
     },
@@ -3793,7 +3798,7 @@
             {
                 "role": "Fast Support",
                 "movepool": ["Leech Seed", "Phantom Force", "Power Whip", "Substitute"],
-                "teraTypes": ["Ghost", "Fairy"]
+                "teraTypes": ["Steel", "Water", "Fairy"]
             }
         ]
     },
