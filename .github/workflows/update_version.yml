@@ -1,0 +1,36 @@
+name: Update the npm package version
+
+on:
+  workflow_dispatch:
+    inputs:
+        version:
+          required: true
+          type: choice
+          description: Version type
+          options: 
+          - major
+          - minor
+          - patch
+          - premajor
+          - preminor
+          - prepatch
+          - prerelease
+jobs:
+  update_version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14
+          cache: 'npm'
+      - run: npm version ${{ github.event.inputs.version }}
+      - uses: peter-evans/create-pull-request@v4
+        with:
+          title: Bump package.json version to ${{ github.event.inputs.version }}
+          body: |
+            Bump package.json version to ${{ github.event.inputs.version }}
+          commit-message: Bump version to ${{ github.event.inputs.version }}
+          branch: npm-version-bump
+          base: master
+    
