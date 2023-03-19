@@ -22113,6 +22113,27 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
+	regurgitation: {
+		num: -24,
+		accuracy: true,
+		basePower: 0,
+		damage: 0,
+		category: "Physical",
+		name: "Regurgitation",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onModifyMove(move, pokemon, target) {
+			if (pokemon.species.baseSpecies === 'Muk-Delta' && pokemon.species.name !== 'Muk-Delta' && target && !target.fainted) {
+				move.type = pokemon.species.name.slice(10);
+				move.damage = Math.floor((2 ** this.dex.getEffectiveness(move.type, target)) * target.baseMaxhp / 6);
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		contestType: "Cool",
+	},
 	retrograde: {
 		num: -17,
 		accuracy: 100,
@@ -22225,7 +22246,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Tough",
 	},
 	hotcoals: {
-		num: 446,
+		num: -23,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
