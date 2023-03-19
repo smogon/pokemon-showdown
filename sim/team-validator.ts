@@ -1884,7 +1884,7 @@ export class TeamValidator {
 					problems.push(`${name} must have its Hidden Ability${etc}.`);
 				}
 
-				const canUseAbilityPatch = dex.gen >= 8 && this.format.mod !== 'gen8dlc1';
+				const canUseAbilityPatch = dex.gen >= 8 && this.format.mod !== 'gen8dlc1' && this.format.mod !== 'gen6insurgence';
 				if (isHidden && !eventData.isHidden && !canUseAbilityPatch) {
 					if (fastReturn) return true;
 					problems.push(`${name} must not have its Hidden Ability${etc}.`);
