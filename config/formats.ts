@@ -2542,7 +2542,7 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['Standard', '!Switch Priority Clause Mod'],
 		banlist: ['Uber', 'Soul Dew', 'Swagger'],
-		unbanlist: ['Deoxys-Defense', 'Latias', 'Wobbuffet', 'Wynaut'],
+		unbanlist: ['Latias', 'Wobbuffet', 'Wynaut'],
 	},
 
 	// Sw/Sh Singles
