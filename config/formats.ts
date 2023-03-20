@@ -1259,7 +1259,7 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Standard Doubles'],
-		banlist: ['Flutter Mane', 'Koraidon', 'Miraidon', 'Dancer', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Ally Switch', 'Revival Blessing', 'Swagger'],
+		banlist: ['Annihilape', 'Chi-Yu', 'Flutter Mane', 'Koraidon', 'Miraidon', 'Dancer', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Ally Switch', 'Revival Blessing', 'Swagger'],
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
 				pokemon.m.trackPP = new Map<string, number>();
