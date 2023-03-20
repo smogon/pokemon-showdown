@@ -1,0 +1,1733 @@
+{
+    "venusaurmega": {
+        "moves": ["earthquake", "leechseed", "megadrain", "sleeppowder", "sludgebomb"]
+    },
+    "charizardmegax": {
+        "moves": ["earthquake", "flareblitz", "outrage", "roost", "willowisp"]
+    },
+    "charizardmegay": {
+        "moves": ["airslash", "dragonpulse", "fireblast", "flamethrower", "roost"]
+    },
+    "blastoisemega": {
+        "moves": ["darkpulse", "hydropump", "icebeam", "scald", "toxic"]
+    },
+    "butterfree": {
+        "moves": ["airslash", "bugbuzz", "quiverdance", "sleeppowder"]
+    },
+    "beedrillmega": {
+        "moves": ["brickbreak", "drillrun", "poisonjab", "uturn", "xscissor"]
+    },
+    "pidgeotmega": {
+        "moves": ["airslash", "heatwave", "roost", "toxic", "uturn"]
+    },
+    "raticate": {
+        "moves": ["crunch", "doubleedge", "irontail", "suckerpunch", "swordsdance"]
+    },
+    "raticatealola": {
+        "moves": ["crunch", "doubleedge", "suckerpunch", "swordsdance", "uturn"]
+    },
+    "fearow": {
+        "moves": ["drillpeck", "drillrun", "quickattack", "roost", "uturn"]
+    },
+    "arbok": {
+        "moves": ["crunch", "earthquake", "glare", "poisonjab", "suckerpunch"]
+    },
+    "pikachustarter": {
+        "moves": ["calmmind", "splishysplash", "substitute", "thunderbolt", "zippyzap"]
+    },
+    "raichualola": {
+        "moves": ["calmmind", "encore", "psychic", "substitute", "thunderbolt"]
+    },
+    "raichu": {
+        "moves": ["brickbreak", "fakeout", "irontail", "substitute", "thunderbolt"]
+    },
+    "sandslash": {
+        "moves": ["earthquake", "rockslide", "stealthrock", "swordsdance", "toxic"]
+    },
+    "sandslashalola": {
+        "moves": ["earthquake", "icepunch", "iceshard", "irontail", "stealthrock", "swordsdance"]
+    },
+    "nidoqueen": {
+        "moves": ["dragontail", "earthquake", "icebeam", "poisonjab", "stealthrock"]
+    },
+    "nidoking": {
+        "moves": ["earthquake", "icepunch", "megahorn", "poisonjab", "stealthrock"]
+    },
+    "clefable": {
+        "moves": ["calmmind", "flamethrower", "icebeam", "moonblast", "stealthrock", "thunderwave"]
+    },
+    "ninetales": {
+        "moves": ["darkpulse", "fireblast", "flamethrower", "nastyplot", "willowisp"]
+    },
+    "ninetalesalola": {
+        "moves": ["darkpulse", "dazzlinggleam", "icebeam", "nastyplot", "substitute"]
+    },
+    "wigglytuff": {
+        "moves": ["bodyslam", "dazzlinggleam", "fireblast", "icebeam", "stealthrock"]
+    },
+    "golbat": {
+        "moves": ["airslash", "roost", "sludgebomb", "taunt", "toxic", "uturn", "whirlwind"]
+    },
+    "vileplume": {
+        "moves": ["megadrain", "moonblast", "sleeppowder", "sludgebomb", "stunspore"]
+    },
+    "parasect": {
+        "moves": ["brickbreak", "leechlife", "leechseed", "spore", "substitute"]
+    },
+    "venomoth": {
+        "moves": ["bugbuzz", "psychic", "quiverdance", "sleeppowder", "sludgebomb"]
+    },
+    "dugtrio": {
+        "moves": ["earthquake", "rockslide", "stealthrock", "suckerpunch", "toxic"]
+    },
+    "dugtrioalola": {
+        "moves": ["earthquake", "rockslide", "stealthrock", "suckerpunch", "toxic"]
+    },
+    "persian": {
+        "moves": ["fakeout", "headbutt", "playrough", "taunt", "uturn"]
+    },
+    "persianalola": {
+        "moves": ["darkpulse", "nastyplot", "taunt", "thunderbolt", "uturn"]
+    },
+    "golduck": {
+        "moves": ["calmmind", "hydropump", "icebeam", "psychic", "scald"]
+    },
+    "primeape": {
+        "moves": ["brickbreak", "bulkup", "earthquake", "rockslide", "uturn"]
+    },
+    "arcanine": {
+        "moves": ["crunch", "flareblitz", "playrough", "superpower", "willowisp"]
+    },
+    "poliwrath": {
+        "moves": ["brickbreak", "bulkup", "earthquake", "icepunch", "superpower", "waterfall"]
+    },
+    "alakazammega": {
+        "moves": ["calmmind", "dazzlinggleam", "psychic", "recover", "shadowball"]
+    },
+    "machamp": {
+        "moves": ["brickbreak", "bulkup", "earthquake", "icepunch", "rockslide", "superpower"]
+    },
+    "victreebel": {
+        "moves": ["poisonjab", "powerwhip", "sleeppowder", "suckerpunch", "swordsdance"]
+    },
+    "tentacruel": {
+        "moves": ["haze", "icebeam", "scald", "sludgebomb"]
+    },
+    "golem": {
+        "moves": ["earthquake", "explosion", "rockslide", "stealthrock", "toxic"]
+    },
+    "golemalola": {
+        "moves": ["earthquake", "explosion", "rockslide", "stealthrock", "thunderpunch"]
+    },
+    "rapidash": {
+        "moves": ["drillrun", "flareblitz", "irontail", "megahorn", "willowisp"]
+    },
+    "slowbromega": {
+        "moves": ["calmmind", "icebeam", "psychic", "scald", "toxic"]
+    },
+    "magneton": {
+        "moves": ["flashcannon", "lightscreen", "reflect", "thunderbolt", "thunderwave"]
+    },
+    "farfetchd": {
+        "moves": ["fly", "poisonjab", "quickattack", "razorleaf", "swordsdance"]
+    },
+    "dodrio": {
+        "moves": ["drillpeck", "jumpkick", "quickattack", "roost", "swordsdance"]
+    },
+    "dewgong": {
+        "moves": ["aquajet", "icebeam", "iceshard", "megahorn", "surf"]
+    },
+    "muk": {
+        "moves": ["brickbreak", "firepunch", "poisonjab", "protect", "toxic"]
+    },
+    "mukalola": {
+        "moves": ["crunch", "firepunch", "megadrain", "poisonjab", "toxic"]
+    },
+    "cloyster": {
+        "moves": ["hydropump", "icebeam", "iceshard", "shellsmash", "surf"]
+    },
+    "gengarmega": {
+        "moves": ["dazzlinggleam", "shadowball", "sludgebomb", "substitute", "thunderbolt", "willowisp"]
+    },
+    "onix": {
+        "moves": ["dragontail", "earthquake", "rockslide", "stealthrock", "toxic"]
+    },
+    "hypno": {
+        "moves": ["calmmind", "dazzlinggleam", "psychic", "shadowball", "thunderwave"]
+    },
+    "kingler": {
+        "moves": ["agility", "crabhammer", "rockslide", "superpower", "xscissor"]
+    },
+    "electrode": {
+        "moves": ["explosion", "lightscreen", "reflect", "taunt", "thunderbolt", "thunderwave"]
+    },
+    "exeggutoralola": {
+        "moves": ["dragonpulse", "earthquake", "flamethrower", "megadrain", "stunspore"]
+    },
+    "exeggutor": {
+        "moves": ["leechseed", "megadrain", "psychic", "sleeppowder", "sludgebomb"]
+    },
+    "marowakalola": {
+        "moves": ["bonemerang", "earthquake", "flareblitz", "rockslide", "stealthrock", "swordsdance", "willowisp"]
+    },
+    "marowak": {
+        "moves": ["bonemerang", "doubleedge", "earthquake", "rockslide", "stealthrock", "swordsdance"]
+    },
+    "hitmonlee": {
+        "moves": ["bulkup", "earthquake", "highjumpkick", "poisonjab", "rockslide"]
+    },
+    "hitmonchan": {
+        "moves": ["brickbreak", "bulkup", "earthquake", "firepunch", "icepunch", "thunderpunch"]
+    },
+    "lickitung": {
+        "moves": ["facade", "fireblast", "icebeam", "shadowball", "toxic"]
+    },
+    "weezing": {
+        "moves": ["explosion", "fireblast", "flamethrower", "sludgebomb", "toxic", "willowisp"]
+    },
+    "rhydon": {
+        "moves": ["earthquake", "megahorn", "rockslide", "stealthrock", "toxic"]
+    },
+    "chansey": {
+        "moves": ["seismictoss", "softboiled", "stealthrock", "teleport", "toxic"]
+    },
+    "tangela": {
+        "moves": ["leechseed", "megadrain", "protect", "sleeppowder", "toxic"]
+    },
+    "kangaskhanmega": {
+        "moves": ["brickbreak", "earthquake", "facade", "fakeout", "suckerpunch"]
+    },
+    "seadra": {
+        "moves": ["agility", "dragonpulse", "hydropump", "icebeam", "scald", "toxic"]
+    },
+    "seaking": {
+        "moves": ["drillrun", "icebeam", "megahorn", "poisonjab", "scald"]
+    },
+    "starmie": {
+        "moves": ["hydropump", "icebeam", "psychic", "recover", "scald", "thunderbolt"]
+    },
+    "mrmime": {
+        "moves": ["calmmind", "dazzlinggleam", "encore", "psychic", "shadowball"]
+    },
+    "scyther": {
+        "moves": ["brickbreak", "swordsdance", "uturn", "wingattack", "xscissor"]
+    },
+    "jynx": {
+        "moves": ["calmmind", "icebeam", "lovelykiss", "psychic", "shadowball"]
+    },
+    "electabuzz": {
+        "moves": ["brickbreak", "icepunch", "psychic", "thunderbolt", "thunderwave"]
+    },
+    "magmar": {
+        "moves": ["clearsmog", "fireblast", "flamethrower", "psychic", "thunderpunch", "willowisp"]
+    },
+    "pinsirmega": {
+        "moves": ["earthquake", "rockslide", "superpower", "swordsdance", "xscissor"]
+    },
+    "tauros": {
+        "moves": ["doubleedge", "earthquake", "fireblast", "rockslide", "toxic"]
+    },
+    "gyaradosmega": {
+        "moves": ["crunch", "earthquake", "substitute", "thunderwave", "waterfall"]
+    },
+    "lapras": {
+        "moves": ["hydropump", "icebeam", "surf", "thunderbolt", "toxic"]
+    },
+    "ditto": {
+        "moves": ["transform"]
+    },
+    "eeveestarter": {
+        "moves": ["bouncybubble", "buzzybuzz", "protect", "sappyseed", "sizzlyslide", "sparklyswirl"]
+    },
+    "vaporeon": {
+        "moves": ["icebeam", "protect", "rest", "scald", "toxic"]
+    },
+    "jolteon": {
+        "moves": ["shadowball", "substitute", "thunderbolt", "thunderwave", "toxic"]
+    },
+    "flareon": {
+        "moves": ["flareblitz", "irontail", "quickattack", "superpower", "toxic"]
+    },
+    "porygon": {
+        "moves": ["icebeam", "psychic", "recover", "toxic", "triattack"]
+    },
+    "omastar": {
+        "moves": ["hydropump", "icebeam", "rockslide", "scald", "shellsmash"]
+    },
+    "kabutops": {
+        "moves": ["aquajet", "rockslide", "stealthrock", "superpower", "swordsdance", "waterfall"]
+    },
+    "aerodactylmega": {
+        "moves": ["crunch", "earthquake", "rockslide", "roost", "stealthrock", "taunt"]
+    },
+    "snorlax": {
+        "moves": ["bodyslam", "crunch", "earthquake", "rest", "toxic"]
+    },
+    "articuno": {
+        "moves": ["icebeam", "roost", "substitute", "toxic", "uturn"]
+    },
+    "zapdos": {
+        "moves": ["drillpeck", "roost", "thunderbolt", "toxic", "uturn"]
+    },
+    "moltres": {
+        "moves": ["airslash", "fireblast", "flamethrower", "roost", "uturn", "willowisp"]
+    },
+    "dragonite": {
+        "moves": ["agility", "earthquake", "fireblast", "outrage", "roost"]
+    },
+    "mewtwomegax": {
+        "moves": ["brickbreak", "bulkup", "earthquake", "icepunch", "substitute"]
+    },
+    "mewtwomegay": {
+        "moves": ["calmmind", "fireblast", "icebeam", "psychic", "recover", "shadowball"]
+    },
+    "mew": {
+        "moves": ["flamethrower", "nastyplot", "psychic", "roost", "stealthrock", "willowisp"]
+    },
+    "meganium": {
+        "moves": ["aromatherapy", "dragontail", "gigadrain", "leechseed", "lightscreen", "reflect", "synthesis", "toxic"]
+    },
+    "typhlosion": {
+        "moves": ["eruption", "extrasensory", "fireblast", "focusblast", "hiddenpowergrass"]
+    },
+    "feraligatr": {
+        "moves": ["aquajet", "crunch", "dragondance", "earthquake", "icepunch", "liquidation", "swordsdance"]
+    },
+    "furret": {
+        "moves": ["aquatail", "doubleedge", "firepunch", "knockoff", "trick", "uturn"]
+    },
+    "noctowl": {
+        "moves": ["airslash", "defog", "heatwave", "hurricane", "hypervoice", "roost", "whirlwind"]
+    },
+    "ledian": {
+        "moves": ["knockoff", "lightscreen", "reflect", "roost", "toxic", "uturn"]
+    },
+    "ariados": {
+        "moves": ["megahorn", "poisonjab", "stickyweb", "suckerpunch", "toxicspikes"]
+    },
+    "crobat": {
+        "moves": ["bravebird", "defog", "roost", "superfang", "taunt", "toxic", "uturn"]
+    },
+    "lanturn": {
+        "moves": ["healbell", "hiddenpowergrass", "hydropump", "icebeam", "scald", "toxic", "voltswitch"]
+    },
+    "xatu": {
+        "moves": ["calmmind", "heatwave", "psychic", "roost", "thunderwave", "toxic", "uturn"]
+    },
+    "ampharos": {
+        "moves": ["focusblast", "healbell", "hiddenpowerice", "lightscreen", "reflect", "thunderbolt", "toxic", "voltswitch"]
+    },
+    "ampharosmega": {
+        "moves": ["agility", "dragonpulse", "focusblast", "healbell", "thunderbolt", "voltswitch"]
+    },
+    "bellossom": {
+        "moves": ["gigadrain", "hiddenpowerground", "moonblast", "quiverdance", "sleeppowder", "strengthsap"]
+    },
+    "azumarill": {
+        "moves": ["aquajet", "bellydrum", "knockoff", "liquidation", "playrough", "superpower"]
+    },
+    "sudowoodo": {
+        "moves": ["earthquake", "headsmash", "stealthrock", "suckerpunch", "toxic", "woodhammer"]
+    },
+    "politoed": {
+        "moves": ["encore", "icebeam", "protect", "rest", "scald", "toxic"]
+    },
+    "jumpluff": {
+        "moves": ["acrobatics", "encore", "leechseed", "seedbomb", "sleeppowder", "strengthsap", "substitute", "swordsdance", "toxic", "uturn"]
+    },
+    "sunflora": {
+        "moves": ["earthpower", "hiddenpowerfire", "hiddenpowerice", "leafstorm", "sludgebomb"]
+    },
+    "quagsire": {
+        "moves": ["earthquake", "encore", "icebeam", "recover", "scald", "toxic"]
+    },
+    "espeon": {
+        "moves": ["calmmind", "dazzlinggleam", "morningsun", "psychic", "psyshock", "shadowball"]
+    },
+    "umbreon": {
+        "moves": ["foulplay", "protect", "toxic", "wish"]
+    },
+    "slowking": {
+        "moves": ["dragontail", "fireblast", "icebeam", "nastyplot", "psyshock", "scald", "slackoff", "thunderwave", "toxic", "trickroom"]
+    },
+    "unown": {
+        "moves": ["hiddenpowerpsychic"]
+    },
+    "wobbuffet": {
+        "moves": ["counter", "destinybond", "encore", "mirrorcoat"]
+    },
+    "girafarig": {
+        "moves": ["hypervoice", "nastyplot", "psychic", "psyshock", "substitute", "thunderbolt"]
+    },
+    "forretress": {
+        "moves": ["gyroball", "rapidspin", "spikes", "stealthrock", "toxic", "voltswitch"]
+    },
+    "dunsparce": {
+        "moves": ["bite", "bodyslam", "coil", "glare", "headbutt", "rockslide", "roost"]
+    },
+    "gligar": {
+        "moves": ["defog", "earthquake", "knockoff", "roost", "stealthrock", "toxic", "uturn"]
+    },
+    "steelix": {
+        "moves": ["earthquake", "ironhead", "roar", "rockslide", "stealthrock", "toxic"]
+    },
+    "steelixmega": {
+        "moves": ["dragontail", "earthquake", "heavyslam", "roar", "stealthrock", "toxic"]
+    },
+    "granbull": {
+        "moves": ["crunch", "earthquake", "healbell", "playrough", "thunderwave"]
+    },
+    "qwilfish": {
+        "moves": ["destinybond", "liquidation", "painsplit", "spikes", "taunt", "thunderwave", "toxicspikes"]
+    },
+    "scizor": {
+        "moves": ["bugbite", "bulletpunch", "knockoff", "pursuit", "superpower", "swordsdance", "uturn"]
+    },
+    "scizormega": {
+        "moves": ["bugbite", "bulletpunch", "defog", "knockoff", "roost", "superpower", "swordsdance", "uturn"]
+    },
+    "shuckle": {
+        "moves": ["encore", "knockoff", "stealthrock", "stickyweb", "toxic"]
+    },
+    "heracross": {
+        "moves": ["closecombat", "facade", "knockoff", "megahorn", "stoneedge", "swordsdance"]
+    },
+    "heracrossmega": {
+        "moves": ["closecombat", "pinmissile", "rockblast", "substitute", "swordsdance"]
+    },
+    "ursaring": {
+        "moves": ["closecombat", "crunch", "facade", "protect", "swordsdance"]
+    },
+    "magcargo": {
+        "moves": ["ancientpower", "earthpower", "fireblast", "hiddenpowergrass", "lavaplume", "recover", "shellsmash", "stealthrock", "toxic"]
+    },
+    "corsola": {
+        "moves": ["powergem", "recover", "scald", "stealthrock", "toxic"]
+    },
+    "octillery": {
+        "moves": ["energyball", "fireblast", "gunkshot", "hydropump", "icebeam", "rockblast", "scald"]
+    },
+    "delibird": {
+        "moves": ["destinybond", "freezedry", "icywind", "rapidspin", "spikes"]
+    },
+    "mantine": {
+        "moves": ["airslash", "defog", "roost", "scald", "toxic"]
+    },
+    "skarmory": {
+        "moves": ["bravebird", "roost", "spikes", "stealthrock", "whirlwind"]
+    },
+    "houndoom": {
+        "moves": ["darkpulse", "fireblast", "hiddenpowergrass", "nastyplot", "suckerpunch"]
+    },
+    "houndoommega": {
+        "moves": ["darkpulse", "fireblast", "hiddenpowergrass", "nastyplot", "taunt"]
+    },
+    "kingdra": {
+        "moves": ["dracometeor", "hydropump", "icebeam", "raindance", "waterfall"]
+    },
+    "donphan": {
+        "moves": ["earthquake", "iceshard", "knockoff", "rapidspin", "stealthrock", "stoneedge"]
+    },
+    "porygon2": {
+        "moves": ["discharge", "icebeam", "recover", "toxic", "triattack"]
+    },
+    "stantler": {
+        "moves": ["doubleedge", "earthquake", "jumpkick", "megahorn", "suckerpunch"]
+    },
+    "smeargle": {
+        "moves": ["destinybond", "spore", "stealthrock", "stickyweb", "whirlwind"]
+    },
+    "hitmontop": {
+        "moves": ["closecombat", "rapidspin", "stoneedge", "suckerpunch", "toxic"]
+    },
+    "miltank": {
+        "moves": ["bodyslam", "curse", "earthquake", "healbell", "milkdrink", "stealthrock", "toxic"]
+    },
+    "blissey": {
+        "moves": ["healbell", "seismictoss", "softboiled", "stealthrock", "toxic"]
+    },
+    "raikou": {
+        "moves": ["aurasphere", "calmmind", "hiddenpowerice", "substitute", "thunderbolt", "voltswitch"]
+    },
+    "entei": {
+        "moves": ["extremespeed", "flareblitz", "sacredfire", "stompingtantrum", "stoneedge"]
+    },
+    "suicune": {
+        "moves": ["calmmind", "hiddenpowergrass", "icebeam", "rest", "scald", "sleeptalk"]
+    },
+    "tyranitar": {
+        "moves": ["crunch", "earthquake", "fireblast", "icebeam", "pursuit", "stealthrock", "stoneedge"]
+    },
+    "tyranitarmega": {
+        "moves": ["crunch", "dragondance", "earthquake", "icepunch", "stoneedge"]
+    },
+    "lugia": {
+        "moves": ["aeroblast", "earthquake", "roost", "substitute", "toxic", "whirlwind"]
+    },
+    "hooh": {
+        "moves": ["bravebird", "defog", "earthquake", "roost", "sacredfire", "substitute", "toxic"]
+    },
+    "celebi": {
+        "moves": ["earthpower", "gigadrain", "hiddenpowerfire", "leafstorm", "nastyplot", "psychic", "recover", "thunderwave", "uturn"]
+    },
+    "sceptile": {
+        "moves": ["focusblast", "gigadrain", "hiddenpowerfire", "hiddenpowerice", "leafstorm", "leechseed", "substitute"]
+    },
+    "sceptilemega": {
+        "moves": ["dragonpulse", "earthquake", "focusblast", "gigadrain", "hiddenpowerfire", "leafblade", "outrage", "substitute", "swordsdance"]
+    },
+    "blaziken": {
+        "moves": ["fireblast", "hiddenpowerice", "highjumpkick", "knockoff", "protect"]
+    },
+    "blazikenmega": {
+        "moves": ["flareblitz", "highjumpkick", "knockoff", "protect", "stoneedge", "swordsdance"]
+    },
+    "swampert": {
+        "moves": ["earthquake", "icebeam", "protect", "roar", "scald", "stealthrock", "toxic"]
+    },
+    "swampertmega": {
+        "moves": ["earthquake", "icepunch", "raindance", "superpower", "waterfall"]
+    },
+    "mightyena": {
+        "moves": ["crunch", "firefang", "irontail", "playrough", "suckerpunch"]
+    },
+    "linoone": {
+        "moves": ["bellydrum", "extremespeed", "shadowclaw", "stompingtantrum"]
+    },
+    "beautifly": {
+        "moves": ["bugbuzz", "energyball", "hiddenpowerfighting", "psychic", "quiverdance"]
+    },
+    "dustox": {
+        "moves": ["bugbuzz", "defog", "quiverdance", "roost", "sludgebomb", "uturn"]
+    },
+    "ludicolo": {
+        "moves": ["focusblast", "gigadrain", "hydropump", "icebeam", "raindance", "scald"]
+    },
+    "shiftry": {
+        "moves": ["defog", "knockoff", "leafstorm", "lowkick", "seedbomb", "suckerpunch", "swordsdance"]
+    },
+    "swellow": {
+        "moves": ["bravebird", "facade", "protect", "quickattack", "uturn"]
+    },
+    "pelipper": {
+        "moves": ["defog", "hurricane", "hydropump", "knockoff", "roost", "scald", "uturn"]
+    },
+    "gardevoir": {
+        "moves": ["calmmind", "focusblast", "moonblast", "psychic", "shadowball", "substitute", "thunderbolt", "willowisp"]
+    },
+    "gardevoirmega": {
+        "moves": ["calmmind", "focusblast", "hypervoice", "psyshock", "substitute", "taunt", "willowisp"]
+    },
+    "masquerain": {
+        "moves": ["airslash", "bugbuzz", "hydropump", "quiverdance", "stickyweb"]
+    },
+    "breloom": {
+        "moves": ["bulletseed", "machpunch", "rocktomb", "spore", "swordsdance"]
+    },
+    "slaking": {
+        "moves": ["earthquake", "firepunch", "gigaimpact", "nightslash", "pursuit", "retaliate"]
+    },
+    "ninjask": {
+        "moves": ["aerialace", "dig", "leechlife", "nightslash", "swordsdance", "uturn"]
+    },
+    "shedinja": {
+        "moves": ["shadowclaw", "shadowsneak", "swordsdance", "willowisp", "xscissor"]
+    },
+    "exploud": {
+        "moves": ["boomburst", "fireblast", "focusblast", "icebeam", "surf"]
+    },
+    "hariyama": {
+        "moves": ["bulkup", "bulletpunch", "closecombat", "icepunch", "knockoff", "stoneedge"]
+    },
+    "delcatty": {
+        "moves": ["doubleedge", "fakeout", "healbell", "suckerpunch", "thunderwave", "wildcharge"]
+    },
+    "sableye": {
+        "moves": ["foulplay", "recover", "taunt", "toxic", "willowisp"]
+    },
+    "sableyemega": {
+        "moves": ["calmmind", "darkpulse", "recover", "shadowball", "willowisp"]
+    },
+    "mawile": {
+        "moves": ["ironhead", "knockoff", "playrough", "stealthrock", "suckerpunch", "swordsdance"]
+    },
+    "mawilemega": {
+        "moves": ["firefang", "focuspunch", "ironhead", "knockoff", "playrough", "substitute", "suckerpunch", "swordsdance"]
+    },
+    "aggron": {
+        "moves": ["aquatail", "earthquake", "headsmash", "heavyslam", "rockpolish", "stealthrock"]
+    },
+    "aggronmega": {
+        "moves": ["earthquake", "heavyslam", "roar", "stealthrock", "stoneedge", "thunderwave", "toxic"]
+    },
+    "medicham": {
+        "moves": ["bulletpunch", "drainpunch", "highjumpkick", "icepunch", "zenheadbutt"]
+    },
+    "medichammega": {
+        "moves": ["fakeout", "highjumpkick", "icepunch", "thunderpunch", "zenheadbutt"]
+    },
+    "manectric": {
+        "moves": ["flamethrower", "hiddenpowergrass", "hiddenpowerice", "overheat", "thunderbolt", "voltswitch"]
+    },
+    "manectricmega": {
+        "moves": ["hiddenpowergrass", "hiddenpowerice", "overheat", "thunderbolt", "voltswitch"]
+    },
+    "plusle": {
+        "moves": ["encore", "hiddenpowerice", "nastyplot", "substitute", "thunderbolt"]
+    },
+    "minun": {
+        "moves": ["encore", "hiddenpowerice", "nastyplot", "substitute", "thunderbolt"]
+    },
+    "volbeat": {
+        "moves": ["defog", "encore", "roost", "tailwind", "thunderwave", "uturn"]
+    },
+    "illumise": {
+        "moves": ["bugbuzz", "defog", "encore", "roost", "thunderwave", "uturn", "wish"]
+    },
+    "swalot": {
+        "moves": ["earthquake", "encore", "icebeam", "painsplit", "sludgebomb", "toxic", "yawn"]
+    },
+    "sharpedo": {
+        "moves": ["crunch", "earthquake", "icebeam", "protect", "waterfall"]
+    },
+    "sharpedomega": {
+        "moves": ["crunch", "destinybond", "icefang", "protect", "psychicfangs", "waterfall"]
+    },
+    "wailord": {
+        "moves": ["hiddenpowerfire", "hiddenpowergrass", "hydropump", "icebeam", "waterspout"]
+    },
+    "camerupt": {
+        "moves": ["earthpower", "fireblast", "hiddenpowergrass", "lavaplume", "roar", "rockpolish", "stealthrock", "stoneedge"]
+    },
+    "cameruptmega": {
+        "moves": ["ancientpower", "earthpower", "fireblast", "stealthrock", "toxic", "willowisp"]
+    },
+    "torkoal": {
+        "moves": ["earthpower", "fireblast", "lavaplume", "rapidspin", "shellsmash", "solarbeam", "stealthrock", "yawn"]
+    },
+    "grumpig": {
+        "moves": ["focusblast", "healbell", "lightscreen", "psychic", "reflect", "thunderwave", "toxic", "whirlwind"]
+    },
+    "spinda": {
+        "moves": ["encore", "return", "rockslide", "superpower"]
+    },
+    "flygon": {
+        "moves": ["defog", "dragondance", "earthquake", "firepunch", "outrage", "roost", "uturn"]
+    },
+    "cacturne": {
+        "moves": ["darkpulse", "drainpunch", "focusblast", "gigadrain", "seedbomb", "spikes", "suckerpunch", "swordsdance"]
+    },
+    "altaria": {
+        "moves": ["defog", "dracometeor", "earthquake", "fireblast", "roost", "toxic"]
+    },
+    "altariamega": {
+        "moves": ["dragondance", "earthquake", "fireblast", "healbell", "return", "roost"]
+    },
+    "zangoose": {
+        "moves": ["closecombat", "facade", "knockoff", "quickattack", "swordsdance"]
+    },
+    "seviper": {
+        "moves": ["darkpulse", "earthquake", "flamethrower", "gigadrain", "poisonjab", "sludgewave", "suckerpunch", "switcheroo", "swordsdance"]
+    },
+    "lunatone": {
+        "moves": ["earthpower", "icebeam", "moonblast", "moonlight", "powergem", "psychic", "rockpolish", "stealthrock", "toxic"]
+    },
+    "solrock": {
+        "moves": ["earthquake", "morningsun", "rockslide", "stealthrock", "willowisp"]
+    },
+    "whiscash": {
+        "moves": ["dragondance", "earthquake", "stoneedge", "waterfall", "zenheadbutt"]
+    },
+    "crawdaunt": {
+        "moves": ["aquajet", "crabhammer", "dragondance", "knockoff", "superpower", "swordsdance"]
+    },
+    "claydol": {
+        "moves": ["earthquake", "icebeam", "psychic", "rapidspin", "stealthrock", "toxic"]
+    },
+    "cradily": {
+        "moves": ["curse", "gigadrain", "recover", "rockslide", "seedbomb", "stealthrock", "toxic"]
+    },
+    "armaldo": {
+        "moves": ["earthquake", "knockoff", "rapidspin", "stealthrock", "stoneedge", "toxic", "xscissor"]
+    },
+    "milotic": {
+        "moves": ["dragontail", "icebeam", "recover", "scald", "toxic"]
+    },
+    "castformsunny": {
+        "moves": ["fireblast", "icebeam", "solarbeam", "sunnyday"]
+    },
+    "castformrainy": {
+        "moves": ["hurricane", "hydropump", "raindance", "thunder"]
+    },
+    "castformsnowy": {
+        "moves": ["blizzard", "fireblast", "hail", "thunderbolt"]
+    },
+    "kecleon": {
+        "moves": ["drainpunch", "fakeout", "knockoff", "recover", "shadowsneak", "stealthrock", "suckerpunch"]
+    },
+    "banette": {
+        "moves": ["destinybond", "knockoff", "shadowclaw", "shadowsneak", "suckerpunch", "taunt", "willowisp"]
+    },
+    "banettemega": {
+        "moves": ["destinybond", "knockoff", "shadowclaw", "suckerpunch", "taunt", "willowisp"]
+    },
+    "tropius": {
+        "moves": ["airslash", "gigadrain", "leechseed", "protect", "substitute", "toxic"]
+    },
+    "chimecho": {
+        "moves": ["calmmind", "healbell", "healingwish", "psychic", "recover", "shadowball", "taunt", "yawn"]
+    },
+    "absol": {
+        "moves": ["knockoff", "playrough", "pursuit", "suckerpunch", "superpower", "swordsdance"]
+    },
+    "absolmega": {
+        "moves": ["icebeam", "knockoff", "playrough", "pursuit", "suckerpunch", "superpower", "swordsdance"]
+    },
+    "glalie": {
+        "moves": ["earthquake", "explosion", "icebeam", "iceshard", "spikes", "superfang", "taunt"]
+    },
+    "glaliemega": {
+        "moves": ["earthquake", "explosion", "freezedry", "iceshard", "return", "spikes"]
+    },
+    "walrein": {
+        "moves": ["icebeam", "protect", "roar", "superfang", "surf", "toxic"]
+    },
+    "huntail": {
+        "moves": ["icebeam", "shellsmash", "suckerpunch", "waterfall"]
+    },
+    "gorebyss": {
+        "moves": ["hiddenpowergrass", "hydropump", "icebeam", "shellsmash"]
+    },
+    "relicanth": {
+        "moves": ["doubleedge", "earthquake", "headsmash", "stealthrock", "toxic", "waterfall"]
+    },
+    "luvdisc": {
+        "moves": ["icebeam", "protect", "scald", "sweetkiss", "toxic"]
+    },
+    "salamence": {
+        "moves": ["dragondance", "earthquake", "fireblast", "fly", "outrage", "roost"]
+    },
+    "salamencemega": {
+        "moves": ["doubleedge", "dracometeor", "dragondance", "earthquake", "fireblast", "return", "roost"]
+    },
+    "metagross": {
+        "moves": ["agility", "bulletpunch", "earthquake", "explosion", "icepunch", "meteormash", "stealthrock", "thunderpunch", "zenheadbutt"]
+    },
+    "metagrossmega": {
+        "moves": ["agility", "earthquake", "hammerarm", "icepunch", "meteormash", "zenheadbutt"]
+    },
+    "regirock": {
+        "moves": ["curse", "drainpunch", "rest", "rockslide", "stealthrock", "stoneedge", "thunderwave", "toxic"]
+    },
+    "regice": {
+        "moves": ["focusblast", "icebeam", "rest", "rockpolish", "sleeptalk", "thunderbolt", "thunderwave"]
+    },
+    "registeel": {
+        "moves": ["curse", "ironhead", "rest", "sleeptalk", "stealthrock", "toxic"]
+    },
+    "latias": {
+        "moves": ["dracometeor", "healingwish", "hiddenpowerfire", "psychic", "trick"]
+    },
+    "latiasmega": {
+        "moves": ["calmmind", "defog", "dracometeor", "psyshock", "roost", "surf"]
+    },
+    "latios": {
+        "moves": ["dracometeor", "hiddenpowerfire", "psyshock", "surf", "thunderbolt", "trick"]
+    },
+    "latiosmega": {
+        "moves": ["calmmind", "dracometeor", "hiddenpowerfire", "psyshock", "roost"]
+    },
+    "kyogre": {
+        "moves": ["icebeam", "originpulse", "scald", "thunder", "waterspout"]
+    },
+    "kyogreprimal": {
+        "moves": ["calmmind", "icebeam", "originpulse", "rest", "scald", "sleeptalk", "thunder"]
+    },
+    "groudon": {
+        "moves": ["dragonclaw", "earthquake", "firepunch", "lavaplume", "roar", "stealthrock", "stoneedge", "thunderwave"]
+    },
+    "groudonprimal": {
+        "moves": ["firepunch", "lavaplume", "precipiceblades", "rockpolish", "stealthrock", "stoneedge", "swordsdance"]
+    },
+    "rayquaza": {
+        "moves": ["dracometeor", "dragonascent", "dragondance", "earthquake", "extremespeed", "outrage", "vcreate"]
+    },
+    "jirachi": {
+        "moves": ["bodyslam", "firepunch", "ironhead", "stealthrock", "substitute", "toxic", "uturn", "wish"]
+    },
+    "deoxys": {
+        "moves": ["extremespeed", "firepunch", "icebeam", "knockoff", "psychoboost", "stealthrock", "superpower"]
+    },
+    "deoxysattack": {
+        "moves": ["extremespeed", "firepunch", "icebeam", "knockoff", "psychoboost", "superpower"]
+    },
+    "deoxysdefense": {
+        "moves": ["knockoff", "recover", "seismictoss", "spikes", "stealthrock", "taunt", "toxic"]
+    },
+    "deoxysspeed": {
+        "moves": ["knockoff", "magiccoat", "psychoboost", "spikes", "stealthrock", "superpower", "taunt"]
+    },
+    "torterra": {
+        "moves": ["earthquake", "rockpolish", "stealthrock", "stoneedge", "synthesis", "woodhammer"]
+    },
+    "infernape": {
+        "moves": ["closecombat", "fireblast", "flareblitz", "focusblast", "grassknot", "nastyplot", "stealthrock", "stoneedge", "swordsdance", "uturn", "vacuumwave"]
+    },
+    "empoleon": {
+        "moves": ["defog", "flashcannon", "grassknot", "hydropump", "icebeam", "roar", "scald", "stealthrock", "toxic"]
+    },
+    "staraptor": {
+        "moves": ["bravebird", "closecombat", "doubleedge", "quickattack", "uturn"]
+    },
+    "bibarel": {
+        "moves": ["aquajet", "liquidation", "quickattack", "return", "swordsdance"]
+    },
+    "kricketune": {
+        "moves": ["endeavor", "knockoff", "leechlife", "stickyweb", "taunt", "toxic"]
+    },
+    "luxray": {
+        "moves": ["crunch", "facade", "icefang", "superpower", "voltswitch", "wildcharge"]
+    },
+    "roserade": {
+        "moves": ["gigadrain", "hiddenpowerfire", "leafstorm", "sleeppowder", "sludgebomb", "spikes", "synthesis", "toxicspikes"]
+    },
+    "rampardos": {
+        "moves": ["crunch", "earthquake", "firepunch", "headsmash", "rockpolish", "rockslide"]
+    },
+    "bastiodon": {
+        "moves": ["metalburst", "protect", "roar", "rockblast", "stealthrock", "toxic"]
+    },
+    "wormadam": {
+        "moves": ["bugbuzz", "gigadrain", "hiddenpowerrock", "leafstorm", "quiverdance"]
+    },
+    "wormadamsandy": {
+        "moves": ["earthquake", "protect", "stealthrock", "toxic"]
+    },
+    "wormadamtrash": {
+        "moves": ["flashcannon", "protect", "stealthrock", "toxic"]
+    },
+    "mothim": {
+        "moves": ["airslash", "bugbuzz", "energyball", "quiverdance", "uturn"]
+    },
+    "vespiquen": {
+        "moves": ["infestation", "protect", "roost", "toxic", "uturn"]
+    },
+    "pachirisu": {
+        "moves": ["nuzzle", "superfang", "thunderbolt", "toxic", "uturn"]
+    },
+    "floatzel": {
+        "moves": ["aquajet", "brickbreak", "bulkup", "icepunch", "liquidation", "substitute", "taunt"]
+    },
+    "cherrim": {
+        "moves": ["dazzlinggleam", "energyball", "healingwish", "hiddenpowerfire", "synthesis"]
+    },
+    "cherrimsunshine": {
+        "moves": ["gigadrain", "hiddenpowerice", "solarbeam", "sunnyday", "weatherball"]
+    },
+    "gastrodon": {
+        "moves": ["earthquake", "icebeam", "recover", "scald", "toxic"]
+    },
+    "ambipom": {
+        "moves": ["fakeout", "knockoff", "lowkick", "return", "seedbomb", "switcheroo", "uturn"]
+    },
+    "drifblim": {
+        "moves": ["acrobatics", "destinybond", "hex", "shadowball", "substitute", "willowisp"]
+    },
+    "lopunny": {
+        "moves": ["highjumpkick", "icepunch", "return", "switcheroo"]
+    },
+    "lopunnymega": {
+        "moves": ["fakeout", "highjumpkick", "icepunch", "return", "substitute"]
+    },
+    "mismagius": {
+        "moves": ["dazzlinggleam", "destinybond", "nastyplot", "painsplit", "shadowball", "substitute", "taunt", "thunderbolt", "willowisp"]
+    },
+    "honchkrow": {
+        "moves": ["bravebird", "heatwave", "pursuit", "roost", "suckerpunch", "superpower"]
+    },
+    "purugly": {
+        "moves": ["fakeout", "knockoff", "quickattack", "return", "suckerpunch", "uturn"]
+    },
+    "skuntank": {
+        "moves": ["crunch", "defog", "fireblast", "poisonjab", "pursuit", "suckerpunch", "taunt"]
+    },
+    "bronzong": {
+        "moves": ["earthquake", "explosion", "ironhead", "lightscreen", "reflect", "stealthrock", "toxic"]
+    },
+    "chatot": {
+        "moves": ["boomburst", "chatter", "heatwave", "hiddenpowerground", "nastyplot", "substitute", "uturn"]
+    },
+    "spiritomb": {
+        "moves": ["calmmind", "darkpulse", "psychic", "pursuit", "rest", "shadowsneak", "sleeptalk", "willowisp"]
+    },
+    "garchomp": {
+        "moves": ["dragonclaw", "earthquake", "fireblast", "firefang", "outrage", "stealthrock", "stoneedge", "swordsdance"]
+    },
+    "garchompmega": {
+        "moves": ["dracometeor", "earthquake", "fireblast", "outrage", "stoneedge", "swordsdance"]
+    },
+    "lucario": {
+        "moves": ["aurasphere", "closecombat", "crunch", "darkpulse", "extremespeed", "flashcannon", "meteormash", "nastyplot", "swordsdance", "vacuumwave"]
+    },
+    "lucariomega": {
+        "moves": ["aurasphere", "closecombat", "extremespeed", "flashcannon", "icepunch", "meteormash", "nastyplot", "swordsdance", "vacuumwave"]
+    },
+    "hippowdon": {
+        "moves": ["earthquake", "slackoff", "stealthrock", "stoneedge", "toxic", "whirlwind"]
+    },
+    "drapion": {
+        "moves": ["aquatail", "earthquake", "knockoff", "poisonjab", "pursuit", "swordsdance", "taunt", "toxicspikes", "whirlwind"]
+    },
+    "toxicroak": {
+        "moves": ["drainpunch", "gunkshot", "icepunch", "substitute", "suckerpunch", "swordsdance"]
+    },
+    "carnivine": {
+        "moves": ["knockoff", "powerwhip", "return", "sleeppowder", "substitute", "swordsdance"]
+    },
+    "lumineon": {
+        "moves": ["defog", "icebeam", "scald", "toxic", "uturn"]
+    },
+    "abomasnow": {
+        "moves": ["blizzard", "earthquake", "focuspunch", "gigadrain", "iceshard", "leechseed", "substitute", "woodhammer"]
+    },
+    "abomasnowmega": {
+        "moves": ["blizzard", "earthquake", "gigadrain", "hiddenpowerfire", "iceshard", "woodhammer"]
+    },
+    "weavile": {
+        "moves": ["iceshard", "iciclecrash", "knockoff", "lowkick", "pursuit", "swordsdance"]
+    },
+    "magnezone": {
+        "moves": ["flashcannon", "hiddenpowerfire", "substitute", "thunderbolt", "voltswitch"]
+    },
+    "lickilicky": {
+        "moves": ["bodyslam", "dragontail", "earthquake", "explosion", "healbell", "knockoff", "powerwhip", "protect", "swordsdance", "wish"]
+    },
+    "rhyperior": {
+        "moves": ["dragontail", "earthquake", "icepunch", "megahorn", "rockpolish", "stoneedge"]
+    },
+    "tangrowth": {
+        "moves": ["earthquake", "gigadrain", "hiddenpowerfire", "knockoff", "leafstorm", "rockslide", "sleeppowder", "synthesis"]
+    },
+    "electivire": {
+        "moves": ["crosschop", "earthquake", "flamethrower", "icepunch", "voltswitch", "wildcharge"]
+    },
+    "magmortar": {
+        "moves": ["earthquake", "fireblast", "focusblast", "hiddenpowergrass", "hiddenpowerice", "substitute", "thunderbolt"]
+    },
+    "togekiss": {
+        "moves": ["airslash", "aurasphere", "defog", "healbell", "nastyplot", "roost", "thunderwave"]
+    },
+    "yanmega": {
+        "moves": ["airslash", "bugbuzz", "gigadrain", "protect", "uturn"]
+    },
+    "leafeon": {
+        "moves": ["healbell", "knockoff", "leafblade", "swordsdance", "synthesis", "xscissor"]
+    },
+    "glaceon": {
+        "moves": ["healbell", "hiddenpowerground", "icebeam", "protect", "shadowball", "toxic", "wish"]
+    },
+    "gliscor": {
+        "moves": ["earthquake", "knockoff", "protect", "roost", "stealthrock", "taunt", "toxic", "uturn"]
+    },
+    "mamoswine": {
+        "moves": ["earthquake", "endeavor", "iceshard", "iciclecrash", "knockoff", "stealthrock", "superpower"]
+    },
+    "porygonz": {
+        "moves": ["icebeam", "nastyplot", "shadowball", "thunderbolt", "triattack", "trick"]
+    },
+    "gallade": {
+        "moves": ["bulkup", "closecombat", "drainpunch", "icepunch", "knockoff", "shadowsneak", "substitute", "zenheadbutt"]
+    },
+    "gallademega": {
+        "moves": ["closecombat", "icepunch", "knockoff", "swordsdance", "zenheadbutt"]
+    },
+    "probopass": {
+        "moves": ["earthpower", "flashcannon", "stealthrock", "thunderwave", "toxic", "voltswitch"]
+    },
+    "dusknoir": {
+        "moves": ["earthquake", "icepunch", "painsplit", "shadowsneak", "substitute", "willowisp"]
+    },
+    "froslass": {
+        "moves": ["destinybond", "icebeam", "shadowball", "spikes", "taunt", "thunderwave"]
+    },
+    "rotom": {
+        "moves": ["hiddenpowerice", "painsplit", "shadowball", "substitute", "thunderbolt", "trick", "voltswitch", "willowisp"]
+    },
+    "rotomheat": {
+        "moves": ["hiddenpowerice", "overheat", "painsplit", "thunderbolt", "voltswitch", "willowisp"]
+    },
+    "rotomwash": {
+        "moves": ["defog", "hydropump", "painsplit", "thunderbolt", "trick", "voltswitch", "willowisp"]
+    },
+    "rotomfrost": {
+        "moves": ["blizzard", "painsplit", "thunderbolt", "trick", "voltswitch", "willowisp"]
+    },
+    "rotomfan": {
+        "moves": ["airslash", "defog", "painsplit", "thunderbolt", "voltswitch", "willowisp"]
+    },
+    "rotommow": {
+        "moves": ["hiddenpowerfire", "hiddenpowerice", "leafstorm", "thunderbolt", "trick", "voltswitch"]
+    },
+    "uxie": {
+        "moves": ["healbell", "knockoff", "psychic", "stealthrock", "thunderwave", "uturn", "yawn"]
+    },
+    "mesprit": {
+        "moves": ["calmmind", "energyball", "healingwish", "hiddenpowerfire", "icebeam", "psychic", "psyshock", "signalbeam", "stealthrock", "uturn"]
+    },
+    "azelf": {
+        "moves": ["dazzlinggleam", "explosion", "fireblast", "knockoff", "nastyplot", "psyshock", "stealthrock", "taunt"]
+    },
+    "dialga": {
+        "moves": ["dracometeor", "fireblast", "flashcannon", "roar", "stealthrock", "thunderbolt", "toxic"]
+    },
+    "palkia": {
+        "moves": ["dracometeor", "fireblast", "hydropump", "spacialrend", "thunderwave"]
+    },
+    "heatran": {
+        "moves": ["earthpower", "flashcannon", "lavaplume", "magmastorm", "protect", "roar", "stealthrock", "toxic"]
+    },
+    "regigigas": {
+        "moves": ["confuseray", "drainpunch", "knockoff", "return", "substitute", "thunderwave"]
+    },
+    "giratinaorigin": {
+        "moves": ["defog", "dracometeor", "earthquake", "hex", "shadowsneak", "thunderwave", "willowisp"]
+    },
+    "giratina": {
+        "moves": ["calmmind", "dragonpulse", "rest", "roar", "shadowball", "sleeptalk", "willowisp"]
+    },
+    "cresselia": {
+        "moves": ["calmmind", "icebeam", "moonblast", "moonlight", "psychic", "psyshock", "substitute", "thunderwave", "toxic"]
+    },
+    "phione": {
+        "moves": ["healbell", "icebeam", "knockoff", "scald", "toxic", "uturn"]
+    },
+    "manaphy": {
+        "moves": ["energyball", "icebeam", "surf", "tailglow"]
+    },
+    "darkrai": {
+        "moves": ["darkpulse", "focusblast", "hypnosis", "nastyplot", "sludgebomb", "trick"]
+    },
+    "shaymin": {
+        "moves": ["airslash", "earthpower", "leechseed", "psychic", "rest", "seedflare", "substitute"]
+    },
+    "shayminsky": {
+        "moves": ["airslash", "earthpower", "hiddenpowerice", "leechseed", "seedflare", "substitute"]
+    },
+    "arceus": {
+        "moves": ["earthquake", "extremespeed", "recover", "shadowclaw", "swordsdance"]
+    },
+    "arceusbug": {
+        "moves": ["earthquake", "ironhead", "recover", "stoneedge", "swordsdance", "xscissor"]
+    },
+    "arceusdark": {
+        "moves": ["calmmind", "fireblast", "judgment", "recover", "toxic"]
+    },
+    "arceusdragon": {
+        "moves": ["defog", "earthquake", "extremespeed", "fireblast", "judgment", "outrage", "recover", "swordsdance", "willowisp"]
+    },
+    "arceuselectric": {
+        "moves": ["calmmind", "earthpower", "icebeam", "judgment", "recover"]
+    },
+    "arceusfairy": {
+        "moves": ["calmmind", "defog", "earthpower", "judgment", "recover", "toxic", "willowisp"]
+    },
+    "arceusfighting": {
+        "moves": ["calmmind", "icebeam", "judgment", "recover", "roar", "shadowball", "stoneedge"]
+    },
+    "arceusfire": {
+        "moves": ["calmmind", "fireblast", "icebeam", "recover", "roar", "thunderbolt"]
+    },
+    "arceusflying": {
+        "moves": ["calmmind", "earthpower", "fireblast", "judgment", "recover", "toxic"]
+    },
+    "arceusghost": {
+        "moves": ["brickbreak", "defog", "extremespeed", "judgment", "recover", "shadowclaw", "shadowforce", "swordsdance", "toxic"]
+    },
+    "arceusgrass": {
+        "moves": ["calmmind", "fireblast", "icebeam", "judgment", "recover"]
+    },
+    "arceusground": {
+        "moves": ["earthquake", "icebeam", "judgment", "recover", "stealthrock", "stoneedge", "swordsdance", "toxic"]
+    },
+    "arceusice": {
+        "moves": ["calmmind", "fireblast", "judgment", "recover", "thunderbolt"]
+    },
+    "arceuspoison": {
+        "moves": ["calmmind", "defog", "fireblast", "icebeam", "recover", "sludgebomb"]
+    },
+    "arceuspsychic": {
+        "moves": ["calmmind", "fireblast", "icebeam", "judgment", "recover", "toxic"]
+    },
+    "arceusrock": {
+        "moves": ["earthquake", "judgment", "recover", "stealthrock", "stoneedge", "swordsdance", "willowisp"]
+    },
+    "arceussteel": {
+        "moves": ["defog", "earthquake", "ironhead", "judgment", "recover", "roar", "stoneedge", "swordsdance", "willowisp"]
+    },
+    "arceuswater": {
+        "moves": ["calmmind", "defog", "icebeam", "judgment", "recover", "toxic"]
+    },
+    "victini": {
+        "moves": ["blueflare", "boltstrike", "focusblast", "grassknot", "uturn", "vcreate", "zenheadbutt"]
+    },
+    "serperior": {
+        "moves": ["dragonpulse", "glare", "hiddenpowerfire", "leafstorm", "leechseed", "substitute"]
+    },
+    "emboar": {
+        "moves": ["fireblast", "flareblitz", "grassknot", "headsmash", "suckerpunch", "superpower", "wildcharge"]
+    },
+    "samurott": {
+        "moves": ["aquajet", "grassknot", "hydropump", "icebeam", "liquidation", "megahorn", "sacredsword", "swordsdance"]
+    },
+    "watchog": {
+        "moves": ["hypnosis", "knockoff", "return", "substitute", "superfang", "swordsdance"]
+    },
+    "stoutland": {
+        "moves": ["crunch", "icefang", "return", "superpower", "wildcharge"]
+    },
+    "liepard": {
+        "moves": ["copycat", "encore", "knockoff", "playrough", "substitute", "thunderwave", "uturn"]
+    },
+    "simisage": {
+        "moves": ["focusblast", "gigadrain", "hiddenpowerice", "knockoff", "leafstorm", "nastyplot", "substitute", "superpower"]
+    },
+    "simisear": {
+        "moves": ["fireblast", "focusblast", "grassknot", "hiddenpowerrock", "nastyplot", "substitute"]
+    },
+    "simipour": {
+        "moves": ["focusblast", "hydropump", "icebeam", "nastyplot", "substitute"]
+    },
+    "musharna": {
+        "moves": ["calmmind", "healbell", "moonlight", "psychic", "psyshock", "signalbeam", "thunderwave"]
+    },
+    "unfezant": {
+        "moves": ["hypnosis", "nightslash", "pluck", "return", "roost", "tailwind", "uturn"]
+    },
+    "zebstrika": {
+        "moves": ["hiddenpowergrass", "overheat", "thunderbolt", "voltswitch", "wildcharge"]
+    },
+    "gigalith": {
+        "moves": ["earthquake", "explosion", "stealthrock", "stoneedge", "superpower"]
+    },
+    "swoobat": {
+        "moves": ["airslash", "calmmind", "heatwave", "roost", "storedpower"]
+    },
+    "excadrill": {
+        "moves": ["earthquake", "ironhead", "rapidspin", "rockslide", "swordsdance"]
+    },
+    "audino": {
+        "moves": ["doubleedge", "encore", "healbell", "protect", "toxic", "wish"]
+    },
+    "audinomega": {
+        "moves": ["calmmind", "dazzlinggleam", "fireblast", "healbell", "protect", "wish"]
+    },
+    "conkeldurr": {
+        "moves": ["bulkup", "drainpunch", "facade", "knockoff", "machpunch"]
+    },
+    "seismitoad": {
+        "moves": ["earthquake", "hydropump", "knockoff", "raindance", "scald", "sludgewave", "stealthrock", "toxic"]
+    },
+    "throh": {
+        "moves": ["bulkup", "circlethrow", "icepunch", "knockoff", "rest", "sleeptalk", "stormthrow"]
+    },
+    "sawk": {
+        "moves": ["bulkup", "closecombat", "earthquake", "icepunch", "knockoff", "poisonjab", "stoneedge"]
+    },
+    "leavanny": {
+        "moves": ["knockoff", "leafblade", "stickyweb", "swordsdance", "xscissor"]
+    },
+    "scolipede": {
+        "moves": ["earthquake", "megahorn", "poisonjab", "protect", "spikes", "swordsdance", "toxicspikes"]
+    },
+    "whimsicott": {
+        "moves": ["defog", "encore", "leechseed", "memento", "moonblast", "stunspore", "tailwind", "taunt", "toxic", "uturn"]
+    },
+    "lilligant": {
+        "moves": ["gigadrain", "hiddenpowerfire", "hiddenpowerrock", "petaldance", "quiverdance", "sleeppowder"]
+    },
+    "basculin": {
+        "moves": ["aquajet", "crunch", "headsmash", "liquidation", "superpower"]
+    },
+    "basculinbluestriped": {
+        "moves": ["aquajet", "crunch", "headsmash", "liquidation", "superpower"]
+    },
+    "krookodile": {
+        "moves": ["earthquake", "knockoff", "pursuit", "stealthrock", "stoneedge", "superpower"]
+    },
+    "darmanitan": {
+        "moves": ["earthquake", "flareblitz", "rockslide", "superpower", "uturn"]
+    },
+    "maractus": {
+        "moves": ["gigadrain", "hiddenpowerfire", "leechseed", "spikes", "spikyshield", "suckerpunch", "toxic"]
+    },
+    "crustle": {
+        "moves": ["earthquake", "shellsmash", "spikes", "stealthrock", "stoneedge", "xscissor"]
+    },
+    "scrafty": {
+        "moves": ["bulkup", "dragondance", "drainpunch", "highjumpkick", "icepunch", "knockoff", "rest"]
+    },
+    "sigilyph": {
+        "moves": ["airslash", "calmmind", "heatwave", "icebeam", "psychic", "psyshock", "roost"]
+    },
+    "cofagrigus": {
+        "moves": ["haze", "hiddenpowerfighting", "nastyplot", "painsplit", "shadowball", "toxicspikes", "trickroom", "willowisp"]
+    },
+    "carracosta": {
+        "moves": ["aquajet", "earthquake", "liquidation", "shellsmash", "stoneedge"]
+    },
+    "archeops": {
+        "moves": ["acrobatics", "aquatail", "earthquake", "endeavor", "headsmash", "stoneedge", "uturn"]
+    },
+    "garbodor": {
+        "moves": ["gunkshot", "haze", "painsplit", "spikes", "stompingtantrum", "toxic", "toxicspikes"]
+    },
+    "zoroark": {
+        "moves": ["darkpulse", "flamethrower", "focusblast", "nastyplot", "sludgebomb", "trick"]
+    },
+    "cinccino": {
+        "moves": ["bulletseed", "knockoff", "rockblast", "tailslap", "uturn"]
+    },
+    "gothitelle": {
+        "moves": ["charm", "confide", "rest", "taunt"]
+    },
+    "reuniclus": {
+        "moves": ["calmmind", "focusblast", "psychic", "psyshock", "recover", "shadowball", "trickroom"]
+    },
+    "swanna": {
+        "moves": ["bravebird", "defog", "hurricane", "icebeam", "raindance", "roost", "scald"]
+    },
+    "vanilluxe": {
+        "moves": ["autotomize", "blizzard", "explosion", "flashcannon", "freezedry", "hiddenpowerground"]
+    },
+    "sawsbuck": {
+        "moves": ["hornleech", "jumpkick", "return", "substitute", "swordsdance"]
+    },
+    "emolga": {
+        "moves": ["acrobatics", "encore", "knockoff", "roost", "thunderbolt", "toxic", "uturn"]
+    },
+    "escavalier": {
+        "moves": ["drillrun", "ironhead", "knockoff", "megahorn", "pursuit", "swordsdance"]
+    },
+    "amoonguss": {
+        "moves": ["clearsmog", "foulplay", "gigadrain", "hiddenpowerfire", "sludgebomb", "spore", "synthesis"]
+    },
+    "jellicent": {
+        "moves": ["icebeam", "recover", "scald", "shadowball", "taunt", "toxic", "willowisp"]
+    },
+    "alomomola": {
+        "moves": ["knockoff", "protect", "scald", "toxic", "wish"]
+    },
+    "galvantula": {
+        "moves": ["bugbuzz", "gigadrain", "hiddenpowerice", "stickyweb", "thunder", "voltswitch"]
+    },
+    "ferrothorn": {
+        "moves": ["gyroball", "leechseed", "powerwhip", "protect", "spikes", "stealthrock"]
+    },
+    "klinklang": {
+        "moves": ["geargrind", "return", "shiftgear", "substitute", "wildcharge"]
+    },
+    "eelektross": {
+        "moves": ["flamethrower", "gigadrain", "hiddenpowerice", "knockoff", "superpower", "thunderbolt", "uturn"]
+    },
+    "beheeyem": {
+        "moves": ["hiddenpowerfighting", "nastyplot", "psychic", "psyshock", "signalbeam", "thunderbolt", "trick", "trickroom"]
+    },
+    "chandelure": {
+        "moves": ["calmmind", "energyball", "fireblast", "hiddenpowerground", "shadowball", "substitute", "trick"]
+    },
+    "haxorus": {
+        "moves": ["dragondance", "earthquake", "outrage", "poisonjab", "swordsdance", "taunt"]
+    },
+    "beartic": {
+        "moves": ["aquajet", "iciclecrash", "nightslash", "stoneedge", "superpower", "swordsdance"]
+    },
+    "cryogonal": {
+        "moves": ["freezedry", "haze", "hiddenpowerground", "icebeam", "rapidspin", "recover", "toxic"]
+    },
+    "accelgor": {
+        "moves": ["bugbuzz", "encore", "energyball", "focusblast", "hiddenpowerrock", "spikes", "toxicspikes", "yawn"]
+    },
+    "stunfisk": {
+        "moves": ["discharge", "earthpower", "rest", "scald", "sleeptalk", "stealthrock", "toxic"]
+    },
+    "mienshao": {
+        "moves": ["fakeout", "highjumpkick", "knockoff", "poisonjab", "stoneedge", "swordsdance", "uturn"]
+    },
+    "druddigon": {
+        "moves": ["dragontail", "earthquake", "firepunch", "glare", "gunkshot", "outrage", "stealthrock", "suckerpunch"]
+    },
+    "golurk": {
+        "moves": ["dynamicpunch", "earthquake", "icepunch", "rockpolish", "shadowpunch", "stealthrock"]
+    },
+    "bisharp": {
+        "moves": ["ironhead", "knockoff", "lowkick", "suckerpunch", "swordsdance"]
+    },
+    "bouffalant": {
+        "moves": ["earthquake", "headcharge", "megahorn", "stoneedge", "superpower", "swordsdance"]
+    },
+    "braviary": {
+        "moves": ["bravebird", "bulkup", "return", "roost", "substitute", "superpower", "uturn"]
+    },
+    "mandibuzz": {
+        "moves": ["bravebird", "defog", "foulplay", "roost", "taunt", "toxic", "uturn"]
+    },
+    "heatmor": {
+        "moves": ["fireblast", "focusblast", "gigadrain", "knockoff", "suckerpunch"]
+    },
+    "durant": {
+        "moves": ["honeclaws", "ironhead", "rockslide", "superpower", "xscissor"]
+    },
+    "hydreigon": {
+        "moves": ["darkpulse", "dracometeor", "earthpower", "fireblast", "flashcannon", "roost", "superpower", "uturn"]
+    },
+    "volcarona": {
+        "moves": ["bugbuzz", "fierydance", "fireblast", "gigadrain", "hiddenpowerground", "quiverdance", "roost"]
+    },
+    "cobalion": {
+        "moves": ["closecombat", "ironhead", "stealthrock", "stoneedge", "swordsdance", "voltswitch"]
+    },
+    "terrakion": {
+        "moves": ["closecombat", "earthquake", "quickattack", "stealthrock", "stoneedge", "swordsdance"]
+    },
+    "virizion": {
+        "moves": ["closecombat", "leafblade", "stoneedge", "swordsdance"]
+    },
+    "tornadus": {
+        "moves": ["defog", "grassknot", "heatwave", "hurricane", "superpower", "tailwind", "uturn"]
+    },
+    "tornadustherian": {
+        "moves": ["heatwave", "hurricane", "knockoff", "superpower", "taunt", "uturn"]
+    },
+    "thundurus": {
+        "moves": ["focusblast", "hiddenpowerflying", "hiddenpowerice", "knockoff", "nastyplot", "substitute", "taunt", "thunderbolt", "thunderwave"]
+    },
+    "thundurustherian": {
+        "moves": ["focusblast", "hiddenpowerflying", "hiddenpowerice", "nastyplot", "thunderbolt", "voltswitch"]
+    },
+    "reshiram": {
+        "moves": ["blueflare", "dracometeor", "dragonpulse", "flamecharge", "roost", "stoneedge", "toxic"]
+    },
+    "zekrom": {
+        "moves": ["boltstrike", "dracometeor", "dragonclaw", "honeclaws", "outrage", "roost", "substitute", "voltswitch"]
+    },
+    "landorus": {
+        "moves": ["calmmind", "earthpower", "focusblast", "knockoff", "psychic", "rockpolish", "rockslide", "sludgewave", "stealthrock"]
+    },
+    "landorustherian": {
+        "moves": ["earthquake", "fly", "rockpolish", "stealthrock", "stoneedge", "superpower", "swordsdance", "uturn"]
+    },
+    "kyurem": {
+        "moves": ["dracometeor", "earthpower", "focusblast", "icebeam", "outrage", "roost", "substitute"]
+    },
+    "kyuremblack": {
+        "moves": ["dragonclaw", "earthpower", "fusionbolt", "icebeam", "outrage", "roost", "substitute"]
+    },
+    "kyuremwhite": {
+        "moves": ["dracometeor", "earthpower", "focusblast", "fusionflare", "icebeam", "roost", "toxic"]
+    },
+    "keldeo": {
+        "moves": ["calmmind", "hiddenpowerelectric", "hiddenpowerflying", "hydropump", "icywind", "scald", "secretsword", "substitute"]
+    },
+    "meloetta": {
+        "moves": ["calmmind", "focusblast", "hypervoice", "psyshock", "shadowball", "trick", "uturn"]
+    },
+    "meloettapirouette": {
+        "moves": ["closecombat", "knockoff", "relicsong", "return"]
+    },
+    "genesect": {
+        "moves": ["blazekick", "extremespeed", "flamethrower", "icebeam", "ironhead", "shiftgear", "technoblast", "thunderbolt", "uturn"]
+    },
+    "chesnaught": {
+        "moves": ["drainpunch", "leechseed", "spikes", "spikyshield", "synthesis", "woodhammer"]
+    },
+    "delphox": {
+        "moves": ["calmmind", "fireblast", "grassknot", "psyshock", "shadowball", "switcheroo"]
+    },
+    "greninja": {
+        "moves": ["gunkshot", "hydropump", "icebeam", "spikes", "taunt", "toxicspikes", "uturn"]
+    },
+    "greninjaash": {
+        "moves": ["darkpulse", "hydropump", "icebeam", "uturn", "watershuriken"]
+    },
+    "diggersby": {
+        "moves": ["agility", "earthquake", "knockoff", "quickattack", "return", "swordsdance", "uturn", "wildcharge"]
+    },
+    "talonflame": {
+        "moves": ["bravebird", "flareblitz", "overheat", "roost", "swordsdance", "uturn", "willowisp"]
+    },
+    "vivillon": {
+        "moves": ["energyball", "hurricane", "quiverdance", "sleeppowder", "substitute"]
+    },
+    "pyroar": {
+        "moves": ["darkpulse", "fireblast", "hypervoice", "solarbeam", "sunnyday", "willowisp"]
+    },
+    "floetteeternal": {
+        "moves": ["hiddenpowerfire", "hiddenpowerground", "lightofruin", "moonblast", "psychic"]
+    },
+    "florges": {
+        "moves": ["aromatherapy", "defog", "moonblast", "protect", "synthesis", "toxic", "wish"]
+    },
+    "gogoat": {
+        "moves": ["bulkup", "earthquake", "hornleech", "leechseed", "milkdrink", "rockslide", "substitute"]
+    },
+    "pangoro": {
+        "moves": ["bulletpunch", "drainpunch", "icepunch", "knockoff", "superpower", "swordsdance"]
+    },
+    "furfrou": {
+        "moves": ["cottonguard", "rest", "return", "substitute", "suckerpunch", "thunderwave", "toxic", "uturn"]
+    },
+    "meowstic": {
+        "moves": ["healbell", "lightscreen", "psychic", "reflect", "thunderwave", "toxic", "yawn"]
+    },
+    "meowsticf": {
+        "moves": ["calmmind", "energyball", "psychic", "psyshock", "shadowball", "thunderbolt"]
+    },
+    "doublade": {
+        "moves": ["ironhead", "sacredsword", "shadowclaw", "shadowsneak", "swordsdance"]
+    },
+    "aegislash": {
+        "moves": ["flashcannon", "hiddenpowerice", "kingsshield", "shadowball", "shadowsneak", "toxic"]
+    },
+    "aegislashblade": {
+        "moves": ["ironhead", "sacredsword", "shadowclaw", "shadowsneak", "swordsdance"]
+    },
+    "aromatisse": {
+        "moves": ["calmmind", "moonblast", "rest", "sleeptalk", "toxic"]
+    },
+    "slurpuff": {
+        "moves": ["bellydrum", "drainpunch", "playrough", "return"]
+    },
+    "malamar": {
+        "moves": ["happyhour", "knockoff", "psychocut", "rest", "sleeptalk", "superpower"]
+    },
+    "barbaracle": {
+        "moves": ["earthquake", "liquidation", "lowkick", "shellsmash", "stoneedge"]
+    },
+    "dragalge": {
+        "moves": ["dracometeor", "dragonpulse", "focusblast", "hiddenpowerfire", "scald", "sludgewave", "toxicspikes"]
+    },
+    "clawitzer": {
+        "moves": ["aurasphere", "darkpulse", "icebeam", "scald", "uturn", "waterpulse"]
+    },
+    "heliolisk": {
+        "moves": ["darkpulse", "hiddenpowerice", "hypervoice", "raindance", "surf", "thunderbolt", "voltswitch"]
+    },
+    "tyrantrum": {
+        "moves": ["dragonclaw", "dragondance", "earthquake", "headsmash", "outrage", "stealthrock", "superpower"]
+    },
+    "aurorus": {
+        "moves": ["ancientpower", "blizzard", "earthpower", "freezedry", "hypervoice", "stealthrock", "thunderwave"]
+    },
+    "sylveon": {
+        "moves": ["calmmind", "hiddenpowerfire", "hypervoice", "protect", "psyshock", "wish"]
+    },
+    "hawlucha": {
+        "moves": ["acrobatics", "highjumpkick", "skyattack", "substitute", "swordsdance"]
+    },
+    "dedenne": {
+        "moves": ["protect", "recycle", "thunderbolt", "toxic"]
+    },
+    "carbink": {
+        "moves": ["explosion", "lightscreen", "moonblast", "powergem", "reflect", "stealthrock"]
+    },
+    "goodra": {
+        "moves": ["dracometeor", "dragontail", "earthquake", "fireblast", "powerwhip", "sludgebomb", "thunderbolt"]
+    },
+    "klefki": {
+        "moves": ["dazzlinggleam", "foulplay", "magnetrise", "spikes", "thunderwave", "toxic"]
+    },
+    "trevenant": {
+        "moves": ["earthquake", "hornleech", "rockslide", "shadowclaw", "trickroom", "woodhammer"]
+    },
+    "gourgeistsmall": {
+        "moves": ["leechseed", "seedbomb", "shadowsneak", "substitute", "synthesis", "willowisp"]
+    },
+    "gourgeistlarge": {
+        "moves": ["leechseed", "seedbomb", "shadowsneak", "substitute", "synthesis", "willowisp"]
+    },
+    "gourgeist": {
+        "moves": ["leechseed", "seedbomb", "shadowsneak", "substitute", "synthesis", "willowisp"]
+    },
+    "gourgeistsuper": {
+        "moves": ["leechseed", "seedbomb", "shadowsneak", "substitute", "synthesis", "willowisp"]
+    },
+    "avalugg": {
+        "moves": ["avalanche", "earthquake", "rapidspin", "recover", "roar", "toxic"]
+    },
+    "noivern": {
+        "moves": ["boomburst", "dracometeor", "flamethrower", "hurricane", "roost", "switcheroo", "taunt", "uturn"]
+    },
+    "xerneas": {
+        "moves": ["focusblast", "geomancy", "hiddenpowerfire", "moonblast", "psyshock", "thunderbolt"]
+    },
+    "yveltal": {
+        "moves": ["darkpulse", "focusblast", "foulplay", "oblivionwing", "roost", "suckerpunch", "taunt", "toxic", "uturn"]
+    },
+    "zygarde": {
+        "moves": ["dragondance", "extremespeed", "outrage", "substitute", "thousandarrows"]
+    },
+    "zygarde10": {
+        "moves": ["coil", "extremespeed", "irontail", "outrage", "thousandarrows"]
+    },
+    "diancie": {
+        "moves": ["diamondstorm", "earthpower", "lightscreen", "moonblast", "reflect", "stealthrock"]
+    },
+    "dianciemega": {
+        "moves": ["calmmind", "diamondstorm", "earthpower", "hiddenpowerfire", "moonblast"]
+    },
+    "hoopa": {
+        "moves": ["focusblast", "nastyplot", "psyshock", "shadowball", "trick"]
+    },
+    "hoopaunbound": {
+        "moves": ["darkpulse", "drainpunch", "focusblast", "gunkshot", "hyperspacefury", "icepunch", "nastyplot", "psychic", "substitute", "trick", "zenheadbutt"]
+    },
+    "volcanion": {
+        "moves": ["earthpower", "fireblast", "sludgebomb", "steameruption", "substitute", "superpower"]
+    },
+    "decidueye": {
+        "moves": ["leafblade", "roost", "shadowsneak", "spiritshackle", "swordsdance", "uturn"]
+    },
+    "incineroar": {
+        "moves": ["darkestlariat", "earthquake", "fakeout", "flareblitz", "knockoff", "uturn"]
+    },
+    "primarina": {
+        "moves": ["energyball", "hiddenpowerfire", "hydropump", "moonblast", "psychic", "scald"]
+    },
+    "toucannon": {
+        "moves": ["beakblast", "boomburst", "brickbreak", "bulletseed", "roost"]
+    },
+    "gumshoos": {
+        "moves": ["crunch", "earthquake", "firepunch", "return", "uturn"]
+    },
+    "vikavolt": {
+        "moves": ["agility", "bugbuzz", "energyball", "hiddenpowerice", "thunderbolt", "voltswitch"]
+    },
+    "crabominable": {
+        "moves": ["closecombat", "earthquake", "icehammer", "stoneedge"]
+    },
+    "oricorio": {
+        "moves": ["calmmind", "hurricane", "revelationdance", "roost", "toxic", "uturn"]
+    },
+    "oricoriopompom": {
+        "moves": ["calmmind", "hurricane", "revelationdance", "roost", "toxic", "uturn"]
+    },
+    "oricoriopau": {
+        "moves": ["calmmind", "hurricane", "revelationdance", "roost", "toxic", "uturn"]
+    },
+    "oricoriosensu": {
+        "moves": ["calmmind", "hurricane", "revelationdance", "roost", "toxic", "uturn"]
+    },
+    "ribombee": {
+        "moves": ["bugbuzz", "hiddenpowerfire", "moonblast", "quiverdance", "roost", "stickyweb"]
+    },
+    "lycanroc": {
+        "moves": ["accelerock", "drillrun", "firefang", "stoneedge", "swordsdance"]
+    },
+    "lycanrocmidnight": {
+        "moves": ["firepunch", "stealthrock", "stoneedge", "suckerpunch", "swordsdance"]
+    },
+    "lycanrocdusk": {
+        "moves": ["accelerock", "drillrun", "firefang", "return", "stoneedge", "swordsdance"]
+    },
+    "wishiwashischool": {
+        "moves": ["earthquake", "hiddenpowergrass", "hydropump", "icebeam", "scald"]
+    },
+    "toxapex": {
+        "moves": ["banefulbunker", "haze", "recover", "scald", "toxicspikes"]
+    },
+    "mudsdale": {
+        "moves": ["closecombat", "earthquake", "heavyslam", "rockslide", "stealthrock"]
+    },
+    "araquanid": {
+        "moves": ["liquidation", "lunge", "mirrorcoat", "stickyweb", "toxic"]
+    },
+    "lurantis": {
+        "moves": ["hiddenpowerice", "knockoff", "leafstorm", "superpower", "synthesis"]
+    },
+    "shiinotic": {
+        "moves": ["gigadrain", "leechseed", "moonblast", "spore", "strengthsap"]
+    },
+    "salazzle": {
+        "moves": ["fireblast", "hiddenpowergrass", "nastyplot", "sludgewave"]
+    },
+    "bewear": {
+        "moves": ["doubleedge", "hammerarm", "icepunch", "return", "shadowclaw", "swordsdance"]
+    },
+    "tsareena": {
+        "moves": ["highjumpkick", "knockoff", "powerwhip", "rapidspin", "synthesis", "uturn"]
+    },
+    "comfey": {
+        "moves": ["aromatherapy", "drainingkiss", "synthesis", "toxic", "uturn"]
+    },
+    "oranguru": {
+        "moves": ["focusblast", "nastyplot", "psyshock", "thunderbolt", "trickroom"]
+    },
+    "passimian": {
+        "moves": ["closecombat", "earthquake", "gunkshot", "knockoff", "rockslide", "uturn"]
+    },
+    "golisopod": {
+        "moves": ["aquajet", "firstimpression", "knockoff", "liquidation", "spikes"]
+    },
+    "palossand": {
+        "moves": ["earthpower", "shadowball", "shoreup", "stealthrock", "toxic"]
+    },
+    "pyukumuku": {
+        "moves": ["block", "recover", "soak", "toxic"]
+    },
+    "typenull": {
+        "moves": ["rest", "return", "sleeptalk", "swordsdance", "uturn"]
+    },
+    "silvally": {
+        "moves": ["crunch", "doubleedge", "flamecharge", "flamethrower", "icebeam", "ironhead", "return", "swordsdance", "uturn"]
+    },
+    "silvallybug": {
+        "moves": ["defog", "flamethrower", "icebeam", "thunderbolt", "uturn"]
+    },
+    "silvallydark": {
+        "moves": ["flamecharge", "ironhead", "multiattack", "swordsdance"]
+    },
+    "silvallydragon": {
+        "moves": ["dracometeor", "flamecharge", "flamethrower", "icebeam", "ironhead", "multiattack", "swordsdance", "uturn"]
+    },
+    "silvallyelectric": {
+        "moves": ["flamethrower", "icebeam", "multiattack", "partingshot", "toxic"]
+    },
+    "silvallyfairy": {
+        "moves": ["flamethrower", "multiattack", "partingshot", "rockslide", "thunderwave"]
+    },
+    "silvallyfighting": {
+        "moves": ["flamecharge", "ironhead", "multiattack", "shadowclaw", "swordsdance"]
+    },
+    "silvallyfire": {
+        "moves": ["defog", "icebeam", "multiattack", "thunderbolt", "uturn"]
+    },
+    "silvallyflying": {
+        "moves": ["flamethrower", "ironhead", "multiattack", "partingshot", "thunderwave"]
+    },
+    "silvallyghost": {
+        "moves": ["flamethrower", "icebeam", "multiattack", "partingshot", "toxic"]
+    },
+    "silvallygrass": {
+        "moves": ["flamethrower", "icebeam", "multiattack", "partingshot", "toxic"]
+    },
+    "silvallyground": {
+        "moves": ["flamecharge", "multiattack", "rockslide", "swordsdance"]
+    },
+    "silvallyice": {
+        "moves": ["flamethrower", "multiattack", "thunderbolt", "toxic", "uturn"]
+    },
+    "silvallypoison": {
+        "moves": ["flamethrower", "icebeam", "multiattack", "partingshot", "toxic"]
+    },
+    "silvallypsychic": {
+        "moves": ["flamethrower", "multiattack", "partingshot", "rockslide", "thunderwave"]
+    },
+    "silvallyrock": {
+        "moves": ["flamethrower", "grasspledge", "multiattack", "partingshot", "toxic"]
+    },
+    "silvallysteel": {
+        "moves": ["crunch", "defog", "flamethrower", "multiattack", "thunderbolt"]
+    },
+    "silvallywater": {
+        "moves": ["defog", "icebeam", "multiattack", "partingshot", "thunderbolt"]
+    },
+    "minior": {
+        "moves": ["acrobatics", "earthquake", "powergem", "shellsmash"]
+    },
+    "komala": {
+        "moves": ["earthquake", "playrough", "return", "suckerpunch", "uturn", "woodhammer"]
+    },
+    "turtonator": {
+        "moves": ["dracometeor", "dragonpulse", "dragontail", "earthquake", "explosion", "fireblast", "shellsmash"]
+    },
+    "togedemaru": {
+        "moves": ["ironhead", "nuzzle", "spikyshield", "uturn", "wish", "zingzap"]
+    },
+    "mimikyu": {
+        "moves": ["playrough", "shadowclaw", "shadowsneak", "swordsdance", "taunt"]
+    },
+    "bruxish": {
+        "moves": ["aquajet", "crunch", "icefang", "liquidation", "psychicfangs", "swordsdance"]
+    },
+    "drampa": {
+        "moves": ["dracometeor", "dragonpulse", "fireblast", "glare", "hypervoice", "roost", "thunderbolt"]
+    },
+    "dhelmise": {
+        "moves": ["anchorshot", "earthquake", "knockoff", "powerwhip", "rapidspin", "synthesis"]
+    },
+    "kommoo": {
+        "moves": ["clangingscales", "closecombat", "dragondance", "outrage", "poisonjab"]
+    },
+    "tapukoko": {
+        "moves": ["bravebird", "dazzlinggleam", "defog", "naturesmadness", "thunderbolt", "uturn"]
+    },
+    "tapulele": {
+        "moves": ["calmmind", "focusblast", "hiddenpowerfire", "moonblast", "psychic", "psyshock"]
+    },
+    "tapubulu": {
+        "moves": ["bulkup", "hornleech", "megahorn", "stoneedge", "superpower", "woodhammer"]
+    },
+    "tapufini": {
+        "moves": ["calmmind", "hydropump", "icebeam", "moonblast", "scald", "taunt"]
+    },
+    "solgaleo": {
+        "moves": ["earthquake", "flareblitz", "morningsun", "stoneedge", "sunsteelstrike", "zenheadbutt"]
+    },
+    "lunala": {
+        "moves": ["calmmind", "focusblast", "moonblast", "moongeistbeam", "psyshock", "roost"]
+    },
+    "nihilego": {
+        "moves": ["grassknot", "powergem", "sludgewave", "stealthrock", "thunderbolt", "toxicspikes"]
+    },
+    "buzzwole": {
+        "moves": ["drainpunch", "earthquake", "leechlife", "poisonjab", "stoneedge", "superpower"]
+    },
+    "pheromosa": {
+        "moves": ["highjumpkick", "icebeam", "poisonjab", "throatchop", "uturn"]
+    },
+    "xurkitree": {
+        "moves": ["dazzlinggleam", "electricterrain", "energyball", "hiddenpowerice", "thunderbolt", "voltswitch"]
+    },
+    "celesteela": {
+        "moves": ["airslash", "autotomize", "earthquake", "fireblast", "heavyslam", "leechseed", "protect"]
+    },
+    "kartana": {
+        "moves": ["knockoff", "leafblade", "sacredsword", "smartstrike", "swordsdance"]
+    },
+    "guzzlord": {
+        "moves": ["dracometeor", "earthquake", "fireblast", "heavyslam", "knockoff"]
+    },
+    "necrozma": {
+        "moves": ["calmmind", "heatwave", "moonlight", "photongeyser", "stealthrock"]
+    },
+    "necrozmaduskmane": {
+        "moves": ["autotomize", "earthquake", "knockoff", "photongeyser", "sunsteelstrike", "swordsdance"]
+    },
+    "necrozmadawnwings": {
+        "moves": ["calmmind", "heatwave", "moongeistbeam", "photongeyser", "powergem", "trickroom"]
+    },
+    "magearna": {
+        "moves": ["calmmind", "flashcannon", "fleurcannon", "focusblast", "ironhead", "shiftgear", "thunderbolt"]
+    },
+    "marshadow": {
+        "moves": ["bulkup", "closecombat", "icepunch", "rocktomb", "shadowsneak", "spectralthief"]
+    },
+    "naganadel": {
+        "moves": ["dracometeor", "dragonpulse", "fireblast", "nastyplot", "sludgewave", "uturn"]
+    },
+    "stakataka": {
+        "moves": ["earthquake", "gyroball", "stealthrock", "stoneedge", "superpower", "trickroom"]
+    },
+    "blacephalon": {
+        "moves": ["calmmind", "explosion", "fireblast", "hiddenpowerice", "shadowball", "trick"]
+    },
+    "zeraora": {
+        "moves": ["closecombat", "grassknot", "hiddenpowerice", "knockoff", "plasmafists", "voltswitch", "workup"]
+    },
+    "meltan": {
+        "moves": ["flashcannon", "protect", "thunderbolt", "toxic"]
+    },
+    "melmetal": {
+        "moves": ["doubleironbash", "earthquake", "icepunch", "rockslide", "thunderwave"]
+    }
+}

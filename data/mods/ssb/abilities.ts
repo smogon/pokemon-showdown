@@ -874,7 +874,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onSwitchOut(pokemon) {
 			pokemon.heal(pokemon.baseMaxhp / 3);
 		},
-		onBoost(boost, target, source, effect) {
+		onTryBoost(boost, target, source, effect) {
 			if (source && target === source) return;
 			let showMsg = false;
 			let i: BoostID;
@@ -927,8 +927,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onAnyRedirectTarget(target, source, source2, move) {
-			if (!['Water', 'Electric'].includes(move.type) ||
-				['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
+			if (!['Water', 'Electric'].includes(move.type) || move.flags['pledgecombo']) return;
 			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
 			if (this.validTarget(this.effectState.target, source, redirectTarget)) {
 				if (move.smartTarget) move.smartTarget = false;
@@ -1931,7 +1930,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (source.volatiles['leechseed']) return;
-			if (!move.isFutureMove) {
+			if (!move.flags['futuremove']) {
 				source.addVolatile('leechseed', this.effectState.target);
 			}
 		},

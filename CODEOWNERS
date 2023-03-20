@@ -6,6 +6,7 @@ data/random-teams.ts @AnnikaCodes @KrisXV @MathyFurret @ACakeWearingAHat @livid-
 data/text/ @Marty-D
 databases/ @monsanto
 server/artemis/* @mia-pi-git
+server/chat-plugins/abuse-monitor.ts @mia-pi-git
 server/chat-plugins/friends.ts @mia-pi-git
 server/chat-plugins/github.ts @mia-pi-git
 server/chat-plugins/hosts.ts @AnnikaCodes
@@ -18,9 +19,8 @@ server/chat-plugins/repeats.ts @AnnikaCodes
 server/chat-plugins/responder.ts @mia-pi-git
 server/chat-plugins/rock-paper-scissors.ts @mia-pi-git
 server/chat-plugins/sample-teams.ts @KrisXV
-server/chat-plugins/scavenger*.ts @xfix @sparkychildcharlie
+server/chat-plugins/scavenger*.ts @xfix @sparkychildcharlie @PartMan7
 server/chat-plugins/the-studio.ts @KrisXV
-server/chat-plugins/abuse-monitor.ts @mia-pi-git
 server/chat-plugins/trivia/ @AnnikaCodes
 server/chat-plugins/username-prefixes.ts @AnnikaCodes
 server/chat-plugins/wifi.ts @KrisXV

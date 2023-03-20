@@ -278,10 +278,12 @@ export class RoomAuth extends Auth {
 		}
 		// this is a bit of a hardcode, yeah, but admins need to have admin commands in prooms w/o the symbol
 		// and we want that to include sysops.
-		// Plus, using user.can is cleaner than Users.globalAuth.get(user) === '& and it accounts for more things.
+		// Plus, using user.can is cleaner than Users.globalAuth.get(user) === admin and it accounts for more things.
 		// (and no this won't recurse or anything since user.can() with no room doesn't call this)
 		if (this.room.settings.isPrivate === true && user.can('makeroom')) {
-			return '&';
+			// not hardcoding & here since globalAuth.get should return & in basically all cases
+			// except sysops, and there's an override for them anyways so it doesn't matter
+			return Users.globalAuth.get(user);
 		}
 		return symbol;
 	}

@@ -417,7 +417,7 @@ export async function lock(user: User, room: GameRoom, reason: string, isWeek?: 
 		['#artemis'],
 	);
 	globalModlog(`${isWeek ? 'WEEK' : ''}LOCK`, user, reason, room);
-	addGlobalModAction(`${user.name} was locked from talking by Artemis ${isWeek ? 'for a week ' : ""}(${reason})`, room);
+	addGlobalModAction(`${user.name} was locked from talking by Artemis${isWeek ? ' for a week. ' : ". "}(${reason})`, room);
 	if (affected.length > 1) {
 		Rooms.get('staff')?.add(
 			`|c|&|/log (${user.id}'s ` +
@@ -1675,7 +1675,7 @@ export const commands: Chat.ChatCommands = {
 			this.refreshPage('abusemonitor-settings');
 		},
 		edithistory(target, room, user) {
-			checkAccess(this);
+			this.checkCan('globalban');
 			target = toID(target);
 			if (!target) {
 				return this.parse(`/help abusemonitor`);
@@ -1684,7 +1684,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		ignoremodlog: {
 			add(target, room, user) {
-				checkAccess(this);
+				this.checkCan('globalban');
 				let targetUser: string;
 				[targetUser, target] = this.splitOne(target).map(f => f.trim());
 				targetUser = toID(targetUser);
@@ -1717,7 +1717,7 @@ export const commands: Chat.ChatCommands = {
 				this.refreshPage(`abusemonitor-edithistory-${targetUser}`);
 			},
 			remove(target, room, user) {
-				checkAccess(this);
+				this.checkCan('globalban');
 				let [targetUser, rawNum] = this.splitOne(target).map(f => f.trim());
 				targetUser = toID(targetUser);
 				const num = Number(rawNum);
@@ -2307,7 +2307,7 @@ export const pages: Chat.PageTable = {
 			return buf;
 		},
 		async edithistory(query, user) {
-			checkAccess(this);
+			this.checkCan('globalban');
 			const targetUser = toID(query[0]);
 			if (!targetUser) {
 				return this.errorReply(`Specify a user.`);

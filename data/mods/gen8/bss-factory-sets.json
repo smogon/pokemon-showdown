@@ -40,7 +40,6 @@
         "ability": ["Static"],
         "evs": {"spa": 252, "spd": 4, "spe": 252},
         "nature": "Timid",
-        "ivs": {"atk": 0},
         "moves": [["Hurricane"], ["Thunderbolt"], ["Heat Wave"], ["Roost", "Steel Wing"]]
       },
       {
@@ -256,7 +255,7 @@
         "species": "Dracozolt",
         "item": ["Life Orb"],
         "ability": ["Hustle"],
-        "evs": {"atk": 252, "spa": 4, "spe": 252},
+        "evs": {"atk": 252, "spd": 4, "spe": 252},
         "nature": "Jolly",
         "moves": [["Bolt Beak"], ["Outrage"], ["Aerial Ace"], ["Fire Fang", "Low Kick"]]
       }
@@ -342,7 +341,15 @@
         "ability": ["Infiltrator"],
         "evs": {"atk": 252, "spa": 4, "spe": 252},
         "nature": "Naive",
-        "moves": [["Dragon Darts"], ["Phantom Force", "Hex"], ["Dragon Dance"], ["Will-O-Wisp", "Thunder Wave"]]
+        "moves": [["Dragon Darts"], ["Hex"], ["Dragon Dance"], ["Will-O-Wisp", "Thunder Wave"]]
+      },
+      {
+        "species": "Dragapult",
+        "item": ["Focus Sash"],
+        "ability": ["Infiltrator"],
+        "evs": {"atk": 252, "def": 4, "spe": 252},
+        "nature": "Jolly",
+        "moves": [["Dragon Darts"], ["Phantom Force"], ["Dragon Dance"], ["Will-O-Wisp", "Thunder Wave"]]
       },
       {
         "species": "Dragapult",
@@ -666,7 +673,6 @@
         "ability": ["Beast Boost"],
         "evs": {"spa": 252, "spd": 4, "spe": 252},
         "nature": "Timid",
-        "ivs": {"atk": 0},
         "moves": [["Sludge Wave"], ["Draco Meteor"], ["Fire Blast"], ["U-turn"]]
       }
     ]
@@ -1603,7 +1609,6 @@
         "item": ["Assault Vest", "Choice Specs"],
         "ability": ["Torrent"],
         "evs": {"hp": 252, "def": 28, "spa": 228},
-        "ivs": {"atk": 0},
         "nature": "Modest",
         "moves": [["Moonblast"], ["Sparkling Aria"], ["Energy Ball"], ["Psychic", "Aqua Jet"]]
       },
@@ -1612,7 +1617,6 @@
         "item": ["Focus Sash"],
         "ability": ["Torrent"],
         "evs": {"def": 4, "spa": 252, "spe": 252},
-        "ivs": {"atk": 0},
         "nature": "Modest",
         "moves": [["Moonblast"], ["Sparkling Aria"], ["Energy Ball"], ["Aqua Jet"]]
       }
@@ -1768,7 +1772,15 @@
         "ability": ["Levitate"],
         "evs": {"hp": 252, "def": 252, "spe": 4},
         "nature": "Bold",
-        "moves": [["Stealth Rock"], ["Yawn"], ["Memento"], ["Trick Room", "U-turn"]]
+        "moves": [["Stealth Rock"], ["Yawn"], ["Memento"], ["Trick Room"]]
+      },
+      {
+        "species": "Uxie",
+        "item": ["Sitrus Berry", "Mental Herb"],
+        "ability": ["Levitate"],
+        "evs": {"hp": 252, "def": 252, "spe": 4},
+        "nature": "Impish",
+        "moves": [["Stealth Rock"], ["Yawn"], ["Memento"], ["U-turn"]]
       }
     ]
   },
@@ -1910,7 +1922,16 @@
         "ability": ["Sap Sipper"],
         "evs": {"hp": 252, "def": 4, "spa": 252},
         "nature": "Modest",
-        "moves": [["Dragon Pulse", "Draco Meteor"], ["Flamethrower"], ["Acid Spray"], ["Thunderbolt", "Power Whip"]]
+        "moves": [["Dragon Pulse", "Draco Meteor"], ["Flamethrower"], ["Acid Spray"], ["Power Whip"]]
+      },
+      {
+        "species": "Goodra",
+        "item": ["Assault Vest"],
+        "ability": ["Sap Sipper"],
+        "evs": {"hp": 252, "def": 4, "spa": 252},
+        "ivs": {"atk": 0},
+        "nature": "Modest",
+        "moves": [["Dragon Pulse", "Draco Meteor"], ["Flamethrower"], ["Acid Spray"], ["Thunderbolt"]]
       }
     ]
   },
@@ -1991,7 +2012,7 @@
         "ability": ["Magic Bounce"],
         "evs": {"hp": 252, "def": 252, "spa": 4},
         "nature": "Bold",
-        "ivs": {"atk": 0, "spe": 0},
+        "ivs": {"atk": 0},
         "moves": [["Psyshock"], ["Draining Kiss"], ["Giga Drain"], ["Calm Mind"]]
       }
     ]
@@ -2218,7 +2239,7 @@
         "ability": ["Infiltrator"],
         "evs": {"hp": 252, "spa": 252, "spd": 4},
         "nature": "Quiet",
-        "ivs": {"atk": 0},
+        "ivs": {"atk": 0, "spe": 0},
         "moves": [["Flamethrower", "Overheat"], ["Shadow Ball"], ["Trick Room"], ["Memento"]]
       },
       {
@@ -2646,7 +2667,6 @@
         "ability": ["Light Metal"],
         "evs": {"hp": 252, "spa": 252, "spd": 4},
         "nature": "Modest",
-        "ivs": {"atk": 0},
         "moves": [["Draco Meteor"], ["Flash Cannon"], ["Thunderbolt"], ["Rock Tomb"]]
       },
       {
@@ -2691,7 +2711,6 @@
         "ability": ["Quick Draw"],
         "evs": {"hp": 252, "spa": 252, "spd": 4},
         "nature": "Modest",
-        "ivs": {"atk": 0},
         "moves": [["Shell Side Arm"], ["Psyshock", "Expanding Force"], ["Flamethrower"], ["Nasty Plot"]]
       }
     ]

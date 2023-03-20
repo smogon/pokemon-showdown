@@ -2,7 +2,7 @@ import RandomGen5Teams from '../gen5/random-teams';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
 import {PRNG} from '../../../sim';
-import type {MoveCounter} from '../gen8/random-teams';
+import type {MoveCounter, OldRandomBattleSpecies} from '../gen8/random-teams';
 
 
 // These moves can be used even if we aren't setting up to use them:
@@ -15,17 +15,17 @@ const recoveryMoves = [
 ];
 const defensiveStatusMoves = ['aromatherapy', 'haze', 'healbell', 'roar', 'whirlwind', 'willowisp', 'yawn'];
 export class RandomGen4Teams extends RandomGen5Teams {
+	randomData: {[species: string]: OldRandomBattleSpecies} = require('./random-data.json');
+
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 		this.moveEnforcementCheckers = {
 			Bug: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Bug') && (movePool.includes('bugbuzz') || movePool.includes('megahorn'))
+				(movePool.includes('bugbuzz') || movePool.includes('megahorn'))
 			),
 			Dark: (movePool, moves, abilities, types, counter) => (
-				(!counter.get('Dark') || (counter.get('Dark') === 1 && moves.has('pursuit'))) &&
-				movePool.includes('suckerpunch') &&
-				counter.setupType !== 'Special'
-			),
+				!counter.get('damage') &&
+				(!counter.get('Dark') || (counter.get('Dark') < 2 && moves.has('pursuit') && movePool.includes('suckerpunch')))),
 			Dragon: (movePool, moves, abilities, types, counter) => !counter.get('Dragon'),
 			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
 			Fighting: (movePool, moves, abilities, types, counter) => (
@@ -59,6 +59,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			),
 			Guts: (movePool, moves, abilities, types) => types.has('Normal') && movePool.includes('facade'),
 			'Slow Start': movePool => movePool.includes('substitute'),
+			protect: movePool => movePool.includes('wish'),
+			wish: movePool => movePool.includes('protect'),
 		};
 	}
 	shouldCullMove(
@@ -82,12 +84,31 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			return {cull: counter.get('Physical') + counter.get('Special') < 4};
 		case 'focuspunch':
 			return {cull: !moves.has('substitute') || counter.damagingMoves.size < 2 || moves.has('hammerarm')};
+		case 'lightscreen':
+			if (movePool.length > 1) {
+				const screen = movePool.indexOf('reflect');
+				if (screen >= 0) {
+					this.fastPop(movePool, screen);
+					return {cull: true};
+				}
+			}
+			return {cull: false};
 		case 'raindance':
 			return {cull: abilities.has('Hydration') ? !moves.has('rest') : counter.get('Physical') + counter.get('Special') < 2};
+		case 'reflect':
+			if (movePool.length > 1) {
+				const screen = movePool.indexOf('lightscreen');
+				if (screen >= 0) {
+					this.fastPop(movePool, screen);
+					return {cull: true};
+				}
+			}
+			return {cull: false};
 		case 'refresh':
 			return {cull: !(moves.has('calmmind') && (moves.has('recover') || moves.has('roost')))};
 		case 'rest':
-			return {cull: movePool.includes('sleeptalk') || (abilities.has('Hydration') && !moves.has('raindance'))};
+			return {cull: movePool.includes('sleeptalk') || (abilities.has('Hydration') && !moves.has('raindance')) ||
+				moves.has('reflect') && moves.has('lightscreen')};
 		case 'sleeptalk':
 			if (movePool.length > 1) {
 				const rest = movePool.indexOf('rest');
@@ -134,18 +155,20 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			return {cull: !!counter.setupType || moves.has('rest') || moves.has('substitute')};
 		case 'protect':
 			return {cull: (
-				!['Guts', 'Quick Feet', 'Speed Boost'].some(abil => abilities.has(abil)) ||
-				['rest', 'softboiled', 'toxic', 'wish'].some(m => moves.has(m))
+				['rest', 'softboiled'].some(m => moves.has(m)) ||
+				!['Guts', 'Quick Feet', 'Speed Boost'].some(abil => abilities.has(abil)) &&
+				!['toxic', 'wish'].some(m => moves.has(m))
 			)};
 		case 'wish':
 			return {cull: (
-				!['batonpass', 'protect', 'uturn'].some(m => moves.has(m)) ||
-				moves.has('rest') ||
-				!!counter.get('speedsetup')
+				!['batonpass', 'ironhead', 'moonlight', 'protect', 'softboiled', 'uturn'].some(m => moves.has(m)) &&
+				!movePool.includes('protect')
 			)};
+		case 'moonlight':
+			return {cull: (moves.has('wish') && (moves.has('protect') || movePool.includes('protect')))};
 		case 'rapidspin':
 			return {cull: !!teamDetails.rapidSpin || (!!counter.setupType && counter.get('Physical') + counter.get('Special') < 2)};
-		case 'reflect': case 'lightscreen': case 'fakeout':
+		case 'fakeout':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('substitute')};
 		case 'spikes':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('substitute')};
@@ -176,7 +199,6 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			)};
 		case 'uturn':
 			return {cull: (
-				(types.has('Bug') && counter.get('stab') < 2 && counter.damagingMoves.size > 1) ||
 				(abilities.has('Speed Boost') && moves.has('protect')) ||
 				!!counter.setupType ||
 				!!counter.get('speedsetup') ||
@@ -187,22 +209,29 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		// Attacks:
 		case 'bodyslam': case 'slash':
 			return {cull: moves.has('facade') || moves.has('return')};
+		case 'bugbite':
+			return {cull: moves.has('uturn')};
 		case 'doubleedge':
 			return {cull: ['bodyslam', 'facade', 'return'].some(m => moves.has(m))};
 		case 'endeavor':
 			return {cull: !isLead};
+		case 'facade':
+			return {cull: moves.has('substitute')};
 		case 'headbutt':
 			return {cull: !moves.has('bodyslam') && !moves.has('thunderwave')};
-		case 'judgment': case 'swift':
-			return {cull: counter.setupType !== 'Special' && counter.get('stab') > 1};
+		case 'swift':
+			return {cull: counter.setupType !== 'Special'};
 		case 'quickattack':
 			return {cull: moves.has('thunderwave')};
 		case 'firepunch': case 'flamethrower':
 			return {cull: moves.has('fireblast') || moves.has('overheat') && !counter.setupType};
+		case 'flareblitz':
+			return {cull: moves.has('superpower') && !!counter.get('speedsetup')};
 		case 'lavaplume': case 'fireblast':
 			if (move.id === 'fireblast' && moves.has('lavaplume') && !counter.get('speedsetup')) return {cull: true};
 			if (move.id === 'lavaplume' && moves.has('fireblast') && counter.get('speedsetup')) return {cull: true};
-			if (moves.has('flareblitz') && counter.setupType !== 'Special') return {cull: true};
+			if (moves.has('flareblitz') && counter.setupType !== 'Special' &&
+				(!moves.has('superpower') || !counter.get('speedsetup'))) return {cull: true};
 			break;
 		case 'overheat':
 			return {cull: counter.setupType === 'Special' || ['batonpass', 'fireblast', 'flareblitz'].some(m => moves.has(m))};
@@ -218,10 +247,9 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		case 'chargebeam':
 			return {cull: moves.has('thunderbolt') && counter.get('Special') < 3};
 		case 'discharge':
-			return {cull: moves.has('thunderbolt')};
+			return {cull: moves.has('thunderbolt') || moves.has('shadowball')};
 		case 'energyball':
 			return {cull: (
-				moves.has('leafblade') ||
 				moves.has('woodhammer') ||
 				(moves.has('sunnyday') && moves.has('solarbeam')) ||
 				(moves.has('leafstorm') && counter.get('Physical') + counter.get('Special') < 4)
@@ -233,6 +261,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				!!counter.setupType ||
 				moves.has('batonpass') ||
 				moves.has('powerwhip') ||
+				moves.has('leafblade') ||
 				(moves.has('sunnyday') && moves.has('solarbeam'))
 			)};
 		case 'solarbeam':
@@ -244,14 +273,11 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		case 'brickbreak': case 'closecombat': case 'crosschop': case 'lowkick':
 			return {cull: moves.has('substitute') && moves.has('focuspunch')};
 		case 'machpunch':
-			return {cull: (
-				counter.damagingMoves.size <= counter.get('Fighting') ||
-				(types.has('Fighting') && counter.get('stab') < 2 && !abilities.has('Technician'))
-			)};
+			return {cull: (counter.damagingMoves.size <= counter.get('Fighting'))};
 		case 'seismictoss':
 			return {cull: moves.has('nightshade') || counter.get('Physical') + counter.get('Special') >= 1};
 		case 'superpower':
-			return {cull: moves.has('dragondance') || !!counter.get('speedsetup')};
+			return {cull: moves.has('dragondance') || !!counter.get('speedsetup') && !types.has('Fighting')};
 		case 'gunkshot':
 			return {cull: moves.has('poisonjab')};
 		case 'earthpower':
@@ -262,16 +288,16 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			return {cull: moves.has('psychocut')};
 		case 'rockblast': case 'rockslide':
 			return {cull: moves.has('stoneedge')};
-		case 'shadowclaw':
-			return {cull: moves.has('shadowforce') || moves.has('suckerpunch') && !types.has('Ghost')};
+		case 'shadowclaw': case 'shadowsneak':
+			return {cull: moves.has('suckerpunch') && !types.has('Ghost')};
 		case 'dracometeor':
 			return {cull: moves.has('calmmind') || restTalk || (!!counter.setupType && counter.get('stab') < 2)};
 		case 'dragonclaw':
 			return {cull: moves.has('outrage')};
 		case 'dragonpulse':
-			return {cull: moves.has('dracometeor') && moves.has('outrage')};
+			return {cull: moves.has('dracometeor') || moves.has('outrage')};
 		case 'crunch': case 'nightslash':
-			return {cull: moves.has('suckerpunch')};
+			return {cull: moves.has('suckerpunch') && !types.has('Dark')};
 		case 'pursuit':
 			return {cull: !!counter.setupType || moves.has('payback')};
 		case 'flashcannon':
@@ -282,6 +308,9 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			return {cull: ['roar', 'taunt', 'whirlwind'].some(m => moves.has(m)) || restTalk};
 		case 'haze': case 'taunt':
 			return {cull: restTalk};
+		case 'healbell':
+			// Ampharos doesn't want both
+			return {cull: moves.has('reflect') && moves.has('lightscreen')};
 		case 'leechseed': case 'painsplit':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('rest')};
 		case 'recover': case 'slackoff':
@@ -294,7 +323,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				movePool.includes('spore')
 			)};
 		case 'substitute':
-			return {cull: ['pursuit', 'rapidspin', 'rest', 'taunt'].some(m => moves.has(m))};
+			return {cull: ['lightscreen', 'pursuit', 'rapidspin', 'reflect', 'rest', 'taunt'].some(m => moves.has(m))};
 		case 'thunderwave':
 			return {cull: (
 				!!counter.setupType ||
@@ -319,7 +348,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		species: Species,
 	) {
 		switch (ability) {
-		case 'Anger Point': case 'Ice Body': case 'Steadfast':
+		case 'Anger Point': case 'Ice Body': case 'Steadfast': case 'Unaware':
 			return true;
 		case 'Blaze':
 			return !counter.get('Fire');
@@ -361,8 +390,10 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			return counter.get('Status') < 2;
 		case 'Technician':
 			return !counter.get('technician') || moves.has('toxic');
+		case 'Thick Fat':
+			return (moves.has('facade') || moves.has('fakeout')) && abilities.has('Guts');
 		case 'Tinted Lens':
-			return counter.get('damage') >= counter.damagingMoves.size;
+			return moves.has('protect');
 		case 'Torrent':
 			return !counter.get('Water');
 		}
@@ -381,8 +412,10 @@ export class RandomGen4Teams extends RandomGen5Teams {
 	): string | undefined {
 		if (species.requiredItem) return species.requiredItem;
 		if (species.requiredItems) return this.sample(species.requiredItems);
-		if (species.name === 'Farfetch\u2019d') return 'Stick';
+		if (species.name === 'Ditto') return this.sample(['Salac Berry', 'Sitrus Berry']);
+		if (species.name === 'Farfetch\u2019d' && counter.get('Physical') < 4) return 'Stick';
 		if (species.name === 'Marowak') return 'Thick Club';
+		if (species.name === 'Pikachu') return 'Light Ball';
 		if (species.name === 'Shedinja' || species.name === 'Smeargle') return 'Focus Sash';
 		if (species.name === 'Unown') return 'Choice Specs';
 		if (species.name === 'Wobbuffet') {
@@ -470,6 +503,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		) {
 			return 'Focus Sash';
 		}
+		if (counter.get('Dark') >= 3) return 'Black Glasses';
 		if (counter.damagingMoves.size >= 4) {
 			return (
 				counter.get('Normal') || counter.get('Dragon') > 1 || moves.has('chargebeam') || moves.has('suckerpunch')
@@ -515,7 +549,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
 
-		const movePool = (species.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
+		const data = this.randomData[species.id];
+		const movePool = (data.moves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool: string[] = [];
 		const moves = new Set<string>();
 		let ability = '';
@@ -644,7 +679,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 					(move.category !== 'Status' || !move.flags.heal) &&
 					(move.category === 'Status' || !types.has(move.type) || (move.basePower && move.basePower < 40 && !move.multihit)) &&
 					// These moves cannot be rejected in favor of a forced move
-					!['judgment', 'sleeptalk'].includes(moveid) &&
+					!['judgment', 'lightscreen', 'reflect', 'sleeptalk'].includes(moveid) &&
 					// Setup-supported moves should only be rejected under specific circumstances
 					(counter.get('physicalsetup') + counter.get('specialsetup') < 2 && (
 						!counter.setupType || counter.setupType === 'Mixed' ||
@@ -658,7 +693,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 					const canRollForcedMoves = (
 						// These moves should always be rolled
 						movePool.includes('spore') || (!Array.from(moves).some(id => recoveryMoves.includes(id)) && (
-							movePool.includes('softboiled') ||
+							movePool.includes('softboiled') && !moves.has('explosion') ||
 							(species.baseSpecies === 'Arceus' && movePool.includes('recover'))
 						))
 					);
@@ -685,6 +720,9 @@ export class RandomGen4Teams extends RandomGen5Teams {
 						}
 						for (const abil of abilities) {
 							if (runEnforcementChecker(abil)) cull = true;
+						}
+						for (const m of moves) {
+							if (runEnforcementChecker(m)) cull = true;
 						}
 					}
 				}
@@ -779,20 +817,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			item = 'Black Sludge';
 		}
 
-		const levelScale: {[k: string]: number} = {
-			AG: 74,
-			Uber: 76,
-			OU: 80,
-			'(OU)': 82,
-			UUBL: 82,
-			UU: 84,
-			NUBL: 86,
-			NU: 88,
-		};
-		const customScale: {[k: string]: number} = {
-			Delibird: 100, Ditto: 100, 'Farfetch\u2019d': 100, Unown: 100, Castform: 100,
-		};
-		const level = this.adjustLevel || customScale[species.name] || levelScale[species.tier] || (species.nfe ? 90 : 80);
+		const level = this.adjustLevel || data.level || (species.nfe ? 90 : 80);
 
 		// Prepare optimal HP
 		let hp = Math.floor(

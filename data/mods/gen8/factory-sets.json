@@ -416,13 +416,6 @@
 				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": "Jolly",
 				"moves": [["Icicle Crash"], ["Flare Blitz"], ["U-turn"], ["Earthquake", "Rock Slide"]]
-			}, {
-				"species": "Darmanitan-Galar",
-				"item": ["Choice Band"],
-				"ability": ["Gorilla Tactics"],
-				"evs": {"atk": 252, "spd": 4, "spe": 252},
-				"nature": ["Jolly", "Adamant"],
-				"moves": [["Icicle Crash"], ["Flare Blitz"], ["U-turn", "Rock Slide"], ["Earthquake"]]
 			}]
 		},
 		"weavile": {
@@ -1784,7 +1777,6 @@
 				"item": ["Rocky Helmet"],
 				"ability": ["Sturdy"],
 				"evs": {"hp": 252, "def": 160, "spd": 96},
-				"ivs": {"atk": 0},
 				"nature": "Bold",
 				"moves": [["Body Press", "Brave Bird"], ["Toxic", "Whirlwind"], ["Spikes"], ["Roost"]]
 			}]
@@ -2164,7 +2156,7 @@
 				"item": ["Power Herb"],
 				"ability": ["Prism Armor"],
 				"evs": {"hp": 4, "spa": 252, "spe": 252},
-        "ivs": {"atk": 0},
+				"ivs": {"atk": 0},
 				"nature": "Modest",
 				"moves": [["Photon Geyser"], ["Heat Wave"], ["Meteor Beam"], ["Autotomize", "Stealth Rock"]]
 			}, {
@@ -2172,7 +2164,7 @@
 				"item": ["Colbur Berry"],
 				"ability": ["Prism Armor"],
 				"evs": {"hp": 252, "def": 72, "spa": 156, "spe": 28},
-        "ivs": {"atk": 0},
+				"ivs": {"atk": 0},
 				"nature": "Bold",
 				"moves": [["Photon Geyser"], ["Heat Wave"], ["Calm Mind"], ["Moonlight"]]
 			}]
@@ -2355,6 +2347,7 @@
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Inner Focus", "Infiltrator"],
 				"evs": {"spa": 252, "spd": 4, "spe": 252},
+				"ivs": {"atk": 0},
 				"nature": "Timid",
 				"moves": [["Sludge Bomb"], ["Roost", "Giga Drain"], ["Heat Wave"], ["Nasty Plot"]]
 			}]
@@ -2420,6 +2413,7 @@
 				"item": ["Leftovers"],
 				"ability": ["Clear Body"],
 				"evs": {"hp": 252, "def": 4, "spd": 252},
+				"ivs": {"atk": 0},
 				"nature": "Careful",
 				"moves": [["Stealth Rock"], ["Seismic Toss"], ["Thunder Wave", "Protect"], ["Toxic"]]
 			}, {
@@ -2914,7 +2908,6 @@
 				"item": ["Leftovers"],
 				"ability": ["Thick Fat"],
 				"evs": {"hp": 208, "atk": 44, "def": 172, "spd": 84},
-				"ivs": {"atk": 0},
 				"nature": "Careful",
 				"moves": [["Curse"], ["Body Slam"], ["Earthquake", "Darkest Lariat"], ["Rest"]]
 			}]
@@ -3092,14 +3085,14 @@
 				"species": "Golurk",
 				"item": ["Choice Band"],
 				"ability": ["No Guard"],
-				"evs": {"hp": 4, "atk": 252, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Earthquake"], ["Poltergeist"], ["Close Combat"], ["Trick"]]
 			}, {
 				"species": "Golurk",
 				"item": ["Choice Band"],
 				"ability": ["Iron Fist"],
-				"evs": {"hp": 4, "atk": 252, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Earthquake"], ["Poltergeist"], ["Close Combat"], ["Shadow Punch"]]
 			}]
@@ -3436,7 +3429,6 @@
 				"item": ["Leftovers"],
 				"ability": ["Water Absorb"],
 				"evs": {"hp": 252, "def": 216, "spd": 40},
-				"ivs": {"atk": 0},
 				"nature": "Calm",
 				"moves": [["Scald"], ["Flip Turn", "Heal Bell", "Toxic", "Ice Beam"], ["Wish"], ["Protect"]]
 			}]
@@ -3543,7 +3535,6 @@
 				"item": ["Choice Specs"],
 				"ability": ["Overgrow"],
 				"evs": {"spa": 252, "spd": 4, "spe": 252},
-				"ivs": {"atk": 0},
 				"nature": "Timid",
 				"moves": [["Shadow Ball"], ["Leaf Storm"], ["Giga Drain"], ["U-turn"]]
 			}, {
@@ -3593,7 +3584,6 @@
 				"item": ["Leftovers"],
 				"ability": ["Unaware"],
 				"evs": {"hp": 252, "def": 188, "spd": 68},
-				"ivs": {"atk": 0},
 				"nature": "Impish",
 				"moves": [["Earthquake"], ["Scald", "Protect"], ["Recover"], ["Toxic"]]
 			}]
@@ -3734,7 +3724,7 @@
 				"species": "Weezing",
 				"item": ["Rocky Helmet"],
 				"ability": ["Levitate"],
-				"evs": {"hp": 252, "def": 212, "spd": 44},
+				"evs": {"hp": 252, "def": 212, "spe": 44},
 				"ivs": {"atk": 0},
 				"nature": "Bold",
 				"moves": [["Sludge Bomb"], ["Will-O-Wisp"], ["Pain Split"], ["Taunt", "Toxic Spikes"]]
@@ -3795,7 +3785,7 @@
 				"species": "Golurk",
 				"item": ["Choice Band"],
 				"ability": ["No Guard"],
-				"evs": {"hp": 4, "atk": 252, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Earthquake"], ["Poltergeist"], ["Heat Crash"], ["Darkest Lariat"]]
 			}]
@@ -3850,7 +3840,6 @@
 				"item": ["Choice Specs"],
 				"ability": ["Torrent"],
 				"evs": {"def": 4, "spa": 252, "spe": 252},
-				"ivs": {"atk": 0},
 				"nature": "Timid",
 				"moves": [["Hydro Pump"], ["Dark Pulse"], ["Ice Beam"], ["U-turn"]]
 			}]
@@ -3974,7 +3963,6 @@
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Shield Dust"],
 				"evs": {"spa": 252, "spd": 4, "spe": 252},
-				"ivs": {"atk": 0},
 				"nature": "Timid",
 				"moves": [["Moonblast"], ["Quiver Dance"], ["Roost"], ["Psychic", "Aromatherapy", "U-turn"]]
 			}, {
@@ -3982,7 +3970,6 @@
 				"item": ["Choice Specs"],
 				"ability": ["Shield Dust"],
 				"evs": {"spa": 252, "spd": 4, "spe": 252},
-				"ivs": {"atk": 0},
 				"nature": "Timid",
 				"moves": [["Moonblast"], ["Bug Buzz"], ["U-turn", "Switcheroo"], ["Psychic"]]
 			}]
@@ -4076,7 +4063,6 @@
 				"item": ["Leftovers", "Rocky Helmet", "Heavy-Duty Boots"],
 				"ability": ["Unaware"],
 				"evs": {"hp": 252, "def": 252, "spd": 4},
-				"ivs": {"atk": 0},
 				"nature": "Impish",
 				"moves": [["Earthquake"], ["Scald"], ["Recover"], ["Toxic", "Curse"]]
 			}]
@@ -4665,7 +4651,7 @@
 				"item": ["Eviolite"],
 				"ability": ["Magic Guard"],
 				"evs": {"hp": 252, "def": 4, "spd": 252},
-				"nature": "Bold",
+				"nature": "Calm",
 				"moves": [["Moonblast"], ["Soft-Boiled"], ["Stealth Rock"], ["Knock Off"]]
 			}]
 		},
@@ -4860,7 +4846,6 @@
 				"item": ["Eviolite"],
 				"ability": ["Natural Cure"],
 				"evs": {"hp": 116, "def": 156, "spe": 236},
-				"ivs": {"atk": 0},
 				"nature": "Timid",
 				"moves": [["Scald"], ["Thunder Wave", "Thunderbolt"], ["Rapid Spin"], ["Recover"]]
 			}, {
@@ -5081,7 +5066,7 @@
 				"species": "Carvanha",
 				"item": ["Life Orb"],
 				"ability": ["Speed Boost"],
-				"evs": {"atk": 196, "spd": 36, "spe": 236},
+				"evs": {"atk": 196, "def": 36, "spd": 36, "spe": 236},
 				"ivs": {"hp": 9},
 				"nature": "Adamant",
 				"moves": [["Aqua Jet"], ["Crunch"], ["Psychic Fangs"], ["Protect"]]
@@ -5092,7 +5077,7 @@
 				"species": "Mareanie",
 				"item": ["Eviolite"],
 				"ability": ["Regenerator"],
-				"evs": {"hp": 116, "atk": 12, "def": 180, "spa": 12, "spd": 100, "spe": 180},
+				"evs": {"hp": 116, "atk": 12, "def": 180, "spa": 12, "spd": 180},
 				"nature": "Bold",
 				"moves": [["Knock Off"], ["Scald"], ["Sludge Bomb"], ["Recover"]]
 			}]
@@ -5149,7 +5134,6 @@
 				"item": ["Eviolite"],
 				"ability": ["Aroma Veil"],
 				"evs": {"hp": 212, "def": 196, "spa": 12, "spd": 76, "spe": 12},
-				"ivs": {"atk": 0},
 				"nature": "Bold",
 				"moves": [["Moonblast"], ["Wish"], ["Protect"], ["Psychic", "Covet"]]
 			}, {
@@ -5187,7 +5171,7 @@
 				"species": "Wingull",
 				"item": ["Berry Juice"],
 				"ability": ["Keen Eye"],
-				"evs": {"spa": 236, "spe": 236},
+				"evs": {"spa": 236, "spd": 36, "spe": 236},
 				"ivs": {"hp": 19},
 				"nature": "Hasty",
 				"moves": [["Hurricane"], ["Scald"], ["Knock Off"], ["Substitute"]]
@@ -5219,7 +5203,7 @@
 				"species": "Wynaut",
 				"item": ["Berry Juice"],
 				"ability": ["Shadow Tag"],
-				"evs": {"hp": 212, "spd": 52, "spe": 172},
+				"evs": {"hp": 236, "spd": 52, "spe": 172},
 				"ivs": {"atk": 0},
 				"nature": "Timid",
 				"moves": [["Counter"], ["Mirror Coat"], ["Encore"], ["Destiny Bond"]]
@@ -5459,7 +5443,6 @@
 				"item": ["Berry Juice"],
 				"ability": ["Corrosion"],
 				"evs": {"hp": 52, "spa": 188, "spd": 36, "spe": 220},
-				"ivs": {"atk": 0},
 				"nature": "Timid",
 				"moves": [["Fire Blast"], ["Sludge Bomb"], ["Thief"], ["Substitute"]]
 			}]

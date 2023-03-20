@@ -47,29 +47,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
-	assist: {
-		inherit: true,
-		onHit(target) {
-			const moves = [];
-			for (const pokemon of target.side.pokemon) {
-				if (pokemon === target) continue;
-				for (const move of pokemon.moves) {
-					const noAssist = [
-						'assist', 'chatter', 'copycat', 'counter', 'covet', 'destinybond', 'detect', 'endure', 'feint', 'focuspunch', 'followme', 'helpinghand', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'protect', 'sketch', 'sleeptalk', 'snatch', 'struggle', 'switcheroo', 'thief', 'trick',
-					];
-					if (move && !noAssist.includes(move)) {
-						moves.push(move);
-					}
-				}
-			}
-			let randomMove = '';
-			if (moves.length) randomMove = this.sample(moves);
-			if (!randomMove) {
-				return false;
-			}
-			this.actions.useMove(randomMove, target);
-		},
-	},
 	beatup: {
 		inherit: true,
 		basePower: 10,
@@ -221,18 +198,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-start', target, 'typechange', type);
 		},
 	},
-	copycat: {
-		inherit: true,
-		onHit(pokemon) {
-			const noCopycat = [
-				'assist', 'chatter', 'copycat', 'counter', 'covet', 'destinybond', 'detect', 'endure', 'feint', 'focuspunch', 'followme', 'helpinghand', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'protect', 'sketch', 'sleeptalk', 'snatch', 'struggle', 'switcheroo', 'thief', 'trick',
-			];
-			if (!this.lastMove || noCopycat.includes(this.lastMove.id)) {
-				return false;
-			}
-			this.actions.useMove(this.lastMove.id, pokemon);
-		},
-	},
 	cottonspore: {
 		inherit: true,
 		accuracy: 85,
@@ -367,10 +332,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				name: "Doom Desire",
 				basePower: 120,
 				category: "Special",
-				flags: {},
+				flags: {futuremove: 1},
 				willCrit: false,
 				type: '???',
-				isFutureMove: true,
 			} as unknown as ActiveMove;
 			const damage = this.actions.getDamage(source, target, moveData, true);
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
@@ -384,9 +348,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					basePower: 0,
 					damage: damage,
 					category: "Special",
-					flags: {},
+					flags: {futuremove: 1},
 					effectType: 'Move',
-					isFutureMove: true,
 					type: '???',
 				},
 			});
@@ -432,17 +395,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	encore: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, bypasssub: 1},
+		flags: {protect: 1, mirror: 1, bypasssub: 1, failencore: 1},
 		volatileStatus: 'encore',
 		condition: {
 			durationCallback() {
 				return this.random(4, 9);
 			},
 			onStart(target, source) {
-				const noEncore = ['encore', 'mimic', 'mirrormove', 'sketch', 'struggle', 'transform'];
 				const moveIndex = target.lastMove ? target.moves.indexOf(target.lastMove.id) : -1;
 				if (
-					!target.lastMove || noEncore.includes(target.lastMove.id) ||
+					!target.lastMove || target.lastMove.flags['failencore'] ||
 					!target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0
 				) {
 					// it failed
@@ -584,10 +546,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				name: "Future Sight",
 				basePower: 80,
 				category: "Special",
-				flags: {},
+				flags: {futuremove: 1},
 				willCrit: false,
 				type: '???',
-				isFutureMove: true,
 			} as unknown as ActiveMove;
 			const damage = this.actions.getDamage(source, target, moveData, true);
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
@@ -601,9 +562,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					basePower: 0,
 					damage: damage,
 					category: "Special",
-					flags: {},
+					flags: {futuremove: 1},
 					effectType: 'Move',
-					isFutureMove: true,
 					type: '???',
 				},
 			});
@@ -1009,20 +969,27 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
+	metalburst: {
+		inherit: true,
+		flags: {protect: 1, mirror: 1},
+	},
 	metronome: {
 		inherit: true,
+		flags: {noassist: 1, failcopycat: 1, nosleeptalk: 1, failmimic: 1},
 		noMetronome: [
 			"Assist", "Chatter", "Copycat", "Counter", "Covet", "Destiny Bond", "Detect", "Endure", "Feint", "Focus Punch", "Follow Me", "Helping Hand", "Me First", "Metronome", "Mimic", "Mirror Coat", "Mirror Move", "Protect", "Sketch", "Sleep Talk", "Snatch", "Struggle", "Switcheroo", "Thief", "Trick",
 		],
 	},
 	mimic: {
 		inherit: true,
+		flags: {
+			protect: 1, bypasssub: 1, allyanim: 1, noassist: 1, failcopycat: 1, failencore: 1, failinstruct: 1, failmimic: 1,
+		},
 		onHit(target, source) {
-			const disallowedMoves = ['chatter', 'metronome', 'mimic', 'sketch', 'struggle', 'transform'];
 			if (source.transformed || !target.lastMove || target.volatiles['substitute']) {
 				return false;
 			}
-			if (disallowedMoves.includes(target.lastMove.id) || source.moves.includes(target.lastMove.id)) {
+			if (target.lastMove.flags['failmimic'] || source.moves.includes(target.lastMove.id)) {
 				return false;
 			}
 			const mimicIndex = source.moves.indexOf('mimic');
@@ -1072,7 +1039,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		condition: {
 			duration: 5,
-			onBoost(boost, target, source, effect) {
+			onTryBoost(boost, target, source, effect) {
 				if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
 				if (source && target !== source) {
 					let showMsg = false;
@@ -1136,6 +1103,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	naturepower: {
 		inherit: true,
+		flags: {},
 		onHit(pokemon) {
 			this.actions.useMove('triattack', pokemon);
 		},
@@ -1421,6 +1389,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	sketch: {
 		inherit: true,
+		flags: {bypasssub: 1, allyanim: 1, failencore: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
 		onHit(target, source) {
 			const disallowedMoves = ['chatter', 'sketch', 'struggle'];
 			if (source.transformed || !target.lastMove || target.volatiles['substitute']) {
@@ -1466,6 +1435,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	snatch: {
 		inherit: true,
+		flags: {bypasssub: 1, noassist: 1, failcopycat: 1},
 		condition: {
 			duration: 1,
 			onStart(pokemon) {
@@ -1499,6 +1469,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	struggle: {
 		inherit: true,
+		flags: {
+			contact: 1, protect: 1, failencore: 1, failmefirst: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
+		},
 		onModifyMove(move) {
 			move.type = '???';
 		},
@@ -1695,7 +1668,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	transform: {
 		inherit: true,
-		flags: {bypasssub: 1},
+		flags: {bypasssub: 1, failencore: 1},
 	},
 	trick: {
 		inherit: true,

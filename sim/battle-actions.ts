@@ -301,6 +301,8 @@ export class BattleActions {
 			pokemon.side.zMoveUsed = true;
 		}
 
+		const oldActiveMove = move;
+
 		const moveDidSomething = this.useMove(baseMove, pokemon, target, sourceEffect, zMove, maxMove);
 		this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove && this.battle.activeMove.id : null;
 		if (this.battle.activeMove) move = this.battle.activeMove;
@@ -338,6 +340,11 @@ export class BattleActions {
 		if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
 		this.battle.faintMessages();
 		this.battle.checkWin();
+
+		if (this.battle.gen <= 4) {
+			// In gen 4, the outermost move is considered the last move for Copycat
+			this.battle.activeMove = oldActiveMove;
+		}
 	}
 	/**
 	 * useMove is the "inside" move caller. It handles effects of the
@@ -507,7 +514,7 @@ export class BattleActions {
 		if (
 			!move.negateSecondary &&
 			!(move.hasSheerForce && pokemon.hasAbility('sheerforce')) &&
-			!move.isFutureMove
+			!move.flags['futuremove']
 		) {
 			const originalHp = pokemon.hp;
 			this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
@@ -1657,8 +1664,8 @@ export class BattleActions {
 			defBoosts = 0;
 		}
 
-		let attack = attacker.calculateStat(attackStat, atkBoosts);
-		let defense = defender.calculateStat(defenseStat, defBoosts);
+		let attack = attacker.calculateStat(attackStat, atkBoosts, 1, source);
+		let defense = defender.calculateStat(defenseStat, defBoosts, 1, target);
 
 		attackStat = (category === 'Physical' ? 'atk' : 'spa');
 
@@ -1805,7 +1812,7 @@ export class BattleActions {
 		const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
 		const item = pokemon.getItem();
 		// Mega Rayquaza
-		if ((this.battle.gen <= 7 || this.battle.ruleTable.has('standardnatdex')) &&
+		if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+pokemontag:past')) &&
 			altForme?.isMega && altForme?.requiredMove &&
 			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
 			return altForme.name;
@@ -1863,6 +1870,7 @@ export class BattleActions {
 		for (const ally of pokemon.side.pokemon) {
 			ally.canTerastallize = null;
 		}
+		pokemon.addedType = '';
 		pokemon.knownType = true;
 		pokemon.apparentType = type;
 		this.battle.runEvent('AfterTerastallization', pokemon);

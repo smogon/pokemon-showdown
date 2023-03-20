@@ -267,7 +267,7 @@ describe('Dex data', function () {
 		6: 721,
 		7: 807,
 		8: 664,
-		9: 406,
+		9: 415,
 	};
 	const formes = {
 		// Gens 1 and 2 have no alternate formes
@@ -302,11 +302,11 @@ describe('Dex data', function () {
 	formes[8] = 17 + 5 + 1 + 1 + 1 + 3 + 3 + 7 + 14 + 8 +
 	  1 + 1 + 1 + 2 + 1 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 +
 	  (4 + 1 + 1 + 1 + 1 + 2 + (1 + 1)) + (1 + 3 + 4 + 2 + 3 + 1 + 2) - 1; // FIXME Rockruff
-	// Galar (1) + Paldea (4) + Rotom (5) + Basculin (1) + Vivillon (1) + Oricorio (3) +
+	// Galar (1) + Paldea (4) + Rotom (5) + Basculin (1) + Vivillon-Fancy (1) + Oricorio (3) +
 	// Lycanroc (2) + Mimikyu (1) + Toxtricity (1) + Eiscue (1) + Indeedee (1) + Oinkologne (1) +
 	// Dudunsparce (1) + Palafin (1) + Maushold (1) + Squawkabilly (3) + Sinistea-Antique (1) +
-	// Polteageist-Antique (1)
-	formes[9] = 1 + 4 + 5 + 1 + 1 + 3 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 3 + 1 + 1;
+	// Polteageist-Antique (1) + Zorua-Hisui (1) + Zoroark-Hisui (1)
+	formes[9] = 1 + 4 + 5 + 1 + 1 + 3 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 3 + 1 + 1 + 1 + 1;
 
 	for (const gen of [1, 2, 3, 4, 5, 6, 7, 8, 9]) {
 		it(`Gen ${gen} should have ${species[gen]} species and ${formes[gen]} formes`, () => {

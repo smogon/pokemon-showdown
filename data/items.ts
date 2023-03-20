@@ -6,7 +6,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		// Neutralizing Gas protection implemented in Pokemon.ignoringAbility() within sim/pokemon.ts
 		// and in Neutralizing Gas itself within data/abilities.ts
 		onSetAbility(ability, target, source, effect) {
-			if (effect && effect.effectType === 'Ability' && !effect.fullname?.endsWith('Trace')) {
+			if (effect && effect.effectType === 'Ability' && effect.name !== 'Trace') {
 				this.add('-ability', source, effect);
 			}
 			this.add('-block', target, 'item: Ability Shield');
@@ -105,14 +105,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 30,
 		},
-		onBoostPriority: 1,
-		onBoost(boost, target) {
-			target.itemState.lastAtk = target.boosts['atk'];
-		},
 		onAfterBoost(boost, target, source, effect) {
-			const noAtkChange = boost.atk! < 0 && target.boosts['atk'] === -6 && target.itemState.lastAtk === -6;
-			const noContraryAtkChange = boost.atk! > 0 && target.boosts['atk'] === 6 && target.itemState.lastAtk === 6;
-			if (target.boosts['spe'] === 6 || noAtkChange || noContraryAtkChange) {
+			// Adrenaline Orb activates if Intimidate is blocked by an ability like Hyper Cutter,
+			// which deletes boost.atk,
+			// but not if the holder's attack is already at -6 (or +6 if it has Contrary),
+			// which sets boost.atk to 0
+			if (target.boosts['spe'] === 6 || boost.atk === 0) {
 				return;
 			}
 			if (effect.name === 'Intimidate') {
@@ -493,6 +491,21 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 241,
 		gen: 2,
 	},
+	blackglasses: {
+		name: "Black Glasses",
+		spritenum: 35,
+		fling: {
+			basePower: 30,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move && move.type === 'Dark') {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		num: 240,
+		gen: 2,
+	},
 	blacksludge: {
 		name: "Black Sludge",
 		spritenum: 34,
@@ -510,21 +523,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 281,
 		gen: 4,
-	},
-	blackglasses: {
-		name: "Black Glasses",
-		spritenum: 35,
-		fling: {
-			basePower: 30,
-		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move && move.type === 'Dark') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		num: 240,
-		gen: 2,
 	},
 	blastoisinite: {
 		name: "Blastoisinite",
@@ -1005,7 +1003,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	clearamulet: {
 		name: "Clear Amulet",
 		spritenum: 0, // TODO
-		onBoost(boost, target, source, effect) {
+		onTryBoost(boost, target, source, effect) {
 			if (source && target === source) return;
 			let showMsg = false;
 			let i: BoostID;
@@ -1513,7 +1511,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onAfterMoveSecondaryPriority: 2,
 		onAfterMoveSecondary(target, source, move) {
-			if (source && source !== target && target.hp && move && move.category !== 'Status' && !move.isFutureMove) {
+			if (source && source !== target && target.hp && move && move.category !== 'Status' && !move.flags['futuremove']) {
 				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.beingCalledBack || target.isSkyDropped()) return;
 				if (target.volatiles['commanding'] || target.volatiles['commanded']) return;
 				for (const pokemon of this.getAllActive()) {
@@ -1574,8 +1572,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 120,
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
-			const pledges = ['firepledge', 'grasspledge', 'waterpledge'];
-			if (target === source || move.category === 'Status' || pledges.includes(move.id)) return;
+			if (target === source || move.category === 'Status' || move.flags['pledgecombo']) return;
 			if (move.type === 'Electric' && source.useItem()) {
 				source.addVolatile('gem');
 			}
@@ -1814,8 +1811,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 141,
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
-			const pledges = ['firepledge', 'grasspledge', 'waterpledge'];
-			if (target === source || move.category === 'Status' || pledges.includes(move.id)) return;
+			if (target === source || move.category === 'Status' || move.flags['pledgecombo']) return;
 			if (move.type === 'Fire' && source.useItem()) {
 				source.addVolatile('gem');
 			}
@@ -2239,8 +2235,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 172,
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
-			const pledges = ['firepledge', 'grasspledge', 'waterpledge'];
-			if (target === source || move.category === 'Status' || pledges.includes(move.id)) return;
+			if (target === source || move.category === 'Status' || move.flags['pledgecombo']) return;
 			if (move.type === 'Grass' && source.useItem()) {
 				source.addVolatile('gem');
 			}
@@ -3733,7 +3728,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		spritenum: 0, // TODO
 		onFoeAfterBoost(boost, target, source, effect) {
-			if (effect?.fullname?.endsWith('Opportunist') || effect?.fullname?.endsWith('Mirror Herb')) return;
+			if (effect?.name === 'Opportunist' || effect?.name === 'Mirror Herb') return;
 			const boostPlus: SparseBoostsTable = {};
 			let statsRaised = false;
 			let i: BoostID;
@@ -3879,8 +3874,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 307,
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
-			const pledges = ['firepledge', 'grasspledge', 'waterpledge'];
-			if (target === source || move.category === 'Status' || pledges.includes(move.id)) return;
+			if (target === source || move.category === 'Status' || move.flags['pledgecombo']) return;
 			if (move.type === 'Normal' && source.useItem()) {
 				source.addVolatile('gem');
 			}
@@ -6943,8 +6937,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 528,
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
-			const pledges = ['firepledge', 'grasspledge', 'waterpledge'];
-			if (target === source || move.category === 'Status' || pledges.includes(move.id)) return;
+			if (target === source || move.category === 'Status' || move.flags['pledgecombo']) return;
 			if (move.type === 'Water' && source.useItem()) {
 				source.addVolatile('gem');
 			}
