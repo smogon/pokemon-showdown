@@ -1,7 +1,9 @@
 import type {PRNG} from '../../../sim';
-import RandomTeams, {MoveCounter} from '../../random-teams';
+import {MoveCounter, RandomGen8Teams, OldRandomBattleSpecies} from '../gen8/random-teams';
 
-export class RandomLetsGoTeams extends RandomTeams {
+export class RandomLetsGoTeams extends RandomGen8Teams {
+	randomData: {[species: string]: OldRandomBattleSpecies} = require('./random-data.json');
+
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 		this.moveEnforcementCheckers = {
@@ -123,7 +125,9 @@ export class RandomLetsGoTeams extends RandomTeams {
 			forme = species.battleOnly;
 		}
 
-		const movePool = (species.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
+		const data = this.randomData[species.id];
+
+		const movePool = (data.moves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const types = new Set(species.types);
 
 		const moves = new Set<string>();
@@ -131,7 +135,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
-			while (moves.size < 4 && movePool.length) {
+			while (moves.size < this.maxMoveCount && movePool.length) {
 				const moveid = this.sampleNoReplace(movePool);
 				moves.add(moveid);
 			}
@@ -191,7 +195,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 					break;
 				}
 			}
-		} while (moves.size < 4 && movePool.length);
+		} while (moves.size < this.maxMoveCount && movePool.length);
 
 		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 		// Minimize confusion damage
@@ -201,7 +205,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
-			level: 100,
+			level: this.adjustLevel || 100,
 			gender: species.gender,
 			happiness: 70,
 			shiny: this.randomChance(1, 1024),
@@ -226,7 +230,7 @@ export class RandomLetsGoTeams extends RandomTeams {
 				(species.num > 151 && ![808, 809].includes(species.num)) ||
 				species.gen > 7 ||
 				species.nfe ||
-				!species.randomBattleMoves?.length ||
+				!this.randomData[species.id]?.moves ||
 				(this.forceMonotype && !species.types.includes(this.forceMonotype))
 			) {
 				continue;

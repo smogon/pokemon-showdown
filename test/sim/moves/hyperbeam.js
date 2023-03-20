@@ -12,7 +12,7 @@ describe(`Hyper Beam`, function () {
 
 	it(`should always force a recharge turn`, function () {
 		battle = common.createBattle([[
-			{species: 'snorlax', moves: ['hyperbeam', 'tackle']},
+			{species: 'snorlax', ability: 'noguard', moves: ['hyperbeam', 'tackle']},
 		], [
 			{species: 'alakazam', moves: ['substitute']},
 		]]);
@@ -42,13 +42,13 @@ describe(`Hyper Beam`, function () {
 		assert.false.cantMove(() => battle.choose('p1', 'move tackle'));
 	});
 
-	it.skip(`[Gen 1] should force a recharge turn after damaging, but not breaking a Substitute`, function () {
-		battle = common.gen(1).createBattle([[
-			{species: 'chansey', moves: ['hyperbeam', 'tackle']},
+	it(`[Gen 1] should force a recharge turn after damaging, but not breaking a Substitute`, function () {
+		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
+			{species: 'slowpoke', moves: ['hyperbeam', 'tackle']},
 		], [
 			{species: 'rhydon', moves: ['substitute']},
 		]]);
 		battle.makeChoices();
-		assert.false.cantMove(() => battle.choose('p1', 'move tackle'));
+		assert.cantMove(() => battle.choose('p1', 'move tackle'));
 	});
 });

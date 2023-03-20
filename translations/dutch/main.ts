@@ -49,6 +49,7 @@ export const translations: Translations = {
 		"<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.": "<strong>mute</strong> - Mutet een gebruiker (maakt het onmogelijk om te praten) voor 7 minuten.",
 		"<strong>hourmute</strong> - Mutes a user for 60 minutes.": "<strong>hourmute</strong> - Mutet een gebruiker voor 60 minuten.",
 		"<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.": "<strong>ban</strong> - Verbant een gebruiker (maakt het onmogelijk om de room binnen te komen) voor 2 dagen.",
+		"<strong>weekban</strong> - Bans a user from the room for a week.": "<strong>weekban</strong> - Verbant een gebruiker een week lang uit de room.",
 		"<strong>blacklist</strong> - Bans a user for a year.": "<strong>blacklist</strong> - Verbant een gebruiker voor een jaar.",
 
 		"<strong>Global punishments</strong>:": "<strong>Globale straffen</strong>:",
@@ -56,6 +57,12 @@ export const translations: Translations = {
 		"<strong>weeklock</strong> - Locks a user for a week.": "<strong>weeklock</strong> - Lockt een gebruiker voor een week.",
 		"<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.": "<strong>namelock</strong> - Lockt een gebruiker en maakt het onmogelijk een gebruikersnaam te kiezen voor 2 dagen.",
 		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "<strong>globalban</strong> - Verbant een gebruiker globaal (maakt het onmogelijk met de website te verbinden) voor een week.",
+
+		"<strong>Indefinite global punishments</strong>:": "<strong>Globale straffen van onbepaalde tijd</strong>:",
+		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "<strong>permalock</strong> - Uitgegeven voor herhaalde gevallen van slecht gedrag. Deze straf is zelden het resultaat van slechts één enkele actie. ",
+		'These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>': ' Tegen deze straf kan bezwaar gemaakt worden, mits er ten minste 3 maanden lang geen overige incidenten optreden.',
+		" forum after at least 3 months without incident.": ' Dit kan door te posten in het <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a> forum.',
+		"<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.": "<strong>permaban</strong> - Een globale verbanning waar geen bezwaar op gemaakt kan worden. Deze straf wordt meestal uitgegeven in extreme gevallen van offensief/ongepast gedrag.",
 
 		"<strong>Roomdrivers (%)</strong> can use:": "<strong>Roomdrivers (%)</strong> kunnen de volgende commando's gebruiken:",
 		"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules": "- /warn OF /k <em>gebruikersnaam</em>: Waarschuwt een gebruiker en laat ze de Pok&eacute;mon Showdown regels zien.",

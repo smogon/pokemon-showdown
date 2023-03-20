@@ -18,7 +18,7 @@ export const translations: Translations = {
 		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "",
 		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "",
-		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "",
+		"* <strong>Global Bot</strong> - An automated account that can use HTML anywhere": "",
 		"&amp; <strong>Global Administrator</strong> -  They can do anything, like change what this message says and promote users globally": "",
 
 		"<strong>Room ranks</strong>": "",
@@ -26,7 +26,7 @@ export const translations: Translations = {
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "",
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "",
-		"* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "",
+		"* <strong>Bot</strong> - An automated account that can mute, warn, and use HTML": "",
 		"# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it": "",
 
 		"/help OR /h OR /? - Gives you help.": "",
@@ -49,6 +49,7 @@ export const translations: Translations = {
 		"<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.": "",
 		"<strong>hourmute</strong> - Mutes a user for 60 minutes.": "",
 		"<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.": "",
+		"<strong>weekban</strong> - Bans a user from the room for a week.": "",
 		"<strong>blacklist</strong> - Bans a user for a year.": "",
 
 		"<strong>Global punishments</strong>:": "",
@@ -56,6 +57,12 @@ export const translations: Translations = {
 		"<strong>weeklock</strong> - Locks a user for a week.": "",
 		"<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.": "",
 		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "",
+
+		"<strong>Indefinite global punishments</strong>:": "",
+		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "",
+		'These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>': '',
+		" forum after at least 3 months without incident.": "",
+		"<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.": "",
 
 		"<strong>Room drivers (%)</strong> can use:": "",
 		"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules": "",

@@ -1,31 +1,25 @@
 /**
  * Neural net chat'filters'.
  * These are in a separate file so that they don't crash the other filters.
- * (issues with globals, etc)
+	 * (issues with globals, etc)
  * We use Google's Perspective API to classify messages.
  * @see https://perspectiveapi.com/
  * by Mia.
  * @author mia-pi-git
  */
-
-import {FS, Utils, Net, ProcessManager, Repl} from '../../lib';
+import * as Artemis from '../artemis';
+import {FS, Utils} from '../../lib';
 import {Config} from '../config-loader';
 import {toID} from '../../sim/dex-data';
+import {getBattleLog, getBattleLinks, HelpTicket} from './helptickets';
+import type {GlobalPermission} from '../user-groups';
 
 const WHITELIST = ["mia"];
-// 20m. this is mostly here so we can use Monitor.slow()
-const PM_TIMEOUT = 20 * 60 * 1000;
-const ATTRIBUTES = {
-	"SEVERE_TOXICITY": {},
-	"TOXICITY": {},
-	"IDENTITY_ATTACK": {},
-	"INSULT": {},
-	"PROFANITY": {},
-	"THREAT": {},
-	"SEXUALLY_EXPLICIT": {},
-	"FLIRTATION": {},
-};
-const PUNISHMENTS = ['WARN', 'MUTE', 'LOCK', 'WEEKLOCK'];
+const MUTE_DURATION = 7 * 60 * 1000;
+const DAY = 24 * 60 * 60 * 1000;
+const STAFF_NOTIF_INTERVAL = 10 * 60 * 1000;
+const MAX_MODLOG_TIME = 2 * 365 * DAY;
+const NON_PUNISHMENTS = ['MUTE', 'REPORT'];
 const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
 	'lock': '/lock',
 	'weeklock': '/weeklock',
@@ -34,13 +28,8 @@ const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
 	'namelock': '/nl',
 	'weeknamelock': '/wnl',
 };
-const REPORT_NAMECOLORS: {[k: string]: string} = {
-	p1: 'DodgerBlue',
-	p2: 'Crimson',
-	p3: '#FBa92C',
-	p4: '#228B22',
-	other: '', // black - empty since handled by dark mode
-};
+
+export let migrated = global.Chat?.oldPlugins['abuse-monitor']?.migrated || false;
 
 export const cache: {
 	[roomid: string]: {
@@ -49,9 +38,24 @@ export const cache: {
 		// todo: move this to just ID[]
 		staffNotified?: ID | ID[],
 		claimed?: ID,
-		recommended?: {type: string, reason: string},
+		recommended?: Record<string, {type: string, reason: string}>,
 	},
-} = global.Chat?.oldPlugins['abuse-monitor']?.cache || {};
+} = (() => {
+	const plugin = global.Chat?.oldPlugins['abuse-monitor'];
+	if (!plugin?.cache) return {};
+	if (plugin.migrated) return plugin.cache;
+	for (const k in plugin.cache) {
+		const cur = plugin.cache[k];
+		if (typeof cur.recommended?.type === 'string') { // would be object if it was the new entry
+			// we cannot feasibly determine who it was (but it __is__ logged in <<abuselog>>, so staff can)
+			delete cur.recommended;
+		}
+	}
+	migrated = true;
+	return plugin.cache;
+})();
+
+export const muted = Chat.oldPlugins['abuse-monitor']?.muted || new WeakMap<Room, WeakMap<User, number>>();
 
 const defaults: FilterSettings = {
 	threshold: 4,
@@ -62,6 +66,8 @@ const defaults: FilterSettings = {
 		IDENTITY_ATTACK: {0.8: 2},
 		SEVERE_TOXICITY: {0.8: 2},
 	},
+	replacements: {},
+	recommendOnly: true,
 	punishments: [
 		{certainty: 0.93, type: 'IDENTITY_ATTACK', punishment: 'WARN', count: 2},
 	],
@@ -78,11 +84,37 @@ export const settings: FilterSettings = (() => {
 	}
 })();
 
+export const reviews: Record<string, ReviewRequest[]> = (() => {
+	try {
+		return JSON.parse(FS(`config/chat-plugins/artemis-reviews.json`).readSync());
+	} catch {
+		return {};
+	}
+})();
+
+/**
+ * Non-core settings - ones that shouldn't be included in /am backups/backup rollbacks/etc.
+ * They should stay unless changed via specific command.
+ */
+export const metadata: MetaSettings = (() => {
+	try {
+		return JSON.parse(FS('config/chat-plugins/artemis-metadata.json').readSync());
+	} catch {
+		return {};
+	}
+})();
+
 interface PunishmentSettings {
 	count?: number;
 	certainty?: number;
 	type?: string;
 	punishment: typeof PUNISHMENTS[number];
+	modlogCount?: number;
+	modlogActions?: string[];
+	/** Other types of a given certainty needed beyond the primary */
+	secondaryTypes?: Record<string, number>;
+	/** Requires another punishment given to activate. */
+	requiresPunishment?: boolean;
 }
 
 interface FilterSettings {
@@ -91,23 +123,24 @@ interface FilterSettings {
 	threshold: number;
 	minScore: number;
 	specials: {[k: string]: {[k: number]: number | "MAXIMUM"}};
+	/** Replaces [key] with [value] before processing the string. */
+	replacements: Record<string, string>;
 	punishments: PunishmentSettings[];
+	/** Should it make recommendations, or punish? */
+	recommendOnly?: boolean;
 }
 
-export interface PerspectiveRequest {
-	languages: string[];
-	requestedAttributes: AnyObject;
-	comment: {text: string};
+interface MetaSettings {
+	/** {[userid]: entries to ignore[] OR ignore entries after date [string]} */
+	modlogIgnores?: Record<string, string | number[]>;
 }
 
-interface PMRequest {
-	comment: string;
-	fullResponse?: boolean;
-}
-
-interface BattleInfo {
-	players: Record<SideID, ID>;
-	log: string[];
+interface ReviewRequest {
+	staff: string;
+	room: string;
+	details: string;
+	time: number;
+	resolved?: {by: string, time: number, details: string, result: number};
 }
 
 // stolen from chatlog. necessary here, but importing chatlog sucks.
@@ -123,143 +156,121 @@ function isFlaggedUserid(name: string, room: RoomID) {
 	return typeof entry === 'string' ? entry === id : entry.includes(id);
 }
 
-// Mostly stolen from my code in helptickets.
-// Necessary because we can't require this in without also requiring in a LOT of other
-// modules, most of which crash the child process. Lot messier to fix that than it is to do this.
-export function getBattleLog(battle: string) {
-	const battleRoom = Rooms.get(battle);
-	if (battleRoom && battleRoom.type !== 'chat') {
-		const playerTable: Partial<BattleInfo['players']> = {};
-		// i kinda hate this, but this will always be accurate to the battle players.
-		// consulting room.battle.playerTable might be invalid (if battle is over), etc.
-		const playerLines = battleRoom.log.log.filter(line => line.startsWith('|player|'));
-		for (const line of playerLines) {
-			const [, , playerSlot, name] = line.split('|');
-			playerTable[playerSlot as SideID] = toID(name);
+function visualizePunishmentKey(punishment: PunishmentSettings, key: keyof PunishmentSettings) {
+	if (key === 'secondaryTypes') {
+		if (!punishment.secondaryTypes) return '';
+		const keys = Utils.sortBy(Object.keys(punishment.secondaryTypes));
+		return `${keys.map(k => `${k}: ${punishment.secondaryTypes![k]}`).join(', ')}`;
+	}
+	return punishment[key]?.toString() || "";
+}
+
+function visualizePunishment(punishment: PunishmentSettings) {
+	return Utils
+		.sortBy(Object.keys(punishment))
+		.map(k => `${k}: ${visualizePunishmentKey(punishment, k as keyof PunishmentSettings)}`)
+		.join(', ');
+}
+
+function displayResolved(review: ReviewRequest, justSubmitted = false) {
+	const user = Users.get(review.staff);
+	if (!user) return;
+	const resolved = review.resolved;
+	if (!resolved) return;
+	const prefix = `|pm|&|${user.getIdentity()}|`;
+	user.send(
+		prefix +
+		`Your Artemis review for <<${review.room}>> was resolved by ${resolved.by}` +
+		(justSubmitted ? "." : `, ${Chat.toDurationString(Date.now() - resolved.time)} ago.`)
+	);
+	if (resolved.details) user.send(prefix + `The response was: "${resolved.details}"`);
+	const idx = reviews[review.staff].findIndex(r => r.room === review.room);
+	if (idx > -1) reviews[review.staff].splice(idx, 1);
+	if (!reviews[review.staff].length) {
+		delete reviews[review.staff];
+	}
+	saveReviews();
+}
+
+export const punishmentCache: WeakMap<User, Record<string, number>> = (
+	Chat.oldPlugins['abuse-monitor']?.punishmentCache || new WeakMap()
+);
+
+export async function searchModlog(
+	query: {user: ID, ip?: string | string[], actions?: string[]}
+) {
+	const userObj = Users.get(query.user);
+	if (userObj) {
+		const data = punishmentCache.get(userObj);
+		if (data) {
+			let sum = 0;
+			for (const action of (query.actions || Object.keys(data))) {
+				sum += (data[action] || 0);
+			}
+			return sum;
 		}
-		return {
-			log: battleRoom.log.log.filter(k => k.startsWith('|c|')),
-			players: playerTable as BattleInfo['players'],
-		};
 	}
-	return null;
-}
-// see above comment.
-function colorName(id: ID, info: BattleInfo) {
-	for (const k in info.players) {
-		const player = info.players[k as SideID];
-		if (player === id) {
-			return ` style="color: ${REPORT_NAMECOLORS[k]}"`;
-		}
-	}
-	return REPORT_NAMECOLORS.other;
-}
-
-function time() {
-	return Math.floor(Date.now() / 1000);
-}
-
-export class RollingCounter {
-	counts: number[] = [0];
-	readonly size: number;
-	constructor(limit: number) {
-		this.size = limit;
-	}
-	increment() {
-		this.counts[this.counts.length - 1]++;
-	}
-	rollOver(amount: number) {
-		if (amount > this.size) {
-			this.counts = Array(this.size).fill(0);
-			return;
-		}
-		for (let i = 0; i < amount; i++) {
-			this.counts.push(0);
-			if (this.counts.length > this.size) this.counts.shift();
-		}
-	}
-	mean() {
-		let total = 0;
-		for (const elem of this.counts) total += elem;
-		return total / this.counts.length;
-	}
-}
-
-export class Limiter {
-	readonly counter: RollingCounter;
-	readonly max: number;
-	lastCounterRoll = time();
-	constructor(max: number, period: number) {
-		this.max = max;
-		this.counter = new RollingCounter(period);
-	}
-	shouldRequest() {
-		const now = time();
-		this.counter.rollOver(now - this.lastCounterRoll);
-		this.lastCounterRoll = now;
-
-		if (this.counter.mean() > this.max) return false;
-		this.counter.increment();
-		return true;
-	}
-}
-
-function isCommon(message: string) {
-	message = message.toLowerCase().replace(/\?!\., ;:/g, '');
-	return ['gg', 'wp', 'ggwp', 'gl', 'hf', 'glhf', 'hello'].includes(message);
-}
-
-const limiter = new Limiter(15, 10);
-let throttleTime: number | null = null;
-export async function classify(text: string) {
-	if (isCommon(text) || !limiter.shouldRequest()) return null;
-	if (throttleTime && (Date.now() - throttleTime < 10000)) {
-		return null;
-	}
-	if (throttleTime) throttleTime = null;
-
-	const requestData: PerspectiveRequest = {
-		// todo - support 'es', 'it', 'pt', 'fr' - use user.language? room.settings.language...?
-		languages: ['en'],
-		requestedAttributes: ATTRIBUTES,
-		comment: {text},
+	const search: import('../modlog').ModlogSearch = {
+		user: [],
+		ip: [],
+		note: [],
+		actionTaker: [],
+		action: [],
 	};
-	try {
-		const raw = await Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze`).post({
-			query: {
-				key: Config.perspectiveKey,
-			},
-			body: JSON.stringify(requestData),
-			headers: {
-				'Content-Type': "application/json",
-			},
-			timeout: 10 * 1000, // 10s
-		});
-		if (!raw) return null;
-		const data = JSON.parse(raw);
-		if (data.error) throw new Error(data.message);
-		const result: {[k: string]: number} = {};
-		for (const k in data.attributeScores) {
-			const score = data.attributeScores[k];
-			result[k] = score.summaryScore.value;
+	if (query.user) search.user.push({search: query.user, isExact: true});
+	if (query.ip) {
+		if (!Array.isArray(query.ip)) query.ip = [query.ip];
+		for (const ip of query.ip) {
+			search.ip.push({search: ip});
 		}
-		return result;
-	} catch (e: any) {
-		throttleTime = Date.now();
-		if (e.message.startsWith('Request timeout')) {
-			// just ignore this. error on their end not ours.
-			// todo maybe stop sending requests for a bit?
-			return null;
-		}
-		Monitor.crashlog(e, 'A Perspective API request', {request: JSON.stringify(requestData)});
-		return null;
 	}
+	const modlog = await Rooms.Modlog.search('global', search);
+	if (!modlog) return 0;
+	const ignores = metadata.modlogIgnores?.[query.user];
+	if (userObj) {
+		const validTypes = Array.from(Punishments.punishmentTypes.keys());
+		const cacheEntry: Record<string, number> = {};
+		for (const entry of modlog.results) {
+			if ((Date.now() - entry.time) > MAX_MODLOG_TIME) continue;
+			if (!validTypes.some(k => entry.action.endsWith(k))) continue;
+			if (!cacheEntry[entry.action]) cacheEntry[entry.action] = 0;
+			if (ignores) {
+				if (
+					typeof ignores === 'string' &&
+					new Date(ignores).getTime() < new Date(entry.time).getTime()
+				) {
+					continue;
+				} else if (Array.isArray(ignores) && ignores.includes(entry.entryID)) {
+					continue;
+				}
+			}
+			cacheEntry[entry.action]++;
+		}
+		punishmentCache.set(userObj, cacheEntry);
+		let sum = 0;
+		for (const action of (query.actions || Object.keys(cacheEntry))) {
+			sum += (cacheEntry[action] || 0);
+		}
+		return sum;
+	}
+	if (query.actions) {
+		// have to do this because using actions in the search treats it like
+		// AND action = foo AND action = bar
+		for (const [i, entry] of modlog.results.entries()) {
+			if (!query.actions.includes(entry.action)) {
+				modlog.results.splice(i, 1);
+			}
+		}
+	}
+	return modlog.results.length;
 }
 
-async function recommend(user: User, room: GameRoom, response: Record<string, number>) {
+export const classifier = new Artemis.RemoteClassifier();
+
+export async function runActions(user: User, room: GameRoom, message: string, response: Record<string, number>) {
 	const keys = Utils.sortBy(Object.keys(response), k => -response[k]);
-	const recommended: [string, string][] = [];
-	const prevRecommend = cache[room.roomid]?.recommended;
+	const recommended: [string, string, boolean][] = [];
+	const prevRecommend = cache[room.roomid]?.recommended?.[user.id];
 	for (const punishment of settings.punishments) {
 		if (prevRecommend?.type) { // avoid making extra db queries by frontloading this check
 			if (PUNISHMENTS.indexOf(punishment.punishment) <= PUNISHMENTS.indexOf(prevRecommend?.type)) continue;
@@ -268,30 +279,229 @@ async function recommend(user: User, room: GameRoom, response: Record<string, nu
 			const num = response[type];
 			if (punishment.type && punishment.type !== type) continue;
 			if (punishment.certainty && punishment.certainty > num) continue;
+			if (punishment.modlogCount) {
+				// todo: support configuration for ip searches
+				const modlog = await searchModlog({
+					user: user.id,
+					actions: punishment.modlogActions,
+				});
+				if (modlog < punishment.modlogCount) continue;
+			}
+			if (punishment.secondaryTypes) {
+				let matches = 0;
+				for (const curType in punishment.secondaryTypes) {
+					if (response[curType] >= punishment.secondaryTypes[curType]) matches++;
+				}
+				if (matches < Object.keys(punishment.secondaryTypes).length) continue;
+			}
 			if (punishment.count) {
-				const hits = await Chat.database.all(
+				let hits = await Chat.database.all(
 					`SELECT * FROM perspective_flags WHERE userid = ? AND type = ? AND certainty >= ?`,
 					[user.id, type, num]
 				);
+				// filtering out old hits. 5-17-2022 perspective did an update that seriously changed scoring
+				// so old hits are unreliable.
+				// yes i know this is horrible but i'm not writing a framework for this because
+				// i should never need to do it again
+				hits = hits.filter(f => {
+					const date = new Date(f.time);
+					if (date.getFullYear() < 2022) return false;
+					return !(date.getFullYear() === 2022 && date.getMonth() <= 4 && date.getDate() <= 17);
+				});
 				if (hits.length < punishment.count) continue;
-				recommended.push([punishment.punishment, type]);
 			}
+			recommended.push([punishment.punishment, type, !!punishment.requiresPunishment]);
 		}
 	}
 	if (recommended.length) {
 		Utils.sortBy(recommended, ([punishment]) => -PUNISHMENTS.indexOf(punishment));
+		if (recommended.filter(k => !NON_PUNISHMENTS.includes(k[1])).every(k => k[2])) {
+			// requiresPunishment is for upgrading. if every one is an upgrade and
+			// there's no independent punishment, do not upgrade it
+			return;
+		}
 		// go by most severe
 		const [punishment, reason] = recommended[0];
 		if (cache[room.roomid]) {
-			cache[room.roomid].recommended = {type: punishment, reason: reason.replace(/_/g, ' ').toLowerCase()};
+			if (!cache[room.roomid].recommended) cache[room.roomid].recommended = {};
+			cache[room.roomid].recommended![user.id] = {type: punishment, reason: reason.replace(/_/g, ' ').toLowerCase()};
 		}
-		Rooms.get('abuselog')?.add(
-			`|c|&|/log [Abuse-Monitor] ` +
-			`<<${room.roomid}>> - punishment ${punishment} recommended for ${user.id} ` +
-			`(${reason.replace(/_/g, ' ').toLowerCase()})`
-		).update();
+		if (user.trusted) {
+			// force just logging for any sort of punishment. requested by staff
+			Rooms.get('staff')?.add(
+				`|c|&|/log [Artemis] ${getViewLink(room.roomid)} ${punishment} recommended for trusted user ${user.id}` +
+				`${user.trusted !== user.id ? ` [${user.trusted}]` : ''} `
+			).update();
+			return; // we want nothing else to be executed. staff want trusted users to be reviewed manually for now
+		}
+
+		const result = await punishmentHandlers[toID(punishment)]?.(user, room, response, message);
+		writeStats('punishments', {
+			punishment,
+			userid: user.id,
+			roomid: room.roomid,
+			timestamp: Date.now(),
+		});
+		if (result !== false) {
+			// returning false means not to close the 'ticket'
+			const notified = cache[room.roomid].staffNotified;
+			if (notified) {
+				if (typeof notified === 'string') {
+					if (notified === user.id) delete cache[room.roomid].staffNotified;
+				} else {
+					notified.splice(notified.indexOf(user.id), 1);
+					if (!notified.length) {
+						delete cache[room.roomid].staffNotified;
+						void Chat.database.run(
+							`INSERT INTO perspective_stats (staff, roomid, result, timestamp) VALUES ($staff, $roomid, $result, $timestamp) ` +
+								`ON CONFLICT (roomid) DO UPDATE SET result = $result, timestamp = $timestamp`,
+							// todo: maybe use 3 to indicate punishment?
+							{staff: '', roomid: room.roomid, result: 1, timestamp: Date.now()}
+						);
+					}
+				}
+			}
+			delete cache[room.roomid].users[user.id]; // user has been punished, reset their counter
+			// keep the cache object only if there are other users in it, since they still need to be monitored
+			if (!Object.keys(cache[room.roomid].users).length) {
+				delete cache[room.roomid];
+			}
+			notifyStaff();
+		}
 	}
 }
+
+function globalModlog(
+	action: string, user: User | ID | null, note: string, roomid?: string | GameRoom
+) {
+	if (typeof roomid === 'object') roomid = roomid.roomid;
+	user = Users.get(user) || user;
+	void Rooms.Modlog.write(roomid || 'global', {
+		isGlobal: true,
+		action,
+		ip: user && typeof user === 'object' ? user.latestIp : undefined,
+		userid: toID(user) || undefined,
+		loggedBy: 'artemis' as ID,
+		note,
+	});
+}
+
+const getViewLink = (roomid: RoomID) => `<<view-battlechat-${roomid.replace('battle-', '')}>>`;
+
+function addGlobalModAction(message: string, room: GameRoom) {
+	room.add(`|c|&|/log ${message}`).update();
+	Rooms.get(`staff`)?.add(`|c|&|/log ${getViewLink(room.roomid)} ${message}`).update();
+}
+
+const DISCLAIMER = (
+	'<small>This action was done automatically.' +
+	' Want to learn more about the AI? ' +
+	'<a href="https://www.smogon.com/forums/threads/3570628/#post-9056769">Visit the information thread</a>.</small>'
+);
+
+export async function lock(user: User, room: GameRoom, reason: string, isWeek?: boolean) {
+	if (settings.recommendOnly) {
+		Rooms.get('staff')?.add(
+			`|c|&|/log [Artemis] ${getViewLink(room.roomid)} ${isWeek ? "WEEK" : ""}LOCK recommended for ${user.id}`
+		).update();
+		room.hideText([user.id], undefined, true);
+		return false;
+	}
+	const affected = await Punishments.lock(
+		user,
+		isWeek ? Date.now() + 7 * 24 * 60 * 60 * 1000 : null,
+		user.id,
+		false,
+		reason,
+		false,
+		['#artemis'],
+	);
+	globalModlog(`${isWeek ? 'WEEK' : ''}LOCK`, user, reason, room);
+	addGlobalModAction(`${user.name} was locked from talking by Artemis${isWeek ? ' for a week. ' : ". "}(${reason})`, room);
+	if (affected.length > 1) {
+		Rooms.get('staff')?.add(
+			`|c|&|/log (${user.id}'s ` +
+			`locked alts: ${affected.slice(1).map(curUser => curUser.getLastName()).join(", ")})`
+		);
+	}
+	room.add(`|c|&|/raw ${DISCLAIMER}`).update();
+	room.hideText(affected.map(f => f.id), undefined, true);
+	let message = `|popup||html|${user.name} has locked you from talking in chats, battles, and PMing regular users`;
+	message += ` ${isWeek ? "for two days" : "for a week"}`;
+	message += `\n\nReason: ${reason}`;
+	let appeal = '';
+	if (Chat.pages.help) {
+		appeal += `<a href="view-help-request--appeal"><button class="button"><strong>Appeal your punishment</strong></button></a>`;
+	} else if (Config.appealurl) {
+		appeal += `appeal: <a href="${Config.appealurl}">${Config.appealurl}</a>`;
+	}
+
+	if (appeal) message += `\n\nIf you feel that your lock was unjustified, you can ${appeal}.`;
+	message += `\n\nYour lock will expire in a few days.`;
+	user.send(message);
+
+	const roomauth = Rooms.global.destroyPersonalRooms(user.id);
+	if (roomauth.length) {
+		Monitor.log(
+			`[CrisisMonitor] Locked user ${user.name} ` +
+			`has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`
+		);
+	}
+}
+
+type PunishmentHandler = (
+	user: User, room: GameRoom, response: Record<string, number>, message: string,
+) => void | boolean | Promise<void | boolean>;
+
+/** Keep this in descending order of severity */
+const punishmentHandlers: Record<string, PunishmentHandler> = {
+	report(user, room) {
+		for (const k in room.users) {
+			if (k === user.id) continue;
+			const u = room.users[k];
+			if (room.auth.get(u) !== Users.PLAYER_SYMBOL) continue;
+			u.sendTo(
+				room.roomid,
+				`|c|&|/uhtml report,` +
+				`Toxicity has been automatically detected in this battle, ` +
+				`please click below if you would like to report it.<br />` +
+				`<a class="button notifying" href="/view-help-request">Make a report</a>`
+			);
+		}
+	},
+	mute(user, room) {
+		const roomMutes = muted.get(room) || new WeakMap();
+		if (!user.trusted) {
+			muted.set(room, roomMutes);
+			roomMutes.set(user, Date.now() + MUTE_DURATION);
+		}
+	},
+	warn(user, room, response, message) {
+		const reason = `${Users.PLAYER_SYMBOL}${user.name}: ${message}`;
+		if (!user.connected) {
+			Punishments.offlineWarns.set(user.id, reason);
+		} else {
+			user.send(`|c|~|/warn ${reason}`);
+		}
+		globalModlog('WARN', user, reason, room);
+		addGlobalModAction(`${user.name} was warned by Artemis (${reason})`, room);
+		const punishments = punishmentCache.get(user) || {};
+		if (!punishments['WARN']) punishments['WARN'] = 0;
+		punishments['WARN']++;
+		punishmentCache.set(user, punishments);
+
+		room.add(`|c|&|/raw ${DISCLAIMER}`).update();
+		room.hideText([user.id], undefined, true);
+	},
+	lock(user, room, response, message) {
+		return lock(user, room, `${Users.PLAYER_SYMBOL}${user.name}: ${message}`);
+	},
+	weeklock(user, room, response, message) {
+		return lock(user, room, `${Users.PLAYER_SYMBOL}${user.name}: ${message}`, true);
+	},
+};
+// autogenerated for QOL
+const PUNISHMENTS = Object.keys(punishmentHandlers).map(f => f.toUpperCase());
 
 function makeScore(roomid: RoomID, result: Record<string, number>) {
 	let score = 0;
@@ -330,51 +540,40 @@ function makeScore(roomid: RoomID, result: Record<string, number>) {
 	return {score, flags: [...flags], main};
 }
 
-type PMResult = Record<string, number> | null;
-export const PM = new ProcessManager.QueryProcessManager<PMRequest, PMResult>(module, async query => {
-	const result = await classify(query.comment);
-	if (!result) return null;
-	return result;
-}, PM_TIMEOUT, message => {
-	if (message.startsWith('SLOW\n')) {
-		Monitor.slow(message.slice(5));
-	}
-});
-
-if (!PM.isParentProcess) {
-	// This is a child process!
-	global.Config = Config;
-	global.Monitor = {
-		crashlog(error: Error, source = 'An abuse monitor child process', details: AnyObject | null = null) {
-			const repr = JSON.stringify([error.name, error.message, source, details]);
-			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
-		},
-		slow(text: string) {
-			process.send!(`CALLBACK\nSLOW\n${text}`);
-		},
-	};
-	global.toID = toID;
-	process.on('uncaughtException', err => {
-		if (Config.crashguard) {
-			Monitor.crashlog(err, 'A netfilter child process');
-		}
-	});
-	// eslint-disable-next-line no-eval
-	Repl.start(`abusemonitor-${process.pid}`, cmd => eval(cmd));
-} else {
-	PM.spawn(Config.netfilterprocesses || 1);
-}
-
 export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 	// 2 lines to not hit max-len
 	if (!room?.battle || !['rated', 'unrated'].includes(room.battle.challengeType)) return;
+	const mutes = muted.get(room);
+	const muteEntry = mutes?.get(user);
+	if (muteEntry) {
+		if (Date.now() > muteEntry) {
+			mutes.delete(user);
+			if (!mutes.size) {
+				muted.delete(room);
+			}
+		} else {
+			this.sendReply(
+				`|c|&|/raw <div class="message-error">` +
+				`Your behavior in this battle has been automatically identified as breaking ` +
+				`<a href="https://${Config.routes.root}/rules">Pokemon Showdown's global rules.</a> ` +
+				`Repeated instances of misbehavior may incur harsher punishment.</div>`
+			);
+			return false;
+		}
+	}
 	if (settings.disabled) return;
 	// startsWith('!') - broadcasting command, ignore it.
 	if (!Config.perspectiveKey || message.startsWith('!')) return;
 
 	const roomid = room.roomid;
 	void (async () => {
-		const response = await PM.query({comment: message});
+		message = message.replace(pokemonRegex, '[Pokemon]');
+
+		for (const k in settings.replacements) {
+			message = message.replace(new RegExp(k, 'gi'), settings.replacements[k]);
+		}
+
+		const response = await classifier.classify(message);
 		const {score, flags, main} = makeScore(roomid, response || {});
 		if (score) {
 			if (!cache[roomid]) cache[roomid] = {users: {}};
@@ -401,7 +600,7 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 					// response exists if we got this far
 					[user.id, score, response![main], main, room.roomid, Date.now()]
 				);
-				void recommend(user, room, response || {});
+				void runActions(user, room, message, response || {});
 			}
 			await Chat.database.run(
 				'INSERT INTO perspective_logs (userid, message, score, flags, roomid, time, hit_threshold) VALUES (?, ?, ?, ?, ?, ?, ?)',
@@ -412,6 +611,14 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 };
 // to avoid conflicts with other filters
 chatfilter.priority = -100;
+
+export const loginfilter: Chat.LoginFilter = user => {
+	if (reviews[user.id]?.length) {
+		for (const r of reviews[user.id]) {
+			displayResolved(r);
+		}
+	}
+};
 
 function calcThreshold(roomid: RoomID) {
 	const incr = settings.thresholdIncrement;
@@ -461,9 +668,32 @@ function getFlaggedRooms() {
 	return Object.keys(cache).filter(roomid => cache[roomid].staffNotified);
 }
 
-function saveSettings(isBackup = false) {
-	FS(`config/chat-plugins/nf${isBackup ? ".backup" : ""}.json`).writeUpdate(() => JSON.stringify(settings));
+export function writeStats(type: string, entry: AnyObject) {
+	const path = `logs/artemis/${type}/${Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3)}.jsonl`;
+	try {
+		FS(path).parentDir().mkdirpSync();
+	} catch {}
+	void FS(path).append(JSON.stringify(entry) + "\n");
 }
+
+function saveSettings(path?: string) {
+	if (!path) path = 'nf';
+	FS(`config/chat-plugins/${path}.json`).writeUpdate(() => JSON.stringify(settings));
+}
+
+function saveReviews() {
+	FS(`config/chat-plugins/artemis-reviews.json`).writeUpdate(() => JSON.stringify(reviews));
+}
+
+function saveMetadata() {
+	FS('config/chat-plugins/artemis-metadata.json').writeUpdate(() => JSON.stringify(metadata));
+}
+
+export const pokemonRegex = new RegExp( // we want only base formes and existent stuff
+	`\\b(${Dex.species.all().filter(s => !s.forme && s.num > 0).map(f => f.id).join('|')})\\b`, 'gi'
+);
+
+export let lastLogTime: number = Chat.oldPlugins['abuse-monitor']?.lastLogTime || 0;
 
 export function notifyStaff() {
 	const staffRoom = Rooms.get('staff');
@@ -471,25 +701,30 @@ export function notifyStaff() {
 		const flagged = getFlaggedRooms();
 		let buf = '';
 		if (flagged.length) {
-			const unclaimed = flagged.filter(f => f in cache && !cache[f].claimed);
-			// if none are unclaimed, remove the notifying property so it's regular grey
-			buf = `<button class="button${!unclaimed.length ? '' : ' notifying'}" name="send" value="/am">`;
-			buf += `${Chat.count(flagged.length, 'flagged battles')}`;
-			// if some are unclaimed, tell staff how many
-			if (unclaimed.length) {
-				buf += ` (${unclaimed.length} unclaimed)`;
-			}
-			buf += `</button>`;
+			buf = `<button class="button" name="send" value="/am">Flagged battles need review</button>`;
 		} else {
 			buf = 'No battles flagged.';
 		}
-		staffRoom.send(`|uhtml|abusemonitor|<div class="infobox">${buf}</div>`);
+		// if it's been 10m, or if there are no flagged battles currently, update the box
+		if ((lastLogTime + STAFF_NOTIF_INTERVAL) < Date.now() || !flagged.length) {
+			staffRoom.send(`|uhtml|abusemonitor|<div class="infobox">${buf}</div>`);
+			// if there are none, don't update the time - no point
+			if (flagged.length) {
+				lastLogTime = Date.now();
+			} else {
+				lastLogTime = 0;
+			}
+		}
+		// always update flags
 		Chat.refreshPageFor('abusemonitor-flagged', staffRoom);
 	}
 }
 
-function checkAccess(context: Chat.CommandContext | Chat.PageContext) {
-	if (!WHITELIST.includes(context.user.id)) context.checkCan('bypassall');
+function checkAccess(context: Chat.CommandContext | Chat.PageContext, perm: GlobalPermission = 'bypassall') {
+	const user = context.user;
+	if (!(WHITELIST.includes(user.id) || user.previousIDs.some(id => WHITELIST.includes(id)))) {
+		context.checkCan(perm);
+	}
 }
 
 export const commands: Chat.ChatCommands = {
@@ -503,17 +738,118 @@ export const commands: Chat.ChatCommands = {
 			const text = target.trim();
 			if (!text) return this.parse(`/help abusemonitor`);
 			this.runBroadcast();
-			let response = await PM.query({comment: text, fullResponse: true});
+			let response = await classifier.classify(text);
 			if (!response) response = {};
 			// intentionally hardcoded to staff to ensure threshold is never altered.
 			const {score, flags} = makeScore('staff', response);
 			let buf = `<strong>Score for "${text}":</strong> ${score}<br />`;
 			buf += `<strong>Flags:</strong> ${flags.join(', ')}<br />`;
+			const punishments: {punishment: PunishmentSettings, desc: string[], index: number}[] = [];
+			for (const [i, p] of settings.punishments.entries()) {
+				const matches = [];
+				for (const k in response) {
+					const descriptors = [];
+					if (p.type) {
+						if (p.type !== k) continue;
+						descriptors.push('type');
+					}
+					if (p.certainty) {
+						if (response[k] < p.certainty) continue;
+						descriptors.push('certainty');
+					}
+					const secondaries = Object.entries(p.secondaryTypes || {});
+					if (secondaries.length) {
+						if (!secondaries.every(([sK, sV]) => response![sK] >= sV)) continue;
+						descriptors.push('secondary');
+					}
+					if (descriptors.length) { // ignore modlog / flag -only based actions
+						matches.push(`${k} (${descriptors.map(f => `${f} match`).join(', ')})`);
+					}
+				}
+				if (matches.length) {
+					punishments.push({
+						punishment: p,
+						desc: matches,
+						index: i,
+					});
+				}
+			}
+			if (punishments.length) {
+				buf += `<strong>Punishments:</strong><br />`;
+				buf += punishments.map(p => (
+					`&bull; ${p.index + 1}: <code>${visualizePunishment(p.punishment)}</code>: ${p.desc.join(', ')}`
+				)).join('<br />');
+				buf += `<br />`;
+			}
 			buf += `<strong>Score breakdown:</strong><br />`;
 			for (const k in response) {
 				buf += `&bull; ${k}: ${response[k]}<br />`;
 			}
 			this.sendReplyBox(buf);
+		},
+		cm: 'compare',
+		async compare(target) {
+			checkAccess(this);
+			const [base, against] = Utils.splitFirst(target, ',').map(f => f.trim());
+			if (!(base && against)) return this.parse(`/help abusemonitor`);
+			const colors: Record<string, string> = {
+				'0': 'Purple',
+				'1': 'DodgerBlue',
+				'2': 'Red',
+			};
+			const baseResponse = await classifier.classify(base) || {};
+			const againstResponse = await new Promise<Record<string, number> | null>(resolve => {
+				// bit of a hack, but this has to be done so rate limits don't get hit
+				setTimeout(() => {
+					resolve(classifier.classify(against));
+				}, 500);
+			}) || {};
+			let buf = Utils.html`<strong>Compared scores for "${base}" `;
+			buf += `(<strong style="color: ${colors['1']}">1</strong>) `;
+			buf += Utils.html`and "${against}" (<strong style="color: ${colors['2']}">2</strong>): </strong><br />`;
+			for (const [k, val] of Object.entries(baseResponse)) {
+				const max = Math.max(val, againstResponse[k]);
+				const num = val === againstResponse[k] ? '0' : max === val ? '1' : '2';
+				buf += `&bull; ${k}: <strong style="color: ${colors[num]}">${num}</strong> `;
+				if (num === '0') {
+					buf += `(${max})`;
+				} else {
+					buf += `(${max} vs ${(max === val ? againstResponse : baseResponse)[k]})`;
+				}
+				buf += `<br />`;
+			}
+			this.runBroadcast();
+			return this.sendReplyBox(buf);
+		},
+		async score(target) {
+			checkAccess(this);
+			target = target.trim();
+			if (!target) return this.parse(`/help abusemonitor`);
+			const [text, scoreText] = Utils.splitFirst(target, ',').map(f => f.trim());
+			const args = Chat.parseArguments(scoreText, ',', {useIDs: false});
+			const scores: Record<string, number> = {};
+			for (let k in args) {
+				const vals = args[k];
+				if (vals.length > 1) {
+					return this.errorReply(`Too many values for ${k}`);
+				}
+				k = k.toUpperCase().replace(/\s/g, '_');
+				if (!(k in Artemis.RemoteClassifier.ATTRIBUTES)) {
+					return this.errorReply(`Invalid attribute: ${k}`);
+				}
+				const val = parseFloat(vals[0]);
+				if (isNaN(val)) {
+					return this.errorReply(`Invalid value for ${k}: ${vals[0]}`);
+				}
+				scores[k] = val;
+			}
+			for (const k in Artemis.RemoteClassifier.ATTRIBUTES) {
+				if (!(k in scores)) scores[k] = 0;
+			}
+			const response = await classifier.suggestScore(text, scores);
+			if (response.error) throw new Chat.ErrorMessage(response.error);
+			this.sendReply(`Recommendation successfully sent.`);
+			Rooms.get('abuselog')?.roomlog(`${this.user.name} used /am score ${target}`);
 		},
 		toggle(target) {
 			checkAccess(this);
@@ -589,6 +925,28 @@ export const commands: Chat.ChatCommands = {
 			);
 			return this.parse(`/j view-abusemonitor-flagged`);
 		},
+		unmute(target, room, user) {
+			this.checkCan('lock');
+			room = this.requireRoom();
+			target = toID(target);
+			if (!target) {
+				return this.parse(`/help am`);
+			}
+			const roomMutes = muted.get(room);
+			if (!roomMutes) {
+				return this.errorReply(`No users have Artemis mutes in this room.`);
+			}
+			const targetUser = Users.get(target);
+			if (!targetUser) {
+				return this.errorReply(`User '${target}' not found.`);
+			}
+			if (!roomMutes.has(targetUser)) {
+				return this.errorReply(`That user does not have an Artemis mute in this room.`);
+			}
+			roomMutes.delete(targetUser);
+			this.modlog(`ABUSEMONITOR UNMUTE`, targetUser);
+			this.privateModAction(`${user.name} removed ${targetUser.name}'s Artemis mute.`);
+		},
 		async nojoinpunish(target, room, user) {
 			this.checkCan('lock');
 			const [roomid, type, rest] = Utils.splitFirst(target, ',', 2).map(f => f.trim());
@@ -622,6 +980,11 @@ export const commands: Chat.ChatCommands = {
 			const [count, userid] = Utils.splitFirst(target, ',').map(toID);
 			this.parse(`/join view-abusemonitor-logs-${count || '200'}${userid ? `-${userid}` : ""}`);
 		},
+		ul: 'userlogs',
+		userlogs(target) {
+			checkAccess(this, 'lock');
+			return this.parse(`/join view-abusemonitor-userlogs-${toID(target)}`);
+		},
 		stats(target) {
 			checkAccess(this);
 			return this.parse(`/join view-abusemonitor-stats${target ? `-${target}` : ''}`);
@@ -629,9 +992,71 @@ export const commands: Chat.ChatCommands = {
 		async respawn(target, room, user) {
 			checkAccess(this);
 			this.sendReply(`Respawning...`);
-			const unspawned = await PM.respawn();
+			const unspawned = await classifier.respawn();
 			this.sendReply(`DONE. ${Chat.count(unspawned, 'processes', 'process')} unspawned.`);
 			this.addGlobalModAction(`${user.name} used /abusemonitor respawn`);
+		},
+		async rescale(target, room, user) {
+			// people should NOT be fucking with this unless they know what they are doing
+			if (!WHITELIST.includes(user.id)) this.canUseConsole();
+			const examples = target.split(',').filter(Boolean);
+			const type = examples.shift()?.toUpperCase().replace(/\s/g, '_') || "";
+			if (!(type in Artemis.RemoteClassifier.ATTRIBUTES)) {
+				return this.errorReply(`Invalid type: ${type}`);
+			}
+			if (examples.length < 3) {
+				return this.errorReply(`At least 3 examples are needed.`);
+			}
+			const scales = [];
+			const oldScales = [];
+			for (const chunk of examples) {
+				const [message, rawNum] = chunk.split('|');
+				if (!(message && rawNum)) {
+					return this.errorReply(`Invalid example: "${chunk}". Must be in \`\`message|num\`\` format.`);
+				}
+				const num = parseFloat(rawNum);
+				if (isNaN(num)) {
+					return this.errorReply(`Invalid number in example '${chunk}'.`);
+				}
+				const data = await classifier.classify(message);
+				if (!data) {
+					return this.errorReply(`No results found. Try again in a minute?`);
+				}
+				oldScales.push(num);
+				scales.push(data[type]);
+				// take a bit to dodge rate limits
+				await Utils.waitUntil(Date.now() + 1000);
+			}
+			const newAverage = scales.reduce((a, b) => a + b) / scales.length;
+			const oldAverage = oldScales.reduce((a, b) => a + b) / oldScales.length;
+			const round = (num: number) => Number(num.toFixed(4));
+			const change = newAverage / oldAverage;
+
+			this.sendReply(`Change average: ${change}`);
+			await this.parse(`/am bs prescale`);
+
+			for (const p of settings.punishments) {
+				if (p.type !== type) continue;
+				if (p.certainty) p.certainty = round(p.certainty * change);
+				if (p.secondaryTypes) {
+					for (const k in p.secondaryTypes) {
+						p.secondaryTypes[k] = round(p.secondaryTypes[k] * change);
+					}
+				}
+			}
+			if (type in settings.specials) {
+				for (const n in settings.specials[type]) {
+					const num = settings.specials[type][n];
+					delete settings.specials[type][n];
+					settings.specials[type][round(parseFloat(n) * change)] = num;
+				}
+			}
+			saveSettings();
+			this.refreshPage('abusemonitor-settings');
+			this.addGlobalModAction(
+				`${user.name} used /abusemonitor rescale ${type.toLowerCase().replace('_', '')}`
+			);
+			this.globalModlog(`ABUSEMONITOR RESCALE`, null, `${type}: ${examples.join(', ')}`);
 		},
 		async userclear(target, room, user) {
 			checkAccess(this);
@@ -687,7 +1112,7 @@ export const commands: Chat.ChatCommands = {
 			let [rawType, rawPercent, rawScore] = target.split(',');
 			const type = rawType.toUpperCase().replace(/\s/g, '_');
 			rawScore = toID(rawScore);
-			const types = {...ATTRIBUTES, "ALL": {}};
+			const types = {...Artemis.RemoteClassifier.ATTRIBUTES, "ALL": {}};
 			if (!(type in types)) {
 				return this.errorReply(`Invalid type: ${type}. Valid types: ${Object.keys(types).join(', ')}.`);
 			}
@@ -725,7 +1150,7 @@ export const commands: Chat.ChatCommands = {
 			checkAccess(this);
 			const [rawType, rawPercent] = target.split(',');
 			const type = rawType.toUpperCase().replace(/\s/g, '_');
-			const types = {...ATTRIBUTES, "ALL": {}};
+			const types = {...Artemis.RemoteClassifier.ATTRIBUTES, "ALL": {}};
 			if (!(type in types)) {
 				return this.errorReply(`Invalid type: ${type}. Valid types: ${Object.keys(types).join(', ')}.`);
 			}
@@ -759,6 +1184,88 @@ export const commands: Chat.ChatCommands = {
 			this.privateGlobalModAction(`${user.name} set the abuse monitor minimum score to ${num}.`);
 			this.globalModlog("ABUSEMONITOR MIN", null, "" + num);
 			this.sendReply(`|html|Remember to use <code>/am respawn</code> to deploy the settings to the child processes.`);
+		},
+		ex: 'exportpunishment',
+		exportpunishment(target) {
+			checkAccess(this);
+			const num = parseInt(target) - 1;
+			if (isNaN(num)) {
+				return this.errorReply(`Invalid punishment number: ${num + 1}.`);
+			}
+			const punishment = settings.punishments[num];
+			if (!punishment) {
+				return this.errorReply(`Punishment ${num + 1} does not exist.`);
+			}
+			this.sendReply(
+				`|html|Punishment ${num + 1}: <code>` +
+				`${visualizePunishment(punishment).replace(/: /g, ' = ')}</code>`
+			);
+		},
+		changeall(target, room, user) {
+			checkAccess(this);
+			const [to, from] = target.split(',').map(f => toID(f));
+			if (!(to && from)) {
+				return this.errorReply(`Specify a type to change and a type to change to.`);
+			}
+			if (![to, from].every(f => punishmentHandlers[f])) {
+				return this.errorReply(
+					`Invalid types given. Valid types: ${Object.keys(punishmentHandlers).join(', ')}.`
+				);
+			}
+			const changed = [];
+			for (const [i, punishment] of settings.punishments.entries()) {
+				if (toID(punishment.type) === to) {
+					punishment.type = from.toUpperCase();
+					changed.push(i + 1);
+				}
+			}
+			if (!changed.length) {
+				return this.errorReply(`No punishments of type '${to}' found.`);
+			}
+			this.sendReply(`Updated punishment(s) ${changed.join(', ')}`);
+			this.privateGlobalModAction(`${user.name} updated all abuse-monitor punishments of type ${to} to type ${from}`);
+			saveSettings();
+			this.globalModlog(`ABUSEMONITOR CHANGEALL`, null, `${to} to ${from}`);
+		},
+		ep: 'exportpunishments', // exports punishment settings to something easily copy/pastable
+		exportpunishments() {
+			checkAccess(this);
+			let buf = settings.punishments.map(punishment => {
+				const line = [];
+				for (const k in punishment) {
+					// simplifies code to not need to cast every time.
+					const key = k as keyof PunishmentSettings;
+					const val = punishment[key];
+					switch (key) {
+					case 'modlogCount':
+						line.push(`mlc=${val}`);
+						break;
+					case 'modlogActions':
+						line.push(`${(val as string[]).map(f => `mla=${f}`).join(', ')}`);
+						break;
+					case 'punishment':
+						line.push(`p=${val}`);
+						break;
+					case 'type':
+						line.push(`t=${val}`);
+						break;
+					case 'count':
+						line.push(`c=${val}`);
+						break;
+					case 'certainty':
+						line.push(`ct=${val}`);
+						break;
+					case 'secondaryTypes':
+						for (const type in (val as any)) {
+							line.push(`st=${type}|${(val as any)[type]}`);
+						}
+						break;
+					}
+				}
+				return line.join(', ');
+			}).join('<br />');
+			if (!buf) buf = 'None found';
+			this.sendReplyBox(buf);
 		},
 		ap: 'addpunishment',
 		addpunishment(target, room, user) {
@@ -798,10 +1305,10 @@ export const commands: Chat.ChatCommands = {
 						return this.errorReply(`Duplicate type values.`);
 					}
 					value = value.replace(/\s/g, '_').toUpperCase();
-					if (!ATTRIBUTES[value as keyof typeof ATTRIBUTES]) {
+					if (!Artemis.RemoteClassifier.ATTRIBUTES[value as keyof typeof Artemis.RemoteClassifier.ATTRIBUTES]) {
 						return this.errorReply(
 							`Invalid attribute: ${value}. ` +
-							`Valid attributes: ${Object.keys(ATTRIBUTES).join(', ')}.`
+							`Valid attributes: ${Object.keys(Artemis.RemoteClassifier.ATTRIBUTES).join(', ')}.`
 						);
 					}
 					punishment.type = value;
@@ -816,6 +1323,53 @@ export const commands: Chat.ChatCommands = {
 					}
 					punishment.certainty = certainty;
 					break;
+				case 'mla': case 'modlogaction':
+					value = value.toUpperCase();
+					if (!punishment.modlogActions) {
+						punishment.modlogActions = [];
+					}
+					if (punishment.modlogActions.includes(value)) {
+						return this.errorReply(`Duplicate modlog action values - '${value}'.`);
+					}
+					punishment.modlogActions.push(value);
+					break;
+				case 'mlc': case 'modlogcount':
+					if (punishment.modlogCount) {
+						return this.errorReply(`Duplicate modlog count values.`);
+					}
+					const count = parseInt(value);
+					if (isNaN(count)) {
+						return this.errorReply(`Invalid modlog count.`);
+					}
+					punishment.modlogCount = count;
+					break;
+				case 'st': case 's': case 'secondary':
+					let [sType, sValue] = Utils.splitFirst(value, '|').map(f => f.trim());
+					if (!sType || !sValue) {
+						return this.errorReply(`Invalid secondary type/certainty.`);
+					}
+					sType = sType.replace(/\s/g, '_').toUpperCase();
+					if (!Artemis.RemoteClassifier.ATTRIBUTES[sType as keyof typeof Artemis.RemoteClassifier.ATTRIBUTES]) {
+						return this.errorReply(
+							`Invalid secondary attribute: ${sType}. ` +
+							`Valid attributes: ${Object.keys(Artemis.RemoteClassifier.ATTRIBUTES).join(', ')}.`
+						);
+					}
+					const sCertainty = parseFloat(sValue);
+					if (isNaN(sCertainty) || sCertainty > 1 || sCertainty < 0) {
+						return this.errorReply(`Invalid secondary certainty '${sValue}'. Must be a number above 0 and below 1.`);
+					}
+					if (!punishment.secondaryTypes) {
+						punishment.secondaryTypes = {};
+					}
+					if (punishment.secondaryTypes[sType]) {
+						return this.errorReply(`Duplicate secondary type.`);
+					}
+					punishment.secondaryTypes[sType] = sCertainty;
+					break;
+				case 'requirepunishment': case 'rp':
+					punishment.requiresPunishment = true;
+					break;
 				default:
 					this.errorReply(`Invalid key:  ${key}`);
 					return this.parse(`/help am`);
@@ -827,7 +1381,9 @@ export const commands: Chat.ChatCommands = {
 			for (const [i, p] of settings.punishments.entries()) {
 				let matches = 0;
 				for (const k in p) {
-					if (p[k as keyof PunishmentSettings] === punishment[k as keyof PunishmentSettings]) matches++;
+					const key = k as keyof PunishmentSettings;
+					const val = visualizePunishmentKey(punishment as PunishmentSettings, key);
+					if (val && val === visualizePunishmentKey(p, key)) matches++;
 				}
 				if (matches === Object.keys(p).length) {
 					return this.errorReply(`This punishment is already stored at ${i + 1}.`);
@@ -837,7 +1393,7 @@ export const commands: Chat.ChatCommands = {
 			saveSettings();
 			this.refreshPage('abusemonitor-settings');
 			this.privateGlobalModAction(`${user.name} added a ${punishment.punishment} abuse-monitor punishment.`);
-			const str = Object.keys(punishment).map(f => `${f}: ${punishment[f as keyof PunishmentSettings]}`).join(', ');
+			const str = visualizePunishment(punishment as PunishmentSettings);
 			this.stafflog(`Info: ${str}`);
 			this.globalModlog(`ABUSEMONITOR ADDPUNISHMENT`, null, str);
 		},
@@ -934,48 +1490,300 @@ export const commands: Chat.ChatCommands = {
 			);
 		},
 		bs: 'backupsettings',
-		backupsettings(target, room, user) {
+		async backupsettings(target, room, user) {
 			checkAccess(this);
-			saveSettings(true);
+			target = target.replace(/\//g, '-').toLowerCase().trim();
+			let dotIdx = target.lastIndexOf('.');
+			if (dotIdx < 0) {
+				dotIdx = target.length;
+			}
+			target = target.toLowerCase().slice(0, dotIdx);
+			if (target) {
+				target = `/artemis/${target}`;
+				await FS(`config/chat-plugins/artemis/`).mkdirIfNonexistent();
+			} else {
+				target = `/nf.backup`;
+			}
+			saveSettings(target);
 			this.addGlobalModAction(`${user.name} used /abusemonitor backupsettings`);
+			this.stafflog(`Logged to ${target || "default location"}`);
+			if (target) { // named? probably relevant
+				this.globalModlog(`ABUSEMONITOR BACKUP`, null, target);
+			}
 			this.refreshPage('abusemonitor-settings');
 		},
 		lb: 'loadbackup',
 		async loadbackup(target, room, user) {
 			checkAccess(this);
-			const backup = await FS('config/chat-plugins/nf.backup.json').readIfExists();
+			let path = `nf.backup`;
+			if (target) {
+				path = `artemis/${target.toLowerCase().replace(/\//g, '-')}`;
+			}
+			const backup = await FS(`config/chat-plugins/${path}.json`).readIfExists();
 			if (!backup) return this.errorReply(`No backup settings saved.`);
 			const backupSettings = JSON.parse(backup);
 			Object.assign(settings, backupSettings);
 			saveSettings();
 			this.addGlobalModAction(`${user.name} used /abusemonitor loadbackup`);
+			this.stafflog(`Loaded ${path}`);
 			this.refreshPage('abusemonitor-settings');
 		},
+		async deletebackup(target, room, user) {
+			checkAccess(this);
+			target = target.toLowerCase().replace(/\//g, '-');
+			if (!target) return this.errorReply(`Specify a backup file.`);
+			const path = FS(`config/chat-plugins/artemis/${target}.json`);
+			if (!(await path.exists())) {
+				return this.errorReply(`Backup '${target}' not found.`);
+			}
+			await path.unlinkIfExists();
+			this.globalModlog(`ABUSEMONITOR DELETEBACKUP`, null, target);
+			this.sendReply(`Backup '${target}' deleted.`);
+			this.privateGlobalModAction(`${user.name} deleted the abuse-monitor backup '${target}'`);
+		},
+		async backups() {
+			checkAccess(this);
+			let buf = `<strong>Artemis backups:</strong><br />`;
+			const files = await FS(`config/chat-plugins/artemis`).readdirIfExists();
+			if (!files.length) {
+				buf += `No backups found.`;
+			} else {
+				buf += files.map(f => {
+					const fName = f.slice(0, f.lastIndexOf('.'));
+					let line = `&bull; ${fName} `;
+					line += `<button name="send" value="/abusemonitor deletebackup ${fName}">Delete</button> `;
+					line += `<button name="send" value="/abusemonitor loadbackup ${fName}">Load</button>`;
+					return line;
+				}).join('<br />');
+			}
+			this.sendReplyBox(buf);
+		},
+		togglepunishments(target, room, user) {
+			checkAccess(this);
+			let message;
+			if (this.meansYes(target)) {
+				if (!settings.recommendOnly) {
+					return this.errorReply(`Automatic punishments are already enabled.`);
+				}
+				settings.recommendOnly = false;
+				message = `${user.name} enabled automatic punishments for the Artemis battle monitor`;
+			} else if (this.meansNo(target)) {
+				if (settings.recommendOnly) {
+					return this.errorReply(`Automatic punishments are already disabled.`);
+				}
+				settings.recommendOnly = true;
+				message = `${user.name} disabled automatic punishments for the Artemis battle monitor`;
+			} else {
+				return this.sendReply(`Automatic punishments are: ${!settings.recommendOnly ? 'ON' : 'OFF'}.`);
+			}
+			this.privateGlobalModAction(message);
+			this.globalModlog(`ABUSEMONITOR TOGGLE`, null, settings.recommendOnly ? 'off' : 'on');
+			saveSettings();
+		},
+		review() {
+			this.checkCan('lock');
+			return this.parse(`/join view-abusemonitor-review`);
+		},
+		reviews() {
+			checkAccess(this);
+			return this.parse(`/join view-abusemonitor-reviews`);
+		},
+		async submitreview(target, room, user) {
+			this.checkCan('lock');
+			if (!target) return this.parse(`/help abusemonitor submitreview`);
+			const [roomid, reason] = Utils.splitFirst(target, ',').map(f => f.trim());
+			const log = await getBattleLog(getBattleLinks(roomid)[0] || "");
+			if (!log) {
+				return this.popupReply(`No logs found for that roomid.`);
+			}
+			if (reviews[user.id]?.some(f => f.room === roomid)) {
+				return this.popupReply(`You have already submitted a review for this room.`);
+			}
+			if (reason.length < 1 || reason.length > 2000) {
+				return this.popupReply(`Your review must be between 1 and 2000 characters.`);
+			}
+			(reviews[user.id] ||= []).push({
+				room: roomid,
+				details: reason,
+				staff: user.id,
+				time: Date.now(),
+			});
+			saveReviews();
+			Chat.refreshPageFor('abusemonitor-reviews', 'staff');
+			this.closePage('abusemonitor-review');
+			this.popupReply(`Your review has been submitted.`);
+		},
+		resolvereview(target, room, user) {
+			checkAccess(this);
+			let [userid, roomid, accurate, result] = Utils.splitFirst(target, ',', 3).map(f => f.trim());
+			userid = toID(userid);
+			roomid = getBattleLinks(roomid)[0] || "";
+			if (!userid || !roomid || !accurate || !result) {
+				return this.parse(`/help abusemonitor resolvereview`);
+			}
+			if (!reviews[userid]) {
+				return this.errorReply(`No reviews found by that user.`);
+			}
+			const review = reviews[userid].find(f => getBattleLinks(f.room).includes(roomid));
+			if (!review) {
+				return this.errorReply(`No reviews found by that user for that room.`);
+			}
+			const isAccurate = Number(accurate);
+			if (isNaN(isAccurate) || isAccurate < 0 || isAccurate > 1) {
+				return this.popupReply(`Invalid accuracy. Must be a number between 0 and 1.`);
+			}
+			if (review.resolved) {
+				return this.errorReply(`That review has already been resolved.`);
+			}
+			review.resolved = {
+				by: user.id,
+				time: Date.now(),
+				details: result,
+				result: isAccurate,
+			};
+			displayResolved(review, true);
+			writeStats('reviews', review);
+			Chat.refreshPageFor('abusemonitor-reviews', 'staff');
+		},
+		replace(target, room, user) {
+			checkAccess(this);
+			if (!target) return this.parse(`/help am`);
+			const [old, newWord] = target.split(',');
+			if (!old || !newWord) return this.errorReply(`Invalid arguments - must be [oldWord], [newWord].`);
+			if (toID(old) === toID(newWord)) return this.errorReply(`The old word and the new word are the same.`);
+			if (settings.replacements[old]) {
+				return this.errorReply(`The old word '${old}' is already in use (for '${settings.replacements[old]}').`);
+			}
+			Chat.validateRegex(target);
+			settings.replacements[old] = newWord;
+			saveSettings();
+			this.privateGlobalModAction(`${user.name} added an Artemis replacement for '${old}' to '${newWord}'.`);
+			this.globalModlog(`ABUSEMONITOR REPLACE`, null, `'${old}' to '${newWord}'`);
+			this.refreshPage('abusemonitor-settings');
+		},
+		removereplace(target, room, user) {
+			checkAccess(this);
+			if (!target) return this.parse(`/help am`);
+			const replaceTo = settings.replacements[target];
+			if (!replaceTo) {
+				return this.errorReply(`${target} is not a currently set replacement.`);
+			}
+			delete settings.replacements[target];
+			saveSettings();
+			this.privateGlobalModAction(`${user.name} removed the Artemis replacement for ${target}`);
+			this.globalModlog(`ABUSEMONITOR REMOVEREPLACEMENT`, null, `${target} (=> ${replaceTo})`);
+			this.refreshPage('abusemonitor-settings');
+		},
+		edithistory(target, room, user) {
+			this.checkCan('globalban');
+			target = toID(target);
+			if (!target) {
+				return this.parse(`/help abusemonitor`);
+			}
+			return this.parse(`/j view-abusemonitor-edithistory-${target}`);
+		},
+		ignoremodlog: {
+			add(target, room, user) {
+				this.checkCan('globalban');
+				let targetUser: string;
+				[targetUser, target] = this.splitOne(target).map(f => f.trim());
+				targetUser = toID(targetUser);
+				if (!targetUser || !target) {
+					return this.popupReply(
+						`Must specify a user and a target date (or modlog entry number).`
+					);
+				}
+				if (!metadata.modlogIgnores) metadata.modlogIgnores = {};
+				const num = Number(target);
+				if (isNaN(num)) {
+					if (!/[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(target)) {
+						return this.errorReply(`Invalid date provided. Must be in YYYY-MM-DD format.`);
+					}
+					metadata.modlogIgnores[targetUser] = target;
+					target = 'before and including ' + target;
+				} else {
+					let ignores = metadata.modlogIgnores[targetUser];
+					if (!Array.isArray(ignores)) {
+						metadata.modlogIgnores[targetUser] = ignores = [];
+					}
+					if (ignores.includes(num)) {
+						return this.errorReply(`That modlog entry is already ignored.`);
+					}
+					ignores.push(num);
+					target = `entry #${target}`;
+				}
+				this.globalModlog(`ABUSEMONITOR MODLOGIGNORE`, targetUser, target);
+				saveMetadata();
+				this.refreshPage(`abusemonitor-edithistory-${targetUser}`);
+			},
+			remove(target, room, user) {
+				this.checkCan('globalban');
+				let [targetUser, rawNum] = this.splitOne(target).map(f => f.trim());
+				targetUser = toID(targetUser);
+				const num = Number(rawNum);
+				if (!targetUser || !rawNum) {
+					return this.popupReply(
+						`Specify a target user and a target (either a modlog entry # or a date).`
+					);
+				}
+				const entry = metadata.modlogIgnores?.[targetUser];
+				if (!entry) {
+					return this.errorReply(`That user has no ignored modlog entries registered.`);
+				}
+				if (typeof entry === 'string') {
+					rawNum = entry;
+					delete metadata.modlogIgnores![targetUser];
+				} else {
+					if (isNaN(num)) {
+						return this.errorReply(`Invalid modlog entry number: ${num}`);
+					}
+					const idx = entry.indexOf(num);
+					if (idx === -1) {
+						return this.errorReply(`That modlog entry is not ignored for the user ${targetUser}.`);
+					}
+					entry.splice(idx, 1);
+					if (!entry.length) {
+						delete metadata.modlogIgnores![targetUser];
+					}
+				}
+				saveMetadata();
+				this.globalModlog(`ABUSEMONITOR REMOVEMODLOGIGNORE`, targetUser, rawNum);
+				this.refreshPage(`abusemonitor-edithistory-${targetUser}`);
+			},
+		},
 	},
-	abusemonitorhelp: [
-		`/am toggle - Toggle the abuse monitor on and off. Requires: whitelist &`,
-		`/am threshold [number] - Set the abuse monitor trigger threshold. Requires: whitelist &`,
-		`/am resolve [room] - Mark a abuse monitor flagged room as handled by staff. Requires: % @ &`,
-		`/am respawn - Respawns abuse monitor processes. Requires: whitelist &`,
-		`/am logs [count][, userid] - View logs of recent matches by the abuse monitor. `,
-		`If a userid is given, searches only logs from that userid. Requires: whitelist &`,
-		`/am userclear [user] - Clear all logged abuse monitor hits for a user. Requires: whitelist &`,
-		`/am deletelog [number] - Deletes a abuse monitor log matching the row ID [number] given. Requires: whitelist &`,
-		`/am editspecial [type], [percent], [score] - Sets a special case for the abuse monitor. Requires: whitelist &`,
-		`[score] can be either a number or MAXIMUM, which will set it to the maximum score possible (that will trigger an action)`,
-		`/am deletespecial [type], [percent] - Deletes a special case for the abuse monitor. Requires: whitelist &`,
-		`/am editmin [number] - Sets the minimum percent needed to process for all flags. Requires: whitelist &`,
-		`/am viewsettings - View the current settings for the abuse monitor. Requires: whitelist &`,
-		`/am thresholdincrement [num], [amount][, min turns] - Sets the threshold increment for the abuse monitor to increase [amount] every [num] turns.`,
-		`If [min turns] is provided, increments will start after that turn number. Requires: whitelist &`,
-		`/am deleteincrement - clear abuse-monitor threshold increment. Requires: whitelist &`,
-	],
+	abusemonitorhelp() {
+		return this.sendReplyBox([
+			`<strong>Staff commands:</strong>`,
+			`/am userlogs [user] - View the Artemis flagged message logs for the given [user]. Requires: % @ &`,
+			`/am unmute [user] - Remove the Artemis mute from the given [user]. Requires: % @ &`,
+			`/am review - Submit feedback for manual abuse monitor review. Requires: % @ &`,
+			`</details><br /><details class="readmore"><summary><strong>Management commands:</strong></summary>`,
+			`/am toggle - Toggle the abuse monitor on and off. Requires: whitelist &`,
+			`/am threshold [number] - Set the abuse monitor trigger threshold. Requires: whitelist &`,
+			`/am resolve [room] - Mark a abuse monitor flagged room as handled by staff. Requires: % @ &`,
+			`/am respawn - Respawns abuse monitor processes. Requires: whitelist &`,
+			`/am logs [count][, userid] - View logs of recent matches by the abuse monitor. `,
+			`If a userid is given, searches only logs from that userid. Requires: whitelist &`,
+			`/am userclear [user] - Clear all logged abuse monitor hits for a user. Requires: whitelist &`,
+			`/am deletelog [number] - Deletes a abuse monitor log matching the row ID [number] given. Requires: whitelist &`,
+			`/am editspecial [type], [percent], [score] - Sets a special case for the abuse monitor. Requires: whitelist &`,
+			`[score] can be either a number or MAXIMUM, which will set it to the maximum score possible (that will trigger an action)`,
+			`/am deletespecial [type], [percent] - Deletes a special case for the abuse monitor. Requires: whitelist &`,
+			`/am editmin [number] - Sets the minimum percent needed to process for all flags. Requires: whitelist &`,
+			`/am viewsettings - View the current settings for the abuse monitor. Requires: whitelist &`,
+			`/am thresholdincrement [num], [amount][, min turns] - Sets the threshold increment for the abuse monitor to increase [amount] every [num] turns.`,
+			`If [min turns] is provided, increments will start after that turn number. Requires: whitelist &`,
+			`/am deleteincrement - clear abuse-monitor threshold increment. Requires: whitelist &`,
+			`</details>`,
+		].join('<br />'));
+	},
 };
 
 export const pages: Chat.PageTable = {
 	abusemonitor: {
 		flagged(query, user) {
-			this.checkCan('lock');
+			checkAccess(this, 'lock');
 			const ids = getFlaggedRooms();
 			this.title = '[Abuse Monitor] Flagged rooms';
 			let buf = `<div class="pad">`;
@@ -1007,8 +1815,8 @@ export const pages: Chat.PageTable = {
 			buf += `</table></div>`;
 			return buf;
 		},
-		view(query, user) {
-			this.checkCan('lock');
+		async view(query, user) {
+			checkAccess(this, 'lock');
 			const roomid = query.join('-') as RoomID;
 			if (!toID(roomid)) {
 				return this.errorReply(`You must specify a roomid to view abuse monitor data for.`);
@@ -1049,7 +1857,7 @@ export const pages: Chat.PageTable = {
 			buf += `<details class="readmore"><summary><strong>Chat:</strong></summary><div class="infobox">`;
 			// we parse users specifically from the log so we can see it after they leave the room
 			const users = new Utils.Multiset<string>();
-			const logData = getBattleLog(room.roomid);
+			const logData = await getBattleLog(room.roomid, true);
 			// should only extremely rarely happen - if the room expires while this is happening.
 			if (!logData) return `<div class="pad"><p class="error">No such room.</p></div>`;
 			// assume logs exist - why else would the filter activate?
@@ -1063,13 +1871,16 @@ export const pages: Chat.PageTable = {
 				if (!id) continue;
 				users.add(id);
 				buf += `<div class="chat chatmessage">`;
-				buf += `<strong${colorName(id, logData)}>`;
+				buf += `<strong style="color: ${HelpTicket.colorName(id, logData)}">`;
 				buf += Utils.html`<span class="username">${data.user}:</span></strong> ${data.message}</div>`;
 			}
 			buf += `</div></details>`;
-			const rec = cache[roomid].recommended;
-			if (rec) {
-				buf += `<p><strong>Recommended action:</strong> ${rec.type} (${rec.reason})</p>`;
+			const recs = cache[roomid].recommended || {};
+			if (Object.keys(recs).length) {
+				for (const id in recs) {
+					const rec = recs[id];
+					buf += `<p><strong>Recommended action for ${id}:</strong> ${rec.type} (${rec.reason})</p>`;
+				}
 			}
 			buf += `<p><strong>Users:</strong><small> (click a name to punish)</small></p>`;
 			const sortedUsers = Utils.sortBy([...users], ([id, num]) => (
@@ -1092,6 +1903,32 @@ export const pages: Chat.PageTable = {
 			buf += `<hr /><strong>Mark resolved:</strong><br />`;
 			buf += `<button class="button" name="send" value="/msgroom staff, /am resolve ${room.roomid},success">As accurate flag</button> | `;
 			buf += `<button class="button" name="send" value="/msgroom staff, /am resolve ${room.roomid},failure">As inaccurate flag</button>`;
+			return buf;
+		},
+		async userlogs(query, user) {
+			// separate from logs bc logs presents all sorts of data. this only needs time/room/user/message
+			// as so to not overwhelm staff
+			this.checkCan('lock');
+			let buf = `<div class="pad"><h2>Artemis user logs</h2><hr />`;
+			const userid = toID(query.shift());
+			if (!userid || userid.length > 18) {
+				buf += `<p class="message-error">Invalid username.</p>`;
+				return buf;
+			}
+			this.title = `[Artemis Logs] ${userid}`;
+			// hardcoding this limit bc no single user should ever really break it
+			const logs = await Chat.database.all(`SELECT * FROM perspective_logs WHERE userid = ? LIMIT 100`, [userid]);
+			if (!logs.length) {
+				buf += `<p class="message-error">No logs found.</p>`;
+				return buf;
+			}
+			buf += `<div class="ladder pad"><table><tr><th>Date</th><th>Room</th><th>User</th><th>Message</th></tr>`;
+			Utils.sortBy(logs, log => -log.time);
+			for (const log of logs) {
+				buf += `<tr><td>${Chat.toTimestamp(new Date(log.time), {human: true})}</td>`;
+				buf += `<td><a href="/${log.roomid}">${log.roomid}</a></td>`;
+				buf += Utils.html`<td>${log.userid}</td><td>${log.message}</td></tr>`;
+			}
 			return buf;
 		},
 		async logs(query, user) {
@@ -1158,25 +1995,29 @@ export const pages: Chat.PageTable = {
 		},
 		async stats(query, user) {
 			checkAccess(this);
-			const date = new Date(query.join('-') || Chat.toTimestamp(new Date()).split(' ')[0]);
-			if (isNaN(date.getTime())) {
-				return this.errorReply(`Invalid date: ${date}`);
+			const dateString = (query.join('-') || Chat.toTimestamp(new Date())).slice(0, 7);
+			if (!/^[0-9]{4}-[0-9]{2}$/.test(dateString)) {
+				return this.errorReply(`Invalid date: ${dateString}`);
 			}
-			const month = Chat.toTimestamp(date).split(' ')[0].slice(0, -3);
 			let buf = `<div class="pad">`;
 			buf += `<button style="float:right;" class="button" name="send" value="/join ${this.pageid}">`;
 			buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
-			buf += `<h2>Abuse Monitor stats for ${month}</h2><hr />`;
+			buf += `<h2>Abuse Monitor stats for ${dateString}</h2>`;
+			const next = nextMonth(dateString);
+			const prev = new Date(new Date(`${dateString}-15`).getTime() - (30 * 24 * 60 * 60 * 1000)).toISOString().slice(0, 7);
+			buf += `<a class="button" target="replace" href="/view-abusemonitor-stats-${prev}-15">Previous month</a> | `;
+			buf += `<a class="button" target="replace" href="/view-abusemonitor-stats-${next}-15">Next month</a>`;
+			buf += `<hr />`;
 			const logs = await Chat.database.all(
 				`SELECT * FROM perspective_stats WHERE timestamp > ? AND timestamp < ?`,
-				[new Date(month).getTime(), new Date(nextMonth(month)).getTime()]
+				[new Date(dateString + '-01').getTime(), new Date(nextMonth(dateString)).getTime()]
 			);
 			this.title = '[Abuse Monitor] Stats';
 			if (!logs.length) {
-				buf += `<p class="message-error">No logs found for the month ${month}.</p>`;
+				buf += `<p class="message-error">No logs found for the month ${dateString}.</p>`;
 				return buf;
 			}
-			this.title += ` ${month}`;
+			this.title += ` ${dateString}`;
 			buf += `<p>${Chat.count(logs.length, 'logs')} found.</p>`;
 			let successes = 0;
 			let failures = 0;
@@ -1202,7 +2043,7 @@ export const pages: Chat.PageTable = {
 				staffStats[log.staff]++;
 				dayStats[cur].total++;
 			}
-			const percent = (numerator: number, denom: number) => Math.floor((numerator / denom) * 100);
+			const percent = (numerator: number, denom: number) => Math.floor((numerator / denom) * 100) || 0;
 			buf += `<p><strong>Success rate:</strong> ${percent(successes, successes + failures)}% (${successes})</p>`;
 			buf += `<p><strong>Failure rate:</strong> ${percent(failures, successes + failures)}% (${failures})</p>`;
 			buf += `<p><details class="readmore"><summary><strong>Stats including dead flags</strong></summary>`;
@@ -1238,7 +2079,92 @@ export const pages: Chat.PageTable = {
 			}
 			buf += `<tr>${header}</tr><tr>${data}</tr>`;
 			buf += `</div></table>`;
-			buf += `<p><strong>Staff stats:</strong></p>`;
+			buf += `<hr /><p><strong>Punishment stats:</strong></p>`;
+			const punishmentStats = {
+				inaccurate: 0,
+				total: 0,
+				byDay: {} as Record<string, {total: number, inaccurate: number}>,
+				types: {} as Record<string, number>,
+			};
+			const inaccurate = new Set();
+			const logPath = FS(`logs/artemis/punishments/${dateString}.jsonl`);
+			if (await logPath.exists()) {
+				const stream = logPath.createReadStream();
+				for await (const line of stream.byLine()) {
+					if (!line.trim()) continue;
+					const chunk = JSON.parse(line.trim());
+					punishmentStats.total++;
+					if (!punishmentStats.types[chunk.punishment]) punishmentStats.types[chunk.punishment] = 0;
+					punishmentStats.types[chunk.punishment]++;
+					const day = Chat.toTimestamp(new Date(chunk.timestamp)).split(' ')[0];
+					if (!punishmentStats.byDay[day]) punishmentStats.byDay[day] = {total: 0, inaccurate: 0};
+					punishmentStats.byDay[day].total++;
+				}
+			}
+
+			const reviewLogPath = FS(`logs/artemis/reviews/${dateString}.jsonl`);
+			if (await reviewLogPath.exists()) {
+				const stream = reviewLogPath.createReadStream();
+				for await (const line of stream.byLine()) {
+					if (!line.trim()) continue;
+					const chunk = JSON.parse(line.trim());
+					if (!chunk.resolved.result) { // inaccurate punishment
+						punishmentStats.inaccurate++;
+						inaccurate.add(chunk.room);
+						const day = Chat.toTimestamp(new Date(chunk.time)).split(' ')[0];
+						if (!punishmentStats.byDay[day]) punishmentStats.byDay[day] = {total: 0, inaccurate: 0};
+						punishmentStats.byDay[day].inaccurate++;
+					}
+				}
+			}
+
+			buf += `<p>Total punishments: ${punishmentStats.total}</p>`;
+			const accurate = punishmentStats.total - punishmentStats.inaccurate;
+			buf += `<p>Accurate punishments: ${accurate} (${percent(accurate, punishmentStats.total)}%)</p>`;
+			buf += `<details class="readmore"><summary>Inaccurate punishments: ${punishmentStats.inaccurate} `;
+			buf += `(${percent(punishmentStats.inaccurate, punishmentStats.total)}%)</summary>`;
+			buf += Array.from(inaccurate).map(f => `<a href="/${f}">${f}</a>`).join(', ');
+			buf += `</details>`;
+
+			if (punishmentStats.total) {
+				buf += `<p><strong>Day stats:</strong></p>`;
+				buf += `<div class="ladder pad"><table>`;
+				header = '';
+				data = '';
+				const sortedDayStats = Utils.sortBy(Object.keys(punishmentStats.byDay), d => new Date(d).getTime());
+				for (const [i, day] of sortedDayStats.entries()) {
+					const cur = punishmentStats.byDay[day];
+					if (!cur.total) continue;
+					header += `<th>${day.split('-')[2]} (${cur.total})</th>`;
+					const curAccurate = cur.total - cur.inaccurate;
+					data += `<td><small>${curAccurate} (${percent(curAccurate, cur.total)}%)`;
+					if (cur.inaccurate) {
+						data += ` | ${cur.inaccurate} (${percent(cur.inaccurate, cur.total)}%)`;
+					} else { // so one cannot confuse dead tickets & false hit tickets
+						data += ' | 0 (0%)';
+					}
+					data += '</small></td>';
+					// i + 1 ensures it's above 0 always (0 % 5 === 0)
+					if ((i + 1) % 5 === 0 && sortedDays[i + 1]) {
+						buf += `<tr>${header}</tr><tr>${data}</tr>`;
+						buf += `</div></table>`;
+						buf += `<div class="ladder pad"><table>`;
+						header = '';
+						data = '';
+					}
+				}
+				buf += `<tr>${header}</tr><tr>${data}</tr>`;
+				buf += `</div></table>`;
+				buf += `<br /><strong>Punishment breakdown:</strong><br />`;
+				buf += `<div class="ladder pad"><table>`;
+				buf += `<tr><th>Type</th><th>Count</th><th>Percent</th></tr>`;
+				const sorted = Utils.sortBy(Object.entries(punishmentStats.types), e => e[1]);
+				for (const [type, num] of sorted) {
+					buf += `<tr><td>${type}</td><td>${num}</td><td>${percent(num, punishmentStats.total)}%</td></tr>`;
+				}
+				buf += `</table></div>`;
+			}
+			buf += `<hr /><p><strong>Staff stats:</strong></p>`;
 			buf += `<div class="ladder pad"><table>`;
 			buf += `<tr><th>User</th><th>Total</th><th>Percent total</th></tr>`;
 			for (const id of Utils.sortBy(Object.keys(staffStats), k => -staffStats[k])) {
@@ -1271,11 +2197,19 @@ export const pages: Chat.PageTable = {
 				if (incr.minTurns) buf += ` after turn ${incr.minTurns}`;
 				buf += `<br />`;
 			}
+			const replacements = Object.keys(settings.replacements);
+			if (replacements.length) {
+				buf += `<br />Replacements: `;
+				buf += replacements.map(k => `${k}: ${settings.replacements[k]}`).join(', ');
+				buf += `<br />`;
+			}
 			buf += `</div><div class="infobox"><h3>Punishment settings</h3><hr />`;
 			if (settings.punishments.length) {
 				for (const [i, p] of settings.punishments.entries()) {
 					buf += `&bull; ${i + 1}: `;
-					buf += Object.keys(p).map(f => `${f}: ${p[f as keyof PunishmentSettings]}`).join(', ');
+					buf += Object.keys(p).map(
+						f => `${f}: ${visualizePunishmentKey(p, f as keyof PunishmentSettings)}`
+					).join(', ');
 					buf += ` (<button class="button" name="send" value="/msgroom staff,/am dp ${i + 1}">delete</button>)`;
 					buf += `<br />`;
 				}
@@ -1290,7 +2224,10 @@ export const pages: Chat.PageTable = {
 			buf += `<button class="button notifying" type="submit">Add punishment</button></details>`;
 			buf += `</form><br />`;
 			buf += `</div><div class="infobox"><h3>Scoring:</h3><hr />`;
-			const keys = Utils.sortBy(Object.keys(ATTRIBUTES), k => [-Object.keys(settings.specials[k] || {}).length, k]);
+			const keys = Utils.sortBy(
+				Object.keys(Artemis.RemoteClassifier.ATTRIBUTES),
+				k => [-Object.keys(settings.specials[k] || {}).length, k]
+			);
 			for (const k of keys) {
 				buf += `<strong>${k}</strong>:<br />`;
 				if (settings.specials[k]) {
@@ -1312,5 +2249,137 @@ export const pages: Chat.PageTable = {
 			buf += `</div>`;
 			return buf;
 		},
+		reviews() {
+			checkAccess(this);
+			this.title = `[Abuse Monitor] Reviews`;
+			let buf = `<div class="pad"><h2>Artemis recommendation reviews ({{total}})</h2>`;
+			buf += `<button class="button" name="send" value="/msgroom staff,/am reviews">Reload reviews</button>`;
+			buf += `<hr />`;
+			let total = 0;
+			let atLeastOne = false;
+			for (const userid in reviews) {
+				const curReviews = reviews[userid].filter(f => !f.resolved);
+				if (curReviews.length) {
+					buf += `<strong>${Chat.count(curReviews, 'reviews')} from ${userid}:</strong><hr />`;
+					total += curReviews.length;
+				} else {
+					continue;
+				}
+				for (const review of curReviews) {
+					buf += `<div class="infobox">`;
+					buf += `Battle: <a href="//${Config.routes.client}/${getBattleLinks(review.room)[0]}">${review.room}</a><br />`;
+					buf += Utils.html`<details class="readmore"><summary>Review details:</summary>${review.details}</details>`;
+					buf += `<form data-submitsend="/msgroom staff,/am resolvereview ${review.staff},${review.room},{result},{response}">`;
+					buf += `Respond: <br /><textarea name="response" rows="3" cols="40"></textarea><br />`;
+					buf += `Mark result: <select name="result">`;
+					buf += `<option value="1">Accurate</option>`;
+					buf += `<option value="0">Inaccurate</option>`;
+					buf += `</select><br />`;
+					buf += `<button class="button notifying" type="submit">Resolve</button>`;
+					buf += `</form></div><br />`;
+					atLeastOne = true;
+				}
+				buf += `<hr />`;
+			}
+			if (!atLeastOne) {
+				buf += `No reviews to display.`;
+				return buf;
+			}
+			buf = buf.replace('{{total}}', `${total}`);
+			return buf;
+		},
+		review() {
+			this.checkCan('lock');
+			this.title = `[Abuse Monitor] Review`;
+			let buf = `<div class="pad"><h2>Artemis recommendation review</h2>`;
+			buf += `<hr />`;
+			buf += `<form data-submitsend="/msgroom staff,/am submitreview {room},{details}">`;
+			buf += `<label>Enter a room ID (replay URL will work):</label>`;
+			buf += `<br />`;
+			buf += `<input type="text" name="room" />`;
+			buf += `<br />`;
+			buf += `<label>Tell what was inaccurate and why:</label> `;
+			buf += `<br />`;
+			buf += `<textarea name="details" rows="3" cols="20"></textarea>`;
+			buf += `<br />`;
+			buf += `<button class="button notifying" type="submit">Submit</button>`;
+			buf += `</form>`;
+			return buf;
+		},
+		async edithistory(query, user) {
+			this.checkCan('globalban');
+			const targetUser = toID(query[0]);
+			if (!targetUser) {
+				return this.errorReply(`Specify a user.`);
+			}
+			this.title = `[Artemis History] ${targetUser}`;
+			let buf = `<div class="pad"><h2>Artemis modlog handling for ${targetUser}</h2><hr />`;
+			const modlogEntries = await Rooms.Modlog.search('global', {
+				user: [{search: targetUser, isExact: true}],
+				note: [],
+				ip: [],
+				action: [],
+				actionTaker: [],
+			}, 100, true);
+			if (!modlogEntries?.results.length) {
+				buf += `<div class="message-error">No entries found.</div>`;
+				return buf;
+			}
+			buf += `<div class="ladder pad"><table><tr><th>Entry</th><th>Options</th></tr><tr>`;
+			buf += modlogEntries.results.map(result => {
+				const day = Chat.toTimestamp(new Date(result.time)).split(' ')[0];
+				let innerBuf = Utils.html`<td><small>#${result.entryID}</small> [${day}] `;
+				innerBuf += `${result.action}${result.note ? ` (${result.note.trim()})` : ``}</td>`;
+				const existingIgnore = metadata.modlogIgnores?.[targetUser];
+				const todayMatch = existingIgnore === day;
+				const entryMatch = (
+					(Array.isArray(existingIgnore) && existingIgnore?.includes(result.entryID))
+				);
+				let cmd = entryMatch ? `am ignoremodlog remove` : `am ignoremodlog add`;
+				innerBuf += `<td><button class="button" name="send" value="/${cmd} ${targetUser},${result.entryID}">`;
+				innerBuf += `(${entryMatch ? 'Unignore' : 'Ignore'} specific)</button> `;
+				cmd = todayMatch ? `am ignoremodlog remove` : `am ignoremodlog add`;
+				innerBuf += `<button class="button" name="send" value="/${cmd} ${targetUser},${day}">`;
+				innerBuf += `(${todayMatch ? 'Unignore' : 'Ignore'} up to this date)</button></td>`;
+				return innerBuf;
+			}).join('</tr><tr>');
+			buf += `</tr></table></div>`;
+			return buf;
+		},
 	},
+	async battlechat(query) {
+		const [format, num, pw] = query.map(toID);
+		this.checkCan('lock');
+		if (!format || !num) {
+			return this.errorReply(`Invalid battle link provided.`);
+		}
+		this.title = `[Battle Logs] ${format}-${num}`;
+		const full = `battle-${format}-${num}${pw ? `-${pw}` : ""}`;
+		const logData = await getBattleLog(full);
+		if (!logData) {
+			return this.errorReply(`No logs found for the battle <code>${full}</code>.`);
+		}
+		let log = logData.log;
+		log = log.filter(l => l.startsWith('|c|'));
+
+		let buf = '<div class="pad">';
+		buf += `<h2>Logs for <a href="/${full}">${logData.title}</a></h2>`;
+		buf += `Players: ${Object.values(logData.players).map(toID).filter(Boolean).join(', ')}<hr />`;
+		let atLeastOne = false;
+		for (const line of log) {
+			const [,, username, message] = Utils.splitFirst(line, '|', 3);
+			buf += Utils.html`<div class="chat"><span class="username"><username>${username}:</username></span> ${message}</div>`;
+			atLeastOne = true;
+		}
+		if (!atLeastOne) buf += `None found.`;
+		return buf;
+	},
+};
+
+export const punishmentfilter: Chat.PunishmentFilter = (user, punishment) => {
+	if (typeof user === 'string') return;
+	if (!Punishments.punishmentTypes.has(punishment.type)) return;
+	const cacheEntry = punishmentCache.get(user) || {};
+	if (!cacheEntry[punishment.type]) cacheEntry[punishment.type] = 0;
+	cacheEntry[punishment.type]++;
 };

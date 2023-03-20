@@ -878,7 +878,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Petal Dance', target);
 		},
 		onModifyMove(move, source, target) {
-			if (target && target.getStat('def') < target.getStat('spd')) {
+			if (target && target.getStat('def', false, true) < target.getStat('spd', false, true)) {
 				move.category = "Physical";
 			}
 		},
@@ -911,7 +911,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (move.overrideOffensiveStat && !['atk', 'spa'].includes(move.overrideOffensiveStat)) return;
 				const attacker = move.overrideOffensivePokemon === 'target' ? target : source;
 				if (!attacker) return;
-				move.overrideOffensiveStat = attacker.getStat('atk') > attacker.getStat('spa') ? 'spa' : 'atk';
+				const attackerAtk = attacker.getStat('atk', false, true);
+				const attackerSpa = attacker.getStat('spa', false, true);
+				move.overrideOffensiveStat = attackerAtk > attackerSpa ? 'spa' : 'atk';
 			},
 			// Stat modifying in scripts.ts
 			onFieldStart(field, source, effect) {
@@ -1866,7 +1868,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const details = target.species.name + (target.level === 100 ? '' : ', L' + target.level) +
 				(target.gender === '' ? '' : ', ' + target.gender) + (target.set.shiny ? ', shiny' : '');
 			if (shiny) this.add('replace', target, details);
-			if (message) this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('GMars')}|${message}`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('GMars')}|${message}`);
 			target.setAbility('capsulearmor');
 			target.baseAbility = target.ability;
 			if (target.set.shiny) return;
@@ -2419,10 +2421,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
-		onTryHit(pokemon, target, move) {
-			if (!this.canSwitch(pokemon.side)) {
-				delete move.selfdestruct;
-				return false;
+		onTryHit(source) {
+			if (!this.canSwitch(source.side)) {
+				this.attrLastMove('[still]');
+				this.add('-fail', source);
+				return this.NOT_FAIL;
 			}
 		},
 		selfdestruct: "ifHit",
@@ -2819,9 +2822,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 15,
 		priority: 0,
-		flags: {},
+		flags: {futuremove: 1},
 		ignoreImmunity: true,
-		isFutureMove: true,
 		onTry(source, target) {
 			this.attrLastMove('[still]');
 			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
@@ -2838,10 +2840,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					basePower: 110,
 					category: "Special",
 					priority: 0,
-					flags: {},
+					flags: {futuremove: 1},
 					ignoreImmunity: false,
 					effectType: 'Move',
-					isFutureMove: true,
 					type: 'Psychic',
 				},
 			});
@@ -5274,7 +5275,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// genderless infatuation for nui's Condition Override
 	attract: {
 		inherit: true,
-		volatileStatus: 'attract',
 		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon, source, effect) {
@@ -5323,11 +5323,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-end', pokemon, 'Attract', '[silent]');
 			},
 		},
+		onTryImmunity(target, source) {
+			if (source.hasAbility('conditionoverride')) return true;
+			return (target.gender === 'M' && source.gender === 'F') || (target.gender === 'F' && source.gender === 'M');
+		},
 	},
 
-	// :^)
-	// Remnant of an AFD past. Thank u for the memes.
-	/*
+	// Try playing Staff Bros without dynamax and see what happens
 	supermetronome: {
 		accuracy: true,
 		basePower: 0,
@@ -5371,5 +5373,4 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "self",
 		type: "???",
 	},
-	*/
 };

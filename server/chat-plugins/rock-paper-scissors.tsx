@@ -31,18 +31,15 @@ export class RPSPlayer extends Rooms.RoomGamePlayer {
 	}
 }
 
-export class RPSGame extends Rooms.RoomGame {
+export class RPSGame extends Rooms.RoomGame<RPSPlayer> {
 	currentRound: number;
-	declare playerTable: {[k: string]: RPSPlayer};
 	readonly checkChat = true;
 	roundTimer: NodeJS.Timeout | null = null;
-	players: RPSPlayer[];
 	constructor(room: Room) {
 		super(room);
 		this.currentRound = 0;
 		this.title = 'Rock Paper Scissors';
 		this.gameid = 'rockpaperscissors' as ID;
-		this.players = [];
 
 		this.room.update();
 		this.controls(<div style={{textAlign: 'center'}}>Waiting for another player to join....</div>);
@@ -84,7 +81,8 @@ export class RPSGame extends Rooms.RoomGame {
 					{choice || '\u00A0'}
 				</button>
 			))}<br /><br />
-			<button class="button" name="send" value="/rps end">End game</button>
+			<button class="button" name="send" value="/rps end">End game</button><br />
+			<button class="button" name="send" value="/rps pause">Pause game</button>
 		</div>);
 	}
 	getField() {
@@ -271,10 +269,13 @@ export class RPSGame extends Rooms.RoomGame {
 	}
 	addPlayer(user: User) {
 		if (this.playerTable[user.id]) throw new Chat.ErrorMessage(`You are already a player in this game.`);
-		this.playerTable[user.id] = new RPSPlayer(user, this);
+		this.playerTable[user.id] = this.makePlayer(user);
 		this.players.push(this.playerTable[user.id]);
 		this.room.auth.set(user.id, Users.PLAYER_SYMBOL);
 		return this.playerTable[user.id];
+	}
+	makePlayer(user: string | User | null): RPSPlayer {
+		return new RPSPlayer(user, this);
 	}
 }
 

@@ -37,7 +37,7 @@ interface FormatData {
 	[source: string]: PokemonSets;
 }
 
-type GenerationNum = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+type GenerationNum = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 // The tiers we support, ie. ones that we have data sources for.
 export const TIERS = new Set([
@@ -45,10 +45,11 @@ export const TIERS = new Set([
 	'doublesou', 'battlespotsingles', 'battlespotdoubles', 'battlestadiumsingles',
 	'vgc2016', 'vgc2017', 'vgc2018', 'vgc2019ultraseries', 'vgc2020', '1v1',
 	'anythinggoes', 'nationaldexag', 'balancedhackmons', 'letsgoou', 'monotype',
+	'purehackmons',
 ]);
 const FORMATS = new Map<ID, {gen: GenerationNum, format: Format}>();
 const VALIDATORS = new Map<ID, TeamValidator>();
-for (let gen = 1; gen <= 8; gen++) {
+for (let gen = 1; gen <= 9; gen++) {
 	for (const tier of TIERS) {
 		const format = Dex.formats.get(`gen${gen}${tier}`);
 		if (format.exists) {
@@ -62,7 +63,7 @@ export async function importAll() {
 	const index = await request(smogon.Statistics.URL);
 
 	const imports = [];
-	for (let gen = 1; gen <= 8; gen++) {
+	for (let gen = 1; gen <= 9; gen++) {
 		imports.push(importGen(gen as GenerationNum, index));
 	}
 
@@ -147,6 +148,7 @@ function toGen(dex: ModdedDex, name: string): GenerationNum | undefined {
 	if (!pokemon.exists || (pokemon.isNonstandard && pokemon.isNonstandard !== 'CAP')) return undefined;
 
 	const n = pokemon.num;
+	if (n > 905) return 9;
 	if (n > 810) return 8;
 	if (n > 721 || (n <= -23 && n >= -28) || (n <= -120 && n >= -126)) return 7;
 	if (n > 649 || (n <= -8 && n >= -22) || (n <= -106 && n >= -110)) return 6;
@@ -231,13 +233,14 @@ function cleanName(name: string) {
 }
 
 function movesetToPokemonSet(dex: ModdedDex, format: Format, pokemon: string, set: smogon.Moveset) {
-	const level = getLevel(format, set.level);
+	const level = getLevel(format, set.levels[0]);
 	return {
 		level: level === 100 ? undefined : level,
 		moves: set.moveslots.map(ms => ms[0]).map(s => s.type ? `${s.move} ${s.type}` : s.move),
 		ability: fixedAbility(dex, pokemon, set.abilities[0]),
 		item: set.items[0] === 'No Item' ? undefined : set.items[0],
 		nature: set.natures[0],
+		teraType: set.teratypes ? set.teratypes[0] : undefined,
 		ivs: toStatsTable(set.ivconfigs[0], 31),
 		evs: toStatsTable(set.evconfigs[0]),
 	};

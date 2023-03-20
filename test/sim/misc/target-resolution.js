@@ -73,9 +73,24 @@ describe('Target Resolution', function () {
 			redirector = battle.p2.active[2];
 			battle.makeChoices('move watergun 2, auto', 'auto');
 			assert.statStage(redirector, 'spa', 1);
+
+			// Test Storm Drain on the user's side
+			battle.destroy();
+			battle = common.gen(5).createBattle({gameType: 'triples'}, [[
+				{species: 'Shuckle', moves: ['watergun']},
+				{species: 'Gastrodon', ability: 'stormdrain', moves: ['swordsdance']},
+				{species: 'Magikarp', moves: ['swordsdance']},
+			], [
+				{species: 'Beartic', moves: ['swordsdance']},
+				{species: 'Magikarp', moves: ['swordsdance']},
+				{species: 'Victini', moves: ['finalgambit']},
+			]]);
+			redirector = battle.p1.active[1];
+			battle.makeChoices('move watergun 3, auto', 'move swordsdance, move swordsdance, move finalgambit -2');
+			assert.statStage(redirector, 'spa', 1);
 		});
 
-		it.skip(`should not redirect non-pulse/flying moves in Triples if the Pokemon is out of range`, function () {
+		it(`should not redirect non-pulse/flying moves in Triples if the Pokemon is out of range`, function () {
 			battle = common.gen(6).createBattle({gameType: 'triples'}, [[
 				{species: 'Shuckle', moves: ['watergun']},
 				{species: 'Magikarp', moves: ['swordsdance']},
@@ -174,7 +189,7 @@ describe('Target Resolution', function () {
 
 		it(`should support RedirectTarget event for a fainted foe and type 'any'`, function () {
 			battle = common.createBattle({gameType: 'doubles'}, [[
-				{species: 'Aurorus', ability: 'snowwarning', moves: ['watergun']},
+				{species: 'Hippowdon', ability: 'sandstream', moves: ['waterpulse']},
 				{species: 'Shedinja', ability: 'wonderguard', moves: ['agility']},
 			], [
 				{species: 'Gastrodon', ability: 'stormdrain', moves: ['curse']},
@@ -183,13 +198,13 @@ describe('Target Resolution', function () {
 			const redirector = battle.p2.active[0];
 
 			battle.makeChoices('auto', 'auto'); // Shedinjas faint
-			battle.makeChoices('move watergun 2, pass', 'auto');
+			battle.makeChoices('move waterpulse 2, pass', 'auto');
 			assert.statStage(redirector, 'spa', 2);
 		});
 
 		it(`should support RedirectTarget event for a fainted ally and type 'any'`, function () {
 			battle = common.createBattle({gameType: 'doubles'}, [[
-				{species: 'Aurorus', ability: 'snowwarning', moves: ['watergun']},
+				{species: 'Hippowdon', ability: 'sandstream', moves: ['waterpulse']},
 				{species: 'Shedinja', ability: 'wonderguard', moves: ['agility']},
 			], [
 				{species: 'Gastrodon', ability: 'stormdrain', moves: ['curse']},
@@ -198,7 +213,7 @@ describe('Target Resolution', function () {
 			const redirector = battle.p2.active[0];
 
 			battle.makeChoices('auto', 'auto'); // Shedinjas faint
-			battle.makeChoices('move watergun -2, pass', 'auto');
+			battle.makeChoices('move waterpulse -2, pass', 'auto');
 			assert.statStage(redirector, 'spa', 2);
 		});
 	});
@@ -280,21 +295,25 @@ describe('Target Resolution', function () {
 
 	it('should not force charge moves called by another move to target an ally after Ally Switch', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'purrloin', ability: 'prankster', moves: ['copycat', 'sleeptalk']},
-			{species: 'wynaut', moves: ['allyswitch', 'solarbeam']},
+			{species: 'purrloin', ability: 'no guard', moves: ['copycat', 'sleeptalk']},
+			{species: 'wynaut', moves: ['allyswitch', 'fly', 'skullbash']},
 		], [
-			{species: 'swablu', moves: ['sleeptalk']},
-			{species: 'swablu', moves: ['sleeptalk']},
+			{species: 'aron', moves: ['sleeptalk']},
+			{species: 'lairon', moves: ['sleeptalk']},
 		]]);
 
-		battle.makeChoices('move sleeptalk, move solarbeam 1', 'auto');
+		battle.makeChoices('move sleeptalk, move fly 1', 'auto');
 		battle.makeChoices();
 		battle.makeChoices();
-		assert.fullHP(battle.p1.active[0]);
+		battle.makeChoices('move skullbash 1, move sleeptalk', 'auto');
+		battle.makeChoices();
+		battle.makeChoices();
+		// ally switch was used twice, so wynaut will be back where it started
+		assert.fullHP(battle.p1.active[1]);
 	});
 
 	it(`Ally Switch should cause single-target moves to fail if targeting an ally`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'purrloin', moves: ['thunder', 'ironhead']},
 			{species: 'wynaut', moves: ['allyswitch']},
 		], [
@@ -338,17 +357,17 @@ describe('Target Resolution', function () {
 		assert.false.fullHP(battle.p1.active[1], 'Altaria should not be at full HP, because Phantom Force was redirected and targeted it.');
 	});
 
-	it.skip(`should cause Rollout to target the same slot after being called as a submove`, function () {
+	it(`should cause Rollout to target the same slot after being called as a submove`, function () {
 		// hardcoded RNG seed to show the erroneous targeting behavior
 		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
-			{species: 'purrloin', ability: 'compoundeyes', moves: ['rollout', 'sleeptalk']},
-			{species: 'regieleki', moves: ['healbell', 'spore']},
+			{species: 'shuckle', ability: 'compoundeyes', moves: ['copycat']},
+			{species: 'foongus', moves: ['spore']},
 		], [
 			{species: 'aggron', moves: ['sleeptalk']},
-			{species: 'slowbro', moves: ['sleeptalk']},
+			{species: 'slowbro', moves: ['rollout']},
 		]]);
 
-		battle.makeChoices('move sleeptalk, move spore -1', 'auto');
+		battle.makeChoices('move copycat, move spore 2', 'auto');
 		// Determine which slot was damaged on first turn of Rollout
 		const aggron = battle.p2.active[0];
 		const notTargetedPokemon = aggron.hp === aggron.maxhp ? aggron : battle.p2.active[1];

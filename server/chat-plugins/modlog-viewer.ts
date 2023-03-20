@@ -115,8 +115,12 @@ function prettifyResults(
 		}
 		const thisRoomID = entryRoom?.split(' ')[0];
 		if (addModlogLinks) {
-			const url = Config.modloglink(date, thisRoomID);
-			if (url) timestamp = `<a href="${url}">${timestamp}</a>`;
+			if (thisRoomID.startsWith('battle-')) {
+				timestamp = `<a href="/${thisRoomID}">${timestamp}</a>`;
+			} else {
+				const [day, time] = Chat.toTimestamp(date).split(' ');
+				timestamp = `<a href="/view-chatlog-${thisRoomID}--${day}--time-${toID(time)}">${timestamp}</a>`;
+			}
 		}
 		line = Utils.escapeHTML(line.slice(line.indexOf(')') + ` </small>`.length));
 		line = line.replace(
@@ -161,7 +165,7 @@ async function getModlog(
 
 	const hideIps = !user.can('lock');
 	const addModlogLinks = !!(
-		Config.modloglink && (user.tempGroup !== ' ' || (targetRoom && targetRoom.settings.isPrivate !== true))
+		(user.tempGroup !== ' ' || (targetRoom && targetRoom.settings.isPrivate !== true))
 	);
 	if (hideIps && search.ip.length) {
 		connection.popup(`You cannot search for IPs.`);
@@ -373,12 +377,25 @@ export const pages: Chat.PageTable = {
 		if (!entries?.results.length) {
 			return this.errorReply(`No data found.`);
 		}
-		const punishmentTable = new Utils.Multiset();
+		const punishmentTable = new Utils.Multiset<string>();
+		const punishmentsByIp = new Map<string, Utils.Multiset<string>>();
+		const actionsWithIp = new Set<string>();
 		const alts = new Set<string>();
 		const autoconfirmed = new Set<string>();
 		const ips = new Set<string>();
 		for (const entry of entries.results) {
-			if (entry.action !== 'NOTE') punishmentTable.add(entry.action);
+			if (entry.action !== 'NOTE') {
+				punishmentTable.add(entry.action);
+				if (entry.ip) {
+					let ipTable = punishmentsByIp.get(entry.ip);
+					if (!ipTable) {
+						ipTable = new Utils.Multiset();
+						punishmentsByIp.set(entry.ip, ipTable);
+					}
+					ipTable.add(entry.action);
+					actionsWithIp.add(entry.action);
+				}
+			}
 			if (entry.alts) {
 				for (const alt of entry.alts) alts.add(alt);
 			}
@@ -421,6 +438,21 @@ export const pages: Chat.PageTable = {
 			for (const [punishment, number] of punishmentTable) {
 				buf += `<tr><td>${punishment}</td><td>${number}</td></tr>`;
 			}
+			buf += `</table></div><br />`;
+		}
+		if (punishmentsByIp.size) {
+			buf += `<strong>Punishments by IP:</strong><br />`;
+			const keys = [...actionsWithIp];
+			buf += `<div class="ladder pad"><table>`;
+			buf += `<tr><th></th>${keys.map(k => `<th>${k}</th>`).join("")}</tr>`;
+			for (const [ip, table] of punishmentsByIp) {
+				buf += `<tr><td><a href="https://whatismyipaddress.com/ip/${ip}">${ip}</a></td>`;
+				for (const key of keys) {
+					buf += `<td>${table.get(key) || 0}</td>`;
+				}
+				buf += `</tr>`;
+			}
+			buf += `</table></div>`;
 		}
 
 		buf += `<br /><br />`;

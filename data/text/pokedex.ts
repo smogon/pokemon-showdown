@@ -293,8 +293,14 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	growlithe: {
 		name: "Growlithe",
 	},
+	growlithehisui: {
+		name: "Growlithe-Hisui",
+	},
 	arcanine: {
 		name: "Arcanine",
+	},
+	arcaninehisui: {
+		name: "Arcanine-Hisui",
 	},
 	poliwag: {
 		name: "Poliwag",
@@ -467,8 +473,14 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	voltorb: {
 		name: "Voltorb",
 	},
+	voltorbhisui: {
+		name: "Voltorb-Hisui",
+	},
 	electrode: {
 		name: "Electrode",
+	},
+	electrodehisui: {
+		name: "Electrode-Hisui",
 	},
 	exeggcute: {
 		name: "Exeggcute",
@@ -683,6 +695,9 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	typhlosion: {
 		name: "Typhlosion",
 	},
+	typhlosionhisui: {
+		name: "Typhlosion-Hisui",
+	},
 	totodile: {
 		name: "Totodile",
 	},
@@ -800,8 +815,14 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	wooper: {
 		name: "Wooper",
 	},
+	wooperpaldea: {
+		name: "Wooper-Paldea",
+	},
 	quagsire: {
 		name: "Quagsire",
+	},
+	quagsirepaldea: {
+		name: "Quagsire-Paldea",
 	},
 	espeon: {
 		name: "Espeon",
@@ -854,6 +875,9 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	qwilfish: {
 		name: "Qwilfish",
 	},
+	qwilfishhisui: {
+		name: "Qwilfish-Hisui",
+	},
 	scizor: {
 		name: "Scizor",
 	},
@@ -871,6 +895,9 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	},
 	sneasel: {
 		name: "Sneasel",
+	},
+	sneaselhisui: {
+		name: "Sneasel-Hisui",
 	},
 	teddiursa: {
 		name: "Teddiursa",
@@ -1814,8 +1841,14 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	dialga: {
 		name: "Dialga",
 	},
+	dialgaorigin: {
+		name: "Dialga-Origin",
+	},
 	palkia: {
 		name: "Palkia",
+	},
+	palkiaorigin: {
+		name: "Palkia-Origin",
 	},
 	heatran: {
 		name: "Heatran",
@@ -1930,6 +1963,9 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	},
 	samurott: {
 		name: "Samurott",
+	},
+	samurotthisui: {
+		name: "Samurott-Hisui",
 	},
 	patrat: {
 		name: "Patrat",
@@ -2072,11 +2108,17 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	lilligant: {
 		name: "Lilligant",
 	},
+	lilliganthisui: {
+		name: "Lilligant-Hisui",
+	},
 	basculin: {
 		name: "Basculin",
 	},
 	basculinbluestriped: {
 		name: "Basculin-Blue-Striped",
+	},
+	basculinwhitestriped: {
+		name: "Basculin-White-Striped",
 	},
 	sandile: {
 		name: "Sandile",
@@ -2156,8 +2198,14 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	zorua: {
 		name: "Zorua",
 	},
+	zoruahisui: {
+		name: "Zorua-Hisui",
+	},
 	zoroark: {
 		name: "Zoroark",
+	},
+	zoroarkhisui: {
+		name: "Zoroark-Hisui",
 	},
 	minccino: {
 		name: "Minccino",
@@ -2332,6 +2380,9 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	},
 	braviary: {
 		name: "Braviary",
+	},
+	braviaryhisui: {
+		name: "Braviary-Hisui",
 	},
 	vullaby: {
 		name: "Vullaby",
@@ -2615,8 +2666,14 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	sliggoo: {
 		name: "Sliggoo",
 	},
+	sliggoohisui: {
+		name: "Sliggoo-Hisui",
+	},
 	goodra: {
 		name: "Goodra",
+	},
+	goodrahisui: {
+		name: "Goodra-Hisui",
 	},
 	klefki: {
 		name: "Klefki",
@@ -2656,6 +2713,9 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	},
 	avalugg: {
 		name: "Avalugg",
+	},
+	avalugghisui: {
+		name: "Avalugg-Hisui",
 	},
 	noibat: {
 		name: "Noibat",
@@ -2704,6 +2764,9 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	},
 	decidueye: {
 		name: "Decidueye",
+	},
+	decidueyehisui: {
+		name: "Decidueye-Hisui",
 	},
 	litten: {
 		name: "Litten",
@@ -3451,6 +3514,33 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	},
 	calyrexshadow: {
 		name: "Calyrex-Shadow",
+	},
+	wyrdeer: {
+		name: "Wydreer",
+	},
+	kleavor: {
+		name: "Kleavor",
+	},
+	ursaluna: {
+		name: "Ursaluna",
+	},
+	basculegion: {
+		name: "Basculegion",
+	},
+	basculegionf: {
+		name: "Basculegion-F",
+	},
+	sneasler: {
+		name: "Sneasler",
+	},
+	overqwil: {
+		name: "Overqwil",
+	},
+	enamorus: {
+		name: "Enamorus",
+	},
+	enamorustherian: {
+		name: "Enamorus-Therian",
 	},
 	missingno: {
 		name: "MissingNo.",

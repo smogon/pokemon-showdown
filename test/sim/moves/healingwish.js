@@ -21,14 +21,11 @@ describe('Healing Wish', function () {
 			{species: 'Tyranitar', ability: 'sandstream', moves: ['seismictoss', 'stealthrock']},
 		]});
 
-		battle.makeChoices('move String Shot', 'move Endeavor'); // set Caterpie to 1hp
-
-		battle.makeChoices('switch Jirachi', 'switch Tyranitar'); // set up Sand
-
-		battle.makeChoices('move Protect', 'move Stealth Rock');
-
-		battle.makeChoices('move Healing Wish', 'move Seismic Toss');
-
+		battle.makeChoices('move stringshot', 'move endeavor'); // set Caterpie to 1hp
+		battle.makeChoices('switch jirachi', 'switch tyranitar'); // set up Sand
+		battle.makeChoices('move protect', 'move stealthrock');
+		battle.makeChoices('move healingwish', 'move seismictoss');
+		assert.equal(battle.requestState, 'switch');
 		// sand happens after Jirachi faints and before any switch-in
 		battle.makeChoices('switch Caterpie', ''); // Caterpie heals before taking SR damage
 		assert.equal(battle.p1.active[0].hp, 174);
@@ -44,10 +41,9 @@ describe('Healing Wish', function () {
 		battle.setPlayer('p2', {team: [
 			{species: 'Tyranitar', ability: 'sandstream', moves: ['seismictoss', 'stealthrock']},
 		]});
-		battle.makeChoices('move Protect', 'move Stealth Rock'); // set up Sand and Stealth Rock
-
-		battle.makeChoices('move Healing Wish', 'move Seismic Toss');
-
+		battle.makeChoices('move protect', 'move stealthrock'); // set up Sand and Stealth Rock
+		battle.makeChoices('move healingwish', 'move seismictoss');
+		assert.equal(battle.requestState, 'switch');
 		// sand happens after Jirachi faints and before any switch-in
 		battle.makeChoices('switch Caterpie', ''); // Caterpie does not consume Healing Wish
 		assert(battle.p1.slotConditions[0]['healingwish']);
@@ -65,15 +61,52 @@ describe('Healing Wish', function () {
 			{species: 'Shedinja', ability: 'wonderguard', moves: ['endeavor', 'protect']},
 		]});
 		// set up Healing Wish, Caterpie is at 1 HP
-		battle.makeChoices('move Healing Wish, move String Shot', 'move Sleep Talk, move Endeavor 2');
+		battle.makeChoices('move healingwish, move stringshot', 'move sleeptalk, move endeavor 2');
+		assert.equal(battle.requestState, 'switch');
 		// Rotom does not consume Healing Wish
-		battle.makeChoices('switch Rotom', '');
+		battle.makeChoices('switch rotom', '');
 		assert(battle.p1.slotConditions[0]['healingwish']);
 		// Caterpie gets healed by Healing Wish triggered by Ally Switch
-		battle.makeChoices('move Ally Switch, move String Shot', 'move Sleep Talk, move Protect');
-
+		battle.makeChoices('move allyswitch, move stringshot', 'move sleeptalk, move protect');
 		assert.equal(battle.p1.active[0].hp, 231); // Caterpie start in slot 1 -> Ally Switch-ed to slot 0
 		assert.false(battle.p1.slotConditions[0]['healingwish']);
+	});
+
+	it(`should fail to switch the user out if no Pokemon can be switched in`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', moves: ['healingwish']},
+		], [
+			{species: 'pichu', moves: ['swordsdance']},
+		]]);
+		battle.makeChoices();
+		assert(battle.log.some(line => line.startsWith('|-fail')));
+		assert.false.fainted(battle.p1.active[0]);
+
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'wynaut', moves: ['healingwish']},
+			{species: 'pichu', moves: ['swordsdance']},
+		], [
+			{species: 'pichu', moves: ['swordsdance']},
+			{species: 'pichu', moves: ['swordsdance']},
+		]]);
+		battle.makeChoices();
+		assert(battle.log.some(line => line.startsWith('|-fail')));
+		assert.false.fainted(battle.p1.active[0]);
+	});
+
+	it(`should not set up the slot condition when it fails`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'wobbuffet', moves: ['healingwish', 'swordsdance']},
+			{species: 'wynaut', moves: ['swordsdance', 'allyswitch']},
+		], [
+			{species: 'dratini', moves: ['breakingswipe', 'swordsdance']},
+			{species: 'pichu', moves: ['swordsdance']},
+		]]);
+		const wynaut = battle.p1.active[1];
+		battle.makeChoices();
+		battle.makeChoices('move swordsdance, move allyswitch', 'move swordsdance, move swordsdance');
+		assert(battle.log.some(line => line.startsWith('|-fail')));
+		assert.false.fullHP(wynaut);
 	});
 
 	it('[Gen 4] should heal a switch-in for full after hazards mid-turn', function () {

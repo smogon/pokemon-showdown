@@ -113,6 +113,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	fastball: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	flameorb: {
 		inherit: true,
 		onResidualOrder: 10,
@@ -148,6 +152,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	heavyball: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	ironball: {
 		inherit: true,
 		onEffectiveness() {},
@@ -181,6 +189,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onResidualOrder: 10,
 		onResidualSubOrder: 4,
 	},
+	levelball: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	lifeorb: {
 		inherit: true,
 		onModifyDamage() {},
@@ -192,7 +204,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			return basePower;
 		},
 		onModifyDamagePhase2(damage, source, target, move) {
-			if (!move.isFutureMove) return damage * 1.3;
+			if (!move.flags['futuremove']) return damage * 1.3;
 		},
 		condition: {
 			duration: 1,
@@ -214,6 +226,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	loveball: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	luckypunch: {
 		inherit: true,
 		onModifyCritRatio(critRatio, user) {
@@ -221,6 +237,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 				return critRatio + 2;
 			}
 		},
+	},
+	lureball: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	lustrousorb: {
 		inherit: true,
@@ -286,6 +306,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 			},
 		},
 	},
+	moonball: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	razorfang: {
 		inherit: true,
 		onModifyMove(move) {
@@ -300,6 +324,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 				});
 			}
 		},
+	},
+	sportball: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	stick: {
 		inherit: true,

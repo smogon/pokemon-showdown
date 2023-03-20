@@ -14,12 +14,19 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			'Vaporeon + Tackle + Growl',
 			'Jolteon + Tackle + Growl', 'Jolteon + Focus Energy + Thunder Shock',
 			'Flareon + Tackle + Growl', 'Flareon + Focus Energy + Ember',
+
+			// https://github.com/smogon/pokemon-showdown/pull/8869
+			'Rapidash + Pay Day + Growl',
+			'Rapidash + Pay Day + Tail Whip',
+			'Fearow + Pay Day + Peck',
+			'Fearow + Pay Day + Mirror Move',
+			'Magikarp + Dragon Rage + Tackle',
 		],
 	},
 	standard: {
 		effectType: 'ValidatorRule',
 		name: 'Standard',
-		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause', 'Endless battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: [
 			'Hypnosis + Mean Look',
 			'Hypnosis + Spider Web',

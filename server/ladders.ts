@@ -163,11 +163,17 @@ class Ladder extends LadderStore {
 			connection.popup(`You are already challenging someone. Cancel that challenge before challenging someone else.`);
 			return false;
 		}
-		if (targetUser.settings.blockChallenges && !user.can('bypassblocks', targetUser) && (
-			targetUser.settings.blockChallenges === true ||
-			targetUser.settings.blockChallenges === 'friends' && targetUser.friends?.has(user.id) ||
-			!Users.globalAuth.atLeast(user, targetUser.settings.blockChallenges as AuthLevel)
-		)) {
+
+		let blockChallenge: boolean;
+		if (typeof targetUser.settings.blockChallenges === 'boolean') {
+			blockChallenge = targetUser.settings.blockChallenges;
+		} else if (targetUser.settings.blockChallenges === 'friends') {
+			blockChallenge = !targetUser.friends?.has(user.id);
+		} else {
+			blockChallenge = !Users.globalAuth.atLeast(user, targetUser.settings.blockChallenges);
+		}
+
+		if (blockChallenge && !user.can('bypassblocks', targetUser)) {
 			connection.popup(`The user '${targetUser.name}' is not accepting challenges right now.`);
 			Chat.maybeNotifyBlocked('challenge', targetUser, user);
 			return false;

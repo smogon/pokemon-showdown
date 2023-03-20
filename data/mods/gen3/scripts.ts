@@ -69,9 +69,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Mod 2 (Damage is floored after all multipliers are in)
 			baseDamage = Math.floor(this.battle.runEvent('ModifyDamagePhase2', pokemon, target, move, baseDamage));
 
-			// this is not a modifier
-			baseDamage = this.battle.randomizer(baseDamage);
-
 			// STAB
 			if (move.forceSTAB || type !== '???' && pokemon.hasType(type)) {
 				// The "???" type never gets STAB
@@ -103,6 +100,9 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Final modifier.
 			baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
+
+			// this is not a modifier
+			baseDamage = this.battle.randomizer(baseDamage);
 
 			if (!Math.floor(baseDamage)) {
 				return 1;
@@ -228,7 +228,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						lacksTarget = !target.isAdjacent(pokemon);
 					}
 				}
-				if (lacksTarget && !move.isFutureMove) {
+				if (lacksTarget && !move.flags['futuremove']) {
 					this.battle.attrLastMove('[notarget]');
 					this.battle.add('-notarget', pokemon);
 					return false;

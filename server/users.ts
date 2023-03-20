@@ -32,9 +32,11 @@ type StatusType = 'online' | 'busy' | 'idle';
 
 const THROTTLE_DELAY = 600;
 const THROTTLE_DELAY_TRUSTED = 100;
+const THROTTLE_DELAY_PUBLIC_BOT = 25;
 const THROTTLE_BUFFER_LIMIT = 6;
 const THROTTLE_MULTILINE_WARN = 3;
 const THROTTLE_MULTILINE_WARN_STAFF = 6;
+const THROTTLE_MULTILINE_WARN_ADMIN = 25;
 
 const NAMECHANGE_THROTTLE = 2 * 60 * 1000; // 2 minutes
 const NAMES_PER_THROTTLE = 3;
@@ -193,6 +195,16 @@ function isTrusted(userid: ID) {
 	const staffRoom = Rooms.get('staff');
 	const staffAuth = staffRoom && !!(staffRoom.auth.has(userid) || staffRoom.users[userid]);
 	return staffAuth ? userid : false;
+}
+
+function isPublicBot(userid: ID) {
+	if (globalAuth.get(userid) === '*') return true;
+	for (const room of Rooms.global.chatRooms) {
+		if (room.persist && !room.settings.isPrivate && room.auth.get(userid) === '*') {
+			return true;
+		}
+	}
+	return false;
 }
 
 /*********************************************************
@@ -363,6 +375,7 @@ export class User extends Chat.MessageContext {
 
 	isSysop: boolean;
 	isStaff: boolean;
+	isPublicBot: boolean;
 	lastDisconnected: number;
 	lastConnected: number;
 	foodfight?: {generatedTeam: string[], dish: string, ingredients: string[], timestamp: number};
@@ -457,6 +470,7 @@ export class User extends Chat.MessageContext {
 
 		this.isSysop = false;
 		this.isStaff = false;
+		this.isPublicBot = false;
 		this.lastDisconnected = 0;
 		this.lastConnected = connection.connectedAt;
 
@@ -809,6 +823,9 @@ export class User extends Chat.MessageContext {
 			this.destroyPunishmentTimer();
 		}
 
+		this.isPublicBot = Users.isPublicBot(userid);
+
+		Chat.runHandlers('onRename', this, this.id, userid);
 		let user = users.get(userid);
 		const possibleUser = Users.get(userid);
 		if (possibleUser?.namelocked) {
@@ -829,6 +846,7 @@ export class User extends Chat.MessageContext {
 			Punishments.checkName(user, userid, registered);
 
 			Rooms.global.checkAutojoin(user);
+			Rooms.global.joinOldBattles(this);
 			Chat.loginfilter(user, this, userType);
 			return true;
 		}
@@ -844,6 +862,7 @@ export class User extends Chat.MessageContext {
 			return false;
 		}
 		Rooms.global.checkAutojoin(this);
+		Rooms.global.joinOldBattles(this);
 		Chat.loginfilter(this, null, userType);
 		return true;
 	}
@@ -1113,7 +1132,6 @@ export class User extends Chat.MessageContext {
 				this.autoconfirmed = this.id;
 			} else {
 				globalAuth.delete(this.id);
-				globalAuth.save();
 				this.trusted = '';
 			}
 		}
@@ -1392,7 +1410,8 @@ export class User extends Chat.MessageContext {
 			return false; // but end the loop here
 		}
 
-		const throttleDelay = this.trusted ? THROTTLE_DELAY_TRUSTED : THROTTLE_DELAY;
+		const throttleDelay = this.isPublicBot ? THROTTLE_DELAY_PUBLIC_BOT : this.trusted ? THROTTLE_DELAY_TRUSTED :
+			THROTTLE_DELAY;
 
 		if (this.chatQueueTimeout) {
 			if (!this.chatQueue) this.chatQueue = []; // this should never happen
@@ -1417,7 +1436,8 @@ export class User extends Chat.MessageContext {
 	}
 	startChatQueue(delay: number | null = null) {
 		if (delay === null) {
-			delay = (this.trusted ? THROTTLE_DELAY_TRUSTED : THROTTLE_DELAY) - (Date.now() - this.lastChatMessage);
+			delay = (this.isPublicBot ? THROTTLE_DELAY_PUBLIC_BOT : this.trusted ? THROTTLE_DELAY_TRUSTED :
+				THROTTLE_DELAY) - (Date.now() - this.lastChatMessage);
 		}
 
 		this.chatQueueTimeout = setTimeout(
@@ -1459,7 +1479,8 @@ export class User extends Chat.MessageContext {
 			// room no longer exists; do nothing
 		}
 
-		const throttleDelay = this.trusted ? THROTTLE_DELAY_TRUSTED : THROTTLE_DELAY;
+		const throttleDelay = this.isPublicBot ? THROTTLE_DELAY_PUBLIC_BOT : this.trusted ? THROTTLE_DELAY_TRUSTED :
+			THROTTLE_DELAY;
 
 		if (this.chatQueue.length) {
 			this.chatQueueTimeout = setTimeout(() => this.processChatQueue(), throttleDelay);
@@ -1671,8 +1692,11 @@ function socketReceive(worker: ProcessManager.StreamWorker, workerid: number, so
 	const lines = message.split('\n');
 	if (!lines[lines.length - 1]) lines.pop();
 	// eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-	const maxLineCount = (user.isStaff || (room && room.auth.isStaff(user.id))) ?
-		THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN;
+	const maxLineCount = (
+		user.can('bypassall') ? THROTTLE_MULTILINE_WARN_ADMIN :
+		(user.isStaff || (room && room.auth.isStaff(user.id))) ?
+			THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN
+	);
 	if (lines.length > maxLineCount && !Config.nothrottle) {
 		connection.popup(`You're sending too many lines at once. Try using a paste service like [[Pastebin]].`);
 		return;
@@ -1708,6 +1732,7 @@ export const Users = {
 	isUsernameKnown,
 	isUsername,
 	isTrusted,
+	isPublicBot,
 	SECTIONLEADER_SYMBOL,
 	PLAYER_SYMBOL,
 	HOST_SYMBOL,

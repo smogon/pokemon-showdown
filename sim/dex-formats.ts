@@ -3,7 +3,7 @@ import {toID, BasicEffect} from './dex-data';
 import {EventMethods} from './dex-conditions';
 import {Tags} from '../data/tags';
 
-const DEFAULT_MOD = 'gen8';
+const DEFAULT_MOD = 'gen9';
 
 export interface FormatData extends Partial<Format>, EventMethods {
 	name: string;
@@ -377,7 +377,6 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly queue?: ModdedBattleQueue;
 	declare readonly field?: ModdedField;
 	declare readonly actions?: ModdedBattleActions;
-	declare readonly cannotMega?: string[];
 	declare readonly challengeShow?: boolean;
 	declare readonly searchShow?: boolean;
 	declare readonly threads?: string[];
@@ -413,9 +412,10 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 
 	constructor(data: AnyObject) {
 		super(data);
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		data = this;
 
-		this.mod = Utils.getString(data.mod) || 'gen8';
+		this.mod = Utils.getString(data.mod) || 'gen9';
 		this.effectType = Utils.getString(data.effectType) as FormatEffectType || 'Format';
 		this.debug = !!data.debug;
 		this.rated = (typeof data.rated === 'string' ? data.rated : data.rated !== false);
@@ -541,7 +541,7 @@ export class DexFormats {
 			if (format.challengeShow === undefined) format.challengeShow = true;
 			if (format.searchShow === undefined) format.searchShow = true;
 			if (format.tournamentShow === undefined) format.tournamentShow = true;
-			if (format.mod === undefined) format.mod = 'gen8';
+			if (format.mod === undefined) format.mod = 'gen9';
 			if (!this.dex.dexes[format.mod]) throw new Error(`Format "${format.name}" requires nonexistent mod: '${format.mod}'`);
 
 			const ruleset = new Format(format);
@@ -812,6 +812,16 @@ export class DexFormats {
 		ruleTable.getTagRules();
 
 		ruleTable.resolveNumbers(format, this.dex);
+
+		const canMegaEvo = this.dex.gen <= 7 || ruleTable.has('+pokemontag:past');
+		if (ruleTable.has('obtainableformes') && canMegaEvo &&
+			ruleTable.isBannedSpecies(this.dex.species.get('rayquazamega')) &&
+			!ruleTable.isBannedSpecies(this.dex.species.get('rayquaza'))
+		) {
+			// Banning Rayquaza-Mega implicitly adds Mega Rayquaza Clause
+			// note that already having it explicitly in the ruleset is ok
+			ruleTable.set('megarayquazaclause', '');
+		}
 
 		for (const rule of ruleTable.keys()) {
 			if ("+*-!".includes(rule.charAt(0))) continue;
