@@ -1474,15 +1474,16 @@ export class Pokemon {
 				(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 			let details = (this.illusion || this).details;
 			if (this.terastallized) details += `, tera:${this.terastallized}`;
-			
+			if (!this.illusion) {
+				this.battle.add('detailschange', this, details);
+			}
 			if (source.effectType === 'Item') {
 				if (source.zMove) {
-					this.battle.add('detailschange', this, details);
 					this.battle.add('-burst', this, apparentSpecies, species.requiredItem);
 					this.moveThisTurnResult = true; // Ultra Burst counts as an action for Truant
 				} else if (source.onPrimal) {
-					this.battle.add('detailschange', this, details);
 					if (this.illusion) {
+						this.battle.add('detailschange', this, details);
 						this.ability = '';
 						this.battle.add('-primal', this.illusion);
 					} else {
@@ -1498,7 +1499,6 @@ export class Pokemon {
 							this.battle.add('-mega', this, apparentSpecies, illusionRawSpecies.requiredItem);
 						}
 					} else {
-						this.battle.add('detailschange', this, details);
 						this.battle.add('-mega', this, apparentSpecies, species.requiredItem);
 					}
 					this.moveThisTurnResult = true; // Mega Evolution counts as an action for Truant
