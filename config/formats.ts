@@ -327,7 +327,7 @@ export const Formats: FormatList = [
 		gameType: 'freeforall',
 		rated: false,
 		tournamentShow: false,
-		ruleset: ['Standard NatDex'],
+		ruleset: ['Standard NatDex', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120'],
 		banlist: [],
 	},
 ];
