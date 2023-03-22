@@ -452,12 +452,12 @@ const TWISTS: {[k: string]: Twist} = {
 		desc: 'The huntmaker can add incorrect \'mines\' to the hunt - they get points every time a player scavenges it, and players that dodge all the mines in the hunt get points.',
 		onAfterLoad() {
 			this.guesses = Array.from({length: this.questions.length}).map(() => []);
-			this.mines = Array.from({length: this.questions.length}).map(() => []);
-			for (const [index, question] of this.questions.entries()) {
-				this.mines[index] = question.answer.filter(ans => ans.startsWith('!'));
+			this.mines = [];
+			for (const question of this.questions) {
+				this.mines.push(question.answer.filter(ans => ans.startsWith('!')));
 				question.answer = question.answer.filter(ans => !ans.startsWith('!'));
 			}
-			if (this.mines.some(mineSet => mineSet.length === 0)) {
+			if ((this.mines as string[][]).some(mineSet => mineSet.length === 0)) {
 				this.announce('This twist requires at least one mine for each question. Please reset the hunt and make it again.');
 				this.huntLocked = true;
 			}
