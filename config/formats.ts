@@ -2528,7 +2528,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen4',
 		gameType: 'doubles',
-		ruleset: ['Standard', '!Sleep Clause Mod'],
+		ruleset: ['Standard'],
 		banlist: ['AG', 'Uber', 'Soul Dew', 'Dark Void', 'Sand Veil'],
 		unbanlist: ['Latios', 'Manaphy', 'Mew', 'Salamence', 'Wobbuffet', 'Wynaut'],
 	},
