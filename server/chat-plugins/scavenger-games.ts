@@ -347,6 +347,13 @@ const TWISTS: {[k: string]: Twist} = {
 			}
 		},
 
+		onAnySubmit(player) {
+			if (this.huntLocked) {
+				player.sendRoom('The hunt was not set up correctly.  Please wait for the host to reset the hunt and create a new one.');
+				return true;
+			}
+		},
+
 		onComplete(player, time, blitz) {
 			const now = Date.now();
 			const takenTime = Chat.toDurationString(now - this.startTimes[player.id], {hhmmss: true});
@@ -444,11 +451,15 @@ const TWISTS: {[k: string]: Twist} = {
 		name: 'Minesweeper',
 		desc: 'The huntmaker can add incorrect \'mines\' to the hunt - they get points every time a player scavenges it, and players that dodge all the mines in the hunt get points.',
 		onAfterLoad() {
-			this.guesses = Array.from({length: this.questions.length}).map(() => ({}));
-			this.mines = Array.from({length: this.questions.length}).map(() => ({}));
+			this.guesses = Array.from({length: this.questions.length}).map(() => []);
+			this.mines = Array.from({length: this.questions.length}).map(() => []);
 			for (const [index, question] of this.questions.entries()) {
 				this.mines[index] = question.answer.filter(ans => ans.startsWith('!'));
 				question.answer = question.answer.filter(ans => !ans.startsWith('!'));
+			}
+			if (this.mines.some(mineSet => mineSet.length === 0)) {
+				this.announce('This twist requires at least one mine for each question. Please reset the hunt and make it again.');
+				this.huntLocked = true;
 			}
 		},
 
@@ -482,6 +493,13 @@ const TWISTS: {[k: string]: Twist} = {
 			return true;
 		},
 
+		onAnySubmit(player) {
+			if (this.huntLocked) {
+				player.sendRoom('The hunt was not set up correctly.  Please wait for the host to reset the hunt and create a new one.');
+				return true;
+			}
+		},
+
 		onIncorrectAnswer(player: ScavengerHuntPlayer, value: string) {
 			const curr = player.currentQuestion;
 
@@ -495,27 +513,29 @@ const TWISTS: {[k: string]: Twist} = {
 			const sliceIndex = this.gameType === 'official' ? 5 : 3;
 			const hosts = Chat.toListString(this.hosts.map(h => `<em>${Utils.escapeHTML(h.name)}</em>`));
 
-			for (const index in this.mines) {
-				this.questions[index].mines = [];
+			const mines: {mine: string, users: string[]}[][] = [];
+
+			for (let index = 0; index < this.mines.length; index++) {
+				mines[index] = [];
 				for (const mine of this.mines[index]) {
-					this.questions[index].mines.push({mine: mine.substr(1), users: []});
+					mines[index].push({mine: mine.substr(1), users: []});
 				}
 			}
 
 			for (const player of Object.values(this.playerTable)) {
 				if (player.mines) {
 					for (const {index, mine} of player.mines) {
-						this.questions[index].mines.find(obj => obj.mine === mine)?.users.push(player.name);
+						mines[index].find(obj => obj.mine === mine)?.users.push(player.name);
 					}
 				}
 			}
 
-			for (const question of this.questions) question.mines.sort();
+			for (const mineSet of mines) mineSet.sort();
 
 			this.announce(
 				`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt by ${hosts} was ended ${(endedBy ? "by " + Utils.escapeHTML(endedBy.name) : "automatically")}.<br />` +
 				`${this.completed.slice(0, sliceIndex).map((p, i) => `${Utils.formatOrder(i + 1)} place: <em>${Utils.escapeHTML(p.name)}</em> <span style="color: lightgreen;">[${p.time}]</span>.<br />`).join("")}${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Utils.escapeHTML(e.name)}</em> <span style="color: lightgreen;">[${e.time}]</span>`).join(', ')}<br />` : ''}<br />` +
-				`<details style="cursor: pointer;"><summary>Solution: </summary><br />${this.questions.map((q, i) => `${i + 1}) ${Chat.formatText(q.hint)} <span style="color: lightgreen">[<em>${Utils.escapeHTML(q.answer.join(' / '))}</em>]</span><br/><details style="cursor: pointer;"><summary>Mines: </summary>${q.mines.map(({mine, users}) => Utils.escapeHTML(`${mine}: ${users.join(' / ') || '-'}`)).join('<br />')}</details>`).join("<br />")}</details>`
+				`<details style="cursor: pointer;"><summary>Solution: </summary><br />${this.questions.map((q, i) => `${i + 1}) ${Chat.formatText(q.hint)} <span style="color: lightgreen">[<em>${Utils.escapeHTML(q.answer.join(' / '))}</em>]</span><br/><details style="cursor: pointer;"><summary>Mines: </summary>${mines[i].map(({mine, users}) => Utils.escapeHTML(`${mine}: ${users.join(' / ') || '-'}`)).join('<br />')}</details>`).join("<br />")}</details>`
 			);
 			return true;
 		},
@@ -523,11 +543,13 @@ const TWISTS: {[k: string]: Twist} = {
 		onEnd(isReset) {
 			if (isReset) return;
 			for (const [q, guessObj] of this.guesses.entries()) {
-				const mines = this.mines[q];
+				const mines: string[] = this.mines[q];
 				for (const [playerId, guesses] of Object.entries(guessObj)) {
 					const player = this.playerTable[playerId];
 					if (!player.mines) player.mines = [];
-					player.mines.push(...mines.filter(mine => guesses.has(toID(mine))).map(mine => ({index: q, mine: mine.substr(1)})));
+					(player.mines as {index: number, mine: string}[]).push(...mines
+						.filter(mine => (guesses as Set<string>).has(toID(mine)))
+						.map(mine => ({index: q, mine: mine.substr(1)})));
 				}
 			}
 		},
