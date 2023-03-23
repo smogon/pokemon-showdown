@@ -567,7 +567,8 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 
 	const roomid = room.roomid;
 	void (async () => {
-		message = message.replace(pokemonRegex, '[Pokemon]');
+		message = message.trim();
+		message = message.replace(pokemonRegex, '[[Pokemon]]');
 
 		for (const k in settings.replacements) {
 			message = message.replace(new RegExp(k, 'gi'), settings.replacements[k]);
@@ -735,14 +736,17 @@ export const commands: Chat.ChatCommands = {
 		},
 		async test(target, room, user) {
 			checkAccess(this);
-			const text = target.trim();
+			const text = target;
 			if (!text) return this.parse(`/help abusemonitor`);
 			this.runBroadcast();
 			let response = await classifier.classify(text);
 			if (!response) response = {};
+			for (const k in settings.replacements) {
+				target = target.replace(new RegExp(k, 'gi'), settings.replacements[k]);
+			}
 			// intentionally hardcoded to staff to ensure threshold is never altered.
 			const {score, flags} = makeScore('staff', response);
-			let buf = `<strong>Score for "${text}":</strong> ${score}<br />`;
+			let buf = `<strong>Score for "${text}"${target === text ? '' : ` (alt: "${target}")`}:</strong> ${score}<br />`;
 			buf += `<strong>Flags:</strong> ${flags.join(', ')}<br />`;
 			const punishments: {punishment: PunishmentSettings, desc: string[], index: number}[] = [];
 			for (const [i, p] of settings.punishments.entries()) {
