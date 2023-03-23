@@ -157,7 +157,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['[Gen 9] OU', '+CAP'],
-		banlist: ['Crucibellite'],
+		banlist: ['Walking Wake', 'Crucibellite'],
 	},
 	{
 		name: "[Gen 9] Free-For-All",
@@ -553,8 +553,9 @@ export const Formats: FormatList = [
 		// searchShow: false,
 		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Min Source Gen = 9'],
 		banlist: [
-			'Annihilape', 'Azumarill', 'Chi-Yu', 'Chien-Pao', 'Cloyster', 'Dragonite', 'Espathra', 'Flutter Mane', 'Great Tusk', 'Houndstone', 'Iron Bundle',
-			'Koraidon', 'Miraidon', 'Palafin', 'Riolu', 'Arena Trap', 'Moody', 'Serene Grace', 'Shadow Tag', 'Covert Cloak', 'Beat Up', 'Baton Pass',
+			'Annihilape', 'Azumarill', 'Chi-Yu', 'Chien-Pao', 'Cloyster', 'Dragonite', 'Espathra', 'Flutter Mane', 'Great Tusk',
+			'Houndstone', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Palafin', 'Arena Trap', 'Moody', 'Serene Grace', 'Shadow Tag',
+			'Covert Cloak', 'Beat Up', 'Baton Pass',
 		],
 		restricted: ['Dynamic Punch', 'Flail', 'Fury Cutter', 'Grass Knot', 'Heavy Slam', 'Inferno', 'Low Kick', 'Nuzzle', 'Power Trip', 'Reversal', 'Spit Up', 'Stored Power', 'Zap Cannon'],
 		validateSet(set, teamHas) {
@@ -779,7 +780,7 @@ export const Formats: FormatList = [
 			'Iron Valiant', 'Koraidon', 'Miraidon', 'Noivern', 'Slaking', 'Walking Wake', 'Arena Trap', 'Comatose', 'Contrary', 'Fur Coat',
 			'Good as Gold', 'Gorilla Tactics', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter', 'Innards Out', 'Magic Bounce', 'Magnet Pull',
 			'Moody', 'Neutralizing Gas', 'Orichalcum Pulse', 'Parental Bond', 'Poison Heal', 'Pure Power', 'Shadow Tag', 'Simple', 'Speed Boost',
-			'Stakeout', 'Unburden', 'Water Bubble', 'Wonder Guard', 'King\'s Rock', 'Baton Pass', 'Revival Blessing',
+			'Stakeout', 'Unburden', 'Water Bubble', 'Wonder Guard', 'King\'s Rock', 'Baton Pass', 'Revival Blessing', 'Shed Tail',
 		],
 	},
 	{
@@ -809,7 +810,7 @@ export const Formats: FormatList = [
 		mod: 'mixandmega',
 		ruleset: ['Standard OMs', 'Evasion Items Clause', 'Evasion Abilities Clause', 'Sleep Moves Clause', 'Min Source Gen = 9'],
 		banlist: ['Koraidon', 'Miraidon', 'Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Moody', 'Rusted Sword', 'Shadow Tag', 'Baton Pass', 'Shed Tail'],
-		restricted: ['Flutter Mane', 'Gengar', 'Iron Bundle', 'Kilowattrel', 'Sandy Shocks', 'Slaking'],
+		restricted: ['Dragapult', 'Flutter Mane', 'Gengar', 'Iron Bundle', 'Kilowattrel', 'Sandy Shocks', 'Slaking'],
 		onValidateTeam(team) {
 			const itemTable = new Set<ID>();
 			for (const set of team) {
@@ -2527,7 +2528,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen4',
 		gameType: 'doubles',
-		ruleset: ['Standard', '!Sleep Clause Mod'],
+		ruleset: ['Standard'],
 		banlist: ['AG', 'Uber', 'Soul Dew', 'Dark Void', 'Sand Veil'],
 		unbanlist: ['Latios', 'Manaphy', 'Mew', 'Salamence', 'Wobbuffet', 'Wynaut'],
 	},
