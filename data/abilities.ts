@@ -582,6 +582,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				// Cancel all actions this turn for pokemon if applicable
 				this.queue.cancelAction(pokemon);
 				// Add volatiles to both pokemon
+				this.add('-activate', pokemon, 'ability: Commander', '[of] ' + ally);
 				pokemon.addVolatile('commanding');
 				ally.addVolatile('commanded', pokemon);
 				// Continued in conditions.ts in the volatiles
