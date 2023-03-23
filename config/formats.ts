@@ -157,7 +157,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['[Gen 9] OU', '+CAP'],
-		banlist: ['Crucibellite'],
+		banlist: ['Walking Wake', 'Crucibellite'],
 	},
 	{
 		name: "[Gen 9] Free-For-All",
