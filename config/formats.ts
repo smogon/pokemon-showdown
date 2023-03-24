@@ -890,8 +890,8 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'STABmons Move Legality', 'Sleep Moves Clause', 'Min Source Gen = 9'],
 		banlist: [
-			'Chi-Yu', 'Chien-Pao', 'Cloyster', 'Dragapult', 'Dragonite', 'Flutter Mane', 'Garchomp', 'Iron Bundle', 'Komala',
-			'Koraidon', 'Miraidon', 'Zoroark-Hisui', 'Arena Trap', 'Moody', 'Shadow Tag', 'Booster Energy', 'King\'s Rock', 'Baton Pass',
+			'Chi-Yu', 'Chien-Pao', 'Cloyster', 'Dragapult', 'Dragonite', 'Flutter Mane', 'Garchomp', 'Iron Bundle', 'Komala', 'Koraidon',
+			'Miraidon', 'Walking Wake', 'Zoroark-Hisui', 'Arena Trap', 'Moody', 'Shadow Tag', 'Booster Energy', 'King\'s Rock', 'Baton Pass',
 		],
 		restricted: [
 			'Acupressure', 'Astral Barrage', 'Belly Drum', 'Dire Claw', 'Extreme Speed', 'Fillet Away', 'Last Respects', 'No Retreat',
