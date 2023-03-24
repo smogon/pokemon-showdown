@@ -20439,6 +20439,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	"scyther": {
 		"inherit": true,
 		"learnset": {
+			"quickguard": ["9M"],
 			"twineedle": [
 				"9L1"
 			],
@@ -76227,6 +76228,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	"riolu": {
 		"inherit": true,
 		"learnset": {
+			"quickguard": ["9M"],
 			"poweruppunch": [
 				"9L1"
 			],
@@ -77311,6 +77313,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	"croagunk": {
 		"inherit": true,
 		"learnset": {
+			"quickguard": ["9M"],
 			"focusenergy": ["9M"],
 			"cut": [
 				"9L1"
@@ -81402,6 +81405,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 		"learnset": {
 			"focusenergy": ["9M"],
 			"wideguard": ["9M"],
+			"quickguard": ["9M"],
 			"leafblade": [
 				"9L1"
 			],

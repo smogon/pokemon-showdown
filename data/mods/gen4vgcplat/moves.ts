@@ -67,6 +67,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			chance: 30,
 			volatileStatus: 'flinch',
 		},
+		"recoil": [1, 3],
 		target: "any",
 		type: "Flying",
 		contestType: "Cool",
@@ -280,7 +281,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"whirlwind": {
 		"inherit": true,
-		"accuracy": 100,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 20,
@@ -592,7 +593,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"roar": {
 		"inherit": true,
-		"accuracy": 100,
+		"accuracy": true,
 		"basePower": 0,
 		"category": "Status",
 		"pp": 20,

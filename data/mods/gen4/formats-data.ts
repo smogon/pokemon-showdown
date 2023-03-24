@@ -1561,7 +1561,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	bastiodon: {
 		randomBattleMoves: ["earthquake", "metalburst", "protect", "roar", "rockslide", "stealthrock", "toxic"],
-		tier: "ZU",
+		tier: "6U",
 	},
 	burmy: {
 		tier: "LC",
