@@ -2192,7 +2192,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Dark Pulse", "Grass Knot", "Gunk Shot", "Hydro Pump", "Ice Beam", "Spikes", "Toxic Spikes", "U-turn"],
+                "movepool": ["Dark Pulse", "Grass Knot", "Gunk Shot", "Hydro Pump", "Ice Beam", "Toxic Spikes", "U-turn"],
                 "teraTypes": ["Water", "Dark", "Poison"]
             }
         ]
@@ -3262,7 +3262,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Flower Trick", "Knock Off", "Spikes", "Thunder Punch", "Toxic Spikes", "U-turn"],
+                "movepool": ["Flower Trick", "Knock Off", "Thunder Punch", "Toxic Spikes", "U-turn"],
                 "teraTypes": ["Grass", "Dark"]
             }
         ]
