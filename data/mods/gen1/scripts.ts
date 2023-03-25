@@ -92,16 +92,18 @@ export const Scripts: ModdedBattleScriptsData = {
 						changed = true;
 					}
 				}
-				// Recalculate the modified stat
-				this.modifiedStats![i] = this.storedStats[i];
-				if (this.boosts[i] >= 0) {
-					this.modifyStat!(i, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[i]]);
-				} else {
-					this.modifyStat!(i, [100, 66, 50, 40, 33, 28, 25][-this.boosts[i]] / 100);
-				}
-				if (delta > 0 && this.modifiedStats![i] > 999) {
-					// Cap the stat at 999
-					this.modifiedStats![i] = 999;
+				if (changed) {
+					// Recalculate the modified stat
+					this.modifiedStats![i] = this.storedStats[i];
+					if (this.boosts[i] >= 0) {
+						this.modifyStat!(i, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[i]]);
+					} else {
+						this.modifyStat!(i, [100, 66, 50, 40, 33, 28, 25][-this.boosts[i]] / 100);
+					}
+					if (delta > 0 && this.modifiedStats![i] > 999) {
+						// Cap the stat at 999
+						this.modifiedStats![i] = 999;
+					}
 				}
 			}
 			return changed;
