@@ -1,14 +1,4 @@
 export const Items: {[k: string]: ModdedItemData} = {
-	blacksludge: {
-		inherit: true,
-		onResidual(pokemon) {
-			if (pokemon.hasType('Dark')) {
-				this.heal(pokemon.baseMaxhp / 16);
-			} else {
-				this.damage(pokemon.baseMaxhp / 8);
-			}
-		},
-	},
 	buggem: {
 		inherit: true,
 		onSourceTryPrimaryHit(target, source, move) {

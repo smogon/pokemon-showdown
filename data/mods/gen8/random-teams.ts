@@ -22,6 +22,13 @@ export interface BattleFactorySpecies {
 	flags: {limEevee?: 1};
 	sets: BattleFactorySet[];
 }
+export interface OldRandomBattleSpecies {
+	level?: number;
+	moves?: ID[];
+	doublesLevel?: number;
+	doublesMoves?: ID[];
+	noDynamaxMoves?: ID[];
+}
 interface BattleFactorySet {
 	species: string;
 	item: string;
@@ -102,6 +109,8 @@ export class RandomGen8Teams {
 	readonly adjustLevel: number | null;
 	readonly maxMoveCount: number;
 	readonly forceMonotype: string | undefined;
+
+	randomData: {[species: string]: OldRandomBattleSpecies} = require('./random-data.json');
 
 	/**
 	 * Checkers for move enforcement based on a Pokémon's types or other factors
@@ -745,28 +754,26 @@ export class RandomGen8Teams {
 		let naturePool: Nature[] = [];
 		if (doNaturesExist) {
 			if (!hasCustomBans) {
-				if (!hasCustomBans) {
-					naturePool = [...this.dex.natures.all()];
-				} else {
-					const hasAllNaturesBan = ruleTable.check('pokemontag:allnatures');
-					for (const nature of this.dex.natures.all()) {
-						let banReason = ruleTable.check('nature:' + nature.id);
-						if (banReason) continue;
-						if (banReason !== '' && nature.id) {
-							if (hasAllNaturesBan) continue;
-							if (nature.isNonstandard) {
-								banReason = ruleTable.check('pokemontag:' + toID(nature.isNonstandard));
-								if (banReason) continue;
-								if (banReason !== '' && nature.isNonstandard !== 'Unobtainable') {
-									if (hasNonexistentBan) continue;
-									if (!hasNonexistentWhitelist) continue;
-								}
+				naturePool = [...this.dex.natures.all()];
+			} else {
+				const hasAllNaturesBan = ruleTable.check('pokemontag:allnatures');
+				for (const nature of this.dex.natures.all()) {
+					let banReason = ruleTable.check('nature:' + nature.id);
+					if (banReason) continue;
+					if (banReason !== '' && nature.id) {
+						if (hasAllNaturesBan) continue;
+						if (nature.isNonstandard) {
+							banReason = ruleTable.check('pokemontag:' + toID(nature.isNonstandard));
+							if (banReason) continue;
+							if (banReason !== '' && nature.isNonstandard !== 'Unobtainable') {
+								if (hasNonexistentBan) continue;
+								if (!hasNonexistentWhitelist) continue;
 							}
 						}
-						naturePool.push(nature);
 					}
-					// There is no 'nature:nonature' rule so do not constrain pool size
+					naturePool.push(nature);
 				}
+				// There is no 'nature:nonature' rule so do not constrain pool size
 			}
 		}
 
@@ -1978,10 +1985,11 @@ export class RandomGen8Teams {
 		isDoubles: boolean,
 		isNoDynamax: boolean,
 	): number {
+		const data = this.randomData[species.id];
 		// level set by rules
 		if (this.adjustLevel) return this.adjustLevel;
 		// doubles levelling
-		if (isDoubles && species.randomDoubleBattleLevel) return species.randomDoubleBattleLevel;
+		if (isDoubles && data.doublesLevel) return data.doublesLevel;
 		// No Dmax levelling
 		if (isNoDynamax) {
 			const tier = species.name.endsWith('-Gmax') ? this.dex.species.get(species.changesFrom).tier : species.tier;
@@ -2030,7 +2038,7 @@ export class RandomGen8Teams {
 			return customScale[species.id] || tierScale[species.tier] || 80;
 		}
 		// Arbitrary levelling base on data files (typically winrate-influenced)
-		if (species.randomBattleLevel) return species.randomBattleLevel;
+		if (data.level) return data.level;
 		// Finally default to level 80
 		return 80;
 	}
@@ -2058,10 +2066,12 @@ export class RandomGen8Teams {
 			gmax = true;
 		}
 
+		const data = this.randomData[species.id];
+
 		const randMoves =
-			(isDoubles && species.randomDoubleBattleMoves) ||
-			(isNoDynamax && species.randomBattleNoDynamaxMoves) ||
-			species.randomBattleMoves;
+			(isDoubles && data.doublesMoves) ||
+			(isNoDynamax && data.noDynamaxMoves) ||
+			data.moves;
 		const movePool = (randMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		if (this.format.gameType === 'multi' || this.format.gameType === 'freeforall') {
 			// Random Multi Battle uses doubles move pools, but Ally Switch fails in multi battles
@@ -2442,9 +2452,9 @@ export class RandomGen8Teams {
 
 			// Check if the forme has moves for random battle
 			if (this.format.gameType === 'singles') {
-				if (!species.randomBattleMoves?.length) continue;
+				if (!this.randomData[species.id]?.moves) continue;
 			} else {
-				if (!species.randomDoubleBattleMoves?.length) continue;
+				if (!this.randomData[species.id]?.doublesMoves) continue;
 			}
 
 			// Limit to one of each species (Species Clause)

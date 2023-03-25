@@ -1,4 +1,4 @@
-import {MoveCounter, RandomGen8Teams, TeamData} from '../gen8/random-teams';
+import {MoveCounter, RandomGen8Teams, TeamData, OldRandomBattleSpecies} from '../gen8/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
@@ -30,6 +30,8 @@ const ZeroAttackHPIVs: {[k: string]: SparseStatsTable} = {
 };
 
 export class RandomGen7Teams extends RandomGen8Teams {
+	randomData: {[species: string]: OldRandomBattleSpecies} = require('./random-data.json');
+
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 
@@ -572,11 +574,12 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				(moves.has('wish') && (moves.has('protect') || movePool.includes('protect')))
 			)};
 		case 'substitute':
+			const moveBasedCull = ['copycat', 'dragondance', 'shiftgear'].some(m => movePool.includes(m));
 			return {cull: (
 				moves.has('dracometeor') ||
 				(moves.has('leafstorm') && !abilities.has('Contrary')) ||
 				['encore', 'pursuit', 'rest', 'taunt', 'uturn', 'voltswitch', 'whirlwind'].some(m => moves.has(m)) ||
-				movePool.includes('copycat') || movePool.includes('dragondance')
+				moveBasedCull
 			)};
 		case 'powersplit':
 			return {cull: moves.has('guardsplit')};
@@ -1054,9 +1057,11 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
 
+		const data = this.randomData[species.id];
+
 		const randMoves = isDoubles ?
-			(species.randomDoubleBattleMoves || species.randomBattleMoves) :
-			species.randomBattleMoves;
+			(data.doublesMoves || data.moves) :
+			data.moves;
 		const movePool = (randMoves || Object.keys(Dex.species.getLearnset(species.id)!)).slice();
 		if (this.format.gameType === 'multi') {
 			// Random Multi Battle uses doubles move pools, but Ally Switch fails in multi battles
@@ -1347,11 +1352,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		}
 
 		if (species.name === 'Genesect' && moves.has('technoblast')) forme = 'Genesect-Douse';
-		if (!isDoubles && species.id === 'pikachu') {
-			const pikachuForme = this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner']);
-			forme = `Pikachu${pikachuForme}`;
-			if (forme !== 'Pikachu') ability = 'Static';
-		}
 
 		if (
 			!moves.has('photongeyser') &&
@@ -1384,16 +1384,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (this.adjustLevel) {
 			level = this.adjustLevel;
 		} else if (!isDoubles) {
-			const levelScale: {[k: string]: number} = {uber: 76, ou: 80, uu: 82, ru: 84, nu: 86, pu: 88};
-			const customScale: {[k: string]: number} = {
-				// Banned Ability
-				Dugtrio: 82, Gothitelle: 82, Pelipper: 84, Politoed: 84, Torkoal: 84, Wobbuffet: 82,
-				// Holistic judgement
-				'Castform-Rainy': 100, 'Castform-Snowy': 100, 'Castform-Sunny': 100, Delibird: 100, Luvdisc: 100, Spinda: 100, Unown: 100,
-			};
-			const tier = toID(species.tier).replace('bl', '');
-			level = levelScale[tier] || (species.nfe ? 90 : 80);
-			if (customScale[species.name]) level = customScale[species.name];
+			level = data.level || (species.nfe ? 90 : 80);
 		} else {
 			// We choose level based on BST. Min level is 70, max level is 99. 600+ BST is 70, less than 300 is 99. Calculate with those values.
 			// Every 10.34 BST adds a level from 70 up to 99. Results are floored. Uses the Mega's stats if holding a Mega Stone
@@ -1464,11 +1455,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			ivs.spa = 0;
 		}
 
-		if (['gyroball', 'metalburst', 'trickroom'].some(m => moves.has(m))) {
-			evs.spe = 0;
-			ivs.spe = 0;
-		}
-
 		// Fix IVs for non-Bottle Cap-able sets
 		if (hasHiddenPower && level < 100) {
 			let hpType;
@@ -1481,6 +1467,11 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			for (iv in HPivs) {
 				ivs[iv] = HPivs[iv]!;
 			}
+		}
+
+		if (['gyroball', 'metalburst', 'trickroom'].some(m => moves.has(m))) {
+			evs.spe = 0;
+			ivs.spe = (hasHiddenPower && level < 100) ? ivs.spe - 30 : 0;
 		}
 
 		return {
@@ -1528,9 +1519,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 				// Check if the forme has moves for random battle
 				if (this.format.gameType === 'singles') {
-					if (!species.randomBattleMoves) continue;
+					if (!this.randomData[species.id]?.moves) continue;
 				} else {
-					if (!species.randomDoubleBattleMoves) continue;
+					if (!this.randomData[species.id]?.doublesMoves) continue;
 				}
 				if (!species.exists) continue;
 

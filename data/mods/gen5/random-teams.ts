@@ -2,9 +2,11 @@ import RandomGen6Teams from '../gen6/random-teams';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
 import {PRNG} from '../../../sim';
-import type {MoveCounter} from '../gen8/random-teams';
+import type {MoveCounter, OldRandomBattleSpecies} from '../gen8/random-teams';
 
 export class RandomGen5Teams extends RandomGen6Teams {
+	randomData: {[species: string]: OldRandomBattleSpecies} = require('./random-data.json');
+
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 		this.moveEnforcementCheckers = {
@@ -249,7 +251,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				(moves.has('doubleedge') && !abilities.has('rockhead')) ||
 				['pursuit', 'rest', 'superpower', 'uturn', 'voltswitch'].some(m => moves.has(m)) ||
 				// Sceptile wants Swords Dance
-				(moves.has('acrobatics') && moves.has('earthquake'))
+				(moves.has('acrobatics') && moves.has('earthquake')) ||
+				movePool.includes('shiftgear')
 			)};
 		case 'thunderwave':
 			return {cull: (
@@ -490,7 +493,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
 
-		const movePool = (species.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
+		const data = this.randomData[species.id];
+
+		const movePool = (data.moves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool = [];
 		const moves = new Set<string>();
 		let ability = '';
@@ -748,25 +753,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			item = 'Black Sludge';
 		}
 
-		const levelScale: {[tier: string]: number} = {
-			Uber: 76,
-			OU: 80,
-			'(OU)': 82,
-			UUBL: 82,
-			UU: 82,
-			RUBL: 84,
-			RU: 84,
-			NUBL: 86,
-			NU: 86,
-			'(NU)': 88,
-			PUBL: 88,
-			PU: 88,
-			'(PU)': 90,
-		};
-		const customScale: {[forme: string]: number} = {
-			'Castform-Rainy': 100, 'Castform-Sunny': 100, Delibird: 100, 'Farfetch\u2019d': 100, Luvdisc: 100, Unown: 100,
-		};
-		const level = this.adjustLevel || customScale[species.name] || levelScale[species.tier] || (species.nfe ? 90 : 80);
+		const level = this.adjustLevel || data.level || (species.nfe ? 90 : 80);
 
 		// Prepare optimal HP
 		const srWeakness = this.dex.getEffectiveness('Rock', species);
@@ -834,7 +821,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
-			if (!species.exists || !species.randomBattleMoves) continue;
+			if (!species.exists || !this.randomData[species.id]?.moves) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;

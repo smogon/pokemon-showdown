@@ -228,7 +228,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						lacksTarget = !target.isAdjacent(pokemon);
 					}
 				}
-				if (lacksTarget && !move.isFutureMove) {
+				if (lacksTarget && !move.flags['futuremove']) {
 					this.battle.attrLastMove('[notarget]');
 					this.battle.add('-notarget', pokemon);
 					return false;
