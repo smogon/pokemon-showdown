@@ -3488,7 +3488,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Dazzling Gleam", "Earth Power", "Energy Ball", "Hyper Voice", "Strength Sap"],
-                "teraTypes": ["Grass", "Fairy"]
+                "teraTypes": ["Grass", "Fairy", "Ground"]
             },
             {
                 "role": "Bulky Support",
