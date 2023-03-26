@@ -417,7 +417,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	kabuto: {
-		tier: "LC",
+		tier: "7U",
 	},
 	kabutops: {
 		tier: "6U",
