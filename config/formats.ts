@@ -62,7 +62,6 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 4] 6U'],
 		banlist: ['6U'],
 	},
-
 	{
 		name: "[Gen 4] 8U",
 		threads: [
@@ -72,6 +71,55 @@ export const Formats: FormatList = [
 		searchShow: true,
 		ruleset: ['[Gen 4] 7U'],
 		banlist: ['7U'],
+	},
+	{
+		name: "[Gen 1] ZU",
+		mod: 'gen4',
+		searchShow: true,
+		ruleset: ['[Gen 1] PU'],
+		banlist: ['PU'],
+	},
+	{
+		name: "[Gen 1] 6U",
+		mod: 'gen4',
+		searchShow: true,
+		ruleset: ['[Gen 1] ZU'],
+		banlist: ['ZU'],
+	},
+	{
+		name: "[Gen 1] 7U",
+		mod: 'gen4',
+		searchShow: true,
+		ruleset: ['[Gen 1] 6U'],
+		banlist: ['6U'],
+	},
+	{
+		name: "[Gen 1] 8U",
+		mod: 'gen4',
+		searchShow: true,
+		ruleset: ['[Gen 1] 7U'],
+		banlist: ['7U'],
+	},
+	{
+		name: "[Gen 1] 9U",
+		mod: 'gen4',
+		searchShow: true,
+		ruleset: ['[Gen 1] 8U'],
+		banlist: ['8U'],
+	},
+	{
+		name: "[Gen 1] 10U",
+		mod: 'gen4',
+		searchShow: true,
+		ruleset: ['[Gen 1] 9U'],
+		banlist: ['9U'],
+	},
+	{
+		name: "[Gen 1] 11U",
+		mod: 'gen4',
+		searchShow: true,
+		ruleset: ['[Gen 1] 10U'],
+		banlist: ['10U'],
 	},
 
 	{
