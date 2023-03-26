@@ -54,6 +54,11 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] OU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3710915/">SV OU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3712513/">SV OU Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3712493/">SV OU Viability Rankings</a>`,
+		],
 
 		mod: 'gen9',
 		ruleset: ['Standard'],
@@ -73,6 +78,7 @@ export const Formats: FormatList = [
 		name: "[Gen 9] UU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3713709/">UU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3716435/">UU Viability Rankings</a>`,
 		],
 
 		mod: 'gen9',
@@ -83,6 +89,7 @@ export const Formats: FormatList = [
 		name: "[Gen 9] RU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3713711/">RU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3717138/">RU Viability Rankings</a>`,
 		],
 
 		mod: 'gen9',
@@ -93,6 +100,7 @@ export const Formats: FormatList = [
 		name: "[Gen 9] NU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3715408/">NU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3715712/">NU Metagame Discussion</a>`,
 		],
 
 		mod: 'gen9',
