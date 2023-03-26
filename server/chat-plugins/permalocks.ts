@@ -187,11 +187,12 @@ export const Nominations = new class {
 	}
 	async displayActionPage(nom: Nomination) {
 		let buf = `<div class="pad">`;
+		const standings = this.getStandings();
 		buf += `<button class="button" name="send" value="/perma viewnom ${nom.primaryID}" style="float:right">`;
 		buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
 		buf += `<h3>Nomination: ${nom.primaryID}</h3><hr />`;
 		buf += `<strong>By:</strong> ${nom.by} (on ${Chat.toTimestamp(new Date(nom.date))})<br />`;
-		buf += `<strong>Recommended punishment:</strong> ${Config.standings[nom.standing]}<br />`;
+		buf += `<strong>Recommended punishment:</strong> ${standings[nom.standing]}<br />`;
 		buf += `<details class="readmore"><summary><strong>Modlog</strong></summary>`;
 		const modlog = await this.fetchModlog(nom.primaryID);
 		if (!modlog) {
@@ -355,7 +356,7 @@ export const commands: Chat.ChatCommands = {
 			if (!nom) return this.popupReply(`No permalock nomination found for ${primary}.`);
 			const standing = parseInt(standingName);
 			const standings = Nominations.getStandings();
-			if (!Config.standings[standing]) return this.popupReply(`Invalid standing.`);
+			if (!standings[standing]) return this.popupReply(`Invalid standing.`);
 			if (!toID(postReason)) return this.popupReply(`A reason must be given.`);
 			// todo thread num
 			const threadNum = '3697117';
