@@ -567,7 +567,8 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 
 	const roomid = room.roomid;
 	void (async () => {
-		message = message.replace(pokemonRegex, '[Pokemon]');
+		message = message.trim();
+		message = message.replace(pokemonRegex, '[[Pokemon]]');
 
 		for (const k in settings.replacements) {
 			message = message.replace(new RegExp(k, 'gi'), settings.replacements[k]);
@@ -735,14 +736,17 @@ export const commands: Chat.ChatCommands = {
 		},
 		async test(target, room, user) {
 			checkAccess(this);
-			const text = target.trim();
+			const text = target;
 			if (!text) return this.parse(`/help abusemonitor`);
 			this.runBroadcast();
 			let response = await classifier.classify(text);
 			if (!response) response = {};
+			for (const k in settings.replacements) {
+				target = target.replace(new RegExp(k, 'gi'), settings.replacements[k]);
+			}
 			// intentionally hardcoded to staff to ensure threshold is never altered.
 			const {score, flags} = makeScore('staff', response);
-			let buf = `<strong>Score for "${text}":</strong> ${score}<br />`;
+			let buf = `<strong>Score for "${text}"${target === text ? '' : ` (alt: "${target}")`}:</strong> ${score}<br />`;
 			buf += `<strong>Flags:</strong> ${flags.join(', ')}<br />`;
 			const punishments: {punishment: PunishmentSettings, desc: string[], index: number}[] = [];
 			for (const [i, p] of settings.punishments.entries()) {
@@ -1675,7 +1679,7 @@ export const commands: Chat.ChatCommands = {
 			this.refreshPage('abusemonitor-settings');
 		},
 		edithistory(target, room, user) {
-			checkAccess(this);
+			this.checkCan('globalban');
 			target = toID(target);
 			if (!target) {
 				return this.parse(`/help abusemonitor`);
@@ -1684,7 +1688,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		ignoremodlog: {
 			add(target, room, user) {
-				checkAccess(this);
+				this.checkCan('globalban');
 				let targetUser: string;
 				[targetUser, target] = this.splitOne(target).map(f => f.trim());
 				targetUser = toID(targetUser);
@@ -1717,7 +1721,7 @@ export const commands: Chat.ChatCommands = {
 				this.refreshPage(`abusemonitor-edithistory-${targetUser}`);
 			},
 			remove(target, room, user) {
-				checkAccess(this);
+				this.checkCan('globalban');
 				let [targetUser, rawNum] = this.splitOne(target).map(f => f.trim());
 				targetUser = toID(targetUser);
 				const num = Number(rawNum);
@@ -2307,7 +2311,7 @@ export const pages: Chat.PageTable = {
 			return buf;
 		},
 		async edithistory(query, user) {
-			checkAccess(this);
+			this.checkCan('globalban');
 			const targetUser = toID(query[0]);
 			if (!targetUser) {
 				return this.errorReply(`Specify a user.`);

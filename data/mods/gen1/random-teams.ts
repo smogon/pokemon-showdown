@@ -7,7 +7,17 @@ interface HackmonsCupEntry {
 	baseStats: StatsTable;
 }
 
+interface Gen1RandomBattleSpecies {
+	level?: number;
+	moves?: ID[];
+	essentialMove?: ID;
+	exclusiveMoves?: ID[];
+	comboMoves?: ID[];
+}
+
 export class RandomGen1Teams extends RandomGen2Teams {
+	randomData: {[species: string]: Gen1RandomBattleSpecies} = require('./random-data.json');
+
 	// Challenge Cup or CC teams are basically fully random teams.
 	randomCCTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
@@ -130,7 +140,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
-			if (!species.exists || !species.randomBattleMoves) continue;
+			if (!species.exists || !this.randomData[species.id]?.moves) continue;
 			// Only one Ditto is allowed per battle in Generation 1,
 			// as it can cause an endless battle if two Dittos are forced
 			// to face each other.
@@ -267,7 +277,8 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		species = this.dex.species.get(species);
 		if (!species.exists) species = this.dex.species.get('pikachu'); // Because Gen 1.
 
-		const movePool = species.randomBattleMoves ? species.randomBattleMoves.slice() : [];
+		const data = this.randomData[species.id];
+		const movePool = data.moves?.slice() || [];
 		const moves = new Set<string>();
 		const types = new Set(species.types);
 
@@ -279,19 +290,19 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const SpecialSetup = ['amnesia', 'growth'];
 
 		// Either add all moves or add none
-		if (species.comboMoves && species.comboMoves.length <= this.maxMoveCount && this.randomChance(1, 2)) {
-			for (const m of species.comboMoves) moves.add(m);
+		if (data.comboMoves && data.comboMoves.length <= this.maxMoveCount && this.randomChance(1, 2)) {
+			for (const m of data.comboMoves) moves.add(m);
 		}
 
 		// Add one of the semi-mandatory moves
 		// Often, these are used so that the Pokemon only gets one of the less useful moves
-		if (moves.size < this.maxMoveCount && species.exclusiveMoves) {
-			moves.add(this.sample(species.exclusiveMoves));
+		if (moves.size < this.maxMoveCount && data.exclusiveMoves) {
+			moves.add(this.sample(data.exclusiveMoves));
 		}
 
 		// Add the mandatory move. SD Mew and Amnesia Snorlax are exceptions.
-		if (moves.size < this.maxMoveCount && species.essentialMove) {
-			moves.add(species.essentialMove);
+		if (moves.size < this.maxMoveCount && data.essentialMove) {
+			moves.add(data.essentialMove);
 		}
 
 		while (moves.size < this.maxMoveCount && movePool.length) {
@@ -312,10 +323,10 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				}
 
 				for (const moveid of moves) {
-					if (moveid === species.essentialMove) continue;
+					if (moveid === data.essentialMove) continue;
 					const move = this.dex.moves.get(moveid);
 					if (
-						(!species.essentialMove || moveid !== species.essentialMove) &&
+						(!data.essentialMove || moveid !== data.essentialMove) &&
 						this.shouldCullMove(move, types, moves, counter).cull
 					) {
 						moves.delete(moveid);
@@ -338,12 +349,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			Uber: 65,
 		};
 
-		const customScale: {[k: string]: number} = {
-			Mewtwo: 62,
-			Caterpie: 100, Metapod: 100, Weedle: 100, Kakuna: 100, Magikarp: 100,
-			Ditto: 100,
-		};
-		const level = this.adjustLevel || customScale[species.name] || levelScale[species.tier] || 80;
+		const level = this.adjustLevel || data.level || levelScale[species.tier] || 80;
 
 		const evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255};
 		const ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};

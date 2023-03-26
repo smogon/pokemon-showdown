@@ -8,14 +8,17 @@ const {testNotBothMoves, testSet, testHiddenPower, testAlwaysHasMove} = require(
 
 describe('[Gen 7] Random Battle', () => {
 	const options = {format: 'gen7randombattle'};
+	const dataJSON = require(`../../dist/data/mods/gen7/random-data.json`);
 	const dex = Dex.forFormat(options.format);
 	const generator = Teams.getGenerator(options.format);
 
 	it('All moves on all sets should be obtainable (slow)', () => {
 		const rounds = 500;
-		for (const species of dex.species.all()) {
-			if (!species.randomBattleMoves || species.isNonstandard) continue;
-			const remainingMoves = new Set(species.randomBattleMoves);
+		for (const pokemon of Object.keys(dataJSON)) {
+			const species = dex.species.get(pokemon);
+			const data = dataJSON[pokemon];
+			if (!data.moves || species.isNonstandard) continue;
+			const remainingMoves = new Set(data.moves);
 			for (let i = 0; i < rounds; i++) {
 				// Test lead 1/6 of the time
 				const set = generator.randomSet(species, {}, i % 6 === 0);
@@ -44,10 +47,8 @@ describe('[Gen 7] Random Battle', () => {
 	});
 
 	it('should not generate Pursuit as the only Dark STAB move', () => {
-		const darkTypesWithPursuit = dex.species
-			.all()
-			.filter(pkmn => pkmn.types.includes('Dark') && pkmn.randomBattleMoves?.includes('pursuit'))
-			.map(pkmn => pkmn.id);
+		const darkTypesWithPursuit = Object.keys(dataJSON)
+			.filter(pkmn => dex.species.get(pkmn).types.includes('Dark') && dataJSON[pkmn].moves?.includes('pursuit'));
 		for (const pokemon of darkTypesWithPursuit) {
 			testSet(pokemon, options, set => {
 				if (!set.moves.includes('pursuit')) return;

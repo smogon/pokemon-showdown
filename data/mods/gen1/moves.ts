@@ -17,8 +17,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	amnesia: {
 		inherit: true,
 		boosts: {
-			spd: 2,
 			spa: 2,
+			spd: 2,
 		},
 	},
 	aurorabeam: {
@@ -568,8 +568,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: {
 			chance: 33,
 			boosts: {
-				spd: -1,
 				spa: -1,
+				spd: -1,
 			},
 		},
 	},

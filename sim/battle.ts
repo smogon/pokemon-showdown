@@ -1633,7 +1633,7 @@ export class Battle {
 		// These are checked before the 100 turn minimum as the battle cannot progress if they are true
 		if (this.gen <= 1) {
 			const noProgressPossible = this.sides.every(side => {
-				const foeAllGhosts = side.foe.pokemon.every(pokemon => pokemon.fainted || pokemon.types.includes('Ghost'));
+				const foeAllGhosts = side.foe.pokemon.every(pokemon => pokemon.fainted || pokemon.hasType('Ghost'));
 				const foeAllTransform = side.foe.pokemon.every(pokemon => (
 					pokemon.fainted ||
 					// true if transforming into this pokemon would lead to an endless battle
@@ -2272,7 +2272,7 @@ export class Battle {
 		const selfLoc = pokemon.getLocOf(pokemon);
 		if (['adjacentAlly', 'any', 'normal'].includes(move.target) && targetLoc === selfLoc &&
 				!pokemon.volatiles['twoturnmove'] && !pokemon.volatiles['iceball'] && !pokemon.volatiles['rollout']) {
-			return move.isFutureMove ? pokemon : null;
+			return move.flags['futuremove'] ? pokemon : null;
 		}
 		if (move.target !== 'randomNormal' && this.validTargetLoc(targetLoc, pokemon, move.target)) {
 			const target = pokemon.getAtLoc(targetLoc);
