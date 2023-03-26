@@ -171,10 +171,7 @@ export class RandomTeams {
 			),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => (movePool.includes('freezedry') || !counter.get('Ice')),
-			Normal: (movePool, moves, abilities, types, counter) => {
-				if (movePool.includes('boomburst')) return true;
-				return (!counter.get('Normal') && movePool.includes('futuresight'));
-			},
+			Normal: (movePool, moves, types, counter) => (movePool.includes('boomburst') || movePool.includes('hypervoice')),
 			Poison: (movePool, moves, abilities, types, counter) => {
 				if (types.includes('Ground')) return false;
 				return !counter.get('Poison');
@@ -970,6 +967,7 @@ export class RandomTeams {
 		if (abilities.has('Technician') && counter.get('technician')) return 'Technician';
 		if (abilities.has('Own Tempo') && moves.has('petaldance')) return 'Own Tempo';
 		if (abilities.has('Slush Rush') && moves.has('snowscape')) return 'Slush Rush';
+		if (abilities.has('Soundproof') && moves.has('substitute')) return 'Soundproof';
 
 		let abilityAllowed: Ability[] = [];
 		// Obtain a list of abilities that are allowed (not culled)

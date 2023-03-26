@@ -208,9 +208,9 @@
         "level": 78,
         "sets": [
             {
-                "role": "Tera Blast user",
-                "movepool": ["Icicle Spear", "Rock Blast", "Shell Smash", "Tera Blast"],
-                "teraTypes": ["Fire", "Ground"]
+                "role": "Fast Attacker",
+                "movepool": ["Drill Run", "Icicle Spear", "Rock Blast", "Shell Smash"],
+                "teraTypes": ["Ground"]
             },
             {
                 "role": "Setup Sweeper",
@@ -1274,7 +1274,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["Draco Meteor", "Earthquake", "Fire Blast", "Stealth Rock", "Stone Edge"],
+                "movepool": ["Draco Meteor", "Earthquake", "Fire Blast", "Spikes", "Stealth Rock", "Stone Edge"],
                 "teraTypes": ["Ground", "Steel"]
             },
             {
@@ -1943,7 +1943,7 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["Bitter Malice", "Flamethrower", "Focus Blast", "Hyper Voice", "Nasty Plot", "Shadow Ball", "Trick", "U-turn"],
-                "teraTypes": ["Normal"]
+                "teraTypes": ["Normal", "Fighting"]
             }
         ]
     },
@@ -3428,7 +3428,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Future Sight", "Hyper Voice", "Protect", "Wish"],
-                "teraTypes": ["Ground", "Water", "Fairy"]
+                "teraTypes": ["Ground", "Water", "Fairy", "Normal"]
             },
             {
                 "role": "AV Pivot",
@@ -3488,7 +3488,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Dazzling Gleam", "Earth Power", "Energy Ball", "Hyper Voice", "Strength Sap"],
-                "teraTypes": ["Grass", "Fairy"]
+                "teraTypes": ["Grass", "Fairy", "Ground"]
             },
             {
                 "role": "Bulky Support",
@@ -3849,6 +3849,11 @@
                 "role": "Bulky Attacker",
                 "movepool": ["Earth Power", "Spikes", "Stealth Rock", "Thunder Wave", "Thunderbolt", "Volt Switch"],
                 "teraTypes": ["Electric", "Ground"]
+            },
+            {
+                "role": "Tera Blast user",
+                "movepool": ["Earth Power", "Tera Blast", "Thunderbolt", "Volt Switch"],
+                "teraTypes": ["Flying", "Ice"]
             }
         ]
     },
