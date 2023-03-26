@@ -364,7 +364,8 @@ export const commands: Chat.ChatCommands = {
 				threadNum,
 				`[${Chat.toTimestamp(new Date(), {human: true})}] ` +
 				`[b]${primary}[/b] was added to ${standings[standing]} by ${user.name} (${postReason}). ` +
-				`Nominated by ${nom.by}.`
+				`Nominated by ${nom.by}.\n` +
+				`${nom.alts.length ? `[spoiler=Alts]${nom.alts.join(', ')}[/spoiler]` : ""}`
 			);
 			if (res.error) {
 				return this.popupReply(`Error making post: ${res.error}`);
