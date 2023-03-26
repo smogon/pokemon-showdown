@@ -2764,6 +2764,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"inherit": true,
 		"isNonstandard": null,
 	},
+	"hiddenpowerground": {
+		"inherit": true,
+		"isNonstandard": null,
+	},
 	"crosschop": {
 		"inherit": true,
 		"accuracy": 90,

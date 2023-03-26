@@ -331,7 +331,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	"magneton": {
 		"doublesTier": "NFE",
-		"tier": "PU"
+		"tier": "NU"
 	},
 	"magnezone": {
 		"doublesTier": "DUU",
@@ -615,7 +615,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "LC"
 	},
 	"porygon2": {
-		"tier": "NFE"
+		"tier": "NU"
 	},
 	"porygonz": {
 		"doublesTier": "DUU",
@@ -1405,7 +1405,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "LC"
 	},
 	"dusclops": {
-		"tier": "NFE"
+		"tier": "NU"
 	},
 	"dusknoir": {
 		"doublesTier": "DUU",

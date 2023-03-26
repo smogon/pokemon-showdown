@@ -28,9 +28,12 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 9] VGC Plat",
 		searchShow: true,
+		threads: [
+			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1ngTv4VwNVYzdMb8VLsaJFU6AORpBH3bLcQSXKo3zoGo">Viability Rankings</a>`,
+		],
 		mod: 'gen4vgcplat',
 		gameType: 'doubles',
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Draft Timer', 'Terastal Clause', 'VGC Plat Pokedex'],
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Draft Timer', 'Terastal Clause', 'VGC Plat Pokedex', 'Evasion Moves Clause'],
 	},
 	{
 		name: "[Gen 9] VGC Plat Tera",
@@ -42,56 +45,33 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 4] 6U",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/7260264/">DPP PU</a>`,
+			`&bullet; <a href="https://docs.google.com/document/d/12yUO1jg2NGDvVynDbc3oUupXx7K0i0jwRmfRJ76f_Jg">DPP 6U</a>`,
 		],
-
 		mod: 'gen4',
-		searchShow: false,
+		searchShow: true,
 		ruleset: ['[Gen 4] ZU'],
-		banlist: [
-			'Arbok', 'Banette', 'Beedrill', 'Bibarel', 'Butterfree', 'Chimecho', 'Diglett', 'Dustox', 'Exploud',
-			'Fearow', 'Flareon', 'Gastly', 'Girafarig', 'Gloom', 'Granbull', 'Grotle', 'Grovyle', 'Kecleon',
-			'Lairon', 'Lunatone', 'Luxray', 'Mawile', 'Omanyte', 'Pelipper', 'Persian', 'Probopass', 'Raticate',
-			'Sableye', 'Slaking', 'Stantler', 'Swalot', 'Wailord', 'Yanma',
-		],
+		banlist: ['ZU'],
 	},
 	{
 		name: "[Gen 4] 7U",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/7260264/">DPP PU</a>`,
+			`&bullet; <a href="https://docs.google.com/document/d/1Ff5EmG9LQvwO3iQINTgz00YVbdlnz8MJFcISNdePo0U">DPP 7U</a>`,
 		],
-
 		mod: 'gen4',
-		searchShow: false,
+		searchShow: true,
 		ruleset: ['[Gen 4] 6U'],
-		banlist: [
-			'Abra', 'Bronzor', 'Budew', 'Carnivine', 'Chatot', 'Clamperl', 'Corsola', 'Cranidos', 'Croconaw',
-			'Dewgong', 'Dunsparce', 'Illumise', 'Lopunny', 'Magcargo', 'Magnemite', 'Marshtomp', 'Meditite',
-			'Minun', 'Munchlax', 'Octillery', 'Phione', 'Pidgeot', 'Pikachu', 'Pineco', 'Plusle', 'Porygon',
-			'Pupitar', 'Quilava', 'Seadra', 'Seaking', 'Seviper', 'Shelgon', 'Shuckle', 'Staryu', 'Sudowoodo',
-			'Tentacool', 'Vespiquen', 'Vibrava', 'Vigoroth', 'Voltorb', 'Wailmer', 'Wartortle', 'Weepinbell',
-			'Wigglytuff', 'Wormadam-Trash'
-		],
+		banlist: ['6U'],
 	},
 
 	{
 		name: "[Gen 4] 8U",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/7260264/">DPP PU</a>`,
+			`&bullet; <a href="https://docs.google.com/document/d/1j7SjNhxv1H5NuYRDIuSULh_znkbH6wqm_wn2a5PUC7Y">DPP 8U</a>`,
 		],
-
 		mod: 'gen4',
-		searchShow: false,
+		searchShow: true,
 		ruleset: ['[Gen 4] 7U'],
-		banlist: [
-			'Mightyena', 'Elekid', 'Ponyta', 'Trapinch', 'Pachirisu', 'Graveler',
-			'Lileep', 'Aron', 'Lickitung', 'Prinplup', 'Dratini', 'Staravia',
-			'Shellder', 'Shieldon', 'Ledian', 'Noctowl', 'Togetic', 'Bayleef',
-			'Mankey', 'Masquerain', 'Nosepass', 'Baltoy', 'Delibird', 'Duskull',
-			'Nuzleaf', 'Onix', 'Meowth', 'Lumineon', 'Combusken', 'Charmeleon',
-			'Taillow', 'Lombre', 'Castform', 'Wormadam-Sandy', 'Tropius', 'Clefairy',
-			'Sandshrew', 'Aipom'
-		],
+		banlist: ['7U'],
 	},
 
 	{

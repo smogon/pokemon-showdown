@@ -170,7 +170,19 @@ export const Tags: {[id: string]: TagData} = {
 	},
 	zu: {
 		name: "ZU",
-		speciesFilter: species => species.tier === '(PU)',
+		speciesFilter: species => species.tier === '(PU)' || species.tier === 'ZU',
+	},
+	"6u": {
+		name: "6U",
+		speciesFilter: species => species.tier === '6U',
+	},
+	"7u": {
+		name: "7U",
+		speciesFilter: species => species.tier === '7U',
+	},
+	"8u": {
+		name: "8U",
+		speciesFilter: species => species.tier === '8U',
 	},
 	nfe: {
 		name: "NFE",
