@@ -28,7 +28,7 @@ jobs:
       - id: bump_version
         run: |
           echo "old_version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
-          npm version ${{ github.event.inputs.version }} --git-tag-version false
+          npm version ${{ github.event.inputs.version }} --no-git-tag-version
           echo "new_version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
 
       - uses: peter-evans/create-pull-request@v4
