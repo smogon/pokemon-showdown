@@ -5994,7 +5994,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: -26,
 	},
 	regurgitation: {
-		onAfterMove(pokemon, target, move) {
+		onDamagingHit(damage, target, pokemon, move) {
 			if (pokemon === target) return;
 			if (move.name === "Regurgitation" || target.fainted || target.isSemiInvulnerable()) return;
 			this.actions.useMove("Regurgitation", pokemon, target);
