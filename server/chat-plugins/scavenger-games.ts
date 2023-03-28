@@ -377,7 +377,7 @@ const TWISTS: {[k: string]: Twist} = {
 		desc: 'After completing the hunt, players will guess what the most common incorrect answer for each question is.',
 		onAfterLoad() {
 			this.guesses = {};
-			this.incorrect = Array.from({length: this.questions.length}).map(() => ({}));
+			this.incorrect = this.questions.map(() => ({}));
 
 			this.questions.push({
 				hint: 'Please enter what you think are the most common incorrect answers to each question.  (Enter your guesses in the order of the previous questions, and separate them with a comma)',
@@ -451,7 +451,7 @@ const TWISTS: {[k: string]: Twist} = {
 		name: 'Minesweeper',
 		desc: 'The huntmaker can add incorrect \'mines\' to the hunt - they get points every time a player scavenges it, and players that dodge all the mines in the hunt get points.',
 		onAfterLoad() {
-			this.guesses = Array.from({length: this.questions.length}).map(() => []);
+			this.guesses = this.questions.map(() => []);
 			this.mines = [];
 			for (const question of this.questions) {
 				this.mines.push(question.answer.filter(ans => ans.startsWith('!')));
