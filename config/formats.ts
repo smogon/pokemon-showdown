@@ -2622,7 +2622,7 @@ export const Formats: FormatList = [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/super-staff-bros-4-discussion-thread.3675237/">Discussion Thread</a>`,
 		], */
 
-		mod: 'ssb',
+		mod: 'gen9ssb',
 		debug: true,
 		team: 'randomStaffBros',
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
