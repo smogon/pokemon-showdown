@@ -463,7 +463,7 @@ const TWISTS: {[k: string]: Twist} = {
 			}
 		},
 
-		onEditQuestion(number: number, questionAnswer: string, value: string) {
+		onEditQuestion(questionNumber: number, questionAnswer: string, value: string) {
 			if (questionAnswer === 'question') questionAnswer = 'hint';
 			if (!['hint', 'answer'].includes(questionAnswer)) return false;
 
@@ -472,22 +472,24 @@ const TWISTS: {[k: string]: Twist} = {
 				answer = value.split(';').map(p => p.trim());
 			}
 
-			if (!number || number < 1 || number > this.questions.length || (!answer && !value)) return false;
+			if (!questionNumber || questionNumber < 1 || questionNumber > this.questions.length || (!answer && !value)) {
+				return false;
+			}
 
-			number--; // indexOf starts at 0
+			questionNumber--; // indexOf starts at 0
 
 			if (questionAnswer === 'answer') {
 				// These two lines are the only difference from the original
-				this.mines[number] = answer.filter(ans => ans.startsWith('!'));
-				this.questions[number].answer = answer.filter(ans => !ans.startsWith('!'));
+				this.mines[questionNumber] = answer.filter(ans => ans.startsWith('!'));
+				this.questions[questionNumber].answer = answer.filter(ans => !ans.startsWith('!'));
 			} else {
-				this.questions[number].hint = value;
+				this.questions[questionNumber].hint = value;
 			}
 
-			this.announce(`The ${questionAnswer} for question ${number + 1} has been edited.`);
+			this.announce(`The ${questionAnswer} for question ${questionNumber + 1} has been edited.`);
 			if (questionAnswer === 'hint') {
 				for (const p in this.playerTable) {
-					this.playerTable[p].onNotifyChange(number);
+					this.playerTable[p].onNotifyChange(questionNumber);
 				}
 			}
 			return true;

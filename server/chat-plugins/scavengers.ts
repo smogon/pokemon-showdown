@@ -526,7 +526,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		return result === false ? true : result;
 	}
 
-	onEditQuestion(number: number, question_answer: string, value: string) {
+	onEditQuestion(questionNumber: number, question_answer: string, value: string) {
 		if (question_answer === 'question') question_answer = 'hint';
 		if (!['hint', 'answer'].includes(question_answer)) return false;
 
@@ -535,20 +535,22 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 			answer = value.split(';').map(p => p.trim());
 		}
 
-		if (!number || number < 1 || number > this.questions.length || (!answer && !value)) return false;
-
-		number--; // indexOf starts at 0
-
-		if (question_answer === 'answer') {
-			this.questions[number].answer = answer;
-		} else {
-			this.questions[number].hint = value;
+		if (!questionNumber || questionNumber < 1 || questionNumber > this.questions.length || (!answer && !value)) {
+			return false;
 		}
 
-		this.announce(`The ${question_answer} for question ${number + 1} has been edited.`);
+		questionNumber--; // indexOf starts at 0
+
+		if (question_answer === 'answer') {
+			this.questions[questionNumber].answer = answer;
+		} else {
+			this.questions[questionNumber].hint = value;
+		}
+
+		this.announce(`The ${question_answer} for question ${questionNumber + 1} has been edited.`);
 		if (question_answer === 'hint') {
 			for (const p in this.playerTable) {
-				this.playerTable[p].onNotifyChange(number);
+				this.playerTable[p].onNotifyChange(questionNumber);
 			}
 		}
 		return true;
