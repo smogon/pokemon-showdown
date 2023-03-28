@@ -559,14 +559,14 @@ const TWISTS: {[k: string]: Twist} = {
 		onAfterEndPriority: 1,
 		onAfterEnd(isReset) {
 			if (isReset) return;
-			const mineLess = [];
+			const noMines = [];
 			for (const {name} of this.completed) {
 				const player = this.playerTable[toID(name)];
 				if (!player) continue;
-				if (!player.mines?.length) mineLess.push(name);
+				if (!player.mines?.length) noMines.push(name);
 			}
-			if (mineLess.length) {
-				this.announce(Utils.html`${Chat.toListString(mineLess)} ${mineLess.length > 1 ? 'have' : 'has'} completed the hunt without hitting a single mine!`);
+			if (noMines.length) {
+				this.announce(Utils.html`${Chat.toListString(noMines)} ${noMines.length > 1 ? 'have' : 'has'} completed the hunt without hitting a single mine!`);
 				// Points are awarded manually
 			}
 		},
