@@ -23855,7 +23855,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		otherFormes: ["Eiscue-Delta-Norock"],
 		formeOrder: ["Eiscue", "Eiscue-Delta-Norock"],
 	},
-	eiscuenorock: {
+	eiscuedeltanorock: {
 		num: 875,
 		name: "Eiscue-Delta-Norock",
 		baseSpecies: "Eiscue-Delta",
