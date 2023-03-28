@@ -6291,11 +6291,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: -43,
 	},
-	rockface: {
+	stoneface: {
 		onStart(pokemon) {
 			if (this.field.isWeather(['sandstorm']) &&
 				pokemon.species.id === 'eiscuedeltanorock' && !pokemon.transformed) {
-				this.add('-activate', pokemon, 'ability: Rock Face');
+				this.add('-activate', pokemon, 'ability: Stone Face');
 				this.effectState.busted = false;
 				pokemon.formeChange('Eiscue-Delta', this.effect, true);
 			}
@@ -6306,7 +6306,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				effect && effect.effectType === 'Move' && effect.category === 'Special' &&
 				target.species.id === 'eiscuedelta' && !target.transformed
 			) {
-				this.add('-activate', target, 'ability: Rock Face');
+				this.add('-activate', target, 'ability: Stone Face');
 				this.effectState.busted = true;
 				return 0;
 			}
@@ -6339,14 +6339,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!pokemon.hp) return;
 			if (this.field.isWeather(['sandstorm']) &&
 				pokemon.species.id === 'eiscuedeltanorock' && !pokemon.transformed) {
-				this.add('-activate', pokemon, 'ability: Rock Face');
+				this.add('-activate', pokemon, 'ability: Stone Face');
 				this.effectState.busted = false;
 				pokemon.formeChange('Eiscue-Delta', this.effect, true);
 			}
 		},
 		isBreakable: true,
 		isPermanent: true,
-		name: "Rock Face",
+		name: "Stone Face",
 		rating: 3,
 		num: -44,
 	},
