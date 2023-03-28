@@ -23853,7 +23853,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Grey",
 		eggGroups: ["Water 1", "Field"],
 		otherFormes: ["Eiscue-Delta-Norock"],
-		formeOrder: ["Eiscue", "Eiscue-Delta-Norock"],
+		formeOrder: ["Eiscue-Delta", "Eiscue-Delta-Norock"],
 	},
 	eiscuedeltanorock: {
 		num: 875,

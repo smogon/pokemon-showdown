@@ -6293,7 +6293,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	stoneface: {
 		onStart(pokemon) {
-			if (this.field.isWeather(['sandstorm']) &&
+			if (this.field.isWeather('sandstorm') &&
 				pokemon.species.id === 'eiscuedeltanorock' && !pokemon.transformed) {
 				this.add('-activate', pokemon, 'ability: Stone Face');
 				this.effectState.busted = false;
@@ -6337,7 +6337,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			// snow/hail resuming because Cloud Nine/Air Lock ended does not trigger Ice Face
 			if ((sourceEffect as Ability)?.suppressWeather) return;
 			if (!pokemon.hp) return;
-			if (this.field.isWeather(['sandstorm']) &&
+			if (this.field.isWeather('sandstorm') &&
 				pokemon.species.id === 'eiscuedeltanorock' && !pokemon.transformed) {
 				this.add('-activate', pokemon, 'ability: Stone Face');
 				this.effectState.busted = false;
