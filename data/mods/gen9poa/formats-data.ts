@@ -1797,4 +1797,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "Illegal",
 		natDexTier: "Illegal",
 	},
+	eiscuedelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };

@@ -682,6 +682,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 			shortDesc: "If Eiscue, the first physical hit it takes deals 0 damage. This effect is restored in Hail.",
 		},
 	},
+	rockface: {
+		name: "Rock Face",
+		desc: "If this Pokemon is an Eiscue-Delta, the first physical hit it takes in battle deals 0 neutral damage. Its rock face is then broken and it changes forme to Norock Face. Eiscue-Delta regains its Rock Face forme when Snow begins or when Eiscue-Delta switches in while Sandstorm is active. Confusion damage also breaks the ice face.",
+		shortDesc: "If Eiscue-Delta, the first physical hit it takes deals 0 damage. Effect is restored in Sandstorm.",
+	},
 	icescales: {
 		name: "Ice Scales",
 		shortDesc: "This Pokemon receives 1/2 damage from special attacks.",

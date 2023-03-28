@@ -6249,6 +6249,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: -41,
 	},
+
+	// Our Additions!
 	intimidated: {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, pokemon) {
@@ -6288,5 +6290,64 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Feral",
 		rating: 3,
 		num: -43,
+	},
+	rockface: {
+		onStart(pokemon) {
+			if (this.field.isWeather(['sandstorm']) &&
+				pokemon.species.id === 'eiscuedeltanorock' && !pokemon.transformed) {
+				this.add('-activate', pokemon, 'ability: Rock Face');
+				this.effectState.busted = false;
+				pokemon.formeChange('Eiscue-Delta', this.effect, true);
+			}
+		},
+		onDamagePriority: 1,
+		onDamage(damage, target, source, effect) {
+			if (
+				effect && effect.effectType === 'Move' && effect.category === 'Special' &&
+				target.species.id === 'eiscuedelta' && !target.transformed
+			) {
+				this.add('-activate', target, 'ability: Rock Face');
+				this.effectState.busted = true;
+				return 0;
+			}
+		},
+		onCriticalHit(target, type, move) {
+			if (!target) return;
+			if (move.category !== 'Special' || target.species.id !== 'eiscuedelta' || target.transformed) return;
+			if (target.volatiles['substitute'] && !(move.flags['bypasssub'] || move.infiltrates)) return;
+			if (!target.runImmunity(move.type)) return;
+			return false;
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (!target) return;
+			if (move.category !== 'Special' || target.species.id !== 'eiscuedelta' || target.transformed) return;
+
+			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+			if (hitSub) return;
+
+			if (!target.runImmunity(move.type)) return;
+			return 0;
+		},
+		onUpdate(pokemon) {
+			if (pokemon.species.id === 'eiscuedelta' && this.effectState.busted) {
+				pokemon.formeChange('Eiscue-Delta-Norock', this.effect, true);
+			}
+		},
+		onWeatherChange(pokemon, source, sourceEffect) {
+			// snow/hail resuming because Cloud Nine/Air Lock ended does not trigger Ice Face
+			if ((sourceEffect as Ability)?.suppressWeather) return;
+			if (!pokemon.hp) return;
+			if (this.field.isWeather(['sandstorm']) &&
+				pokemon.species.id === 'eiscuedeltanorock' && !pokemon.transformed) {
+				this.add('-activate', pokemon, 'ability: Rock Face');
+				this.effectState.busted = false;
+				pokemon.formeChange('Eiscue-Delta', this.effect, true);
+			}
+		},
+		isBreakable: true,
+		isPermanent: true,
+		name: "Rock Face",
+		rating: 3,
+		num: -44,
 	},
 };

@@ -7670,7 +7670,14 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	castformcloudy: {
 		isNonstandard: "Past",
     },
+
+	// Our Additions!
 	susan: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	eiscuedelta: {
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "Illegal",
