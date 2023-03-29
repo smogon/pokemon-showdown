@@ -47,7 +47,7 @@ export const Formats: FormatList = [
 		mod: 'gen9deluxe',
 		ruleset: ['DNU Clause', 'Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause'],
 		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
-		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass", "Litwick", "Hatenna", "Cherubi"]
+		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass"]
 	},
 
 	// {
@@ -159,6 +159,131 @@ export const Formats: FormatList = [
 		mod: 'gen9rebalanced',
 		ruleset: ['[Gen 9] Rebalanced NU'],
 		banlist: ['NU', 'PUBL', 'Drizzle', 'Revival Blessing'],
+	},
+
+	{
+		section: "DNU RoA",
+	},
+
+	{
+		name: "[Gen 1] Do Not Use",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3689726/">RBY Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3685861/">RBY OU Viability Rankings</a>`,
+		],
+
+		mod: 'gen1dnu',
+		ruleset: ['Standard'],
+		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
+		"PUBL", "PU", "NFE", "LC"]
+	},
+
+	{
+		name: "[Gen 2] Do Not Use",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3688523/">GSC Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3633233/">GSC OU Viability Rankings</a>`,
+		],
+
+		mod: 'gen2dnu',
+		ruleset: ['Standard'],
+		banlist: ['Uber', 'Mean Look + Baton Pass', 'Spider Web + Baton Pass', 'AG', "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
+		"PUBL", "PU", "NFE", "LC"],
+	},
+
+	{
+		name: "[Gen 3] Do Not Use",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3687813/">ADV Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3503019/">ADV OU Viability Rankings</a>`,
+		],
+
+		mod: 'gen3dnu',
+		ruleset: ['Standard', 'One Boost Passer Clause', 'Freeze Clause Mod'],
+		banlist: ['Uber', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Smeargle + Ingrain', 'AG', 
+			"UUBL", "UU", "RUBL", "RU", "NUBL", "NU", "PUBL", "PU", "NFE", "LC"],
+	},
+
+	{
+		name: "[Gen 4] Do Not Use",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3685887/">DPP OU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3687351/">DPP Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3683332/">DPP OU Viability Rankings</a>`,
+		],
+
+		mod: 'gen4dnu',
+		ruleset: ['Standard', 'Freeze Clause Mod'],
+		banlist: ['AG', 'Uber', 'Arena Trap', 'Sand Veil', 'Swinub + Snow Cloak', 'Piloswine + Snow Cloak', 'Mamoswine + Snow Cloak', 'Soul Dew', 'Baton Pass', 'Swagger',
+			"UUBL", "UU", "RUBL", "RU", "NUBL", "NU", "PUBL", "PU", "NFE", "LC"],
+	},
+
+	{
+		name: "[Gen 5] Do Not Use",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3686880/">BW2 Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3668699/">BW2 OU Viability Rankings</a>`,
+		],
+
+		mod: 'gen5dnu',
+		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause', 'Swagger Clause', 'Gems Clause', 'Baton Pass Stat Clause'],
+		banlist: ['Uber', 'Arena Trap', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Soul Dew', 
+		'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Smeargle + Ingrain', 'AG',],
+	},
+
+	{
+		name: "[Gen 6] Do Not Use",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/dex/xy/tags/ou/">ORAS OU Banlist</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8133793/">ORAS OU Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3623399/">ORAS OU Viability Rankings</a>`,
+		],
+
+		mod: 'gen6dnu',
+		ruleset: ['Standard', 'Swagger Clause'],
+		banlist: ['Uber', 'Arena Trap', 'Shadow Tag', 'Soul Dew', 'Baton Pass', 'AG',
+			"UUBL", "UU", "RUBL", "RU", "NUBL", "NU", "PUBL", "PU", "NFE", "LC"],
+	},
+
+	{
+		name: "[Gen 7] Do Not Use",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/dex/sm/tags/ou/">USM OU Banlist</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8162240/">USM OU Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3667522/">USM OU Viability Rankings</a>`,
+		],
+
+		mod: 'gen7dnu',
+		ruleset: ['Standard'],
+		banlist: ['Uber', 'Arena Trap', 'Power Construct', 'Shadow Tag', 'Baton Pass',
+			"UUBL", "UU", "RUBL", "RU", "NUBL", "NU", "PUBL", "PU", "NFE", "LC", 'AG'],
+	},
+
+	{
+		name: "[Gen 7 Let's Go] Do Not Use",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3667865/">LGPE OU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3656868/">LGPE OU Viability Rankings</a>`,
+		],
+
+		mod: 'gen7letsgodnu',
+		ruleset: ['Adjust Level = 50', 'Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
+		banlist: ['Uber', 'AG', 
+			"UUBL", "UU", "RUBL", "RU", "NUBL", "NU", "PUBL", "PU", "NFE", "LC"],
+	},
+
+	{
+		name: "[Gen 8] Do Not Use",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3672210/">SS OU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3672556/">SS OU Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3674058/">SS OU Viability Rankings</a>`,
+		],
+
+		mod: 'gen8dnu',
+		ruleset: ['Standard', 'Dynamax Clause'],
+		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Power Construct', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'King\'s Rock', 'Baton Pass',
+			"UUBL", "UU", "RUBL", "RU", "NUBL", "NU", "PUBL", "PU", "NFE", "LC"],
 	},
 
 
@@ -463,20 +588,20 @@ export const Formats: FormatList = [
 			'Poison Fang', 'Rage Powder', 'Spicy Extract', 'Swagger', 'Toxic', 'Toxic Spikes',
 		],
 	},
-	{
-		name: "[Gen 9] Battle Stadium Singles Series 2",
+	// {
+	// 	name: "[Gen 9] Battle Stadium Singles Series 2",
 
-		mod: 'gen9',
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer'],
-		banlist: ['Sub-Legendary'],
-	},
-	{
-		name: "[Gen 9] Battle Stadium Singles Regulation C",
+	// 	mod: 'gen9',
+	// 	ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer'],
+	// 	banlist: ['Sub-Legendary'],
+	// },
+	// {
+	// 	name: "[Gen 9] Battle Stadium Singles Regulation C",
 
-		mod: 'gen9',
-		searchShow: false,
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer'],
-	},
+	// 	mod: 'gen9',
+	// 	searchShow: false,
+	// 	ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer'],
+	// },
 	{
 		name: "[Gen 9] Custom Game",
 
@@ -3949,62 +4074,62 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 
-	// B2/W2 Doubles
-	///////////////////////////////////////////////////////////////////
+	// // B2/W2 Doubles
+	// ///////////////////////////////////////////////////////////////////
 
-	{
-		section: 'B2/W2 Doubles',
-		column: 6,
-	},
-	{
-		name: "[Gen 5] VGC 2013",
+	// {
+	// 	section: 'B2/W2 Doubles',
+	// 	column: 6,
+	// },
+	// {
+	// 	name: "[Gen 5] VGC 2013",
 
-		mod: 'gen5',
-		gameType: 'doubles',
-		searchShow: false,
-		ruleset: ['Flat Rules'],
-		banlist: ['Chatot', 'Dark Void', 'Sky Drop', 'Soul Dew'],
-	},
-	{
-		name: "[Gen 5] VGC 2012",
+	// 	mod: 'gen5',
+	// 	gameType: 'doubles',
+	// 	searchShow: false,
+	// 	ruleset: ['Flat Rules'],
+	// 	banlist: ['Chatot', 'Dark Void', 'Sky Drop', 'Soul Dew'],
+	// },
+	// {
+	// 	name: "[Gen 5] VGC 2012",
 
-		mod: 'gen5bw1',
-		gameType: 'doubles',
-		searchShow: false,
-		ruleset: ['Flat Rules'],
-		banlist: ['Dark Void', 'Sky Drop'],
-	},
-	{
-		name: "[Gen 5] VGC 2011",
+	// 	mod: 'gen5bw1',
+	// 	gameType: 'doubles',
+	// 	searchShow: false,
+	// 	ruleset: ['Flat Rules'],
+	// 	banlist: ['Dark Void', 'Sky Drop'],
+	// },
+	// {
+	// 	name: "[Gen 5] VGC 2011",
 
-		mod: 'gen5bw1',
-		gameType: 'doubles',
-		searchShow: false,
-		ruleset: ['Flat Rules', 'Old Unova Pokedex'],
-		banlist: ['Sky Drop', 'Belue Berry', 'Durin Berry', 'Nomel Berry', 'Rabuta Berry', 'Spelon Berry', 'Watmel Berry'],
-	},
-	{
-		name: "[Gen 5] Doubles Custom Game",
+	// 	mod: 'gen5bw1',
+	// 	gameType: 'doubles',
+	// 	searchShow: false,
+	// 	ruleset: ['Flat Rules', 'Old Unova Pokedex'],
+	// 	banlist: ['Sky Drop', 'Belue Berry', 'Durin Berry', 'Nomel Berry', 'Rabuta Berry', 'Spelon Berry', 'Watmel Berry'],
+	// },
+	// {
+	// 	name: "[Gen 5] Doubles Custom Game",
 
-		mod: 'gen5',
-		gameType: 'doubles',
-		searchShow: false,
-		debug: true,
-		battle: {trunc: Math.trunc},
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
-	},
-	{
-		name: "[Gen 5] Triples Custom Game",
+	// 	mod: 'gen5',
+	// 	gameType: 'doubles',
+	// 	searchShow: false,
+	// 	debug: true,
+	// 	battle: {trunc: Math.trunc},
+	// 	// no restrictions, for serious (other than team preview)
+	// 	ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+	// },
+	// {
+	// 	name: "[Gen 5] Triples Custom Game",
 
-		mod: 'gen5',
-		gameType: 'triples',
-		searchShow: false,
-		debug: true,
-		battle: {trunc: Math.trunc},
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod'],
-	},
+	// 	mod: 'gen5',
+	// 	gameType: 'triples',
+	// 	searchShow: false,
+	// 	debug: true,
+	// 	battle: {trunc: Math.trunc},
+	// 	// no restrictions, for serious (other than team preview)
+	// 	ruleset: ['Team Preview', 'Cancel Mod'],
+	// },
 
 	// DPP Singles
 	///////////////////////////////////////////////////////////////////
@@ -4131,43 +4256,43 @@ export const Formats: FormatList = [
 		ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 
-	// DPP Doubles
-	///////////////////////////////////////////////////////////////////
+	// // DPP Doubles
+	// ///////////////////////////////////////////////////////////////////
 
-	{
-		section: "DPP Doubles",
-		column: 7,
-	},
-	{
-		name: "[Gen 4] VGC 2010",
+	// {
+	// 	section: "DPP Doubles",
+	// 	column: 7,
+	// },
+	// {
+	// 	name: "[Gen 4] VGC 2010",
 
-		mod: 'gen4',
-		gameType: 'doubles',
-		searchShow: false,
-		ruleset: ['Flat Rules', 'Max Team Size = 4', 'Limit Two Restricted'],
-		restricted: ['Restricted Legendary'],
-		banlist: ['Soul Dew'],
-	},
-	{
-		name: "[Gen 4] VGC 2009",
+	// 	mod: 'gen4',
+	// 	gameType: 'doubles',
+	// 	searchShow: false,
+	// 	ruleset: ['Flat Rules', 'Max Team Size = 4', 'Limit Two Restricted'],
+	// 	restricted: ['Restricted Legendary'],
+	// 	banlist: ['Soul Dew'],
+	// },
+	// {
+	// 	name: "[Gen 4] VGC 2009",
 
-		mod: 'gen4pt',
-		gameType: 'doubles',
-		searchShow: false,
-		ruleset: ['Flat Rules', '! Adjust Level Down', 'Max Level = 50', 'Max Team Size = 4'],
-		banlist: ['Tyranitar', 'Rotom', 'Judgment', 'Soul Dew'],
-	},
-	{
-		name: "[Gen 4] Doubles Custom Game",
+	// 	mod: 'gen4pt',
+	// 	gameType: 'doubles',
+	// 	searchShow: false,
+	// 	ruleset: ['Flat Rules', '! Adjust Level Down', 'Max Level = 50', 'Max Team Size = 4'],
+	// 	banlist: ['Tyranitar', 'Rotom', 'Judgment', 'Soul Dew'],
+	// },
+	// {
+	// 	name: "[Gen 4] Doubles Custom Game",
 
-		mod: 'gen4',
-		gameType: 'doubles',
-		searchShow: false,
-		debug: true,
-		battle: {trunc: Math.trunc},
-		// no restrictions
-		ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
-	},
+	// 	mod: 'gen4',
+	// 	gameType: 'doubles',
+	// 	searchShow: false,
+	// 	debug: true,
+	// 	battle: {trunc: Math.trunc},
+	// 	// no restrictions
+	// 	ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+	// },
 
 	// Past Generations
 	///////////////////////////////////////////////////////////////////
