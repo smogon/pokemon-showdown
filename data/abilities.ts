@@ -6368,4 +6368,20 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: -45,
 	},
+	ringrust: {
+		onSourceModifyAccuracyPriority: -2,
+		onSourceModifyAccuracy(accuracy) {
+			if (typeof accuracy === 'number' && accuracy < 100) {
+				return this.chainModify([4506, 4096]);
+			}
+		},
+		onSourceModifyDamage(num, pokemon, target, move) {
+			if (typeof move.accuracy === 'number' && move.accuracy < 100) {
+				return this.chainModify([5325, 4096]);
+			}
+		},
+		name: "Ring Rust",
+		rating: 2,
+		num: -46,
+	},
 };

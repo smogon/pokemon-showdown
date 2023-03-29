@@ -103498,6 +103498,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	sceptiledelta: {
 		learnset: {
+			crosschop: ["6M"],
 			achillesheel: ["6M"],
 			custommove: ["6M"],
 			dracometeor: ["6T", "6L1", "6L63"],

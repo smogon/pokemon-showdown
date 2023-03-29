@@ -184,6 +184,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	deltasceptilite: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	deltamawilite: {
 		inherit: true,
 		isNonstandard: null,
