@@ -6375,7 +6375,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return this.chainModify([4506, 4096]);
 			}
 		},
-		onSourceModifyDamage(num, pokemon, target, move) {
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
 			if (typeof move.accuracy === 'number' && move.accuracy < 100) {
 				return this.chainModify([5325, 4096]);
 			}
