@@ -20816,7 +20816,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	volttackle: {
 		num: 344,
 		accuracy: 100,
-		basePower: 120,
+		basePower: 140,
 		category: "Physical",
 		name: "Volt Tackle",
 		pp: 15,

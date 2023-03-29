@@ -141,6 +141,26 @@ export const Formats: FormatList = [
 		banlist: ['UU', 'RUBL'],
 	},
 
+	{
+		name: "[Gen 9] Rebalanced NU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3715408/">NU Metagame Discussion</a>`,
+		],
+
+		mod: 'gen9rebalanced',
+		ruleset: ['[Gen 9] Rebalanced RU'],
+		banlist: ['RU', 'NUBL', 'Drought'],
+	},
+
+
+	{
+		name: "[Gen 9] Rebalanced PU",
+
+		mod: 'gen9rebalanced',
+		ruleset: ['[Gen 9] Rebalanced NU'],
+		banlist: ['NU', 'PUBL', 'Drizzle', 'Revival Blessing'],
+	},
+
 
 	// SS Pseudos Metas
 	///////////////////////////////////////////////////////////////////
