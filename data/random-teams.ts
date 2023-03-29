@@ -1253,7 +1253,8 @@ export class RandomTeams {
 		species: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false,
-		isDoubles = false
+		isDoubles = false,
+		isDNURandbats = false,
 	): RandomTeamsTypes.RandomSet {
 		species = this.dex.species.get(species);
 		let forme = species.name;
@@ -1393,10 +1394,22 @@ export class RandomTeams {
 		pokemonToExclude: RandomTeamsTypes.RandomSet[] = [],
 		isMonotype = false,
 		isDoubles = false,
+		isDNURandbats = false
 	) {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
 		const pokemonPool = [];
 		const baseSpeciesPool: string[] = [];
+		if (isDNURandbats) {
+			// only allow pokemon with the 'Do Not Use' or 'DNUU' tier
+			for (const pokemon of Object.keys(this.randomSets)) {
+				let species = this.dex.species.get(pokemon);
+				if (species.gen > this.gen || exclude.includes(species.id)) continue;
+				if (species.tier === 'Do Not Use' || species.tier === 'DNUU') {
+					pokemonPool.push(pokemon);
+					if (!baseSpeciesPool.includes(species.baseSpecies)) baseSpeciesPool.push(species.baseSpecies);
+				}
+			}
+		}
 		if (isDoubles) {
 			for (const pokemon of Object.keys(this.randomDoublesSets)) {
 				let species = this.dex.species.get(pokemon);
@@ -1445,6 +1458,7 @@ export class RandomTeams {
 		const isDoubles = this.format.gameType !== 'singles';
 		const typePool = this.dex.types.names();
 		const type = this.forceMonotype || this.sample(typePool);
+		const isDNURandbats = ruleTable.has('dnurandbats');
 
 		// PotD stuff
 		const usePotD = global.Config && Config.potd && ruleTable.has('potd');
@@ -1457,7 +1471,7 @@ export class RandomTeams {
 		const typeComboCount: {[k: string]: number} = {};
 		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
-		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, isDoubles);
+		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, isDoubles, isDNURandbats);
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
 			const currentSpeciesPool: Species[] = [];

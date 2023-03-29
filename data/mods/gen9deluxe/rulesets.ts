@@ -810,6 +810,11 @@ export const Rulesets: {[k: string]: FormatData} = {
 			return problems;
 		},
 	},
+	dnurandbats: {
+		effectType: 'ValidatorRule',
+		name: 'DNU Randbats',
+		desc: 'Defines whether the randbats is only for dnu pokemon'
+	},
 	oudclause: {
 		effectType: 'ValidatorRule',
 		name: 'OUD Clause',

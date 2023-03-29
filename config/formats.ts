@@ -101,6 +101,18 @@ export const Formats: FormatList = [
 		banlist: ["Do Not Use"]
 	},
 
+	{
+		name: "[Gen 9] DNU Random Battle",
+		desc: `Randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3712619/">Random Battle Suggestions</a>`,
+		],
+
+		mod: 'gen9deluxe',
+		team: 'random',
+		ruleset: ['DNU Randbats', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
+	},
+
 	// SV OU Rebalanced
 	///////////////////////////////////////////////////////////////////
 	

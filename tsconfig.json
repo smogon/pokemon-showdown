@@ -34,6 +34,6 @@
         "./sim/**/*",
         "./tools/set-import/*.ts",
         "./tools/modlog/*.ts",
-        "./translations/**/*.ts",
+        "./translations/**/*.ts", "data/mods/gen8",
     ]
 }
