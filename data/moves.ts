@@ -22429,10 +22429,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Desert Tempest",
 		pp: 15,
 		priority: 0,
-		onModifyMove(move, pokemon, target) {
-			if (pokemon.getItem().id === "smoothrock") {
-				move.basePower = 75;
-				return;
+		onBasePower(basePower, pokemon, target) {
+			if (pokemon.item === "smoothrock") {
+				return this.chainModify(1.2);
 			}
 		},
 		flags: {},
