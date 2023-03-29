@@ -22384,7 +22384,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 
 	// Plan of Attack
 	coinflip: {
-		num: 90,
+		num: -23,
 		basePower: 0,
 		accuracy: true,
 		category: "Special",
@@ -22422,7 +22422,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Tough",
 	},
 	deserttempest: {
-		num: -16,
+		num: -24,
 		accuracy: 90,
 		basePower: 65,
 		category: "Special",
