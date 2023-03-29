@@ -617,6 +617,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile('twoturnmove')) {
+				attacker.removeVolatile('invulnerability');
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
@@ -711,6 +712,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile('twoturnmove')) {
+				attacker.removeVolatile('invulnerability');
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
@@ -722,6 +724,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile('twoturnmove')) {
+				attacker.removeVolatile('invulnerability');
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
@@ -744,6 +747,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile('twoturnmove')) {
+				attacker.removeVolatile('invulnerability');
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
