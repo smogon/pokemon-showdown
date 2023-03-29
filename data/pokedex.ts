@@ -21898,7 +21898,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Giratina-Primal",
 		baseSpecies: "Giratina",
 		forme: "Primal",
-		types: ["Ghost", "Dragon", "Dark", "Fighting", "Flying", "Grass", "Water", "Fire", "Psychic", "Fairy", "Steel", "Rock", "Ground", "Bug", "Ice", "Normal", "Electric", "Poison"],
+		types: ["Ghost", "Dragon"],
 		gender: "N",
 		baseStats: {hp: 150, atk: 135, def: 135, spa: 135, spd: 135, spe: 130},
 		abilities: {0: "Omnitype"},
