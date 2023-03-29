@@ -23872,7 +23872,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	},
 	raikoudelta: {
 		num: 243,
-		name: "Raikou",
+		name: "Raikou-Delta",
 		types: ["Rock"],
 		gender: "N",
 		baseStats: {hp: 90, atk: 85, def: 75, spa: 115, spd: 100, spe: 115},
