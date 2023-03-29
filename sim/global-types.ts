@@ -62,7 +62,7 @@ type MoveSource = string;
 
 namespace TierTypes {
 	export type Singles = "Suspect" | "AG" | "Uber" | "OUD" | "(Uber)" | "Pseubers" | "Pseudo" | "OU" | "(OU)" | "UUBL" | "UUD" | "UU" | "RUBL" | "RU" | "NUBL" | "NU" |
-	"(NU)" | "PUBL" | "PU" | "(PU)" | "NFE" | "LC" | "Do Not Use";
+	"(NU)" | "PUBL" | "PU" | "(PU)" | "NFE" | "LC" | "Do Not Use" | "DNUU";
 	export type Doubles = "DUber" | "(DUber)" | "DOU" | "(DOU)" | "DBL" | "DUU" | "(DUU)" | "NFE" | "LC";
 	export type Other = "Unreleased" | "Illegal" | "CAP" | "CAP NFE" | "CAP LC";
 }

@@ -93,6 +93,14 @@ export const Formats: FormatList = [
 		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass"]
 	},
 
+	{
+		name: "[Gen 9] DNUU",
+
+		mod: 'gen9deluxe',
+		ruleset: ['[Gen 9] Do Not Use'],
+		banlist: ["Do Not Use"]
+	},
+
 	// SV OU Rebalanced
 	///////////////////////////////////////////////////////////////////
 	
