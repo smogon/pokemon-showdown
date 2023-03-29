@@ -23870,4 +23870,17 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		requiredAbility: "Stone Face",
 		battleOnly: "Eiscue-Delta",
 	},
+	raikoudelta: {
+		num: 243,
+		name: "Raikou",
+		types: ["Rock"],
+		gender: "N",
+		baseStats: {hp: 90, atk: 85, def: 75, spa: 115, spd: 100, spe: 115},
+		abilities: {0: "Sand Stream", 1: "Sandy Defense", H: "Adaptability"},
+		heightm: 1.9,
+		weightkg: 178,
+		color: "Yellow",
+		tags: ["Sub-Legendary"],
+		eggGroups: ["Undiscovered"],
+	},
 };

@@ -6350,4 +6350,22 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: -44,
 	},
+	sandydefense: {
+		onModifySpD(spd, pokemon) {
+			if (this.field.isWeather('sandstorm')) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifyDef(def, pokemon) {
+			if (this.field.isWeather('sandstorm')) {
+				return this.chainModify(1.5);
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm') return false;
+		},
+		name: "Sandy Defense",
+		rating: 3,
+		num: -45,
+	},
 };
