@@ -713,6 +713,7 @@ export class BattleActions {
 			} else {
 				accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
 			}
+
 			if (accuracy !== true) {
 				let hitSuccess = this.battle.randomChance(accuracy, 100);
 
@@ -739,7 +740,7 @@ export class BattleActions {
 						if (!hitSuccess) this.battle.add('-ability', pokemon, 'Snake Eyes');
 					}
 				} 
-				
+
 				if (!hitSuccess) {
 					if (move.smartTarget) {
 						move.smartTarget = false;
@@ -1356,7 +1357,33 @@ export class BattleActions {
 			const secondaries: Dex.SecondaryEffect[] =
 				this.battle.runEvent('ModifySecondaries', target, source, moveData, moveData.secondaries.slice());
 			for (const secondary of secondaries) {
-				const secondaryRoll = this.battle.random(100);
+				
+				let secondaryRoll = this.battle.random(100);
+
+				if (typeof secondary.chance !== 'undefined' && source.ability === "snakeeyes" && secondaryRoll > secondary.chance) {
+
+					secondaryRoll = this.battle.random(100);
+					if (secondaryRoll < secondary.chance) this.battle.add('-ability', source, 'Snake Eyes');
+
+					if (source.item === "loadeddice" && secondaryRoll > secondary.chance) {
+
+						secondaryRoll = this.battle.random(100);
+						if (secondaryRoll < secondary.chance) this.battle.add('-ability', source, 'Snake Eyes');
+					}
+				}
+
+				if (typeof secondary.chance !== 'undefined' && target?.ability === "snakeeyes" && secondaryRoll < secondary.chance) {
+
+					secondaryRoll = this.battle.random(100);
+					if (secondaryRoll > secondary.chance) this.battle.add('-ability', source, 'Snake Eyes');
+
+					if (target?.item === "loadeddice" && secondaryRoll < secondary.chance) {
+
+						secondaryRoll = this.battle.random(100);
+						if (secondaryRoll > secondary.chance) this.battle.add('-ability', source, 'Snake Eyes');
+					}
+				}
+
 				// User stat boosts or target stat drops can possibly overflow if it goes beyond 256 in Gen 8 or prior
 				const secondaryOverflow = (secondary.boosts || secondary.self) && this.battle.gen <= 8;
 				if (typeof secondary.chance === 'undefined' ||
