@@ -378,4 +378,7 @@ export const DefaultText: {[k: string]: DefaultText} = {
 	crash: {
 		damage: "  [POKEMON] kept going and crashed!",
 	},
+	gambled: {
+		damage: "  [POKEMON] gambled its life away."
+	}
 };

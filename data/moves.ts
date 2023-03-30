@@ -22391,7 +22391,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		ohko: true,
 		hasCrashDamage: true,
 		onMoveFail(target, source, move) {
-			this.add('-message', `${source.name} gambled its life away.`);
 			this.damage(source.baseMaxhp, source, source, this.dex.conditions.get('High Jump Kick'));
 		},
 		name: "Coinflip",

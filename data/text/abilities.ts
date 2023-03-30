@@ -2332,4 +2332,18 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "During the months of November, December, January, and February, the Attack and Special Attack of Pokémon with this Ability are increased by 40%. During the months of May, June, July, and August the Attack and Special Attack of Pokémon with this ability are decreased by 30%. During the remaining four months, stats are unchanged.",
 		shortDesc: "This Pokemon's attacks do more damage during Winter; reduced damage during Summer.",
 	},
+
+	// Our Additions
+	sandydefense: {
+		name: "Sandy Defense",
+		shortDesc: "This Pokemon's Defense and Special Defense are boosted 1.5 in sandstorm.",
+	},
+	snakeeyes: {
+		name: "Snake Eyes",
+		shortDesc: "This Pokemon gets lucky.",
+	},
+	ringrust: {
+		name: "Ring Rust",
+		shortDesc: "Moves that aren't 100% accurate have a 1.3x damage boost and 1.1x accuracy boost.",
+	}
 };

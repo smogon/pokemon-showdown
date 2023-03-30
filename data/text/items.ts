@@ -2616,4 +2616,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Zoronite",
 		desc: "If held by a Zoroark, this item allows it to Mega Evolve in battle.",
 	},
+
+	// Our Additions
+	deltasceptilite: {
+		name: "Delta Sceptilite",
+		desc: "If held by a Delta Sceptile, this item allows it to Mega Evolve in battle.",
+	},
 };

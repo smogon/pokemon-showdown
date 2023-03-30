@@ -7527,4 +7527,22 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Zombie Strike",
 		shortDesc: "No additional effect.",
 	},
+
+	// Our Additions!
+	coinflip: {
+		name: "Coinflip",
+		shortDesc: "The user gambles its life on a coin.",
+		desc: "User flips a coin, another coin is flipped and if the coins match, the opponent dies. If they do not, user dies.",
+
+		damage: '#crash',
+	},
+	deserttempest: {
+		name: "Desert Tempest",
+		shortDesc: "Summons sandstorm. 1.2x damage if user is holding a Smooth Rock.",
+	},
+	obsidiancrash: {
+		name: "Obsidian Crash",
+		shortDesc: "The user smashes into the opponent with its obsidian body, this also damages the user.",
+		desc: "Move ignores water resistance and Rainy Day, 1/3 recoil.",
+	}
 };
