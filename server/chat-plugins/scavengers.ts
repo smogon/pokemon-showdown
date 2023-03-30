@@ -526,7 +526,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		return result === false ? true : result;
 	}
 
-	onEditQuestion(number: number, question_answer: string, value: string) {
+	onEditQuestion(questionNumber: number, question_answer: string, value: string) {
 		if (question_answer === 'question') question_answer = 'hint';
 		if (!['hint', 'answer'].includes(question_answer)) return false;
 
@@ -535,20 +535,22 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 			answer = value.split(';').map(p => p.trim());
 		}
 
-		if (!number || number < 1 || number > this.questions.length || (!answer && !value)) return false;
-
-		number--; // indexOf starts at 0
-
-		if (question_answer === 'answer') {
-			this.questions[number].answer = answer;
-		} else {
-			this.questions[number].hint = value;
+		if (!questionNumber || questionNumber < 1 || questionNumber > this.questions.length || (!answer && !value)) {
+			return false;
 		}
 
-		this.announce(`The ${question_answer} for question ${number + 1} has been edited.`);
+		questionNumber--; // indexOf starts at 0
+
+		if (question_answer === 'answer') {
+			this.questions[questionNumber].answer = answer;
+		} else {
+			this.questions[questionNumber].hint = value;
+		}
+
+		this.announce(`The ${question_answer} for question ${questionNumber + 1} has been edited.`);
 		if (question_answer === 'hint') {
 			for (const p in this.playerTable) {
-				this.playerTable[p].onNotifyChange(number);
+				this.playerTable[p].onNotifyChange(questionNumber);
 			}
 		}
 		return true;
@@ -701,6 +703,20 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		player.destroy(); // remove from user.games;
 	}
 
+	onShowEndBoard(endedBy?: User) {
+		const sliceIndex = this.gameType === 'official' ? 5 : 3;
+		const hosts = Chat.toListString(this.hosts.map(h => `<em>${Utils.escapeHTML(h.name)}</em>`));
+
+		this.announce(
+			`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt by ${hosts} was ended ${(endedBy ? "by " + Utils.escapeHTML(endedBy.name) : "automatically")}.<br />` +
+			`${this.completed.slice(0, sliceIndex).map((p, i) => `${Utils.formatOrder(i + 1)} place: <em>${Utils.escapeHTML(p.name)}</em> <span style="color: lightgreen;">[${p.time}]</span>.<br />`).join("")}` +
+			`${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Utils.escapeHTML(e.name)}</em> <span style="color: lightgreen;">[${e.time}]</span>`).join(', ')}<br />` : ''}<br />` +
+			`<details style="cursor: pointer;"><summary>Solution: </summary><br />` +
+			`${this.questions.map((q, i) => `${i + 1}) ${Chat.formatText(q.hint)} <span style="color: lightgreen">[<em>${Utils.escapeHTML(q.answer.join(' / '))}</em>]</span>`).join("<br />")}` +
+			`</details>`
+		);
+	}
+
 	onEnd(reset?: boolean, endedBy?: User) {
 		if (!endedBy && (this.preCompleted ? this.preCompleted.length : this.completed.length) === 0) {
 			reset = true;
@@ -721,15 +737,8 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 			});
 		}
 		if (!reset) {
-			const sliceIndex = this.gameType === 'official' ? 5 : 3;
-
-			const hosts = Chat.toListString(this.hosts.map(h => `<em>${Utils.escapeHTML(h.name)}</em>`));
-
-			this.announce(
-				`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt by ${hosts} was ended ${(endedBy ? "by " + Utils.escapeHTML(endedBy.name) : "automatically")}.<br />` +
-				`${this.completed.slice(0, sliceIndex).map((p, i) => `${Utils.formatOrder(i + 1)} place: <em>${Utils.escapeHTML(p.name)}</em> <span style="color: lightgreen;">[${p.time}]</span>.<br />`).join("")}${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Utils.escapeHTML(e.name)}</em> <span style="color: lightgreen;">[${e.time}]</span>`).join(', ')}<br />` : ''}<br />` +
-				`<details style="cursor: pointer;"><summary>Solution: </summary><br />${this.questions.map((q, i) => `${i + 1}) ${Chat.formatText(q.hint)} <span style="color: lightgreen">[<em>${Utils.escapeHTML(q.answer.join(' / '))}</em>]</span>`).join("<br />")}</details>`
-			);
+			// Display the finishers' board
+			if (!this.runEvent('ShowEndBoard', endedBy)) this.onShowEndBoard(endedBy);
 
 			// give points for winning and blitzes in official games
 			if (!this.runEvent('GivePoints')) {
