@@ -193,7 +193,7 @@ export const commands: Chat.ChatCommands = {
 		if (!validGroups.includes(rank)) {
 			return this.errorReply(`Invalid rank.`);
 		}
-        if (room.settings.isPersonal && !user.can('makeroom')
+        if (room.settings.isPersonal && !user.can('makeroom') &&
             room.settings.modjoin === true && !'+%'.includes(rank)) {
 			return this.errorReply(`/automodchat - Access denied from setting automodchat rank past % in group chats while modjoin is set to sync.`);
 		}
