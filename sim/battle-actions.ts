@@ -713,18 +713,23 @@ export class BattleActions {
 			} else {
 				accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
 			}
-			if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) {
-				if (move.smartTarget) {
-					move.smartTarget = false;
-				} else {
-					if (!move.spreadHit) this.battle.attrLastMove('[miss]');
-					this.battle.add('-miss', pokemon, target);
+			if (accuracy !== true) {
+				let hitSuccess = this.battle.randomChance(accuracy, 100);
+				if (!hitSuccess && pokemon.ability === "snakeeyes") hitSuccess = this.battle.randomChance(accuracy, 100);
+				if (hitSuccess && target.ability === "snakeeyes") hitSuccess = this.battle.randomChance(accuracy, 100);
+				if (!hitSuccess) {
+					if (move.smartTarget) {
+						move.smartTarget = false;
+					} else {
+						if (!move.spreadHit) this.battle.attrLastMove('[miss]');
+						this.battle.add('-miss', pokemon, target);
+					}
+					if (!move.ohko && pokemon.hasItem('blunderpolicy') && pokemon.useItem()) {
+						this.battle.boost({spe: 2}, pokemon);
+					}
+					hitResults[i] = false;
+					continue;
 				}
-				if (!move.ohko && pokemon.hasItem('blunderpolicy') && pokemon.useItem()) {
-					this.battle.boost({spe: 2}, pokemon);
-				}
-				hitResults[i] = false;
-				continue;
 			}
 			hitResults[i] = true;
 		}

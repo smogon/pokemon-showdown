@@ -6385,4 +6385,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2,
 		num: -46,
 	},
+	snakeeyes: {
+		name: "Snake Eyes",
+		rating: 5,
+		num: -47,
+	},
 };
