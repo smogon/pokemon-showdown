@@ -715,8 +715,14 @@ export class BattleActions {
 			}
 			if (accuracy !== true) {
 				let hitSuccess = this.battle.randomChance(accuracy, 100);
-				if (!hitSuccess && pokemon.ability === "snakeeyes") hitSuccess = this.battle.randomChance(accuracy, 100);
-				if (hitSuccess && target.ability === "snakeeyes") hitSuccess = this.battle.randomChance(accuracy, 100);
+				if (!hitSuccess && pokemon.ability === "snakeeyes") {
+					hitSuccess = this.battle.randomChance(accuracy, 100);
+					if (!hitSuccess && pokemon.item === "loadeddice") hitSuccess = this.battle.randomChance(accuracy, 100);
+				}
+				if (hitSuccess && target.ability === "snakeeyes"){
+					hitSuccess = this.battle.randomChance(accuracy, 100);
+					if (hitSuccess && target.item === "loadeddice") hitSuccess = this.battle.randomChance(accuracy, 100);
+				} 
 				if (!hitSuccess) {
 					if (move.smartTarget) {
 						move.smartTarget = false;
