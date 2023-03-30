@@ -715,14 +715,31 @@ export class BattleActions {
 			}
 			if (accuracy !== true) {
 				let hitSuccess = this.battle.randomChance(accuracy, 100);
+
 				if (!hitSuccess && pokemon.ability === "snakeeyes") {
+
 					hitSuccess = this.battle.randomChance(accuracy, 100);
-					if (!hitSuccess && pokemon.item === "loadeddice") hitSuccess = this.battle.randomChance(accuracy, 100);
+					if (hitSuccess) this.battle.add('-ability', pokemon, 'Snake Eyes');
+					
+					if (!hitSuccess && pokemon.item === "loadeddice") {
+
+						hitSuccess = this.battle.randomChance(accuracy, 100);
+						if (hitSuccess) this.battle.add('-ability', pokemon, 'Snake Eyes');
+					}
 				}
+
 				if (hitSuccess && target.ability === "snakeeyes"){
+
 					hitSuccess = this.battle.randomChance(accuracy, 100);
-					if (hitSuccess && target.item === "loadeddice") hitSuccess = this.battle.randomChance(accuracy, 100);
+					if (!hitSuccess) this.battle.add('-ability', pokemon, 'Snake Eyes');
+
+					if (hitSuccess && target.item === "loadeddice") {
+
+						hitSuccess = this.battle.randomChance(accuracy, 100);
+						if (!hitSuccess) this.battle.add('-ability', pokemon, 'Snake Eyes');
+					}
 				} 
+				
 				if (!hitSuccess) {
 					if (move.smartTarget) {
 						move.smartTarget = false;
@@ -1622,18 +1639,15 @@ export class BattleActions {
 		if (move.willCrit === undefined) {
 			if (critRatio) {
 				moveHit.crit = this.battle.randomChance(1, critMult[critRatio]);
-				this.battle.add("-message", moveHit.crit.toString());
 				if (!moveHit.crit && source.ability === "snakeeyes") {
 
 					moveHit.crit = this.battle.randomChance(1, critMult[critRatio]);
 					if (moveHit.crit) this.battle.add('-ability', source, 'Snake Eyes');
-					this.battle.add("-message", moveHit.crit.toString());
 
 					if (!moveHit.crit && source.item === "loadeddice") {
 
 						moveHit.crit = this.battle.randomChance(1, critMult[critRatio]);
 						if (moveHit.crit) this.battle.add('-ability', source, 'Snake Eyes');
-						this.battle.add("-message", moveHit.crit.toString());
 					} 
 				}
 
@@ -1641,13 +1655,11 @@ export class BattleActions {
 
 					moveHit.crit = this.battle.randomChance(1, critMult[critRatio]);
 					if (!moveHit.crit) this.battle.add('-ability', source, 'Snake Eyes');
-					this.battle.add("-message", moveHit.crit.toString());
 
 					if (moveHit.crit && target.item === "loadeddice") {
 
 						moveHit.crit = this.battle.randomChance(1, critMult[critRatio]);
 						if (!moveHit.crit) this.battle.add('-ability', source, 'Snake Eyes');
-						this.battle.add("-message", moveHit.crit.toString());
 					}
 				}
 			}
