@@ -22442,4 +22442,20 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Beautiful",
 	},
+	obsidiancrash: {
+		num: -25,
+		accuracy: 95,
+		basePower: 80,
+		category: "Physical",
+		name: "Obsidian Crash",
+		pp: 10,
+		recoil: [33, 100],
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Water') return 0;
+		},
+		priority: 0,
+		flags: {contact: 1, protect: 1},
+		target: "normal",
+		type: "Fire",
+	},
 };

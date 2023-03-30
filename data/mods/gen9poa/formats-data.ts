@@ -1812,4 +1812,14 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "OU",
 	},
+	cetoddlehisui: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	cetitanhisui: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };

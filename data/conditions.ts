@@ -512,6 +512,10 @@ export const Conditions: {[k: string]: ConditionData} = {
 				this.debug('rain water boost');
 				return this.chainModify(1.5);
 			}
+			if (move.id === 'obsidiancrash') {
+				this.debug('ignore drop for obsidian crash boost');
+				return;
+			}
 			if (move.type === 'Fire') {
 				this.debug('rain fire suppress');
 				return this.chainModify(0.5);
