@@ -136,6 +136,9 @@ export const commands: Chat.ChatCommands = {
 			if (modchatLevelHigherThanUserRank || !Users.Auth.hasPermission(user, 'modchat', target as GroupSymbol, room)) {
 				return this.errorReply(`/modchat - Access denied for setting to ${target}.`);
 			}
+            if (room.settings.isPersonal && !user.can('makeroom')) && !'+%'.includes(target) {
+                return this.errorReply(`/modchat - Access denied from setting modchat past % in group chats while modjoin is set to sync.`);
+            }
 			room.settings.modchat = target;
 			break;
 		}
@@ -188,6 +191,9 @@ export const commands: Chat.ChatCommands = {
 		const validGroups = [...Config.groupsranking as string[], 'trusted'];
 		if (!validGroups.includes(rank)) {
 			return this.errorReply(`Invalid rank.`);
+		}
+        if (room.settings.isPersonal && !user.can('makeroom')) && !'+%'.includes(rank) {
+			return this.errorReply(`/automodchat - Access denied from setting automodchat rank past % in group chats while modjoin is set to sync.`);
 		}
 		const time = parseInt(rawTime);
 		if (isNaN(time) || time > 480 || time < 5) {
@@ -286,7 +292,8 @@ export const commands: Chat.ChatCommands = {
 			return;
 		} else if (target === 'sync') {
 			if (room.settings.modjoin === true) return this.errorReply(`Modjoin is already set to sync modchat in this room.`);
-			if (room.settings.isPersonal && !user.can('makeroom') && !'+%'.includes(room.settings.modchat)) {
+			if (room.settings.isPersonal && !user.can('makeroom')) &&
+                room.setting.modchat && !'+%'.includes(room.setting.modchat) {
 				return this.errorReply(`/modjoin - Access denied from setting modjoin past % in group chats.`);
 			}
 			room.settings.modjoin = true;
