@@ -1367,7 +1367,7 @@ export class BattleActions {
 					if (secondaryRoll < secondary.chance) this.battle.add('-ability', source, 'Snake Eyes');
 					this.battle.add("-message", secondaryRoll.toString())
 
-					if (source.item === "loadeddice" && secondaryRoll > secondary.chance) {
+					if (source.item === "loadeddice" && secondaryRoll >= secondary.chance) {
 
 						secondaryRoll = this.battle.random(100);
 						if (secondaryRoll < secondary.chance) this.battle.add('-ability', source, 'Snake Eyes');
@@ -1378,13 +1378,13 @@ export class BattleActions {
 				if (typeof secondary.chance !== 'undefined' && target?.ability === "snakeeyes" && secondaryRoll < secondary.chance) {
 
 					secondaryRoll = this.battle.random(100);
-					if (secondaryRoll > secondary.chance) this.battle.add('-ability', source, 'Snake Eyes');
+					if (secondaryRoll >= secondary.chance) this.battle.add('-ability', source, 'Snake Eyes');
 					this.battle.add("-message", secondaryRoll.toString())
 
 					if (target?.item === "loadeddice" && secondaryRoll < secondary.chance) {
 
 						secondaryRoll = this.battle.random(100);
-						if (secondaryRoll > secondary.chance) this.battle.add('-ability', source, 'Snake Eyes');
+						if (secondaryRoll >= secondary.chance) this.battle.add('-ability', source, 'Snake Eyes');
 						this.battle.add("-message", secondaryRoll.toString())
 					}
 				}
