@@ -108,20 +108,21 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		target = target.toLowerCase().trim();
+        let modchatChangeTo: AuthLevel | true | null;
 		const currentModchat = room.settings.modchat;
 		switch (target) {
 		case 'off':
 		case 'false':
 		case 'no':
 		case 'disable':
-			room.settings.modchat = null;
+			modchatChangeTo = null;
 			break;
 		case 'ac':
 		case 'autoconfirmed':
-			room.settings.modchat = 'autoconfirmed';
+			modchatChangeTo= 'autoconfirmed';
 			break;
 		case 'trusted':
-			room.settings.modchat = 'trusted';
+			modchatChangeTo = 'trusted';
 			break;
 		case 'player':
 			target = Users.PLAYER_SYMBOL;
@@ -136,16 +137,17 @@ export const commands: Chat.ChatCommands = {
 			if (modchatLevelHigherThanUserRank || !Users.Auth.hasPermission(user, 'modchat', target as GroupSymbol, room)) {
 				return this.errorReply(`/modchat - Access denied for setting to ${target}.`);
 			}
-            if (room.settings.isPersonal && !user.can('makeroom') &&
-                room.settings.modjoin === true && !'+%'.includes(target)) {
-                return this.errorReply(`/modchat - Access denied from setting modchat past % in group chats while modjoin is set to sync.`);
-            }
-			room.settings.modchat = target;
+			modchatChangeTo = target;
 			break;
 		}
-		if (currentModchat === room.settings.modchat) {
+		if (currentModchat === modchatChangeTo) {
 			return this.errorReply(`Modchat is already set to ${currentModchat || 'off'}.`);
 		}
+        if (room.settings.isPersonal && !user.can('makeroom') &&
+            room.settings.modjoin === true && !'+%'.includes(target)) {
+            return this.errorReply(`/modchat - Access denied from setting modchat past % in group chats while modjoin is set to sync.`);
+        }
+        room.settings.modchat = modchatChangeTo;
 		if (!room.settings.modchat) {
 			this.add("|raw|<div class=\"broadcast-blue\"><strong>Moderated chat was disabled!</strong><br />Anyone may talk now.</div>");
 		} else {
@@ -191,12 +193,12 @@ export const commands: Chat.ChatCommands = {
 		}
 		const validGroups = [...Config.groupsranking as string[], 'trusted'];
 		if (!validGroups.includes(rank)) {
-			return this.errorReply(`Invalid rank.`);
+            return this.errorReply(`Invalid rank.`);
 		}
         if (room.settings.isPersonal && !user.can('makeroom') &&
             room.settings.modjoin === true && !'+%'.includes(rank)) {
-			return this.errorReply(`/automodchat - Access denied from setting automodchat rank past % in group chats while modjoin is set to sync.`);
-		}
+            return this.errorReply(`/automodchat - Access denied from setting automodchat rank past % in group chats while modjoin is set to sync.`);
+        }
 		const time = parseInt(rawTime);
 		if (isNaN(time) || time > 480 || time < 5) {
 			return this.errorReply("Invalid duration. Choose a number under 480 (in minutes) and over 5 minutes.");
