@@ -1637,7 +1637,7 @@ export const commands: Chat.ChatCommands = {
 			`<code>/linecount OR /roomstats OR /topusers</code> [<code>key=value</code> formatted parameters] - ` +
 			`Searches linecounts with the given parameters.<br />` +
 			`<details class="readmore"><summary><strong>Parameters:</strong></summary>` +
-			`- <code>room</code> (aliases: <code>roomid</code>) - Select a room to search. If no room is given, defaults to current room.</br />` +
+			`- <code>room</code> (aliases: <code>roomid</code>) - Select a room to search. If no room is given, defaults to current room.<br />` +
 			`- <code>date</code> (aliases: <code>month</code>, <code>time</code>) - ` +
 			`Select a month to search linecounts on (requires YYYY-MM format). Defaults to current month.<br />` +
 			`- <code>user</code> (aliases: <code>id</code>, <code>userid</code>) - ` +
