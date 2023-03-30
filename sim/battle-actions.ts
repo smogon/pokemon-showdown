@@ -1622,6 +1622,14 @@ export class BattleActions {
 		if (move.willCrit === undefined) {
 			if (critRatio) {
 				moveHit.crit = this.battle.randomChance(1, critMult[critRatio]);
+				if (!moveHit.crit && source.ability === "snakeeyes") {
+					moveHit.crit = this.battle.randomChance(1, critMult[critRatio]);
+					if (!moveHit.crit && source.item === "loadeddice") moveHit.crit = this.battle.randomChance(1, critMult[critRatio]);
+				}
+				if (moveHit.crit && target.ability === "snakeeyes") {
+					moveHit.crit = this.battle.randomChance(1, critMult[critRatio]);
+					if (moveHit.crit && target.item === "loadeddice") moveHit.crit = this.battle.randomChance(1, critMult[critRatio]);
+				}
 			}
 		}
 
