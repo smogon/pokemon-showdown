@@ -286,6 +286,9 @@ export const commands: Chat.ChatCommands = {
 			return;
 		} else if (target === 'sync') {
 			if (room.settings.modjoin === true) return this.errorReply(`Modjoin is already set to sync modchat in this room.`);
+			if (room.settings.isPersonal && !user.can('makeroom') && !'+%'.includes(room.settings.modchat)) {
+				return this.errorReply(`/modjoin - Access denied from setting modjoin past % in group chats.`);
+			}
 			room.settings.modjoin = true;
 			this.add(`|raw|<div class="broadcast-red"><strong>Moderated join is set to sync with modchat!</strong><br />Only users who can speak in modchat can join.</div>`);
 			this.addModAction(`${user.name} set modjoin to sync with modchat.`);
