@@ -22388,32 +22388,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 0,
 		accuracy: true,
 		category: "Special",
+		ohko: true,
+		hasCrashDamage: true,
+		onMoveFail(target, source, move) {
+			this.add('-message', `${source.name} gambled its life away.`);
+			this.damage(source.baseMaxhp, source, source, this.dex.conditions.get('High Jump Kick'));
+		},
 		name: "Coinflip",
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onModifyMove(move, pokemon, target) {
-			if (!target) {
-				this.add('-fail', pokemon, 'move: Coinflip');
-				return null;
-			} 
-			const choice = this.random(2);
-			const side = (choice === 1) ? "Heads" : "Tails";
-			this.add('-message', `${pokemon.name} chose ${side}!`);
-			this.add('-anim', pokemon, 'Revival Blessing', pokemon);
-			const result = this.random(2);
-			const resultSide = (result === 1) ? "Heads" : "Tails";
-			this.add('-message', `It landed on ${resultSide}.`);
-			if (result === choice) {
-				move.ohko = true;
-			} else {
-				this.add('-message', `${pokemon.name} gambled its life away.`);
-				this.damage(pokemon.baseMaxhp, pokemon, pokemon, this.dex.conditions.get('Coinflip'));
-			}
-		},
 		secondary: null,
 		target: "normal",
 		type: "Dark",

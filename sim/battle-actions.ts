@@ -676,8 +676,19 @@ export class BattleActions {
 					}
 					if (!target.volatiles['dynamax'] && pokemon.level >= target.level &&
 						(move.ohko === true || !target.hasType(move.ohko))) {
-						if (move.name === "Coinflip"){
-							accuracy = true;
+						if (move.name === "Coinflip") {
+							const choice = this.battle.random(2);
+							const side = (choice === 1) ? "Heads" : "Tails";
+							this.battle.add('-message', `${pokemon.name} chose ${side}!`);
+							this.battle.add('-anim', pokemon, 'Revival Blessing', pokemon);
+							const result = this.battle.random(2);
+							const resultSide = (result === 1) ? "Heads" : "Tails";
+							this.battle.add('-message', `It landed on ${resultSide}.`);
+							if (result === choice) {
+								accuracy = true;
+							} else {
+								accuracy = 0;
+							}
 						} else {
 							accuracy += (pokemon.level - target.level);
 						}
