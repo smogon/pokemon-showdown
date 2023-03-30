@@ -680,7 +680,6 @@ export class BattleActions {
 							const choice = this.battle.random(2);
 							const side = (choice === 1) ? "Heads" : "Tails";
 							this.battle.add('-message', `${pokemon.name} chose ${side}!`);
-							this.battle.add('-anim', pokemon, 'Revival Blessing', pokemon);
 							const result = this.battle.random(2);
 							const resultSide = (result === 1) ? "Heads" : "Tails";
 							this.battle.add('-message', `It landed on ${resultSide}.`);
