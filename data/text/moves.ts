@@ -7534,7 +7534,7 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "The user gambles its life on a coin.",
 		desc: "User flips a coin, another coin is flipped and if the coins match, the opponent dies. If they do not, user dies.",
 
-		damage: '#crash',
+		damage: '#gamble',
 	},
 	deserttempest: {
 		name: "Desert Tempest",
