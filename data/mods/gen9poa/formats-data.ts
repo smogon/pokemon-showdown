@@ -1822,4 +1822,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	alakazamgambler: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "Uber",
+	},
 };
