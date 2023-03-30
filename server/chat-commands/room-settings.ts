@@ -297,7 +297,7 @@ export const commands: Chat.ChatCommands = {
 		} else if (target === 'sync') {
 			if (room.settings.modjoin === true) return this.errorReply(`Modjoin is already set to sync modchat in this room.`);
 			if (room.settings.isPersonal && !user.can('makeroom') &&
-                room.setting.modchat && !'+%'.includes(room.setting.modchat)) {
+                room.settings.modchat && !'+%'.includes(room.settings.modchat)) {
 				return this.errorReply(`/modjoin - Access denied from setting modjoin past % in group chats.`);
 			}
 			room.settings.modjoin = true;
