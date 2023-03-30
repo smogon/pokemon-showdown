@@ -1807,6 +1807,30 @@ export class BattleActions {
 
 		// random factor - also not a modifier
 		baseDamage = this.battle.randomizer(baseDamage);
+		if (pokemon.ability === "snakeeyes") {
+			let baseDamageSE = this.battle.randomizer(baseDamage);
+			if (baseDamageSE > baseDamage) {
+				baseDamage = baseDamageSE
+			} 
+			if (pokemon.item === "loadeddice") {
+				let baseDamageLD = this.battle.randomizer(baseDamage);
+				if (baseDamageLD > baseDamage) {
+					baseDamage = baseDamageLD
+				}
+			}
+		}
+		if (target.ability === "snakeeyes") {
+			let baseDamageSEO = this.battle.randomizer(baseDamage);
+			if (baseDamageSEO < baseDamage) {
+				baseDamage = baseDamageSEO
+			} 
+			if (target.item === "loadeddice") {
+				let baseDamageLDO = this.battle.randomizer(baseDamage);
+				if (baseDamageLDO < baseDamage) {
+					baseDamage = baseDamageLDO
+				}
+			}
+		}
 
 		// STAB
 		if (move.forceSTAB || (type !== '???' &&
