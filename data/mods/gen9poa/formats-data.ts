@@ -94,7 +94,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		inherit: true,
 		isNonstandard: null,
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
     },
 	raltsdelta: {
 		inherit: true,
@@ -118,7 +118,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		inherit: true,
 		isNonstandard: null,
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "UU",
     },
     galladedelta: {
 		inherit: true,
@@ -849,7 +849,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		inherit: true,
 		isNonstandard: null,
 		tier: "Illegal",
-		natDexTier: "RU",
+		natDexTier: "Uber",
     },
 	arondelta: {
 		inherit: true,
@@ -885,7 +885,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		inherit: true,
 		isNonstandard: null,
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "UU",
     },
 	numeldelta: {
 		inherit: true,
@@ -945,7 +945,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		inherit: true,
 		isNonstandard: null,
 		tier: "Illegal",
-		natDexTier: "UU",
+		natDexTier: "OU",
     },
 	miloticmega: {
 		inherit: true,
@@ -1220,7 +1220,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		inherit: true,
 		isNonstandard: null,
 		tier: "Illegal",
-		natDexTier: "RU",
+		natDexTier: "UU",
     },
 	litwickdelta: {
 		inherit: true,
@@ -1353,7 +1353,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		inherit: true,
 		isNonstandard: null,
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "UU",
     },
 	goomydelta: {
 		inherit: true,
@@ -1419,13 +1419,13 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		inherit: true,
 		isNonstandard: null,
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "UU",
     },
 	marowakmega: {
 		inherit: true,
 		isNonstandard: null,
 		tier: "Illegal",
-		natDexTier: "RU",
+		natDexTier: "UU",
     },
 	eeveemega: {
 		inherit: true,
@@ -1537,7 +1537,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		inherit: true,
 		isNonstandard: null,
 		tier: "Illegal",
-		natDexTier: "UU",
+		natDexTier: "OU",
     },
 	miltankmega: {
 		inherit: true,
@@ -1579,7 +1579,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		inherit: true,
 		isNonstandard: null,
 		tier: "Illegal",
-		natDexTier: "UU",
+		natDexTier: "OU",
     },
 	spiritombmega: {
 		inherit: true,
@@ -1610,6 +1610,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		tier: "Illegal",
 		natDexTier: "Uber",
+    },
+	reuniclusmega: {
+		inherit: true,
+		isNonstandard: null,
+		tier: "Illegal",
+		natDexTier: "UU",
     },
 	stunfiskmega: {
 		inherit: true,

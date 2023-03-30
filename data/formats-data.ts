@@ -7549,6 +7549,11 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 		natDexTier: "Illegal",
     },
+	reuniclusmega: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+    },
 	steelixmegafire: {
 		isNonstandard: "Past",
 		tier: "Illegal",
