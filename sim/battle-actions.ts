@@ -1361,7 +1361,7 @@ export class BattleActions {
 				let secondaryRoll = this.battle.random(100);
 				this.battle.add("-message", secondaryRoll.toString())
 
-				if (typeof secondary.chance !== 'undefined' && source.ability === "snakeeyes" && secondaryRoll > secondary.chance) {
+				if (typeof secondary.chance !== 'undefined' && source.ability === "snakeeyes" && secondaryRoll >= secondary.chance) {
 
 					secondaryRoll = this.battle.random(100);
 					if (secondaryRoll < secondary.chance) this.battle.add('-ability', source, 'Snake Eyes');
