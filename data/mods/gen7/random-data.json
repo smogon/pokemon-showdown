@@ -81,7 +81,7 @@
     },
     "pikachu": {
         "level": 90,
-        "moves": ["extremespeed", "grassknot", "hiddenpowerice", "irontail", "knockoff", "voltswitch", "volttackle"],
+        "moves": ["extremespeed", "grassknot", "hiddenpowerice", "knockoff", "surf", "voltswitch", "volttackle"],
         "doublesMoves": ["encore", "fakeout", "grassknot", "hiddenpowerice", "knockoff", "protect", "voltswitch", "volttackle"]
     },
     "raichu": {
@@ -216,7 +216,7 @@
     },
     "golem": {
         "level": 88,
-        "moves": ["earthquake", "explosion", "rockblast", "stealthrock", "suckerpunch", "toxic"],
+        "moves": ["earthquake", "explosion", "stealthrock", "stoneedge", "suckerpunch", "toxic"],
         "doublesMoves": ["earthquake", "protect", "rockslide", "stealthrock", "stoneedge", "suckerpunch"]
     },
     "golemalola": {
@@ -1257,10 +1257,12 @@
     },
     "rayquaza": {
         "level": 76,
-        "moves": ["dracometeor", "dragonascent", "dragondance", "earthquake", "extremespeed", "outrage", "vcreate"],
+        "moves": ["dracometeor", "dragondance", "earthquake", "extremespeed", "outrage", "vcreate"],
         "doublesMoves": ["dracometeor", "dragonclaw", "dragondance", "earthquake", "extremespeed", "protect", "tailwind", "vcreate"]
     },
     "rayquazamega": {
+        "level": 67,
+        "moves": ["dragonascent", "dragondance", "earthquake", "extremespeed", "vcreate"],
         "doublesMoves": ["dragonascent", "dragonclaw", "dragondance", "earthquake", "extremespeed", "protect", "swordsdance", "vcreate"]
     },
     "jirachi": {
