@@ -383,6 +383,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (pokemon.status === 'tox') {
 					pokemon.setStatus('psn');
 				}
+				pokemon.updateSpeed();
 				// should only clear a specific set of volatiles
 				// while technically the toxic counter shouldn't be cleared, the preserved toxic counter is never used again
 				// in-game, so it is equivalent to just clear it.
@@ -616,6 +617,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile('twoturnmove')) {
+				attacker.removeVolatile('invulnerability');
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
@@ -710,6 +712,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile('twoturnmove')) {
+				attacker.removeVolatile('invulnerability');
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
@@ -721,6 +724,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile('twoturnmove')) {
+				attacker.removeVolatile('invulnerability');
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
@@ -743,6 +747,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile('twoturnmove')) {
+				attacker.removeVolatile('invulnerability');
 				return;
 			}
 			this.add('-prepare', attacker, move.name);

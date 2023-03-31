@@ -863,9 +863,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 	commanding: {
 		name: "Commanding",
 		noCopy: true,
-		onStart(pokemon) {
-			this.add('-activate', pokemon, 'ability: Commander');
-		},
 		onDragOutPriority: 2,
 		onDragOut() {
 			return false;

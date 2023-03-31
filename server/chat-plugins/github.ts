@@ -6,7 +6,9 @@
 
 import {FS, Utils} from '../../lib';
 
-const STAFF_REPOS = Config.staffrepos || ['pokemon-showdown', 'pokemon-showdown-client', 'Pokemon-Showdown-Dex'];
+const STAFF_REPOS = Config.staffrepos || [
+	'pokemon-showdown', 'pokemon-showdown-client', 'Pokemon-Showdown-Dex', 'pokemon-showdown-loginserver',
+];
 const COOLDOWN = 10 * 60 * 1000;
 
 export const gitData: GitData = JSON.parse(FS("config/chat-plugins/github.json").readIfExistsSync() || "{}");
