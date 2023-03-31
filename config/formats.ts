@@ -90,6 +90,7 @@ export const Formats: FormatList = [
 		name: "[Gen 9] RU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3713711/">RU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3717072/">RU Sample Teams</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3717138/">RU Viability Rankings</a>`,
 		],
 
@@ -101,6 +102,7 @@ export const Formats: FormatList = [
 		name: "[Gen 9] NU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3715408/">NU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3718115/">NU Sample Teams</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3715712/">NU Viability Rankings</a>`,
 		],
 
@@ -144,6 +146,7 @@ export const Formats: FormatList = [
 		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3710864/">1v1 Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3713073/">1v1 Sample Teams</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3712375/">1v1 Viability Rankings</a>`,
 		],
 
@@ -169,7 +172,12 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] CAP",
-
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3712857/">CAP Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3718107/">CAP Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3714023/">CAP Viability Rankings</a>`,
+		],
+		
 		mod: 'gen9',
 		ruleset: ['[Gen 9] OU', '+CAP'],
 		banlist: ['Walking Wake', 'Crucibellite'],
@@ -226,6 +234,7 @@ export const Formats: FormatList = [
 		name: "[Gen 9] Doubles OU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3710876/">Doubles OU Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3710905/">Doubles OU Viability Rankings</a>`,
 		],
 
 		mod: 'gen9',
@@ -317,6 +326,8 @@ export const Formats: FormatList = [
 		name: "[Gen 9] National Dex",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3710848/">National Dex Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3714863/">National Dex Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3714511/">National Dex Viability Rankings</a>`,
 		],
 
 		mod: 'gen9',
@@ -360,6 +371,8 @@ export const Formats: FormatList = [
 		name: "[Gen 9] National Dex Monotype",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3710738/">National Dex Monotype Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3716842/">National Dex Monotype Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3715785/">National Dex Viability Rankings</a>`,
 		],
 
 		mod: 'gen9',
