@@ -5540,6 +5540,9 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	jigglypuff: {
 		learnset: {
+			moonblast: ['9M'],
+			knockoff: ['9M'],
+			softboiled: ['9M'],
 			allyswitch: ["8M", "7T"],
 			amnesia: ["9M"],
 			attract: ["8M", "7M", "7V", "6M", "5M", "4M", "3M"],
@@ -5602,7 +5605,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			icespinner: ["9M"],
 			icywind: ["9M", "8M", "7T", "6T", "5T", "4T"],
 			incinerate: ["6M", "5M"],
-			knockoff: ["7T", "6T", "5T", "4T"],
+			// knockoff: ["7T", "6T", "5T", "4T"],
 			lastresort: ["7T", "6T", "5T", "4T"],
 			lightscreen: ["9M", "8M", "8V", "7M", "6M", "5M", "4M", "3M"],
 			magicalleaf: ["9M"],
@@ -62336,6 +62339,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	pawniard: {
 		learnset: {
+			kowtowcleave: ['9M'],
 			aerialace: ["9M", "7M", "6M", "5M"],
 			airslash: ["9M"],
 			assurance: ["9L25", "8M", "8L25", "7L33", "6L33", "5L33"],
@@ -80096,6 +80100,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	carkol: {
 		learnset: {
+			slackoff: ['9M'],
 			ancientpower: ["9L20", "8L20"],
 			attract: ["8M"],
 			bodypress: ["9M", "8M"],

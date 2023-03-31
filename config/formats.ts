@@ -98,7 +98,8 @@ export const Formats: FormatList = [
 
 		mod: 'gen9deluxe',
 		ruleset: ['[Gen 9] Do Not Use'],
-		banlist: ["Do Not Use"]
+		banlist: ["Cleffa", "Zubat", "Happiny", "Togepi", "Wooper", "Wooper-Paldea", "Unown", "Swinub", "Zigzagoon-Galar", "Lotad",
+			"Makuhita", "Gulpin", "Luvdisc", "Starly", "Shinx", "Noibat", "Wimpod", "Nickit", "Rolycoly", "Dreepy", "Tarountula", "Nymble", "Charcadet"]
 	},
 
 	{
@@ -220,7 +221,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen3dnu',
 		ruleset: ['Standard', 'One Boost Passer Clause', 'Freeze Clause Mod'],
-		banlist: ['Uber', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Smeargle + Ingrain', 'AG', 
+		banlist: ['Uber', 'Sand Veil', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Smeargle + Ingrain', 'AG', 
 			"UUBL", "UU", "RUBL", "RU", "NUBL", "NU", "PUBL", "PU", "NFE", "LC"],
 	},
 
