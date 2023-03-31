@@ -425,7 +425,7 @@
     },
     "shuckle": {
         "level": 90,
-        "moves": ["encore", "protect", "stealthrock", "toxic", "wrap"]
+        "moves": ["encore", "knockoff", "protect", "stealthrock", "toxic"]
     },
     "heracross": {
         "level": 82,
