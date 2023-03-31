@@ -21,6 +21,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				!counter.get('Dragon') &&
 				!abilities.has('Aerilate') &&
 				!abilities.has('Pixilate') &&
+				!moves.has('dragonascent') &&
 				!moves.has('rest') &&
 				!moves.has('sleeptalk')
 			),
@@ -513,7 +514,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		species: Species
 	): boolean {
 		switch (ability) {
-		case 'Flare Boost': case 'Gluttony': case 'Moody': case 'Snow Cloak': case 'Steadfast':
+		case 'Flare Boost': case 'Gluttony': case 'Moody': case 'Snow Cloak': case 'Steadfast': case 'Magician':
 			return true;
 		case 'Contrary': case 'Iron Fist': case 'Skill Link': case 'Strong Jaw':
 			return !counter.get(toID(ability));

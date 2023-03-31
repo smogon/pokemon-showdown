@@ -73,7 +73,7 @@
     },
     "parasect": {
         "level": 88,
-        "moves": ["seedbomb", "spore", "stunspore", "synthesis", "xscissor"]
+        "moves": ["leechseed", "seedbomb", "spore", "stunspore", "synthesis", "xscissor"]
     },
     "venomoth": {
         "level": 88,
@@ -305,7 +305,7 @@
     },
     "ledian": {
         "level": 88,
-        "moves": ["encore", "lightscreen", "reflect", "roost", "toxic", "uturn"]
+        "moves": ["encore", "knockoff", "lightscreen", "reflect", "roost", "toxic", "uturn"]
     },
     "ariados": {
         "level": 88,
@@ -349,7 +349,7 @@
     },
     "sunflora": {
         "level": 88,
-        "moves": ["earthpower", "hiddenpowerice", "leafstorm", "synthesis"]
+        "moves": ["earthpower", "hiddenpowerice", "leafstorm", "sludgebomb", "synthesis"]
     },
     "quagsire": {
         "level": 88,
@@ -385,7 +385,7 @@
     },
     "dunsparce": {
         "level": 88,
-        "moves": ["bite", "bodyslam", "headbutt", "rockslide", "roost", "thunderwave", "zenheadbutt"]
+        "moves": ["bite", "bodyslam", "earthquake", "headbutt", "rockslide", "roost", "thunderwave"]
     },
     "steelix": {
         "level": 84,
@@ -648,8 +648,8 @@
         "moves": ["calmmind", "focusblast", "healbell", "psychic", "shadowball", "thunderwave", "toxic"]
     },
     "spinda": {
-        "level": 88,
-        "moves": ["bodyslam", "encore", "hypnosis", "seismictoss", "substitute", "teeterdance", "toxic"]
+        "level": 100,
+        "moves": ["bodyslam", "encore", "shadowball", "teeterdance", "toxic"]
     },
     "flygon": {
         "level": 80,
@@ -1089,7 +1089,7 @@
     },
     "giratinaorigin": {
         "level": 76,
-        "moves": ["aurasphere", "calmmind", "dracometeor", "dragonpulse", "hiddenpowerfire", "outrage", "shadowball", "shadowsneak", "substitute"]
+        "moves": ["aurasphere", "calmmind", "dracometeor", "dragonpulse", "outrage", "shadowball", "shadowsneak", "substitute", "willowisp"]
     },
     "giratina": {
         "level": 76,

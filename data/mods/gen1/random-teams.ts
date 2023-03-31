@@ -133,7 +133,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 		// Now let's store what we are getting.
 		const typeCount: {[k: string]: number} = {};
-		const weaknessCount: {[k: string]: number} = {Electric: 0, Psychic: 0, Water: 0, Ice: 0, Ground: 0};
+		const weaknessCount: {[k: string]: number} = {Electric: 0, Psychic: 0, Water: 0, Ice: 0, Ground: 0, Fire: 0};
 		let uberCount = 0;
 		let nuCount = 0;
 
@@ -361,6 +361,18 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				if (hp % 4 !== 0) break;
 				evs.hp -= 4;
 			}
+		}
+
+		// Minimize confusion damage
+		const noAttackStatMoves = [...moves].every(m => {
+			const move = this.dex.moves.get(m);
+			if (move.damageCallback || move.damage) return true;
+			return move.category !== 'Physical';
+		});
+		if (noAttackStatMoves && !moves.has('mimic') && !moves.has('transform')) {
+			evs.atk = 0;
+			// We don't want to lower the HP DV/IV
+			ivs.atk = 2;
 		}
 
 		return {
