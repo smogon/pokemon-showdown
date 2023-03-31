@@ -22418,7 +22418,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		onAfterHit(source, target, move) {
-			this.actions.useMove("Sandstorm", source, source);
+			this.actions.useMove("Sandstorm", target, target);
 		},
 		flags: {protect: 1},
 		secondary: null,
