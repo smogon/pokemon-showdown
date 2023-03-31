@@ -47,7 +47,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			Dragon: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Dragon') &&
 				!abilities.has('Aerilate') && !abilities.has('Pixilate') &&
-				!moves.has('fly') && !moves.has('rest') && !moves.has('sleeptalk')
+				!moves.has('dragonascent') && !moves.has('fly') && !moves.has('rest') && !moves.has('sleeptalk')
 			),
 			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric') || movePool.includes('thunder'),
 			Fairy: (movePool, moves, abilities, types, counter) => (
@@ -605,7 +605,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 	): boolean {
 		switch (ability) {
 		case 'Battle Bond': case 'Dazzling': case 'Flare Boost': case 'Hyper Cutter':
-		case 'Ice Body': case 'Innards Out': case 'Moody': case 'Steadfast':
+		case 'Ice Body': case 'Innards Out': case 'Moody': case 'Steadfast': case 'Magician':
 			return true;
 		case 'Aerilate': case 'Galvanize': case 'Pixilate': case 'Refrigerate':
 			return !counter.get('Normal');
@@ -657,8 +657,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			return !counter.get('sound');
 		case 'Magic Guard': case 'Speed Boost':
 			return (abilities.has('Tinted Lens') && (!counter.get('Status') || moves.has('uturn')));
-		case 'Magician':
-			return moves.has('switcheroo');
 		case 'Magnet Pull':
 			return (!!counter.get('Normal') || !types.has('Electric') && !moves.has('earthpower'));
 		case 'Mold Breaker':
@@ -1657,7 +1655,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				}
 
 				// Track what the team has
-				if (item.megaStone) hasMega = true;
+				if (item.megaStone || species.name === 'Rayquaza-Mega') hasMega = true;
 				if (item.zMove) teamDetails.zMove = 1;
 				if (set.ability === 'Snow Warning' || set.moves.includes('hail')) teamDetails.hail = 1;
 				if (set.moves.includes('raindance') || set.ability === 'Drizzle' && !item.onPrimal) teamDetails.rain = 1;

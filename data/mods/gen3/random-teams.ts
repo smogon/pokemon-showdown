@@ -318,8 +318,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			return !teamDetails['sand'];
 		case 'Serene Grace':
 			return species.id === 'blissey';
-		case 'Sturdy':
-			// Sturdy is bad.
+		case 'Soundproof': case 'Sturdy':
+			// Electrode prefers Static, and Sturdy is bad.
 			return true;
 		case 'Swift Swim':
 			return !moves.has('raindance') && !teamDetails['rain'];
