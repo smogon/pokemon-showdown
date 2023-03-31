@@ -1808,6 +1808,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	eiscuedeltanorock: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+		natDexTier: "Illegal",
+		tier: "Illegal",
+	},
 	raikoudelta: {
 		inherit: true,
 		isNonstandard: null,
