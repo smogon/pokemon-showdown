@@ -22392,6 +22392,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		hasCrashDamage: true,
 		onMoveFail(target, source, move) {
 			this.damage(source.baseMaxhp, source, source, this.dex.conditions.get('Coinflip'));
+			this.add('-message', `${source.name} gambled its life away.`);
 		},
 		name: "Coinflip",
 		pp: 5,
