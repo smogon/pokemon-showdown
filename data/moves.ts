@@ -22417,12 +22417,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return this.chainModify(1.2);
 			}
 		},
-		flags: {},
-		weather: 'Sandstorm',
+		onAfterHit(source, target, move) {
+			this.actions.useMove("Sandstorm", source, source);
+		},
+		flags: {protect: 1},
 		secondary: null,
 		target: "normal",
 		type: "Rock",
-		zMove: {boost: {spe: 1}},
 		contestType: "Beautiful",
 	},
 	obsidiancrash: {
