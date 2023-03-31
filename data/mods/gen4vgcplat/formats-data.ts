@@ -1,32 +1,38 @@
 export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	"bulbasaur": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"ivysaur": {
-		"tier": "3"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"venusaur": {
-		"doublesTier": "DUU",
+		"doublesTier": "16",
 		"tier": "16"
 	},
 	"charmander": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"charmeleon": {
-		"tier": "3"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"charizard": {
-		"doublesTier": "DUU",
+		"doublesTier": "11",
 		"tier": "11"
 	},
 	"squirtle": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"wartortle": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"blastoise": {
-		"doublesTier": "DUU",
+		"doublesTier": "7",
 		"tier": "7"
 	},
 	"caterpie": {
@@ -42,13 +48,15 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"weedle": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"kakuna": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"beedrill": {
-		"doublesTier": "DUU",
+		"doublesTier": "13",
 		"tier": "13"
 	},
 	"beedrillmega": {
@@ -56,13 +64,15 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"pidgey": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"pidgeotto": {
-		"tier": "3"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"pidgeot": {
-		"doublesTier": "DUU",
+		"doublesTier": "7",
 		"tier": "7"
 	},
 	"pidgeotmega": {
@@ -86,27 +96,31 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"ekans": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"arbok": {
-		"doublesTier": "DUU",
+		"doublesTier": "9",
 		"tier": "9"
 	},
 	"pichu": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"pikachu": {
-		"tier": "4"
+		"tier": "4",
+		"doublesTier": "4"
 	},
 	"raichu": {
-		"doublesTier": "DOU",
+		"doublesTier": "12",
 		"tier": "12"
 	},
 	"sandshrew": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"sandslash": {
-		"doublesTier": "DUU",
+		"doublesTier": "4",
 		"tier": "4"
 	},
 	"nidoranf": {
@@ -122,13 +136,15 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"nidoranm": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"nidorino": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"nidoking": {
-		"doublesTier": "DUU",
+		"doublesTier": "7",
 		"tier": "7"
 	},
 	"cleffa": {
@@ -144,10 +160,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"vulpix": {
-		"tier": "5"
+		"tier": "5",
+		"doublesTier": "5"
 	},
 	"ninetales": {
-		"doublesTier": "DUU",
+		"doublesTier": "14",
 		"tier": "14"
 	},
 	"igglybuff": {
@@ -163,13 +180,15 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"zubat": {
-		"tier": "1"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"golbat": {
-		"tier": "4"
+		"tier": "7",
+		"doublesTier": "7"
 	},
 	"crobat": {
-		"doublesTier": "DUU",
+		"doublesTier": "14",
 		"tier": "14"
 	},
 	"oddish": {
@@ -189,10 +208,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"paras": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"parasect": {
-		"doublesTier": "DUU",
+		"doublesTier": "9",
 		"tier": "9"
 	},
 	"venonat": {
@@ -228,51 +248,59 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"mankey": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"primeape": {
-		"doublesTier": "DUU",
+		"doublesTier": "7",
 		"tier": "7"
 	},
 	"growlithe": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"arcanine": {
-		"doublesTier": "DOU",
+		"doublesTier": "17",
 		"tier": "17"
 	},
 	"poliwag": {
-		"tier": "4"
+		"tier": "4",
+		"doublesTier": "4"
 	},
 	"poliwhirl": {
-		"tier": "5"
+		"tier": "5",
+		"doublesTier": "5"
 	},
 	"poliwrath": {
-		"doublesTier": "DUU",
+		"doublesTier": "6",
 		"tier": "6"
 	},
 	"politoed": {
-		"doublesTier": "DOU",
+		"doublesTier": "14",
 		"tier": "14"
 	},
 	"abra": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"kadabra": {
-		"tier": "3"
+		"tier": "4",
+		"doublesTier": "4"
 	},
 	"alakazam": {
-		"doublesTier": "DUU",
+		"doublesTier": "11",
 		"tier": "11"
 	},
 	"machop": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"machoke": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"machamp": {
-		"doublesTier": "DUU",
+		"doublesTier": "5",
 		"tier": "5"
 	},
 	"bellsprout": {
@@ -316,25 +344,27 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"slowpoke": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"slowbro": {
-		"doublesTier": "DUU",
+		"doublesTier": "11",
 		"tier": "11"
 	},
 	"slowking": {
-		"doublesTier": "DUU",
+		"doublesTier": "11",
 		"tier": "11"
 	},
 	"magnemite": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"magneton": {
-		"doublesTier": "NFE",
+		"doublesTier": "9",
 		"tier": "9"
 	},
 	"magnezone": {
-		"doublesTier": "DUU",
+		"doublesTier": "11",
 		"tier": "11"
 	},
 	"farfetchd": {
@@ -342,10 +372,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"doduo": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"dodrio": {
-		"doublesTier": "DUU",
+		"doublesTier": "12",
 		"tier": "12"
 	},
 	"seel": {
@@ -357,35 +388,39 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"grimer": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"muk": {
-		"doublesTier": "DUU",
+		"doublesTier": "6",
 		"tier": "6"
 	},
 	"shellder": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"cloyster": {
-		"doublesTier": "DUU",
+		"doublesTier": "7",
 		"tier": "7"
 	},
 	"gastly": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"haunter": {
-		"doublesTier": "NFE",
-		"tier": "3"
+		"doublesTier": "5",
+		"tier": "5"
 	},
 	"gengar": {
-		"doublesTier": "DUU",
+		"doublesTier": "11",
 		"tier": "11"
 	},
 	"onix": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"steelix": {
-		"doublesTier": "DUU",
+		"doublesTier": "10",
 		"tier": "10"
 	},
 	"drowzee": {
@@ -405,39 +440,43 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"voltorb": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"electrode": {
-		"doublesTier": "DUU",
+		"doublesTier": "9",
 		"tier": "9"
 	},
 	"exeggcute": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"exeggutor": {
-		"doublesTier": "DUU",
+		"doublesTier": "12",
 		"tier": "12"
 	},
 	"cubone": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"marowak": {
-		"doublesTier": "DUU",
+		"doublesTier": "10",
 		"tier": "10"
 	},
 	"tyrogue": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"hitmonlee": {
-		"doublesTier": "DUU",
+		"doublesTier": "8",
 		"tier": "8"
 	},
 	"hitmonchan": {
-		"doublesTier": "DUU",
+		"doublesTier": "6",
 		"tier": "6"
 	},
 	"hitmontop": {
-		"doublesTier": "DOU",
+		"doublesTier": "12",
 		"tier": "12"
 	},
 	"lickitung": {
@@ -457,31 +496,35 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"rhyhorn": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"rhydon": {
-		"doublesTier": "NFE",
+		"doublesTier": "8",
 		"tier": "8"
 	},
 	"rhyperior": {
-		"doublesTier": "DUU",
+		"doublesTier": "13",
 		"tier": "13"
 	},
 	"happiny": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"chansey": {
-		"tier": "10"
+		"tier": "10",
+		"doublesTier": "10"
 	},
 	"blissey": {
-		"doublesTier": "DUU",
+		"doublesTier": "16",
 		"tier": "16"
 	},
 	"tangela": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"tangrowth": {
-		"doublesTier": "DUU",
+		"doublesTier": "13",
 		"tier": "13"
 	},
 	"kangaskhan": {
@@ -489,13 +532,15 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"horsea": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"seadra": {
-		"tier": "4"
+		"tier": "5",
+		"doublesTier": "5"
 	},
 	"kingdra": {
-		"doublesTier": "DOU",
+		"doublesTier": "13",
 		"tier": "13"
 	},
 	"goldeen": {
@@ -507,10 +552,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"staryu": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"starmie": {
-		"doublesTier": "DUU",
+		"doublesTier": "8",
 		"tier": "8"
 	},
 	"mimejr": {
@@ -522,11 +568,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"scyther": {
-		"doublesTier": "NFE",
+		"doublesTier": "5",
 		"tier": "5"
 	},
 	"scizor": {
-		"doublesTier": "DOU",
+		"doublesTier": "13",
 		"tier": "13"
 	},
 	"smoochum": {
@@ -534,27 +580,31 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"jynx": {
-		"doublesTier": "DUU",
+		"doublesTier": "12",
 		"tier": "12"
 	},
 	"elekid": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"electabuzz": {
-		"tier": "3"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"electivire": {
-		"doublesTier": "DUU",
+		"doublesTier": "7",
 		"tier": "7"
 	},
 	"magby": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"magmar": {
-		"tier": "2"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"magmortar": {
-		"doublesTier": "DUU",
+		"doublesTier": "8",
 		"tier": "8"
 	},
 	"pinsir": {
@@ -562,18 +612,19 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"tauros": {
-		"doublesTier": "DUU",
+		"doublesTier": "10",
 		"tier": "10"
 	},
 	"magikarp": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"gyarados": {
-		"doublesTier": "DOU",
+		"doublesTier": "14",
 		"tier": "14"
 	},
 	"lapras": {
-		"doublesTier": "DUU",
+		"doublesTier": "8",
 		"tier": "8"
 	},
 	"ditto": {
@@ -581,91 +632,99 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"eevee": {
-		"tier": "1"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"vaporeon": {
-		"doublesTier": "DUU",
+		"doublesTier": "15",
 		"tier": "15"
 	},
 	"jolteon": {
-		"doublesTier": "DUU",
+		"doublesTier": "11",
 		"tier": "11"
 	},
 	"flareon": {
-		"doublesTier": "DUU",
+		"doublesTier": "15",
 		"tier": "15"
 	},
 	"espeon": {
-		"doublesTier": "DUU",
+		"doublesTier": "10",
 		"tier": "10"
 	},
 	"umbreon": {
-		"doublesTier": "DUU",
+		"doublesTier": "11",
 		"tier": "11"
 	},
 	"leafeon": {
-		"doublesTier": "DUU",
+		"doublesTier": "8",
 		"tier": "8"
 	},
 	"glaceon": {
-		"doublesTier": "DUU",
+		"doublesTier": "9",
 		"tier": "9"
 	},
 	"porygon": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"porygon2": {
-		"tier": "17"
+		"tier": "17",
+		"doublesTier": "17"
 	},
 	"porygonz": {
-		"doublesTier": "DUU",
+		"doublesTier": "14",
 		"tier": "14"
 	},
 	"omanyte": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"omastar": {
-		"doublesTier": "DUU",
+		"doublesTier": "8",
 		"tier": "8"
 	},
 	"kabuto": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"kabutops": {
-		"doublesTier": "DUU",
+		"doublesTier": "12",
 		"tier": "12"
 	},
 	"aerodactyl": {
-		"doublesTier": "DUU",
+		"doublesTier": "13",
 		"tier": "13"
 	},
 	"munchlax": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"snorlax": {
-		"doublesTier": "DUU",
+		"doublesTier": "12",
 		"tier": "12"
 	},
 	"articuno": {
-		"doublesTier": "DUU",
+		"doublesTier": "17",
 		"tier": "17"
 	},
 	"zapdos": {
-		"doublesTier": "DOU",
+		"doublesTier": "17",
 		"tier": "17"
 	},
 	"moltres": {
-		"doublesTier": "DUU",
+		"doublesTier": "18",
 		"tier": "18"
 	},
 	"dratini": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"dragonair": {
-		"tier": "3"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"dragonite": {
-		"doublesTier": "DUU",
+		"doublesTier": "13",
 		"tier": "13"
 	},
 	"mewtwo": {
@@ -677,61 +736,71 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"chikorita": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"bayleef": {
-		"tier": "3"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"meganium": {
-		"doublesTier": "DUU",
+		"doublesTier": "10",
 		"tier": "10"
 	},
 	"cyndaquil": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"quilava": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"typhlosion": {
-		"doublesTier": "DUU",
+		"doublesTier": "12",
 		"tier": "12"
 	},
 	"totodile": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"croconaw": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"feraligatr": {
-		"doublesTier": "DUU",
+		"doublesTier": "9",
 		"tier": "9"
 	},
 	"sentret": {
-		"tier": "1"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"furret": {
-		"doublesTier": "DUU",
+		"doublesTier": "7",
 		"tier": "7"
 	},
 	"hoothoot": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"noctowl": {
-		"doublesTier": "DUU",
+		"doublesTier": "6",
 		"tier": "6"
 	},
 	"ledyba": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"ledian": {
-		"doublesTier": "DUU",
+		"doublesTier": "4",
 		"tier": "4"
 	},
 	"spinarak": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"ariados": {
-		"doublesTier": "DUU",
+		"doublesTier": "4",
 		"tier": "4"
 	},
 	"chinchou": {
@@ -743,30 +812,35 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"togepi": {
-		"tier": "1"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"togetic": {
-		"tier": "4"
+		"tier": "10",
+		"doublesTier": "10"
 	},
 	"togekiss": {
-		"doublesTier": "DOU",
+		"doublesTier": "14",
 		"tier": "14"
 	},
 	"natu": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"xatu": {
-		"doublesTier": "DUU",
+		"doublesTier": "7",
 		"tier": "7"
 	},
 	"mareep": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"flaaffy": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"ampharos": {
-		"doublesTier": "DUU",
+		"doublesTier": "6",
 		"tier": "6"
 	},
 	"azurill": {
@@ -782,41 +856,47 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"bonsly": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"sudowoodo": {
-		"doublesTier": "DUU",
+		"doublesTier": "6",
 		"tier": "6"
 	},
 	"hoppip": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"skiploom": {
-		"tier": "3"
+		"tier": "4",
+		"doublesTier": "4"
 	},
 	"jumpluff": {
-		"doublesTier": "DUU",
+		"doublesTier": "10",
 		"tier": "10"
 	},
 	"aipom": {
-		"tier": "3"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"ambipom": {
-		"doublesTier": "DUU",
+		"doublesTier": "13",
 		"tier": "13"
 	},
 	"sunkern": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"sunflora": {
-		"doublesTier": "DUU",
+		"doublesTier": "6",
 		"tier": "6"
 	},
 	"yanma": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"yanmega": {
-		"doublesTier": "DUU",
+		"doublesTier": "5",
 		"tier": "5"
 	},
 	"wooper": {
@@ -828,17 +908,19 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"murkrow": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"honchkrow": {
-		"doublesTier": "DUU",
+		"doublesTier": "10",
 		"tier": "10"
 	},
 	"misdreavus": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"mismagius": {
-		"doublesTier": "DUU",
+		"doublesTier": "10",
 		"tier": "10"
 	},
 	"unown": {
@@ -846,7 +928,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"wynaut": {
-		"tier": "1"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"wobbuffet": {
 		"isNonstandard": "Unobtainable",
@@ -857,22 +940,23 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"pineco": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"forretress": {
-		"doublesTier": "DUU",
+		"doublesTier": "13",
 		"tier": "13"
 	},
 	"dunsparce": {
-		"doublesTier": "DUU",
+		"doublesTier": "12",
 		"tier": "12"
 	},
 	"gligar": {
-		"doublesTier": "NFE",
+		"doublesTier": "3",
 		"tier": "3"
 	},
 	"gliscor": {
-		"doublesTier": "DUU",
+		"doublesTier": "6",
 		"tier": "6"
 	},
 	"snubbull": {
@@ -888,47 +972,51 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"shuckle": {
-		"doublesTier": "DUU",
+		"doublesTier": "5",
 		"tier": "5"
 	},
 	"heracross": {
-		"doublesTier": "DUU",
+		"doublesTier": "9",
 		"tier": "9"
 	},
 	"sneasel": {
-		"doublesTier": "NFE",
+		"doublesTier": "4",
 		"tier": "4"
 	},
 	"weavile": {
-		"doublesTier": "DUU",
+		"doublesTier": "10",
 		"tier": "10"
 	},
 	"teddiursa": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"ursaring": {
-		"doublesTier": "DUU",
+		"doublesTier": "8",
 		"tier": "8"
 	},
 	"slugma": {
-		"tier": "5"
+		"tier": "5",
+		"doublesTier": "5"
 	},
 	"magcargo": {
-		"doublesTier": "DUU",
+		"doublesTier": "15",
 		"tier": "15"
 	},
 	"swinub": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"piloswine": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"mamoswine": {
-		"doublesTier": "DOU",
+		"doublesTier": "11",
 		"tier": "11"
 	},
 	"corsola": {
-		"doublesTier": "DUU",
+		"doublesTier": "9",
 		"tier": "9"
 	},
 	"remoraid": {
@@ -956,10 +1044,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"houndour": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"houndoom": {
-		"doublesTier": "DUU",
+		"doublesTier": "9",
 		"tier": "9"
 	},
 	"phanpy": {
@@ -971,7 +1060,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"stantler": {
-		"doublesTier": "DUU",
+		"doublesTier": "14",
 		"tier": "14"
 	},
 	"smeargle": {
@@ -983,25 +1072,27 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"raikou": {
-		"doublesTier": "DOU",
+		"doublesTier": "15",
 		"tier": "15"
 	},
 	"entei": {
-		"doublesTier": "DOU",
+		"doublesTier": "17",
 		"tier": "17"
 	},
 	"suicune": {
-		"doublesTier": "DOU",
+		"doublesTier": "17",
 		"tier": "17"
 	},
 	"larvitar": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"pupitar": {
-		"tier": "4"
+		"tier": "4",
+		"doublesTier": "4"
 	},
 	"tyranitar": {
-		"doublesTier": "DOU",
+		"doublesTier": "15",
 		"tier": "15"
 	},
 	"lugia": {
@@ -1017,40 +1108,47 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"treecko": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"grovyle": {
-		"tier": "3"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"sceptile": {
-		"doublesTier": "DUU",
+		"doublesTier": "16",
 		"tier": "16"
 	},
 	"torchic": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"combusken": {
-		"tier": "3"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"blaziken": {
-		"doublesTier": "DUU",
+		"doublesTier": "8",
 		"tier": "8"
 	},
 	"mudkip": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"marshtomp": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"swampert": {
-		"doublesTier": "DUU",
+		"doublesTier": "14",
 		"tier": "14"
 	},
 	"poochyena": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"mightyena": {
-		"doublesTier": "DUU",
+		"doublesTier": "7",
 		"tier": "7"
 	},
 	"zigzagoon": {
@@ -1094,65 +1192,75 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"seedot": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"nuzleaf": {
-		"tier": "2"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"shiftry": {
-		"doublesTier": "DUU",
+		"doublesTier": "12",
 		"tier": "12"
 	},
 	"taillow": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"swellow": {
-		"doublesTier": "DUU",
+		"doublesTier": "7",
 		"tier": "7"
 	},
 	"wingull": {
-		"tier": "4"
+		"tier": "4",
+		"doublesTier": "4"
 	},
 	"pelipper": {
-		"doublesTier": "DOU",
+		"doublesTier": "14",
 		"tier": "14"
 	},
 	"ralts": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"kirlia": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"gardevoir": {
-		"doublesTier": "DOU",
+		"doublesTier": "7",
 		"tier": "7"
 	},
 	"gallade": {
-		"doublesTier": "DUU",
+		"doublesTier": "6",
 		"tier": "6"
 	},
 	"surskit": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"masquerain": {
-		"doublesTier": "DUU",
+		"doublesTier": "12",
 		"tier": "12"
 	},
 	"shroomish": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"breloom": {
-		"doublesTier": "DOU",
+		"doublesTier": "9",
 		"tier": "9"
 	},
 	"slakoth": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"vigoroth": {
-		"tier": "3"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"slaking": {
-		"doublesTier": "DUU",
+		"doublesTier": "14",
 		"tier": "14"
 	},
 	"nincada": {
@@ -1168,52 +1276,59 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"whismur": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"loudred": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"exploud": {
-		"doublesTier": "DUU",
+		"doublesTier": "5",
 		"tier": "5"
 	},
 	"makuhita": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"hariyama": {
-		"doublesTier": "DOU",
-		"tier": "9"
+		"doublesTier": "8",
+		"tier": "8"
 	},
 	"nosepass": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"probopass": {
-		"doublesTier": "DUU",
+		"doublesTier": "7",
 		"tier": "7"
 	},
 	"skitty": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"delcatty": {
-		"doublesTier": "DUU",
+		"doublesTier": "5",
 		"tier": "5"
 	},
 	"sableye": {
-		"doublesTier": "DOU",
+		"doublesTier": "4",
 		"tier": "4"
 	},
 	"mawile": {
-		"doublesTier": "DUU",
+		"doublesTier": "5",
 		"tier": "5"
 	},
 	"aron": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"lairon": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"aggron": {
-		"doublesTier": "DUU",
+		"doublesTier": "9",
 		"tier": "9"
 	},
 	"meditite": {
@@ -1225,10 +1340,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"electrike": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"manectric": {
-		"doublesTier": "DUU",
+		"doublesTier": "10",
 		"tier": "10"
 	},
 	"plusle": {
@@ -1248,20 +1364,23 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"budew": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"roselia": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"roserade": {
-		"doublesTier": "DUU",
+		"doublesTier": "7",
 		"tier": "7"
 	},
 	"gulpin": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"swalot": {
-		"doublesTier": "DUU",
+		"doublesTier": "7",
 		"tier": "7"
 	},
 	"carvanha": {
@@ -1273,17 +1392,19 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"wailmer": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"wailord": {
-		"doublesTier": "DUU",
+		"doublesTier": "6",
 		"tier": "6"
 	},
 	"numel": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"camerupt": {
-		"doublesTier": "DUU",
+		"doublesTier": "11",
 		"tier": "11"
 	},
 	"torkoal": {
@@ -1299,17 +1420,19 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"spinda": {
-		"doublesTier": "DUU",
+		"doublesTier": "11",
 		"tier": "11"
 	},
 	"trapinch": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"vibrava": {
-		"tier": "3"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"flygon": {
-		"doublesTier": "DUU",
+		"doublesTier": "11",
 		"tier": "11"
 	},
 	"cacnea": {
@@ -1321,10 +1444,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"swablu": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"altaria": {
-		"doublesTier": "DUU",
+		"doublesTier": "10",
 		"tier": "10"
 	},
 	"zangoose": {
@@ -1336,18 +1460,19 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"lunatone": {
-		"doublesTier": "DUU",
+		"doublesTier": "10",
 		"tier": "10"
 	},
 	"solrock": {
-		"doublesTier": "DUU",
+		"doublesTier": "8",
 		"tier": "8"
 	},
 	"barboach": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"whiscash": {
-		"doublesTier": "DUU",
+		"doublesTier": "6",
 		"tier": "6"
 	},
 	"corphish": {
@@ -1359,31 +1484,35 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"baltoy": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"claydol": {
-		"doublesTier": "DUU",
+		"doublesTier": "8",
 		"tier": "8"
 	},
 	"lileep": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"cradily": {
-		"doublesTier": "DOU",
+		"doublesTier": "6",
 		"tier": "6"
 	},
 	"anorith": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"armaldo": {
-		"doublesTier": "DUU",
+		"doublesTier": "6",
 		"tier": "6"
 	},
 	"feebas": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"milotic": {
-		"doublesTier": "DOU",
+		"doublesTier": "13",
 		"tier": "13"
 	},
 	"castform": {
@@ -1395,24 +1524,27 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"shuppet": {
-		"tier": "1"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"banette": {
-		"doublesTier": "DUU",
+		"doublesTier": "13",
 		"tier": "13"
 	},
 	"duskull": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"dusclops": {
-		"tier": "15"
+		"tier": "15",
+		"doublesTier": "15"
 	},
 	"dusknoir": {
-		"doublesTier": "DUU",
+		"doublesTier": "5",
 		"tier": "5"
 	},
 	"tropius": {
-		"doublesTier": "DUU",
+		"doublesTier": "8",
 		"tier": "8"
 	},
 	"chingling": {
@@ -1424,28 +1556,31 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"absol": {
-		"doublesTier": "DUU",
+		"doublesTier": "9",
 		"tier": "9"
 	},
 	"snorunt": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"glalie": {
-		"doublesTier": "DUU",
+		"doublesTier": "6",
 		"tier": "6"
 	},
 	"froslass": {
-		"doublesTier": "DUU",
+		"doublesTier": "16",
 		"tier": "16"
 	},
 	"spheal": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"sealeo": {
-		"tier": "3"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"walrein": {
-		"doublesTier": "DUU",
+		"doublesTier": "8",
 		"tier": "8"
 	},
 	"clamperl": {
@@ -1469,43 +1604,47 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"bagon": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"shelgon": {
-		"tier": "4"
+		"tier": "4",
+		"doublesTier": "4"
 	},
 	"salamence": {
-		"doublesTier": "DOU",
+		"doublesTier": "16",
 		"tier": "16"
 	},
 	"beldum": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"metang": {
-		"tier": "3"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"metagross": {
-		"doublesTier": "DUU",
+		"doublesTier": "15",
 		"tier": "15"
 	},
 	"regirock": {
-		"doublesTier": "DUU",
+		"doublesTier": "12",
 		"tier": "12"
 	},
 	"regice": {
-		"doublesTier": "DUU",
+		"doublesTier": "14",
 		"tier": "14"
 	},
 	"registeel": {
-		"doublesTier": "DUU",
+		"doublesTier": "6",
 		"tier": "6"
 	},
 	"latias": {
-		"doublesTier": "DUU",
+		"doublesTier": "12",
 		"tier": "12"
 	},
 	"latios": {
-		"doublesTier": "DOU",
+		"doublesTier": "13",
 		"tier": "13"
 	},
 	"kyogre": {
@@ -1541,43 +1680,51 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"turtwig": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"grotle": {
-		"tier": "3"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"torterra": {
-		"doublesTier": "DUU",
+		"doublesTier": "9",
 		"tier": "9"
 	},
 	"chimchar": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"monferno": {
-		"tier": "3"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"infernape": {
-		"doublesTier": "DOU",
-		"tier": "9"
+		"doublesTier": "8",
+		"tier": "8"
 	},
 	"piplup": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"prinplup": {
-		"tier": "3"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"empoleon": {
-		"doublesTier": "DUU",
+		"doublesTier": "7",
 		"tier": "7"
 	},
 	"starly": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"staravia": {
-		"tier": "3"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"staraptor": {
-		"doublesTier": "DUU",
+		"doublesTier": "11",
 		"tier": "11"
 	},
 	"bidoof": {
@@ -1597,27 +1744,31 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"shinx": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"luxio": {
-		"tier": "3"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"luxray": {
-		"doublesTier": "DUU",
+		"doublesTier": "9",
 		"tier": "9"
 	},
 	"cranidos": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"rampardos": {
-		"doublesTier": "DUU",
-		"tier": "8"
+		"doublesTier": "7",
+		"tier": "7"
 	},
 	"shieldon": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"bastiodon": {
-		"doublesTier": "DUU",
+		"doublesTier": "5",
 		"tier": "5"
 	},
 	"burmy": {
@@ -1641,14 +1792,15 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"combee": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"vespiquen": {
-		"doublesTier": "DUU",
+		"doublesTier": "4",
 		"tier": "4"
 	},
 	"pachirisu": {
-		"doublesTier": "DUU",
+		"doublesTier": "8",
 		"tier": "8"
 	},
 	"buizel": {
@@ -1668,17 +1820,19 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"shellos": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"gastrodon": {
-		"doublesTier": "DOU",
+		"doublesTier": "11",
 		"tier": "11"
 	},
 	"drifloon": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"drifblim": {
-		"doublesTier": "DUU",
+		"doublesTier": "5",
 		"tier": "5"
 	},
 	"buneary": {
@@ -1706,10 +1860,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"bronzor": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"bronzong": {
-		"doublesTier": "DOU",
+		"doublesTier": "9",
 		"tier": "9"
 	},
 	"chatot": {
@@ -1717,67 +1872,75 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"spiritomb": {
-		"doublesTier": "DUU",
+		"doublesTier": "6",
 		"tier": "6"
 	},
 	"gible": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"gabite": {
-		"tier": "3"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"garchomp": {
-		"doublesTier": "DOU",
+		"doublesTier": "16",
 		"tier": "16"
 	},
 	"riolu": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"lucario": {
-		"doublesTier": "DUU",
+		"doublesTier": "10",
 		"tier": "10"
 	},
 	"hippopotas": {
-		"tier": "4"
+		"tier": "5",
+		"doublesTier": "5"
 	},
 	"hippowdon": {
-		"doublesTier": "DUU",
+		"doublesTier": "14",
 		"tier": "14"
 	},
 	"skorupi": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"drapion": {
-		"doublesTier": "DUU",
+		"doublesTier": "10",
 		"tier": "10"
 	},
 	"croagunk": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"toxicroak": {
-		"doublesTier": "DUU",
+		"doublesTier": "9",
 		"tier": "9"
 	},
 	"carnivine": {
-		"doublesTier": "DUU",
+		"doublesTier": "15",
 		"tier": "15"
 	},
 	"finneon": {
-		"tier": "1"
+		"tier": "1",
+		"doublesTier": "1"
 	},
 	"lumineon": {
-		"doublesTier": "DUU",
+		"doublesTier": "10",
 		"tier": "10"
 	},
 	"snover": {
-		"tier": "2"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"abomasnow": {
-		"doublesTier": "DOU",
+		"doublesTier": "11",
 		"tier": "11"
 	},
 	"rotom": {
-		"doublesTier": "DUU",
+		"doublesTier": "7",
 		"tier": "7"
 	},
 	"rotomheat": {
@@ -1801,15 +1964,15 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"uxie": {
-		"doublesTier": "DUU",
+		"doublesTier": "17",
 		"tier": "17"
 	},
 	"mesprit": {
-		"doublesTier": "DUU",
+		"doublesTier": "13",
 		"tier": "13"
 	},
 	"azelf": {
-		"doublesTier": "DUU",
+		"doublesTier": "18",
 		"tier": "18"
 	},
 	"dialga": {
@@ -1821,7 +1984,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"heatran": {
-		"doublesTier": "DOU",
+		"doublesTier": "15",
 		"tier": "15"
 	},
 	"regigigas": {
@@ -1837,7 +2000,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"cresselia": {
-		"doublesTier": "DOU",
+		"doublesTier": "16",
 		"tier": "16"
 	},
 	"phione": {
