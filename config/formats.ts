@@ -103,6 +103,15 @@ export const Formats: FormatList = [
 	},
 
 	{
+		name: "[Gen 9] Do Not Use Doubles",
+		gameType: 'doubles',
+		mod: 'gen9deluxe',
+		ruleset: ['DNU Clause', 'Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause'],
+		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
+		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass"]
+	},
+
+	{
 		name: "[Gen 9] DNU Random Battle",
 		desc: `Randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
 		threads: [
