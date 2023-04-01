@@ -92,16 +92,18 @@ export const Scripts: ModdedBattleScriptsData = {
 						changed = true;
 					}
 				}
-				// Recalculate the modified stat
-				this.modifiedStats![i] = this.storedStats[i];
-				if (this.boosts[i] >= 0) {
-					this.modifyStat!(i, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[i]]);
-				} else {
-					this.modifyStat!(i, [100, 66, 50, 40, 33, 28, 25][-this.boosts[i]] / 100);
-				}
-				if (delta > 0 && this.modifiedStats![i] > 999) {
-					// Cap the stat at 999
-					this.modifiedStats![i] = 999;
+				if (changed) {
+					// Recalculate the modified stat
+					this.modifiedStats![i] = this.storedStats[i];
+					if (this.boosts[i] >= 0) {
+						this.modifyStat!(i, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[i]]);
+					} else {
+						this.modifyStat!(i, [100, 66, 50, 40, 33, 28, 25][-this.boosts[i]] / 100);
+					}
+					if (delta > 0 && this.modifiedStats![i] > 999) {
+						// Cap the stat at 999
+						this.modifiedStats![i] = 999;
+					}
 				}
 			}
 			return changed;
@@ -375,7 +377,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// OHKO moves only have a chance to hit if the user is at least as fast as the target
 			if (move.ohko) {
-				if (target.speed > pokemon.speed) {
+				if (target.getStat('spe') > pokemon.getStat('spe')) {
 					this.battle.add('-immune', target, '[ohko]');
 					return false;
 				}
@@ -748,7 +750,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// If there's a fix move damage, we return that.
-			if (move.damage) {
+			if (move.damage || move.damage === 0) {
 				return move.damage;
 			}
 
