@@ -2359,7 +2359,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	callofthehunt: {
 		name: "Call of the Hunt",
-		desc: "When a Pokémon with the ability 'Call of the Hunt' successfully uses an attack, it will summon fellow Lycanrocs to aid in its attack. This triggers an additional 20BP fire type move, followed by another 20BP dark type move",
+		desc: "When a Pokémon with the ability 'Call of the Hunt' successfully uses an attack when in sun or darkness, it will summon fellow Lycanrocs to aid in its attack. This triggers an additional 20BP fire type move, followed by another 20BP dark type move",
 		shortDesc: "After landing an attack, the Pokemon launches two additional attacks, one fire and one dark type.",
 	},
 };
