@@ -6389,10 +6389,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 5,
 		num: -47,
 	},
-	callofthethunt: {
+	callofthehunt: {
 		onDamagingHit(damage, target, pokemon, move) {
 			if (pokemon === target) return;
-			if (move.name === "Regurgitation" || target.fainted || target.isSemiInvulnerable()) return;
+			if (move.name === "Call of the Hunt" || target.fainted || target.isSemiInvulnerable()) return;
 			if (this.field.isWeather(['sunnyday','newmoon'])) {
 				this.actions.useMove("Call of the Hunt", pokemon, target);
 				const CotHDark = this.dex.getActiveMove('callofthehunt');
