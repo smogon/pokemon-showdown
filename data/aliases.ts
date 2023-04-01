@@ -87,8 +87,8 @@ export const Aliases: {[alias: string]: string} = {
 	crossevo: "[Gen 9] Cross Evolution",
 	mayhem: "[Gen 9] Random Battle Mayhem",
 	omotd: "[Gen 9] Meow Cup",
-	omotm: "[Gen 9] Fortemons",
-	lcotm: "[Gen 9] Tera Donation",
+	omotm: "[Gen 9] Pokebilities",
+	lcotm: "[Gen 9] Cross Evolution",
 
 	// mega evos
 	fabio: "Ampharos-Mega",
