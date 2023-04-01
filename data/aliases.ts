@@ -9,7 +9,7 @@ export const Aliases: {[alias: string]: string} = {
 	rarelyused: "[Gen 9] RU",
 	neverused: "[Gen 9] NU",
 	pu: "[Gen 9] PU",
-	zeroused: "[Gen 8] ZU",
+	zeroused: "[Gen 9] ZU",
 	mono: "[Gen 9] Monotype",
 	ag: "[Gen 9] Anything Goes",
 	bss: "[Gen 9] Battle Stadium Singles Series 2",
