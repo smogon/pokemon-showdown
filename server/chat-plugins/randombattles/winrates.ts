@@ -22,17 +22,20 @@ interface FormatData {
 }
 
 const STATS_PATH = 'logs/randbats/{{MONTH}}-winrates.json';
-export let stats: Stats;
+export const stats: Stats = getDefaultStats();
 
 try {
 	const path = STATS_PATH.replace('{{MONTH}}', getMonth());
 	if (!FS('logs/randbats/').existsSync()) {
 		FS('logs/randbats/').mkdirSync();
 	}
-	stats = JSON.parse(FS(path).readSync());
-} catch {
-	stats = getDefaultStats();
-}
+	const savedStats = JSON.parse(FS(path).readSync());
+	stats.elo = savedStats.elo;
+	stats.month = savedStats.month;
+	for (const k in stats.formats) {
+		stats.formats[k] = savedStats.formats[k] || stats.formats[k];
+	}
+} catch {}
 
 function getDefaultStats() {
 	return {
@@ -47,7 +50,7 @@ function getDefaultStats() {
 			gen5randombattle: {mons: {}},
 			gen4randombattle: {mons: {}},
 			gen3randombattle: {mons: {}},
-			gen2randombattle: {mons: {}},
+			gen1randombattle: {mons: {}},
 		},
 	} as Stats;
 }
