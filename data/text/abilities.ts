@@ -2356,5 +2356,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	ringrust: {
 		name: "Ring Rust",
 		shortDesc: "Moves that aren't 100% accurate have a 1.3x damage boost and 1.1x accuracy boost.",
-	}
+	},
+	callofthehunt: {
+		name: "Call of the Hunt",
+		desc: "When a Pokémon with the ability 'Call of the Hunt' successfully uses an attack, it will summon fellow Lycanrocs to aid in its attack. This triggers an additional 20BP fire type move, followed by another 20BP dark type move",
+		shortDesc: "After landing an attack, the Pokemon launches two additional attacks, one fire and one dark type.",
+	},
 };

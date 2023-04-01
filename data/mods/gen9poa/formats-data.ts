@@ -1822,7 +1822,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	sceptiledeltamega: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	cetoddlehisui: {
 		inherit: true,
@@ -1832,11 +1832,31 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	cetitanhisui: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "OU",
 	},
 	alakazamgambler: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "Uber",
+		natDexTier: "UU",
+	},
+	rockruffdelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	lycanrocdelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
+	lycanrocmidnightdelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	lycanrocduskdelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
 	},
 };

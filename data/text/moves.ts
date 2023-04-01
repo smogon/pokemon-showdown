@@ -7577,5 +7577,10 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Obsidian Crash",
 		shortDesc: "The user smashes into the opponent with its obsidian body, this also damages the user.",
 		desc: "Move ignores water resistance and Rainy Day, 1/3 recoil.",
-	}
+	},
+	ferociouscrash: {
+		name: "Ferocious Crash",
+		shortDesc: "Has 50% recoil.",
+		desc: "If the target lost HP, the user takes recoil damage equal to 50% the HP lost by the target, rounded half up, but not less than 1 HP.",
+	},
 };
