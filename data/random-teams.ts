@@ -487,6 +487,7 @@ export class RandomTeams {
 
 		// These status moves are redundant with each other
 		this.incompatibleMoves(moves, movePool, ['taunt', 'strengthsap'], 'encore');
+		this.incompatibleMoves(moves, movePool, 'taunt', 'disable');
 		this.incompatibleMoves(moves, movePool, 'toxic', 'willowisp');
 		this.incompatibleMoves(moves, movePool, ['thunderwave', 'toxic', 'willowisp'], 'toxicspikes');
 		this.incompatibleMoves(moves, movePool, 'thunderwave', 'yawn');
@@ -833,7 +834,7 @@ export class RandomTeams {
 	): boolean {
 		if ([
 			'Armor Tail', 'Battle Bond', 'Early Bird', 'Flare Boost', 'Gluttony', 'Harvest', 'Hydration', 'Ice Body', 'Immunity',
-			'Own Tempo', 'Pressure', 'Quick Feet', 'Rain Dish', 'Sand Veil', 'Snow Cloak', 'Steadfast', 'Steam Engine',
+			'Moody', 'Own Tempo', 'Pressure', 'Quick Feet', 'Rain Dish', 'Sand Veil', 'Snow Cloak', 'Steadfast', 'Steam Engine',
 		].includes(ability)) return true;
 
 		switch (ability) {
@@ -956,6 +957,7 @@ export class RandomTeams {
 		// Hard-code abilities here
 		if (species.id === 'arcaninehisui') return 'Rock Head';
 		if (species.id === 'staraptor') return 'Reckless';
+		if (species.id === 'scovillain') return 'Chlorophyll';
 		if (species.id === 'vespiquen') return 'Pressure';
 		if (species.id === 'enamorus' && moves.has('calmmind')) return 'Cute Charm';
 		if (species.id === 'cetitan' && role === 'Wallbreaker') return 'Sheer Force';
@@ -1471,11 +1473,21 @@ export class RandomTeams {
 			// Illusion shouldn't be on the last slot
 			if (species.baseSpecies === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
 
-			// If Zoroark is in the team, the sixth slot should not be a Pokemon with extremely low level
+			// If Zoroark is in the team, ensure its level is balanced
+			// Level range differs for each forme of Zoroark
 			if (
-				pokemon.some(pkmn => pkmn.name === 'Zoroark') &&
+				pokemon.some(pkmn => pkmn.species === 'Zoroark') &&
 				pokemon.length >= (this.maxTeamSize - 1) &&
-				this.getLevel(species, isDoubles) < 72 &&
+				(this.getLevel(species, isDoubles) < 76 || this.getLevel(species, isDoubles) > 94) &&
+				!this.adjustLevel
+			) {
+				continue;
+			}
+
+			if (
+				pokemon.some(pkmn => pkmn.species === 'Zoroark-Hisui') &&
+				pokemon.length >= (this.maxTeamSize - 1) &&
+				(this.getLevel(species, isDoubles) < 72 || this.getLevel(species, isDoubles) > 86) &&
 				!this.adjustLevel
 			) {
 				continue;
