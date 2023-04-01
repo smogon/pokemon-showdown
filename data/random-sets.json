@@ -1055,12 +1055,12 @@
         ]
     },
     "glalie": {
-        "level": 78,
+        "level": 97,
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["Disable", "Earthquake", "Freeze-Dry", "Protect", "Substitute"],
-                "teraTypes": ["Poison", "Steel", "Water"]
+                "movepool": ["Disable", "Earthquake", "Ice Beam", "Spikes", "Taunt"],
+                "teraTypes": ["Poison", "Steel", "Water", "Ground"]
             }
         ]
     },
@@ -3498,12 +3498,17 @@
         ]
     },
     "scovillain": {
-        "level": 76,
+        "level": 90,
         "sets": [
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Flamethrower", "Leech Seed", "Protect", "Substitute"],
                 "teraTypes": ["Steel", "Water"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Flamethrower", "Giga Drain", "Leaf Storm", "Overheat"],
+                "teraTypes": ["Fire", "Grass"]
             }
         ]
     },
