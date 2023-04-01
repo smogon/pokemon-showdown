@@ -177,7 +177,7 @@ export const Formats: FormatList = [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3718107/">CAP Sample Teams</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3714023/">CAP Viability Rankings</a>`,
 		],
-		
+
 		mod: 'gen9',
 		ruleset: ['[Gen 9] OU', '+CAP'],
 		banlist: ['Walking Wake', 'Crucibellite'],
