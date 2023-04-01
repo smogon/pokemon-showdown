@@ -6389,4 +6389,20 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 5,
 		num: -47,
 	},
+	callofthethunt: {
+		onDamagingHit(damage, target, pokemon, move) {
+			if (pokemon === target) return;
+			if (move.name === "Regurgitation" || target.fainted || target.isSemiInvulnerable()) return;
+			if (this.field.isWeather(['sunnyday','newmoon'])) {
+				this.actions.useMove("Call of the Hunt", pokemon, target);
+				const CotHDark = this.dex.getActiveMove('callofthehunt');
+				CotHDark.type = 'Dark';
+				this.actions.useMove(CotHDark, pokemon, target);
+			}
+			return null;
+		},
+		name: "Call of the Hunt",
+		rating: 3,
+		num: -48,
+	},
 };

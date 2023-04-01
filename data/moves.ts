@@ -22418,4 +22418,18 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fire",
 	},
+	callofthehunt: {
+		num: -26,
+		accuracy: true,
+		basePower: 20,
+		category: "Physical",
+		name: "Call of the Hunt",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+		contestType: "Tough",
+	},
 };
