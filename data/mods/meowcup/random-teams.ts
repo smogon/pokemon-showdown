@@ -18,7 +18,7 @@ export class RandomMeowCupTeams extends RandomTeams {
 			'Zeraora',
 		];
 		const includedPokemon: string[] = [];
-		while (team.length < 6) {
+		while (team.length < (this.maxTeamSize || 6)) {
 			let species = this.dex.species.get(this.sample(allowedPokemon));
 			if (includedPokemon.includes(species.baseSpecies)) continue;
 			includedPokemon.push(species.baseSpecies);
@@ -44,7 +44,7 @@ export class RandomMeowCupTeams extends RandomTeams {
 			// Guarantee one attacking move
 			moves.add(this.sample([...movesPool].filter(m => this.dex.moves.get(m).category !== 'Status')));
 			loCounter++;
-			while (moves.size < 5) {
+			while (moves.size < (this.maxMoveCount || 5)) {
 				const move = this.dex.moves.get(this.sample([...movesPool]));
 				if (move.category !== 'Status') loCounter++;
 				moves.add(move.name);
@@ -73,6 +73,9 @@ export class RandomMeowCupTeams extends RandomTeams {
 				species = this.dex.species.get(species.changesFrom);
 			}
 			const ability = this.sample([...abilityPool]);
+			let level = species.nfe ? this.random(15) + 80 : species.natDexTier === "Uber" ?
+				this.random(25) + 60 : this.random(20) + 70;
+			if (this.adjustLevel) level = this.adjustLevel;
 			team.push({
 				name: species.baseSpecies,
 				species: species.name,
@@ -83,8 +86,7 @@ export class RandomMeowCupTeams extends RandomTeams {
 				ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
 				nature: 'Serious',
 				item,
-				level: this.adjustLevel || species.nfe ? this.random(15) + 80 :
-				species.natDexTier === "Uber" ? this.random(25) + 60 : this.random(20) + 70,
+				level,
 				shiny: this.randomChance(1, 1024),
 				teraType: this.sample([...moves].map(x => this.dex.moves.get(x)).filter(x => x.category !== 'Status').map(x => x.type)),
 			});
