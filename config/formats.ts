@@ -550,6 +550,52 @@ export const Formats: FormatList = [
 		banlist: ['Soul Dew'],
 	},
 
+	// OM of the Decade
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "OM of the Decade",
+		column: 2,
+	},
+	{
+		name: "[Gen 9] Meow Cup",
+		desc: `Randomized format with only feline Pok&eacute;mon and their abilities and moves. Led by Bidoof Princess.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3719015/">Meow Cup</a>`,
+		],
+
+		mod: 'meowcup',
+		team: 'randomHC',
+		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+		banlist: ['Nonexistent'],
+		onModifySpecies(species, target, source, effect) {
+			if (!target) return;
+			const newSpecies = this.dex.deepClone(species);
+			if (newSpecies.id === 'delcatty') newSpecies.bst += 100;
+			return newSpecies;
+		},
+	},
+	{
+		name: "[Gen 9] Meow Cup FFA",
+		desc: `Randomized format with only feline Pok&eacute;mon and their abilities and moves. Led by Bidoof Princess.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3719015/">Meow Cup FFA</a>`,
+		],
+
+		mod: 'meowcup',
+		team: 'randomHC',
+		tournamentShow: false,
+		gameType: 'freeforall',
+		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+		banlist: ['Nonexistent'],
+		onModifySpecies(species, target, source, effect) {
+			if (!target) return;
+			const newSpecies = this.dex.deepClone(species);
+			if (newSpecies.id === 'delcatty') newSpecies.bst += 100;
+			return newSpecies;
+		},
+	},
+
 	// OM of the Month
 	///////////////////////////////////////////////////////////////////
 
