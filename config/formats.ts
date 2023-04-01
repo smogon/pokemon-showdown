@@ -65,6 +65,18 @@ export const Formats: FormatList = [
 		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'King\'s Rock', 'Baton Pass'],
 	},
 	{
+		name: "[Gen 9] OU (suspect)",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3710915/">SV OU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3712513/">SV OU Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3712493/">SV OU Viability Rankings</a>`,
+			`&bulletl <a href="https://www.smogon.com/forums/threads/3719008/">SV OU Suspect Thread</a>`,
+		],
+
+		mod: 'gen9',
+		ruleset: ['[Gen 9] OU', '!Species Clause'],
+	},
+	{
 		name: "[Gen 9] Ubers",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3710870/">Ubers Metagame Discussion</a>`,
@@ -976,7 +988,7 @@ export const Formats: FormatList = [
 		],
 	},
 	{
-		name: "[Gen 9] Partners in Crime (suspect test)",
+		name: "[Gen 9] Partners in Crime (suspect)",
 		desc: `Doubles-based metagame where both active ally Pok&eacute;mon share abilities and moves.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3710997/">Partners in Crime</a>`,
