@@ -6414,7 +6414,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.add("-message", source.getTypes().join());
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.addType(type)) return;
-				this.add('-start', target, 'typeadd', type, '[from] ability: Chromotophile');
+				this.add('-start', source, 'typeadd', type, '[from] ability: Chromotophile');
 			}
 		},
 		name: "Chromotophile",
