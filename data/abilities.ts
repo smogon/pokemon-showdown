@@ -6410,12 +6410,17 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onPrepareHit(source, target, move) {
 			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
 			const type = move.type;	
-			const types = source.getTypes()
+			let types = source.getTypes()
 			if (type && type !== '???') {
+				if (types.join() === "???") types = [];
 				types.push(type);
 				source.setType(types);
 				this.add('-start', source, 'typechange', source.getTypes().join('/'), '[from] ability: Chromotophile');
 			}
+		},
+		onSwitchOut(source) {
+			source.setType(["???"]);
+			this.add('-start', source, 'typechange', source.getTypes().join('/'), '[from] ability: Chromotophile');
 		},
 		name: "Chromotophile",
 		rating: 4,
