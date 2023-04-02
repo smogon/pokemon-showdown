@@ -6392,11 +6392,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	callofthehunt: {
 		onSourceDamagingHit(damage, target, source, move) {
 			if (source === target) return;
-			if (move.name === "Call of the Hunt") return;
+			if (move.name === "Call of the Hunt" || target.fainted || target.isSemiInvulnerable()) return;
 			if (this.field.isWeather(['sunnyday','newmoon'])) {
 				this.actions.useMove('callofthehunt', source, target);
 				const CotHDark = this.dex.getActiveMove('callofthehunt');
 				CotHDark.type = 'Dark';
+				if (target.fainted || target.isSemiInvulnerable()) return;
 				this.actions.useMove(CotHDark, source, target);
 			}
 			return null;
