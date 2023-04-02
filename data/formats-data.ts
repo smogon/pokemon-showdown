@@ -5177,12 +5177,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	toxtricity: {
-		tier: "RU",
-		doublesTier: "(DUU)",
-		natDexTier: "RU",
-	},
-	toxtricitylowkey: {
-		tier: "RU",
+		tier: "RUBL",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
