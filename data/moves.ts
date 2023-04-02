@@ -22428,7 +22428,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
-		secondary: null,
+			onPrepareHit(target, source) {
+					source.addVolatile('embargo');
+			},
+			onAfterMove(target, source) {
+				source.removeVolatile('embargo');
+			},
 		target: "normal",
 		type: "Fire",
 		contestType: "Tough",
