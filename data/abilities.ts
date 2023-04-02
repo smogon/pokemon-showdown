@@ -6393,12 +6393,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onDamagingHit(damage, target, pokemon, move) {
 			if (pokemon === target) return;
 			if (move.name === "Call of the Hunt" || target.fainted || target.isSemiInvulnerable()) return;
-			if (this.field.isWeather(['sunnyday','newmoon'])) {
-				this.actions.useMove("Call of the Hunt", pokemon, target);
-				const CotHDark = this.dex.getActiveMove('callofthehunt');
-				CotHDark.type = 'Dark';
-				this.actions.useMove(CotHDark, pokemon, target);
-			}
+			//if (this.field.isWeather(['sunnyday','newmoon'])) {
+			this.actions.useMove('callofthehunt', pokemon, target);
+			const CotHDark = this.dex.getActiveMove('callofthehunt');
+			CotHDark.type = 'Dark';
+			this.actions.useMove(CotHDark, pokemon, target);
+			//}
 			return null;
 		},
 		name: "Call of the Hunt",
