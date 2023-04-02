@@ -116297,6 +116297,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
             doubleteam: ["6M"],
             swagger: ["6M"],
             confide: ["6M"],
+			sirenssong: ["6M"],
 		},
 	},
 };
