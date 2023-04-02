@@ -5993,10 +5993,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: -26,
 	},
 	regurgitation: {
-		onDamagingHit(damage, target, pokemon, move) {
-			if (pokemon === target) return;
+		onSourceDamagingHit(damage, target, source, move) {
+			if (source === target) return;
 			if (move.name === "Regurgitation" || target.fainted || target.isSemiInvulnerable()) return;
-			this.actions.useMove("Regurgitation", pokemon, target);
+			this.actions.useMove("Regurgitation", source, target);
 			return null;
 		},
 		name: "Regurgitation",
@@ -6393,13 +6393,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onSourceDamagingHit(damage, target, source, move) {
 			if (source === target) return;
 			if (move.name === "Call of the Hunt") return;
-			//if (this.field.isWeather(['sunnyday','newmoon'])) {
-			this.add("-message", "it's workingeth");
-			this.actions.useMove('callofthehunt', source, target);
-			const CotHDark = this.dex.getActiveMove('callofthehunt');
-			CotHDark.type = 'Dark';
-			this.actions.useMove(CotHDark, source, target);
-			//}
+			if (this.field.isWeather(['sunnyday','newmoon'])) {
+				this.actions.useMove('callofthehunt', source, target);
+				const CotHDark = this.dex.getActiveMove('callofthehunt');
+				CotHDark.type = 'Dark';
+				this.actions.useMove(CotHDark, source, target);
+			}
 			return null;
 		},
 		name: "Call of the Hunt",
