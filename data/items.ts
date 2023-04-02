@@ -8465,4 +8465,18 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: -67,
 		gen: 6,
 	},
+	florgesite: {
+		name: "Florgesite",
+		spritenum: 752 + 72,
+		megaStone: "Florges-Mega",
+		megaEvolves: "Florges",
+		itemUser: ["Florges"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -68,
+		gen: 6,
+		isNonstandard: "Unobtainable",
+	},
 };
