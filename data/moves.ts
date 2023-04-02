@@ -687,10 +687,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon, source, effect) {
-				if (!(pokemon.gender === 'M' && source.gender === 'F') && !(pokemon.gender === 'F' && source.gender === 'M')) {
-					this.debug('incompatible gender');
-					return false;
-				}
+				if (!pokemon.hasAbility('aphrodite'))
+					if (!(pokemon.gender === 'M' && source.gender === 'F') && !(pokemon.gender === 'F' && source.gender === 'M')) {
+						this.debug('incompatible gender');
+						return false;
+					}
 				if (!this.runEvent('Attract', pokemon, source)) {
 					this.debug('Attract event failed');
 					return false;
@@ -723,7 +724,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		onTryImmunity(target, source) {
-			return (target.gender === 'M' && source.gender === 'F') || (target.gender === 'F' && source.gender === 'M');
+			return (source.hasAbility('aphrodite') && ((target.gender === 'M' && source.gender === 'F') || (target.gender === 'F' && source.gender === 'M')));
 		},
 		secondary: null,
 		target: "normal",
@@ -22448,7 +22449,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Tough",
 	},
 	boxin: {
-		num: 746,
+		num: -28,
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
@@ -22463,5 +22464,23 @@ export const Moves: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
+	},
+	sirenssong: {
+		num: -29,
+		accuracy: 85,
+		basePower: 60,
+		category: "Special",
+		name: "Siren's Song",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
+		self: {
+			onHit(target, source) {
+					target.addVolatile('attract');
+			},
+		},
+		target: "normal",
+		type: "Psychic",
+		contestType: "Beautiful",
 	},
 };
