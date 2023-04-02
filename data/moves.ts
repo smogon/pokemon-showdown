@@ -22447,4 +22447,21 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
+	boxin: {
+		num: 746,
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		name: "Box In",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onHit(target, source, move) {
+			source.addVolatile('trapped', target, move, 'trapper');
+			target.addVolatile('trapped', source, move, 'trapper');
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
 };
