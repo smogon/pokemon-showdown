@@ -689,7 +689,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon, source, effect) {
-				if (!pokemon.hasAbility('aphrodite'))
+				if (!pokemon.hasAbility('Aphrodite'))
 					if (!(pokemon.gender === 'M' && source.gender === 'F') && !(pokemon.gender === 'F' && source.gender === 'M')) {
 						this.debug('incompatible gender');
 						return false;
@@ -726,7 +726,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		onTryImmunity(target, source) {
-			return ((target.gender === 'M' && source.gender === 'F') || (target.gender === 'F' && source.gender === 'M') || source.ability === 'aphrodite');
+			if (source.ability === "aphrodite") return false;
+			return ((target.gender === 'M' && source.gender === 'F') || (target.gender === 'F' && source.gender === 'M'));
 		},
 		secondary: null,
 		target: "normal",
@@ -22477,6 +22478,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 		onHit(target, source) {
 			target.addVolatile('attract');
+			this.add('-start', target, 'Attract');
 		},
 		target: "normal",
 		type: "Psychic",
