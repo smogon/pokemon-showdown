@@ -24012,7 +24012,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 352,
 		name: "Kecleon-Mono",
 		baseSpecies: "Kecleon",
-		forme: "Kecleon-Mono",
+		forme: "Mono",
 		types: ["???"],
 		baseStats: {hp: 60, atk: 90, def: 70, spa: 60, spd: 120, spe: 40},
 		abilities: {0: "Chromotophile"},
