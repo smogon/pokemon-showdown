@@ -22435,7 +22435,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	ferociouscrash: {
 		num: -27,
 		accuracy: 95,
-		basePower: 150,
+		basePower: 130,
 		category: "Physical",
 		name: "Ferocious Crash",
 		pp: 5,
