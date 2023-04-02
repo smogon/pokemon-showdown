@@ -726,7 +726,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		onTryImmunity(target, source) {
-			return (source.hasAbility('aphrodite') && ((target.gender === 'M' && source.gender === 'F') || (target.gender === 'F' && source.gender === 'M')));
+			return ((target.gender === 'M' && source.gender === 'F') || (target.gender === 'F' && source.gender === 'M') || source.ability === 'aphrodite');
 		},
 		secondary: null,
 		target: "normal",
