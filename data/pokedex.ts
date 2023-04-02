@@ -24021,4 +24021,15 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "White",
 		eggGroups: ["Field"],
 	},
+	soulply: {
+		num: -6001, //-6000 will be PoA mons,
+		name: "Soulply",
+		types: ["Ghost"],
+		baseStats: {hp: 110, atk: 90, def: 90, spa: 20, spd: 119, spe: 33},
+		abilities: {0: "Sticky Hold", 1: "Weak Armor"},
+		heightm: 0.6,
+		weightkg: 4,
+		color: "Brown",
+		eggGroups: ["Undiscovered"],
+	},
 };

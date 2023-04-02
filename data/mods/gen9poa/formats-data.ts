@@ -1864,4 +1864,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "RU",
 	},
+	soulply: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
 };
