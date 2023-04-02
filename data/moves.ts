@@ -1,5 +1,7 @@
 // List of flags and their descriptions can be found in sim/dex-moves.ts
 
+import { Pokemon } from "../sim";
+
 export const Moves: {[moveid: string]: MoveData} = {
 	"10000000voltthunderbolt": {
 		num: 719,
@@ -22428,12 +22430,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
-			onPrepareHit(target, source) {
-					source.addVolatile('embargo');
-			},
-			onAfterMove(target, source) {
-				source.removeVolatile('embargo');
-			},
 		target: "normal",
 		type: "Fire",
 		contestType: "Tough",
