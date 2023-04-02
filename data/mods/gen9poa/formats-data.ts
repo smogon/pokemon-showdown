@@ -1859,4 +1859,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	kecleonmono: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
 };

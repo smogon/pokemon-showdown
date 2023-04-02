@@ -24008,4 +24008,17 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoCondition: "from a special Rockruff",
 		eggGroups: ["Field"],
 	},
+	kecleonmono: {
+		num: 352,
+		name: "Kecleon-Mono",
+		baseSpecies: "Kecleon",
+		forme: "Kecleon-Mono",
+		types: ["???"],
+		baseStats: {hp: 60, atk: 90, def: 70, spa: 60, spd: 120, spe: 40},
+		abilities: {0: "Chromotophile"},
+		heightm: 1,
+		weightkg: 22,
+		color: "White",
+		eggGroups: ["Field"],
+	},
 };
