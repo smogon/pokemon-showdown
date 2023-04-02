@@ -1869,4 +1869,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "RU",
 	},
+	screamtaildelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };

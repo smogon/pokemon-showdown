@@ -24032,4 +24032,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		eggGroups: ["Undiscovered"],
 	},
+	screamtaildelta: {
+		num: 985,
+		name: "Scream Tail-Delta",
+		types: ["Psychic", "Water"],
+		baseSpecies: "Scream Tail",
+		forme: "Delta",
+		gender: "N",
+		baseStats: {hp: 115, atk: 65, def: 99, spa: 65, spd: 115, spe: 111},
+		abilities: {0: "Cute Charm", 1: "Aphrodite", H: "Amplifier"},
+		heightm: 1.2,
+		weightkg: 8,
+		color: "Blue",
+		eggGroups: ["Undiscovered"],
+	},
 };
