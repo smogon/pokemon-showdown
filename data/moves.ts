@@ -22481,7 +22481,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 		self: {
 			onHit(target, source) {
-					target.addVolatile('attract');
+					source.addVolatile('attract');
 			},
 		},
 		target: "normal",
