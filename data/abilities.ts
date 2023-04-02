@@ -6411,7 +6411,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
 			const type = move.type;	
 			let types = source.getTypes()
-			if (type && type !== '???' && !["Double Shock", "Burn Up"].includes(move.name)) {
+			if (type && type !== '???' && !["Double Shock", "Burn Up", "Mirror Move"].includes(move.name)) {
 				if (types.join() === "???") types = [];
 				types.push(type);
 				source.setType(types);
