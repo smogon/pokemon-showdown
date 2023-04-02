@@ -377,7 +377,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// OHKO moves only have a chance to hit if the user is at least as fast as the target
 			if (move.ohko) {
-				if (target.speed > pokemon.speed) {
+				if (target.getStat('spe') > pokemon.getStat('spe')) {
 					this.battle.add('-immune', target, '[ohko]');
 					return false;
 				}
@@ -750,7 +750,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// If there's a fix move damage, we return that.
-			if (move.damage) {
+			if (move.damage || move.damage === 0) {
 				return move.damage;
 			}
 

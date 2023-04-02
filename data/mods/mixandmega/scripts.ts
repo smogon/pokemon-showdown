@@ -68,7 +68,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				pokemon.baseSpecies = rawSpecies;
 				pokemon.details = species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
 					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-				pokemon.setAbility(species.abilities['0'], null, true);
+				pokemon.ability = this.toID(species.abilities['0']);
 				pokemon.baseAbility = pokemon.ability;
 			}
 		}
@@ -121,7 +121,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				pokemon.baseSpecies = rawSpecies;
 				pokemon.details = species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
 					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-				pokemon.setAbility(species.abilities['0'], null, true);
+				pokemon.ability = this.toID(species.abilities['0']);
 				pokemon.baseAbility = pokemon.ability;
 
 				const behemothMove: {[k: string]: string} = {
