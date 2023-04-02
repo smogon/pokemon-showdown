@@ -6418,7 +6418,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.add('-start', source, 'typechange', source.getTypes().join('/'), '[from] ability: Chromotophile');
 			}
 		},
-		onSwitchOut(source) {
+		onSwitchIn(source) {
 			source.setType(["???"]);
 			this.add('-start', source, 'typechange', source.getTypes().join('/'), '[from] ability: Chromotophile');
 		},
