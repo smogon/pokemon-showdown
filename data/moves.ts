@@ -22475,11 +22475,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-		self: {
-			onHit(target) {
-					target.addVolatile('attract');
+			onHit(source) {
+				for (const pokemon of source.foes()) {
+					pokemon.addVolatile('attract');
+				}
 			},
-		},
 		target: "normal",
 		type: "Psychic",
 		contestType: "Beautiful",
