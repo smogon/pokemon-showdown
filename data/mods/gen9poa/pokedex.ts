@@ -34,5 +34,9 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	solrock: {
 		inherit: true,
 		abilities: {0: "Levitate", H: "Drought"},
+	},
+	samurott: {
+		inherit: true,
+		abilities: {0: "Torrent", H: "Sharpness"},
 	}
 };
