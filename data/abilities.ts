@@ -6426,4 +6426,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4,
 		num: -49,
 	},
+	aphrodite: { //Effect coded into attract volatile in data/moves.ts
+		name: "Aphrodite",
+		rating: 1,
+		num: -50,
+	},
 };
