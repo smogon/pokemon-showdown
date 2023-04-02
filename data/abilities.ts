@@ -5997,6 +5997,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (source === target) return;
 			if (move.name === "Regurgitation" || target.fainted || target.isSemiInvulnerable()) return;
 			let firstdamage = this.actions.getDamage(source, target, 'Regurgitation');
+			this.add("-message", firstdamage?.toString());
 			if (typeof firstdamage === 'number') this.damage(firstdamage, target, source);
 			return null;
 		},
