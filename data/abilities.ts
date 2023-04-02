@@ -6431,4 +6431,26 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 1,
 		num: -50,
 	},
+	ivywall: {
+		onImmunity(type, pokemon) {
+			if (type === 'powder') return false;
+		},
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			if (move.flags['powder'] && target !== source && this.dex.getImmunity('powder', target)) {
+				this.add('-immune', target, '[from] ability: Ivy Wall');
+				return null;
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Grass' || move.type === 'Water' || move.type === 'Electric' || move.type === 'Ground') {
+				this.debug('Ivy Wall weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		name: "Ivy Wall",
+		isBreakable: true,
+		rating: 3,
+		num: -51,
+	},
 };
