@@ -23948,7 +23948,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	},
 	rockruffdelta: {
 		num: 744,
-		name: "Rockruff",
+		name: "Rockruff-Delta",
+		baseForme: "Rockruff",
 		forme: "Delta",
 		types: ["Fighting"],
 		baseStats: {hp: 45, atk: 65, def: 40, spa: 30, spd: 40, spe: 60},
