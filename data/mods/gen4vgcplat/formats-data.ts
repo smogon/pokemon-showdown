@@ -180,8 +180,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"zubat": {
-		"tier": "3",
-		"doublesTier": "3"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"golbat": {
 		"tier": "7",
@@ -536,8 +536,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"doublesTier": "1"
 	},
 	"seadra": {
-		"tier": "5",
-		"doublesTier": "5"
+		"tier": "7",
+		"doublesTier": "7"
 	},
 	"kingdra": {
 		"doublesTier": "13",
@@ -868,8 +868,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"doublesTier": "1"
 	},
 	"skiploom": {
-		"tier": "4",
-		"doublesTier": "4"
+		"tier": "5",
+		"doublesTier": "5"
 	},
 	"jumpluff": {
 		"doublesTier": "10",
@@ -920,8 +920,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"doublesTier": "2"
 	},
 	"mismagius": {
-		"doublesTier": "10",
-		"tier": "10"
+		"doublesTier": "12",
+		"tier": "12"
 	},
 	"unown": {
 		"isNonstandard": "Unobtainable",
@@ -1044,8 +1044,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"houndour": {
-		"tier": "1",
-		"doublesTier": "1"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"houndoom": {
 		"doublesTier": "9",
@@ -1120,12 +1120,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "16"
 	},
 	"torchic": {
-		"tier": "1",
-		"doublesTier": "1"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"combusken": {
-		"tier": "3",
-		"doublesTier": "3"
+		"tier": "4",
+		"doublesTier": "4"
 	},
 	"blaziken": {
 		"doublesTier": "8",
@@ -1208,8 +1208,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"doublesTier": "1"
 	},
 	"swellow": {
-		"doublesTier": "7",
-		"tier": "7"
+		"doublesTier": "8",
+		"tier": "8"
 	},
 	"wingull": {
 		"tier": "4",
@@ -1228,8 +1228,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"doublesTier": "2"
 	},
 	"gardevoir": {
-		"doublesTier": "7",
-		"tier": "7"
+		"doublesTier": "10",
+		"tier": "10"
 	},
 	"gallade": {
 		"doublesTier": "6",
@@ -1276,12 +1276,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"whismur": {
-		"tier": "1",
-		"doublesTier": "1"
-	},
-	"loudred": {
 		"tier": "2",
 		"doublesTier": "2"
+	},
+	"loudred": {
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"exploud": {
 		"doublesTier": "5",
@@ -1324,8 +1324,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"doublesTier": "1"
 	},
 	"lairon": {
-		"tier": "2",
-		"doublesTier": "2"
+		"tier": "3",
+		"doublesTier": "3"
 	},
 	"aggron": {
 		"doublesTier": "9",
@@ -1636,8 +1636,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "14"
 	},
 	"registeel": {
-		"doublesTier": "6",
-		"tier": "6"
+		"doublesTier": "7",
+		"tier": "7"
 	},
 	"latias": {
 		"doublesTier": "12",
@@ -1712,8 +1712,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"doublesTier": "3"
 	},
 	"empoleon": {
-		"doublesTier": "7",
-		"tier": "7"
+		"doublesTier": "6",
+		"tier": "6"
 	},
 	"starly": {
 		"tier": "1",
@@ -1744,8 +1744,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"shinx": {
-		"tier": "1",
-		"doublesTier": "1"
+		"tier": "2",
+		"doublesTier": "2"
 	},
 	"luxio": {
 		"tier": "3",

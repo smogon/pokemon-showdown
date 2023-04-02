@@ -18,7 +18,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	squirtle: {
-		tier: "10U",
+		tier: "9U",
 	},
 	wartortle: {
 		tier: "ZU",
@@ -54,7 +54,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "6U",
 	},
 	rattata: {
-		tier: "8U",
+		tier: "9U",
 	},
 	raticate: {
 		tier: "NU",
@@ -159,7 +159,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	psyduck: {
-		tier: "8U",
+		tier: "7U",
 	},
 	golduck: {
 		tier: "NUBL",
@@ -351,7 +351,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "ZU",
 	},
 	goldeen: {
-		tier: "9U",
+		tier: "8U",
 	},
 	seaking: {
 		tier: "ZU",
