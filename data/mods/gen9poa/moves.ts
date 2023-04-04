@@ -17,6 +17,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			case 'sandstorm':
 			case 'hail':
 			case 'snow':
+			case 'acidrain':
 				factor = 0.25;
 				break;
 			}

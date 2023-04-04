@@ -2622,4 +2622,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Delta Sceptilite",
 		desc: "If held by a Delta Sceptile, this item allows it to Mega Evolve in battle.",
 	},
+	acidicrock: {
+		name: "Acidic Rock",
+		desc: "Holder's use of Pollute lasts 8 turns instead of 5.",
+	},
 };

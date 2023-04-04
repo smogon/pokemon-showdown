@@ -6457,4 +6457,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: -51,
 	},
+	pollutant: {
+		onStart(source) {
+			this.field.setWeather('acidrain');
+		},
+		name: "Pollutant",
+		rating: 4,
+		num: 45,
+	},
 };

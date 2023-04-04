@@ -3616,7 +3616,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			duration: 2,
 			onImmunity(type, pokemon) {
-				if (type === 'sandstorm' || type === 'hail') return false;
+				if (type === 'sandstorm' || type === 'hail' || type ==='acidrain') return false;
 			},
 			onInvulnerability(target, source, move) {
 				if (['earthquake', 'magnitude'].includes(move.id)) {
@@ -3791,7 +3791,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			duration: 2,
 			onImmunity(type, pokemon) {
-				if (type === 'sandstorm' || type === 'hail') return false;
+				if (type === 'sandstorm' || type === 'hail' || type === 'acidrain') return false;
 			},
 			onInvulnerability(target, source, move) {
 				if (['surf', 'whirlpool'].includes(move.id)) {
@@ -12468,6 +12468,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			case 'sandstorm':
 			case 'hail':
 			case 'snow':
+			case 'acidrain':
 				factor = 0.25;
 				break;
 			}
@@ -12508,6 +12509,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				factor = 0.333;
 				break;
 			case 'snow':
+			case 'acidrain':
 				factor = 0.25;
 				break;
 			}
@@ -17710,7 +17712,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			return null;
 		},
 		onBasePower(basePower, pokemon, target) {
-			const weakWeathers = ['raindance', 'primordialsea', 'sandstorm', 'hail', 'snow'];
+			const weakWeathers = ['raindance', 'primordialsea', 'sandstorm', 'hail', 'snow', 'acidrain'];
 			if (weakWeathers.includes(pokemon.effectiveWeather())) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
@@ -17751,7 +17753,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			return null;
 		},
 		onBasePower(basePower, pokemon, target) {
-			const weakWeathers = ['raindance', 'primordialsea', 'sandstorm', 'hail', 'snow'];
+			const weakWeathers = ['raindance', 'primordialsea', 'sandstorm', 'hail', 'snow', 'acidrain'];
 			if (weakWeathers.includes(pokemon.effectiveWeather())) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
@@ -19257,6 +19259,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			case 'sandstorm':
 			case 'hail':
 			case 'snow':
+			case 'acidrain':
 				factor = 0.25;
 				break;
 			case 'newmoon':
@@ -21166,6 +21169,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 				break;
 			case 'newmoon':
 				move.type = 'Dark';
+			case 'acidrain':
+				move.type = 'Poison';
 				break;
 			}
 		},
@@ -21187,6 +21192,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 				move.basePower *= 2;
 				break;
 			case 'newmoon':
+				move.basePower *= 2;
+			case 'acidrain':
 				move.basePower *= 2;
 				break;
 			}
@@ -22483,5 +22490,21 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Psychic",
 		contestType: "Beautiful",
+	},
+	pollute: {
+		num: 201,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Pollute",
+		pp: 10,
+		priority: 0,
+		flags: {wind: 1},
+		weather: 'acidrain',
+		secondary: null,
+		target: "all",
+		type: "Poison",
+		zMove: {boost: {spa: 1}},
+		contestType: "Tough",
 	},
 };
