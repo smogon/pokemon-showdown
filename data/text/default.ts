@@ -323,6 +323,13 @@ export const DefaultText: {[k: string]: DefaultText} = {
 		activate: "  The mysterious strong winds weakened the attack!",
 		block: "  The mysterious strong winds blow on regardless!",
 	},
+	acidrain: {
+		weatherName: "Acid Rain",
+		start: "  The air became toxic!",
+		end: "  The air was finally purified.",
+		upkeep: "  (The rain remains acidic)",
+		damage: "  [POKEMON] is damaged by the acid rain!",
+	},
 
 	// terrain
 	electricterrain: {
