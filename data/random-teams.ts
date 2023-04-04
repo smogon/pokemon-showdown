@@ -1566,8 +1566,6 @@ export class RandomTeams {
 				pokemon.push(set);
 			}
 
-			// Okay, the set passes, add it to our team
-			pokemon.push(set);
 			if (pokemon.length === this.maxTeamSize) {
 				// Set Zoroark's level to be the same as the last Pokemon
 				const illusion = teamDetails.illusion;
