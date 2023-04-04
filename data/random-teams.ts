@@ -104,9 +104,14 @@ const MovePairs = [
 	['leechseed', 'protect'],
 ];
 
-// Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type
+/** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
 const PriorityPokemon = [
 	'banette', 'breloom', 'brutebonnet', 'cacturne', 'giratinaorigin', 'lycanrocdusk', 'mimikyu', 'scizor',
+];
+
+/** Pokemon who should never be in the lead slot */
+const NoLeadPokemon = [
+	'Basculegion', 'Houndstone', 'Zacian', 'Zamazenta',
 ];
 
 function sereneGraceBenefits(move: Move) {
@@ -1461,6 +1466,8 @@ export class RandomTeams {
 		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, isDoubles);
+
+		let generatedLead = false;
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
 			const currentSpeciesPool: Species[] = [];
@@ -1492,9 +1499,6 @@ export class RandomTeams {
 			) {
 				continue;
 			}
-
-			// Pokemon with Last Respects, Intrepid Sword, and Dauntless Shield shouldn't be leading
-			if (['Basculegion', 'Houndstone', 'Zacian', 'Zamazenta'].includes(species.baseSpecies) && !pokemon.length) continue;
 
 			const tier = species.tier;
 			const types = species.types;
@@ -1544,7 +1548,23 @@ export class RandomTeams {
 			// The Pokemon of the Day
 			if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
-			const set = this.randomSet(species, teamDetails, pokemon.length === 0, isDoubles);
+			let set: RandomTeamsTypes.RandomSet;
+
+			if (!generatedLead) {
+				if (NoLeadPokemon.includes(species.baseSpecies)) {
+					if (pokemon.length + 1 === this.maxTeamSize) continue;
+					set = this.randomSet(species, teamDetails, false, isDoubles);
+					pokemon.push(set);
+				} else {
+					set = this.randomSet(species, teamDetails, true, isDoubles);
+					pokemon.unshift(set);
+					generatedLead = true;
+					if (typeof teamDetails.illusion === 'number') teamDetails.illusion++;
+				}
+			} else {
+				set = this.randomSet(species, teamDetails, false, isDoubles);
+				pokemon.push(set);
+			}
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
