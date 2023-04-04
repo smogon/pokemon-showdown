@@ -1030,6 +1030,24 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onWeather(target) {
 			this.damage(target.baseMaxhp / 16);
 		},
+		onModifyMove(move) {
+			this.debug('Poison upgraded to Toxic in Acid Rain');
+			if (!move.secondaries) move.secondaries = [];
+			for (const secondary of move.secondaries) {
+				if (secondary.status === 'psn') {
+					const toxChance = secondary.chance;
+					secondary.chance = 0;
+					move.secondaries.push({
+						chance: toxChance,
+						status: 'tox',
+					});
+				}
+			}
+			const toxStatus = this.dex.getActiveMove('toxic').status;
+			if (move.status && move.status === 'psn') {
+				move.status = toxStatus;
+			}
+		},
 		onFieldEnd() {
 			this.add('-weather', 'none');
 		},
