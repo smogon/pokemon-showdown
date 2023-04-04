@@ -32,6 +32,8 @@ Ratings and how they work:
 
 */
 
+import { PokemonSources } from "../sim/team-validator";
+
 export const Abilities: {[abilityid: string]: AbilityData} = {
 	noability: {
 		isNonstandard: "Past",
@@ -649,6 +651,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	corrosion: {
 		// Implemented in sim/pokemon.js:Pokemon#setStatus
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.field.isWeather('acidrain') && move.type === 'Poison') {
+				return this.chainModify(1.3);
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'acidrain') return false;
+		},
 		name: "Corrosion",
 		rating: 2.5,
 		num: 212,
@@ -2198,6 +2208,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return 0;
 			}
 		},
+		onImmunity(type, pokemon) {
+			if (type === 'acidrain') return false;
+		},
 		name: "Liquid Ooze",
 		rating: 2.5,
 		num: 64,
@@ -2637,6 +2650,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	neutralizinggas: {
 		// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility
+		// Item supression in Acid Rain implemented in sim/pokemon.ts:Pokemon#ignoringItem
 		onPreStart(pokemon) {
 			if (pokemon.transformed) return;
 			this.add('-ability', pokemon, 'Neutralizing Gas');
@@ -3015,10 +3029,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	poisonheal: {
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
-			if (effect.id === 'psn' || effect.id === 'tox') {
+			if (effect.id === 'psn' || effect.id === 'tox' || this.field.isWeather('acidrain')) {
 				this.heal(target.baseMaxhp / 8);
 				return false;
 			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'acidrain') return false;
 		},
 		name: "Poison Heal",
 		rating: 4,
@@ -4223,13 +4240,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	stench: {
 		onModifyMovePriority: -1,
-		onModifyMove(move) {
+		onModifyMove(move, pokemon) {
 			if (move.category !== "Status") {
 				this.debug('Adding Stench flinch');
 				if (!move.secondaries) move.secondaries = [];
 				for (const secondary of move.secondaries) {
 					if (secondary.volatileStatus === 'flinch') return;
 				}
+				if (['acidrain'].includes(pokemon.effectiveWeather())) {
+					move.secondaries.push({
+						chance: 15,
+						volatileStatus: 'flinch',
+				})
+			}
 				move.secondaries.push({
 					chance: 10,
 					volatileStatus: 'flinch',
@@ -5015,6 +5038,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	whitesmoke: {
 		onTryBoost(boost, target, source, effect) {
+			if (this.field.isWeather('acidrain')) return;
 			if (source && target === source) return;
 			let showMsg = false;
 			let i: BoostID;
@@ -5770,7 +5794,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 5,
 		onResidual(pokemon) {
-			if (['raindance', 'primordialsea', 'newmoon'].includes(pokemon.effectiveWeather())) return;
+			if (['raindance', 'primordialsea', 'newmoon', 'acidrain'].includes(pokemon.effectiveWeather())) return;
 			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				this.heal(pokemon.baseMaxhp / 8);
 			} else {

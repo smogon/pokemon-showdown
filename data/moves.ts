@@ -20826,7 +20826,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		onHit(target, source, move) {
 			if (target.status === 'psn' || target.status === 'tox') {
-				if (this.field.effectiveWeather() === 'acidrain') {
+				if (this.field.isWeather('acidrain')) {
 					return !!this.boost({atk: -2, spa: -2, spe: -2}, target, source, move);
 				}
 				return !!this.boost({atk: -1, spa: -1, spe: -1}, target, source, move);
