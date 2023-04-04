@@ -2895,39 +2895,49 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	pastelveil: {
 		onStart(pokemon) {
-			for (const ally of pokemon.alliesAndSelf()) {
-				if (['psn', 'tox'].includes(ally.status)) {
-					this.add('-activate', pokemon, 'ability: Pastel Veil');
-					ally.cureStatus();
+			if (!this.field.isWeather('acidrain')){
+				for (const ally of pokemon.alliesAndSelf()) {
+					if (['psn', 'tox'].includes(ally.status)) {
+						this.add('-activate', pokemon, 'ability: Pastel Veil');
+						ally.cureStatus();
+					}
 				}
 			}
 		},
 		onUpdate(pokemon) {
-			if (['psn', 'tox'].includes(pokemon.status)) {
-				this.add('-activate', pokemon, 'ability: Pastel Veil');
-				pokemon.cureStatus();
+			if (!this.field.isWeather('acidrain')){
+				if (['psn', 'tox'].includes(pokemon.status)) {
+					this.add('-activate', pokemon, 'ability: Pastel Veil');
+					pokemon.cureStatus();
+				}
 			}
 		},
 		onAllySwitchIn(pokemon) {
-			if (['psn', 'tox'].includes(pokemon.status)) {
-				this.add('-activate', this.effectState.target, 'ability: Pastel Veil');
-				pokemon.cureStatus();
+			if (!this.field.isWeather('acidrain')){
+				if (['psn', 'tox'].includes(pokemon.status)) {
+					this.add('-activate', this.effectState.target, 'ability: Pastel Veil');
+					pokemon.cureStatus();
+				}
 			}
 		},
 		onSetStatus(status, target, source, effect) {
-			if (!['psn', 'tox'].includes(status.id)) return;
-			if ((effect as Move)?.status) {
-				this.add('-immune', target, '[from] ability: Pastel Veil');
+			if (!this.field.isWeather('acidrain')){
+				if (!['psn', 'tox'].includes(status.id)) return;
+				if ((effect as Move)?.status) {
+					this.add('-immune', target, '[from] ability: Pastel Veil');
+				}
+				return false;
 			}
-			return false;
 		},
 		onAllySetStatus(status, target, source, effect) {
-			if (!['psn', 'tox'].includes(status.id)) return;
-			if ((effect as Move)?.status) {
-				const effectHolder = this.effectState.target;
-				this.add('-block', target, 'ability: Pastel Veil', '[of] ' + effectHolder);
+			if (!this.field.isWeather('acidrain')){
+				if (!['psn', 'tox'].includes(status.id)) return;
+				if ((effect as Move)?.status) {
+					const effectHolder = this.effectState.target;
+					this.add('-block', target, 'ability: Pastel Veil', '[of] ' + effectHolder);
+				}
+				return false;
 			}
-			return false;
 		},
 		isBreakable: true,
 		name: "Pastel Veil",
@@ -3027,12 +3037,20 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 57,
 	},
 	poisonheal: {
+		onResidualOrder: 5,
+		onResidualSubOrder: 5,
+		onResidual(pokemon) {
+			if (this.field.isWeather(['acidrain'])) {
+				this.heal(pokemon.baseMaxhp / 8);
+			} 
+		},
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
-			if (effect.id === 'psn' || effect.id === 'tox' || this.field.isWeather('acidrain')) {
-				this.heal(target.baseMaxhp / 8);
-				return false;
-			}
+			if (this.field.isWeather('acidrain')) return;
+				if (effect.id === 'psn' || effect.id === 'tox') {
+					this.heal(target.baseMaxhp / 8);
+					return false;
+				}
 		},
 		onImmunity(type, pokemon) {
 			if (type === 'acidrain') return false;

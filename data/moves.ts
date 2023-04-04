@@ -14675,14 +14675,15 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, heal: 1},
 		onHit(target, source) {
+			if (source.effectiveWeather() === 'acidrain') {
+				this.field.clearWeather();
+			}
 			if (!target.cureStatus()) {
 				this.add('-fail', source);
 				this.attrLastMove('[still]');
 				return this.NOT_FAIL;
 			}
-			if (source.effectiveWeather() === 'acidrain') {
-				this.field.clearWeather();
-			}
+			
 			this.heal(Math.ceil(source.maxhp * 0.5), source);
 		},
 		secondary: null,
@@ -20246,7 +20247,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					pokemon.side.removeSideCondition('toxicspikes');
 				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots')) {
 					return;
-				} else if (this.effectState.layers >= 2) {
+				} else if (this.effectState.layers >= 2 || this.field.isWeather('acidrain')) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
 				} else {
 					pokemon.trySetStatus('psn', pokemon.side.foe.active[0]);
