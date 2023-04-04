@@ -9,7 +9,7 @@ export const Aliases: {[alias: string]: string} = {
 	rarelyused: "[Gen 9] RU",
 	neverused: "[Gen 9] NU",
 	pu: "[Gen 9] PU",
-	zeroused: "[Gen 8] ZU",
+	zeroused: "[Gen 9] ZU",
 	mono: "[Gen 9] Monotype",
 	ag: "[Gen 9] Anything Goes",
 	bss: "[Gen 9] Battle Stadium Singles Series 2",
@@ -86,8 +86,8 @@ export const Aliases: {[alias: string]: string} = {
 	gen6ag: "[Gen 6] Anything Goes",
 	crossevo: "[Gen 9] Cross Evolution",
 	mayhem: "[Gen 9] Random Battle Mayhem",
-	omotm: "[Gen 9] Fortemons",
-	lcotm: "[Gen 9] Tera Donation",
+	omotm: "[Gen 9] Pokebilities",
+	lcotm: "[Gen 9] Cross Evolution",
 
 	// mega evos
 	fabio: "Ampharos-Mega",
