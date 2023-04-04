@@ -821,6 +821,12 @@ export class Pokemon {
 	}
 
 	ignoringItem() {
+		for (const pokemon of this.battle.getAllActive()) { // Acid Rain + Neutralizing Gas 
+			// can't use hasAbility because it would lead to infinite recursion
+			if (pokemon.ability === ('neutralizinggas' as ID) && this.effectiveWeather() === 'acidrain' && !pokemon.abilityState.ending) {
+				return true;
+			}
+		}
 		return !!(
 			this.itemState.knockedOff || // Gen 3-4
 			(this.battle.gen >= 5 && !this.isActive) ||
