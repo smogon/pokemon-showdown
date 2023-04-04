@@ -1,5 +1,6 @@
 // List of flags and their descriptions can be found in sim/dex-moves.ts
 
+import { pokemonRegex } from "../server/chat-plugins/abuse-monitor";
 import { Pokemon } from "../sim";
 
 export const Moves: {[moveid: string]: MoveData} = {
@@ -77,6 +78,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
+		onModifyMove(move, pokemon) {
+			if (['acidrain'].includes(pokemon.effectiveWeather())) move.boosts = {def: 3};
+		},
 		boosts: {
 			def: 2,
 		},
@@ -2523,9 +2527,36 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onHit(target) {
+		onHit(target, source, move) {
 			target.clearBoosts();
 			this.add('-clearboost', target);
+
+			if (source.effectiveWeather() === 'acidrain') {
+				let success = false;
+
+				if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({evasion: -1});
+				const removeTarget = [
+					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist',
+				];
+				const removeAll = [
+					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist',
+				];
+				for (const targetCondition of removeTarget) {
+					if (target.side.removeSideCondition(targetCondition)) {
+						if (!removeAll.includes(targetCondition)) continue;
+						this.add('-sideend', target.side, this.dex.conditions.get(targetCondition).name, '[from] move: Clear Smog in Acid Rain', '[of] ' + source);
+						success = true;
+					}
+				}
+				for (const sideCondition of removeAll) {
+					if (source.side.removeSideCondition(sideCondition)) {
+						this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Clear Smog in Acid Rain', '[of] ' + source);
+						success = true;
+					}
+				}
+				this.field.clearTerrain();
+				return success;
+			}
 		},
 		secondary: null,
 		target: "normal",
@@ -3459,6 +3490,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
 		onHit(target, source, move) {
 			let success = false;
+			if (source.effectiveWeather() === 'acidrain') {
+				this.field.clearWeather();
+				return true;
+			}
 			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({evasion: -1});
 			const removeTarget = [
 				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'livewire', 'permafrost', 'hotcoals', 'stickyweb', 'gmaxsteelsurge',
@@ -14645,6 +14680,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.attrLastMove('[still]');
 				return this.NOT_FAIL;
 			}
+			if (source.effectiveWeather() === 'acidrain') {
+				this.field.clearWeather();
+			}
 			this.heal(Math.ceil(source.maxhp * 0.5), source);
 		},
 		secondary: null,
@@ -17504,6 +17542,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		secondary: {
 			chance: 40,
 			status: 'psn',
+		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.effectiveWeather() === 'acidrain') {
+				move.basePower *=2;
+				move.accuracy = 100;
+			}
 		},
 		target: "normal",
 		type: "Poison",
@@ -20782,6 +20826,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		onHit(target, source, move) {
 			if (target.status === 'psn' || target.status === 'tox') {
+				if (this.field.effectiveWeather() === 'acidrain') {
+					return !!this.boost({atk: -2, spa: -2, spe: -2}, target, source, move);
+				}
 				return !!this.boost({atk: -1, spa: -1, spe: -1}, target, source, move);
 			}
 			return false;
