@@ -46,18 +46,18 @@ export const Formats: FormatList = [
 
 		mod: 'gen9deluxe',
 		ruleset: ['DNU Clause', 'Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause'],
-		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
+		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU", 'Spinarak', 'Wooloo',
 		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass"]
 	},
 
-	// {
-	// 	name: "[Gen 9] Do Not Use Suspect",
+	{
+		name: "[Gen 9] Do Not Use Suspect",
 
-	// 	mod: 'gen9deluxe',
-	// 	ruleset: ['Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause'],
-	// 	banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
-	// 	"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass"]
-	// },
+		mod: 'gen9deluxe',
+		ruleset: ['Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause'],
+		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
+		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass"]
+	},
 
 	// {
 	// 	name: "[Gen 9] DNU Draft League",
