@@ -762,6 +762,7 @@ export const commands: Chat.ChatCommands = {
 		`/groupavatar [username], [avatar] - Gives a user an allowed (group) avatar.`,
 		`/removeavatar [username], [avatar] - Removes access to an avatar from a user.`,
 		`/removeavatar [username] - Removes access to all custom avatars from a user.`,
+		`/moveavatars [user1], [user2] - Moves access to all custom avatars from user1 to user2.`,
 		AVATAR_FORMATS_MESSAGE,
 	],
 
