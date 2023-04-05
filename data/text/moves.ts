@@ -7583,4 +7583,19 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "Has 50% recoil.",
 		desc: "If the target lost HP, the user takes recoil damage equal to 50% the HP lost by the target, rounded half up, but not less than 1 HP.",
 	},
+	pollute: {
+		name: "Pollute",
+		desc: "Acid Rain will begin to fall. This effect will last for 5 turns; if the user is holding an Acidic Rock, the duration is increased to 8 turns.",
+		shortDesc: "For 5 turns, the weather becomes Acid Rain.",
+	},
+	boxin: {
+		name: "Box In",
+		desc: "Prevents the user and the target from switching out. The user and the target can still switch out if either of them is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
+		shortDesc: "Prevents both user and target from switching out.",
+	},
+	sirenssong: {
+		name: "Siren's Song",
+		desc: "Infatuates foe(s).",
+		shortDesc: "Infatuates foe(s)",
+	},
 };

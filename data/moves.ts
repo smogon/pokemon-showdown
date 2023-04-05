@@ -22535,7 +22535,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			target.addVolatile('attract');
 			this.add('-start', target, 'Attract');
 		},
-		target: "normal",
+		target: "allAdjacentFoes",
 		type: "Psychic",
 		contestType: "Beautiful",
 	},
