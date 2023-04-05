@@ -17,6 +17,23 @@ export interface Nomination {
 	post?: string;
 }
 
+interface IPData {
+	country: string;
+	isp: string;
+	city: string;
+	regionName: string;
+	lat: number;
+	lon: number;
+}
+
+function getIPData(ip: string) {
+	try {
+		return Net("http://ip-api.com/json/" + ip).get().then(JSON.parse) as Promise<IPData>;
+	} catch {
+		return null;
+	}
+}
+
 export const Smogon = new class {
 	async post(threadNum: string, postText: string) {
 		if (!Config.smogon) return null;
@@ -110,7 +127,7 @@ export const Nominations = new class {
 				if (entry.ip) ipTable.add(entry.ip);
 				if (entry.autoconfirmedID) altTable.add(entry.autoconfirmedID);
 				if (entry.alts) {
-					for (const alt of entry.alts) altTable.add(alt);
+					for (const id of entry.alts) altTable.add(id);
 				}
 			}
 		}
@@ -118,7 +135,7 @@ export const Nominations = new class {
 		this.noms.push({
 			by: user.id,
 			alts: [...altTable],
-			ips: [...ipTable],
+			ips: Utils.sortBy([...ipTable], z => -(IPTools.ipToNumber(z) || Infinity)),
 			info: details,
 			primaryID,
 			standing: type,
@@ -180,8 +197,12 @@ export const Nominations = new class {
 				dateString = ``;
 			}
 			const thisRoomID = entryRoom?.split(' ')[0];
-			const url = Config.modloglink?.(date, thisRoomID);
-			if (url) timestamp = `<a href="${url}">${timestamp}</a>`;
+			if (thisRoomID.startsWith('battle-')) {
+				timestamp = `<a href="/${thisRoomID}">${timestamp}</a>`;
+			} else {
+				const [day, time] = Chat.toTimestamp(date).split(' ');
+				timestamp = `<a href="/view-chatlog-${thisRoomID}--${day}--time-${toID(time)}">${timestamp}</a>`;
+			}
 			return `${dateString}${line}`;
 		}).join(`<br />`);
 	}
@@ -215,7 +236,12 @@ export const Nominations = new class {
 		if (nom.ips.length) {
 			buf += `<details class="readmore"><summary><strong>Listed IPs</strong></summary>`;
 			for (const [i, ip] of nom.ips.entries()) {
-				buf += `- <a href="https://whatismyipaddress/ip/${ip}:">${ip}</a>: `;
+				const ipData = await getIPData(ip);
+				buf += `- <a href="https://whatismyipaddress/ip/${ip}:">${ip}</a>`;
+				if (ipData) {
+					buf += `(ISP: ${ipData.isp}, loc: ${ipData.city}, ${ipData.regionName} in ${ipData.country})`;
+				}
+				buf += `: `;
 				buf += `<form data-submitsend="/perma ipstanding ${ip},{standing}">`;
 				buf += this.standingDropdown("standing");
 				buf += ` <button class="button notifying" type="submit">Change standing for all users on IP</button></form>`;
@@ -223,7 +249,7 @@ export const Nominations = new class {
 			}
 			buf += `</details>`;
 		}
-		const [matches, err] = await LoginServer.request('ipmatches', {
+		const [matches] = await LoginServer.request('ipmatches', {
 			id: nom.primaryID,
 		});
 		if (matches?.results?.length) {
@@ -291,7 +317,7 @@ export const Nominations = new class {
 		buf += `<div class="infobox">`;
 		buf += `<strong>Primary userid:</strong> <input name="primary" /><br />`;
 		buf += `<strong>Alts:</strong><br /><textarea name="alts"></textarea><br /><small>(Separated by commas)</small><br />`;
-		buf += `<strong>IPs:</strong><br /><textarea name="ips"></textarea><br /><small>(Separated by commas)</small></div><br />`;
+		buf += `<strong>Static IPs:</strong><br /><textarea name="ips"></textarea><br /><small>(Separated by commas)</small></div><br />`;
 		buf += `<strong>Punishment:</strong> `;
 		buf += `<select name="type"><option value="20">Permalock</option><option value="30">Permaban</option></select>`;
 		buf += `<div class="infobox">`;
@@ -319,7 +345,7 @@ export const Nominations = new class {
 		buf += `</div>`;
 		return buf;
 	}
-}
+};
 
 export const commands: Chat.ChatCommands = {
 	perma: {
@@ -359,13 +385,28 @@ export const commands: Chat.ChatCommands = {
 			if (!standings[standing]) return this.popupReply(`Invalid standing.`);
 			if (!toID(postReason)) return this.popupReply(`A reason must be given.`);
 			// todo thread num
-			const threadNum = '3697117';
+			const threadNum = Config.permathread;
+			if (!threadNum) {
+				throw new Chat.ErrorMessage("The link to the perma has not been set - the post could not be made.");
+			}
+			let postBuf = `[b]${primary}[/b] was added to ${standings[standing]} by ${user.name} (${postReason}). `;
+			postBuf += `Nominated by ${nom.by}.\n`;
+			postBuf += `${nom.alts.length ? `[spoiler=Alts]${nom.alts.join(', ')}[/spoiler]` : ""}\n`;
+			if (nom.ips.length) {
+				postBuf += `[spoiler=ips]`;
+				for (const ip of nom.ips) {
+					const ipData = await getIPData(ip);
+					postBuf += `- [url=https://whatismyipaddress/ip/${ip}]${ip}[/url]`;
+					if (ipData) {
+						postBuf += ` (ISP: ${ipData.isp}, loc: ${ipData.city}, ${ipData.regionName} in ${ipData.country})`;
+					}
+					postBuf += '\n';
+				}
+				postBuf += `[/spoiler]`;
+			}
 			const res = await Smogon.post(
 				threadNum,
-				`[${Chat.toTimestamp(new Date(), {human: true})}] ` +
-				`[b]${primary}[/b] was added to ${standings[standing]} by ${user.name} (${postReason}). ` +
-				`Nominated by ${nom.by}.\n` +
-				`${nom.alts.length ? `[spoiler=Alts]${nom.alts.join(', ')}[/spoiler]` : ""}`
+				postBuf,
 			);
 			if (res.error) {
 				return this.popupReply(`Error making post: ${res.error}`);
@@ -431,7 +472,7 @@ export const commands: Chat.ChatCommands = {
 			this.popupReply(`All standings on the IP ${ip} changed successfully.`);
 			this.globalModlog(`IPSTANDING`, null, `${standingNum}${reason ? ` (${reason})` : ""}`, ip);
 		},
-		async resolve(target) {
+		resolve(target) {
 			this.checkCan('rangeban');
 			Nominations.close(target, this);
 		},
