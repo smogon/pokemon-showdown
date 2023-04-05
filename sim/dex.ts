@@ -535,7 +535,7 @@ export class ModdedDex {
 						// Merge parent into children entry, preserving existing childs' properties.
 						for (const key in parentTypedData[entryId]) {
 							if (key in childTypedData[entryId]) continue;
-							childTypedData[entryId][key] = this.deepClone(parentTypedData[entryId][key]);
+							childTypedData[entryId][key] = parentTypedData[entryId][key];
 						}
 					}
 				}
