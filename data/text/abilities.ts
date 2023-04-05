@@ -2362,4 +2362,23 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "When a Pokémon with the ability 'Call of the Hunt' successfully uses an attack when in sun or darkness, it will summon fellow Lycanrocs to aid in its attack. This triggers an additional 20BP fire type move, followed by another 20BP dark type move",
 		shortDesc: "After landing an attack, the Pokemon launches two additional attacks, one fire and one dark type.",
 	},
+	aphrodite: {
+		name: "Aphrodite",
+		desc: "This Pokémon can infatuate any foe regardless of gender.",
+		shortDesc: "Ignores gender for infatuation.",
+	},
+	chromotophile: {
+		name: "Chromotophile",
+		desc: "When this Pokémon uses a move, it will have the type of this move added to it.",
+		shortDesc: "This Pokémon gains the type of the move it uses.",
+	},
+	pollutant: {
+		name: "Pollutant",
+		shortDesc: "On switch-in, this Pokemon summons Acid Rain.",
+	},
+	ivywall: {
+		name: "Ivy Wall",
+		desc: "This Pokémon takes on the resistances and immunities of the Grass type.",
+		shortDesc: "Gains Grass-type resistances and immunities."
+	},
 };
