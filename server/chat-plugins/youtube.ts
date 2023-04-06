@@ -238,7 +238,8 @@ export class YoutubeInterface {
 			let buf = `<b>${info.title}</b> `;
 			buf += `(<a class="subtle" href="https://youtube.com/channel/${info.channelUrl}">${info.channelTitle}</a>)<br />`;
 			if (broadcasting) {
-				buf += `<button class="button" name="send" value="/show https://www.youtube.com/watch?v=${id}">``Click to view "${info.title}"</button>`;
+				buf += `<button class="button" name="send" value="/show https://www.youtube.com/watch?v=${id}">`;
+				buf += `Click to view "${info.title}"</button>`;
 			} else {
 				buf += `<youtube src="https://www.youtube.com/embed/${id}" />`;
 			}
