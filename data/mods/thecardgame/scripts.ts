@@ -74,7 +74,17 @@ export const Scripts: ModdedBattleScriptsData = {
 					.replace(/(Rock|Ground)/g, 'Fighting')
 					.replace(/Flying/g, 'Normal')
 					.replace(/Poison/g, 'Dark');
-				this.modData('Items', id).naturalGift.type = type;
+				const overriddenBerries = [
+					'chartiberry', 'cobaberry', 'kasibberry', 'kebiaberry', 'roseliberry', 'shucaberry', 'tangaberry', 'yacheberry',
+				];
+				if (overriddenBerries.includes(id)) {
+					// these berries were already modded in ./items.ts
+					// so they have inherited references to the base dex naturalGift objects and need new ones
+					this.modData('Items', id).naturalGift = {...item.naturalGift, type};
+				} else {
+					// these were unmodded, so modData makes deep clones of them which makes this a safe write
+					this.modData('Items', id).naturalGift.type = type;
+				}
 			}
 		}
 	},
