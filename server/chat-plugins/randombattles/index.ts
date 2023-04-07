@@ -1005,6 +1005,9 @@ export const commands: Chat.ChatCommands = {
 			if (!possibleFormat.team) {
 				throw new Chat.ErrorMessage(`${possibleFormat.name} does not have randomly-generated teams.`);
 			}
+			if (!(possibleFormat.team === "random")) {
+				throw new Chat.ErrorMessage(`This command does not support ${possibleFormat.name}.`);
+			}
 			format = possibleFormat;
 			formatOrSpecies = args.shift();
 		}
