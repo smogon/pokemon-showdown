@@ -1738,7 +1738,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	voltorbhisui: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "LC",
 	},
 	wyrdeer: {
 		inherit: true,
@@ -1768,7 +1768,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	electrodehisui: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "LC",
+		natDexTier: "UU",
 	},
 	braviaryhisui: {
 		inherit: true,
