@@ -383,8 +383,13 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	}
 
 	addUser(user: User, output: Chat.CommandContext) {
-		if (!user.named || user.namelocked) {
+		if (!user.named) {
 			output.sendReply('|tournament|error|UserNotNamed');
+			return;
+		}
+
+		if (user.namelocked) {
+			output.sendReply('|tournament|error|UserNameLocked');
 			return;
 		}
 
