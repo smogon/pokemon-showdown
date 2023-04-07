@@ -110,7 +110,7 @@ const priorityPokemon = [
 ];
 
 /** Pokemon who should never be in the lead slot */
-const NoLeadPokemon = [
+const noLeadPokemon = [
 	'Basculegion', 'Houndstone', 'Zacian', 'Zamazenta',
 ];
 
