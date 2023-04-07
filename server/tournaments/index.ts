@@ -389,7 +389,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		}
 
 		if (user.namelocked) {
-			output.sendReply('|tournament|error|UserNameLocked');
+			output.sendReply('|tournament|error|Banned');
 			return;
 		}
 
