@@ -359,7 +359,7 @@ export class RandomTeams {
 			if (move.drain) counter.add('drain');
 			// Moves which have a base power, but aren't super-weak:
 			if (move.basePower > 30 || move.multihit || move.basePowerCallback) {
-				if (!this.noStab.includes(moveid) || PriorityPokemon.includes(species.id) && move.priority > 0) {
+				if (!this.noStab.includes(moveid) || priorityPokemon.includes(species.id) && move.priority > 0) {
 					counter.add(moveType);
 					if (types.includes(moveType)) counter.stabCounter++;
 					if (teraType === moveType) counter.add('stabtera');
@@ -664,7 +664,7 @@ export class RandomTeams {
 		}
 
 		// Enforce STAB priority
-		if (role === 'Bulky Attacker' || role === 'Bulky Setup' || PriorityPokemon.includes(species.id)) {
+		if (role === 'Bulky Attacker' || role === 'Bulky Setup' || priorityPokemon.includes(species.id)) {
 			const priorityMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
@@ -1551,7 +1551,7 @@ export class RandomTeams {
 			let set: RandomTeamsTypes.RandomSet;
 
 			if (!generatedLead) {
-				if (NoLeadPokemon.includes(species.baseSpecies)) {
+				if (noLeadPokemon.includes(species.baseSpecies)) {
 					if (pokemon.length + 1 === this.maxTeamSize) continue;
 					set = this.randomSet(species, teamDetails, false, isDoubles);
 					pokemon.push(set);
