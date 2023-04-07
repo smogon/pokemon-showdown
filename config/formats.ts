@@ -121,6 +121,20 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 1] 10U'],
 		banlist: ['10U'],
 	},
+	{
+		name: "[Gen 7] 7U",
+		mod: 'gen7',
+		searchShow: true,
+		ruleset: ['[Gen 7] ZU'],
+		banlist: ['ZU'],
+	},
+	{
+		name: "[Gen 6] 7U",
+		mod: 'gen6',
+		searchShow: true,
+		ruleset: ['[Gen 6] ZU'],
+		banlist: ['ZU'],
+	},
 
 	{
 		section: "S/V Singles",
