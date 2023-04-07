@@ -105,7 +105,7 @@ const MovePairs = [
 ];
 
 /** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
-const PriorityPokemon = [
+const priorityPokemon = [
 	'banette', 'breloom', 'brutebonnet', 'cacturne', 'giratinaorigin', 'lycanrocdusk', 'mimikyu', 'scizor',
 ];
 
