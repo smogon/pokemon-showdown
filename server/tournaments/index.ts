@@ -388,11 +388,6 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			return;
 		}
 
-		if (user.namelocked) {
-			output.sendReply('|tournament|error|Banned');
-			return;
-		}
-
 		if (user.id in this.playerTable) {
 			output.sendReply('|tournament|error|UserAlreadyAdded');
 			return;
@@ -403,7 +398,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			return;
 		}
 
-		if (Tournament.checkBanned(this.room, user) || Punishments.isBattleBanned(user)) {
+		if (Tournament.checkBanned(this.room, user) || Punishments.isBattleBanned(user) || user.namelocked) {
 			output.sendReply('|tournament|error|Banned');
 			return;
 		}
