@@ -56,6 +56,19 @@ export const Formats: FormatList = [
 		banlist: ['ND Uber', 'ND AG', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Assist', 'Baton Pass'],
 	},
 
+	// POA Doubles
+	//////////////////////////////////////////////////////////////////
+	{
+		name: "[Gen 9] POA Doubles AG",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3710876/">Doubles OU Sample Teams</a>`,
+		],
+
+		mod: 'gen9poa',
+		gameType: 'doubles',
+		ruleset: ['Standard Doubles'],
+	},
+
 	// Insurgence Singles
 	//////////////////////////////////////////////////////////////////
 
