@@ -84,7 +84,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "PU",
 	},
 	nidoranf: {
-		tier: "10U",
+		tier: "9U",
 	},
 	nidorina: {
 		tier: "7U",
@@ -324,7 +324,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "ZU",
 	},
 	koffing: {
-		tier: "9U",
+		tier: "8U",
 	},
 	weezing: {
 		tier: "6U",

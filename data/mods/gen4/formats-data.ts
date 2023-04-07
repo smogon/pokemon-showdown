@@ -183,7 +183,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "PU",
 	},
 	mankey: {
-		tier: "7U",
+		tier: "6U",
 	},
 	primeape: {
 		tier: "UU",
@@ -859,7 +859,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	mightyena: {
-		tier: "7U",
+		tier: "6U",
 	},
 	zigzagoon: {
 		tier: "8U",
@@ -1150,7 +1150,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "ZU",
 	},
 	duskull: {
-		tier: "7U",
+		tier: "6U",
 	},
 	dusclops: {
 		tier: "NU",
