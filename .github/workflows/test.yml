@@ -17,15 +17,47 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [16.x]
 
     steps:
     - uses: actions/checkout@v2
+    
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: Zarel/setup-node@patch-1
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm install
-    - run: npm run full-test
+        cache: 'npm'
+        
+    - name: Cache node_modules or restore if already cached
+      uses: actions/cache@v3
+      with:
+        path: 'node_modules'
+        key: ${{ runner.os }}-node-${{ matrix.node-version }}-modules-${{ hashFiles('package-lock.json') }}
+          
+    - run: npm install && npm list
+    
+    - name: Get all changed *.js, *.ts & *.tsx file(s)
+      id: changed-files
+      uses: tj-actions/changed-files@v35
+      with:
+        files: |
+          **/*.js
+          **/*.ts
+          **/*.tsx
+
+    - name: What files where changed?
+      run: |
+        echo ${{ steps.changed-files.outputs.all_changed_and_modified_files }}
+
+    - name: Run selective lint & full test (if pull request)
+      run: npm run full-test-ci
+      if: ${{ github.event_name == 'pull_request' }}
+      env:
+        CI: true
+        FILES: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}
+
+    - name: Run full lint & test (if pushing to master)
+      run: npm run full-test
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
       env:
         CI: true
