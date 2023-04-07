@@ -144,7 +144,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`Modchat is already set to ${currentModchat || 'off'}.`);
 		}
 		if (room.settings.isPersonal && !user.can('makeroom') && room.settings.modjoin === true &&
-			modchatChangeTo && !'+%'.includes(modchatChangeTo)) {
+			modchatChangeTo && !'^+%'.includes(modchatChangeTo)) {
 			return this.errorReply(`/modchat - Access denied from setting modchat past % in group chats while modjoin is set to sync.`);
 		}
 		room.settings.modchat = modchatChangeTo;
