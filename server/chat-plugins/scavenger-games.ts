@@ -525,6 +525,7 @@ const TWISTS: {[k: string]: Twist} = {
 			}
 
 			for (const player of Object.values(this.playerTable)) {
+				if (!player) continue;
 				if (player.mines) {
 					for (const {index, mine} of player.mines) {
 						mines[index].find(obj => obj.mine === mine)?.users.push(player.name);
