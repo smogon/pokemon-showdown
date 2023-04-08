@@ -10450,7 +10450,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		onTryImmunity(target) {
-			return !target.hasType('Grass') || !target.hasAbility('Ivy Wall');
+			return !target.hasType('Grass');
 		},
 		secondary: null,
 		target: "normal",
