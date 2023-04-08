@@ -1011,6 +1011,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 					}
 				}
 				if (this.checkMoveMakesContact(move, source, target)) {
+					if (this.field.isWeather('acidrain')) {
+						source.trySetStatus('tox', target);
+						return this.NOT_FAIL;
+					}
 					source.trySetStatus('psn', target);
 				}
 				return this.NOT_FAIL;
@@ -7563,7 +7567,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 1,
 			onResidual(target) {
-				if (!target.hasType('Grass')) this.damage(target.baseMaxhp / 6, target);
+				if (!target.hasType('Grass') || !target.hasAbility('Ivy Wall')) this.damage(target.baseMaxhp / 6, target);
 			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 11,
@@ -10446,7 +10450,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		onTryImmunity(target) {
-			return !target.hasType('Grass');
+			return (!target.hasType('Grass') || target.ability !== 'ivywall' );
 		},
 		secondary: null,
 		target: "normal",
@@ -16125,7 +16129,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		onHit(target, source) {
-			if (target.hasType('Grass')) return null;
+			if (target.hasType('Grass') || target.hasAbility('Ivy Wall')) return null;
 			target.addVolatile('leechseed', source);
 		},
 		secondary: null,
