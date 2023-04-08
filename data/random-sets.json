@@ -89,7 +89,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Aerial Ace", "Body Slam", "Fake Out", "Foul Play", "Gunk Shot", "Switcheroo", "U-turn"],
+                "movepool": ["Aerial Ace", "Bite", "Body Slam", "Fake Out", "Foul Play", "Gunk Shot", "Switcheroo", "U-turn"],
                 "teraTypes": ["Normal", "Poison", "Flying"]
             }
         ]
