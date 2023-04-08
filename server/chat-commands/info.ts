@@ -1629,7 +1629,7 @@ export const commands: Chat.ChatCommands = {
 			`- <a href="https://github.com/smogon/pokemon-showdown/commits/master">What's new?</a><br />` +
 			`- <a href="https://github.com/smogon/pokemon-showdown">Server source code</a><br />` +
 			`- <a href="https://github.com/smogon/pokemon-showdown-client">Client source code</a><br />` +
-			`- <a href="https://github.com/Zarel/Pokemon-Showdown-Dex">Dex source code</a>` +
+			`- <a href="https://github.com/Zarel/Pokemon-Showdown-Dex">Dex source code</a><br />` +
 			`- <a href="https://github.com/smogon/pokemon-showdown-loginserver">Login server source code</a>`
 		);
 	},
@@ -2581,7 +2581,7 @@ export const commands: Chat.ChatCommands = {
 			buf = Utils.html`<img src="${request.link}" width="${width}" height="${height}" />`;
 			if (resized) buf += Utils.html`<br /><a href="${request.link}" target="_blank">full-size image</a>`;
 		} else {
-			buf = await YouTube.generateVideoDisplay(request.link);
+			buf = await YouTube.generateVideoDisplay(request.link, false, true);
 			if (!buf) return this.errorReply('Could not get YouTube video');
 		}
 		buf += Utils.html`<br /><div class="infobox"><small>(Requested by ${request.name})</small>`;
@@ -2644,10 +2644,19 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		const [link, comment] = Utils.splitFirst(target, ',').map(f => f.trim());
+		this.checkBroadcast();
+		if (this.broadcastMessage) {
+			if (room) {
+				this.checkCan('show', null, room);
+			} else {
+				this.checkCan('altsself');
+			}
+		}
 
+		this.runBroadcast();
 		let buf;
 		if (YouTube.linkRegex.test(link)) {
-			buf = await YouTube.generateVideoDisplay(link);
+			buf = await YouTube.generateVideoDisplay(link, false, this.broadcasting);
 			this.message = this.message.replace(/&ab_channel=(.*)(&|)/ig, '').replace(/https:\/\/www\./ig, '');
 		} else if (Twitch.linkRegex.test(link)) {
 			const channelId = Twitch.linkRegex.exec(link)?.[2]?.trim();
@@ -2675,15 +2684,6 @@ export const commands: Chat.ChatCommands = {
 			buf += Utils.html`<br />(${comment})</div>`;
 		}
 
-		this.checkBroadcast();
-		if (this.broadcastMessage) {
-			if (room) {
-				this.checkCan('show', null, room);
-			} else {
-				this.checkCan('altsself');
-			}
-		}
-		this.runBroadcast();
 		this.sendReplyBox(buf);
 	},
 	showhelp: [
