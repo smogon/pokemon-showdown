@@ -4023,12 +4023,12 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Earthquake", "Ruination", "Spikes", "Stealth Rock", "Throat Chop", "Whirlwind"],
-                "teraTypes": ["Ground", "Ghost"]
+                "teraTypes": ["Ground", "Ghost", "Poison"]
             },
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Body Press", "Earthquake", "Heavy Slam", "Ruination", "Stone Edge", "Throat Chop"],
-                "teraTypes": ["Ground", "Fighting", "Steel"]
+                "teraTypes": ["Ground", "Fighting", "Steel", "Poison"]
             }
         ]
     },
