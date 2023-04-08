@@ -111,27 +111,27 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "ZU",
 	},
 	pikachucosplay: {
-		tier: "7U",
+		tier: "ZU",
 		doublesTier: "(DUU)",
 	},
 	pikachurockstar: {
-		tier: "7U",
+		tier: "ZU",
 		doublesTier: "(DUU)",
 	},
 	pikachubelle: {
-		tier: "7U",
+		tier: "ZU",
 		doublesTier: "(DUU)",
 	},
 	pikachupopstar: {
-		tier: "7U",
+		tier: "ZU",
 		doublesTier: "(DUU)",
 	},
 	pikachuphd: {
-		tier: "7U",
+		tier: "ZU",
 		doublesTier: "(DUU)",
 	},
 	pikachulibre: {
-		tier: "7U",
+		tier: "ZU",
 		doublesTier: "(DUU)",
 	},
 	raichu: {
@@ -1994,7 +1994,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	regigigas: {
-		tier: "7U",
+		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	giratina: {
@@ -2134,7 +2134,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	simisear: {
-		tier: "7U",
+		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	panpour: {
@@ -2481,7 +2481,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	fraxure: {
-		tier: "NFE",
+		tier: "PU",
 	},
 	haxorus: {
 		tier: "UU",
