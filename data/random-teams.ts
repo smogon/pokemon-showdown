@@ -487,7 +487,7 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'surf', 'hydropump');
 		this.incompatibleMoves(moves, movePool, 'liquidation', 'wavecrash');
 		this.incompatibleMoves(moves, movePool, ['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']);
-		this.incompatibleMoves(moves, movePool, 'knockoff', 'foulplay');
+		this.incompatibleMoves(moves, movePool, ['knockoff', 'bite'], 'foulplay');
 		this.incompatibleMoves(moves, movePool, 'doubleedge', 'headbutt');
 		this.incompatibleMoves(moves, movePool, 'fireblast', ['fierydance', 'flamethrower']);
 		this.incompatibleMoves(moves, movePool, 'lavaplume', 'magmastorm');
