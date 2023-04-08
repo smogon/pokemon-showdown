@@ -116374,7 +116374,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			hydropump: ["6M"],
 			chillingwater: ["6M"],
 			surf: ["6M"],
-			aquaeing: ["6M"],
+			aquaring: ["6M"],
 			waterfall: ["6M"],
 			dive: ["6M"],
 			hydrocannon: ["6M"],
