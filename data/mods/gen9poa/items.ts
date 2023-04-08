@@ -282,4 +282,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		itemUser: ["Clamperl-Delta"],
 	},
+	florgesite: {
+		inherit: true,
+		isNonstandard: null,
+	},
 };
