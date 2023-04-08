@@ -856,7 +856,7 @@ export class TeamValidator {
 
 		const allowAVs = ruleTable.has('allowavs');
 		const evLimit = ruleTable.evLimit;
-		const canBottleCap = dex.gen >= 7 && (set.level >= 100 || !ruleTable.has('obtainablemisc'));
+		const canBottleCap = dex.gen >= 7 && (set.level >= (dex.gen < 9 ? 100 : 50) || !ruleTable.has('obtainablemisc'));
 
 		if (!set.evs) set.evs = TeamValidator.fillStats(null, evLimit === null ? 252 : 0);
 		if (!set.ivs) set.ivs = TeamValidator.fillStats(null, 31);
@@ -1765,8 +1765,8 @@ export class TeamValidator {
 		}
 		let requiredIVs = 0;
 		if (eventData.ivs) {
-			/** In Gen 7, IVs can be changed to 31 */
-			const canBottleCap = (dex.gen >= 7 && set.level === 100);
+			/** In Gen 7+, IVs can be changed to 31 */
+			const canBottleCap = dex.gen >= 7 && set.level >= (dex.gen < 9 ? 100 : 50);
 
 			if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 			let statName: StatID;
@@ -2071,7 +2071,7 @@ export class TeamValidator {
 				} else if (move.gen > 7 && !canSketchPostGen7Moves) {
 					cantLearnReason = `can't be Sketched because it's a Gen ${move.gen} move and Sketch isn't available in Gen ${move.gen}.`;
 				} else {
-					if (!sources) sketch = true;
+					if (!sources || !moveSources.size()) sketch = true;
 					sources = learnset['sketch'].concat(sources || []);
 				}
 			}

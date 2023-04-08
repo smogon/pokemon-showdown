@@ -1412,6 +1412,7 @@ export const pages: Chat.PageTable = {
 
 		if (date && search) {
 			Searcher.checkEnabled();
+			this.checkCan('bypassall');
 			return LogSearcher.runSearch(this, search, roomid, isAll ? null : date, limit);
 		} else if (date) {
 			if (date === 'today') {
@@ -1542,11 +1543,7 @@ export const commands: Chat.ChatCommands = {
 		let targetRoom: RoomID | undefined = room?.roomid;
 		for (const arg of args) {
 			if (arg.startsWith('room=')) {
-				const id = arg.slice(5).trim().toLowerCase() as RoomID;
-				if (!FS(`logs/chat/${id}`).existsSync()) {
-					return this.errorReply(`Room "${id}" not found.`);
-				}
-				targetRoom = id;
+				targetRoom = arg.slice(5).trim().toLowerCase() as RoomID;
 			} else if (arg.startsWith('limit=')) {
 				limit = arg.slice(6);
 			} else if (arg.startsWith('date=')) {
@@ -1640,7 +1637,7 @@ export const commands: Chat.ChatCommands = {
 			`<code>/linecount OR /roomstats OR /topusers</code> [<code>key=value</code> formatted parameters] - ` +
 			`Searches linecounts with the given parameters.<br />` +
 			`<details class="readmore"><summary><strong>Parameters:</strong></summary>` +
-			`- <code>room</code> (aliases: <code>roomid</code>) - Select a room to search. If no room is given, defaults to current room.</br />` +
+			`- <code>room</code> (aliases: <code>roomid</code>) - Select a room to search. If no room is given, defaults to current room.<br />` +
 			`- <code>date</code> (aliases: <code>month</code>, <code>time</code>) - ` +
 			`Select a month to search linecounts on (requires YYYY-MM format). Defaults to current month.<br />` +
 			`- <code>user</code> (aliases: <code>id</code>, <code>userid</code>) - ` +

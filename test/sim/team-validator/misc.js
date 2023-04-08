@@ -84,4 +84,11 @@ describe('Team Validator', function () {
 
 		assert.legalTeam(team, 'gen1ou');
 	});
+
+	it('should correctly enforce Shell Smash as a sketched move for Necturna prior to Gen 9', function () {
+		const team = [
+			{species: 'necturna', ability: 'forewarn', moves: ['shellsmash', 'vcreate'], evs: {hp: 1}},
+		];
+		assert.false.legalTeam(team, 'gen8cap');
+	});
 });

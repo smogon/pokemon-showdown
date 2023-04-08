@@ -16,7 +16,7 @@ interface StoneDeltas {
 
 type TierShiftTiers = 'UU' | 'RUBL' | 'RU' | 'NUBL' | 'NU' | 'PUBL' | 'PU' | 'NFE' | 'LC';
 
-function getMegaStone(stone: string, mod = 'gen8'): Item | null {
+function getMegaStone(stone: string, mod = 'gen9'): Item | null {
 	let dex = Dex;
 	if (mod && toID(mod) in Dex.dexes) dex = Dex.mod(toID(mod));
 	const item = dex.items.get(stone);
@@ -40,7 +40,8 @@ function getMegaStone(stone: string, mod = 'gen8'): Item | null {
 			return null;
 		}
 	}
-	if (!item.megaStone && !item.onPrimal) return null;
+	if (!item.megaStone && !item.onPrimal && !item.forcedForme?.endsWith('Epilogue') &&
+		!item.forcedForme?.endsWith('Origin') && !item.name.startsWith('Rusted')) return null;
 	return item;
 }
 
@@ -96,18 +97,39 @@ export const commands: Chat.ChatCommands = {
 		}
 		const stone = getMegaStone(stoneName[0], mod);
 		const species = dex.species.get(sep[0]);
-		if (!stone || (dex.gen >= 8 && ['redorb', 'blueorb'].includes(stone.id))) {
-			throw new Chat.ErrorMessage(`Error: Mega Stone not found.`);
+		if (!stone) {
+			throw new Chat.ErrorMessage(`Error: Mega Stone/Primal Orb/Rusted Item/Origin Item not found.`);
 		}
 		if (!species.exists) throw new Chat.ErrorMessage(`Error: Pok\u00e9mon not found.`);
-		let baseSpecies = dex.species.get(stone.megaEvolves);
-		let megaSpecies = dex.species.get(stone.megaStone);
-		if (stone.id === 'redorb') { // Orbs do not have 'Item.megaStone' or 'Item.megaEvolves' properties.
-			megaSpecies = dex.species.get("Groudon-Primal");
-			baseSpecies = dex.species.get("Groudon");
-		} else if (stone.id === 'blueorb') {
+		let baseSpecies: Species;
+		let megaSpecies: Species;
+		switch (stone.id) {
+		case 'blueorb':
 			megaSpecies = dex.species.get("Kyogre-Primal");
 			baseSpecies = dex.species.get("Kyogre");
+			break;
+		case 'redorb':
+			megaSpecies = dex.species.get("Groudon-Primal");
+			baseSpecies = dex.species.get("Groudon");
+			break;
+		case 'rustedshield':
+			megaSpecies = dex.species.get("Zamazenta-Crowned");
+			baseSpecies = dex.species.get("Zamazenta");
+			break;
+		case 'rustedsword':
+			megaSpecies = dex.species.get("Zacian-Crowned");
+			baseSpecies = dex.species.get("Zacian");
+			break;
+		default:
+			const forcedForme = stone.forcedForme;
+			if (forcedForme && (forcedForme.endsWith('Origin') || forcedForme.endsWith('Epilogue'))) {
+				megaSpecies = dex.species.get(forcedForme);
+				baseSpecies = dex.species.get(forcedForme.split('-')[0]);
+			} else {
+				megaSpecies = dex.species.get(stone.megaStone);
+				baseSpecies = dex.species.get(stone.megaEvolves);
+			}
+			break;
 		}
 		const deltas: StoneDeltas = {
 			baseStats: Object.create(null),
@@ -121,7 +143,7 @@ export const commands: Chat.ChatCommands = {
 		if (megaSpecies.types.length > baseSpecies.types.length) {
 			deltas.type = megaSpecies.types[1];
 		} else if (megaSpecies.types.length < baseSpecies.types.length) {
-			deltas.type = dex.gen >= 8 ? 'mono' : megaSpecies.types[0];
+			deltas.type = 'mono';
 		} else if (megaSpecies.types[1] !== baseSpecies.types[1]) {
 			deltas.type = megaSpecies.types[1];
 		}
@@ -171,7 +193,7 @@ export const commands: Chat.ChatCommands = {
 		)).join("&nbsp;|&ThickSpace;") + `</font>`);
 	},
 	mixandmegahelp: [
-		`/mnm <pokemon> @ <mega stone>[, generation] - Shows the Mix and Mega evolved Pok\u00e9mon's type and stats.`,
+		`/mnm <pokemon> @ <mega stone or other>[, generation] - Shows the Mix and Mega evolved Pok\u00e9mon's type and stats.`,
 	],
 
 	orb: 'stone',
@@ -193,16 +215,13 @@ export const commands: Chat.ChatCommands = {
 		if (!targetid) return this.parse('/help stone');
 		this.runBroadcast();
 		const stone = getMegaStone(targetid, sep[1]);
-		if (stone && dex.gen >= 8 && ['redorb', 'blueorb'].includes(stone.id)) {
-			throw new Chat.ErrorMessage("The Orbs do not exist in Gen 8 and later.");
-		}
 		const stones = [];
 		if (!stone) {
-			const species = dex.species.get(targetid.replace(/(?:mega[xy]?|primal)$/, ''));
+			const species = dex.species.get(targetid.replace(/(?:mega[xy]?|primal|origin|crowned|epilogue)$/, ''));
 			if (!species.exists) throw new Chat.ErrorMessage(`Error: Mega Stone not found.`);
 			if (!species.otherFormes) throw new Chat.ErrorMessage(`Error: Mega Evolution not found.`);
 			for (const poke of species.otherFormes) {
-				if (!/(?:-Primal|-Mega(?:-[XY])?)$/.test(poke)) continue;
+				if (!/(?:-Crowned|-Epilogue|-Origin|-Primal|-Mega(?:-[XY])?)$/.test(poke)) continue;
 				const megaPoke = dex.species.get(poke);
 				const flag = megaPoke.requiredMove === 'Dragon Ascent' ? megaPoke.requiredMove : megaPoke.requiredItem;
 				if (/mega[xy]$/.test(targetid) && toID(megaPoke.name) !== toID(dex.species.get(targetid))) continue;
@@ -214,17 +233,35 @@ export const commands: Chat.ChatCommands = {
 		const toDisplay = (stones.length ? stones : [stone]);
 		for (const aStone of toDisplay) {
 			if (!aStone) return;
-			let baseSpecies = dex.species.get(aStone.megaEvolves);
-			let megaSpecies = dex.species.get(aStone.megaStone);
-			if (dex.gen >= 8 && ['redorb', 'blueorb'].includes(aStone.id)) {
-				throw new Chat.ErrorMessage("The Orbs do not exist in Gen 8 and later.");
-			}
-			if (aStone.id === 'redorb') { // Orbs do not have 'Item.megaStone' or 'Item.megaEvolves' properties.
-				megaSpecies = dex.species.get("Groudon-Primal");
-				baseSpecies = dex.species.get("Groudon");
-			} else if (aStone.id === 'blueorb') {
+			let baseSpecies: Species;
+			let megaSpecies: Species;
+			switch (aStone.id) {
+			case 'blueorb':
 				megaSpecies = dex.species.get("Kyogre-Primal");
 				baseSpecies = dex.species.get("Kyogre");
+				break;
+			case 'redorb':
+				megaSpecies = dex.species.get("Groudon-Primal");
+				baseSpecies = dex.species.get("Groudon");
+				break;
+			case 'rustedshield':
+				megaSpecies = dex.species.get("Zamazenta-Crowned");
+				baseSpecies = dex.species.get("Zamazenta");
+				break;
+			case 'rustedsword':
+				megaSpecies = dex.species.get("Zacian-Crowned");
+				baseSpecies = dex.species.get("Zacian");
+				break;
+			default:
+				const forcedForme = aStone.forcedForme;
+				if (forcedForme && (forcedForme.endsWith('Origin') || forcedForme.endsWith('Epilogue'))) {
+					megaSpecies = dex.species.get(forcedForme);
+					baseSpecies = dex.species.get(forcedForme.split('-')[0]);
+				} else {
+					megaSpecies = dex.species.get(aStone.megaStone);
+					baseSpecies = dex.species.get(aStone.megaEvolves);
+				}
+				break;
 			}
 			const deltas: StoneDeltas = {
 				baseStats: Object.create(null),
@@ -247,19 +284,23 @@ export const commands: Chat.ChatCommands = {
 				Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
 			};
 			let tier;
-			if (['redorb', 'blueorb'].includes(aStone.id)) {
+			if (['redorb', 'blueorb'].includes(aStone.id) || aStone.forcedForme?.endsWith('Origin')) {
 				tier = "Orb";
 			} else if (aStone.name === "Dragon Ascent") {
 				tier = "Move";
-			} else {
+			} else if (aStone.megaStone) {
 				tier = "Stone";
+			} else {
+				tier = "Item";
 			}
 			let buf = `<li class="result">`;
 			buf += `<span class="col numcol">${tier}</span> `;
 			if (aStone.name === "Dragon Ascent") {
 				buf += `<span class="col itemiconcol"></span>`;
 			} else {
-				buf += `<span class="col itemiconcol"><psicon item="${toID(aStone)}"/></span> `;
+				// temp image support until real images are uploaded
+				const itemName = aStone.forcedForme?.endsWith('Origin') ? aStone.name.split(' ')[0] + ' Orb' : aStone.name;
+				buf += `<span class="col itemiconcol"><psicon item="${toID(itemName)}"/></span> `;
 			}
 			if (aStone.name === "Dragon Ascent") {
 				buf += `<span class="col movenamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/moves/${targetid}" target="_blank">Dragon Ascent</a></span> `;
@@ -273,7 +314,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			buf += `<span style="float:left;min-height:26px">`;
 			buf += `<span class="col abilitycol">${megaSpecies.abilities['0']}</span>`;
-			buf += `<span class="col abilitycol"></span>`;
+			buf += `<span class="col abilitycol">${megaSpecies.abilities['H'] ? `<em>${megaSpecies.abilities['H']}</em>` : ''}</span>`;
 			buf += `</span>`;
 			buf += `<span style="float:left;min-height:26px">`;
 			buf += `<span class="col statcol"><em>HP</em><br />0</span> `;
@@ -289,7 +330,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}</font>`);
 		}
 	},
-	stonehelp: [`/stone <mega stone>[, generation] - Shows the changes that a mega stone/orb applies to a Pok\u00e9mon.`],
+	stonehelp: [`/stone <mega stone or other>[, generation] - Shows the changes that a mega stone/orb applies to a Pok\u00e9mon.`],
 
 	350: '350cup',
 	'350cup'(target, room, user) {

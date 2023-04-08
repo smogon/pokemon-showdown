@@ -506,7 +506,7 @@ export class Pokemon {
 		this.speed = this.getActionSpeed();
 	}
 
-	calculateStat(statName: StatIDExceptHP, boost: number, modifier?: number) {
+	calculateStat(statName: StatIDExceptHP, boost: number, modifier?: number, statUser?: Pokemon) {
 		statName = toID(statName) as StatIDExceptHP;
 		// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
 		if (statName === 'hp') throw new Error("Please read `maxhp` directly");
@@ -527,7 +527,7 @@ export class Pokemon {
 		let boosts: SparseBoostsTable = {};
 		const boostName = statName as BoostID;
 		boosts[boostName] = boost;
-		boosts = this.battle.runEvent('ModifyBoost', this, null, null, boosts);
+		boosts = this.battle.runEvent('ModifyBoost', statUser || this, null, null, boosts);
 		boost = boosts[boostName]!;
 		const boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
 		if (boost > 6) boost = 6;
@@ -778,7 +778,7 @@ export class Pokemon {
 			} else {
 				targets.push(target);
 			}
-			if (target.fainted && !move.isFutureMove) {
+			if (target.fainted && !move.flags['futuremove']) {
 				return {targets: [], pressureTargets: []};
 			}
 			if (selectedTarget !== target) {
@@ -788,14 +788,11 @@ export class Pokemon {
 
 		// Resolve apparent targets for Pressure.
 		let pressureTargets = targets;
-		switch (move.pressureTarget) {
-		case 'foeSide':
-			pressureTargets = this.foes();
-			break;
-		case 'self':
+		if (move.target === 'foeSide') {
 			pressureTargets = [];
-			break;
-		// At the moment, there are no other supported targets.
+		}
+		if (move.flags['mustpressure']) {
+			pressureTargets = this.foes();
 		}
 
 		return {targets, pressureTargets};
@@ -1974,11 +1971,7 @@ export class Pokemon {
 
 	/** Removes any types added previously and adds another one. */
 	addType(newType: string) {
-		if (this.terastallized) {
-			// natdex behavior; type-adding effects are currently not in gen 9,
-			// but moves like Soak fail vs terastallized targets so these probably should too
-			return false;
-		}
+		if (this.terastallized) return false;
 		this.addedType = newType;
 		return true;
 	}

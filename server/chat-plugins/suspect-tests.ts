@@ -76,6 +76,7 @@ export const commands: Chat.ChatCommands = {
 			saveSuspectTests();
 		},
 
+		end: 'remove',
 		delete: 'remove',
 		remove(target, room, user) {
 			checkPermissions(this);

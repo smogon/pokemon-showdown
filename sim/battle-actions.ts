@@ -514,7 +514,7 @@ export class BattleActions {
 		if (
 			!move.negateSecondary &&
 			!(move.hasSheerForce && pokemon.hasAbility('sheerforce')) &&
-			!move.isFutureMove
+			!move.flags['futuremove']
 		) {
 			const originalHp = pokemon.hp;
 			this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
@@ -1664,8 +1664,8 @@ export class BattleActions {
 			defBoosts = 0;
 		}
 
-		let attack = attacker.calculateStat(attackStat, atkBoosts);
-		let defense = defender.calculateStat(defenseStat, defBoosts);
+		let attack = attacker.calculateStat(attackStat, atkBoosts, 1, source);
+		let defense = defender.calculateStat(defenseStat, defBoosts, 1, target);
 
 		attackStat = (category === 'Physical' ? 'atk' : 'spa');
 
@@ -1870,6 +1870,7 @@ export class BattleActions {
 		for (const ally of pokemon.side.pokemon) {
 			ally.canTerastallize = null;
 		}
+		pokemon.addedType = '';
 		pokemon.knownType = true;
 		pokemon.apparentType = type;
 		this.battle.runEvent('AfterTerastallization', pokemon);

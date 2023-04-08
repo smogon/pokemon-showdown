@@ -24,8 +24,40 @@ import {State} from './state';
 import {BattleQueue, Action} from './battle-queue';
 import {BattleActions} from './battle-actions';
 import {Utils} from '../lib';
-import {extractChannelMessages} from '../server/sockets';
 declare const __version: any;
+
+export type ChannelID = 0 | 1 | 2 | 3 | 4;
+
+export type ChannelMessages<T extends ChannelID | -1> = Record<T, string[]>;
+
+const splitRegex = /^\|split\|p([1234])\n(.*)\n(.*)|.+/gm;
+
+export function extractChannelMessages<T extends ChannelID | -1>(message: string, channelIds: T[]): ChannelMessages<T> {
+	const channelIdSet = new Set(channelIds);
+	const channelMessages: ChannelMessages<ChannelID | -1> = {
+		[-1]: [],
+		0: [],
+		1: [],
+		2: [],
+		3: [],
+		4: [],
+	};
+
+	for (const [lineMatch, playerMatch, secretMessage, sharedMessage] of message.matchAll(splitRegex)) {
+		const player = playerMatch ? parseInt(playerMatch) : 0;
+		for (const channelId of channelIdSet) {
+			let line = lineMatch;
+			if (player) {
+				line = channelId === -1 || player === channelId ? secretMessage : sharedMessage;
+				if (!line) continue;
+			}
+			channelMessages[channelId].push(line);
+		}
+	}
+
+	return channelMessages;
+}
+
 
 interface BattleOptions {
 	format?: Format;
@@ -1601,7 +1633,7 @@ export class Battle {
 		// These are checked before the 100 turn minimum as the battle cannot progress if they are true
 		if (this.gen <= 1) {
 			const noProgressPossible = this.sides.every(side => {
-				const foeAllGhosts = side.foe.pokemon.every(pokemon => pokemon.fainted || pokemon.types.includes('Ghost'));
+				const foeAllGhosts = side.foe.pokemon.every(pokemon => pokemon.fainted || pokemon.hasType('Ghost'));
 				const foeAllTransform = side.foe.pokemon.every(pokemon => (
 					pokemon.fainted ||
 					// true if transforming into this pokemon would lead to an endless battle
@@ -2240,7 +2272,7 @@ export class Battle {
 		const selfLoc = pokemon.getLocOf(pokemon);
 		if (['adjacentAlly', 'any', 'normal'].includes(move.target) && targetLoc === selfLoc &&
 				!pokemon.volatiles['twoturnmove'] && !pokemon.volatiles['iceball'] && !pokemon.volatiles['rollout']) {
-			return move.isFutureMove ? pokemon : null;
+			return move.flags['futuremove'] ? pokemon : null;
 		}
 		if (move.target !== 'randomNormal' && this.validTargetLoc(targetLoc, pokemon, move.target)) {
 			const target = pokemon.getAtLoc(targetLoc);

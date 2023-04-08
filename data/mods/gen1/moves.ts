@@ -17,8 +17,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	amnesia: {
 		inherit: true,
 		boosts: {
-			spd: 2,
 			spa: 2,
+			spd: 2,
 		},
 	},
 	aurorabeam: {
@@ -42,10 +42,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onBeforeMove(pokemon, t, move) {
 				const currentMove = this.dex.getActiveMove('bide');
-				if (pokemon.volatiles['disable']?.move === 'bide') {
-					this.add('cant', pokemon, 'Disable', currentMove);
-					return false;
-				}
 				this.effectState.damage += this.lastDamage;
 				this.effectState.time--;
 				if (!this.effectState.time) {
@@ -266,6 +262,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					pokemon.removeVolatile('disable');
 					return;
 				}
+				if (pokemon.volatiles['bide']) move = this.dex.getActiveMove('bide');
 				if (move.id === this.effectState.move) {
 					this.add('cant', pokemon, 'Disable', move);
 					pokemon.removeVolatile('twoturnmove');
@@ -383,6 +380,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (pokemon.status === 'tox') {
 					pokemon.setStatus('psn');
 				}
+				pokemon.updateSpeed();
 				// should only clear a specific set of volatiles
 				// while technically the toxic counter shouldn't be cleared, the preserved toxic counter is never used again
 				// in-game, so it is equivalent to just clear it.
@@ -568,8 +566,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: {
 			chance: 33,
 			boosts: {
-				spd: -1,
 				spa: -1,
+				spd: -1,
 			},
 		},
 	},
@@ -616,6 +614,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile('twoturnmove')) {
+				attacker.removeVolatile('invulnerability');
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
@@ -710,6 +709,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile('twoturnmove')) {
+				attacker.removeVolatile('invulnerability');
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
@@ -721,6 +721,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile('twoturnmove')) {
+				attacker.removeVolatile('invulnerability');
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
@@ -743,6 +744,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile('twoturnmove')) {
+				attacker.removeVolatile('invulnerability');
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
