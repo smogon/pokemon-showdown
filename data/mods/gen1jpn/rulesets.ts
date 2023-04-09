@@ -75,10 +75,11 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			const problems = [];
 			if (set.moves) {
 				for (const moveid of set.moves.map(this.toID)) {
-					if (legalityList[moveid]) {
-						if (legalityList[moveid] === 'illegal') {
+					const legality = legalityList[moveid];
+					if (legality) {
+						if (legality === 'illegal') {
 							problems.push(`${set.species} can't learn ${this.dex.moves.get(moveid).name} in 1997.`);
-						} else if (set.level < legalityList[moveid]) {
+						} else if (set.level < legality) {
 							problems.push(`${set.species} can't learn ${this.dex.moves.get(moveid).name} before level ${legalityList[moveid]} in 1997.`);
 						}
 					}
