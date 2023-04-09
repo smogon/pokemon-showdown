@@ -2175,6 +2175,14 @@ export const Formats: FormatList = [
 		ruleset: ['Standard'],
 	},
 	{
+		name: "[Gen 3] Challenge Cup",
+
+		mod: 'gen3',
+		team: 'randomCC',
+		searchShow: false,
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+	{
 		name: "[Gen 2] Random Battle",
 
 		mod: 'gen2',
