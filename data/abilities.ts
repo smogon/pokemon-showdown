@@ -161,7 +161,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Anger Shell",
-		rating: 4,
+		rating: 3,
 		num: 271,
 	},
 	anticipation: {

@@ -9,7 +9,7 @@ const {Utils} = require('../../dist/lib');
 const {testTeam, assertSetValidity, validateLearnset} = require('./tools');
 const {default: Dex} = require('../../dist/sim/dex');
 
-describe('value rule support', () => {
+describe('value rule support (slow)', () => {
 	it('should generate teams of the proper length for the format (i.e. support Max Team Size)', () => {
 		testTeam({format: 'gen9randombattle', rounds: 100}, team => assert.equal(team.length, 6));
 		testTeam({format: 'gen9challengecup1v1', rounds: 100}, team => assert.equal(team.length, 6));
@@ -110,7 +110,7 @@ describe("New set format", () => {
 	}
 });
 
-describe(`randomly generated teams should be valid (slow)`, () => {
+describe('randomly generated teams should be valid (slow)', () => {
 	for (const format of Dex.formats.all()) {
 		if (!format.team) continue; // format doesn't use randomly generated teams
 
@@ -131,7 +131,7 @@ describe(`randomly generated teams should be valid (slow)`, () => {
 
 describe('Battle Factory and BSS Factory data should be valid (slow)', () => {
 	for (const filename of ['mods/gen8/bss-factory-sets', 'mods/gen7/bss-factory-sets', 'mods/gen7/factory-sets', 'mods/gen6/factory-sets']) {
-		it(`${filename}.json should contain valid sets (slow)`, function () {
+		it(`${filename}.json should contain valid sets`, function () {
 			this.timeout(0);
 			const setsJSON = require(`../../dist/data/${filename}.json`);
 			const mod = filename.split('/')[1] || 'gen' + Dex.gen;
