@@ -387,6 +387,9 @@ export const commands: Chat.ChatCommands = {
 			TeamsHandler.validateAccess(connection, true);
 			const [teamId, rawPrivacy] = target.split(',').map(toID);
 			let privacy: boolean;
+			if (!teamId.length) {
+				return this.popupReply('Invalid team ID.');
+			}
 			// these if checks may seem bit redundant but we want to ensure the user is certain about this
 			// if it might be invalid, we want them to know that
 			if (this.meansYes(rawPrivacy)) {
