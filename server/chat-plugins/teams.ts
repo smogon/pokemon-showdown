@@ -13,7 +13,7 @@ const MAX_TEAMS = 200;
 const MAX_SEARCH = 3000;
 
 export interface StoredTeam {
-	teamid: number;
+	teamid: string;
 	team: string;
 	ownerid: ID;
 	format: ID;
@@ -77,7 +77,7 @@ export const TeamsHandler = new class {
 		);
 		return result.filter(row => {
 			const team = Teams.unpack(row.team)!;
-			if (row.private && !(row.ownerid === user.id || user.can('rangeban'))) {
+			if (row.private && row.ownerid !== user.id) {
 				return false;
 			}
 			let match = true;
@@ -113,7 +113,7 @@ export const TeamsHandler = new class {
 		rawTeam: string,
 		teamName: string | null = null,
 		isPrivate = false,
-		isUpdate?: number
+		isUpdate?: string
 	) {
 		this.validateAccess(connection, true);
 
@@ -203,7 +203,7 @@ export const TeamsHandler = new class {
 			return loaded?.[0].teamid;
 		}
 	}
-	updateViews(teamid: number) {
+	updateViews(teamid: string) {
 		return this.query(`UPDATE teams SET views = views + 1 WHERE teamid = $1`, [teamid]);
 	}
 	list(userid: ID, count: number, publicOnly = false) {
@@ -287,14 +287,14 @@ export const TeamsHandler = new class {
 		const result = await this.query<{count: number}>(`SELECT count(*) AS count FROM teams WHERE ownerid = $1`, [id]);
 		return result?.[0]?.count || 0;
 	}
-	async get(teamid: number): Promise<StoredTeam | null> {
+	async get(teamid: string): Promise<StoredTeam | null> {
 		const rows = await this.query(
 			`SELECT * FROM teams WHERE teamid = $1`, [teamid],
 		);
 		if (!rows.length) return null;
 		return rows[0] as StoredTeam;
 	}
-	async delete(id: number) {
+	async delete(id: string) {
 		await this.query(
 			`DELETE FROM teams WHERE teamid = $1`, [id],
 		);
@@ -313,10 +313,9 @@ export const commands: Chat.ChatCommands = {
 			TeamsHandler.validateAccess(connection, true);
 			const targets = Utils.splitFirst(target, ',', 5);
 			const isEdit = cmd === 'update';
-			const rawID = isEdit ? targets.shift() : undefined;
-			const teamID = Number(rawID || "");
+			const teamID = isEdit ? targets.shift() : undefined;
 			let [teamName, formatid, rawPrivacy, rawTeam] = targets;
-			if (isEdit && isNaN(teamID)) {
+			if (isEdit && !teamID?.length) {
 				connection.popup("Invalid team ID provided.");
 				return null;
 			}
