@@ -8,19 +8,19 @@ const assert = require('../assert');
 const Teams = require('./../../dist/sim/teams').Teams;
 const Dex = require('./../../dist/sim/dex').Dex;
 
-describe('[Gen 9] Random Battle', () => {
+describe('[Gen 9] Random Battle (slow)', () => {
 	const options = {format: 'gen9randombattle'};
 	const setsJSON = require(`../../dist/data/random-sets.json`);
 	const dex = Dex.forFormat(options.format);
 
-	it('all Pokemon should have 4 moves, except for Ditto (slow)', function () {
+	it('all Pokemon should have 4 moves, except for Ditto', function () {
 		// This test takes more than 2000ms
 		testTeam({...options, rounds: 100}, team => {
 			for (const pokemon of team) assert(pokemon.name === 'Ditto' || pokemon.moves.length === 4);
 		});
 	});
 
-	it('all moves on all sets should be obtainable (slow)', function () {
+	it('all moves on all sets should be obtainable', function () {
 		const generator = Teams.getGenerator(options.format);
 		const rounds = 100;
 		for (const pokemon of Object.keys(setsJSON)) {
@@ -66,7 +66,7 @@ describe('[Gen 9] Random Battle', () => {
 	});
 });
 
-describe('[Gen 9] Monotype Random Battle', () => {
+describe('[Gen 9] Monotype Random Battle (slow)', () => {
 	const options = {format: 'gen9monotyperandombattle'};
 
 	it('all Pokemon should share a common type', function () {

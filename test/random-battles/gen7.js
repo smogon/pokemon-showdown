@@ -6,13 +6,13 @@
 const assert = require('../assert');
 const {testNotBothMoves, testSet, testHiddenPower, testAlwaysHasMove} = require('./tools');
 
-describe('[Gen 7] Random Battle', () => {
+describe('[Gen 7] Random Battle (slow)', () => {
 	const options = {format: 'gen7randombattle'};
 	const dataJSON = require(`../../dist/data/mods/gen7/random-data.json`);
 	const dex = Dex.forFormat(options.format);
 	const generator = Teams.getGenerator(options.format);
 
-	it('All moves on all sets should be obtainable (slow)', () => {
+	it('All moves on all sets should be obtainable', () => {
 		const rounds = 500;
 		for (const pokemon of Object.keys(dataJSON)) {
 			const species = dex.species.get(pokemon);
@@ -126,7 +126,7 @@ describe('[Gen 7] Random Battle', () => {
 	});
 });
 
-describe('[Gen 7] Random Doubles Battle', () => {
+describe('[Gen 7] Random Doubles Battle (slow)', () => {
 	const options = {format: 'gen7randomdoublesbattle'};
 
 	it("shouldn't give Manectric Intimidate before Mega Evolving", () => {

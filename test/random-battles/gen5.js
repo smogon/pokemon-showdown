@@ -6,7 +6,7 @@
 const assert = require('../assert');
 const {testHiddenPower, testSet, testAlwaysHasMove} = require('./tools');
 
-describe('[Gen 5] Random Battle', () => {
+describe('[Gen 5] Random Battle (slow)', () => {
 	const options = {format: 'gen5randombattle'};
 
 	it('should prevent double Hidden Power', () => {
