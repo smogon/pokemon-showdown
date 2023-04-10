@@ -5,6 +5,7 @@
  */
 
 import {PostgresDatabase, FS, Utils} from '../../lib';
+import * as crypto from 'crypto';
 
 /** Maximum amount of teams a user can have stored at once. */
 const MAX_TEAMS = 200;
@@ -54,6 +55,9 @@ export const TeamsHandler = new class {
 	async search(search: TeamSearch, user: User, count = 10, includePrivate = false) {
 		const args = [];
 		const where = [];
+		if (count > 500) {
+			throw new Chat.ErrorMessage("Cannot search more than 500 teams.");
+		}
 		if (search.format) {
 			where.push(`format = $${args.length + 1}`);
 			args.push(toID(search.format));
@@ -191,9 +195,10 @@ export const TeamsHandler = new class {
 				connection.popup("You've already uploaded that team.");
 				return null;
 			}
+			const teamId = crypto.randomBytes(10).toString('hex');
 			const loaded = await this.query(
-				`INSERT INTO teams (ownerid, team, date, format, views, title, private) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING teamid`,
-				[user.id, rawTeam, new Date(), format.id, 0, teamName, isPrivate]
+				`INSERT INTO teams (teamid, ownerid, team, date, format, views, title, private) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING teamid`,
+				[teamId, user.id, rawTeam, new Date(), format.id, 0, teamName, isPrivate]
 			);
 			return loaded?.[0].teamid;
 		}
@@ -365,8 +370,8 @@ export const commands: Chat.ChatCommands = {
 		},
 		async delete(target, room, user, connection) {
 			TeamsHandler.validateAccess(connection, true);
-			const teamid = parseInt(target);
-			if (isNaN(teamid)) return this.popupReply(`Invalid team ID.`);
+			const teamid = toID(target);
+			if (!teamid.length) return this.popupReply(`Invalid team ID.`);
 			const teamData = await TeamsHandler.get(teamid);
 			if (!teamData) return this.popupReply(`Team not found.`);
 			if (teamData.ownerid !== user.id && !user.can('rangeban')) {
@@ -380,7 +385,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		async setprivacy(target, room, user, connection) {
 			TeamsHandler.validateAccess(connection, true);
-			const [teamid, rawPrivacy] = target.split(',').map(toID);
+			const [teamId, rawPrivacy] = target.split(',').map(toID);
 			let privacy: boolean;
 			// these if checks may seem bit redundant but we want to ensure the user is certain about this
 			// if it might be invalid, we want them to know that
@@ -391,14 +396,12 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				return this.popupReply(`Invalid privacy setting.`);
 			}
-			const teamNum = parseInt(teamid);
-			if (isNaN(teamNum)) return this.popupReply(`Invalid team ID.`);
-			const team = await TeamsHandler.get(teamNum);
+			const team = await TeamsHandler.get(teamId);
 			if (!team) return this.popupReply(`Team not found.`);
 			if (team.ownerid !== user.id && !user.can('rangeban')) {
 				return this.popupReply(`You cannot change privacy for a team you don't own.`);
 			}
-			await TeamsHandler.query(`UPDATE teams SET private = $1 WHERE teamid = $2`, [privacy, teamNum]);
+			await TeamsHandler.query(`UPDATE teams SET private = $1 WHERE teamid = $2`, [privacy, teamId]);
 			for (const pageid of this.connection.openPages || new Set()) {
 				if (pageid.startsWith('teams-')) {
 					this.refreshPage(pageid);
@@ -487,9 +490,9 @@ export const pages: Chat.PageTable = {
 		},
 		async view(query, user, connection) {
 			TeamsHandler.validateAccess(connection);
-			const teamid = parseInt(query.shift() || "");
+			const teamid = toID(query.shift() || "");
 			this.title = `[View Team]`;
-			if (!teamid) {
+			if (!teamid.length) {
 				throw new Chat.ErrorMessage(`Invalid team ID.`);
 			}
 			const team = await TeamsHandler.get(teamid);
@@ -528,8 +531,8 @@ export const pages: Chat.PageTable = {
 		},
 		async edit(query, user, connection) {
 			TeamsHandler.validateAccess(connection);
-			const teamID = parseInt(query.shift() || "");
-			if (isNaN(teamID)) {
+			const teamID = toID(query.shift() || "");
+			if (teamID.length) {
 				return this.errorReply(`Invalid team ID.`);
 			}
 			this.title = `[Edit Team] ${teamID}`;
