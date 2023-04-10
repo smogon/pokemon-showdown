@@ -3993,6 +3993,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	greninjaash: {
 		isNonstandard: "Past",
 		tier: "Illegal",
+		natDexTier: "OU",
 	},
 	bunnelby: {
 		isNonstandard: "Past",
