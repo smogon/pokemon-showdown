@@ -136,7 +136,7 @@ export const TeamsHandler = new class {
 			}
 		}
 
-		const validatorResult = await TeamValidatorAsync.get(format.id).validateTeam(rawTeam, {
+		const validatorResult = await TeamValidatorAsync.get(`gen${Dex.gen}customgame`).validateTeam(rawTeam, {
 			removeNicknames: true, // less headache to moderate this way
 		});
 		if (!validatorResult.startsWith('1')) {
@@ -177,8 +177,8 @@ export const TeamsHandler = new class {
 		if (isUpdate && existing) {
 			const differenceExists = (
 				existing.team !== rawTeam ||
-				(teamName && teamName !== existing.title) || 
-				format.id !== existing.format || 
+				(teamName && teamName !== existing.title) ||
+				format.id !== existing.format ||
 				existing.private !== isPrivate
 			);
 			if (!differenceExists) {
@@ -202,7 +202,7 @@ export const TeamsHandler = new class {
 			);
 			return loaded?.[0].teamid;
 		}
-		
+
 	}
 	updateViews(teamid: number) {
 		return this.query(`UPDATE teams SET views = views + 1 WHERE teamid = $1`, [teamid]);
@@ -258,7 +258,7 @@ export const TeamsHandler = new class {
 			}
 			for (const move of set.moves) {
 				const type = Dex.moves.get(move).type;
-				teamBuf = teamBuf.replace(`- ${move}`, `- <psicon type="${type}" /> ${move}`);	
+				teamBuf = teamBuf.replace(`- ${move}`, `- <psicon type="${type}" /> ${move}`);
 			}
 			return teamBuf;
 		}).join('<hr />');
@@ -333,7 +333,7 @@ export const commands: Chat.ChatCommands = {
 			const id = await TeamsHandler.save(
 				connection, formatid, rawTeam, teamName, !!Number(rawPrivacy), isEdit ? teamID : undefined
 			);
-			
+
 			const page = isEdit ? 'edit' : 'upload';
 			if (id) {
 				connection.send(`>view-teams-${page}\n|deinit`);
@@ -414,7 +414,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		search(target, room, user) {
 			return this.parse(`/j view-teams-searchpersonal`);
-		},	
+		},
 		help() {
 			return this.parse('/help teams');
 		},
