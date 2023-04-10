@@ -821,8 +821,7 @@ export class Pokemon {
 	}
 
 	ignoringItem() {
-		if (this.hasItem('Ability Shield') || this.ability === ('neutralizinggas' as ID)) return false;
-		this.battle.add("-message", this.effectiveWeather().toString());
+		this.battle.add("-message", this.battle.field.effectiveWeather().toString());
 		return !!(
 			this.itemState.knockedOff || // Gen 3-4
 			(this.battle.gen >= 5 && !this.isActive) ||
