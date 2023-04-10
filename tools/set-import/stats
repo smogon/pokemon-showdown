@@ -5,7 +5,7 @@
 
 'use strict';
 
-require('ts-node').register();
+require('child_process').execSync('node ' + __dirname + "/../../build");
 const Dex = require('../../sim/dex').Dex;
 global.toID = Dex.getId;
 
@@ -13,7 +13,7 @@ const smogon = require('smogon');
 const importer = require('./importer');
 
 const formats = new Map();
-for (let gen = 1; gen <= 8; gen++) {
+for (let gen = 1; gen <= 9; gen++) {
 	for (const tier of importer.TIERS) {
 		const format = Dex.formats.get(`gen${gen}${tier}`);
 		if (format.exists) {

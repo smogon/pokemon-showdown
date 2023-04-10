@@ -261,7 +261,7 @@ export const commands: Chat.ChatCommands = {
 		} else if (user === targetUser) {
 			buf += `<br /> IP: <a href="https://whatismyipaddress.com/ip/${connection.ip}" target="_blank">${connection.ip}</a>`;
 		}
-		if (canViewAlts && hiddenrooms) {
+		if ((user === targetUser || canViewAlts) && hiddenrooms) {
 			buf += `<br />Hidden rooms: ${hiddenrooms}`;
 		}
 		if (canViewSecretRooms && privaterooms) {
@@ -714,7 +714,7 @@ export const commands: Chat.ChatCommands = {
 					};
 
 					if (move.isNonstandard === "Past" && dex.gen >= 8) details["&#10007; Past Gens Only"] = "";
-					if (move.secondary || move.secondaries) details["&#10003; Secondary effect"] = "";
+					if (move.secondary || move.secondaries || move.hasSheerForce) details["&#10003; Boosted by Sheer Force"] = "";
 					if (move.flags['contact'] && dex.gen >= 3) details["&#10003; Contact"] = "";
 					if (move.flags['sound'] && dex.gen >= 3) details["&#10003; Sound"] = "";
 					if (move.flags['bullet'] && dex.gen >= 6) details["&#10003; Bullet"] = "";
@@ -848,6 +848,7 @@ export const commands: Chat.ChatCommands = {
 	dt6: 'details',
 	dt7: 'details',
 	dt8: 'details',
+	dt9: 'details',
 	details(target) {
 		if (!target) return this.parse('/help details');
 		this.run('data');
@@ -1332,6 +1333,15 @@ export const commands: Chat.ChatCommands = {
 				}
 			}
 
+			if (!pokemon) {
+				const testPoke = Dex.species.get(arg);
+				if (testPoke.exists) {
+					pokemon = testPoke.baseStats;
+					baseSet = true;
+					continue;
+				}
+			}
+
 			if (!ivSet) {
 				if (lowercase.endsWith('iv') || lowercase.endsWith('ivs')) {
 					iv = parseInt(arg);
@@ -1400,15 +1410,6 @@ export const commands: Chat.ChatCommands = {
 					return this.sendReplyBox('Modifier should be a number between -6 and +6');
 				}
 				if (modSet) continue;
-			}
-
-			if (!pokemon) {
-				const testPoke = Dex.species.get(arg);
-				if (testPoke.exists) {
-					pokemon = testPoke.baseStats;
-					baseSet = true;
-					continue;
-				}
 			}
 
 			const tempStat = parseInt(arg);
@@ -1628,7 +1629,8 @@ export const commands: Chat.ChatCommands = {
 			`- <a href="https://github.com/smogon/pokemon-showdown/commits/master">What's new?</a><br />` +
 			`- <a href="https://github.com/smogon/pokemon-showdown">Server source code</a><br />` +
 			`- <a href="https://github.com/smogon/pokemon-showdown-client">Client source code</a><br />` +
-			`- <a href="https://github.com/Zarel/Pokemon-Showdown-Dex">Dex source code</a>`
+			`- <a href="https://github.com/Zarel/Pokemon-Showdown-Dex">Dex source code</a><br />` +
+			`- <a href="https://github.com/smogon/pokemon-showdown-loginserver">Login server source code</a>`
 		);
 	},
 	opensourcehelp: [
@@ -2080,6 +2082,9 @@ export const commands: Chat.ChatCommands = {
 		if (showAll || ['privacy', 'private'].includes(target)) {
 			buffer.push(`<a href="https://pokemonshowdown.com/${this.tr`pages/privacy`}">${this.tr`Pokémon Showdown privacy policy`}</a>`);
 		}
+		if (showAll || ['lostpassword', 'password', 'lostpass'].includes(target)) {
+			buffer.push(`If you need your Pokémon Showdown password reset, you can fill out a <a href="https://www.smogon.com/forums/password-reset-form/">${this.tr`Password Reset Form`}</a>. You will need to make a Smogon account to be able to fill out the form, as password resets are processed through the Smogon forums.`);
+		}
 		if (!buffer.length && target) {
 			this.errorReply(`'${target}' is an invalid FAQ.`);
 			return this.parse(`/help faq`);
@@ -2107,7 +2112,7 @@ export const commands: Chat.ChatCommands = {
 		const ability = Dex.abilities.get(targets[0]);
 		const format = Dex.formats.get(targets[0]);
 		let atLeastOne = false;
-		let generation = (targets[1] || 'ss').trim().toLowerCase();
+		let generation = (targets[1] || 'sv').trim().toLowerCase();
 		let genNumber = 9;
 		const extraFormat = Dex.formats.get(targets[2]);
 
@@ -2530,6 +2535,9 @@ export const commands: Chat.ChatCommands = {
 				throw new Chat.ErrorMessage('Invalid link.');
 			}
 		}
+		if (comment && this.checkChat(comment) !== comment) {
+			return this.errorReply(`You cannot use filtered words in comments.`);
+		}
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
 		room.pendingApprovals.set(user.id, {
 			name: user.name,
@@ -2543,6 +2551,7 @@ export const commands: Chat.ChatCommands = {
 		room.sendRankedUsers(message, '%');
 		room.sendMods(
 			Utils.html`|uhtml|request-${user.id}|<div class="infobox">${user.name} wants to show <a href="${link}">${link}</a><br>` +
+			(comment ? Utils.html`Comment: ${comment}<br>` : '') +
 			`<button class="button" name="send" value="/approveshow ${user.id}">Approve</button><br>` +
 			`<button class="button" name="send" value="/denyshow ${user.id}">Deny</button></div>`
 		);
@@ -2572,7 +2581,7 @@ export const commands: Chat.ChatCommands = {
 			buf = Utils.html`<img src="${request.link}" width="${width}" height="${height}" />`;
 			if (resized) buf += Utils.html`<br /><a href="${request.link}" target="_blank">full-size image</a>`;
 		} else {
-			buf = await YouTube.generateVideoDisplay(request.link);
+			buf = await YouTube.generateVideoDisplay(request.link, false, true);
 			if (!buf) return this.errorReply('Could not get YouTube video');
 		}
 		buf += Utils.html`<br /><div class="infobox"><small>(Requested by ${request.name})</small>`;
@@ -2635,10 +2644,19 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		const [link, comment] = Utils.splitFirst(target, ',').map(f => f.trim());
+		this.checkBroadcast();
+		if (this.broadcastMessage) {
+			if (room) {
+				this.checkCan('show', null, room);
+			} else {
+				this.checkCan('altsself');
+			}
+		}
 
+		this.runBroadcast();
 		let buf;
 		if (YouTube.linkRegex.test(link)) {
-			buf = await YouTube.generateVideoDisplay(link);
+			buf = await YouTube.generateVideoDisplay(link, false, this.broadcasting);
 			this.message = this.message.replace(/&ab_channel=(.*)(&|)/ig, '').replace(/https:\/\/www\./ig, '');
 		} else if (Twitch.linkRegex.test(link)) {
 			const channelId = Twitch.linkRegex.exec(link)?.[2]?.trim();
@@ -2666,15 +2684,6 @@ export const commands: Chat.ChatCommands = {
 			buf += Utils.html`<br />(${comment})</div>`;
 		}
 
-		this.checkBroadcast();
-		if (this.broadcastMessage) {
-			if (room) {
-				this.checkCan('show', null, room);
-			} else {
-				this.checkCan('altsself');
-			}
-		}
-		this.runBroadcast();
 		this.sendReplyBox(buf);
 	},
 	showhelp: [
@@ -2866,9 +2875,135 @@ export const commands: Chat.ChatCommands = {
 			);
 		}
 	},
+
+	adminhelp(target, room, user) {
+		this.checkCan('rangeban');
+		let cmds = Chat.allCommands();
+		const canExecute = (perm: string) => !(
+			// gotta make sure no lower group has it
+			Object.values(Config.groups).slice(1).some(f => (f as any)[perm])
+		);
+		cmds = cmds.filter(
+			f => f.requiredPermission && canExecute(f.requiredPermission) && f.fullCmd !== this.handler?.fullCmd
+		);
+		cmds = Utils.sortBy(cmds, f => f.fullCmd);
+		let namespaces = new Map<string, string[]>();
+		for (const cmd of cmds) {
+			const namespace = cmd.fullCmd.split(' ')[0];
+			const list = namespaces.get(namespace) || [];
+			list.push(cmd.fullCmd.trim());
+			namespaces.set(namespace, list);
+		}
+		let buf = `<strong>Admin commands:</strong><br />`;
+		namespaces = new Map(Utils.sortBy([...namespaces], ([, cmdList]) => cmdList.length === 1));
+		for (const [namespace, cmdList] of namespaces) {
+			if (cmdList.length > 1 || cmdList[0].includes(' ')) {
+				buf += `<details class="readmore"><summary>${namespace}</summary>`;
+				buf += cmdList.map(f => `&bull; /${f}`).join('<br />');
+				buf += `</details>`;
+			} else {
+				buf += `&bull; ${cmdList[0]}`;
+				const help = Chat.commands[namespace + 'help'];
+				if (help) {
+					const text = Array.isArray(help) ?
+						help.join(' | ') : typeof help === 'function' ?
+							`<button class="button" name="send" value="/${cmdList[0] + 'help'}">Get help</button>` : '';
+					buf += text ? ` (<code><small>${text}</small></code>)` : `(no help found)`;
+				}
+			}
+			buf += `<br />`;
+		}
+		this.sendReplyBox(buf);
+	},
+	adminhelphelp: [`/adminhelp - Programmatically generates a list of all administrator commands. Requires: &`],
+
+	altlog: 'altslog',
+	altslog(target, room, user) {
+		this.checkCan('lock');
+		target = toID(target);
+		if (!target) {
+			return this.parse(`/help altslog`);
+		}
+		return this.parse(`/join view-altslog-${target}`);
+	},
+	altsloghelp: [
+		`/altslog [userid] - View the alternate account history for the given [userid]. Requires: % @ &`,
+	],
+};
+
+export const handlers: Chat.Handlers = {
+	onRename(user, oldID, newID) {
+		if (oldID === newID || !Config.usesqlite || [oldID, newID].some(f => f.startsWith('guest'))) return;
+		void Chat.database.run(
+			`REPLACE INTO alts_log (to_id, from_id, ip) VALUES (?, ?, ?)`,
+			[newID, oldID, user.latestIp]
+		);
+	},
 };
 
 export const pages: Chat.PageTable = {
+	async altslog(query, user) {
+		this.checkCan('lock');
+		this.title = '[Alts Log]';
+		const target = toID(query.shift());
+		if (!target) {
+			return this.errorReply(`Please specify a user to find alternate accounts for.`);
+		}
+		this.title += ` ${target}`;
+		if (!Config.usesqlite) {
+			return this.errorReply(`The alternate account log is currently disabled.`);
+		}
+		const rawLimit = query.shift() || "100";
+		const num = parseInt(rawLimit);
+		if (num > 3000) {
+			return this.errorReply(`3000 is the maximum number of results from the alternate account log.`);
+		}
+		if (isNaN(num) || num < 1) {
+			return this.errorReply(`The max results must be a real number that is at least one (received "${rawLimit}")`);
+		}
+		const showIPs = user.can('globalban');
+		const results = await Chat.database.all(
+			'SELECT to_id, from_id, ip FROM alts_log WHERE (to_id = ? OR from_id = ?) LIMIT ?',
+			[target, target, num]
+		);
+		let buf = `<div class="pad"><h2>Alternate accounts for ${target}</h2>`;
+		buf += `${results.length} found.<hr />`;
+
+		const ipTable = {} as Record<string, number>;
+		const userids = new Set<string>();
+		const useridToIp = new Map<string, string[]>();
+		for (const result of results) {
+			const id = result.from_id === target ? result.to_id : result.from_id;
+			userids.add(id);
+			let prevIps = useridToIp.get(id);
+			if (!prevIps) {
+				prevIps = [];
+			}
+			if (!prevIps.includes(result.ip)) {
+				prevIps.push(result.ip);
+			}
+			useridToIp.set(id, prevIps);
+			if (!ipTable[result.ip]) ipTable[result.ip] = 0;
+			ipTable[result.ip]++;
+		}
+		buf += `<div class="ladder pad"><table><tr><th>Userid</th>${showIPs ? `<th>Latest IP</th>` : ""}</tr>`;
+		for (const id of userids) {
+			const ips = useridToIp.get(id) || [];
+			buf += `<tr><td>`;
+			buf += `<a href="https://${Config.routes.root}/users/${id}">${id}</a></td>`;
+			const ipStr = ips.map(f => `<a href="https://whatismyipaddress.com/ip/${f}">${f}</a>`).join(', ');
+			buf += `${showIPs ? `<td>${ipStr}</td>` : ""}</tr>`;
+		}
+		buf += `</table></div>`;
+		if (showIPs) {
+			buf += `<br /><div class="ladder pad"><table><tr><th>IP</th><th>Times Used</th></tr>`;
+			for (const ip in ipTable) {
+				buf += `<tr><td>${ip}</td><td>${ipTable[ip]}</td></tr>`;
+			}
+			buf += `</table></div>`;
+		}
+		return buf;
+	},
 	battlerules(query, user) {
 		const rules = Object.values(Dex.data.Rulesets).filter(rule => rule.effectType !== "Format");
 		const tourHelp = `https://www.smogon.com/forums/threads/pok%C3%A9mon-showdown-forum-rules-resources-read-here-first.3570628/#post-6777489`;
@@ -2877,7 +3012,7 @@ export const pages: Chat.PageTable = {
 		const basics = [
 			`<p>Pok&eacute;mon Showdown! supports custom rules in three ways:</p>`,
 			`<ul><li>Challenging another user, using the command <code>/challenge USERNAME, FORMAT @@@ RULES</code></li>`,
-			`<li>Tournaments, using the command <code>/tour rules RULES</code> (see the <a href="${tourHelp}">Tournament command help)</a></li>`,
+			`<li>Tournaments, using the command <code>/tour rules RULES</code> (see the <a href="${tourHelp}">Tournament command help</a>)</li>`,
 			`<li>Custom rules on your own server</li></ul>`,
 			`<h2><u>Bans</u></h2>`,
 			`<p>Bans are just a <code>-</code> followed by the thing you want to ban.</p>`,

@@ -19,6 +19,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Steadfast", H: "Justified"},
 	},
+	giratinaorigin: {
+		inherit: true,
+		requiredItem: "Griseous Orb",
+	},
 	cresselia: {
 		inherit: true,
 		baseStats: {hp: 120, atk: 70, def: 120, spa: 75, spd: 130, spe: 85},
@@ -26,10 +30,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	samurotthisui: {
 		inherit: true,
 		abilities: {0: "Torrent", H: "Shell Armor"},
-	},
-	zoroarkhisui: {
-		inherit: true,
-		baseStats: {hp: 55, atk: 100, def: 60, spa: 125, spd: 60, spe: 110},
 	},
 	braviaryhisui: {
 		inherit: true,
@@ -73,13 +73,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 92, atk: 130, def: 145, spa: 80, spd: 145, spe: 128},
 	},
-	kubfu: {
-		inherit: true,
-		abilities: {0: "Inner Focus"},
-	},
 	kleavor: {
 		inherit: true,
-		baseStats: {hp: 70, atk: 135, def: 95, spa: 45, spd: 70, spe: 85},
 		abilities: {0: "Swarm", 1: "Sheer Force", H: "Steadfast"},
 	},
 	basculegion: {
@@ -93,6 +88,9 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	sneasler: {
 		inherit: true,
 		abilities: {0: "Pressure", H: "Poison Touch"},
+		evoType: "useItem",
+		evoItem: "Razor Claw",
+		evoCondition: "during the day",
 	},
 	enamorus: {
 		inherit: true,

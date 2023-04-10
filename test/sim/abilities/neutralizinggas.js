@@ -183,7 +183,7 @@ describe('Neutralizing Gas', function () {
 		assert.equal(regigigas.getStat('spe'), slowStartSpeed);
 	});
 
-	it.skip(`should not cause Gluttony to instantly eat Berries when Neutralizing Gas leaves the field`, function () {
+	it(`should not cause Gluttony to instantly eat Berries when Neutralizing Gas leaves the field`, function () {
 		battle = common.createBattle([[
 			{species: "Wynaut", ability: 'gluttony', item: 'aguavberry', evs: {hp: 4}, moves: ['bellydrum']},
 		], [
@@ -201,7 +201,7 @@ describe('Neutralizing Gas', function () {
 
 		// Gluttony now has the opportunity to activate the Aguav Berry again on taking damage
 		battle.makeChoices();
-		assert.equal(wynaut.hp, Math.floor(wynaut.maxhp / 2) - 1 + Math.floor(wynaut.maxhp * 0.33));
+		assert.equal(wynaut.hp, Math.floor(wynaut.maxhp / 2) - 1 + Math.floor(wynaut.maxhp / 3));
 	});
 
 	it(`should not trigger twice if negated then replaced`, function () {

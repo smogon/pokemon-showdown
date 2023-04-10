@@ -17,8 +17,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	amnesia: {
 		inherit: true,
 		boosts: {
-			spd: 2,
 			spa: 2,
+			spd: 2,
 		},
 	},
 	aurorabeam: {
@@ -34,60 +34,26 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		priority: 0,
 		accuracy: true,
-		ignoreEvasion: true,
 		condition: {
-			duration: 2,
-			durationCallback(target, source, effect) {
-				return this.random(3, 5);
-			},
 			onStart(pokemon) {
-				this.effectState.totalDamage = 0;
-				this.effectState.lastDamage = 0;
+				this.effectState.damage = 0;
+				this.effectState.time = this.random(2, 4);
 				this.add('-start', pokemon, 'Bide');
 			},
-			onHit(target, source, move) {
-				if (source && source !== target && move.category !== 'Physical' && move.category !== 'Special') {
-					const damage = this.effectState.totalDamage;
-					this.effectState.totalDamage += damage;
-					this.effectState.lastDamage = damage;
-					this.effectState.sourceSlot = source.getSlot();
-				}
-			},
-			onDamage(damage, target, source, move) {
-				if (!source || source.isAlly(target)) return;
-				if (!move || move.effectType !== 'Move') return;
-				if (!damage && this.effectState.lastDamage > 0) {
-					damage = this.effectState.totalDamage;
-				}
-				this.effectState.totalDamage += damage;
-				this.effectState.lastDamage = damage;
-				this.effectState.sourceSlot = source.getSlot();
-			},
-			onAfterSetStatus(status, pokemon) {
-				// Sleep, freeze, and partial trap will just pause duration.
-				if (pokemon.volatiles['flinch']) {
-					this.effectState.duration++;
-				} else if (pokemon.volatiles['partiallytrapped']) {
-					this.effectState.duration++;
-				} else {
-					switch (status.id) {
-					case 'slp':
-					case 'frz':
-						this.effectState.duration++;
-						break;
-					}
-				}
-			},
 			onBeforeMove(pokemon, t, move) {
-				if (this.effectState.duration === 1) {
-					this.add('-end', pokemon, 'Bide');
-					if (!this.effectState.totalDamage) {
-						this.debug("Bide failed because no damage was taken");
+				const currentMove = this.dex.getActiveMove('bide');
+				this.effectState.damage += this.lastDamage;
+				this.effectState.time--;
+				if (!this.effectState.time) {
+					this.add('-end', pokemon, currentMove);
+					if (!this.effectState.damage) {
+						this.debug("Bide failed because no damage was stored");
 						this.add('-fail', pokemon);
+						pokemon.removeVolatile('bide');
 						return false;
 					}
-					const target = this.getAtSlot(this.effectState.sourceSlot);
-					this.actions.moveHit(target, pokemon, move, {damage: this.effectState.totalDamage * 2} as ActiveMove);
+					const target = this.getRandomTarget(pokemon, 'Pound');
+					this.actions.moveHit(target, pokemon, currentMove, {damage: this.effectState.damage * 2} as ActiveMove);
 					pokemon.removeVolatile('bide');
 					return false;
 				}
@@ -249,22 +215,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	dig: {
 		inherit: true,
 		basePower: 100,
-		condition: {
-			duration: 2,
-			onLockMove: 'dig',
-			onInvulnerability(target, source, move) {
-				if (move.id === 'swift' || move.id === 'transform') return true;
-				this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
-				return false;
-			},
-			onDamage(damage, target, source, move) {
-				if (!move || move.effectType !== 'Move') return;
-				if (!source) return;
-				if (move.id === 'earthquake') {
-					this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
-					return null;
-				}
-			},
+		condition: {},
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile('twoturnmove')) {
+				attacker.removeVolatile('invulnerability');
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			attacker.addVolatile('twoturnmove', defender);
+			attacker.addVolatile('invulnerability', defender);
+			return null;
 		},
 	},
 	disable: {
@@ -302,8 +262,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					pokemon.removeVolatile('disable');
 					return;
 				}
+				if (pokemon.volatiles['bide']) move = this.dex.getActiveMove('bide');
 				if (move.id === this.effectState.move) {
 					this.add('cant', pokemon, 'Disable', move);
+					pokemon.removeVolatile('twoturnmove');
 					return false;
 				}
 			},
@@ -368,22 +330,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	fly: {
 		inherit: true,
-		condition: {
-			duration: 2,
-			onLockMove: 'fly',
-			onInvulnerability(target, source, move) {
-				if (move.id === 'swift' || move.id === 'transform') return true;
-				this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
-				return false;
-			},
-			onDamage(damage, target, source, move) {
-				if (!move || move.effectType !== 'Move') return;
-				if (!source || source.isAlly(target)) return;
-				if (move.id === 'gust' || move.id === 'thunder') {
-					this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
-					return null;
-				}
-			},
+		condition: {},
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile('twoturnmove')) {
+				attacker.removeVolatile('invulnerability');
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			attacker.addVolatile('twoturnmove', defender);
+			attacker.addVolatile('invulnerability', defender);
+			return null;
 		},
 	},
 	focusenergy: {
@@ -424,7 +380,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (pokemon.status === 'tox') {
 					pokemon.setStatus('psn');
 				}
-				// should only clear a specific set of volatiles and does not clear the toxic counter
+				pokemon.updateSpeed();
+				// should only clear a specific set of volatiles
+				// while technically the toxic counter shouldn't be cleared, the preserved toxic counter is never used again
+				// in-game, so it is equivalent to just clear it.
 				const silentHack = '|[silent]';
 				const silentHackVolatiles = ['disable', 'confusion'];
 				const hazeVolatiles: {[key: string]: string} = {
@@ -435,6 +394,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					'leechseed': 'move: Leech Seed',
 					'lightscreen': 'Light Screen',
 					'reflect': 'Reflect',
+					'residualdmg': 'Toxic counter',
 				};
 				for (const v in hazeVolatiles) {
 					if (!pokemon.removeVolatile(v)) {
@@ -557,6 +517,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!foe?.lastMove || foe.lastMove.id === 'mirrormove') {
 				return false;
 			}
+			pokemon.side.lastSelectedMove = foe.lastMove.id;
 			this.actions.useMove(foe.lastMove.id, pokemon);
 		},
 	},
@@ -566,7 +527,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Mist');
 			},
-			onBoost(boost, target, source, effect) {
+			onTryBoost(boost, target, source, effect) {
 				if (effect.effectType === 'Move' && effect.category !== 'Status') return;
 				if (source && target !== source) {
 					let showMsg = false;
@@ -589,6 +550,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		ignoreImmunity: true,
 		basePower: 1,
 	},
+	petaldance: {
+		inherit: true,
+		onMoveFail() {},
+	},
 	poisonsting: {
 		inherit: true,
 		secondary: {
@@ -601,8 +566,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: {
 			chance: 33,
 			boosts: {
-				spd: -1,
 				spa: -1,
+				spd: -1,
 			},
 		},
 	},
@@ -625,9 +590,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		condition: {
 			// Rage lock
-			duration: 255,
 			onStart(target, source, effect) {
 				this.effectState.move = 'rage';
+				this.effectState.accuracy = 255;
 			},
 			onLockMove: 'rage',
 			onHit(target, source, move) {
@@ -647,6 +612,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		critRatio: 1,
 		target: "normal",
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile('twoturnmove')) {
+				attacker.removeVolatile('invulnerability');
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
 	},
 	recover: {
 		inherit: true,
@@ -734,13 +708,23 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	skullbash: {
 		inherit: true,
 		onTryMove(attacker, defender, move) {
-			if (attacker.removeVolatile(move.id)) {
+			if (attacker.removeVolatile('twoturnmove')) {
+				attacker.removeVolatile('invulnerability');
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+	},
+	skyattack: {
+		inherit: true,
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile('twoturnmove')) {
+				attacker.removeVolatile('invulnerability');
 				return;
 			}
+			this.add('-prepare', attacker, move.name);
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
@@ -756,9 +740,22 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			status: 'psn',
 		},
 	},
+	solarbeam: {
+		inherit: true,
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile('twoturnmove')) {
+				attacker.removeVolatile('invulnerability');
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+	},
 	sonicboom: {
 		inherit: true,
 		ignoreImmunity: true,
+		basePower: 1,
 	},
 	softboiled: {
 		inherit: true,
@@ -830,11 +827,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// NOTE: In future generations the damage is capped to the remaining HP of the
 				// Substitute, here we deliberately use the uncapped damage when tracking lastDamage etc.
 				// Also, multi-hit moves must always deal the same damage as the first hit for any subsequent hits
-				let uncappedDamage = move.hit > 1 ? source.lastDamage : this.actions.getDamage(source, target, move);
+				let uncappedDamage = move.hit > 1 ? this.lastDamage : this.actions.getDamage(source, target, move);
+				if (move.id === 'bide') uncappedDamage = source.volatiles['bide'].damage * 2;
 				if (!uncappedDamage && uncappedDamage !== 0) return null;
 				uncappedDamage = this.runEvent('SubDamage', target, source, move, uncappedDamage);
 				if (!uncappedDamage && uncappedDamage !== 0) return uncappedDamage;
-				source.lastDamage = uncappedDamage;
 				this.lastDamage = uncappedDamage;
 				target.volatiles['substitute'].hp -= uncappedDamage > target.volatiles['substitute'].hp ?
 					target.volatiles['substitute'].hp : uncappedDamage;
@@ -847,10 +844,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// Drain/recoil/secondary effect confusion do not happen if the substitute breaks
 				if (target.volatiles['substitute']) {
 					if (move.recoil) {
-						this.damage(Math.round(uncappedDamage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
+						this.damage(this.clampIntRange(Math.floor(uncappedDamage * move.recoil[0] / move.recoil[1]), 1)
+							, source, target, 'recoil');
 					}
 					if (move.drain) {
-						this.heal(Math.ceil(uncappedDamage * move.drain[0] / move.drain[1]), source, target, 'drain');
+						const amount = this.clampIntRange(Math.floor(uncappedDamage * move.drain[0] / move.drain[1]), 1);
+						this.lastDamage = amount;
+						this.heal(amount, source, target, 'drain');
 					}
 					if (move.secondary?.volatileStatus === 'confusion') {
 						const secondary = move.secondary;
@@ -887,6 +887,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		ignoreImmunity: true,
 		basePower: 1,
+	},
+	thrash: {
+		inherit: true,
+		onMoveFail() {},
 	},
 	thunder: {
 		inherit: true,

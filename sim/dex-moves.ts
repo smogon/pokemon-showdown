@@ -25,6 +25,7 @@ export type MoveTarget =
 
 /** Possible move flags. */
 interface MoveFlags {
+	allyanim?: 1; // The move plays its animation when used on an ally.
 	bypasssub?: 1; // Ignores a target's substitute.
 	bite?: 1; // Power is multiplied by 1.5 when used by a Pokemon with the Ability Strong Jaw.
 	bullet?: 1; // Has no effect on Pokemon with the Ability Bulletproof.
@@ -33,19 +34,31 @@ interface MoveFlags {
 	dance?: 1; // When used by a Pokemon, other Pokemon with the Ability Dancer can attempt to execute the same move.
 	defrost?: 1; // Thaws the user if executed successfully while the user is frozen.
 	distance?: 1; // Can target a Pokemon positioned anywhere in a Triple Battle.
+	failcopycat?: 1; // Cannot be selected by Copycat.
+	failencore?: 1; // Encore fails if target used this move.
+	failinstruct?: 1; // Cannot be repeated by Instruct.
+	failmefirst?: 1; // Cannot be selected by Me First.
+	failmimic?: 1; // Cannot be copied by Mimic.
+	futuremove?: 1; // Targets a slot, and in 2 turns damages that slot.
 	gravity?: 1; // Prevented from being executed or selected during Gravity's effect.
 	heal?: 1; // Prevented from being executed or selected during Heal Block's effect.
 	mirror?: 1; // Can be copied by Mirror Move.
-	allyanim?: 1; // The move has an animation when used on an ally.
+	mustpressure?: 1; // Additional PP is deducted due to Pressure when it ordinarily would not.
+	noassist?: 1; // Cannot be selected by Assist.
 	nonsky?: 1; // Prevented from being executed or selected in a Sky Battle.
+	noparentalbond?: 1; // Cannot be made to hit twice via Parental Bond.
+	nosleeptalk?: 1; // Cannot be selected by Sleep Talk.
+	pledgecombo?: 1; // Gems will not activate. Cannot be redirected by Storm Drain / Lightning Rod.
 	powder?: 1; // Has no effect on Pokemon which are Grass-type, have the Ability Overcoat, or hold Safety Goggles.
 	protect?: 1; // Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield.
 	pulse?: 1; // Power is multiplied by 1.5 when used by a Pokemon with the Ability Mega Launcher.
 	punch?: 1; // Power is multiplied by 1.2 when used by a Pokemon with the Ability Iron Fist.
 	recharge?: 1; // If this move is successful, the user must recharge on the following turn and cannot make a move.
 	reflectable?: 1; // Bounced back to the original user by Magic Coat or the Ability Magic Bounce.
+	slicing?: 1; // Power is multiplied by 1.5 when used by a Pokemon with the Ability Sharpness.
 	snatch?: 1; // Can be stolen from the original user and instead used by another Pokemon using Snatch.
 	sound?: 1; // Has no effect on Pokemon with the Ability Soundproof.
+	wind?: 1; // Activates the Wind Power and Wind Rider Abilities.
 }
 
 export interface HitEffect {
@@ -142,7 +155,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	type: string;
 	priority: number;
 	target: MoveTarget;
-	flags: AnyObject;
+	flags: MoveFlags;
 	/** Hidden Power */
 	realMove?: string;
 
@@ -198,6 +211,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	secondary?: SecondaryEffect | null;
 	secondaries?: SecondaryEffect[] | null;
 	self?: SecondaryEffect | null;
+	hasSheerForce?: boolean;
 
 	// Hit effect modifiers
 	// --------------------
@@ -255,7 +269,6 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	// ---------------
 	hasCrashDamage?: boolean;
 	isConfusionSelfHit?: boolean;
-	isFutureMove?: boolean;
 	noMetronome?: string[];
 	noSketch?: boolean;
 	stallingMove?: boolean;
@@ -290,7 +303,8 @@ interface MoveHitData {
 }
 
 type MutableMove = BasicEffect & MoveData;
-export interface ActiveMove extends MutableMove {
+type RuinableMove = {[k in `ruined${'Atk' | 'Def' | 'SpA' | 'SpD'}`]?: Pokemon;};
+export interface ActiveMove extends MutableMove, RuinableMove {
 	readonly name: string;
 	readonly effectType: 'Move';
 	readonly id: ID;
@@ -300,12 +314,10 @@ export interface ActiveMove extends MutableMove {
 	hit: number;
 	moveHitData?: MoveHitData;
 	ability?: Ability;
-	aerilateBoosted?: boolean;
 	allies?: Pokemon[];
 	auraBooster?: Pokemon;
 	causedCrashDamage?: boolean;
 	forceStatus?: ID;
-	galvanizeBoosted?: boolean;
 	hasAuraBreak?: boolean;
 	hasBounced?: boolean;
 	hasSheerForce?: boolean;
@@ -314,16 +326,14 @@ export interface ActiveMove extends MutableMove {
 	lastHit?: boolean;
 	magnitude?: number;
 	negateSecondary?: boolean;
-	normalizeBoosted?: boolean;
-	pixilateBoosted?: boolean;
 	pranksterBoosted?: boolean;
-	refrigerateBoosted?: boolean;
 	selfDropped?: boolean;
 	selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
 	spreadHit?: boolean;
 	stab?: number;
 	statusRoll?: string;
 	totalDamage?: number | false;
+	typeChangerBoosted?: Effect;
 	willChangeForme?: boolean;
 	infiltrates?: boolean;
 
@@ -368,6 +378,11 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	 * secondary).
 	 */
 	readonly secondaries: SecondaryEffect[] | null;
+	/**
+	 * Moves manually boosted by Sheer Force that don't have secondary effects.
+	 * e.g. Jet Punch
+	 */
+	readonly hasSheerForce: boolean;
 	/**
 	 * Move priority. Higher priorities go before lower priorities,
 	 * trumping the Speed stat.
@@ -470,6 +485,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.baseMoveType = Utils.getString(data.baseMoveType) || this.type;
 		this.secondary = data.secondary || null;
 		this.secondaries = data.secondaries || (this.secondary && [this.secondary]) || null;
+		this.hasSheerForce = !!(data.hasSheerForce && !this.secondaries);
 		this.priority = Number(data.priority) || 0;
 		this.category = data.category!;
 		this.overrideOffensiveStat = data.overrideOffensiveStat || undefined;

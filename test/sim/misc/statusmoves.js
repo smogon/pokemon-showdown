@@ -32,41 +32,39 @@ describe('Most status moves', function () {
 		assert.statStage(battle.p2.active[0], 'accuracy', -1);
 	});
 
-	it('should fail when the opposing Pokemon is immune to the status effect it sets', function () {
-		this.timeout(0);
-
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'noguard', item: 'laggingtail', moves: ['thunderwave', 'willowisp', 'poisongas', 'toxic']}]});
-		battle.setPlayer('p2', {team: [
-			{species: "Zapdos", ability: 'pressure', moves: ['charge']},
-			{species: "Emboar", ability: 'blaze', moves: ['sleeptalk']},
-			{species: "Muk", ability: 'stench', moves: ['shadowsneak']},
-			{species: "Aron", ability: 'sturdy', moves: ['magnetrise']},
-		]});
+	it(`should fail when the opposing Pokemon is immune to the status effect it sets`, function () {
+		battle = common.createBattle([[
+			{species: 'Smeargle', ability: 'noguard', item: 'laggingtail', moves: ['thunderwave', 'willowisp', 'poisongas', 'toxic']},
+		], [
+			{species: 'Zapdos', moves: ['charge']},
+			{species: 'Emboar', moves: ['sleeptalk']},
+			{species: 'Muk', moves: ['shadowsneak']},
+			{species: 'Aron', moves: ['magnetrise']},
+		]]);
 
 		battle.makeChoices('move thunderwave', 'move charge');
 		assert.equal(battle.p2.active[0].status, '');
-		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
+		assert(battle.log[battle.lastMoveLine + 3].startsWith('|-immune|'));
 
 		battle.makeChoices('move willowisp', 'switch 2'); // Emboar
 		assert.equal(battle.p2.active[0].status, '');
-		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
+		assert(battle.log[battle.lastMoveLine + 3].startsWith('|-immune|'));
 
 		battle.makeChoices('move poisongas', 'switch 3'); // Muk
 		assert.equal(battle.p2.active[0].status, '');
-		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
+		assert(battle.log[battle.lastMoveLine + 3].startsWith('|-immune|'));
 
 		battle.makeChoices('move toxic', 'move shadowsneak');
 		assert.equal(battle.p2.active[0].status, '');
-		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
+		assert(battle.log[battle.lastMoveLine + 3].startsWith('|-immune|'));
 
 		battle.makeChoices('move poisongas', 'switch 4'); // Aron
 		assert.equal(battle.p2.active[0].status, '');
-		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
+		assert(battle.log[battle.lastMoveLine + 3].startsWith('|-immune|'));
 
 		battle.makeChoices('move toxic', 'move magnetrise');
 		assert.equal(battle.p2.active[0].status, '');
-		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
+		assert(battle.log[battle.lastMoveLine + 3].startsWith('|-immune|'));
 	});
 });
 

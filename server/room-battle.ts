@@ -50,12 +50,14 @@ const DISCONNECTION_BANK_TIME = 300;
 
 // time after a player disabling the timer before they can re-enable it
 const TIMER_COOLDOWN = 20 * SECONDS;
+const LOCKDOWN_PERIOD = 30 * 60 * 1000; // 30 minutes
 
 export class RoomBattlePlayer extends RoomGames.RoomGamePlayer<RoomBattle> {
 	readonly slot: SideID;
 	readonly channelIndex: ChannelIndex;
 	request: BattleRequestTracker;
 	wantsTie: boolean;
+	wantsOpenTeamSheets: boolean | null;
 	active: boolean;
 	eliminated: boolean;
 	/**
@@ -110,6 +112,7 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer<RoomBattle> {
 
 		this.request = {rqid: 0, request: '', isWait: 'cantUndo', choice: ''};
 		this.wantsTie = false;
+		this.wantsOpenTeamSheets = null;
 		this.active = true;
 		this.eliminated = false;
 
@@ -841,6 +844,16 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 			break;
 		}
 
+		case 'error': {
+			if (process.uptime() * 1000 < LOCKDOWN_PERIOD) {
+				const error = new Error();
+				error.stack = lines.slice(1).join('\n');
+				// lock down the server
+				Rooms.global.startLockdown(error);
+			}
+			break;
+		}
+
 		case 'end':
 			this.logData = JSON.parse(lines[1]);
 			this.score = this.logData!.score;
@@ -1292,8 +1305,9 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 			}
 		}
 	}
-	async getTeam(user: User) {
-		const id = user.id;
+	async getTeam(user: User | string) {
+		// toID extracts user.id
+		const id = toID(user);
 		const player = this.playerTable[id];
 		if (!player) return;
 		void this.stream.write(`>requestteam ${player.slot}`);
@@ -1338,7 +1352,7 @@ export class RoomBattleStream extends BattleStream {
 		}
 		try {
 			this._writeLines(chunk);
-		} catch (err) {
+		} catch (err: any) {
 			const battle = this.battle;
 			Monitor.crashlog(err, 'A battle', {
 				chunk,
@@ -1354,6 +1368,8 @@ export class RoomBattleStream extends BattleStream {
 					}
 				}
 			}
+			// public crashlogs only have the stack anyways
+			this.push(`error\n${err.stack}`);
 		}
 		if (this.battle) this.battle.sendUpdates();
 		const deltaTime = Date.now() - startTime;

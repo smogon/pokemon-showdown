@@ -27,6 +27,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	blukberry: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	blunderpolicy: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -95,7 +99,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 		onAfterMoveSecondary(target, source, move) {
-			if (source && source !== target && target.hp && move && move.category !== 'Status' && !move.isFutureMove) {
+			if (source && source !== target && target.hp && move && move.category !== 'Status' && !move.flags['futuremove']) {
 				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.beingCalledBack || target.isSkyDropped()) return;
 				for (const pokemon of this.getAllActive()) {
 					if (pokemon.switchFlag === true) return;
@@ -256,9 +260,17 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	nanabberry: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	normalgem: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	pinapberry: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	plumefossil: {
 		inherit: true,
@@ -281,6 +293,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		isNonstandard: "Past",
 	},
 	razorfang: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	razzberry: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -361,6 +377,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		isNonstandard: "Past",
 	},
 	stoneplate: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	strangeball: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -799,6 +819,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 	weaknesspolicy: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	wepearberry: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	whippeddream: {
 		inherit: true,
