@@ -175,7 +175,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['[Gen 9] PU'],
-		banlist: ['PU'],
+		banlist: ['PU', 'Fraxure', 'Girafarig'],
 	},
 	{
 		name: "[Gen 9] CAP",
