@@ -116263,7 +116263,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			astonish: ["6M"],
 			furyswipes: ["6M"],
 			furycutter: ["6M"],
-			frusturation: ["6M"],
+			frustration: ["6M"],
 			phantomforce: ["6M"],
 			copycat: ["6M"],
 			rage: ["6M"],
