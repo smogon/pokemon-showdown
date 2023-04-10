@@ -832,7 +832,7 @@ export class Pokemon {
 			(this.battle.gen >= 5 && !this.isActive) ||
 			(!this.getItem().ignoreKlutz && this.hasAbility('klutz')) ||
 			this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom'] ||
-			this.effectiveWeather() === 'acidrain' && this.hasAbility('neutralizinggas')
+			(this.effectiveWeather() === 'acidrain' && this.hasAbility('neutralizinggas'))
 		);
 	}
 
