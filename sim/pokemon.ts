@@ -808,7 +808,7 @@ export class Pokemon {
 		if (this.volatiles['gastroacid']) return true;
 
 		// Check if any active pokemon have the ability Neutralizing Gas
-		if (this.hasItem('Ability Shield') || this.ability === ('neutralizinggas' as ID)) return false;
+		if (this.item === ('abilityshield' as ID) || this.ability === ('neutralizinggas' as ID)) return false;
 		for (const pokemon of this.battle.getAllActive()) {
 			// can't use hasAbility because it would lead to infinite recursion
 			if (pokemon.ability === ('neutralizinggas' as ID) && !pokemon.volatiles['gastroacid'] &&
@@ -821,7 +821,12 @@ export class Pokemon {
 	}
 
 	ignoringItem() {
-		this.battle.add("-message", this.battle.field.effectiveWeather().toString());
+		for (const pokemon of this.battle.getAllActive()) { // Acid Rain + Neutralizing Gas 
+			// can't use hasAbility because it would lead to infinite recursion
+			if (pokemon.ability === ('neutralizinggas' as ID) && this.effectiveWeather() === 'acidrain' && !pokemon.abilityState.ending) {
+				return true;
+			}
+		}
 		return !!(
 			this.itemState.knockedOff || // Gen 3-4
 			(this.battle.gen >= 5 && !this.isActive) ||
