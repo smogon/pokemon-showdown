@@ -40,18 +40,13 @@ function refresh(context: Chat.PageContext) {
 
 export const TeamsHandler = new class {
 	database = new PostgresDatabase();
-	readyPromise: Promise<void> | null = new Promise<void>((resolve) => {
-		if (!Config.usepostgres) {
-			this.readyPromise = null;
-			return resolve();
-		}
-		void this.database.query('SELECT * FROM teams LIMIT 1').catch(async () => {
+	readyPromise: Promise<void> | null = Config.usepostgres ? (async () => {
+		try {
+			await this.database.query('SELECT * FROM teams LIMIT 1');
+		} catch {
 			await this.database.query(FS(`databases/schemas/teams.sql`).readSync());
-		}).then(() => {
-			resolve();
-			this.readyPromise = null;
-		});
-	});
+		}
+	})() : null;
 	destroy() {
 		void this.database.destroy();
 	}
@@ -202,7 +197,6 @@ export const TeamsHandler = new class {
 			);
 			return loaded?.[0].teamid;
 		}
-
 	}
 	updateViews(teamid: number) {
 		return this.query(`UPDATE teams SET views = views + 1 WHERE teamid = $1`, [teamid]);
@@ -312,9 +306,9 @@ export const commands: Chat.ChatCommands = {
 		update: 'save',
 		async save(target, room, user, connection, cmd) {
 			TeamsHandler.validateAccess(connection, true);
-			let targets = Utils.splitFirst(target, ',', 5);
+			const targets = Utils.splitFirst(target, ',', 5);
 			const isEdit = cmd === 'update';
-			let rawID = isEdit ? targets.shift() : undefined;
+			const rawID = isEdit ? targets.shift() : undefined;
 			const teamID = Number(rawID || "");
 			let [teamName, formatid, rawPrivacy, rawTeam] = targets;
 			if (isEdit && isNaN(teamID)) {
