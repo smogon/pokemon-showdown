@@ -22536,9 +22536,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-		onHit(target, source) {
-			target.addVolatile('attract');
-			this.add('-start', target, 'Attract');
+		onAfterHit(source, target, move) {
+			this.actions.useMove("Attract", source, target);
 		},
 		target: "allAdjacentFoes",
 		type: "Psychic",
