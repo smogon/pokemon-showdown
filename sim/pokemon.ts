@@ -821,6 +821,7 @@ export class Pokemon {
 	}
 
 	ignoringItem() {
+		this.battle.add("-message", this.effectiveWeather().toString());
 		return !!(
 			this.itemState.knockedOff || // Gen 3-4
 			(this.battle.gen >= 5 && !this.isActive) ||
