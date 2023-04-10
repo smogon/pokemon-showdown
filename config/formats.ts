@@ -66,7 +66,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9poa',
 		gameType: 'doubles',
-		ruleset: ['Standard Doubles'],
+		ruleset: ['Standard NatDex'],
 	},
 
 	// Insurgence Singles
