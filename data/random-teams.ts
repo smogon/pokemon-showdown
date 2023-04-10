@@ -1571,7 +1571,6 @@ export class RandomTeams {
 					set = this.randomSet(species, teamDetails, true, isDoubles);
 					pokemon.unshift(set);
 					generatedLead = true;
-					if (typeof teamDetails.illusion === 'number') teamDetails.illusion++;
 				}
 			} else {
 				set = this.randomSet(species, teamDetails, false, isDoubles);
@@ -1580,8 +1579,9 @@ export class RandomTeams {
 
 			if (pokemon.length === this.maxTeamSize) {
 				// Set Zoroark's level to be the same as the last Pokemon
-				const illusion = teamDetails.illusion;
-				if (illusion) pokemon[illusion - 1].level = pokemon[this.maxTeamSize - 1].level;
+				for (const poke of pokemon) {
+					if (poke.ability === 'Illusion') poke.level = pokemon[this.maxTeamSize - 1].level;
+				}
 
 				// Don't bother tracking details for the last Pokemon
 				break;
@@ -1642,9 +1642,6 @@ export class RandomTeams {
 				teamDetails.screens = 1;
 			}
 			if (set.role === 'Tera Blast user') teamDetails.teraBlast = 1;
-
-			// For setting Zoroark's level
-			if (set.ability === 'Illusion') teamDetails.illusion = pokemon.length;
 		}
 		if (pokemon.length < this.maxTeamSize && pokemon.length < 12) { // large teams sometimes cannot be built
 			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
