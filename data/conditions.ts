@@ -1003,6 +1003,47 @@ export const Conditions: {[k: string]: ConditionData} = {
 			this.checkWin();
 		},
 	},
+
+	// uranium
+	fallout: {
+		name: 'Fallout',
+		effectType: 'Weather',
+		duration: 5,
+		durationCallback(source, effect) {
+			return 5;
+		},
+		onFieldStart(field, source, effect) {
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-weather', 'Fallout', '[from] ability: ' + effect, '[of] ' + source);
+			} else {
+				this.add('-weather', 'Fallout');
+			}
+		},
+		onWeatherModifyDamage(damage, attacker, defender, move) {
+			// if (defender.hasItem('utilityumbrella')) return;
+
+			if (this.dex.getEffectiveness(move, defender) > 0 && defender.hasType('Nuclear')) {
+				this.debug('fallout SE on nuclear nerf');
+				return this.chainModify(0.75);
+			}
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-weather', 'Fallout', (this.effectState.duration % 2) ? '[noupkeepdamage]' : '[upkeep]');
+			if (this.field.isWeather('fallout')) this.eachEvent('Weather');
+		},
+		onWeather(target) {
+			if (!(this.effectState.duration % 2)) {
+				const typeMod = target.runEffectiveness(this.dex.getActiveMove('Gamma Ray'));
+				this.damage(target.baseMaxhp * Math.pow(2, typeMod) / 8);
+			}
+		},
+		onFieldEnd() {
+			this.add('-weather', 'none');
+		},
+	},
+
 	//POA ADDITIONS
 	acidrain: {
 		name: 'AcidRain',
