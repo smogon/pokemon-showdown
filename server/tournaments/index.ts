@@ -404,7 +404,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		}
 
         if (!user.autoconfirmed && !user.trusted) {
-            user.popup("Tournaments' signups are only available for autoconfirmed users." + 
+            user.popup("Tournaments' signups are only available for autoconfirmed users. " + 
                 "To see details, type ``/faq ac``.");
             return;
         }
@@ -496,8 +496,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			return;
 		}
         if (!replacementUser.autoconfirmed && !replacementUser.trusted) {
-            output.errorReply("Tournaments' signups are only available for autoconfirmed users." + 
-                "To see details, type ``/faq ac``.");
+            output.errorReply(`${replacementUser.name} is not autoconfirmed so can't be a replacement.`);
             return;
         }
 		if (!Config.noipchecks) {
