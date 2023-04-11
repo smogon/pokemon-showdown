@@ -403,6 +403,12 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			return;
 		}
 
+        if (!user.autoconfirmed && !user.trusted) {
+            user.popup("Tournaments' signups are only available for autoconfirmed users." + 
+                "To see details, type ``/faq ac``.");
+            return;
+        }
+
 		const gameCount = user.games.size;
 		if (gameCount > 4) {
 			output.errorReply("Due to high load, you are limited to 4 games at the same time.");
@@ -485,10 +491,15 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			output.errorReply(`${replacementUser.name} is already in the tournament.`);
 			return;
 		}
-		if (Tournament.checkBanned(this.room, replacementUser) || Punishments.isBattleBanned(replacementUser)) {
+		if (Tournament.checkBanned(this.room, replacementUser) || Punishments.isBattleBanned(replacementUser) || replacementUser.namelocked) {
 			output.errorReply(`${replacementUser.name} is banned from joining tournaments.`);
 			return;
 		}
+        if (!replacementUser.autoconfirmed && !replacementUser.trusted) {
+            output.errorReply("Tournaments' signups are only available for autoconfirmed users." + 
+                "To see details, type ``/faq ac``.");
+            return;
+        }
 		if (!Config.noipchecks) {
 			for (const otherPlayer of this.players) {
 				if (!otherPlayer) continue;
