@@ -403,11 +403,11 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			return;
 		}
 
-        if (!user.autoconfirmed && !user.trusted) {
-            user.popup("Tournaments' signups are only available for autoconfirmed users. " + 
+		if (!user.autoconfirmed && !user.trusted) {
+			user.popup("Tournaments' signups are only available for autoconfirmed users. " +
                 "To see details, type ``/faq ac``.");
-            return;
-        }
+			return;
+		}
 
 		const gameCount = user.games.size;
 		if (gameCount > 4) {
@@ -491,14 +491,15 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			output.errorReply(`${replacementUser.name} is already in the tournament.`);
 			return;
 		}
-		if (Tournament.checkBanned(this.room, replacementUser) || Punishments.isBattleBanned(replacementUser) || replacementUser.namelocked) {
+		if (Tournament.checkBanned(this.room, replacementUser) || Punishments.isBattleBanned(replacementUser) ||
+		    replacementUser.namelocked) {
 			output.errorReply(`${replacementUser.name} is banned from joining tournaments.`);
 			return;
 		}
-        if (!replacementUser.autoconfirmed && !replacementUser.trusted) {
-            output.errorReply(`${replacementUser.name} is not autoconfirmed so can't be a replacement.`);
-            return;
-        }
+		if (!replacementUser.autoconfirmed && !replacementUser.trusted) {
+			output.errorReply(`${replacementUser.name} is not autoconfirmed so can't be a replacement.`);
+			return;
+		}
 		if (!Config.noipchecks) {
 			for (const otherPlayer of this.players) {
 				if (!otherPlayer) continue;
