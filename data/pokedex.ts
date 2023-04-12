@@ -22348,6 +22348,20 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Corsoreef-Nuclear"],
 		eggGroups: ["Undiscovered"],
 	},
+	whimsicottmega: {
+		num: 547,
+		name: "Whimsicott-Mega",
+		baseSpecies: "Whimsicott",
+		forme: "Mega",
+		types: ["Grass", "Fairy"],
+		baseStats: {hp: 60, atk: 65, def: 115, spa: 120, spd: 105, spe: 115},
+		abilities: {0: "Regenerator"},
+		heightm: 0.7,
+		weightkg: 10.5,
+		color: "Green",
+		eggGroups: ["Fairy", "Grass"],
+		requiredItem: "Whimsicottite",
+	},
 	
 	////////////////////////
 	// Insurgence pokemon //

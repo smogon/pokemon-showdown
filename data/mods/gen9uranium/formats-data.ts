@@ -1091,4 +1091,39 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	magikarpnuclear: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	gyaradosnuclear: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
+	ekansnuclear: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	arboknuclear: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	gligarnuclear: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	gliscornuclear: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	corsolanuclear: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
 };

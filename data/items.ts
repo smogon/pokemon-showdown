@@ -8348,6 +8348,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	flygonarmor: {
 		name: "Flygon Armor",
 		spritenum: 752 + 37,
+		isNonstandard: "Unobtainable",
 		fling: {
 			basePower: 60,
 		},
@@ -8365,6 +8366,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	leavannyarmor: {
 		name: "Leavanny Armor",
 		spritenum: 752 + 44,
+		isNonstandard: "Unobtainable",
 		fling: {
 			basePower: 60,
 		},
@@ -8382,6 +8384,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	mewtwoarmor: {
 		name: "Mewtwo Armor",
 		spritenum: 752 + 48,
+		isNonstandard: "Unobtainable",
 		fling: {
 			basePower: 60,
 		},
@@ -8399,6 +8402,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tyranitararmor: {
 		name: "Tyranitar Armor",
 		spritenum: 752 + 66,
+		isNonstandard: "Unobtainable",
 		fling: {
 			basePower: 60,
 		},
@@ -8416,6 +8420,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	volcaronadeltaarmor: {
 		name: "Volcarona-Delta Armor",
 		spritenum: 752 + 67,
+		isNonstandard: "Unobtainable",
 		fling: {
 			basePower: 60,
 		},
@@ -8433,6 +8438,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	zekromarmor: {
 		name: "Zekrom Armor",
 		spritenum: 752 + 69,
+		isNonstandard: "Unobtainable",
 		fling: {
 			basePower: 60,
 		},
@@ -8450,6 +8456,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	trickrock: {
 		name: "Trick Rock",
 		spritenum: 752 + 64,
+		isNonstandard: "Unobtainable",
 		fling: {
 			basePower: 60,
 		},
@@ -8459,12 +8466,285 @@ export const Items: {[itemid: string]: ItemData} = {
 	darkrock: {
 		name: "Dark Rock",
 		spritenum: 752 + 8,
+		isNonstandard: "Unobtainable",
 		fling: {
 			basePower: 60,
 		},
 		num: -67,
 		gen: 6,
 	},
+
+	// Uranium
+	// uranium items start here
+	hafliberry: {
+		name: "Hafli Berry",
+		spritenum: 768,
+		isBerry: true,
+		isNonstandard: "Unobtainable",
+		naturalGift: {
+			basePower: 80,
+			type: "Nuclear",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Nuclear' && target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return this.chainModify(0.5);
+				}
+			}
+		},
+		onEat() { },
+		num: -1001,
+		gen: 6,
+	},
+	coconutmilk: {
+		name: "Coconut Milk",
+		spritenum: 769,
+		isNonstandard: "Unobtainable",
+		fling: {
+			basePower: 30,
+		},
+		num: -1002,
+		gen: 6,
+	},
+	carrotwine: {
+		name: "Carrot Wine",
+		spritenum: 770,
+		isNonstandard: "Unobtainable",
+		fling: {
+			basePower: 30,
+		},
+		num: -1003,
+		gen: 6,
+	},
+	junglecrown: {
+		name: "Jungle Crown",
+		spritenum: 771,
+		isNonstandard: "Unobtainable",
+		fling: {
+			basePower: 30,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move && move.type === 'Fighting') {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		num: -1004,
+		gen: 6,
+	},
+	metalynxite: {
+		name: "Metalynxite",
+		spritenum: 772,
+		isNonstandard: "Unobtainable",
+		megaStone: "Metalynx-Mega",
+		megaEvolves: "Metalynx",
+		itemUser: ["Metalynx"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1005,
+		gen: 6,
+	},
+	archillesite: {
+		name: "Archillesite",
+		spritenum: 773,
+		isNonstandard: "Unobtainable",
+		megaStone: "Archilles-Mega",
+		megaEvolves: "Archilles",
+		itemUser: ["Archilles"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1006,
+		gen: 6,
+	},
+	electruxolite: {
+		name: "Electruxolite",
+		spritenum: 774,
+		isNonstandard: "Unobtainable",
+		megaStone: "Electruxo-Mega",
+		megaEvolves: "Electruxo",
+		itemUser: ["Electruxo"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1007,
+		gen: 6,
+	},
+	baariettite: {
+		name: "Baariettite",
+		spritenum: 775,
+		isNonstandard: "Unobtainable",
+		megaStone: "Baariette-Mega",
+		megaEvolves: "Baariette",
+		itemUser: ["Baariette"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1008,
+		gen: 6,
+	},
+	nuclearbaariettite: {
+		name: "Nuclear Baariettite",
+		spritenum: 775,
+		isNonstandard: "Unobtainable",
+		megaStone: "Baariette-Nuclear-Mega",
+		megaEvolves: "Baariette-Nuclear",
+		itemUser: ["Baariette-Nuclear"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1008,
+		gen: 6,
+	},
+	drilgannite: {
+		name: "Drilgannite",
+		spritenum: 776,
+		isNonstandard: "Unobtainable",
+		megaStone: "Drilgann-Mega",
+		megaEvolves: "Drilgann",
+		itemUser: ["Drilgann"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1009,
+		gen: 6,
+	},
+	inflagetite: {
+		name: "Inflagetite",
+		spritenum: 777,
+		isNonstandard: "Unobtainable",
+		megaStone: "Inflagetah-Mega",
+		megaEvolves: "Inflagetah",
+		itemUser: ["Inflagetah"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1010,
+		gen: 6,
+	},
+	dramsamaite: {
+		name: "Dramsamaite",
+		spritenum: 778,
+		isNonstandard: "Unobtainable",
+		megaStone: "Dramsama-Mega",
+		megaEvolves: "Dramsama",
+		itemUser: ["Dramsama"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1011,
+		gen: 6,
+	},
+	syrentideite: {
+		name: "Syrentideite",
+		spritenum: 779,
+		isNonstandard: "Unobtainable",
+		megaStone: "Syrentide-Mega",
+		megaEvolves: "Syrentide",
+		itemUser: ["Syrentide"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1012,
+		gen: 6,
+	},
+	unidentifiedfallenobject: {
+		name: "Unidentified Fallen Object",
+		spritenum: 780,
+		isNonstandard: "Unobtainable",
+		megaStone: "S51-A-Mega",
+		megaEvolves: "S51-A",
+		itemUser: ["S51-A"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1013,
+		gen: 6,
+	},
+	kiricornite: {
+		name: "Kiricornite",
+		spritenum: 781,
+		isNonstandard: "Unobtainable",
+		megaStone: "Kiricorn-Mega",
+		megaEvolves: "Kiricorn",
+		itemUser: ["Kiricorn"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1014,
+		gen: 6,
+	},
+	whimsicottite: {
+		name: "Whimsicottite",
+		spritenum: 782,
+		isNonstandard: "Unobtainable",
+		megaStone: "Whimsicott-Mega",
+		megaEvolves: "Whimsicott",
+		itemUser: ["Whimsicott"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1015,
+		gen: 6,
+	},
+	arbokite: {
+		name: "Arbokite",
+		spritenum: 783,
+		isNonstandard: "Unobtainable",
+		megaStone: "Arbok-Mega",
+		megaEvolves: "Arbok",
+		itemUser: ["Arbok"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1016,
+		gen: 6,
+	},
+	nucleararbokite: {
+		name: "Nuclear Arbokite",
+		spritenum: 783,
+		isNonstandard: "Unobtainable",
+		megaStone: "Arbok-Nuclear-Mega",
+		megaEvolves: "Arbok-Nuclear",
+		itemUser: ["Arbok-Nuclear"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1016,
+		gen: 6,
+	},
+	aromaticherb: {
+		name: "Aromatic Herb",
+		spritenum: 784,
+		isNonstandard: "Unobtainable",
+		fling: {
+			basePower: 80,
+		},
+		num: -1017,
+		gen: 6,
+	},
+
+	// Custom
 	florgesite: {
 		name: "Florgesite",
 		spritenum: 752 + 72,
@@ -8487,5 +8767,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 284,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 	},
 };
