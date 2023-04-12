@@ -123,6 +123,18 @@ export const Formats: FormatList = [
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
+	{
+		name: "[Gen 9] Not-So-Custom Game",
+
+		mod: 'gen9',
+		searchShow: false,
+		battle: {trunc: Math.trunc},
+		// no restrictions, for serious (other than team preview)
+		ruleset: [
+			'Team Preview', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100',
+			'Sleep Clause Mod', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause',
+		],
+	},
 
 	// S/V Doubles
 	///////////////////////////////////////////////////////////////////
