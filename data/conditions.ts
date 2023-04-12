@@ -1005,6 +1005,43 @@ export const Conditions: {[k: string]: ConditionData} = {
 	},
 
 	// uranium
+	thunderstorm: {
+		name: 'Thunderstorm',
+		effectType: 'Weather',
+		duration: 5,
+		durationCallback(source, effect) {
+			return 5;
+		},
+		onFieldStart(field, source, effect) {
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-weather', 'Thunderstorm', '[from] ability: ' + effect, '[of] ' + source);
+			} else {
+				this.add('-weather', 'Thunderstorm');
+			}
+		},
+		onWeatherModifyDamage(damage, attacker, defender, move) {
+			if (defender.hasItem('utilityumbrella')) return;
+			if (move.type === 'Electric') {
+				this.debug('thunderstorm electric boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-weather', 'Thunderstorm', (this.effectState.duration % 2) ? '[noupkeepdamage]' : '[upkeep]');
+			if (this.field.isWeather('thunderstorm')) this.eachEvent('Weather');
+		},
+		onWeather(target) {
+			if (!(this.effectState.duration % 2)) {
+				const typeMod = target.runEffectiveness(this.dex.getActiveMove('Thundershock'));
+				this.damage(target.baseMaxhp * Math.pow(2, typeMod) / 8);
+			}
+		},
+		onFieldEnd() {
+			this.add('-weather', 'none');
+		},
+	},
 	fallout: {
 		name: 'Fallout',
 		effectType: 'Weather',
