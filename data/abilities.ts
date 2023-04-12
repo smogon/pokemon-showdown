@@ -6393,6 +6393,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	acceleration: {
 		onBasePowerPriority: 30,
 		onBasePower(basePower, attacker, defender, move) {
+			this.add("-message", move.priority.toString());
 			if (move.priority > 0) {
 				return this.chainModify(1.5);
 			}
