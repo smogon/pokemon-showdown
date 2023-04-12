@@ -2372,15 +2372,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Elementalist",
 		shortDesc: "Has 1.5x attacking stats while using a Fire, Water, or Electric-type attack.",
 	},
-	energizate: {
-		name: "Energizate",
-		desc: "This Pokemon's Normal-type moves become Electric-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
-		shortDesc: "This Pokemon's Normal-type moves become Electric type and have 1.2x power.",
-		gen6: {
-			desc: "This Pokemon's Normal-type moves become Electric-type moves and have their power multiplied by 1.3. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
-			shortDesc: "This Pokemon's Normal-type moves become Electric type and have 1.3x power.",
-		},
-	},
 	acceleration: {
 		name: "Acceleration",
 		desc: "The power of this Pokemon's priority moves is multiplied by 1.5.",
