@@ -242,11 +242,11 @@ describe('Modlog conversion script', () => {
 			);
 			assert.equal(
 				converter.modernizeLog(`[2015-09-19T13:30:44.740Z] (development) ([thetournament] was set to disallowing non-autoconfirmed users' joining by SparksBlade)`),
-				`[2015-09-19T13:30:44.740Z] (development) TOUR ONLYAUTOCONFIRMED: by sparksblade: on`
+				`[2015-09-19T13:30:44.740Z] (development) TOUR AUTOCONFIRMEDONLY: by sparksblade: on`
 			);
 			assert.equal(
 				converter.modernizeLog(`[2015-09-19T13:30:44.740Z] (development) ([thetournament] was set to allowing non-autoconfirmed users' joining by SparksBlade)`),
-				`[2015-09-19T13:30:44.740Z] (development) TOUR ONLYAUTOCONFIRMED: by sparksblade: off`
+				`[2015-09-19T13:30:44.740Z] (development) TOUR AUTOCONFIRMEDONLY: by sparksblade: off`
 			);
 		});
 

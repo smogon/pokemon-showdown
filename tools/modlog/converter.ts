@@ -390,11 +390,11 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 		},
 		"[thetournament] was set to disallowing non-autoconfirmed users' joining": (log) => {
 			const [, user] = log.split(' by ');
-			return `TOUR ONLYAUTOCONFIRMED: by ${toID(user)}: on`;
+			return `TOUR AUTOCONFIRMEDONLY: by ${toID(user)}: on`;
 		},
 		"[thetournament] was set to allowing non-autoconfirmed users' joining": (log) => {
 			const [, user] = log.split(' by ');
-			return `TOUR ONLYAUTOCONFIRMED: by ${toID(user)}: off`;
+			return `TOUR AUTOCONFIRMEDONLY: by ${toID(user)}: off`;
 		},
 	};
 

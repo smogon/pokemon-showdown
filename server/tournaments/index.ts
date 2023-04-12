@@ -1934,14 +1934,14 @@ const commands: Chat.ChatCommands = {
 				}
 				tournament.setAutoconfirmedOnly(true);
 				this.privateModAction(`This tournament was set to disallowing non-autoconfirmed users' joining by ${user.name}`);
-				this.modlog('TOUR ONLYAUTOCONFIRMED', null, 'on');
+				this.modlog('TOUR AUTOCONFIRMEDONLY', null, 'on');
 			} else if (this.meansNo(option) || option === 'allow' || option === 'allowed') {
 				if (!tournament.autoconfirmedOnly) {
 					return this.errorReply("Joining non-autoconfirmed users for this tournament is already allowed.");
 				}
 				tournament.setAutoconfirmedOnly(false);
 				this.privateModAction(`This tournament was set to allowing non-autoconfirmed users' joining by ${user.name}`);
-				this.modlog('TOUR ONLYAUTOCONFIRMED', null, 'off');
+				this.modlog('TOUR AUTOCONFIRMEDONLY', null, 'off');
 			} else {
 				return this.sendReply(`Usage: /tour ${cmd}<on|off>`);
 			}
@@ -2380,7 +2380,7 @@ const commands: Chat.ChatCommands = {
 			`/tour settings forcepublic <on|off> - Specifies whether users can hide their battles for every tournament.`,
 			`/tour settings forcetimer <on|off> - Specifies whether users can toggle the timer for every tournament.`,
 			`/tour settings modjoin <on|off> - Specifies whether users can modjoin their battles for every tournament.`,
-			`/tour settings aconlyS: <on|off> - Only allow autoconfirmed users to join a tournament.`,
+			`/tour settings autoconfirmedonly: <on|off> - Set requirement for signups for this tournament. If this is on, only autoconfirmed users can join a tournament.`,
 			`/tour settings playercap <number> - Sets the playercap for every tournament.`,
 			`/tour settings scouting <on|off> - Specifies whether users can spectate other participants for every tournament.`,
 			`/tour settings sampleteams <on|off> - Specifies whether sample teams are shown for every tournament.`,
@@ -2408,7 +2408,7 @@ const commands: Chat.ChatCommands = {
 			`- dq/disqualify &lt;user>: Disqualifies a user.<br />` +
 			`- autodq/setautodq &lt;minutes|off>: Sets the automatic disqualification timeout.<br />` +
 			`- runautodq: Manually run the automatic disqualifier.<br />` +
-			`- aconly: Only allow autoconfirmed users to join a tournament. <br />` +
+			`- autoconfirmedonly/onlyautoconfirmed/aconly/onlyac &lt;on|off>: Set requirement for signups for this tournament. If this is on, only autoconfirmed users can join a tournament.<br />` +
 			`- scouting &lt;allow|disallow>: Specifies whether joining tournament matches while in a tournament is allowed.<br />` +
 			`- modjoin &lt;allow|disallow>: Specifies whether players can modjoin their battles.<br />` +
 			`- forcetimer &lt;on|off>: Turn on the timer for tournament battles.<br />` +
