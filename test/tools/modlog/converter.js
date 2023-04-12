@@ -240,6 +240,14 @@ describe('Modlog conversion script', () => {
 				converter.modernizeLog(`[2015-09-19T13:30:44.740Z] (development) ([thetournament] was set to allow scouting by SparksBlade)`),
 				`[2015-09-19T13:30:44.740Z] (development) TOUR SCOUT: by sparksblade: allow`
 			);
+			assert.equal(
+				converter.modernizeLog(`[2015-09-19T13:30:44.740Z] (development) ([thetournament] was set to disallowing non-autoconfirmed users' joining by SparksBlade)`),
+				`[2015-09-19T13:30:44.740Z] (development) TOUR ONLYAUTOCONFIRMED: by sparksblade: on`
+			);
+			assert.equal(
+				converter.modernizeLog(`[2015-09-19T13:30:44.740Z] (development) ([thetournament] was set to allowing non-autoconfirmed users' joining by SparksBlade)`),
+				`[2015-09-19T13:30:44.740Z] (development) TOUR ONLYAUTOCONFIRMED: by sparksblade: off`
+			);
 		});
 
 		it('should correctly parse old-format roombans', () => {
