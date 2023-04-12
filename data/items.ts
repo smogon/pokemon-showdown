@@ -8733,6 +8733,20 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: -1016,
 		gen: 6,
 	},
+	nucleargyaradosite: {
+		name: "Nuclear Gyaradosite",
+		spritenum: 783,
+		isNonstandard: "Unobtainable",
+		megaStone: "Gyarados-Nuclear-Mega",
+		megaEvolves: "Gyarados-Nuclear",
+		itemUser: ["Gyarados-Nuclear"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -1016,
+		gen: 6,
+	},
 	aromaticherb: {
 		name: "Aromatic Herb",
 		spritenum: 784,
