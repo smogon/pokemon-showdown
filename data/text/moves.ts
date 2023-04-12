@@ -7561,6 +7561,171 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "No additional effect.",
 	},
 
+	// Uranium
+	coralbreak: {
+		name: "Coral Break",
+		desc: "Deals damage to the target based on its Defense instead of Special Defense.",
+		shortDesc: "Damages target based on Defense, not Sp. Def.",
+	},
+	atomicpunch: {
+		name: "Atomic Punch",
+		desc: "Has a 15% chance to paralyze the target.",
+		shortDesc: "15% chance to paralyze the target.",
+	},
+	metalwhip: {
+		name: "Metal Whip",
+		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
+		shortDesc: "Traps and damages the target for 4-5 turns.",
+		gen7: {
+			desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
+		},
+
+		start: "  [POKEMON] was wrapped by [SOURCE]!",
+	},
+	nuclearwaste: {
+		name: "Nuclear Waste",
+		shortDesc: "Badly poisons the target.",
+	},
+	gammaray: {
+		name: "Gamma Ray",
+		shortDesc: "No additional effect.",
+	},
+	radioacid: {
+		name: "Radioacid",
+		desc: "Has a 30% chance to burn the target.",
+		shortDesc: "30% chance to burn the target.",
+	},
+	skyfall: {
+		name: "Sky Fall",
+		desc: "Has a 30% chance to paralyze the target.",
+		shortDesc: "30% chance to paralyze the target.",
+	},
+	flameimpact: {
+		name: "Flame Impact",
+		desc: "Thaws user.",
+		shortDesc: "Nearly always goes first. Thaws user.",
+	},
+	subduction: {
+		name: "Subduction",
+		desc: "Has a 100% chance to lower the target's Speed by 2 stages. Confuses user.",
+		shortDesc: "100% chance lower adjacent Pkmn Speed by 2. Confuses user.",
+	},
+	instantcrush: {
+		name: "Instant Crush",
+		desc: "No additional effect.",
+		shortDesc: "Usually goes first.",
+	},
+	getlucky: {
+		name: "Get Lucky",
+		desc: "Raises the user's chance for a critical hit by 2 stages if the user does not already have this effect. Baton Pass can be used to transfer this effect to an ally.",
+		shortDesc: "Raises the user's critical hit ratio by 2.",
+	},
+	laserpulse: {
+		name: "Laser Pulse",
+		desc: "The type of this move varies; randonly chosen between Fire, Electric, and Ice.",
+		shortDesc: "Type varies.",
+	},
+	halflife: {
+		name: "Half-life",
+		desc: "Deals damage to the target equal to half of its current HP, rounded down, but not less than 1 HP.",
+		shortDesc: "Does damage equal to 1/2 target's current HP.",
+	},
+	fissionburst: {
+		name: "Fission Burst",
+		desc: "The user faints after using this move, even if this move fails for having no target. This move is prevented from executing if any active Pokemon has the Damp Ability.",
+		shortDesc: "Hits adjacent Pokemon. The user faints.",
+	},
+	causticbreath: {
+		name: "Caustic Breath",
+		desc: "Has a 100% chance to lower the target's Defense and Special Defense by 1 stage.",
+		shortDesc: "100% chance to lower the target's Defense and Sp. Def by 1.",
+	},
+	nuclearslash: {
+		name: "Nuclear Slash",
+		desc: "Has a higher chance for a critical hit.",
+		shortDesc: "High critical hit ratio.",
+	},
+	thunderstorm: {
+		name: "Thunderstorm",
+		desc: "For 5 turns, the weather becomes Thunderstorm. At the end of every other turn except the last, all active Pokemon lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Electric type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively, unless they are a Electric or Ground type, or have the Magic Guard Ability. The damage of Electric-type attacks is multiplied by 1.5 during the effect. Fails if the current weather is Thunderstorm.",
+		shortDesc: "For 5 turns, thunderstorm powers Electric moves.",
+	},
+	suddenstrike: {
+		name: "Sudden Strike",
+		desc: "No additional effect.",
+		shortDesc: "Usually goes first.",
+	},
+	expunge: {
+		name: "Expunge",
+		desc: "This move's type effectiveness against Nuclear is changed to be super effective no matter what this move's type is. If the weather is Toxic Fallout, this move does not check accuracy.",
+		shortDesc: "Super effective on Nuclear. Can't miss in fallout.",
+	},
+	fallout: {
+		name: "Fallout",
+		desc: "For 5 turns, the weather becomes Toxic Fallout, which reduces the weaknesses of the Nuclear type for Nuclear-type Pokemon from x2 to x1.5. At the end of every other turn except the last, all active Pokemon lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Nuclear type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively, unless they are a Steel or Nuclear type, or have the Magic Guard Ability. Fails if the current weather is Fallout.",
+		shortDesc: "For 5 turns, toxic fallout reduces Nuclear weaknesses.",
+	},
+	protonbeam: {
+		name: "Proton Beam",
+		desc: "Lowers the user's Special Attack by 2 stages.",
+		shortDesc: "Lowers the user's Sp. Atk by 2.",
+	},
+	infernalblade: {
+		name: "Infernal Blade",
+		desc: "Has a 10% chance to burn the target. This move's type effectiveness against Fairy is changed to be x4 super effective no matter what this move's type is.",
+		shortDesc: "10% chance to burn. Super effective x4 on Fairy.",
+	},
+	quantumleap: {
+		name: "Quantum Leap",
+		desc: "If this move is successful, it breaks through the target's Baneful Bunker, Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn.",
+		shortDesc: "Disappears turn 1. Hits turn 2. Breaks protection.",
+
+		prepare: "#shadowforce",
+		activate: "#shadowforce",
+	},
+	metalcruncher: {
+		name: "Metal Cruncher",
+		desc: "Has a 50% chance to lower the target's Defense by 1 stage.",
+		shortDesc: "50% chance to lower the target's Defense by 1.",
+	},
+	drainlife: {
+		name: "Drain Life",
+		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		shortDesc: "User recovers 50% of the damage dealt.",
+	},
+	stickyterrain: {
+		name: "Sticky Terrain",
+		desc: "For 5 turns, the terrain becomes Sticky Terrain. During the effect, grounded Pokemon cannot hit with moves with priority greater than 0, unless the target is an ally. Camouflage transforms the user into a Poison type, Nature Power becomes Sludge Bomb, and Secret Power has a 30% chance to poison. Fails if the current terrain is Sticky Terrain.",
+		shortDesc: "5 turns. Grounded: can't use priority.",
+	},
+	nuclearwind: {
+		name: "Nuclear Wind",
+		desc: "Has a 5% chance to cause a Toxic Fallout for 5 turns.",
+		shortDesc: "5% chance to cause a Toxic Fallout for 5 turns.",
+	},
+	gemstoneglimmer: {
+		name: "Gemstone Glimmer",
+		desc: "Has a 25% chance to lower the target's accuracy by 1 stage.",
+		shortDesc: "25% chance to lower the target's accuracy by 1.",
+	},
+	oceanswrath: {
+		name: "Ocean's Wrath",
+		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
+		shortDesc: "Traps and damages the target for 4-5 turns.",
+		gen7: {
+			desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
+		},
+
+		start: "  [POKEMON] became trapped in the vortex!",
+	},
+	goldenfist: {
+		name: "Golden Fist",
+		desc: "No additional effect.",
+		shortDesc: "Scatters coins.",
+
+		activate: "#payday",
+	},
+
 	// Our Additions!
 	coinflip: {
 		name: "Coinflip",

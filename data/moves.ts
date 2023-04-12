@@ -22996,60 +22996,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Cool",
 	},
-	stickyterrain: {
-		num: -56,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Sticky Terrain",
-		pp: 10,
-		priority: 0,
-		flags: {nonsky: 1},
-		terrain: 'stickyterrain',
-		condition: {
-			duration: 5,
-			durationCallback(source, effect) {
-				if (source?.hasItem('terrainextender')) {
-					return 8;
-				}
-				return 5;
-			},
-			onTryHitPriority: 4,
-			onTryHit(target, source, effect) {
-				if (effect && (effect.priority <= 0.1 || effect.target === 'self')) {
-					return;
-				}
-				if (target.isSemiInvulnerable() || target.isAlly(source)) return;
-				if (!source.isGrounded()) {
-					const baseMove = this.dex.moves.get(effect.id);
-					if (baseMove.priority > 0) {
-						this.hint("Sticky Terrain doesn't affect attackers immune to Ground.");
-					}
-					return;
-				}
-				if (!target.isGrounded()) {
-					const baseMove = this.dex.moves.get(effect.id);
-					if (baseMove.priority > 0) {
-						this.hint("Unlike Psychic Terrain, Sticky Terrain protects non-grounded targets.");
-					}
-				}
-				this.add('-activate', target, 'move: Sticky Terrain');
-				return null;
-			},
-			onFieldStart(field, source, effect) {
-				this.add('-fieldstart', 'move: Sticky Terrain');
-			},
-			onFieldResidualOrder: 27,
-			onFieldResidualSubOrder: 7,
-			onFieldEnd() {
-				this.add('-fieldend', 'move: Sticky Terrain');
-			},
-		},
-		secondary: null,
-		target: "all",
-		type: "Poison",
-		contestType: "Cool",
-	},
 	nuclearwind: {
 		num: -57,
 		accuracy: 95,

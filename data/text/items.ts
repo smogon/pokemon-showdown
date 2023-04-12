@@ -2617,10 +2617,95 @@ export const ItemsText: {[k: string]: ItemText} = {
 		desc: "If held by a Zoroark, this item allows it to Mega Evolve in battle.",
 	},
 
+	// uranium items start here
+	hafliberry: {
+		name: "Hafli Berry",
+		desc: "Halves damage taken from a supereffective Nuclear-type attack. Single use.",
+	},
+	coconutmilk: {
+		name: "Coconut Milk",
+		desc: "Evolves Cararalm into Cocancer when used.",
+		shortDesc: "Evolves certain species of Pokemon when used.",
+	},
+	carrotwine: {
+		name: "Carrot Wine",
+		desc: "Evolves Jackdeary into Winotinger when used.",
+		shortDesc: "Evolves certain species of Pokemon when used.",
+	},
+	junglecrown: {
+		name: "Jungle Crown",
+		desc: "Holder's Fighting-type attacks have 1.2x power. Evolves Primeape into Empirilla when held and leveled up.",
+		shortDesc: "Holder's Fighting-type attacks have 1.2x power.",
+	},
+	metalynxite: {
+		name: "Metalynxite",
+		desc: "If held by a Metalynx, this item allows it to Mega Evolve in battle.",
+	},
+	archillesite: {
+		name: "Archillesite",
+		desc: "If held by an Archilles, this item allows it to Mega Evolve in battle.",
+	},
+	electruxolite: {
+		name: "Electruxolite",
+		desc: "If held by an Electruxo, this item allows it to Mega Evolve in battle.",
+	},
+	baariettite: {
+		name: "Baariettite",
+		desc: "If held by a Baariette, this item allows it to Mega Evolve in battle.",
+	},
+	nuclearbaariettite: {
+		name: "Nuclear Baariettite",
+		desc: "If held by a Nuclear Baariette, this item allows it to Mega Evolve in battle.",
+	},
+	drilgannite: {
+		name: "Drilgannite",
+		desc: "If held by a Drilgann, this item allows it to Mega Evolve in battle.",
+	},
+	inflagetite: {
+		name: "Inflagetite",
+		desc: "If held by an Inflagetah, this item allows it to Mega Evolve in battle.",
+	},
+	dramsamaite: {
+		name: "Dramsamaite",
+		desc: "If held by a Dramsama, this item allows it to Mega Evolve in battle.",
+	},
+	syrentideite: {
+		name: "Syrentideite",
+		desc: "If held by a Syrentide, this item allows it to Mega Evolve in battle.",
+	},
+	unidentifiedfallenobject: {
+		name: "Unidentified Fallen Object",
+		desc: "If held by an S51-A, this item allows it to Mega Evolve in battle.",
+	},
+	kiricornite: {
+		name: "Kiricorn",
+		desc: "If held by a Kiricorn, this item allows it to Mega Evolve in battle.",
+	},
+	whimsicottite: {
+		name: "Whimsicottite",
+		desc: "If held by a Whimsicott, this item allows it to Mega Evolve in battle.",
+	},
+	arbokite: {
+		name: "Arbokite",
+		desc: "If held by a Arbok, this item allows it to Mega Evolve in battle.",
+	},
+	nucleararbokite: {
+		name: "Nuclear Arbokite",
+		desc: "If held by a Nuclear Arbok, this item allows it to Mega Evolve in battle.",
+	},
+	aromaticherb: {
+		name: "Aromatic Herb",
+		desc: "Evolves Spritzee into Miasmedic when traded.",
+	},
+
 	// Our Additions
 	deltasceptilite: {
 		name: "Delta Sceptilite",
 		desc: "If held by a Delta Sceptile, this item allows it to Mega Evolve in battle.",
+	},
+	florgesite: {
+		name: "Florgesite",
+		desc: "If held by a Florges, this item allows it to Mega Evolve in battle.",
 	},
 	acidicrock: {
 		name: "Acidic Rock",

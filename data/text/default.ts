@@ -387,5 +387,19 @@ export const DefaultText: {[k: string]: DefaultText} = {
 	},
 	gambled: {
 		damage: "  [POKEMON] gambled its life away."
-	}
+	},
+	thunderstorm: {
+		weatherName: "Thunderstorm",
+		start: "  A thunderstorm started!",
+		end: "  The thunderstorm subsided.",
+		upkeep: "  (The thunderstorm is raging.)",
+		damage: "  [POKEMON] is hit by lightning!",
+	},
+	fallout: {
+		weatherName: "Toxic Fallout",
+		start: "  A Toxic Fallout has set in!",
+		end: "  The air is clean again.",
+		upkeep: "  (The geiger counter is FEROCIOUSLY ticking.)", // "  (The toxic fallout continues.)",
+		damage: "  [POKEMON] is affected by the radiation!",
+	},
 };
