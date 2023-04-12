@@ -1029,7 +1029,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
-			this.add('-weather', 'Thunderstorm', (this.effectState.duration % 2) ? '[noupkeepdamage]' : '[upkeep]');
+			this.add('-weather', 'Thunderstorm', '[upkeep]');
 			if (this.field.isWeather('thunderstorm')) this.eachEvent('Weather');
 		},
 		onWeather(target) {
@@ -1067,7 +1067,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
-			this.add('-weather', 'Fallout', (this.effectState.duration % 2) ? '[noupkeepdamage]' : '[upkeep]');
+			this.add('-weather', 'Fallout', '[upkeep]');
 			if (this.field.isWeather('fallout')) this.eachEvent('Weather');
 		},
 		onWeather(target) {
