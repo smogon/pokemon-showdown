@@ -269,7 +269,7 @@ export const Nominations = new class {
 		buf += `<form data-submitsend="/perma actmain ${nom.primaryID},{standing},{note}">`;
 		buf += `Standing: ${this.standingDropdown('standing')}`;
 		buf += `<br />Notes:<br />`;
-		buf += `<textarea name="note" style="width: 100%"></textarea><br />`;
+		buf += `<textarea name="note" style="width: 100%" cols="50" rows="10"></textarea><br />`;
 		buf += `<button class="button notifying" type="submit">Change standing and make post</button>`;
 		buf += `</form></details><br />`;
 		buf += `<button class="button notifying" name="send" value="/perma resolve ${nom.primaryID}">Mark resolved</button>`;
@@ -311,7 +311,7 @@ export const Nominations = new class {
 		return buf;
 	}
 	displayNomPage() {
-		let buf = `<div class="pad"><h3>Make a perma nomination</h3><hr />`;
+		let buf = `<div class="pad"><h3>Make a nomination for a permanent punishment.</h3><hr />`;
 		// const [primary, rawAlts, rawIps, details] = Utils.splitFirst(target, '|', 3).map(f => f.trim());
 		buf += `<form data-submitsend="/perma submit {primary}|{alts}|{ips}|{type}|{details}">`;
 		buf += `<div class="infobox">`;
@@ -323,7 +323,7 @@ export const Nominations = new class {
 		buf += `<div class="infobox">`;
 		buf += `<strong>Please explain why this user deserves a permanent punishment</strong><br />`;
 		buf += `<small>Note: Modlogs are automatically included in review and do not need to be added here.</small><br />`;
-		buf += `<textarea style="width: 100%" name="details"></textarea></div>`;
+		buf += `<textarea style="width: 100%" name="details" cols="50" rows="10"></textarea></div>`;
 		buf += `<button class="button notifying" type="submit">Submit nomination</button>`;
 		return buf;
 	}
@@ -476,6 +476,11 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('rangeban');
 			Nominations.close(target, this);
 		},
+		help: [
+			'/perma nom OR /perma - Open the page to make a nomination for a permanent punishment. Requires: % @ &',
+			'/perma list - View open nominations. Requires: &',
+			'/perma viewnom [userid] - View a nomination for the given [userid]. Requires: &',
+		],
 	},
 };
 
