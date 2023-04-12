@@ -46,7 +46,7 @@ export const TypeChart: {[k: string]: TypeData} = {
 			Rock: 0,
 			Steel: 0,
 			Water: 0,
-			Nuclear: 1,
+			Nuclear: 2,
 		},
 	},
 	dark: {
@@ -388,6 +388,7 @@ export const TypeChart: {[k: string]: TypeData} = {
 			Steel: 1,
 			Water: 1,
 			Nuclear: 2,
+			Crystal: 1,
 		},
 	},
 	poison: {
@@ -496,7 +497,7 @@ export const TypeChart: {[k: string]: TypeData} = {
 			Rock: 2,
 			Steel: 2,
 			Water: 0,
-			Nuclear: 1,
+			Nuclear: 2,
 		},
 		HPivs: {spd: 30},
 		HPdvs: {atk: 13},
