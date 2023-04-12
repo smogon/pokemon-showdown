@@ -693,11 +693,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon, source, effect) {
-				if (!pokemon.hasAbility('Aphrodite'))
+				if (!pokemon.hasAbility('Aphrodite')) {
 					if (!(pokemon.gender === 'M' && source.gender === 'F') && !(pokemon.gender === 'F' && source.gender === 'M')) {
 						this.debug('incompatible gender');
 						return false;
 					}
+				}
 				if (!this.runEvent('Attract', pokemon, source)) {
 					this.debug('Attract event failed');
 					return false;
@@ -730,7 +731,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		onTryImmunity(target, source) {
-			if (source.ability === "aphrodite") return true;
+			if (source.hasAbility('Aphrodite')) return true;
 			return ((target.gender === 'M' && source.gender === 'F') || (target.gender === 'F' && source.gender === 'M'));
 		},
 		secondary: null,
@@ -10450,7 +10451,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		onTryImmunity(target) {
-			if (target.ability === "ivywall") return false;
+			if (target.hasAbility("ivywall")) return false;
 			return !target.hasType('Grass');
 		},
 		secondary: null,
