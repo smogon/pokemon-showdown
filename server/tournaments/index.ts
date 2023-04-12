@@ -1911,40 +1911,30 @@ const commands: Chat.ChatCommands = {
 				return this.sendReply(`Usage: /tour ${cmd} <allow|disallow>`);
 			}
 		},
-		aconly: 'autoconfirmedOnly',
-		onlyac: 'autoconfirmedOnly',
-		onlyautoconfirmed: 'autoconfirmedOnly',
-		autoconfirmedOnly(target, room, user, connection, cmd) {
+		aconly: 'autoconfirmedonly',
+		onlyac: 'autoconfirmedonly',
+		onlyautoconfirmed: 'autoconfirmedonly',
+		autoconfirmedonly(target, room, user, connection, cmd) {
 			room = this.requireRoom();
 			this.checkCan('tournaments', null, room);
 			const tournament = this.requireGame(Tournament);
 			target = target.trim();
 			if (!target) {
-				if (tournament.autoconfirmedOnly) {
-					return this.sendReply("This tournament disallows to non-autoconfirmed users for joining a tournament.");
-				} else {
-					return this.sendReply("This tournament allows to non-autoconfirmed users for joining a tournament.");
-				}
+				return this.sendReply(
+					`This tournament ${tournament.autoconfirmedOnly ? 'does not allow' : 'allows'} non-autoconfirmed users to join a tournament.`
+				);
 			}
-
-			const option = target.toLowerCase();
-			if (this.meansYes(option) || option === 'disallow' || option === 'disallowed') {
-				if (tournament.autoconfirmedOnly) {
-					return this.errorReply("Joining non-autoconfirmed users for this tournament is already disallowed.");
-				}
-				tournament.setAutoconfirmedOnly(true);
-				this.privateModAction(`This tournament was set to disallowing non-autoconfirmed users' joining by ${user.name}`);
-				this.modlog('TOUR AUTOCONFIRMEDONLY', null, 'on');
-			} else if (this.meansNo(option) || option === 'allow' || option === 'allowed') {
-				if (!tournament.autoconfirmedOnly) {
-					return this.errorReply("Joining non-autoconfirmed users for this tournament is already allowed.");
-				}
-				tournament.setAutoconfirmedOnly(false);
-				this.privateModAction(`This tournament was set to allowing non-autoconfirmed users' joining by ${user.name}`);
-				this.modlog('TOUR AUTOCONFIRMEDONLY', null, 'off');
-			} else {
-				return this.sendReply(`Usage: /tour ${cmd}<on|off>`);
+			const value = this.meansYes(target) ? true : this.meansNo(target) ? false : null;
+			target = value ? 'ON' : 'OFF';
+			if (value === null || !toID(target)) {
+				return this.parse(`/help tour`);
 			}
+			if (tournament.autoconfirmedOnly === value) {
+				return this.errorReply(`This tournament is already set to ${value ? 'disallow' : 'allow'} non-autoconfirmed users.`);
+			}
+			tournament.setAutoconfirmedOnly(value);
+			this.privateModAction(`${user.name} set this tournament to ${value ? 'disallow' : 'allow'} non-autoconfirmed users.`);
+			this.modlog('TOUR AUTOCONFIRMEDONLY', null, target);
 		},
 		forcepublic(target, room, user, connection, cmd) {
 			room = this.requireRoom();
@@ -2062,30 +2052,19 @@ const commands: Chat.ChatCommands = {
 			autoconfirmedonly(target, room, user) {
 				room = this.requireRoom();
 				this.checkCan('declare', null, room);
-				if (!target || (!this.meansYes(target) && !this.meansNo(target))) return this.parse(`/help tour settings`);
 				const tour = room.getGame(Tournament);
 				if (!room.settings.tournaments) room.settings.tournaments = {};
-				if (this.meansYes(target)) {
-					if (!room.settings.tournaments.autoconfirmedOnly) {
-						if (tour && !tour.autoconfirmedOnly) this.parse(`/tour autoconfirmedonly on`);
-						room.settings.tournaments.autoconfirmedOnly = true;
-						room.saveSettings();
-						this.privateModAction(`Non-autoconfirmed users were disallowed to join for every tournament by ${user.name}`);
-						this.modlog('TOUR SETTINGS', null, 'autoconfirmedonly: ON');
-					} else {
-						throw new Chat.ErrorMessage(`Non-autoconfirmed users are already disallowed to join for every tournament.`);
-					}
-				} else {
-					if (room.settings.tournaments) {
-						if (tour?.autoconfirmedOnly) this.parse(`/tour autoconfirmedonly off`);
-						room.settings.tournaments.autoconfirmedOnly = false;
-						room.saveSettings();
-						this.privateModAction(`Non-autoconfirmed users were allowed to join for every tournament by ${user.name}`);
-						this.modlog('TOUR SETTINGS', null, 'autoconfirmedonly: OFF');
-					} else {
-						throw new Chat.ErrorMessage(`Non-autoconfirmed users are already allowed to join for every tournament.`);
-					}
+				const value = this.meansYes(target) ? true : this.meansNo(target) ? false : null;
+				if (!target || value === null) return this.parse(`/help tour settings`);
+				if (room.settings.tournaments.autoconfirmedOnly === value) {
+					return this.errorReply(`All tournaments are already set to ${value ? 'disallow' : 'allow'} non-autoconfimed users.`);
 				}
+				room.settings.tournaments.autoconfirmedOnly = value;
+				room.saveSettings();
+				target = value ? 'ON' : 'OFF';
+				this.modlog('TOUR SETTINGS', null, `autoconfirmed only: ${target}`);
+				if (tour) this.parse(`/tour autoconfirmedonly ${target}`);
+				this.privateModAction(`${user.name} set all tournaments to ${value ? 'disallow' : 'allow'} autoconfirmed users.`);
 			},
 			forcepublic(target, room, user) {
 				room = this.requireRoom();

@@ -388,14 +388,6 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 			const [, user] = log.split(' by ');
 			return `TOUR SCOUT: by ${toID(user)}: disallow`;
 		},
-		"[thetournament] was set to disallowing non-autoconfirmed users' joining": (log) => {
-			const [, user] = log.split(' by ');
-			return `TOUR AUTOCONFIRMEDONLY: by ${toID(user)}: on`;
-		},
-		"[thetournament] was set to allowing non-autoconfirmed users' joining": (log) => {
-			const [, user] = log.split(' by ');
-			return `TOUR AUTOCONFIRMEDONLY: by ${toID(user)}: off`;
-		},
 	};
 
 	for (const oldAction in modernizerTransformations) {
