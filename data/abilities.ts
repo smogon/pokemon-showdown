@@ -6487,7 +6487,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: -116,
 	},
 	geigersense: {
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			for (const target of this.getAllActive()) {
 				if (target !== pokemon && target.hasType('Nuclear')) {
 					this.boost({atk: 1, spa: 1});

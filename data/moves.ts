@@ -19936,6 +19936,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1},
 		onModifyMove(move, pokemon, target) {
 			switch (target?.effectiveWeather()) {
+			case 'thunderstorm':
 			case 'raindance':
 			case 'primordialsea':
 				move.accuracy = true;
