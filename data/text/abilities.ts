@@ -2417,11 +2417,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Quick Charge",
 		shortDesc: "On this Pokemon's first turn, its moves have their priority increased by 4.",
 	},
-	soundboost: {
-		name: "Sound Boost",
-		desc: "This Pokemon's sound-based moves have their power multiplied by 1.3.",
-		shortDesc: "This Pokemon's sound moves have 1.3x power.",
-	},
 	disenchant: {
 		name: "Disenchant",
 		shortDesc: "This Pokemon is immune to damaging Fairy-type moves.",
@@ -2435,7 +2430,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Chernobyl",
 		shortDesc: "On switch-in, this Pokemon summons Toxic Fallout (5 turns).",
 	},
-	
+
 	// Our Additions
 	sandydefense: {
 		name: "Sandy Defense",

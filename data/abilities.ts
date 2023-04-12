@@ -6473,18 +6473,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4.5,
 		num: -114,
 	},
-	soundboost: {
-		onBasePowerPriority: 7,
-		onBasePower(basePower, attacker, defender, move) {
-			if (move.flags['sound']) {
-				this.debug('Sound Boost boost');
-				return this.chainModify([5325, 4096]);
-			}
-		},
-		name: "Sound Boost",
-		rating: 3.5,
-		num: -115,
-	},
 	disenchant: {
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Fairy' && move.category !== 'Status') {
