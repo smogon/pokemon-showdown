@@ -2,6 +2,7 @@
 
 /config/*
 !/config/formats.ts
+!/config/config-example.js
 /logs/*
 /test/modlogs
 /node_modules
