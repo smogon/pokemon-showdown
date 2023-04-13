@@ -35,9 +35,6 @@ jobs:
             - name: Install dependencies
               run: npm ci
 
-            - name: Build files
-              run: npm run build
-
             - name: Run test
               run: npm run full-test
               env:
@@ -78,9 +75,6 @@ jobs:
 
             - name: Install dependencies
               run: npm ci
-
-            - name: Build files
-              run: npm run build
 
             - name: Publish a package
               run: npm publish --access=public
