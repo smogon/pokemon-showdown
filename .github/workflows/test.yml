@@ -19,7 +19,7 @@ jobs:
                 node-version: [18.x]
 
         outputs:
-            version_changed: ${{ steps.version_changed.outputs.VERSION_CHANGED }}
+            version_changed: ${{ steps.version_change.outputs.VERSION_CHANGED }}
 
         steps:
             - uses: actions/checkout@v3
@@ -44,7 +44,7 @@ jobs:
                   CI: true
 
             - name: Detect version changes
-              if: github.action_repository == 'smogon/pokemon-showdown'
+              if: github.repository == 'smogon/pokemon-showdown'
               id: version-change
                   previous=$(jq -r .version package.json)
                   git checkout ${{ github.event.before }}
@@ -56,7 +56,7 @@ jobs:
     publish:
         needs: [test]
 
-        if: github.action_repository == 'smogon/pokemon-showdown' &&
+        if: github.repository == 'smogon/pokemon-showdown' &&
             success() && needs.test.outputs.version_changed == 'true'
 
         # Do not specify multiple version of Node.js
