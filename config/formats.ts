@@ -31,7 +31,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen9poa',
-		ruleset: ['Standard NatDex', '- inconsistentCM'],
+		ruleset: ['Standard NatDex', '-inconsistentCM'],
 	},
 	{
 		name: "[Gen 9] POA National Dex Ubers",
@@ -66,7 +66,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9poa',
 		gameType: 'doubles',
-		ruleset: ['Standard NatDex', '- inconsistentCM'],
+		ruleset: ['Standard NatDex', '-inconsistentCM'],
 	},
 
 	// S/V Singles
@@ -220,12 +220,12 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 6] Insurgence Ubers",
 		mod: 'gen6insurgence',
-		ruleset: ['Standard', 'Swagger Clause', 'Mega Rayquaza Clause', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120', '- inconsistentCM'],
+		ruleset: ['Standard', 'Swagger Clause', 'Mega Rayquaza Clause', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120', '-inconsistentCM'],
 	},
 	{
 		name: "[Gen 6] Insurgence Anything Goes",
 		mod: 'gen6insurgence',
-		ruleset: ['Obtainable', 'Team Preview', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120', '- inconsistentCM'],
+		ruleset: ['Obtainable', 'Team Preview', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120', '-inconsistentCM'],
 	},
 
 	// Insurgence National Dex
@@ -242,7 +242,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen9insurgence',
-		ruleset: ['Standard NatDex', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120', '- inconsistentCM'],
+		ruleset: ['Standard NatDex', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120', '-inconsistentCM'],
 	},
 	{
 		name: "[Gen 9] Insurgence National Dex Ubers",
