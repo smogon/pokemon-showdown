@@ -234,7 +234,7 @@ export class TeamValidator {
 
 		let problems: string[] = [];
 		const ruleTable = this.ruleTable;
-		if (team && ruleTable.isBanned('inconsistentCM')) {
+		if (team) {
 			let cm = team[0].cmType;
 			for (var mon of team) {
 				if (mon.cmType !== cm) problems.push(`Your Custom Move type must be consistent over your whole team.`);

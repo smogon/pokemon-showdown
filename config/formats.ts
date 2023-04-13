@@ -31,7 +31,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen9poa',
-		ruleset: ['Standard NatDex', '- inconsistentCM'],
+		ruleset: ['Standard NatDex'],
 	},
 	{
 		name: "[Gen 9] POA National Dex Ubers",
@@ -43,7 +43,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9poa',
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Species Clause', 'Sleep Clause Mod', 'Mega Rayquaza Clause'],
-		banlist: ['ND AG', 'Assist', 'Baton Pass', 'inconsistentCM'],
+		banlist: ['ND AG', 'Assist', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 9] POA National Dex",
@@ -53,7 +53,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9poa',
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Sleep Clause Mod'],
-		banlist: ['ND Uber', 'ND AG', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Assist', 'Baton Pass', 'inconsistentCM'],
+		banlist: ['ND Uber', 'ND AG', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Assist', 'Baton Pass'],
 	},
 
 	// POA Doubles
@@ -66,7 +66,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9poa',
 		gameType: 'doubles',
-		ruleset: ['Standard NatDex', '- inconsistentCM'],
+		ruleset: ['Standard NatDex'],
 	},
 
 	// S/V Singles
@@ -215,17 +215,17 @@ export const Formats: FormatList = [
 		name: "[Gen 6] Insurgence OU",
 		mod: 'gen6insurgence',
 		ruleset: ['Standard', 'Swagger Clause', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120'],
-		banlist: ['Uber', 'Arena Trap', 'Shadow Tag', 'Soul Dew', 'Baton Pass', 'inconsistentCM'],
+		banlist: ['Uber', 'Arena Trap', 'Shadow Tag', 'Soul Dew', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 6] Insurgence Ubers",
 		mod: 'gen6insurgence',
-		ruleset: ['Standard', 'Swagger Clause', 'Mega Rayquaza Clause', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120', '- inconsistentCM'],
+		ruleset: ['Standard', 'Swagger Clause', 'Mega Rayquaza Clause', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120'],
 	},
 	{
 		name: "[Gen 6] Insurgence Anything Goes",
 		mod: 'gen6insurgence',
-		ruleset: ['Obtainable', 'Team Preview', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120', '- inconsistentCM'],
+		ruleset: ['Obtainable', 'Team Preview', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120'],
 	},
 
 	// Insurgence National Dex
@@ -242,7 +242,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen9insurgence',
-		ruleset: ['Standard NatDex', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120', '- inconsistentCM'],
+		ruleset: ['Standard NatDex', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120'],
 	},
 	{
 		name: "[Gen 9] Insurgence National Dex Ubers",
@@ -254,7 +254,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9insurgence',
 		ruleset: ['Standard NatDex', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Species Clause', 'Sleep Clause Mod', 'Mega Rayquaza Clause'],
-		banlist: ['ND AG', 'Assist', 'Baton Pass', 'inconsistentCM'],
+		banlist: ['ND AG', 'Assist', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 9] Insurgence National Dex",
@@ -264,7 +264,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9insurgence',
 		ruleset: ['Standard NatDex', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Sleep Clause Mod'],
-		banlist: ['ND Uber', 'ND AG', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Assist', 'Baton Pass', 'inconsistentCM'],
+		banlist: ['ND Uber', 'ND AG', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Assist', 'Baton Pass'],
 	},
 
 	// Uranium National Dex
