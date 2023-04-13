@@ -1886,11 +1886,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "Bans the combination of Agility and partial trapping moves like Wrap.",
 		banlist: ['Agility + Wrap', 'Agility + Fire Spin', 'Agility + Bind', 'Agility + Clamp'],
 	},
-	inconsistentcm: {
-		effectType: "ValidatorRule",
-		name: 'inconsistentCM',
-		desc: 'Prevents multiple custom move types on one team.'
-	},
 	nintendocup1997movelegality: {
 		effectType: 'ValidatorRule',
 		name: "Nintendo Cup 1997 Move Legality",
