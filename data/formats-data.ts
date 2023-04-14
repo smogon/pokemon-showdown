@@ -1232,7 +1232,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	zapdosgalar: {
 		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
-		natDexTier: "RU",
+		natDexTier: "RUBL",
 	},
 	moltres: {
 		isNonstandard: "Unobtainable",
@@ -1242,7 +1242,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	moltresgalar: {
 		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
-		natDexTier: "RU",
+		natDexTier: "RUBL",
 	},
 	dratini: {
 		tier: "LC",
@@ -1275,7 +1275,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	mew: {
 		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
-		natDexTier: "RU",
+		natDexTier: "RUBL",
 	},
 	chikorita: {
 		isNonstandard: "Past",
@@ -2516,12 +2516,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	latias: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "RU",
+		natDexTier: "RUBL",
 	},
 	latiasmega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "RU",
+		natDexTier: "RUBL",
 	},
 	latios: {
 		isNonstandard: "Past",
@@ -4200,7 +4200,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	hawlucha: {
 		tier: "UU",
 		doublesTier: "(DUU)",
-		natDexTier: "RU",
+		natDexTier: "RUBL",
 	},
 	dedenne: {
 		tier: "(PU)",
