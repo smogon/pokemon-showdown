@@ -40,7 +40,7 @@ export const Formats: FormatList = [
 		searchShow: true,
 		mod: 'gen4vgcplat',
 		gameType: 'doubles',
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Draft Timer', 'VGC Plat Pokedex'],
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Draft Timer', 'VGC Plat Pokedex', 'TB Legality'],
 	},
 	{
 		name: "[Gen 4] 6U",

@@ -19,6 +19,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 			'Min Source Gen = 9',
 		],
 	},
+	tblegality: {
+		effectType: 'ValidatorRule',
+		name: 'TB Legality',
+		desc: "Allow every Pokemon to learn Tera Blast",
+		checkCanLearn(move, species, setSources, set){
+			if (move.id === "Tera Blast") return null;
+			return this.checkCanLearn(move, species, setSources, set);
+		},
+	},
 	standardnext: {
 		effectType: 'ValidatorRule',
 		name: 'Standard NEXT',
@@ -870,7 +879,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				if (!hasOrbeetle && species.name === "Orbeetle-Gmax") hasOrbeetle = true;
 				for (const moveid of set.moves) {
 					const move = this.dex.moves.get(moveid);
-					if (move.status && move.status === 'slp' && move.accuracy < 100) hasSleepMove = true;
+					if (move.status && move.status === 'slp' && !move.accuracy && move.accuracy < 100) hasSleepMove = true;
 				}
 			}
 			if (hasOrbeetle && hasSleepMove) {
