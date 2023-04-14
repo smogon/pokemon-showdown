@@ -105,6 +105,22 @@ describe('Stomping Tantrum', function () {
 		battle.makeChoices('move stompingtantrum', 'auto');
 	});
 
+	it(`should double its Base Power if a two-turn move fails for a different reason`, function () {
+		battle = common.createBattle([[
+			{species: 'Magikarp', moves: ['dive', 'stompingtantrum']},
+		], [
+			{species: 'Wynaut', ability: 'waterabsorb', moves: ['splash']},
+		]]);
+
+		battle.onEvent('BasePower', battle.format, function (basePower, pokemon, target, move) {
+			if (move.id === 'stompingtantrum') assert.equal(basePower, 150);
+		});
+
+		battle.makeChoices();
+		battle.makeChoices();
+		battle.makeChoices('move stompingtantrum', 'auto');
+	});
+
 	it(`should double its Base Power on some failure conditions of Rest`, function () {
 		battle = common.createBattle([[
 			{species: 'Magikarp', ability: 'comatose', moves: ['rest', 'stompingtantrum']},
