@@ -426,8 +426,8 @@ export async function lock(user: User, room: GameRoom, reason: string, isWeek?: 
 	}
 	room.add(`|c|&|/raw ${DISCLAIMER}`).update();
 	room.hideText(affected.map(f => f.id), undefined, true);
-	let message = `|popup||html|${user.name} has locked you from talking in chats, battles, and PMing regular users`;
-	message += ` ${isWeek ? "for two days" : "for a week"}`;
+	let message = `|popup||html|Artemis has locked you from talking in chats, battles, and PMing regular users`;
+	message += ` ${!isWeek ? "for two days" : "for a week"}`;
 	message += `\n\nReason: ${reason}`;
 	let appeal = '';
 	if (Chat.pages.help) {

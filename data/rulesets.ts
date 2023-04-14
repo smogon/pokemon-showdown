@@ -879,7 +879,14 @@ export const Rulesets: {[k: string]: FormatData} = {
 				if (!hasOrbeetle && species.name === "Orbeetle-Gmax") hasOrbeetle = true;
 				for (const moveid of set.moves) {
 					const move = this.dex.moves.get(moveid);
-					if (move.status && move.status === 'slp' && !move.accuracy && move.accuracy < 100) hasSleepMove = true;
+					// replicates previous behavior which may compare `true` to 100: true < 100 == true
+					// this variable is true if the move never misses (even with lowered acc) or has a chance to miss,
+					// but false if the move's accuracy is 100% (yet can be lowered).
+					const hasMissChanceOrNeverMisses = move.accuracy === true || move.accuracy < 100;
+
+					if (move.status && move.status === 'slp' && hasMissChanceOrNeverMisses) {
+						hasSleepMove = true;
+					}
 				}
 			}
 			if (hasOrbeetle && hasSleepMove) {

@@ -42,10 +42,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onBeforeMove(pokemon, t, move) {
 				const currentMove = this.dex.getActiveMove('bide');
-				if (pokemon.volatiles['disable']?.move === 'bide') {
-					this.add('cant', pokemon, 'Disable', currentMove);
-					return false;
-				}
 				this.effectState.damage += this.lastDamage;
 				this.effectState.time--;
 				if (!this.effectState.time) {
@@ -266,6 +262,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					pokemon.removeVolatile('disable');
 					return;
 				}
+				if (pokemon.volatiles['bide']) move = this.dex.getActiveMove('bide');
 				if (move.id === this.effectState.move) {
 					this.add('cant', pokemon, 'Disable', move);
 					pokemon.removeVolatile('twoturnmove');
@@ -381,7 +378,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					pokemon.cureStatus(true);
 				}
 				if (pokemon.status === 'tox') {
-					pokemon.setStatus('psn');
+					pokemon.setStatus('psn', null, null, true);
 				}
 				pokemon.updateSpeed();
 				// should only clear a specific set of volatiles

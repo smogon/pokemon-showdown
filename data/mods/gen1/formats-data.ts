@@ -300,7 +300,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "7U",
 	},
 	electrode: {
-		tier: "ZU",
+		tier: "NU",
 	},
 	exeggcute: {
 		tier: "NU",
@@ -408,7 +408,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "6U",
 	},
 	porygon: {
-		tier: "NU",
+		tier: "PU",
 	},
 	omanyte: {
 		tier: "6U",

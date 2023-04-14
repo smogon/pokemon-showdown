@@ -179,18 +179,6 @@ export const Formats: FormatList = [
 		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'King\'s Rock', 'Baton Pass'],
 	},
 	{
-		name: "[Gen 9] OU (suspect)",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3710915/">SV OU Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3712513/">SV OU Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3712493/">SV OU Viability Rankings</a>`,
-			`&bulletl <a href="https://www.smogon.com/forums/threads/3719008/">SV OU Suspect Thread</a>`,
-		],
-
-		mod: 'gen9',
-		ruleset: ['[Gen 9] OU', '!Species Clause'],
-	},
-	{
 		name: "[Gen 9] Ubers",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3710870/">Ubers Metagame Discussion</a>`,
@@ -301,7 +289,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['[Gen 9] PU'],
-		banlist: ['PU'],
+		banlist: ['PU', 'Fraxure', 'Girafarig'],
 	},
 	{
 		name: "[Gen 9] CAP",
@@ -331,6 +319,7 @@ export const Formats: FormatList = [
 		name: "[Gen 9] Battle Stadium Singles Series 2",
 
 		mod: 'gen9',
+		searchShow: false,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer'],
 		banlist: ['Sub-Legendary'],
 	},
@@ -338,7 +327,6 @@ export const Formats: FormatList = [
 		name: "[Gen 9] Battle Stadium Singles Regulation C",
 
 		mod: 'gen9',
-		searchShow: false,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer'],
 	},
 	{
@@ -420,6 +408,7 @@ export const Formats: FormatList = [
 		name: "[Gen 9] VGC 2023 Series 2",
 
 		mod: 'gen9',
+		searchShow: false,
 		gameType: 'doubles',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
 		banlist: ['Sub-Legendary'],
@@ -479,7 +468,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['[Gen 9] National Dex'],
-		banlist: ['ND OU', 'ND UUBL'],
+		banlist: ['ND OU', 'ND UUBL', 'Battle Bond'],
 	},
 	{
 		name: "[Gen 9] National Dex RU",
@@ -686,52 +675,6 @@ export const Formats: FormatList = [
 		banlist: ['Soul Dew'],
 	},
 
-	// OM of the Decade
-	///////////////////////////////////////////////////////////////////
-
-	{
-		section: "OM of the Decade",
-		column: 2,
-	},
-	{
-		name: "[Gen 9] Meow Cup",
-		desc: `Randomized format with only feline Pok&eacute;mon and their abilities and moves. Led by Bidoof Princess.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3719015/">Meow Cup</a>`,
-		],
-
-		mod: 'meowcup',
-		team: 'randomHC',
-		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
-		banlist: ['Nonexistent'],
-		onModifySpecies(species, target, source, effect) {
-			if (!target) return;
-			const newSpecies = this.dex.deepClone(species);
-			if (newSpecies.id === 'delcatty') newSpecies.bst += 100;
-			return newSpecies;
-		},
-	},
-	{
-		name: "[Gen 9] Meow Cup FFA",
-		desc: `Randomized format with only feline Pok&eacute;mon and their abilities and moves. Led by Bidoof Princess.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3719015/">Meow Cup FFA</a>`,
-		],
-
-		mod: 'meowcup',
-		team: 'randomHC',
-		tournamentShow: false,
-		gameType: 'freeforall',
-		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
-		banlist: ['Nonexistent'],
-		onModifySpecies(species, target, source, effect) {
-			if (!target) return;
-			const newSpecies = this.dex.deepClone(species);
-			if (newSpecies.id === 'delcatty') newSpecies.bst += 100;
-			return newSpecies;
-		},
-	},
-
 	// OM of the Month
 	///////////////////////////////////////////////////////////////////
 
@@ -743,12 +686,12 @@ export const Formats: FormatList = [
 		name: "[Gen 9] Pokebilities",
 		desc: `Pok&eacute;mon have all of their released abilities simultaneously.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3679692/">Pok&eacute;bilities</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3712725/">Pok&eacute;bilities</a>`,
 		],
 		mod: 'pokebilities',
 		// searchShow: false,
-		ruleset: ['Standard OMs', 'Sleep Clause Mod'],
-		banlist: ['Chi-Yu', 'Flutter Mane', 'Houndstone', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Palafin', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Baton Pass'],
+		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Min Source Gen = 9'],
+		banlist: ['Chi-Yu', 'Espathra', 'Flutter Mane', 'Houndstone', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Palafin', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Baton Pass'],
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
 			const unSeenAbilities = Object.keys(species.abilities)
@@ -827,7 +770,7 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		// searchShow: false,
 		ruleset: ['Standard OMs', 'Ability Clause = 2', 'Sleep Moves Clause', 'Min Source Gen = 9'],
-		banlist: ['Scyther', 'Sneasel', 'Ursaring', 'Arena Trap', 'Huge Power', 'Pure Power', 'Shadow Tag', 'Speed Boost', 'Moody', 'King\'s Rock', 'Baton Pass', 'Revival Blessing'],
+		banlist: ['Girafarig', 'Miraidon', 'Scyther', 'Sneasel', 'Ursaring', 'Arena Trap', 'Huge Power', 'Ice Scales', 'Pure Power', 'Shadow Tag', 'Speed Boost', 'Moody', 'King\'s Rock', 'Baton Pass', 'Revival Blessing'],
 		restricted: ['Gallade', 'Gholdengo'],
 		onValidateTeam(team) {
 			const names = new Set<ID>();
@@ -969,11 +912,11 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard OMs', '!Obtainable Abilities', 'Ability Clause = 1', 'Sleep Moves Clause', 'Terastal Clause', 'Min Source Gen = 9'],
 		banlist: [
-			'Annihilape', 'Baxcalibur', 'Dragapult', 'Flutter Mane', 'Great Tusk', 'Gholdengo', 'Houndstone', 'Iron Bundle', 'Iron Hands',
-			'Iron Valiant', 'Koraidon', 'Miraidon', 'Noivern', 'Slaking', 'Walking Wake', 'Arena Trap', 'Comatose', 'Contrary', 'Fur Coat',
-			'Good as Gold', 'Gorilla Tactics', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter', 'Innards Out', 'Magic Bounce', 'Magnet Pull',
-			'Moody', 'Neutralizing Gas', 'Orichalcum Pulse', 'Parental Bond', 'Poison Heal', 'Pure Power', 'Shadow Tag', 'Simple', 'Speed Boost',
-			'Stakeout', 'Unburden', 'Water Bubble', 'Wonder Guard', 'King\'s Rock', 'Baton Pass', 'Revival Blessing', 'Shed Tail',
+			'Annihilape', 'Baxcalibur', 'Dragapult', 'Dragonite', 'Flutter Mane', 'Great Tusk', 'Gholdengo', 'Houndstone', 'Iron Bundle',
+			'Iron Hands', 'Iron Valiant', 'Koraidon', 'Miraidon', 'Noivern', 'Slaking', 'Walking Wake', 'Arena Trap', 'Comatose', 'Contrary',
+			'Fur Coat', 'Good as Gold', 'Gorilla Tactics', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter', 'Innards Out', 'Magic Bounce',
+			'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Orichalcum Pulse', 'Parental Bond', 'Poison Heal', 'Pure Power', 'Shadow Tag', 'Simple',
+			'Speed Boost', 'Stakeout', 'Unburden', 'Water Bubble', 'Wonder Guard', 'King\'s Rock', 'Baton Pass', 'Revival Blessing', 'Shed Tail',
 		],
 	},
 	{
@@ -987,8 +930,8 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['-Nonexistent', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Moves Clause', 'Endless Battle Clause'],
 		banlist: [
-			'Calyrex-Shadow', 'Zacian-Crowned', 'Arena Trap', 'Contrary', 'Huge Power', 'Illusion', 'Innards Out', 'Magnet Pull', 'Moody',
-			'Neutralizing Gas', 'Parental Bond', 'Poison Heal', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard',
+			'Calyrex-Shadow', 'Zacian-Crowned', 'Arena Trap', 'Contrary', 'Gorilla Tactics', 'Huge Power', 'Illusion', 'Innards Out', 'Magnet Pull',
+			'Moody', 'Neutralizing Gas', 'Parental Bond', 'Poison Heal', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard',
 			'Comatose + Sleep Talk', 'Belly Drum', 'Last Respects', 'Quiver Dance', 'Rage Fist', 'Revival Blessing', 'Shed Tail', 'Shell Smash',
 		],
 	},
@@ -1001,7 +944,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'mixandmega',
-		ruleset: ['Standard OMs', 'Evasion Items Clause', 'Evasion Abilities Clause', 'Sleep Moves Clause', 'Min Source Gen = 9'],
+		ruleset: ['Standard OMs', 'Evasion Items Clause', 'Evasion Abilities Clause', 'Sleep Moves Clause', 'Terastal Clause', 'Min Source Gen = 9'],
 		banlist: ['Koraidon', 'Miraidon', 'Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Moody', 'Rusted Sword', 'Shadow Tag', 'Baton Pass', 'Shed Tail'],
 		restricted: ['Dragapult', 'Flutter Mane', 'Gengar', 'Iron Bundle', 'Kilowattrel', 'Sandy Shocks', 'Slaking'],
 		onValidateTeam(team) {
@@ -1068,7 +1011,7 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Godly Gift Mod', 'Min Source Gen = 9'],
 		banlist: [
-			'Blissey', 'Chansey', 'Great Tusk', 'Iron Hands', 'Iron Valiant', 'Walking Wake',
+			'Blissey', 'Chansey', 'Great Tusk', 'Iron Hands', 'Iron Valiant', 'Kingambit', 'Orthworm', 'Walking Wake',
 			'Arena Trap', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Swift Swim', 'Booster Energy', 'Baton Pass',
 		],
 	},
@@ -1106,382 +1049,6 @@ export const Formats: FormatList = [
 			// Shouldn't be legal
 			'Stantler', 'Ursaring',
 		],
-	},
-	{
-		name: "[Gen 9] Partners in Crime (suspect)",
-		desc: `Doubles-based metagame where both active ally Pok&eacute;mon share abilities and moves.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3710997/">Partners in Crime</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3719017/">Partners in Crime Suspect Thread</a>`,
-		],
-
-		mod: 'partnersincrime',
-		gameType: 'doubles',
-		ruleset: ['[Gen 9] Partners in Crime'],
-		unbanlist: ['Ally Switch'],
-		onBegin() {
-			for (const pokemon of this.getAllPokemon()) {
-				pokemon.m.trackPP = new Map<string, number>();
-			}
-		},
-		onBeforeSwitchIn(pokemon) {
-			pokemon.m.curMoves = this.dex.deepClone(pokemon.moves);
-			let ngas = false;
-			for (const poke of this.getAllActive()) {
-				if (this.toID(poke.ability) === ('neutralizinggas' as ID)) {
-					ngas = true;
-					break;
-				}
-			}
-			const BAD_ABILITIES = ['trace', 'imposter', 'neutralizinggas', 'illusion', 'wanderingspirit'];
-			const ally = pokemon.side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
-			if (ally && ally.ability !== pokemon.ability) {
-				if (!pokemon.m.innate && !BAD_ABILITIES.includes(this.toID(ally.ability))) {
-					pokemon.m.innate = 'ability:' + ally.ability;
-					if (!ngas || ally.getAbility().isPermanent || pokemon.hasItem('Ability Shield')) {
-						pokemon.volatiles[pokemon.m.innate] = {id: pokemon.m.innate, target: pokemon};
-						pokemon.m.startVolatile = true;
-					}
-				}
-				if (!ally.m.innate && !BAD_ABILITIES.includes(this.toID(pokemon.ability))) {
-					ally.m.innate = 'ability:' + pokemon.ability;
-					if (!ngas || pokemon.getAbility().isPermanent || ally.hasItem('Ability Shield')) {
-						ally.volatiles[ally.m.innate] = {id: ally.m.innate, target: ally};
-						ally.m.startVolatile = true;
-					}
-				}
-			}
-		},
-		// Starting innate abilities in scripts#actions
-		onSwitchOut(pokemon) {
-			if (pokemon.m.innate) {
-				pokemon.removeVolatile(pokemon.m.innate);
-				delete pokemon.m.innate;
-			}
-			const ally = pokemon.side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
-			if (ally && ally.m.innate) {
-				ally.removeVolatile(ally.m.innate);
-				delete ally.m.innate;
-			}
-		},
-		onFaint(pokemon) {
-			if (pokemon.m.innate) {
-				pokemon.removeVolatile(pokemon.m.innate);
-				delete pokemon.m.innate;
-			}
-			const ally = pokemon.side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
-			if (ally && ally.m.innate) {
-				ally.removeVolatile(ally.m.innate);
-				delete ally.m.innate;
-			}
-		},
-		battle: {
-			runAction(action) {
-				const pokemonOriginalHP = action.pokemon?.hp;
-				let residualPokemon: (readonly [Pokemon, number])[] = [];
-				// returns whether or not we ended in a callback
-				switch (action.choice) {
-				case 'start': {
-					for (const side of this.sides) {
-						if (side.pokemonLeft) side.pokemonLeft = side.pokemon.length;
-					}
-
-					this.add('start');
-
-					// Change Zacian/Zamazenta into their Crowned formes
-					for (const pokemon of this.getAllPokemon()) {
-						let rawSpecies: Species | null = null;
-						if (pokemon.species.id === 'zacian' && pokemon.item === 'rustedsword') {
-							rawSpecies = this.dex.species.get('Zacian-Crowned');
-						} else if (pokemon.species.id === 'zamazenta' && pokemon.item === 'rustedshield') {
-							rawSpecies = this.dex.species.get('Zamazenta-Crowned');
-						}
-						if (!rawSpecies) continue;
-						const species = pokemon.setSpecies(rawSpecies);
-						if (!species) continue;
-						pokemon.baseSpecies = rawSpecies;
-						pokemon.details = species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
-							(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-						pokemon.setAbility(species.abilities['0'], null, true);
-						pokemon.baseAbility = pokemon.ability;
-
-						const behemothMove: {[k: string]: string} = {
-							'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
-						};
-						const ironHead = pokemon.baseMoves.indexOf('ironhead');
-						if (ironHead >= 0) {
-							const move = this.dex.moves.get(behemothMove[rawSpecies.name]);
-							pokemon.baseMoveSlots[ironHead] = {
-								move: move.name,
-								id: move.id,
-								pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
-								maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
-								target: move.target,
-								disabled: false,
-								disabledSource: '',
-								used: false,
-							};
-							pokemon.moveSlots = pokemon.baseMoveSlots.slice();
-						}
-					}
-
-					if (this.format.onBattleStart) this.format.onBattleStart.call(this);
-					for (const rule of this.ruleTable.keys()) {
-						if ('+*-!'.includes(rule.charAt(0))) continue;
-						const subFormat = this.dex.formats.get(rule);
-						if (subFormat.onBattleStart) subFormat.onBattleStart.call(this);
-					}
-
-					for (const side of this.sides) {
-						for (let i = 0; i < side.active.length; i++) {
-							if (!side.pokemonLeft) {
-								// forfeited before starting
-								side.active[i] = side.pokemon[i];
-								side.active[i].fainted = true;
-								side.active[i].hp = 0;
-							} else {
-								this.actions.switchIn(side.pokemon[i], i);
-							}
-						}
-					}
-					for (const pokemon of this.getAllPokemon()) {
-						this.singleEvent('Start', this.dex.conditions.getByID(pokemon.species.id), pokemon.speciesState, pokemon);
-					}
-					this.midTurn = true;
-					break;
-				}
-
-				case 'move':
-					if (!action.pokemon.isActive) return false;
-					if (action.pokemon.fainted) return false;
-					this.actions.runMove(action.move, action.pokemon, action.targetLoc, action.sourceEffect,
-						action.zmove, undefined, action.maxMove, action.originalTarget);
-					break;
-				case 'megaEvo':
-					this.actions.runMegaEvo(action.pokemon);
-					break;
-				case 'runDynamax':
-					action.pokemon.addVolatile('dynamax');
-					action.pokemon.side.dynamaxUsed = true;
-					if (action.pokemon.side.allySide) action.pokemon.side.allySide.dynamaxUsed = true;
-					break;
-				case 'terastallize':
-					this.actions.terastallize(action.pokemon);
-					break;
-				case 'beforeTurnMove':
-					if (!action.pokemon.isActive) return false;
-					if (action.pokemon.fainted) return false;
-					this.debug('before turn callback: ' + action.move.id);
-					const target = this.getTarget(action.pokemon, action.move, action.targetLoc);
-					if (!target) return false;
-					if (!action.move.beforeTurnCallback) throw new Error(`beforeTurnMove has no beforeTurnCallback`);
-					action.move.beforeTurnCallback.call(this, action.pokemon, target);
-					break;
-				case 'priorityChargeMove':
-					if (!action.pokemon.isActive) return false;
-					if (action.pokemon.fainted) return false;
-					this.debug('priority charge callback: ' + action.move.id);
-					if (!action.move.priorityChargeCallback) throw new Error(`priorityChargeMove has no priorityChargeCallback`);
-					action.move.priorityChargeCallback.call(this, action.pokemon);
-					break;
-
-				case 'event':
-					this.runEvent(action.event!, action.pokemon);
-					break;
-				case 'team':
-					if (action.index === 0) {
-						action.pokemon.side.pokemon = [];
-					}
-					action.pokemon.side.pokemon.push(action.pokemon);
-					action.pokemon.position = action.index;
-					// we return here because the update event would crash since there are no active pokemon yet
-					return;
-
-				case 'pass':
-					return;
-				case 'instaswitch':
-				case 'switch':
-					if (action.choice === 'switch' && action.pokemon.status) {
-						this.singleEvent('CheckShow', this.dex.abilities.getByID('naturalcure' as ID), null, action.pokemon);
-					}
-					if (this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect) === 'pursuitfaint') {
-						// a pokemon fainted from Pursuit before it could switch
-						if (this.gen <= 4) {
-							// in gen 2-4, the switch still happens
-							this.hint("Previously chosen switches continue in Gen 2-4 after a Pursuit target faints.");
-							action.priority = -101;
-							this.queue.unshift(action);
-							break;
-						} else {
-							// in gen 5+, the switch is cancelled
-							this.hint("A Pokemon can't switch between when it runs out of HP and when it faints");
-							break;
-						}
-					}
-					break;
-				case 'revivalblessing':
-					action.pokemon.side.pokemonLeft++;
-					if (action.target.position < action.pokemon.side.active.length) {
-						this.queue.addChoice({
-							choice: 'instaswitch',
-							pokemon: action.target,
-							target: action.target,
-						});
-					}
-					action.target.fainted = false;
-					action.target.faintQueued = false;
-					action.target.subFainted = false;
-					action.target.status = '';
-					action.target.hp = 1; // Needed so hp functions works
-					action.target.sethp(action.target.maxhp / 2);
-					this.add('-heal', action.target, action.target.getHealth, '[from] move: Revival Blessing');
-					action.pokemon.side.removeSlotCondition(action.pokemon, 'revivalblessing');
-					break;
-				case 'runUnnerve':
-					this.singleEvent('PreStart', action.pokemon.getAbility(), action.pokemon.abilityState, action.pokemon);
-					break;
-				case 'runSwitch':
-					this.actions.runSwitch(action.pokemon);
-					break;
-				case 'runPrimal':
-					if (!action.pokemon.transformed) {
-						this.singleEvent('Primal', action.pokemon.getItem(), action.pokemon.itemState, action.pokemon);
-					}
-					break;
-				case 'shift':
-					if (!action.pokemon.isActive) return false;
-					if (action.pokemon.fainted) return false;
-					this.swapPosition(action.pokemon, 1);
-					break;
-
-				case 'beforeTurn':
-					for (const side of this.sides) {
-						const pokemon = side.active.find(mon => mon && !mon.fainted);
-						if (this.randomChance(1, 2) || !pokemon) continue;
-						const newPosition = (pokemon.position === 0 ? pokemon.side.active.length - 1 : 0);
-						if (!pokemon.side.active[newPosition]) continue;
-						if (pokemon.side.active[newPosition].fainted) continue;
-						this.swapPosition(pokemon, newPosition, '[from] move: Ally Switch');
-					}
-					this.eachEvent('BeforeTurn');
-					break;
-				case 'residual':
-					this.add('');
-					this.clearActiveMove(true);
-					this.updateSpeed();
-					residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.getUndynamaxedHP()] as const);
-					this.residualEvent('Residual');
-					this.add('upkeep');
-					break;
-				}
-
-				// phazing (Roar, etc)
-				for (const side of this.sides) {
-					for (const pokemon of side.active) {
-						if (pokemon.forceSwitchFlag) {
-							if (pokemon.hp) this.actions.dragIn(pokemon.side, pokemon.position);
-							pokemon.forceSwitchFlag = false;
-						}
-					}
-				}
-
-				this.clearActiveMove();
-
-				// fainting
-
-				this.faintMessages();
-				if (this.ended) return true;
-
-				// switching (fainted pokemon, U-turn, Baton Pass, etc)
-
-				if (!this.queue.peek() || (this.gen <= 3 && ['move', 'residual'].includes(this.queue.peek()!.choice))) {
-					// in gen 3 or earlier, switching in fainted pokemon is done after
-					// every move, rather than only at the end of the turn.
-					this.checkFainted();
-				} else if (action.choice === 'megaEvo' && this.gen === 7) {
-					this.eachEvent('Update');
-					// In Gen 7, the action order is recalculated for a Pokémon that mega evolves.
-					for (const [i, queuedAction] of this.queue.list.entries()) {
-						if (queuedAction.pokemon === action.pokemon && queuedAction.choice === 'move') {
-							this.queue.list.splice(i, 1);
-							queuedAction.mega = 'done';
-							this.queue.insertChoice(queuedAction, true);
-							break;
-						}
-					}
-					return false;
-				} else if (this.queue.peek()?.choice === 'instaswitch') {
-					return false;
-				}
-
-				if (this.gen >= 5) {
-					this.eachEvent('Update');
-					for (const [pokemon, originalHP] of residualPokemon) {
-						const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
-						if (pokemon.hp && pokemon.getUndynamaxedHP() <= maxhp / 2 && originalHP > maxhp / 2) {
-							this.runEvent('EmergencyExit', pokemon);
-						}
-					}
-				}
-
-				if (action.choice === 'runSwitch') {
-					const pokemon = action.pokemon;
-					if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP! > pokemon.maxhp / 2) {
-						this.runEvent('EmergencyExit', pokemon);
-					}
-				}
-
-				const switches = this.sides.map(
-					side => side.active.some(pokemon => pokemon && !!pokemon.switchFlag)
-				);
-
-				for (let i = 0; i < this.sides.length; i++) {
-					let reviveSwitch = false; // Used to ignore the fake switch for Revival Blessing
-					if (switches[i] && !this.canSwitch(this.sides[i])) {
-						for (const pokemon of this.sides[i].active) {
-							if (this.sides[i].slotConditions[pokemon.position]['revivalblessing']) {
-								reviveSwitch = true;
-								continue;
-							}
-							pokemon.switchFlag = false;
-						}
-						if (!reviveSwitch) switches[i] = false;
-					} else if (switches[i]) {
-						for (const pokemon of this.sides[i].active) {
-							if (pokemon.switchFlag && pokemon.switchFlag !== 'revivalblessing' && !pokemon.skipBeforeSwitchOutEventFlag) {
-								this.runEvent('BeforeSwitchOut', pokemon);
-								pokemon.skipBeforeSwitchOutEventFlag = true;
-								this.faintMessages(); // Pokemon may have fainted in BeforeSwitchOut
-								if (this.ended) return true;
-								if (pokemon.fainted) {
-									switches[i] = this.sides[i].active.some(sidePokemon => sidePokemon && !!sidePokemon.switchFlag);
-								}
-							}
-						}
-					}
-				}
-
-				for (const playerSwitch of switches) {
-					if (playerSwitch) {
-						this.makeRequest('switch');
-						return true;
-					}
-				}
-
-				if (this.gen < 5) this.eachEvent('Update');
-
-				if (this.gen >= 8 && (this.queue.peek()?.choice === 'move' || this.queue.peek()?.choice === 'runDynamax')) {
-					// In gen 8, speed is updated dynamically so update the queue's speed properties and sort it.
-					this.updateSpeed();
-					for (const queueAction of this.queue.list) {
-						if (queueAction.pokemon) this.getActionSpeed(queueAction);
-					}
-					this.queue.sort();
-				}
-
-				return false;
-			},
-		},
 	},
 
 	// Challengeable OMs
@@ -2720,6 +2287,14 @@ export const Formats: FormatList = [
 		mod: 'gen3',
 		team: 'random',
 		ruleset: ['Standard'],
+	},
+	{
+		name: "[Gen 3] Challenge Cup",
+
+		mod: 'gen3',
+		team: 'randomCC',
+		searchShow: false,
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
 		name: "[Gen 2] Random Battle",
