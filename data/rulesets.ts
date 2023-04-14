@@ -24,7 +24,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'TB Legality',
 		desc: "Allow every Pokemon to learn Tera Blast",
 		checkCanLearn(move, species, setSources, set){
-			if (move.id === "Tera Blast") return null;
+			if (move.id === "terablast") return null;
 			return this.checkCanLearn(move, species, setSources, set);
 		},
 	},
