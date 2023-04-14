@@ -1357,6 +1357,40 @@ export const commands: Chat.ChatCommands = {
 		`/updateloginserver - Updates and restarts the loginserver. Requires: console access`,
 	],
 
+	async updateclient(target, room, user) {
+		this.canUseConsole();
+		this.sendReply('Restarting...');
+		const [result, err] = await LoginServer.request('rebuildclient', {
+			full: toID(target) === 'full',
+		});
+		if (err) {
+			Rooms.global.notifyRooms(
+				['staff', 'development'],
+				`|c|&|/log ${user.name} used /updateclient - but something failed while updating.`
+			);
+			return this.errorReply(err.message + '\n' + err.stack);
+		}
+		if (!result) return this.errorReply('No result received.');
+		this.stafflog(`[o] ${result.success || ""} [e] ${result.actionerror || ""}`);
+		if (result.actionerror) {
+			return this.errorReply(result.actionerror);
+		}
+		let message = `${user.name} used /updateclient`;
+		if (result.updated) {
+			this.sendReply(`DONE. Client updated.`);
+		} else {
+			message += ` - but something failed while updating.`;
+			this.errorReply(`FAILED. Conflicts were found while updating.`);
+		}
+		Rooms.global.notifyRooms(
+			['staff', 'development'], `|c|&|/log ${message}`
+		);
+	},
+	updateclienthelp: [
+		`/updateclient [full] - Update the client source code. Provide the argument 'full' to make it a full rebuild.`,
+		`Requires: & console access`,
+	],
+
 	async rebuild() {
 		this.canUseConsole();
 		const [, , stderr] = await bash('node ./build', this);
