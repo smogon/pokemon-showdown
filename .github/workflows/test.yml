@@ -49,12 +49,22 @@ jobs:
       run: |
         echo ${{ steps.changed-files.outputs.all_changed_and_modified_files }}
 
-    - name: Run selective lint & full test (if pull request)
+    - name: Detect changed directories
+      id: changed-directories
+      uses: tj-actions/changed-files@v35
+      with:
+        files: |
+          config/formats.ts
+          data/**
+          sim/**
+
+    - name: Run selective lint & neccessary tests (if pull request)
       run: npm run full-test-ci
       if: ${{ github.event_name == 'pull_request' }}
       env:
         CI: true
         FILES: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}
+        SKIPSIMTESTS: ${{ steps.changed-directories.outputs.all_changed_and_modified_files == '' }}
 
     - name: Run full lint & test (if pushing to master)
       run: npm run full-test
