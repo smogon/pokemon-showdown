@@ -1171,7 +1171,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	snorunt: {
-		tier: "8U",
+		tier: "7U",
 	},
 	glalie: {
 		tier: "PU",
@@ -1324,7 +1324,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "PU",
 	},
 	shieldon: {
-		tier: "7U",
+		tier: "8U",
 	},
 	bastiodon: {
 		tier: "6U",

@@ -896,7 +896,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 			const [score, p1rating, p2rating] = await Ladders(this.ladder).updateRating(p1name, p2name, p1score, this.room);
 			void this.logBattle(score, p1rating, p2rating);
 			Chat.runHandlers('onBattleRanked', this, winnerid, [p1rating, p2rating], [p1id, p2id]);
-		} else if (Config.logchallenges) {
+		} else if (Config.logchallenges && !this.room.settings.isPrivate) {
 			if (winnerid === p1id) {
 				p1score = 1;
 			} else if (winnerid === p2id) {
