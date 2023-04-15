@@ -337,19 +337,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			} // End of the check for more than 4 moves on moveset.
 		}
 
-		const levelScale: {[k: string]: number} = {
-			LC: 88,
-			NFE: 80,
-			PU: 77,
-			NU: 77,
-			NUBL: 76,
-			UU: 74,
-			UUBL: 71,
-			OU: 68,
-			Uber: 65,
-		};
-
-		const level = this.adjustLevel || data.level || levelScale[species.tier] || 80;
+		const level = this.adjustLevel || data.level || 80;
 
 		const evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255};
 		const ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
