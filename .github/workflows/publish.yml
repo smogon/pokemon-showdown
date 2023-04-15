@@ -13,6 +13,7 @@ jobs:
     outputs:
       current_version: ${{ steps.current_version.outputs.version }}
       last_version: ${{ steps.last_version.outputs.version }}
+      token_exists: ${{ steps.check_token.outputs.token }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -27,13 +28,17 @@ jobs:
         run: |
           git checkout ${{ github.event.before }}
           echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+      - name: Check if NPM_TOKEN exists
+        id: check_token
+        run: |
+          echo "token=$(if [ -n "${{ secrets.NPM_TOKEN }}" ]; then echo true; else echo false; fi)" >> $GITHUB_OUTPUT
   npm-publish:
     needs:
       - test
       - get-version
     runs-on: ubuntu-latest
     # We only want to publish if the package.json version field has changed
-    if: needs.get-version.outputs.current_version != needs.get-version.outputs.last_version
+    if: needs.get-version.outputs.current_version != needs.get-version.outputs.last_version && needs.get-version.outputs.token_exists == 'true'
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
