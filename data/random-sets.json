@@ -60,7 +60,7 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Bug Buzz", "Quiver Dance", "Sleep Powder", "Sludge Bomb", "Substitute"],
-                "teraTypes": ["Bug", "Poison"]
+                "teraTypes": ["Bug", "Poison", "Steel", "Water"]
             }
         ]
     },
@@ -489,7 +489,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Psychic", "Spikes", "Stealth Rock", "Taunt", "Thunder Wave", "Toxic Spikes", "Will-O-Wisp"],
+                "movepool": ["Psychic", "Spikes", "Stealth Rock", "Taunt", "Thunder Wave", "Toxic Spikes", "U-turn", "Will-O-Wisp"],
                 "teraTypes": ["Steel", "Fairy"]
             },
             {
@@ -499,8 +499,8 @@
             },
             {
                 "role": "Fast Bulky Setup",
-                "movepool": ["Aura Sphere", "Dazzling Gleam", "Earth Power", "Fire Blast", "Nasty Plot", "Psyshock", "Shadow Ball"],
-                "teraTypes": ["Psychic", "Fighting", "Fire", "Ghost", "Ground", "Fairy"]
+                "movepool": ["Aura Sphere", "Dazzling Gleam", "Earth Power", "Fire Blast", "Hydro Pump", "Nasty Plot", "Psyshock", "Shadow Ball"],
+                "teraTypes": ["Psychic", "Fighting", "Fire", "Ghost", "Ground", "Fairy", "Water"]
             }
         ]
     },
@@ -646,6 +646,11 @@
                 "role": "Wallbreaker",
                 "movepool": ["Fire Blast", "Hydro Pump", "Ice Beam", "Psychic", "Psyshock", "Trick Room"],
                 "teraTypes": ["Water", "Psychic"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Chilly Reception", "Future Sight", "Slack Off", "Surf"],
+                "teraTypes": ["Water", "Fairy", "Dragon"]
             }
         ]
     },
@@ -1519,8 +1524,8 @@
             },
             {
                 "role": "Fast Attacker",
-                "movepool": ["Dazzling Gleam", "Energy Ball", "Fire Blast", "Nasty Plot", "Psychic", "Psyshock", "Trick", "U-turn"],
-                "teraTypes": ["Psychic", "Fairy", "Fire"]
+                "movepool": ["Dazzling Gleam", "Fire Blast", "Nasty Plot", "Psychic", "Psyshock", "Thunderbolt", "Trick", "U-turn"],
+                "teraTypes": ["Psychic", "Fairy", "Fire", "Electric"]
             }
         ]
     },
@@ -2278,7 +2283,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Draco Meteor", "Focus Blast", "Sludge Bomb", "Thunderbolt", "Toxic", "Toxic Spikes"],
-                "teraTypes": ["Dragon", "Poison"]
+                "teraTypes": ["Dragon", "Electric", "Fighting"]
             }
         ]
     },
@@ -3292,7 +3297,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Body Press", "Body Slam", "Stomping Tantrum", "Stuff Cheeks"],
+                "movepool": ["Body Press", "Body Slam", "Double-Edge", "Stomping Tantrum", "Stuff Cheeks"],
                 "teraTypes": ["Fighting"]
             }
         ]
@@ -3302,7 +3307,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Body Press", "Body Slam", "Stomping Tantrum", "Stuff Cheeks"],
+                "movepool": ["Body Press", "Body Slam", "Double-Edge", "Stomping Tantrum", "Stuff Cheeks"],
                 "teraTypes": ["Fighting"]
             }
         ]

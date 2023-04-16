@@ -488,7 +488,7 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'liquidation', 'wavecrash');
 		this.incompatibleMoves(moves, movePool, ['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']);
 		this.incompatibleMoves(moves, movePool, ['knockoff', 'bite'], 'foulplay');
-		this.incompatibleMoves(moves, movePool, 'doubleedge', 'headbutt');
+		this.incompatibleMoves(moves, movePool, 'doubleedge', ['headbutt', 'bodyslam']);
 		this.incompatibleMoves(moves, movePool, 'fireblast', ['fierydance', 'flamethrower']);
 		this.incompatibleMoves(moves, movePool, 'lavaplume', 'magmastorm');
 		this.incompatibleMoves(moves, movePool, 'thunderpunch', 'wildcharge');
@@ -1232,6 +1232,7 @@ export class RandomTeams {
 			this.dex.getEffectiveness('Ground', species) >= 2
 		) return 'Air Balloon';
 		if (['Bulky Attacker', 'Bulky Support', 'Bulky Setup'].some(m => role === (m))) return 'Leftovers';
+		if (species.id === 'pawmot' && moves.has('nuzzle')) return 'Leppa Berry';
 		if (role === 'Fast Support' || role === 'Fast Bulky Setup') {
 			return (counter.damagingMoves.size >= 3 && !moves.has('nuzzle')) ? 'Life Orb' : 'Leftovers';
 		}
