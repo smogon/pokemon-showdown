@@ -904,7 +904,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 			}
 			void this.logBattle(p1score);
 			const id = this.room.getReplayData().id.split("-")[1];
-			const link = "http://73.191.22.186:8001/replays/" + p1id + "_vs_" + p2id + "_" + id;
+			const link = "http://73.191.22.186:8001/replays/" + this.format + "/" + p1id + "_vs_" + p2id + "_" + id;
 			const uploader = Users.get(winnerid || p1id);
 			if (uploader?.connections[0]) {
 				Chat.parse('Replay autosaved to ' + link, this.room, uploader, uploader.connections[0]);
