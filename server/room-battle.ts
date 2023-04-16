@@ -896,13 +896,19 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 			const [score, p1rating, p2rating] = await Ladders(this.ladder).updateRating(p1name, p2name, p1score, this.room);
 			void this.logBattle(score, p1rating, p2rating);
 			Chat.runHandlers('onBattleRanked', this, winnerid, [p1rating, p2rating], [p1id, p2id]);
-		} else if (Config.logchallenges && !this.room.settings.isPrivate) {
+		} else if (Config.logchallenges && !this.room.settings.isPrivate && !this.room.hideReplay) {
 			if (winnerid === p1id) {
 				p1score = 1;
 			} else if (winnerid === p2id) {
 				p1score = 0;
 			}
 			void this.logBattle(p1score);
+			const id = this.room.getReplayData().id.split("-")[1];
+			const link = "http://73.191.22.186:8001/replays/" + p1id + "_vs_" + p2id + "_" + id;
+			const uploader = Users.get(winnerid || p1id);
+			if (uploader?.connections[0]) {
+				Chat.parse('Replay autosaved to ' + link, this.room, uploader, uploader.connections[0]);
+			}
 		} else {
 			this.logData = null;
 		}
