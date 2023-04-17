@@ -243,7 +243,6 @@ export class TeamValidator {
 				}
 			}
 			for (var cm of cms) {
-				if (cm) problems.push(cm.toString());
 				if (cm !== cms[0]) problems.push(`Your Custom Move type must be consistent over your whole team.`);
 			}
 		}
