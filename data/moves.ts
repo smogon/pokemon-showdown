@@ -12873,6 +12873,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 				move = 'moonblast';
 			} else if (this.field.isTerrain('psychicterrain')) {
 				move = 'psychic';
+			} else if (this.field.isWeather('fallout')) {
+				move = 'expunge';
 			}
 			this.actions.useMove(move, pokemon, target);
 			return null;
@@ -22423,144 +22425,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 	},
 
-	// Plan of Attack
-	coinflip: {
-		num: -23,
-		basePower: 0,
-		accuracy: true,
-		category: "Special",
-		ohko: true,
-		hasCrashDamage: true,
-		onMoveFail(target, source, move) {
-			this.damage(source.baseMaxhp, source, source, this.dex.conditions.get('Coinflip'));
-			this.add('-message', `${source.name} gambled its life away.`);
-		},
-		name: "Coinflip",
-		pp: 5,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		secondary: null,
-		target: "normal",
-		type: "Dark",
-		zMove: {basePower: 180},
-		maxMove: {basePower: 130},
-		contestType: "Tough",
-	},
-	deserttempest: {
-		num: -24,
-		accuracy: 90,
-		basePower: 65,
-		category: "Special",
-		name: "Desert Tempest",
-		pp: 15,
-		priority: 0,
-		onBasePower(basePower, pokemon, target) {
-			if (pokemon.item === "smoothrock") {
-				return this.chainModify(1.2);
-			}
-		},
-		onAfterHit(source, target, move) {
-			this.actions.useMove("Sandstorm", target, target);
-		},
-		flags: {protect: 1, mirror: 1},
-		secondary: null,
-		target: "normal",
-		type: "Rock",
-		contestType: "Beautiful",
-	},
-	obsidiancrash: {
-		num: -25,
-		accuracy: 95,
-		basePower: 80,
-		category: "Physical",
-		name: "Obsidian Crash",
-		pp: 10,
-		recoil: [33, 100],
-		onEffectiveness(typeMod, target, type) {
-			if (type === 'Water') return 0;
-		},
-		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
-		target: "normal",
-		type: "Fire",
-	},
-	callofthehunt: {
-		num: -26,
-		accuracy: true,
-		basePower: 20,
-		category: "Physical",
-		name: "Call of the Hunt",
-		pp: 20,
-		priority: 0,
-		flags: {protect: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
-		target: "normal",
-		type: "Fire",
-		contestType: "Tough",
-	},
-	ferociouscrash: {
-		num: -27,
-		accuracy: 95,
-		basePower: 130,
-		category: "Physical",
-		name: "Ferocious Crash",
-		pp: 5,
-		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
-		recoil: [50, 100],
-		secondary: null,
-		target: "normal",
-		type: "Fighting",
-		contestType: "Tough",
-	},
-	boxin: {
-		num: -28,
-		accuracy: 100,
-		basePower: 70,
-		category: "Physical",
-		name: "Box In",
-		pp: 10,
-		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
-		onHit(target, source, move) {
-			source.addVolatile('trapped', target, move, 'trapper');
-			target.addVolatile('trapped', source, move, 'trapper');
-		},
-		secondary: null,
-		target: "normal",
-		type: "Ghost",
-	},
-	sirenssong: {
-		num: -29,
-		accuracy: 85,
-		basePower: 60,
-		category: "Special",
-		name: "Siren's Song",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-		onAfterHit(source, target, move) {
-			this.actions.useMove("Attract", source, target);
-		},
-		target: "allAdjacentFoes",
-		type: "Psychic",
-		contestType: "Beautiful",
-	},
-	pollute: {
-		num: -30,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Pollute",
-		pp: 10,
-		priority: 0,
-		flags: {wind: 1},
-		weather: 'acidrain',
-		secondary: null,
-		target: "all",
-		type: "Poison",
-		zMove: {boost: {spa: 1}},
-		contestType: "Tough",
-	},
 	// uranium moves start here
 	coralbreak: {
 		num: -31,
@@ -22762,7 +22626,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 90,
 		basePower: 0,
 		damageCallback(pokemon, target) {
-			return this.clampIntRange(target.getUndynamaxedHP() / 2, 1);
+			return this.clampIntRange(Math.floor(target.getUndynamaxedHP() / 2), 1);
 		},
 		category: "Special",
 		name: "Half-life",
@@ -23065,5 +22929,144 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fighting",
 		contestType: "Cool",
+	},
+
+	// Plan of Attack
+	coinflip: {
+		num: -23,
+		basePower: 0,
+		accuracy: true,
+		category: "Special",
+		ohko: true,
+		hasCrashDamage: true,
+		onMoveFail(target, source, move) {
+			this.damage(source.baseMaxhp, source, source, this.dex.conditions.get('Coinflip'));
+			this.add('-message', `${source.name} gambled its life away.`);
+		},
+		name: "Coinflip",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: null,
+		target: "normal",
+		type: "Dark",
+		zMove: {basePower: 180},
+		maxMove: {basePower: 130},
+		contestType: "Tough",
+	},
+	deserttempest: {
+		num: -24,
+		accuracy: 90,
+		basePower: 65,
+		category: "Special",
+		name: "Desert Tempest",
+		pp: 15,
+		priority: 0,
+		onBasePower(basePower, pokemon, target) {
+			if (pokemon.item === "smoothrock") {
+				return this.chainModify(1.2);
+			}
+		},
+		onAfterHit(source, target, move) {
+			this.actions.useMove("Sandstorm", target, target);
+		},
+		flags: {protect: 1, mirror: 1},
+		secondary: null,
+		target: "normal",
+		type: "Rock",
+		contestType: "Beautiful",
+	},
+	obsidiancrash: {
+		num: -25,
+		accuracy: 95,
+		basePower: 80,
+		category: "Physical",
+		name: "Obsidian Crash",
+		pp: 10,
+		recoil: [33, 100],
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Water') return 0;
+		},
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		target: "normal",
+		type: "Fire",
+	},
+	callofthehunt: {
+		num: -26,
+		accuracy: true,
+		basePower: 20,
+		category: "Physical",
+		name: "Call of the Hunt",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+		target: "normal",
+		type: "Fire",
+		contestType: "Tough",
+	},
+	ferociouscrash: {
+		num: -27,
+		accuracy: 95,
+		basePower: 130,
+		category: "Physical",
+		name: "Ferocious Crash",
+		pp: 5,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		recoil: [50, 100],
+		secondary: null,
+		target: "normal",
+		type: "Fighting",
+		contestType: "Tough",
+	},
+	boxin: {
+		num: -28,
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		name: "Box In",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onHit(target, source, move) {
+			source.addVolatile('trapped', target, move, 'trapper');
+			target.addVolatile('trapped', source, move, 'trapper');
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
+	sirenssong: {
+		num: -29,
+		accuracy: 85,
+		basePower: 60,
+		category: "Special",
+		name: "Siren's Song",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
+		onAfterHit(source, target, move) {
+			this.actions.useMove("Attract", source, target);
+		},
+		target: "allAdjacentFoes",
+		type: "Psychic",
+		contestType: "Beautiful",
+	},
+	pollute: {
+		num: -30,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Pollute",
+		pp: 10,
+		priority: 0,
+		flags: {wind: 1},
+		weather: 'acidrain',
+		secondary: null,
+		target: "all",
+		type: "Poison",
+		zMove: {boost: {spa: 1}},
+		contestType: "Tough",
 	},
 };
