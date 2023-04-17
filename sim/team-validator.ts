@@ -234,9 +234,11 @@ export class TeamValidator {
 
 		let problems: string[] = [];
 		const ruleTable = this.ruleTable;
+
 		if (team) {
 			let cms = [];
 			for (var mon of team) {
+				problems.push(mon.moves[0].toString());
 				if (mon.moves.includes("custommove" as ID)) {
 					cms.push(mon.cmType);
 				}
@@ -245,6 +247,7 @@ export class TeamValidator {
 				if (cm !== cms[0]) problems.push(`Your Custom Move type must be consistent over your whole team.`);
 			}
 		}
+
 		if (format.team) {
 			if (team) {
 				return [
