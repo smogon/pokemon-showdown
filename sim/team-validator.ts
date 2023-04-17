@@ -238,7 +238,7 @@ export class TeamValidator {
 		if (team) {
 			let cms = [];
 			for (var mon of team) {
-				if (mon.moves.includes("custommove" as ID)) {
+				if (mon.moves.includes("Custom Move")) {
 					cms.push(mon.cmType);
 				}
 			}
