@@ -528,14 +528,14 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		searchShow: false,
-		ruleset: ['Draft'],
+		ruleset: ['Draft', 'Dynamax Clause'],
 	},
 	{
 		name: "[Gen 8] NatDex Draft",
 
 		mod: 'gen8',
 		searchShow: false,
-		ruleset: ['Draft', '+Past'],
+		ruleset: ['Draft', 'Dynamax Clause', '+Past'],
 	},
 	{
 		name: "[Gen 8] NatDex 4v4 Doubles Draft",
