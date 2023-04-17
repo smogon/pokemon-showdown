@@ -238,12 +238,12 @@ export class TeamValidator {
 		if (team) {
 			let cms = [];
 			for (var mon of team) {
-				problems.push(mon.moves[0].toString());
 				if (mon.moves.includes("custommove" as ID)) {
 					cms.push(mon.cmType);
 				}
 			}
 			for (var cm of cms) {
+				if (cm) problems.push(cm.toString());
 				if (cm !== cms[0]) problems.push(`Your Custom Move type must be consistent over your whole team.`);
 			}
 		}
