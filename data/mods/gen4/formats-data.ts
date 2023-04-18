@@ -363,7 +363,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	koffing: {
-		tier: "LC",
+		tier: "7U",
 	},
 	weezing: {
 		tier: "UU",
@@ -510,7 +510,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	kabuto: {
-		tier: "8U",
+		tier: "7U",
 	},
 	kabutops: {
 		tier: "UU",

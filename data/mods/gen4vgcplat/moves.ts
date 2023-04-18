@@ -1,60 +1,30 @@
 export const Moves: {[k: string]: ModdedMoveData} = {
-	// accelerock: {
-	// 	num: 709,
-	// 	accuracy: 100,
-	// 	basePower: 40,
-	// 	category: "Physical",
-	// 	name: "Accelerock",
-	// 	pp: 20,
-	// 	priority: 1,
-	// 	flags: {contact: 1, protect: 1, mirror: 1},
-	// 	secondary: null,
-	// 	target: "normal",
-	// 	type: "Rock",
-	// 	contestType: "Cool",
-	// },
-	// spiritbreak: {
-	// 	num: 789,
-	// 	accuracy: 100,
-	// 	basePower: 75,
-	// 	category: "Physical",
-	// 	name: "Spirit Break",
-	// 	pp: 15,
-	// 	priority: 0,
-	// 	flags: {contact: 1, protect: 1, mirror: 1},
-	// 	secondary: {
-	// 		chance: 100,
-	// 		boosts: {
-	// 			spa: -1,
-	// 		},
-	// 	},
-	// 	target: "normal",
-	// 	type: "Fairy",
-	// },
-	// thunderouskick: {
-	// 	num: 823,
-	// 	accuracy: 100,
-	// 	basePower: 80,
-	// 	category: "Physical",
-	// 	name: "Thunderous Kick",
-	// 	pp: 10,
-	// 	priority: 0,
-	// 	flags: {contact: 1, protect: 1, mirror: 1},
-	// 	secondary: {
-	// 		chance: 100,
-	// 		boosts: {
-	// 			def: -1,
-	// 		},
-	// 	},
-	// 	target: "normal",
-	// 	type: "Fighting",
-	// },
 	ominouswind: {
 		inherit: true,
 		"isNonstandard": null,
+		shortDesc: "20% chance to raise all stats by 1 (not acc/eva)",
+		secondary: {
+			chance: 20,
+			self: {
+				boosts: { atk: 1, def: 1, spa: 1, spd: 1, spe: 1},
+			},
+		},
+	},
+	ancientpower: {
+		inherit: true,
+		"isNonstandard": null,
+		shortDesc: "20% chance to raise all stats by 1 (not acc/eva)",
+		secondary: {
+			chance: 20,
+			self: {
+				boosts: { atk: 1, def: 1, spa: 1, spd: 1, spe: 1},
+			},
+		},
 	},
 	skyattack: {
-		num: 143,
+		inherit: true,
+		"isNonstandard": null,
+		shortDesc: "Has 33% Recoil, 30% flinch, High Crit Rate",
 		accuracy: 85,
 		basePower: 105,
 		category: "Physical",
@@ -70,10 +40,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"recoil": [1, 3],
 		target: "any",
 		type: "Flying",
-		contestType: "Cool",
 	},
 	acid: {
-		num: 51,
+		inherit: true,
+		"isNonstandard": null,
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
@@ -89,7 +59,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		target: "allAdjacentFoes",
 		type: "Poison",
-		contestType: "Clever",
 	},
 
 	"pound": {
@@ -3654,6 +3623,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	"silverwind": {
 		"inherit": true,
+		shortDesc: "20% chance to raise all stats by 1 (not acc/eva)",
+		secondary: {
+			chance: 20,
+			self: {
+				boosts: { atk: 1, def: 1, spa: 1, spd: 1, spe: 1},
+			},
+		},
 		"accuracy": 100,
 		"basePower": 60,
 		"category": "Special",
