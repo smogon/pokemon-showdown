@@ -3846,7 +3846,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -4027,9 +4027,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			],
 			"snore": [
 				"9T"
-			],
-			"stealthrock": [
-				"9M"
 			],
 			"stoneedge": [
 				"9M"
@@ -4556,7 +4553,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -5084,7 +5081,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -5341,7 +5338,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -5562,7 +5559,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -6075,7 +6072,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -6281,7 +6278,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -7834,7 +7831,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"substitute": [
@@ -7980,7 +7977,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -11998,7 +11995,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -12159,7 +12156,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -12338,7 +12335,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -15505,9 +15502,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
-				"9M"
-			],
 			"strength": [
 				"9M"
 			],
@@ -17029,7 +17023,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -17226,7 +17220,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -18315,9 +18309,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"spite": [
 				"9T"
 			],
-			"stealthrock": [
-				"9M"
-			],
 			"strength": [
 				"9M"
 			],
@@ -18551,7 +18542,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"spite": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -18808,7 +18799,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -21285,7 +21276,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -22807,9 +22798,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"spikes": [
 				"9E"
 			],
-			"stealthrock": [
-				"9M"
-			],
 			"substitute": [
 				"9M"
 			],
@@ -22989,7 +22977,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -23164,9 +23152,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			],
 			"snore": [
 				"9T"
-			],
-			"stealthrock": [
-				"9M"
 			],
 			"substitute": [
 				"9M"
@@ -23355,9 +23340,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			],
 			"snore": [
 				"9T"
-			],
-			"stealthrock": [
-				"9M"
 			],
 			"substitute": [
 				"9M"
@@ -23565,7 +23547,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"steelwing": [
@@ -25488,7 +25470,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"spite": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"steelwing": [
@@ -31475,7 +31457,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -34424,7 +34406,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -34586,9 +34568,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 				"9T"
 			],
 			"solarbeam": [
-				"9M"
-			],
-			"stealthrock": [
 				"9M"
 			],
 			"strength": [
@@ -34785,7 +34764,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"spite": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -34991,7 +34970,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"steelwing": [
@@ -35196,9 +35175,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			],
 			"snore": [
 				"9T"
-			],
-			"stealthrock": [
-				"9M"
 			],
 			"strength": [
 				"9M"
@@ -36130,9 +36106,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			],
 			"snore": [
 				"9T"
-			],
-			"stealthrock": [
-				"9M"
 			],
 			"stoneedge": [
 				"9M"
@@ -37266,9 +37239,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
-				"9M"
-			],
 			"stoneedge": [
 				"9M"
 			],
@@ -37433,7 +37403,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -37594,7 +37564,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -37803,7 +37773,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -38668,9 +38638,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
-				"9M"
-			],
 			"substitute": [
 				"9M"
 			],
@@ -39345,7 +39312,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -39515,7 +39482,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -40895,7 +40862,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -41137,7 +41104,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -41802,7 +41769,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"spite": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stomp": [
@@ -41960,7 +41927,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"spite": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"substitute": [
@@ -42184,7 +42151,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"spite": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -42856,7 +42823,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"substitute": [
@@ -44390,7 +44357,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -44584,7 +44551,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -50759,7 +50726,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -51750,9 +51717,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"spite": [
 				"9T"
 			],
-			"stealthrock": [
-				"9M"
-			],
 			"stomp": [
 				"9E"
 			],
@@ -51920,7 +51884,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"spite": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -52158,9 +52122,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			],
 			"spite": [
 				"9T"
-			],
-			"stealthrock": [
-				"9M"
 			],
 			"stoneedge": [
 				"9M"
@@ -54900,7 +54861,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stomp": [
@@ -55073,7 +55034,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -55237,7 +55198,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -57696,9 +57657,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
-				"9M"
-			],
 			"stoneedge": [
 				"9M"
 			],
@@ -57894,9 +57852,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 				"9T"
 			],
 			"solarbeam": [
-				"9M"
-			],
-			"stealthrock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -58755,7 +58710,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"substitute": [
@@ -58940,7 +58895,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -59098,7 +59053,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"substitute": [
@@ -59271,7 +59226,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -59426,7 +59381,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"substitute": [
@@ -59587,7 +59542,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -60249,7 +60204,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -63054,7 +63009,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -63918,7 +63873,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -64112,7 +64067,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -64287,9 +64242,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			],
 			"snore": [
 				"9T"
-			],
-			"stealthrock": [
-				"9M"
 			],
 			"stoneedge": [
 				"9M"
@@ -64657,9 +64609,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			],
 			"snore": [
 				"9T"
-			],
-			"stealthrock": [
-				"9M"
 			],
 			"strength": [
 				"9M"
@@ -65488,7 +65437,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -65924,7 +65873,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"substitute": [
@@ -66160,7 +66109,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -66348,7 +66297,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -66512,7 +66461,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -66706,7 +66655,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -66900,7 +66849,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -67100,7 +67049,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -67324,7 +67273,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -67506,7 +67455,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"substitute": [
@@ -67673,7 +67622,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -67870,7 +67819,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"steelwing": [
@@ -68472,7 +68421,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"substitute": [
@@ -68663,7 +68612,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -69768,9 +69717,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"spite": [
 				"9T"
 			],
-			"stealthrock": [
-				"9M"
-			],
 			"stomp": [
 				"9E"
 			],
@@ -69989,9 +69935,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"spite": [
 				"9T"
 			],
-			"stealthrock": [
-				"9M"
-			],
 			"stoneedge": [
 				"9M"
 			],
@@ -70195,7 +70138,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -70374,7 +70317,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -74376,7 +74319,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"substitute": [
@@ -74564,7 +74507,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -74703,9 +74646,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			],
 			"snore": [
 				"9T"
-			],
-			"stealthrock": [
-				"9M"
 			],
 			"substitute": [
 				"9M"
@@ -75602,7 +75542,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -75772,7 +75712,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -75971,9 +75911,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			],
 			"snore": [
 				"9T"
-			],
-			"stealthrock": [
-				"9M"
 			],
 			"stoneedge": [
 				"9M"
@@ -76743,9 +76680,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"spitup": [
 				"9E"
 			],
-			"stealthrock": [
-				"9M"
-			],
 			"stockpile": [
 				"9E"
 			],
@@ -76889,7 +76823,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -79554,9 +79488,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"spite": [
 				"9T"
 			],
-			"stealthrock": [
-				"9M"
-			],
 			"strength": [
 				"9M"
 			],
@@ -81007,7 +80938,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"steelwing": [
@@ -81198,7 +81129,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -81783,7 +81714,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -82529,7 +82460,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"substitute": [
@@ -82738,7 +82669,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"substitute": [
@@ -82953,7 +82884,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"substitute": [
@@ -83174,7 +83105,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -83571,7 +83502,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"strength": [
@@ -85123,7 +85054,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"solarbeam": [
 				"9M"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"stoneedge": [
@@ -85604,7 +85535,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			"snore": [
 				"9T"
 			],
-			"stealthrock": [
+			"accelerock": [
 				"9M"
 			],
 			"substitute": [
