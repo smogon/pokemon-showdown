@@ -1426,7 +1426,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 						`/markshared ${ip}, {owner}` :
 						`Can someone \`\`/markshared ${ip}, {owner}\`\``;
 					buf += `<form data-submitsend="/msgroom staff,${marksharedCmd}">`;
-					buf += `<input name="owner" placeholder="School/Organization Name, City, Country" size="40">`;
+					buf += `<input name="owner" placeholder="School/Organization Name, City, Country" size="40" required />`;
 					buf += `<button class="button" type="submit">Mark as shared IP</button>`;
 					buf += `</form>`;
 				}
