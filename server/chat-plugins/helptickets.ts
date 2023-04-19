@@ -1422,6 +1422,13 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 						`/unlockip ${ip}` :
 						`Can someone \`\`/unlockip ${ip}\`\` (${data.hostType} host)`;
 					buf += `<button class="button" name="send" value="/msgroom staff,${unlockCmd}">Unlock IP</button>`;
+					const marksharedCmd = staff.can('globalban') ?
+						`/markshared ${ip}, {owner}` :
+						`Can someone \`\`/markshared ${ip}, {owner}\`\``;
+					buf += `<form data-submitsend="/msgroom staff,${marksharedCmd}">`;
+					buf += `<input name="owner" placeholder="School/Organization Name, City, Country" size="40">`;
+					buf += `<button class="button" type="submit">Mark as shared IP</button>`;
+					buf += `</form><br />`;
 				}
 				buf += `</details>`;
 			}
