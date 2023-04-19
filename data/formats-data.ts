@@ -5912,12 +5912,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	annihilape: {
 		tier: "Uber",
 		doublesTier: "DUber",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	walkingwake: {
 		tier: "OU",
 		doublesTier: "DOU",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	ironleaves: {
 		tier: "UUBL",
