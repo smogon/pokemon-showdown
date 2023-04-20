@@ -399,7 +399,7 @@ export const DefaultText: {[k: string]: DefaultText} = {
 		weatherName: "Toxic Fallout",
 		start: "  A Toxic Fallout has set in!",
 		end: "  The air is clean again.",
-		upkeep: "  (The geiger counter is FEROCIOUSLY ticking.)", // "  (The toxic fallout continues.)",
+		upkeep: "  (A geiger counter is ticking.)", // "  (The toxic fallout continues.)",
 		damage: "  [POKEMON] is affected by the radiation!",
 	},
 };
