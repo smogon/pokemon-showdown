@@ -413,6 +413,51 @@ export const commands: Chat.ChatCommands = {
 		);
 	},
 
+	randitem: 'randomitem',
+	async randomitem(target, room, user, connection, cmd, message) {
+		this.checkBroadcast(true);
+		target = target.slice(0, 300);
+		const targets = target.split(",");
+		const targetsBuffer = [];
+		let qty;
+		for (const arg of targets) {
+			if (!arg) continue;
+			const num = Number(arg);
+			if (Number.isInteger(num)) {
+				if (qty) throw new Chat.ErrorMessage("Only specify the number of items once.");
+				qty = num;
+				if (qty < 1 || MAX_RANDOM_RESULTS < qty) {
+					throw new Chat.ErrorMessage(`Number of random items must be between 1 and ${MAX_RANDOM_RESULTS}.`);
+				}
+				targetsBuffer.push(`random${qty}`);
+			} else {
+				targetsBuffer.push(arg);
+			}
+		}
+		if (!qty) targetsBuffer.push("random1");
+
+		const response = await runSearch({
+			target: targetsBuffer.join(","),
+			cmd: 'randitem',
+			canAll: !this.broadcastMessage || checkCanAll(room),
+			message: (this.broadcastMessage ? "" : message),
+		});
+		if (!response.error && !this.runBroadcast(true)) return;
+		if (response.error) {
+			throw new Chat.ErrorMessage(response.error);
+		} else if (response.reply) {
+			this.sendReplyBox(response.reply);
+		} else if (response.dt) {
+			(Chat.commands.data as Chat.ChatHandler).call(
+				this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
+			);
+		}
+	},
+	randomitemhelp: [
+		`/randitem - Generates random items based on given search conditions.`,
+		`/randitem uses the same parameters as /itemsearch (see '/help ds').`,
+		`Adding a number as a parameter returns that many random items, e.g., '/randitem 6' returns 6 random items.`,
+	],
 	asearch: 'abilitysearch',
 	as: 'abilitysearch',
 	as3: 'abilitysearch',
@@ -499,6 +544,50 @@ export const commands: Chat.ChatCommands = {
 		`/learn5 displays how the Pok\u00e9mon can learn the given moves at level 5, if it can at all.`,
 		`/learnall displays all of the possible fathers for egg moves.`,
 		`/learn can also be prefixed by a generation acronym (e.g.: /dpplearn) to indicate which generation is used. Valid options are: rby gsc adv dpp bw2 oras usum`,
+	],
+	randtype: 'randomtype',
+	async randomtype(target, room, user, connection, cmd, message) {
+		this.checkBroadcast(true);
+		target = target.slice(0, 300);
+		const targets = target.split(",");
+		const targetsBuffer = [];
+		let qty;
+		for (const arg of targets) {
+			if (!arg) continue;
+			const num = Number(arg);
+			if (Number.isInteger(num)) {
+				if (qty) throw new Chat.ErrorMessage("Only specify the number of types once.");
+				qty = num;
+				if (qty < 1 || MAX_RANDOM_RESULTS < qty) {
+					throw new Chat.ErrorMessage(`Number of random types must be between 1 and ${MAX_RANDOM_RESULTS}.`);
+				}
+				targetsBuffer.push(`random${qty}`);
+			} else {
+				targetsBuffer.push(arg);
+			}
+		}
+		if (!qty) targetsBuffer.push("random1");
+
+		const response = await runSearch({
+			target: targetsBuffer.join(","),
+			cmd: 'randtype',
+			canAll: !this.broadcastMessage || checkCanAll(room),
+			message: (this.broadcastMessage ? "" : message),
+		});
+		if (!response.error && !this.runBroadcast(true)) return;
+		if (response.error) {
+			throw new Chat.ErrorMessage(response.error);
+		} else if (response.reply) {
+			this.sendReplyBox(response.reply);
+		} else if (response.dt) {
+			(Chat.commands.data as Chat.ChatHandler).call(
+				this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
+			);
+		}
+	},
+	randomtypehelp: [
+		`/randtype - Generates random types based on given search conditions.`,
+		`Adding a number as a parameter returns that many random items, e.g., '/randtype 6' returns 6 random types.`,
 	],
 };
 
@@ -2023,8 +2112,10 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 	let showAll = false;
 	let maxGen = 0;
 	let gen = 0;
+	let randomOutput = 0;
 
 	target = target.trim();
+	const target_split = target.split(',');
 	const lastCommaIndex = target.lastIndexOf(',');
 	const lastArgumentSubstr = target.substr(lastCommaIndex + 1).trim();
 	if (lastArgumentSubstr === 'all') {
@@ -2033,6 +2124,16 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 		target = target.substr(0, lastCommaIndex);
 	}
 
+	const sanitized_targets = [];
+	for (const index of target_split.keys()) {
+		const local_target = target_split[index].trim();
+		if (local_target.startsWith('random') && cmd === 'randitem') {
+			randomOutput = parseInt(local_target.substr(6));
+		} else {
+			sanitized_targets.push(local_target);
+		}
+	}
+	target = sanitized_targets.join(',');
 	target = target.toLowerCase().replace('-', ' ').replace(/[^a-z0-9.\s/]/g, '');
 	const rawSearch = target.replace(/(max ?)?gen \d/g, match => toID(match)).split(' ');
 	const searchedWords: string[] = [];
@@ -2130,7 +2231,7 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 		searchedWords.push(newWord);
 	}
 
-	if (searchedWords.length === 0 && !gen && !maxGen) {
+	if (searchedWords.length === 0 && !gen && !maxGen && randomOutput === 0) {
 		return {error: "No distinguishing words were used. Try a more specific search."};
 	}
 
@@ -2251,6 +2352,26 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 	}
 
 	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
+	if (randomOutput !== 0) {
+		const randomItems = [];
+		if (foundItems.length === 0) {
+			for (let i = 0; i < randomOutput; i++) {
+				randomItems.push(dex.items.all()[Math.floor(Math.random() * dex.items.all().length)]);
+			}
+		} else {
+			if (foundItems.length < randomOutput) {
+				randomOutput = foundItems.length;
+			}
+			for (let i = 0; i < randomOutput; i++) {
+				randomItems.push(foundItems[Math.floor(Math.random() * foundItems.length)]);
+			}
+		}
+		resultsStr += randomItems.map(
+			result => `<a href="//${Config.routes.dex}/items/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon item="${result}" style="vertical-align:-7px" />${result}</a>`
+		).join(", ");
+		return {reply: resultsStr};
+	}
+
 	if (foundItems.length > 0) {
 		foundItems.sort();
 		let notShown = 0;
@@ -2658,6 +2779,34 @@ function runSearch(query: {target: string, cmd: string, canAll: boolean, message
 	});
 }
 
+function runRandtype(target: string, cmd: string, canAll: boolean, message: string) {
+	const icon: any = {};
+	for (const type of Dex.types.names()) {
+		icon[type] = `<img src="https://${Config.routes.client}/sprites/types/${type}.png" width="32" height="14">`;
+	}
+	let randomOutput = 0;
+	target = target.trim();
+	const target_split = target.split(',');
+	for (const index of target_split.keys()) {
+		const local_target = target_split[index].trim();
+		// Check if the target contains "random<digit>".
+		if (local_target.startsWith('random') && cmd === 'randtype') {
+			// Validation for this is in the /randpoke command
+			randomOutput = parseInt(local_target.substr(6));
+		}
+	}
+	const randTypes = [];
+	for (let i = 0; i < randomOutput; i++) {
+		// Add a random type to the output.
+		randTypes.push(Dex.types.names()[Math.floor(Math.random() * Dex.types.names().length)]);
+	}
+	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
+	resultsStr += randTypes.map(
+		type => icon[type]
+	).join(' ');
+	return {reply: resultsStr};
+}
+
 /*********************************************************
  * Process manager
  *********************************************************/
@@ -2674,6 +2823,7 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(m
 		case 'randmove':
 		case 'movesearch':
 			return runMovesearch(query.target, query.cmd, query.canAll, query.message, false);
+		case 'randitem':
 		case 'itemsearch':
 			return runItemsearch(query.target, query.cmd, query.canAll, query.message);
 		case 'randability':
@@ -2681,6 +2831,8 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(m
 			return runAbilitysearch(query.target, query.cmd, query.canAll, query.message);
 		case 'learn':
 			return runLearn(query.target, query.cmd, query.canAll, query.message);
+		case 'randtype':
+			return runRandtype(query.target, query.cmd, query.canAll, query.message);
 		default:
 			throw new Error(`Unrecognized Dexsearch command "${query.cmd}"`);
 		}
