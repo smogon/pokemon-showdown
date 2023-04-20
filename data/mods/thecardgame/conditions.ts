@@ -1,20 +1,4 @@
 export const Conditions: {[k: string]: ModdedConditionData} = {
-	sandstorm: {
-		inherit: true,
-		onModifySpD(spd, pokemon) {
-			if (pokemon.hasType('Fighting') && this.field.isWeather('sandstorm')) {
-				return this.modify(spd, 1.5);
-			}
-		},
-	},
-	snow: {
-		inherit: true,
-		onModifyDef(def, pokemon) {
-			if (pokemon.hasType('Water') && this.field.isWeather('snow')) {
-				return this.modify(def, 1.5);
-			}
-		},
-	},
 	deltastream: {
 		inherit: true,
 		onEffectiveness(typeMod, target, type, move) {
