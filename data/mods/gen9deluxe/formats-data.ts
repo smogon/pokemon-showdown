@@ -287,7 +287,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData; } = {
 	noctowl: { "tier": "UU", "natDexTier": "UU" },
 	ledyba: { "tier": "LC", "natDexTier": "LC" },
 	ledian: { "tier": "UU", "natDexTier": "UU" },
-	spinarak: { "tier": "Do Not Use", "natDexTier": "LC" },
+	spinarak: { "tier": "LC", "natDexTier": "LC" },
 	ariados: { "tier": "UU", "natDexTier": "UU" },
 	chinchou: { "tier": "LC", "natDexTier": "LC" },
 	lanturn: { "tier": "UU", "natDexTier": "UU" },

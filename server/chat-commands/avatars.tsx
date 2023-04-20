@@ -242,6 +242,10 @@ function listUsers(users: string[]) {
 }
 
 const OFFICIAL_AVATARS = new Set([
+    'gardevoir4',
+    'gardevoir3',
+    'gardevoir2',
+    'gardevoir1',
     'magnezone',
     'demirab',
     'woopa',

@@ -2709,8 +2709,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return null;
 			}
 		},
-		onBoost(boost, target, source, effect) {
+		onAfterBoost(boost, target, source, effect) {
+			console.log("onBoost from oblivious");
+			console.log(effect.name);
 			if (effect.name === 'Intimidate') {
+				console.log("intimidate");
 				delete boost.atk;
 				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Oblivious', '[of] ' + target);
 			}

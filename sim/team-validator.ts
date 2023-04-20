@@ -583,7 +583,7 @@ export class TeamValidator {
 
 		if (!set.ability) set.ability = 'No Ability';
 		if (ruleTable.has('obtainableabilities')) {
-			if (dex.gen <= 2 || dex.currentMod === 'gen7letsgo') {
+			if (dex.gen <= 2 || dex.currentMod === 'gen7letsgo' || dex.currentMod === 'gen7letsgodnu') {
 				set.ability = 'No Ability';
 			} else {
 				if (!ability.name || ability.name === 'No Ability') {
@@ -857,7 +857,7 @@ export class TeamValidator {
 		const ruleTable = this.ruleTable;
 		const dex = this.dex;
 
-		const allowAVs = ruleTable.has('allowavs');
+		const allowAVs = ruleTable.has('allowavs') && !(this.format.id.includes("letsgodonotuse"));
 		const evLimit = ruleTable.evLimit;
 		const canBottleCap = dex.gen >= 7 && (set.level >= (dex.gen < 9 ? 100 : 50) || !ruleTable.has('obtainablemisc'));
 
@@ -989,7 +989,7 @@ export class TeamValidator {
 			}
 		}
 
-		if (dex.currentMod === 'gen7letsgo') { // AVs
+		if (dex.currentMod.includes("letsgo")) { // AVs
 			for (const stat in set.evs) {
 				if (set.evs[stat as 'hp'] > 0 && !allowAVs) {
 					problems.push(`${name} has Awakening Values but this format doesn't allow them.`);
