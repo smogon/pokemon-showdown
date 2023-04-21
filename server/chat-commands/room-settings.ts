@@ -744,6 +744,32 @@ export const commands: Chat.ChatCommands = {
 		`Requires: # &`,
 	],
 
+	codeapprovals(target, room, user) {
+		room = this.requireRoom();
+		this.checkCan('declare', null, room);
+		target = toID(target);
+		if (!target) {
+			return this.sendReply(`Code approvals are currently ${room.settings.requestCodeEnabled ? `ENABLED` : `DISABLED`} for ${room}.`);
+		}
+		if (this.meansNo(target)) {
+			if (!room.settings.requestCodeEnabled) return this.errorReply(`Code approvals are already disabled.`);
+			room.settings.requestCodeEnabled = undefined;
+			this.privateModAction(`${user.name} disabled code approvals in this room.`);
+		} else if (this.meansYes(target)) {
+			if (room.settings.requestCodeEnabled) return this.errorReply(`Code approvals are already enabled.`);
+			room.settings.requestCodeEnabled = true;
+			this.privateModAction(`${user.name} enabled the use of code approvals in this room.`);
+		} else {
+			return this.errorReply(`Unrecognized setting for code approvals. Use 'on' or 'off'.`);
+		}
+		room.saveSettings();
+		return this.modlog(`SHOWCODEAPPROVALS`, null, `${this.meansYes(target) ? `ON` : `OFF`}`);
+	},
+	codeapprovalshelp: [
+		`/codeapprovals [setting] - Enable or disable the use of code approvals in the current room.`,
+		`Requires: # &`,
+	],
+
 	showmedia(target, room, user) {
 		this.errorReply(`/showmedia has been deprecated. Use /permissions instead.`);
 		return this.parse(`/help permissions`);
@@ -1711,6 +1737,14 @@ export const roomSettings: Chat.SettingsHandler[] = [
 		options: [
 			[`off`, !room.settings.requestShowEnabled || `showapprovals off`],
 			[`on`, room.settings.requestShowEnabled || `showapprovals on`],
+		],
+	}),
+	room => ({
+		label: "/requestcode",
+		permission: 'declare',
+		options: [
+			[`off`, !room.settings.requestCodeEnabled || `codeapprovals off`],
+			[`on`, room.settings.requestCodeEnabled || `codeapprovals on`],
 		],
 	}),
 ];

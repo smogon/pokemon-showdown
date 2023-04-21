@@ -71,6 +71,11 @@ interface ShowRequest {
 	dimensions?: [number, number, boolean];
 }
 
+interface ShowCodeRequest {
+	name: string;
+	code: string;
+}
+
 interface BattleRoomTable {
 	p1?: string;
 	p2?: string;
@@ -116,6 +121,7 @@ export interface RoomSettings {
 	rulesLink?: string | null;
 	dataCommandTierDisplay?: 'tiers' | 'doubles tiers' | 'National Dex tiers' | 'numbers';
 	requestShowEnabled?: boolean | null;
+	requestCodeEnabled?: boolean | null;
 	permissions?: {[k: string]: GroupSymbol};
 	minorActivity?: PollData | AnnouncementData;
 	minorActivityQueue?: MinorActivityData[];
@@ -219,6 +225,7 @@ export abstract class BasicRoom {
 	expireTimer: NodeJS.Timer | null;
 	userList: string;
 	pendingApprovals: Map<string, ShowRequest> | null;
+	pendingCodeApprovals: Map<string, ShowCodeRequest> | null;
 
 	messagesSent: number;
 	/**
@@ -312,6 +319,7 @@ export abstract class BasicRoom {
 			this.userList = this.getUserList();
 		}
 		this.pendingApprovals = null;
+		this.pendingCodeApprovals = null;
 		this.messagesSent = 0;
 		this.nthMessageHandlers = new Map();
 		this.tour = null;
@@ -743,6 +751,20 @@ export abstract class BasicRoom {
 				message += `<strong>Comment:</strong> ${entry.comment ? entry.comment : 'None.'}<br />`;
 				message += `<button class="button" name="send" value="/approveshow ${userid}">Approve</button>` +
 				`<button class="button" name="send" value="/denyshow ${userid}">Deny</button></div>`;
+				message += `<hr />`;
+			}
+			message += `</details></div>`;
+		}
+		if (this.pendingCodeApprovals?.size) {
+			message += `\n|raw|<div class="infobox">`;
+			message += `<details open><summary>(Pending code requests: ${this.pendingCodeApprovals.size})</summary>`;
+			for (const [userid, entry] of this.pendingCodeApprovals) {
+				message += `<div class="infobox">`;
+				message += `<strong>Requester ID:</strong> ${userid}<br />`;
+				message += Chat.getReadmoreCodeBlock(entry.code);
+				message += `</details></div>`;
+				message += `<button class="button" name="send" value="/approvecode ${userid}">Approve</button>` +
+			`<button class="button" name="send" value="/denycode ${userid}">Deny</button></div>`;
 				message += `<hr />`;
 			}
 			message += `</details></div>`;

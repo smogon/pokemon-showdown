@@ -2619,6 +2619,102 @@ export const commands: Chat.ChatCommands = {
 	},
 	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # &`],
 
+	requestcode(target, room, user) {
+		room = this.requireRoom();
+		this.checkChat();
+		target = this.message.substr(this.cmdToken.length + this.cmd.length + +this.message.includes(' ')).trimRight();
+		if (!room.settings.requestCodeEnabled) {
+			return this.errorReply(`Code approvals are disabled in this room.`);
+		}
+
+		if (!this.checkBroadcast(true, '!code')) return this.errorReply(`Use !code instead.`);
+		if (room.pendingCodeApprovals?.has(user.id)) return this.errorReply('You have a code request pending already.');
+		if (!target) return this.parse(`/help requestcode`);
+
+		const code = target;
+		if (code && this.checkChat(code) !== code) {
+			return this.errorReply(`You cannot use filtered words in the code.`);
+		}
+		if (code.length >= 8192) return this.errorReply("Your code must be under 8192 characters long!");
+		// Use backticks if it's small enough
+		if (target.length < 80 && !target.includes('\n') && !target.includes('```')) {
+			const message = this.checkChat(`\`\`\`${target}\`\`\``);
+			this.sendReply(`Your code is too short for a code block, so it has been sent as a single-line code snippet instead.`);
+			return message;
+		}
+
+		if (this.room?.settings.isPersonal !== false && this.shouldBroadcast()) {
+			target = this.filter(target)!;
+			if (!target) return this.errorReply(`Invalid code.`);
+		}
+		if (!room.pendingCodeApprovals) room.pendingCodeApprovals = new Map();
+		room.pendingCodeApprovals.set(user.id, {
+			name: user.name,
+			code,
+		});
+		this.sendReply(`Your code request has been submitted`);
+		const message = `|tempnotify|pendingapprovals|Pending code request!` +
+			`|${user.name} has requested to show code in ${room.title}.|new code request`;
+		room.sendRankedUsers(message, '%');
+		room.sendMods(
+			Utils.html`|uhtml|coderequest-${user.id}|<div class="infobox">${user.name} wants to show the following code` +
+			`<button class="button" name="send" value="/approvecode ${user.id}">Approve</button><br>` +
+			`<button class="button" name="send" value="/denycode ${user.id}">Deny</button><br>` +
+			`${Chat.getReadmoreCodeBlock(target)}</div>`
+		);
+	},
+	requestcodehelp: [`/requestcode [code] - Requests permission to show code in the room.`],
+
+	approvecode(target, room, user) {
+		room = this.requireRoom();
+		this.checkCan('mute', null, room);
+		if (!room.settings.requestCodeEnabled) {
+			return this.errorReply(`Code approvals are disabled in this room.`);
+		}
+		// 		return `/raw `;
+		const userid = toID(target);
+		if (!userid) return this.parse(`/help approvecode`);
+		const request = room.pendingCodeApprovals?.get(userid);
+		if (!request) return this.errorReply(`${userid} has no pending request.`);
+		if (userid === user.id) {
+			return this.errorReply(`You can't approve your own /show request.`);
+		}
+		room.pendingCodeApprovals!.delete(userid);
+		room.sendMods(`|uhtmlchange|request-${target}|`);
+		room.sendRankedUsers(`|tempnotifyoff|pendingapprovals`, '%');
+
+		let buf = '';
+		buf += `<div class="infobox">${Chat.getReadmoreCodeBlock(request.code)}</div>`;
+		buf += Utils.html`<br /><div class="infobox"><small>(Requested by ${request.name})</small>`;
+		this.privateModAction(`${user.name} approved showing code from ${request.name}.`);
+		room.add(`|c| ${request.name}|/raw ${buf}`);
+	},
+	approvecodehelp: [`/approvecode [user] - Approves the code display request of [user]. Requires: % @ # &`],
+
+	denycode(target, room, user) {
+		room = this.requireRoom();
+		this.checkCan('mute', null, room);
+		if (!room.settings.requestCodeEnabled) {
+			return this.errorReply(`Code approvals are disabled in this room.`);
+		}
+		if (!target) return this.parse(`/help denycode`);
+
+		const entry = room.pendingCodeApprovals?.get(target);
+		if (!entry) return this.errorReply(`${target} has no pending request.`);
+
+		const userid = toID(target);
+		room.pendingCodeApprovals!.delete(userid);
+		room.sendMods(`|uhtmlchange|request-${target}|`);
+		room.sendRankedUsers(`|tempnotifyoff|pendingapprovals`, '%');
+		this.privateModAction(`${user.name} denied ${target}'s request to display code.`);
+
+		const targetUser = Users.get(target);
+		if (!targetUser) return;
+		room.sendUser(targetUser, `|raw|<div class="broadcast-red">Your code request was denied.</div>`);
+		room.sendUser(targetUser, `|notify|Code request denied`);
+	},
+	denycodehelp: [`/denycode [user] - Denies the code display request of [user]. Requires: % @ # &`],
+
 	approvallog(target, room, user) {
 		room = this.requireRoom();
 		return this.parse(`/sl approved showing media from, ${room.roomid}`);
@@ -3183,14 +3279,29 @@ export const pages: Chat.PageTable = {
 		const room = Rooms.get(args[0]) as ChatRoom | GameRoom;
 		this.checkCan('mute', null, room);
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
-		if (room.pendingApprovals.size < 1) return `<h2>No pending approvals on ${room.title}</h2>`;
-		let buf = `<div class="pad"><strong>Pending media requests on ${room.title}</strong><hr />`;
-		for (const [userid, entry] of room.pendingApprovals) {
-			buf += `<strong>${entry.name}</strong><div class="infobox">`;
-			buf += `<strong>Requester ID:</strong> ${userid}<br />`;
-			buf += `<strong>Link:</strong> <a href="${entry.link}">${entry.link}</a><br />`;
-			buf += `<strong>Comment:</strong> ${entry.comment}`;
-			buf += `</div><hr />`;
+		if (!room.pendingCodeApprovals) room.pendingCodeApprovals = new Map();
+		if (room.pendingApprovals.size < 1 && room.pendingCodeApprovals.size < 1) {
+			return `<h2>No pending approvals on ${room.title}</h2>`;
+		}
+		let buf = 'Approvals for ' + Chat.html`<a href="/${room.roomid}">${room.title}</a>`;
+		if (room.pendingApprovals.size > 0) {
+			buf += `<div class="pad"><strong>Pending media requests on ${room.title}</strong><hr />`;
+			for (const [userid, entry] of room.pendingApprovals) {
+				buf += `<strong>${entry.name}</strong><div class="infobox">`;
+				buf += `<strong>Requester ID:</strong> ${userid}<br />`;
+				buf += `<strong>Link:</strong> <a href="${entry.link}">${entry.link}</a><br />`;
+				buf += `<strong>Comment:</strong> ${entry.comment}`;
+				buf += `</div><hr />`;
+			}
+		}
+		if (room.pendingCodeApprovals.size > 0) {
+			buf += `<div class="pad"><strong>Pending code requests on ${room.title}</strong><hr />`;
+			for (const [userid, entry] of room.pendingCodeApprovals) {
+				buf += `<strong>Requester ID:</strong> ${userid}<br />`;
+				buf += `<strong>Code:</strong><br>`;
+				buf += `${Chat.getReadmoreCodeBlock(entry.code)}`;
+				buf += `</div><hr />`;
+			}
 		}
 		return buf;
 	},
