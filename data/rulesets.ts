@@ -88,7 +88,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Standard NatDex',
 		desc: "The standard ruleset for all National Dex tiers",
 		ruleset: [
-			'Obtainable', '+Unobtainable', '+Past', 'Sketch Post-Gen 7 Moves', 'Team Preview', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
+			'Obtainable', '+Unobtainable', '+Past', 'Sketch Post-Gen 7 Moves', 'Team Preview', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause', 'Overflow Stat Mod',
 		],
 		unbanlist: ['Adamant Crystal', 'Griseous Core', 'Lustrous Globe', 'Bleakwind Storm', 'Lunar Blessing', 'Mystical Power', 'Sandsear Storm', 'Wildbolt Storm'],
 		onValidateSet(set) {
