@@ -1595,7 +1595,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Calm Mind", "Dragon Pulse", "Rest", "Sleep Talk"],
-                "teraTypes": ["Dragon"]
+                "teraTypes": ["Dragon", "Fairy"]
             }
         ]
     },
