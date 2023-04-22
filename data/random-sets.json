@@ -1590,7 +1590,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Dragon Tail", "Rest", "Shadow Ball", "Sleep Talk", "Will-O-Wisp"],
-                "teraTypes": ["Ghost"]
+                "teraTypes": ["Ghost", "Fairy"]
             },
             {
                 "role": "Bulky Setup",
