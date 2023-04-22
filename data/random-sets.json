@@ -968,9 +968,9 @@
         "level": 87,
         "sets": [
             {
-                "role": "Bulky Support",
+                "role": "Bulky Attacker",
                 "movepool": ["Earthquake", "Lava Plume", "Rapid Spin", "Solar Beam", "Stealth Rock", "Yawn"],
-                "teraTypes": ["Dragon", "Fire"]
+                "teraTypes": ["Dragon", "Grass"]
             }
         ]
     },
@@ -1140,7 +1140,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Brave Bird", "Close Combat", "Double-Edge", "Quick Attack", "U-turn"],
-                "teraTypes": ["Fighting"]
+                "teraTypes": ["Fighting", "Flying"]
             }
         ]
     },
@@ -1280,7 +1280,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Calm Mind", "Dark Pulse", "Rest", "Sleep Talk"],
-                "teraTypes": ["Dark", "Steel"]
+                "teraTypes": ["Steel"]
             }
         ]
     },
@@ -1696,11 +1696,6 @@
                 "role": "Bulky Setup",
                 "movepool": ["Body Press", "Cosmic Power", "Recover", "Stored Power"],
                 "teraTypes": ["Steel", "Psychic"]
-            },
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["Calm Mind", "Judgment", "Recover", "Shadow Ball"],
-                "teraTypes": ["Steel", "Ghost"]
             }
         ]
     },
@@ -2003,7 +1998,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Coil", "Drain Punch", "Fire Punch", "Liquidation", "Wild Charge"],
-                "teraTypes": ["Electric", "Fighting"]
+                "teraTypes": ["Fighting"]
             },
             {
                 "role": "AV Pivot",
@@ -2347,7 +2342,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Draco Meteor", "Dragon Tail", "Earthquake", "Fire Blast", "Power Whip", "Sludge Bomb", "Thunderbolt"],
+                "movepool": ["Draco Meteor", "Earthquake", "Fire Blast", "Power Whip", "Sludge Bomb", "Thunderbolt"],
                 "teraTypes": ["Dragon", "Ground", "Fire", "Grass", "Poison", "Electric"]
             }
         ]
@@ -2928,7 +2923,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Discharge", "Hydro Pump", "Spikes", "Sucker Punch", "Toxic Spikes"],
-                "teraTypes": ["Electric", "Water"]
+                "teraTypes": ["Ghost", "Water"]
             }
         ]
     },
@@ -3267,13 +3262,13 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Flame Charge", "Roar", "Shadow Ball", "Slack Off", "Torch Song"],
-                "teraTypes": ["Ghost", "Water", "Fairy"]
+                "movepool": ["Flame Charge", "Shadow Ball", "Slack Off", "Torch Song"],
+                "teraTypes": ["Fire", "Water"]
             },
             {
                 "role": "Bulky Support",
                 "movepool": ["Hex", "Slack Off", "Torch Song", "Will-O-Wisp"],
-                "teraTypes": ["Ghost", "Water", "Fairy"]
+                "teraTypes": ["Ghost", "Water"]
             }
         ]
     },
