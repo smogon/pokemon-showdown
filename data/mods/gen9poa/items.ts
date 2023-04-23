@@ -282,6 +282,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		itemUser: ["Clamperl-Delta"],
 	},
+	// Uranium Items
 	hafliberry: {
 		inherit: true,
 		isNonstandard: null,
@@ -358,7 +359,19 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	
+	//PoA items
 	florgesite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+
+	//Cap Items
+	crucibellite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	vilevial: {
 		inherit: true,
 		isNonstandard: null,
 	},

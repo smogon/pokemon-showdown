@@ -3007,4 +3007,354 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+
+	//CAP
+	syclar: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	syclant: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+
+	},
+	revenankh: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+
+	},
+	embirch: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	flarelm: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "NFE",
+	},
+	pyroak: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RUBL",
+	},
+	breezi: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	fidgit: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	rebble: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	tactite: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "NFE",
+	},
+	stratagem: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	privatyke: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	arghonaut: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
+	nohface: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	kitsunoh: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	monohm: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	duohm: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "NFE",
+	},
+	cyclohm: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	dorsoil: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	colossoil: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	protowatt: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	krilowatt: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
+	voodoll: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	voodoom: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	scratchet: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	tomohawk: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	necturine: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	necturna: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
+	mollux: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	cupra: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	argalis: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "NFE",
+	},
+	aurumoth: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UUBL",
+	},
+	brattler: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	malaconda: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	cawdet: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	cawmodore: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	volkritter: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	volkraken: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	snugglow: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	plasmanta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	floatoy: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	caimanoe: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "NFE",
+	},
+	naviathan: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RUBL",
+	},
+	crucibelle: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	crucibellemega: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RUBL",
+	},
+	pluffle: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	kerfluffle: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RUBL",
+	},
+	pajantom: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RUBL",
+	},
+	mumbao: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	jumbao: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
+	fawnifer: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	electrelk: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "NFE",
+	},
+	caribolt: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	smogecko: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	smoguana: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
+	smokomodo: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	swirlpool: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	coribalis: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "NFE",
+	},
+	snaelstrom: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	justyke: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	equilibra: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
+	solotl: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	astrolotl: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	miasmite: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	miasmaw: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	chromera: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	venomicon: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
+	venomiconepilogue: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	saharaja: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+
+	},
 };

@@ -10,7 +10,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				break;
 			case 'sunnyday':
 			case 'desolateland':
-				factor = 0.333;
+				factor = 0.667;
 				break;
 			case 'raindance':
 			case 'primordialsea':
