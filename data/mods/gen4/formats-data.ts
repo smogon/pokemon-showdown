@@ -171,7 +171,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	meowth: {
-		tier: "7U",
+		tier: "8U",
 	},
 	persian: {
 		tier: "ZU",
@@ -534,7 +534,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	dratini: {
-		tier: "7U",
+		tier: "8U",
 	},
 	dragonair: {
 		tier: "PU",
@@ -579,7 +579,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	furret: {
-		tier: "7U",
+		tier: "6U",
 	},
 	hoothoot: {
 		tier: "LC",
@@ -591,7 +591,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	ledian: {
-		tier: "7U",
+		tier: "8U",
 	},
 	spinarak: {
 		tier: "LC",
@@ -1066,7 +1066,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "8U",
 	},
 	trapinch: {
-		tier: "7U",
+		tier: "8U",
 	},
 	vibrava: {
 		tier: "6U",
@@ -1135,7 +1135,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	castform: {
-		tier: "7U",
+		tier: "8U",
 	},
 	castformsunny: {},
 	castformrainy: {},

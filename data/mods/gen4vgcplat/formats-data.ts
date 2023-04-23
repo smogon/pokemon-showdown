@@ -620,8 +620,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"doublesTier": "1"
 	},
 	"gyarados": {
-		"doublesTier": "14",
-		"tier": "14"
+		"doublesTier": "15",
+		"tier": "15"
 	},
 	"lapras": {
 		"doublesTier": "8",
@@ -636,8 +636,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"doublesTier": "2"
 	},
 	"vaporeon": {
-		"doublesTier": "15",
-		"tier": "15"
+		"doublesTier": "16",
+		"tier": "16"
 	},
 	"jolteon": {
 		"doublesTier": "11",
