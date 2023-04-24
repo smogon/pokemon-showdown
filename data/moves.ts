@@ -23130,7 +23130,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (target.beingCalledBack || target.switchFlag) {
 				this.debug('Monkey Arms damage boost');
 				this.add("-message", "Add yoinked");
-				target.addVolatile('yoinked');
+				target.m.yoinked = true;
 				return move.basePower * 2;
 			}
 			return move.basePower;
