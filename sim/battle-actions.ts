@@ -85,8 +85,8 @@ export class BattleActions {
 			}
 			oldActive.skipBeforeSwitchOutEventFlag = false;
 			this.battle.add("-message", "Check yoinked");
-			this.battle.add("-message", oldActive.volatiles['yoinked']);
-			if (oldActive.volatiles['yoinked']) return 'pursuitfaint';
+			this.battle.add("-message", pokemon.m.yoinked);
+			if (pokemon.m.yoinked) return 'pursuitfaint';
 			if (!this.battle.runEvent('SwitchOut', oldActive)) {
 				// Warning: DO NOT interrupt a switch-out if you just want to trap a pokemon.
 				// To trap a pokemon and prevent it from switching out, (e.g. Mean Look, Magnet Pull)
