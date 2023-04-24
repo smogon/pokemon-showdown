@@ -147,7 +147,6 @@ const MESSAGE_COOLDOWN = 5 * 60 * 1000;
 const THROTTLE_MULTILINE_WARN = 3;
 const THROTTLE_MULTILINE_WARN_STAFF = 6;
 const THROTTLE_BUFFER_LIMIT = 6;
-const THROTTLE_DELAY_PUBLIC_BOT = 25;
 const THROTTLE_MULTILINE_WARN_ADMIN = 25;
 
 const MAX_PARSE_RECURSION = 10;
@@ -1905,7 +1904,7 @@ export const Chat = new class {
 			return false; // but end the loop here
 		}
 
-		const throttleDelay = user.isPublicBot ? THROTTLE_DELAY_PUBLIC_BOT : user.trusted ? Users.THROTTLE_DELAY_TRUSTED :
+		const throttleDelay = user.isPublicBot ? Users.THROTTLE_DELAY_PUBLIC_BOT : user.trusted ? Users.THROTTLE_DELAY_TRUSTED :
 			Users.THROTTLE_DELAY;
 		if (user.chatQueueTimeout) {
 			if (!user.chatQueue) user.chatQueue = []; // this should never happen

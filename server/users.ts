@@ -32,6 +32,7 @@ type StatusType = 'online' | 'busy' | 'idle';
 
 const THROTTLE_DELAY = 600;
 const THROTTLE_DELAY_TRUSTED = 100;
+const THROTTLE_DELAY_PUBLIC_BOT = 25;
 const NAMECHANGE_THROTTLE = 2 * 60 * 1000; // 2 minutes
 const NAMES_PER_THROTTLE = 3;
 
@@ -1681,4 +1682,5 @@ export const Users = {
 	socketConnect,
 	THROTTLE_DELAY,
 	THROTTLE_DELAY_TRUSTED,
+	THROTTLE_DELAY_PUBLIC_BOT,
 };
