@@ -23099,4 +23099,26 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Cool",
 	},
+	boilover: {
+		num: 315,
+		accuracy: 90,
+		basePower: 130,
+		category: "Special",
+		name: "Boil Over",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		self: {
+			boosts: {
+				spa: -2,
+			},
+		},
+		secondary: {
+			chance: 30,
+			status: 'brn',
+		},
+		target: "normal",
+		type: "Water",
+		contestType: "Beautiful",
+	},
 };
