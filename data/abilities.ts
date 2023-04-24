@@ -6740,4 +6740,48 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: -53,
 	},
+	consumerexchange: {
+		onSourceDamagingHit(damage, target, source, move) {
+			if (this.effectState.exchange) {
+
+				const yourItem = target.takeItem(source);
+				const myItem = source.takeItem();
+
+				if (target.item || source.item || (!yourItem && !myItem)) {
+					if (yourItem) target.item = yourItem.id;
+					if (myItem) source.item = myItem.id;
+					return false;
+				}
+				if (
+					(myItem && !this.singleEvent('TakeItem', myItem, source.itemState, target, source, move, myItem)) ||
+					(yourItem && !this.singleEvent('TakeItem', yourItem, target.itemState, source, target, move, yourItem))
+				) {
+					if (yourItem) target.item = yourItem.id;
+					if (myItem) source.item = myItem.id;
+					return false;
+				}
+				this.add('-activate', source, 'ability: Consumer Exchange', '[of] ' + target);
+				if (myItem) {
+					target.setItem(myItem);
+					this.add('-item', target, myItem, '[from] ability: Consumer Exchange');
+				} else {
+					this.add('-enditem', target, yourItem, '[silent]', '[from] ability: Consumer Exchange');
+				}
+				if (yourItem) {
+					source.setItem(yourItem);
+					this.add('-item', source, yourItem, '[from] ability: Consumer Exchange');
+				} else {
+					this.add('-enditem', source, myItem, '[silent]', '[from] ability: Consumer Exchange');
+				}
+
+				delete this.effectState.exchange;
+			}
+		},
+		onSwitchIn(pokemon) {
+			this.effectState.exchange = true;
+		},
+		name: "Consumer Exchange",
+		rating: 3,
+		num: -54,
+	},
 };
