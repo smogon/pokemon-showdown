@@ -8,6 +8,8 @@ Building and running
 
 Our build script does most of the work here: You can mostly just run `./pokemon-showdown` to start a server. (Windows users will have to replace `./whatever` with `node whatever`, every time it appears)
 
+If you are unable to access a local server due to your browser forcing you to use HTTPS, try disabling "DNS over HTTPS" (Firefox) or "Async DNS resolver" (Chrome, in chrome://flags on Windows and Linux). If the problem persists, you can file an issue.
+
 PS has other useful command-line invocations, which you can investigate with `./pokemon-showdown help`.
 
 Unit tests can be run with `npm test`. You can run specific unit tests with `npx mocha -g "text"`, which will run all unit tests whose name contains "text", or you can just edit the unit test from `it` to `it.only`.
@@ -57,6 +59,8 @@ The fewer words you use, the less likely someone is to gloss over it, and the ea
 Buttons and links that say "Click here" or "Look at this" are bad for a number of reasons, but the most important one is probably because it violates the principle that you shouldn't need to read outside the button to know what the button does. The way people use interfaces is by looking for buttons that do what they want, not by reading every word from beginning to end.
 
 In addition, blind users in particular navigate by link text, so a blind user will have a much harder time figuring out where a link goes if it only says "click here".
+
+For similar reasons, buttons should not say "Yes" or "No" or "Confirm". Instead of "Delete this file? [Yes] [No]", you should just use "[Delete] [Cancel]". This is especially important for complex questions where it could be easy to lose track of which side is "yes" and which side is "no".
 
 ### D3. Remove unnecessary clicks
 

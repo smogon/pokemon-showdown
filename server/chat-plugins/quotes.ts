@@ -1,7 +1,7 @@
 import {FS, Utils} from '../../lib';
 
 const STORAGE_PATH = 'config/chat-plugins/quotes.json';
-const MAX_QUOTES = 200;
+const MAX_QUOTES = 300;
 
 interface Quote {
 	userid: string;
@@ -73,6 +73,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		roomQuotes.push({userid: user.id, quote: target, date: Date.now()});
 		saveQuotes();
+		this.refreshPage(`quotes-${room.roomid}`);
 		const collapsedQuote = target.replace(/\n/g, ' ');
 		this.privateModAction(`${user.name} added a new quote: "${collapsedQuote}".`);
 		return this.modlog(`ADDQUOTE`, null, collapsedQuote);
@@ -99,6 +100,30 @@ export const commands: Chat.ChatCommands = {
 		this.refreshPage(`quotes-${room.roomid}`);
 	},
 	removequotehelp: [`/removequote [index] - Removes the quote from the room's quotes. Requires: % @ # &`],
+
+	viewquote(target, room, user) {
+		room = this.requireRoom();
+		const roomQuotes = quotes[room.roomid];
+		if (!roomQuotes?.length) return this.errorReply(`This room has no quotes.`);
+		const [num, showAuthor] = Utils.splitFirst(target, ',');
+		const index = parseInt(num) - 1;
+		if (isNaN(index)) {
+			return this.errorReply(`Invalid index.`);
+		}
+		if (!roomQuotes[index]) {
+			return this.errorReply(`Quote not found.`);
+		}
+		this.runBroadcast(true);
+		const {quote, date, userid} = roomQuotes[index];
+		const time = Chat.toTimestamp(new Date(date), {human: true});
+		const attribution = toID(showAuthor) === 'showauthor' ? `<hr /><small>Added by ${userid} on ${time}</small>` : '';
+		return this.sendReplyBox(`${Chat.formatText(quote, false, true)}${attribution}`);
+	},
+	viewquotehelp: [
+		`/viewquote [index][, params] - View the quote from the room's quotes.`,
+		`If 'showauthor' is used for the [params] argument, it shows who added the quote and when.`,
+		`Requires: % @ # &`,
+	],
 
 	viewquotes: 'quotes',
 	quotes(target, room) {
@@ -129,7 +154,7 @@ export const pages: Chat.PageTable = {
 		for (const [i, quoteObj] of roomQuotes.entries()) {
 			const index = i + 1;
 			const {quote, userid, date} = quoteObj;
-			buffer += `<div class="infobox">${Chat.formatText(quote, false, true)}`;
+			buffer += `<div class="infobox">#${index}: ${Chat.formatText(quote, false, true)}`;
 			buffer += `<br /><hr /><small>Added by ${userid} on ${Chat.toTimestamp(new Date(date), {human: true})}</small>`;
 			if (user.can('mute', null, room)) {
 				buffer += ` <button class="button" name="send" value="/msgroom ${room.roomid},/removequote ${index}">Remove</button>`;

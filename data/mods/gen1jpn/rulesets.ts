@@ -2,13 +2,25 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 	standard: {
 		effectType: 'ValidatorRule',
 		name: 'Standard',
-		ruleset: ['Obtainable', 'Desync Clause Mod', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Obtainable', 'Desync Clause Mod', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Dig', 'Fly'],
 	},
 	nintendocup1997movelegality: {
 		effectType: 'ValidatorRule',
 		name: 'Nintendo Cup 1997 Move Legality',
 		desc: "Bans move combinations on Pok\u00e9mon that would only be obtainable in Pok\u00e9mon Yellow.",
+		banlist: [
+			// https://www.smogon.com/forums/threads/rby-and-gsc-illegal-movesets.78638/
+			// https://www.smogon.com/forums/threads/rby-tradebacks-bug-report-thread.3524844/post-9235903
+			// Due to Yellow learnset modifications not applying, there are a few more incompatibilities than usual.
+			'Nidoking + Fury Attack + Thrash', 'Nidoking + Double Kick + Thrash',
+			'Butterfree + Tackle + Harden', 'Butterfree + String Shot + Harden',
+			'Exeggutor + Poison Powder + Stomp', 'Exeggutor + Sleep Powder + Stomp', 'Exeggutor + Stun Spore + Stomp',
+			'Eevee + Tackle + Growl',
+			'Vaporeon + Tackle + Growl',
+			'Jolteon + Tackle + Growl', 'Jolteon + Focus Energy + Thunder Shock',
+			'Flareon + Tackle + Growl', 'Flareon + Focus Energy + Ember',
+		],
 		onValidateSet(set) {
 			const rgb97Legality: {[speciesid: string]: {[moveid: string]: 'illegal' | number}} = {
 				charizard: {fly: 'illegal'},
@@ -63,10 +75,11 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			const problems = [];
 			if (set.moves) {
 				for (const moveid of set.moves.map(this.toID)) {
-					if (legalityList[moveid]) {
-						if (legalityList[moveid] === 'illegal') {
+					const legality = legalityList[moveid];
+					if (legality) {
+						if (legality === 'illegal') {
 							problems.push(`${set.species} can't learn ${this.dex.moves.get(moveid).name} in 1997.`);
-						} else if (set.level < legalityList[moveid]) {
+						} else if (set.level < legality) {
 							problems.push(`${set.species} can't learn ${this.dex.moves.get(moveid).name} before level ${legalityList[moveid]} in 1997.`);
 						}
 					}

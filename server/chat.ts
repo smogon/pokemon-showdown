@@ -28,8 +28,9 @@ import type {Punishment} from './punishments';
 import type {PartialModlogEntry} from './modlog';
 import {FriendsDatabase, PM} from './friends';
 import {SQL, Repl, FS, Utils} from '../lib';
+import * as Artemis from './artemis';
 import {Dex} from '../sim';
-import {resolve} from 'path';
+import * as pathModule from 'path';
 import * as JSX from './chat-jsx';
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
@@ -65,13 +66,23 @@ export interface AnnotatedChatCommands {
 	[k: string]: AnnotatedChatHandler | string | string[] | AnnotatedChatCommands;
 }
 
-export interface Handlers {
-	onRoomClose?: (id: string, user: User, connection: Connection, page: boolean) => any;
-	onRenameRoom?: (oldId: RoomID, newID: RoomID, room: BasicRoom) => void;
-	onBattleStart?: (user: User, room: GameRoom) => void;
-	onBattleLeave?: (user: User, room: GameRoom) => void;
-	onDisconnect?: (user: User) => void;
-	onRoomDestroy?: (roomid: RoomID) => void;
+export type HandlerTable = {[key in keyof Handlers]?: Handlers[key]};
+
+interface Handlers {
+	onRoomClose: (id: string, user: User, connection: Connection, page: boolean) => any;
+	onRenameRoom: (oldId: RoomID, newID: RoomID, room: BasicRoom) => void;
+	onBattleStart: (user: User, room: GameRoom) => void;
+	onBattleLeave: (user: User, room: GameRoom) => void;
+	onRoomJoin: (room: BasicRoom, user: User, connection: Connection) => void;
+	onDisconnect: (user: User) => void;
+	onRoomDestroy: (roomid: RoomID) => void;
+	onBattleEnd: (battle: RoomBattle, winner: ID, players: ID[]) => void;
+	onLadderSearch: (user: User, connection: Connection, format: ID) => void;
+	onBattleRanked: (
+		battle: Rooms.RoomBattle, winner: ID, ratings: (AnyObject | null | undefined)[], players: ID[]
+	) => void;
+	onRename: (user: User, oldID: ID, newID: ID) => void;
+	onTicketCreate: (ticket: import('./chat-plugins/helptickets').TicketState, user: User) => void;
 }
 
 export interface ChatPlugin {
@@ -129,13 +140,15 @@ const LINK_WHITELIST = [
 	'*.smogon.com', '*.pastebin.com', '*.hastebin.com',
 ];
 
-const MAX_MESSAGE_LENGTH = 300;
+const MAX_MESSAGE_LENGTH = 1000;
 
 const BROADCAST_COOLDOWN = 20 * 1000;
 const MESSAGE_COOLDOWN = 5 * 60 * 1000;
 const THROTTLE_MULTILINE_WARN = 3;
 const THROTTLE_MULTILINE_WARN_STAFF = 6;
 const THROTTLE_BUFFER_LIMIT = 6;
+const THROTTLE_DELAY_PUBLIC_BOT = 25;
+const THROTTLE_MULTILINE_WARN_ADMIN = 25;
 
 const MAX_PARSE_RECURSION = 10;
 
@@ -144,7 +157,6 @@ const BROADCAST_TOKEN = '!';
 
 const PLUGIN_DATABASE_PATH = './databases/chat-plugins.db';
 const MAX_PLUGIN_LOADING_DEPTH = 3;
-const VALID_PLUGIN_ENDINGS = ['.jsx', '.tsx', '.js', '.ts'];
 
 import {formatText, linkRegex, stripFormatting} from './chat-formatter';
 
@@ -153,9 +165,8 @@ import ProbeModule = require('probe-image-size');
 const probe: (url: string) => Promise<{width: number, height: number}> = ProbeModule;
 
 const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
-// to account for Sucrase
-const TRANSLATION_PATH = __dirname.endsWith('.server-dist') ? `../.translations-dist` : `../translations`;
-const TRANSLATION_DIRECTORY = `${__dirname}/${TRANSLATION_PATH}`;
+
+const TRANSLATION_DIRECTORY = pathModule.resolve(__dirname, '..', 'translations');
 
 class PatternTester {
 	// This class sounds like a RegExp
@@ -506,6 +517,7 @@ export class CommandContext extends MessageContext {
 	handler: AnnotatedChatHandler | null;
 
 	isQuiet: boolean;
+	bypassRoomCheck?: boolean;
 	broadcasting: boolean;
 	broadcastToRoom: boolean;
 	/** Used only by !rebroadcast */
@@ -514,7 +526,7 @@ export class CommandContext extends MessageContext {
 	constructor(options: {
 		message: string, user: User, connection: Connection,
 		room?: Room | null, pmTarget?: User | null, cmd?: string, cmdToken?: string, target?: string, fullCmd?: string,
-		recursionDepth?: number, isQuiet?: boolean, broadcastPrefix?: string,
+		recursionDepth?: number, isQuiet?: boolean, broadcastPrefix?: string, bypassRoomCheck?: boolean,
 	}) {
 		super(
 			options.user, options.room && options.room.settings.language ?
@@ -536,6 +548,7 @@ export class CommandContext extends MessageContext {
 		this.fullCmd = options.fullCmd || '';
 		this.handler = null;
 		this.isQuiet = options.isQuiet || false;
+		this.bypassRoomCheck = options.bypassRoomCheck || false;
 
 		// broadcast context
 		this.broadcasting = false;
@@ -545,7 +558,10 @@ export class CommandContext extends MessageContext {
 	}
 
 	// TODO: return should be void | boolean | Promise<void | boolean>
-	parse(msg?: string, options: {isQuiet?: boolean, broadcastPrefix?: string} = {}): any {
+	parse(
+		msg?: string,
+		options: Partial<{isQuiet: boolean, broadcastPrefix: string, bypassRoomCheck: boolean}> = {}
+	): any {
 		if (typeof msg === 'string') {
 			// spawn subcontext
 			const subcontext = new CommandContext({
@@ -555,6 +571,7 @@ export class CommandContext extends MessageContext {
 				room: this.room,
 				pmTarget: this.pmTarget,
 				recursionDepth: this.recursionDepth + 1,
+				bypassRoomCheck: this.bypassRoomCheck,
 				...options,
 			});
 			if (subcontext.recursionDepth > MAX_PARSE_RECURSION) {
@@ -573,7 +590,7 @@ export class CommandContext extends MessageContext {
 			this.handler = parsedCommand.handler;
 		}
 
-		if (this.room && !(this.user.id in this.room.users)) {
+		if (!this.bypassRoomCheck && this.room && !(this.user.id in this.room.users)) {
 			return this.popupReply(`You tried to send "${message}" to the room "${this.room.roomid}" but it failed because you were not in that room.`);
 		}
 
@@ -700,11 +717,25 @@ export class CommandContext extends MessageContext {
 
 	checkFormat(room: BasicRoom | null | undefined, user: User, message: string) {
 		if (!room) return true;
-		if (!room.settings.filterStretching && !room.settings.filterCaps && !room.settings.filterEmojis) return true;
-		if (user.can('bypassall')) return true;
+		if (
+			!room.settings.filterStretching && !room.settings.filterCaps &&
+			!room.settings.filterEmojis && !room.settings.filterLinks
+		) {
+			return true;
+		}
+		if (user.can('mute', null, room)) return true;
 
 		if (room.settings.filterStretching && /(.+?)\1{5,}/i.test(user.name)) {
 			throw new Chat.ErrorMessage(`Your username contains too much stretching, which this room doesn't allow.`);
+		}
+		if (room.settings.filterLinks) {
+			const bannedLinks = this.checkBannedLinks(message);
+			if (bannedLinks.length) {
+				throw new Chat.ErrorMessage(
+					`You have linked to ${bannedLinks.length > 1 ? 'unrecognized external websites' : 'an unrecognized external website'} ` +
+					`(${bannedLinks.join(', ')}), which this room doesn't allow.`
+				);
+			}
 		}
 		if (room.settings.filterCaps && /[A-Z\s]{6,}/.test(user.name)) {
 			throw new Chat.ErrorMessage(`Your username contains too many capital letters, which this room doesn't allow.`);
@@ -808,6 +839,11 @@ export class CommandContext extends MessageContext {
 		}
 	}
 	errorReply(message: string) {
+		if (this.bypassRoomCheck) { // if they're not in the room, we still want a good error message for them
+			return this.popupReply(
+				`|html|<strong class="message-error">${message.replace(/\n/ig, '<br />')}</strong>`
+			);
+		}
 		this.sendReply(`|error|` + message.replace(/\n/g, `\n|error|`));
 	}
 	addBox(htmlContent: string | JSX.VNode) {
@@ -994,6 +1030,11 @@ export class CommandContext extends MessageContext {
 			return true;
 		}
 
+		if (this.user.locked && !(this.room?.roomid.startsWith('help-') || this.pmTarget?.can('lock'))) {
+			this.errorReply(`You cannot broadcast this command's information while locked.`);
+			throw new Chat.ErrorMessage(`To see it for yourself, use: /${this.message.slice(1)}`);
+		}
+
 		if (this.room && !this.user.can('show', null, this.room)) {
 			this.errorReply(`You need to be voiced to broadcast this command's information.`);
 			throw new Chat.ErrorMessage(`To see it for yourself, use: /${this.message.slice(1)}`);
@@ -1088,6 +1129,13 @@ export class CommandContext extends MessageContext {
 						throw new Chat.ErrorMessage(this.tr`You are ${lockType} and can't talk in chat. ${lockExpiration}`);
 					}
 				}
+				if (!room.persist && !room.roomid.startsWith('help-') && !(user.registered || user.autoconfirmed)) {
+					this.sendReply(
+						this.tr`|html|<div class="message-error">You must be registered to chat in temporary rooms (like battles).</div>` +
+						this.tr`You may register in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu.`
+					);
+					throw new Chat.Interruption();
+				}
 				if (room.isMuted(user)) {
 					throw new Chat.ErrorMessage(this.tr`You are muted and cannot talk in this room.`);
 				}
@@ -1108,7 +1156,7 @@ export class CommandContext extends MessageContext {
 						this.tr`Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.`
 					);
 				}
-				if (!(user.id in room.users)) {
+				if (!this.bypassRoomCheck && !(user.id in room.users)) {
 					connection.popup(`You can't send a message to this room without being in it.`);
 					return null;
 				}
@@ -1122,7 +1170,7 @@ export class CommandContext extends MessageContext {
 					);
 					throw new Chat.Interruption();
 				}
-				if (!(targetUser.registered || targetUser.autoconfirmed)) {
+				if (targetUser.id !== user.id && !(targetUser.registered || targetUser.autoconfirmed)) {
 					throw new Chat.ErrorMessage(this.tr`That user is unregistered and cannot be PMed.`);
 				}
 				if (lockType && !targetUser.can('lock')) {
@@ -1178,19 +1226,7 @@ export class CommandContext extends MessageContext {
 
 		// If the corresponding config option is set, non-AC users cannot send links, except to staff.
 		if (Config.restrictLinks && !user.autoconfirmed) {
-			// eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
-			const links = message.match(Chat.linkRegex);
-			const allLinksWhitelisted = !links || links.every(link => {
-				link = link.toLowerCase();
-				const domainMatches = /^(?:http:\/\/|https:\/\/)?(?:[^/]*\.)?([^/.]*\.[^/.]*)\.?($|\/|:)/.exec(link);
-				const domain = domainMatches?.[1];
-				const hostMatches = /^(?:http:\/\/|https:\/\/)?([^/]*[^/.])\.?($|\/|:)/.exec(link);
-				let host = hostMatches?.[1];
-				if (host?.startsWith('www.')) host = host.slice(4);
-				if (!domain || !host) return null;
-				return LINK_WHITELIST.includes(host) || LINK_WHITELIST.includes(`*.${domain}`);
-			});
-			if (!allLinksWhitelisted && !(targetUser?.can('lock') || room?.settings.isHelp)) {
+			if (this.checkBannedLinks(message).length && !(targetUser?.can('lock') || room?.settings.isHelp)) {
 				throw new Chat.ErrorMessage("Your account must be autoconfirmed to send links to other users, except for global staff.");
 			}
 		}
@@ -1263,6 +1299,21 @@ export class CommandContext extends MessageContext {
 			throw new Chat.ErrorMessage("This user is currently locked, so you cannot send them HTML.");
 		}
 		return true;
+	}
+
+	checkBannedLinks(message: string) {
+		// RegExp#exec only returns one match, String#match returns all of them
+		// eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
+		return (message.match(Chat.linkRegex) || []).filter(link => {
+			link = link.toLowerCase();
+			const domainMatches = /^(?:http:\/\/|https:\/\/)?(?:[^/]*\.)?([^/.]*\.[^/.]*)\.?($|\/|:)/.exec(link);
+			const domain = domainMatches?.[1];
+			const hostMatches = /^(?:http:\/\/|https:\/\/)?([^/]*[^/.])\.?($|\/|:)/.exec(link);
+			let host = hostMatches?.[1];
+			if (host?.startsWith('www.')) host = host.slice(4);
+			if (!domain || !host) return null;
+			return !(LINK_WHITELIST.includes(host) || LINK_WHITELIST.includes(`*.${domain}`));
+		});
 	}
 	/* eslint-enable @typescript-eslint/prefer-optional-chain */
 	checkEmbedURI(uri: string) {
@@ -1454,6 +1505,17 @@ export class CommandContext extends MessageContext {
 			void this.parse(`/join view-${pageid}`);
 		}
 	}
+	closePage(pageid: string) {
+		for (const connection of this.user.connections) {
+			if (connection.openPages?.has(pageid)) {
+				connection.send(`>view-${pageid}\n|deinit`);
+				connection.openPages.delete(pageid);
+				if (!connection.openPages.size) {
+					connection.openPages = null;
+				}
+			}
+		}
+	}
 }
 
 export const Chat = new class {
@@ -1481,7 +1543,7 @@ export const Chat = new class {
 	commands!: AnnotatedChatCommands;
 	basePages!: PageTable;
 	pages!: PageTable;
-	readonly destroyHandlers: (() => void)[] = [];
+	readonly destroyHandlers: (() => void)[] = [Artemis.destroy];
 	readonly crqHandlers: {[k: string]: CRQHandler} = {};
 	readonly handlers: {[k: string]: ((...args: any) => any)[]} = Object.create(null);
 	/** The key is the name of the plugin. */
@@ -1648,7 +1710,7 @@ export const Chat = new class {
 			const languageID = Dex.toID(dirname);
 			const files = await dir.readdir();
 			for (const filename of files) {
-				if (!filename.endsWith('.ts')) continue;
+				if (!filename.endsWith('.js')) continue;
 
 				const content: Translations = require(`${TRANSLATION_DIRECTORY}/${dirname}/${filename}`).translations;
 
@@ -1737,6 +1799,9 @@ export const Chat = new class {
 	databaseReadyPromise: Promise<void> | null = null;
 
 	async prepareDatabase() {
+		// PLEASE NEVER ACTUALLY ADD MIGRATIONS
+		// things break in weird ways that are hard to reason about, probably because of subprocesses
+		// it WILL crash and it WILL make your life and that of your users extremely unpleasant until it is fixed
 		if (!PM.isParentProcess) return; // We don't need a database in a subprocess that requires Chat.
 		if (!Config.usesqlite) return;
 		// check if we have the db_info table, which will always be present unless the schema needs to be initialized
@@ -1757,14 +1822,17 @@ export const Chat = new class {
 		for (const migrationFile of (await FS(migrationsFolder).readdir())) {
 			const migrationVersion = parseInt(/v(\d+)\.sql$/.exec(migrationFile)?.[1] || '');
 			if (!migrationVersion) continue;
-			if (migrationVersion > curVersion) migrationsToRun.push({version: migrationVersion, file: migrationFile});
+			if (migrationVersion > curVersion) {
+				migrationsToRun.push({version: migrationVersion, file: migrationFile});
+				Monitor.adminlog(`Pushing to migrationsToRun: ${migrationVersion} at ${migrationFile} - mainModule ${process.mainModule === module} !process.send ${!process.send}`);
+			}
 		}
 		Utils.sortBy(migrationsToRun, ({version}) => version);
 		for (const {file} of migrationsToRun) {
-			await this.database.runFile(resolve(migrationsFolder, file));
+			await this.database.runFile(pathModule.resolve(migrationsFolder, file));
 		}
 
-		Chat.destroyHandlers.push(() => Chat.database?.destroy());
+		Chat.destroyHandlers.push(() => void Chat.database?.destroy());
 	}
 
 	readonly MessageContext = MessageContext;
@@ -1837,8 +1905,8 @@ export const Chat = new class {
 			return false; // but end the loop here
 		}
 
-		const throttleDelay = user.trusted ? Users.THROTTLE_DELAY_TRUSTED : Users.THROTTLE_DELAY;
-
+		const throttleDelay = user.isPublicBot ? THROTTLE_DELAY_PUBLIC_BOT : user.trusted ? Users.THROTTLE_DELAY_TRUSTED :
+			Users.THROTTLE_DELAY;
 		if (user.chatQueueTimeout) {
 			if (!user.chatQueue) user.chatQueue = []; // this should never happen
 			if (user.chatQueue.length >= THROTTLE_BUFFER_LIMIT - 1) {
@@ -1869,8 +1937,11 @@ export const Chat = new class {
 		const lines = message.split('\n');
 		if (!lines[lines.length - 1]) lines.pop();
 		// eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-		const maxLineCount = (user.isStaff || (room && room.auth.isStaff(user.id))) ?
-			THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN;
+		const maxLineCount = (
+			user.can('bypassall') ? THROTTLE_MULTILINE_WARN_ADMIN :
+			(user.isStaff || (room && room.auth.isStaff(user.id))) ?
+				THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN
+		);
 		if (lines.length > maxLineCount && !Config.nothrottle) {
 			connection.popup(`You're sending too many lines at once. Try using a paste service like [[Pastebin]].`);
 			return;
@@ -1908,15 +1979,21 @@ export const Chat = new class {
 
 	packageData: AnyObject = {};
 
+	getPluginName(file: string) {
+		const nameWithExt = pathModule.relative(__dirname, file).replace(/^chat-(?:commands|plugins)./, '');
+		let name = nameWithExt.slice(0, nameWithExt.lastIndexOf('.'));
+		if (name.endsWith('/index')) name = name.slice(0, -6);
+		return name;
+	}
+
 	loadPluginFile(file: string) {
-		if (!VALID_PLUGIN_ENDINGS.some(ext => file.endsWith(ext))) return;
-		const filename = file.split('/').pop() || "";
-		this.loadPlugin(require(file), filename.slice(0, filename.lastIndexOf('.')) || file);
+		if (!file.endsWith('.js')) return;
+		this.loadPlugin(require(file), this.getPluginName(file));
 	}
 
 	loadPluginDirectory(dir: string, depth = 0) {
 		for (const file of FS(dir).readdirSync()) {
-			const path = resolve(dir, file);
+			const path = pathModule.resolve(dir, file);
 			if (FS(path).isDirectorySync()) {
 				depth++;
 				if (depth > MAX_PLUGIN_LOADING_DEPTH) continue;
@@ -1974,6 +2051,9 @@ export const Chat = new class {
 		return commandTable;
 	}
 	loadPlugin(plugin: AnyObject, name: string) {
+		// esbuild builds cjs exports in such a way that they use getters, leading to crashes
+		// in the plugin.roomSettings = [plugin.roomSettings] action. So, we have to make them not getters
+		plugin = {...plugin};
 		if (plugin.commands) {
 			Object.assign(Chat.commands, this.annotateCommands(plugin.commands));
 		}
@@ -1999,18 +2079,17 @@ export const Chat = new class {
 		if (plugin.nicknamefilter) Chat.nicknamefilters.push(plugin.nicknamefilter);
 		if (plugin.statusfilter) Chat.statusfilters.push(plugin.statusfilter);
 		if (plugin.onRenameRoom) {
-			if (!Chat.handlers['RenameRoom']) Chat.handlers['RenameRoom'] = [];
-			Chat.handlers['RenameRoom'].push(plugin.onRenameRoom);
+			if (!Chat.handlers['onRenameRoom']) Chat.handlers['onRenameRoom'] = [];
+			Chat.handlers['onRenameRoom'].push(plugin.onRenameRoom);
 		}
 		if (plugin.onRoomClose) {
-			if (!Chat.handlers['RoomClose']) Chat.handlers['RoomClose'] = [];
-			Chat.handlers['RoomClose'].push(plugin.onRoomClose);
+			if (!Chat.handlers['onRoomClose']) Chat.handlers['onRoomClose'] = [];
+			Chat.handlers['onRoomClose'].push(plugin.onRoomClose);
 		}
 		if (plugin.handlers) {
-			for (const k in plugin.handlers) {
-				const handlerName = k.slice(2);
+			for (const handlerName in plugin.handlers) {
 				if (!Chat.handlers[handlerName]) Chat.handlers[handlerName] = [];
-				Chat.handlers[handlerName].push(plugin.handlers[k]);
+				Chat.handlers[handlerName].push(plugin.handlers[handlerName]);
 			}
 		}
 		Chat.plugins[name] = plugin;
@@ -2028,7 +2107,7 @@ export const Chat = new class {
 
 		Chat.commands = Object.create(null);
 		Chat.pages = Object.create(null);
-		this.loadPluginDirectory('server/chat-commands');
+		this.loadPluginDirectory('dist/server/chat-commands');
 		Chat.baseCommands = Chat.commands;
 		Chat.basePages = Chat.pages;
 		Chat.commands = Object.assign(Object.create(null), Chat.baseCommands);
@@ -2038,7 +2117,7 @@ export const Chat = new class {
 		this.loadPlugin(Config, 'config');
 		this.loadPlugin(Tournaments, 'tournaments');
 
-		this.loadPluginDirectory('server/chat-plugins');
+		this.loadPluginDirectory('dist/server/chat-plugins');
 		Chat.oldPlugins = {};
 		// lower priority should run later
 		Utils.sortBy(Chat.filters, filter => -(filter.priority || 0));
@@ -2050,7 +2129,7 @@ export const Chat = new class {
 		}
 	}
 
-	runHandlers(name: string, ...args: any) {
+	runHandlers(name: keyof Handlers, ...args: Parameters<Handlers[typeof name]>) {
 		const handlers = this.handlers[name];
 		if (!handlers) return;
 		for (const h of handlers) {
@@ -2059,11 +2138,11 @@ export const Chat = new class {
 	}
 
 	handleRoomRename(oldID: RoomID, newID: RoomID, room: Room) {
-		Chat.runHandlers('RoomRename', oldID, newID, room);
+		Chat.runHandlers('onRenameRoom', oldID, newID, room);
 	}
 
 	handleRoomClose(roomid: RoomID, user: User, connection: Connection) {
-		Chat.runHandlers('RoomClose', roomid, user, connection, roomid.startsWith('view-'));
+		Chat.runHandlers('onRoomClose', roomid, user, connection, roomid.startsWith('view-'));
 	}
 
 	/**
@@ -2476,6 +2555,24 @@ export const Chat = new class {
 		return probe(url);
 	}
 
+	parseArguments(
+		str: string,
+		delim = ',',
+		opts: Partial<{paramDelim: string, useIDs: boolean, allowEmpty: boolean}> = {useIDs: true}
+	) {
+		const result: Record<string, string[]> = {};
+		for (const part of str.split(delim)) {
+			let [key, val] = Utils.splitFirst(part, opts.paramDelim ||= "=").map(f => f.trim());
+			if (opts.useIDs) key = toID(key);
+			if (!toID(key) || (!opts.allowEmpty && !toID(val))) {
+				throw new Chat.ErrorMessage(`Invalid option ${part}. Must be in [key]${opts.paramDelim}[value] format.`);
+			}
+			if (!result[key]) result[key] = [];
+			result[key].push(val);
+		}
+		return result;
+	}
+
 	/**
 	 * Normalize a message for the purposes of applying chat filters.
 	 *
@@ -2556,6 +2653,17 @@ export const Chat = new class {
 	readonly formatText = formatText;
 	readonly linkRegex = linkRegex;
 	readonly stripFormatting = stripFormatting;
+
+	/** Helper function to ensure no state issues occur when regex testing for links. */
+	isLink(possibleUrl: string) {
+		// if we don't do this, it starts spitting out false every other time even if it's a valid link
+		//  since global regexes are stateful.
+		// this took me so much pain to debug.
+		// Yes, that is intended JS behavior. Yes, it fills me with unyielding rage.
+		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test
+		this.linkRegex.lastIndex = -1;
+		return this.linkRegex.test(possibleUrl);
+	}
 
 	readonly filterWords: {[k: string]: FilterWord[]} = {};
 	readonly monitors: {[k: string]: Monitor} = {};

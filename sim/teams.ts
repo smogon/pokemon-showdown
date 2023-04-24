@@ -98,7 +98,16 @@ export interface PokemonSet {
 	 * because `ivs` contain post-Battle-Cap values.
 	 */
 	hpType?: string;
+	/**
+	 * Dynamax Level. Affects the amount of HP gained when Dynamaxed.
+	 * This value must be between 0 and 10, inclusive.
+	 */
+	dynamaxLevel?: number;
 	gigantamax?: boolean;
+	/**
+	 * Tera Type
+	 */
+	teraType?: string;
 }
 
 export const Teams = new class Teams {
@@ -183,10 +192,13 @@ export const Teams = new class Teams {
 				buf += '|';
 			}
 
-			if (set.pokeball || set.hpType || set.gigantamax) {
+			if (set.pokeball || set.hpType || set.gigantamax ||
+				(set.dynamaxLevel !== undefined && set.dynamaxLevel !== 10) || set.teraType) {
 				buf += ',' + (set.hpType || '');
 				buf += ',' + this.packName(set.pokeball || '');
 				buf += ',' + (set.gigantamax ? 'G' : '');
+				buf += ',' + (set.dynamaxLevel !== undefined && set.dynamaxLevel !== 10 ? set.dynamaxLevel : '');
+				buf += ',' + (set.teraType || '');
 			}
 		}
 
@@ -307,15 +319,17 @@ export const Teams = new class Teams {
 			j = buf.indexOf(']', i);
 			let misc;
 			if (j < 0) {
-				if (i < buf.length) misc = buf.substring(i).split(',', 4);
+				if (i < buf.length) misc = buf.substring(i).split(',', 6);
 			} else {
-				if (i !== j) misc = buf.substring(i, j).split(',', 4);
+				if (i !== j) misc = buf.substring(i, j).split(',', 6);
 			}
 			if (misc) {
 				set.happiness = (misc[0] ? Number(misc[0]) : 255);
 				set.hpType = misc[1] || '';
 				set.pokeball = this.unpackName(misc[2] || '', Dex.items);
 				set.gigantamax = !!misc[3];
+				set.dynamaxLevel = (misc[4] ? Number(misc[4]) : 10);
+				set.teraType = misc[5];
 			}
 			if (j < 0) break;
 			i = j + 1;
@@ -376,7 +390,7 @@ export const Teams = new class Teams {
 		if (set.shiny) {
 			out += `Shiny: Yes  \n`;
 		}
-		if (typeof set.happiness === `number` && set.happiness !== 255 && !isNaN(set.happiness)) {
+		if (typeof set.happiness === 'number' && set.happiness !== 255 && !isNaN(set.happiness)) {
 			out += `Happiness: ${set.happiness}  \n`;
 		}
 		if (set.pokeball) {
@@ -385,8 +399,14 @@ export const Teams = new class Teams {
 		if (set.hpType) {
 			out += `Hidden Power: ${set.hpType}  \n`;
 		}
+		if (typeof set.dynamaxLevel === 'number' && set.dynamaxLevel !== 10 && !isNaN(set.dynamaxLevel)) {
+			out += `Dynamax Level: ${set.dynamaxLevel}  \n`;
+		}
 		if (set.gigantamax) {
 			out += `Gigantamax: Yes  \n`;
+		}
+		if (set.teraType) {
+			out += `Tera Type: ${set.teraType}  \n`;
 		}
 
 		// stats
@@ -469,6 +489,9 @@ export const Teams = new class Teams {
 		} else if (line.startsWith('Hidden Power: ')) {
 			line = line.slice(14);
 			set.hpType = line;
+		} else if (line.startsWith('Tera Type: ')) {
+			line = line.slice(11);
+			set.teraType = line;
 		} else if (line === 'Gigantamax: Yes') {
 			set.gigantamax = true;
 		} else if (line.startsWith('EVs: ')) {
@@ -592,7 +615,13 @@ export const Teams = new class Teams {
 	}
 
 	getGenerator(format: Format | string, seed: PRNG | PRNGSeed | null = null) {
-		const TeamGenerator = require(Dex.forFormat(format).dataDir + '/random-teams').default;
+		let TeamGenerator;
+		if (toID(format).includes('gen9computergeneratedteams')) {
+			TeamGenerator = require(Dex.forFormat(format).dataDir + '/cg-teams').default;
+		} else {
+			TeamGenerator = require(Dex.forFormat(format).dataDir + '/random-teams').default;
+		}
+
 		return new TeamGenerator(format, seed);
 	}
 

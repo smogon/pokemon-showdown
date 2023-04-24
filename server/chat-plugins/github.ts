@@ -6,7 +6,9 @@
 
 import {FS, Utils} from '../../lib';
 
-const STAFF_REPOS = Config.staffrepos || ['pokemon-showdown', 'pokemon-showdown-client', 'Pokemon-Showdown-Dex'];
+const STAFF_REPOS = Config.staffrepos || [
+	'pokemon-showdown', 'pokemon-showdown-client', 'Pokemon-Showdown-Dex', 'pokemon-showdown-loginserver',
+];
 const COOLDOWN = 10 * 60 * 1000;
 
 export const gitData: GitData = JSON.parse(FS("config/chat-plugins/github.json").readIfExistsSync() || "{}");
@@ -148,6 +150,8 @@ export const GitHub = new class {
 		if (action === 'synchronize') return 'updated';
 		if (action === 'review_requested') {
 			return 'requested a review for';
+		} else if (action === 'review_request_removed') {
+			return 'removed a review request for';
 		}
 		if (['ready_for_review', 'labeled', 'unlabeled', 'converted_to_draft'].includes(action)) {
 			return null;

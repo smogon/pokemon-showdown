@@ -46,7 +46,7 @@ export const translations: Translations = {
 		"<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.": "<strong>mute</strong> - Schaltet einen Nutzer für 7 Minuten stumm.",
 		"<strong>hourmute</strong> - Mutes a user for 60 minutes.": "<strong>hourmute</strong> - Schaltet einen Nutzer für 60 Minuten stumm.",
 		"<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.": "<strong>ban</strong> - Verbannt einen Nutzer für 2 Tage aus dem Raum (er kann ihn während dieser Zeit nicht betreten).",
-		"<strong>weekban</strong> - Bans a user from the room for a week.": "<strong>weekban</strong> - Verbannt einen Nutzer für 1 Woche aus dem Raum.",
+		"<strong>weekban</strong> - Bans a user from the room for a week.": "<strong>weekban</strong> - Bannt einen User vom Raum für genau eine Woche.",
 		"<strong>blacklist</strong> - Bans a user for a year.": "<strong>blacklist</strong> - Verbannt einen Nutzer für 1 Jahr aus dem Raum.",
 
 		"<strong>Global punishments</strong>:": "<strong>Globale Strafen</strong>:",
@@ -54,6 +54,12 @@ export const translations: Translations = {
 		"<strong>weeklock</strong> - Locks a user for a week.": "<strong>weeklock</strong> - Sperrt einen Nutzer für 1 Woche.",
 		"<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.": "<strong>namelock</strong> - Sperrt einen Nutzer für 2 Tage und hindert ihn daran, einen Nutzernamen zu haben.",
 		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "<strong>globalban</strong> - Verbannt einen Nutzer für 1 Woche vom Server (verbietet es ihm, sich zu verbinden und zu kämpfen).",
+
+		"<strong>Indefinite global punishments</strong>:": "<strong>Zeitlich unbestimmtes globales Strafenkatalog</strong>:",
+		"<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ": "<strong>permalock</strong> - Wird meistens erst dann verwendet wenn ein User mehrfach schlechtes Verhalten an den Tag legt. Meistens ist das was zu einem Permalock führt, dann die eine Aktion die das Fass zum Überlaufen gebracht hat.",
+		'These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>': 'Für diese Permalocks hat man dann 3 Monate nach auffallfreier Zeit die Möglichkeit',
+		" forum after at least 3 months without incident.": ', im <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Forum auf Smogon für den Entfall des Bannes</a> zu bitten.',
+		"<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.": "<strong>permaban</strong> - Ein globaler Bann bei dem auch keine Bitte des Entbannens aushilft. Grundsätzlich werden diese Arten von Bestrafungen aber nur in den härtesten Fällen verwendet, wenn beispielsweise die Angelegenheiten sehr stark beleidigend oder oftmals unangemessenes Verhalten an den Tag gelegt wird.",
 
 		"<strong>Room drivers (%)</strong> can use:": "<strong>Raum-Driver (%)</strong> können nutzen:",
 		"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules": "- /warn oder /k <em>Nutzernamen</em>: Verwarnt einen Nutzer und zeigt ihm die Regeln von Pok&eacute;mon Showdown",

@@ -55,12 +55,12 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Handle boosting items
 			if (
-				(['Cubone', 'Marowak'].includes(this.species.name) && this.item === 'thickclub' && statName === 'atk') ||
-				(this.species.name === 'Pikachu' && this.item === 'lightball' && statName === 'spa')
+				(['Cubone', 'Marowak'].includes(this.baseSpecies.name) && this.item === 'thickclub' && statName === 'atk') ||
+				(this.baseSpecies.name === 'Pikachu' && this.item === 'lightball' && statName === 'spa')
 			) {
 				stat *= 2;
-			} else if (this.species.name === 'Ditto' && this.item === 'metalpowder' && ['def', 'spd'].includes(statName)) {
-				stat *= 1.5;
+			} else if (this.baseSpecies.name === 'Ditto' && this.item === 'metalpowder' && ['def', 'spd'].includes(statName)) {
+				stat = Math.floor(stat * 1.5);
 			}
 
 			return stat;
@@ -158,6 +158,22 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (!this.battle.singleEvent('Try', move, null, pokemon, target, move)) {
 				return false;
+			}
+
+			if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
+				if (move.target === 'all') {
+					hitResult = this.battle.runEvent('TryHitField', target, pokemon, move);
+				} else {
+					hitResult = this.battle.runEvent('TryHitSide', target, pokemon, move);
+				}
+				if (!hitResult) {
+					if (hitResult === false) {
+						this.battle.add('-fail', pokemon);
+						this.battle.attrLastMove('[still]');
+					}
+					return false;
+				}
+				return this.moveHit(target, pokemon, move);
 			}
 
 			hitResult = this.battle.runEvent('Invulnerability', target, pokemon, move);
@@ -690,7 +706,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			// Apply random factor is damage is greater than 1, except for Flail and Reversal
+			// Apply random factor if damage is greater than 1, except for Flail and Reversal
 			if (!move.noDamageVariance && damage > 1) {
 				damage *= this.battle.random(217, 256);
 				damage = Math.floor(damage / 255);

@@ -56,7 +56,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			) {
 				stat *= 2;
 			} else if (this.species.name === 'Ditto' && this.item === 'metalpowder' && ['def', 'spd'].includes(statName)) {
-				stat *= 1.5;
+				stat = Math.floor(stat * 1.5);
 			}
 
 			return stat;
@@ -93,6 +93,22 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (!this.battle.singleEvent('Try', move, null, pokemon, target, move)) {
 				return false;
+			}
+
+			if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
+				if (move.target === 'all') {
+					hitResult = this.battle.runEvent('TryHitField', target, pokemon, move);
+				} else {
+					hitResult = this.battle.runEvent('TryHitSide', target, pokemon, move);
+				}
+				if (!hitResult) {
+					if (hitResult === false) {
+						this.battle.add('-fail', pokemon);
+						this.battle.attrLastMove('[still]');
+					}
+					return false;
+				}
+				return this.moveHit(target, pokemon, move);
 			}
 
 			hitResult = this.battle.runEvent('Invulnerability', target, pokemon, move);
@@ -431,7 +447,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			// Apply random factor is damage is greater than 1, except for Flail and Reversal
+			// Apply random factor if damage is greater than 1, except for Flail and Reversal
 			if (!move.noDamageVariance && damage > 1) {
 				damage *= this.battle.random(217, 256);
 				damage = Math.floor(damage / 255);
@@ -462,7 +478,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (typeof effect === 'string') effect = this.dex.conditions.get(effect);
 		if (!target?.hp) return 0;
 		let success = null;
-		boost = this.runEvent('Boost', target, source, effect, {...boost});
+		boost = this.runEvent('TryBoost', target, source, effect, {...boost});
 		let i: BoostID;
 		for (i in boost) {
 			const currentBoost: SparseBoostsTable = {};
@@ -514,6 +530,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.runEvent('BeforeFaint', pokemon, faintData.source, faintData.effect)) {
 				this.add('faint', pokemon);
 				pokemon.side.pokemonLeft--;
+				if (pokemon.side.totalFainted < 100) pokemon.side.totalFainted++;
 				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
 				pokemon.clearVolatile(false);
@@ -528,6 +545,14 @@ export const Scripts: ModdedBattleScriptsData = {
 			// in gen 1, fainting skips the rest of the turn
 			// residuals don't exist in gen 1
 			this.queue.clear();
+			// Fainting clears accumulated Bide damage
+			for (const pokemon of this.getAllActive()) {
+				if (pokemon.volatiles['bide'] && pokemon.volatiles['bide'].damage) {
+					pokemon.volatiles['bide'].damage = 0;
+					this.hint("Desync Clause Mod activated!");
+					this.hint("In Gen 1, Bide's accumulated damage is reset to 0 when a Pokemon faints.");
+				}
+			}
 		} else if (this.gen <= 3 && this.gameType === 'singles') {
 			// in gen 3 or earlier, fainting in singles skips to residuals
 			for (const pokemon of this.getAllActive()) {

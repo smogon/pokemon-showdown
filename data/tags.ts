@@ -46,6 +46,10 @@ export const Tags: {[id: string]: TagData} = {
 		name: "Restricted Legendary",
 		speciesFilter: species => species.tags.includes("Restricted Legendary"),
 	},
+	paradox: {
+		name: "Paradox",
+		speciesFilter: species => species.tags.includes("Paradox"),
+	},
 
 	// Move tags
 	// ---------
@@ -192,14 +196,6 @@ export const Tags: {[id: string]: TagData} = {
 		name: "AG",
 		speciesFilter: species => species.tier === 'AG',
 	},
-	nduubl: {
-		name: "ND UUBL",
-		speciesFilter: species => [
-			'Aerodactyl-Mega', 'Azumarill', 'Blacephalon', 'Diancie-Mega', 'Gallade-Mega', 'Gardevoir-Mega', 'Gengar', 'Gyarados', 'Gyarados-Mega',
-			'Hawlucha', 'Heracross-Mega', 'Hoopa-Unbound', 'Hydreigon', 'Jirachi', 'Latias', 'Latias-Mega', 'Latios', 'Latios-Mega', 'Manaphy', 'Mew',
-			'Pinsir-Mega', 'Sableye-Mega', 'Slowbro-Mega', 'Slowking-Galar', 'Thundurus', 'Thundurus-Therian', 'Venusaur-Mega', 'Xurkitree', 'Zapdos-Galar',
-		].includes(species.name),
-	},
 
 	// Doubles tiers
 	// -------------
@@ -222,6 +218,37 @@ export const Tags: {[id: string]: TagData} = {
 	dnu: {
 		name: "DNU",
 		speciesFilter: species => species.doublesTier === '(DUU)',
+	},
+
+	// Nat Dex tiers
+	// -------------
+	ndag: {
+		name: "ND AG",
+		speciesFilter: species => species.natDexTier === 'AG',
+	},
+	nduber: {
+		name: "ND Uber",
+		speciesFilter: species => species.natDexTier === 'Uber' || species.natDexTier === '(Uber)',
+	},
+	ndou: {
+		name: "ND OU",
+		speciesFilter: species => species.natDexTier === 'OU' || species.natDexTier === '(OU)',
+	},
+	nduubl: {
+		name: "ND UUBL",
+		speciesFilter: species => species.natDexTier === 'UUBL',
+	},
+	nduu: {
+		name: "ND UU",
+		speciesFilter: species => species.natDexTier === 'UU',
+	},
+	ndrubl: {
+		name: "ND RUBL",
+		speciesFilter: species => species.natDexTier === 'RUBL',
+	},
+	ndru: {
+		name: "ND RU",
+		speciesFilter: species => species.natDexTier === 'RU',
 	},
 
 	// Legality tags

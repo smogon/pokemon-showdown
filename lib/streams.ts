@@ -49,7 +49,7 @@ export class ReadStream {
 		});
 		this.awaitingPush = false;
 
-		let options;
+		let options: {[k: string]: any};
 		if (typeof optionsOrStreamLike === 'string') {
 			options = {buffer: optionsOrStreamLike};
 		} else if (optionsOrStreamLike instanceof Buffer) {
@@ -481,10 +481,10 @@ export class ReadWriteStream extends ReadStream implements WriteStream {
 			const nodeStream: NodeJS.WritableStream = options.nodeStream;
 			this.nodeWritableStream = nodeStream;
 			options.write = function (data: string | Buffer) {
-				const result = this.nodeWritableStream!.write(data);
+				const result = this.nodeWritableStream.write(data);
 				if (result !== false) return undefined;
 				if (!this.drainListeners.length) {
-					this.nodeWritableStream!.once('drain', () => {
+					this.nodeWritableStream.once('drain', () => {
 						for (const listener of this.drainListeners) listener();
 						this.drainListeners = [];
 					});
@@ -497,7 +497,7 @@ export class ReadWriteStream extends ReadStream implements WriteStream {
 			if (nodeStream !== process.stdout && nodeStream !== process.stderr) {
 				options.writeEnd = function () {
 					return new Promise<void>(resolve => {
-						this.nodeWritableStream!.end(() => resolve());
+						this.nodeWritableStream.end(() => resolve());
 					});
 				};
 			}
@@ -612,7 +612,7 @@ export class ObjectReadStream<T> {
 	push(elem: T) {
 		if (this.atEOF) return;
 		this.buf.push(elem);
-		if (this.buf.length > this.readSize && this.buf.length >= 16) this._pause();
+		if (this.buf.length > this.readSize && this.buf.length >= 16) void this._pause();
 		this.resolvePush();
 	}
 
@@ -658,8 +658,8 @@ export class ObjectReadStream<T> {
 		throw new Error(`ReadStream needs to be subclassed and the _read function needs to be implemented.`);
 	}
 
-	_destroy() {}
-	_pause() {}
+	_destroy(): void | Promise<void> {}
+	_pause(): void | Promise<void> {}
 
 	async loadIntoBuffer(count: number | true = 1, readError?: boolean) {
 		this[readError ? 'readError' : 'peekError']();

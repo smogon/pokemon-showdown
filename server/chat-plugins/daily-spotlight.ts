@@ -88,7 +88,7 @@ export const pages: Chat.PageTable = {
 
 		let buf = `<div class="pad ladder">`;
 		buf += `<div class="pad">`;
-		buf += `<button style="float:right;" class="button" name="send" value="/join view-spotlights-${room.roomid}-${sortType}">`;
+		buf += `<button style="float:right;" class="button" name="send" value="/join view-spotlights-${room.roomid}${sortType ? '-' + sortType : ''}">`;
 		buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
 		buf += `<h2>Daily Spotlights</h2>`;
 		// for posterity, all these switches are futureproofing for more sort types
@@ -292,7 +292,7 @@ export const commands: Chat.ChatCommands = {
 		this.sendReplyBox(html);
 		if (!this.broadcasting && user.can('ban', null, room, 'setdaily')) {
 			const code = Utils.escapeHTML(description).replace(/\n/g, '<br />');
-			this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/setdaily ${key},${image},${code}</code></details>`);
+			this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/setdaily ${key},${image ? `${image},` : ''}${code}</code></details>`);
 		}
 		room.update();
 	},

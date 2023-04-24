@@ -7,8 +7,8 @@
 'use strict';
 
 const assert = require("../assert");
-const Teams = require('./../../sim/teams').Teams;
-const {TeamValidator, PokemonSources} = require('../../sim/team-validator');
+const Teams = require('./../../dist/sim/teams').Teams;
+const {TeamValidator, PokemonSources} = require('../../dist/sim/team-validator');
 
 /**
  * Unit test helper for Pokemon sets
@@ -23,8 +23,10 @@ function testSet(pokemon, options, test) {
 	const isDoubles = options.isDoubles || (options.format && options.format.includes('doubles'));
 	const isDynamax = options.isDynamax || !(options.format && options.format.includes('nodmax'));
 	for (let i = 0; i < rounds; i++) {
+		// If undefined, test lead 1/6 of the time
+		const isLead = options.isLead === undefined ? i % 6 === 2 : options.isLead;
 		const generator = Teams.getGenerator(options.format, options.seed || [i, i, i, i]);
-		const set = generator.randomSet(pokemon, {}, options.isLead, isDoubles, isDynamax);
+		const set = generator.randomSet(pokemon, {}, isLead, isDoubles, isDynamax);
 		test(set);
 	}
 }
@@ -156,7 +158,7 @@ function assertSetValidity(format, set) {
 		species.baseSpecies === 'Arceus' &&
 		species.types[0] !== 'Normal' &&
 		(dex.gen !== 7 || !set.item.endsWith(' Z')) &&
-		!format.id.includes('hackmons')
+		format.team !== 'randomHC'
 	) {
 		assert(set.item.endsWith(' Plate'), `${species.name} doesn't have a Plate (got "${set.item}" instead)`);
 	}

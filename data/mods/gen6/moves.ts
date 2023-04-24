@@ -3,6 +3,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		priority: 1,
 	},
+	assist: {
+		inherit: true,
+		flags: {noassist: 1, failcopycat: 1, nosleeptalk: 1},
+	},
+	copycat: {
+		inherit: true,
+		flags: {noassist: 1, failcopycat: 1, nosleeptalk: 1},
+	},
 	darkvoid: {
 		inherit: true,
 		accuracy: 80,
@@ -31,10 +39,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 3,
 			onStart(target) {
-				const noEncore = ['encore', 'mimic', 'mirrormove', 'sketch', 'struggle', 'transform'];
 				const moveIndex = target.lastMove ? target.moves.indexOf(target.lastMove.id) : -1;
 				if (
-					!target.lastMove || noEncore.includes(target.lastMove.id) ||
+					!target.lastMove || target.lastMove.flags['failencore'] ||
 					!target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0
 				) {
 					// it failed
@@ -88,6 +95,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 20,
 		pp: 15,
 	},
+	mefirst: {
+		inherit: true,
+		flags: {protect: 1, bypasssub: 1, noassist: 1, failcopycat: 1, failmefirst: 1, nosleeptalk: 1},
+	},
 	minimize: {
 		inherit: true,
 		condition: {
@@ -110,6 +121,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return accuracy;
 			},
 		},
+	},
+	metronome: {
+		inherit: true,
+		flags: {noassist: 1, failcopycat: 1, nosleeptalk: 1},
 	},
 	mistyterrain: {
 		inherit: true,
@@ -152,6 +167,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		basePower: 65,
 	},
+	naturepower: {
+		inherit: true,
+		flags: {nosleeptalk: 1, noassist: 1, failcopycat: 1},
+	},
 	paraboliccharge: {
 		inherit: true,
 		basePower: 50,
@@ -187,6 +206,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	sheercold: {
 		inherit: true,
 		ohko: true,
+	},
+	sleeptalk: {
+		inherit: true,
+		flags: {nosleeptalk: 1, noassist: 1, failcopycat: 1},
 	},
 	stockpile: {
 		inherit: true,

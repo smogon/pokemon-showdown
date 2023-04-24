@@ -105,7 +105,7 @@ describe(`Pressure`, function () {
 	});
 
 	it(`should deduct additional PP from Max Moves`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(8).createBattle([[
 			{species: 'wynaut', moves: ['darkpulse']},
 		], [
 			{species: 'absol', ability: 'pressure', moves: ['sleeptalk']},
@@ -126,7 +126,7 @@ describe(`Pressure`, function () {
 		assert.equal(move.pp, move.maxpp - 2);
 	});
 
-	it.skip(`should deduct additional PP from submoves that target Pressure`, function () {
+	it(`should deduct additional PP from submoves that target Pressure`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['assist']},
 			{species: 'yveltal', moves: ['darkpulse']},
@@ -147,11 +147,43 @@ describe(`Pressure`, function () {
 		const wynaut = battle.p1.active[0];
 		battle.makeChoices('move stickyweb', 'auto');
 		let move = wynaut.getMoveData(Dex.moves.get('stickyweb'));
-		assert.equal(move.pp, move.maxpp - 1);
+		assert.equal(move.pp, move.maxpp - 1, `Sticky Web should lose only 1 PP`);
 
 		battle.makeChoices('move stealthrock', 'auto');
 		move = wynaut.getMoveData(Dex.moves.get('stealthrock'));
-		assert.equal(move.pp, move.maxpp - 2);
+		assert.equal(move.pp, move.maxpp - 2, `Stealth Rock should lose 2 PP`);
+	});
+
+	it(`should deduct additional PP from Tera Blast even when not used into the Pressure target`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'wynaut', moves: ['terablast']},
+			{species: 'magikarp', moves: ['sleeptalk']},
+		], [
+			{species: 'absol', ability: 'pressure', moves: ['sleeptalk']},
+			{species: 'feebas', moves: ['sleeptalk']},
+		]]);
+		const wynaut = battle.p1.active[0];
+		battle.makeChoices('move terablast -2, auto', 'auto');
+		battle.makeChoices('move terablast 2, auto', 'auto');
+		const move = wynaut.getMoveData(Dex.moves.get('terablast'));
+		assert.equal(move.pp, move.maxpp - 4);
+	});
+
+	it(`should not deduct additional PP from moves reflected by Magic Coat`, function () {
+		battle = common.createBattle([[
+			{species: 'reuniclus', moves: ['magiccoat', 'confuseray']},
+		], [
+			{species: 'dusclops', ability: 'pressure', moves: ['confuseray']},
+		]]);
+		battle.makeChoices();
+		// Reuniclus
+		let move = battle.p1.active[0].getMoveData(Dex.moves.get('magiccoat'));
+		assert.equal(move.pp, move.maxpp - 1);
+		move = battle.p1.active[0].getMoveData(Dex.moves.get('confuseray'));
+		assert.equal(move.pp, move.maxpp);
+		// Dusclops
+		move = battle.p2.active[0].getMoveData(Dex.moves.get('confuseray'));
+		assert.equal(move.pp, move.maxpp - 1);
 	});
 });
 

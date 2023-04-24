@@ -19,7 +19,7 @@ describe('Gluttony', function () {
 
 		battle.makeChoices();
 		const wobbuffet = battle.p1.active[0];
-		assert.equal(wobbuffet.hp, Math.floor(wobbuffet.maxhp / 2) + Math.floor(wobbuffet.maxhp * 0.33));
+		assert.equal(wobbuffet.hp, Math.floor(wobbuffet.maxhp / 2) + Math.floor(wobbuffet.maxhp / 3));
 	});
 
 	it(`should activate after Belly Drum`, function () {
@@ -31,7 +31,7 @@ describe('Gluttony', function () {
 
 		battle.makeChoices();
 		const snorlax = battle.p1.active[0];
-		assert.equal(snorlax.hp, Math.floor(snorlax.maxhp / 2) + Math.floor(snorlax.maxhp * 0.33));
+		assert.equal(snorlax.hp, Math.floor(snorlax.maxhp / 2) + Math.floor(snorlax.maxhp / 3));
 	});
 
 	it(`should activate after poison damage`, function () {
@@ -43,6 +43,6 @@ describe('Gluttony', function () {
 
 		for (let i = 0; i < 4; i++) battle.makeChoices();
 		const wobbuffet = battle.p1.active[0];
-		assert.equal(wobbuffet.hp, Math.floor(wobbuffet.maxhp / 2) + Math.floor(wobbuffet.maxhp * 0.33));
+		assert.equal(wobbuffet.hp, Math.floor(wobbuffet.maxhp / 2) + Math.floor(wobbuffet.maxhp / 3));
 	});
 });

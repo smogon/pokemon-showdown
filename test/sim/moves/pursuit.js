@@ -58,16 +58,16 @@ describe(`Pursuit`, function () {
 	});
 
 	it(`should not double in power or activate before a switch if targeting an ally`, function () {
-		battle = common.createBattle({gameType: 'doubles', seed: [1, 1, 1, 1]}, [[
-			{species: "Beedrill", ability: 'swarm', item: 'beedrillite', moves: ['pursuit']},
-			{species: "Clefable", ability: 'unaware', moves: ['calmmind']},
-			{species: "Furret", ability: 'frisk', moves: ['uturn']},
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: "Beedrill", item: 'beedrillite', moves: ['pursuit']},
+			{species: "Clefable", moves: ['calmmind']},
+			{species: "Furret", ability: 'shellarmor', moves: ['uturn']},
 		], [
-			{species: "Clefable", ability: 'magicguard', moves: ['calmmind']},
-			{species: "Alakazam", ability: 'unaware', moves: ['calmmind']},
+			{species: "Clefable", moves: ['calmmind']},
+			{species: "Alakazam", moves: ['calmmind']},
 		]]);
 		const furret = battle.p1.pokemon[2];
-		battle.makeChoices('move Pursuit mega -2, switch 3', 'auto');
+		battle.makeChoices('move pursuit mega -2, switch 3', 'auto');
 		assert.bounded(furret.maxhp - furret.hp, [60, 70]);
 	});
 
@@ -87,5 +87,21 @@ describe(`Pursuit`, function () {
 		assert.fullHP(battle.p2.pokemon[1], 'should not hit Pokemon that has used Baton Pass');
 		assert.equal(battle.p2.pokemon[0].name, "Emolga");
 		battle.makeChoices('move Pursuit', 'move voltswitch');
+	});
+
+	it(`should only activate before switches on adjacent foes`, function () {
+		battle = common.gen(5).createBattle({gameType: 'triples'}, [[
+			{species: 'Beedrill', moves: ['pursuit']},
+			{species: 'Wynaut', moves: ['swordsdance']},
+			{species: 'Wynaut', moves: ['swordsdance']},
+		], [
+			{species: 'Alakazam', moves: ['swordsdance']},
+			{species: 'Solosis', moves: ['swordsdance']},
+			{species: 'Wynaut', moves: ['swordsdance']},
+			{species: 'Wynaut', moves: ['swordsdance']},
+		]]);
+		battle.makeChoices('move pursuit 2, auto', 'switch 4, auto');
+		assert.false(battle.log.includes('|-activate|p2a: Alakazam|move: Pursuit'));
+		assert.false.fullHP(battle.p2.active[1]);
 	});
 });

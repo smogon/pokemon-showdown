@@ -152,7 +152,7 @@ export const pages: Chat.PageTable = {
 
 	sharedipblacklist(args, user, connection) {
 		this.title = `[Shared IP Blacklist]`;
-		checkCanPerform(this, user, 'globalban');
+		checkCanPerform(this, user, 'lock');
 
 		let buf = `<div class="pad"><h2>IPs blocked from being marked as shared</h2>`;
 		if (!Punishments.sharedIpBlacklist.size) {
@@ -329,7 +329,7 @@ export const commands: Chat.ChatCommands = {
 			`Get datacenter info from <code>/whois</code>; <code>[low IP]</code>, <code>[high IP]</code> are the range in the last inetnum.`,
 			`<code>/ipranges remove [low IP]-[high IP]</code>: remove IP range(s). Can be multiline. Requires: hosts manager &`,
 			`For example: <code>/ipranges remove 5.152.192.0, 5.152.223.255</code>.`,
-			`<code>/ipranges rename [low IP]-[high IP], [host]</code>: changes the host an IP range resolves to. Requires: hosts manager &`,
+			`<code>/ipranges rename [type], [low IP]-[high IP], [host]</code>: changes the host an IP range resolves to. Requires: hosts manager &`,
 		];
 		return this.sendReply(`|html|<details class="readmore"><summary>${help.join('<br />')}`);
 	},
@@ -416,7 +416,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`'${type}' isn't one of 'openproxy', 'proxy', 'residential', or 'mobile'.`);
 		}
 		this.privateGlobalModAction(
-			`${user.name} ${removing ? 'removed' : 'added'} ${hosts.length} hosts (${hosts.join(', ')}) to the ${type} category!`
+			`${user.name} ${removing ? 'removed' : 'added'} ${hosts.length} hosts (${hosts.join(', ')}) ${removing ? 'from' : 'to'} the ${type} category`
 		);
 		this.globalModlog(removing ? 'REMOVEHOSTS' : 'ADDHOSTS', null, `${type}: ${hosts.join(', ')}`);
 	},

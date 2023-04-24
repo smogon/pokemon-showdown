@@ -101,7 +101,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	darkvoid: {
 		inherit: true,
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	decorate: {
 		inherit: true,
@@ -501,7 +501,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	judgment: {
 		inherit: true,
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	junglehealing: {
 		inherit: true,
@@ -611,6 +611,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	metronome: {
+		inherit: true,
+		desc: "A random move is selected for use, other than After You, Belch, Body Press, Chatter, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Ascent, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Life Dew, Metronome, Mimic, Mirror Coat, Nature Power, Origin Pulse, Precipice Blades, Protect, Quash, Quick Guard, Rage Powder, Sketch, Sleep Talk, Snarl, Snore, Spiky Shield, Struggle, Switcheroo, Thief, Transform, Trick, or Wide Guard.",
+		shortDesc: "Picks a random move.",
+		noMetronome: [
+			"After You", "Belch", "Body Press", "Chatter", "Copycat", "Counter", "Covet", "Destiny Bond", "Detect", "Dragon Ascent", "Endure", "Feint", "Focus Punch", "Follow Me", "Helping Hand", "Life Dew", "Metronome", "Mimic", "Mirror Coat", "Nature Power", "Origin Pulse", "Precipice Blades", "Protect", "Quash", "Quick Guard", "Rage Powder", "Sketch", "Sleep Talk", "Snarl", "Snore", "Spiky Shield", "Struggle", "Switcheroo", "Thief", "Transform", "Trick", "Wide Guard",
+		],
+	},
 	mindblown: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -693,7 +701,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	psychoboost: {
 		inherit: true,
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	purify: {
 		inherit: true,
@@ -733,7 +741,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	seedflare: {
 		inherit: true,
-		isNonstandard: "Unobtainable",
+		isNonstandard: null,
 	},
 	shadowbone: {
 		inherit: true,
