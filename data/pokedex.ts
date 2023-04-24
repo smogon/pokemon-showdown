@@ -27243,7 +27243,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 95,
 		color: "Purple",
 		prevo: "Swalot",
-		evos: ["Belcevour"],
 		evoLevel: 45,
 		eggGroups: ["Amorphous"],
 	},
