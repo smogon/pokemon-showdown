@@ -8478,7 +8478,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	// uranium items start here
 	hafliberry: {
 		name: "Hafli Berry",
-		spritenum: 768,
+		spritenum: 0,
 		isBerry: true,
 		isNonstandard: "Unobtainable",
 		naturalGift: {
@@ -8503,7 +8503,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	coconutmilk: {
 		name: "Coconut Milk",
-		spritenum: 769,
+		spritenum: 0,
 		isNonstandard: "Unobtainable",
 		fling: {
 			basePower: 30,
@@ -8513,7 +8513,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	carrotwine: {
 		name: "Carrot Wine",
-		spritenum: 770,
+		spritenum: 0,
 		isNonstandard: "Unobtainable",
 		fling: {
 			basePower: 30,
@@ -8523,7 +8523,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	junglecrown: {
 		name: "Jungle Crown",
-		spritenum: 771,
+		spritenum: 0,
 		isNonstandard: "Unobtainable",
 		fling: {
 			basePower: 30,
@@ -8539,7 +8539,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	metalynxite: {
 		name: "Metalynxite",
-		spritenum: 772,
+		spritenum: 0,
 		isNonstandard: "Unobtainable",
 		megaStone: "Metalynx-Mega",
 		megaEvolves: "Metalynx",
@@ -8553,7 +8553,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	archillesite: {
 		name: "Archillesite",
-		spritenum: 773,
+		spritenum: 0,
 		isNonstandard: "Unobtainable",
 		megaStone: "Archilles-Mega",
 		megaEvolves: "Archilles",
@@ -8567,7 +8567,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	electruxolite: {
 		name: "Electruxolite",
-		spritenum: 774,
+		spritenum: 0,
 		isNonstandard: "Unobtainable",
 		megaStone: "Electruxo-Mega",
 		megaEvolves: "Electruxo",
@@ -8581,7 +8581,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	baariettite: {
 		name: "Baariettite",
-		spritenum: 775,
+		spritenum: 0,
 		isNonstandard: "Unobtainable",
 		megaStone: "Baariette-Mega",
 		megaEvolves: "Baariette",
@@ -8595,7 +8595,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	nuclearbaariettite: {
 		name: "Nuclear Baariettite",
-		spritenum: 775,
+		spritenum: 0,
 		isNonstandard: "Unobtainable",
 		megaStone: "Baariette-Nuclear-Mega",
 		megaEvolves: "Baariette-Nuclear",
@@ -8609,7 +8609,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	drilgannite: {
 		name: "Drilgannite",
-		spritenum: 776,
+		spritenum: 0,
 		isNonstandard: "Unobtainable",
 		megaStone: "Drilgann-Mega",
 		megaEvolves: "Drilgann",
@@ -8623,7 +8623,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	inflagetite: {
 		name: "Inflagetite",
-		spritenum: 777,
+		spritenum: 0,
 		isNonstandard: "Unobtainable",
 		megaStone: "Inflagetah-Mega",
 		megaEvolves: "Inflagetah",
@@ -8637,7 +8637,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	dramsamaite: {
 		name: "Dramsamaite",
-		spritenum: 778,
+		spritenum: 0,
 		isNonstandard: "Unobtainable",
 		megaStone: "Dramsama-Mega",
 		megaEvolves: "Dramsama",
@@ -8651,7 +8651,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	syrentideite: {
 		name: "Syrentideite",
-		spritenum: 779,
+		spritenum: 0,
 		isNonstandard: "Unobtainable",
 		megaStone: "Syrentide-Mega",
 		megaEvolves: "Syrentide",
@@ -8665,7 +8665,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	unidentifiedfallenobject: {
 		name: "Unidentified Fallen Object",
-		spritenum: 780,
+		spritenum: 0,
 		isNonstandard: "Unobtainable",
 		megaStone: "S51-A-Mega",
 		megaEvolves: "S51-A",
@@ -8679,7 +8679,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	kiricornite: {
 		name: "Kiricornite",
-		spritenum: 781,
+		spritenum: 0,
 		isNonstandard: "Unobtainable",
 		megaStone: "Kiricorn-Mega",
 		megaEvolves: "Kiricorn",
@@ -8693,7 +8693,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	whimsicottite: {
 		name: "Whimsicottite",
-		spritenum: 782,
+		spritenum: 0,
 		isNonstandard: "Unobtainable",
 		megaStone: "Whimsicott-Mega",
 		megaEvolves: "Whimsicott",
@@ -8707,7 +8707,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	arbokite: {
 		name: "Arbokite",
-		spritenum: 783,
+		spritenum: 0,
 		isNonstandard: "Unobtainable",
 		megaStone: "Arbok-Mega",
 		megaEvolves: "Arbok",
@@ -8721,7 +8721,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	nucleararbokite: {
 		name: "Nuclear Arbokite",
-		spritenum: 783,
+		spritenum: 0,
 		isNonstandard: "Unobtainable",
 		megaStone: "Arbok-Nuclear-Mega",
 		megaEvolves: "Arbok-Nuclear",
@@ -8735,7 +8735,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	nucleargyaradosite: {
 		name: "Nuclear Gyaradosite",
-		spritenum: 783,
+		spritenum: 0,
 		isNonstandard: "Unobtainable",
 		megaStone: "Gyarados-Nuclear-Mega",
 		megaEvolves: "Gyarados-Nuclear",
@@ -8749,7 +8749,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	aromaticherb: {
 		name: "Aromatic Herb",
-		spritenum: 784,
+		spritenum: 0,
 		isNonstandard: "Unobtainable",
 		fling: {
 			basePower: 80,
