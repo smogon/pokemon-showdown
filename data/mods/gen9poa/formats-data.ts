@@ -3381,4 +3381,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	golisopodshogun: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
 };

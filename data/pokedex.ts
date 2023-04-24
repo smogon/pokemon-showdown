@@ -27218,4 +27218,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
+	golisopodshogun: {
+		num: 768,
+		name: "Golisopod-Shogun",
+		baseSpecies: "Golisopod",
+		forme: "Shogun",
+		types: ["Bug", "Steel"],
+		baseStats: {hp: 75, atk: 125, def: 140, spa: 60, spd: 90, spe: 40},
+		abilities: {0: "Bushido", H: "Sharpness"},
+		heightm: 2,
+		weightkg: 108,
+		color: "Gray",
+		evoLevel: 30,
+		eggGroups: ["Bug", "Water 3"],
+	},
 };
