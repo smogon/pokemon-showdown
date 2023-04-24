@@ -2469,4 +2469,13 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "Flowing tranquility activates during rain, giving golduck a 1.5x speed boost and a 1.3x power boost to its psychic type attacks.",
 		shortDesc: "Speed is boosted 1.5x and Psychic-Type attacks are boosted 1.3x in Rain."
 	},
+	bushido: {
+		name: "Bushido",
+		desc: "When this Pokemon moves first, it does 1.3x damage.",
+	},
+	acidfumes: {
+		name: "Acid Fumes",
+		desc: "Any pokemon that make contact with or are contacted by this pokemon in Acid Rain takes -1 in both defenses.",
+		shortDesc: "Lower's opponents defenses when contacted in Acid Rain."
+	},
 };
