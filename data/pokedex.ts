@@ -27166,6 +27166,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	pinecodelta: {
 		num: 204,
 		name: "Pineco-Delta",
+		baseSpecies: "Pineco",
+		forme: "Delta",
 		types: ["Bug"],
 		baseStats: {hp: 50, atk: 65, def: 90, spa: 35, spd: 35, spe: 15},
 		abilities: {0: "Iron Barbs", 1: "Weak Armor", H: "Sturdy"},
@@ -27178,6 +27180,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	forretressdelta: {
 		num: 205,
 		name: "Forretress-Delta",
+		baseSpecies: "Forretress",
+		forme: "Delta",
 		types: ["Bug", "Rock"],
 		baseStats: {hp: 75, atk: 90, def: 140, spa: 60, spd: 60, spe: 40},
 		abilities: {0: "Iron Barbs", 1: "Weak Armor", H: "Solid Rock"},
