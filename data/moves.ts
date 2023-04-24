@@ -23129,7 +23129,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			// You can't get here unless the pursuit succeeds
 			if (target.beingCalledBack || target.switchFlag) {
 				this.debug('Monkey Arms damage boost');
-				target.switchFlag = false;
+				target.tryTrap(true);
+				target.maybeTrapped = true;
 				return move.basePower * 2;
 			}
 			return move.basePower;
