@@ -38,5 +38,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	samurott: {
 		inherit: true,
 		abilities: {0: "Torrent", H: "Sharpness"},
-	}
+	},
+	cameruptdelta: {
+		inherit: true,
+		abilities: {0: "Pollutant", 1: "Poison Point", H: "Liquid Ooze"},
+	},
+	cameruptdeltamega: {
+		inherit: true,
+		abilities: {0: "Corrosion"},
+	},
 };

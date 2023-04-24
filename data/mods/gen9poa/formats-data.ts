@@ -3376,4 +3376,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	ironbrew: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };

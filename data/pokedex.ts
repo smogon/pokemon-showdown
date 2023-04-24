@@ -27205,4 +27205,17 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
+	ironbrew: {
+		num: -6003,
+		name: "Iron Brew",
+		types: ["Ghost", "Water"],
+		gender: "N",
+		baseStats: {hp: 80, atk: 70, def: 100, spa: 130, spd: 140, spe: 50},
+		abilities: {0: "Quark Drive"},
+		heightm: 0.2,
+		weightkg: 20.2,
+		color: "Gray",
+		tags: ["Paradox"],
+		eggGroups: ["Undiscovered"],
+	},
 };
