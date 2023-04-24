@@ -8797,4 +8797,15 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Unobtainable",
 	},
+	nullhelm: {
+		name: "Null Helm",
+		spritenum: 0,
+		isNonstandard: "Unobtainable",
+		fling: {
+			basePower: 60,
+			volatileStatus: 'gastroacid',
+		},
+		num: -69,
+		gen: 6,
+	},
 };

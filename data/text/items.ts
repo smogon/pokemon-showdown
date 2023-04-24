@@ -2715,4 +2715,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "golduckite",
 		desc: "If held by a Golduck, this item allows it to Mega Evolve in battle.",
 	},
+	nullhelm: {
+		name: "Null Helm",
+		desc: "Suppresses the holder's ability, supresses targets ability when flung.",
+	}
 };

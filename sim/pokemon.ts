@@ -806,6 +806,7 @@ export class Pokemon {
 		if (this.battle.gen >= 5 && !this.isActive) return true;
 		if (this.getAbility().isPermanent) return false;
 		if (this.volatiles['gastroacid']) return true;
+		if (this.hasItem('nullhelm')) return true;
 
 		// Check if any active pokemon have the ability Neutralizing Gas
 		if ((this.item === ('abilityshield' as ID) && !(
@@ -814,6 +815,7 @@ export class Pokemon {
 			(!this.getItem().ignoreKlutz && this.hasAbility('klutz')) ||
 			this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom'])) || 
 			this.ability === ('neutralizinggas' as ID)) return false;
+			
 		for (const pokemon of this.battle.getAllActive()) {
 			// can't use hasAbility because it would lead to infinite recursion
 			if (pokemon.ability === ('neutralizinggas' as ID) && !pokemon.volatiles['gastroacid'] &&
