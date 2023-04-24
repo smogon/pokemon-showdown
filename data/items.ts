@@ -8785,7 +8785,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	golduckite: {
 		name: "Golduckite",
-		spritenum: 752 + 72,
+		spritenum: 0,
 		megaStone: "Golduck-Mega",
 		megaEvolves: "Golduck",
 		itemUser: ["Golduck"],
