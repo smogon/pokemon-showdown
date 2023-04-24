@@ -6784,4 +6784,49 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: -54,
 	},
+	bushido: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (defender.newlySwitched || this.queue.willMove(defender)) {
+				this.debug('Bushido damage boost');
+				return this.chainModify(1.3);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (defender.newlySwitched || this.queue.willMove(defender)) {
+				this.debug('Bushido damage boost');
+				return this.chainModify(1.3);
+			}
+		},
+		name: "Bushido",
+		rating: 4,
+		num: -55,
+	},
+	acidfumes: {
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target) && this.field.isWeather('acidrain')) {
+				this.add('-ability', target, 'Acid Fumes');
+				this.boost({spd: -1, def: -1}, source, target, null, true);
+			}
+		},
+		onModifyMove(move) {
+			if (!move?.flags['contact'] || move.target === 'self' || !this.field.isWeather('acidrain')) return;
+			if (!move.secondaries) {
+				move.secondaries = [];
+			}
+			move.secondaries.push({
+				chance: 100,
+				boosts: {
+					def: -1,
+					spd: -1,
+				},
+				ability: this.dex.abilities.get('acidfumes'),
+			});
+		},
+		name: "Acid Fumes",
+		rating: 1.5,
+		num: -56,
+	},
 };
+
