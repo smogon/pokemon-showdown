@@ -23069,4 +23069,34 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 1}},
 		contestType: "Tough",
 	},
+	acidicbombardment: {
+		num: -31,
+		accuracy: 100,
+		basePower: 120,
+		category: "Special",
+		name: "Acidic Bombardment",
+		pp: 10,
+		priority: 0,
+		flags: {charge: 1, protect: 1, mirror: 1},
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', defender, "Poltergeist", attacker);
+			if (this.field.isWeather('newmoon')) {
+				this.attrLastMove('[still]');
+				this.addMove('-anim', attacker, move.name, defender);
+				return;
+			}
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+		secondary: null,
+		target: "allAdjacentFoes",
+		type: "Poison",
+		contestType: "Cool",
+	},
 };
