@@ -23129,7 +23129,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			// You can't get here unless the pursuit succeeds
 			if (target.beingCalledBack || target.switchFlag) {
 				this.debug('Monkey Arms damage boost');
-				this.queue.cancelAction(target);
+				this.add("-message", "Add yoinked");
+				target.addVolatile('yoinked');
 				return move.basePower * 2;
 			}
 			return move.basePower;
@@ -23173,7 +23174,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 					// If it is, then Mega Evolve before moving.
 					if (source.canMegaEvo || source.canUltraBurst) {
 						for (const [actionIndex, action] of this.queue.entries()) {
-							this.add("-message", action.choice.toString());
 							if (action.pokemon === source && action.choice === 'megaEvo') {
 								this.actions.runMegaEvo(source);
 								this.queue.list.splice(actionIndex, 1);
