@@ -23047,7 +23047,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 		onAfterHit(source, target, move) {
-			this.actions.useMove("Attract", source, target);
+			this.actions.useMove("Attract", target, source);
 		},
 		target: "allAdjacentFoes",
 		type: "Psychic",
