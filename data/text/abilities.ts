@@ -2459,4 +2459,9 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "This Pokémon takes on the resistances and immunities of the Grass type.",
 		shortDesc: "Gains Grass-type resistances and immunities."
 	},
+	consumerexchange: {
+		name: "Consumer Exchange",
+		desc: "The first successful attack used by this Pokémon every time it is out on the field will cause it to switch items with its opponent. Fails if the move misses, has no effect, or if the target's item cannot be removed.",
+		shortDesc: "First successful attack after switching in swaps items.",
+	},
 };
