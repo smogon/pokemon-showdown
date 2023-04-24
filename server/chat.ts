@@ -1936,10 +1936,9 @@ export const Chat = new class {
 
 		const lines = message.split('\n');
 		if (!lines[lines.length - 1]) lines.pop();
-		// eslint-disable-next-line @typescript-eslint/prefer-optional-chain
 		const maxLineCount = (
 			user.can('bypassall') ? THROTTLE_MULTILINE_WARN_ADMIN :
-			(user.isStaff || (room && room.auth.isStaff(user.id))) ?
+			(user.isStaff || (room?.auth.isStaff(user.id))) ?
 				THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN
 		);
 		if (lines.length > maxLineCount && !Config.nothrottle) {
