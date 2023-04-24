@@ -85,6 +85,7 @@ export class BattleActions {
 			}
 			oldActive.skipBeforeSwitchOutEventFlag = false;
 			if (oldActive.m.yoinked) {
+				oldActive.beingCalledBack = false;
 				delete oldActive.m.yoinked;
 				return 'monkeygrab';
 			}
