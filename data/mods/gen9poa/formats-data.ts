@@ -3361,4 +3361,14 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	pinecodelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	forretressdelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
 };
