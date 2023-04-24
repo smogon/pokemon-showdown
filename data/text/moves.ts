@@ -7761,6 +7761,17 @@ export const MovesText: {[k: string]: MoveText} = {
 	sirenssong: {
 		name: "Siren's Song",
 		desc: "Infatuates foe(s).",
-		shortDesc: "Infatuates foe(s)",
+	},
+	boilover: {
+		name: "Boil Over",
+		desc: "Lowers the user's Special Attack by 2 stages. 30% chance to burn target.",
+		shortDesc: "Lowers the user's Sp. Atk by 2. 30% chance to burn.",
+	},
+	monkeyarms: {
+		name: "Monkey Arms",
+		desc: "If an opposing Pokemon switches out this turn, this move hits that Pokemon before it leaves the field, even if it was not the original target. If the user moves after an opponent using Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch, but not Baton Pass, it will hit that opponent before it leaves the field. Power doubles and no accuracy check is done if the user hits an opponent switching out, and the user's turn is over; if an opponent faints from this, the replacement Pokemon does not become active until the end of the turn. If the move is successful, the opponent is prevented from switching out.",
+		shortDesc: "If a foe is switching out, hits it at 2x power. Prevents the switch.",
+
+		activate: "  ([TARGET] is being grabbed by monkey arms...)",
 	},
 };
