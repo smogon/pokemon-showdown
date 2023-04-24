@@ -27175,7 +27175,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 7.2,
 		color: "Gray",
 		evos: ["Forretress-Delta"],
-		eggGroups: ["Bug"],
+		eggGroups: ["Bug", "Rock"],
 	},
 	forretressdelta: {
 		num: 205,
