@@ -27188,4 +27188,17 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 31,
 		eggGroups: ["Bug"],
 	},
+	thunderoustitan: {
+		num: -6002,
+		name: "Thunderous Titan",
+		types: ["Electric", "Fighting"],
+		gender: "N",
+		baseStats: {hp: 93, atk: 125, def: 87, spa: 81, spd: 95, spe: 109},
+		abilities: {0: "Protosynthesis"},
+		heightm: 4,
+		weightkg: 1001.1,
+		color: "Yellow",
+		tags: ["Paradox"],
+		eggGroups: ["Undiscovered"],
+	},
 };
