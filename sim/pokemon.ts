@@ -276,7 +276,6 @@ export class Pokemon {
 		gluttonyFlag?: boolean, // Gen-NEXT
 		innate?: string, // Partners in Crime
 		originalSpecies?: string, // Mix and Mega
-		yoinked?: boolean,
 		[key: string]: any,
 	};
 
