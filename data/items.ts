@@ -8539,7 +8539,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	metalynxite: {
 		name: "Metalynxite",
-		spritenum: 0,
+		spritenum: 836,
 		isNonstandard: "Unobtainable",
 		megaStone: "Metalynx-Mega",
 		megaEvolves: "Metalynx",
