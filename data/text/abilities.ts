@@ -2464,4 +2464,9 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "The first successful attack used by this Pokémon every time it is out on the field will cause it to switch items with its opponent. Fails if the move misses, has no effect, or if the target's item cannot be removed.",
 		shortDesc: "First successful attack after switching in swaps items.",
 	},
+	flowingtranquility: {
+		name: "Flowing Tranquility",
+		desc: "Flowing tranquility activates during rain, giving golduck a 1.5x speed boost and a 1.3x power boost to its psychic type attacks.",
+		shortDesc: "Speed is boosted 1.5x and Psychic-Type attacks are boosted 1.3x in Rain."
+	},
 };
