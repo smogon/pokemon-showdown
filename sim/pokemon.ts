@@ -807,8 +807,7 @@ export class Pokemon {
 		if (this.getAbility().isPermanent) return false;
 		if (this.volatiles['gastroacid']) return true;
 		if (this.hasItem('nullhelm')) return true;
-		this.battle.add(this.item.toString());
-		
+
 		// Check if any active pokemon have the ability Neutralizing Gas
 		if ((this.item === ('abilityshield' as ID) && !(
 			this.itemState.knockedOff || // Gen 3-4
