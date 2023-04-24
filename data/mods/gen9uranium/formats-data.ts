@@ -411,7 +411,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	drilgannmega: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	cocaran: {
 		inherit: true,

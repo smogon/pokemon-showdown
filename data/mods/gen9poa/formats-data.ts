@@ -2203,12 +2203,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	drilgann: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "UU",
 	},
 	drilgannmega: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "Uber",
 	},
 	cocaran: {
 		inherit: true,
