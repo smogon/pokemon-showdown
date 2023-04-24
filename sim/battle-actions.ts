@@ -1969,8 +1969,12 @@ export class BattleActions {
 	}
 
 	runMegaEvo(pokemon: Pokemon) {
-		const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
+		let speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
 		if (!speciesid) return false;
+
+		if (pokemon.species.id === 'sunflora' && pokemon.gender === 'F') {
+			speciesid = "Sunflora-Mega-F";
+		}
 
 		pokemon.formeChange(speciesid, pokemon.getItem(), true);
 
