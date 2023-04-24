@@ -23174,6 +23174,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					// If it is, then Mega Evolve before moving.
 					if (source.canMegaEvo || source.canUltraBurst) {
 						for (const [actionIndex, action] of this.queue.entries()) {
+							this.add("-message", action.toString());
 							if (action.pokemon === source && action.choice === 'megaEvo') {
 								this.actions.runMegaEvo(source);
 								this.queue.list.splice(actionIndex, 1);
