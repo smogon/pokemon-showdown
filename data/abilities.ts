@@ -6722,6 +6722,22 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Pollutant",
 		rating: 4,
-		num: 45,
+		num: -52,
+	},
+	flowingtranquility: {
+		onModifySpe(spe, pokemon) {
+			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
+				return this.chainModify(1.5);
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather()) && move.type === "Psychic") {
+				return this.chainModify(1.3);
+			}
+		},
+		name: "Flowing Tranquility",
+		rating: 3,
+		num: -53,
 	},
 };

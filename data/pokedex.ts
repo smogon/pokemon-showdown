@@ -526,6 +526,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Ekans",
 		evoLevel: 22,
 		eggGroups: ["Field", "Dragon"],
+		otherFormes: ["Arbok-Mega"],
+		formeOrder: ["Arbok", "Arbok-Mega"],
 	},
 	pikachu: {
 		num: 25,
@@ -1379,6 +1381,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Psyduck",
 		evoLevel: 33,
 		eggGroups: ["Water 1", "Field"],
+		otherFormes: ["Golduck-Mega"],
+		formeOrder: ["Golduck", "Golduck-Mega"],
 	},
 	mankey: {
 		num: 56,
@@ -9845,6 +9849,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "useItem",
 		evoItem: "Sun Stone",
 		eggGroups: ["Fairy", "Grass"],
+		otherFormes: ["Whimsicott-Mega"],
+		formeOrder: ["Whimsicott", "Whimsicott-Mega"],
 	},
 	petilil: {
 		num: 548,
@@ -27131,6 +27137,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	florgesmega: {
 		num: 671,
 		name: "Florges-Mega",
+		baseSpecies: "Florges",
+		forme: "Mega",
 		types: ["Fairy"],
 		gender: "F",
 		baseStats: {hp: 78, atk: 55, def: 108, spa: 132, spd: 184, spe: 95},
@@ -27139,8 +27147,20 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 10,
 		color: "White",
 		eggGroups: ["Fairy"],
-		baseSpecies: "Florges",
-		forme: "Mega",
 		requiredItem: "Florgesite",
+	},
+	golduckmega: {
+		num: 55,
+		name: "Golduck-Mega",
+		baseSpecies: "Golduck",
+		forme: "Mega",
+		types: ["Water", "Psychic"],
+		baseStats: {hp: 80, atk: 87, def: 93, spa: 130, spd: 100, spe: 105},
+		abilities: {0: "Flowing Tranquility"},
+		heightm: 1.7,
+		weightkg: 76.6,
+		color: "Blue",
+		eggGroups: ["Water 1", "Field"],
+		requiredItem: "Golduckite",
 	},
 };

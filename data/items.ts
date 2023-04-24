@@ -8783,4 +8783,18 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 4,
 		isNonstandard: "Unobtainable",
 	},
+	golduckite: {
+		name: "Golduckite",
+		spritenum: 752 + 72,
+		megaStone: "Golduck-Mega",
+		megaEvolves: "Golduck",
+		itemUser: ["Golduck"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -68,
+		gen: 6,
+		isNonstandard: "Unobtainable",
+	},
 };

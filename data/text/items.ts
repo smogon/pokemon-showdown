@@ -2711,4 +2711,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Acidic Rock",
 		desc: "Holder's use of Pollute lasts 8 turns instead of 5.",
 	},
+	golduckite: {
+		name: "golduckite",
+		desc: "If held by a Golduck, this item allows it to Mega Evolve in battle.",
+	},
 };

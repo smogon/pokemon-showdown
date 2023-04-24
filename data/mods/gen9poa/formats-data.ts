@@ -2924,90 +2924,6 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		natDexTier: "RU",
 	},
 
-	// Our Additions!
-	susan: {
-		inherit: true,
-		isNonstandard: null,
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	eiscuedelta: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "UU",
-	},
-	eiscuedeltanorock: {
-		inherit: true,
-		isNonstandard: "Unobtainable",
-		natDexTier: "Illegal",
-		tier: "Illegal",
-	},
-	raikoudelta: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "OU",
-	},
-	sceptiledeltamega: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "Uber",
-	},
-	cetoddlehisui: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "LC",
-	},
-	cetitanhisui: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "OU",
-	},
-	alakazamgambler: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "UU",
-	},
-	rockruffdelta: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "LC",
-	},
-	lycanrocdelta: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "OU",
-	},
-	lycanrocmidnightdelta: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "UU",
-	},
-	lycanrocduskdelta: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "UU",
-	},
-	kecleonmono: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	soulply: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	screamtaildelta: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "UU",
-	},
-	florgesmega: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "UU",
-	},
-
 	//CAP
 	syclar: {
 		inherit: true,
@@ -3355,6 +3271,94 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		inherit: true,
 		isNonstandard: null,
 		natDexTier: "UU",
+	},
 
+	// Our Additions!
+	susan: {
+		inherit: true,
+		isNonstandard: null,
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	eiscuedelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	eiscuedeltanorock: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+		natDexTier: "Illegal",
+		tier: "Illegal",
+	},
+	raikoudelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
+	sceptiledeltamega: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "Uber",
+	},
+	cetoddlehisui: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	cetitanhisui: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
+	alakazamgambler: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	rockruffdelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	lycanrocdelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
+	lycanrocmidnightdelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	lycanrocduskdelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	kecleonmono: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	soulply: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	screamtaildelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	florgesmega: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	golduckmega: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
 	},
 };
