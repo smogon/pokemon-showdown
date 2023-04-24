@@ -2599,7 +2599,8 @@ export class Battle {
 			if (action.choice === 'switch' && action.pokemon.status) {
 				this.singleEvent('CheckShow', this.dex.abilities.getByID('naturalcure' as ID), null, action.pokemon);
 			}
-			if (this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect) === 'pursuitfaint') {
+			let result = this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect);
+			if (result && result === 'pursuitfaint') {
 				// a pokemon fainted from Pursuit before it could switch
 				if (this.gen <= 4) {
 					// in gen 2-4, the switch still happens
@@ -2612,6 +2613,11 @@ export class Battle {
 					this.hint("A Pokemon can't switch between when it runs out of HP and when it faints");
 					break;
 				}
+			}
+			if (result && result === 'monkeygrab') {
+				// in gen 5+, the switch is cancelled
+				this.hint("Monkey arms held the Pokemon in the arena!");
+				break;
 			}
 			break;
 		case 'revivalblessing':

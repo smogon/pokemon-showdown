@@ -23129,7 +23129,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 			// You can't get here unless the pursuit succeeds
 			if (target.beingCalledBack || target.switchFlag) {
 				this.debug('Monkey Arms damage boost');
-				this.add("-message", "Add yoinked");
 				target.m.yoinked = true;
 				return move.basePower * 2;
 			}
