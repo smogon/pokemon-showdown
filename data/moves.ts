@@ -23213,7 +23213,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		secondary: null,
-		target: "self",
+		target: "normal",
 		type: "Poison",
 		zMove: {boost: {atk: -6, def: -6, spa: -6, spd: -6, spe: -6, evasion: -6, accuracy: -6}},
 		contestType: "Beautiful",
