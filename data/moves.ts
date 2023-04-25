@@ -23101,7 +23101,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Cool",
 	},
 	boilover: {
-		num: 315,
+		num: -32,
 		accuracy: 90,
 		basePower: 130,
 		category: "Special",
@@ -23123,7 +23123,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Beautiful",
 	},
 	monkeyarms: {
-		num: 228,
+		num: -33,
 		accuracy: 100,
 		basePower: 30,
 		basePowerCallback(pokemon, target, move) {
@@ -23189,5 +23189,26 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Ghost",
 		contestType: "Clever",
+	},
+	rot: {
+		num: -34,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		isNonstandard: "Past",
+		name: "Rot",
+		pp: 30,
+		priority: 0,
+		flags: {snatch: 1, protect: 1, bypasssub: 1},
+		onHit(target) {
+			if (target.getItem().isBerry) {
+				target.item = ("rotten" + target.item) as ID
+			}
+		},
+		secondary: null,
+		target: "self",
+		type: "Normal",
+		zMove: {boost: {atk: -6, def: -6, spa: -6, spd: -6, spe: -6, evasion: -6, accuracy: -6}},
+		contestType: "Beautiful",
 	},
 };
