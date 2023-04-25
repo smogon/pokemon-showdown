@@ -422,16 +422,16 @@ export const Formats: FormatList = [
 		},
 	},
 	{
-		name: "[Gen 9] Insurgence Free-For-All AG",
+		name: "[Gen 9] POA Free-For-All AG",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3711724/">Free-For-All</a>`,
 		],
 
-		mod: 'gen9insurgence',
+		mod: 'gen9poa',
 		gameType: 'freeforall',
 		rated: false,
 		tournamentShow: false,
-		ruleset: ['Standard NatDex', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120'],
+		ruleset: ['Standard NatDex'],
 		banlist: [],
 	},
 ];
