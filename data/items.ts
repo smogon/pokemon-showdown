@@ -8809,4 +8809,1064 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: -69,
 		gen: 6,
 	},
+
+	// ROT
+	rottenaguavberry: {
+		name: "Rotten Aguav Berry",
+		spritenum: 5,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Dragon",
+		},
+		onUpdate(pokemon) {
+			if (pokemon.hp <= (3 * pokemon.maxhp) / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				pokemon.eatItem();
+			}
+		},
+		onTryEatItem(item, pokemon) {
+			if (!this.runEvent('Damage', pokemon)) return false;
+		},
+		onEat(pokemon) {
+			this.damage(pokemon.baseMaxhp / 3);
+			if (pokemon.getNature().minus !== 'spd') {
+				pokemon.addVolatile('confusion');
+			}
+		},
+		num: 162,
+		gen: 3,
+	},
+	rottenapicotberry: {
+		name: "Rotten Apicot Berry",
+		spritenum: 10,
+		isBerry: true,
+		naturalGift: {
+			basePower: 100,
+			type: "Ground",
+		},
+		onUpdate(pokemon) {
+			if (pokemon.hp <= (3 * pokemon.maxhp) / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				pokemon.eatItem();
+			}
+		},
+		onEat(pokemon) {
+			this.boost({spd: -1});
+		},
+		num: 205,
+		gen: 3,
+	},
+	rottenaspearberry: {
+		name: "Rotten Aspear Berry",
+		spritenum: 13,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Ice",
+		},
+		onUpdate(pokemon) {
+			pokemon.eatItem();
+		},
+		onEat(pokemon) {
+			pokemon.trySetStatus('frz', pokemon);
+		},
+		num: 153,
+		gen: 3,
+	},
+	rottenbabiriberry: {
+		name: "Rotten Babiri Berry",
+		spritenum: 17,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Steel",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Steel') {
+				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+	
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[strengthen]');
+					return this.chainModify(2);
+				}
+			}
+		},
+		onEat() { },
+		num: 199,
+		gen: 4,
+	},
+	rottenchartiberry: {
+		name: "Rotten Charti Berry",
+		spritenum: 62,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Rock",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Rock') {
+				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+	
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[strengthen]');
+					return this.chainModify(2);
+				}
+			}
+		},
+		onEat() { },
+		num: 195,
+		gen: 4,
+	},
+	rottencheriberry: {
+		name: "Rotten Cheri Berry",
+		spritenum: 63,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Fire",
+		},
+		onUpdate(pokemon) {
+			pokemon.eatItem();
+		},
+		onEat(pokemon) {
+			pokemon.trySetStatus('par', pokemon);
+		},
+		num: 149,
+		gen: 3,
+	},
+	rottenchestoberry: {
+		name: "Rotten Chesto Berry",
+		spritenum: 65,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Water",
+		},
+		onUpdate(pokemon) {
+			pokemon.eatItem();
+		},
+		onEat(pokemon) {
+			pokemon.trySetStatus('slp', pokemon);
+		},
+		num: 150,
+		gen: 3,
+	},
+	rottenchilanberry: {
+		name: "Rotten Chilan Berry",
+		spritenum: 66,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Normal",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (
+				move.type === 'Normal' &&
+				(!target.volatiles['substitute'] || move.flags['bypasssub'] || (move.infiltrates && this.gen >= 6))
+			) {
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[strengthen]');
+					return this.chainModify(2);
+				}
+			}
+		},
+		onEat() { },
+		num: 200,
+		gen: 4,
+	},
+	rottenchopleberry: {
+		name: "Rotten Chople Berry",
+		spritenum: 71,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Fighting",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Fighting') {
+				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+	
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[strengthen]');
+					return this.chainModify(2);
+				}
+			}
+		},
+		onEat() { },
+		num: 189,
+		gen: 4,
+	},
+	rottencobaberry: {
+		name: "Rotten Coba Berry",
+		spritenum: 76,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Flying",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Flying') {
+				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+	
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[strengthen]');
+					return this.chainModify(2);
+				}
+			}
+		},
+		onEat() { },
+		num: 192,
+		gen: 4,
+	},
+	rottencolburberry: {
+		name: "Rotten Colbur Berry",
+		spritenum: 78,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Dark",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Dark') {
+				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+	
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[strengthen]');
+					return this.chainModify(2);
+				}
+			}
+		},
+		onEat() { },
+		num: 198,
+		gen: 4,
+	},
+	rottencustapberry: {
+		name: "Rotten Custap Berry",
+		spritenum: 86,
+		isBerry: true,
+		naturalGift: {
+			basePower: 100,
+			type: "Ghost",
+		},
+		onFractionalPriorityPriority: -2,
+		onFractionalPriority(priority, pokemon) {
+			if (
+				priority <= 0 &&
+				(pokemon.hp <= (3 * pokemon.maxhp) / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony))
+			) {
+				if (pokemon.eatItem()) {
+					this.add('-activate', pokemon, 'item: Rotten Custap Berry', '[consumed]');
+					return -0.1;
+				}
+			}
+		},
+		onEat() { },
+		num: 210,
+		gen: 4,
+		isNonstandard: "Unobtainable",
+	},
+	rottenenigmaberry: {
+		name: "Rotten Enigma Berry",
+		spritenum: 124,
+		isBerry: true,
+		naturalGift: {
+			basePower: 100,
+			type: "Bug",
+		},
+		onHit(target, source, move) {
+			if (move && target.getMoveHitData(move).typeMod > 0) {
+				if (target.eatItem()) {
+					this.damage(target.baseMaxhp / 4);
+				}
+			}
+		},
+		onTryEatItem(item, pokemon) {
+			if (!this.runEvent('Damage', pokemon)) return false;
+		},
+		onEat() { },
+		num: 208,
+		gen: 3,
+		isNonstandard: "Unobtainable",
+	},
+	rottenfigyberry: {
+		name: "Rotten Figy Berry",
+		spritenum: 140,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Bug",
+		},
+		onUpdate(pokemon) {
+			if (pokemon.hp <= (3 * pokemon.maxhp) / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				pokemon.eatItem();
+			}
+		},
+		onTryEatItem(item, pokemon) {
+			if (!this.runEvent('Damage', pokemon)) return false;
+		},
+		onEat(pokemon) {
+			this.damage(pokemon.baseMaxhp / 3);
+			if (pokemon.getNature().minus !== 'atk') {
+				pokemon.addVolatile('confusion');
+			}
+		},
+		num: 159,
+		gen: 3,
+	},
+	rottenganlonberry: {
+		name: "Rotten Ganlon Berry",
+		spritenum: 158,
+		isBerry: true,
+		naturalGift: {
+			basePower: 100,
+			type: "Ice",
+		},
+		onUpdate(pokemon) {
+			if (pokemon.hp <= (3 * pokemon.maxhp) / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				pokemon.eatItem();
+			}
+		},
+		onEat(pokemon) {
+			this.boost({def: -1});
+		},
+		num: 202,
+		gen: 3,
+	},
+	rottenhabanberry: {
+		name: "Rotten Haban Berry",
+		spritenum: 185,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Dragon",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Dragon') {
+				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+	
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[strengthen]');
+					return this.chainModify(2);
+				}
+			}
+		},
+		onEat() { },
+		num: 197,
+		gen: 4,
+	},
+	rotteniapapaberry: {
+		name: "Rotten Iapapa Berry",
+		spritenum: 217,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Dark",
+		},
+		onUpdate(pokemon) {
+			if (pokemon.hp <= (3 * pokemon.maxhp) / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				pokemon.eatItem();
+			}
+		},
+		onTryEatItem(item, pokemon) {
+			if (!this.runEvent('Damage', pokemon)) return false;
+		},
+		onEat(pokemon) {
+			this.damage(pokemon.baseMaxhp / 3);
+			if (pokemon.getNature().minus !== 'def') {
+				pokemon.addVolatile('confusion');
+			}
+		},
+		num: 163,
+		gen: 3,
+	},
+	rottenjabocaberry: {
+		name: "Rotten Jaboca Berry",
+		spritenum: 230,
+		isBerry: true,
+		naturalGift: {
+			basePower: 100,
+			type: "Dragon",
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (move.category === 'Physical' && source.hp && source.isActive && !source.hasAbility('magicguard')) {
+				if (target.eatItem()) {
+					this.heal(source.baseMaxhp / (target.hasAbility('ripen') ? 4 : 8), source, target);
+				}
+			}
+		},
+		onEat() { },
+		num: 211,
+		gen: 4,
+		isNonstandard: "Unobtainable",
+	},
+	rottenkasibberry: {
+		name: "Rotten Kasib Berry",
+		spritenum: 233,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Ghost",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Ghost') {
+				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+	
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[strengthen]');
+					return this.chainModify(2);
+				}
+			}
+		},
+		onEat() { },
+		num: 196,
+		gen: 4,
+	},
+	rottenkebiaberry: {
+		name: "Rotten Kebia Berry",
+		spritenum: 234,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Poison",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Poison') {
+				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+	
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[strengthen]');
+					return this.chainModify(2);
+				}
+			}
+		},
+		onEat() { },
+		num: 190,
+		gen: 4,
+	},
+	rottenkeeberry: {
+		name: "Rotten Kee Berry",
+		spritenum: 593,
+		isBerry: true,
+		naturalGift: {
+			basePower: 100,
+			type: "Fairy",
+		},
+		onAfterMoveSecondary(target, source, move) {
+			if (move.category === 'Physical') {
+				if (move.id === 'present' && move.heal) return;
+				target.eatItem();
+			}
+		},
+		onEat(pokemon) {
+			this.boost({def: -1});
+		},
+		num: 687,
+		gen: 6,
+		isNonstandard: "Unobtainable",
+	},
+	rottenlansatberry: {
+		name: "Rotten Lansat Berry",
+		spritenum: 238,
+		isBerry: true,
+		naturalGift: {
+			basePower: 100,
+			type: "Flying",
+		},
+		onUpdate(pokemon) {
+			if (pokemon.hp <= (3 * pokemon.maxhp) / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				pokemon.eatItem();
+			}
+		},
+		onEat(pokemon) {
+			this.boost({evasion: -1});
+		},
+		num: 206,
+		gen: 3,
+	},
+	rottenleppaberry: {
+		name: "Rotten Leppa Berry",
+		spritenum: 244,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Fighting",
+		},
+		onUpdate(pokemon) {
+				pokemon.eatItem();
+		},
+		onEat(pokemon) {
+			const moveSlot = pokemon.moveSlots.find(move => move.pp < move.maxpp);
+			if (!moveSlot) return;
+			moveSlot.pp -= 10;
+			if (moveSlot.pp < 0) moveSlot.pp = 0;
+			this.add('-activate', pokemon, 'item: Rotten Leppa Berry', moveSlot.move, '[consumed]');
+		},
+		num: 154,
+		gen: 3,
+	},
+	rottenliechiberry: {
+		name: "Rotten Liechi Berry",
+		spritenum: 248,
+		isBerry: true,
+		naturalGift: {
+			basePower: 100,
+			type: "Grass",
+		},
+		onUpdate(pokemon) {
+			if (pokemon.hp <= (3 * pokemon.maxhp) / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				pokemon.eatItem();
+			}
+		},
+		onEat(pokemon) {
+			this.boost({atk: -1});
+		},
+		num: 201,
+		gen: 3,
+	},
+	rottenlumberry: {
+		name: "Rotten Lum Berry",
+		spritenum: 262,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Flying",
+		},
+		onUpdate(pokemon) {
+			pokemon.eatItem();
+		},
+		onEat(pokemon) {
+			const statuses = ['slp', 'par', 'brn', 'tox', 'psn', 'frz'];
+			const status = this.sample(statuses);
+			pokemon.trySetStatus(status, pokemon);
+		},
+		num: 157,
+		gen: 3,
+	},
+	rottenmagoberry: {
+		name: "Rotten Mago Berry",
+		spritenum: 274,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Ghost",
+		},
+		onUpdate(pokemon) {
+			if (pokemon.hp <= (3 * pokemon.maxhp) / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				pokemon.eatItem();
+			}
+		},
+		onTryEatItem(item, pokemon) {
+			if (!this.runEvent('Damage', pokemon)) return false;
+		},
+		onEat(pokemon) {
+			this.damage(pokemon.baseMaxhp / 3);
+			if (pokemon.getNature().minus !== 'spe') {
+				pokemon.addVolatile('confusion');
+			}
+		},
+		num: 161,
+		gen: 3,
+	},
+	rottenmarangaberry: {
+		name: "Rotten Maranga Berry",
+		spritenum: 597,
+		isBerry: true,
+		naturalGift: {
+			basePower: 100,
+			type: "Dark",
+		},
+		onAfterMoveSecondary(target, source, move) {
+			if (move.category === 'Special') {
+				target.eatItem();
+			}
+		},
+		onEat(pokemon) {
+			this.boost({spd: -1});
+		},
+		num: 688,
+		gen: 6,
+		isNonstandard: "Unobtainable",
+	},
+	rottenmicleberry: {
+		name: "Rotten Micle Berry",
+		spritenum: 290,
+		isBerry: true,
+		naturalGift: {
+			basePower: 100,
+			type: "Rock",
+		},
+		onResidual(pokemon) {
+			if (pokemon.hp <= (3 * pokemon.maxhp) / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				pokemon.eatItem();
+			}
+		},
+		onEat(pokemon) {
+			pokemon.addVolatile('rottenmicleberry');
+		},
+		condition: {
+			duration: 2,
+			onSourceAccuracy(accuracy, target, source, move) {
+				if (!move.ohko) {
+					this.add('-enditem', source, 'Rotten Micle Berry');
+					source.removeVolatile('rottenmicleberry');
+					if (typeof accuracy === 'number') {
+						return this.chainModify([4096, 4915]);
+					}
+				}
+			},
+		},
+		num: 209,
+		gen: 4,
+		isNonstandard: "Unobtainable",
+	},
+	rottenoccaberry: {
+		name: "Rotten Occa Berry",
+		spritenum: 311,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Fire",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Fire') {
+				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+	
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[strengthen]');
+					return this.chainModify(2);
+				}
+			}
+		},
+		onEat() { },
+		num: 184,
+		gen: 4,
+	},
+	rottenoranberry: {
+		name: "Rotten Oran Berry",
+		spritenum: 319,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Poison",
+		},
+		onUpdate(pokemon) {
+			pokemon.eatItem();
+		},
+		onEat(pokemon) {
+			pokemon.faint();
+		},
+		num: 155,
+		gen: 3,
+	},
+	rottenpasshoberry: {
+		name: "Rotten Passho Berry",
+		spritenum: 329,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Water",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Water') {
+				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+	
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[strengthen]');
+					return this.chainModify(2);
+				}
+			}
+		},
+		onEat() { },
+		num: 185,
+		gen: 4,
+	},
+	rottenpayapaberry: {
+		name: "Rotten Payapa Berry",
+		spritenum: 330,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Psychic",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Psychic') {
+				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+	
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[strengthen]');
+					return this.chainModify(2);
+				}
+			}
+		},
+		onEat() { },
+		num: 193,
+		gen: 4,
+	},
+	rottenpechaberry: {
+		name: "Rotten Pecha Berry",
+		spritenum: 333,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Electric",
+		},
+		onUpdate(pokemon) {
+			pokemon.eatItem();
+		},
+		onEat(pokemon) {
+			pokemon.trySetStatus('psn', pokemon);
+		},
+		num: 151,
+		gen: 3,
+	},
+	rottenpersimberry: {
+		name: "Rotten Persim Berry",
+		spritenum: 334,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Ground",
+		},
+		onUpdate(pokemon) {
+			pokemon.eatItem();
+		},
+		onEat(pokemon) {
+			pokemon.addVolatile('confusion');
+		},
+		num: 156,
+		gen: 3,
+	},
+	rottenpetayaberry: {
+		name: "Rotten Petaya Berry",
+		spritenum: 335,
+		isBerry: true,
+		naturalGift: {
+			basePower: 100,
+			type: "Poison",
+		},
+		onUpdate(pokemon) {
+			if (pokemon.hp <= (3 * pokemon.maxhp) / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				pokemon.eatItem();
+			}
+		},
+		onEat(pokemon) {
+			this.boost({spa: -1});
+		},
+		num: 204,
+		gen: 3,
+	},
+	rottenrawstberry: {
+		name: "Rotten Rawst Berry",
+		spritenum: 381,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Grass",
+		},
+		onUpdate(pokemon) {
+			pokemon.eatItem();
+		},
+		onEat(pokemon) {
+			pokemon.trySetStatus('brn', pokemon);
+		},
+		num: 152,
+		gen: 3,
+	},
+	rottenrindoberry: {
+		name: "Rotten Rindo Berry",
+		spritenum: 409,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Grass",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Grass') {
+				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+	
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[strengthen]');
+					return this.chainModify(2);
+				}
+			}
+		},
+		onEat() { },
+		num: 187,
+		gen: 4,
+	},
+	rottenroseliberry: {
+		name: "Rotten Roseli Berry",
+		spritenum: 603,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Fairy",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Fairy') {
+				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+	
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[strengthen]');
+					return this.chainModify(2);
+				}
+			}
+		},
+		onEat() { },
+		num: 686,
+		gen: 6,
+	},
+	rottenrowapberry: {
+		name: "Rotten Rowap Berry",
+		spritenum: 420,
+		isBerry: true,
+		naturalGift: {
+			basePower: 100,
+			type: "Dark",
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (move.category === 'Special' && source.hp && source.isActive && !source.hasAbility('magicguard')) {
+				if (target.eatItem()) {
+					this.heal(source.baseMaxhp / (target.hasAbility('ripen') ? 4 : 8), source, target);
+				}
+			}
+		},
+		onEat() { },
+		num: 212,
+		gen: 4,
+		isNonstandard: "Unobtainable",
+	},
+	rottensalacberry: {
+		name: "Rotten Salac Berry",
+		spritenum: 426,
+		isBerry: true,
+		naturalGift: {
+			basePower: 100,
+			type: "Fighting",
+		},
+		onUpdate(pokemon) {
+			if (pokemon.hp <= (3 * pokemon.maxhp) / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				pokemon.eatItem();
+			}
+		},
+		onEat(pokemon) {
+			this.boost({spe: -1});
+		},
+		num: 203,
+		gen: 3,
+	},
+	rottenshucaberry: {
+		name: "Rotten Shuca Berry",
+		spritenum: 443,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Ground",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Ground') {
+				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+	
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[strengthen]');
+					return this.chainModify(2);
+				}
+			}
+		},
+		onEat() { },
+		num: 191,
+		gen: 4,
+	},
+	rottensitrusberry: {
+		name: "Rotten Sitrus Berry",
+		spritenum: 448,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Psychic",
+		},
+		onUpdate(pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
+				pokemon.eatItem();
+			}
+		},
+		onTryEatItem(item, pokemon) {
+			if (!this.runEvent('Damage', pokemon)) return false;
+		},
+		onEat(pokemon) {
+			this.damage(pokemon.baseMaxhp / 4);
+		},
+		num: 158,
+		gen: 3,
+	},
+	rottenstarfberry: {
+		name: "Rotten Starf Berry",
+		spritenum: 472,
+		isBerry: true,
+		naturalGift: {
+			basePower: 100,
+			type: "Psychic",
+		},
+		onUpdate(pokemon) {
+			if (pokemon.hp <= (3 * pokemon.maxhp) / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				pokemon.eatItem();
+			}
+		},
+		onEat(pokemon) {
+			const stats: BoostID[] = [];
+			let stat: BoostID;
+			for (stat in pokemon.boosts) {
+				if (stat !== 'accuracy' && stat !== 'evasion' && pokemon.boosts[stat] < 6) {
+					stats.push(stat);
+				}
+			}
+			if (stats.length) {
+				const randomStat = this.sample(stats);
+				const boost: SparseBoostsTable = {};
+				boost[randomStat] = -2;
+				this.boost(boost);
+			}
+		},
+		num: 207,
+		gen: 3,
+	},
+	rottentangaberry: {
+		name: "Rotten Tanga Berry",
+		spritenum: 487,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Bug",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Bug') {
+				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+	
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[strengthen]');
+					return this.chainModify(2);
+				}
+			}
+		},
+		onEat() { },
+		num: 194,
+		gen: 4,
+	},
+	rottenwacanberry: {
+		name: "Rotten Wacan Berry",
+		spritenum: 526,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Electric",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Electric') {
+				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[strengthen]');
+					return this.chainModify(2);
+				}
+			}
+		},
+		onEat() { },
+		num: 186,
+		gen: 4,
+	},
+	rottenwikiberry: {
+		name: "Rotten Wiki Berry",
+		spritenum: 538,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Rock",
+		},
+		onUpdate(pokemon) {
+			if (pokemon.hp <= (3 * pokemon.maxhp) / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				pokemon.eatItem();
+			}
+		},
+		onTryEatItem(item, pokemon) {
+			if (!this.runEvent('Damage', pokemon)) return false;
+		},
+		onEat(pokemon) {
+			this.damage(pokemon.baseMaxhp / 3);
+			if (pokemon.getNature().minus !== 'spa') {
+				pokemon.addVolatile('confusion');
+			}
+		},
+		num: 160,
+		gen: 3,
+	},
+	rottenyacheberry: {
+		name: "Rotten Yache Berry",
+		spritenum: 567,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Ice",
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Ice') {
+				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+				if (hitSub) return;
+	
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[strengthen]');
+					return this.chainModify(2);
+				}
+			}
+		},
+		onEat() { },
+		num: 188,
+		gen: 4,
+	},
+	
 };
