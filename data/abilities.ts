@@ -6807,7 +6807,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target) && this.field.isWeather('acidrain')) {
 				this.add('-ability', target, 'Acid Fumes');
-				this.boost({spd: -1, def: -1}, source, target, null, true);
+				this.boost({atk: -1, spa: -1}, source, target, null, true);
 			}
 		},
 		onModifyMove(move) {
@@ -6818,8 +6818,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			move.secondaries.push({
 				chance: 100,
 				boosts: {
-					def: -1,
-					spd: -1,
+					atk: -1,
+					spa: -1,
 				},
 				ability: this.dex.abilities.get('acidfumes'),
 			});
