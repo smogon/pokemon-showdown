@@ -3200,7 +3200,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	smoguana: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "OU",
+		natDexTier: "NFE",
 	},
 	smokomodo: {
 		inherit: true,
