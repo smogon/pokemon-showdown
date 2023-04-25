@@ -2059,15 +2059,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 		onModifySpecies(species, target, source, effect) {
 			if (!species.baseStats) return;
 			const boosts: {[tier: string]: number} = {
-				uu: 10,
-				rubl: 10,
+				uu: 15,
+				rubl: 15,
 				ru: 20,
 				nubl: 20,
-				nu: 30,
-				publ: 30,
-				pu: 40,
-				nfe: 40,
-				lc: 40,
+				nu: 25,
+				publ: 25,
+				pu: 30,
+				nfe: 30,
+				lc: 30,
 			};
 			let tier: string = this.toID(species.tier);
 			if (!(tier in boosts)) return;
