@@ -7740,8 +7740,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	obsidiancrash: {
 		name: "Obsidian Crash",
-		shortDesc: "The user smashes into the opponent with its obsidian body, this also damages the user.",
-		desc: "Move ignores water resistance and Rainy Day, 1/3 recoil.",
+		desc: "The user smashes into the opponent with its obsidian body, this also damages the user.",
+		shortDesc: "Move ignores water resistance and Rainy Day, 1/3 recoil.",
 	},
 	ferociouscrash: {
 		name: "Ferocious Crash",
