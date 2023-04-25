@@ -20446,15 +20446,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
+				let modifiedDuration = 5;
 				if (source?.hasAbility('persistent')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Trick Room');
-					return 7;
+					modifiedDuration += 2;
 				}
 				if (source?.hasItem('trickrock')) {
 					this.add('-activate', source, 'item: Trick Rock', effect);
-					return 8;
+					modifiedDuration += 3;
 				}
-				return 5;
+				return modifiedDuration;
 			},
 			onFieldStart(target, source) {
 				if (source?.hasAbility('persistent')) {
