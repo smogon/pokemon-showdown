@@ -23192,22 +23192,29 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	rot: {
 		num: -34,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
+		accuracy: 90,
+		basePower: 60,
+		category: "Physical",
 		isNonstandard: "Past",
 		name: "Rot",
 		pp: 30,
 		priority: 0,
 		flags: {snatch: 1, protect: 1, bypasssub: 1},
 		onHit(target) {
-			if (target.getItem().isBerry) {
-				target.item = ("rotten" + target.item) as ID
+			const item = target.getItem();
+			const newItem = ('Rotten ' + item);
+
+			if (target.hp && item.isBerry) {
+				target.setItem('Rotten ' + item);
+				this.add('-item', target, newItem, '[from] move: Rot');
+			} else if (target.hasItem('leftovers' || 'berryjuice')) {
+				target.setItem('blacksludge');
+				this.add('-item', target, 'Black Sludge', '[from] move: Rot');
 			}
 		},
 		secondary: null,
 		target: "self",
-		type: "Normal",
+		type: "Poison",
 		zMove: {boost: {atk: -6, def: -6, spa: -6, spd: -6, spe: -6, evasion: -6, accuracy: -6}},
 		contestType: "Beautiful",
 	},
