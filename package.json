@@ -1,7 +1,7 @@
 {
   "name": "pokemon-showdown",
   "description": "The server for the Pokémon Showdown battle simulator",
-  "version": "0.11.7",
+  "version": "0.11.9",
   "main": "dist/sim/index.js",
   "dependencies": {
     "esbuild": "^0.16.10",
@@ -40,7 +40,7 @@
     "test": "mocha",
     "posttest": "npm run tsc",
     "full-test": "npm run lint && npm run tsc && mocha --timeout 8000 --forbid-only -g \".*\"",
-    "postinstall": "npm run build"
+    "postinstall": "npm run build postinstall"
   },
   "bin": "./pokemon-showdown",
   "homepage": "http://pokemonshowdown.com",
@@ -79,6 +79,6 @@
     "eslint": "^8.5.0",
     "mocha": "^8.2.0",
     "smogon": "^2.2.1",
-    "typescript": "^4.9.4"
+    "typescript": "^5.0.4"
   }
 }

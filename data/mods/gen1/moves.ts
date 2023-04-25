@@ -255,7 +255,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Disable');
 			},
-			onBeforeMovePriority: 7,
+			onBeforeMovePriority: 6,
 			onBeforeMove(pokemon, target, move) {
 				pokemon.volatiles['disable'].time--;
 				if (!pokemon.volatiles['disable'].time) {
@@ -378,7 +378,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					pokemon.cureStatus(true);
 				}
 				if (pokemon.status === 'tox') {
-					pokemon.setStatus('psn');
+					pokemon.setStatus('psn', null, null, true);
 				}
 				pokemon.updateSpeed();
 				// should only clear a specific set of volatiles
