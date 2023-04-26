@@ -7760,7 +7760,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	sirenssong: {
 		name: "Siren's Song",
-		desc: "Infatuates foe(s).",
+		shortDesc: "Infatuates foe(s).",
 	},
 	boilover: {
 		name: "Boil Over",
@@ -7774,4 +7774,9 @@ export const MovesText: {[k: string]: MoveText} = {
 
 		activate: "  ([TARGET] is being grabbed by monkey arms...)",
 	},
+	acidicbombardment: {
+		name: "Acidic Bombardment",
+		desc: "This attack charges on the first turn and executes on the second. If the user is holding a Power Herb or the weather is Acid Rain, the move completes in one turn.",
+		shortDesc: "Charges turn 1. Hits turn 2. No charge in acid rain.",
+	}
 };

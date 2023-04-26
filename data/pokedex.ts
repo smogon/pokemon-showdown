@@ -27124,7 +27124,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	screamtaildelta: {
 		num: 985,
 		name: "Scream Tail-Delta",
-		types: ["Psychic", "Water"],
+		types: ["Water", "Psychic"],
 		baseSpecies: "Scream Tail",
 		forme: "Delta",
 		gender: "N",
