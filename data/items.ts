@@ -9923,4 +9923,18 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Unobtainable",
 	},
+	garbodorite: {
+		name: "Garbodorite",
+		spritenum: 0,
+		megaStone: "Garbodorite-Mega",
+		megaEvolves: "Garbodorite",
+		itemUser: ["Garbodorite"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -73,
+		gen: 6,
+		isNonstandard: "Unobtainable",
+	},
 };

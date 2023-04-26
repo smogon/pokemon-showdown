@@ -3451,4 +3451,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "RUBL",
 	},
+	garbodormega: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "NUBL",
+	},
 };

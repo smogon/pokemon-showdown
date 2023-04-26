@@ -10267,6 +10267,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 36,
 		eggGroups: ["Mineral"],
 		canGigantamax: "G-Max Malodor",
+		otherFormes: ["Garbodor-Mega"],
+		formeOrder: ["Garbodor", "Garbodor-Mega"],
 	},
 	garbodorgmax: {
 		num: 569,
@@ -27420,5 +27422,19 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		eggGroups: ["Mineral"],
 		requiredItem: "Electrodite",
+	},
+	garbodormega: {
+		num: 168,
+		name: "Garbodor-Mega",
+		baseSpecies: "Garbodor",
+		forme: "Mega",
+		types: ["Poison"],
+		baseStats: {hp: 80, atk: 136, def: 124, spa: 50, spd: 124, spe: 60},
+		abilities: {0: "Merciless"},
+		heightm: 2.3,
+		weightkg: 130,
+		color: "Green",
+		eggGroups: ["Mineral"],
+		requiredItem: "Garbodorite",
 	},
 };
