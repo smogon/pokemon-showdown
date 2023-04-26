@@ -377,6 +377,62 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	custapberry: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	rottencustapberry: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	enigmaberry: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	rottenenigmaberry: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	jabocaberry: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	rottenjabocaberry: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	keeberry: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	rottenkeeberry: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	marangaberry: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	rottenmarangaberry: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	micleberry: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	rottenmicleberry: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	rowapberry: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	rottenrowapberry: {
+		inherit: true,
+		isNonstandard: null,
+	},
 
 	//Cap Items
 	crucibellite: {
