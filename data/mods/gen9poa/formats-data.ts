@@ -3411,4 +3411,14 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "RU",
 	},
+	rellordelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	rabscadelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
 };
