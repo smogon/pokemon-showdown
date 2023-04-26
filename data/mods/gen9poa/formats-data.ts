@@ -3456,4 +3456,24 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "NUBL",
 	},
+	mudkipdelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	marshtompdelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "NFE",
+	},
+	swampertdelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	swampertdeltamega: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
 };
