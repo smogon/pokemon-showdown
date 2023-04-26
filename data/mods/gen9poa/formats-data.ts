@@ -3439,7 +3439,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	ariadosmega: {
 		inherit: true,
 		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	granbullmega: {
+		inherit: true,
+		isNonstandard: null,
 		natDexTier: "UU",
 	},
-
 };

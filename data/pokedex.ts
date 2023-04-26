@@ -3572,6 +3572,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Spinarak",
 		evoLevel: 22,
 		eggGroups: ["Bug"],
+		otherFormes: ["Ariados-Mega"],
+		formeOrder: ["Ariados", "Ariados-Mega"],
 	},
 	crobat: {
 		num: 169,
@@ -4218,6 +4220,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Snubbull",
 		evoLevel: 23,
 		eggGroups: ["Field", "Fairy"],
+		otherFormes: ["Granbull-Mega"],
+		formeOrder: ["Granbull", "Granbull-Mega"],
 	},
 	qwilfish: {
 		num: 211,
@@ -27388,5 +27392,19 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		eggGroups: ["Bug"],
 		requiredItem: "Ariadosite",
+	},
+	granbullmega: {
+		num: 168,
+		name: "Granbull-Mega",
+		baseSpecies: "Granbull",
+		forme: "Mega",
+		types: ["Fairy", "Ground"],
+		baseStats: {hp: 90, atk: 150, def: 110, spa: 60, spd: 110, spe: 30},
+		abilities: {0: "Hustle"},
+		heightm: 2,
+		weightkg: 50,
+		color: "Red",
+		eggGroups: ["Field", "Fairy"],
+		requiredItem: "Granbullite",
 	},
 };

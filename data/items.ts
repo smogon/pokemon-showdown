@@ -9895,4 +9895,18 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Unobtainable",
 	},
+	granbullite: {
+		name: "Granbullite",
+		spritenum: 0,
+		megaStone: "Granbull-Mega",
+		megaEvolves: "Granbull",
+		itemUser: ["Granbull"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -71,
+		gen: 6,
+		isNonstandard: "Unobtainable",
+	},
 };
