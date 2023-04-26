@@ -6879,5 +6879,30 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: -59,
 	},
+	kablooey: {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Electric';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (pokemon.volatiles["mustrecharge"]) {
+				pokemon.removeVolatile("mustrecharge")
+				return;
+			}
+			else this.actions.useMove("Self-Destruct", pokemon);
+		},
+		name: "Kablooey",
+		rating: 3,
+		num: 206,
+	},
 };
 

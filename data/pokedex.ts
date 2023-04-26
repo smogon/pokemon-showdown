@@ -27396,7 +27396,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		requiredItem: "Ariadosite",
 	},
 	granbullmega: {
-		num: 168,
+		num: 210,
 		name: "Granbull-Mega",
 		baseSpecies: "Granbull",
 		forme: "Mega",
@@ -27410,7 +27410,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		requiredItem: "Granbullite",
 	},
 	electrodemega: {
-		num: 168,
+		num: 101,
 		name: "Electrode-Mega",
 		baseSpecies: "Electrode",
 		forme: "Mega",
@@ -27424,7 +27424,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		requiredItem: "Electrodite",
 	},
 	garbodormega: {
-		num: 168,
+		num: 569,
 		name: "Garbodor-Mega",
 		baseSpecies: "Garbodor",
 		forme: "Mega",
