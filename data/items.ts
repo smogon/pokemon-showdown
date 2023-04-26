@@ -9477,12 +9477,12 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Poison",
 		},
 		onUpdate(pokemon) {
+			if (pokemon.level < 20) {
 			pokemon.eatItem();
+			}
 		},
 		onEat(pokemon) {
-			if (pokemon.level < 20) {
 			pokemon.faint();
-			}
 		},
 		num: 155,
 		gen: 3,
