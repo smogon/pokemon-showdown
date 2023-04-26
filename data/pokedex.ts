@@ -27375,4 +27375,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Aviotion",
 		eggGroups: ["Amorphous"],
 	},
+	ariadosmega: {
+		num: 168,
+		name: "Ariados-Mega",
+		baseSpecies: "Ariados",
+		forme: "Mega",
+		types: ["Bug", "Poison"],
+		baseStats: {hp: 70, atk: 145, def: 80, spa: 60, spd: 80, spe: 65},
+		abilities: {0: "Sludge Slider"},
+		heightm: 2,
+		weightkg: 50,
+		color: "Red",
+		eggGroups: ["Bug"],
+		requiredItem: "Ariadosite",
+	},
 };
