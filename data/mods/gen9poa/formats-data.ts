@@ -3454,7 +3454,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	garbodormega: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "NUBL",
+		natDexTier: "RU",
 	},
 	mudkipdelta: {
 		inherit: true,
