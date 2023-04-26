@@ -33,7 +33,7 @@ class SearchUsernames extends Chat.JSX.Component<{target: string, page?: boolean
 			online: [],
 		};
 		for (const curUser of Users.users.values()) {
-			if (!curUser.id.includes(target) || curUser.id.startsWith('guest')) continue;
+			if (curUser.id.startsWith('guest') || curUser.id.match(target)) continue;
 			if (Punishments.isGlobalBanned(curUser)) continue;
 			if (curUser.connected) {
 				results.online.push(`${!page ? ONLINE_SYMBOL : ''} ${curUser.name}`);
@@ -114,7 +114,7 @@ export const commands: Chat.ChatCommands = {
 	usersearchpage: 'usersearch',
 	usersearch(target, room, user, connection, cmd) {
 		this.checkCan('lock');
-		target = toID(target);
+		target = target.replace(/\s/g, '').toLowerCase();
 		if (!target) { // just join directly if it's the page cmd, they're likely looking for the full list
 			if (cmd.includes('page')) return this.parse(`/j view-usersearch`);
 			return this.parse(`/help usersearch`);
@@ -142,7 +142,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		add(target, room, user) {
 			this.checkCan('lock');
-			const targets = target.split(',').map(toID).filter(Boolean);
+			const targets = target.split(',').map(x => x.replace(/\s/g, '').toLowerCase()).filter(Boolean);
 			if (!targets.length) {
 				return this.errorReply(`Specify at least one term.`);
 			}
@@ -175,7 +175,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		remove(target, room, user) {
 			this.checkCan('lock');
-			const targets = target.split(',').map(toID).filter(Boolean);
+			const targets = target.split(',').map(x => x.replace(/\s/g, '').toLowerCase()).filter(Boolean);
 			if (!targets.length) {
 				return this.errorReply(`Specify at least one term.`);
 			}
@@ -217,7 +217,7 @@ export const pages: Chat.PageTable = {
 			const sorted: {[k: string]: number} = {};
 			for (const curUser of Users.users.values()) {
 				for (const term of nameList) {
-					if (curUser.id.includes(term)) {
+					if (curUser.id.match(term)) {
 						if (!(term in sorted)) sorted[term] = 0;
 						sorted[term]++;
 					}
