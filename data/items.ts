@@ -9881,4 +9881,18 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Unobtainable",
 	},
+	ariadosite: {
+		name: "Ariadosite",
+		spritenum: 0,
+		megaStone: "Ariados-Mega",
+		megaEvolves: "Ariados",
+		itemUser: ["Ariados"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -70,
+		gen: 6,
+		isNonstandard: "Unobtainable",
+	},
 };
