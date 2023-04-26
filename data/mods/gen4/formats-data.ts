@@ -901,7 +901,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	taillow: {
-		tier: "7U",
+		tier: "8U",
 	},
 	swellow: {
 		tier: "UU",
