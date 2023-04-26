@@ -9480,7 +9480,9 @@ export const Items: {[itemid: string]: ItemData} = {
 			pokemon.eatItem();
 		},
 		onEat(pokemon) {
+			if (pokemon.level < 20) {
 			pokemon.faint();
+			}
 		},
 		num: 155,
 		gen: 3,
