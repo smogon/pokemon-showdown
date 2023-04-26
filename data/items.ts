@@ -9318,8 +9318,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.eatItem();
 		},
 		onEat(pokemon) {
-			this.add("-message", this.sample(pokemon.moveSlots).toString());
-			const moveSlot = pokemon.moveSlots[0];
+			const moveSlot = this.sample(pokemon.moveSlots);
 			moveSlot.pp -= 10;
 			if (moveSlot.pp < 0) moveSlot.pp = 0;
 			this.add('-activate', pokemon, 'item: Rotten Leppa Berry', moveSlot.move, '[consumed]');
