@@ -6851,5 +6851,15 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2.5,
 		num: 36,
 	},
+	sludgeslider: {
+		onModifySpe(spe, pokemon) {
+			if (['acidrain'].includes(pokemon.effectiveWeather())) {
+				return this.chainModify(2);
+			}
+		},
+		name: "Sludge Slider",
+		rating: 3,
+		num: 33,
+	},
 };
 
