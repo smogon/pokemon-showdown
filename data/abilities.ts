@@ -6825,5 +6825,42 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 1.5,
 		num: -56,
 	},
+	putridaura: {
+		onStart(pokemon) {
+			const targets: Pokemon[] = [];
+			for (const pokemon of this.getAllActive()) {
+				let item = pokemon.getItem();
+				let newItem = ('Rotten ' + item);
+
+				this.add('-fieldactivate', 'ability: Putrid Aura');
+
+				if (pokemon.hp && item.isBerry && item.onEat !== false && !item.id.includes('rotten')) {
+					pokemon.setItem('Rotten ' + item);
+					this.add('-item', pokemon, newItem, '[from] move: Rot');
+				} else if (pokemon.hasItem('leftovers' || 'berryjuice')) {
+					pokemon.setItem('blacksludge');
+					this.add('-item', pokemon, 'Black Sludge', '[from] move: Rot');
+				}
+			}
+		},
+		onUpdate(pokemon) {
+			const targets: Pokemon[] = [];
+			for (const pokemon of this.getAllActive()) {
+				let item = pokemon.getItem();
+				let newItem = ('Rotten ' + item);
+
+				if (pokemon.hp && item.isBerry && item.onEat !== false && !item.id.includes('rotten')) {
+					pokemon.setItem('Rotten ' + item);
+					this.add('-item', pokemon, newItem, '[from] move: Rot');
+				} else if (pokemon.hasItem('leftovers' || 'berryjuice')) {
+					pokemon.setItem('blacksludge');
+					this.add('-item', pokemon, 'Black Sludge', '[from] move: Rot');
+				}
+			}
+		},
+		name: "Putrid Aura",
+		rating: 2.5,
+		num: 36,
+	},
 };
 
