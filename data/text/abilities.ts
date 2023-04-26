@@ -2482,4 +2482,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Putrid Aura",
 		shortDesc: "Rots the berries on all of the Pokemon on the field.",
 	},
+	windywall: {
+		name: "Windy Wall",
+		shortDesc: "Grants immunity to Flying-Type moves and ignores opponent's tailwind."
+	}
 };

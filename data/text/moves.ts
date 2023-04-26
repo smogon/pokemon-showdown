@@ -7783,5 +7783,17 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Rot",
 		desc: "When this attack is used on a pokemon holding a berry, the berry is transformed into it's rotten variant, which has the opposite effect of the original.",
 		shortDesc: "Rots the opponent's berry.",
-	}
+	},
+	heal: {
+		name: "Heal",
+		shortDesc: "Heals the target 20 HP.",
+	},
+	hyperheal: {
+		name: "Hyper Heal",
+		shortDesc: "Heals the target 200 HP.",
+	},
+	fullheal: {
+		name: "Full Heal",
+		shortDesc: "Heals target to its max HP and cures status, damages by amount healed.",
+	},
 };
