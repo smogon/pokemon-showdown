@@ -6826,13 +6826,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: -56,
 	},
 	putridaura: {
-		onStart(pokemon) {
+		onPreStart(pokemon) {
+
+			this.add('-ability', pokemon, 'Putrid Aura');
+
 			const targets: Pokemon[] = [];
 			for (const pokemon of this.getAllActive()) {
 				let item = pokemon.getItem();
 				let newItem = ('Rotten ' + item);
-
-				this.add('-fieldactivate', 'ability: Putrid Aura');
 
 				if (pokemon.hp && item.isBerry && item.onEat !== false && !item.id.includes('rotten')) {
 					pokemon.setItem('Rotten ' + item);
