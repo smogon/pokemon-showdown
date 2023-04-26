@@ -2721,11 +2721,11 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	rottenaguavberry: {
 		name: "Rotten Aguav Berry",
-		desc: "Damages 1/3 max HP at 3/4 max HP or less; confuses if not -SpD Nature. Single use.",
+		desc: "Damages 1/3 max HP at 1/4 max HP or less; confuses if not -SpD Nature. Single use.",
 	},
 	rottenapicotberry: {
 		name: "Rotten Apicot Berry",
-		desc: "Lowers holder's Sp. Def by 1 stage when at 3/4 max HP or less. Single use.",
+		desc: "Lowers holder's Sp. Def by 1 stage when at 1/4 max HP or less. Single use.",
 	},
 	rottenaspearberry: {
 		name: "Rotten Aspear Berry",
@@ -2765,7 +2765,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	rottencustapberry: {
 		name: "Rotten Custap Berry",
-		desc: "Holder moves last in its priority bracket when at 3/4 max HP or less. Single use.",
+		desc: "Holder moves last in its priority bracket when at 1/4 max HP or less. Single use.",
 	
 		activate: "  [POKEMON] acted slower than normal due to its Rotten Custap Berry!",
 	},
@@ -2775,11 +2775,11 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	rottenfigyberry: {
 		name: "Rotten Figy Berry",
-		desc: "Damages 1/3 max HP at 3/4 max HP or less; confuses if not -Atk Nature. Single use.",
+		desc: "Damages 1/3 max HP at 1/4 max HP or less; confuses if not -Atk Nature. Single use.",
 	},
 	rottenganlonberry: {
 		name: "Rotten Ganlon Berry",
-		desc: "Lowers holder's Defense by 1 stage when at 3/4 max HP or less. Single use.",
+		desc: "Lowers holder's Defense by 1 stage when at 1/4 max HP or less. Single use.",
 	},
 	rottenhabanberry: {
 		name: "Rotten Haban Berry",
@@ -2787,7 +2787,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	rotteniapapaberry: {
 		name: "Rotten Iapapa Berry",
-		desc: "Damages 1/3 max HP at 3/4 max HP or less; confuses if not -Def Nature. Single use.",
+		desc: "Damages 1/3 max HP at 1/4 max HP or less; confuses if not -Def Nature. Single use.",
 	},
 	rottenjabocaberry: {
 		name: "Rotten Jaboca Berry",
@@ -2807,7 +2807,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	rottenlansatberry: {
 		name: "Rotten Lansat Berry",
-		desc: "Lowers holder's Evasion by 1 stage when at 3/4 max HP or less. Single use.",
+		desc: "Lowers holder's Evasion by 1 stage when at 1/4 max HP or less. Single use.",
 	},
 	rottenleppaberry: {
 		name: "Rotten Leppa Berry",
@@ -2817,7 +2817,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	rottenliechiberry: {
 		name: "Rotten Liechi Berry",
-		desc: "Lowers holder's Attack by 1 stage when at 3/4 max HP or less. Single use.",
+		desc: "Lowers holder's Attack by 1 stage when at 1/4 max HP or less. Single use.",
 	},
 	rottenlumberry: {
 		name: "Rotten Lum Berry",
@@ -2825,7 +2825,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	rottenmagoberry: {
 		name: "Rotten Mago Berry",
-		desc: "Damages 1/3 max HP at 3/4 max HP or less; confuses if not -Spe Nature. Single use.",
+		desc: "Damages 1/3 max HP at 1/4 max HP or less; confuses if not -Spe Nature. Single use.",
 	},
 	rottenmarangaberry: {
 		name: "Rotten Maranga Berry",
@@ -2833,7 +2833,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	rottenmicleberry: {
 		name: "Rotten Micle Berry",
-		desc: "Holder's next move has 0.833x accuracy when at 3/4 max HP or less. Single use.",
+		desc: "Holder's next move has 0.833x accuracy when at 1/4 max HP or less. Single use.",
 	},
 	rottenoccaberry: {
 		name: "Rotten Occa Berry",
@@ -2841,7 +2841,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	rottenoranberry: {
 		name: "Rotten Oran Berry",
-		desc: "Holder is smited by Arceus for it's crimes. Single use.",
+		desc: "Holder is smited by Arceus for its fearful crimes. Single use.",
 	},
 	rottenpasshoberry: {
 		name: "Rotten Passho Berry",
@@ -2861,7 +2861,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	rottenpetayaberry: {
 		name: "Rotten Petaya Berry",
-		desc: "Lowers holder's Sp. Atk by 1 stage when at 3/4 max HP or less. Single use.",
+		desc: "Lowers holder's Sp. Atk by 1 stage when at 1/4 max HP or less. Single use.",
 	},
 	rottenrawstberry: {
 		name: "Rotten Rawst Berry",
@@ -2881,7 +2881,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	rottensalacberry: {
 		name: "Rotten Salac Berry",
-		desc: "Lowers holder's Speed by 1 stage when at 3/4 max HP or less. Single use.",
+		desc: "Lowers holder's Speed by 1 stage when at 1/4 max HP or less. Single use.",
 	},
 	rottenshucaberry: {
 		name: "Rotten Shuca Berry",
@@ -2893,7 +2893,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	rottenstarfberry: {
 		name: "Rotten Starf Berry",
-		desc: "Lowers a random stat by 2 when at 3/4 max HP or less (not acc/eva). Single use.",
+		desc: "Lowers a random stat by 2 when at 1/4 max HP or less (not acc/eva). Single use.",
 	},
 	rottentangaberry: {
 		name: "Rotten Tanga Berry",
@@ -2905,7 +2905,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	rottenwikiberry: {
 		name: "Rotten Wiki Berry",
-		desc: "Damages 1/3 max HP at 3/4 max HP or less; confuses if not -SpA Nature. Single use.",
+		desc: "Damages 1/3 max HP at 1/4 max HP or less; confuses if not -SpA Nature. Single use.",
 	},
 	rottenyacheberry: {
 		name: "Rotten Yache Berry",
