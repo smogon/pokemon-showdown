@@ -6826,6 +6826,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: -56,
 	},
 	putridaura: {
+		onStart(pokemon) {
+			if (this.suppressingAbility(pokemon)) return;
+			this.add('-ability', pokemon, 'Putrid Aura');
+		},
 		onUpdate(source) {
 			const targets: Pokemon[] = [];
 			for (const pokemon of this.getAllActive()) {
@@ -6834,7 +6838,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 
 				if (pokemon.hp && item.isBerry && item.onEat !== false && !item.id.includes('rotten')) {
 					pokemon.setItem('Rotten ' + item);
-					this.add('-ability', source, 'Putrid Aura');
+					//this.add('-ability', source, 'Putrid Aura');
 					this.add('-item', pokemon, newItem, '[from] move: Rot');
 				} else if (pokemon.hasItem('leftovers' || 'berryjuice')) {
 					pokemon.setItem('blacksludge');
