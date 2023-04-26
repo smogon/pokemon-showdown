@@ -7778,5 +7778,10 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Acidic Bombardment",
 		desc: "This attack charges on the first turn and executes on the second. If the user is holding a Power Herb or the weather is Acid Rain, the move completes in one turn.",
 		shortDesc: "Charges turn 1. Hits turn 2. No charge in acid rain.",
+	},
+	rot: {
+		name: "Rot",
+		desc: "When this attack is used on a pokemon holding a berry, the berry is transformed into it's rotten variant, which has the opposite effect of the original.",
+		shortDesc: "Rots the opponent's berry.",
 	}
 };

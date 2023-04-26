@@ -2471,11 +2471,15 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	bushido: {
 		name: "Bushido",
-		desc: "When this Pokemon moves first, it does 1.3x damage.",
+		shortDesc: "When this Pokemon moves first, it does 1.3x damage.",
 	},
 	acidfumes: {
 		name: "Acid Fumes",
 		desc: "Any pokemon that make contact with or are contacted by this pokemon in Acid Rain takes -1 in both defenses.",
 		shortDesc: "Lower's opponents defenses when contacted in Acid Rain."
+	},
+	putridaura: {
+		name: "Putrid Aura",
+		shortDesc: "Rots the berries on all of the Pokemon on the field.",
 	},
 };
