@@ -3446,4 +3446,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	electrodemega: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RUBL",
+	},
 };

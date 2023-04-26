@@ -9909,4 +9909,18 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Unobtainable",
 	},
+	electrodite: {
+		name: "Electrodite",
+		spritenum: 0,
+		megaStone: "Electrode-Mega",
+		megaEvolves: "Electrode",
+		itemUser: ["Electrode"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -72,
+		gen: 6,
+		isNonstandard: "Unobtainable",
+	},
 };
