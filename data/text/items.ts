@@ -2911,4 +2911,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Rotten Yache Berry",
 		desc: "Doubles damage taken from a Ice-type attack. Single use.",
 	},
+	slowkingite: {
+		name: "Slowkingite",
+		desc: "If held by a Slowking, this item allows it to Mega Evolve in battle.",
+	},
 };
