@@ -2489,5 +2489,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	sludgeslider: {
 		name: "Sludge Slider",
 		shortDesc: "If Acid Rain is active, this Pokemon's Speed is doubled.",
+	},
+	kabloeey: {
+		name: "Kabloeey",
+		desc: "This Pokémon will use Self-Destruct at the end of the turn, unless it needs to recharge, in which case it'll recharge instead.",
+		shortDesc: "Uses Self-Destruct at the end of the turn.",
 	}
 };

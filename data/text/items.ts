@@ -2915,4 +2915,24 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Slowkingite",
 		desc: "If held by a Slowking, this item allows it to Mega Evolve in battle.",
 	},
+	ariadosite: {
+		name: "Ariadosite",
+		desc: "If held by an Ariados, this item allows it to Mega Evolve in battle.",
+	},
+	granbullite: {
+		name: "Granbullite",
+		desc: "If held by a Granbull, this item allows it to Mega Evolve in battle.",
+	},
+	garbodorite: {
+		name: "Garbodorite",
+		desc: "If held by a Garbodor, this item allows it to Mega Evolve in battle.",
+	},
+	electrodite: {
+		name: "Electrodite",
+		desc: "If held by an Electrode, this item allows it to Mega Evolve in battle.",
+	},
+	deltaswampertite: {
+		name: "Delta Swampertite",
+		desc: "If held by a Delta-Swampert, this item allows it to Mega Evolve in battle.",
+	},
 };
