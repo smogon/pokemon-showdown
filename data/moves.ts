@@ -23218,4 +23218,90 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: -6, def: -6, spa: -6, spd: -6, spe: -6, evasion: -6, accuracy: -6}},
 		contestType: "Beautiful",
 	},
+	heal: {
+		num: -35,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Heal",
+		pp: 5,
+		priority: -1,
+		flags: {protect: 1, pulse: 1, reflectable: 1, distance: 1, heal: 1, allyanim: 1},
+		onHit(target, source) {
+			let success = false
+			success = !!this.heal(20, target);
+			if (success && !target.isAlly(source)) {
+				target.staleness = 'external';
+			}
+			if (!success) {
+				this.add('-fail', target, 'heal');
+				return this.NOT_FAIL;
+			}
+			return success;
+		},
+		secondary: null,
+		target: "any",
+		type: "Normal",
+		zMove: {effect: 'clearnegativeboost'},
+		contestType: "Beautiful",
+	},
+	hyperheal: {
+		num: -36,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Hyper Heal",
+		pp: 5,
+		priority: -5,
+		flags: {protect: 1, pulse: 1, reflectable: 1, distance: 1, heal: 1, allyanim: 1},
+		onHit(target, source) {
+			let success = false
+			success = !!this.heal(200, target);
+			if (success && !target.isAlly(source)) {
+				target.staleness = 'external';
+			}
+			if (!success) {
+				this.add('-fail', target, 'heal');
+				return this.NOT_FAIL;
+			}
+			return success;
+		},
+		secondary: null,
+		target: "any",
+		type: "Normal",
+		zMove: {effect: 'clearnegativeboost'},
+		contestType: "Beautiful",
+	},
+	fullheal: {
+		num: -36,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Full Heal",
+		pp: 5,
+		priority: -7,
+		flags: {protect: 1, pulse: 1, reflectable: 1, distance: 1, heal: 1, allyanim: 1},
+		onHit(target, source) {
+			let success = false;
+			let toHeal = target.baseMaxhp - target.hp;
+			success = !!this.heal(toHeal, target);
+			target.cureStatus()
+			if (success) {
+				this.damage(toHeal, source);
+			}
+			if (success && !target.isAlly(source)) {
+				target.staleness = 'external';
+			}
+			if (!success) {
+				this.add('-fail', target, 'heal');
+				return this.NOT_FAIL;
+			}
+			return success;
+		},
+		secondary: null,
+		target: "any",
+		type: "Normal",
+		zMove: {effect: 'clearnegativeboost'},
+		contestType: "Beautiful",
+	},
 };

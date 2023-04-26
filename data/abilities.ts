@@ -6849,7 +6849,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Putrid Aura",
 		rating: 2.5,
-		num: 36,
+		num: -57,
 	},
 	sludgeslider: {
 		onModifySpe(spe, pokemon) {
@@ -6859,7 +6859,25 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Sludge Slider",
 		rating: 3,
-		num: 33,
+		num: -58,
+	},
+	windywall: {
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Flying') {
+				this.add('-immune', target, '[from] ability: Windy Wall');
+				return null;
+			}
+		},
+		onModifySpe(spe, pokemon) {
+			if (pokemon.adjacentFoes()[0].side.sideConditions['tailwind']) {
+				return this.chainModify(2);
+			}
+		},
+		isBreakable: true,
+		name: "Windy Wall",
+		rating: 3,
+		num: -59,
 	},
 };
 

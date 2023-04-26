@@ -3421,4 +3421,20 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "RU",
 	},
+	imitotion: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	aviotion: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "NFE",
+	},
+	dracotion: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+
 };
