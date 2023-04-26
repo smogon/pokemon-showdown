@@ -6896,6 +6896,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onResidual(pokemon) {
 			if (pokemon.volatiles["mustrecharge"]) {
 				pokemon.removeVolatile("mustrecharge")
+				this.add("cant", pokemon, "recharge")
 				return;
 			}
 			else this.actions.useMove("Self-Destruct", pokemon);
