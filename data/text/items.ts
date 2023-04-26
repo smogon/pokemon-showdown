@@ -2841,7 +2841,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	rottenoranberry: {
 		name: "Rotten Oran Berry",
-		desc: "Holder is smited by Arceus for its fearful crimes. Single use.",
+		desc: "Holder is smitten by Arceus for its fearful crimes. Single use.",
 	},
 	rottenpasshoberry: {
 		name: "Rotten Passho Berry",
