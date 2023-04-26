@@ -2485,5 +2485,9 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	windywall: {
 		name: "Windy Wall",
 		shortDesc: "Grants immunity to Flying-Type moves and ignores opponent's tailwind."
+	},
+	sludgesurfer: {
+		name: "Sludge Surfer",
+		shortDesc: "If Acid Rain is active, this Pokemon's Speed is doubled.",
 	}
 };
