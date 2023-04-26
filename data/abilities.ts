@@ -6831,6 +6831,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.add('-ability', pokemon, 'Putrid Aura');
 		},
 		onUpdate(source) {
+			if (!source.isStarted) return;
 			const targets: Pokemon[] = [];
 			for (const pokemon of this.getAllActive()) {
 				let item = pokemon.getItem();
