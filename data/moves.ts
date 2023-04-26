@@ -23204,7 +23204,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			const item = target.getItem();
 			const newItem = ('Rotten ' + item);
 
-			if (target.hp && item.isBerry && item.onEat !== false) {
+			if (target.hp && item.isBerry && item.onEat !== false && !item.id.includes('rotten')) {
 				target.setItem('Rotten ' + item);
 				this.add('-item', target, newItem, '[from] move: Rot');
 			} else if (target.hasItem('leftovers' || 'berryjuice')) {
