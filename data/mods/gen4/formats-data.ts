@@ -1363,7 +1363,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	cherrim: {
-		tier: "8U",
+		tier: "7U",
 	},
 	cherrimsunshine: {
 	},
