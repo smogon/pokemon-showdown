@@ -2718,5 +2718,197 @@ export const ItemsText: {[k: string]: ItemText} = {
 	nullhelm: {
 		name: "Null Helm",
 		desc: "Suppresses the holder's ability, supresses targets ability when flung.",
-	}
+	},
+	rottenaguavberry: {
+		name: "Rotten Aguav Berry",
+		desc: "Damages 1/3 max HP at 3/4 max HP or less; confuses if not -SpD Nature. Single use.",
+	},
+	rottenapicotberry: {
+		name: "Rotten Apicot Berry",
+		desc: "Lowers holder's Sp. Def by 1 stage when at 3/4 max HP or less. Single use.",
+	},
+	rottenaspearberry: {
+		name: "Rotten Aspear Berry",
+		desc: "Holder is frozen. Single use.",
+	},
+	rottenbabiriberry: {
+		name: "Rotten Babiri Berry",
+		desc: "Doubles damage taken from a Steel-type attack. Single use.",
+	},
+	rottenchartiberry: {
+		name: "Rotten Charti Berry",
+		desc: "Doubles damage taken from a Rock-type attack. Single use.",
+	},
+	rottencheriberry: {
+		name: "Rotten Cheri Berry",
+		desc: "Holder is paralyzed. Single use.",
+	},
+	rottenchestoberry: {
+		name: "Rotten Chesto Berry",
+		desc: "Holder is put to sleep. Single use.",
+	},
+	rottenchilanberry: {
+		name: "Rotten Chilan Berry",
+		desc: "Doubles damage taken from a Normal-type attack. Single use.",
+	},
+	rottenchopleberry: {
+		name: "Rotten Chople Berry",
+		desc: "Doubles damage taken from a Fighting-type attack. Single use.",
+	},
+	rottencobaberry: {
+		name: "Rotten Coba Berry",
+		desc: "Doubles damage taken from a Flying-type attack. Single use.",
+	},
+	rottencolburberry: {
+		name: "Rotten Colbur Berry",
+		desc: "Doubles damage taken from a Dark-type attack. Single use.",
+	},
+	rottencustapberry: {
+		name: "Rotten Custap Berry",
+		desc: "Holder moves last in its priority bracket when at 3/4 max HP or less. Single use.",
+	
+		activate: "  [POKEMON] acted slower than normal due to its Rotten Custap Berry!",
+	},
+	rottenenigmaberry: {
+		name: "Rotten Enigma Berry",
+		desc: "Damages 1/4 max HP after holder is hit by a supereffective move. Single use.",
+	},
+	rottenfigyberry: {
+		name: "Rotten Figy Berry",
+		desc: "Damages 1/3 max HP at 3/4 max HP or less; confuses if not -Atk Nature. Single use.",
+	},
+	rottenganlonberry: {
+		name: "Rotten Ganlon Berry",
+		desc: "Lowers holder's Defense by 1 stage when at 3/4 max HP or less. Single use.",
+	},
+	rottenhabanberry: {
+		name: "Rotten Haban Berry",
+		desc: "Doubles damage taken from a Dragon-type attack. Single use.",
+	},
+	rotteniapapaberry: {
+		name: "Rotten Iapapa Berry",
+		desc: "Damages 1/3 max HP at 3/4 max HP or less; confuses if not -Def Nature. Single use.",
+	},
+	rottenjabocaberry: {
+		name: "Rotten Jaboca Berry",
+		desc: "If holder is hit by a physical move, attacker heals 1/8 of its max HP. Single use.",
+	},
+	rottenkasibberry: {
+		name: "Rotten Kasib Berry",
+		desc: "Doubles damage taken from a Ghost-type attack. Single use.",
+	},
+	rottenkebiaberry: {
+		name: "Rotten Kebia Berry",
+		desc: "Doubles damage taken from a Poison-type attack. Single use.",
+	},
+	rottenkeeberry: {
+		name: "Rotten Kee Berry",
+		desc: "Lowers holder's Defense by 1 stage after it is hit by a physical attack. Single use.",
+	},
+	rottenlansatberry: {
+		name: "Rotten Lansat Berry",
+		desc: "Lowers holder's Evasion by 1 stage when at 3/4 max HP or less. Single use.",
+	},
+	rottenleppaberry: {
+		name: "Rotten Leppa Berry",
+		desc: "Removes 10 PP from a random move. Single use.",
+	
+		activate: "  [POKEMON] lost PP on it's move [MOVE] due to its Rotten Leppa Berry!",
+	},
+	rottenliechiberry: {
+		name: "Rotten Liechi Berry",
+		desc: "Lowers holder's Attack by 1 stage when at 3/4 max HP or less. Single use.",
+	},
+	rottenlumberry: {
+		name: "Rotten Lum Berry",
+		desc: "Inflicts a random non-volatile effect on the holder when eaten. Single use.",
+	},
+	rottenmagoberry: {
+		name: "Rotten Mago Berry",
+		desc: "Damages 1/3 max HP at 3/4 max HP or less; confuses if not -Spe Nature. Single use.",
+	},
+	rottenmarangaberry: {
+		name: "Rotten Maranga Berry",
+		desc: "Lowers holder's Sp. Def by 1 stage after it is hit by a special attack. Single use.",
+	},
+	rottenmicleberry: {
+		name: "Rotten Micle Berry",
+		desc: "Holder's next move has 0.833x accuracy when at 3/4 max HP or less. Single use.",
+	},
+	rottenoccaberry: {
+		name: "Rotten Occa Berry",
+		desc: "Doubles damage taken from a Fire-type attack. Single use.",
+	},
+	rottenoranberry: {
+		name: "Rotten Oran Berry",
+		desc: "Holder is smited by Arceus for it's crimes. Single use.",
+	},
+	rottenpasshoberry: {
+		name: "Rotten Passho Berry",
+		desc: "Doubles damage taken from a Water-type attack. Single use.",
+	},
+	rottenpayapaberry: {
+		name: "Rotten Payapa Berry",
+		desc: "Doubles damage taken from a Psychic-type attack. Single use.",
+	},
+	rottenpechaberry: {
+		name: "Rotten Pecha Berry",
+		desc: "Holder is poisoned. Single use.",
+	},
+	rottenpersimberry: {
+		name: "Rotten Persim Berry",
+		desc: "Holder becomes confused. Single use.",
+	},
+	rottenpetayaberry: {
+		name: "Rotten Petaya Berry",
+		desc: "Lowers holder's Sp. Atk by 1 stage when at 3/4 max HP or less. Single use.",
+	},
+	rottenrawstberry: {
+		name: "Rotten Rawst Berry",
+		desc: "Holder is burned. Single use.",
+	},
+	rottenrindoberry: {
+		name: "Rotten Rindo Berry",
+		desc: "Doubles damage taken from a Grass-type attack. Single use.",
+	},
+	rottenroseliberry: {
+		name: "Rotten Roseli Berry",
+		desc: "Doubles damage taken from a Fairy-type attack. Single use.",
+	},
+	rottenrowapberry: {
+		name: "Rotten Rowap Berry",
+		desc: "If holder is hit by a special move, attacker heals 1/8 of its max HP. Single use.",
+	},
+	rottensalacberry: {
+		name: "Rotten Salac Berry",
+		desc: "Lowers holder's Speed by 1 stage when at 3/4 max HP or less. Single use.",
+	},
+	rottenshucaberry: {
+		name: "Rotten Shuca Berry",
+		desc: "Doubles damage taken from a Ground-type attack. Single use.",
+	},
+	rottensitrusberry: {
+		name: "Rotten Sitrus Berry",
+		desc: "Damages 1/4 max HP when at 1/2 max HP or less. Single use.",
+	},
+	rottenstarfberry: {
+		name: "Rotten Starf Berry",
+		desc: "Lowers a random stat by 2 when at 3/4 max HP or less (not acc/eva). Single use.",
+	},
+	rottentangaberry: {
+		name: "Rotten Tanga Berry",
+		desc: "Doubles damage taken from a Bug-type attack. Single use.",
+	},
+	rottenwacanberry: {
+		name: "Rotten Wacan Berry",
+		desc: "Doubles damage taken from a Electric-type attack. Single use.",
+	},
+	rottenwikiberry: {
+		name: "Rotten Wiki Berry",
+		desc: "Damages 1/3 max HP at 3/4 max HP or less; confuses if not -SpA Nature. Single use.",
+	},
+	rottenyacheberry: {
+		name: "Rotten Yache Berry",
+		desc: "Doubles damage taken from a Ice-type attack. Single use.",
+	},
 };
