@@ -8825,9 +8825,6 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.eatItem();
 			}
 		},
-		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('Damage', pokemon)) return false;
-		},
 		onEat(pokemon) {
 			this.damage(pokemon.baseMaxhp / 3, pokemon);
 			if (pokemon.getNature().minus !== 'spd') {
@@ -9093,9 +9090,6 @@ export const Items: {[itemid: string]: ItemData} = {
 				}
 			}
 		},
-		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('Damage', pokemon)) return false;
-		},
 		onEat() { },
 		num: 208,
 		gen: 3,
@@ -9114,9 +9108,6 @@ export const Items: {[itemid: string]: ItemData} = {
 					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
 			}
-		},
-		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('Damage', pokemon)) return false;
 		},
 		onEat(pokemon) {
 			this.damage(pokemon.baseMaxhp / 3, pokemon);
@@ -9184,9 +9175,6 @@ export const Items: {[itemid: string]: ItemData} = {
 					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
 			}
-		},
-		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('Damage', pokemon)) return false;
 		},
 		onEat(pokemon) {
 			this.damage(pokemon.baseMaxhp / 3, pokemon);
@@ -9378,9 +9366,6 @@ export const Items: {[itemid: string]: ItemData} = {
 					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
 			}
-		},
-		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('Damage', pokemon)) return false;
 		},
 		onEat(pokemon) {
 			this.damage(pokemon.baseMaxhp / 3, pokemon);
@@ -9731,9 +9716,6 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.eatItem();
 			}
 		},
-		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('Damage', pokemon)) return false;
-		},
 		onEat(pokemon) {
 			this.damage(pokemon.baseMaxhp / 4, pokemon);
 		},
@@ -9832,9 +9814,6 @@ export const Items: {[itemid: string]: ItemData} = {
 					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
 			}
-		},
-		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('Damage', pokemon)) return false;
 		},
 		onEat(pokemon) {
 			this.damage(pokemon.baseMaxhp / 3, pokemon);
