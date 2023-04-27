@@ -1628,11 +1628,11 @@ export const Chat = new class {
 		name = name.replace(/^[^A-Za-z0-9]+/, ""); // remove symbols from start
 		name = name.replace(/@/g, ""); // Remove @ as this is used to indicate status messages
 
-		// cut name length down to 18 chars
-		if (/[A-Za-z0-9]/.test(name.slice(18))) {
+		// cut name length down to 50 chars
+		if (/[A-Za-z0-9]/.test(name.slice(50))) {
 			name = name.replace(/[^A-Za-z0-9]+/g, "");
 		} else {
-			name = name.slice(0, 18);
+			name = name.slice(0, 50);
 		}
 
 		name = Dex.getName(name);
