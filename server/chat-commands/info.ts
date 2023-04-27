@@ -2535,7 +2535,7 @@ export const commands: Chat.ChatCommands = {
 				throw new Chat.ErrorMessage('Invalid link.');
 			}
 		}
-		if (comment && this.checkChat(comment) !== comment) {
+		if (comment && this.checkChat(comment) !== comment.trim()) {
 			return this.errorReply(`You cannot use filtered words in comments.`);
 		}
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
