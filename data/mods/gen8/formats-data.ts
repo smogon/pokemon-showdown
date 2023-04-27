@@ -4699,8 +4699,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomDoubleBattleMoves: ["agility", "aurasphere", "dazzlinggleam", "flashcannon", "fleurcannon", "protect", "trick"],
 		randomDoubleBattleLevel: 72,
 		tier: "Pseudo",
-=======
->>>>>>> 26111b130f99aa57279ad3ba893d07dedceb04e2
 	},
 	marshadow: {
 		tier: "Uber",
