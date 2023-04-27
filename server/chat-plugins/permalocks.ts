@@ -215,13 +215,14 @@ export const Nominations = new class {
 		buf += `<strong>By:</strong> ${nom.by} (on ${Chat.toTimestamp(new Date(nom.date))})<br />`;
 		buf += `<strong>Recommended punishment:</strong> ${standings[nom.standing]}<br />`;
 		buf += `<details class="readmore"><summary><strong>Modlog</strong></summary>`;
+		buf += `<div class="infobox limited">`;
 		const modlog = await this.fetchModlog(nom.primaryID);
 		if (!modlog) {
 			buf += `None found.`;
 		} else {
 			buf += this.displayModlog(modlog.results);
 		}
-		buf += `</details>`;
+		buf += `</div></details>`;
 		if (nom.alts.length) {
 			buf += `<details class="readmore"><summary><strong>Listed alts</strong></summary>`;
 			for (const [i, alt] of nom.alts.entries()) {
