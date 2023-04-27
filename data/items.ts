@@ -8829,8 +8829,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (!this.runEvent('Damage', pokemon)) return false;
 		},
 		onEat(pokemon) {
-			this.damage(pokemon.baseMaxhp / 3);
-			if (pokemon.hp <= 0) pokemon.faint();
+			this.damage(pokemon.baseMaxhp / 3, pokemon);
 			if (pokemon.getNature().minus !== 'spd') {
 				pokemon.addVolatile('confusion');
 			}
@@ -9090,8 +9089,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onHit(target, source, move) {
 			if (move && target.getMoveHitData(move).typeMod > 0) {
 				if (target.eatItem()) {
-					this.damage(target.baseMaxhp / 4);
-					if (target.hp <= 0) target.faint();
+					this.damage(target.baseMaxhp / 4, target);
 				}
 			}
 		},
@@ -9121,8 +9119,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (!this.runEvent('Damage', pokemon)) return false;
 		},
 		onEat(pokemon) {
-			this.damage(pokemon.baseMaxhp / 3);
-			if (pokemon.hp <= 0) pokemon.faint();
+			this.damage(pokemon.baseMaxhp / 3, pokemon);
 			if (pokemon.getNature().minus !== 'atk') {
 				pokemon.addVolatile('confusion');
 			}
@@ -9192,8 +9189,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (!this.runEvent('Damage', pokemon)) return false;
 		},
 		onEat(pokemon) {
-			this.damage(pokemon.baseMaxhp / 3);
-			if (pokemon.hp <= 0) pokemon.faint();
+			this.damage(pokemon.baseMaxhp / 3, pokemon);
 			if (pokemon.getNature().minus !== 'def') {
 				pokemon.addVolatile('confusion');
 			}
@@ -9387,8 +9383,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (!this.runEvent('Damage', pokemon)) return false;
 		},
 		onEat(pokemon) {
-			this.damage(pokemon.baseMaxhp / 3);
-			if (pokemon.hp <= 0) pokemon.faint();
+			this.damage(pokemon.baseMaxhp / 3, pokemon);
 			if (pokemon.getNature().minus !== 'spe') {
 				pokemon.addVolatile('confusion');
 			}
@@ -9740,8 +9735,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (!this.runEvent('Damage', pokemon)) return false;
 		},
 		onEat(pokemon) {
-			this.damage(pokemon.baseMaxhp / 4);
-			if (pokemon.hp <= 0) pokemon.faint();
+			this.damage(pokemon.baseMaxhp / 4, pokemon);
 		},
 		num: 158,
 		gen: 3,
@@ -9843,8 +9837,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (!this.runEvent('Damage', pokemon)) return false;
 		},
 		onEat(pokemon) {
-			this.damage(pokemon.baseMaxhp / 3);
-			if (pokemon.hp <= 0) pokemon.faint();
+			this.damage(pokemon.baseMaxhp / 3, pokemon);
 			if (pokemon.getNature().minus !== 'spa') {
 				pokemon.addVolatile('confusion');
 			}

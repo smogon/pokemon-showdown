@@ -2813,7 +2813,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Rotten Leppa Berry",
 		desc: "Removes 10 PP from a random move. Single use.",
 	
-		activate: "  [POKEMON] lost PP on it's move [MOVE] due to its Rotten Leppa Berry!",
+		activate: "  [POKEMON] lost PP on a random move due to its Rotten Leppa Berry!",
 	},
 	rottenliechiberry: {
 		name: "Rotten Liechi Berry",
