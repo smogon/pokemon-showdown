@@ -2521,8 +2521,7 @@ export const commands: Chat.ChatCommands = {
 		if (room.pendingApprovals?.has(user.id)) return this.errorReply('You have a request pending already.');
 		if (!toID(target)) return this.parse(`/help requestshow`);
 
-		let [link, ...comments] = target.split(',');
-		const comment = comments.join(',').trim();
+		let [link, comment] = this.splitOne(target);
 		if (!/^https?:\/\//.test(link)) link = `https://${link}`;
 		link = encodeURI(link);
 		let dimensions;
