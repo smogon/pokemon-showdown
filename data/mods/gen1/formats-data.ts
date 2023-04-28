@@ -171,7 +171,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "ZU",
 	},
 	growlithe: {
-		tier: "9U",
+		tier: "8U",
 	},
 	arcanine: {
 		tier: "PU",

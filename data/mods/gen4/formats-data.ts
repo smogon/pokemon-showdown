@@ -519,7 +519,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	munchlax: {
-		tier: "7U",
+		tier: "6U",
 	},
 	snorlax: {
 		tier: "(OU)",
@@ -841,7 +841,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	combusken: {
-		tier: "7U",
+		tier: "6U",
 	},
 	blaziken: {
 		tier: "UU",
