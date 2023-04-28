@@ -17,4 +17,39 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			'Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'Dynamax Clause', 'HP Percentage Mod', 'Cancel Mod', 'Overflow Stat Mod',
 		],
 	},
+	tiershiftmod: {
+		inherit: true,
+		desc: `Pok&eacute;mon below OU get their stats, excluding HP, boosted. UU/RUBL get +10, RU/NUBL get +20, NU/PUBL get +30, and PU or lower get +40.`,
+		onModifySpecies(species, target, source, effect) {
+			if (!species.baseStats) return;
+			const boosts: {[tier: string]: number} = {
+				uu: 10,
+				rubl: 10,
+				ru: 20,
+				nubl: 20,
+				nu: 30,
+				publ: 30,
+				pu: 40,
+				nfe: 40,
+				lc: 40,
+			};
+			let tier: string = this.toID(species.tier);
+			if (!(tier in boosts)) return;
+			// Non-Pokemon bans in lower tiers
+			if (target) {
+				if (target.set.item === 'lightclay') return;
+				if (['drizzle', 'drought', 'slushrush'].includes(target.set.ability) && boosts[tier] > 20) tier = 'nubl';
+			}
+			const pokemon = this.dex.deepClone(species);
+			pokemon.bst = pokemon.baseStats['hp'];
+			const boost = boosts[tier];
+			let statName: StatID;
+			for (statName in pokemon.baseStats as StatsTable) {
+				if (statName === 'hp') continue;
+				pokemon.baseStats[statName] = this.clampIntRange(pokemon.baseStats[statName] + boost, 1, 255);
+				pokemon.bst += pokemon.baseStats[statName];
+			}
+			return pokemon;
+		},
+	},
 };
