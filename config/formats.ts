@@ -83,7 +83,7 @@ export const Formats: FormatList = [
 		name: "[Gen 1] 6U",
 		mod: 'gen1',
 		searchShow: true,
-		ruleset: ['[Gen 1] ZU'],
+		ruleset: ['[Gen 1] ZU', 'APT Clause', 'Confuse Ray'],
 		banlist: ['ZU'],
 	},
 	{
@@ -115,10 +115,10 @@ export const Formats: FormatList = [
 		banlist: ['9U'],
 	},
 	{
-		name: "[Gen 7] 7U",
-		mod: 'gen7',
+		name: "[Gen 5] 7U",
+		mod: 'gen5',
 		searchShow: true,
-		ruleset: ['[Gen 7] ZU'],
+		ruleset: ['[Gen 5] ZU'],
 		banlist: ['ZU'],
 	},
 	{
@@ -126,6 +126,13 @@ export const Formats: FormatList = [
 		mod: 'gen6',
 		searchShow: true,
 		ruleset: ['[Gen 6] ZU'],
+		banlist: ['ZU'],
+	},
+	{
+		name: "[Gen 7] 7U",
+		mod: 'gen7',
+		searchShow: true,
+		ruleset: ['[Gen 7] ZU'],
 		banlist: ['ZU'],
 	},
 
