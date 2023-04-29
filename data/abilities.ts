@@ -6871,9 +6871,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onModifySpe(spe, pokemon) {
 			if (!pokemon.adjacentFoes()) return this.chainModify(1);
-			for (var target of pokemon.adjacentFoes()) {
-				this.add("-message", target.name);
-			}
 			if (pokemon.adjacentFoes()[0].side.sideConditions['tailwind']) {
 				return this.chainModify(2);
 			}
