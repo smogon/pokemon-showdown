@@ -15303,16 +15303,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (pokemon.baseSpecies.baseSpecies === 'Meloetta' && !pokemon.transformed) {
 				move.willChangeForme = true;
 			}
-			if (pokemon.baseSpecies.baseSpecies === 'Meloetta-Delta-Mime' && !pokemon.transformed) {
+			if (pokemon.baseSpecies.baseSpecies === 'Meloetta-Delta' && !pokemon.transformed) {
 				move.willChangeForme = true;
 			}
 		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (move.willChangeForme) {
-				this.add("-message", pokemon.species.id);
 				const forme = pokemon.species.id.substring(8);
 				let meloettaForme;
-				this.add("-message", forme);
 				switch (forme) {
 					case '': 
 						meloettaForme = "-Pirouette";
@@ -15320,11 +15318,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 					case 'pirouette':
 						meloettaForme = ""; 
 						break;
-					case 'deltamime': 
+					case 'delta': 
 						meloettaForme = "-Delta-Magician";
 						break;
 					case 'deltamagician': 
-						meloettaForme = "-Delta-Mime";
+						meloettaForme = "-Delta";
 						break;
 				}
 				pokemon.formeChange('Meloetta' + meloettaForme, this.effect, false, '[msg]');

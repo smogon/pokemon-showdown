@@ -25815,9 +25815,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		requiredItem: "Volcarona-Delta Armor",
 		changesFrom: "Volcarona-Delta",
 	},
-	meloettadeltamime: {
+	meloettadelta: {
 		num: 648,
-		name: "Meloetta-Delta-Mime",
+		name: "Meloetta-Delta",
 		baseForme: "Mime",
 		types: ["Dark", "Fairy"],
 		gender: "N",
@@ -25829,12 +25829,12 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		tags: ["Mythical", "Insurgence"],
 		otherFormes: ["Meloetta-Delta-Magician"],
-		formeOrder: ["Meloetta-Delta-Mime", "Meloetta-Delta-Magician"],
+		formeOrder: ["Meloetta-Delta", "Meloetta-Delta-Magician"],
 	},
 	meloettadeltamagician: {
 		num: 648,
 		name: "Meloetta-Delta-Magician",
-		baseSpecies: "Meloetta-Delta-Mime",
+		baseSpecies: "Meloetta-Delta",
 		forme: "Magician",
 		types: ["Dark", "Psychic"],
 		gender: "N",
