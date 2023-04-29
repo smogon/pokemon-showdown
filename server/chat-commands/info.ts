@@ -2523,7 +2523,7 @@ export const commands: Chat.ChatCommands = {
 		if (!room.settings.requestShowEnabled) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
 		}
-		if (user.can('showmedia', null, room, '/show')) return this.errorReply(`Use !show instead.`);
+		if (user.can('showmedia', null, room, 'show')) return this.errorReply(`Use !show instead.`);
 		if (room.pendingApprovals?.has(user.id)) return this.errorReply('You have a request pending already.');
 		if (!toID(target)) return this.parse(`/help requestshow`);
 
@@ -2541,7 +2541,7 @@ export const commands: Chat.ChatCommands = {
 				throw new Chat.ErrorMessage('Invalid link.');
 			}
 		}
-		if (comment && this.checkChat(comment) !== comment) {
+		if (comment && this.checkChat(comment) !== comment.trim()) {
 			return this.errorReply(`You cannot use filtered words in comments.`);
 		}
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();

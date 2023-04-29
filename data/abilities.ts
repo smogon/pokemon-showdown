@@ -1613,6 +1613,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return this.chainModify([5461, 4096]);
 			}
 		},
+		isPermanent: true,
 		name: "Hadron Engine",
 		rating: 4.5,
 		num: 289,
@@ -2771,6 +2772,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return this.chainModify([5461, 4096]);
 			}
 		},
+		isPermanent: true,
 		name: "Orichalcum Pulse",
 		rating: 4.5,
 		num: 288,

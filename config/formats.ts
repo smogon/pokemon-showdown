@@ -176,7 +176,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['Standard'],
-		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'King\'s Rock', 'Baton Pass'],
+		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'King\'s Rock', 'Baton Pass', 'Shed Tail'],
 	},
 	{
 		name: "[Gen 9] Ubers",
@@ -289,7 +289,22 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['[Gen 9] PU'],
-		banlist: ['PU', 'Fraxure', 'Girafarig'],
+		banlist: ['PU', 'Beartic', 'Fraxure', 'Girafarig', 'Vigoroth'],
+	},
+	{
+		name: "[Gen 9] LC UU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3711750/">LC UU Metagame Discussion</a>`,
+		],
+
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['[Gen 9] LC'],
+		banlist: [
+			'Crabrawler', 'Cyndaquil', 'Diglett', 'Drifloon', 'Foongus', 'Fuecoco', 'Glimmet', 'Gothita', 'Greavard', 'Larvesta',
+			'Magnemite', 'Mankey', 'Mareanie', 'Mudbray', 'Nymble', 'Oshawott', 'Pawniard', 'Quaxly', 'Sandile', 'Shellder',
+			'Shellos', 'Shroodle', 'Surskit', 'Tinkatink', 'Toedscool', 'Voltorb', 'Wattrel', 'Wingull', 'Zorua', 'Zorua-Hisui',
+		],
 	},
 	{
 		name: "[Gen 9] CAP",
@@ -402,7 +417,7 @@ export const Formats: FormatList = [
 			'Picked Team Size = 2', 'Max Team Size = 4',
 			'Standard Doubles', 'Accuracy Moves Clause', 'Terastal Clause', 'Sleep Clause Mod', 'Evasion Items Clause',
 		],
-		banlist: ['Koraidon', 'Miraidon', 'Commander', 'Focus Sash', 'King\'s Rock', 'Ally Switch', 'Final Gambit', 'Moody', 'Perish Song', 'Swagger'],
+		banlist: ['Chi-Yu', 'Koraidon', 'Miraidon', 'Commander', 'Focus Sash', 'King\'s Rock', 'Ally Switch', 'Final Gambit', 'Moody', 'Perish Song', 'Swagger'],
 	},
 	{
 		name: "[Gen 9] VGC 2023 Series 2",
@@ -446,7 +461,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Sleep Clause Mod'],
-		banlist: ['ND Uber', 'ND AG', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Assist', 'Baton Pass'],
+		banlist: ['ND Uber', 'ND AG', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Assist', 'Baton Pass', 'Shed Tail'],
 	},
 	{
 		name: "[Gen 9] National Dex Ubers",
@@ -642,14 +657,14 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		searchShow: false,
-		ruleset: ['Draft'],
+		ruleset: ['Draft', 'Dynamax Clause'],
 	},
 	{
 		name: "[Gen 8] NatDex Draft",
 
 		mod: 'gen8',
 		searchShow: false,
-		ruleset: ['Draft', '+Past'],
+		ruleset: ['Draft', 'Dynamax Clause', '+Past'],
 	},
 	{
 		name: "[Gen 8] NatDex 4v4 Doubles Draft",
@@ -691,7 +706,10 @@ export const Formats: FormatList = [
 		mod: 'pokebilities',
 		// searchShow: false,
 		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Min Source Gen = 9'],
-		banlist: ['Chi-Yu', 'Espathra', 'Flutter Mane', 'Houndstone', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Palafin', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Baton Pass'],
+		banlist: [
+			'Chi-Yu', 'Espathra', 'Flutter Mane', 'Houndstone', 'Iron Bundle', 'Koraidon', 'Miraidon',
+			'Palafin', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Baton Pass', 'Shed Tail',
+		],
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
 			const unSeenAbilities = Object.keys(species.abilities)
@@ -930,9 +948,10 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['-Nonexistent', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Moves Clause', 'Endless Battle Clause'],
 		banlist: [
-			'Calyrex-Shadow', 'Zacian-Crowned', 'Arena Trap', 'Contrary', 'Gorilla Tactics', 'Huge Power', 'Illusion', 'Innards Out', 'Magnet Pull',
-			'Moody', 'Neutralizing Gas', 'Parental Bond', 'Poison Heal', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard',
-			'Comatose + Sleep Talk', 'Belly Drum', 'Last Respects', 'Quiver Dance', 'Rage Fist', 'Revival Blessing', 'Shed Tail', 'Shell Smash',
+			'Calyrex-Shadow', 'Miraidon', 'Zacian-Crowned', 'Arena Trap', 'Contrary', 'Gorilla Tactics', 'Huge Power', 'Illusion', 'Innards Out',
+			'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Orichalcum Pulse', 'Parental Bond', 'Poison Heal', 'Pure Power', 'Shadow Tag', 'Stakeout',
+			'Water Bubble', 'Wonder Guard', 'Comatose + Sleep Talk', 'Belly Drum', 'Ceaseless Edge', 'Last Respects', 'Quiver Dance', 'Rage Fist',
+			'Revival Blessing', 'Shed Tail', 'Shell Smash',
 		],
 	},
 	{
@@ -1011,8 +1030,8 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Godly Gift Mod', 'Min Source Gen = 9'],
 		banlist: [
-			'Blissey', 'Chansey', 'Great Tusk', 'Iron Hands', 'Iron Valiant', 'Kingambit', 'Orthworm', 'Walking Wake',
-			'Arena Trap', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Swift Swim', 'Booster Energy', 'Baton Pass',
+			'Blissey', 'Chansey', 'Great Tusk', 'Iron Hands', 'Iron Valiant', 'Kingambit', 'Walking Wake', 'Arena Trap',
+			'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Swift Swim', 'Booster Energy', 'Baton Pass', 'Shed Tail',
 		],
 	},
 	{
@@ -1026,12 +1045,12 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'STABmons Move Legality', 'Sleep Moves Clause', 'Min Source Gen = 9'],
 		banlist: [
-			'Chi-Yu', 'Chien-Pao', 'Cloyster', 'Dragapult', 'Dragonite', 'Flutter Mane', 'Garchomp', 'Iron Bundle', 'Komala', 'Koraidon',
-			'Miraidon', 'Walking Wake', 'Zoroark-Hisui', 'Arena Trap', 'Moody', 'Shadow Tag', 'Booster Energy', 'King\'s Rock', 'Baton Pass',
+			'Chi-Yu', 'Chien-Pao', 'Cloyster', 'Dragapult', 'Dragonite', 'Flutter Mane', 'Garchomp', 'Iron Bundle', 'Komala', 'Koraidon', 'Miraidon',
+			'Walking Wake', 'Zoroark-Hisui', 'Arena Trap', 'Moody', 'Shadow Tag', 'Booster Energy', 'King\'s Rock', 'Baton Pass', 'Shed Tail',
 		],
 		restricted: [
-			'Acupressure', 'Astral Barrage', 'Belly Drum', 'Dire Claw', 'Extreme Speed', 'Fillet Away', 'Last Respects', 'No Retreat',
-			'Revival Blessing', 'Shed Tail', 'Shell Smash', 'Shift Gear', 'V-create', 'Victory Dance', 'Wicked Blow',
+			'Acupressure', 'Astral Barrage', 'Belly Drum', 'Dire Claw', 'Extreme Speed', 'Fillet Away', 'Gigaton Hammer',
+			'Last Respects', 'No Retreat', 'Revival Blessing', 'Shell Smash', 'Shift Gear', 'V-create', 'Victory Dance', 'Wicked Blow',
 		],
 	},
 	{
@@ -1045,7 +1064,7 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'Not Fully Evolved', 'Sleep Moves Clause', 'Terastal Clause', 'Min Source Gen = 9'],
 		banlist: [
-			'Bisharp', 'Chansey', 'Haunter', 'Magneton', 'Primeape', 'Scyther', 'Arena Trap', 'Shadow Tag', 'Baton Pass',
+			'Bisharp', 'Chansey', 'Haunter', 'Magneton', 'Misdreavus', 'Naclstack', 'Primeape', 'Scyther', 'Arena Trap', 'Shadow Tag', 'Baton Pass',
 			// Shouldn't be legal
 			'Stantler', 'Ursaring',
 		],
@@ -1057,6 +1076,37 @@ export const Formats: FormatList = [
 	{
 		section: "Challengeable OMs",
 		column: 2,
+	},
+	{
+		name: "[Gen 9] Camomons",
+		desc: `Pok&eacute;mon have their types set to match their first two moves.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3711340/">Camomons</a>`,
+		],
+
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Evasion Items Clause', 'Evasion Abilities Clause', 'Terastal Clause', 'Camomons Mod', 'Min Source Gen = 9'],
+		banlist: [
+			'Baxcalibur', 'Chi-Yu', 'Chien-Pao', 'Cyclizar', 'Dragonite', 'Drednaw', 'Espathra', 'Flutter Mane', 'Houndstone', 'Iron Bundle', 'Koraidon',
+			'Miraidon', 'Palafin', 'Roaring Moon', 'Volcarona', 'Arena Trap', 'Moody', 'Shadow Tag', 'Booster Energy', 'King\'s Rock', 'Baton Pass',
+		],
+	},
+	{
+		name: "[Gen 9] Convergence",
+		desc: `Allows all Pok&eacute;mon that have identical types to share moves and abilities.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3714048/">Convergence</a>`,
+		],
+
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Convergence Legality', '!Obtainable Abilities', 'Min Source Gen = 9'],
+		banlist: [
+			'Cyclizar', 'Chi-Yu', 'Dondozo', 'Flutter Mane', 'Iron Bundle', 'Iron Hands', 'Koraidon', 'Miraidon', 'Palafin', 'Slaking', 'Arena Trap',
+			'Comatose', 'Imposter', 'Moody', 'Pure Power', 'Shadow Tag', 'Speed Boost', 'Damp Rock', 'King\'s Rock', 'Baton Pass', 'Extreme Speed',
+			'Last Respects', 'Rage Fist', 'Revival Blessing', 'Shell Smash', 'Spore', 'Transform',
+		],
 	},
 	{
 		name: "[Gen 9] Fortemons",
@@ -1491,6 +1541,19 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		searchShow: false,
 		ruleset: ['-Nonexistent', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
+	},
+	{
+		name: "[Gen 9] Revelationmons",
+		desc: `The moves in the first slot(s) of a Pok&eacute;mon's set have their types changed to match the Pok&eacute;mon's type(s).`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3711644/">Revelationmons</a>`,
+		],
+
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Min Source Gen = 9'],
+		banlist: ['Dragonite', 'Espathra', 'Flutter Mane', 'Koraidon', 'Iron Bundle', 'Miraidon', 'Noivern', 'Palafin', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Baton Pass'],
+		restricted: ['U-turn', 'Volt Switch'],
 	},
 	{
 		name: "[Gen 9] Shared Power",
