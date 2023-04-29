@@ -44,7 +44,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	macargonite: {
+	magcargonite: {
 		inherit: true,
 		isNonstandard: null,
 	},
