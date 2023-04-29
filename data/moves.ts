@@ -20463,7 +20463,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 					modifiedDuration += 2;
 				}
 				if (source?.hasItem('trickrock')) {
-					this.add('-activate', source, 'item: Trick Rock', effect);
 					modifiedDuration += 3;
 				}
 				return modifiedDuration;

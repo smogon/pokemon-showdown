@@ -6869,12 +6869,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return null;
 			}
 		},
-		onModifySpe(spe, pokemon) {
-			if (!pokemon.adjacentFoes()) return this.chainModify(1);
-			if (pokemon.adjacentFoes()[0].side.sideConditions['tailwind']) {
-				return this.chainModify(2);
-			}
-		},
 		isBreakable: true,
 		name: "Windy Wall",
 		rating: 3,
