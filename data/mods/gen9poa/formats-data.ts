@@ -94,7 +94,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		inherit: true,
 		isNonstandard: null,
 		tier: "Illegal",
-		natDexTier: "Uber",
+		natDexTier: "OU",
     },
 	raltsdelta: {
 		inherit: true,
@@ -2609,7 +2609,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	frosthra: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	fafurr: {
 		inherit: true,
@@ -2804,7 +2804,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	seikamater: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "Uber",
 	},
 	garlikid: {
 		inherit: true,
