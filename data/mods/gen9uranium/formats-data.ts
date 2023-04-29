@@ -912,7 +912,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	geigeroach: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "OU",
+		natDexTier: "RU",
 	},
 	minicorn: {
 		inherit: true,
