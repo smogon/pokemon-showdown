@@ -4,6 +4,7 @@
   "version": "0.11.9",
   "main": "dist/sim/index.js",
   "dependencies": {
+    "edmonds-blossom": "^1.0.0",
     "esbuild": "^0.16.10",
     "preact": "^10.5.15",
     "preact-render-to-string": "^5.1.19",

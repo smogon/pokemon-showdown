@@ -7,6 +7,10 @@ interface Match {
 import {Utils} from '../../lib/utils';
 import type {TournamentPlayer} from './index';
 
+function usersToNames(users: TournamentPlayer[]) {
+	return users.map(user => user.name);
+}
+
 export class RoundRobin {
 	readonly name: string;
 	readonly isDrawingSupported: boolean;
@@ -35,8 +39,8 @@ export class RoundRobin {
 		return {
 			type: 'table',
 			tableHeaders: {
-				cols: players.slice(0),
-				rows: players.slice(0),
+				cols: usersToNames(players.slice(0)),
+				rows: usersToNames(players.slice(0)),
 			},
 			tableContents: players.map(
 				(p1, row) => players.map((p2, col) => {
@@ -45,6 +49,7 @@ export class RoundRobin {
 
 					return {
 						state: 'unavailable',
+						type: 'matchCell',
 					};
 				})
 			),
@@ -56,8 +61,8 @@ export class RoundRobin {
 		return {
 			type: 'table',
 			tableHeaders: {
-				cols: players.slice(0),
-				rows: players.slice(0),
+				cols: usersToNames(players.slice(0)),
+				rows: usersToNames(players.slice(0)),
 			},
 			tableContents: players.map(
 				(p1, row) => players.map((p2, col) => {
@@ -68,6 +73,7 @@ export class RoundRobin {
 
 					const cell: any = {
 						state: match.state,
+						type: 'matchCell',
 					};
 					if (match.state === 'finished' && match.score) {
 						cell.result = match.result;
