@@ -7451,7 +7451,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 		natDexTier: "Illegal",
     },
-	meloettadeltamime: {
+	meloettadelta: {
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "Illegal",

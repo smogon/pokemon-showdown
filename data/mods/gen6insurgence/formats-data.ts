@@ -4131,7 +4131,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		tier: "OU",
     },
-	meloettadeltamime: {
+	meloettadelta: {
 		inherit: true,
 		isNonstandard: null,
 		tier: "OU",

@@ -113590,7 +113590,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			terablast: ["9M"],
 		},
 	},
-	meloettadeltamime: {
+	meloettadelta: {
 		learnset: {
 			achillesheel: ["6M"],
 			custommove: ["6M"],
