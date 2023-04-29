@@ -15310,7 +15310,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (move.willChangeForme) {
 				this.add("-message", pokemon.species.id);
-				const forme = pokemon.species.id.substring(0, 8);
+				const forme = pokemon.species.id.substring(8);
 				let meloettaForme;
 				this.add("-message", forme);
 				switch (forme) {
