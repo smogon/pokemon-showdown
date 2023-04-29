@@ -15310,7 +15310,23 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (move.willChangeForme) {
 				this.add("-message", pokemon.species.id);
-				const meloettaForme = "-Delta-Mime"
+				const forme = pokemon.species.id.substring(0, 8);
+				let meloettaForme;
+				this.add("-message", forme);
+				switch (forme) {
+					case '': 
+						meloettaForme = "-Pirouette";
+						break;
+					case 'pirouette':
+						meloettaForme = ""; 
+						break;
+					case 'deltamime': 
+						meloettaForme = "-Delta-Magician";
+						break;
+					case 'deltamagician': 
+						meloettaForme = "-Delta-Mime";
+						break;
+				}
 				pokemon.formeChange('Meloetta' + meloettaForme, this.effect, false, '[msg]');
 			}
 		},
