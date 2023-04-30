@@ -16556,7 +16556,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Clever",
 	},
 	shadowstrike: {
-		num: -38,
+		-38,
 		accuracy: 95,
 		basePower: 80,
 		category: "Physical",
