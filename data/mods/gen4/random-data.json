@@ -772,12 +772,12 @@
         "moves": ["curse", "ironhead", "rest", "sleeptalk", "stealthrock", "thunderwave", "toxic"]
     },
     "latias": {
-        "level": 79,
-        "moves": ["calmmind", "dragonpulse", "psychic", "refresh", "roost", "surf"]
+        "level": 74,
+        "moves": ["calmmind", "dracometeor", "psychic", "roost"]
     },
     "latios": {
-        "level": 76,
-        "moves": ["calmmind", "dracometeor", "dragonpulse", "hiddenpowerfire", "psychic", "roost", "surf", "thunderbolt", "trick"]
+        "level": 72,
+        "moves": ["calmmind", "dracometeor", "psychic", "roost"]
     },
     "kyogre": {
         "level": 71,

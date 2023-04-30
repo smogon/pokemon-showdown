@@ -840,12 +840,12 @@
         "moves": ["rest", "seismictoss", "sleeptalk", "toxic"]
     },
     "latias": {
-        "level": 76,
-        "moves": ["calmmind", "dragonclaw", "hiddenpowerfire", "recover", "refresh", "toxic"]
+        "level": 68,
+        "moves": ["calmmind", "dragonclaw", "hiddenpowerfire", "psychic", "recover"]
     },
     "latios": {
-        "level": 75,
-        "moves": ["calmmind", "dragonclaw", "hiddenpowerfire", "psychic", "recover", "thunderbolt"]
+        "level": 68,
+        "moves": ["calmmind", "dragonclaw", "hiddenpowerfire", "psychic", "recover"]
     },
     "kyogre": {
         "level": 70,

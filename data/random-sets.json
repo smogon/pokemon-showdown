@@ -2832,17 +2832,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Boomburst", "Overdrive", "Shift Gear", "Sludge Bomb", "Volt Switch"],
-                "teraTypes": ["Normal"]
-            }
-        ]
-    },
-    "toxtricitylowkey": {
-        "level": 82,
-        "sets": [
-            {
-                "role": "Fast Attacker",
-                "movepool": ["Boomburst", "Overdrive", "Sludge Bomb", "Toxic Spikes", "Volt Switch"],
+                "movepool": ["Boomburst", "Overdrive", "Shift Gear", "Sludge Bomb", "Toxic Spikes", "Volt Switch"],
                 "teraTypes": ["Normal"]
             }
         ]

@@ -1165,8 +1165,8 @@
         "doublesMoves": ["dragonpulse", "healpulse", "helpinghand", "lightscreen", "protect", "psychic", "reflect", "tailwind"]
     },
     "latias": {
-        "level": 80,
-        "moves": ["defog", "dracometeor", "healingwish", "hiddenpowerfire", "psyshock", "roost"],
+        "level": 76,
+        "moves": ["calmmind", "dracometeor", "psyshock", "roost"],
         "doublesMoves": ["dragonpulse", "healpulse", "helpinghand", "lightscreen", "protect", "psychic", "reflect", "tailwind"]
     },
     "latiosmega": {
@@ -1175,8 +1175,8 @@
         "doublesMoves": ["dracometeor", "dragonpulse", "hiddenpowerfire", "protect", "psyshock", "substitute", "surf", "tailwind", "thunderbolt"]
     },
     "latios": {
-        "level": 80,
-        "moves": ["calmmind", "dracometeor", "hiddenpowerfire", "psyshock", "roost", "trick"],
+        "level": 74,
+        "moves": ["calmmind", "dracometeor", "psyshock", "roost"],
         "doublesMoves": ["dracometeor", "dragonpulse", "hiddenpowerfire", "protect", "psyshock", "substitute", "surf", "tailwind", "thunderbolt", "trick"]
     },
     "kyogre": {

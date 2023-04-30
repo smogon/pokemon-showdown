@@ -800,12 +800,12 @@
         "moves": ["curse", "ironhead", "protect", "rest", "sleeptalk", "stealthrock", "toxic"]
     },
     "latias": {
-        "level": 81,
-        "moves": ["calmmind", "dracometeor", "healingwish", "hiddenpowerfire", "psyshock", "roost", "surf"]
+        "level": 76,
+        "moves": ["calmmind", "dracometeor", "psyshock", "roost"]
     },
     "latios": {
-        "level": 79,
-        "moves": ["dracometeor", "hiddenpowerfire", "psyshock", "roost", "surf", "trick"]
+        "level": 74,
+        "moves": ["calmmind", "dracometeor", "psyshock", "roost"]
     },
     "kyogre": {
         "level": 73,
