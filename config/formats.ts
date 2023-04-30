@@ -1874,6 +1874,7 @@ export const Formats: FormatList = [
 		desc: `[Gen 9] Hackmons Cup but with only the most powerful Pokemon, moves, Abilities, and items.`,
 
 		team: 'randomHC',
+		searchShow: false,
 		ruleset: ['[Gen 9] Hackmons Cup'],
 		banlist: ['All Pokemon', 'All Abilities', 'All Items', 'All Moves'],
 		unbanlist: [
