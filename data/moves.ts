@@ -13422,7 +13422,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Clever",
 	},
 	paleowave: {
-		num: -37,
+		num: 0,
 		accuracy: 100,
 		basePower: 85,
 		category: "Special",
@@ -16556,7 +16556,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Clever",
 	},
 	shadowstrike: {
-		-38,
+		num: 0,
 		accuracy: 95,
 		basePower: 80,
 		category: "Physical",
