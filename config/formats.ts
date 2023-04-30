@@ -1981,7 +1981,7 @@ export const Formats: FormatList = [
 		team: 'randomFactory',
 		ruleset: ['Standard', 'Dynamax Clause'],
 		onBegin() {
-			this.add(`raw|<div class='broadcast-blue'><b>Battle Factory Tier: ${this.teamGenerator.factoryTier}</b></div>`);
+			this.add(`raw|<div class="broadcast-blue"><b>Battle Factory Tier: ${this.teamGenerator.factoryTier}</b></div>`);
 		},
 	},
 	{
@@ -2125,7 +2125,7 @@ export const Formats: FormatList = [
 		team: 'randomFactory',
 		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
 		onBegin() {
-			this.add(`raw|<div class='broadcast-blue'><b>Battle Factory Tier: ${this.teamGenerator.factoryTier}</b></div>`);
+			this.add(`raw|<div class="broadcast-blue"><b>Battle Factory Tier: ${this.teamGenerator.factoryTier}</b></div>`);
 		},
 	},
 	{
@@ -2175,7 +2175,7 @@ export const Formats: FormatList = [
 		challengeShow: false,
 		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
 		onBegin() {
-			this.add(`raw|<div class='broadcast-blue'><b>Battle Factory Tier: ${this.teamGenerator.factoryTier}</b></div>`);
+			this.add(`raw|<div class="broadcast-blue"><b>Battle Factory Tier: ${this.teamGenerator.factoryTier}</b></div>`);
 		},
 	},
 	{
