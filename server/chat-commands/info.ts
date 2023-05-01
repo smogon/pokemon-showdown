@@ -2521,7 +2521,7 @@ export const commands: Chat.ChatCommands = {
 		if (room.pendingApprovals?.has(user.id)) return this.errorReply('You have a request pending already.');
 		if (!toID(target)) return this.parse(`/help requestshow`);
 
-		let [link, comment] = target.split(',');
+		let [link, comment] = this.splitOne(target);
 		if (!/^https?:\/\//.test(link)) link = `https://${link}`;
 		link = encodeURI(link);
 		let dimensions;
@@ -2535,7 +2535,7 @@ export const commands: Chat.ChatCommands = {
 				throw new Chat.ErrorMessage('Invalid link.');
 			}
 		}
-		if (comment && this.checkChat(comment) !== comment.trim()) {
+		if (comment && this.checkChat(comment) !== comment) {
 			return this.errorReply(`You cannot use filtered words in comments.`);
 		}
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
