@@ -40,6 +40,7 @@
     "test": "mocha",
     "posttest": "npm run tsc",
     "full-test": "npm run lint && npm run tsc && mocha --timeout 8000 --forbid-only -g \".*\"",
+    "full-test-ci": "eslint ${FILES} --max-warnings 0 && npm run tsc && (([ \"$SKIPSIMTESTS\" = true ] && mocha --timeout 8000 --forbid-only -g \".*\" --exclude \"test/{sim,random-battles}/**\") || mocha --timeout 8000 --forbid-only -g \".*\")",
     "postinstall": "npm run build postinstall"
   },
   "bin": "./pokemon-showdown",

@@ -640,6 +640,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (species.name === 'Deoxys-Attack') return (isLead && moves.has('stealthrock')) ? 'Focus Sash' : 'Life Orb';
 		if (species.name === 'Farfetch\u2019d') return 'Stick';
 		if (species.name === 'Genesect' && moves.has('technoblast')) return 'Douse Drive';
+		if (species.name === 'Latias' || species.name === 'Latios') return 'Soul Dew';
 		if (species.baseSpecies === 'Pikachu') return 'Light Ball';
 		if (species.name === 'Shedinja' || species.name === 'Smeargle') return 'Focus Sash';
 		if (species.name === 'Unfezant' && counter.get('Physical') >= 2) return 'Scope Lens';
