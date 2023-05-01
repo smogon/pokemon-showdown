@@ -236,8 +236,8 @@ export class Swiss {
 			if (index1 > index2) {
 				continue;
 			}
-			const swissPlayer1 = this.players[index1];
-			const swissPlayer2 = this.players[index2];
+			const swissPlayer1 = nonDQedPlayers[index1];
+			const swissPlayer2 = nonDQedPlayers[index2];
 			this.matches.push({
 				p1: this.players[index1],
 				p2: this.players[index2],
