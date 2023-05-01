@@ -83,8 +83,8 @@ export const Formats: FormatList = [
 		name: "[Gen 1] 6U",
 		mod: 'gen1',
 		searchShow: true,
-		ruleset: ['[Gen 1] ZU', 'APT Clause', 'Confuse Ray'],
-		banlist: ['ZU'],
+		ruleset: ['[Gen 1] ZU', 'APT Clause'],
+		banlist: ['ZU', 'Confuse Ray'],
 	},
 	{
 		name: "[Gen 1] 7U",
