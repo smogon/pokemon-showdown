@@ -184,8 +184,6 @@ export class Swiss {
 				rows: rowHeaders,
 			},
 			tableContents: swissData,
-			// TODO(delete this)
-			scores: this.players.map(player => 0),
 		};
 	}
 
