@@ -417,10 +417,10 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	kabuto: {
-		tier: "ZU",
+		tier: "PU",
 	},
 	kabutops: {
-		tier: "6U",
+		tier: "NU",
 	},
 	aerodactyl: {
 		tier: "UU",

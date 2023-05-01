@@ -106,6 +106,7 @@ export const Formats: FormatList = [
 		searchShow: true,
 		ruleset: ['[Gen 1] 8U'],
 		banlist: ['8U'],
+		unbanlist: ['Confuse Ray']
 	},
 	{
 		name: "[Gen 1] 10U",

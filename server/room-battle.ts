@@ -880,6 +880,8 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		const p1id = toID(p1name);
 		const p2id = toID(p2name);
 		Chat.runHandlers('onBattleEnd', this, winnerid, [p1id, p2id, this.p3?.id, this.p4?.id].filter(Boolean));
+		const id = this.room.getReplayData().id.split("-")[1];
+		const link = "http://73.191.22.186:8001/replays/" + this.format + "/" + id + "_" + p1id + "_vs_" + p2id;
 		if (this.room.rated) {
 			this.room.rated = 0;
 
@@ -895,6 +897,10 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 			}
 			const [score, p1rating, p2rating] = await Ladders(this.ladder).updateRating(p1name, p2name, p1score, this.room);
 			void this.logBattle(score, p1rating, p2rating);
+			const uploader = Users.get(winnerid || p1id);
+			if (uploader?.connections[0]) {
+				Chat.parse('Replay autosaved to ' + link, this.room, uploader, uploader.connections[0]);
+			}
 			Chat.runHandlers('onBattleRanked', this, winnerid, [p1rating, p2rating], [p1id, p2id]);
 		} else if (Config.logchallenges && !this.room.settings.isPrivate && !this.room.hideReplay) {
 			if (winnerid === p1id) {
@@ -903,9 +909,6 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 				p1score = 0;
 			}
 			void this.logBattle(p1score);
-			const id = this.room.getReplayData().id.split("-")[1];
-			// const link = "http://73.191.22.186:8001/replays/" + this.format + "/" + p1id + "_vs_" + p2id + "_" + id;
-			const link = "http://73.191.22.186:8001/replays/" + this.format + "/" + id + "_" + p1id + "_vs_" + p2id;
 			const uploader = Users.get(winnerid || p1id);
 			if (uploader?.connections[0]) {
 				Chat.parse('Replay autosaved to ' + link, this.room, uploader, uploader.connections[0]);
