@@ -363,6 +363,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 		if (species.name === 'Marowak') return 'Thick Club';
 		if (species.name === 'Farfetch\u2019d') return 'Stick';
+		if (species.name === 'Latias' || species.name === 'Latios') return 'Soul Dew';
 		if (species.name === 'Pikachu') return 'Light Ball';
 		if (species.name === 'Shedinja' || species.name === 'Smeargle') return 'Focus Sash';
 		if (species.name === 'Unown') return 'Choice Specs';

@@ -414,6 +414,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (species.requiredItems) return this.sample(species.requiredItems);
 		if (species.name === 'Ditto') return this.sample(['Salac Berry', 'Sitrus Berry']);
 		if (species.name === 'Farfetch\u2019d' && counter.get('Physical') < 4) return 'Stick';
+		if (species.name === 'Latias' || species.name === 'Latios') return 'Soul Dew';
 		if (species.name === 'Marowak') return 'Thick Club';
 		if (species.name === 'Pikachu') return 'Light Ball';
 		if (species.name === 'Shedinja' || species.name === 'Smeargle') return 'Focus Sash';
