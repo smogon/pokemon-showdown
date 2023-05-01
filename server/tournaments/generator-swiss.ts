@@ -110,7 +110,9 @@ export class Swiss {
 
 	getAvailableMatches() {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
-		const matches = this.matches.filter(match => !match.p1.tournamentPlayer.isBusy && !match.p2?.tournamentPlayer.isBusy).flatMap(match => match.p2 ? [[match.p1.tournamentPlayer, match.p2.tournamentPlayer]] : []);
+		const matches = this.matches
+			.filter(match => !match.p1.tournamentPlayer.isBusy && !match.p2?.tournamentPlayer.isBusy)
+			.flatMap(match => match.p2 ? [[match.p1.tournamentPlayer, match.p2.tournamentPlayer]] : []);
 		return matches;
 	}
 

@@ -276,9 +276,7 @@ export class Connection {
 	}
 
 	send(data: string) {
-		try {
-			Sockets.socketSend(this.worker, this.socketid, data);
-		} catch (e) {}
+		Sockets.socketSend(this.worker, this.socketid, data);
 		Monitor.countNetworkUse(data.length);
 	}
 

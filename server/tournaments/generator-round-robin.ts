@@ -5,8 +5,7 @@ interface Match {
 }
 
 import {Utils} from '../../lib/utils';
-import type {TournamentPlayer} from './index';
-import {usersToNames} from './index';
+import {TournamentPlayer, usersToNames} from './index';
 
 export class RoundRobin {
 	readonly name: string;
@@ -50,6 +49,7 @@ export class RoundRobin {
 					};
 				})
 			),
+			scores: players.map(player => 0),
 		};
 	}
 	getBracketData() {
