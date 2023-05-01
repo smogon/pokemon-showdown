@@ -402,6 +402,12 @@ export const commands: Chat.ChatCommands = {
 			NFE: 30,
 			LC: 30,
 		};
+		if (dex.gen < 9) {
+			boosts['UU'] = boosts['RUBL'] = 10;
+			boosts['RU'] = boosts['NUBL'] = 20;
+			boosts['NU'] = boosts['PUBL'] = 30;
+			boosts['PU'] = boosts['NFE'] = boosts['LC'] = 40;
+		}
 		let tier = species.tier;
 		if (tier[0] === '(') tier = tier.slice(1, -1);
 		if (!(tier in boosts)) return this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
