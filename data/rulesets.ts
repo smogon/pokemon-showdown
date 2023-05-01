@@ -2074,8 +2074,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			if (!(tier in boosts)) return;
 			// Non-Pokemon bans in lower tiers
 			if (target) {
-				if (target.set.item === 'lightclay') return;
-				if (['drizzle', 'drought', 'snowwarning'].includes(target.set.ability) && boosts[tier] > 20) tier = 'nubl';
+				if (this.toID(target.set.item) === 'lightclay') tier = 'rubl';
 			}
 			const pokemon = this.dex.deepClone(species);
 			pokemon.bst = pokemon.baseStats['hp'];
