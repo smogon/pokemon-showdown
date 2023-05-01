@@ -6,7 +6,7 @@ function createNameCell(name: string) {
 		type: "nameCell",
 	};
 }
-const winPoints = 1;
+const NUM_DEFAULT_ROUNDS = 5;
 
 import {Utils} from '../../lib/utils';
 import {TournamentPlayer} from './index';
@@ -24,6 +24,7 @@ class SwissPlayer {
 
 interface Match {
 	p1: SwissPlayer;
+	/** null if this is a match representing a bye */
 	p2: SwissPlayer | null;
 	state: string;
 	score?: number[];
@@ -46,7 +47,7 @@ export class Swiss {
 		this.players = [];
 		this.matches = [];
 		const intNumRounds = Utils.parseExactInt(numRounds);
-		this.rounds = intNumRounds ? intNumRounds : 5;
+		this.rounds = intNumRounds ? intNumRounds : NUM_DEFAULT_ROUNDS;
 		this.name = this.rounds + "-Round Swiss";
 		this.curRound = 0;
 		this.isBracketFrozen = false;
@@ -111,7 +112,7 @@ export class Swiss {
 	getAvailableMatches() {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 		const matches = this.matches
-			.filter(match => !match.p1.tournamentPlayer.isBusy && !match.p2?.tournamentPlayer.isBusy)
+			.filter(match => !match.p1.tournamentPlayer.isBusy && !match.p2?.tournamentPlayer.isBusy && match.state !== 'finished')
 			.flatMap(match => match.p2 ? [[match.p1.tournamentPlayer, match.p2.tournamentPlayer]] : []);
 		return matches;
 	}
@@ -173,7 +174,7 @@ export class Swiss {
 			}
 			row.push(cell);
 			swissData.push(row);
-			rowHeaders.push("Match " + (i + 1).toString());
+			rowHeaders.push("Match " + i + 1);
 		}
 
 		return {
@@ -183,7 +184,7 @@ export class Swiss {
 				rows: rowHeaders,
 			},
 			tableContents: swissData,
-			// TODO: delete this
+			// TODO(delete this)
 			scores: this.players.map(player => 0),
 		};
 	}
@@ -209,14 +210,14 @@ export class Swiss {
 			byePlayer = Utils.shuffle(playersWithMinScore)[0];
 		}
 		this.matches = [];
-		const maxPossiblePoints = (this.curRound + 1) * winPoints;
+		const maxPossiblePoints = this.curRound + 1;
 		const possiblePairs: number[][] = [];
-		for (let p1 = 0; p1 < this.players.length; p1++) {
-			const swissPlayer1 = this.players[p1];
-			if (swissPlayer1 === byePlayer || swissPlayer1.tournamentPlayer.isDisqualified) continue;
-			for (let p2 = 0; p2 < this.players.length; p2++) {
-				const swissPlayer2 = this.players[p2];
-				if (swissPlayer2 === byePlayer || swissPlayer2.tournamentPlayer.isDisqualified) continue;
+		for (let p1 = 0; p1 < nonDQedPlayers.length; p1++) {
+			const swissPlayer1 = nonDQedPlayers[p1];
+			if (swissPlayer1 === byePlayer) continue;
+			for (let p2 = 0; p2 < nonDQedPlayers.length; p2++) {
+				const swissPlayer2 = nonDQedPlayers[p2];
+				if (swissPlayer2 === byePlayer) continue;
 				if (p1 < p2) {
 					const match = [p1, p2];
 					if (swissPlayer1.playersAlreadyPlayed.includes(swissPlayer2)) {
