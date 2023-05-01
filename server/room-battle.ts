@@ -1387,6 +1387,10 @@ export const PM = new ProcessManager.StreamProcessManager(module, () => new Room
 	if (message.startsWith(`SLOW\n`)) {
 		Monitor.slow(message.slice(5));
 	}
+}, message => {
+	if (message.startsWith('RELOAD')) {
+		BattleStream.recache();
+	}
 });
 
 if (!PM.isParentProcess) {

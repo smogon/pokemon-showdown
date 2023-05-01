@@ -742,7 +742,7 @@ export const commands: Chat.ChatCommands = {
 				// respawn validator processes
 				void TeamValidatorAsync.PM.respawn();
 				// respawn simulator processes
-				void Rooms.PM.respawn();
+				void Rooms.PM.messageAll('RELOAD');
 				// respawn datasearch processes (crashes otherwise, since the Dex data in the PM can be out of date)
 				void Chat.plugins.datasearch?.PM?.respawn();
 				// broadcast the new formats list to clients

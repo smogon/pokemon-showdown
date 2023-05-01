@@ -605,16 +605,19 @@ export class StreamProcessManager extends ProcessManager<StreamProcessWrapper> {
 	activeStreams: Map<string, Streams.ObjectReadWriteStream<string>>;
 	_createStream: () => Streams.ObjectReadWriteStream<string>;
 	messageCallback?: (message: string) => any;
+	childMessageCallback?: (message: string) => any;
 
 	constructor(
 		module: NodeJS.Module,
 		createStream: () => Streams.ObjectReadWriteStream<string>,
-		messageCallback?: (message: string) => any
+		messageCallback?: (message: string) => any,
+		childMessageCallback?: (message: string) => any,
 	) {
 		super(module);
 		this.activeStreams = new Map();
 		this._createStream = createStream;
 		this.messageCallback = messageCallback;
+		this.childMessageCallback = childMessageCallback;
 
 		processManagers.push(this);
 	}
@@ -654,6 +657,7 @@ export class StreamProcessManager extends ProcessManager<StreamProcessWrapper> {
 			const stream = this.activeStreams.get(taskId);
 
 			message = message.slice(nlLoc + 1);
+			const rawMessage = message;
 			nlLoc = message.indexOf('\n');
 			if (nlLoc < 0) nlLoc = message.length;
 			const messageType = message.slice(0, nlLoc);
@@ -662,6 +666,11 @@ export class StreamProcessManager extends ProcessManager<StreamProcessWrapper> {
 			if (taskId.startsWith('EVAL')) {
 				// eslint-disable-next-line no-eval
 				process.send!(`${taskId}\n` + eval(message));
+				return;
+			}
+
+			if (taskId.startsWith('CUSTOM')) {
+				this.childMessageCallback?.(rawMessage);
 				return;
 			}
 
@@ -687,6 +696,12 @@ export class StreamProcessManager extends ProcessManager<StreamProcessWrapper> {
 		process.on('disconnect', () => {
 			process.exit();
 		});
+	}
+
+	messageAll(message: string) {
+		for (const child of this.processes) {
+			child.getProcess().send('CUSTOM\n' + message);
+		}
 	}
 }
 

@@ -12,7 +12,6 @@
 import {Streams, Utils} from '../lib';
 import {Teams} from './teams';
 import {Battle, extractChannelMessages} from './battle';
-
 /**
  * Like string.split(delimiter), but only recognizes the first `limit`
  * delimiters (default 1).
@@ -55,6 +54,14 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 		this.replay = options.replay || false;
 		this.keepAlive = !!options.keepAlive;
 		this.battle = null;
+	}
+
+	static Battle = Battle;
+	static recache() {
+		// force a recaching when require is next called
+		require.cache = {};
+		require('module')._cache = {};
+		this.Battle = require('./battle').Battle;
 	}
 
 	_write(chunk: string) {
@@ -106,7 +113,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 				if (t === 'end' && !this.keepAlive) this.pushEnd();
 			};
 			if (this.debug) options.debug = true;
-			this.battle = new Battle(options);
+			this.battle = new BattleStream.Battle(options);
 			break;
 		case 'player':
 			const [slot, optionsText] = splitFirst(message, ' ');
