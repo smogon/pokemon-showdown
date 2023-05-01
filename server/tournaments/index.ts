@@ -43,7 +43,7 @@ const TournamentGenerators = {
 	swiss: Swiss,
 };
 
-function usersToNames(users: TournamentPlayer[]) {
+export function usersToNames(users: TournamentPlayer[]) {
 	return users.map(user => user.name);
 }
 
@@ -385,10 +385,10 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	}
 
 	addUser(user: User, output: Chat.CommandContext) {
-		if (!user.named) {
+		/*if (!user.named) {
 			output.sendReply('|tournament|error|UserNotNamed');
 			return;
-		}
+		}*/
 
 		if (user.id in this.playerTable) {
 			output.sendReply('|tournament|error|UserAlreadyAdded');
@@ -1107,7 +1107,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			}
 		}
 	}
-	/*
+
 	devBattleWin(winnerid: ID, loserid: ID) {
 		const p1 = this.playerTable[winnerid];
 		const p2 = this.playerTable[loserid];
@@ -1135,7 +1135,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		this.isAvailableMatchesInvalidated = true;
 
 		if (result === 'draw' && !this.generator.isDrawingSupported) {
-			this.room.add(`|tournament|battleend|${p1.name}|${p2.name}|${result}|${score.join(',')}|fail|${room.roomid}`);
+			//this.room.add(`|tournament|battleend|${p1.name}|${p2.name}|${result}|${score.join(',')}|fail|${room.roomid}`);
 
 			if (this.autoDisqualifyTimeout !== Infinity) this.runAutoDisqualify();
 			this.update();
@@ -1163,7 +1163,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			this.update();
 		}
 		this.room.update();
-	}*/
+	}
 	onBattleWin(room: GameRoom, winnerid: ID) {
 		if (this.completedMatches.has(room.roomid)) return;
 		this.completedMatches.add(room.roomid);

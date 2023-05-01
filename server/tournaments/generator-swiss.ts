@@ -48,7 +48,6 @@ export class Swiss {
 		const intNumRounds = Utils.parseExactInt(numRounds);
 		this.rounds = intNumRounds ? intNumRounds : 5;
 		this.name = this.rounds + "-Round Swiss";
-		this.rounds = 5;
 		this.curRound = 0;
 		this.isBracketFrozen = false;
 		this.totalPendingMatches = 0;
@@ -111,7 +110,7 @@ export class Swiss {
 
 	getAvailableMatches() {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
-		const matches = this.matches.flatMap(match => match.p2 ? [[match.p1.tournamentPlayer, match.p2.tournamentPlayer]] : []);
+		const matches = this.matches.filter(match => !match.p1.tournamentPlayer.isBusy && !match.p2?.tournamentPlayer.isBusy).flatMap(match => match.p2 ? [[match.p1.tournamentPlayer, match.p2.tournamentPlayer]] : []);
 		return matches;
 	}
 
@@ -133,8 +132,8 @@ export class Swiss {
 	}
 
 	getResults() {
-		// TODO: Add tiebreak calculation
 		if (!this.isTournamentEnded()) return 'TournamentNotEnded';
+		// TODO: Add tiebreak calculation
 		const sortedScores = Utils.sortBy([...this.players], p => -p.tournamentPlayer.score);
 		const results: TournamentPlayer[][] = [];
 		for (const player of sortedScores) {
@@ -182,12 +181,14 @@ export class Swiss {
 				rows: rowHeaders,
 			},
 			tableContents: swissData,
+			// TODO: delete this
+			scores: this.players.map(player => 0),
 		};
 	}
 
 	freezeBracket(players: TournamentPlayer[]) {
 		this.isBracketFrozen = true;
-		this.players = players.map(player => new SwissPlayer(player));
+		this.players = Utils.shuffle(players.map(player => new SwissPlayer(player)));
 		this.generateNextRoundPairings();
 	}
 
@@ -219,7 +220,7 @@ export class Swiss {
 					if (swissPlayer1.playersAlreadyPlayed.includes(swissPlayer2)) {
 						match.push(0);
 					} else {
-						// We want a higher value for players with the same score so that blossom functions properly
+						// We want a higher value for players with the same score as blossom finds the max weight matching
 						match.push(maxPossiblePoints - Math.abs(swissPlayer1.tournamentPlayer.score - swissPlayer2.tournamentPlayer.score));
 					}
 					possiblePairs.push(match);
@@ -227,6 +228,7 @@ export class Swiss {
 			}
 		}
 
+		// TODO: reimplement blossom in our code
 		const rawPairings = blossom(possiblePairs);
 		for (let index1 = 0; index1 < rawPairings.length; index1++) {
 			const index2 = rawPairings[index1];
@@ -259,6 +261,7 @@ export class Swiss {
 			byePlayer.tournamentPlayer.score += 1;
 		}
 		this.curRound++;
+		// TODO: Add a message in the room saying the next round has started
 	}
 
 	getPlayerScore(match: Match) {
