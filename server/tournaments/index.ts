@@ -604,6 +604,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 					if (pendingChallenge || inProgressMatch) {
 						for (const [c, cell] of row.entries()) {
 							if (!cell || cell.namedCell) continue;
+
 							if (pendingChallenge && data.tableHeaders.cols[c] === pendingChallenge.to) {
 								cell.state = 'challenging';
 							}
