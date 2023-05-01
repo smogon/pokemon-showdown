@@ -585,7 +585,7 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] Tier Shift",
-		desc: `Pok&eacute;mon below OU get their stats, excluding HP, boosted. UU/RUBL get +10, RU/NUBL get +20, NU/PUBL get +30, and PU or lower get +40.`,
+		desc: `Pok&eacute;mon below OU get their stats, excluding HP, boosted. UU/RUBL get +15, RU/NUBL get +20, NU/PUBL get +25, and PU or lower get +30.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3720396/">Tier Shift</a>`,
 		],
