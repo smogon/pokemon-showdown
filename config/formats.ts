@@ -592,7 +592,10 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'Tier Shift Mod', 'Sleep Moves Clause', 'Min Source Gen = 9'],
-		banlist: ['Chi-Yu', 'Cloyster', 'Espathra', 'Falinks', 'Flutter Mane', 'Houndstone', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Moody', 'Arena Trap', 'Shadow Tag', 'Eviolite', 'Damp Rock', 'Heat Rock', 'Baton Pass', 'Shed Tail'],
+		banlist: [
+			'Chi-Yu', 'Cloyster', 'Espathra', 'Falinks', 'Flutter Mane', 'Houndstone', 'Iron Bundle', 'Koraidon', 'Miraidon',
+			'Moody', 'Arena Trap', 'Shadow Tag', 'Eviolite', 'Damp Rock', 'Heat Rock', 'Baton Pass', 'Shed Tail',
+		],
 	},
 	{
 		name: "[Gen 9] The Card Game",
@@ -604,7 +607,10 @@ export const Formats: FormatList = [
 		mod: 'thecardgame',
 		// searchShow: false,
 		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Terastal Clause', 'Min Source Gen = 9'],
-		banlist: ['Annihilape', 'Baxcalibur', 'Chi-Yu', 'Cyclizar', 'Dragapult', 'Dragonite', 'Espathra', 'Houndstone', 'Hydreigon', 'Koraidon', 'Miraidon', 'Noivern', 'Palafin', 'Roaring Moon', 'Salamence', 'Walking Wake', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass'],
+		banlist: [
+			'Annihilape', 'Baxcalibur', 'Chi-Yu', 'Cyclizar', 'Dragapult', 'Dragonite', 'Espathra', 'Houndstone', 'Hydreigon', 'Koraidon',
+			'Miraidon', 'Noivern', 'Palafin', 'Roaring Moon', 'Salamence', 'Walking Wake', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass',
+		],
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
 				pokemon.hpType = pokemon.hpType.replace(/(Ghost|Fairy)/g, 'Psychic')
