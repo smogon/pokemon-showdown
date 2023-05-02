@@ -3377,7 +3377,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	basculinwhitestriped: {
 //		isNonstandard: "Unobtainable",
-		tier: "NFE",
+		tier: "PUBL",
 	},
 	basculegion: {
 //		isNonstandard: "Unobtainable",
