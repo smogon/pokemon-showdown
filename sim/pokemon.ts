@@ -1347,9 +1347,9 @@ export class Pokemon {
 				} else if (source.onPrimal) {
 					if (this.illusion) {
 						this.ability = '';
-						this.battle.add('-primal', this.illusion);
+						this.battle.add('-primal', this.illusion, species.requiredItem);
 					} else {
-						this.battle.add('-primal', this);
+						this.battle.add('-primal', this, species.requiredItem);
 					}
 				} else {
 					this.battle.add('-mega', this, apparentSpecies, species.requiredItem);
