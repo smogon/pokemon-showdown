@@ -633,7 +633,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	marill: {
-		tier: "8U",
+		tier: "7U",
 	},
 	azumarill: {
 		tier: "UU",
@@ -1342,7 +1342,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "ZU",
 	},
 	mothim: {
-		tier: "8U",
+		tier: "7U",
 	},
 	combee: {
 		tier: "LC",

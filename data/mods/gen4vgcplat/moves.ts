@@ -58,6 +58,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 		target: "allAdjacentFoes",
+		shortDesc: "45% chance to reduce spDef, Hits Both Enemies",
 		type: "Poison",
 	},
 
@@ -461,10 +462,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"priority": 0,
 		"isNonstandard": null,
 		"self": {},
-		"recoil": [
-			1,
-			3
-		],
+		shortDesc: "Has 1/3 Recoil",
+		"recoil": [1, 3],
 		"target": "normal"
 	},
 	"doubleedge": {
@@ -749,10 +748,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"priority": 0,
 		"isNonstandard": null,
 		"self": {},
-		"recoil": [
-			1,
-			3
-		],
+		shortDesc: "Has 1/3 Recoil",
+		"recoil": [1, 3],
 		"target": "normal"
 	},
 	"peck": {
@@ -945,10 +942,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"priority": 0,
 		"isNonstandard": null,
 		"self": {},
-		"recoil": [
-			1,
-			3
-		],
+		shortDesc: "Has 1/3 Recoil",
+		"recoil": [1, 3],
 		"target": "normal"
 	},
 	"stringshot": {
@@ -1201,6 +1196,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"pp": 3,
 		"type": "Normal",
 		"priority": 0,
+		shortDesc: "Lowers Def of both opponents by 2",
 		"isNonstandard": null,
 		"target": "allAdjacentFoes"
 	},
@@ -1212,6 +1208,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"pp": 3,
 		"type": "Normal",
 		"priority": 0,
+		shortDesc: "BANNED",
 		"isNonstandard": null,
 		"target": "self"
 	},
@@ -1245,6 +1242,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"pp": 3,
 		"type": "Normal",
 		"priority": 0,
+		shortDesc: "BANNED",
 		"isNonstandard": null,
 		"target": "self"
 	},
@@ -1257,6 +1255,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"type": "Normal",
 		"priority": 0,
 		"isNonstandard": null,
+		shortDesc: "Lowers accuracy of both opponents by 1",
 		"target": "allAdjacentFoes"
 	},
 	"confuseray": {
@@ -1419,6 +1418,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"pp": 20,
 		"type": "Poison",
 		"priority": 0,
+		shortDesc: "40% chance to poison target, Hits both enemies",
 		"isNonstandard": null,
 		"target": "allAdjacentFoes"
 	},
@@ -1433,6 +1433,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			chance: 40,
 			status: 'psn',
 		},
+		shortDesc: "40% chance to poison target, Hits both enemies",
 		"priority": 0,
 		"isNonstandard": null,
 		"target": "allAdjacentFoes"
@@ -1446,6 +1447,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"type": "Ground",
 		"priority": 0,
 		"isNonstandard": null,
+		secondary: {
+			chance: 20,
+			volatileStatus: 'flinch',
+		},
+		shortDesc: "20% chance to make the target flinch",
 		"target": "normal"
 	},
 	"fireblast": {
@@ -1600,6 +1606,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"type": "Poison",
 		"priority": 0,
 		"isNonstandard": null,
+		shortDesc: "Poisons both opponents",
 		"target": "allAdjacentFoes"
 	},
 	"barrage": {
@@ -1798,6 +1805,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"type": "Steel",
 		"priority": 0,
 		"isNonstandard": null,
+		secondary: {
+			chance: 20,
+			volatileStatus: 'flinch',
+		},
+		shortDesc: "20% chance to make the target flinch",
 		"target": "normal"
 	},
 	"sharpen": {
@@ -1941,6 +1953,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"type": "Ghost",
 		"priority": 0,
 		"isNonstandard": null,
+		shortDesc: "All enemy sleeping targets take 1/4 HP per turn",
 		"target": "allAdjacentFoes"
 	},
 	"flamewheel": {
@@ -2265,6 +2278,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			1,
 			3
 		],
+		shortDesc: "Has 33% Recoil",
 		"target": "normal"
 	},
 	"sandstorm": {
@@ -2325,7 +2339,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	"falseswipe": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 40,
+		"basePower": 150,
 		"category": "Physical",
 		"pp": 40,
 		"type": "Normal",
@@ -3151,10 +3165,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"priority": 0,
 		"isNonstandard": null,
 		"self": {},
-		"recoil": [
-			1,
-			3
-		],
+		shortDesc: "Has 1/3 Recoil",
+		"recoil": [1, 3],
 		"target": "normal"
 	},
 	"magiccoat": {
@@ -3495,10 +3507,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"priority": 0,
 		"isNonstandard": null,
 		"self": {},
-		"recoil": [
-			1,
-			3
-		],
+		shortDesc: "Has 1/3 Recoil",
+		"recoil": [1, 3],
 		"target": "normal"
 	},
 	"hydrocannon": {
@@ -3511,10 +3521,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"priority": 0,
 		"isNonstandard": null,
 		"self": {},
-		"recoil": [
-			1,
-			3
-		],
+		shortDesc: "Has 1/3 Recoil",
+		"recoil": [1, 3],
 		"target": "normal"
 	},
 	"meteormash": {
@@ -3593,10 +3601,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"priority": 0,
 		"isNonstandard": null,
 		"self": {},
-		"recoil": [
-			1,
-			3
-		],
+		shortDesc: "Has 1/3 Recoil",
+		"recoil": [1, 3],
 		"target": "normal"
 	},
 	"odorsleuth": {
@@ -3659,6 +3665,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"type": "Grass",
 		"priority": 0,
 		"isNonstandard": null,
+		shortDesc: "Puts both enemies to sleep",
 		"target": "allAdjacentFoes"
 	},
 	"tickle": {
@@ -3846,10 +3853,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"priority": 0,
 		"isNonstandard": null,
 		"self": {},
-		"recoil": [
-			1,
-			3
-		],
+		shortDesc: "Has 1/3 Recoil",
+		"recoil": [1, 3],
 		"target": "normal"
 	},
 	"bulkup": {
@@ -4027,10 +4032,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"priority": 0,
 		"isNonstandard": null,
 		"self": {},
-		"recoil": [
-			1,
-			3
-		],
+		shortDesc: "Has 1/3 Recoil",
+		"recoil": [1, 3],
 		"target": "normal"
 	},
 	"roost": {
@@ -4693,10 +4696,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"priority": 0,
 		"isNonstandard": null,
 		"self": {},
-		"recoil": [
-			1,
-			3
-		],
+		shortDesc: "Has 1/3 Recoil",
+		"recoil": [1, 3],
 		"target": "normal"
 	},
 	"nastyplot": {
@@ -4732,6 +4733,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			chance: 30,
 			volatileStatus: 'flinch',
 		},
+		shortDesc: "30% Flinch, Hits both foes",
 		"priority": 0,
 		"isNonstandard": null,
 		"target": "allAdjacentFoes"
@@ -4900,10 +4902,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"priority": 0,
 		"isNonstandard": null,
 		"self": {},
-		"recoil": [
-			1,
-			3
-		],
+		shortDesc: "Has 1/3 Recoil",
+		"recoil": [1, 3],
 		"target": "normal"
 	},
 	"discharge": {
@@ -4938,10 +4938,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"priority": 0,
 		"isNonstandard": null,
 		"self": {},
-		"recoil": [
-			1,
-			3
-		],
+		shortDesc: "Has 1/3 Recoil",
+		"recoil": [1, 3],
 		"target": "normal"
 	},
 	"powerwhip": {
@@ -4965,10 +4963,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"priority": 0,
 		"isNonstandard": null,
 		"self": {},
-		"recoil": [
-			1,
-			3
-		],
+		shortDesc: "Has 1/3 Recoil",
+		"recoil": [1, 3],
 		"target": "normal"
 	},
 	"crosspoison": {
@@ -5189,10 +5185,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		"priority": 0,
 		"isNonstandard": null,
 		"self": {},
-		"recoil": [
-			1,
-			3
-		],
+		shortDesc: "Has 1/3 Recoil",
+		"recoil": [1, 3],
 		"target": "normal"
 	},
 	"spacialrend": {
