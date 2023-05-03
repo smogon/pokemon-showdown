@@ -302,9 +302,9 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['[Gen 9] LC'],
 		banlist: [
-			'Crabrawler', 'Cyndaquil', 'Diglett', 'Drifloon', 'Foongus', 'Fuecoco', 'Glimmet', 'Gothita', 'Greavard', 'Larvesta',
-			'Magnemite', 'Mankey', 'Mareanie', 'Mudbray', 'Nymble', 'Oshawott', 'Pawniard', 'Quaxly', 'Sandile', 'Shellder',
-			'Shellos', 'Shroodle', 'Surskit', 'Tinkatink', 'Toedscool', 'Voltorb', 'Wattrel', 'Wingull', 'Zorua', 'Zorua-Hisui',
+			'Bramblin', 'Crabrawler', 'Cyndaquil', 'Diglett', 'Drifloon', 'Foongus', 'Fuecoco', 'Glimmet', 'Gothita', 'Greavard', 'Larvesta',
+			'Magnemite', 'Mankey', 'Mareanie', 'Meowth-Base', 'Mudbray', 'Numel', 'Nymble', 'Oshawott', 'Pawniard', 'Quaxly', 'Shellder',
+			'Shroodle', 'Stunky', 'Surskit', 'Tinkatink', 'Toedscool', 'Voltorb', 'Wattrel', 'Wingull', 'Zorua', 'Zorua-Hisui',
 		],
 	},
 	{
@@ -700,14 +700,17 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] Tier Shift",
-		desc: `Pok&eacute;mon below OU get their stats, excluding HP, boosted. UU/RUBL get +10, RU/NUBL get +20, NU/PUBL get +30, and PU or lower get +40.`,
+		desc: `Pok&eacute;mon below OU get their stats, excluding HP, boosted. UU/RUBL get +15, RU/NUBL get +20, NU/PUBL get +25, and PU or lower get +30.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3720396/">Tier Shift</a>`,
 		],
 
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'Tier Shift Mod', 'Sleep Moves Clause', 'Min Source Gen = 9'],
-		banlist: ['Chi-Yu', 'Espathra', 'Flutter Mane', 'Houndstone', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Moody', 'Arena Trap', 'Shadow Tag', 'Eviolite', 'Baton Pass', 'Shed Tail'],
+		banlist: [
+			'Chi-Yu', 'Cloyster', 'Espathra', 'Falinks', 'Flutter Mane', 'Houndstone', 'Iron Bundle', 'Koraidon', 'Miraidon',
+			'Moody', 'Arena Trap', 'Shadow Tag', 'Eviolite', 'Damp Rock', 'Heat Rock', 'Baton Pass', 'Shed Tail',
+		],
 	},
 	{
 		name: "[Gen 9] The Card Game",
@@ -718,8 +721,11 @@ export const Formats: FormatList = [
 
 		mod: 'thecardgame',
 		// searchShow: false,
-		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Min Source Gen = 9'],
-		banlist: ['Annihilape', 'Baxcalibur', 'Chi-Yu', 'Cyclizar', 'Dragonite', 'Espathra', 'Houndstone', 'Hydreigon', 'Koraidon', 'Miraidon', 'Noivern', 'Palafin', 'Walking Wake', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass'],
+		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Terastal Clause', 'Min Source Gen = 9'],
+		banlist: [
+			'Annihilape', 'Baxcalibur', 'Chi-Yu', 'Cyclizar', 'Dragapult', 'Dragonite', 'Espathra', 'Houndstone', 'Hydreigon', 'Koraidon',
+			'Miraidon', 'Noivern', 'Palafin', 'Roaring Moon', 'Salamence', 'Walking Wake', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass',
+		],
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
 				pokemon.hpType = pokemon.hpType.replace(/(Ghost|Fairy)/g, 'Psychic')
@@ -2185,6 +2191,9 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		team: 'randomFactory',
 		ruleset: ['Standard', 'Dynamax Clause'],
+		onBegin() {
+			this.add(`raw|<div class="broadcast-blue"><b>Battle Factory Tier: ${this.teamGenerator.factoryTier}</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 8] BSS Factory",
@@ -2326,6 +2335,9 @@ export const Formats: FormatList = [
 		mod: 'gen7',
 		team: 'randomFactory',
 		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
+		onBegin() {
+			this.add(`raw|<div class="broadcast-blue"><b>Battle Factory Tier: ${this.teamGenerator.factoryTier}</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 7] BSS Factory",
@@ -2373,6 +2385,9 @@ export const Formats: FormatList = [
 		searchShow: false,
 		challengeShow: false,
 		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
+		onBegin() {
+			this.add(`raw|<div class="broadcast-blue"><b>Battle Factory Tier: ${this.teamGenerator.factoryTier}</b></div>`);
+		},
 	},
 	{
 		name: "[Gen 5] Random Battle",
