@@ -23358,7 +23358,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		self: {
 			boosts: {
-				def: +1,
+				def: 1,
 			},
 		},
 		secondary: null,
