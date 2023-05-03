@@ -23342,4 +23342,27 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Tough",
 	},
+	electroplate: {
+		num: -39,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Electroplate",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
+		onHit(target) {
+			if (target.hasType('Steel')) return false;
+			if (!target.addType('Steel')) return false;
+			this.add('-start', target, 'typeadd', 'Steel', '[from] move: Electroplate');
+		},
+		boosts: {
+			def: 1,
+		},
+		secondary: null,
+		target: "normal",
+		type: "Electric",
+		zMove: {boost: {atk: 1, def: 2, spa: 1, spd: 1}},
+		contestType: "Clever",
+	},
 };
