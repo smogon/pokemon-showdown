@@ -47,7 +47,7 @@ export const Formats: FormatList = [
 		mod: 'gen9deluxe',
 		ruleset: ['DNU Clause', 'Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause'],
 		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
-		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass", "Smoliv", "Ledbya"]
+		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass", "Smoliv", "Ledyba"]
 	},
 
 	{
