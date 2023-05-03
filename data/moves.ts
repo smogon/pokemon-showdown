@@ -23365,4 +23365,22 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1, def: 2, spa: 1, spd: 1}},
 		contestType: "Clever",
 	},
+	prizewheel: {
+		num: -40,
+		accuracy: 100,
+		basePower: 100,
+		category: "Physical",
+		name: "Prize Wheel",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onAfterMove(source, target) {
+			const type = this.sample(["Bug", "Crystal", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water", "Nuclear"]);
+			this.add('-start', source, 'typechange', type);
+		},
+		secondary: null,
+		target: "normal",
+		type: "???",
+		contestType: "Clever",
+	},
 };
