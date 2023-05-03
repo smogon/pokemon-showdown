@@ -1084,7 +1084,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Baton Pass",
 		pp: 40,
 		priority: 0,
-		flags: {},
+		flags: {pivot: 1},
 		onTryHit(target) {
 			if (!this.canSwitch(target.side) || target.volatiles['commanded']) {
 				this.attrLastMove('[still]');
@@ -2368,7 +2368,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Chilly Reception",
 		pp: 10,
 		priority: 0,
-		flags: {},
+		flags: {pivot: 1},
 		// TODO show prepare message before the "POKEMON used MOVE!" message
 		// This happens even before sleep shows its "POKEMON is fast asleep." message
 		weather: 'snow',
@@ -3897,7 +3897,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					priority: 0,
 					flags: {futuremove: 1},
 					effectType: 'Move',
-					type: 'Steel',
+					type: source.ability === 'preordained' ? '???' : 'Steel',
 				},
 			});
 			this.add('-start', source, 'Doom Desire');
@@ -5813,7 +5813,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Flip Turn",
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, pivot: 1},
 		selfSwitch: true,
 		secondary: null,
 		target: "normal",
@@ -6457,7 +6457,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					flags: {allyanim: 1, futuremove: 1},
 					ignoreImmunity: false,
 					effectType: 'Move',
-					type: 'Psychic',
+					type: source.ability === 'preordained' ? '???' : 'Psychic',
 				},
 			});
 			this.add('-start', source, 'move: Future Sight');
@@ -13366,7 +13366,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Parting Shot",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1},
+		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, pivot: 1},
 		onHit(target, source, move) {
 			const success = this.boost({atk: -1, spa: -1}, target, source);
 			if (!success && !target.hasAbility('mirrorarmor')) {
@@ -16488,7 +16488,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Shed Tail",
 		pp: 10,
 		priority: 0,
-		flags: {},
+		flags: {pivot: 1},
 		volatileStatus: 'substitute',
 		onTryHit(source) {
 			if (!this.canSwitch(source.side)) {
@@ -19572,7 +19572,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Teleport",
 		pp: 20,
 		priority: -6,
-		flags: {},
+		flags: {pivot: 1},
 		onTry(source) {
 			return !!this.canSwitch(source.side);
 		},
@@ -20558,7 +20558,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "U-turn",
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, pivot: 1},
 		selfSwitch: true,
 		secondary: null,
 		target: "normal",
@@ -20791,7 +20791,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Volt Switch",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, pivot: 1},
 		selfSwitch: true,
 		secondary: null,
 		target: "normal",

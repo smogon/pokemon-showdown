@@ -33,6 +33,175 @@ Ratings and how they work:
 */
 
 export const Abilities: {[abilityid: string]: AbilityData} = {
+	/////////
+	// CommunityUsed Abilities
+	/////////
+	witheringgaze: {
+		onAnyTryMove(this, source, target, move) {
+			if (source === this.effectState.target) return;
+			if (move.flags['pivot']) {
+				this.add('-fail', source, 'ability: Withering Gaze', '[of] ' + this.effectState.target);
+				return false;
+			}
+		},
+		name: "Withering Gaze",
+		rating: 3,
+		num: 3000,
+	},
+	polished: {
+		onDamagingHit(this, damage, target, source, move) {
+			if (target.getMoveHitData(move).typeMod < 0) {
+				this.boost({spe: 1}, target);
+			}
+		},
+		name: "Polished",
+		rating: 3,
+		num: 3001,
+	},
+	preordained: {
+		onStart(pokemon) {
+			for (const target of pokemon.foes()) {
+				for (const moveSlot of target.moveSlots) {
+					const move = this.dex.moves.get(moveSlot.move);
+					if (move.category === 'Status') continue;
+					const moveType = move.id === 'hiddenpower' ? target.hpType : move.type;
+					if (
+						this.dex.getImmunity(moveType, pokemon) && this.dex.getEffectiveness(moveType, pokemon) > 0 ||
+						move.ohko
+					) {
+						this.add('-ability', pokemon, 'Pre-Ordained');
+						return;
+					}
+				}
+			}
+
+			let warnMoves: (Move | Pokemon)[][] = [];
+			let warnBp = 1;
+			for (const target of pokemon.foes()) {
+				for (const moveSlot of target.moveSlots) {
+					const move = this.dex.moves.get(moveSlot.move);
+					let bp = move.basePower;
+					if (move.ohko) bp = 150;
+					if (move.id === 'counter' || move.id === 'metalburst' || move.id === 'mirrorcoat') bp = 120;
+					if (bp === 1) bp = 80;
+					if (!bp && move.category !== 'Status') bp = 80;
+					if (bp > warnBp) {
+						warnMoves = [[move, target]];
+						warnBp = bp;
+					} else if (bp === warnBp) {
+						warnMoves.push([move, target]);
+					}
+				}
+			}
+			if (!warnMoves.length) return;
+			const [warnMoveName, warnTarget] = this.sample(warnMoves);
+			this.add('-activate', pokemon, 'ability: Pre-Ordained', warnMoveName, '[of] ' + warnTarget);
+
+			for (const target of pokemon.foes()) {
+				if (target.item) {
+					this.add('-item', target, target.getItem().name, '[from] ability: Pre-Ordained', '[of] ' + pokemon, '[identify]');
+				}
+			}
+		},
+		// future sight and doom desire changes implemented in moves.ts			
+		name: "Pre-Ordained",
+		rating: 3,
+		num: 3002,
+	},
+	improvjazz: {
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Improv Jazz');
+			this.add('-message', pokemon.name + ' is jamming out!');
+			// permanently apply torment
+			pokemon.addVolatile('torment');
+		},
+		onBasePowerPriority: 8,
+		onBasePower(this, relayVar, source, target, move) {
+			return this.chainModify(1.5);
+		},
+		name: "Improv Jazz",
+		rating: 3,
+		num: 3003,
+	},
+	shatteringform:{
+		// physical moves give the user -1 defense but set up a layer of spikes
+		onDamagingHit(damage, target, source, move) {
+			if (move.category === 'Physical') {
+				this.boost({def: -1}, source);
+				source.side.addSideCondition('spikes');
+			}
+		},
+		name: "Shattering Form",
+		rating: 3,
+		num: 3004,
+	},
+	envenom: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Poison') {
+				this.debug('Envenom boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Poison') {
+				this.debug('Envenom boost');
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Envenom",
+		rating: 3.5,
+		num: 3005,
+	},
+	inertia: {
+		onDamagingHit(damage, target, source, move) {
+			if (move.category === 'Physical') {
+				this.boost({spe: 1}, source);
+			}
+		},
+		name: "Inertia",
+		rating: 3,
+		num: 3006,
+	},
+	smithing: {
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Steel') {
+				if (!this.boost({atk: 1})) {
+					this.add('-immune', target, '[from] ability: Smithing');
+				}
+				return null;
+			}
+		},
+		onAllyTryHitSide(target, source, move) {
+			if (source === this.effectState.target || !target.isAlly(source)) return;
+			if (move.type === 'Steel') {
+				this.boost({atk: 1}, this.effectState.target);
+			}
+		},
+		isBreakable: true,
+		name: "Smithing",
+		rating: 3,
+		num: 3007,
+	},
+	cometfist: {
+		onModifyMovePriority: -1,
+		onModifyMove(move) {
+			if (move.flags['punch']) {
+				move.category = 'Special';
+			}
+		},
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['punch']) {
+				return this.chainModify(1.2);
+			}
+		},
+		name: "Comet Fist",
+		rating: 3,
+		num: 3008,
+	},
 	noability: {
 		isNonstandard: "Past",
 		name: "No Ability",
