@@ -23351,7 +23351,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
-		onHit(target, source) {
+		onAfterMove(source) {
 			if (source.hasType('Steel')) return false;
 			if (!source.addType('Steel')) return false;
 			this.add('-start', source, 'typeadd', 'Steel', '[from] move: Electroplate');
@@ -23362,7 +23362,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 		},
 		secondary: null,
-		target: "normal",
+		target: "self",
 		type: "Electric",
 		zMove: {boost: {atk: 1, def: 2, spa: 1, spd: 1}},
 		contestType: "Clever",
@@ -23376,7 +23376,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onAfterMove(source) {
+		onHit(target, source) {
 			let type = this.sample(["Bug", "Crystal", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water", "Nuclear"]);
 			this.add('-start', source, 'typechange', type);
 			source.setType(type);
