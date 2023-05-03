@@ -47,4 +47,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Corrosion"},
 	},
+	cacturne: {
+		inherit: true,
+		abilities: {0: "Sand Veil", 1: "Adaptability", H: "Water Absorb"},
+	},
 };
