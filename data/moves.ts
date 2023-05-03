@@ -23374,9 +23374,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onAfterMove(source, target) {
-			const type = this.sample(["Bug", "Crystal", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water", "Nuclear"]);
-			this.add('-start', source, 'typechange', type);
+		onHit(target) {
+			let type = this.sample(["Bug", "Crystal", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water", "Nuclear"]);
+			this.add('-start', target, 'typechange', type);
 		},
 		secondary: null,
 		target: "normal",
