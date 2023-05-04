@@ -19774,6 +19774,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	aegislashallirahunter: {
 		num: 9059,
 		name: "Aegislash-Allira-Hunter",
+		baseSpecies: "Aegislash-Allira",
 		types: ["Grass", "Water"],
 		baseStats: {hp: 60, atk: 130, def: 60, spa: 110, spd: 60, spe: 80},
 		abilities: {0: "Stance Change"},

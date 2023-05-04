@@ -247,6 +247,30 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (this.effectState.source?.isActive || gmaxEffect) pokemon.tryTrap();
 		},
 	},
+	puppeteering: {
+		name: 'puppeteering',
+		duration: -1,
+		onStart(pokemon, source) {
+			this.add('-start', pokemon, 'puppeteering', '[from] move: ' + this.effectState.sourceEffect, '[of] ' + source);
+			pokemon.addVolatile('torment');
+		},
+		onResidualOrder: 13,
+		onResidual(pokemon) {
+			if (!this.effectState.source?.isActive || this.effectState.source.hp <= 0 || !this.effectState.source.activeTurns) {
+				pokemon.removeVolatile('puppeteering');
+				this.add('-end', pokemon, 'puppeteering', '[silent]');
+				pokemon.removeVolatile('torment');
+				return;
+			}
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, this.effectState.sourceEffect, '[puppeteering]');
+		},
+		onTrapPokemon(pokemon) {
+			const gmaxEffect = ['gmaxcentiferno', 'gmaxsandblast'].includes(this.effectState.sourceEffect.id);
+			if (this.effectState.source?.isActive || gmaxEffect) pokemon.tryTrap();
+		},
+	},
 	lockedmove: {
 		// Outrage, Thrash, Petal Dance...
 		name: 'lockedmove',

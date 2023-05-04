@@ -202,6 +202,18 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: 3008,
 	},
+	soullessheart: {
+		onAnyFaintPriority: 1,
+		onAnyFaint(target) {
+			let stat = 'def';
+			if (this.runEvent('TryStat', this.effectState.target, 'spd')) stat = 'spd';
+			this.boost({[stat]: 1}, this.effectState.target);
+		},
+		name: "Soulless Heart",
+		rating: 3,
+		num: 3009,
+	},
+
 	noability: {
 		isNonstandard: "Past",
 		name: "No Ability",
@@ -4290,10 +4302,16 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	stancechange: {
 		onModifyMovePriority: 1,
 		onModifyMove(move, attacker, defender) {
-			if (attacker.species.baseSpecies !== 'Aegislash' || attacker.transformed) return;
-			if (move.category === 'Status' && move.id !== 'kingsshield') return;
-			const targetForme = (move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade');
-			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
+			if ((attacker.species.baseSpecies !== 'Aegislash' && attacker.species.baseSpecies !== 'Aegislash-Allira') || attacker.transformed) return;
+			if (attacker.species.baseSpecies === 'Aegislash') {
+				if (move.category === 'Status' && move.id !== 'kingsshield') return;
+				const targetForme = (move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade');
+				if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
+			} else {
+				if (move.category === 'Physical' && move.id !== 'wavestrident') return;
+				const targetForme = (move.id === 'wavestrident' ? 'Aegislash-Allira-Hunter' : 'Aegislash-Allira');
+				if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
+			}
 		},
 		isPermanent: true,
 		name: "Stance Change",
