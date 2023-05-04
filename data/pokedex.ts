@@ -27504,4 +27504,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Delta Swampertite",
 	},
+	torkoaldelta: {
+		tags: ["Insurgence"],
+		num: 324,
+		name: "Torkoal-Delta",
+		baseSpecies: "Torkoal",
+		forme: "Delta",
+		types: ["Poison"],
+		baseStats: {hp: 45, atk: 49, def: 49, spa: 65, spd: 65, spe: 45},
+		abilities: {0: "Pollutant", 1: "Sturdy", H: "Shell Armor"},
+		heightm: 0.5,
+		weightkg: 80.4,
+		color: "Purple",
+		eggGroups: ["Field"],
+	},
 };
