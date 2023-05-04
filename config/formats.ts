@@ -59,6 +59,15 @@ export const Formats: FormatList = [
 		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass"]
 	},
 
+	{
+		name: "[Gen 9] CU",
+
+		mod: 'gen9cu',
+		ruleset: ['Standard', 'Z-Move Clause', 'Terastal Clause'],
+		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
+		"PUBL", "PU", "NFE", "LC",],
+	},
+
 	// {
 	// 	name: "[Gen 9] DNU Draft League",
 
