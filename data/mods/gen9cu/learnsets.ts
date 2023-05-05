@@ -94432,6 +94432,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	pallaidon: {
 		learnset: {
+			tridentstrikes: ["9T"],
 			iciclespear: ["9T"],
 			rockblast: ["9T"],
 			watershuriken: ["9T"],
@@ -94477,6 +94478,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	corotrek: {
 		learnset: {
+			twixpendant: ["9T"],
 			sacredsword: ["9T"],
 			superpower: ["9T"],
 			closecombat: ["9T"],
@@ -94608,6 +94610,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	veltrilokist: {
 		learnset: {
+			puppeteering: ["9T"],
 			bugbuzz: ["9T"],
 			signalbeam: ["9T"],
 			uturn: ["9T"],
@@ -94630,6 +94633,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	salamenceallira: {
 		learnset: {
+			moltenslam: ["9T"],
 			heavyslam: ["9T"],
 			earthquake: ["9T"],
 			scorchingsands: ["9T"],
@@ -95150,6 +95154,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	tabucat: {
 		learnset: {
+			arpeggio: ["9T"],
 			trailblaze: ["9T"],
 			playrough: ["9T"],
 			ironhead: ["9T"],
@@ -95300,6 +95305,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	ceramimik: {
 		learnset: {
+			shatter: ["9T"],
+			patchwork: ["9T"],
 			earthquake : ["9T"],
 			earthpower: ["9T"],
 			scorchingsands: ["9T"],
@@ -95326,6 +95333,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	crystalier: {
 		learnset: {
+			soulshards: ["9T"],
 			auroraveil: ["9T"],
 			blizzard: ["9T"],
 			bodypress: ["9T"],
@@ -95642,6 +95650,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	geishard: {
 		learnset: {
+			shardexpulsion: ["9T"],
 			willowisp: ["9T"],
 			shadowball: ["9T"],
 			poltergeist: ["9T"],
@@ -95661,7 +95670,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			thief: ["9T"],
 			torment: ["9T"],
 			bodyslam: ["9T"],
-			shardexpulsion: ["9T"],
 		},
 	},
 	shelgonallira: {
@@ -95775,6 +95783,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	aegislashallira: {
 		learnset: {
+			wavestrident: ["9T"],
+			algaelatch: ["9T"],
 			powerwhip: ["9T"],
 			toxic: ["9T"],
 			surf: ["9T"],
@@ -95871,10 +95881,12 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			whirpool: ["9T"],
 			iceball: ["9T"],
 			defensecurl: ["9T"],
+			stabilize: ["9T"],
 		},
 	},
 	acrolaos: {
 		learnset: {
+			hoplon: ["9T"],
 			closecombat: ["9T"],
 			bulkup: ["9T"],
 			circlethrow: ["9T"],
@@ -95897,6 +95909,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	titanoso: {
 		learnset: {
+			earthpress: ["9T"],
 			slackoff: ["9T"],
 			rest: ["9T"],
 			sleeptalk: ["9T"],
@@ -96023,6 +96036,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	archanchant: {
 		learnset: {
+			tempestarrow: ["9T"],
 			spiritbreak: ["9T"],
 			dualwingbeat: ["9T"],
 			echoedvoice: ["9T"],
