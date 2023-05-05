@@ -80,7 +80,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Dialga-Origin"],
 		num: 1777,
 		gen: 8,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	adamantorb: {
 		name: "Adamant Orb",
@@ -97,7 +97,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Dialga"],
 		num: 135,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	adrenalineorb: {
 		name: "Adrenaline Orb",
@@ -823,7 +823,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 16,
 		gen: 4,
 		isPokeball: true,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	chestoberry: {
 		name: "Chesto Berry",
@@ -1147,7 +1147,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 210,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	damprock: {
 		name: "Damp Rock",
@@ -1335,7 +1335,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Dragon",
 		num: 311,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	dragonfang: {
 		name: "Dragon Fang",
@@ -1423,7 +1423,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Dark",
 		num: 312,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	dreamball: {
 		name: "Dream Ball",
@@ -1490,7 +1490,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Ground",
 		num: 305,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	eeviumz: {
 		name: "Eevium Z",
@@ -1652,7 +1652,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 208,
 		gen: 3,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	eviolite: {
 		name: "Eviolite",
@@ -1876,7 +1876,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Fighting",
 		num: 303,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	flameorb: {
 		name: "Flame Orb",
@@ -1912,7 +1912,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Fire",
 		num: 298,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	floatstone: {
 		name: "Float Stone",
@@ -2077,7 +2077,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1582,
 		gen: 8,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	galaricawreath: {
 		name: "Galarica Wreath",
@@ -2087,7 +2087,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1592,
 		gen: 8,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	galladite: {
 		name: "Galladite",
@@ -2342,7 +2342,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Giratina-Origin"],
 		num: 1779,
 		gen: 8,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	griseousorb: {
 		name: "Griseous Orb",
@@ -2359,7 +2359,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Giratina"],
 		num: 112,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	groundgem: {
 		name: "Ground Gem",
@@ -2623,7 +2623,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Ice",
 		num: 302,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	iciumz: {
 		name: "Icium Z",
@@ -2676,7 +2676,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Bug",
 		num: 308,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	ironball: {
 		name: "Iron Ball",
@@ -2715,7 +2715,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Steel",
 		num: 313,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	jabocaberry: {
 		name: "Jaboca Berry",
@@ -2735,7 +2735,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 211,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	jawfossil: {
 		name: "Jaw Fossil",
@@ -2814,7 +2814,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 687,
 		gen: 6,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	kelpsyberry: {
 		name: "Kelpsy Berry",
@@ -3242,7 +3242,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Palkia-Origin"],
 		num: 1778,
 		gen: 8,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	lustrousorb: {
 		name: "Lustrous Orb",
@@ -3259,7 +3259,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Palkia"],
 		num: 136,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	luxuryball: {
 		name: "Luxury Ball",
@@ -3406,7 +3406,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 688,
 		gen: 6,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	marshadiumz: {
 		name: "Marshadium Z",
@@ -3459,7 +3459,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Grass",
 		num: 301,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	medichamite: {
 		name: "Medichamite",
@@ -3672,7 +3672,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 209,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	mimikiumz: {
 		name: "Mimikium Z",
@@ -3704,7 +3704,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Psychic",
 		num: 307,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	miracleseed: {
 		name: "Miracle Seed",
@@ -3992,7 +3992,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 500,
 		gen: 4,
 		isPokeball: true,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	passhoberry: {
 		name: "Passho Berry",
@@ -4184,7 +4184,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Fairy",
 		num: 644,
 		gen: 6,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	plumefossil: {
 		name: "Plume Fossil",
@@ -4908,7 +4908,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 212,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	rustedshield: {
 		name: "Rusted Shield",
@@ -4922,7 +4922,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Zamazenta-Crowned"],
 		num: 1104,
 		gen: 8,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	rustedsword: {
 		name: "Rusted Sword",
@@ -4936,7 +4936,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Zacian-Crowned"],
 		num: 1103,
 		gen: 8,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	sablenite: {
 		name: "Sablenite",
@@ -4968,7 +4968,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 5,
 		gen: 1,
 		isPokeball: true,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	safetygoggles: {
 		name: "Safety Goggles",
@@ -5275,7 +5275,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Flying",
 		num: 306,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	slowbronite: {
 		name: "Slowbronite",
@@ -5421,7 +5421,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Water",
 		num: 299,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	spookyplate: {
 		name: "Spooky Plate",
@@ -5442,7 +5442,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Ghost",
 		num: 310,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	sportball: {
 		name: "Sport Ball",
@@ -5450,7 +5450,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 499,
 		gen: 2,
 		isPokeball: true,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	starfberry: {
 		name: "Starf Berry",
@@ -5607,7 +5607,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Rock",
 		num: 309,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	strangeball: {
 		name: "Strange Ball",
@@ -5615,7 +5615,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 1785,
 		gen: 8,
 		isPokeball: true,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	strawberrysweet: {
 		name: "Strawberry Sweet",
@@ -5808,7 +5808,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Poison",
 		num: 304,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	tr00: {
 		name: "TR00",
@@ -7192,7 +7192,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Electric",
 		num: 300,
 		gen: 4,
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 	},
 	zoomlens: {
 		name: "Zoom Lens",

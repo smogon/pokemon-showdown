@@ -19941,10 +19941,10 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	},
 	scorsmith: {
 		num: 9056,
-		name: " Scorsmith",
+		name: "Scorsmith",
 		types: ["Fire", "Fighting"],
 		baseStats: {hp: 105, atk: 125, def: 100, spa: 70, spd: 85, spe: 65},
-		abilities: {0: "Heavy Metal", 1: "Mold Breaker", H: "Steelworker"},
+		abilities: {0: "Heavy Metal", 1: "Mold Breaker", H: "Smithing"},
 		heightm: 2.5,
 		weightkg: 150,
 		color: "Gray",

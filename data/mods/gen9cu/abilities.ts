@@ -525,7 +525,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				source.abilityState.battleBondTriggered = true;
 			}
 		},
-		isNonstandard: "Unobtainable",
+		// isNonstandard: "Unobtainable",
 		isPermanent: true,
 		name: "Battle Bond",
 		rating: 3.5,

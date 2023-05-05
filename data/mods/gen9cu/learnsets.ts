@@ -95002,6 +95002,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			screech: ["9T"],
 			secretpower: ["9T"],
 			snore: ["9T"],
+			sunnyday: ["9T"],
 		},
 	},
 	zepblim: {
