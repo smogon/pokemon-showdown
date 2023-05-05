@@ -94692,7 +94692,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			brickbreak: ["9T"],
 			drainpunch: ["9T"],
 			machpunch: ["9T"],
-			twixpendent: ["9T"],
+			twixpendant: ["9T"],
 			iciclecrash: ["9T"],
 			iciclespear: ["9T"],
 			icespinner: ["9T"],
