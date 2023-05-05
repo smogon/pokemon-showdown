@@ -2171,74 +2171,74 @@ export const Formats: FormatList = [
 		section: "Retro Other Metagames",
 		column: 2,
 	},
-	{
-		name: "[Gen 7] Mix and Mega",
-		desc: `Mega Stones and Primal Orbs can be used on almost any Pok&eacute;mon with no Mega Evolution limit.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8778656/">USM Mix and Mega</a>`,
-		],
+	// {
+	// 	name: "[Gen 7] Mix and Mega",
+	// 	desc: `Mega Stones and Primal Orbs can be used on almost any Pok&eacute;mon with no Mega Evolution limit.`,
+	// 	threads: [
+	// 		`&bullet; <a href="https://www.smogon.com/forums/posts/8778656/">USM Mix and Mega</a>`,
+	// 	],
 
-		mod: 'gen7mixandmega',
-		ruleset: ['Standard OMs', 'Mega Rayquaza Clause', 'Sleep Clause Mod'],
-		banlist: ['Shadow Tag', 'Gengarite', 'Baton Pass', 'Electrify'],
-		restricted: [
-			'Arceus', 'Deoxys', 'Dialga', 'Dragonite', 'Giratina', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem', 'Landorus-Therian', 'Lugia',
-			'Lunala', 'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma', 'Palkia', 'Pheromosa', 'Rayquaza', 'Regigigas', 'Reshiram', 'Shuckle',
-			'Slaking', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zekrom',
-			'Beedrillite', 'Blazikenite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Ultranecrozium Z',
-		],
-		unbanlist: ['Deoxys-Defense', 'Kyurem-Base', 'Necrozma-Base'],
-		onValidateTeam(team) {
-			const itemTable = new Set<ID>();
-			for (const set of team) {
-				const item = this.dex.items.get(set.item);
-				if (!item.exists) continue;
-				if (itemTable.has(item.id) && (item.megaStone || item.onPrimal)) {
-					return [
-						`You are limited to one of each Mega Stone and Primal Orb.`,
-						`(You have more than one ${item.name}.)`,
-					];
-				}
-				itemTable.add(item.id);
-			}
-		},
-		onValidateSet(set) {
-			const species = this.dex.species.get(set.species);
-			const item = this.dex.items.get(set.item);
-			if (!item.megaEvolves && !item.onPrimal && item.id !== 'ultranecroziumz') return;
-			if (species.baseSpecies === item.megaEvolves || (item.onPrimal && item.itemUser?.includes(species.baseSpecies)) ||
-				(species.name.startsWith('Necrozma-') && item.id === 'ultranecroziumz')) {
-				return;
-			}
-			if (this.ruleTable.isRestricted(`item:${item.id}`) || this.ruleTable.isRestrictedSpecies(species) ||
-				set.ability === 'Power Construct') {
-				return [`${set.species} is not allowed to hold ${item.name}.`];
-			}
-		},
-		onBegin() {
-			for (const pokemon of this.getAllPokemon()) {
-				pokemon.m.originalSpecies = pokemon.baseSpecies.name;
-			}
-		},
-		onSwitchIn(pokemon) {
-			// @ts-ignore
-			const oMegaSpecies = this.dex.species.get(pokemon.species.originalMega);
-			if (oMegaSpecies.exists && pokemon.m.originalSpecies !== oMegaSpecies.baseSpecies) {
-				this.add('-start', pokemon, oMegaSpecies.requiredItem || oMegaSpecies.requiredMove, '[silent]');
-				const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
-				if (oSpecies.types.length !== pokemon.species.types.length || oSpecies.types[1] !== pokemon.species.types[1]) {
-					this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
-				}
-			}
-		},
-		onSwitchOut(pokemon) {
-			// @ts-ignore
-			const oMegaSpecies = this.dex.species.get(pokemon.species.originalMega);
-			if (oMegaSpecies.exists && pokemon.m.originalSpecies !== oMegaSpecies.baseSpecies) {
-				this.add('-start', pokemon, oMegaSpecies.requiredItem || oMegaSpecies.requiredMove, '[silent]');
-			}
-		},
-	},
+	// 	mod: 'gen7mixandmega',
+	// 	ruleset: ['Standard OMs', 'Mega Rayquaza Clause', 'Sleep Clause Mod'],
+	// 	banlist: ['Shadow Tag', 'Gengarite', 'Baton Pass', 'Electrify'],
+	// 	restricted: [
+	// 		'Arceus', 'Deoxys', 'Dialga', 'Dragonite', 'Giratina', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem', 'Landorus-Therian', 'Lugia',
+	// 		'Lunala', 'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma', 'Palkia', 'Pheromosa', 'Rayquaza', 'Regigigas', 'Reshiram', 'Shuckle',
+	// 		'Slaking', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zekrom',
+	// 		'Beedrillite', 'Blazikenite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Ultranecrozium Z',
+	// 	],
+	// 	unbanlist: ['Deoxys-Defense', 'Kyurem-Base', 'Necrozma-Base'],
+	// 	onValidateTeam(team) {
+	// 		const itemTable = new Set<ID>();
+	// 		for (const set of team) {
+	// 			const item = this.dex.items.get(set.item);
+	// 			if (!item.exists) continue;
+	// 			if (itemTable.has(item.id) && (item.megaStone || item.onPrimal)) {
+	// 				return [
+	// 					`You are limited to one of each Mega Stone and Primal Orb.`,
+	// 					`(You have more than one ${item.name}.)`,
+	// 				];
+	// 			}
+	// 			itemTable.add(item.id);
+	// 		}
+	// 	},
+	// 	onValidateSet(set) {
+	// 		const species = this.dex.species.get(set.species);
+	// 		const item = this.dex.items.get(set.item);
+	// 		if (!item.megaEvolves && !item.onPrimal && item.id !== 'ultranecroziumz') return;
+	// 		if (species.baseSpecies === item.megaEvolves || (item.onPrimal && item.itemUser?.includes(species.baseSpecies)) ||
+	// 			(species.name.startsWith('Necrozma-') && item.id === 'ultranecroziumz')) {
+	// 			return;
+	// 		}
+	// 		if (this.ruleTable.isRestricted(`item:${item.id}`) || this.ruleTable.isRestrictedSpecies(species) ||
+	// 			set.ability === 'Power Construct') {
+	// 			return [`${set.species} is not allowed to hold ${item.name}.`];
+	// 		}
+	// 	},
+	// 	onBegin() {
+	// 		for (const pokemon of this.getAllPokemon()) {
+	// 			pokemon.m.originalSpecies = pokemon.baseSpecies.name;
+	// 		}
+	// 	},
+	// 	onSwitchIn(pokemon) {
+	// 		// @ts-ignore
+	// 		const oMegaSpecies = this.dex.species.get(pokemon.species.originalMega);
+	// 		if (oMegaSpecies.exists && pokemon.m.originalSpecies !== oMegaSpecies.baseSpecies) {
+	// 			this.add('-start', pokemon, oMegaSpecies.requiredItem || oMegaSpecies.requiredMove, '[silent]');
+	// 			const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
+	// 			if (oSpecies.types.length !== pokemon.species.types.length || oSpecies.types[1] !== pokemon.species.types[1]) {
+	// 				this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
+	// 			}
+	// 		}
+	// 	},
+	// 	onSwitchOut(pokemon) {
+	// 		// @ts-ignore
+	// 		const oMegaSpecies = this.dex.species.get(pokemon.species.originalMega);
+	// 		if (oMegaSpecies.exists && pokemon.m.originalSpecies !== oMegaSpecies.baseSpecies) {
+	// 			this.add('-start', pokemon, oMegaSpecies.requiredItem || oMegaSpecies.requiredMove, '[silent]');
+	// 		}
+	// 	},
+	// },
 	{
 		name: "[Gen 7] STABmons",
 		desc: `Pok&eacute;mon can use any move of their typing, in addition to the moves they can normally learn.`,
