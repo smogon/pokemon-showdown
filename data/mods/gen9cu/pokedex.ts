@@ -19965,7 +19965,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 9058,
 		name: "Salackle",
 		types: ["Fire", "Dragon"],
-		baseStats: {hp: 117, atk: 120, def: 100, spa: 24, spd: 90, spe: 68},
+		baseStats: {hp: 117, atk: 111, def: 60, spa: 64, spd: 60, spe: 68},
 		abilities: {0: "Shed Skin", 1: "Flash Fire", H: "Dry Skin"},
 		heightm: 2.3,
 		weightkg: 50,

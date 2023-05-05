@@ -157,7 +157,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	inertia: {
 		onDamagingHit(damage, target, source, move) {
 			if (move.category === 'Physical') {
-				this.boost({spe: 1}, source);
+				this.boost({spe: 1}, target);
 			}
 		},
 		name: "Inertia",
