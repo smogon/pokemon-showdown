@@ -69,7 +69,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 						this.dex.getImmunity(moveType, pokemon) && this.dex.getEffectiveness(moveType, pokemon) > 0 ||
 						move.ohko
 					) {
-						this.add('-ability', pokemon, 'Pre-Ordained');
+						this.add('-ability', pokemon, 'Anticipation');
 						return;
 					}
 				}
@@ -95,11 +95,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 			if (!warnMoves.length) return;
 			const [warnMoveName, warnTarget] = this.sample(warnMoves);
-			this.add('-activate', pokemon, 'ability: Pre-Ordained', warnMoveName, '[of] ' + warnTarget);
+			this.add('-activate', pokemon, 'ability: Forewarn', warnMoveName, '[of] ' + warnTarget);
 
 			for (const target of pokemon.foes()) {
 				if (target.item) {
-					this.add('-item', target, target.getItem().name, '[from] ability: Pre-Ordained', '[of] ' + pokemon, '[identify]');
+					this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon, '[identify]');
 				}
 			}
 		},

@@ -1263,6 +1263,12 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 			shortDesc: "This Pokemon's non-damaging moves have their priority increased by 1.",
 		},
 	},
+	preordained: {
+		name: "Pre-Ordained",
+		desc: "Gives effects of anticipation, forewarn, and frisk all at once. Additionally, when this pokemon uses future sight or doom desire, the move ignores type effectiveness.",
+		shortDesc: "Gives effects of anticipation, forewarn, and frisk all at once. Future sight and doom desire ignore type effectiveness.",
+		start: "  The battle is decided!",
+	},
 	pressure: {
 		name: "Pressure",
 		desc: "If this Pokemon is the target of an opposing Pokemon's move, that move loses one additional PP. Imprison, Snatch, and Tera Blast also lose one additional PP when used by an opposing Pokemon, but Sticky Web does not.",
