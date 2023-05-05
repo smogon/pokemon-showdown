@@ -712,6 +712,20 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		// isNonstandard: "Past",
 	},
+	Ledyite: {
+		name: "Ledyite",
+		spritenum: 625,
+		megaStone: "Lediary-Mega",
+		megaEvolves: "Lediary",
+		itemUser: ["Lediary"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 15467,
+		gen: 9,
+		// isNonstandard: "Past",
+	},
 	cellbattery: {
 		name: "Cell Battery",
 		spritenum: 60,
