@@ -19353,7 +19353,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	},
 	pallaidon: {
 		num: 9003,
-		name: "Palláidon",
+		name: "Pallaidon",
 		types: ["Water", "Steel"],
 		baseStats: {hp: 70, atk: 95, def: 80, spa: 90, spd: 60, spe: 128},
 		abilities: {0: "Oblivious", H: "Technician"},
