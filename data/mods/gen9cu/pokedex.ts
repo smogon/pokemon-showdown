@@ -19725,9 +19725,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		eggGroups: ["Amorphous"],
 	},
-	shelgonallirian: {
+	shelgonallira: {
 		num: 9037,
-		name: "Shelgon-Allirian",
+		name: "Shelgon-Allira",
 		types: ["Ground", "Steel"],
 		baseStats: {hp: 70, atk: 90, def: 110, spa: 60, spd: 75, spe: 15},
 		abilities: {0: "Guts", H: "Flash Fire"},
@@ -19736,9 +19736,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Dragon"],
 	},
-	bagonallirian: {
+	bagonallira: {
 		num: 9038,
-		name: "Bagon-Allirian",
+		name: "Bagon-Allira",
 		types: ["Ground"],
 		baseStats: {hp: 60, atk: 70, def: 30, spa: 30, spd: 30, spe: 80},
 		abilities: {0: "Guts", H: "Flash Fire"},

@@ -94367,7 +94367,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			tickle : ["9T"],
 		},
 	},
-	gothitelleallirian: {
+	gothitelleallira: {
 		learnset: {
 			pound: ["9T"],
 			confusion: ["9T"],
@@ -94497,7 +94497,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			bulkup: ["9T"],
 		},
 	},
-	typhlosionallirian: {
+	typhlosionallira: {
 		learnset: {
 			gyroball: ["9T"],
 			recover: ["9T"],
@@ -94628,7 +94628,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			reflect: ["9T"],
 		},
 	},
-	salamenceallirian: {
+	salamenceallira: {
 		learnset: {
 			heavyslam: ["9T"],
 			earthquake: ["9T"],
@@ -95223,7 +95223,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			flashcannon: ["9T"],
 		},
 	},
-	magearnaallirian: {
+	magearnaallira: {
 		learnset: {
 			agility: ["9T"],
 			clearsmog: ["9T"],
@@ -95380,7 +95380,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			snore: ["9T"],
 		},
 	},
-	pyukumukuallirian: {
+	pyukumukuallira: {
 		learnset: {
 			recover: ["9T"],
 			sludgebomb: ["9T"],
@@ -95633,7 +95633,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			shardexpulsion: ["9T"],
 		},
 	},
-	shelgonallirian: {
+	shelgonallira: {
 		learnset: {
 			heavyslam: ["9T"],
 			earthquake: ["9T"],
@@ -95654,7 +95654,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			sandstorm: ["9T"],
 		},
 	},
-	bagonallirian: {
+	bagonallira: {
 		learnset: {
 			heavyslam: ["9T"],
 			earthquake: ["9T"],
@@ -95673,7 +95673,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			sandstorm: ["9T"],
 		},
 	},
-	drifblimallirian: {
+	drifblimallira: {
 		learnset: {
 			acrobatics: ["9T"],
 			aerialace: ["9T"],
