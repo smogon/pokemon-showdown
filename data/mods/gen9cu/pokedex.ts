@@ -18101,7 +18101,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "MissingNo.",
 		types: ["Bird", "Normal"],
 		baseStats: {hp: 33, atk: 136, def: 0, spa: 6, spd: 6, spe: 29},
-		abilities: {0: ""},
+		abilities: {0: "},
 		heightm: 3,
 		weightkg: 1590.8,
 		color: "Gray",
@@ -19827,9 +19827,24 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		eggGroups: ["Field"],
 	},
-	megaledian: {
+	lediary: {
 		num: 9045,
-		name: "Mega Ledian",
+		name: "Lediary",
+		types: ["Bug", "Flying"],
+		baseStats: {hp: 60, atk: 35, def: 50, spa: 55, spd: 110, spe: 85},
+		abilities: {0: "Swarm", 1: "Early Bird", H: "Iron Fist"},
+		heightm: 1.4,
+		weightkg: 35.6,
+		color: "Red",
+		eggGroups: ["Bug"],
+		otherFormes: ["Lediary-Mega"],
+		formeOrder: ["Lediary", "Lediary-Mega"],
+	},
+	lediarymega: {
+		num: 9045,
+		name: "Lediary-Mega",
+		baseSpecies: "Lediary",
+		forme: "Mega",
 		types: ["Bug", "Fighting"],
 		baseStats: {hp: 55, atk: 40, def: 80, spa: 95, spd: 125, spe: 95},
 		abilities: {0: "Comet Fist"},
@@ -19837,6 +19852,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 36.2,
 		color: "Red",
 		eggGroups: ["Bug"],
+		requiredItem: ["Ledyite"]
 	},
 	archanchant: {
 		num: 9046,
