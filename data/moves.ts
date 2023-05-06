@@ -8,7 +8,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		category: "Special",
 		isNonstandard: "Past",
 		name: "10,000,000 Volt Thunderbolt",
-		pp: 1,
+		pp: 1.6,
 		priority: 0,
 		flags: {},
 		isZ: "pikashuniumz",
