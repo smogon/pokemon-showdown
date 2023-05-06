@@ -4774,7 +4774,7 @@ priority: 1,
 flags: {protect: 1, mirror: 1},
 secondary: null,
 target: "normal",
-type: "Fighting", "Steel",
+type: "Fighting",
 },
 
 victorydance: {
