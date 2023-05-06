@@ -712,9 +712,9 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		// isNonstandard: "Past",
 	},
-	Ledyite: {
+	ledyite: {
 		name: "Ledyite",
-		spritenum: 625,
+		spritenum: 899,
 		megaStone: "Lediary-Mega",
 		megaEvolves: "Lediary",
 		itemUser: ["Lediary"],
