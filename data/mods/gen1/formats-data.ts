@@ -282,7 +282,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	onix: {
-		tier: "ZU",
+		tier: "6U",
 	},
 	drowzee: {
 		tier: "PU",
@@ -300,7 +300,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "6U",
 	},
 	electrode: {
-		tier: "PU",
+		tier: "NU",
 	},
 	exeggcute: {
 		tier: "NU",
@@ -330,7 +330,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "ZU",
 	},
 	rhyhorn: {
-		tier: "6U",
+		tier: "ZU",
 	},
 	rhydon: {
 		tier: "OU",
@@ -408,7 +408,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "ZU",
 	},
 	porygon: {
-		tier: "NU",
+		tier: "PU",
 	},
 	omanyte: {
 		tier: "PU",
@@ -417,7 +417,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	kabuto: {
-		tier: "PU",
+		tier: "ZU",
 	},
 	kabutops: {
 		tier: "NU",

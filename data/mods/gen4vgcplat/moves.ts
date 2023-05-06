@@ -2339,7 +2339,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	"falseswipe": {
 		"inherit": true,
 		"accuracy": 100,
-		"basePower": 150,
+		"basePower": 140,
 		"category": "Physical",
 		"pp": 40,
 		"type": "Normal",

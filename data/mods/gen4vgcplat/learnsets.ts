@@ -70717,6 +70717,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	"vespiquen": {
 		"inherit": true,
 		"learnset": {
+			"focusenergy": ["9M"],
 			"sweetscent": [
 				"9L1"
 			],

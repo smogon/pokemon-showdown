@@ -620,8 +620,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"doublesTier": "1"
 	},
 	"gyarados": {
-		"doublesTier": "15",
-		"tier": "15"
+		"doublesTier": "14",
+		"tier": "14"
 	},
 	"lapras": {
 		"doublesTier": "8",
@@ -636,8 +636,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"doublesTier": "2"
 	},
 	"vaporeon": {
-		"doublesTier": "16",
-		"tier": "16"
+		"doublesTier": "15",
+		"tier": "15"
 	},
 	"jolteon": {
 		"doublesTier": "11",
@@ -1060,8 +1060,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "Unreleased"
 	},
 	"stantler": {
-		"doublesTier": "14",
-		"tier": "14"
+		"doublesTier": "13",
+		"tier": "13"
 	},
 	"smeargle": {
 		"isNonstandard": "Unobtainable",
@@ -1128,8 +1128,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"doublesTier": "4"
 	},
 	"blaziken": {
-		"doublesTier": "11",
-		"tier": "11"
+		"doublesTier": "8",
+		"tier": "8"
 	},
 	"mudkip": {
 		"tier": "1",
@@ -1540,8 +1540,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"doublesTier": "15"
 	},
 	"dusknoir": {
-		"doublesTier": "6",
-		"tier": "6"
+		"doublesTier": "5",
+		"tier": "5"
 	},
 	"tropius": {
 		"doublesTier": "8",
@@ -1564,8 +1564,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"doublesTier": "1"
 	},
 	"glalie": {
-		"doublesTier": "7",
-		"tier": "7"
+		"doublesTier": "6",
+		"tier": "6"
 	},
 	"froslass": {
 		"doublesTier": "16",
@@ -1896,12 +1896,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		"tier": "10"
 	},
 	"hippopotas": {
-		"tier": "5",
-		"doublesTier": "5"
+		"tier": "9",
+		"doublesTier": "9"
 	},
 	"hippowdon": {
-		"doublesTier": "16",
-		"tier": "16"
+		"doublesTier": "17",
+		"tier": "17"
 	},
 	"skorupi": {
 		"tier": "1",
