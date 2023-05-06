@@ -4115,7 +4115,7 @@ export const Formats: FormatList = [
 		name: "[Gen 1] Custom Game",
 
 		mod: 'gen1',
-		searchShow: false,
+		searchShow: true,
 		debug: true,
 		battle: {trunc: Math.trunc},
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
