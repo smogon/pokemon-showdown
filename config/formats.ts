@@ -4209,12 +4209,20 @@ export const Formats: FormatList = [
 		],
 	},
 	{
-		name: "[Gen 1] Custom Game",
+		name: "BudpoW: Singles",
 
-		mod: 'gen1',
-		searchShow: false,
-		debug: true,
-		battle: {trunc: Math.trunc},
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		mod: 'gen9',
+		searchShow: true,
+		ruleset: ['Standard NatDex'],
+		gameType: 'doubles',
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 9', 'Max Move Count = 8', 'Max Level = 100', 'Default Level = 50'],
+	},
+		name: "BudpoW: Tag",
+
+		mod: 'gen9',
+		searchShow: true,
+		gameType: 'doubles',
+		ruleset: ['Standard NatDex'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 9', 'Max Move Count = 8', 'Max Level = 100', 'Default Level = 50'],
 	},
 ];
