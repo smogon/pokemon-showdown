@@ -26,6 +26,21 @@ export const Formats: FormatList = [
 		section: "BudpoW",
 	},
 	{
+		name: "[BudpoW] Singles",
+		mod: 'gen9',
+		searchShow: true,
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 9', 'Max Move Count = 8', 'Max Level = 100', 'Default Level = 50'],
+	},
+
+	{
+		name: "[BudpoW] Doubles",
+
+		mod: 'gen9',
+		searchShow: true,
+		gameType: 'doubles',
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 9', 'Max Move Count = 8', 'Max Level = 100', 'Default Level = 50'],
+	},
+	{
 		name: "[Gen 9] Random Battle",
 				desc: `Randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
 		threads: [
@@ -47,20 +62,6 @@ export const Formats: FormatList = [
 		rated: false,
 		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
 	},
-	{
-		name: "[BudpoW]Singles",
-		mod: 'gen9',
-		searchShow: true,
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 9', 'Max Move Count = 8', 'Max Level = 100', 'Default Level = 50'],
-	},
 
-	{
-		name: "[BudpoW]doubles",
-
-		mod: 'gen9',
-		searchShow: true,
-		gameType: 'doubles',
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 9', 'Max Move Count = 8', 'Max Level = 100', 'Default Level = 50'],
-	},
 ];
 
