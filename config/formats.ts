@@ -48,12 +48,12 @@ export const Formats: FormatList = [
 		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
 	},
 	{
-		name: "[Gen 9] Random Battle (Blitz)",
+		name: "Singles",
 
 		mod: 'gen9',
-		searchShow: false,
+		searchShow: true,
 		team: 'random',
-		ruleset: ['[Gen 9] Random Battle', 'Blitz'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 9', 'Max Move Count = 8', 'Max Level = 100', 'Default Level = 50'],
 	},
 
 ];
