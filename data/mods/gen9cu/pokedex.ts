@@ -19887,10 +19887,15 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		eggGroups: ["Water 1"],
 		gender: "F",
+		otherFormes: ["Electrocampus-M"],
+		formeOrder: ["Electrocampus", "Electrocampus-M"],
+		baseForme: "F",
 	},
 	electrocampusm: {
 		num: 9048,
 		name: "Electrocampus-M",
+		baseSpecies: "Electrocampus",
+		forme: "M",
 		types: ["Water", "Electric"],
 		gender: "M",
 		baseStats: {hp: 100, atk: 75, def: 105, spa: 75, spd: 105, spe: 50},
@@ -19987,6 +19992,17 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 50,
 		color: "Black",
 		eggGroups: ["Dragon"],
+	},
+	musharnaallira: {
+		num: 9059,
+		name: "Musharna-Allira",
+		types: ["Water", "Flying"],
+		baseStats: {hp: 116, atk: 35, def: 95, spa: 117, spd: 106, spe: 19},
+		abilities: {0: "Natural Cure", 1: "Misty Surge", H: "Neutralizing Gas"}
+		heightm: 1.1,
+		weightkg: 30.1,
+		color: "Blue",
+		eggGroups: ["Water 2"],
 	},
 };
 
