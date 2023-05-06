@@ -95,11 +95,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1, sound: 1},
 		secondary: {
 			chance: 100,
-			self: {
-				boosts: {
+			boosts: {
 				def: -1,
-				},
-			}
+			},
 		},
 		target: "normal",
 		type: "Dark",
@@ -154,7 +152,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Soul Shards",
 		pp: 10,
 		priority: 4,
-		flags: {noassist: 1, failcopycat: 1},
+		flags: {noassist: 1, failcopycat: 1, failinstruct: 1},
 		stallingMove: true,
 		volatileStatus: 'soulshards',
 		onPrepareHit(pokemon) {
@@ -166,11 +164,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			duration: 1,
 			onStart(target) {
-				this.add('-singleturn', target, 'move: Protect');
+				this.add('-singleturn', target, 'Protect');
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
-				if (!move.flags['protect']) {
+				if (!move.flags['protect'] || move.category === 'Status') {
 					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
 					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
@@ -187,22 +185,22 @@ export const Moves: {[moveid: string]: MoveData} = {
 						delete source.volatiles['lockedmove'];
 					}
 				}
-				if (move.flags['contact']) {
-					source.side.addSideCondition('soulshards', source);
+				if (this.checkMoveMakesContact(move, source, target)) {
+					source.side.addSideCondition('mirrorshards');
 				}
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
 				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
-					this.damage(source.baseMaxhp / 8, source, target);
+					this.boost({atk: -1}, source, target, this.dex.getActiveMove("Soul Shards"));
 				}
 			},
 		},
 		secondary: null,
 		target: "self",
 		type: "Grass",
-		zMove: {boost: {def: 1}},
-		contestType: "Tough",
+		zMove: {effect: 'clearnegativeboost'},
+		contestType: "Cool",
 	},
 	mirrorshards: {
 		num: 8009,
@@ -261,19 +259,23 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Shard Expulsion",
 		pp: 10,
 		priority: -1,
-		flags: {reflectable: 1, mirror: 1, nonsky: 1},
-		sideCondition: 'spikes',
-		onTryHit(target, source) {
-			if (source.side.sideConditions['spikes'] && source.side.sideConditions['spikes'].layers >= 3) return false;
+		flags: {pivot: 1},
+		onTry(source) {
+			return !!this.canSwitch(source.side);
 		},
-		onHit(source) {
-			this.add('-anim', source, "Spikes", source);
+		self: {
+			onHit(source) {
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('spikes');
+				}
+			},
 		},
+		selfSwitch: true,
 		secondary: null,
-		target: "normal",
+		target: "self",
 		type: "Rock",
-		zMove: {boost: {def: 1}},
-		contestType: "Tough",
+		zMove: {effect: 'heal'},
+		contestType: "Cool",
 	},
 	wavestrident: {
 		num: 8012,

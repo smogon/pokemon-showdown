@@ -109,15 +109,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 3002,
 	},
 	improvjazz: {
-		onStart(pokemon) {
-			this.add('-ability', pokemon, 'Improv Jazz');
-			this.add('-message', pokemon.name + ' is jamming out!');
-			// permanently apply torment
-			pokemon.addVolatile('torment');
-		},
-		onBasePowerPriority: 8,
-		onBasePower(this, relayVar, source, target, move) {
-			return this.chainModify(1.5);
+		volatilestatus: "improvjazz",
+		condition: {
+			noCopy: true,
+			onStart(pokemon) {
+				this.add('-ability', pokemon, 'Improv Jazz');
+				this.add('-message', pokemon.name + ' is jamming out!');
+				// permanently apply torment
+				pokemon.addVolatile('torment');
+			},
+			onBasePowerPriority: 8,
+			onBasePower(this, relayVar, source, target, move) {
+				return this.chainModify(1.5);
+			},
 		},
 		name: "Improv Jazz",
 		rating: 3,
