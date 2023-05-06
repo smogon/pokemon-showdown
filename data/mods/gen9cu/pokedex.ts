@@ -19998,7 +19998,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Musharna-Allira",
 		types: ["Water", "Flying"],
 		baseStats: {hp: 116, atk: 35, def: 95, spa: 117, spd: 106, spe: 19},
-		abilities: {0: "Natural Cure", 1: "Misty Surge", H: "Neutralizing Gas"}
+		abilities: {0: "Natural Cure", 1: "Misty Surge", H: "Neutralizing Gas"},
 		heightm: 1.1,
 		weightkg: 30.1,
 		color: "Blue",
