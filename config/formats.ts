@@ -48,7 +48,7 @@ export const Formats: FormatList = [
 		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
 	},
 	{
-		name: "Singles",
+		name: "[BudpoW]Singles",
 
 		mod: 'gen9',
 		searchShow: true,
