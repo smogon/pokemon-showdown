@@ -96478,4 +96478,21 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			drainpunch: ["9T"],
 		},
 	},
+	musharnaallira: {
+		learnset: {
+			calmmind: ["9T"],
+			flipturn: ["9T"],
+			slackoff: ["9T"],
+			amnesia: ["9T"],
+			rest: ["9T"],
+			psyshock: ["9T"],
+			surf: ["9T"],
+			airslash: ["9T"],
+			weatherball: ["9T"],
+			trickroom: ["9T"],
+			mistyexplosion: ["9T"],
+			dazzlinggleam: ["9T"],
+			mistball: ["9T"],
+		}
+	},
 };
