@@ -2,6 +2,7 @@ export const Natures: {[k: string]: NatureData} = {
 	adamant: {
 		name: "Adamant",
 		plus: 'atk',
+		plus: 'spd',
 		minus: 'spa',
 	},
 	bashful: {

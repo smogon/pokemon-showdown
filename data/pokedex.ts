@@ -242,7 +242,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	caterpie: {
 		num: 10,
 		name: "Caterpie",
-		types: ["???"],
+		types: ["bug"],
 		baseStats: {hp: 45, atk: 30, def: 35, spa: 20, spd: 20, spe: 45},
 		abilities: {0: "Shield Dust", H: "Run Away"},
 		heightm: 0.3,
