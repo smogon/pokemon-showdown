@@ -609,7 +609,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Earthquake", "Haze", "Poison Jab", "Recover", "Spikes", "Toxic", "Toxic Spikes"],
+                "movepool": ["Earthquake", "Haze", "Poison Jab", "Recover", "Stealth Rock", "Toxic", "Toxic Spikes"],
                 "teraTypes": ["Ground", "Flying", "Steel"]
             }
         ]
@@ -1039,7 +1039,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Earthquake", "Liquidation", "Spikes", "Stealth Rock", "Stone Edge"],
+                "movepool": ["Earthquake", "Hydro Pump", "Ice Beam", "Spikes", "Stealth Rock"],
                 "teraTypes": ["Ground", "Steel"]
             },
             {
@@ -3943,7 +3943,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Close Combat", "Drain Punch", "Fake Out", "Heavy Slam", "Ice Punch", "Thunder Punch", "Volt Switch", "Wild Charge"],
-                "teraTypes": ["Electric"]
+                "teraTypes": ["Electric", "Fighting"]
             }
         ]
     },
