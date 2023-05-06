@@ -231,12 +231,11 @@ export const Formats: FormatList = [
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer'],
 	},
 	{
-		name: "[Gen 9] Custom Game",
+		name: "[BudpoW] Singles",
 
 		mod: 'gen9',
-		searchShow: false,
+		searchShow: True,
 		debug: true,
-		battle: {trunc: Math.trunc},
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
