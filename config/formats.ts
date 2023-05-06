@@ -4209,7 +4209,7 @@ export const Formats: FormatList = [
 		],
 	},
 	{
-		name: "BudpoW: Singles",
+		name: "[BudpoW] Singles",
 
 		mod: 'gen9',
 		searchShow: true,
@@ -4217,7 +4217,7 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 9', 'Max Move Count = 8', 'Max Level = 100', 'Default Level = 50'],
 	},
-		name: "BudpoW: Tag",
+		name: "[BudpoW] Tag",
 
 		mod: 'gen9',
 		searchShow: true,
