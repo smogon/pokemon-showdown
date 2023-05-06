@@ -6349,4 +6349,5 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	salackle: { "tier": "CU", "doublesTier": "DUU", "natDexTier": "UU"},
 	megalediary: { "tier": "CU", "doublesTier": "DUU", "natDexTier": "UU"},
 	electrocampusm: { "tier": "CU", "doublesTier": "DUU", "natDexTier": "UU"},
+	musharnaallira: { "tier": "CU", "doublesTier": "DUU", "natDexTier": "UU"},
 };
