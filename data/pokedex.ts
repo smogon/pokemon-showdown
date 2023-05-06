@@ -13076,7 +13076,7 @@ eggGroups: ["Field", "Mineral"],
 },
 copperajahgmax: {
 num: 879,
-types: ["Steel", "Normal"],
+name: "Copperajah-Gmax",
 baseSpecies: "Copperajah",
 forme: "Gmax",
 types: ["Steel"],
