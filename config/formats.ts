@@ -92,16 +92,5 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 9] OU'],
 		banlist: ['OU', 'UUBL'],
 	},
-	{
-		name: "[Gen 9] RU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3713711/">RU Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3717138/">RU Viability Rankings</a>`,
-		],
 
-		mod: 'gen9',
-		searchShow: false,
-		ruleset: ['[Gen 9] UU'],
-		banlist: ['UU', 'RUBL', 'Light Clay'],
-	},
 ];
