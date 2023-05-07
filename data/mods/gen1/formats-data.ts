@@ -282,7 +282,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	onix: {
-		tier: "6U",
+		tier: "ZU",
 	},
 	drowzee: {
 		tier: "PU",
@@ -330,7 +330,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "ZU",
 	},
 	rhyhorn: {
-		tier: "ZU",
+		tier: "6U",
 	},
 	rhydon: {
 		tier: "OU",

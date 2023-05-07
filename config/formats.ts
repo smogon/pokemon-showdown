@@ -33,7 +33,7 @@ export const Formats: FormatList = [
 		],
 		mod: 'gen4vgcplat',
 		gameType: 'doubles',
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Draft Timer', 'Terastal Clause', 'VGC Plat Pokedex', 'Evasion Moves Clause'],
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Draft Timer', 'Terastal Clause', 'VGC Plat Pokedex', 'Evasion Moves Clause', 'Evasion Items Clause'],
 	},
 	{
 		name: "[Gen 9] VGC Plat Tera",
