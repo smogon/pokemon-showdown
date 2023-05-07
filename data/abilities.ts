@@ -6906,7 +6906,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onResidual(pokemon) {
 			if (pokemon.hp && pokemon.status && this.randomChance(33, 100)) {
 				this.debug('coral cleaner');
-				this.add('-activate', pokemon, 'ability: Natural Cure');
+				this.add('-activate', pokemon, 'ability: Coral Cleaner');
 				pokemon.cureStatus();
 			}
 		},
@@ -6915,7 +6915,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: -61,
 	},
 	toughterror: {
-		onTryHit(pokemon, target, move) {
+		onHit(pokemon, target, move) {
 			if (pokemon.getMoveHitData(move).typeMod > 0) {
 				if (pokemon.species.baseSpecies !== 'Lycanmimiktoo' || pokemon.transformed) return;
 				const targetForme = pokemon.species.name === 'Lycanmimiktoo' ? 'Lycanmimiktoo-Ruined' : 'Lycanmimiktoo';
