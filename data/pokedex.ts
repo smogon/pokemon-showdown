@@ -27566,6 +27566,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	lycanmimiktooruined: {
 		num: -6008,
 		name: "Lycanmimiktoo-Ruined",
+		baseSpecies: "Lycanmimiktoo",
 		forme: "Ruined",
 		types: ["Ghost", "Steel"],
 		baseStats: {hp: 100, atk: 100, def: 20, spa: 100, spd: 83, spe: 84},

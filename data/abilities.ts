@@ -6917,7 +6917,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	toughterror: {
 		onHit(pokemon, target, move) {
 			if (pokemon.getMoveHitData(move).typeMod > 0) {
-				if (pokemon.species.baseSpecies !== ('Lycanmimiktoo' || 'Lycanmimiktoo-Ruined')) return;
+				if (pokemon.species.baseSpecies !== 'Lycanmimiktoo') return;
 				const targetForme = pokemon.species.name === 'Lycanmimiktoo' ? 'Lycanmimiktoo-Ruined' : 'Lycanmimiktoo';
 				pokemon.formeChange(targetForme);
 			}
