@@ -2494,5 +2494,15 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Kabloeey",
 		desc: "This Pokémon will use Self-Destruct at the end of the turn, unless it needs to recharge, in which case it'll recharge instead.",
 		shortDesc: "Uses Self-Destruct at the end of the turn.",
-	}
+	},
+	coralcleaner: {
+		name: "Coral Cleaner",
+		desc: "This Pokemon has a 33% chance to have its non-volatile status condition cured at the end of each turn.",
+		shortDesc: "33% chance to cure status condition at end of turn.",
+	},
+	toughterror: {
+		name: "Tough Terror",
+		desc: "If this Pokemon is a Lycanmimiktoo, it changes formes between its base forme and Ruined forme when hit by a supereffective move.",
+		shortDesc: "If Lycanmimiktoo, changes formes between base and Ruined when hit by a supereffective move.",
+	},
 };

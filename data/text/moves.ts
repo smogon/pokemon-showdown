@@ -7796,4 +7796,29 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Full Heal",
 		shortDesc: "Heals target to its max HP and cures status, damages by amount healed.",
 	},
+	clankerdemolition: {
+		name: "Clanker Demolition",
+		desc: "Hits four times. Power increases to 30 for the second and third hits, and 40 for the fourth. This move checks accuracy for each hit, and the attack ends if the target avoids a hit. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit four times.",
+		shortDesc: "Hits 4 times. Each hit can miss, but power rises.",
+	},
+	kamikazbee: {
+		name: "Kamikazbee",
+		desc: "The user faints after using this move, even if this move fails for having no target. This move is prevented from executing if any active Pokemon has the Damp Ability.",
+		shortDesc: "Hits adjacent Pokemon. The user faints.",
+	},
+	shieldbash: {
+		name: "Shield Bash",
+		desc: "Deals damage to the target based on its Special Defense instead of Defense.",
+		shortDesc: "Damages target based on Sp. Def, not Def.",
+	},
+	electroplate: {
+		name: "Electroplate",
+		desc: "Causes the target to gain the Steel type. Also boosts the user's Defense stat by 1.",
+		shortDesc: "Adds Steel type to target. +1 Def.",
+	},
+	prizewheel: {
+		name: "Prize Wheel",
+		desc: "Causes the user to change type to a random type.",
+		shortDesc: "Changes user's type to a random type",
+	},
 };

@@ -2935,4 +2935,32 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Delta Swampertite",
 		desc: "If held by a Delta-Swampert, this item allows it to Mega Evolve in battle.",
 	},
+	tyranitararmor: {
+		name: "Tyranitar Armor",
+		desc: "A special set of armor that is designed for Tyranitar."
+	},
+	flygonarmor: {
+		name: "Flygon Armor",
+		desc: "A special set of armor that is designed for Flygon."
+	},
+	leavannyarmor: {
+		name: "Leavanny Armor",
+		desc: "A special set of armor that is designed for Leavanny."
+	},
+	zekromarmor: {
+		name: "Zekrom Armor",
+		desc: "A special set of armor that is designed for Zekrom."
+	},
+	volcaronadeltaarmor: {
+		name: "Volcarona-Delta Armor",
+		desc: "A special set of armor that is designed for Volcarona-Delta."
+	},
+	mewtwoarmor: {
+		name: "Mewtwo Armor",
+		desc: "A special set of armor that is designed for Mewtwo."
+	},
+	mantinite: {
+		name: "Mantinite",
+		desc: "If held by a Mantine, this item allows it to Mega Evolve in battle.",
+	},
 };
