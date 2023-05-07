@@ -3491,4 +3491,14 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "RU",
 	},
+	lycanmimiktoo: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
+	lycanmimiktooruined: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
 };
