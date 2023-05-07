@@ -6914,5 +6914,17 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2.5,
 		num: -61,
 	},
+	toughterror: {
+		onTryHit(target, source, move) {
+			if (target.getMoveHitData(move).typeMod > 0) {
+				if (target.species.baseSpecies !== 'Lycanmimiktoo' || target.transformed) return;
+				const targetForme = target.species.name === 'Lycanmimiktoo' ? 'Lycanmimiktoo-Ruined' : 'Lycanmimiktoo';
+				target.formeChange(targetForme);
+			}
+		},
+		name: "Tough Terror",
+		rating: 1,
+		num: -62,
+	},
 };
 
