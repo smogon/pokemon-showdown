@@ -27525,7 +27525,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Delta-Formation-Maushold",
 		baseSpecies: "Maushold",
 		types: ["Steel", "Fighting"],
-		forme: "Delta Formation",
+		forme: "Delta-Formation",
 		gender: "N",
 		baseStats: {hp: 74, atk: 75, def: 70, spa: 65, spd: 75, spe: 111},
 		abilities: {0: "Battle Armor", 1: "Friend Guard", H: "Technician"},
@@ -27537,7 +27537,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	},
 	mantinemega: {
 		num: 226,
-		name: "Mantine",
+		name: "Mantine-Mega",
 		baseSpecies: "Mantine",
 		forme: "Mega",
 		types: ["Water", "Flying"],

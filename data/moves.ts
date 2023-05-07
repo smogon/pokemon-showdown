@@ -23392,7 +23392,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 20,
 		basePowerCallback(pokemon, target, move) {
 			if (move.hit == 1) return 20;
-			if (move.hit == (2 || 3)) return 30;
+			if (move.hit == 2) return 30;
+			if (move.hit == 3) return 30;
 			if (move.hit == 4) return 40;
 			else return 0;
 		},
