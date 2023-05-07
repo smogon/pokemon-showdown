@@ -3516,7 +3516,7 @@
                 "teraTypes": ["Water", "Ground"]
             },
             {
-                "role": "Fast Support",
+                "role": "Bulky Attacker",
                 "movepool": ["Gunk Shot", "Haze", "Parting Shot", "Spin Out", "Toxic", "Toxic Spikes"],
                 "teraTypes": ["Water"]
             }
