@@ -1222,7 +1222,7 @@ export class RandomTeams {
 		if (moves.has('outrage')) return 'Lum Berry';
 		if (
 			(species.id === 'garchomp' && role === 'Fast Support') || (
-				ability === 'Regenerator' && role === 'Bulky Support' &&
+				ability === 'Regenerator' && (role === 'Bulky Support' || role === 'Bulky Attacker') &&
 				(species.baseStats.hp + species.baseStats.def) >= 180 && this.randomChance(1, 2)
 			)
 		) return 'Rocky Helmet';
