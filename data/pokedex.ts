@@ -27522,7 +27522,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	},
 	mausholddeltaformation: {
 		num: 925,
-		name: "Delta-Formation-Maushold",
+		name: "Maushold-Delta-Formation",
 		baseSpecies: "Maushold",
 		types: ["Steel", "Fighting"],
 		forme: "Delta-Formation",
