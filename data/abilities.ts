@@ -6898,7 +6898,21 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Kablooey",
 		rating: 3,
-		num: 206,
+		num: -60,
+	},
+	coralcleaner: {
+		onResidualOrder: 5,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			if (pokemon.hp && pokemon.status && this.randomChance(33, 100)) {
+				this.debug('coral cleaner');
+				this.add('-activate', pokemon, 'ability: Natural Cure');
+				pokemon.cureStatus();
+			}
+		},
+		name: "Coral Cleaner",
+		rating: 2.5,
+		num: -61,
 	},
 };
 
