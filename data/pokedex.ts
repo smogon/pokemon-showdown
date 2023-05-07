@@ -23855,7 +23855,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Mawile-Delta",
 		types: ["Grass", "Dark"],
 		baseStats: {hp: 50, atk: 85, def: 85, spa: 55, spd: 55, spe: 50},
-		abilities: {0: "Serene Grace", 1: "Aroma Veil", H: "Immunity"},
+		abilities: {0: "Serene Grace", 1: "Flower Veil", H: "Immunity"},
 		weightkg: 11.5,
 		heightm: 1,
 		color: "Red",
