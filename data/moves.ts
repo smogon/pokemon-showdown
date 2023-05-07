@@ -23386,4 +23386,27 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "???",
 		contestType: "Clever",
 	},
+	clankerdemolition: {
+		num: -41,
+		accuracy: 90,
+		basePower: 20,
+		basePowerCallback(pokemon, target, move) {
+			if (move.hit == 1) return 20;
+			if (move.hit == (2 || 3)) return 30;
+			if (move.hit == 4) return 40;
+			else return 0;
+		},
+		category: "Physical",
+		name: "Clanker Demolition",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		multihit: 4,
+		multiaccuracy: true,
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+		zMove: {basePower: 120},
+		maxMove: {basePower: 140},
+	},
 };
