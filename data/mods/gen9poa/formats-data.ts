@@ -3481,4 +3481,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	mausholddeltaformation: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };
