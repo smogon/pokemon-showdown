@@ -6915,11 +6915,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: -61,
 	},
 	toughterror: {
-		onHit(target, source, move) {
-			if (target.species.name !== 'Lycanmimiktoo' || target.transformed) return;
-			if (move && target.getMoveHitData(move).typeMod > 0) {
-				this.add('-activate', target, 'ability: Tough Terror');
-				target.formeChange('Lycanmimiktoo-Ruined', this.effect, true);
+		onTryHit(pokemon, target, move) {
+			if (pokemon.getMoveHitData(move).typeMod > 0) {
+				if (pokemon.species.baseSpecies !== 'Lycanmimiktoo' || pokemon.transformed) return;
+				const targetForme = pokemon.species.name === 'Lycanmimiktoo' ? 'Lycanmimiktoo-Ruined' : 'Lycanmimiktoo';
+				pokemon.formeChange(targetForme);
 			}
 		},
 		name: "Tough Terror",
