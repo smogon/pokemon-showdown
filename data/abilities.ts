@@ -6906,7 +6906,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onResidual(pokemon) {
 			if (pokemon.hp && pokemon.status && this.randomChance(33, 100)) {
 				this.debug('coral cleaner');
-				this.add('-activate', pokemon, 'ability: Coral Cleaner');
+				this.add('-activate', pokemon, 'ability: Natural Cure');
 				pokemon.cureStatus();
 			}
 		},
