@@ -4503,6 +4503,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "levelExtra",
 		evoCondition: "with a Remoraid in party",
 		eggGroups: ["Water 1"],
+		otherFormes: ["Mantine-Mega"],
+		formeOrder: ["Mantine", "Mantine-Mega"],
 		canHatch: true,
 	},
 	skarmory: {
@@ -27532,5 +27534,19 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "White",
 		evoLevel: 25,
 		eggGroups: ["Field", "Fairy"],
+	},
+	mantinemega: {
+		num: 226,
+		name: "Mantine",
+		baseSpecies: "Mantine",
+		forme: "Mega",
+		types: ["Water", "Flying"],
+		baseStats: {hp: 85, atk: 40, def: 100, spa: 100, spd: 170, spe: 90},
+		abilities: {0: "Coral Cleaner"},
+		heightm: 2.1,
+		weightkg: 220,
+		color: "Blue",
+		eggGroups: ["Water 1"],
+		requiredItem: "Mantinite",
 	},
 };

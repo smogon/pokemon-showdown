@@ -3486,4 +3486,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	mantinemega: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
 };

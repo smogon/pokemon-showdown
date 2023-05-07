@@ -9928,7 +9928,21 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
-		num: -73,
+		num: -74,
+		gen: 6,
+		isNonstandard: "Unobtainable",
+	},
+	mantinite: {
+		name: "Mantinite",
+		spritenum: 0,
+		megaStone: "Mantine-Mega",
+		megaEvolves: "Mantine",
+		itemUser: ["Mantine"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -75,
 		gen: 6,
 		isNonstandard: "Unobtainable",
 	},
