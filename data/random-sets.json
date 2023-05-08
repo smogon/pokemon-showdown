@@ -510,7 +510,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Eruption", "Fire Blast", "Focus Blast", "Shadow Ball"],
-                "teraTypes": ["Fire", "Ghost"]
+                "teraTypes": ["Fire", "Fighting"]
             }
         ]
     },
@@ -2528,7 +2528,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Defog", "Hurricane", "Quiver Dance", "Revelation Dance", "Roost"],
-                "teraTypes": ["Ground"]
+                "teraTypes": ["Ground", "Fighting"]
             }
         ]
     },
