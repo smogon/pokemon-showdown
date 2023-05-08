@@ -4458,6 +4458,10 @@ chance: 100,
 self: {
 boosts: {
 atk: 1,
+
+
+
+
 },
 },
 },
