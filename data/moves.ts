@@ -41,15 +41,15 @@ type: "Bug",
 },
 
 bugbuzz: {
-accuracy: 95,
-basePower: 90,
+accuracy: 80,
+basePower: 110,
 category: "Special",
 name: "Bug Buzz",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 secondary: {
-chance: 10,
+chance: 40,
 boosts: {
 spd: -1,
 },
@@ -67,9 +67,9 @@ pp: 1.25,
 priority: 0,
 flags: {snatch: 1},
 boosts: {
-def: 1,
-spd: 1,
-
+def: 2,
+spd: 2,
+spe:-2,
 },
 secondary: null,
 target: "self",
@@ -77,8 +77,8 @@ type: "Bug",
 },
 
 fellstinger: {
-accuracy: 95,
-basePower: 50,
+accuracy: 85,
+basePower: 65,
 category: "Physical",
 name: "Fell Stinger",
 pp: 1.25,
@@ -160,7 +160,7 @@ type: "Bug",
 
 infestation: {
 accuracy: 95,
-basePower: 20,
+basePower: 25,
 category: "Special",
 name: "Infestation",
 pp: 1.25,
@@ -187,14 +187,14 @@ type: "Bug",
 },
 
 lunge: {
-accuracy: 95,
-basePower: 80,
-category: "Physical",
+accuracy: 90,
+basePower: 35,
+category: "Special",
 name: "Lunge",
 pp: 1.25,
-priority: 0,
+priority: 2,
 flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
+secondary: null,
 target: "normal",
 type: "Bug",
 },
@@ -207,25 +207,25 @@ name: "Megahorn",
 pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-
-
-
-
-
-target: "normal",
+self: {
+boosts: {
+atk: -1,
+def: -1,
+},
+},
+target: "allAdjacentFoes",
 type: "Bug",
 },
 
 pinmissile: {
-accuracy: 95,
-basePower: 25,
+accuracy: 90,
+basePower: 15,
 category: "Physical",
 name: "Pin Missile",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
-multihit: [2, 5],
+multihit: [2, 8],
 secondary: null,
 target: "normal",
 type: "Bug",
@@ -325,8 +325,8 @@ type: "Bug",
 
 ragepowder: {
 accuracy: 95,
-basePower: 0,
-category: "Status",
+basePower: 25,
+category: "Special",
 name: "Rage Powder",
 pp: 1.25,
 priority: 2,
@@ -357,8 +357,8 @@ type: "Bug",
 },
 
 savagespinout: {
-accuracy: 95,
-basePower: 1,
+accuracy: 65,
+basePower: 200,
 category: "Physical",
 name: "Savage Spin-Out",
 pp: 1,
@@ -370,15 +370,15 @@ type: "Bug",
 },
 
 signalbeam: {
-accuracy: 95,
-basePower: 75,
+accuracy: 85,
+basePower: 90,
 category: "Special",
 name: "Signal Beam",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 10,
+chance: 75,
 volatileStatus: 'confusion',
 },
 target: "normal",
@@ -425,13 +425,13 @@ delete source.volatiles['lockedmove'];
 }
 }
 if (this.checkMoveMakesContact(move, source, target)) {
-this.boost({spe: -1}, source, target, this.dex.getActiveMove("Silk Trap"));
+this.boost({spe: -2}, source, target, this.dex.getActiveMove("Silk Trap"));
 }
 return this.NOT_FAIL;
 },
 onHit(target, source, move) {
 if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
-this.boost({spe: -1}, source, target, this.dex.getActiveMove("Silk Trap"));
+this.boost({spe: -2}, source, target, this.dex.getActiveMove("Silk Trap"));
 }
 },
 },
@@ -441,14 +441,14 @@ type: "Bug",
 
 silverwind: {
 accuracy: 95,
-basePower: 60,
+basePower: 50,
 category: "Special",
 name: "Silver Wind",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 10,
+chance: 50,
 self: {
 boosts: {
 atk: 1,
@@ -459,27 +459,27 @@ spe: 1,
 },
 },
 },
-target: "normal",
+target: "foeSide",
 type: "Bug",
 },
 
 skittersmack: {
 accuracy: 90,
-basePower: 70,
+basePower: 45,
 category: "Physical",
 name: "Skitter Smack",
 pp: 1.25,
-priority: 0,
+priority: 2,
 flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
+secondary: null,
 target: "normal",
 type: "Bug",
 },
 
 spiderweb: {
 accuracy: 95,
-basePower: 0,
-category: "Status",
+basePower: 20,
+category: "attack",
 name: "Spider Web",
 pp: 1.25,
 priority: 0,
@@ -488,20 +488,20 @@ onHit(target, source, move) {
 return target.addVolatile('trapped', source, move, 'trapper');
 },
 secondary: null,
-target: "normal",
+target: "foeSide",
 type: "Bug",
 },
 
 steamroller: {
-accuracy: 95,
-basePower: 65,
+accuracy: 90,
+basePower: 70,
 category: "Physical",
 name: "Steamroller",
 pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 30,
+chance: 50,
 volatileStatus: 'flinch',
 },
 target: "normal",
@@ -534,14 +534,14 @@ type: "Bug",
 
 stringshot: {
 accuracy: 95,
-basePower: 0,
-category: "Status",
+basePower: 55,
+category: "Physical",
 name: "String Shot",
 pp: 125,
 priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1},
 boosts: {
-spe: -2,
+spe: -1,
 },
 secondary: null,
 target: "allAdjacentFoes",
@@ -560,7 +560,7 @@ secondary: {
 chance: 100,
 boosts: {
 spa: -1,
-
+atk: -1,
 },
 },
 target: "allAdjacentFoes",
@@ -593,7 +593,7 @@ priority: 0,
 flags: {protect: 1, mirror: 1},
 multihit: 2,
 secondary: {
-chance: 20,
+chance: 40,
 status: 'tox',
 },
 target: "normal",
@@ -602,7 +602,7 @@ type: "Bug",
 
 uturn: {
 accuracy: 95,
-basePower: 70,
+basePower: 50,
 category: "Physical",
 name: "U-turn",
 pp: 1.25,
@@ -615,7 +615,7 @@ type: "Bug",
 },
 
 xscissor: {
-accuracy: 95,
+accuracy: 85,
 basePower: 80,
 category: "Physical",
 name: "X-Scissor",
@@ -648,8 +648,8 @@ type: "Dark",
 },
 
 baddybad: {
-accuracy: 95,
-basePower: 80,
+accuracy: 80,
+basePower: 110,
 category: "Special",
 name: "Baddy Bad",
 pp: 1.25,
@@ -687,15 +687,15 @@ type: "Dark",
 },
 
 bite: {
-accuracy: 95,
-basePower: 60,
+accuracy: 90,
+basePower: 80,
 category: "Physical",
 name: "Bite",
 pp: 1.25,
 priority: 0,
 flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 30,
+chance: 40,
 volatileStatus: 'flinch',
 },
 target: "normal",
@@ -703,8 +703,8 @@ type: "Dark",
 },
 
 blackholeeclipse: {
-accuracy: 95,
-basePower: 1,
+accuracy: 65,
+basePower: 200,
 category: "Physical",
 name: "Black Hole Eclipse",
 pp: 1,
@@ -779,7 +779,7 @@ type: "Dark",
 },
 
 crunch: {
-accuracy: 95,
+accuracy: 90,
 basePower: 80,
 category: "Physical",
 name: "Crunch",
@@ -812,15 +812,15 @@ type: "Dark",
 },
 
 darkpulse: {
-accuracy: 95,
-basePower: 80,
+accuracy: 85,
+basePower: 90,
 category: "Special",
 name: "Dark Pulse",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, pulse: 1, mirror: 1, distance: 1},
 secondary: {
-chance: 20,
+chance: 30,
 volatileStatus: 'flinch',
 },
 target: "any",
@@ -1033,13 +1033,13 @@ type: "Dark",
 },
 
 hyperspacefury: {
-accuracy: 95,
+accuracy: 90,
 basePower: 100,
-category: "Physical",
+category: "Special",
 name: "Hyperspace Fury",
 pp: 1.25,
 priority: 0,
-flags: {mirror: 1, bypasssub: 1},
+flags: {mirror: 1,},
 breaksProtect: true,
 onTry(source) {
 if (source.species.name === 'Hoopa-Unbound') {
@@ -1058,7 +1058,7 @@ return null;
 self: {
 boosts: {
 def: -1,
-
+spd: -1,
 },
 },
 secondary: null,
@@ -1144,8 +1144,8 @@ type: "Dark",
 },
 
 maliciousmoonsault: {
-accuracy: 95,
-basePower: 180,
+accuracy: 80,
+basePower: 120,
 category: "Physical",
 name: "Malicious Moonsault",
 pp: 1,
@@ -1162,7 +1162,7 @@ basePower: 0,
 category: "Status",
 name: "Memento",
 pp: 1.25,
-priority: 0,
+priority: 4,
 flags: {protect: 1, mirror: 1},
 boosts: {
 atk: -2,
@@ -1191,7 +1191,7 @@ type: "Dark",
 },
 
 nightdaze: {
-accuracy: 95,
+accuracy: 90,
 basePower: 85,
 category: "Special",
 name: "Night Daze",
@@ -1199,7 +1199,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 40,
+chance: 75,
 boosts: {
 accuracy: -1,
 },
@@ -1424,7 +1424,7 @@ type: "Dark",
 quash: {
 accuracy: 95,
 basePower: 0,
-category: "Status",
+category: "Special",
 name: "Quash",
 pp: 1.25,
 priority: 0,
@@ -1469,7 +1469,7 @@ secondary: {
 chance: 100,
 boosts: {
 spa: -1,
-
+atk: -1,
 },
 },
 target: "allAdjacentFoes",
@@ -1749,12 +1749,12 @@ type: "Dark",
 },
 
 wickedblow: {
-accuracy: 95,
-basePower: 75,
+accuracy: 90,
+basePower: 45,
 category: "Physical",
 name: "Wicked Blow",
 pp: 1.25,
-priority: 0,
+priority: 2,
 flags: {contact: 1, protect: 1, punch: 1, mirror: 1},
 secondary: null,
 target: "normal",
@@ -1763,16 +1763,16 @@ type: "Dark",
 
 wickedtorque: {
 accuracy: 95,
-basePower: 80,
-category: "Physical",
+basePower: 35,
+category: "Special",
 name: "Wicked Torque",
 pp: 1.25,
-priority: 0,
+priority: 2,
 flags: {
 protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 },
 secondary: {
-chance: 10,
+chance: 50,
 status: 'slp',
 },
 target: "normal",
@@ -1846,8 +1846,8 @@ type: "Dragon",
 },
 
 clangoroussoulblaze: {
-accuracy: 95,
-basePower: 185,
+accuracy: 80,
+basePower: 120,
 category: "Special",
 name: "Clangorous Soulblaze",
 pp: 1,
@@ -1893,8 +1893,8 @@ type: "Dragon",
 },
 
 devastatingdrake: {
-accuracy: 95,
-basePower: 1,
+accuracy: 60,
+basePower: 200,
 category: "Physical",
 name: "Devastating Drake",
 pp: 1,
@@ -1906,8 +1906,8 @@ type: "Dragon",
 },
 
 dracometeor: {
-accuracy: 90,
-basePower: 130,
+accuracy: 80,
+basePower: 110,
 category: "Special",
 name: "Draco Meteor",
 pp: 1.25,
@@ -1932,7 +1932,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 30,
+chance: 50,
 status: 'par',
 },
 target: "normal",
@@ -1940,7 +1940,7 @@ type: "Dragon",
 },
 
 dragonclaw: {
-accuracy: 95,
+accuracy: 90,
 basePower: 80,
 category: "Physical",
 name: "Dragon Claw",
@@ -1985,8 +1985,8 @@ type: "Dragon",
 },
 
 dragonenergy: {
-accuracy: 95,
-basePower: 150,
+accuracy: 80,
+basePower: 120,
 basePowerCallback(pokemon, target, move) {
 const bp = move.basePower * pokemon.hp / pokemon.maxhp;
 this.debug('BP: ' + bp);
@@ -2016,8 +2016,8 @@ type: "Dragon",
 },
 
 dragonpulse: {
-accuracy: 95,
-basePower: 85,
+accuracy: 85,
+basePower: 90,
 category: "Special",
 name: "Dragon Pulse",
 pp: 1.25,
@@ -2030,7 +2030,7 @@ type: "Dragon",
 
 dragonrage: {
 accuracy: 95,
-basePower: 0,
+basePower: 35,
 category: "Special",
 name: "Dragon Rage",
 pp: 1.25,
@@ -2086,7 +2086,7 @@ type: "Dragon",
 
 eternabeam: {
 accuracy: 90,
-basePower: 160,
+basePower: 150,
 category: "Special",
 name: "Eternabeam",
 pp: 1.25,
@@ -2164,7 +2164,7 @@ type: "Dragon",
 },
 
 outrage: {
-accuracy: 95,
+accuracy: 75,
 basePower: 120,
 category: "Physical",
 name: "Outrage",
@@ -2202,11 +2202,11 @@ type: "Dragon",
 
 scaleshot: {
 accuracy: 90,
-basePower: 25,
+basePower: 5,
 category: "Physical",
 name: "Scale Shot",
 pp: 1.25,
-priority: 0,
+priority: 1,
 flags: {protect: 1, mirror: 1},
 multihit: [2, 5],
 selfBoost: {
@@ -2251,17 +2251,17 @@ type: "Dragon",
 },
 
 "10000000voltthunderbolt": {
-accuracy: 95,
-basePower: 195,
+accuracy: 75,
+    
 category: "Special",
 name: "10,000,000 Volt Thunderbolt",
 pp: 1,
 priority: 0,
-flags: {},
-
-critRatio: 3,
+flags: {protect: 1, mirror: 1, noparentalbond: 1},
+selfdestruct: "always",
+critRatio: 4,
 secondary: null,
-target: "normal",
+target: "all",
 type: "Electric",
 },
 
@@ -3264,7 +3264,7 @@ type: "Fairy",
 drainingkiss: {
 accuracy: 95,
 basePower: 50,
-category: "Special",
+category: "Physical",
 name: "Draining Kiss",
 pp: 1.25,
 priority: 0,
@@ -4447,21 +4447,21 @@ type: "Fighting",
 
 poweruppunch: {
 accuracy: 95,
-basePower: 40,
+basePower: 30,
 category: "Physical",
 name: "Power-Up Punch",
 pp: 1.25,
-priority: 0,
+priority: -1,
 flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 secondary: {
 chance: 100,
 self: {
 boosts: {
 atk: 1,
-
-
-
-
+def: 1,
+spa: 1,
+spd: 1,
+spe: -1,
 },
 },
 },
