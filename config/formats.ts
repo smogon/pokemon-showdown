@@ -29,7 +29,7 @@ export const Formats: FormatList = [
 		name: "[BudpoW] Singles",
 		mod: 'gen9',
 		searchShow: true,
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 9', 'Max Move Count = 8', 'Max Level = 100', 'Default Level = 50'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 9', 'Max Move Count = 8', 'Max Level = 100', 'Default Level = 50','Team Preview'],
 	},
 
 	{
@@ -50,7 +50,7 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		searchShow: false,
 		team: 'random',
-		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
+		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod','Team Preview'],
 	},
 	{
 		name: "[Gen 9] Unrated Random Battle",
