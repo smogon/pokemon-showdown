@@ -18601,5 +18601,4 @@ secondary: null,
 target: "self",
 type: "Water",
 },
-
 };
