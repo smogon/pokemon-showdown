@@ -41,15 +41,15 @@ type: "Bug",
 },
 
 bugbuzz: {
-accuracy: 80,
-basePower: 110,
+accuracy: 95,
+basePower: 90,
 category: "Special",
 name: "Bug Buzz",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 secondary: {
-chance: 40,
+chance: 10,
 boosts: {
 spd: -1,
 },
@@ -67,9 +67,8 @@ pp: 1.25,
 priority: 0,
 flags: {snatch: 1},
 boosts: {
-def: 2,
-spd: 2,
-spe:-2,
+def: 1,
+spd: 1,
 },
 secondary: null,
 target: "self",
@@ -77,8 +76,8 @@ type: "Bug",
 },
 
 fellstinger: {
-accuracy: 85,
-basePower: 65,
+accuracy: 95,
+basePower: 50,
 category: "Physical",
 name: "Fell Stinger",
 pp: 1.25,
@@ -160,7 +159,7 @@ type: "Bug",
 
 infestation: {
 accuracy: 95,
-basePower: 25,
+basePower: 20,
 category: "Special",
 name: "Infestation",
 pp: 1.25,
@@ -187,14 +186,19 @@ type: "Bug",
 },
 
 lunge: {
-accuracy: 90,
-basePower: 35,
-category: "Special",
+accuracy: 95,
+basePower: 80,
+category: "Physical",
 name: "Lunge",
 pp: 1.25,
-priority: 2,
+priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
+secondary: {
+chance: 100,
+boosts: {
+atk: -1,
+},
+},
 target: "normal",
 type: "Bug",
 },
@@ -207,25 +211,20 @@ name: "Megahorn",
 pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
-self: {
-boosts: {
-atk: -1,
-def: -1,
-},
-},
-target: "allAdjacentFoes",
+secondary: null,
+target: "normal",
 type: "Bug",
 },
 
 pinmissile: {
-accuracy: 90,
-basePower: 15,
+accuracy: 95,
+basePower: 25,
 category: "Physical",
 name: "Pin Missile",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
-multihit: [2, 8],
+multihit: [2, 5],
 secondary: null,
 target: "normal",
 type: "Bug",
@@ -325,8 +324,8 @@ type: "Bug",
 
 ragepowder: {
 accuracy: 95,
-basePower: 25,
-category: "Special",
+basePower: 0,
+category: "Status",
 name: "Rage Powder",
 pp: 1.25,
 priority: 2,
@@ -357,8 +356,8 @@ type: "Bug",
 },
 
 savagespinout: {
-accuracy: 65,
-basePower: 200,
+accuracy: 95,
+basePower: 1,
 category: "Physical",
 name: "Savage Spin-Out",
 pp: 1,
@@ -370,15 +369,15 @@ type: "Bug",
 },
 
 signalbeam: {
-accuracy: 85,
-basePower: 90,
+accuracy: 95,
+basePower: 75,
 category: "Special",
 name: "Signal Beam",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 75,
+chance: 10,
 volatileStatus: 'confusion',
 },
 target: "normal",
@@ -425,13 +424,13 @@ delete source.volatiles['lockedmove'];
 }
 }
 if (this.checkMoveMakesContact(move, source, target)) {
-this.boost({spe: -2}, source, target, this.dex.getActiveMove("Silk Trap"));
+this.boost({spe: -1}, source, target, this.dex.getActiveMove("Silk Trap"));
 }
 return this.NOT_FAIL;
 },
 onHit(target, source, move) {
 if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
-this.boost({spe: -2}, source, target, this.dex.getActiveMove("Silk Trap"));
+this.boost({spe: -1}, source, target, this.dex.getActiveMove("Silk Trap"));
 }
 },
 },
@@ -441,14 +440,14 @@ type: "Bug",
 
 silverwind: {
 accuracy: 95,
-basePower: 50,
+basePower: 60,
 category: "Special",
 name: "Silver Wind",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 50,
+chance: 10,
 self: {
 boosts: {
 atk: 1,
@@ -459,27 +458,32 @@ spe: 1,
 },
 },
 },
-target: "foeSide",
+target: "normal",
 type: "Bug",
 },
 
 skittersmack: {
 accuracy: 90,
-basePower: 45,
+basePower: 70,
 category: "Physical",
 name: "Skitter Smack",
 pp: 1.25,
-priority: 2,
+priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
+secondary: {
+chance: 100,
+boosts: {
+spa: -1,
+},
+},
 target: "normal",
 type: "Bug",
 },
 
 spiderweb: {
 accuracy: 95,
-basePower: 20,
-category: "attack",
+basePower: 0,
+category: "Status",
 name: "Spider Web",
 pp: 1.25,
 priority: 0,
@@ -488,20 +492,20 @@ onHit(target, source, move) {
 return target.addVolatile('trapped', source, move, 'trapper');
 },
 secondary: null,
-target: "foeSide",
+target: "normal",
 type: "Bug",
 },
 
 steamroller: {
-accuracy: 90,
-basePower: 70,
+accuracy: 95,
+basePower: 65,
 category: "Physical",
 name: "Steamroller",
 pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 50,
+chance: 30,
 volatileStatus: 'flinch',
 },
 target: "normal",
@@ -534,14 +538,14 @@ type: "Bug",
 
 stringshot: {
 accuracy: 95,
-basePower: 55,
-category: "Physical",
+basePower: 0,
+category: "Status",
 name: "String Shot",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1},
 boosts: {
-spe: -1,
+spe: -2,
 },
 secondary: null,
 target: "allAdjacentFoes",
@@ -560,7 +564,6 @@ secondary: {
 chance: 100,
 boosts: {
 spa: -1,
-atk: -1,
 },
 },
 target: "allAdjacentFoes",
@@ -593,7 +596,7 @@ priority: 0,
 flags: {protect: 1, mirror: 1},
 multihit: 2,
 secondary: {
-chance: 40,
+chance: 20,
 status: 'tox',
 },
 target: "normal",
@@ -602,7 +605,7 @@ type: "Bug",
 
 uturn: {
 accuracy: 95,
-basePower: 50,
+basePower: 70,
 category: "Physical",
 name: "U-turn",
 pp: 1.25,
@@ -615,7 +618,7 @@ type: "Bug",
 },
 
 xscissor: {
-accuracy: 85,
+accuracy: 95,
 basePower: 80,
 category: "Physical",
 name: "X-Scissor",
@@ -648,8 +651,8 @@ type: "Dark",
 },
 
 baddybad: {
-accuracy: 80,
-basePower: 110,
+accuracy: 95,
+basePower: 80,
 category: "Special",
 name: "Baddy Bad",
 pp: 1.25,
@@ -687,15 +690,15 @@ type: "Dark",
 },
 
 bite: {
-accuracy: 90,
-basePower: 80,
+accuracy: 95,
+basePower: 60,
 category: "Physical",
 name: "Bite",
 pp: 1.25,
 priority: 0,
 flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 40,
+chance: 30,
 volatileStatus: 'flinch',
 },
 target: "normal",
@@ -703,8 +706,8 @@ type: "Dark",
 },
 
 blackholeeclipse: {
-accuracy: 65,
-basePower: 200,
+accuracy: 95,
+basePower: 1,
 category: "Physical",
 name: "Black Hole Eclipse",
 pp: 1,
@@ -779,7 +782,7 @@ type: "Dark",
 },
 
 crunch: {
-accuracy: 90,
+accuracy: 95,
 basePower: 80,
 category: "Physical",
 name: "Crunch",
@@ -812,15 +815,15 @@ type: "Dark",
 },
 
 darkpulse: {
-accuracy: 85,
-basePower: 90,
+accuracy: 95,
+basePower: 80,
 category: "Special",
 name: "Dark Pulse",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, pulse: 1, mirror: 1, distance: 1},
 secondary: {
-chance: 30,
+chance: 20,
 volatileStatus: 'flinch',
 },
 target: "any",
@@ -1033,13 +1036,13 @@ type: "Dark",
 },
 
 hyperspacefury: {
-accuracy: 90,
+accuracy: 95,
 basePower: 100,
-category: "Special",
+category: "Physical",
 name: "Hyperspace Fury",
 pp: 1.25,
 priority: 0,
-flags: {mirror: 1,},
+flags: {mirror: 1, bypasssub: 1},
 breaksProtect: true,
 onTry(source) {
 if (source.species.name === 'Hoopa-Unbound') {
@@ -1058,7 +1061,6 @@ return null;
 self: {
 boosts: {
 def: -1,
-spd: -1,
 },
 },
 secondary: null,
@@ -1144,8 +1146,8 @@ type: "Dark",
 },
 
 maliciousmoonsault: {
-accuracy: 80,
-basePower: 120,
+accuracy: 95,
+basePower: 180,
 category: "Physical",
 name: "Malicious Moonsault",
 pp: 1,
@@ -1162,7 +1164,7 @@ basePower: 0,
 category: "Status",
 name: "Memento",
 pp: 1.25,
-priority: 4,
+priority: 0,
 flags: {protect: 1, mirror: 1},
 boosts: {
 atk: -2,
@@ -1191,7 +1193,7 @@ type: "Dark",
 },
 
 nightdaze: {
-accuracy: 90,
+accuracy: 95,
 basePower: 85,
 category: "Special",
 name: "Night Daze",
@@ -1199,7 +1201,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 75,
+chance: 40,
 boosts: {
 accuracy: -1,
 },
@@ -1424,7 +1426,7 @@ type: "Dark",
 quash: {
 accuracy: 95,
 basePower: 0,
-category: "Special",
+category: "Status",
 name: "Quash",
 pp: 1.25,
 priority: 0,
@@ -1469,7 +1471,6 @@ secondary: {
 chance: 100,
 boosts: {
 spa: -1,
-atk: -1,
 },
 },
 target: "allAdjacentFoes",
@@ -1749,13 +1750,14 @@ type: "Dark",
 },
 
 wickedblow: {
-accuracy: 90,
-basePower: 45,
+accuracy: 95,
+basePower: 75,
 category: "Physical",
 name: "Wicked Blow",
 pp: 1.25,
-priority: 2,
+priority: 0,
 flags: {contact: 1, protect: 1, punch: 1, mirror: 1},
+willCrit: true,
 secondary: null,
 target: "normal",
 type: "Dark",
@@ -1763,16 +1765,16 @@ type: "Dark",
 
 wickedtorque: {
 accuracy: 95,
-basePower: 35,
-category: "Special",
+basePower: 80,
+category: "Physical",
 name: "Wicked Torque",
 pp: 1.25,
-priority: 2,
+priority: 0,
 flags: {
 protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 },
 secondary: {
-chance: 50,
+chance: 10,
 status: 'slp',
 },
 target: "normal",
@@ -1846,8 +1848,8 @@ type: "Dragon",
 },
 
 clangoroussoulblaze: {
-accuracy: 80,
-basePower: 120,
+accuracy: 95,
+basePower: 185,
 category: "Special",
 name: "Clangorous Soulblaze",
 pp: 1,
@@ -1893,8 +1895,8 @@ type: "Dragon",
 },
 
 devastatingdrake: {
-accuracy: 60,
-basePower: 200,
+accuracy: 95,
+basePower: 1,
 category: "Physical",
 name: "Devastating Drake",
 pp: 1,
@@ -1906,8 +1908,8 @@ type: "Dragon",
 },
 
 dracometeor: {
-accuracy: 80,
-basePower: 110,
+accuracy: 90,
+basePower: 130,
 category: "Special",
 name: "Draco Meteor",
 pp: 1.25,
@@ -1932,7 +1934,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 50,
+chance: 30,
 status: 'par',
 },
 target: "normal",
@@ -1940,7 +1942,7 @@ type: "Dragon",
 },
 
 dragonclaw: {
-accuracy: 90,
+accuracy: 95,
 basePower: 80,
 category: "Physical",
 name: "Dragon Claw",
@@ -1985,8 +1987,8 @@ type: "Dragon",
 },
 
 dragonenergy: {
-accuracy: 80,
-basePower: 120,
+accuracy: 95,
+basePower: 150,
 basePowerCallback(pokemon, target, move) {
 const bp = move.basePower * pokemon.hp / pokemon.maxhp;
 this.debug('BP: ' + bp);
@@ -2016,8 +2018,8 @@ type: "Dragon",
 },
 
 dragonpulse: {
-accuracy: 85,
-basePower: 90,
+accuracy: 95,
+basePower: 85,
 category: "Special",
 name: "Dragon Pulse",
 pp: 1.25,
@@ -2030,7 +2032,8 @@ type: "Dragon",
 
 dragonrage: {
 accuracy: 95,
-basePower: 35,
+basePower: 0,
+damage: 40,
 category: "Special",
 name: "Dragon Rage",
 pp: 1.25,
@@ -2086,7 +2089,7 @@ type: "Dragon",
 
 eternabeam: {
 accuracy: 90,
-basePower: 150,
+basePower: 160,
 category: "Special",
 name: "Eternabeam",
 pp: 1.25,
@@ -2164,7 +2167,7 @@ type: "Dragon",
 },
 
 outrage: {
-accuracy: 75,
+accuracy: 95,
 basePower: 120,
 category: "Physical",
 name: "Outrage",
@@ -2202,11 +2205,11 @@ type: "Dragon",
 
 scaleshot: {
 accuracy: 90,
-basePower: 5,
+basePower: 25,
 category: "Physical",
 name: "Scale Shot",
 pp: 1.25,
-priority: 1,
+priority: 0,
 flags: {protect: 1, mirror: 1},
 multihit: [2, 5],
 selfBoost: {
@@ -2249,19 +2252,18 @@ volatileStatus: 'flinch',
 target: "allAdjacentFoes",
 type: "Dragon",
 },
-
 "10000000voltthunderbolt": {
-accuracy: 75,
-    
+10000000voltthunderbolt: {
+accuracy: 95,
+basePower: 195,
 category: "Special",
 name: "10,000,000 Volt Thunderbolt",
 pp: 1,
 priority: 0,
-flags: {protect: 1, mirror: 1, noparentalbond: 1},
-selfdestruct: "always",
-critRatio: 4,
+flags: {},
+critRatio: 3,
 secondary: null,
-target: "all",
+target: "normal",
 type: "Electric",
 },
 
@@ -3264,7 +3266,7 @@ type: "Fairy",
 drainingkiss: {
 accuracy: 95,
 basePower: 50,
-category: "Physical",
+category: "Special",
 name: "Draining Kiss",
 pp: 1.25,
 priority: 0,
@@ -4447,21 +4449,17 @@ type: "Fighting",
 
 poweruppunch: {
 accuracy: 95,
-basePower: 30,
+basePower: 40,
 category: "Physical",
 name: "Power-Up Punch",
 pp: 1.25,
-priority: -1,
+priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 secondary: {
 chance: 100,
 self: {
 boosts: {
 atk: 1,
-def: 1,
-spa: 1,
-spd: 1,
-spe: -1,
 },
 },
 },
@@ -5888,11 +5886,11 @@ flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
 onHit(target, source, move) {
 let success = false;
 if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({evasion: -1});
-const removeTarget = [
 'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
+reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
 ];
-const removeAll = [
 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
+spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
 ];
 for (const targetCondition of removeTarget) {
 if (target.side.removeSideCondition(targetCondition)) {
@@ -7109,7 +7107,7 @@ accuracy: 95,
 basePower: 40,
 category: "Physical",
 name: "Branch Poke",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: null,
@@ -7175,7 +7173,7 @@ accuracy: 95,
 basePower: 0,
 category: "Status",
 name: "Cotton Spore",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
 boosts: {
@@ -7562,7 +7560,7 @@ accuracy: 95,
 basePower: 40,
 category: "Physical",
 name: "Leafage",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: null,
@@ -9535,7 +9533,7 @@ accuracy: 95,
 basePower: 0,
 category: "Status",
 name: "Baton Pass",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {},
 onTryHit(target) {
@@ -9796,7 +9794,7 @@ accuracy: 95,
 basePower: 0,
 category: "Status",
 name: "Celebrate",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
 onTryHit(target, source) {
@@ -9952,8 +9950,8 @@ pp: 1.25,
 priority: 0,
 flags: {mirror: 1},
 onHitField(target, source) {
-const sideConditions = [
 'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire',
+mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire',
 ];
 let success = false;
 if (this.gameType === "freeforall") {
@@ -10101,7 +10099,7 @@ accuracy: 95,
 basePower: 0,
 category: "Status",
 name: "Defense Curl",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {snatch: 1},
 boosts: {
@@ -10464,8 +10462,8 @@ flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
 onTryHit(target, source) {
 if (target === source || target.volatiles['dynamax']) return false;
 const additionalBannedSourceAbilities = [
-// Zen Mode included here for compatability with Gen 5-6
 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode',
+flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode',
 ];
 if (
 target.ability === source.ability ||
@@ -10581,7 +10579,7 @@ accuracy: 95,
 basePower: 40,
 category: "Physical",
 name: "False Swipe",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 onDamagePriority: -20,
@@ -10752,7 +10750,7 @@ accuracy: 95,
 basePower: 0,
 category: "Status",
 name: "Foresight",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
 volatileStatus: 'foresight',
@@ -10857,7 +10855,7 @@ accuracy: 95,
 basePower: 0,
 category: "Status",
 name: "Growl",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1},
 boosts: {
@@ -11024,7 +11022,7 @@ accuracy: 95,
 basePower: 40,
 category: "Physical",
 name: "Hold Back",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 onDamagePriority: -20,
@@ -11041,7 +11039,7 @@ accuracy: 95,
 basePower: 0,
 category: "Status",
 name: "Hold Hands",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {bypasssub: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
 secondary: null,
@@ -11081,7 +11079,7 @@ accuracy: 95,
 basePower: 0,
 category: "Status",
 name: "Howl",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {snatch: 1, sound: 1},
 boosts: {
@@ -11398,8 +11396,8 @@ name: "Metronome",
 pp: 1.25,
 priority: 0,
 flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
-noMetronome: [
 "After You", "Apple Acid", "Armor Cannon", "Assist", "Astral Barrage", "Aura Wheel", "Baneful Bunker", "Beak Blast", "Behemoth Bash", "Behemoth Blade", "Belch", "Bestow", "Blazing Torque", "Body Press", "Branch Poke", "Breaking Swipe", "Celebrate", "Chatter", "Chilling Water", "Chilly Reception", "Clangorous Soul", "Collision Course", "Combat Torque", "Comeuppance", "Copycat", "Counter", "Covet", "Crafty Shield", "Decorate", "Destiny Bond", "Detect", "Diamond Storm", "Doodle", "Double Iron Bash", "Double Shock", "Dragon Ascent", "Dragon Energy", "Drum Beating", "Dynamax Cannon", "Electro Drift", "Endure", "Eternabeam", "False Surrender", "Feint", "Fiery Wrath", "Fillet Away", "Fleur Cannon", "Focus Punch", "Follow Me", "Freeze Shock", "Freezing Glare", "Glacial Lance", "Grav Apple", "Helping Hand", "Hold Hands", "Hyper Drill", "Hyperspace Fury", "Hyperspace Hole", "Ice Burn", "Instruct", "Jet Punch", "Jungle Healing", "King's Shield", "Life Dew", "Light of Ruin", "Magical Torque", "Make It Rain", "Mat Block", "Me First", "Meteor Assault", "Metronome", "Mimic", "Mind Blown", "Mirror Coat", "Mirror Move", "Moongeist Beam", "Nature Power", "Nature's Madness", "Noxious Torque", "Obstruct", "Order Up", "Origin Pulse", "Overdrive", "Photon Geyser", "Plasma Fists", "Population Bomb", "Pounce", "Power Shift", "Precipice Blades", "Protect", "Pyro Ball", "Quash", "Quick Guard", "Rage Fist", "Rage Powder", "Raging Bull", "Raging Fury", "Relic Song", "Revival Blessing", "Ruination", "Salt Cure", "Secret Sword", "Shed Tail", "Shell Trap", "Silk Trap", "Sketch", "Sleep Talk", "Snap Trap", "Snarl", "Snatch", "Snore", "Snowscape", "Spectral Thief", "Spicy Extract", "Spiky Shield", "Spirit Break", "Spotlight", "Springtide Storm", "Steam Eruption", "Steel Beam", "Strange Steam", "Struggle", "Sunsteel Strike", "Surging Strikes", "Switcheroo", "Techno Blast", "Thief", "Thousand Arrows", "Thousand Waves", "Thunder Cage", "Thunderous Kick", "Tidy Up", "Trailblaze", "Transform", "Trick", "Twin Beam", "V-create", "Wicked Blow", "Wicked Torque", "Wide Guard",
+After You, "Apple Acid", "Armor Cannon", "Assist", "Astral Barrage", "Aura Wheel", "Baneful Bunker", "Beak Blast", "Behemoth Bash", "Behemoth Blade", "Belch", "Bestow", "Blazing Torque", "Body Press", "Branch Poke", "Breaking Swipe", "Celebrate", "Chatter", "Chilling Water", "Chilly Reception", "Clangorous Soul", "Collision Course", "Combat Torque", "Comeuppance", "Copycat", "Counter", "Covet", "Crafty Shield", "Decorate", "Destiny Bond", "Detect", "Diamond Storm", "Doodle", "Double Iron Bash", "Double Shock", "Dragon Ascent", "Dragon Energy", "Drum Beating", "Dynamax Cannon", "Electro Drift", "Endure", "Eternabeam", "False Surrender", "Feint", "Fiery Wrath", "Fillet Away", "Fleur Cannon", "Focus Punch", "Follow Me", "Freeze Shock", "Freezing Glare", "Glacial Lance", "Grav Apple", "Helping Hand", "Hold Hands", "Hyper Drill", "Hyperspace Fury", "Hyperspace Hole", "Ice Burn", "Instruct", "Jet Punch", "Jungle Healing", "King's Shield", "Life Dew", "Light of Ruin", "Magical Torque", "Make It Rain", "Mat Block", "Me First", "Meteor Assault", "Metronome", "Mimic", "Mind Blown", "Mirror Coat", "Mirror Move", "Moongeist Beam", "Nature Power", "Nature's Madness", "Noxious Torque", "Obstruct", "Order Up", "Origin Pulse", "Overdrive", "Photon Geyser", "Plasma Fists", "Population Bomb", "Pounce", "Power Shift", "Precipice Blades", "Protect", "Pyro Ball", "Quash", "Quick Guard", "Rage Fist", "Rage Powder", "Raging Bull", "Raging Fury", "Relic Song", "Revival Blessing", "Ruination", "Salt Cure", "Secret Sword", "Shed Tail", "Shell Trap", "Silk Trap", "Sketch", "Sleep Talk", "Snap Trap", "Snarl", "Snatch", "Snore", "Snowscape", "Spectral Thief", "Spicy Extract", "Spiky Shield", "Spirit Break", "Spotlight", "Springtide Storm", "Steam Eruption", "Steel Beam", "Strange Steam", "Struggle", "Sunsteel Strike", "Surging Strikes", "Switcheroo", "Techno Blast", "Thief", "Thousand Arrows", "Thousand Waves", "Thunder Cage", "Thunderous Kick", "Tidy Up", "Trailblaze", "Transform", "Trick", "Twin Beam", "V-create", "Wicked Blow", "Wicked Torque", "Wide Guard",
 ],
 onHit(target, source, effect) {
 const moves = this.dex.moves.all().filter(move => (
@@ -11504,16 +11502,16 @@ condition: {
 noCopy: true,
 onRestart: () => null,
 onSourceModifyDamage(damage, source, target, move) {
-const boostedMoves = [
 'stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'heatcrash', 'heavyslam', 'maliciousmoonsault',
+stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'heatcrash', 'heavyslam', 'maliciousmoonsault',
 ];
 if (boostedMoves.includes(move.id)) {
 return this.chainModify(2);
 }
 },
 onAccuracy(accuracy, target, source, move) {
-const boostedMoves = [
 'stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'heatcrash', 'heavyslam', 'maliciousmoonsault',
+stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'heatcrash', 'heavyslam', 'maliciousmoonsault',
 ];
 if (boostedMoves.includes(move.id)) {
 return true;
@@ -11660,7 +11658,7 @@ accuracy: 95,
 basePower: 0,
 category: "Status",
 name: "Odor Sleuth",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, allyanim: 1},
 volatileStatus: 'foresight',
@@ -12031,7 +12029,7 @@ accuracy: 95,
 basePower: 50,
 category: "Physical",
 name: "Rapid Spin",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 onAfterHit(target, pokemon) {
@@ -12439,7 +12437,7 @@ accuracy: 85,
 basePower: 0,
 category: "Status",
 name: "Screech",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, allyanim: 1},
 boosts: {
@@ -12889,7 +12887,7 @@ accuracy: 95,
 basePower: 0,
 category: "Status",
 name: "Splash",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {gravity: 1},
 onTry(source, target, move) {
@@ -14005,7 +14003,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 onBasePower(basePower, pokemon, target) {
-if (target.status === 'tox' || target.status === 'tox') {
+if (target.status === 'psn' || target.status === 'tox') {
 return this.chainModify(2);
 }
 },
@@ -14073,7 +14071,7 @@ accuracy: 95,
 basePower: 0,
 category: "Status",
 name: "Corrosive Gas",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
 onHit(target, source) {
@@ -14264,7 +14262,7 @@ accuracy: 90,
 basePower: 0,
 category: "Status",
 name: "Poison Gas",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1},
 status: 'tox',
@@ -14542,7 +14540,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1},
 onHit(target, source, move) {
-if (target.status === 'tox' || target.status === 'tox') {
+if (target.status === 'psn' || target.status === 'tox') {
 return !!this.boost({atk: -1, spa: -1, spe: -1}, target, source, move);
 }
 return false;
@@ -14561,7 +14559,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 onBasePower(basePower, pokemon, target) {
-if (target.status === 'tox' || target.status === 'tox') {
+if (target.status === 'psn' || target.status === 'tox') {
 return this.chainModify(2);
 }
 },
@@ -15555,7 +15553,7 @@ accuracy: 95,
 basePower: 0,
 category: "Status",
 name: "Meditate",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {snatch: 1},
 boosts: {
@@ -15571,7 +15569,7 @@ accuracy: 95,
 basePower: 0,
 category: "Status",
 name: "Miracle Eye",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
 volatileStatus: 'miracleeye',
@@ -16126,10 +16124,10 @@ pp: 1.25,
 priority: 0,
 flags: {bypasssub: 1, allyanim: 1},
 onTryHit(target, source) {
-if (target.ability === source.ability) return false;
+'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard', 'zenmode',
 const additionalBannedTargetAbilities = [
 // Zen Mode included here for compatability with Gen 5-6
-'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard', 'zenmode',
+flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard', 'zenmode',
 ];
 if (target.getAbility().isPermanent || additionalBannedTargetAbilities.includes(target.ability) ||
 source.getAbility().isPermanent) {
@@ -17537,7 +17535,7 @@ accuracy: 85,
 basePower: 0,
 category: "Status",
 name: "Metal Sound",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, allyanim: 1},
 boosts: {
@@ -18591,7 +18589,7 @@ accuracy: 95,
 basePower: 0,
 category: "Status",
 name: "Withdraw",
-pp: 125,
+pp: 40,
 priority: 0,
 flags: {snatch: 1},
 boosts: {
