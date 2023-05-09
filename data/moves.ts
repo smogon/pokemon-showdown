@@ -23462,4 +23462,22 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "???",
 		contestType: "Tough",
 	},
+	everyoneexplodenow: {
+		num: -43,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Everyone Explode Now",
+		pp: 1,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: null,
+		target: "all",
+		onAfterHit(source, target, move) {
+			this.actions.useMove("Explosion", target, target);
+		},
+		type: "Normal",
+		zMove: {boost: {atk: 1}},
+		contestType: "Tough",
+	},
 };
