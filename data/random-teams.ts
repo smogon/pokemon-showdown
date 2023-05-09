@@ -1872,7 +1872,7 @@ export class RandomTeams {
 				pool.push(num);
 			}
 		} else {
-			const EXISTENCE_TAG = [];
+			const EXISTENCE_TAG = ['nothing'];
 			const nonexistentBanReason = ruleTable.check('nonexistent');
 			// Assume tierSpecies does not differ from species here (mega formes can be used without their stone, etc)
 			for (const species of this.dex.species.all()) {
