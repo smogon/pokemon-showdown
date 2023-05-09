@@ -940,7 +940,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (
 			!isDoubles &&
 			counter.get('Physical') >= 3 &&
-			moves.has('defog') &&
+			(moves.has('defog') || moves.has('healingwish')) &&
 			!moves.has('foulplay') &&
 			species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
 			!counter.get('priority')
