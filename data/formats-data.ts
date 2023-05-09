@@ -9059,4 +9059,14 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	magnemiterhinianswarm: {
 		isNonstandard: "Past",
 	},
+	dewpiderdelta: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	araquaniddelta: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
 };

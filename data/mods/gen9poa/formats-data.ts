@@ -3521,4 +3521,14 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "OU",
 	},
+	dewpiderdelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	araquaniddelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };

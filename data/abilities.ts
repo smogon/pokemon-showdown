@@ -6938,5 +6938,23 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 1,
 		num: -62,
 	},
+	magmabubble: {
+		onModifyDamage(source,move) {
+			if (move.types.includes('Fire')) {
+				return this.chainModify(1.5);
+			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target)) {
+				if (this.randomChance(3, 10)) {
+					source.trySetStatus('brn', target);
+				}
+			}
+		},
+		isBreakable: true,
+		name: "Magma Bubble",
+		rating: 4.5,
+		num: 199,
+	},
 };
 
