@@ -88,7 +88,7 @@ const Setup = [
 const NoStab = [
 	'accelerock', 'aquajet', 'beakblast', 'bounce', 'breakingswipe', 'chatter', 'chloroblast', 'clearsmog', 'dragontail', 'eruption',
 	'explosion', 'fakeout', 'flamecharge', 'flipturn', 'iceshard', 'icywind', 'incinerate', 'machpunch', 'meteorbeam',
-	'mortalspin', 'pluck', 'pursuit', 'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak',
+	'mortalspin', 'nuzzle', 'pluck', 'pursuit', 'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak',
 	'skydrop', 'snarl', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
 ];
 // Hazard-setting moves
@@ -344,7 +344,6 @@ export class RandomTeams {
 			if (move.damage || move.damageCallback) {
 				// Moves that do a set amount of damage:
 				counter.add('damage');
-				counter.damagingMoves.add(move);
 			} else {
 				// Are Physical/Special/Status moves:
 				categories[move.category]++;
@@ -358,11 +357,12 @@ export class RandomTeams {
 			if (move.recoil || move.hasCrashDamage) counter.add('recoil');
 			if (move.drain) counter.add('drain');
 			// Moves which have a base power, but aren't super-weak:
-			if (move.basePower > 30 || move.multihit || move.basePowerCallback) {
+			if (move.category !== 'Status') {
 				if (!this.noStab.includes(moveid) || priorityPokemon.includes(species.id) && move.priority > 0) {
 					counter.add(moveType);
 					if (types.includes(moveType)) counter.stabCounter++;
 					if (teraType === moveType) counter.add('stabtera');
+					counter.damagingMoves.add(move);
 				}
 				if (move.flags['bite']) counter.add('strongjaw');
 				if (move.flags['punch']) counter.ironFist++;
@@ -370,7 +370,6 @@ export class RandomTeams {
 				if (move.priority > 0 || (moveid === 'grassyglide' && abilities.has('Grassy Surge'))) {
 					counter.add('priority');
 				}
-				counter.damagingMoves.add(move);
 			}
 			// Moves with secondary effects:
 			if (move.secondary || move.hasSheerForce) {
@@ -468,9 +467,7 @@ export class RandomTeams {
 
 		// These moves don't mesh well with other aspects of the set
 		this.incompatibleMoves(moves, movePool, statusMoves, ['healingwish', 'switcheroo', 'trick']);
-		if (species.id !== "scyther" && species.id !== "scizor") {
-			this.incompatibleMoves(moves, movePool, Setup, pivotingMoves);
-		}
+		this.incompatibleMoves(moves, movePool, Setup, pivotingMoves);
 		this.incompatibleMoves(moves, movePool, Setup, Hazards);
 		this.incompatibleMoves(moves, movePool, Setup, ['defog', 'nuzzle', 'toxic', 'waterspout', 'yawn', 'haze']);
 		this.incompatibleMoves(moves, movePool, PhysicalSetup, PhysicalSetup);
@@ -700,9 +697,7 @@ export class RandomTeams {
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
 				const moveType = this.getMoveType(move, species, abilities, teraType);
-				if (type === moveType &&
-					(move.basePower > 30 || move.multihit || move.basePowerCallback) &&
-					(!this.noStab.includes(moveid) || abilities.has('Technician') && moveid === 'machpunch')) {
+				if (type === moveType && move.category !== 'Status' && !this.noStab.includes(moveid)) {
 					stabMoves.push(moveid);
 				}
 			}
@@ -720,8 +715,7 @@ export class RandomTeams {
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
 				const moveType = this.getMoveType(move, species, abilities, teraType);
-				if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback) &&
-					types.includes(moveType)) {
+				if (!this.noStab.includes(moveid) && move.category !== 'Status' && types.includes(moveType)) {
 					stabMoves.push(moveid);
 				}
 			}
@@ -738,10 +732,8 @@ export class RandomTeams {
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
 				const moveType = this.getMoveType(move, species, abilities, teraType);
-				if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
-					if (teraType === moveType) {
-						stabMoves.push(moveid);
-					}
+				if (!this.noStab.includes(moveid) && move.category !== 'Status' && teraType === moveType) {
+					stabMoves.push(moveid);
 				}
 			}
 			if (stabMoves.length) {
@@ -784,21 +776,14 @@ export class RandomTeams {
 		if (!['AV Pivot', 'Fast Support', 'Bulky Support'].includes(role)) {
 			if (counter.damagingMoves.size <= 1) {
 				// Find the type of the current attacking move
-				let currentAttackType: string;
-				for (const moveid of moves) {
-					const move = this.dex.moves.get(moveid);
-					if (move.basePower > 30 || move.multihit || move.basePowerCallback) {
-						const moveType = this.getMoveType(move, species, abilities, teraType);
-						currentAttackType = moveType;
-					}
-				}
+				const currentAttackType = counter.damagingMoves.values().next().value.type;
 				// Choose an attacking move that is of different type to the current single attack
 				const coverageMoves = [];
 				for (const moveid of movePool) {
 					const move = this.dex.moves.get(moveid);
 					const moveType = this.getMoveType(move, species, abilities, teraType);
-					if (!this.noStab.includes(moveid) && (move.basePower > 30 || move.multihit || move.basePowerCallback)) {
-						if (currentAttackType! !== moveType) coverageMoves.push(moveid);
+					if (!this.noStab.includes(moveid) && move.category !== 'Status') {
+						if (currentAttackType !== moveType) coverageMoves.push(moveid);
 					}
 				}
 				if (coverageMoves.length) {
@@ -806,6 +791,21 @@ export class RandomTeams {
 					counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 						movePool, teraType, role);
 				}
+			}
+		}
+
+		// Enforce a move not on the noSTAB list
+		if (!counter.damagingMoves.size) {
+			// Choose an attacking move
+			const attackingMoves = [];
+			for (const moveid of movePool) {
+				const move = this.dex.moves.get(moveid);
+				if (!this.noStab.includes(moveid) && move.category !== 'Status') attackingMoves.push(moveid);
+			}
+			if (attackingMoves.length) {
+				const moveid = this.sample(attackingMoves);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
 			}
 		}
 
@@ -1211,16 +1211,20 @@ export class RandomTeams {
 			this.dex.getEffectiveness('Rock', species) >= 1
 		) return 'Heavy-Duty Boots';
 		if (
-			role === 'Fast Support' &&
-			['defog', 'rapidspin', 'uturn', 'voltswitch'].some(m => moves.has(m)) &&
-			!types.includes('Flying') && ability !== 'Levitate'
+			(moves.has('chillyreception') || (
+				role === 'Fast Support' &&
+				['defog', 'partingshot', 'mortalspin', 'rapidspin', 'uturn', 'voltswitch'].some(m => moves.has(m)) &&
+				!types.includes('Flying') && ability !== 'Levitate'
+			))
 		) return 'Heavy-Duty Boots';
 
 		// Low Priority
 		if (moves.has('outrage')) return 'Lum Berry';
 		if (
-			(species.id === 'garchomp' && role === 'Fast Support') ||
-			(ability === 'Regenerator' && types.includes('Water') && species.baseStats.def >= 110 && this.randomChance(1, 3))
+			(species.id === 'garchomp' && role === 'Fast Support') || (
+				ability === 'Regenerator' && (role === 'Bulky Support' || role === 'Bulky Attacker') &&
+				(species.baseStats.hp + species.baseStats.def) >= 180 && this.randomChance(1, 2)
+			)
 		) return 'Rocky Helmet';
 		if (
 			role === 'Fast Support' && isLead &&
@@ -1234,9 +1238,12 @@ export class RandomTeams {
 		if (['Bulky Attacker', 'Bulky Support', 'Bulky Setup'].some(m => role === (m))) return 'Leftovers';
 		if (species.id === 'pawmot' && moves.has('nuzzle')) return 'Leppa Berry';
 		if (role === 'Fast Support' || role === 'Fast Bulky Setup') {
-			return (counter.damagingMoves.size >= 3 && !moves.has('nuzzle')) ? 'Life Orb' : 'Leftovers';
+			return (counter.get('Physical') + counter.get('Special') >= 3 && !moves.has('nuzzle')) ? 'Life Orb' : 'Leftovers';
 		}
-		if (role === 'Tera Blast user' && counter.get('recovery') && counter.damagingMoves.size < 3) return 'Leftovers';
+		if (
+			role === 'Tera Blast user' && counter.get('recovery') &&
+			counter.get('Physical') + counter.get('Special') < 3
+		) return 'Leftovers';
 		if (
 			['flamecharge', 'rapidspin'].every(m => !moves.has(m)) &&
 			['Fast Attacker', 'Setup Sweeper', 'Tera Blast user', 'Wallbreaker'].some(m => role === (m))
