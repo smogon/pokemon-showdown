@@ -33,7 +33,6 @@ ex.Imposter,ShadowTag
 */
 
 exportconstAbilities:{[abilityid:string]:AbilityData}={
-
 noability:{
 isNonstandard:"Past",
 name:"NoAbility",
