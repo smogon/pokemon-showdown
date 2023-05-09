@@ -528,23 +528,21 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 20,
 	},
 	rest: {
-		 inherit: true,
-		 OnTry (source) {
-			 if (source.status === 'slp') {
-				 this.add('-fail', pokemon, 'slp');
-				 return null;
-			 }
-
-			 if (source.hp === source.maxhp) {
-				 this.add('-fail', source, 'heal');
-				 return null;
-			 }
-
-			 if (source.hasAbility(['insomnia', 'vitalspirit'])) {
-				 this.add('-fail', source, '[from] ability: ' + source.getAbility().name, '[of] ' + source);
-				 return null;
-			 }
-		 }
+		inherit: true,
+		onTry(source) {
+			if (source.status === 'slp') {
+				this.add('-fail', source, 'slp');
+				return null;
+			}
+			if (source.hp === source.maxhp) {
+				this.add('-fail', source, 'heal');
+				return null;
+			}
+			if (source.hasAbility(['insomnia', 'vitalspirit'])) {
+				this.add('-fail', source, '[from] ability: ' + source.getAbility().name, '[of] ' + source);
+				return null;
+			}
+		}
 	},
 	rocksmash: {
 		inherit: true,
@@ -559,7 +557,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(pokemon) {
 			const moves = [];
 			for (const moveSlot of pokemon.moveSlots) {
-			const moveid = moveSlot.id;
+				const moveid = moveSlot.id;
 				const pp = moveSlot.pp;
 				const move = this.dex.moves.get(moveid);
 				if (moveid && !move.flags['nosleeptalk'] && !move.flags['charge']) {
