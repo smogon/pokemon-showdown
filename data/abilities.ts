@@ -39,7 +39,6 @@ name:"NoAbility",
 rating:0.1,
 num:0,
 },
-
 adaptability:{
 onModifyMove(move){
 move.stab=2;
@@ -48,7 +47,6 @@ name:"Adaptability",
 rating:4,
 num:91,
 },
-
 aerilate:{
 onModifyTypePriority:-1,
 onModifyType(move,pokemon){
@@ -69,7 +67,6 @@ name:"Aerilate",
 rating:4,
 num:184,
 },
-
 aftermath:{
 name:"Aftermath",
 onDamagingHitOrder:1,
@@ -81,7 +78,6 @@ this.damage(source.baseMaxhp/4,source,target);
 rating:2,
 num:106,
 },
-
 airlock:{
 onSwitchIn(pokemon){
 this.effectState.switchingIn=true;
@@ -102,7 +98,6 @@ name:"AirLock",
 rating:1.5,
 num:76,
 },
-
 analytic:{
 onBasePowerPriority:21,
 onBasePower(basePower,pokemon){
@@ -123,7 +118,6 @@ name:"Analytic",
 rating:2.5,
 num:148,
 },
-
 angerpoint:{
 onHit(target,source,move){
 if(!target.hp)return;
@@ -135,7 +129,6 @@ name:"AngerPoint",
 rating:1,
 num:83,
 },
-
 angershell:{
 onDamage(damage,target,source,effect){
 if(
@@ -171,7 +164,6 @@ name:"AngerShell",
 rating:3,
 num:271,
 },
-
 anticipation:{
 onStart(pokemon){
 for(consttargetofpokemon.foes()){
@@ -193,7 +185,6 @@ name:"Anticipation",
 rating:0.5,
 num:107,
 },
-
 arenatrap:{
 onFoeTrapPokemon(pokemon){
 if(!pokemon.isAdjacent(this.effectState.target))return;
@@ -212,7 +203,6 @@ name:"ArenaTrap",
 rating:5,
 num:71,
 },
-
 armortail:{
 onFoeTryMove(target,source,move){
 consttargetAllExceptions=['perishsong','flowershield','rototiller'];
@@ -232,7 +222,6 @@ name:"ArmorTail",
 rating:2.5,
 num:296,
 },
-
 aromaveil:{
 onAllyTryAddVolatile(status,target,source,effect){
 if(['attract','disable','encore','healblock','taunt','torment'].includes(status.id)){
@@ -248,7 +237,6 @@ name:"AromaVeil",
 rating:2,
 num:165,
 },
-
 asoneglastrier:{
 onPreStart(pokemon){
 this.add('-ability',pokemon,'AsOne');
@@ -271,7 +259,6 @@ name:"AsOne(Glastrier)",
 rating:3.5,
 num:266,
 },
-
 asonespectrier:{
 onPreStart(pokemon){
 this.add('-ability',pokemon,'AsOne');
@@ -294,7 +281,6 @@ name:"AsOne(Spectrier)",
 rating:3.5,
 num:267,
 },
-
 aurabreak:{
 onStart(pokemon){
 if(this.suppressingAbility(pokemon))return;
@@ -309,7 +295,6 @@ name:"AuraBreak",
 rating:1,
 num:188,
 },
-
 baddreams:{
 onResidualOrder:28,
 onResidualSubOrder:2,
@@ -325,13 +310,11 @@ name:"BadDreams",
 rating:1.5,
 num:123,
 },
-
 ballfetch:{
 name:"BallFetch",
 rating:0,
 num:237,
 },
-
 battery:{
 onAllyBasePowerPriority:22,
 onAllyBasePower(basePower,attacker,defender,move){
@@ -344,7 +327,6 @@ name:"Battery",
 rating:0,
 num:217,
 },
-
 battlearmor:{
 onCriticalHit:false,
 isBreakable:true,
@@ -352,7 +334,6 @@ name:"BattleArmor",
 rating:1,
 num:4,
 },
-
 battlebond:{
 onSourceAfterFaint(length,target,source,effect){
 if(effect?.effectType!=='Move')return;
@@ -369,7 +350,6 @@ name:"BattleBond",
 rating:3.5,
 num:210,
 },
-
 beadsofruin:{
 onStart(pokemon){
 if(this.suppressingAbility(pokemon))return;
@@ -387,7 +367,6 @@ name:"BeadsofRuin",
 rating:4.5,
 num:284,
 },
-
 beastboost:{
 onSourceAfterFaint(length,target,source,effect){
 if(effect&&effect.effectType==='Move'){
@@ -399,7 +378,6 @@ name:"BeastBoost",
 rating:3.5,
 num:224,
 },
-
 berserk:{
 onDamage(damage,target,source,effect){
 if(
@@ -435,7 +413,6 @@ name:"Berserk",
 rating:2,
 num:201,
 },
-
 bigpecks:{
 onTryBoost(boost,target,source,effect){
 if(source&&target===source)return;
@@ -451,7 +428,6 @@ name:"BigPecks",
 rating:0.5,
 num:145,
 },
-
 blaze:{
 onModifyAtkPriority:5,
 onModifyAtk(atk,attacker,defender,move){
@@ -471,7 +447,6 @@ name:"Blaze",
 rating:2,
 num:66,
 },
-
 bulletproof:{
 onTryHit(pokemon,target,move){
 if(move.flags['bullet']){
@@ -484,7 +459,6 @@ name:"Bulletproof",
 rating:3,
 num:171,
 },
-
 cheekpouch:{
 onEatItem(item,pokemon){
 this.heal(pokemon.baseMaxhp/3);
@@ -493,7 +467,6 @@ name:"CheekPouch",
 rating:2,
 num:167,
 },
-
 chillingneigh:{
 onSourceAfterFaint(length,target,source,effect){
 if(effect&&effect.effectType==='Move'){
@@ -504,7 +477,6 @@ name:"ChillingNeigh",
 rating:3,
 num:264,
 },
-
 chlorophyll:{
 onModifySpe(spe,pokemon){
 if(['sunnyday','desolateland'].includes(pokemon.effectiveWeather())){
@@ -515,7 +487,6 @@ name:"Chlorophyll",
 rating:3,
 num:34,
 },
-
 clearbody:{
 onTryBoost(boost,target,source,effect){
 if(source&&target===source)return;
@@ -536,7 +507,6 @@ name:"ClearBody",
 rating:2,
 num:29,
 },
-
 cloudnine:{
 onSwitchIn(pokemon){
 this.effectState.switchingIn=true;
@@ -557,7 +527,6 @@ name:"CloudNine",
 rating:1.5,
 num:13,
 },
-
 colorchange:{
 onAfterMoveSecondary(target,source,move){
 if(!target.hp)return;
@@ -582,7 +551,6 @@ name:"ColorChange",
 rating:0,
 num:16,
 },
-
 comatose:{
 onStart(pokemon){
 this.add('-ability',pokemon,'Comatose');
@@ -599,7 +567,6 @@ name:"Comatose",
 rating:4,
 num:213,
 },
-
 commander:{
 onUpdate(pokemon){
 constally=pokemon.allies()[0];
@@ -629,7 +596,6 @@ name:"Commander",
 rating:0,
 num:279,
 },
-
 competitive:{
 onAfterEachBoost(boost,target,source,effect){
 if(!source||target.isAlly(source)){
@@ -653,7 +619,6 @@ name:"Competitive",
 rating:2.5,
 num:172,
 },
-
 compoundeyes:{
 onSourceModifyAccuracyPriority:-1,
 onSourceModifyAccuracy(accuracy){
@@ -665,7 +630,6 @@ name:"CompoundEyes",
 rating:3,
 num:14,
 },
-
 contrary:{
 onChangeBoost(boost,target,source,effect){
 if(effect&&effect.id==='zpower')return;
@@ -679,14 +643,12 @@ name:"Contrary",
 rating:4.5,
 num:126,
 },
-
 corrosion:{
 //Implementedinsim/pokemon.js:Pokemon#setStatus
 name:"Corrosion",
 rating:2.5,
 num:212,
 },
-
 costar:{
 onStart(pokemon){
 constally=pokemon.allies()[0];
@@ -711,7 +673,6 @@ name:"Costar",
 rating:0,
 num:294,
 },
-
 cottondown:{
 onDamagingHit(damage,target,source,move){
 letactivated=false;
@@ -728,7 +689,6 @@ name:"CottonDown",
 rating:2,
 num:238,
 },
-
 cudchew:{
 onEatItem(item,pokemon){
 if(item.isBerry&&pokemon.addVolatile('cudchew')){
@@ -762,7 +722,6 @@ name:"CudChew",
 rating:2,
 num:291,
 },
-
 curiousmedicine:{
 onStart(pokemon){
 for(constallyofpokemon.adjacentAllies()){
@@ -774,7 +733,6 @@ name:"CuriousMedicine",
 rating:0,
 num:261,
 },
-
 cursedbody:{
 onDamagingHit(damage,target,source,move){
 if(source.volatiles['disable'])return;
@@ -788,7 +746,6 @@ name:"CursedBody",
 rating:2,
 num:130,
 },
-
 cutecharm:{
 onDamagingHit(damage,target,source,move){
 if(this.checkMoveMakesContact(move,source,target)){
@@ -801,7 +758,6 @@ name:"CuteCharm",
 rating:0.5,
 num:56,
 },
-
 damp:{
 onAnyTryMove(target,source,effect){
 if(['explosion','mindblown','mistyexplosion','selfdestruct'].includes(effect.id)){
@@ -820,14 +776,12 @@ name:"Damp",
 rating:0.5,
 num:6,
 },
-
 dancer:{
 name:"Dancer",
 //implementedinrunMoveinscripts.js
 rating:1.5,
 num:216,
 },
-
 darkaura:{
 onStart(pokemon){
 if(this.suppressingAbility(pokemon))return;
@@ -844,7 +798,6 @@ name:"DarkAura",
 rating:3,
 num:186,
 },
-
 dauntlessshield:{
 onStart(pokemon){
 if(this.effectState.shieldBoost)return;
@@ -856,7 +809,6 @@ name:"DauntlessShield",
 rating:3.5,
 num:235,
 },
-
 dazzling:{
 onFoeTryMove(target,source,move){
 consttargetAllExceptions=['perishsong','flowershield','rototiller'];
@@ -876,7 +828,6 @@ name:"Dazzling",
 rating:2.5,
 num:219,
 },
-
 defeatist:{
 onModifyAtkPriority:5,
 onModifyAtk(atk,pokemon){
@@ -894,7 +845,6 @@ name:"Defeatist",
 rating:-1,
 num:129,
 },
-
 defiant:{
 onAfterEachBoost(boost,target,source,effect){
 if(!source||target.isAlly(source)){
@@ -918,7 +868,6 @@ name:"Defiant",
 rating:3,
 num:128,
 },
-
 deltastream:{
 onStart(source){
 this.field.setWeather('deltastream');
@@ -942,7 +891,6 @@ name:"DeltaStream",
 rating:4,
 num:191,
 },
-
 desolateland:{
 onStart(source){
 this.field.setWeather('desolateland');
@@ -966,8 +914,6 @@ name:"DesolateLand",
 rating:4.5,
 num:190,
 },
-
-
 disguise:{
 onDamagePriority:1,
 onDamage(damage,target,source,effect){
@@ -1016,7 +962,6 @@ name:"Disguise",
 rating:3.5,
 num:209,
 },
-
 download:{
 onStart(pokemon){
 lettotaldef=0;
@@ -1035,7 +980,6 @@ name:"Download",
 rating:3.5,
 num:88,
 },
-
 dragonsmaw:{
 onModifyAtkPriority:5,
 onModifyAtk(atk,attacker,defender,move){
@@ -1055,7 +999,6 @@ name:"Dragon'sMaw",
 rating:3.5,
 num:263,
 },
-
 drizzle:{
 onStart(source){
 for(constactionofthis.queue){
@@ -1068,7 +1011,6 @@ name:"Drizzle",
 rating:4,
 num:2,
 },
-
 drought:{
 onStart(source){
 for(constactionofthis.queue){
@@ -1081,7 +1023,6 @@ name:"Drought",
 rating:4,
 num:70,
 },
-
 dryskin:{
 onTryHit(target,source,move){
 if(target!==source&&move.type==='Water'){
@@ -1110,14 +1051,12 @@ name:"DrySkin",
 rating:3,
 num:87,
 },
-
 earlybird:{
 name:"EarlyBird",
 //Implementedinstatuses.js
 rating:1.5,
 num:48,
 },
-
 eartheater:{
 onTryHit(target,source,move){
 if(target!==source&&move.type==='Ground'){
@@ -1132,7 +1071,6 @@ name:"EarthEater",
 rating:3.5,
 num:297,
 },
-
 effectspore:{
 onDamagingHit(damage,target,source,move){
 if(this.checkMoveMakesContact(move,source,target)&&!source.status&&source.runStatusImmunity('powder')){
@@ -1150,7 +1088,6 @@ name:"EffectSpore",
 rating:2,
 num:27,
 },
-
 electricsurge:{
 onStart(source){
 this.field.setTerrain('electricterrain');
@@ -1159,7 +1096,6 @@ name:"ElectricSurge",
 rating:4,
 num:226,
 },
-
 electromorphosis:{
 onDamagingHitOrder:1,
 onDamagingHit(damage,target,source,move){
@@ -1169,7 +1105,6 @@ name:"Electromorphosis",
 rating:2.5,
 num:280,
 },
-
 emergencyexit:{
 onEmergencyExit(target){
 if(!this.canSwitch(target.side)||target.forceSwitchFlag||target.switchFlag)return;
@@ -1185,7 +1120,6 @@ name:"EmergencyExit",
 rating:1,
 num:194,
 },
-
 fairyaura:{
 onStart(pokemon){
 if(this.suppressingAbility(pokemon))return;
@@ -1202,7 +1136,6 @@ name:"FairyAura",
 rating:3,
 num:187,
 },
-
 filter:{
 onSourceModifyDamage(damage,source,target,move){
 if(target.getMoveHitData(move).typeMod>0){
@@ -1215,7 +1148,6 @@ name:"Filter",
 rating:3,
 num:111,
 },
-
 flamebody:{
 onDamagingHit(damage,target,source,move){
 if(this.checkMoveMakesContact(move,source,target)){
@@ -1228,7 +1160,6 @@ name:"FlameBody",
 rating:2,
 num:49,
 },
-
 flareboost:{
 onBasePowerPriority:19,
 onBasePower(basePower,attacker,defender,move){
@@ -1240,7 +1171,6 @@ name:"FlareBoost",
 rating:2,
 num:138,
 },
-
 flashfire:{
 onTryHit(target,source,move){
 if(target!==source&&move.type==='Fire'){
@@ -1282,7 +1212,6 @@ name:"FlashFire",
 rating:3.5,
 num:18,
 },
-
 flowergift:{
 onStart(pokemon){
 this.singleEvent('WeatherChange',this.effect,this.effectState,pokemon);
@@ -1319,7 +1248,6 @@ name:"FlowerGift",
 rating:1,
 num:122,
 },
-
 flowerveil:{
 onAllyTryBoost(boost,target,source,effect){
 if((source&&target===source)||!target.hasType('Grass'))return;
@@ -1359,7 +1287,6 @@ name:"FlowerVeil",
 rating:0,
 num:166,
 },
-
 fluffy:{
 onSourceModifyDamage(damage,source,target,move){
 letmod=1;
@@ -1372,7 +1299,6 @@ name:"Fluffy",
 rating:3.5,
 num:218,
 },
-
 forecast:{
 onStart(pokemon){
 this.singleEvent('WeatherChange',this.effect,this.effectState,pokemon);
@@ -1405,7 +1331,6 @@ name:"Forecast",
 rating:2,
 num:59,
 },
-
 forewarn:{
 onStart(pokemon){
 letwarnMoves:(Move|Pokemon)[][]=[];
@@ -1434,7 +1359,6 @@ name:"Forewarn",
 rating:0.5,
 num:108,
 },
-
 friendguard:{
 name:"FriendGuard",
 onAnyModifyDamage(damage,source,target,move){
@@ -1447,7 +1371,6 @@ isBreakable:true,
 rating:0,
 num:132,
 },
-
 frisk:{
 onStart(pokemon){
 for(consttargetofpokemon.foes()){
@@ -1460,7 +1383,6 @@ name:"Frisk",
 rating:1.5,
 num:119,
 },
-
 fullmetalbody:{
 onTryBoost(boost,target,source,effect){
 if(source&&target===source)return;
@@ -1480,7 +1402,6 @@ name:"FullMetalBody",
 rating:2,
 num:230,
 },
-
 furcoat:{
 onModifyDefPriority:6,
 onModifyDef(def){
@@ -1491,7 +1412,6 @@ name:"FurCoat",
 rating:4,
 num:169,
 },
-
 galewings:{
 onModifyPriority(priority,pokemon,target,move){
 if(move?.type==='Flying'&&pokemon.hp===pokemon.maxhp)returnpriority+1;
@@ -1500,7 +1420,6 @@ name:"GaleWings",
 rating:2.5,
 num:177,
 },
-
 galvanize:{
 onModifyTypePriority:-1,
 onModifyType(move,pokemon){
@@ -1521,7 +1440,6 @@ name:"Galvanize",
 rating:4,
 num:206,
 },
-
 gluttony:{
 name:"Gluttony",
 rating:1.5,
@@ -1534,7 +1452,6 @@ pokemon.abilityState.gluttony=true;
 },
 
 },
-
 goodasgold:{
 onTryHit(target,source,move){
 if(move.category==='Status'&&target!==source){
@@ -1547,7 +1464,6 @@ name:"GoodasGold",
 rating:5,
 num:283,
 },
-
 gooey:{
 onDamagingHit(damage,target,source,move){
 if(this.checkMoveMakesContact(move,source,target,true)){
@@ -1559,7 +1475,6 @@ name:"Gooey",
 rating:2,
 num:183,
 },
-
 gorillatactics:{
 onStart(pokemon){
 pokemon.abilityState.choiceLock="";
@@ -1602,7 +1517,6 @@ name:"GorillaTactics",
 rating:4.5,
 num:255,
 },
-
 grasspelt:{
 onModifyDefPriority:6,
 onModifyDef(pokemon){
@@ -1613,7 +1527,6 @@ name:"GrassPelt",
 rating:0.5,
 num:179,
 },
-
 grassysurge:{
 onStart(source){
 this.field.setTerrain('grassyterrain');
@@ -1622,7 +1535,6 @@ name:"GrassySurge",
 rating:4,
 num:229,
 },
-
 grimneigh:{
 onSourceAfterFaint(length,target,source,effect){
 if(effect&&effect.effectType==='Move'){
@@ -1633,7 +1545,6 @@ name:"GrimNeigh",
 rating:3,
 num:265,
 },
-
 guarddog:{
 onDragOutPriority:1,
 onDragOut(pokemon){
@@ -1650,7 +1561,6 @@ name:"GuardDog",
 rating:2,
 num:275,
 },
-
 gulpmissile:{
 onDamagingHit(damage,target,source,move){
 if(!source.hp||!source.isActive||target.transformed||target.isSemiInvulnerable())return;
@@ -1679,7 +1589,6 @@ name:"GulpMissile",
 rating:2.5,
 num:241,
 },
-
 guts:{
 onModifyAtkPriority:5,
 onModifyAtk(atk,pokemon){
@@ -1691,7 +1600,6 @@ name:"Guts",
 rating:3.5,
 num:62,
 },
-
 hadronengine:{
 onStart(pokemon){
 if(!this.field.setTerrain('electricterrain')&&this.field.isTerrain('electricterrain')){
@@ -1710,7 +1618,6 @@ name:"HadronEngine",
 rating:4.5,
 num:289,
 },
-
 harvest:{
 name:"Harvest",
 onResidualOrder:28,
@@ -1727,7 +1634,6 @@ this.add('-item',pokemon,pokemon.getItem(),'[from]ability:Harvest');
 rating:2.5,
 num:139,
 },
-
 healer:{
 name:"Healer",
 onResidualOrder:5,
@@ -1743,7 +1649,6 @@ allyActive.cureStatus();
 rating:0,
 num:131,
 },
-
 heatproof:{
 onSourceBasePowerPriority:18,
 onSourceBasePower(basePower,attacker,defender,move){
@@ -1761,7 +1666,6 @@ name:"Heatproof",
 rating:2,
 num:85,
 },
-
 heavymetal:{
 onModifyWeightPriority:1,
 onModifyWeight(weighthg){
@@ -1772,13 +1676,11 @@ name:"HeavyMetal",
 rating:0,
 num:134,
 },
-
 honeygather:{
 name:"HoneyGather",
 rating:0,
 num:118,
 },
-
 hugepower:{
 onModifyAtkPriority:5,
 onModifyAtk(atk){
@@ -1788,7 +1690,6 @@ name:"HugePower",
 rating:5,
 num:37,
 },
-
 hungerswitch:{
 onResidualOrder:29,
 onResidual(pokemon){
@@ -1800,7 +1701,6 @@ name:"HungerSwitch",
 rating:1,
 num:258,
 },
-
 hustle:{
 //Thisshouldbeapplieddirectlytothestatasopposedtochainingwiththeothers
 onModifyAtkPriority:5,
@@ -1817,7 +1717,6 @@ name:"Hustle",
 rating:3.5,
 num:55,
 },
-
 hydration:{
 onResidualOrder:5,
 onResidualSubOrder:3,
@@ -1832,7 +1731,6 @@ name:"Hydration",
 rating:1.5,
 num:93,
 },
-
 hypercutter:{
 onTryBoost(boost,target,source,effect){
 if(source&&target===source)return;
@@ -1848,7 +1746,6 @@ name:"HyperCutter",
 rating:1.5,
 num:52,
 },
-
 icebody:{
 onWeather(target,source,effect){
 if(effect.id==='hail'||effect.id==='snow'){
@@ -1862,7 +1759,6 @@ name:"IceBody",
 rating:1,
 num:115,
 },
-
 iceface:{
 onStart(pokemon){
 if(this.field.isWeather(['hail','snow'])&&
@@ -1922,7 +1818,6 @@ name:"IceFace",
 rating:3,
 num:248,
 },
-
 icescales:{
 onSourceModifyDamage(damage,source,target,move){
 if(move.category==='Special'){
@@ -1934,13 +1829,11 @@ name:"IceScales",
 rating:4,
 num:246,
 },
-
 illuminate:{
 name:"Illuminate",
 rating:0,
 num:35,
 },
-
 illusion:{
 onBeforeSwitchIn(pokemon){
 pokemon.illusion=null;
@@ -1975,7 +1868,6 @@ name:"Illusion",
 rating:4.5,
 num:149,
 },
-
 immunity:{
 onUpdate(pokemon){
 if(pokemon.status==='psn'||pokemon.status==='tox'){
@@ -1995,7 +1887,6 @@ name:"Immunity",
 rating:2,
 num:17,
 },
-
 imposter:{
 onSwitchIn(pokemon){
 this.effectState.switchingIn=true;
@@ -2016,7 +1907,6 @@ name:"Imposter",
 rating:5,
 num:150,
 },
-
 infiltrator:{
 onModifyMove(move){
 move.infiltrates=true;
@@ -2025,7 +1915,6 @@ name:"Infiltrator",
 rating:2.5,
 num:151,
 },
-
 innardsout:{
 name:"InnardsOut",
 onDamagingHitOrder:1,
@@ -2037,7 +1926,6 @@ this.damage(target.getUndynamaxedHP(damage),source,target);
 rating:4,
 num:215,
 },
-
 innerfocus:{
 onTryAddVolatile(status,pokemon){
 if(status.id==='flinch')returnnull;
@@ -2053,7 +1941,6 @@ name:"InnerFocus",
 rating:1,
 num:39,
 },
-
 insomnia:{
 onUpdate(pokemon){
 if(pokemon.status==='slp'){
@@ -2073,7 +1960,6 @@ name:"Insomnia",
 rating:1.5,
 num:15,
 },
-
 intimidate:{
 onStart(pokemon){
 letactivated=false;
@@ -2093,7 +1979,6 @@ name:"Intimidate",
 rating:3.5,
 num:22,
 },
-
 intrepidsword:{
 onStart(pokemon){
 if(this.effectState.swordBoost)return;
@@ -2105,7 +1990,6 @@ name:"IntrepidSword",
 rating:4,
 num:234,
 },
-
 ironbarbs:{
 onDamagingHitOrder:1,
 onDamagingHit(damage,target,source,move){
@@ -2117,7 +2001,6 @@ name:"IronBarbs",
 rating:2.5,
 num:160,
 },
-
 ironfist:{
 onBasePowerPriority:23,
 onBasePower(basePower,attacker,defender,move){
@@ -2130,7 +2013,6 @@ name:"IronFist",
 rating:3,
 num:89,
 },
-
 justified:{
 onDamagingHit(damage,target,source,move){
 if(move.type==='Dark'){
@@ -2141,7 +2023,6 @@ name:"Justified",
 rating:2.5,
 num:154,
 },
-
 keeneye:{
 onTryBoost(boost,target,source,effect){
 if(source&&target===source)return;
@@ -2160,7 +2041,6 @@ name:"KeenEye",
 rating:0.5,
 num:51,
 },
-
 klutz:{
 //ItemsuppressionimplementedinPokemon.ignoringItem()withinsim/pokemon.js
 onStart(pokemon){
@@ -2170,7 +2050,6 @@ name:"Klutz",
 rating:-1,
 num:103,
 },
-
 leafguard:{
 onSetStatus(status,target,source,effect){
 if(['sunnyday','desolateland'].includes(target.effectiveWeather())){
@@ -2191,7 +2070,6 @@ name:"LeafGuard",
 rating:0.5,
 num:102,
 },
-
 levitate:{
 //airbornenessimplementedinsim/pokemon.js:Pokemon#isGrounded
 isBreakable:true,
@@ -2199,7 +2077,6 @@ name:"Levitate",
 rating:3.5,
 num:26,
 },
-
 libero:{
 onPrepareHit(source,target,move){
 if(this.effectState.libero)return;
@@ -2218,7 +2095,6 @@ name:"Libero",
 rating:4,
 num:236,
 },
-
 lightmetal:{
 onModifyWeight(weighthg){
 returnthis.trunc(weighthg/2);
@@ -2228,7 +2104,6 @@ name:"LightMetal",
 rating:1,
 num:135,
 },
-
 lightningrod:{
 onTryHit(target,source,move){
 if(target!==source&&move.type==='Electric'){
@@ -2254,7 +2129,6 @@ name:"LightningRod",
 rating:3,
 num:31,
 },
-
 limber:{
 onUpdate(pokemon){
 if(pokemon.status==='par'){
@@ -2274,7 +2148,6 @@ name:"Limber",
 rating:2,
 num:7,
 },
-
 lingeringaroma:{
 onDamagingHit(damage,target,source,move){
 constsourceAbility=source.getAbility();
@@ -2292,7 +2165,6 @@ name:"LingeringAroma",
 rating:2,
 num:268,
 },
-
 liquidooze:{
 onSourceTryHeal(damage,target,source,effect){
 this.debug("Healisoccurring:"+target+"<-"+source+"::"+effect.id);
@@ -2306,7 +2178,6 @@ name:"LiquidOoze",
 rating:2.5,
 num:64,
 },
-
 liquidvoice:{
 onModifyTypePriority:-1,
 onModifyType(move,pokemon){
@@ -2318,7 +2189,6 @@ name:"LiquidVoice",
 rating:1.5,
 num:204,
 },
-
 longreach:{
 onModifyMove(move){
 deletemove.flags['contact'];
@@ -2327,7 +2197,6 @@ name:"LongReach",
 rating:1,
 num:203,
 },
-
 magicbounce:{
 name:"MagicBounce",
 onTryHitPriority:1,
@@ -2358,7 +2227,6 @@ isBreakable:true,
 rating:4,
 num:156,
 },
-
 magicguard:{
 onDamage(damage,target,source,effect){
 if(effect.effectType!=='Move'){
@@ -2370,7 +2238,6 @@ name:"MagicGuard",
 rating:4,
 num:98,
 },
-
 magician:{
 onAfterMoveSecondarySelf(source,target,move){
 if(!move||!target)return;
@@ -2389,7 +2256,6 @@ name:"Magician",
 rating:1,
 num:170,
 },
-
 magmaarmor:{
 onUpdate(pokemon){
 if(pokemon.status==='frz'){
@@ -2405,7 +2271,6 @@ name:"MagmaArmor",
 rating:0.5,
 num:40,
 },
-
 magnetpull:{
 onFoeTrapPokemon(pokemon){
 if(pokemon.hasType('Steel')&&pokemon.isAdjacent(this.effectState.target)){
@@ -2423,7 +2288,6 @@ name:"MagnetPull",
 rating:4,
 num:42,
 },
-
 marvelscale:{
 onModifyDefPriority:6,
 onModifyDef(def,pokemon){
@@ -2436,7 +2300,6 @@ name:"MarvelScale",
 rating:2.5,
 num:63,
 },
-
 megalauncher:{
 onBasePowerPriority:19,
 onBasePower(basePower,attacker,defender,move){
@@ -2448,7 +2311,6 @@ name:"MegaLauncher",
 rating:3,
 num:178,
 },
-
 merciless:{
 onModifyCritRatio(critRatio,source,target){
 if(target&&['psn','tox'].includes(target.status))return5;
@@ -2457,7 +2319,6 @@ name:"Merciless",
 rating:1.5,
 num:196,
 },
-
 mimicry:{
 onStart(pokemon){
 this.singleEvent('TerrainChange',this.effect,this.effectState,pokemon);
@@ -2494,7 +2355,6 @@ name:"Mimicry",
 rating:0,
 num:250,
 },
-
 minus:{
 onModifySpAPriority:5,
 onModifySpA(spa,pokemon){
@@ -2508,7 +2368,6 @@ name:"Minus",
 rating:0,
 num:58,
 },
-
 mirrorarmor:{
 onTryBoost(boost,target,source,effect){
 //Don'tbounceselfstatchanges,orbooststhathavealreadybounced
@@ -2532,7 +2391,6 @@ name:"MirrorArmor",
 rating:2,
 num:240,
 },
-
 mistysurge:{
 onStart(source){
 this.field.setTerrain('mistyterrain');
@@ -2541,7 +2399,6 @@ name:"MistySurge",
 rating:3.5,
 num:228,
 },
-
 moldbreaker:{
 onStart(pokemon){
 this.add('-ability',pokemon,'MoldBreaker');
@@ -2553,7 +2410,6 @@ name:"MoldBreaker",
 rating:3,
 num:104,
 },
-
 moody:{
 onResidualOrder:28,
 onResidualSubOrder:2,
@@ -2587,7 +2443,6 @@ name:"Moody",
 rating:5,
 num:141,
 },
-
 motordrive:{
 onTryHit(target,source,move){
 if(target!==source&&move.type==='Electric'){
@@ -2602,7 +2457,6 @@ name:"MotorDrive",
 rating:3,
 num:78,
 },
-
 moxie:{
 onSourceAfterFaint(length,target,source,effect){
 if(effect&&effect.effectType==='Move'){
@@ -2613,7 +2467,6 @@ name:"Moxie",
 rating:3,
 num:153,
 },
-
 multiscale:{
 onSourceModifyDamage(damage,source,target,move){
 if(target.hp>=target.maxhp){
@@ -2626,7 +2479,6 @@ name:"Multiscale",
 rating:3.5,
 num:136,
 },
-
 multitype:{
 //Multitype'stype-changingitselfisimplementedinstatuses.js
 isPermanent:true,
@@ -2634,7 +2486,6 @@ name:"Multitype",
 rating:4,
 num:121,
 },
-
 mummy:{
 name:"Mummy",
 onDamagingHit(damage,target,source,move){
@@ -2652,7 +2503,6 @@ this.add('-activate',target,'ability:Mummy',this.dex.abilities.get(oldAbility).n
 rating:2,
 num:152,
 },
-
 myceliummight:{
 onFractionalPriorityPriority:-1,
 onFractionalPriority(priority,pokemon,target,move){
@@ -2669,7 +2519,6 @@ name:"MyceliumMight",
 rating:2,
 num:298,
 },
-
 naturalcure:{
 onCheckShow(pokemon){
 //Thisiscomplicated
@@ -2752,7 +2601,6 @@ name:"NaturalCure",
 rating:2.5,
 num:30,
 },
-
 neuroforce:{
 onModifyDamage(damage,source,target,move){
 if(move&&target.getMoveHitData(move).typeMod>0){
@@ -2763,7 +2611,6 @@ name:"Neuroforce",
 rating:2.5,
 num:233,
 },
-
 neutralizinggas:{
 //Abilitysuppressionimplementedinsim/pokemon.ts:Pokemon#ignoringAbility
 onPreStart(pokemon){
@@ -2823,7 +2670,6 @@ name:"NeutralizingGas",
 rating:4,
 num:256,
 },
-
 noguard:{
 onAnyInvulnerabilityPriority:1,
 onAnyInvulnerability(target,source,move){
@@ -2839,7 +2685,6 @@ name:"NoGuard",
 rating:4,
 num:99,
 },
-
 normalize:{
 onModifyTypePriority:1,
 onModifyType(move,pokemon){
@@ -2861,7 +2706,6 @@ name:"Normalize",
 rating:0,
 num:96,
 },
-
 oblivious:{
 onUpdate(pokemon){
 if(pokemon.volatiles['attract']){
@@ -2895,7 +2739,6 @@ name:"Oblivious",
 rating:1.5,
 num:12,
 },
-
 opportunist:{
 onFoeAfterBoost(boost,target,source,effect){
 if(effect?.name==='Opportunist'||effect?.name==='MirrorHerb')return;
@@ -2914,7 +2757,6 @@ name:"Opportunist",
 rating:3,
 num:290,
 },
-
 orichalcumpulse:{
 onStart(pokemon){
 if(this.field.setWeather('sunnyday')){
@@ -2935,7 +2777,6 @@ name:"OrichalcumPulse",
 rating:4.5,
 num:288,
 },
-
 overcoat:{
 onImmunity(type,pokemon){
 if(type==='sandstorm'||type==='hail'||type==='powder')returnfalse;
@@ -2952,7 +2793,6 @@ name:"Overcoat",
 rating:2,
 num:142,
 },
-
 overgrow:{
 onModifyAtkPriority:5,
 onModifyAtk(atk,attacker,defender,move){
@@ -2972,7 +2812,6 @@ name:"Overgrow",
 rating:2,
 num:65,
 },
-
 owntempo:{
 onUpdate(pokemon){
 if(pokemon.volatiles['confusion']){
@@ -2999,7 +2838,6 @@ name:"OwnTempo",
 rating:1.5,
 num:20,
 },
-
 parentalbond:{
 onPrepareHit(source,target,move){
 if(move.category==='Status'||move.multihit||move.flags['noparentalbond']||move.flags['charge']||
@@ -3018,7 +2856,6 @@ name:"ParentalBond",
 rating:4.5,
 num:185,
 },
-
 pastelveil:{
 onStart(pokemon){
 for(constallyofpokemon.alliesAndSelf()){
@@ -3060,7 +2897,6 @@ name:"PastelVeil",
 rating:2,
 num:257,
 },
-
 perishbody:{
 onDamagingHit(damage,target,source,move){
 if(!this.checkMoveMakesContact(move,source,target))return;
@@ -3079,7 +2915,6 @@ name:"PerishBody",
 rating:1,
 num:253,
 },
-
 pickpocket:{
 onAfterMoveSecondary(target,source,move){
 if(source&&source!==target&&move?.flags['contact']){
@@ -3102,7 +2937,6 @@ name:"Pickpocket",
 rating:1,
 num:124,
 },
-
 pickup:{
 onResidualOrder:28,
 onResidualSubOrder:2,
@@ -3122,7 +2956,6 @@ name:"Pickup",
 rating:0.5,
 num:53,
 },
-
 pixilate:{
 onModifyTypePriority:-1,
 onModifyType(move,pokemon){
@@ -3143,7 +2976,6 @@ name:"Pixilate",
 rating:4,
 num:182,
 },
-
 plus:{
 onModifySpAPriority:5,
 onModifySpA(spa,pokemon){
@@ -3157,7 +2989,6 @@ name:"Plus",
 rating:0,
 num:57,
 },
-
 poisonheal:{
 onDamagePriority:1,
 onDamage(damage,target,source,effect){
@@ -3170,7 +3001,6 @@ name:"PoisonHeal",
 rating:4,
 num:90,
 },
-
 poisonpoint:{
 onDamagingHit(damage,target,source,move){
 if(this.checkMoveMakesContact(move,source,target)){
@@ -3183,7 +3013,6 @@ name:"PoisonPoint",
 rating:1.5,
 num:38,
 },
-
 poisontouch:{
 //upokecentersaysthisisimplementedasanaddedsecondaryeffect
 onModifyMove(move){
@@ -3201,7 +3030,6 @@ name:"PoisonTouch",
 rating:2,
 num:143,
 },
-
 powerconstruct:{
 onResidualOrder:29,
 onResidual(pokemon){
@@ -3222,7 +3050,6 @@ name:"PowerConstruct",
 rating:5,
 num:211,
 },
-
 powerofalchemy:{
 onAllyFaint(target){
 if(!this.effectState.target.hp)return;
@@ -3239,7 +3066,6 @@ name:"PowerofAlchemy",
 rating:0,
 num:223,
 },
-
 powerspot:{
 onAllyBasePowerPriority:22,
 onAllyBasePower(basePower,attacker,defender,move){
@@ -3252,7 +3078,6 @@ name:"PowerSpot",
 rating:0,
 num:249,
 },
-
 prankster:{
 onModifyPriority(priority,pokemon,target,move){
 if(move?.category==='Status'){
@@ -3264,7 +3089,6 @@ name:"Prankster",
 rating:4,
 num:158,
 },
-
 pressure:{
 onStart(pokemon){
 this.add('-ability',pokemon,'Pressure');
@@ -3277,7 +3101,6 @@ name:"Pressure",
 rating:2.5,
 num:46,
 },
-
 primordialsea:{
 onStart(source){
 this.field.setWeather('primordialsea');
@@ -3301,7 +3124,6 @@ name:"PrimordialSea",
 rating:4.5,
 num:189,
 },
-
 prismarmor:{
 onSourceModifyDamage(damage,source,target,move){
 if(target.getMoveHitData(move).typeMod>0){
@@ -3313,7 +3135,6 @@ name:"PrismArmor",
 rating:3,
 num:232,
 },
-
 propellertail:{
 onModifyMovePriority:1,
 onModifyMove(move){
@@ -3324,7 +3145,6 @@ name:"PropellerTail",
 rating:0,
 num:239,
 },
-
 protean:{
 onPrepareHit(source,target,move){
 if(this.effectState.protean)return;
@@ -3343,7 +3163,6 @@ name:"Protean",
 rating:4,
 num:168,
 },
-
 protosynthesis:{
 onStart(pokemon){
 this.singleEvent('WeatherChange',this.effect,this.effectState,pokemon);
@@ -3411,7 +3230,6 @@ name:"Protosynthesis",
 rating:3,
 num:281,
 },
-
 psychicsurge:{
 onStart(source){
 this.field.setTerrain('psychicterrain');
@@ -3420,7 +3238,6 @@ name:"PsychicSurge",
 rating:4,
 num:227,
 },
-
 punkrock:{
 onBasePowerPriority:7,
 onBasePower(basePower,attacker,defender,move){
@@ -3440,7 +3257,6 @@ name:"PunkRock",
 rating:3.5,
 num:244,
 },
-
 purepower:{
 onModifyAtkPriority:5,
 onModifyAtk(atk){
@@ -3450,7 +3266,6 @@ name:"PurePower",
 rating:5,
 num:74,
 },
-
 purifyingsalt:{
 onSetStatus(status,target,source,effect){
 if((effectasMove)?.status){
@@ -3483,7 +3298,6 @@ name:"PurifyingSalt",
 rating:4,
 num:272,
 },
-
 quarkdrive:{
 onStart(pokemon){
 this.singleEvent('TerrainChange',this.effect,this.effectState,pokemon);
@@ -3550,7 +3364,6 @@ name:"QuarkDrive",
 rating:3,
 num:282,
 },
-
 queenlymajesty:{
 onFoeTryMove(target,source,move){
 consttargetAllExceptions=['perishsong','flowershield','rototiller'];
@@ -3570,7 +3383,6 @@ name:"QueenlyMajesty",
 rating:2.5,
 num:214,
 },
-
 quickdraw:{
 onFractionalPriorityPriority:-1,
 onFractionalPriority(priority,pokemon,target,move){
@@ -3583,7 +3395,6 @@ name:"QuickDraw",
 rating:2.5,
 num:259,
 },
-
 quickfeet:{
 onModifySpe(spe,pokemon){
 if(pokemon.status){
@@ -3594,7 +3405,6 @@ name:"QuickFeet",
 rating:2.5,
 num:95,
 },
-
 raindish:{
 onWeather(target,source,effect){
 if(target.hasItem('utilityumbrella'))return;
@@ -3606,7 +3416,6 @@ name:"RainDish",
 rating:1.5,
 num:44,
 },
-
 rattled:{
 onDamagingHit(damage,target,source,move){
 if(['Dark','Bug','Ghost'].includes(move.type)){
@@ -3622,7 +3431,6 @@ name:"Rattled",
 rating:1,
 num:155,
 },
-
 receiver:{
 onAllyFaint(target){
 if(!this.effectState.target.hp)return;
@@ -3639,7 +3447,6 @@ name:"Receiver",
 rating:0,
 num:222,
 },
-
 reckless:{
 onBasePowerPriority:23,
 onBasePower(basePower,attacker,defender,move){
@@ -3652,7 +3459,6 @@ name:"Reckless",
 rating:3,
 num:120,
 },
-
 refrigerate:{
 onModifyTypePriority:-1,
 onModifyType(move,pokemon){
@@ -3673,7 +3479,6 @@ name:"Refrigerate",
 rating:4,
 num:174,
 },
-
 regenerator:{
 onSwitchOut(pokemon){
 pokemon.heal(pokemon.baseMaxhp/3);
@@ -3682,7 +3487,6 @@ name:"Regenerator",
 rating:4.5,
 num:144,
 },
-
 ripen:{
 onTryHeal(damage,target,source,effect){
 if(!effect)return;
@@ -3721,7 +3525,6 @@ name:"Ripen",
 rating:2,
 num:247,
 },
-
 rivalry:{
 onBasePowerPriority:24,
 onBasePower(basePower,attacker,defender,move){
@@ -3739,7 +3542,6 @@ name:"Rivalry",
 rating:0,
 num:79,
 },
-
 rkssystem:{
 //RKSSystem'stype-changingitselfisimplementedinstatuses.js
 isPermanent:true,
@@ -3747,7 +3549,6 @@ name:"RKSSystem",
 rating:4,
 num:225,
 },
-
 rockhead:{
 onDamage(damage,target,source,effect){
 if(effect.id==='recoil'){
@@ -3759,7 +3560,6 @@ name:"RockHead",
 rating:3,
 num:69,
 },
-
 rockypayload:{
 onModifyAtkPriority:5,
 onModifyAtk(atk,attacker,defender,move){
@@ -3779,7 +3579,6 @@ name:"RockyPayload",
 rating:3.5,
 num:276,
 },
-
 roughskin:{
 onDamagingHitOrder:1,
 onDamagingHit(damage,target,source,move){
@@ -3791,13 +3590,11 @@ name:"RoughSkin",
 rating:2.5,
 num:24,
 },
-
 runaway:{
 name:"RunAway",
 rating:0,
 num:50,
 },
-
 sandforce:{
 onBasePowerPriority:21,
 onBasePower(basePower,attacker,defender,move){
@@ -3815,7 +3612,6 @@ name:"SandForce",
 rating:2,
 num:159,
 },
-
 sandrush:{
 onModifySpe(spe,pokemon){
 if(this.field.isWeather('sandstorm')){
@@ -3829,7 +3625,6 @@ name:"SandRush",
 rating:3,
 num:146,
 },
-
 sandspit:{
 onDamagingHit(damage,target,source,move){
 this.field.setWeather('sandstorm');
@@ -3838,7 +3633,6 @@ name:"SandSpit",
 rating:1,
 num:245,
 },
-
 sandstream:{
 onStart(source){
 this.field.setWeather('sandstorm');
@@ -3847,7 +3641,6 @@ name:"SandStream",
 rating:4,
 num:45,
 },
-
 sandveil:{
 onImmunity(type,pokemon){
 if(type==='sandstorm')returnfalse;
@@ -3865,7 +3658,6 @@ name:"SandVeil",
 rating:1.5,
 num:8,
 },
-
 sapsipper:{
 onTryHitPriority:1,
 onTryHit(target,source,move){
@@ -3887,7 +3679,6 @@ name:"SapSipper",
 rating:3,
 num:157,
 },
-
 schooling:{
 onStart(pokemon){
 if(pokemon.baseSpecies.baseSpecies!=='Wishiwashi'||pokemon.level<20||pokemon.transformed)return;
@@ -3922,7 +3713,6 @@ name:"Schooling",
 rating:3,
 num:208,
 },
-
 scrappy:{
 onModifyMovePriority:-5,
 onModifyMove(move){
@@ -3942,7 +3732,6 @@ name:"Scrappy",
 rating:3,
 num:113,
 },
-
 screencleaner:{
 onStart(pokemon){
 letactivated=false;
@@ -3962,7 +3751,6 @@ name:"ScreenCleaner",
 rating:2,
 num:251,
 },
-
 seedsower:{
 onDamagingHit(damage,target,source,move){
 this.field.setTerrain('grassyterrain');
@@ -3971,7 +3759,6 @@ name:"SeedSower",
 rating:2.5,
 num:269,
 },
-
 serenegrace:{
 onModifyMovePriority:-2,
 onModifyMove(move){
@@ -3987,7 +3774,6 @@ name:"SereneGrace",
 rating:3.5,
 num:32,
 },
-
 shadowshield:{
 onSourceModifyDamage(damage,source,target,move){
 if(target.hp>=target.maxhp){
@@ -3999,7 +3785,6 @@ name:"ShadowShield",
 rating:3.5,
 num:231,
 },
-
 shadowtag:{
 onFoeTrapPokemon(pokemon){
 if(!pokemon.hasAbility('shadowtag')&&pokemon.isAdjacent(this.effectState.target)){
@@ -4017,7 +3802,6 @@ name:"ShadowTag",
 rating:5,
 num:23,
 },
-
 sharpness:{
 onBasePowerPriority:19,
 onBasePower(basePower,attacker,defender,move){
@@ -4030,7 +3814,6 @@ name:"Sharpness",
 rating:3.5,
 num:292,
 },
-
 shedskin:{
 onResidualOrder:5,
 onResidualSubOrder:3,
@@ -4045,7 +3828,6 @@ name:"ShedSkin",
 rating:3,
 num:61,
 },
-
 sheerforce:{
 onModifyMove(move,pokemon){
 if(move.secondaries){
@@ -4065,7 +3847,6 @@ name:"SheerForce",
 rating:3.5,
 num:125,
 },
-
 shellarmor:{
 onCriticalHit:false,
 isBreakable:true,
@@ -4073,7 +3854,6 @@ name:"ShellArmor",
 rating:1,
 num:75,
 },
-
 shielddust:{
 onModifySecondaries(secondaries){
 this.debug('ShieldDustpreventsecondary');
@@ -4084,7 +3864,6 @@ name:"ShieldDust",
 rating:2,
 num:19,
 },
-
 shieldsdown:{
 onStart(pokemon){
 if(pokemon.baseSpecies.baseSpecies!=='Minior'||pokemon.transformed)return;
@@ -4129,7 +3908,6 @@ name:"ShieldsDown",
 rating:3,
 num:197,
 },
-
 simple:{
 onChangeBoost(boost,target,source,effect){
 if(effect&&effect.id==='zpower')return;
@@ -4143,7 +3921,6 @@ name:"Simple",
 rating:4,
 num:86,
 },
-
 skilllink:{
 onModifyMove(move){
 if(move.multihit&&Array.isArray(move.multihit)&&move.multihit.length){
@@ -4157,7 +3934,6 @@ name:"SkillLink",
 rating:3,
 num:92,
 },
-
 slowstart:{
 onStart(pokemon){
 pokemon.addVolatile('slowstart');
@@ -4188,7 +3964,6 @@ name:"SlowStart",
 rating:-1,
 num:112,
 },
-
 slushrush:{
 onModifySpe(spe,pokemon){
 if(this.field.isWeather(['hail','snow'])){
@@ -4199,7 +3974,6 @@ name:"SlushRush",
 rating:3,
 num:202,
 },
-
 sniper:{
 onModifyDamage(damage,source,target,move){
 if(target.getMoveHitData(move).crit){
@@ -4211,7 +3985,6 @@ name:"Sniper",
 rating:2,
 num:97,
 },
-
 snowcloak:{
 onImmunity(type,pokemon){
 if(type==='hail')returnfalse;
@@ -4229,7 +4002,6 @@ name:"SnowCloak",
 rating:1.5,
 num:81,
 },
-
 snowwarning:{
 onStart(source){
 this.field.setWeather('snow');
@@ -4238,7 +4010,6 @@ name:"SnowWarning",
 rating:4,
 num:117,
 },
-
 solarpower:{
 onModifySpAPriority:5,
 onModifySpA(spa,pokemon){
@@ -4256,7 +4027,6 @@ name:"SolarPower",
 rating:2,
 num:94,
 },
-
 solidrock:{
 onSourceModifyDamage(damage,source,target,move){
 if(target.getMoveHitData(move).typeMod>0){
@@ -4269,7 +4039,6 @@ name:"SolidRock",
 rating:3,
 num:116,
 },
-
 soulheart:{
 onAnyFaintPriority:1,
 onAnyFaint(){
@@ -4279,7 +4048,6 @@ name:"Soul-Heart",
 rating:3.5,
 num:220,
 },
-
 soundproof:{
 onTryHit(target,source,move){
 if(target!==source&&move.flags['sound']){
@@ -4297,7 +4065,6 @@ name:"Soundproof",
 rating:2,
 num:43,
 },
-
 speedboost:{
 onResidualOrder:28,
 onResidualSubOrder:2,
@@ -4310,7 +4077,6 @@ name:"SpeedBoost",
 rating:4.5,
 num:3,
 },
-
 stakeout:{
 onModifyAtkPriority:5,
 onModifyAtk(atk,attacker,defender){
@@ -4330,14 +4096,12 @@ name:"Stakeout",
 rating:4.5,
 num:198,
 },
-
 stall:{
 onFractionalPriority:-0.1,
 name:"Stall",
 rating:-1,
 num:100,
 },
-
 stalwart:{
 onModifyMovePriority:1,
 onModifyMove(move){
@@ -4348,7 +4112,6 @@ name:"Stalwart",
 rating:0,
 num:242,
 },
-
 stamina:{
 onDamagingHit(damage,target,source,effect){
 this.boost({def:1});
@@ -4357,7 +4120,6 @@ name:"Stamina",
 rating:3.5,
 num:192,
 },
-
 stancechange:{
 onModifyMovePriority:1,
 onModifyMove(move,attacker,defender){
@@ -4371,7 +4133,6 @@ name:"StanceChange",
 rating:4,
 num:176,
 },
-
 static:{
 onDamagingHit(damage,target,source,move){
 if(this.checkMoveMakesContact(move,source,target)){
@@ -4384,7 +4145,6 @@ name:"Static",
 rating:2,
 num:9,
 },
-
 steadfast:{
 onFlinch(pokemon){
 this.boost({spe:1});
@@ -4393,7 +4153,6 @@ name:"Steadfast",
 rating:1,
 num:80,
 },
-
 steamengine:{
 onDamagingHit(damage,target,source,move){
 if(['Water','Fire'].includes(move.type)){
@@ -4404,7 +4163,6 @@ name:"SteamEngine",
 rating:2,
 num:243,
 },
-
 steelworker:{
 onModifyAtkPriority:5,
 onModifyAtk(atk,attacker,defender,move){
@@ -4424,7 +4182,6 @@ name:"Steelworker",
 rating:3.5,
 num:200,
 },
-
 steelyspirit:{
 onAllyBasePowerPriority:22,
 onAllyBasePower(basePower,attacker,defender,move){
@@ -4437,7 +4194,6 @@ name:"SteelySpirit",
 rating:3.5,
 num:252,
 },
-
 stench:{
 onModifyMovePriority:-1,
 onModifyMove(move){
@@ -4457,7 +4213,6 @@ name:"Stench",
 rating:0.5,
 num:1,
 },
-
 stickyhold:{
 onTakeItem(item,pokemon,source){
 if(!this.activeMove)thrownewError("Battle.activeMoveisnull");
@@ -4472,7 +4227,6 @@ name:"StickyHold",
 rating:1.5,
 num:60,
 },
-
 stormdrain:{
 onTryHit(target,source,move){
 if(target!==source&&move.type==='Water'){
@@ -4498,7 +4252,6 @@ name:"StormDrain",
 rating:3,
 num:114,
 },
-
 strongjaw:{
 onBasePowerPriority:19,
 onBasePower(basePower,attacker,defender,move){
@@ -4510,7 +4263,6 @@ name:"StrongJaw",
 rating:3.5,
 num:173,
 },
-
 sturdy:{
 onTryHit(pokemon,target,move){
 if(move.ohko){
@@ -4530,7 +4282,6 @@ name:"Sturdy",
 rating:3,
 num:5,
 },
-
 suctioncups:{
 onDragOutPriority:1,
 onDragOut(pokemon){
@@ -4542,7 +4293,6 @@ name:"SuctionCups",
 rating:1,
 num:21,
 },
-
 superluck:{
 onModifyCritRatio(critRatio){
 returncritRatio+1;
@@ -4551,7 +4301,6 @@ name:"SuperLuck",
 rating:1.5,
 num:105,
 },
-
 supremeoverlord:{
 onStart(pokemon){
 if(pokemon.side.totalFainted){
@@ -4576,7 +4325,6 @@ name:"SupremeOverlord",
 rating:4,
 num:293,
 },
-
 surgesurfer:{
 onModifySpe(spe){
 if(this.field.isTerrain('electricterrain')){
@@ -4587,7 +4335,6 @@ name:"SurgeSurfer",
 rating:3,
 num:207,
 },
-
 swarm:{
 onModifyAtkPriority:5,
 onModifyAtk(atk,attacker,defender,move){
@@ -4607,7 +4354,6 @@ name:"Swarm",
 rating:2,
 num:68,
 },
-
 sweetveil:{
 name:"SweetVeil",
 onAllySetStatus(status,target,source,effect){
@@ -4630,7 +4376,6 @@ isBreakable:true,
 rating:2,
 num:175,
 },
-
 swiftswim:{
 onModifySpe(spe,pokemon){
 if(['raindance','primordialsea'].includes(pokemon.effectiveWeather())){
@@ -4641,7 +4386,6 @@ name:"SwiftSwim",
 rating:3,
 num:33,
 },
-
 symbiosis:{
 onAllyAfterUseItem(item,pokemon){
 if(pokemon.switchFlag)return;
@@ -4661,7 +4405,6 @@ name:"Symbiosis",
 rating:0,
 num:180,
 },
-
 synchronize:{
 onAfterSetStatus(status,target,source,effect){
 if(!source||source===target)return;
@@ -4676,7 +4419,6 @@ name:"Synchronize",
 rating:2,
 num:28,
 },
-
 swordofruin:{
 onStart(pokemon){
 if(this.suppressingAbility(pokemon))return;
@@ -4694,7 +4436,6 @@ name:"SwordofRuin",
 rating:4.5,
 num:285,
 },
-
 tabletsofruin:{
 onStart(pokemon){
 if(this.suppressingAbility(pokemon))return;
@@ -4712,7 +4453,6 @@ name:"TabletsofRuin",
 rating:4.5,
 num:284,
 },
-
 tangledfeet:{
 onModifyAccuracyPriority:-1,
 onModifyAccuracy(accuracy,target){
@@ -4727,7 +4467,6 @@ name:"TangledFeet",
 rating:1,
 num:77,
 },
-
 tanglinghair:{
 onDamagingHit(damage,target,source,move){
 if(this.checkMoveMakesContact(move,source,target,true)){
@@ -4739,7 +4478,6 @@ name:"TanglingHair",
 rating:2,
 num:221,
 },
-
 technician:{
 onBasePowerPriority:30,
 onBasePower(basePower,attacker,defender,move){
@@ -4754,7 +4492,6 @@ name:"Technician",
 rating:3.5,
 num:101,
 },
-
 telepathy:{
 onTryHit(target,source,move){
 if(target!==source&&target.isAlly(source)&&move.category!=='Status'){
@@ -4767,7 +4504,6 @@ name:"Telepathy",
 rating:0,
 num:140,
 },
-
 teravolt:{
 onStart(pokemon){
 this.add('-ability',pokemon,'Teravolt');
@@ -4779,7 +4515,6 @@ name:"Teravolt",
 rating:3,
 num:164,
 },
-
 thermalexchange:{
 onDamagingHit(damage,target,source,move){
 if(move.type==='Fire'){
@@ -4803,7 +4538,6 @@ name:"ThermalExchange",
 rating:2.5,
 num:270,
 },
-
 thickfat:{
 onSourceModifyAtkPriority:6,
 onSourceModifyAtk(atk,attacker,defender,move){
@@ -4824,7 +4558,6 @@ name:"ThickFat",
 rating:3.5,
 num:47,
 },
-
 tintedlens:{
 onModifyDamage(damage,source,target,move){
 if(target.getMoveHitData(move).typeMod<0){
@@ -4836,7 +4569,6 @@ name:"TintedLens",
 rating:4,
 num:110,
 },
-
 torrent:{
 onModifyAtkPriority:5,
 onModifyAtk(atk,attacker,defender,move){
@@ -4856,7 +4588,6 @@ name:"Torrent",
 rating:2,
 num:67,
 },
-
 toughclaws:{
 onBasePowerPriority:21,
 onBasePower(basePower,attacker,defender,move){
@@ -4868,7 +4599,6 @@ name:"ToughClaws",
 rating:3.5,
 num:181,
 },
-
 toxicboost:{
 onBasePowerPriority:19,
 onBasePower(basePower,attacker,defender,move){
@@ -4880,7 +4610,6 @@ name:"ToxicBoost",
 rating:3,
 num:137,
 },
-
 toxicdebris:{
 onDamagingHit(damage,target,source,move){
 constside=source.isAlly(target)?source.side.foe:source.side;
@@ -4894,7 +4623,6 @@ name:"ToxicDebris",
 rating:3.5,
 num:295,
 },
-
 trace:{
 onStart(pokemon){
 //n.b.onlyaffectsHackmons
@@ -4930,7 +4658,6 @@ name:"Trace",
 rating:2.5,
 num:36,
 },
-
 transistor:{
 onModifyAtkPriority:5,
 onModifyAtk(atk,attacker,defender,move){
@@ -4950,7 +4677,6 @@ name:"Transistor",
 rating:3.5,
 num:262,
 },
-
 triage:{
 onModifyPriority(priority,pokemon,target,move){
 if(move?.flags['heal'])returnpriority+3;
@@ -4959,7 +4685,6 @@ name:"Triage",
 rating:3.5,
 num:205,
 },
-
 truant:{
 onStart(pokemon){
 pokemon.removeVolatile('truant');
@@ -4980,7 +4705,6 @@ name:"Truant",
 rating:-1,
 num:54,
 },
-
 turboblaze:{
 onStart(pokemon){
 this.add('-ability',pokemon,'Turboblaze');
@@ -4992,7 +4716,6 @@ name:"Turboblaze",
 rating:3,
 num:163,
 },
-
 unaware:{
 name:"Unaware",
 onAnyModifyBoost(boosts,pokemon){
@@ -5014,7 +4737,6 @@ isBreakable:true,
 rating:4,
 num:109,
 },
-
 unburden:{
 onAfterUseItem(item,pokemon){
 if(pokemon!==this.effectState.target)return;
@@ -5037,7 +4759,6 @@ name:"Unburden",
 rating:3.5,
 num:84,
 },
-
 unnerve:{
 onPreStart(pokemon){
 this.add('-ability',pokemon,'Unnerve');
@@ -5058,7 +4779,6 @@ name:"Unnerve",
 rating:1,
 num:127,
 },
-
 unseenfist:{
 onModifyMove(move){
 if(move.flags['contact'])deletemove.flags['protect'];
@@ -5067,7 +4787,6 @@ name:"UnseenFist",
 rating:2,
 num:260,
 },
-
 vesselofruin:{
 onStart(pokemon){
 if(this.suppressingAbility(pokemon))return;
@@ -5085,7 +4804,6 @@ name:"VesselofRuin",
 rating:4.5,
 num:284,
 },
-
 victorystar:{
 onAnyModifyAccuracyPriority:-1,
 onAnyModifyAccuracy(accuracy,target,source){
@@ -5097,7 +4815,6 @@ name:"VictoryStar",
 rating:2,
 num:162,
 },
-
 vitalspirit:{
 onUpdate(pokemon){
 if(pokemon.status==='slp'){
@@ -5117,7 +4834,6 @@ name:"VitalSpirit",
 rating:1.5,
 num:72,
 },
-
 voltabsorb:{
 onTryHit(target,source,move){
 if(target!==source&&move.type==='Electric'){
@@ -5132,7 +4848,6 @@ name:"VoltAbsorb",
 rating:3.5,
 num:10,
 },
-
 wanderingspirit:{
 onDamagingHit(damage,target,source,move){
 constadditionalBannedAbilities=['hungerswitch','illusion','neutralizinggas','wonderguard'];
@@ -5159,7 +4874,6 @@ name:"WanderingSpirit",
 rating:2.5,
 num:254,
 },
-
 waterabsorb:{
 onTryHit(target,source,move){
 if(target!==source&&move.type==='Water'){
@@ -5174,7 +4888,6 @@ name:"WaterAbsorb",
 rating:3.5,
 num:11,
 },
-
 waterbubble:{
 onSourceModifyAtkPriority:5,
 onSourceModifyAtk(atk,attacker,defender,move){
@@ -5216,7 +4929,6 @@ name:"WaterBubble",
 rating:4.5,
 num:199,
 },
-
 watercompaction:{
 onDamagingHit(damage,target,source,move){
 if(move.type==='Water'){
@@ -5227,7 +4939,6 @@ name:"WaterCompaction",
 rating:1.5,
 num:195,
 },
-
 waterveil:{
 onUpdate(pokemon){
 if(pokemon.status==='brn'){
@@ -5247,7 +4958,6 @@ name:"WaterVeil",
 rating:2,
 num:41,
 },
-
 weakarmor:{
 onDamagingHit(damage,target,source,move){
 if(move.category==='Physical'){
@@ -5258,7 +4968,6 @@ name:"WeakArmor",
 rating:1,
 num:133,
 },
-
 wellbakedbody:{
 onTryHit(target,source,move){
 if(target!==source&&move.type==='Fire'){
@@ -5273,7 +4982,6 @@ name:"Well-BakedBody",
 rating:3.5,
 num:273,
 },
-
 whitesmoke:{
 onTryBoost(boost,target,source,effect){
 if(source&&target===source)return;
@@ -5294,7 +5002,6 @@ name:"WhiteSmoke",
 rating:2,
 num:73,
 },
-
 wimpout:{
 onEmergencyExit(target){
 if(!this.canSwitch(target.side)||target.forceSwitchFlag||target.switchFlag)return;
@@ -5310,7 +5017,6 @@ name:"WimpOut",
 rating:1,
 num:193,
 },
-
 windpower:{
 onDamagingHitOrder:1,
 onDamagingHit(damage,target,source,move){
@@ -5328,7 +5034,6 @@ name:"WindPower",
 rating:1,
 num:277,
 },
-
 windrider:{
 onStart(pokemon){
 if(pokemon.side.sideConditions['tailwind']){
@@ -5354,7 +5059,6 @@ rating:3.5,
 //WedonotwantBrambleghasttogetInfiltratorinRandbats
 num:274,
 },
-
 wonderguard:{
 onTryHit(target,source,move){
 if(target===source||move.category==='Status'||move.type==='???'||move.id==='struggle')return;
@@ -5374,7 +5078,6 @@ name:"WonderGuard",
 rating:5,
 num:25,
 },
-
 wonderskin:{
 onModifyAccuracyPriority:10,
 onModifyAccuracy(accuracy,target,source,move){
@@ -5388,7 +5091,6 @@ name:"WonderSkin",
 rating:2,
 num:147,
 },
-
 zenmode:{
 onResidualOrder:29,
 onResidual(pokemon){
@@ -5429,7 +5131,6 @@ name:"ZenMode",
 rating:0,
 num:161,
 },
-
 zerotohero:{
 onSwitchOut(pokemon){
 if(pokemon.baseSpecies.baseSpecies!=='Palafin'||pokemon.transformed)return;
@@ -5456,7 +5157,6 @@ num:278,
 },
 
 //CAP
-
 mountaineer:{
 onDamage(damage,target,source,effect){
 if(effect&&effect.id==='stealthrock'){
@@ -5475,7 +5175,6 @@ name:"Mountaineer",
 rating:3,
 num:-2,
 },
-
 rebound:{
 isNonstandard:"CAP",
 name:"Rebound",
@@ -5509,7 +5208,6 @@ isBreakable:true,
 rating:3,
 num:-3,
 },
-
 persistent:{
 isNonstandard:"CAP",
 name:"Persistent",
@@ -5517,5 +5215,4 @@ name:"Persistent",
 rating:3,
 num:-4,
 },
-
 };
