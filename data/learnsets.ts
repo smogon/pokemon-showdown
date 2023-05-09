@@ -37666,6 +37666,10 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			waterpulse: ["7T", "6T", "4M", "3M"],
 			zenheadbutt: ["7T", "7L33", "6T", "6L33", "5T", "5L37", "4T", "4L37"],
 		},
+		eventData: [
+			{generation: 7, level: 1, moves: ["batonpass", "bugbuzz", "dizzypunch", "encore", "seismictoss", "silverwind", "trick"]},
+			{generation: 7, level: 1, moves: ["batonpass", "bugbuzz", "encore", "lunge", "seismictoss", "silverwind", "trick"]},
+		],
 	},
 	illumise: {
 		learnset: {
