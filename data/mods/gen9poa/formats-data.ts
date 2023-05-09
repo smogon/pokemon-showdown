@@ -3506,4 +3506,14 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "Uber",
 	},
+	spiritombdelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	spiritombdeltamega: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UUBL",
+	},
 };

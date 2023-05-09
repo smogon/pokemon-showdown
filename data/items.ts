@@ -9946,4 +9946,18 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Unobtainable",
 	},
+	deltaspiritombite: {
+		name: "Delta Spiritombite",
+		spritenum: 0,
+		megaStone: "Spiritomb-Delta-Mega",
+		megaEvolves: "Spiritomb-Delta",
+		itemUser: ["Spiritomb-Delta"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -76,
+		gen: 6,
+		isNonstandard: "Unobtainable",
+	},
 };
