@@ -23092,7 +23092,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return;
 			}
 			this.add('-prepare', defender, "Poltergeist", attacker);
-			if (this.field.isWeather('newmoon')) {
+			if (this.field.isWeather('acidrain')) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
