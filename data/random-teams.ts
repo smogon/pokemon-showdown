@@ -1858,7 +1858,7 @@ export class RandomTeams {
 		if (isNotCustom) {
 			speciesPool = [...this.dex.species.all()];
 			for (const species of speciesPool) {
-				if (species.isNonstandard && species.isNonstandard !== 'Unobtainable') continue;
+				if (species.isNonstandard) continue;
 				if (requireMoves) {
 					const hasMovesInCurrentGen = Object.values(this.dex.species.getLearnset(species.id) || {})
 						.some(sources => sources.some(source => source.startsWith('9')));
@@ -1872,7 +1872,7 @@ export class RandomTeams {
 				pool.push(num);
 			}
 		} else {
-			const EXISTENCE_TAG = ['past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent'];
+			const EXISTENCE_TAG = [];
 			const nonexistentBanReason = ruleTable.check('nonexistent');
 			// Assume tierSpecies does not differ from species here (mega formes can be used without their stone, etc)
 			for (const species of this.dex.species.all()) {
