@@ -40,7 +40,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		this.moveEnforcementCheckers = {
 			Bug: (movePool, moves, abilities, types, counter) => (
 				['megahorn', 'pinmissile'].some(m => movePool.includes(m)) ||
-				!counter.get('Bug') && abilities.has('Tinted Lens') ||
+				(!counter.get('Bug') && abilities.has('Tinted Lens')) ||
 				species.id === 'beedrillmega'
 			),
 			Dark: (movePool, moves, abilities, types, counter, species) => (
