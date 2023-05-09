@@ -32,13 +32,13 @@ onModifySpe(spe, pokemon) {
 // Paralysis occurs after all other Speed modifiers, so evaluate all modifiers up to this point first
 spe = this.finalModify(spe);
 if (!pokemon.hasAbility('quickfeet')) {
-spe = Math.floor(spe * 50 / 100);
+spe = Math.floor(spe * 49 / 100);
 }
 return spe;
 },
 onBeforeMovePriority: 1,
 onBeforeMove(pokemon) {
-if (this.randomChance(1, 4)) {
+if (this.randomChance(1, 5)) {
 this.add('cant', pokemon, 'par');
 return false;
 }
@@ -57,7 +57,7 @@ this.add('-status', target, 'slp', '[from] move: ' + sourceEffect.name);
 this.add('-status', target, 'slp');
 }
 // 1-3 turns
-this.effectState.startTime = this.random(3, 6);
+this.effectState.startTime = this.random(3, 8);
 this.effectState.time = this.effectState.startTime;
 
 if (target.removeVolatile('nightmare')) {
@@ -98,7 +98,7 @@ target.formeChange('Shaymin', this.effect, true);
 onBeforeMovePriority: 10,
 onBeforeMove(pokemon, target, move) {
 if (move.flags['defrost']) return;
-if (this.randomChance(1, 4)) {
+if (this.randomChance(1, 3)) {
 pokemon.cureStatus();
 return;
 }
