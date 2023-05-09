@@ -3501,4 +3501,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "OU",
 	},
+	palossandmirage: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "Uber",
+	},
 };
