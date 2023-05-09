@@ -9051,4 +9051,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 		natDexTier: "Illegal",
 	},
+	magnemiterhinian: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	magnemiterhinianswarm: {
+		isNonstandard: "Past",
+	},
 };

@@ -3516,4 +3516,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UUBL",
 	},
+	magnemiterhinian: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
 };
