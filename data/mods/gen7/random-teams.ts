@@ -327,6 +327,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			return {cull: (
 				!!counter.setupType ||
 				!!counter.get('speedsetup') ||
+				movePool.includes('boltstrike') ||
 				['electricterrain', 'raindance', 'uturn'].some(m => moves.has(m))
 			)};
 		case 'wish':
