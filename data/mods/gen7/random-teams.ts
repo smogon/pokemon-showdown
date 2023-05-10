@@ -40,8 +40,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		this.moveEnforcementCheckers = {
 			Bug: (movePool, moves, abilities, types, counter) => (
 				['megahorn', 'pinmissile'].some(m => movePool.includes(m)) ||
-				(!counter.get('Bug') && abilities.has('Tinted Lens')) ||
-				species.id === 'beedrillmega'
+				!counter.get('Bug') && (abilities.has('Tinted Lens') || abilities.has('Adaptability'))
 			),
 			Dark: (movePool, moves, abilities, types, counter, species) => (
 				(!counter.get('Dark') && !abilities.has('Protean')) ||
@@ -53,7 +52,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				!moves.has('dragonascent') && !moves.has('fly') && !moves.has('rest') && !moves.has('sleeptalk')
 			),
 			Electric: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Electric') || movePool.includes('thunder') || movePool.includes('boltstrike')
+				!counter.get('Electric') || movePool.includes('thunder')
 			),
 			Fairy: (movePool, moves, abilities, types, counter) => (
 				(!counter.get('Fairy') && !types.has('Flying') && !abilities.has('Pixilate'))
