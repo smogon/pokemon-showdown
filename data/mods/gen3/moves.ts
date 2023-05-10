@@ -542,7 +542,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-fail', source, '[from] ability: ' + source.getAbility().name, '[of] ' + source);
 				return null;
 			}
-		}
+		},
 	},
 	rocksmash: {
 		inherit: true,
