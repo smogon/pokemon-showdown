@@ -51,9 +51,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				!abilities.has('Aerilate') && !abilities.has('Pixilate') &&
 				!moves.has('dragonascent') && !moves.has('fly') && !moves.has('rest') && !moves.has('sleeptalk')
 			),
-			Electric: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Electric') || movePool.includes('thunder')
-			),
+			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric') || movePool.includes('thunder'),
 			Fairy: (movePool, moves, abilities, types, counter) => (
 				(!counter.get('Fairy') && !types.has('Flying') && !abilities.has('Pixilate'))
 			),
