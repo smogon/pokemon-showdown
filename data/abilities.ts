@@ -3743,42 +3743,30 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	schooling: {
 		onStart(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== ('Wishiwashi' || 'Magnemite-Rhinian') || pokemon.level < 20 || pokemon.transformed) return;
+			if (pokemon.baseSpecies.baseSpecies !== 'Wishiwashi' || pokemon.level < 20 || pokemon.transformed) return;
 			if (pokemon.hp > pokemon.maxhp / 4) {
 				if (pokemon.species.id === 'wishiwashi') {
 					pokemon.formeChange('Wishiwashi-School');
 				}
-				if (pokemon.species.id === 'magnemiterhinian') {
-					pokemon.formeChange('Magnemite-Rhinian-Swarm');
-				}
 			} else {
 				if (pokemon.species.id === 'wishiwashischool') {
 					pokemon.formeChange('Wishiwashi');
-				}
-				if (pokemon.species.id === 'magnemiterhinianswarm') {
-					pokemon.formeChange('Magnemite-Rhinian');
 				}
 			}
 		},
 		onResidualOrder: 29,
 		onResidual(pokemon) {
 			if (
-				pokemon.baseSpecies.baseSpecies !== ('Wishiwashi' || 'Magnemite-Rhinian') || pokemon.level < 20 ||
+				pokemon.baseSpecies.baseSpecies !== 'Wishiwashi' || pokemon.level < 20 ||
 				pokemon.transformed || !pokemon.hp
 			) return;
 			if (pokemon.hp > pokemon.maxhp / 4) {
 				if (pokemon.species.id === 'wishiwashi') {
 					pokemon.formeChange('Wishiwashi-School');
 				}
-				if (pokemon.species.id === 'magnemiterhinian') {
-					pokemon.formeChange('Magnemite-Rhinian-Swarm');
-				}
 			} else {
 				if (pokemon.species.id === 'wishiwashischool') {
 					pokemon.formeChange('Wishiwashi');
-				}
-				if (pokemon.species.id === 'magnemiterhinianswarm') {
-					pokemon.formeChange('Magnemite-Rhinian');
 				}
 			}
 		},
@@ -6959,7 +6947,41 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		isBreakable: true,
 		name: "Magma Bubble",
 		rating: 4.5,
-		num: 199,
+		num: -63,
+	},
+	swarming: {
+		onStart(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Magnemite-Rhinian' || pokemon.level < 20 || pokemon.transformed) return;
+			if (pokemon.hp > pokemon.maxhp / 4) {
+				if (pokemon.species.id === 'magnemiterhinian') {
+					pokemon.formeChange('Magnemite-Rhinian-Swarm');
+				}
+			} else {
+				if (pokemon.species.id === 'magnemiterhinianswarm') {
+					pokemon.formeChange('Magnemite-Rhinian');
+				}
+			}
+		},
+		onResidualOrder: 29,
+		onResidual(pokemon) {
+			if (
+				pokemon.baseSpecies.baseSpecies !== 'Magnemite-Rhinian' || pokemon.level < 20 ||
+				pokemon.transformed || !pokemon.hp
+			) return;
+			if (pokemon.hp > pokemon.maxhp / 4) {
+				if (pokemon.species.id === 'magnemiterhinian') {
+					pokemon.formeChange('Magnemite-Rhinian-Swarm');
+				}
+			} else {
+				if (pokemon.species.id === 'magnemiterhinianswarm') {
+					pokemon.formeChange('Magnemite-Rhinian');
+				}
+			}
+		},
+		isPermanent: true,
+		name: "Swarming",
+		rating: 3,
+		num: -64,
 	},
 };
 
