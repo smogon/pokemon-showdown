@@ -866,7 +866,7 @@
     },
     "sableyemega": {
         "level": 80,
-        "moves": ["calmmind", "darkpulse", "recover", "shadowball", "willowisp"],
+        "moves": ["calmmind", "darkpulse", "recover", "willowisp"],
         "doublesMoves": ["darkpulse", "fakeout", "knockoff", "protect", "shadowball", "willowisp"]
     },
     "mawile": {
@@ -1077,7 +1077,7 @@
     },
     "chimecho": {
         "level": 90,
-        "moves": ["calmmind", "healbell", "healingwish", "psychic", "recover", "shadowball", "taunt", "yawn"],
+        "moves": ["calmmind", "healbell", "healingwish", "knockoff", "psychic", "recover", "shadowball", "taunt", "toxic", "yawn"],
         "doublesMoves": ["dazzlinggleam", "helpinghand", "protect", "psychic", "recover", "shadowball", "taunt", "thunderwave", "trickroom"]
     },
     "absol": {
@@ -1306,7 +1306,7 @@
     },
     "vespiquen": {
         "level": 93,
-        "moves": ["infestation", "protect", "roost", "toxic", "uturn"],
+        "moves": ["airslash", "defog", "roost", "toxic", "uturn"],
         "doublesMoves": ["attackorder", "healorder", "protect", "stringshot", "strugglebug", "tailwind"]
     },
     "pachirisu": {
@@ -1648,7 +1648,7 @@
     },
     "arceusbug": {
         "level": 73,
-        "moves": ["earthquake", "ironhead", "recover", "stoneedge", "swordsdance", "xscissor"],
+        "moves": ["calmmind", "earthpower", "fireblast", "judgment", "recover"],
         "doublesMoves": ["earthquake", "ironhead", "protect", "recover", "stoneedge", "swordsdance", "xscissor"]
     },
     "arceusdark": {

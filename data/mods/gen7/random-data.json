@@ -920,7 +920,7 @@
     },
     "sableyemega": {
         "level": 85,
-        "moves": ["calmmind", "darkpulse", "recover", "shadowball", "willowisp"],
+        "moves": ["calmmind", "darkpulse", "recover", "willowisp"],
         "doublesMoves": ["fakeout", "knockoff", "protect", "recover", "shadowball", "willowisp"]
     },
     "mawile": {
@@ -1132,7 +1132,7 @@
     },
     "chimecho": {
         "level": 90,
-        "moves": ["calmmind", "healbell", "healingwish", "psychic", "recover", "shadowball", "taunt", "yawn"],
+        "moves": ["calmmind", "defog", "healbell", "healingwish", "knockoff", "psychic", "recover", "shadowball", "taunt", "toxic", "yawn"],
         "doublesMoves": ["helpinghand", "protect", "psychic", "recover", "taunt", "thunderwave", "trickroom"]
     },
     "absol": {
@@ -1247,7 +1247,7 @@
     },
     "groudon": {
         "level": 76,
-        "moves": ["dragonclaw", "earthquake", "firepunch", "lavaplume", "roar", "stealthrock", "stoneedge", "thunderwave"],
+        "moves": ["earthquake", "firepunch", "lavaplume", "roar", "stealthrock", "stoneedge", "thunderwave"],
         "doublesMoves": ["firepunch", "precipiceblades", "protect", "rockpolish", "rockslide", "stoneedge", "swordsdance"]
     },
     "groudonprimal": {
@@ -1362,7 +1362,7 @@
     },
     "vespiquen": {
         "level": 90,
-        "moves": ["infestation", "protect", "roost", "toxic", "uturn"],
+        "moves": ["airslash", "defog", "roost", "toxic", "uturn"],
         "doublesMoves": ["attackorder", "healorder", "protect", "stringshot", "strugglebug", "tailwind"]
     },
     "pachirisu": {
@@ -1401,7 +1401,7 @@
     },
     "lopunny": {
         "level": 88,
-        "moves": ["highjumpkick", "icepunch", "return", "switcheroo"],
+        "moves": ["healingwish", "highjumpkick", "icepunch", "return", "switcheroo"],
         "doublesMoves": ["encore", "fakeout", "firepunch", "helpinghand", "protect", "return", "switcheroo", "thunderwave"]
     },
     "lopunnymega": {
@@ -1705,7 +1705,7 @@
     },
     "arceusbug": {
         "level": 74,
-        "moves": ["earthquake", "ironhead", "recover", "stoneedge", "swordsdance", "xscissor"],
+        "moves": ["calmmind", "earthpower", "fireblast", "judgment", "recover"],
         "doublesMoves": ["earthquake", "ironhead", "protect", "recover", "stoneedge", "swordsdance", "xscissor"]
     },
     "arceusdark": {
@@ -1989,7 +1989,7 @@
     },
     "gothitelle": {
         "level": 87,
-        "moves": ["charm", "confide", "rest", "taunt"],
+        "moves": ["hiddenpowerfighting", "psychic", "shadowball", "signalbeam", "thunderbolt", "trick"],
         "doublesMoves": ["charm", "healpulse", "protect", "psychic", "shadowball", "taunt", "thunderbolt", "trickroom"]
     },
     "reuniclus": {
@@ -2258,7 +2258,7 @@
     },
     "diggersby": {
         "level": 84,
-        "moves": ["agility", "earthquake", "knockoff", "quickattack", "return", "swordsdance", "uturn", "wildcharge"],
+        "moves": ["agility", "earthquake", "knockoff", "quickattack", "return", "swordsdance", "uturn"],
         "doublesMoves": ["earthquake", "knockoff", "protect", "quickattack", "return", "uturn"]
     },
     "talonflame": {
