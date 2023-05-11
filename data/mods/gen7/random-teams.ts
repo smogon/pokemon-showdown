@@ -38,8 +38,10 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		this.noStab = [...this.noStab, 'voltswitch'];
 
 		this.moveEnforcementCheckers = {
-			Bug: (movePool, moves, abilities, types, counter) => (['megahorn', 'pinmissile'].some(m => movePool.includes(m)) ||
-				!counter.get('Bug') && abilities.has('Tinted Lens')),
+			Bug: (movePool, moves, abilities, types, counter) => (
+				['megahorn', 'pinmissile'].some(m => movePool.includes(m)) ||
+				!counter.get('Bug') && (abilities.has('Tinted Lens') || abilities.has('Adaptability'))
+			),
 			Dark: (movePool, moves, abilities, types, counter, species) => (
 				(!counter.get('Dark') && !abilities.has('Protean')) ||
 				(moves.has('pursuit') && species.types.length > 1 && counter.get('Dark') === 1)
@@ -323,6 +325,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			return {cull: (
 				!!counter.setupType ||
 				!!counter.get('speedsetup') ||
+				movePool.includes('boltstrike') ||
 				['electricterrain', 'raindance', 'uturn'].some(m => moves.has(m))
 			)};
 		case 'wish':
@@ -940,7 +943,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (
 			!isDoubles &&
 			counter.get('Physical') >= 3 &&
-			moves.has('defog') &&
+			(moves.has('defog') || moves.has('healingwish')) &&
 			!moves.has('foulplay') &&
 			species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
 			!counter.get('priority')
