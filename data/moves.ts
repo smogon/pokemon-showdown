@@ -23474,7 +23474,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1},
 		secondary: null,
 		target: "all",
-		onHit(target, source, move) {
+		onAfterMove(source) {
 			for (const active of this.getAllActive()) {
 				this.add("-message", active.name);
 				if (this.queue.willMove(active)) {
