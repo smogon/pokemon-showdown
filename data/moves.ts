@@ -10426,7 +10426,7 @@ this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High 
 },
 boosts: {
 spe: 2,
-}
+},
 secondary: null,
 target: "normal",
 type: "Normal",
