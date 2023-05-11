@@ -27517,7 +27517,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		baseSpecies: "Torkoal",
 		forme: "Delta",
 		types: ["Poison"],
-		baseStats: {hp: 45, atk: 49, def: 49, spa: 65, spd: 65, spe: 45},
+		baseStats: {hp: 70, atk: 85, def: 140, spa: 85, spd: 70, spe: 20},
 		abilities: {0: "Pollutant", 1: "Sturdy", H: "Shell Armor"},
 		heightm: 0.5,
 		weightkg: 80.4,
