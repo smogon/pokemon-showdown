@@ -591,10 +591,10 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen9',
-		ruleset: ['Standard OMs', 'Tier Shift Mod', 'Sleep Moves Clause', 'Min Source Gen = 9'],
+		ruleset: ['Standard OMs', 'Tier Shift Mod', 'Sleep Moves Clause', 'Terastal Clause', 'Min Source Gen = 9'],
 		banlist: [
-			'Chi-Yu', 'Cloyster', 'Espathra', 'Falinks', 'Flutter Mane', 'Houndstone', 'Iron Bundle', 'Koraidon', 'Miraidon',
-			'Moody', 'Arena Trap', 'Shadow Tag', 'Eviolite', 'Damp Rock', 'Heat Rock', 'Baton Pass', 'Shed Tail',
+			'Chi-Yu', 'Cloyster', 'Espathra', 'Falinks', 'Flutter Mane', 'Houndstone', 'Iron Bundle', 'Koraidon', 'Medicham', 'Miraidon', 'Oricorio-Pom-Pom',
+			'Polteageist', 'Arena Trap', 'Moody', 'Shadow Tag', 'Eviolite', 'Damp Rock', 'Heat Rock', 'Light Clay', 'Baton Pass', 'Shed Tail',
 		],
 	},
 	{
@@ -608,8 +608,8 @@ export const Formats: FormatList = [
 		// searchShow: false,
 		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Terastal Clause', 'Min Source Gen = 9'],
 		banlist: [
-			'Annihilape', 'Baxcalibur', 'Chi-Yu', 'Cyclizar', 'Dragapult', 'Dragonite', 'Espathra', 'Houndstone', 'Hydreigon', 'Koraidon',
-			'Miraidon', 'Noivern', 'Palafin', 'Roaring Moon', 'Salamence', 'Walking Wake', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass',
+			'Annihilape', 'Baxcalibur', 'Chi-Yu', 'Chien-Pao', 'Cyclizar', 'Dragapult', 'Dragonite', 'Espathra', 'Haxorus', 'Houndstone', 'Hydreigon', 'Iron Valiant',
+			'Koraidon', 'Miraidon', 'Noivern', 'Palafin', 'Roaring Moon', 'Salamence', 'Walking Wake', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass',
 		],
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
