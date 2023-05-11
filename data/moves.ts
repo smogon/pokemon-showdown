@@ -23469,15 +23469,15 @@ export const Moves: {[moveid: string]: MoveData} = {
 		category: "Status",
 		name: "Everyone Explode Now",
 		pp: 1,
+		noPPBoosts: true,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		secondary: null,
 		target: "all",
-		onTry(source, target, move) {
-			for (const pokemon of this.getAllActive()) {
-				const action = this.queue.willMove(target);
-				if (action) {
-					this.actions.useMove("Explosion", target, target);
+		onHit(target, source, move) {
+			for (const active of this.getAllActive()) {
+				if (this.queue.willMove(active)) {
+					this.actions.useMove("Explosion", active, active);
 				}
 			}
 		},
