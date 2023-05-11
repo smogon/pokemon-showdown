@@ -23476,7 +23476,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onAfterHit(source, target, move) {
 			if (this.queue.willMove(target)) {
 			this.actions.useMove("Explosion", target, target);
-			},
+			}
 		},
 		type: "Normal",
 		zMove: {boost: {atk: 1}},
