@@ -23473,9 +23473,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1},
 		secondary: null,
 		target: "all",
-		onAfterMove(source, target, move) {
-			if (this.queue.willMove(target)) {
-			this.actions.useMove("Explosion", target, target);
+		onTry(source, target, move) {
+			for (const pokemon of this.getAllActive()) {
+				const action = this.queue.willMove(target);
+				if (action) {
+					this.actions.useMove("Explosion", target, target);
+				}
 			}
 		},
 		type: "Normal",
