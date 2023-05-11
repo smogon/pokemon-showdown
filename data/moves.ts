@@ -12745,7 +12745,6 @@ pp: 1.25,
 priority: 4,
 flags: {protect: 1, mirror: 1},
 secondary: null,
-target: "normal",
 target: "foeSide",
 },
 
