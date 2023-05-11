@@ -3521,6 +3521,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "OU",
 	},
+	magnemiterhinianswarm: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+		natDexTier: "Illegal",
+		tier: "Illegal",
+	},
 	dewpiderdelta: {
 		inherit: true,
 		isNonstandard: null,
