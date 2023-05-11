@@ -23473,7 +23473,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1},
 		secondary: null,
 		target: "all",
-		onAfterHit(source, target, move) {
+		onAfterMove(source, target, move) {
 			if (this.queue.willMove(target)) {
 			this.actions.useMove("Explosion", target, target);
 			}

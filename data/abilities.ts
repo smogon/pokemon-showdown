@@ -6939,8 +6939,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: -62,
 	},
 	magmabubble: {
-		onModifyDamage(source,move) {
-			if (move.types.includes('Fire')) {
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Fire') {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Fire') {
 				return this.chainModify(1.5);
 			}
 		},

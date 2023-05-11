@@ -27639,7 +27639,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	magnemiterhinianswarm: {
 		num: -6009,
 		name: "Magnemite-Rhinian-Swarm",
-		baseSpecies: "Wishiwashi",
+		baseSpecies: "Magnemite-Rhinian",
 		forme: "School",
 		types: ["Electric", "Steel"],
 		baseStats: {hp: 25, atk: 125, def: 105, spa: 130, spd: 155, spe: 130},
@@ -27668,7 +27668,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 752,
 		name: "Araquanid-Delta",
 		baseSpecies: "Araquanid",
-		types: ["Water", "Bug"],
+		types: ["Fire", "Dragon"],
 		baseStats: {hp: 68, atk: 70, def: 92, spa: 50, spd: 132, spe: 42},
 		abilities: {0: "Magma Bubble", H: "Flash Fire"},
 		heightm: 1.8,

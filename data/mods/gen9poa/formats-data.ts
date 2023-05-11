@@ -3509,12 +3509,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	spiritombdelta: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "OU",
 	},
 	spiritombdeltamega: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UUBL",
+		natDexTier: "OU",
 	},
 	magnemiterhinian: {
 		inherit: true,
