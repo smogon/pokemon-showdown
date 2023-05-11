@@ -7374,7 +7374,7 @@ return 5;
 },
 onBasePowerPriority: 6,
 onBasePower(basePower, attacker, defender, move) {
-target: "all",
+const weakenedMoves = ['earthquake', 'bulldoze', 'magnitude'];
 if (weakenedMoves.includes(move.id) && defender.isGrounded() && !defender.isSemiInvulnerable()) {
 this.debug('move weakened by grassy terrain');
 return this.chainModify(0.5);
