@@ -9504,7 +9504,7 @@ beforeMoveCallback(pokemon) {
 if (pokemon.volatiles['bide']) return true;
 },
 condition: {
-duration: 1,3,
+duration: 2,
 onLockMove: 'bide',
 onStart(pokemon) {
 this.effectState.totalDamage = 0;
@@ -13667,7 +13667,7 @@ priority: 0,
 flags: {snatch: 1, heal: 1},
 slotCondition: 'Wish',
 condition: {
-duration: 1,3,
+duration: 2,
 onStart(pokemon, source) {
 this.effectState.hp = source.maxhp / 2;
 },
@@ -13753,7 +13753,7 @@ return false;
 },
 condition: {
 noCopy: true, // doesn't get copied by Baton Pass
-duration: 1,3,
+duration: 2,
 onStart(target, source) {
 this.add('-start', target, 'move: Yawn', '[of] ' + source);
 },
