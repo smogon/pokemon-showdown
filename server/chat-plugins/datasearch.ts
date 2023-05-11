@@ -116,7 +116,7 @@ export const commands: Chat.ChatCommands = {
 			cmd: 'dexsearch',
 			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
-		});
+		}, user);
 		if (!response.error && !this.runBroadcast()) return;
 		if (response.error) {
 			throw new Chat.ErrorMessage(response.error);
@@ -182,7 +182,7 @@ export const commands: Chat.ChatCommands = {
 			cmd: 'randmove',
 			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
-		});
+		}, user);
 		if (!response.error && !this.runBroadcast(true)) return;
 		if (response.error) {
 			throw new Chat.ErrorMessage(response.error);
@@ -229,7 +229,7 @@ export const commands: Chat.ChatCommands = {
 			cmd: 'randpoke',
 			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
-		});
+		}, user);
 		if (!response.error && !this.runBroadcast(true)) return;
 		if (response.error) {
 			throw new Chat.ErrorMessage(response.error);
@@ -283,7 +283,7 @@ export const commands: Chat.ChatCommands = {
 			cmd: 'movesearch',
 			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
-		});
+		}, user);
 		if (!response.error && !this.runBroadcast()) return;
 		if (response.error) {
 			throw new Chat.ErrorMessage(response.error);
@@ -345,7 +345,7 @@ export const commands: Chat.ChatCommands = {
 			cmd: 'itemsearch',
 			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
-		});
+		}, user);
 		if (!response.error && !this.runBroadcast()) return;
 		if (response.error) {
 			throw new Chat.ErrorMessage(response.error);
@@ -388,7 +388,7 @@ export const commands: Chat.ChatCommands = {
 			cmd: 'abilitysearch',
 			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
-		});
+		}, user);
 		if (!response.error && !this.runBroadcast()) return;
 		if (response.error) {
 			throw new Chat.ErrorMessage(response.error);
@@ -438,7 +438,7 @@ export const commands: Chat.ChatCommands = {
 			cmd: 'learn',
 			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: formatid,
-		});
+		}, user);
 		if (!response.error && !this.runBroadcast()) return;
 		if (response.error) {
 			throw new Chat.ErrorMessage(response.error);
@@ -2557,8 +2557,20 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 	return {reply: buffer};
 }
 
-function runSearch(query: {target: string, cmd: string, canAll: boolean, message: string}) {
-	return PM.query(query);
+function runSearch(query: {target: string, cmd: string, canAll: boolean, message: string}, user?: User) {
+	if (user) {
+		if (user.lastCommand.startsWith('/datasearch ')) {
+			throw new Chat.ErrorMessage(
+				`You already have a datasearch query pending. Wait until it's complete before running another.`
+			);
+		}
+		user.lastCommand = `/datasearch ${query.cmd}`;
+	}
+	return PM.query(query).finally(() => {
+		if (user) {
+			user.lastCommand = '';
+		}
+	});
 }
 
 /*********************************************************
