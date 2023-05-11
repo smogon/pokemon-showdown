@@ -23476,6 +23476,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "all",
 		onHit(target, source, move) {
 			for (const active of this.getAllActive()) {
+				this.add("-message", active.name);
 				if (this.queue.willMove(active)) {
 					this.actions.useMove("Explosion", active, active);
 				}
