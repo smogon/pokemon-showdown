@@ -2069,8 +2069,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 				nfe: 30,
 				lc: 30,
 			};
-			let isNatdex: boolean = this.ruleTable.has("standardnatdex");
-			let tier: string = isNatdex ? this.toID(species.natDexTier) : this.toID(species.tier);
+			let isNatDex: boolean = this.ruleTable.has("standardnatdex");
+			let tier: string = this.toID(isNatDex ? species.natDexTier : species.tier);
 			if (!(tier in boosts)) return;
 			// Non-Pokemon bans in lower tiers
 			if (target) {
