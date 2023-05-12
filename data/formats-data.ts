@@ -3942,18 +3942,14 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "Uber",
 	},
 	chespin: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
-		natDexTier: "LC",
+		tier: "LC",
 	},
 	quilladin: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
-		natDexTier: "NFE",
+		tier: "NFE",
 	},
 	chesnaught: {
-		isNonstandard: "Unobtainable",
-		tier: "Unreleased",
+		tier: "OU",
+		doublesTier: "DOU",
 		natDexTier: "RU",
 	},
 	fennekin: {
