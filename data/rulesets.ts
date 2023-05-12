@@ -2069,7 +2069,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				nfe: 30,
 				lc: 30,
 			};
-			let isNatDex: boolean = this.ruleTable.has("standardnatdex");
+			const isNatDex: boolean = this.ruleTable.has("standardnatdex");
 			let tier: string = this.toID(isNatDex ? species.natDexTier : species.tier);
 			if (!(tier in boosts)) return;
 			// Non-Pokemon bans in lower tiers
