@@ -3504,7 +3504,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	palossandmirage: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "Uber",
+		natDexTier: "UU",
 	},
 	spiritombdelta: {
 		inherit: true,
