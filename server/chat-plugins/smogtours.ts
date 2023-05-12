@@ -68,7 +68,7 @@ function saveTours() {
 function getTour(categoryID: ID, id: string) {
 	id = toID(id);
 	if (!tours[categoryID]) return null;
-	const idx = tours[categoryID].tours.findIndex(f => f.id === id) || -1;
+	const idx = tours[categoryID].tours.findIndex(f => f.id === id) ?? -1;
 	const tour = tours[categoryID].tours[idx];
 	if (!tour) {
 		return null;
