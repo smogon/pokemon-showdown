@@ -1135,7 +1135,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	castform: {
-		tier: "8U",
+		tier: "7U",
 	},
 	castformsunny: {},
 	castformrainy: {},
