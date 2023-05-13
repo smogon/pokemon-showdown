@@ -116,6 +116,13 @@ export const Formats: FormatList = [
 		banlist: ['9U'],
 	},
 	{
+		name: "[Gen 2] PU",
+		mod: 'gen2',
+		searchShow: true,
+		ruleset: ['[Gen 2] NU'],
+		banlist: ['NU'],
+	},
+	{
 		name: "[Gen 2] ZU",
 		mod: 'gen2',
 		searchShow: true,
