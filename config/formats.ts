@@ -43,6 +43,16 @@ export const Formats: FormatList = [
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Draft Timer', 'VGC Plat Pokedex', 'TB Legality'],
 	},
 	{
+		name: "[Gen 9] VGC Gay",
+		searchShow: true,
+		mod: 'gen9vgcgay',
+		gameType: 'doubles',
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Draft Timer', 'TB Legality'],
+	},
+	{
+		section: "Gen 4 Lower Tiers",
+	},
+	{
 		name: "[Gen 4] 6U",
 		threads: [
 			`&bullet; <a href="https://docs.google.com/document/d/12yUO1jg2NGDvVynDbc3oUupXx7K0i0jwRmfRJ76f_Jg">DPP 6U</a>`,
@@ -71,6 +81,9 @@ export const Formats: FormatList = [
 		searchShow: true,
 		ruleset: ['[Gen 4] 7U'],
 		banlist: ['7U'],
+	},
+	{
+		section: "Gen 1 Lower Tiers",
 	},
 	{
 		name: "[Gen 1] ZU",
@@ -114,6 +127,9 @@ export const Formats: FormatList = [
 		searchShow: true,
 		ruleset: ['[Gen 1] 9U'],
 		banlist: ['9U'],
+	},
+	{
+		section: "Gen 2 Lower Tiers",
 	},
 	{
 		name: "[Gen 2] PU",
@@ -163,6 +179,9 @@ export const Formats: FormatList = [
 		searchShow: true,
 		ruleset: ['[Gen 2] 9U'],
 		banlist: ['9U'],
+	},
+	{
+		section: "Alt Lower Tiers",
 	},
 	{
 		name: "[Gen 5] 7U",
