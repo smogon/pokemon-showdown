@@ -91,6 +91,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+	megalauncher: {
+		inherit: true,
+		shortDesc: "Pulse and Cannon moves have 1.5x Power",
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['pulse'] || move.name.toLowerCase().includes("cannon")) {
+				return this.chainModify(1.5);
+			}
+		},
+	},
 	triplethreat: {
 		isNonstandard: null,
 		onModifyMove(move) {
@@ -143,6 +152,22 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Drill moves do 1.5x damage",
 		rating: 3,
 		num: -8,
+	},
+	articrush: {
+		isNonstandard: null,
+		onModifySpe(spe, pokemon) {
+			if (this.field.isWeather(['hail', 'snow', 'rain'])) {
+				return this.chainModify(2);
+			}
+		},
+		onModifySpD(spd, pokemon) {
+			if (this.field.isWeather(['hail', 'snow', 'rain'])) {
+				return this.chainModify([3, 2]);
+			}
+		},
+		name: "Arctic Rush",
+		shortDesc: "Doubles Speed and boosts SpDef in Snow and Rain",
+		rating: 3,
+		num: -9,
 	}
-	
 };
