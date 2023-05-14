@@ -47,7 +47,7 @@ export const Formats: FormatList = [
 		searchShow: true,
 		mod: 'gen9vgcgay',
 		gameType: 'doubles',
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Draft Timer', 'TB Legality'],
+		ruleset: ['Standard NatDex', 'Flat Rules', '!! Adjust Level = 50', 'Draft Timer', 'TB Legality'],
 	},
 	{
 		section: "Gen 4 Lower Tiers",
