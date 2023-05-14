@@ -5217,54 +5217,54 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 
 	// GAY
-	triplethreat: {
-		isNonstandard: "CAP",
-		onModifyMove(move) {
-			if (!move.multihit && move.basePower > 0) {
-				move.multihit = 3
-			}
-		},
-		onBasePower(basePower, attacker, defender, move) {
-			return this.chainModify([4, 10]);
-		},
-		name: "Triple Threat",
-		shortDesc: "Moves hit 3 times at 40% power",
-		rating: 3,
-		num: -5,
-	},
-	mindsurfer: {
-		isNonstandard: "CAP",
-		onModifySpe(spe) {
-			if (this.field.isTerrain('psychicterrain')) {
-				return this.chainModify(2);
-			}
-		},
-		name: "Mind Surfer",
-		shortDesc: "Doubles speed in Psychic Terrain",
-		rating: 3,
-		num: -6,
-	},
-	thunderstorm: {
-		isNonstandard: "CAP",
-		onStart(source) {
-			this.field.setWeather('raindance');
-			this.field.setTerrain('electricterrain');
-		},
-		name: "Thunderstorm",
-		shortDesc: "Sets Rain and Electric Terrain",
-		rating: 4,
-		num: -7,
-	},
-	justthetip: {
-		isNonstandard: "CAP",
-		onBasePower(basePower, attacker, defender, move) {
-			if (move.name.toLowerCase().includes("drill")) {
-				return this.chainModify([3, 2]);
-			}
-		},
-		name: "Just the Tip",
-		shortDesc: "Drill moves do 1.5x damage",
-		rating: 3,
-		num: -8,
-	}
+	// triplethreat: {
+	// 	isNonstandard: "CAP",
+	// 	onModifyMove(move) {
+	// 		if (!move.multihit && move.basePower > 0) {
+	// 			move.multihit = 3
+	// 		}
+	// 	},
+	// 	onBasePower(basePower, attacker, defender, move) {
+	// 		return this.chainModify([4, 10]);
+	// 	},
+	// 	name: "Triple Threat",
+	// 	shortDesc: "Moves hit 3 times at 40% power",
+	// 	rating: 3,
+	// 	num: -5,
+	// },
+	// mindsurfer: {
+	// 	isNonstandard: "CAP",
+	// 	onModifySpe(spe) {
+	// 		if (this.field.isTerrain('psychicterrain')) {
+	// 			return this.chainModify(2);
+	// 		}
+	// 	},
+	// 	name: "Mind Surfer",
+	// 	shortDesc: "Doubles speed in Psychic Terrain",
+	// 	rating: 3,
+	// 	num: -6,
+	// },
+	// thunderstorm: {
+	// 	isNonstandard: "CAP",
+	// 	onStart(source) {
+	// 		this.field.setWeather('raindance');
+	// 		this.field.setTerrain('electricterrain');
+	// 	},
+	// 	name: "Thunderstorm",
+	// 	shortDesc: "Sets Rain and Electric Terrain",
+	// 	rating: 4,
+	// 	num: -7,
+	// },
+	// justthetip: {
+	// 	isNonstandard: "CAP",
+	// 	onBasePower(basePower, attacker, defender, move) {
+	// 		if (move.name.toLowerCase().includes("drill")) {
+	// 			return this.chainModify([3, 2]);
+	// 		}
+	// 	},
+	// 	name: "Just the Tip",
+	// 	shortDesc: "Drill moves do 1.5x damage",
+	// 	rating: 3,
+	// 	num: -8,
+	// }
 };
