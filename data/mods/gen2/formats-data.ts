@@ -153,13 +153,13 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "9U",
 	},
 	parasect: {
-		tier: "PU",
+		tier: "ZU",
 	},
 	venonat: {
 		tier: "7U",
 	},
 	venomoth: {
-		tier: "NU",
+		tier: "PU",
 	},
 	diglett: {
 		tier: "ZU",
@@ -195,7 +195,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "PU",
 	},
 	poliwhirl: {
-		tier: "NU",
+		tier: "PU",
 	},
 	poliwrath: {
 		tier: "NUBL",
@@ -225,13 +225,13 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "8U",
 	},
 	weepinbell: {
-		tier: "PU",
+		tier: "ZU",
 	},
 	victreebel: {
 		tier: "UU",
 	},
 	tentacool: {
-		tier: "NU",
+		tier: "ZU",
 	},
 	tentacruel: {
 		tier: "UUBL",
@@ -321,7 +321,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	voltorb: {
-		tier: "NU",
+		tier: "PU",
 	},
 	electrode: {
 		tier: "UU",
@@ -354,7 +354,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	koffing: {
-		tier: "PU",
+		tier: "ZU",
 	},
 	weezing: {
 		tier: "NU",
@@ -372,7 +372,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	tangela: {
-		tier: "NU",
+		tier: "PU",
 	},
 	kangaskhan: {
 		tier: "UUBL",
@@ -495,7 +495,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UUBL",
 	},
 	dratini: {
-		tier: "6U",
+		tier: "ZU",
 	},
 	dragonair: {
 		tier: "NU",
@@ -606,7 +606,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	aipom: {
-		tier: "NU",
+		tier: "PU",
 	},
 	sunkern: {
 		tier: "9U",
@@ -666,7 +666,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	sneasel: {
-		tier: "NU",
+		tier: "PU",
 	},
 	teddiursa: {
 		tier: "6U",
@@ -687,7 +687,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	corsola: {
-		tier: "NU",
+		tier: "PU",
 	},
 	remoraid: {
 		tier: "6U",
@@ -696,7 +696,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	delibird: {
-		tier: "NU",
+		tier: "PU",
 	},
 	mantine: {
 		tier: "PU",

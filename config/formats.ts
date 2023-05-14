@@ -145,7 +145,7 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 2] 8U",
-		mod: 'gen1',
+		mod: 'gen2',
 		searchShow: true,
 		ruleset: ['[Gen 2] 7U'],
 		banlist: ['7U'],
