@@ -92,6 +92,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 	triplethreat: {
+		isNonstandard: null,
 		onModifyMove(move) {
 			if (!move.multihit && move.basePower > 0) {
 				move.multihit = 3
@@ -109,6 +110,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: -5,
 	},
 	mindsurfer: {
+		isNonstandard: null,
 		onModifySpe(spe) {
 			if (this.field.isTerrain('psychicterrain')) {
 				return this.chainModify(2);
@@ -120,6 +122,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: -6,
 	},
 	thunderstorm: {
+		isNonstandard: null,
 		onStart(source) {
 			this.field.setWeather('raindance');
 			this.field.setTerrain('electricterrain');
@@ -130,6 +133,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: -7,
 	},
 	justthetip: {
+		isNonstandard: null,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.name.toLowerCase().includes("drill")) {
 				return this.chainModify([3, 2]);
