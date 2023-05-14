@@ -1,7 +1,8 @@
 export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	"venusaur": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -20,7 +21,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"charizard": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 78,
@@ -39,8 +41,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"blastoise": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 84,
@@ -59,7 +60,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"butterfree": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -77,7 +79,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"beedrill": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -96,7 +99,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"pidgeot": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 83,
@@ -115,8 +119,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"raticate": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -135,7 +138,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"fearow": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -154,8 +158,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"arbok": {
 		"types": [
-			"Poison",
-			""
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -174,8 +177,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"pikachu": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 35,
@@ -193,8 +195,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"raichu": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -212,8 +213,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sandslash": {
 		"types": [
-			"Ground",
-			""
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -231,7 +231,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"nidoqueen": {
 		"types": [
-			"Poison"
+			"Poison",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -250,7 +251,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"nidoking": {
 		"types": [
-			"Poison"
+			"Poison",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -269,8 +271,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"clefairy": {
 		"types": [
-			"Fairy",
-			""
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -289,8 +290,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"clefable": {
 		"types": [
-			"Fairy",
-			""
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -309,8 +309,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"ninetales": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 73,
@@ -328,7 +327,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"wigglytuff": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 145,
@@ -347,7 +347,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"vileplume": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -365,7 +366,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"parasect": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -384,7 +386,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"venomoth": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -403,8 +406,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dugtrio": {
 		"types": [
-			"Ground",
-			""
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 35,
@@ -423,8 +425,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"persian": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -443,8 +444,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"golduck": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -463,8 +463,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"primeape": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -483,8 +482,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"arcanine": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -503,7 +501,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"poliwrath": {
 		"types": [
-			"Water"
+			"Water",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -522,8 +521,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"alakazam": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -542,8 +540,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"machamp": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -562,7 +559,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"victreebel": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -580,7 +578,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"tentacruel": {
 		"types": [
-			"Water"
+			"Water",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -599,7 +598,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"golem": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -618,7 +618,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"slowbro": {
 		"types": [
-			"Water"
+			"Water",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -637,7 +638,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dodrio": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -656,7 +658,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dewgong": {
 		"types": [
-			"Water"
+			"Water",
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -675,8 +678,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"muk": {
 		"types": [
-			"Poison",
-			""
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 105,
@@ -695,7 +697,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cloyster": {
 		"types": [
-			"Water"
+			"Water",
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -714,7 +717,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"gengar": {
 		"types": [
-			"Ghost"
+			"Ghost",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -733,8 +737,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"hypno": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -753,8 +756,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"kingler": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -773,8 +775,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"electrode": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -793,7 +794,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"exeggutor": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -811,8 +813,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"marowak": {
 		"types": [
-			"Ground",
-			""
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -831,8 +832,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"hitmonlee": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -851,8 +851,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"hitmonchan": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -871,8 +870,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"weezing": {
 		"types": [
-			"Poison",
-			""
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -891,7 +889,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"rhydon": {
 		"types": [
-			"Ground"
+			"Ground",
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 105,
@@ -910,8 +909,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"chansey": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 150,
@@ -930,8 +928,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"kangaskhan": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 105,
@@ -950,7 +947,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"seaking": {
 		"types": [
-			"Water"
+			"Water",
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -969,7 +967,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"starmie": {
 		"types": [
-			"Water"
+			"Water",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -988,7 +987,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"scyther": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -1007,7 +1007,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"jynx": {
 		"types": [
-			"Ice"
+			"Ice",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -1026,7 +1027,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"pinsir": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -1045,8 +1047,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"tauros": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -1065,7 +1066,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"gyarados": {
 		"types": [
-			"Water"
+			"Water",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -1084,7 +1086,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"lapras": {
 		"types": [
-			"Water"
+			"Water",
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 130,
@@ -1103,8 +1106,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"ditto": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -1123,8 +1125,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"eevee": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -1143,8 +1144,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"vaporeon": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 140,
@@ -1162,8 +1162,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"jolteon": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -1181,8 +1180,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"flareon": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -1200,7 +1198,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"omastar": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Water"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -1219,7 +1218,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"kabutops": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Water"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -1238,7 +1238,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"aerodactyl": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -1257,8 +1258,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"snorlax": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 160,
@@ -1277,7 +1277,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"articuno": {
 		"types": [
-			"Ice"
+			"Ice",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -1296,7 +1297,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"zapdos": {
 		"types": [
-			"Electric"
+			"Electric",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -1315,7 +1317,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"moltres": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -1334,7 +1337,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dragonite": {
 		"types": [
-			"Dragon"
+			"Dragon",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 91,
@@ -1353,7 +1357,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"meganium": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -1371,8 +1376,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"typhlosion": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 78,
@@ -1390,8 +1394,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"feraligatr": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -1409,8 +1412,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"furret": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -1429,7 +1431,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"noctowl": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -1448,7 +1451,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"ledian": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -1467,7 +1471,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"ariados": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -1486,7 +1491,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"crobat": {
 		"types": [
-			"Poison"
+			"Poison",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -1505,7 +1511,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"chinchou": {
 		"types": [
-			"Water"
+			"Water",
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -1524,7 +1531,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"lanturn": {
 		"types": [
-			"Water"
+			"Water",
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 125,
@@ -1543,7 +1551,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"xatu": {
 		"types": [
-			"Psychic"
+			"Psychic",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -1562,7 +1571,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"ampharos": {
 		"types": [
-			"Electric"
+			"Electric",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -1581,8 +1591,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"bellossom": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -1600,7 +1609,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"marill": {
 		"types": [
-			"Water"
+			"Water",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -1619,7 +1629,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"azumarill": {
 		"types": [
-			"Water"
+			"Water",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -1638,8 +1649,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sudowoodo": {
 		"types": [
-			"Rock",
-			""
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -1658,8 +1668,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"politoed": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -1678,7 +1687,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"hoppip": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 35,
@@ -1697,7 +1707,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"skiploom": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -1716,7 +1727,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"jumpluff": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -1735,8 +1747,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"aipom": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -1755,8 +1766,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sunkern": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 30,
@@ -1775,7 +1785,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sunflora": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -1794,7 +1805,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"yanma": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -1813,7 +1825,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"wooper": {
 		"types": [
-			"Water"
+			"Water",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -1832,7 +1845,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"quagsire": {
 		"types": [
-			"Water"
+			"Water",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -1851,8 +1865,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"espeon": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -1870,8 +1883,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"umbreon": {
 		"types": [
-			"Dark",
-			""
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 115,
@@ -1889,7 +1901,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"murkrow": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -1908,7 +1921,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"slowking": {
 		"types": [
-			"Water"
+			"Water",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -1927,8 +1941,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"misdreavus": {
 		"types": [
-			"Ghost",
-			""
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -1945,8 +1958,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"unown": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 48,
@@ -1963,8 +1975,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"wobbuffet": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 190,
@@ -1982,7 +1993,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"girafarig": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -2001,8 +2013,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"pineco": {
 		"types": [
-			"Bug",
-			""
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -2020,7 +2031,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"forretress": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -2038,8 +2050,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dunsparce": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -2058,7 +2069,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"gligar": {
 		"types": [
-			"Ground"
+			"Ground",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -2077,7 +2089,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"steelix": {
 		"types": [
-			"Steel"
+			"Steel",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -2096,8 +2109,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"snubbull": {
 		"types": [
-			"Fairy",
-			""
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -2116,8 +2128,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"granbull": {
 		"types": [
-			"Fairy",
-			""
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -2136,7 +2147,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"qwilfish": {
 		"types": [
-			"Water"
+			"Water",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -2155,7 +2167,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"scizor": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -2174,7 +2187,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"shuckle": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 20,
@@ -2193,7 +2207,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"heracross": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -2212,7 +2227,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sneasel": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -2231,8 +2247,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"teddiursa": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -2251,8 +2266,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"ursaring": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -2271,8 +2285,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"slugma": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -2291,7 +2304,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"magcargo": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -2310,7 +2324,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"swinub": {
 		"types": [
-			"Ice"
+			"Ice",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -2329,7 +2344,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"piloswine": {
 		"types": [
-			"Ice"
+			"Ice",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -2348,7 +2364,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"corsola": {
 		"types": [
-			"Water"
+			"Water",
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -2367,8 +2384,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"remoraid": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 35,
@@ -2387,8 +2403,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"octillery": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -2407,7 +2422,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"delibird": {
 		"types": [
-			"Ice"
+			"Ice",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -2426,7 +2442,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"mantine": {
 		"types": [
-			"Water"
+			"Water",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -2445,7 +2462,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"skarmory": {
 		"types": [
-			"Steel"
+			"Steel",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -2464,7 +2482,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"houndoom": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -2483,7 +2502,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"kingdra": {
 		"types": [
-			"Water"
+			"Water",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -2502,8 +2522,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"phanpy": {
 		"types": [
-			"Ground",
-			""
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -2521,8 +2540,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"donphan": {
 		"types": [
-			"Ground",
-			""
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -2540,8 +2558,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"porygon2": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -2560,8 +2577,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"smeargle": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -2580,8 +2596,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"hitmontop": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -2600,8 +2615,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"miltank": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -2620,8 +2634,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"blissey": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 210,
@@ -2640,8 +2653,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"raikou": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -2659,8 +2671,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"entei": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 115,
@@ -2678,8 +2689,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"suicune": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -2697,7 +2707,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"tyranitar": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -2715,7 +2726,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sceptile": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -2734,7 +2746,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"blaziken": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -2753,7 +2766,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"swampert": {
 		"types": [
-			"Water"
+			"Water",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -2772,8 +2786,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"mightyena": {
 		"types": [
-			"Dark",
-			""
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -2792,8 +2805,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"zigzagoon": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 38,
@@ -2812,8 +2824,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"linoone": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 78,
@@ -2832,8 +2843,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"wurmple": {
 		"types": [
-			"Bug",
-			""
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -2851,8 +2861,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"silcoon": {
 		"types": [
-			"Bug",
-			""
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -2869,7 +2878,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"beautifly": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -2887,8 +2897,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cascoon": {
 		"types": [
-			"Bug",
-			""
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -2905,7 +2914,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dustox": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -2923,7 +2933,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"lotad": {
 		"types": [
-			"Water"
+			"Water",
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -2942,7 +2953,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"lombre": {
 		"types": [
-			"Water"
+			"Water",
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -2961,7 +2973,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"ludicolo": {
 		"types": [
-			"Water"
+			"Water",
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -2980,8 +2993,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"seedot": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -3000,7 +3012,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"nuzleaf": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -3019,7 +3032,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"shiftry": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -3038,7 +3052,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"taillow": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -3056,7 +3071,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"swellow": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -3074,7 +3090,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"wingull": {
 		"types": [
-			"Water"
+			"Water",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -3093,7 +3110,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"pelipper": {
 		"types": [
-			"Water"
+			"Water",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -3112,7 +3130,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"ralts": {
 		"types": [
-			"Psychic"
+			"Psychic",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 28,
@@ -3131,7 +3150,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"kirlia": {
 		"types": [
-			"Psychic"
+			"Psychic",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 38,
@@ -3150,7 +3170,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"gardevoir": {
 		"types": [
-			"Psychic"
+			"Psychic",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 68,
@@ -3169,7 +3190,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"surskit": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Water"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -3187,7 +3209,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"masquerain": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -3205,8 +3228,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"shroomish": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -3225,7 +3247,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"breloom": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -3244,8 +3267,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"slakoth": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -3262,8 +3284,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"vigoroth": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -3280,8 +3301,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"slaking": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 150,
@@ -3298,7 +3318,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"nincada": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 31,
@@ -3316,7 +3337,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"ninjask": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 61,
@@ -3334,7 +3356,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"shedinja": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 1,
@@ -3353,8 +3376,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"exploud": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 104,
@@ -3373,8 +3395,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"hariyama": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 144,
@@ -3393,8 +3414,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"delcatty": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -3413,7 +3433,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sableye": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -3432,7 +3453,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"mawile": {
 		"types": [
-			"Steel"
+			"Steel",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -3451,7 +3473,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"aggron": {
 		"types": [
-			"Steel"
+			"Steel",
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -3470,7 +3493,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"meditite": {
 		"types": [
-			"Fighting"
+			"Fighting",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 30,
@@ -3488,7 +3512,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"medicham": {
 		"types": [
-			"Fighting"
+			"Fighting",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -3506,8 +3531,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"electrike": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -3526,8 +3550,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"manectric": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -3546,8 +3569,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"plusle": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -3565,8 +3587,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"minun": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -3584,8 +3605,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"volbeat": {
 		"types": [
-			"Bug",
-			""
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -3604,8 +3624,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"illumise": {
 		"types": [
-			"Bug",
-			""
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -3624,7 +3643,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"roselia": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -3643,8 +3663,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"gulpin": {
 		"types": [
-			"Poison",
-			""
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -3663,8 +3682,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"swalot": {
 		"types": [
-			"Poison",
-			""
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -3683,7 +3701,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"carvanha": {
 		"types": [
-			"Water"
+			"Water",
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -3701,7 +3720,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sharpedo": {
 		"types": [
-			"Water"
+			"Water",
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -3719,8 +3739,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"wailmer": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 130,
@@ -3739,8 +3758,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"wailord": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 170,
@@ -3759,7 +3777,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"numel": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -3778,7 +3797,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"camerupt": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -3797,8 +3817,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"torkoal": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -3817,8 +3836,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"spoink": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -3837,8 +3855,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"grumpig": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -3857,8 +3874,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"spinda": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -3877,8 +3893,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"trapinch": {
 		"types": [
-			"Ground",
-			""
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -3897,7 +3912,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"vibrava": {
 		"types": [
-			"Ground"
+			"Ground",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -3914,7 +3930,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"flygon": {
 		"types": [
-			"Ground"
+			"Ground",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -3931,8 +3948,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cacnea": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -3950,7 +3966,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cacturne": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -3968,7 +3985,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"swablu": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -3986,7 +4004,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"altaria": {
 		"types": [
-			"Dragon"
+			"Dragon",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -4005,8 +4024,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"zangoose": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 73,
@@ -4024,8 +4042,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"seviper": {
 		"types": [
-			"Poison",
-			""
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 73,
@@ -4043,7 +4060,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"lunatone": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -4060,7 +4078,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"solrock": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -4077,7 +4096,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"barboach": {
 		"types": [
-			"Water"
+			"Water",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -4096,7 +4116,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"whiscash": {
 		"types": [
-			"Water"
+			"Water",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 110,
@@ -4115,8 +4136,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"corphish": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 43,
@@ -4135,7 +4155,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"crawdaunt": {
 		"types": [
-			"Water"
+			"Water",
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 63,
@@ -4154,7 +4175,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"baltoy": {
 		"types": [
-			"Ground"
+			"Ground",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -4171,7 +4193,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"claydol": {
 		"types": [
-			"Ground"
+			"Ground",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -4188,7 +4211,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"lileep": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 66,
@@ -4206,7 +4230,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cradily": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 86,
@@ -4224,7 +4249,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"anorith": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -4242,7 +4268,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"armaldo": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -4260,8 +4287,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"feebas": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 20,
@@ -4280,8 +4306,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"milotic": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -4300,8 +4325,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"castform": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -4318,8 +4342,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"kecleon": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -4337,8 +4360,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"shuppet": {
 		"types": [
-			"Ghost",
-			""
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 44,
@@ -4357,8 +4379,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"banette": {
 		"types": [
-			"Ghost",
-			""
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 64,
@@ -4377,8 +4398,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"duskull": {
 		"types": [
-			"Ghost",
-			""
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 20,
@@ -4396,8 +4416,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dusclops": {
 		"types": [
-			"Ghost",
-			""
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -4415,7 +4434,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"tropius": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 99,
@@ -4434,8 +4454,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"chimecho": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -4452,8 +4471,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"absol": {
 		"types": [
-			"Dark",
-			""
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -4472,8 +4490,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"wynaut": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -4491,8 +4508,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"snorunt": {
 		"types": [
-			"Ice",
-			""
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -4511,8 +4527,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"glalie": {
 		"types": [
-			"Ice",
-			""
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -4531,7 +4546,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"spheal": {
 		"types": [
-			"Ice"
+			"Ice",
+			"Water"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -4550,7 +4566,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sealeo": {
 		"types": [
-			"Ice"
+			"Ice",
+			"Water"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -4569,7 +4586,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"walrein": {
 		"types": [
-			"Ice"
+			"Ice",
+			"Water"
 		],
 		"baseStats": {
 			"hp": 110,
@@ -4588,8 +4606,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"clamperl": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 35,
@@ -4607,8 +4624,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"huntail": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -4626,8 +4642,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"gorebyss": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -4645,7 +4660,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"relicanth": {
 		"types": [
-			"Water"
+			"Water",
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -4664,8 +4680,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"luvdisc": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 43,
@@ -4683,8 +4698,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"bagon": {
 		"types": [
-			"Dragon",
-			""
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -4702,8 +4716,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"shelgon": {
 		"types": [
-			"Dragon",
-			""
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -4721,7 +4734,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"salamence": {
 		"types": [
-			"Dragon"
+			"Dragon",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -4739,7 +4753,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"beldum": {
 		"types": [
-			"Steel"
+			"Steel",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -4757,7 +4772,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"metang": {
 		"types": [
-			"Steel"
+			"Steel",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -4775,7 +4791,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"metagross": {
 		"types": [
-			"Steel"
+			"Steel",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -4793,8 +4810,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"regirock": {
 		"types": [
-			"Rock",
-			""
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -4812,8 +4828,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"regice": {
 		"types": [
-			"Ice",
-			""
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -4831,8 +4846,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"registeel": {
 		"types": [
-			"Steel",
-			""
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -4850,7 +4864,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"latias": {
 		"types": [
-			"Dragon"
+			"Dragon",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -4867,7 +4882,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"latios": {
 		"types": [
-			"Dragon"
+			"Dragon",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -4884,8 +4900,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"kyogre": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -4902,8 +4917,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"groudon": {
 		"types": [
-			"Ground",
-			""
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -4920,7 +4934,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"rayquaza": {
 		"types": [
-			"Dragon"
+			"Dragon",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 105,
@@ -4937,7 +4952,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"jirachi": {
 		"types": [
-			"Steel"
+			"Steel",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -4954,8 +4970,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"deoxys": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -4972,8 +4987,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"turtwig": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -4991,8 +5005,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"grotle": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -5010,7 +5023,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"torterra": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -5028,8 +5042,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"chimchar": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 44,
@@ -5047,7 +5060,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"monferno": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 64,
@@ -5065,7 +5079,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"infernape": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 76,
@@ -5083,8 +5098,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"piplup": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 53,
@@ -5102,8 +5116,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"prinplup": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 64,
@@ -5121,7 +5134,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"empoleon": {
 		"types": [
-			"Water"
+			"Water",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 84,
@@ -5139,7 +5153,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"starly": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -5157,7 +5172,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"staravia": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -5175,7 +5191,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"staraptor": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -5193,8 +5210,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"bidoof": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 59,
@@ -5213,7 +5229,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"bibarel": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Water"
 		],
 		"baseStats": {
 			"hp": 79,
@@ -5232,8 +5249,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"kricketot": {
 		"types": [
-			"Bug",
-			""
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 37,
@@ -5251,8 +5267,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"kricketune": {
 		"types": [
-			"Bug",
-			""
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 77,
@@ -5270,8 +5285,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"shinx": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -5290,8 +5304,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"luxio": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -5310,8 +5323,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"luxray": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -5330,7 +5342,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"budew": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -5349,7 +5362,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"roserade": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -5368,8 +5382,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cranidos": {
 		"types": [
-			"Rock",
-			""
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 67,
@@ -5387,8 +5400,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"rampardos": {
 		"types": [
-			"Rock",
-			""
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 97,
@@ -5406,7 +5418,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"shieldon": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 30,
@@ -5424,7 +5437,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"bastiodon": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -5442,7 +5456,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"mothim": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -5460,7 +5475,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"combee": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 30,
@@ -5478,7 +5494,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"vespiquen": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -5496,8 +5513,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"pachirisu": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -5516,8 +5532,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"buizel": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -5535,8 +5550,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"floatzel": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -5554,8 +5568,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cherubi": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -5572,8 +5585,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cherrim": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -5590,8 +5602,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"ambipom": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -5610,7 +5621,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"drifloon": {
 		"types": [
-			"Ghost"
+			"Ghost",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -5629,7 +5641,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"drifblim": {
 		"types": [
-			"Ghost"
+			"Ghost",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 150,
@@ -5648,8 +5661,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"buneary": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -5668,8 +5680,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"lopunny": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -5688,8 +5699,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"mismagius": {
 		"types": [
-			"Ghost",
-			""
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -5706,7 +5716,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"honchkrow": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -5725,8 +5736,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"glameow": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 49,
@@ -5745,8 +5755,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"purugly": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 71,
@@ -5765,8 +5774,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"chingling": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -5783,7 +5791,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"stunky": {
 		"types": [
-			"Poison"
+			"Poison",
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 63,
@@ -5802,7 +5811,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"skuntank": {
 		"types": [
-			"Poison"
+			"Poison",
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 103,
@@ -5821,7 +5831,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"bronzor": {
 		"types": [
-			"Steel"
+			"Steel",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 57,
@@ -5840,7 +5851,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"bronzong": {
 		"types": [
-			"Steel"
+			"Steel",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 67,
@@ -5859,8 +5871,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"bonsly": {
 		"types": [
-			"Rock",
-			""
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -5879,8 +5890,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"happiny": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -5899,7 +5909,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"chatot": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 76,
@@ -5918,7 +5929,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"spiritomb": {
 		"types": [
-			"Ghost"
+			"Ghost",
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -5936,7 +5948,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"gible": {
 		"types": [
-			"Dragon"
+			"Dragon",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 58,
@@ -5954,7 +5967,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"gabite": {
 		"types": [
-			"Dragon"
+			"Dragon",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 68,
@@ -5972,7 +5986,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"garchomp": {
 		"types": [
-			"Dragon"
+			"Dragon",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 108,
@@ -5990,8 +6005,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"munchlax": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 135,
@@ -6010,8 +6024,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"riolu": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -6030,7 +6043,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"lucario": {
 		"types": [
-			"Fighting"
+			"Fighting",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -6049,8 +6063,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"hippopotas": {
 		"types": [
-			"Ground",
-			""
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 68,
@@ -6068,8 +6081,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"hippowdon": {
 		"types": [
-			"Ground",
-			""
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 108,
@@ -6087,7 +6099,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"skorupi": {
 		"types": [
-			"Poison"
+			"Poison",
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -6106,7 +6119,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"drapion": {
 		"types": [
-			"Poison"
+			"Poison",
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -6125,7 +6139,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"croagunk": {
 		"types": [
-			"Poison"
+			"Poison",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 48,
@@ -6144,7 +6159,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"toxicroak": {
 		"types": [
-			"Poison"
+			"Poison",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 83,
@@ -6163,8 +6179,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"carnivine": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -6181,7 +6196,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"lumineon": {
 		"types": [
-			"Water"
+			"Water",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 69,
@@ -6200,7 +6216,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"mantyke": {
 		"types": [
-			"Water"
+			"Water",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -6219,7 +6236,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"snover": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -6237,7 +6255,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"abomasnow": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -6255,7 +6274,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"weavile": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -6273,7 +6293,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"magnezone": {
 		"types": [
-			"Electric"
+			"Electric",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -6292,8 +6313,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"lickilicky": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 110,
@@ -6312,7 +6332,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"rhyperior": {
 		"types": [
-			"Ground"
+			"Ground",
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 115,
@@ -6331,8 +6352,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"tangrowth": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -6351,8 +6371,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"electivire": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -6370,8 +6389,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"magmortar": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -6389,7 +6407,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"togekiss": {
 		"types": [
-			"Fairy"
+			"Fairy",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -6408,7 +6427,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"yanmega": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 86,
@@ -6427,8 +6447,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"leafeon": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -6446,8 +6465,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"glaceon": {
 		"types": [
-			"Ice",
-			""
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -6465,7 +6483,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"gliscor": {
 		"types": [
-			"Ground"
+			"Ground",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -6484,7 +6503,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"mamoswine": {
 		"types": [
-			"Ice"
+			"Ice",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 110,
@@ -6503,8 +6523,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"porygonz": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -6523,7 +6542,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"gallade": {
 		"types": [
-			"Psychic"
+			"Psychic",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 68,
@@ -6542,7 +6562,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"probopass": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -6561,8 +6582,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dusknoir": {
 		"types": [
-			"Ghost",
-			""
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -6580,7 +6600,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"froslass": {
 		"types": [
-			"Ice"
+			"Ice",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -6598,7 +6619,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"rotom": {
 		"types": [
-			"Electric"
+			"Electric",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -6617,8 +6639,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"uxie": {
 		"types": [
-			"Fairy",
-			""
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -6637,8 +6658,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"mesprit": {
 		"types": [
-			"Fairy",
-			""
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -6657,8 +6677,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"azelf": {
 		"types": [
-			"Fairy",
-			""
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -6677,7 +6696,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dialga": {
 		"types": [
-			"Steel"
+			"Steel",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -6695,7 +6715,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"palkia": {
 		"types": [
-			"Water"
+			"Water",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -6713,7 +6734,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"heatran": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 91,
@@ -6731,8 +6753,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"regigigas": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 110,
@@ -6749,7 +6770,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"giratina": {
 		"types": [
-			"Ghost"
+			"Ghost",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 150,
@@ -6767,8 +6789,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cresselia": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 120,
@@ -6785,8 +6806,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"phione": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -6803,8 +6823,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"manaphy": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -6821,8 +6840,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"darkrai": {
 		"types": [
-			"Dark",
-			""
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -6839,8 +6857,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"arceus": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 120,
@@ -6857,7 +6874,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"victini": {
 		"types": [
-			"Psychic"
+			"Psychic",
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -6874,8 +6892,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"snivy": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -6893,8 +6910,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"servine": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -6912,8 +6928,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"serperior": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -6931,8 +6946,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"tepig": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -6950,7 +6964,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"pignite": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -6968,7 +6983,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"emboar": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 110,
@@ -6986,8 +7002,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"oshawott": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -7005,8 +7020,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dewott": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -7024,8 +7038,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"samurott": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -7043,8 +7056,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"patrat": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -7063,8 +7075,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"watchog": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -7083,8 +7094,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"lillipup": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -7103,8 +7113,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"herdier": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -7123,8 +7132,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"stoutland": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -7143,8 +7151,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"purrloin": {
 		"types": [
-			"Dark",
-			""
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 41,
@@ -7163,8 +7170,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"liepard": {
 		"types": [
-			"Dark",
-			""
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 64,
@@ -7183,8 +7189,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"pansage": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -7202,8 +7207,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"simisage": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -7221,8 +7225,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"pansear": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -7240,8 +7243,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"simisear": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -7259,8 +7261,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"panpour": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -7278,8 +7279,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"simipour": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -7297,8 +7297,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"munna": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 76,
@@ -7317,8 +7316,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"musharna": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 116,
@@ -7337,7 +7335,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"pidove": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -7356,7 +7355,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"tranquill": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 62,
@@ -7375,7 +7375,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"unfezant": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -7394,8 +7395,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"blitzle": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -7414,8 +7414,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"zebstrika": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -7434,8 +7433,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"roggenrola": {
 		"types": [
-			"Rock",
-			""
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -7454,8 +7452,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"boldore": {
 		"types": [
-			"Rock",
-			""
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -7474,8 +7471,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"gigalith": {
 		"types": [
-			"Rock",
-			""
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -7494,7 +7490,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"woobat": {
 		"types": [
-			"Psychic"
+			"Psychic",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -7513,7 +7510,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"swoobat": {
 		"types": [
-			"Psychic"
+			"Psychic",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 67,
@@ -7532,8 +7530,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"drilbur": {
 		"types": [
-			"Ground",
-			""
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -7552,7 +7549,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"excadrill": {
 		"types": [
-			"Ground"
+			"Ground",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 110,
@@ -7571,8 +7569,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"audino": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 103,
@@ -7591,8 +7588,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"timburr": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -7611,8 +7607,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"gurdurr": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -7631,8 +7626,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"conkeldurr": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 105,
@@ -7651,8 +7645,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"tympole": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -7671,7 +7664,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"palpitoad": {
 		"types": [
-			"Water"
+			"Water",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -7690,7 +7684,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"seismitoad": {
 		"types": [
-			"Water"
+			"Water",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 105,
@@ -7709,8 +7704,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"throh": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 120,
@@ -7729,8 +7723,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sawk": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -7749,7 +7742,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sewaddle": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -7768,7 +7762,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"swadloon": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -7787,7 +7782,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"leavanny": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -7806,7 +7802,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"venipede": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 30,
@@ -7825,7 +7822,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"whirlipede": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -7844,7 +7842,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"scolipede": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -7863,7 +7862,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cottonee": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -7882,7 +7882,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"whimsicott": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -7901,8 +7902,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"petilil": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -7921,8 +7921,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"lilligant": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -7941,7 +7940,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sandile": {
 		"types": [
-			"Ground"
+			"Ground",
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -7960,7 +7960,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"krokorok": {
 		"types": [
-			"Ground"
+			"Ground",
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -7979,7 +7980,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"krookodile": {
 		"types": [
-			"Ground"
+			"Ground",
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -7998,8 +8000,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"darumaka": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -8017,8 +8018,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"darmanitan": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 105,
@@ -8036,8 +8036,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"maractus": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -8056,7 +8055,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dwebble": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -8075,7 +8075,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"crustle": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -8094,7 +8095,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"scraggy": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -8113,7 +8115,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"scrafty": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -8132,7 +8135,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sigilyph": {
 		"types": [
-			"Psychic"
+			"Psychic",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 72,
@@ -8151,8 +8155,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"yamask": {
 		"types": [
-			"Ghost",
-			""
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 38,
@@ -8169,8 +8172,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cofagrigus": {
 		"types": [
-			"Ghost",
-			""
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 58,
@@ -8187,7 +8189,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"tirtouga": {
 		"types": [
-			"Water"
+			"Water",
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 54,
@@ -8206,7 +8209,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"carracosta": {
 		"types": [
-			"Water"
+			"Water",
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 74,
@@ -8225,7 +8229,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"archen": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -8242,7 +8247,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"archeops": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -8259,8 +8265,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"trubbish": {
 		"types": [
-			"Poison",
-			""
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -8279,8 +8284,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"garbodor": {
 		"types": [
-			"Poison",
-			""
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -8299,8 +8303,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"zorua": {
 		"types": [
-			"Dark",
-			""
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -8317,8 +8320,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"zoroark": {
 		"types": [
-			"Dark",
-			""
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -8335,8 +8337,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"minccino": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -8355,8 +8356,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cinccino": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -8375,8 +8375,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"gothita": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -8395,8 +8394,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"gothorita": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -8415,8 +8413,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"gothitelle": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -8435,8 +8432,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"solosis": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -8455,8 +8451,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"duosion": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -8475,8 +8470,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"reuniclus": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 110,
@@ -8495,7 +8489,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"ducklett": {
 		"types": [
-			"Water"
+			"Water",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 62,
@@ -8514,7 +8509,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"swanna": {
 		"types": [
-			"Water"
+			"Water",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -8533,8 +8529,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"vanillite": {
 		"types": [
-			"Ice",
-			""
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 36,
@@ -8553,8 +8548,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"vanillish": {
 		"types": [
-			"Ice",
-			""
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 51,
@@ -8573,8 +8567,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"vanilluxe": {
 		"types": [
-			"Ice",
-			""
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 71,
@@ -8593,7 +8586,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sawsbuck": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -8612,7 +8606,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"emolga": {
 		"types": [
-			"Electric"
+			"Electric",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -8630,8 +8625,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"karrablast": {
 		"types": [
-			"Bug",
-			""
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -8650,7 +8644,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"escavalier": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -8669,7 +8664,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"foongus": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 69,
@@ -8687,7 +8683,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"amoonguss": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 114,
@@ -8705,7 +8702,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"frillish": {
 		"types": [
-			"Water"
+			"Water",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -8724,7 +8722,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"jellicent": {
 		"types": [
-			"Water"
+			"Water",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -8743,8 +8742,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"alomomola": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 165,
@@ -8763,7 +8761,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"joltik": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -8782,7 +8781,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"galvantula": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -8801,7 +8801,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"ferroseed": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 44,
@@ -8818,7 +8819,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"ferrothorn": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 74,
@@ -8836,8 +8838,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"klink": {
 		"types": [
-			"Steel",
-			""
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -8856,8 +8857,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"klang": {
 		"types": [
-			"Steel",
-			""
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -8876,8 +8876,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"klinklang": {
 		"types": [
-			"Steel",
-			""
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -8896,8 +8895,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"tynamo": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 35,
@@ -8914,8 +8912,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"eelektrik": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -8932,8 +8929,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"eelektross": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -8950,8 +8946,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"elgyem": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -8970,8 +8965,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"beheeyem": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -8990,7 +8984,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"litwick": {
 		"types": [
-			"Ghost"
+			"Ghost",
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -9009,7 +9004,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"lampent": {
 		"types": [
-			"Ghost"
+			"Ghost",
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -9028,7 +9024,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"chandelure": {
 		"types": [
-			"Ghost"
+			"Ghost",
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -9047,8 +9044,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"axew": {
 		"types": [
-			"Dragon",
-			""
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 46,
@@ -9067,8 +9063,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"fraxure": {
 		"types": [
-			"Dragon",
-			""
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 66,
@@ -9087,8 +9082,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"haxorus": {
 		"types": [
-			"Dragon",
-			""
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 76,
@@ -9107,8 +9101,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cubchoo": {
 		"types": [
-			"Ice",
-			""
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -9127,8 +9120,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"beartic": {
 		"types": [
-			"Ice",
-			""
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -9147,8 +9139,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cryogonal": {
 		"types": [
-			"Ice",
-			""
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -9165,8 +9156,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"shelmet": {
 		"types": [
-			"Bug",
-			""
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -9185,8 +9175,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"accelgor": {
 		"types": [
-			"Bug",
-			""
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -9205,7 +9194,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"stunfisk": {
 		"types": [
-			"Ground"
+			"Ground",
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 109,
@@ -9224,8 +9214,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"mienfoo": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -9244,8 +9233,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"mienshao": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -9264,8 +9252,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"druddigon": {
 		"types": [
-			"Dragon",
-			""
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 77,
@@ -9284,7 +9271,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"golett": {
 		"types": [
-			"Ground"
+			"Ground",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 59,
@@ -9303,7 +9291,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"golurk": {
 		"types": [
-			"Ground"
+			"Ground",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 89,
@@ -9322,7 +9311,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"pawniard": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -9341,7 +9331,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"bisharp": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -9360,8 +9351,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"bouffalant": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -9380,7 +9370,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"rufflet": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -9399,7 +9390,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"braviary": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -9418,7 +9410,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"vullaby": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -9437,7 +9430,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"mandibuzz": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 110,
@@ -9456,8 +9450,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"heatmor": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -9476,7 +9469,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"durant": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 58,
@@ -9495,7 +9489,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"deino": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 52,
@@ -9512,7 +9507,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"zweilous": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 72,
@@ -9529,7 +9525,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"hydreigon": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 92,
@@ -9546,7 +9543,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"larvesta": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -9564,7 +9562,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"volcarona": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -9582,7 +9581,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cobalion": {
 		"types": [
-			"Steel"
+			"Steel",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 91,
@@ -9599,7 +9599,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"terrakion": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 91,
@@ -9616,7 +9617,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"virizion": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 91,
@@ -9633,7 +9635,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"reshiram": {
 		"types": [
-			"Dragon"
+			"Dragon",
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -9650,7 +9653,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"zekrom": {
 		"types": [
-			"Dragon"
+			"Dragon",
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -9667,7 +9671,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"kyurem": {
 		"types": [
-			"Dragon"
+			"Dragon",
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 125,
@@ -9684,7 +9689,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"genesect": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 71,
@@ -9701,7 +9707,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"chesnaught": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 88,
@@ -9719,8 +9726,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"fennekin": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -9738,8 +9744,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"braixen": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 59,
@@ -9757,7 +9762,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"delphox": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -9775,8 +9781,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"froakie": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 41,
@@ -9794,8 +9799,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"frogadier": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 54,
@@ -9813,7 +9817,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"greninja": {
 		"types": [
-			"Water"
+			"Water",
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 72,
@@ -9831,8 +9836,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"bunnelby": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 38,
@@ -9851,7 +9855,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"diggersby": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -9870,7 +9875,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"fletchling": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -9888,7 +9894,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"fletchinder": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 62,
@@ -9906,7 +9913,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"talonflame": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 78,
@@ -9924,8 +9932,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"scatterbug": {
 		"types": [
-			"Bug",
-			""
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 38,
@@ -9944,8 +9951,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"spewpa": {
 		"types": [
-			"Bug",
-			""
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -9963,7 +9969,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"vivillon": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -9982,7 +9989,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"litleo": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 62,
@@ -10001,7 +10009,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"pyroar": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 86,
@@ -10020,8 +10029,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"flabebe": {
 		"types": [
-			"Fairy",
-			""
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 44,
@@ -10039,8 +10047,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"floette": {
 		"types": [
-			"Fairy",
-			""
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 54,
@@ -10058,8 +10065,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"florges": {
 		"types": [
-			"Fairy",
-			""
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 78,
@@ -10077,8 +10083,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"skiddo": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 66,
@@ -10096,8 +10101,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"gogoat": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 123,
@@ -10115,8 +10119,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"pancham": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 67,
@@ -10135,7 +10138,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"pangoro": {
 		"types": [
-			"Fighting"
+			"Fighting",
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -10154,8 +10158,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"furfrou": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -10172,8 +10175,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"espurr": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 62,
@@ -10192,7 +10194,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"honedge": {
 		"types": [
-			"Steel"
+			"Steel",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -10209,7 +10212,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"doublade": {
 		"types": [
-			"Steel"
+			"Steel",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 59,
@@ -10226,8 +10230,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"spritzee": {
 		"types": [
-			"Fairy",
-			""
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 78,
@@ -10245,8 +10248,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"aromatisse": {
 		"types": [
-			"Fairy",
-			""
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 101,
@@ -10264,8 +10266,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"swirlix": {
 		"types": [
-			"Fairy",
-			""
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 62,
@@ -10283,8 +10284,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"slurpuff": {
 		"types": [
-			"Fairy",
-			""
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 82,
@@ -10302,7 +10302,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"inkay": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 53,
@@ -10321,7 +10322,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"malamar": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 86,
@@ -10340,7 +10342,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"binacle": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Water"
 		],
 		"baseStats": {
 			"hp": 42,
@@ -10359,7 +10362,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"barbaracle": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Water"
 		],
 		"baseStats": {
 			"hp": 72,
@@ -10378,7 +10382,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"skrelp": {
 		"types": [
-			"Poison"
+			"Poison",
+			"Water"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -10397,7 +10402,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dragalge": {
 		"types": [
-			"Poison"
+			"Poison",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -10416,8 +10422,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"clauncher": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -10434,8 +10439,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"clawitzer": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 71,
@@ -10452,7 +10456,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"helioptile": {
 		"types": [
-			"Electric"
+			"Electric",
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 44,
@@ -10471,7 +10476,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"heliolisk": {
 		"types": [
-			"Electric"
+			"Electric",
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 62,
@@ -10490,7 +10496,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"tyrunt": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 58,
@@ -10508,7 +10515,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"tyrantrum": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 82,
@@ -10526,7 +10534,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"amaura": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 77,
@@ -10544,7 +10553,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"aurorus": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 123,
@@ -10562,8 +10572,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sylveon": {
 		"types": [
-			"Fairy",
-			""
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -10581,7 +10590,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"hawlucha": {
 		"types": [
-			"Fighting"
+			"Fighting",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 78,
@@ -10600,7 +10610,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dedenne": {
 		"types": [
-			"Electric"
+			"Electric",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 67,
@@ -10619,7 +10630,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"carbink": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -10637,8 +10649,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"goomy": {
 		"types": [
-			"Dragon",
-			""
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -10657,8 +10668,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sliggoo": {
 		"types": [
-			"Dragon",
-			""
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 68,
@@ -10677,8 +10687,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"goodra": {
 		"types": [
-			"Dragon",
-			""
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -10697,7 +10706,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"klefki": {
 		"types": [
-			"Steel"
+			"Steel",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 57,
@@ -10715,7 +10725,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"phantump": {
 		"types": [
-			"Ghost"
+			"Ghost",
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 43,
@@ -10734,7 +10745,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"trevenant": {
 		"types": [
-			"Ghost"
+			"Ghost",
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -10753,8 +10765,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"bergmite": {
 		"types": [
-			"Ice",
-			""
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -10773,8 +10784,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"avalugg": {
 		"types": [
-			"Ice",
-			""
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -10793,7 +10803,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"noibat": {
 		"types": [
-			"Flying"
+			"Flying",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -10812,7 +10823,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"noivern": {
 		"types": [
-			"Flying"
+			"Flying",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -10831,8 +10843,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"xerneas": {
 		"types": [
-			"Fairy",
-			""
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 126,
@@ -10849,7 +10860,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"yveltal": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 126,
@@ -10866,7 +10878,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"diancie": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -10883,7 +10896,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"volcanion": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Water"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -10902,7 +10916,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"rowlet": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 68,
@@ -10920,7 +10935,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dartrix": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 78,
@@ -10938,7 +10954,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"decidueye": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 78,
@@ -10956,8 +10973,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"litten": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -10975,8 +10991,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"torracat": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -10994,7 +11009,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"primarina": {
 		"types": [
-			"Water"
+			"Water",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -11012,7 +11028,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"pikipek": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 35,
@@ -11031,7 +11048,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"trumbeak": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -11050,7 +11068,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"toucannon": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -11069,8 +11088,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"yungoos": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 48,
@@ -11089,8 +11107,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"gumshoos": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 88,
@@ -11109,8 +11126,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"grubbin": {
 		"types": [
-			"Bug",
-			""
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 47,
@@ -11127,7 +11143,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"charjabug": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 57,
@@ -11144,7 +11161,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"vikavolt": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 77,
@@ -11161,8 +11179,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"crabrawler": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 47,
@@ -11181,7 +11198,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"crabominable": {
 		"types": [
-			"Fighting"
+			"Fighting",
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 97,
@@ -11200,7 +11218,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cutiefly": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -11219,7 +11238,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"ribombee": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -11238,8 +11258,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"rockruff": {
 		"types": [
-			"Rock",
-			""
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -11258,7 +11277,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"mareanie": {
 		"types": [
-			"Poison"
+			"Poison",
+			"Water"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -11277,7 +11297,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"toxapex": {
 		"types": [
-			"Poison"
+			"Poison",
+			"Water"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -11296,8 +11317,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"mudbray": {
 		"types": [
-			"Ground",
-			""
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -11316,8 +11336,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"mudsdale": {
 		"types": [
-			"Ground",
-			""
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -11336,7 +11355,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dewpider": {
 		"types": [
-			"Water"
+			"Water",
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 38,
@@ -11354,7 +11374,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"araquanid": {
 		"types": [
-			"Water"
+			"Water",
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 68,
@@ -11372,8 +11393,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"fomantis": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -11391,8 +11411,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"lurantis": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -11410,7 +11429,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"morelull": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -11429,7 +11449,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"shiinotic": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -11448,7 +11469,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"salandit": {
 		"types": [
-			"Poison"
+			"Poison",
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 48,
@@ -11466,7 +11488,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"salazzle": {
 		"types": [
-			"Poison"
+			"Poison",
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 68,
@@ -11484,7 +11507,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"stufful": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -11503,7 +11527,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"bewear": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 120,
@@ -11522,8 +11547,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"bounsweet": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 42,
@@ -11542,8 +11566,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"steenee": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 52,
@@ -11562,8 +11585,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"tsareena": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 72,
@@ -11582,8 +11604,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"comfey": {
 		"types": [
-			"Fairy",
-			""
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 51,
@@ -11602,7 +11623,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"oranguru": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -11621,8 +11643,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"passimian": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -11640,7 +11661,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"wimpod": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Water"
 		],
 		"baseStats": {
 			"hp": 25,
@@ -11657,7 +11679,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"golisopod": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Water"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -11674,7 +11697,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sandygast": {
 		"types": [
-			"Ghost"
+			"Ghost",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -11692,7 +11716,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"palossand": {
 		"types": [
-			"Ghost"
+			"Ghost",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -11710,8 +11735,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"pyukumuku": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -11729,8 +11753,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"silvally": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -11747,8 +11770,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"komala": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -11765,7 +11787,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"turtonator": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -11782,7 +11805,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"togedemaru": {
 		"types": [
-			"Electric"
+			"Electric",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -11801,7 +11825,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"mimikyu": {
 		"types": [
-			"Ghost"
+			"Ghost",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -11818,7 +11843,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"bruxish": {
 		"types": [
-			"Water"
+			"Water",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 68,
@@ -11837,7 +11863,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"drampa": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 78,
@@ -11856,7 +11883,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dhelmise": {
 		"types": [
-			"Ghost"
+			"Ghost",
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -11873,8 +11901,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"jangmoo": {
 		"types": [
-			"Dragon",
-			""
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -11893,7 +11920,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"hakamoo": {
 		"types": [
-			"Dragon"
+			"Dragon",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -11912,7 +11940,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"kommoo": {
 		"types": [
-			"Dragon"
+			"Dragon",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -11931,8 +11960,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cosmog": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 43,
@@ -11949,8 +11977,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cosmoem": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 43,
@@ -11967,7 +11994,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"solgaleo": {
 		"types": [
-			"Psychic"
+			"Psychic",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 137,
@@ -11984,7 +12012,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"lunala": {
 		"types": [
-			"Psychic"
+			"Psychic",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 137,
@@ -12001,7 +12030,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"nihilego": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 109,
@@ -12018,7 +12048,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"buzzwole": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 107,
@@ -12035,7 +12066,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"pheromosa": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 71,
@@ -12052,8 +12084,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"xurkitree": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 83,
@@ -12070,7 +12101,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"celesteela": {
 		"types": [
-			"Steel"
+			"Steel",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 97,
@@ -12087,7 +12119,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"kartana": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 59,
@@ -12104,7 +12137,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"guzzlord": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 223,
@@ -12121,8 +12155,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"necrozma": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 97,
@@ -12139,7 +12172,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"magearna": {
 		"types": [
-			"Steel"
+			"Steel",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -12156,7 +12190,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"marshadow": {
 		"types": [
-			"Fighting"
+			"Fighting",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -12173,8 +12208,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"poipole": {
 		"types": [
-			"Poison",
-			""
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 67,
@@ -12191,7 +12225,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"naganadel": {
 		"types": [
-			"Poison"
+			"Poison",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 73,
@@ -12208,7 +12243,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"stakataka": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 61,
@@ -12225,7 +12261,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"blacephalon": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 53,
@@ -12242,8 +12279,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"zeraora": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 88,
@@ -12260,8 +12296,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"meltan": {
 		"types": [
-			"Steel",
-			""
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 46,
@@ -12278,8 +12313,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"melmetal": {
 		"types": [
-			"Steel",
-			""
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 135,
@@ -12296,8 +12330,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"grookey": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -12315,8 +12348,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"thwackey": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -12334,8 +12366,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"rillaboom": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -12353,8 +12384,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"scorbunny": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -12372,8 +12402,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"raboot": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -12391,8 +12420,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cinderace": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -12410,8 +12438,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sobble": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -12429,8 +12456,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"drizzile": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -12448,8 +12474,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"inteleon": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -12467,8 +12492,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"skwovet": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -12486,8 +12510,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"greedent": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 120,
@@ -12505,8 +12528,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"rookidee": {
 		"types": [
-			"Flying",
-			""
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 38,
@@ -12525,8 +12547,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"corvisquire": {
 		"types": [
-			"Flying",
-			""
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 68,
@@ -12545,7 +12566,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"corviknight": {
 		"types": [
-			"Flying"
+			"Flying",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 98,
@@ -12564,8 +12586,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"blipbug": {
 		"types": [
-			"Bug",
-			""
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 25,
@@ -12584,7 +12605,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dottler": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -12603,7 +12625,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"orbeetle": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -12622,8 +12645,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"nickit": {
 		"types": [
-			"Dark",
-			""
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -12642,8 +12664,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"thievul": {
 		"types": [
-			"Dark",
-			""
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -12662,8 +12683,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"gossifleur": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -12682,8 +12702,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"eldegoss": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -12702,8 +12721,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"wooloo": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 42,
@@ -12722,8 +12740,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dubwool": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 72,
@@ -12742,8 +12759,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"chewtle": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -12762,7 +12778,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"drednaw": {
 		"types": [
-			"Water"
+			"Water",
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -12781,8 +12798,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"yamper": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 59,
@@ -12800,8 +12816,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"boltund": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 69,
@@ -12819,8 +12834,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"rolycoly": {
 		"types": [
-			"Rock",
-			""
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 30,
@@ -12839,7 +12853,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"carkol": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -12858,7 +12873,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"coalossal": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 110,
@@ -12877,7 +12893,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"applin": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -12896,7 +12913,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"flapple": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -12915,7 +12933,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"appletun": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 110,
@@ -12934,8 +12953,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"silicobra": {
 		"types": [
-			"Ground",
-			""
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 52,
@@ -12954,8 +12972,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sandaconda": {
 		"types": [
-			"Ground",
-			""
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 72,
@@ -12974,7 +12991,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cramorant": {
 		"types": [
-			"Flying"
+			"Flying",
+			"Water"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -12991,8 +13009,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"arrokuda": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 41,
@@ -13010,8 +13027,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"barraskewda": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 61,
@@ -13029,7 +13045,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"toxel": {
 		"types": [
-			"Electric"
+			"Electric",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -13048,7 +13065,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sizzlipede": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -13067,7 +13085,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"centiskorch": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -13086,8 +13105,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"clobbopus": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -13105,8 +13123,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"grapploct": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -13124,8 +13141,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sinistea": {
 		"types": [
-			"Ghost",
-			""
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -13143,8 +13159,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"polteageist": {
 		"types": [
-			"Ghost",
-			""
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -13162,8 +13177,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"hatenna": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 42,
@@ -13182,8 +13196,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"hattrem": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 57,
@@ -13202,7 +13215,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"hatterene": {
 		"types": [
-			"Psychic"
+			"Psychic",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 57,
@@ -13221,7 +13235,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"impidimp": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -13240,7 +13255,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"morgrem": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -13259,7 +13275,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"grimmsnarl": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -13278,7 +13295,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"obstagoon": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 93,
@@ -13297,8 +13315,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"perrserker": {
 		"types": [
-			"Steel",
-			""
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -13317,8 +13334,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cursola": {
 		"types": [
-			"Ghost",
-			""
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -13336,8 +13352,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sirfetchd": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 62,
@@ -13355,7 +13370,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"runerigus": {
 		"types": [
-			"Ground"
+			"Ground",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 58,
@@ -13372,8 +13388,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"milcery": {
 		"types": [
-			"Fairy",
-			""
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -13391,8 +13406,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"alcremie": {
 		"types": [
-			"Fairy",
-			""
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -13410,8 +13424,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"falinks": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -13429,8 +13442,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"pincurchin": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 48,
@@ -13448,7 +13460,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"snom": {
 		"types": [
-			"Ice"
+			"Ice",
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 30,
@@ -13466,7 +13479,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"frosmoth": {
 		"types": [
-			"Ice"
+			"Ice",
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -13484,8 +13498,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"stonjourner": {
 		"types": [
-			"Rock",
-			""
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -13502,8 +13515,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cufant": {
 		"types": [
-			"Steel",
-			""
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 72,
@@ -13521,8 +13533,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"copperajah": {
 		"types": [
-			"Steel",
-			""
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 122,
@@ -13540,7 +13551,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dracozolt": {
 		"types": [
-			"Electric"
+			"Electric",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -13559,7 +13571,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"arctozolt": {
 		"types": [
-			"Electric"
+			"Electric",
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -13578,7 +13591,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dracovish": {
 		"types": [
-			"Water"
+			"Water",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -13597,7 +13611,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"arctovish": {
 		"types": [
-			"Water"
+			"Water",
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -13616,7 +13631,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"duraludon": {
 		"types": [
-			"Steel"
+			"Steel",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -13635,7 +13651,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dreepy": {
 		"types": [
-			"Dragon"
+			"Dragon",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 28,
@@ -13654,7 +13671,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"drakloak": {
 		"types": [
-			"Dragon"
+			"Dragon",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 68,
@@ -13673,7 +13691,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dragapult": {
 		"types": [
-			"Dragon"
+			"Dragon",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 88,
@@ -13692,7 +13711,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"eternatus": {
 		"types": [
-			"Poison"
+			"Poison",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 140,
@@ -13709,8 +13729,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"kubfu": {
 		"types": [
-			"Fighting",
-			""
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -13728,7 +13747,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"zarude": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 105,
@@ -13745,8 +13765,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"regieleki": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -13763,8 +13782,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"regidrago": {
 		"types": [
-			"Dragon",
-			""
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 200,
@@ -13781,8 +13799,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"glastrier": {
 		"types": [
-			"Ice",
-			""
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -13799,8 +13816,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"spectrier": {
 		"types": [
-			"Ghost",
-			""
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -13817,7 +13833,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"calyrex": {
 		"types": [
-			"Psychic"
+			"Psychic",
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -13834,7 +13851,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"wyrdeer": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 103,
@@ -13853,7 +13871,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"kleavor": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -13872,7 +13891,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"ursaluna": {
 		"types": [
-			"Ground"
+			"Ground",
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 130,
@@ -13891,7 +13911,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sneasler": {
 		"types": [
-			"Fighting"
+			"Fighting",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -13910,7 +13931,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"overqwil": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -13929,8 +13951,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"sprigatito": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -13948,8 +13969,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"floragato": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 61,
@@ -13967,7 +13987,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"meowscarada": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 76,
@@ -13985,8 +14006,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"fuecoco": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 67,
@@ -14004,8 +14024,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"crocalor": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 81,
@@ -14023,7 +14042,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"skeledirge": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 104,
@@ -14041,8 +14061,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"quaxly": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -14060,8 +14079,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"quaxwell": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -14079,7 +14097,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"quaquaval": {
 		"types": [
-			"Water"
+			"Water",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -14097,8 +14116,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"lechonk": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 54,
@@ -14117,8 +14135,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"oinkologne": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 115,
@@ -14137,8 +14154,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"tarountula": {
 		"types": [
-			"Bug",
-			""
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 35,
@@ -14156,8 +14172,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"spidops": {
 		"types": [
-			"Bug",
-			""
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -14175,8 +14190,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"nymble": {
 		"types": [
-			"Bug",
-			""
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 33,
@@ -14194,7 +14208,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"lokix": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 71,
@@ -14212,8 +14227,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"pawmi": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -14232,7 +14246,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"pawmo": {
 		"types": [
-			"Electric"
+			"Electric",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -14251,7 +14266,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"pawmot": {
 		"types": [
-			"Electric"
+			"Electric",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -14270,8 +14286,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"tandemaus": {
 		"types": [
-			"Normal",
-			""
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -14290,8 +14305,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"fidough": {
 		"types": [
-			"Fairy",
-			""
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 37,
@@ -14309,8 +14323,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dachsbun": {
 		"types": [
-			"Fairy",
-			""
+			"Fairy"
 		],
 		"baseStats": {
 			"hp": 57,
@@ -14328,7 +14341,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"smoliv": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 41,
@@ -14346,7 +14360,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dolliv": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 52,
@@ -14364,7 +14379,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"arboliva": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 78,
@@ -14382,8 +14398,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"nacli": {
 		"types": [
-			"Rock",
-			""
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -14402,8 +14417,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"naclstack": {
 		"types": [
-			"Rock",
-			""
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -14422,8 +14436,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"garganacl": {
 		"types": [
-			"Rock",
-			""
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -14442,8 +14455,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"charcadet": {
 		"types": [
-			"Fire",
-			""
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -14461,7 +14473,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"armarouge": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -14480,7 +14493,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"ceruledge": {
 		"types": [
-			"Fire"
+			"Fire",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -14499,8 +14513,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"tadbulb": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 61,
@@ -14519,8 +14532,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"bellibolt": {
 		"types": [
-			"Electric",
-			""
+			"Electric"
 		],
 		"baseStats": {
 			"hp": 109,
@@ -14539,7 +14551,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"wattrel": {
 		"types": [
-			"Electric"
+			"Electric",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -14558,7 +14571,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"kilowattrel": {
 		"types": [
-			"Electric"
+			"Electric",
+			"Flying"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -14577,8 +14591,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"maschiff": {
 		"types": [
-			"Dark",
-			""
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 60,
@@ -14597,8 +14610,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"mabosstiff": {
 		"types": [
-			"Dark",
-			""
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -14617,7 +14629,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"shroodle": {
 		"types": [
-			"Poison"
+			"Poison",
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -14636,7 +14649,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"grafaiai": {
 		"types": [
-			"Poison"
+			"Poison",
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 63,
@@ -14655,7 +14669,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"bramblin": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -14673,7 +14688,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"brambleghast": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -14691,7 +14707,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"toedscool": {
 		"types": [
-			"Ground"
+			"Ground",
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 40,
@@ -14708,7 +14725,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"toedscruel": {
 		"types": [
-			"Ground"
+			"Ground",
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -14725,8 +14743,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"klawf": {
 		"types": [
-			"Rock",
-			""
+			"Rock"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -14745,8 +14762,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"capsakid": {
 		"types": [
-			"Grass",
-			""
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -14765,7 +14781,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"scovillain": {
 		"types": [
-			"Grass"
+			"Grass",
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -14784,8 +14801,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"rellor": {
 		"types": [
-			"Bug",
-			""
+			"Bug"
 		],
 		"baseStats": {
 			"hp": 41,
@@ -14803,7 +14819,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"rabsca": {
 		"types": [
-			"Bug"
+			"Bug",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 75,
@@ -14821,8 +14838,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"flittle": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 30,
@@ -14841,8 +14857,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"espathra": {
 		"types": [
-			"Psychic",
-			""
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 95,
@@ -14861,7 +14876,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"tinkatink": {
 		"types": [
-			"Fairy"
+			"Fairy",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -14880,7 +14896,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"tinkatuff": {
 		"types": [
-			"Fairy"
+			"Fairy",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -14899,7 +14916,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"tinkaton": {
 		"types": [
-			"Fairy"
+			"Fairy",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -14918,8 +14936,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"wiglett": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 10,
@@ -14938,8 +14955,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"wugtrio": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 35,
@@ -14958,7 +14974,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"bombirdier": {
 		"types": [
-			"Flying"
+			"Flying",
+			"Dark"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -14977,8 +14994,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"finizen": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -14995,7 +15011,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"varoom": {
 		"types": [
-			"Steel"
+			"Steel",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 45,
@@ -15013,7 +15030,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"revavroom": {
 		"types": [
-			"Steel"
+			"Steel",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -15031,7 +15049,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cyclizar": {
 		"types": [
-			"Dragon"
+			"Dragon",
+			"Normal"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -15049,8 +15068,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"orthworm": {
 		"types": [
-			"Steel",
-			""
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 70,
@@ -15068,7 +15086,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"glimmet": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 48,
@@ -15086,7 +15105,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"glimmora": {
 		"types": [
-			"Rock"
+			"Rock",
+			"Poison"
 		],
 		"baseStats": {
 			"hp": 83,
@@ -15104,8 +15124,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"greavard": {
 		"types": [
-			"Ghost",
-			""
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 50,
@@ -15123,8 +15142,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"houndstone": {
 		"types": [
-			"Ghost",
-			""
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 72,
@@ -15142,7 +15160,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"flamigo": {
 		"types": [
-			"Flying"
+			"Flying",
+			"Fighting"
 		],
 		"baseStats": {
 			"hp": 82,
@@ -15161,8 +15180,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cetoddle": {
 		"types": [
-			"Ice",
-			""
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 108,
@@ -15181,8 +15199,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"cetitan": {
 		"types": [
-			"Ice",
-			""
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 170,
@@ -15201,7 +15218,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"veluza": {
 		"types": [
-			"Water"
+			"Water",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -15219,8 +15237,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"dondozo": {
 		"types": [
-			"Water",
-			""
+			"Water"
 		],
 		"baseStats": {
 			"hp": 150,
@@ -15239,7 +15256,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"annihilape": {
 		"types": [
-			"Fighting"
+			"Fighting",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 110,
@@ -15258,7 +15276,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"clodsire": {
 		"types": [
-			"Poison"
+			"Poison",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 130,
@@ -15277,7 +15296,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"farigiraf": {
 		"types": [
-			"Normal"
+			"Normal",
+			"Psychic"
 		],
 		"baseStats": {
 			"hp": 120,
@@ -15296,7 +15316,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"kingambit": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Steel"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -15315,7 +15336,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"frigibax": {
 		"types": [
-			"Dragon"
+			"Dragon",
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 65,
@@ -15333,7 +15355,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"arctibax": {
 		"types": [
-			"Dragon"
+			"Dragon",
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 90,
@@ -15351,7 +15374,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"baxcalibur": {
 		"types": [
-			"Dragon"
+			"Dragon",
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 115,
@@ -15369,7 +15393,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"gholdengo": {
 		"types": [
-			"Steel"
+			"Steel",
+			"Ghost"
 		],
 		"baseStats": {
 			"hp": 87,
@@ -15386,7 +15411,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"wochien": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Grass"
 		],
 		"baseStats": {
 			"hp": 85,
@@ -15403,7 +15429,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"chienpao": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Ice"
 		],
 		"baseStats": {
 			"hp": 80,
@@ -15420,7 +15447,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"tinglu": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Ground"
 		],
 		"baseStats": {
 			"hp": 155,
@@ -15437,7 +15465,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"chiyu": {
 		"types": [
-			"Dark"
+			"Dark",
+			"Fire"
 		],
 		"baseStats": {
 			"hp": 55,
@@ -15454,7 +15483,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"koraidon": {
 		"types": [
-			"Fighting"
+			"Fighting",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 100,
@@ -15471,7 +15501,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	"miraidon": {
 		"types": [
-			"Electric"
+			"Electric",
+			"Dragon"
 		],
 		"baseStats": {
 			"hp": 100,
