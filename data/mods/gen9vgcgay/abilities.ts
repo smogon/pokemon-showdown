@@ -104,6 +104,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			return this.chainModify([4, 10]);
 		},
 		name: "Triple Threat",
+		shortDesc: "Moves hit 3 times at 40% power",
 		rating: 3,
 		num: -5,
 	},
@@ -114,6 +115,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Mind Surfer",
+		shortDesc: "Doubles speed in Psychic Terrain",
 		rating: 3,
 		num: -6,
 	},
@@ -123,16 +125,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.field.setTerrain('electricterrain');
 		},
 		name: "Thunderstorm",
+		shortDesc: "Sets Rain and Electric Terrain",
 		rating: 4,
 		num: -7,
 	},
 	justthetip: {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.name.toLowerCase().includes("drill")) {
-				return this.chainModify([4, 10]);
+				return this.chainModify([3, 2]);
 			}
 		},
 		name: "Just the Tip",
+		shortDesc: "Drill moves do 1.5x damage",
 		rating: 3,
 		num: -8,
 	}

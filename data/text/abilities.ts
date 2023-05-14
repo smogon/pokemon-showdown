@@ -2163,4 +2163,25 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 
 		activate: "  [POKEMON] extends [MOVE] by 2 turns!",
 	},
+	// GAY
+	triplethreat: {
+		name: "Triple Threat",
+		desc: "Moves hit 3 times at 40% power",
+		shortDesc: "Moves hit 3 times at 40% power",
+	},
+	mindsurfer: {
+		name: "Mind Surfer",
+		desc: "Doubles speed in Psychic Terrain",
+		shortDesc: "Doubles speed in Psychic Terrain",
+	},
+	thunderstorm: {
+		name: "Thunderstorm",
+		desc: "Sets Rain and Electric Terrain",
+		shortDesc: "Sets Rain and Electric Terrain",
+	},
+	justthetip: {
+		name: "Just the Tip",
+		desc: "Drill moves do 1.5x damage",
+		shortDesc: "Drill moves do 1.5x damage",
+	},
 };
