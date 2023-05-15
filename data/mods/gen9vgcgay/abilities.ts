@@ -169,5 +169,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Doubles Speed and boosts SpDef in Snow and Rain",
 		rating: 3,
 		num: -9,
+	},
+	galewings: {
+		inherit: true,
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.type === 'Flying' && pokemon.hp > pokemon.maxhp/2) return priority + 1;
+		}
+	},
+	tanglinghair: {
+		inherit: true,
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target, true)) {
+				this.add('-ability', target, 'Tangling Hair');
+				target.tryTrap(true);
+			}
+		}
 	}
 };
