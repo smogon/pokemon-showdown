@@ -522,7 +522,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	alakazam: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "RU",
+		natDexTier: "RUBL",
 	},
 	alakazammega: {
 		isNonstandard: "Past",
@@ -741,7 +741,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	gengar: {
 		tier: "UU",
 		doublesTier: "(DUU)",
-		natDexTier: "RU",
+		natDexTier: "RUBL",
 	},
 	gengarmega: {
 		isNonstandard: "Past",
@@ -1586,7 +1586,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	heracrossmega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "RU",
+		natDexTier: "RUBL",
 	},
 	sneasel: {
 		tier: "NFE",
@@ -3838,7 +3838,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	terrakion: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "RU",
+		natDexTier: "RUBL",
 	},
 	virizion: {
 		isNonstandard: "Past",
@@ -3903,7 +3903,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	keldeo: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "RU",
+		natDexTier: "RUBL",
 	},
 	keldeoresolute: {
 		isNonstandard: "Past",
