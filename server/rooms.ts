@@ -760,7 +760,7 @@ export abstract class BasicRoom {
 			room => includeSecret ? true : !room.settings.isPrivate && !room.settings.isPersonal
 		);
 	}
-	validateTitle(newTitle: string, newID?: string) {
+	validateTitle(newTitle: string, newID?: string, oldID?: string) {
 		if (!newID) newID = toID(newTitle);
 		// `,` is a delimiter used by a lot of /commands
 		// `|` and `[` are delimiters used by the protocol
@@ -772,7 +772,7 @@ export abstract class BasicRoom {
 			throw new Chat.ErrorMessage(`Room title "${newTitle}" can't contain -`);
 		}
 		if (newID.length > MAX_CHATROOM_ID_LENGTH) throw new Chat.ErrorMessage("The given room title is too long.");
-		if (Rooms.search(newTitle)) throw new Chat.ErrorMessage(`The room '${newTitle}' already exists.`);
+		if (newID !== oldID && Rooms.search(newTitle)) throw new Chat.ErrorMessage(`The room '${newTitle}' already exists.`);
 	}
 	setParent(room: Room | null) {
 		if (this.parent === room) return;
@@ -890,13 +890,21 @@ export abstract class BasicRoom {
 	 */
 	rename(newTitle: string, newID?: RoomID, noAlias?: boolean) {
 		if (!newID) newID = toID(newTitle) as RoomID;
-		this.validateTitle(newTitle, newID);
+		const oldID = this.roomid;
+		this.validateTitle(newTitle, newID, oldID);
 		if (this.type === 'chat' && this.game) {
 			throw new Chat.ErrorMessage(`Please finish your game (${this.game.title}) before renaming ${this.roomid}.`);
 		}
-		const oldID = this.roomid;
 		(this as any).roomid = newID;
-		this.title = newTitle;
+		this.title = this.settings.title = newTitle;
+		this.saveSettings();
+		if (newID === oldID) {
+			for (const user of Object.values(this.users)) {
+				user.sendTo(this, `|title|${newTitle}`);
+			}
+			return;
+		}
+
 		Rooms.rooms.delete(oldID);
 		Rooms.rooms.set(newID, this as Room);
 		if (this.battle && oldID) {
@@ -938,8 +946,6 @@ export abstract class BasicRoom {
 
 		this.game?.renameRoom(newID);
 
-		this.saveSettings();
-
 		for (const user of Object.values(this.users)) {
 			user.moveConnections(oldID, newID);
 			user.send(`>${oldID}\n|noinit|rename|${newID}|${newTitle}`);
@@ -956,7 +962,6 @@ export abstract class BasicRoom {
 			}
 		}
 
-		this.settings.title = newTitle;
 		this.saveSettings();
 
 		Punishments.renameRoom(oldID, newID);
