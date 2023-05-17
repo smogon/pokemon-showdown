@@ -2115,7 +2115,7 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 	let randomOutput = 0;
 
 	target = target.trim();
-	const target_split = target.split(',');
+	const targetSplit = target.split(',');
 	const lastCommaIndex = target.lastIndexOf(',');
 	const lastArgumentSubstr = target.substr(lastCommaIndex + 1).trim();
 	if (lastArgumentSubstr === 'all') {
@@ -2124,16 +2124,16 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 		target = target.substr(0, lastCommaIndex);
 	}
 
-	const sanitized_targets = [];
-	for (const index of target_split.keys()) {
-		const local_target = target_split[index].trim();
-		if (local_target.startsWith('random') && cmd === 'randitem') {
-			randomOutput = parseInt(local_target.substr(6));
+	const sanitizedTargets = [];
+	for (const index of targetSplit.keys()) {
+		const localTarget = targetSplit[index].trim();
+		if (localTarget.startsWith('random') && cmd === 'randitem') {
+			randomOutput = parseInt(localTarget.substr(6));
 		} else {
-			sanitized_targets.push(local_target);
+			sanitizedTargets.push(localTarget);
 		}
 	}
-	target = sanitized_targets.join(',');
+	target = sanitizedTargets.join(',');
 	target = target.toLowerCase().replace('-', ' ').replace(/[^a-z0-9.\s/]/g, '');
 	const rawSearch = target.replace(/(max ?)?gen \d/g, match => toID(match)).split(' ');
 	const searchedWords: string[] = [];
@@ -2786,9 +2786,9 @@ function runRandtype(target: string, cmd: string, canAll: boolean, message: stri
 	}
 	let randomOutput = 0;
 	target = target.trim();
-	const target_split = target.split(',');
-	for (const index of target_split.keys()) {
-		const local_target = target_split[index].trim();
+	const targetSplit = target.split(',');
+	for (const index of targetSplit.keys()) {
+		const local_target = targetSplit[index].trim();
 		// Check if the target contains "random<digit>".
 		if (local_target.startsWith('random') && cmd === 'randtype') {
 			// Validation for this is in the /randpoke command
