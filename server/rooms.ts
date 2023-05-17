@@ -721,14 +721,14 @@ export abstract class BasicRoom {
 	}
 	getStaffIntroMessage(user: User) {
 		if (!user.can('mute', null, this)) return ``;
-		let message = ``;
+		const messages = [];
 		if (this.settings.staffMessage) {
-			message += `\n|raw|<div class="infobox">(Staff intro:)<br /><div>` +
+			messages.push(`|raw|<div class="infobox">(Staff intro:)<br /><div>` +
 				this.settings.staffMessage.replace(/\n/g, '') +
-				`</div>`;
+				`</div>`);
 		}
 		if (this.pendingApprovals?.size) {
-			message += `\n|raw|<div class="infobox">`;
+			let message = `|raw|<div class="infobox">`;
 			message += `<details open><summary>(Pending media requests: ${this.pendingApprovals.size})</summary>`;
 			for (const [userid, entry] of this.pendingApprovals) {
 				message += `<div class="infobox">`;
@@ -746,8 +746,13 @@ export abstract class BasicRoom {
 				message += `<hr />`;
 			}
 			message += `</details></div>`;
+			messages.push(message);
 		}
-		return message ? `|raw|${message}` : ``;
+		if (!this.settings.isPrivate && !this.settings.isPersonal &&
+				this.settings.modchat && this.settings.modchat !== 'autoconfirmed') {
+			messages.push(`|raw|<div class="broadcast-red">Modchat currently set to ${this.settings.modchat}</div>`);
+		}
+		return messages.join('\n');
 	}
 	getSubRooms(includeSecret = false) {
 		if (!this.subRooms) return [];
