@@ -1046,15 +1046,15 @@ export const commands: Chat.ChatCommands = {
 			if (target.includes(',') || target.includes('|') || target.includes('[') || target.includes('-')) {
 				return this.errorReply("Room titles can't contain any of: ,|[-");
 			}
-			target = `[G] ${target}`;
 		} else {
 			this.checkCan('makeroom');
 		}
 		const creatorID = room.roomid.split('-')[1];
 		const id = isGroupchat ? `groupchat-${creatorID}-${toID(target)}` as RoomID : undefined;
+		const title = isGroupchat ? `[G] ${target}` : target;
 		const oldID = room.roomid;
 
-		room.rename(target, id);
+		room.rename(title, id);
 
 		Chat.handleRoomRename(oldID, id || toID(target) as RoomID, room);
 
