@@ -8857,9 +8857,6 @@ name: "Thousand Waves",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1, nonsky: 1},
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
 secondary: null,
 target: "foeSide",
 type: "Ground",
