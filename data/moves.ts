@@ -8829,8 +8829,6 @@ this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High 
 volatileStatus: 'partiallytrapped',
 secondary: null,
 target: "randomNormal",
-type: "Steel",
-},
 type: "Ground",
 },
 
