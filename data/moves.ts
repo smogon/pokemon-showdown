@@ -3003,7 +3003,7 @@ type: "Electric",
 },
 
 volttackle: {
-accuracy: 76
+accuracy: 76,
 basePower: 145,
 category: "Physical",
 name: "Volt Tackle",
@@ -3417,7 +3417,7 @@ type: "Fairy",
 },
 
 lightofruin: {
-accuracy: 76
+accuracy: 76,
 basePower: 145,
 category: "Special",
 name: "Light of Ruin",
@@ -4169,7 +4169,7 @@ type: "Fighting",
 },
 
 jumpkick: {
-accuracy: 76
+accuracy: 76,
 basePower: 145,
 category: "Physical",
 name: "Jump Kick",
@@ -5218,7 +5218,7 @@ type: "Fire",
 },
 
 flareblitz: {
-accuracy: 76
+accuracy: 76,
 basePower: 145,
 category: "Physical",
 name: "Flare Blitz",
@@ -5796,7 +5796,7 @@ type: "Flying",
 },
 
 bravebird: {
-accuracy: 76
+accuracy: 76,
 basePower: 145,
 category: "Physical",
 name: "Brave Bird",
@@ -8085,7 +8085,7 @@ type: "Grass",
 },
 
 woodhammer: {
-accuracy: 76
+accuracy: 76,
 basePower: 145,
 category: "Physical",
 name: "Wood Hammer",
@@ -8646,7 +8646,7 @@ type: "Ground",
 },
 
 tectonicrage: {
-accuracy: 76
+accuracy: 76,
 basePower: 145,
 category: "Physical",
 name: "Tectonic Rage",
@@ -13272,7 +13272,7 @@ type: "Normal",
 },
 
 takedown: {
-accuracy: 76
+accuracy: 76,
 basePower: 145,
 category: "Physical",
 name: "Take Down",
@@ -16574,7 +16574,7 @@ type: "Rock",
 },
 
 headsmash: {
-accuracy: 76
+accuracy: 76,
 basePower: 145,
 category: "Physical",
 name: "Head Smash",
@@ -17506,7 +17506,7 @@ type: "Steel",
 },
 
 searingsunrazesmash: {
-accuracy: 76
+accuracy: 76,
 basePower: 145,
 category: "Physical",
 name: "Searing Sunraze Smash",
@@ -18491,7 +18491,7 @@ type: "Water",
 },
 
 wavecrash: {
-accuracy: 76
+accuracy: 76,
 basePower: 145,
 category: "Physical",
 name: "Wave Crash",
