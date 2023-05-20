@@ -1833,7 +1833,7 @@ type: "Dragon",
 },
 
 clangoroussoulblaze: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Clangorous Soulblaze",
@@ -1857,7 +1857,7 @@ type: "Dragon",
 },
 
 coreenforcer: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Core Enforcer",
@@ -2027,7 +2027,7 @@ type: "Dragon",
 },
 
 dragonrush: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Dragon Rush",
@@ -2070,7 +2070,7 @@ type: "Dragon",
 },
 
 eternabeam: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Eternabeam",
@@ -2136,7 +2136,7 @@ type: "Dragon",
 },
 
 outrage: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Outrage",
@@ -2157,7 +2157,7 @@ type: "Dragon",
 },
 
 roaroftime: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Roar of Time",
@@ -2186,7 +2186,7 @@ type: "Dragon",
 },
 
 spacialrend: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Spacial Rend",
@@ -2231,7 +2231,7 @@ type: "Electric",
 },
 
 aurawheel: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Aura Wheel",
@@ -2288,7 +2288,7 @@ type: "Electric",
 },
 
 boltstrike: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Bolt Strike",
@@ -2847,7 +2847,7 @@ type: "Electric",
 },
 
 stokedsparksurfer: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Stoked Sparksurfer",
@@ -3058,7 +3058,7 @@ type: "Electric",
 },
 
 zapcannon: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Zap Cannon",
@@ -3849,7 +3849,7 @@ type: "Fighting",
 },
 
 closecombat: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Close Combat",
@@ -4078,7 +4078,7 @@ type: "Fighting",
 },
 
 focusblast: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Focus Blast",
@@ -4317,7 +4317,7 @@ type: "Fighting",
 },
 
 meteorassault: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Meteor Assault",
@@ -4651,7 +4651,7 @@ type: "Fighting",
 },
 
 superpower: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Superpower",
@@ -4799,7 +4799,7 @@ type: "Fighting",
 },
 
 armorcannon: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Armor Cannon",
@@ -4880,7 +4880,7 @@ type: "Fire",
 },
 
 blueflare: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Blue Flare",
@@ -4916,7 +4916,7 @@ type: "Fire",
 },
 
 burnup: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Burn Up",
@@ -4957,7 +4957,7 @@ type: "Fire",
 },
 
 eruption: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 basePowerCallback(pokemon, target, move) {
 const bp = move.basePower * pokemon.hp / pokemon.maxhp;
@@ -5415,7 +5415,7 @@ type: "Fire",
 },
 
 overheat: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Overheat",
@@ -5449,7 +5449,7 @@ type: "Fire",
 },
 
 ragingfury: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Raging Fury",
@@ -5502,7 +5502,7 @@ type: "Fire",
 },
 
 shelltrap: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Shell Trap",
@@ -6130,7 +6130,7 @@ type: "Flying",
 },
 
 skyattack: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Sky Attack",
@@ -6268,7 +6268,7 @@ type: "Flying",
 },
 
 supersonicskystrike: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Supersonic Skystrike",
@@ -6741,7 +6741,7 @@ type: "Ghost",
 },
 
 poltergeist: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Poltergeist",
@@ -6822,7 +6822,7 @@ type: "Ghost",
 },
 
 shadowforce: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Shadow Force",
@@ -7113,7 +7113,7 @@ type: "Grass",
 },
 
 chloroblast: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Chloroblast",
@@ -7555,7 +7555,7 @@ type: "Grass",
 },
 
 leafstorm: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Leaf Storm",
@@ -7679,7 +7679,7 @@ type: "Grass",
 },
 
 petaldance: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Petal Dance",
@@ -7700,7 +7700,7 @@ type: "Grass",
 },
 
 powerwhip: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Power Whip",
@@ -7802,7 +7802,7 @@ type: "Grass",
 },
 
 solarbeam: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Solar Beam",
@@ -7838,7 +7838,7 @@ type: "Grass",
 },
 
 solarblade: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Solar Blade",
@@ -8305,7 +8305,7 @@ type: "Ground",
 },
 
 headlongrush: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Headlong Rush",
@@ -10784,7 +10784,7 @@ type: "Normal",
 },
 
 gigaimpact: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Giga Impact",
@@ -11180,7 +11180,7 @@ type: "Normal",
 },
 
 lastresort: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Last Resort",
@@ -11343,7 +11343,7 @@ type: "Normal",
 },
 
 megakick: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Mega Kick",
@@ -11546,7 +11546,7 @@ type: "Normal",
 },
 
 multiattack: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Multi-Attack",
@@ -11920,7 +11920,7 @@ type: "Normal",
 },
 
 pulverizingpancake: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Pulverizing Pancake",
@@ -12624,7 +12624,7 @@ type: "Normal",
 },
 
 skullbash: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Skull Bash",
@@ -13339,7 +13339,7 @@ type: "Normal",
 },
 
 technoblast: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Techno Blast",
@@ -13429,7 +13429,7 @@ type: "Normal",
 },
 
 thrash: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Thrash",
@@ -13999,7 +13999,7 @@ type: "Poison",
 },
 
 belch: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Belch",
@@ -14801,7 +14801,7 @@ type: "Psychic",
 },
 
 futuresight: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Future Sight",
@@ -14818,7 +14818,7 @@ source: source,
 moveData: {
 id: 'futuresight',
 name: "Future Sight",
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 priority: 0,
@@ -15766,7 +15766,7 @@ type: "Psychic",
 },
 
 prismaticlaser: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Prismatic Laser",
@@ -15913,7 +15913,7 @@ type: "Psychic",
 },
 
 psychoboost: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Psycho Boost",
@@ -16234,7 +16234,7 @@ type: "Psychic",
 },
 
 synchronoise: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Synchronoise",
@@ -17076,7 +17076,7 @@ type: "Steel",
 },
 
 doomdesire: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Doom Desire",
@@ -17091,7 +17091,7 @@ source: source,
 moveData: {
 id: 'doomdesire',
 name: "Doom Desire",
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 priority: 0,
@@ -17607,7 +17607,7 @@ type: "Steel",
 },
 
 steelroller: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Steel Roller",
@@ -17950,7 +17950,7 @@ type: "Water",
 },
 
 hydrocannon: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Hydro Cannon",
@@ -18473,7 +18473,7 @@ type: "Water",
 },
 
 waterspout: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 basePowerCallback(pokemon, target, move) {
 const bp = move.basePower * pokemon.hp / pokemon.maxhp;
