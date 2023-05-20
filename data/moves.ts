@@ -17969,18 +17969,10 @@ name: "Chilling Water",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
-secondaries: [
-{
-chance: 30,
-boosts: {
-atk: -1,
-spa: -1,
-spd: -1,
-}, {
+secondary: {
 chance: 30,
 status: 'frz',
 },
-],
 target: "normal",
 type: "Water",
 },
