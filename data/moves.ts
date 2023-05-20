@@ -12964,7 +12964,7 @@ pp: 1.25,
 priority: 1,
 flags: {protect: 1, mirror: 1},
 critRatio: 2,
-multihit: [1, 15], Physical
+multihit: [1, 6],
 secondary: null,
 target: "normal",
 type: "Normal",
