@@ -9894,14 +9894,6 @@ flags: {nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic:
 onTryHit(target, source) {
 this.add('-activate', target, 'move: Celebrate');
 },
-if (stats.length) {
-const randomStat = this.sample(stats);
-const boost: SparseBoostsTable = {};
-boost[randomStat] = 3;
-this.boost(boost);
-} else {
-return false;
-},
 target: "self",
 type: "Normal",
 },
