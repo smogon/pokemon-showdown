@@ -1136,7 +1136,7 @@ type: "Dark",
 },
 
 maliciousmoonsault: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Physical",
 name: "Malicious Moonsault",
