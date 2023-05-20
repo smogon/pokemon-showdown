@@ -7233,7 +7233,49 @@ name: "Frenzy Plant",
 pp: 1,
 priority: 0,
 flags: {protect: 1, mirror: 1, nonsky: 1},
-Grassy Terrain
+terrain: 'grassyterrain',
+condition: {
+duration: 5,
+durationCallback(source, effect) {
+if (source?.hasItem('terrainextender')) {
+return 8;
+}
+return 5;
+},
+onBasePowerPriority: 6,
+onBasePower(basePower, attacker, defender, move) {
+const weakenedMoves = ['earthquake', 'bulldoze', 'magnitude'];
+if (weakenedMoves.includes(move.id) && defender.isGrounded() && !defender.isSemiInvulnerable()) {
+this.debug('move weakened by grassy terrain');
+return this.chainModify(0.5);
+}
+if (move.type === 'Grass' && attacker.isGrounded()) {
+this.debug('grassy terrain boost');
+return this.chainModify([5325, 4096]);
+}
+},
+onFieldStart(field, source, effect) {
+if (effect?.effectType === 'Ability') {
+this.add('-fieldstart', 'move: Grassy Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
+} else {
+this.add('-fieldstart', 'move: Grassy Terrain');
+}
+},
+onResidualOrder: 5,
+onResidualSubOrder: 2,
+onResidual(pokemon) {
+if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
+this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+} else {
+this.debug(`Pokemon semi-invuln or not grounded; Grassy Terrain skipped`);
+}
+},
+onFieldResidualOrder: 27,
+onFieldResidualSubOrder: 7,
+onFieldEnd() {
+this.add('-fieldend', 'move: Grassy Terrain');
+},
+},
 secondary: null,
 target: "normal",
 type: "Grass",
