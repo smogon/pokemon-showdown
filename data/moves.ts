@@ -4572,7 +4572,7 @@ priority: 6,
 flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
 ignoreEvasion: true,
 ignoreDefensive: true,
-selfSwitch: true
+selfSwitch: true,
 secondary: null,
 target: "normal",
 type: "Fighting",
