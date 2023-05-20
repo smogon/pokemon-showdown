@@ -1785,7 +1785,7 @@ type: "Dragon",
 },
 
 clangingscales: {
-accuracy: 79
+accuracy: 79,
 basePower: 110,
 category: "Special",
 name: "Clanging Scales",
