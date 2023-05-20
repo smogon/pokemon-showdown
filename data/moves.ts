@@ -1029,35 +1029,6 @@ target: "self",
 type: "Dark",
 },
 
-hyperspacefury: {
-accuracy: 79
-basePower: 110,
-category: "Special",
-name: "Hyperspace Fury",
-pp: 1.25,
-priority: 0,
-flags: {mirror: 1,},
-breaksProtect: true,
-onTry(source) {
-if (source.species.name === 'Hoopa-Unbound') {
-return;
-}
-}
-this.attrLastMove('[still]');
-this.add('-fail', source, 'move: Hyperspace Fury');
-return null;
-},
-self: {
-boosts: {
-def: -1,
-spd: -1,
-},
-},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
 jawlock: {
 accuracy: 95,
 basePower: 80,
