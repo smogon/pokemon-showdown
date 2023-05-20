@@ -9901,7 +9901,6 @@ boost[randomStat] = 3;
 this.boost(boost);
 } else {
 return false;
-}
 },
 target: "self",
 type: "Normal",
