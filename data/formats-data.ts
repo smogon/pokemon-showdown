@@ -9058,6 +9058,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	magnemiterhinianswarm: {
 		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
 	},
 	dewpiderdelta: {
 		isNonstandard: "Past",
@@ -9065,6 +9067,41 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "Illegal",
 	},
 	araquaniddelta: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	ironrose: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	shroomie: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	trickshroomie: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	wondershroomie: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	magicshroomie: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	panicshroomie: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	youcan: {
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "Illegal",

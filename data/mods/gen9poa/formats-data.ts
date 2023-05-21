@@ -3537,4 +3537,39 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	ironrose: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	shroomie: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	magicshroomie: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	trickshroomie: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	wondershroomie: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	panicshroomie: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	youcan: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
 };

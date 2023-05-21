@@ -6147,7 +6147,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	supercell: {
 		onStart(pokemon) {
-			if (this.field.isWeather(['newmoon', 'raindance', 'primordialsea'])) {
+			if (this.field.isWeather(['newmoon', 'raindance', 'primordialsea', 'thunderstorm'])) {
 				if (pokemon.species.name === 'Typhlosion-Delta-Mega') pokemon.formeChange('Typhlosion-Delta-Mega-Active', this.effect, false);
 			} else {
 				if (pokemon.species.name === 'Typhlosion-Delta-Mega-Active') pokemon.formeChange('Typhlosion-Delta-Mega', this.effect, false);
@@ -6155,12 +6155,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
-			if (this.field.isWeather(['newmoon', 'raindance', 'primordialsea'])) {
+			if (this.field.isWeather(['newmoon', 'raindance', 'primordialsea', 'thunderstorm'])) {
 				return this.chainModify(1.5);
 			}
 		},
 		onUpdate(pokemon) {
-			if (this.field.isWeather(['newmoon', 'raindance', 'primordialsea'])) {
+			if (this.field.isWeather(['newmoon', 'raindance', 'primordialsea', 'thunderstorm'])) {
 				if (pokemon.species.name === 'Typhlosion-Delta-Mega') pokemon.formeChange('Typhlosion-Delta-Mega-Active', this.effect, false);
 			} else {
 				if (pokemon.species.name === 'Typhlosion-Delta-Mega-Active') pokemon.formeChange('Typhlosion-Delta-Mega', this.effect, false);
@@ -6982,6 +6982,54 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Swarming",
 		rating: 3,
 		num: -64,
+	},
+	claustrophobia: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			if (pokemon?.volatiles['trapped'] || pokemon?.volatiles['partiallyTrapped'] || pokemon?.volatiles['noretreat'] || this.field.getPseudoWeather('trickroom') || this.field.getPseudoWeather('magicroom') || this.field.getPseudoWeather('wonderroom') || this.field.getPseudoWeather('panicroom')) {
+				this.debug('claustrophobia boost');
+				return this.chainModify(2);
+			}
+		},
+		name: "Claustrophobia",
+		rating: 1,
+		num: -65,
+	},
+	refurbished: {
+		onStart(pokemon) {
+			let forme;
+			if (this.field.getPseudoWeather('trickroom') || pokemon.species.id !== 'trickshroomie') {
+				forme = 'Trick Shroomie';
+			} if (this.field.getPseudoWeather('magicroom') || pokemon.species.id !== 'magicshroomie') {
+				forme = 'Magic Shroomie';
+			} if (this.field.getPseudoWeather('wonderroom') || pokemon.species.id !== 'wondershroomie') {
+				forme = 'Wonder Shroomie';
+			} if (this.field.getPseudoWeather('panicroom') || pokemon.species.id !== 'panicshroomie') {
+				forme = 'Panic Shroomie';
+			}
+			if (pokemon.isActive && forme) {
+				pokemon.formeChange(forme, this.effect, false, '[msg]');
+			}
+		},
+		onAnyPseudoWeatherChange() {
+			const pokemon = this.effectState.target;
+			let forme;
+			if (this.field.getPseudoWeather('trickroom') || pokemon.species.id !== 'trickshroomie') {
+				forme = 'Trick Shroomie';
+			} if (this.field.getPseudoWeather('magicroom') || pokemon.species.id !== 'magicshroomie') {
+				forme = 'Magic Shroomie';
+			} if (this.field.getPseudoWeather('wonderroom') || pokemon.species.id !== 'wondershroomie') {
+				forme = 'Wonder Shroomie';
+			} if (this.field.getPseudoWeather('panicroom') || pokemon.species.id !== 'panicshroomie') {
+				forme = 'Panic Shroomie';
+			}
+			if (pokemon.isActive && forme) {
+				pokemon.formeChange(forme, this.effect, false, '[msg]');
+			}
+		},
+		name: "Refurbished",
+		rating: 2,
+		num: -66,
 	},
 };
 

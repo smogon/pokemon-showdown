@@ -23485,4 +23485,57 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1}},
 		contestType: "Tough",
 	},
+	panicroom: {
+		num: -44,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Panic Room",
+		pp: 5,
+		priority: -4,
+		flags: {mirror: 1},
+		pseudoWeather: 'panicroom',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-activate', source, 'ability: Persistent', '[move] Panic Room');
+					return 7;
+				}
+				return 5;
+			},
+			onModifyAtk(Atk) {
+				return this.chainModify([4915, 4096]);
+			},
+			onModifySpA(SpA) {
+				return this.chainModify([4915, 4096]);
+			},
+			onBeforeMovePriority: 6,
+			onBeforeMove(pokemon, target, move) {
+				if (move.category === "Status" && this.randomChance(20, 100)) {
+					this.add('cant', pokemon, 'Panic Room', move);
+				}
+			},
+			onFieldStart(target, source) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-fieldstart', 'move: Panic Room', '[of] ' + source, '[persistent]');
+				} else {
+					this.add('-fieldstart', 'move: Panic Room', '[of] ' + source);
+				}
+			},
+			onFieldRestart(target, source) {
+				this.field.removePseudoWeather('trickroom');
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 1,
+			onFieldEnd() {
+				this.add('-fieldend', 'move: Panic Room');
+			},
+		},
+		secondary: null,
+		target: "all",
+		type: "Psychic",
+		zMove: {boost: {accuracy: 1}},
+		contestType: "Clever",
+	},
 };
