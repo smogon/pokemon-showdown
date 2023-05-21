@@ -7031,5 +7031,18 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2,
 		num: -66,
 	},
+	multitasker: {
+		onModifyMove(move, pokemon) {
+			if (move.category === "Status") return;
+			if (move.category === "Physical") move.overrideDefensiveStat = 'def';
+			if (move.category === "Special") move.overrideDefensiveStat = 'spd';
+			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) {
+				move.category = 'Physical';
+			}
+		},
+		name: "Multitasker",
+		rating: 4,
+		num: -22,
+	},
 };
 

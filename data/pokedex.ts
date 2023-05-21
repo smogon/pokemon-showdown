@@ -27760,5 +27760,17 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
-	}
+	},
+	felapstan: {
+		num: -6013,
+		name: "Felapstan",
+		types: ["Ghost", "Electric"],
+		gender: "N",
+		baseStats: {hp: 90, atk: 70, def: 100, spa: 105, spd: 110, spe: 100},
+		abilities: {0: "Multitasker"},
+		heightm: 0.3,
+		weightkg: 0.3,
+		color: "Red",
+		eggGroups: ["Amorphous"],
+	},
 };

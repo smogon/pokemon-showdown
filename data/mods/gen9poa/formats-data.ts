@@ -3572,4 +3572,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "RU",
 	},
+	felapstan: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };
