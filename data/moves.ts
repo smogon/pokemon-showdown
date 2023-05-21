@@ -23548,8 +23548,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				move.type = types[0];
 				delete types[0];
 				pokemon.setType(types);
-				this.add('-start', pokemon, 'typechange', pokemon.getTypes().join('/'), '[from] ability: Chromotophile');
-				
+				this.add('-start', pokemon, 'typechange', pokemon.getTypes().join('/'));
 			}
 			return move.basePower;
 		},
@@ -23559,7 +23558,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, allyanim: 1},
 		onModifyMove(move, pokemon) {
-			move.multihit = pokemon.getTypes().length;
+			move.multihit = pokemon.getTypes().length - 1;
 		},
 		secondary: null,
 		target: "normal",
