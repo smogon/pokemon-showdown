@@ -5145,7 +5145,6 @@ flags: {protect: 1, mirror: 1},
 onHit(target, source, move) {
 return target.addVolatile('trapped', source, move, 'trapper');
 },
-volatileStatus: 'trapped',
 volatileStatus: 'partiallytrapped',
 secondary: null,
 target: "normal",
@@ -5391,7 +5390,6 @@ onHit(target, source, move) {
 return target.addVolatile('trapped', source, move, 'trapper');
 },
 volatileStatus: 'partiallytrapped',
-volatileStatus: 'trapped',
 secondary: null,
 target: "normal",
 type: "Fire",
@@ -7939,7 +7937,6 @@ onHit(target, source, move) {
 return target.addVolatile('trapped', source, move, 'trapper');
 },
 volatileStatus: 'partiallytrapped',
-volatileStatus: 'trapped',
 secondary: null,
 target: "normal",
 type: "Grass",
@@ -9830,7 +9827,6 @@ onHit(target, source, move) {
 return target.addVolatile('trapped', source, move, 'trapper');
 },
 volatileStatus: 'partiallytrapped',
-volatileStatus: 'trapped',
 secondary: null,
 target: "normal",
 type: "Normal",
@@ -14000,7 +13996,6 @@ onHit(target, source, move) {
 return target.addVolatile('trapped', source, move, 'trapper');
 },
 volatileStatus: 'partiallytrapped',
-volatileStatus: 'trapped',
 secondary: null,
 target: "normal",
 type: "Normal",
@@ -16346,10 +16341,6 @@ name: "Shattered Psyche",
 pp: 1.25,
 priority: 0,
 flags: {mirror: 1},
-onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
-},
-volatileStatus: 'trapped',
 volatileStatus: 'confusion',
 target: "allAdjacentFoes",
 type: "Psychic",
