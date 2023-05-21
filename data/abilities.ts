@@ -6624,21 +6624,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: -45,
 	},
 	ringrust: {
-		onSourceModifyAccuracyPriority: -2,
-		onSourceModifyAccuracy(accuracy) {
-			if (typeof accuracy === 'number' && accuracy < 100) {
-				return this.chainModify([4506, 4096]);
-			}
+		onAnyInvulnerabilityPriority: 1,
+		onAnyInvulnerability(target, source, move) {
+			if (move && (source === this.effectState.target || target === this.effectState.target)) return 0;
 		},
-		onBasePowerPriority: 21,
-		onBasePower(basePower, attacker, defender, move) {
-			if (typeof move.accuracy === 'number' && move.accuracy < 100) {
-				return this.chainModify([5325, 4096]);
+		onAnyAccuracy(accuracy, target, source, move) {
+			if (move && (source === this.effectState.target || target === this.effectState.target)) {
+				return true;
 			}
+			return accuracy;
 		},
 		name: "Ring Rust",
-		rating: 2,
-		num: -46,
+		rating: 4,
+		num: 99,
 	},
 	snakeeyes: {
 		name: "Snake Eyes",
@@ -7036,6 +7034,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move.category === "Status") return;
 			if (move.category === "Physical") move.overrideDefensiveStat = 'def';
 			if (move.category === "Special") move.overrideDefensiveStat = 'spd';
+			move.category = 'Special';
 			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) {
 				move.category = 'Physical';
 			}
