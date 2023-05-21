@@ -7050,8 +7050,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				const otypes = target.getTypes();	
 				let types = source.getTypes();
 				if (otypes.join() === "???") return;
-				for (var type of otypes) {
-					types.push(type);
+				for (var single_type of otypes) {
+					types.push(single_type);
 				}
 				source.setType(types);
 				this.add('-start', source, 'typechange', source.getTypes().join('/'), '[from] ability: Chromotophile');
