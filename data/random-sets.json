@@ -2998,7 +2998,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Draco Meteor", "Fire Blast", "Shadow Ball", "Thunderbolt", "U-turn"],
-                "teraTypes": ["Fire", "Ghost"]
+                "teraTypes": ["Dragon", "Fire", "Ghost"]
             },
             {
                 "role": "Tera Blast user",
