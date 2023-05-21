@@ -227,9 +227,11 @@ export const Nominations = new class {
 			buf += `<details class="readmore"><summary><strong>Listed alts</strong></summary>`;
 			for (const [i, alt] of nom.alts.entries()) {
 				buf += `- ${alt}: `;
-				buf += `<form data-submitsend="/perma standing ${alt},{standing}">`;
+				buf += `<form data-submitsend="/perma standing ${alt},{standing},{reason}">`;
 				buf += this.standingDropdown("standing");
-				buf += ` <button class="button notifying" type="submit">Change standing</button></form>`;
+				buf += ` <button class="button notifying" type="submit">Change standing</button>`;
+				buf += ` <input name="reason" placeholder="Reason" />`;
+				buf += `</form>`;
 				if (nom.alts[i + 1]) buf += `<br />`;
 			}
 			buf += `</details>`;
@@ -243,9 +245,11 @@ export const Nominations = new class {
 					buf += `(ISP: ${ipData.isp}, loc: ${ipData.city}, ${ipData.regionName} in ${ipData.country})`;
 				}
 				buf += `: `;
-				buf += `<form data-submitsend="/perma ipstanding ${ip},{standing}">`;
+				buf += `<form data-submitsend="/perma ipstanding ${ip},{standing},{reason}">`;
 				buf += this.standingDropdown("standing");
-				buf += ` <button class="button notifying" type="submit">Change standing for all users on IP</button></form>`;
+				buf += ` <button class="button notifying" type="submit">Change standing for all users on IP</button>`;
+				buf += ` <input name="reason" placeholder="Reason" />`;
+				buf += `</form>`;
 				if (nom.ips[i + 1]) buf += `<br />`;
 			}
 			buf += `</details>`;
@@ -409,8 +413,8 @@ export const commands: Chat.ChatCommands = {
 				threadNum,
 				postBuf,
 			);
-			if (res.error) {
-				return this.popupReply(`Error making post: ${res.error}`);
+			if (!res || res.error) {
+				return this.popupReply(`Error making post: ${res?.error}`);
 			}
 			const url = `https://smogon.com/forums/threads/${threadNum}/#post-${res.post.post_id}`;
 			const result = await LoginServer.request('setstanding', {
@@ -461,6 +465,9 @@ export const commands: Chat.ChatCommands = {
 			if (!Config.standings[`${standingNum}`]) {
 				return this.popupReply(`Invalid standing: ${standingName}.`);
 			}
+			if (!reason.length) {
+				return this.popupReply('Specify a reason.');
+			}
 			const res = await LoginServer.request('ipstanding', {
 				reason,
 				standing: standingNum,
@@ -470,7 +477,7 @@ export const commands: Chat.ChatCommands = {
 			if (res[1]) {
 				return this.popupReply(`Error changing standing: ${res[1].message}`);
 			}
-			this.popupReply(`All standings on the IP ${ip} changed successfully.`);
+			this.popupReply(`All standings on the IP ${ip} changed successfully to ${standingNum}.`);
 			this.globalModlog(`IPSTANDING`, null, `${standingNum}${reason ? ` (${reason})` : ""}`, ip);
 		},
 		resolve(target) {
