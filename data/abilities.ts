@@ -7044,9 +7044,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	stolenart: {
 		onSourceDamagingHit(damage, target, source, move) {
-			this.add('-message', "move.name");
 			if (this.checkMoveMakesContact(move, target, source)) {
-				this.add('-message', "move.name");
 				const otypes = target.getTypes();	
 				let types = source.getTypes();
 				if (otypes.join() === "???") return;
@@ -7054,10 +7052,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					types.push(single_type);
 				}
 				source.setType(types);
-				this.add('-start', source, 'typechange', source.getTypes().join('/'), '[from] ability: Chromotophile');
+				this.add('-start', source, 'typechange', source.getTypes().join('/'), '[from] ability: Palette Drain');
 				target.setType("???");
-				this.add('-start', target, 'typechange', target.getTypes().join('/'), '[from] ability: Chromotophile');
+				this.add('-start', target, 'typechange', target.getTypes().join('/'));
 			}
+		},
+		onSwitchIn(source) {
+			source.setType(["Normal"]);
+			this.add('-start', source, 'typechange', source.getTypes().join('/'), '[from] ability: Palette Drain');
 		},
 		name: "Stolen Art",
 		rating: 1.5,
