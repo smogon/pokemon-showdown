@@ -6994,7 +6994,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	refurbished: {
 		onStart(pokemon) {
-			let forme;
+			let forme = 'Shroomie';
 			if (this.field.getPseudoWeather('trickroom') && pokemon.species.id !== 'trickshroomie') {
 				forme = 'Trick Shroomie';
 			} if (this.field.getPseudoWeather('magicroom') && pokemon.species.id !== 'magicshroomie') {
@@ -7010,7 +7010,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onAnyPseudoWeatherChange() {
 			const pokemon = this.effectState.target;
-			let forme;
+			let forme = 'Shroomie';
 			if (this.field.getPseudoWeather('trickroom') && pokemon.species.id !== 'trickshroomie') {
 				forme = 'Trick Shroomie';
 			} if (this.field.getPseudoWeather('magicroom') && pokemon.species.id !== 'magicshroomie') {
