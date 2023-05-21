@@ -1,5 +1,13 @@
 // TODO: alphabetize move names. I'm trying to implement this on a low-quality laptop under time pressure, so I haven't bothered doing so.
 export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
+	// PoA Tier Changes
+	roaringmoon: {
+		inherit: true,
+		isNonstandard: null,
+		tier: "Uber",
+		natDexTier: "OU",
+    },
+	// Insurgence
 	bulbasaurdelta: {
 		inherit: true,
 		isNonstandard: null,
@@ -549,7 +557,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		inherit: true,
 		isNonstandard: null,
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
     },
 	geodudedelta: {
 		inherit: true,
@@ -1191,7 +1199,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		inherit: true,
 		isNonstandard: null,
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "Uber",
     },
 	emolgadeltafired: {
 		isNonstandard: "Unobtainable",
@@ -1870,7 +1878,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	aveden: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "NU",		
+		natDexTier: "NFE",		
 	},
 	splendifowl: {
 		inherit: true,
@@ -1900,7 +1908,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	dearewl: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",		
+		natDexTier: "NFE",		
 	},
 	gararewl: {
 		inherit: true,
@@ -1940,7 +1948,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	folerog: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "NU",		
+		natDexTier: "NFE",		
 	},
 	blubelrog: {
 		inherit: true,
@@ -2006,7 +2014,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	brainoar: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "UU",
 	},
 	tancoon: {
 		inherit: true,
@@ -2052,12 +2060,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	palij: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "NU",	
+		natDexTier: "NFE",	
 	},
 	palijnuclear: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",	
+		natDexTier: "NU",	
 	},
 	pajay: {
 		inherit: true,
@@ -2067,7 +2075,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	pajaynuclear: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "Uber",
 	},
 	jerbolta: {
 		inherit: true,
@@ -2077,7 +2085,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	jerboltanuclear: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	comite: {
 		inherit: true,
@@ -2087,7 +2095,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	cometeor: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "NU",
+		natDexTier: "NFE",
 	},
 	astronite: {
 		inherit: true,
@@ -2107,12 +2115,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	baaschaf: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "NU",
+		natDexTier: "NFE",
 	},
 	baaschafnuclear: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "NU",
 	},
 	baariette: {
 		inherit: true,
@@ -2132,7 +2140,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	baariettenuclearmega: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	tricwe: {
 		inherit: true,
@@ -2223,12 +2231,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	cararalm: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "NFE",
 	},
 	cararalmmystery: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "PU",
 	},
 	cocancer: {
 		inherit: true,
@@ -2268,7 +2276,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	tubareelnuclear: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	cassnail: {
 		inherit: true,
@@ -2278,13 +2286,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	sableau: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "NFE",
 	},
 	escartress: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "OU",
-		
+		natDexTier: "UU",
 	},
 	nupin: {
 		inherit: true,
@@ -2294,7 +2301,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	nupinnuclear: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "NU",
+		natDexTier: "PU",
 	},
 	gellin: {
 		inherit: true,
@@ -2304,7 +2311,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	gellinnuclear: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "Uber",
 	},
 	barand: {
 		inherit: true,
@@ -2314,7 +2321,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	barandnuclear: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "Uber",
 	},
 	glaslug: {
 		inherit: true,
@@ -2369,7 +2376,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	inflagetah: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	inflagetahmega: {
 		inherit: true,
@@ -2394,7 +2401,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	frikitiki: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "OU",
+		natDexTier: "RU",
 	},
 	unymph: {
 		inherit: true,
@@ -2414,17 +2421,17 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	quetzoral: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "NU",
+		natDexTier: "NFE",
 	},
 	coatlith: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "UU",
 	},
 	tracton: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "OU",
 	},
 	snopach: {
 		inherit: true,
@@ -2459,7 +2466,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	saidine: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "NU",
+		natDexTier: "NFE",
 	},
 	daikatuna: {
 		inherit: true,
@@ -2514,7 +2521,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	nucleon: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "Uber",
 	},
 	ratsy: {
 		inherit: true,
@@ -2604,7 +2611,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	frosulo: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "NU",
+		natDexTier: "NFE",
 	},
 	frosthra: {
 		inherit: true,
@@ -2644,7 +2651,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	skelerogue: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "NFE",
 	},
 	navighast: {
 		inherit: true,
@@ -2664,7 +2671,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	majungold: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "RU",
 	},
 	hagoop: {
 		inherit: true,
@@ -2694,22 +2701,22 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	xenogen: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "Uber",
 	},
 	xenoqueen: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	hazma: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "UU",
 	},
 	geigeroach: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "Uber",
 	},
 	minicorn: {
 		inherit: true,
@@ -2739,7 +2746,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	luxor: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "NU",
+		natDexTier: "NFE",
 	},
 	luxelong: {
 		inherit: true,
@@ -2764,7 +2771,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	terrabbit: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "NFE",
 	},
 	laissure: {
 		inherit: true,
@@ -2779,7 +2786,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	voltasu: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "NFE",
 	},
 	yatagaryu: {
 		inherit: true,
@@ -2794,7 +2801,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	fallengel: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "NU",
 	},
 	beliaddon: {
 		inherit: true,
@@ -2809,7 +2816,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	garlikid: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "OU",
+		natDexTier: "RU",
 	},
 	baitatao: {
 		inherit: true,
@@ -2834,7 +2841,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	actan: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "Uber",
+		natDexTier: "OU",
 	},
 	actannuclear: {
 		inherit: true,
@@ -2844,7 +2851,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	urayne: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "OU",
+		natDexTier: "Uber",
 		
 	},
 	uraynebeta: {
@@ -2876,12 +2883,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	whimsicottmega: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "RU",
 	},
 	arbokmega: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "RU",
 	},
 	arboknuclearmega: {
 		inherit: true,
@@ -2896,7 +2903,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	gyaradosnuclear: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "OU",
+		natDexTier: "RU",
 	},
 	ekansnuclear: {
 		inherit: true,
@@ -2906,7 +2913,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	arboknuclear: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "NU",
 	},
 	gligarnuclear: {
 		inherit: true,
@@ -2916,12 +2923,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	gliscornuclear: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "RU",
 	},
 	corsolanuclear: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "NU",
 	},
 
 	//CAP
@@ -3339,12 +3346,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	kecleonmono: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "NU",
 	},
 	soulply: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "UU",
 	},
 	screamtaildelta: {
 		inherit: true,
@@ -3354,7 +3361,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	florgesmega: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "OU",
 	},
 	golduckmega: {
 		inherit: true,
@@ -3369,7 +3376,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	forretressdelta: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "UU",
 	},
 	thunderoustitan: {
 		inherit: true,
@@ -3389,7 +3396,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	belcevour: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "OU",
 	},
 	applindelta: {
 		inherit: true,
@@ -3409,7 +3416,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	slowkingmega: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "OU",
 	},
 	rellordelta: {
 		inherit: true,
@@ -3434,7 +3441,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	dracotion: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "OU",
 	},
 	ariadosmega: {
 		inherit: true,
@@ -3449,7 +3456,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	electrodemega: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RUBL",
+		natDexTier: "RU",
 	},
 	garbodormega: {
 		inherit: true,
@@ -3469,12 +3476,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	swampertdelta: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "RU",
 	},
 	swampertdeltamega: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "OU",
+		natDexTier: "UU",
 	},
 	torkoaldelta: {
 		inherit: true,
@@ -3494,12 +3501,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	lycanmimiktoo: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "OU",
+		natDexTier: "UU",
 	},
 	lycanmimiktooruined: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "OU",
+		natDexTier: "UU",
 	},
 	palossandmirage: {
 		inherit: true,
