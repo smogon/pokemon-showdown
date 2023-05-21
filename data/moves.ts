@@ -298,7 +298,6 @@ target.trySetStatus('slp', source);
 }
 },
 },
-secondary: null,
 target: "foeSide",
 type: "Bug",
 },
