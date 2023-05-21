@@ -6995,13 +6995,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	refurbished: {
 		onStart(pokemon) {
 			let forme;
-			if (this.field.getPseudoWeather('trickroom') || pokemon.species.id !== 'trickshroomie') {
+			if (this.field.getPseudoWeather('trickroom') && pokemon.species.id !== 'trickshroomie') {
 				forme = 'Trick Shroomie';
-			} if (this.field.getPseudoWeather('magicroom') || pokemon.species.id !== 'magicshroomie') {
+			} if (this.field.getPseudoWeather('magicroom') && pokemon.species.id !== 'magicshroomie') {
 				forme = 'Magic Shroomie';
-			} if (this.field.getPseudoWeather('wonderroom') || pokemon.species.id !== 'wondershroomie') {
+			} if (this.field.getPseudoWeather('wonderroom') && pokemon.species.id !== 'wondershroomie') {
 				forme = 'Wonder Shroomie';
-			} if (this.field.getPseudoWeather('panicroom') || pokemon.species.id !== 'panicshroomie') {
+			} if (this.field.getPseudoWeather('panicroom') && pokemon.species.id !== 'panicshroomie') {
 				forme = 'Panic Shroomie';
 			}
 			if (pokemon.isActive && forme) {
@@ -7011,13 +7011,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onAnyPseudoWeatherChange() {
 			const pokemon = this.effectState.target;
 			let forme;
-			if (this.field.getPseudoWeather('trickroom') || pokemon.species.id !== 'trickshroomie') {
+			if (this.field.getPseudoWeather('trickroom') && pokemon.species.id !== 'trickshroomie') {
 				forme = 'Trick Shroomie';
-			} if (this.field.getPseudoWeather('magicroom') || pokemon.species.id !== 'magicshroomie') {
+			} if (this.field.getPseudoWeather('magicroom') && pokemon.species.id !== 'magicshroomie') {
 				forme = 'Magic Shroomie';
-			} if (this.field.getPseudoWeather('wonderroom') || pokemon.species.id !== 'wondershroomie') {
+			} if (this.field.getPseudoWeather('wonderroom') && pokemon.species.id !== 'wondershroomie') {
 				forme = 'Wonder Shroomie';
-			} if (this.field.getPseudoWeather('panicroom') || pokemon.species.id !== 'panicshroomie') {
+			} if (this.field.getPseudoWeather('panicroom') && pokemon.species.id !== 'panicshroomie') {
 				forme = 'Panic Shroomie';
 			}
 			if (pokemon.isActive && forme) {
@@ -7044,10 +7044,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	stolenart: {
 		onDamagingHit(damage, target, source, move) {
+			this.add('-message', "move.name");
 			if (this.checkMoveMakesContact(move, source, target)) {
+				this.add('-message', "move.name");
 				const otypes = target.getTypes();	
 				let types = source.getTypes();
-				if (otypes.join() === "???") types = [];
+				if (otypes.join() === "???") return;
 				for (var type of otypes) {
 					types.push(type);
 				}

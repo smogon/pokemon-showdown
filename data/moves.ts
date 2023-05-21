@@ -23541,7 +23541,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	palettedrain: {
 		num: -45,
 		accuracy: 95,
-		basePower: 0,
+		basePower: 20,
 		basePowerCallback(pokemon, target, move) {
 			if (pokemon.getTypes().join("") !== "???") {
 				let types = pokemon.getTypes();
@@ -23563,7 +23563,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		secondary: null,
 		target: "normal",
-		type: "Dark",
+		type: "???",
 		contestType: "Clever",
 	},
 };
