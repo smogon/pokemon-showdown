@@ -7043,9 +7043,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: -22,
 	},
 	stolenart: {
-		onDamagingHit(damage, target, source, move) {
+		onSourceDamagingHit(damage, target, source, move) {
 			this.add('-message', "move.name");
-			if (this.checkMoveMakesContact(move, source, target)) {
+			if (this.checkMoveMakesContact(move, target, source)) {
 				this.add('-message', "move.name");
 				const otypes = target.getTypes();	
 				let types = source.getTypes();
