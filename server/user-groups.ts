@@ -115,7 +115,8 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		permission: string,
 		target: User | EffectiveGroupSymbol | ID | null,
 		room?: BasicRoom | null,
-		cmd?: string
+		cmd?: string,
+		cmdToken?: string,
 	): boolean {
 		if (user.hasSysopAccess()) return true;
 
@@ -156,16 +157,17 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		if (roomPermissions) {
 			let foundSpecificPermission = false;
 			if (cmd) {
+				if (!cmdToken) cmdToken = `/`;
 				const namespace = cmd.slice(0, cmd.indexOf(' '));
-				if (roomPermissions[`/${cmd}`]) {
+				if (roomPermissions[`${cmdToken}${cmd}`]) {
 					// this checks sub commands and command objects, but it checks to see if a sub-command
 					// overrides (should a perm for the command object exist) first
-					if (!auth.atLeast(user, roomPermissions[`/${cmd}`])) return false;
+					if (!auth.atLeast(user, roomPermissions[`${cmdToken}${cmd}`])) return false;
 					jurisdiction = 'u';
 					foundSpecificPermission = true;
-				} else if (roomPermissions[`/${namespace}`]) {
+				} else if (roomPermissions[`${cmdToken}${namespace}`]) {
 					// if it's for one command object
-					if (!auth.atLeast(user, roomPermissions[`/${namespace}`])) return false;
+					if (!auth.atLeast(user, roomPermissions[`${cmdToken}${namespace}`])) return false;
 					jurisdiction = 'u';
 					foundSpecificPermission = true;
 				}

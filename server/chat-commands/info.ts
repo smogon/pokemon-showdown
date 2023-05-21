@@ -2745,6 +2745,7 @@ export const commands: Chat.ChatCommands = {
 	pihelp: [`/pi - Displays the first several digits of pi in several notation types.`],
 
 	code(target, room, user, connection) {
+		
 		// target is trimmed by Chat#splitMessage, but leading spaces can be
 		// important to code block indentation.
 		target = this.message.substr(this.cmdToken.length + this.cmd.length + +this.message.includes(' ')).trimRight();
