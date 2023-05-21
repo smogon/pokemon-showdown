@@ -23538,4 +23538,32 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {accuracy: 1}},
 		contestType: "Clever",
 	},
+	palettedrain: {
+		num: -45,
+		accuracy: 95,
+		basePower: 0,
+		basePowerCallback(pokemon, target, move) {
+			if (pokemon.getTypes().join("") !== "???") {
+				let types = pokemon.getTypes();
+				move.type = types[0];
+				delete types[0];
+				pokemon.setType(types);
+				this.add('-start', pokemon, 'typechange', pokemon.getTypes().join('/'), '[from] ability: Chromotophile');
+				
+			}
+			return move.basePower;
+		},
+		category: "Special",
+		name: "Palette Drain",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, allyanim: 1},
+		onModifyMove(move, pokemon) {
+			move.multihit = pokemon.getTypes().length;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Dark",
+		contestType: "Clever",
+	},
 };

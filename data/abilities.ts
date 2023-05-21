@@ -6666,7 +6666,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	chromotophile: {
 		onPrepareHit(source, target, move) {
-			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
 			const type = move.type;	
 			let types = source.getTypes()
 			if (type && type !== '???' && !["Double Shock", "Burn Up", "Mirror Move"].includes(move.name)) {
@@ -7042,6 +7041,25 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Multitasker",
 		rating: 4,
 		num: -22,
+	},
+	stolenart: {
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target)) {
+				const otypes = target.getTypes();	
+				let types = source.getTypes();
+				if (otypes.join() === "???") types = [];
+				for (var type of otypes) {
+					types.push(type);
+				}
+				source.setType(types);
+				this.add('-start', source, 'typechange', source.getTypes().join('/'), '[from] ability: Chromotophile');
+				target.setType("???");
+				this.add('-start', target, 'typechange', target.getTypes().join('/'), '[from] ability: Chromotophile');
+			}
+		},
+		name: "Stolen Art",
+		rating: 1.5,
+		num: 38,
 	},
 };
 

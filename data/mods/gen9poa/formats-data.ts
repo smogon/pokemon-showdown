@@ -3577,4 +3577,15 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	carbinkdelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "PU",
+	},
+	sableyemono: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "PU",
+	},
+	
 };
