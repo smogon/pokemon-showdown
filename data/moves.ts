@@ -164,11 +164,12 @@ name: "Infestation",
 pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
+secondary: {
+chance: 100,
 onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 },
-volatileStatus: 'trapped',
-secondary: null,
+},
 target: "normal",
 type: "Bug",
 },
@@ -488,11 +489,12 @@ name: "Spider Web",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1},
+secondary: {
+chance: 100,
 onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 },
-volatileStatus: 'trapped',
-secondary: null,
+},
 target: "allAdjacentFoes",
 type: "Bug",
 },
@@ -2917,11 +2919,12 @@ name: "Thunder Cage",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
+secondary: {
+chance: 100,
 onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 },
-volatileStatus: 'trapped',
-secondary: null,
+},
 target: "normal",
 type: "Electric",
 },
@@ -8420,11 +8423,12 @@ return this.chainModify(2);
 }
 },
 },
-secondary: null,
+secondary: {
+chance: 100,
 onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 },
-volatileStatus: 'trapped',
+},
 target: "normal",
 type: "Ground",
 },
@@ -8469,12 +8473,13 @@ name: "Earthquake",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1, nonsky: 1},
-secondary: null,
-target: "allAdjacentFoes",
+secondary: {
+chance: 100,
 onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 },
-volatileStatus: 'trapped',
+},
+target: "allAdjacentFoes",
 type: "Ground",
 },
 
@@ -8486,13 +8491,13 @@ name: "Fissure",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1, nonsky: 1},
-ohko: true,
-secondary: null,
-target: "allAdjacentFoes",
+secondary: {
+chance: 100,
 onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 },
-volatileStatus: 'trapped',
+},
+target: "allAdjacentFoes",
 type: "Ground",
 },
 
@@ -8536,11 +8541,12 @@ name: "Land's Wrath",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1, nonsky: 1},
+secondary: {
+chance: 100,
 onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 },
-volatileStatus: 'trapped',
-secondary: null,
+},
 target: "allAdjacentFoes",
 type: "Ground",
 },
@@ -8581,11 +8587,12 @@ move.basePower = 150;
 onUseMoveMessage(pokemon, target, move) {
 this.add('-activate', pokemon, 'move: Magnitude', move.magnitude);
 },
-secondary: null,
+secondary: {
+chance: 100,
 onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 },
-volatileStatus: 'trapped',
+},
 target: "allAdjacentFoes",
 type: "Ground",
 },
@@ -8604,10 +8611,6 @@ boosts: {
 accuracy: -1,
 },
 },
-onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
-},
-volatileStatus: 'trapped',
 target: "allAdjacentFoes",
 type: "Ground",
 },
@@ -8626,10 +8629,6 @@ boosts: {
 spe: -1,
 },
 },
-onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
-},
-volatileStatus: 'trapped',
 target: "allAdjacentFoes",
 type: "Ground",
 },
@@ -8648,10 +8647,6 @@ boosts: {
 accuracy: -1,
 },
 },
-onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
-},
-volatileStatus: 'trapped',
 target: "normal",
 type: "Ground",
 },
@@ -8683,10 +8678,6 @@ onFieldEnd() {
 this.add('-fieldend', 'move: Mud Sport');
 },
 },
-onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
-},
-volatileStatus: 'trapped',
 secondary: null,
 target: "all",
 type: "Ground",
@@ -8712,10 +8703,6 @@ name: "Rototiller",
 pp: 1.25,
 priority: 6,
 flags: {distance: 1, nonsky: 1},
-onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
-},
-volatileStatus: 'trapped',
 selfSwitch: true,
 secondary: null,
 target: "allAdjacentFoes",
@@ -8759,11 +8746,12 @@ name: "Sand Tomb",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
+secondary: {
+chance: 100,
 onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 },
-volatileStatus: 'trapped',
-secondary: null,
+},
 target: "normal",
 type: "Ground",
 },
@@ -8874,11 +8862,12 @@ hasCrashDamage: true,
 onMoveFail(target, source, move) {
 this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
 },
+secondary: {
+chance: 100,
 onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 },
-volatileStatus: 'trapped',
-secondary: null,
+},
 target: "randomNormal",
 type: "Ground",
 },
@@ -9475,11 +9464,12 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 weather: 'snow',
-secondary: null,
+secondary: {
+chance: 100,
 onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 },
-volatileStatus: 'trapped',
+},
 target: "all",
 type: "Ice",
 },
@@ -9840,11 +9830,12 @@ name: "Block",
 pp: 1.25,
 priority: 0,
 flags: {reflectable: 1, mirror: 1},
+secondary: {
+chance: 100,
 onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 },
-volatileStatus: 'trapped',
-secondary: null,
+},
 target: "normal",
 type: "Normal",
 },
@@ -16742,12 +16733,13 @@ name: "Continental Crush",
 pp: 0.625,
 priority: 0,
 flags: {},
-secondary: null,
-weather: 'Sandstorm',
+secondary: {
+chance: 100,
 onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 },
-volatileStatus: 'trapped',
+},
+weather: 'Sandstorm',
 target: "allAdjacentFoes",
 type: "Rock",
 },
@@ -16836,7 +16828,7 @@ type: "Rock",
 rockpolish: {
 accuracy: 99,
 basePower: 33,
-category: "Status",
+category: "Special",
 name: "Rock Polish",
 pp: 0.625,
 priority: 8,
@@ -16845,10 +16837,6 @@ boosts: {
 spe: 2,
 },
 weather: 'Sandstorm',
-onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
-},
-volatileStatus: 'trapped',
 secondary: null,
 target: "self",
 type: "Rock",
@@ -16894,14 +16882,10 @@ priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
 chance: 100,
-boosts: {
-spe: -1,
-},
-},
 onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 },
-volatileStatus: 'trapped',
+},
 target: "normal",
 type: "Rock",
 },
@@ -17590,11 +17574,12 @@ name: "Magnet Bomb",
 pp: 1.25,
 priority: 0,
 flags: {bullet: 1, protect: 1, mirror: 1},
+secondary: {
+chance: 100,
 onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 },
-volatileStatus: 'trapped',
-secondary: null,
+},
 target: "normal",
 type: "Steel",
 },
@@ -18048,11 +18033,12 @@ name: "Clamp",
 pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
+secondary: {
+chance: 100,
 onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 },
-volatileStatus: 'trapped',
-secondary: null,
+},
 target: "normal",
 type: "Water",
 },
@@ -18720,11 +18706,12 @@ name: "Whirlpool",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
+secondary: {
+chance: 100,
 onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 },
-volatileStatus: 'trapped',
-secondary: null,
+},
 target: "normal",
 type: "Water",
 },
