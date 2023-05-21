@@ -269,7 +269,7 @@ export const Nominations = new class {
 			buf += `</details>`;
 		}
 		buf += `<p><strong>Staff notes:</strong></p>`;
-		buf += `<p><div class="infobox">${Chat.formatText(nom.info)}</div></p>`;
+		buf += `<p><div class="infobox">${Chat.formatText(nom.info).replace(/\n/ig, '<br />')}</div></p>`;
 		buf += `<details class="readmore"><summary><strong>Act on primary:</strong></summary>`;
 		buf += `<form data-submitsend="/perma actmain ${nom.primaryID},{standing},{note}">`;
 		buf += `Standing: ${this.standingDropdown('standing')}`;

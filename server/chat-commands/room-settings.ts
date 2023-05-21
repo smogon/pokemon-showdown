@@ -401,7 +401,8 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`${rank} is not a valid rank.`);
 			}
 			const validPerms = Users.Auth.supportedRoomPermissions(room);
-			if (!validPerms.some(p => p === perm || p.startsWith(`${perm} `))) {
+			const sanitizedPerm = perm.replace('!', '/'); // handles ! commands so we don't have to add commands to the array twice
+			if (!validPerms.some(p => p === sanitizedPerm || p.startsWith(`${sanitizedPerm} `))) {
 				return this.errorReply(`${perm} is not a valid room permission.`);
 			}
 			if (!room.auth.atLeast(user, '#')) {
