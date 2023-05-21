@@ -240,7 +240,7 @@ export const Nominations = new class {
 			buf += `<details class="readmore"><summary><strong>Listed IPs</strong></summary>`;
 			for (const [i, ip] of nom.ips.entries()) {
 				const ipData = await getIPData(ip);
-				buf += `- <a href="https://whatismyipaddress/ip/${ip}:">${ip}</a>`;
+				buf += `- <a href="https://whatismyipaddress.com/ip/${ip}:">${ip}</a>`;
 				if (ipData) {
 					buf += `(ISP: ${ipData.isp}, loc: ${ipData.city}, ${ipData.regionName} in ${ipData.country})`;
 				}
@@ -394,14 +394,15 @@ export const commands: Chat.ChatCommands = {
 			if (!threadNum) {
 				throw new Chat.ErrorMessage("The link to the perma has not been set - the post could not be made.");
 			}
-			let postBuf = `[b]${primary}[/b] was added to ${standings[standing]} by ${user.name} (${postReason}). `;
+			let postBuf = `[b][url="https://${Config.routes.root}/users/${primary}"]${primary}[/url][/b]`;
+			postBuf += ` was added to ${standings[standing]} by ${user.name} (${postReason}). `;
 			postBuf += `Nominated by ${nom.by}.\n`;
 			postBuf += `${nom.alts.length ? `[spoiler=Alts]${nom.alts.join(', ')}[/spoiler]` : ""}\n`;
 			if (nom.ips.length) {
 				postBuf += `[spoiler=ips]`;
 				for (const ip of nom.ips) {
 					const ipData = await getIPData(ip);
-					postBuf += `- [url=https://whatismyipaddress/ip/${ip}]${ip}[/url]`;
+					postBuf += `- [url=https://whatismyipaddress.com/ip/${ip}]${ip}[/url]`;
 					if (ipData) {
 						postBuf += ` (ISP: ${ipData.isp}, loc: ${ipData.city}, ${ipData.regionName} in ${ipData.country})`;
 					}
