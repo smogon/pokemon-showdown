@@ -23543,6 +23543,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 95,
 		basePower: 20,
 		basePowerCallback(pokemon, target, move) {
+			if (move.multihit === 0) {
+				this.add('cant', pokemon, 'Palette Drain', move);
+				return move.basePower;
+			}
 			let types = pokemon.getTypes();
 			move.type = types[types.length - 1];
 			types.splice(-1, 1);
