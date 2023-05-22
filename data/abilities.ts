@@ -6676,7 +6676,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onSwitchIn(source) {
-			source.setType(["???"]);
+			source.setType(source.types);
 			this.add('-start', source, 'typechange', source.getTypes().join('/'), '[from] ability: Chromotophile');
 		},
 		name: "Chromotophile",
@@ -7058,7 +7058,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onSwitchIn(source) {
-			source.setType(["Normal"]);
+			source.setType(source.types);
 			this.add('-start', source, 'typechange', source.getTypes().join('/'), '[from] ability: Palette Drain');
 		},
 		name: "Stolen Art",
