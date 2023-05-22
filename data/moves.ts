@@ -23543,10 +23543,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 95,
 		basePower: 20,
 		basePowerCallback(pokemon, target, move) {
-			this.add("-message", pokemon.getTypes().join(""))
+			this.add("-message", pokemon.getTypes().join(""));
 			let types = pokemon.getTypes();
 			move.type = types[0];
-			delete types[0];
+			this.add("-message", move.type);
+			types.splice(0, 0);
+			this.add("-message", types.join('/'));
 			pokemon.setType(types);
 			this.add('-start', pokemon, 'typechange', types.join('/'));
 			return move.basePower;
