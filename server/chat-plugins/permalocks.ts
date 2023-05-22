@@ -240,7 +240,7 @@ export const Nominations = new class {
 			buf += `<details class="readmore"><summary><strong>Listed IPs</strong></summary>`;
 			for (const [i, ip] of nom.ips.entries()) {
 				const ipData = await getIPData(ip);
-				buf += `- <a href="https://whatismyipaddress.com/ip/${ip}:">${ip}</a>`;
+				buf += `- <a href="https://whatismyipaddress.com/ip/${ip}">${ip}</a>`;
 				if (ipData) {
 					buf += `(ISP: ${ipData.isp}, loc: ${ipData.city}, ${ipData.regionName} in ${ipData.country})`;
 				}
@@ -399,7 +399,7 @@ export const commands: Chat.ChatCommands = {
 			postBuf += `Nominated by ${nom.by}.\n`;
 			postBuf += `${nom.alts.length ? `[spoiler=Alts]${nom.alts.join(', ')}[/spoiler]` : ""}\n`;
 			if (nom.ips.length) {
-				postBuf += `[spoiler=ips]`;
+				postBuf += `[spoiler=IPs]`;
 				for (const ip of nom.ips) {
 					const ipData = await getIPData(ip);
 					postBuf += `- [url=https://whatismyipaddress.com/ip/${ip}]${ip}[/url]`;
@@ -410,6 +410,14 @@ export const commands: Chat.ChatCommands = {
 				}
 				postBuf += `[/spoiler]`;
 			}
+
+			const modlog = await Nominations.fetchModlog(nom.primaryID);
+			if (modlog?.results.length) {
+				let rawHTML = Nominations.displayModlog(modlog.results);
+				rawHTML = rawHTML.replace(/<br \/>/g, '\n');
+				postBuf += `\n[spoiler=Modlog]${Utils.stripHTML(rawHTML)}[/spoiler]`;
+			}
+
 			const res = await Smogon.post(
 				threadNum,
 				postBuf,
