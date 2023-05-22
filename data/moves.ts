@@ -23543,13 +23543,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 95,
 		basePower: 20,
 		basePowerCallback(pokemon, target, move) {
-			if (pokemon.getTypes().join("") !== "???") {
-				let types = pokemon.getTypes();
-				move.type = types[0];
-				delete types[0];
-				pokemon.setType(types);
-				this.add('-start', pokemon, 'typechange', pokemon.getTypes().join('/'));
-			}
+			this.add("-message", pokemon.getTypes().join(""))
+			// if (pokemon.getTypes().join("") !== "???" ) {
+			// 	let types = pokemon.getTypes();
+			// 	move.type = types[0];
+			// 	delete types[0];
+			// 	pokemon.setType(types);
+			// 	this.add('-start', pokemon, 'typechange', pokemon.getTypes().join('/'));
+			// }
 			return move.basePower;
 		},
 		category: "Special",
