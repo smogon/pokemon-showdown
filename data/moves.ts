@@ -23545,7 +23545,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePowerCallback(pokemon, target, move) {
 			if (move.multihit === 0) {
 				this.add('cant', pokemon, 'Palette Drain', move);
-				return move.basePower;
+				return 0;
 			}
 			let types = pokemon.getTypes();
 			move.type = types[types.length - 1];
