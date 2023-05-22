@@ -23547,7 +23547,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			let types = pokemon.getTypes();
 			move.type = types[0];
 			this.add("-message", move.type);
-			delete types[0];
+			types.splice(0, 1);
 			this.add("-message", types.join('/'));
 			pokemon.setType(types);
 			this.add('-start', pokemon, 'typechange', types.join('/'));
