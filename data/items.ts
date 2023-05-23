@@ -458,7 +458,7 @@ basePower: 30,
 onUpdate(pokemon) {
 if (pokemon.hp <= pokemon.maxhp / 2) {
 if (this.runEvent('TryHeal', pokemon) && pokemon.useItem()) {
-this.heal(20);
+this.heal(25);
 }
 }
 },
@@ -548,9 +548,9 @@ onResidualOrder: 5,
 onResidualSubOrder: 4,
 onResidual(pokemon) {
 if (pokemon.hasType('Poison')) {
-this.heal(pokemon.baseMaxhp / 15);
+this.heal(pokemon.baseMaxhp / 16);
 } else {
-this.damage(pokemon.baseMaxhp / 15);
+this.damage(pokemon.baseMaxhp / 16);
 }
 },
 num: 281,
@@ -5482,7 +5482,7 @@ basePower: 30,
 onAfterMoveSecondarySelfPriority: -1,
 onAfterMoveSecondarySelf(pokemon, target, move) {
 if (move.totalDamage && !pokemon.forceSwitchFlag) {
-this.heal(move.totalDamage / 8, pokemon);
+this.heal(move.totalDamage / 9, pokemon);
 }
 },
 num: 253,
@@ -5590,7 +5590,7 @@ onTryEatItem(item, pokemon) {
 if (!this.runEvent('TryHeal', pokemon)) return false;
 },
 onEat(pokemon) {
-this.heal(pokemon.baseMaxhp / 4);
+this.heal(pokemon.baseMaxhp / 3);
 },
 num: 158,
 gen: 3,
@@ -7759,7 +7759,7 @@ onTryEatItem(item, pokemon) {
 if (!this.runEvent('TryHeal', pokemon)) return false;
 },
 onEat(pokemon) {
-this.heal(10);
+this.heal(25);
 },
 num: 155,
 gen: 2,
