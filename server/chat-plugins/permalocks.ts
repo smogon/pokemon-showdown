@@ -415,8 +415,9 @@ export const commands: Chat.ChatCommands = {
 			if (modlog?.results.length) {
 				let rawHTML = Nominations.displayModlog(modlog.results);
 				rawHTML = rawHTML.replace(/<br \/>/g, '\n');
+				rawHTML = Utils.stripHTML(rawHTML);
 				rawHTML = rawHTML.replace(/\&#x2f;/g, '/');
-				postBuf += `\n[spoiler=Modlog]${Utils.stripHTML(rawHTML)}[/spoiler]`;
+				postBuf += `\n[spoiler=Modlog]${rawHTML}[/spoiler]`;
 			}
 
 			const res = await Smogon.post(
