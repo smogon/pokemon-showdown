@@ -2114,7 +2114,7 @@ basePower: 10,
 },
 onDamagePriority: -40,
 onDamage(damage, target, source, effect) {
-if (this.randomChance(1, 10) && damage >= target.hp && effect && effect.effectType === 'Move') {
+if (this.randomChance(25, 100) && damage >= target.hp && effect && effect.effectType === 'Move') {
 this.add("-activate", target, "item: Focus Band");
 return target.hp - 1;
 }
@@ -4042,7 +4042,7 @@ basePower: 10,
 onBasePowerPriority: 16,
 onBasePower(basePower, user, target, move) {
 if (move.category === 'Physical') {
-return this.chainModify([4505, 4096]);
+return this.chainModify([4915, 4096]);
 }
 },
 num: 266,
@@ -4786,7 +4786,7 @@ onBasePowerPriority: 23,
 onBasePower(basePower, attacker, defender, move) {
 if (move.flags['punch']) {
 this.debug('Punching Glove boost');
-return this.chainModify([4506, 4096]);
+return this.chainModify([4915, 4096]);
 }
 },
 onModifyMovePriority: 1,
@@ -7370,19 +7370,19 @@ basePower: 60,
 // Partially implemented in Pokemon.effectiveWeather() in sim/pokemon.ts
 onStart(pokemon) {
 if (!pokemon.ignoringItem()) return;
-if (['sunnyday', 'raindance', 'desolateland', 'primordialsea'].includes(this.field.effectiveWeather())) {
+if (['sunnyday', 'raindance', 'desolateland', 'snow', 'sandstorm', 'primordialsea'].includes(this.field.effectiveWeather())) {
 this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
 }
 },
 onUpdate(pokemon) {
 if (!this.effectState.inactive) return;
 this.effectState.inactive = false;
-if (['sunnyday', 'raindance', 'desolateland', 'primordialsea'].includes(this.field.effectiveWeather())) {
+if (['sunnyday', 'raindance', 'desolateland', 'snow', 'sandstorm', 'primordialsea'].includes(this.field.effectiveWeather())) {
 this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
 }
 },
 onEnd(pokemon) {
-if (['sunnyday', 'raindance', 'desolateland', 'primordialsea'].includes(this.field.effectiveWeather())) {
+if (['sunnyday', 'raindance', 'desolateland', 'snow', 'sandstorm', 'primordialsea'].includes(this.field.effectiveWeather())) {
 this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
 }
 this.effectState.inactive = true;
