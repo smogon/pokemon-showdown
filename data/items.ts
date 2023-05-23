@@ -4822,7 +4822,7 @@ quickclaw: {
 onFractionalPriorityPriority: -2,
 onFractionalPriority(priority, pokemon, target, move) {
 if (move.category === "Status" && pokemon.hasAbility("myceliummight")) return;
-if (priority <= 0 && this.randomChance(1, 5)) {
+if (priority <= 0 && this.randomChance(22, 100)) {
 this.add('-activate', pokemon, 'item: Quick Claw');
 return 0.1;
 }
