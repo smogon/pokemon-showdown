@@ -5528,17 +5528,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				move.ignoreImmunity['Poison'] = true;
 				move.ignoreImmunity['Ghost'] = true;
 				move.ignoreImmunity['Dragon'] = true;
-				if (target?.hasAbility('etherealshroud') === false) {
-					move.ignoreImmunity['Fighting'] = true;
-					move.ignoreImmunity['Normal'] = true;
-				}
-				if (
-					target?.volatiles['magnetrise'] || target?.hasItem('airballoon') ||
-					target?.hasAbility('levitate') || target?.hasAbility('omnitype')
-				) {
-					move.ignoreImmunity['Ground'] = false;
-				} else {
-					move.ignoreImmunity['Ground'] = true;
+				move.ignoreImmunity['Ground'] = true;
 				}
 			}
 		},
