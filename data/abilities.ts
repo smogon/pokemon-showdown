@@ -5529,7 +5529,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				move.ignoreImmunity['Ghost'] = true;
 				move.ignoreImmunity['Dragon'] = true;
 				move.ignoreImmunity['Ground'] = true;
-				}
 			}
 		},
 		name: "Irrelephant",
