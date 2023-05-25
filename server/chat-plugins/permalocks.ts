@@ -416,7 +416,7 @@ export const commands: Chat.ChatCommands = {
 				let rawHTML = Nominations.displayModlog(modlog.results);
 				rawHTML = rawHTML.replace(/<br \/>/g, '\n');
 				rawHTML = Utils.stripHTML(rawHTML);
-				rawHTML = rawHTML.replace(/\&#x2f;/g, '/');
+				rawHTML = rawHTML.replace(/&#x2f;/g, '/');
 				postBuf += `\n[spoiler=Modlog]${rawHTML}[/spoiler]`;
 			}
 
