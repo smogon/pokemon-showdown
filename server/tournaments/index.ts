@@ -499,7 +499,6 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			output.errorReply(`${replacementUser.name} is banned from joining tournaments.`);
 			return;
 		}
-		if ((this.room.settings.tournaments?.autoconfirmedOnly || this.autoconfirmedOnly) &&
 		if ((this.room.settings.tournaments?.autoconfirmedOnly || this.autoconfirmedOnly) && !user.autoconfirmed) {
 			user.popup("Signups for tournaments are only available for autoconfirmed users in this room.");
 			return;
