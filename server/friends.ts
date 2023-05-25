@@ -98,7 +98,9 @@ export class FriendsDatabase {
 		} else {
 			let val;
 			try {
-				val = database.prepare(`SELECT val FROM database_settings WHERE name = 'version'`).get().val;
+				val = (database
+					.prepare(`SELECT val FROM database_settings WHERE name = 'version'`)
+					.get() as AnyObject).val;
 			} catch {}
 			const actualVersion = FS(`databases/migrations/friends`).readdirIfExistsSync().length;
 			if (val === undefined) {
@@ -318,9 +320,11 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 	send: requests => {
 		for (const request of requests) {
 			const [senderID, receiverID] = request;
-			const hasSentRequest = statements.findRequest.get({user1: senderID, user2: receiverID})['num'];
-			const friends = statements.countFriends.get(senderID, senderID)['num'];
-			const totalRequests = statements.countRequests.get(senderID, senderID)['num'];
+			const hasSentRequest = (
+				statements.findRequest.get({user1: senderID, user2: receiverID}) as AnyObject
+			)['num'];
+			const friends = (statements.countFriends.get(senderID, senderID) as AnyObject)['num'];
+			const totalRequests = (statements.countRequests.get(senderID, senderID) as AnyObject)['num'];
 			if (friends >= MAX_FRIENDS) {
 				throw new FailureMessage(`You are at the maximum number of friends.`);
 			}
