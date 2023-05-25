@@ -500,7 +500,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			return;
 		}
 		if ((this.room.settings.tournaments?.autoconfirmedOnly || this.autoconfirmedOnly) &&
-		   !user.autoconfirmed && !user.trusted) {
+		if ((this.room.settings.tournaments?.autoconfirmedOnly || this.autoconfirmedOnly) && !user.autoconfirmed) {
 			user.popup("Signups for tournaments are only available for autoconfirmed users in this room.");
 			return;
 		}
