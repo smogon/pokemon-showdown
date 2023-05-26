@@ -427,7 +427,7 @@ export const commands: Chat.ChatCommands = {
 			if (!res || res.error) {
 				return this.popupReply(`Error making post: ${res?.error}`);
 			}
-			const url = `https://smogon.com/forums/threads/${threadNum}/#post-${res.post.post_id}`;
+			const url = `https://smogon.com/forums/threads/${threadNum}/post-${res.post.post_id}`;
 			const result = await LoginServer.request('setstanding', {
 				user: primary,
 				standing,
