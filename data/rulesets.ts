@@ -19,6 +19,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 			'Min Source Gen = 9',
 		],
 	},
+	farawayisland: {
+		effectType: 'ValidatorRule',
+		name: 'Faraway Island',
+		desc: "The standard ruleset for all offical Faraway Island games",
+		ruleset: [
+			'Obtainable', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'Cancel Mod', 'Double Item Clause', 'Adjust Level = 61',
+		],
+		banlist: ['Mewtwo', 'Ho-oh', 'Lugia', 'Kyogre', 'Groudon', 'Rayquaza', 'Latios', 'Latias', 'Deoxys', 'Soul Dew', 'Confuse Ray', ],
+	},
 	standardnext: {
 		effectType: 'ValidatorRule',
 		name: 'Standard NEXT',
