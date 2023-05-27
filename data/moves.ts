@@ -23540,7 +23540,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		secondary: null,
 		target: "all",
-		type: "Psychic",
+		type: "Ghost",
 		zMove: {boost: {accuracy: 1}},
 		contestType: "Clever",
 	},
