@@ -22976,8 +22976,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return this.chainModify(1.2);
 			}
 		},
-		onAfterHit(source, target, move) {
-			this.actions.useMove("Sandstorm", target, target);
+		self: {
+			onHit(source) {
+				this.field.setWeather('sandstorm');
+			},
 		},
 		flags: {protect: 1, mirror: 1},
 		secondary: null,
@@ -23055,8 +23057,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-		onAfterHit(source, target, move) {
-			this.actions.useMove("Attract", target, source);
+		self: {
+			onHit(source) {
+				for (const pokemon of source.foes()) {
+					pokemon.addVolatile('attract');
+				}
+			},
 		},
 		target: "allAdjacentFoes",
 		type: "Psychic",
