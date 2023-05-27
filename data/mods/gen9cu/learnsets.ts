@@ -94484,7 +94484,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			closecombat: ["9T"],
 			brickbreak: ["9T"],
 			drainpunch: ["9T"],
-			machpunch: ["9T"],
+	//		machpunch: ["9T"],
 			iciclecrash: ["9T"],
 			iciclespear: ["9T"],
 			icespinner: ["9T"],
@@ -94638,7 +94638,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			earthquake: ["9T"],
 			scorchingsands: ["9T"],
 			heatcrash: ["9T"],
-			flamecharge: ["9T"],
+	//		flamecharge: ["9T"],
 			flareblitz: ["9T"],
 			recover: ["9T"],
 			coil: ["9T"],
@@ -95938,7 +95938,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	titanoso: {
 		learnset: {
 			earthpress: ["9T"],
-			slackoff: ["9T"],
+		//	slackoff: ["9T"],
 			rest: ["9T"],
 			sleeptalk: ["9T"],
 			curse: ["9T"],
@@ -96198,6 +96198,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	electrocampus: {
 		learnset: {
+			protect: ["9T"],
 			chargebeam: ["9T"],
 			electroweb: ["9T"],
 			spark: ["9T"],
@@ -96508,7 +96509,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	musharnaallira: {
 		learnset: {
-			calmmind: ["9T"],
+	//		calmmind: ["9T"],
 			flipturn: ["9T"],
 			slackoff: ["9T"],
 			amnesia: ["9T"],
@@ -96524,3 +96525,4 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		}
 	},
 };
+

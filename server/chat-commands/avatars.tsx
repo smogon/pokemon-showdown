@@ -725,6 +725,32 @@ export const commands: Chat.ChatCommands = {
 	},
 	avatarhelp: [`/avatar [avatar name or number] - Change your trainer sprite.`],
 
+	// set another user's avatar, requires: % @ & ~
+	forceavatar: 'customavatar',
+	customavatar(target, room, user, connection, cmd) {
+		if (!target) return this.parse(`/help customavatar`);
+		const [userid, avatar] = this.splitOne(target);
+		const targetUser = Users.get(userid);
+		if (!targetUser) return this.errorReply(`User ${userid} not found.`);
+		if (!Avatars.userCanUse(user, avatar)) {
+			return this.errorReply(`Avatar '${avatar}' not found.`);
+		}
+		if (cmd === 'forceavatar') {
+			if (!user.can('forcewin')) return false;
+			if (targetUser.id in customAvatars && !avatar.endsWith('xmas')) {
+				Avatars.setDefault(targetUser.id, avatar);
+			}
+		}
+		targetUser.avatar = avatar;
+		this.sendReply(`Avatar changed to:\n|raw|${Avatars.img(avatar)}`);
+		this.privateModAction(`${targetUser.name}'s avatar was changed to ${avatar} by ${user.name}.`);
+	},
+	customavatarhelp: [
+		`/customavatar [user], [avatar number] - Forces a user to have a certain avatar.`,
+		`/forceavatar [user], [avatar number] - Forces a user to have a certain avatar, and bypasses restrictions.`,
+	],
+
+
 	avatars(target, room, user) {
 		this.runBroadcast();
 
