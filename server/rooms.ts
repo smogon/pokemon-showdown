@@ -982,6 +982,7 @@ export abstract class BasicRoom {
 		if (!user) return false; // ???
 		if (this.users[user.id]) return false;
 
+		Chat.runHandlers('onBeforeRoomJoin', this, user, connection);
 		if (user.named) {
 			this.reportJoin('j', user.getIdentityWithStatus(this), user);
 		}
@@ -2001,6 +2002,7 @@ export class GameRoom extends BasicRoom {
 		if (!user) return false; // ???
 		if (this.users[user.id]) return false;
 
+		Chat.runHandlers('onBeforeRoomJoin', this, user, connection);
 		if (user.named) {
 			this.reportJoin('j', user.getIdentityWithStatus(this), user);
 		}
