@@ -245,6 +245,7 @@ exports.reportjoinsperiod = 0;
  * report battles - shows messages like "OU battle started" in the lobby
  *   This feature can lag larger servers - turn this off if your server is
  *   getting more than 160 or so users.
+ *  @type {boolean | string[] | string}
  */
 exports.reportbattles = true;
 
