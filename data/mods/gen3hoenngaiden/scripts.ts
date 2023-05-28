@@ -167,7 +167,11 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 
 		// list Pokemon by VR rank
-		for (const id in this.dataCache.Pokedex) {
+        // Uncomment if you want to display tiers the same as Dragon Heaven
+        // Requires an implementation of something similar to the Dragon Heaven
+        // client to visualize
+        
+		/* for (const id in this.dataCache.Pokedex) {
 			if (this.modData('FormatsData', id) && this.modData('FormatsData', id).tier !== 'Uber') {
 				if (this.modData('FormatsData', id).rank !== 'Unranked') {
 					this.modData('FormatsData', id).tier = this.modData('FormatsData', id).rank;
@@ -175,7 +179,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					this.modData('FormatsData', id).tier = 'Unranked';
 				}
 			}
-		};
+		}; */
 
 		//Slate 2 Buffs
 		this.modData('Learnsets', 'jumpluff').learnset.rapidspin = ['3L1'];
