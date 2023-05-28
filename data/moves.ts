@@ -23056,9 +23056,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 		onHit(target, source) {
-			for (const pokemon of source.foes()) {
-				pokemon.addVolatile('attract');
-			}
+			target.addVolatile('attract');
 		},
 		target: "allAdjacentFoes",
 		type: "Psychic",
