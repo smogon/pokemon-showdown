@@ -23566,7 +23566,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 			},
 			onFieldRestart(target, source) {
-				this.field.removePseudoWeather('trickroom');
+				this.field.removePseudoWeather('panicroom');
 			},
 			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 1,
