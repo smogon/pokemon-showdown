@@ -693,7 +693,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon, source, effect) {
-				if (!pokemon.hasAbility('Aphrodite')) {
+				if (!source.hasAbility('Aphrodite')) {
 					if (!(pokemon.gender === 'M' && source.gender === 'F') && !(pokemon.gender === 'F' && source.gender === 'M')) {
 						this.debug('incompatible gender');
 						return false;
@@ -23059,7 +23059,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon, source, effect) {
-				if (!pokemon.hasAbility('Aphrodite')) {
+				if (!source.hasAbility('Aphrodite')) {
 					if (!(pokemon.gender === 'M' && source.gender === 'F') && !(pokemon.gender === 'F' && source.gender === 'M')) {
 						this.debug('incompatible gender');
 						return false;
