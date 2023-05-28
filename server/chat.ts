@@ -74,6 +74,7 @@ interface Handlers {
 	onBattleStart: (user: User, room: GameRoom) => void;
 	onBattleLeave: (user: User, room: GameRoom) => void;
 	onRoomJoin: (room: BasicRoom, user: User, connection: Connection) => void;
+	onBeforeRoomJoin: (room: BasicRoom, user: User, connection: Connection) => void;
 	onDisconnect: (user: User) => void;
 	onRoomDestroy: (roomid: RoomID) => void;
 	onBattleEnd: (battle: RoomBattle, winner: ID, players: ID[]) => void;
