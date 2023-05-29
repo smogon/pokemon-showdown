@@ -3614,4 +3614,14 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "RU",
 	},
+	crystallocause: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	crystallocausepurity: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
 };

@@ -23638,4 +23638,34 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
+	crystallinereaction: {
+		num: -47,
+		accuracy: 100,
+		basePower: 200,
+		category: "Special",
+		name: "Crystalline Reaction",
+		pp: 5,
+		priority: 0,
+		flags: {charge: 1, protect: 1, mirror: 1},
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', defender, "Poltergeist", attacker);
+			if (this.field.isWeather('newmoon')) {
+				this.attrLastMove('[still]');
+				this.addMove('-anim', attacker, move.name, defender);
+				return;
+			}
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Crystal",
+		contestType: "Cool",
+	},
 };
