@@ -124,7 +124,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	sandslash: {
 		randomBattleMoves: ["earthquake", "hiddenpowerbug", "rapidspin", "rockslide", "swordsdance", "toxic"],
-		tier: "UU",		
+		tier: "UU",
 		rank: "Unranked",
 	},
 	nidoranf: {
@@ -2257,7 +2257,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		rank: "Unranked",
 		gen: 3,
 		tier: "UU",
-	},	
+	},
 	vulpixalola: {
 		rank: "Unranked",
 		gen: 3,

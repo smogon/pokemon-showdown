@@ -1,7 +1,7 @@
 export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	clefable: {
 		inherit: true,
-		//baseStats: {hp: 95, atk: 70, def: 73, spa: 95, spd: 90, spe: 60},
+		// baseStats: {hp: 95, atk: 70, def: 73, spa: 95, spd: 90, spe: 60},
 		abilities: {0: "Cute Charm"},
 	},
 	clefairy: {
@@ -15,7 +15,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	porygon2: {
 		inherit: true,
 		abilities: {0: "Trace", 1: "Analytic"},
-		//evos: ["Porygon-Z"],
+		// evos: ["Porygon-Z"],
 	},
 	porygon: {
 		inherit: true,
@@ -160,7 +160,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 50, atk: 75, def: 130, spa: 75, spd: 130, spe: 45},
 		abilities: {0: "Sand Veil", 1: "Ice Body"},
-		//evos: ["Dusknoir"],
+		// evos: ["Dusknoir"],
 	},
 	duskull: {
 		inherit: true,
@@ -238,7 +238,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	rhydon: {
 		inherit: true,
 		abilities: {0: "Lightning Rod", 1: "Mold Breaker"},
-		//evos: ["Rhyperior"],
+		// evos: ["Rhyperior"],
 	},
 	primeape: {
 		inherit: true,
@@ -296,7 +296,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	murkrow: {
 		inherit: true,
 		abilities: {0: "Insomnia"},
-		//evos: ["Honchkrow"],
+		// evos: ["Honchkrow"],
 	},
 	parasect: {
 		inherit: true,
@@ -1204,7 +1204,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	golem: {
 		inherit: true,
-		//baseStats: {hp: 80, atk: 110, def: 130, spa: 55, spd: 65, spe: 75},
+		// baseStats: {hp: 80, atk: 110, def: 130, spa: 55, spd: 65, spe: 75},
 		otherFormes: ["Golem-Alola"],
 		formeOrder: ["Golem", "Golem-Alola"],
 	},
@@ -1767,7 +1767,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	marowak: {
 		inherit: true,
-		//baseStats: {hp: 60, atk: 80, def: 110, spa: 50, spd: 80, spe: 55},
+		// baseStats: {hp: 60, atk: 80, def: 110, spa: 50, spd: 80, spe: 55},
 		otherFormes: ["Marowak-Alola", "Marowak-Alola-Totem"],
 		formeOrder: ["Marowak", "Marowak-Alola", "Marowak-Alola-Totem"],
 	},
@@ -1901,39 +1901,39 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	alakazam: {
 		inherit: true,
-		//baseStats: {hp: 55, atk: 50, def: 45, spa: 135, spd: 95, spe: 120},
+		// baseStats: {hp: 55, atk: 50, def: 45, spa: 135, spd: 95, spe: 120},
 	},
 	ariados: {
 		inherit: true,
 		abilities: {0: "Stakeout", 1: "Swarm"},
-		//baseStats: {hp: 70, atk: 90, def: 70, spa: 60, spd: 70, spe: 40},
+		// baseStats: {hp: 70, atk: 90, def: 70, spa: 60, spd: 70, spe: 40},
 	},
 	azumarill: {
 		inherit: true,
-		//types: ["Water", "Normal"],
-		//baseStats: {hp: 100, atk: 50, def: 80, spa: 60, spd: 80, spe: 50},	
+		// types: ["Water", "Normal"],
+		// baseStats: {hp: 100, atk: 50, def: 80, spa: 60, spd: 80, spe: 50},
 	},
 	beautifly: {
 		inherit: true,
-		//baseStats: {hp: 60, atk: 70, def: 50, spa: 100, spd: 50, spe: 65},
+		// baseStats: {hp: 60, atk: 70, def: 50, spa: 100, spd: 50, spe: 65},
 	},
 	bellossom: {
 		inherit: true,
-		//baseStats: {hp: 75, atk: 80, def: 95, spa: 90, spd: 100, spe: 50},
+		// baseStats: {hp: 75, atk: 80, def: 95, spa: 90, spd: 100, spe: 50},
 		abilities: {0: "Chlorophyll"},
 	},
 	vileplume: {
 		inherit: true,
-		//baseStats: {hp: 75, atk: 80, def: 85, spa: 110, spd: 90, spe: 50},
+		// baseStats: {hp: 75, atk: 80, def: 85, spa: 110, spd: 90, spe: 50},
 		abilities: {0: "Chlorophyll", 1: "Sticky Hold"},
 	},
 	butterfree: {
 		inherit: true,
-		//baseStats: {hp: 60, atk: 45, def: 50, spa: 90, spd: 80, spe: 70},
+		// baseStats: {hp: 60, atk: 45, def: 50, spa: 90, spd: 80, spe: 70},
 	},
 	chimecho: {
 		inherit: true,
-		//baseStats: {hp: 75, atk: 50, def: 80, spa: 95, spd: 90, spe: 65},
+		// baseStats: {hp: 75, atk: 50, def: 80, spa: 95, spd: 90, spe: 65},
 		prevo: "Chingling",
 		evoType: "levelFriendship",
 		evoCondition: "at night",
@@ -1941,7 +1941,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	corsola: {
 		inherit: true,
-		//baseStats: {hp: 65, atk: 55, def: 95, spa: 65, spd: 95, spe: 35},
+		// baseStats: {hp: 65, atk: 55, def: 95, spa: 65, spd: 95, spe: 35},
 		/*otherFormes: ["Corsola-Galar"],
 		formeOrder: ["Corsola", "Corsola-Galar"],
 	},
@@ -2022,7 +2022,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	dodrio: {
 		inherit: true,
-		//baseStats: {hp: 60, atk: 110, def: 70, spa: 60, spd: 60, spe: 110},
+		// baseStats: {hp: 60, atk: 110, def: 70, spa: 60, spd: 60, spe: 110},
 	},
 	voltorb: {
 		inherit: true,
@@ -2045,7 +2045,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		otherFormes: ["Electrode-Hisui"],
 		formeOrder: ["Electrode", "Electrode-Hisui"],
-		//baseStats: {hp: 60, atk: 50, def: 70, spa: 80, spd: 80, spe: 150},
+		// baseStats: {hp: 60, atk: 50, def: 70, spa: 80, spd: 80, spe: 150},
 	},
 	electrodehisui: {
 		num: 101,
@@ -2095,11 +2095,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	exeggcute: {
 		inherit: true,
-		//evos: ["Exeggutor", "Exeggutor-Alola"],
+		// evos: ["Exeggutor", "Exeggutor-Alola"],
 	},
 	exeggutor: {
 		inherit: true,
-		//baseStats: {hp: 95, atk: 95, def: 85, spa: 125, spd: 75, spe: 55},
+		// baseStats: {hp: 95, atk: 95, def: 85, spa: 125, spd: 75, spe: 55},
 		/*otherFormes: ["Exeggutor-Alola"],
 		formeOrder: ["Exeggutor", "Exeggutor-Alola"],
 	},
@@ -2122,7 +2122,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	farfetchd: {
 		inherit: true,
-		//baseStats: {hp: 52, atk: 90, def: 55, spa: 58, spd: 62, spe: 60},
+		// baseStats: {hp: 52, atk: 90, def: 55, spa: 58, spd: 62, spe: 60},
 		abilities: {0: "Keen Eye", 1: "Inner Focus"},
 		otherFormes: ["Farfetch\u2019d-Galar"],
 		formeOrder: ["Farfetch\u2019d", "Farfetch\u2019d-Galar"],
@@ -2144,25 +2144,25 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	lunatone: {
 		inherit: true,
-		//baseStats: {hp: 90, atk: 55, def: 65, spa: 95, spd: 85, spe: 70},
+		// baseStats: {hp: 90, atk: 55, def: 65, spa: 95, spd: 85, spe: 70},
 	},
 	// nidoking: {
 	// 	inherit: true,
-	// 	//baseStats: {hp: 81, atk: 102, def: 77, spa: 85, spd: 75, spe: 85},
+	// 	// baseStats: {hp: 81, atk: 102, def: 77, spa: 85, spd: 75, spe: 85},
 	// 	abilities: {0: "Poison Point"},
 	// },
 	// nidoqueen: {
 	// 	inherit: true,
-	// 	//baseStats: {hp: 90, atk: 92, def: 87, spa: 75, spd: 85, spe: 76},
+	// 	// baseStats: {hp: 90, atk: 92, def: 87, spa: 75, spd: 85, spe: 76},
 	// 	abilities: {0: "Poison Point"},
 	// },
 	magcargo: {
 		inherit: true,
-		//baseStats: {hp: 60, atk: 50, def: 120, spa: 90, spd: 80, spe: 30},
+		// baseStats: {hp: 60, atk: 50, def: 120, spa: 90, spd: 80, spe: 30},
 	},
 	mantine: {
 		inherit: true,
-		//baseStats: {hp: 85, atk: 40, def: 70, spa: 80, spd: 140, spe: 70},
+		// baseStats: {hp: 85, atk: 40, def: 70, spa: 80, spd: 140, spe: 70},
 		prevo: "Mantyke",
 		evoType: "levelExtra",
 		evoCondition: "with a Remoraid in party",
@@ -2173,7 +2173,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "Bonsly",
 		evoType: "levelMove",
 		evoMove: "Mimic",
-		canHatch: true,	
+		canHatch: true,
 	},
 	bonsly: {
 		num: 438,
@@ -2205,36 +2205,36 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	masquerain: {
 		inherit: true,
-		//baseStats: {hp: 70, atk: 60, def: 62, spa: 100, spd: 82, spe: 80},
+		// baseStats: {hp: 70, atk: 60, def: 62, spa: 100, spd: 82, spe: 80},
 	},
 	noctowl: {
 		inherit: true,
-		//baseStats: {hp: 100, atk: 50, def: 50, spa: 86, spd: 96, spe: 70},
+		// baseStats: {hp: 100, atk: 50, def: 50, spa: 86, spd: 96, spe: 70},
 	},
 	beedrill: {
 		inherit: true,
-		//baseStats: {hp: 65, atk: 90, def: 40, spa: 45, spd: 80, spe: 75},
+		// baseStats: {hp: 65, atk: 90, def: 40, spa: 45, spd: 80, spe: 75},
 	},
 	pelipper: {
 		inherit: true,
-		//baseStats: {hp: 60, atk: 50, def: 100, spa: 95, spd: 70, spe: 65},
+		// baseStats: {hp: 60, atk: 50, def: 100, spa: 95, spd: 70, spe: 65},
 	},
 	swellow: {
 		inherit: true,
-		//baseStats: {hp: 60, atk: 85, def: 60, spa: 75, spd: 50, spe: 125},
+		// baseStats: {hp: 60, atk: 85, def: 60, spa: 75, spd: 50, spe: 125},
 	},
 	// pidgeot: {
 	// 	inherit: true,
-	// 	//baseStats: {hp: 83, atk: 80, def: 75, spa: 70, spd: 70, spe: 101},
+	// 	// baseStats: {hp: 83, atk: 80, def: 75, spa: 70, spd: 70, spe: 101},
 	// 	abilities: {0: "Keen Eye"},
 	// },
 	poliwrath: {
 		inherit: true,
-		//baseStats: {hp: 90, atk: 95, def: 95, spa: 70, spd: 90, spe: 70},
+		// baseStats: {hp: 90, atk: 95, def: 95, spa: 70, spd: 90, spe: 70},
 	},
 	qwilfish: {
 		inherit: true,
-		//baseStats: {hp: 65, atk: 95, def: 85, spa: 55, spd: 55, spe: 85},
+		// baseStats: {hp: 65, atk: 95, def: 85, spa: 55, spd: 55, spe: 85},
 		abilities: {0: "Poison Point", 1: "Stakeout"},
 		/*otherFormes: ["Qwilfish-Hisui"],
 		formeOrder: ["Qwilfish", "Qwilfish-Hisui"],
@@ -2263,29 +2263,29 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	solrock: {
 		inherit: true,
-		//baseStats: {hp: 90, atk: 95, def: 85, spa: 55, spd: 65, spe: 70},
+		// baseStats: {hp: 90, atk: 95, def: 85, spa: 55, spd: 65, spe: 70},
 	},
 	victreebel: {
 		inherit: true,
-		//baseStats: {hp: 80, atk: 105, def: 65, spa: 100, spd: 70, spe: 70},
+		// baseStats: {hp: 80, atk: 105, def: 65, spa: 100, spd: 70, spe: 70},
 		abilities: {0: "Chlorophyll", 1: "Sticky Hold"},
 	},
 	wigglytuff: {
 		inherit: true,
-		//baseStats: {hp: 140, atk: 70, def: 45, spa: 85, spd: 50, spe: 45},
+		// baseStats: {hp: 140, atk: 70, def: 45, spa: 85, spd: 50, spe: 45},
 		abilities: {0: "Cute Charm", 1: "Fur Coat"},
 	},
 	aggron: {
 		inherit: true,
-		//types: ["Steel"],
+		// types: ["Steel"],
 	},
 	venusaur: {
 		inherit: true,
-		//abilities: {0: "Overgrow", 1: "Suction Cups"},
+		// abilities: {0: "Overgrow", 1: "Suction Cups"},
 	},
 	seaking: {
 		inherit: true,
-		//baseStats: {hp: 80, atk: 102, def: 65, spa: 85, spd: 80, spe: 88},
+		// baseStats: {hp: 80, atk: 102, def: 65, spa: 85, spd: 80, spe: 88},
 		abilities: {0: "Swift Swim", 1: "Water Veil"},
 	},
 	mamoswine: {
@@ -2532,7 +2532,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	electabuzz: {
 		inherit: true,
-		//evos: ["Electivire"],
+		// evos: ["Electivire"],
 	},
 	magmar: {
 		inherit: true,
@@ -2540,11 +2540,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	togetic: {
 		inherit: true,
-		//evos: ["Togekiss"],
+		// evos: ["Togekiss"],
 	},
 	yanma: {
 		inherit: true,
-		//evos: ["Yanmega"],
+		// evos: ["Yanmega"],
 	},
 	/*electivire: {
 		num: 466,
@@ -2611,7 +2611,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},*/
 	kirlia: {
 		inherit: true,
-		//evos: ["Gardevoir", "Gallade"],
+		// evos: ["Gardevoir", "Gallade"],
 	},
 	nosepass: {
 		inherit: true,
@@ -3021,7 +3021,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		otherFormes: ["Zapdos-Galar"],
 		formeOrder: ["Zapdos", "Zapdos-Galar"],
-	},	
+	},
 	zapdosgalar: {
 		num: 145,
 		name: "Zapdos-Galar",
