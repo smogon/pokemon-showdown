@@ -23623,7 +23623,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			onFieldStart(target, source, sourceEffect) {
 				this.add('-fieldactivate', 'move: Turf Melter');
-				this.hint(`Ground-type moves become Fire-type after using ${sourceEffect}.`);
+				this.hint(`Ground-type moves will become Fire-type!`);
 			},
 			onModifyTypePriority: -2,
 			onModifyType(move) {
