@@ -302,21 +302,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (this.field.getWeather().id === 'desolateland' && !strongWeathers.includes(weather.id)) return false;
 		},
 		onEnd(pokemon) {
-			if (this.field.weatherData.source !== pokemon) return;
+			if (this.field.weatherState.source !== pokemon) return;
 			for (const target of this.getAllActive()) {
 				if (target === pokemon) continue;
 				if (target.hasAbility('desolateland')) {
-					this.field.weatherData.source = target;
+					this.field.weatherState.source = target;
 					return;
 				}
 			}
 			this.field.clearWeather();
 		},
-		isNonstandard: null,
-		gen: 3,
 		name: "Desolate Land",
 		rating: 4.5,
 		num: 190,
+        isNonstandard: null,
+        gen: 3,
 	},
 	forecast: {
 		onUpdate(pokemon) {
