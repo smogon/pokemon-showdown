@@ -836,8 +836,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Dark",
 		contestType: "Clever",
 		gen: 3,
-        desc: "Damage is calculated using the target's Special Attack stat, including stat stage changes. The user's Ability and item are used as normal.",
-        shortDesc: "Uses target's Special Attack stat in damage calculation.",
+		desc: "Damage is calculated using the target's Special Attack stat, including stat stage changes. The user's Ability and item are used as normal.",
+		shortDesc: "Uses target's Special Attack stat in damage calculation.",
 	},
 	gigadrain: {
 		num: 202,

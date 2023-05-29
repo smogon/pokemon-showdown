@@ -4,9 +4,9 @@ export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen3',
 	gen: 3,
 
-    // Uncomment if you want to display tiers the same as Dragon Heaven
-    // Requires an implementation of something similar to the Dragon Heaven
-    // client to visualize
+	// Uncomment if you want to display tiers the same as Dragon Heaven
+	// Requires an implementation of something similar to the Dragon Heaven
+	// client to visualize
 
 	/* teambuilderConfig: {
 		// for micrometas to only show custom tiers
@@ -167,10 +167,10 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 
 		// list Pokemon by VR rank
-        // Uncomment if you want to display tiers the same as Dragon Heaven
-        // Requires an implementation of something similar to the Dragon Heaven
-        // client to visualize
-        
+		// Uncomment if you want to display tiers the same as Dragon Heaven
+		// Requires an implementation of something similar to the Dragon Heaven
+		// client to visualize
+		
 		/* for (const id in this.dataCache.Pokedex) {
 			if (this.modData('FormatsData', id) && this.modData('FormatsData', id).tier !== 'Uber') {
 				if (this.modData('FormatsData', id).rank !== 'Unranked') {

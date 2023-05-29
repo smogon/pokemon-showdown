@@ -1929,7 +1929,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 			target.m.numSwaps++;
 			if (effect && effect.effectType === 'Move' && source.side.pokemon.length < 24 &&
-                source.side !== target.side && target.m.numSwaps < 4) {
+				source.side !== target.side && target.m.numSwaps < 4) {
 				const hpCost = this.clampIntRange(Math.floor((target.baseMaxhp * target.m.numSwaps) / 4), 1);
 				// Just in case(tm) and for Shedinja
 				if (hpCost === target.baseMaxhp) {
@@ -2443,7 +2443,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			return this.checkCanLearn(move, species, setSources, set);
 		},
 	},
-    datamod: {
+	datamod: {
 		effectType: 'Rule',
 		name: 'Data Mod',
 		desc: 'When a new Pokémon switches in for the first time, information about its types, stats and Abilities is displayed to both players.',
@@ -2549,7 +2549,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
-    // Initially made for Hoenn Gaiden
+	// Initially made for Hoenn Gaiden
 	statboostpassmod: {
 		effectType: 'Rule',
 		name: 'Stat Boost Pass Mod',

@@ -472,12 +472,12 @@ export const Formats: FormatList = [
 	{
 		section: "Pet Mods",
 	},
-    {
+	{
 		name: "[Gen 3] Hoenn Gaiden OU",
 		desc: [`A [Gen 3] OU-based format where later generation Pok&eacute;mon, moves, items, Abilities, and mechanics are added. Sometimes, existing Pok&eacute;mon are changed as well.`],
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/hoenn-gaiden-pet-mod-of-the-season.3714737/">Hoenn Gaiden</a>`,
-            `&bullet; <a href="https://docs.google.com/spreadsheets/d/1Ua7t1HSJ74NqEfvJI8hMIvea2MrdszhU1kOdcJ2HDJw/edit#gid=0">Spreadsheet</a>`,
+			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1Ua7t1HSJ74NqEfvJI8hMIvea2MrdszhU1kOdcJ2HDJw/edit#gid=0">Spreadsheet</a>`,
 		],
 		mod: 'gen3hoenngaiden',
 		ruleset: ['Standard', 'Freeze Clause Mod', 'Data Mod'],

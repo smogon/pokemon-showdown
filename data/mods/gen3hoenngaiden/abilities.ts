@@ -478,7 +478,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Neutralizing Gas",
 		rating: 4,
 		num: 256,
-        gen: 3,
+		gen: 3,
 	},
 	protean: {
 		onPrepareHit(source, target, move) {
