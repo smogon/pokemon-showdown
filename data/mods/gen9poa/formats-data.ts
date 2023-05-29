@@ -3609,4 +3609,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "NFE",
 	},
+	toxice: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
 };
