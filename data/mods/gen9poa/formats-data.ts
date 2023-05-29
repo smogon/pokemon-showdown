@@ -3604,4 +3604,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	squice: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "NFE",
+	},
 };

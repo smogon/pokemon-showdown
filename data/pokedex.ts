@@ -27818,7 +27818,20 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		abilities: {0: "Color Change", H: "Hue Shift"},
 		heightm: 1,
 		weightkg: 22,
+		prevo: "Kecleon",
 		color: "Green",
 		eggGroups: ["Field"],
 	},
+	squice: {
+		num: -6015,
+		name: "Squice",
+		types: ["Water", "Ice"],
+		baseStats: {hp: 65, atk: 30, def: 30, spa: 60, spd: 60, spe: 60},
+		abilities: {0: "Water Veil"},
+		heightm: 1,
+		weightkg: 22,
+		color: "Green",
+		eggGroups: ["Field"],
+	},
+
 };
