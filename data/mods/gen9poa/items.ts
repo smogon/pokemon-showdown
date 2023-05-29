@@ -465,6 +465,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	deltaaggronite: {
+		inherit: true,
+		isNonstandard: null,
+	},
 
 	//Cap Items
 	crucibellite: {

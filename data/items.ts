@@ -9960,4 +9960,18 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Unobtainable",
 	},
+	deltaaggronite: {
+		name: "Delta Aggronite",
+		spritenum: 0,
+		megaStone: "Aggron-Delta-Mega",
+		megaEvolves: "Aggron-Delta",
+		itemUser: ["Aggron-Delta"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -77,
+		gen: 6,
+		isNonstandard: "Unobtainable",
+	},
 };

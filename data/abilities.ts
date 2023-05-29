@@ -7029,7 +7029,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Multitasker",
 		rating: 4,
-		num: -22,
+		num: -67,
 	},
 	stolenart: {
 		onSourceDamagingHit(damage, target, source, move) {
@@ -7052,7 +7052,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Stolen Art",
 		rating: 1.5,
-		num: 38,
+		num: -68,
+	},
+	turfmelter: {
+		onStart(source) {
+			this.field.addPseudoWeather('turfmelter');
+		},
+		onEnd(source) {
+			this.field.removePseudoWeather('turfmelter');
+		},
+		name: "Turf Melter",
+		gen: 6,
+		rating: 4.5,
+		num: -69,
 	},
 };
 

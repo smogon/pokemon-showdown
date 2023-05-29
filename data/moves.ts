@@ -23609,4 +23609,33 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "???",
 		contestType: "Clever",
 	},
+	turfmelter: {
+		num: -46,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		isNonstandard: "Past",
+		name: "Turf Melter",
+		pp: 25,
+		priority: 0,
+		flags: {},
+		pseudoWeather: 'turfmelter',
+		condition: {
+			onFieldStart(target, source, sourceEffect) {
+				this.add('-fieldactivate', 'move: Turf Melter');
+				this.hint(`Ground-type moves become Fire-type after using ${sourceEffect}.`);
+			},
+			onModifyTypePriority: -2,
+			onModifyType(move) {
+				if (move.type === 'Ground') {
+					move.type = 'Fire';
+					this.debug(move.name + "'s type changed to Fire");
+				}
+			},
+		},
+		secondary: null,
+		target: "all",
+		type: "Fire",
+		contestType: "Beautiful",
+	},
 };
