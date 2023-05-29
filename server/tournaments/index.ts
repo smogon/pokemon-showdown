@@ -2063,7 +2063,7 @@ const commands: Chat.ChatCommands = {
 				target = value ? 'ON' : 'OFF';
 				this.modlog('TOUR SETTINGS', null, `autoconfirmed only: ${target}`);
 				if (tour) this.parse(`/tour autoconfirmedonly ${target}`);
-				this.privateModAction(`${user.name} set all tournaments to ${value ? 'disallow' : 'allow'} autoconfirmed users.`);
+				this.privateModAction(`${user.name} set all tournaments to ${value ? 'disallow' : 'allow'} non-autoconfirmed users.`);
 			},
 			forcepublic(target, room, user) {
 				room = this.requireRoom();
