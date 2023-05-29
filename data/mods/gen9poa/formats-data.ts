@@ -3624,4 +3624,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "LC",
 	},
+	tinkatonrhinian: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };

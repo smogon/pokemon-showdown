@@ -6024,7 +6024,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onSourceDamagingHit(damage, target, source, move) {
 			if (source === target) return;
 			if (move.name === "Regurgitation" || target.fainted || target.isSemiInvulnerable()) return;
-			this.actions.useMove("Regurgitation", source, target);
+			let firstdamage = this.actions.getDamage(source, target, 'regurgitation');
+			if (typeof firstdamage === 'number') this.damage(firstdamage, target, source);
 			return null;
 		},
 		name: "Regurgitation",
@@ -7076,6 +7077,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Hue Shift",
+		rating: 4,
+		num: -70,
+	},
+	fairylaw: {
+		onStart(pokemon) {
+			this.actions.useMove("Imprison", pokemon, pokemon);
+		},
+		name: "Fairy Law",
 		rating: 4,
 		num: -70,
 	},
