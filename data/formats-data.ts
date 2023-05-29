@@ -9126,4 +9126,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 		natDexTier: "Illegal",
 	},
+	kelaidleon: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
 };

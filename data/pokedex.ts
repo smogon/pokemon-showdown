@@ -27810,4 +27810,15 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Delta Aggronite",
 	},
+	kelaidleon: {
+		num: -6014,
+		name: "Kelaidleon",
+		types: ["Normal", "Dragon"],
+		baseStats: {hp: 80, atk: 90, def: 80, spa: 100, spd: 80, spe: 110},
+		abilities: {0: "Color Change", H: "Hue Shift"},
+		heightm: 1,
+		weightkg: 22,
+		color: "Green",
+		eggGroups: ["Field"],
+	},
 };

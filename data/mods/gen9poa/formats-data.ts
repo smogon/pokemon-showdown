@@ -3587,7 +3587,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	carbinkdelta: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "PU",
+		natDexTier: "RU",
 	},
 	sableyemono: {
 		inherit: true,
@@ -3598,5 +3598,10 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		inherit: true,
 		isNonstandard: null,
 		natDexTier: "OU",
+	},
+	kelaidleon: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
 	},
 };
