@@ -1540,10 +1540,9 @@ export const Formats: FormatList = [
 			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chien-Pao', 'Dialga', 'Dialga-Origin', 'Eternatus', 'Gholdengo', 'Giratina', 'Giratina-Origin',
 			'Groudon', 'Koraidon', 'Komala', 'Kyogre', 'Mewtwo', 'Miraidon', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Zacian', 'Zacian-Crowned',
 			'Zamazenta', 'Zamazenta-Crowned', 'Arena Trap', 'Armor Tail', 'Contrary', 'Dazzling', 'Drought', 'Electric Surge', 'Fur Coat',
-			'Guts', 'Huge Power', 'Imposter', 'Magic Bounce', 'Magnet Pull', 'Mold Breaker',
-			'Moody', 'Poison Heal', 'Prankster', 'Pure Power', 'Purifying Salt', 'Queenly Majesty', 'Quick Draw', 'Quick Feet', 'Regenerator',
-			'Sand Rush', 'Shadow Tag', 'Simple', 'Slush Rush', 'Speed Boost', 'Stakeout', 'Stench', 'Sturdy', 'Swift Swim', 'Tinted Lens',
-			'Unaware', 'Unburden', 'Starf Berry', 'King\'s Rock', 'Baton Pass',
+			'Guts', 'Huge Power', 'Imposter', 'Magic Bounce', 'Magnet Pull', 'Mold Breaker', 'Moody', 'Poison Heal', 'Prankster', 'Pure Power',
+			'Purifying Salt', 'Queenly Majesty', 'Quick Draw', 'Quick Feet', 'Regenerator', 'Sand Rush', 'Shadow Tag', 'Simple', 'Slush Rush',
+			'Speed Boost', 'Stakeout', 'Stench', 'Sturdy', 'Swift Swim', 'Tinted Lens', 'Unaware', 'Unburden', 'Starf Berry', 'King\'s Rock', 'Baton Pass',
 		],
 		getSharedPower(pokemon) {
 			const sharedPower = new Set<string>();
