@@ -60,7 +60,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onTypePriority: 1,
 		onType(types, pokemon) {
 			if (pokemon.transformed || pokemon.ability !== 'rkssystem' && this.gen >= 8) return types;
-			/** @type {string | undefined} */
+			/* @type {string | undefined} */
 			let type = 'Normal';
 			if (pokemon.ability === 'rkssystem') {
 				type = pokemon.getItem().onMemory;

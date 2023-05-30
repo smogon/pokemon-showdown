@@ -2136,7 +2136,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		gen: 3,
 		tier: "UU",
 	},
-	/*dusknoir: {
+	/* dusknoir: {
 		rank: "Unranked",
 		gen: 3,
 		tier: "UU",
@@ -2156,7 +2156,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		gen: 3,
 		tier: "UU",
 	},
-	/*honchkrow: {
+	/* honchkrow: {
 		rank: "Unranked",
 		gen: 3,
 		tier: "UU",
@@ -2186,7 +2186,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		gen: 3,
 		tier: "LC",
 	},
-	/*ambipom: {
+	/* ambipom: {
 		rank: "Unranked",
 		gen: 3,
 		tier: "UU",
@@ -2211,7 +2211,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		gen: 3,
 		tier: "UU",
 	},
-	/*
+	/* 
 	electivire: {
 		rank: "Unranked",
 		gen: 3,
@@ -2222,7 +2222,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		gen: 3,
 		tier: "UUBL",
 	},
-	/*togekiss: {
+	/* togekiss: {
 		rank: "Unranked",
 		gen: 3,
 		tier: "UU",
@@ -2248,7 +2248,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		gen: 3,
 		tier: "OU",
 	},
-	/*sandshrewalola: {
+	/* sandshrewalola: {
 		rank: "Unranked",
 		gen: 3,
 		tier: "LC",
@@ -2278,7 +2278,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		gen: 3,
 		tier: "UUBL",
 	},
-	/*persianalola: {
+	/* persianalola: {
 		rank: "Unranked",
 		gen: 3,
 		tier: "UU",
@@ -2298,7 +2298,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		gen: 3,
 		tier: "UU",
 	},
-	/*mukalola: {
+	/* mukalola: {
 		rank: "Unranked",
 		gen: 3,
 		tier: "UU",
@@ -2333,7 +2333,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		gen: 3,
 		tier: "UU",
 	},
-	/*cursola: {
+	/* cursola: {
 		rank: "Unranked",
 		gen: 3,
 		tier: "UU",
@@ -2453,7 +2453,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		gen: 3,
 		tier: "UU",
 	},
-	/*wyrdeer: {
+	/* wyrdeer: {
 		rank: "Unranked",
 		gen: 3,
 		tier: "UU",
@@ -2463,7 +2463,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	// 	gen: 3,
 	// 	tier: "OU",
 	// },
-	/*ursaluna: {
+	/* ursaluna: {
 		rank: "Unranked",
 		gen: 3,
 		tier: "Uber",
@@ -2498,7 +2498,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		gen: 3,
 		tier: "UU",
 	},
-	/*growlithehisui: {
+	/* growlithehisui: {
 		rank: "Unranked",
 		gen: 3,
 		tier: "LC",

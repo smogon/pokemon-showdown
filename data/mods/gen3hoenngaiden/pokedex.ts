@@ -50,7 +50,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	persian: {
 		inherit: true,
 		abilities: {0: "Stakeout", 1: "Limber"},
-		/*otherFormes: ["Persian-Alola"],
+		/* otherFormes: ["Persian-Alola"],
 		formeOrder: ["Persian", "Persian-Alola"],*/
 	},
 	smoochum: {
@@ -128,7 +128,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	ursaring: {
 		inherit: true,
 		abilities: {0: "Guts"},
-		/*evos: ["Ursaluna"],
+		/* evos: ["Ursaluna"],
 	},
 	ursaluna: {
 		num: 901,
@@ -1653,13 +1653,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	sandslash: {
 		inherit: true,
 		abilities: {0: "Hyper Cutter", 1: "Analytic"},
-		/*otherFormes: ["Sandslash-Alola"],
+		/* otherFormes: ["Sandslash-Alola"],
 		formeOrder: ["Sandslash", "Sandslash-Alola"],*/
 	},
 	sandshrew: {
 		inherit: true,
 		abilities: {0: "Hyper Cutter", 1: "Analytic"},
-		/*otherFormes: ["Sandshrew-Alola"],
+		/* otherFormes: ["Sandshrew-Alola"],
 		formeOrder: ["Sandshrew", "Sandshrew-Alola"],*/
 	},
 	dracovish: {
@@ -1887,7 +1887,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 71.2,
 		color: "Brown",
 		eggGroups: ["Field"],
-		/*evos: ["Wyrdeer"],
+		/* evos: ["Wyrdeer"],
 	},
 	wyrdeer: {
 		num: 899,
@@ -1942,7 +1942,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	corsola: {
 		inherit: true,
 		// baseStats: {hp: 65, atk: 55, def: 95, spa: 65, spd: 95, spe: 35},
-		/*otherFormes: ["Corsola-Galar"],
+		/* otherFormes: ["Corsola-Galar"],
 		formeOrder: ["Corsola", "Corsola-Galar"],
 	},
 	corsolagalar: {
@@ -2064,7 +2064,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		otherFormes: ["Growlithe-Hisui"],
 		formeOrder: ["Growlithe", "Growlithe-Hisui"],
 	},
-	/*growlithehisui: {
+	/* growlithehisui: {
 		num: 58,
 		name: "Growlithe-Hisui",
 		baseSpecies: "Growlithe",
@@ -2078,7 +2078,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},*/
 	arcanine: {
 		inherit: true,
-		/*otherFormes: ["Arcanine-Hisui"],
+		/* otherFormes: ["Arcanine-Hisui"],
 		formeOrder: ["Arcanine", "Arcanine-Hisui"],
 	},
 	arcaninehisui: {
@@ -2100,7 +2100,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	exeggutor: {
 		inherit: true,
 		// baseStats: {hp: 95, atk: 95, def: 85, spa: 125, spd: 75, spe: 55},
-		/*otherFormes: ["Exeggutor-Alola"],
+		/* otherFormes: ["Exeggutor-Alola"],
 		formeOrder: ["Exeggutor", "Exeggutor-Alola"],
 	},
 	exeggutoralola: {
@@ -2236,7 +2236,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		// baseStats: {hp: 65, atk: 95, def: 85, spa: 55, spd: 55, spe: 85},
 		abilities: {0: "Poison Point", 1: "Stakeout"},
-		/*otherFormes: ["Qwilfish-Hisui"],
+		/* otherFormes: ["Qwilfish-Hisui"],
 		formeOrder: ["Qwilfish", "Qwilfish-Hisui"],
 	},
 	qwilfishhisui: {
@@ -2318,7 +2318,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Fairy", "Grass"],
 		gen: 3,
 	},
-	/*dusknoir: {
+	/* dusknoir: {
 		num: 477,
 		name: "Dusknoir",
 		types: ["Ghost"],
@@ -2364,7 +2364,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Amorphous"],
 		gen: 3,
 	},
-	/*honchkrow: {
+	/* honchkrow: {
 		num: 430,
 		name: "Honchkrow",
 		types: ["Dark", "Flying"],
@@ -2412,7 +2412,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	aipom: {
 		inherit: true,
-		/*evos: ["Ambipom"],
+		/* evos: ["Ambipom"],
 	},
 	ambipom: {
 		num: 424,
@@ -2431,7 +2431,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	sneasel: {
 		inherit: true,
-		/*evos: ["Weavile"],
+		/* evos: ["Weavile"],
 		otherFormes: ["Sneasel-Hisui"],
 		formeOrder: ["Sneasel", "Sneasel-Hisui"],
 	},
@@ -2474,7 +2474,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	lickitung: {
 		inherit: true,
-		/*evos: ["Lickilicky"],
+		/* evos: ["Lickilicky"],
 	},
 	lickilicky: {
 		num: 463,
@@ -2491,7 +2491,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Monster"],
 		gen: 3,*/
 	},
-	/*rhyperior: {
+	/* rhyperior: {
 		num: 464,
 		name: "Rhyperior",
 		types: ["Ground", "Rock"],
@@ -2546,7 +2546,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		// evos: ["Yanmega"],
 	},
-	/*electivire: {
+	/* electivire: {
 		num: 466,
 		name: "Electivire",
 		types: ["Electric"],
@@ -2578,7 +2578,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Human-Like"],
 		gen: 3,
 	},
-	/*togekiss: {
+	/* togekiss: {
 		num: 468,
 		name: "Togekiss",
 		types: ["Normal", "Flying"],
@@ -2617,7 +2617,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		evos: ["Probopass"],
 	},
-	/*porygonz: {
+	/* porygonz: {
 		num: 474,
 		name: "Porygon-Z",
 		types: ["Normal"],
@@ -2654,12 +2654,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	*/
 	rattata: {
 		inherit: true,
-		/*otherFormes: ["Rattata-Alola"],
+		/* otherFormes: ["Rattata-Alola"],
 		formeOrder: ["Rattata", "Rattata-Alola"],*/
 	},
 	raticate: {
 		inherit: true,
-		/*otherFormes: ["Raticate-Alola"],
+		/* otherFormes: ["Raticate-Alola"],
 		formeOrder: ["Raticate", "Raticate-Alola"],
 	},
 	rattataalola: {
@@ -2724,7 +2724,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Field", "Fairy"],
 		gen: 3,
 	},
-	/*sandshrewalola: {
+	/* sandshrewalola: {
 		num: 27,
 		name: "Sandshrew-Alola",
 		baseSpecies: "Sandshrew",
@@ -2758,10 +2758,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},*/
 	vulpix: {
 		inherit: true,
-		/*otherFormes: ["Vulpix-Alola"],
+		/* otherFormes: ["Vulpix-Alola"],
 		formeOrder: ["Vulpix", "Vulpix-Alola"],*/
 	},
-	/*vulpixalola: {
+	/* vulpixalola: {
 		num: 37,
 		name: "Vulpix-Alola",
 		baseSpecies: "Vulpix",
@@ -2780,10 +2780,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	ninetales: {
 		inherit: true,
 		abilities: {0: "Flash Fire", 1: "Fur Coat"},
-		/*otherFormes: ["Ninetales-Alola"],
+		/* otherFormes: ["Ninetales-Alola"],
 		formeOrder: ["Ninetales", "Ninetales-Alola"],*/
 	},
-	/*ninetalesalola: {
+	/* ninetalesalola: {
 		num: 38,
 		name: "Ninetales-Alola",
 		baseSpecies: "Ninetales",
@@ -2844,7 +2844,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Field"],
 		gen: 3,
 	},
-	/*meowthalola: {
+	/* meowthalola: {
 		num: 52,
 		name: "Meowth-Alola",
 		baseSpecies: "Meowth",
@@ -2892,15 +2892,15 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	muk: {
 		inherit: true,
-		/*otherFormes: ["Muk-Alola"],
+		/* otherFormes: ["Muk-Alola"],
 		formeOrder: ["Muk", "Muk-Alola"],*/
 	},
 	grimer: {
 		inherit: true,
-		/*otherFormes: ["Grimer-Alola"],
+		/* otherFormes: ["Grimer-Alola"],
 		formeOrder: ["Grimer", "Grimer-Alola"],*/
 	},
-	/*grimeralola: {
+	/* grimeralola: {
 		num: 88,
 		name: "Grimer-Alola",
 		baseSpecies: "Grimer",
@@ -2933,10 +2933,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},*/
 	ponyta: {
 		inherit: true,
-		/*otherFormes: ["Ponyta-Galar"],
+		/* otherFormes: ["Ponyta-Galar"],
 		formeOrder: ["Ponyta", "Ponyta-Galar"],*/
 	},
-	/*ponytagalar: {
+	/* ponytagalar: {
 		num: 77,
 		name: "Ponyta-Galar",
 		baseSpecies: "Ponyta",
@@ -2953,10 +2953,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},*/
 	rapidash: {
 		inherit: true,
-		/*otherFormes: ["Rapidash-Galar"],
+		/* otherFormes: ["Rapidash-Galar"],
 		formeOrder: ["Rapidash", "Rapidash-Galar"],*/
 	},
-	/*rapidashgalar: {
+	/* rapidashgalar: {
 		num: 78,
 		name: "Rapidash-Galar",
 		baseSpecies: "Rapidash",
