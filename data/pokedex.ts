@@ -6862,7 +6862,7 @@ abilities: {0: "Levitate"},
 weightkg: 0.3,
 },
 
-
+dialga: {
 num: 483,
 name: "Dialga",
 types: ["Steel", "Dragon"],
@@ -6873,7 +6873,7 @@ otherFormes: ["Dialga-Origin"],
 formeOrder: ["Dialga", "Dialga-Origin"],
 },
 
-
+dialgaorigin: {
 num: 483,
 name: "Dialga-Origin",
 baseSpecies: "Dialga",
@@ -6883,9 +6883,10 @@ baseStats: {hp: 100, atk: 100, def: 120, spa: 150, spd: 120, spe: 90},
 abilities: {0: "Pressure", H: "Telepathy"},
 weightkg: 850,
 changesFrom: "Dialga",
+gen: 8,
 },
 
-
+palkia: {
 num: 484,
 name: "Palkia",
 types: ["Fairy", "Dragon"],
@@ -6896,7 +6897,7 @@ otherFormes: ["Palkia-Origin"],
 formeOrder: ["Palkia", "Palkia-Origin"],
 },
 
-
+palkiaorigin: {
 num: 484,
 name: "Palkia-Origin",
 baseSpecies: "Palkia",
@@ -6927,7 +6928,7 @@ abilities: {0: "Slow Start"},
 weightkg: 420,
 },
 
-
+giratina: {
 num: 487,
 name: "Giratina",
 baseForme: "Altered",
@@ -6939,7 +6940,7 @@ otherFormes: ["Giratina-Origin"],
 formeOrder: ["Giratina", "Giratina-Origin"],
 },
 
-
+giratinaorigin: {
 num: 487,
 name: "Giratina-Origin",
 baseSpecies: "Giratina",
@@ -7011,7 +7012,7 @@ weightkg: 5.2,
 changesFrom: "Shaymin",
 },
 
-
+arceus: {
 num: 493,
 name: "Arceus",
 baseForme: "Normal",
