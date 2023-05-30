@@ -231,12 +231,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 	rustedshield: {
 		inherit: true,
 		onTakeItem: false,
-		isNonstandard: null,
 	},
 	rustedsword: {
 		inherit: true,
 		onTakeItem: false,
-		isNonstandard: null,
 	},
 	sablenite: {
 		inherit: true,

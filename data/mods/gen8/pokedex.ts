@@ -45,6 +45,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: undefined,
 		evoLevel: undefined,
 	},
+	vivillonpokeball: {
+		inherit: true,
+		abilities: {0: "Shield Dust", 1: "Compound Eyes"},
+	},
 	sliggoohisui: {
 		inherit: true,
 		abilities: {0: "Sap Sipper", 1: "Overcoat", H: "Gooey"},
