@@ -1,18989 +1,14335 @@
-// List of flags and their descriptions can be found in sim/dex-moves.ts
-
-export const Moves: {[moveid: string]: MoveData} = {
-
-attackorder: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Attack Order",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-critRatio: 3,
-secondary: null,
-target: "normal",
-type: "Bug",
-},
-
-bugbite: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Bug Bite",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-onHit(target, source) {
-const item = target.getItem();
-if (source.hp && item.isBerry && target.takeItem(source)) {
-this.add('-enditem', target, item.name, '[from] stealeat', '[move] Bug Bite', '[of] ' + source);
-if (this.singleEvent('Eat', item, null, source, null, null)) {
-this.runEvent('EatItem', source, null, null, item);
-if (item.id === 'leppaberry') target.staleness = 'external';
-}
-if (item.onEat) source.ateBerry = true;
-}
-},
-secondary: null,
-target: "normal",
-type: "Bug",
-},
-
-bugbuzz: {
-accuracy: 70,
-basePower: 125,
-category: "Special",
-name: "Bug Buzz",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-secondary: {
-chance: 45,
-status: 'tox',
-},
-target: "normal",
-type: "Bug",
-},
-
-defendorder: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Defend Order",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-def: 2,
-spd: 2,
-spe:-2,
-evasion: -2,
-},
-secondary: null,
-target: "self",
-type: "Bug",
-},
-
-fellstinger: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Fell Stinger",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-onAfterMoveSecondarySelf(pokemon, target, move) {
-if (!target || target.fainted || target.hp <= 0) this.boost({atk: 3}, pokemon, pokemon, move);
-},
-secondary: null,
-target: "normal",
-type: "Bug",
-},
-
-firstimpression: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "First Impression",
-pp: 1.25,
-priority: 5,
-flags: {contact: 1, protect: 1, mirror: 1},
-onTry(source) {
-if (source.activeMoveActions > 1) {
-this.hint("First Impression only works on your first turn out.");
-return false;
-}
-},
-secondary: {
-chance: 95,
-volatileStatus: 'flinch',
-},
-target: "normal",
-type: "Bug",
-},
-
-furycutter: {
-accuracy: 72,
-basePower: 115,
-basePowerCallback(pokemon, target, move) {
-if (!pokemon.volatiles['furycutter'] || move.hit === 1) {
-pokemon.addVolatile('furycutter');
-}
-const bp = this.clampIntRange(move.basePower * pokemon.volatiles['furycutter'].multiplier, 1, 160);
-this.debug('BP: ' + bp);
-return bp;
-},
-category: "Physical",
-name: "Fury Cutter",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
-condition: {
-duration: 2,
-onStart() {
-this.effectState.multiplier = 1;
-},
-onRestart() {
-if (this.effectState.multiplier < 4) {
-this.effectState.multiplier <<= 1;
-}
-this.effectState.duration = 2;
-},
-},
-secondary: null,
-target: "normal",
-type: "Bug",
-},
-
-healorder: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Heal Order",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, heal: 1},
-heal: [33, 100],
-secondary: null,
-target: "self",
-type: "Bug",
-},
-
-infestation: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Infestation",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
-target: "normal",
-type: "Bug",
-},
-
-leechlife: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Leech Life",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
-drain: [1, 2],
-secondary: null,
-target: "normal",
-type: "Bug",
-},
-
-lunge: {
-accuracy: 93,
-basePower: 30,
-category: "Special",
-name: "Lunge",
-pp: 1.25,
-priority: 3,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Bug",
-},
-
-megahorn: {
-accuracy: 68,
-basePower: 135,
-category: "Physical",
-name: "Megahorn",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1},
-self: {
-boosts: {
-atk: 1,
-spa: 1,
-spd: -1,
-accuracy: 1,
-evasion: -1,
-},
-},
-target: "allAdjacentFoes",
-type: "Bug",
-},
-
-pinmissile: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Pin Missile",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-multihit: [1, 6],
-secondary: null,
-target: "normal",
-type: "Bug",
-},
-
-pollenpuff: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Pollen Puff",
-pp: 1.25,
-priority: 0,
-flags: {bullet: 1, protect: 1, mirror: 1, allyanim: 1},
-onTryHit(target, source, move) {
-if (source.isAlly(target)) {
-move.basePower = 0;
-move.infiltrates = true;
-}
-},
-onHit(target, source) {
-if (source.isAlly(target)) {
-if (!this.heal(Math.floor(target.baseMaxhp * 0.5))) {
-this.add('-immune', target);
-return this.NOT_FAIL;
-}
-}
-},
-secondary: null,
-target: "normal",
-type: "Bug",
-},
-
-pounce: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Pounce",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-boosts: {
-spe: -1,
-evasion: -1,
-},
-},
-target: "normal",
-type: "Bug",
-},
-
-powder: {
-accuracy: 125,
-basePower: 33,
-category: "Special",
-name: "Powder",
-pp: 0.625,
-priority: 4,
-flags: {bullet: 1, protect: 1, mirror: 1, allyanim: 1},
-secondary: {
-chance: 100,
-onHit(target, source) {
-const result = this.random(3);
-if (result === 0) {
-target.trySetStatus('tox', source);
-} else if (result === 1) {
-target.trySetStatus('par', source);
-} else {
-target.trySetStatus('slp', source);
-}
-},
-},
-target: "allAdjacentFoes",
-type: "Bug",
-},
-
-quiverdance: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Quiver Dance",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, dance: 1},
-boosts: {
-atk: 1,
-spa: 1,
-spe: 1,
-spd: 1,
-def: 1,
-accuracy: 1,
-evasion: -10,
-},
-secondary: null,
-target: "self",
-type: "Bug",
-},
-
-ragepowder: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Rage Powder",
-pp: 1.25,
-priority: 2,
-flags: {powder: 1, noassist: 1, failcopycat: 1},
-volatileStatus: 'ragepowder',
-onTry(source) {
-return this.activePerHalf > 1;
-},
-condition: {
-duration: 1,
-onStart(pokemon) {
-this.add('-singleturn', pokemon, 'move: Rage Powder');
-},
-onFoeRedirectTargetPriority: 1,
-onFoeRedirectTarget(target, source, source2, move) {
-const ragePowderUser = this.effectState.target;
-if (ragePowderUser.isSkyDropped()) return;
-if (source.runStatusImmunity('powder') && this.validTarget(ragePowderUser, source, move.target)) {
-if (move.smartTarget) move.smartTarget = false;
-this.debug("Rage Powder redirected target of move");
-return ragePowderUser;
-}
-},
-},
-secondary: null,
-target: "self",
-type: "Bug",
-},
-
-savagespinout: {
-accuracy: 60,
-basePower: 200,
-category: "Physical",
-name: "Savage Spin-Out",
-pp: 0.625,
-priority: 0,
-flags: {protect: 1,},
-secondary: {
-chance: 100,
-volatileStatus: 'confusion',
-},
-target: "normal",
-type: "Bug",
-},
-
-signalbeam: {
-accuracy: 82,
-basePower: 85,
-category: "Special",
-name: "Signal Beam",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-volatileStatus: 'confusion',
-},
-target: "normal",
-type: "Bug",
-},
-
-silktrap: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Silk Trap",
-pp: 1.25,
-priority: 4,
-flags: {},
-stallingMove: true,
-volatileStatus: 'silktrap',
-onPrepareHit(pokemon) {
-return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
-},
-onHit(pokemon) {
-pokemon.addVolatile('stall');
-},
-condition: {
-duration: 1,
-onStart(target) {
-this.add('-singleturn', target, 'Protect');
-},
-onTryHitPriority: 3,
-onTryHit(target, source, move) {
-if (!move.flags['protect'] || move.category === 'Status') {
-if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
-return;
-}
-if (move.smartTarget) {
-move.smartTarget = false;
-} else {
-this.add('-activate', target, 'move: Protect');
-}
-const lockedmove = source.getVolatile('lockedmove');
-if (lockedmove) {
-// Outrage counter is reset
-if (source.volatiles['lockedmove'].duration === 2) {
-delete source.volatiles['lockedmove'];
-}
-}
-if (this.checkMoveMakesContact(move, source, target)) {
-this.boost({spe: -2}, source, target, this.dex.getActiveMove("Silk Trap"));
-}
-return this.NOT_FAIL;
-},
-onHit(target, source, move) {
-if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
-this.boost({spe: -2}, source, target, this.dex.getActiveMove("Silk Trap"));
-}
-},
-},
-target: "self",
-type: "Bug",
-},
-
-silverwind: {
-accuracy: 80,
-basePower: 95,
-category: "Special",
-name: "Silver Wind",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-self: {
-boosts: {
-atk: 1,
-def: 1,
-spa: 1,
-spd: 1,
-spe: 1,
-accuracy: 1,
-evasion: 1,
-},
-},
-},
-target: "allAdjacentFoes",
-type: "Bug",
-},
-
-skittersmack: {
-accuracy: 91,
-basePower: 40,
-category: "Physical",
-name: "Skitter Smack",
-pp: 1.25,
-priority: 3,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Bug",
-},
-
-spiderweb: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Spider Web",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-secondary: {
-chance: 100,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
-target: "allAdjacentFoes",
-type: "Bug",
-},
-
-steamroller: {
-accuracy: 95,
-basePower: 45,
-category: "Physical",
-name: "Steamroller",
-pp: 0.625,
-priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [25, 100],
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-target: "normal",
-type: "Bug",
-},
-
-stickyweb: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Sticky Web",
-pp: 1.25,
-priority: 0,
-flags: {reflectable: 1},
-sideCondition: 'stickyweb',
-condition: {
-onSideStart(side) {
-this.add('-sidestart', side, 'move: Sticky Web');
-},
-onEntryHazard(pokemon) {
-if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
-this.add('-activate', pokemon, 'move: Sticky Web');
-this.boost({spe: -1}, pokemon, this.effectState.source, this.dex.getActiveMove('stickyweb'));
-},
-},
-secondary: null,
-target: "foeSide",
-type: "Bug",
-},
-
-stringshot: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "String Shot",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-boosts: {
-spe: -2,
-evasion: -2,
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Bug",
-},
-
-strugglebug: {
-accuracy: 100,
-basePower: 16,
-category: "Physical",
-name: "Struggle Bug",
-pp: 1.25,
-priority: 6,
-flags: {contact: 1, protect: 1, mirror: 1, noassist: 1, failcopycat: 1},
-forceSwitch: true,
-target: "normal",
-type: "Bug",
-},
-
-tailglow: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Tail Glow",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-spa: 3,
-atk: 3,
-evasion: -10,
-},
-secondary: null,
-target: "self",
-type: "Bug",
-},
-
-twineedle: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Twineedle",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-multihit: [1, 6],
-secondary: {
-chance: 33,
-status: 'tox',
-},
-target: "normal",
-type: "Bug",
-},
-
-uturn: {
-accuracy: 100,
-basePower: 16,
-category: "Physical",
-name: "U-turn",
-pp: 1.25,
-priority: 6,
-flags: {contact: 1, protect: 1, mirror: 1},
-selfSwitch: true,
-secondary: null,
-target: "normal",
-type: "Bug",
-},
-
-xscissor: {
-accuracy: 78,
-basePower: 105,
-category: "Physical",
-name: "X-Scissor",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
-secondary: null,
-target: "normal",
-type: "Bug",
-},
-
-assurance: {
-accuracy: 87,
-basePower: 60,
-basePowerCallback(pokemon, target, move) {
-if (target.hurtThisTurn) {
-this.debug('BP doubled on damaged target');
-return move.basePower * 2;
-}
-return move.basePower;
-},
-category: "Physical",
-name: "Assurance",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-baddybad: {
-accuracy: 70,
-basePower: 125,
-category: "Special",
-name: "Baddy Bad",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-self: {
-sideCondition: 'reflect',
-},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-beatup: {
-accuracy: 87,
-basePower: 60,
-basePowerCallback(pokemon, target, move) {
-const currentSpecies = move.allies!.shift()!.species;
-const bp = 5 + Math.floor(currentSpecies.baseStats.atk / 10);
-this.debug('BP for ' + currentSpecies.name + ' hit: ' + bp);
-return bp;
-},
-category: "Physical",
-name: "Beat Up",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, allyanim: 1},
-onModifyMove(move, pokemon) {
-move.allies = pokemon.side.pokemon.filter(ally => ally === pokemon || !ally.fainted && !ally.status);
-move.multihit = move.allies.length;
-},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-bite: {
-accuracy: 78,
-basePower: 105,
-category: "Physical",
-name: "Bite",
-pp: 1.25,
-priority: 0,
-flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 40,
-volatileStatus: 'flinch',
-},
-target: "normal",
-type: "Dark",
-},
-
-blackholeeclipse: {
-accuracy: 60,
-basePower: 200,
-category: "Physical",
-name: "Black Hole Eclipse",
-pp: 0.625,
-priority: 0,
-flags: {protect: 1,},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Dark",
-},
-
-brutalswing: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Brutal Swing",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Dark",
-},
-
-ceaselessedge: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Ceaseless Edge",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
-self: {
-onHit(source) {
-for (const side of source.side.foeSidesWithConditions()) {
-side.addSideCondition('spikes');
-}
-},
-},
-secondary: {}, // allows sheer force to trigger
-target: "normal",
-type: "Dark",
-},
-
-comeuppance: {
-accuracy: 89,
-basePower: 50,
-damageCallback(pokemon) {
-const lastDamagedBy = pokemon.getLastDamagedBy(true);
-if (lastDamagedBy !== undefined) {
-return (lastDamagedBy.damage * 1.5) || 1;
-}
-return 0;
-},
-category: "Special",
-name: "Comeuppance",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, failmefirst: 1},
-onTry(source) {
-const lastDamagedBy = source.getLastDamagedBy(true);
-if (lastDamagedBy === undefined || !lastDamagedBy.thisTurn) return false;
-},
-onModifyTarget(targetRelayVar, source, target, move) {
-const lastDamagedBy = source.getLastDamagedBy(true);
-if (lastDamagedBy) {
-targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
-}
-},
-secondary: null,
-target: "scripted",
-type: "Dark",
-},
-
-crunch: {
-accuracy: 68,
-basePower: 135,
-category: "Physical",
-name: "Crunch",
-pp: 1.25,
-priority: -1,
-flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-boosts: {
-spe: -1,
-spd: -1,
-def: -1,
-evasion: -1,
-},
-},
-target: "normal",
-type: "Dark",
-},
-
-darkestlariat: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Darkest Lariat",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-ignoreEvasion: true,
-ignoreDefensive: true,
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-darkpulse: {
-accuracy: 80,
-basePower: 95,
-category: "Special",
-name: "Dark Pulse",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, pulse: 1, mirror: 1, distance: 1},
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-target: "allAdjacentFoes",
-type: "Dark",
-},
-
-darkvoid: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Dark Void",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-status: 'slp',
-secondary: null,
-target: "allAdjacentFoes",
-type: "Dark",
-},
-
-embargo: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Embargo",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-volatileStatus: 'embargo',
-condition: {
-duration: 5,
-onStart(pokemon) {
-this.add('-start', pokemon, 'Embargo');
-this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
-},
-// Item suppression implemented in Pokemon.ignoringItem() within sim/pokemon.js
-onResidualOrder: 21,
-onEnd(pokemon) {
-this.add('-end', pokemon, 'Embargo');
-},
-},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-faketears: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Fake Tears",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
-boosts: {
-spd: -2,
-def: -2,
-},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-falsesurrender: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "False Surrender",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-feintattack: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Feint Attack",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-fierywrath: {
-accuracy: 125,
-basePower: 33,
-category: "Special",
-name: "Fiery Wrath",
-pp: 0.625,
-priority: 4,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-volatileStatus: 'flinch',
-},
-target: "allAdjacentFoes",
-type: "Dark",
-},
-
-flatter: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Flatter",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
-volatileStatus: 'confusion',
-boosts: {
-atk: 1,
-spa: 1,
-accuracy: 1,
-spe: -1,
-spd: -1,
-def: -1,
-evasion: -1,
-},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-fling: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Fling",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, allyanim: 1, noparentalbond: 1},
-onPrepareHit(target, source, move) {
-if (source.ignoringItem()) return false;
-const item = source.getItem();
-if (!this.singleEvent('TakeItem', item, source.itemState, source, source, move, item)) return false;
-if (!item.fling) return false;
-move.basePower = item.fling.basePower;
-this.debug('BP: ' + move.basePower);
-if (item.isBerry) {
-move.onHit = function (foe) {
-if (this.singleEvent('Eat', item, null, foe, null, null)) {
-this.runEvent('EatItem', foe, null, null, item);
-if (item.id === 'leppaberry') foe.staleness = 'external';
-}
-if (item.onEat) foe.ateBerry = true;
-};
-} else if (item.fling.effect) {
-move.onHit = item.fling.effect;
-} else {
-if (!move.secondaries) move.secondaries = [];
-if (item.fling.status) {
-move.secondaries.push({status: item.fling.status});
-} else if (item.fling.volatileStatus) {
-move.secondaries.push({volatileStatus: item.fling.volatileStatus});
-}
-}
-source.addVolatile('fling');
-},
-condition: {
-onUpdate(pokemon) {
-const item = pokemon.getItem();
-pokemon.setItem('');
-pokemon.lastItem = item.id;
-pokemon.usedItemThisTurn = true;
-this.add('-enditem', pokemon, item.name, '[from] move: Fling');
-this.runEvent('AfterUseItem', pokemon, null, null, item);
-pokemon.removeVolatile('fling');
-},
-},
-secondary: null,
-target: "all",
-type: "Dark",
-},
-
-foulplay: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Foul Play",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-overrideOffensivePokemon: 'target',
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-honeclaws: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Hone Claws",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-atk: 1,
-spe: 1,
-accuracy: 1,
-spa: -1,
-evasion: -1,
-spd: -1,
-def: -1,
-},
-secondary: null,
-target: "self",
-type: "Dark",
-},
-
-hyperspacefury: {
-accuracy: 72,
-basePower: 115,
-category: "Special",
-name: "Hyperspace Fury",
-pp: 1.25,
-priority: -1,
-flags: {mirror: 1,},
-breaksProtect: true,
-onTry(source) {
-if (source.species.name === 'Hoopa-Unbound') {
-return;
-}
-this.hint("Only a Pokemon whose form is Hoopa Unbound can use this move.");
-if (source.species.name === 'Hoopa') {
-this.attrLastMove('[still]');
-this.add('-fail', source, 'move: Hyperspace Fury', '[forme]');
-return null;
-}
-this.attrLastMove('[still]');
-this.add('-fail', source, 'move: Hyperspace Fury');
-return null;
-},
-self: {
-boosts: {
-def: -1,
-spd: -1,
-},
-},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-jawlock: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Jaw Lock",
-pp: 1.25,
-priority: 0,
-flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
-onHit(target, source, move) {
-source.addVolatile('trapped', target, move, 'trapper');
-target.addVolatile('trapped', source, move, 'trapper');
-},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-knockoff: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Knock Off",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-onBasePower(basePower, source, target, move) {
-const item = target.getItem();
-if (!this.singleEvent('TakeItem', item, target.itemState, target, target, move, item)) return;
-if (item.id) {
-return this.chainModify(1.5);
-}
-},
-onAfterHit(target, source) {
-if (source.hp) {
-const item = target.takeItem();
-if (item) {
-this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
-}
-}
-},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-kowtowcleave: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Kowtow Cleave",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-lashout: {
-accuracy: 100,
-basePower: 16,
-category: "Physical",
-name: "Lash Out",
-pp: 1.25,
-priority: 6,
-flags: {contact: 1, protect: 1, mirror: 1},
-selfSwitch: true,
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-maliciousmoonsault: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Malicious Moonsault",
-pp: 0.625,
-priority: -1,
-flags: {contact: 1},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-memento: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Memento",
-pp: 1.25,
-priority: 4,
-flags: {protect: 1, mirror: 1},
-boosts: {
-atk: -2,
-spa: -2,
-accuracy: -1,
-evasion: -1,
-},
-selfdestruct: "ifHit",
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-nastyplot: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Nasty Plot",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-spa: 2,
-atk: 2,
-accuracy: 2,
-spe: -1,
-spd: -1,
-def: -1,
-evasion: -1,
-},
-secondary: null,
-target: "self",
-type: "Dark",
-},
-
-nightdaze: {
-accuracy: 100,
-basePower: 16,
-category: "Special",
-name: "Night Daze",
-pp: 1.25,
-priority: 6,
-flags: {contact: 1, protect: 1, mirror: 1, noassist: 1, failcopycat: 1},
-forceSwitch: true,
-target: "normal",
-type: "Dark",
-},
-
-nightslash: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Night Slash",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
-critRatio: 3,
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-obstruct: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Obstruct",
-pp: 1.25,
-priority: 4,
-flags: {failinstruct: 1},
-stallingMove: true,
-volatileStatus: 'obstruct',
-onPrepareHit(pokemon) {
-return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
-},
-onHit(pokemon) {
-pokemon.addVolatile('stall');
-},
-condition: {
-duration: 1,
-onStart(target) {
-this.add('-singleturn', target, 'Protect');
-},
-onTryHitPriority: 3,
-onTryHit(target, source, move) {
-if (!move.flags['protect'] || move.category === 'Status') {
-if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
-if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
-return;
-}
-if (move.smartTarget) {
-move.smartTarget = false;
-} else {
-this.add('-activate', target, 'move: Protect');
-}
-const lockedmove = source.getVolatile('lockedmove');
-if (lockedmove) {
-// Outrage counter is reset
-if (source.volatiles['lockedmove'].duration === 2) {
-delete source.volatiles['lockedmove'];
-}
-}
-if (this.checkMoveMakesContact(move, source, target)) {
-this.boost({def: -2}, source, target, this.dex.getActiveMove("Obstruct"));
-}
-return this.NOT_FAIL;
-},
-onHit(target, source, move) {
-if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
-this.boost({def: -2}, source, target, this.dex.getActiveMove("Obstruct"));
-}
-},
-},
-secondary: null,
-target: "self",
-type: "Dark",
-},
-
-partingshot: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Parting Shot",
-pp: 1.25,
-priority: 4,
-flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1},
-onHit(target, source, move) {
-const success = this.boost({atk: -1, spa: -1}, target, source);
-if (!success && !target.hasAbility('mirrorarmor')) {
-delete move.selfSwitch;
-}
-},
-selfSwitch: true,
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-payback: {
-accuracy: 89,
-basePower: 50,
-basePowerCallback(pokemon, target, move) {
-if (target.newlySwitched || this.queue.willMove(target)) {
-this.debug('Payback NOT boosted');
-return move.basePower;
-}
-this.debug('Payback damage boost');
-return move.basePower * 2;
-},
-category: "Special",
-name: "Payback",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-powertrip: {
-accuracy: 84,
-basePower: 75,
-basePowerCallback(pokemon, target, move) {
-const bp = move.basePower + 20 * pokemon.positiveBoosts();
-this.debug('BP: ' + bp);
-return bp;
-},
-category: "Special",
-name: "Power Trip",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-punishment: {
-accuracy: 87,
-basePower: 60,
-basePowerCallback(pokemon, target) {
-let power = 60 + 20 * target.positiveBoosts();
-if (power > 200) power = 200;
-this.debug('BP: ' + power);
-return power;
-},
-category: "Physical",
-name: "Punishment",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-pursuit: {
-accuracy: 87,
-basePower: 60,
-basePowerCallback(pokemon, target, move) {
-// You can't get here unless the pursuit succeeds
-if (target.beingCalledBack || target.switchFlag) {
-this.debug('Pursuit damage boost');
-return move.basePower * 2;
-}
-return move.basePower;
-},
-category: "Physical",
-name: "Pursuit",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-beforeTurnCallback(pokemon) {
-for (const side of this.sides) {
-if (side.hasAlly(pokemon)) continue;
-side.addSideCondition('pursuit', pokemon);
-const data = side.getSideConditionData('pursuit');
-if (!data.sources) {
-data.sources = [];
-}
-data.sources.push(pokemon);
-}
-},
-onModifyMove(move, source, target) {
-if (target?.beingCalledBack || target?.switchFlag) move.accuracy = true;
-},
-onTryHit(target, pokemon) {
-target.side.removeSideCondition('pursuit');
-},
-condition: {
-duration: 1,
-onBeforeSwitchOut(pokemon) {
-this.debug('Pursuit start');
-let alreadyAdded = false;
-pokemon.removeVolatile('destinybond');
-for (const source of this.effectState.sources) {
-if (!source.isAdjacent(pokemon) || !this.queue.cancelMove(source) || !source.hp) continue;
-if (!alreadyAdded) {
-this.add('-activate', pokemon, 'move: Pursuit');
-alreadyAdded = true;
-}
-// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
-// If it is, then Mega Evolve before moving.
-if (source.canMegaEvo || source.canUltraBurst) {
-for (const [actionIndex, action] of this.queue.entries()) {
-if (action.pokemon === source && action.choice === 'megaEvo') {
-this.actions.runMegaEvo(source);
-this.queue.list.splice(actionIndex, 1);
-break;
-}
-}
-}
-this.actions.runMove('pursuit', source, source.getLocOf(pokemon));
-}
-},
-},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-quash: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Quash",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onHit(target) {
-if (this.activePerHalf === 1) return false; // fails in singles
-const action = this.queue.willMove(target);
-if (!action) return false;
-action.order = 201;
-this.add('-activate', target, 'move: Quash');
-},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-ruination: {
-accuracy: 89,
-basePower: 50,
-damageCallback(pokemon, target) {
-return this.clampIntRange(Math.floor(target.getUndynamaxedHP() / 2), 1);
-},
-category: "Special",
-name: "Ruination",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-snarl: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Snarl",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-secondary: {
-chance: 100,
-boosts: {
-spa: -1,
-atk: -1,
-},
-},
-target: "allAdjacentFoes",
-type: "Dark",
-},
-
-snatch: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Snatch",
-pp: 1.25,
-priority: 4,
-flags: {bypasssub: 1, mustpressure: 1, noassist: 1, failcopycat: 1},
-volatileStatus: 'snatch',
-condition: {
-duration: 1,
-onStart(pokemon) {
-this.add('-singleturn', pokemon, 'Snatch');
-},
-onAnyPrepareHitPriority: -1,
-onAnyPrepareHit(source, target, move) {
-const snatchUser = this.effectState.source;
-if (snatchUser.isSkyDropped()) return;
-if (!move || move.isZ || move.isMax || !move.flags['snatch'] || move.sourceEffect === 'snatch') {
-return;
-}
-snatchUser.removeVolatile('snatch');
-this.add('-activate', snatchUser, 'move: Snatch', '[of] ' + source);
-this.actions.useMove(move.id, snatchUser);
-return null;
-},
-},
-secondary: null,
-target: "self",
-type: "Dark",
-},
-
-suckerpunch: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Sucker Punch",
-pp: 1.25,
-priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1},
-onTry(source, target) {
-const action = this.queue.willMove(target);
-const move = action?.choice === 'move' ? action.move : null;
-if (!move || (move.category === 'Status' && move.id !== 'mefirst') || target.volatiles['mustrecharge']) {
-return false;
-}
-},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-switcheroo: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Switcheroo",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, allyanim: 1, noassist: 1, failcopycat: 1},
-onTryImmunity(target) {
-return !target.hasAbility('stickyhold');
-},
-onHit(target, source, move) {
-const yourItem = target.takeItem(source);
-const myItem = source.takeItem();
-if (target.item || source.item || (!yourItem && !myItem)) {
-if (yourItem) target.item = yourItem.id;
-if (myItem) source.item = myItem.id;
-return false;
-}
-if (
-(myItem && !this.singleEvent('TakeItem', myItem, source.itemState, target, source, move, myItem)) ||
-(yourItem && !this.singleEvent('TakeItem', yourItem, target.itemState, source, target, move, yourItem))
-) {
-if (yourItem) target.item = yourItem.id;
-if (myItem) source.item = myItem.id;
-return false;
-}
-this.add('-activate', source, 'move: Trick', '[of] ' + target);
-if (myItem) {
-target.setItem(myItem);
-this.add('-item', target, myItem, '[from] move: Switcheroo');
-} else {
-this.add('-enditem', target, yourItem, '[silent]', '[from] move: Switcheroo');
-}
-if (yourItem) {
-source.setItem(yourItem);
-this.add('-item', source, yourItem, '[from] move: Switcheroo');
-} else {
-this.add('-enditem', source, myItem, '[silent]', '[from] move: Switcheroo');
-}
-},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-taunt: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Taunt",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
-volatileStatus: 'taunt',
-condition: {
-duration: 3,
-onStart(target) {
-if (target.activeTurns && !this.queue.willMove(target)) {
-this.effectState.duration++;
-}
-this.add('-start', target, 'move: Taunt');
-},
-onResidualOrder: 15,
-onEnd(target) {
-this.add('-end', target, 'move: Taunt');
-},
-onDisableMove(pokemon) {
-for (const moveSlot of pokemon.moveSlots) {
-const move = this.dex.moves.get(moveSlot.id);
-if (move.category === 'Status' && move.id !== 'mefirst') {
-pokemon.disableMove(moveSlot.id);
-}
-}
-},
-onBeforeMovePriority: 5,
-onBeforeMove(attacker, defender, move) {
-if (!move.isZ && !move.isMax && move.category === 'Status' && move.id !== 'mefirst') {
-this.add('cant', attacker, 'move: Taunt', move);
-return false;
-}
-},
-},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-thief: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Thief",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, failmefirst: 1, noassist: 1, failcopycat: 1},
-onAfterHit(target, source, move) {
-if (source.item || source.volatiles['gem']) {
-return;
-}
-const yourItem = target.takeItem(source);
-if (!yourItem) {
-return;
-}
-if (!this.singleEvent('TakeItem', yourItem, target.itemState, source, target, move, yourItem) ||
-!source.setItem(yourItem)) {
-target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
-return;
-}
-this.add('-enditem', target, yourItem, '[silent]', '[from] move: Thief', '[of] ' + source);
-this.add('-item', source, yourItem, '[from] move: Thief', '[of] ' + target);
-},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-throatchop: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Throat Chop",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-condition: {
-duration: 2,
-onStart(target) {
-this.add('-start', target, 'Throat Chop', '[silent]');
-},
-onDisableMove(pokemon) {
-for (const moveSlot of pokemon.moveSlots) {
-if (this.dex.moves.get(moveSlot.id).flags['sound']) {
-pokemon.disableMove(moveSlot.id);
-}
-}
-},
-onBeforeMovePriority: 6,
-onBeforeMove(pokemon, target, move) {
-if (!move.isZ && !move.isMax && move.flags['sound']) {
-this.add('cant', pokemon, 'move: Throat Chop');
-return false;
-}
-},
-onModifyMove(move, pokemon, target) {
-if (!move.isZ && !move.isMax && move.flags['sound']) {
-this.add('cant', pokemon, 'move: Throat Chop');
-return false;
-}
-},
-onResidualOrder: 22,
-onEnd(target) {
-this.add('-end', target, 'Throat Chop', '[silent]');
-},
-},
-secondary: {
-chance: 100,
-onHit(target) {
-target.addVolatile('throatchop');
-},
-},
-target: "normal",
-type: "Dark",
-},
-
-topsyturvy: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Topsy-Turvy",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
-onHit(target) {
-let success = false;
-let i: BoostID;
-for (i in target.boosts) {
-if (target.boosts[i] === 0) continue;
-target.boosts[i] = -target.boosts[i];
-success = true;
-}
-if (!success) return false;
-this.add('-invertboost', target, '[from] move: Topsy-Turvy');
-},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-torment: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Torment",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
-volatileStatus: 'torment',
-condition: {
-noCopy: true,
-onStart(pokemon, source, effect) {
-if (pokemon.volatiles['dynamax']) {
-delete pokemon.volatiles['torment'];
-return false;
-}
-if (effect?.id === 'gmaxmeltdown') this.effectState.duration = 3;
-this.add('-start', pokemon, 'Torment');
-},
-onEnd(pokemon) {
-this.add('-end', pokemon, 'Torment');
-},
-onDisableMove(pokemon) {
-if (pokemon.lastMove && pokemon.lastMove.id !== 'struggle') pokemon.disableMove(pokemon.lastMove.id);
-},
-},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-wickedblow: {
-accuracy: 91,
-basePower: 40,
-category: "Physical",
-name: "Wicked Blow",
-pp: 1.25,
-priority: 3,
-flags: {contact: 1, protect: 1, punch: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Dark",
-},
-
-wickedtorque: {
-accuracy: 93,
-basePower: 30,
-category: "Special",
-name: "Wicked Torque",
-pp: 1.25,
-priority: 3,
-flags: {
-protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
-},
-secondary: {
-chance: 33,
-status: 'slp',
-},
-target: "normal",
-type: "Dark",
-},
-
-breakingswipe: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Breaking Swipe",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-boosts: {
-atk: -1,
-spa: -1,
-},
-},
-target: "allAdjacentFoes",
-type: "Dragon",
-},
-
-clangingscales: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Clanging Scales",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-selfBoost: {
-boosts: {
-def: -1,
-spd: -1,
-spe: 1,
-evasion: 1,
-},
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Dragon",
-},
-
-clangoroussoul: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Clangorous Soul",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, sound: 1, dance: 1},
-onTry(source) {
-if (source.hp <= (source.maxhp * 33 / 100) || source.maxhp === 1) return false;
-},
-onTryHit(pokemon, target, move) {
-if (!this.boost(move.boosts as SparseBoostsTable)) return null;
-delete move.boosts;
-},
-onHit(pokemon) {
-this.directDamage(pokemon.maxhp * 33 / 100);
-},
-boosts: {
-atk: 1,
-def: 1,
-spa: 1,
-spd: 1,
-spe: -1,
-accuracy: 1,
-evasion: -1,
-},
-secondary: null,
-target: "self",
-type: "Dragon",
-},
-
-clangoroussoulblaze: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Clangorous Soulblaze",
-pp: 0.625,
-priority: -1,
-flags: {sound: 1, bypasssub: 1},
-selfBoost: {
-boosts: {
-atk: 1,
-def: 1,
-spa: 1,
-spd: 1,
-spe: -1,
-evasion: -1,
-},
-},
-secondary: {
-// Sheer Force negates the selfBoost even though it is not secondary
-},
-target: "allAdjacentFoes",
-type: "Dragon",
-},
-
-coreenforcer: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Core Enforcer",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1},
-onHit(target) {
-if (target.getAbility().isPermanent) return;
-if (target.newlySwitched || this.queue.willMove(target)) return;
-target.addVolatile('gastroacid');
-},
-onAfterSubDamage(damage, target) {
-if (target.getAbility().isPermanent) return;
-if (target.newlySwitched || this.queue.willMove(target)) return;
-target.addVolatile('gastroacid');
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Dragon",
-},
-
-devastatingdrake: {
-accuracy: 60,
-basePower: 200,
-category: "Physical",
-name: "Devastating Drake",
-pp: 0.625,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Dragon",
-},
-
-dracometeor: {
-accuracy: 70,
-basePower: 125,
-category: "Special",
-name: "Draco Meteor",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-self: {
-boosts: {
-atk: 1,
-spa: 1,
-accuracy: 1,
-spd: -1,
-def: -1,
-spe: -1,
-evasion: -1,
-},
-},
-secondary: null,
-target: "normal",
-type: "Dragon",
-},
-
-dragonbreath: {
-accuracy: 125,
-basePower: 33,
-category: "Special",
-name: "Dragon Breath",
-pp: 0.625,
-priority: 4,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-status: 'par',
-},
-target: "normal",
-type: "Dragon",
-},
-
-dragonclaw: {
-accuracy: 78,
-basePower: 105,
-category: "Physical",
-name: "Dragon Claw",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Dragon",
-},
-
-dragondance: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Dragon Dance",
-pp: 0.625,
-priority: 0,
-flags: {snatch: 1, dance: 1},
-boosts: {
-atk: 1,
-spa: 1,
-spe: 1,
-evasion: 1,
-accuracy: 1,
-spd: -2,
-def: -2,
-},
-secondary: null,
-target: "self",
-type: "Dragon",
-},
-
-dragondarts: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Dragon Darts",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, noparentalbond: 1},
-multihit: [2, 4],
-smartTarget: true,
-secondary: null,
-target: "normal",
-type: "Dragon",
-},
-
-dragonenergy: {
-accuracy: 100,
-basePower: 16,
-category: "Special",
-name: "Dragon Energy",
-pp: 1.25,
-priority: 6,
-flags: {contact: 1, protect: 1, mirror: 1},
-selfSwitch: true,
-secondary: null,
-target: "normal",
-type: "Dragon",
-},
-
-dragonhammer: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Dragon Hammer",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Dragon",
-},
-
-dragonpulse: {
-accuracy: 80,
-basePower: 95,
-category: "Special",
-name: "Dragon Pulse",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, pulse: 1, mirror: 1, distance: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Dragon",
-},
-
-dragonrage: {
-accuracy: 93,
-basePower: 30,
-category: "Special",
-name: "Dragon Rage",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Dragon",
-},
-
-dragonrush: {
-accuracy: 95,
-basePower: 45,
-category: "Physical",
-name: "Dragon Rush",
-pp: 0.625,
-priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [25, 100],
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-target: "normal",
-type: "Dragon",
-},
-
-dragontail: {
-accuracy: 100,
-basePower: 16,
-category: "Physical",
-name: "Dragon Tail",
-pp: 1.25,
-priority: 6,
-flags: {contact: 1, protect: 1, mirror: 1, noassist: 1, failcopycat: 1},
-forceSwitch: true,
-target: "normal",
-type: "Dragon",
-},
-
-dualchop: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Dual Chop",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-multihit: [2, 4],
-secondary: null,
-target: "normal",
-type: "Dragon",
-},
-
-eternabeam: {
-accuracy: 72,
-basePower: 115,
-category: "Special",
-name: "Eternabeam",
-pp: 1.25,
-priority: -1,
-flags: {recharge: 1, protect: 1, mirror: 1},
-self: {
-volatileStatus: 'mustrecharge',
-},
-secondary: null,
-target: "normal",
-type: "Dragon",
-},
-
-glaiverush: {
-accuracy: 68,
-basePower: 135,
-category: "Physical",
-name: "Glaive Rush",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1},
-self: {
-boosts: {
-spe: 2,
-spd: -2,
-def: -2,
-},
-},
-secondary: null,
-target: "normal",
-type: "Dragon",
-},
-
-orderup: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Order Up",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1},
-onAfterMoveSecondarySelf(pokemon, target, move) {
-if (!pokemon.volatiles['commanded']) return;
-const tatsugiri = pokemon.volatiles['commanded'].source;
-if (tatsugiri.baseSpecies.baseSpecies !== 'Tatsugiri') return; // Should never happen
-switch (tatsugiri.baseSpecies.forme) {
-case 'Droopy':
-this.boost({def: 1}, pokemon, pokemon);
-break;
-case 'Stretchy':
-this.boost({spe: 1}, pokemon, pokemon);
-break;
-default:
-this.boost({atk: 1}, pokemon, pokemon);
-break;
-}
-},
-secondary: null,
-hasSheerForce: true,
-target: "normal",
-type: "Dragon",
-},
-
-outrage: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Outrage",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1, failinstruct: 1},
-self: {
-volatileStatus: 'lockedmove',
-},
-onAfterMove(pokemon) {
-if (pokemon.volatiles['lockedmove'] && pokemon.volatiles['lockedmove'].duration === 1) {
-pokemon.removeVolatile('lockedmove');
-}
-},
-secondary: null,
-target: "randomNormal",
-type: "Dragon",
-},
-
-roaroftime: {
-accuracy: 72,
-basePower: 115,
-category: "Special",
-name: "Roar of Time",
-pp: 1.25,
-priority: -1,
-flags: {recharge: 1, protect: 1, mirror: 1},
-self: {
-volatileStatus: 'mustrecharge',
-},
-secondary: null,
-target: "normal",
-type: "Dragon",
-},
-
-scaleshot: {
-accuracy: 91,
-basePower: 40,
-category: "Physical",
-name: "Scale Shot",
-pp: 1.25,
-priority: 3,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-secondary: null,
-target: "normal",
-type: "Dragon",
-},
-
-spacialrend: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Spacial Rend",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1},
-critRatio: 3,
-secondary: null,
-target: "normal",
-type: "Dragon",
-},
-
-twister: {
-accuracy: 95,
-basePower: 45,
-category: "Special",
-name: "Twister",
-pp: 0.625,
-priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [25, 100],
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-target: "allAdjacentFoes",
-type: "Dragon",
-},
-
-"10000000voltthunderbolt": {
-accuracy: 150,
-basePower: 250,
-category: "Special",
-name: "10,000,000 Volt Thunderbolt",
-pp: 0.625,
-priority: 0,
-flags: {protect: 1, mirror: 1, noparentalbond: 1},
-selfdestruct: "always",
-critRatio: 4,
-secondary: null,
-target: "allAdjacentFoes",
-type: "Electric",
-},
-
-aurawheel: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Aura Wheel",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-self: {
-boosts: {
-spe: 1,
-evasion: 1,
-},
-},
-},
-onTry(source) {
-if (source.species.baseSpecies === 'Morpeko') {
-return;
-}
-this.attrLastMove('[still]');
-this.add('-fail', source, 'move: Aura Wheel');
-this.hint("Only a Pokemon whose form is Morpeko or Morpeko-Hangry can use this move.");
-return null;
-},
-onModifyType(move, pokemon) {
-if (pokemon.species.name === 'Morpeko-Hangry') {
-move.type = 'Dark';
-} else {
-move.type = 'Electric';
-}
-},
-target: "normal",
-type: "Electric",
-},
-
-boltbeak: {
-accuracy: 82,
-basePower: 85,
-basePowerCallback(pokemon, target, move) {
-if (target.newlySwitched || this.queue.willMove(target)) {
-this.debug('Bolt Beak damage boost');
-return move.basePower * 2;
-}
-this.debug('Bolt Beak NOT boosted');
-return move.basePower;
-},
-category: "Physical",
-name: "Bolt Beak",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Electric",
-},
-
-boltstrike: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Bolt Strike",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'par',
-},
-target: "normal",
-type: "Electric",
-},
-
-buzzybuzz: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Buzzy Buzz",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-status: 'par',
-},
-target: "normal",
-type: "Electric",
-},
-
-catastropika: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Catastropika",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1},
-secondary: null,
-target: "normal",
-type: "Electric",
-},
-
-charge: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Charge",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-volatileStatus: 'charge',
-condition: {
-onStart(pokemon, source, effect) {
-if (effect && ['Electromorphosis', 'Wind Power'].includes(effect.name)) {
-this.add('-start', pokemon, 'Charge', this.activeMove!.name, '[from] ability: ' + effect.name);
-} else {
-this.add('-start', pokemon, 'Charge');
-}
-},
-onRestart(pokemon, source, effect) {
-if (effect && ['Electromorphosis', 'Wind Power'].includes(effect.name)) {
-this.add('-start', pokemon, 'Charge', this.activeMove!.name, '[from] ability: ' + effect.name);
-} else {
-this.add('-start', pokemon, 'Charge');
-}
-},
-onBasePowerPriority: 9,
-onBasePower(basePower, attacker, defender, move) {
-if (move.type === 'Electric') {
-this.debug('charge boost');
-return this.chainModify(2);
-}
-},
-onMoveAborted(pokemon, target, move) {
-if (move.type === 'Electric' && move.id !== 'charge') {
-pokemon.removeVolatile('charge');
-}
-},
-onAfterMove(pokemon, target, move) {
-if (move.type === 'Electric' && move.id !== 'charge') {
-pokemon.removeVolatile('charge');
-}
-},
-onEnd(pokemon) {
-this.add('-end', pokemon, 'Charge', '[silent]');
-},
-},
-boosts: {
-spd: 1,
-def: 1,
-},
-secondary: null,
-target: "self",
-type: "Electric",
-},
-
-chargebeam: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Charge Beam",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 50,
-self: {
-boosts: {
-atk: 1,
-spa: 1,
-spe: -1,
-spd: 1,
-def: 1,
-evasion: -1,
-},
-},
-},
-target: "normal",
-type: "Electric",
-},
-
-discharge: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Discharge",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'par',
-},
-target: "allAdjacentFoes",
-type: "Electric",
-},
-
-doubleshock: {
-accuracy: 73,
-basePower: 15,
-category: "Special",
-name: "Double Shock",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-multihit: [2, 4],
-secondary: {
-chance: 33,
-status: 'par',
-},
-target: "normal",
-type: "Electric",
-},
-
-eerieimpulse: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Eerie Impulse",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-boosts: {
-spa: -2,
-atk: -2,
-},
-secondary: null,
-target: "normal",
-type: "Electric",
-},
-
-electricterrain: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Electric Terrain",
-pp: 1.25,
-priority: 0,
-flags: {nonsky: 1},
-terrain: 'electricterrain',
-condition: {
-duration: 5,
-durationCallback(source, effect) {
-if (source?.hasItem('terrainextender')) {
-return 8;
-}
-return 5;
-},
-onSetStatus(status, target, source, effect) {
-if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
-if (effect.id === 'yawn' || (effect.effectType === 'Move' && !effect.secondaries)) {
-this.add('-activate', target, 'move: Electric Terrain');
-}
-return false;
-}
-},
-onTryAddVolatile(status, target) {
-if (!target.isGrounded() || target.isSemiInvulnerable()) return;
-if (status.id === 'yawn') {
-this.add('-activate', target, 'move: Electric Terrain');
-return null;
-}
-},
-onBasePowerPriority: 6,
-onBasePower(basePower, attacker, defender, move) {
-if (move.type === 'Electric' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
-this.debug('electric terrain boost');
-return this.chainModify([5325, 4096]);
-}
-},
-onFieldStart(field, source, effect) {
-if (effect?.effectType === 'Ability') {
-this.add('-fieldstart', 'move: Electric Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
-} else {
-this.add('-fieldstart', 'move: Electric Terrain');
-}
-},
-onFieldResidualOrder: 27,
-onFieldResidualSubOrder: 7,
-onFieldEnd() {
-this.add('-fieldend', 'move: Electric Terrain');
-},
-},
-secondary: null,
-target: "all",
-type: "Electric",
-},
-
-electrify: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Electrify",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, allyanim: 1},
-volatileStatus: 'electrify',
-onTryHit(target) {
-if (!this.queue.willMove(target) && target.activeTurns) return false;
-},
-condition: {
-duration: 1,
-onStart(target) {
-this.add('-singleturn', target, 'move: Electrify');
-},
-onModifyTypePriority: -2,
-onModifyType(move) {
-if (move.id !== 'struggle') {
-this.debug('Electrify making move type electric');
-move.type = 'Electric';
-}
-},
-},
-secondary: null,
-target: "normal",
-type: "Electric",
-},
-
-electroball: {
-accuracy: 89,
-basePower: 50,
-basePowerCallback(pokemon, target) {
-let ratio = Math.floor(pokemon.getStat('spe') / target.getStat('spe'));
-if (!isFinite(ratio)) ratio = 0;
-const bp = [40, 60, 80, 120, 150][Math.min(ratio, 4)];
-this.debug('BP: ' + bp);
-return bp;
-},
-category: "Special",
-name: "Electro Ball",
-pp: 1.25,
-priority: 0,
-flags: {bullet: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Electric",
-},
-
-electrodrift: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Electro Drift",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-onBasePower(basePower, source, target, move) {
-if (target.runEffectiveness(move) > 0) {
-// Placeholder
-this.debug(`electro drift super effective buff`);
-return this.chainModify([5461, 4096]);
-}
-},
-secondary: null,
-target: "normal",
-type: "Electric",
-},
-
-electroweb: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Electroweb",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-boosts: {
-spe: -1,
-evasion: -1,
-},
-},
-target: "allAdjacentFoes",
-type: "Electric",
-},
-
-fusionbolt: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Fusion Bolt",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onBasePower(basePower, pokemon) {
-if (this.lastSuccessfulMoveThisTurn === 'fusionflare') {
-this.debug('double power');
-return this.chainModify(2);
-}
-},
-secondary: null,
-target: "normal",
-type: "Electric",
-},
-
-gigavolthavoc: {
-accuracy: 78,
-basePower: 105,
-category: "Physical",
-name: "Gigavolt Havoc",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1,},
-secondary: {
-chance: 33,
-status: 'par',
-},
-target: "normal",
-type: "Electric",
-},
-
-iondeluge: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Ion Deluge",
-pp: 1.25,
-priority: 1,
-flags: {},
-pseudoWeather: 'iondeluge',
-condition: {
-duration: 1,
-onFieldStart(target, source, sourceEffect) {
-this.add('-fieldactivate', 'move: Ion Deluge');
-this.hint(`Normal-type moves become Electric-type after using ${sourceEffect}.`);
-},
-onModifyTypePriority: -2,
-onModifyType(move) {
-if (move.type === 'Normal') {
-move.type = 'Electric';
-this.debug(move.name + "'s type changed to Electric");
-}
-},
-},
-secondary: null,
-target: "all",
-type: "Electric",
-},
-
-magneticflux: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Magnetic Flux",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, distance: 1, bypasssub: 1},
-onHitSide(side, source, move) {
-const targets = side.allies().filter(ally => (
-ally.hasAbility(['plus', 'minus']) &&
-(!ally.volatiles['maxguard'] || this.runEvent('TryHit', ally, source, move))
-));
-if (!targets.length) return false;
-let didSomething = false;
-for (const target of targets) {
-didSomething = this.boost({def: 1, spd: 1}, target, source, move, false, true) || didSomething;
-}
-return didSomething;
-},
-secondary: null,
-target: "allySide",
-type: "Electric",
-},
-
-magnetrise: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Magnet Rise",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, gravity: 1},
-volatileStatus: 'magnetrise',
-onTry(source, target, move) {
-if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
-// Additional Gravity check for Z-move variant
-if (this.field.getPseudoWeather('Gravity')) {
-this.add('cant', source, 'move: Gravity', move);
-return null;
-}
-},
-condition: {
-duration: 5,
-onStart(target) {
-this.add('-start', target, 'Magnet Rise');
-},
-onImmunity(type) {
-if (type === 'Ground') return false;
-},
-onResidualOrder: 18,
-onEnd(target) {
-this.add('-end', target, 'Magnet Rise');
-},
-},
-secondary: null,
-target: "self",
-type: "Electric",
-},
-
-nuzzle: {
-accuracy: 125,
-basePower: 33,
-category: "Physical",
-name: "Nuzzle",
-pp: 0.625,
-priority: 4,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-status: 'par',
-},
-target: "normal",
-type: "Electric",
-},
-
-overdrive: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Overdrive",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Electric",
-},
-
-paraboliccharge: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Parabolic Charge",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1, heal: 1},
-drain: [1, 2],
-secondary: null,
-target: "allAdjacentFoes",
-type: "Electric",
-},
-
-pikapapow: {
-accuracy: 100,
-basePower: 16,
-category: "Physical",
-name: "Pika Papow",
-pp: 1.25,
-priority: 6,
-flags: {contact: 1, protect: 1, mirror: 1, noassist: 1, failcopycat: 1},
-forceSwitch: true,
-target: "normal",
-type: "Electric",
-},
-
-plasmafists: {
-accuracy: 68,
-basePower: 135,
-category: "Physical",
-name: "Plasma Fists",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-pseudoWeather: 'iondeluge',
-secondary: {
-chance: 45,
-status: 'par',
-},
-target: "normal",
-type: "Electric",
-},
-
-risingvoltage: {
-accuracy: 89,
-basePower: 50,
-basePowerCallback(source, target, move) {
-if (this.field.isTerrain('electricterrain') && target.isGrounded()) {
-if (!source.isAlly(target)) this.hint(`${move.name}'s BP doubled on grounded target.`);
-return move.basePower * 2;
-}
-return move.basePower;
-},
-category: "Special",
-name: "Rising Voltage",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Electric",
-},
-
-shockwave: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Shock Wave",
-pp: 1.25,
-priority: 1,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Electric",
-},
-
-spark: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Spark",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'par',
-},
-target: "normal",
-type: "Electric",
-},
-
-stokedsparksurfer: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Stoked Sparksurfer",
-pp: 0.625,
-priority: -1,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'par',
-},
-target: "normal",
-type: "Electric",
-},
-
-thunder: {
-accuracy: 70,
-basePower: 125,
-category: "Special",
-name: "Thunder",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onModifyMove(move, pokemon, target) {
-switch (target?.effectiveWeather()) {
-case 'raindance':
-case 'primordialsea':
-move.accuracy = true;
-break;
-case 'sunnyday':
-case 'desolateland':
-move.accuracy = 50;
-break;
-}
-},
-secondary: {
-chance: 40,
-status: 'par',
-},
-target: "normal",
-type: "Electric",
-},
-
-thunderbolt: {
-accuracy: 80,
-basePower: 95,
-category: "Special",
-name: "Thunderbolt",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'par',
-},
-target: "normal",
-type: "Electric",
-},
-
-thundercage: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Thunder Cage",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
-target: "normal",
-type: "Electric",
-},
-
-thunderfang: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Thunder Fang",
-pp: 1.25,
-priority: 0,
-flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
-secondaries: [
-{
-chance: 33,
-status: 'par',
-}, {
-chance: 33,
-volatileStatus: 'flinch',
-},
+export const Pokedex: {[speciesid: string]: SpeciesData} = {
+bulbasaur: {
+num: 1,
+name: "Bulbasaur",
+types: ["Grass"],
+baseStats: {hp: 45, atk: 49, def: 49, spa: 65, spd: 65, spe: 45},
+abilities: {0: "Overgrow", H: "Chlorophyll"},
+weightkg: 6.9,
+evos: ["Ivysaur"],
+},
+
+ivysaur: {
+num: 2,
+name: "Ivysaur",
+types: ["Grass"],
+baseStats: {hp: 60, atk: 62, def: 63, spa: 80, spd: 80, spe: 60},
+abilities: {0: "Overgrow", H: "Chlorophyll"},
+weightkg: 13,
+prevo: "Bulbasaur",
+evos: ["Venusaur"],
+},
+
+venusaur: {
+num: 3,
+name: "Venusaur",
+types: ["Grass", "Dragon"],
+baseStats: {hp: 80, atk: 82, def: 83, spa: 100, spd: 100, spe: 80},
+abilities: {0: "Overgrow", H: "Chlorophyll"},
+weightkg: 100,
+prevo: "Ivysaur",
+otherFormes: ["Venusaur-Mega"],
+formeOrder: ["Venusaur", "Venusaur-Mega"],
+},
+
+venusaurmega: {
+num: 3,
+name: "Venusaur-Mega",
+baseSpecies: "Venusaur",
+forme: "Mega",
+types: ["Grass", "Dragon"],
+baseStats: {hp: 80, atk: 100, def: 123, spa: 122, spd: 120, spe: 80},
+abilities: {0: "Thick Fat"},
+weightkg: 155.5,
+},
+
+venusaurgmax: {
+num: 3,
+name: "Venusaur-Gmax",
+baseSpecies: "Venusaur",
+forme: "Gmax",
+types: ["Grass", "Dragon"],
+baseStats: {hp: 80, atk: 82, def: 83, spa: 100, spd: 100, spe: 80},
+abilities: {0: "Overgrow", H: "Chlorophyll"},
+weightkg: 0,
+changesFrom: "Venusaur",
+},
+
+charmander: {
+num: 4,
+name: "Charmander",
+types: ["Fire"],
+baseStats: {hp: 39, atk: 52, def: 43, spa: 60, spd: 50, spe: 65},
+abilities: {0: "Blaze", H: "Solar Power"},
+weightkg: 8.5,
+evos: ["Charmeleon"],
+},
+
+charmeleon: {
+num: 5,
+name: "Charmeleon",
+types: ["Fire"],
+baseStats: {hp: 58, atk: 64, def: 58, spa: 80, spd: 65, spe: 80},
+abilities: {0: "Blaze", H: "Solar Power"},
+weightkg: 19,
+prevo: "Charmander",
+evos: ["Charizard"],
+},
+
+charizard: {
+num: 6,
+name: "Charizard",
+types: ["Fire", "Dragon"],
+baseStats: {hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100},
+abilities: {0: "Blaze", H: "Solar Power"},
+weightkg: 90.5,
+prevo: "Charmeleon",
+otherFormes: ["Charizard-Mega-X", "Charizard-Mega-Y"],
+formeOrder: ["Charizard", "Charizard-Mega-X", "Charizard-Mega-Y"],
+},
+
+charizardmegax: {
+num: 6,
+name: "Charizard-Mega-X",
+baseSpecies: "Charizard",
+forme: "Mega-X",
+types: ["Fire", "Dragon"],
+baseStats: {hp: 78, atk: 130, def: 111, spa: 130, spd: 85, spe: 100},
+abilities: {0: "Tough Claws"},
+weightkg: 110.5,
+},
+
+charizardmegay: {
+num: 6,
+name: "Charizard-Mega-Y",
+baseSpecies: "Charizard",
+forme: "Mega-Y",
+types: ["Fire", "Dragon"],
+baseStats: {hp: 78, atk: 104, def: 78, spa: 159, spd: 115, spe: 100},
+abilities: {0: "Drought"},
+weightkg: 100.5,
+},
+
+charizardgmax: {
+num: 6,
+name: "Charizard-Gmax",
+baseSpecies: "Charizard",
+forme: "Gmax",
+types: ["Fire", "Dragon"],
+baseStats: {hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100},
+abilities: {0: "Blaze", H: "Solar Power"},
+weightkg: 0,
+changesFrom: "Charizard",
+},
+
+squirtle: {
+num: 7,
+name: "Squirtle",
+types: ["Water"],
+baseStats: {hp: 44, atk: 48, def: 65, spa: 50, spd: 64, spe: 43},
+abilities: {0: "Torrent", H: "Rain Dish"},
+weightkg: 9,
+evos: ["Wartortle"],
+},
+
+wartortle: {
+num: 8,
+name: "Wartortle",
+types: ["Water"],
+baseStats: {hp: 59, atk: 63, def: 80, spa: 65, spd: 80, spe: 58},
+abilities: {0: "Torrent", H: "Rain Dish"},
+weightkg: 22.5,
+prevo: "Squirtle",
+evos: ["Blastoise"],
+},
+
+blastoise: {
+num: 9,
+name: "Blastoise",
+types: ["Water", "Steel"],
+baseStats: {hp: 79, atk: 83, def: 100, spa: 85, spd: 105, spe: 78},
+abilities: {0: "Torrent", H: "Rain Dish"},
+weightkg: 85.5,
+prevo: "Wartortle",
+otherFormes: ["Blastoise-Mega"],
+formeOrder: ["Blastoise", "Blastoise-Mega"],
+},
+
+blastoisemega: {
+num: 9,
+name: "Blastoise-Mega",
+baseSpecies: "Blastoise",
+forme: "Mega",
+types: ["Water", "Steel"],
+baseStats: {hp: 79, atk: 103, def: 120, spa: 135, spd: 115, spe: 78},
+abilities: {0: "Mega Launcher"},
+weightkg: 101.1,
+},
+
+blastoisegmax: {
+num: 9,
+name: "Blastoise-Gmax",
+baseSpecies: "Blastoise",
+forme: "Gmax",
+types: ["Water", "Steel"],
+baseStats: {hp: 79, atk: 83, def: 100, spa: 85, spd: 105, spe: 78},
+abilities: {0: "Torrent", H: "Rain Dish"},
+weightkg: 0,
+changesFrom: "Blastoise",
+},
+
+caterpie: {
+num: 10,
+name: "Caterpie",
+types: ["Bug"],
+baseStats: {hp: 45, atk: 30, def: 35, spa: 20, spd: 20, spe: 45},
+abilities: {0: "Shield Dust", H: "Run Away"},
+weightkg: 2.9,
+evos: ["Metapod"],
+},
+
+metapod: {
+num: 11,
+name: "Metapod",
+types: ["Bug"],
+baseStats: {hp: 50, atk: 20, def: 55, spa: 25, spd: 25, spe: 30},
+abilities: {0: "Shed Skin"},
+weightkg: 9.9,
+prevo: "Caterpie",
+evos: ["Butterfree"],
+},
+
+butterfree: {
+num: 12,
+name: "Butterfree",
+types: ["Bug", "Psychic"],
+baseStats: {hp: 60, atk: 45, def: 50, spa: 90, spd: 80, spe: 70},
+abilities: {0: "Compound Eyes", H: "Tinted Lens"},
+weightkg: 32,
+prevo: "Metapod",
+},
+
+butterfreegmax: {
+num: 12,
+name: "Butterfree-Gmax",
+baseSpecies: "Butterfree",
+forme: "Gmax",
+types: ["Bug", "Psychic"],
+baseStats: {hp: 60, atk: 45, def: 50, spa: 90, spd: 80, spe: 70},
+abilities: {0: "Compound Eyes", H: "Tinted Lens"},
+weightkg: 0,
+changesFrom: "Butterfree",
+},
+
+weedle: {
+num: 13,
+name: "Weedle",
+types: ["Bug", "Poison"],
+baseStats: {hp: 40, atk: 35, def: 30, spa: 20, spd: 20, spe: 50},
+abilities: {0: "Shield Dust", H: "Run Away"},
+weightkg: 3.2,
+evos: ["Kakuna"],
+},
+
+kakuna: {
+num: 14,
+name: "Kakuna",
+types: ["Bug", "Poison"],
+baseStats: {hp: 45, atk: 25, def: 50, spa: 25, spd: 25, spe: 35},
+abilities: {0: "Shed Skin"},
+weightkg: 10,
+prevo: "Weedle",
+evos: ["Beedrill"],
+},
+
+beedrill: {
+num: 15,
+name: "Beedrill",
+types: ["Bug", "Poison"],
+baseStats: {hp: 65, atk: 90, def: 40, spa: 45, spd: 80, spe: 75},
+abilities: {0: "Swarm", H: "Sniper"},
+weightkg: 29.5,
+prevo: "Kakuna",
+otherFormes: ["Beedrill-Mega"],
+formeOrder: ["Beedrill", "Beedrill-Mega"],
+},
+
+beedrillmega: {
+num: 15,
+name: "Beedrill-Mega",
+baseSpecies: "Beedrill",
+forme: "Mega",
+types: ["Bug", "Poison"],
+baseStats: {hp: 65, atk: 150, def: 40, spa: 15, spd: 80, spe: 145},
+abilities: {0: "Adaptability"},
+weightkg: 40.5,
+},
+
+pidgey: {
+num: 16,
+name: "Pidgey",
+types: ["Normal", "Flying"],
+baseStats: {hp: 40, atk: 45, def: 40, spa: 35, spd: 35, spe: 56},
+abilities: {0: "Keen Eye", 1: "Tangled Feet", H: "Big Pecks"},
+weightkg: 1.8,
+evos: ["Pidgeotto"],
+},
+
+pidgeotto: {
+num: 17,
+name: "Pidgeotto",
+types: ["Normal", "Flying"],
+baseStats: {hp: 63, atk: 60, def: 55, spa: 50, spd: 50, spe: 71},
+abilities: {0: "Keen Eye", 1: "Tangled Feet", H: "Big Pecks"},
+weightkg: 30,
+prevo: "Pidgey",
+evos: ["Pidgeot"],
+},
+
+pidgeot: {
+num: 18,
+name: "Pidgeot",
+types: ["Normal", "Flying"],
+baseStats: {hp: 83, atk: 80, def: 75, spa: 70, spd: 70, spe: 101},
+abilities: {0: "Keen Eye", 1: "Tangled Feet", H: "Big Pecks"},
+weightkg: 39.5,
+prevo: "Pidgeotto",
+otherFormes: ["Pidgeot-Mega"],
+formeOrder: ["Pidgeot", "Pidgeot-Mega"],
+},
+
+pidgeotmega: {
+num: 18,
+name: "Pidgeot-Mega",
+baseSpecies: "Pidgeot",
+forme: "Mega",
+types: ["Normal", "Flying"],
+baseStats: {hp: 83, atk: 80, def: 80, spa: 135, spd: 80, spe: 121},
+abilities: {0: "No Guard"},
+weightkg: 50.5,
+},
+
+rattata: {
+num: 19,
+name: "Rattata",
+types: ["Poison"],
+baseStats: {hp: 30, atk: 56, def: 35, spa: 25, spd: 35, spe: 72},
+abilities: {0: "Run Away", 1: "Guts", H: "Hustle"},
+weightkg: 3.5,
+evos: ["Raticate"],
+otherFormes: ["Rattata-Alola"],
+formeOrder: ["Rattata", "Rattata-Alola"],
+},
+
+rattataalola: {
+num: 19,
+name: "Rattata-Alola",
+baseSpecies: "Rattata",
+forme: "Alola",
+types: ["Dark", "Normal"],
+baseStats: {hp: 30, atk: 56, def: 35, spa: 25, spd: 35, spe: 72},
+abilities: {0: "Gluttony", 1: "Hustle", H: "Thick Fat"},
+weightkg: 3.8,
+evos: ["Raticate-Alola"],
+},
+
+raticate: {
+num: 20,
+name: "Raticate",
+types: ["Poison", "Ground"],
+baseStats: {hp: 55, atk: 81, def: 60, spa: 50, spd: 70, spe: 97},
+abilities: {0: "Run Away", 1: "Guts", H: "Hustle"},
+weightkg: 18.5,
+prevo: "Rattata",
+otherFormes: ["Raticate-Alola", "Raticate-Alola-Totem"],
+formeOrder: ["Raticate", "Raticate-Alola", "Raticate-Alola-Totem"],
+},
+
+raticatealola: {
+num: 20,
+name: "Raticate-Alola",
+baseSpecies: "Raticate",
+forme: "Alola",
+types: ["Dark", "Normal"],
+baseStats: {hp: 75, atk: 71, def: 70, spa: 40, spd: 80, spe: 77},
+abilities: {0: "Gluttony", 1: "Hustle", H: "Thick Fat"},
+weightkg: 25.5,
+prevo: "Rattata-Alola",
+evoCondition: "at night",
+},
+
+raticatealolatotem: {
+num: 20,
+name: "Raticate-Alola-Totem",
+baseSpecies: "Raticate",
+forme: "Alola-Totem",
+types: ["Dark", "Normal"],
+baseStats: {hp: 75, atk: 71, def: 70, spa: 40, spd: 80, spe: 77},
+abilities: {0: "Thick Fat"},
+weightkg: 105,
+},
+
+spearow: {
+num: 21,
+name: "Spearow",
+types: ["Flying"],
+baseStats: {hp: 40, atk: 60, def: 30, spa: 31, spd: 31, spe: 70},
+abilities: {0: "Keen Eye", H: "Sniper"},
+weightkg: 2,
+evos: ["Fearow"],
+},
+
+fearow: {
+num: 22,
+name: "Fearow",
+types: ["Flying"],
+baseStats: {hp: 65, atk: 90, def: 65, spa: 61, spd: 61, spe: 100},
+abilities: {0: "Keen Eye", H: "Sniper"},
+weightkg: 38,
+prevo: "Spearow",
+},
+
+ekans: {
+num: 23,
+name: "Ekans",
+types: ["Poison"],
+baseStats: {hp: 35, atk: 60, def: 44, spa: 40, spd: 54, spe: 55},
+abilities: {0: "Intimidate", 1: "Shed Skin", H: "Unnerve"},
+weightkg: 6.9,
+evos: ["Arbok"],
+},
+
+arbok: {
+num: 24,
+name: "Arbok",
+types: ["Poison", "Dragon"],
+baseStats: {hp: 60, atk: 95, def: 69, spa: 65, spd: 79, spe: 80},
+abilities: {0: "Intimidate", 1: "Shed Skin", H: "Unnerve"},
+weightkg: 65,
+prevo: "Ekans",
+},
+
+pikachu: {
+num: 25,
+name: "Pikachu",
+types: ["Electric"],
+baseStats: {hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90},
+abilities: {0: "Static", H: "Lightning Rod"},
+weightkg: 6,
+prevo: "Pichu",
+evoType: "levelFriendship",
+evos: ["Raichu", "Raichu-Alola"],
+otherFormes: ["Pikachu-Cosplay", "Pikachu-Rock-Star", "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner", "Pikachu-Starter", "Pikachu-World"],
+formeOrder: [
+Pikachu,
+Pikachu-Original, "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner", // Gen 7 formes
+Pikachu-Starter, // forme 8 in LGPE
+Pikachu-World, // Gen 8 forme (indexed as Pikachu 9 in datamine)
+Pikachu-Rock-Star, "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Cosplay", // formes 1-6 from Gen 6
 ],
-target: "normal",
-type: "Electric",
-},
-
-thunderpunch: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Thunder Punch",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-secondary: {
-chance: 33,
-status: 'par',
-},
-target: "normal",
-type: "Electric",
-},
-
-thundershock: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Thunder Shock",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'par',
-},
-target: "normal",
-type: "Electric",
-},
-
-thunderwave: {
-accuracy: 75,
-basePower: 5,
-category: "Status",
-name: "Thunder Wave",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-status: 'par',
-ignoreImmunity: false,
-secondary: null,
-target: "normal",
-type: "Electric",
-},
-
-voltswitch: {
-accuracy: 100,
-basePower: 16,
-category: "Special",
-name: "Volt Switch",
-pp: 1.25,
-priority: 6,
-flags: {protect: 1, mirror: 1},
-selfSwitch: true,
-secondary: null,
-target: "normal",
-type: "Electric",
-},
-
-volttackle: {
-accuracy: 63,
-basePower: 150,
-category: "Physical",
-name: "Volt Tackle",
-pp: 0.625,
-priority: -3,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [50, 100],
-hasCrashDamage: true,
-onMoveFail(target, source, move) {
-this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
-},
-secondary: {
-chance: 33,
-status: 'par',
-},
-target: "normal",
-type: "Electric",
-},
-
-wildboltstorm: {
-accuracy: 60,
-basePower: 200,
-category: "Special",
-name: "Wildbolt Storm",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, wind: 1},
-secondary: {
-chance: 33,
-status: 'par',
-},
-target: "allAdjacentFoes",
-type: "Electric",
-},
-
-wildcharge: {
-accuracy: 65,
-basePower: 140,
-category: "Physical",
-name: "Wild Charge",
-pp: 0.625,
-priority: -2,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [33, 100],
-hasCrashDamage: true,
-onMoveFail(target, source, move) {
-this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
-},
-secondary: null,
-target: "normal",
-type: "Electric",
-},
-
-zapcannon: {
-accuracy: 72,
-basePower: 115,
-category: "Special",
-name: "Zap Cannon",
-pp: 1.25,
-priority: -1,
-flags: {bullet: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 50,
-status: 'par',
-},
-target: "normal",
-type: "Electric",
-},
-
-zingzap: {
-accuracy: 93,
-basePower: 30,
-category: "Physical",
-name: "Zing Zap",
-pp: 1.25,
-priority: 3,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Electric",
-},
-
-zippyzap: {
-accuracy: 91,
-basePower: 40,
-category: "Special",
-name: "Zippy Zap",
-pp: 1.25,
-priority: 3,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Electric",
-},
-
-aromaticmist: {
-accuracy: 75,
-basePower: 5,
-category: "Status",
-name: "Aromatic Mist",
-pp: 1.25,
-priority: 3,
-flags: {bypasssub: 1},
-boosts: {
-spd: 1,
-def: 1,
-},
-secondary: null,
-target: "allySide",
-type: "Fairy",
-},
-
-babydolleyes: {
-accuracy: 100,
-basePower: 16,
-category: "Special",
-name: "Baby-Doll Eyes",
-pp: 1.25,
-priority: 6,
-flags: {contact: 1, protect: 1, mirror: 1, noassist: 1, failcopycat: 1},
-forceSwitch: true,
-target: "normal",
-type: "Fairy",
-},
-
-charm: {
-accuracy: 100,
-basePower: 16,
-category: "Physical",
-name: "Charm",
-pp: 1.25,
-priority: 6,
-flags: {protect: 1, mirror: 1},
-selfSwitch: true,
-secondary: null,
-target: "normal",
-type: "Fairy",
-},
-
-craftyshield: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Crafty Shield",
-pp: 1.25,
-priority: 3,
-flags: {},
-sideCondition: 'craftyshield',
-onTry() {
-return !!this.queue.willAct();
-},
-condition: {
-duration: 1,
-onSideStart(target, source) {
-this.add('-singleturn', source, 'Crafty Shield');
-},
-onTryHitPriority: 3,
-onTryHit(target, source, move) {
-if (['self', 'all'].includes(move.target) || move.category !== 'Status') return;
-this.add('-activate', target, 'move: Crafty Shield');
-return this.NOT_FAIL;
-},
-},
-secondary: null,
-target: "allySide",
-type: "Fairy",
-},
-
-dazzlinggleam: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Dazzling Gleam",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Fairy",
-},
-
-decorate: {
-accuracy: 125,
-basePower: 33,
-category: "Special",
-name: "Decorate",
-pp: 0.625,
-priority: 4,
-flags: {mirror: 1, bypasssub: 1},
-pseudoWeather: 'fairylock',
-condition: {
-duration: 5,
-onFieldStart(target) {
-this.add('-fieldactivate', 'move: Fairy Lock');
-},
-onTrapPokemon(pokemon) {
-pokemon.tryTrap();
-},
-},
-target: "allAdjacentFoes",
-type: "Fairy",
-},
-
-disarmingvoice: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Disarming Voice",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Fairy",
-},
-
-drainingkiss: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Draining Kiss",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
-drain: [3, 4],
-secondary: null,
-target: "normal",
-type: "Fairy",
-},
-
-fairylock: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Fairy Lock",
-pp: 1.25,
-priority: 0,
-flags: {mirror: 1, bypasssub: 1},
-pseudoWeather: 'fairylock',
-condition: {
-duration: 5,
-onFieldStart(target) {
-this.add('-fieldactivate', 'move: Fairy Lock');
-},
-onTrapPokemon(pokemon) {
-pokemon.tryTrap();
-},
-},
-secondary: null,
-target: "all",
-type: "Fairy",
-},
-
-fairywind: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Fairy Wind",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, wind: 1},
-pseudoWeather: 'fairylock',
-secondary: null,
-target: "normal",
-type: "Fairy",
-},
-
-fleurcannon: {
-accuracy: 70,
-basePower: 125,
-category: "Special",
-name: "Fleur Cannon",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-self: {
-boosts: {
-atk: 1,
-spa: 1,
-spe: -1,
-spd: -1,
-def: -1,
-evasion: -1,
-},
-},
-secondary: null,
-target: "normal",
-type: "Fairy",
-},
-
-floralhealing: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Floral Healing",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, heal: 1, allyanim: 1},
-onHit(target, source) {
-let success = false;
-if (this.field.isTerrain('grassyterrain')) {
-success = !!this.heal(this.modify(target.baseMaxhp, 0.667));
-} else {
-success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
-}
-if (success && !target.isAlly(source)) {
-target.staleness = 'external';
-}
-if (!success) {
-this.add('-fail', target, 'heal');
-return this.NOT_FAIL;
-}
-return success;
-},
-secondary: null,
-target: "normal",
-type: "Fairy",
-},
-
-flowershield: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Flower Shield",
-pp: 1.25,
-priority: 0,
-flags: {distance: 1},
-onHitField(t, source, move) {
-const targets: Pokemon[] = [];
-for (const pokemon of this.getAllActive()) {
-if (
-pokemon.hasType('Grass') &&
-(!pokemon.volatiles['maxguard'] ||
-this.runEvent('TryHit', pokemon, source, move))
-) {
-// This move affects every Grass-type Pokemon in play.
-targets.push(pokemon);
-}
-}
-let success = false;
-for (const target of targets) {
-success = this.boost({def: 1}, target, source, move) || success;
-}
-return success;
-},
-secondary: null,
-target: "all",
-type: "Fairy",
-},
-
-geomancy: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Geomancy",
-pp: 1.25,
-priority: 0,
-flags: {charge: 1, nonsky: 1, nosleeptalk: 1, failinstruct: 1},
-onTryMove(attacker, defender, move) {
-if (attacker.removeVolatile(move.id)) {
-return;
-}
-this.add('-prepare', attacker, move.name);
-if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-return;
-}
-attacker.addVolatile('twoturnmove', defender);
-return null;
-},
-boosts: {
-spa: 3,
-spd: 3,
-spe: -3,
-accuracy: 3,
-evasion: -3,
-atk: -3,
-def: -3,
-},
-secondary: null,
-target: "self",
-type: "Fairy",
-},
-
-guardianofalola: {
-accuracy: 87,
-basePower: 60,
-damageCallback(pokemon, target) {
-const hp75 = Math.floor(target.getUndynamaxedHP() * 3 / 4);
-if (
-target.volatiles['protect'] || target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] ||
-target.volatiles['spikyshield'] || target.side.getSideCondition('matblock')
-) {
-this.add('-zbroken', target);
-return this.clampIntRange(Math.ceil(hp75 / 4 - 0.5), 1);
-}
-return this.clampIntRange(hp75, 1);
-},
-category: "Physical",
-name: "Guardian of Alola",
-pp: 0.625,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Fairy",
-},
-
-letssnuggleforever: {
-accuracy: 60,
-basePower: 200,
-category: "Physical",
-name: "Let's Snuggle Forever",
-pp: 0.625,
-priority: 0,
-flags: {contact: 1},
-pseudoWeather: 'fairylock',
-secondary: null,
-target: "allAdjacentFoes",
-type: "Fairy",
-},
-
-lightofruin: {
-accuracy: 63,
-basePower: 150,
-category: "Special",
-name: "Light of Ruin",
-pp: 0.625,
-priority: -3,
-flags: {protect: 1, mirror: 1},
-recoil: [50, 100],
-hasCrashDamage: true,
-onMoveFail(target, source, move) {
-this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
-},
-secondary: null,
-target: "normal",
-type: "Fairy",
-},
-
-magicaltorque: {
-accuracy: 91,
-basePower: 40,
-category: "Physical",
-name: "Magical Torque",
-pp: 1.25,
-priority: 3,
-flags: {
-protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
-},
-secondary: {
-chance: 33,
-volatileStatus: 'confusion',
-},
-target: "normal",
-type: "Fairy",
-},
-
-mistyexplosion: {
-accuracy: 150,
-basePower: 250,
-category: "Special",
-name: "Misty Explosion",
-pp: 0.625,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-selfdestruct: "always",
-critRatio: 4,
-onBasePower(basePower, source) {
-if (this.field.isTerrain('mistyterrain') && source.isGrounded()) {
-this.debug('misty terrain boost');
-return this.chainModify(1.5);
-}
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Fairy",
-},
-
-mistyterrain: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Misty Terrain",
-pp: 1.25,
-priority: 0,
-flags: {nonsky: 1},
-terrain: 'mistyterrain',
-condition: {
-duration: 5,
-durationCallback(source, effect) {
-if (source?.hasItem('terrainextender')) {
-return 8;
-}
-return 5;
-},
-onSetStatus(status, target, source, effect) {
-if (!target.isGrounded() || target.isSemiInvulnerable()) return;
-if (effect && ((effect as Move).status || effect.id === 'yawn')) {
-this.add('-activate', target, 'move: Misty Terrain');
-}
-return false;
-},
-onTryAddVolatile(status, target, source, effect) {
-if (!target.isGrounded() || target.isSemiInvulnerable()) return;
-if (status.id === 'confusion') {
-if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Misty Terrain');
-return null;
-}
-},
-onBasePowerPriority: 6,
-onBasePower(basePower, attacker, defender, move) {
-if (move.type === 'Dragon' && defender.isGrounded() && !defender.isSemiInvulnerable()) {
-this.debug('misty terrain weaken');
-return this.chainModify(0.5);
-}
-},
-onFieldStart(field, source, effect) {
-if (effect?.effectType === 'Ability') {
-this.add('-fieldstart', 'move: Misty Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
-} else {
-this.add('-fieldstart', 'move: Misty Terrain');
-}
-},
-onFieldResidualOrder: 27,
-onFieldResidualSubOrder: 7,
-onFieldEnd() {
-this.add('-fieldend', 'Misty Terrain');
-},
-},
-secondary: null,
-target: "all",
-type: "Fairy",
-},
-
-moonblast: {
-accuracy: 80,
-basePower: 95,
-category: "Special",
-name: "Moonblast",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-boosts: {
-atk: -1,
-spa: -1,
-},
-},
-target: "normal",
-type: "Fairy",
-},
-
-moonlight: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Moonlight",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, heal: 1},
-onHit(pokemon) {
-let factor = 0.5;
-switch (pokemon.effectiveWeather()) {
-case 'sunnyday':
-case 'desolateland':
-factor = 0.667;
-break;
-case 'raindance':
-case 'primordialsea':
-case 'sandstorm':
-case 'hail':
-case 'snow':
-factor = 0.25;
-break;
-}
-const success = !!this.heal(this.modify(pokemon.maxhp, factor));
-if (!success) {
-this.add('-fail', pokemon, 'heal');
-return this.NOT_FAIL;
-}
-return success;
-},
-secondary: null,
-target: "self",
-type: "Fairy",
-},
-
-naturesmadness: {
-accuracy: 89,
-basePower: 50,
-damageCallback(pokemon, target) {
-return this.clampIntRange(Math.floor(target.getUndynamaxedHP() / 2), 1);
-},
-category: "Special",
-name: "Nature's Madness",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Fairy",
-},
-
-playrough: {
-accuracy: 78,
-basePower: 105,
-category: "Physical",
-name: "Play Rough",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-boosts: {
-atk: -1,
-spa: -1,
-},
-},
-target: "normal",
-type: "Fairy",
-},
-
-sparklyswirl: {
-accuracy: 93,
-basePower: 30,
-category: "Special",
-name: "Sparkly Swirl",
-pp: 1.25,
-priority: 3,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Fairy",
-},
-
-spiritbreak: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Spirit Break",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-boosts: {
-atk: -1,
-spa: -1,
-},
-},
-target: "normal",
-type: "Fairy",
-},
-
-springtidestorm: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Springtide Storm",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, wind: 1},
-secondary: {
-chance: 33,
-boosts: {
-atk: -1,
-spa: -1,
-},
-},
-weather: 'RainDance',
-forceSwitch: true,
-target: "allAdjacentFoes",
-type: "Fairy",
-},
-
-strangesteam: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Strange Steam",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-volatileStatus: 'confusion',
-},
-target: "normal",
-type: "Fairy",
-},
-
-sweetkiss: {
-accuracy: 75,
-basePower: 5,
-category: "Status",
-name: "Sweet Kiss",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-volatileStatus: 'confusion',
-secondary: null,
-target: "normal",
-type: "Fairy",
-},
-
-twinkletackle: {
-accuracy: 68,
-basePower: 135,
-category: "Physical",
-name: "Twinkle Tackle",
-pp: 0.625,
-priority: -1,
-flags: {protect: 1,},
-self: {
-boosts: {
-atk: 1,
-spa: 1,
-spe: 1,
-spd: 1,
-def: 1,
-evasion: -10,
-},
-},
-secondary: null,
-target: "normal",
-type: "Fairy",
-},
-
-alloutpummeling: {
-accuracy: 78,
-basePower: 105,
-category: "Physical",
-name: "All-Out Pummeling",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1,},
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-armthrust: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Arm Thrust",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-critRatio: 2,
-multihit: [1, 6],
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-aurasphere: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Aura Sphere",
-pp: 1.25,
-priority: 0,
-flags: {bullet: 1, protect: 1, pulse: 1, mirror: 1, distance: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Fighting",
-},
-
-axekick: {
-accuracy: 65,
-basePower: 140,
-category: "Physical",
-name: "Axe Kick",
-pp: 0.625,
-priority: -2,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [33, 100],
-hasCrashDamage: true,
-onMoveFail(target, source, move) {
-this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
-},
-secondary: {
-chance: 33,
-volatileStatus: 'confusion',
-},
-target: "normal",
-type: "Fighting",
-},
-
-bodypress: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Body Press",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-overrideOffensiveStat: 'def',
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-brickbreak: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Brick Break",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-onTryHit(pokemon) {
-// will shatter screens through sub, before you hit
-pokemon.side.removeSideCondition('reflect');
-pokemon.side.removeSideCondition('lightscreen');
-pokemon.side.removeSideCondition('auroraveil');
-},
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-bulkup: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Bulk Up",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-atk: 1,
-spa: 1,
-spe: -2,
-spd: 1,
-def: 1,
-evasion: -2,
-},
-secondary: null,
-target: "self",
-type: "Fighting",
-},
-
-circlethrow: {
-accuracy: 100,
-basePower: 16,
-category: "Physical",
-name: "Circle Throw",
-pp: 0.625,
-priority: 6,
-flags: {contact: 1, protect: 1, mirror: 1, noassist: 1, failcopycat: 1},
-forceSwitch: true,
-target: "normal",
-type: "Fighting",
-},
-
-closecombat: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Close Combat",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1},
-self: {
-boosts: {
-def: -1,
-spd: -1,
-},
-},
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-coaching: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Coaching",
-pp: 0.625,
-priority: 0,
-flags: {bypasssub: 1, allyanim: 1},
-secondary: null,
-boosts: {
-atk: 1,
-spa: 1,
-spe: 1,
-spd: 1,
-def: 1,
-accuracy: 1,
-evasion: 1,
-},
-target: "allySide",
-type: "Fighting",
-},
-
-collisioncourse: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Collision Course",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-onBasePower(basePower, source, target, move) {
-if (target.runEffectiveness(move) > 0) {
-// Placeholder
-this.debug(`collision course super effective buff`);
-return this.chainModify([5461, 4096]);
-}
-},
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-combattorque: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Combat Torque",
-pp: 1.25,
-priority: 0,
-flags: {
-protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
-},
-secondary: {
-chance: 33,
-status: 'par',
-},
-target: "normal",
-type: "Fighting",
-},
-
-counter: {
-accuracy: 87,
-basePower: 60,
-damageCallback(pokemon) {
-if (!pokemon.volatiles['counter']) return 0;
-return pokemon.volatiles['counter'].damage || 1;
-},
-category: "Physical",
-name: "Counter",
-pp: 1.25,
-priority: -5,
-flags: {contact: 1, protect: 1, failmefirst: 1, noassist: 1, failcopycat: 1},
-beforeTurnCallback(pokemon) {
-pokemon.addVolatile('counter');
-},
-onTry(source) {
-if (!source.volatiles['counter']) return false;
-if (source.volatiles['counter'].slot === null) return false;
-},
-condition: {
-duration: 1,
-noCopy: true,
-onStart(target, source, move) {
-this.effectState.slot = null;
-this.effectState.damage = 0;
-},
-onRedirectTargetPriority: -1,
-onRedirectTarget(target, source, source2, move) {
-if (move.id !== 'counter') return;
-if (source !== this.effectState.target || !this.effectState.slot) return;
-return this.getAtSlot(this.effectState.slot);
-},
-onDamagingHit(damage, target, source, move) {
-if (!source.isAlly(target) && this.getCategory(move) === 'Physical') {
-this.effectState.slot = source.getSlot();
-this.effectState.damage = 2 * damage;
-}
-},
-},
-secondary: null,
-target: "scripted",
-type: "Fighting",
-},
-
-crosschop: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Cross Chop",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-critRatio: 3,
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-detect: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Detect",
-pp: 1.25,
-priority: 4,
-flags: {noassist: 1, failcopycat: 1},
-stallingMove: true,
-volatileStatus: 'protect',
-onPrepareHit(pokemon) {
-return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
-},
-onHit(pokemon) {
-pokemon.addVolatile('stall');
-},
-secondary: null,
-target: "self",
-type: "Fighting",
-},
-
-doublekick: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Double Kick",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-multihit: [2, 4],
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-drainpunch: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Drain Punch",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1, heal: 1},
-drain: [1, 2],
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-dynamicpunch: {
-accuracy: 125,
-basePower: 33,
-category: "Physical",
-name: "Dynamic Punch",
-pp: 0.625,
-priority: 4,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-secondary: {
-chance: 100,
-volatileStatus: 'confusion',
-},
-target: "normal",
-type: "Fighting",
-},
-
-finalgambit: {
-accuracy: 60,
-basePower: 200,
-category: "Special",
-name: "Final Gambit",
-pp: 0.625,
-priority: 0,
-flags: {protect: 1, noparentalbond: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Fighting",
-},
-
-flyingpress: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Flying Press",
-pp: 1.25,
-flags: {contact: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nonsky: 1},
-onEffectiveness(typeMod, target, type, move) {
-return typeMod + this.dex.getEffectiveness('Flying', type);
-},
-priority: 0,
-secondary: null,
-target: "allAdjacentFoes",
-type: "Fighting",
-},
-
-focusblast: {
-accuracy: 72,
-basePower: 115,
-category: "Special",
-name: "Focus Blast",
-pp: 1.25,
-priority: -1,
-flags: {bullet: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-boosts: {
-spd: -1,
-def: -1,
-},
-},
-target: "normal",
-type: "Fighting",
-},
-
-focuspunch: {
-accuracy: 68,
-basePower: 135,
-category: "Physical",
-name: "Focus Punch",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1},
-onTryHit(pokemon) {
-// will shatter screens through sub, before you hit
-pokemon.side.removeSideCondition('reflect');
-pokemon.side.removeSideCondition('lightscreen');
-pokemon.side.removeSideCondition('auroraveil');
-},
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-forcepalm: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Force Palm",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'par',
-},
-target: "normal",
-type: "Fighting",
-},
-
-hammerarm: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Hammer Arm",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-self: {
-boosts: {
-atk: 1,
-spa: 1,
-evasion: -1,
-spe: -1,
-},
-},
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-highjumpkick: {
-accuracy: 65,
-basePower: 140,
-category: "Physical",
-name: "High Jump Kick",
-pp: 0.625,
-priority: -2,
-flags: {contact: 1, protect: 1, mirror: 1, gravity: 1},
-recoil: [33, 100],
-hasCrashDamage: true,
-onMoveFail(target, source, move) {
-this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
-},
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-jumpkick: {
-accuracy: 63,
-basePower: 150,
-category: "Physical",
-name: "Jump Kick",
-pp: 0.625,
-priority: -3,
-flags: {contact: 1, protect: 1, mirror: 1, gravity: 1},
-recoil: [50, 100],
-hasCrashDamage: true,
-onMoveFail(target, source, move) {
-this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('Jump Kick'));
-},
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-karatechop: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Karate Chop",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-critRatio: 3,
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-lowkick: {
-accuracy: 73,
-basePower: 15,
-basePowerCallback(pokemon, target) {
-const targetWeight = target.getWeight();
-let bp;
-if (targetWeight >= 2000) {
-bp = 125;
-} else if (targetWeight >= 1000) {
-bp = 100;
-} else if (targetWeight >= 500) {
-bp = 75;
-} else if (targetWeight >= 250) {
-bp = 50;
-} else if (targetWeight >= 100) {
-bp = 25;
-} else {
-bp = 10;
-}
-this.debug('BP: ' + bp);
-return bp;
-},
-category: "Physical",
-name: "Low Kick",
-pp: 1.25,
-priority: -6,
-flags: {contact: 1, protect: 1, mirror: 1},
-onTryHit(target, pokemon, move) {
-if (target.volatiles['dynamax']) {
-this.add('-fail', pokemon, 'Dynamax');
-this.attrLastMove('[still]');
-return null;
-}
-},
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-lowsweep: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Low Sweep",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-boosts: {
-spe: -1,
-evasion: -1,
-},
-},
-target: "normal",
-type: "Fighting",
-},
-
-machpunch: {
-accuracy: 91,
-basePower: 40,
-category: "Physical",
-name: "Mach Punch",
-pp: 1.25,
-priority: 3,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-matblock: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Mat Block",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, nonsky: 1, noassist: 1, failcopycat: 1},
-stallingMove: true,
-sideCondition: 'matblock',
-onTry(source) {
-if (source.activeMoveActions > 1) {
-this.hint("Mat Block only works on your first turn out.");
-return false;
-}
-return !!this.queue.willAct();
-},
-condition: {
-duration: 1,
-onSideStart(target, source) {
-this.add('-singleturn', source, 'Mat Block');
-},
-onTryHitPriority: 3,
-onTryHit(target, source, move) {
-if (!move.flags['protect']) {
-if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
-if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
-return;
-}
-if (move && (move.target === 'self' || move.category === 'Status')) return;
-this.add('-activate', target, 'move: Mat Block', move.name);
-const lockedmove = source.getVolatile('lockedmove');
-if (lockedmove) {
-// Outrage counter is reset
-if (source.volatiles['lockedmove'].duration === 2) {
-delete source.volatiles['lockedmove'];
-}
-}
-return this.NOT_FAIL;
-},
-},
-secondary: null,
-target: "allySide",
-type: "Fighting",
-},
-
-meteorassault: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Meteor Assault",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, recharge: 1, mirror: 1, failinstruct: 1},
-self: {
-volatileStatus: 'mustrecharge',
-},
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-noretreat: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "No Retreat",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-volatileStatus: 'noretreat',
-onTry(source, target, move) {
-if (source.volatiles['noretreat']) return false;
-if (source.volatiles['trapped']) {
-delete move.volatileStatus;
-}
-},
-condition: {
-onStart(pokemon) {
-this.add('-start', pokemon, 'move: No Retreat');
-},
-onTrapPokemon(pokemon) {
-pokemon.tryTrap();
-},
-},
-boosts: {
-atk: 2,
-def: 2,
-spa: 2,
-spd: 2,
-spe: -1,
-accuracy: 2,
-evasion: -10,
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Fighting",
-},
-
-octolock: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Octolock",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onTryImmunity(target) {
-return this.dex.getImmunity('trapped', target);
-},
-volatileStatus: 'octolock',
-condition: {
-onStart(pokemon, source) {
-this.add('-start', pokemon, 'move: Octolock', '[of] ' + source);
-},
-onResidualOrder: 14,
-onResidual(pokemon) {
-const source = this.effectState.source;
-if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns)) {
-delete pokemon.volatiles['octolock'];
-this.add('-end', pokemon, 'Octolock', '[partiallytrapped]', '[silent]');
-return;
-}
-this.boost({def: -1, spd: -1}, pokemon, source, this.dex.getActiveMove('octolock'));
-},
-onTrapPokemon(pokemon) {
-if (this.effectState.source && this.effectState.source.isActive) pokemon.tryTrap();
-},
-},
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-poweruppunch: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Power-Up Punch",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-secondary: {
-chance: 100,
-self: {
-boosts: {
-atk: 1,
-def: 1,
-spa: 1,
-spd: 1,
-accuracy: 1,
-spe: -1,
-evasion: -1,
-},
-},
-},
-target: "normal",
-type: "Fighting",
-},
-
-quickguard: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Quick Guard",
-pp: 1.25,
-priority: 3,
-flags: {snatch: 1},
-sideCondition: 'quickguard',
-onTry() {
-return !!this.queue.willAct();
-},
-onHitSide(side, source) {
-source.addVolatile('stall');
-},
-condition: {
-duration: 2,
-onSideStart(target, source) {
-this.add('-singleturn', source, 'Quick Guard');
-},
-onTryHitPriority: 4,
-onTryHit(target, source, move) {
-// Quick Guard blocks moves with positive priority, even those given increased priority by Prankster or Gale Wings.
-// (e.g. it blocks 0 priority moves boosted by Prankster or Gale Wings; Quick Claw/Custap Berry do not count)
-if (move.priority <= 0.1) return;
-if (!move.flags['protect']) {
-if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
-if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
-return;
-}
-this.add('-activate', target, 'move: Quick Guard');
-const lockedmove = source.getVolatile('lockedmove');
-if (lockedmove) {
-// Outrage counter is reset
-if (source.volatiles['lockedmove'].duration === 2) {
-delete source.volatiles['lockedmove'];
-}
-}
-return this.NOT_FAIL;
-},
-},
-secondary: null,
-target: "allySide",
-type: "Fighting",
-},
-
-revenge: {
-accuracy: 87,
-basePower: 60,
-basePowerCallback(pokemon, target, move) {
-const damagedByTarget = pokemon.attackedBy.some(
-p => p.source === target && p.damage > 0 && p.thisTurn
-);
-if (damagedByTarget) {
-this.debug('BP doubled for getting hit by ' + target);
-return move.basePower * 2;
-}
-return move.basePower;
-},
-category: "Physical",
-name: "Revenge",
-pp: 1.25,
-priority: -4,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-reversal: {
-accuracy: 87,
-basePower: 60,
-basePowerCallback(pokemon, target) {
-const ratio = Math.max(Math.floor(pokemon.hp * 48 / pokemon.maxhp), 1);
-let bp;
-if (ratio < 2) {
-bp = 200;
-} else if (ratio < 5) {
-bp = 150;
-} else if (ratio < 10) {
-bp = 100;
-} else if (ratio < 17) {
-bp = 80;
-} else if (ratio < 33) {
-bp = 40;
-} else {
-bp = 20;
-}
-this.debug('BP: ' + bp);
-return bp;
-},
-category: "Physical",
-name: "Reversal",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-rocksmash: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Rock Smash",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-boosts: {
-spd: -1,
-def: -1,
-},
-},
-target: "normal",
-type: "Fighting",
-},
-
-rollingkick: {
-accuracy: 95,
-basePower: 45,
-category: "Physical",
-name: "Rolling Kick",
-pp: 0.625,
-priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [25, 100],
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-target: "normal",
-type: "Fighting",
-},
-
-sacredsword: {
-accuracy: 100,
-basePower: 16,
-category: "Special",
-name: "Sacred Sword",
-pp: 1.25,
-priority: 6,
-flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
-ignoreEvasion: true,
-ignoreDefensive: true,
-selfSwitch: true,
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-secretsword: {
-accuracy: 80,
-basePower: 95,
-category: "Special",
-name: "Secret Sword",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-seismictoss: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Seismic Toss",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-skyuppercut: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Sky Uppercut",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-stormthrow: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Storm Throw",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-willCrit: true,
-weather: 'RainDance',
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-submission: {
-accuracy: 65,
-basePower: 140,
-category: "Physical",
-name: "Submission",
-pp: 0.625,
-priority: -2,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [33, 100],
-hasCrashDamage: true,
-onMoveFail(target, source, move) {
-this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
-},
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-superpower: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Superpower",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1},
-self: {
-boosts: {
-atk: -1,
-spa: -1,
-spe: -1,
-spd: -1,
-def: -1,
-},
-},
-secondary: null,
-target: "normal",
-type: "Fighting",
-},
-
-thunderouskick: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Thunderous Kick",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'par',
-},
-pseudoWeather: 'iondeluge',
-target: "normal",
-type: "Fighting",
-},
-
-triplearrows: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Triple Arrows",
-pp: 1.25,
-priority: -2,
-flags: {protect: 1, mirror: 1},
-critRatio: 3,
-multihit: [3, 6],
-secondaries: [
-{
-chance: 33,
-boosts: {
-spd: -1,
-def: -1,
-},
-}, {
-chance: 33,
-volatileStatus: 'flinch',
 },
+
+pikachucosplay: {
+num: 25,
+name: "Pikachu-Cosplay",
+baseSpecies: "Pikachu",
+forme: "Cosplay",
+types: ["Electric"],
+baseStats: {hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90},
+abilities: {0: "Lightning Rod"},
+weightkg: 6,
+gen: 6,
+},
+
+pikachurockstar: {
+num: 25,
+name: "Pikachu-Rock-Star",
+baseSpecies: "Pikachu",
+forme: "Rock-Star",
+types: ["Electric"],
+baseStats: {hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90},
+abilities: {0: "Lightning Rod"},
+weightkg: 6,
+changesFrom: "Pikachu-Cosplay",
+gen: 6,
+},
+
+pikachubelle: {
+num: 25,
+name: "Pikachu-Belle",
+baseSpecies: "Pikachu",
+forme: "Belle",
+types: ["Electric"],
+baseStats: {hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90},
+abilities: {0: "Lightning Rod"},
+weightkg: 6,
+changesFrom: "Pikachu-Cosplay",
+gen: 6,
+},
+
+pikachupopstar: {
+num: 25,
+name: "Pikachu-Pop-Star",
+baseSpecies: "Pikachu",
+forme: "Pop-Star",
+types: ["Electric"],
+baseStats: {hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90},
+abilities: {0: "Lightning Rod"},
+weightkg: 6,
+changesFrom: "Pikachu-Cosplay",
+gen: 6,
+},
+
+pikachuphd: {
+num: 25,
+name: "Pikachu-PhD",
+baseSpecies: "Pikachu",
+forme: "PhD",
+types: ["Electric"],
+baseStats: {hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90},
+abilities: {0: "Lightning Rod"},
+weightkg: 6,
+changesFrom: "Pikachu-Cosplay",
+gen: 6,
+},
+
+pikachulibre: {
+num: 25,
+name: "Pikachu-Libre",
+baseSpecies: "Pikachu",
+forme: "Libre",
+types: ["Electric"],
+baseStats: {hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90},
+abilities: {0: "Lightning Rod"},
+weightkg: 6,
+changesFrom: "Pikachu-Cosplay",
+gen: 6,
+},
+
+pikachuoriginal: {
+num: 25,
+name: "Pikachu-Original",
+baseSpecies: "Pikachu",
+forme: "Original",
+types: ["Electric"],
+baseStats: {hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90},
+abilities: {0: "Static", H: "Lightning Rod"},
+weightkg: 6,
+gen: 7,
+},
+
+pikachuhoenn: {
+num: 25,
+name: "Pikachu-Hoenn",
+baseSpecies: "Pikachu",
+forme: "Hoenn",
+types: ["Electric"],
+baseStats: {hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90},
+abilities: {0: "Static", H: "Lightning Rod"},
+weightkg: 6,
+gen: 7,
+},
+
+pikachusinnoh: {
+num: 25,
+name: "Pikachu-Sinnoh",
+baseSpecies: "Pikachu",
+forme: "Sinnoh",
+types: ["Electric"],
+baseStats: {hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90},
+abilities: {0: "Static", H: "Lightning Rod"},
+weightkg: 6,
+gen: 7,
+},
+
+pikachuunova: {
+num: 25,
+name: "Pikachu-Unova",
+baseSpecies: "Pikachu",
+forme: "Unova",
+types: ["Electric"],
+baseStats: {hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90},
+abilities: {0: "Static", H: "Lightning Rod"},
+weightkg: 6,
+gen: 7,
+},
+
+pikachukalos: {
+num: 25,
+name: "Pikachu-Kalos",
+baseSpecies: "Pikachu",
+forme: "Kalos",
+types: ["Electric"],
+baseStats: {hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90},
+abilities: {0: "Static", H: "Lightning Rod"},
+weightkg: 6,
+gen: 7,
+},
+
+pikachualola: {
+num: 25,
+name: "Pikachu-Alola",
+baseSpecies: "Pikachu",
+forme: "Alola",
+types: ["Electric"],
+baseStats: {hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90},
+abilities: {0: "Static", H: "Lightning Rod"},
+weightkg: 6,
+gen: 7,
+},
+
+pikachupartner: {
+num: 25,
+name: "Pikachu-Partner",
+baseSpecies: "Pikachu",
+forme: "Partner",
+types: ["Electric"],
+baseStats: {hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90},
+abilities: {0: "Static", H: "Lightning Rod"},
+weightkg: 6,
+gen: 7,
+},
+
+pikachustarter: {
+num: 25,
+name: "Pikachu-Starter",
+baseSpecies: "Pikachu",
+forme: "Starter",
+types: ["Electric"],
+baseStats: {hp: 45, atk: 80, def: 50, spa: 75, spd: 60, spe: 120},
+abilities: {0: "Static", H: "Lightning Rod"},
+weightkg: 6,
+},
+
+pikachugmax: {
+num: 25,
+name: "Pikachu-Gmax",
+baseSpecies: "Pikachu",
+forme: "Gmax",
+types: ["Electric"],
+baseStats: {hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90},
+abilities: {0: "Static", H: "Lightning Rod"},
+weightkg: 0,
+changesFrom: "Pikachu",
+},
+
+pikachuworld: {
+num: 25,
+name: "Pikachu-World",
+baseSpecies: "Pikachu",
+forme: "World",
+types: ["Electric"],
+baseStats: {hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90},
+abilities: {0: "Static", H: "Lightning Rod"},
+weightkg: 6,
+gen: 8,
+},
+
+raichu: {
+num: 26,
+name: "Raichu",
+types: ["Electric"],
+baseStats: {hp: 60, atk: 90, def: 55, spa: 90, spd: 80, spe: 110},
+abilities: {0: "Static", H: "Lightning Rod"},
+weightkg: 30,
+prevo: "Pikachu",
+evoType: "useItem",
+evoItem: "Thunder Stone",
+otherFormes: ["Raichu-Alola"],
+formeOrder: ["Raichu", "Raichu-Alola"],
+},
+
+raichualola: {
+num: 26,
+name: "Raichu-Alola",
+baseSpecies: "Raichu",
+forme: "Alola",
+types: ["Electric", "Psychic"],
+baseStats: {hp: 60, atk: 85, def: 50, spa: 95, spd: 85, spe: 110},
+abilities: {0: "Surge Surfer"},
+weightkg: 21,
+prevo: "Pikachu",
+evoType: "useItem",
+evoItem: "Thunder Stone",
+evoRegion: "Alola",
+},
+
+sandshrew: {
+num: 27,
+name: "Sandshrew",
+types: ["Ground"],
+baseStats: {hp: 50, atk: 75, def: 85, spa: 20, spd: 30, spe: 40},
+abilities: {0: "Sand Veil", H: "Sand Rush"},
+weightkg: 12,
+evos: ["Sandslash"],
+otherFormes: ["Sandshrew-Alola"],
+formeOrder: ["Sandshrew", "Sandshrew-Alola"],
+},
+
+sandshrewalola: {
+num: 27,
+name: "Sandshrew-Alola",
+baseSpecies: "Sandshrew",
+forme: "Alola",
+types: ["Ice", "Steel"],
+baseStats: {hp: 50, atk: 75, def: 90, spa: 10, spd: 35, spe: 40},
+abilities: {0: "Snow Cloak", H: "Slush Rush"},
+weightkg: 40,
+evos: ["Sandslash-Alola"],
+},
+
+sandslash: {
+num: 28,
+name: "Sandslash",
+types: ["Ground", "Fairy"],
+baseStats: {hp: 75, atk: 100, def: 110, spa: 45, spd: 55, spe: 65},
+abilities: {0: "Sand Veil", H: "Sand Rush"},
+weightkg: 29.5,
+prevo: "Sandshrew",
+otherFormes: ["Sandslash-Alola"],
+formeOrder: ["Sandslash", "Sandslash-Alola"],
+},
+
+sandslashalola: {
+num: 28,
+name: "Sandslash-Alola",
+baseSpecies: "Sandslash",
+forme: "Alola",
+types: ["Ice", "Steel"],
+baseStats: {hp: 75, atk: 100, def: 120, spa: 25, spd: 65, spe: 65},
+abilities: {0: "Snow Cloak", H: "Slush Rush"},
+weightkg: 55,
+prevo: "Sandshrew-Alola",
+evoType: "useItem",
+evoItem: "Ice Stone",
+},
+
+nidoranf: {
+num: 29,
+name: "Nidoran-F",
+types: ["Poison"],
+baseStats: {hp: 55, atk: 47, def: 52, spa: 40, spd: 40, spe: 41},
+abilities: {0: "Poison Point", 1: "Rivalry", H: "Hustle"},
+weightkg: 7,
+evos: ["Nidorina"],
+},
+
+nidorina: {
+num: 30,
+name: "Nidorina",
+types: ["Poison"],
+baseStats: {hp: 70, atk: 62, def: 67, spa: 55, spd: 55, spe: 56},
+abilities: {0: "Poison Point", 1: "Rivalry", H: "Hustle"},
+weightkg: 20,
+prevo: "Nidoran-F",
+evos: ["Nidoqueen"],
+},
+
+nidoqueen: {
+num: 31,
+name: "Nidoqueen",
+types: ["Poison", "Fighting"],
+baseStats: {hp: 90, atk: 92, def: 87, spa: 75, spd: 85, spe: 76},
+abilities: {0: "Poison Point", 1: "Rivalry", H: "Sheer Force"},
+weightkg: 60,
+prevo: "Nidorina",
+evoType: "useItem",
+evoItem: "Moon Stone",
+},
+
+nidoranm: {
+num: 32,
+name: "Nidoran-M",
+types: ["Poison"],
+baseStats: {hp: 46, atk: 57, def: 40, spa: 40, spd: 40, spe: 50},
+abilities: {0: "Poison Point", 1: "Rivalry", H: "Hustle"},
+weightkg: 9,
+evos: ["Nidorino"],
+},
+
+nidorino: {
+num: 33,
+name: "Nidorino",
+types: ["Poison"],
+baseStats: {hp: 61, atk: 72, def: 57, spa: 55, spd: 55, spe: 65},
+abilities: {0: "Poison Point", 1: "Rivalry", H: "Hustle"},
+weightkg: 19.5,
+prevo: "Nidoran-M",
+evos: ["Nidoking"],
+},
+
+nidoking: {
+num: 34,
+name: "Nidoking",
+types: ["Poison", "Ground"],
+baseStats: {hp: 81, atk: 102, def: 77, spa: 85, spd: 75, spe: 85},
+abilities: {0: "Poison Point", 1: "Rivalry", H: "Sheer Force"},
+weightkg: 62,
+prevo: "Nidorino",
+evoType: "useItem",
+evoItem: "Moon Stone",
+},
+
+clefairy: {
+num: 35,
+name: "Clefairy",
+types: ["Fairy", "Rock"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 70, atk: 45, def: 48, spa: 60, spd: 65, spe: 35},
+abilities: {0: "Cute Charm", 1: "Magic Guard", H: "Friend Guard"},
+weightkg: 7.5,
+prevo: "Cleffa",
+evoType: "levelFriendship",
+evos: ["Clefable"],
+},
+
+clefable: {
+num: 36,
+name: "Clefable",
+types: ["Fairy", "Rock"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 95, atk: 70, def: 73, spa: 95, spd: 90, spe: 60},
+abilities: {0: "Cute Charm", 1: "Magic Guard", H: "Unaware"},
+weightkg: 40,
+prevo: "Clefairy",
+evoType: "useItem",
+evoItem: "Moon Stone",
+},
+
+vulpix: {
+num: 37,
+name: "Vulpix",
+types: ["Fire"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 38, atk: 41, def: 40, spa: 50, spd: 65, spe: 65},
+abilities: {0: "Flash Fire", H: "Drought"},
+weightkg: 9.9,
+evos: ["Ninetales"],
+otherFormes: ["Vulpix-Alola"],
+formeOrder: ["Vulpix", "Vulpix-Alola"],
+},
+
+vulpixalola: {
+num: 37,
+name: "Vulpix-Alola",
+baseSpecies: "Vulpix",
+forme: "Alola",
+types: ["Ice"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 38, atk: 41, def: 40, spa: 50, spd: 65, spe: 65},
+abilities: {0: "Snow Cloak", H: "Snow Warning"},
+weightkg: 9.9,
+evos: ["Ninetales-Alola"],
+},
+
+ninetales: {
+num: 38,
+name: "Ninetales",
+types: ["Fire", "Fairy"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 73, atk: 76, def: 75, spa: 81, spd: 100, spe: 100},
+abilities: {0: "Flash Fire", H: "Drought"},
+weightkg: 19.9,
+prevo: "Vulpix",
+evoType: "useItem",
+evoItem: "Fire Stone",
+otherFormes: ["Ninetales-Alola"],
+formeOrder: ["Ninetales", "Ninetales-Alola"],
+},
+
+ninetalesalola: {
+num: 38,
+name: "Ninetales-Alola",
+baseSpecies: "Ninetales",
+forme: "Alola",
+types: ["Ice", "Fairy"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 73, atk: 67, def: 75, spa: 81, spd: 100, spe: 109},
+abilities: {0: "Snow Cloak", H: "Snow Warning"},
+weightkg: 19.9,
+prevo: "Vulpix-Alola",
+evoType: "useItem",
+evoItem: "Ice Stone",
+},
+
+jigglypuff: {
+num: 39,
+name: "Jigglypuff",
+types: ["Fire", "Fairy"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 115, atk: 45, def: 20, spa: 45, spd: 25, spe: 20},
+abilities: {0: "Cute Charm", 1: "Competitive", H: "Friend Guard"},
+weightkg: 5.5,
+prevo: "Igglybuff",
+evoType: "levelFriendship",
+evos: ["Wigglytuff"],
+},
+
+wigglytuff: {
+num: 40,
+name: "Wigglytuff",
+types: ["Fire", "Fairy"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 140, atk: 70, def: 45, spa: 85, spd: 50, spe: 45},
+abilities: {0: "Cute Charm", 1: "Competitive", H: "Frisk"},
+weightkg: 12,
+prevo: "Jigglypuff",
+evoType: "useItem",
+evoItem: "Moon Stone",
+},
+
+zubat: {
+num: 41,
+name: "Zubat",
+types: ["Poison", "Flying"],
+baseStats: {hp: 40, atk: 45, def: 35, spa: 30, spd: 40, spe: 55},
+abilities: {0: "Inner Focus", H: "Infiltrator"},
+weightkg: 7.5,
+evos: ["Golbat"],
+},
+
+golbat: {
+num: 42,
+name: "Golbat",
+types: ["Poison", "Flying"],
+baseStats: {hp: 75, atk: 80, def: 70, spa: 65, spd: 75, spe: 90},
+abilities: {0: "Inner Focus", H: "Infiltrator"},
+weightkg: 55,
+prevo: "Zubat",
+evos: ["Crobat"],
+},
+
+oddish: {
+num: 43,
+name: "Oddish",
+types: ["Grass", "Poison"],
+baseStats: {hp: 45, atk: 50, def: 55, spa: 75, spd: 65, spe: 30},
+abilities: {0: "Chlorophyll", H: "Run Away"},
+weightkg: 5.4,
+evos: ["Gloom"],
+},
+
+gloom: {
+num: 44,
+name: "Gloom",
+types: ["Grass", "Poison"],
+baseStats: {hp: 60, atk: 65, def: 70, spa: 85, spd: 75, spe: 40},
+abilities: {0: "Chlorophyll", H: "Stench"},
+weightkg: 8.6,
+prevo: "Oddish",
+evos: ["Vileplume", "Bellossom"],
+},
+
+vileplume: {
+num: 45,
+name: "Vileplume",
+types: ["Grass", "Poison"],
+baseStats: {hp: 75, atk: 80, def: 85, spa: 110, spd: 90, spe: 50},
+abilities: {0: "Chlorophyll", H: "Effect Spore"},
+weightkg: 18.6,
+prevo: "Gloom",
+evoType: "useItem",
+evoItem: "Leaf Stone",
+},
+
+paras: {
+num: 46,
+name: "Paras",
+types: ["Bug"],
+baseStats: {hp: 35, atk: 70, def: 55, spa: 45, spd: 55, spe: 25},
+abilities: {0: "Effect Spore", 1: "Dry Skin", H: "Damp"},
+weightkg: 5.4,
+evos: ["Parasect"],
+},
+
+parasect: {
+num: 47,
+name: "Parasect",
+types: ["Bug", "Ghost"],
+baseStats: {hp: 60, atk: 95, def: 80, spa: 60, spd: 80, spe: 30},
+abilities: {0: "Effect Spore", 1: "Dry Skin", H: "Damp"},
+weightkg: 29.5,
+prevo: "Paras",
+},
+
+venonat: {
+num: 48,
+name: "Venonat",
+types: ["Bug", "Poison"],
+baseStats: {hp: 60, atk: 55, def: 50, spa: 40, spd: 55, spe: 45},
+abilities: {0: "Compound Eyes", 1: "Tinted Lens", H: "Run Away"},
+weightkg: 30,
+evos: ["Venomoth"],
+},
+
+venomoth: {
+num: 49,
+name: "Venomoth",
+types: ["Bug", "Poison"],
+baseStats: {hp: 70, atk: 65, def: 60, spa: 90, spd: 75, spe: 90},
+abilities: {0: "Shield Dust", 1: "Tinted Lens", H: "Wonder Skin"},
+weightkg: 12.5,
+prevo: "Venonat",
+},
+
+diglett: {
+num: 50,
+name: "Diglett",
+types: ["Ground"],
+baseStats: {hp: 10, atk: 55, def: 25, spa: 35, spd: 45, spe: 95},
+abilities: {0: "Sand Veil", 1: "Arena Trap", H: "Sand Force"},
+weightkg: 0.8,
+evos: ["Dugtrio"],
+otherFormes: ["Diglett-Alola"],
+formeOrder: ["Diglett", "Diglett-Alola"],
+},
+
+diglettalola: {
+num: 50,
+name: "Diglett-Alola",
+baseSpecies: "Diglett",
+forme: "Alola",
+types: ["Ground", "Rock"],
+baseStats: {hp: 10, atk: 55, def: 30, spa: 35, spd: 45, spe: 90},
+abilities: {0: "Sand Veil", 1: "Tangling Hair", H: "Sand Force"},
+weightkg: 1,
+evos: ["Dugtrio-Alola"],
+},
+
+dugtrio: {
+num: 51,
+name: "Dugtrio",
+types: ["Ground"],
+baseStats: {hp: 35, atk: 100, def: 50, spa: 50, spd: 70, spe: 120},
+abilities: {0: "Sand Veil", 1: "Arena Trap", H: "Sand Force"},
+weightkg: 33.3,
+prevo: "Diglett",
+otherFormes: ["Dugtrio-Alola"],
+formeOrder: ["Dugtrio", "Dugtrio-Alola"],
+},
+
+dugtrioalola: {
+num: 51,
+name: "Dugtrio-Alola",
+baseSpecies: "Dugtrio",
+forme: "Alola",
+types: ["Ground", "Rock"],
+baseStats: {hp: 35, atk: 100, def: 60, spa: 50, spd: 70, spe: 110},
+abilities: {0: "Sand Veil", 1: "Tangling Hair", H: "Sand Force"},
+weightkg: 66.6,
+prevo: "Diglett-Alola",
+},
+
+meowth: {
+num: 52,
+name: "Meowth",
+types: ["Normal"],
+baseStats: {hp: 40, atk: 45, def: 35, spa: 40, spd: 40, spe: 90},
+abilities: {0: "Pickup", 1: "Technician", H: "Unnerve"},
+weightkg: 4.2,
+evos: ["Persian"],
+otherFormes: ["Meowth-Alola", "Meowth-Galar"],
+formeOrder: ["Meowth", "Meowth-Alola", "Meowth-Galar"],
+},
+
+meowthalola: {
+num: 52,
+name: "Meowth-Alola",
+baseSpecies: "Meowth",
+forme: "Alola",
+types: ["Normal", "Dark"],
+baseStats: {hp: 40, atk: 35, def: 35, spa: 50, spd: 40, spe: 90},
+abilities: {0: "Pickup", 1: "Technician", H: "Rattled"},
+weightkg: 4.2,
+evos: ["Persian-Alola"],
+},
+
+meowthgalar: {
+num: 52,
+name: "Meowth-Galar",
+baseSpecies: "Meowth",
+forme: "Galar",
+types: ["Steel", "Normal"],
+baseStats: {hp: 50, atk: 65, def: 55, spa: 40, spd: 40, spe: 40},
+abilities: {0: "Pickup", 1: "Tough Claws", H: "Unnerve"},
+weightkg: 7.5,
+evos: ["Perrserker"],
+},
+
+meowthgmax: {
+num: 52,
+name: "Meowth-Gmax",
+baseSpecies: "Meowth",
+forme: "Gmax",
+types: ["Normal"],
+baseStats: {hp: 40, atk: 45, def: 35, spa: 40, spd: 40, spe: 90},
+abilities: {0: "Pickup", 1: "Technician", H: "Unnerve"},
+weightkg: 0,
+changesFrom: "Meowth",
+},
+
+persian: {
+num: 53,
+name: "Persian",
+types: ["Normal"],
+baseStats: {hp: 65, atk: 70, def: 60, spa: 65, spd: 65, spe: 115},
+abilities: {0: "Limber", 1: "Technician", H: "Unnerve"},
+weightkg: 32,
+prevo: "Meowth",
+otherFormes: ["Persian-Alola"],
+formeOrder: ["Persian", "Persian-Alola"],
+},
+
+persianalola: {
+num: 53,
+name: "Persian-Alola",
+baseSpecies: "Persian",
+forme: "Alola",
+types: ["Normal", "Dark"],
+baseStats: {hp: 65, atk: 60, def: 60, spa: 75, spd: 65, spe: 115},
+abilities: {0: "Fur Coat", 1: "Technician", H: "Rattled"},
+weightkg: 33,
+prevo: "Meowth-Alola",
+evoType: "levelFriendship",
+},
+
+psyduck: {
+num: 54,
+name: "Psyduck",
+types: ["Water", "Psychic"],
+baseStats: {hp: 50, atk: 52, def: 48, spa: 65, spd: 50, spe: 55},
+abilities: {0: "Damp", 1: "Cloud Nine", H: "Swift Swim"},
+weightkg: 19.6,
+evos: ["Golduck"],
+},
+
+golduck: {
+num: 55,
+name: "Golduck",
+types: ["Water", "Psychic"],
+baseStats: {hp: 80, atk: 82, def: 78, spa: 95, spd: 80, spe: 85},
+abilities: {0: "Damp", 1: "Cloud Nine", H: "Swift Swim"},
+weightkg: 76.6,
+prevo: "Psyduck",
+},
+
+mankey: {
+num: 56,
+name: "Mankey",
+types: ["Fighting"],
+baseStats: {hp: 40, atk: 80, def: 35, spa: 35, spd: 45, spe: 70},
+abilities: {0: "Vital Spirit", 1: "Anger Point", H: "Defiant"},
+weightkg: 28,
+evos: ["Primeape"],
+},
+
+primeape: {
+num: 57,
+name: "Primeape",
+types: ["Fighting"],
+baseStats: {hp: 65, atk: 105, def: 60, spa: 60, spd: 70, spe: 95},
+abilities: {0: "Vital Spirit", 1: "Anger Point", H: "Defiant"},
+weightkg: 32,
+prevo: "Mankey",
+evos: ["Annihilape"],
+},
+
+growlithe: {
+num: 58,
+name: "Growlithe",
+types: ["Fire", "Normal"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 55, atk: 70, def: 45, spa: 70, spd: 50, spe: 60},
+abilities: {0: "Intimidate", 1: "Flash Fire", H: "Justified"},
+weightkg: 19,
+evos: ["Arcanine"],
+otherFormes: ["Growlithe-Hisui"],
+formeOrder: ["Growlithe", "Growlithe-Hisui"],
+},
+
+growlithehisui: {
+num: 58,
+name: "Growlithe-Hisui",
+baseSpecies: "Growlithe",
+forme: "Hisui",
+types: ["Fire", "Rock"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 60, atk: 75, def: 45, spa: 65, spd: 50, spe: 55},
+abilities: {0: "Intimidate", 1: "Flash Fire", H: "Rock Head"},
+weightkg: 22.7,
+evos: ["Arcanine-Hisui"],
+},
+
+arcanine: {
+num: 59,
+name: "Arcanine",
+types: ["Fire", "Normal"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 90, atk: 110, def: 80, spa: 100, spd: 80, spe: 95},
+abilities: {0: "Intimidate", 1: "Flash Fire", H: "Justified"},
+weightkg: 155,
+prevo: "Growlithe",
+evoType: "useItem",
+evoItem: "Fire Stone",
+otherFormes: ["Arcanine-Hisui"],
+formeOrder: ["Arcanine", "Arcanine-Hisui"],
+},
+
+arcaninehisui: {
+num: 59,
+name: "Arcanine-Hisui",
+baseSpecies: "Arcanine",
+forme: "Hisui",
+types: ["Fire", "Rock"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 95, atk: 115, def: 80, spa: 95, spd: 80, spe: 90},
+abilities: {0: "Intimidate", 1: "Flash Fire", H: "Rock Head"},
+weightkg: 168,
+prevo: "Growlithe-Hisui",
+evoType: "useItem",
+evoItem: "Fire Stone",
+},
+
+poliwag: {
+num: 60,
+name: "Poliwag",
+types: ["Water"],
+baseStats: {hp: 40, atk: 50, def: 40, spa: 40, spd: 40, spe: 90},
+abilities: {0: "Water Absorb", 1: "Damp", H: "Swift Swim"},
+weightkg: 12.4,
+evos: ["Poliwhirl"],
+},
+
+poliwhirl: {
+num: 61,
+name: "Poliwhirl",
+types: ["Water"],
+baseStats: {hp: 65, atk: 65, def: 65, spa: 50, spd: 50, spe: 90},
+abilities: {0: "Water Absorb", 1: "Damp", H: "Swift Swim"},
+weightkg: 20,
+prevo: "Poliwag",
+evos: ["Poliwrath", "Politoed"],
+},
+
+poliwrath: {
+num: 62,
+name: "Poliwrath",
+types: ["Water", "Fighting"],
+baseStats: {hp: 90, atk: 95, def: 95, spa: 70, spd: 90, spe: 70},
+abilities: {0: "Water Absorb", 1: "Damp", H: "Swift Swim"},
+weightkg: 54,
+prevo: "Poliwhirl",
+evoType: "useItem",
+evoItem: "Water Stone",
+},
+
+abra: {
+num: 63,
+name: "Abra",
+types: ["Psychic"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 25, atk: 20, def: 15, spa: 105, spd: 55, spe: 90},
+abilities: {0: "Synchronize", 1: "Inner Focus", H: "Magic Guard"},
+weightkg: 19.5,
+evos: ["Kadabra"],
+},
+
+kadabra: {
+num: 64,
+name: "Kadabra",
+types: ["Psychic"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 40, atk: 35, def: 30, spa: 120, spd: 70, spe: 105},
+abilities: {0: "Synchronize", 1: "Inner Focus", H: "Magic Guard"},
+weightkg: 56.5,
+prevo: "Abra",
+evos: ["Alakazam"],
+},
+
+alakazam: {
+num: 65,
+name: "Alakazam",
+types: ["Psychic"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 55, atk: 50, def: 45, spa: 135, spd: 95, spe: 120},
+abilities: {0: "Synchronize", 1: "Inner Focus", H: "Magic Guard"},
+weightkg: 48,
+prevo: "Kadabra",
+evoType: "trade",
+otherFormes: ["Alakazam-Mega"],
+formeOrder: ["Alakazam", "Alakazam-Mega"],
+},
+
+alakazammega: {
+num: 65,
+name: "Alakazam-Mega",
+baseSpecies: "Alakazam",
+forme: "Mega",
+types: ["Psychic"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 55, atk: 50, def: 65, spa: 175, spd: 105, spe: 150},
+abilities: {0: "Trace"},
+weightkg: 48,
+},
+
+machop: {
+num: 66,
+name: "Machop",
+types: ["Fighting"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 70, atk: 80, def: 50, spa: 35, spd: 35, spe: 35},
+abilities: {0: "Guts", 1: "No Guard", H: "Steadfast"},
+weightkg: 19.5,
+evos: ["Machoke"],
+},
+
+machoke: {
+num: 67,
+name: "Machoke",
+types: ["Fighting"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 80, atk: 100, def: 70, spa: 50, spd: 60, spe: 45},
+abilities: {0: "Guts", 1: "No Guard", H: "Steadfast"},
+weightkg: 70.5,
+prevo: "Machop",
+evos: ["Machamp"],
+},
+
+machamp: {
+num: 68,
+name: "Machamp",
+types: ["Fighting"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 90, atk: 130, def: 80, spa: 65, spd: 85, spe: 55},
+abilities: {0: "Guts", 1: "No Guard", H: "Steadfast"},
+weightkg: 130,
+prevo: "Machoke",
+evoType: "trade",
+},
+
+machampgmax: {
+num: 68,
+name: "Machamp-Gmax",
+baseSpecies: "Machamp",
+forme: "Gmax",
+types: ["Fighting"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 90, atk: 130, def: 80, spa: 65, spd: 85, spe: 55},
+abilities: {0: "Guts", 1: "No Guard", H: "Steadfast"},
+weightkg: 0,
+changesFrom: "Machamp",
+},
+
+bellsprout: {
+num: 69,
+name: "Bellsprout",
+types: ["Grass"],
+baseStats: {hp: 50, atk: 75, def: 35, spa: 70, spd: 30, spe: 40},
+abilities: {0: "Chlorophyll", H: "Gluttony"},
+weightkg: 4,
+evos: ["Weepinbell"],
+},
+
+weepinbell: {
+num: 70,
+name: "Weepinbell",
+types: ["Grass"],
+baseStats: {hp: 65, atk: 90, def: 50, spa: 85, spd: 45, spe: 55},
+abilities: {0: "Chlorophyll", H: "Gluttony"},
+weightkg: 6.4,
+prevo: "Bellsprout",
+evos: ["Victreebel"],
+},
+
+victreebel: {
+num: 71,
+name: "Victreebel",
+types: ["Grass", "Dark"],
+baseStats: {hp: 80, atk: 105, def: 65, spa: 100, spd: 70, spe: 70},
+abilities: {0: "Chlorophyll", H: "Gluttony"},
+weightkg: 15.5,
+prevo: "Weepinbell",
+evoType: "useItem",
+evoItem: "Leaf Stone",
+},
+
+tentacool: {
+num: 72,
+name: "Tentacool",
+types: ["Water", "Poison"],
+baseStats: {hp: 40, atk: 40, def: 35, spa: 50, spd: 100, spe: 70},
+abilities: {0: "Clear Body", 1: "Liquid Ooze", H: "Rain Dish"},
+weightkg: 45.5,
+evos: ["Tentacruel"],
+},
+
+tentacruel: {
+num: 73,
+name: "Tentacruel",
+types: ["Water", "Poison"],
+baseStats: {hp: 80, atk: 70, def: 65, spa: 80, spd: 120, spe: 100},
+abilities: {0: "Clear Body", 1: "Liquid Ooze", H: "Rain Dish"},
+weightkg: 55,
+prevo: "Tentacool",
+},
+
+geodude: {
+num: 74,
+name: "Geodude",
+types: ["Rock", "Ground"],
+baseStats: {hp: 40, atk: 80, def: 100, spa: 30, spd: 30, spe: 20},
+abilities: {0: "Rock Head", 1: "Sturdy", H: "Sand Veil"},
+weightkg: 20,
+evos: ["Graveler"],
+otherFormes: ["Geodude-Alola"],
+formeOrder: ["Geodude", "Geodude-Alola"],
+},
+
+geodudealola: {
+num: 74,
+name: "Geodude-Alola",
+baseSpecies: "Geodude",
+forme: "Alola",
+types: ["Rock", "Electric"],
+baseStats: {hp: 40, atk: 80, def: 100, spa: 30, spd: 30, spe: 20},
+abilities: {0: "Magnet Pull", 1: "Sturdy", H: "Galvanize"},
+weightkg: 20.3,
+evos: ["Graveler-Alola"],
+},
+
+graveler: {
+num: 75,
+name: "Graveler",
+types: ["Rock", "Ground"],
+baseStats: {hp: 55, atk: 95, def: 115, spa: 45, spd: 45, spe: 35},
+abilities: {0: "Rock Head", 1: "Sturdy", H: "Sand Veil"},
+weightkg: 105,
+prevo: "Geodude",
+evos: ["Golem"],
+otherFormes: ["Graveler-Alola"],
+formeOrder: ["Graveler", "Graveler-Alola"],
+},
+
+graveleralola: {
+num: 75,
+name: "Graveler-Alola",
+baseSpecies: "Graveler",
+forme: "Alola",
+types: ["Rock", "Electric"],
+baseStats: {hp: 55, atk: 95, def: 115, spa: 45, spd: 45, spe: 35},
+abilities: {0: "Magnet Pull", 1: "Sturdy", H: "Galvanize"},
+weightkg: 110,
+prevo: "Geodude-Alola",
+evos: ["Golem-Alola"],
+},
+
+golem: {
+num: 76,
+name: "Golem",
+types: ["Rock", "Dragon"],
+baseStats: {hp: 80, atk: 120, def: 130, spa: 55, spd: 65, spe: 45},
+abilities: {0: "Rock Head", 1: "Sturdy", H: "Sand Veil"},
+weightkg: 300,
+prevo: "Graveler",
+evoType: "trade",
+otherFormes: ["Golem-Alola"],
+formeOrder: ["Golem", "Golem-Alola"],
+},
+
+golemalola: {
+num: 76,
+name: "Golem-Alola",
+baseSpecies: "Golem",
+forme: "Alola",
+types: ["Rock", "Electric"],
+baseStats: {hp: 80, atk: 120, def: 130, spa: 55, spd: 65, spe: 45},
+abilities: {0: "Magnet Pull", 1: "Sturdy", H: "Galvanize"},
+weightkg: 316,
+prevo: "Graveler-Alola",
+evoType: "trade",
+},
+
+ponyta: {
+num: 77,
+name: "Ponyta",
+types: ["Fire"],
+baseStats: {hp: 50, atk: 85, def: 55, spa: 65, spd: 65, spe: 90},
+abilities: {0: "Run Away", 1: "Flash Fire", H: "Flame Body"},
+weightkg: 30,
+evos: ["Rapidash"],
+otherFormes: ["Ponyta-Galar"],
+formeOrder: ["Ponyta", "Ponyta-Galar"],
+},
+
+ponytagalar: {
+num: 77,
+name: "Ponyta-Galar",
+baseSpecies: "Ponyta",
+forme: "Galar",
+types: ["Psychic"],
+baseStats: {hp: 50, atk: 85, def: 55, spa: 65, spd: 65, spe: 90},
+abilities: {0: "Run Away", 1: "Pastel Veil", H: "Anticipation"},
+weightkg: 24,
+evos: ["Rapidash-Galar"],
+},
+
+rapidash: {
+num: 78,
+name: "Rapidash",
+types: ["Fire", "Steel"],
+baseStats: {hp: 65, atk: 100, def: 70, spa: 80, spd: 80, spe: 105},
+abilities: {0: "Run Away", 1: "Flash Fire", H: "Flame Body"},
+weightkg: 95,
+prevo: "Ponyta",
+otherFormes: ["Rapidash-Galar"],
+formeOrder: ["Rapidash", "Rapidash-Galar"],
+},
+
+rapidashgalar: {
+num: 78,
+name: "Rapidash-Galar",
+baseSpecies: "Rapidash",
+forme: "Galar",
+types: ["Psychic", "Fairy"],
+baseStats: {hp: 65, atk: 100, def: 70, spa: 80, spd: 80, spe: 105},
+abilities: {0: "Run Away", 1: "Pastel Veil", H: "Anticipation"},
+weightkg: 80,
+prevo: "Ponyta-Galar",
+},
+
+slowpoke: {
+num: 79,
+name: "Slowpoke",
+types: ["Water", "Psychic"],
+baseStats: {hp: 90, atk: 65, def: 65, spa: 40, spd: 40, spe: 15},
+abilities: {0: "Oblivious", 1: "Own Tempo", H: "Regenerator"},
+weightkg: 36,
+evos: ["Slowbro", "Slowking"],
+otherFormes: ["Slowpoke-Galar"],
+formeOrder: ["Slowpoke", "Slowpoke-Galar"],
+},
+
+slowpokegalar: {
+num: 79,
+name: "Slowpoke-Galar",
+baseSpecies: "Slowpoke",
+forme: "Galar",
+types: ["Psychic"],
+baseStats: {hp: 90, atk: 65, def: 65, spa: 40, spd: 40, spe: 15},
+abilities: {0: "Gluttony", 1: "Own Tempo", H: "Regenerator"},
+weightkg: 36,
+evos: ["Slowbro-Galar", "Slowking-Galar"],
+},
+
+slowbro: {
+num: 80,
+name: "Slowbro",
+types: ["Water", "Psychic"],
+baseStats: {hp: 95, atk: 75, def: 110, spa: 100, spd: 80, spe: 30},
+abilities: {0: "Oblivious", 1: "Own Tempo", H: "Regenerator"},
+weightkg: 78.5,
+prevo: "Slowpoke",
+otherFormes: ["Slowbro-Mega", "Slowbro-Galar"],
+formeOrder: ["Slowbro", "Slowbro-Mega", "Slowbro-Galar"],
+},
+
+slowbromega: {
+num: 80,
+name: "Slowbro-Mega",
+baseSpecies: "Slowbro",
+forme: "Mega",
+types: ["Water", "Psychic"],
+baseStats: {hp: 95, atk: 75, def: 180, spa: 130, spd: 80, spe: 30},
+abilities: {0: "Shell Armor"},
+weightkg: 120,
+},
+
+slowbrogalar: {
+num: 80,
+name: "Slowbro-Galar",
+baseSpecies: "Slowbro",
+forme: "Galar",
+types: ["Poison", "Psychic"],
+baseStats: {hp: 95, atk: 100, def: 95, spa: 100, spd: 70, spe: 30},
+abilities: {0: "Quick Draw", 1: "Own Tempo", H: "Regenerator"},
+weightkg: 70.5,
+prevo: "Slowpoke-Galar",
+evoType: "useItem",
+evoItem: "Galarica Cuff",
+},
+
+magnemite: {
+num: 81,
+name: "Magnemite",
+types: ["Electric", "Steel"],
+baseStats: {hp: 25, atk: 35, def: 70, spa: 95, spd: 55, spe: 45},
+abilities: {0: "Magnet Pull", 1: "Sturdy", H: "Analytic"},
+weightkg: 6,
+evos: ["Magneton"],
+},
+
+magneton: {
+num: 82,
+name: "Magneton",
+types: ["Electric", "Steel"],
+baseStats: {hp: 50, atk: 60, def: 95, spa: 120, spd: 70, spe: 70},
+abilities: {0: "Magnet Pull", 1: "Sturdy", H: "Analytic"},
+weightkg: 60,
+prevo: "Magnemite",
+evos: ["Magnezone"],
+},
+
+farfetchd: {
+num: 83,
+name: "Farfetch\u2019d",
+types: ["Normal", "Flying"],
+baseStats: {hp: 52, atk: 90, def: 55, spa: 58, spd: 62, spe: 60},
+abilities: {0: "Keen Eye", 1: "Inner Focus", H: "Defiant"},
+weightkg: 15,
+otherFormes: ["Farfetch\u2019d-Galar"],
+formeOrder: ["Farfetch\u2019d", "Farfetch\u2019d-Galar"],
+},
+
+farfetchdgalar: {
+num: 83,
+name: "Farfetch\u2019d-Galar",
+baseSpecies: "Farfetch\u2019d",
+forme: "Galar",
+types: ["Fighting", "Flying"],
+baseStats: {hp: 52, atk: 95, def: 55, spa: 58, spd: 62, spe: 55},
+abilities: {0: "Steadfast", H: "Scrappy"},
+weightkg: 15,
+evos: ["Sirfetch\u2019d"],
+},
+
+doduo: {
+num: 84,
+name: "Doduo",
+types: ["Ground", "Flying"],
+baseStats: {hp: 35, atk: 85, def: 45, spa: 35, spd: 35, spe: 75},
+abilities: {0: "Run Away", 1: "Early Bird", H: "Tangled Feet"},
+weightkg: 39.2,
+evos: ["Dodrio"],
+},
+
+dodrio: {
+num: 85,
+name: "Dodrio",
+types: ["Ground", "Flying"],
+baseStats: {hp: 60, atk: 110, def: 70, spa: 60, spd: 60, spe: 110},
+abilities: {0: "Run Away", 1: "Early Bird", H: "Tangled Feet"},
+weightkg: 85.2,
+prevo: "Doduo",
+},
+
+seel: {
+num: 86,
+name: "Seel",
+types: ["Ice"],
+baseStats: {hp: 65, atk: 45, def: 55, spa: 45, spd: 70, spe: 45},
+abilities: {0: "Thick Fat", 1: "Hydration", H: "Ice Body"},
+weightkg: 90,
+evos: ["Dewgong"],
+},
+
+dewgong: {
+num: 87,
+name: "Dewgong",
+types: ["Ice"],
+baseStats: {hp: 90, atk: 70, def: 80, spa: 70, spd: 95, spe: 70},
+abilities: {0: "Thick Fat", 1: "Hydration", H: "Ice Body"},
+weightkg: 120,
+prevo: "Seel",
+},
+
+grimer: {
+num: 88,
+name: "Grimer",
+types: ["Poison"],
+baseStats: {hp: 80, atk: 80, def: 50, spa: 40, spd: 50, spe: 25},
+abilities: {0: "Stench", 1: "Sticky Hold", H: "Poison Touch"},
+weightkg: 30,
+evos: ["Muk"],
+otherFormes: ["Grimer-Alola"],
+formeOrder: ["Grimer", "Grimer-Alola"],
+},
+
+grimeralola: {
+num: 88,
+name: "Grimer-Alola",
+baseSpecies: "Grimer",
+forme: "Alola",
+types: ["Poison", "Dark"],
+baseStats: {hp: 80, atk: 80, def: 50, spa: 40, spd: 50, spe: 25},
+abilities: {0: "Poison Touch", 1: "Gluttony", H: "Power of Alchemy"},
+weightkg: 42,
+evos: ["Muk-Alola"],
+},
+
+muk: {
+num: 89,
+name: "Muk",
+types: ["Poison"],
+baseStats: {hp: 105, atk: 105, def: 75, spa: 65, spd: 100, spe: 50},
+abilities: {0: "Stench", 1: "Sticky Hold", H: "Poison Touch"},
+weightkg: 30,
+prevo: "Grimer",
+otherFormes: ["Muk-Alola"],
+formeOrder: ["Muk", "Muk-Alola"],
+},
+
+mukalola: {
+num: 89,
+name: "Muk-Alola",
+baseSpecies: "Muk",
+forme: "Alola",
+types: ["Poison", "Dark"],
+baseStats: {hp: 105, atk: 105, def: 75, spa: 65, spd: 100, spe: 50},
+abilities: {0: "Poison Touch", 1: "Gluttony", H: "Power of Alchemy"},
+weightkg: 52,
+prevo: "Grimer-Alola",
+},
+
+shellder: {
+num: 90,
+name: "Shellder",
+types: ["Ice"],
+baseStats: {hp: 30, atk: 65, def: 100, spa: 45, spd: 25, spe: 40},
+abilities: {0: "Shell Armor", 1: "Skill Link", H: "Overcoat"},
+weightkg: 4,
+evos: ["Cloyster"],
+},
+
+cloyster: {
+num: 91,
+name: "Cloyster",
+types: ["Steel", "Ice"],
+baseStats: {hp: 50, atk: 95, def: 180, spa: 85, spd: 45, spe: 70},
+abilities: {0: "Shell Armor", 1: "Skill Link", H: "Overcoat"},
+weightkg: 132.5,
+prevo: "Shellder",
+evoType: "useItem",
+evoItem: "Water Stone",
+},
+
+gastly: {
+num: 92,
+name: "Gastly",
+types: ["Ghost", "Poison"],
+baseStats: {hp: 30, atk: 35, def: 30, spa: 100, spd: 35, spe: 80},
+abilities: {0: "Levitate"},
+weightkg: 0.1,
+evos: ["Haunter"],
+},
+
+haunter: {
+num: 93,
+name: "Haunter",
+types: ["Ghost", "Poison"],
+baseStats: {hp: 45, atk: 50, def: 45, spa: 115, spd: 55, spe: 95},
+abilities: {0: "Levitate"},
+weightkg: 0.1,
+prevo: "Gastly",
+evos: ["Gengar"],
+},
+
+gengar: {
+num: 94,
+name: "Gengar",
+types: ["Ghost", "Poison"],
+baseStats: {hp: 60, atk: 65, def: 60, spa: 130, spd: 75, spe: 110},
+abilities: {0: "Cursed Body"},
+weightkg: 40.5,
+prevo: "Haunter",
+evoType: "trade",
+otherFormes: ["Gengar-Mega"],
+formeOrder: ["Gengar", "Gengar-Mega"],
+},
+
+gengarmega: {
+num: 94,
+name: "Gengar-Mega",
+baseSpecies: "Gengar",
+forme: "Mega",
+types: ["Ghost", "Poison"],
+baseStats: {hp: 60, atk: 65, def: 80, spa: 170, spd: 95, spe: 130},
+abilities: {0: "Shadow Tag"},
+weightkg: 40.5,
+},
+
+gengargmax: {
+num: 94,
+name: "Gengar-Gmax",
+baseSpecies: "Gengar",
+forme: "Gmax",
+types: ["Ghost", "Poison"],
+baseStats: {hp: 60, atk: 65, def: 60, spa: 130, spd: 75, spe: 110},
+abilities: {0: "Cursed Body"},
+weightkg: 0,
+changesFrom: "Gengar",
+},
+
+onix: {
+num: 95,
+name: "Onix",
+types: ["Rock", "Ground"],
+baseStats: {hp: 35, atk: 45, def: 160, spa: 30, spd: 45, spe: 70},
+abilities: {0: "Rock Head", 1: "Sturdy", H: "Weak Armor"},
+weightkg: 210,
+evos: ["Steelix"],
+},
+
+drowzee: {
+num: 96,
+name: "Drowzee",
+types: ["Psychic", "Poison"],
+baseStats: {hp: 60, atk: 48, def: 45, spa: 43, spd: 90, spe: 42},
+abilities: {0: "Insomnia", 1: "Forewarn", H: "Inner Focus"},
+weightkg: 32.4,
+evos: ["Hypno"],
+},
+
+hypno: {
+num: 97,
+name: "Hypno",
+types: ["Psychic", "Poison"],
+baseStats: {hp: 85, atk: 73, def: 70, spa: 73, spd: 115, spe: 67},
+abilities: {0: "Insomnia", 1: "Forewarn", H: "Inner Focus"},
+weightkg: 75.6,
+prevo: "Drowzee",
+},
+
+krabby: {
+num: 98,
+name: "Krabby",
+types: ["Water"],
+baseStats: {hp: 30, atk: 105, def: 90, spa: 25, spd: 25, spe: 50},
+abilities: {0: "Hyper Cutter", 1: "Shell Armor", H: "Sheer Force"},
+weightkg: 6.5,
+evos: ["Kingler"],
+},
+
+kingler: {
+num: 99,
+name: "Kingler",
+types: ["Water", "Steel"],
+baseStats: {hp: 55, atk: 130, def: 115, spa: 50, spd: 50, spe: 75},
+abilities: {0: "Hyper Cutter", 1: "Shell Armor", H: "Sheer Force"},
+weightkg: 60,
+prevo: "Krabby",
+},
+
+kinglergmax: {
+num: 99,
+name: "Kingler-Gmax",
+baseSpecies: "Kingler",
+forme: "Gmax",
+types: ["Water", "Steel"],
+baseStats: {hp: 55, atk: 130, def: 115, spa: 50, spd: 50, spe: 75},
+abilities: {0: "Hyper Cutter", 1: "Shell Armor", H: "Sheer Force"},
+weightkg: 0,
+changesFrom: "Kingler",
+},
+
+voltorb: {
+num: 100,
+name: "Voltorb",
+types: ["Electric"],
+baseStats: {hp: 40, atk: 30, def: 50, spa: 55, spd: 55, spe: 100},
+abilities: {0: "Soundproof", 1: "Static", H: "Aftermath"},
+weightkg: 10.4,
+evos: ["Electrode"],
+otherFormes: ["Voltorb-Hisui"],
+formeOrder: ["Voltorb", "Voltorb-Hisui"],
+},
+
+voltorbhisui: {
+num: 100,
+name: "Voltorb-Hisui",
+baseSpecies: "Voltorb",
+forme: "Hisui",
+types: ["Electric", "Grass"],
+baseStats: {hp: 40, atk: 30, def: 50, spa: 55, spd: 55, spe: 100},
+abilities: {0: "Soundproof", 1: "Static", H: "Aftermath"},
+weightkg: 13,
+evos: ["Electrode-Hisui"],
+},
+
+electrode: {
+num: 101,
+name: "Electrode",
+types: ["Electric", "Ghost"],
+baseStats: {hp: 60, atk: 50, def: 70, spa: 80, spd: 80, spe: 150},
+abilities: {0: "Soundproof", 1: "Static", H: "Aftermath"},
+weightkg: 66.6,
+prevo: "Voltorb",
+otherFormes: ["Electrode-Hisui"],
+formeOrder: ["Electrode", "Electrode-Hisui"],
+},
+
+electrodehisui: {
+num: 101,
+name: "Electrode-Hisui",
+baseSpecies: "Electrode",
+forme: "Hisui",
+types: ["Electric", "Grass"],
+baseStats: {hp: 60, atk: 50, def: 70, spa: 80, spd: 80, spe: 150},
+abilities: {0: "Soundproof", 1: "Static", H: "Aftermath"},
+weightkg: 71,
+prevo: "Voltorb-Hisui",
+evoType: "useItem",
+evoItem: "Leaf Stone",
+},
+
+exeggcute: {
+num: 102,
+name: "Exeggcute",
+types: ["Grass", "Psychic"],
+baseStats: {hp: 60, atk: 40, def: 80, spa: 60, spd: 45, spe: 40},
+abilities: {0: "Chlorophyll", H: "Harvest"},
+weightkg: 2.5,
+evos: ["Exeggutor", "Exeggutor-Alola"],
+},
+
+exeggutor: {
+num: 103,
+name: "Exeggutor",
+types: ["Grass", "Psychic"],
+baseStats: {hp: 95, atk: 95, def: 85, spa: 125, spd: 75, spe: 55},
+abilities: {0: "Chlorophyll", H: "Harvest"},
+weightkg: 120,
+prevo: "Exeggcute",
+evoType: "useItem",
+evoItem: "Leaf Stone",
+otherFormes: ["Exeggutor-Alola"],
+formeOrder: ["Exeggutor", "Exeggutor-Alola"],
+},
+
+exeggutoralola: {
+num: 103,
+name: "Exeggutor-Alola",
+baseSpecies: "Exeggutor",
+forme: "Alola",
+types: ["Psychic", "Dragon"],
+baseStats: {hp: 95, atk: 105, def: 85, spa: 125, spd: 75, spe: 45},
+abilities: {0: "Frisk", H: "Harvest"},
+weightkg: 415.6,
+prevo: "Exeggcute",
+evoType: "useItem",
+evoItem: "Leaf Stone",
+evoRegion: "Alola",
+},
+
+cubone: {
+num: 104,
+name: "Cubone",
+types: ["Ground"],
+baseStats: {hp: 50, atk: 50, def: 95, spa: 40, spd: 50, spe: 35},
+abilities: {0: "Rock Head", 1: "Lightning Rod", H: "Battle Armor"},
+weightkg: 6.5,
+evos: ["Marowak", "Marowak-Alola"],
+},
+
+marowak: {
+num: 105,
+name: "Marowak",
+types: ["Ground", "Ghost"],
+baseStats: {hp: 60, atk: 80, def: 110, spa: 50, spd: 80, spe: 45},
+abilities: {0: "Rock Head", 1: "Lightning Rod", H: "Battle Armor"},
+weightkg: 45,
+prevo: "Cubone",
+otherFormes: ["Marowak-Alola", "Marowak-Alola-Totem"],
+formeOrder: ["Marowak", "Marowak-Alola", "Marowak-Alola-Totem"],
+},
+
+marowakalola: {
+num: 105,
+name: "Marowak-Alola",
+baseSpecies: "Marowak",
+forme: "Alola",
+types: ["Fire", "Ghost"],
+baseStats: {hp: 60, atk: 80, def: 110, spa: 50, spd: 80, spe: 45},
+abilities: {0: "Cursed Body", 1: "Lightning Rod", H: "Rock Head"},
+weightkg: 34,
+prevo: "Cubone",
+evoCondition: "at night",
+evoRegion: "Alola",
+},
+
+marowakalolatotem: {
+num: 105,
+name: "Marowak-Alola-Totem",
+baseSpecies: "Marowak",
+forme: "Alola-Totem",
+types: ["Fire", "Ghost"],
+baseStats: {hp: 60, atk: 80, def: 110, spa: 50, spd: 80, spe: 45},
+abilities: {0: "Rock Head"},
+weightkg: 98,
+},
+
+hitmonlee: {
+num: 106,
+name: "Hitmonlee",
+types: ["Fighting", "Ground"],
+baseStats: {hp: 50, atk: 120, def: 53, spa: 35, spd: 110, spe: 87},
+abilities: {0: "Limber", 1: "Reckless", H: "Unburden"},
+weightkg: 49.8,
+prevo: "Tyrogue",
+evoCondition: "with an Atk stat > its Def stat",
+},
+
+hitmonchan: {
+num: 107,
+name: "Hitmonchan",
+types: ["Fighting", "Steel"],
+baseStats: {hp: 50, atk: 105, def: 79, spa: 35, spd: 110, spe: 76},
+abilities: {0: "Keen Eye", 1: "Iron Fist", H: "Inner Focus"},
+weightkg: 50.2,
+prevo: "Tyrogue",
+evoCondition: "with an Atk stat < its Def stat",
+},
+
+lickitung: {
+num: 108,
+name: "Lickitung",
+types: ["Fairy", "Poison"],
+baseStats: {hp: 90, atk: 55, def: 75, spa: 60, spd: 75, spe: 30},
+abilities: {0: "Own Tempo", 1: "Oblivious", H: "Cloud Nine"},
+weightkg: 65.5,
+evos: ["Lickilicky"],
+},
+
+koffing: {
+num: 109,
+name: "Koffing",
+types: ["Poison"],
+baseStats: {hp: 40, atk: 65, def: 95, spa: 60, spd: 45, spe: 35},
+abilities: {0: "Levitate", 1: "Neutralizing Gas", H: "Stench"},
+weightkg: 1,
+evos: ["Weezing", "Weezing-Galar"],
+},
+
+weezing: {
+num: 110,
+name: "Weezing",
+types: ["Poison"],
+baseStats: {hp: 65, atk: 90, def: 120, spa: 85, spd: 70, spe: 60},
+abilities: {0: "Levitate", 1: "Neutralizing Gas", H: "Stench"},
+weightkg: 9.5,
+prevo: "Koffing",
+otherFormes: ["Weezing-Galar"],
+formeOrder: ["Weezing", "Weezing-Galar"],
+},
+
+weezinggalar: {
+num: 110,
+name: "Weezing-Galar",
+baseSpecies: "Weezing",
+forme: "Galar",
+types: ["Poison", "Fairy"],
+baseStats: {hp: 65, atk: 90, def: 120, spa: 85, spd: 70, spe: 60},
+abilities: {0: "Levitate", 1: "Neutralizing Gas", H: "Misty Surge"},
+weightkg: 16,
+prevo: "Koffing",
+evoRegion: "Galar",
+},
+
+rhyhorn: {
+num: 111,
+name: "Rhyhorn",
+types: ["Ground", "Rock"],
+baseStats: {hp: 80, atk: 85, def: 95, spa: 30, spd: 30, spe: 25},
+abilities: {0: "Lightning Rod", 1: "Rock Head", H: "Reckless"},
+weightkg: 115,
+evos: ["Rhydon"],
+},
+
+rhydon: {
+num: 112,
+name: "Rhydon",
+types: ["Ground", "Rock"],
+baseStats: {hp: 105, atk: 130, def: 120, spa: 45, spd: 45, spe: 40},
+abilities: {0: "Lightning Rod", 1: "Rock Head", H: "Reckless"},
+weightkg: 120,
+prevo: "Rhyhorn",
+evos: ["Rhyperior"],
+},
+
+chansey: {
+num: 113,
+name: "Chansey",
+types: ["Normal", "Fairy"],
+baseStats: {hp: 250, atk: 5, def: 5, spa: 35, spd: 105, spe: 50},
+abilities: {0: "Natural Cure", 1: "Serene Grace", H: "Healer"},
+weightkg: 34.6,
+prevo: "Happiny",
+evoType: "levelHold",
+evoItem: "Oval Stone",
+evoCondition: "during the day",
+evos: ["Blissey"],
+canHatch: true,
+},
+
+tangela: {
+num: 114,
+name: "Tangela",
+types: ["Grass"],
+baseStats: {hp: 65, atk: 55, def: 115, spa: 100, spd: 40, spe: 60},
+abilities: {0: "Chlorophyll", 1: "Leaf Guard", H: "Regenerator"},
+weightkg: 35,
+evos: ["Tangrowth"],
+},
+
+kangaskhan: {
+num: 115,
+name: "Kangaskhan",
+types: ["Fighting", "Dragon"],
+baseStats: {hp: 105, atk: 95, def: 80, spa: 40, spd: 80, spe: 90},
+abilities: {0: "Early Bird", 1: "Scrappy", H: "Inner Focus"},
+weightkg: 80,
+otherFormes: ["Kangaskhan-Mega"],
+formeOrder: ["Kangaskhan", "Kangaskhan-Mega"],
+},
+
+kangaskhanmega: {
+num: 115,
+name: "Kangaskhan-Mega",
+baseSpecies: "Kangaskhan",
+forme: "Mega",
+types: ["Fighting", "Dragon"],
+baseStats: {hp: 105, atk: 125, def: 100, spa: 60, spd: 100, spe: 100},
+abilities: {0: "Parental Bond"},
+weightkg: 100,
+},
+
+horsea: {
+num: 116,
+name: "Horsea",
+types: ["Ice"],
+baseStats: {hp: 30, atk: 40, def: 70, spa: 70, spd: 25, spe: 60},
+abilities: {0: "Swift Swim", 1: "Sniper", H: "Damp"},
+weightkg: 8,
+evos: ["Seadra"],
+},
+
+seadra: {
+num: 117,
+name: "Seadra",
+types: ["Ice"],
+baseStats: {hp: 55, atk: 65, def: 95, spa: 95, spd: 45, spe: 85},
+abilities: {0: "Poison Point", 1: "Sniper", H: "Damp"},
+weightkg: 25,
+prevo: "Horsea",
+evos: ["Kingdra"],
+},
+
+goldeen: {
+num: 118,
+name: "Goldeen",
+types: ["Water"],
+baseStats: {hp: 45, atk: 67, def: 60, spa: 35, spd: 50, spe: 63},
+abilities: {0: "Swift Swim", 1: "Water Veil", H: "Lightning Rod"},
+weightkg: 15,
+evos: ["Seaking"],
+},
+
+seaking: {
+num: 119,
+name: "Seaking",
+types: ["Water"],
+baseStats: {hp: 80, atk: 92, def: 65, spa: 65, spd: 80, spe: 68},
+abilities: {0: "Swift Swim", 1: "Water Veil", H: "Lightning Rod"},
+weightkg: 39,
+prevo: "Goldeen",
+},
+
+staryu: {
+num: 120,
+name: "Staryu",
+types: ["Psychic", "Rock"],
+baseStats: {hp: 30, atk: 45, def: 55, spa: 70, spd: 55, spe: 85},
+abilities: {0: "Illuminate", 1: "Natural Cure", H: "Analytic"},
+weightkg: 34.5,
+evos: ["Starmie"],
+},
+
+starmie: {
+num: 121,
+name: "Starmie",
+types: ["Psychic", "Rock"],
+baseStats: {hp: 60, atk: 75, def: 85, spa: 100, spd: 85, spe: 115},
+abilities: {0: "Illuminate", 1: "Natural Cure", H: "Analytic"},
+weightkg: 80,
+prevo: "Staryu",
+evoType: "useItem",
+evoItem: "Water Stone",
+},
+
+mrmime: {
+num: 122,
+name: "Mr. Mime",
+types: ["Dark", "Fairy"],
+baseStats: {hp: 40, atk: 45, def: 65, spa: 100, spd: 120, spe: 90},
+abilities: {0: "Soundproof", 1: "Filter", H: "Technician"},
+weightkg: 54.5,
+prevo: "Mime Jr.",
+evoType: "levelMove",
+evoMove: "Mimic",
+canHatch: true,
+otherFormes: ["Mr. Mime-Galar"],
+formeOrder: ["Mr. Mime", "Mr. Mime-Galar"],
+},
+
+mrmimegalar: {
+num: 122,
+name: "Mr. Mime-Galar",
+baseSpecies: "Mr. Mime",
+forme: "Galar",
+types: ["Ice", "Psychic"],
+baseStats: {hp: 50, atk: 65, def: 65, spa: 90, spd: 90, spe: 100},
+abilities: {0: "Vital Spirit", 1: "Screen Cleaner", H: "Ice Body"},
+weightkg: 56.8,
+prevo: "Mime Jr.",
+evoType: "levelMove",
+evoMove: "Mimic",
+evoRegion: "Galar",
+evos: ["Mr. Rime"],
+canHatch: true,
+},
+
+scyther: {
+num: 123,
+name: "Scyther",
+types: ["Bug", "Flying"],
+baseStats: {hp: 70, atk: 110, def: 80, spa: 55, spd: 80, spe: 105},
+abilities: {0: "Swarm", 1: "Technician", H: "Steadfast"},
+weightkg: 56,
+evos: ["Scizor", "Kleavor"],
+},
+
+jynx: {
+num: 124,
+name: "Jynx",
+types: ["Ice", "Psychic"],
+baseStats: {hp: 65, atk: 50, def: 35, spa: 115, spd: 95, spe: 95},
+abilities: {0: "Oblivious", 1: "Forewarn", H: "Dry Skin"},
+weightkg: 40.6,
+prevo: "Smoochum",
+},
+
+electabuzz: {
+num: 125,
+name: "Electabuzz",
+types: ["Electric", "Fighting"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 65, atk: 83, def: 57, spa: 95, spd: 85, spe: 105},
+abilities: {0: "Static", H: "Vital Spirit"},
+weightkg: 30,
+prevo: "Elekid",
+evos: ["Electivire"],
+},
+
+magmar: {
+num: 126,
+name: "Magmar",
+types: ["Fire", "Poison"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 65, atk: 95, def: 57, spa: 100, spd: 85, spe: 93},
+abilities: {0: "Flame Body", H: "Vital Spirit"},
+weightkg: 44.5,
+prevo: "Magby",
+evos: ["Magmortar"],
+},
+
+pinsir: {
+num: 127,
+name: "Pinsir",
+types: ["Bug"],
+baseStats: {hp: 65, atk: 125, def: 100, spa: 55, spd: 70, spe: 85},
+abilities: {0: "Hyper Cutter", 1: "Mold Breaker", H: "Moxie"},
+weightkg: 55,
+otherFormes: ["Pinsir-Mega"],
+formeOrder: ["Pinsir", "Pinsir-Mega"],
+},
+
+pinsirmega: {
+num: 127,
+name: "Pinsir-Mega",
+baseSpecies: "Pinsir",
+forme: "Mega",
+types: ["Bug", "Flying"],
+baseStats: {hp: 65, atk: 155, def: 120, spa: 65, spd: 90, spe: 105},
+abilities: {0: "Aerilate"},
+weightkg: 59,
+},
+
+tauros: {
+num: 128,
+name: "Tauros",
+types: ["Ground","Fighting"],
+baseStats: {hp: 75, atk: 100, def: 95, spa: 40, spd: 70, spe: 110},
+abilities: {0: "Intimidate", 1: "Anger Point", H: "Sheer Force"},
+weightkg: 88.4,
+otherFormes: ["Tauros-Paldea-Combat", "Tauros-Paldea-Blaze", "Tauros-Paldea-Aqua"],
+formeOrder: ["Tauros", "Tauros-Paldea-Combat", "Tauros-Paldea-Blaze", "Tauros-Paldea-Aqua"],
+},
+
+taurospaldeacombat: {
+num: 128,
+name: "Tauros-Paldea-Combat",
+baseSpecies: "Tauros",
+forme: "Paldea-Combat",
+types: ["Fighting"],
+baseStats: {hp: 75, atk: 110, def: 105, spa: 30, spd: 70, spe: 100},
+abilities: {0: "Intimidate", 1: "Anger Point", H: "Cud Chew"},
+weightkg: 88.4,
+},
+
+taurospaldeablaze: {
+num: 128,
+name: "Tauros-Paldea-Blaze",
+baseSpecies: "Tauros",
+forme: "Paldea-Blaze",
+types: ["Fighting", "Fire"],
+baseStats: {hp: 75, atk: 110, def: 105, spa: 30, spd: 70, spe: 100},
+abilities: {0: "Intimidate", 1: "Anger Point", H: "Cud Chew"},
+weightkg: 88.4,
+},
+
+taurospaldeaaqua: {
+num: 128,
+name: "Tauros-Paldea-Aqua",
+baseSpecies: "Tauros",
+forme: "Paldea-Aqua",
+types: ["Fighting", "Water"],
+baseStats: {hp: 75, atk: 110, def: 105, spa: 30, spd: 70, spe: 100},
+abilities: {0: "Intimidate", 1: "Anger Point", H: "Cud Chew"},
+weightkg: 88.4,
+},
+
+magikarp: {
+num: 129,
+name: "Magikarp",
+types: ["Water"],
+baseStats: {hp: 20, atk: 10, def: 55, spa: 15, spd: 20, spe: 80},
+abilities: {0: "Swift Swim", H: "Rattled"},
+weightkg: 10,
+evos: ["Gyarados"],
+},
+
+gyarados: {
+num: 130,
+name: "Gyarados",
+types: ["Water", "Dragon"],
+baseStats: {hp: 95, atk: 125, def: 79, spa: 60, spd: 100, spe: 81},
+abilities: {0: "Intimidate", H: "Moxie"},
+weightkg: 235,
+prevo: "Magikarp",
+otherFormes: ["Gyarados-Mega"],
+formeOrder: ["Gyarados", "Gyarados-Mega"],
+},
+
+gyaradosmega: {
+num: 130,
+name: "Gyarados-Mega",
+baseSpecies: "Gyarados",
+forme: "Mega",
+types: ["Water", "Dragon"],
+baseStats: {hp: 95, atk: 155, def: 109, spa: 70, spd: 130, spe: 81},
+abilities: {0: "Mold Breaker"},
+weightkg: 305,
+},
+
+lapras: {
+num: 131,
+name: "Lapras",
+types: ["Dragon", "Ice"],
+baseStats: {hp: 130, atk: 85, def: 80, spa: 85, spd: 95, spe: 60},
+abilities: {0: "Water Absorb", 1: "Shell Armor", H: "Hydration"},
+weightkg: 220,
+},
+
+laprasgmax: {
+num: 131,
+name: "Lapras-Gmax",
+baseSpecies: "Lapras",
+forme: "Gmax",
+types: ["Dragon", "Ice"],
+baseStats: {hp: 130, atk: 85, def: 80, spa: 85, spd: 95, spe: 60},
+abilities: {0: "Water Absorb", 1: "Shell Armor", H: "Hydration"},
+weightkg: 0,
+changesFrom: "Lapras",
+},
+
+ditto: {
+num: 132,
+name: "Ditto",
+types: ["???"],
+baseStats: {hp: 48, atk: 48, def: 48, spa: 48, spd: 48, spe: 48},
+abilities: {0: "Limber", H: "Imposter"},
+weightkg: 4,
+},
+
+eevee: {
+num: 133,
+name: "Eevee",
+types: ["Normal"],
+baseStats: {hp: 55, atk: 55, def: 50, spa: 45, spd: 65, spe: 55},
+abilities: {0: "Run Away", 1: "Adaptability", H: "Anticipation"},
+weightkg: 6.5,
+evos: ["Vaporeon", "Jolteon", "Flareon", "Espeon", "Umbreon", "Leafeon", "Glaceon", "Sylveon"],
+otherFormes: ["Eevee-Starter"],
+formeOrder: ["Eevee", "Eevee-Starter"],
+},
+
+eeveestarter: {
+num: 133,
+name: "Eevee-Starter",
+baseSpecies: "Eevee",
+forme: "Starter",
+types: ["Normal"],
+baseStats: {hp: 65, atk: 75, def: 70, spa: 65, spd: 85, spe: 75},
+abilities: {0: "Run Away", 1: "Adaptability", H: "Anticipation"},
+weightkg: 6.5,
+},
+
+eeveegmax: {
+num: 133,
+name: "Eevee-Gmax",
+baseSpecies: "Eevee",
+forme: "Gmax",
+types: ["Normal"],
+baseStats: {hp: 55, atk: 55, def: 50, spa: 45, spd: 65, spe: 55},
+abilities: {0: "Run Away", 1: "Adaptability", H: "Anticipation"},
+weightkg: 0,
+changesFrom: "Eevee",
+},
+
+vaporeon: {
+num: 134,
+name: "Vaporeon",
+types: ["Water", "Normal"],
+baseStats: {hp: 130, atk: 65, def: 60, spa: 110, spd: 95, spe: 65},
+abilities: {0: "Water Absorb", H: "Hydration"},
+weightkg: 29,
+prevo: "Eevee",
+evoType: "useItem",
+evoItem: "Water Stone",
+},
+
+jolteon: {
+num: 135,
+name: "Jolteon",
+types: ["Electric", "Normal"],
+baseStats: {hp: 65, atk: 65, def: 60, spa: 110, spd: 95, spe: 130},
+abilities: {0: "Volt Absorb", H: "Quick Feet"},
+weightkg: 24.5,
+prevo: "Eevee",
+evoType: "useItem",
+evoItem: "Thunder Stone",
+},
+
+flareon: {
+num: 136,
+name: "Flareon",
+types: ["Fire", "Normal"],
+baseStats: {hp: 65, atk: 130, def: 60, spa: 95, spd: 110, spe: 65},
+abilities: {0: "Flash Fire", H: "Guts"},
+weightkg: 25,
+prevo: "Eevee",
+evoType: "useItem",
+evoItem: "Fire Stone",
+},
+
+porygon: {
+num: 137,
+name: "Porygon",
+types: ["Electric", "Psychic"],
+baseStats: {hp: 65, atk: 60, def: 70, spa: 85, spd: 75, spe: 40},
+abilities: {0: "Trace", 1: "Download", H: "Analytic"},
+weightkg: 36.5,
+evos: ["Porygon2"],
+},
+
+omanyte: {
+num: 138,
+name: "Omanyte",
+types: ["Bug", "Ghost"],
+baseStats: {hp: 35, atk: 40, def: 100, spa: 90, spd: 55, spe: 35},
+abilities: {0: "Swift Swim", 1: "Shell Armor", H: "Weak Armor"},
+weightkg: 7.5,
+evos: ["Omastar"],
+},
+
+omastar: {
+num: 139,
+name: "Omastar",
+types: ["Bug", "Ghost"],
+baseStats: {hp: 70, atk: 60, def: 125, spa: 115, spd: 70, spe: 55},
+abilities: {0: "Swift Swim", 1: "Shell Armor", H: "Weak Armor"},
+weightkg: 35,
+prevo: "Omanyte",
+},
+
+kabuto: {
+num: 140,
+name: "Kabuto",
+types: ["Water"],
+baseStats: {hp: 30, atk: 80, def: 90, spa: 55, spd: 45, spe: 55},
+abilities: {0: "Swift Swim", 1: "Battle Armor", H: "Weak Armor"},
+weightkg: 11.5,
+evos: ["Kabutops"],
+},
+
+kabutops: {
+num: 141,
+name: "Kabutops",
+types: ["Water", "Steel"],
+baseStats: {hp: 60, atk: 115, def: 105, spa: 65, spd: 70, spe: 80},
+abilities: {0: "Swift Swim", 1: "Battle Armor", H: "Weak Armor"},
+weightkg: 40.5,
+prevo: "Kabuto",
+},
+
+aerodactyl: {
+num: 142,
+name: "Aerodactyl",
+types: ["Ghost", "Dragon"],
+baseStats: {hp: 80, atk: 105, def: 65, spa: 60, spd: 75, spe: 130},
+abilities: {0: "Rock Head", 1: "Pressure", H: "Unnerve"},
+weightkg: 59,
+otherFormes: ["Aerodactyl-Mega"],
+formeOrder: ["Aerodactyl", "Aerodactyl-Mega"],
+},
+
+aerodactylmega: {
+num: 142,
+name: "Aerodactyl-Mega",
+baseSpecies: "Aerodactyl",
+forme: "Mega",
+types: ["Ghost", "Dragon"],
+baseStats: {hp: 80, atk: 135, def: 85, spa: 70, spd: 95, spe: 150},
+abilities: {0: "Tough Claws"},
+weightkg: 79,
+},
+
+snorlax: {
+num: 143,
+name: "Snorlax",
+types: ["Normal", "Dragon"],
+baseStats: {hp: 160, atk: 110, def: 65, spa: 65, spd: 110, spe: 30},
+abilities: {0: "Immunity", 1: "Thick Fat", H: "Gluttony"},
+weightkg: 460,
+prevo: "Munchlax",
+evoType: "levelFriendship",
+canHatch: true,
+},
+
+snorlaxgmax: {
+num: 143,
+name: "Snorlax-Gmax",
+baseSpecies: "Snorlax",
+forme: "Gmax",
+types: ["Normal", "Dragon"],
+baseStats: {hp: 160, atk: 110, def: 65, spa: 65, spd: 110, spe: 30},
+abilities: {0: "Immunity", 1: "Thick Fat", H: "Gluttony"},
+weightkg: 0,
+changesFrom: "Snorlax",
+},
+
+articuno: {
+num: 144,
+name: "Articuno",
+types: ["Ice", "Flying"],
+baseStats: {hp: 90, atk: 85, def: 100, spa: 95, spd: 125, spe: 85},
+abilities: {0: "Pressure", H: "Snow Cloak"},
+weightkg: 55.4,
+otherFormes: ["Articuno-Galar"],
+formeOrder: ["Articuno", "Articuno-Galar"],
+},
+
+articunogalar: {
+num: 144,
+name: "Articuno-Galar",
+baseSpecies: "Articuno",
+forme: "Galar",
+types: ["Psychic", "Flying"],
+baseStats: {hp: 90, atk: 85, def: 85, spa: 125, spd: 100, spe: 95},
+abilities: {0: "Competitive"},
+weightkg: 50.9,
+},
+
+zapdos: {
+num: 145,
+name: "Zapdos",
+types: ["Electric", "Flying"],
+baseStats: {hp: 90, atk: 90, def: 85, spa: 125, spd: 90, spe: 100},
+abilities: {0: "Pressure", H: "Static"},
+weightkg: 52.6,
+otherFormes: ["Zapdos-Galar"],
+formeOrder: ["Zapdos", "Zapdos-Galar"],
+},
+
+zapdosgalar: {
+num: 145,
+name: "Zapdos-Galar",
+baseSpecies: "Zapdos",
+forme: "Galar",
+types: ["Fighting", "Flying"],
+baseStats: {hp: 90, atk: 125, def: 90, spa: 85, spd: 90, spe: 100},
+abilities: {0: "Defiant"},
+weightkg: 58.2,
+},
+
+moltres: {
+num: 146,
+name: "Moltres",
+types: ["Fire", "Flying"],
+baseStats: {hp: 90, atk: 100, def: 90, spa: 125, spd: 85, spe: 90},
+abilities: {0: "Pressure", H: "Flame Body"},
+weightkg: 60,
+otherFormes: ["Moltres-Galar"],
+formeOrder: ["Moltres", "Moltres-Galar"],
+},
+
+moltresgalar: {
+num: 146,
+name: "Moltres-Galar",
+baseSpecies: "Moltres",
+forme: "Galar",
+types: ["Dark", "Flying"],
+baseStats: {hp: 90, atk: 85, def: 90, spa: 100, spd: 125, spe: 90},
+abilities: {0: "Berserk"},
+weightkg: 66,
+},
+
+dratini: {
+num: 147,
+name: "Dratini",
+types: ["Dragon"],
+baseStats: {hp: 41, atk: 64, def: 45, spa: 50, spd: 50, spe: 50},
+abilities: {0: "Shed Skin", H: "Marvel Scale"},
+weightkg: 3.3,
+evos: ["Dragonair"],
+},
+
+dragonair: {
+num: 148,
+name: "Dragonair",
+types: ["Dragon"],
+baseStats: {hp: 61, atk: 84, def: 65, spa: 70, spd: 70, spe: 70},
+abilities: {0: "Shed Skin", H: "Marvel Scale"},
+weightkg: 16.5,
+prevo: "Dratini",
+evos: ["Dragonite"],
+},
+
+dragonite: {
+num: 149,
+name: "Dragonite",
+types: ["Dragon", "Flying"],
+baseStats: {hp: 91, atk: 134, def: 95, spa: 100, spd: 100, spe: 80},
+abilities: {0: "Inner Focus", H: "Multiscale"},
+weightkg: 210,
+prevo: "Dragonair",
+},
+
+mewtwo: {
+num: 150,
+name: "Mewtwo",
+types: ["Psychic", "Dark"],
+baseStats: {hp: 106, atk: 110, def: 90, spa: 154, spd: 90, spe: 130},
+abilities: {0: "Pressure", H: "Unnerve"},
+weightkg: 122,
+otherFormes: ["Mewtwo-Mega-X", "Mewtwo-Mega-Y"],
+formeOrder: ["Mewtwo", "Mewtwo-Mega-X", "Mewtwo-Mega-Y"],
+},
+
+mewtwomegax: {
+num: 150,
+name: "Mewtwo-Mega-X",
+baseSpecies: "Mewtwo",
+forme: "Mega-X",
+types: ["Psychic", "Fighting"],
+baseStats: {hp: 106, atk: 190, def: 100, spa: 154, spd: 100, spe: 130},
+abilities: {0: "Steadfast"},
+weightkg: 127,
+},
+
+mewtwomegay: {
+num: 150,
+name: "Mewtwo-Mega-Y",
+baseSpecies: "Mewtwo",
+forme: "Mega-Y",
+types: ["Psychic"],
+baseStats: {hp: 106, atk: 150, def: 70, spa: 194, spd: 120, spe: 140},
+abilities: {0: "Insomnia"},
+weightkg: 33,
+},
+
+mew: {
+num: 151,
+name: "Mew",
+types: ["Psychic", "Fairy"],
+baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
+abilities: {0: "Synchronize"},
+weightkg: 4,
+},
+
+chikorita: {
+num: 152,
+name: "Chikorita",
+types: ["Grass"],
+baseStats: {hp: 45, atk: 49, def: 65, spa: 49, spd: 65, spe: 45},
+abilities: {0: "Overgrow", H: "Leaf Guard"},
+weightkg: 6.4,
+evos: ["Bayleef"],
+},
+
+bayleef: {
+num: 153,
+name: "Bayleef",
+types: ["Grass"],
+baseStats: {hp: 60, atk: 62, def: 80, spa: 63, spd: 80, spe: 60},
+abilities: {0: "Overgrow", H: "Leaf Guard"},
+weightkg: 15.8,
+prevo: "Chikorita",
+evos: ["Meganium"],
+},
+
+meganium: {
+num: 154,
+name: "Meganium",
+types: ["Grass", "Fairy"],
+baseStats: {hp: 80, atk: 82, def: 100, spa: 83, spd: 100, spe: 80},
+abilities: {0: "Overgrow", H: "Leaf Guard"},
+weightkg: 100.5,
+prevo: "Bayleef",
+},
+
+cyndaquil: {
+num: 155,
+name: "Cyndaquil",
+types: ["Fire"],
+baseStats: {hp: 39, atk: 52, def: 43, spa: 60, spd: 50, spe: 65},
+abilities: {0: "Blaze", H: "Flash Fire"},
+weightkg: 7.9,
+evos: ["Quilava"],
+},
+
+quilava: {
+num: 156,
+name: "Quilava",
+types: ["Fire"],
+baseStats: {hp: 58, atk: 64, def: 58, spa: 80, spd: 65, spe: 80},
+abilities: {0: "Blaze", H: "Flash Fire"},
+weightkg: 19,
+prevo: "Cyndaquil",
+evos: ["Typhlosion", "Typhlosion-Hisui"],
+},
+
+typhlosion: {
+num: 157,
+name: "Typhlosion",
+types: ["Fire", "Electric"],
+baseStats: {hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100},
+abilities: {0: "Blaze", H: "Flash Fire"},
+weightkg: 79.5,
+prevo: "Quilava",
+otherFormes: ["Typhlosion-Hisui"],
+formeOrder: ["Typhlosion", "Typhlosion-Hisui"],
+},
+
+typhlosionhisui: {
+num: 157,
+name: "Typhlosion-Hisui",
+baseSpecies: "Typhlosion",
+forme: "Hisui",
+types: ["Fire", "Ghost"],
+baseStats: {hp: 73, atk: 84, def: 78, spa: 119, spd: 85, spe: 95},
+abilities: {0: "Blaze", H: "Frisk"},
+weightkg: 69.8,
+prevo: "Quilava",
+},
+
+totodile: {
+num: 158,
+name: "Totodile",
+types: ["Water"],
+baseStats: {hp: 50, atk: 65, def: 64, spa: 44, spd: 48, spe: 43},
+abilities: {0: "Torrent", H: "Sheer Force"},
+weightkg: 9.5,
+evos: ["Croconaw"],
+},
+
+croconaw: {
+num: 159,
+name: "Croconaw",
+types: ["Water"],
+baseStats: {hp: 65, atk: 80, def: 80, spa: 59, spd: 63, spe: 58},
+abilities: {0: "Torrent", H: "Sheer Force"},
+weightkg: 25,
+prevo: "Totodile",
+evos: ["Feraligatr"],
+},
+
+feraligatr: {
+num: 160,
+name: "Feraligatr",
+types: ["Water", "Fire"],
+baseStats: {hp: 85, atk: 105, def: 100, spa: 79, spd: 83, spe: 78},
+abilities: {0: "Torrent", H: "Sheer Force"},
+weightkg: 88.8,
+prevo: "Croconaw",
+},
+
+sentret: {
+num: 161,
+name: "Sentret",
+types: ["Ground", "Fairy"],
+baseStats: {hp: 35, atk: 46, def: 34, spa: 35, spd: 45, spe: 20},
+abilities: {0: "Run Away", 1: "Keen Eye", H: "Frisk"},
+weightkg: 6,
+evos: ["Furret"],
+},
+
+furret: {
+num: 162,
+name: "Furret",
+types: ["Ground", "Fairy"],
+baseStats: {hp: 85, atk: 76, def: 64, spa: 45, spd: 55, spe: 90},
+abilities: {0: "Run Away", 1: "Keen Eye", H: "Frisk"},
+weightkg: 32.5,
+prevo: "Sentret",
+},
+
+hoothoot: {
+num: 163,
+name: "Hoothoot",
+types: ["Normal", "Flying"],
+baseStats: {hp: 60, atk: 30, def: 30, spa: 36, spd: 56, spe: 50},
+abilities: {0: "Insomnia", 1: "Keen Eye", H: "Tinted Lens"},
+weightkg: 21.2,
+evos: ["Noctowl"],
+},
+
+noctowl: {
+num: 164,
+name: "Noctowl",
+types: ["Ghost", "Flying"],
+baseStats: {hp: 100, atk: 50, def: 50, spa: 86, spd: 96, spe: 70},
+abilities: {0: "Insomnia", 1: "Keen Eye", H: "Tinted Lens"},
+weightkg: 40.8,
+prevo: "Hoothoot",
+},
+
+ledyba: {
+num: 165,
+name: "Ledyba",
+types: ["Bug", "Normal"],
+baseStats: {hp: 40, atk: 20, def: 30, spa: 40, spd: 80, spe: 55},
+abilities: {0: "Swarm", 1: "Early Bird", H: "Rattled"},
+weightkg: 10.8,
+evos: ["Ledian"],
+},
+
+ledian: {
+num: 166,
+name: "Ledian",
+types: ["Bug", "Normal"],
+baseStats: {hp: 55, atk: 35, def: 50, spa: 55, spd: 110, spe: 85},
+abilities: {0: "Swarm", 1: "Early Bird", H: "Iron Fist"},
+weightkg: 35.6,
+prevo: "Ledyba",
+},
+
+spinarak: {
+num: 167,
+name: "Spinarak",
+types: ["Bug"],
+baseStats: {hp: 40, atk: 60, def: 40, spa: 40, spd: 40, spe: 30},
+abilities: {0: "Swarm", 1: "Insomnia", H: "Sniper"},
+weightkg: 8.5,
+evos: ["Ariados"],
+},
+
+ariados: {
+num: 168,
+name: "Ariados",
+types: ["Bug", "Dark"],
+baseStats: {hp: 70, atk: 90, def: 70, spa: 60, spd: 70, spe: 40},
+abilities: {0: "Swarm", 1: "Insomnia", H: "Sniper"},
+weightkg: 33.5,
+prevo: "Spinarak",
+},
+
+crobat: {
+num: 169,
+name: "Crobat",
+types: ["Poison", "Flying"],
+baseStats: {hp: 85, atk: 90, def: 80, spa: 70, spd: 80, spe: 130},
+abilities: {0: "Inner Focus", H: "Infiltrator"},
+weightkg: 75,
+prevo: "Golbat",
+evoType: "levelFriendship",
+},
+
+chinchou: {
+num: 170,
+name: "Chinchou",
+types: ["Water", "Electric"],
+baseStats: {hp: 75, atk: 38, def: 38, spa: 56, spd: 56, spe: 67},
+abilities: {0: "Volt Absorb", 1: "Illuminate", H: "Water Absorb"},
+weightkg: 12,
+evos: ["Lanturn"],
+},
+
+lanturn: {
+num: 171,
+name: "Lanturn",
+types: ["Water", "Electric"],
+baseStats: {hp: 125, atk: 58, def: 58, spa: 76, spd: 76, spe: 67},
+abilities: {0: "Volt Absorb", 1: "Illuminate", H: "Water Absorb"},
+weightkg: 22.5,
+prevo: "Chinchou",
+},
+
+pichu: {
+num: 172,
+name: "Pichu",
+types: ["Electric"],
+baseStats: {hp: 20, atk: 40, def: 15, spa: 35, spd: 35, spe: 60},
+abilities: {0: "Static", H: "Lightning Rod"},
+weightkg: 2,
+evos: ["Pikachu"],
+canHatch: true,
+otherFormes: ["Pichu-Spiky-eared"],
+formeOrder: ["Pichu", "Pichu-Spiky-eared"],
+},
+
+pichuspikyeared: {
+num: 172,
+name: "Pichu-Spiky-eared",
+baseSpecies: "Pichu",
+forme: "Spiky-eared",
+types: ["Electric"],
+baseStats: {hp: 20, atk: 40, def: 15, spa: 35, spd: 35, spe: 60},
+abilities: {0: "Static"},
+weightkg: 2,
+gen: 4,
+},
+
+cleffa: {
+num: 173,
+name: "Cleffa",
+types: ["Fairy"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 50, atk: 25, def: 28, spa: 45, spd: 55, spe: 15},
+abilities: {0: "Cute Charm", 1: "Magic Guard", H: "Friend Guard"},
+weightkg: 3,
+evos: ["Clefairy"],
+canHatch: true,
+},
+
+igglybuff: {
+num: 174,
+name: "Igglybuff",
+types: ["Normal", "Fairy"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 90, atk: 30, def: 15, spa: 40, spd: 20, spe: 15},
+abilities: {0: "Cute Charm", 1: "Competitive", H: "Friend Guard"},
+weightkg: 1,
+evos: ["Jigglypuff"],
+canHatch: true,
+},
+
+togepi: {
+num: 175,
+name: "Togepi",
+types: ["Fairy"],
+baseStats: {hp: 35, atk: 20, def: 65, spa: 40, spd: 65, spe: 20},
+abilities: {0: "Hustle", 1: "Serene Grace", H: "Super Luck"},
+weightkg: 1.5,
+evos: ["Togetic"],
+canHatch: true,
+},
+
+togetic: {
+num: 176,
+name: "Togetic",
+types: ["Fairy", "Flying"],
+baseStats: {hp: 55, atk: 40, def: 85, spa: 80, spd: 105, spe: 40},
+abilities: {0: "Hustle", 1: "Serene Grace", H: "Super Luck"},
+weightkg: 3.2,
+prevo: "Togepi",
+evoType: "levelFriendship",
+evos: ["Togekiss"],
+},
+
+natu: {
+num: 177,
+name: "Natu",
+types: ["Psychic", "Flying"],
+baseStats: {hp: 40, atk: 50, def: 45, spa: 70, spd: 45, spe: 70},
+abilities: {0: "Synchronize", 1: "Early Bird", H: "Magic Bounce"},
+weightkg: 2,
+evos: ["Xatu"],
+},
+
+xatu: {
+num: 178,
+name: "Xatu",
+types: ["Psychic", "Flying"],
+baseStats: {hp: 65, atk: 75, def: 70, spa: 95, spd: 70, spe: 95},
+abilities: {0: "Synchronize", 1: "Early Bird", H: "Magic Bounce"},
+weightkg: 15,
+prevo: "Natu",
+},
+
+mareep: {
+num: 179,
+name: "Mareep",
+types: ["Electric", "Normal"],
+baseStats: {hp: 55, atk: 40, def: 40, spa: 65, spd: 45, spe: 35},
+abilities: {0: "Static", H: "Plus"},
+weightkg: 7.8,
+evos: ["Flaaffy"],
+},
+
+flaaffy: {
+num: 180,
+name: "Flaaffy",
+types: ["Electric", "Normal"],
+baseStats: {hp: 70, atk: 55, def: 55, spa: 80, spd: 60, spe: 45},
+abilities: {0: "Static", H: "Plus"},
+weightkg: 13.3,
+prevo: "Mareep",
+evos: ["Ampharos"],
+},
+
+ampharos: {
+num: 181,
+name: "Ampharos",
+types: ["Electric", "Dragon"],
+baseStats: {hp: 90, atk: 75, def: 85, spa: 115, spd: 90, spe: 55},
+abilities: {0: "Static", H: "Plus"},
+weightkg: 61.5,
+prevo: "Flaaffy",
+otherFormes: ["Ampharos-Mega"],
+formeOrder: ["Ampharos", "Ampharos-Mega"],
+},
+
+ampharosmega: {
+num: 181,
+name: "Ampharos-Mega",
+baseSpecies: "Ampharos",
+forme: "Mega",
+types: ["Electric", "Dragon"],
+baseStats: {hp: 90, atk: 95, def: 105, spa: 165, spd: 110, spe: 45},
+abilities: {0: "Mold Breaker"},
+weightkg: 61.5,
+},
+
+bellossom: {
+num: 182,
+name: "Bellossom",
+types: ["Grass", "Fire"],
+baseStats: {hp: 75, atk: 80, def: 95, spa: 90, spd: 100, spe: 50},
+abilities: {0: "Chlorophyll", H: "Healer"},
+weightkg: 5.8,
+prevo: "Gloom",
+evoType: "useItem",
+evoItem: "Sun Stone",
+},
+
+marill: {
+num: 183,
+name: "Marill",
+types: ["Water", "Fairy"],
+baseStats: {hp: 70, atk: 20, def: 50, spa: 20, spd: 50, spe: 40},
+abilities: {0: "Thick Fat", 1: "Huge Power", H: "Sap Sipper"},
+weightkg: 8.5,
+prevo: "Azurill",
+evoType: "levelFriendship",
+evos: ["Azumarill"],
+canHatch: true,
+},
+
+azumarill: {
+num: 184,
+name: "Azumarill",
+types: ["Water", "Fairy"],
+baseStats: {hp: 100, atk: 50, def: 80, spa: 60, spd: 80, spe: 50},
+abilities: {0: "Thick Fat", 1: "Huge Power", H: "Sap Sipper"},
+weightkg: 28.5,
+prevo: "Marill",
+},
+
+sudowoodo: {
+num: 185,
+name: "Sudowoodo",
+types: ["Rock", "Grass"],
+baseStats: {hp: 70, atk: 100, def: 115, spa: 30, spd: 65, spe: 30},
+abilities: {0: "Sturdy", 1: "Rock Head", H: "Rattled"},
+weightkg: 38,
+prevo: "Bonsly",
+evoType: "levelMove",
+evoMove: "Mimic",
+canHatch: true,
+},
+
+politoed: {
+num: 186,
+name: "Politoed",
+types: ["Poison", "Psychic"],
+baseStats: {hp: 90, atk: 75, def: 75, spa: 90, spd: 100, spe: 70},
+abilities: {0: "Water Absorb", 1: "Damp", H: "Drizzle"},
+weightkg: 33.9,
+prevo: "Poliwhirl",
+evoType: "trade",
+evoItem: "King's Rock",
+},
+
+hoppip: {
+num: 187,
+name: "Hoppip",
+types: ["Grass", "Flying"],
+baseStats: {hp: 35, atk: 35, def: 40, spa: 35, spd: 55, spe: 50},
+abilities: {0: "Chlorophyll", 1: "Leaf Guard", H: "Infiltrator"},
+weightkg: 0.5,
+evos: ["Skiploom"],
+},
+
+skiploom: {
+num: 188,
+name: "Skiploom",
+types: ["Grass", "Flying"],
+baseStats: {hp: 55, atk: 45, def: 50, spa: 45, spd: 65, spe: 80},
+abilities: {0: "Chlorophyll", 1: "Leaf Guard", H: "Infiltrator"},
+weightkg: 1,
+prevo: "Hoppip",
+evos: ["Jumpluff"],
+},
+
+jumpluff: {
+num: 189,
+name: "Jumpluff",
+types: ["Grass", "Flying"],
+baseStats: {hp: 75, atk: 55, def: 70, spa: 55, spd: 95, spe: 110},
+abilities: {0: "Chlorophyll", 1: "Leaf Guard", H: "Infiltrator"},
+weightkg: 3,
+prevo: "Skiploom",
+},
+
+aipom: {
+num: 190,
+name: "Aipom",
+types: ["Normal", "Poison"],
+baseStats: {hp: 55, atk: 70, def: 55, spa: 40, spd: 55, spe: 85},
+abilities: {0: "Run Away", 1: "Pickup", H: "Skill Link"},
+weightkg: 11.5,
+evos: ["Ambipom"],
+},
+
+sunkern: {
+num: 191,
+name: "Sunkern",
+types: ["Grass"],
+baseStats: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30},
+abilities: {0: "Chlorophyll", 1: "Solar Power", H: "Early Bird"},
+weightkg: 1.8,
+evos: ["Sunflora"],
+},
+
+sunflora: {
+num: 192,
+name: "Sunflora",
+types: ["Grass", "Fire"],
+baseStats: {hp: 75, atk: 75, def: 55, spa: 105, spd: 85, spe: 30},
+abilities: {0: "Chlorophyll", 1: "Solar Power", H: "Early Bird"},
+weightkg: 8.5,
+prevo: "Sunkern",
+evoType: "useItem",
+evoItem: "Sun Stone",
+},
+
+yanma: {
+num: 193,
+name: "Yanma",
+types: ["Bug", "Flying"],
+baseStats: {hp: 65, atk: 65, def: 45, spa: 75, spd: 45, spe: 95},
+abilities: {0: "Speed Boost", 1: "Compound Eyes", H: "Frisk"},
+weightkg: 38,
+evos: ["Yanmega"],
+},
+
+wooper: {
+num: 194,
+name: "Wooper",
+types: ["Water", "Ground"],
+baseStats: {hp: 55, atk: 45, def: 45, spa: 25, spd: 25, spe: 15},
+abilities: {0: "Damp", 1: "Water Absorb", H: "Unaware"},
+weightkg: 8.5,
+evos: ["Quagsire"],
+otherFormes: ["Wooper-Paldea"],
+formeOrder: ["Wooper", "Wooper-Paldea"],
+},
+
+wooperpaldea: {
+num: 194,
+name: "Wooper-Paldea",
+baseSpecies: "Wooper",
+forme: "Paldea",
+types: ["Poison", "Ground"],
+baseStats: {hp: 55, atk: 45, def: 45, spa: 25, spd: 25, spe: 15},
+abilities: {0: "Poison Point", 1: "Water Absorb", H: "Unaware"},
+weightkg: 8.5,
+evos: ["Clodsire"],
+},
+
+quagsire: {
+num: 195,
+name: "Quagsire",
+types: ["Water", "Ground"],
+baseStats: {hp: 95, atk: 85, def: 85, spa: 65, spd: 65, spe: 35},
+abilities: {0: "Damp", 1: "Water Absorb", H: "Unaware"},
+weightkg: 75,
+prevo: "Wooper",
+},
+
+espeon: {
+num: 196,
+name: "Espeon",
+types: ["Psychic", "Normal"],
+baseStats: {hp: 65, atk: 65, def: 60, spa: 130, spd: 95, spe: 110},
+abilities: {0: "Synchronize", H: "Magic Bounce"},
+weightkg: 26.5,
+prevo: "Eevee",
+evoType: "levelFriendship",
+evoCondition: "during the day",
+},
+
+umbreon: {
+num: 197,
+name: "Umbreon",
+types: ["Dark", "Normal"],
+baseStats: {hp: 95, atk: 65, def: 110, spa: 60, spd: 130, spe: 65},
+abilities: {0: "Synchronize", H: "Inner Focus"},
+weightkg: 27,
+prevo: "Eevee",
+evoType: "levelFriendship",
+evoCondition: "at night",
+},
+
+murkrow: {
+num: 198,
+name: "Murkrow",
+types: ["Dark", "Flying"],
+baseStats: {hp: 60, atk: 85, def: 42, spa: 85, spd: 42, spe: 91},
+abilities: {0: "Insomnia", 1: "Super Luck", H: "Prankster"},
+weightkg: 2.1,
+evos: ["Honchkrow"],
+},
+
+slowking: {
+num: 199,
+name: "Slowking",
+types: ["Water", "Poison"],
+baseStats: {hp: 95, atk: 75, def: 80, spa: 100, spd: 110, spe: 30},
+abilities: {0: "Oblivious", 1: "Own Tempo", H: "Regenerator"},
+weightkg: 79.5,
+prevo: "Slowpoke",
+evoType: "trade",
+evoItem: "King's Rock",
+otherFormes: ["Slowking-Galar"],
+formeOrder: ["Slowking", "Slowking-Galar"],
+},
+
+slowkinggalar: {
+num: 199,
+name: "Slowking-Galar",
+baseSpecies: "Slowking",
+forme: "Galar",
+types: ["Poison", "Dark"],
+baseStats: {hp: 95, atk: 65, def: 80, spa: 110, spd: 110, spe: 30},
+abilities: {0: "Curious Medicine", 1: "Own Tempo", H: "Regenerator"},
+weightkg: 79.5,
+prevo: "Slowpoke-Galar",
+evoType: "useItem",
+evoItem: "Galarica Wreath",
+},
+
+misdreavus: {
+num: 200,
+name: "Misdreavus",
+types: ["Ghost", "Fairy"],
+baseStats: {hp: 60, atk: 60, def: 60, spa: 85, spd: 85, spe: 85},
+abilities: {0: "Levitate"},
+weightkg: 1,
+evos: ["Mismagius"],
+},
+
+unown: {
+num: 201,
+name: "Unown",
+baseForme: "A",
+types: ["???"],
+baseStats: {hp: 48, atk: 72, def: 48, spa: 72, spd: 48, spe: 48},
+abilities: {0: "Levitate"},
+weightkg: 5,
+cosmeticFormes: ["Unown-B", "Unown-C", "Unown-D", "Unown-E", "Unown-F", "Unown-G", "Unown-H", "Unown-I", "Unown-J", "Unown-K", "Unown-L", "Unown-M", "Unown-N", "Unown-O", "Unown-P", "Unown-Q", "Unown-R", "Unown-S", "Unown-T", "Unown-U", "Unown-V", "Unown-W", "Unown-X", "Unown-Y", "Unown-Z", "Unown-Exclamation", "Unown-Question"],
+formeOrder: ["Unown", "Unown-B", "Unown-C", "Unown-D", "Unown-E", "Unown-F", "Unown-G", "Unown-H", "Unown-I", "Unown-J", "Unown-K", "Unown-L", "Unown-M", "Unown-N", "Unown-O", "Unown-P", "Unown-Q", "Unown-R", "Unown-S", "Unown-T", "Unown-U", "Unown-V", "Unown-W", "Unown-X", "Unown-Y", "Unown-Z", "Unown-Exclamation", "Unown-Question"],
+},
+
+wobbuffet: {
+num: 202,
+name: "Wobbuffet",
+types: ["???"],
+baseStats: {hp: 190, atk: 33, def: 58, spa: 33, spd: 58, spe: 33},
+abilities: {0: "Shadow Tag", H: "Telepathy"},
+weightkg: 28.5,
+prevo: "Wynaut",
+canHatch: true,
+},
+
+girafarig: {
+num: 203,
+name: "Girafarig",
+types: ["Normal", "Psychic"],
+baseStats: {hp: 70, atk: 80, def: 65, spa: 90, spd: 65, spe: 85},
+abilities: {0: "Inner Focus", 1: "Early Bird", H: "Sap Sipper"},
+weightkg: 41.5,
+evos: ["Farigiraf"],
+},
+
+pineco: {
+num: 204,
+name: "Pineco",
+types: ["Bug"],
+baseStats: {hp: 50, atk: 65, def: 90, spa: 35, spd: 35, spe: 15},
+abilities: {0: "Sturdy", H: "Overcoat"},
+weightkg: 7.2,
+evos: ["Forretress"],
+},
+
+forretress: {
+num: 205,
+name: "Forretress",
+types: ["Bug", "Ground"],
+baseStats: {hp: 75, atk: 90, def: 140, spa: 60, spd: 60, spe: 40},
+abilities: {0: "Sturdy", H: "Overcoat"},
+weightkg: 125.8,
+prevo: "Pineco",
+},
+
+dunsparce: {
+num: 206,
+name: "Dunsparce",
+types: ["Normal", "Bug"],
+baseStats: {hp: 100, atk: 70, def: 70, spa: 65, spd: 65, spe: 45},
+abilities: {0: "Serene Grace", 1: "Run Away", H: "Rattled"},
+weightkg: 14,
+evos: ["Dudunsparce", "Dudunsparce-Three-Segment"],
+},
+
+gligar: {
+num: 207,
+name: "Gligar",
+types: ["Ground", "Flying"],
+baseStats: {hp: 65, atk: 75, def: 105, spa: 35, spd: 65, spe: 85},
+abilities: {0: "Hyper Cutter", 1: "Sand Veil", H: "Immunity"},
+weightkg: 64.8,
+evos: ["Gliscor"],
+},
+
+steelix: {
+num: 208,
+name: "Steelix",
+types: ["Steel", "Ground"],
+baseStats: {hp: 75, atk: 85, def: 200, spa: 55, spd: 65, spe: 30},
+abilities: {0: "Rock Head", 1: "Sturdy", H: "Sheer Force"},
+weightkg: 400,
+prevo: "Onix",
+evoType: "trade",
+evoItem: "Metal Coat",
+otherFormes: ["Steelix-Mega"],
+formeOrder: ["Steelix", "Steelix-Mega"],
+},
+
+steelixmega: {
+num: 208,
+name: "Steelix-Mega",
+baseSpecies: "Steelix",
+forme: "Mega",
+types: ["Steel", "Ground"],
+baseStats: {hp: 75, atk: 125, def: 230, spa: 55, spd: 95, spe: 30},
+abilities: {0: "Sand Force"},
+weightkg: 740,
+},
+
+snubbull: {
+num: 209,
+name: "Snubbull",
+types: ["Ground", "Fighting"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 60, atk: 80, def: 50, spa: 40, spd: 40, spe: 30},
+abilities: {0: "Intimidate", 1: "Run Away", H: "Rattled"},
+weightkg: 7.8,
+evos: ["Granbull"],
+},
+
+granbull: {
+num: 210,
+name: "Granbull",
+types: ["Ground", "Fighting"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 90, atk: 120, def: 75, spa: 60, spd: 60, spe: 45},
+abilities: {0: "Intimidate", 1: "Quick Feet", H: "Rattled"},
+weightkg: 48.7,
+prevo: "Snubbull",
+},
+
+qwilfish: {
+num: 211,
+name: "Qwilfish",
+types: ["Ice", "Poison"],
+baseStats: {hp: 65, atk: 95, def: 85, spa: 55, spd: 55, spe: 85},
+abilities: {0: "Poison Point", 1: "Swift Swim", H: "Intimidate"},
+weightkg: 3.9,
+otherFormes: ["Qwilfish-Hisui"],
+formeOrder: ["Qwilfish", "Qwilfish-Hisui"],
+},
+
+qwilfishhisui: {
+num: 211,
+name: "Qwilfish-Hisui",
+baseSpecies: "Qwilfish",
+forme: "Hisui",
+types: ["Dark", "Poison"],
+baseStats: {hp: 65, atk: 95, def: 85, spa: 55, spd: 55, spe: 85},
+abilities: {0: "Poison Point", 1: "Swift Swim", H: "Intimidate"},
+weightkg: 3.9,
+evos: ["Overqwil"],
+},
+
+scizor: {
+num: 212,
+name: "Scizor",
+types: ["Bug", "Steel"],
+baseStats: {hp: 70, atk: 130, def: 100, spa: 55, spd: 80, spe: 65},
+abilities: {0: "Swarm", 1: "Technician", H: "Light Metal"},
+weightkg: 118,
+prevo: "Scyther",
+evoType: "trade",
+evoItem: "Metal Coat",
+otherFormes: ["Scizor-Mega"],
+formeOrder: ["Scizor", "Scizor-Mega"],
+},
+
+scizormega: {
+num: 212,
+name: "Scizor-Mega",
+baseSpecies: "Scizor",
+forme: "Mega",
+types: ["Bug", "Steel"],
+baseStats: {hp: 70, atk: 150, def: 140, spa: 65, spd: 100, spe: 75},
+abilities: {0: "Technician"},
+weightkg: 125,
+},
+
+shuckle: {
+num: 213,
+name: "Shuckle",
+types: ["Bug", "Rock"],
+baseStats: {hp: 20, atk: 10, def: 230, spa: 10, spd: 230, spe: 5},
+abilities: {0: "Sturdy", 1: "Gluttony", H: "Contrary"},
+weightkg: 20.5,
+},
+
+heracross: {
+num: 214,
+name: "Heracross",
+types: ["Bug", "Fighting"],
+baseStats: {hp: 80, atk: 125, def: 75, spa: 40, spd: 95, spe: 85},
+abilities: {0: "Swarm", 1: "Guts", H: "Moxie"},
+weightkg: 54,
+otherFormes: ["Heracross-Mega"],
+formeOrder: ["Heracross", "Heracross-Mega"],
+},
+
+heracrossmega: {
+num: 214,
+name: "Heracross-Mega",
+baseSpecies: "Heracross",
+forme: "Mega",
+types: ["Bug", "Fighting"],
+baseStats: {hp: 80, atk: 185, def: 115, spa: 40, spd: 105, spe: 75},
+abilities: {0: "Skill Link"},
+weightkg: 62.5,
+},
+
+sneasel: {
+num: 215,
+name: "Sneasel",
+types: ["Dark", "Ice"],
+baseStats: {hp: 55, atk: 95, def: 55, spa: 35, spd: 75, spe: 115},
+abilities: {0: "Inner Focus", 1: "Keen Eye", H: "Pickpocket"},
+weightkg: 28,
+evos: ["Weavile"],
+otherFormes: ["Sneasel-Hisui"],
+formeOrder: ["Sneasel", "Sneasel-Hisui"],
+},
+
+sneaselhisui: {
+num: 215,
+name: "Sneasel-Hisui",
+baseSpecies: "Sneasel",
+forme: "Hisui",
+types: ["Fighting", "Poison"],
+baseStats: {hp: 55, atk: 95, def: 55, spa: 35, spd: 75, spe: 115},
+abilities: {0: "Inner Focus", 1: "Keen Eye", H: "Pickpocket"},
+weightkg: 27,
+evos: ["Sneasler"],
+},
+
+teddiursa: {
+num: 216,
+name: "Teddiursa",
+types: ["Normal"],
+baseStats: {hp: 60, atk: 80, def: 50, spa: 50, spd: 50, spe: 40},
+abilities: {0: "Pickup", 1: "Quick Feet", H: "Honey Gather"},
+weightkg: 8.8,
+evos: ["Ursaring"],
+},
+
+ursaring: {
+num: 217,
+name: "Ursaring",
+types: ["Normal"],
+baseStats: {hp: 90, atk: 130, def: 75, spa: 75, spd: 75, spe: 55},
+abilities: {0: "Guts", 1: "Quick Feet", H: "Unnerve"},
+weightkg: 125.8,
+prevo: "Teddiursa",
+evos: ["Ursaluna"],
+},
+
+slugma: {
+num: 218,
+name: "Slugma",
+types: ["Fire"],
+baseStats: {hp: 40, atk: 40, def: 40, spa: 70, spd: 40, spe: 20},
+abilities: {0: "Magma Armor", 1: "Flame Body", H: "Weak Armor"},
+weightkg: 35,
+evos: ["Magcargo"],
+},
+
+magcargo: {
+num: 219,
+name: "Magcargo",
+types: ["Fire", "Rock"],
+baseStats: {hp: 60, atk: 50, def: 120, spa: 90, spd: 80, spe: 30},
+abilities: {0: "Magma Armor", 1: "Flame Body", H: "Weak Armor"},
+weightkg: 55,
+prevo: "Slugma",
+},
+
+swinub: {
+num: 220,
+name: "Swinub",
+types: ["Ice", "Ground"],
+baseStats: {hp: 50, atk: 50, def: 40, spa: 30, spd: 30, spe: 50},
+abilities: {0: "Oblivious", 1: "Snow Cloak", H: "Thick Fat"},
+weightkg: 6.5,
+evos: ["Piloswine"],
+},
+
+piloswine: {
+num: 221,
+name: "Piloswine",
+types: ["Ice", "Ground"],
+baseStats: {hp: 100, atk: 100, def: 80, spa: 60, spd: 60, spe: 50},
+abilities: {0: "Oblivious", 1: "Snow Cloak", H: "Thick Fat"},
+weightkg: 55.8,
+prevo: "Swinub",
+evos: ["Mamoswine"],
+},
+
+corsola: {
+num: 222,
+name: "Corsola",
+types: ["Water", "Rock"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 65, atk: 55, def: 95, spa: 65, spd: 95, spe: 35},
+abilities: {0: "Hustle", 1: "Natural Cure", H: "Regenerator"},
+weightkg: 5,
+otherFormes: ["Corsola-Galar"],
+formeOrder: ["Corsola", "Corsola-Galar"],
+},
+
+corsolagalar: {
+num: 222,
+name: "Corsola-Galar",
+baseSpecies: "Corsola",
+forme: "Galar",
+types: ["Ghost", "Rock"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 60, atk: 55, def: 100, spa: 65, spd: 100, spe: 30},
+abilities: {0: "Weak Armor", H: "Cursed Body"},
+weightkg: 0.5,
+evos: ["Cursola"],
+},
+
+remoraid: {
+num: 223,
+name: "Remoraid",
+types: ["Ice"],
+baseStats: {hp: 35, atk: 65, def: 35, spa: 65, spd: 35, spe: 65},
+abilities: {0: "Hustle", 1: "Sniper", H: "Moody"},
+weightkg: 12,
+evos: ["Octillery"],
+},
+
+octillery: {
+num: 224,
+name: "Octillery",
+types: ["Ice", "Fighting"],
+baseStats: {hp: 75, atk: 105, def: 75, spa: 105, spd: 75, spe: 45},
+abilities: {0: "Suction Cups", 1: "Sniper", H: "Moody"},
+weightkg: 28.5,
+prevo: "Remoraid",
+},
+
+delibird: {
+num: 225,
+name: "Delibird",
+types: ["Ice", "Flying"],
+baseStats: {hp: 45, atk: 55, def: 45, spa: 65, spd: 45, spe: 75},
+abilities: {0: "Vital Spirit", 1: "Hustle", H: "Insomnia"},
+weightkg: 16,
+},
+
+mantine: {
+num: 226,
+name: "Mantine",
+types: ["Water", "Flying"],
+baseStats: {hp: 85, atk: 40, def: 70, spa: 80, spd: 140, spe: 70},
+abilities: {0: "Swift Swim", 1: "Water Absorb", H: "Water Veil"},
+weightkg: 220,
+prevo: "Mantyke",
+evoType: "levelExtra",
+evoCondition: "with a Remoraid in party",
+canHatch: true,
+},
+
+skarmory: {
+num: 227,
+name: "Skarmory",
+types: ["Steel", "Flying"],
+baseStats: {hp: 65, atk: 80, def: 140, spa: 40, spd: 70, spe: 70},
+abilities: {0: "Keen Eye", 1: "Sturdy", H: "Weak Armor"},
+weightkg: 50.5,
+},
+
+houndour: {
+num: 228,
+name: "Houndour",
+types: ["Dark", "Fire"],
+baseStats: {hp: 45, atk: 60, def: 30, spa: 80, spd: 50, spe: 65},
+abilities: {0: "Early Bird", 1: "Flash Fire", H: "Unnerve"},
+weightkg: 10.8,
+evos: ["Houndoom"],
+},
+
+houndoom: {
+num: 229,
+name: "Houndoom",
+types: ["Dark", "Fire"],
+baseStats: {hp: 75, atk: 90, def: 50, spa: 110, spd: 80, spe: 95},
+abilities: {0: "Early Bird", 1: "Flash Fire", H: "Unnerve"},
+weightkg: 35,
+prevo: "Houndour",
+otherFormes: ["Houndoom-Mega"],
+formeOrder: ["Houndoom", "Houndoom-Mega"],
+},
+
+houndoommega: {
+num: 229,
+name: "Houndoom-Mega",
+baseSpecies: "Houndoom",
+forme: "Mega",
+types: ["Dark", "Fire"],
+baseStats: {hp: 75, atk: 90, def: 90, spa: 140, spd: 90, spe: 115},
+abilities: {0: "Solar Power"},
+weightkg: 49.5,
+},
+
+kingdra: {
+num: 230,
+name: "Kingdra",
+types: ["Ice", "Dragon"],
+baseStats: {hp: 75, atk: 95, def: 95, spa: 95, spd: 95, spe: 85},
+abilities: {0: "Swift Swim", 1: "Sniper", H: "Damp"},
+weightkg: 152,
+prevo: "Seadra",
+evoType: "trade",
+evoItem: "Dragon Scale",
+},
+
+phanpy: {
+num: 231,
+name: "Phanpy",
+types: ["Ground"],
+baseStats: {hp: 90, atk: 60, def: 60, spa: 40, spd: 40, spe: 40},
+abilities: {0: "Pickup", H: "Sand Veil"},
+weightkg: 33.5,
+evos: ["Donphan"],
+},
+
+donphan: {
+num: 232,
+name: "Donphan",
+types: ["Ground", "Fighting"],
+baseStats: {hp: 90, atk: 120, def: 120, spa: 60, spd: 60, spe: 50},
+abilities: {0: "Sturdy", H: "Sand Veil"},
+weightkg: 120,
+prevo: "Phanpy",
+},
+
+porygon2: {
+num: 233,
+name: "Porygon2",
+types: ["Electric", "Psychic"],
+baseStats: {hp: 85, atk: 80, def: 90, spa: 105, spd: 95, spe: 60},
+abilities: {0: "Trace", 1: "Download", H: "Analytic"},
+weightkg: 32.5,
+prevo: "Porygon",
+evoType: "trade",
+evoItem: "Up-Grade",
+evos: ["Porygon-Z"],
+},
+
+stantler: {
+num: 234,
+name: "Stantler",
+types: ["Normal"],
+baseStats: {hp: 73, atk: 95, def: 62, spa: 85, spd: 65, spe: 85},
+abilities: {0: "Intimidate", 1: "Frisk", H: "Sap Sipper"},
+weightkg: 71.2,
+evos: ["Wyrdeer"],
+},
+
+smeargle: {
+num: 235,
+name: "Smeargle",
+types: ["Normal"],
+baseStats: {hp: 55, atk: 20, def: 35, spa: 20, spd: 45, spe: 75},
+abilities: {0: "Own Tempo", 1: "Technician", H: "Moody"},
+weightkg: 58,
+},
+
+tyrogue: {
+num: 236,
+name: "Tyrogue",
+types: ["Fighting"],
+baseStats: {hp: 35, atk: 35, def: 35, spa: 35, spd: 35, spe: 35},
+abilities: {0: "Guts", 1: "Steadfast", H: "Vital Spirit"},
+weightkg: 21,
+evos: ["Hitmonlee", "Hitmonchan", "Hitmontop"],
+canHatch: true,
+},
+
+hitmontop: {
+num: 237,
+name: "Hitmontop",
+types: ["Fighting", "Poison"],
+baseStats: {hp: 50, atk: 95, def: 95, spa: 35, spd: 110, spe: 70},
+abilities: {0: "Intimidate", 1: "Technician", H: "Steadfast"},
+weightkg: 48,
+prevo: "Tyrogue",
+evoCondition: "with an Atk stat equal to its Def stat",
+},
+
+smoochum: {
+num: 238,
+name: "Smoochum",
+types: ["Ice", "Psychic"],
+baseStats: {hp: 45, atk: 30, def: 15, spa: 85, spd: 65, spe: 65},
+abilities: {0: "Oblivious", 1: "Forewarn", H: "Hydration"},
+weightkg: 6,
+evos: ["Jynx"],
+canHatch: true,
+},
+
+elekid: {
+num: 239,
+name: "Elekid",
+types: ["Electric"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 45, atk: 63, def: 37, spa: 65, spd: 55, spe: 95},
+abilities: {0: "Static", H: "Vital Spirit"},
+weightkg: 23.5,
+evos: ["Electabuzz"],
+canHatch: true,
+},
+
+magby: {
+num: 240,
+name: "Magby",
+types: ["Fire"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 45, atk: 75, def: 37, spa: 70, spd: 55, spe: 83},
+abilities: {0: "Flame Body", H: "Vital Spirit"},
+weightkg: 21.4,
+evos: ["Magmar"],
+canHatch: true,
+},
+
+miltank: {
+num: 241,
+name: "Miltank",
+types: ["Normal", "Rock"],
+baseStats: {hp: 95, atk: 80, def: 105, spa: 40, spd: 70, spe: 100},
+abilities: {0: "Thick Fat", 1: "Scrappy", H: "Sap Sipper"},
+weightkg: 75.5,
+},
+
+blissey: {
+num: 242,
+name: "Blissey",
+types: ["Normal", "Fairy"],
+baseStats: {hp: 255, atk: 10, def: 10, spa: 75, spd: 135, spe: 55},
+abilities: {0: "Natural Cure", 1: "Serene Grace", H: "Healer"},
+weightkg: 46.8,
+prevo: "Chansey",
+evoType: "levelFriendship",
+},
+
+raikou: {
+num: 243,
+name: "Raikou",
+types: ["Electric"],
+baseStats: {hp: 90, atk: 85, def: 75, spa: 115, spd: 100, spe: 115},
+abilities: {0: "Pressure", H: "Inner Focus"},
+weightkg: 178,
+},
+
+entei: {
+num: 244,
+name: "Entei",
+types: ["Fire"],
+baseStats: {hp: 115, atk: 115, def: 85, spa: 90, spd: 75, spe: 100},
+abilities: {0: "Pressure", H: "Inner Focus"},
+weightkg: 198,
+},
+
+suicune: {
+num: 245,
+name: "Suicune",
+types: ["Ice"],
+baseStats: {hp: 100, atk: 75, def: 115, spa: 90, spd: 115, spe: 85},
+abilities: {0: "Pressure", H: "Inner Focus"},
+weightkg: 187,
+},
+
+larvitar: {
+num: 246,
+name: "Larvitar",
+types: ["Rock", "Ground"],
+baseStats: {hp: 50, atk: 64, def: 50, spa: 45, spd: 50, spe: 41},
+abilities: {0: "Guts", H: "Sand Veil"},
+weightkg: 72,
+evos: ["Pupitar"],
+},
+
+pupitar: {
+num: 247,
+name: "Pupitar",
+types: ["Rock", "Ground"],
+baseStats: {hp: 70, atk: 84, def: 70, spa: 65, spd: 70, spe: 51},
+abilities: {0: "Shed Skin"},
+weightkg: 152,
+prevo: "Larvitar",
+evos: ["Tyranitar"],
+},
+
+tyranitar: {
+num: 248,
+name: "Tyranitar",
+types: ["Rock", "Dark"],
+baseStats: {hp: 100, atk: 134, def: 110, spa: 95, spd: 100, spe: 61},
+abilities: {0: "Sand Stream", H: "Unnerve"},
+weightkg: 202,
+prevo: "Pupitar",
+otherFormes: ["Tyranitar-Mega"],
+formeOrder: ["Tyranitar", "Tyranitar-Mega"],
+},
+
+tyranitarmega: {
+num: 248,
+name: "Tyranitar-Mega",
+baseSpecies: "Tyranitar",
+forme: "Mega",
+types: ["Rock", "Dark"],
+baseStats: {hp: 100, atk: 164, def: 150, spa: 95, spd: 120, spe: 71},
+abilities: {0: "Sand Stream"},
+weightkg: 255,
+},
+
+lugia: {
+num: 249,
+name: "Lugia",
+types: ["Water", "Dragon"],
+baseStats: {hp: 106, atk: 90, def: 130, spa: 90, spd: 154, spe: 110},
+abilities: {0: "Pressure", H: "Multiscale"},
+weightkg: 216,
+},
+
+hooh: {
+num: 250,
+name: "Ho-Oh",
+types: ["Fire", "Dragon"],
+baseStats: {hp: 106, atk: 130, def: 90, spa: 110, spd: 154, spe: 90},
+abilities: {0: "Pressure", H: "Regenerator"},
+weightkg: 199,
+},
+
+celebi: {
+num: 251,
+name: "Celebi",
+types: ["Fairy", "Grass"],
+baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
+abilities: {0: "Natural Cure"},
+weightkg: 5,
+},
+
+treecko: {
+num: 252,
+name: "Treecko",
+types: ["Grass"],
+baseStats: {hp: 40, atk: 45, def: 35, spa: 65, spd: 55, spe: 70},
+abilities: {0: "Overgrow", H: "Unburden"},
+weightkg: 5,
+evos: ["Grovyle"],
+},
+
+grovyle: {
+num: 253,
+name: "Grovyle",
+types: ["Grass"],
+baseStats: {hp: 50, atk: 65, def: 45, spa: 85, spd: 65, spe: 95},
+abilities: {0: "Overgrow", H: "Unburden"},
+weightkg: 21.6,
+prevo: "Treecko",
+evos: ["Sceptile"],
+},
+
+sceptile: {
+num: 254,
+name: "Sceptile",
+types: ["Grass", "Dragon"],
+baseStats: {hp: 70, atk: 85, def: 65, spa: 105, spd: 85, spe: 120},
+abilities: {0: "Overgrow", H: "Unburden"},
+weightkg: 52.2,
+prevo: "Grovyle",
+otherFormes: ["Sceptile-Mega"],
+formeOrder: ["Sceptile", "Sceptile-Mega"],
+},
+
+sceptilemega: {
+num: 254,
+name: "Sceptile-Mega",
+baseSpecies: "Sceptile",
+forme: "Mega",
+types: ["Grass", "Dragon"],
+baseStats: {hp: 70, atk: 110, def: 75, spa: 145, spd: 85, spe: 145},
+abilities: {0: "Lightning Rod"},
+weightkg: 55.2,
+},
+
+torchic: {
+num: 255,
+name: "Torchic",
+types: ["Fire"],
+baseStats: {hp: 45, atk: 60, def: 40, spa: 70, spd: 50, spe: 45},
+abilities: {0: "Blaze", H: "Speed Boost"},
+weightkg: 2.5,
+evos: ["Combusken"],
+},
+
+combusken: {
+num: 256,
+name: "Combusken",
+types: ["Fire", "Fighting"],
+baseStats: {hp: 60, atk: 85, def: 60, spa: 85, spd: 60, spe: 55},
+abilities: {0: "Blaze", H: "Speed Boost"},
+weightkg: 19.5,
+prevo: "Torchic",
+evos: ["Blaziken"],
+},
+
+blaziken: {
+num: 257,
+name: "Blaziken",
+types: ["Fire", "Fighting"],
+baseStats: {hp: 80, atk: 120, def: 70, spa: 110, spd: 70, spe: 80},
+abilities: {0: "Blaze", H: "Speed Boost"},
+weightkg: 52,
+prevo: "Combusken",
+otherFormes: ["Blaziken-Mega"],
+formeOrder: ["Blaziken", "Blaziken-Mega"],
+},
+
+blazikenmega: {
+num: 257,
+name: "Blaziken-Mega",
+baseSpecies: "Blaziken",
+forme: "Mega",
+types: ["Fire", "Fighting"],
+baseStats: {hp: 80, atk: 160, def: 80, spa: 130, spd: 80, spe: 100},
+abilities: {0: "Speed Boost"},
+weightkg: 52,
+},
+
+mudkip: {
+num: 258,
+name: "Mudkip",
+types: ["Water"],
+baseStats: {hp: 50, atk: 70, def: 50, spa: 50, spd: 50, spe: 40},
+abilities: {0: "Torrent", H: "Damp"},
+weightkg: 7.6,
+evos: ["Marshtomp"],
+},
+
+marshtomp: {
+num: 259,
+name: "Marshtomp",
+types: ["Water", "Ground"],
+baseStats: {hp: 70, atk: 85, def: 70, spa: 60, spd: 70, spe: 50},
+abilities: {0: "Torrent", H: "Damp"},
+weightkg: 28,
+prevo: "Mudkip",
+evos: ["Swampert"],
+},
+
+swampert: {
+num: 260,
+name: "Swampert",
+types: ["Water", "Ground"],
+baseStats: {hp: 100, atk: 110, def: 90, spa: 85, spd: 90, spe: 60},
+abilities: {0: "Torrent", H: "Damp"},
+weightkg: 81.9,
+prevo: "Marshtomp",
+otherFormes: ["Swampert-Mega"],
+formeOrder: ["Swampert", "Swampert-Mega"],
+},
+
+swampertmega: {
+num: 260,
+name: "Swampert-Mega",
+baseSpecies: "Swampert",
+forme: "Mega",
+types: ["Water", "Ground"],
+baseStats: {hp: 100, atk: 150, def: 110, spa: 95, spd: 110, spe: 70},
+abilities: {0: "Swift Swim"},
+weightkg: 102,
+},
+
+poochyena: {
+num: 261,
+name: "Poochyena",
+types: ["Dark"],
+baseStats: {hp: 35, atk: 55, def: 35, spa: 30, spd: 30, spe: 35},
+abilities: {0: "Run Away", 1: "Quick Feet", H: "Rattled"},
+weightkg: 13.6,
+evos: ["Mightyena"],
+},
+
+mightyena: {
+num: 262,
+name: "Mightyena",
+types: ["Dark"],
+baseStats: {hp: 70, atk: 90, def: 70, spa: 60, spd: 60, spe: 70},
+abilities: {0: "Intimidate", 1: "Quick Feet", H: "Moxie"},
+weightkg: 37,
+prevo: "Poochyena",
+},
+
+zigzagoon: {
+num: 263,
+name: "Zigzagoon",
+types: ["Ground"],
+baseStats: {hp: 38, atk: 30, def: 41, spa: 30, spd: 41, spe: 60},
+abilities: {0: "Pickup", 1: "Gluttony", H: "Quick Feet"},
+weightkg: 17.5,
+evos: ["Linoone"],
+otherFormes: ["Zigzagoon-Galar"],
+formeOrder: ["Zigzagoon", "Zigzagoon-Galar"],
+},
+
+zigzagoongalar: {
+num: 263,
+name: "Zigzagoon-Galar",
+baseSpecies: "Zigzagoon",
+forme: "Galar",
+types: ["Dark", "Normal"],
+baseStats: {hp: 38, atk: 30, def: 41, spa: 30, spd: 41, spe: 60},
+abilities: {0: "Pickup", 1: "Gluttony", H: "Quick Feet"},
+weightkg: 17.5,
+evos: ["Linoone-Galar"],
+},
+
+linoone: {
+num: 264,
+name: "Linoone",
+types: ["Ground", "Electric"],
+baseStats: {hp: 78, atk: 70, def: 61, spa: 50, spd: 61, spe: 100},
+abilities: {0: "Pickup", 1: "Gluttony", H: "Quick Feet"},
+weightkg: 32.5,
+prevo: "Zigzagoon",
+otherFormes: ["Linoone-Galar"],
+formeOrder: ["Linoone", "Linoone-Galar"],
+},
+
+linoonegalar: {
+num: 264,
+name: "Linoone-Galar",
+baseSpecies: "Linoone",
+forme: "Galar",
+types: ["Dark", "Normal"],
+baseStats: {hp: 78, atk: 70, def: 61, spa: 50, spd: 61, spe: 100},
+abilities: {0: "Pickup", 1: "Gluttony", H: "Quick Feet"},
+weightkg: 32.5,
+prevo: "Zigzagoon-Galar",
+evos: ["Obstagoon"],
+},
+
+wurmple: {
+num: 265,
+name: "Wurmple",
+types: ["Bug"],
+baseStats: {hp: 45, atk: 45, def: 35, spa: 20, spd: 30, spe: 20},
+abilities: {0: "Shield Dust", H: "Run Away"},
+weightkg: 3.6,
+evos: ["Silcoon", "Cascoon"],
+},
+
+silcoon: {
+num: 266,
+name: "Silcoon",
+types: ["Bug"],
+baseStats: {hp: 50, atk: 35, def: 55, spa: 25, spd: 25, spe: 15},
+abilities: {0: "Shed Skin"},
+weightkg: 10,
+prevo: "Wurmple",
+evos: ["Beautifly"],
+},
+
+beautifly: {
+num: 267,
+name: "Beautifly",
+types: ["Bug", "Fairy"],
+baseStats: {hp: 60, atk: 70, def: 50, spa: 100, spd: 50, spe: 65},
+abilities: {0: "Swarm", H: "Rivalry"},
+weightkg: 28.4,
+prevo: "Silcoon",
+},
+
+cascoon: {
+num: 268,
+name: "Cascoon",
+types: ["Bug"],
+baseStats: {hp: 50, atk: 35, def: 55, spa: 25, spd: 25, spe: 15},
+abilities: {0: "Shed Skin"},
+weightkg: 11.5,
+prevo: "Wurmple",
+evos: ["Dustox"],
+},
+
+dustox: {
+num: 269,
+name: "Dustox",
+types: ["Bug", "Poison"],
+baseStats: {hp: 60, atk: 50, def: 70, spa: 50, spd: 90, spe: 65},
+abilities: {0: "Shield Dust", H: "Compound Eyes"},
+weightkg: 31.6,
+prevo: "Cascoon",
+},
+
+lotad: {
+num: 270,
+name: "Lotad",
+types: ["Water", "Grass"],
+baseStats: {hp: 40, atk: 30, def: 30, spa: 40, spd: 50, spe: 30},
+abilities: {0: "Swift Swim", 1: "Rain Dish", H: "Own Tempo"},
+weightkg: 2.6,
+evos: ["Lombre"],
+},
+
+lombre: {
+num: 271,
+name: "Lombre",
+types: ["Water", "Grass"],
+baseStats: {hp: 60, atk: 50, def: 50, spa: 60, spd: 70, spe: 50},
+abilities: {0: "Swift Swim", 1: "Rain Dish", H: "Own Tempo"},
+weightkg: 32.5,
+prevo: "Lotad",
+evos: ["Ludicolo"],
+},
+
+ludicolo: {
+num: 272,
+name: "Ludicolo",
+types: ["Water", "Grass"],
+baseStats: {hp: 80, atk: 70, def: 70, spa: 90, spd: 100, spe: 70},
+abilities: {0: "Swift Swim", 1: "Rain Dish", H: "Own Tempo"},
+weightkg: 55,
+prevo: "Lombre",
+evoType: "useItem",
+evoItem: "Water Stone",
+},
+
+seedot: {
+num: 273,
+name: "Seedot",
+types: ["Grass"],
+baseStats: {hp: 40, atk: 40, def: 50, spa: 30, spd: 30, spe: 30},
+abilities: {0: "Chlorophyll", 1: "Early Bird", H: "Pickpocket"},
+weightkg: 4,
+evos: ["Nuzleaf"],
+},
+
+nuzleaf: {
+num: 274,
+name: "Nuzleaf",
+types: ["Grass", "Dark"],
+baseStats: {hp: 70, atk: 70, def: 40, spa: 60, spd: 40, spe: 60},
+abilities: {0: "Chlorophyll", 1: "Early Bird", H: "Pickpocket"},
+weightkg: 28,
+prevo: "Seedot",
+evos: ["Shiftry"],
+},
+
+shiftry: {
+num: 275,
+name: "Shiftry",
+types: ["Grass", "Dark"],
+baseStats: {hp: 90, atk: 100, def: 60, spa: 90, spd: 60, spe: 80},
+abilities: {0: "Chlorophyll", 1: "Early Bird", H: "Pickpocket"},
+weightkg: 59.6,
+prevo: "Nuzleaf",
+evoType: "useItem",
+evoItem: "Leaf Stone",
+},
+
+taillow: {
+num: 276,
+name: "Taillow",
+types: ["Flying"],
+baseStats: {hp: 40, atk: 55, def: 30, spa: 30, spd: 30, spe: 85},
+abilities: {0: "Guts", H: "Scrappy"},
+weightkg: 2.3,
+evos: ["Swellow"],
+},
+
+swellow: {
+num: 277,
+name: "Swellow",
+types: ["Flying"],
+baseStats: {hp: 60, atk: 85, def: 60, spa: 75, spd: 50, spe: 125},
+abilities: {0: "Guts", H: "Scrappy"},
+weightkg: 19.8,
+prevo: "Taillow",
+},
+
+wingull: {
+num: 278,
+name: "Wingull",
+types: ["Water", "Flying"],
+baseStats: {hp: 40, atk: 30, def: 30, spa: 55, spd: 30, spe: 85},
+abilities: {0: "Keen Eye", 1: "Hydration", H: "Rain Dish"},
+weightkg: 9.5,
+evos: ["Pelipper"],
+},
+
+pelipper: {
+num: 279,
+name: "Pelipper",
+types: ["Water", "Flying"],
+baseStats: {hp: 60, atk: 50, def: 100, spa: 95, spd: 70, spe: 65},
+abilities: {0: "Keen Eye", 1: "Drizzle", H: "Rain Dish"},
+weightkg: 28,
+prevo: "Wingull",
+},
+
+ralts: {
+num: 280,
+name: "Ralts",
+types: ["Psychic", "Fairy"],
+baseStats: {hp: 28, atk: 25, def: 25, spa: 45, spd: 35, spe: 40},
+abilities: {0: "Synchronize", 1: "Trace", H: "Telepathy"},
+weightkg: 6.6,
+evos: ["Kirlia"],
+},
+
+kirlia: {
+num: 281,
+name: "Kirlia",
+types: ["Psychic", "Fairy"],
+baseStats: {hp: 38, atk: 35, def: 35, spa: 65, spd: 55, spe: 50},
+abilities: {0: "Synchronize", 1: "Trace", H: "Telepathy"},
+weightkg: 20.2,
+prevo: "Ralts",
+evos: ["Gardevoir", "Gallade"],
+},
+
+gardevoir: {
+num: 282,
+name: "Gardevoir",
+types: ["Psychic", "Fairy"],
+baseStats: {hp: 68, atk: 65, def: 65, spa: 125, spd: 115, spe: 80},
+abilities: {0: "Synchronize", 1: "Trace", H: "Telepathy"},
+weightkg: 48.4,
+prevo: "Kirlia",
+otherFormes: ["Gardevoir-Mega"],
+formeOrder: ["Gardevoir", "Gardevoir-Mega"],
+},
+
+gardevoirmega: {
+num: 282,
+name: "Gardevoir-Mega",
+baseSpecies: "Gardevoir",
+forme: "Mega",
+types: ["Psychic", "Fairy"],
+baseStats: {hp: 68, atk: 85, def: 65, spa: 165, spd: 135, spe: 100},
+abilities: {0: "Pixilate"},
+weightkg: 48.4,
+},
+
+surskit: {
+num: 283,
+name: "Surskit",
+types: ["Bug", "Water"],
+baseStats: {hp: 40, atk: 30, def: 32, spa: 50, spd: 52, spe: 65},
+abilities: {0: "Swift Swim", H: "Rain Dish"},
+weightkg: 1.7,
+evos: ["Masquerain"],
+},
+
+masquerain: {
+num: 284,
+name: "Masquerain",
+types: ["Bug", "Water"],
+baseStats: {hp: 70, atk: 60, def: 62, spa: 100, spd: 82, spe: 80},
+abilities: {0: "Intimidate", H: "Unnerve"},
+weightkg: 3.6,
+prevo: "Surskit",
+},
+
+shroomish: {
+num: 285,
+name: "Shroomish",
+types: ["Grass"],
+baseStats: {hp: 60, atk: 40, def: 60, spa: 40, spd: 60, spe: 35},
+abilities: {0: "Effect Spore", 1: "Poison Heal", H: "Quick Feet"},
+weightkg: 4.5,
+evos: ["Breloom"],
+},
+
+breloom: {
+num: 286,
+name: "Breloom",
+types: ["Grass", "Fighting"],
+baseStats: {hp: 60, atk: 130, def: 80, spa: 60, spd: 60, spe: 70},
+abilities: {0: "Effect Spore", 1: "Poison Heal", H: "Technician"},
+weightkg: 39.2,
+prevo: "Shroomish",
+},
+
+slakoth: {
+num: 287,
+name: "Slakoth",
+types: ["Normal", "Ground"],
+baseStats: {hp: 60, atk: 60, def: 60, spa: 35, spd: 35, spe: 30},
+abilities: {0: "Truant"},
+weightkg: 24,
+evos: ["Vigoroth"],
+},
+
+vigoroth: {
+num: 288,
+name: "Vigoroth",
+types: ["Normal", "Ground"],
+baseStats: {hp: 80, atk: 80, def: 80, spa: 55, spd: 55, spe: 90},
+abilities: {0: "Vital Spirit"},
+weightkg: 46.5,
+prevo: "Slakoth",
+evos: ["Slaking"],
+},
+
+slaking: {
+num: 289,
+name: "Slaking",
+types: ["Normal", "Ground"],
+baseStats: {hp: 150, atk: 160, def: 100, spa: 95, spd: 65, spe: 100},
+abilities: {0: "Truant"},
+weightkg: 130.5,
+prevo: "Vigoroth",
+},
+
+nincada: {
+num: 290,
+name: "Nincada",
+types: ["Bug", "Ground"],
+baseStats: {hp: 31, atk: 45, def: 90, spa: 30, spd: 30, spe: 40},
+abilities: {0: "Compound Eyes", H: "Run Away"},
+weightkg: 5.5,
+evos: ["Ninjask", "Shedinja"],
+},
+
+ninjask: {
+num: 291,
+name: "Ninjask",
+types: ["Bug", "Electric"],
+baseStats: {hp: 61, atk: 90, def: 45, spa: 50, spd: 50, spe: 160},
+abilities: {0: "Speed Boost", H: "Infiltrator"},
+weightkg: 12,
+prevo: "Nincada",
+},
+
+shedinja: {
+num: 292,
+name: "Shedinja",
+types: ["Bug", "Ghost"],
+baseStats: {hp: 1, atk: 90, def: 45, spa: 30, spd: 30, spe: 40},
+maxHP: 1,
+abilities: {0: "Wonder Guard"},
+weightkg: 1.2,
+prevo: "Nincada",
+},
+
+whismur: {
+num: 293,
+name: "Whismur",
+types: ["Poison"],
+baseStats: {hp: 64, atk: 51, def: 23, spa: 51, spd: 23, spe: 28},
+abilities: {0: "Soundproof", H: "Rattled"},
+weightkg: 16.3,
+evos: ["Loudred"],
+},
+
+loudred: {
+num: 294,
+name: "Loudred",
+types: ["Poison"],
+baseStats: {hp: 84, atk: 71, def: 43, spa: 71, spd: 43, spe: 48},
+abilities: {0: "Soundproof", H: "Scrappy"},
+weightkg: 40.5,
+prevo: "Whismur",
+evos: ["Exploud"],
+},
+
+exploud: {
+num: 295,
+name: "Exploud",
+types: ["Steel", "Poison"],
+baseStats: {hp: 104, atk: 91, def: 63, spa: 91, spd: 73, spe: 68},
+abilities: {0: "Soundproof", H: "Scrappy"},
+weightkg: 84,
+prevo: "Loudred",
+},
+
+makuhita: {
+num: 296,
+name: "Makuhita",
+types: ["Fighting"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 72, atk: 60, def: 30, spa: 20, spd: 30, spe: 25},
+abilities: {0: "Thick Fat", 1: "Guts", H: "Sheer Force"},
+weightkg: 86.4,
+evos: ["Hariyama"],
+},
+
+hariyama: {
+num: 297,
+name: "Hariyama",
+types: ["Fighting"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 144, atk: 120, def: 60, spa: 40, spd: 60, spe: 50},
+abilities: {0: "Thick Fat", 1: "Guts", H: "Sheer Force"},
+weightkg: 253.8,
+prevo: "Makuhita",
+},
+
+azurill: {
+num: 298,
+name: "Azurill",
+types: ["Normal", "Fairy"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 50, atk: 20, def: 40, spa: 20, spd: 40, spe: 20},
+abilities: {0: "Thick Fat", 1: "Huge Power", H: "Sap Sipper"},
+weightkg: 2,
+evos: ["Marill"],
+canHatch: true,
+},
+
+nosepass: {
+num: 299,
+name: "Nosepass",
+types: ["Rock"],
+baseStats: {hp: 30, atk: 45, def: 135, spa: 45, spd: 90, spe: 30},
+abilities: {0: "Sturdy", 1: "Magnet Pull", H: "Sand Force"},
+weightkg: 97,
+evos: ["Probopass"],
+},
+
+skitty: {
+num: 300,
+name: "Skitty",
+types: ["Psychic"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 50, atk: 45, def: 45, spa: 35, spd: 35, spe: 50},
+abilities: {0: "Cute Charm", 1: "Normalize", H: "Wonder Skin"},
+weightkg: 11,
+evos: ["Delcatty"],
+},
+
+delcatty: {
+num: 301,
+name: "Delcatty",
+types: ["Psychic", "Dark"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 70, atk: 65, def: 65, spa: 55, spd: 55, spe: 90},
+abilities: {0: "Cute Charm", 1: "Normalize", H: "Wonder Skin"},
+weightkg: 32.6,
+prevo: "Skitty",
+evoType: "useItem",
+evoItem: "Moon Stone",
+},
+
+sableye: {
+num: 302,
+name: "Sableye",
+types: ["Rock", "Ghost"],
+baseStats: {hp: 50, atk: 75, def: 75, spa: 65, spd: 65, spe: 50},
+abilities: {0: "Keen Eye", 1: "Stall", H: "Prankster"},
+weightkg: 11,
+otherFormes: ["Sableye-Mega"],
+formeOrder: ["Sableye", "Sableye-Mega"],
+},
+
+sableyemega: {
+num: 302,
+name: "Sableye-Mega",
+baseSpecies: "Sableye",
+forme: "Mega",
+types: ["Rock", "Ghost"],
+baseStats: {hp: 50, atk: 85, def: 125, spa: 85, spd: 115, spe: 20},
+abilities: {0: "Magic Bounce"},
+weightkg: 161,
+},
+
+mawile: {
+num: 303,
+name: "Mawile",
+types: ["Steel", "Fairy"],
+baseStats: {hp: 50, atk: 85, def: 85, spa: 55, spd: 55, spe: 50},
+abilities: {0: "Hyper Cutter", 1: "Intimidate", H: "Sheer Force"},
+weightkg: 11.5,
+otherFormes: ["Mawile-Mega"],
+formeOrder: ["Mawile", "Mawile-Mega"],
+},
+
+mawilemega: {
+num: 303,
+name: "Mawile-Mega",
+baseSpecies: "Mawile",
+forme: "Mega",
+types: ["Steel", "Fairy"],
+baseStats: {hp: 50, atk: 105, def: 125, spa: 55, spd: 95, spe: 50},
+abilities: {0: "Huge Power"},
+weightkg: 23.5,
+},
+
+aron: {
+num: 304,
+name: "Aron",
+types: ["Steel", "Rock"],
+baseStats: {hp: 50, atk: 70, def: 100, spa: 40, spd: 40, spe: 30},
+abilities: {0: "Sturdy", 1: "Rock Head", H: "Heavy Metal"},
+weightkg: 60,
+evos: ["Lairon"],
+},
+
+lairon: {
+num: 305,
+name: "Lairon",
+types: ["Steel", "Rock"],
+baseStats: {hp: 60, atk: 90, def: 140, spa: 50, spd: 50, spe: 40},
+abilities: {0: "Sturdy", 1: "Rock Head", H: "Heavy Metal"},
+weightkg: 120,
+prevo: "Aron",
+evos: ["Aggron"],
+},
+
+aggron: {
+num: 306,
+name: "Aggron",
+types: ["Steel", "Dragon"],
+baseStats: {hp: 70, atk: 110, def: 180, spa: 60, spd: 60, spe: 50},
+abilities: {0: "Sturdy", 1: "Rock Head", H: "Heavy Metal"},
+weightkg: 360,
+prevo: "Lairon",
+otherFormes: ["Aggron-Mega"],
+formeOrder: ["Aggron", "Aggron-Mega"],
+},
+
+aggronmega: {
+num: 306,
+name: "Aggron-Mega",
+baseSpecies: "Aggron",
+forme: "Mega",
+types: ["Steel"],
+baseStats: {hp: 70, atk: 140, def: 230, spa: 60, spd: 80, spe: 50},
+abilities: {0: "Filter"},
+weightkg: 395,
+},
+
+meditite: {
+num: 307,
+name: "Meditite",
+types: ["Fighting", "Psychic"],
+baseStats: {hp: 30, atk: 40, def: 55, spa: 40, spd: 55, spe: 60},
+abilities: {0: "Pure Power", H: "Telepathy"},
+weightkg: 11.2,
+evos: ["Medicham"],
+},
+
+medicham: {
+num: 308,
+name: "Medicham",
+types: ["Fighting", "Psychic"],
+baseStats: {hp: 60, atk: 60, def: 75, spa: 60, spd: 75, spe: 80},
+abilities: {0: "Pure Power", H: "Telepathy"},
+weightkg: 31.5,
+prevo: "Meditite",
+otherFormes: ["Medicham-Mega"],
+formeOrder: ["Medicham", "Medicham-Mega"],
+},
+
+medichammega: {
+num: 308,
+name: "Medicham-Mega",
+baseSpecies: "Medicham",
+forme: "Mega",
+types: ["Fighting", "Psychic"],
+baseStats: {hp: 60, atk: 100, def: 85, spa: 80, spd: 85, spe: 100},
+abilities: {0: "Pure Power"},
+weightkg: 31.5,
+},
+
+electrike: {
+num: 309,
+name: "Electrike",
+types: ["Electric", "Grass"],
+baseStats: {hp: 40, atk: 45, def: 40, spa: 65, spd: 40, spe: 65},
+abilities: {0: "Static", 1: "Lightning Rod", H: "Minus"},
+weightkg: 15.2,
+evos: ["Manectric"],
+},
+
+manectric: {
+num: 310,
+name: "Manectric",
+types: ["Electric", "Grass"],
+baseStats: {hp: 70, atk: 75, def: 60, spa: 105, spd: 60, spe: 105},
+abilities: {0: "Static", 1: "Lightning Rod", H: "Minus"},
+weightkg: 40.2,
+prevo: "Electrike",
+otherFormes: ["Manectric-Mega"],
+formeOrder: ["Manectric", "Manectric-Mega"],
+},
+
+manectricmega: {
+num: 310,
+name: "Manectric-Mega",
+baseSpecies: "Manectric",
+forme: "Mega",
+types: ["Electric"],
+baseStats: {hp: 70, atk: 75, def: 80, spa: 135, spd: 80, spe: 135},
+abilities: {0: "Intimidate"},
+weightkg: 44,
+},
+
+plusle: {
+num: 311,
+name: "Plusle",
+types: ["Electric", "Fire"],
+baseStats: {hp: 60, atk: 50, def: 40, spa: 85, spd: 75, spe: 95},
+abilities: {0: "Plus", H: "Lightning Rod"},
+weightkg: 4.2,
+},
+
+minun: {
+num: 312,
+name: "Minun",
+types: ["Electric", "Water"],
+baseStats: {hp: 60, atk: 40, def: 50, spa: 75, spd: 85, spe: 95},
+abilities: {0: "Minus", H: "Volt Absorb"},
+weightkg: 4.2,
+},
+
+volbeat: {
+num: 313,
+name: "Volbeat",
+types: ["Bug", "Fire"],
+baseStats: {hp: 65, atk: 73, def: 75, spa: 47, spd: 85, spe: 85},
+abilities: {0: "Illuminate", 1: "Swarm", H: "Prankster"},
+weightkg: 17.7,
+},
+
+illumise: {
+num: 314,
+name: "Illumise",
+types: ["Bug", "Ice"],
+baseStats: {hp: 65, atk: 47, def: 75, spa: 73, spd: 85, spe: 85},
+abilities: {0: "Oblivious", 1: "Tinted Lens", H: "Prankster"},
+weightkg: 17.7,
+},
+
+roselia: {
+num: 315,
+name: "Roselia",
+types: ["Grass", "Poison"],
+baseStats: {hp: 50, atk: 60, def: 45, spa: 100, spd: 80, spe: 65},
+abilities: {0: "Natural Cure", 1: "Poison Point", H: "Leaf Guard"},
+weightkg: 2,
+prevo: "Budew",
+evoType: "levelFriendship",
+evoCondition: "during the day",
+evos: ["Roserade"],
+canHatch: true,
+},
+
+gulpin: {
+num: 316,
+name: "Gulpin",
+types: ["Poison"],
+baseStats: {hp: 70, atk: 43, def: 53, spa: 43, spd: 53, spe: 40},
+abilities: {0: "Liquid Ooze", 1: "Sticky Hold", H: "Gluttony"},
+weightkg: 10.3,
+evos: ["Swalot"],
+},
+
+swalot: {
+num: 317,
+name: "Swalot",
+types: ["Poison"],
+baseStats: {hp: 100, atk: 73, def: 83, spa: 73, spd: 83, spe: 55},
+abilities: {0: "Liquid Ooze", 1: "Sticky Hold", H: "Gluttony"},
+weightkg: 80,
+prevo: "Gulpin",
+},
+
+carvanha: {
+num: 318,
+name: "Carvanha",
+types: ["Water", "Dark"],
+baseStats: {hp: 45, atk: 90, def: 20, spa: 65, spd: 20, spe: 65},
+abilities: {0: "Rough Skin", H: "Speed Boost"},
+weightkg: 20.8,
+evos: ["Sharpedo"],
+},
+
+sharpedo: {
+num: 319,
+name: "Sharpedo",
+types: ["Water", "Dark"],
+baseStats: {hp: 70, atk: 120, def: 40, spa: 95, spd: 40, spe: 95},
+abilities: {0: "Rough Skin", H: "Speed Boost"},
+weightkg: 88.8,
+prevo: "Carvanha",
+otherFormes: ["Sharpedo-Mega"],
+formeOrder: ["Sharpedo", "Sharpedo-Mega"],
+},
+
+sharpedomega: {
+num: 319,
+name: "Sharpedo-Mega",
+baseSpecies: "Sharpedo",
+forme: "Mega",
+types: ["Water", "Dark"],
+baseStats: {hp: 70, atk: 140, def: 70, spa: 110, spd: 65, spe: 105},
+abilities: {0: "Strong Jaw"},
+weightkg: 130.3,
+},
+
+wailmer: {
+num: 320,
+name: "Wailmer",
+types: ["Water"],
+baseStats: {hp: 130, atk: 70, def: 35, spa: 70, spd: 35, spe: 60},
+abilities: {0: "Water Veil", 1: "Oblivious", H: "Pressure"},
+weightkg: 130,
+evos: ["Wailord"],
+},
+
+wailord: {
+num: 321,
+name: "Wailord",
+types: ["Water"],
+baseStats: {hp: 170, atk: 90, def: 45, spa: 90, spd: 45, spe: 60},
+abilities: {0: "Water Veil", 1: "Oblivious", H: "Pressure"},
+weightkg: 398,
+prevo: "Wailmer",
+},
+
+numel: {
+num: 322,
+name: "Numel",
+types: ["Fire", "Ground"],
+baseStats: {hp: 60, atk: 60, def: 40, spa: 65, spd: 45, spe: 35},
+abilities: {0: "Oblivious", 1: "Simple", H: "Own Tempo"},
+weightkg: 24,
+evos: ["Camerupt"],
+},
+
+camerupt: {
+num: 323,
+name: "Camerupt",
+types: ["Fire", "Ground"],
+baseStats: {hp: 70, atk: 100, def: 70, spa: 105, spd: 75, spe: 40},
+abilities: {0: "Magma Armor", 1: "Solid Rock", H: "Anger Point"},
+weightkg: 220,
+prevo: "Numel",
+otherFormes: ["Camerupt-Mega"],
+formeOrder: ["Camerupt", "Camerupt-Mega"],
+},
+
+cameruptmega: {
+num: 323,
+name: "Camerupt-Mega",
+baseSpecies: "Camerupt",
+forme: "Mega",
+types: ["Fire", "Ground"],
+baseStats: {hp: 70, atk: 120, def: 100, spa: 145, spd: 105, spe: 20},
+abilities: {0: "Sheer Force"},
+weightkg: 320.5,
+},
+
+torkoal: {
+num: 324,
+name: "Torkoal",
+types: ["Fire", "Steel"],
+baseStats: {hp: 70, atk: 85, def: 140, spa: 85, spd: 70, spe: 20},
+abilities: {0: "White Smoke", 1: "Drought", H: "Shell Armor"},
+weightkg: 80.4,
+},
+
+spoink: {
+num: 325,
+name: "Spoink",
+types: ["Dark", "Rock"],
+baseStats: {hp: 60, atk: 25, def: 35, spa: 70, spd: 80, spe: 60},
+abilities: {0: "Thick Fat", 1: "Own Tempo", H: "Gluttony"},
+weightkg: 30.6,
+evos: ["Grumpig"],
+},
+
+grumpig: {
+num: 326,
+name: "Grumpig",
+types: ["Dark", "Rock"],
+baseStats: {hp: 80, atk: 45, def: 65, spa: 90, spd: 110, spe: 80},
+abilities: {0: "Thick Fat", 1: "Own Tempo", H: "Gluttony"},
+weightkg: 71.5,
+prevo: "Spoink",
+},
+
+spinda: {
+num: 327,
+name: "Spinda",
+types: ["Ground", "Psychic"],
+baseStats: {hp: 60, atk: 60, def: 60, spa: 60, spd: 60, spe: 60},
+abilities: {0: "Own Tempo", 1: "Tangled Feet", H: "Contrary"},
+weightkg: 5,
+},
+
+trapinch: {
+num: 328,
+name: "Trapinch",
+types: ["Bug"],
+baseStats: {hp: 45, atk: 100, def: 45, spa: 45, spd: 45, spe: 10},
+abilities: {0: "Hyper Cutter", 1: "Arena Trap", H: "Sheer Force"},
+weightkg: 15,
+evos: ["Vibrava"],
+},
+
+vibrava: {
+num: 329,
+name: "Vibrava",
+types: ["Bug", "Dragon"],
+baseStats: {hp: 50, atk: 70, def: 50, spa: 50, spd: 50, spe: 70},
+abilities: {0: "Levitate"},
+weightkg: 15.3,
+prevo: "Trapinch",
+evos: ["Flygon"],
+},
+
+flygon: {
+num: 330,
+name: "Flygon",
+types: ["Bug", "Dragon"],
+baseStats: {hp: 80, atk: 100, def: 80, spa: 80, spd: 80, spe: 100},
+abilities: {0: "Levitate"},
+weightkg: 82,
+prevo: "Vibrava",
+},
+
+cacnea: {
+num: 331,
+name: "Cacnea",
+types: ["Grass"],
+baseStats: {hp: 50, atk: 85, def: 40, spa: 85, spd: 40, spe: 35},
+abilities: {0: "Sand Veil", H: "Water Absorb"},
+weightkg: 51.3,
+evos: ["Cacturne"],
+},
+
+cacturne: {
+num: 332,
+name: "Cacturne",
+types: ["Grass", "Ground"],
+baseStats: {hp: 70, atk: 115, def: 60, spa: 115, spd: 60, spe: 55},
+abilities: {0: "Sand Veil", H: "Water Absorb"},
+weightkg: 77.4,
+prevo: "Cacnea",
+},
+
+swablu: {
+num: 333,
+name: "Swablu",
+types: ["Fairy", "Flying"],
+baseStats: {hp: 45, atk: 40, def: 60, spa: 40, spd: 75, spe: 50},
+abilities: {0: "Natural Cure", H: "Cloud Nine"},
+weightkg: 1.2,
+evos: ["Altaria"],
+},
+
+altaria: {
+num: 334,
+name: "Altaria",
+types: ["Dragon", "Fairy"],
+baseStats: {hp: 75, atk: 70, def: 90, spa: 70, spd: 105, spe: 80},
+abilities: {0: "Natural Cure", H: "Cloud Nine"},
+weightkg: 20.6,
+prevo: "Swablu",
+otherFormes: ["Altaria-Mega"],
+formeOrder: ["Altaria", "Altaria-Mega"],
+},
+
+altariamega: {
+num: 334,
+name: "Altaria-Mega",
+baseSpecies: "Altaria",
+forme: "Mega",
+types: ["Dragon", "Fairy"],
+baseStats: {hp: 75, atk: 110, def: 110, spa: 110, spd: 105, spe: 80},
+abilities: {0: "Pixilate"},
+weightkg: 20.6,
+},
+
+zangoose: {
+num: 335,
+name: "Zangoose",
+types: ["Normal", "Electric"],
+baseStats: {hp: 73, atk: 115, def: 60, spa: 60, spd: 60, spe: 90},
+abilities: {0: "Immunity", H: "Toxic Boost"},
+weightkg: 40.3,
+},
+
+seviper: {
+num: 336,
+name: "Seviper",
+types: ["Poison", "Steel"],
+baseStats: {hp: 73, atk: 100, def: 60, spa: 100, spd: 60, spe: 65},
+abilities: {0: "Shed Skin", H: "Infiltrator"},
+weightkg: 52.5,
+},
+
+lunatone: {
+num: 337,
+name: "Lunatone",
+types: ["Rock", "Psychic"],
+baseStats: {hp: 90, atk: 55, def: 65, spa: 95, spd: 85, spe: 70},
+abilities: {0: "Levitate"},
+weightkg: 168,
+},
+
+solrock: {
+num: 338,
+name: "Solrock",
+types: ["Rock", "Fire"],
+baseStats: {hp: 90, atk: 95, def: 85, spa: 55, spd: 65, spe: 70},
+abilities: {0: "Levitate"},
+weightkg: 154,
+},
+
+barboach: {
+num: 339,
+name: "Barboach",
+types: ["Ice", "Ground"],
+baseStats: {hp: 50, atk: 48, def: 43, spa: 46, spd: 41, spe: 60},
+abilities: {0: "Oblivious", 1: "Anticipation", H: "Hydration"},
+weightkg: 1.9,
+evos: ["Whiscash"],
+},
+
+whiscash: {
+num: 340,
+name: "Whiscash",
+types: ["Ice", "Ground"],
+baseStats: {hp: 110, atk: 78, def: 73, spa: 76, spd: 71, spe: 60},
+abilities: {0: "Oblivious", 1: "Anticipation", H: "Hydration"},
+weightkg: 23.6,
+prevo: "Barboach",
+},
+
+corphish: {
+num: 341,
+name: "Corphish",
+types: ["Water"],
+baseStats: {hp: 43, atk: 80, def: 65, spa: 50, spd: 35, spe: 35},
+abilities: {0: "Hyper Cutter", 1: "Shell Armor", H: "Adaptability"},
+weightkg: 11.5,
+evos: ["Crawdaunt"],
+},
+
+crawdaunt: {
+num: 342,
+name: "Crawdaunt",
+types: ["Water", "Dark"],
+baseStats: {hp: 63, atk: 120, def: 85, spa: 90, spd: 55, spe: 55},
+abilities: {0: "Hyper Cutter", 1: "Shell Armor", H: "Adaptability"},
+weightkg: 32.8,
+prevo: "Corphish",
+},
+
+baltoy: {
+num: 343,
+name: "Baltoy",
+types: ["Ground", "Psychic"],
+baseStats: {hp: 40, atk: 40, def: 55, spa: 40, spd: 70, spe: 55},
+abilities: {0: "Levitate"},
+weightkg: 21.5,
+evos: ["Claydol"],
+},
+
+claydol: {
+num: 344,
+name: "Claydol",
+types: ["Ground", "Psychic"],
+baseStats: {hp: 60, atk: 70, def: 105, spa: 70, spd: 120, spe: 75},
+abilities: {0: "Levitate"},
+weightkg: 108,
+prevo: "Baltoy",
+},
+
+lileep: {
+num: 345,
+name: "Lileep",
+types: ["Rock", "Grass"],
+baseStats: {hp: 66, atk: 41, def: 77, spa: 61, spd: 87, spe: 23},
+abilities: {0: "Suction Cups", H: "Storm Drain"},
+weightkg: 23.8,
+evos: ["Cradily"],
+},
+
+cradily: {
+num: 346,
+name: "Cradily",
+types: ["Rock", "Grass"],
+baseStats: {hp: 86, atk: 81, def: 97, spa: 81, spd: 107, spe: 43},
+abilities: {0: "Suction Cups", H: "Storm Drain"},
+weightkg: 60.4,
+prevo: "Lileep",
+},
+
+anorith: {
+num: 347,
+name: "Anorith",
+types: ["Rock", "Bug"],
+baseStats: {hp: 45, atk: 95, def: 50, spa: 40, spd: 50, spe: 75},
+abilities: {0: "Battle Armor", H: "Swift Swim"},
+weightkg: 12.5,
+evos: ["Armaldo"],
+},
+
+armaldo: {
+num: 348,
+name: "Armaldo",
+types: ["Rock", "Bug"],
+baseStats: {hp: 75, atk: 125, def: 100, spa: 70, spd: 80, spe: 45},
+abilities: {0: "Battle Armor", H: "Swift Swim"},
+weightkg: 68.2,
+prevo: "Anorith",
+},
+
+feebas: {
+num: 349,
+name: "Feebas",
+types: ["Water"],
+baseStats: {hp: 20, atk: 15, def: 20, spa: 10, spd: 55, spe: 80},
+abilities: {0: "Swift Swim", 1: "Oblivious", H: "Adaptability"},
+weightkg: 7.4,
+evos: ["Milotic"],
+},
+
+milotic: {
+num: 350,
+name: "Milotic",
+types: ["Dragon", "Fairy"],
+baseStats: {hp: 95, atk: 60, def: 79, spa: 100, spd: 125, spe: 81},
+abilities: {0: "Marvel Scale", 1: "Competitive", H: "Cute Charm"},
+weightkg: 162,
+prevo: "Feebas",
+evoType: "trade",
+evoItem: "Prism Scale",
+},
+
+castform: {
+num: 351,
+name: "Castform",
+types: ["???"],
+baseStats: {hp: 70, atk: 70, def: 70, spa: 70, spd: 70, spe: 70},
+abilities: {0: "Forecast"},
+weightkg: 0.8,
+otherFormes: ["Castform-Sunny", "Castform-Rainy", "Castform-Snowy"],
+formeOrder: ["Castform", "Castform-Sunny", "Castform-Rainy", "Castform-Snowy"],
+},
+
+castformsunny: {
+num: 351,
+name: "Castform-Sunny",
+baseSpecies: "Castform",
+forme: "Sunny",
+types: ["Fire"],
+baseStats: {hp: 70, atk: 70, def: 70, spa: 70, spd: 70, spe: 70},
+abilities: {0: "Forecast"},
+weightkg: 0.8,
+requiredAbility: "Forecast",
+battleOnly: "Castform",
+},
+
+castformrainy: {
+num: 351,
+name: "Castform-Rainy",
+baseSpecies: "Castform",
+forme: "Rainy",
+types: ["Water"],
+baseStats: {hp: 70, atk: 70, def: 70, spa: 70, spd: 70, spe: 70},
+abilities: {0: "Forecast"},
+weightkg: 0.8,
+requiredAbility: "Forecast",
+battleOnly: "Castform",
+},
+
+castformsnowy: {
+num: 351,
+name: "Castform-Snowy",
+baseSpecies: "Castform",
+forme: "Snowy",
+types: ["Ice"],
+baseStats: {hp: 70, atk: 70, def: 70, spa: 70, spd: 70, spe: 70},
+abilities: {0: "Forecast"},
+weightkg: 0.8,
+requiredAbility: "Forecast",
+battleOnly: "Castform",
+},
+
+kecleon: {
+num: 352,
+name: "Kecleon",
+types: ["???"],
+baseStats: {hp: 60, atk: 90, def: 70, spa: 60, spd: 120, spe: 40},
+abilities: {0: "Color Change", H: "Protean"},
+weightkg: 22,
+},
+
+shuppet: {
+num: 353,
+name: "Shuppet",
+types: ["Ghost"],
+baseStats: {hp: 44, atk: 75, def: 35, spa: 63, spd: 33, spe: 45},
+abilities: {0: "Insomnia", 1: "Frisk", H: "Cursed Body"},
+weightkg: 2.3,
+evos: ["Banette"],
+},
+
+banette: {
+num: 354,
+name: "Banette",
+types: ["Ghost"],
+baseStats: {hp: 64, atk: 115, def: 65, spa: 83, spd: 63, spe: 65},
+abilities: {0: "Insomnia", 1: "Frisk", H: "Cursed Body"},
+weightkg: 12.5,
+prevo: "Shuppet",
+otherFormes: ["Banette-Mega"],
+formeOrder: ["Banette", "Banette-Mega"],
+},
+
+banettemega: {
+num: 354,
+name: "Banette-Mega",
+baseSpecies: "Banette",
+forme: "Mega",
+types: ["Ghost"],
+baseStats: {hp: 64, atk: 165, def: 75, spa: 93, spd: 83, spe: 75},
+abilities: {0: "Prankster"},
+weightkg: 13,
+},
+
+duskull: {
+num: 355,
+name: "Duskull",
+types: ["Ghost"],
+baseStats: {hp: 20, atk: 40, def: 90, spa: 30, spd: 90, spe: 25},
+abilities: {0: "Levitate", H: "Frisk"},
+weightkg: 15,
+evos: ["Dusclops"],
+},
+
+dusclops: {
+num: 356,
+name: "Dusclops",
+types: ["Ghost"],
+baseStats: {hp: 40, atk: 70, def: 130, spa: 60, spd: 130, spe: 25},
+abilities: {0: "Pressure", H: "Frisk"},
+weightkg: 30.6,
+prevo: "Duskull",
+evos: ["Dusknoir"],
+},
+
+tropius: {
+num: 357,
+name: "Tropius",
+types: ["Grass", "Dragon"],
+baseStats: {hp: 99, atk: 68, def: 83, spa: 72, spd: 87, spe: 51},
+abilities: {0: "Chlorophyll", 1: "Solar Power", H: "Harvest"},
+weightkg: 100,
+},
+
+chimecho: {
+num: 358,
+name: "Chimecho",
+types: ["Psychic", "Ghost"],
+baseStats: {hp: 75, atk: 50, def: 80, spa: 95, spd: 90, spe: 65},
+abilities: {0: "Levitate"},
+weightkg: 1,
+prevo: "Chingling",
+evoType: "levelFriendship",
+evoCondition: "at night",
+canHatch: true,
+},
+
+absol: {
+num: 359,
+name: "Absol",
+types: ["Dark", "Fairy"],
+baseStats: {hp: 65, atk: 130, def: 60, spa: 75, spd: 60, spe: 75},
+abilities: {0: "Pressure", 1: "Super Luck", H: "Justified"},
+weightkg: 47,
+otherFormes: ["Absol-Mega"],
+formeOrder: ["Absol", "Absol-Mega"],
+},
+
+absolmega: {
+num: 359,
+name: "Absol-Mega",
+baseSpecies: "Absol",
+forme: "Mega",
+types: ["Dark", "Fairy"],
+baseStats: {hp: 65, atk: 150, def: 60, spa: 115, spd: 60, spe: 115},
+abilities: {0: "Magic Bounce"},
+weightkg: 49,
+},
+
+wynaut: {
+num: 360,
+name: "Wynaut",
+types: ["???"],
+baseStats: {hp: 95, atk: 23, def: 48, spa: 23, spd: 48, spe: 23},
+abilities: {0: "Shadow Tag", H: "Telepathy"},
+weightkg: 14,
+evos: ["Wobbuffet"],
+canHatch: true,
+},
+
+snorunt: {
+num: 361,
+name: "Snorunt",
+types: ["Ice"],
+baseStats: {hp: 50, atk: 50, def: 50, spa: 50, spd: 50, spe: 50},
+abilities: {0: "Inner Focus", 1: "Ice Body", H: "Moody"},
+weightkg: 16.8,
+evos: ["Glalie", "Froslass"],
+},
+
+glalie: {
+num: 362,
+name: "Glalie",
+types: ["Ice", "Steel"],
+baseStats: {hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 80},
+abilities: {0: "Inner Focus", 1: "Ice Body", H: "Moody"},
+weightkg: 256.5,
+prevo: "Snorunt",
+otherFormes: ["Glalie-Mega"],
+formeOrder: ["Glalie", "Glalie-Mega"],
+},
+
+glaliemega: {
+num: 362,
+name: "Glalie-Mega",
+baseSpecies: "Glalie",
+forme: "Mega",
+types: ["Ice", "Steel"],
+baseStats: {hp: 80, atk: 120, def: 80, spa: 120, spd: 80, spe: 100},
+abilities: {0: "Refrigerate"},
+weightkg: 350.2,
+},
+
+spheal: {
+num: 363,
+name: "Spheal",
+types: ["Ice", "Water"],
+baseStats: {hp: 70, atk: 40, def: 50, spa: 55, spd: 50, spe: 25},
+abilities: {0: "Thick Fat", 1: "Ice Body", H: "Oblivious"},
+weightkg: 39.5,
+evos: ["Sealeo"],
+},
+
+sealeo: {
+num: 364,
+name: "Sealeo",
+types: ["Ice", "Water"],
+baseStats: {hp: 90, atk: 60, def: 70, spa: 75, spd: 70, spe: 45},
+abilities: {0: "Thick Fat", 1: "Ice Body", H: "Oblivious"},
+weightkg: 87.6,
+prevo: "Spheal",
+evos: ["Walrein"],
+},
+
+walrein: {
+num: 365,
+name: "Walrein",
+types: ["Ice", "Water"],
+baseStats: {hp: 110, atk: 80, def: 90, spa: 95, spd: 90, spe: 65},
+abilities: {0: "Thick Fat", 1: "Ice Body", H: "Oblivious"},
+weightkg: 150.6,
+prevo: "Sealeo",
+},
+
+clamperl: {
+num: 366,
+name: "Clamperl",
+types: ["Ice"],
+baseStats: {hp: 35, atk: 64, def: 85, spa: 74, spd: 55, spe: 32},
+abilities: {0: "Shell Armor", H: "Rattled"},
+weightkg: 52.5,
+evos: ["Huntail", "Gorebyss"],
+},
+
+huntail: {
+num: 367,
+name: "Huntail",
+types: ["Ice", "Fire"],
+baseStats: {hp: 55, atk: 104, def: 105, spa: 94, spd: 75, spe: 52},
+abilities: {0: "Swift Swim", H: "Water Veil"},
+weightkg: 27,
+prevo: "Clamperl",
+evoType: "trade",
+evoItem: "Deep Sea Tooth",
+},
+
+gorebyss: {
+num: 368,
+name: "Gorebyss",
+types: ["Ice", "Poison"],
+baseStats: {hp: 55, atk: 84, def: 105, spa: 114, spd: 75, spe: 52},
+abilities: {0: "Swift Swim", H: "Hydration"},
+weightkg: 22.6,
+prevo: "Clamperl",
+evoType: "trade",
+evoItem: "Deep Sea Scale",
+},
+
+relicanth: {
+num: 369,
+name: "Relicanth",
+types: ["Water", "Ghost"],
+baseStats: {hp: 100, atk: 90, def: 130, spa: 45, spd: 65, spe: 55},
+abilities: {0: "Swift Swim", 1: "Rock Head", H: "Sturdy"},
+weightkg: 23.4,
+},
+
+luvdisc: {
+num: 370,
+name: "Luvdisc",
+types: ["Water", "Fairy"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 43, atk: 30, def: 55, spa: 40, spd: 65, spe: 97},
+abilities: {0: "Swift Swim", H: "Hydration"},
+weightkg: 8.7,
+},
+
+bagon: {
+num: 371,
+name: "Bagon",
+types: ["Dragon"],
+baseStats: {hp: 45, atk: 75, def: 60, spa: 40, spd: 30, spe: 50},
+abilities: {0: "Rock Head", H: "Sheer Force"},
+weightkg: 42.1,
+evos: ["Shelgon"],
+},
+
+shelgon: {
+num: 372,
+name: "Shelgon",
+types: ["Dragon"],
+baseStats: {hp: 65, atk: 95, def: 100, spa: 60, spd: 50, spe: 50},
+abilities: {0: "Rock Head", H: "Overcoat"},
+weightkg: 110.5,
+prevo: "Bagon",
+evos: ["Salamence"],
+},
+
+salamence: {
+num: 373,
+name: "Salamence",
+types: ["Dragon", "Flying"],
+baseStats: {hp: 95, atk: 135, def: 80, spa: 110, spd: 80, spe: 100},
+abilities: {0: "Intimidate", H: "Moxie"},
+weightkg: 102.6,
+prevo: "Shelgon",
+otherFormes: ["Salamence-Mega"],
+formeOrder: ["Salamence", "Salamence-Mega"],
+},
+
+salamencemega: {
+num: 373,
+name: "Salamence-Mega",
+baseSpecies: "Salamence",
+forme: "Mega",
+types: ["Dragon", "Flying"],
+baseStats: {hp: 95, atk: 145, def: 130, spa: 120, spd: 90, spe: 120},
+abilities: {0: "Aerilate"},
+weightkg: 112.6,
+},
+
+beldum: {
+num: 374,
+name: "Beldum",
+types: ["Steel", "Psychic"],
+baseStats: {hp: 40, atk: 55, def: 80, spa: 35, spd: 60, spe: 30},
+abilities: {0: "Clear Body", H: "Light Metal"},
+weightkg: 95.2,
+evos: ["Metang"],
+},
+
+metang: {
+num: 375,
+name: "Metang",
+types: ["Steel", "Psychic"],
+baseStats: {hp: 60, atk: 75, def: 100, spa: 55, spd: 80, spe: 50},
+abilities: {0: "Clear Body", H: "Light Metal"},
+weightkg: 202.5,
+prevo: "Beldum",
+evos: ["Metagross"],
+},
+
+metagross: {
+num: 376,
+name: "Metagross",
+types: ["Steel", "Psychic"],
+baseStats: {hp: 80, atk: 135, def: 130, spa: 95, spd: 90, spe: 70},
+abilities: {0: "Clear Body", H: "Light Metal"},
+weightkg: 550,
+prevo: "Metang",
+otherFormes: ["Metagross-Mega"],
+formeOrder: ["Metagross", "Metagross-Mega"],
+},
+
+metagrossmega: {
+num: 376,
+name: "Metagross-Mega",
+baseSpecies: "Metagross",
+forme: "Mega",
+types: ["Steel", "Psychic"],
+baseStats: {hp: 80, atk: 145, def: 150, spa: 105, spd: 110, spe: 110},
+abilities: {0: "Tough Claws"},
+weightkg: 942.9,
+},
+
+regirock: {
+num: 377,
+name: "Regirock",
+types: ["Rock"],
+baseStats: {hp: 80, atk: 100, def: 200, spa: 50, spd: 100, spe: 50},
+abilities: {0: "Clear Body", H: "Sturdy"},
+weightkg: 230,
+},
+
+regice: {
+num: 378,
+name: "Regice",
+types: ["Ice"],
+baseStats: {hp: 80, atk: 50, def: 100, spa: 100, spd: 200, spe: 50},
+abilities: {0: "Clear Body", H: "Ice Body"},
+weightkg: 175,
+},
+
+registeel: {
+num: 379,
+name: "Registeel",
+types: ["Steel"],
+baseStats: {hp: 80, atk: 75, def: 150, spa: 75, spd: 150, spe: 50},
+abilities: {0: "Clear Body", H: "Light Metal"},
+weightkg: 205,
+},
+
+latias: {
+num: 380,
+name: "Latias",
+types: ["Dragon", "Fire"],
+baseStats: {hp: 80, atk: 80, def: 90, spa: 110, spd: 130, spe: 110},
+abilities: {0: "Levitate"},
+weightkg: 40,
+otherFormes: ["Latias-Mega"],
+formeOrder: ["Latias", "Latias-Mega"],
+},
+
+latiasmega: {
+num: 380,
+name: "Latias-Mega",
+baseSpecies: "Latias",
+forme: "Mega",
+types: ["Dragon", "Fire"],
+baseStats: {hp: 80, atk: 100, def: 120, spa: 140, spd: 150, spe: 110},
+abilities: {0: "Levitate"},
+weightkg: 52,
+},
+
+latios: {
+num: 381,
+name: "Latios",
+types: ["Dragon", "Psychic"],
+baseStats: {hp: 80, atk: 90, def: 80, spa: 130, spd: 110, spe: 110},
+abilities: {0: "Levitate"},
+weightkg: 60,
+otherFormes: ["Latios-Mega"],
+formeOrder: ["Latios", "Latios-Mega"],
+},
+
+latiosmega: {
+num: 381,
+name: "Latios-Mega",
+baseSpecies: "Latios",
+forme: "Mega",
+types: ["Dragon", "Psychic"],
+baseStats: {hp: 80, atk: 130, def: 100, spa: 160, spd: 120, spe: 110},
+abilities: {0: "Levitate"},
+weightkg: 70,
+},
+
+kyogre: {
+num: 382,
+name: "Kyogre",
+types: ["Water", "Ghost"],
+baseStats: {hp: 100, atk: 100, def: 90, spa: 150, spd: 140, spe: 90},
+abilities: {0: "Drizzle"},
+weightkg: 352,
+otherFormes: ["Kyogre-Primal"],
+formeOrder: ["Kyogre", "Kyogre-Primal"],
+},
+
+kyogreprimal: {
+num: 382,
+name: "Kyogre-Primal",
+baseSpecies: "Kyogre",
+forme: "Primal",
+types: ["Water", "Ghost"],
+baseStats: {hp: 100, atk: 150, def: 90, spa: 180, spd: 160, spe: 90},
+abilities: {0: "Primordial Sea"},
+weightkg: 430,
+},
+
+groudon: {
+num: 383,
+name: "Groudon",
+types: ["Ground", "Fire"],
+baseStats: {hp: 100, atk: 150, def: 140, spa: 100, spd: 90, spe: 90},
+abilities: {0: "Drought"},
+weightkg: 950,
+otherFormes: ["Groudon-Primal"],
+formeOrder: ["Groudon", "Groudon-Primal"],
+},
+
+groudonprimal: {
+num: 383,
+name: "Groudon-Primal",
+baseSpecies: "Groudon",
+forme: "Primal",
+types: ["Ground", "Fire"],
+baseStats: {hp: 100, atk: 180, def: 160, spa: 150, spd: 90, spe: 90},
+abilities: {0: "Desolate Land"},
+weightkg: 999.7,
+},
+
+rayquaza: {
+num: 384,
+name: "Rayquaza",
+types: ["Dragon", "Flying"],
+baseStats: {hp: 105, atk: 150, def: 90, spa: 150, spd: 90, spe: 95},
+abilities: {0: "Air Lock"},
+weightkg: 206.5,
+otherFormes: ["Rayquaza-Mega"],
+formeOrder: ["Rayquaza", "Rayquaza-Mega"],
+},
+
+rayquazamega: {
+num: 384,
+name: "Rayquaza-Mega",
+baseSpecies: "Rayquaza",
+forme: "Mega",
+types: ["Dragon", "Flying"],
+baseStats: {hp: 105, atk: 180, def: 100, spa: 180, spd: 100, spe: 115},
+abilities: {0: "Delta Stream"},
+weightkg: 392,
+requiredMove: "Dragon Ascent",
+},
+
+jirachi: {
+num: 385,
+name: "Jirachi",
+types: ["Steel", "Psychic"],
+baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
+abilities: {0: "Serene Grace"},
+weightkg: 1.1,
+},
+
+deoxys: {
+num: 386,
+name: "Deoxys",
+baseForme: "Normal",
+types: ["Psychic"],
+baseStats: {hp: 50, atk: 150, def: 50, spa: 150, spd: 50, spe: 150},
+abilities: {0: "Pressure"},
+weightkg: 60.8,
+otherFormes: ["Deoxys-Attack", "Deoxys-Defense", "Deoxys-Speed"],
+formeOrder: ["Deoxys", "Deoxys-Attack", "Deoxys-Defense", "Deoxys-Speed"],
+},
+
+deoxysattack: {
+num: 386,
+name: "Deoxys-Attack",
+baseSpecies: "Deoxys",
+forme: "Attack",
+types: ["Psychic", "Fighting"],
+baseStats: {hp: 50, atk: 180, def: 20, spa: 180, spd: 20, spe: 150},
+abilities: {0: "Pressure"},
+weightkg: 60.8,
+changesFrom: "Deoxys",
+},
+
+deoxysdefense: {
+num: 386,
+name: "Deoxys-Defense",
+baseSpecies: "Deoxys",
+forme: "Defense",
+types: ["Psychic", "Steel"],
+baseStats: {hp: 50, atk: 70, def: 160, spa: 70, spd: 160, spe: 90},
+abilities: {0: "Pressure"},
+weightkg: 60.8,
+changesFrom: "Deoxys",
+},
+
+deoxysspeed: {
+num: 386,
+name: "Deoxys-Speed",
+baseSpecies: "Deoxys",
+forme: "Speed",
+types: ["Psychic", "Electric"],
+baseStats: {hp: 50, atk: 95, def: 90, spa: 95, spd: 90, spe: 180},
+abilities: {0: "Pressure"},
+weightkg: 60.8,
+changesFrom: "Deoxys",
+},
+
+turtwig: {
+num: 387,
+name: "Turtwig",
+types: ["Grass"],
+baseStats: {hp: 55, atk: 68, def: 64, spa: 45, spd: 55, spe: 31},
+abilities: {0: "Overgrow", H: "Shell Armor"},
+weightkg: 10.2,
+evos: ["Grotle"],
+},
+
+grotle: {
+num: 388,
+name: "Grotle",
+types: ["Grass"],
+baseStats: {hp: 75, atk: 89, def: 85, spa: 55, spd: 65, spe: 36},
+abilities: {0: "Overgrow", H: "Shell Armor"},
+weightkg: 97,
+prevo: "Turtwig",
+evos: ["Torterra"],
+},
+
+torterra: {
+num: 389,
+name: "Torterra",
+types: ["Grass", "Ground"],
+baseStats: {hp: 95, atk: 109, def: 105, spa: 75, spd: 85, spe: 56},
+abilities: {0: "Overgrow", H: "Shell Armor"},
+weightkg: 310,
+prevo: "Grotle",
+},
+
+chimchar: {
+num: 390,
+name: "Chimchar",
+types: ["Fire"],
+baseStats: {hp: 44, atk: 58, def: 44, spa: 58, spd: 44, spe: 61},
+abilities: {0: "Blaze", H: "Iron Fist"},
+weightkg: 6.2,
+evos: ["Monferno"],
+},
+
+monferno: {
+num: 391,
+name: "Monferno",
+types: ["Fire", "Fighting"],
+baseStats: {hp: 64, atk: 78, def: 52, spa: 78, spd: 52, spe: 81},
+abilities: {0: "Blaze", H: "Iron Fist"},
+weightkg: 22,
+prevo: "Chimchar",
+evos: ["Infernape"],
+},
+
+infernape: {
+num: 392,
+name: "Infernape",
+types: ["Fire", "Fighting"],
+baseStats: {hp: 76, atk: 104, def: 71, spa: 104, spd: 71, spe: 108},
+abilities: {0: "Blaze", H: "Iron Fist"},
+weightkg: 55,
+prevo: "Monferno",
+},
+
+piplup: {
+num: 393,
+name: "Piplup",
+types: ["Water"],
+baseStats: {hp: 53, atk: 51, def: 53, spa: 61, spd: 56, spe: 40},
+abilities: {0: "Torrent", H: "Defiant"},
+weightkg: 5.2,
+evos: ["Prinplup"],
+},
+
+prinplup: {
+num: 394,
+name: "Prinplup",
+types: ["Water"],
+baseStats: {hp: 64, atk: 66, def: 68, spa: 81, spd: 76, spe: 50},
+abilities: {0: "Torrent", H: "Defiant"},
+weightkg: 23,
+prevo: "Piplup",
+evos: ["Empoleon"],
+},
+
+empoleon: {
+num: 395,
+name: "Empoleon",
+types: ["Water", "Steel"],
+baseStats: {hp: 84, atk: 86, def: 88, spa: 111, spd: 101, spe: 60},
+abilities: {0: "Torrent", H: "Defiant"},
+weightkg: 84.5,
+prevo: "Prinplup",
+},
+
+starly: {
+num: 396,
+name: "Starly",
+types: ["Flying"],
+baseStats: {hp: 40, atk: 55, def: 30, spa: 30, spd: 30, spe: 60},
+abilities: {0: "Keen Eye", H: "Reckless"},
+weightkg: 2,
+evos: ["Staravia"],
+},
+
+staravia: {
+num: 397,
+name: "Staravia",
+types: ["Flying"],
+baseStats: {hp: 55, atk: 75, def: 50, spa: 40, spd: 40, spe: 80},
+abilities: {0: "Intimidate", H: "Reckless"},
+weightkg: 15.5,
+prevo: "Starly",
+evos: ["Staraptor"],
+},
+
+staraptor: {
+num: 398,
+name: "Staraptor",
+types: ["Flying"],
+baseStats: {hp: 85, atk: 120, def: 70, spa: 50, spd: 60, spe: 100},
+abilities: {0: "Intimidate", H: "Reckless"},
+weightkg: 24.9,
+prevo: "Staravia",
+},
+
+bidoof: {
+num: 399,
+name: "Bidoof",
+types: ["Normal"],
+baseStats: {hp: 59, atk: 45, def: 40, spa: 35, spd: 40, spe: 31},
+abilities: {0: "Simple", 1: "Unaware", H: "Moody"},
+weightkg: 20,
+evos: ["Bibarel"],
+},
+
+bibarel: {
+num: 400,
+name: "Bibarel",
+types: ["Normal", "Water"],
+baseStats: {hp: 79, atk: 85, def: 60, spa: 55, spd: 60, spe: 71},
+abilities: {0: "Simple", 1: "Unaware", H: "Moody"},
+weightkg: 31.5,
+prevo: "Bidoof",
+},
+
+kricketot: {
+num: 401,
+name: "Kricketot",
+types: ["Bug"],
+baseStats: {hp: 37, atk: 25, def: 41, spa: 25, spd: 41, spe: 25},
+abilities: {0: "Shed Skin", H: "Run Away"},
+weightkg: 2.2,
+evos: ["Kricketune"],
+},
+
+kricketune: {
+num: 402,
+name: "Kricketune",
+types: ["Bug"],
+baseStats: {hp: 77, atk: 85, def: 51, spa: 55, spd: 51, spe: 65},
+abilities: {0: "Swarm", H: "Technician"},
+weightkg: 25.5,
+prevo: "Kricketot",
+},
+
+shinx: {
+num: 403,
+name: "Shinx",
+types: ["Electric"],
+baseStats: {hp: 45, atk: 65, def: 34, spa: 40, spd: 34, spe: 45},
+abilities: {0: "Rivalry", 1: "Intimidate", H: "Guts"},
+weightkg: 9.5,
+evos: ["Luxio"],
+},
+
+luxio: {
+num: 404,
+name: "Luxio",
+types: ["Electric"],
+baseStats: {hp: 60, atk: 85, def: 49, spa: 60, spd: 49, spe: 60},
+abilities: {0: "Rivalry", 1: "Intimidate", H: "Guts"},
+weightkg: 30.5,
+prevo: "Shinx",
+evos: ["Luxray"],
+},
+
+luxray: {
+num: 405,
+name: "Luxray",
+types: ["Electric", "Dark"],
+baseStats: {hp: 80, atk: 120, def: 79, spa: 95, spd: 79, spe: 70},
+abilities: {0: "Rivalry", 1: "Intimidate", H: "Guts"},
+weightkg: 42,
+prevo: "Luxio",
+},
+
+budew: {
+num: 406,
+name: "Budew",
+types: ["Grass", "Poison"],
+baseStats: {hp: 40, atk: 30, def: 35, spa: 50, spd: 70, spe: 55},
+abilities: {0: "Natural Cure", 1: "Poison Point", H: "Leaf Guard"},
+weightkg: 1.2,
+evos: ["Roselia"],
+canHatch: true,
+},
+
+roserade: {
+num: 407,
+name: "Roserade",
+types: ["Grass", "Poison"],
+baseStats: {hp: 60, atk: 70, def: 65, spa: 125, spd: 105, spe: 90},
+abilities: {0: "Natural Cure", 1: "Poison Point", H: "Technician"},
+weightkg: 14.5,
+prevo: "Roselia",
+evoType: "useItem",
+evoItem: "Shiny Stone",
+},
+
+cranidos: {
+num: 408,
+name: "Cranidos",
+types: ["Rock"],
+baseStats: {hp: 67, atk: 125, def: 40, spa: 30, spd: 30, spe: 58},
+abilities: {0: "Mold Breaker", H: "Sheer Force"},
+weightkg: 31.5,
+evos: ["Rampardos"],
+},
+
+rampardos: {
+num: 409,
+name: "Rampardos",
+types: ["Rock", "Dragon"],
+baseStats: {hp: 97, atk: 165, def: 60, spa: 65, spd: 50, spe: 58},
+abilities: {0: "Mold Breaker", H: "Sheer Force"},
+weightkg: 102.5,
+prevo: "Cranidos",
+},
+
+shieldon: {
+num: 410,
+name: "Shieldon",
+types: ["Rock", "Steel"],
+baseStats: {hp: 30, atk: 42, def: 118, spa: 42, spd: 88, spe: 30},
+abilities: {0: "Sturdy", H: "Soundproof"},
+weightkg: 57,
+evos: ["Bastiodon"],
+},
+
+bastiodon: {
+num: 411,
+name: "Bastiodon",
+types: ["Rock", "Steel"],
+baseStats: {hp: 60, atk: 52, def: 168, spa: 47, spd: 138, spe: 30},
+abilities: {0: "Sturdy", H: "Soundproof"},
+weightkg: 149.5,
+prevo: "Shieldon",
+},
+
+burmy: {
+num: 412,
+name: "Burmy",
+baseForme: "Plant",
+types: ["Bug"],
+baseStats: {hp: 40, atk: 29, def: 45, spa: 29, spd: 45, spe: 36},
+abilities: {0: "Shed Skin", H: "Overcoat"},
+weightkg: 3.4,
+evos: ["Wormadam", "Wormadam-Sandy", "Wormadam-Trash", "Mothim"],
+cosmeticFormes: ["Burmy-Sandy", "Burmy-Trash"],
+formeOrder: ["Burmy", "Burmy-Sandy", "Burmy-Trash"],
+},
+
+wormadam: {
+num: 413,
+name: "Wormadam",
+baseForme: "Plant",
+types: ["Bug", "Grass"],
+baseStats: {hp: 60, atk: 59, def: 85, spa: 79, spd: 105, spe: 36},
+abilities: {0: "Anticipation", H: "Overcoat"},
+weightkg: 6.5,
+prevo: "Burmy",
+otherFormes: ["Wormadam-Sandy", "Wormadam-Trash"],
+formeOrder: ["Wormadam", "Wormadam-Sandy", "Wormadam-Trash"],
+},
+
+wormadamsandy: {
+num: 413,
+name: "Wormadam-Sandy",
+baseSpecies: "Wormadam",
+forme: "Sandy",
+types: ["Bug", "Ground"],
+baseStats: {hp: 60, atk: 79, def: 105, spa: 59, spd: 85, spe: 36},
+abilities: {0: "Anticipation", H: "Overcoat"},
+weightkg: 6.5,
+prevo: "Burmy",
+},
+
+wormadamtrash: {
+num: 413,
+name: "Wormadam-Trash",
+baseSpecies: "Wormadam",
+forme: "Trash",
+types: ["Bug", "Normal"],
+baseStats: {hp: 60, atk: 69, def: 95, spa: 69, spd: 95, spe: 36},
+abilities: {0: "Anticipation", H: "Overcoat"},
+weightkg: 6.5,
+prevo: "Burmy",
+},
+
+mothim: {
+num: 414,
+name: "Mothim",
+types: ["Bug", "Flying"],
+baseStats: {hp: 70, atk: 94, def: 50, spa: 94, spd: 50, spe: 66},
+abilities: {0: "Swarm", H: "Tinted Lens"},
+weightkg: 23.3,
+prevo: "Burmy",
+},
+
+combee: {
+num: 415,
+name: "Combee",
+types: ["Bug", "Flying"],
+baseStats: {hp: 30, atk: 30, def: 42, spa: 30, spd: 42, spe: 70},
+abilities: {0: "Honey Gather", H: "Hustle"},
+weightkg: 5.5,
+evos: ["Vespiquen"],
+},
+
+vespiquen: {
+num: 416,
+name: "Vespiquen",
+types: ["Bug", "Flying"],
+baseStats: {hp: 70, atk: 80, def: 102, spa: 80, spd: 102, spe: 40},
+abilities: {0: "Pressure", H: "Unnerve"},
+weightkg: 38.5,
+prevo: "Combee",
+},
+
+pachirisu: {
+num: 417,
+name: "Pachirisu",
+types: ["Electric", "Ice"],
+baseStats: {hp: 60, atk: 45, def: 70, spa: 45, spd: 90, spe: 95},
+abilities: {0: "Run Away", 1: "Pickup", H: "Volt Absorb"},
+weightkg: 3.9,
+},
+
+buizel: {
+num: 418,
+name: "Buizel",
+types: ["Water", "Normal"],
+baseStats: {hp: 55, atk: 65, def: 35, spa: 60, spd: 30, spe: 85},
+abilities: {0: "Swift Swim", H: "Water Veil"},
+weightkg: 29.5,
+evos: ["Floatzel"],
+},
+
+floatzel: {
+num: 419,
+name: "Floatzel",
+types: ["Water", "Normal"],
+baseStats: {hp: 85, atk: 105, def: 55, spa: 85, spd: 50, spe: 115},
+abilities: {0: "Swift Swim", H: "Water Veil"},
+weightkg: 33.5,
+prevo: "Buizel",
+},
+
+cherubi: {
+num: 420,
+name: "Cherubi",
+types: ["Grass"],
+baseStats: {hp: 45, atk: 35, def: 45, spa: 62, spd: 53, spe: 35},
+abilities: {0: "Chlorophyll"},
+weightkg: 3.3,
+evos: ["Cherrim"],
+},
+
+cherrim: {
+num: 421,
+name: "Cherrim",
+baseForme: "Overcast",
+types: ["Grass", "Fire"],
+baseStats: {hp: 70, atk: 60, def: 70, spa: 87, spd: 78, spe: 85},
+abilities: {0: "Flower Gift"},
+weightkg: 9.3,
+prevo: "Cherubi",
+otherFormes: ["Cherrim-Sunshine"],
+formeOrder: ["Cherrim", "Cherrim-Sunshine"],
+},
+
+cherrimsunshine: {
+num: 421,
+name: "Cherrim-Sunshine",
+baseSpecies: "Cherrim",
+forme: "Sunshine",
+types: ["Grass", "Fire"],
+baseStats: {hp: 70, atk: 60, def: 70, spa: 87, spd: 78, spe: 85},
+abilities: {0: "Flower Gift"},
+weightkg: 9.3,
+requiredAbility: "Flower Gift",
+battleOnly: "Cherrim",
+},
+
+shellos: {
+num: 422,
+name: "Shellos",
+baseForme: "West",
+types: ["Water"],
+baseStats: {hp: 76, atk: 48, def: 48, spa: 57, spd: 62, spe: 34},
+abilities: {0: "Sticky Hold", 1: "Storm Drain", H: "Sand Force"},
+weightkg: 6.3,
+evos: ["Gastrodon"],
+cosmeticFormes: ["Shellos-East"],
+formeOrder: ["Shellos", "Shellos-East"],
+},
+
+gastrodon: {
+num: 423,
+name: "Gastrodon",
+baseForme: "West",
+types: ["Water", "Ground"],
+baseStats: {hp: 111, atk: 83, def: 68, spa: 92, spd: 82, spe: 39},
+abilities: {0: "Sticky Hold", 1: "Storm Drain", H: "Sand Force"},
+weightkg: 29.9,
+prevo: "Shellos",
+cosmeticFormes: ["Gastrodon-East"],
+formeOrder: ["Gastrodon", "Gastrodon-East"],
+},
+
+ambipom: {
+num: 424,
+name: "Ambipom",
+types: ["Normal", "Poison"],
+baseStats: {hp: 75, atk: 100, def: 66, spa: 60, spd: 66, spe: 115},
+abilities: {0: "Technician", 1: "Pickup", H: "Skill Link"},
+weightkg: 20.3,
+prevo: "Aipom",
+evoType: "levelMove",
+evoMove: "Double Hit",
+},
+
+drifloon: {
+num: 425,
+name: "Drifloon",
+types: ["Ghost", "Flying"],
+baseStats: {hp: 90, atk: 50, def: 34, spa: 60, spd: 44, spe: 70},
+abilities: {0: "Aftermath", 1: "Unburden", H: "Flare Boost"},
+weightkg: 1.2,
+evos: ["Drifblim"],
+},
+
+drifblim: {
+num: 426,
+name: "Drifblim",
+types: ["Ghost", "Flying"],
+baseStats: {hp: 150, atk: 80, def: 44, spa: 90, spd: 54, spe: 80},
+abilities: {0: "Aftermath", 1: "Unburden", H: "Flare Boost"},
+weightkg: 15,
+prevo: "Drifloon",
+},
+
+buneary: {
+num: 427,
+name: "Buneary",
+types: ["Normal"],
+baseStats: {hp: 55, atk: 66, def: 44, spa: 44, spd: 56, spe: 85},
+abilities: {0: "Run Away", 1: "Klutz", H: "Limber"},
+weightkg: 5.5,
+evos: ["Lopunny"],
+},
+
+lopunny: {
+num: 428,
+name: "Lopunny",
+types: ["Normal", "Fighting"],
+baseStats: {hp: 65, atk: 76, def: 84, spa: 54, spd: 96, spe: 105},
+abilities: {0: "Cute Charm", 1: "Klutz", H: "Limber"},
+weightkg: 33.3,
+prevo: "Buneary",
+evoType: "levelFriendship",
+otherFormes: ["Lopunny-Mega"],
+formeOrder: ["Lopunny", "Lopunny-Mega"],
+},
+
+lopunnymega: {
+num: 428,
+name: "Lopunny-Mega",
+baseSpecies: "Lopunny",
+forme: "Mega",
+types: ["Normal", "Fighting"],
+baseStats: {hp: 65, atk: 136, def: 94, spa: 54, spd: 96, spe: 135},
+abilities: {0: "Scrappy"},
+weightkg: 28.3,
+},
+
+mismagius: {
+num: 429,
+name: "Mismagius",
+types: ["Ghost", "Fairy"],
+baseStats: {hp: 60, atk: 60, def: 60, spa: 105, spd: 105, spe: 105},
+abilities: {0: "Levitate"},
+weightkg: 4.4,
+prevo: "Misdreavus",
+evoType: "useItem",
+evoItem: "Dusk Stone",
+},
+
+honchkrow: {
+num: 430,
+name: "Honchkrow",
+types: ["Dark", "Flying"],
+baseStats: {hp: 100, atk: 125, def: 52, spa: 105, spd: 52, spe: 71},
+abilities: {0: "Insomnia", 1: "Super Luck", H: "Moxie"},
+weightkg: 27.3,
+prevo: "Murkrow",
+evoType: "useItem",
+evoItem: "Dusk Stone",
+},
+
+glameow: {
+num: 431,
+name: "Glameow",
+types: ["Dark"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 49, atk: 55, def: 42, spa: 42, spd: 37, spe: 85},
+abilities: {0: "Limber", 1: "Own Tempo", H: "Keen Eye"},
+weightkg: 3.9,
+evos: ["Purugly"],
+},
+
+purugly: {
+num: 432,
+name: "Purugly",
+types: ["Dark"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 71, atk: 82, def: 64, spa: 64, spd: 59, spe: 112},
+abilities: {0: "Thick Fat", 1: "Own Tempo", H: "Defiant"},
+weightkg: 43.8,
+prevo: "Glameow",
+},
+
+chingling: {
+num: 433,
+name: "Chingling",
+types: ["Psychic"],
+baseStats: {hp: 45, atk: 30, def: 50, spa: 65, spd: 50, spe: 45},
+abilities: {0: "Levitate"},
+weightkg: 0.6,
+evos: ["Chimecho"],
+canHatch: true,
+},
+
+stunky: {
+num: 434,
+name: "Stunky",
+types: ["Poison", "Normal"],
+baseStats: {hp: 63, atk: 63, def: 47, spa: 41, spd: 41, spe: 74},
+abilities: {0: "Stench", 1: "Aftermath", H: "Keen Eye"},
+weightkg: 19.2,
+evos: ["Skuntank"],
+},
+
+skuntank: {
+num: 435,
+name: "Skuntank",
+types: ["Poison", "Normal"],
+baseStats: {hp: 103, atk: 93, def: 67, spa: 71, spd: 61, spe: 84},
+abilities: {0: "Stench", 1: "Aftermath", H: "Keen Eye"},
+weightkg: 38,
+prevo: "Stunky",
+},
+
+bronzor: {
+num: 436,
+name: "Bronzor",
+types: ["Steel", "Psychic"],
+baseStats: {hp: 57, atk: 24, def: 86, spa: 24, spd: 86, spe: 23},
+abilities: {0: "Levitate", 1: "Heatproof", H: "Heavy Metal"},
+weightkg: 60.5,
+evos: ["Bronzong"],
+},
+
+bronzong: {
+num: 437,
+name: "Bronzong",
+types: ["Steel", "Psychic"],
+baseStats: {hp: 67, atk: 89, def: 116, spa: 79, spd: 116, spe: 33},
+abilities: {0: "Levitate", 1: "Heatproof", H: "Heavy Metal"},
+weightkg: 187,
+prevo: "Bronzor",
+},
+
+bonsly: {
+num: 438,
+name: "Bonsly",
+types: ["Rock"],
+baseStats: {hp: 50, atk: 80, def: 95, spa: 10, spd: 45, spe: 10},
+abilities: {0: "Sturdy", 1: "Rock Head", H: "Rattled"},
+weightkg: 15,
+evos: ["Sudowoodo"],
+canHatch: true,
+},
+
+mimejr: {
+num: 439,
+name: "Mime Jr.",
+types: ["Psychic", "Fairy"],
+baseStats: {hp: 20, atk: 25, def: 45, spa: 70, spd: 90, spe: 60},
+abilities: {0: "Soundproof", 1: "Filter", H: "Technician"},
+weightkg: 13,
+evos: ["Mr. Mime", "Mr. Mime-Galar"],
+canHatch: true,
+},
+
+happiny: {
+num: 440,
+name: "Happiny",
+types: ["Normal"],
+baseStats: {hp: 100, atk: 5, def: 5, spa: 15, spd: 65, spe: 30},
+abilities: {0: "Natural Cure", 1: "Serene Grace", H: "Friend Guard"},
+weightkg: 24.4,
+evos: ["Chansey"],
+canHatch: true,
+},
+
+chatot: {
+num: 441,
+name: "Chatot",
+types: ["Normal", "Flying"],
+baseStats: {hp: 76, atk: 65, def: 45, spa: 92, spd: 42, spe: 91},
+abilities: {0: "Keen Eye", 1: "Tangled Feet", H: "Big Pecks"},
+weightkg: 1.9,
+},
+
+spiritomb: {
+num: 442,
+name: "Spiritomb",
+types: ["Ghost", "Dark"],
+baseStats: {hp: 50, atk: 92, def: 108, spa: 92, spd: 108, spe: 35},
+abilities: {0: "Pressure", H: "Infiltrator"},
+weightkg: 108,
+},
+
+gible: {
+num: 443,
+name: "Gible",
+types: ["Dragon", "Ground"],
+baseStats: {hp: 58, atk: 70, def: 45, spa: 40, spd: 45, spe: 42},
+abilities: {0: "Sand Veil", H: "Rough Skin"},
+weightkg: 20.5,
+evos: ["Gabite"],
+},
+
+gabite: {
+num: 444,
+name: "Gabite",
+types: ["Dragon", "Ground"],
+baseStats: {hp: 68, atk: 90, def: 65, spa: 50, spd: 55, spe: 82},
+abilities: {0: "Sand Veil", H: "Rough Skin"},
+weightkg: 56,
+prevo: "Gible",
+evos: ["Garchomp"],
+},
+
+garchomp: {
+num: 445,
+name: "Garchomp",
+types: ["Dragon", "Ground"],
+baseStats: {hp: 108, atk: 130, def: 95, spa: 80, spd: 85, spe: 102},
+abilities: {0: "Sand Veil", H: "Rough Skin"},
+weightkg: 95,
+prevo: "Gabite",
+otherFormes: ["Garchomp-Mega"],
+formeOrder: ["Garchomp", "Garchomp-Mega"],
+},
+
+garchompmega: {
+num: 445,
+name: "Garchomp-Mega",
+baseSpecies: "Garchomp",
+forme: "Mega",
+types: ["Dragon", "Ground"],
+baseStats: {hp: 108, atk: 170, def: 115, spa: 120, spd: 95, spe: 92},
+abilities: {0: "Sand Force"},
+weightkg: 95,
+},
+
+munchlax: {
+num: 446,
+name: "Munchlax",
+types: ["Normal"],
+baseStats: {hp: 135, atk: 85, def: 40, spa: 40, spd: 85, spe: 5},
+abilities: {0: "Pickup", 1: "Thick Fat", H: "Gluttony"},
+weightkg: 105,
+evos: ["Snorlax"],
+canHatch: true,
+},
+
+riolu: {
+num: 447,
+name: "Riolu",
+types: ["Fighting"],
+baseStats: {hp: 40, atk: 70, def: 40, spa: 35, spd: 40, spe: 60},
+abilities: {0: "Steadfast", 1: "Inner Focus", H: "Prankster"},
+weightkg: 20.2,
+evos: ["Lucario"],
+canHatch: true,
+},
+
+lucario: {
+num: 448,
+name: "Lucario",
+types: ["Fighting", "Steel"],
+baseStats: {hp: 70, atk: 110, def: 70, spa: 115, spd: 70, spe: 90},
+abilities: {0: "Steadfast", 1: "Inner Focus", H: "Justified"},
+weightkg: 54,
+prevo: "Riolu",
+evoType: "levelFriendship",
+evoCondition: "during the day",
+otherFormes: ["Lucario-Mega"],
+formeOrder: ["Lucario", "Lucario-Mega"],
+},
+
+lucariomega: {
+num: 448,
+name: "Lucario-Mega",
+baseSpecies: "Lucario",
+forme: "Mega",
+types: ["Fighting", "Steel"],
+baseStats: {hp: 70, atk: 145, def: 88, spa: 140, spd: 70, spe: 112},
+abilities: {0: "Adaptability"},
+weightkg: 57.5,
+},
+
+hippopotas: {
+num: 449,
+name: "Hippopotas",
+types: ["Ground"],
+baseStats: {hp: 68, atk: 72, def: 78, spa: 38, spd: 42, spe: 32},
+abilities: {0: "Sand Stream", H: "Sand Force"},
+weightkg: 49.5,
+evos: ["Hippowdon"],
+},
+
+hippowdon: {
+num: 450,
+name: "Hippowdon",
+types: ["Ground"],
+baseStats: {hp: 108, atk: 112, def: 118, spa: 68, spd: 72, spe: 47},
+abilities: {0: "Sand Stream", H: "Sand Force"},
+weightkg: 300,
+prevo: "Hippopotas",
+},
+
+skorupi: {
+num: 451,
+name: "Skorupi",
+types: ["Poison", "Bug"],
+baseStats: {hp: 40, atk: 50, def: 90, spa: 30, spd: 55, spe: 65},
+abilities: {0: "Battle Armor", 1: "Sniper", H: "Keen Eye"},
+weightkg: 12,
+evos: ["Drapion"],
+},
+
+drapion: {
+num: 452,
+name: "Drapion",
+types: ["Bug", "Dark"],
+baseStats: {hp: 70, atk: 90, def: 110, spa: 60, spd: 75, spe: 95},
+abilities: {0: "Battle Armor", 1: "Sniper", H: "Keen Eye"},
+weightkg: 61.5,
+prevo: "Skorupi",
+},
+
+croagunk: {
+num: 453,
+name: "Croagunk",
+types: ["Poison", "Fighting"],
+baseStats: {hp: 48, atk: 61, def: 40, spa: 61, spd: 40, spe: 50},
+abilities: {0: "Anticipation", 1: "Dry Skin", H: "Poison Touch"},
+weightkg: 23,
+evos: ["Toxicroak"],
+},
+
+toxicroak: {
+num: 454,
+name: "Toxicroak",
+types: ["Poison", "Fighting"],
+baseStats: {hp: 83, atk: 106, def: 65, spa: 86, spd: 65, spe: 85},
+abilities: {0: "Anticipation", 1: "Dry Skin", H: "Poison Touch"},
+weightkg: 44.4,
+prevo: "Croagunk",
+},
+
+carnivine: {
+num: 455,
+name: "Carnivine",
+types: ["Grass"],
+baseStats: {hp: 74, atk: 100, def: 72, spa: 90, spd: 72, spe: 46},
+abilities: {0: "Levitate"},
+weightkg: 27,
+},
+
+finneon: {
+num: 456,
+name: "Finneon",
+types: ["Water"],
+baseStats: {hp: 49, atk: 49, def: 56, spa: 49, spd: 61, spe: 66},
+abilities: {0: "Swift Swim", 1: "Storm Drain", H: "Water Veil"},
+weightkg: 7,
+evos: ["Lumineon"],
+},
+
+lumineon: {
+num: 457,
+name: "Lumineon",
+types: ["Water", "Ghost"],
+baseStats: {hp: 69, atk: 69, def: 76, spa: 69, spd: 86, spe: 91},
+abilities: {0: "Swift Swim", 1: "Storm Drain", H: "Water Veil"},
+weightkg: 24,
+prevo: "Finneon",
+},
+
+mantyke: {
+num: 458,
+name: "Mantyke",
+types: ["Water", "Flying"],
+baseStats: {hp: 45, atk: 20, def: 50, spa: 60, spd: 120, spe: 50},
+abilities: {0: "Swift Swim", 1: "Water Absorb", H: "Water Veil"},
+weightkg: 65,
+evos: ["Mantine"],
+canHatch: true,
+},
+
+snover: {
+num: 459,
+name: "Snover",
+types: ["Grass", "Ice"],
+baseStats: {hp: 60, atk: 62, def: 50, spa: 62, spd: 60, spe: 40},
+abilities: {0: "Snow Warning", H: "Soundproof"},
+weightkg: 50.5,
+evos: ["Abomasnow"],
+},
+
+abomasnow: {
+num: 460,
+name: "Abomasnow",
+types: ["Grass", "Ice"],
+baseStats: {hp: 90, atk: 92, def: 75, spa: 92, spd: 85, spe: 60},
+abilities: {0: "Snow Warning", H: "Soundproof"},
+weightkg: 135.5,
+prevo: "Snover",
+otherFormes: ["Abomasnow-Mega"],
+formeOrder: ["Abomasnow", "Abomasnow-Mega"],
+},
+
+abomasnowmega: {
+num: 460,
+name: "Abomasnow-Mega",
+baseSpecies: "Abomasnow",
+forme: "Mega",
+types: ["Grass", "Ice"],
+baseStats: {hp: 90, atk: 132, def: 105, spa: 132, spd: 105, spe: 30},
+abilities: {0: "Snow Warning"},
+weightkg: 185,
+},
+
+weavile: {
+num: 461,
+name: "Weavile",
+types: ["Dark", "Ice"],
+baseStats: {hp: 70, atk: 120, def: 65, spa: 45, spd: 85, spe: 125},
+abilities: {0: "Pressure", H: "Pickpocket"},
+weightkg: 34,
+prevo: "Sneasel",
+evoType: "levelHold",
+evoItem: "Razor Claw",
+evoCondition: "at night",
+},
+
+magnezone: {
+num: 462,
+name: "Magnezone",
+types: ["Electric", "Steel"],
+baseStats: {hp: 70, atk: 70, def: 115, spa: 130, spd: 90, spe: 60},
+abilities: {0: "Magnet Pull", 1: "Sturdy", H: "Analytic"},
+weightkg: 180,
+prevo: "Magneton",
+evoType: "useItem",
+evoItem: "Thunder Stone",
+},
+
+lickilicky: {
+num: 463,
+name: "Lickilicky",
+types: ["Fairy", "Poison"],
+baseStats: {hp: 110, atk: 85, def: 95, spa: 80, spd: 95, spe: 50},
+abilities: {0: "Own Tempo", 1: "Oblivious", H: "Cloud Nine"},
+weightkg: 140,
+prevo: "Lickitung",
+evoType: "levelMove",
+evoMove: "Rollout",
+},
+
+rhyperior: {
+num: 464,
+name: "Rhyperior",
+types: ["Ground", "Rock"],
+baseStats: {hp: 115, atk: 140, def: 130, spa: 55, spd: 55, spe: 40},
+abilities: {0: "Lightning Rod", 1: "Solid Rock", H: "Reckless"},
+weightkg: 282.8,
+prevo: "Rhydon",
+evoType: "trade",
+evoItem: "Protector",
+},
+
+tangrowth: {
+num: 465,
+name: "Tangrowth",
+types: ["Grass"],
+baseStats: {hp: 100, atk: 100, def: 125, spa: 110, spd: 50, spe: 50},
+abilities: {0: "Chlorophyll", 1: "Leaf Guard", H: "Regenerator"},
+weightkg: 128.6,
+prevo: "Tangela",
+evoType: "levelMove",
+evoMove: "Ancient Power",
+},
+
+electivire: {
+num: 466,
+name: "Electivire",
+types: ["Electric", "Fighting"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 75, atk: 123, def: 67, spa: 95, spd: 85, spe: 95},
+abilities: {0: "Motor Drive", H: "Vital Spirit"},
+weightkg: 138.6,
+prevo: "Electabuzz",
+evoType: "trade",
+evoItem: "Electirizer",
+},
+
+magmortar: {
+num: 467,
+name: "Magmortar",
+types: ["Fire", "Poison"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 75, atk: 95, def: 67, spa: 125, spd: 95, spe: 83},
+abilities: {0: "Flame Body", H: "Vital Spirit"},
+weightkg: 68,
+prevo: "Magmar",
+evoType: "trade",
+evoItem: "Magmarizer",
+},
+
+togekiss: {
+num: 468,
+name: "Togekiss",
+types: ["Fairy", "Flying"],
+baseStats: {hp: 85, atk: 50, def: 95, spa: 120, spd: 115, spe: 80},
+abilities: {0: "Hustle", 1: "Serene Grace", H: "Super Luck"},
+weightkg: 38,
+prevo: "Togetic",
+evoType: "useItem",
+evoItem: "Shiny Stone",
+},
+
+yanmega: {
+num: 469,
+name: "Yanmega",
+types: ["Bug", "Dragon"],
+baseStats: {hp: 86, atk: 76, def: 86, spa: 116, spd: 56, spe: 95},
+abilities: {0: "Speed Boost", 1: "Tinted Lens", H: "Frisk"},
+weightkg: 51.5,
+prevo: "Yanma",
+evoType: "levelMove",
+evoMove: "Ancient Power",
+},
+
+leafeon: {
+num: 470,
+name: "Leafeon",
+types: ["Grass", "Normal"],
+baseStats: {hp: 65, atk: 110, def: 130, spa: 60, spd: 65, spe: 95},
+abilities: {0: "Leaf Guard", H: "Chlorophyll"},
+weightkg: 25.5,
+prevo: "Eevee",
+evoType: "useItem",
+evoItem: "Leaf Stone",
+},
+
+glaceon: {
+num: 471,
+name: "Glaceon",
+types: ["Ice", "Normal"],
+baseStats: {hp: 65, atk: 60, def: 110, spa: 130, spd: 95, spe: 65},
+abilities: {0: "Snow Cloak", H: "Ice Body"},
+weightkg: 25.9,
+prevo: "Eevee",
+evoType: "useItem",
+evoItem: "Ice Stone",
+},
+
+gliscor: {
+num: 472,
+name: "Gliscor",
+types: ["Ground", "Flying"],
+baseStats: {hp: 75, atk: 95, def: 125, spa: 45, spd: 75, spe: 95},
+abilities: {0: "Hyper Cutter", 1: "Sand Veil", H: "Poison Heal"},
+weightkg: 42.5,
+prevo: "Gligar",
+evoType: "levelHold",
+evoItem: "Razor Fang",
+evoCondition: "at night",
+},
+
+mamoswine: {
+num: 473,
+name: "Mamoswine",
+types: ["Ice", "Ground"],
+baseStats: {hp: 110, atk: 130, def: 80, spa: 70, spd: 60, spe: 80},
+abilities: {0: "Oblivious", 1: "Snow Cloak", H: "Thick Fat"},
+weightkg: 291,
+prevo: "Piloswine",
+evoType: "levelMove",
+evoMove: "Ancient Power",
+},
+
+porygonz: {
+num: 474,
+name: "Porygon-Z",
+types: ["Electric", "Psychic"],
+baseStats: {hp: 85, atk: 80, def: 70, spa: 135, spd: 75, spe: 90},
+abilities: {0: "Adaptability", 1: "Download", H: "Analytic"},
+weightkg: 34,
+prevo: "Porygon2",
+evoType: "trade",
+evoItem: "Dubious Disc",
+},
+
+gallade: {
+num: 475,
+name: "Gallade",
+types: ["Psychic", "Fighting"],
+baseStats: {hp: 68, atk: 125, def: 65, spa: 65, spd: 115, spe: 80},
+abilities: {0: "Steadfast", 1: "Sharpness", H: "Justified"},
+weightkg: 52,
+prevo: "Kirlia",
+evoType: "useItem",
+evoItem: "Dawn Stone",
+otherFormes: ["Gallade-Mega"],
+formeOrder: ["Gallade", "Gallade-Mega"],
+},
+
+gallademega: {
+num: 475,
+name: "Gallade-Mega",
+baseSpecies: "Gallade",
+forme: "Mega",
+types: ["Psychic", "Fighting"],
+baseStats: {hp: 68, atk: 165, def: 95, spa: 65, spd: 115, spe: 110},
+abilities: {0: "Inner Focus"},
+weightkg: 56.4,
+},
+
+probopass: {
+num: 476,
+name: "Probopass",
+types: ["Rock", "Steel"],
+baseStats: {hp: 60, atk: 55, def: 145, spa: 75, spd: 150, spe: 40},
+abilities: {0: "Sturdy", 1: "Magnet Pull", H: "Sand Force"},
+weightkg: 340,
+prevo: "Nosepass",
+evoType: "levelExtra",
+evoCondition: "near a special magnetic field",
+},
+
+dusknoir: {
+num: 477,
+name: "Dusknoir",
+types: ["Ghost"],
+baseStats: {hp: 45, atk: 100, def: 135, spa: 65, spd: 135, spe: 45},
+abilities: {0: "Pressure", H: "Frisk"},
+weightkg: 106.6,
+prevo: "Dusclops",
+evoType: "trade",
+evoItem: "Reaper Cloth",
+},
+
+froslass: {
+num: 478,
+name: "Froslass",
+types: ["Ice", "Ghost"],
+baseStats: {hp: 70, atk: 80, def: 70, spa: 80, spd: 70, spe: 110},
+abilities: {0: "Snow Cloak", H: "Cursed Body"},
+weightkg: 26.6,
+prevo: "Snorunt",
+evoType: "useItem",
+evoItem: "Dawn Stone",
+},
+
+rotom: {
+num: 479,
+name: "Rotom",
+types: ["Electric", "Ghost"],
+baseStats: {hp: 50, atk: 50, def: 77, spa: 95, spd: 77, spe: 91},
+abilities: {0: "Levitate"},
+weightkg: 0.3,
+otherFormes: ["Rotom-Heat", "Rotom-Wash", "Rotom-Frost", "Rotom-Fan", "Rotom-Mow"],
+formeOrder: ["Rotom", "Rotom-Heat", "Rotom-Wash", "Rotom-Frost", "Rotom-Fan", "Rotom-Mow"],
+},
+
+rotomheat: {
+num: 479,
+name: "Rotom-Heat",
+baseSpecies: "Rotom",
+forme: "Heat",
+types: ["Electric", "Fire"],
+baseStats: {hp: 50, atk: 65, def: 107, spa: 105, spd: 107, spe: 86},
+abilities: {0: "Levitate"},
+weightkg: 0.3,
+changesFrom: "Rotom",
+},
+
+rotomwash: {
+num: 479,
+name: "Rotom-Wash",
+baseSpecies: "Rotom",
+forme: "Wash",
+types: ["Electric", "Water"],
+baseStats: {hp: 50, atk: 65, def: 107, spa: 105, spd: 107, spe: 86},
+abilities: {0: "Levitate"},
+weightkg: 0.3,
+changesFrom: "Rotom",
+},
+
+rotomfrost: {
+num: 479,
+name: "Rotom-Frost",
+baseSpecies: "Rotom",
+forme: "Frost",
+types: ["Electric", "Ice"],
+baseStats: {hp: 50, atk: 65, def: 107, spa: 105, spd: 107, spe: 86},
+abilities: {0: "Levitate"},
+weightkg: 0.3,
+changesFrom: "Rotom",
+},
+
+rotomfan: {
+num: 479,
+name: "Rotom-Fan",
+baseSpecies: "Rotom",
+forme: "Fan",
+types: ["Electric", "Flying"],
+baseStats: {hp: 50, atk: 65, def: 107, spa: 105, spd: 107, spe: 86},
+abilities: {0: "Levitate"},
+weightkg: 0.3,
+changesFrom: "Rotom",
+},
+
+rotommow: {
+num: 479,
+name: "Rotom-Mow",
+baseSpecies: "Rotom",
+forme: "Mow",
+types: ["Electric", "Grass"],
+baseStats: {hp: 50, atk: 65, def: 107, spa: 105, spd: 107, spe: 86},
+abilities: {0: "Levitate"},
+weightkg: 0.3,
+changesFrom: "Rotom",
+},
+
+uxie: {
+num: 480,
+name: "Uxie",
+types: ["Fairy", "Electric"],
+baseStats: {hp: 75, atk: 75, def: 130, spa: 75, spd: 130, spe: 95},
+abilities: {0: "Levitate"},
+weightkg: 0.3,
+},
+
+mesprit: {
+num: 481,
+name: "Mesprit",
+types: ["Poison", "Fairy"],
+baseStats: {hp: 80, atk: 105, def: 105, spa: 105, spd: 105, spe: 80},
+abilities: {0: "Levitate"},
+weightkg: 0.3,
+},
+
+azelf: {
+num: 482,
+name: "Azelf",
+types: ["Fairy", "Ice"],
+baseStats: {hp: 75, atk: 125, def: 70, spa: 125, spd: 70, spe: 115},
+abilities: {0: "Levitate"},
+weightkg: 0.3,
+},
+
+
+num: 483,
+name: "Dialga",
+types: ["Steel", "Dragon"],
+baseStats: {hp: 100, atk: 120, def: 120, spa: 150, spd: 100, spe: 90},
+abilities: {0: "Pressure", H: "Telepathy"},
+weightkg: 683,
+otherFormes: ["Dialga-Origin"],
+formeOrder: ["Dialga", "Dialga-Origin"],
+},
+
+
+num: 483,
+name: "Dialga-Origin",
+baseSpecies: "Dialga",
+forme: "Origin",
+types: ["Steel", "Dragon"],
+baseStats: {hp: 100, atk: 100, def: 120, spa: 150, spd: 120, spe: 90},
+abilities: {0: "Pressure", H: "Telepathy"},
+weightkg: 850,
+changesFrom: "Dialga",
+gen: 8,
+},
+
+
+num: 484,
+name: "Palkia",
+types: ["Fairy", "Dragon"],
+baseStats: {hp: 90, atk: 120, def: 100, spa: 150, spd: 120, spe: 100},
+abilities: {0: "Pressure", H: "Telepathy"},
+weightkg: 336,
+otherFormes: ["Palkia-Origin"],
+formeOrder: ["Palkia", "Palkia-Origin"],
+},
+
+
+num: 484,
+name: "Palkia-Origin",
+baseSpecies: "Palkia",
+forme: "Origin",
+types: ["Fairy", "Dragon"],
+baseStats: {hp: 90, atk: 100, def: 100, spa: 150, spd: 120, spe: 120},
+abilities: {0: "Pressure", H: "Telepathy"},
+weightkg: 660,
+changesFrom: "Palkia",
+gen: 8,
+},
+
+heatran: {
+num: 485,
+name: "Heatran",
+types: ["Fire", "Steel"],
+baseStats: {hp: 91, atk: 90, def: 106, spa: 130, spd: 106, spe: 77},
+abilities: {0: "Flash Fire", H: "Flame Body"},
+weightkg: 430,
+},
+
+regigigas: {
+num: 486,
+name: "Regigigas",
+types: ["Normal"],
+baseStats: {hp: 110, atk: 160, def: 110, spa: 80, spd: 110, spe: 100},
+abilities: {0: "Slow Start"},
+weightkg: 420,
+},
+
+
+num: 487,
+name: "Giratina",
+baseForme: "Altered",
+types: ["Ghost", "Dragon"],
+baseStats: {hp: 150, atk: 100, def: 120, spa: 100, spd: 120, spe: 90},
+abilities: {0: "Pressure", H: "Telepathy"},
+weightkg: 750,
+otherFormes: ["Giratina-Origin"],
+formeOrder: ["Giratina", "Giratina-Origin"],
+},
+
+
+num: 487,
+name: "Giratina-Origin",
+baseSpecies: "Giratina",
+forme: "Origin",
+types: ["Ghost", "Dragon"],
+baseStats: {hp: 150, atk: 120, def: 100, spa: 120, spd: 100, spe: 90},
+abilities: {0: "Levitate"},
+weightkg: 650,
+changesFrom: "Giratina",
+},
+
+cresselia: {
+num: 488,
+name: "Cresselia",
+types: ["Fairy", "Ghost"],
+baseStats: {hp: 120, atk: 70, def: 110, spa: 75, spd: 120, spe: 85},
+abilities: {0: "Levitate"},
+weightkg: 85.6,
+},
+
+phione: {
+num: 489,
+name: "Phione",
+types: ["Fairy"],
+baseStats: {hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 80},
+abilities: {0: "Hydration"},
+weightkg: 3.1,
+},
+
+manaphy: {
+num: 490,
+name: "Manaphy",
+types: ["Fairy", "Ice"],
+baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
+abilities: {0: "Hydration"},
+weightkg: 1.4,
+},
+
+darkrai: {
+num: 491,
+name: "Darkrai",
+types: ["Dark", "Ghost"],
+baseStats: {hp: 70, atk: 90, def: 90, spa: 135, spd: 90, spe: 125},
+abilities: {0: "Bad Dreams"},
+weightkg: 50.5,
+},
+
+shaymin: {
+num: 492,
+name: "Shaymin",
+baseForme: "Land",
+types: ["Grass", "Flying"],
+baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
+abilities: {0: "Natural Cure"},
+weightkg: 2.1,
+otherFormes: ["Shaymin-Sky"],
+formeOrder: ["Shaymin", "Shaymin-Sky"],
+},
+
+shayminsky: {
+num: 492,
+name: "Shaymin-Sky",
+baseSpecies: "Shaymin",
+forme: "Sky",
+types: ["Grass", "Flying"],
+baseStats: {hp: 100, atk: 103, def: 75, spa: 120, spd: 75, spe: 127},
+abilities: {0: "Serene Grace"},
+weightkg: 5.2,
+changesFrom: "Shaymin",
+},
+
+
+num: 493,
+name: "Arceus",
+baseForme: "Normal",
+types: ["???"],
+baseStats: {hp: 120, atk: 120, def: 120, spa: 120, spd: 120, spe: 120},
+abilities: {0: "Multitype"},
+weightkg: 320,
+otherFormes: ["Arceus-Bug", "Arceus-Dark", "Arceus-Dragon", "Arceus-Electric", "Arceus-Fairy", "Arceus-Fighting", "Arceus-Fire", "Arceus-Flying", "Arceus-Ghost", "Arceus-Grass", "Arceus-Ground", "Arceus-Ice", "Arceus-Poison", "Arceus-Psychic", "Arceus-Rock", "Arceus-Steel", "Arceus-Water"],
+formeOrder: [
+Arceus, "Arceus-Fighting", "Arceus-Flying", "Arceus-Poison", "Arceus-Ground", "Arceus-Rock", "Arceus-Bug", "Arceus-Ghost", "Arceus-Steel",
+Arceus-Fire, "Arceus-Water", "Arceus-Grass", "Arceus-Electric", "Arceus-Psychic", "Arceus-Ice", "Arceus-Dragon", "Arceus-Dark", "Arceus-Fairy",
 ],
-target: "normal",
-type: "Fighting",
 },
 
-triplekick: {
-accuracy: 73,
-basePower: 15,
-basePowerCallback(pokemon, target, move) {
-return 10 * move.hit;
-},
-category: "Physical",
-name: "Triple Kick",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-multihit: [3, 6],
-multiaccuracy: 73,
-secondary: null,
-target: "normal",
-type: "Fighting",
+arceusbug: {
+num: 493,
+name: "Arceus-Bug",
+baseSpecies: "Arceus",
+forme: "Bug",
+types: ["Bug"],
+baseStats: {hp: 120, atk: 120, def: 120, spa: 120, spd: 120, spe: 120},
+abilities: {0: "Multitype"},
+weightkg: 320,
+requiredItems: ["Insect Plate", "Buginium Z"],
+changesFrom: "Arceus",
 },
 
-vacuumwave: {
-accuracy: 93,
-basePower: 30,
-category: "Special",
-name: "Vacuum Wave",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Fighting",
+arceusdark: {
+num: 493,
+name: "Arceus-Dark",
+baseSpecies: "Arceus",
+forme: "Dark",
+types: ["Dark"],
+baseStats: {hp: 120, atk: 120, def: 120, spa: 120, spd: 120, spe: 120},
+abilities: {0: "Multitype"},
+weightkg: 320,
+requiredItems: ["Dread Plate", "Darkinium Z"],
+changesFrom: "Arceus",
 },
 
-victorydance: {
-accuracy: 70,
-basePower: 125,
-category: "Special",
-name: "Victory Dance",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-onAfterMoveSecondarySelf(pokemon, target, move) {
-if (!target || target.fainted || target.hp <= 0) this.boost({atk: 3}, pokemon, pokemon, move);
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Fighting",
+arceusdragon: {
+num: 493,
+name: "Arceus-Dragon",
+baseSpecies: "Arceus",
+forme: "Dragon",
+types: ["Dragon"],
+baseStats: {hp: 120, atk: 120, def: 120, spa: 120, spd: 120, spe: 120},
+abilities: {0: "Multitype"},
+weightkg: 320,
+requiredItems: ["Draco Plate", "Dragonium Z"],
+changesFrom: "Arceus",
 },
 
-vitalthrow: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Vital Throw",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Fighting",
+arceuselectric: {
+num: 493,
+name: "Arceus-Electric",
+baseSpecies: "Arceus",
+forme: "Electric",
+types: ["Electric"],
+baseStats: {hp: 120, atk: 120, def: 120, spa: 120, spd: 120, spe: 120},
+abilities: {0: "Multitype"},
+weightkg: 320,
+requiredItems: ["Zap Plate", "Electrium Z"],
+changesFrom: "Arceus",
 },
 
-wakeupslap: {
-accuracy: 82,
-basePower: 85,
-basePowerCallback(pokemon, target, move) {
-if (target.status === 'slp' || target.hasAbility('comatose')) {
-this.debug('BP doubled on sleeping target');
-return move.basePower * 2;
-}
-return move.basePower;
-},
-category: "Physical",
-name: "Wake-Up Slap",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-onHit(target) {
-if (target.status === 'slp') target.cureStatus();
-},
-secondary: null,
-target: "normal",
-type: "Fighting",
+arceusfairy: {
+num: 493,
+name: "Arceus-Fairy",
+baseSpecies: "Arceus",
+forme: "Fairy",
+types: ["Fairy"],
+baseStats: {hp: 120, atk: 120, def: 120, spa: 120, spd: 120, spe: 120},
+abilities: {0: "Multitype"},
+weightkg: 320,
+requiredItems: ["Pixie Plate", "Fairium Z"],
+changesFrom: "Arceus",
+gen: 6,
 },
 
-armorcannon: {
-accuracy: 72,
-basePower: 115,
-category: "Special",
-name: "Armor Cannon",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1},
-self: {
-boosts: {
-def: -1,
-spd: -1,
-},
-},
-secondary: null,
-target: "normal",
-type: "Fire",
+arceusfighting: {
+num: 493,
+name: "Arceus-Fighting",
+baseSpecies: "Arceus",
+forme: "Fighting",
+types: ["Fighting"],
+baseStats: {hp: 120, atk: 120, def: 120, spa: 120, spd: 120, spe: 120},
+abilities: {0: "Multitype"},
+weightkg: 320,
+requiredItems: ["Fist Plate", "Fightinium Z"],
+changesFrom: "Arceus",
 },
 
-bitterblade: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Bitter Blade",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
-drain: [1, 2],
-secondary: null,
-target: "normal",
-type: "Fire",
+arceusfire: {
+num: 493,
+name: "Arceus-Fire",
+baseSpecies: "Arceus",
+forme: "Fire",
+types: ["Fire"],
+baseStats: {hp: 120, atk: 120, def: 120, spa: 120, spd: 120, spe: 120},
+abilities: {0: "Multitype"},
+weightkg: 320,
+requiredItems: ["Flame Plate", "Firium Z"],
+changesFrom: "Arceus",
 },
 
-blastburn: {
-accuracy: 60,
-basePower: 200,
-category: "Special",
-name: "Blast Burn",
-pp: 0.625,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Fire",
+arceusflying: {
+num: 493,
+name: "Arceus-Flying",
+baseSpecies: "Arceus",
+forme: "Flying",
+types: ["Flying"],
+baseStats: {hp: 120, atk: 120, def: 120, spa: 120, spd: 120, spe: 120},
+abilities: {0: "Multitype"},
+weightkg: 320,
+requiredItems: ["Sky Plate", "Flyinium Z"],
+changesFrom: "Arceus",
 },
 
-blazekick: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Blaze Kick",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-critRatio: 3,
-secondary: {
-chance: 33,
-status: 'brn',
-},
-target: "normal",
-type: "Fire",
+arceusghost: {
+num: 493,
+name: "Arceus-Ghost",
+baseSpecies: "Arceus",
+forme: "Ghost",
+types: ["Ghost"],
+baseStats: {hp: 120, atk: 120, def: 120, spa: 120, spd: 120, spe: 120},
+abilities: {0: "Multitype"},
+weightkg: 320,
+requiredItems: ["Spooky Plate", "Ghostium Z"],
+changesFrom: "Arceus",
 },
 
-blazingtorque: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Blazing Torque",
-pp: 1.25,
-priority: 0,
-flags: {
-protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
-},
-secondary: {
-chance: 33,
-status: 'brn',
-},
-target: "normal",
-type: "Fire",
+arceusgrass: {
+num: 493,
+name: "Arceus-Grass",
+baseSpecies: "Arceus",
+forme: "Grass",
+types: ["Grass"],
+baseStats: {hp: 120, atk: 120, def: 120, spa: 120, spd: 120, spe: 120},
+abilities: {0: "Multitype"},
+weightkg: 320,
+requiredItems: ["Meadow Plate", "Grassium Z"],
+changesFrom: "Arceus",
 },
 
-blueflare: {
-accuracy: 72,
-basePower: 115,
-category: "Special",
-name: "Blue Flare",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'brn',
-},
-target: "normal",
-type: "Fire",
+arceusground: {
+num: 493,
+name: "Arceus-Ground",
+baseSpecies: "Arceus",
+forme: "Ground",
+types: ["Ground"],
+baseStats: {hp: 120, atk: 120, def: 120, spa: 120, spd: 120, spe: 120},
+abilities: {0: "Multitype"},
+weightkg: 320,
+requiredItems: ["Earth Plate", "Groundium Z"],
+changesFrom: "Arceus",
 },
 
-burningjealousy: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Burning Jealousy",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-onHit(target, source, move) {
-if (target?.statsRaisedThisTurn) {
-target.trySetStatus('brn', source, move);
-}
-},
-},
-target: "allAdjacentFoes",
-type: "Fire",
+arceusice: {
+num: 493,
+name: "Arceus-Ice",
+baseSpecies: "Arceus",
+forme: "Ice",
+types: ["Ice"],
+baseStats: {hp: 120, atk: 120, def: 120, spa: 120, spd: 120, spe: 120},
+abilities: {0: "Multitype"},
+weightkg: 320,
+requiredItems: ["Icicle Plate", "Icium Z"],
+changesFrom: "Arceus",
 },
 
-burnup: {
-accuracy: 72,
-basePower: 115,
-category: "Special",
-name: "Burn Up",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1, defrost: 1},
-onTryMove(pokemon, target, move) {
-if (pokemon.hasType('Fire')) return;
-this.add('-fail', pokemon, 'move: Burn Up');
-this.attrLastMove('[still]');
-return null;
-},
-self: {
-onHit(pokemon) {
-pokemon.setType(pokemon.getTypes(true).map(type => type === "Fire" ? "???" : type));
-this.add('-start', pokemon, 'typechange', pokemon.getTypes().join('/'), '[from] move: Burn Up');
-},
-},
-weather: 'sunnyday',
-secondary: null,
-target: "normal",
-type: "Fire",
+arceuspoison: {
+num: 493,
+name: "Arceus-Poison",
+baseSpecies: "Arceus",
+forme: "Poison",
+types: ["Poison"],
+baseStats: {hp: 120, atk: 120, def: 120, spa: 120, spd: 120, spe: 120},
+abilities: {0: "Multitype"},
+weightkg: 320,
+requiredItems: ["Toxic Plate", "Poisonium Z"],
+changesFrom: "Arceus",
 },
 
-ember: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Ember",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'brn',
-},
-target: "normal",
-type: "Fire",
+arceuspsychic: {
+num: 493,
+name: "Arceus-Psychic",
+baseSpecies: "Arceus",
+forme: "Psychic",
+types: ["Psychic"],
+baseStats: {hp: 120, atk: 120, def: 120, spa: 120, spd: 120, spe: 120},
+abilities: {0: "Multitype"},
+weightkg: 320,
+requiredItems: ["Mind Plate", "Psychium Z"],
+changesFrom: "Arceus",
 },
 
-eruption: {
-accuracy: 72,
-basePower: 115,
-basePowerCallback(pokemon, target, move) {
-const bp = move.basePower * pokemon.hp / pokemon.maxhp;
-this.debug('BP: ' + bp);
-return bp;
-},
-category: "Special",
-name: "Eruption",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1},
-weather: 'sunnyday',
-secondary: null,
-target: "allAdjacentFoes",
-type: "Fire",
+arceusrock: {
+num: 493,
+name: "Arceus-Rock",
+baseSpecies: "Arceus",
+forme: "Rock",
+types: ["Rock"],
+baseStats: {hp: 120, atk: 120, def: 120, spa: 120, spd: 120, spe: 120},
+abilities: {0: "Multitype"},
+weightkg: 320,
+requiredItems: ["Stone Plate", "Rockium Z"],
+changesFrom: "Arceus",
 },
 
-fierydance: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Fiery Dance",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, dance: 1},
-secondary: {
-chance: 33,
-self: {
-boosts: {
-atk: 1,
-spa: 1,
-spd: -1,
-def: -1,
-accuracy: 1,
-},
-},
-},
-weather: 'sunnyday',
-target: "normal",
-type: "Fire",
+arceussteel: {
+num: 493,
+name: "Arceus-Steel",
+baseSpecies: "Arceus",
+forme: "Steel",
+types: ["Steel"],
+baseStats: {hp: 120, atk: 120, def: 120, spa: 120, spd: 120, spe: 120},
+abilities: {0: "Multitype"},
+weightkg: 320,
+requiredItems: ["Iron Plate", "Steelium Z"],
+changesFrom: "Arceus",
 },
 
-fireblast: {
-accuracy: 70,
-basePower: 125,
-category: "Special",
-name: "Fire Blast",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 45,
-status: 'brn',
-},
-target: "normal",
-type: "Fire",
+arceuswater: {
+num: 493,
+name: "Arceus-Water",
+baseSpecies: "Arceus",
+forme: "Water",
+types: ["Water"],
+baseStats: {hp: 120, atk: 120, def: 120, spa: 120, spd: 120, spe: 120},
+abilities: {0: "Multitype"},
+weightkg: 320,
+requiredItems: ["Splash Plate", "Waterium Z"],
+changesFrom: "Arceus",
 },
 
-firefang: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Fire Fang",
-pp: 1.25,
-priority: 0,
-flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
-secondaries: [
-{
-chance: 33,
-status: 'brn',
-}, {
-chance: 33,
-volatileStatus: 'flinch',
+victini: {
+num: 494,
+name: "Victini",
+types: ["Psychic", "Fire"],
+baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
+abilities: {0: "Victory Star"},
+weightkg: 4,
 },
+
+snivy: {
+num: 495,
+name: "Snivy",
+types: ["Grass"],
+baseStats: {hp: 45, atk: 45, def: 55, spa: 45, spd: 55, spe: 63},
+abilities: {0: "Overgrow", H: "Contrary"},
+weightkg: 8.1,
+evos: ["Servine"],
+},
+
+servine: {
+num: 496,
+name: "Servine",
+types: ["Grass"],
+baseStats: {hp: 60, atk: 60, def: 75, spa: 60, spd: 75, spe: 83},
+abilities: {0: "Overgrow", H: "Contrary"},
+weightkg: 16,
+prevo: "Snivy",
+evos: ["Serperior"],
+},
+
+serperior: {
+num: 497,
+name: "Serperior",
+types: ["Grass", "Bug"],
+baseStats: {hp: 75, atk: 75, def: 95, spa: 75, spd: 95, spe: 113},
+abilities: {0: "Overgrow", H: "Contrary"},
+weightkg: 63,
+prevo: "Servine",
+},
+
+tepig: {
+num: 498,
+name: "Tepig",
+types: ["Fire"],
+baseStats: {hp: 65, atk: 63, def: 45, spa: 45, spd: 45, spe: 45},
+abilities: {0: "Blaze", H: "Thick Fat"},
+weightkg: 9.9,
+evos: ["Pignite"],
+},
+
+pignite: {
+num: 499,
+name: "Pignite",
+types: ["Fire", "Ground"],
+baseStats: {hp: 90, atk: 93, def: 55, spa: 70, spd: 55, spe: 55},
+abilities: {0: "Blaze", H: "Thick Fat"},
+weightkg: 55.5,
+prevo: "Tepig",
+evos: ["Emboar"],
+},
+
+emboar: {
+num: 500,
+name: "Emboar",
+types: ["Fire", "Ground"],
+baseStats: {hp: 110, atk: 123, def: 65, spa: 100, spd: 65, spe: 65},
+abilities: {0: "Blaze", H: "Reckless"},
+weightkg: 150,
+prevo: "Pignite",
+},
+
+oshawott: {
+num: 501,
+name: "Oshawott",
+types: ["Water"],
+baseStats: {hp: 55, atk: 55, def: 45, spa: 63, spd: 45, spe: 45},
+abilities: {0: "Torrent", H: "Shell Armor"},
+weightkg: 5.9,
+evos: ["Dewott"],
+},
+
+dewott: {
+num: 502,
+name: "Dewott",
+types: ["Water"],
+baseStats: {hp: 75, atk: 75, def: 60, spa: 83, spd: 60, spe: 60},
+abilities: {0: "Torrent", H: "Shell Armor"},
+weightkg: 24.5,
+prevo: "Oshawott",
+evos: ["Samurott", "Samurott-Hisui"],
+},
+
+samurott: {
+num: 503,
+name: "Samurott",
+types: ["Water", "Ice"],
+baseStats: {hp: 95, atk: 100, def: 85, spa: 108, spd: 70, spe: 70},
+abilities: {0: "Torrent", H: "Shell Armor"},
+weightkg: 94.6,
+prevo: "Dewott",
+otherFormes: ["Samurott-Hisui"],
+formeOrder: ["Samurott", "Samurott-Hisui"],
+},
+
+samurotthisui: {
+num: 503,
+name: "Samurott-Hisui",
+baseSpecies: "Samurott",
+forme: "Hisui",
+types: ["Water", "Dark"],
+baseStats: {hp: 90, atk: 108, def: 80, spa: 100, spd: 65, spe: 85},
+abilities: {0: "Torrent", H: "Sharpness"},
+weightkg: 58.2,
+prevo: "Dewott",
+},
+
+patrat: {
+num: 504,
+name: "Patrat",
+types: ["Ground"],
+baseStats: {hp: 45, atk: 55, def: 39, spa: 35, spd: 39, spe: 42},
+abilities: {0: "Run Away", 1: "Keen Eye", H: "Analytic"},
+weightkg: 11.6,
+evos: ["Watchog"],
+},
+
+watchog: {
+num: 505,
+name: "Watchog",
+types: ["Ground", "Psychic"],
+baseStats: {hp: 60, atk: 85, def: 69, spa: 60, spd: 69, spe: 77},
+abilities: {0: "Illuminate", 1: "Keen Eye", H: "Analytic"},
+weightkg: 27,
+prevo: "Patrat",
+},
+
+lillipup: {
+num: 506,
+name: "Lillipup",
+types: ["Normal"],
+baseStats: {hp: 45, atk: 60, def: 45, spa: 25, spd: 45, spe: 55},
+abilities: {0: "Vital Spirit", 1: "Pickup", H: "Run Away"},
+weightkg: 4.1,
+evos: ["Herdier"],
+},
+
+herdier: {
+num: 507,
+name: "Herdier",
+types: ["Normal"],
+baseStats: {hp: 65, atk: 80, def: 65, spa: 35, spd: 65, spe: 60},
+abilities: {0: "Intimidate", 1: "Sand Rush", H: "Scrappy"},
+weightkg: 14.7,
+prevo: "Lillipup",
+evos: ["Stoutland"],
+},
+
+stoutland: {
+num: 508,
+name: "Stoutland",
+types: ["Normal"],
+baseStats: {hp: 85, atk: 110, def: 90, spa: 45, spd: 90, spe: 80},
+abilities: {0: "Intimidate", 1: "Sand Rush", H: "Scrappy"},
+weightkg: 61,
+prevo: "Herdier",
+},
+
+purrloin: {
+num: 509,
+name: "Purrloin",
+types: ["Dark"],
+baseStats: {hp: 41, atk: 50, def: 37, spa: 50, spd: 37, spe: 66},
+abilities: {0: "Limber", 1: "Unburden", H: "Prankster"},
+weightkg: 10.1,
+evos: ["Liepard"],
+},
+
+liepard: {
+num: 510,
+name: "Liepard",
+types: ["Dark", "Electric"],
+baseStats: {hp: 64, atk: 88, def: 50, spa: 88, spd: 50, spe: 106},
+abilities: {0: "Limber", 1: "Unburden", H: "Prankster"},
+weightkg: 37.5,
+prevo: "Purrloin",
+},
+
+pansage: {
+num: 511,
+name: "Pansage",
+types: ["Grass", "Normal"],
+baseStats: {hp: 50, atk: 53, def: 48, spa: 53, spd: 48, spe: 64},
+abilities: {0: "Gluttony", H: "Overgrow"},
+weightkg: 10.5,
+evos: ["Simisage"],
+},
+
+simisage: {
+num: 512,
+name: "Simisage",
+types: ["Grass", "Normal"],
+baseStats: {hp: 75, atk: 98, def: 63, spa: 98, spd: 63, spe: 101},
+abilities: {0: "Gluttony", H: "Overgrow"},
+weightkg: 30.5,
+prevo: "Pansage",
+evoType: "useItem",
+evoItem: "Leaf Stone",
+},
+
+pansear: {
+num: 513,
+name: "Pansear",
+types: ["Fire", "Normal"],
+baseStats: {hp: 50, atk: 53, def: 48, spa: 53, spd: 48, spe: 64},
+abilities: {0: "Gluttony", H: "Blaze"},
+weightkg: 11,
+evos: ["Simisear"],
+},
+
+simisear: {
+num: 514,
+name: "Simisear",
+types: ["Fire", "Normal"],
+baseStats: {hp: 75, atk: 98, def: 63, spa: 98, spd: 63, spe: 101},
+abilities: {0: "Gluttony", H: "Blaze"},
+weightkg: 28,
+prevo: "Pansear",
+evoType: "useItem",
+evoItem: "Fire Stone",
+},
+
+panpour: {
+num: 515,
+name: "Panpour",
+types: ["Water", "Normal"],
+baseStats: {hp: 50, atk: 53, def: 48, spa: 53, spd: 48, spe: 64},
+abilities: {0: "Gluttony", H: "Torrent"},
+weightkg: 13.5,
+evos: ["Simipour"],
+},
+
+simipour: {
+num: 516,
+name: "Simipour",
+types: ["Water", "Normal"],
+baseStats: {hp: 75, atk: 98, def: 63, spa: 98, spd: 63, spe: 101},
+abilities: {0: "Gluttony", H: "Torrent"},
+weightkg: 29,
+prevo: "Panpour",
+evoType: "useItem",
+evoItem: "Water Stone",
+},
+
+munna: {
+num: 517,
+name: "Munna",
+types: ["Psychic", "Ghost"],
+baseStats: {hp: 76, atk: 25, def: 45, spa: 67, spd: 55, spe: 24},
+abilities: {0: "Forewarn", 1: "Synchronize", H: "Telepathy"},
+weightkg: 23.3,
+evos: ["Musharna"],
+},
+
+musharna: {
+num: 518,
+name: "Musharna",
+types: ["Psychic", "Ghost"],
+baseStats: {hp: 116, atk: 55, def: 85, spa: 107, spd: 95, spe: 29},
+abilities: {0: "Forewarn", 1: "Synchronize", H: "Telepathy"},
+weightkg: 60.5,
+prevo: "Munna",
+evoType: "useItem",
+evoItem: "Moon Stone",
+},
+
+pidove: {
+num: 519,
+name: "Pidove",
+types: ["Normal", "Flying"],
+baseStats: {hp: 50, atk: 55, def: 50, spa: 36, spd: 30, spe: 43},
+abilities: {0: "Big Pecks", 1: "Super Luck", H: "Rivalry"},
+weightkg: 2.1,
+evos: ["Tranquill"],
+},
+
+tranquill: {
+num: 520,
+name: "Tranquill",
+types: ["Normal", "Flying"],
+baseStats: {hp: 62, atk: 77, def: 62, spa: 50, spd: 42, spe: 65},
+abilities: {0: "Big Pecks", 1: "Super Luck", H: "Rivalry"},
+weightkg: 15,
+prevo: "Pidove",
+evos: ["Unfezant"],
+},
+
+unfezant: {
+num: 521,
+name: "Unfezant",
+types: ["Poison", "Flying"],
+baseStats: {hp: 80, atk: 115, def: 80, spa: 65, spd: 55, spe: 93},
+abilities: {0: "Big Pecks", 1: "Super Luck", H: "Rivalry"},
+weightkg: 29,
+prevo: "Tranquill",
+},
+
+blitzle: {
+num: 522,
+name: "Blitzle",
+types: ["Electric"],
+baseStats: {hp: 45, atk: 60, def: 32, spa: 50, spd: 32, spe: 76},
+abilities: {0: "Lightning Rod", 1: "Motor Drive", H: "Sap Sipper"},
+weightkg: 29.8,
+evos: ["Zebstrika"],
+},
+
+zebstrika: {
+num: 523,
+name: "Zebstrika",
+types: ["Electric", "Steel"],
+baseStats: {hp: 75, atk: 100, def: 63, spa: 80, spd: 63, spe: 116},
+abilities: {0: "Lightning Rod", 1: "Motor Drive", H: "Sap Sipper"},
+weightkg: 79.5,
+prevo: "Blitzle",
+},
+
+roggenrola: {
+num: 524,
+name: "Roggenrola",
+types: ["Rock"],
+baseStats: {hp: 55, atk: 75, def: 85, spa: 25, spd: 25, spe: 15},
+abilities: {0: "Sturdy", 1: "Weak Armor", H: "Sand Force"},
+weightkg: 18,
+evos: ["Boldore"],
+},
+
+boldore: {
+num: 525,
+name: "Boldore",
+types: ["Rock", "Poison"],
+baseStats: {hp: 70, atk: 105, def: 105, spa: 50, spd: 40, spe: 20},
+abilities: {0: "Sturdy", 1: "Weak Armor", H: "Sand Force"},
+weightkg: 102,
+prevo: "Roggenrola",
+evos: ["Gigalith"],
+},
+
+gigalith: {
+num: 526,
+name: "Gigalith",
+types: ["Rock", "Poison"],
+baseStats: {hp: 85, atk: 135, def: 130, spa: 60, spd: 80, spe: 25},
+abilities: {0: "Sturdy", 1: "Sand Stream", H: "Sand Force"},
+weightkg: 260,
+prevo: "Boldore",
+evoType: "trade",
+},
+
+woobat: {
+num: 527,
+name: "Woobat",
+types: ["Psychic", "Flying"],
+baseStats: {hp: 65, atk: 45, def: 43, spa: 55, spd: 43, spe: 72},
+abilities: {0: "Unaware", 1: "Klutz", H: "Simple"},
+weightkg: 2.1,
+evos: ["Swoobat"],
+},
+
+swoobat: {
+num: 528,
+name: "Swoobat",
+types: ["Psychic", "Flying"],
+baseStats: {hp: 67, atk: 57, def: 55, spa: 77, spd: 55, spe: 114},
+abilities: {0: "Unaware", 1: "Klutz", H: "Simple"},
+weightkg: 10.5,
+prevo: "Woobat",
+evoType: "levelFriendship",
+},
+
+drilbur: {
+num: 529,
+name: "Drilbur",
+types: ["Ground"],
+baseStats: {hp: 60, atk: 85, def: 40, spa: 30, spd: 45, spe: 68},
+abilities: {0: "Sand Rush", 1: "Sand Force", H: "Mold Breaker"},
+weightkg: 8.5,
+evos: ["Excadrill"],
+},
+
+excadrill: {
+num: 530,
+name: "Excadrill",
+types: ["Ground", "Steel"],
+baseStats: {hp: 110, atk: 135, def: 60, spa: 50, spd: 65, spe: 88},
+abilities: {0: "Sand Rush", 1: "Sand Force", H: "Mold Breaker"},
+weightkg: 40.4,
+prevo: "Drilbur",
+},
+
+audino: {
+num: 531,
+name: "Audino",
+types: ["Poison", "Fairy"],
+baseStats: {hp: 103, atk: 60, def: 86, spa: 60, spd: 86, spe: 50},
+abilities: {0: "Healer", 1: "Regenerator", H: "Klutz"},
+weightkg: 31,
+otherFormes: ["Audino-Mega"],
+formeOrder: ["Audino", "Audino-Mega"],
+},
+
+audinomega: {
+num: 531,
+name: "Audino-Mega",
+baseSpecies: "Audino",
+forme: "Mega",
+types: ["Normal", "Fairy"],
+baseStats: {hp: 103, atk: 60, def: 126, spa: 80, spd: 126, spe: 50},
+abilities: {0: "Healer"},
+weightkg: 32,
+},
+
+timburr: {
+num: 532,
+name: "Timburr",
+types: ["Fighting", "Grass"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 75, atk: 80, def: 55, spa: 25, spd: 35, spe: 35},
+abilities: {0: "Guts", 1: "Sheer Force", H: "Iron Fist"},
+weightkg: 12.5,
+evos: ["Gurdurr"],
+},
+
+gurdurr: {
+num: 533,
+name: "Gurdurr",
+types: ["Fighting", "Steel"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 85, atk: 105, def: 85, spa: 40, spd: 50, spe: 40},
+abilities: {0: "Guts", 1: "Sheer Force", H: "Iron Fist"},
+weightkg: 40,
+prevo: "Timburr",
+evos: ["Conkeldurr"],
+},
+
+conkeldurr: {
+num: 534,
+name: "Conkeldurr",
+types: ["Fighting", "Rock"],
+genderRatio: {M: 0.75, F: 0.25},
+baseStats: {hp: 105, atk: 140, def: 95, spa: 55, spd: 65, spe: 45},
+abilities: {0: "Guts", 1: "Sheer Force", H: "Iron Fist"},
+weightkg: 87,
+prevo: "Gurdurr",
+evoType: "trade",
+},
+
+tympole: {
+num: 535,
+name: "Tympole",
+types: ["Water"],
+baseStats: {hp: 50, atk: 50, def: 40, spa: 50, spd: 40, spe: 64},
+abilities: {0: "Swift Swim", 1: "Hydration", H: "Water Absorb"},
+weightkg: 4.5,
+evos: ["Palpitoad"],
+},
+
+palpitoad: {
+num: 536,
+name: "Palpitoad",
+types: ["Water", "Ground"],
+baseStats: {hp: 75, atk: 65, def: 55, spa: 65, spd: 55, spe: 69},
+abilities: {0: "Swift Swim", 1: "Hydration", H: "Water Absorb"},
+weightkg: 17,
+prevo: "Tympole",
+evos: ["Seismitoad"],
+},
+
+seismitoad: {
+num: 537,
+name: "Seismitoad",
+types: ["Water", "Ground"],
+baseStats: {hp: 105, atk: 95, def: 75, spa: 85, spd: 75, spe: 74},
+abilities: {0: "Swift Swim", 1: "Poison Touch", H: "Water Absorb"},
+weightkg: 62,
+prevo: "Palpitoad",
+},
+
+throh: {
+num: 538,
+name: "Throh",
+types: ["Fighting", "Rock"],
+baseStats: {hp: 120, atk: 100, def: 85, spa: 30, spd: 85, spe: 45},
+abilities: {0: "Guts", 1: "Inner Focus", H: "Mold Breaker"},
+weightkg: 55.5,
+},
+
+sawk: {
+num: 539,
+name: "Sawk",
+types: ["Fighting", "Ice"],
+baseStats: {hp: 75, atk: 125, def: 75, spa: 30, spd: 75, spe: 85},
+abilities: {0: "Sturdy", 1: "Inner Focus", H: "Mold Breaker"},
+weightkg: 51,
+},
+
+sewaddle: {
+num: 540,
+name: "Sewaddle",
+types: ["Bug", "Grass"],
+baseStats: {hp: 45, atk: 53, def: 70, spa: 40, spd: 60, spe: 42},
+abilities: {0: "Swarm", 1: "Chlorophyll", H: "Overcoat"},
+weightkg: 2.5,
+evos: ["Swadloon"],
+},
+
+swadloon: {
+num: 541,
+name: "Swadloon",
+types: ["Bug", "Grass"],
+baseStats: {hp: 55, atk: 63, def: 90, spa: 50, spd: 80, spe: 42},
+abilities: {0: "Leaf Guard", 1: "Chlorophyll", H: "Overcoat"},
+weightkg: 7.3,
+prevo: "Sewaddle",
+evos: ["Leavanny"],
+},
+
+leavanny: {
+num: 542,
+name: "Leavanny",
+types: ["Bug", "Grass"],
+baseStats: {hp: 75, atk: 103, def: 80, spa: 70, spd: 80, spe: 92},
+abilities: {0: "Swarm", 1: "Chlorophyll", H: "Overcoat"},
+weightkg: 20.5,
+prevo: "Swadloon",
+evoType: "levelFriendship",
+},
+
+venipede: {
+num: 543,
+name: "Venipede",
+types: ["Bug", "Poison"],
+baseStats: {hp: 30, atk: 45, def: 59, spa: 30, spd: 39, spe: 57},
+abilities: {0: "Poison Point", 1: "Swarm", H: "Speed Boost"},
+weightkg: 5.3,
+evos: ["Whirlipede"],
+},
+
+whirlipede: {
+num: 544,
+name: "Whirlipede",
+types: ["Bug", "Poison"],
+baseStats: {hp: 40, atk: 55, def: 99, spa: 40, spd: 79, spe: 47},
+abilities: {0: "Poison Point", 1: "Swarm", H: "Speed Boost"},
+weightkg: 58.5,
+prevo: "Venipede",
+evos: ["Scolipede"],
+},
+
+scolipede: {
+num: 545,
+name: "Scolipede",
+types: ["Bug", "Poison"],
+baseStats: {hp: 60, atk: 100, def: 89, spa: 55, spd: 69, spe: 112},
+abilities: {0: "Poison Point", 1: "Swarm", H: "Speed Boost"},
+weightkg: 200.5,
+prevo: "Whirlipede",
+},
+
+cottonee: {
+num: 546,
+name: "Cottonee",
+types: ["Grass", "Flying"],
+baseStats: {hp: 40, atk: 27, def: 60, spa: 37, spd: 50, spe: 66},
+abilities: {0: "Prankster", 1: "Infiltrator", H: "Chlorophyll"},
+weightkg: 0.6,
+evos: ["Whimsicott"],
+},
+
+whimsicott: {
+num: 547,
+name: "Whimsicott",
+types: ["Grass", "Flying"],
+baseStats: {hp: 60, atk: 67, def: 85, spa: 77, spd: 75, spe: 116},
+abilities: {0: "Prankster", 1: "Infiltrator", H: "Chlorophyll"},
+weightkg: 6.6,
+prevo: "Cottonee",
+evoType: "useItem",
+evoItem: "Sun Stone",
+},
+
+petilil: {
+num: 548,
+name: "Petilil",
+types: ["Grass"],
+baseStats: {hp: 45, atk: 35, def: 50, spa: 70, spd: 50, spe: 30},
+abilities: {0: "Chlorophyll", 1: "Own Tempo", H: "Leaf Guard"},
+weightkg: 6.6,
+evos: ["Lilligant", "Lilligant-Hisui"],
+},
+
+lilligant: {
+num: 549,
+name: "Lilligant",
+types: ["Grass", "Psychic"],
+baseStats: {hp: 70, atk: 60, def: 75, spa: 110, spd: 75, spe: 90},
+abilities: {0: "Chlorophyll", 1: "Own Tempo", H: "Leaf Guard"},
+weightkg: 16.3,
+prevo: "Petilil",
+evoType: "useItem",
+evoItem: "Sun Stone",
+otherFormes: ["Lilligant-Hisui"],
+formeOrder: ["Lilligant", "Lilligant-Hisui"],
+},
+
+lilliganthisui: {
+num: 549,
+name: "Lilligant-Hisui",
+baseSpecies: "Lilligant",
+forme: "Hisui",
+types: ["Grass", "Fighting"],
+baseStats: {hp: 70, atk: 105, def: 75, spa: 50, spd: 75, spe: 105},
+abilities: {0: "Chlorophyll", 1: "Hustle", H: "Leaf Guard"},
+weightkg: 19.2,
+prevo: "Petilil",
+evoType: "useItem",
+evoItem: "Sun Stone",
+},
+
+basculin: {
+num: 550,
+name: "Basculin",
+baseForme: "Red-Striped",
+types: ["Water", "Fire"],
+baseStats: {hp: 70, atk: 92, def: 65, spa: 80, spd: 55, spe: 98},
+abilities: {0: "Reckless", 1: "Adaptability", H: "Mold Breaker"},
+weightkg: 18,
+otherFormes: ["Basculin-Blue-Striped", "Basculin-White-Striped"],
+formeOrder: ["Basculin", "Basculin-Blue-Striped", "Basculin-White-Striped"],
+},
+
+basculinbluestriped: {
+num: 550,
+name: "Basculin-Blue-Striped",
+baseSpecies: "Basculin",
+forme: "Blue-Striped",
+types: ["Water", "Ghost"],
+baseStats: {hp: 70, atk: 92, def: 65, spa: 80, spd: 55, spe: 98},
+abilities: {0: "Rock Head", 1: "Adaptability", H: "Mold Breaker"},
+weightkg: 18,
+},
+
+basculinwhitestriped: {
+num: 550,
+name: "Basculin-White-Striped",
+baseSpecies: "Basculin",
+forme: "White-Striped",
+types: ["Ice"],
+baseStats: {hp: 70, atk: 92, def: 65, spa: 80, spd: 55, spe: 98},
+abilities: {0: "Rattled", 1: "Adaptability", H: "Mold Breaker"},
+weightkg: 18,
+evos: ["Basculegion", "Basculegion-F"],
+gen: 8,
+},
+
+sandile: {
+num: 551,
+name: "Sandile",
+types: ["Ground", "Dark"],
+baseStats: {hp: 50, atk: 72, def: 35, spa: 35, spd: 35, spe: 65},
+abilities: {0: "Intimidate", 1: "Moxie", H: "Anger Point"},
+weightkg: 15.2,
+evos: ["Krokorok"],
+},
+
+krokorok: {
+num: 552,
+name: "Krokorok",
+types: ["Ground", "Dark"],
+baseStats: {hp: 60, atk: 82, def: 45, spa: 45, spd: 45, spe: 74},
+abilities: {0: "Intimidate", 1: "Moxie", H: "Anger Point"},
+weightkg: 33.4,
+prevo: "Sandile",
+evos: ["Krookodile"],
+},
+
+krookodile: {
+num: 553,
+name: "Krookodile",
+types: ["Ground", "Dark"],
+baseStats: {hp: 95, atk: 117, def: 80, spa: 65, spd: 70, spe: 92},
+abilities: {0: "Intimidate", 1: "Moxie", H: "Anger Point"},
+weightkg: 96.3,
+prevo: "Krokorok",
+},
+
+darumaka: {
+num: 554,
+name: "Darumaka",
+types: ["Fire"],
+baseStats: {hp: 70, atk: 90, def: 45, spa: 15, spd: 45, spe: 50},
+abilities: {0: "Hustle", H: "Inner Focus"},
+weightkg: 37.5,
+evos: ["Darmanitan"],
+otherFormes: ["Darumaka-Galar"],
+formeOrder: ["Darumaka", "Darumaka-Galar"],
+},
+
+darumakagalar: {
+num: 554,
+name: "Darumaka-Galar",
+baseSpecies: "Darumaka",
+forme: "Galar",
+types: ["Ice"],
+baseStats: {hp: 70, atk: 90, def: 45, spa: 15, spd: 45, spe: 50},
+abilities: {0: "Hustle", H: "Inner Focus"},
+weightkg: 40,
+evos: ["Darmanitan-Galar"],
+},
+
+darmanitan: {
+num: 555,
+name: "Darmanitan",
+baseForme: "Standard",
+types: ["Fire", "Psychic"],
+baseStats: {hp: 105, atk: 140, def: 55, spa: 30, spd: 55, spe: 95},
+abilities: {0: "Sheer Force", H: "Zen Mode"},
+weightkg: 92.9,
+prevo: "Darumaka",
+otherFormes: ["Darmanitan-Zen", "Darmanitan-Galar", "Darmanitan-Galar-Zen"],
+formeOrder: ["Darmanitan", "Darmanitan-Zen", "Darmanitan-Galar", "Darmanitan-Galar-Zen"],
+},
+
+darmanitanzen: {
+num: 555,
+name: "Darmanitan-Zen",
+baseSpecies: "Darmanitan",
+forme: "Zen",
+types: ["Fire", "Psychic"],
+baseStats: {hp: 105, atk: 30, def: 105, spa: 140, spd: 105, spe: 55},
+abilities: {0: "Zen Mode"},
+weightkg: 92.9,
+requiredAbility: "Zen Mode",
+battleOnly: "Darmanitan",
+},
+
+darmanitangalar: {
+num: 555,
+name: "Darmanitan-Galar",
+baseSpecies: "Darmanitan",
+forme: "Galar",
+types: ["Ice", "Fire"],
+baseStats: {hp: 105, atk: 140, def: 55, spa: 30, spd: 55, spe: 95},
+abilities: {0: "Gorilla Tactics", H: "Zen Mode"},
+weightkg: 120,
+prevo: "Darumaka-Galar",
+evoType: "useItem",
+evoItem: "Ice Stone",
+},
+
+darmanitangalarzen: {
+num: 555,
+name: "Darmanitan-Galar-Zen",
+baseSpecies: "Darmanitan",
+forme: "Galar-Zen",
+types: ["Ice", "Fire"],
+baseStats: {hp: 105, atk: 160, def: 55, spa: 30, spd: 55, spe: 135},
+abilities: {0: "Zen Mode"},
+weightkg: 120,
+requiredAbility: "Zen Mode",
+battleOnly: "Darmanitan-Galar",
+},
+
+maractus: {
+num: 556,
+name: "Maractus",
+types: ["Grass", "Water"],
+baseStats: {hp: 75, atk: 86, def: 67, spa: 106, spd: 67, spe: 60},
+abilities: {0: "Water Absorb", 1: "Chlorophyll", H: "Storm Drain"},
+weightkg: 28,
+},
+
+dwebble: {
+num: 557,
+name: "Dwebble",
+types: ["Bug", "Rock"],
+baseStats: {hp: 50, atk: 65, def: 85, spa: 35, spd: 35, spe: 55},
+abilities: {0: "Sturdy", 1: "Shell Armor", H: "Weak Armor"},
+weightkg: 14.5,
+evos: ["Crustle"],
+},
+
+crustle: {
+num: 558,
+name: "Crustle",
+types: ["Bug", "Rock"],
+baseStats: {hp: 70, atk: 105, def: 125, spa: 65, spd: 75, spe: 45},
+abilities: {0: "Sturdy", 1: "Shell Armor", H: "Weak Armor"},
+weightkg: 200,
+prevo: "Dwebble",
+},
+
+scraggy: {
+num: 559,
+name: "Scraggy",
+types: ["Fighting"],
+baseStats: {hp: 50, atk: 75, def: 70, spa: 35, spd: 70, spe: 48},
+abilities: {0: "Shed Skin", 1: "Moxie", H: "Intimidate"},
+weightkg: 11.8,
+evos: ["Scrafty"],
+},
+
+scrafty: {
+num: 560,
+name: "Scrafty",
+types: ["Fighting", "Dragon"],
+baseStats: {hp: 65, atk: 90, def: 115, spa: 45, spd: 115, spe: 58},
+abilities: {0: "Shed Skin", 1: "Moxie", H: "Intimidate"},
+weightkg: 30,
+prevo: "Scraggy",
+},
+
+sigilyph: {
+num: 561,
+name: "Sigilyph",
+types: ["Psychic", "Flying"],
+baseStats: {hp: 72, atk: 58, def: 80, spa: 103, spd: 80, spe: 97},
+abilities: {0: "Wonder Skin", 1: "Magic Guard", H: "Tinted Lens"},
+weightkg: 14,
+},
+
+yamask: {
+num: 562,
+name: "Yamask",
+types: ["Ghost"],
+baseStats: {hp: 38, atk: 30, def: 85, spa: 55, spd: 65, spe: 30},
+abilities: {0: "Mummy"},
+weightkg: 1.5,
+evos: ["Cofagrigus"],
+otherFormes: ["Yamask-Galar"],
+formeOrder: ["Yamask", "Yamask-Galar"],
+},
+
+yamaskgalar: {
+num: 562,
+name: "Yamask-Galar",
+baseSpecies: "Yamask",
+forme: "Galar",
+types: ["Rock", "Ghost"],
+baseStats: {hp: 38, atk: 55, def: 85, spa: 30, spd: 65, spe: 30},
+abilities: {0: "Wandering Spirit"},
+weightkg: 1.5,
+evos: ["Runerigus"],
+},
+
+cofagrigus: {
+num: 563,
+name: "Cofagrigus",
+types: ["Ghost"],
+baseStats: {hp: 58, atk: 50, def: 145, spa: 95, spd: 105, spe: 30},
+abilities: {0: "Mummy"},
+weightkg: 76.5,
+prevo: "Yamask",
+},
+
+tirtouga: {
+num: 564,
+name: "Tirtouga",
+types: ["Ice", "Rock"],
+baseStats: {hp: 54, atk: 78, def: 103, spa: 53, spd: 45, spe: 22},
+abilities: {0: "Solid Rock", 1: "Sturdy", H: "Swift Swim"},
+weightkg: 16.5,
+evos: ["Carracosta"],
+},
+
+carracosta: {
+num: 565,
+name: "Carracosta",
+types: ["Ice", "Rock"],
+baseStats: {hp: 74, atk: 108, def: 133, spa: 83, spd: 65, spe: 32},
+abilities: {0: "Solid Rock", 1: "Sturdy", H: "Swift Swim"},
+weightkg: 81,
+prevo: "Tirtouga",
+},
+
+archen: {
+num: 566,
+name: "Archen",
+types: ["Rock", "Flying"],
+baseStats: {hp: 55, atk: 112, def: 45, spa: 74, spd: 45, spe: 70},
+abilities: {0: "Defeatist"},
+weightkg: 9.5,
+evos: ["Archeops"],
+},
+
+archeops: {
+num: 567,
+name: "Archeops",
+types: ["Rock", "Flying"],
+baseStats: {hp: 75, atk: 140, def: 65, spa: 112, spd: 65, spe: 110},
+abilities: {0: "Defeatist"},
+weightkg: 32,
+prevo: "Archen",
+},
+
+trubbish: {
+num: 568,
+name: "Trubbish",
+types: ["Poison"],
+baseStats: {hp: 50, atk: 50, def: 62, spa: 40, spd: 62, spe: 65},
+abilities: {0: "Stench", 1: "Sticky Hold", H: "Aftermath"},
+weightkg: 31,
+evos: ["Garbodor"],
+},
+
+garbodor: {
+num: 569,
+name: "Garbodor",
+types: ["Poison"],
+baseStats: {hp: 80, atk: 95, def: 82, spa: 60, spd: 82, spe: 75},
+abilities: {0: "Stench", 1: "Weak Armor", H: "Aftermath"},
+weightkg: 107.3,
+prevo: "Trubbish",
+},
+
+garbodorgmax: {
+num: 569,
+name: "Garbodor-Gmax",
+baseSpecies: "Garbodor",
+forme: "Gmax",
+types: ["Poison"],
+baseStats: {hp: 80, atk: 95, def: 82, spa: 60, spd: 82, spe: 75},
+abilities: {0: "Stench", 1: "Weak Armor", H: "Aftermath"},
+weightkg: 0,
+changesFrom: "Garbodor",
+},
+
+zorua: {
+num: 570,
+name: "Zorua",
+types: ["Dark"],
+baseStats: {hp: 40, atk: 65, def: 40, spa: 80, spd: 40, spe: 65},
+abilities: {0: "Illusion"},
+weightkg: 12.5,
+evos: ["Zoroark"],
+otherFormes: ["Zorua-Hisui"],
+formeOrder: ["Zorua", "Zorua-Hisui"],
+},
+
+zoruahisui: {
+num: 570,
+name: "Zorua-Hisui",
+baseSpecies: "Zorua",
+forme: "Hisui",
+types: ["Normal", "Ghost"],
+baseStats: {hp: 35, atk: 60, def: 40, spa: 85, spd: 40, spe: 70},
+abilities: {0: "Illusion"},
+weightkg: 12.5,
+evos: ["Zoroark-Hisui"],
+},
+
+zoroark: {
+num: 571,
+name: "Zoroark",
+types: ["Dark", "Ghost"],
+baseStats: {hp: 60, atk: 105, def: 60, spa: 120, spd: 60, spe: 105},
+abilities: {0: "Illusion"},
+weightkg: 81.1,
+prevo: "Zorua",
+otherFormes: ["Zoroark-Hisui"],
+formeOrder: ["Zoroark", "Zoroark-Hisui"],
+},
+
+zoroarkhisui: {
+num: 571,
+name: "Zoroark-Hisui",
+baseSpecies: "Zoroark",
+forme: "Hisui",
+types: ["Normal", "Ghost"],
+baseStats: {hp: 55, atk: 100, def: 60, spa: 125, spd: 60, spe: 110},
+abilities: {0: "Illusion"},
+weightkg: 73,
+prevo: "Zorua-Hisui",
+},
+
+minccino: {
+num: 572,
+name: "Minccino",
+types: ["Fairy"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 55, atk: 50, def: 40, spa: 40, spd: 40, spe: 75},
+abilities: {0: "Cute Charm", 1: "Technician", H: "Skill Link"},
+weightkg: 5.8,
+evos: ["Cinccino"],
+},
+
+cinccino: {
+num: 573,
+name: "Cinccino",
+types: ["Fairy", "Fighting"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 75, atk: 95, def: 60, spa: 65, spd: 60, spe: 115},
+abilities: {0: "Cute Charm", 1: "Technician", H: "Skill Link"},
+weightkg: 7.5,
+prevo: "Minccino",
+evoType: "useItem",
+evoItem: "Shiny Stone",
+},
+
+gothita: {
+num: 574,
+name: "Gothita",
+types: ["Psychic"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 45, atk: 30, def: 50, spa: 55, spd: 65, spe: 45},
+abilities: {0: "Frisk", 1: "Competitive", H: "Shadow Tag"},
+weightkg: 5.8,
+evos: ["Gothorita"],
+},
+
+gothorita: {
+num: 575,
+name: "Gothorita",
+types: ["Psychic", "Dark"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 60, atk: 45, def: 70, spa: 75, spd: 85, spe: 55},
+abilities: {0: "Frisk", 1: "Competitive", H: "Shadow Tag"},
+weightkg: 18,
+prevo: "Gothita",
+evos: ["Gothitelle"],
+},
+
+gothitelle: {
+num: 576,
+name: "Gothitelle",
+types: ["Psychic", "Dark"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 70, atk: 55, def: 95, spa: 95, spd: 110, spe: 65},
+abilities: {0: "Frisk", 1: "Competitive", H: "Shadow Tag"},
+weightkg: 44,
+prevo: "Gothorita",
+},
+
+solosis: {
+num: 577,
+name: "Solosis",
+types: ["Psychic", "Poison"],
+baseStats: {hp: 45, atk: 30, def: 40, spa: 105, spd: 50, spe: 20},
+abilities: {0: "Overcoat", 1: "Magic Guard", H: "Regenerator"},
+weightkg: 1,
+evos: ["Duosion"],
+},
+
+duosion: {
+num: 578,
+name: "Duosion",
+types: ["Psychic", "Poison"],
+baseStats: {hp: 65, atk: 40, def: 50, spa: 125, spd: 60, spe: 30},
+abilities: {0: "Overcoat", 1: "Magic Guard", H: "Regenerator"},
+weightkg: 8,
+prevo: "Solosis",
+evos: ["Reuniclus"],
+},
+
+reuniclus: {
+num: 579,
+name: "Reuniclus",
+types: ["Psychic", "Poison"],
+baseStats: {hp: 110, atk: 65, def: 75, spa: 125, spd: 85, spe: 30},
+abilities: {0: "Overcoat", 1: "Magic Guard", H: "Regenerator"},
+weightkg: 20.1,
+prevo: "Duosion",
+},
+
+ducklett: {
+num: 580,
+name: "Ducklett",
+types: ["Ice", "Flying"],
+baseStats: {hp: 62, atk: 44, def: 50, spa: 44, spd: 50, spe: 55},
+abilities: {0: "Keen Eye", 1: "Big Pecks", H: "Hydration"},
+weightkg: 5.5,
+evos: ["Swanna"],
+},
+
+swanna: {
+num: 581,
+name: "Swanna",
+types: ["Ice", "Flying"],
+baseStats: {hp: 75, atk: 87, def: 63, spa: 87, spd: 63, spe: 98},
+abilities: {0: "Keen Eye", 1: "Big Pecks", H: "Hydration"},
+weightkg: 24.2,
+prevo: "Ducklett",
+},
+
+vanillite: {
+num: 582,
+name: "Vanillite",
+types: ["Ice", "Poison"],
+baseStats: {hp: 36, atk: 50, def: 50, spa: 65, spd: 60, spe: 44},
+abilities: {0: "Ice Body", 1: "Snow Cloak", H: "Weak Armor"},
+weightkg: 5.7,
+evos: ["Vanillish"],
+},
+
+vanillish: {
+num: 583,
+name: "Vanillish",
+types: ["Ice", "Poison"],
+baseStats: {hp: 51, atk: 65, def: 65, spa: 80, spd: 75, spe: 59},
+abilities: {0: "Ice Body", 1: "Snow Cloak", H: "Weak Armor"},
+weightkg: 41,
+prevo: "Vanillite",
+evos: ["Vanilluxe"],
+},
+
+vanilluxe: {
+num: 584,
+name: "Vanilluxe",
+types: ["Ice", "Poison"],
+baseStats: {hp: 71, atk: 95, def: 85, spa: 110, spd: 95, spe: 79},
+abilities: {0: "Ice Body", 1: "Snow Warning", H: "Weak Armor"},
+weightkg: 57.5,
+prevo: "Vanillish",
+},
+
+deerling: {
+num: 585,
+name: "Deerling",
+baseForme: "Spring",
+types: ["Ground", "Grass"],
+baseStats: {hp: 60, atk: 60, def: 50, spa: 40, spd: 50, spe: 75},
+abilities: {0: "Chlorophyll", 1: "Sap Sipper", H: "Serene Grace"},
+weightkg: 19.5,
+evos: ["Sawsbuck"],
+cosmeticFormes: ["Deerling-Summer", "Deerling-Autumn", "Deerling-Winter"],
+formeOrder: ["Deerling", "Deerling-Summer", "Deerling-Autumn", "Deerling-Winter"],
+},
+
+sawsbuck: {
+num: 586,
+name: "Sawsbuck",
+baseForme: "Spring",
+types: ["Ground", "Grass"],
+baseStats: {hp: 80, atk: 100, def: 70, spa: 60, spd: 70, spe: 95},
+abilities: {0: "Chlorophyll", 1: "Sap Sipper", H: "Serene Grace"},
+weightkg: 92.5,
+prevo: "Deerling",
+cosmeticFormes: ["Sawsbuck-Summer", "Sawsbuck-Autumn", "Sawsbuck-Winter"],
+formeOrder: ["Sawsbuck", "Sawsbuck-Summer", "Sawsbuck-Autumn", "Sawsbuck-Winter"],
+},
+
+emolga: {
+num: 587,
+name: "Emolga",
+types: ["Electric", "Ground"],
+baseStats: {hp: 55, atk: 75, def: 60, spa: 75, spd: 60, spe: 103},
+abilities: {0: "Static", H: "Motor Drive"},
+weightkg: 5,
+},
+
+karrablast: {
+num: 588,
+name: "Karrablast",
+types: ["Bug"],
+baseStats: {hp: 50, atk: 75, def: 45, spa: 40, spd: 45, spe: 60},
+abilities: {0: "Swarm", 1: "Shed Skin", H: "No Guard"},
+weightkg: 5.9,
+evos: ["Escavalier"],
+},
+
+escavalier: {
+num: 589,
+name: "Escavalier",
+types: ["Bug", "Steel"],
+baseStats: {hp: 70, atk: 135, def: 105, spa: 60, spd: 105, spe: 20},
+abilities: {0: "Swarm", 1: "Shell Armor", H: "Overcoat"},
+weightkg: 33,
+prevo: "Karrablast",
+evoType: "trade",
+evoCondition: "with a Shelmet",
+},
+
+foongus: {
+num: 590,
+name: "Foongus",
+types: ["Grass", "Poison"],
+baseStats: {hp: 69, atk: 55, def: 45, spa: 55, spd: 55, spe: 15},
+abilities: {0: "Effect Spore", H: "Regenerator"},
+weightkg: 1,
+evos: ["Amoonguss"],
+},
+
+amoonguss: {
+num: 591,
+name: "Amoonguss",
+types: ["Grass", "Poison"],
+baseStats: {hp: 114, atk: 85, def: 70, spa: 85, spd: 80, spe: 30},
+abilities: {0: "Effect Spore", H: "Regenerator"},
+weightkg: 10.5,
+prevo: "Foongus",
+},
+
+frillish: {
+num: 592,
+name: "Frillish",
+types: ["Water", "Ghost"],
+baseStats: {hp: 55, atk: 40, def: 50, spa: 65, spd: 85, spe: 40},
+abilities: {0: "Water Absorb", 1: "Cursed Body", H: "Damp"},
+weightkg: 33,
+evos: ["Jellicent"],
+},
+
+jellicent: {
+num: 593,
+name: "Jellicent",
+types: ["Water", "Ghost"],
+baseStats: {hp: 100, atk: 60, def: 70, spa: 85, spd: 105, spe: 60},
+abilities: {0: "Water Absorb", 1: "Cursed Body", H: "Damp"},
+weightkg: 135,
+prevo: "Frillish",
+},
+
+alomomola: {
+num: 594,
+name: "Alomomola",
+types: ["Water", "Fairy"],
+baseStats: {hp: 165, atk: 75, def: 80, spa: 40, spd: 45, spe: 65},
+abilities: {0: "Healer", 1: "Hydration", H: "Regenerator"},
+weightkg: 31.6,
+},
+
+joltik: {
+num: 595,
+name: "Joltik",
+types: ["Bug", "Electric"],
+baseStats: {hp: 50, atk: 47, def: 50, spa: 57, spd: 50, spe: 65},
+abilities: {0: "Compound Eyes", 1: "Unnerve", H: "Swarm"},
+weightkg: 0.6,
+evos: ["Galvantula"],
+},
+
+galvantula: {
+num: 596,
+name: "Galvantula",
+types: ["Bug", "Electric"],
+baseStats: {hp: 70, atk: 77, def: 60, spa: 97, spd: 60, spe: 108},
+abilities: {0: "Compound Eyes", 1: "Unnerve", H: "Swarm"},
+weightkg: 14.3,
+prevo: "Joltik",
+},
+
+ferroseed: {
+num: 597,
+name: "Ferroseed",
+types: ["Grass", "Steel"],
+baseStats: {hp: 44, atk: 50, def: 91, spa: 24, spd: 86, spe: 10},
+abilities: {0: "Iron Barbs"},
+weightkg: 18.8,
+evos: ["Ferrothorn"],
+},
+
+ferrothorn: {
+num: 598,
+name: "Ferrothorn",
+types: ["Grass", "Steel"],
+baseStats: {hp: 74, atk: 94, def: 131, spa: 54, spd: 116, spe: 20},
+abilities: {0: "Iron Barbs", H: "Anticipation"},
+weightkg: 110,
+prevo: "Ferroseed",
+},
+
+klink: {
+num: 599,
+name: "Klink",
+types: ["Steel"],
+baseStats: {hp: 40, atk: 55, def: 70, spa: 45, spd: 60, spe: 30},
+abilities: {0: "Plus", 1: "Minus", H: "Clear Body"},
+weightkg: 21,
+evos: ["Klang"],
+},
+
+klang: {
+num: 600,
+name: "Klang",
+types: ["Steel"],
+baseStats: {hp: 60, atk: 80, def: 95, spa: 70, spd: 85, spe: 50},
+abilities: {0: "Plus", 1: "Minus", H: "Clear Body"},
+weightkg: 51,
+prevo: "Klink",
+evos: ["Klinklang"],
+},
+
+klinklang: {
+num: 601,
+name: "Klinklang",
+types: ["Steel"],
+baseStats: {hp: 60, atk: 100, def: 115, spa: 70, spd: 85, spe: 90},
+abilities: {0: "Plus", 1: "Minus", H: "Clear Body"},
+weightkg: 81,
+prevo: "Klang",
+},
+
+tynamo: {
+num: 602,
+name: "Tynamo",
+types: ["Electric"],
+baseStats: {hp: 35, atk: 55, def: 40, spa: 45, spd: 40, spe: 60},
+abilities: {0: "Levitate"},
+weightkg: 0.3,
+evos: ["Eelektrik"],
+},
+
+eelektrik: {
+num: 603,
+name: "Eelektrik",
+types: ["Electric", "Poison"],
+baseStats: {hp: 65, atk: 85, def: 70, spa: 75, spd: 70, spe: 40},
+abilities: {0: "Levitate"},
+weightkg: 22,
+prevo: "Tynamo",
+evos: ["Eelektross"],
+},
+
+eelektross: {
+num: 604,
+name: "Eelektross",
+types: ["Electric", "Poison"],
+baseStats: {hp: 85, atk: 115, def: 80, spa: 105, spd: 80, spe: 50},
+abilities: {0: "Levitate"},
+weightkg: 80.5,
+prevo: "Eelektrik",
+evoType: "useItem",
+evoItem: "Thunder Stone",
+},
+
+elgyem: {
+num: 605,
+name: "Elgyem",
+types: ["Psychic", "Rock"],
+baseStats: {hp: 55, atk: 55, def: 55, spa: 85, spd: 55, spe: 30},
+abilities: {0: "Telepathy", 1: "Synchronize", H: "Analytic"},
+weightkg: 9,
+evos: ["Beheeyem"],
+},
+
+beheeyem: {
+num: 606,
+name: "Beheeyem",
+types: ["Psychic", "Rock"],
+baseStats: {hp: 75, atk: 75, def: 75, spa: 125, spd: 95, spe: 40},
+abilities: {0: "Telepathy", 1: "Synchronize", H: "Analytic"},
+weightkg: 34.5,
+prevo: "Elgyem",
+},
+
+litwick: {
+num: 607,
+name: "Litwick",
+types: ["Ghost", "Fire"],
+baseStats: {hp: 50, atk: 30, def: 55, spa: 65, spd: 55, spe: 20},
+abilities: {0: "Flash Fire", 1: "Flame Body", H: "Infiltrator"},
+weightkg: 3.1,
+evos: ["Lampent"],
+},
+
+lampent: {
+num: 608,
+name: "Lampent",
+types: ["Ghost", "Fire"],
+baseStats: {hp: 60, atk: 40, def: 60, spa: 95, spd: 60, spe: 55},
+abilities: {0: "Flash Fire", 1: "Flame Body", H: "Infiltrator"},
+weightkg: 13,
+prevo: "Litwick",
+evos: ["Chandelure"],
+},
+
+chandelure: {
+num: 609,
+name: "Chandelure",
+types: ["Ghost", "Fire"],
+baseStats: {hp: 60, atk: 55, def: 90, spa: 145, spd: 90, spe: 80},
+abilities: {0: "Flash Fire", 1: "Flame Body", H: "Infiltrator"},
+weightkg: 34.3,
+prevo: "Lampent",
+evoType: "useItem",
+evoItem: "Dusk Stone",
+},
+
+axew: {
+num: 610,
+name: "Axew",
+types: ["Dragon"],
+baseStats: {hp: 46, atk: 87, def: 60, spa: 30, spd: 40, spe: 57},
+abilities: {0: "Rivalry", 1: "Mold Breaker", H: "Unnerve"},
+weightkg: 18,
+evos: ["Fraxure"],
+},
+
+fraxure: {
+num: 611,
+name: "Fraxure",
+types: ["Dragon"],
+baseStats: {hp: 66, atk: 117, def: 70, spa: 40, spd: 50, spe: 67},
+abilities: {0: "Rivalry", 1: "Mold Breaker", H: "Unnerve"},
+weightkg: 36,
+prevo: "Axew",
+evos: ["Haxorus"],
+},
+
+haxorus: {
+num: 612,
+name: "Haxorus",
+types: ["Dragon"],
+baseStats: {hp: 76, atk: 147, def: 90, spa: 60, spd: 70, spe: 97},
+abilities: {0: "Rivalry", 1: "Mold Breaker", H: "Unnerve"},
+weightkg: 105.5,
+prevo: "Fraxure",
+},
+
+cubchoo: {
+num: 613,
+name: "Cubchoo",
+types: ["Ice", "Normal"],
+baseStats: {hp: 55, atk: 70, def: 40, spa: 60, spd: 40, spe: 40},
+abilities: {0: "Snow Cloak", 1: "Slush Rush", H: "Rattled"},
+weightkg: 8.5,
+evos: ["Beartic"],
+},
+
+beartic: {
+num: 614,
+name: "Beartic",
+types: ["Ice", "Normal"],
+baseStats: {hp: 95, atk: 130, def: 80, spa: 70, spd: 80, spe: 50},
+abilities: {0: "Snow Cloak", 1: "Slush Rush", H: "Swift Swim"},
+weightkg: 260,
+prevo: "Cubchoo",
+},
+
+cryogonal: {
+num: 615,
+name: "Cryogonal",
+types: ["Ice", "Steel"],
+baseStats: {hp: 80, atk: 50, def: 50, spa: 95, spd: 135, spe: 105},
+abilities: {0: "Levitate"},
+weightkg: 148,
+},
+
+shelmet: {
+num: 616,
+name: "Shelmet",
+types: ["Bug"],
+baseStats: {hp: 50, atk: 40, def: 85, spa: 40, spd: 65, spe: 25},
+abilities: {0: "Hydration", 1: "Shell Armor", H: "Overcoat"},
+weightkg: 7.7,
+evos: ["Accelgor"],
+},
+
+accelgor: {
+num: 617,
+name: "Accelgor",
+types: ["Bug", "Ghost"],
+baseStats: {hp: 80, atk: 70, def: 40, spa: 100, spd: 60, spe: 145},
+abilities: {0: "Hydration", 1: "Sticky Hold", H: "Unburden"},
+weightkg: 25.3,
+prevo: "Shelmet",
+evoType: "trade",
+evoCondition: "with a Karrablast",
+},
+
+stunfisk: {
+num: 618,
+name: "Stunfisk",
+types: ["Ground", "Electric"],
+baseStats: {hp: 109, atk: 66, def: 84, spa: 81, spd: 99, spe: 32},
+abilities: {0: "Static", 1: "Limber", H: "Sand Veil"},
+weightkg: 11,
+otherFormes: ["Stunfisk-Galar"],
+formeOrder: ["Stunfisk", "Stunfisk-Galar"],
+},
+
+stunfiskgalar: {
+num: 618,
+name: "Stunfisk-Galar",
+baseSpecies: "Stunfisk",
+forme: "Galar",
+types: ["Dark", "Steel"],
+baseStats: {hp: 109, atk: 81, def: 99, spa: 66, spd: 84, spe: 32},
+abilities: {0: "Mimicry"},
+weightkg: 20.5,
+},
+
+mienfoo: {
+num: 619,
+name: "Mienfoo",
+types: ["Fighting"],
+baseStats: {hp: 45, atk: 85, def: 50, spa: 55, spd: 50, spe: 65},
+abilities: {0: "Inner Focus", 1: "Regenerator", H: "Reckless"},
+weightkg: 20,
+evos: ["Mienshao"],
+},
+
+mienshao: {
+num: 620,
+name: "Mienshao",
+types: ["Fighting", "Ghost"],
+baseStats: {hp: 65, atk: 125, def: 60, spa: 95, spd: 60, spe: 105},
+abilities: {0: "Inner Focus", 1: "Regenerator", H: "Reckless"},
+weightkg: 35.5,
+prevo: "Mienfoo",
+},
+
+druddigon: {
+num: 621,
+name: "Druddigon",
+types: ["Dragon"],
+baseStats: {hp: 77, atk: 120, def: 90, spa: 60, spd: 90, spe: 48},
+abilities: {0: "Rough Skin", 1: "Sheer Force", H: "Mold Breaker"},
+weightkg: 139,
+},
+
+golett: {
+num: 622,
+name: "Golett",
+types: ["Steel", "Ghost"],
+baseStats: {hp: 59, atk: 74, def: 50, spa: 35, spd: 50, spe: 35},
+abilities: {0: "Iron Fist", 1: "Klutz", H: "No Guard"},
+weightkg: 92,
+evos: ["Golurk"],
+},
+
+golurk: {
+num: 623,
+name: "Golurk",
+types: ["Steel", "Ghost"],
+baseStats: {hp: 89, atk: 124, def: 80, spa: 55, spd: 80, spe: 55},
+abilities: {0: "Iron Fist", 1: "Klutz", H: "No Guard"},
+weightkg: 330,
+prevo: "Golett",
+},
+
+pawniard: {
+num: 624,
+name: "Pawniard",
+types: ["Dark", "Steel"],
+baseStats: {hp: 45, atk: 85, def: 70, spa: 40, spd: 40, spe: 60},
+abilities: {0: "Defiant", 1: "Inner Focus", H: "Pressure"},
+weightkg: 10.2,
+evos: ["Bisharp"],
+},
+
+bisharp: {
+num: 625,
+name: "Bisharp",
+types: ["Dark", "Steel"],
+baseStats: {hp: 65, atk: 125, def: 100, spa: 60, spd: 70, spe: 70},
+abilities: {0: "Defiant", 1: "Inner Focus", H: "Pressure"},
+weightkg: 70,
+prevo: "Pawniard",
+evos: ["Kingambit"],
+},
+
+bouffalant: {
+num: 626,
+name: "Bouffalant",
+types: ["Normal", "Rock"],
+baseStats: {hp: 95, atk: 110, def: 95, spa: 40, spd: 95, spe: 55},
+abilities: {0: "Reckless", 1: "Sap Sipper", H: "Soundproof"},
+weightkg: 94.6,
+},
+
+rufflet: {
+num: 627,
+name: "Rufflet",
+types: ["Ice", "Flying"],
+baseStats: {hp: 70, atk: 83, def: 50, spa: 37, spd: 50, spe: 60},
+abilities: {0: "Keen Eye", 1: "Sheer Force", H: "Hustle"},
+weightkg: 10.5,
+evos: ["Braviary", "Braviary-Hisui"],
+},
+
+braviary: {
+num: 628,
+name: "Braviary",
+types: ["Ice", "Flying"],
+baseStats: {hp: 100, atk: 123, def: 75, spa: 57, spd: 75, spe: 80},
+abilities: {0: "Keen Eye", 1: "Sheer Force", H: "Defiant"},
+weightkg: 41,
+prevo: "Rufflet",
+otherFormes: ["Braviary-Hisui"],
+formeOrder: ["Braviary", "Braviary-Hisui"],
+},
+
+braviaryhisui: {
+num: 628,
+name: "Braviary-Hisui",
+baseSpecies: "Braviary",
+forme: "Hisui",
+types: ["Psychic", "Ice"],
+baseStats: {hp: 110, atk: 83, def: 70, spa: 112, spd: 70, spe: 65},
+abilities: {0: "Keen Eye", 1: "Sheer Force", H: "Tinted Lens"},
+weightkg: 43.4,
+prevo: "Rufflet",
+},
+
+vullaby: {
+num: 629,
+name: "Vullaby",
+types: ["Dark", "Flying"],
+baseStats: {hp: 70, atk: 55, def: 75, spa: 45, spd: 65, spe: 60},
+abilities: {0: "Big Pecks", 1: "Overcoat", H: "Weak Armor"},
+weightkg: 9,
+evos: ["Mandibuzz"],
+},
+
+mandibuzz: {
+num: 630,
+name: "Mandibuzz",
+types: ["Dark", "Flying"],
+baseStats: {hp: 110, atk: 65, def: 105, spa: 55, spd: 95, spe: 80},
+abilities: {0: "Big Pecks", 1: "Overcoat", H: "Weak Armor"},
+weightkg: 39.5,
+prevo: "Vullaby",
+},
+
+heatmor: {
+num: 631,
+name: "Heatmor",
+types: ["Fire"],
+baseStats: {hp: 85, atk: 97, def: 66, spa: 105, spd: 66, spe: 65},
+abilities: {0: "Gluttony", 1: "Flash Fire", H: "White Smoke"},
+weightkg: 58,
+},
+
+durant: {
+num: 632,
+name: "Durant",
+types: ["Bug", "Steel"],
+baseStats: {hp: 58, atk: 109, def: 112, spa: 48, spd: 48, spe: 109},
+abilities: {0: "Swarm", 1: "Hustle", H: "Truant"},
+weightkg: 33,
+},
+
+deino: {
+num: 633,
+name: "Deino",
+types: ["Dark", "Dragon"],
+baseStats: {hp: 52, atk: 65, def: 50, spa: 45, spd: 50, spe: 38},
+abilities: {0: "Hustle"},
+weightkg: 17.3,
+evos: ["Zweilous"],
+},
+
+zweilous: {
+num: 634,
+name: "Zweilous",
+types: ["Dark", "Dragon"],
+baseStats: {hp: 72, atk: 85, def: 70, spa: 65, spd: 70, spe: 58},
+abilities: {0: "Hustle"},
+weightkg: 50,
+prevo: "Deino",
+evos: ["Hydreigon"],
+},
+
+hydreigon: {
+num: 635,
+name: "Hydreigon",
+types: ["Dark", "Dragon"],
+baseStats: {hp: 92, atk: 105, def: 90, spa: 125, spd: 90, spe: 98},
+abilities: {0: "Levitate"},
+weightkg: 160,
+prevo: "Zweilous",
+},
+
+larvesta: {
+num: 636,
+name: "Larvesta",
+types: ["Bug", "Fire"],
+baseStats: {hp: 55, atk: 85, def: 55, spa: 50, spd: 55, spe: 60},
+abilities: {0: "Flame Body", H: "Swarm"},
+weightkg: 28.8,
+evos: ["Volcarona"],
+},
+
+volcarona: {
+num: 637,
+name: "Volcarona",
+types: ["Bug", "Fire"],
+baseStats: {hp: 85, atk: 60, def: 65, spa: 135, spd: 105, spe: 100},
+abilities: {0: "Flame Body", H: "Swarm"},
+weightkg: 46,
+prevo: "Larvesta",
+},
+
+cobalion: {
+num: 638,
+name: "Cobalion",
+types: ["Steel", "Fighting"],
+baseStats: {hp: 91, atk: 90, def: 129, spa: 90, spd: 72, spe: 108},
+abilities: {0: "Justified"},
+weightkg: 250,
+},
+
+terrakion: {
+num: 639,
+name: "Terrakion",
+types: ["Rock", "Fighting"],
+baseStats: {hp: 91, atk: 129, def: 90, spa: 72, spd: 90, spe: 108},
+abilities: {0: "Justified"},
+weightkg: 260,
+},
+
+virizion: {
+num: 640,
+name: "Virizion",
+types: ["Grass", "Fighting"],
+baseStats: {hp: 91, atk: 90, def: 72, spa: 90, spd: 129, spe: 108},
+abilities: {0: "Justified"},
+weightkg: 200,
+},
+
+tornadus: {
+num: 641,
+name: "Tornadus",
+baseForme: "Incarnate",
+types: ["Flying", "Dragon"],
+baseStats: {hp: 79, atk: 115, def: 70, spa: 125, spd: 80, spe: 111},
+abilities: {0: "Prankster", H: "Defiant"},
+weightkg: 63,
+otherFormes: ["Tornadus-Therian"],
+formeOrder: ["Tornadus", "Tornadus-Therian"],
+},
+
+tornadustherian: {
+num: 641,
+name: "Tornadus-Therian",
+baseSpecies: "Tornadus",
+forme: "Therian",
+types: ["Flying", "Dragon"],
+baseStats: {hp: 79, atk: 100, def: 80, spa: 110, spd: 90, spe: 121},
+abilities: {0: "Regenerator"},
+weightkg: 63,
+changesFrom: "Tornadus",
+},
+
+thundurus: {
+num: 642,
+name: "Thundurus",
+baseForme: "Incarnate",
+types: ["Electric", "Dragon"],
+baseStats: {hp: 79, atk: 115, def: 70, spa: 125, spd: 80, spe: 111},
+abilities: {0: "Prankster", H: "Defiant"},
+weightkg: 61,
+otherFormes: ["Thundurus-Therian"],
+formeOrder: ["Thundurus", "Thundurus-Therian"],
+},
+
+thundurustherian: {
+num: 642,
+name: "Thundurus-Therian",
+baseSpecies: "Thundurus",
+forme: "Therian",
+types: ["Electric", "Dragon"],
+baseStats: {hp: 79, atk: 105, def: 70, spa: 145, spd: 80, spe: 101},
+abilities: {0: "Volt Absorb"},
+weightkg: 61,
+changesFrom: "Thundurus",
+},
+
+
+num: 643,
+name: "Reshiram",
+types: ["Dragon", "Fire"],
+baseStats: {hp: 100, atk: 120, def: 100, spa: 150, spd: 120, spe: 90},
+abilities: {0: "Turboblaze"},
+weightkg: 330,
+},
+
+
+num: 644,
+name: "Zekrom",
+types: ["Dragon", "Electric"],
+baseStats: {hp: 100, atk: 150, def: 120, spa: 120, spd: 100, spe: 90},
+abilities: {0: "Teravolt"},
+weightkg: 345,
+},
+
+landorus: {
+num: 645,
+name: "Landorus",
+baseForme: "Incarnate",
+types: ["Ground", "Dragon"],
+baseStats: {hp: 89, atk: 125, def: 90, spa: 115, spd: 80, spe: 101},
+abilities: {0: "Sand Force", H: "Sheer Force"},
+weightkg: 68,
+otherFormes: ["Landorus-Therian"],
+formeOrder: ["Landorus", "Landorus-Therian"],
+},
+
+landorustherian: {
+num: 645,
+name: "Landorus-Therian",
+baseSpecies: "Landorus",
+forme: "Therian",
+types: ["Ground", "Dragon"],
+baseStats: {hp: 89, atk: 145, def: 90, spa: 105, spd: 80, spe: 91},
+abilities: {0: "Intimidate"},
+weightkg: 68,
+changesFrom: "Landorus",
+},
+
+kyurem: {
+num: 646,
+name: "Kyurem",
+types: ["Dragon", "Ice"],
+baseStats: {hp: 125, atk: 130, def: 90, spa: 130, spd: 90, spe: 95},
+abilities: {0: "Pressure"},
+weightkg: 325,
+otherFormes: ["Kyurem-Black", "Kyurem-White"],
+formeOrder: ["Kyurem", "Kyurem-White", "Kyurem-Black"],
+},
+
+kyuremblack: {
+num: 646,
+name: "Kyurem-Black",
+baseSpecies: "Kyurem",
+forme: "Black",
+types: ["Electric", "Ice"],
+baseStats: {hp: 125, atk: 170, def: 100, spa: 120, spd: 90, spe: 95},
+abilities: {0: "Teravolt"},
+weightkg: 325,
+changesFrom: "Kyurem",
+},
+
+kyuremwhite: {
+num: 646,
+name: "Kyurem-White",
+baseSpecies: "Kyurem",
+forme: "White",
+types: ["Fire", "Ice"],
+baseStats: {hp: 125, atk: 120, def: 90, spa: 170, spd: 100, spe: 95},
+abilities: {0: "Turboblaze"},
+weightkg: 325,
+changesFrom: "Kyurem",
+},
+
+keldeo: {
+num: 647,
+name: "Keldeo",
+baseForme: "Ordinary",
+types: ["Water", "Fighting"],
+baseStats: {hp: 91, atk: 72, def: 90, spa: 129, spd: 90, spe: 108},
+abilities: {0: "Justified"},
+weightkg: 48.5,
+otherFormes: ["Keldeo-Resolute"],
+formeOrder: ["Keldeo", "Keldeo-Resolute"],
+},
+
+keldeoresolute: {
+num: 647,
+name: "Keldeo-Resolute",
+baseSpecies: "Keldeo",
+forme: "Resolute",
+types: ["Water", "Fighting"],
+baseStats: {hp: 91, atk: 72, def: 90, spa: 129, spd: 90, spe: 108},
+abilities: {0: "Justified"},
+weightkg: 48.5,
+requiredMove: "Secret Sword",
+changesFrom: "Keldeo",
+},
+
+meloetta: {
+num: 648,
+name: "Meloetta",
+baseForme: "Aria",
+types: ["Normal", "Psychic"],
+baseStats: {hp: 100, atk: 77, def: 77, spa: 128, spd: 128, spe: 90},
+abilities: {0: "Serene Grace"},
+weightkg: 6.5,
+otherFormes: ["Meloetta-Pirouette"],
+formeOrder: ["Meloetta", "Meloetta-Pirouette"],
+},
+
+meloettapirouette: {
+num: 648,
+name: "Meloetta-Pirouette",
+baseSpecies: "Meloetta",
+forme: "Pirouette",
+types: ["Normal", "Fighting"],
+baseStats: {hp: 100, atk: 128, def: 90, spa: 77, spd: 77, spe: 128},
+abilities: {0: "Serene Grace"},
+weightkg: 6.5,
+requiredMove: "Relic Song",
+battleOnly: "Meloetta",
+},
+
+genesect: {
+num: 649,
+name: "Genesect",
+types: ["Bug", "Dark"],
+baseStats: {hp: 71, atk: 120, def: 95, spa: 120, spd: 95, spe: 99},
+abilities: {0: "Download"},
+weightkg: 82.5,
+otherFormes: ["Genesect-Douse", "Genesect-Shock", "Genesect-Burn", "Genesect-Chill"],
+formeOrder: ["Genesect", "Genesect-Douse", "Genesect-Shock", "Genesect-Burn", "Genesect-Chill"],
+},
+
+genesectdouse: {
+num: 649,
+name: "Genesect-Douse",
+baseSpecies: "Genesect",
+forme: "Douse",
+types: ["Bug", "Dark"],
+baseStats: {hp: 71, atk: 120, def: 95, spa: 120, spd: 95, spe: 99},
+abilities: {0: "Download"},
+weightkg: 82.5,
+changesFrom: "Genesect",
+},
+
+genesectshock: {
+num: 649,
+name: "Genesect-Shock",
+baseSpecies: "Genesect",
+forme: "Shock",
+types: ["Bug", "Dark"],
+baseStats: {hp: 71, atk: 120, def: 95, spa: 120, spd: 95, spe: 99},
+abilities: {0: "Download"},
+weightkg: 82.5,
+changesFrom: "Genesect",
+},
+
+genesectburn: {
+num: 649,
+name: "Genesect-Burn",
+baseSpecies: "Genesect",
+forme: "Burn",
+types: ["Bug", "Dark"],
+baseStats: {hp: 71, atk: 120, def: 95, spa: 120, spd: 95, spe: 99},
+abilities: {0: "Download"},
+weightkg: 82.5,
+changesFrom: "Genesect",
+},
+
+genesectchill: {
+num: 649,
+name: "Genesect-Chill",
+baseSpecies: "Genesect",
+forme: "Chill",
+types: ["Bug", "Dark"],
+baseStats: {hp: 71, atk: 120, def: 95, spa: 120, spd: 95, spe: 99},
+abilities: {0: "Download"},
+weightkg: 82.5,
+changesFrom: "Genesect",
+},
+
+chespin: {
+num: 650,
+name: "Chespin",
+types: ["Grass"],
+baseStats: {hp: 56, atk: 61, def: 65, spa: 48, spd: 45, spe: 38},
+abilities: {0: "Overgrow", H: "Bulletproof"},
+weightkg: 9,
+evos: ["Quilladin"],
+},
+
+quilladin: {
+num: 651,
+name: "Quilladin",
+types: ["Grass"],
+baseStats: {hp: 61, atk: 78, def: 95, spa: 56, spd: 58, spe: 57},
+abilities: {0: "Overgrow", H: "Bulletproof"},
+weightkg: 29,
+prevo: "Chespin",
+evos: ["Chesnaught"],
+},
+
+chesnaught: {
+num: 652,
+name: "Chesnaught",
+types: ["Grass", "Steel"],
+baseStats: {hp: 88, atk: 107, def: 122, spa: 74, spd: 75, spe: 64},
+abilities: {0: "Overgrow", H: "Bulletproof"},
+weightkg: 90,
+prevo: "Quilladin",
+},
+
+fennekin: {
+num: 653,
+name: "Fennekin",
+types: ["Fire"],
+baseStats: {hp: 40, atk: 45, def: 40, spa: 62, spd: 60, spe: 60},
+abilities: {0: "Blaze", H: "Magician"},
+weightkg: 9.4,
+evos: ["Braixen"],
+},
+
+braixen: {
+num: 654,
+name: "Braixen",
+types: ["Fire"],
+baseStats: {hp: 59, atk: 59, def: 58, spa: 90, spd: 70, spe: 73},
+abilities: {0: "Blaze", H: "Magician"},
+weightkg: 14.5,
+prevo: "Fennekin",
+evos: ["Delphox"],
+},
+
+delphox: {
+num: 655,
+name: "Delphox",
+types: ["Fire", "Psychic"],
+baseStats: {hp: 75, atk: 69, def: 72, spa: 114, spd: 100, spe: 104},
+abilities: {0: "Blaze", H: "Magician"},
+weightkg: 39,
+prevo: "Braixen",
+},
+
+froakie: {
+num: 656,
+name: "Froakie",
+types: ["Water"],
+baseStats: {hp: 41, atk: 56, def: 40, spa: 62, spd: 44, spe: 71},
+abilities: {0: "Torrent", H: "Protean"},
+weightkg: 7,
+evos: ["Frogadier"],
+},
+
+frogadier: {
+num: 657,
+name: "Frogadier",
+types: ["Water"],
+baseStats: {hp: 54, atk: 63, def: 52, spa: 83, spd: 56, spe: 97},
+abilities: {0: "Torrent", H: "Protean"},
+weightkg: 10.9,
+prevo: "Froakie",
+evos: ["Greninja"],
+},
+
+greninja: {
+num: 658,
+name: "Greninja",
+types: ["Water", "Dark"],
+baseStats: {hp: 72, atk: 95, def: 67, spa: 103, spd: 71, spe: 122},
+abilities: {0: "Torrent", H: "Protean", S: "Battle Bond"},
+weightkg: 40,
+prevo: "Frogadier",
+otherFormes: ["Greninja-Ash"],
+// non-activated Greninja-Ash is forme 1, but PS does not currently distinguish it
+formeOrder: ["Greninja", "Greninja", "Greninja-Ash"],
+},
+
+greninjaash: {
+num: 658,
+name: "Greninja-Ash",
+baseSpecies: "Greninja",
+forme: "Ash",
+types: ["Water", "Dark"],
+baseStats: {hp: 72, atk: 145, def: 67, spa: 153, spd: 71, spe: 132},
+abilities: {0: "Battle Bond"},
+weightkg: 40,
+requiredAbility: "Battle Bond",
+battleOnly: "Greninja",
+gen: 7,
+},
+
+bunnelby: {
+num: 659,
+name: "Bunnelby",
+types: ["Normal"],
+baseStats: {hp: 38, atk: 36, def: 38, spa: 32, spd: 36, spe: 57},
+abilities: {0: "Pickup", 1: "Cheek Pouch", H: "Huge Power"},
+weightkg: 5,
+evos: ["Diggersby"],
+},
+
+diggersby: {
+num: 660,
+name: "Diggersby",
+types: ["Normal", "Ground"],
+baseStats: {hp: 85, atk: 56, def: 77, spa: 50, spd: 77, spe: 78},
+abilities: {0: "Pickup", 1: "Cheek Pouch", H: "Huge Power"},
+weightkg: 42.4,
+prevo: "Bunnelby",
+},
+
+fletchling: {
+num: 661,
+name: "Fletchling",
+types: ["Normal", "Flying"],
+baseStats: {hp: 45, atk: 50, def: 43, spa: 40, spd: 38, spe: 62},
+abilities: {0: "Big Pecks", H: "Gale Wings"},
+weightkg: 1.7,
+evos: ["Fletchinder"],
+},
+
+fletchinder: {
+num: 662,
+name: "Fletchinder",
+types: ["Fire", "Flying"],
+baseStats: {hp: 62, atk: 73, def: 55, spa: 56, spd: 52, spe: 84},
+abilities: {0: "Flame Body", H: "Gale Wings"},
+weightkg: 16,
+prevo: "Fletchling",
+evos: ["Talonflame"],
+},
+
+talonflame: {
+num: 663,
+name: "Talonflame",
+types: ["Fire", "Flying"],
+baseStats: {hp: 78, atk: 81, def: 71, spa: 74, spd: 69, spe: 126},
+abilities: {0: "Flame Body", H: "Gale Wings"},
+weightkg: 24.5,
+prevo: "Fletchinder",
+},
+
+scatterbug: {
+num: 664,
+name: "Scatterbug",
+types: ["Bug"],
+baseStats: {hp: 38, atk: 35, def: 40, spa: 27, spd: 25, spe: 35},
+abilities: {0: "Shield Dust", 1: "Compound Eyes", H: "Friend Guard"},
+weightkg: 2.5,
+evos: ["Spewpa"],
+// TODO: Scatterbug technically has the same number of formes as Vivillon
+},
+
+spewpa: {
+num: 665,
+name: "Spewpa",
+types: ["Bug"],
+baseStats: {hp: 45, atk: 22, def: 60, spa: 27, spd: 30, spe: 29},
+abilities: {0: "Shed Skin", H: "Friend Guard"},
+weightkg: 8.4,
+prevo: "Scatterbug",
+evos: ["Vivillon", "Vivillon-Fancy"],
+// TODO: Spewpa technically has the same number of formes as Vivillon
+},
+
+vivillon: {
+num: 666,
+name: "Vivillon",
+baseForme: "Meadow", // TODO: actual base forme is Icy Snow, not Meadow
+types: ["Bug", "Flying"],
+baseStats: {hp: 80, atk: 52, def: 50, spa: 90, spd: 50, spe: 89},
+abilities: {0: "Shield Dust", 1: "Compound Eyes", H: "Friend Guard"},
+weightkg: 17,
+prevo: "Spewpa",
+otherFormes: ["Vivillon-Fancy", "Vivillon-Pokeball"],
+cosmeticFormes: ["Vivillon-Archipelago", "Vivillon-Continental", "Vivillon-Elegant", "Vivillon-Garden", "Vivillon-High Plains", "Vivillon-Icy Snow", "Vivillon-Jungle", "Vivillon-Marine", "Vivillon-Modern", "Vivillon-Monsoon", "Vivillon-Ocean", "Vivillon-Polar", "Vivillon-River", "Vivillon-Sandstorm", "Vivillon-Savanna", "Vivillon-Sun", "Vivillon-Tundra"],
+formeOrder: [
+Vivillon-Icy Snow,
+Vivillon-Polar,
+Vivillon-Tundra,
+Vivillon-Continental,
+Vivillon-Garden,
+Vivillon-Elegant,
+Vivillon, // Meadow
+Vivillon-Modern,
+Vivillon-Marine,
+Vivillon-Archipelago,
+Vivillon-High Plains,
+Vivillon-Sandstorm,
+Vivillon-River,
+Vivillon-Monsoon,
+Vivillon-Savanna,
+Vivillon-Sun,
+Vivillon-Ocean,
+Vivillon-Jungle,
+Vivillon-Fancy,
+Vivillon-Pokeball,
 ],
-target: "normal",
-type: "Fire",
 },
 
-firelash: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Fire Lash",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-boosts: {
-spd: -1,
-def: -1,
-},
-},
-target: "normal",
-type: "Fire",
-},
-
-firepledge: {
-accuracy: 84,
-basePower: 75,
-basePowerCallback(target, source, move) {
-if (['grasspledge', 'waterpledge'].includes(move.sourceEffect)) {
-this.add('-combine');
-return 150;
-}
-return 80;
-},
-category: "Special",
-name: "Fire Pledge",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1, pledgecombo: 1},
-onPrepareHit(target, source, move) {
-for (const action of this.queue.list as MoveAction[]) {
-if (
-!action.move || !action.pokemon?.isActive ||
-action.pokemon.fainted || action.maxMove || action.zmove
-) {
-continue;
-}
-if (action.pokemon.isAlly(source) && ['grasspledge', 'waterpledge'].includes(action.move.id)) {
-this.queue.prioritizeAction(action, move);
-this.add('-waiting', source, action.pokemon);
-return null;
-}
-}
-},
-onModifyMove(move) {
-if (move.sourceEffect === 'waterpledge') {
-move.type = 'Water';
-move.forceSTAB = true;
-move.self = {sideCondition: 'waterpledge'};
-}
-if (move.sourceEffect === 'grasspledge') {
-move.type = 'Fire';
-move.forceSTAB = true;
-move.sideCondition = 'firepledge';
-}
-},
-condition: {
-duration: 4,
-onSideStart(targetSide) {
-this.add('-sidestart', targetSide, 'Fire Pledge');
-},
-onResidualOrder: 5,
-onResidualSubOrder: 1,
-onResidual(pokemon) {
-if (!pokemon.hasType('Fire')) this.damage(pokemon.baseMaxhp / 8, pokemon);
-},
-onSideResidualOrder: 26,
-onSideResidualSubOrder: 8,
-onSideEnd(targetSide) {
-this.add('-sideend', targetSide, 'Fire Pledge');
-},
-},
-secondary: null,
-target: "normal",
-type: "Fire",
-},
-
-firepunch: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Fire Punch",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-secondary: {
-chance: 33,
-status: 'brn',
-},
-target: "normal",
-type: "Fire",
-},
-
-firespin: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Fire Spin",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
-},
-volatileStatus: 'partiallytrapped',
-weather: 'sunnyday',
-secondary: null,
-target: "normal",
-type: "Fire",
-},
-
-flameburst: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Flame Burst",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onHit(target, source, move) {
-for (const ally of target.adjacentAllies()) {
-this.damage(ally.baseMaxhp / 16, ally, source, this.dex.conditions.get('Flame Burst'));
-}
-},
-onAfterSubDamage(damage, target, source, move) {
-for (const ally of target.adjacentAllies()) {
-this.damage(ally.baseMaxhp / 16, ally, source, this.dex.conditions.get('Flame Burst'));
-}
-},
-secondary: null,
-target: "normal",
-type: "Fire",
-},
-
-flamecharge: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Flame Charge",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-self: {
-boosts: {
-spe: 1,
-evasion: 1,
-},
-},
-},
-target: "normal",
-type: "Fire",
-},
-
-flamewheel: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Flame Wheel",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, defrost: 1},
-secondary: {
-chance: 33,
-status: 'brn',
-},
-target: "normal",
-type: "Fire",
-},
-
-flamethrower: {
-accuracy: 80,
-basePower: 95,
-category: "Special",
-name: "Flamethrower",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'brn',
-},
-target: "normal",
-type: "Fire",
-},
-
-flareblitz: {
-accuracy: 63,
-basePower: 150,
-category: "Physical",
-name: "Flare Blitz",
-pp: 0.625,
-priority: -3,
-flags: {contact: 1, protect: 1, mirror: 1, defrost: 1},
-recoil: [50, 100],
-hasCrashDamage: true,
-onMoveFail(target, source, move) {
-this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
-},
-secondary: {
-chance: 33,
-status: 'brn',
-},
-target: "normal",
-type: "Fire",
-},
-
-fusionflare: {
-accuracy: 93,
-basePower: 30,
-category: "Special",
-name: "Fusion Flare",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, mirror: 1, defrost: 1},
-secondary: null,
-target: "normal",
-type: "Fire",
-},
-
-heatcrash: {
-accuracy: 73,
-basePower: 15,
-basePowerCallback(pokemon, target) {
-const targetWeight = target.getWeight();
-const pokemonWeight = pokemon.getWeight();
-let bp;
-if (pokemonWeight >= targetWeight * 5) {
-bp = 125;
-} else if (pokemonWeight >= targetWeight * 4) {
-bp = 100;
-} else if (pokemonWeight >= targetWeight * 3) {
-bp = 75;
-} else if (pokemonWeight >= targetWeight * 2) {
-bp = 50;
-} else {
-bp = 25;
-}
-this.debug('BP: ' + bp);
-return bp;
-},
-category: "Physical",
-name: "Heat Crash",
-pp: 1.25,
-priority: -6,
-flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
-onTryHit(target, pokemon, move) {
-if (target.volatiles['dynamax']) {
-this.add('-fail', pokemon, 'Dynamax');
-this.attrLastMove('[still]');
-return null;
-}
-},
-secondary: null,
-target: "normal",
-type: "Fire",
-},
-
-heatwave: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Heat Wave",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, wind: 1},
-secondary: {
-chance: 33,
-status: 'brn',
-},
-weather: 'sunnyday',
-target: "allAdjacentFoes",
-type: "Fire",
-},
-
-incinerate: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Incinerate",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onHit(pokemon, source) {
-const item = pokemon.getItem();
-if ((item.isBerry || item.isGem) && pokemon.takeItem(source)) {
-this.add('-enditem', pokemon, item.name, '[from] move: Incinerate');
-}
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Fire",
-},
-
-inferno: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Inferno",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-status: 'brn',
-},
-target: "normal",
-type: "Fire",
-},
-
-infernooverdrive: {
-accuracy: 91,
-basePower: 40,
-category: "Physical",
-name: "Inferno Overdrive",
-pp: 1.25,
-priority: 3,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-secondary: null,
-target: "normal",
-type: "Fire",
-},
-
-lavaplume: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Lava Plume",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'brn',
-},
-target: "allAdjacentFoes",
-type: "Fire",
-},
-
-magmastorm: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Magma Storm",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
-},
-volatileStatus: 'partiallytrapped',
-secondary: null,
-target: "normal",
-type: "Fire",
-},
-
-mindblown: {
-accuracy: 100,
-basePower: 16,
-category: "Special",
-name: "Mind Blown",
-pp: 0.625,
-priority: 6,
-flags: {contact: 1, protect: 1, mirror: 1, noassist: 1, failcopycat: 1},
-forceSwitch: true,
-target: "allAdjacentFoes",
-type: "Fighting",
-},
-
-mysticalfire: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Mystical Fire",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-boosts: {
-atk: -1,
-spa: -1,
-},
-},
-target: "normal",
-type: "Fire",
-},
-
-overheat: {
-accuracy: 72,
-basePower: 115,
-category: "Special",
-name: "Overheat",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1},
-self: {
-boosts: {
-atk: -2,
-spa: -2,
-spe: 2,
-},
-},
-secondary: null,
-target: "normal",
-type: "Fire",
-},
-
-pyroball: {
-accuracy: 68,
-basePower: 135,
-category: "Physical",
-name: "Pyro Ball",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1, defrost: 1, bullet: 1},
-secondary: {
-chance: 50,
-status: 'brn',
-},
-target: "normal",
-type: "Fire",
-},
-
-ragingfury: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Raging Fury",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1},
-self: {
-volatileStatus: 'lockedmove',
-},
-onAfterMove(pokemon) {
-if (pokemon.volatiles['lockedmove']?.duration === 1) {
-pokemon.removeVolatile('lockedmove');
-}
-},
-secondary: null,
-target: "randomNormal",
-type: "Fire",
-},
-
-sacredfire: {
-accuracy: 78,
-basePower: 105,
-category: "Physical",
-name: "Sacred Fire",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, defrost: 1},
-secondary: {
-chance: 50,
-status: 'brn',
-},
-target: "normal",
-type: "Fire",
-},
-
-searingshot: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Searing Shot",
-pp: 1.25,
-priority: 0,
-flags: {bullet: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'brn',
-},
-target: "allAdjacentFoes",
-type: "Fire",
-},
-
-shelltrap: {
-accuracy: 72,
-basePower: 115,
-category: "Special",
-name: "Shell Trap",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
-priorityChargeCallback(pokemon) {
-pokemon.addVolatile('shelltrap');
-},
-onTryMove(pokemon) {
-if (!pokemon.volatiles['shelltrap']?.gotHit) {
-this.attrLastMove('[still]');
-this.add('cant', pokemon, 'Shell Trap', 'Shell Trap');
-return null;
-}
-},
-condition: {
-duration: 1,
-onStart(pokemon) {
-this.add('-singleturn', pokemon, 'move: Shell Trap');
-},
-onHit(pokemon, source, move) {
-if (!pokemon.isAlly(source) && move.category === 'Physical') {
-this.effectState.gotHit = true;
-const action = this.queue.willMove(pokemon);
-if (action) {
-this.queue.prioritizeAction(action);
-}
-}
-},
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Fire",
-},
-
-sizzlyslide: {
-accuracy: 125,
-basePower: 33,
-category: "Physical",
-name: "Sizzly Slide",
-pp: 0.625,
-priority: 4,
-flags: {contact: 1, protect: 1, mirror: 1, defrost: 1},
-secondary: {
-chance: 100,
-status: 'brn',
-},
-target: "normal",
-type: "Fire",
-},
-
-sunnyday: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Sunny Day",
-pp: 1.25,
-priority: 0,
-flags: {},
-weather: 'sunnyday',
-secondary: null,
-target: "all",
-type: "Fire",
-},
-
-torchsong: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Torch Song",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-secondary: {
-chance: 100,
-self: {
-boosts: {
-spa: 1,
-atk: 1,
-},
-},
-},
-target: "normal",
-type: "Fire",
-},
-
-vcreate: {
-accuracy: 100,
-basePower: 16,
-category: "Physical",
-name: "V-create",
-pp: 1.25,
-priority: 6,
-flags: {contact: 1, protect: 1, mirror: 1},
-selfSwitch: true,
-secondary: null,
-target: "normal",
-type: "Fire",
-},
-
-willowisp: {
-accuracy: 75,
-basePower: 5,
-category: "Status",
-name: "Will-O-Wisp",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-status: 'brn',
-secondary: null,
-target: "normal",
-type: "Fire",
-},
-
-acrobatics: {
-accuracy: 87,
-basePower: 60,
-basePowerCallback(pokemon, target, move) {
-if (!pokemon.item) {
-this.debug("BP doubled for no item");
-return move.basePower * 2;
-}
-return move.basePower;
-},
-category: "Physical",
-name: "Acrobatics",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, distance: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Flying",
-},
-
-aerialace: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Aerial Ace",
-pp: 1.25,
-priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1, distance: 1, slicing: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Flying",
-},
-
-aeroblast: {
-accuracy: 125,
-basePower: 33,
-category: "Special",
-name: "Aeroblast",
-pp: 0.625,
-priority: 4,
-flags: {protect: 1, mirror: 1, distance: 1},
-pseudoWeather: 'fairylock',
-condition: {
-duration: 5,
-onFieldStart(target) {
-this.add('-fieldactivate', 'move: Fairy Lock');
-},
-onTrapPokemon(pokemon) {
-pokemon.tryTrap();
-},
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Flying",
-},
-
-aircutter: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Air Cutter",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, slicing: 1, wind: 1},
-critRatio: 3,
-secondary: null,
-target: "allAdjacentFoes",
-type: "Flying",
-},
-
-airslash: {
-accuracy: 95,
-basePower: 45,
-category: "Special",
-name: "Air Slash",
-pp: 0.625,
-priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [25, 100],
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-target: "allAdjacentFoes",
-type: "Flying",
-},
-
-beakblast: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Beak Blast",
-pp: 1.25,
-priority: -3,
-flags: {bullet: 1, protect: 1, noassist: 1, failmefirst: 1, nosleeptalk: 1, failcopycat: 1, failinstruct: 1},
-priorityChargeCallback(pokemon) {
-pokemon.addVolatile('beakblast');
-},
-condition: {
-duration: 2,
-onStart(pokemon) {
-this.add('-singleturn', pokemon, 'move: Beak Blast');
-},
-onHit(target, source, move) {
-if (this.checkMoveMakesContact(move, source, target)) {
-source.trySetStatus('brn', target);
-}
-},
-},
-// FIXME: onMoveAborted(pokemon) {pokemon.removeVolatile('beakblast')},
-onAfterMove(pokemon) {
-pokemon.removeVolatile('beakblast');
-},
-secondary: null,
-target: "normal",
-type: "Flying",
-},
-
-bleakwindstorm: {
-accuracy: 80,
-basePower: 95,
-category: "Special",
-name: "Bleakwind Storm",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, wind: 1},
-secondary: {
-chance: 50,
-boosts: {
-spe: -1,
-evasion: -1,
-},
-},
-target: "allAdjacentFoes",
-type: "Flying",
-},
-
-bounce: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Bounce",
-pp: 1.25,
-critRatio: 3,
-priority: 0,
-flags: {
-contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
-},
-onTryMove(attacker, defender, move) {
-if (attacker.removeVolatile(move.id)) {
-return;
-}
-this.add('-prepare', attacker, move.name);
-if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-return;
-}
-attacker.addVolatile('twoturnmove', defender);
-return null;
-},
-condition: {
-duration: 2,
-onInvulnerability(target, source, move) {
-if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows'].includes(move.id)) {
-return;
-}
-return false;
-},
-onSourceBasePower(basePower, target, source, move) {
-if (move.id === 'gust' || move.id === 'twister') {
-return this.chainModify(2);
-}
-},
-},
-secondary: {
-chance: 33,
-status: 'par',
-},
-target: "allAdjacentFoes",
-type: "Flying",
-},
-
-bravebird: {
-accuracy: 63,
-basePower: 150,
-category: "Physical",
-name: "Brave Bird",
-pp: 0.625,
-priority: -3,
-flags: {contact: 1, protect: 1, mirror: 1, distance: 1},
-recoil: [50, 100],
-hasCrashDamage: true,
-onMoveFail(target, source, move) {
-this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Flying",
-},
-
-chatter: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Chatter",
-pp: 1.25,
-priority: 0,
-flags: {
-protect: 1, mirror: 1, sound: 1, distance: 1, bypasssub: 1, nosleeptalk: 1, noassist: 1,
-failcopycat: 1, failinstruct: 1, failmimic: 1,
-},
-noSketch: true,
-secondary: {
-chance: 100,
-volatileStatus: 'confusion',
-},
-target: "allAdjacentFoes",
-type: "Flying",
-},
-
-defog: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Defog",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
-onHit(target, source, move) {
-let success = false;
-if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({evasion: -1});
-const removeTarget = [
-'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
-];
-const removeAll = [
-'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
-];
-for (const targetCondition of removeTarget) {
-if (target.side.removeSideCondition(targetCondition)) {
-if (!removeAll.includes(targetCondition)) continue;
-this.add('-sideend', target.side, this.dex.conditions.get(targetCondition).name, '[from] move: Defog', '[of] ' + source);
-success = true;
-}
-}
-for (const sideCondition of removeAll) {
-if (source.side.removeSideCondition(sideCondition)) {
-this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Defog', '[of] ' + source);
-success = true;
-}
-}
-this.field.clearTerrain();
-return success;
-},
-secondary: null,
-target: "normal",
-type: "Flying",
-},
-
-dragonascent: {
-accuracy: 100,
-basePower: 16,
-category: "Physical",
-name: "Dragon Ascent",
-pp: 1.25,
-priority: 6,
-flags: {contact: 1, protect: 1, mirror: 1, distance: 1},
-ignoreEvasion: true,
-ignoreDefensive: true,
-selfSwitch: true,
-secondary: null,
-target: "normal",
-type: "Flying",
-},
-
-drillpeck: {
-accuracy: 68,
-basePower: 135,
-category: "Physical",
-name: "Drill Peck",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1, distance: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Flying",
-},
-
-dualwingbeat: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Dual Wingbeat",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-multihit: [2, 4],
-secondary: null,
-target: "normal",
-type: "Flying",
-},
-
-featherdance: {
-accuracy: 91,
-basePower: 40,
-category: "Physical",
-name: "Feather Dance",
-pp: 1.25,
-priority: 3,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-secondary: null,
-target: "normal",
-type: "Flying",
-},
-
-floatyfall: {
-accuracy: 95,
-basePower: 45,
-category: "Physical",
-name: "Floaty Fall",
-pp: 0.625,
-priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [25, 100],
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-target: "normal",
-type: "Flying",
-},
-
-fly: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Fly",
-pp: 1.25,
-priority: 0,
-critRatio: 3,
-flags: {
-contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
-},
-onTryMove(attacker, defender, move) {
-if (attacker.removeVolatile(move.id)) {
-return;
-}
-this.add('-prepare', attacker, move.name);
-if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-return;
-}
-attacker.addVolatile('twoturnmove', defender);
-return null;
-},
-condition: {
-duration: 2,
-onInvulnerability(target, source, move) {
-if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows'].includes(move.id)) {
-return;
-}
-return false;
-},
-onSourceModifyDamage(damage, source, target, move) {
-if (move.id === 'gust' || move.id === 'twister') {
-return this.chainModify(2);
-}
-},
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Flying",
-},
-
-gust: {
-accuracy: 93,
-basePower: 30,
-category: "Special",
-name: "Gust",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, mirror: 1, distance: 1, wind: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Flying",
-},
-
-hurricane: {
-accuracy: 60,
-basePower: 200,
-category: "Special",
-name: "Hurricane",
-pp: 0.625,
-priority: 0,
-flags: {protect: 1, mirror: 1, distance: 1, wind: 1},
-onModifyMove(move, pokemon, target) {
-switch (target?.effectiveWeather()) {
-case 'raindance':
-case 'primordialsea':
-move.accuracy = true;
-break;
-case 'sunnyday':
-case 'desolateland':
-move.accuracy = 50;
-break;
-}
-},
-secondary: {
-chance: 50,
-volatileStatus: 'confusion',
-},
-target: "allAdjacentFoes",
-type: "Flying",
-},
-
-mirrormove: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Mirror Move",
-pp: 1.25,
-priority: 0,
-flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
-onTryHit(target, pokemon) {
-const move = target.lastMove;
-if (!move?.flags['mirror'] || move.isZ || move.isMax) {
-return false;
-}
-this.actions.useMove(move.id, pokemon, target);
-return null;
-},
-secondary: null,
-target: "normal",
-type: "Flying",
-},
-
-oblivionwing: {
-accuracy: 70,
-basePower: 125,
-category: "Special",
-name: "Oblivion Wing",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, distance: 1, heal: 1},
-drain: [3, 4],
-secondary: null,
-target: "allAdjacentFoes",
-type: "Flying",
-},
-
-peck: {
-accuracy: 78,
-basePower: 105,
-category: "Physical",
-name: "Peck",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, distance: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Flying",
-},
-
-pluck: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Pluck",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, distance: 1},
-onHit(target, source) {
-const item = target.getItem();
-if (source.hp && item.isBerry && target.takeItem(source)) {
-this.add('-enditem', target, item.name, '[from] stealeat', '[move] Pluck', '[of] ' + source);
-if (this.singleEvent('Eat', item, null, source, null, null)) {
-this.runEvent('EatItem', source, null, null, item);
-if (item.id === 'leppaberry') target.staleness = 'external';
-}
-if (item.onEat) source.ateBerry = true;
-}
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Flying",
-},
-
-roost: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Roost",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, heal: 1},
-heal: [33, 100],
-self: {
-volatileStatus: 'roost',
-},
-condition: {
-duration: 2,
-onResidualOrder: 25,
-onStart(target) {
-if (!target.terastallized) {
-this.add('-singleturn', target, 'move: Roost');
-} else if (target.terastallized === "Flying") {
-this.add('-hint', "If a Flying Terastallized Pokemon uses Roost, it remains Flying-type.");
-}
-},
-onTypePriority: -1,
-onType(types, pokemon) {
-this.effectState.typeWas = types;
-return types.filter(type => type !== 'Flying');
-},
-},
-secondary: null,
-target: "self",
-type: "Flying",
-},
-
-skyattack: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Sky Attack",
-pp: 1.25,
-priority: -1,
-flags: {charge: 1, protect: 1, mirror: 1, distance: 1, nosleeptalk: 1, failinstruct: 1},
-critRatio: 3,
-onTryMove(attacker, defender, move) {
-if (attacker.removeVolatile(move.id)) {
-return;
-}
-this.add('-prepare', attacker, move.name);
-if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-return;
-}
-attacker.addVolatile('twoturnmove', defender);
-return null;
-},
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-target: "allAdjacentFoes",
-type: "Flying",
-},
-
-skydrop: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Sky Drop",
-pp: 1.25,
-priority: 0,
-flags: {
-contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
-},
-onModifyMove(move, source) {
-if (!source.volatiles['skydrop']) {
-move.accuracy = true;
-delete move.flags['contact'];
-}
-},
-onMoveFail(target, source) {
-if (source.volatiles['twoturnmove'] && source.volatiles['twoturnmove'].duration === 1) {
-source.removeVolatile('skydrop');
-source.removeVolatile('twoturnmove');
-if (target === this.effectState.target) {
-this.add('-end', target, 'Sky Drop', '[interrupt]');
-}
-}
-},
-onTry(source, target) {
-return !target.fainted;
-},
-onTryHit(target, source, move) {
-if (source.removeVolatile(move.id)) {
-if (target !== source.volatiles['twoturnmove'].source) return false;
-if (target.hasType('Flying')) {
-this.add('-immune', target);
-return null;
-}
-} else {
-if (target.volatiles['substitute'] || target.isAlly(source)) {
-return false;
-}
-if (target.getWeight() >= 2000) {
-this.add('-fail', target, 'move: Sky Drop', '[heavy]');
-return null;
-}
-this.add('-prepare', source, move.name, target);
-source.addVolatile('twoturnmove', target);
-return null;
-}
-},
-onHit(target, source) {
-if (target.hp) this.add('-end', target, 'Sky Drop');
-},
-condition: {
-duration: 2,
-onAnyDragOut(pokemon) {
-if (pokemon === this.effectState.target || pokemon === this.effectState.source) return false;
-},
-onFoeTrapPokemonPriority: -15,
-onFoeTrapPokemon(defender) {
-if (defender !== this.effectState.source) return;
-defender.trapped = true;
-},
-onFoeBeforeMovePriority: 12,
-onFoeBeforeMove(attacker, defender, move) {
-if (attacker === this.effectState.source) {
-attacker.activeMoveActions--;
-this.debug('Sky drop nullifying.');
-return null;
-}
-},
-onRedirectTargetPriority: 99,
-onRedirectTarget(target, source, source2) {
-if (source !== this.effectState.target) return;
-if (this.effectState.source.fainted) return;
-return this.effectState.source;
-},
-onAnyInvulnerability(target, source, move) {
-if (target !== this.effectState.target && target !== this.effectState.source) {
-return;
-}
-if (source === this.effectState.target && target === this.effectState.source) {
-return;
-}
-if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows'].includes(move.id)) {
-return;
-}
-return false;
-},
-onAnyBasePower(basePower, target, source, move) {
-if (target !== this.effectState.target && target !== this.effectState.source) {
-return;
-}
-if (source === this.effectState.target && target === this.effectState.source) {
-return;
-}
-if (move.id === 'gust' || move.id === 'twister') {
-this.debug('BP doubled on midair target');
-return this.chainModify(2);
-}
-},
-onFaint(target) {
-if (target.volatiles['skydrop'] && target.volatiles['twoturnmove'].source) {
-this.add('-end', target.volatiles['twoturnmove'].source, 'Sky Drop', '[interrupt]');
-}
-},
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Flying",
-},
-
-supersonicskystrike: {
-accuracy: 63,
-basePower: 150,
-category: "Physical",
-name: "Supersonic Skystrike",
-pp: 0.625,
-priority: -3,
-flags: {contact: 1},
-secondary: null,
-target: "randomNormal",
-type: "Flying",
-},
-
-tailwind: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Tailwind",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, wind: 1},
-sideCondition: 'tailwind',
-condition: {
-duration: 5,
-durationCallback(target, source, effect) {
-if (source?.hasAbility('persistent')) {
-this.add('-activate', source, 'ability: Persistent', '[move] Tailwind');
-return 6;
-}
-return 4;
-},
-onSideStart(side, source) {
-if (source?.hasAbility('persistent')) {
-this.add('-sidestart', side, 'move: Tailwind', '[persistent]');
-} else {
-this.add('-sidestart', side, 'move: Tailwind');
-}
-},
-onModifySpe(spe, pokemon) {
-return this.chainModify(2);
-},
-onSideResidualOrder: 26,
-onSideResidualSubOrder: 5,
-onSideEnd(side) {
-this.add('-sideend', side, 'move: Tailwind');
-},
-},
-secondary: null,
-target: "allySide",
-type: "Flying",
-},
-
-wingattack: {
-accuracy: 100,
-basePower: 16,
-category: "Physical",
-name: "Wing Attack",
-pp: 1.25,
-priority: 6,
-flags: {contact: 1, protect: 1, mirror: 1, distance: 1},
-forceSwitch: true,
-secondary: null,
-target: "allAdjacentFoes",
-type: "Flying",
-},
-
-astonish: {
-accuracy: 95,
-basePower: 45,
-category: "Physical",
-name: "Astonish",
-pp: 0.625,
-priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [25, 100],
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-target: "normal",
-type: "Ghost",
-},
-
-astralbarrage: {
-accuracy: 93,
-basePower: 30,
-category: "Special",
-name: "Astral Barrage",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Ghost",
-},
-
-bittermalice: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Bitter Malice",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'frz',
-},
-target: "normal",
-type: "Ghost",
-},
-
-confuseray: {
-accuracy: 75,
-basePower: 5,
-category: "Status",
-name: "Confuse Ray",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-volatileStatus: 'confusion',
-secondary: null,
-target: "normal",
-type: "Ghost",
-},
-
-curse: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Curse",
-pp: 1.25,
-priority: 0,
-flags: {bypasssub: 1},
-volatileStatus: 'curse',
-onModifyMove(move, source, target) {
-if (!source.hasType('Ghost')) {
-move.target = move.nonGhostTarget as MoveTarget;
-} else if (source.isAlly(target)) {
-move.target = 'randomNormal';
-}
-},
-onTryHit(target, source, move) {
-if (!source.hasType('Ghost')) {
-delete move.volatileStatus;
-delete move.onHit;
-move.self = {boosts: {spe: -1, atk: 1, def: 1}};
-} else if (move.volatileStatus && target.volatiles['curse']) {
-return false;
-}
-},
-onHit(target, source) {
-this.directDamage(source.maxhp / 2, source, source);
-},
-condition: {
-onStart(pokemon, source) {
-this.add('-start', pokemon, 'Curse', '[of] ' + source);
-},
-onResidualOrder: 12,
-onResidual(pokemon) {
-this.damage(pokemon.baseMaxhp / 4);
-},
-},
-secondary: null,
-target: "normal",
-nonGhostTarget: "self",
-type: "Ghost",
-},
-
-destinybond: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Destiny Bond",
-pp: 1.25,
-priority: 0,
-flags: {bypasssub: 1, noassist: 1, failcopycat: 1},
-volatileStatus: 'destinybond',
-onPrepareHit(pokemon) {
-return !pokemon.removeVolatile('destinybond');
-},
-condition: {
-onStart(pokemon) {
-this.add('-singlemove', pokemon, 'Destiny Bond');
-},
-onFaint(target, source, effect) {
-if (!source || !effect || target.isAlly(source)) return;
-if (effect.effectType === 'Move' && !effect.flags['futuremove']) {
-if (source.volatiles['dynamax']) {
-this.add('-hint', "Dynamaxed Pokémon are immune to Destiny Bond.");
-return;
-}
-this.add('-activate', target, 'move: Destiny Bond');
-source.faint();
-}
-},
-onBeforeMovePriority: -1,
-onBeforeMove(pokemon, target, move) {
-if (move.id === 'destinybond') return;
-this.debug('removing Destiny Bond before attack');
-pokemon.removeVolatile('destinybond');
-},
-onMoveAborted(pokemon, target, move) {
-pokemon.removeVolatile('destinybond');
-},
-},
-secondary: null,
-target: "self",
-type: "Ghost",
-},
-
-grudge: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Grudge",
-pp: 1.25,
-priority: 0,
-flags: {bypasssub: 1},
-volatileStatus: 'grudge',
-condition: {
-onStart(pokemon) {
-this.add('-singlemove', pokemon, 'Grudge');
-},
-onFaint(target, source, effect) {
-if (!source || source.fainted || !effect) return;
-if (effect.effectType === 'Move' && !effect.flags['futuremove'] && source.lastMove) {
-let move: Move = source.lastMove;
-if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
-for (const moveSlot of source.moveSlots) {
-if (moveSlot.id === move.id) {
-moveSlot.pp = 0;
-this.add('-activate', source, 'move: Grudge', move.name);
-}
-}
-}
-},
-onBeforeMovePriority: 100,
-onBeforeMove(pokemon) {
-this.debug('removing Grudge before attack');
-pokemon.removeVolatile('grudge');
-},
-},
-secondary: null,
-target: "self",
-type: "Ghost",
-},
-
-hex: {
-accuracy: 89,
-basePower: 50,
-basePowerCallback(pokemon, target, move) {
-if (target.status || target.hasAbility('comatose')) {
-this.debug('BP doubled from status condition');
-return move.basePower * 2;
-}
-return move.basePower;
-},
-category: "Special",
-name: "Hex",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Ghost",
-},
-
-infernalparade: {
-accuracy: 89,
-basePower: 50,
-basePowerCallback(pokemon, target, move) {
-if (target.status || target.hasAbility('comatose')) return move.basePower * 2;
-return move.basePower;
-},
-category: "Special",
-name: "Infernal Parade",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'brn',
-},
-target: "normal",
-type: "Ghost",
-},
-
-lastrespects: {
-accuracy: 87,
-basePower: 60,
-basePowerCallback(pokemon, target, move) {
-return 60 + 60 * pokemon.side.totalFainted;
-},
-category: "Physical",
-name: "Last Respects",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Ghost",
-},
-
-lick: {
-accuracy: 125,
-basePower: 33,
-category: "Physical",
-name: "Lick",
-pp: 0.625,
-priority: 4,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-status: 'par',
-},
-target: "normal",
-type: "Ghost",
-},
-
-menacingmoonrazemaelstrom: {
-accuracy: 60,
-basePower: 200,
-category: "Special",
-name: "Menacing Moonraze Maelstrom",
-pp: 0.625,
-priority: 0,
-flags: {},
-ignoreAbility: true,
-secondary: null,
-target: "normal",
-type: "Ghost",
-},
-
-moongeistbeam: {
-accuracy: 70,
-basePower: 125,
-category: "Special",
-name: "Moongeist Beam",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-pseudoWeather: 'fairylock',
-ignoreAbility: true,
-secondary: null,
-target: "normal",
-type: "Ghost",
-},
-
-neverendingnightmare: {
-accuracy: 68,
-basePower: 135,
-category: "Physical",
-name: "Never-Ending Nightmare",
-pp: 1.25,
-priority: -1,
-status: 'slp',
-pseudoWeather: 'fairylock',
-condition: {
-duration: 5,
-onFieldStart(target) {
-this.add('-fieldactivate', 'move: Fairy Lock');
-},
-onTrapPokemon(pokemon) {
-pokemon.tryTrap();
-},
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Ghost",
-},
-
-nightmare: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Nightmare",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-volatileStatus: 'nightmare',
-condition: {
-noCopy: true,
-onStart(pokemon) {
-if (pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) {
-return false;
-}
-this.add('-start', pokemon, 'Nightmare');
-},
-onResidualOrder: 11,
-onResidual(pokemon) {
-this.damage(pokemon.baseMaxhp / 4);
-},
-},
-secondary: null,
-target: "normal",
-type: "Ghost",
-},
-
-nightshade: {
-accuracy: 80,
-basePower: 95,
-category: "Special",
-name: "Night Shade",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-pseudoWeather: 'fairylock',
-condition: {
-duration: 5,
-onFieldStart(target) {
-this.add('-fieldactivate', 'move: Fairy Lock');
-},
-onTrapPokemon(pokemon) {
-pokemon.tryTrap();
-},
-},
-secondary: null,
-target: "normal",
-type: "Ghost",
-},
-
-ominouswind: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Ominous Wind",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 50,
-self: {
-boosts: {
-atk: 1,
-def: 1,
-spa: 1,
-spd: 1,
-spe: 1,
-accuracy: 1,
-evasion: 1,
-},
-},
-},
-target: "normal",
-type: "Ghost",
-},
-
-phantomforce: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Phantom Force",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, charge: 1, mirror: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1},
-breaksProtect: true,
-onTryMove(attacker, defender, move) {
-if (attacker.removeVolatile(move.id)) {
-return;
-}
-this.add('-prepare', attacker, move.name);
-if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-return;
-}
-attacker.addVolatile('twoturnmove', defender);
-return null;
-},
-condition: {
-duration: 2,
-onInvulnerability: false,
-},
-secondary: null,
-target: "normal",
-type: "Ghost",
-},
-
-poltergeist: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Poltergeist",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1},
-onTry(source, target) {
-return !!target.item;
-},
-onTryHit(target, source, move) {
-this.add('-activate', target, 'move: Poltergeist', this.dex.items.get(target.item).name);
-},
-secondary: null,
-target: "normal",
-type: "Ghost",
-},
-
-ragefist: {
-accuracy: 78,
-basePower: 105,
-basePowerCallback(pokemon) {
-return Math.min(350, 50 + 50 * pokemon.timesAttacked);
-},
-category: "Physical",
-name: "Rage Fist",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-secondary: null,
-target: "normal",
-type: "Ghost",
-},
-
-shadowball: {
-accuracy: 100,
-basePower: 16,
-category: "Special",
-name: "Shadow Ball",
-pp: 1.25,
-priority: 6,
-flags: {contact: 1, protect: 1, mirror: 1, noassist: 1, failcopycat: 1},
-forceSwitch: true,
-target: "normal",
-type: "Ghost",
-},
-
-shadowbone: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Shadow Bone",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-boosts: {
-spd: -1,
-def: -1,
-},
-},
-target: "normal",
-type: "Ghost",
-},
-
-shadowclaw: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Shadow Claw",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-critRatio: 3,
-secondary: null,
-target: "normal",
-type: "Ghost",
-},
-
-shadowforce: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Shadow Force",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, charge: 1, mirror: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1},
-breaksProtect: true,
-onTryMove(attacker, defender, move) {
-if (attacker.removeVolatile(move.id)) {
-return;
-}
-this.add('-prepare', attacker, move.name);
-if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-return;
-}
-attacker.addVolatile('twoturnmove', defender);
-return null;
-},
-condition: {
-duration: 2,
-onInvulnerability: false,
-},
-secondary: null,
-target: "normal",
-type: "Ghost",
-},
-
-shadowpunch: {
-accuracy: 91,
-basePower: 40,
-category: "Physical",
-name: "Shadow Punch",
-pp: 1.25,
-priority: 3,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-secondary: null,
-target: "normal",
-type: "Ghost",
-},
-
-shadowsneak: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Shadow Sneak",
-pp: 1.25,
-priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Ghost",
-},
-
-shadowstrike: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Shadow Strike",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-boosts: {
-spd: -1,
-def: -1,
-},
-},
-target: "normal",
-type: "Ghost",
-},
-
-sinisterarrowraid: {
-accuracy: 100,
-basePower: 16,
-category: "Physical",
-name: "Sinister Arrow Raid",
-pp: 0.625,
-priority: 6,
-flags: {protect: 1,},
-secondary: null,
-target: "normal",
-type: "Ghost",
-},
-
-soulstealing7starstrike: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Soul-Stealing 7-Star Strike",
-pp: 0.625,
-priority: 0,
-flags: {contact: 1},
-secondary: null,
-target: "normal",
-type: "Ghost",
-},
-
-spectralthief: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Spectral Thief",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, bypasssub: 1},
-stealsBoosts: true,
-// Boost stealing implemented in scripts.js
-secondary: null,
-target: "normal",
-type: "Ghost",
-},
-
-spiritshackle: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Spirit Shackle",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
-target: "normal",
-type: "Ghost",
-},
-
-spite: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Spite",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
-onHit(target) {
-let move: Move | ActiveMove | null = target.lastMove;
-if (!move || move.isZ) return false;
-if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
-const ppDeducted = target.deductPP(move.id, 4);
-if (!ppDeducted) return false;
-this.add("-activate", target, 'move: Spite', move.name, ppDeducted);
-},
-secondary: null,
-target: "normal",
-type: "Ghost",
-},
-
-trickortreat: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Trick-or-Treat",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
-onHit(target) {
-if (target.hasType('Ghost')) return false;
-if (!target.addType('Ghost')) return false;
-this.add('-start', target, 'typeadd', 'Ghost', '[from] move: Trick-or-Treat');
-if (target.side.active.length === 2 && target.position === 1) {
-// Curse Glitch
-const action = this.queue.willMove(target);
-if (action && action.move.id === 'curse') {
-action.targetLoc = -1;
-}
-}
-},
-secondary: null,
-target: "normal",
-type: "Ghost",
-},
-
-absorb: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Absorb",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, heal: 1},
-drain: [1, 2],
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-appleacid: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Apple Acid",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-boosts: {
-spd: -1,
-def: -1,
-},
-},
-target: "normal",
-type: "Grass",
-},
-
-aromatherapy: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Aromatherapy",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, distance: 1},
-onHit(target, source, move) {
-this.add('-activate', source, 'move: Aromatherapy');
-let success = false;
-const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
-for (const ally of allies) {
-if (ally !== source && ((ally.hasAbility('sapsipper')) ||
-(ally.volatiles['substitute'] && !move.infiltrates))) {
-continue;
-}
-if (ally.cureStatus()) success = true;
-}
-return success;
-},
-target: "allyTeam",
-type: "Grass",
-},
-
-bloomdoom: {
-accuracy: 125,
-basePower: 33,
-category: "Physical",
-name: "Bloom Doom",
-pp: 0.625,
-priority: 4,
-flags: {protect: 1,},
-secondary: {
-chance: 100,
-onHit(target, source) {
-const result = this.random(3);
-if (result === 0) {
-target.trySetStatus('tox', source);
-} else if (result === 1) {
-target.trySetStatus('par', source);
-} else {
-target.trySetStatus('slp', source);
-}
-},
-},
-target: "allAdjacentFoes",
-type: "Grass",
-},
-
-branchpoke: {
-accuracy: 100,
-basePower: 16,
-category: "Physical",
-name: "Branch Poke",
-pp: 1.25,
-priority: 6,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-forceSwitch: true,
-target: "normal",
-type: "Grass",
-},
-
-bulletseed: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Bullet Seed",
-pp: 1.25,
-priority: 0,
-flags: {bullet: 1, protect: 1, mirror: 1},
-critRatio: 2,
-multihit: [1, 6],
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-chloroblast: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Chloroblast",
-pp: 1.25,
-priority: 1,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-cottonguard: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Cotton Guard",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-spe: -2,
-evasion: -2,
-spd: 2,
-def: 2,
-},
-secondary: null,
-target: "self",
-type: "Grass",
-},
-
-cottonspore: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Cotton Spore",
-pp: 1.25,
-priority: 0,
-flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
-boosts: {
-spe: -2,
-evasion: -2,
-spd: 2,
-def: 2,
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Grass",
-},
-
-drumbeating: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Drum Beating",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-boosts: {
-spe: -1,
-evasion: -1,
-},
-},
-target: "normal",
-type: "Grass",
-},
-
-energyball: {
-accuracy: 70,
-basePower: 125,
-category: "Special",
-name: "Energy Ball",
-pp: 1.25,
-priority: 0,
-flags: {bullet: 1, protect: 1, mirror: 1},
-target: "normal",
-type: "Grass",
-},
-
-flowertrick: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Flower Trick",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-willCrit: true,
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-forestscurse: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Forest's Curse",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
-onHit(target) {
-if (target.hasType('Grass')) return false;
-if (!target.addType('Grass')) return false;
-this.add('-start', target, 'typeadd', 'Grass', '[from] move: Forest\'s Curse');
-},
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-frenzyplant: {
-accuracy: 60,
-basePower: 200,
-category: "Special",
-name: "Frenzy Plant",
-pp: 0.625,
-priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1},
-terrain: 'grassyterrain',
-condition: {
-duration: 5,
-durationCallback(source, effect) {
-if (source?.hasItem('terrainextender')) {
-return 8;
-}
-return 5;
-},
-onBasePowerPriority: 6,
-onBasePower(basePower, attacker, defender, move) {
-const weakenedMoves = ['earthquake', 'bulldoze', 'magnitude'];
-if (weakenedMoves.includes(move.id) && defender.isGrounded() && !defender.isSemiInvulnerable()) {
-this.debug('move weakened by grassy terrain');
-return this.chainModify(0.5);
-}
-if (move.type === 'Grass' && attacker.isGrounded()) {
-this.debug('grassy terrain boost');
-return this.chainModify([5325, 4096]);
-}
-},
-onFieldStart(field, source, effect) {
-if (effect?.effectType === 'Ability') {
-this.add('-fieldstart', 'move: Grassy Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
-} else {
-this.add('-fieldstart', 'move: Grassy Terrain');
-}
-},
-onResidualOrder: 5,
-onResidualSubOrder: 2,
-onResidual(pokemon) {
-if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
-this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
-} else {
-this.debug(`Pokemon semi-invuln or not grounded; Grassy Terrain skipped`);
-}
-},
-onFieldResidualOrder: 27,
-onFieldResidualSubOrder: 7,
-onFieldEnd() {
-this.add('-fieldend', 'move: Grassy Terrain');
-},
-},
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-gigadrain: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Giga Drain",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, heal: 1},
-drain: [1, 2],
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-grassknot: {
-accuracy: 73,
-basePower: 15,
-basePowerCallback(pokemon, target) {
-const targetWeight = target.getWeight();
-let bp;
-if (targetWeight >= 2000) {
-bp = 125;
-} else if (targetWeight >= 1000) {
-bp = 100;
-} else if (targetWeight >= 500) {
-bp = 75;
-} else if (targetWeight >= 250) {
-bp = 50;
-} else if (targetWeight >= 100) {
-bp = 25;
-} else {
-bp = 10;
-}
-this.debug('BP: ' + bp);
-return bp;
-},
-category: "Special",
-name: "Grass Knot",
-pp: 1.25,
-priority: -6,
-flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
-onTryHit(target, source, move) {
-if (target.volatiles['dynamax']) {
-this.add('-fail', source, 'move: Grass Knot', '[from] Dynamax');
-this.attrLastMove('[still]');
-return null;
-}
-},
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-grasspledge: {
-accuracy: 82,
-basePower: 85,
-basePowerCallback(target, source, move) {
-if (['waterpledge', 'firepledge'].includes(move.sourceEffect)) {
-this.add('-combine');
-return 150;
-}
-return 80;
-},
-category: "Special",
-name: "Grass Pledge",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1, pledgecombo: 1},
-onPrepareHit(target, source, move) {
-for (const action of this.queue.list as MoveAction[]) {
-if (
-!action.move || !action.pokemon?.isActive ||
-action.pokemon.fainted || action.maxMove || action.zmove
-) {
-continue;
-}
-if (action.pokemon.isAlly(source) && ['waterpledge', 'firepledge'].includes(action.move.id)) {
-this.queue.prioritizeAction(action, move);
-this.add('-waiting', source, action.pokemon);
-return null;
-}
-}
-},
-onModifyMove(move) {
-if (move.sourceEffect === 'waterpledge') {
-move.type = 'Grass';
-move.forceSTAB = true;
-move.sideCondition = 'grasspledge';
-}
-if (move.sourceEffect === 'firepledge') {
-move.type = 'Fire';
-move.forceSTAB = true;
-move.sideCondition = 'firepledge';
-}
-},
-condition: {
-duration: 4,
-onSideStart(targetSide) {
-this.add('-sidestart', targetSide, 'Grass Pledge');
-},
-onSideResidualOrder: 26,
-onSideResidualSubOrder: 9,
-onSideEnd(targetSide) {
-this.add('-sideend', targetSide, 'Grass Pledge');
-},
-onModifySpe(spe, pokemon) {
-return this.chainModify(0.25);
-},
-},
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-grasswhistle: {
-accuracy: 75,
-basePower: 5,
-category: "Status",
-name: "Grass Whistle",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1},
-status: 'slp',
-secondary: null,
-target: "allAdjacentFoes",
-type: "Grass",
-},
-
-grassyglide: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Grassy Glide",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1},
-onModifyPriority(priority, source, target, move) {
-if (this.field.isTerrain('grassyterrain') && source.isGrounded()) {
-return priority + 1;
-}
-},
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-grassyterrain: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Grassy Terrain",
-pp: 1.25,
-priority: 0,
-flags: {nonsky: 1},
-terrain: 'grassyterrain',
-condition: {
-duration: 5,
-durationCallback(source, effect) {
-if (source?.hasItem('terrainextender')) {
-return 8;
-}
-return 5;
-},
-onBasePowerPriority: 6,
-onBasePower(basePower, attacker, defender, move) {
-const weakenedMoves = ['earthquake', 'bulldoze', 'magnitude'];
-if (weakenedMoves.includes(move.id) && defender.isGrounded() && !defender.isSemiInvulnerable()) {
-this.debug('move weakened by grassy terrain');
-return this.chainModify(0.5);
-}
-if (move.type === 'Grass' && attacker.isGrounded()) {
-this.debug('grassy terrain boost');
-return this.chainModify([5325, 4096]);
-}
-},
-onFieldStart(field, source, effect) {
-if (effect?.effectType === 'Ability') {
-this.add('-fieldstart', 'move: Grassy Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
-} else {
-this.add('-fieldstart', 'move: Grassy Terrain');
-}
-},
-onResidualOrder: 5,
-onResidualSubOrder: 2,
-onResidual(pokemon) {
-if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
-this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
-} else {
-this.debug(`Pokemon semi-invuln or not grounded; Grassy Terrain skipped`);
-}
-},
-onFieldResidualOrder: 27,
-onFieldResidualSubOrder: 7,
-onFieldEnd() {
-this.add('-fieldend', 'move: Grassy Terrain');
-},
-},
-secondary: null,
-target: "all",
-type: "Grass",
-},
-
-gravapple: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Grav Apple",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onBasePower(basePower) {
-if (this.field.getPseudoWeather('gravity')) {
-return this.chainModify(1.5);
-}
-},
-secondary: {
-chance: 100,
-boosts: {
-spd: -1,
-def: -1,
-},
-},
-target: "normal",
-type: "Grass",
-},
-
-hornleech: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Horn Leech",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
-drain: [1, 2],
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-ingrain: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Ingrain",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, nonsky: 1},
-volatileStatus: 'ingrain',
-condition: {
-onStart(pokemon) {
-this.add('-start', pokemon, 'move: Ingrain');
-},
-onResidualOrder: 7,
-onResidual(pokemon) {
-this.heal(pokemon.baseMaxhp / 16);
-},
-onTrapPokemon(pokemon) {
-pokemon.tryTrap();
-},
-// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
-onDragOut(pokemon) {
-this.add('-activate', pokemon, 'move: Ingrain');
-return null;
-},
-},
-secondary: null,
-target: "self",
-type: "Grass",
-},
-
-junglehealing: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Jungle Healing",
-pp: 1.25,
-priority: 0,
-flags: {heal: 1, bypasssub: 1, allyanim: 1},
-onHit(pokemon) {
-const success = !!this.heal(this.modify(pokemon.maxhp, 0.25));
-return pokemon.cureStatus() || success;
-},
-secondary: null,
-target: "allies",
-type: "Grass",
-},
-
-leafage: {
-accuracy: 91,
-basePower: 40,
-category: "Physical",
-name: "Leafage",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-leafblade: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Leaf Blade",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
-critRatio: 3,
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-leafstorm: {
-accuracy: 72,
-basePower: 115,
-category: "Special",
-name: "Leaf Storm",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1},
-self: {
-boosts: {
-atk: -2,
-spa: -2,
-},
-},
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-leaftornado: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Leaf Tornado",
-pp: 1.25,
-priority: 1,
-flags: {protect: 1, mirror: 1},
-forceSwitch: true,
-critRatio: 2,
-secondary: null,
-target: "allAdjacentFoes",
-type: "Grass",
-},
-
-leechseed: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Leech Seed",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-volatileStatus: 'leechseed',
-condition: {
-onStart(target) {
-this.add('-start', target, 'move: Leech Seed');
-},
-onResidualOrder: 8,
-onResidual(pokemon) {
-const target = this.getAtSlot(pokemon.volatiles['leechseed'].sourceSlot);
-if (!target || target.fainted || target.hp <= 0) {
-this.debug('Nothing to leech into');
-return;
-}
-const damage = this.damage(pokemon.baseMaxhp / 9, pokemon, target);
-if (damage) {
-this.heal(damage, target, pokemon);
-}
-},
-},
-onTryImmunity(target) {
-return !target.hasType('Grass');
-},
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-magicalleaf: {
-accuracy: 80,
-basePower: 95,
-category: "Special",
-name: "Magical Leaf",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-megadrain: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Mega Drain",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, heal: 1},
-drain: [1, 2],
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-needlearm: {
-accuracy: 95,
-basePower: 45,
-category: "Physical",
-name: "Needle Arm",
-pp: 0.625,
-priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [25, 100],
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-target: "normal",
-type: "Grass",
-},
-
-petalblizzard: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Petal Blizzard",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, wind: 1},
-terrain: 'mistyterrain',
-condition: {
-duration: 5,
-durationCallback(source, effect) {
-if (source?.hasItem('terrainextender')) {
-return 8;
-}
-return 5;
-},
-onSetStatus(status, target, source, effect) {
-if (!target.isGrounded() || target.isSemiInvulnerable()) return;
-if (effect && ((effect as Move).status || effect.id === 'yawn')) {
-this.add('-activate', target, 'move: Misty Terrain');
-}
-return false;
-},
-onTryAddVolatile(status, target, source, effect) {
-if (!target.isGrounded() || target.isSemiInvulnerable()) return;
-if (status.id === 'confusion') {
-if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Misty Terrain');
-return null;
-}
-},
-onBasePowerPriority: 6,
-onBasePower(basePower, attacker, defender, move) {
-if (move.type === 'Dragon' && defender.isGrounded() && !defender.isSemiInvulnerable()) {
-this.debug('misty terrain weaken');
-return this.chainModify(0.5);
-}
-},
-onFieldStart(field, source, effect) {
-if (effect?.effectType === 'Ability') {
-this.add('-fieldstart', 'move: Misty Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
-} else {
-this.add('-fieldstart', 'move: Misty Terrain');
-}
-},
-onFieldResidualOrder: 27,
-onFieldResidualSubOrder: 7,
-onFieldEnd() {
-this.add('-fieldend', 'Misty Terrain');
-},
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Grass",
-},
-
-petaldance: {
-accuracy: 80,
-basePower: 95,
-category: "Special",
-name: "Petal Dance",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1, dance: 1, failinstruct: 1},
-self: {
-volatileStatus: 'lockedmove',
-},
-onAfterMove(pokemon) {
-if (pokemon.volatiles['lockedmove'] && pokemon.volatiles['lockedmove'].duration === 1) {
-pokemon.removeVolatile('lockedmove');
-}
-},
-secondary: null,
-target: "randomNormal",
-type: "Grass",
-},
-
-powerwhip: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Power Whip",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'par',
-},
-target: "normal",
-type: "Grass",
-},
-
-razorleaf: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Razor Leaf",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, slicing: 1},
-critRatio: 3,
-secondary: null,
-target: "allAdjacentFoes",
-type: "Grass",
-},
-
-sappyseed: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Sappy Seed",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-onHit(target, source) {
-if (target.hasType('Grass')) return null;
-target.addVolatile('leechseed', source);
-},
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-seedbomb: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Seed Bomb",
-pp: 1.25,
-priority: 0,
-flags: {bullet: 1, protect: 1, mirror: 1},
-terrain: 'grassyterrain',
-condition: {
-duration: 5,
-durationCallback(source, effect) {
-if (source?.hasItem('terrainextender')) {
-return 8;
-}
-return 5;
-},
-onBasePowerPriority: 6,
-onBasePower(basePower, attacker, defender, move) {
-const weakenedMoves = ['earthquake', 'bulldoze', 'magnitude'];
-if (weakenedMoves.includes(move.id) && defender.isGrounded() && !defender.isSemiInvulnerable()) {
-this.debug('move weakened by grassy terrain');
-return this.chainModify(0.5);
-}
-if (move.type === 'Grass' && attacker.isGrounded()) {
-this.debug('grassy terrain boost');
-return this.chainModify([5325, 4096]);
-}
-},
-onFieldStart(field, source, effect) {
-if (effect?.effectType === 'Ability') {
-this.add('-fieldstart', 'move: Grassy Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
-} else {
-this.add('-fieldstart', 'move: Grassy Terrain');
-}
-},
-onResidualOrder: 5,
-onResidualSubOrder: 2,
-onResidual(pokemon) {
-if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
-this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
-} else {
-this.debug(`Pokemon semi-invuln or not grounded; Grassy Terrain skipped`);
-}
-},
-onFieldResidualOrder: 27,
-onFieldResidualSubOrder: 7,
-onFieldEnd() {
-this.add('-fieldend', 'move: Grassy Terrain');
-},
-},
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-seedflare: {
-accuracy: 93,
-basePower: 30,
-category: "Special",
-name: "Seed Flare",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'brn',
-},
-target: "normal",
-type: "Grass",
-},
-
-sleeppowder: {
-accuracy: 75,
-basePower: 5,
-category: "Status",
-name: "Sleep Powder",
-pp: 1.25,
-priority: 3,
-flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
-status: 'slp',
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-snaptrap: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Snap Trap",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
-},
-volatileStatus: 'partiallytrapped',
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-solarbeam: {
-accuracy: 72,
-basePower: 115,
-category: "Special",
-name: "Solar Beam",
-pp: 1.25,
-priority: -1,
-flags: {charge: 1, protect: 1, mirror: 1, nosleeptalk: 1, failinstruct: 1},
-onTryMove(attacker, defender, move) {
-if (attacker.removeVolatile(move.id)) {
-return;
-}
-this.add('-prepare', attacker, move.name);
-if (['sunnyday', 'desolateland'].includes(attacker.effectiveWeather())) {
-this.attrLastMove('[still]');
-this.addMove('-anim', attacker, move.name, defender);
-return;
-}
-if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-return;
-}
-attacker.addVolatile('twoturnmove', defender);
-return null;
-},
-onBasePower(basePower, pokemon, target) {
-const weakWeathers = ['raindance', 'primordialsea', 'sandstorm', 'hail', 'snow'];
-if (weakWeathers.includes(pokemon.effectiveWeather())) {
-this.debug('weakened by weather');
-return this.chainModify(0.5);
-}
-},
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-solarblade: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Solar Blade",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, charge: 1, protect: 1, mirror: 1, slicing: 1, nosleeptalk: 1, failinstruct: 1},
-onTryMove(attacker, defender, move) {
-if (attacker.removeVolatile(move.id)) {
-return;
-}
-this.add('-prepare', attacker, move.name);
-if (['sunnyday', 'desolateland'].includes(attacker.effectiveWeather())) {
-this.attrLastMove('[still]');
-this.addMove('-anim', attacker, move.name, defender);
-return;
-}
-if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-return;
-}
-attacker.addVolatile('twoturnmove', defender);
-return null;
-},
-onBasePower(basePower, pokemon, target) {
-const weakWeathers = ['raindance', 'primordialsea', 'sandstorm', 'hail', 'snow'];
-if (weakWeathers.includes(pokemon.effectiveWeather())) {
-this.debug('weakened by weather');
-return this.chainModify(0.5);
-}
-},
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-spicyextract: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Spicy Extract",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-boosts: {
-atk: 2,
-spa: 2,
-spd: -2,
-def: -2,
-accuracy: 1,
-evasion: -1,
-},
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-spikyshield: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Spiky Shield",
-pp: 1.25,
-priority: 4,
-flags: {noassist: 1, failcopycat: 1},
-stallingMove: true,
-volatileStatus: 'spikyshield',
-onPrepareHit(pokemon) {
-return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
-},
-onHit(pokemon) {
-pokemon.addVolatile('stall');
-},
-condition: {
-duration: 1,
-onStart(target) {
-this.add('-singleturn', target, 'move: Protect');
-},
-onTryHitPriority: 3,
-onTryHit(target, source, move) {
-if (!move.flags['protect']) {
-if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
-if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
-return;
-}
-if (move.smartTarget) {
-move.smartTarget = false;
-} else {
-this.add('-activate', target, 'move: Protect');
-}
-const lockedmove = source.getVolatile('lockedmove');
-if (lockedmove) {
-// Outrage counter is reset
-if (source.volatiles['lockedmove'].duration === 2) {
-delete source.volatiles['lockedmove'];
-}
-}
-if (this.checkMoveMakesContact(move, source, target)) {
-this.damage(source.baseMaxhp / 8, source, target);
-}
-return this.NOT_FAIL;
-},
-onHit(target, source, move) {
-if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
-this.damage(source.baseMaxhp / 8, source, target);
-}
-},
-},
-secondary: null,
-target: "self",
-type: "Grass",
-},
-
-spore: {
-accuracy: 100,
-basePower: 16,
-category: "Status",
-name: "Spore",
-pp: 1.25,
-priority: 6,
-flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
-status: 'slp',
-selfSwitch: true,
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-strengthsap: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Strength Sap",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, heal: 1},
-onHit(target, source) {
-if (target.boosts.atk === -6) return false;
-const atk = target.getStat('atk', false, true);
-const success = this.boost({atk: -1}, target, source, null, false, true);
-return !!(this.heal(atk, source, target) || success);
-},
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-stunspore: {
-accuracy: 75,
-basePower: 5,
-category: "Status",
-name: "Stun Spore",
-pp: 1.25,
-priority: 3,
-flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
-status: 'par',
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-synthesis: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Synthesis",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, heal: 1},
-onHit(pokemon) {
-let factor = 0.5;
-switch (pokemon.effectiveWeather()) {
-case 'sunnyday':
-case 'desolateland':
-factor = 0.667;
-break;
-case 'raindance':
-case 'primordialsea':
-case 'sandstorm':
-case 'hail':
-case 'snow':
-factor = 0.25;
-break;
-}
-const success = !!this.heal(this.modify(pokemon.maxhp, factor));
-if (!success) {
-this.add('-fail', pokemon, 'heal');
-return this.NOT_FAIL;
-}
-return success;
-},
-secondary: null,
-target: "self",
-type: "Grass",
-},
-
-trailblaze: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Trailblaze",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-self: {
-boosts: {
-spe: 1,
-evasion: 1,
-},
-},
-},
-weather: 'sunnyday',
-target: "normal",
-type: "Grass",
-},
-
-tropkick: {
-accuracy: 68,
-basePower: 135,
-category: "Physical",
-name: "Trop Kick",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-boosts: {
-atk: -1,
-spa: -1,
-},
-},
-target: "normal",
-type: "Grass",
-},
-
-vinewhip: {
-accuracy: 78,
-basePower: 105,
-category: "Physical",
-name: "Vine Whip",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-terrain: 'grassyterrain',
-condition: {
-duration: 5,
-durationCallback(source, effect) {
-if (source?.hasItem('terrainextender')) {
-return 8;
-}
-return 5;
-},
-onBasePowerPriority: 6,
-onBasePower(basePower, attacker, defender, move) {
-const weakenedMoves = ['earthquake', 'bulldoze', 'magnitude'];
-if (weakenedMoves.includes(move.id) && defender.isGrounded() && !defender.isSemiInvulnerable()) {
-this.debug('move weakened by grassy terrain');
-return this.chainModify(0.5);
-}
-if (move.type === 'Grass' && attacker.isGrounded()) {
-this.debug('grassy terrain boost');
-return this.chainModify([5325, 4096]);
-}
-},
-onFieldStart(field, source, effect) {
-if (effect?.effectType === 'Ability') {
-this.add('-fieldstart', 'move: Grassy Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
-} else {
-this.add('-fieldstart', 'move: Grassy Terrain');
-}
-},
-onResidualOrder: 5,
-onResidualSubOrder: 2,
-onResidual(pokemon) {
-if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
-this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
-} else {
-this.debug(`Pokemon semi-invuln or not grounded; Grassy Terrain skipped`);
-}
-},
-onFieldResidualOrder: 27,
-onFieldResidualSubOrder: 7,
-onFieldEnd() {
-this.add('-fieldend', 'move: Grassy Terrain');
-},
-},
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-woodhammer: {
-accuracy: 63,
-basePower: 150,
-category: "Physical",
-name: "Wood Hammer",
-pp: 0.625,
-priority: -3,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [50, 100],
-hasCrashDamage: true,
-onMoveFail(target, source, move) {
-this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
-},
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-worryseed: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Worry Seed",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
-onTryImmunity(target) {
-// Truant and Insomnia have special treatment; they fail before
-// checking accuracy and will double Stomping Tantrum's BP
-if (target.ability === 'truant' || target.ability === 'insomnia') {
-return false;
-}
-},
-onTryHit(target) {
-if (target.getAbility().isPermanent) {
-return false;
-}
-},
-onHit(pokemon) {
-const oldAbility = pokemon.setAbility('insomnia');
-if (oldAbility) {
-this.add('-ability', pokemon, 'Insomnia', '[from] move: Worry Seed');
-if (pokemon.status === 'slp') {
-pokemon.cureStatus();
-}
-return;
-}
-return oldAbility as false | null;
-},
-secondary: null,
-target: "normal",
-type: "Grass",
-},
-
-boneclub: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Bone Club",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-target: "normal",
-type: "Ground",
-},
-
-bonemerang: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Bonemerang",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-multihit: [2, 4],
-secondary: null,
-target: "normal",
-type: "Ground",
-},
-
-bonerush: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Bone Rush",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-critRatio: 2,
-multihit: [1, 6],
-secondary: null,
-target: "normal",
-type: "Ground",
-},
-
-bulldoze: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Bulldoze",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1},
-secondary: {
-chance: 100,
-boosts: {
-spe: -1,
-evasion: -1,
-},
-},
-target: "allAdjacentFoes",
-type: "Ground",
-},
-
-dig: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Dig",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1},
-onTryMove(attacker, defender, move) {
-if (attacker.removeVolatile(move.id)) {
-return;
-}
-this.add('-prepare', attacker, move.name);
-if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-return;
-}
-attacker.addVolatile('twoturnmove', defender);
-return null;
-},
-condition: {
-duration: 2,
-onImmunity(type, pokemon) {
-if (type === 'sandstorm' || type === 'hail') return false;
-},
-onInvulnerability(target, source, move) {
-if (['earthquake', 'magnitude'].includes(move.id)) {
-return;
-}
-return false;
-},
-onSourceModifyDamage(damage, source, target, move) {
-if (move.id === 'earthquake' || move.id === 'magnitude') {
-return this.chainModify(2);
-}
-},
-},
-secondary: {
-chance: 100,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
-target: "normal",
-type: "Ground",
-},
-
-drillrun: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Drill Run",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-critRatio: 3,
-secondary: null,
-target: "normal",
-type: "Ground",
-},
-
-earthpower: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Earth Power",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1},
-secondary: {
-chance: 33,
-boosts: {
-spd: -1,
-def: -1,
-},
-},
-target: "normal",
-type: "Ground",
-},
-
-earthquake: {
-accuracy: 68,
-basePower: 135,
-category: "Physical",
-name: "Earthquake",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1, nonsky: 1},
-secondary: {
-chance: 100,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
-target: "allAdjacentFoes",
-type: "Ground",
-},
-
-fissure: {
-accuracy: 78,
-basePower: 105,
-category: "Physical",
-name: "Fissure",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1},
-secondary: {
-chance: 100,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
-target: "allAdjacentFoes",
-type: "Ground",
-},
-
-headlongrush: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Headlong Rush",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-self: {
-boosts: {
-def: -1,
-spd: -1,
-spe: 1,
-evasion: 1,
-},
-},
-secondary: null,
-target: "normal",
-type: "Ground",
-},
-
-highhorsepower: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "High Horsepower",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Ground",
-},
-
-landswrath: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Land's Wrath",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1},
-secondary: {
-chance: 100,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
-target: "allAdjacentFoes",
-type: "Ground",
-},
-
-magnitude: {
-accuracy: 60,
-basePower: 200,
-category: "Physical",
-name: "Magnitude",
-pp: 0.625,
-priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1},
-onModifyMove(move, pokemon) {
-const i = this.random(100);
-if (i < 5) {
-move.magnitude = 4;
-move.basePower = 10;
-} else if (i < 15) {
-move.magnitude = 5;
-move.basePower = 25;
-} else if (i < 35) {
-move.magnitude = 6;
-move.basePower = 50;
-} else if (i < 65) {
-move.magnitude = 7;
-move.basePower = 75;
-} else if (i < 85) {
-move.magnitude = 8;
-move.basePower = 100;
-} else if (i < 95) {
-move.magnitude = 9;
-move.basePower = 125;
-} else {
-move.magnitude = 10;
-move.basePower = 150;
-}
-},
-onUseMoveMessage(pokemon, target, move) {
-this.add('-activate', pokemon, 'move: Magnitude', move.magnitude);
-},
-secondary: {
-chance: 100,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
-target: "allAdjacentFoes",
-type: "Ground",
-},
-
-mudbomb: {
-accuracy: 70,
-basePower: 125,
-category: "Special",
-name: "Mud Bomb",
-pp: 1.25,
-priority: 0,
-flags: {bullet: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-boosts: {
-accuracy: -1,
-},
-},
-target: "allAdjacentFoes",
-type: "Ground",
-},
-
-mudshot: {
-accuracy: 80,
-basePower: 95,
-category: "Special",
-name: "Mud Shot",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-boosts: {
-spe: -1,
-evasion: -1,
-},
-},
-target: "allAdjacentFoes",
-type: "Ground",
-},
-
-mudslap: {
-accuracy: 125,
-basePower: 33,
-category: "Special",
-name: "Mud-Slap",
-pp: 0.625,
-priority: 4,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-boosts: {
-accuracy: -1,
-},
-},
-target: "normal",
-type: "Ground",
-},
-
-mudsport: {
-accuracy: 93,
-basePower: 30,
-category: "Special ",
-name: "Mud Sport",
-pp: 1.25,
-priority: 3,
-flags: {nonsky: 1},
-pseudoWeather: 'mudsport',
-condition: {
-duration: 5,
-onFieldStart(field, source) {
-this.add('-fieldstart', 'move: Mud Sport', '[of] ' + source);
-},
-onBasePowerPriority: 1,
-onBasePower(basePower, attacker, defender, move) {
-if (move.type === 'Electric') {
-this.debug('mud sport weaken');
-return this.chainModify([1352, 4096]);
-}
-},
-onFieldResidualOrder: 27,
-onFieldResidualSubOrder: 4,
-onFieldEnd() {
-this.add('-fieldend', 'move: Mud Sport');
-},
-},
-secondary: null,
-target: "all",
-type: "Ground",
-},
-
-precipiceblades: {
-accuracy: 91,
-basePower: 40,
-category: "Physical",
-name: "Precipice Blades",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, mirror: 1, nonsky: 1},
-target: "allAdjacentFoes",
-type: "Ground",
-},
-
-rototiller: {
-accuracy: 100,
-basePower: 16,
-category: "Physical ",
-name: "Rototiller",
-pp: 1.25,
-priority: 6,
-flags: {distance: 1, nonsky: 1},
-selfSwitch: true,
-secondary: null,
-target: "allAdjacentFoes",
-type: "Ground",
-},
-
-sandattack: {
-accuracy: 100,
-basePower: 16,
-category: "Special",
-name: "Sand Attack",
-pp: 1.25,
-priority: 6,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-secondary: null,
-weather: 'Sandstorm',
-target: "allAdjacentFoes",
-type: "Ground",
-},
-
-sandsearstorm: {
-accuracy: 82,
-basePower: 85,
-category: "Special",
-name: "Sandsear Storm",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, wind: 1},
-secondary: {
-chance: 33,
-status: 'brn',
-},
-weather: 'Sandstorm',
-target: "allAdjacentFoes",
-type: "Ground",
-},
-
-sandtomb: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Sand Tomb",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
-target: "normal",
-type: "Ground",
-},
-
-scorchingsands: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Scorching Sands",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, defrost: 1},
-thawsTarget: true,
-secondary: {
-chance: 33,
-status: 'brn',
-},
-weather: 'Sandstorm',
-target: "normal",
-type: "Ground",
-},
-
-shoreup: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Shore Up",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, heal: 1},
-onHit(pokemon) {
-let factor = 0.5;
-if (this.field.isWeather('sandstorm')) {
-factor = 0.667;
-}
-const success = !!this.heal(this.modify(pokemon.maxhp, factor));
-if (!success) {
-this.add('-fail', pokemon, 'heal');
-return this.NOT_FAIL;
-}
-return success;
-},
-secondary: null,
-target: "self",
-type: "Ground",
-},
-
-spikes: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Spikes",
-pp: 1.25,
-priority: 0,
-flags: {reflectable: 1, nonsky: 1, mustpressure: 1},
-sideCondition: 'spikes',
-condition: {
-// this is a side condition
-onSideStart(side) {
-this.add('-sidestart', side, 'Spikes');
-this.effectState.layers = 1;
-},
-onSideRestart(side) {
-if (this.effectState.layers >= 3) return false;
-this.add('-sidestart', side, 'Spikes');
-this.effectState.layers++;
-},
-onEntryHazard(pokemon) {
-if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
-const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
-this.damage(damageAmounts[this.effectState.layers] * pokemon.maxhp / 24);
-},
-},
-weather: 'Sandstorm',
-secondary: null,
-target: "foeSide",
-type: "Ground",
-},
-
-stompingtantrum: {
-accuracy: 82,
-basePower: 85,
-basePowerCallback(pokemon, target, move) {
-if (pokemon.moveLastTurnResult === false) {
-this.debug('doubling Stomping Tantrum BP due to previous move failure');
-return move.basePower * 2;
-}
-return move.basePower;
-},
-category: "Physical",
-name: "Stomping Tantrum",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Ground",
-},
-
-tectonicrage: {
-accuracy: 63,
-basePower: 150,
-category: "Physical",
-name: "Tectonic Rage",
-pp: 0.625,
-priority: -3,
-flags: {contact: 1},
-recoil: [50, 100],
-hasCrashDamage: true,
-onMoveFail(target, source, move) {
-this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
-},
-secondary: {
-chance: 100,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
-target: "randomNormal",
-type: "Ground",
-},
-
-thousandarrows: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Thousand Arrows",
-pp: 1.25,
-priority: 0,
-volatileStatus: 'smackdown',
-ignoreImmunity: {'Ground': true},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Ground",
-},
-
-thousandwaves: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Thousand Waves",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Ground",
-},
-
-aurorabeam: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Aurora Beam",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-boosts: {
-atk: -1,
-spa: -1,
-},
-},
-target: "normal",
-type: "Ice",
-},
-
-auroraveil: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Aurora Veil",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-sideCondition: 'auroraveil',
-onTry() {
-return this.field.isWeather(['hail', 'snow']);
-},
-condition: {
-duration: 5,
-durationCallback(target, source, effect) {
-if (source?.hasItem('lightclay')) {
-return 8;
-}
-return 5;
-},
-onAnyModifyDamage(damage, source, target, move) {
-if (target !== source && this.effectState.target.hasAlly(target)) {
-if ((target.side.getSideCondition('reflect') && this.getCategory(move) === 'Physical') ||
-(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {
-return;
-}
-if (!target.getMoveHitData(move).crit && !move.infiltrates) {
-this.debug('Aurora Veil weaken');
-if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
-return this.chainModify(0.5);
-}
-}
-},
-onSideStart(side) {
-this.add('-sidestart', side, 'move: Aurora Veil');
-},
-onSideResidualOrder: 26,
-onSideResidualSubOrder: 10,
-onSideEnd(side) {
-this.add('-sideend', side, 'move: Aurora Veil');
-},
-},
-secondary: null,
-target: "allySide",
-type: "Ice",
-},
-
-avalanche: {
-accuracy: 87,
-basePower: 60,
-basePowerCallback(pokemon, target, move) {
-const damagedByTarget = pokemon.attackedBy.some(
-p => p.source === target && p.damage > 0 && p.thisTurn
-);
-if (damagedByTarget) {
-this.debug('BP doubled for getting hit by ' + target);
-return move.basePower * 2;
-}
-return move.basePower;
-},
-category: "Physical",
-name: "Avalanche",
-pp: 1.25,
-priority: -4,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Ice",
-},
-
-blizzard: {
-accuracy: 70,
-basePower: 125,
-category: "Special",
-name: "Blizzard",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, wind: 1},
-onModifyMove(move) {
-if (this.field.isWeather(['hail', 'snow'])) move.accuracy = true;
-},
-secondary: {
-chance: 33,
-status: 'frz',
-},
-target: "allAdjacentFoes",
-type: "Ice",
-},
-
-chillyreception: {
-accuracy: 100,
-basePower: 16,
-category: "Special",
-name: "Chilly Reception",
-pp: 1.25,
-priority: 6,
-flags: {protect: 1, mirror: 1,},
-weather: 'snow',
-selfSwitch: true,
-secondary: null,
-target: "allAdjacentFoes",
-type: "Ice",
-},
-
-freezedry: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Freeze-Dry",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onEffectiveness(typeMod, target, type) {
-if (type === 'Water') return 1;
-},
-secondary: {
-chance: 33,
-status: 'frz',
-},
-target: "normal",
-type: "Ice",
-},
-
-freezeshock: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Freeze Shock",
-pp: 1.25,
-priority: 0,
-flags: {charge: 1, protect: 1, mirror: 1, nosleeptalk: 1, failinstruct: 1},
-onTryMove(attacker, defender, move) {
-if (attacker.removeVolatile(move.id)) {
-return;
-}
-this.add('-prepare', attacker, move.name);
-if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-return;
-}
-attacker.addVolatile('twoturnmove', defender);
-return null;
-},
-secondary: {
-chance: 33,
-status: 'par',
-},
-target: "normal",
-type: "Ice",
-},
-
-freezyfrost: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Freezy Frost",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onHit() {
-this.add('-clearallboost');
-for (const pokemon of this.getAllActive()) {
-pokemon.clearBoosts();
-}
-},
-secondary: null,
-target: "normal",
-type: "Ice",
-},
-
-frostbreath: {
-accuracy: 93,
-basePower: 30,
-category: "Special",
-name: "Frost Breath",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, mirror: 1},
-willCrit: true,
-secondary: {
-chance: 33,
-status: 'frz',
-},
-target: "normal",
-type: "Ice",
-},
-
-glaciallance: {
-accuracy: 60,
-basePower: 200,
-category: "Physical",
-name: "Glacial Lance",
-pp: 0.625,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-status: 'frz',
-},
-weather: 'snow',
-target: "allAdjacentFoes",
-type: "Ice",
-},
-
-glaciate: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Glaciate",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-boosts: {
-spe: -1,
-evasion: -1,
-},
-},
-target: "allAdjacentFoes",
-type: "Ice",
-},
-
-hail: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Hail",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-weather: 'snow',
-target: "allAdjacentFoes",
-type: "Ice",
-},
-
-haze: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Haze",
-pp: 1.25,
-priority: 0,
-flags: {bypasssub: 1},
-onHitField() {
-this.add('-clearallboost');
-for (const pokemon of this.getAllActive()) {
-pokemon.clearBoosts();
-}
-},
-secondary: null,
-target: "all",
-type: "Ice",
-},
-
-iceball: {
-accuracy: 73,
-basePower: 15,
-basePowerCallback(pokemon, target, move) {
-return 20 * move.hit;
-},
-category: "Physical",
-name: "Ice Ball",
-pp: 0.625,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-multihit: [5, 10],
-multiaccuracy: 75,
-secondary: null,
-target: "normal",
-type: "Ice",
-},
-
-icebeam: {
-accuracy: 80,
-basePower: 95,
-category: "Special",
-name: "Ice Beam",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'frz',
-},
-target: "normal",
-type: "Ice",
-},
-
-iceburn: {
-accuracy: 125,
-basePower: 33,
-category: "Special",
-name: "Ice Burn",
-pp: 0.625,
-priority: 4,
-flags: {charge: 1, protect: 1, mirror: 1, nosleeptalk: 1, failinstruct: 1},
-onTryMove(attacker, defender, move) {
-if (attacker.removeVolatile(move.id)) {
-return;
-}
-this.add('-prepare', attacker, move.name);
-if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-return;
-}
-attacker.addVolatile('twoturnmove', defender);
-return null;
-},
-secondary: {
-chance: 100,
-status: 'brn',
-},
-target: "normal",
-type: "Ice",
-},
-
-icefang: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Ice Fang",
-pp: 1.25,
-priority: 0,
-flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
-secondaries: [
-{
-chance: 33,
-status: 'frz',
-}, {
-chance: 33,
-volatileStatus: 'flinch',
-},
+vivillonfancy: {
+num: 666,
+name: "Vivillon-Fancy",
+baseSpecies: "Vivillon",
+forme: "Fancy",
+types: ["Bug", "Flying"],
+baseStats: {hp: 80, atk: 52, def: 50, spa: 90, spd: 50, spe: 89},
+abilities: {0: "Shield Dust", 1: "Compound Eyes", H: "Friend Guard"},
+weightkg: 17,
+prevo: "Spewpa",
+},
+
+vivillonpokeball: {
+num: 666,
+name: "Vivillon-Pokeball",
+baseSpecies: "Vivillon",
+forme: "Pokeball",
+types: ["Bug", "Flying"],
+baseStats: {hp: 80, atk: 52, def: 50, spa: 90, spd: 50, spe: 89},
+abilities: {0: "Shield Dust", 1: "Compound Eyes"},
+weightkg: 17,
+},
+
+litleo: {
+num: 667,
+name: "Litleo",
+types: ["Fire", "Ground"],
+genderRatio: {M: 0.125, F: 0.875},
+baseStats: {hp: 62, atk: 50, def: 58, spa: 73, spd: 54, spe: 72},
+abilities: {0: "Rivalry", 1: "Unnerve", H: "Moxie"},
+weightkg: 13.5,
+evos: ["Pyroar"],
+},
+
+pyroar: {
+num: 668,
+name: "Pyroar",
+types: ["Fire", "Ground"],
+genderRatio: {M: 0.125, F: 0.875},
+baseStats: {hp: 86, atk: 68, def: 72, spa: 109, spd: 66, spe: 106},
+abilities: {0: "Rivalry", 1: "Unnerve", H: "Moxie"},
+weightkg: 81.5,
+prevo: "Litleo",
+},
+
+flabebe: {
+num: 669,
+name: "Flabe\u0301be\u0301",
+baseForme: "Red",
+types: ["Fairy", "Bug"],
+baseStats: {hp: 44, atk: 38, def: 39, spa: 61, spd: 79, spe: 42},
+abilities: {0: "Flower Veil", H: "Symbiosis"},
+weightkg: 0.1,
+evos: ["Floette"],
+cosmeticFormes: ["Flabe\u0301be\u0301-Blue", "Flabe\u0301be\u0301-Orange", "Flabe\u0301be\u0301-White", "Flabe\u0301be\u0301-Yellow"],
+formeOrder: ["Flabe\u0301be\u0301", "Flabe\u0301be\u0301-Blue", "Flabe\u0301be\u0301-Orange", "Flabe\u0301be\u0301-White", "Flabe\u0301be\u0301-Yellow"],
+},
+
+floette: {
+num: 670,
+name: "Floette",
+baseForme: "Red",
+types: ["Fairy", "Bug"],
+baseStats: {hp: 54, atk: 45, def: 47, spa: 75, spd: 98, spe: 52},
+abilities: {0: "Flower Veil", H: "Symbiosis"},
+weightkg: 0.9,
+prevo: "Flabe\u0301be\u0301",
+evos: ["Florges"],
+otherFormes: ["Floette-Eternal"],
+cosmeticFormes: ["Floette-Blue", "Floette-Orange", "Floette-White", "Floette-Yellow"],
+formeOrder: ["Floette", "Floette-Blue", "Floette-Orange", "Floette-White", "Floette-Yellow", "Floette-Eternal"],
+},
+
+floetteeternal: {
+num: 670,
+name: "Floette-Eternal",
+baseSpecies: "Floette",
+forme: "Eternal",
+types: ["Fairy", "Bug"],
+baseStats: {hp: 74, atk: 65, def: 67, spa: 125, spd: 128, spe: 92},
+abilities: {0: "Flower Veil"},
+weightkg: 0.9,
+},
+
+florges: {
+num: 671,
+name: "Florges",
+baseForme: "Red",
+types: ["Fairy", "Bug"],
+baseStats: {hp: 78, atk: 65, def: 68, spa: 112, spd: 154, spe: 75},
+abilities: {0: "Flower Veil", H: "Symbiosis"},
+weightkg: 10,
+prevo: "Floette",
+evoType: "useItem",
+evoItem: "Shiny Stone",
+cosmeticFormes: ["Florges-Blue", "Florges-Orange", "Florges-White", "Florges-Yellow"],
+formeOrder: ["Florges", "Florges-Blue", "Florges-Orange", "Florges-White", "Florges-Yellow"],
+},
+
+skiddo: {
+num: 672,
+name: "Skiddo",
+types: ["Grass", "Normal"],
+baseStats: {hp: 66, atk: 65, def: 48, spa: 62, spd: 57, spe: 52},
+abilities: {0: "Sap Sipper", H: "Grass Pelt"},
+weightkg: 31,
+evos: ["Gogoat"],
+},
+
+gogoat: {
+num: 673,
+name: "Gogoat",
+types: ["Grass", "Normal"],
+baseStats: {hp: 123, atk: 100, def: 62, spa: 97, spd: 81, spe: 68},
+abilities: {0: "Sap Sipper", H: "Grass Pelt"},
+weightkg: 91,
+prevo: "Skiddo",
+},
+
+pancham: {
+num: 674,
+name: "Pancham",
+types: ["Fighting"],
+baseStats: {hp: 67, atk: 82, def: 62, spa: 46, spd: 48, spe: 43},
+abilities: {0: "Iron Fist", 1: "Mold Breaker", H: "Scrappy"},
+weightkg: 8,
+evos: ["Pangoro"],
+},
+
+pangoro: {
+num: 675,
+name: "Pangoro",
+types: ["Fighting", "Dark"],
+baseStats: {hp: 95, atk: 124, def: 78, spa: 69, spd: 71, spe: 58},
+abilities: {0: "Iron Fist", 1: "Mold Breaker", H: "Scrappy"},
+weightkg: 136,
+prevo: "Pancham",
+evoCondition: "with a Dark-type in the party",
+},
+
+furfrou: {
+num: 676,
+name: "Furfrou",
+baseForme: "Natural",
+types: ["Normal", "Fairy"],
+baseStats: {hp: 75, atk: 80, def: 60, spa: 65, spd: 90, spe: 102},
+abilities: {0: "Fur Coat"},
+weightkg: 28,
+cosmeticFormes: ["Furfrou-Dandy", "Furfrou-Debutante", "Furfrou-Diamond", "Furfrou-Heart", "Furfrou-Kabuki", "Furfrou-La Reine", "Furfrou-Matron", "Furfrou-Pharaoh", "Furfrou-Star"],
+formeOrder: [
+Furfrou,
+Furfrou-Heart,
+Furfrou-Star,
+Furfrou-Diamond,
+Furfrou-Debutante,
+Furfrou-Matron,
+Furfrou-Dandy,
+Furfrou-La Reine,
+Furfrou-Kabuki,
+Furfrou-Pharaoh,
 ],
-target: "normal",
-type: "Ice",
-},
-
-icehammer: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Ice Hammer",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-self: {
-boosts: {
-spe: -1,
-evasion: -1,
-},
-},
-secondary: null,
-target: "normal",
-type: "Ice",
-},
-
-icepunch: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Ice Punch",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-secondary: {
-chance: 33,
-status: 'frz',
-},
-target: "normal",
-type: "Ice",
-},
-
-iceshard: {
-accuracy: 91,
-basePower: 40,
-category: "Physical",
-name: "Ice Shard",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Ice",
-},
-
-icespinner: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Ice Spinner",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-onHit() {
-this.field.clearTerrain();
-},
-onAfterSubDamage() {
-this.field.clearTerrain();
-},
-secondary: null,
-target: "normal",
-type: "Ice",
-},
-
-iciclecrash: {
-accuracy: 95,
-basePower: 45,
-category: "Physical",
-name: "Icicle Crash",
-pp: 0.625,
-priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [25, 100],
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-target: "normal",
-type: "Ice",
-},
-
-iciclespear: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Icicle Spear",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-critRatio: 2,
-multihit: [1, 6],
-secondary: null,
-target: "normal",
-type: "Ice",
-},
-
-icywind: {
-accuracy: 100,
-basePower: 16,
-category: "Special",
-name: "Icy Wind",
-pp: 1.25,
-priority: 6,
-flags: {protect: 1, mirror: 1, wind: 1},
-secondary: {
-chance: 100,
-boosts: {
-spe: -1,
-evasion: -1,
-},
-},
-forceSwitch: true,
-weather: 'snow',
-target: "allAdjacentFoes",
-type: "Ice",
-},
-
-mist: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Mist",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-sideCondition: 'mist',
-condition: {
-duration: 5,
-onTryBoost(boost, target, source, effect) {
-if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
-if (source && target !== source) {
-let showMsg = false;
-let i: BoostID;
-for (i in boost) {
-if (boost[i]! < 0) {
-delete boost[i];
-showMsg = true;
-}
-}
-if (showMsg && !(effect as ActiveMove).secondaries) {
-this.add('-activate', target, 'move: Mist');
-}
-}
-},
-onSideStart(side) {
-this.add('-sidestart', side, 'Mist');
-},
-onSideResidualOrder: 26,
-onSideResidualSubOrder: 4,
-onSideEnd(side) {
-this.add('-sideend', side, 'Mist');
-},
-},
-secondary: null,
-target: "allySide",
-type: "Ice",
-},
-
-mountaingale: {
-accuracy: 78,
-basePower: 105,
-category: "Physical",
-name: "Mountain Gale",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-weather: 'snow',
-target: "normal",
-type: "Ice",
-},
-
-powdersnow: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Powder Snow",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'frz',
-},
-weather: 'snow',
-target: "allAdjacentFoes",
-type: "Ice",
-},
-
-sheercold: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Sheer Cold",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-ohko: 'Ice',
-target: "normal",
-type: "Ice",
-},
-
-snowscape: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Snowscape",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-weather: 'snow',
-secondary: {
-chance: 100,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
-target: "all",
-type: "Ice",
-},
-
-subzeroslammer: {
-accuracy: 68,
-basePower: 135,
-category: "Physical",
-name: "Subzero Slammer",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1},
-secondary: {
-chance: 50,
-status: 'frz',
-},
-target: "normal",
-type: "Ice",
-},
-
-tripleaxel: {
-accuracy: 73,
-basePower: 15,
-basePowerCallback(pokemon, target, move) {
-return 20 * move.hit;
-},
-category: "Physical",
-name: "Triple Axel",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-multihit: [5, 10],
-multiaccuracy: 75,
-secondary: null,
-target: "normal",
-type: "Ice",
-},
-
-acupressure: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Acupressure",
-pp: 1.25,
-priority: 0,
-flags: {},
-onHit(target) {
-const stats: BoostID[] = [];
-let stat: BoostID;
-for (stat in target.boosts) {
-if (target.boosts[stat] < 6) {
-stats.push(stat);
-}
-}
-if (stats.length) {
-const randomStat = this.sample(stats);
-const boost: SparseBoostsTable = {};
-boost[randomStat] = 3;
-this.boost(boost);
-} else {
-return false;
-}
-},
-secondary: null,
-target: "adjacentAllyOrSelf",
-type: "Normal",
-},
-
-afteryou: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "After You",
-pp: 1.25,
-priority: 5,
-flags: {bypasssub: 1, allyanim: 1},
-onHit(target) {
-if (target.side.active.length < 2) return false; // fails in singles
-const action = this.queue.willMove(target);
-if (action) {
-this.queue.prioritizeAction(action);
-this.add('-activate', target, 'move: After You');
-} else {
-return false;
-}
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-assist: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Assist",
-pp: 1.25,
-priority: 0,
-flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
-onHit(target) {
-const moves = [];
-for (const pokemon of target.side.pokemon) {
-if (pokemon === target) continue;
-for (const moveSlot of pokemon.moveSlots) {
-const moveid = moveSlot.id;
-const move = this.dex.moves.get(moveid);
-if (move.flags['noassist'] || move.isZ || move.isMax) {
-continue;
-}
-moves.push(moveid);
-}
-}
-let randomMove = '';
-if (moves.length) randomMove = this.sample(moves);
-if (!randomMove) {
-return false;
-}
-this.actions.useMove(randomMove, target);
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-attract: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Attract",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
-volatileStatus: 'attract',
-condition: {
-noCopy: true, // doesn't get copied by Baton Pass
-onStart(pokemon, source, effect) {
-if (!(pokemon.gender === 'M' && source.gender === 'F') && !(pokemon.gender === 'F' && source.gender === 'M')) {
-this.debug('incompatible gender');
-return false;
-}
-if (!this.runEvent('Attract', pokemon, source)) {
-this.debug('Attract event failed');
-return false;
-}
-if (effect.name === 'Cute Charm') {
-this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', '[of] ' + source);
-} else if (effect.name === 'Destiny Knot') {
-this.add('-start', pokemon, 'Attract', '[from] item: Destiny Knot', '[of] ' + source);
-} else {
-this.add('-start', pokemon, 'Attract');
-}
-},
-onUpdate(pokemon) {
-if (this.effectState.source && !this.effectState.source.isActive && pokemon.volatiles['attract']) {
-this.debug('Removing Attract volatile on ' + pokemon);
-pokemon.removeVolatile('attract');
-}
-},
-onBeforeMovePriority: 2,
-onBeforeMove(pokemon, target, move) {
-this.add('-activate', pokemon, 'move: Attract', '[of] ' + this.effectState.source);
-if (this.randomChance(1, 2)) {
-this.add('cant', pokemon, 'Attract');
-return false;
-}
-},
-onEnd(pokemon) {
-this.add('-end', pokemon, 'Attract', '[silent]');
-},
-},
-onTryImmunity(target, source) {
-return (target.gender === 'M' && source.gender === 'F') || (target.gender === 'F' && source.gender === 'M');
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-barrage: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Barrage",
-pp: 1.25,
-priority: 0,
-flags: {bullet: 1, protect: 1, mirror: 1},
-multihit: [1, 6],
-secondary: null,
-target: "randomNormal",
-type: "Normal",
-},
-
-batonpass: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Baton Pass",
-pp: 0.625,
-priority: -2,
-flags: {},
-onTryHit(target) {
-if (!this.canSwitch(target.side) || target.volatiles['commanded']) {
-this.attrLastMove('[still]');
-this.add('-fail', target);
-return this.NOT_FAIL;
-}
-},
-self: {
-onHit(source) {
-source.skipBeforeSwitchOutEventFlag = true;
-},
-},
-selfSwitch: 'copyvolatile',
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-bellydrum: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Belly Drum",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-onHit(target) {
-if (target.hp <= target.maxhp / 2 || target.boosts.atk >= 6 || target.maxhp === 1) { // Shedinja clause
-return false;
-}
-this.directDamage(target.maxhp / 2);
-this.boost({atk: 12}, target);
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-bestow: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Bestow",
-pp: 1.25,
-priority: 0,
-flags: {mirror: 1, bypasssub: 1, allyanim: 1, noassist: 1, failcopycat: 1},
-onHit(target, source, move) {
-if (target.item) {
-return false;
-}
-const myItem = source.takeItem();
-if (!myItem) return false;
-if (!this.singleEvent('TakeItem', myItem, source.itemState, target, source, move, myItem) || !target.setItem(myItem)) {
-source.item = myItem.id;
-return false;
-}
-this.add('-item', target, myItem.name, '[from] move: Bestow', '[of] ' + source);
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-bide: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Bide",
-pp: 1.25,
-priority: 1,
-flags: {contact: 1, protect: 1, nosleeptalk: 1, failinstruct: 1},
-volatileStatus: 'bide',
-ignoreImmunity: true,
-beforeMoveCallback(pokemon) {
-if (pokemon.volatiles['bide']) return true;
-},
-condition: {
-duration: 2,
-onLockMove: 'bide',
-onStart(pokemon) {
-this.effectState.totalDamage = 0;
-this.add('-start', pokemon, 'move: Bide');
-},
-onDamagePriority: -101,
-onDamage(damage, target, source, move) {
-if (!move || move.effectType !== 'Move' || !source) return;
-this.effectState.totalDamage += damage;
-this.effectState.lastDamageSource = source;
-},
-onBeforeMove(pokemon, target, move) {
-if (this.effectState.duration === 1) {
-this.add('-end', pokemon, 'move: Bide');
-target = this.effectState.lastDamageSource;
-if (!target || !this.effectState.totalDamage) {
-this.attrLastMove('[still]');
-this.add('-fail', pokemon);
-return false;
-}
-if (!target.isActive) {
-const possibleTarget = this.getRandomTarget(pokemon, this.dex.moves.get('pound'));
-if (!possibleTarget) {
-this.add('-miss', pokemon);
-return false;
-}
-target = possibleTarget;
-}
-const moveData: Partial<ActiveMove> = {
-id: 'bide' as ID,
-name: "Bide",
-accuracy: 87,
-damage: this.effectState.totalDamage * 2,
-category: "Physical",
-priority: 10,
-flags: {contact: 1, protect: 1},
-effectType: 'Move',
-type: 'Normal',
-};
-this.actions.tryMoveHit(target, pokemon, moveData as ActiveMove);
-pokemon.removeVolatile('bide');
-return false;
-}
-this.add('-activate', pokemon, 'move: Bide');
-},
-onMoveAborted(pokemon) {
-pokemon.removeVolatile('bide');
-},
-onEnd(pokemon) {
-this.add('-end', pokemon, 'move: Bide', '[silent]');
-},
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-bind: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Bind",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
-},
-volatileStatus: 'partiallytrapped',
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-block: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "block",
-pp: 1.25,
-priority: 5,
-flags: {reflectable: 1, mirror: 1},
-secondary: {
-chance: 100,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
-target: "normal",
-type: "Normal",
-},
-
-bodyslam: {
-accuracy: 78,
-basePower: 105,
-category: "Physical",
-name: "Body Slam",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
-secondary: {
-chance: 50,
-status: 'par',
-},
-target: "normal",
-type: "Normal",
-},
-
-boomburst: {
-accuracy: 80,
-basePower: 95,
-category: "Special",
-name: "Boomburst",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-breakneckblitz: {
-accuracy: 91,
-basePower: 40,
-category: "Physical",
-name: "Breakneck Blitz",
-pp: 1.25,
-priority: 3,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-secondary: null,
-target: "randomNormal",
-type: "Normal",
-},
-
-camouflage: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Camouflage",
-pp: 1.25,
-priority: 5,
-flags: {snatch: 1},
-onHit(target) {
-let newType = 'Normal';
-if (this.field.isTerrain('electricterrain')) {
-newType = 'Electric';
-} else if (this.field.isTerrain('grassyterrain')) {
-newType = 'Grass';
-} else if (this.field.isTerrain('mistyterrain')) {
-newType = 'Fairy';
-} else if (this.field.isTerrain('psychicterrain')) {
-newType = 'Psychic';
-}
-if (target.getTypes().join() === newType || !target.setType(newType)) return false;
-this.add('-start', target, 'typechange', newType);
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-captivate: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Captivate",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-onTryImmunity(pokemon, source) {
-return (pokemon.gender === 'M' && source.gender === 'F') || (pokemon.gender === 'F' && source.gender === 'M');
-},
-boosts: {
-atk: -1,
-spa: -1,
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-celebrate: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Celebrate",
-pp: 1.25,
-priority: 0,
-flags: {nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
-type: "Normal",
-},
-
-chipaway: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Chip Away",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-ignoreDefensive: true,
-ignoreEvasion: true,
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-cometpunch: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Comet Punch",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-critRatio: 2,
-multihit: [1, 6],
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-confide: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Confide",
-pp: 1.25,
-priority: 0,
-flags: {reflectable: 1, mirror: 1, sound: 1, bypasssub: 1},
-boosts: {
-atk: -1,
-spa: -1,
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-constrict: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Constrict",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-boosts: {
-spe: -2,
-evasion: -2,
-},
-},
-target: "normal",
-type: "Normal",
-},
-
-conversion: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Conversion",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-onHit(target) {
-const type = this.dex.moves.get(target.moveSlots[0].id).type;
-if (target.hasType(type) || !target.setType(type)) return false;
-this.add('-start', target, 'typechange', type);
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-conversion2: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Conversion 2",
-pp: 1.25,
-priority: 0,
-flags: {bypasssub: 1},
-onHit(target, source) {
-if (!target.lastMoveUsed) {
-return false;
-}
-const possibleTypes = [];
-const attackType = target.lastMoveUsed.type;
-for (const type of this.dex.types.names()) {
-if (source.hasType(type)) continue;
-const typeCheck = this.dex.types.get(type).damageTaken[attackType];
-if (typeCheck === 2 || typeCheck === 3) {
-possibleTypes.push(type);
-}
-}
-if (!possibleTypes.length) {
-return false;
-}
-const randomType = this.sample(possibleTypes);
-if (!source.setType(randomType)) return false;
-this.add('-start', source, 'typechange', randomType);
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-copycat: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Copycat",
-pp: 1.25,
-priority: 0,
-flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
-onHit(pokemon) {
-let move: Move | ActiveMove | null = this.lastMove;
-if (!move) return;
-if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
-if (move.flags['failcopycat'] || move.isZ || move.isMax) {
-return false;
-}
-this.actions.useMove(move.id, pokemon);
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-courtchange: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Court Change",
-pp: 1.25,
-priority: 0,
-flags: {mirror: 1},
-onHitField(target, source) {
-const sideConditions = [
-'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire',
-];
-let success = false;
-if (this.gameType === "freeforall") {
-// random integer from 1-3 inclusive
-const offset = this.random(3) + 1;
-// the list of all sides in counterclockwise order
-const sides = [this.sides[0], this.sides[2]!, this.sides[1], this.sides[3]!];
-const temp: {[k: number]: typeof source.side.sideConditions} = {0: {}, 1: {}, 2: {}, 3: {}};
-for (const side of sides) {
-for (const id in side.sideConditions) {
-if (!sideConditions.includes(id)) continue;
-temp[side.n][id] = side.sideConditions[id];
-delete side.sideConditions[id];
-const effectName = this.dex.conditions.get(id).name;
-this.add('-sideend', side, effectName, '[silent]');
-success = true;
-}
-}
-for (let i = 0; i < 4; i++) {
-const sourceSideConditions = temp[sides[i].n];
-const targetSide = sides[(i + offset) % 4]; // the next side in rotation
-for (const id in sourceSideConditions) {
-targetSide.sideConditions[id] = sourceSideConditions[id];
-const effectName = this.dex.conditions.get(id).name;
-let layers = sourceSideConditions[id].layers || 1;
-for (; layers > 0; layers--) this.add('-sidestart', targetSide, effectName, '[silent]');
-}
-}
-} else {
-const sourceSideConditions = source.side.sideConditions;
-const targetSideConditions = source.side.foe.sideConditions;
-const sourceTemp: typeof sourceSideConditions = {};
-const targetTemp: typeof targetSideConditions = {};
-for (const id in sourceSideConditions) {
-if (!sideConditions.includes(id)) continue;
-sourceTemp[id] = sourceSideConditions[id];
-delete sourceSideConditions[id];
-success = true;
-}
-for (const id in targetSideConditions) {
-if (!sideConditions.includes(id)) continue;
-targetTemp[id] = targetSideConditions[id];
-delete targetSideConditions[id];
-success = true;
-}
-for (const id in sourceTemp) {
-targetSideConditions[id] = sourceTemp[id];
-}
-for (const id in targetTemp) {
-sourceSideConditions[id] = targetTemp[id];
-}
-this.add('-swapsideconditions');
-}
-if (!success) return false;
-this.add('-activate', source, 'move: Court Change');
-},
-secondary: null,
-target: "all",
-type: "Normal",
-},
-
-covet: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Covet",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, failmefirst: 1, noassist: 1, failcopycat: 1},
-onAfterHit(target, source, move) {
-if (source.item || source.volatiles['gem']) {
-return;
-}
-const yourItem = target.takeItem(source);
-if (!yourItem) {
-return;
-}
-if (
-!this.singleEvent('TakeItem', yourItem, target.itemState, source, target, move, yourItem) ||
-!source.setItem(yourItem)
-) {
-target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
-return;
-}
-this.add('-item', source, yourItem, '[from] move: Covet', '[of] ' + target);
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-crushclaw: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Crush Claw",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-boosts: {
-spd: -1,
-def: -1,
-},
-},
-target: "normal",
-type: "Normal",
-},
-
-crushgrip: {
-accuracy: 87,
-basePower: 60,
-basePowerCallback(pokemon, target) {
-const hp = target.hp;
-const maxHP = target.maxhp;
-const bp = Math.floor(Math.floor((120 * (100 * Math.floor(hp * 4096 / maxHP)) + 2048 - 1) / 4096) / 100) || 1;
-this.debug('BP for ' + hp + '/' + maxHP + " HP: " + bp);
-return bp;
-},
-category: "Physical",
-name: "Crush Grip",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-cut: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Cut",
-pp: 1.25,
-priority: 0,
-critRatio: 3,
-flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-defensecurl: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Defense Curl",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-spd: 1,
-def: 1,
-evasion: -1,
-spe: -1,
-},
-volatileStatus: 'defensecurl',
-condition: {
-noCopy: true,
-onRestart: () => null,
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-disable: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Disable",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
-volatileStatus: 'disable',
-onTryHit(target) {
-if (!target.lastMove || target.lastMove.isZ || target.lastMove.isMax || target.lastMove.id === 'struggle') {
-return false;
-}
-},
-condition: {
-duration: 5,
-noCopy: true, // doesn't get copied by Baton Pass
-onStart(pokemon, source, effect) {
-// The target hasn't taken its turn, or Cursed Body activated and the move was not used through Dancer or Instruct
-if (
-this.queue.willMove(pokemon) ||
-(pokemon === this.activePokemon && this.activeMove && !this.activeMove.isExternal)
-) {
-this.effectState.duration--;
-}
-if (!pokemon.lastMove) {
-this.debug(`Pokemon hasn't moved yet`);
-return false;
-}
-for (const moveSlot of pokemon.moveSlots) {
-if (moveSlot.id === pokemon.lastMove.id) {
-if (!moveSlot.pp) {
-this.debug('Move out of PP');
-return false;
-}
-}
-}
-if (effect.effectType === 'Ability') {
-this.add('-start', pokemon, 'Disable', pokemon.lastMove.name, '[from] ability: Cursed Body', '[of] ' + source);
-} else {
-this.add('-start', pokemon, 'Disable', pokemon.lastMove.name);
-}
-this.effectState.move = pokemon.lastMove.id;
-},
-onResidualOrder: 17,
-onEnd(pokemon) {
-this.add('-end', pokemon, 'Disable');
-},
-onBeforeMovePriority: 7,
-onBeforeMove(attacker, defender, move) {
-if (!move.isZ && move.id === this.effectState.move) {
-this.add('cant', attacker, 'Disable', move);
-return false;
-}
-},
-onDisableMove(pokemon) {
-for (const moveSlot of pokemon.moveSlots) {
-if (moveSlot.id === this.effectState.move) {
-pokemon.disableMove(moveSlot.id);
-}
-}
-},
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-dizzypunch: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Dizzy Punch",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-secondary: {
-chance: 33,
-volatileStatus: 'confusion',
-},
-target: "normal",
-type: "Normal",
-},
-
-doodle: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Doodle",
-pp: 1.25,
-priority: 0,
-flags: {},
-onHit(target, source, move) {
-let success: boolean | null = false;
-for (const pokemon of source.alliesAndSelf()) {
-if (pokemon.ability === target.ability) continue;
-const oldAbility = pokemon.setAbility(target.ability);
-if (oldAbility) {
-this.add('-ability', pokemon, target.getAbility().name, '[from] move: Doodle');
-success = true;
-} else if (!success && oldAbility === null) {
-success = null;
-}
-}
-if (!success) {
-if (success === false) {
-this.add('-fail', source);
-}
-this.attrLastMove('[still]');
-return this.NOT_FAIL;
-}
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-doubleedge: {
-accuracy: 65,
-basePower: 140,
-category: "Physical",
-name: "Double-Edge",
-pp: 0.625,
-priority: -2,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [33, 100],
-hasCrashDamage: true,
-onMoveFail(target, source, move) {
-this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-doublehit: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Double Hit",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-multihit: [2, 4],
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-doubleslap: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Double Slap",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-multihit: [1, 6],
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-doubleteam: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Double Team",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-spe: 2,
-evasion: 2,
-accuracy: -2,
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-echoedvoice: {
-accuracy: 89,
-basePower: 50,
-basePowerCallback(pokemon, target, move) {
-let bp = move.basePower;
-if (this.field.pseudoWeather.echoedvoice) {
-bp = move.basePower * this.field.pseudoWeather.echoedvoice.multiplier;
-}
-this.debug('BP: ' + move.basePower);
-return bp;
-},
-category: "Special",
-name: "Echoed Voice",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-onTry() {
-this.field.addPseudoWeather('echoedvoice');
-},
-condition: {
-duration: 2,
-onFieldStart() {
-this.effectState.multiplier = 1;
-},
-onFieldRestart() {
-if (this.effectState.duration !== 2) {
-this.effectState.duration = 2;
-if (this.effectState.multiplier < 5) {
-this.effectState.multiplier++;
-}
-}
-},
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-eggbomb: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Egg Bomb",
-pp: 1.25,
-priority: 0,
-flags: {bullet: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-encore: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Encore",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, failencore: 1},
-volatileStatus: 'encore',
-condition: {
-duration: 3,
-noCopy: true, // doesn't get copied by Z-Baton Pass
-onStart(target) {
-let move: Move | ActiveMove | null = target.lastMove;
-if (!move || target.volatiles['dynamax']) return false;
-if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
-const moveIndex = target.moves.indexOf(move.id);
-if (move.isZ || move.flags['failencore'] || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
-// it failed
-return false;
-}
-this.effectState.move = move.id;
-this.add('-start', target, 'Encore');
-if (!this.queue.willMove(target)) {
-this.effectState.duration++;
-}
-},
-onOverrideAction(pokemon, target, move) {
-if (move.id !== this.effectState.move) return this.effectState.move;
-},
-onResidualOrder: 16,
-onResidual(target) {
-if (target.moves.includes(this.effectState.move) &&
-target.moveSlots[target.moves.indexOf(this.effectState.move)].pp <= 0) {
-// early termination if you run out of PP
-target.removeVolatile('encore');
-}
-},
-onEnd(target) {
-this.add('-end', target, 'Encore');
-},
-onDisableMove(pokemon) {
-if (!this.effectState.move || !pokemon.hasMove(this.effectState.move)) {
-return;
-}
-for (const moveSlot of pokemon.moveSlots) {
-if (moveSlot.id !== this.effectState.move) {
-pokemon.disableMove(moveSlot.id);
-}
-}
-},
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-endeavor: {
-accuracy: 87,
-basePower: 60,
-damageCallback(pokemon, target) {
-return target.getUndynamaxedHP() - pokemon.hp;
-},
-category: "Physical",
-name: "Endeavor",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, noparentalbond: 1},
-onTryImmunity(target, pokemon) {
-return pokemon.hp < target.hp;
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-endure: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Endure",
-pp: 1.25,
-priority: 4,
-flags: {noassist: 1, failcopycat: 1},
-stallingMove: true,
-volatileStatus: 'endure',
-onPrepareHit(pokemon) {
-return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
-},
-onHit(pokemon) {
-pokemon.addVolatile('stall');
-},
-condition: {
-duration: 1,
-onStart(target) {
-this.add('-singleturn', target, 'move: Endure');
-},
-onDamagePriority: -10,
-onDamage(damage, target, source, effect) {
-if (effect?.effectType === 'Move' && damage >= target.hp) {
-this.add('-activate', target, 'move: Endure');
-return target.hp - 1;
-}
-},
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-entrainment: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Entrainment",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
-onTryHit(target, source) {
-if (target === source || target.volatiles['dynamax']) return false;
-const additionalBannedSourceAbilities = [
-// Zen Mode included here for compatability with Gen 5-6
-'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode',
-];
-if (
-target.ability === source.ability ||
-target.getAbility().isPermanent || target.ability === 'truant' ||
-source.getAbility().isPermanent || additionalBannedSourceAbilities.includes(source.ability)
-) {
-return false;
-}
-},
-onHit(target, source) {
-const oldAbility = target.setAbility(source.ability);
-if (oldAbility) {
-this.add('-ability', target, target.getAbility().name, '[from] move: Entrainment');
-if (!target.isAlly(source)) target.volatileStaleness = 'external';
-return;
-}
-return oldAbility as false | null;
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-explosion: {
-accuracy: 150,
-basePower: 250,
-category: "Physical",
-name: "Explosion",
-pp: 0.625,
-priority: 0,
-flags: {protect: 1, mirror: 1, noparentalbond: 1},
-selfdestruct: "always",
-critRatio: 4,
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-extremeevoboost: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Extreme Evoboost",
-pp: 0.625,
-priority: 0,
-flags: {},
-boosts: {
-atk: 2,
-def: 2,
-spa: 2,
-spd: 2,
-spe: -2,
-evasion: -4,
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-extremespeed: {
-accuracy: 65,
-basePower: 140,
-category: "Physical",
-name: "Extreme Speed",
-pp: 0.625,
-priority: -2,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [33, 100],
-hasCrashDamage: true,
-onMoveFail(target, source, move) {
-this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
-},
-boosts: {
-spe: 2,
-accuracy: -2,
-evasion: 2,
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-facade: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Facade",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-onBasePower(basePower, pokemon) {
-if (pokemon.status && pokemon.status !== 'slp') {
-return this.chainModify(2);
-}
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-fakeout: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Fake Out",
-pp: 1.25,
-priority: 5,
-flags: {contact: 1, protect: 1, mirror: 1},
-onTry(source) {
-if (source.activeMoveActions > 1) {
-this.hint("Fake Out only works on your first turn out.");
-return false;
-}
-},
-secondary: {
-chance: 95,
-volatileStatus: 'flinch',
-},
-target: "normal",
-type: "Normal",
-},
-
-falseswipe: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "False Swipe",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-onDamagePriority: -20,
-onDamage(damage, target, source, effect) {
-if (damage >= target.hp) return target.hp - 1;
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-feint: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Feint",
-pp: 1.25,
-priority: 2,
-flags: {mirror: 1, noassist: 1, failcopycat: 1},
-breaksProtect: true,
-// Breaking protection implemented in scripts.js
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-filletaway: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Fillet Away",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-onTry(source) {
-if (source.hp <= source.maxhp / 2 || source.maxhp === 1) return false;
-},
-onTryHit(pokemon, target, move) {
-if (!this.boost(move.boosts as SparseBoostsTable)) return null;
-delete move.boosts;
-},
-onHit(pokemon) {
-this.directDamage(pokemon.maxhp / 2);
-},
-boosts: {
-atk: 2,
-spa: 2,
-spe: 2,
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-flail: {
-accuracy: 72,
-basePower: 115,
-basePowerCallback(pokemon, target) {
-const ratio = Math.max(Math.floor(pokemon.hp * 48 / pokemon.maxhp), 1);
-let bp;
-if (ratio < 2) {
-bp = 150;
-} else if (ratio < 5) {
-bp = 125;
-} else if (ratio < 10) {
-bp = 100;
-} else if (ratio < 17) {
-bp = 75;
-} else if (ratio < 33) {
-bp = 50;
-} else {
-bp = 25;
-}
-this.debug('BP: ' + bp);
-return bp;
-},
-category: "Physical",
-name: "Flail",
-pp: 0.625,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-flash: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Flash",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-boosts: {
-accuracy: -2,
-},
-secondary: null,
-target: "any",
-type: "Normal",
-},
-
-focusenergy: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Focus Energy",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-volatileStatus: 'focusenergy',
-condition: {
-onStart(target, source, effect) {
-if (effect?.id === 'zpower') {
-this.add('-start', target, 'move: Focus Energy', '[zeffect]');
-} else if (effect && (['costar', 'imposter', 'psychup', 'transform'].includes(effect.id))) {
-this.add('-start', target, 'move: Focus Energy', '[silent]');
-} else {
-this.add('-start', target, 'move: Focus Energy');
-}
-},
-onModifyCritRatio(critRatio) {
-return critRatio + 2;
-},
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-followme: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Follow Me",
-pp: 1.25,
-priority: 2,
-flags: {noassist: 1, failcopycat: 1},
-volatileStatus: 'followme',
-onTry(source) {
-return this.activePerHalf > 1;
-},
-condition: {
-duration: 1,
-onStart(target, source, effect) {
-if (effect?.id === 'zpower') {
-this.add('-singleturn', target, 'move: Follow Me', '[zeffect]');
-} else {
-this.add('-singleturn', target, 'move: Follow Me');
-}
-},
-onFoeRedirectTargetPriority: 1,
-onFoeRedirectTarget(target, source, source2, move) {
-if (!this.effectState.target.isSkyDropped() && this.validTarget(this.effectState.target, source, move.target)) {
-if (move.smartTarget) move.smartTarget = false;
-this.debug("Follow Me redirected target of move");
-return this.effectState.target;
-}
-},
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-foresight: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Foresight",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
-volatileStatus: 'foresight',
-onTryHit(target) {
-if (target.volatiles['miracleeye']) return false;
-},
-condition: {
-noCopy: true,
-onStart(pokemon) {
-this.add('-start', pokemon, 'Foresight');
-},
-onNegateImmunity(pokemon, type) {
-if (pokemon.hasType('Ghost') && ['Normal', 'Fighting'].includes(type)) return false;
-},
-onModifyBoost(boosts) {
-if (boosts.evasion && boosts.evasion > 0) {
-boosts.evasion = 0;
-}
-},
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-frustration: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Frustration",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-furyattack: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Fury Attack",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-multihit: [1, 6],
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-furyswipes: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Fury Swipes",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-multihit: [1, 6],
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-gigaimpact: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Giga Impact",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, recharge: 1, protect: 1, mirror: 1},
-self: {
-volatileStatus: 'mustrecharge',
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-glare: {
-accuracy: 75,
-basePower: 5,
-category: "Status",
-name: "Glare",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-status: 'par',
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-growl: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Growl",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1},
-boosts: {
-atk: -1,
-spa: -1,
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-growth: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Growth",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-onModifyMove(move, pokemon) {
-if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) move.boosts = {atk: 2, spa: 2};
-},
-boosts: {
-atk: 2,
-spa: 2,
-spd: 2,
-def: 2,
-spe: -2,
-evasion: -2,
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-guillotine: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Guillotine",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-ohko: true,
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-happyhour: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Happy Hour",
-pp: 1.25,
-priority: 0,
-flags: {},
-onTryHit(target, source) {
-this.add('-activate', target, 'move: Happy Hour');
-},
-secondary: null,
-target: "allySide",
-type: "Normal",
-},
-
-harden: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Harden",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-spd: 1,
-def: 1,
-evasion: -1,
-spe: -1,
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-headbutt: {
-accuracy: 95,
-basePower: 45,
-category: "Physical",
-name: "Headbutt",
-pp: 0.625,
-priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [25, 100],
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-target: "normal",
-type: "Normal",
-},
-
-headcharge: {
-accuracy: 65,
-basePower: 140,
-category: "Physical",
-name: "Head Charge",
-pp: 0.625,
-priority: -2,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [33, 100],
-hasCrashDamage: true,
-onMoveFail(target, source, move) {
-this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-healbell: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Heal Bell",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, sound: 1, distance: 1, bypasssub: 1},
-onHit(target, source) {
-this.add('-activate', source, 'move: Heal Bell');
-let success = false;
-const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
-for (const ally of allies) {
-if (ally !== source && ally.hasAbility('soundproof')) continue;
-if (ally.cureStatus()) success = true;
-}
-return success;
-},
-target: "allyTeam",
-type: "Normal",
-},
-
-helpinghand: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Helping Hand",
-pp: 1.25,
-priority: 10,
-flags: {bypasssub: 1, noassist: 1, failcopycat: 1},
-volatileStatus: 'helpinghand',
-onTryHit(target) {
-if (!target.newlySwitched && !this.queue.willMove(target)) return false;
-},
-condition: {
-duration: 1,
-onStart(target, source) {
-this.effectState.multiplier = 1.75;
-this.add('-singleturn', target, 'Helping Hand', '[of] ' + source);
-},
-onRestart(target, source) {
-this.effectState.multiplier *= 1.75;
-this.add('-singleturn', target, 'Helping Hand', '[of] ' + source);
-},
-onBasePowerPriority: 10,
-onBasePower(basePower) {
-this.debug('Boosting from Helping Hand: ' + this.effectState.multiplier);
-return this.chainModify(this.effectState.multiplier);
-},
-},
-secondary: null,
-target: "adjacentAlly",
-type: "Normal",
-},
-
-holdback: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Hold Back",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-onDamagePriority: -20,
-onDamage(damage, target, source, effect) {
-if (damage >= target.hp) return target.hp - 1;
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-holdhands: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Hold Hands",
-pp: 1.25,
-priority: 0,
-flags: {bypasssub: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
-secondary: null,
-target: "randomNormal",
-type: "Normal",
-},
-
-hornattack: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Horn Attack",
-pp: 0.625,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-horndrill: {
-accuracy: 68,
-basePower: 135,
-category: "Physical",
-name: "Horn Drill",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1},
-ohko: true,
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-howl: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Howl",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, sound: 1},
-boosts: {
-atk: 1,
-spa: 1,
-accuracy: 1,
-evasion: -1,
-spd: -1,
-def: -1,
-},
-secondary: null,
-target: "allies",
-type: "Normal",
-},
-
-hyperbeam: {
-accuracy: 70,
-basePower: 125,
-category: "Special",
-name: "Hyper Beam",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-self: {
-boosts: {
-atk: 1,
-spa: 1,
-accuracy: -1,
-evasion: -1,
-},
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-hyperdrill: {
-accuracy: 60,
-basePower: 200,
-category: "Physical",
-name: "Hyper Drill",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, mirror: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-hyperfang: {
-accuracy: 95,
-basePower: 45,
-category: "Physical",
-name: "Hyper Fang",
-pp: 0.625,
-priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [25, 100],
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-target: "normal",
-type: "Normal",
-},
-
-hypervoice: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Hyper Voice",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-judgment: {
-accuracy: 82,
-basePower: 85,
-category: "Special",
-name: "Judgment",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onModifyType(move, pokemon) {
-if (pokemon.ignoringItem()) return;
-const item = pokemon.getItem();
-if (item.id && item.onPlate && !item.zMove) {
-move.type = item.onPlate;
-}
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-laserfocus: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Laser Focus",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-volatileStatus: 'laserfocus',
-condition: {
-duration: 2,
-onStart(pokemon, source, effect) {
-if (effect && (['costar', 'imposter', 'psychup', 'transform'].includes(effect.id))) {
-this.add('-start', pokemon, 'move: Laser Focus', '[silent]');
-} else {
-this.add('-start', pokemon, 'move: Laser Focus');
-}
-},
-onRestart(pokemon) {
-this.effectState.duration = 2;
-this.add('-start', pokemon, 'move: Laser Focus');
-},
-onModifyCritRatio(critRatio) {
-return 5;
-},
-onEnd(pokemon) {
-this.add('-end', pokemon, 'move: Laser Focus', '[silent]');
-},
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-lastresort: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Last Resort",
-pp: 0.625,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1},
-onTry(source) {
-if (source.moveSlots.length < 2) return false; // Last Resort fails unless the user knows at least 2 moves
-let hasLastResort = false; // User must actually have Last Resort for it to succeed
-for (const moveSlot of source.moveSlots) {
-if (moveSlot.id === 'lastresort') {
-hasLastResort = true;
-continue;
-}
-if (!moveSlot.used) return false;
-}
-return hasLastResort;
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-leer: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Leer",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-boosts: {
-def: -1,
-spd: -1,
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-lockon: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Lock-On",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onTryHit(target, source) {
-if (source.volatiles['lockon']) return false;
-},
-onHit(target, source) {
-source.addVolatile('lockon', target);
-this.add('-activate', source, 'move: Lock-On', '[of] ' + target);
-},
-condition: {
-noCopy: true, // doesn't get copied by Baton Pass
-duration: 2,
-onSourceInvulnerabilityPriority: 1,
-onSourceInvulnerability(target, source, move) {
-if (move && source === this.effectState.target && target === this.effectState.source) return 0;
-},
-onSourceAccuracy(accuracy, target, source, move) {
-if (move && source === this.effectState.target && target === this.effectState.source) return true;
-},
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-lovelykiss: {
-accuracy: 125,
-basePower: 33,
-category: "Physical",
-name: "Lovely Kiss",
-pp: 1.25,
-priority: 4,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-status: 'slp',
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-luckychant: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Lucky Chant",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-sideCondition: 'luckychant',
-condition: {
-duration: 5,
-onSideStart(side) {
-this.add('-sidestart', side, 'move: Lucky Chant'); // "The Lucky Chant shielded [side.name]'s team from critical hits!"
-},
-onCriticalHit: false,
-onSideResidualOrder: 26,
-onSideResidualSubOrder: 6,
-onSideEnd(side) {
-this.add('-sideend', side, 'move: Lucky Chant'); // "[side.name]'s team's Lucky Chant wore off!"
-},
-},
-secondary: null,
-target: "allySide",
-type: "Normal",
-},
-
-meanlook: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Mean Look",
-pp: 1.25,
-priority: 0,
-flags: {reflectable: 1, mirror: 1},
-onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
-},
-volatileStatus: 'trapped',
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-mefirst: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Me First",
-pp: 1.25,
-priority: -1,
-flags: {
-protect: 1, bypasssub: 1,
-failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
-},
-onTryHit(target, pokemon) {
-const action = this.queue.willMove(target);
-if (!action) return false;
-const move = this.dex.getActiveMove(action.move.id);
-if (action.zmove || move.isZ || move.isMax) return false;
-if (target.volatiles['mustrecharge']) return false;
-if (move.category === 'Status' || move.flags['failmefirst']) return false;
-pokemon.addVolatile('mefirst');
-this.actions.useMove(move, pokemon, target);
-return null;
-},
-condition: {
-duration: 1,
-onBasePowerPriority: 12,
-onBasePower(basePower) {
-return this.chainModify(1.5);
-},
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-megakick: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Mega Kick",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-megapunch: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Mega Punch",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-metronome: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Metronome",
-pp: 1.25,
-priority: 0,
-flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
-onHit(target, source, effect) {
-const moves = this.dex.moves.all().filter(move => (
-(![2, 4].includes(this.gen) || !source.moves.includes(move.id)) &&
-!move.realMove && !move.isZ && !move.isMax &&
-!effect.noMetronome!.includes(move.name)
-));
-let randomMove = '';
-if (moves.length) {
-moves.sort((a, b) => a.num - b.num);
-randomMove = this.sample(moves).id;
-}
-if (!randomMove) return false;
-source.side.lastSelectedMove = this.toID(randomMove);
-this.actions.useMove(randomMove, target);
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-milkdrink: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Milk Drink",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, heal: 1},
-heal: [33, 100],
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-mimic: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Mimic",
-pp: 1.25,
-priority: 0,
-flags: {
-protect: 1, bypasssub: 1, allyanim: 1,
-failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
-},
-onHit(target, source) {
-const move = target.lastMove;
-if (source.transformed || !move || move.flags['failmimic'] || source.moves.includes(move.id)) {
-return false;
-}
-if (move.isZ || move.isMax) return false;
-const mimicIndex = source.moves.indexOf('mimic');
-if (mimicIndex < 0) return false;
-source.moveSlots[mimicIndex] = {
-move: move.name,
-id: move.id,
-pp: move.pp,
-maxpp: move.pp,
-target: move.target,
-disabled: false,
-used: false,
-virtual: true,
-};
-this.add('-start', source, 'Mimic', move.name);
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-mindreader: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Mind Reader",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onTryHit(target, source) {
-if (source.volatiles['lockon']) return false;
-},
-onHit(target, source) {
-source.addVolatile('lockon', target);
-this.add('-activate', source, 'move: Mind Reader', '[of] ' + target);
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-minimize: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Minimize",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-volatileStatus: 'minimize',
-condition: {
-noCopy: true,
-onRestart: () => null,
-onSourceModifyDamage(damage, source, target, move) {
-const boostedMoves = [
-'stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'heatcrash', 'heavyslam', 'maliciousmoonsault',
-];
-if (boostedMoves.includes(move.id)) {
-return this.chainModify(2);
-}
-},
-onAccuracy(accuracy, target, source, move) {
-const boostedMoves = [
-'stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'heatcrash', 'heavyslam', 'maliciousmoonsault',
-];
-if (boostedMoves.includes(move.id)) {
-return true;
-}
-return accuracy;
-},
-},
-boosts: {
-evasion: 3,
-spe: 3,
-spd: -10,
-def: -10,
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-morningsun: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Morning Sun",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, heal: 1},
-onHit(pokemon) {
-let factor = 0.5;
-switch (pokemon.effectiveWeather()) {
-case 'sunnyday':
-case 'desolateland':
-factor = 0.667;
-break;
-case 'raindance':
-case 'primordialsea':
-case 'sandstorm':
-case 'hail':
-case 'snow':
-factor = 0.25;
-break;
-}
-const success = !!this.heal(this.modify(pokemon.maxhp, factor));
-if (!success) {
-this.add('-fail', pokemon, 'heal');
-return this.NOT_FAIL;
-}
-return success;
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-multiattack: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Multi-Attack",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1},
-onModifyType(move, pokemon) {
-if (pokemon.ignoringItem()) return;
-move.type = this.runEvent('Memory', pokemon, null, move, 'Normal');
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-naturalgift: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Natural Gift",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onModifyType(move, pokemon) {
-if (pokemon.ignoringItem()) return;
-const item = pokemon.getItem();
-if (!item.naturalGift) return;
-move.type = item.naturalGift.type;
-},
-onPrepareHit(target, pokemon, move) {
-if (pokemon.ignoringItem()) return false;
-const item = pokemon.getItem();
-if (!item.naturalGift) return false;
-move.basePower = item.naturalGift.basePower;
-this.debug('BP: ' + move.basePower);
-pokemon.setItem('');
-pokemon.lastItem = item.id;
-pokemon.usedItemThisTurn = true;
-this.runEvent('AfterUseItem', pokemon, null, null, item);
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-naturepower: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Nature Power",
-pp: 1.25,
-priority: 0,
-flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
-onTryHit(target, pokemon) {
-let move = 'triattack';
-if (this.field.isTerrain('electricterrain')) {
-move = 'thunderbolt';
-} else if (this.field.isTerrain('grassyterrain')) {
-move = 'energyball';
-} else if (this.field.isTerrain('mistyterrain')) {
-move = 'moonblast';
-} else if (this.field.isTerrain('psychicterrain')) {
-move = 'psychic';
-}
-this.actions.useMove(move, pokemon, target);
-return null;
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-nobleroar: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Noble Roar",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1},
-boosts: {
-atk: -1,
-spa: -1,
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-odorsleuth: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Odor Sleuth",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, allyanim: 1},
-volatileStatus: 'foresight',
-onTryHit(target) {
-if (target.volatiles['miracleeye']) return false;
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-painsplit: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Pain Split",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, allyanim: 1},
-onHit(target, pokemon) {
-const targetHP = target.getUndynamaxedHP();
-const averagehp = Math.floor((targetHP + pokemon.hp) / 2) || 1;
-const targetChange = targetHP - averagehp;
-target.sethp(target.hp - targetChange);
-this.add('-sethp', target, target.getHealth, '[from] move: Pain Split', '[silent]');
-pokemon.sethp(averagehp);
-this.add('-sethp', pokemon, pokemon.getHealth, '[from] move: Pain Split');
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-payday: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Pay Day",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-perishsong: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Perish Song",
-pp: 1.25,
-priority: 0,
-flags: {sound: 1, distance: 1, bypasssub: 1},
-onHitField(target, source, move) {
-let result = false;
-let message = false;
-for (const pokemon of this.getAllActive()) {
-if (this.runEvent('Invulnerability', pokemon, source, move) === false) {
-this.add('-miss', source, pokemon);
-result = true;
-} else if (this.runEvent('TryHit', pokemon, source, move) === null) {
-result = true;
-} else if (!pokemon.volatiles['perishsong']) {
-pokemon.addVolatile('perishsong');
-this.add('-start', pokemon, 'perish3', '[silent]');
-result = true;
-message = true;
-}
-}
-if (!result) return false;
-if (message) this.add('-fieldactivate', 'move: Perish Song');
-},
-condition: {
-duration: 3,
-onEnd(target) {
-this.add('-start', target, 'perish0');
-target.faint();
-},
-onResidualOrder: 24,
-onResidual(pokemon) {
-const duration = pokemon.volatiles['perishsong'].duration;
-this.add('-start', pokemon, 'perish' + duration);
-},
-},
-secondary: null,
-target: "all",
-type: "Normal",
-},
-
-playnice: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Play Nice",
-pp: 1.25,
-priority: 0,
-flags: {reflectable: 1, mirror: 1, bypasssub: 1},
-boosts: {
-atk: -1,
-spa: -1,
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-populationbomb: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Population Bomb",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
-multihit: [1, 25],
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-pound: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Pound",
-pp: 0.625,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-powershift: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Power Shift",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-volatileStatus: 'powershift',
-condition: {
-onStart(pokemon) {
-this.add('-start', pokemon, 'Power Shift');
-[pokemon.storedStats.atk, pokemon.storedStats.spa,
-pokemon.storedStats.def, pokemon.storedStats.spd] =
-[pokemon.storedStats.def, pokemon.storedStats.spd,
-pokemon.storedStats.atk, pokemon.storedStats.spa];
-},
-onCopy(pokemon) {
-[pokemon.storedStats.atk, pokemon.storedStats.spa,
-pokemon.storedStats.def, pokemon.storedStats.spd] =
-[pokemon.storedStats.def, pokemon.storedStats.spd,
-pokemon.storedStats.atk, pokemon.storedStats.spa];
-},
-onEnd(pokemon) {
-this.add('-end', pokemon, 'Power Shift');
-[pokemon.storedStats.atk, pokemon.storedStats.spa,
-pokemon.storedStats.def, pokemon.storedStats.spd] =
-[pokemon.storedStats.def, pokemon.storedStats.spd,
-pokemon.storedStats.atk, pokemon.storedStats.spa];
-},
-onRestart(pokemon) {
-pokemon.removeVolatile('Power Shift');
-},
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-present: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Present",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onModifyMove(move, pokemon, target) {
-const rand = this.random(10);
-if (rand < 2) {
-move.heal = [1, 4];
-move.infiltrates = true;
-} else if (rand < 6) {
-move.basePower = 50;
-} else if (rand < 9) {
-move.basePower = 100;
-} else {
-move.basePower = 150;
-}
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-protect: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Protect",
-pp: 1.25,
-priority: 4,
-flags: {noassist: 1, failcopycat: 1},
-stallingMove: true,
-volatileStatus: 'protect',
-onPrepareHit(pokemon) {
-return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
-},
-onHit(pokemon) {
-pokemon.addVolatile('stall');
-},
-condition: {
-duration: 1,
-onStart(target) {
-this.add('-singleturn', target, 'Protect');
-},
-onTryHitPriority: 3,
-onTryHit(target, source, move) {
-if (!move.flags['protect']) {
-if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
-if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
-return;
-}
-if (move.smartTarget) {
-move.smartTarget = false;
-} else {
-this.add('-activate', target, 'move: Protect');
-}
-const lockedmove = source.getVolatile('lockedmove');
-if (lockedmove) {
-// Outrage counter is reset
-if (source.volatiles['lockedmove'].duration === 2) {
-delete source.volatiles['lockedmove'];
-}
-}
-return this.NOT_FAIL;
-},
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-psychup: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Psych Up",
-pp: 1.25,
-priority: 0,
-flags: {bypasssub: 1, allyanim: 1},
-onHit(target, source) {
-let i: BoostID;
-for (i in target.boosts) {
-source.boosts[i] = target.boosts[i];
-}
-const volatilesToCopy = ['focusenergy', 'gmaxchistrike', 'laserfocus'];
-for (const volatile of volatilesToCopy) {
-if (target.volatiles[volatile]) {
-source.addVolatile(volatile);
-if (volatile === 'gmaxchistrike') source.volatiles[volatile].layers = target.volatiles[volatile].layers;
-} else {
-source.removeVolatile(volatile);
-}
-}
-this.add('-copyboost', source, target, '[from] move: Psych Up');
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-pulverizingpancake: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Pulverizing Pancake",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-quickattack: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Quick Attack",
-pp: 1.25,
-priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "randomNormal",
-type: "Normal",
-},
-
-rage: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Rage",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-self: {
-volatileStatus: 'rage',
-},
-condition: {
-onStart(pokemon) {
-this.add('-singlemove', pokemon, 'Rage');
-},
-onHit(target, source, move) {
-if (target !== source && move.category !== 'Status') {
-this.boost({atk: 2});
-}
-},
-onBeforeMovePriority: 100,
-onBeforeMove(pokemon) {
-this.debug('removing Rage before attack');
-pokemon.removeVolatile('rage');
-},
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-ragingbull: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Raging Bull",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-onTryHit(pokemon) {
-// will shatter screens through sub, before you hit
-pokemon.side.removeSideCondition('reflect');
-pokemon.side.removeSideCondition('lightscreen');
-pokemon.side.removeSideCondition('auroraveil');
-},
-onModifyType(move, pokemon) {
-switch (pokemon.species.name) {
-case 'Tauros-Paldea-Combat':
-move.type = 'Fighting';
-break;
-case 'Tauros-Paldea-Blaze':
-move.type = 'Fire';
-break;
-case 'Tauros-Paldea-Aqua':
-move.type = 'Water';
-break;
-}
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-rapidspin: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Rapid Spin",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-onAfterHit(target, pokemon) {
-if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
-this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + pokemon);
-}
-const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
-for (const condition of sideConditions) {
-if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
-this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
-}
-}
-if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
-pokemon.removeVolatile('partiallytrapped');
-}
-},
-onAfterSubDamage(damage, target, pokemon) {
-if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
-this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + pokemon);
-}
-const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
-for (const condition of sideConditions) {
-if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
-this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
-}
-}
-if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
-pokemon.removeVolatile('partiallytrapped');
-}
-},
-secondary: {
-chance: 100,
-self: {
-boosts: {
-spe: 1,
-evasion: 1,
-accuracy: -1,
-},
-},
-},
-target: "normal",
-type: "Normal",
-},
-
-razorwind: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Razor Wind",
-pp: 1.25,
-priority: 0,
-flags: {charge: 1, protect: 1, mirror: 1, nosleeptalk: 1, failinstruct: 1},
-onTryMove(attacker, defender, move) {
-if (attacker.removeVolatile(move.id)) {
-return;
-}
-this.add('-prepare', attacker, move.name);
-if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-return;
-}
-attacker.addVolatile('twoturnmove', defender);
-return null;
-},
-critRatio: 3,
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-recover: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Recover",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, heal: 1},
-heal: [33, 100],
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-recycle: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Recycle",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-onHit(pokemon) {
-if (pokemon.item || !pokemon.lastItem) return false;
-const item = pokemon.lastItem;
-pokemon.lastItem = '';
-this.add('-item', pokemon, this.dex.items.get(item), '[from] move: Recycle');
-pokemon.setItem(item);
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-reflecttype: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Reflect Type",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, bypasssub: 1, allyanim: 1},
-onHit(target, source) {
-if (source.species && (source.species.num === 493 || source.species.num === 773)) return false;
-if (source.terastallized) return false;
-const oldApparentType = source.apparentType;
-let newBaseTypes = target.getTypes(true).filter(type => type !== '???');
-if (!newBaseTypes.length) {
-if (target.addedType) {
-newBaseTypes = ['Normal'];
-} else {
-return false;
-}
-}
-this.add('-start', source, 'typechange', '[from] move: Reflect Type', '[of] ' + target);
-source.setType(newBaseTypes);
-source.addedType = target.addedType;
-source.knownType = target.isAlly(source) && target.knownType;
-if (!source.knownType) source.apparentType = oldApparentType;
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-refresh: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Refresh",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-onHit(pokemon) {
-if (['', 'slp', 'frz'].includes(pokemon.status)) return false;
-pokemon.cureStatus();
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-relicsong: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Relic Song",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-secondary: {
-chance: 33,
-status: 'slp',
-},
-onHit(target, pokemon, move) {
-if (pokemon.baseSpecies.baseSpecies === 'Meloetta' && !pokemon.transformed) {
-move.willChangeForme = true;
-}
-},
-onAfterMoveSecondarySelf(pokemon, target, move) {
-if (move.willChangeForme) {
-const meloettaForme = pokemon.species.id === 'meloettapirouette' ? '' : '-Pirouette';
-pokemon.formeChange('Meloetta' + meloettaForme, this.effect, false, '[msg]');
-}
-},
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-retaliate: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Retaliate",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-onBasePower(basePower, pokemon) {
-if (pokemon.side.faintedLastTurn) {
-this.debug('Boosted for a faint last turn');
-return this.chainModify(2);
-}
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-return: {
-accuracy: 87,
-basePower: 60,
-basePowerCallback(pokemon) {
-return Math.floor((pokemon.happiness * 10) / 25) || 1;
-},
-category: "Physical",
-name: "Return",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-revelationdance: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Revelation Dance",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, dance: 1},
-onModifyType(move, pokemon) {
-let type = pokemon.getTypes()[0];
-if (type === "Bird") type = "???";
-move.type = type;
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-revivalblessing: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Revival Blessing",
-pp: 0.625,
-noPPBoosts: true,
-priority: 10,
-flags: {},
-onTryHit(source) {
-if (!source.side.pokemon.filter(ally => ally.fainted).length) {
-return false;
-}
-},
-slotCondition: 'revivalblessing',
-// No this not a real switchout move
-// This is needed to trigger a switch protocol to choose a fainted party member
-// Feel free to refactor
-selfSwitch: true,
-condition: {
-duration: 1,
-// reviving implemented in side.ts, kind of
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-roar: {
-accuracy: 100,
-basePower: 16,
-category: "Special",
-name: "Roar",
-pp: 1.25,
-priority: 6,
-flags: {reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, allyanim: 1, noassist: 1, failcopycat: 1},
-forceSwitch: true,
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-rockclimb: {
-accuracy: 100,
-basePower: 16,
-category: "Physical",
-name: "Rock Climb",
-pp: 1.25,
-priority: 6,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-volatileStatus: 'confusion',
-},
-selfSwitch: true,
-target: "normal",
-type: "Normal",
-},
-
-round: {
-accuracy: 89,
-basePower: 50,
-basePowerCallback(target, source, move) {
-if (move.sourceEffect === 'round') {
-this.debug('BP doubled');
-return move.basePower * 2.5;
-}
-return move.basePower;
-},
-category: "Special",
-name: "Round",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-onTry(source, target, move) {
-for (const action of this.queue.list as MoveAction[]) {
-if (!action.pokemon || !action.move || action.maxMove || action.zmove) continue;
-if (action.move.id === 'round') {
-this.queue.prioritizeAction(action, move);
-return;
-}
-}
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-safeguard: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Safeguard",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-sideCondition: 'safeguard',
-condition: {
-duration: 5,
-durationCallback(target, source, effect) {
-if (source?.hasAbility('persistent')) {
-this.add('-activate', source, 'ability: Persistent', '[move] Safeguard');
-return 7;
-}
-return 5;
-},
-onSetStatus(status, target, source, effect) {
-if (!effect || !source) return;
-if (effect.id === 'yawn') return;
-if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
-if (target !== source) {
-this.debug('interrupting setStatus');
-if (effect.name === 'Synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
-this.add('-activate', target, 'move: Safeguard');
-}
-return null;
-}
-},
-onTryAddVolatile(status, target, source, effect) {
-if (!effect || !source) return;
-if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
-if ((status.id === 'confusion' || status.id === 'yawn') && target !== source) {
-if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Safeguard');
-return null;
-}
-},
-onSideStart(side, source) {
-if (source?.hasAbility('persistent')) {
-this.add('-sidestart', side, 'Safeguard', '[persistent]');
-} else {
-this.add('-sidestart', side, 'Safeguard');
-}
-},
-onSideResidualOrder: 26,
-onSideResidualSubOrder: 3,
-onSideEnd(side) {
-this.add('-sideend', side, 'Safeguard');
-},
-},
-secondary: null,
-target: "allySide",
-type: "Normal",
-},
-
-scaryface: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Scary Face",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
-boosts: {
-spe: -2,
-evasion: -2,
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-scratch: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Scratch",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-screech: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Screech",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, allyanim: 1},
-boosts: {
-def: -2,
-spd: -2,
-accuracy: -2,
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-secretpower: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Secret Power",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onModifyMove(move, pokemon) {
-if (this.field.isTerrain('')) return;
-move.secondaries = [];
-if (this.field.isTerrain('electricterrain')) {
-move.secondaries.push({
-chance: 33,
-status: 'par',
-});
-} else if (this.field.isTerrain('grassyterrain')) {
-move.secondaries.push({
-chance: 33,
-status: 'slp',
-});
-} else if (this.field.isTerrain('mistyterrain')) {
-move.secondaries.push({
-chance: 33,
-boosts: {
-spa: -1,
-},
-});
-} else if (this.field.isTerrain('psychicterrain')) {
-move.secondaries.push({
-chance: 33,
-boosts: {
-spe: -1,
-},
-});
-}
-},
-secondary: {
-chance: 33,
-status: 'par',
-},
-target: "normal",
-type: "Normal",
-},
-
-selfdestruct: {
-accuracy: 150,
-basePower: 250,
-category: "Special",
-name: "Self-Destruct",
-pp: 0.625,
-priority: 0,
-flags: {protect: 1, mirror: 1, noparentalbond: 1},
-selfdestruct: "always",
-critRatio: 4,
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-sharpen: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Sharpen",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-atk: 2,
-spa: 2,
-accuracy: 2,
-spe: -2,
-spd: -2,
-def: -2,
-evasion: -2,
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-shedtail: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Shed Tail",
-pp: 1.25,
-priority: -1,
-flags: {},
-volatileStatus: 'substitute',
-onTryHit(source) {
-if (!this.canSwitch(source.side)) {
-this.add('-fail', source);
-return this.NOT_FAIL;
-}
-if (source.volatiles['substitute']) {
-this.add('-fail', source, 'move: Shed Tail');
-return this.NOT_FAIL;
-}
-if (source.hp <= Math.ceil(source.maxhp / 2)) {
-this.add('-fail', source, 'move: Shed Tail', '[weak]');
-return this.NOT_FAIL;
-}
-},
-onHit(target) {
-this.directDamage(Math.ceil(target.maxhp / 2));
-},
-self: {
-onHit(source) {
-source.skipBeforeSwitchOutEventFlag = true;
-},
-},
-selfSwitch: 'shedtail',
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-shellsmash: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Shell Smash",
-pp: 1.25,
-priority: -1,
-flags: {snatch: 1},
-boosts: {
-def: -2,
-spd: -2,
-atk: 2,
-spa: 2,
-spe: 2,
-accuracy: -1,
-evasion: -2,
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-simplebeam: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Simple Beam",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
-onTryHit(target) {
-if (target.getAbility().isPermanent || target.ability === 'simple' || target.ability === 'truant') {
-return false;
-}
-},
-onHit(pokemon) {
-const oldAbility = pokemon.setAbility('simple');
-if (oldAbility) {
-this.add('-ability', pokemon, 'Simple', '[from] move: Simple Beam');
-return;
-}
-return oldAbility as false | null;
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-sing: {
-accuracy: 75,
-basePower: 5,
-category: "Status",
-name: "Sing",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1},
-status: 'slp',
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-sketch: {
-accuracy: 93,
-basePower: 30,
-category: "Special ",
-name: "Sketch",
-pp: 1.25,
-noPPBoosts: true,
-priority: 3,
-flags: {
-bypasssub: 1, allyanim: 1, failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-skullbash: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Skull Bash",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, charge: 1, protect: 1, mirror: 1, nosleeptalk: 1, failinstruct: 1},
-onTryMove(attacker, defender, move) {
-if (attacker.removeVolatile(move.id)) {
-return;
-}
-this.add('-prepare', attacker, move.name);
-this.boost({def: 1}, attacker, attacker, move);
-if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-return;
-}
-attacker.addVolatile('twoturnmove', defender);
-return null;
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-slackoff: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Slack Off",
-pp: 1.25,
-priority: -1,
-flags: {snatch: 1, heal: 1},
-heal: [33, 100],
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-slam: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Slam",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-slash: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Slash",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
-critRatio: 3,
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-sleeptalk: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Sleep Talk",
-pp: 1.25,
-priority: 0,
-flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
-sleepUsable: true,
-onTry(source) {
-return source.status === 'slp' || source.hasAbility('comatose');
-},
-onHit(pokemon) {
-const moves = [];
-for (const moveSlot of pokemon.moveSlots) {
-const moveid = moveSlot.id;
-if (!moveid) continue;
-const move = this.dex.moves.get(moveid);
-if (move.flags['nosleeptalk'] || move.flags['charge'] || (move.isZ && move.basePower !== 1) || move.isMax) {
-continue;
-}
-moves.push(moveid);
-}
-let randomMove = '';
-if (moves.length) randomMove = this.sample(moves);
-if (!randomMove) {
-return false;
-}
-this.actions.useMove(randomMove, pokemon);
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-smellingsalts: {
-accuracy: 87,
-basePower: 60,
-basePowerCallback(pokemon, target, move) {
-if (target.status === 'par') {
-this.debug('BP doubled on paralyzed target');
-return move.basePower * 2;
-}
-return move.basePower;
-},
-category: "Physical",
-name: "Smelling Salts",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-onHit(target) {
-if (target.status === 'par') target.cureStatus();
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-smokescreen: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Smokescreen",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-boosts: {
-accuracy: -1,
-evasion: 1,
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-snore: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Snore",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-sleepUsable: true,
-onTry(source) {
-return source.status === 'slp' || source.hasAbility('comatose');
-},
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-target: "normal",
-type: "Normal",
-},
-
-softboiled: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Soft-Boiled",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, heal: 1},
-heal: [33, 100],
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-sonicboom: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Sonic Boom",
-pp: 1.25,
-priority: 4,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "allAdjacentFoes",
-},
-
-spikecannon: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Spike Cannon",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-critRatio: 2,
-multihit: [1, 6],
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-spitup: {
-accuracy: 89,
-basePower: 50,
-basePowerCallback(pokemon) {
-if (!pokemon.volatiles['stockpile']?.layers) return false;
-return pokemon.volatiles['stockpile'].layers * 100;
-},
-category: "Special",
-name: "Spit Up",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1},
-onTry(source) {
-return !!source.volatiles['stockpile'];
-},
-onAfterMove(pokemon) {
-pokemon.removeVolatile('stockpile');
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-splash: {
-accuracy: 75,
-basePower: 5,
-category: "Status",
-name: "Splash",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-volatileStatus: 'confusion',
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-spotlight: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Spotlight",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, reflectable: 1, allyanim: 1, noassist: 1, failcopycat: 1},
-volatileStatus: 'spotlight',
-onTryHit(target) {
-if (this.activePerHalf === 1) return false;
-},
-condition: {
-duration: 1,
-onStart(pokemon) {
-this.add('-singleturn', pokemon, 'move: Spotlight');
-},
-onFoeRedirectTargetPriority: 2,
-onFoeRedirectTarget(target, source, source2, move) {
-if (this.validTarget(this.effectState.target, source, move.target)) {
-this.debug("Spotlight redirected target of move");
-return this.effectState.target;
-}
-},
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-stockpile: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Stockpile",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-onTry(source) {
-if (source.volatiles['stockpile'] && source.volatiles['stockpile'].layers >= 3) return false;
-},
-volatileStatus: 'stockpile',
-condition: {
-noCopy: true,
-onStart(target) {
-this.effectState.layers = 1;
-this.effectState.def = 0;
-this.effectState.spd = 0;
-this.add('-start', target, 'stockpile' + this.effectState.layers);
-const [curDef, curSpD] = [target.boosts.def, target.boosts.spd];
-this.boost({def: 1, spd: 1}, target, target);
-if (curDef !== target.boosts.def) this.effectState.def--;
-if (curSpD !== target.boosts.spd) this.effectState.spd--;
-},
-onRestart(target) {
-if (this.effectState.layers >= 3) return false;
-this.effectState.layers++;
-this.add('-start', target, 'stockpile' + this.effectState.layers);
-const curDef = target.boosts.def;
-const curSpD = target.boosts.spd;
-this.boost({def: 1, spd: 1}, target, target);
-if (curDef !== target.boosts.def) this.effectState.def--;
-if (curSpD !== target.boosts.spd) this.effectState.spd--;
-},
-onEnd(target) {
-if (this.effectState.def || this.effectState.spd) {
-const boosts: SparseBoostsTable = {};
-if (this.effectState.def) boosts.def = this.effectState.def;
-if (this.effectState.spd) boosts.spd = this.effectState.spd;
-this.boost(boosts, target, target);
-}
-this.add('-end', target, 'Stockpile');
-if (this.effectState.def !== this.effectState.layers * -1 || this.effectState.spd !== this.effectState.layers * -1) {
-this.hint("In Gen 7, Stockpile keeps track of how many times it successfully altered each stat individually.");
-}
-},
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-stomp: {
-accuracy: 95,
-basePower: 45,
-category: "Physical",
-name: "Stomp",
-pp: 0.625,
-priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [25, 100],
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-target: "normal",
-type: "Normal",
-},
-
-strength: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Strength",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-struggle: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Struggle",
-pp: 1.25,
-noPPBoosts: true,
-priority: -1,
-flags: {
-contact: 1, protect: 1,
-failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
-},
-noSketch: true,
-onModifyMove(move, pokemon, target) {
-move.type = '???';
-this.add('-activate', pokemon, 'move: Struggle');
-},
-struggleRecoil: true,
-secondary: null,
-target: "randomNormal",
-type: "Normal",
-},
-
-stuffcheeks: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Stuff Cheeks",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-onDisableMove(pokemon) {
-if (!pokemon.getItem().isBerry) pokemon.disableMove('stuffcheeks');
-},
-onTry(source) {
-return source.getItem().isBerry;
-},
-onHit(pokemon) {
-if (!this.boost({def: 2})) return null;
-pokemon.eatItem(true);
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-substitute: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Substitute",
-pp: 1.25,
-priority: -1,
-flags: {snatch: 1, nonsky: 1},
-volatileStatus: 'substitute',
-onTryHit(source) {
-if (source.volatiles['substitute']) {
-this.add('-fail', source, 'move: Substitute');
-return this.NOT_FAIL;
-}
-if (source.hp <= source.maxhp / 3 || source.maxhp === 1) { // Shedinja clause
-this.add('-fail', source, 'move: Substitute', '[weak]');
-return this.NOT_FAIL;
-}
-},
-onHit(target) {
-this.directDamage(target.maxhp / 4);
-},
-condition: {
-onStart(target, source, effect) {
-if (effect?.id === 'shedtail') {
-this.add('-start', target, 'Substitute', '[from] move: Shed Tail');
-} else {
-this.add('-start', target, 'Substitute');
-}
-this.effectState.hp = Math.floor(target.maxhp / 4);
-if (target.volatiles['partiallytrapped']) {
-this.add('-end', target, target.volatiles['partiallytrapped'].sourceEffect, '[partiallytrapped]', '[silent]');
-delete target.volatiles['partiallytrapped'];
-}
-},
-onTryPrimaryHitPriority: -1,
-onTryPrimaryHit(target, source, move) {
-if (target === source || move.flags['bypasssub'] || move.infiltrates) {
-return;
-}
-let damage = this.actions.getDamage(source, target, move);
-if (!damage && damage !== 0) {
-this.add('-fail', source);
-this.attrLastMove('[still]');
-return null;
-}
-damage = this.runEvent('SubDamage', target, source, move, damage);
-if (!damage) {
-return damage;
-}
-if (damage > target.volatiles['substitute'].hp) {
-damage = target.volatiles['substitute'].hp as number;
-}
-target.volatiles['substitute'].hp -= damage;
-source.lastDamage = damage;
-if (target.volatiles['substitute'].hp <= 0) {
-if (move.ohko) this.add('-ohko');
-target.removeVolatile('substitute');
-} else {
-this.add('-activate', target, 'move: Substitute', '[damage]');
-}
-if (move.recoil) {
-this.damage(this.actions.calcRecoilDamage(damage, move), source, target, 'recoil');
-}
-if (move.drain) {
-this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
-}
-this.singleEvent('AfterSubDamage', move, null, target, source, move, damage);
-this.runEvent('AfterSubDamage', target, source, move, damage);
-return this.HIT_SUBSTITUTE;
-},
-onEnd(target) {
-this.add('-end', target, 'Substitute');
-},
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-superfang: {
-accuracy: 72,
-basePower: 115,
-damageCallback(pokemon, target) {
-return this.clampIntRange(target.getUndynamaxedHP() / 2, 1);
-},
-category: "Physical",
-name: "Super Fang",
-pp: 0.625,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-supersonic: {
-accuracy: 75,
-basePower: 5,
-category: "Status",
-name: "Supersonic",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1},
-volatileStatus: 'confusion',
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-swagger: {
-accuracy: 75,
-basePower: 5,
-category: "Status",
-name: "Swagger",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
-volatileStatus: 'confusion',
-boosts: {
-atk: 2,
-spa: 2,
-spe: 1,
-spd: -2,
-def: -2,
-evasion: -2,
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-swallow: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Swallow",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, heal: 1},
-onTry(source) {
-return !!source.volatiles['stockpile'];
-},
-onHit(pokemon) {
-const healAmount = [0.25, 0.5, 1];
-const success = !!this.heal(this.modify(pokemon.maxhp, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
-if (!success) this.add('-fail', pokemon, 'heal');
-pokemon.removeVolatile('stockpile');
-return success || this.NOT_FAIL;
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-sweetscent: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Sweet Scent",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-boosts: {
-evasion: -2,
-spe: -2,
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-swift: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Swift",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-boosts: {
-atk: 1,
-spe: 1,
-accuracy: 2,
-evasion: -1,
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-swordsdance: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Swords Dance",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, dance: 1},
-boosts: {
-atk: 2,
-spa: 2,
-spd: -1,
-def: -1,
-accuracy: 2,
-evasion: -2,
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-tackle: {
-accuracy: 65,
-basePower: 140,
-category: "Physical",
-name: "Tackle",
-pp: 0.625,
-priority: -2,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [33, 100],
-hasCrashDamage: true,
-onMoveFail(target, source, move) {
-this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-tailslap: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Tail Slap",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-critRatio: 2,
-multihit: [1, 6],
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-tailwhip: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Tail Whip",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-boosts: {
-spd: -1,
-def: -1,
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-takedown: {
-accuracy: 63,
-basePower: 150,
-category: "Physical",
-name: "Take Down",
-pp: 0.625,
-priority: -3,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [50, 100],
-hasCrashDamage: true,
-onMoveFail(target, source, move) {
-this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-tearfullook: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Tearful Look",
-pp: 1.25,
-priority: -10,
-flags: {reflectable: 1, mirror: 1},
-boosts: {
-atk: -1,
-spa: -1,
-spe: -1,
-spd: -1,
-def: -1,
-accuracy: -1,
-evasion: -1,
-},
-secondary: null,
-target: "any",
-type: "Normal",
-},
-
-teatime: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Teatime",
-pp: 1.25,
-priority: 0,
-flags: {bypasssub: 1},
-onHitField(target, source, move) {
-const targets: Pokemon[] = [];
-for (const pokemon of this.getAllActive()) {
-if (this.runEvent('Invulnerability', pokemon, source, move) === false) {
-this.add('-miss', source, pokemon);
-} else if (this.runEvent('TryHit', pokemon, source, move) && pokemon.getItem().isBerry) {
-targets.push(pokemon);
-}
-}
-this.add('-fieldactivate', 'move: Teatime');
-if (!targets.length) {
-this.add('-fail', source, 'move: Teatime');
-this.attrLastMove('[still]');
-return this.NOT_FAIL;
-}
-for (const pokemon of targets) {
-pokemon.eatItem(true);
-}
-},
-secondary: null,
-target: "all",
-type: "Normal",
-},
-
-technoblast: {
-accuracy: 72,
-basePower: 115,
-category: "Special",
-name: "Techno Blast",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1},
-onModifyType(move, pokemon) {
-if (pokemon.ignoringItem()) return;
-move.type = this.runEvent('Drive', pokemon, null, move, 'Normal');
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-teeterdance: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Teeter Dance",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, dance: 1},
-volatileStatus: 'confusion',
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-terablast: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Tera Blast",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, mustpressure: 1},
-onModifyType(move, pokemon, target) {
-if (pokemon.terastallized) {
-move.type = pokemon.teraType;
-}
-},
-onModifyMove(move, pokemon) {
-if (pokemon.terastallized && pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) {
-move.category = 'Physical';
-}
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-terrainpulse: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Terrain Pulse",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, pulse: 1},
-onModifyType(move, pokemon) {
-if (!pokemon.isGrounded()) return;
-switch (this.field.terrain) {
-case 'electricterrain':
-move.type = 'Electric';
-break;
-case 'grassyterrain':
-move.type = 'Grass';
-break;
-case 'mistyterrain':
-move.type = 'Fairy';
-break;
-case 'psychicterrain':
-move.type = 'Psychic';
-break;
-}
-},
-onModifyMove(move, pokemon) {
-if (this.field.terrain && pokemon.isGrounded()) {
-move.basePower *= 2;
-this.debug('BP doubled in Terrain');
-}
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-thrash: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Thrash",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1, failinstruct: 1},
-self: {
-volatileStatus: 'lockedmove',
-},
-onAfterMove(pokemon) {
-if (pokemon.volatiles['lockedmove'] && pokemon.volatiles['lockedmove'].duration === 1) {
-pokemon.removeVolatile('lockedmove');
-}
-},
-secondary: null,
-target: "randomNormal",
-type: "Normal",
-},
-
-tickle: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Tickle",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
-boosts: {
-atk: -1,
-spa: -1,
-spe: 1,
-spd: -1,
-def: -1,
-evasion: 1,
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-tidyup: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Tidy Up",
-pp: 1.25,
-priority: 0,
-flags: {},
-onHit(pokemon) {
-let success = false;
-for (const active of this.getAllActive()) {
-if (active.removeVolatile('substitute')) success = true;
-}
-const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
-const sides = [pokemon.side, ...pokemon.side.foeSidesWithConditions()];
-for (const side of sides) {
-for (const sideCondition of removeAll) {
-if (side.removeSideCondition(sideCondition)) {
-this.add('-sideend', side, this.dex.conditions.get(sideCondition).name);
-success = true;
-}
-}
-}
-if (success) this.add('-activate', pokemon, 'move: Tidy Up');
-return !!this.boost({atk: 1, spe: 1}, pokemon, pokemon, null, false, true) || success;
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-transform: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Transform",
-pp: 1.25,
-priority: 5,
-flags: {allyanim: 1, failencore: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
-onHit(target, pokemon) {
-if (!pokemon.transformInto(target)) {
-return false;
-}
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-triattack: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Tri Attack",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 75,
-onHit(target, source) {
-const result = this.random(3);
-if (result === 0) {
-target.trySetStatus('brn', source);
-} else if (result === 1) {
-target.trySetStatus('par', source);
-} else {
-target.trySetStatus('frz', source);
-}
-},
-},
-target: "normal",
-type: "Normal",
-},
-
-trumpcard: {
-accuracy: 89,
-basePower: 50,
-basePowerCallback(source, target, move) {
-const callerMoveId = move.sourceEffect || move.id;
-const moveSlot = callerMoveId === 'instruct' ? source.getMoveData(move.id) : source.getMoveData(callerMoveId);
-let bp;
-if (!moveSlot) {
-bp = 40;
-} else {
-switch (moveSlot.pp) {
-case 0:
-bp = 200;
-break;
-case 1:
-bp = 80;
-break;
-case 2:
-bp = 60;
-break;
-case 3:
-bp = 50;
-break;
-default:
-bp = 40;
-break;
-}
-}
-this.debug('BP: ' + bp);
-return bp;
-},
-category: "Special",
-name: "Trump Card",
-pp: 1.25,
-noPPBoosts: true,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-uproar: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Uproar",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1, nosleeptalk: 1, failinstruct: 1},
-self: {
-volatileStatus: 'uproar',
-},
-onTryHit(target) {
-const activeTeam = target.side.activeTeam();
-const foeActiveTeam = target.side.foe.activeTeam();
-for (const [i, allyActive] of activeTeam.entries()) {
-if (allyActive && allyActive.status === 'slp') allyActive.cureStatus();
-const foeActive = foeActiveTeam[i];
-if (foeActive && foeActive.status === 'slp') foeActive.cureStatus();
-}
-},
-condition: {
-duration: 3,
-onStart(target) {
-this.add('-start', target, 'Uproar');
-},
-onResidual(target) {
-if (target.volatiles['throatchop']) {
-target.removeVolatile('uproar');
-return;
-}
-if (target.lastMove && target.lastMove.id === 'struggle') {
-// don't lock
-delete target.volatiles['uproar'];
-}
-this.add('-start', target, 'Uproar', '[upkeep]');
-},
-onResidualOrder: 28,
-onResidualSubOrder: 1,
-onEnd(target) {
-this.add('-end', target, 'Uproar');
-},
-onLockMove: 'uproar',
-onAnySetStatus(status, pokemon) {
-if (status.id === 'slp') {
-if (pokemon === this.effectState.target) {
-this.add('-fail', pokemon, 'slp', '[from] Uproar', '[msg]');
-} else {
-this.add('-fail', pokemon, 'slp', '[from] Uproar');
-}
-return null;
-}
-},
-},
-secondary: null,
-target: "randomNormal",
-type: "Normal",
-},
-
-veeveevolley: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Veevee Volley",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-visegrip: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Vise Grip",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-weatherball: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Weather Ball",
-pp: 1.25,
-priority: 0,
-flags: {bullet: 1, protect: 1, mirror: 1},
-onModifyType(move, pokemon) {
-switch (pokemon.effectiveWeather()) {
-case 'sunnyday':
-case 'desolateland':
-move.type = 'Fire';
-break;
-case 'raindance':
-case 'primordialsea':
-move.type = 'Water';
-break;
-case 'sandstorm':
-move.type = 'Rock';
-break;
-case 'hail':
-case 'snow':
-move.type = 'Ice';
-break;
-}
-},
-onModifyMove(move, pokemon) {
-switch (pokemon.effectiveWeather()) {
-case 'sunnyday':
-case 'desolateland':
-move.basePower *= 2;
-break;
-case 'raindance':
-case 'primordialsea':
-move.basePower *= 2;
-break;
-case 'sandstorm':
-move.basePower *= 2;
-break;
-case 'hail':
-case 'snow':
-move.basePower *= 2;
-break;
-}
-this.debug('BP: ' + move.basePower);
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-whirlwind: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Whirlwind",
-pp: 1.25,
-priority: 6,
-flags: {reflectable: 1, mirror: 1, bypasssub: 1, allyanim: 1, wind: 1, noassist: 1, failcopycat: 1},
-forceSwitch: true,
-selfSwitch: true,
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-wish: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Wish",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, heal: 1},
-slotCondition: 'Wish',
-condition: {
-duration: 2,
-onStart(pokemon, source) {
-this.effectState.hp = source.maxhp / 2;
-},
-onResidualOrder: 4,
-onEnd(target) {
-if (target && !target.fainted) {
-const damage = this.heal(this.effectState.hp, target, target);
-if (damage) {
-this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.source.name);
-}
-}
-},
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-workup: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Work Up",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-atk: 2,
-spa: 2,
-accuracy: 1,
-spe: -1,
-evasion: -1,
-},
-secondary: null,
-target: "self",
-type: "Normal",
-},
-
-wrap: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Wrap",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-onHit(target, source, move) {
-return target.addVolatile('trapped', source, move, 'trapper');
-},
-volatileStatus: 'partiallytrapped',
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-wringout: {
-accuracy: 72,
-basePower: 115,
-basePowerCallback(pokemon, target, move) {
-const hp = target.hp;
-const maxHP = target.maxhp;
-const bp = Math.floor(Math.floor((120 * (100 * Math.floor(hp * 4096 / maxHP)) + 2048 - 1) / 4096) / 100) || 1;
-this.debug('BP for ' + hp + '/' + maxHP + " HP: " + bp);
-return bp;
-},
-category: "Special",
-name: "Wring Out",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-yawn: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Yawn",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-volatileStatus: 'yawn',
-onTryHit(target) {
-if (target.status || !target.runStatusImmunity('slp')) {
-return false;
-}
-},
-condition: {
-noCopy: true, // doesn't get copied by Baton Pass
-duration: 2,
-onStart(target, source) {
-this.add('-start', target, 'move: Yawn', '[of] ' + source);
-},
-onResidualOrder: 23,
-onEnd(target) {
-this.add('-end', target, 'move: Yawn', '[silent]');
-target.trySetStatus('slp', this.effectState.source);
-},
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Normal",
-},
-
-acid: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Acid",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-boosts: {
-spd: -1,
-def: -1,
-},
-},
-target: "allAdjacentFoes",
-type: "Poison",
-},
-
-acidarmor: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Acid Armor",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-def: 2,
-spd: 2,
-atk: 1,
-spa: 1,
-spe: -2,
-evasion: -2,
-},
-secondary: null,
-target: "self",
-type: "Poison",
-},
-
-aciddownpour: {
-accuracy: 60,
-basePower: 200,
-category: "Special",
-name: "Acid Downpour",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-status: 'tox',
-secondary: null,
-target: "allAdjacentFoes",
-type: "Poison",
-},
-
-acidspray: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Acid Spray",
-pp: 1.25,
-priority: 0,
-flags: {bullet: 1, protect: 1, mirror: 1},
-status: 'tox',
-secondary: {
-chance: 100,
-boosts: {
-spd: -2,
-def: -2,
-accuracy: -1,
-},
-},
-target: "allAdjacentFoes",
-type: "Poison",
-},
-
-banefulbunker: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Baneful Bunker",
-pp: 1.25,
-priority: 4,
-flags: {noassist: 1, failcopycat: 1},
-stallingMove: true,
-volatileStatus: 'banefulbunker',
-onPrepareHit(pokemon) {
-return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
-},
-onHit(pokemon) {
-pokemon.addVolatile('stall');
-},
-condition: {
-duration: 1,
-onStart(target) {
-this.add('-singleturn', target, 'move: Protect');
-},
-onTryHitPriority: 3,
-onTryHit(target, source, move) {
-if (!move.flags['protect']) {
-if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
-if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
-return;
-}
-if (move.smartTarget) {
-move.smartTarget = false;
-} else {
-this.add('-activate', target, 'move: Protect');
-}
-const lockedmove = source.getVolatile('lockedmove');
-if (lockedmove) {
-// Outrage counter is reset
-if (source.volatiles['lockedmove'].duration === 2) {
-delete source.volatiles['lockedmove'];
-}
-}
-if (this.checkMoveMakesContact(move, source, target)) {
-source.trySetStatus('tox', target);
-}
-return this.NOT_FAIL;
-},
-onHit(target, source, move) {
-if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
-source.trySetStatus('tox', target);
-}
-},
-},
-secondary: null,
-target: "self",
-type: "Poison",
-},
-
-barbbarrage: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Barb Barrage",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onBasePower(basePower, pokemon, target) {
-if (target.status === 'tox' || target.status === 'tox') {
-return this.chainModify(2);
-}
-},
-secondary: {
-chance: 33,
-status: 'tox',
-},
-target: "normal",
-type: "Poison",
-},
-
-belch: {
-accuracy: 72,
-basePower: 115,
-category: "Special",
-name: "Belch",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
-onDisableMove(pokemon) {
-if (!pokemon.ateBerry) pokemon.disableMove('belch');
-},
-secondary: null,
-target: "normal",
-type: "Poison",
-},
-
-clearsmog: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Clear Smog",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onHit(target) {
-target.clearBoosts();
-this.add('-clearboost', target);
-},
-secondary: null,
-target: "normal",
-type: "Poison",
-},
-
-coil: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Coil",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-atk: 1,
-spa: 1,
-spe: -2,
-def: 1,
-spd: 1,
-evasion: -2,
-accuracy: 1,
-},
-secondary: null,
-target: "self",
-type: "Poison",
-},
-
-corrosivegas: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Corrosive Gas",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
-onHit(target, source) {
-const item = target.takeItem(source);
-if (item) {
-this.add('-enditem', target, item.name, '[from] move: Corrosive Gas', '[of] ' + source);
-} else {
-this.add('-fail', target, 'move: Corrosive Gas');
-}
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Poison",
-},
-
-crosspoison: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Cross Poison",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
-secondary: {
-chance: 33,
-status: 'tox',
-},
-critRatio: 3,
-target: "normal",
-type: "Poison",
-},
-
-direclaw: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Dire Claw",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-onHit(target, source) {
-const result = this.random(3);
-if (result === 0) {
-target.trySetStatus('tox', source);
-} else if (result === 1) {
-target.trySetStatus('par', source);
-} else {
-target.trySetStatus('slp', source);
-}
-},
-},
-target: "normal",
-type: "Poison",
-},
-
-gastroacid: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Gastro Acid",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
-volatileStatus: 'gastroacid',
-onTryHit(target) {
-if (target.getAbility().isPermanent) {
-return false;
-}
-if (target.hasItem('Ability Shield')) {
-this.add('-block', target, 'item: Ability Shield');
-return null;
-}
-},
-condition: {
-// Ability suppression implemented in Pokemon.ignoringAbility() within sim/pokemon.ts
-onStart(pokemon) {
-if (pokemon.hasItem('Ability Shield')) return false;
-this.add('-endability', pokemon);
-this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, 'gastroacid');
-},
-onCopy(pokemon) {
-if (pokemon.getAbility().isPermanent) pokemon.removeVolatile('gastroacid');
-},
-},
-secondary: null,
-target: "normal",
-type: "Poison",
-},
-
-gunkshot: {
-accuracy: 68,
-basePower: 135,
-category: "Physical",
-name: "Gunk Shot",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 45,
-status: 'tox',
-},
-target: "normal",
-type: "Poison",
-},
-
-mortalspin: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Mortal Spin",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-onAfterHit(target, pokemon) {
-if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
-this.add('-end', pokemon, 'Leech Seed', '[from] move: Mortal Spin', '[of] ' + pokemon);
-}
-const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
-for (const condition of sideConditions) {
-if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
-this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Mortal Spin', '[of] ' + pokemon);
-}
-}
-if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
-pokemon.removeVolatile('partiallytrapped');
-}
-},
-onAfterSubDamage(damage, target, pokemon) {
-if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
-this.add('-end', pokemon, 'Leech Seed', '[from] move: Mortal Spin', '[of] ' + pokemon);
-}
-const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
-for (const condition of sideConditions) {
-if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
-this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Mortal Spin', '[of] ' + pokemon);
-}
-}
-if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
-pokemon.removeVolatile('partiallytrapped');
-}
-},
-secondary: {
-chance: 100,
-status: 'tox',
-},
-target: "allAdjacentFoes",
-type: "Poison",
-},
-
-noxioustorque: {
-accuracy: 91,
-basePower: 40,
-category: "Physical",
-name: "Noxious Torque",
-pp: 1.25,
-priority: 3,
-flags: {
-protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
-},
-secondary: {
-chance: 33,
-status: 'tox',
-},
-target: "normal",
-type: "Poison",
-},
-
-poisonfang: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Poison Fang",
-pp: 1.25,
-priority: 0,
-flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'tox',
-},
-target: "normal",
-type: "Poison",
-},
-
-poisongas: {
-accuracy: 80,
-basePower: 95,
-category: "Special",
-name: "Poison Gas",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-status: 'tox',
-secondary: null,
-target: "allAdjacentFoes",
-type: "Poison",
-},
-
-poisonjab: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Poison Jab",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'tox',
-},
-target: "normal",
-type: "Poison",
-},
-
-poisonpowder: {
-accuracy: 75,
-basePower: 5,
-category: "Status",
-name: "Poison Powder",
-pp: 1.25,
-priority: 3,
-flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
-status: 'tox',
-secondary: null,
-target: "normal",
-type: "Poison",
-},
-
-poisonsting: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Poison Sting",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'tox',
-},
-target: "normal",
-type: "Poison",
-},
-
-poisontail: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Poison Tail",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-critRatio: 3,
-secondary: {
-chance: 33,
-status: 'tox',
-},
-target: "normal",
-type: "Poison",
-},
-
-purify: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Purify",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, heal: 1},
-onHit(target, source) {
-if (!target.cureStatus()) {
-this.add('-fail', source);
-this.attrLastMove('[still]');
-return this.NOT_FAIL;
-}
-this.heal(Math.ceil(source.maxhp * 0.5), source);
-},
-secondary: null,
-target: "normal",
-type: "Poison",
-},
-
-shellsidearm: {
-accuracy: 78,
-basePower: 105,
-category: "Special",
-name: "Shell Side Arm",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onPrepareHit(target, source, move) {
-if (!source.isAlly(target)) {
-this.attrLastMove('[anim] Shell Side Arm ' + move.category);
-}
-},
-onModifyMove(move, pokemon, target) {
-if (!target) return;
-const atk = pokemon.getStat('atk', false, true);
-const spa = pokemon.getStat('spa', false, true);
-const def = target.getStat('def', false, true);
-const spd = target.getStat('spd', false, true);
-const physical = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * atk) / def) / 50);
-const special = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * spa) / spd) / 50);
-if (physical > special || (physical === special && this.random(2) === 0)) {
-move.category = 'Physical';
-move.flags.contact = 1;
-}
-},
-onHit(target, source, move) {
-// Shell Side Arm normally reveals its category via animation on cart, but doesn't play either custom animation against allies
-if (!source.isAlly(target)) this.hint(move.category + " Shell Side Arm");
-},
-onAfterSubDamage(damage, target, source, move) {
-if (!source.isAlly(target)) this.hint(move.category + " Shell Side Arm");
-},
-secondary: {
-chance: 33,
-status: 'tox',
-},
-target: "normal",
-type: "Poison",
-},
-
-sludge: {
-accuracy: 125,
-basePower: 33,
-category: "Special",
-name: "Sludge",
-pp: 0.625,
-priority: 4,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-status: 'tox',
-},
-target: "normal",
-type: "Poison",
-},
-
-sludgebomb: {
-accuracy: 70,
-basePower: 125,
-category: "Special",
-name: "Sludge Bomb",
-pp: 1.25,
-priority: 0,
-flags: {bullet: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 50,
-status: 'tox',
-},
-target: "normal",
-type: "Poison",
-},
-
-sludgewave: {
-accuracy: 100,
-basePower: 16,
-category: "Special",
-name: "Sludge Wave",
-pp: 1.25,
-priority: 6,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'tox',
-},
-forceSwitch: true,
-target: "allAdjacentFoes",
-type: "Poison",
-},
-
-smog: {
-accuracy: 93,
-basePower: 30,
-category: "Special",
-name: "Smog",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'tox',
-},
-target: "normal",
-type: "Poison",
-},
-
-toxic: {
-accuracy: 75,
-basePower: 5,
-category: "Status",
-name: "Toxic",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-// No Guard-like effect for Poison-type users implemented in Scripts#tryMoveHit
-status: 'tox',
-secondary: null,
-target: "allAdjacentFoes",
-type: "Poison",
-},
-
-toxicspikes: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Toxic Spikes",
-pp: 1.25,
-priority: -1,
-flags: {reflectable: 1, nonsky: 1, mustpressure: 1},
-sideCondition: 'toxicspikes',
-condition: {
-// this is a side condition
-onSideStart(side) {
-this.add('-sidestart', side, 'move: Toxic Spikes');
-this.effectState.layers = 1;
-},
-onSideRestart(side) {
-if (this.effectState.layers >= 2) return false;
-this.add('-sidestart', side, 'move: Toxic Spikes');
-this.effectState.layers++;
-},
-onEntryHazard(pokemon) {
-if (!pokemon.isGrounded()) return;
-if (pokemon.hasType('Poison')) {
-this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
-pokemon.side.removeSideCondition('toxicspikes');
-} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots')) {
-return;
-} else if (this.effectState.layers >= 2) {
-pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
-} else {
-pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
-}
-},
-},
-secondary: null,
-target: "foeSide",
-type: "Poison",
-},
-
-toxicthread: {
-accuracy: 100,
-basePower: 16,
-category: "Special",
-name: "Toxic Thread",
-pp: 1.25,
-priority: 6,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-status: 'tox',
-boosts: {
-spe: -1,
-},
-selfSwitch: true,
-secondary: null,
-target: "normal",
-type: "Poison",
-},
-
-venomdrench: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Venom Drench",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-onHit(target, source, move) {
-if (target.status === 'tox' || target.status === 'tox') {
-return !!this.boost({atk: -1, spa: -1, spe: -1}, target, source, move);
-}
-return false;
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Poison",
-},
-
-venoshock: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Venoshock",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onBasePower(basePower, pokemon, target) {
-if (target.status === 'tox' || target.status === 'tox') {
-return this.chainModify(2);
-}
-},
-secondary: null,
-target: "normal",
-type: "Poison",
-},
-
-agility: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Agility",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-spe: 2,
-evasion: 2,
-accuracy: -2,
-},
-secondary: null,
-target: "self",
-type: "Psychic",
-},
-
-allyswitch: {
-accuracy: 100,
-basePower: 16,
-category: "Special",
-name: "Ally Switch",
-pp: 1.25,
-priority: 6,
-flags: {protect: 1, mirror: 1},
-stallingMove: true,
-onPrepareHit(pokemon) {
-return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
-},
-onTryHit(source) {
-if (source.side.active.length === 1) return false;
-if (source.side.active.length === 3 && source.position === 1) return false;
-},
-onHit(pokemon) {
-pokemon.addVolatile('stall');
-const newPosition = (pokemon.position === 0 ? pokemon.side.active.length - 1 : 0);
-if (!pokemon.side.active[newPosition]) return false;
-if (pokemon.side.active[newPosition].fainted) return false;
-this.swapPosition(pokemon, newPosition, '[from] move: Ally Switch');
-},
-selfSwitch: true,
-secondary: null,
-target: "self",
-type: "Psychic",
-},
-
-amnesia: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Amnesia",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-spe: -2,
-atk: 2,
-spa: 2,
-evasion: -2,
-},
-secondary: null,
-target: "self",
-type: "Psychic",
-},
-
-barrier: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Barrier",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-spd: 1,
-def: 2,
-evasion: -1,
-},
-secondary: null,
-target: "self",
-type: "Psychic",
-},
-
-calmmind: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Calm Mind",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-atk: 1,
-spa: 1,
-spe: -2,
-spd: 1,
-def: 1,
-evasion: -2,
-accuracy: 1,
-},
-secondary: null,
-target: "self",
-type: "Psychic",
-},
-
-confusion: {
-accuracy: 125,
-basePower: 33,
-category: "Special",
-name: "Confusion",
-pp: 0.625,
-priority: 4,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-volatileStatus: 'confusion',
-},
-target: "normal",
-type: "Psychic",
-},
-
-cosmicpower: {
-accuracy: 70,
-basePower: 125,
-category: "Status",
-name: "Cosmic Power",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-def: -1,
-spd: -1,
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Psychic",
-},
-
-dreameater: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Dream Eater",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, heal: 1},
-drain: [1, 2],
-onTryImmunity(target) {
-return target.status === 'slp' || target.hasAbility('comatose');
-},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-eeriespell: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Eerie Spell",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-secondary: {
-chance: 100,
-onHit(target) {
-if (!target.hp) return;
-let move: Move | ActiveMove | null = target.lastMove;
-if (!move || move.isZ) return;
-if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
-const ppDeducted = target.deductPP(move.id, 3);
-if (!ppDeducted) return;
-this.add('-activate', target, 'move: Eerie Spell', move.name, ppDeducted);
-},
-},
-target: "normal",
-type: "Psychic",
-},
-
-esperwing: {
-accuracy: 100,
-basePower: 16,
-category: "Special",
-name: "Esper Wing",
-pp: 1.25,
-priority: 6,
-flags: {protect: 1, mirror: 1},
-critRatio: 3,
-secondary: {
-chance: 100,
-self: {
-boosts: {
-spe: 1,
-accuracy: -1,
-},
-},
-},
-forceSwitch: true,
-target: "normal",
-type: "Psychic",
-},
-
-expandingforce: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Expanding Force",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onBasePower(basePower, source) {
-if (this.field.isTerrain('psychicterrain') && source.isGrounded()) {
-this.debug('terrain buff');
-return this.chainModify(1.5);
-}
-},
-onModifyMove(move, source, target) {
-if (this.field.isTerrain('psychicterrain') && source.isGrounded()) {
-move.target = 'allfoeSides';
-}
-},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-extrasensory: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Extrasensory",
-pp: 0.625,
-priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [25, 100],
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-target: "normal",
-type: "Psychic",
-},
-
-freezingglare: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Freezing Glare",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 50,
-status: 'frz',
-},
-target: "normal",
-type: "Psychic",
-},
-
-futuresight: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Future Sight",
-pp: 0.625,
-priority: -1,
-flags: {allyanim: 1, futuremove: 1},
-ignoreImmunity: true,
-onTry(source, target) {
-if (!target.side.addSlotCondition(target, 'futuremove')) return false;
-Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-duration: 5,
-move: 'futuresight',
-source: source,
-moveData: {
-id: 'futuresight',
-name: "Future Sight",
-accuracy: 87,
-basePower: 60,
-category: "Special",
-priority: -1,
-flags: {allyanim: 1, futuremove: 1},
-ignoreImmunity: false,
-effectType: 'Move',
-type: 'Psychic',
-},
-});
-this.add('-start', source, 'move: Future Sight');
-return this.NOT_FAIL;
-},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-genesissupernova: {
-accuracy: 72,
-basePower: 115,
-category: "Special",
-name: "Genesis Supernova",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-self: {
-onHit() {
-this.field.setTerrain('psychicterrain');
-},
-},
-},
-target: "normal",
-type: "Psychic",
-},
-
-glitzyglow: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Glitzy Glow",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-self: {
-sideCondition: 'lightscreen',
-},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-gravity: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Gravity",
-pp: 1.25,
-priority: 0,
-flags: {nonsky: 1},
-pseudoWeather: 'gravity',
-condition: {
-duration: 5,
-durationCallback(source, effect) {
-if (source?.hasAbility('persistent')) {
-this.add('-activate', source, 'ability: Persistent', '[move] Gravity');
-return 7;
-}
-return 5;
-},
-onFieldStart(target, source) {
-if (source?.hasAbility('persistent')) {
-this.add('-fieldstart', 'move: Gravity', '[persistent]');
-} else {
-this.add('-fieldstart', 'move: Gravity');
-}
-for (const pokemon of this.getAllActive()) {
-let applies = false;
-if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly')) {
-applies = true;
-this.queue.cancelMove(pokemon);
-pokemon.removeVolatile('twoturnmove');
-}
-if (pokemon.volatiles['skydrop']) {
-applies = true;
-this.queue.cancelMove(pokemon);
-if (pokemon.volatiles['skydrop'].source) {
-this.add('-end', pokemon.volatiles['twoturnmove'].source, 'Sky Drop', '[interrupt]');
-}
-pokemon.removeVolatile('skydrop');
-pokemon.removeVolatile('twoturnmove');
-}
-if (pokemon.volatiles['magnetrise']) {
-applies = true;
-delete pokemon.volatiles['magnetrise'];
-}
-if (pokemon.volatiles['telekinesis']) {
-applies = true;
-delete pokemon.volatiles['telekinesis'];
-}
-if (applies) this.add('-activate', pokemon, 'move: Gravity');
-}
-},
-onModifyAccuracy(accuracy) {
-if (typeof accuracy !== 'number') return;
-return this.chainModify([6840, 4096]);
-},
-onDisableMove(pokemon) {
-for (const moveSlot of pokemon.moveSlots) {
-if (this.dex.moves.get(moveSlot.id).flags['gravity']) {
-pokemon.disableMove(moveSlot.id);
-}
-}
-},
-// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
-onBeforeMovePriority: 6,
-onBeforeMove(pokemon, target, move) {
-if (move.flags['gravity'] && !move.isZ) {
-this.add('cant', pokemon, 'move: Gravity', move);
-return false;
-}
-},
-onModifyMove(move, pokemon, target) {
-if (move.flags['gravity'] && !move.isZ) {
-this.add('cant', pokemon, 'move: Gravity', move);
-return false;
-}
-},
-onFieldResidualOrder: 27,
-onFieldResidualSubOrder: 2,
-onFieldEnd() {
-this.add('-fieldend', 'move: Gravity');
-},
-},
-secondary: null,
-target: "all",
-type: "Psychic",
-},
-
-guardsplit: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Guard Split",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, allyanim: 1},
-onHit(target, source) {
-const newdef = Math.floor((target.storedStats.def + source.storedStats.def) / 2);
-target.storedStats.def = newdef;
-source.storedStats.def = newdef;
-const newspd = Math.floor((target.storedStats.spd + source.storedStats.spd) / 2);
-target.storedStats.spd = newspd;
-source.storedStats.spd = newspd;
-this.add('-activate', source, 'move: Guard Split', '[of] ' + target);
-},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-guardswap: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Guard Swap",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, bypasssub: 1, allyanim: 1},
-onHit(target, source) {
-const targetBoosts: SparseBoostsTable = {};
-const sourceBoosts: SparseBoostsTable = {};
-const defSpd: BoostID[] = ['def', 'spd'];
-for (const stat of defSpd) {
-targetBoosts[stat] = target.boosts[stat];
-sourceBoosts[stat] = source.boosts[stat];
-}
-source.setBoost(targetBoosts);
-target.setBoost(sourceBoosts);
-this.add('-swapboost', source, target, 'def, spd', '[from] move: Guard Swap');
-},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-healblock: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Heal Block",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-volatileStatus: 'healblock',
-condition: {
-duration: 5,
-durationCallback(target, source, effect) {
-if (source?.hasAbility('persistent')) {
-this.add('-activate', source, 'ability: Persistent', '[move] Heal Block');
-return 7;
-}
-return 5;
-},
-onStart(pokemon, source) {
-this.add('-start', pokemon, 'move: Heal Block');
-source.moveThisTurnResult = true;
-},
-onDisableMove(pokemon) {
-for (const moveSlot of pokemon.moveSlots) {
-if (this.dex.moves.get(moveSlot.id).flags['heal']) {
-pokemon.disableMove(moveSlot.id);
-}
-}
-},
-onBeforeMovePriority: 6,
-onBeforeMove(pokemon, target, move) {
-if (move.flags['heal'] && !move.isZ && !move.isMax) {
-this.add('cant', pokemon, 'move: Heal Block', move);
-return false;
-}
-},
-onModifyMove(move, pokemon, target) {
-if (move.flags['heal'] && !move.isZ && !move.isMax) {
-this.add('cant', pokemon, 'move: Heal Block', move);
-return false;
-}
-},
-onResidualOrder: 20,
-onEnd(pokemon) {
-this.add('-end', pokemon, 'move: Heal Block');
-},
-onTryHeal(damage, target, source, effect) {
-if ((effect?.id === 'zpower') || this.effectState.isZ) return damage;
-return false;
-},
-onRestart(target, source) {
-this.add('-fail', target, 'move: Heal Block'); // Succeeds to supress downstream messages
-if (!source.moveThisTurnResult) {
-source.moveThisTurnResult = false;
-}
-},
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Psychic",
-},
-
-healingwish: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Healing Wish",
-pp: 0.625,
-priority: 0,
-flags: {snatch: 1, heal: 1},
-onTryHit(source) {
-if (!this.canSwitch(source.side)) {
-this.attrLastMove('[still]');
-this.add('-fail', source);
-return this.NOT_FAIL;
-}
-},
-selfdestruct: "ifHit",
-slotCondition: 'healingwish',
-condition: {
-onSwap(target) {
-if (!target.fainted && (target.hp < target.maxhp || target.status)) {
-target.heal(target.maxhp);
-target.clearStatus();
-this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
-target.side.removeSlotCondition(target, 'healingwish');
-}
-},
-},
-secondary: null,
-target: "self",
-type: "Psychic",
-},
-
-healpulse: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Heal Pulse",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, pulse: 1, reflectable: 1, distance: 1, heal: 1, allyanim: 1},
-onHit(target, source) {
-let success = false;
-if (source.hasAbility('megalauncher')) {
-success = !!this.heal(this.modify(target.baseMaxhp, 0.75));
-} else {
-success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
-}
-if (success && !target.isAlly(source)) {
-target.staleness = 'external';
-}
-if (!success) {
-this.add('-fail', target, 'heal');
-return this.NOT_FAIL;
-}
-return success;
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Psychic",
-},
-
-heartstamp: {
-accuracy: 68,
-basePower: 135,
-category: "Physical",
-name: "Heart Stamp",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 50,
-volatileStatus: 'flinch',
-},
-target: "normal",
-type: "Psychic",
-},
-
-heartswap: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Heart Swap",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, bypasssub: 1, allyanim: 1},
-onHit(target, source) {
-const targetBoosts: SparseBoostsTable = {};
-const sourceBoosts: SparseBoostsTable = {};
-let i: BoostID;
-for (i in target.boosts) {
-targetBoosts[i] = target.boosts[i];
-sourceBoosts[i] = source.boosts[i];
-}
-target.setBoost(sourceBoosts);
-source.setBoost(targetBoosts);
-this.add('-swapboost', source, target, '[from] move: Heart Swap');
-},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-hyperspacehole: {
-accuracy: 72,
-basePower: 115,
-category: "Special",
-name: "Hyperspace Hole",
-pp: 1.25,
-priority: -1,
-flags: {mirror: 1, bypasssub: 1},
-breaksProtect: true,
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-hypnosis: {
-accuracy: 75,
-basePower: 5,
-category: "Status",
-name: "Hypnosis",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-status: 'slp',
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-imprison: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Imprison",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, bypasssub: 1, mustpressure: 1},
-volatileStatus: 'imprison',
-condition: {
-noCopy: true,
-onStart(target) {
-this.add('-start', target, 'move: Imprison');
-},
-onFoeDisableMove(pokemon) {
-for (const moveSlot of this.effectState.source.moveSlots) {
-if (moveSlot.id === 'struggle') continue;
-pokemon.disableMove(moveSlot.id, 'hidden');
-}
-pokemon.maybeDisabled = true;
-},
-onFoeBeforeMovePriority: 4,
-onFoeBeforeMove(attacker, defender, move) {
-if (move.id !== 'struggle' && this.effectState.source.hasMove(move.id) && !move.isZ && !move.isMax) {
-this.add('cant', attacker, 'move: Imprison', move);
-return false;
-}
-},
-},
-secondary: null,
-target: "self",
-type: "Psychic",
-},
-
-instruct: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Instruct",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, bypasssub: 1, allyanim: 1, failinstruct: 1},
-onHit(target, source) {
-if (!target.lastMove || target.volatiles['dynamax']) return false;
-const lastMove = target.lastMove;
-const moveIndex = target.moves.indexOf(lastMove.id);
-if (
-lastMove.flags['failinstruct'] || lastMove.isZ || lastMove.isMax ||
-lastMove.flags['charge'] || lastMove.flags['recharge'] ||
-target.volatiles['beakblast'] || target.volatiles['focuspunch'] || target.volatiles['shelltrap'] ||
-(target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)
-) {
-return false;
-}
-this.add('-singleturn', target, 'move: Instruct', '[of] ' + source);
-this.queue.prioritizeAction(this.queue.resolveAction({
-choice: 'move',
-pokemon: target,
-moveid: target.lastMove.id,
-targetLoc: target.lastMoveTargetLoc!,
-})[0] as MoveAction);
-},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-kinesis: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Kinesis",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-boosts: {
-accuracy: -1,
-evasion: -1,
-},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-lightscreen: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Light Screen",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-sideCondition: 'lightscreen',
-condition: {
-duration: 5,
-durationCallback(target, source, effect) {
-if (source?.hasItem('lightclay')) {
-return 8;
-}
-return 5;
-},
-onAnyModifyDamage(damage, source, target, move) {
-if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Special') {
-if (!target.getMoveHitData(move).crit && !move.infiltrates) {
-this.debug('Light Screen weaken');
-if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
-return this.chainModify(0.5);
-}
-}
-},
-onSideStart(side) {
-this.add('-sidestart', side, 'move: Light Screen');
-},
-onSideResidualOrder: 26,
-onSideResidualSubOrder: 2,
-onSideEnd(side) {
-this.add('-sideend', side, 'move: Light Screen');
-},
-},
-secondary: null,
-target: "allySide",
-type: "Psychic",
-},
-
-lightthatburnsthesky: {
-accuracy: 60,
-basePower: 200,
-category: "Special",
-name: "Light That Burns the Sky",
-pp: 0.625,
-priority: 0,
-flags: {},
-onModifyMove(move, pokemon) {
-if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
-},
-ignoreAbility: true,
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-luminacrash: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Lumina Crash",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-boosts: {
-spd: -2,
-evasion: -2,
-},
-},
-target: "normal",
-type: "Psychic",
-},
-
-lunarblessing: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Lunar Blessing",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, heal: 1},
-onHit(pokemon) {
-const success = !!this.heal(this.modify(pokemon.maxhp, 0.25));
-return pokemon.cureStatus() || success;
-},
-secondary: null,
-target: "allies",
-type: "Psychic",
-},
-
-lunardance: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Lunar Dance",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, heal: 1, dance: 1},
-onTryHit(source) {
-if (!this.canSwitch(source.side)) {
-this.attrLastMove('[still]');
-this.add('-fail', source);
-return this.NOT_FAIL;
-}
-},
-selfdestruct: "ifHit",
-slotCondition: 'lunardance',
-condition: {
-onSwap(target) {
-if (
-!target.fainted && (
-target.hp < target.maxhp ||
-target.status ||
-target.moveSlots.some(moveSlot => moveSlot.pp < moveSlot.maxpp)
-)
-) {
-target.heal(target.maxhp);
-target.clearStatus();
-for (const moveSlot of target.moveSlots) {
-moveSlot.pp = moveSlot.maxpp;
-}
-this.add('-heal', target, target.getHealth, '[from] move: Lunar Dance');
-target.side.removeSlotCondition(target, 'lunardance');
-}
-},
-},
-secondary: null,
-target: "self",
-type: "Psychic",
-},
-
-lusterpurge: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Luster Purge",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-boosts: {
-spd: -1,
-def: -1,
-spe: 1,
-},
-},
-target: "normal",
-type: "Psychic",
-},
-
-magiccoat: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Magic Coat",
-pp: 1.25,
-priority: 4,
-flags: {mirror: 1},
-volatileStatus: 'magiccoat',
-condition: {
-duration: 1,
-onStart(target, source, effect) {
-this.add('-singleturn', target, 'move: Magic Coat');
-if (effect?.effectType === 'Move') {
-this.effectState.pranksterBoosted = effect.pranksterBoosted;
-}
-},
-onTryHitPriority: 2,
-onTryHit(target, source, move) {
-if (target === source || move.hasBounced || !move.flags['reflectable']) {
-return;
-}
-const newMove = this.dex.getActiveMove(move.id);
-newMove.hasBounced = true;
-newMove.pranksterBoosted = this.effectState.pranksterBoosted;
-this.actions.useMove(newMove, target, source);
-return null;
-},
-onAllyTryHitSide(target, source, move) {
-if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
-return;
-}
-const newMove = this.dex.getActiveMove(move.id);
-newMove.hasBounced = true;
-newMove.pranksterBoosted = false;
-this.actions.useMove(newMove, this.effectState.target, source);
-return null;
-},
-},
-secondary: null,
-target: "self",
-type: "Psychic",
-},
-
-magicpowder: {
-accuracy: 91,
-basePower: 40,
-category: "Physical ",
-name: "Magic Powder",
-pp: 1.25,
-priority: 3,
-flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-magicroom: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Magic Room",
-pp: 1.25,
-priority: 0,
-flags: {mirror: 1},
-pseudoWeather: 'magicroom',
-condition: {
-duration: 5,
-durationCallback(source, effect) {
-if (source?.hasAbility('persistent')) {
-this.add('-activate', source, 'ability: Persistent', '[move] Magic Room');
-return 7;
-}
-return 5;
-},
-onFieldStart(target, source) {
-if (source?.hasAbility('persistent')) {
-this.add('-fieldstart', 'move: Magic Room', '[of] ' + source, '[persistent]');
-} else {
-this.add('-fieldstart', 'move: Magic Room', '[of] ' + source);
-}
-for (const mon of this.getAllActive()) {
-this.singleEvent('End', mon.getItem(), mon.itemState, mon);
-}
-},
-onFieldRestart(target, source) {
-this.field.removePseudoWeather('magicroom');
-},
-// Item suppression implemented in Pokemon.ignoringItem() within sim/pokemon.js
-onFieldResidualOrder: 27,
-onFieldResidualSubOrder: 6,
-onFieldEnd() {
-this.add('-fieldend', 'move: Magic Room', '[of] ' + this.effectState.source);
-},
-},
-secondary: null,
-target: "all",
-type: "Psychic",
-},
-
-meditate: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Meditate",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-atk: 1,
-spa: 1,
-accuracy: 1,
-evasion: 1,
-spd: -2,
-def: -2,
-},
-secondary: null,
-target: "self",
-type: "Psychic",
-},
-
-miracleeye: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Miracle Eye",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
-volatileStatus: 'miracleeye',
-onTryHit(target) {
-if (target.volatiles['foresight']) return false;
-},
-condition: {
-noCopy: true,
-onStart(pokemon) {
-this.add('-start', pokemon, 'Miracle Eye');
-},
-onNegateImmunity(pokemon, type) {
-if (pokemon.hasType('Dark') && type === 'Psychic') return false;
-},
-onModifyBoost(boosts) {
-if (boosts.evasion && boosts.evasion > 0) {
-boosts.evasion = 0;
-}
-},
-},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-mirrorcoat: {
-accuracy: 89,
-basePower: 50,
-damageCallback(pokemon) {
-if (!pokemon.volatiles['mirrorcoat']) return 0;
-return pokemon.volatiles['mirrorcoat'].damage || 1;
-},
-category: "Special",
-name: "Mirror Coat",
-pp: 1.25,
-priority: -5,
-flags: {protect: 1, failmefirst: 1, noassist: 1},
-beforeTurnCallback(pokemon) {
-pokemon.addVolatile('mirrorcoat');
-},
-onTry(source) {
-if (!source.volatiles['mirrorcoat']) return false;
-if (source.volatiles['mirrorcoat'].slot === null) return false;
-},
-condition: {
-duration: 1,
-noCopy: true,
-onStart(target, source, move) {
-this.effectState.slot = null;
-this.effectState.damage = 0;
-},
-onRedirectTargetPriority: -1,
-onRedirectTarget(target, source, source2, move) {
-if (move.id !== 'mirrorcoat') return;
-if (source !== this.effectState.target || !this.effectState.slot) return;
-return this.getAtSlot(this.effectState.slot);
-},
-onDamagingHit(damage, target, source, move) {
-if (!source.isAlly(target) && this.getCategory(move) === 'Special') {
-this.effectState.slot = source.getSlot();
-this.effectState.damage = 2 * damage;
-}
-},
-},
-secondary: null,
-target: "scripted",
-type: "Psychic",
-},
-
-mistball: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Mist Ball",
-pp: 1.25,
-priority: 0,
-flags: {bullet: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-boosts: {
-accuracy: -1,
-evasion: -1,
-},
-},
-target: "normal",
-type: "Psychic",
-},
-
-mysticalpower: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Mystical Power",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-self: {
-boosts: {
-atk: 1,
-spa: 1,
-},
-},
-},
-target: "normal",
-type: "Psychic",
-},
-
-photongeyser: {
-accuracy: 82,
-basePower: 85,
-category: "Special",
-name: "Photon Geyser",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onModifyMove(move, pokemon) {
-if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
-},
-ignoreAbility: true,
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-powersplit: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Power Split",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, allyanim: 1},
-onHit(target, source) {
-const newatk = Math.floor((target.storedStats.atk + source.storedStats.atk) / 2);
-target.storedStats.atk = newatk;
-source.storedStats.atk = newatk;
-const newspa = Math.floor((target.storedStats.spa + source.storedStats.spa) / 2);
-target.storedStats.spa = newspa;
-source.storedStats.spa = newspa;
-this.add('-activate', source, 'move: Power Split', '[of] ' + target);
-},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-powerswap: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Power Swap",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, bypasssub: 1, allyanim: 1},
-onHit(target, source) {
-const targetBoosts: SparseBoostsTable = {};
-const sourceBoosts: SparseBoostsTable = {};
-const atkSpa: BoostID[] = ['atk', 'spa'];
-for (const stat of atkSpa) {
-targetBoosts[stat] = target.boosts[stat];
-sourceBoosts[stat] = source.boosts[stat];
-}
-source.setBoost(targetBoosts);
-target.setBoost(sourceBoosts);
-this.add('-swapboost', source, target, 'atk, spa', '[from] move: Power Swap');
-},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-powertrick: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Power Trick",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-volatileStatus: 'powertrick',
-condition: {
-onStart(pokemon) {
-this.add('-start', pokemon, 'Power Trick');
-const newatk = pokemon.storedStats.def;
-const newdef = pokemon.storedStats.atk;
-pokemon.storedStats.atk = newatk;
-pokemon.storedStats.def = newdef;
-},
-onCopy(pokemon) {
-const newatk = pokemon.storedStats.def;
-const newdef = pokemon.storedStats.atk;
-pokemon.storedStats.atk = newatk;
-pokemon.storedStats.def = newdef;
-},
-onEnd(pokemon) {
-this.add('-end', pokemon, 'Power Trick');
-const newatk = pokemon.storedStats.def;
-const newdef = pokemon.storedStats.atk;
-pokemon.storedStats.atk = newatk;
-pokemon.storedStats.def = newdef;
-},
-onRestart(pokemon) {
-pokemon.removeVolatile('Power Trick');
-},
-},
-secondary: null,
-target: "self",
-type: "Psychic",
-},
-
-prismaticlaser: {
-accuracy: 72,
-basePower: 115,
-category: "Special",
-name: "Prismatic Laser",
-pp: 1.25,
-priority: -1,
-flags: {recharge: 1, protect: 1, mirror: 1},
-self: {
-volatileStatus: 'mustrecharge',
-},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-psybeam: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Psybeam",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-volatileStatus: 'confusion',
-},
-target: "normal",
-type: "Psychic",
-},
-
-psyblade: {
-accuracy: 78,
-basePower: 105,
-category: "Physical",
-name: "Psyblade",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
-secondary: null,
-onBasePower(basePower, source) {
-if (this.field.isTerrain('electricterrain')) {
-this.debug('psyblade electric terrain boost');
-return this.chainModify(1.5);
-}
-},
-target: "normal",
-type: "Psychic",
-},
-
-psychic: {
-accuracy: 80,
-basePower: 95,
-category: "Special",
-name: "Psychic",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-boosts: {
-spd: -1,
-def: -1,
-spe: 1,
-evasion: 1,
-},
-},
-target: "normal",
-type: "Psychic",
-},
-
-psychicfangs: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Psychic Fangs",
-pp: 1.25,
-priority: 0,
-flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
-onTryHit(pokemon) {
-// will shatter screens through sub, before you hit
-pokemon.side.removeSideCondition('reflect');
-pokemon.side.removeSideCondition('lightscreen');
-pokemon.side.removeSideCondition('auroraveil');
-},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-psychicterrain: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Psychic Terrain",
-pp: 1.25,
-priority: 0,
-flags: {nonsky: 1},
-terrain: 'psychicterrain',
-condition: {
-duration: 5,
-durationCallback(source, effect) {
-if (source?.hasItem('terrainextender')) {
-return 8;
-}
-return 5;
-},
-onTryHitPriority: 4,
-onTryHit(target, source, effect) {
-if (effect && (effect.priority <= 0.1 || effect.target === 'self')) {
-return;
-}
-if (target.isSemiInvulnerable() || target.isAlly(source)) return;
-if (!target.isGrounded()) {
-const baseMove = this.dex.moves.get(effect.id);
-if (baseMove.priority > 0) {
-this.hint("Psychic Terrain doesn't affect Pokémon immune to Ground.");
-}
-return;
-}
-this.add('-activate', target, 'move: Psychic Terrain');
-return null;
-},
-onBasePowerPriority: 6,
-onBasePower(basePower, attacker, defender, move) {
-if (move.type === 'Psychic' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
-this.debug('psychic terrain boost');
-return this.chainModify([5325, 4096]);
-}
-},
-onFieldStart(field, source, effect) {
-if (effect?.effectType === 'Ability') {
-this.add('-fieldstart', 'move: Psychic Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
-} else {
-this.add('-fieldstart', 'move: Psychic Terrain');
-}
-},
-onFieldResidualOrder: 27,
-onFieldResidualSubOrder: 7,
-onFieldEnd() {
-this.add('-fieldend', 'move: Psychic Terrain');
-},
-},
-secondary: null,
-target: "all",
-type: "Psychic",
-},
-
-psychoboost: {
-accuracy: 72,
-basePower: 115,
-category: "Special",
-name: "Psycho Boost",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1},
-self: {
-boosts: {
-atk: -2,
-spa: -2,
-spe: 2,
-evasion: 2,
-accuracy: -2,
-},
-},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-psychocut: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Psycho Cut",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, slicing: 1},
-critRatio: 3,
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-psychoshift: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Psycho Shift",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onTryHit(target, source, move) {
-if (!source.status) return false;
-move.status = source.status;
-},
-self: {
-onHit(pokemon) {
-pokemon.cureStatus();
-},
-},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-psyshieldbash: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Psyshield Bash",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-self: {
-boosts: {
-def: 1,
-spd: 1,
-spe: -1,
-evasion: -1,
-},
-},
-},
-target: "normal",
-type: "Psychic",
-},
-
-psyshock: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-overrideDefensiveStat: 'def',
-name: "Psyshock",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-psystrike: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-overrideDefensiveStat: 'def',
-name: "Psystrike",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-psywave: {
-accuracy: 93,
-basePower: 30,
-category: "Special",
-name: "Psywave",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Psychic",
-},
-
-reflect: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Reflect",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-sideCondition: 'reflect',
-condition: {
-duration: 5,
-durationCallback(target, source, effect) {
-if (source?.hasItem('lightclay')) {
-return 8;
-}
-return 5;
-},
-onAnyModifyDamage(damage, source, target, move) {
-if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Physical') {
-if (!target.getMoveHitData(move).crit && !move.infiltrates) {
-this.debug('Reflect weaken');
-if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
-return this.chainModify(0.5);
-}
-}
-},
-onSideStart(side) {
-this.add('-sidestart', side, 'Reflect');
-},
-onSideResidualOrder: 26,
-onSideResidualSubOrder: 1,
-onSideEnd(side) {
-this.add('-sideend', side, 'Reflect');
-},
-},
-secondary: null,
-target: "allySide",
-type: "Psychic",
-},
-
-rest: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Rest",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, heal: 1},
-self: {
-boosts: {
-evasion: -2,
-},
-onTry(source) {
-if (source.status === 'slp' || source.hasAbility('comatose')) return false;
-if (source.hp === source.maxhp) {
-this.add('-fail', source, 'heal');
-return null;
-}
-if (source.hasAbility(['insomnia', 'vitalspirit'])) {
-this.add('-fail', source, '[from] ability: ' + source.getAbility().name, '[of] ' + source);
-return null;
-}
-},
-onHit(target, source, move) {
-const result = target.setStatus('slp', source, move);
-if (!result) return result;
-target.statusState.time = 3;
-target.statusState.startTime = 3;
-this.heal(target.maxhp); // Aesthetic only as the healing happens after you fall asleep in-game
-},
-secondary: null,
-target: "self",
-type: "Psychic",
-},
-
-roleplay: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Role Play",
-pp: 1.25,
-priority: 0,
-flags: {bypasssub: 1, allyanim: 1},
-onTryHit(target, source) {
-if (target.ability === source.ability) return false;
-const additionalBannedTargetAbilities = [
-// Zen Mode included here for compatability with Gen 5-6
-'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard', 'zenmode',
-];
-if (target.getAbility().isPermanent || additionalBannedTargetAbilities.includes(target.ability) ||
-source.getAbility().isPermanent) {
-return false;
-}
-},
-onHit(target, source) {
-const oldAbility = source.setAbility(target.ability);
-if (oldAbility) {
-this.add('-ability', source, source.getAbility().name, '[from] move: Role Play', '[of] ' + target);
-return;
-}
-return oldAbility as false | null;
-},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-shatteredpsyche: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Shattered Psyche",
-pp: 1.25,
-priority: 0,
-flags: {mirror: 1},
-volatileStatus: 'confusion',
-target: "allAdjacentFoes",
-type: "Psychic",
-},
-
-skillswap: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Skill Swap",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, bypasssub: 1, allyanim: 1},
-onTryHit(target, source) {
-const additionalBannedAbilities = ['hungerswitch', 'illusion', 'neutralizinggas', 'wonderguard'];
-const targetAbility = target.getAbility();
-const sourceAbility = source.getAbility();
-// TODO: research in what order these should be checked
-if (
-target.volatiles['dynamax'] ||
-targetAbility.isPermanent || sourceAbility.isPermanent ||
-additionalBannedAbilities.includes(target.ability) || additionalBannedAbilities.includes(source.ability)
-) {
-return false;
-}
-const sourceCanBeSet = this.runEvent('SetAbility', source, source, this.effect, targetAbility);
-if (!sourceCanBeSet) return sourceCanBeSet;
-const targetCanBeSet = this.runEvent('SetAbility', target, source, this.effect, sourceAbility);
-if (!targetCanBeSet) return targetCanBeSet;
-},
-onHit(target, source, move) {
-const targetAbility = target.getAbility();
-const sourceAbility = source.getAbility();
-if (target.isAlly(source)) {
-this.add('-activate', source, 'move: Skill Swap', '', '', '[of] ' + target);
-} else {
-this.add('-activate', source, 'move: Skill Swap', targetAbility, sourceAbility, '[of] ' + target);
-}
-this.singleEvent('End', sourceAbility, source.abilityState, source);
-this.singleEvent('End', targetAbility, target.abilityState, target);
-source.ability = targetAbility.id;
-target.ability = sourceAbility.id;
-source.abilityState = {id: this.toID(source.ability), target: source};
-target.abilityState = {id: this.toID(target.ability), target: target};
-if (!target.isAlly(source)) target.volatileStaleness = 'external';
-this.singleEvent('Start', targetAbility, source.abilityState, source);
-this.singleEvent('Start', sourceAbility, target.abilityState, target);
-},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-speedswap: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Speed Swap",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, bypasssub: 1, allyanim: 1},
-onHit(target, source) {
-const targetSpe = target.storedStats.spe;
-target.storedStats.spe = source.storedStats.spe;
-source.storedStats.spe = targetSpe;
-this.add('-activate', source, 'move: Speed Swap', '[of] ' + target);
-},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-storedpower: {
-accuracy: 89,
-basePower: 50,
-basePowerCallback(pokemon, target, move) {
-const bp = move.basePower + 20 * pokemon.positiveBoosts();
-this.debug('BP: ' + bp);
-return bp;
-},
-category: "Special",
-name: "Stored Power",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-synchronoise: {
-accuracy: 72,
-basePower: 115,
-category: "Special",
-name: "Synchronoise",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1},
-onTryImmunity(target, source) {
-return target.hasType(source.getTypes());
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Psychic",
-},
-
-takeheart: {
-accuracy: 73,
-basePower: 0,
-category: "Special",
-name: "Take Heart",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-onHit(pokemon) {
-const success = !!this.boost({spa: 1, spd: 1});
-return pokemon.cureStatus() || success;
-},
-secondary: null,
-target: "self",
-type: "Psychic",
-},
-
-telekinesis: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Telekinesis",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, gravity: 1, allyanim: 1},
-volatileStatus: 'telekinesis',
-onTry(source, target, move) {
-// Additional Gravity check for Z-move variant
-if (this.field.getPseudoWeather('Gravity')) {
-this.attrLastMove('[still]');
-this.add('cant', source, 'move: Gravity', move);
-return null;
-}
-},
-condition: {
-duration: 3,
-onStart(target) {
-if (['Diglett', 'Dugtrio', 'Palossand', 'Sandygast'].includes(target.baseSpecies.baseSpecies) ||
-target.baseSpecies.name === 'Gengar-Mega') {
-this.add('-immune', target);
-return null;
-}
-if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
-this.add('-start', target, 'Telekinesis');
-},
-onAccuracyPriority: -1,
-onAccuracy(accuracy, target, source, move) {
-if (move && !move.ohko) return true;
-},
-onImmunity(type) {
-if (type === 'Ground') return false;
-},
-onUpdate(pokemon) {
-if (pokemon.baseSpecies.name === 'Gengar-Mega') {
-delete pokemon.volatiles['telekinesis'];
-this.add('-end', pokemon, 'Telekinesis', '[silent]');
-}
-},
-onResidualOrder: 19,
-onEnd(target) {
-this.add('-end', target, 'Telekinesis');
-},
-},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-teleport: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Teleport",
-pp: 0.625,
-priority: 10,
-flags: {protect: 1,},
-onTry(source) {
-return !!this.canSwitch(source.side);
-},
-selfSwitch: true,
-forceSwitch: true,
-secondary: null,
-target: "any",
-type: "Psychic",
-},
-
-trick: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Trick",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, allyanim: 1, noassist: 1, failcopycat: 1},
-onTryImmunity(target) {
-return !target.hasAbility('stickyhold');
-},
-onHit(target, source, move) {
-const yourItem = target.takeItem(source);
-const myItem = source.takeItem();
-if (target.item || source.item || (!yourItem && !myItem)) {
-if (yourItem) target.item = yourItem.id;
-if (myItem) source.item = myItem.id;
-return false;
-}
-if (
-(myItem && !this.singleEvent('TakeItem', myItem, source.itemState, target, source, move, myItem)) ||
-(yourItem && !this.singleEvent('TakeItem', yourItem, target.itemState, source, target, move, yourItem))
-) {
-if (yourItem) target.item = yourItem.id;
-if (myItem) source.item = myItem.id;
-return false;
-}
-this.add('-activate', source, 'move: Trick', '[of] ' + target);
-if (myItem) {
-target.setItem(myItem);
-this.add('-item', target, myItem, '[from] move: Trick');
-} else {
-this.add('-enditem', target, yourItem, '[silent]', '[from] move: Trick');
-}
-if (yourItem) {
-source.setItem(yourItem);
-this.add('-item', source, yourItem, '[from] move: Trick');
-} else {
-this.add('-enditem', source, myItem, '[silent]', '[from] move: Trick');
-}
-},
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-trickroom: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Trick Room",
-pp: 1.25,
-priority: -7,
-flags: {mirror: 1},
-pseudoWeather: 'trickroom',
-condition: {
-duration: 5,
-durationCallback(source, effect) {
-if (source?.hasAbility('persistent')) {
-this.add('-activate', source, 'ability: Persistent', '[move] Trick Room');
-return 7;
-}
-return 5;
-},
-onFieldStart(target, source) {
-if (source?.hasAbility('persistent')) {
-this.add('-fieldstart', 'move: Trick Room', '[of] ' + source, '[persistent]');
-} else {
-this.add('-fieldstart', 'move: Trick Room', '[of] ' + source);
-}
-},
-onFieldRestart(target, source) {
-this.field.removePseudoWeather('trickroom');
-},
-// Speed modification is changed in Pokemon.getActionSpeed() in sim/pokemon.js
-onFieldResidualOrder: 27,
-onFieldResidualSubOrder: 1,
-onFieldEnd() {
-this.add('-fieldend', 'move: Trick Room');
-},
-},
-secondary: null,
-target: "all",
-type: "Psychic",
-},
-
-twinbeam: {
-accuracy: 73,
-basePower: 15,
-category: "Special",
-name: "Twin Beam",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-multihit: [2, 4],
-secondary: null,
-target: "normal",
-type: "Psychic",
-},
-
-wonderroom: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Wonder Room",
-pp: 1.25,
-priority: 0,
-flags: {mirror: 1},
-pseudoWeather: 'wonderroom',
-condition: {
-duration: 5,
-durationCallback(source, effect) {
-if (source?.hasAbility('persistent')) {
-this.add('-activate', source, 'ability: Persistent', '[move] Wonder Room');
-return 7;
-}
-return 5;
-},
-onModifyMove(move, source, target) {
-// This code is for moves that use defensive stats as the attacking stat; see below for most of the implementation
-if (!move.overrideOffensiveStat) return;
-const statAndBoosts = move.overrideOffensiveStat;
-if (!['def', 'spd'].includes(statAndBoosts)) return;
-move.overrideOffensiveStat = statAndBoosts === 'def' ? 'spd' : 'def';
-this.hint(`${move.name} uses ${statAndBoosts === 'def' ? '' : 'Sp. '}Def boosts when Wonder Room is active.`);
-},
-onFieldStart(field, source) {
-if (source?.hasAbility('persistent')) {
-this.add('-fieldstart', 'move: Wonder Room', '[of] ' + source, '[persistent]');
-} else {
-this.add('-fieldstart', 'move: Wonder Room', '[of] ' + source);
-}
-},
-onFieldRestart(target, source) {
-this.field.removePseudoWeather('wonderroom');
-},
-// Swapping defenses partially implemented in sim/pokemon.js:Pokemon#calculateStat and Pokemon#getStat
-onFieldResidualOrder: 27,
-onFieldResidualSubOrder: 5,
-onFieldEnd() {
-this.add('-fieldend', 'move: Wonder Room');
-},
-},
-secondary: null,
-target: "all",
-type: "Psychic",
-},
-
-zenheadbutt: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Zen Headbutt",
-pp: 0.625,
-priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [25, 100],
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-target: "normal",
-type: "Psychic",
-},
-
-accelerock: {
-accuracy: 91,
-basePower: 40,
-category: "Physical",
-name: "Accelerock",
-pp: 1.25,
-priority: 3,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Rock",
-},
-
-ancientpower: {
-accuracy: 80,
-basePower: 95,
-category: "Special",
-name: "Ancient Power",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-self: {
-boosts: {
-atk: 1,
-def: 1,
-spa: 1,
-spd: 1,
-spe: 1,
-accuracy: 1,
-evasion: -6,
-},
-},
-},
-target: "normal",
-type: "Rock",
-},
-
-continentalcrush: {
-accuracy: 60,
-basePower: 200,
-category: "Physical",
-name: "Continental Crush",
-pp: 0.625,
-priority: 0,
-flags: {},
-secondary: {
-chance: 100,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
-weather: 'Sandstorm',
-target: "allAdjacentFoes",
-type: "Rock",
-},
-
-diamondstorm: {
-accuracy: 68,
-basePower: 135,
-category: "Physical",
-name: "Diamond Storm",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1},
-self: {
-chance: 33,
-boosts: {
-spd: 2,
-def: 2,
-spe: -1,
-evasion: -1,
-},
-},
-secondary: {
-// Sheer Force negates the self even though it is not secondary
-},
-target: "allAdjacentFoes",
-type: "Rock",
-},
-
-headsmash: {
-accuracy: 63,
-basePower: 150,
-category: "Physical",
-name: "Head Smash",
-pp: 0.625,
-priority: -3,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [50, 100],
-hasCrashDamage: true,
-onMoveFail(target, source, move) {
-this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
-},
-secondary: null,
-target: "normal",
-type: "Rock",
-},
-
-meteorbeam: {
-accuracy: 70,
-basePower: 125,
-category: "Special",
-name: "Meteor Beam",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Rock",
-},
-
-powergem: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Power Gem",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Rock",
-},
-
-rockblast: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Rock Blast",
-pp: 1.25,
-priority: 0,
-flags: {bullet: 1, protect: 1, mirror: 1},
-critRatio: 2,
-multihit: [1, 6],
-secondary: null,
-target: "normal",
-type: "Rock",
-},
-
-rockpolish: {
-accuracy: 125,
-basePower: 33,
-category: "Special",
-name: "Rock Polish",
-pp: 0.625,
-priority: 4,
-flags: {snatch: 1},
-boosts: {
-spe: 2,
-spd: -1,
-def: -1,
-},
-weather: 'Sandstorm',
-secondary: null,
-target: "self",
-type: "Rock",
-},
-
-rockslide: {
-accuracy: 78,
-basePower: 105,
-category: "Physical",
-name: "Rock Slide",
-pp: 0.625,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [25, 100],
-secondary: {
-chance: 40,
-volatileStatus: 'flinch',
-},
-weather: 'Sandstorm',
-target: "allAdjacentFoes",
-type: "Rock",
-},
-
-rockthrow: {
-accuracy: 100,
-basePower: 16,
-category: "Physical",
-name: "Rock Throw",
-pp: 1.25,
-priority: 6,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-forceSwitch: true,
-target: "randomNormal",
-type: "Rock",
-},
-
-rocktomb: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Rock Tomb",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
-target: "normal",
-type: "Rock",
-},
-
-rockwrecker: {
-accuracy: 93,
-basePower: 30,
-category: "Physical",
-name: "Rock Wrecker",
-pp: 1.25,
-priority: 3,
-flags: {bullet: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Rock",
-},
-
-rollout: {
-accuracy: 73,
-basePower: 15,
-basePowerCallback(pokemon, target, move) {
-return 20 * move.hit;
-},
-category: "Physical",
-name: "Rollout",
-pp: 0.625,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-multihit: [5, 10],
-multiaccuracy: 75,
-secondary: null,
-target: "normal",
-type: "Rock",
-},
-
-saltcure: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Salt Cure",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-condition: {
-noCopy: true,
-onStart(pokemon) {
-this.add('-start', pokemon, 'Salt Cure');
-},
-onResidualOrder: 13,
-onResidual(pokemon) {
-this.damage(pokemon.baseMaxhp / (pokemon.hasType(['Water', 'Steel']) ? 4 : 8));
-},
-onEnd(pokemon) {
-this.add('-end', pokemon, 'Salt Cure');
-},
-},
-secondary: {
-chance: 100,
-volatileStatus: 'saltcure',
-},
-target: "normal",
-type: "Rock",
-},
-
-sandstorm: {
-accuracy: 100,
-basePower: 16,
-category: "Special",
-name: "Sandstorm",
-pp: 1.25,
-priority: 6,
-flags: {wind: 1},
-weather: 'Sandstorm',
-secondary: null,
-selfSwitch: true,
-target: "all",
-type: "Rock",
-},
-
-smackdown: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Smack Down",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1},
-volatileStatus: 'smackdown',
-condition: {
-noCopy: true,
-onStart(pokemon) {
-let applies = false;
-if (pokemon.hasType('Flying') || pokemon.hasAbility('levitate')) applies = true;
-if (pokemon.hasItem('ironball') || pokemon.volatiles['ingrain'] ||
-this.field.getPseudoWeather('gravity')) applies = false;
-if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
-applies = true;
-this.queue.cancelMove(pokemon);
-pokemon.removeVolatile('twoturnmove');
-}
-if (pokemon.volatiles['magnetrise']) {
-applies = true;
-delete pokemon.volatiles['magnetrise'];
-}
-if (pokemon.volatiles['telekinesis']) {
-applies = true;
-delete pokemon.volatiles['telekinesis'];
-}
-if (!applies) return false;
-this.add('-start', pokemon, 'Smack Down');
-},
-onRestart(pokemon) {
-if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
-this.queue.cancelMove(pokemon);
-pokemon.removeVolatile('twoturnmove');
-this.add('-start', pokemon, 'Smack Down');
-}
-},
-// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
-},
-secondary: null,
-target: "normal",
-type: "Rock",
-},
-
-splinteredstormshards: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Splintered Stormshards",
-pp: 0.625,
-priority: -1,
-flags: {protect: 1, mirror: 1,},
-onHit() {
-this.field.clearTerrain();
-},
-onAfterSubDamage() {
-this.field.clearTerrain();
-},
-weather: 'Sandstorm',
-secondary: null,
-target: "normal",
-type: "Rock",
-},
-
-stealthrock: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Stealth Rock",
-pp: 1.25,
-priority: -1,
-flags: {reflectable: 1, mustpressure: 1},
-sideCondition: 'stealthrock',
-condition: {
-// this is a side condition
-onSideStart(side) {
-this.add('-sidestart', side, 'move: Stealth Rock');
-},
-onEntryHazard(pokemon) {
-if (pokemon.hasItem('heavydutyboots')) return;
-const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
-this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
-},
-},
-secondary: null,
-target: "foeSide",
-type: "Rock",
-},
-
-stoneaxe: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Stone Axe",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
-self: {
-onHit(source) {
-for (const side of source.side.foeSidesWithConditions()) {
-side.addSideCondition('stealthrock');
-}
-},
-},
-secondary: {}, // allows sheer force to trigger
-target: "normal",
-type: "Rock",
-},
-
-stoneedge: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Stone Edge",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-critRatio: 3,
-secondary: null,
-target: "normal",
-type: "Rock",
-},
-
-tarshot: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Tar Shot",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-volatileStatus: 'tarshot',
-condition: {
-onStart(pokemon) {
-this.add('-start', pokemon, 'Tar Shot');
-},
-onEffectivenessPriority: -2,
-onEffectiveness(typeMod, target, type, move) {
-if (move.type !== 'Fire') return;
-if (!target) return;
-if (type !== target.getTypes()[0]) return;
-return typeMod + 1;
-},
-},
-boosts: {
-spe: -1,
-evasion: -1,
-},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Rock",
-},
-
-wideguard: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Wide Guard",
-pp: 1.25,
-priority: 3,
-flags: {snatch: 1},
-sideCondition: 'wideguard',
-onTry() {
-return !!this.queue.willAct();
-},
-onHitSide(side, source) {
-source.addVolatile('stall');
-},
-condition: {
-duration: 1,
-onSideStart(target, source) {
-this.add('-singleturn', source, 'Wide Guard');
-},
-onTryHitPriority: 4,
-onTryHit(target, source, move) {
-// Wide Guard blocks all spread moves
-if (move?.target !== 'foeSide' && move.target !== 'allfoeSides') {
-return;
-}
-if (move.isZ || move.isMax) {
-if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
-target.getMoveHitData(move).zBrokeProtect = true;
-return;
-}
-this.add('-activate', target, 'move: Wide Guard');
-const lockedmove = source.getVolatile('lockedmove');
-if (lockedmove) {
-// Outrage counter is reset
-if (source.volatiles['lockedmove'].duration === 2) {
-delete source.volatiles['lockedmove'];
-}
-}
-return this.NOT_FAIL;
-},
-},
-secondary: null,
-target: "allySide",
-type: "Rock",
-},
-
-anchorshot: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Anchor Shot",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
-target: "normal",
-type: "Steel",
-},
-
-autotomize: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Autotomize",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-onTryHit(pokemon) {
-const hasContrary = pokemon.hasAbility('contrary');
-if ((!hasContrary && pokemon.boosts.spe === 6) || (hasContrary && pokemon.boosts.spe === -6)) {
-return false;
-}
-},
-boosts: {
-spe: 2,
-spd: -1,
-def: -1,
-},
-onHit(pokemon) {
-if (pokemon.weighthg > 1) {
-pokemon.weighthg = Math.max(1, pokemon.weighthg - 1000);
-this.add('-start', pokemon, 'Autotomize');
-}
-},
-secondary: null,
-target: "self",
-type: "Steel",
-},
-
-behemothbash: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Behemoth Bash",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, failcopycat: 1, failmimic: 1},
-secondary: null,
-target: "normal",
-type: "Steel",
-},
-
-behemothblade: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Behemoth Blade",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, slicing: 1, failcopycat: 1, failmimic: 1},
-secondary: null,
-target: "normal",
-type: "Steel",
-},
-
-bulletpunch: {
-accuracy: 91,
-basePower: 40,
-category: "Physical",
-name: "Bullet Punch",
-pp: 1.25,
-priority: 3,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-secondary: null,
-target: "normal",
-type: "Steel",
-},
-
-corkscrewcrash: {
-accuracy: 125,
-basePower: 33,
-category: "Physical",
-name: "Corkscrew Crash",
-pp: 0.625,
-priority: 4,
-flags: {contact: 1},
-secondary: {
-chance: 100,
-status: 'brn',
-},
-target: "randomNormal",
-type: "Steel",
-},
-
-doomdesire: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Doom Desire",
-pp: 1.25,
-priority: -1,
-flags: {futuremove: 1},
-onTry(source, target) {
-if (!target.side.addSlotCondition(target, 'futuremove')) return false;
-Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-move: 'doomdesire',
-source: source,
-moveData: {
-id: 'doomdesire',
-name: "Doom Desire",
-accuracy: 72,
-basePower: 115,
-category: "Special",
-priority: -1,
-flags: {futuremove: 1},
-effectType: 'Move',
-type: 'Steel',
-},
-});
-this.add('-start', source, 'Doom Desire');
-return this.NOT_FAIL;
-},
-secondary: null,
-target: "normal",
-type: "Steel",
-},
-
-doubleironbash: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Double Iron Bash",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-multihit: [2, 4],
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-target: "normal",
-type: "Steel",
-},
-
-flashcannon: {
-accuracy: 70,
-basePower: 125,
-category: "Special",
-name: "Flash Cannon",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 50,
-boosts: {
-spe: 1,
-spd: -1,
-def: -1,
-},
-},
-target: "normal",
-type: "Steel",
-},
-
-geargrind: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Gear Grind",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-multihit: [2, 4],
-secondary: null,
-target: "normal",
-type: "Steel",
-},
-
-gearup: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Gear Up",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, bypasssub: 1},
-onHitSide(side, source, move) {
-const targets = side.allies().filter(target => (
-target.hasAbility(['plus', 'minus']) &&
-(!target.volatiles['maxguard'] || this.runEvent('TryHit', target, source, move))
-));
-if (!targets.length) return false;
-let didSomething = false;
-for (const target of targets) {
-didSomething = this.boost({atk: 1, spa: 1}, target, source, move, false, true) || didSomething;
-}
-return didSomething;
-},
-secondary: null,
-target: "allySide",
-type: "Steel",
-},
-
-gigatonhammer: {
-accuracy: 68,
-basePower: 135,
-category: "Physical",
-name: "Gigaton Hammer",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1},
-onDisableMove(pokemon) {
-if (pokemon.lastMove?.id === 'gigatonhammer') pokemon.disableMove('gigatonhammer');
-},
-beforeMoveCallback(pokemon) {
-if (pokemon.lastMove?.id === 'gigatonhammer') pokemon.addVolatile('gigatonhammer');
-},
-onAfterMove(pokemon) {
-if (pokemon.removeVolatile('gigatonhammer')) {
-this.add('-hint', "Some effects can force a Pokemon to use Gigaton Hammer again in a row.");
-}
-},
-condition: {},
-secondary: null,
-target: "normal",
-type: "Steel",
-},
-
-gyroball: {
-accuracy: 87,
-basePower: 60,
-basePowerCallback(pokemon, target) {
-let power = Math.floor(25 * target.getStat('spe') / pokemon.getStat('spe')) + 1;
-if (!isFinite(power)) power = 1;
-if (power > 150) power = 150;
-this.debug('BP: ' + power);
-return power;
-},
-category: "Physical",
-name: "Gyro Ball",
-pp: 1.25,
-priority: 0,
-flags: {bullet: 1, contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Steel",
-},
-
-heavyslam: {
-accuracy: 73,
-basePower: 15,
-basePowerCallback(pokemon, target) {
-const targetWeight = target.getWeight();
-const pokemonWeight = pokemon.getWeight();
-let bp;
-if (pokemonWeight >= targetWeight * 5) {
-bp = 125;
-} else if (pokemonWeight >= targetWeight * 4) {
-bp = 100;
-} else if (pokemonWeight >= targetWeight * 3) {
-bp = 75;
-} else if (pokemonWeight >= targetWeight * 2) {
-bp = 50;
-} else {
-bp = 25;
-}
-this.debug('BP: ' + bp);
-return bp;
-},
-category: "Physical",
-name: "Heavy Slam",
-pp: 1.25,
-priority: -6,
-flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
-onTryHit(target, pokemon, move) {
-if (target.volatiles['dynamax']) {
-this.add('-fail', pokemon, 'Dynamax');
-this.attrLastMove('[still]');
-return null;
-}
-},
-secondary: null,
-target: "normal",
-type: "Steel",
-},
-
-irondefense: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Iron Defense",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-spd: 2,
-def: 2,
-spe: -2,
-evasion: -2,
-},
-secondary: null,
-target: "self",
-type: "Steel",
-},
-
-ironhead: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Iron Head",
-pp: 0.625,
-priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [25, 100],
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-target: "normal",
-type: "Steel",
-},
-
-irontail: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Iron Tail",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-boosts: {
-spe: 1,
-spd: -1,
-def: -1,
-},
-},
-target: "normal",
-type: "Steel",
-},
-
-kingsshield: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "King's Shield",
-pp: 1.25,
-priority: 4,
-flags: {noassist: 1, failcopycat: 1, failinstruct: 1},
-stallingMove: true,
-volatileStatus: 'kingsshield',
-onPrepareHit(pokemon) {
-return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
-},
-onHit(pokemon) {
-pokemon.addVolatile('stall');
-},
-condition: {
-duration: 1,
-onStart(target) {
-this.add('-singleturn', target, 'Protect');
-},
-onTryHitPriority: 3,
-onTryHit(target, source, move) {
-if (!move.flags['protect'] || move.category === 'Status') {
-if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
-if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
-return;
-}
-if (move.smartTarget) {
-move.smartTarget = false;
-} else {
-this.add('-activate', target, 'move: Protect');
-}
-const lockedmove = source.getVolatile('lockedmove');
-if (lockedmove) {
-// Outrage counter is reset
-if (source.volatiles['lockedmove'].duration === 2) {
-delete source.volatiles['lockedmove'];
-}
-}
-if (this.checkMoveMakesContact(move, source, target)) {
-this.boost({atk: -1}, source, target, this.dex.getActiveMove("King's Shield"));
-}
-return this.NOT_FAIL;
-},
-onHit(target, source, move) {
-if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
-this.boost({atk: -1}, source, target, this.dex.getActiveMove("King's Shield"));
-}
-},
-},
-secondary: null,
-target: "self",
-type: "Steel",
-},
-
-magnetbomb: {
-accuracy: 78,
-basePower: 105,
-category: "Physical",
-name: "Magnet Bomb",
-pp: 1.25,
-priority: 0,
-flags: {bullet: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
-target: "normal",
-type: "Steel",
-},
-
-makeitrain: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Make It Rain",
-pp: 1.25,
-priority: 0,
-flags: {mirror: 1},
-weather: 'RainDance',
-secondary: null,
-target: "allAdjacentFoes",
-type: "Steel",
-},
-
-metalburst: {
-accuracy: 84,
-basePower: 75,
-damageCallback(pokemon) {
-const lastDamagedBy = pokemon.getLastDamagedBy(true);
-if (lastDamagedBy !== undefined) {
-return (lastDamagedBy.damage * 1.5) || 1;
-}
-return 0;
-},
-category: "Special",
-name: "Metal Burst",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1, failmefirst: 1},
-onTry(source) {
-const lastDamagedBy = source.getLastDamagedBy(true);
-if (lastDamagedBy === undefined || !lastDamagedBy.thisTurn) return false;
-},
-onModifyTarget(targetRelayVar, source, target, move) {
-const lastDamagedBy = source.getLastDamagedBy(true);
-if (lastDamagedBy) {
-targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
-}
-},
-secondary: null,
-target: "scripted",
-type: "Steel",
-},
-
-metalclaw: {
-accuracy: 100,
-basePower: 16,
-category: "Physical",
-name: "Metal Claw",
-pp: 1.25,
-priority: 6,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-self: {
-boosts: {
-atk: 1,
-spa: 1,
-spe: -1,
-},
-},
-},
-forceSwitch: true,
-target: "normal",
-type: "Steel",
-},
-
-metalsound: {
-accuracy: 93,
-basePower: 30,
-category: "Status",
-name: "Metal Sound",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, allyanim: 1},
-secondary: null,
-target: "normal",
-type: "Steel",
-},
-
-meteormash: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Meteor Mash",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-secondary: {
-chance: 33,
-self: {
-boosts: {
-atk: 1,
-spa: 1,
-spe: -1,
-},
-},
-},
-weather: 'Sandstorm',
-target: "normal",
-type: "Steel",
-},
-
-mirrorshot: {
-accuracy: 80,
-basePower: 95,
-category: "Special",
-name: "Mirror Shot",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-boosts: {
-accuracy: -1,
-},
-},
-target: "normal",
-type: "Steel",
-},
-
-searingsunrazesmash: {
-accuracy: 63,
-basePower: 150,
-category: "Physical",
-name: "Searing Sunraze Smash",
-pp: 0.625,
-priority: -3,
-flags: {contact: 1},
-recoil: [50, 100],
-hasCrashDamage: true,
-onMoveFail(target, source, move) {
-this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
-},
-secondary: {
-chance: 75,
-status: 'brn',
-},
-weather: 'sunnyday',
-target: "randomNormal",
-type: "Steel",
-},
-
-shelter: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Shelter",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-spd: 2,
-def: 2,
-spe: -2,
-evasion: -2,
-},
-secondary: null,
-target: "self",
-type: "Steel",
-},
-
-shiftgear: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Shift Gear",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-spe: 2,
-atk: 1,
-spa: 1,
-spd: -1,
-def: -1,
-},
-secondary: null,
-target: "self",
-type: "Steel",
-},
-
-smartstrike: {
-accuracy: 100,
-basePower: 16,
-category: "Physical",
-name: "Smart Strike",
-pp: 1.25,
-priority: 6,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Steel",
-},
-
-spinout: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Spin Out",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-self: {
-boosts: {
-spe: -2,
-},
-},
-secondary: null,
-target: "normal",
-type: "Steel",
-},
-
-steelbeam: {
-accuracy: 60,
-basePower: 200,
-category: "Special",
-name: "Steel Beam",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Steel",
-},
-
-steelroller: {
-accuracy: 72,
-basePower: 115,
-category: "Physical",
-name: "Steel Roller",
-pp: 1.25,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1},
-onTry() {
-return !this.field.isTerrain('');
-},
-onHit() {
-this.field.clearTerrain();
-},
-onAfterSubDamage() {
-this.field.clearTerrain();
-},
-secondary: null,
-target: "normal",
-type: "Steel",
-},
-
-steelwing: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Steel Wing",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-self: {
-boosts: {
-spe: -1,
-spd: 1,
-def: 1,
-evasion: -1,
-},
-},
-},
-target: "normal",
-type: "Steel",
-},
-
-sunsteelstrike: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Sunsteel Strike",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-ignoreAbility: true,
-},
-secondary: {
-chance: 33,
-status: 'brn',
-},
-target: "normal",
-type: "Steel",
-},
-
-aquacutter: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Aqua Cutter",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, slicing: 1},
-critRatio: 3,
-secondary: null,
-target: "normal",
-type: "Water",
-},
-
-aquajet: {
-accuracy: 91,
-basePower: 40,
-category: "Physical",
-name: "Aqua Jet",
-pp: 1.25,
-priority: 3,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Water",
-},
-
-aquaring: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Aqua Ring",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-volatileStatus: 'aquaring',
-condition: {
-onStart(pokemon) {
-this.add('-start', pokemon, 'Aqua Ring');
-},
-onResidualOrder: 6,
-onResidual(pokemon) {
-this.heal(pokemon.baseMaxhp / 16);
-},
-},
-secondary: null,
-target: "self",
-type: "Water",
-},
-
-aquastep: {
-accuracy: 100,
-basePower: 16,
-category: "Physical",
-name: "Aqua Step",
-pp: 1.25,
-priority: 6,
-flags: {contact: 1, protect: 1, mirror: 1, dance: 1},
-secondary: {
-chance: 100,
-self: {
-boosts: {
-spe: 1,
-spd: -1,
-def: -1,
-},
-},
-},
-forceSwitch: true,
-target: "normal",
-type: "Water",
-},
-
-aquatail: {
-accuracy: 78,
-basePower: 105,
-category: "Physical",
-name: "Aqua Tail",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Water",
-},
-
-bouncybubble: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Bouncy Bubble",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1, heal: 1},
-drain: [1, 2],
-secondary: null,
-target: "normal",
-type: "Water",
-},
-
-brine: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Brine",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onBasePower(basePower, pokemon, target) {
-if (target.hp * 2 <= target.maxhp) {
-return this.chainModify(2);
-}
-},
-secondary: null,
-target: "normal",
-type: "Water",
-},
-
-bubble: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Bubble",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-boosts: {
-spe: -1,
-},
-},
-target: "allAdjacentFoes",
-type: "Water",
-},
-
-bubblebeam: {
-accuracy: 80,
-basePower: 95,
-category: "Special",
-name: "Bubble Beam",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 40,
-boosts: {
-spe: -1,
-},
-},
-target: "normal",
-type: "Water",
-},
-
-chillingwater: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Chilling Water",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'frz',
-},
-target: "normal",
-type: "Water",
-},
-
-clamp: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Clamp",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
-target: "normal",
-type: "Water",
-},
-
-crabhammer: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Crabhammer",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-critRatio: 3,
-secondary: null,
-target: "normal",
-type: "Water",
-},
-
-dive: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Dive",
-pp: 1.25,
-priority: 0,
-critRatio: 3,
-flags: {
-contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1, allyanim: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
-},
-onTryMove(attacker, defender, move) {
-if (attacker.removeVolatile(move.id)) {
-return;
-}
-if (attacker.hasAbility('gulpmissile') && attacker.species.name === 'Cramorant' && !attacker.transformed) {
-const forme = attacker.hp <= attacker.maxhp / 2 ? 'cramorantgorging' : 'cramorantgulping';
-attacker.formeChange(forme, move);
-}
-this.add('-prepare', attacker, move.name);
-if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-return;
-}
-attacker.addVolatile('twoturnmove', defender);
-return null;
-},
-condition: {
-duration: 2,
-onImmunity(type, pokemon) {
-if (type === 'sandstorm' || type === 'hail') return false;
-},
-onInvulnerability(target, source, move) {
-if (['surf', 'whirlpool'].includes(move.id)) {
-return;
-}
-return false;
-},
-onSourceModifyDamage(damage, source, target, move) {
-if (move.id === 'surf' || move.id === 'whirlpool') {
-return this.chainModify(2);
-}
-},
-},
-secondary: null,
-target: "normal",
-type: "Water",
-},
-
-fishiousrend: {
-accuracy: 82,
-basePower: 85,
-basePowerCallback(pokemon, target, move) {
-if (target.newlySwitched || this.queue.willMove(target)) {
-this.debug('Fishious Rend damage boost');
-return move.basePower * 2;
-}
-this.debug('Fishious Rend NOT boosted');
-return move.basePower;
-},
-category: "Physical",
-name: "Fishious Rend",
-pp: 1.25,
-priority: 0,
-flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Water",
-},
-
-flipturn: {
-accuracy: 100,
-basePower: 16,
-category: "Physical",
-name: "Flip Turn",
-pp: 1.25,
-priority: 6,
-flags: {contact: 1, protect: 1, mirror: 1},
-selfSwitch: true,
-secondary: null,
-target: "normal",
-type: "Water",
-},
-
-hydrocannon: {
-accuracy: 72,
-basePower: 115,
-category: "Special",
-name: "Hydro Cannon",
-pp: 1.25,
-priority: -1,
-flags: {recharge: 1, protect: 1, mirror: 1},
-self: {
-volatileStatus: 'mustrecharge',
-},
-secondary: null,
-target: "normal",
-type: "Water",
-},
-
-hydropump: {
-accuracy: 70,
-basePower: 125,
-category: "Special",
-name: "Hydro Pump",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-weather: 'RainDance',
-target: "normal",
-type: "Water",
-},
-
-hydrosteam: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Hydro Steam",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, defrost: 1},
-// Damage boost in Sun applied in conditions.ts
-thawsTarget: true,
-secondary: null,
-target: "normal",
-type: "Water",
-},
-
-hydrovortex: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Hydro Vortex",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1},
-selfSwitch: true,
-forceSwitch: true,
-secondary: null,
-target: "any",
-type: "Water",
-},
-
-jetpunch: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Jet Punch",
-pp: 1.25,
-priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-secondary: null,
-hasSheerForce: true,
-target: "normal",
-type: "Water",
-},
-
-lifedew: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Life Dew",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1, heal: 1, bypasssub: 1},
-heal: [33, 100],
-secondary: null,
-target: "allies",
-type: "Water",
-},
-
-liquidation: {
-accuracy: 84,
-basePower: 75,
-category: "Physical",
-name: "Liquidation",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-boosts: {
-spd: -1,
-def: -1,
-},
-},
-target: "normal",
-type: "Water",
-},
-
-muddywater: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Muddy Water",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1},
-secondary: {
-chance: 33,
-boosts: {
-accuracy: -1,
-},
-},
-target: "allAdjacentFoes",
-type: "Water",
-},
-
-oceanicoperetta: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Oceanic Operetta",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1,},
-status: 'slp',
-secondary: null,
-target: "allAdjacentFoes",
-type: "Water",
-},
-
-octazooka: {
-accuracy: 73,
-basePower: 15,
-category: "Special",
-name: "Physical",
-pp: 1.25,
-priority: 0,
-flags: {bullet: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-boosts: {
-accuracy: -1,
-},
-},
-multihit: [1, 10],
-target: "randomNormal",
-type: "Water",
-},
-
-originpulse: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Origin Pulse",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, pulse: 1, mirror: 1},
-weather: 'RainDance',
-target: "allAdjacentFoes",
-type: "Water",
-},
-
-raindance: {
-accuracy: 75,
-basePower: 5,
-category: "Status",
-name: "Rain Dance",
-pp: 1.25,
-priority: 3,
-flags: {},
-weather: 'RainDance',
-secondary: null,
-target: "all",
-type: "Water",
-},
-
-razorshell: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Razor Shell",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
-secondary: {
-chance: 33,
-boosts: {
-spe: -1,
-spd: 1,
-def: 1,
-evasion: -1,
-},
-},
-target: "normal",
-type: "Water",
-},
-
-scald: {
-accuracy: 125,
-basePower: 33,
-category: "Special",
-name: "Scald",
-pp: 0.625,
-priority: 4,
-flags: {protect: 1, mirror: 1, defrost: 1},
-thawsTarget: true,
-secondary: {
-chance: 33,
-status: 'brn',
-},
-weather: 'RainDance',
-target: "normal",
-type: "Water",
-},
-
-snipeshot: {
-accuracy: 82,
-basePower: 85,
-category: "Physical",
-name: "Snipe Shot",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-critRatio: 3,
-tracksTarget: true,
-secondary: null,
-target: "normal",
-type: "Water",
-},
-
-soak: {
-accuracy: 87,
-basePower: 60,
-category: "Physical",
-name: "Soak",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
-onHit(target) {
-if (target.getTypes().join() === 'Water' || !target.setType('Water')) {
-// Soak should animate even when it fails.
-// Returning false would suppress the animation.
-this.add('-fail', target);
-return null;
-}
-this.add('-start', target, 'typechange', 'Water');
-},
-secondary: null,
-target: "normal",
-type: "Water",
-},
-
-sparklingaria: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Sparkling Aria",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-secondary: {
-dustproof: true,
-chance: 100,
-volatileStatus: 'sparklingaria',
-},
-onAfterMove(source, target, move) {
-for (const pokemon of this.getAllActive()) {
-if (pokemon !== source && pokemon.removeVolatile('sparklingaria') && pokemon.status === 'brn' && !source.fainted) {
-pokemon.cureStatus();
-}
-}
-},
-target: "allAdjacentFoes",
-type: "Water",
-},
-
-splishysplash: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Splishy Splash",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 33,
-status: 'par',
-},
-target: "allAdjacentFoes",
-type: "Water",
-},
-
-steameruption: {
-accuracy: 60,
-basePower: 200,
-category: "Special",
-name: "Steam Eruption",
-pp: 0.625,
-priority: 0,
-flags: {protect: 1, mirror: 1, defrost: 1},
-thawsTarget: true,
-secondary: {
-chance: 100,
-status: 'brn',
-},
-weather: 'RainDance',
-target: "normal",
-type: "Water",
-},
-
-surf: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Surf",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1},
-secondary: null,
-forceSwitch: true,
-weather: 'RainDance',
-target: "allAdjacentFoes",
-type: "Water",
-},
-
-surgingstrikes: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Surging Strikes",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, punch: 1, mirror: 1},
-willCrit: true,
-multihit: [3, 6],
-secondary: null,
-target: "normal",
-type: "Water",
-},
-
-tripledive: {
-accuracy: 73,
-basePower: 15,
-category: "Physical",
-name: "Triple Dive",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-multihit: [3, 6],
-secondary: null,
-target: "normal",
-type: "Water",
-},
-
-waterfall: {
-accuracy: 68,
-basePower: 135,
-category: "Physical",
-name: "Waterfall",
-pp: 0.625,
-priority: -1,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [25, 100],
-secondary: {
-chance: 33,
-volatileStatus: 'flinch',
-},
-weather: 'RainDance',
-target: "normal",
-type: "Water",
-},
-
-watergun: {
-accuracy: 93,
-basePower: 30,
-category: "Special",
-name: "Water Gun",
-pp: 1.25,
-priority: 3,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Water",
-},
-
-waterpledge: {
-accuracy: 84,
-basePower: 75,
-basePowerCallback(target, source, move) {
-if (['firepledge', 'grasspledge'].includes(move.sourceEffect)) {
-this.add('-combine');
-return 150;
-}
-return 80;
-},
-category: "Special",
-name: "Water Pledge",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1, pledgecombo: 1},
-onPrepareHit(target, source, move) {
-for (const action of this.queue) {
-if (action.choice !== 'move') continue;
-const otherMove = action.move;
-const otherMoveUser = action.pokemon;
-if (
-!otherMove || !action.pokemon || !otherMoveUser.isActive ||
-otherMoveUser.fainted || action.maxMove || action.zmove
-) {
-continue;
-}
-if (otherMoveUser.isAlly(source) && ['firepledge', 'grasspledge'].includes(otherMove.id)) {
-this.queue.prioritizeAction(action, move);
-this.add('-waiting', source, otherMoveUser);
-return null;
-}
-}
-},
-onModifyMove(move) {
-if (move.sourceEffect === 'grasspledge') {
-move.type = 'Grass';
-move.forceSTAB = true;
-move.sideCondition = 'grasspledge';
-}
-if (move.sourceEffect === 'firepledge') {
-move.type = 'Water';
-move.forceSTAB = true;
-move.self = {sideCondition: 'waterpledge'};
-}
-},
-condition: {
-duration: 4,
-onSideStart(targetSide) {
-this.add('-sidestart', targetSide, 'Water Pledge');
-},
-onSideResidualOrder: 26,
-onSideResidualSubOrder: 7,
-onSideEnd(targetSide) {
-this.add('-sideend', targetSide, 'Water Pledge');
-},
-onModifyMove(move, pokemon) {
-if (move.secondaries && move.id !== 'secretpower') {
-this.debug('doubling secondary chance');
-for (const secondary of move.secondaries) {
-if (pokemon.hasAbility('serenegrace') && secondary.volatileStatus === 'flinch') continue;
-if (secondary.chance) secondary.chance *= 2;
-}
-if (move.self?.chance) move.self.chance *= 2;
-}
-},
-},
-secondary: null,
-target: "normal",
-type: "Water",
-},
-
-waterpulse: {
-accuracy: 84,
-basePower: 75,
-category: "Special",
-name: "Water Pulse",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, pulse: 1, mirror: 1, distance: 1},
-secondary: {
-chance: 33,
-volatileStatus: 'confusion',
-},
-target: "allAdjacentFoes",
-type: "Water",
-},
-
-watershuriken: {
-accuracy: 73,
-basePower: 15,
-category: "Special",
-name: "Water Shuriken",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-critRatio: 2,
-multihit: [1, 6],
-secondary: null,
-target: "normal",
-type: "Water",
-},
-
-watersport: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Water Sport",
-pp: 1.25,
-priority: 0,
-flags: {nonsky: 1},
-pseudoWeather: 'watersport',
-condition: {
-duration: 5,
-onFieldStart(field, source) {
-this.add('-fieldstart', 'move: Water Sport', '[of] ' + source);
-},
-onBasePowerPriority: 1,
-onBasePower(basePower, attacker, defender, move) {
-if (move.type === 'Fire') {
-this.debug('water sport weaken');
-return this.chainModify([1352, 4096]);
-}
-},
-onFieldResidualOrder: 27,
-onFieldResidualSubOrder: 3,
-onFieldEnd() {
-this.add('-fieldend', 'move: Water Sport');
-},
-},
-secondary: null,
-target: "all",
-type: "Water",
-},
-
-waterspout: {
-accuracy: 72,
-basePower: 115,
-basePowerCallback(pokemon, target, move) {
-const bp = move.basePower * pokemon.hp / pokemon.maxhp;
-this.debug('BP: ' + bp);
-return bp;
-},
-category: "Special",
-name: "Water Spout",
-pp: 1.25,
-priority: -1,
-flags: {protect: 1, mirror: 1},
-secondary: null,
-target: "allAdjacentFoes",
-type: "Water",
-},
-
-wavecrash: {
-accuracy: 63,
-basePower: 150,
-category: "Physical",
-name: "Wave Crash",
-pp: 0.625,
-priority: -3,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [50, 100],
-hasCrashDamage: true,
-onMoveFail(target, source, move) {
-this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
-},
-secondary: null,
-target: "normal",
-type: "Water",
-},
-
-whirlpool: {
-accuracy: 89,
-basePower: 50,
-category: "Special",
-name: "Whirlpool",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 100,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
-target: "normal",
-type: "Water",
-},
-
-withdraw: {
-accuracy: 73,
-basePower: 0,
-category: "Status",
-name: "Withdraw",
-pp: 1.25,
-priority: 0,
-flags: {snatch: 1},
-boosts: {
-spe: -1,
-spd: 1,
-def: 1,
-evasion: -1,
-},
-secondary: null,
-target: "self",
-type: "Water",
 },
+
+espurr: {
+num: 677,
+name: "Espurr",
+types: ["Psychic"],
+baseStats: {hp: 62, atk: 48, def: 54, spa: 63, spd: 60, spe: 68},
+abilities: {0: "Keen Eye", 1: "Infiltrator", H: "Own Tempo"},
+weightkg: 3.5,
+evos: ["Meowstic", "Meowstic-F"],
+},
+
+meowstic: {
+num: 678,
+name: "Meowstic",
+baseForme: "M",
+types: ["Psychic"],
+baseStats: {hp: 74, atk: 48, def: 76, spa: 83, spd: 81, spe: 104},
+abilities: {0: "Keen Eye", 1: "Infiltrator", H: "Prankster"},
+weightkg: 8.5,
+prevo: "Espurr",
+otherFormes: ["Meowstic-F"],
+formeOrder: ["Meowstic", "Meowstic-F"],
+},
+
+meowsticf: {
+num: 678,
+name: "Meowstic-F",
+baseSpecies: "Meowstic",
+forme: "F",
+types: ["Psychic"],
+baseStats: {hp: 74, atk: 48, def: 76, spa: 83, spd: 81, spe: 104},
+abilities: {0: "Keen Eye", 1: "Infiltrator", H: "Competitive"},
+weightkg: 8.5,
+prevo: "Espurr",
+},
+
+honedge: {
+num: 679,
+name: "Honedge",
+types: ["Steel", "Ghost"],
+baseStats: {hp: 45, atk: 80, def: 100, spa: 35, spd: 37, spe: 28},
+abilities: {0: "No Guard"},
+weightkg: 2,
+evos: ["Doublade"],
+},
+
+doublade: {
+num: 680,
+name: "Doublade",
+types: ["Steel", "Ghost"],
+baseStats: {hp: 59, atk: 110, def: 150, spa: 45, spd: 49, spe: 35},
+abilities: {0: "No Guard"},
+weightkg: 4.5,
+prevo: "Honedge",
+evos: ["Aegislash"],
+},
+
+aegislash: {
+num: 681,
+name: "Aegislash",
+baseForme: "Shield",
+types: ["Steel", "Ghost"],
+baseStats: {hp: 60, atk: 50, def: 140, spa: 50, spd: 140, spe: 60},
+abilities: {0: "Stance Change"},
+weightkg: 53,
+prevo: "Doublade",
+evoType: "useItem",
+evoItem: "Dusk Stone",
+otherFormes: ["Aegislash-Blade"],
+formeOrder: ["Aegislash", "Aegislash-Blade"],
+},
+
+aegislashblade: {
+num: 681,
+name: "Aegislash-Blade",
+baseSpecies: "Aegislash",
+forme: "Blade",
+types: ["Steel", "Ghost"],
+baseStats: {hp: 60, atk: 140, def: 50, spa: 140, spd: 50, spe: 60},
+abilities: {0: "Stance Change"},
+weightkg: 53,
+requiredAbility: "Stance Change",
+battleOnly: "Aegislash",
+},
+
+spritzee: {
+num: 682,
+name: "Spritzee",
+types: ["Fairy"],
+baseStats: {hp: 78, atk: 52, def: 60, spa: 63, spd: 65, spe: 23},
+abilities: {0: "Healer", H: "Aroma Veil"},
+weightkg: 0.5,
+evos: ["Aromatisse"],
+},
+
+aromatisse: {
+num: 683,
+name: "Aromatisse",
+types: ["Fairy", "Poison"],
+baseStats: {hp: 101, atk: 72, def: 72, spa: 99, spd: 89, spe: 29},
+abilities: {0: "Healer", H: "Aroma Veil"},
+weightkg: 15.5,
+prevo: "Spritzee",
+evoType: "trade",
+evoItem: "Sachet",
+},
+
+swirlix: {
+num: 684,
+name: "Swirlix",
+types: ["Fairy"],
+baseStats: {hp: 62, atk: 48, def: 66, spa: 59, spd: 57, spe: 49},
+abilities: {0: "Sweet Veil", H: "Unburden"},
+weightkg: 3.5,
+evos: ["Slurpuff"],
+},
+
+slurpuff: {
+num: 685,
+name: "Slurpuff",
+types: ["Fairy"],
+baseStats: {hp: 82, atk: 80, def: 86, spa: 85, spd: 75, spe: 72},
+abilities: {0: "Sweet Veil", H: "Unburden"},
+weightkg: 5,
+prevo: "Swirlix",
+evoType: "trade",
+evoItem: "Whipped Dream",
+},
+
+inkay: {
+num: 686,
+name: "Inkay",
+types: ["Dark", "Psychic"],
+baseStats: {hp: 53, atk: 54, def: 53, spa: 37, spd: 46, spe: 45},
+abilities: {0: "Contrary", 1: "Suction Cups", H: "Infiltrator"},
+weightkg: 3.5,
+evos: ["Malamar"],
+},
+
+malamar: {
+num: 687,
+name: "Malamar",
+types: ["Dark", "Psychic"],
+baseStats: {hp: 86, atk: 92, def: 88, spa: 68, spd: 75, spe: 73},
+abilities: {0: "Contrary", 1: "Suction Cups", H: "Infiltrator"},
+weightkg: 47,
+prevo: "Inkay",
+evoCondition: "with the console turned upside-down",
+},
+
+binacle: {
+num: 688,
+name: "Binacle",
+types: ["Rock", "Water"],
+baseStats: {hp: 42, atk: 52, def: 67, spa: 39, spd: 56, spe: 50},
+abilities: {0: "Tough Claws", 1: "Sniper", H: "Pickpocket"},
+weightkg: 31,
+evos: ["Barbaracle"],
+},
+
+barbaracle: {
+num: 689,
+name: "Barbaracle",
+types: ["Rock", "Water"],
+baseStats: {hp: 72, atk: 105, def: 115, spa: 54, spd: 86, spe: 68},
+abilities: {0: "Tough Claws", 1: "Sniper", H: "Pickpocket"},
+weightkg: 96,
+prevo: "Binacle",
+},
+
+skrelp: {
+num: 690,
+name: "Skrelp",
+types: ["Poison", "Water"],
+baseStats: {hp: 50, atk: 60, def: 60, spa: 60, spd: 60, spe: 30},
+abilities: {0: "Poison Point", 1: "Poison Touch", H: "Adaptability"},
+weightkg: 7.3,
+evos: ["Dragalge"],
+},
+
+dragalge: {
+num: 691,
+name: "Dragalge",
+types: ["Poison", "Dragon"],
+baseStats: {hp: 65, atk: 75, def: 90, spa: 97, spd: 123, spe: 44},
+abilities: {0: "Poison Point", 1: "Poison Touch", H: "Adaptability"},
+weightkg: 81.5,
+prevo: "Skrelp",
+},
+
+clauncher: {
+num: 692,
+name: "Clauncher",
+types: ["Water"],
+baseStats: {hp: 50, atk: 53, def: 62, spa: 58, spd: 63, spe: 44},
+abilities: {0: "Mega Launcher"},
+weightkg: 8.3,
+evos: ["Clawitzer"],
+},
+
+clawitzer: {
+num: 693,
+name: "Clawitzer",
+types: ["Water", "Fire"],
+baseStats: {hp: 71, atk: 73, def: 88, spa: 120, spd: 89, spe: 59},
+abilities: {0: "Mega Launcher"},
+weightkg: 35.3,
+prevo: "Clauncher",
+},
+
+helioptile: {
+num: 694,
+name: "Helioptile",
+types: ["Electric"],
+baseStats: {hp: 44, atk: 38, def: 33, spa: 61, spd: 43, spe: 70},
+abilities: {0: "Dry Skin", 1: "Sand Veil", H: "Solar Power"},
+weightkg: 6,
+evos: ["Heliolisk"],
+},
+
+heliolisk: {
+num: 695,
+name: "Heliolisk",
+types: ["Electric", "Fire"],
+baseStats: {hp: 62, atk: 55, def: 52, spa: 109, spd: 94, spe: 109},
+abilities: {0: "Dry Skin", 1: "Sand Veil", H: "Solar Power"},
+weightkg: 21,
+prevo: "Helioptile",
+evoType: "useItem",
+evoItem: "Sun Stone",
+},
+
+tyrunt: {
+num: 696,
+name: "Tyrunt",
+types: ["Rock", "Dragon"],
+baseStats: {hp: 58, atk: 89, def: 77, spa: 45, spd: 45, spe: 48},
+abilities: {0: "Strong Jaw", H: "Sturdy"},
+weightkg: 26,
+evos: ["Tyrantrum"],
+},
+
+tyrantrum: {
+num: 697,
+name: "Tyrantrum",
+types: ["Rock", "Dragon"],
+baseStats: {hp: 82, atk: 121, def: 119, spa: 69, spd: 59, spe: 71},
+abilities: {0: "Strong Jaw", H: "Rock Head"},
+weightkg: 270,
+prevo: "Tyrunt",
+evoCondition: "during the day",
+},
+
+amaura: {
+num: 698,
+name: "Amaura",
+types: ["Ice", "Electric"],
+baseStats: {hp: 77, atk: 59, def: 50, spa: 67, spd: 63, spe: 46},
+abilities: {0: "Refrigerate", H: "Snow Warning"},
+weightkg: 25.2,
+evos: ["Aurorus"],
+},
+
+aurorus: {
+num: 699,
+name: "Aurorus",
+types: ["Ice", "Electric"],
+baseStats: {hp: 123, atk: 77, def: 72, spa: 99, spd: 92, spe: 58},
+abilities: {0: "Refrigerate", H: "Snow Warning"},
+weightkg: 225,
+prevo: "Amaura",
+evoCondition: "at night",
+},
+
+sylveon: {
+num: 700,
+name: "Sylveon",
+types: ["Fairy", "Normal"],
+baseStats: {hp: 95, atk: 65, def: 65, spa: 110, spd: 130, spe: 60},
+abilities: {0: "Cute Charm", H: "Pixilate"},
+weightkg: 23.5,
+prevo: "Eevee",
+evoType: "levelExtra",
+evoCondition: "with a Fairy-type move and two levels of Affection",
+},
+
+hawlucha: {
+num: 701,
+name: "Hawlucha",
+types: ["Fighting", "Flying"],
+baseStats: {hp: 78, atk: 92, def: 75, spa: 74, spd: 63, spe: 118},
+abilities: {0: "Limber", 1: "Unburden", H: "Mold Breaker"},
+weightkg: 21.5,
+},
+
+dedenne: {
+num: 702,
+name: "Dedenne",
+types: ["Electric", "Fairy"],
+baseStats: {hp: 67, atk: 58, def: 57, spa: 81, spd: 67, spe: 101},
+abilities: {0: "Cheek Pouch", 1: "Pickup", H: "Plus"},
+weightkg: 2.2,
+},
+
+carbink: {
+num: 703,
+name: "Carbink",
+types: ["Rock", "Fairy"],
+baseStats: {hp: 50, atk: 50, def: 150, spa: 50, spd: 150, spe: 50},
+abilities: {0: "Clear Body", H: "Sturdy"},
+weightkg: 5.7,
+},
+
+goomy: {
+num: 704,
+name: "Goomy",
+types: ["Dragon", "Poison"],
+baseStats: {hp: 45, atk: 50, def: 35, spa: 55, spd: 75, spe: 40},
+abilities: {0: "Sap Sipper", 1: "Hydration", H: "Gooey"},
+weightkg: 2.8,
+evos: ["Sliggoo", "Sliggoo-Hisui"],
+},
+
+sliggoo: {
+num: 705,
+name: "Sliggoo",
+types: ["Dragon", "Poison"],
+baseStats: {hp: 68, atk: 75, def: 53, spa: 83, spd: 113, spe: 60},
+abilities: {0: "Sap Sipper", 1: "Hydration", H: "Gooey"},
+weightkg: 17.5,
+prevo: "Goomy",
+evos: ["Goodra"],
+otherFormes: ["Sliggoo-Hisui"],
+formeOrder: ["Sliggoo", "Sliggoo-Hisui"],
+},
+
+sliggoohisui: {
+num: 705,
+name: "Sliggoo-Hisui",
+baseSpecies: "Sliggoo",
+forme: "Hisui",
+types: ["Steel", "Dragon"],
+baseStats: {hp: 58, atk: 75, def: 83, spa: 83, spd: 113, spe: 40},
+abilities: {0: "Sap Sipper", 1: "Shell Armor", H: "Gooey"},
+weightkg: 68.5,
+prevo: "Goomy",
+evos: ["Goodra-Hisui"],
+},
+
+goodra: {
+num: 706,
+name: "Goodra",
+types: ["Dragon", "Poison"],
+baseStats: {hp: 90, atk: 100, def: 70, spa: 110, spd: 150, spe: 80},
+abilities: {0: "Sap Sipper", 1: "Hydration", H: "Gooey"},
+weightkg: 150.5,
+prevo: "Sliggoo",
+otherFormes: ["Goodra-Hisui"],
+formeOrder: ["Goodra", "Goodra-Hisui"],
+},
+
+goodrahisui: {
+num: 706,
+name: "Goodra-Hisui",
+baseSpecies: "Goodra",
+forme: "Hisui",
+types: ["Steel", "Dragon"],
+baseStats: {hp: 80, atk: 100, def: 100, spa: 110, spd: 150, spe: 60},
+abilities: {0: "Sap Sipper", 1: "Shell Armor", H: "Gooey"},
+weightkg: 334.1,
+prevo: "Sliggoo-Hisui",
+},
+
+klefki: {
+num: 707,
+name: "Klefki",
+types: ["Steel", "Fairy"],
+baseStats: {hp: 57, atk: 80, def: 91, spa: 80, spd: 87, spe: 75},
+abilities: {0: "Prankster", H: "Magician"},
+weightkg: 3,
+},
+
+phantump: {
+num: 708,
+name: "Phantump",
+types: ["Ghost", "Grass"],
+baseStats: {hp: 43, atk: 70, def: 48, spa: 50, spd: 60, spe: 38},
+abilities: {0: "Natural Cure", 1: "Frisk", H: "Harvest"},
+weightkg: 7,
+evos: ["Trevenant"],
+},
+
+trevenant: {
+num: 709,
+name: "Trevenant",
+types: ["Ghost", "Grass"],
+baseStats: {hp: 85, atk: 110, def: 76, spa: 65, spd: 82, spe: 56},
+abilities: {0: "Natural Cure", 1: "Frisk", H: "Harvest"},
+weightkg: 71,
+prevo: "Phantump",
+evoType: "trade",
+},
+
+pumpkaboo: {
+num: 710,
+name: "Pumpkaboo",
+baseForme: "Average",
+types: ["Ghost", "Grass"],
+baseStats: {hp: 49, atk: 66, def: 70, spa: 44, spd: 55, spe: 51},
+abilities: {0: "Pickup", 1: "Frisk", H: "Insomnia"},
+weightkg: 5,
+evos: ["Gourgeist"],
+otherFormes: ["Pumpkaboo-Small", "Pumpkaboo-Large", "Pumpkaboo-Super"],
+formeOrder: ["Pumpkaboo", "Pumpkaboo-Small", "Pumpkaboo-Large", "Pumpkaboo-Super"],
+},
+
+pumpkaboosmall: {
+num: 710,
+name: "Pumpkaboo-Small",
+baseSpecies: "Pumpkaboo",
+forme: "Small",
+types: ["Ghost", "Grass"],
+baseStats: {hp: 44, atk: 66, def: 70, spa: 44, spd: 55, spe: 56},
+abilities: {0: "Pickup", 1: "Frisk", H: "Insomnia"},
+weightkg: 3.5,
+evos: ["Gourgeist-Small"],
+},
+
+pumpkaboolarge: {
+num: 710,
+name: "Pumpkaboo-Large",
+baseSpecies: "Pumpkaboo",
+forme: "Large",
+types: ["Ghost", "Grass"],
+baseStats: {hp: 54, atk: 66, def: 70, spa: 44, spd: 55, spe: 46},
+abilities: {0: "Pickup", 1: "Frisk", H: "Insomnia"},
+weightkg: 7.5,
+evos: ["Gourgeist-Large"],
+},
+
+pumpkaboosuper: {
+num: 710,
+name: "Pumpkaboo-Super",
+baseSpecies: "Pumpkaboo",
+forme: "Super",
+types: ["Ghost", "Grass"],
+baseStats: {hp: 59, atk: 66, def: 70, spa: 44, spd: 55, spe: 41},
+abilities: {0: "Pickup", 1: "Frisk", H: "Insomnia"},
+weightkg: 15,
+evos: ["Gourgeist-Super"],
+},
+
+gourgeist: {
+num: 711,
+name: "Gourgeist",
+baseForme: "Average",
+types: ["Ghost", "Grass"],
+baseStats: {hp: 65, atk: 90, def: 122, spa: 58, spd: 75, spe: 84},
+abilities: {0: "Pickup", 1: "Frisk", H: "Insomnia"},
+weightkg: 12.5,
+prevo: "Pumpkaboo",
+evoType: "trade",
+otherFormes: ["Gourgeist-Small", "Gourgeist-Large", "Gourgeist-Super"],
+formeOrder: ["Gourgeist", "Gourgeist-Small", "Gourgeist-Large", "Gourgeist-Super"],
+},
+
+gourgeistsmall: {
+num: 711,
+name: "Gourgeist-Small",
+baseSpecies: "Gourgeist",
+forme: "Small",
+types: ["Ghost", "Grass"],
+baseStats: {hp: 55, atk: 85, def: 122, spa: 58, spd: 75, spe: 99},
+abilities: {0: "Pickup", 1: "Frisk", H: "Insomnia"},
+weightkg: 9.5,
+prevo: "Pumpkaboo-Small",
+evoType: "trade",
+},
+
+gourgeistlarge: {
+num: 711,
+name: "Gourgeist-Large",
+baseSpecies: "Gourgeist",
+forme: "Large",
+types: ["Ghost", "Grass"],
+baseStats: {hp: 75, atk: 95, def: 122, spa: 58, spd: 75, spe: 69},
+abilities: {0: "Pickup", 1: "Frisk", H: "Insomnia"},
+weightkg: 14,
+prevo: "Pumpkaboo-Large",
+evoType: "trade",
+},
+
+gourgeistsuper: {
+num: 711,
+name: "Gourgeist-Super",
+baseSpecies: "Gourgeist",
+forme: "Super",
+types: ["Ghost", "Grass"],
+baseStats: {hp: 85, atk: 100, def: 122, spa: 58, spd: 75, spe: 54},
+abilities: {0: "Pickup", 1: "Frisk", H: "Insomnia"},
+weightkg: 39,
+prevo: "Pumpkaboo-Super",
+evoType: "trade",
+},
+
+bergmite: {
+num: 712,
+name: "Bergmite",
+types: ["Ice", "Bug"],
+baseStats: {hp: 55, atk: 69, def: 85, spa: 32, spd: 35, spe: 28},
+abilities: {0: "Own Tempo", 1: "Ice Body", H: "Sturdy"},
+weightkg: 99.5,
+evos: ["Avalugg", "Avalugg-Hisui"],
+},
+
+avalugg: {
+num: 713,
+name: "Avalugg",
+types: ["Ice", "Bug"],
+baseStats: {hp: 95, atk: 117, def: 184, spa: 44, spd: 46, spe: 28},
+abilities: {0: "Own Tempo", 1: "Ice Body", H: "Sturdy"},
+weightkg: 505,
+prevo: "Bergmite",
+otherFormes: ["Avalugg-Hisui"],
+formeOrder: ["Avalugg", "Avalugg-Hisui"],
+},
+
+avalugghisui: {
+num: 713,
+name: "Avalugg-Hisui",
+baseSpecies: "Avalugg",
+forme: "Hisui",
+types: ["Ice", "Rock"],
+baseStats: {hp: 95, atk: 127, def: 184, spa: 34, spd: 36, spe: 38},
+abilities: {0: "Strong Jaw", 1: "Ice Body", H: "Sturdy"},
+weightkg: 262.4,
+prevo: "Bergmite",
+},
+
+noibat: {
+num: 714,
+name: "Noibat",
+types: ["Flying", "Dragon"],
+baseStats: {hp: 40, atk: 30, def: 35, spa: 45, spd: 40, spe: 55},
+abilities: {0: "Frisk", 1: "Infiltrator", H: "Telepathy"},
+weightkg: 8,
+evos: ["Noivern"],
+},
+
+noivern: {
+num: 715,
+name: "Noivern",
+types: ["Psychic", "Dragon"],
+baseStats: {hp: 85, atk: 70, def: 80, spa: 97, spd: 80, spe: 123},
+abilities: {0: "Frisk", 1: "Infiltrator", H: "Telepathy"},
+weightkg: 85,
+prevo: "Noibat",
+},
+
+xerneas: {
+num: 716,
+name: "Xerneas",
+baseForme: "Active", // Neutral is technically the base, but it can't be used in battle
+types: ["Fairy"],
+baseStats: {hp: 126, atk: 131, def: 95, spa: 131, spd: 98, spe: 99},
+abilities: {0: "Fairy Aura"},
+weightkg: 215,
+otherFormes: ["Xerneas-Neutral"],
+formeOrder: ["Xerneas-Neutral", "Xerneas"],
+},
+
+xerneasneutral: {
+num: 716,
+name: "Xerneas-Neutral",
+baseSpecies: "Xerneas",
+forme: "Neutral",
+types: ["Fairy"],
+baseStats: {hp: 126, atk: 131, def: 95, spa: 131, spd: 98, spe: 99},
+abilities: {0: "Fairy Aura"},
+weightkg: 215,
+},
+
+yveltal: {
+num: 717,
+name: "Yveltal",
+types: ["Ghost", "Flying"],
+baseStats: {hp: 126, atk: 131, def: 95, spa: 131, spd: 98, spe: 99},
+abilities: {0: "Dark Aura"},
+weightkg: 203,
+},
+
+zygarde: {
+num: 718,
+name: "Zygarde",
+baseForme: "50%",
+types: ["Dragon", "Ground"],
+baseStats: {hp: 108, atk: 100, def: 121, spa: 81, spd: 95, spe: 95},
+abilities: {0: "Aura Break", S: "Power Construct"},
+weightkg: 305,
+otherFormes: ["Zygarde-10%", "Zygarde-Complete"],
+// forme 2 = 10% with Power Constructor ,forme 3 = 50% with Power Construct
+formeOrder: ["Zygarde", "Zygarde-10%", "Zygarde-10%", "Zygarde", "Zygarde-Complete"],
+},
+
+zygarde10: {
+num: 718,
+name: "Zygarde-10%",
+baseSpecies: "Zygarde",
+forme: "10%",
+types: ["Dragon", "Ground"],
+baseStats: {hp: 54, atk: 100, def: 71, spa: 61, spd: 85, spe: 115},
+abilities: {0: "Aura Break", S: "Power Construct"},
+weightkg: 33.5,
+changesFrom: "Zygarde",
+gen: 7,
+},
+
+zygardecomplete: {
+num: 718,
+name: "Zygarde-Complete",
+baseSpecies: "Zygarde",
+forme: "Complete",
+types: ["Dragon", "Ground"],
+baseStats: {hp: 216, atk: 100, def: 121, spa: 91, spd: 95, spe: 85},
+abilities: {0: "Power Construct"},
+weightkg: 610,
+requiredAbility: "Power Construct",
+battleOnly: ["Zygarde", "Zygarde-10%"],
+gen: 7,
+},
+
+diancie: {
+num: 719,
+name: "Diancie",
+types: ["Rock", "Fairy"],
+baseStats: {hp: 50, atk: 100, def: 150, spa: 100, spd: 150, spe: 50},
+abilities: {0: "Clear Body"},
+weightkg: 8.8,
+otherFormes: ["Diancie-Mega"],
+formeOrder: ["Diancie", "Diancie-Mega"],
+},
+
+dianciemega: {
+num: 719,
+name: "Diancie-Mega",
+baseSpecies: "Diancie",
+forme: "Mega",
+types: ["Rock", "Fairy"],
+baseStats: {hp: 50, atk: 160, def: 110, spa: 160, spd: 110, spe: 110},
+abilities: {0: "Magic Bounce"},
+weightkg: 27.8,
+},
+
+hoopa: {
+num: 720,
+name: "Hoopa",
+baseForme: "Confined",
+types: ["Psychic", "Ghost"],
+baseStats: {hp: 80, atk: 110, def: 60, spa: 150, spd: 130, spe: 70},
+abilities: {0: "Magician"},
+weightkg: 9,
+otherFormes: ["Hoopa-Unbound"],
+formeOrder: ["Hoopa", "Hoopa-Unbound"],
+},
+
+hoopaunbound: {
+num: 720,
+name: "Hoopa-Unbound",
+baseSpecies: "Hoopa",
+forme: "Unbound",
+types: ["Psychic", "Dark"],
+baseStats: {hp: 80, atk: 160, def: 60, spa: 170, spd: 130, spe: 80},
+abilities: {0: "Magician"},
+weightkg: 490,
+changesFrom: "Hoopa",
+},
+
+volcanion: {
+num: 721,
+name: "Volcanion",
+types: ["Fire", "Water"],
+baseStats: {hp: 80, atk: 110, def: 120, spa: 130, spd: 90, spe: 70},
+abilities: {0: "Water Absorb"},
+weightkg: 195,
+},
+
+rowlet: {
+num: 722,
+name: "Rowlet",
+types: ["Grass", "Flying"],
+baseStats: {hp: 68, atk: 55, def: 55, spa: 50, spd: 50, spe: 42},
+abilities: {0: "Overgrow", H: "Long Reach"},
+weightkg: 1.5,
+evos: ["Dartrix"],
+},
+
+dartrix: {
+num: 723,
+name: "Dartrix",
+types: ["Grass", "Flying"],
+baseStats: {hp: 78, atk: 75, def: 75, spa: 70, spd: 70, spe: 52},
+abilities: {0: "Overgrow", H: "Long Reach"},
+weightkg: 16,
+prevo: "Rowlet",
+evos: ["Decidueye", "Decidueye-Hisui"],
+},
+
+decidueye: {
+num: 724,
+name: "Decidueye",
+types: ["Grass", "Flying"],
+baseStats: {hp: 78, atk: 107, def: 75, spa: 100, spd: 100, spe: 70},
+abilities: {0: "Overgrow", H: "Long Reach"},
+weightkg: 36.6,
+prevo: "Dartrix",
+otherFormes: ["Decidueye-Hisui"],
+formeOrder: ["Decidueye", "Decidueye-Hisui"],
+},
+
+decidueyehisui: {
+num: 724,
+name: "Decidueye-Hisui",
+baseSpecies: "Decidueye",
+forme: "Hisui",
+types: ["Grass", "Fighting"],
+baseStats: {hp: 88, atk: 112, def: 80, spa: 95, spd: 95, spe: 60},
+abilities: {0: "Overgrow", H: "Scrappy"},
+weightkg: 37,
+prevo: "Dartrix",
+},
+
+litten: {
+num: 725,
+name: "Litten",
+types: ["Fire"],
+baseStats: {hp: 45, atk: 65, def: 40, spa: 60, spd: 40, spe: 70},
+abilities: {0: "Blaze", H: "Intimidate"},
+weightkg: 4.3,
+evos: ["Torracat"],
+},
+
+torracat: {
+num: 726,
+name: "Torracat",
+types: ["Fire"],
+baseStats: {hp: 65, atk: 85, def: 50, spa: 80, spd: 50, spe: 90},
+abilities: {0: "Blaze", H: "Intimidate"},
+weightkg: 25,
+prevo: "Litten",
+evos: ["Incineroar"],
+},
+
+incineroar: {
+num: 727,
+name: "Incineroar",
+types: ["Fire", "Dark"],
+baseStats: {hp: 95, atk: 115, def: 90, spa: 80, spd: 90, spe: 60},
+abilities: {0: "Blaze", H: "Intimidate"},
+weightkg: 83,
+prevo: "Torracat",
+},
+
+popplio: {
+num: 728,
+name: "Popplio",
+types: ["Water"],
+baseStats: {hp: 50, atk: 54, def: 54, spa: 66, spd: 56, spe: 40},
+abilities: {0: "Torrent", H: "Liquid Voice"},
+weightkg: 7.5,
+evos: ["Brionne"],
+},
+
+brionne: {
+num: 729,
+name: "Brionne",
+types: ["Water"],
+baseStats: {hp: 60, atk: 69, def: 69, spa: 91, spd: 81, spe: 50},
+abilities: {0: "Torrent", H: "Liquid Voice"},
+weightkg: 17.5,
+prevo: "Popplio",
+evos: ["Primarina"],
+},
+
+primarina: {
+num: 730,
+name: "Primarina",
+types: ["Water", "Fairy"],
+baseStats: {hp: 80, atk: 74, def: 74, spa: 126, spd: 116, spe: 60},
+abilities: {0: "Torrent", H: "Liquid Voice"},
+weightkg: 44,
+prevo: "Brionne",
+},
+
+pikipek: {
+num: 731,
+name: "Pikipek",
+types: ["Normal", "Flying"],
+baseStats: {hp: 35, atk: 75, def: 30, spa: 30, spd: 30, spe: 65},
+abilities: {0: "Keen Eye", 1: "Skill Link", H: "Pickup"},
+weightkg: 1.2,
+evos: ["Trumbeak"],
+},
+
+trumbeak: {
+num: 732,
+name: "Trumbeak",
+types: ["Normal", "Flying"],
+baseStats: {hp: 55, atk: 85, def: 50, spa: 40, spd: 50, spe: 75},
+abilities: {0: "Keen Eye", 1: "Skill Link", H: "Pickup"},
+weightkg: 14.8,
+prevo: "Pikipek",
+evos: ["Toucannon"],
+},
+
+toucannon: {
+num: 733,
+name: "Toucannon",
+types: ["Poison", "Flying"],
+baseStats: {hp: 80, atk: 120, def: 75, spa: 75, spd: 75, spe: 60},
+abilities: {0: "Keen Eye", 1: "Skill Link", H: "Sheer Force"},
+weightkg: 26,
+prevo: "Trumbeak",
+},
+
+yungoos: {
+num: 734,
+name: "Yungoos",
+types: ["Ground"],
+baseStats: {hp: 48, atk: 70, def: 30, spa: 30, spd: 30, spe: 45},
+abilities: {0: "Stakeout", 1: "Strong Jaw", H: "Adaptability"},
+weightkg: 6,
+evos: ["Gumshoos"],
+},
+
+gumshoos: {
+num: 735,
+name: "Gumshoos",
+types: ["Ground", "Dark"],
+baseStats: {hp: 88, atk: 110, def: 60, spa: 55, spd: 60, spe: 45},
+abilities: {0: "Stakeout", 1: "Strong Jaw", H: "Adaptability"},
+weightkg: 14.2,
+prevo: "Yungoos",
+evoCondition: "during the day",
+otherFormes: ["Gumshoos-Totem"],
+formeOrder: ["Gumshoos", "Gumshoos-Totem"],
+},
+
+gumshoostotem: {
+num: 735,
+name: "Gumshoos-Totem",
+baseSpecies: "Gumshoos",
+forme: "Totem",
+types: ["Ground", "Dark"],
+baseStats: {hp: 88, atk: 110, def: 60, spa: 55, spd: 60, spe: 45},
+abilities: {0: "Adaptability"},
+weightkg: 60,
+},
+
+grubbin: {
+num: 736,
+name: "Grubbin",
+types: ["Bug"],
+baseStats: {hp: 47, atk: 62, def: 45, spa: 55, spd: 45, spe: 46},
+abilities: {0: "Swarm"},
+weightkg: 4.4,
+evos: ["Charjabug"],
+},
+
+charjabug: {
+num: 737,
+name: "Charjabug",
+types: ["Bug", "Electric"],
+baseStats: {hp: 57, atk: 82, def: 95, spa: 55, spd: 75, spe: 36},
+abilities: {0: "Battery"},
+weightkg: 10.5,
+prevo: "Grubbin",
+evos: ["Vikavolt"],
+},
+
+vikavolt: {
+num: 738,
+name: "Vikavolt",
+types: ["Bug", "Electric"],
+baseStats: {hp: 77, atk: 70, def: 90, spa: 145, spd: 75, spe: 43},
+abilities: {0: "Levitate"},
+weightkg: 45,
+prevo: "Charjabug",
+evoType: "useItem",
+evoItem: "Thunder Stone",
+otherFormes: ["Vikavolt-Totem"],
+formeOrder: ["Vikavolt", "Vikavolt-Totem"],
+},
+
+vikavolttotem: {
+num: 738,
+name: "Vikavolt-Totem",
+baseSpecies: "Vikavolt",
+forme: "Totem",
+types: ["Bug", "Electric"],
+baseStats: {hp: 77, atk: 70, def: 90, spa: 145, spd: 75, spe: 43},
+abilities: {0: "Levitate"},
+weightkg: 147.5,
+},
+
+crabrawler: {
+num: 739,
+name: "Crabrawler",
+types: ["Fighting"],
+baseStats: {hp: 47, atk: 82, def: 57, spa: 42, spd: 47, spe: 63},
+abilities: {0: "Hyper Cutter", 1: "Iron Fist", H: "Anger Point"},
+weightkg: 7,
+evos: ["Crabominable"],
+},
+
+crabominable: {
+num: 740,
+name: "Crabominable",
+types: ["Fighting", "Ice"],
+baseStats: {hp: 97, atk: 132, def: 77, spa: 62, spd: 67, spe: 43},
+abilities: {0: "Hyper Cutter", 1: "Iron Fist", H: "Anger Point"},
+weightkg: 180,
+prevo: "Crabrawler",
+evoType: "useItem",
+evoItem: "Ice Stone",
+},
+
+oricorio: {
+num: 741,
+name: "Oricorio",
+baseForme: "Baile",
+types: ["Fire", "Flying"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 75, atk: 70, def: 70, spa: 98, spd: 70, spe: 93},
+abilities: {0: "Dancer"},
+weightkg: 3.4,
+otherFormes: ["Oricorio-Pom-Pom", "Oricorio-Pa'u", "Oricorio-Sensu"],
+formeOrder: ["Oricorio", "Oricorio-Pom-Pom", "Oricorio-Pa'u", "Oricorio-Sensu"],
+},
+
+oricoriopompom: {
+num: 741,
+name: "Oricorio-Pom-Pom",
+baseSpecies: "Oricorio",
+forme: "Pom-Pom",
+types: ["Electric", "Flying"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 75, atk: 70, def: 70, spa: 98, spd: 70, spe: 93},
+abilities: {0: "Dancer"},
+weightkg: 3.4,
+changesFrom: "Oricorio",
+},
+
+oricoriopau: {
+num: 741,
+name: "Oricorio-Pa'u",
+baseSpecies: "Oricorio",
+forme: "Pa'u",
+types: ["Fairy", "Flying"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 75, atk: 70, def: 70, spa: 98, spd: 70, spe: 93},
+abilities: {0: "Dancer"},
+weightkg: 3.4,
+changesFrom: "Oricorio",
+},
+
+oricoriosensu: {
+num: 741,
+name: "Oricorio-Sensu",
+baseSpecies: "Oricorio",
+forme: "Sensu",
+types: ["Ghost", "Flying"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 75, atk: 70, def: 70, spa: 98, spd: 70, spe: 93},
+abilities: {0: "Dancer"},
+weightkg: 3.4,
+changesFrom: "Oricorio",
+},
+
+cutiefly: {
+num: 742,
+name: "Cutiefly",
+types: ["Bug", "Fairy"],
+baseStats: {hp: 40, atk: 45, def: 40, spa: 55, spd: 40, spe: 84},
+abilities: {0: "Honey Gather", 1: "Shield Dust", H: "Sweet Veil"},
+weightkg: 0.2,
+evos: ["Ribombee"],
+},
+
+ribombee: {
+num: 743,
+name: "Ribombee",
+types: ["Bug", "Fairy"],
+baseStats: {hp: 60, atk: 55, def: 60, spa: 95, spd: 70, spe: 124},
+abilities: {0: "Honey Gather", 1: "Shield Dust", H: "Sweet Veil"},
+weightkg: 0.5,
+prevo: "Cutiefly",
+otherFormes: ["Ribombee-Totem"],
+formeOrder: ["Ribombee", "Ribombee-Totem"],
+},
+
+ribombeetotem: {
+num: 743,
+name: "Ribombee-Totem",
+baseSpecies: "Ribombee",
+forme: "Totem",
+types: ["Bug", "Fairy"],
+baseStats: {hp: 60, atk: 55, def: 60, spa: 95, spd: 70, spe: 124},
+abilities: {0: "Sweet Veil"},
+weightkg: 2,
+},
+
+rockruff: {
+num: 744,
+name: "Rockruff",
+baseForme: "Midday",
+types: ["Rock", "Normal"],
+baseStats: {hp: 45, atk: 65, def: 40, spa: 30, spd: 40, spe: 60},
+abilities: {0: "Keen Eye", 1: "Vital Spirit", H: "Steadfast", S: "Own Tempo"},
+weightkg: 9.2,
+evos: ["Lycanroc", "Lycanroc-Midnight", "Lycanroc-Dusk"],
+formeOrder: ["Rockruff", "Rockruff"], // TODO: Rockruff-Dusk
+},
+
+lycanroc: {
+num: 745,
+name: "Lycanroc",
+baseForme: "Midday",
+types: ["Rock", "Normal"],
+baseStats: {hp: 75, atk: 115, def: 65, spa: 55, spd: 65, spe: 112},
+abilities: {0: "Keen Eye", 1: "Sand Rush", H: "Steadfast"},
+weightkg: 25,
+prevo: "Rockruff",
+evoCondition: "during the day",
+otherFormes: ["Lycanroc-Midnight", "Lycanroc-Dusk"],
+formeOrder: ["Lycanroc", "Lycanroc-Midnight", "Lycanroc-Dusk"],
+},
+
+lycanrocmidnight: {
+num: 745,
+name: "Lycanroc-Midnight",
+baseSpecies: "Lycanroc",
+forme: "Midnight",
+types: ["Rock", "Dark"],
+baseStats: {hp: 85, atk: 115, def: 75, spa: 55, spd: 75, spe: 82},
+abilities: {0: "Keen Eye", 1: "Vital Spirit", H: "No Guard"},
+weightkg: 25,
+prevo: "Rockruff",
+evoCondition: "at night",
+},
+
+lycanrocdusk: {
+num: 745,
+name: "Lycanroc-Dusk",
+baseSpecies: "Lycanroc",
+forme: "Dusk",
+types: ["Rock", "Electric"],
+baseStats: {hp: 75, atk: 117, def: 65, spa: 55, spd: 65, spe: 110},
+abilities: {0: "Tough Claws"},
+weightkg: 25,
+prevo: "Rockruff",
+evoCondition: "from a special Rockruff",
+},
+
+wishiwashi: {
+num: 746,
+name: "Wishiwashi",
+baseForme: "Solo",
+types: ["Water"],
+baseStats: {hp: 45, atk: 20, def: 20, spa: 25, spd: 25, spe: 40},
+abilities: {0: "Schooling"},
+weightkg: 0.3,
+otherFormes: ["Wishiwashi-School"],
+formeOrder: ["Wishiwashi", "Wishiwashi-School"],
+},
+
+wishiwashischool: {
+num: 746,
+name: "Wishiwashi-School",
+baseSpecies: "Wishiwashi",
+forme: "School",
+types: ["Water", "Ghost"],
+baseStats: {hp: 45, atk: 140, def: 130, spa: 140, spd: 135, spe: 30},
+abilities: {0: "Schooling"},
+weightkg: 78.6,
+requiredAbility: "Schooling",
+battleOnly: "Wishiwashi",
+},
+
+mareanie: {
+num: 747,
+name: "Mareanie",
+types: ["Poison", "Water"],
+baseStats: {hp: 50, atk: 53, def: 62, spa: 43, spd: 52, spe: 45},
+abilities: {0: "Merciless", 1: "Limber", H: "Regenerator"},
+weightkg: 8,
+evos: ["Toxapex"],
+},
+
+toxapex: {
+num: 748,
+name: "Toxapex",
+types: ["Poison", "Water"],
+baseStats: {hp: 50, atk: 63, def: 152, spa: 53, spd: 142, spe: 35},
+abilities: {0: "Merciless", 1: "Limber", H: "Regenerator"},
+weightkg: 14.5,
+prevo: "Mareanie",
+},
+
+mudbray: {
+num: 749,
+name: "Mudbray",
+types: ["Ground"],
+baseStats: {hp: 70, atk: 100, def: 70, spa: 45, spd: 55, spe: 45},
+abilities: {0: "Own Tempo", 1: "Stamina", H: "Inner Focus"},
+weightkg: 110,
+evos: ["Mudsdale"],
+},
+
+mudsdale: {
+num: 750,
+name: "Mudsdale",
+types: ["Ground"],
+baseStats: {hp: 100, atk: 125, def: 100, spa: 55, spd: 85, spe: 35},
+abilities: {0: "Own Tempo", 1: "Stamina", H: "Inner Focus"},
+weightkg: 920,
+prevo: "Mudbray",
+},
+
+dewpider: {
+num: 751,
+name: "Dewpider",
+types: ["Water", "Bug"],
+baseStats: {hp: 38, atk: 40, def: 52, spa: 40, spd: 72, spe: 27},
+abilities: {0: "Water Bubble", H: "Water Absorb"},
+weightkg: 4,
+evos: ["Araquanid"],
+},
+
+araquanid: {
+num: 752,
+name: "Araquanid",
+types: ["Water", "Bug"],
+baseStats: {hp: 68, atk: 70, def: 92, spa: 50, spd: 132, spe: 42},
+abilities: {0: "Water Bubble", H: "Water Absorb"},
+weightkg: 82,
+prevo: "Dewpider",
+otherFormes: ["Araquanid-Totem"],
+formeOrder: ["Araquanid", "Araquanid-Totem"],
+},
+
+araquanidtotem: {
+num: 752,
+name: "Araquanid-Totem",
+baseSpecies: "Araquanid",
+forme: "Totem",
+types: ["Water", "Bug"],
+baseStats: {hp: 68, atk: 70, def: 92, spa: 50, spd: 132, spe: 42},
+abilities: {0: "Water Bubble"},
+weightkg: 217.5,
+},
+
+fomantis: {
+num: 753,
+name: "Fomantis",
+types: ["Grass"],
+baseStats: {hp: 40, atk: 55, def: 35, spa: 50, spd: 35, spe: 35},
+abilities: {0: "Leaf Guard", H: "Contrary"},
+weightkg: 1.5,
+evos: ["Lurantis"],
+},
+
+lurantis: {
+num: 754,
+name: "Lurantis",
+types: ["Grass", "Ice"],
+baseStats: {hp: 70, atk: 105, def: 90, spa: 80, spd: 90, spe: 45},
+abilities: {0: "Leaf Guard", H: "Contrary"},
+weightkg: 18.5,
+prevo: "Fomantis",
+evoCondition: "during the day",
+otherFormes: ["Lurantis-Totem"],
+formeOrder: ["Lurantis", "Lurantis-Totem"],
+},
+
+lurantistotem: {
+num: 754,
+name: "Lurantis-Totem",
+baseSpecies: "Lurantis",
+forme: "Totem",
+types: ["Grass", "Ice"],
+baseStats: {hp: 70, atk: 105, def: 90, spa: 80, spd: 90, spe: 45},
+abilities: {0: "Leaf Guard"},
+weightkg: 58,
+},
+
+morelull: {
+num: 755,
+name: "Morelull",
+types: ["Grass", "Fairy"],
+baseStats: {hp: 40, atk: 35, def: 55, spa: 65, spd: 75, spe: 15},
+abilities: {0: "Illuminate", 1: "Effect Spore", H: "Rain Dish"},
+weightkg: 1.5,
+evos: ["Shiinotic"],
+},
+
+shiinotic: {
+num: 756,
+name: "Shiinotic",
+types: ["Grass", "Fairy"],
+baseStats: {hp: 60, atk: 45, def: 80, spa: 90, spd: 100, spe: 30},
+abilities: {0: "Illuminate", 1: "Effect Spore", H: "Rain Dish"},
+weightkg: 11.5,
+prevo: "Morelull",
+},
+
+salandit: {
+num: 757,
+name: "Salandit",
+types: ["Poison", "Fire"],
+baseStats: {hp: 48, atk: 44, def: 40, spa: 71, spd: 40, spe: 77},
+abilities: {0: "Corrosion", H: "Oblivious"},
+weightkg: 4.8,
+evos: ["Salazzle"],
+},
+
+salazzle: {
+num: 758,
+name: "Salazzle",
+types: ["Poison", "Fire"],
+baseStats: {hp: 68, atk: 64, def: 60, spa: 111, spd: 60, spe: 117},
+abilities: {0: "Corrosion", H: "Oblivious"},
+weightkg: 22.2,
+prevo: "Salandit",
+otherFormes: ["Salazzle-Totem"],
+formeOrder: ["Salazzle", "Salazzle-Totem"],
+},
+
+salazzletotem: {
+num: 758,
+name: "Salazzle-Totem",
+baseSpecies: "Salazzle",
+forme: "Totem",
+types: ["Poison", "Fire"],
+baseStats: {hp: 68, atk: 64, def: 60, spa: 111, spd: 60, spe: 117},
+abilities: {0: "Corrosion"},
+weightkg: 81,
+},
+
+stufful: {
+num: 759,
+name: "Stufful",
+types: ["Normal", "Fighting"],
+baseStats: {hp: 70, atk: 75, def: 50, spa: 45, spd: 50, spe: 50},
+abilities: {0: "Fluffy", 1: "Klutz", H: "Cute Charm"},
+weightkg: 6.8,
+evos: ["Bewear"],
+},
+
+bewear: {
+num: 760,
+name: "Bewear",
+types: ["Normal", "Fighting"],
+baseStats: {hp: 120, atk: 125, def: 80, spa: 55, spd: 60, spe: 60},
+abilities: {0: "Fluffy", 1: "Klutz", H: "Unnerve"},
+weightkg: 135,
+prevo: "Stufful",
+},
+
+bounsweet: {
+num: 761,
+name: "Bounsweet",
+types: ["Grass"],
+baseStats: {hp: 42, atk: 30, def: 38, spa: 30, spd: 38, spe: 32},
+abilities: {0: "Leaf Guard", 1: "Oblivious", H: "Sweet Veil"},
+weightkg: 3.2,
+evos: ["Steenee"],
+},
+
+steenee: {
+num: 762,
+name: "Steenee",
+types: ["Grass"],
+baseStats: {hp: 52, atk: 40, def: 48, spa: 40, spd: 48, spe: 62},
+abilities: {0: "Leaf Guard", 1: "Oblivious", H: "Sweet Veil"},
+weightkg: 8.2,
+prevo: "Bounsweet",
+evos: ["Tsareena"],
+},
+
+tsareena: {
+num: 763,
+name: "Tsareena",
+types: ["Grass", "Steel"],
+baseStats: {hp: 72, atk: 120, def: 98, spa: 50, spd: 98, spe: 72},
+abilities: {0: "Leaf Guard", 1: "Queenly Majesty", H: "Sweet Veil"},
+weightkg: 21.4,
+prevo: "Steenee",
+evoType: "levelMove",
+evoMove: "Stomp",
+},
+
+comfey: {
+num: 764,
+name: "Comfey",
+types: ["Fairy", "Flying"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 51, atk: 52, def: 90, spa: 82, spd: 110, spe: 100},
+abilities: {0: "Flower Veil", 1: "Triage", H: "Natural Cure"},
+weightkg: 0.3,
+},
+
+oranguru: {
+num: 765,
+name: "Oranguru",
+types: ["Normal", "Ghost"],
+baseStats: {hp: 90, atk: 60, def: 80, spa: 90, spd: 110, spe: 60},
+abilities: {0: "Inner Focus", 1: "Telepathy", H: "Symbiosis"},
+weightkg: 76,
+},
+
+passimian: {
+num: 766,
+name: "Passimian",
+types: ["Normal", "Fighting"],
+baseStats: {hp: 100, atk: 120, def: 90, spa: 40, spd: 60, spe: 80},
+abilities: {0: "Receiver", H: "Defiant"},
+weightkg: 82.8,
+},
+
+wimpod: {
+num: 767,
+name: "Wimpod",
+types: ["Bug", "Water"],
+baseStats: {hp: 25, atk: 35, def: 40, spa: 20, spd: 30, spe: 80},
+abilities: {0: "Wimp Out"},
+weightkg: 12,
+evos: ["Golisopod"],
+},
+
+golisopod: {
+num: 768,
+name: "Golisopod",
+types: ["Bug", "Water"],
+baseStats: {hp: 75, atk: 125, def: 140, spa: 60, spd: 90, spe: 40},
+abilities: {0: "Emergency Exit"},
+weightkg: 108,
+prevo: "Wimpod",
+},
+
+sandygast: {
+num: 769,
+name: "Sandygast",
+types: ["Ghost", "Ground"],
+baseStats: {hp: 55, atk: 55, def: 80, spa: 70, spd: 45, spe: 15},
+abilities: {0: "Water Compaction", H: "Sand Veil"},
+weightkg: 70,
+evos: ["Palossand"],
+},
+
+palossand: {
+num: 770,
+name: "Palossand",
+types: ["Ghost", "Ground"],
+baseStats: {hp: 85, atk: 75, def: 110, spa: 100, spd: 75, spe: 35},
+abilities: {0: "Water Compaction", H: "Sand Veil"},
+weightkg: 250,
+prevo: "Sandygast",
+},
+
+pyukumuku: {
+num: 771,
+name: "Pyukumuku",
+types: ["Rock", "Poison"],
+baseStats: {hp: 55, atk: 60, def: 130, spa: 30, spd: 130, spe: 5},
+abilities: {0: "Innards Out", H: "Unaware"},
+weightkg: 1.2,
+},
+
+typenull: {
+num: 772,
+name: "Type: Null",
+types: ["???"],
+baseStats: {hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 59},
+abilities: {0: "Battle Armor"},
+weightkg: 120.5,
+evos: ["Silvally"],
+},
+
+silvally: {
+num: 773,
+name: "Silvally",
+types: ["???"],
+baseStats: {hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 95},
+abilities: {0: "RKS System"},
+weightkg: 100.5,
+prevo: "Type: Null",
+evoType: "levelFriendship",
+otherFormes: ["Silvally-Bug", "Silvally-Dark", "Silvally-Dragon", "Silvally-Electric", "Silvally-Fairy", "Silvally-Fighting", "Silvally-Fire", "Silvally-Flying", "Silvally-Ghost", "Silvally-Grass", "Silvally-Ground", "Silvally-Ice", "Silvally-Poison", "Silvally-Psychic", "Silvally-Rock", "Silvally-Steel", "Silvally-Water"],
+formeOrder: [
+Silvally, "Silvally-Fighting", "Silvally-Flying", "Silvally-Poison", "Silvally-Ground", "Silvally-Rock", "Silvally-Bug", "Silvally-Ghost", "Silvally-Steel",
+Silvally-Fire, "Silvally-Water", "Silvally-Grass", "Silvally-Electric", "Silvally-Psychic", "Silvally-Ice", "Silvally-Dragon", "Silvally-Dark", "Silvally-Fairy",
+],
+},
+
+silvallybug: {
+num: 773,
+name: "Silvally-Bug",
+baseSpecies: "Silvally",
+forme: "Bug",
+types: ["Bug"],
+baseStats: {hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 95},
+abilities: {0: "RKS System"},
+weightkg: 100.5,
+changesFrom: "Silvally",
+},
+
+silvallydark: {
+num: 773,
+name: "Silvally-Dark",
+baseSpecies: "Silvally",
+forme: "Dark",
+types: ["Dark"],
+baseStats: {hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 95},
+abilities: {0: "RKS System"},
+weightkg: 100.5,
+changesFrom: "Silvally",
+},
+
+silvallydragon: {
+num: 773,
+name: "Silvally-Dragon",
+baseSpecies: "Silvally",
+forme: "Dragon",
+types: ["Dragon"],
+baseStats: {hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 95},
+abilities: {0: "RKS System"},
+weightkg: 100.5,
+changesFrom: "Silvally",
+},
+
+silvallyelectric: {
+num: 773,
+name: "Silvally-Electric",
+baseSpecies: "Silvally",
+forme: "Electric",
+types: ["Electric"],
+baseStats: {hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 95},
+abilities: {0: "RKS System"},
+weightkg: 100.5,
+changesFrom: "Silvally",
+},
+
+silvallyfairy: {
+num: 773,
+name: "Silvally-Fairy",
+baseSpecies: "Silvally",
+forme: "Fairy",
+types: ["Fairy"],
+baseStats: {hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 95},
+abilities: {0: "RKS System"},
+weightkg: 100.5,
+changesFrom: "Silvally",
+},
+
+silvallyfighting: {
+num: 773,
+name: "Silvally-Fighting",
+baseSpecies: "Silvally",
+forme: "Fighting",
+types: ["Fighting"],
+baseStats: {hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 95},
+abilities: {0: "RKS System"},
+weightkg: 100.5,
+changesFrom: "Silvally",
+},
+
+silvallyfire: {
+num: 773,
+name: "Silvally-Fire",
+baseSpecies: "Silvally",
+forme: "Fire",
+types: ["Fire"],
+baseStats: {hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 95},
+abilities: {0: "RKS System"},
+weightkg: 100.5,
+changesFrom: "Silvally",
+},
+
+silvallyflying: {
+num: 773,
+name: "Silvally-Flying",
+baseSpecies: "Silvally",
+forme: "Flying",
+types: ["Flying"],
+baseStats: {hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 95},
+abilities: {0: "RKS System"},
+weightkg: 100.5,
+changesFrom: "Silvally",
+},
+
+silvallyghost: {
+num: 773,
+name: "Silvally-Ghost",
+baseSpecies: "Silvally",
+forme: "Ghost",
+types: ["Ghost"],
+baseStats: {hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 95},
+abilities: {0: "RKS System"},
+weightkg: 100.5,
+changesFrom: "Silvally",
+},
+
+silvallygrass: {
+num: 773,
+name: "Silvally-Grass",
+baseSpecies: "Silvally",
+forme: "Grass",
+types: ["Grass"],
+baseStats: {hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 95},
+abilities: {0: "RKS System"},
+weightkg: 100.5,
+changesFrom: "Silvally",
+},
+
+silvallyground: {
+num: 773,
+name: "Silvally-Ground",
+baseSpecies: "Silvally",
+forme: "Ground",
+types: ["Ground"],
+baseStats: {hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 95},
+abilities: {0: "RKS System"},
+weightkg: 100.5,
+changesFrom: "Silvally",
+},
+
+silvallyice: {
+num: 773,
+name: "Silvally-Ice",
+baseSpecies: "Silvally",
+forme: "Ice",
+types: ["Ice"],
+baseStats: {hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 95},
+abilities: {0: "RKS System"},
+weightkg: 100.5,
+changesFrom: "Silvally",
+},
+
+silvallypoison: {
+num: 773,
+name: "Silvally-Poison",
+baseSpecies: "Silvally",
+forme: "Poison",
+types: ["Poison"],
+baseStats: {hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 95},
+abilities: {0: "RKS System"},
+weightkg: 100.5,
+changesFrom: "Silvally",
+},
+
+silvallypsychic: {
+num: 773,
+name: "Silvally-Psychic",
+baseSpecies: "Silvally",
+forme: "Psychic",
+types: ["Psychic"],
+baseStats: {hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 95},
+abilities: {0: "RKS System"},
+weightkg: 100.5,
+changesFrom: "Silvally",
+},
+
+silvallyrock: {
+num: 773,
+name: "Silvally-Rock",
+baseSpecies: "Silvally",
+forme: "Rock",
+types: ["Rock"],
+baseStats: {hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 95},
+abilities: {0: "RKS System"},
+weightkg: 100.5,
+changesFrom: "Silvally",
+},
+
+silvallysteel: {
+num: 773,
+name: "Silvally-Steel",
+baseSpecies: "Silvally",
+forme: "Steel",
+types: ["Steel"],
+baseStats: {hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 95},
+abilities: {0: "RKS System"},
+weightkg: 100.5,
+changesFrom: "Silvally",
+},
+
+silvallywater: {
+num: 773,
+name: "Silvally-Water",
+baseSpecies: "Silvally",
+forme: "Water",
+types: ["Water"],
+baseStats: {hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 95},
+abilities: {0: "RKS System"},
+weightkg: 100.5,
+changesFrom: "Silvally",
+},
+
+minior: {
+num: 774,
+name: "Minior",
+baseForme: "Red",
+types: ["Rock", "Flying"],
+baseStats: {hp: 60, atk: 100, def: 60, spa: 100, spd: 60, spe: 120},
+abilities: {0: "Shields Down"},
+weightkg: 0.3,
+otherFormes: ["Minior-Meteor"],
+cosmeticFormes: ["Minior-Orange", "Minior-Yellow", "Minior-Green", "Minior-Blue", "Minior-Indigo", "Minior-Violet"],
+formeOrder: [
+// All of the colored Minior Meteor formes (unsupported by PS) are numbers 0-6
+Minior-Meteor, "Minior-Meteor", "Minior-Meteor", "Minior-Meteor", "Minior-Meteor", "Minior-Meteor", "Minior-Meteor",
+Minior, "Minior-Orange", "Minior-Yellow", "Minior-Green", "Minior-Blue", "Minior-Indigo", "Minior-Violet",
+],
+},
+
+miniormeteor: {
+num: 774,
+name: "Minior-Meteor",
+baseSpecies: "Minior",
+forme: "Meteor",
+types: ["Fairy", "Flying"],
+baseStats: {hp: 60, atk: 60, def: 100, spa: 60, spd: 100, spe: 60},
+abilities: {0: "Shields Down"},
+weightkg: 40,
+requiredAbility: "Shields Down",
+battleOnly: "Minior",
+},
+
+komala: {
+num: 775,
+name: "Komala",
+types: ["Normal", "Ghost"],
+baseStats: {hp: 65, atk: 115, def: 65, spa: 75, spd: 95, spe: 65},
+abilities: {0: "Comatose"},
+weightkg: 19.9,
+},
+
+turtonator: {
+num: 776,
+name: "Turtonator",
+types: ["Fire", "Dragon"],
+baseStats: {hp: 60, atk: 78, def: 135, spa: 91, spd: 85, spe: 36},
+abilities: {0: "Shell Armor"},
+weightkg: 212,
+},
+
+togedemaru: {
+num: 777,
+name: "Togedemaru",
+types: ["Electric", "Steel"],
+baseStats: {hp: 65, atk: 98, def: 63, spa: 40, spd: 73, spe: 96},
+abilities: {0: "Iron Barbs", 1: "Lightning Rod", H: "Sturdy"},
+weightkg: 3.3,
+otherFormes: ["Togedemaru-Totem"],
+formeOrder: ["Togedemaru", "Togedemaru-Totem"],
+},
+
+togedemarutotem: {
+num: 777,
+name: "Togedemaru-Totem",
+baseSpecies: "Togedemaru",
+forme: "Totem",
+types: ["Electric", "Steel"],
+baseStats: {hp: 65, atk: 98, def: 63, spa: 40, spd: 73, spe: 96},
+abilities: {0: "Sturdy"},
+weightkg: 13,
+},
+
+mimikyu: {
+num: 778,
+name: "Mimikyu",
+baseForme: "Disguised",
+types: ["Ghost", "Fairy"],
+baseStats: {hp: 55, atk: 90, def: 80, spa: 50, spd: 105, spe: 96},
+abilities: {0: "Disguise"},
+weightkg: 0.7,
+otherFormes: ["Mimikyu-Busted", "Mimikyu-Totem", "Mimikyu-Busted-Totem"],
+formeOrder: ["Mimikyu", "Mimikyu-Busted", "Mimikyu-Totem", "Mimikyu-Busted-Totem"],
+},
+
+mimikyubusted: {
+num: 778,
+name: "Mimikyu-Busted",
+baseSpecies: "Mimikyu",
+forme: "Busted",
+types: ["Ghost", "Fairy"],
+baseStats: {hp: 55, atk: 90, def: 80, spa: 50, spd: 105, spe: 96},
+abilities: {0: "Disguise"},
+weightkg: 0.7,
+requiredAbility: "Disguise",
+battleOnly: "Mimikyu",
+},
+
+mimikyutotem: {
+num: 778,
+name: "Mimikyu-Totem",
+baseSpecies: "Mimikyu",
+forme: "Totem",
+types: ["Ghost", "Fairy"],
+baseStats: {hp: 55, atk: 90, def: 80, spa: 50, spd: 105, spe: 96},
+abilities: {0: "Disguise"},
+weightkg: 2.8,
+},
+
+mimikyubustedtotem: {
+num: 778,
+name: "Mimikyu-Busted-Totem",
+baseSpecies: "Mimikyu",
+forme: "Busted-Totem",
+types: ["Ghost", "Fairy"],
+baseStats: {hp: 55, atk: 90, def: 80, spa: 50, spd: 105, spe: 96},
+abilities: {0: "Disguise"},
+weightkg: 2.8,
+requiredAbility: "Disguise",
+battleOnly: "Mimikyu-Totem",
+},
+
+bruxish: {
+num: 779,
+name: "Bruxish",
+types: ["Water", "Psychic"],
+baseStats: {hp: 68, atk: 105, def: 70, spa: 70, spd: 70, spe: 92},
+abilities: {0: "Dazzling", 1: "Strong Jaw", H: "Wonder Skin"},
+weightkg: 19,
+},
+
+drampa: {
+num: 780,
+name: "Drampa",
+types: ["Normal", "Dragon"],
+baseStats: {hp: 78, atk: 60, def: 85, spa: 135, spd: 91, spe: 36},
+abilities: {0: "Berserk", 1: "Sap Sipper", H: "Cloud Nine"},
+weightkg: 185,
+},
+
+dhelmise: {
+num: 781,
+name: "Dhelmise",
+types: ["Water", "Grass"],
+baseStats: {hp: 70, atk: 131, def: 100, spa: 86, spd: 90, spe: 40},
+abilities: {0: "Steelworker"},
+weightkg: 210,
+},
+
+jangmoo: {
+num: 782,
+name: "Jangmo-o",
+types: ["Dragon"],
+baseStats: {hp: 45, atk: 55, def: 65, spa: 45, spd: 45, spe: 45},
+abilities: {0: "Bulletproof", 1: "Soundproof", H: "Overcoat"},
+weightkg: 29.7,
+evos: ["Hakamo-o"],
+},
+
+hakamoo: {
+num: 783,
+name: "Hakamo-o",
+types: ["Dragon", "Fighting"],
+baseStats: {hp: 55, atk: 75, def: 90, spa: 65, spd: 70, spe: 65},
+abilities: {0: "Bulletproof", 1: "Soundproof", H: "Overcoat"},
+weightkg: 47,
+prevo: "Jangmo-o",
+evos: ["Kommo-o"],
+},
+
+kommoo: {
+num: 784,
+name: "Kommo-o",
+types: ["Dragon", "Fighting"],
+baseStats: {hp: 75, atk: 110, def: 125, spa: 100, spd: 105, spe: 85},
+abilities: {0: "Bulletproof", 1: "Soundproof", H: "Overcoat"},
+weightkg: 78.2,
+prevo: "Hakamo-o",
+otherFormes: ["Kommo-o-Totem"],
+formeOrder: ["Kommo-o", "Kommo-o-Totem"],
+},
+
+kommoototem: {
+num: 784,
+name: "Kommo-o-Totem",
+baseSpecies: "Kommo-o",
+forme: "Totem",
+types: ["Dragon", "Fighting"],
+baseStats: {hp: 75, atk: 110, def: 125, spa: 100, spd: 105, spe: 85},
+abilities: {0: "Overcoat"},
+weightkg: 207.5,
+},
+
+tapukoko: {
+num: 785,
+name: "Tapu Koko",
+types: ["Electric", "Fairy"],
+baseStats: {hp: 70, atk: 115, def: 85, spa: 95, spd: 75, spe: 130},
+abilities: {0: "Electric Surge", H: "Telepathy"},
+weightkg: 20.5,
+},
+
+tapulele: {
+num: 786,
+name: "Tapu Lele",
+types: ["Psychic", "Fairy"],
+baseStats: {hp: 70, atk: 85, def: 75, spa: 130, spd: 115, spe: 95},
+abilities: {0: "Psychic Surge", H: "Telepathy"},
+weightkg: 18.6,
+},
+
+tapubulu: {
+num: 787,
+name: "Tapu Bulu",
+types: ["Grass", "Fairy"],
+baseStats: {hp: 70, atk: 130, def: 115, spa: 85, spd: 95, spe: 75},
+abilities: {0: "Grassy Surge", H: "Telepathy"},
+weightkg: 45.5,
+},
+
+tapufini: {
+num: 788,
+name: "Tapu Fini",
+types: ["Water", "Fairy"],
+baseStats: {hp: 70, atk: 75, def: 115, spa: 95, spd: 130, spe: 85},
+abilities: {0: "Misty Surge", H: "Telepathy"},
+weightkg: 21.2,
+},
+
+
+num: 789,
+name: "Cosmog",
+types: ["Psychic"],
+baseStats: {hp: 43, atk: 29, def: 31, spa: 29, spd: 31, spe: 37},
+abilities: {0: "Unaware"},
+weightkg: 0.1,
+evos: ["Cosmoem"],
+},
+
+
+num: 790,
+name: "Cosmoem",
+types: ["Psychic"],
+baseStats: {hp: 43, atk: 29, def: 131, spa: 29, spd: 131, spe: 37},
+abilities: {0: "Sturdy"},
+weightkg: 999.9,
+prevo: "Cosmog",
+evos: ["Solgaleo", "Lunala"],
+},
+
+
+num: 791,
+name: "Solgaleo",
+types: ["Psychic", "Steel"],
+baseStats: {hp: 137, atk: 137, def: 107, spa: 113, spd: 89, spe: 97},
+abilities: {0: "Full Metal Body"},
+weightkg: 230,
+prevo: "Cosmoem",
+},
+
+
+num: 792,
+name: "Lunala",
+types: ["Psychic", "Ghost"],
+baseStats: {hp: 137, atk: 113, def: 89, spa: 137, spd: 107, spe: 97},
+abilities: {0: "Shadow Shield"},
+weightkg: 120,
+prevo: "Cosmoem",
+},
+
+nihilego: {
+num: 793,
+name: "Nihilego",
+types: ["Rock", "Poison"],
+baseStats: {hp: 109, atk: 53, def: 47, spa: 127, spd: 131, spe: 103},
+abilities: {0: "Beast Boost"},
+weightkg: 55.5,
+},
+
+buzzwole: {
+num: 794,
+name: "Buzzwole",
+types: ["Bug", "Fighting"],
+baseStats: {hp: 107, atk: 139, def: 139, spa: 53, spd: 53, spe: 79},
+abilities: {0: "Beast Boost"},
+weightkg: 333.6,
+},
+
+pheromosa: {
+num: 795,
+name: "Pheromosa",
+types: ["Bug"],
+baseStats: {hp: 71, atk: 137, def: 37, spa: 137, spd: 37, spe: 151},
+abilities: {0: "Beast Boost"},
+weightkg: 25,
+},
+
+xurkitree: {
+num: 796,
+name: "Xurkitree",
+types: ["Electric", "Ghost"],
+baseStats: {hp: 83, atk: 89, def: 71, spa: 173, spd: 71, spe: 83},
+abilities: {0: "Beast Boost"},
+weightkg: 100,
+},
+
+celesteela: {
+num: 797,
+name: "Celesteela",
+types: ["Steel", "Flying"],
+baseStats: {hp: 97, atk: 101, def: 103, spa: 107, spd: 101, spe: 61},
+abilities: {0: "Beast Boost"},
+weightkg: 999.9,
+},
+
+kartana: {
+num: 798,
+name: "Kartana",
+types: ["Grass", "Steel"],
+baseStats: {hp: 59, atk: 181, def: 131, spa: 59, spd: 31, spe: 109},
+abilities: {0: "Beast Boost"},
+weightkg: 0.1,
+},
+
+guzzlord: {
+num: 799,
+name: "Guzzlord",
+types: ["Dark", "Dragon"],
+baseStats: {hp: 223, atk: 101, def: 53, spa: 97, spd: 53, spe: 43},
+abilities: {0: "Beast Boost"},
+weightkg: 888,
+},
+
+necrozma: {
+num: 800,
+name: "Necrozma",
+types: ["Psychic", "Electric"],
+baseStats: {hp: 97, atk: 107, def: 101, spa: 127, spd: 89, spe: 79},
+abilities: {0: "Prism Armor"},
+weightkg: 230,
+otherFormes: ["Necrozma-Dusk-Mane", "Necrozma-Dawn-Wings", "Necrozma-Ultra"],
+formeOrder: ["Necrozma", "Necrozma-Dusk-Mane", "Necrozma-Dawn-Wings", "Necrozma-Ultra"],
+},
+
+necrozmaduskmane: {
+num: 800,
+name: "Necrozma-Dusk-Mane",
+baseSpecies: "Necrozma",
+forme: "Dusk-Mane",
+types: ["Electric", "Steel"],
+baseStats: {hp: 97, atk: 157, def: 127, spa: 113, spd: 109, spe: 77},
+abilities: {0: "Prism Armor"},
+weightkg: 460,
+changesFrom: "Necrozma",
+},
+
+necrozmadawnwings: {
+num: 800,
+name: "Necrozma-Dawn-Wings",
+baseSpecies: "Necrozma",
+forme: "Dawn-Wings",
+types: ["Electric", "Ghost"],
+baseStats: {hp: 97, atk: 113, def: 109, spa: 157, spd: 127, spe: 77},
+abilities: {0: "Prism Armor"},
+weightkg: 350,
+changesFrom: "Necrozma",
+},
+
+necrozmaultra: {
+num: 800,
+name: "Necrozma-Ultra",
+baseSpecies: "Necrozma",
+forme: "Ultra",
+types: ["Psychic", "Dragon"],
+baseStats: {hp: 97, atk: 167, def: 97, spa: 167, spd: 97, spe: 129},
+abilities: {0: "Neuroforce"},
+weightkg: 230,
+battleOnly: ["Necrozma-Dawn-Wings", "Necrozma-Dusk-Mane"],
+},
+
+magearna: {
+num: 801,
+name: "Magearna",
+types: ["Steel", "Fairy"],
+baseStats: {hp: 80, atk: 95, def: 115, spa: 130, spd: 115, spe: 65},
+abilities: {0: "Soul-Heart"},
+weightkg: 80.5,
+otherFormes: ["Magearna-Original"],
+formeOrder: ["Magearna", "Magearna-Original"],
+},
+
+magearnaoriginal: {
+num: 801,
+name: "Magearna-Original",
+baseSpecies: "Magearna",
+forme: "Original",
+types: ["Steel"],
+baseStats: {hp: 80, atk: 95, def: 115, spa: 130, spd: 115, spe: 65},
+abilities: {0: "Soul-Heart"},
+weightkg: 80.5,
+},
+
+marshadow: {
+num: 802,
+name: "Marshadow",
+types: ["Fighting", "Ghost"],
+baseStats: {hp: 90, atk: 125, def: 80, spa: 90, spd: 90, spe: 125},
+abilities: {0: "Technician"},
+weightkg: 22.2,
+},
+
+poipole: {
+num: 803,
+name: "Poipole",
+types: ["Ghost"],
+baseStats: {hp: 67, atk: 73, def: 67, spa: 73, spd: 67, spe: 73},
+abilities: {0: "Beast Boost"},
+weightkg: 1.8,
+evos: ["Naganadel"],
+},
+
+naganadel: {
+num: 804,
+name: "Naganadel",
+types: ["Ghost", "Dragon"],
+baseStats: {hp: 73, atk: 73, def: 73, spa: 127, spd: 73, spe: 121},
+abilities: {0: "Beast Boost"},
+weightkg: 150,
+prevo: "Poipole",
+evoType: "levelMove",
+evoMove: "Dragon Pulse",
+},
+
+stakataka: {
+num: 805,
+name: "Stakataka",
+types: ["Rock", "Steel"],
+baseStats: {hp: 61, atk: 131, def: 211, spa: 53, spd: 101, spe: 13},
+abilities: {0: "Beast Boost"},
+weightkg: 820,
+},
+
+blacephalon: {
+num: 806,
+name: "Blacephalon",
+types: ["Fire"],
+baseStats: {hp: 53, atk: 127, def: 53, spa: 151, spd: 79, spe: 107},
+abilities: {0: "Beast Boost"},
+weightkg: 13,
+},
+
+zeraora: {
+num: 807,
+name: "Zeraora",
+types: ["Electric", "Fighting"],
+baseStats: {hp: 88, atk: 112, def: 75, spa: 102, spd: 80, spe: 143},
+abilities: {0: "Volt Absorb"},
+weightkg: 44.5,
+},
+
+meltan: {
+num: 808,
+name: "Meltan",
+types: ["Steel"],
+baseStats: {hp: 46, atk: 65, def: 65, spa: 55, spd: 35, spe: 34},
+abilities: {0: "Magnet Pull"},
+weightkg: 8,
+},
+
+melmetal: {
+num: 809,
+name: "Melmetal",
+types: ["Steel"],
+baseStats: {hp: 135, atk: 143, def: 143, spa: 80, spd: 65, spe: 34},
+abilities: {0: "Iron Fist"},
+weightkg: 800,
+},
+
+melmetalgmax: {
+num: 809,
+name: "Melmetal-Gmax",
+baseSpecies: "Melmetal",
+forme: "Gmax",
+types: ["Steel"],
+baseStats: {hp: 135, atk: 143, def: 143, spa: 80, spd: 65, spe: 34},
+abilities: {0: "Iron Fist"},
+weightkg: 0,
+changesFrom: "Melmetal",
+},
+
+grookey: {
+num: 810,
+name: "Grookey",
+types: ["Grass"],
+baseStats: {hp: 50, atk: 65, def: 50, spa: 40, spd: 40, spe: 65},
+abilities: {0: "Overgrow", H: "Grassy Surge"},
+weightkg: 5,
+evos: ["Thwackey"],
+},
+
+thwackey: {
+num: 811,
+name: "Thwackey",
+types: ["Grass", "Rock"],
+baseStats: {hp: 70, atk: 85, def: 70, spa: 55, spd: 60, spe: 80},
+abilities: {0: "Overgrow", H: "Grassy Surge"},
+weightkg: 14,
+prevo: "Grookey",
+evos: ["Rillaboom"],
+},
+
+rillaboom: {
+num: 812,
+name: "Rillaboom",
+types: ["Grass", "Rock"],
+baseStats: {hp: 100, atk: 125, def: 90, spa: 60, spd: 70, spe: 85},
+abilities: {0: "Overgrow", H: "Grassy Surge"},
+weightkg: 90,
+prevo: "Thwackey",
+},
+
+rillaboomgmax: {
+num: 812,
+name: "Rillaboom-Gmax",
+baseSpecies: "Rillaboom",
+forme: "Gmax",
+types: ["Grass", "Rock"],
+baseStats: {hp: 100, atk: 125, def: 90, spa: 60, spd: 70, spe: 85},
+abilities: {0: "Overgrow", H: "Grassy Surge"},
+weightkg: 0,
+changesFrom: "Rillaboom",
+},
+
+scorbunny: {
+num: 813,
+name: "Scorbunny",
+types: ["Fire", "Normal"],
+baseStats: {hp: 50, atk: 71, def: 40, spa: 40, spd: 40, spe: 69},
+abilities: {0: "Blaze", H: "Libero"},
+weightkg: 4.5,
+evos: ["Raboot"],
+},
+
+raboot: {
+num: 814,
+name: "Raboot",
+types: ["Fire", "Normal"],
+baseStats: {hp: 65, atk: 86, def: 60, spa: 55, spd: 60, spe: 94},
+abilities: {0: "Blaze", H: "Libero"},
+weightkg: 9,
+prevo: "Scorbunny",
+evos: ["Cinderace"],
+},
+
+cinderace: {
+num: 815,
+name: "Cinderace",
+types: ["Fire", "Normal"],
+baseStats: {hp: 80, atk: 116, def: 75, spa: 65, spd: 75, spe: 119},
+abilities: {0: "Blaze", H: "Libero"},
+weightkg: 33,
+prevo: "Raboot",
+},
+
+cinderacegmax: {
+num: 815,
+name: "Cinderace-Gmax",
+baseSpecies: "Cinderace",
+forme: "Gmax",
+types: ["Fire", "Normal"],
+baseStats: {hp: 80, atk: 116, def: 75, spa: 65, spd: 75, spe: 119},
+abilities: {0: "Blaze", H: "Libero"},
+weightkg: 0,
+changesFrom: "Cinderace",
+},
+
+sobble: {
+num: 816,
+name: "Sobble",
+types: ["Water"],
+baseStats: {hp: 50, atk: 40, def: 40, spa: 70, spd: 40, spe: 70},
+abilities: {0: "Torrent", H: "Sniper"},
+weightkg: 4,
+evos: ["Drizzile"],
+},
+
+drizzile: {
+num: 817,
+name: "Drizzile",
+types: ["Water", "Poison"],
+baseStats: {hp: 65, atk: 60, def: 55, spa: 95, spd: 55, spe: 90},
+abilities: {0: "Torrent", H: "Sniper"},
+weightkg: 11.5,
+prevo: "Sobble",
+evos: ["Inteleon"],
+},
+
+inteleon: {
+num: 818,
+name: "Inteleon",
+types: ["Water", "Poison"],
+baseStats: {hp: 70, atk: 85, def: 65, spa: 125, spd: 65, spe: 120},
+abilities: {0: "Torrent", H: "Sniper"},
+weightkg: 45.2,
+prevo: "Drizzile",
+},
+
+inteleongmax: {
+num: 818,
+name: "Inteleon-Gmax",
+baseSpecies: "Inteleon",
+forme: "Gmax",
+types: ["Water", "Poison"],
+baseStats: {hp: 70, atk: 85, def: 65, spa: 125, spd: 65, spe: 120},
+abilities: {0: "Torrent", H: "Sniper"},
+weightkg: 0,
+changesFrom: "Inteleon",
+},
+
+skwovet: {
+num: 819,
+name: "Skwovet",
+types: ["Normal"],
+baseStats: {hp: 70, atk: 55, def: 55, spa: 35, spd: 35, spe: 25},
+abilities: {0: "Cheek Pouch", H: "Gluttony"},
+weightkg: 2.5,
+evos: ["Greedent"],
+},
+
+greedent: {
+num: 820,
+name: "Greedent",
+types: ["Normal", "Ground"],
+baseStats: {hp: 120, atk: 95, def: 95, spa: 55, spd: 75, spe: 20},
+abilities: {0: "Cheek Pouch", H: "Gluttony"},
+weightkg: 6,
+prevo: "Skwovet",
+},
+
+rookidee: {
+num: 821,
+name: "Rookidee",
+types: ["Flying"],
+baseStats: {hp: 38, atk: 47, def: 35, spa: 33, spd: 35, spe: 57},
+abilities: {0: "Keen Eye", 1: "Unnerve", H: "Big Pecks"},
+weightkg: 1.8,
+evos: ["Corvisquire"],
+},
+
+corvisquire: {
+num: 822,
+name: "Corvisquire",
+types: ["Flying"],
+baseStats: {hp: 68, atk: 67, def: 55, spa: 43, spd: 55, spe: 77},
+abilities: {0: "Keen Eye", 1: "Unnerve", H: "Big Pecks"},
+weightkg: 16,
+prevo: "Rookidee",
+evos: ["Corviknight"],
+},
+
+corviknight: {
+num: 823,
+name: "Corviknight",
+types: ["Flying", "Steel"],
+baseStats: {hp: 98, atk: 87, def: 105, spa: 53, spd: 85, spe: 67},
+abilities: {0: "Pressure", 1: "Unnerve", H: "Mirror Armor"},
+weightkg: 75,
+prevo: "Corvisquire",
+},
+
+corviknightgmax: {
+num: 823,
+name: "Corviknight-Gmax",
+baseSpecies: "Corviknight",
+forme: "Gmax",
+types: ["Flying", "Steel"],
+baseStats: {hp: 98, atk: 87, def: 105, spa: 53, spd: 85, spe: 67},
+abilities: {0: "Pressure", 1: "Unnerve", H: "Mirror Armor"},
+weightkg: 0,
+changesFrom: "Corviknight",
+},
+
+blipbug: {
+num: 824,
+name: "Blipbug",
+types: ["Bug"],
+baseStats: {hp: 25, atk: 20, def: 20, spa: 25, spd: 45, spe: 45},
+abilities: {0: "Swarm", 1: "Compound Eyes", H: "Telepathy"},
+weightkg: 8,
+evos: ["Dottler"],
+},
+
+dottler: {
+num: 825,
+name: "Dottler",
+types: ["Bug", "Psychic"],
+baseStats: {hp: 50, atk: 35, def: 80, spa: 50, spd: 90, spe: 30},
+abilities: {0: "Swarm", 1: "Compound Eyes", H: "Telepathy"},
+weightkg: 19.5,
+prevo: "Blipbug",
+evos: ["Orbeetle"],
+},
+
+orbeetle: {
+num: 826,
+name: "Orbeetle",
+types: ["Bug", "Psychic"],
+baseStats: {hp: 60, atk: 45, def: 110, spa: 80, spd: 120, spe: 90},
+abilities: {0: "Swarm", 1: "Frisk", H: "Telepathy"},
+weightkg: 40.8,
+prevo: "Dottler",
+},
+
+orbeetlegmax: {
+num: 826,
+name: "Orbeetle-Gmax",
+baseSpecies: "Orbeetle",
+forme: "Gmax",
+types: ["Bug", "Psychic"],
+baseStats: {hp: 60, atk: 45, def: 110, spa: 80, spd: 120, spe: 90},
+abilities: {0: "Swarm", 1: "Frisk", H: "Telepathy"},
+weightkg: 0,
+changesFrom: "Orbeetle",
+},
+
+nickit: {
+num: 827,
+name: "Nickit",
+types: ["Dark"],
+baseStats: {hp: 40, atk: 28, def: 28, spa: 47, spd: 52, spe: 50},
+abilities: {0: "Run Away", 1: "Unburden", H: "Stakeout"},
+weightkg: 8.9,
+evos: ["Thievul"],
+},
+
+thievul: {
+num: 828,
+name: "Thievul",
+types: ["Dark"],
+baseStats: {hp: 70, atk: 58, def: 58, spa: 87, spd: 92, spe: 90},
+abilities: {0: "Run Away", 1: "Unburden", H: "Stakeout"},
+weightkg: 19.9,
+prevo: "Nickit",
+},
+
+gossifleur: {
+num: 829,
+name: "Gossifleur",
+types: ["Grass"],
+baseStats: {hp: 40, atk: 40, def: 60, spa: 40, spd: 60, spe: 10},
+abilities: {0: "Cotton Down", 1: "Regenerator", H: "Effect Spore"},
+weightkg: 2.2,
+evos: ["Eldegoss"],
+},
+
+eldegoss: {
+num: 830,
+name: "Eldegoss",
+types: ["Grass"],
+baseStats: {hp: 60, atk: 50, def: 90, spa: 80, spd: 120, spe: 60},
+abilities: {0: "Cotton Down", 1: "Regenerator", H: "Effect Spore"},
+weightkg: 2.5,
+prevo: "Gossifleur",
+},
+
+wooloo: {
+num: 831,
+name: "Wooloo",
+types: ["Normal"],
+baseStats: {hp: 42, atk: 40, def: 55, spa: 40, spd: 45, spe: 48},
+abilities: {0: "Fluffy", 1: "Run Away", H: "Bulletproof"},
+weightkg: 6,
+evos: ["Dubwool"],
+},
+
+dubwool: {
+num: 832,
+name: "Dubwool",
+types: ["Normal", "Steel"],
+baseStats: {hp: 72, atk: 80, def: 100, spa: 60, spd: 90, spe: 88},
+abilities: {0: "Fluffy", 1: "Steadfast", H: "Bulletproof"},
+weightkg: 43,
+prevo: "Wooloo",
+},
+
+chewtle: {
+num: 833,
+name: "Chewtle",
+types: ["Water"],
+baseStats: {hp: 50, atk: 64, def: 50, spa: 38, spd: 38, spe: 44},
+abilities: {0: "Strong Jaw", 1: "Shell Armor", H: "Swift Swim"},
+weightkg: 8.5,
+evos: ["Drednaw"],
+},
+
+drednaw: {
+num: 834,
+name: "Drednaw",
+types: ["Water", "Rock"],
+baseStats: {hp: 90, atk: 115, def: 90, spa: 48, spd: 68, spe: 74},
+abilities: {0: "Strong Jaw", 1: "Shell Armor", H: "Swift Swim"},
+weightkg: 115.5,
+prevo: "Chewtle",
+},
+
+drednawgmax: {
+num: 834,
+name: "Drednaw-Gmax",
+baseSpecies: "Drednaw",
+forme: "Gmax",
+types: ["Water", "Rock"],
+baseStats: {hp: 90, atk: 115, def: 90, spa: 48, spd: 68, spe: 74},
+abilities: {0: "Strong Jaw", 1: "Shell Armor", H: "Swift Swim"},
+weightkg: 0,
+changesFrom: "Drednaw",
+},
+
+yamper: {
+num: 835,
+name: "Yamper",
+types: ["Electric", "Normal"],
+baseStats: {hp: 59, atk: 45, def: 50, spa: 40, spd: 50, spe: 26},
+abilities: {0: "Ball Fetch", H: "Rattled"},
+weightkg: 13.5,
+evos: ["Boltund"],
+},
+
+boltund: {
+num: 836,
+name: "Boltund",
+types: ["Electric", "Normal"],
+baseStats: {hp: 69, atk: 90, def: 60, spa: 90, spd: 60, spe: 121},
+abilities: {0: "Strong Jaw", H: "Competitive"},
+weightkg: 34,
+prevo: "Yamper",
+},
+
+rolycoly: {
+num: 837,
+name: "Rolycoly",
+types: ["Rock"],
+baseStats: {hp: 30, atk: 40, def: 50, spa: 40, spd: 50, spe: 30},
+abilities: {0: "Steam Engine", 1: "Heatproof", H: "Flash Fire"},
+weightkg: 12,
+evos: ["Carkol"],
+},
+
+carkol: {
+num: 838,
+name: "Carkol",
+types: ["Rock", "Fire"],
+baseStats: {hp: 80, atk: 60, def: 90, spa: 60, spd: 70, spe: 50},
+abilities: {0: "Steam Engine", 1: "Flame Body", H: "Flash Fire"},
+weightkg: 78,
+prevo: "Rolycoly",
+evos: ["Coalossal"],
+},
+
+coalossal: {
+num: 839,
+name: "Coalossal",
+types: ["Rock", "Fire"],
+baseStats: {hp: 110, atk: 80, def: 120, spa: 80, spd: 90, spe: 30},
+abilities: {0: "Steam Engine", 1: "Flame Body", H: "Flash Fire"},
+weightkg: 310.5,
+prevo: "Carkol",
+},
+
+coalossalgmax: {
+num: 839,
+name: "Coalossal-Gmax",
+baseSpecies: "Coalossal",
+forme: "Gmax",
+types: ["Rock", "Fire"],
+baseStats: {hp: 110, atk: 80, def: 120, spa: 80, spd: 90, spe: 30},
+abilities: {0: "Steam Engine", 1: "Flame Body", H: "Flash Fire"},
+weightkg: 0,
+changesFrom: "Coalossal",
+},
+
+applin: {
+num: 840,
+name: "Applin",
+types: ["Grass", "Bug"],
+baseStats: {hp: 40, atk: 40, def: 80, spa: 40, spd: 40, spe: 20},
+abilities: {0: "Ripen", 1: "Gluttony", H: "Bulletproof"},
+weightkg: 0.5,
+evos: ["Flapple", "Appletun"],
+},
+
+flapple: {
+num: 841,
+name: "Flapple",
+types: ["Bug", "Dragon"],
+baseStats: {hp: 70, atk: 110, def: 80, spa: 95, spd: 60, spe: 70},
+abilities: {0: "Ripen", 1: "Gluttony", H: "Hustle"},
+weightkg: 1,
+prevo: "Applin",
+evoType: "useItem",
+evoItem: "Tart Apple",
+},
+
+flapplegmax: {
+num: 841,
+name: "Flapple-Gmax",
+baseSpecies: "Flapple",
+forme: "Gmax",
+types: ["Bug", "Dragon"],
+baseStats: {hp: 70, atk: 110, def: 80, spa: 95, spd: 60, spe: 70},
+abilities: {0: "Ripen", 1: "Gluttony", H: "Hustle"},
+weightkg: 0,
+changesFrom: "Flapple",
+},
+
+appletun: {
+num: 842,
+name: "Appletun",
+types: ["Grass", "Dragon"],
+baseStats: {hp: 110, atk: 85, def: 80, spa: 100, spd: 80, spe: 30},
+abilities: {0: "Ripen", 1: "Gluttony", H: "Thick Fat"},
+weightkg: 13,
+prevo: "Applin",
+evoType: "useItem",
+evoItem: "Sweet Apple",
+},
+
+appletungmax: {
+num: 842,
+name: "Appletun-Gmax",
+baseSpecies: "Appletun",
+forme: "Gmax",
+types: ["Grass", "Dragon"],
+baseStats: {hp: 110, atk: 85, def: 80, spa: 100, spd: 80, spe: 30},
+abilities: {0: "Ripen", 1: "Gluttony", H: "Thick Fat"},
+weightkg: 0,
+changesFrom: "Appletun",
+},
+
+silicobra: {
+num: 843,
+name: "Silicobra",
+types: ["Ground"],
+baseStats: {hp: 52, atk: 57, def: 75, spa: 35, spd: 50, spe: 46},
+abilities: {0: "Sand Spit", 1: "Shed Skin", H: "Sand Veil"},
+weightkg: 7.6,
+evos: ["Sandaconda"],
+},
+
+sandaconda: {
+num: 844,
+name: "Sandaconda",
+types: ["Ground", "Dragon"],
+baseStats: {hp: 72, atk: 107, def: 125, spa: 65, spd: 70, spe: 71},
+abilities: {0: "Sand Spit", 1: "Shed Skin", H: "Sand Veil"},
+weightkg: 65.5,
+prevo: "Silicobra",
+},
+
+sandacondagmax: {
+num: 844,
+name: "Sandaconda-Gmax",
+baseSpecies: "Sandaconda",
+forme: "Gmax",
+types: ["Ground", "Dragon"],
+baseStats: {hp: 72, atk: 107, def: 125, spa: 65, spd: 70, spe: 71},
+abilities: {0: "Sand Spit", 1: "Shed Skin", H: "Sand Veil"},
+weightkg: 0,
+changesFrom: "Sandaconda",
+},
+
+cramorant: {
+num: 845,
+name: "Cramorant",
+types: ["Flying", "Water"],
+baseStats: {hp: 70, atk: 85, def: 55, spa: 85, spd: 95, spe: 85},
+abilities: {0: "Gulp Missile"},
+weightkg: 18,
+otherFormes: ["Cramorant-Gulping", "Cramorant-Gorging"],
+formeOrder: ["Cramorant", "Cramorant-Gulping", "Cramorant-Gorging"],
+},
+
+cramorantgulping: {
+num: 845,
+name: "Cramorant-Gulping",
+baseSpecies: "Cramorant",
+forme: "Gulping",
+types: ["Flying", "Water"],
+baseStats: {hp: 70, atk: 85, def: 55, spa: 85, spd: 95, spe: 85},
+abilities: {0: "Gulp Missile"},
+weightkg: 18,
+requiredAbility: "Gulp Missile",
+battleOnly: "Cramorant",
+},
+
+cramorantgorging: {
+num: 845,
+name: "Cramorant-Gorging",
+baseSpecies: "Cramorant",
+forme: "Gorging",
+types: ["Flying", "Water"],
+baseStats: {hp: 70, atk: 85, def: 55, spa: 85, spd: 95, spe: 85},
+abilities: {0: "Gulp Missile"},
+weightkg: 18,
+requiredAbility: "Gulp Missile",
+battleOnly: "Cramorant",
+},
+
+arrokuda: {
+num: 846,
+name: "Arrokuda",
+types: ["Ice"],
+baseStats: {hp: 41, atk: 63, def: 40, spa: 40, spd: 30, spe: 66},
+abilities: {0: "Swift Swim", H: "Propeller Tail"},
+weightkg: 1,
+evos: ["Barraskewda"],
+},
+
+barraskewda: {
+num: 847,
+name: "Barraskewda",
+types: ["Ice", "Fire"],
+baseStats: {hp: 61, atk: 123, def: 60, spa: 60, spd: 50, spe: 136},
+abilities: {0: "Swift Swim", H: "Propeller Tail"},
+weightkg: 30,
+prevo: "Arrokuda",
+},
+
+toxel: {
+num: 848,
+name: "Toxel",
+types: ["Electric", "Poison"],
+baseStats: {hp: 40, atk: 38, def: 35, spa: 54, spd: 35, spe: 40},
+abilities: {0: "Rattled", 1: "Static", H: "Klutz"},
+weightkg: 11,
+evos: ["Toxtricity", "Toxtricity-Low-Key"],
+canHatch: true,
+},
+
+toxtricity: {
+num: 849,
+name: "Toxtricity",
+baseForme: "Amped",
+types: ["Electric", "Poison"],
+baseStats: {hp: 75, atk: 98, def: 70, spa: 114, spd: 70, spe: 75},
+abilities: {0: "Punk Rock", 1: "Plus", H: "Technician"},
+weightkg: 40,
+prevo: "Toxel",
+otherFormes: ["Toxtricity-Low-Key"],
+formeOrder: ["Toxtricity", "Toxtricity-Low-Key"],
+},
+
+toxtricitylowkey: {
+num: 849,
+name: "Toxtricity-Low-Key",
+baseSpecies: "Toxtricity",
+forme: "Low-Key",
+types: ["Electric", "Poison"],
+baseStats: {hp: 75, atk: 98, def: 70, spa: 114, spd: 70, spe: 75},
+abilities: {0: "Punk Rock", 1: "Minus", H: "Technician"},
+weightkg: 40,
+prevo: "Toxel",
+},
+
+toxtricitygmax: {
+num: 849,
+name: "Toxtricity-Gmax",
+baseSpecies: "Toxtricity",
+forme: "Gmax",
+types: ["Electric", "Poison"],
+baseStats: {hp: 75, atk: 98, def: 70, spa: 114, spd: 70, spe: 75},
+abilities: {0: "Punk Rock", 1: "Plus", H: "Technician"},
+weightkg: 0,
+changesFrom: "Toxtricity",
+},
+
+toxtricitylowkeygmax: {
+num: 849,
+name: "Toxtricity-Low-Key-Gmax",
+baseSpecies: "Toxtricity",
+forme: "Low-Key-Gmax",
+types: ["Electric", "Poison"],
+baseStats: {hp: 75, atk: 98, def: 70, spa: 114, spd: 70, spe: 75},
+abilities: {0: "Punk Rock", 1: "Minus", H: "Technician"},
+weightkg: 0,
+battleOnly: "Toxtricity-Low-Key",
+changesFrom: "Toxtricity-Low-Key",
+},
+
+sizzlipede: {
+num: 850,
+name: "Sizzlipede",
+types: ["Fire", "Bug"],
+baseStats: {hp: 50, atk: 65, def: 45, spa: 50, spd: 50, spe: 45},
+abilities: {0: "Flash Fire", 1: "White Smoke", H: "Flame Body"},
+weightkg: 1,
+evos: ["Centiskorch"],
+},
+
+centiskorch: {
+num: 851,
+name: "Centiskorch",
+types: ["Fire", "Bug"],
+baseStats: {hp: 100, atk: 115, def: 65, spa: 90, spd: 90, spe: 65},
+abilities: {0: "Flash Fire", 1: "White Smoke", H: "Flame Body"},
+weightkg: 120,
+prevo: "Sizzlipede",
+},
+
+centiskorchgmax: {
+num: 851,
+name: "Centiskorch-Gmax",
+baseSpecies: "Centiskorch",
+forme: "Gmax",
+types: ["Fire", "Bug"],
+baseStats: {hp: 100, atk: 115, def: 65, spa: 90, spd: 90, spe: 65},
+abilities: {0: "Flash Fire", 1: "White Smoke", H: "Flame Body"},
+weightkg: 0,
+changesFrom: "Centiskorch",
+},
+
+clobbopus: {
+num: 852,
+name: "Clobbopus",
+types: ["Fighting"],
+baseStats: {hp: 50, atk: 68, def: 60, spa: 50, spd: 50, spe: 32},
+abilities: {0: "Limber", H: "Technician"},
+weightkg: 4,
+evos: ["Grapploct"],
+},
+
+grapploct: {
+num: 853,
+name: "Grapploct",
+types: ["Fighting", "Dark"],
+baseStats: {hp: 80, atk: 118, def: 90, spa: 70, spd: 80, spe: 42},
+abilities: {0: "Limber", H: "Technician"},
+weightkg: 39,
+prevo: "Clobbopus",
+evoType: "levelMove",
+evoMove: "Taunt",
+},
+
+sinistea: {
+num: 854,
+name: "Sinistea",
+baseForme: "Phony",
+types: ["Ghost", "Poison"],
+baseStats: {hp: 40, atk: 45, def: 45, spa: 74, spd: 54, spe: 50},
+abilities: {0: "Weak Armor", H: "Cursed Body"},
+weightkg: 0.2,
+evos: ["Polteageist"],
+otherFormes: ["Sinistea-Antique"],
+formeOrder: ["Sinistea", "Sinistea-Antique"],
+},
+
+sinisteaantique: {
+num: 854,
+name: "Sinistea-Antique",
+baseSpecies: "Sinistea",
+forme: "Antique",
+types: ["Ghost", "Poison"],
+baseStats: {hp: 40, atk: 45, def: 45, spa: 74, spd: 54, spe: 50},
+abilities: {0: "Weak Armor", H: "Cursed Body"},
+weightkg: 0.2,
+evos: ["Polteageist-Antique"],
+},
+
+polteageist: {
+num: 855,
+name: "Polteageist",
+baseForme: "Phony",
+types: ["Ghost", "Poison"],
+baseStats: {hp: 60, atk: 65, def: 65, spa: 134, spd: 114, spe: 70},
+abilities: {0: "Weak Armor", H: "Cursed Body"},
+weightkg: 0.4,
+prevo: "Sinistea",
+evoType: "useItem",
+evoItem: "Cracked Pot",
+otherFormes: ["Polteageist-Antique"],
+formeOrder: ["Polteageist", "Polteageist-Antique"],
+},
+
+polteageistantique: {
+num: 855,
+name: "Polteageist-Antique",
+baseSpecies: "Polteageist",
+forme: "Antique",
+types: ["Ghost", "Poison"],
+baseStats: {hp: 60, atk: 65, def: 65, spa: 134, spd: 114, spe: 70},
+abilities: {0: "Weak Armor", H: "Cursed Body"},
+weightkg: 0.4,
+prevo: "Sinistea-Antique",
+evoType: "useItem",
+evoItem: "Chipped Pot",
+},
+
+hatenna: {
+num: 856,
+name: "Hatenna",
+types: ["Fairy"],
+baseStats: {hp: 42, atk: 30, def: 45, spa: 56, spd: 53, spe: 39},
+abilities: {0: "Healer", 1: "Anticipation", H: "Magic Bounce"},
+weightkg: 3.4,
+evos: ["Hattrem"],
+},
+
+hattrem: {
+num: 857,
+name: "Hattrem",
+types: ["Fairy"],
+baseStats: {hp: 57, atk: 40, def: 65, spa: 86, spd: 73, spe: 49},
+abilities: {0: "Healer", 1: "Anticipation", H: "Magic Bounce"},
+weightkg: 4.8,
+prevo: "Hatenna",
+evos: ["Hatterene"],
+},
+
+hatterene: {
+num: 858,
+name: "Hatterene",
+types: ["Fairy"],
+baseStats: {hp: 57, atk: 90, def: 95, spa: 136, spd: 103, spe: 29},
+abilities: {0: "Healer", 1: "Anticipation", H: "Magic Bounce"},
+weightkg: 5.1,
+prevo: "Hattrem",
+},
+
+hatterenegmax: {
+num: 858,
+name: "Hatterene-Gmax",
+baseSpecies: "Hatterene",
+forme: "Gmax",
+types: ["Psychic", "Fairy"],
+baseStats: {hp: 57, atk: 90, def: 95, spa: 136, spd: 103, spe: 29},
+abilities: {0: "Healer", 1: "Anticipation", H: "Magic Bounce"},
+weightkg: 0,
+changesFrom: "Hatterene",
+},
+
+impidimp: {
+num: 859,
+name: "Impidimp",
+types: ["Dark", "Fairy"],
+baseStats: {hp: 45, atk: 45, def: 30, spa: 55, spd: 40, spe: 50},
+abilities: {0: "Prankster", 1: "Frisk", H: "Pickpocket"},
+weightkg: 5.5,
+evos: ["Morgrem"],
+},
+
+morgrem: {
+num: 860,
+name: "Morgrem",
+types: ["Dark", "Fairy"],
+baseStats: {hp: 65, atk: 60, def: 45, spa: 75, spd: 55, spe: 70},
+abilities: {0: "Prankster", 1: "Frisk", H: "Pickpocket"},
+weightkg: 12.5,
+prevo: "Impidimp",
+evos: ["Grimmsnarl"],
+},
+
+grimmsnarl: {
+num: 861,
+name: "Grimmsnarl",
+types: ["Dark", "Fairy"],
+baseStats: {hp: 95, atk: 120, def: 65, spa: 95, spd: 75, spe: 60},
+abilities: {0: "Prankster", 1: "Frisk", H: "Pickpocket"},
+weightkg: 61,
+prevo: "Morgrem",
+},
+
+grimmsnarlgmax: {
+num: 861,
+name: "Grimmsnarl-Gmax",
+baseSpecies: "Grimmsnarl",
+forme: "Gmax",
+types: ["Dark", "Fairy"],
+baseStats: {hp: 95, atk: 120, def: 65, spa: 95, spd: 75, spe: 60},
+abilities: {0: "Prankster", 1: "Frisk", H: "Pickpocket"},
+weightkg: 0,
+changesFrom: "Grimmsnarl",
+},
+
+obstagoon: {
+num: 862,
+name: "Obstagoon",
+types: ["Dark", "Normal"],
+baseStats: {hp: 93, atk: 90, def: 101, spa: 60, spd: 81, spe: 95},
+abilities: {0: "Reckless", 1: "Guts", H: "Defiant"},
+weightkg: 46,
+prevo: "Linoone-Galar",
+evoCondition: "at night",
+},
+
+perrserker: {
+num: 863,
+name: "Perrserker",
+types: ["Steel", "Normal"],
+baseStats: {hp: 70, atk: 110, def: 100, spa: 50, spd: 60, spe: 50},
+abilities: {0: "Battle Armor", 1: "Tough Claws", H: "Steely Spirit"},
+weightkg: 28,
+prevo: "Meowth-Galar",
+},
+
+cursola: {
+num: 864,
+name: "Cursola",
+types: ["Ghost", "Rock"],
+genderRatio: {M: 0.25, F: 0.75},
+baseStats: {hp: 60, atk: 95, def: 50, spa: 145, spd: 130, spe: 30},
+abilities: {0: "Weak Armor", H: "Perish Body"},
+weightkg: 0.4,
+prevo: "Corsola-Galar",
+},
+
+sirfetchd: {
+num: 865,
+name: "Sirfetch\u2019d",
+types: ["Fighting", "Flying"],
+baseStats: {hp: 62, atk: 135, def: 95, spa: 68, spd: 82, spe: 65},
+abilities: {0: "Steadfast", H: "Scrappy"},
+weightkg: 117,
+prevo: "Farfetch\u2019d-Galar",
+evoType: "other",
+evoCondition: "Land 3 critical hits in 1 battle",
+},
+
+mrrime: {
+num: 866,
+name: "Mr. Rime",
+types: ["Ice", "Psychic"],
+baseStats: {hp: 80, atk: 85, def: 75, spa: 110, spd: 100, spe: 70},
+abilities: {0: "Tangled Feet", 1: "Screen Cleaner", H: "Ice Body"},
+weightkg: 58.2,
+prevo: "Mr. Mime-Galar",
+},
+
+runerigus: {
+num: 867,
+name: "Runerigus",
+types: ["Rock", "Ghost"],
+baseStats: {hp: 58, atk: 95, def: 145, spa: 50, spd: 105, spe: 30},
+abilities: {0: "Wandering Spirit"},
+weightkg: 66.6,
+prevo: "Yamask-Galar",
+evoType: "other",
+evoCondition: "Have 49+ HP lost and walk under stone sculpture in Dusty Bowl",
+},
+
+milcery: {
+num: 868,
+name: "Milcery",
+types: ["Fairy"],
+baseStats: {hp: 45, atk: 40, def: 40, spa: 50, spd: 61, spe: 34},
+abilities: {0: "Sweet Veil", H: "Aroma Veil"},
+weightkg: 0.3,
+evos: ["Alcremie"],
+},
+
+alcremie: {
+num: 869,
+name: "Alcremie",
+baseForme: "Vanilla Cream",
+types: ["Fairy"],
+baseStats: {hp: 65, atk: 60, def: 75, spa: 110, spd: 121, spe: 64},
+abilities: {0: "Sweet Veil", H: "Aroma Veil"},
+weightkg: 0.5,
+prevo: "Milcery",
+evoType: "other",
+evoCondition: "spin while holding a Sweet",
+cosmeticFormes: ["Alcremie-Ruby-Cream", "Alcremie-Matcha-Cream", "Alcremie-Mint-Cream", "Alcremie-Lemon-Cream", "Alcremie-Salted-Cream", "Alcremie-Ruby-Swirl", "Alcremie-Caramel-Swirl", "Alcremie-Rainbow-Swirl"],
+formeOrder: ["Alcremie", "Alcremie-Ruby-Cream", "Alcremie-Matcha-Cream", "Alcremie-Mint-Cream", "Alcremie-Lemon-Cream", "Alcremie-Salted-Cream", "Alcremie-Ruby-Swirl", "Alcremie-Caramel-Swirl", "Alcremie-Rainbow-Swirl"],
+},
+
+alcremiegmax: {
+num: 869,
+name: "Alcremie-Gmax",
+baseSpecies: "Alcremie",
+forme: "Gmax",
+types: ["Fairy"],
+baseStats: {hp: 65, atk: 60, def: 75, spa: 110, spd: 121, spe: 64},
+abilities: {0: "Sweet Veil", H: "Aroma Veil"},
+weightkg: 0,
+changesFrom: "Alcremie",
+},
+
+falinks: {
+num: 870,
+name: "Falinks",
+types: ["Fighting", "Fairy"],
+baseStats: {hp: 65, atk: 100, def: 100, spa: 70, spd: 60, spe: 75},
+abilities: {0: "Battle Armor", H: "Defiant"},
+weightkg: 62,
+},
+
+pincurchin: {
+num: 871,
+name: "Pincurchin",
+types: ["Electric", "Poison"],
+baseStats: {hp: 48, atk: 101, def: 95, spa: 91, spd: 85, spe: 15},
+abilities: {0: "Lightning Rod", H: "Electric Surge"},
+weightkg: 1,
+},
+
+snom: {
+num: 872,
+name: "Snom",
+types: ["Ice", "Bug"],
+baseStats: {hp: 30, atk: 25, def: 35, spa: 45, spd: 30, spe: 20},
+abilities: {0: "Shield Dust", H: "Ice Scales"},
+weightkg: 3.8,
+evos: ["Frosmoth"],
+},
+
+frosmoth: {
+num: 873,
+name: "Frosmoth",
+types: ["Ice", "Bug"],
+baseStats: {hp: 70, atk: 65, def: 60, spa: 125, spd: 90, spe: 65},
+abilities: {0: "Shield Dust", H: "Ice Scales"},
+weightkg: 42,
+prevo: "Snom",
+evoType: "levelFriendship",
+evoCondition: "at night",
+},
+
+stonjourner: {
+num: 874,
+name: "Stonjourner",
+types: ["Rock"],
+baseStats: {hp: 100, atk: 125, def: 135, spa: 20, spd: 20, spe: 70},
+abilities: {0: "Power Spot"},
+weightkg: 520,
+},
+
+eiscue: {
+num: 875,
+name: "Eiscue",
+types: ["Ice", "Ghost"],
+baseStats: {hp: 75, atk: 80, def: 110, spa: 65, spd: 90, spe: 50},
+abilities: {0: "Ice Face"},
+weightkg: 89,
+otherFormes: ["Eiscue-Noice"],
+formeOrder: ["Eiscue", "Eiscue-Noice"],
+},
+
+eiscuenoice: {
+num: 875,
+name: "Eiscue-Noice",
+baseSpecies: "Eiscue",
+forme: "Noice",
+types: ["Ice", "Ghost"],
+baseStats: {hp: 75, atk: 80, def: 70, spa: 65, spd: 50, spe: 130},
+abilities: {0: "Ice Face"},
+weightkg: 89,
+requiredAbility: "Ice Face",
+battleOnly: "Eiscue",
+},
+
+indeedee: {
+num: 876,
+name: "Indeedee",
+baseForme: "M",
+types: ["Psychic", "Ice"],
+baseStats: {hp: 60, atk: 65, def: 55, spa: 105, spd: 95, spe: 95},
+abilities: {0: "Inner Focus", 1: "Synchronize", H: "Psychic Surge"},
+weightkg: 28,
+otherFormes: ["Indeedee-F"],
+formeOrder: ["Indeedee", "Indeedee-F"],
+},
+
+indeedeef: {
+num: 876,
+name: "Indeedee-F",
+baseSpecies: "Indeedee",
+forme: "F",
+types: ["Psychic", "Ice"],
+baseStats: {hp: 70, atk: 55, def: 65, spa: 95, spd: 105, spe: 85},
+abilities: {0: "Own Tempo", 1: "Synchronize", H: "Psychic Surge"},
+weightkg: 28,
+},
+
+morpeko: {
+num: 877,
+name: "Morpeko",
+types: ["Electric", "Dark"],
+baseStats: {hp: 58, atk: 95, def: 58, spa: 70, spd: 58, spe: 97},
+abilities: {0: "Hunger Switch"},
+weightkg: 3,
+otherFormes: ["Morpeko-Hangry"],
+formeOrder: ["Morpeko", "Morpeko-Hangry"],
+},
+
+morpekohangry: {
+num: 877,
+name: "Morpeko-Hangry",
+baseSpecies: "Morpeko",
+forme: "Hangry",
+types: ["Electric", "Dark"],
+baseStats: {hp: 58, atk: 95, def: 58, spa: 70, spd: 58, spe: 97},
+abilities: {0: "Hunger Switch"},
+weightkg: 3,
+requiredAbility: "Hunger Switch",
+battleOnly: "Morpeko",
+},
+
+cufant: {
+num: 878,
+name: "Cufant",
+types: ["Steel", "Normal"],
+baseStats: {hp: 72, atk: 80, def: 49, spa: 40, spd: 49, spe: 40},
+abilities: {0: "Sheer Force", H: "Heavy Metal"},
+weightkg: 100,
+evos: ["Copperajah"],
+},
+
+copperajah: {
+num: 879,
+name: "Copperajah",
+types: ["Steel", "Normal"],
+baseStats: {hp: 122, atk: 130, def: 69, spa: 80, spd: 69, spe: 30},
+abilities: {0: "Sheer Force", H: "Heavy Metal"},
+weightkg: 650,
+prevo: "Cufant",
+},
+
+copperajahgmax: {
+num: 879,
+name: "Copperajah-Gmax",
+baseSpecies: "Copperajah",
+forme: "Gmax",
+types: ["Steel"],
+baseStats: {hp: 122, atk: 130, def: 69, spa: 80, spd: 69, spe: 30},
+abilities: {0: "Sheer Force", H: "Heavy Metal"},
+weightkg: 0,
+changesFrom: "Copperajah",
+},
+
+dracozolt: {
+num: 880,
+name: "Dracozolt",
+types: ["Electric", "Dragon"],
+baseStats: {hp: 90, atk: 100, def: 90, spa: 80, spd: 70, spe: 75},
+abilities: {0: "Volt Absorb", 1: "Hustle", H: "Sand Rush"},
+weightkg: 190,
+},
+
+arctozolt: {
+num: 881,
+name: "Arctozolt",
+types: ["Electric", "Ice"],
+baseStats: {hp: 90, atk: 100, def: 90, spa: 90, spd: 80, spe: 55},
+abilities: {0: "Volt Absorb", 1: "Static", H: "Slush Rush"},
+weightkg: 150,
+},
+
+dracovish: {
+num: 882,
+name: "Dracovish",
+types: ["Water", "Dragon"],
+baseStats: {hp: 90, atk: 90, def: 100, spa: 70, spd: 80, spe: 75},
+abilities: {0: "Water Absorb", 1: "Strong Jaw", H: "Sand Rush"},
+weightkg: 215,
+},
+
+arctovish: {
+num: 883,
+name: "Arctovish",
+types: ["Water", "Ice"],
+baseStats: {hp: 90, atk: 90, def: 100, spa: 80, spd: 90, spe: 55},
+abilities: {0: "Water Absorb", 1: "Ice Body", H: "Slush Rush"},
+weightkg: 175,
+},
+
+duraludon: {
+num: 884,
+name: "Duraludon",
+types: ["Steel", "Dragon"],
+baseStats: {hp: 70, atk: 95, def: 115, spa: 120, spd: 50, spe: 85},
+abilities: {0: "Light Metal", 1: "Heavy Metal", H: "Stalwart"},
+weightkg: 40,
+},
+
+duraludongmax: {
+num: 884,
+name: "Duraludon-Gmax",
+baseSpecies: "Duraludon",
+forme: "Gmax",
+types: ["Steel", "Dragon"],
+baseStats: {hp: 70, atk: 95, def: 115, spa: 120, spd: 50, spe: 85},
+abilities: {0: "Light Metal", 1: "Heavy Metal", H: "Stalwart"},
+weightkg: 0,
+changesFrom: "Duraludon",
+},
+
+dreepy: {
+num: 885,
+name: "Dreepy",
+types: ["Dragon", "Ghost"],
+baseStats: {hp: 28, atk: 60, def: 30, spa: 40, spd: 30, spe: 82},
+abilities: {0: "Clear Body", 1: "Infiltrator", H: "Cursed Body"},
+weightkg: 2,
+evos: ["Drakloak"],
+},
+
+drakloak: {
+num: 886,
+name: "Drakloak",
+types: ["Dragon", "Ghost"],
+baseStats: {hp: 68, atk: 80, def: 50, spa: 60, spd: 50, spe: 102},
+abilities: {0: "Clear Body", 1: "Infiltrator", H: "Cursed Body"},
+weightkg: 11,
+prevo: "Dreepy",
+evos: ["Dragapult"],
+},
+
+dragapult: {
+num: 887,
+name: "Dragapult",
+types: ["Dragon", "Ghost"],
+baseStats: {hp: 88, atk: 120, def: 75, spa: 100, spd: 75, spe: 142},
+abilities: {0: "Clear Body", 1: "Infiltrator", H: "Cursed Body"},
+weightkg: 50,
+prevo: "Drakloak",
+},
+
+zacian: {
+num: 888,
+name: "Zacian",
+baseForme: "Hero",
+types: ["Fairy"],
+baseStats: {hp: 92, atk: 120, def: 115, spa: 80, spd: 115, spe: 138},
+abilities: {0: "Intrepid Sword"},
+weightkg: 110,
+otherFormes: ["Zacian-Crowned"],
+formeOrder: ["Zacian", "Zacian-Crowned"],
+cannotDynamax: true,
+},
+
+zaciancrowned: {
+num: 888,
+name: "Zacian-Crowned",
+baseSpecies: "Zacian",
+forme: "Crowned",
+types: ["Fairy", "Steel"],
+baseStats: {hp: 92, atk: 150, def: 115, spa: 80, spd: 115, spe: 148},
+abilities: {0: "Intrepid Sword"},
+weightkg: 355,
+battleOnly: "Zacian",
+cannotDynamax: true,
+},
+
+zamazenta: {
+num: 889,
+name: "Zamazenta",
+baseForme: "Hero",
+types: ["Fighting"],
+baseStats: {hp: 92, atk: 120, def: 115, spa: 80, spd: 115, spe: 138},
+abilities: {0: "Dauntless Shield"},
+weightkg: 210,
+otherFormes: ["Zamazenta-Crowned"],
+formeOrder: ["Zamazenta", "Zamazenta-Crowned"],
+cannotDynamax: true,
+},
+
+zamazentacrowned: {
+num: 889,
+name: "Zamazenta-Crowned",
+baseSpecies: "Zamazenta",
+forme: "Crowned",
+types: ["Fighting", "Steel"],
+baseStats: {hp: 92, atk: 120, def: 140, spa: 80, spd: 140, spe: 128},
+abilities: {0: "Dauntless Shield"},
+weightkg: 785,
+battleOnly: "Zamazenta",
+cannotDynamax: true,
+},
+
+eternatus: {
+num: 890,
+name: "Eternatus",
+types: ["Poison", "Dragon"],
+baseStats: {hp: 140, atk: 85, def: 95, spa: 145, spd: 95, spe: 130},
+abilities: {0: "Pressure"},
+weightkg: 950,
+otherFormes: ["Eternatus-Eternamax"],
+formeOrder: ["Eternatus", "Eternatus-Eternamax"],
+cannotDynamax: true,
+},
+
+eternatuseternamax: {
+num: 890,
+name: "Eternatus-Eternamax",
+baseSpecies: "Eternatus",
+forme: "Eternamax",
+types: ["Poison", "Dragon"],
+baseStats: {hp: 255, atk: 115, def: 250, spa: 125, spd: 250, spe: 130},
+abilities: {0: "Pressure"},
+weightkg: 0,
+cannotDynamax: true,
+},
+
+kubfu: {
+num: 891,
+name: "Kubfu",
+types: ["Fighting"],
+baseStats: {hp: 60, atk: 90, def: 60, spa: 53, spd: 50, spe: 72},
+abilities: {0: "Inner Focus"},
+weightkg: 12,
+evos: ["Urshifu", "Urshifu-Rapid-Strike"],
+},
+
+urshifu: {
+num: 892,
+name: "Urshifu",
+baseForme: "Single-Strike",
+types: ["Fighting", "Dark"],
+baseStats: {hp: 100, atk: 130, def: 100, spa: 63, spd: 60, spe: 97},
+abilities: {0: "Unseen Fist"},
+weightkg: 105,
+prevo: "Kubfu",
+evoType: "other",
+evoCondition: "Defeat the Single Strike Tower",
+otherFormes: ["Urshifu-Rapid-Strike"],
+formeOrder: ["Urshifu", "Urshifu-Rapid-Strike"],
+},
+
+urshifurapidstrike: {
+num: 892,
+name: "Urshifu-Rapid-Strike",
+baseSpecies: "Urshifu",
+forme: "Rapid-Strike",
+types: ["Fighting", "Ghost"],
+baseStats: {hp: 100, atk: 130, def: 100, spa: 63, spd: 60, spe: 97},
+abilities: {0: "Unseen Fist"},
+weightkg: 105,
+prevo: "Kubfu",
+evoType: "other",
+evoCondition: "Defeat the Rapid Strike Tower",
+},
+
+urshifugmax: {
+num: 892,
+name: "Urshifu-Gmax",
+baseSpecies: "Urshifu",
+forme: "Gmax",
+types: ["Fighting", "Dark"],
+baseStats: {hp: 100, atk: 130, def: 100, spa: 63, spd: 60, spe: 97},
+abilities: {0: "Unseen Fist"},
+weightkg: 0,
+changesFrom: "Urshifu",
+},
+
+urshifurapidstrikegmax: {
+num: 892,
+name: "Urshifu-Rapid-Strike-Gmax",
+baseSpecies: "Urshifu",
+forme: "Rapid-Strike-Gmax",
+types: ["Fighting", "Water"],
+baseStats: {hp: 100, atk: 130, def: 100, spa: 63, spd: 60, spe: 97},
+abilities: {0: "Unseen Fist"},
+weightkg: 105,
+battleOnly: "Urshifu-Rapid-Strike",
+changesFrom: "Urshifu-Rapid-Strike",
+},
+
+zarude: {
+num: 893,
+name: "Zarude",
+types: ["Dark", "Grass"],
+baseStats: {hp: 105, atk: 120, def: 105, spa: 70, spd: 95, spe: 105},
+abilities: {0: "Leaf Guard"},
+weightkg: 70,
+otherFormes: ["Zarude-Dada"],
+formeOrder: ["Zarude", "Zarude-Dada"],
+},
+
+zarudedada: {
+num: 893,
+name: "Zarude-Dada",
+baseSpecies: "Zarude",
+forme: "Dada",
+types: ["Dark", "Grass"],
+baseStats: {hp: 105, atk: 120, def: 105, spa: 70, spd: 95, spe: 105},
+abilities: {0: "Leaf Guard"},
+weightkg: 70,
+},
+
+regieleki: {
+num: 894,
+name: "Regieleki",
+types: ["Electric"],
+baseStats: {hp: 80, atk: 100, def: 50, spa: 100, spd: 50, spe: 200},
+abilities: {0: "Transistor"},
+weightkg: 145,
+},
+
+regidrago: {
+num: 895,
+name: "Regidrago",
+types: ["Dragon"],
+baseStats: {hp: 200, atk: 100, def: 50, spa: 100, spd: 50, spe: 80},
+abilities: {0: "Dragon's Maw"},
+weightkg: 200,
+},
+
+glastrier: {
+num: 896,
+name: "Glastrier",
+types: ["Ice", "Normal"],
+baseStats: {hp: 100, atk: 145, def: 130, spa: 65, spd: 110, spe: 30},
+abilities: {0: "Chilling Neigh"},
+weightkg: 800,
+},
+
+spectrier: {
+num: 897,
+name: "Spectrier",
+types: ["Ghost", "Normal"],
+baseStats: {hp: 100, atk: 65, def: 60, spa: 145, spd: 80, spe: 130},
+abilities: {0: "Grim Neigh"},
+weightkg: 44.5,
+},
+
+calyrex: {
+num: 898,
+name: "Calyrex",
+types: ["Psychic", "Grass"],
+baseStats: {hp: 100, atk: 80, def: 80, spa: 80, spd: 80, spe: 80},
+abilities: {0: "Unnerve"},
+weightkg: 7.7,
+otherFormes: ["Calyrex-Ice", "Calyrex-Shadow"],
+formeOrder: ["Calyrex", "Calyrex-Ice", "Calyrex-Shadow"],
+},
+
+calyrexice: {
+num: 898,
+name: "Calyrex-Ice",
+baseSpecies: "Calyrex",
+forme: "Ice",
+types: ["Grass", "Ice"],
+baseStats: {hp: 100, atk: 165, def: 150, spa: 85, spd: 130, spe: 50},
+abilities: {0: "As One (Glastrier)"},
+weightkg: 809.1,
+changesFrom: "Calyrex",
+},
+
+calyrexshadow: {
+num: 898,
+name: "Calyrex-Shadow",
+baseSpecies: "Calyrex",
+forme: "Shadow",
+types: ["Grass", "Ghost"],
+baseStats: {hp: 100, atk: 85, def: 80, spa: 165, spd: 100, spe: 150},
+abilities: {0: "As One (Spectrier)"},
+weightkg: 53.6,
+changesFrom: "Calyrex",
+},
+
+wyrdeer: {
+num: 899,
+name: "Wyrdeer",
+types: ["Normal", "Psychic"],
+baseStats: {hp: 103, atk: 105, def: 72, spa: 105, spd: 75, spe: 65},
+abilities: {0: "Intimidate", 1: "Frisk", H: "Sap Sipper"},
+weightkg: 95.1,
+prevo: "Stantler",
+evoType: "other",
+evoCondition: "Use Agile style Psyshield Bash 20 times",
+},
+
+kleavor: {
+num: 900,
+name: "Kleavor",
+types: ["Bug", "Rock"],
+baseStats: {hp: 70, atk: 135, def: 95, spa: 45, spd: 70, spe: 85},
+abilities: {0: "Swarm", 1: "Sheer Force", H: "Sharpness"},
+weightkg: 89,
+prevo: "Scyther",
+evoType: "other",
+evoCondition: "Black Augurite",
+},
+
+ursaluna: {
+num: 901,
+name: "Ursaluna",
+types: ["Ground", "Normal"],
+baseStats: {hp: 130, atk: 140, def: 105, spa: 45, spd: 80, spe: 50},
+abilities: {0: "Guts", 1: "Bulletproof", H: "Unnerve"},
+weightkg: 290,
+prevo: "Ursaring",
+evoType: "other",
+evoCondition: "Peat Block when there's a full moon",
+},
+
+basculegion: {
+num: 902,
+name: "Basculegion",
+baseForme: "M",
+types: ["Ice", "Ghost"],
+baseStats: {hp: 120, atk: 112, def: 65, spa: 80, spd: 75, spe: 78},
+abilities: {0: "Swift Swim", 1: "Adaptability", H: "Mold Breaker"},
+weightkg: 110,
+prevo: "Basculin-White-Striped",
+evoType: "other",
+evoCondition: "Receive 294+ recoil without fainting",
+otherFormes: ["Basculegion-F"],
+formeOrder: ["Basculegion", "Basculegion-F"],
+},
+
+basculegionf: {
+num: 902,
+name: "Basculegion-F",
+baseSpecies: "Basculegion",
+forme: "F",
+types: ["Ice", "Ghost"],
+baseStats: {hp: 120, atk: 92, def: 65, spa: 100, spd: 75, spe: 78},
+abilities: {0: "Swift Swim", 1: "Adaptability", H: "Mold Breaker"},
+weightkg: 110,
+prevo: "Basculin-White-Striped",
+evoType: "other",
+evoCondition: "Receive 294+ recoil without fainting",
+},
+
+sneasler: {
+num: 903,
+name: "Sneasler",
+types: ["Fighting", "Poison"],
+baseStats: {hp: 80, atk: 130, def: 60, spa: 40, spd: 80, spe: 120},
+abilities: {0: "Pressure", 1: "Unburden", H: "Poison Touch"},
+weightkg: 43,
+prevo: "Sneasel-Hisui",
+evoType: "levelHold",
+evoItem: "Razor Claw",
+evoCondition: "during the day",
+},
+
+overqwil: {
+num: 904,
+name: "Overqwil",
+types: ["Dark", "Poison"],
+baseStats: {hp: 85, atk: 115, def: 95, spa: 65, spd: 65, spe: 85},
+abilities: {0: "Poison Point", 1: "Swift Swim", H: "Intimidate"},
+weightkg: 3.9,
+prevo: "Qwilfish-Hisui",
+evoType: "other",
+evoCondition: "Use Strong style Barb Barrage 20 times",
+},
+
+enamorus: {
+num: 905,
+name: "Enamorus",
+baseForme: "Incarnate",
+types: ["Fairy", "Flying"],
+baseStats: {hp: 74, atk: 115, def: 70, spa: 135, spd: 80, spe: 106},
+abilities: {0: "Cute Charm", H: "Contrary"},
+weightkg: 48,
+otherFormes: ["Enamorus-Therian"],
+formeOrder: ["Enamorus", "Enamorus-Therian"],
+},
+
+enamorustherian: {
+num: 905,
+name: "Enamorus-Therian",
+baseSpecies: "Enamorus",
+forme: "Therian",
+types: ["Fairy", "Flying"],
+baseStats: {hp: 74, atk: 115, def: 110, spa: 135, spd: 100, spe: 46},
+abilities: {0: "Overcoat"},
+weightkg: 48,
+changesFrom: "Enamorus",
+},
+
+sprigatito: {
+num: 906,
+name: "Sprigatito",
+types: ["Grass"],
+baseStats: {hp: 40, atk: 61, def: 54, spa: 45, spd: 45, spe: 65},
+abilities: {0: "Overgrow", H: "Protean"},
+weightkg: 4.1,
+evos: ["Floragato"],
+},
+
+floragato: {
+num: 907,
+name: "Floragato",
+types: ["Grass"],
+baseStats: {hp: 61, atk: 80, def: 63, spa: 60, spd: 63, spe: 83},
+abilities: {0: "Overgrow", H: "Protean"},
+weightkg: 12.2,
+prevo: "Sprigatito",
+evos: ["Meowscarada"],
+},
+
+meowscarada: {
+num: 908,
+name: "Meowscarada",
+types: ["Grass", "Poison"],
+baseStats: {hp: 76, atk: 110, def: 70, spa: 81, spd: 70, spe: 123},
+abilities: {0: "Overgrow", H: "Protean"},
+weightkg: 31.2,
+prevo: "Floragato",
+},
+
+fuecoco: {
+num: 909,
+name: "Fuecoco",
+types: ["Fire"],
+baseStats: {hp: 67, atk: 45, def: 59, spa: 63, spd: 40, spe: 36},
+abilities: {0: "Blaze", H: "Unaware"},
+weightkg: 9.8,
+evos: ["Crocalor"],
+},
+
+crocalor: {
+num: 910,
+name: "Crocalor",
+types: ["Fire"],
+baseStats: {hp: 81, atk: 55, def: 78, spa: 90, spd: 58, spe: 49},
+abilities: {0: "Blaze", H: "Unaware"},
+weightkg: 30.7,
+prevo: "Fuecoco",
+evos: ["Skeledirge"],
+},
+
+skeledirge: {
+num: 911,
+name: "Skeledirge",
+types: ["Fire", "Ghost"],
+baseStats: {hp: 104, atk: 75, def: 100, spa: 110, spd: 75, spe: 66},
+abilities: {0: "Blaze", H: "Unaware"},
+weightkg: 326.5,
+prevo: "Crocalor",
+},
+
+quaxly: {
+num: 912,
+name: "Quaxly",
+types: ["Water"],
+baseStats: {hp: 55, atk: 65, def: 45, spa: 50, spd: 45, spe: 50},
+abilities: {0: "Torrent", H: "Moxie"},
+weightkg: 6.1,
+evos: ["Quaxwell"],
+},
+
+quaxwell: {
+num: 913,
+name: "Quaxwell",
+types: ["Water"],
+baseStats: {hp: 70, atk: 85, def: 65, spa: 65, spd: 60, spe: 65},
+abilities: {0: "Torrent", H: "Moxie"},
+weightkg: 21.5,
+prevo: "Quaxly",
+evos: ["Quaquaval"],
+},
+
+quaquaval: {
+num: 914,
+name: "Quaquaval",
+types: ["Water", "Fighting"],
+baseStats: {hp: 85, atk: 120, def: 80, spa: 85, spd: 75, spe: 85},
+abilities: {0: "Torrent", H: "Moxie"},
+weightkg: 61.9,
+prevo: "Quaxwell",
+},
+
+lechonk: {
+num: 915,
+name: "Lechonk",
+types: ["Fairy"],
+baseStats: {hp: 54, atk: 45, def: 40, spa: 35, spd: 45, spe: 35},
+abilities: {0: "Aroma Veil", 1: "Gluttony", H: "Thick Fat"},
+weightkg: 10.2,
+evos: ["Oinkologne", "Oinkologne-F"],
+},
+
+oinkologne: {
+num: 916,
+name: "Oinkologne",
+baseForme: "M",
+types: ["Fairy", "Ground"],
+baseStats: {hp: 110, atk: 100, def: 75, spa: 59, spd: 80, spe: 65},
+abilities: {0: "Lingering Aroma", 1: "Gluttony", H: "Thick Fat"},
+weightkg: 120,
+prevo: "Lechonk",
+otherFormes: ["Oinkologne-F"],
+formeOrder: ["Oinkologne", "Oinkologne-F"],
+},
+
+oinkolognef: {
+num: 916,
+name: "Oinkologne-F",
+baseSpecies: "Oinkologne",
+forme: "F",
+types: ["Fairy", "Ground"],
+baseStats: {hp: 115, atk: 90, def: 70, spa: 59, spd: 90, spe: 65},
+abilities: {0: "Aroma Veil", 1: "Gluttony", H: "Thick Fat"},
+weightkg: 120,
+prevo: "Lechonk",
+},
+
+tarountula: {
+num: 917,
+name: "Tarountula",
+types: ["Bug"],
+baseStats: {hp: 35, atk: 41, def: 45, spa: 29, spd: 40, spe: 20},
+abilities: {0: "Insomnia", H: "Stakeout"},
+weightkg: 4,
+evos: ["Spidops"],
+},
+
+spidops: {
+num: 918,
+name: "Spidops",
+types: ["Bug", "Ground"],
+baseStats: {hp: 60, atk: 79, def: 92, spa: 52, spd: 86, spe: 35},
+abilities: {0: "Insomnia", H: "Stakeout"},
+weightkg: 16.5,
+prevo: "Tarountula",
+},
+
+nymble: {
+num: 919,
+name: "Nymble",
+types: ["Bug"],
+baseStats: {hp: 33, atk: 46, def: 40, spa: 21, spd: 25, spe: 45},
+abilities: {0: "Swarm", H: "Tinted Lens"},
+weightkg: 1,
+evos: ["Lokix"],
+},
+
+lokix: {
+num: 920,
+name: "Lokix",
+types: ["Bug", "Dark"],
+baseStats: {hp: 71, atk: 102, def: 78, spa: 52, spd: 55, spe: 92},
+abilities: {0: "Swarm", H: "Tinted Lens"},
+weightkg: 17.5,
+prevo: "Nymble",
+},
+
+pawmi: {
+num: 921,
+name: "Pawmi",
+types: ["Electric"],
+baseStats: {hp: 45, atk: 50, def: 20, spa: 40, spd: 25, spe: 60},
+abilities: {0: "Static", 1: "Natural Cure", H: "Iron Fist"},
+weightkg: 2.5,
+evos: ["Pawmo"],
+},
+
+pawmo: {
+num: 922,
+name: "Pawmo",
+types: ["Electric", "Fighting"],
+baseStats: {hp: 60, atk: 75, def: 40, spa: 50, spd: 40, spe: 85},
+abilities: {0: "Volt Absorb", 1: "Natural Cure", H: "Iron Fist"},
+weightkg: 6.5,
+prevo: "Pawmi",
+evos: ["Pawmot"],
+},
+
+pawmot: {
+num: 923,
+name: "Pawmot",
+types: ["Electric", "Fighting"],
+baseStats: {hp: 70, atk: 115, def: 70, spa: 70, spd: 60, spe: 105},
+abilities: {0: "Volt Absorb", 1: "Natural Cure", H: "Iron Fist"},
+weightkg: 41,
+prevo: "Pawmo",
+evoType: "other",
+evoCondition: "walk 1000 steps in Let's Go",
+},
+
+tandemaus: {
+num: 924,
+name: "Tandemaus",
+types: ["Normal"],
+baseStats: {hp: 50, atk: 50, def: 45, spa: 40, spd: 45, spe: 75},
+abilities: {0: "Run Away", 1: "Pickup", H: "Own Tempo"},
+weightkg: 1.8,
+evos: ["Maushold", "Maushold-Four"],
+},
+
+maushold: {
+num: 925,
+name: "Maushold",
+baseForme: "Three",
+types: ["Normal", "Fairy"],
+baseStats: {hp: 74, atk: 75, def: 70, spa: 65, spd: 75, spe: 111},
+abilities: {0: "Friend Guard", 1: "Cheek Pouch", H: "Technician"},
+weightkg: 2.3,
+prevo: "Tandemaus",
+otherFormes: ["Maushold-Four"],
+formeOrder: ["Maushold", "Maushold-Four"],
+},
+
+mausholdfour: {
+num: 925,
+name: "Maushold-Four",
+baseSpecies: "Maushold",
+forme: "Four",
+types: ["Normal", "Fairy"],
+baseStats: {hp: 74, atk: 75, def: 70, spa: 65, spd: 75, spe: 111},
+abilities: {0: "Friend Guard", 1: "Cheek Pouch", H: "Technician"},
+weightkg: 2.8,
+prevo: "Tandemaus",
+},
+
+fidough: {
+num: 926,
+name: "Fidough",
+types: ["Fairy"],
+baseStats: {hp: 37, atk: 55, def: 70, spa: 30, spd: 55, spe: 65},
+abilities: {0: "Own Tempo", H: "Klutz"},
+weightkg: 10.9,
+evos: ["Dachsbun"],
+},
+
+dachsbun: {
+num: 927,
+name: "Dachsbun",
+types: ["Fairy", "Fire"],
+baseStats: {hp: 57, atk: 80, def: 115, spa: 50, spd: 80, spe: 95},
+abilities: {0: "Well-Baked Body", H: "Aroma Veil"},
+weightkg: 14.9,
+prevo: "Fidough",
+},
+
+smoliv: {
+num: 928,
+name: "Smoliv",
+types: ["Grass", "Normal"],
+baseStats: {hp: 41, atk: 35, def: 45, spa: 58, spd: 51, spe: 30},
+abilities: {0: "Early Bird", H: "Harvest"},
+weightkg: 6.5,
+evos: ["Dolliv"],
+},
+
+dolliv: {
+num: 929,
+name: "Dolliv",
+types: ["Grass", "Normal"],
+baseStats: {hp: 52, atk: 53, def: 60, spa: 78, spd: 78, spe: 33},
+abilities: {0: "Early Bird", H: "Harvest"},
+weightkg: 11.9,
+prevo: "Smoliv",
+evos: ["Arboliva"],
+},
+
+arboliva: {
+num: 930,
+name: "Arboliva",
+types: ["Grass", "Normal"],
+baseStats: {hp: 78, atk: 69, def: 90, spa: 125, spd: 109, spe: 39},
+abilities: {0: "Seed Sower", H: "Harvest"},
+weightkg: 48.2,
+prevo: "Dolliv",
+},
+
+squawkabilly: {
+num: 931,
+name: "Squawkabilly",
+baseForme: "Green",
+types: ["Normal", "Flying"],
+baseStats: {hp: 82, atk: 96, def: 51, spa: 45, spd: 51, spe: 92},
+abilities: {0: "Intimidate", 1: "Hustle", H: "Guts"},
+weightkg: 2.4,
+otherFormes: ["Squawkabilly-Blue", "Squawkabilly-Yellow", "Squawkabilly-White"],
+formeOrder: ["Squawkabilly", "Squawkabilly-Blue", "Squawkabilly-Yellow", "Squawkabilly-White"],
+},
+
+squawkabillyblue: {
+num: 931,
+name: "Squawkabilly-Blue",
+baseSpecies: "Squawkabilly",
+forme: "Blue",
+types: ["Normal", "Flying"],
+baseStats: {hp: 82, atk: 96, def: 51, spa: 45, spd: 51, spe: 92},
+abilities: {0: "Intimidate", 1: "Hustle", H: "Guts"},
+weightkg: 2.4,
+},
+
+squawkabillyyellow: {
+num: 931,
+name: "Squawkabilly-Yellow",
+baseSpecies: "Squawkabilly",
+forme: "Yellow",
+types: ["Normal", "Flying"],
+baseStats: {hp: 82, atk: 96, def: 51, spa: 45, spd: 51, spe: 92},
+abilities: {0: "Intimidate", 1: "Hustle", H: "Sheer Force"},
+weightkg: 2.4,
+},
+
+squawkabillywhite: {
+num: 931,
+name: "Squawkabilly-White",
+baseSpecies: "Squawkabilly",
+forme: "White",
+types: ["Normal", "Flying"],
+baseStats: {hp: 82, atk: 96, def: 51, spa: 45, spd: 51, spe: 92},
+abilities: {0: "Intimidate", 1: "Hustle", H: "Sheer Force"},
+weightkg: 2.4,
+},
+
+nacli: {
+num: 932,
+name: "Nacli",
+types: ["Rock"],
+baseStats: {hp: 55, atk: 55, def: 75, spa: 35, spd: 35, spe: 25},
+abilities: {0: "Purifying Salt", 1: "Sturdy", H: "Clear Body"},
+weightkg: 16,
+evos: ["Naclstack"],
+},
+
+naclstack: {
+num: 933,
+name: "Naclstack",
+types: ["Rock", "Ice"],
+baseStats: {hp: 60, atk: 60, def: 100, spa: 35, spd: 65, spe: 35},
+abilities: {0: "Purifying Salt", 1: "Sturdy", H: "Clear Body"},
+weightkg: 105,
+prevo: "Nacli",
+evos: ["Garganacl"],
+},
+
+garganacl: {
+num: 934,
+name: "Garganacl",
+types: ["Rock", "Ice"],
+baseStats: {hp: 100, atk: 100, def: 130, spa: 45, spd: 90, spe: 35},
+abilities: {0: "Purifying Salt", 1: "Sturdy", H: "Clear Body"},
+weightkg: 240,
+prevo: "Naclstack",
+},
+
+charcadet: {
+num: 935,
+name: "Charcadet",
+types: ["Fire"],
+baseStats: {hp: 40, atk: 50, def: 40, spa: 50, spd: 40, spe: 35},
+abilities: {0: "Flash Fire", H: "Flame Body"},
+weightkg: 10.5,
+evos: ["Armarouge", "Ceruledge"],
+},
+
+armarouge: {
+num: 936,
+name: "Armarouge",
+types: ["Fire", "Psychic"],
+baseStats: {hp: 85, atk: 60, def: 100, spa: 125, spd: 80, spe: 75},
+abilities: {0: "Flash Fire", H: "Weak Armor"},
+weightkg: 85,
+prevo: "Charcadet",
+evoType: "useItem",
+evoItem: "Auspicious Armor",
+},
+
+ceruledge: {
+num: 937,
+name: "Ceruledge",
+types: ["Fire", "Steel"],
+baseStats: {hp: 75, atk: 125, def: 80, spa: 60, spd: 100, spe: 85},
+abilities: {0: "Flash Fire", H: "Weak Armor"},
+weightkg: 62,
+prevo: "Charcadet",
+evoType: "useItem",
+evoItem: "Malicious Armor",
+},
+
+tadbulb: {
+num: 938,
+name: "Tadbulb",
+types: ["Electric"],
+baseStats: {hp: 61, atk: 31, def: 41, spa: 59, spd: 35, spe: 45},
+abilities: {0: "Own Tempo", 1: "Static", H: "Damp"},
+weightkg: 0.4,
+evos: ["Bellibolt"],
+},
+
+bellibolt: {
+num: 939,
+name: "Bellibolt",
+types: ["Electric", "Poison"],
+baseStats: {hp: 109, atk: 64, def: 91, spa: 103, spd: 83, spe: 45},
+abilities: {0: "Electromorphosis", 1: "Static", H: "Damp"},
+weightkg: 113,
+prevo: "Tadbulb",
+evoType: "useItem",
+evoItem: "Thunder Stone",
+},
+
+wattrel: {
+num: 940,
+name: "Wattrel",
+types: ["Electric", "Flying"],
+baseStats: {hp: 40, atk: 40, def: 35, spa: 55, spd: 40, spe: 70},
+abilities: {0: "Wind Power", 1: "Volt Absorb", H: "Competitive"},
+weightkg: 3.6,
+evos: ["Kilowattrel"],
+},
+
+kilowattrel: {
+num: 941,
+name: "Kilowattrel",
+types: ["Electric", "Flying"],
+baseStats: {hp: 70, atk: 70, def: 60, spa: 105, spd: 60, spe: 125},
+abilities: {0: "Wind Power", 1: "Volt Absorb", H: "Competitive"},
+weightkg: 38.6,
+prevo: "Wattrel",
+},
+
+maschiff: {
+num: 942,
+name: "Maschiff",
+types: ["Dark"],
+baseStats: {hp: 60, atk: 78, def: 60, spa: 40, spd: 51, spe: 51},
+abilities: {0: "Intimidate", 1: "Run Away", H: "Stakeout"},
+weightkg: 16,
+evos: ["Mabosstiff"],
+},
+
+mabosstiff: {
+num: 943,
+name: "Mabosstiff",
+types: ["Dark", "Ground"],
+baseStats: {hp: 80, atk: 120, def: 90, spa: 60, spd: 70, spe: 85},
+abilities: {0: "Intimidate", 1: "Guard Dog", H: "Stakeout"},
+weightkg: 61,
+prevo: "Maschiff",
+},
+
+shroodle: {
+num: 944,
+name: "Shroodle",
+types: ["Poison", "Normal"],
+baseStats: {hp: 40, atk: 65, def: 35, spa: 40, spd: 35, spe: 75},
+abilities: {0: "Unburden", 1: "Pickpocket", H: "Prankster"},
+weightkg: 0.7,
+evos: ["Grafaiai"],
+},
+
+grafaiai: {
+num: 945,
+name: "Grafaiai",
+types: ["Poison", "Normal"],
+baseStats: {hp: 63, atk: 95, def: 65, spa: 80, spd: 72, spe: 110},
+abilities: {0: "Unburden", 1: "Poison Touch", H: "Prankster"},
+weightkg: 27.2,
+prevo: "Shroodle",
+},
+
+bramblin: {
+num: 946,
+name: "Bramblin",
+types: ["Grass", "Ghost"],
+baseStats: {hp: 40, atk: 65, def: 30, spa: 45, spd: 35, spe: 60},
+abilities: {0: "Wind Rider", H: "Infiltrator"},
+weightkg: 0.6,
+evos: ["Brambleghast"],
+},
+
+brambleghast: {
+num: 947,
+name: "Brambleghast",
+types: ["Grass", "Ghost"],
+baseStats: {hp: 55, atk: 115, def: 70, spa: 80, spd: 70, spe: 90},
+abilities: {0: "Wind Rider", H: "Infiltrator"},
+weightkg: 6,
+prevo: "Bramblin",
+evoType: "other",
+evoCondition: "Walk 1000 steps in Let's Go",
+},
+
+toedscool: {
+num: 948,
+name: "Toedscool",
+types: ["Ground", "Grass"],
+baseStats: {hp: 40, atk: 40, def: 35, spa: 50, spd: 100, spe: 70},
+abilities: {0: "Mycelium Might"},
+weightkg: 33,
+evos: ["Toedscruel"],
+},
+
+toedscruel: {
+num: 949,
+name: "Toedscruel",
+types: ["Ground", "Grass"],
+baseStats: {hp: 80, atk: 70, def: 65, spa: 80, spd: 120, spe: 100},
+abilities: {0: "Mycelium Might"},
+weightkg: 58,
+prevo: "Toedscool",
+},
+
+klawf: {
+num: 950,
+name: "Klawf",
+types: ["Rock"],
+baseStats: {hp: 70, atk: 100, def: 115, spa: 35, spd: 55, spe: 75},
+abilities: {0: "Anger Shell", 1: "Shell Armor", H: "Regenerator"},
+weightkg: 79,
+},
+
+capsakid: {
+num: 951,
+name: "Capsakid",
+types: ["Grass"],
+baseStats: {hp: 52, atk: 62, def: 40, spa: 62, spd: 40, spe: 50},
+abilities: {0: "Chlorophyll", 1: "Insomnia", H: "Klutz"},
+weightkg: 3,
+evos: ["Scovillain"],
+},
+
+scovillain: {
+num: 952,
+name: "Scovillain",
+types: ["Grass", "Fire"],
+baseStats: {hp: 65, atk: 108, def: 65, spa: 108, spd: 65, spe: 75},
+abilities: {0: "Chlorophyll", 1: "Insomnia", H: "Moody"},
+weightkg: 15,
+prevo: "Capsakid",
+evoType: "useItem",
+evoItem: "Fire Stone",
+},
+
+rellor: {
+num: 953,
+name: "Rellor",
+types: ["Bug"],
+baseStats: {hp: 41, atk: 50, def: 60, spa: 31, spd: 58, spe: 30},
+abilities: {0: "Compound Eyes", H: "Shed Skin"},
+weightkg: 1,
+evos: ["Rabsca"],
+},
+
+rabsca: {
+num: 954,
+name: "Rabsca",
+types: ["Bug", "Psychic"],
+baseStats: {hp: 75, atk: 50, def: 85, spa: 115, spd: 100, spe: 45},
+abilities: {0: "Synchronize", H: "Telepathy"},
+weightkg: 3.5,
+prevo: "Rellor",
+evoType: "other",
+evoCondition: "walk 1000 steps in Let's Go",
+},
+
+flittle: {
+num: 955,
+name: "Flittle",
+types: ["Psychic"],
+baseStats: {hp: 30, atk: 35, def: 30, spa: 55, spd: 30, spe: 75},
+abilities: {0: "Anticipation", 1: "Frisk", H: "Speed Boost"},
+weightkg: 1.5,
+evos: ["Espathra"],
+},
+
+espathra: {
+num: 956,
+name: "Espathra",
+types: ["Psychic", "Ground"],
+baseStats: {hp: 95, atk: 60, def: 60, spa: 101, spd: 60, spe: 105},
+abilities: {0: "Opportunist", 1: "Frisk", H: "Speed Boost"},
+weightkg: 90,
+prevo: "Flittle",
+},
+
+tinkatink: {
+num: 957,
+name: "Tinkatink",
+types: ["Fairy", "Steel"],
+baseStats: {hp: 50, atk: 45, def: 45, spa: 35, spd: 64, spe: 58},
+abilities: {0: "Mold Breaker", 1: "Own Tempo", H: "Pickpocket"},
+weightkg: 8.9,
+evos: ["Tinkatuff"],
+},
+
+tinkatuff: {
+num: 958,
+name: "Tinkatuff",
+types: ["Fairy", "Steel"],
+baseStats: {hp: 65, atk: 55, def: 55, spa: 45, spd: 82, spe: 78},
+abilities: {0: "Mold Breaker", 1: "Own Tempo", H: "Pickpocket"},
+weightkg: 59.1,
+prevo: "Tinkatink",
+evos: ["Tinkaton"],
+},
+
+tinkaton: {
+num: 959,
+name: "Tinkaton",
+types: ["Fairy", "Steel"],
+baseStats: {hp: 85, atk: 75, def: 77, spa: 70, spd: 105, spe: 94},
+abilities: {0: "Mold Breaker", 1: "Own Tempo", H: "Pickpocket"},
+weightkg: 112.8,
+prevo: "Tinkatuff",
+},
+
+wiglett: {
+num: 960,
+name: "Wiglett",
+types: ["Water", "Rock"],
+baseStats: {hp: 10, atk: 55, def: 25, spa: 35, spd: 25, spe: 95},
+abilities: {0: "Gooey", 1: "Rattled", H: "Sand Veil"},
+weightkg: 1.8,
+evos: ["Wugtrio"],
+},
+
+wugtrio: {
+num: 961,
+name: "Wugtrio",
+types: ["Water", "Rock"],
+baseStats: {hp: 35, atk: 100, def: 50, spa: 50, spd: 70, spe: 120},
+abilities: {0: "Gooey", 1: "Rattled", H: "Sand Veil"},
+weightkg: 5.4,
+prevo: "Wiglett",
+},
+
+bombirdier: {
+num: 962,
+name: "Bombirdier",
+types: ["Flying", "Rock"],
+baseStats: {hp: 70, atk: 103, def: 85, spa: 60, spd: 85, spe: 82},
+abilities: {0: "Big Pecks", 1: "Keen Eye", H: "Rocky Payload"},
+weightkg: 42.9,
+},
+
+finizen: {
+num: 963,
+name: "Finizen",
+types: ["Water"],
+baseStats: {hp: 70, atk: 45, def: 40, spa: 45, spd: 40, spe: 75},
+abilities: {0: "Water Veil"},
+weightkg: 60.2,
+evos: ["Palafin"],
+},
+
+palafin: {
+num: 964,
+name: "Palafin",
+baseForme: "Zero",
+types: ["Water"],
+baseStats: {hp: 100, atk: 70, def: 72, spa: 53, spd: 62, spe: 100},
+abilities: {0: "Zero to Hero"},
+weightkg: 60.2,
+prevo: "Finizen",
+otherFormes: ["Palafin-Hero"],
+formeOrder: ["Palafin", "Palafin-Hero"],
+},
+
+palafinhero: {
+num: 964,
+name: "Palafin-Hero",
+baseSpecies: "Palafin",
+forme: "Hero",
+types: ["Water"],
+baseStats: {hp: 100, atk: 160, def: 97, spa: 106, spd: 87, spe: 100},
+abilities: {0: "Zero to Hero"},
+weightkg: 97.4,
+requiredAbility: "Zero to Hero",
+battleOnly: "Palafin",
+},
+
+varoom: {
+num: 965,
+name: "Varoom",
+types: ["Steel", "Poison"],
+baseStats: {hp: 45, atk: 70, def: 63, spa: 30, spd: 45, spe: 47},
+abilities: {0: "Overcoat", H: "Slow Start"},
+weightkg: 35,
+evos: ["Revavroom"],
+},
+
+revavroom: {
+num: 966,
+name: "Revavroom",
+types: ["Steel", "Poison"],
+baseStats: {hp: 80, atk: 119, def: 90, spa: 54, spd: 67, spe: 90},
+abilities: {0: "Overcoat", H: "Filter"},
+weightkg: 120,
+prevo: "Varoom",
+},
+
+cyclizar: {
+num: 967,
+name: "Cyclizar",
+types: ["Dragon", "Normal"],
+baseStats: {hp: 70, atk: 95, def: 65, spa: 85, spd: 65, spe: 121},
+abilities: {0: "Shed Skin", H: "Regenerator"},
+weightkg: 63,
+},
+
+orthworm: {
+num: 968,
+name: "Orthworm",
+types: ["Steel", "Bug"],
+baseStats: {hp: 70, atk: 85, def: 145, spa: 60, spd: 55, spe: 65},
+abilities: {0: "Earth Eater", H: "Sand Veil"},
+weightkg: 310,
+},
+
+glimmet: {
+num: 969,
+name: "Glimmet",
+types: ["Rock", "Poison"],
+baseStats: {hp: 48, atk: 35, def: 42, spa: 105, spd: 60, spe: 60},
+abilities: {0: "Toxic Debris", H: "Corrosion"},
+weightkg: 8,
+evos: ["Glimmora"],
+},
+
+glimmora: {
+num: 970,
+name: "Glimmora",
+types: ["Rock", "Poison"],
+baseStats: {hp: 83, atk: 55, def: 90, spa: 130, spd: 81, spe: 86},
+abilities: {0: "Toxic Debris", H: "Corrosion"},
+weightkg: 45,
+prevo: "Glimmet",
+},
+
+greavard: {
+num: 971,
+name: "Greavard",
+types: ["Ghost", "Ground"],
+baseStats: {hp: 50, atk: 61, def: 60, spa: 30, spd: 55, spe: 34},
+abilities: {0: "Pickup", H: "Fluffy"},
+weightkg: 35,
+evos: ["Houndstone"],
+},
+
+houndstone: {
+num: 972,
+name: "Houndstone",
+types: ["Ghost", "Ground"],
+baseStats: {hp: 72, atk: 101, def: 100, spa: 50, spd: 97, spe: 68},
+abilities: {0: "Sand Rush", H: "Fluffy"},
+weightkg: 15,
+prevo: "Greavard",
+evoCondition: "at night",
+},
+
+flamigo: {
+num: 973,
+name: "Flamigo",
+types: ["Flying", "Ground"],
+baseStats: {hp: 82, atk: 115, def: 74, spa: 75, spd: 64, spe: 90},
+abilities: {0: "Scrappy", 1: "Tangled Feet", H: "Costar"},
+weightkg: 37,
+},
+
+cetoddle: {
+num: 974,
+name: "Cetoddle",
+types: ["Ice"],
+baseStats: {hp: 108, atk: 68, def: 45, spa: 30, spd: 40, spe: 43},
+abilities: {0: "Thick Fat", 1: "Snow Cloak", H: "Sheer Force"},
+weightkg: 45,
+evos: ["Cetitan"],
+},
+
+cetitan: {
+num: 975,
+name: "Cetitan",
+types: ["Ice", "Ground"],
+baseStats: {hp: 170, atk: 113, def: 65, spa: 45, spd: 55, spe: 73},
+abilities: {0: "Thick Fat", 1: "Slush Rush", H: "Sheer Force"},
+weightkg: 700,
+prevo: "Cetoddle",
+evoType: "useItem",
+evoItem: "Ice Stone",
+},
+
+veluza: {
+num: 976,
+name: "Veluza",
+types: ["Water", "Psychic"],
+baseStats: {hp: 90, atk: 102, def: 73, spa: 78, spd: 65, spe: 70},
+abilities: {0: "Mold Breaker", H: "Sharpness"},
+weightkg: 90,
+},
+
+dondozo: {
+num: 977,
+name: "Dondozo",
+types: ["Dark", "Ice"],
+baseStats: {hp: 150, atk: 100, def: 115, spa: 65, spd: 65, spe: 35},
+abilities: {0: "Unaware", 1: "Oblivious", H: "Water Veil"},
+weightkg: 220,
+},
+
+tatsugiri: {
+num: 978,
+name: "Tatsugiri",
+baseForme: "Curly",
+types: ["Dragon", "Water"],
+baseStats: {hp: 68, atk: 50, def: 60, spa: 120, spd: 95, spe: 82},
+abilities: {0: "Commander", H: "Storm Drain"},
+weightkg: 8,
+cosmeticFormes: ["Tatsugiri-Droopy", "Tatsugiri-Stretchy"],
+formeOrder: ["Tatsugiri", "Tatsugiri-Droopy", "Tatsugiri-Stretchy"],
+},
+
+annihilape: {
+num: 979,
+name: "Annihilape",
+types: ["Fighting", "Ghost"],
+baseStats: {hp: 110, atk: 115, def: 80, spa: 50, spd: 90, spe: 90},
+abilities: {0: "Vital Spirit", 1: "Inner Focus", H: "Defiant"},
+weightkg: 56,
+prevo: "Primeape",
+evoType: "other",
+evoCondition: "Use Rage Fist 20 times and level-up",
+},
+
+clodsire: {
+num: 980,
+name: "Clodsire",
+types: ["Poison", "Ground"],
+baseStats: {hp: 130, atk: 75, def: 60, spa: 45, spd: 100, spe: 20},
+abilities: {0: "Poison Point", 1: "Water Absorb", H: "Unaware"},
+weightkg: 223,
+prevo: "Wooper-Paldea",
+},
+
+farigiraf: {
+num: 981,
+name: "Farigiraf",
+types: ["Normal", "Psychic"],
+baseStats: {hp: 120, atk: 90, def: 70, spa: 110, spd: 70, spe: 60},
+abilities: {0: "Cud Chew", 1: "Armor Tail", H: "Sap Sipper"},
+weightkg: 160,
+prevo: "Girafarig",
+evoType: "levelMove",
+evoMove: "Twin Beam",
+},
+
+dudunsparce: {
+num: 982,
+name: "Dudunsparce",
+baseForme: "Two-Segment",
+types: ["Normal", "Bug"],
+baseStats: {hp: 125, atk: 100, def: 80, spa: 85, spd: 75, spe: 55},
+abilities: {0: "Serene Grace", 1: "Run Away", H: "Rattled"},
+weightkg: 39.2,
+prevo: "Dunsparce",
+evoType: "levelMove",
+evoMove: "Hyper Drill",
+otherFormes: ["Dudunsparce-Three-Segment"],
+formeOrder: ["Dudunsparce", "Dudunsparce-Three-Segment"],
+},
+
+dudunsparcethreesegment: {
+num: 982,
+name: "Dudunsparce-Three-Segment",
+baseSpecies: "Dudunsparce",
+forme: "Three-Segment",
+types: ["Normal", "Bug"],
+baseStats: {hp: 125, atk: 100, def: 80, spa: 85, spd: 75, spe: 55},
+abilities: {0: "Serene Grace", 1: "Run Away", H: "Rattled"},
+weightkg: 47.4,
+prevo: "Dunsparce",
+evoType: "levelMove",
+evoMove: "Hyper Drill",
+},
+
+kingambit: {
+num: 983,
+name: "Kingambit",
+types: ["Dark", "Steel"],
+baseStats: {hp: 100, atk: 135, def: 120, spa: 60, spd: 85, spe: 50},
+abilities: {0: "Defiant", 1: "Supreme Overlord", H: "Pressure"},
+weightkg: 120,
+prevo: "Bisharp",
+evoType: "other",
+evoCondition: "Defeat 3 Bisharp leading Pawniard and level-up",
+},
+
+greattusk: {
+num: 984,
+name: "Great Tusk",
+types: ["Ground", "Rock"],
+baseStats: {hp: 115, atk: 131, def: 131, spa: 53, spd: 53, spe: 87},
+abilities: {0: "Protosynthesis"},
+weightkg: 320,
+},
+
+screamtail: {
+num: 985,
+name: "Scream Tail",
+types: ["Fairy", "Dragon"],
+baseStats: {hp: 115, atk: 65, def: 99, spa: 65, spd: 115, spe: 111},
+abilities: {0: "Protosynthesis"},
+weightkg: 8,
+},
+
+brutebonnet: {
+num: 986,
+name: "Brute Bonnet",
+types: ["Poison", "Ghost"],
+baseStats: {hp: 111, atk: 127, def: 99, spa: 79, spd: 99, spe: 55},
+abilities: {0: "Protosynthesis"},
+weightkg: 21,
+},
+
+fluttermane: {
+num: 987,
+name: "Flutter Mane",
+types: ["Ghost", "Fairy"],
+baseStats: {hp: 55, atk: 55, def: 55, spa: 135, spd: 135, spe: 135},
+abilities: {0: "Protosynthesis"},
+weightkg: 4,
+},
+
+slitherwing: {
+num: 988,
+name: "Slither Wing",
+types: ["Bug", "Fighting"],
+baseStats: {hp: 85, atk: 135, def: 79, spa: 85, spd: 105, spe: 81},
+abilities: {0: "Protosynthesis"},
+weightkg: 92,
+},
+
+sandyshocks: {
+num: 989,
+name: "Sandy Shocks",
+types: ["Electric", "Ground"],
+baseStats: {hp: 85, atk: 81, def: 97, spa: 121, spd: 85, spe: 101},
+abilities: {0: "Protosynthesis"},
+weightkg: 60,
+},
+
+irontreads: {
+num: 990,
+name: "Iron Treads",
+types: ["Ground", "Steel"],
+baseStats: {hp: 90, atk: 112, def: 120, spa: 72, spd: 70, spe: 106},
+abilities: {0: "Quark Drive"},
+weightkg: 240,
+},
+
+ironbundle: {
+num: 991,
+name: "Iron Bundle",
+types: ["Ice", "Water"],
+baseStats: {hp: 56, atk: 80, def: 114, spa: 124, spd: 60, spe: 136},
+abilities: {0: "Quark Drive"},
+weightkg: 11,
+},
+
+ironhands: {
+num: 992,
+name: "Iron Hands",
+types: ["Fighting", "Electric"],
+baseStats: {hp: 154, atk: 140, def: 108, spa: 50, spd: 68, spe: 50},
+abilities: {0: "Quark Drive"},
+weightkg: 380.7,
+},
+
+ironjugulis: {
+num: 993,
+name: "Iron Jugulis",
+types: ["Dark", "Steel"],
+baseStats: {hp: 94, atk: 80, def: 86, spa: 122, spd: 80, spe: 108},
+abilities: {0: "Quark Drive"},
+weightkg: 111,
+},
+
+ironmoth: {
+num: 994,
+name: "Iron Moth",
+types: ["Fire", "Poison"],
+baseStats: {hp: 80, atk: 70, def: 60, spa: 140, spd: 110, spe: 110},
+abilities: {0: "Quark Drive"},
+weightkg: 36,
+},
+
+ironthorns: {
+num: 995,
+name: "Iron Thorns",
+types: ["Rock", "Electric"],
+baseStats: {hp: 100, atk: 134, def: 110, spa: 70, spd: 84, spe: 72},
+abilities: {0: "Quark Drive"},
+weightkg: 303,
+},
+
+frigibax: {
+num: 996,
+name: "Frigibax",
+types: ["Dragon", "Ice"],
+baseStats: {hp: 65, atk: 75, def: 45, spa: 35, spd: 45, spe: 55},
+abilities: {0: "Thermal Exchange", H: "Ice Body"},
+weightkg: 17,
+evos: ["Arctibax"],
+},
+
+arctibax: {
+num: 997,
+name: "Arctibax",
+types: ["Dragon", "Ice"],
+baseStats: {hp: 90, atk: 95, def: 66, spa: 45, spd: 65, spe: 62},
+abilities: {0: "Thermal Exchange", H: "Ice Body"},
+weightkg: 30,
+prevo: "Frigibax",
+evos: ["Baxcalibur"],
+},
+
+baxcalibur: {
+num: 998,
+name: "Baxcalibur",
+types: ["Dragon", "Ice"],
+baseStats: {hp: 115, atk: 145, def: 92, spa: 75, spd: 86, spe: 87},
+abilities: {0: "Thermal Exchange", H: "Ice Body"},
+weightkg: 210,
+prevo: "Arctibax",
+},
+
+gimmighoul: {
+num: 999,
+name: "Gimmighoul",
+baseForme: "Chest",
+types: ["Ghost"],
+baseStats: {hp: 45, atk: 30, def: 70, spa: 75, spd: 70, spe: 10},
+abilities: {0: "Rattled"},
+weightkg: 5,
+evos: ["Gholdengo"],
+otherFormes: ["Gimmighoul-Roaming"],
+formeOrder: ["Gimmighoul", "Gimmighoul-Roaming"],
+},
+
+gimmighoulroaming: {
+num: 999,
+name: "Gimmighoul-Roaming",
+baseSpecies: "Gimmighoul",
+forme: "Roaming",
+types: ["Ghost"],
+baseStats: {hp: 45, atk: 30, def: 25, spa: 75, spd: 45, spe: 80},
+abilities: {0: "Run Away"},
+weightkg: 0.1,
+evos: ["Gholdengo"],
+},
+
+gholdengo: {
+num: 1000,
+name: "Gholdengo",
+types: ["Steel", "Ghost"],
+baseStats: {hp: 87, atk: 60, def: 95, spa: 133, spd: 91, spe: 84},
+abilities: {0: "Good as Gold"},
+weightkg: 30,
+prevo: "Gimmighoul",
+evoType: "other",
+evoCondition: "Level up with 999 Coins in the bag",
+},
+
+wochien: {
+num: 1001,
+name: "Wo-Chien",
+types: ["Dark", "Grass"],
+baseStats: {hp: 85, atk: 85, def: 100, spa: 95, spd: 135, spe: 70},
+abilities: {0: "Tablets of Ruin"},
+weightkg: 74.2,
+},
+
+chienpao: {
+num: 1002,
+name: "Chien-Pao",
+types: ["Dark", "Ice"],
+baseStats: {hp: 80, atk: 120, def: 80, spa: 90, spd: 65, spe: 135},
+abilities: {0: "Sword of Ruin"},
+weightkg: 152.2,
+},
+
+tinglu: {
+num: 1003,
+name: "Ting-Lu",
+types: ["Dark", "Ground"],
+baseStats: {hp: 155, atk: 110, def: 125, spa: 55, spd: 80, spe: 45},
+abilities: {0: "Vessel of Ruin"},
+weightkg: 699.7,
+},
+
+chiyu: {
+num: 1004,
+name: "Chi-Yu",
+types: ["Dark", "Fire"],
+baseStats: {hp: 55, atk: 80, def: 80, spa: 135, spd: 120, spe: 100},
+abilities: {0: "Beads of Ruin"},
+weightkg: 4.9,
+},
+
+roaringmoon: {
+num: 1005,
+name: "Roaring Moon",
+types: ["Dragon", "Dark"],
+baseStats: {hp: 105, atk: 139, def: 71, spa: 55, spd: 101, spe: 119},
+abilities: {0: "Protosynthesis"},
+weightkg: 380,
+},
+
+ironvaliant: {
+num: 1006,
+name: "Iron Valiant",
+types: ["Fairy", "Fighting"],
+baseStats: {hp: 74, atk: 130, def: 90, spa: 120, spd: 60, spe: 116},
+abilities: {0: "Quark Drive"},
+weightkg: 35,
+},
+
+koraidon: {
+num: 1007,
+name: "Koraidon",
+types: ["Fighting", "Dragon"],
+baseStats: {hp: 100, atk: 135, def: 115, spa: 85, spd: 100, spe: 135},
+abilities: {0: "Orichalcum Pulse"},
+weightkg: 303,
+},
+
+miraidon: {
+num: 1008,
+name: "Miraidon",
+types: ["Electric", "Dragon"],
+baseStats: {hp: 100, atk: 85, def: 100, spa: 135, spd: 115, spe: 135},
+abilities: {0: "Hadron Engine"},
+weightkg: 240,
+},
+
+walkingwake: {
+num: 1009,
+name: "Walking Wake",
+types: ["Ice", "Dragon"],
+baseStats: {hp: 99, atk: 83, def: 91, spa: 125, spd: 83, spe: 109},
+abilities: {0: "Protosynthesis"},
+weightkg: 280,
+},
+
+ironleaves: {
+num: 1010,
+name: "Iron Leaves",
+types: ["Grass", "Psychic"],
+baseStats: {hp: 90, atk: 130, def: 88, spa: 70, spd: 108, spe: 104},
+abilities: {0: "Quark Drive"},
+weightkg: 125,
+},
+
 };
