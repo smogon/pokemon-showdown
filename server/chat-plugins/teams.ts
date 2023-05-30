@@ -197,7 +197,7 @@ export const TeamsHandler = new class {
 			}
 			const teamId = crypto.randomBytes(10).toString('hex');
 			const loaded = await this.query(
-				`INSERT INTO teams (teamid, ownerid, team, date, format, views, title, private) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING teamid`,
+				`INSERT INTO teams (teamid, ownerid, team, date, format, views, title, private) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING teamid`,
 				[teamId, user.id, rawTeam, new Date(), format.id, 0, teamName, isPrivate]
 			);
 			return loaded?.[0].teamid;
