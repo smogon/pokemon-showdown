@@ -421,11 +421,11 @@ evoType: "levelFriendship",
 evos: ["Raichu", "Raichu-Alola"],
 otherFormes: ["Pikachu-Cosplay", "Pikachu-Rock-Star", "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner", "Pikachu-Starter", "Pikachu-World"],
 formeOrder: [
-Pikachu,
-Pikachu-Original, "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner", // Gen 7 formes
-Pikachu-Starter, // forme 8 in LGPE
-Pikachu-World, // Gen 8 forme (indexed as Pikachu 9 in datamine)
-Pikachu-Rock-Star, "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Cosplay", // formes 1-6 from Gen 6
+"Pikachu",
+"Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner", // Gen 7 formes
+"Pikachu-Starter", // forme 8 in LGPE
+"Pikachu-World", // Gen 8 forme (indexed as Pikachu 9 in datamine)
+"Pikachu-Rock-Star", "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Cosplay", // formes 1-6 from Gen 6
 ],
 },
 
