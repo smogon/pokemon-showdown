@@ -885,7 +885,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Swiffix
 	stinky: {
-		desc: "10% chance to either Poison or Paralayze the Pokemon on hit.",
+		desc: "10% chance to either poison or paralyze the Pokemon on hit.",
 		name: "Stinky",
 		onModifyMovePriority: -1,
 		onModifyMove(move) {
