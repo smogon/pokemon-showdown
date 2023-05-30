@@ -2,26 +2,28 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 bulbasaur: {
 num: 1,
 name: "Bulbasaur",
-types: ["Grass", "Poison"],
+types: ["Grass"],
 baseStats: {hp: 45, atk: 49, def: 49, spa: 65, spd: 65, spe: 45},
 abilities: {0: "Overgrow", H: "Chlorophyll"},
 weightkg: 6.9,
 evos: ["Ivysaur"],
 },
+
 ivysaur: {
 num: 2,
 name: "Ivysaur",
-types: ["Grass", "Poison"],
+types: ["Grass"],
 baseStats: {hp: 60, atk: 62, def: 63, spa: 80, spd: 80, spe: 60},
 abilities: {0: "Overgrow", H: "Chlorophyll"},
 weightkg: 13,
 prevo: "Bulbasaur",
 evos: ["Venusaur"],
 },
+
 venusaur: {
 num: 3,
 name: "Venusaur",
-types: ["Grass", "Poison"],
+types: ["Grass", "Dragon"],
 baseStats: {hp: 80, atk: 82, def: 83, spa: 100, spd: 100, spe: 80},
 abilities: {0: "Overgrow", H: "Chlorophyll"},
 weightkg: 100,
@@ -29,27 +31,30 @@ prevo: "Ivysaur",
 otherFormes: ["Venusaur-Mega"],
 formeOrder: ["Venusaur", "Venusaur-Mega"],
 },
+
 venusaurmega: {
 num: 3,
 name: "Venusaur-Mega",
 baseSpecies: "Venusaur",
 forme: "Mega",
-types: ["Grass", "Poison"],
+types: ["Grass", "Dragon"],
 baseStats: {hp: 80, atk: 100, def: 123, spa: 122, spd: 120, spe: 80},
 abilities: {0: "Thick Fat"},
 weightkg: 155.5,
 },
+
 venusaurgmax: {
 num: 3,
 name: "Venusaur-Gmax",
 baseSpecies: "Venusaur",
 forme: "Gmax",
-types: ["Grass", "Poison"],
+types: ["Grass", "Dragon"],
 baseStats: {hp: 80, atk: 82, def: 83, spa: 100, spd: 100, spe: 80},
 abilities: {0: "Overgrow", H: "Chlorophyll"},
 weightkg: 0,
 changesFrom: "Venusaur",
 },
+
 charmander: {
 num: 4,
 name: "Charmander",
@@ -59,6 +64,7 @@ abilities: {0: "Blaze", H: "Solar Power"},
 weightkg: 8.5,
 evos: ["Charmeleon"],
 },
+
 charmeleon: {
 num: 5,
 name: "Charmeleon",
@@ -69,10 +75,11 @@ weightkg: 19,
 prevo: "Charmander",
 evos: ["Charizard"],
 },
+
 charizard: {
 num: 6,
 name: "Charizard",
-types: ["Fire", "Flying"],
+types: ["Fire", "Dragon"],
 baseStats: {hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100},
 abilities: {0: "Blaze", H: "Solar Power"},
 weightkg: 90.5,
@@ -80,6 +87,7 @@ prevo: "Charmeleon",
 otherFormes: ["Charizard-Mega-X", "Charizard-Mega-Y"],
 formeOrder: ["Charizard", "Charizard-Mega-X", "Charizard-Mega-Y"],
 },
+
 charizardmegax: {
 num: 6,
 name: "Charizard-Mega-X",
@@ -90,27 +98,30 @@ baseStats: {hp: 78, atk: 130, def: 111, spa: 130, spd: 85, spe: 100},
 abilities: {0: "Tough Claws"},
 weightkg: 110.5,
 },
+
 charizardmegay: {
 num: 6,
 name: "Charizard-Mega-Y",
 baseSpecies: "Charizard",
 forme: "Mega-Y",
-types: ["Fire", "Flying"],
+types: ["Fire", "Dragon"],
 baseStats: {hp: 78, atk: 104, def: 78, spa: 159, spd: 115, spe: 100},
 abilities: {0: "Drought"},
 weightkg: 100.5,
 },
+
 charizardgmax: {
 num: 6,
 name: "Charizard-Gmax",
 baseSpecies: "Charizard",
 forme: "Gmax",
-types: ["Fire", "Flying"],
+types: ["Fire", "Dragon"],
 baseStats: {hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100},
 abilities: {0: "Blaze", H: "Solar Power"},
 weightkg: 0,
 changesFrom: "Charizard",
 },
+
 squirtle: {
 num: 7,
 name: "Squirtle",
@@ -120,6 +131,7 @@ abilities: {0: "Torrent", H: "Rain Dish"},
 weightkg: 9,
 evos: ["Wartortle"],
 },
+
 wartortle: {
 num: 8,
 name: "Wartortle",
@@ -130,10 +142,11 @@ weightkg: 22.5,
 prevo: "Squirtle",
 evos: ["Blastoise"],
 },
+
 blastoise: {
 num: 9,
 name: "Blastoise",
-types: ["Water"],
+types: ["Water", "Steel"],
 baseStats: {hp: 79, atk: 83, def: 100, spa: 85, spd: 105, spe: 78},
 abilities: {0: "Torrent", H: "Rain Dish"},
 weightkg: 85.5,
@@ -141,27 +154,30 @@ prevo: "Wartortle",
 otherFormes: ["Blastoise-Mega"],
 formeOrder: ["Blastoise", "Blastoise-Mega"],
 },
+
 blastoisemega: {
 num: 9,
 name: "Blastoise-Mega",
 baseSpecies: "Blastoise",
 forme: "Mega",
-types: ["Water"],
+types: ["Water", "Steel"],
 baseStats: {hp: 79, atk: 103, def: 120, spa: 135, spd: 115, spe: 78},
 abilities: {0: "Mega Launcher"},
 weightkg: 101.1,
 },
+
 blastoisegmax: {
 num: 9,
 name: "Blastoise-Gmax",
 baseSpecies: "Blastoise",
 forme: "Gmax",
-types: ["Water"],
+types: ["Water", "Steel"],
 baseStats: {hp: 79, atk: 83, def: 100, spa: 85, spd: 105, spe: 78},
 abilities: {0: "Torrent", H: "Rain Dish"},
 weightkg: 0,
 changesFrom: "Blastoise",
 },
+
 caterpie: {
 num: 10,
 name: "Caterpie",
@@ -171,6 +187,7 @@ abilities: {0: "Shield Dust", H: "Run Away"},
 weightkg: 2.9,
 evos: ["Metapod"],
 },
+
 metapod: {
 num: 11,
 name: "Metapod",
@@ -181,26 +198,29 @@ weightkg: 9.9,
 prevo: "Caterpie",
 evos: ["Butterfree"],
 },
+
 butterfree: {
 num: 12,
 name: "Butterfree",
-types: ["Bug", "Flying"],
+types: ["Bug", "Psychic"],
 baseStats: {hp: 60, atk: 45, def: 50, spa: 90, spd: 80, spe: 70},
 abilities: {0: "Compound Eyes", H: "Tinted Lens"},
 weightkg: 32,
 prevo: "Metapod",
 },
+
 butterfreegmax: {
 num: 12,
 name: "Butterfree-Gmax",
 baseSpecies: "Butterfree",
 forme: "Gmax",
-types: ["Bug", "Flying"],
+types: ["Bug", "Psychic"],
 baseStats: {hp: 60, atk: 45, def: 50, spa: 90, spd: 80, spe: 70},
 abilities: {0: "Compound Eyes", H: "Tinted Lens"},
 weightkg: 0,
 changesFrom: "Butterfree",
 },
+
 weedle: {
 num: 13,
 name: "Weedle",
@@ -210,6 +230,7 @@ abilities: {0: "Shield Dust", H: "Run Away"},
 weightkg: 3.2,
 evos: ["Kakuna"],
 },
+
 kakuna: {
 num: 14,
 name: "Kakuna",
@@ -220,6 +241,7 @@ weightkg: 10,
 prevo: "Weedle",
 evos: ["Beedrill"],
 },
+
 beedrill: {
 num: 15,
 name: "Beedrill",
@@ -231,6 +253,7 @@ prevo: "Kakuna",
 otherFormes: ["Beedrill-Mega"],
 formeOrder: ["Beedrill", "Beedrill-Mega"],
 },
+
 beedrillmega: {
 num: 15,
 name: "Beedrill-Mega",
@@ -241,6 +264,7 @@ baseStats: {hp: 65, atk: 150, def: 40, spa: 15, spd: 80, spe: 145},
 abilities: {0: "Adaptability"},
 weightkg: 40.5,
 },
+
 pidgey: {
 num: 16,
 name: "Pidgey",
@@ -250,6 +274,7 @@ abilities: {0: "Keen Eye", 1: "Tangled Feet", H: "Big Pecks"},
 weightkg: 1.8,
 evos: ["Pidgeotto"],
 },
+
 pidgeotto: {
 num: 17,
 name: "Pidgeotto",
@@ -260,6 +285,7 @@ weightkg: 30,
 prevo: "Pidgey",
 evos: ["Pidgeot"],
 },
+
 pidgeot: {
 num: 18,
 name: "Pidgeot",
@@ -271,6 +297,7 @@ prevo: "Pidgeotto",
 otherFormes: ["Pidgeot-Mega"],
 formeOrder: ["Pidgeot", "Pidgeot-Mega"],
 },
+
 pidgeotmega: {
 num: 18,
 name: "Pidgeot-Mega",
@@ -281,10 +308,11 @@ baseStats: {hp: 83, atk: 80, def: 80, spa: 135, spd: 80, spe: 121},
 abilities: {0: "No Guard"},
 weightkg: 50.5,
 },
+
 rattata: {
 num: 19,
 name: "Rattata",
-types: ["Normal"],
+types: ["Poison"],
 baseStats: {hp: 30, atk: 56, def: 35, spa: 25, spd: 35, spe: 72},
 abilities: {0: "Run Away", 1: "Guts", H: "Hustle"},
 weightkg: 3.5,
@@ -292,6 +320,7 @@ evos: ["Raticate"],
 otherFormes: ["Rattata-Alola"],
 formeOrder: ["Rattata", "Rattata-Alola"],
 },
+
 rattataalola: {
 num: 19,
 name: "Rattata-Alola",
@@ -303,10 +332,11 @@ abilities: {0: "Gluttony", 1: "Hustle", H: "Thick Fat"},
 weightkg: 3.8,
 evos: ["Raticate-Alola"],
 },
+
 raticate: {
 num: 20,
 name: "Raticate",
-types: ["Normal"],
+types: ["Poison", "Ground"],
 baseStats: {hp: 55, atk: 81, def: 60, spa: 50, spd: 70, spe: 97},
 abilities: {0: "Run Away", 1: "Guts", H: "Hustle"},
 weightkg: 18.5,
@@ -314,6 +344,7 @@ prevo: "Rattata",
 otherFormes: ["Raticate-Alola", "Raticate-Alola-Totem"],
 formeOrder: ["Raticate", "Raticate-Alola", "Raticate-Alola-Totem"],
 },
+
 raticatealola: {
 num: 20,
 name: "Raticate-Alola",
@@ -326,6 +357,7 @@ weightkg: 25.5,
 prevo: "Rattata-Alola",
 evoCondition: "at night",
 },
+
 raticatealolatotem: {
 num: 20,
 name: "Raticate-Alola-Totem",
@@ -336,24 +368,27 @@ baseStats: {hp: 75, atk: 71, def: 70, spa: 40, spd: 80, spe: 77},
 abilities: {0: "Thick Fat"},
 weightkg: 105,
 },
+
 spearow: {
 num: 21,
 name: "Spearow",
-types: ["Normal", "Flying"],
+types: ["Flying"],
 baseStats: {hp: 40, atk: 60, def: 30, spa: 31, spd: 31, spe: 70},
 abilities: {0: "Keen Eye", H: "Sniper"},
 weightkg: 2,
 evos: ["Fearow"],
 },
+
 fearow: {
 num: 22,
 name: "Fearow",
-types: ["Normal", "Flying"],
+types: ["Flying"],
 baseStats: {hp: 65, atk: 90, def: 65, spa: 61, spd: 61, spe: 100},
 abilities: {0: "Keen Eye", H: "Sniper"},
 weightkg: 38,
 prevo: "Spearow",
 },
+
 ekans: {
 num: 23,
 name: "Ekans",
@@ -363,15 +398,17 @@ abilities: {0: "Intimidate", 1: "Shed Skin", H: "Unnerve"},
 weightkg: 6.9,
 evos: ["Arbok"],
 },
+
 arbok: {
 num: 24,
 name: "Arbok",
-types: ["Poison"],
+types: ["Poison", "Dragon"],
 baseStats: {hp: 60, atk: 95, def: 69, spa: 65, spd: 79, spe: 80},
 abilities: {0: "Intimidate", 1: "Shed Skin", H: "Unnerve"},
 weightkg: 65,
 prevo: "Ekans",
 },
+
 pikachu: {
 num: 25,
 name: "Pikachu",
@@ -384,13 +421,14 @@ evoType: "levelFriendship",
 evos: ["Raichu", "Raichu-Alola"],
 otherFormes: ["Pikachu-Cosplay", "Pikachu-Rock-Star", "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner", "Pikachu-Starter", "Pikachu-World"],
 formeOrder: [
-"Pikachu",
-"Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner", // Gen 7 formes
-"Pikachu-Starter", // forme 8 in LGPE
-"Pikachu-World", // Gen 8 forme (indexed as Pikachu 9 in datamine)
-"Pikachu-Rock-Star", "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Cosplay", // formes 1-6 from Gen 6
+Pikachu,
+Pikachu-Original, "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner", // Gen 7 formes
+Pikachu-Starter, // forme 8 in LGPE
+Pikachu-World, // Gen 8 forme (indexed as Pikachu 9 in datamine)
+Pikachu-Rock-Star, "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Cosplay", // formes 1-6 from Gen 6
 ],
 },
+
 pikachucosplay: {
 num: 25,
 name: "Pikachu-Cosplay",
@@ -402,6 +440,7 @@ abilities: {0: "Lightning Rod"},
 weightkg: 6,
 gen: 6,
 },
+
 pikachurockstar: {
 num: 25,
 name: "Pikachu-Rock-Star",
@@ -414,6 +453,7 @@ weightkg: 6,
 changesFrom: "Pikachu-Cosplay",
 gen: 6,
 },
+
 pikachubelle: {
 num: 25,
 name: "Pikachu-Belle",
@@ -426,6 +466,7 @@ weightkg: 6,
 changesFrom: "Pikachu-Cosplay",
 gen: 6,
 },
+
 pikachupopstar: {
 num: 25,
 name: "Pikachu-Pop-Star",
@@ -438,6 +479,7 @@ weightkg: 6,
 changesFrom: "Pikachu-Cosplay",
 gen: 6,
 },
+
 pikachuphd: {
 num: 25,
 name: "Pikachu-PhD",
@@ -450,6 +492,7 @@ weightkg: 6,
 changesFrom: "Pikachu-Cosplay",
 gen: 6,
 },
+
 pikachulibre: {
 num: 25,
 name: "Pikachu-Libre",
@@ -462,6 +505,7 @@ weightkg: 6,
 changesFrom: "Pikachu-Cosplay",
 gen: 6,
 },
+
 pikachuoriginal: {
 num: 25,
 name: "Pikachu-Original",
@@ -473,6 +517,7 @@ abilities: {0: "Static", H: "Lightning Rod"},
 weightkg: 6,
 gen: 7,
 },
+
 pikachuhoenn: {
 num: 25,
 name: "Pikachu-Hoenn",
@@ -484,6 +529,7 @@ abilities: {0: "Static", H: "Lightning Rod"},
 weightkg: 6,
 gen: 7,
 },
+
 pikachusinnoh: {
 num: 25,
 name: "Pikachu-Sinnoh",
@@ -495,6 +541,7 @@ abilities: {0: "Static", H: "Lightning Rod"},
 weightkg: 6,
 gen: 7,
 },
+
 pikachuunova: {
 num: 25,
 name: "Pikachu-Unova",
@@ -506,6 +553,7 @@ abilities: {0: "Static", H: "Lightning Rod"},
 weightkg: 6,
 gen: 7,
 },
+
 pikachukalos: {
 num: 25,
 name: "Pikachu-Kalos",
@@ -517,6 +565,7 @@ abilities: {0: "Static", H: "Lightning Rod"},
 weightkg: 6,
 gen: 7,
 },
+
 pikachualola: {
 num: 25,
 name: "Pikachu-Alola",
@@ -528,6 +577,7 @@ abilities: {0: "Static", H: "Lightning Rod"},
 weightkg: 6,
 gen: 7,
 },
+
 pikachupartner: {
 num: 25,
 name: "Pikachu-Partner",
@@ -539,6 +589,7 @@ abilities: {0: "Static", H: "Lightning Rod"},
 weightkg: 6,
 gen: 7,
 },
+
 pikachustarter: {
 num: 25,
 name: "Pikachu-Starter",
@@ -549,6 +600,7 @@ baseStats: {hp: 45, atk: 80, def: 50, spa: 75, spd: 60, spe: 120},
 abilities: {0: "Static", H: "Lightning Rod"},
 weightkg: 6,
 },
+
 pikachugmax: {
 num: 25,
 name: "Pikachu-Gmax",
@@ -560,6 +612,7 @@ abilities: {0: "Static", H: "Lightning Rod"},
 weightkg: 0,
 changesFrom: "Pikachu",
 },
+
 pikachuworld: {
 num: 25,
 name: "Pikachu-World",
@@ -571,6 +624,7 @@ abilities: {0: "Static", H: "Lightning Rod"},
 weightkg: 6,
 gen: 8,
 },
+
 raichu: {
 num: 26,
 name: "Raichu",
@@ -584,6 +638,7 @@ evoItem: "Thunder Stone",
 otherFormes: ["Raichu-Alola"],
 formeOrder: ["Raichu", "Raichu-Alola"],
 },
+
 raichualola: {
 num: 26,
 name: "Raichu-Alola",
@@ -598,6 +653,7 @@ evoType: "useItem",
 evoItem: "Thunder Stone",
 evoRegion: "Alola",
 },
+
 sandshrew: {
 num: 27,
 name: "Sandshrew",
@@ -609,6 +665,7 @@ evos: ["Sandslash"],
 otherFormes: ["Sandshrew-Alola"],
 formeOrder: ["Sandshrew", "Sandshrew-Alola"],
 },
+
 sandshrewalola: {
 num: 27,
 name: "Sandshrew-Alola",
@@ -620,10 +677,11 @@ abilities: {0: "Snow Cloak", H: "Slush Rush"},
 weightkg: 40,
 evos: ["Sandslash-Alola"],
 },
+
 sandslash: {
 num: 28,
 name: "Sandslash",
-types: ["Ground"],
+types: ["Ground", "Fairy"],
 baseStats: {hp: 75, atk: 100, def: 110, spa: 45, spd: 55, spe: 65},
 abilities: {0: "Sand Veil", H: "Sand Rush"},
 weightkg: 29.5,
@@ -631,6 +689,7 @@ prevo: "Sandshrew",
 otherFormes: ["Sandslash-Alola"],
 formeOrder: ["Sandslash", "Sandslash-Alola"],
 },
+
 sandslashalola: {
 num: 28,
 name: "Sandslash-Alola",
@@ -644,6 +703,7 @@ prevo: "Sandshrew-Alola",
 evoType: "useItem",
 evoItem: "Ice Stone",
 },
+
 nidoranf: {
 num: 29,
 name: "Nidoran-F",
@@ -653,6 +713,7 @@ abilities: {0: "Poison Point", 1: "Rivalry", H: "Hustle"},
 weightkg: 7,
 evos: ["Nidorina"],
 },
+
 nidorina: {
 num: 30,
 name: "Nidorina",
@@ -663,10 +724,11 @@ weightkg: 20,
 prevo: "Nidoran-F",
 evos: ["Nidoqueen"],
 },
+
 nidoqueen: {
 num: 31,
 name: "Nidoqueen",
-types: ["Poison", "Ground"],
+types: ["Poison", "Fighting"],
 baseStats: {hp: 90, atk: 92, def: 87, spa: 75, spd: 85, spe: 76},
 abilities: {0: "Poison Point", 1: "Rivalry", H: "Sheer Force"},
 weightkg: 60,
@@ -674,6 +736,7 @@ prevo: "Nidorina",
 evoType: "useItem",
 evoItem: "Moon Stone",
 },
+
 nidoranm: {
 num: 32,
 name: "Nidoran-M",
@@ -683,6 +746,7 @@ abilities: {0: "Poison Point", 1: "Rivalry", H: "Hustle"},
 weightkg: 9,
 evos: ["Nidorino"],
 },
+
 nidorino: {
 num: 33,
 name: "Nidorino",
@@ -693,6 +757,7 @@ weightkg: 19.5,
 prevo: "Nidoran-M",
 evos: ["Nidoking"],
 },
+
 nidoking: {
 num: 34,
 name: "Nidoking",
@@ -704,10 +769,12 @@ prevo: "Nidorino",
 evoType: "useItem",
 evoItem: "Moon Stone",
 },
+
 clefairy: {
 num: 35,
 name: "Clefairy",
-types: ["Fairy"],
+types: ["Fairy", "Rock"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 70, atk: 45, def: 48, spa: 60, spd: 65, spe: 35},
 abilities: {0: "Cute Charm", 1: "Magic Guard", H: "Friend Guard"},
 weightkg: 7.5,
@@ -715,10 +782,12 @@ prevo: "Cleffa",
 evoType: "levelFriendship",
 evos: ["Clefable"],
 },
+
 clefable: {
 num: 36,
 name: "Clefable",
-types: ["Fairy"],
+types: ["Fairy", "Rock"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 95, atk: 70, def: 73, spa: 95, spd: 90, spe: 60},
 abilities: {0: "Cute Charm", 1: "Magic Guard", H: "Unaware"},
 weightkg: 40,
@@ -726,10 +795,12 @@ prevo: "Clefairy",
 evoType: "useItem",
 evoItem: "Moon Stone",
 },
+
 vulpix: {
 num: 37,
 name: "Vulpix",
 types: ["Fire"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 38, atk: 41, def: 40, spa: 50, spd: 65, spe: 65},
 abilities: {0: "Flash Fire", H: "Drought"},
 weightkg: 9.9,
@@ -737,21 +808,25 @@ evos: ["Ninetales"],
 otherFormes: ["Vulpix-Alola"],
 formeOrder: ["Vulpix", "Vulpix-Alola"],
 },
+
 vulpixalola: {
 num: 37,
 name: "Vulpix-Alola",
 baseSpecies: "Vulpix",
 forme: "Alola",
 types: ["Ice"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 38, atk: 41, def: 40, spa: 50, spd: 65, spe: 65},
 abilities: {0: "Snow Cloak", H: "Snow Warning"},
 weightkg: 9.9,
 evos: ["Ninetales-Alola"],
 },
+
 ninetales: {
 num: 38,
 name: "Ninetales",
-types: ["Fire"],
+types: ["Fire", "Fairy"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 73, atk: 76, def: 75, spa: 81, spd: 100, spe: 100},
 abilities: {0: "Flash Fire", H: "Drought"},
 weightkg: 19.9,
@@ -761,12 +836,14 @@ evoItem: "Fire Stone",
 otherFormes: ["Ninetales-Alola"],
 formeOrder: ["Ninetales", "Ninetales-Alola"],
 },
+
 ninetalesalola: {
 num: 38,
 name: "Ninetales-Alola",
 baseSpecies: "Ninetales",
 forme: "Alola",
 types: ["Ice", "Fairy"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 73, atk: 67, def: 75, spa: 81, spd: 100, spe: 109},
 abilities: {0: "Snow Cloak", H: "Snow Warning"},
 weightkg: 19.9,
@@ -774,10 +851,12 @@ prevo: "Vulpix-Alola",
 evoType: "useItem",
 evoItem: "Ice Stone",
 },
+
 jigglypuff: {
 num: 39,
 name: "Jigglypuff",
-types: ["Normal", "Fairy"],
+types: ["Fire", "Fairy"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 115, atk: 45, def: 20, spa: 45, spd: 25, spe: 20},
 abilities: {0: "Cute Charm", 1: "Competitive", H: "Friend Guard"},
 weightkg: 5.5,
@@ -785,10 +864,12 @@ prevo: "Igglybuff",
 evoType: "levelFriendship",
 evos: ["Wigglytuff"],
 },
+
 wigglytuff: {
 num: 40,
 name: "Wigglytuff",
-types: ["Normal", "Fairy"],
+types: ["Fire", "Fairy"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 140, atk: 70, def: 45, spa: 85, spd: 50, spe: 45},
 abilities: {0: "Cute Charm", 1: "Competitive", H: "Frisk"},
 weightkg: 12,
@@ -796,6 +877,7 @@ prevo: "Jigglypuff",
 evoType: "useItem",
 evoItem: "Moon Stone",
 },
+
 zubat: {
 num: 41,
 name: "Zubat",
@@ -805,6 +887,7 @@ abilities: {0: "Inner Focus", H: "Infiltrator"},
 weightkg: 7.5,
 evos: ["Golbat"],
 },
+
 golbat: {
 num: 42,
 name: "Golbat",
@@ -815,6 +898,7 @@ weightkg: 55,
 prevo: "Zubat",
 evos: ["Crobat"],
 },
+
 oddish: {
 num: 43,
 name: "Oddish",
@@ -824,6 +908,7 @@ abilities: {0: "Chlorophyll", H: "Run Away"},
 weightkg: 5.4,
 evos: ["Gloom"],
 },
+
 gloom: {
 num: 44,
 name: "Gloom",
@@ -834,6 +919,7 @@ weightkg: 8.6,
 prevo: "Oddish",
 evos: ["Vileplume", "Bellossom"],
 },
+
 vileplume: {
 num: 45,
 name: "Vileplume",
@@ -845,24 +931,27 @@ prevo: "Gloom",
 evoType: "useItem",
 evoItem: "Leaf Stone",
 },
+
 paras: {
 num: 46,
 name: "Paras",
-types: ["Bug", "Grass"],
+types: ["Bug"],
 baseStats: {hp: 35, atk: 70, def: 55, spa: 45, spd: 55, spe: 25},
 abilities: {0: "Effect Spore", 1: "Dry Skin", H: "Damp"},
 weightkg: 5.4,
 evos: ["Parasect"],
 },
+
 parasect: {
 num: 47,
 name: "Parasect",
-types: ["Bug", "Grass"],
+types: ["Bug", "Ghost"],
 baseStats: {hp: 60, atk: 95, def: 80, spa: 60, spd: 80, spe: 30},
 abilities: {0: "Effect Spore", 1: "Dry Skin", H: "Damp"},
 weightkg: 29.5,
 prevo: "Paras",
 },
+
 venonat: {
 num: 48,
 name: "Venonat",
@@ -872,6 +961,7 @@ abilities: {0: "Compound Eyes", 1: "Tinted Lens", H: "Run Away"},
 weightkg: 30,
 evos: ["Venomoth"],
 },
+
 venomoth: {
 num: 49,
 name: "Venomoth",
@@ -881,6 +971,7 @@ abilities: {0: "Shield Dust", 1: "Tinted Lens", H: "Wonder Skin"},
 weightkg: 12.5,
 prevo: "Venonat",
 },
+
 diglett: {
 num: 50,
 name: "Diglett",
@@ -892,17 +983,19 @@ evos: ["Dugtrio"],
 otherFormes: ["Diglett-Alola"],
 formeOrder: ["Diglett", "Diglett-Alola"],
 },
+
 diglettalola: {
 num: 50,
 name: "Diglett-Alola",
 baseSpecies: "Diglett",
 forme: "Alola",
-types: ["Ground", "Steel"],
+types: ["Ground", "Rock"],
 baseStats: {hp: 10, atk: 55, def: 30, spa: 35, spd: 45, spe: 90},
 abilities: {0: "Sand Veil", 1: "Tangling Hair", H: "Sand Force"},
 weightkg: 1,
 evos: ["Dugtrio-Alola"],
 },
+
 dugtrio: {
 num: 51,
 name: "Dugtrio",
@@ -914,17 +1007,19 @@ prevo: "Diglett",
 otherFormes: ["Dugtrio-Alola"],
 formeOrder: ["Dugtrio", "Dugtrio-Alola"],
 },
+
 dugtrioalola: {
 num: 51,
 name: "Dugtrio-Alola",
 baseSpecies: "Dugtrio",
 forme: "Alola",
-types: ["Ground", "Steel"],
+types: ["Ground", "Rock"],
 baseStats: {hp: 35, atk: 100, def: 60, spa: 50, spd: 70, spe: 110},
 abilities: {0: "Sand Veil", 1: "Tangling Hair", H: "Sand Force"},
 weightkg: 66.6,
 prevo: "Diglett-Alola",
 },
+
 meowth: {
 num: 52,
 name: "Meowth",
@@ -936,28 +1031,31 @@ evos: ["Persian"],
 otherFormes: ["Meowth-Alola", "Meowth-Galar"],
 formeOrder: ["Meowth", "Meowth-Alola", "Meowth-Galar"],
 },
+
 meowthalola: {
 num: 52,
 name: "Meowth-Alola",
 baseSpecies: "Meowth",
 forme: "Alola",
-types: ["Dark"],
+types: ["Normal", "Dark"],
 baseStats: {hp: 40, atk: 35, def: 35, spa: 50, spd: 40, spe: 90},
 abilities: {0: "Pickup", 1: "Technician", H: "Rattled"},
 weightkg: 4.2,
 evos: ["Persian-Alola"],
 },
+
 meowthgalar: {
 num: 52,
 name: "Meowth-Galar",
 baseSpecies: "Meowth",
 forme: "Galar",
-types: ["Steel"],
+types: ["Steel", "Normal"],
 baseStats: {hp: 50, atk: 65, def: 55, spa: 40, spd: 40, spe: 40},
 abilities: {0: "Pickup", 1: "Tough Claws", H: "Unnerve"},
 weightkg: 7.5,
 evos: ["Perrserker"],
 },
+
 meowthgmax: {
 num: 52,
 name: "Meowth-Gmax",
@@ -969,6 +1067,7 @@ abilities: {0: "Pickup", 1: "Technician", H: "Unnerve"},
 weightkg: 0,
 changesFrom: "Meowth",
 },
+
 persian: {
 num: 53,
 name: "Persian",
@@ -980,36 +1079,40 @@ prevo: "Meowth",
 otherFormes: ["Persian-Alola"],
 formeOrder: ["Persian", "Persian-Alola"],
 },
+
 persianalola: {
 num: 53,
 name: "Persian-Alola",
 baseSpecies: "Persian",
 forme: "Alola",
-types: ["Dark"],
+types: ["Normal", "Dark"],
 baseStats: {hp: 65, atk: 60, def: 60, spa: 75, spd: 65, spe: 115},
 abilities: {0: "Fur Coat", 1: "Technician", H: "Rattled"},
 weightkg: 33,
 prevo: "Meowth-Alola",
 evoType: "levelFriendship",
 },
+
 psyduck: {
 num: 54,
 name: "Psyduck",
-types: ["Water"],
+types: ["Water", "Psychic"],
 baseStats: {hp: 50, atk: 52, def: 48, spa: 65, spd: 50, spe: 55},
 abilities: {0: "Damp", 1: "Cloud Nine", H: "Swift Swim"},
 weightkg: 19.6,
 evos: ["Golduck"],
 },
+
 golduck: {
 num: 55,
 name: "Golduck",
-types: ["Water"],
+types: ["Water", "Psychic"],
 baseStats: {hp: 80, atk: 82, def: 78, spa: 95, spd: 80, spe: 85},
 abilities: {0: "Damp", 1: "Cloud Nine", H: "Swift Swim"},
 weightkg: 76.6,
 prevo: "Psyduck",
 },
+
 mankey: {
 num: 56,
 name: "Mankey",
@@ -1019,6 +1122,7 @@ abilities: {0: "Vital Spirit", 1: "Anger Point", H: "Defiant"},
 weightkg: 28,
 evos: ["Primeape"],
 },
+
 primeape: {
 num: 57,
 name: "Primeape",
@@ -1029,10 +1133,12 @@ weightkg: 32,
 prevo: "Mankey",
 evos: ["Annihilape"],
 },
+
 growlithe: {
 num: 58,
 name: "Growlithe",
-types: ["Fire"],
+types: ["Fire", "Normal"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 55, atk: 70, def: 45, spa: 70, spd: 50, spe: 60},
 abilities: {0: "Intimidate", 1: "Flash Fire", H: "Justified"},
 weightkg: 19,
@@ -1040,21 +1146,25 @@ evos: ["Arcanine"],
 otherFormes: ["Growlithe-Hisui"],
 formeOrder: ["Growlithe", "Growlithe-Hisui"],
 },
+
 growlithehisui: {
 num: 58,
 name: "Growlithe-Hisui",
 baseSpecies: "Growlithe",
 forme: "Hisui",
 types: ["Fire", "Rock"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 60, atk: 75, def: 45, spa: 65, spd: 50, spe: 55},
 abilities: {0: "Intimidate", 1: "Flash Fire", H: "Rock Head"},
 weightkg: 22.7,
 evos: ["Arcanine-Hisui"],
 },
+
 arcanine: {
 num: 59,
 name: "Arcanine",
-types: ["Fire"],
+types: ["Fire", "Normal"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 90, atk: 110, def: 80, spa: 100, spd: 80, spe: 95},
 abilities: {0: "Intimidate", 1: "Flash Fire", H: "Justified"},
 weightkg: 155,
@@ -1064,12 +1174,14 @@ evoItem: "Fire Stone",
 otherFormes: ["Arcanine-Hisui"],
 formeOrder: ["Arcanine", "Arcanine-Hisui"],
 },
+
 arcaninehisui: {
 num: 59,
 name: "Arcanine-Hisui",
 baseSpecies: "Arcanine",
 forme: "Hisui",
 types: ["Fire", "Rock"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 95, atk: 115, def: 80, spa: 95, spd: 80, spe: 90},
 abilities: {0: "Intimidate", 1: "Flash Fire", H: "Rock Head"},
 weightkg: 168,
@@ -1077,6 +1189,7 @@ prevo: "Growlithe-Hisui",
 evoType: "useItem",
 evoItem: "Fire Stone",
 },
+
 poliwag: {
 num: 60,
 name: "Poliwag",
@@ -1086,6 +1199,7 @@ abilities: {0: "Water Absorb", 1: "Damp", H: "Swift Swim"},
 weightkg: 12.4,
 evos: ["Poliwhirl"],
 },
+
 poliwhirl: {
 num: 61,
 name: "Poliwhirl",
@@ -1096,6 +1210,7 @@ weightkg: 20,
 prevo: "Poliwag",
 evos: ["Poliwrath", "Politoed"],
 },
+
 poliwrath: {
 num: 62,
 name: "Poliwrath",
@@ -1107,29 +1222,35 @@ prevo: "Poliwhirl",
 evoType: "useItem",
 evoItem: "Water Stone",
 },
+
 abra: {
 num: 63,
 name: "Abra",
 types: ["Psychic"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 25, atk: 20, def: 15, spa: 105, spd: 55, spe: 90},
 abilities: {0: "Synchronize", 1: "Inner Focus", H: "Magic Guard"},
 weightkg: 19.5,
 evos: ["Kadabra"],
 },
+
 kadabra: {
 num: 64,
 name: "Kadabra",
 types: ["Psychic"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 40, atk: 35, def: 30, spa: 120, spd: 70, spe: 105},
 abilities: {0: "Synchronize", 1: "Inner Focus", H: "Magic Guard"},
 weightkg: 56.5,
 prevo: "Abra",
 evos: ["Alakazam"],
 },
+
 alakazam: {
 num: 65,
 name: "Alakazam",
 types: ["Psychic"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 55, atk: 50, def: 45, spa: 135, spd: 95, spe: 120},
 abilities: {0: "Synchronize", 1: "Inner Focus", H: "Magic Guard"},
 weightkg: 48,
@@ -1138,79 +1259,92 @@ evoType: "trade",
 otherFormes: ["Alakazam-Mega"],
 formeOrder: ["Alakazam", "Alakazam-Mega"],
 },
+
 alakazammega: {
 num: 65,
 name: "Alakazam-Mega",
 baseSpecies: "Alakazam",
 forme: "Mega",
 types: ["Psychic"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 55, atk: 50, def: 65, spa: 175, spd: 105, spe: 150},
 abilities: {0: "Trace"},
 weightkg: 48,
 },
+
 machop: {
 num: 66,
 name: "Machop",
 types: ["Fighting"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 70, atk: 80, def: 50, spa: 35, spd: 35, spe: 35},
 abilities: {0: "Guts", 1: "No Guard", H: "Steadfast"},
 weightkg: 19.5,
 evos: ["Machoke"],
 },
+
 machoke: {
 num: 67,
 name: "Machoke",
 types: ["Fighting"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 80, atk: 100, def: 70, spa: 50, spd: 60, spe: 45},
 abilities: {0: "Guts", 1: "No Guard", H: "Steadfast"},
 weightkg: 70.5,
 prevo: "Machop",
 evos: ["Machamp"],
 },
+
 machamp: {
 num: 68,
 name: "Machamp",
 types: ["Fighting"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 90, atk: 130, def: 80, spa: 65, spd: 85, spe: 55},
 abilities: {0: "Guts", 1: "No Guard", H: "Steadfast"},
 weightkg: 130,
 prevo: "Machoke",
 evoType: "trade",
 },
+
 machampgmax: {
 num: 68,
 name: "Machamp-Gmax",
 baseSpecies: "Machamp",
 forme: "Gmax",
 types: ["Fighting"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 90, atk: 130, def: 80, spa: 65, spd: 85, spe: 55},
 abilities: {0: "Guts", 1: "No Guard", H: "Steadfast"},
 weightkg: 0,
 changesFrom: "Machamp",
 },
+
 bellsprout: {
 num: 69,
 name: "Bellsprout",
-types: ["Grass", "Poison"],
+types: ["Grass"],
 baseStats: {hp: 50, atk: 75, def: 35, spa: 70, spd: 30, spe: 40},
 abilities: {0: "Chlorophyll", H: "Gluttony"},
 weightkg: 4,
 evos: ["Weepinbell"],
 },
+
 weepinbell: {
 num: 70,
 name: "Weepinbell",
-types: ["Grass", "Poison"],
+types: ["Grass"],
 baseStats: {hp: 65, atk: 90, def: 50, spa: 85, spd: 45, spe: 55},
 abilities: {0: "Chlorophyll", H: "Gluttony"},
 weightkg: 6.4,
 prevo: "Bellsprout",
 evos: ["Victreebel"],
 },
+
 victreebel: {
 num: 71,
 name: "Victreebel",
-types: ["Grass", "Poison"],
+types: ["Grass", "Dark"],
 baseStats: {hp: 80, atk: 105, def: 65, spa: 100, spd: 70, spe: 70},
 abilities: {0: "Chlorophyll", H: "Gluttony"},
 weightkg: 15.5,
@@ -1218,6 +1352,7 @@ prevo: "Weepinbell",
 evoType: "useItem",
 evoItem: "Leaf Stone",
 },
+
 tentacool: {
 num: 72,
 name: "Tentacool",
@@ -1227,6 +1362,7 @@ abilities: {0: "Clear Body", 1: "Liquid Ooze", H: "Rain Dish"},
 weightkg: 45.5,
 evos: ["Tentacruel"],
 },
+
 tentacruel: {
 num: 73,
 name: "Tentacruel",
@@ -1236,6 +1372,7 @@ abilities: {0: "Clear Body", 1: "Liquid Ooze", H: "Rain Dish"},
 weightkg: 55,
 prevo: "Tentacool",
 },
+
 geodude: {
 num: 74,
 name: "Geodude",
@@ -1247,6 +1384,7 @@ evos: ["Graveler"],
 otherFormes: ["Geodude-Alola"],
 formeOrder: ["Geodude", "Geodude-Alola"],
 },
+
 geodudealola: {
 num: 74,
 name: "Geodude-Alola",
@@ -1258,6 +1396,7 @@ abilities: {0: "Magnet Pull", 1: "Sturdy", H: "Galvanize"},
 weightkg: 20.3,
 evos: ["Graveler-Alola"],
 },
+
 graveler: {
 num: 75,
 name: "Graveler",
@@ -1270,6 +1409,7 @@ evos: ["Golem"],
 otherFormes: ["Graveler-Alola"],
 formeOrder: ["Graveler", "Graveler-Alola"],
 },
+
 graveleralola: {
 num: 75,
 name: "Graveler-Alola",
@@ -1282,10 +1422,11 @@ weightkg: 110,
 prevo: "Geodude-Alola",
 evos: ["Golem-Alola"],
 },
+
 golem: {
 num: 76,
 name: "Golem",
-types: ["Rock", "Ground"],
+types: ["Rock", "Dragon"],
 baseStats: {hp: 80, atk: 120, def: 130, spa: 55, spd: 65, spe: 45},
 abilities: {0: "Rock Head", 1: "Sturdy", H: "Sand Veil"},
 weightkg: 300,
@@ -1294,6 +1435,7 @@ evoType: "trade",
 otherFormes: ["Golem-Alola"],
 formeOrder: ["Golem", "Golem-Alola"],
 },
+
 golemalola: {
 num: 76,
 name: "Golem-Alola",
@@ -1306,6 +1448,7 @@ weightkg: 316,
 prevo: "Graveler-Alola",
 evoType: "trade",
 },
+
 ponyta: {
 num: 77,
 name: "Ponyta",
@@ -1317,6 +1460,7 @@ evos: ["Rapidash"],
 otherFormes: ["Ponyta-Galar"],
 formeOrder: ["Ponyta", "Ponyta-Galar"],
 },
+
 ponytagalar: {
 num: 77,
 name: "Ponyta-Galar",
@@ -1328,10 +1472,11 @@ abilities: {0: "Run Away", 1: "Pastel Veil", H: "Anticipation"},
 weightkg: 24,
 evos: ["Rapidash-Galar"],
 },
+
 rapidash: {
 num: 78,
 name: "Rapidash",
-types: ["Fire"],
+types: ["Fire", "Steel"],
 baseStats: {hp: 65, atk: 100, def: 70, spa: 80, spd: 80, spe: 105},
 abilities: {0: "Run Away", 1: "Flash Fire", H: "Flame Body"},
 weightkg: 95,
@@ -1339,6 +1484,7 @@ prevo: "Ponyta",
 otherFormes: ["Rapidash-Galar"],
 formeOrder: ["Rapidash", "Rapidash-Galar"],
 },
+
 rapidashgalar: {
 num: 78,
 name: "Rapidash-Galar",
@@ -1350,6 +1496,7 @@ abilities: {0: "Run Away", 1: "Pastel Veil", H: "Anticipation"},
 weightkg: 80,
 prevo: "Ponyta-Galar",
 },
+
 slowpoke: {
 num: 79,
 name: "Slowpoke",
@@ -1361,6 +1508,7 @@ evos: ["Slowbro", "Slowking"],
 otherFormes: ["Slowpoke-Galar"],
 formeOrder: ["Slowpoke", "Slowpoke-Galar"],
 },
+
 slowpokegalar: {
 num: 79,
 name: "Slowpoke-Galar",
@@ -1372,6 +1520,7 @@ abilities: {0: "Gluttony", 1: "Own Tempo", H: "Regenerator"},
 weightkg: 36,
 evos: ["Slowbro-Galar", "Slowking-Galar"],
 },
+
 slowbro: {
 num: 80,
 name: "Slowbro",
@@ -1383,6 +1532,7 @@ prevo: "Slowpoke",
 otherFormes: ["Slowbro-Mega", "Slowbro-Galar"],
 formeOrder: ["Slowbro", "Slowbro-Mega", "Slowbro-Galar"],
 },
+
 slowbromega: {
 num: 80,
 name: "Slowbro-Mega",
@@ -1393,6 +1543,7 @@ baseStats: {hp: 95, atk: 75, def: 180, spa: 130, spd: 80, spe: 30},
 abilities: {0: "Shell Armor"},
 weightkg: 120,
 },
+
 slowbrogalar: {
 num: 80,
 name: "Slowbro-Galar",
@@ -1406,6 +1557,7 @@ prevo: "Slowpoke-Galar",
 evoType: "useItem",
 evoItem: "Galarica Cuff",
 },
+
 magnemite: {
 num: 81,
 name: "Magnemite",
@@ -1415,6 +1567,7 @@ abilities: {0: "Magnet Pull", 1: "Sturdy", H: "Analytic"},
 weightkg: 6,
 evos: ["Magneton"],
 },
+
 magneton: {
 num: 82,
 name: "Magneton",
@@ -1425,6 +1578,7 @@ weightkg: 60,
 prevo: "Magnemite",
 evos: ["Magnezone"],
 },
+
 farfetchd: {
 num: 83,
 name: "Farfetch\u2019d",
@@ -1435,53 +1589,59 @@ weightkg: 15,
 otherFormes: ["Farfetch\u2019d-Galar"],
 formeOrder: ["Farfetch\u2019d", "Farfetch\u2019d-Galar"],
 },
+
 farfetchdgalar: {
 num: 83,
 name: "Farfetch\u2019d-Galar",
 baseSpecies: "Farfetch\u2019d",
 forme: "Galar",
-types: ["Fighting"],
+types: ["Fighting", "Flying"],
 baseStats: {hp: 52, atk: 95, def: 55, spa: 58, spd: 62, spe: 55},
 abilities: {0: "Steadfast", H: "Scrappy"},
 weightkg: 15,
 evos: ["Sirfetch\u2019d"],
 },
+
 doduo: {
 num: 84,
 name: "Doduo",
-types: ["Normal", "Flying"],
+types: ["Ground", "Flying"],
 baseStats: {hp: 35, atk: 85, def: 45, spa: 35, spd: 35, spe: 75},
 abilities: {0: "Run Away", 1: "Early Bird", H: "Tangled Feet"},
 weightkg: 39.2,
 evos: ["Dodrio"],
 },
+
 dodrio: {
 num: 85,
 name: "Dodrio",
-types: ["Normal", "Flying"],
+types: ["Ground", "Flying"],
 baseStats: {hp: 60, atk: 110, def: 70, spa: 60, spd: 60, spe: 110},
 abilities: {0: "Run Away", 1: "Early Bird", H: "Tangled Feet"},
 weightkg: 85.2,
 prevo: "Doduo",
 },
+
 seel: {
 num: 86,
 name: "Seel",
-types: ["Water"],
+types: ["Ice"],
 baseStats: {hp: 65, atk: 45, def: 55, spa: 45, spd: 70, spe: 45},
 abilities: {0: "Thick Fat", 1: "Hydration", H: "Ice Body"},
 weightkg: 90,
 evos: ["Dewgong"],
 },
+
 dewgong: {
 num: 87,
 name: "Dewgong",
-types: ["Water", "Ice"],
+types: ["Ice"],
 baseStats: {hp: 90, atk: 70, def: 80, spa: 70, spd: 95, spe: 70},
 abilities: {0: "Thick Fat", 1: "Hydration", H: "Ice Body"},
 weightkg: 120,
 prevo: "Seel",
 },
+
 grimer: {
 num: 88,
 name: "Grimer",
@@ -1493,6 +1653,7 @@ evos: ["Muk"],
 otherFormes: ["Grimer-Alola"],
 formeOrder: ["Grimer", "Grimer-Alola"],
 },
+
 grimeralola: {
 num: 88,
 name: "Grimer-Alola",
@@ -1504,6 +1665,7 @@ abilities: {0: "Poison Touch", 1: "Gluttony", H: "Power of Alchemy"},
 weightkg: 42,
 evos: ["Muk-Alola"],
 },
+
 muk: {
 num: 89,
 name: "Muk",
@@ -1515,6 +1677,7 @@ prevo: "Grimer",
 otherFormes: ["Muk-Alola"],
 formeOrder: ["Muk", "Muk-Alola"],
 },
+
 mukalola: {
 num: 89,
 name: "Muk-Alola",
@@ -1526,19 +1689,21 @@ abilities: {0: "Poison Touch", 1: "Gluttony", H: "Power of Alchemy"},
 weightkg: 52,
 prevo: "Grimer-Alola",
 },
+
 shellder: {
 num: 90,
 name: "Shellder",
-types: ["Water"],
+types: ["Ice"],
 baseStats: {hp: 30, atk: 65, def: 100, spa: 45, spd: 25, spe: 40},
 abilities: {0: "Shell Armor", 1: "Skill Link", H: "Overcoat"},
 weightkg: 4,
 evos: ["Cloyster"],
 },
+
 cloyster: {
 num: 91,
 name: "Cloyster",
-types: ["Water", "Ice"],
+types: ["Steel", "Ice"],
 baseStats: {hp: 50, atk: 95, def: 180, spa: 85, spd: 45, spe: 70},
 abilities: {0: "Shell Armor", 1: "Skill Link", H: "Overcoat"},
 weightkg: 132.5,
@@ -1546,6 +1711,7 @@ prevo: "Shellder",
 evoType: "useItem",
 evoItem: "Water Stone",
 },
+
 gastly: {
 num: 92,
 name: "Gastly",
@@ -1555,6 +1721,7 @@ abilities: {0: "Levitate"},
 weightkg: 0.1,
 evos: ["Haunter"],
 },
+
 haunter: {
 num: 93,
 name: "Haunter",
@@ -1565,6 +1732,7 @@ weightkg: 0.1,
 prevo: "Gastly",
 evos: ["Gengar"],
 },
+
 gengar: {
 num: 94,
 name: "Gengar",
@@ -1577,6 +1745,7 @@ evoType: "trade",
 otherFormes: ["Gengar-Mega"],
 formeOrder: ["Gengar", "Gengar-Mega"],
 },
+
 gengarmega: {
 num: 94,
 name: "Gengar-Mega",
@@ -1587,6 +1756,7 @@ baseStats: {hp: 60, atk: 65, def: 80, spa: 170, spd: 95, spe: 130},
 abilities: {0: "Shadow Tag"},
 weightkg: 40.5,
 },
+
 gengargmax: {
 num: 94,
 name: "Gengar-Gmax",
@@ -1598,6 +1768,7 @@ abilities: {0: "Cursed Body"},
 weightkg: 0,
 changesFrom: "Gengar",
 },
+
 onix: {
 num: 95,
 name: "Onix",
@@ -1607,24 +1778,27 @@ abilities: {0: "Rock Head", 1: "Sturdy", H: "Weak Armor"},
 weightkg: 210,
 evos: ["Steelix"],
 },
+
 drowzee: {
 num: 96,
 name: "Drowzee",
-types: ["Psychic"],
+types: ["Psychic", "Poison"],
 baseStats: {hp: 60, atk: 48, def: 45, spa: 43, spd: 90, spe: 42},
 abilities: {0: "Insomnia", 1: "Forewarn", H: "Inner Focus"},
 weightkg: 32.4,
 evos: ["Hypno"],
 },
+
 hypno: {
 num: 97,
 name: "Hypno",
-types: ["Psychic"],
+types: ["Psychic", "Poison"],
 baseStats: {hp: 85, atk: 73, def: 70, spa: 73, spd: 115, spe: 67},
 abilities: {0: "Insomnia", 1: "Forewarn", H: "Inner Focus"},
 weightkg: 75.6,
 prevo: "Drowzee",
 },
+
 krabby: {
 num: 98,
 name: "Krabby",
@@ -1634,26 +1808,29 @@ abilities: {0: "Hyper Cutter", 1: "Shell Armor", H: "Sheer Force"},
 weightkg: 6.5,
 evos: ["Kingler"],
 },
+
 kingler: {
 num: 99,
 name: "Kingler",
-types: ["Water"],
+types: ["Water", "Steel"],
 baseStats: {hp: 55, atk: 130, def: 115, spa: 50, spd: 50, spe: 75},
 abilities: {0: "Hyper Cutter", 1: "Shell Armor", H: "Sheer Force"},
 weightkg: 60,
 prevo: "Krabby",
 },
+
 kinglergmax: {
 num: 99,
 name: "Kingler-Gmax",
 baseSpecies: "Kingler",
 forme: "Gmax",
-types: ["Water"],
+types: ["Water", "Steel"],
 baseStats: {hp: 55, atk: 130, def: 115, spa: 50, spd: 50, spe: 75},
 abilities: {0: "Hyper Cutter", 1: "Shell Armor", H: "Sheer Force"},
 weightkg: 0,
 changesFrom: "Kingler",
 },
+
 voltorb: {
 num: 100,
 name: "Voltorb",
@@ -1665,6 +1842,7 @@ evos: ["Electrode"],
 otherFormes: ["Voltorb-Hisui"],
 formeOrder: ["Voltorb", "Voltorb-Hisui"],
 },
+
 voltorbhisui: {
 num: 100,
 name: "Voltorb-Hisui",
@@ -1676,10 +1854,11 @@ abilities: {0: "Soundproof", 1: "Static", H: "Aftermath"},
 weightkg: 13,
 evos: ["Electrode-Hisui"],
 },
+
 electrode: {
 num: 101,
 name: "Electrode",
-types: ["Electric"],
+types: ["Electric", "Ghost"],
 baseStats: {hp: 60, atk: 50, def: 70, spa: 80, spd: 80, spe: 150},
 abilities: {0: "Soundproof", 1: "Static", H: "Aftermath"},
 weightkg: 66.6,
@@ -1687,6 +1866,7 @@ prevo: "Voltorb",
 otherFormes: ["Electrode-Hisui"],
 formeOrder: ["Electrode", "Electrode-Hisui"],
 },
+
 electrodehisui: {
 num: 101,
 name: "Electrode-Hisui",
@@ -1700,6 +1880,7 @@ prevo: "Voltorb-Hisui",
 evoType: "useItem",
 evoItem: "Leaf Stone",
 },
+
 exeggcute: {
 num: 102,
 name: "Exeggcute",
@@ -1709,6 +1890,7 @@ abilities: {0: "Chlorophyll", H: "Harvest"},
 weightkg: 2.5,
 evos: ["Exeggutor", "Exeggutor-Alola"],
 },
+
 exeggutor: {
 num: 103,
 name: "Exeggutor",
@@ -1722,12 +1904,13 @@ evoItem: "Leaf Stone",
 otherFormes: ["Exeggutor-Alola"],
 formeOrder: ["Exeggutor", "Exeggutor-Alola"],
 },
+
 exeggutoralola: {
 num: 103,
 name: "Exeggutor-Alola",
 baseSpecies: "Exeggutor",
 forme: "Alola",
-types: ["Grass", "Dragon"],
+types: ["Psychic", "Dragon"],
 baseStats: {hp: 95, atk: 105, def: 85, spa: 125, spd: 75, spe: 45},
 abilities: {0: "Frisk", H: "Harvest"},
 weightkg: 415.6,
@@ -1736,6 +1919,7 @@ evoType: "useItem",
 evoItem: "Leaf Stone",
 evoRegion: "Alola",
 },
+
 cubone: {
 num: 104,
 name: "Cubone",
@@ -1745,10 +1929,11 @@ abilities: {0: "Rock Head", 1: "Lightning Rod", H: "Battle Armor"},
 weightkg: 6.5,
 evos: ["Marowak", "Marowak-Alola"],
 },
+
 marowak: {
 num: 105,
 name: "Marowak",
-types: ["Ground"],
+types: ["Ground", "Ghost"],
 baseStats: {hp: 60, atk: 80, def: 110, spa: 50, spd: 80, spe: 45},
 abilities: {0: "Rock Head", 1: "Lightning Rod", H: "Battle Armor"},
 weightkg: 45,
@@ -1756,6 +1941,7 @@ prevo: "Cubone",
 otherFormes: ["Marowak-Alola", "Marowak-Alola-Totem"],
 formeOrder: ["Marowak", "Marowak-Alola", "Marowak-Alola-Totem"],
 },
+
 marowakalola: {
 num: 105,
 name: "Marowak-Alola",
@@ -1769,6 +1955,7 @@ prevo: "Cubone",
 evoCondition: "at night",
 evoRegion: "Alola",
 },
+
 marowakalolatotem: {
 num: 105,
 name: "Marowak-Alola-Totem",
@@ -1779,35 +1966,39 @@ baseStats: {hp: 60, atk: 80, def: 110, spa: 50, spd: 80, spe: 45},
 abilities: {0: "Rock Head"},
 weightkg: 98,
 },
+
 hitmonlee: {
 num: 106,
 name: "Hitmonlee",
-types: ["Fighting"],
+types: ["Fighting", "Ground"],
 baseStats: {hp: 50, atk: 120, def: 53, spa: 35, spd: 110, spe: 87},
 abilities: {0: "Limber", 1: "Reckless", H: "Unburden"},
 weightkg: 49.8,
 prevo: "Tyrogue",
 evoCondition: "with an Atk stat > its Def stat",
 },
+
 hitmonchan: {
 num: 107,
 name: "Hitmonchan",
-types: ["Fighting"],
+types: ["Fighting", "Steel"],
 baseStats: {hp: 50, atk: 105, def: 79, spa: 35, spd: 110, spe: 76},
 abilities: {0: "Keen Eye", 1: "Iron Fist", H: "Inner Focus"},
 weightkg: 50.2,
 prevo: "Tyrogue",
 evoCondition: "with an Atk stat < its Def stat",
 },
+
 lickitung: {
 num: 108,
 name: "Lickitung",
-types: ["Normal"],
+types: ["Fairy", "Poison"],
 baseStats: {hp: 90, atk: 55, def: 75, spa: 60, spd: 75, spe: 30},
 abilities: {0: "Own Tempo", 1: "Oblivious", H: "Cloud Nine"},
 weightkg: 65.5,
 evos: ["Lickilicky"],
 },
+
 koffing: {
 num: 109,
 name: "Koffing",
@@ -1817,6 +2008,7 @@ abilities: {0: "Levitate", 1: "Neutralizing Gas", H: "Stench"},
 weightkg: 1,
 evos: ["Weezing", "Weezing-Galar"],
 },
+
 weezing: {
 num: 110,
 name: "Weezing",
@@ -1828,6 +2020,7 @@ prevo: "Koffing",
 otherFormes: ["Weezing-Galar"],
 formeOrder: ["Weezing", "Weezing-Galar"],
 },
+
 weezinggalar: {
 num: 110,
 name: "Weezing-Galar",
@@ -1840,6 +2033,7 @@ weightkg: 16,
 prevo: "Koffing",
 evoRegion: "Galar",
 },
+
 rhyhorn: {
 num: 111,
 name: "Rhyhorn",
@@ -1849,6 +2043,7 @@ abilities: {0: "Lightning Rod", 1: "Rock Head", H: "Reckless"},
 weightkg: 115,
 evos: ["Rhydon"],
 },
+
 rhydon: {
 num: 112,
 name: "Rhydon",
@@ -1859,10 +2054,11 @@ weightkg: 120,
 prevo: "Rhyhorn",
 evos: ["Rhyperior"],
 },
+
 chansey: {
 num: 113,
 name: "Chansey",
-types: ["Normal"],
+types: ["Normal", "Fairy"],
 baseStats: {hp: 250, atk: 5, def: 5, spa: 35, spd: 105, spe: 50},
 abilities: {0: "Natural Cure", 1: "Serene Grace", H: "Healer"},
 weightkg: 34.6,
@@ -1873,6 +2069,7 @@ evoCondition: "during the day",
 evos: ["Blissey"],
 canHatch: true,
 },
+
 tangela: {
 num: 114,
 name: "Tangela",
@@ -1882,45 +2079,50 @@ abilities: {0: "Chlorophyll", 1: "Leaf Guard", H: "Regenerator"},
 weightkg: 35,
 evos: ["Tangrowth"],
 },
+
 kangaskhan: {
 num: 115,
 name: "Kangaskhan",
-types: ["Normal"],
+types: ["Fighting", "Dragon"],
 baseStats: {hp: 105, atk: 95, def: 80, spa: 40, spd: 80, spe: 90},
 abilities: {0: "Early Bird", 1: "Scrappy", H: "Inner Focus"},
 weightkg: 80,
 otherFormes: ["Kangaskhan-Mega"],
 formeOrder: ["Kangaskhan", "Kangaskhan-Mega"],
 },
+
 kangaskhanmega: {
 num: 115,
 name: "Kangaskhan-Mega",
 baseSpecies: "Kangaskhan",
 forme: "Mega",
-types: ["Normal"],
+types: ["Fighting", "Dragon"],
 baseStats: {hp: 105, atk: 125, def: 100, spa: 60, spd: 100, spe: 100},
 abilities: {0: "Parental Bond"},
 weightkg: 100,
 },
+
 horsea: {
 num: 116,
 name: "Horsea",
-types: ["Water"],
+types: ["Ice"],
 baseStats: {hp: 30, atk: 40, def: 70, spa: 70, spd: 25, spe: 60},
 abilities: {0: "Swift Swim", 1: "Sniper", H: "Damp"},
 weightkg: 8,
 evos: ["Seadra"],
 },
+
 seadra: {
 num: 117,
 name: "Seadra",
-types: ["Water"],
+types: ["Ice"],
 baseStats: {hp: 55, atk: 65, def: 95, spa: 95, spd: 45, spe: 85},
 abilities: {0: "Poison Point", 1: "Sniper", H: "Damp"},
 weightkg: 25,
 prevo: "Horsea",
 evos: ["Kingdra"],
 },
+
 goldeen: {
 num: 118,
 name: "Goldeen",
@@ -1930,6 +2132,7 @@ abilities: {0: "Swift Swim", 1: "Water Veil", H: "Lightning Rod"},
 weightkg: 15,
 evos: ["Seaking"],
 },
+
 seaking: {
 num: 119,
 name: "Seaking",
@@ -1939,19 +2142,21 @@ abilities: {0: "Swift Swim", 1: "Water Veil", H: "Lightning Rod"},
 weightkg: 39,
 prevo: "Goldeen",
 },
+
 staryu: {
 num: 120,
 name: "Staryu",
-types: ["Water"],
+types: ["Psychic", "Rock"],
 baseStats: {hp: 30, atk: 45, def: 55, spa: 70, spd: 55, spe: 85},
 abilities: {0: "Illuminate", 1: "Natural Cure", H: "Analytic"},
 weightkg: 34.5,
 evos: ["Starmie"],
 },
+
 starmie: {
 num: 121,
 name: "Starmie",
-types: ["Water", "Psychic"],
+types: ["Psychic", "Rock"],
 baseStats: {hp: 60, atk: 75, def: 85, spa: 100, spd: 85, spe: 115},
 abilities: {0: "Illuminate", 1: "Natural Cure", H: "Analytic"},
 weightkg: 80,
@@ -1959,10 +2164,11 @@ prevo: "Staryu",
 evoType: "useItem",
 evoItem: "Water Stone",
 },
+
 mrmime: {
 num: 122,
 name: "Mr. Mime",
-types: ["Psychic", "Fairy"],
+types: ["Dark", "Fairy"],
 baseStats: {hp: 40, atk: 45, def: 65, spa: 100, spd: 120, spe: 90},
 abilities: {0: "Soundproof", 1: "Filter", H: "Technician"},
 weightkg: 54.5,
@@ -1973,6 +2179,7 @@ canHatch: true,
 otherFormes: ["Mr. Mime-Galar"],
 formeOrder: ["Mr. Mime", "Mr. Mime-Galar"],
 },
+
 mrmimegalar: {
 num: 122,
 name: "Mr. Mime-Galar",
@@ -1989,6 +2196,7 @@ evoRegion: "Galar",
 evos: ["Mr. Rime"],
 canHatch: true,
 },
+
 scyther: {
 num: 123,
 name: "Scyther",
@@ -1998,6 +2206,7 @@ abilities: {0: "Swarm", 1: "Technician", H: "Steadfast"},
 weightkg: 56,
 evos: ["Scizor", "Kleavor"],
 },
+
 jynx: {
 num: 124,
 name: "Jynx",
@@ -2007,26 +2216,31 @@ abilities: {0: "Oblivious", 1: "Forewarn", H: "Dry Skin"},
 weightkg: 40.6,
 prevo: "Smoochum",
 },
+
 electabuzz: {
 num: 125,
 name: "Electabuzz",
-types: ["Electric"],
+types: ["Electric", "Fighting"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 65, atk: 83, def: 57, spa: 95, spd: 85, spe: 105},
 abilities: {0: "Static", H: "Vital Spirit"},
 weightkg: 30,
 prevo: "Elekid",
 evos: ["Electivire"],
 },
+
 magmar: {
 num: 126,
 name: "Magmar",
-types: ["Fire"],
+types: ["Fire", "Poison"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 65, atk: 95, def: 57, spa: 100, spd: 85, spe: 93},
 abilities: {0: "Flame Body", H: "Vital Spirit"},
 weightkg: 44.5,
 prevo: "Magby",
 evos: ["Magmortar"],
 },
+
 pinsir: {
 num: 127,
 name: "Pinsir",
@@ -2037,6 +2251,7 @@ weightkg: 55,
 otherFormes: ["Pinsir-Mega"],
 formeOrder: ["Pinsir", "Pinsir-Mega"],
 },
+
 pinsirmega: {
 num: 127,
 name: "Pinsir-Mega",
@@ -2047,16 +2262,18 @@ baseStats: {hp: 65, atk: 155, def: 120, spa: 65, spd: 90, spe: 105},
 abilities: {0: "Aerilate"},
 weightkg: 59,
 },
+
 tauros: {
 num: 128,
 name: "Tauros",
-types: ["Normal"],
+types: ["Ground","Fighting"],
 baseStats: {hp: 75, atk: 100, def: 95, spa: 40, spd: 70, spe: 110},
 abilities: {0: "Intimidate", 1: "Anger Point", H: "Sheer Force"},
 weightkg: 88.4,
 otherFormes: ["Tauros-Paldea-Combat", "Tauros-Paldea-Blaze", "Tauros-Paldea-Aqua"],
 formeOrder: ["Tauros", "Tauros-Paldea-Combat", "Tauros-Paldea-Blaze", "Tauros-Paldea-Aqua"],
 },
+
 taurospaldeacombat: {
 num: 128,
 name: "Tauros-Paldea-Combat",
@@ -2067,6 +2284,7 @@ baseStats: {hp: 75, atk: 110, def: 105, spa: 30, spd: 70, spe: 100},
 abilities: {0: "Intimidate", 1: "Anger Point", H: "Cud Chew"},
 weightkg: 88.4,
 },
+
 taurospaldeablaze: {
 num: 128,
 name: "Tauros-Paldea-Blaze",
@@ -2077,6 +2295,7 @@ baseStats: {hp: 75, atk: 110, def: 105, spa: 30, spd: 70, spe: 100},
 abilities: {0: "Intimidate", 1: "Anger Point", H: "Cud Chew"},
 weightkg: 88.4,
 },
+
 taurospaldeaaqua: {
 num: 128,
 name: "Tauros-Paldea-Aqua",
@@ -2087,6 +2306,7 @@ baseStats: {hp: 75, atk: 110, def: 105, spa: 30, spd: 70, spe: 100},
 abilities: {0: "Intimidate", 1: "Anger Point", H: "Cud Chew"},
 weightkg: 88.4,
 },
+
 magikarp: {
 num: 129,
 name: "Magikarp",
@@ -2096,10 +2316,11 @@ abilities: {0: "Swift Swim", H: "Rattled"},
 weightkg: 10,
 evos: ["Gyarados"],
 },
+
 gyarados: {
 num: 130,
 name: "Gyarados",
-types: ["Water", "Flying"],
+types: ["Water", "Dragon"],
 baseStats: {hp: 95, atk: 125, def: 79, spa: 60, spd: 100, spe: 81},
 abilities: {0: "Intimidate", H: "Moxie"},
 weightkg: 235,
@@ -2107,43 +2328,48 @@ prevo: "Magikarp",
 otherFormes: ["Gyarados-Mega"],
 formeOrder: ["Gyarados", "Gyarados-Mega"],
 },
+
 gyaradosmega: {
 num: 130,
 name: "Gyarados-Mega",
 baseSpecies: "Gyarados",
 forme: "Mega",
-types: ["Water", "Dark"],
+types: ["Water", "Dragon"],
 baseStats: {hp: 95, atk: 155, def: 109, spa: 70, spd: 130, spe: 81},
 abilities: {0: "Mold Breaker"},
 weightkg: 305,
 },
+
 lapras: {
 num: 131,
 name: "Lapras",
-types: ["Water", "Ice"],
+types: ["Dragon", "Ice"],
 baseStats: {hp: 130, atk: 85, def: 80, spa: 85, spd: 95, spe: 60},
 abilities: {0: "Water Absorb", 1: "Shell Armor", H: "Hydration"},
 weightkg: 220,
 },
+
 laprasgmax: {
 num: 131,
 name: "Lapras-Gmax",
 baseSpecies: "Lapras",
 forme: "Gmax",
-types: ["Water", "Ice"],
+types: ["Dragon", "Ice"],
 baseStats: {hp: 130, atk: 85, def: 80, spa: 85, spd: 95, spe: 60},
 abilities: {0: "Water Absorb", 1: "Shell Armor", H: "Hydration"},
 weightkg: 0,
 changesFrom: "Lapras",
 },
+
 ditto: {
 num: 132,
 name: "Ditto",
-types: ["Normal"],
+types: ["???"],
 baseStats: {hp: 48, atk: 48, def: 48, spa: 48, spd: 48, spe: 48},
 abilities: {0: "Limber", H: "Imposter"},
 weightkg: 4,
 },
+
 eevee: {
 num: 133,
 name: "Eevee",
@@ -2155,6 +2381,7 @@ evos: ["Vaporeon", "Jolteon", "Flareon", "Espeon", "Umbreon", "Leafeon", "Glaceo
 otherFormes: ["Eevee-Starter"],
 formeOrder: ["Eevee", "Eevee-Starter"],
 },
+
 eeveestarter: {
 num: 133,
 name: "Eevee-Starter",
@@ -2165,6 +2392,7 @@ baseStats: {hp: 65, atk: 75, def: 70, spa: 65, spd: 85, spe: 75},
 abilities: {0: "Run Away", 1: "Adaptability", H: "Anticipation"},
 weightkg: 6.5,
 },
+
 eeveegmax: {
 num: 133,
 name: "Eevee-Gmax",
@@ -2176,10 +2404,11 @@ abilities: {0: "Run Away", 1: "Adaptability", H: "Anticipation"},
 weightkg: 0,
 changesFrom: "Eevee",
 },
+
 vaporeon: {
 num: 134,
 name: "Vaporeon",
-types: ["Water"],
+types: ["Water", "Normal"],
 baseStats: {hp: 130, atk: 65, def: 60, spa: 110, spd: 95, spe: 65},
 abilities: {0: "Water Absorb", H: "Hydration"},
 weightkg: 29,
@@ -2187,10 +2416,11 @@ prevo: "Eevee",
 evoType: "useItem",
 evoItem: "Water Stone",
 },
+
 jolteon: {
 num: 135,
 name: "Jolteon",
-types: ["Electric"],
+types: ["Electric", "Normal"],
 baseStats: {hp: 65, atk: 65, def: 60, spa: 110, spd: 95, spe: 130},
 abilities: {0: "Volt Absorb", H: "Quick Feet"},
 weightkg: 24.5,
@@ -2198,10 +2428,11 @@ prevo: "Eevee",
 evoType: "useItem",
 evoItem: "Thunder Stone",
 },
+
 flareon: {
 num: 136,
 name: "Flareon",
-types: ["Fire"],
+types: ["Fire", "Normal"],
 baseStats: {hp: 65, atk: 130, def: 60, spa: 95, spd: 110, spe: 65},
 abilities: {0: "Flash Fire", H: "Guts"},
 weightkg: 25,
@@ -2209,75 +2440,83 @@ prevo: "Eevee",
 evoType: "useItem",
 evoItem: "Fire Stone",
 },
+
 porygon: {
 num: 137,
 name: "Porygon",
-types: ["Normal"],
+types: ["Electric", "Psychic"],
 baseStats: {hp: 65, atk: 60, def: 70, spa: 85, spd: 75, spe: 40},
 abilities: {0: "Trace", 1: "Download", H: "Analytic"},
 weightkg: 36.5,
 evos: ["Porygon2"],
 },
+
 omanyte: {
 num: 138,
 name: "Omanyte",
-types: ["Rock", "Water"],
+types: ["Bug", "Ghost"],
 baseStats: {hp: 35, atk: 40, def: 100, spa: 90, spd: 55, spe: 35},
 abilities: {0: "Swift Swim", 1: "Shell Armor", H: "Weak Armor"},
 weightkg: 7.5,
 evos: ["Omastar"],
 },
+
 omastar: {
 num: 139,
 name: "Omastar",
-types: ["Rock", "Water"],
+types: ["Bug", "Ghost"],
 baseStats: {hp: 70, atk: 60, def: 125, spa: 115, spd: 70, spe: 55},
 abilities: {0: "Swift Swim", 1: "Shell Armor", H: "Weak Armor"},
 weightkg: 35,
 prevo: "Omanyte",
 },
+
 kabuto: {
 num: 140,
 name: "Kabuto",
-types: ["Rock", "Water"],
+types: ["Water"],
 baseStats: {hp: 30, atk: 80, def: 90, spa: 55, spd: 45, spe: 55},
 abilities: {0: "Swift Swim", 1: "Battle Armor", H: "Weak Armor"},
 weightkg: 11.5,
 evos: ["Kabutops"],
 },
+
 kabutops: {
 num: 141,
 name: "Kabutops",
-types: ["Rock", "Water"],
+types: ["Water", "Steel"],
 baseStats: {hp: 60, atk: 115, def: 105, spa: 65, spd: 70, spe: 80},
 abilities: {0: "Swift Swim", 1: "Battle Armor", H: "Weak Armor"},
 weightkg: 40.5,
 prevo: "Kabuto",
 },
+
 aerodactyl: {
 num: 142,
 name: "Aerodactyl",
-types: ["Rock", "Flying"],
+types: ["Ghost", "Dragon"],
 baseStats: {hp: 80, atk: 105, def: 65, spa: 60, spd: 75, spe: 130},
 abilities: {0: "Rock Head", 1: "Pressure", H: "Unnerve"},
 weightkg: 59,
 otherFormes: ["Aerodactyl-Mega"],
 formeOrder: ["Aerodactyl", "Aerodactyl-Mega"],
 },
+
 aerodactylmega: {
 num: 142,
 name: "Aerodactyl-Mega",
 baseSpecies: "Aerodactyl",
 forme: "Mega",
-types: ["Rock", "Flying"],
+types: ["Ghost", "Dragon"],
 baseStats: {hp: 80, atk: 135, def: 85, spa: 70, spd: 95, spe: 150},
 abilities: {0: "Tough Claws"},
 weightkg: 79,
 },
+
 snorlax: {
 num: 143,
 name: "Snorlax",
-types: ["Normal"],
+types: ["Normal", "Dragon"],
 baseStats: {hp: 160, atk: 110, def: 65, spa: 65, spd: 110, spe: 30},
 abilities: {0: "Immunity", 1: "Thick Fat", H: "Gluttony"},
 weightkg: 460,
@@ -2285,17 +2524,19 @@ prevo: "Munchlax",
 evoType: "levelFriendship",
 canHatch: true,
 },
+
 snorlaxgmax: {
 num: 143,
 name: "Snorlax-Gmax",
 baseSpecies: "Snorlax",
 forme: "Gmax",
-types: ["Normal"],
+types: ["Normal", "Dragon"],
 baseStats: {hp: 160, atk: 110, def: 65, spa: 65, spd: 110, spe: 30},
 abilities: {0: "Immunity", 1: "Thick Fat", H: "Gluttony"},
 weightkg: 0,
 changesFrom: "Snorlax",
 },
+
 articuno: {
 num: 144,
 name: "Articuno",
@@ -2306,6 +2547,7 @@ weightkg: 55.4,
 otherFormes: ["Articuno-Galar"],
 formeOrder: ["Articuno", "Articuno-Galar"],
 },
+
 articunogalar: {
 num: 144,
 name: "Articuno-Galar",
@@ -2316,6 +2558,7 @@ baseStats: {hp: 90, atk: 85, def: 85, spa: 125, spd: 100, spe: 95},
 abilities: {0: "Competitive"},
 weightkg: 50.9,
 },
+
 zapdos: {
 num: 145,
 name: "Zapdos",
@@ -2326,6 +2569,7 @@ weightkg: 52.6,
 otherFormes: ["Zapdos-Galar"],
 formeOrder: ["Zapdos", "Zapdos-Galar"],
 },
+
 zapdosgalar: {
 num: 145,
 name: "Zapdos-Galar",
@@ -2336,6 +2580,7 @@ baseStats: {hp: 90, atk: 125, def: 90, spa: 85, spd: 90, spe: 100},
 abilities: {0: "Defiant"},
 weightkg: 58.2,
 },
+
 moltres: {
 num: 146,
 name: "Moltres",
@@ -2346,6 +2591,7 @@ weightkg: 60,
 otherFormes: ["Moltres-Galar"],
 formeOrder: ["Moltres", "Moltres-Galar"],
 },
+
 moltresgalar: {
 num: 146,
 name: "Moltres-Galar",
@@ -2356,6 +2602,7 @@ baseStats: {hp: 90, atk: 85, def: 90, spa: 100, spd: 125, spe: 90},
 abilities: {0: "Berserk"},
 weightkg: 66,
 },
+
 dratini: {
 num: 147,
 name: "Dratini",
@@ -2365,6 +2612,7 @@ abilities: {0: "Shed Skin", H: "Marvel Scale"},
 weightkg: 3.3,
 evos: ["Dragonair"],
 },
+
 dragonair: {
 num: 148,
 name: "Dragonair",
@@ -2375,6 +2623,7 @@ weightkg: 16.5,
 prevo: "Dratini",
 evos: ["Dragonite"],
 },
+
 dragonite: {
 num: 149,
 name: "Dragonite",
@@ -2384,16 +2633,18 @@ abilities: {0: "Inner Focus", H: "Multiscale"},
 weightkg: 210,
 prevo: "Dragonair",
 },
+
 mewtwo: {
 num: 150,
 name: "Mewtwo",
-types: ["Psychic"],
+types: ["Psychic", "Dark"],
 baseStats: {hp: 106, atk: 110, def: 90, spa: 154, spd: 90, spe: 130},
 abilities: {0: "Pressure", H: "Unnerve"},
 weightkg: 122,
 otherFormes: ["Mewtwo-Mega-X", "Mewtwo-Mega-Y"],
 formeOrder: ["Mewtwo", "Mewtwo-Mega-X", "Mewtwo-Mega-Y"],
 },
+
 mewtwomegax: {
 num: 150,
 name: "Mewtwo-Mega-X",
@@ -2404,6 +2655,7 @@ baseStats: {hp: 106, atk: 190, def: 100, spa: 154, spd: 100, spe: 130},
 abilities: {0: "Steadfast"},
 weightkg: 127,
 },
+
 mewtwomegay: {
 num: 150,
 name: "Mewtwo-Mega-Y",
@@ -2414,14 +2666,16 @@ baseStats: {hp: 106, atk: 150, def: 70, spa: 194, spd: 120, spe: 140},
 abilities: {0: "Insomnia"},
 weightkg: 33,
 },
+
 mew: {
 num: 151,
 name: "Mew",
-types: ["Psychic"],
+types: ["Psychic", "Fairy"],
 baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
 abilities: {0: "Synchronize"},
 weightkg: 4,
 },
+
 chikorita: {
 num: 152,
 name: "Chikorita",
@@ -2431,6 +2685,7 @@ abilities: {0: "Overgrow", H: "Leaf Guard"},
 weightkg: 6.4,
 evos: ["Bayleef"],
 },
+
 bayleef: {
 num: 153,
 name: "Bayleef",
@@ -2441,15 +2696,17 @@ weightkg: 15.8,
 prevo: "Chikorita",
 evos: ["Meganium"],
 },
+
 meganium: {
 num: 154,
 name: "Meganium",
-types: ["Grass"],
+types: ["Grass", "Fairy"],
 baseStats: {hp: 80, atk: 82, def: 100, spa: 83, spd: 100, spe: 80},
 abilities: {0: "Overgrow", H: "Leaf Guard"},
 weightkg: 100.5,
 prevo: "Bayleef",
 },
+
 cyndaquil: {
 num: 155,
 name: "Cyndaquil",
@@ -2459,6 +2716,7 @@ abilities: {0: "Blaze", H: "Flash Fire"},
 weightkg: 7.9,
 evos: ["Quilava"],
 },
+
 quilava: {
 num: 156,
 name: "Quilava",
@@ -2469,10 +2727,11 @@ weightkg: 19,
 prevo: "Cyndaquil",
 evos: ["Typhlosion", "Typhlosion-Hisui"],
 },
+
 typhlosion: {
 num: 157,
 name: "Typhlosion",
-types: ["Fire"],
+types: ["Fire", "Electric"],
 baseStats: {hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100},
 abilities: {0: "Blaze", H: "Flash Fire"},
 weightkg: 79.5,
@@ -2480,6 +2739,7 @@ prevo: "Quilava",
 otherFormes: ["Typhlosion-Hisui"],
 formeOrder: ["Typhlosion", "Typhlosion-Hisui"],
 },
+
 typhlosionhisui: {
 num: 157,
 name: "Typhlosion-Hisui",
@@ -2491,6 +2751,7 @@ abilities: {0: "Blaze", H: "Frisk"},
 weightkg: 69.8,
 prevo: "Quilava",
 },
+
 totodile: {
 num: 158,
 name: "Totodile",
@@ -2500,6 +2761,7 @@ abilities: {0: "Torrent", H: "Sheer Force"},
 weightkg: 9.5,
 evos: ["Croconaw"],
 },
+
 croconaw: {
 num: 159,
 name: "Croconaw",
@@ -2510,33 +2772,37 @@ weightkg: 25,
 prevo: "Totodile",
 evos: ["Feraligatr"],
 },
+
 feraligatr: {
 num: 160,
 name: "Feraligatr",
-types: ["Water"],
+types: ["Water", "Fire"],
 baseStats: {hp: 85, atk: 105, def: 100, spa: 79, spd: 83, spe: 78},
 abilities: {0: "Torrent", H: "Sheer Force"},
 weightkg: 88.8,
 prevo: "Croconaw",
 },
+
 sentret: {
 num: 161,
 name: "Sentret",
-types: ["Normal"],
+types: ["Ground", "Fairy"],
 baseStats: {hp: 35, atk: 46, def: 34, spa: 35, spd: 45, spe: 20},
 abilities: {0: "Run Away", 1: "Keen Eye", H: "Frisk"},
 weightkg: 6,
 evos: ["Furret"],
 },
+
 furret: {
 num: 162,
 name: "Furret",
-types: ["Normal"],
+types: ["Ground", "Fairy"],
 baseStats: {hp: 85, atk: 76, def: 64, spa: 45, spd: 55, spe: 90},
 abilities: {0: "Run Away", 1: "Keen Eye", H: "Frisk"},
 weightkg: 32.5,
 prevo: "Sentret",
 },
+
 hoothoot: {
 num: 163,
 name: "Hoothoot",
@@ -2546,51 +2812,57 @@ abilities: {0: "Insomnia", 1: "Keen Eye", H: "Tinted Lens"},
 weightkg: 21.2,
 evos: ["Noctowl"],
 },
+
 noctowl: {
 num: 164,
 name: "Noctowl",
-types: ["Normal", "Flying"],
+types: ["Ghost", "Flying"],
 baseStats: {hp: 100, atk: 50, def: 50, spa: 86, spd: 96, spe: 70},
 abilities: {0: "Insomnia", 1: "Keen Eye", H: "Tinted Lens"},
 weightkg: 40.8,
 prevo: "Hoothoot",
 },
+
 ledyba: {
 num: 165,
 name: "Ledyba",
-types: ["Bug", "Flying"],
+types: ["Bug", "Normal"],
 baseStats: {hp: 40, atk: 20, def: 30, spa: 40, spd: 80, spe: 55},
 abilities: {0: "Swarm", 1: "Early Bird", H: "Rattled"},
 weightkg: 10.8,
 evos: ["Ledian"],
 },
+
 ledian: {
 num: 166,
 name: "Ledian",
-types: ["Bug", "Flying"],
+types: ["Bug", "Normal"],
 baseStats: {hp: 55, atk: 35, def: 50, spa: 55, spd: 110, spe: 85},
 abilities: {0: "Swarm", 1: "Early Bird", H: "Iron Fist"},
 weightkg: 35.6,
 prevo: "Ledyba",
 },
+
 spinarak: {
 num: 167,
 name: "Spinarak",
-types: ["Bug", "Poison"],
+types: ["Bug"],
 baseStats: {hp: 40, atk: 60, def: 40, spa: 40, spd: 40, spe: 30},
 abilities: {0: "Swarm", 1: "Insomnia", H: "Sniper"},
 weightkg: 8.5,
 evos: ["Ariados"],
 },
+
 ariados: {
 num: 168,
 name: "Ariados",
-types: ["Bug", "Poison"],
+types: ["Bug", "Dark"],
 baseStats: {hp: 70, atk: 90, def: 70, spa: 60, spd: 70, spe: 40},
 abilities: {0: "Swarm", 1: "Insomnia", H: "Sniper"},
 weightkg: 33.5,
 prevo: "Spinarak",
 },
+
 crobat: {
 num: 169,
 name: "Crobat",
@@ -2601,6 +2873,7 @@ weightkg: 75,
 prevo: "Golbat",
 evoType: "levelFriendship",
 },
+
 chinchou: {
 num: 170,
 name: "Chinchou",
@@ -2610,6 +2883,7 @@ abilities: {0: "Volt Absorb", 1: "Illuminate", H: "Water Absorb"},
 weightkg: 12,
 evos: ["Lanturn"],
 },
+
 lanturn: {
 num: 171,
 name: "Lanturn",
@@ -2619,6 +2893,7 @@ abilities: {0: "Volt Absorb", 1: "Illuminate", H: "Water Absorb"},
 weightkg: 22.5,
 prevo: "Chinchou",
 },
+
 pichu: {
 num: 172,
 name: "Pichu",
@@ -2631,6 +2906,7 @@ canHatch: true,
 otherFormes: ["Pichu-Spiky-eared"],
 formeOrder: ["Pichu", "Pichu-Spiky-eared"],
 },
+
 pichuspikyeared: {
 num: 172,
 name: "Pichu-Spiky-eared",
@@ -2642,26 +2918,31 @@ abilities: {0: "Static"},
 weightkg: 2,
 gen: 4,
 },
+
 cleffa: {
 num: 173,
 name: "Cleffa",
 types: ["Fairy"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 50, atk: 25, def: 28, spa: 45, spd: 55, spe: 15},
 abilities: {0: "Cute Charm", 1: "Magic Guard", H: "Friend Guard"},
 weightkg: 3,
 evos: ["Clefairy"],
 canHatch: true,
 },
+
 igglybuff: {
 num: 174,
 name: "Igglybuff",
 types: ["Normal", "Fairy"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 90, atk: 30, def: 15, spa: 40, spd: 20, spe: 15},
 abilities: {0: "Cute Charm", 1: "Competitive", H: "Friend Guard"},
 weightkg: 1,
 evos: ["Jigglypuff"],
 canHatch: true,
 },
+
 togepi: {
 num: 175,
 name: "Togepi",
@@ -2672,6 +2953,7 @@ weightkg: 1.5,
 evos: ["Togetic"],
 canHatch: true,
 },
+
 togetic: {
 num: 176,
 name: "Togetic",
@@ -2683,6 +2965,7 @@ prevo: "Togepi",
 evoType: "levelFriendship",
 evos: ["Togekiss"],
 },
+
 natu: {
 num: 177,
 name: "Natu",
@@ -2692,6 +2975,7 @@ abilities: {0: "Synchronize", 1: "Early Bird", H: "Magic Bounce"},
 weightkg: 2,
 evos: ["Xatu"],
 },
+
 xatu: {
 num: 178,
 name: "Xatu",
@@ -2701,29 +2985,32 @@ abilities: {0: "Synchronize", 1: "Early Bird", H: "Magic Bounce"},
 weightkg: 15,
 prevo: "Natu",
 },
+
 mareep: {
 num: 179,
 name: "Mareep",
-types: ["Electric"],
+types: ["Electric", "Normal"],
 baseStats: {hp: 55, atk: 40, def: 40, spa: 65, spd: 45, spe: 35},
 abilities: {0: "Static", H: "Plus"},
 weightkg: 7.8,
 evos: ["Flaaffy"],
 },
+
 flaaffy: {
 num: 180,
 name: "Flaaffy",
-types: ["Electric"],
+types: ["Electric", "Normal"],
 baseStats: {hp: 70, atk: 55, def: 55, spa: 80, spd: 60, spe: 45},
 abilities: {0: "Static", H: "Plus"},
 weightkg: 13.3,
 prevo: "Mareep",
 evos: ["Ampharos"],
 },
+
 ampharos: {
 num: 181,
 name: "Ampharos",
-types: ["Electric"],
+types: ["Electric", "Dragon"],
 baseStats: {hp: 90, atk: 75, def: 85, spa: 115, spd: 90, spe: 55},
 abilities: {0: "Static", H: "Plus"},
 weightkg: 61.5,
@@ -2731,6 +3018,7 @@ prevo: "Flaaffy",
 otherFormes: ["Ampharos-Mega"],
 formeOrder: ["Ampharos", "Ampharos-Mega"],
 },
+
 ampharosmega: {
 num: 181,
 name: "Ampharos-Mega",
@@ -2741,10 +3029,11 @@ baseStats: {hp: 90, atk: 95, def: 105, spa: 165, spd: 110, spe: 45},
 abilities: {0: "Mold Breaker"},
 weightkg: 61.5,
 },
+
 bellossom: {
 num: 182,
 name: "Bellossom",
-types: ["Grass"],
+types: ["Grass", "Fire"],
 baseStats: {hp: 75, atk: 80, def: 95, spa: 90, spd: 100, spe: 50},
 abilities: {0: "Chlorophyll", H: "Healer"},
 weightkg: 5.8,
@@ -2752,6 +3041,7 @@ prevo: "Gloom",
 evoType: "useItem",
 evoItem: "Sun Stone",
 },
+
 marill: {
 num: 183,
 name: "Marill",
@@ -2764,6 +3054,7 @@ evoType: "levelFriendship",
 evos: ["Azumarill"],
 canHatch: true,
 },
+
 azumarill: {
 num: 184,
 name: "Azumarill",
@@ -2773,10 +3064,11 @@ abilities: {0: "Thick Fat", 1: "Huge Power", H: "Sap Sipper"},
 weightkg: 28.5,
 prevo: "Marill",
 },
+
 sudowoodo: {
 num: 185,
 name: "Sudowoodo",
-types: ["Rock"],
+types: ["Rock", "Grass"],
 baseStats: {hp: 70, atk: 100, def: 115, spa: 30, spd: 65, spe: 30},
 abilities: {0: "Sturdy", 1: "Rock Head", H: "Rattled"},
 weightkg: 38,
@@ -2785,10 +3077,11 @@ evoType: "levelMove",
 evoMove: "Mimic",
 canHatch: true,
 },
+
 politoed: {
 num: 186,
 name: "Politoed",
-types: ["Water"],
+types: ["Poison", "Psychic"],
 baseStats: {hp: 90, atk: 75, def: 75, spa: 90, spd: 100, spe: 70},
 abilities: {0: "Water Absorb", 1: "Damp", H: "Drizzle"},
 weightkg: 33.9,
@@ -2796,6 +3089,7 @@ prevo: "Poliwhirl",
 evoType: "trade",
 evoItem: "King's Rock",
 },
+
 hoppip: {
 num: 187,
 name: "Hoppip",
@@ -2805,6 +3099,7 @@ abilities: {0: "Chlorophyll", 1: "Leaf Guard", H: "Infiltrator"},
 weightkg: 0.5,
 evos: ["Skiploom"],
 },
+
 skiploom: {
 num: 188,
 name: "Skiploom",
@@ -2815,6 +3110,7 @@ weightkg: 1,
 prevo: "Hoppip",
 evos: ["Jumpluff"],
 },
+
 jumpluff: {
 num: 189,
 name: "Jumpluff",
@@ -2824,15 +3120,17 @@ abilities: {0: "Chlorophyll", 1: "Leaf Guard", H: "Infiltrator"},
 weightkg: 3,
 prevo: "Skiploom",
 },
+
 aipom: {
 num: 190,
 name: "Aipom",
-types: ["Normal"],
+types: ["Normal", "Poison"],
 baseStats: {hp: 55, atk: 70, def: 55, spa: 40, spd: 55, spe: 85},
 abilities: {0: "Run Away", 1: "Pickup", H: "Skill Link"},
 weightkg: 11.5,
 evos: ["Ambipom"],
 },
+
 sunkern: {
 num: 191,
 name: "Sunkern",
@@ -2842,10 +3140,11 @@ abilities: {0: "Chlorophyll", 1: "Solar Power", H: "Early Bird"},
 weightkg: 1.8,
 evos: ["Sunflora"],
 },
+
 sunflora: {
 num: 192,
 name: "Sunflora",
-types: ["Grass"],
+types: ["Grass", "Fire"],
 baseStats: {hp: 75, atk: 75, def: 55, spa: 105, spd: 85, spe: 30},
 abilities: {0: "Chlorophyll", 1: "Solar Power", H: "Early Bird"},
 weightkg: 8.5,
@@ -2853,6 +3152,7 @@ prevo: "Sunkern",
 evoType: "useItem",
 evoItem: "Sun Stone",
 },
+
 yanma: {
 num: 193,
 name: "Yanma",
@@ -2862,6 +3162,7 @@ abilities: {0: "Speed Boost", 1: "Compound Eyes", H: "Frisk"},
 weightkg: 38,
 evos: ["Yanmega"],
 },
+
 wooper: {
 num: 194,
 name: "Wooper",
@@ -2873,6 +3174,7 @@ evos: ["Quagsire"],
 otherFormes: ["Wooper-Paldea"],
 formeOrder: ["Wooper", "Wooper-Paldea"],
 },
+
 wooperpaldea: {
 num: 194,
 name: "Wooper-Paldea",
@@ -2884,6 +3186,7 @@ abilities: {0: "Poison Point", 1: "Water Absorb", H: "Unaware"},
 weightkg: 8.5,
 evos: ["Clodsire"],
 },
+
 quagsire: {
 num: 195,
 name: "Quagsire",
@@ -2893,10 +3196,11 @@ abilities: {0: "Damp", 1: "Water Absorb", H: "Unaware"},
 weightkg: 75,
 prevo: "Wooper",
 },
+
 espeon: {
 num: 196,
 name: "Espeon",
-types: ["Psychic"],
+types: ["Psychic", "Normal"],
 baseStats: {hp: 65, atk: 65, def: 60, spa: 130, spd: 95, spe: 110},
 abilities: {0: "Synchronize", H: "Magic Bounce"},
 weightkg: 26.5,
@@ -2904,10 +3208,11 @@ prevo: "Eevee",
 evoType: "levelFriendship",
 evoCondition: "during the day",
 },
+
 umbreon: {
 num: 197,
 name: "Umbreon",
-types: ["Dark"],
+types: ["Dark", "Normal"],
 baseStats: {hp: 95, atk: 65, def: 110, spa: 60, spd: 130, spe: 65},
 abilities: {0: "Synchronize", H: "Inner Focus"},
 weightkg: 27,
@@ -2915,6 +3220,7 @@ prevo: "Eevee",
 evoType: "levelFriendship",
 evoCondition: "at night",
 },
+
 murkrow: {
 num: 198,
 name: "Murkrow",
@@ -2924,10 +3230,11 @@ abilities: {0: "Insomnia", 1: "Super Luck", H: "Prankster"},
 weightkg: 2.1,
 evos: ["Honchkrow"],
 },
+
 slowking: {
 num: 199,
 name: "Slowking",
-types: ["Water", "Psychic"],
+types: ["Water", "Poison"],
 baseStats: {hp: 95, atk: 75, def: 80, spa: 100, spd: 110, spe: 30},
 abilities: {0: "Oblivious", 1: "Own Tempo", H: "Regenerator"},
 weightkg: 79.5,
@@ -2937,12 +3244,13 @@ evoItem: "King's Rock",
 otherFormes: ["Slowking-Galar"],
 formeOrder: ["Slowking", "Slowking-Galar"],
 },
+
 slowkinggalar: {
 num: 199,
 name: "Slowking-Galar",
 baseSpecies: "Slowking",
 forme: "Galar",
-types: ["Poison", "Psychic"],
+types: ["Poison", "Dark"],
 baseStats: {hp: 95, atk: 65, def: 80, spa: 110, spd: 110, spe: 30},
 abilities: {0: "Curious Medicine", 1: "Own Tempo", H: "Regenerator"},
 weightkg: 79.5,
@@ -2950,36 +3258,40 @@ prevo: "Slowpoke-Galar",
 evoType: "useItem",
 evoItem: "Galarica Wreath",
 },
+
 misdreavus: {
 num: 200,
 name: "Misdreavus",
-types: ["Ghost"],
+types: ["Ghost", "Fairy"],
 baseStats: {hp: 60, atk: 60, def: 60, spa: 85, spd: 85, spe: 85},
 abilities: {0: "Levitate"},
 weightkg: 1,
 evos: ["Mismagius"],
 },
+
 unown: {
 num: 201,
 name: "Unown",
 baseForme: "A",
-types: ["Psychic"],
+types: ["???"],
 baseStats: {hp: 48, atk: 72, def: 48, spa: 72, spd: 48, spe: 48},
 abilities: {0: "Levitate"},
 weightkg: 5,
 cosmeticFormes: ["Unown-B", "Unown-C", "Unown-D", "Unown-E", "Unown-F", "Unown-G", "Unown-H", "Unown-I", "Unown-J", "Unown-K", "Unown-L", "Unown-M", "Unown-N", "Unown-O", "Unown-P", "Unown-Q", "Unown-R", "Unown-S", "Unown-T", "Unown-U", "Unown-V", "Unown-W", "Unown-X", "Unown-Y", "Unown-Z", "Unown-Exclamation", "Unown-Question"],
 formeOrder: ["Unown", "Unown-B", "Unown-C", "Unown-D", "Unown-E", "Unown-F", "Unown-G", "Unown-H", "Unown-I", "Unown-J", "Unown-K", "Unown-L", "Unown-M", "Unown-N", "Unown-O", "Unown-P", "Unown-Q", "Unown-R", "Unown-S", "Unown-T", "Unown-U", "Unown-V", "Unown-W", "Unown-X", "Unown-Y", "Unown-Z", "Unown-Exclamation", "Unown-Question"],
 },
+
 wobbuffet: {
 num: 202,
 name: "Wobbuffet",
-types: ["Psychic"],
+types: ["???"],
 baseStats: {hp: 190, atk: 33, def: 58, spa: 33, spd: 58, spe: 33},
 abilities: {0: "Shadow Tag", H: "Telepathy"},
 weightkg: 28.5,
 prevo: "Wynaut",
 canHatch: true,
 },
+
 girafarig: {
 num: 203,
 name: "Girafarig",
@@ -2989,6 +3301,7 @@ abilities: {0: "Inner Focus", 1: "Early Bird", H: "Sap Sipper"},
 weightkg: 41.5,
 evos: ["Farigiraf"],
 },
+
 pineco: {
 num: 204,
 name: "Pineco",
@@ -2998,24 +3311,27 @@ abilities: {0: "Sturdy", H: "Overcoat"},
 weightkg: 7.2,
 evos: ["Forretress"],
 },
+
 forretress: {
 num: 205,
 name: "Forretress",
-types: ["Bug", "Steel"],
+types: ["Bug", "Ground"],
 baseStats: {hp: 75, atk: 90, def: 140, spa: 60, spd: 60, spe: 40},
 abilities: {0: "Sturdy", H: "Overcoat"},
 weightkg: 125.8,
 prevo: "Pineco",
 },
+
 dunsparce: {
 num: 206,
 name: "Dunsparce",
-types: ["Normal"],
+types: ["Normal", "Bug"],
 baseStats: {hp: 100, atk: 70, def: 70, spa: 65, spd: 65, spe: 45},
 abilities: {0: "Serene Grace", 1: "Run Away", H: "Rattled"},
 weightkg: 14,
 evos: ["Dudunsparce", "Dudunsparce-Three-Segment"],
 },
+
 gligar: {
 num: 207,
 name: "Gligar",
@@ -3025,6 +3341,7 @@ abilities: {0: "Hyper Cutter", 1: "Sand Veil", H: "Immunity"},
 weightkg: 64.8,
 evos: ["Gliscor"],
 },
+
 steelix: {
 num: 208,
 name: "Steelix",
@@ -3038,6 +3355,7 @@ evoItem: "Metal Coat",
 otherFormes: ["Steelix-Mega"],
 formeOrder: ["Steelix", "Steelix-Mega"],
 },
+
 steelixmega: {
 num: 208,
 name: "Steelix-Mega",
@@ -3048,34 +3366,40 @@ baseStats: {hp: 75, atk: 125, def: 230, spa: 55, spd: 95, spe: 30},
 abilities: {0: "Sand Force"},
 weightkg: 740,
 },
+
 snubbull: {
 num: 209,
 name: "Snubbull",
-types: ["Fairy"],
+types: ["Ground", "Fighting"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 60, atk: 80, def: 50, spa: 40, spd: 40, spe: 30},
 abilities: {0: "Intimidate", 1: "Run Away", H: "Rattled"},
 weightkg: 7.8,
 evos: ["Granbull"],
 },
+
 granbull: {
 num: 210,
 name: "Granbull",
-types: ["Fairy"],
+types: ["Ground", "Fighting"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 90, atk: 120, def: 75, spa: 60, spd: 60, spe: 45},
 abilities: {0: "Intimidate", 1: "Quick Feet", H: "Rattled"},
 weightkg: 48.7,
 prevo: "Snubbull",
 },
+
 qwilfish: {
 num: 211,
 name: "Qwilfish",
-types: ["Water", "Poison"],
+types: ["Ice", "Poison"],
 baseStats: {hp: 65, atk: 95, def: 85, spa: 55, spd: 55, spe: 85},
 abilities: {0: "Poison Point", 1: "Swift Swim", H: "Intimidate"},
 weightkg: 3.9,
 otherFormes: ["Qwilfish-Hisui"],
 formeOrder: ["Qwilfish", "Qwilfish-Hisui"],
 },
+
 qwilfishhisui: {
 num: 211,
 name: "Qwilfish-Hisui",
@@ -3087,6 +3411,7 @@ abilities: {0: "Poison Point", 1: "Swift Swim", H: "Intimidate"},
 weightkg: 3.9,
 evos: ["Overqwil"],
 },
+
 scizor: {
 num: 212,
 name: "Scizor",
@@ -3100,6 +3425,7 @@ evoItem: "Metal Coat",
 otherFormes: ["Scizor-Mega"],
 formeOrder: ["Scizor", "Scizor-Mega"],
 },
+
 scizormega: {
 num: 212,
 name: "Scizor-Mega",
@@ -3110,6 +3436,7 @@ baseStats: {hp: 70, atk: 150, def: 140, spa: 65, spd: 100, spe: 75},
 abilities: {0: "Technician"},
 weightkg: 125,
 },
+
 shuckle: {
 num: 213,
 name: "Shuckle",
@@ -3118,6 +3445,7 @@ baseStats: {hp: 20, atk: 10, def: 230, spa: 10, spd: 230, spe: 5},
 abilities: {0: "Sturdy", 1: "Gluttony", H: "Contrary"},
 weightkg: 20.5,
 },
+
 heracross: {
 num: 214,
 name: "Heracross",
@@ -3128,6 +3456,7 @@ weightkg: 54,
 otherFormes: ["Heracross-Mega"],
 formeOrder: ["Heracross", "Heracross-Mega"],
 },
+
 heracrossmega: {
 num: 214,
 name: "Heracross-Mega",
@@ -3138,6 +3467,7 @@ baseStats: {hp: 80, atk: 185, def: 115, spa: 40, spd: 105, spe: 75},
 abilities: {0: "Skill Link"},
 weightkg: 62.5,
 },
+
 sneasel: {
 num: 215,
 name: "Sneasel",
@@ -3149,6 +3479,7 @@ evos: ["Weavile"],
 otherFormes: ["Sneasel-Hisui"],
 formeOrder: ["Sneasel", "Sneasel-Hisui"],
 },
+
 sneaselhisui: {
 num: 215,
 name: "Sneasel-Hisui",
@@ -3160,6 +3491,7 @@ abilities: {0: "Inner Focus", 1: "Keen Eye", H: "Pickpocket"},
 weightkg: 27,
 evos: ["Sneasler"],
 },
+
 teddiursa: {
 num: 216,
 name: "Teddiursa",
@@ -3169,6 +3501,7 @@ abilities: {0: "Pickup", 1: "Quick Feet", H: "Honey Gather"},
 weightkg: 8.8,
 evos: ["Ursaring"],
 },
+
 ursaring: {
 num: 217,
 name: "Ursaring",
@@ -3179,6 +3512,7 @@ weightkg: 125.8,
 prevo: "Teddiursa",
 evos: ["Ursaluna"],
 },
+
 slugma: {
 num: 218,
 name: "Slugma",
@@ -3188,6 +3522,7 @@ abilities: {0: "Magma Armor", 1: "Flame Body", H: "Weak Armor"},
 weightkg: 35,
 evos: ["Magcargo"],
 },
+
 magcargo: {
 num: 219,
 name: "Magcargo",
@@ -3197,6 +3532,7 @@ abilities: {0: "Magma Armor", 1: "Flame Body", H: "Weak Armor"},
 weightkg: 55,
 prevo: "Slugma",
 },
+
 swinub: {
 num: 220,
 name: "Swinub",
@@ -3206,6 +3542,7 @@ abilities: {0: "Oblivious", 1: "Snow Cloak", H: "Thick Fat"},
 weightkg: 6.5,
 evos: ["Piloswine"],
 },
+
 piloswine: {
 num: 221,
 name: "Piloswine",
@@ -3216,45 +3553,52 @@ weightkg: 55.8,
 prevo: "Swinub",
 evos: ["Mamoswine"],
 },
+
 corsola: {
 num: 222,
 name: "Corsola",
 types: ["Water", "Rock"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 65, atk: 55, def: 95, spa: 65, spd: 95, spe: 35},
 abilities: {0: "Hustle", 1: "Natural Cure", H: "Regenerator"},
 weightkg: 5,
 otherFormes: ["Corsola-Galar"],
 formeOrder: ["Corsola", "Corsola-Galar"],
 },
+
 corsolagalar: {
 num: 222,
 name: "Corsola-Galar",
 baseSpecies: "Corsola",
 forme: "Galar",
-types: ["Ghost"],
+types: ["Ghost", "Rock"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 60, atk: 55, def: 100, spa: 65, spd: 100, spe: 30},
 abilities: {0: "Weak Armor", H: "Cursed Body"},
 weightkg: 0.5,
 evos: ["Cursola"],
 },
+
 remoraid: {
 num: 223,
 name: "Remoraid",
-types: ["Water"],
+types: ["Ice"],
 baseStats: {hp: 35, atk: 65, def: 35, spa: 65, spd: 35, spe: 65},
 abilities: {0: "Hustle", 1: "Sniper", H: "Moody"},
 weightkg: 12,
 evos: ["Octillery"],
 },
+
 octillery: {
 num: 224,
 name: "Octillery",
-types: ["Water"],
+types: ["Ice", "Fighting"],
 baseStats: {hp: 75, atk: 105, def: 75, spa: 105, spd: 75, spe: 45},
 abilities: {0: "Suction Cups", 1: "Sniper", H: "Moody"},
 weightkg: 28.5,
 prevo: "Remoraid",
 },
+
 delibird: {
 num: 225,
 name: "Delibird",
@@ -3263,6 +3607,7 @@ baseStats: {hp: 45, atk: 55, def: 45, spa: 65, spd: 45, spe: 75},
 abilities: {0: "Vital Spirit", 1: "Hustle", H: "Insomnia"},
 weightkg: 16,
 },
+
 mantine: {
 num: 226,
 name: "Mantine",
@@ -3275,6 +3620,7 @@ evoType: "levelExtra",
 evoCondition: "with a Remoraid in party",
 canHatch: true,
 },
+
 skarmory: {
 num: 227,
 name: "Skarmory",
@@ -3283,6 +3629,7 @@ baseStats: {hp: 65, atk: 80, def: 140, spa: 40, spd: 70, spe: 70},
 abilities: {0: "Keen Eye", 1: "Sturdy", H: "Weak Armor"},
 weightkg: 50.5,
 },
+
 houndour: {
 num: 228,
 name: "Houndour",
@@ -3292,6 +3639,7 @@ abilities: {0: "Early Bird", 1: "Flash Fire", H: "Unnerve"},
 weightkg: 10.8,
 evos: ["Houndoom"],
 },
+
 houndoom: {
 num: 229,
 name: "Houndoom",
@@ -3303,6 +3651,7 @@ prevo: "Houndour",
 otherFormes: ["Houndoom-Mega"],
 formeOrder: ["Houndoom", "Houndoom-Mega"],
 },
+
 houndoommega: {
 num: 229,
 name: "Houndoom-Mega",
@@ -3313,10 +3662,11 @@ baseStats: {hp: 75, atk: 90, def: 90, spa: 140, spd: 90, spe: 115},
 abilities: {0: "Solar Power"},
 weightkg: 49.5,
 },
+
 kingdra: {
 num: 230,
 name: "Kingdra",
-types: ["Water", "Dragon"],
+types: ["Ice", "Dragon"],
 baseStats: {hp: 75, atk: 95, def: 95, spa: 95, spd: 95, spe: 85},
 abilities: {0: "Swift Swim", 1: "Sniper", H: "Damp"},
 weightkg: 152,
@@ -3324,6 +3674,7 @@ prevo: "Seadra",
 evoType: "trade",
 evoItem: "Dragon Scale",
 },
+
 phanpy: {
 num: 231,
 name: "Phanpy",
@@ -3333,19 +3684,21 @@ abilities: {0: "Pickup", H: "Sand Veil"},
 weightkg: 33.5,
 evos: ["Donphan"],
 },
+
 donphan: {
 num: 232,
 name: "Donphan",
-types: ["Ground"],
+types: ["Ground", "Fighting"],
 baseStats: {hp: 90, atk: 120, def: 120, spa: 60, spd: 60, spe: 50},
 abilities: {0: "Sturdy", H: "Sand Veil"},
 weightkg: 120,
 prevo: "Phanpy",
 },
+
 porygon2: {
 num: 233,
 name: "Porygon2",
-types: ["Normal"],
+types: ["Electric", "Psychic"],
 baseStats: {hp: 85, atk: 80, def: 90, spa: 105, spd: 95, spe: 60},
 abilities: {0: "Trace", 1: "Download", H: "Analytic"},
 weightkg: 32.5,
@@ -3354,6 +3707,7 @@ evoType: "trade",
 evoItem: "Up-Grade",
 evos: ["Porygon-Z"],
 },
+
 stantler: {
 num: 234,
 name: "Stantler",
@@ -3363,6 +3717,7 @@ abilities: {0: "Intimidate", 1: "Frisk", H: "Sap Sipper"},
 weightkg: 71.2,
 evos: ["Wyrdeer"],
 },
+
 smeargle: {
 num: 235,
 name: "Smeargle",
@@ -3371,6 +3726,7 @@ baseStats: {hp: 55, atk: 20, def: 35, spa: 20, spd: 45, spe: 75},
 abilities: {0: "Own Tempo", 1: "Technician", H: "Moody"},
 weightkg: 58,
 },
+
 tyrogue: {
 num: 236,
 name: "Tyrogue",
@@ -3381,16 +3737,18 @@ weightkg: 21,
 evos: ["Hitmonlee", "Hitmonchan", "Hitmontop"],
 canHatch: true,
 },
+
 hitmontop: {
 num: 237,
 name: "Hitmontop",
-types: ["Fighting"],
+types: ["Fighting", "Poison"],
 baseStats: {hp: 50, atk: 95, def: 95, spa: 35, spd: 110, spe: 70},
 abilities: {0: "Intimidate", 1: "Technician", H: "Steadfast"},
 weightkg: 48,
 prevo: "Tyrogue",
 evoCondition: "with an Atk stat equal to its Def stat",
 },
+
 smoochum: {
 num: 238,
 name: "Smoochum",
@@ -3401,44 +3759,51 @@ weightkg: 6,
 evos: ["Jynx"],
 canHatch: true,
 },
+
 elekid: {
 num: 239,
 name: "Elekid",
 types: ["Electric"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 45, atk: 63, def: 37, spa: 65, spd: 55, spe: 95},
 abilities: {0: "Static", H: "Vital Spirit"},
 weightkg: 23.5,
 evos: ["Electabuzz"],
 canHatch: true,
 },
+
 magby: {
 num: 240,
 name: "Magby",
 types: ["Fire"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 45, atk: 75, def: 37, spa: 70, spd: 55, spe: 83},
 abilities: {0: "Flame Body", H: "Vital Spirit"},
 weightkg: 21.4,
 evos: ["Magmar"],
 canHatch: true,
 },
+
 miltank: {
 num: 241,
 name: "Miltank",
-types: ["Normal"],
+types: ["Normal", "Rock"],
 baseStats: {hp: 95, atk: 80, def: 105, spa: 40, spd: 70, spe: 100},
 abilities: {0: "Thick Fat", 1: "Scrappy", H: "Sap Sipper"},
 weightkg: 75.5,
 },
+
 blissey: {
 num: 242,
 name: "Blissey",
-types: ["Normal"],
+types: ["Normal", "Fairy"],
 baseStats: {hp: 255, atk: 10, def: 10, spa: 75, spd: 135, spe: 55},
 abilities: {0: "Natural Cure", 1: "Serene Grace", H: "Healer"},
 weightkg: 46.8,
 prevo: "Chansey",
 evoType: "levelFriendship",
 },
+
 raikou: {
 num: 243,
 name: "Raikou",
@@ -3447,6 +3812,7 @@ baseStats: {hp: 90, atk: 85, def: 75, spa: 115, spd: 100, spe: 115},
 abilities: {0: "Pressure", H: "Inner Focus"},
 weightkg: 178,
 },
+
 entei: {
 num: 244,
 name: "Entei",
@@ -3455,14 +3821,16 @@ baseStats: {hp: 115, atk: 115, def: 85, spa: 90, spd: 75, spe: 100},
 abilities: {0: "Pressure", H: "Inner Focus"},
 weightkg: 198,
 },
+
 suicune: {
 num: 245,
 name: "Suicune",
-types: ["Water"],
+types: ["Ice"],
 baseStats: {hp: 100, atk: 75, def: 115, spa: 90, spd: 115, spe: 85},
 abilities: {0: "Pressure", H: "Inner Focus"},
 weightkg: 187,
 },
+
 larvitar: {
 num: 246,
 name: "Larvitar",
@@ -3472,6 +3840,7 @@ abilities: {0: "Guts", H: "Sand Veil"},
 weightkg: 72,
 evos: ["Pupitar"],
 },
+
 pupitar: {
 num: 247,
 name: "Pupitar",
@@ -3482,6 +3851,7 @@ weightkg: 152,
 prevo: "Larvitar",
 evos: ["Tyranitar"],
 },
+
 tyranitar: {
 num: 248,
 name: "Tyranitar",
@@ -3493,6 +3863,7 @@ prevo: "Pupitar",
 otherFormes: ["Tyranitar-Mega"],
 formeOrder: ["Tyranitar", "Tyranitar-Mega"],
 },
+
 tyranitarmega: {
 num: 248,
 name: "Tyranitar-Mega",
@@ -3503,30 +3874,34 @@ baseStats: {hp: 100, atk: 164, def: 150, spa: 95, spd: 120, spe: 71},
 abilities: {0: "Sand Stream"},
 weightkg: 255,
 },
+
 lugia: {
 num: 249,
 name: "Lugia",
-types: ["Psychic", "Flying"],
+types: ["Water", "Dragon"],
 baseStats: {hp: 106, atk: 90, def: 130, spa: 90, spd: 154, spe: 110},
 abilities: {0: "Pressure", H: "Multiscale"},
 weightkg: 216,
 },
+
 hooh: {
 num: 250,
 name: "Ho-Oh",
-types: ["Fire", "Flying"],
+types: ["Fire", "Dragon"],
 baseStats: {hp: 106, atk: 130, def: 90, spa: 110, spd: 154, spe: 90},
 abilities: {0: "Pressure", H: "Regenerator"},
 weightkg: 199,
 },
+
 celebi: {
 num: 251,
 name: "Celebi",
-types: ["Psychic", "Grass"],
+types: ["Fairy", "Grass"],
 baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
 abilities: {0: "Natural Cure"},
 weightkg: 5,
 },
+
 treecko: {
 num: 252,
 name: "Treecko",
@@ -3536,6 +3911,7 @@ abilities: {0: "Overgrow", H: "Unburden"},
 weightkg: 5,
 evos: ["Grovyle"],
 },
+
 grovyle: {
 num: 253,
 name: "Grovyle",
@@ -3546,10 +3922,11 @@ weightkg: 21.6,
 prevo: "Treecko",
 evos: ["Sceptile"],
 },
+
 sceptile: {
 num: 254,
 name: "Sceptile",
-types: ["Grass"],
+types: ["Grass", "Dragon"],
 baseStats: {hp: 70, atk: 85, def: 65, spa: 105, spd: 85, spe: 120},
 abilities: {0: "Overgrow", H: "Unburden"},
 weightkg: 52.2,
@@ -3557,6 +3934,7 @@ prevo: "Grovyle",
 otherFormes: ["Sceptile-Mega"],
 formeOrder: ["Sceptile", "Sceptile-Mega"],
 },
+
 sceptilemega: {
 num: 254,
 name: "Sceptile-Mega",
@@ -3567,6 +3945,7 @@ baseStats: {hp: 70, atk: 110, def: 75, spa: 145, spd: 85, spe: 145},
 abilities: {0: "Lightning Rod"},
 weightkg: 55.2,
 },
+
 torchic: {
 num: 255,
 name: "Torchic",
@@ -3576,6 +3955,7 @@ abilities: {0: "Blaze", H: "Speed Boost"},
 weightkg: 2.5,
 evos: ["Combusken"],
 },
+
 combusken: {
 num: 256,
 name: "Combusken",
@@ -3586,6 +3966,7 @@ weightkg: 19.5,
 prevo: "Torchic",
 evos: ["Blaziken"],
 },
+
 blaziken: {
 num: 257,
 name: "Blaziken",
@@ -3597,6 +3978,7 @@ prevo: "Combusken",
 otherFormes: ["Blaziken-Mega"],
 formeOrder: ["Blaziken", "Blaziken-Mega"],
 },
+
 blazikenmega: {
 num: 257,
 name: "Blaziken-Mega",
@@ -3607,6 +3989,7 @@ baseStats: {hp: 80, atk: 160, def: 80, spa: 130, spd: 80, spe: 100},
 abilities: {0: "Speed Boost"},
 weightkg: 52,
 },
+
 mudkip: {
 num: 258,
 name: "Mudkip",
@@ -3616,6 +3999,7 @@ abilities: {0: "Torrent", H: "Damp"},
 weightkg: 7.6,
 evos: ["Marshtomp"],
 },
+
 marshtomp: {
 num: 259,
 name: "Marshtomp",
@@ -3626,6 +4010,7 @@ weightkg: 28,
 prevo: "Mudkip",
 evos: ["Swampert"],
 },
+
 swampert: {
 num: 260,
 name: "Swampert",
@@ -3637,6 +4022,7 @@ prevo: "Marshtomp",
 otherFormes: ["Swampert-Mega"],
 formeOrder: ["Swampert", "Swampert-Mega"],
 },
+
 swampertmega: {
 num: 260,
 name: "Swampert-Mega",
@@ -3647,6 +4033,7 @@ baseStats: {hp: 100, atk: 150, def: 110, spa: 95, spd: 110, spe: 70},
 abilities: {0: "Swift Swim"},
 weightkg: 102,
 },
+
 poochyena: {
 num: 261,
 name: "Poochyena",
@@ -3656,6 +4043,7 @@ abilities: {0: "Run Away", 1: "Quick Feet", H: "Rattled"},
 weightkg: 13.6,
 evos: ["Mightyena"],
 },
+
 mightyena: {
 num: 262,
 name: "Mightyena",
@@ -3665,10 +4053,11 @@ abilities: {0: "Intimidate", 1: "Quick Feet", H: "Moxie"},
 weightkg: 37,
 prevo: "Poochyena",
 },
+
 zigzagoon: {
 num: 263,
 name: "Zigzagoon",
-types: ["Normal"],
+types: ["Ground"],
 baseStats: {hp: 38, atk: 30, def: 41, spa: 30, spd: 41, spe: 60},
 abilities: {0: "Pickup", 1: "Gluttony", H: "Quick Feet"},
 weightkg: 17.5,
@@ -3676,6 +4065,7 @@ evos: ["Linoone"],
 otherFormes: ["Zigzagoon-Galar"],
 formeOrder: ["Zigzagoon", "Zigzagoon-Galar"],
 },
+
 zigzagoongalar: {
 num: 263,
 name: "Zigzagoon-Galar",
@@ -3687,10 +4077,11 @@ abilities: {0: "Pickup", 1: "Gluttony", H: "Quick Feet"},
 weightkg: 17.5,
 evos: ["Linoone-Galar"],
 },
+
 linoone: {
 num: 264,
 name: "Linoone",
-types: ["Normal"],
+types: ["Ground", "Electric"],
 baseStats: {hp: 78, atk: 70, def: 61, spa: 50, spd: 61, spe: 100},
 abilities: {0: "Pickup", 1: "Gluttony", H: "Quick Feet"},
 weightkg: 32.5,
@@ -3698,6 +4089,7 @@ prevo: "Zigzagoon",
 otherFormes: ["Linoone-Galar"],
 formeOrder: ["Linoone", "Linoone-Galar"],
 },
+
 linoonegalar: {
 num: 264,
 name: "Linoone-Galar",
@@ -3710,6 +4102,7 @@ weightkg: 32.5,
 prevo: "Zigzagoon-Galar",
 evos: ["Obstagoon"],
 },
+
 wurmple: {
 num: 265,
 name: "Wurmple",
@@ -3719,6 +4112,7 @@ abilities: {0: "Shield Dust", H: "Run Away"},
 weightkg: 3.6,
 evos: ["Silcoon", "Cascoon"],
 },
+
 silcoon: {
 num: 266,
 name: "Silcoon",
@@ -3729,15 +4123,17 @@ weightkg: 10,
 prevo: "Wurmple",
 evos: ["Beautifly"],
 },
+
 beautifly: {
 num: 267,
 name: "Beautifly",
-types: ["Bug", "Flying"],
+types: ["Bug", "Fairy"],
 baseStats: {hp: 60, atk: 70, def: 50, spa: 100, spd: 50, spe: 65},
 abilities: {0: "Swarm", H: "Rivalry"},
 weightkg: 28.4,
 prevo: "Silcoon",
 },
+
 cascoon: {
 num: 268,
 name: "Cascoon",
@@ -3748,6 +4144,7 @@ weightkg: 11.5,
 prevo: "Wurmple",
 evos: ["Dustox"],
 },
+
 dustox: {
 num: 269,
 name: "Dustox",
@@ -3757,6 +4154,7 @@ abilities: {0: "Shield Dust", H: "Compound Eyes"},
 weightkg: 31.6,
 prevo: "Cascoon",
 },
+
 lotad: {
 num: 270,
 name: "Lotad",
@@ -3766,6 +4164,7 @@ abilities: {0: "Swift Swim", 1: "Rain Dish", H: "Own Tempo"},
 weightkg: 2.6,
 evos: ["Lombre"],
 },
+
 lombre: {
 num: 271,
 name: "Lombre",
@@ -3776,6 +4175,7 @@ weightkg: 32.5,
 prevo: "Lotad",
 evos: ["Ludicolo"],
 },
+
 ludicolo: {
 num: 272,
 name: "Ludicolo",
@@ -3787,6 +4187,7 @@ prevo: "Lombre",
 evoType: "useItem",
 evoItem: "Water Stone",
 },
+
 seedot: {
 num: 273,
 name: "Seedot",
@@ -3796,6 +4197,7 @@ abilities: {0: "Chlorophyll", 1: "Early Bird", H: "Pickpocket"},
 weightkg: 4,
 evos: ["Nuzleaf"],
 },
+
 nuzleaf: {
 num: 274,
 name: "Nuzleaf",
@@ -3806,6 +4208,7 @@ weightkg: 28,
 prevo: "Seedot",
 evos: ["Shiftry"],
 },
+
 shiftry: {
 num: 275,
 name: "Shiftry",
@@ -3817,24 +4220,27 @@ prevo: "Nuzleaf",
 evoType: "useItem",
 evoItem: "Leaf Stone",
 },
+
 taillow: {
 num: 276,
 name: "Taillow",
-types: ["Normal", "Flying"],
+types: ["Flying"],
 baseStats: {hp: 40, atk: 55, def: 30, spa: 30, spd: 30, spe: 85},
 abilities: {0: "Guts", H: "Scrappy"},
 weightkg: 2.3,
 evos: ["Swellow"],
 },
+
 swellow: {
 num: 277,
 name: "Swellow",
-types: ["Normal", "Flying"],
+types: ["Flying"],
 baseStats: {hp: 60, atk: 85, def: 60, spa: 75, spd: 50, spe: 125},
 abilities: {0: "Guts", H: "Scrappy"},
 weightkg: 19.8,
 prevo: "Taillow",
 },
+
 wingull: {
 num: 278,
 name: "Wingull",
@@ -3844,6 +4250,7 @@ abilities: {0: "Keen Eye", 1: "Hydration", H: "Rain Dish"},
 weightkg: 9.5,
 evos: ["Pelipper"],
 },
+
 pelipper: {
 num: 279,
 name: "Pelipper",
@@ -3853,6 +4260,7 @@ abilities: {0: "Keen Eye", 1: "Drizzle", H: "Rain Dish"},
 weightkg: 28,
 prevo: "Wingull",
 },
+
 ralts: {
 num: 280,
 name: "Ralts",
@@ -3862,6 +4270,7 @@ abilities: {0: "Synchronize", 1: "Trace", H: "Telepathy"},
 weightkg: 6.6,
 evos: ["Kirlia"],
 },
+
 kirlia: {
 num: 281,
 name: "Kirlia",
@@ -3872,6 +4281,7 @@ weightkg: 20.2,
 prevo: "Ralts",
 evos: ["Gardevoir", "Gallade"],
 },
+
 gardevoir: {
 num: 282,
 name: "Gardevoir",
@@ -3883,6 +4293,7 @@ prevo: "Kirlia",
 otherFormes: ["Gardevoir-Mega"],
 formeOrder: ["Gardevoir", "Gardevoir-Mega"],
 },
+
 gardevoirmega: {
 num: 282,
 name: "Gardevoir-Mega",
@@ -3893,6 +4304,7 @@ baseStats: {hp: 68, atk: 85, def: 65, spa: 165, spd: 135, spe: 100},
 abilities: {0: "Pixilate"},
 weightkg: 48.4,
 },
+
 surskit: {
 num: 283,
 name: "Surskit",
@@ -3902,15 +4314,17 @@ abilities: {0: "Swift Swim", H: "Rain Dish"},
 weightkg: 1.7,
 evos: ["Masquerain"],
 },
+
 masquerain: {
 num: 284,
 name: "Masquerain",
-types: ["Bug", "Flying"],
+types: ["Bug", "Water"],
 baseStats: {hp: 70, atk: 60, def: 62, spa: 100, spd: 82, spe: 80},
 abilities: {0: "Intimidate", H: "Unnerve"},
 weightkg: 3.6,
 prevo: "Surskit",
 },
+
 shroomish: {
 num: 285,
 name: "Shroomish",
@@ -3920,6 +4334,7 @@ abilities: {0: "Effect Spore", 1: "Poison Heal", H: "Quick Feet"},
 weightkg: 4.5,
 evos: ["Breloom"],
 },
+
 breloom: {
 num: 286,
 name: "Breloom",
@@ -3929,34 +4344,38 @@ abilities: {0: "Effect Spore", 1: "Poison Heal", H: "Technician"},
 weightkg: 39.2,
 prevo: "Shroomish",
 },
+
 slakoth: {
 num: 287,
 name: "Slakoth",
-types: ["Normal"],
+types: ["Normal", "Ground"],
 baseStats: {hp: 60, atk: 60, def: 60, spa: 35, spd: 35, spe: 30},
 abilities: {0: "Truant"},
 weightkg: 24,
 evos: ["Vigoroth"],
 },
+
 vigoroth: {
 num: 288,
 name: "Vigoroth",
-types: ["Normal"],
+types: ["Normal", "Ground"],
 baseStats: {hp: 80, atk: 80, def: 80, spa: 55, spd: 55, spe: 90},
 abilities: {0: "Vital Spirit"},
 weightkg: 46.5,
 prevo: "Slakoth",
 evos: ["Slaking"],
 },
+
 slaking: {
 num: 289,
 name: "Slaking",
-types: ["Normal"],
+types: ["Normal", "Ground"],
 baseStats: {hp: 150, atk: 160, def: 100, spa: 95, spd: 65, spe: 100},
 abilities: {0: "Truant"},
 weightkg: 130.5,
 prevo: "Vigoroth",
 },
+
 nincada: {
 num: 290,
 name: "Nincada",
@@ -3966,15 +4385,17 @@ abilities: {0: "Compound Eyes", H: "Run Away"},
 weightkg: 5.5,
 evos: ["Ninjask", "Shedinja"],
 },
+
 ninjask: {
 num: 291,
 name: "Ninjask",
-types: ["Bug", "Flying"],
+types: ["Bug", "Electric"],
 baseStats: {hp: 61, atk: 90, def: 45, spa: 50, spd: 50, spe: 160},
 abilities: {0: "Speed Boost", H: "Infiltrator"},
 weightkg: 12,
 prevo: "Nincada",
 },
+
 shedinja: {
 num: 292,
 name: "Shedinja",
@@ -3985,62 +4406,72 @@ abilities: {0: "Wonder Guard"},
 weightkg: 1.2,
 prevo: "Nincada",
 },
+
 whismur: {
 num: 293,
 name: "Whismur",
-types: ["Normal"],
+types: ["Poison"],
 baseStats: {hp: 64, atk: 51, def: 23, spa: 51, spd: 23, spe: 28},
 abilities: {0: "Soundproof", H: "Rattled"},
 weightkg: 16.3,
 evos: ["Loudred"],
 },
+
 loudred: {
 num: 294,
 name: "Loudred",
-types: ["Normal"],
+types: ["Poison"],
 baseStats: {hp: 84, atk: 71, def: 43, spa: 71, spd: 43, spe: 48},
 abilities: {0: "Soundproof", H: "Scrappy"},
 weightkg: 40.5,
 prevo: "Whismur",
 evos: ["Exploud"],
 },
+
 exploud: {
 num: 295,
 name: "Exploud",
-types: ["Normal"],
+types: ["Steel", "Poison"],
 baseStats: {hp: 104, atk: 91, def: 63, spa: 91, spd: 73, spe: 68},
 abilities: {0: "Soundproof", H: "Scrappy"},
 weightkg: 84,
 prevo: "Loudred",
 },
+
 makuhita: {
 num: 296,
 name: "Makuhita",
 types: ["Fighting"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 72, atk: 60, def: 30, spa: 20, spd: 30, spe: 25},
 abilities: {0: "Thick Fat", 1: "Guts", H: "Sheer Force"},
 weightkg: 86.4,
 evos: ["Hariyama"],
 },
+
 hariyama: {
 num: 297,
 name: "Hariyama",
 types: ["Fighting"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 144, atk: 120, def: 60, spa: 40, spd: 60, spe: 50},
 abilities: {0: "Thick Fat", 1: "Guts", H: "Sheer Force"},
 weightkg: 253.8,
 prevo: "Makuhita",
 },
+
 azurill: {
 num: 298,
 name: "Azurill",
 types: ["Normal", "Fairy"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 50, atk: 20, def: 40, spa: 20, spd: 40, spe: 20},
 abilities: {0: "Thick Fat", 1: "Huge Power", H: "Sap Sipper"},
 weightkg: 2,
 evos: ["Marill"],
 canHatch: true,
 },
+
 nosepass: {
 num: 299,
 name: "Nosepass",
@@ -4050,19 +4481,23 @@ abilities: {0: "Sturdy", 1: "Magnet Pull", H: "Sand Force"},
 weightkg: 97,
 evos: ["Probopass"],
 },
+
 skitty: {
 num: 300,
 name: "Skitty",
-types: ["Normal"],
+types: ["Psychic"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 50, atk: 45, def: 45, spa: 35, spd: 35, spe: 50},
 abilities: {0: "Cute Charm", 1: "Normalize", H: "Wonder Skin"},
 weightkg: 11,
 evos: ["Delcatty"],
 },
+
 delcatty: {
 num: 301,
 name: "Delcatty",
-types: ["Normal"],
+types: ["Psychic", "Dark"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 70, atk: 65, def: 65, spa: 55, spd: 55, spe: 90},
 abilities: {0: "Cute Charm", 1: "Normalize", H: "Wonder Skin"},
 weightkg: 32.6,
@@ -4070,26 +4505,29 @@ prevo: "Skitty",
 evoType: "useItem",
 evoItem: "Moon Stone",
 },
+
 sableye: {
 num: 302,
 name: "Sableye",
-types: ["Dark", "Ghost"],
+types: ["Rock", "Ghost"],
 baseStats: {hp: 50, atk: 75, def: 75, spa: 65, spd: 65, spe: 50},
 abilities: {0: "Keen Eye", 1: "Stall", H: "Prankster"},
 weightkg: 11,
 otherFormes: ["Sableye-Mega"],
 formeOrder: ["Sableye", "Sableye-Mega"],
 },
+
 sableyemega: {
 num: 302,
 name: "Sableye-Mega",
 baseSpecies: "Sableye",
 forme: "Mega",
-types: ["Dark", "Ghost"],
+types: ["Rock", "Ghost"],
 baseStats: {hp: 50, atk: 85, def: 125, spa: 85, spd: 115, spe: 20},
 abilities: {0: "Magic Bounce"},
 weightkg: 161,
 },
+
 mawile: {
 num: 303,
 name: "Mawile",
@@ -4100,6 +4538,7 @@ weightkg: 11.5,
 otherFormes: ["Mawile-Mega"],
 formeOrder: ["Mawile", "Mawile-Mega"],
 },
+
 mawilemega: {
 num: 303,
 name: "Mawile-Mega",
@@ -4110,6 +4549,7 @@ baseStats: {hp: 50, atk: 105, def: 125, spa: 55, spd: 95, spe: 50},
 abilities: {0: "Huge Power"},
 weightkg: 23.5,
 },
+
 aron: {
 num: 304,
 name: "Aron",
@@ -4119,6 +4559,7 @@ abilities: {0: "Sturdy", 1: "Rock Head", H: "Heavy Metal"},
 weightkg: 60,
 evos: ["Lairon"],
 },
+
 lairon: {
 num: 305,
 name: "Lairon",
@@ -4129,10 +4570,11 @@ weightkg: 120,
 prevo: "Aron",
 evos: ["Aggron"],
 },
+
 aggron: {
 num: 306,
 name: "Aggron",
-types: ["Steel", "Rock"],
+types: ["Steel", "Dragon"],
 baseStats: {hp: 70, atk: 110, def: 180, spa: 60, spd: 60, spe: 50},
 abilities: {0: "Sturdy", 1: "Rock Head", H: "Heavy Metal"},
 weightkg: 360,
@@ -4140,6 +4582,7 @@ prevo: "Lairon",
 otherFormes: ["Aggron-Mega"],
 formeOrder: ["Aggron", "Aggron-Mega"],
 },
+
 aggronmega: {
 num: 306,
 name: "Aggron-Mega",
@@ -4150,6 +4593,7 @@ baseStats: {hp: 70, atk: 140, def: 230, spa: 60, spd: 80, spe: 50},
 abilities: {0: "Filter"},
 weightkg: 395,
 },
+
 meditite: {
 num: 307,
 name: "Meditite",
@@ -4159,6 +4603,7 @@ abilities: {0: "Pure Power", H: "Telepathy"},
 weightkg: 11.2,
 evos: ["Medicham"],
 },
+
 medicham: {
 num: 308,
 name: "Medicham",
@@ -4170,6 +4615,7 @@ prevo: "Meditite",
 otherFormes: ["Medicham-Mega"],
 formeOrder: ["Medicham", "Medicham-Mega"],
 },
+
 medichammega: {
 num: 308,
 name: "Medicham-Mega",
@@ -4180,19 +4626,21 @@ baseStats: {hp: 60, atk: 100, def: 85, spa: 80, spd: 85, spe: 100},
 abilities: {0: "Pure Power"},
 weightkg: 31.5,
 },
+
 electrike: {
 num: 309,
 name: "Electrike",
-types: ["Electric"],
+types: ["Electric", "Grass"],
 baseStats: {hp: 40, atk: 45, def: 40, spa: 65, spd: 40, spe: 65},
 abilities: {0: "Static", 1: "Lightning Rod", H: "Minus"},
 weightkg: 15.2,
 evos: ["Manectric"],
 },
+
 manectric: {
 num: 310,
 name: "Manectric",
-types: ["Electric"],
+types: ["Electric", "Grass"],
 baseStats: {hp: 70, atk: 75, def: 60, spa: 105, spd: 60, spe: 105},
 abilities: {0: "Static", 1: "Lightning Rod", H: "Minus"},
 weightkg: 40.2,
@@ -4200,6 +4648,7 @@ prevo: "Electrike",
 otherFormes: ["Manectric-Mega"],
 formeOrder: ["Manectric", "Manectric-Mega"],
 },
+
 manectricmega: {
 num: 310,
 name: "Manectric-Mega",
@@ -4210,38 +4659,43 @@ baseStats: {hp: 70, atk: 75, def: 80, spa: 135, spd: 80, spe: 135},
 abilities: {0: "Intimidate"},
 weightkg: 44,
 },
+
 plusle: {
 num: 311,
 name: "Plusle",
-types: ["Electric"],
+types: ["Electric", "Fire"],
 baseStats: {hp: 60, atk: 50, def: 40, spa: 85, spd: 75, spe: 95},
 abilities: {0: "Plus", H: "Lightning Rod"},
 weightkg: 4.2,
 },
+
 minun: {
 num: 312,
 name: "Minun",
-types: ["Electric"],
+types: ["Electric", "Water"],
 baseStats: {hp: 60, atk: 40, def: 50, spa: 75, spd: 85, spe: 95},
 abilities: {0: "Minus", H: "Volt Absorb"},
 weightkg: 4.2,
 },
+
 volbeat: {
 num: 313,
 name: "Volbeat",
-types: ["Bug"],
+types: ["Bug", "Fire"],
 baseStats: {hp: 65, atk: 73, def: 75, spa: 47, spd: 85, spe: 85},
 abilities: {0: "Illuminate", 1: "Swarm", H: "Prankster"},
 weightkg: 17.7,
 },
+
 illumise: {
 num: 314,
 name: "Illumise",
-types: ["Bug"],
+types: ["Bug", "Ice"],
 baseStats: {hp: 65, atk: 47, def: 75, spa: 73, spd: 85, spe: 85},
 abilities: {0: "Oblivious", 1: "Tinted Lens", H: "Prankster"},
 weightkg: 17.7,
 },
+
 roselia: {
 num: 315,
 name: "Roselia",
@@ -4255,6 +4709,7 @@ evoCondition: "during the day",
 evos: ["Roserade"],
 canHatch: true,
 },
+
 gulpin: {
 num: 316,
 name: "Gulpin",
@@ -4264,6 +4719,7 @@ abilities: {0: "Liquid Ooze", 1: "Sticky Hold", H: "Gluttony"},
 weightkg: 10.3,
 evos: ["Swalot"],
 },
+
 swalot: {
 num: 317,
 name: "Swalot",
@@ -4273,6 +4729,7 @@ abilities: {0: "Liquid Ooze", 1: "Sticky Hold", H: "Gluttony"},
 weightkg: 80,
 prevo: "Gulpin",
 },
+
 carvanha: {
 num: 318,
 name: "Carvanha",
@@ -4282,6 +4739,7 @@ abilities: {0: "Rough Skin", H: "Speed Boost"},
 weightkg: 20.8,
 evos: ["Sharpedo"],
 },
+
 sharpedo: {
 num: 319,
 name: "Sharpedo",
@@ -4293,6 +4751,7 @@ prevo: "Carvanha",
 otherFormes: ["Sharpedo-Mega"],
 formeOrder: ["Sharpedo", "Sharpedo-Mega"],
 },
+
 sharpedomega: {
 num: 319,
 name: "Sharpedo-Mega",
@@ -4303,6 +4762,7 @@ baseStats: {hp: 70, atk: 140, def: 70, spa: 110, spd: 65, spe: 105},
 abilities: {0: "Strong Jaw"},
 weightkg: 130.3,
 },
+
 wailmer: {
 num: 320,
 name: "Wailmer",
@@ -4312,6 +4772,7 @@ abilities: {0: "Water Veil", 1: "Oblivious", H: "Pressure"},
 weightkg: 130,
 evos: ["Wailord"],
 },
+
 wailord: {
 num: 321,
 name: "Wailord",
@@ -4321,6 +4782,7 @@ abilities: {0: "Water Veil", 1: "Oblivious", H: "Pressure"},
 weightkg: 398,
 prevo: "Wailmer",
 },
+
 numel: {
 num: 322,
 name: "Numel",
@@ -4330,6 +4792,7 @@ abilities: {0: "Oblivious", 1: "Simple", H: "Own Tempo"},
 weightkg: 24,
 evos: ["Camerupt"],
 },
+
 camerupt: {
 num: 323,
 name: "Camerupt",
@@ -4341,6 +4804,7 @@ prevo: "Numel",
 otherFormes: ["Camerupt-Mega"],
 formeOrder: ["Camerupt", "Camerupt-Mega"],
 },
+
 cameruptmega: {
 num: 323,
 name: "Camerupt-Mega",
@@ -4351,68 +4815,76 @@ baseStats: {hp: 70, atk: 120, def: 100, spa: 145, spd: 105, spe: 20},
 abilities: {0: "Sheer Force"},
 weightkg: 320.5,
 },
+
 torkoal: {
 num: 324,
 name: "Torkoal",
-types: ["Fire"],
+types: ["Fire", "Steel"],
 baseStats: {hp: 70, atk: 85, def: 140, spa: 85, spd: 70, spe: 20},
 abilities: {0: "White Smoke", 1: "Drought", H: "Shell Armor"},
 weightkg: 80.4,
 },
+
 spoink: {
 num: 325,
 name: "Spoink",
-types: ["Psychic"],
+types: ["Dark", "Rock"],
 baseStats: {hp: 60, atk: 25, def: 35, spa: 70, spd: 80, spe: 60},
 abilities: {0: "Thick Fat", 1: "Own Tempo", H: "Gluttony"},
 weightkg: 30.6,
 evos: ["Grumpig"],
 },
+
 grumpig: {
 num: 326,
 name: "Grumpig",
-types: ["Psychic"],
+types: ["Dark", "Rock"],
 baseStats: {hp: 80, atk: 45, def: 65, spa: 90, spd: 110, spe: 80},
 abilities: {0: "Thick Fat", 1: "Own Tempo", H: "Gluttony"},
 weightkg: 71.5,
 prevo: "Spoink",
 },
+
 spinda: {
 num: 327,
 name: "Spinda",
-types: ["Normal"],
+types: ["Ground", "Psychic"],
 baseStats: {hp: 60, atk: 60, def: 60, spa: 60, spd: 60, spe: 60},
 abilities: {0: "Own Tempo", 1: "Tangled Feet", H: "Contrary"},
 weightkg: 5,
 },
+
 trapinch: {
 num: 328,
 name: "Trapinch",
-types: ["Ground"],
+types: ["Bug"],
 baseStats: {hp: 45, atk: 100, def: 45, spa: 45, spd: 45, spe: 10},
 abilities: {0: "Hyper Cutter", 1: "Arena Trap", H: "Sheer Force"},
 weightkg: 15,
 evos: ["Vibrava"],
 },
+
 vibrava: {
 num: 329,
 name: "Vibrava",
-types: ["Ground", "Dragon"],
+types: ["Bug", "Dragon"],
 baseStats: {hp: 50, atk: 70, def: 50, spa: 50, spd: 50, spe: 70},
 abilities: {0: "Levitate"},
 weightkg: 15.3,
 prevo: "Trapinch",
 evos: ["Flygon"],
 },
+
 flygon: {
 num: 330,
 name: "Flygon",
-types: ["Ground", "Dragon"],
+types: ["Bug", "Dragon"],
 baseStats: {hp: 80, atk: 100, def: 80, spa: 80, spd: 80, spe: 100},
 abilities: {0: "Levitate"},
 weightkg: 82,
 prevo: "Vibrava",
 },
+
 cacnea: {
 num: 331,
 name: "Cacnea",
@@ -4422,28 +4894,31 @@ abilities: {0: "Sand Veil", H: "Water Absorb"},
 weightkg: 51.3,
 evos: ["Cacturne"],
 },
+
 cacturne: {
 num: 332,
 name: "Cacturne",
-types: ["Grass", "Dark"],
+types: ["Grass", "Ground"],
 baseStats: {hp: 70, atk: 115, def: 60, spa: 115, spd: 60, spe: 55},
 abilities: {0: "Sand Veil", H: "Water Absorb"},
 weightkg: 77.4,
 prevo: "Cacnea",
 },
+
 swablu: {
 num: 333,
 name: "Swablu",
-types: ["Normal", "Flying"],
+types: ["Fairy", "Flying"],
 baseStats: {hp: 45, atk: 40, def: 60, spa: 40, spd: 75, spe: 50},
 abilities: {0: "Natural Cure", H: "Cloud Nine"},
 weightkg: 1.2,
 evos: ["Altaria"],
 },
+
 altaria: {
 num: 334,
 name: "Altaria",
-types: ["Dragon", "Flying"],
+types: ["Dragon", "Fairy"],
 baseStats: {hp: 75, atk: 70, def: 90, spa: 70, spd: 105, spe: 80},
 abilities: {0: "Natural Cure", H: "Cloud Nine"},
 weightkg: 20.6,
@@ -4451,6 +4926,7 @@ prevo: "Swablu",
 otherFormes: ["Altaria-Mega"],
 formeOrder: ["Altaria", "Altaria-Mega"],
 },
+
 altariamega: {
 num: 334,
 name: "Altaria-Mega",
@@ -4461,22 +4937,25 @@ baseStats: {hp: 75, atk: 110, def: 110, spa: 110, spd: 105, spe: 80},
 abilities: {0: "Pixilate"},
 weightkg: 20.6,
 },
+
 zangoose: {
 num: 335,
 name: "Zangoose",
-types: ["Normal"],
+types: ["Normal", "Electric"],
 baseStats: {hp: 73, atk: 115, def: 60, spa: 60, spd: 60, spe: 90},
 abilities: {0: "Immunity", H: "Toxic Boost"},
 weightkg: 40.3,
 },
+
 seviper: {
 num: 336,
 name: "Seviper",
-types: ["Poison"],
+types: ["Poison", "Steel"],
 baseStats: {hp: 73, atk: 100, def: 60, spa: 100, spd: 60, spe: 65},
 abilities: {0: "Shed Skin", H: "Infiltrator"},
 weightkg: 52.5,
 },
+
 lunatone: {
 num: 337,
 name: "Lunatone",
@@ -4485,32 +4964,36 @@ baseStats: {hp: 90, atk: 55, def: 65, spa: 95, spd: 85, spe: 70},
 abilities: {0: "Levitate"},
 weightkg: 168,
 },
+
 solrock: {
 num: 338,
 name: "Solrock",
-types: ["Rock", "Psychic"],
+types: ["Rock", "Fire"],
 baseStats: {hp: 90, atk: 95, def: 85, spa: 55, spd: 65, spe: 70},
 abilities: {0: "Levitate"},
 weightkg: 154,
 },
+
 barboach: {
 num: 339,
 name: "Barboach",
-types: ["Water", "Ground"],
+types: ["Ice", "Ground"],
 baseStats: {hp: 50, atk: 48, def: 43, spa: 46, spd: 41, spe: 60},
 abilities: {0: "Oblivious", 1: "Anticipation", H: "Hydration"},
 weightkg: 1.9,
 evos: ["Whiscash"],
 },
+
 whiscash: {
 num: 340,
 name: "Whiscash",
-types: ["Water", "Ground"],
+types: ["Ice", "Ground"],
 baseStats: {hp: 110, atk: 78, def: 73, spa: 76, spd: 71, spe: 60},
 abilities: {0: "Oblivious", 1: "Anticipation", H: "Hydration"},
 weightkg: 23.6,
 prevo: "Barboach",
 },
+
 corphish: {
 num: 341,
 name: "Corphish",
@@ -4520,6 +5003,7 @@ abilities: {0: "Hyper Cutter", 1: "Shell Armor", H: "Adaptability"},
 weightkg: 11.5,
 evos: ["Crawdaunt"],
 },
+
 crawdaunt: {
 num: 342,
 name: "Crawdaunt",
@@ -4529,6 +5013,7 @@ abilities: {0: "Hyper Cutter", 1: "Shell Armor", H: "Adaptability"},
 weightkg: 32.8,
 prevo: "Corphish",
 },
+
 baltoy: {
 num: 343,
 name: "Baltoy",
@@ -4538,6 +5023,7 @@ abilities: {0: "Levitate"},
 weightkg: 21.5,
 evos: ["Claydol"],
 },
+
 claydol: {
 num: 344,
 name: "Claydol",
@@ -4547,6 +5033,7 @@ abilities: {0: "Levitate"},
 weightkg: 108,
 prevo: "Baltoy",
 },
+
 lileep: {
 num: 345,
 name: "Lileep",
@@ -4556,6 +5043,7 @@ abilities: {0: "Suction Cups", H: "Storm Drain"},
 weightkg: 23.8,
 evos: ["Cradily"],
 },
+
 cradily: {
 num: 346,
 name: "Cradily",
@@ -4565,6 +5053,7 @@ abilities: {0: "Suction Cups", H: "Storm Drain"},
 weightkg: 60.4,
 prevo: "Lileep",
 },
+
 anorith: {
 num: 347,
 name: "Anorith",
@@ -4574,6 +5063,7 @@ abilities: {0: "Battle Armor", H: "Swift Swim"},
 weightkg: 12.5,
 evos: ["Armaldo"],
 },
+
 armaldo: {
 num: 348,
 name: "Armaldo",
@@ -4583,6 +5073,7 @@ abilities: {0: "Battle Armor", H: "Swift Swim"},
 weightkg: 68.2,
 prevo: "Anorith",
 },
+
 feebas: {
 num: 349,
 name: "Feebas",
@@ -4592,10 +5083,11 @@ abilities: {0: "Swift Swim", 1: "Oblivious", H: "Adaptability"},
 weightkg: 7.4,
 evos: ["Milotic"],
 },
+
 milotic: {
 num: 350,
 name: "Milotic",
-types: ["Water"],
+types: ["Dragon", "Fairy"],
 baseStats: {hp: 95, atk: 60, def: 79, spa: 100, spd: 125, spe: 81},
 abilities: {0: "Marvel Scale", 1: "Competitive", H: "Cute Charm"},
 weightkg: 162,
@@ -4603,16 +5095,18 @@ prevo: "Feebas",
 evoType: "trade",
 evoItem: "Prism Scale",
 },
+
 castform: {
 num: 351,
 name: "Castform",
-types: ["Normal"],
+types: ["???"],
 baseStats: {hp: 70, atk: 70, def: 70, spa: 70, spd: 70, spe: 70},
 abilities: {0: "Forecast"},
 weightkg: 0.8,
 otherFormes: ["Castform-Sunny", "Castform-Rainy", "Castform-Snowy"],
 formeOrder: ["Castform", "Castform-Sunny", "Castform-Rainy", "Castform-Snowy"],
 },
+
 castformsunny: {
 num: 351,
 name: "Castform-Sunny",
@@ -4625,6 +5119,7 @@ weightkg: 0.8,
 requiredAbility: "Forecast",
 battleOnly: "Castform",
 },
+
 castformrainy: {
 num: 351,
 name: "Castform-Rainy",
@@ -4637,6 +5132,7 @@ weightkg: 0.8,
 requiredAbility: "Forecast",
 battleOnly: "Castform",
 },
+
 castformsnowy: {
 num: 351,
 name: "Castform-Snowy",
@@ -4649,14 +5145,16 @@ weightkg: 0.8,
 requiredAbility: "Forecast",
 battleOnly: "Castform",
 },
+
 kecleon: {
 num: 352,
 name: "Kecleon",
-types: ["Normal"],
+types: ["???"],
 baseStats: {hp: 60, atk: 90, def: 70, spa: 60, spd: 120, spe: 40},
 abilities: {0: "Color Change", H: "Protean"},
 weightkg: 22,
 },
+
 shuppet: {
 num: 353,
 name: "Shuppet",
@@ -4666,6 +5164,7 @@ abilities: {0: "Insomnia", 1: "Frisk", H: "Cursed Body"},
 weightkg: 2.3,
 evos: ["Banette"],
 },
+
 banette: {
 num: 354,
 name: "Banette",
@@ -4677,6 +5176,7 @@ prevo: "Shuppet",
 otherFormes: ["Banette-Mega"],
 formeOrder: ["Banette", "Banette-Mega"],
 },
+
 banettemega: {
 num: 354,
 name: "Banette-Mega",
@@ -4687,6 +5187,7 @@ baseStats: {hp: 64, atk: 165, def: 75, spa: 93, spd: 83, spe: 75},
 abilities: {0: "Prankster"},
 weightkg: 13,
 },
+
 duskull: {
 num: 355,
 name: "Duskull",
@@ -4696,6 +5197,7 @@ abilities: {0: "Levitate", H: "Frisk"},
 weightkg: 15,
 evos: ["Dusclops"],
 },
+
 dusclops: {
 num: 356,
 name: "Dusclops",
@@ -4706,18 +5208,20 @@ weightkg: 30.6,
 prevo: "Duskull",
 evos: ["Dusknoir"],
 },
+
 tropius: {
 num: 357,
 name: "Tropius",
-types: ["Grass", "Flying"],
+types: ["Grass", "Dragon"],
 baseStats: {hp: 99, atk: 68, def: 83, spa: 72, spd: 87, spe: 51},
 abilities: {0: "Chlorophyll", 1: "Solar Power", H: "Harvest"},
 weightkg: 100,
 },
+
 chimecho: {
 num: 358,
 name: "Chimecho",
-types: ["Psychic"],
+types: ["Psychic", "Ghost"],
 baseStats: {hp: 75, atk: 50, def: 80, spa: 95, spd: 90, spe: 65},
 abilities: {0: "Levitate"},
 weightkg: 1,
@@ -4726,36 +5230,40 @@ evoType: "levelFriendship",
 evoCondition: "at night",
 canHatch: true,
 },
+
 absol: {
 num: 359,
 name: "Absol",
-types: ["Dark"],
+types: ["Dark", "Fairy"],
 baseStats: {hp: 65, atk: 130, def: 60, spa: 75, spd: 60, spe: 75},
 abilities: {0: "Pressure", 1: "Super Luck", H: "Justified"},
 weightkg: 47,
 otherFormes: ["Absol-Mega"],
 formeOrder: ["Absol", "Absol-Mega"],
 },
+
 absolmega: {
 num: 359,
 name: "Absol-Mega",
 baseSpecies: "Absol",
 forme: "Mega",
-types: ["Dark"],
+types: ["Dark", "Fairy"],
 baseStats: {hp: 65, atk: 150, def: 60, spa: 115, spd: 60, spe: 115},
 abilities: {0: "Magic Bounce"},
 weightkg: 49,
 },
+
 wynaut: {
 num: 360,
 name: "Wynaut",
-types: ["Psychic"],
+types: ["???"],
 baseStats: {hp: 95, atk: 23, def: 48, spa: 23, spd: 48, spe: 23},
 abilities: {0: "Shadow Tag", H: "Telepathy"},
 weightkg: 14,
 evos: ["Wobbuffet"],
 canHatch: true,
 },
+
 snorunt: {
 num: 361,
 name: "Snorunt",
@@ -4765,10 +5273,11 @@ abilities: {0: "Inner Focus", 1: "Ice Body", H: "Moody"},
 weightkg: 16.8,
 evos: ["Glalie", "Froslass"],
 },
+
 glalie: {
 num: 362,
 name: "Glalie",
-types: ["Ice"],
+types: ["Ice", "Steel"],
 baseStats: {hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 80},
 abilities: {0: "Inner Focus", 1: "Ice Body", H: "Moody"},
 weightkg: 256.5,
@@ -4776,16 +5285,18 @@ prevo: "Snorunt",
 otherFormes: ["Glalie-Mega"],
 formeOrder: ["Glalie", "Glalie-Mega"],
 },
+
 glaliemega: {
 num: 362,
 name: "Glalie-Mega",
 baseSpecies: "Glalie",
 forme: "Mega",
-types: ["Ice"],
+types: ["Ice", "Steel"],
 baseStats: {hp: 80, atk: 120, def: 80, spa: 120, spd: 80, spe: 100},
 abilities: {0: "Refrigerate"},
 weightkg: 350.2,
 },
+
 spheal: {
 num: 363,
 name: "Spheal",
@@ -4795,6 +5306,7 @@ abilities: {0: "Thick Fat", 1: "Ice Body", H: "Oblivious"},
 weightkg: 39.5,
 evos: ["Sealeo"],
 },
+
 sealeo: {
 num: 364,
 name: "Sealeo",
@@ -4805,6 +5317,7 @@ weightkg: 87.6,
 prevo: "Spheal",
 evos: ["Walrein"],
 },
+
 walrein: {
 num: 365,
 name: "Walrein",
@@ -4814,19 +5327,21 @@ abilities: {0: "Thick Fat", 1: "Ice Body", H: "Oblivious"},
 weightkg: 150.6,
 prevo: "Sealeo",
 },
+
 clamperl: {
 num: 366,
 name: "Clamperl",
-types: ["Water"],
+types: ["Ice"],
 baseStats: {hp: 35, atk: 64, def: 85, spa: 74, spd: 55, spe: 32},
 abilities: {0: "Shell Armor", H: "Rattled"},
 weightkg: 52.5,
 evos: ["Huntail", "Gorebyss"],
 },
+
 huntail: {
 num: 367,
 name: "Huntail",
-types: ["Water"],
+types: ["Ice", "Fire"],
 baseStats: {hp: 55, atk: 104, def: 105, spa: 94, spd: 75, spe: 52},
 abilities: {0: "Swift Swim", H: "Water Veil"},
 weightkg: 27,
@@ -4834,10 +5349,11 @@ prevo: "Clamperl",
 evoType: "trade",
 evoItem: "Deep Sea Tooth",
 },
+
 gorebyss: {
 num: 368,
 name: "Gorebyss",
-types: ["Water"],
+types: ["Ice", "Poison"],
 baseStats: {hp: 55, atk: 84, def: 105, spa: 114, spd: 75, spe: 52},
 abilities: {0: "Swift Swim", H: "Hydration"},
 weightkg: 22.6,
@@ -4845,22 +5361,26 @@ prevo: "Clamperl",
 evoType: "trade",
 evoItem: "Deep Sea Scale",
 },
+
 relicanth: {
 num: 369,
 name: "Relicanth",
-types: ["Water", "Rock"],
+types: ["Water", "Ghost"],
 baseStats: {hp: 100, atk: 90, def: 130, spa: 45, spd: 65, spe: 55},
 abilities: {0: "Swift Swim", 1: "Rock Head", H: "Sturdy"},
 weightkg: 23.4,
 },
+
 luvdisc: {
 num: 370,
 name: "Luvdisc",
-types: ["Water"],
+types: ["Water", "Fairy"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 43, atk: 30, def: 55, spa: 40, spd: 65, spe: 97},
 abilities: {0: "Swift Swim", H: "Hydration"},
 weightkg: 8.7,
 },
+
 bagon: {
 num: 371,
 name: "Bagon",
@@ -4870,6 +5390,7 @@ abilities: {0: "Rock Head", H: "Sheer Force"},
 weightkg: 42.1,
 evos: ["Shelgon"],
 },
+
 shelgon: {
 num: 372,
 name: "Shelgon",
@@ -4880,6 +5401,7 @@ weightkg: 110.5,
 prevo: "Bagon",
 evos: ["Salamence"],
 },
+
 salamence: {
 num: 373,
 name: "Salamence",
@@ -4891,6 +5413,7 @@ prevo: "Shelgon",
 otherFormes: ["Salamence-Mega"],
 formeOrder: ["Salamence", "Salamence-Mega"],
 },
+
 salamencemega: {
 num: 373,
 name: "Salamence-Mega",
@@ -4901,6 +5424,7 @@ baseStats: {hp: 95, atk: 145, def: 130, spa: 120, spd: 90, spe: 120},
 abilities: {0: "Aerilate"},
 weightkg: 112.6,
 },
+
 beldum: {
 num: 374,
 name: "Beldum",
@@ -4910,6 +5434,7 @@ abilities: {0: "Clear Body", H: "Light Metal"},
 weightkg: 95.2,
 evos: ["Metang"],
 },
+
 metang: {
 num: 375,
 name: "Metang",
@@ -4920,6 +5445,7 @@ weightkg: 202.5,
 prevo: "Beldum",
 evos: ["Metagross"],
 },
+
 metagross: {
 num: 376,
 name: "Metagross",
@@ -4931,6 +5457,7 @@ prevo: "Metang",
 otherFormes: ["Metagross-Mega"],
 formeOrder: ["Metagross", "Metagross-Mega"],
 },
+
 metagrossmega: {
 num: 376,
 name: "Metagross-Mega",
@@ -4941,6 +5468,7 @@ baseStats: {hp: 80, atk: 145, def: 150, spa: 105, spd: 110, spe: 110},
 abilities: {0: "Tough Claws"},
 weightkg: 942.9,
 },
+
 regirock: {
 num: 377,
 name: "Regirock",
@@ -4949,6 +5477,7 @@ baseStats: {hp: 80, atk: 100, def: 200, spa: 50, spd: 100, spe: 50},
 abilities: {0: "Clear Body", H: "Sturdy"},
 weightkg: 230,
 },
+
 regice: {
 num: 378,
 name: "Regice",
@@ -4957,6 +5486,7 @@ baseStats: {hp: 80, atk: 50, def: 100, spa: 100, spd: 200, spe: 50},
 abilities: {0: "Clear Body", H: "Ice Body"},
 weightkg: 175,
 },
+
 registeel: {
 num: 379,
 name: "Registeel",
@@ -4965,26 +5495,29 @@ baseStats: {hp: 80, atk: 75, def: 150, spa: 75, spd: 150, spe: 50},
 abilities: {0: "Clear Body", H: "Light Metal"},
 weightkg: 205,
 },
+
 latias: {
 num: 380,
 name: "Latias",
-types: ["Dragon", "Psychic"],
+types: ["Dragon", "Fire"],
 baseStats: {hp: 80, atk: 80, def: 90, spa: 110, spd: 130, spe: 110},
 abilities: {0: "Levitate"},
 weightkg: 40,
 otherFormes: ["Latias-Mega"],
 formeOrder: ["Latias", "Latias-Mega"],
 },
+
 latiasmega: {
 num: 380,
 name: "Latias-Mega",
 baseSpecies: "Latias",
 forme: "Mega",
-types: ["Dragon", "Psychic"],
+types: ["Dragon", "Fire"],
 baseStats: {hp: 80, atk: 100, def: 120, spa: 140, spd: 150, spe: 110},
 abilities: {0: "Levitate"},
 weightkg: 52,
 },
+
 latios: {
 num: 381,
 name: "Latios",
@@ -4995,6 +5528,7 @@ weightkg: 60,
 otherFormes: ["Latios-Mega"],
 formeOrder: ["Latios", "Latios-Mega"],
 },
+
 latiosmega: {
 num: 381,
 name: "Latios-Mega",
@@ -5005,36 +5539,40 @@ baseStats: {hp: 80, atk: 130, def: 100, spa: 160, spd: 120, spe: 110},
 abilities: {0: "Levitate"},
 weightkg: 70,
 },
+
 kyogre: {
 num: 382,
 name: "Kyogre",
-types: ["Water"],
+types: ["Water", "Ghost"],
 baseStats: {hp: 100, atk: 100, def: 90, spa: 150, spd: 140, spe: 90},
 abilities: {0: "Drizzle"},
 weightkg: 352,
 otherFormes: ["Kyogre-Primal"],
 formeOrder: ["Kyogre", "Kyogre-Primal"],
 },
+
 kyogreprimal: {
 num: 382,
 name: "Kyogre-Primal",
 baseSpecies: "Kyogre",
 forme: "Primal",
-types: ["Water"],
+types: ["Water", "Ghost"],
 baseStats: {hp: 100, atk: 150, def: 90, spa: 180, spd: 160, spe: 90},
 abilities: {0: "Primordial Sea"},
 weightkg: 430,
 },
+
 groudon: {
 num: 383,
 name: "Groudon",
-types: ["Ground"],
+types: ["Ground", "Fire"],
 baseStats: {hp: 100, atk: 150, def: 140, spa: 100, spd: 90, spe: 90},
 abilities: {0: "Drought"},
 weightkg: 950,
 otherFormes: ["Groudon-Primal"],
 formeOrder: ["Groudon", "Groudon-Primal"],
 },
+
 groudonprimal: {
 num: 383,
 name: "Groudon-Primal",
@@ -5045,6 +5583,7 @@ baseStats: {hp: 100, atk: 180, def: 160, spa: 150, spd: 90, spe: 90},
 abilities: {0: "Desolate Land"},
 weightkg: 999.7,
 },
+
 rayquaza: {
 num: 384,
 name: "Rayquaza",
@@ -5055,6 +5594,7 @@ weightkg: 206.5,
 otherFormes: ["Rayquaza-Mega"],
 formeOrder: ["Rayquaza", "Rayquaza-Mega"],
 },
+
 rayquazamega: {
 num: 384,
 name: "Rayquaza-Mega",
@@ -5066,6 +5606,7 @@ abilities: {0: "Delta Stream"},
 weightkg: 392,
 requiredMove: "Dragon Ascent",
 },
+
 jirachi: {
 num: 385,
 name: "Jirachi",
@@ -5074,6 +5615,7 @@ baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
 abilities: {0: "Serene Grace"},
 weightkg: 1.1,
 },
+
 deoxys: {
 num: 386,
 name: "Deoxys",
@@ -5085,39 +5627,43 @@ weightkg: 60.8,
 otherFormes: ["Deoxys-Attack", "Deoxys-Defense", "Deoxys-Speed"],
 formeOrder: ["Deoxys", "Deoxys-Attack", "Deoxys-Defense", "Deoxys-Speed"],
 },
+
 deoxysattack: {
 num: 386,
 name: "Deoxys-Attack",
 baseSpecies: "Deoxys",
 forme: "Attack",
-types: ["Psychic"],
+types: ["Psychic", "Fighting"],
 baseStats: {hp: 50, atk: 180, def: 20, spa: 180, spd: 20, spe: 150},
 abilities: {0: "Pressure"},
 weightkg: 60.8,
 changesFrom: "Deoxys",
 },
+
 deoxysdefense: {
 num: 386,
 name: "Deoxys-Defense",
 baseSpecies: "Deoxys",
 forme: "Defense",
-types: ["Psychic"],
+types: ["Psychic", "Steel"],
 baseStats: {hp: 50, atk: 70, def: 160, spa: 70, spd: 160, spe: 90},
 abilities: {0: "Pressure"},
 weightkg: 60.8,
 changesFrom: "Deoxys",
 },
+
 deoxysspeed: {
 num: 386,
 name: "Deoxys-Speed",
 baseSpecies: "Deoxys",
 forme: "Speed",
-types: ["Psychic"],
+types: ["Psychic", "Electric"],
 baseStats: {hp: 50, atk: 95, def: 90, spa: 95, spd: 90, spe: 180},
 abilities: {0: "Pressure"},
 weightkg: 60.8,
 changesFrom: "Deoxys",
 },
+
 turtwig: {
 num: 387,
 name: "Turtwig",
@@ -5127,6 +5673,7 @@ abilities: {0: "Overgrow", H: "Shell Armor"},
 weightkg: 10.2,
 evos: ["Grotle"],
 },
+
 grotle: {
 num: 388,
 name: "Grotle",
@@ -5137,6 +5684,7 @@ weightkg: 97,
 prevo: "Turtwig",
 evos: ["Torterra"],
 },
+
 torterra: {
 num: 389,
 name: "Torterra",
@@ -5146,6 +5694,7 @@ abilities: {0: "Overgrow", H: "Shell Armor"},
 weightkg: 310,
 prevo: "Grotle",
 },
+
 chimchar: {
 num: 390,
 name: "Chimchar",
@@ -5155,6 +5704,7 @@ abilities: {0: "Blaze", H: "Iron Fist"},
 weightkg: 6.2,
 evos: ["Monferno"],
 },
+
 monferno: {
 num: 391,
 name: "Monferno",
@@ -5165,6 +5715,7 @@ weightkg: 22,
 prevo: "Chimchar",
 evos: ["Infernape"],
 },
+
 infernape: {
 num: 392,
 name: "Infernape",
@@ -5174,6 +5725,7 @@ abilities: {0: "Blaze", H: "Iron Fist"},
 weightkg: 55,
 prevo: "Monferno",
 },
+
 piplup: {
 num: 393,
 name: "Piplup",
@@ -5183,6 +5735,7 @@ abilities: {0: "Torrent", H: "Defiant"},
 weightkg: 5.2,
 evos: ["Prinplup"],
 },
+
 prinplup: {
 num: 394,
 name: "Prinplup",
@@ -5193,6 +5746,7 @@ weightkg: 23,
 prevo: "Piplup",
 evos: ["Empoleon"],
 },
+
 empoleon: {
 num: 395,
 name: "Empoleon",
@@ -5202,34 +5756,38 @@ abilities: {0: "Torrent", H: "Defiant"},
 weightkg: 84.5,
 prevo: "Prinplup",
 },
+
 starly: {
 num: 396,
 name: "Starly",
-types: ["Normal", "Flying"],
+types: ["Flying"],
 baseStats: {hp: 40, atk: 55, def: 30, spa: 30, spd: 30, spe: 60},
 abilities: {0: "Keen Eye", H: "Reckless"},
 weightkg: 2,
 evos: ["Staravia"],
 },
+
 staravia: {
 num: 397,
 name: "Staravia",
-types: ["Normal", "Flying"],
+types: ["Flying"],
 baseStats: {hp: 55, atk: 75, def: 50, spa: 40, spd: 40, spe: 80},
 abilities: {0: "Intimidate", H: "Reckless"},
 weightkg: 15.5,
 prevo: "Starly",
 evos: ["Staraptor"],
 },
+
 staraptor: {
 num: 398,
 name: "Staraptor",
-types: ["Normal", "Flying"],
+types: ["Flying"],
 baseStats: {hp: 85, atk: 120, def: 70, spa: 50, spd: 60, spe: 100},
 abilities: {0: "Intimidate", H: "Reckless"},
 weightkg: 24.9,
 prevo: "Staravia",
 },
+
 bidoof: {
 num: 399,
 name: "Bidoof",
@@ -5239,6 +5797,7 @@ abilities: {0: "Simple", 1: "Unaware", H: "Moody"},
 weightkg: 20,
 evos: ["Bibarel"],
 },
+
 bibarel: {
 num: 400,
 name: "Bibarel",
@@ -5248,6 +5807,7 @@ abilities: {0: "Simple", 1: "Unaware", H: "Moody"},
 weightkg: 31.5,
 prevo: "Bidoof",
 },
+
 kricketot: {
 num: 401,
 name: "Kricketot",
@@ -5257,6 +5817,7 @@ abilities: {0: "Shed Skin", H: "Run Away"},
 weightkg: 2.2,
 evos: ["Kricketune"],
 },
+
 kricketune: {
 num: 402,
 name: "Kricketune",
@@ -5266,6 +5827,7 @@ abilities: {0: "Swarm", H: "Technician"},
 weightkg: 25.5,
 prevo: "Kricketot",
 },
+
 shinx: {
 num: 403,
 name: "Shinx",
@@ -5275,6 +5837,7 @@ abilities: {0: "Rivalry", 1: "Intimidate", H: "Guts"},
 weightkg: 9.5,
 evos: ["Luxio"],
 },
+
 luxio: {
 num: 404,
 name: "Luxio",
@@ -5285,15 +5848,17 @@ weightkg: 30.5,
 prevo: "Shinx",
 evos: ["Luxray"],
 },
+
 luxray: {
 num: 405,
 name: "Luxray",
-types: ["Electric"],
+types: ["Electric", "Dark"],
 baseStats: {hp: 80, atk: 120, def: 79, spa: 95, spd: 79, spe: 70},
 abilities: {0: "Rivalry", 1: "Intimidate", H: "Guts"},
 weightkg: 42,
 prevo: "Luxio",
 },
+
 budew: {
 num: 406,
 name: "Budew",
@@ -5304,6 +5869,7 @@ weightkg: 1.2,
 evos: ["Roselia"],
 canHatch: true,
 },
+
 roserade: {
 num: 407,
 name: "Roserade",
@@ -5315,6 +5881,7 @@ prevo: "Roselia",
 evoType: "useItem",
 evoItem: "Shiny Stone",
 },
+
 cranidos: {
 num: 408,
 name: "Cranidos",
@@ -5324,15 +5891,17 @@ abilities: {0: "Mold Breaker", H: "Sheer Force"},
 weightkg: 31.5,
 evos: ["Rampardos"],
 },
+
 rampardos: {
 num: 409,
 name: "Rampardos",
-types: ["Rock"],
+types: ["Rock", "Dragon"],
 baseStats: {hp: 97, atk: 165, def: 60, spa: 65, spd: 50, spe: 58},
 abilities: {0: "Mold Breaker", H: "Sheer Force"},
 weightkg: 102.5,
 prevo: "Cranidos",
 },
+
 shieldon: {
 num: 410,
 name: "Shieldon",
@@ -5342,6 +5911,7 @@ abilities: {0: "Sturdy", H: "Soundproof"},
 weightkg: 57,
 evos: ["Bastiodon"],
 },
+
 bastiodon: {
 num: 411,
 name: "Bastiodon",
@@ -5351,6 +5921,7 @@ abilities: {0: "Sturdy", H: "Soundproof"},
 weightkg: 149.5,
 prevo: "Shieldon",
 },
+
 burmy: {
 num: 412,
 name: "Burmy",
@@ -5363,6 +5934,7 @@ evos: ["Wormadam", "Wormadam-Sandy", "Wormadam-Trash", "Mothim"],
 cosmeticFormes: ["Burmy-Sandy", "Burmy-Trash"],
 formeOrder: ["Burmy", "Burmy-Sandy", "Burmy-Trash"],
 },
+
 wormadam: {
 num: 413,
 name: "Wormadam",
@@ -5375,6 +5947,7 @@ prevo: "Burmy",
 otherFormes: ["Wormadam-Sandy", "Wormadam-Trash"],
 formeOrder: ["Wormadam", "Wormadam-Sandy", "Wormadam-Trash"],
 },
+
 wormadamsandy: {
 num: 413,
 name: "Wormadam-Sandy",
@@ -5386,17 +5959,19 @@ abilities: {0: "Anticipation", H: "Overcoat"},
 weightkg: 6.5,
 prevo: "Burmy",
 },
+
 wormadamtrash: {
 num: 413,
 name: "Wormadam-Trash",
 baseSpecies: "Wormadam",
 forme: "Trash",
-types: ["Bug", "Steel"],
+types: ["Bug", "Normal"],
 baseStats: {hp: 60, atk: 69, def: 95, spa: 69, spd: 95, spe: 36},
 abilities: {0: "Anticipation", H: "Overcoat"},
 weightkg: 6.5,
 prevo: "Burmy",
 },
+
 mothim: {
 num: 414,
 name: "Mothim",
@@ -5406,6 +5981,7 @@ abilities: {0: "Swarm", H: "Tinted Lens"},
 weightkg: 23.3,
 prevo: "Burmy",
 },
+
 combee: {
 num: 415,
 name: "Combee",
@@ -5415,6 +5991,7 @@ abilities: {0: "Honey Gather", H: "Hustle"},
 weightkg: 5.5,
 evos: ["Vespiquen"],
 },
+
 vespiquen: {
 num: 416,
 name: "Vespiquen",
@@ -5424,32 +6001,36 @@ abilities: {0: "Pressure", H: "Unnerve"},
 weightkg: 38.5,
 prevo: "Combee",
 },
+
 pachirisu: {
 num: 417,
 name: "Pachirisu",
-types: ["Electric"],
+types: ["Electric", "Ice"],
 baseStats: {hp: 60, atk: 45, def: 70, spa: 45, spd: 90, spe: 95},
 abilities: {0: "Run Away", 1: "Pickup", H: "Volt Absorb"},
 weightkg: 3.9,
 },
+
 buizel: {
 num: 418,
 name: "Buizel",
-types: ["Water"],
+types: ["Water", "Normal"],
 baseStats: {hp: 55, atk: 65, def: 35, spa: 60, spd: 30, spe: 85},
 abilities: {0: "Swift Swim", H: "Water Veil"},
 weightkg: 29.5,
 evos: ["Floatzel"],
 },
+
 floatzel: {
 num: 419,
 name: "Floatzel",
-types: ["Water"],
+types: ["Water", "Normal"],
 baseStats: {hp: 85, atk: 105, def: 55, spa: 85, spd: 50, spe: 115},
 abilities: {0: "Swift Swim", H: "Water Veil"},
 weightkg: 33.5,
 prevo: "Buizel",
 },
+
 cherubi: {
 num: 420,
 name: "Cherubi",
@@ -5459,11 +6040,12 @@ abilities: {0: "Chlorophyll"},
 weightkg: 3.3,
 evos: ["Cherrim"],
 },
+
 cherrim: {
 num: 421,
 name: "Cherrim",
 baseForme: "Overcast",
-types: ["Grass"],
+types: ["Grass", "Fire"],
 baseStats: {hp: 70, atk: 60, def: 70, spa: 87, spd: 78, spe: 85},
 abilities: {0: "Flower Gift"},
 weightkg: 9.3,
@@ -5471,18 +6053,20 @@ prevo: "Cherubi",
 otherFormes: ["Cherrim-Sunshine"],
 formeOrder: ["Cherrim", "Cherrim-Sunshine"],
 },
+
 cherrimsunshine: {
 num: 421,
 name: "Cherrim-Sunshine",
 baseSpecies: "Cherrim",
 forme: "Sunshine",
-types: ["Grass"],
+types: ["Grass", "Fire"],
 baseStats: {hp: 70, atk: 60, def: 70, spa: 87, spd: 78, spe: 85},
 abilities: {0: "Flower Gift"},
 weightkg: 9.3,
 requiredAbility: "Flower Gift",
 battleOnly: "Cherrim",
 },
+
 shellos: {
 num: 422,
 name: "Shellos",
@@ -5495,6 +6079,7 @@ evos: ["Gastrodon"],
 cosmeticFormes: ["Shellos-East"],
 formeOrder: ["Shellos", "Shellos-East"],
 },
+
 gastrodon: {
 num: 423,
 name: "Gastrodon",
@@ -5507,10 +6092,11 @@ prevo: "Shellos",
 cosmeticFormes: ["Gastrodon-East"],
 formeOrder: ["Gastrodon", "Gastrodon-East"],
 },
+
 ambipom: {
 num: 424,
 name: "Ambipom",
-types: ["Normal"],
+types: ["Normal", "Poison"],
 baseStats: {hp: 75, atk: 100, def: 66, spa: 60, spd: 66, spe: 115},
 abilities: {0: "Technician", 1: "Pickup", H: "Skill Link"},
 weightkg: 20.3,
@@ -5518,6 +6104,7 @@ prevo: "Aipom",
 evoType: "levelMove",
 evoMove: "Double Hit",
 },
+
 drifloon: {
 num: 425,
 name: "Drifloon",
@@ -5527,6 +6114,7 @@ abilities: {0: "Aftermath", 1: "Unburden", H: "Flare Boost"},
 weightkg: 1.2,
 evos: ["Drifblim"],
 },
+
 drifblim: {
 num: 426,
 name: "Drifblim",
@@ -5536,6 +6124,7 @@ abilities: {0: "Aftermath", 1: "Unburden", H: "Flare Boost"},
 weightkg: 15,
 prevo: "Drifloon",
 },
+
 buneary: {
 num: 427,
 name: "Buneary",
@@ -5545,10 +6134,11 @@ abilities: {0: "Run Away", 1: "Klutz", H: "Limber"},
 weightkg: 5.5,
 evos: ["Lopunny"],
 },
+
 lopunny: {
 num: 428,
 name: "Lopunny",
-types: ["Normal"],
+types: ["Normal", "Fighting"],
 baseStats: {hp: 65, atk: 76, def: 84, spa: 54, spd: 96, spe: 105},
 abilities: {0: "Cute Charm", 1: "Klutz", H: "Limber"},
 weightkg: 33.3,
@@ -5557,6 +6147,7 @@ evoType: "levelFriendship",
 otherFormes: ["Lopunny-Mega"],
 formeOrder: ["Lopunny", "Lopunny-Mega"],
 },
+
 lopunnymega: {
 num: 428,
 name: "Lopunny-Mega",
@@ -5567,10 +6158,11 @@ baseStats: {hp: 65, atk: 136, def: 94, spa: 54, spd: 96, spe: 135},
 abilities: {0: "Scrappy"},
 weightkg: 28.3,
 },
+
 mismagius: {
 num: 429,
 name: "Mismagius",
-types: ["Ghost"],
+types: ["Ghost", "Fairy"],
 baseStats: {hp: 60, atk: 60, def: 60, spa: 105, spd: 105, spe: 105},
 abilities: {0: "Levitate"},
 weightkg: 4.4,
@@ -5578,6 +6170,7 @@ prevo: "Misdreavus",
 evoType: "useItem",
 evoItem: "Dusk Stone",
 },
+
 honchkrow: {
 num: 430,
 name: "Honchkrow",
@@ -5589,24 +6182,29 @@ prevo: "Murkrow",
 evoType: "useItem",
 evoItem: "Dusk Stone",
 },
+
 glameow: {
 num: 431,
 name: "Glameow",
-types: ["Normal"],
+types: ["Dark"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 49, atk: 55, def: 42, spa: 42, spd: 37, spe: 85},
 abilities: {0: "Limber", 1: "Own Tempo", H: "Keen Eye"},
 weightkg: 3.9,
 evos: ["Purugly"],
 },
+
 purugly: {
 num: 432,
 name: "Purugly",
-types: ["Normal"],
+types: ["Dark"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 71, atk: 82, def: 64, spa: 64, spd: 59, spe: 112},
 abilities: {0: "Thick Fat", 1: "Own Tempo", H: "Defiant"},
 weightkg: 43.8,
 prevo: "Glameow",
 },
+
 chingling: {
 num: 433,
 name: "Chingling",
@@ -5617,24 +6215,27 @@ weightkg: 0.6,
 evos: ["Chimecho"],
 canHatch: true,
 },
+
 stunky: {
 num: 434,
 name: "Stunky",
-types: ["Poison", "Dark"],
+types: ["Poison", "Normal"],
 baseStats: {hp: 63, atk: 63, def: 47, spa: 41, spd: 41, spe: 74},
 abilities: {0: "Stench", 1: "Aftermath", H: "Keen Eye"},
 weightkg: 19.2,
 evos: ["Skuntank"],
 },
+
 skuntank: {
 num: 435,
 name: "Skuntank",
-types: ["Poison", "Dark"],
+types: ["Poison", "Normal"],
 baseStats: {hp: 103, atk: 93, def: 67, spa: 71, spd: 61, spe: 84},
 abilities: {0: "Stench", 1: "Aftermath", H: "Keen Eye"},
 weightkg: 38,
 prevo: "Stunky",
 },
+
 bronzor: {
 num: 436,
 name: "Bronzor",
@@ -5644,6 +6245,7 @@ abilities: {0: "Levitate", 1: "Heatproof", H: "Heavy Metal"},
 weightkg: 60.5,
 evos: ["Bronzong"],
 },
+
 bronzong: {
 num: 437,
 name: "Bronzong",
@@ -5653,6 +6255,7 @@ abilities: {0: "Levitate", 1: "Heatproof", H: "Heavy Metal"},
 weightkg: 187,
 prevo: "Bronzor",
 },
+
 bonsly: {
 num: 438,
 name: "Bonsly",
@@ -5663,6 +6266,7 @@ weightkg: 15,
 evos: ["Sudowoodo"],
 canHatch: true,
 },
+
 mimejr: {
 num: 439,
 name: "Mime Jr.",
@@ -5673,6 +6277,7 @@ weightkg: 13,
 evos: ["Mr. Mime", "Mr. Mime-Galar"],
 canHatch: true,
 },
+
 happiny: {
 num: 440,
 name: "Happiny",
@@ -5683,6 +6288,7 @@ weightkg: 24.4,
 evos: ["Chansey"],
 canHatch: true,
 },
+
 chatot: {
 num: 441,
 name: "Chatot",
@@ -5691,6 +6297,7 @@ baseStats: {hp: 76, atk: 65, def: 45, spa: 92, spd: 42, spe: 91},
 abilities: {0: "Keen Eye", 1: "Tangled Feet", H: "Big Pecks"},
 weightkg: 1.9,
 },
+
 spiritomb: {
 num: 442,
 name: "Spiritomb",
@@ -5699,6 +6306,7 @@ baseStats: {hp: 50, atk: 92, def: 108, spa: 92, spd: 108, spe: 35},
 abilities: {0: "Pressure", H: "Infiltrator"},
 weightkg: 108,
 },
+
 gible: {
 num: 443,
 name: "Gible",
@@ -5708,6 +6316,7 @@ abilities: {0: "Sand Veil", H: "Rough Skin"},
 weightkg: 20.5,
 evos: ["Gabite"],
 },
+
 gabite: {
 num: 444,
 name: "Gabite",
@@ -5718,6 +6327,7 @@ weightkg: 56,
 prevo: "Gible",
 evos: ["Garchomp"],
 },
+
 garchomp: {
 num: 445,
 name: "Garchomp",
@@ -5729,6 +6339,7 @@ prevo: "Gabite",
 otherFormes: ["Garchomp-Mega"],
 formeOrder: ["Garchomp", "Garchomp-Mega"],
 },
+
 garchompmega: {
 num: 445,
 name: "Garchomp-Mega",
@@ -5739,6 +6350,7 @@ baseStats: {hp: 108, atk: 170, def: 115, spa: 120, spd: 95, spe: 92},
 abilities: {0: "Sand Force"},
 weightkg: 95,
 },
+
 munchlax: {
 num: 446,
 name: "Munchlax",
@@ -5749,6 +6361,7 @@ weightkg: 105,
 evos: ["Snorlax"],
 canHatch: true,
 },
+
 riolu: {
 num: 447,
 name: "Riolu",
@@ -5759,6 +6372,7 @@ weightkg: 20.2,
 evos: ["Lucario"],
 canHatch: true,
 },
+
 lucario: {
 num: 448,
 name: "Lucario",
@@ -5772,6 +6386,7 @@ evoCondition: "during the day",
 otherFormes: ["Lucario-Mega"],
 formeOrder: ["Lucario", "Lucario-Mega"],
 },
+
 lucariomega: {
 num: 448,
 name: "Lucario-Mega",
@@ -5782,6 +6397,7 @@ baseStats: {hp: 70, atk: 145, def: 88, spa: 140, spd: 70, spe: 112},
 abilities: {0: "Adaptability"},
 weightkg: 57.5,
 },
+
 hippopotas: {
 num: 449,
 name: "Hippopotas",
@@ -5791,6 +6407,7 @@ abilities: {0: "Sand Stream", H: "Sand Force"},
 weightkg: 49.5,
 evos: ["Hippowdon"],
 },
+
 hippowdon: {
 num: 450,
 name: "Hippowdon",
@@ -5800,6 +6417,7 @@ abilities: {0: "Sand Stream", H: "Sand Force"},
 weightkg: 300,
 prevo: "Hippopotas",
 },
+
 skorupi: {
 num: 451,
 name: "Skorupi",
@@ -5809,15 +6427,17 @@ abilities: {0: "Battle Armor", 1: "Sniper", H: "Keen Eye"},
 weightkg: 12,
 evos: ["Drapion"],
 },
+
 drapion: {
 num: 452,
 name: "Drapion",
-types: ["Poison", "Dark"],
+types: ["Bug", "Dark"],
 baseStats: {hp: 70, atk: 90, def: 110, spa: 60, spd: 75, spe: 95},
 abilities: {0: "Battle Armor", 1: "Sniper", H: "Keen Eye"},
 weightkg: 61.5,
 prevo: "Skorupi",
 },
+
 croagunk: {
 num: 453,
 name: "Croagunk",
@@ -5827,6 +6447,7 @@ abilities: {0: "Anticipation", 1: "Dry Skin", H: "Poison Touch"},
 weightkg: 23,
 evos: ["Toxicroak"],
 },
+
 toxicroak: {
 num: 454,
 name: "Toxicroak",
@@ -5836,6 +6457,7 @@ abilities: {0: "Anticipation", 1: "Dry Skin", H: "Poison Touch"},
 weightkg: 44.4,
 prevo: "Croagunk",
 },
+
 carnivine: {
 num: 455,
 name: "Carnivine",
@@ -5844,6 +6466,7 @@ baseStats: {hp: 74, atk: 100, def: 72, spa: 90, spd: 72, spe: 46},
 abilities: {0: "Levitate"},
 weightkg: 27,
 },
+
 finneon: {
 num: 456,
 name: "Finneon",
@@ -5853,15 +6476,17 @@ abilities: {0: "Swift Swim", 1: "Storm Drain", H: "Water Veil"},
 weightkg: 7,
 evos: ["Lumineon"],
 },
+
 lumineon: {
 num: 457,
 name: "Lumineon",
-types: ["Water"],
+types: ["Water", "Ghost"],
 baseStats: {hp: 69, atk: 69, def: 76, spa: 69, spd: 86, spe: 91},
 abilities: {0: "Swift Swim", 1: "Storm Drain", H: "Water Veil"},
 weightkg: 24,
 prevo: "Finneon",
 },
+
 mantyke: {
 num: 458,
 name: "Mantyke",
@@ -5872,6 +6497,7 @@ weightkg: 65,
 evos: ["Mantine"],
 canHatch: true,
 },
+
 snover: {
 num: 459,
 name: "Snover",
@@ -5881,6 +6507,7 @@ abilities: {0: "Snow Warning", H: "Soundproof"},
 weightkg: 50.5,
 evos: ["Abomasnow"],
 },
+
 abomasnow: {
 num: 460,
 name: "Abomasnow",
@@ -5892,6 +6519,7 @@ prevo: "Snover",
 otherFormes: ["Abomasnow-Mega"],
 formeOrder: ["Abomasnow", "Abomasnow-Mega"],
 },
+
 abomasnowmega: {
 num: 460,
 name: "Abomasnow-Mega",
@@ -5902,6 +6530,7 @@ baseStats: {hp: 90, atk: 132, def: 105, spa: 132, spd: 105, spe: 30},
 abilities: {0: "Snow Warning"},
 weightkg: 185,
 },
+
 weavile: {
 num: 461,
 name: "Weavile",
@@ -5914,6 +6543,7 @@ evoType: "levelHold",
 evoItem: "Razor Claw",
 evoCondition: "at night",
 },
+
 magnezone: {
 num: 462,
 name: "Magnezone",
@@ -5925,10 +6555,11 @@ prevo: "Magneton",
 evoType: "useItem",
 evoItem: "Thunder Stone",
 },
+
 lickilicky: {
 num: 463,
 name: "Lickilicky",
-types: ["Normal"],
+types: ["Fairy", "Poison"],
 baseStats: {hp: 110, atk: 85, def: 95, spa: 80, spd: 95, spe: 50},
 abilities: {0: "Own Tempo", 1: "Oblivious", H: "Cloud Nine"},
 weightkg: 140,
@@ -5936,6 +6567,7 @@ prevo: "Lickitung",
 evoType: "levelMove",
 evoMove: "Rollout",
 },
+
 rhyperior: {
 num: 464,
 name: "Rhyperior",
@@ -5947,6 +6579,7 @@ prevo: "Rhydon",
 evoType: "trade",
 evoItem: "Protector",
 },
+
 tangrowth: {
 num: 465,
 name: "Tangrowth",
@@ -5958,10 +6591,12 @@ prevo: "Tangela",
 evoType: "levelMove",
 evoMove: "Ancient Power",
 },
+
 electivire: {
 num: 466,
 name: "Electivire",
-types: ["Electric"],
+types: ["Electric", "Fighting"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 75, atk: 123, def: 67, spa: 95, spd: 85, spe: 95},
 abilities: {0: "Motor Drive", H: "Vital Spirit"},
 weightkg: 138.6,
@@ -5969,10 +6604,12 @@ prevo: "Electabuzz",
 evoType: "trade",
 evoItem: "Electirizer",
 },
+
 magmortar: {
 num: 467,
 name: "Magmortar",
-types: ["Fire"],
+types: ["Fire", "Poison"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 75, atk: 95, def: 67, spa: 125, spd: 95, spe: 83},
 abilities: {0: "Flame Body", H: "Vital Spirit"},
 weightkg: 68,
@@ -5980,6 +6617,7 @@ prevo: "Magmar",
 evoType: "trade",
 evoItem: "Magmarizer",
 },
+
 togekiss: {
 num: 468,
 name: "Togekiss",
@@ -5991,10 +6629,11 @@ prevo: "Togetic",
 evoType: "useItem",
 evoItem: "Shiny Stone",
 },
+
 yanmega: {
 num: 469,
 name: "Yanmega",
-types: ["Bug", "Flying"],
+types: ["Bug", "Dragon"],
 baseStats: {hp: 86, atk: 76, def: 86, spa: 116, spd: 56, spe: 95},
 abilities: {0: "Speed Boost", 1: "Tinted Lens", H: "Frisk"},
 weightkg: 51.5,
@@ -6002,10 +6641,11 @@ prevo: "Yanma",
 evoType: "levelMove",
 evoMove: "Ancient Power",
 },
+
 leafeon: {
 num: 470,
 name: "Leafeon",
-types: ["Grass"],
+types: ["Grass", "Normal"],
 baseStats: {hp: 65, atk: 110, def: 130, spa: 60, spd: 65, spe: 95},
 abilities: {0: "Leaf Guard", H: "Chlorophyll"},
 weightkg: 25.5,
@@ -6013,10 +6653,11 @@ prevo: "Eevee",
 evoType: "useItem",
 evoItem: "Leaf Stone",
 },
+
 glaceon: {
 num: 471,
 name: "Glaceon",
-types: ["Ice"],
+types: ["Ice", "Normal"],
 baseStats: {hp: 65, atk: 60, def: 110, spa: 130, spd: 95, spe: 65},
 abilities: {0: "Snow Cloak", H: "Ice Body"},
 weightkg: 25.9,
@@ -6024,6 +6665,7 @@ prevo: "Eevee",
 evoType: "useItem",
 evoItem: "Ice Stone",
 },
+
 gliscor: {
 num: 472,
 name: "Gliscor",
@@ -6036,6 +6678,7 @@ evoType: "levelHold",
 evoItem: "Razor Fang",
 evoCondition: "at night",
 },
+
 mamoswine: {
 num: 473,
 name: "Mamoswine",
@@ -6047,10 +6690,11 @@ prevo: "Piloswine",
 evoType: "levelMove",
 evoMove: "Ancient Power",
 },
+
 porygonz: {
 num: 474,
 name: "Porygon-Z",
-types: ["Normal"],
+types: ["Electric", "Psychic"],
 baseStats: {hp: 85, atk: 80, def: 70, spa: 135, spd: 75, spe: 90},
 abilities: {0: "Adaptability", 1: "Download", H: "Analytic"},
 weightkg: 34,
@@ -6058,6 +6702,7 @@ prevo: "Porygon2",
 evoType: "trade",
 evoItem: "Dubious Disc",
 },
+
 gallade: {
 num: 475,
 name: "Gallade",
@@ -6071,6 +6716,7 @@ evoItem: "Dawn Stone",
 otherFormes: ["Gallade-Mega"],
 formeOrder: ["Gallade", "Gallade-Mega"],
 },
+
 gallademega: {
 num: 475,
 name: "Gallade-Mega",
@@ -6081,6 +6727,7 @@ baseStats: {hp: 68, atk: 165, def: 95, spa: 65, spd: 115, spe: 110},
 abilities: {0: "Inner Focus"},
 weightkg: 56.4,
 },
+
 probopass: {
 num: 476,
 name: "Probopass",
@@ -6092,6 +6739,7 @@ prevo: "Nosepass",
 evoType: "levelExtra",
 evoCondition: "near a special magnetic field",
 },
+
 dusknoir: {
 num: 477,
 name: "Dusknoir",
@@ -6103,6 +6751,7 @@ prevo: "Dusclops",
 evoType: "trade",
 evoItem: "Reaper Cloth",
 },
+
 froslass: {
 num: 478,
 name: "Froslass",
@@ -6114,6 +6763,7 @@ prevo: "Snorunt",
 evoType: "useItem",
 evoItem: "Dawn Stone",
 },
+
 rotom: {
 num: 479,
 name: "Rotom",
@@ -6124,6 +6774,7 @@ weightkg: 0.3,
 otherFormes: ["Rotom-Heat", "Rotom-Wash", "Rotom-Frost", "Rotom-Fan", "Rotom-Mow"],
 formeOrder: ["Rotom", "Rotom-Heat", "Rotom-Wash", "Rotom-Frost", "Rotom-Fan", "Rotom-Mow"],
 },
+
 rotomheat: {
 num: 479,
 name: "Rotom-Heat",
@@ -6135,6 +6786,7 @@ abilities: {0: "Levitate"},
 weightkg: 0.3,
 changesFrom: "Rotom",
 },
+
 rotomwash: {
 num: 479,
 name: "Rotom-Wash",
@@ -6146,6 +6798,7 @@ abilities: {0: "Levitate"},
 weightkg: 0.3,
 changesFrom: "Rotom",
 },
+
 rotomfrost: {
 num: 479,
 name: "Rotom-Frost",
@@ -6157,6 +6810,7 @@ abilities: {0: "Levitate"},
 weightkg: 0.3,
 changesFrom: "Rotom",
 },
+
 rotomfan: {
 num: 479,
 name: "Rotom-Fan",
@@ -6168,6 +6822,7 @@ abilities: {0: "Levitate"},
 weightkg: 0.3,
 changesFrom: "Rotom",
 },
+
 rotommow: {
 num: 479,
 name: "Rotom-Mow",
@@ -6179,31 +6834,35 @@ abilities: {0: "Levitate"},
 weightkg: 0.3,
 changesFrom: "Rotom",
 },
+
 uxie: {
 num: 480,
 name: "Uxie",
-types: ["Psychic"],
+types: ["Fairy", "Electric"],
 baseStats: {hp: 75, atk: 75, def: 130, spa: 75, spd: 130, spe: 95},
 abilities: {0: "Levitate"},
 weightkg: 0.3,
 },
+
 mesprit: {
 num: 481,
 name: "Mesprit",
-types: ["Psychic"],
+types: ["Poison", "Fairy"],
 baseStats: {hp: 80, atk: 105, def: 105, spa: 105, spd: 105, spe: 80},
 abilities: {0: "Levitate"},
 weightkg: 0.3,
 },
+
 azelf: {
 num: 482,
 name: "Azelf",
-types: ["Psychic"],
+types: ["Fairy", "Ice"],
 baseStats: {hp: 75, atk: 125, def: 70, spa: 125, spd: 70, spe: 115},
 abilities: {0: "Levitate"},
 weightkg: 0.3,
 },
-dialga: {
+
+
 num: 483,
 name: "Dialga",
 types: ["Steel", "Dragon"],
@@ -6213,7 +6872,8 @@ weightkg: 683,
 otherFormes: ["Dialga-Origin"],
 formeOrder: ["Dialga", "Dialga-Origin"],
 },
-dialgaorigin: {
+
+
 num: 483,
 name: "Dialga-Origin",
 baseSpecies: "Dialga",
@@ -6225,28 +6885,31 @@ weightkg: 850,
 changesFrom: "Dialga",
 gen: 8,
 },
-palkia: {
+
+
 num: 484,
 name: "Palkia",
-types: ["Water", "Dragon"],
+types: ["Fairy", "Dragon"],
 baseStats: {hp: 90, atk: 120, def: 100, spa: 150, spd: 120, spe: 100},
 abilities: {0: "Pressure", H: "Telepathy"},
 weightkg: 336,
 otherFormes: ["Palkia-Origin"],
 formeOrder: ["Palkia", "Palkia-Origin"],
 },
-palkiaorigin: {
+
+
 num: 484,
 name: "Palkia-Origin",
 baseSpecies: "Palkia",
 forme: "Origin",
-types: ["Water", "Dragon"],
+types: ["Fairy", "Dragon"],
 baseStats: {hp: 90, atk: 100, def: 100, spa: 150, spd: 120, spe: 120},
 abilities: {0: "Pressure", H: "Telepathy"},
 weightkg: 660,
 changesFrom: "Palkia",
 gen: 8,
 },
+
 heatran: {
 num: 485,
 name: "Heatran",
@@ -6255,6 +6918,7 @@ baseStats: {hp: 91, atk: 90, def: 106, spa: 130, spd: 106, spe: 77},
 abilities: {0: "Flash Fire", H: "Flame Body"},
 weightkg: 430,
 },
+
 regigigas: {
 num: 486,
 name: "Regigigas",
@@ -6263,7 +6927,8 @@ baseStats: {hp: 110, atk: 160, def: 110, spa: 80, spd: 110, spe: 100},
 abilities: {0: "Slow Start"},
 weightkg: 420,
 },
-giratina: {
+
+
 num: 487,
 name: "Giratina",
 baseForme: "Altered",
@@ -6274,7 +6939,8 @@ weightkg: 750,
 otherFormes: ["Giratina-Origin"],
 formeOrder: ["Giratina", "Giratina-Origin"],
 },
-giratinaorigin: {
+
+
 num: 487,
 name: "Giratina-Origin",
 baseSpecies: "Giratina",
@@ -6285,49 +6951,55 @@ abilities: {0: "Levitate"},
 weightkg: 650,
 changesFrom: "Giratina",
 },
+
 cresselia: {
 num: 488,
 name: "Cresselia",
-types: ["Psychic"],
+types: ["Fairy", "Ghost"],
 baseStats: {hp: 120, atk: 70, def: 110, spa: 75, spd: 120, spe: 85},
 abilities: {0: "Levitate"},
 weightkg: 85.6,
 },
+
 phione: {
 num: 489,
 name: "Phione",
-types: ["Water"],
+types: ["Fairy"],
 baseStats: {hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 80},
 abilities: {0: "Hydration"},
 weightkg: 3.1,
 },
+
 manaphy: {
 num: 490,
 name: "Manaphy",
-types: ["Water"],
+types: ["Fairy", "Ice"],
 baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
 abilities: {0: "Hydration"},
 weightkg: 1.4,
 },
+
 darkrai: {
 num: 491,
 name: "Darkrai",
-types: ["Dark"],
+types: ["Dark", "Ghost"],
 baseStats: {hp: 70, atk: 90, def: 90, spa: 135, spd: 90, spe: 125},
 abilities: {0: "Bad Dreams"},
 weightkg: 50.5,
 },
+
 shaymin: {
 num: 492,
 name: "Shaymin",
 baseForme: "Land",
-types: ["Grass"],
+types: ["Grass", "Flying"],
 baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
 abilities: {0: "Natural Cure"},
 weightkg: 2.1,
 otherFormes: ["Shaymin-Sky"],
 formeOrder: ["Shaymin", "Shaymin-Sky"],
 },
+
 shayminsky: {
 num: 492,
 name: "Shaymin-Sky",
@@ -6339,20 +7011,22 @@ abilities: {0: "Serene Grace"},
 weightkg: 5.2,
 changesFrom: "Shaymin",
 },
-arceus: {
+
+
 num: 493,
 name: "Arceus",
 baseForme: "Normal",
-types: ["Normal"],
+types: ["???"],
 baseStats: {hp: 120, atk: 120, def: 120, spa: 120, spd: 120, spe: 120},
 abilities: {0: "Multitype"},
 weightkg: 320,
 otherFormes: ["Arceus-Bug", "Arceus-Dark", "Arceus-Dragon", "Arceus-Electric", "Arceus-Fairy", "Arceus-Fighting", "Arceus-Fire", "Arceus-Flying", "Arceus-Ghost", "Arceus-Grass", "Arceus-Ground", "Arceus-Ice", "Arceus-Poison", "Arceus-Psychic", "Arceus-Rock", "Arceus-Steel", "Arceus-Water"],
 formeOrder: [
-"Arceus", "Arceus-Fighting", "Arceus-Flying", "Arceus-Poison", "Arceus-Ground", "Arceus-Rock", "Arceus-Bug", "Arceus-Ghost", "Arceus-Steel",
-"Arceus-Fire", "Arceus-Water", "Arceus-Grass", "Arceus-Electric", "Arceus-Psychic", "Arceus-Ice", "Arceus-Dragon", "Arceus-Dark", "Arceus-Fairy",
+Arceus, "Arceus-Fighting", "Arceus-Flying", "Arceus-Poison", "Arceus-Ground", "Arceus-Rock", "Arceus-Bug", "Arceus-Ghost", "Arceus-Steel",
+Arceus-Fire, "Arceus-Water", "Arceus-Grass", "Arceus-Electric", "Arceus-Psychic", "Arceus-Ice", "Arceus-Dragon", "Arceus-Dark", "Arceus-Fairy",
 ],
 },
+
 arceusbug: {
 num: 493,
 name: "Arceus-Bug",
@@ -6365,6 +7039,7 @@ weightkg: 320,
 requiredItems: ["Insect Plate", "Buginium Z"],
 changesFrom: "Arceus",
 },
+
 arceusdark: {
 num: 493,
 name: "Arceus-Dark",
@@ -6377,6 +7052,7 @@ weightkg: 320,
 requiredItems: ["Dread Plate", "Darkinium Z"],
 changesFrom: "Arceus",
 },
+
 arceusdragon: {
 num: 493,
 name: "Arceus-Dragon",
@@ -6389,6 +7065,7 @@ weightkg: 320,
 requiredItems: ["Draco Plate", "Dragonium Z"],
 changesFrom: "Arceus",
 },
+
 arceuselectric: {
 num: 493,
 name: "Arceus-Electric",
@@ -6401,6 +7078,7 @@ weightkg: 320,
 requiredItems: ["Zap Plate", "Electrium Z"],
 changesFrom: "Arceus",
 },
+
 arceusfairy: {
 num: 493,
 name: "Arceus-Fairy",
@@ -6414,6 +7092,7 @@ requiredItems: ["Pixie Plate", "Fairium Z"],
 changesFrom: "Arceus",
 gen: 6,
 },
+
 arceusfighting: {
 num: 493,
 name: "Arceus-Fighting",
@@ -6426,6 +7105,7 @@ weightkg: 320,
 requiredItems: ["Fist Plate", "Fightinium Z"],
 changesFrom: "Arceus",
 },
+
 arceusfire: {
 num: 493,
 name: "Arceus-Fire",
@@ -6438,6 +7118,7 @@ weightkg: 320,
 requiredItems: ["Flame Plate", "Firium Z"],
 changesFrom: "Arceus",
 },
+
 arceusflying: {
 num: 493,
 name: "Arceus-Flying",
@@ -6450,6 +7131,7 @@ weightkg: 320,
 requiredItems: ["Sky Plate", "Flyinium Z"],
 changesFrom: "Arceus",
 },
+
 arceusghost: {
 num: 493,
 name: "Arceus-Ghost",
@@ -6462,6 +7144,7 @@ weightkg: 320,
 requiredItems: ["Spooky Plate", "Ghostium Z"],
 changesFrom: "Arceus",
 },
+
 arceusgrass: {
 num: 493,
 name: "Arceus-Grass",
@@ -6474,6 +7157,7 @@ weightkg: 320,
 requiredItems: ["Meadow Plate", "Grassium Z"],
 changesFrom: "Arceus",
 },
+
 arceusground: {
 num: 493,
 name: "Arceus-Ground",
@@ -6486,6 +7170,7 @@ weightkg: 320,
 requiredItems: ["Earth Plate", "Groundium Z"],
 changesFrom: "Arceus",
 },
+
 arceusice: {
 num: 493,
 name: "Arceus-Ice",
@@ -6498,6 +7183,7 @@ weightkg: 320,
 requiredItems: ["Icicle Plate", "Icium Z"],
 changesFrom: "Arceus",
 },
+
 arceuspoison: {
 num: 493,
 name: "Arceus-Poison",
@@ -6510,6 +7196,7 @@ weightkg: 320,
 requiredItems: ["Toxic Plate", "Poisonium Z"],
 changesFrom: "Arceus",
 },
+
 arceuspsychic: {
 num: 493,
 name: "Arceus-Psychic",
@@ -6522,6 +7209,7 @@ weightkg: 320,
 requiredItems: ["Mind Plate", "Psychium Z"],
 changesFrom: "Arceus",
 },
+
 arceusrock: {
 num: 493,
 name: "Arceus-Rock",
@@ -6534,6 +7222,7 @@ weightkg: 320,
 requiredItems: ["Stone Plate", "Rockium Z"],
 changesFrom: "Arceus",
 },
+
 arceussteel: {
 num: 493,
 name: "Arceus-Steel",
@@ -6546,6 +7235,7 @@ weightkg: 320,
 requiredItems: ["Iron Plate", "Steelium Z"],
 changesFrom: "Arceus",
 },
+
 arceuswater: {
 num: 493,
 name: "Arceus-Water",
@@ -6558,6 +7248,7 @@ weightkg: 320,
 requiredItems: ["Splash Plate", "Waterium Z"],
 changesFrom: "Arceus",
 },
+
 victini: {
 num: 494,
 name: "Victini",
@@ -6566,6 +7257,7 @@ baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
 abilities: {0: "Victory Star"},
 weightkg: 4,
 },
+
 snivy: {
 num: 495,
 name: "Snivy",
@@ -6575,6 +7267,7 @@ abilities: {0: "Overgrow", H: "Contrary"},
 weightkg: 8.1,
 evos: ["Servine"],
 },
+
 servine: {
 num: 496,
 name: "Servine",
@@ -6585,15 +7278,17 @@ weightkg: 16,
 prevo: "Snivy",
 evos: ["Serperior"],
 },
+
 serperior: {
 num: 497,
 name: "Serperior",
-types: ["Grass"],
+types: ["Grass", "Bug"],
 baseStats: {hp: 75, atk: 75, def: 95, spa: 75, spd: 95, spe: 113},
 abilities: {0: "Overgrow", H: "Contrary"},
 weightkg: 63,
 prevo: "Servine",
 },
+
 tepig: {
 num: 498,
 name: "Tepig",
@@ -6603,25 +7298,28 @@ abilities: {0: "Blaze", H: "Thick Fat"},
 weightkg: 9.9,
 evos: ["Pignite"],
 },
+
 pignite: {
 num: 499,
 name: "Pignite",
-types: ["Fire", "Fighting"],
+types: ["Fire", "Ground"],
 baseStats: {hp: 90, atk: 93, def: 55, spa: 70, spd: 55, spe: 55},
 abilities: {0: "Blaze", H: "Thick Fat"},
 weightkg: 55.5,
 prevo: "Tepig",
 evos: ["Emboar"],
 },
+
 emboar: {
 num: 500,
 name: "Emboar",
-types: ["Fire", "Fighting"],
+types: ["Fire", "Ground"],
 baseStats: {hp: 110, atk: 123, def: 65, spa: 100, spd: 65, spe: 65},
 abilities: {0: "Blaze", H: "Reckless"},
 weightkg: 150,
 prevo: "Pignite",
 },
+
 oshawott: {
 num: 501,
 name: "Oshawott",
@@ -6631,6 +7329,7 @@ abilities: {0: "Torrent", H: "Shell Armor"},
 weightkg: 5.9,
 evos: ["Dewott"],
 },
+
 dewott: {
 num: 502,
 name: "Dewott",
@@ -6641,10 +7340,11 @@ weightkg: 24.5,
 prevo: "Oshawott",
 evos: ["Samurott", "Samurott-Hisui"],
 },
+
 samurott: {
 num: 503,
 name: "Samurott",
-types: ["Water"],
+types: ["Water", "Ice"],
 baseStats: {hp: 95, atk: 100, def: 85, spa: 108, spd: 70, spe: 70},
 abilities: {0: "Torrent", H: "Shell Armor"},
 weightkg: 94.6,
@@ -6652,6 +7352,7 @@ prevo: "Dewott",
 otherFormes: ["Samurott-Hisui"],
 formeOrder: ["Samurott", "Samurott-Hisui"],
 },
+
 samurotthisui: {
 num: 503,
 name: "Samurott-Hisui",
@@ -6663,24 +7364,27 @@ abilities: {0: "Torrent", H: "Sharpness"},
 weightkg: 58.2,
 prevo: "Dewott",
 },
+
 patrat: {
 num: 504,
 name: "Patrat",
-types: ["Normal"],
+types: ["Ground"],
 baseStats: {hp: 45, atk: 55, def: 39, spa: 35, spd: 39, spe: 42},
 abilities: {0: "Run Away", 1: "Keen Eye", H: "Analytic"},
 weightkg: 11.6,
 evos: ["Watchog"],
 },
+
 watchog: {
 num: 505,
 name: "Watchog",
-types: ["Normal"],
+types: ["Ground", "Psychic"],
 baseStats: {hp: 60, atk: 85, def: 69, spa: 60, spd: 69, spe: 77},
 abilities: {0: "Illuminate", 1: "Keen Eye", H: "Analytic"},
 weightkg: 27,
 prevo: "Patrat",
 },
+
 lillipup: {
 num: 506,
 name: "Lillipup",
@@ -6690,6 +7394,7 @@ abilities: {0: "Vital Spirit", 1: "Pickup", H: "Run Away"},
 weightkg: 4.1,
 evos: ["Herdier"],
 },
+
 herdier: {
 num: 507,
 name: "Herdier",
@@ -6700,6 +7405,7 @@ weightkg: 14.7,
 prevo: "Lillipup",
 evos: ["Stoutland"],
 },
+
 stoutland: {
 num: 508,
 name: "Stoutland",
@@ -6709,6 +7415,7 @@ abilities: {0: "Intimidate", 1: "Sand Rush", H: "Scrappy"},
 weightkg: 61,
 prevo: "Herdier",
 },
+
 purrloin: {
 num: 509,
 name: "Purrloin",
@@ -6718,28 +7425,31 @@ abilities: {0: "Limber", 1: "Unburden", H: "Prankster"},
 weightkg: 10.1,
 evos: ["Liepard"],
 },
+
 liepard: {
 num: 510,
 name: "Liepard",
-types: ["Dark"],
+types: ["Dark", "Electric"],
 baseStats: {hp: 64, atk: 88, def: 50, spa: 88, spd: 50, spe: 106},
 abilities: {0: "Limber", 1: "Unburden", H: "Prankster"},
 weightkg: 37.5,
 prevo: "Purrloin",
 },
+
 pansage: {
 num: 511,
 name: "Pansage",
-types: ["Grass"],
+types: ["Grass", "Normal"],
 baseStats: {hp: 50, atk: 53, def: 48, spa: 53, spd: 48, spe: 64},
 abilities: {0: "Gluttony", H: "Overgrow"},
 weightkg: 10.5,
 evos: ["Simisage"],
 },
+
 simisage: {
 num: 512,
 name: "Simisage",
-types: ["Grass"],
+types: ["Grass", "Normal"],
 baseStats: {hp: 75, atk: 98, def: 63, spa: 98, spd: 63, spe: 101},
 abilities: {0: "Gluttony", H: "Overgrow"},
 weightkg: 30.5,
@@ -6747,19 +7457,21 @@ prevo: "Pansage",
 evoType: "useItem",
 evoItem: "Leaf Stone",
 },
+
 pansear: {
 num: 513,
 name: "Pansear",
-types: ["Fire"],
+types: ["Fire", "Normal"],
 baseStats: {hp: 50, atk: 53, def: 48, spa: 53, spd: 48, spe: 64},
 abilities: {0: "Gluttony", H: "Blaze"},
 weightkg: 11,
 evos: ["Simisear"],
 },
+
 simisear: {
 num: 514,
 name: "Simisear",
-types: ["Fire"],
+types: ["Fire", "Normal"],
 baseStats: {hp: 75, atk: 98, def: 63, spa: 98, spd: 63, spe: 101},
 abilities: {0: "Gluttony", H: "Blaze"},
 weightkg: 28,
@@ -6767,19 +7479,21 @@ prevo: "Pansear",
 evoType: "useItem",
 evoItem: "Fire Stone",
 },
+
 panpour: {
 num: 515,
 name: "Panpour",
-types: ["Water"],
+types: ["Water", "Normal"],
 baseStats: {hp: 50, atk: 53, def: 48, spa: 53, spd: 48, spe: 64},
 abilities: {0: "Gluttony", H: "Torrent"},
 weightkg: 13.5,
 evos: ["Simipour"],
 },
+
 simipour: {
 num: 516,
 name: "Simipour",
-types: ["Water"],
+types: ["Water", "Normal"],
 baseStats: {hp: 75, atk: 98, def: 63, spa: 98, spd: 63, spe: 101},
 abilities: {0: "Gluttony", H: "Torrent"},
 weightkg: 29,
@@ -6787,19 +7501,21 @@ prevo: "Panpour",
 evoType: "useItem",
 evoItem: "Water Stone",
 },
+
 munna: {
 num: 517,
 name: "Munna",
-types: ["Psychic"],
+types: ["Psychic", "Ghost"],
 baseStats: {hp: 76, atk: 25, def: 45, spa: 67, spd: 55, spe: 24},
 abilities: {0: "Forewarn", 1: "Synchronize", H: "Telepathy"},
 weightkg: 23.3,
 evos: ["Musharna"],
 },
+
 musharna: {
 num: 518,
 name: "Musharna",
-types: ["Psychic"],
+types: ["Psychic", "Ghost"],
 baseStats: {hp: 116, atk: 55, def: 85, spa: 107, spd: 95, spe: 29},
 abilities: {0: "Forewarn", 1: "Synchronize", H: "Telepathy"},
 weightkg: 60.5,
@@ -6807,6 +7523,7 @@ prevo: "Munna",
 evoType: "useItem",
 evoItem: "Moon Stone",
 },
+
 pidove: {
 num: 519,
 name: "Pidove",
@@ -6816,6 +7533,7 @@ abilities: {0: "Big Pecks", 1: "Super Luck", H: "Rivalry"},
 weightkg: 2.1,
 evos: ["Tranquill"],
 },
+
 tranquill: {
 num: 520,
 name: "Tranquill",
@@ -6826,15 +7544,17 @@ weightkg: 15,
 prevo: "Pidove",
 evos: ["Unfezant"],
 },
+
 unfezant: {
 num: 521,
 name: "Unfezant",
-types: ["Normal", "Flying"],
+types: ["Poison", "Flying"],
 baseStats: {hp: 80, atk: 115, def: 80, spa: 65, spd: 55, spe: 93},
 abilities: {0: "Big Pecks", 1: "Super Luck", H: "Rivalry"},
 weightkg: 29,
 prevo: "Tranquill",
 },
+
 blitzle: {
 num: 522,
 name: "Blitzle",
@@ -6844,15 +7564,17 @@ abilities: {0: "Lightning Rod", 1: "Motor Drive", H: "Sap Sipper"},
 weightkg: 29.8,
 evos: ["Zebstrika"],
 },
+
 zebstrika: {
 num: 523,
 name: "Zebstrika",
-types: ["Electric"],
+types: ["Electric", "Steel"],
 baseStats: {hp: 75, atk: 100, def: 63, spa: 80, spd: 63, spe: 116},
 abilities: {0: "Lightning Rod", 1: "Motor Drive", H: "Sap Sipper"},
 weightkg: 79.5,
 prevo: "Blitzle",
 },
+
 roggenrola: {
 num: 524,
 name: "Roggenrola",
@@ -6862,26 +7584,29 @@ abilities: {0: "Sturdy", 1: "Weak Armor", H: "Sand Force"},
 weightkg: 18,
 evos: ["Boldore"],
 },
+
 boldore: {
 num: 525,
 name: "Boldore",
-types: ["Rock"],
+types: ["Rock", "Poison"],
 baseStats: {hp: 70, atk: 105, def: 105, spa: 50, spd: 40, spe: 20},
 abilities: {0: "Sturdy", 1: "Weak Armor", H: "Sand Force"},
 weightkg: 102,
 prevo: "Roggenrola",
 evos: ["Gigalith"],
 },
+
 gigalith: {
 num: 526,
 name: "Gigalith",
-types: ["Rock"],
+types: ["Rock", "Poison"],
 baseStats: {hp: 85, atk: 135, def: 130, spa: 60, spd: 80, spe: 25},
 abilities: {0: "Sturdy", 1: "Sand Stream", H: "Sand Force"},
 weightkg: 260,
 prevo: "Boldore",
 evoType: "trade",
 },
+
 woobat: {
 num: 527,
 name: "Woobat",
@@ -6891,6 +7616,7 @@ abilities: {0: "Unaware", 1: "Klutz", H: "Simple"},
 weightkg: 2.1,
 evos: ["Swoobat"],
 },
+
 swoobat: {
 num: 528,
 name: "Swoobat",
@@ -6901,6 +7627,7 @@ weightkg: 10.5,
 prevo: "Woobat",
 evoType: "levelFriendship",
 },
+
 drilbur: {
 num: 529,
 name: "Drilbur",
@@ -6910,6 +7637,7 @@ abilities: {0: "Sand Rush", 1: "Sand Force", H: "Mold Breaker"},
 weightkg: 8.5,
 evos: ["Excadrill"],
 },
+
 excadrill: {
 num: 530,
 name: "Excadrill",
@@ -6919,16 +7647,18 @@ abilities: {0: "Sand Rush", 1: "Sand Force", H: "Mold Breaker"},
 weightkg: 40.4,
 prevo: "Drilbur",
 },
+
 audino: {
 num: 531,
 name: "Audino",
-types: ["Normal"],
+types: ["Poison", "Fairy"],
 baseStats: {hp: 103, atk: 60, def: 86, spa: 60, spd: 86, spe: 50},
 abilities: {0: "Healer", 1: "Regenerator", H: "Klutz"},
 weightkg: 31,
 otherFormes: ["Audino-Mega"],
 formeOrder: ["Audino", "Audino-Mega"],
 },
+
 audinomega: {
 num: 531,
 name: "Audino-Mega",
@@ -6939,35 +7669,42 @@ baseStats: {hp: 103, atk: 60, def: 126, spa: 80, spd: 126, spe: 50},
 abilities: {0: "Healer"},
 weightkg: 32,
 },
+
 timburr: {
 num: 532,
 name: "Timburr",
-types: ["Fighting"],
+types: ["Fighting", "Grass"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 75, atk: 80, def: 55, spa: 25, spd: 35, spe: 35},
 abilities: {0: "Guts", 1: "Sheer Force", H: "Iron Fist"},
 weightkg: 12.5,
 evos: ["Gurdurr"],
 },
+
 gurdurr: {
 num: 533,
 name: "Gurdurr",
-types: ["Fighting"],
+types: ["Fighting", "Steel"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 85, atk: 105, def: 85, spa: 40, spd: 50, spe: 40},
 abilities: {0: "Guts", 1: "Sheer Force", H: "Iron Fist"},
 weightkg: 40,
 prevo: "Timburr",
 evos: ["Conkeldurr"],
 },
+
 conkeldurr: {
 num: 534,
 name: "Conkeldurr",
-types: ["Fighting"],
+types: ["Fighting", "Rock"],
+genderRatio: {M: 0.75, F: 0.25},
 baseStats: {hp: 105, atk: 140, def: 95, spa: 55, spd: 65, spe: 45},
 abilities: {0: "Guts", 1: "Sheer Force", H: "Iron Fist"},
 weightkg: 87,
 prevo: "Gurdurr",
 evoType: "trade",
 },
+
 tympole: {
 num: 535,
 name: "Tympole",
@@ -6977,6 +7714,7 @@ abilities: {0: "Swift Swim", 1: "Hydration", H: "Water Absorb"},
 weightkg: 4.5,
 evos: ["Palpitoad"],
 },
+
 palpitoad: {
 num: 536,
 name: "Palpitoad",
@@ -6987,6 +7725,7 @@ weightkg: 17,
 prevo: "Tympole",
 evos: ["Seismitoad"],
 },
+
 seismitoad: {
 num: 537,
 name: "Seismitoad",
@@ -6996,22 +7735,25 @@ abilities: {0: "Swift Swim", 1: "Poison Touch", H: "Water Absorb"},
 weightkg: 62,
 prevo: "Palpitoad",
 },
+
 throh: {
 num: 538,
 name: "Throh",
-types: ["Fighting"],
+types: ["Fighting", "Rock"],
 baseStats: {hp: 120, atk: 100, def: 85, spa: 30, spd: 85, spe: 45},
 abilities: {0: "Guts", 1: "Inner Focus", H: "Mold Breaker"},
 weightkg: 55.5,
 },
+
 sawk: {
 num: 539,
 name: "Sawk",
-types: ["Fighting"],
+types: ["Fighting", "Ice"],
 baseStats: {hp: 75, atk: 125, def: 75, spa: 30, spd: 75, spe: 85},
 abilities: {0: "Sturdy", 1: "Inner Focus", H: "Mold Breaker"},
 weightkg: 51,
 },
+
 sewaddle: {
 num: 540,
 name: "Sewaddle",
@@ -7021,6 +7763,7 @@ abilities: {0: "Swarm", 1: "Chlorophyll", H: "Overcoat"},
 weightkg: 2.5,
 evos: ["Swadloon"],
 },
+
 swadloon: {
 num: 541,
 name: "Swadloon",
@@ -7031,6 +7774,7 @@ weightkg: 7.3,
 prevo: "Sewaddle",
 evos: ["Leavanny"],
 },
+
 leavanny: {
 num: 542,
 name: "Leavanny",
@@ -7041,6 +7785,7 @@ weightkg: 20.5,
 prevo: "Swadloon",
 evoType: "levelFriendship",
 },
+
 venipede: {
 num: 543,
 name: "Venipede",
@@ -7050,6 +7795,7 @@ abilities: {0: "Poison Point", 1: "Swarm", H: "Speed Boost"},
 weightkg: 5.3,
 evos: ["Whirlipede"],
 },
+
 whirlipede: {
 num: 544,
 name: "Whirlipede",
@@ -7060,6 +7806,7 @@ weightkg: 58.5,
 prevo: "Venipede",
 evos: ["Scolipede"],
 },
+
 scolipede: {
 num: 545,
 name: "Scolipede",
@@ -7069,19 +7816,21 @@ abilities: {0: "Poison Point", 1: "Swarm", H: "Speed Boost"},
 weightkg: 200.5,
 prevo: "Whirlipede",
 },
+
 cottonee: {
 num: 546,
 name: "Cottonee",
-types: ["Grass", "Fairy"],
+types: ["Grass", "Flying"],
 baseStats: {hp: 40, atk: 27, def: 60, spa: 37, spd: 50, spe: 66},
 abilities: {0: "Prankster", 1: "Infiltrator", H: "Chlorophyll"},
 weightkg: 0.6,
 evos: ["Whimsicott"],
 },
+
 whimsicott: {
 num: 547,
 name: "Whimsicott",
-types: ["Grass", "Fairy"],
+types: ["Grass", "Flying"],
 baseStats: {hp: 60, atk: 67, def: 85, spa: 77, spd: 75, spe: 116},
 abilities: {0: "Prankster", 1: "Infiltrator", H: "Chlorophyll"},
 weightkg: 6.6,
@@ -7089,6 +7838,7 @@ prevo: "Cottonee",
 evoType: "useItem",
 evoItem: "Sun Stone",
 },
+
 petilil: {
 num: 548,
 name: "Petilil",
@@ -7098,10 +7848,11 @@ abilities: {0: "Chlorophyll", 1: "Own Tempo", H: "Leaf Guard"},
 weightkg: 6.6,
 evos: ["Lilligant", "Lilligant-Hisui"],
 },
+
 lilligant: {
 num: 549,
 name: "Lilligant",
-types: ["Grass"],
+types: ["Grass", "Psychic"],
 baseStats: {hp: 70, atk: 60, def: 75, spa: 110, spd: 75, spe: 90},
 abilities: {0: "Chlorophyll", 1: "Own Tempo", H: "Leaf Guard"},
 weightkg: 16.3,
@@ -7111,6 +7862,7 @@ evoItem: "Sun Stone",
 otherFormes: ["Lilligant-Hisui"],
 formeOrder: ["Lilligant", "Lilligant-Hisui"],
 },
+
 lilliganthisui: {
 num: 549,
 name: "Lilligant-Hisui",
@@ -7124,39 +7876,43 @@ prevo: "Petilil",
 evoType: "useItem",
 evoItem: "Sun Stone",
 },
+
 basculin: {
 num: 550,
 name: "Basculin",
 baseForme: "Red-Striped",
-types: ["Water"],
+types: ["Water", "Fire"],
 baseStats: {hp: 70, atk: 92, def: 65, spa: 80, spd: 55, spe: 98},
 abilities: {0: "Reckless", 1: "Adaptability", H: "Mold Breaker"},
 weightkg: 18,
 otherFormes: ["Basculin-Blue-Striped", "Basculin-White-Striped"],
 formeOrder: ["Basculin", "Basculin-Blue-Striped", "Basculin-White-Striped"],
 },
+
 basculinbluestriped: {
 num: 550,
 name: "Basculin-Blue-Striped",
 baseSpecies: "Basculin",
 forme: "Blue-Striped",
-types: ["Water"],
+types: ["Water", "Ghost"],
 baseStats: {hp: 70, atk: 92, def: 65, spa: 80, spd: 55, spe: 98},
 abilities: {0: "Rock Head", 1: "Adaptability", H: "Mold Breaker"},
 weightkg: 18,
 },
+
 basculinwhitestriped: {
 num: 550,
 name: "Basculin-White-Striped",
 baseSpecies: "Basculin",
 forme: "White-Striped",
-types: ["Water"],
+types: ["Ice"],
 baseStats: {hp: 70, atk: 92, def: 65, spa: 80, spd: 55, spe: 98},
 abilities: {0: "Rattled", 1: "Adaptability", H: "Mold Breaker"},
 weightkg: 18,
 evos: ["Basculegion", "Basculegion-F"],
 gen: 8,
 },
+
 sandile: {
 num: 551,
 name: "Sandile",
@@ -7166,6 +7922,7 @@ abilities: {0: "Intimidate", 1: "Moxie", H: "Anger Point"},
 weightkg: 15.2,
 evos: ["Krokorok"],
 },
+
 krokorok: {
 num: 552,
 name: "Krokorok",
@@ -7176,6 +7933,7 @@ weightkg: 33.4,
 prevo: "Sandile",
 evos: ["Krookodile"],
 },
+
 krookodile: {
 num: 553,
 name: "Krookodile",
@@ -7185,6 +7943,7 @@ abilities: {0: "Intimidate", 1: "Moxie", H: "Anger Point"},
 weightkg: 96.3,
 prevo: "Krokorok",
 },
+
 darumaka: {
 num: 554,
 name: "Darumaka",
@@ -7196,6 +7955,7 @@ evos: ["Darmanitan"],
 otherFormes: ["Darumaka-Galar"],
 formeOrder: ["Darumaka", "Darumaka-Galar"],
 },
+
 darumakagalar: {
 num: 554,
 name: "Darumaka-Galar",
@@ -7207,11 +7967,12 @@ abilities: {0: "Hustle", H: "Inner Focus"},
 weightkg: 40,
 evos: ["Darmanitan-Galar"],
 },
+
 darmanitan: {
 num: 555,
 name: "Darmanitan",
 baseForme: "Standard",
-types: ["Fire"],
+types: ["Fire", "Psychic"],
 baseStats: {hp: 105, atk: 140, def: 55, spa: 30, spd: 55, spe: 95},
 abilities: {0: "Sheer Force", H: "Zen Mode"},
 weightkg: 92.9,
@@ -7219,6 +7980,7 @@ prevo: "Darumaka",
 otherFormes: ["Darmanitan-Zen", "Darmanitan-Galar", "Darmanitan-Galar-Zen"],
 formeOrder: ["Darmanitan", "Darmanitan-Zen", "Darmanitan-Galar", "Darmanitan-Galar-Zen"],
 },
+
 darmanitanzen: {
 num: 555,
 name: "Darmanitan-Zen",
@@ -7231,12 +7993,13 @@ weightkg: 92.9,
 requiredAbility: "Zen Mode",
 battleOnly: "Darmanitan",
 },
+
 darmanitangalar: {
 num: 555,
 name: "Darmanitan-Galar",
 baseSpecies: "Darmanitan",
 forme: "Galar",
-types: ["Ice"],
+types: ["Ice", "Fire"],
 baseStats: {hp: 105, atk: 140, def: 55, spa: 30, spd: 55, spe: 95},
 abilities: {0: "Gorilla Tactics", H: "Zen Mode"},
 weightkg: 120,
@@ -7244,6 +8007,7 @@ prevo: "Darumaka-Galar",
 evoType: "useItem",
 evoItem: "Ice Stone",
 },
+
 darmanitangalarzen: {
 num: 555,
 name: "Darmanitan-Galar-Zen",
@@ -7256,14 +8020,16 @@ weightkg: 120,
 requiredAbility: "Zen Mode",
 battleOnly: "Darmanitan-Galar",
 },
+
 maractus: {
 num: 556,
 name: "Maractus",
-types: ["Grass"],
+types: ["Grass", "Water"],
 baseStats: {hp: 75, atk: 86, def: 67, spa: 106, spd: 67, spe: 60},
 abilities: {0: "Water Absorb", 1: "Chlorophyll", H: "Storm Drain"},
 weightkg: 28,
 },
+
 dwebble: {
 num: 557,
 name: "Dwebble",
@@ -7273,6 +8039,7 @@ abilities: {0: "Sturdy", 1: "Shell Armor", H: "Weak Armor"},
 weightkg: 14.5,
 evos: ["Crustle"],
 },
+
 crustle: {
 num: 558,
 name: "Crustle",
@@ -7282,24 +8049,27 @@ abilities: {0: "Sturdy", 1: "Shell Armor", H: "Weak Armor"},
 weightkg: 200,
 prevo: "Dwebble",
 },
+
 scraggy: {
 num: 559,
 name: "Scraggy",
-types: ["Dark", "Fighting"],
+types: ["Fighting"],
 baseStats: {hp: 50, atk: 75, def: 70, spa: 35, spd: 70, spe: 48},
 abilities: {0: "Shed Skin", 1: "Moxie", H: "Intimidate"},
 weightkg: 11.8,
 evos: ["Scrafty"],
 },
+
 scrafty: {
 num: 560,
 name: "Scrafty",
-types: ["Dark", "Fighting"],
+types: ["Fighting", "Dragon"],
 baseStats: {hp: 65, atk: 90, def: 115, spa: 45, spd: 115, spe: 58},
 abilities: {0: "Shed Skin", 1: "Moxie", H: "Intimidate"},
 weightkg: 30,
 prevo: "Scraggy",
 },
+
 sigilyph: {
 num: 561,
 name: "Sigilyph",
@@ -7308,6 +8078,7 @@ baseStats: {hp: 72, atk: 58, def: 80, spa: 103, spd: 80, spe: 97},
 abilities: {0: "Wonder Skin", 1: "Magic Guard", H: "Tinted Lens"},
 weightkg: 14,
 },
+
 yamask: {
 num: 562,
 name: "Yamask",
@@ -7319,17 +8090,19 @@ evos: ["Cofagrigus"],
 otherFormes: ["Yamask-Galar"],
 formeOrder: ["Yamask", "Yamask-Galar"],
 },
+
 yamaskgalar: {
 num: 562,
 name: "Yamask-Galar",
 baseSpecies: "Yamask",
 forme: "Galar",
-types: ["Ground", "Ghost"],
+types: ["Rock", "Ghost"],
 baseStats: {hp: 38, atk: 55, def: 85, spa: 30, spd: 65, spe: 30},
 abilities: {0: "Wandering Spirit"},
 weightkg: 1.5,
 evos: ["Runerigus"],
 },
+
 cofagrigus: {
 num: 563,
 name: "Cofagrigus",
@@ -7339,24 +8112,27 @@ abilities: {0: "Mummy"},
 weightkg: 76.5,
 prevo: "Yamask",
 },
+
 tirtouga: {
 num: 564,
 name: "Tirtouga",
-types: ["Water", "Rock"],
+types: ["Ice", "Rock"],
 baseStats: {hp: 54, atk: 78, def: 103, spa: 53, spd: 45, spe: 22},
 abilities: {0: "Solid Rock", 1: "Sturdy", H: "Swift Swim"},
 weightkg: 16.5,
 evos: ["Carracosta"],
 },
+
 carracosta: {
 num: 565,
 name: "Carracosta",
-types: ["Water", "Rock"],
+types: ["Ice", "Rock"],
 baseStats: {hp: 74, atk: 108, def: 133, spa: 83, spd: 65, spe: 32},
 abilities: {0: "Solid Rock", 1: "Sturdy", H: "Swift Swim"},
 weightkg: 81,
 prevo: "Tirtouga",
 },
+
 archen: {
 num: 566,
 name: "Archen",
@@ -7366,6 +8142,7 @@ abilities: {0: "Defeatist"},
 weightkg: 9.5,
 evos: ["Archeops"],
 },
+
 archeops: {
 num: 567,
 name: "Archeops",
@@ -7375,6 +8152,7 @@ abilities: {0: "Defeatist"},
 weightkg: 32,
 prevo: "Archen",
 },
+
 trubbish: {
 num: 568,
 name: "Trubbish",
@@ -7384,6 +8162,7 @@ abilities: {0: "Stench", 1: "Sticky Hold", H: "Aftermath"},
 weightkg: 31,
 evos: ["Garbodor"],
 },
+
 garbodor: {
 num: 569,
 name: "Garbodor",
@@ -7393,6 +8172,7 @@ abilities: {0: "Stench", 1: "Weak Armor", H: "Aftermath"},
 weightkg: 107.3,
 prevo: "Trubbish",
 },
+
 garbodorgmax: {
 num: 569,
 name: "Garbodor-Gmax",
@@ -7404,6 +8184,7 @@ abilities: {0: "Stench", 1: "Weak Armor", H: "Aftermath"},
 weightkg: 0,
 changesFrom: "Garbodor",
 },
+
 zorua: {
 num: 570,
 name: "Zorua",
@@ -7415,6 +8196,7 @@ evos: ["Zoroark"],
 otherFormes: ["Zorua-Hisui"],
 formeOrder: ["Zorua", "Zorua-Hisui"],
 },
+
 zoruahisui: {
 num: 570,
 name: "Zorua-Hisui",
@@ -7426,10 +8208,11 @@ abilities: {0: "Illusion"},
 weightkg: 12.5,
 evos: ["Zoroark-Hisui"],
 },
+
 zoroark: {
 num: 571,
 name: "Zoroark",
-types: ["Dark"],
+types: ["Dark", "Ghost"],
 baseStats: {hp: 60, atk: 105, def: 60, spa: 120, spd: 60, spe: 105},
 abilities: {0: "Illusion"},
 weightkg: 81.1,
@@ -7437,6 +8220,7 @@ prevo: "Zorua",
 otherFormes: ["Zoroark-Hisui"],
 formeOrder: ["Zoroark", "Zoroark-Hisui"],
 },
+
 zoroarkhisui: {
 num: 571,
 name: "Zoroark-Hisui",
@@ -7448,19 +8232,23 @@ abilities: {0: "Illusion"},
 weightkg: 73,
 prevo: "Zorua-Hisui",
 },
+
 minccino: {
 num: 572,
 name: "Minccino",
-types: ["Normal"],
+types: ["Fairy"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 55, atk: 50, def: 40, spa: 40, spd: 40, spe: 75},
 abilities: {0: "Cute Charm", 1: "Technician", H: "Skill Link"},
 weightkg: 5.8,
 evos: ["Cinccino"],
 },
+
 cinccino: {
 num: 573,
 name: "Cinccino",
-types: ["Normal"],
+types: ["Fairy", "Fighting"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 75, atk: 95, def: 60, spa: 65, spd: 60, spe: 115},
 abilities: {0: "Cute Charm", 1: "Technician", H: "Skill Link"},
 weightkg: 7.5,
@@ -7468,113 +8256,128 @@ prevo: "Minccino",
 evoType: "useItem",
 evoItem: "Shiny Stone",
 },
+
 gothita: {
 num: 574,
 name: "Gothita",
 types: ["Psychic"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 45, atk: 30, def: 50, spa: 55, spd: 65, spe: 45},
 abilities: {0: "Frisk", 1: "Competitive", H: "Shadow Tag"},
 weightkg: 5.8,
 evos: ["Gothorita"],
 },
+
 gothorita: {
 num: 575,
 name: "Gothorita",
-types: ["Psychic"],
+types: ["Psychic", "Dark"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 60, atk: 45, def: 70, spa: 75, spd: 85, spe: 55},
 abilities: {0: "Frisk", 1: "Competitive", H: "Shadow Tag"},
 weightkg: 18,
 prevo: "Gothita",
 evos: ["Gothitelle"],
 },
+
 gothitelle: {
 num: 576,
 name: "Gothitelle",
-types: ["Psychic"],
+types: ["Psychic", "Dark"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 70, atk: 55, def: 95, spa: 95, spd: 110, spe: 65},
 abilities: {0: "Frisk", 1: "Competitive", H: "Shadow Tag"},
 weightkg: 44,
 prevo: "Gothorita",
 },
+
 solosis: {
 num: 577,
 name: "Solosis",
-types: ["Psychic"],
+types: ["Psychic", "Poison"],
 baseStats: {hp: 45, atk: 30, def: 40, spa: 105, spd: 50, spe: 20},
 abilities: {0: "Overcoat", 1: "Magic Guard", H: "Regenerator"},
 weightkg: 1,
 evos: ["Duosion"],
 },
+
 duosion: {
 num: 578,
 name: "Duosion",
-types: ["Psychic"],
+types: ["Psychic", "Poison"],
 baseStats: {hp: 65, atk: 40, def: 50, spa: 125, spd: 60, spe: 30},
 abilities: {0: "Overcoat", 1: "Magic Guard", H: "Regenerator"},
 weightkg: 8,
 prevo: "Solosis",
 evos: ["Reuniclus"],
 },
+
 reuniclus: {
 num: 579,
 name: "Reuniclus",
-types: ["Psychic"],
+types: ["Psychic", "Poison"],
 baseStats: {hp: 110, atk: 65, def: 75, spa: 125, spd: 85, spe: 30},
 abilities: {0: "Overcoat", 1: "Magic Guard", H: "Regenerator"},
 weightkg: 20.1,
 prevo: "Duosion",
 },
+
 ducklett: {
 num: 580,
 name: "Ducklett",
-types: ["Water", "Flying"],
+types: ["Ice", "Flying"],
 baseStats: {hp: 62, atk: 44, def: 50, spa: 44, spd: 50, spe: 55},
 abilities: {0: "Keen Eye", 1: "Big Pecks", H: "Hydration"},
 weightkg: 5.5,
 evos: ["Swanna"],
 },
+
 swanna: {
 num: 581,
 name: "Swanna",
-types: ["Water", "Flying"],
+types: ["Ice", "Flying"],
 baseStats: {hp: 75, atk: 87, def: 63, spa: 87, spd: 63, spe: 98},
 abilities: {0: "Keen Eye", 1: "Big Pecks", H: "Hydration"},
 weightkg: 24.2,
 prevo: "Ducklett",
 },
+
 vanillite: {
 num: 582,
 name: "Vanillite",
-types: ["Ice"],
+types: ["Ice", "Poison"],
 baseStats: {hp: 36, atk: 50, def: 50, spa: 65, spd: 60, spe: 44},
 abilities: {0: "Ice Body", 1: "Snow Cloak", H: "Weak Armor"},
 weightkg: 5.7,
 evos: ["Vanillish"],
 },
+
 vanillish: {
 num: 583,
 name: "Vanillish",
-types: ["Ice"],
+types: ["Ice", "Poison"],
 baseStats: {hp: 51, atk: 65, def: 65, spa: 80, spd: 75, spe: 59},
 abilities: {0: "Ice Body", 1: "Snow Cloak", H: "Weak Armor"},
 weightkg: 41,
 prevo: "Vanillite",
 evos: ["Vanilluxe"],
 },
+
 vanilluxe: {
 num: 584,
 name: "Vanilluxe",
-types: ["Ice"],
+types: ["Ice", "Poison"],
 baseStats: {hp: 71, atk: 95, def: 85, spa: 110, spd: 95, spe: 79},
 abilities: {0: "Ice Body", 1: "Snow Warning", H: "Weak Armor"},
 weightkg: 57.5,
 prevo: "Vanillish",
 },
+
 deerling: {
 num: 585,
 name: "Deerling",
 baseForme: "Spring",
-types: ["Normal", "Grass"],
+types: ["Ground", "Grass"],
 baseStats: {hp: 60, atk: 60, def: 50, spa: 40, spd: 50, spe: 75},
 abilities: {0: "Chlorophyll", 1: "Sap Sipper", H: "Serene Grace"},
 weightkg: 19.5,
@@ -7582,11 +8385,12 @@ evos: ["Sawsbuck"],
 cosmeticFormes: ["Deerling-Summer", "Deerling-Autumn", "Deerling-Winter"],
 formeOrder: ["Deerling", "Deerling-Summer", "Deerling-Autumn", "Deerling-Winter"],
 },
+
 sawsbuck: {
 num: 586,
 name: "Sawsbuck",
 baseForme: "Spring",
-types: ["Normal", "Grass"],
+types: ["Ground", "Grass"],
 baseStats: {hp: 80, atk: 100, def: 70, spa: 60, spd: 70, spe: 95},
 abilities: {0: "Chlorophyll", 1: "Sap Sipper", H: "Serene Grace"},
 weightkg: 92.5,
@@ -7594,14 +8398,16 @@ prevo: "Deerling",
 cosmeticFormes: ["Sawsbuck-Summer", "Sawsbuck-Autumn", "Sawsbuck-Winter"],
 formeOrder: ["Sawsbuck", "Sawsbuck-Summer", "Sawsbuck-Autumn", "Sawsbuck-Winter"],
 },
+
 emolga: {
 num: 587,
 name: "Emolga",
-types: ["Electric", "Flying"],
+types: ["Electric", "Ground"],
 baseStats: {hp: 55, atk: 75, def: 60, spa: 75, spd: 60, spe: 103},
 abilities: {0: "Static", H: "Motor Drive"},
 weightkg: 5,
 },
+
 karrablast: {
 num: 588,
 name: "Karrablast",
@@ -7611,6 +8417,7 @@ abilities: {0: "Swarm", 1: "Shed Skin", H: "No Guard"},
 weightkg: 5.9,
 evos: ["Escavalier"],
 },
+
 escavalier: {
 num: 589,
 name: "Escavalier",
@@ -7622,6 +8429,7 @@ prevo: "Karrablast",
 evoType: "trade",
 evoCondition: "with a Shelmet",
 },
+
 foongus: {
 num: 590,
 name: "Foongus",
@@ -7631,6 +8439,7 @@ abilities: {0: "Effect Spore", H: "Regenerator"},
 weightkg: 1,
 evos: ["Amoonguss"],
 },
+
 amoonguss: {
 num: 591,
 name: "Amoonguss",
@@ -7640,6 +8449,7 @@ abilities: {0: "Effect Spore", H: "Regenerator"},
 weightkg: 10.5,
 prevo: "Foongus",
 },
+
 frillish: {
 num: 592,
 name: "Frillish",
@@ -7649,6 +8459,7 @@ abilities: {0: "Water Absorb", 1: "Cursed Body", H: "Damp"},
 weightkg: 33,
 evos: ["Jellicent"],
 },
+
 jellicent: {
 num: 593,
 name: "Jellicent",
@@ -7658,14 +8469,16 @@ abilities: {0: "Water Absorb", 1: "Cursed Body", H: "Damp"},
 weightkg: 135,
 prevo: "Frillish",
 },
+
 alomomola: {
 num: 594,
 name: "Alomomola",
-types: ["Water"],
+types: ["Water", "Fairy"],
 baseStats: {hp: 165, atk: 75, def: 80, spa: 40, spd: 45, spe: 65},
 abilities: {0: "Healer", 1: "Hydration", H: "Regenerator"},
 weightkg: 31.6,
 },
+
 joltik: {
 num: 595,
 name: "Joltik",
@@ -7675,6 +8488,7 @@ abilities: {0: "Compound Eyes", 1: "Unnerve", H: "Swarm"},
 weightkg: 0.6,
 evos: ["Galvantula"],
 },
+
 galvantula: {
 num: 596,
 name: "Galvantula",
@@ -7684,6 +8498,7 @@ abilities: {0: "Compound Eyes", 1: "Unnerve", H: "Swarm"},
 weightkg: 14.3,
 prevo: "Joltik",
 },
+
 ferroseed: {
 num: 597,
 name: "Ferroseed",
@@ -7693,6 +8508,7 @@ abilities: {0: "Iron Barbs"},
 weightkg: 18.8,
 evos: ["Ferrothorn"],
 },
+
 ferrothorn: {
 num: 598,
 name: "Ferrothorn",
@@ -7702,6 +8518,7 @@ abilities: {0: "Iron Barbs", H: "Anticipation"},
 weightkg: 110,
 prevo: "Ferroseed",
 },
+
 klink: {
 num: 599,
 name: "Klink",
@@ -7711,6 +8528,7 @@ abilities: {0: "Plus", 1: "Minus", H: "Clear Body"},
 weightkg: 21,
 evos: ["Klang"],
 },
+
 klang: {
 num: 600,
 name: "Klang",
@@ -7721,6 +8539,7 @@ weightkg: 51,
 prevo: "Klink",
 evos: ["Klinklang"],
 },
+
 klinklang: {
 num: 601,
 name: "Klinklang",
@@ -7730,6 +8549,7 @@ abilities: {0: "Plus", 1: "Minus", H: "Clear Body"},
 weightkg: 81,
 prevo: "Klang",
 },
+
 tynamo: {
 num: 602,
 name: "Tynamo",
@@ -7739,20 +8559,22 @@ abilities: {0: "Levitate"},
 weightkg: 0.3,
 evos: ["Eelektrik"],
 },
+
 eelektrik: {
 num: 603,
 name: "Eelektrik",
-types: ["Electric"],
+types: ["Electric", "Poison"],
 baseStats: {hp: 65, atk: 85, def: 70, spa: 75, spd: 70, spe: 40},
 abilities: {0: "Levitate"},
 weightkg: 22,
 prevo: "Tynamo",
 evos: ["Eelektross"],
 },
+
 eelektross: {
 num: 604,
 name: "Eelektross",
-types: ["Electric"],
+types: ["Electric", "Poison"],
 baseStats: {hp: 85, atk: 115, def: 80, spa: 105, spd: 80, spe: 50},
 abilities: {0: "Levitate"},
 weightkg: 80.5,
@@ -7760,24 +8582,27 @@ prevo: "Eelektrik",
 evoType: "useItem",
 evoItem: "Thunder Stone",
 },
+
 elgyem: {
 num: 605,
 name: "Elgyem",
-types: ["Psychic"],
+types: ["Psychic", "Rock"],
 baseStats: {hp: 55, atk: 55, def: 55, spa: 85, spd: 55, spe: 30},
 abilities: {0: "Telepathy", 1: "Synchronize", H: "Analytic"},
 weightkg: 9,
 evos: ["Beheeyem"],
 },
+
 beheeyem: {
 num: 606,
 name: "Beheeyem",
-types: ["Psychic"],
+types: ["Psychic", "Rock"],
 baseStats: {hp: 75, atk: 75, def: 75, spa: 125, spd: 95, spe: 40},
 abilities: {0: "Telepathy", 1: "Synchronize", H: "Analytic"},
 weightkg: 34.5,
 prevo: "Elgyem",
 },
+
 litwick: {
 num: 607,
 name: "Litwick",
@@ -7787,6 +8612,7 @@ abilities: {0: "Flash Fire", 1: "Flame Body", H: "Infiltrator"},
 weightkg: 3.1,
 evos: ["Lampent"],
 },
+
 lampent: {
 num: 608,
 name: "Lampent",
@@ -7797,6 +8623,7 @@ weightkg: 13,
 prevo: "Litwick",
 evos: ["Chandelure"],
 },
+
 chandelure: {
 num: 609,
 name: "Chandelure",
@@ -7808,6 +8635,7 @@ prevo: "Lampent",
 evoType: "useItem",
 evoItem: "Dusk Stone",
 },
+
 axew: {
 num: 610,
 name: "Axew",
@@ -7817,6 +8645,7 @@ abilities: {0: "Rivalry", 1: "Mold Breaker", H: "Unnerve"},
 weightkg: 18,
 evos: ["Fraxure"],
 },
+
 fraxure: {
 num: 611,
 name: "Fraxure",
@@ -7827,6 +8656,7 @@ weightkg: 36,
 prevo: "Axew",
 evos: ["Haxorus"],
 },
+
 haxorus: {
 num: 612,
 name: "Haxorus",
@@ -7836,32 +8666,36 @@ abilities: {0: "Rivalry", 1: "Mold Breaker", H: "Unnerve"},
 weightkg: 105.5,
 prevo: "Fraxure",
 },
+
 cubchoo: {
 num: 613,
 name: "Cubchoo",
-types: ["Ice"],
+types: ["Ice", "Normal"],
 baseStats: {hp: 55, atk: 70, def: 40, spa: 60, spd: 40, spe: 40},
 abilities: {0: "Snow Cloak", 1: "Slush Rush", H: "Rattled"},
 weightkg: 8.5,
 evos: ["Beartic"],
 },
+
 beartic: {
 num: 614,
 name: "Beartic",
-types: ["Ice"],
+types: ["Ice", "Normal"],
 baseStats: {hp: 95, atk: 130, def: 80, spa: 70, spd: 80, spe: 50},
 abilities: {0: "Snow Cloak", 1: "Slush Rush", H: "Swift Swim"},
 weightkg: 260,
 prevo: "Cubchoo",
 },
+
 cryogonal: {
 num: 615,
 name: "Cryogonal",
-types: ["Ice"],
+types: ["Ice", "Steel"],
 baseStats: {hp: 80, atk: 50, def: 50, spa: 95, spd: 135, spe: 105},
 abilities: {0: "Levitate"},
 weightkg: 148,
 },
+
 shelmet: {
 num: 616,
 name: "Shelmet",
@@ -7871,10 +8705,11 @@ abilities: {0: "Hydration", 1: "Shell Armor", H: "Overcoat"},
 weightkg: 7.7,
 evos: ["Accelgor"],
 },
+
 accelgor: {
 num: 617,
 name: "Accelgor",
-types: ["Bug"],
+types: ["Bug", "Ghost"],
 baseStats: {hp: 80, atk: 70, def: 40, spa: 100, spd: 60, spe: 145},
 abilities: {0: "Hydration", 1: "Sticky Hold", H: "Unburden"},
 weightkg: 25.3,
@@ -7882,6 +8717,7 @@ prevo: "Shelmet",
 evoType: "trade",
 evoCondition: "with a Karrablast",
 },
+
 stunfisk: {
 num: 618,
 name: "Stunfisk",
@@ -7892,16 +8728,18 @@ weightkg: 11,
 otherFormes: ["Stunfisk-Galar"],
 formeOrder: ["Stunfisk", "Stunfisk-Galar"],
 },
+
 stunfiskgalar: {
 num: 618,
 name: "Stunfisk-Galar",
 baseSpecies: "Stunfisk",
 forme: "Galar",
-types: ["Ground", "Steel"],
+types: ["Dark", "Steel"],
 baseStats: {hp: 109, atk: 81, def: 99, spa: 66, spd: 84, spe: 32},
 abilities: {0: "Mimicry"},
 weightkg: 20.5,
 },
+
 mienfoo: {
 num: 619,
 name: "Mienfoo",
@@ -7911,15 +8749,17 @@ abilities: {0: "Inner Focus", 1: "Regenerator", H: "Reckless"},
 weightkg: 20,
 evos: ["Mienshao"],
 },
+
 mienshao: {
 num: 620,
 name: "Mienshao",
-types: ["Fighting"],
+types: ["Fighting", "Ghost"],
 baseStats: {hp: 65, atk: 125, def: 60, spa: 95, spd: 60, spe: 105},
 abilities: {0: "Inner Focus", 1: "Regenerator", H: "Reckless"},
 weightkg: 35.5,
 prevo: "Mienfoo",
 },
+
 druddigon: {
 num: 621,
 name: "Druddigon",
@@ -7928,24 +8768,27 @@ baseStats: {hp: 77, atk: 120, def: 90, spa: 60, spd: 90, spe: 48},
 abilities: {0: "Rough Skin", 1: "Sheer Force", H: "Mold Breaker"},
 weightkg: 139,
 },
+
 golett: {
 num: 622,
 name: "Golett",
-types: ["Ground", "Ghost"],
+types: ["Steel", "Ghost"],
 baseStats: {hp: 59, atk: 74, def: 50, spa: 35, spd: 50, spe: 35},
 abilities: {0: "Iron Fist", 1: "Klutz", H: "No Guard"},
 weightkg: 92,
 evos: ["Golurk"],
 },
+
 golurk: {
 num: 623,
 name: "Golurk",
-types: ["Ground", "Ghost"],
+types: ["Steel", "Ghost"],
 baseStats: {hp: 89, atk: 124, def: 80, spa: 55, spd: 80, spe: 55},
 abilities: {0: "Iron Fist", 1: "Klutz", H: "No Guard"},
 weightkg: 330,
 prevo: "Golett",
 },
+
 pawniard: {
 num: 624,
 name: "Pawniard",
@@ -7955,6 +8798,7 @@ abilities: {0: "Defiant", 1: "Inner Focus", H: "Pressure"},
 weightkg: 10.2,
 evos: ["Bisharp"],
 },
+
 bisharp: {
 num: 625,
 name: "Bisharp",
@@ -7965,27 +8809,30 @@ weightkg: 70,
 prevo: "Pawniard",
 evos: ["Kingambit"],
 },
+
 bouffalant: {
 num: 626,
 name: "Bouffalant",
-types: ["Normal"],
+types: ["Normal", "Rock"],
 baseStats: {hp: 95, atk: 110, def: 95, spa: 40, spd: 95, spe: 55},
 abilities: {0: "Reckless", 1: "Sap Sipper", H: "Soundproof"},
 weightkg: 94.6,
 },
+
 rufflet: {
 num: 627,
 name: "Rufflet",
-types: ["Normal", "Flying"],
+types: ["Ice", "Flying"],
 baseStats: {hp: 70, atk: 83, def: 50, spa: 37, spd: 50, spe: 60},
 abilities: {0: "Keen Eye", 1: "Sheer Force", H: "Hustle"},
 weightkg: 10.5,
 evos: ["Braviary", "Braviary-Hisui"],
 },
+
 braviary: {
 num: 628,
 name: "Braviary",
-types: ["Normal", "Flying"],
+types: ["Ice", "Flying"],
 baseStats: {hp: 100, atk: 123, def: 75, spa: 57, spd: 75, spe: 80},
 abilities: {0: "Keen Eye", 1: "Sheer Force", H: "Defiant"},
 weightkg: 41,
@@ -7993,17 +8840,19 @@ prevo: "Rufflet",
 otherFormes: ["Braviary-Hisui"],
 formeOrder: ["Braviary", "Braviary-Hisui"],
 },
+
 braviaryhisui: {
 num: 628,
 name: "Braviary-Hisui",
 baseSpecies: "Braviary",
 forme: "Hisui",
-types: ["Psychic", "Flying"],
+types: ["Psychic", "Ice"],
 baseStats: {hp: 110, atk: 83, def: 70, spa: 112, spd: 70, spe: 65},
 abilities: {0: "Keen Eye", 1: "Sheer Force", H: "Tinted Lens"},
 weightkg: 43.4,
 prevo: "Rufflet",
 },
+
 vullaby: {
 num: 629,
 name: "Vullaby",
@@ -8013,6 +8862,7 @@ abilities: {0: "Big Pecks", 1: "Overcoat", H: "Weak Armor"},
 weightkg: 9,
 evos: ["Mandibuzz"],
 },
+
 mandibuzz: {
 num: 630,
 name: "Mandibuzz",
@@ -8022,6 +8872,7 @@ abilities: {0: "Big Pecks", 1: "Overcoat", H: "Weak Armor"},
 weightkg: 39.5,
 prevo: "Vullaby",
 },
+
 heatmor: {
 num: 631,
 name: "Heatmor",
@@ -8030,6 +8881,7 @@ baseStats: {hp: 85, atk: 97, def: 66, spa: 105, spd: 66, spe: 65},
 abilities: {0: "Gluttony", 1: "Flash Fire", H: "White Smoke"},
 weightkg: 58,
 },
+
 durant: {
 num: 632,
 name: "Durant",
@@ -8038,6 +8890,7 @@ baseStats: {hp: 58, atk: 109, def: 112, spa: 48, spd: 48, spe: 109},
 abilities: {0: "Swarm", 1: "Hustle", H: "Truant"},
 weightkg: 33,
 },
+
 deino: {
 num: 633,
 name: "Deino",
@@ -8047,6 +8900,7 @@ abilities: {0: "Hustle"},
 weightkg: 17.3,
 evos: ["Zweilous"],
 },
+
 zweilous: {
 num: 634,
 name: "Zweilous",
@@ -8057,6 +8911,7 @@ weightkg: 50,
 prevo: "Deino",
 evos: ["Hydreigon"],
 },
+
 hydreigon: {
 num: 635,
 name: "Hydreigon",
@@ -8066,6 +8921,7 @@ abilities: {0: "Levitate"},
 weightkg: 160,
 prevo: "Zweilous",
 },
+
 larvesta: {
 num: 636,
 name: "Larvesta",
@@ -8075,6 +8931,7 @@ abilities: {0: "Flame Body", H: "Swarm"},
 weightkg: 28.8,
 evos: ["Volcarona"],
 },
+
 volcarona: {
 num: 637,
 name: "Volcarona",
@@ -8084,6 +8941,7 @@ abilities: {0: "Flame Body", H: "Swarm"},
 weightkg: 46,
 prevo: "Larvesta",
 },
+
 cobalion: {
 num: 638,
 name: "Cobalion",
@@ -8092,6 +8950,7 @@ baseStats: {hp: 91, atk: 90, def: 129, spa: 90, spd: 72, spe: 108},
 abilities: {0: "Justified"},
 weightkg: 250,
 },
+
 terrakion: {
 num: 639,
 name: "Terrakion",
@@ -8100,6 +8959,7 @@ baseStats: {hp: 91, atk: 129, def: 90, spa: 72, spd: 90, spe: 108},
 abilities: {0: "Justified"},
 weightkg: 260,
 },
+
 virizion: {
 num: 640,
 name: "Virizion",
@@ -8108,51 +8968,56 @@ baseStats: {hp: 91, atk: 90, def: 72, spa: 90, spd: 129, spe: 108},
 abilities: {0: "Justified"},
 weightkg: 200,
 },
+
 tornadus: {
 num: 641,
 name: "Tornadus",
 baseForme: "Incarnate",
-types: ["Flying"],
+types: ["Flying", "Dragon"],
 baseStats: {hp: 79, atk: 115, def: 70, spa: 125, spd: 80, spe: 111},
 abilities: {0: "Prankster", H: "Defiant"},
 weightkg: 63,
 otherFormes: ["Tornadus-Therian"],
 formeOrder: ["Tornadus", "Tornadus-Therian"],
 },
+
 tornadustherian: {
 num: 641,
 name: "Tornadus-Therian",
 baseSpecies: "Tornadus",
 forme: "Therian",
-types: ["Flying"],
+types: ["Flying", "Dragon"],
 baseStats: {hp: 79, atk: 100, def: 80, spa: 110, spd: 90, spe: 121},
 abilities: {0: "Regenerator"},
 weightkg: 63,
 changesFrom: "Tornadus",
 },
+
 thundurus: {
 num: 642,
 name: "Thundurus",
 baseForme: "Incarnate",
-types: ["Electric", "Flying"],
+types: ["Electric", "Dragon"],
 baseStats: {hp: 79, atk: 115, def: 70, spa: 125, spd: 80, spe: 111},
 abilities: {0: "Prankster", H: "Defiant"},
 weightkg: 61,
 otherFormes: ["Thundurus-Therian"],
 formeOrder: ["Thundurus", "Thundurus-Therian"],
 },
+
 thundurustherian: {
 num: 642,
 name: "Thundurus-Therian",
 baseSpecies: "Thundurus",
 forme: "Therian",
-types: ["Electric", "Flying"],
+types: ["Electric", "Dragon"],
 baseStats: {hp: 79, atk: 105, def: 70, spa: 145, spd: 80, spe: 101},
 abilities: {0: "Volt Absorb"},
 weightkg: 61,
 changesFrom: "Thundurus",
 },
-reshiram: {
+
+
 num: 643,
 name: "Reshiram",
 types: ["Dragon", "Fire"],
@@ -8160,7 +9025,8 @@ baseStats: {hp: 100, atk: 120, def: 100, spa: 150, spd: 120, spe: 90},
 abilities: {0: "Turboblaze"},
 weightkg: 330,
 },
-zekrom: {
+
+
 num: 644,
 name: "Zekrom",
 types: ["Dragon", "Electric"],
@@ -8168,28 +9034,31 @@ baseStats: {hp: 100, atk: 150, def: 120, spa: 120, spd: 100, spe: 90},
 abilities: {0: "Teravolt"},
 weightkg: 345,
 },
+
 landorus: {
 num: 645,
 name: "Landorus",
 baseForme: "Incarnate",
-types: ["Ground", "Flying"],
+types: ["Ground", "Dragon"],
 baseStats: {hp: 89, atk: 125, def: 90, spa: 115, spd: 80, spe: 101},
 abilities: {0: "Sand Force", H: "Sheer Force"},
 weightkg: 68,
 otherFormes: ["Landorus-Therian"],
 formeOrder: ["Landorus", "Landorus-Therian"],
 },
+
 landorustherian: {
 num: 645,
 name: "Landorus-Therian",
 baseSpecies: "Landorus",
 forme: "Therian",
-types: ["Ground", "Flying"],
+types: ["Ground", "Dragon"],
 baseStats: {hp: 89, atk: 145, def: 90, spa: 105, spd: 80, spe: 91},
 abilities: {0: "Intimidate"},
 weightkg: 68,
 changesFrom: "Landorus",
 },
+
 kyurem: {
 num: 646,
 name: "Kyurem",
@@ -8200,28 +9069,31 @@ weightkg: 325,
 otherFormes: ["Kyurem-Black", "Kyurem-White"],
 formeOrder: ["Kyurem", "Kyurem-White", "Kyurem-Black"],
 },
+
 kyuremblack: {
 num: 646,
 name: "Kyurem-Black",
 baseSpecies: "Kyurem",
 forme: "Black",
-types: ["Dragon", "Ice"],
+types: ["Electric", "Ice"],
 baseStats: {hp: 125, atk: 170, def: 100, spa: 120, spd: 90, spe: 95},
 abilities: {0: "Teravolt"},
 weightkg: 325,
 changesFrom: "Kyurem",
 },
+
 kyuremwhite: {
 num: 646,
 name: "Kyurem-White",
 baseSpecies: "Kyurem",
 forme: "White",
-types: ["Dragon", "Ice"],
+types: ["Fire", "Ice"],
 baseStats: {hp: 125, atk: 120, def: 90, spa: 170, spd: 100, spe: 95},
 abilities: {0: "Turboblaze"},
 weightkg: 325,
 changesFrom: "Kyurem",
 },
+
 keldeo: {
 num: 647,
 name: "Keldeo",
@@ -8233,6 +9105,7 @@ weightkg: 48.5,
 otherFormes: ["Keldeo-Resolute"],
 formeOrder: ["Keldeo", "Keldeo-Resolute"],
 },
+
 keldeoresolute: {
 num: 647,
 name: "Keldeo-Resolute",
@@ -8245,6 +9118,7 @@ weightkg: 48.5,
 requiredMove: "Secret Sword",
 changesFrom: "Keldeo",
 },
+
 meloetta: {
 num: 648,
 name: "Meloetta",
@@ -8256,6 +9130,7 @@ weightkg: 6.5,
 otherFormes: ["Meloetta-Pirouette"],
 formeOrder: ["Meloetta", "Meloetta-Pirouette"],
 },
+
 meloettapirouette: {
 num: 648,
 name: "Meloetta-Pirouette",
@@ -8268,60 +9143,66 @@ weightkg: 6.5,
 requiredMove: "Relic Song",
 battleOnly: "Meloetta",
 },
+
 genesect: {
 num: 649,
 name: "Genesect",
-types: ["Bug", "Steel"],
+types: ["Bug", "Dark"],
 baseStats: {hp: 71, atk: 120, def: 95, spa: 120, spd: 95, spe: 99},
 abilities: {0: "Download"},
 weightkg: 82.5,
 otherFormes: ["Genesect-Douse", "Genesect-Shock", "Genesect-Burn", "Genesect-Chill"],
 formeOrder: ["Genesect", "Genesect-Douse", "Genesect-Shock", "Genesect-Burn", "Genesect-Chill"],
 },
+
 genesectdouse: {
 num: 649,
 name: "Genesect-Douse",
 baseSpecies: "Genesect",
 forme: "Douse",
-types: ["Bug", "Steel"],
+types: ["Bug", "Dark"],
 baseStats: {hp: 71, atk: 120, def: 95, spa: 120, spd: 95, spe: 99},
 abilities: {0: "Download"},
 weightkg: 82.5,
 changesFrom: "Genesect",
 },
+
 genesectshock: {
 num: 649,
 name: "Genesect-Shock",
 baseSpecies: "Genesect",
 forme: "Shock",
-types: ["Bug", "Steel"],
+types: ["Bug", "Dark"],
 baseStats: {hp: 71, atk: 120, def: 95, spa: 120, spd: 95, spe: 99},
 abilities: {0: "Download"},
 weightkg: 82.5,
 changesFrom: "Genesect",
 },
+
 genesectburn: {
 num: 649,
 name: "Genesect-Burn",
 baseSpecies: "Genesect",
 forme: "Burn",
-types: ["Bug", "Steel"],
+types: ["Bug", "Dark"],
 baseStats: {hp: 71, atk: 120, def: 95, spa: 120, spd: 95, spe: 99},
 abilities: {0: "Download"},
 weightkg: 82.5,
 changesFrom: "Genesect",
 },
+
 genesectchill: {
 num: 649,
 name: "Genesect-Chill",
 baseSpecies: "Genesect",
 forme: "Chill",
-types: ["Bug", "Steel"],
+types: ["Bug", "Dark"],
 baseStats: {hp: 71, atk: 120, def: 95, spa: 120, spd: 95, spe: 99},
 abilities: {0: "Download"},
 weightkg: 82.5,
 changesFrom: "Genesect",
 },
+
 chespin: {
 num: 650,
 name: "Chespin",
@@ -8331,6 +9212,7 @@ abilities: {0: "Overgrow", H: "Bulletproof"},
 weightkg: 9,
 evos: ["Quilladin"],
 },
+
 quilladin: {
 num: 651,
 name: "Quilladin",
@@ -8341,15 +9223,17 @@ weightkg: 29,
 prevo: "Chespin",
 evos: ["Chesnaught"],
 },
+
 chesnaught: {
 num: 652,
 name: "Chesnaught",
-types: ["Grass", "Fighting"],
+types: ["Grass", "Steel"],
 baseStats: {hp: 88, atk: 107, def: 122, spa: 74, spd: 75, spe: 64},
 abilities: {0: "Overgrow", H: "Bulletproof"},
 weightkg: 90,
 prevo: "Quilladin",
 },
+
 fennekin: {
 num: 653,
 name: "Fennekin",
@@ -8359,6 +9243,7 @@ abilities: {0: "Blaze", H: "Magician"},
 weightkg: 9.4,
 evos: ["Braixen"],
 },
+
 braixen: {
 num: 654,
 name: "Braixen",
@@ -8369,6 +9254,7 @@ weightkg: 14.5,
 prevo: "Fennekin",
 evos: ["Delphox"],
 },
+
 delphox: {
 num: 655,
 name: "Delphox",
@@ -8378,6 +9264,7 @@ abilities: {0: "Blaze", H: "Magician"},
 weightkg: 39,
 prevo: "Braixen",
 },
+
 froakie: {
 num: 656,
 name: "Froakie",
@@ -8387,6 +9274,7 @@ abilities: {0: "Torrent", H: "Protean"},
 weightkg: 7,
 evos: ["Frogadier"],
 },
+
 frogadier: {
 num: 657,
 name: "Frogadier",
@@ -8397,6 +9285,7 @@ weightkg: 10.9,
 prevo: "Froakie",
 evos: ["Greninja"],
 },
+
 greninja: {
 num: 658,
 name: "Greninja",
@@ -8409,6 +9298,7 @@ otherFormes: ["Greninja-Ash"],
 // non-activated Greninja-Ash is forme 1, but PS does not currently distinguish it
 formeOrder: ["Greninja", "Greninja", "Greninja-Ash"],
 },
+
 greninjaash: {
 num: 658,
 name: "Greninja-Ash",
@@ -8422,6 +9312,7 @@ requiredAbility: "Battle Bond",
 battleOnly: "Greninja",
 gen: 7,
 },
+
 bunnelby: {
 num: 659,
 name: "Bunnelby",
@@ -8431,6 +9322,7 @@ abilities: {0: "Pickup", 1: "Cheek Pouch", H: "Huge Power"},
 weightkg: 5,
 evos: ["Diggersby"],
 },
+
 diggersby: {
 num: 660,
 name: "Diggersby",
@@ -8440,6 +9332,7 @@ abilities: {0: "Pickup", 1: "Cheek Pouch", H: "Huge Power"},
 weightkg: 42.4,
 prevo: "Bunnelby",
 },
+
 fletchling: {
 num: 661,
 name: "Fletchling",
@@ -8449,6 +9342,7 @@ abilities: {0: "Big Pecks", H: "Gale Wings"},
 weightkg: 1.7,
 evos: ["Fletchinder"],
 },
+
 fletchinder: {
 num: 662,
 name: "Fletchinder",
@@ -8459,6 +9353,7 @@ weightkg: 16,
 prevo: "Fletchling",
 evos: ["Talonflame"],
 },
+
 talonflame: {
 num: 663,
 name: "Talonflame",
@@ -8468,6 +9363,7 @@ abilities: {0: "Flame Body", H: "Gale Wings"},
 weightkg: 24.5,
 prevo: "Fletchinder",
 },
+
 scatterbug: {
 num: 664,
 name: "Scatterbug",
@@ -8478,6 +9374,7 @@ weightkg: 2.5,
 evos: ["Spewpa"],
 // TODO: Scatterbug technically has the same number of formes as Vivillon
 },
+
 spewpa: {
 num: 665,
 name: "Spewpa",
@@ -8489,6 +9386,7 @@ prevo: "Scatterbug",
 evos: ["Vivillon", "Vivillon-Fancy"],
 // TODO: Spewpa technically has the same number of formes as Vivillon
 },
+
 vivillon: {
 num: 666,
 name: "Vivillon",
@@ -8501,28 +9399,29 @@ prevo: "Spewpa",
 otherFormes: ["Vivillon-Fancy", "Vivillon-Pokeball"],
 cosmeticFormes: ["Vivillon-Archipelago", "Vivillon-Continental", "Vivillon-Elegant", "Vivillon-Garden", "Vivillon-High Plains", "Vivillon-Icy Snow", "Vivillon-Jungle", "Vivillon-Marine", "Vivillon-Modern", "Vivillon-Monsoon", "Vivillon-Ocean", "Vivillon-Polar", "Vivillon-River", "Vivillon-Sandstorm", "Vivillon-Savanna", "Vivillon-Sun", "Vivillon-Tundra"],
 formeOrder: [
-"Vivillon-Icy Snow",
-"Vivillon-Polar",
-"Vivillon-Tundra",
-"Vivillon-Continental",
-"Vivillon-Garden",
-"Vivillon-Elegant",
-"Vivillon", // Meadow
-"Vivillon-Modern",
-"Vivillon-Marine",
-"Vivillon-Archipelago",
-"Vivillon-High Plains",
-"Vivillon-Sandstorm",
-"Vivillon-River",
-"Vivillon-Monsoon",
-"Vivillon-Savanna",
-"Vivillon-Sun",
-"Vivillon-Ocean",
-"Vivillon-Jungle",
-"Vivillon-Fancy",
-"Vivillon-Pokeball",
+Vivillon-Icy Snow,
+Vivillon-Polar,
+Vivillon-Tundra,
+Vivillon-Continental,
+Vivillon-Garden,
+Vivillon-Elegant,
+Vivillon, // Meadow
+Vivillon-Modern,
+Vivillon-Marine,
+Vivillon-Archipelago,
+Vivillon-High Plains,
+Vivillon-Sandstorm,
+Vivillon-River,
+Vivillon-Monsoon,
+Vivillon-Savanna,
+Vivillon-Sun,
+Vivillon-Ocean,
+Vivillon-Jungle,
+Vivillon-Fancy,
+Vivillon-Pokeball,
 ],
 },
+
 vivillonfancy: {
 num: 666,
 name: "Vivillon-Fancy",
@@ -8534,6 +9433,7 @@ abilities: {0: "Shield Dust", 1: "Compound Eyes", H: "Friend Guard"},
 weightkg: 17,
 prevo: "Spewpa",
 },
+
 vivillonpokeball: {
 num: 666,
 name: "Vivillon-Pokeball",
@@ -8544,29 +9444,34 @@ baseStats: {hp: 80, atk: 52, def: 50, spa: 90, spd: 50, spe: 89},
 abilities: {0: "Shield Dust", 1: "Compound Eyes"},
 weightkg: 17,
 },
+
 litleo: {
 num: 667,
 name: "Litleo",
-types: ["Fire", "Normal"],
+types: ["Fire", "Ground"],
+genderRatio: {M: 0.125, F: 0.875},
 baseStats: {hp: 62, atk: 50, def: 58, spa: 73, spd: 54, spe: 72},
 abilities: {0: "Rivalry", 1: "Unnerve", H: "Moxie"},
 weightkg: 13.5,
 evos: ["Pyroar"],
 },
+
 pyroar: {
 num: 668,
 name: "Pyroar",
-types: ["Fire", "Normal"],
+types: ["Fire", "Ground"],
+genderRatio: {M: 0.125, F: 0.875},
 baseStats: {hp: 86, atk: 68, def: 72, spa: 109, spd: 66, spe: 106},
 abilities: {0: "Rivalry", 1: "Unnerve", H: "Moxie"},
 weightkg: 81.5,
 prevo: "Litleo",
 },
+
 flabebe: {
 num: 669,
 name: "Flabe\u0301be\u0301",
 baseForme: "Red",
-types: ["Fairy"],
+types: ["Fairy", "Bug"],
 baseStats: {hp: 44, atk: 38, def: 39, spa: 61, spd: 79, spe: 42},
 abilities: {0: "Flower Veil", H: "Symbiosis"},
 weightkg: 0.1,
@@ -8574,11 +9479,12 @@ evos: ["Floette"],
 cosmeticFormes: ["Flabe\u0301be\u0301-Blue", "Flabe\u0301be\u0301-Orange", "Flabe\u0301be\u0301-White", "Flabe\u0301be\u0301-Yellow"],
 formeOrder: ["Flabe\u0301be\u0301", "Flabe\u0301be\u0301-Blue", "Flabe\u0301be\u0301-Orange", "Flabe\u0301be\u0301-White", "Flabe\u0301be\u0301-Yellow"],
 },
+
 floette: {
 num: 670,
 name: "Floette",
 baseForme: "Red",
-types: ["Fairy"],
+types: ["Fairy", "Bug"],
 baseStats: {hp: 54, atk: 45, def: 47, spa: 75, spd: 98, spe: 52},
 abilities: {0: "Flower Veil", H: "Symbiosis"},
 weightkg: 0.9,
@@ -8588,21 +9494,23 @@ otherFormes: ["Floette-Eternal"],
 cosmeticFormes: ["Floette-Blue", "Floette-Orange", "Floette-White", "Floette-Yellow"],
 formeOrder: ["Floette", "Floette-Blue", "Floette-Orange", "Floette-White", "Floette-Yellow", "Floette-Eternal"],
 },
+
 floetteeternal: {
 num: 670,
 name: "Floette-Eternal",
 baseSpecies: "Floette",
 forme: "Eternal",
-types: ["Fairy"],
+types: ["Fairy", "Bug"],
 baseStats: {hp: 74, atk: 65, def: 67, spa: 125, spd: 128, spe: 92},
 abilities: {0: "Flower Veil"},
 weightkg: 0.9,
 },
+
 florges: {
 num: 671,
 name: "Florges",
 baseForme: "Red",
-types: ["Fairy"],
+types: ["Fairy", "Bug"],
 baseStats: {hp: 78, atk: 65, def: 68, spa: 112, spd: 154, spe: 75},
 abilities: {0: "Flower Veil", H: "Symbiosis"},
 weightkg: 10,
@@ -8612,24 +9520,27 @@ evoItem: "Shiny Stone",
 cosmeticFormes: ["Florges-Blue", "Florges-Orange", "Florges-White", "Florges-Yellow"],
 formeOrder: ["Florges", "Florges-Blue", "Florges-Orange", "Florges-White", "Florges-Yellow"],
 },
+
 skiddo: {
 num: 672,
 name: "Skiddo",
-types: ["Grass"],
+types: ["Grass", "Normal"],
 baseStats: {hp: 66, atk: 65, def: 48, spa: 62, spd: 57, spe: 52},
 abilities: {0: "Sap Sipper", H: "Grass Pelt"},
 weightkg: 31,
 evos: ["Gogoat"],
 },
+
 gogoat: {
 num: 673,
 name: "Gogoat",
-types: ["Grass"],
+types: ["Grass", "Normal"],
 baseStats: {hp: 123, atk: 100, def: 62, spa: 97, spd: 81, spe: 68},
 abilities: {0: "Sap Sipper", H: "Grass Pelt"},
 weightkg: 91,
 prevo: "Skiddo",
 },
+
 pancham: {
 num: 674,
 name: "Pancham",
@@ -8639,6 +9550,7 @@ abilities: {0: "Iron Fist", 1: "Mold Breaker", H: "Scrappy"},
 weightkg: 8,
 evos: ["Pangoro"],
 },
+
 pangoro: {
 num: 675,
 name: "Pangoro",
@@ -8649,28 +9561,30 @@ weightkg: 136,
 prevo: "Pancham",
 evoCondition: "with a Dark-type in the party",
 },
+
 furfrou: {
 num: 676,
 name: "Furfrou",
 baseForme: "Natural",
-types: ["Normal"],
+types: ["Normal", "Fairy"],
 baseStats: {hp: 75, atk: 80, def: 60, spa: 65, spd: 90, spe: 102},
 abilities: {0: "Fur Coat"},
 weightkg: 28,
 cosmeticFormes: ["Furfrou-Dandy", "Furfrou-Debutante", "Furfrou-Diamond", "Furfrou-Heart", "Furfrou-Kabuki", "Furfrou-La Reine", "Furfrou-Matron", "Furfrou-Pharaoh", "Furfrou-Star"],
 formeOrder: [
-"Furfrou",
-"Furfrou-Heart",
-"Furfrou-Star",
-"Furfrou-Diamond",
-"Furfrou-Debutante",
-"Furfrou-Matron",
-"Furfrou-Dandy",
-"Furfrou-La Reine",
-"Furfrou-Kabuki",
-"Furfrou-Pharaoh",
+Furfrou,
+Furfrou-Heart,
+Furfrou-Star,
+Furfrou-Diamond,
+Furfrou-Debutante,
+Furfrou-Matron,
+Furfrou-Dandy,
+Furfrou-La Reine,
+Furfrou-Kabuki,
+Furfrou-Pharaoh,
 ],
 },
+
 espurr: {
 num: 677,
 name: "Espurr",
@@ -8680,6 +9594,7 @@ abilities: {0: "Keen Eye", 1: "Infiltrator", H: "Own Tempo"},
 weightkg: 3.5,
 evos: ["Meowstic", "Meowstic-F"],
 },
+
 meowstic: {
 num: 678,
 name: "Meowstic",
@@ -8692,6 +9607,7 @@ prevo: "Espurr",
 otherFormes: ["Meowstic-F"],
 formeOrder: ["Meowstic", "Meowstic-F"],
 },
+
 meowsticf: {
 num: 678,
 name: "Meowstic-F",
@@ -8703,6 +9619,7 @@ abilities: {0: "Keen Eye", 1: "Infiltrator", H: "Competitive"},
 weightkg: 8.5,
 prevo: "Espurr",
 },
+
 honedge: {
 num: 679,
 name: "Honedge",
@@ -8712,6 +9629,7 @@ abilities: {0: "No Guard"},
 weightkg: 2,
 evos: ["Doublade"],
 },
+
 doublade: {
 num: 680,
 name: "Doublade",
@@ -8722,6 +9640,7 @@ weightkg: 4.5,
 prevo: "Honedge",
 evos: ["Aegislash"],
 },
+
 aegislash: {
 num: 681,
 name: "Aegislash",
@@ -8736,6 +9655,7 @@ evoItem: "Dusk Stone",
 otherFormes: ["Aegislash-Blade"],
 formeOrder: ["Aegislash", "Aegislash-Blade"],
 },
+
 aegislashblade: {
 num: 681,
 name: "Aegislash-Blade",
@@ -8748,6 +9668,7 @@ weightkg: 53,
 requiredAbility: "Stance Change",
 battleOnly: "Aegislash",
 },
+
 spritzee: {
 num: 682,
 name: "Spritzee",
@@ -8757,10 +9678,11 @@ abilities: {0: "Healer", H: "Aroma Veil"},
 weightkg: 0.5,
 evos: ["Aromatisse"],
 },
+
 aromatisse: {
 num: 683,
 name: "Aromatisse",
-types: ["Fairy"],
+types: ["Fairy", "Poison"],
 baseStats: {hp: 101, atk: 72, def: 72, spa: 99, spd: 89, spe: 29},
 abilities: {0: "Healer", H: "Aroma Veil"},
 weightkg: 15.5,
@@ -8768,6 +9690,7 @@ prevo: "Spritzee",
 evoType: "trade",
 evoItem: "Sachet",
 },
+
 swirlix: {
 num: 684,
 name: "Swirlix",
@@ -8777,6 +9700,7 @@ abilities: {0: "Sweet Veil", H: "Unburden"},
 weightkg: 3.5,
 evos: ["Slurpuff"],
 },
+
 slurpuff: {
 num: 685,
 name: "Slurpuff",
@@ -8788,6 +9712,7 @@ prevo: "Swirlix",
 evoType: "trade",
 evoItem: "Whipped Dream",
 },
+
 inkay: {
 num: 686,
 name: "Inkay",
@@ -8797,6 +9722,7 @@ abilities: {0: "Contrary", 1: "Suction Cups", H: "Infiltrator"},
 weightkg: 3.5,
 evos: ["Malamar"],
 },
+
 malamar: {
 num: 687,
 name: "Malamar",
@@ -8807,6 +9733,7 @@ weightkg: 47,
 prevo: "Inkay",
 evoCondition: "with the console turned upside-down",
 },
+
 binacle: {
 num: 688,
 name: "Binacle",
@@ -8816,6 +9743,7 @@ abilities: {0: "Tough Claws", 1: "Sniper", H: "Pickpocket"},
 weightkg: 31,
 evos: ["Barbaracle"],
 },
+
 barbaracle: {
 num: 689,
 name: "Barbaracle",
@@ -8825,6 +9753,7 @@ abilities: {0: "Tough Claws", 1: "Sniper", H: "Pickpocket"},
 weightkg: 96,
 prevo: "Binacle",
 },
+
 skrelp: {
 num: 690,
 name: "Skrelp",
@@ -8834,6 +9763,7 @@ abilities: {0: "Poison Point", 1: "Poison Touch", H: "Adaptability"},
 weightkg: 7.3,
 evos: ["Dragalge"],
 },
+
 dragalge: {
 num: 691,
 name: "Dragalge",
@@ -8843,6 +9773,7 @@ abilities: {0: "Poison Point", 1: "Poison Touch", H: "Adaptability"},
 weightkg: 81.5,
 prevo: "Skrelp",
 },
+
 clauncher: {
 num: 692,
 name: "Clauncher",
@@ -8852,28 +9783,31 @@ abilities: {0: "Mega Launcher"},
 weightkg: 8.3,
 evos: ["Clawitzer"],
 },
+
 clawitzer: {
 num: 693,
 name: "Clawitzer",
-types: ["Water"],
+types: ["Water", "Fire"],
 baseStats: {hp: 71, atk: 73, def: 88, spa: 120, spd: 89, spe: 59},
 abilities: {0: "Mega Launcher"},
 weightkg: 35.3,
 prevo: "Clauncher",
 },
+
 helioptile: {
 num: 694,
 name: "Helioptile",
-types: ["Electric", "Normal"],
+types: ["Electric"],
 baseStats: {hp: 44, atk: 38, def: 33, spa: 61, spd: 43, spe: 70},
 abilities: {0: "Dry Skin", 1: "Sand Veil", H: "Solar Power"},
 weightkg: 6,
 evos: ["Heliolisk"],
 },
+
 heliolisk: {
 num: 695,
 name: "Heliolisk",
-types: ["Electric", "Normal"],
+types: ["Electric", "Fire"],
 baseStats: {hp: 62, atk: 55, def: 52, spa: 109, spd: 94, spe: 109},
 abilities: {0: "Dry Skin", 1: "Sand Veil", H: "Solar Power"},
 weightkg: 21,
@@ -8881,6 +9815,7 @@ prevo: "Helioptile",
 evoType: "useItem",
 evoItem: "Sun Stone",
 },
+
 tyrunt: {
 num: 696,
 name: "Tyrunt",
@@ -8890,6 +9825,7 @@ abilities: {0: "Strong Jaw", H: "Sturdy"},
 weightkg: 26,
 evos: ["Tyrantrum"],
 },
+
 tyrantrum: {
 num: 697,
 name: "Tyrantrum",
@@ -8900,29 +9836,32 @@ weightkg: 270,
 prevo: "Tyrunt",
 evoCondition: "during the day",
 },
+
 amaura: {
 num: 698,
 name: "Amaura",
-types: ["Rock", "Ice"],
+types: ["Ice", "Electric"],
 baseStats: {hp: 77, atk: 59, def: 50, spa: 67, spd: 63, spe: 46},
 abilities: {0: "Refrigerate", H: "Snow Warning"},
 weightkg: 25.2,
 evos: ["Aurorus"],
 },
+
 aurorus: {
 num: 699,
 name: "Aurorus",
-types: ["Rock", "Ice"],
+types: ["Ice", "Electric"],
 baseStats: {hp: 123, atk: 77, def: 72, spa: 99, spd: 92, spe: 58},
 abilities: {0: "Refrigerate", H: "Snow Warning"},
 weightkg: 225,
 prevo: "Amaura",
 evoCondition: "at night",
 },
+
 sylveon: {
 num: 700,
 name: "Sylveon",
-types: ["Fairy"],
+types: ["Fairy", "Normal"],
 baseStats: {hp: 95, atk: 65, def: 65, spa: 110, spd: 130, spe: 60},
 abilities: {0: "Cute Charm", H: "Pixilate"},
 weightkg: 23.5,
@@ -8930,6 +9869,7 @@ prevo: "Eevee",
 evoType: "levelExtra",
 evoCondition: "with a Fairy-type move and two levels of Affection",
 },
+
 hawlucha: {
 num: 701,
 name: "Hawlucha",
@@ -8938,6 +9878,7 @@ baseStats: {hp: 78, atk: 92, def: 75, spa: 74, spd: 63, spe: 118},
 abilities: {0: "Limber", 1: "Unburden", H: "Mold Breaker"},
 weightkg: 21.5,
 },
+
 dedenne: {
 num: 702,
 name: "Dedenne",
@@ -8946,6 +9887,7 @@ baseStats: {hp: 67, atk: 58, def: 57, spa: 81, spd: 67, spe: 101},
 abilities: {0: "Cheek Pouch", 1: "Pickup", H: "Plus"},
 weightkg: 2.2,
 },
+
 carbink: {
 num: 703,
 name: "Carbink",
@@ -8954,19 +9896,21 @@ baseStats: {hp: 50, atk: 50, def: 150, spa: 50, spd: 150, spe: 50},
 abilities: {0: "Clear Body", H: "Sturdy"},
 weightkg: 5.7,
 },
+
 goomy: {
 num: 704,
 name: "Goomy",
-types: ["Dragon"],
+types: ["Dragon", "Poison"],
 baseStats: {hp: 45, atk: 50, def: 35, spa: 55, spd: 75, spe: 40},
 abilities: {0: "Sap Sipper", 1: "Hydration", H: "Gooey"},
 weightkg: 2.8,
 evos: ["Sliggoo", "Sliggoo-Hisui"],
 },
+
 sliggoo: {
 num: 705,
 name: "Sliggoo",
-types: ["Dragon"],
+types: ["Dragon", "Poison"],
 baseStats: {hp: 68, atk: 75, def: 53, spa: 83, spd: 113, spe: 60},
 abilities: {0: "Sap Sipper", 1: "Hydration", H: "Gooey"},
 weightkg: 17.5,
@@ -8975,6 +9919,7 @@ evos: ["Goodra"],
 otherFormes: ["Sliggoo-Hisui"],
 formeOrder: ["Sliggoo", "Sliggoo-Hisui"],
 },
+
 sliggoohisui: {
 num: 705,
 name: "Sliggoo-Hisui",
@@ -8987,10 +9932,11 @@ weightkg: 68.5,
 prevo: "Goomy",
 evos: ["Goodra-Hisui"],
 },
+
 goodra: {
 num: 706,
 name: "Goodra",
-types: ["Dragon"],
+types: ["Dragon", "Poison"],
 baseStats: {hp: 90, atk: 100, def: 70, spa: 110, spd: 150, spe: 80},
 abilities: {0: "Sap Sipper", 1: "Hydration", H: "Gooey"},
 weightkg: 150.5,
@@ -8998,6 +9944,7 @@ prevo: "Sliggoo",
 otherFormes: ["Goodra-Hisui"],
 formeOrder: ["Goodra", "Goodra-Hisui"],
 },
+
 goodrahisui: {
 num: 706,
 name: "Goodra-Hisui",
@@ -9009,6 +9956,7 @@ abilities: {0: "Sap Sipper", 1: "Shell Armor", H: "Gooey"},
 weightkg: 334.1,
 prevo: "Sliggoo-Hisui",
 },
+
 klefki: {
 num: 707,
 name: "Klefki",
@@ -9017,6 +9965,7 @@ baseStats: {hp: 57, atk: 80, def: 91, spa: 80, spd: 87, spe: 75},
 abilities: {0: "Prankster", H: "Magician"},
 weightkg: 3,
 },
+
 phantump: {
 num: 708,
 name: "Phantump",
@@ -9026,6 +9975,7 @@ abilities: {0: "Natural Cure", 1: "Frisk", H: "Harvest"},
 weightkg: 7,
 evos: ["Trevenant"],
 },
+
 trevenant: {
 num: 709,
 name: "Trevenant",
@@ -9036,6 +9986,7 @@ weightkg: 71,
 prevo: "Phantump",
 evoType: "trade",
 },
+
 pumpkaboo: {
 num: 710,
 name: "Pumpkaboo",
@@ -9048,6 +9999,7 @@ evos: ["Gourgeist"],
 otherFormes: ["Pumpkaboo-Small", "Pumpkaboo-Large", "Pumpkaboo-Super"],
 formeOrder: ["Pumpkaboo", "Pumpkaboo-Small", "Pumpkaboo-Large", "Pumpkaboo-Super"],
 },
+
 pumpkaboosmall: {
 num: 710,
 name: "Pumpkaboo-Small",
@@ -9059,6 +10011,7 @@ abilities: {0: "Pickup", 1: "Frisk", H: "Insomnia"},
 weightkg: 3.5,
 evos: ["Gourgeist-Small"],
 },
+
 pumpkaboolarge: {
 num: 710,
 name: "Pumpkaboo-Large",
@@ -9070,6 +10023,7 @@ abilities: {0: "Pickup", 1: "Frisk", H: "Insomnia"},
 weightkg: 7.5,
 evos: ["Gourgeist-Large"],
 },
+
 pumpkaboosuper: {
 num: 710,
 name: "Pumpkaboo-Super",
@@ -9081,6 +10035,7 @@ abilities: {0: "Pickup", 1: "Frisk", H: "Insomnia"},
 weightkg: 15,
 evos: ["Gourgeist-Super"],
 },
+
 gourgeist: {
 num: 711,
 name: "Gourgeist",
@@ -9094,6 +10049,7 @@ evoType: "trade",
 otherFormes: ["Gourgeist-Small", "Gourgeist-Large", "Gourgeist-Super"],
 formeOrder: ["Gourgeist", "Gourgeist-Small", "Gourgeist-Large", "Gourgeist-Super"],
 },
+
 gourgeistsmall: {
 num: 711,
 name: "Gourgeist-Small",
@@ -9106,6 +10062,7 @@ weightkg: 9.5,
 prevo: "Pumpkaboo-Small",
 evoType: "trade",
 },
+
 gourgeistlarge: {
 num: 711,
 name: "Gourgeist-Large",
@@ -9118,6 +10075,7 @@ weightkg: 14,
 prevo: "Pumpkaboo-Large",
 evoType: "trade",
 },
+
 gourgeistsuper: {
 num: 711,
 name: "Gourgeist-Super",
@@ -9130,19 +10088,21 @@ weightkg: 39,
 prevo: "Pumpkaboo-Super",
 evoType: "trade",
 },
+
 bergmite: {
 num: 712,
 name: "Bergmite",
-types: ["Ice"],
+types: ["Ice", "Bug"],
 baseStats: {hp: 55, atk: 69, def: 85, spa: 32, spd: 35, spe: 28},
 abilities: {0: "Own Tempo", 1: "Ice Body", H: "Sturdy"},
 weightkg: 99.5,
 evos: ["Avalugg", "Avalugg-Hisui"],
 },
+
 avalugg: {
 num: 713,
 name: "Avalugg",
-types: ["Ice"],
+types: ["Ice", "Bug"],
 baseStats: {hp: 95, atk: 117, def: 184, spa: 44, spd: 46, spe: 28},
 abilities: {0: "Own Tempo", 1: "Ice Body", H: "Sturdy"},
 weightkg: 505,
@@ -9150,6 +10110,7 @@ prevo: "Bergmite",
 otherFormes: ["Avalugg-Hisui"],
 formeOrder: ["Avalugg", "Avalugg-Hisui"],
 },
+
 avalugghisui: {
 num: 713,
 name: "Avalugg-Hisui",
@@ -9161,6 +10122,7 @@ abilities: {0: "Strong Jaw", 1: "Ice Body", H: "Sturdy"},
 weightkg: 262.4,
 prevo: "Bergmite",
 },
+
 noibat: {
 num: 714,
 name: "Noibat",
@@ -9170,15 +10132,17 @@ abilities: {0: "Frisk", 1: "Infiltrator", H: "Telepathy"},
 weightkg: 8,
 evos: ["Noivern"],
 },
+
 noivern: {
 num: 715,
 name: "Noivern",
-types: ["Flying", "Dragon"],
+types: ["Psychic", "Dragon"],
 baseStats: {hp: 85, atk: 70, def: 80, spa: 97, spd: 80, spe: 123},
 abilities: {0: "Frisk", 1: "Infiltrator", H: "Telepathy"},
 weightkg: 85,
 prevo: "Noibat",
 },
+
 xerneas: {
 num: 716,
 name: "Xerneas",
@@ -9190,6 +10154,7 @@ weightkg: 215,
 otherFormes: ["Xerneas-Neutral"],
 formeOrder: ["Xerneas-Neutral", "Xerneas"],
 },
+
 xerneasneutral: {
 num: 716,
 name: "Xerneas-Neutral",
@@ -9200,14 +10165,16 @@ baseStats: {hp: 126, atk: 131, def: 95, spa: 131, spd: 98, spe: 99},
 abilities: {0: "Fairy Aura"},
 weightkg: 215,
 },
+
 yveltal: {
 num: 717,
 name: "Yveltal",
-types: ["Dark", "Flying"],
+types: ["Ghost", "Flying"],
 baseStats: {hp: 126, atk: 131, def: 95, spa: 131, spd: 98, spe: 99},
 abilities: {0: "Dark Aura"},
 weightkg: 203,
 },
+
 zygarde: {
 num: 718,
 name: "Zygarde",
@@ -9217,9 +10184,10 @@ baseStats: {hp: 108, atk: 100, def: 121, spa: 81, spd: 95, spe: 95},
 abilities: {0: "Aura Break", S: "Power Construct"},
 weightkg: 305,
 otherFormes: ["Zygarde-10%", "Zygarde-Complete"],
- // forme 2 = 10% with Power Constructor ,forme 3 = 50% with Power Construct
+// forme 2 = 10% with Power Constructor ,forme 3 = 50% with Power Construct
 formeOrder: ["Zygarde", "Zygarde-10%", "Zygarde-10%", "Zygarde", "Zygarde-Complete"],
 },
+
 zygarde10: {
 num: 718,
 name: "Zygarde-10%",
@@ -9232,6 +10200,7 @@ weightkg: 33.5,
 changesFrom: "Zygarde",
 gen: 7,
 },
+
 zygardecomplete: {
 num: 718,
 name: "Zygarde-Complete",
@@ -9245,6 +10214,7 @@ requiredAbility: "Power Construct",
 battleOnly: ["Zygarde", "Zygarde-10%"],
 gen: 7,
 },
+
 diancie: {
 num: 719,
 name: "Diancie",
@@ -9255,6 +10225,7 @@ weightkg: 8.8,
 otherFormes: ["Diancie-Mega"],
 formeOrder: ["Diancie", "Diancie-Mega"],
 },
+
 dianciemega: {
 num: 719,
 name: "Diancie-Mega",
@@ -9265,6 +10236,7 @@ baseStats: {hp: 50, atk: 160, def: 110, spa: 160, spd: 110, spe: 110},
 abilities: {0: "Magic Bounce"},
 weightkg: 27.8,
 },
+
 hoopa: {
 num: 720,
 name: "Hoopa",
@@ -9276,6 +10248,7 @@ weightkg: 9,
 otherFormes: ["Hoopa-Unbound"],
 formeOrder: ["Hoopa", "Hoopa-Unbound"],
 },
+
 hoopaunbound: {
 num: 720,
 name: "Hoopa-Unbound",
@@ -9287,6 +10260,7 @@ abilities: {0: "Magician"},
 weightkg: 490,
 changesFrom: "Hoopa",
 },
+
 volcanion: {
 num: 721,
 name: "Volcanion",
@@ -9295,6 +10269,7 @@ baseStats: {hp: 80, atk: 110, def: 120, spa: 130, spd: 90, spe: 70},
 abilities: {0: "Water Absorb"},
 weightkg: 195,
 },
+
 rowlet: {
 num: 722,
 name: "Rowlet",
@@ -9304,6 +10279,7 @@ abilities: {0: "Overgrow", H: "Long Reach"},
 weightkg: 1.5,
 evos: ["Dartrix"],
 },
+
 dartrix: {
 num: 723,
 name: "Dartrix",
@@ -9314,10 +10290,11 @@ weightkg: 16,
 prevo: "Rowlet",
 evos: ["Decidueye", "Decidueye-Hisui"],
 },
+
 decidueye: {
 num: 724,
 name: "Decidueye",
-types: ["Grass", "Ghost"],
+types: ["Grass", "Flying"],
 baseStats: {hp: 78, atk: 107, def: 75, spa: 100, spd: 100, spe: 70},
 abilities: {0: "Overgrow", H: "Long Reach"},
 weightkg: 36.6,
@@ -9325,6 +10302,7 @@ prevo: "Dartrix",
 otherFormes: ["Decidueye-Hisui"],
 formeOrder: ["Decidueye", "Decidueye-Hisui"],
 },
+
 decidueyehisui: {
 num: 724,
 name: "Decidueye-Hisui",
@@ -9336,6 +10314,7 @@ abilities: {0: "Overgrow", H: "Scrappy"},
 weightkg: 37,
 prevo: "Dartrix",
 },
+
 litten: {
 num: 725,
 name: "Litten",
@@ -9345,6 +10324,7 @@ abilities: {0: "Blaze", H: "Intimidate"},
 weightkg: 4.3,
 evos: ["Torracat"],
 },
+
 torracat: {
 num: 726,
 name: "Torracat",
@@ -9355,6 +10335,7 @@ weightkg: 25,
 prevo: "Litten",
 evos: ["Incineroar"],
 },
+
 incineroar: {
 num: 727,
 name: "Incineroar",
@@ -9364,6 +10345,7 @@ abilities: {0: "Blaze", H: "Intimidate"},
 weightkg: 83,
 prevo: "Torracat",
 },
+
 popplio: {
 num: 728,
 name: "Popplio",
@@ -9373,6 +10355,7 @@ abilities: {0: "Torrent", H: "Liquid Voice"},
 weightkg: 7.5,
 evos: ["Brionne"],
 },
+
 brionne: {
 num: 729,
 name: "Brionne",
@@ -9383,6 +10366,7 @@ weightkg: 17.5,
 prevo: "Popplio",
 evos: ["Primarina"],
 },
+
 primarina: {
 num: 730,
 name: "Primarina",
@@ -9392,6 +10376,7 @@ abilities: {0: "Torrent", H: "Liquid Voice"},
 weightkg: 44,
 prevo: "Brionne",
 },
+
 pikipek: {
 num: 731,
 name: "Pikipek",
@@ -9401,6 +10386,7 @@ abilities: {0: "Keen Eye", 1: "Skill Link", H: "Pickup"},
 weightkg: 1.2,
 evos: ["Trumbeak"],
 },
+
 trumbeak: {
 num: 732,
 name: "Trumbeak",
@@ -9411,28 +10397,31 @@ weightkg: 14.8,
 prevo: "Pikipek",
 evos: ["Toucannon"],
 },
+
 toucannon: {
 num: 733,
 name: "Toucannon",
-types: ["Normal", "Flying"],
+types: ["Poison", "Flying"],
 baseStats: {hp: 80, atk: 120, def: 75, spa: 75, spd: 75, spe: 60},
 abilities: {0: "Keen Eye", 1: "Skill Link", H: "Sheer Force"},
 weightkg: 26,
 prevo: "Trumbeak",
 },
+
 yungoos: {
 num: 734,
 name: "Yungoos",
-types: ["Normal"],
+types: ["Ground"],
 baseStats: {hp: 48, atk: 70, def: 30, spa: 30, spd: 30, spe: 45},
 abilities: {0: "Stakeout", 1: "Strong Jaw", H: "Adaptability"},
 weightkg: 6,
 evos: ["Gumshoos"],
 },
+
 gumshoos: {
 num: 735,
 name: "Gumshoos",
-types: ["Normal"],
+types: ["Ground", "Dark"],
 baseStats: {hp: 88, atk: 110, def: 60, spa: 55, spd: 60, spe: 45},
 abilities: {0: "Stakeout", 1: "Strong Jaw", H: "Adaptability"},
 weightkg: 14.2,
@@ -9441,16 +10430,18 @@ evoCondition: "during the day",
 otherFormes: ["Gumshoos-Totem"],
 formeOrder: ["Gumshoos", "Gumshoos-Totem"],
 },
+
 gumshoostotem: {
 num: 735,
 name: "Gumshoos-Totem",
 baseSpecies: "Gumshoos",
 forme: "Totem",
-types: ["Normal"],
+types: ["Ground", "Dark"],
 baseStats: {hp: 88, atk: 110, def: 60, spa: 55, spd: 60, spe: 45},
 abilities: {0: "Adaptability"},
 weightkg: 60,
 },
+
 grubbin: {
 num: 736,
 name: "Grubbin",
@@ -9460,6 +10451,7 @@ abilities: {0: "Swarm"},
 weightkg: 4.4,
 evos: ["Charjabug"],
 },
+
 charjabug: {
 num: 737,
 name: "Charjabug",
@@ -9470,6 +10462,7 @@ weightkg: 10.5,
 prevo: "Grubbin",
 evos: ["Vikavolt"],
 },
+
 vikavolt: {
 num: 738,
 name: "Vikavolt",
@@ -9483,6 +10476,7 @@ evoItem: "Thunder Stone",
 otherFormes: ["Vikavolt-Totem"],
 formeOrder: ["Vikavolt", "Vikavolt-Totem"],
 },
+
 vikavolttotem: {
 num: 738,
 name: "Vikavolt-Totem",
@@ -9493,6 +10487,7 @@ baseStats: {hp: 77, atk: 70, def: 90, spa: 145, spd: 75, spe: 43},
 abilities: {0: "Levitate"},
 weightkg: 147.5,
 },
+
 crabrawler: {
 num: 739,
 name: "Crabrawler",
@@ -9502,6 +10497,7 @@ abilities: {0: "Hyper Cutter", 1: "Iron Fist", H: "Anger Point"},
 weightkg: 7,
 evos: ["Crabominable"],
 },
+
 crabominable: {
 num: 740,
 name: "Crabominable",
@@ -9513,50 +10509,59 @@ prevo: "Crabrawler",
 evoType: "useItem",
 evoItem: "Ice Stone",
 },
+
 oricorio: {
 num: 741,
 name: "Oricorio",
 baseForme: "Baile",
 types: ["Fire", "Flying"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 75, atk: 70, def: 70, spa: 98, spd: 70, spe: 93},
 abilities: {0: "Dancer"},
 weightkg: 3.4,
 otherFormes: ["Oricorio-Pom-Pom", "Oricorio-Pa'u", "Oricorio-Sensu"],
 formeOrder: ["Oricorio", "Oricorio-Pom-Pom", "Oricorio-Pa'u", "Oricorio-Sensu"],
 },
+
 oricoriopompom: {
 num: 741,
 name: "Oricorio-Pom-Pom",
 baseSpecies: "Oricorio",
 forme: "Pom-Pom",
 types: ["Electric", "Flying"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 75, atk: 70, def: 70, spa: 98, spd: 70, spe: 93},
 abilities: {0: "Dancer"},
 weightkg: 3.4,
 changesFrom: "Oricorio",
 },
+
 oricoriopau: {
 num: 741,
 name: "Oricorio-Pa'u",
 baseSpecies: "Oricorio",
 forme: "Pa'u",
-types: ["Psychic", "Flying"],
+types: ["Fairy", "Flying"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 75, atk: 70, def: 70, spa: 98, spd: 70, spe: 93},
 abilities: {0: "Dancer"},
 weightkg: 3.4,
 changesFrom: "Oricorio",
 },
+
 oricoriosensu: {
 num: 741,
 name: "Oricorio-Sensu",
 baseSpecies: "Oricorio",
 forme: "Sensu",
 types: ["Ghost", "Flying"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 75, atk: 70, def: 70, spa: 98, spd: 70, spe: 93},
 abilities: {0: "Dancer"},
 weightkg: 3.4,
 changesFrom: "Oricorio",
 },
+
 cutiefly: {
 num: 742,
 name: "Cutiefly",
@@ -9566,6 +10571,7 @@ abilities: {0: "Honey Gather", 1: "Shield Dust", H: "Sweet Veil"},
 weightkg: 0.2,
 evos: ["Ribombee"],
 },
+
 ribombee: {
 num: 743,
 name: "Ribombee",
@@ -9577,6 +10583,7 @@ prevo: "Cutiefly",
 otherFormes: ["Ribombee-Totem"],
 formeOrder: ["Ribombee", "Ribombee-Totem"],
 },
+
 ribombeetotem: {
 num: 743,
 name: "Ribombee-Totem",
@@ -9587,22 +10594,24 @@ baseStats: {hp: 60, atk: 55, def: 60, spa: 95, spd: 70, spe: 124},
 abilities: {0: "Sweet Veil"},
 weightkg: 2,
 },
+
 rockruff: {
 num: 744,
 name: "Rockruff",
 baseForme: "Midday",
-types: ["Rock"],
+types: ["Rock", "Normal"],
 baseStats: {hp: 45, atk: 65, def: 40, spa: 30, spd: 40, spe: 60},
 abilities: {0: "Keen Eye", 1: "Vital Spirit", H: "Steadfast", S: "Own Tempo"},
 weightkg: 9.2,
 evos: ["Lycanroc", "Lycanroc-Midnight", "Lycanroc-Dusk"],
 formeOrder: ["Rockruff", "Rockruff"], // TODO: Rockruff-Dusk
 },
+
 lycanroc: {
 num: 745,
 name: "Lycanroc",
 baseForme: "Midday",
-types: ["Rock"],
+types: ["Rock", "Normal"],
 baseStats: {hp: 75, atk: 115, def: 65, spa: 55, spd: 65, spe: 112},
 abilities: {0: "Keen Eye", 1: "Sand Rush", H: "Steadfast"},
 weightkg: 25,
@@ -9611,30 +10620,33 @@ evoCondition: "during the day",
 otherFormes: ["Lycanroc-Midnight", "Lycanroc-Dusk"],
 formeOrder: ["Lycanroc", "Lycanroc-Midnight", "Lycanroc-Dusk"],
 },
+
 lycanrocmidnight: {
 num: 745,
 name: "Lycanroc-Midnight",
 baseSpecies: "Lycanroc",
 forme: "Midnight",
-types: ["Rock"],
+types: ["Rock", "Dark"],
 baseStats: {hp: 85, atk: 115, def: 75, spa: 55, spd: 75, spe: 82},
 abilities: {0: "Keen Eye", 1: "Vital Spirit", H: "No Guard"},
 weightkg: 25,
 prevo: "Rockruff",
 evoCondition: "at night",
 },
+
 lycanrocdusk: {
 num: 745,
 name: "Lycanroc-Dusk",
 baseSpecies: "Lycanroc",
 forme: "Dusk",
-types: ["Rock"],
+types: ["Rock", "Electric"],
 baseStats: {hp: 75, atk: 117, def: 65, spa: 55, spd: 65, spe: 110},
 abilities: {0: "Tough Claws"},
 weightkg: 25,
 prevo: "Rockruff",
 evoCondition: "from a special Rockruff",
 },
+
 wishiwashi: {
 num: 746,
 name: "Wishiwashi",
@@ -9646,18 +10658,20 @@ weightkg: 0.3,
 otherFormes: ["Wishiwashi-School"],
 formeOrder: ["Wishiwashi", "Wishiwashi-School"],
 },
+
 wishiwashischool: {
 num: 746,
 name: "Wishiwashi-School",
 baseSpecies: "Wishiwashi",
 forme: "School",
-types: ["Water"],
+types: ["Water", "Ghost"],
 baseStats: {hp: 45, atk: 140, def: 130, spa: 140, spd: 135, spe: 30},
 abilities: {0: "Schooling"},
 weightkg: 78.6,
 requiredAbility: "Schooling",
 battleOnly: "Wishiwashi",
 },
+
 mareanie: {
 num: 747,
 name: "Mareanie",
@@ -9667,6 +10681,7 @@ abilities: {0: "Merciless", 1: "Limber", H: "Regenerator"},
 weightkg: 8,
 evos: ["Toxapex"],
 },
+
 toxapex: {
 num: 748,
 name: "Toxapex",
@@ -9676,6 +10691,7 @@ abilities: {0: "Merciless", 1: "Limber", H: "Regenerator"},
 weightkg: 14.5,
 prevo: "Mareanie",
 },
+
 mudbray: {
 num: 749,
 name: "Mudbray",
@@ -9685,6 +10701,7 @@ abilities: {0: "Own Tempo", 1: "Stamina", H: "Inner Focus"},
 weightkg: 110,
 evos: ["Mudsdale"],
 },
+
 mudsdale: {
 num: 750,
 name: "Mudsdale",
@@ -9694,6 +10711,7 @@ abilities: {0: "Own Tempo", 1: "Stamina", H: "Inner Focus"},
 weightkg: 920,
 prevo: "Mudbray",
 },
+
 dewpider: {
 num: 751,
 name: "Dewpider",
@@ -9703,6 +10721,7 @@ abilities: {0: "Water Bubble", H: "Water Absorb"},
 weightkg: 4,
 evos: ["Araquanid"],
 },
+
 araquanid: {
 num: 752,
 name: "Araquanid",
@@ -9714,6 +10733,7 @@ prevo: "Dewpider",
 otherFormes: ["Araquanid-Totem"],
 formeOrder: ["Araquanid", "Araquanid-Totem"],
 },
+
 araquanidtotem: {
 num: 752,
 name: "Araquanid-Totem",
@@ -9724,6 +10744,7 @@ baseStats: {hp: 68, atk: 70, def: 92, spa: 50, spd: 132, spe: 42},
 abilities: {0: "Water Bubble"},
 weightkg: 217.5,
 },
+
 fomantis: {
 num: 753,
 name: "Fomantis",
@@ -9733,10 +10754,11 @@ abilities: {0: "Leaf Guard", H: "Contrary"},
 weightkg: 1.5,
 evos: ["Lurantis"],
 },
+
 lurantis: {
 num: 754,
 name: "Lurantis",
-types: ["Grass"],
+types: ["Grass", "Ice"],
 baseStats: {hp: 70, atk: 105, def: 90, spa: 80, spd: 90, spe: 45},
 abilities: {0: "Leaf Guard", H: "Contrary"},
 weightkg: 18.5,
@@ -9745,16 +10767,18 @@ evoCondition: "during the day",
 otherFormes: ["Lurantis-Totem"],
 formeOrder: ["Lurantis", "Lurantis-Totem"],
 },
+
 lurantistotem: {
 num: 754,
 name: "Lurantis-Totem",
 baseSpecies: "Lurantis",
 forme: "Totem",
-types: ["Grass"],
+types: ["Grass", "Ice"],
 baseStats: {hp: 70, atk: 105, def: 90, spa: 80, spd: 90, spe: 45},
 abilities: {0: "Leaf Guard"},
 weightkg: 58,
 },
+
 morelull: {
 num: 755,
 name: "Morelull",
@@ -9764,6 +10788,7 @@ abilities: {0: "Illuminate", 1: "Effect Spore", H: "Rain Dish"},
 weightkg: 1.5,
 evos: ["Shiinotic"],
 },
+
 shiinotic: {
 num: 756,
 name: "Shiinotic",
@@ -9773,6 +10798,7 @@ abilities: {0: "Illuminate", 1: "Effect Spore", H: "Rain Dish"},
 weightkg: 11.5,
 prevo: "Morelull",
 },
+
 salandit: {
 num: 757,
 name: "Salandit",
@@ -9782,6 +10808,7 @@ abilities: {0: "Corrosion", H: "Oblivious"},
 weightkg: 4.8,
 evos: ["Salazzle"],
 },
+
 salazzle: {
 num: 758,
 name: "Salazzle",
@@ -9793,6 +10820,7 @@ prevo: "Salandit",
 otherFormes: ["Salazzle-Totem"],
 formeOrder: ["Salazzle", "Salazzle-Totem"],
 },
+
 salazzletotem: {
 num: 758,
 name: "Salazzle-Totem",
@@ -9803,6 +10831,7 @@ baseStats: {hp: 68, atk: 64, def: 60, spa: 111, spd: 60, spe: 117},
 abilities: {0: "Corrosion"},
 weightkg: 81,
 },
+
 stufful: {
 num: 759,
 name: "Stufful",
@@ -9812,6 +10841,7 @@ abilities: {0: "Fluffy", 1: "Klutz", H: "Cute Charm"},
 weightkg: 6.8,
 evos: ["Bewear"],
 },
+
 bewear: {
 num: 760,
 name: "Bewear",
@@ -9821,6 +10851,7 @@ abilities: {0: "Fluffy", 1: "Klutz", H: "Unnerve"},
 weightkg: 135,
 prevo: "Stufful",
 },
+
 bounsweet: {
 num: 761,
 name: "Bounsweet",
@@ -9830,6 +10861,7 @@ abilities: {0: "Leaf Guard", 1: "Oblivious", H: "Sweet Veil"},
 weightkg: 3.2,
 evos: ["Steenee"],
 },
+
 steenee: {
 num: 762,
 name: "Steenee",
@@ -9840,10 +10872,11 @@ weightkg: 8.2,
 prevo: "Bounsweet",
 evos: ["Tsareena"],
 },
+
 tsareena: {
 num: 763,
 name: "Tsareena",
-types: ["Grass"],
+types: ["Grass", "Steel"],
 baseStats: {hp: 72, atk: 120, def: 98, spa: 50, spd: 98, spe: 72},
 abilities: {0: "Leaf Guard", 1: "Queenly Majesty", H: "Sweet Veil"},
 weightkg: 21.4,
@@ -9851,30 +10884,35 @@ prevo: "Steenee",
 evoType: "levelMove",
 evoMove: "Stomp",
 },
+
 comfey: {
 num: 764,
 name: "Comfey",
-types: ["Fairy"],
+types: ["Fairy", "Flying"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 51, atk: 52, def: 90, spa: 82, spd: 110, spe: 100},
 abilities: {0: "Flower Veil", 1: "Triage", H: "Natural Cure"},
 weightkg: 0.3,
 },
+
 oranguru: {
 num: 765,
 name: "Oranguru",
-types: ["Normal", "Psychic"],
+types: ["Normal", "Ghost"],
 baseStats: {hp: 90, atk: 60, def: 80, spa: 90, spd: 110, spe: 60},
 abilities: {0: "Inner Focus", 1: "Telepathy", H: "Symbiosis"},
 weightkg: 76,
 },
+
 passimian: {
 num: 766,
 name: "Passimian",
-types: ["Fighting"],
+types: ["Normal", "Fighting"],
 baseStats: {hp: 100, atk: 120, def: 90, spa: 40, spd: 60, spe: 80},
 abilities: {0: "Receiver", H: "Defiant"},
 weightkg: 82.8,
 },
+
 wimpod: {
 num: 767,
 name: "Wimpod",
@@ -9884,6 +10922,7 @@ abilities: {0: "Wimp Out"},
 weightkg: 12,
 evos: ["Golisopod"],
 },
+
 golisopod: {
 num: 768,
 name: "Golisopod",
@@ -9893,6 +10932,7 @@ abilities: {0: "Emergency Exit"},
 weightkg: 108,
 prevo: "Wimpod",
 },
+
 sandygast: {
 num: 769,
 name: "Sandygast",
@@ -9902,6 +10942,7 @@ abilities: {0: "Water Compaction", H: "Sand Veil"},
 weightkg: 70,
 evos: ["Palossand"],
 },
+
 palossand: {
 num: 770,
 name: "Palossand",
@@ -9911,27 +10952,30 @@ abilities: {0: "Water Compaction", H: "Sand Veil"},
 weightkg: 250,
 prevo: "Sandygast",
 },
+
 pyukumuku: {
 num: 771,
 name: "Pyukumuku",
-types: ["Water"],
+types: ["Rock", "Poison"],
 baseStats: {hp: 55, atk: 60, def: 130, spa: 30, spd: 130, spe: 5},
 abilities: {0: "Innards Out", H: "Unaware"},
 weightkg: 1.2,
 },
+
 typenull: {
 num: 772,
 name: "Type: Null",
-types: ["Normal"],
+types: ["???"],
 baseStats: {hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 59},
 abilities: {0: "Battle Armor"},
 weightkg: 120.5,
 evos: ["Silvally"],
 },
+
 silvally: {
 num: 773,
 name: "Silvally",
-types: ["Normal"],
+types: ["???"],
 baseStats: {hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 95},
 abilities: {0: "RKS System"},
 weightkg: 100.5,
@@ -9939,10 +10983,11 @@ prevo: "Type: Null",
 evoType: "levelFriendship",
 otherFormes: ["Silvally-Bug", "Silvally-Dark", "Silvally-Dragon", "Silvally-Electric", "Silvally-Fairy", "Silvally-Fighting", "Silvally-Fire", "Silvally-Flying", "Silvally-Ghost", "Silvally-Grass", "Silvally-Ground", "Silvally-Ice", "Silvally-Poison", "Silvally-Psychic", "Silvally-Rock", "Silvally-Steel", "Silvally-Water"],
 formeOrder: [
-"Silvally", "Silvally-Fighting", "Silvally-Flying", "Silvally-Poison", "Silvally-Ground", "Silvally-Rock", "Silvally-Bug", "Silvally-Ghost", "Silvally-Steel",
-"Silvally-Fire", "Silvally-Water", "Silvally-Grass", "Silvally-Electric", "Silvally-Psychic", "Silvally-Ice", "Silvally-Dragon", "Silvally-Dark", "Silvally-Fairy",
+Silvally, "Silvally-Fighting", "Silvally-Flying", "Silvally-Poison", "Silvally-Ground", "Silvally-Rock", "Silvally-Bug", "Silvally-Ghost", "Silvally-Steel",
+Silvally-Fire, "Silvally-Water", "Silvally-Grass", "Silvally-Electric", "Silvally-Psychic", "Silvally-Ice", "Silvally-Dragon", "Silvally-Dark", "Silvally-Fairy",
 ],
 },
+
 silvallybug: {
 num: 773,
 name: "Silvally-Bug",
@@ -9954,6 +10999,7 @@ abilities: {0: "RKS System"},
 weightkg: 100.5,
 changesFrom: "Silvally",
 },
+
 silvallydark: {
 num: 773,
 name: "Silvally-Dark",
@@ -9965,6 +11011,7 @@ abilities: {0: "RKS System"},
 weightkg: 100.5,
 changesFrom: "Silvally",
 },
+
 silvallydragon: {
 num: 773,
 name: "Silvally-Dragon",
@@ -9976,6 +11023,7 @@ abilities: {0: "RKS System"},
 weightkg: 100.5,
 changesFrom: "Silvally",
 },
+
 silvallyelectric: {
 num: 773,
 name: "Silvally-Electric",
@@ -9987,6 +11035,7 @@ abilities: {0: "RKS System"},
 weightkg: 100.5,
 changesFrom: "Silvally",
 },
+
 silvallyfairy: {
 num: 773,
 name: "Silvally-Fairy",
@@ -9998,6 +11047,7 @@ abilities: {0: "RKS System"},
 weightkg: 100.5,
 changesFrom: "Silvally",
 },
+
 silvallyfighting: {
 num: 773,
 name: "Silvally-Fighting",
@@ -10009,6 +11059,7 @@ abilities: {0: "RKS System"},
 weightkg: 100.5,
 changesFrom: "Silvally",
 },
+
 silvallyfire: {
 num: 773,
 name: "Silvally-Fire",
@@ -10020,6 +11071,7 @@ abilities: {0: "RKS System"},
 weightkg: 100.5,
 changesFrom: "Silvally",
 },
+
 silvallyflying: {
 num: 773,
 name: "Silvally-Flying",
@@ -10031,6 +11083,7 @@ abilities: {0: "RKS System"},
 weightkg: 100.5,
 changesFrom: "Silvally",
 },
+
 silvallyghost: {
 num: 773,
 name: "Silvally-Ghost",
@@ -10042,6 +11095,7 @@ abilities: {0: "RKS System"},
 weightkg: 100.5,
 changesFrom: "Silvally",
 },
+
 silvallygrass: {
 num: 773,
 name: "Silvally-Grass",
@@ -10053,6 +11107,7 @@ abilities: {0: "RKS System"},
 weightkg: 100.5,
 changesFrom: "Silvally",
 },
+
 silvallyground: {
 num: 773,
 name: "Silvally-Ground",
@@ -10064,6 +11119,7 @@ abilities: {0: "RKS System"},
 weightkg: 100.5,
 changesFrom: "Silvally",
 },
+
 silvallyice: {
 num: 773,
 name: "Silvally-Ice",
@@ -10075,6 +11131,7 @@ abilities: {0: "RKS System"},
 weightkg: 100.5,
 changesFrom: "Silvally",
 },
+
 silvallypoison: {
 num: 773,
 name: "Silvally-Poison",
@@ -10086,6 +11143,7 @@ abilities: {0: "RKS System"},
 weightkg: 100.5,
 changesFrom: "Silvally",
 },
+
 silvallypsychic: {
 num: 773,
 name: "Silvally-Psychic",
@@ -10097,6 +11155,7 @@ abilities: {0: "RKS System"},
 weightkg: 100.5,
 changesFrom: "Silvally",
 },
+
 silvallyrock: {
 num: 773,
 name: "Silvally-Rock",
@@ -10108,6 +11167,7 @@ abilities: {0: "RKS System"},
 weightkg: 100.5,
 changesFrom: "Silvally",
 },
+
 silvallysteel: {
 num: 773,
 name: "Silvally-Steel",
@@ -10119,6 +11179,7 @@ abilities: {0: "RKS System"},
 weightkg: 100.5,
 changesFrom: "Silvally",
 },
+
 silvallywater: {
 num: 773,
 name: "Silvally-Water",
@@ -10130,6 +11191,7 @@ abilities: {0: "RKS System"},
 weightkg: 100.5,
 changesFrom: "Silvally",
 },
+
 minior: {
 num: 774,
 name: "Minior",
@@ -10141,31 +11203,34 @@ weightkg: 0.3,
 otherFormes: ["Minior-Meteor"],
 cosmeticFormes: ["Minior-Orange", "Minior-Yellow", "Minior-Green", "Minior-Blue", "Minior-Indigo", "Minior-Violet"],
 formeOrder: [
- // All of the colored Minior Meteor formes (unsupported by PS) are numbers 0-6
-"Minior-Meteor", "Minior-Meteor", "Minior-Meteor", "Minior-Meteor", "Minior-Meteor", "Minior-Meteor", "Minior-Meteor",
-"Minior", "Minior-Orange", "Minior-Yellow", "Minior-Green", "Minior-Blue", "Minior-Indigo", "Minior-Violet",
+// All of the colored Minior Meteor formes (unsupported by PS) are numbers 0-6
+Minior-Meteor, "Minior-Meteor", "Minior-Meteor", "Minior-Meteor", "Minior-Meteor", "Minior-Meteor", "Minior-Meteor",
+Minior, "Minior-Orange", "Minior-Yellow", "Minior-Green", "Minior-Blue", "Minior-Indigo", "Minior-Violet",
 ],
 },
+
 miniormeteor: {
 num: 774,
 name: "Minior-Meteor",
 baseSpecies: "Minior",
 forme: "Meteor",
-types: ["Rock", "Flying"],
+types: ["Fairy", "Flying"],
 baseStats: {hp: 60, atk: 60, def: 100, spa: 60, spd: 100, spe: 60},
 abilities: {0: "Shields Down"},
 weightkg: 40,
 requiredAbility: "Shields Down",
 battleOnly: "Minior",
 },
+
 komala: {
 num: 775,
 name: "Komala",
-types: ["Normal"],
+types: ["Normal", "Ghost"],
 baseStats: {hp: 65, atk: 115, def: 65, spa: 75, spd: 95, spe: 65},
 abilities: {0: "Comatose"},
 weightkg: 19.9,
 },
+
 turtonator: {
 num: 776,
 name: "Turtonator",
@@ -10174,6 +11239,7 @@ baseStats: {hp: 60, atk: 78, def: 135, spa: 91, spd: 85, spe: 36},
 abilities: {0: "Shell Armor"},
 weightkg: 212,
 },
+
 togedemaru: {
 num: 777,
 name: "Togedemaru",
@@ -10184,6 +11250,7 @@ weightkg: 3.3,
 otherFormes: ["Togedemaru-Totem"],
 formeOrder: ["Togedemaru", "Togedemaru-Totem"],
 },
+
 togedemarutotem: {
 num: 777,
 name: "Togedemaru-Totem",
@@ -10194,6 +11261,7 @@ baseStats: {hp: 65, atk: 98, def: 63, spa: 40, spd: 73, spe: 96},
 abilities: {0: "Sturdy"},
 weightkg: 13,
 },
+
 mimikyu: {
 num: 778,
 name: "Mimikyu",
@@ -10205,6 +11273,7 @@ weightkg: 0.7,
 otherFormes: ["Mimikyu-Busted", "Mimikyu-Totem", "Mimikyu-Busted-Totem"],
 formeOrder: ["Mimikyu", "Mimikyu-Busted", "Mimikyu-Totem", "Mimikyu-Busted-Totem"],
 },
+
 mimikyubusted: {
 num: 778,
 name: "Mimikyu-Busted",
@@ -10217,6 +11286,7 @@ weightkg: 0.7,
 requiredAbility: "Disguise",
 battleOnly: "Mimikyu",
 },
+
 mimikyutotem: {
 num: 778,
 name: "Mimikyu-Totem",
@@ -10227,6 +11297,7 @@ baseStats: {hp: 55, atk: 90, def: 80, spa: 50, spd: 105, spe: 96},
 abilities: {0: "Disguise"},
 weightkg: 2.8,
 },
+
 mimikyubustedtotem: {
 num: 778,
 name: "Mimikyu-Busted-Totem",
@@ -10239,6 +11310,7 @@ weightkg: 2.8,
 requiredAbility: "Disguise",
 battleOnly: "Mimikyu-Totem",
 },
+
 bruxish: {
 num: 779,
 name: "Bruxish",
@@ -10247,6 +11319,7 @@ baseStats: {hp: 68, atk: 105, def: 70, spa: 70, spd: 70, spe: 92},
 abilities: {0: "Dazzling", 1: "Strong Jaw", H: "Wonder Skin"},
 weightkg: 19,
 },
+
 drampa: {
 num: 780,
 name: "Drampa",
@@ -10255,14 +11328,16 @@ baseStats: {hp: 78, atk: 60, def: 85, spa: 135, spd: 91, spe: 36},
 abilities: {0: "Berserk", 1: "Sap Sipper", H: "Cloud Nine"},
 weightkg: 185,
 },
+
 dhelmise: {
 num: 781,
 name: "Dhelmise",
-types: ["Ghost", "Grass"],
+types: ["Water", "Grass"],
 baseStats: {hp: 70, atk: 131, def: 100, spa: 86, spd: 90, spe: 40},
 abilities: {0: "Steelworker"},
 weightkg: 210,
 },
+
 jangmoo: {
 num: 782,
 name: "Jangmo-o",
@@ -10272,6 +11347,7 @@ abilities: {0: "Bulletproof", 1: "Soundproof", H: "Overcoat"},
 weightkg: 29.7,
 evos: ["Hakamo-o"],
 },
+
 hakamoo: {
 num: 783,
 name: "Hakamo-o",
@@ -10282,6 +11358,7 @@ weightkg: 47,
 prevo: "Jangmo-o",
 evos: ["Kommo-o"],
 },
+
 kommoo: {
 num: 784,
 name: "Kommo-o",
@@ -10293,6 +11370,7 @@ prevo: "Hakamo-o",
 otherFormes: ["Kommo-o-Totem"],
 formeOrder: ["Kommo-o", "Kommo-o-Totem"],
 },
+
 kommoototem: {
 num: 784,
 name: "Kommo-o-Totem",
@@ -10303,6 +11381,7 @@ baseStats: {hp: 75, atk: 110, def: 125, spa: 100, spd: 105, spe: 85},
 abilities: {0: "Overcoat"},
 weightkg: 207.5,
 },
+
 tapukoko: {
 num: 785,
 name: "Tapu Koko",
@@ -10311,6 +11390,7 @@ baseStats: {hp: 70, atk: 115, def: 85, spa: 95, spd: 75, spe: 130},
 abilities: {0: "Electric Surge", H: "Telepathy"},
 weightkg: 20.5,
 },
+
 tapulele: {
 num: 786,
 name: "Tapu Lele",
@@ -10319,6 +11399,7 @@ baseStats: {hp: 70, atk: 85, def: 75, spa: 130, spd: 115, spe: 95},
 abilities: {0: "Psychic Surge", H: "Telepathy"},
 weightkg: 18.6,
 },
+
 tapubulu: {
 num: 787,
 name: "Tapu Bulu",
@@ -10327,6 +11408,7 @@ baseStats: {hp: 70, atk: 130, def: 115, spa: 85, spd: 95, spe: 75},
 abilities: {0: "Grassy Surge", H: "Telepathy"},
 weightkg: 45.5,
 },
+
 tapufini: {
 num: 788,
 name: "Tapu Fini",
@@ -10335,7 +11417,8 @@ baseStats: {hp: 70, atk: 75, def: 115, spa: 95, spd: 130, spe: 85},
 abilities: {0: "Misty Surge", H: "Telepathy"},
 weightkg: 21.2,
 },
-cosmog: {
+
+
 num: 789,
 name: "Cosmog",
 types: ["Psychic"],
@@ -10344,7 +11427,8 @@ abilities: {0: "Unaware"},
 weightkg: 0.1,
 evos: ["Cosmoem"],
 },
-cosmoem: {
+
+
 num: 790,
 name: "Cosmoem",
 types: ["Psychic"],
@@ -10354,7 +11438,8 @@ weightkg: 999.9,
 prevo: "Cosmog",
 evos: ["Solgaleo", "Lunala"],
 },
-solgaleo: {
+
+
 num: 791,
 name: "Solgaleo",
 types: ["Psychic", "Steel"],
@@ -10363,7 +11448,8 @@ abilities: {0: "Full Metal Body"},
 weightkg: 230,
 prevo: "Cosmoem",
 },
-lunala: {
+
+
 num: 792,
 name: "Lunala",
 types: ["Psychic", "Ghost"],
@@ -10372,6 +11458,7 @@ abilities: {0: "Shadow Shield"},
 weightkg: 120,
 prevo: "Cosmoem",
 },
+
 nihilego: {
 num: 793,
 name: "Nihilego",
@@ -10380,6 +11467,7 @@ baseStats: {hp: 109, atk: 53, def: 47, spa: 127, spd: 131, spe: 103},
 abilities: {0: "Beast Boost"},
 weightkg: 55.5,
 },
+
 buzzwole: {
 num: 794,
 name: "Buzzwole",
@@ -10388,22 +11476,25 @@ baseStats: {hp: 107, atk: 139, def: 139, spa: 53, spd: 53, spe: 79},
 abilities: {0: "Beast Boost"},
 weightkg: 333.6,
 },
+
 pheromosa: {
 num: 795,
 name: "Pheromosa",
-types: ["Bug", "Fighting"],
+types: ["Bug"],
 baseStats: {hp: 71, atk: 137, def: 37, spa: 137, spd: 37, spe: 151},
 abilities: {0: "Beast Boost"},
 weightkg: 25,
 },
+
 xurkitree: {
 num: 796,
 name: "Xurkitree",
-types: ["Electric"],
+types: ["Electric", "Ghost"],
 baseStats: {hp: 83, atk: 89, def: 71, spa: 173, spd: 71, spe: 83},
 abilities: {0: "Beast Boost"},
 weightkg: 100,
 },
+
 celesteela: {
 num: 797,
 name: "Celesteela",
@@ -10412,6 +11503,7 @@ baseStats: {hp: 97, atk: 101, def: 103, spa: 107, spd: 101, spe: 61},
 abilities: {0: "Beast Boost"},
 weightkg: 999.9,
 },
+
 kartana: {
 num: 798,
 name: "Kartana",
@@ -10420,6 +11512,7 @@ baseStats: {hp: 59, atk: 181, def: 131, spa: 59, spd: 31, spe: 109},
 abilities: {0: "Beast Boost"},
 weightkg: 0.1,
 },
+
 guzzlord: {
 num: 799,
 name: "Guzzlord",
@@ -10428,38 +11521,42 @@ baseStats: {hp: 223, atk: 101, def: 53, spa: 97, spd: 53, spe: 43},
 abilities: {0: "Beast Boost"},
 weightkg: 888,
 },
+
 necrozma: {
 num: 800,
 name: "Necrozma",
-types: ["Psychic"],
+types: ["Psychic", "Electric"],
 baseStats: {hp: 97, atk: 107, def: 101, spa: 127, spd: 89, spe: 79},
 abilities: {0: "Prism Armor"},
 weightkg: 230,
 otherFormes: ["Necrozma-Dusk-Mane", "Necrozma-Dawn-Wings", "Necrozma-Ultra"],
 formeOrder: ["Necrozma", "Necrozma-Dusk-Mane", "Necrozma-Dawn-Wings", "Necrozma-Ultra"],
 },
+
 necrozmaduskmane: {
 num: 800,
 name: "Necrozma-Dusk-Mane",
 baseSpecies: "Necrozma",
 forme: "Dusk-Mane",
-types: ["Psychic", "Steel"],
+types: ["Electric", "Steel"],
 baseStats: {hp: 97, atk: 157, def: 127, spa: 113, spd: 109, spe: 77},
 abilities: {0: "Prism Armor"},
 weightkg: 460,
 changesFrom: "Necrozma",
 },
+
 necrozmadawnwings: {
 num: 800,
 name: "Necrozma-Dawn-Wings",
 baseSpecies: "Necrozma",
 forme: "Dawn-Wings",
-types: ["Psychic", "Ghost"],
+types: ["Electric", "Ghost"],
 baseStats: {hp: 97, atk: 113, def: 109, spa: 157, spd: 127, spe: 77},
 abilities: {0: "Prism Armor"},
 weightkg: 350,
 changesFrom: "Necrozma",
 },
+
 necrozmaultra: {
 num: 800,
 name: "Necrozma-Ultra",
@@ -10471,6 +11568,7 @@ abilities: {0: "Neuroforce"},
 weightkg: 230,
 battleOnly: ["Necrozma-Dawn-Wings", "Necrozma-Dusk-Mane"],
 },
+
 magearna: {
 num: 801,
 name: "Magearna",
@@ -10481,16 +11579,18 @@ weightkg: 80.5,
 otherFormes: ["Magearna-Original"],
 formeOrder: ["Magearna", "Magearna-Original"],
 },
+
 magearnaoriginal: {
 num: 801,
 name: "Magearna-Original",
 baseSpecies: "Magearna",
 forme: "Original",
-types: ["Steel", "Fairy"],
+types: ["Steel"],
 baseStats: {hp: 80, atk: 95, def: 115, spa: 130, spd: 115, spe: 65},
 abilities: {0: "Soul-Heart"},
 weightkg: 80.5,
 },
+
 marshadow: {
 num: 802,
 name: "Marshadow",
@@ -10499,19 +11599,21 @@ baseStats: {hp: 90, atk: 125, def: 80, spa: 90, spd: 90, spe: 125},
 abilities: {0: "Technician"},
 weightkg: 22.2,
 },
+
 poipole: {
 num: 803,
 name: "Poipole",
-types: ["Poison"],
+types: ["Ghost"],
 baseStats: {hp: 67, atk: 73, def: 67, spa: 73, spd: 67, spe: 73},
 abilities: {0: "Beast Boost"},
 weightkg: 1.8,
 evos: ["Naganadel"],
 },
+
 naganadel: {
 num: 804,
 name: "Naganadel",
-types: ["Poison", "Dragon"],
+types: ["Ghost", "Dragon"],
 baseStats: {hp: 73, atk: 73, def: 73, spa: 127, spd: 73, spe: 121},
 abilities: {0: "Beast Boost"},
 weightkg: 150,
@@ -10519,6 +11621,7 @@ prevo: "Poipole",
 evoType: "levelMove",
 evoMove: "Dragon Pulse",
 },
+
 stakataka: {
 num: 805,
 name: "Stakataka",
@@ -10527,22 +11630,25 @@ baseStats: {hp: 61, atk: 131, def: 211, spa: 53, spd: 101, spe: 13},
 abilities: {0: "Beast Boost"},
 weightkg: 820,
 },
+
 blacephalon: {
 num: 806,
 name: "Blacephalon",
-types: ["Fire", "Ghost"],
+types: ["Fire"],
 baseStats: {hp: 53, atk: 127, def: 53, spa: 151, spd: 79, spe: 107},
 abilities: {0: "Beast Boost"},
 weightkg: 13,
 },
+
 zeraora: {
 num: 807,
 name: "Zeraora",
-types: ["Electric"],
+types: ["Electric", "Fighting"],
 baseStats: {hp: 88, atk: 112, def: 75, spa: 102, spd: 80, spe: 143},
 abilities: {0: "Volt Absorb"},
 weightkg: 44.5,
 },
+
 meltan: {
 num: 808,
 name: "Meltan",
@@ -10551,6 +11657,7 @@ baseStats: {hp: 46, atk: 65, def: 65, spa: 55, spd: 35, spe: 34},
 abilities: {0: "Magnet Pull"},
 weightkg: 8,
 },
+
 melmetal: {
 num: 809,
 name: "Melmetal",
@@ -10559,6 +11666,7 @@ baseStats: {hp: 135, atk: 143, def: 143, spa: 80, spd: 65, spe: 34},
 abilities: {0: "Iron Fist"},
 weightkg: 800,
 },
+
 melmetalgmax: {
 num: 809,
 name: "Melmetal-Gmax",
@@ -10570,6 +11678,7 @@ abilities: {0: "Iron Fist"},
 weightkg: 0,
 changesFrom: "Melmetal",
 },
+
 grookey: {
 num: 810,
 name: "Grookey",
@@ -10579,75 +11688,83 @@ abilities: {0: "Overgrow", H: "Grassy Surge"},
 weightkg: 5,
 evos: ["Thwackey"],
 },
+
 thwackey: {
 num: 811,
 name: "Thwackey",
-types: ["Grass"],
+types: ["Grass", "Rock"],
 baseStats: {hp: 70, atk: 85, def: 70, spa: 55, spd: 60, spe: 80},
 abilities: {0: "Overgrow", H: "Grassy Surge"},
 weightkg: 14,
 prevo: "Grookey",
 evos: ["Rillaboom"],
 },
+
 rillaboom: {
 num: 812,
 name: "Rillaboom",
-types: ["Grass"],
+types: ["Grass", "Rock"],
 baseStats: {hp: 100, atk: 125, def: 90, spa: 60, spd: 70, spe: 85},
 abilities: {0: "Overgrow", H: "Grassy Surge"},
 weightkg: 90,
 prevo: "Thwackey",
 },
+
 rillaboomgmax: {
 num: 812,
 name: "Rillaboom-Gmax",
 baseSpecies: "Rillaboom",
 forme: "Gmax",
-types: ["Grass"],
+types: ["Grass", "Rock"],
 baseStats: {hp: 100, atk: 125, def: 90, spa: 60, spd: 70, spe: 85},
 abilities: {0: "Overgrow", H: "Grassy Surge"},
 weightkg: 0,
 changesFrom: "Rillaboom",
 },
+
 scorbunny: {
 num: 813,
 name: "Scorbunny",
-types: ["Fire"],
+types: ["Fire", "Normal"],
 baseStats: {hp: 50, atk: 71, def: 40, spa: 40, spd: 40, spe: 69},
 abilities: {0: "Blaze", H: "Libero"},
 weightkg: 4.5,
 evos: ["Raboot"],
 },
+
 raboot: {
 num: 814,
 name: "Raboot",
-types: ["Fire"],
+types: ["Fire", "Normal"],
 baseStats: {hp: 65, atk: 86, def: 60, spa: 55, spd: 60, spe: 94},
 abilities: {0: "Blaze", H: "Libero"},
 weightkg: 9,
 prevo: "Scorbunny",
 evos: ["Cinderace"],
 },
+
 cinderace: {
 num: 815,
 name: "Cinderace",
-types: ["Fire"],
+types: ["Fire", "Normal"],
 baseStats: {hp: 80, atk: 116, def: 75, spa: 65, spd: 75, spe: 119},
 abilities: {0: "Blaze", H: "Libero"},
 weightkg: 33,
 prevo: "Raboot",
 },
+
 cinderacegmax: {
 num: 815,
 name: "Cinderace-Gmax",
 baseSpecies: "Cinderace",
 forme: "Gmax",
-types: ["Fire"],
+types: ["Fire", "Normal"],
 baseStats: {hp: 80, atk: 116, def: 75, spa: 65, spd: 75, spe: 119},
 abilities: {0: "Blaze", H: "Libero"},
 weightkg: 0,
 changesFrom: "Cinderace",
 },
+
 sobble: {
 num: 816,
 name: "Sobble",
@@ -10657,36 +11774,40 @@ abilities: {0: "Torrent", H: "Sniper"},
 weightkg: 4,
 evos: ["Drizzile"],
 },
+
 drizzile: {
 num: 817,
 name: "Drizzile",
-types: ["Water"],
+types: ["Water", "Poison"],
 baseStats: {hp: 65, atk: 60, def: 55, spa: 95, spd: 55, spe: 90},
 abilities: {0: "Torrent", H: "Sniper"},
 weightkg: 11.5,
 prevo: "Sobble",
 evos: ["Inteleon"],
 },
+
 inteleon: {
 num: 818,
 name: "Inteleon",
-types: ["Water"],
+types: ["Water", "Poison"],
 baseStats: {hp: 70, atk: 85, def: 65, spa: 125, spd: 65, spe: 120},
 abilities: {0: "Torrent", H: "Sniper"},
 weightkg: 45.2,
 prevo: "Drizzile",
 },
+
 inteleongmax: {
 num: 818,
 name: "Inteleon-Gmax",
 baseSpecies: "Inteleon",
 forme: "Gmax",
-types: ["Water"],
+types: ["Water", "Poison"],
 baseStats: {hp: 70, atk: 85, def: 65, spa: 125, spd: 65, spe: 120},
 abilities: {0: "Torrent", H: "Sniper"},
 weightkg: 0,
 changesFrom: "Inteleon",
 },
+
 skwovet: {
 num: 819,
 name: "Skwovet",
@@ -10696,15 +11817,17 @@ abilities: {0: "Cheek Pouch", H: "Gluttony"},
 weightkg: 2.5,
 evos: ["Greedent"],
 },
+
 greedent: {
 num: 820,
 name: "Greedent",
-types: ["Normal"],
+types: ["Normal", "Ground"],
 baseStats: {hp: 120, atk: 95, def: 95, spa: 55, spd: 75, spe: 20},
 abilities: {0: "Cheek Pouch", H: "Gluttony"},
 weightkg: 6,
 prevo: "Skwovet",
 },
+
 rookidee: {
 num: 821,
 name: "Rookidee",
@@ -10714,6 +11837,7 @@ abilities: {0: "Keen Eye", 1: "Unnerve", H: "Big Pecks"},
 weightkg: 1.8,
 evos: ["Corvisquire"],
 },
+
 corvisquire: {
 num: 822,
 name: "Corvisquire",
@@ -10724,6 +11848,7 @@ weightkg: 16,
 prevo: "Rookidee",
 evos: ["Corviknight"],
 },
+
 corviknight: {
 num: 823,
 name: "Corviknight",
@@ -10733,6 +11858,7 @@ abilities: {0: "Pressure", 1: "Unnerve", H: "Mirror Armor"},
 weightkg: 75,
 prevo: "Corvisquire",
 },
+
 corviknightgmax: {
 num: 823,
 name: "Corviknight-Gmax",
@@ -10744,6 +11870,7 @@ abilities: {0: "Pressure", 1: "Unnerve", H: "Mirror Armor"},
 weightkg: 0,
 changesFrom: "Corviknight",
 },
+
 blipbug: {
 num: 824,
 name: "Blipbug",
@@ -10753,6 +11880,7 @@ abilities: {0: "Swarm", 1: "Compound Eyes", H: "Telepathy"},
 weightkg: 8,
 evos: ["Dottler"],
 },
+
 dottler: {
 num: 825,
 name: "Dottler",
@@ -10763,6 +11891,7 @@ weightkg: 19.5,
 prevo: "Blipbug",
 evos: ["Orbeetle"],
 },
+
 orbeetle: {
 num: 826,
 name: "Orbeetle",
@@ -10772,6 +11901,7 @@ abilities: {0: "Swarm", 1: "Frisk", H: "Telepathy"},
 weightkg: 40.8,
 prevo: "Dottler",
 },
+
 orbeetlegmax: {
 num: 826,
 name: "Orbeetle-Gmax",
@@ -10783,6 +11913,7 @@ abilities: {0: "Swarm", 1: "Frisk", H: "Telepathy"},
 weightkg: 0,
 changesFrom: "Orbeetle",
 },
+
 nickit: {
 num: 827,
 name: "Nickit",
@@ -10792,6 +11923,7 @@ abilities: {0: "Run Away", 1: "Unburden", H: "Stakeout"},
 weightkg: 8.9,
 evos: ["Thievul"],
 },
+
 thievul: {
 num: 828,
 name: "Thievul",
@@ -10801,6 +11933,7 @@ abilities: {0: "Run Away", 1: "Unburden", H: "Stakeout"},
 weightkg: 19.9,
 prevo: "Nickit",
 },
+
 gossifleur: {
 num: 829,
 name: "Gossifleur",
@@ -10810,6 +11943,7 @@ abilities: {0: "Cotton Down", 1: "Regenerator", H: "Effect Spore"},
 weightkg: 2.2,
 evos: ["Eldegoss"],
 },
+
 eldegoss: {
 num: 830,
 name: "Eldegoss",
@@ -10819,6 +11953,7 @@ abilities: {0: "Cotton Down", 1: "Regenerator", H: "Effect Spore"},
 weightkg: 2.5,
 prevo: "Gossifleur",
 },
+
 wooloo: {
 num: 831,
 name: "Wooloo",
@@ -10828,15 +11963,17 @@ abilities: {0: "Fluffy", 1: "Run Away", H: "Bulletproof"},
 weightkg: 6,
 evos: ["Dubwool"],
 },
+
 dubwool: {
 num: 832,
 name: "Dubwool",
-types: ["Normal"],
+types: ["Normal", "Steel"],
 baseStats: {hp: 72, atk: 80, def: 100, spa: 60, spd: 90, spe: 88},
 abilities: {0: "Fluffy", 1: "Steadfast", H: "Bulletproof"},
 weightkg: 43,
 prevo: "Wooloo",
 },
+
 chewtle: {
 num: 833,
 name: "Chewtle",
@@ -10846,6 +11983,7 @@ abilities: {0: "Strong Jaw", 1: "Shell Armor", H: "Swift Swim"},
 weightkg: 8.5,
 evos: ["Drednaw"],
 },
+
 drednaw: {
 num: 834,
 name: "Drednaw",
@@ -10855,6 +11993,7 @@ abilities: {0: "Strong Jaw", 1: "Shell Armor", H: "Swift Swim"},
 weightkg: 115.5,
 prevo: "Chewtle",
 },
+
 drednawgmax: {
 num: 834,
 name: "Drednaw-Gmax",
@@ -10866,24 +12005,27 @@ abilities: {0: "Strong Jaw", 1: "Shell Armor", H: "Swift Swim"},
 weightkg: 0,
 changesFrom: "Drednaw",
 },
+
 yamper: {
 num: 835,
 name: "Yamper",
-types: ["Electric"],
+types: ["Electric", "Normal"],
 baseStats: {hp: 59, atk: 45, def: 50, spa: 40, spd: 50, spe: 26},
 abilities: {0: "Ball Fetch", H: "Rattled"},
 weightkg: 13.5,
 evos: ["Boltund"],
 },
+
 boltund: {
 num: 836,
 name: "Boltund",
-types: ["Electric"],
+types: ["Electric", "Normal"],
 baseStats: {hp: 69, atk: 90, def: 60, spa: 90, spd: 60, spe: 121},
 abilities: {0: "Strong Jaw", H: "Competitive"},
 weightkg: 34,
 prevo: "Yamper",
 },
+
 rolycoly: {
 num: 837,
 name: "Rolycoly",
@@ -10893,6 +12035,7 @@ abilities: {0: "Steam Engine", 1: "Heatproof", H: "Flash Fire"},
 weightkg: 12,
 evos: ["Carkol"],
 },
+
 carkol: {
 num: 838,
 name: "Carkol",
@@ -10903,6 +12046,7 @@ weightkg: 78,
 prevo: "Rolycoly",
 evos: ["Coalossal"],
 },
+
 coalossal: {
 num: 839,
 name: "Coalossal",
@@ -10912,6 +12056,7 @@ abilities: {0: "Steam Engine", 1: "Flame Body", H: "Flash Fire"},
 weightkg: 310.5,
 prevo: "Carkol",
 },
+
 coalossalgmax: {
 num: 839,
 name: "Coalossal-Gmax",
@@ -10923,19 +12068,21 @@ abilities: {0: "Steam Engine", 1: "Flame Body", H: "Flash Fire"},
 weightkg: 0,
 changesFrom: "Coalossal",
 },
+
 applin: {
 num: 840,
 name: "Applin",
-types: ["Grass", "Dragon"],
+types: ["Grass", "Bug"],
 baseStats: {hp: 40, atk: 40, def: 80, spa: 40, spd: 40, spe: 20},
 abilities: {0: "Ripen", 1: "Gluttony", H: "Bulletproof"},
 weightkg: 0.5,
 evos: ["Flapple", "Appletun"],
 },
+
 flapple: {
 num: 841,
 name: "Flapple",
-types: ["Grass", "Dragon"],
+types: ["Bug", "Dragon"],
 baseStats: {hp: 70, atk: 110, def: 80, spa: 95, spd: 60, spe: 70},
 abilities: {0: "Ripen", 1: "Gluttony", H: "Hustle"},
 weightkg: 1,
@@ -10943,17 +12090,19 @@ prevo: "Applin",
 evoType: "useItem",
 evoItem: "Tart Apple",
 },
+
 flapplegmax: {
 num: 841,
 name: "Flapple-Gmax",
 baseSpecies: "Flapple",
 forme: "Gmax",
-types: ["Grass", "Dragon"],
+types: ["Bug", "Dragon"],
 baseStats: {hp: 70, atk: 110, def: 80, spa: 95, spd: 60, spe: 70},
 abilities: {0: "Ripen", 1: "Gluttony", H: "Hustle"},
 weightkg: 0,
 changesFrom: "Flapple",
 },
+
 appletun: {
 num: 842,
 name: "Appletun",
@@ -10965,6 +12114,7 @@ prevo: "Applin",
 evoType: "useItem",
 evoItem: "Sweet Apple",
 },
+
 appletungmax: {
 num: 842,
 name: "Appletun-Gmax",
@@ -10976,6 +12126,7 @@ abilities: {0: "Ripen", 1: "Gluttony", H: "Thick Fat"},
 weightkg: 0,
 changesFrom: "Appletun",
 },
+
 silicobra: {
 num: 843,
 name: "Silicobra",
@@ -10985,26 +12136,29 @@ abilities: {0: "Sand Spit", 1: "Shed Skin", H: "Sand Veil"},
 weightkg: 7.6,
 evos: ["Sandaconda"],
 },
+
 sandaconda: {
 num: 844,
 name: "Sandaconda",
-types: ["Ground"],
+types: ["Ground", "Dragon"],
 baseStats: {hp: 72, atk: 107, def: 125, spa: 65, spd: 70, spe: 71},
 abilities: {0: "Sand Spit", 1: "Shed Skin", H: "Sand Veil"},
 weightkg: 65.5,
 prevo: "Silicobra",
 },
+
 sandacondagmax: {
 num: 844,
 name: "Sandaconda-Gmax",
 baseSpecies: "Sandaconda",
 forme: "Gmax",
-types: ["Ground"],
+types: ["Ground", "Dragon"],
 baseStats: {hp: 72, atk: 107, def: 125, spa: 65, spd: 70, spe: 71},
 abilities: {0: "Sand Spit", 1: "Shed Skin", H: "Sand Veil"},
 weightkg: 0,
 changesFrom: "Sandaconda",
 },
+
 cramorant: {
 num: 845,
 name: "Cramorant",
@@ -11015,6 +12169,7 @@ weightkg: 18,
 otherFormes: ["Cramorant-Gulping", "Cramorant-Gorging"],
 formeOrder: ["Cramorant", "Cramorant-Gulping", "Cramorant-Gorging"],
 },
+
 cramorantgulping: {
 num: 845,
 name: "Cramorant-Gulping",
@@ -11027,6 +12182,7 @@ weightkg: 18,
 requiredAbility: "Gulp Missile",
 battleOnly: "Cramorant",
 },
+
 cramorantgorging: {
 num: 845,
 name: "Cramorant-Gorging",
@@ -11039,24 +12195,27 @@ weightkg: 18,
 requiredAbility: "Gulp Missile",
 battleOnly: "Cramorant",
 },
+
 arrokuda: {
 num: 846,
 name: "Arrokuda",
-types: ["Water"],
+types: ["Ice"],
 baseStats: {hp: 41, atk: 63, def: 40, spa: 40, spd: 30, spe: 66},
 abilities: {0: "Swift Swim", H: "Propeller Tail"},
 weightkg: 1,
 evos: ["Barraskewda"],
 },
+
 barraskewda: {
 num: 847,
 name: "Barraskewda",
-types: ["Water"],
+types: ["Ice", "Fire"],
 baseStats: {hp: 61, atk: 123, def: 60, spa: 60, spd: 50, spe: 136},
 abilities: {0: "Swift Swim", H: "Propeller Tail"},
 weightkg: 30,
 prevo: "Arrokuda",
 },
+
 toxel: {
 num: 848,
 name: "Toxel",
@@ -11067,6 +12226,7 @@ weightkg: 11,
 evos: ["Toxtricity", "Toxtricity-Low-Key"],
 canHatch: true,
 },
+
 toxtricity: {
 num: 849,
 name: "Toxtricity",
@@ -11079,6 +12239,7 @@ prevo: "Toxel",
 otherFormes: ["Toxtricity-Low-Key"],
 formeOrder: ["Toxtricity", "Toxtricity-Low-Key"],
 },
+
 toxtricitylowkey: {
 num: 849,
 name: "Toxtricity-Low-Key",
@@ -11090,6 +12251,7 @@ abilities: {0: "Punk Rock", 1: "Minus", H: "Technician"},
 weightkg: 40,
 prevo: "Toxel",
 },
+
 toxtricitygmax: {
 num: 849,
 name: "Toxtricity-Gmax",
@@ -11101,6 +12263,7 @@ abilities: {0: "Punk Rock", 1: "Plus", H: "Technician"},
 weightkg: 0,
 changesFrom: "Toxtricity",
 },
+
 toxtricitylowkeygmax: {
 num: 849,
 name: "Toxtricity-Low-Key-Gmax",
@@ -11113,6 +12276,7 @@ weightkg: 0,
 battleOnly: "Toxtricity-Low-Key",
 changesFrom: "Toxtricity-Low-Key",
 },
+
 sizzlipede: {
 num: 850,
 name: "Sizzlipede",
@@ -11122,6 +12286,7 @@ abilities: {0: "Flash Fire", 1: "White Smoke", H: "Flame Body"},
 weightkg: 1,
 evos: ["Centiskorch"],
 },
+
 centiskorch: {
 num: 851,
 name: "Centiskorch",
@@ -11131,6 +12296,7 @@ abilities: {0: "Flash Fire", 1: "White Smoke", H: "Flame Body"},
 weightkg: 120,
 prevo: "Sizzlipede",
 },
+
 centiskorchgmax: {
 num: 851,
 name: "Centiskorch-Gmax",
@@ -11142,6 +12308,7 @@ abilities: {0: "Flash Fire", 1: "White Smoke", H: "Flame Body"},
 weightkg: 0,
 changesFrom: "Centiskorch",
 },
+
 clobbopus: {
 num: 852,
 name: "Clobbopus",
@@ -11151,10 +12318,11 @@ abilities: {0: "Limber", H: "Technician"},
 weightkg: 4,
 evos: ["Grapploct"],
 },
+
 grapploct: {
 num: 853,
 name: "Grapploct",
-types: ["Fighting"],
+types: ["Fighting", "Dark"],
 baseStats: {hp: 80, atk: 118, def: 90, spa: 70, spd: 80, spe: 42},
 abilities: {0: "Limber", H: "Technician"},
 weightkg: 39,
@@ -11162,11 +12330,12 @@ prevo: "Clobbopus",
 evoType: "levelMove",
 evoMove: "Taunt",
 },
+
 sinistea: {
 num: 854,
 name: "Sinistea",
 baseForme: "Phony",
-types: ["Ghost"],
+types: ["Ghost", "Poison"],
 baseStats: {hp: 40, atk: 45, def: 45, spa: 74, spd: 54, spe: 50},
 abilities: {0: "Weak Armor", H: "Cursed Body"},
 weightkg: 0.2,
@@ -11174,22 +12343,24 @@ evos: ["Polteageist"],
 otherFormes: ["Sinistea-Antique"],
 formeOrder: ["Sinistea", "Sinistea-Antique"],
 },
+
 sinisteaantique: {
 num: 854,
 name: "Sinistea-Antique",
 baseSpecies: "Sinistea",
 forme: "Antique",
-types: ["Ghost"],
+types: ["Ghost", "Poison"],
 baseStats: {hp: 40, atk: 45, def: 45, spa: 74, spd: 54, spe: 50},
 abilities: {0: "Weak Armor", H: "Cursed Body"},
 weightkg: 0.2,
 evos: ["Polteageist-Antique"],
 },
+
 polteageist: {
 num: 855,
 name: "Polteageist",
 baseForme: "Phony",
-types: ["Ghost"],
+types: ["Ghost", "Poison"],
 baseStats: {hp: 60, atk: 65, def: 65, spa: 134, spd: 114, spe: 70},
 abilities: {0: "Weak Armor", H: "Cursed Body"},
 weightkg: 0.4,
@@ -11199,12 +12370,13 @@ evoItem: "Cracked Pot",
 otherFormes: ["Polteageist-Antique"],
 formeOrder: ["Polteageist", "Polteageist-Antique"],
 },
+
 polteageistantique: {
 num: 855,
 name: "Polteageist-Antique",
 baseSpecies: "Polteageist",
 forme: "Antique",
-types: ["Ghost"],
+types: ["Ghost", "Poison"],
 baseStats: {hp: 60, atk: 65, def: 65, spa: 134, spd: 114, spe: 70},
 abilities: {0: "Weak Armor", H: "Cursed Body"},
 weightkg: 0.4,
@@ -11212,34 +12384,38 @@ prevo: "Sinistea-Antique",
 evoType: "useItem",
 evoItem: "Chipped Pot",
 },
+
 hatenna: {
 num: 856,
 name: "Hatenna",
-types: ["Psychic"],
+types: ["Fairy"],
 baseStats: {hp: 42, atk: 30, def: 45, spa: 56, spd: 53, spe: 39},
 abilities: {0: "Healer", 1: "Anticipation", H: "Magic Bounce"},
 weightkg: 3.4,
 evos: ["Hattrem"],
 },
+
 hattrem: {
 num: 857,
 name: "Hattrem",
-types: ["Psychic"],
+types: ["Fairy"],
 baseStats: {hp: 57, atk: 40, def: 65, spa: 86, spd: 73, spe: 49},
 abilities: {0: "Healer", 1: "Anticipation", H: "Magic Bounce"},
 weightkg: 4.8,
 prevo: "Hatenna",
 evos: ["Hatterene"],
 },
+
 hatterene: {
 num: 858,
 name: "Hatterene",
-types: ["Psychic", "Fairy"],
+types: ["Fairy"],
 baseStats: {hp: 57, atk: 90, def: 95, spa: 136, spd: 103, spe: 29},
 abilities: {0: "Healer", 1: "Anticipation", H: "Magic Bounce"},
 weightkg: 5.1,
 prevo: "Hattrem",
 },
+
 hatterenegmax: {
 num: 858,
 name: "Hatterene-Gmax",
@@ -11251,6 +12427,7 @@ abilities: {0: "Healer", 1: "Anticipation", H: "Magic Bounce"},
 weightkg: 0,
 changesFrom: "Hatterene",
 },
+
 impidimp: {
 num: 859,
 name: "Impidimp",
@@ -11260,6 +12437,7 @@ abilities: {0: "Prankster", 1: "Frisk", H: "Pickpocket"},
 weightkg: 5.5,
 evos: ["Morgrem"],
 },
+
 morgrem: {
 num: 860,
 name: "Morgrem",
@@ -11270,6 +12448,7 @@ weightkg: 12.5,
 prevo: "Impidimp",
 evos: ["Grimmsnarl"],
 },
+
 grimmsnarl: {
 num: 861,
 name: "Grimmsnarl",
@@ -11279,6 +12458,7 @@ abilities: {0: "Prankster", 1: "Frisk", H: "Pickpocket"},
 weightkg: 61,
 prevo: "Morgrem",
 },
+
 grimmsnarlgmax: {
 num: 861,
 name: "Grimmsnarl-Gmax",
@@ -11290,6 +12470,7 @@ abilities: {0: "Prankster", 1: "Frisk", H: "Pickpocket"},
 weightkg: 0,
 changesFrom: "Grimmsnarl",
 },
+
 obstagoon: {
 num: 862,
 name: "Obstagoon",
@@ -11300,28 +12481,32 @@ weightkg: 46,
 prevo: "Linoone-Galar",
 evoCondition: "at night",
 },
+
 perrserker: {
 num: 863,
 name: "Perrserker",
-types: ["Steel"],
+types: ["Steel", "Normal"],
 baseStats: {hp: 70, atk: 110, def: 100, spa: 50, spd: 60, spe: 50},
 abilities: {0: "Battle Armor", 1: "Tough Claws", H: "Steely Spirit"},
 weightkg: 28,
 prevo: "Meowth-Galar",
 },
+
 cursola: {
 num: 864,
 name: "Cursola",
-types: ["Ghost"],
+types: ["Ghost", "Rock"],
+genderRatio: {M: 0.25, F: 0.75},
 baseStats: {hp: 60, atk: 95, def: 50, spa: 145, spd: 130, spe: 30},
 abilities: {0: "Weak Armor", H: "Perish Body"},
 weightkg: 0.4,
 prevo: "Corsola-Galar",
 },
+
 sirfetchd: {
 num: 865,
 name: "Sirfetch\u2019d",
-types: ["Fighting"],
+types: ["Fighting", "Flying"],
 baseStats: {hp: 62, atk: 135, def: 95, spa: 68, spd: 82, spe: 65},
 abilities: {0: "Steadfast", H: "Scrappy"},
 weightkg: 117,
@@ -11329,6 +12514,7 @@ prevo: "Farfetch\u2019d-Galar",
 evoType: "other",
 evoCondition: "Land 3 critical hits in 1 battle",
 },
+
 mrrime: {
 num: 866,
 name: "Mr. Rime",
@@ -11338,10 +12524,11 @@ abilities: {0: "Tangled Feet", 1: "Screen Cleaner", H: "Ice Body"},
 weightkg: 58.2,
 prevo: "Mr. Mime-Galar",
 },
+
 runerigus: {
 num: 867,
 name: "Runerigus",
-types: ["Ground", "Ghost"],
+types: ["Rock", "Ghost"],
 baseStats: {hp: 58, atk: 95, def: 145, spa: 50, spd: 105, spe: 30},
 abilities: {0: "Wandering Spirit"},
 weightkg: 66.6,
@@ -11349,6 +12536,7 @@ prevo: "Yamask-Galar",
 evoType: "other",
 evoCondition: "Have 49+ HP lost and walk under stone sculpture in Dusty Bowl",
 },
+
 milcery: {
 num: 868,
 name: "Milcery",
@@ -11358,6 +12546,7 @@ abilities: {0: "Sweet Veil", H: "Aroma Veil"},
 weightkg: 0.3,
 evos: ["Alcremie"],
 },
+
 alcremie: {
 num: 869,
 name: "Alcremie",
@@ -11372,6 +12561,7 @@ evoCondition: "spin while holding a Sweet",
 cosmeticFormes: ["Alcremie-Ruby-Cream", "Alcremie-Matcha-Cream", "Alcremie-Mint-Cream", "Alcremie-Lemon-Cream", "Alcremie-Salted-Cream", "Alcremie-Ruby-Swirl", "Alcremie-Caramel-Swirl", "Alcremie-Rainbow-Swirl"],
 formeOrder: ["Alcremie", "Alcremie-Ruby-Cream", "Alcremie-Matcha-Cream", "Alcremie-Mint-Cream", "Alcremie-Lemon-Cream", "Alcremie-Salted-Cream", "Alcremie-Ruby-Swirl", "Alcremie-Caramel-Swirl", "Alcremie-Rainbow-Swirl"],
 },
+
 alcremiegmax: {
 num: 869,
 name: "Alcremie-Gmax",
@@ -11383,22 +12573,25 @@ abilities: {0: "Sweet Veil", H: "Aroma Veil"},
 weightkg: 0,
 changesFrom: "Alcremie",
 },
+
 falinks: {
 num: 870,
 name: "Falinks",
-types: ["Fighting"],
+types: ["Fighting", "Fairy"],
 baseStats: {hp: 65, atk: 100, def: 100, spa: 70, spd: 60, spe: 75},
 abilities: {0: "Battle Armor", H: "Defiant"},
 weightkg: 62,
 },
+
 pincurchin: {
 num: 871,
 name: "Pincurchin",
-types: ["Electric"],
+types: ["Electric", "Poison"],
 baseStats: {hp: 48, atk: 101, def: 95, spa: 91, spd: 85, spe: 15},
 abilities: {0: "Lightning Rod", H: "Electric Surge"},
 weightkg: 1,
 },
+
 snom: {
 num: 872,
 name: "Snom",
@@ -11408,6 +12601,7 @@ abilities: {0: "Shield Dust", H: "Ice Scales"},
 weightkg: 3.8,
 evos: ["Frosmoth"],
 },
+
 frosmoth: {
 num: 873,
 name: "Frosmoth",
@@ -11419,6 +12613,7 @@ prevo: "Snom",
 evoType: "levelFriendship",
 evoCondition: "at night",
 },
+
 stonjourner: {
 num: 874,
 name: "Stonjourner",
@@ -11427,49 +12622,54 @@ baseStats: {hp: 100, atk: 125, def: 135, spa: 20, spd: 20, spe: 70},
 abilities: {0: "Power Spot"},
 weightkg: 520,
 },
+
 eiscue: {
 num: 875,
 name: "Eiscue",
-types: ["Ice"],
+types: ["Ice", "Ghost"],
 baseStats: {hp: 75, atk: 80, def: 110, spa: 65, spd: 90, spe: 50},
 abilities: {0: "Ice Face"},
 weightkg: 89,
 otherFormes: ["Eiscue-Noice"],
 formeOrder: ["Eiscue", "Eiscue-Noice"],
 },
+
 eiscuenoice: {
 num: 875,
 name: "Eiscue-Noice",
 baseSpecies: "Eiscue",
 forme: "Noice",
-types: ["Ice"],
+types: ["Ice", "Ghost"],
 baseStats: {hp: 75, atk: 80, def: 70, spa: 65, spd: 50, spe: 130},
 abilities: {0: "Ice Face"},
 weightkg: 89,
 requiredAbility: "Ice Face",
 battleOnly: "Eiscue",
 },
+
 indeedee: {
 num: 876,
 name: "Indeedee",
 baseForme: "M",
-types: ["Psychic", "Normal"],
+types: ["Psychic", "Ice"],
 baseStats: {hp: 60, atk: 65, def: 55, spa: 105, spd: 95, spe: 95},
 abilities: {0: "Inner Focus", 1: "Synchronize", H: "Psychic Surge"},
 weightkg: 28,
 otherFormes: ["Indeedee-F"],
 formeOrder: ["Indeedee", "Indeedee-F"],
 },
+
 indeedeef: {
 num: 876,
 name: "Indeedee-F",
 baseSpecies: "Indeedee",
 forme: "F",
-types: ["Psychic", "Normal"],
+types: ["Psychic", "Ice"],
 baseStats: {hp: 70, atk: 55, def: 65, spa: 95, spd: 105, spe: 85},
 abilities: {0: "Own Tempo", 1: "Synchronize", H: "Psychic Surge"},
 weightkg: 28,
 },
+
 morpeko: {
 num: 877,
 name: "Morpeko",
@@ -11480,6 +12680,7 @@ weightkg: 3,
 otherFormes: ["Morpeko-Hangry"],
 formeOrder: ["Morpeko", "Morpeko-Hangry"],
 },
+
 morpekohangry: {
 num: 877,
 name: "Morpeko-Hangry",
@@ -11492,24 +12693,27 @@ weightkg: 3,
 requiredAbility: "Hunger Switch",
 battleOnly: "Morpeko",
 },
+
 cufant: {
 num: 878,
 name: "Cufant",
-types: ["Steel"],
+types: ["Steel", "Normal"],
 baseStats: {hp: 72, atk: 80, def: 49, spa: 40, spd: 49, spe: 40},
 abilities: {0: "Sheer Force", H: "Heavy Metal"},
 weightkg: 100,
 evos: ["Copperajah"],
 },
+
 copperajah: {
 num: 879,
 name: "Copperajah",
-types: ["Steel"],
+types: ["Steel", "Normal"],
 baseStats: {hp: 122, atk: 130, def: 69, spa: 80, spd: 69, spe: 30},
 abilities: {0: "Sheer Force", H: "Heavy Metal"},
 weightkg: 650,
 prevo: "Cufant",
 },
+
 copperajahgmax: {
 num: 879,
 name: "Copperajah-Gmax",
@@ -11521,6 +12725,7 @@ abilities: {0: "Sheer Force", H: "Heavy Metal"},
 weightkg: 0,
 changesFrom: "Copperajah",
 },
+
 dracozolt: {
 num: 880,
 name: "Dracozolt",
@@ -11529,6 +12734,7 @@ baseStats: {hp: 90, atk: 100, def: 90, spa: 80, spd: 70, spe: 75},
 abilities: {0: "Volt Absorb", 1: "Hustle", H: "Sand Rush"},
 weightkg: 190,
 },
+
 arctozolt: {
 num: 881,
 name: "Arctozolt",
@@ -11537,6 +12743,7 @@ baseStats: {hp: 90, atk: 100, def: 90, spa: 90, spd: 80, spe: 55},
 abilities: {0: "Volt Absorb", 1: "Static", H: "Slush Rush"},
 weightkg: 150,
 },
+
 dracovish: {
 num: 882,
 name: "Dracovish",
@@ -11545,6 +12752,7 @@ baseStats: {hp: 90, atk: 90, def: 100, spa: 70, spd: 80, spe: 75},
 abilities: {0: "Water Absorb", 1: "Strong Jaw", H: "Sand Rush"},
 weightkg: 215,
 },
+
 arctovish: {
 num: 883,
 name: "Arctovish",
@@ -11553,6 +12761,7 @@ baseStats: {hp: 90, atk: 90, def: 100, spa: 80, spd: 90, spe: 55},
 abilities: {0: "Water Absorb", 1: "Ice Body", H: "Slush Rush"},
 weightkg: 175,
 },
+
 duraludon: {
 num: 884,
 name: "Duraludon",
@@ -11561,6 +12770,7 @@ baseStats: {hp: 70, atk: 95, def: 115, spa: 120, spd: 50, spe: 85},
 abilities: {0: "Light Metal", 1: "Heavy Metal", H: "Stalwart"},
 weightkg: 40,
 },
+
 duraludongmax: {
 num: 884,
 name: "Duraludon-Gmax",
@@ -11572,6 +12782,7 @@ abilities: {0: "Light Metal", 1: "Heavy Metal", H: "Stalwart"},
 weightkg: 0,
 changesFrom: "Duraludon",
 },
+
 dreepy: {
 num: 885,
 name: "Dreepy",
@@ -11581,6 +12792,7 @@ abilities: {0: "Clear Body", 1: "Infiltrator", H: "Cursed Body"},
 weightkg: 2,
 evos: ["Drakloak"],
 },
+
 drakloak: {
 num: 886,
 name: "Drakloak",
@@ -11591,6 +12803,7 @@ weightkg: 11,
 prevo: "Dreepy",
 evos: ["Dragapult"],
 },
+
 dragapult: {
 num: 887,
 name: "Dragapult",
@@ -11600,6 +12813,7 @@ abilities: {0: "Clear Body", 1: "Infiltrator", H: "Cursed Body"},
 weightkg: 50,
 prevo: "Drakloak",
 },
+
 zacian: {
 num: 888,
 name: "Zacian",
@@ -11612,6 +12826,7 @@ otherFormes: ["Zacian-Crowned"],
 formeOrder: ["Zacian", "Zacian-Crowned"],
 cannotDynamax: true,
 },
+
 zaciancrowned: {
 num: 888,
 name: "Zacian-Crowned",
@@ -11624,6 +12839,7 @@ weightkg: 355,
 battleOnly: "Zacian",
 cannotDynamax: true,
 },
+
 zamazenta: {
 num: 889,
 name: "Zamazenta",
@@ -11636,6 +12852,7 @@ otherFormes: ["Zamazenta-Crowned"],
 formeOrder: ["Zamazenta", "Zamazenta-Crowned"],
 cannotDynamax: true,
 },
+
 zamazentacrowned: {
 num: 889,
 name: "Zamazenta-Crowned",
@@ -11648,6 +12865,7 @@ weightkg: 785,
 battleOnly: "Zamazenta",
 cannotDynamax: true,
 },
+
 eternatus: {
 num: 890,
 name: "Eternatus",
@@ -11659,6 +12877,7 @@ otherFormes: ["Eternatus-Eternamax"],
 formeOrder: ["Eternatus", "Eternatus-Eternamax"],
 cannotDynamax: true,
 },
+
 eternatuseternamax: {
 num: 890,
 name: "Eternatus-Eternamax",
@@ -11670,6 +12889,7 @@ abilities: {0: "Pressure"},
 weightkg: 0,
 cannotDynamax: true,
 },
+
 kubfu: {
 num: 891,
 name: "Kubfu",
@@ -11679,6 +12899,7 @@ abilities: {0: "Inner Focus"},
 weightkg: 12,
 evos: ["Urshifu", "Urshifu-Rapid-Strike"],
 },
+
 urshifu: {
 num: 892,
 name: "Urshifu",
@@ -11693,12 +12914,13 @@ evoCondition: "Defeat the Single Strike Tower",
 otherFormes: ["Urshifu-Rapid-Strike"],
 formeOrder: ["Urshifu", "Urshifu-Rapid-Strike"],
 },
+
 urshifurapidstrike: {
 num: 892,
 name: "Urshifu-Rapid-Strike",
 baseSpecies: "Urshifu",
 forme: "Rapid-Strike",
-types: ["Fighting", "Water"],
+types: ["Fighting", "Ghost"],
 baseStats: {hp: 100, atk: 130, def: 100, spa: 63, spd: 60, spe: 97},
 abilities: {0: "Unseen Fist"},
 weightkg: 105,
@@ -11706,6 +12928,7 @@ prevo: "Kubfu",
 evoType: "other",
 evoCondition: "Defeat the Rapid Strike Tower",
 },
+
 urshifugmax: {
 num: 892,
 name: "Urshifu-Gmax",
@@ -11717,6 +12940,7 @@ abilities: {0: "Unseen Fist"},
 weightkg: 0,
 changesFrom: "Urshifu",
 },
+
 urshifurapidstrikegmax: {
 num: 892,
 name: "Urshifu-Rapid-Strike-Gmax",
@@ -11729,6 +12953,7 @@ weightkg: 105,
 battleOnly: "Urshifu-Rapid-Strike",
 changesFrom: "Urshifu-Rapid-Strike",
 },
+
 zarude: {
 num: 893,
 name: "Zarude",
@@ -11739,6 +12964,7 @@ weightkg: 70,
 otherFormes: ["Zarude-Dada"],
 formeOrder: ["Zarude", "Zarude-Dada"],
 },
+
 zarudedada: {
 num: 893,
 name: "Zarude-Dada",
@@ -11749,6 +12975,7 @@ baseStats: {hp: 105, atk: 120, def: 105, spa: 70, spd: 95, spe: 105},
 abilities: {0: "Leaf Guard"},
 weightkg: 70,
 },
+
 regieleki: {
 num: 894,
 name: "Regieleki",
@@ -11757,6 +12984,7 @@ baseStats: {hp: 80, atk: 100, def: 50, spa: 100, spd: 50, spe: 200},
 abilities: {0: "Transistor"},
 weightkg: 145,
 },
+
 regidrago: {
 num: 895,
 name: "Regidrago",
@@ -11765,22 +12993,25 @@ baseStats: {hp: 200, atk: 100, def: 50, spa: 100, spd: 50, spe: 80},
 abilities: {0: "Dragon's Maw"},
 weightkg: 200,
 },
+
 glastrier: {
 num: 896,
 name: "Glastrier",
-types: ["Ice"],
+types: ["Ice", "Normal"],
 baseStats: {hp: 100, atk: 145, def: 130, spa: 65, spd: 110, spe: 30},
 abilities: {0: "Chilling Neigh"},
 weightkg: 800,
 },
+
 spectrier: {
 num: 897,
 name: "Spectrier",
-types: ["Ghost"],
+types: ["Ghost", "Normal"],
 baseStats: {hp: 100, atk: 65, def: 60, spa: 145, spd: 80, spe: 130},
 abilities: {0: "Grim Neigh"},
 weightkg: 44.5,
 },
+
 calyrex: {
 num: 898,
 name: "Calyrex",
@@ -11791,28 +13022,31 @@ weightkg: 7.7,
 otherFormes: ["Calyrex-Ice", "Calyrex-Shadow"],
 formeOrder: ["Calyrex", "Calyrex-Ice", "Calyrex-Shadow"],
 },
+
 calyrexice: {
 num: 898,
 name: "Calyrex-Ice",
 baseSpecies: "Calyrex",
 forme: "Ice",
-types: ["Psychic", "Ice"],
+types: ["Grass", "Ice"],
 baseStats: {hp: 100, atk: 165, def: 150, spa: 85, spd: 130, spe: 50},
 abilities: {0: "As One (Glastrier)"},
 weightkg: 809.1,
 changesFrom: "Calyrex",
 },
+
 calyrexshadow: {
 num: 898,
 name: "Calyrex-Shadow",
 baseSpecies: "Calyrex",
 forme: "Shadow",
-types: ["Psychic", "Ghost"],
+types: ["Grass", "Ghost"],
 baseStats: {hp: 100, atk: 85, def: 80, spa: 165, spd: 100, spe: 150},
 abilities: {0: "As One (Spectrier)"},
 weightkg: 53.6,
 changesFrom: "Calyrex",
 },
+
 wyrdeer: {
 num: 899,
 name: "Wyrdeer",
@@ -11824,6 +13058,7 @@ prevo: "Stantler",
 evoType: "other",
 evoCondition: "Use Agile style Psyshield Bash 20 times",
 },
+
 kleavor: {
 num: 900,
 name: "Kleavor",
@@ -11835,6 +13070,7 @@ prevo: "Scyther",
 evoType: "other",
 evoCondition: "Black Augurite",
 },
+
 ursaluna: {
 num: 901,
 name: "Ursaluna",
@@ -11846,11 +13082,12 @@ prevo: "Ursaring",
 evoType: "other",
 evoCondition: "Peat Block when there's a full moon",
 },
+
 basculegion: {
 num: 902,
 name: "Basculegion",
 baseForme: "M",
-types: ["Water", "Ghost"],
+types: ["Ice", "Ghost"],
 baseStats: {hp: 120, atk: 112, def: 65, spa: 80, spd: 75, spe: 78},
 abilities: {0: "Swift Swim", 1: "Adaptability", H: "Mold Breaker"},
 weightkg: 110,
@@ -11860,12 +13097,13 @@ evoCondition: "Receive 294+ recoil without fainting",
 otherFormes: ["Basculegion-F"],
 formeOrder: ["Basculegion", "Basculegion-F"],
 },
+
 basculegionf: {
 num: 902,
 name: "Basculegion-F",
 baseSpecies: "Basculegion",
 forme: "F",
-types: ["Water", "Ghost"],
+types: ["Ice", "Ghost"],
 baseStats: {hp: 120, atk: 92, def: 65, spa: 100, spd: 75, spe: 78},
 abilities: {0: "Swift Swim", 1: "Adaptability", H: "Mold Breaker"},
 weightkg: 110,
@@ -11873,6 +13111,7 @@ prevo: "Basculin-White-Striped",
 evoType: "other",
 evoCondition: "Receive 294+ recoil without fainting",
 },
+
 sneasler: {
 num: 903,
 name: "Sneasler",
@@ -11885,6 +13124,7 @@ evoType: "levelHold",
 evoItem: "Razor Claw",
 evoCondition: "during the day",
 },
+
 overqwil: {
 num: 904,
 name: "Overqwil",
@@ -11896,6 +13136,7 @@ prevo: "Qwilfish-Hisui",
 evoType: "other",
 evoCondition: "Use Strong style Barb Barrage 20 times",
 },
+
 enamorus: {
 num: 905,
 name: "Enamorus",
@@ -11907,6 +13148,7 @@ weightkg: 48,
 otherFormes: ["Enamorus-Therian"],
 formeOrder: ["Enamorus", "Enamorus-Therian"],
 },
+
 enamorustherian: {
 num: 905,
 name: "Enamorus-Therian",
@@ -11918,6 +13160,7 @@ abilities: {0: "Overcoat"},
 weightkg: 48,
 changesFrom: "Enamorus",
 },
+
 sprigatito: {
 num: 906,
 name: "Sprigatito",
@@ -11927,6 +13170,7 @@ abilities: {0: "Overgrow", H: "Protean"},
 weightkg: 4.1,
 evos: ["Floragato"],
 },
+
 floragato: {
 num: 907,
 name: "Floragato",
@@ -11937,15 +13181,17 @@ weightkg: 12.2,
 prevo: "Sprigatito",
 evos: ["Meowscarada"],
 },
+
 meowscarada: {
 num: 908,
 name: "Meowscarada",
-types: ["Grass", "Dark"],
+types: ["Grass", "Poison"],
 baseStats: {hp: 76, atk: 110, def: 70, spa: 81, spd: 70, spe: 123},
 abilities: {0: "Overgrow", H: "Protean"},
 weightkg: 31.2,
 prevo: "Floragato",
 },
+
 fuecoco: {
 num: 909,
 name: "Fuecoco",
@@ -11955,6 +13201,7 @@ abilities: {0: "Blaze", H: "Unaware"},
 weightkg: 9.8,
 evos: ["Crocalor"],
 },
+
 crocalor: {
 num: 910,
 name: "Crocalor",
@@ -11965,6 +13212,7 @@ weightkg: 30.7,
 prevo: "Fuecoco",
 evos: ["Skeledirge"],
 },
+
 skeledirge: {
 num: 911,
 name: "Skeledirge",
@@ -11974,6 +13222,7 @@ abilities: {0: "Blaze", H: "Unaware"},
 weightkg: 326.5,
 prevo: "Crocalor",
 },
+
 quaxly: {
 num: 912,
 name: "Quaxly",
@@ -11983,6 +13232,7 @@ abilities: {0: "Torrent", H: "Moxie"},
 weightkg: 6.1,
 evos: ["Quaxwell"],
 },
+
 quaxwell: {
 num: 913,
 name: "Quaxwell",
@@ -11993,6 +13243,7 @@ weightkg: 21.5,
 prevo: "Quaxly",
 evos: ["Quaquaval"],
 },
+
 quaquaval: {
 num: 914,
 name: "Quaquaval",
@@ -12002,20 +13253,22 @@ abilities: {0: "Torrent", H: "Moxie"},
 weightkg: 61.9,
 prevo: "Quaxwell",
 },
+
 lechonk: {
 num: 915,
 name: "Lechonk",
-types: ["Normal"],
+types: ["Fairy"],
 baseStats: {hp: 54, atk: 45, def: 40, spa: 35, spd: 45, spe: 35},
 abilities: {0: "Aroma Veil", 1: "Gluttony", H: "Thick Fat"},
 weightkg: 10.2,
 evos: ["Oinkologne", "Oinkologne-F"],
 },
+
 oinkologne: {
 num: 916,
 name: "Oinkologne",
 baseForme: "M",
-types: ["Normal"],
+types: ["Fairy", "Ground"],
 baseStats: {hp: 110, atk: 100, def: 75, spa: 59, spd: 80, spe: 65},
 abilities: {0: "Lingering Aroma", 1: "Gluttony", H: "Thick Fat"},
 weightkg: 120,
@@ -12023,17 +13276,19 @@ prevo: "Lechonk",
 otherFormes: ["Oinkologne-F"],
 formeOrder: ["Oinkologne", "Oinkologne-F"],
 },
+
 oinkolognef: {
 num: 916,
 name: "Oinkologne-F",
 baseSpecies: "Oinkologne",
 forme: "F",
-types: ["Normal"],
+types: ["Fairy", "Ground"],
 baseStats: {hp: 115, atk: 90, def: 70, spa: 59, spd: 90, spe: 65},
 abilities: {0: "Aroma Veil", 1: "Gluttony", H: "Thick Fat"},
 weightkg: 120,
 prevo: "Lechonk",
 },
+
 tarountula: {
 num: 917,
 name: "Tarountula",
@@ -12043,15 +13298,17 @@ abilities: {0: "Insomnia", H: "Stakeout"},
 weightkg: 4,
 evos: ["Spidops"],
 },
+
 spidops: {
 num: 918,
 name: "Spidops",
-types: ["Bug"],
+types: ["Bug", "Ground"],
 baseStats: {hp: 60, atk: 79, def: 92, spa: 52, spd: 86, spe: 35},
 abilities: {0: "Insomnia", H: "Stakeout"},
 weightkg: 16.5,
 prevo: "Tarountula",
 },
+
 nymble: {
 num: 919,
 name: "Nymble",
@@ -12061,6 +13318,7 @@ abilities: {0: "Swarm", H: "Tinted Lens"},
 weightkg: 1,
 evos: ["Lokix"],
 },
+
 lokix: {
 num: 920,
 name: "Lokix",
@@ -12070,6 +13328,7 @@ abilities: {0: "Swarm", H: "Tinted Lens"},
 weightkg: 17.5,
 prevo: "Nymble",
 },
+
 pawmi: {
 num: 921,
 name: "Pawmi",
@@ -12079,6 +13338,7 @@ abilities: {0: "Static", 1: "Natural Cure", H: "Iron Fist"},
 weightkg: 2.5,
 evos: ["Pawmo"],
 },
+
 pawmo: {
 num: 922,
 name: "Pawmo",
@@ -12089,6 +13349,7 @@ weightkg: 6.5,
 prevo: "Pawmi",
 evos: ["Pawmot"],
 },
+
 pawmot: {
 num: 923,
 name: "Pawmot",
@@ -12100,6 +13361,7 @@ prevo: "Pawmo",
 evoType: "other",
 evoCondition: "walk 1000 steps in Let's Go",
 },
+
 tandemaus: {
 num: 924,
 name: "Tandemaus",
@@ -12109,11 +13371,12 @@ abilities: {0: "Run Away", 1: "Pickup", H: "Own Tempo"},
 weightkg: 1.8,
 evos: ["Maushold", "Maushold-Four"],
 },
+
 maushold: {
 num: 925,
 name: "Maushold",
 baseForme: "Three",
-types: ["Normal"],
+types: ["Normal", "Fairy"],
 baseStats: {hp: 74, atk: 75, def: 70, spa: 65, spd: 75, spe: 111},
 abilities: {0: "Friend Guard", 1: "Cheek Pouch", H: "Technician"},
 weightkg: 2.3,
@@ -12121,17 +13384,19 @@ prevo: "Tandemaus",
 otherFormes: ["Maushold-Four"],
 formeOrder: ["Maushold", "Maushold-Four"],
 },
+
 mausholdfour: {
 num: 925,
 name: "Maushold-Four",
 baseSpecies: "Maushold",
 forme: "Four",
-types: ["Normal"],
+types: ["Normal", "Fairy"],
 baseStats: {hp: 74, atk: 75, def: 70, spa: 65, spd: 75, spe: 111},
 abilities: {0: "Friend Guard", 1: "Cheek Pouch", H: "Technician"},
 weightkg: 2.8,
 prevo: "Tandemaus",
 },
+
 fidough: {
 num: 926,
 name: "Fidough",
@@ -12141,15 +13406,17 @@ abilities: {0: "Own Tempo", H: "Klutz"},
 weightkg: 10.9,
 evos: ["Dachsbun"],
 },
+
 dachsbun: {
 num: 927,
 name: "Dachsbun",
-types: ["Fairy"],
+types: ["Fairy", "Fire"],
 baseStats: {hp: 57, atk: 80, def: 115, spa: 50, spd: 80, spe: 95},
 abilities: {0: "Well-Baked Body", H: "Aroma Veil"},
 weightkg: 14.9,
 prevo: "Fidough",
 },
+
 smoliv: {
 num: 928,
 name: "Smoliv",
@@ -12159,6 +13426,7 @@ abilities: {0: "Early Bird", H: "Harvest"},
 weightkg: 6.5,
 evos: ["Dolliv"],
 },
+
 dolliv: {
 num: 929,
 name: "Dolliv",
@@ -12169,6 +13437,7 @@ weightkg: 11.9,
 prevo: "Smoliv",
 evos: ["Arboliva"],
 },
+
 arboliva: {
 num: 930,
 name: "Arboliva",
@@ -12178,6 +13447,7 @@ abilities: {0: "Seed Sower", H: "Harvest"},
 weightkg: 48.2,
 prevo: "Dolliv",
 },
+
 squawkabilly: {
 num: 931,
 name: "Squawkabilly",
@@ -12189,6 +13459,7 @@ weightkg: 2.4,
 otherFormes: ["Squawkabilly-Blue", "Squawkabilly-Yellow", "Squawkabilly-White"],
 formeOrder: ["Squawkabilly", "Squawkabilly-Blue", "Squawkabilly-Yellow", "Squawkabilly-White"],
 },
+
 squawkabillyblue: {
 num: 931,
 name: "Squawkabilly-Blue",
@@ -12199,6 +13470,7 @@ baseStats: {hp: 82, atk: 96, def: 51, spa: 45, spd: 51, spe: 92},
 abilities: {0: "Intimidate", 1: "Hustle", H: "Guts"},
 weightkg: 2.4,
 },
+
 squawkabillyyellow: {
 num: 931,
 name: "Squawkabilly-Yellow",
@@ -12209,6 +13481,7 @@ baseStats: {hp: 82, atk: 96, def: 51, spa: 45, spd: 51, spe: 92},
 abilities: {0: "Intimidate", 1: "Hustle", H: "Sheer Force"},
 weightkg: 2.4,
 },
+
 squawkabillywhite: {
 num: 931,
 name: "Squawkabilly-White",
@@ -12219,6 +13492,7 @@ baseStats: {hp: 82, atk: 96, def: 51, spa: 45, spd: 51, spe: 92},
 abilities: {0: "Intimidate", 1: "Hustle", H: "Sheer Force"},
 weightkg: 2.4,
 },
+
 nacli: {
 num: 932,
 name: "Nacli",
@@ -12228,25 +13502,28 @@ abilities: {0: "Purifying Salt", 1: "Sturdy", H: "Clear Body"},
 weightkg: 16,
 evos: ["Naclstack"],
 },
+
 naclstack: {
 num: 933,
 name: "Naclstack",
-types: ["Rock"],
+types: ["Rock", "Ice"],
 baseStats: {hp: 60, atk: 60, def: 100, spa: 35, spd: 65, spe: 35},
 abilities: {0: "Purifying Salt", 1: "Sturdy", H: "Clear Body"},
 weightkg: 105,
 prevo: "Nacli",
 evos: ["Garganacl"],
 },
+
 garganacl: {
 num: 934,
 name: "Garganacl",
-types: ["Rock"],
+types: ["Rock", "Ice"],
 baseStats: {hp: 100, atk: 100, def: 130, spa: 45, spd: 90, spe: 35},
 abilities: {0: "Purifying Salt", 1: "Sturdy", H: "Clear Body"},
 weightkg: 240,
 prevo: "Naclstack",
 },
+
 charcadet: {
 num: 935,
 name: "Charcadet",
@@ -12256,6 +13533,7 @@ abilities: {0: "Flash Fire", H: "Flame Body"},
 weightkg: 10.5,
 evos: ["Armarouge", "Ceruledge"],
 },
+
 armarouge: {
 num: 936,
 name: "Armarouge",
@@ -12267,10 +13545,11 @@ prevo: "Charcadet",
 evoType: "useItem",
 evoItem: "Auspicious Armor",
 },
+
 ceruledge: {
 num: 937,
 name: "Ceruledge",
-types: ["Fire", "Ghost"],
+types: ["Fire", "Steel"],
 baseStats: {hp: 75, atk: 125, def: 80, spa: 60, spd: 100, spe: 85},
 abilities: {0: "Flash Fire", H: "Weak Armor"},
 weightkg: 62,
@@ -12278,6 +13557,7 @@ prevo: "Charcadet",
 evoType: "useItem",
 evoItem: "Malicious Armor",
 },
+
 tadbulb: {
 num: 938,
 name: "Tadbulb",
@@ -12287,10 +13567,11 @@ abilities: {0: "Own Tempo", 1: "Static", H: "Damp"},
 weightkg: 0.4,
 evos: ["Bellibolt"],
 },
+
 bellibolt: {
 num: 939,
 name: "Bellibolt",
-types: ["Electric"],
+types: ["Electric", "Poison"],
 baseStats: {hp: 109, atk: 64, def: 91, spa: 103, spd: 83, spe: 45},
 abilities: {0: "Electromorphosis", 1: "Static", H: "Damp"},
 weightkg: 113,
@@ -12298,6 +13579,7 @@ prevo: "Tadbulb",
 evoType: "useItem",
 evoItem: "Thunder Stone",
 },
+
 wattrel: {
 num: 940,
 name: "Wattrel",
@@ -12307,6 +13589,7 @@ abilities: {0: "Wind Power", 1: "Volt Absorb", H: "Competitive"},
 weightkg: 3.6,
 evos: ["Kilowattrel"],
 },
+
 kilowattrel: {
 num: 941,
 name: "Kilowattrel",
@@ -12316,6 +13599,7 @@ abilities: {0: "Wind Power", 1: "Volt Absorb", H: "Competitive"},
 weightkg: 38.6,
 prevo: "Wattrel",
 },
+
 maschiff: {
 num: 942,
 name: "Maschiff",
@@ -12325,15 +13609,17 @@ abilities: {0: "Intimidate", 1: "Run Away", H: "Stakeout"},
 weightkg: 16,
 evos: ["Mabosstiff"],
 },
+
 mabosstiff: {
 num: 943,
 name: "Mabosstiff",
-types: ["Dark"],
+types: ["Dark", "Ground"],
 baseStats: {hp: 80, atk: 120, def: 90, spa: 60, spd: 70, spe: 85},
 abilities: {0: "Intimidate", 1: "Guard Dog", H: "Stakeout"},
 weightkg: 61,
 prevo: "Maschiff",
 },
+
 shroodle: {
 num: 944,
 name: "Shroodle",
@@ -12343,6 +13629,7 @@ abilities: {0: "Unburden", 1: "Pickpocket", H: "Prankster"},
 weightkg: 0.7,
 evos: ["Grafaiai"],
 },
+
 grafaiai: {
 num: 945,
 name: "Grafaiai",
@@ -12352,6 +13639,7 @@ abilities: {0: "Unburden", 1: "Poison Touch", H: "Prankster"},
 weightkg: 27.2,
 prevo: "Shroodle",
 },
+
 bramblin: {
 num: 946,
 name: "Bramblin",
@@ -12361,6 +13649,7 @@ abilities: {0: "Wind Rider", H: "Infiltrator"},
 weightkg: 0.6,
 evos: ["Brambleghast"],
 },
+
 brambleghast: {
 num: 947,
 name: "Brambleghast",
@@ -12372,6 +13661,7 @@ prevo: "Bramblin",
 evoType: "other",
 evoCondition: "Walk 1000 steps in Let's Go",
 },
+
 toedscool: {
 num: 948,
 name: "Toedscool",
@@ -12381,6 +13671,7 @@ abilities: {0: "Mycelium Might"},
 weightkg: 33,
 evos: ["Toedscruel"],
 },
+
 toedscruel: {
 num: 949,
 name: "Toedscruel",
@@ -12390,6 +13681,7 @@ abilities: {0: "Mycelium Might"},
 weightkg: 58,
 prevo: "Toedscool",
 },
+
 klawf: {
 num: 950,
 name: "Klawf",
@@ -12398,6 +13690,7 @@ baseStats: {hp: 70, atk: 100, def: 115, spa: 35, spd: 55, spe: 75},
 abilities: {0: "Anger Shell", 1: "Shell Armor", H: "Regenerator"},
 weightkg: 79,
 },
+
 capsakid: {
 num: 951,
 name: "Capsakid",
@@ -12407,6 +13700,7 @@ abilities: {0: "Chlorophyll", 1: "Insomnia", H: "Klutz"},
 weightkg: 3,
 evos: ["Scovillain"],
 },
+
 scovillain: {
 num: 952,
 name: "Scovillain",
@@ -12418,6 +13712,7 @@ prevo: "Capsakid",
 evoType: "useItem",
 evoItem: "Fire Stone",
 },
+
 rellor: {
 num: 953,
 name: "Rellor",
@@ -12427,6 +13722,7 @@ abilities: {0: "Compound Eyes", H: "Shed Skin"},
 weightkg: 1,
 evos: ["Rabsca"],
 },
+
 rabsca: {
 num: 954,
 name: "Rabsca",
@@ -12438,6 +13734,7 @@ prevo: "Rellor",
 evoType: "other",
 evoCondition: "walk 1000 steps in Let's Go",
 },
+
 flittle: {
 num: 955,
 name: "Flittle",
@@ -12447,15 +13744,17 @@ abilities: {0: "Anticipation", 1: "Frisk", H: "Speed Boost"},
 weightkg: 1.5,
 evos: ["Espathra"],
 },
+
 espathra: {
 num: 956,
 name: "Espathra",
-types: ["Psychic"],
+types: ["Psychic", "Ground"],
 baseStats: {hp: 95, atk: 60, def: 60, spa: 101, spd: 60, spe: 105},
 abilities: {0: "Opportunist", 1: "Frisk", H: "Speed Boost"},
 weightkg: 90,
 prevo: "Flittle",
 },
+
 tinkatink: {
 num: 957,
 name: "Tinkatink",
@@ -12465,6 +13764,7 @@ abilities: {0: "Mold Breaker", 1: "Own Tempo", H: "Pickpocket"},
 weightkg: 8.9,
 evos: ["Tinkatuff"],
 },
+
 tinkatuff: {
 num: 958,
 name: "Tinkatuff",
@@ -12475,6 +13775,7 @@ weightkg: 59.1,
 prevo: "Tinkatink",
 evos: ["Tinkaton"],
 },
+
 tinkaton: {
 num: 959,
 name: "Tinkaton",
@@ -12484,32 +13785,36 @@ abilities: {0: "Mold Breaker", 1: "Own Tempo", H: "Pickpocket"},
 weightkg: 112.8,
 prevo: "Tinkatuff",
 },
+
 wiglett: {
 num: 960,
 name: "Wiglett",
-types: ["Water"],
+types: ["Water", "Rock"],
 baseStats: {hp: 10, atk: 55, def: 25, spa: 35, spd: 25, spe: 95},
 abilities: {0: "Gooey", 1: "Rattled", H: "Sand Veil"},
 weightkg: 1.8,
 evos: ["Wugtrio"],
 },
+
 wugtrio: {
 num: 961,
 name: "Wugtrio",
-types: ["Water"],
+types: ["Water", "Rock"],
 baseStats: {hp: 35, atk: 100, def: 50, spa: 50, spd: 70, spe: 120},
 abilities: {0: "Gooey", 1: "Rattled", H: "Sand Veil"},
 weightkg: 5.4,
 prevo: "Wiglett",
 },
+
 bombirdier: {
 num: 962,
 name: "Bombirdier",
-types: ["Flying", "Dark"],
+types: ["Flying", "Rock"],
 baseStats: {hp: 70, atk: 103, def: 85, spa: 60, spd: 85, spe: 82},
 abilities: {0: "Big Pecks", 1: "Keen Eye", H: "Rocky Payload"},
 weightkg: 42.9,
 },
+
 finizen: {
 num: 963,
 name: "Finizen",
@@ -12519,6 +13824,7 @@ abilities: {0: "Water Veil"},
 weightkg: 60.2,
 evos: ["Palafin"],
 },
+
 palafin: {
 num: 964,
 name: "Palafin",
@@ -12531,6 +13837,7 @@ prevo: "Finizen",
 otherFormes: ["Palafin-Hero"],
 formeOrder: ["Palafin", "Palafin-Hero"],
 },
+
 palafinhero: {
 num: 964,
 name: "Palafin-Hero",
@@ -12543,6 +13850,7 @@ weightkg: 97.4,
 requiredAbility: "Zero to Hero",
 battleOnly: "Palafin",
 },
+
 varoom: {
 num: 965,
 name: "Varoom",
@@ -12552,6 +13860,7 @@ abilities: {0: "Overcoat", H: "Slow Start"},
 weightkg: 35,
 evos: ["Revavroom"],
 },
+
 revavroom: {
 num: 966,
 name: "Revavroom",
@@ -12561,6 +13870,7 @@ abilities: {0: "Overcoat", H: "Filter"},
 weightkg: 120,
 prevo: "Varoom",
 },
+
 cyclizar: {
 num: 967,
 name: "Cyclizar",
@@ -12569,14 +13879,16 @@ baseStats: {hp: 70, atk: 95, def: 65, spa: 85, spd: 65, spe: 121},
 abilities: {0: "Shed Skin", H: "Regenerator"},
 weightkg: 63,
 },
+
 orthworm: {
 num: 968,
 name: "Orthworm",
-types: ["Steel"],
+types: ["Steel", "Bug"],
 baseStats: {hp: 70, atk: 85, def: 145, spa: 60, spd: 55, spe: 65},
 abilities: {0: "Earth Eater", H: "Sand Veil"},
 weightkg: 310,
 },
+
 glimmet: {
 num: 969,
 name: "Glimmet",
@@ -12586,6 +13898,7 @@ abilities: {0: "Toxic Debris", H: "Corrosion"},
 weightkg: 8,
 evos: ["Glimmora"],
 },
+
 glimmora: {
 num: 970,
 name: "Glimmora",
@@ -12595,33 +13908,37 @@ abilities: {0: "Toxic Debris", H: "Corrosion"},
 weightkg: 45,
 prevo: "Glimmet",
 },
+
 greavard: {
 num: 971,
 name: "Greavard",
-types: ["Ghost"],
+types: ["Ghost", "Ground"],
 baseStats: {hp: 50, atk: 61, def: 60, spa: 30, spd: 55, spe: 34},
 abilities: {0: "Pickup", H: "Fluffy"},
 weightkg: 35,
 evos: ["Houndstone"],
 },
+
 houndstone: {
 num: 972,
 name: "Houndstone",
-types: ["Ghost"],
+types: ["Ghost", "Ground"],
 baseStats: {hp: 72, atk: 101, def: 100, spa: 50, spd: 97, spe: 68},
 abilities: {0: "Sand Rush", H: "Fluffy"},
 weightkg: 15,
 prevo: "Greavard",
 evoCondition: "at night",
 },
+
 flamigo: {
 num: 973,
 name: "Flamigo",
-types: ["Flying", "Fighting"],
+types: ["Flying", "Ground"],
 baseStats: {hp: 82, atk: 115, def: 74, spa: 75, spd: 64, spe: 90},
 abilities: {0: "Scrappy", 1: "Tangled Feet", H: "Costar"},
 weightkg: 37,
 },
+
 cetoddle: {
 num: 974,
 name: "Cetoddle",
@@ -12631,10 +13948,11 @@ abilities: {0: "Thick Fat", 1: "Snow Cloak", H: "Sheer Force"},
 weightkg: 45,
 evos: ["Cetitan"],
 },
+
 cetitan: {
 num: 975,
 name: "Cetitan",
-types: ["Ice"],
+types: ["Ice", "Ground"],
 baseStats: {hp: 170, atk: 113, def: 65, spa: 45, spd: 55, spe: 73},
 abilities: {0: "Thick Fat", 1: "Slush Rush", H: "Sheer Force"},
 weightkg: 700,
@@ -12642,6 +13960,7 @@ prevo: "Cetoddle",
 evoType: "useItem",
 evoItem: "Ice Stone",
 },
+
 veluza: {
 num: 976,
 name: "Veluza",
@@ -12650,14 +13969,16 @@ baseStats: {hp: 90, atk: 102, def: 73, spa: 78, spd: 65, spe: 70},
 abilities: {0: "Mold Breaker", H: "Sharpness"},
 weightkg: 90,
 },
+
 dondozo: {
 num: 977,
 name: "Dondozo",
-types: ["Water"],
+types: ["Dark", "Ice"],
 baseStats: {hp: 150, atk: 100, def: 115, spa: 65, spd: 65, spe: 35},
 abilities: {0: "Unaware", 1: "Oblivious", H: "Water Veil"},
 weightkg: 220,
 },
+
 tatsugiri: {
 num: 978,
 name: "Tatsugiri",
@@ -12669,6 +13990,7 @@ weightkg: 8,
 cosmeticFormes: ["Tatsugiri-Droopy", "Tatsugiri-Stretchy"],
 formeOrder: ["Tatsugiri", "Tatsugiri-Droopy", "Tatsugiri-Stretchy"],
 },
+
 annihilape: {
 num: 979,
 name: "Annihilape",
@@ -12680,6 +14002,7 @@ prevo: "Primeape",
 evoType: "other",
 evoCondition: "Use Rage Fist 20 times and level-up",
 },
+
 clodsire: {
 num: 980,
 name: "Clodsire",
@@ -12689,6 +14012,7 @@ abilities: {0: "Poison Point", 1: "Water Absorb", H: "Unaware"},
 weightkg: 223,
 prevo: "Wooper-Paldea",
 },
+
 farigiraf: {
 num: 981,
 name: "Farigiraf",
@@ -12700,11 +14024,12 @@ prevo: "Girafarig",
 evoType: "levelMove",
 evoMove: "Twin Beam",
 },
+
 dudunsparce: {
 num: 982,
 name: "Dudunsparce",
 baseForme: "Two-Segment",
-types: ["Normal"],
+types: ["Normal", "Bug"],
 baseStats: {hp: 125, atk: 100, def: 80, spa: 85, spd: 75, spe: 55},
 abilities: {0: "Serene Grace", 1: "Run Away", H: "Rattled"},
 weightkg: 39.2,
@@ -12714,12 +14039,13 @@ evoMove: "Hyper Drill",
 otherFormes: ["Dudunsparce-Three-Segment"],
 formeOrder: ["Dudunsparce", "Dudunsparce-Three-Segment"],
 },
+
 dudunsparcethreesegment: {
 num: 982,
 name: "Dudunsparce-Three-Segment",
 baseSpecies: "Dudunsparce",
 forme: "Three-Segment",
-types: ["Normal"],
+types: ["Normal", "Bug"],
 baseStats: {hp: 125, atk: 100, def: 80, spa: 85, spd: 75, spe: 55},
 abilities: {0: "Serene Grace", 1: "Run Away", H: "Rattled"},
 weightkg: 47.4,
@@ -12727,6 +14053,7 @@ prevo: "Dunsparce",
 evoType: "levelMove",
 evoMove: "Hyper Drill",
 },
+
 kingambit: {
 num: 983,
 name: "Kingambit",
@@ -12738,30 +14065,34 @@ prevo: "Bisharp",
 evoType: "other",
 evoCondition: "Defeat 3 Bisharp leading Pawniard and level-up",
 },
+
 greattusk: {
 num: 984,
 name: "Great Tusk",
-types: ["Ground", "Fighting"],
+types: ["Ground", "Rock"],
 baseStats: {hp: 115, atk: 131, def: 131, spa: 53, spd: 53, spe: 87},
 abilities: {0: "Protosynthesis"},
 weightkg: 320,
 },
+
 screamtail: {
 num: 985,
 name: "Scream Tail",
-types: ["Fairy", "Psychic"],
+types: ["Fairy", "Dragon"],
 baseStats: {hp: 115, atk: 65, def: 99, spa: 65, spd: 115, spe: 111},
 abilities: {0: "Protosynthesis"},
 weightkg: 8,
 },
+
 brutebonnet: {
 num: 986,
 name: "Brute Bonnet",
-types: ["Grass", "Dark"],
+types: ["Poison", "Ghost"],
 baseStats: {hp: 111, atk: 127, def: 99, spa: 79, spd: 99, spe: 55},
 abilities: {0: "Protosynthesis"},
 weightkg: 21,
 },
+
 fluttermane: {
 num: 987,
 name: "Flutter Mane",
@@ -12770,6 +14101,7 @@ baseStats: {hp: 55, atk: 55, def: 55, spa: 135, spd: 135, spe: 135},
 abilities: {0: "Protosynthesis"},
 weightkg: 4,
 },
+
 slitherwing: {
 num: 988,
 name: "Slither Wing",
@@ -12778,6 +14110,7 @@ baseStats: {hp: 85, atk: 135, def: 79, spa: 85, spd: 105, spe: 81},
 abilities: {0: "Protosynthesis"},
 weightkg: 92,
 },
+
 sandyshocks: {
 num: 989,
 name: "Sandy Shocks",
@@ -12786,6 +14119,7 @@ baseStats: {hp: 85, atk: 81, def: 97, spa: 121, spd: 85, spe: 101},
 abilities: {0: "Protosynthesis"},
 weightkg: 60,
 },
+
 irontreads: {
 num: 990,
 name: "Iron Treads",
@@ -12794,6 +14128,7 @@ baseStats: {hp: 90, atk: 112, def: 120, spa: 72, spd: 70, spe: 106},
 abilities: {0: "Quark Drive"},
 weightkg: 240,
 },
+
 ironbundle: {
 num: 991,
 name: "Iron Bundle",
@@ -12802,6 +14137,7 @@ baseStats: {hp: 56, atk: 80, def: 114, spa: 124, spd: 60, spe: 136},
 abilities: {0: "Quark Drive"},
 weightkg: 11,
 },
+
 ironhands: {
 num: 992,
 name: "Iron Hands",
@@ -12810,14 +14146,16 @@ baseStats: {hp: 154, atk: 140, def: 108, spa: 50, spd: 68, spe: 50},
 abilities: {0: "Quark Drive"},
 weightkg: 380.7,
 },
+
 ironjugulis: {
 num: 993,
 name: "Iron Jugulis",
-types: ["Dark", "Flying"],
+types: ["Dark", "Steel"],
 baseStats: {hp: 94, atk: 80, def: 86, spa: 122, spd: 80, spe: 108},
 abilities: {0: "Quark Drive"},
 weightkg: 111,
 },
+
 ironmoth: {
 num: 994,
 name: "Iron Moth",
@@ -12826,6 +14164,7 @@ baseStats: {hp: 80, atk: 70, def: 60, spa: 140, spd: 110, spe: 110},
 abilities: {0: "Quark Drive"},
 weightkg: 36,
 },
+
 ironthorns: {
 num: 995,
 name: "Iron Thorns",
@@ -12834,6 +14173,7 @@ baseStats: {hp: 100, atk: 134, def: 110, spa: 70, spd: 84, spe: 72},
 abilities: {0: "Quark Drive"},
 weightkg: 303,
 },
+
 frigibax: {
 num: 996,
 name: "Frigibax",
@@ -12843,6 +14183,7 @@ abilities: {0: "Thermal Exchange", H: "Ice Body"},
 weightkg: 17,
 evos: ["Arctibax"],
 },
+
 arctibax: {
 num: 997,
 name: "Arctibax",
@@ -12853,6 +14194,7 @@ weightkg: 30,
 prevo: "Frigibax",
 evos: ["Baxcalibur"],
 },
+
 baxcalibur: {
 num: 998,
 name: "Baxcalibur",
@@ -12862,6 +14204,7 @@ abilities: {0: "Thermal Exchange", H: "Ice Body"},
 weightkg: 210,
 prevo: "Arctibax",
 },
+
 gimmighoul: {
 num: 999,
 name: "Gimmighoul",
@@ -12874,6 +14217,7 @@ evos: ["Gholdengo"],
 otherFormes: ["Gimmighoul-Roaming"],
 formeOrder: ["Gimmighoul", "Gimmighoul-Roaming"],
 },
+
 gimmighoulroaming: {
 num: 999,
 name: "Gimmighoul-Roaming",
@@ -12885,6 +14229,7 @@ abilities: {0: "Run Away"},
 weightkg: 0.1,
 evos: ["Gholdengo"],
 },
+
 gholdengo: {
 num: 1000,
 name: "Gholdengo",
@@ -12896,6 +14241,7 @@ prevo: "Gimmighoul",
 evoType: "other",
 evoCondition: "Level up with 999 Coins in the bag",
 },
+
 wochien: {
 num: 1001,
 name: "Wo-Chien",
@@ -12904,6 +14250,7 @@ baseStats: {hp: 85, atk: 85, def: 100, spa: 95, spd: 135, spe: 70},
 abilities: {0: "Tablets of Ruin"},
 weightkg: 74.2,
 },
+
 chienpao: {
 num: 1002,
 name: "Chien-Pao",
@@ -12912,6 +14259,7 @@ baseStats: {hp: 80, atk: 120, def: 80, spa: 90, spd: 65, spe: 135},
 abilities: {0: "Sword of Ruin"},
 weightkg: 152.2,
 },
+
 tinglu: {
 num: 1003,
 name: "Ting-Lu",
@@ -12920,6 +14268,7 @@ baseStats: {hp: 155, atk: 110, def: 125, spa: 55, spd: 80, spe: 45},
 abilities: {0: "Vessel of Ruin"},
 weightkg: 699.7,
 },
+
 chiyu: {
 num: 1004,
 name: "Chi-Yu",
@@ -12928,6 +14277,7 @@ baseStats: {hp: 55, atk: 80, def: 80, spa: 135, spd: 120, spe: 100},
 abilities: {0: "Beads of Ruin"},
 weightkg: 4.9,
 },
+
 roaringmoon: {
 num: 1005,
 name: "Roaring Moon",
@@ -12936,6 +14286,7 @@ baseStats: {hp: 105, atk: 139, def: 71, spa: 55, spd: 101, spe: 119},
 abilities: {0: "Protosynthesis"},
 weightkg: 380,
 },
+
 ironvaliant: {
 num: 1006,
 name: "Iron Valiant",
@@ -12944,6 +14295,7 @@ baseStats: {hp: 74, atk: 130, def: 90, spa: 120, spd: 60, spe: 116},
 abilities: {0: "Quark Drive"},
 weightkg: 35,
 },
+
 koraidon: {
 num: 1007,
 name: "Koraidon",
@@ -12952,6 +14304,7 @@ baseStats: {hp: 100, atk: 135, def: 115, spa: 85, spd: 100, spe: 135},
 abilities: {0: "Orichalcum Pulse"},
 weightkg: 303,
 },
+
 miraidon: {
 num: 1008,
 name: "Miraidon",
@@ -12960,14 +14313,16 @@ baseStats: {hp: 100, atk: 85, def: 100, spa: 135, spd: 115, spe: 135},
 abilities: {0: "Hadron Engine"},
 weightkg: 240,
 },
+
 walkingwake: {
 num: 1009,
 name: "Walking Wake",
-types: ["Water", "Dragon"],
+types: ["Ice", "Dragon"],
 baseStats: {hp: 99, atk: 83, def: 91, spa: 125, spd: 83, spe: 109},
 abilities: {0: "Protosynthesis"},
 weightkg: 280,
 },
+
 ironleaves: {
 num: 1010,
 name: "Iron Leaves",
@@ -12976,4 +14331,5 @@ baseStats: {hp: 90, atk: 130, def: 88, spa: 70, spd: 108, spe: 104},
 abilities: {0: "Quark Drive"},
 weightkg: 125,
 },
+
 };
