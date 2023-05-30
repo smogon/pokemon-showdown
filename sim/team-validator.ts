@@ -1362,6 +1362,24 @@ export class TeamValidator {
 				set.moves[behemothMove] = 'ironhead';
 			}
 		}
+		if (species.baseSpecies === "Hoopa" && dex.gen >= 9) {
+			const moves = set.moves.map(toID);
+			const hyperspaceHole = moves.indexOf('hyperspacehole' as ID);
+			const hyperspaceFury = moves.indexOf('hyperspacefury' as ID);
+			if (species.name === "Hoopa" && hyperspaceFury >= 0) {
+				if (hyperspaceHole >= 0) {
+					problems.push(`In Generation 9, Hoopa cannot run Hyperspace Fury because it gets replaced with Hyperspace Hole upon changing forme.`);
+				} else {
+					set.moves[hyperspaceFury] = 'hyperspacehole';
+				}
+			} else if (hyperspaceHole >= 0) {
+				if (hyperspaceFury >= 0) {
+					problems.push(`In Generation 9, Hoopa-Unbound cannot run Hyperspace Hole because it gets replaced with Hyperspace Fury upon changing forme.`);
+				} else {
+					set.moves[hyperspaceHole] = 'hyperspacefury';
+				}
+			}
+		}
 		return problems;
 	}
 
