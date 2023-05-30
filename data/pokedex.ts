@@ -9412,7 +9412,7 @@ formeOrder: [
 "Vivillon-High Plains",
 "Vivillon-Sandstorm",
 "Vivillon-River",
-Vivillon-Monsoon"",
+"Vivillon-Monsoon",
 "Vivillon-Savanna",
 "Vivillon-Sun",
 "Vivillon-Ocean",
