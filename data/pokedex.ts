@@ -9398,6 +9398,28 @@ weightkg: 17,
 prevo: "Spewpa",
 otherFormes: ["Vivillon-Fancy", "Vivillon-Pokeball"],
 cosmeticFormes: ["Vivillon-Archipelago", "Vivillon-Continental", "Vivillon-Elegant", "Vivillon-Garden", "Vivillon-High Plains", "Vivillon-Icy Snow", "Vivillon-Jungle", "Vivillon-Marine", "Vivillon-Modern", "Vivillon-Monsoon", "Vivillon-Ocean", "Vivillon-Polar", "Vivillon-River", "Vivillon-Sandstorm", "Vivillon-Savanna", "Vivillon-Sun", "Vivillon-Tundra"],
+formeOrder: [
+Vivillon-Icy Snow,
+Vivillon-Polar,
+Vivillon-Tundra,
+Vivillon-Continental,
+Vivillon-Garden,
+Vivillon-Elegant,
+Vivillon, // Meadow
+Vivillon-Modern,
+Vivillon-Marine,
+Vivillon-Archipelago,
+Vivillon-High Plains,
+Vivillon-Sandstorm,
+Vivillon-River,
+Vivillon-Monsoon,
+Vivillon-Savanna,
+Vivillon-Sun,
+Vivillon-Ocean,
+Vivillon-Jungle,
+Vivillon-Fancy,
+Vivillon-Pokeball,
+],
 },
 
 vivillonfancy: {
@@ -11396,7 +11418,7 @@ abilities: {0: "Misty Surge", H: "Telepathy"},
 weightkg: 21.2,
 },
 
-
+cosmog: {
 num: 789,
 name: "Cosmog",
 types: ["Psychic"],
@@ -11406,7 +11428,7 @@ weightkg: 0.1,
 evos: ["Cosmoem"],
 },
 
-
+cosmoem: {
 num: 790,
 name: "Cosmoem",
 types: ["Psychic"],
@@ -11417,7 +11439,7 @@ prevo: "Cosmog",
 evos: ["Solgaleo", "Lunala"],
 },
 
-
+solgaleo: {
 num: 791,
 name: "Solgaleo",
 types: ["Psychic", "Steel"],
@@ -11427,7 +11449,7 @@ weightkg: 230,
 prevo: "Cosmoem",
 },
 
-
+lunala: {
 num: 792,
 name: "Lunala",
 types: ["Psychic", "Ghost"],
