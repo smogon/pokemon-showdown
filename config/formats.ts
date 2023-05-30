@@ -637,10 +637,10 @@ export const Formats: FormatList = [
 		// searchShow: false,
 		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Terastal Clause', 'Min Source Gen = 9'],
 		banlist: [
-			'Annihilape', 'Arceus', 'Baxcalibur', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Cyclizar', 'Dialga', 'Dragapult', 'Dragonite',
-			'Espathra', 'Eternatus', 'Giratina', 'Groudon', 'Haxorus', 'Hydreigon', 'Iron Valiant', 'Koraidon', 'Kyogre', 'Landorus-Base', 'Mewtwo',
-			'Miraidon', 'Noivern', 'Palafin', 'Palkia', 'Rayquaza', 'Regidrago', 'Regieleki', 'Roaring Moon', 'Salamence', 'Urshifu-Base', 'Walking Wake',
-			'Zacian', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass', 'Last Respects',
+			'Annihilape', 'Arceus', 'Baxcalibur', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Cyclizar', 'Dialga', 'Dialga-Origin', 'Dragapult',
+			'Dragonite', 'Espathra', 'Eternatus', 'Giratina', 'Giratina-Origin', 'Groudon', 'Haxorus', 'Hydreigon', 'Iron Valiant', 'Koraidon', 'Kyogre',
+			'Landorus-Base', 'Mewtwo', 'Miraidon', 'Noivern', 'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Regidrago', 'Regieleki', 'Roaring Moon',
+			'Salamence', 'Urshifu-Base', 'Walking Wake', 'Zacian', 'Zacian-Crowned', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass', 'Last Respects',
 		],
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
