@@ -2114,7 +2114,7 @@ basePower: 10,
 },
 onDamagePriority: -40,
 onDamage(damage, target, source, effect) {
-if (this.randomChance(25, 100) && damage >= target.hp && effect && effect.effectType === 'Move') {
+if (this.randomChance(17.25, 100) && damage >= target.hp && effect && effect.effectType === 'Move') {
 this.add("-activate", target, "item: Focus Band");
 return target.hp - 1;
 }
