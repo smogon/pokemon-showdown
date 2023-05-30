@@ -642,8 +642,10 @@ export const Formats: FormatList = [
 		// searchShow: false,
 		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Terastal Clause', 'Min Source Gen = 9'],
 		banlist: [
-			'Annihilape', 'Baxcalibur', 'Chi-Yu', 'Chien-Pao', 'Cyclizar', 'Dragapult', 'Dragonite', 'Espathra', 'Haxorus', 'Houndstone', 'Hydreigon', 'Iron Valiant',
-			'Koraidon', 'Miraidon', 'Noivern', 'Palafin', 'Roaring Moon', 'Salamence', 'Walking Wake', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass',
+			'Annihilape', 'Arceus', 'Baxcalibur', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Cyclizar', 'Dialga', 'Dialga-Origin', 'Dragapult',
+			'Dragonite', 'Espathra', 'Eternatus', 'Giratina', 'Giratina-Origin', 'Groudon', 'Haxorus', 'Hydreigon', 'Iron Valiant', 'Koraidon', 'Kyogre',
+			'Landorus-Base', 'Mewtwo', 'Miraidon', 'Noivern', 'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Regidrago', 'Regieleki', 'Roaring Moon',
+			'Salamence', 'Urshifu-Base', 'Walking Wake', 'Zacian', 'Zacian-Crowned', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass', 'Last Respects',
 		],
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
@@ -1014,9 +1016,10 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Min Source Gen = 9'],
 		banlist: [
-			'Annihilape', 'Azumarill', 'Chi-Yu', 'Chien-Pao', 'Cloyster', 'Dragonite', 'Espathra', 'Flutter Mane', 'Great Tusk',
-			'Houndstone', 'Iron Bundle', 'Koraidon', 'Miraidon', 'Palafin', 'Arena Trap', 'Moody', 'Serene Grace', 'Shadow Tag',
-			'Covert Cloak', 'Damp Rock', 'Heat Rock', 'Baton Pass', 'Beat Up',
+			'Annihilape', 'Arceus', 'Azumarill', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Cloyster', 'Dialga', 'Dialga-Origin', 'Dragonite',
+			'Espathra', 'Eternatus', 'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Great Tusk', 'Groudon', 'Iron Bundle', 'Koraidon', 'Kyogre', 'Magearna',
+			'Mewtwo', 'Miraidon', 'Palafin', 'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Spectrier', 'Sneasler', 'Urshifu-Base', 'Zacian', 'Zacian-Crowned',
+			'Zamazenta-Base', 'Arena Trap', 'Moody', 'Serene Grace', 'Shadow Tag', 'Damp Rock', 'Heat Rock', 'Baton Pass', 'Beat Up', 'Last Respects',
 		],
 		restricted: ['Dynamic Punch', 'Flail', 'Fury Cutter', 'Grass Knot', 'Heavy Slam', 'Inferno', 'Low Kick', 'Nuzzle', 'Power Trip', 'Reversal', 'Spit Up', 'Stored Power', 'Zap Cannon'],
 		validateSet(set, teamHas) {
