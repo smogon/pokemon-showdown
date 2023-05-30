@@ -162,7 +162,7 @@ export const TeamsHandler = new class {
 				return null;
 			}
 			const filtered = Chat.namefilter(teamName, user);
-			if (filtered !== teamName) {
+			if (filtered?.trim() !== teamName.trim()) {
 				connection.popup(`Your team's name has a filtered word.`);
 				return null;
 			}
@@ -575,8 +575,8 @@ export const pages: Chat.PageTable = {
 			let buf = '<div class="pad">';
 			buf += refresh(this);
 			buf += '<h2 />Search all teams</h2>';
-			const type = this.pageid === 'searchpersonal' ? this.pageid : 'searchpublic';
-			const isPersonal = this.pageid === 'searchpersonal';
+			const type = this.pageid.split('-')[2];
+			const isPersonal = type === 'searchpersonal';
 			query = query.join('-').split('--');
 			if (!query.length || (isPersonal && query.length === 1)) {
 				buf += `<hr />`;
@@ -635,7 +635,7 @@ export const pages: Chat.PageTable = {
 			return buf;
 		},
 		async searchpersonal(query, user, connection) {
-			this.pageid = 'searchpersonal';
+			this.pageid = 'view-teams-searchpersonal';
 
 			return ((pages.teams as Chat.PageTable).searchpublic as import('../chat').PageHandler).call(
 				this, `${user.id}${query.join('-')}`.split('-'), user, connection
