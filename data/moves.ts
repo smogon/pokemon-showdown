@@ -18985,3 +18985,6 @@ evasion: -1,
 secondary: null,
 target: "self",
 type: "Water",
+},
+
+};
