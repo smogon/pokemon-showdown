@@ -23,7 +23,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	accelerock: {
 		name: "Accelerock",
-		desc: "No additional effect.",
+		desc: "Usually goes first.",
 		shortDesc: "Usually goes first.",
 	},
 	acid: {
