@@ -1513,7 +1513,7 @@ export class RandomTeams {
 			if (
 				pokemon.some(pkmn => pkmn.species === 'Zoroark-Hisui') &&
 				pokemon.length >= (this.maxTeamSize - 1) &&
-				(this.getLevel(species, isDoubles) < 72 || this.getLevel(species, isDoubles) > 86) &&
+				(this.getLevel(species, isDoubles) < 72 || this.getLevel(species, isDoubles) > 84) &&
 				!this.adjustLevel
 			) {
 				continue;
