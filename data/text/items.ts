@@ -49,10 +49,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	airballoon: {
 		name: "Air Balloon",
-		desc: "Holder is immune to Ground-type attacks. Pops when holder is hit.",
+		desc: "Holder is immune to Ground-type attacks. *POPS* when holder is hit.",
 
-		start: "  [POKEMON] floats in the air with its Air Balloon!",
-		end: "  [POKEMON]'s Air Balloon popped!",
+		start: "  [POKEMON] floats in the air with its Air Balloon! I hope they are ok!",
+		end: "  [POKEMON]'s Air Balloon popped! O h n o",
 	},
 	alakazite: {
 		name: "Alakazite",
