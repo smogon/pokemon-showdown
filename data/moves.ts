@@ -16476,10 +16476,6 @@ name: "Rest",
 pp: 1.25,
 priority: 0,
 flags: {snatch: 1, heal: 1},
-self: {
-boosts: {
-evasion: -2,
-},
 onTry(source) {
 if (source.status === 'slp' || source.hasAbility('comatose')) return false;
 if (source.hp === source.maxhp) {
