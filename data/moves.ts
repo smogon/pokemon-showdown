@@ -18088,12 +18088,11 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 ignoreAbility: true,
-},
 secondary: {
 chance: 33,
 status: 'brn',
-},
 target: "normal",
+},
 type: "Steel",
 },
 
@@ -18140,6 +18139,7 @@ this.add('-start', pokemon, 'Aqua Ring');
 onResidualOrder: 6,
 onResidual(pokemon) {
 this.heal(pokemon.baseMaxhp / 16);
+},
 },
 secondary: null,
 target: "self",
