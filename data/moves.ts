@@ -16502,7 +16502,7 @@ type: "Psychic",
 roleplay: {
 accuracy: 87,
 basePower: 60,
-category: "Status",
+category: "Physical",
 name: "Role Play",
 pp: 1.25,
 priority: 0,
@@ -18140,7 +18140,6 @@ this.add('-start', pokemon, 'Aqua Ring');
 onResidualOrder: 6,
 onResidual(pokemon) {
 this.heal(pokemon.baseMaxhp / 16);
-},
 },
 secondary: null,
 target: "self",
