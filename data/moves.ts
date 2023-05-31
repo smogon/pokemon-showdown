@@ -18091,8 +18091,8 @@ ignoreAbility: true,
 secondary: {
 chance: 33,
 status: 'brn',
-target: "normal",
 },
+target: "normal",
 type: "Steel",
 },
 
