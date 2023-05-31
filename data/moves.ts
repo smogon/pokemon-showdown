@@ -16506,7 +16506,7 @@ type: "Psychic",
 roleplay: {
 accuracy: 87,
 basePower: 60,
-category: "Physical",
+category: "Status",
 name: "Role Play",
 pp: 1.25,
 priority: 0,
