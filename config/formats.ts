@@ -300,7 +300,7 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles', 'Little Cup', 'Sleep Clause Mod'],
-		banlist: ['Dunsparce', 'Murkrow', 'Scyther', 'Sneasel'],
+		banlist: ['Dunsparce', 'Murkrow', 'Qwilfish-Hisui', 'Scyther', 'Sneasel', 'Sneasel-Hisui'],
 	},
 	{
 		name: "[Gen 9] 2v2 Doubles",
