@@ -18141,6 +18141,7 @@ onResidualOrder: 6,
 onResidual(pokemon) {
 this.heal(pokemon.baseMaxhp / 16);
 },
+},
 secondary: null,
 target: "self",
 type: "Water",
