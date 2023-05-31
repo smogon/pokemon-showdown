@@ -627,10 +627,13 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen9',
-		ruleset: ['Standard OMs', 'Tier Shift Mod', 'Sleep Moves Clause', 'Terastal Clause', 'Min Source Gen = 9'],
+		ruleset: ['Standard OMs', 'Evasion Clause', 'Tier Shift Mod', 'Sleep Moves Clause', 'Terastal Clause', 'Min Source Gen = 9'],
 		banlist: [
-			'Chi-Yu', 'Cloyster', 'Espathra', 'Falinks', 'Flutter Mane', 'Houndstone', 'Iron Bundle', 'Koraidon', 'Medicham', 'Miraidon', 'Oricorio-Pom-Pom',
-			'Polteageist', 'Arena Trap', 'Moody', 'Shadow Tag', 'Eviolite', 'Damp Rock', 'Heat Rock', 'Light Clay', 'Baton Pass', 'Shed Tail',
+			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Cloyster', 'Dialga', 'Dialga-Origin', 'Espathra', 'Eternatus', 'Falinks',
+			'Flutter Mane', 'Groudon', 'Giratina', 'Giratina-Origin', 'Iron Bundle', 'Koraidon', 'Kyogre', 'Landorus-Base', 'Medicham',
+			'Mewtwo', 'Miraidon', 'Oricorio-Pom-Pom', 'Palkia', 'Palkia-Origin', 'Polteageist', 'Rayquaza', 'Urshifu-Base', 'Zacian',
+			'Zacian-Crowned', 'Arena Trap', 'Moody', 'Shadow Tag', 'Eviolite', 'Damp Rock', 'Heat Rock', 'Light Clay', 'Baton Pass',
+			'Last Respects', 'Shed Tail',
 		],
 	},
 	{
