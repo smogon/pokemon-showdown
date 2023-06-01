@@ -9,6 +9,7 @@ export interface TournamentRoomSettings {
 	allowModjoin?: boolean;
 	allowScouting?: boolean;
 	announcements?: boolean;
+	autoconfirmedOnly?: boolean;
 	autodq?: number;
 	autostart?: number | boolean;
 	forcePublic?: boolean;
@@ -97,6 +98,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	isRated: boolean;
 	allowScouting: boolean;
 	allowModjoin: boolean;
+	autoconfirmedOnly: boolean;
 	forceTimer: boolean;
 	autostartcap: boolean;
 	forcePublic: boolean;
@@ -138,6 +140,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		this.isRated = isRated;
 		this.allowScouting = true;
 		this.allowModjoin = false;
+		this.autoconfirmedOnly = false;
 		this.forceTimer = false;
 		this.autostartcap = false;
 		this.forcePublic = false;
@@ -398,8 +401,14 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			return;
 		}
 
-		if (Tournament.checkBanned(this.room, user) || Punishments.isBattleBanned(user)) {
+		if (Tournament.checkBanned(this.room, user) || Punishments.isBattleBanned(user) || user.namelocked) {
 			output.sendReply('|tournament|error|Banned');
+			return;
+		}
+
+		if ((this.room.settings.tournaments?.autoconfirmedOnly || this.autoconfirmedOnly) &&
+		   !user.autoconfirmed && !user.trusted) {
+			user.popup("Signups for tournaments are only available for autoconfirmed users in this room.");
 			return;
 		}
 
@@ -485,10 +494,16 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			output.errorReply(`${replacementUser.name} is already in the tournament.`);
 			return;
 		}
-		if (Tournament.checkBanned(this.room, replacementUser) || Punishments.isBattleBanned(replacementUser)) {
+		if (Tournament.checkBanned(this.room, replacementUser) || Punishments.isBattleBanned(replacementUser) ||
+		    replacementUser.namelocked) {
 			output.errorReply(`${replacementUser.name} is banned from joining tournaments.`);
 			return;
 		}
+		if ((this.room.settings.tournaments?.autoconfirmedOnly || this.autoconfirmedOnly) && !user.autoconfirmed) {
+			user.popup("Signups for tournaments are only available for autoconfirmed users in this room.");
+			return;
+		}
+
 		if (!Config.noipchecks) {
 			for (const otherPlayer of this.players) {
 				if (!otherPlayer) continue;
@@ -892,6 +907,10 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	setModjoin(allowed: boolean) {
 		this.allowModjoin = allowed;
 		this.room.add(`Modjoining is now ${allowed ? 'allowed' : 'banned'} (Players can${allowed ? '' : 'not'} modjoin their tournament battles).`);
+	}
+	setAutoconfirmedOnly(acOnly: boolean) {
+		this.autoconfirmedOnly = acOnly;
+		this.room.add(`This tournament is now ${acOnly ? 'dis' : ''}allowing non-autoconfirmed users' joining.`);
 	}
 	setForceTimer(force: boolean) {
 		this.forceTimer = force;
@@ -1891,6 +1910,31 @@ const commands: Chat.ChatCommands = {
 				return this.sendReply(`Usage: /tour ${cmd} <allow|disallow>`);
 			}
 		},
+		aconly: 'autoconfirmedonly',
+		onlyac: 'autoconfirmedonly',
+		onlyautoconfirmed: 'autoconfirmedonly',
+		autoconfirmedonly(target, room, user, connection, cmd) {
+			room = this.requireRoom();
+			this.checkCan('tournaments', null, room);
+			const tournament = this.requireGame(Tournament);
+			target = target.trim();
+			if (!target) {
+				return this.sendReply(
+					`This tournament ${tournament.autoconfirmedOnly ? 'does not allow' : 'allows'} non-autoconfirmed users to join a tournament.`
+				);
+			}
+			const value = this.meansYes(target) ? true : this.meansNo(target) ? false : null;
+			target = value ? 'ON' : 'OFF';
+			if (value === null || !toID(target)) {
+				return this.parse(`/help tour`);
+			}
+			if (tournament.autoconfirmedOnly === value) {
+				return this.errorReply(`This tournament is already set to ${value ? 'disallow' : 'allow'} non-autoconfirmed users.`);
+			}
+			tournament.setAutoconfirmedOnly(value);
+			this.privateModAction(`${user.name} set this tournament to ${value ? 'disallow' : 'allow'} non-autoconfirmed users.`);
+			this.modlog('TOUR AUTOCONFIRMEDONLY', null, target);
+		},
 		forcepublic(target, room, user, connection, cmd) {
 			room = this.requireRoom();
 			this.checkCan('tournaments', null, room);
@@ -2000,6 +2044,26 @@ const commands: Chat.ChatCommands = {
 						throw new Chat.ErrorMessage(`Scouting is already disabled for every tournament.`);
 					}
 				}
+			},
+			aconly: 'autoconfirmedonly',
+			onlyac: 'autoconfirmedonly',
+			onlyautoconfirmed: 'autoconfirmedonly',
+			autoconfirmedonly(target, room, user) {
+				room = this.requireRoom();
+				this.checkCan('declare', null, room);
+				const tour = room.getGame(Tournament);
+				if (!room.settings.tournaments) room.settings.tournaments = {};
+				const value = this.meansYes(target) ? true : this.meansNo(target) ? false : null;
+				if (!target || value === null) return this.parse(`/help tour settings`);
+				if (room.settings.tournaments.autoconfirmedOnly === value) {
+					return this.errorReply(`All tournaments are already set to ${value ? 'disallow' : 'allow'} non-autoconfimed users.`);
+				}
+				room.settings.tournaments.autoconfirmedOnly = value;
+				room.saveSettings();
+				target = value ? 'ON' : 'OFF';
+				this.modlog('TOUR SETTINGS', null, `autoconfirmed only: ${target}`);
+				if (tour) this.parse(`/tour autoconfirmedonly ${target}`);
+				this.privateModAction(`${user.name} set all tournaments to ${value ? 'disallow' : 'allow'} non-autoconfirmed users.`);
 			},
 			forcepublic(target, room, user) {
 				room = this.requireRoom();
@@ -2294,6 +2358,7 @@ const commands: Chat.ChatCommands = {
 			`/tour settings forcepublic <on|off> - Specifies whether users can hide their battles for every tournament.`,
 			`/tour settings forcetimer <on|off> - Specifies whether users can toggle the timer for every tournament.`,
 			`/tour settings modjoin <on|off> - Specifies whether users can modjoin their battles for every tournament.`,
+			`/tour settings autoconfirmedonly: <on|off> - Set requirement for signups for this tournament. If this is on, only autoconfirmed users can join a tournament.`,
 			`/tour settings playercap <number> - Sets the playercap for every tournament.`,
 			`/tour settings scouting <on|off> - Specifies whether users can spectate other participants for every tournament.`,
 			`/tour settings sampleteams <on|off> - Specifies whether sample teams are shown for every tournament.`,
@@ -2321,6 +2386,7 @@ const commands: Chat.ChatCommands = {
 			`- dq/disqualify &lt;user>: Disqualifies a user.<br />` +
 			`- autodq/setautodq &lt;minutes|off>: Sets the automatic disqualification timeout.<br />` +
 			`- runautodq: Manually run the automatic disqualifier.<br />` +
+			`- autoconfirmedonly/onlyautoconfirmed/aconly/onlyac &lt;on|off>: Set requirement for signups for this tournament. If this is on, only autoconfirmed users can join a tournament.<br />` +
 			`- scouting &lt;allow|disallow>: Specifies whether joining tournament matches while in a tournament is allowed.<br />` +
 			`- modjoin &lt;allow|disallow>: Specifies whether players can modjoin their battles.<br />` +
 			`- forcetimer &lt;on|off>: Turn on the timer for tournament battles.<br />` +
@@ -2360,6 +2426,14 @@ const roomSettings: Chat.SettingsHandler[] = [
 		options: [
 			['allow', room.settings.tournaments?.allowModjoin || 'tour settings modjoin allow'],
 			['disallow', !room.settings.tournaments?.allowModjoin || 'tour settings modjoin disallow'],
+		],
+	}),
+	room => ({
+		label: "Tournament Autoconfirmed Only",
+		permission: "editroom",
+		options: [
+			['on', room.settings.tournaments?.autoconfirmedOnly || 'tour settings aconly on'],
+			['off', !room.settings.tournaments?.autoconfirmedOnly || 'tour settings aconly off'],
 		],
 	}),
 	room => ({

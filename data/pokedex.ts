@@ -11819,7 +11819,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		forme: "Pokeball",
 		types: ["Bug", "Flying"],
 		baseStats: {hp: 80, atk: 52, def: 50, spa: 90, spd: 50, spe: 89},
-		abilities: {0: "Shield Dust", 1: "Compound Eyes"},
+		abilities: {0: "Shield Dust", 1: "Compound Eyes", H: "Friend Guard"},
 		heightm: 1.2,
 		weightkg: 17,
 		color: "Black",
@@ -19015,6 +19015,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoItem: "Shiny Stone",
 		eggGroups: ["Field"],
 		gen: 8,
+	},
+	hemogoblin: {
+		num: -71,
+		name: "Hemogoblin",
+		types: ["Fairy", "Fire"],
+		baseStats: {hp: 90, atk: 99, def: 89, spa: 99, spd: 97, spe: 55},
+		abilities: {0: "Pixilate", 1: "Intimidate"},
+		heightm: 1.4,
+		weightkg: 85,
+		color: "Pink",
+		eggGroups: ["Undiscovered"],
+		gen: 9,
 	},
 	// NOTE: PokeStar "formes" are not actually formes and thus do not have a formeOrder
 	pokestarsmeargle: {

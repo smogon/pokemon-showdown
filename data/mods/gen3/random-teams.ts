@@ -246,6 +246,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		// First, the high-priority items
 		if (species.name === 'Ditto') return this.sample(['Metal Powder', 'Quick Claw']);
 		if (species.name === 'Farfetch\u2019d') return 'Stick';
+		if (species.name === 'Latias' || species.name === 'Latios') return 'Soul Dew';
 		if (species.name === 'Marowak') return 'Thick Club';
 		if (species.name === 'Pikachu') return 'Light Ball';
 		if (species.name === 'Shedinja') return 'Lum Berry';
