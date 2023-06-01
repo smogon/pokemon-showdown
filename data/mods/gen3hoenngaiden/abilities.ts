@@ -213,7 +213,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 3,
 	},
 	rkssystem: {
-	shortDesc: "If this Pokemon is a Silvally, its type changes to match its held Memory.",
+		shortDesc: "If this Pokemon is a Silvally, its type changes to match its held Memory.",
 		// RKS System's type-changing itself is implemented in statuses.js
 		id: "rkssystem",
 		isNonstandard: null,
@@ -315,8 +315,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Desolate Land",
 		rating: 4.5,
 		num: 190,
-        isNonstandard: null,
-        gen: 3,
+		isNonstandard: null,
+		gen: 3,
 	},
 	forecast: {
 		onUpdate(pokemon) {

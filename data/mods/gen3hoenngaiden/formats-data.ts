@@ -1908,7 +1908,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	silvallysteel: {
 		rank: "Unranked",
-				gen: 3,
+		gen: 3,
 		tier: "OU",
 	},
 	silvallywater: {
@@ -2211,7 +2211,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		gen: 3,
 		tier: "UU",
 	},
-	/* 
+	/*
 	electivire: {
 		rank: "Unranked",
 		gen: 3,

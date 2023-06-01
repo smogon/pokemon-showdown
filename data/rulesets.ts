@@ -2452,7 +2452,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				const species = this.dex.species.get(pokemon.species.name);
 				const baseSpecies = Dex.species.get(pokemon.species.name);
 				let modded = false;
-				for (const type in [0, 1]) {
+				for (let type = 0; type < 2; type++) {
 					if (species.types[type] !== baseSpecies.types[type]) {
 						// console.log(species.types[type] + " is different from " + baseSpecies.types[type]);
 						modded = true;
@@ -2478,7 +2478,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 		},
 		onSwitchIn(pokemon) {
 			let species = this.dex.species.get(pokemon.species.name);
-			let switchedIn = pokemon.switchedIn;
 			if (pokemon.illusion) {
 				species = this.dex.species.get(pokemon.illusion.species.name);
 				// console.log(pokemon.illusion.name + " is being reported");
@@ -2519,7 +2518,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 					this.add('-start', target, 'typechange', target.getTypes(true).join('/'), '[silent]');
 					if (!target.switchedIn) {
 						target.switchedIn = true;
-						let species = this.dex.species.get(target.species.name);
+						const species = this.dex.species.get(target.species.name);
 						let abilities = species.abilities[0];
 						if (species.abilities[1]) {
 							abilities += ` / ${species.abilities[1]}`;

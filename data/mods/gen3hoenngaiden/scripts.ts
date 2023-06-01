@@ -1,5 +1,3 @@
-const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
-
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen3',
 	gen: 3,
@@ -160,7 +158,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 		return true;
 	},
-	init: function () {
+	init() {
 		for (const i in this.data.Pokedex) {
 			delete this.data.Pokedex[i].abilities['H'];
 		}
@@ -1028,10 +1026,10 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData("Learnsets", "sirfetchd").learnset.knockoff = ["3L1"];
 		this.modData("Learnsets", "sirfetchd").learnset.bulkup = ["3L1"];
 
-		this.modData("Learnsets", "talonflame").learnset.skyattack = ["3L1"];	
+		this.modData("Learnsets", "talonflame").learnset.skyattack = ["3L1"];
 		this.modData("Learnsets", "talonflame").learnset.doubleedge = ["3L1"];
-		this.modData("Learnsets", "talonflame").learnset.mimic = ["3L1"];	
-		this.modData("Learnsets", "talonflame").learnset.mudslap = ["3L1"];	
+		this.modData("Learnsets", "talonflame").learnset.mimic = ["3L1"];
+		this.modData("Learnsets", "talonflame").learnset.mudslap = ["3L1"];
 
 		// quick fix
 
