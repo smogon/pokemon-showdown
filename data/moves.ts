@@ -1470,6 +1470,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, wind: 1},
+		onModifyMove(move, pokemon, target) {
+			if (target && ['raindance', 'primordialsea'].includes(target.effectiveWeather())) {
+				move.accuracy = true;
+			}
+		},
 		secondary: {
 			chance: 30,
 			boosts: {
@@ -15939,6 +15944,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, wind: 1},
+		onModifyMove(move, pokemon, target) {
+			if (target && ['raindance', 'primordialsea'].includes(target.effectiveWeather())) {
+				move.accuracy = true;
+			}
+		},
 		secondary: {
 			chance: 20,
 			status: 'brn',
@@ -21191,6 +21201,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, wind: 1},
+		onModifyMove(move, pokemon, target) {
+			if (target && ['raindance', 'primordialsea'].includes(target.effectiveWeather())) {
+				move.accuracy = true;
+			}
+		},
 		secondary: {
 			chance: 20,
 			status: 'par',
