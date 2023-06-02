@@ -7821,4 +7821,17 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Causes the user to change type to a random type.",
 		shortDesc: "Changes user's type to a random type",
 	},
+	panicroom: {
+		name: "Panic Room",
+		shortDesc: "Goes last. For 5 turns moves have 1.2x power, status moves may fail.",
+	},
+	palettedrain: {
+		name: "Palette Drain",
+		shortDesc: "The user will shoot out the types it has collected one by one.",
+	},
+	crystallinereaction: {
+		name: "Crystalline Reaction",
+		desc: "This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn.",
+		shortDesc: "Charges turn 1. Hits turn 2.",
+	},
 };

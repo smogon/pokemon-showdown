@@ -2433,7 +2433,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	ringrust: {
 		name: "Ring Rust",
-		shortDesc: "Moves that aren't 100% accurate have a 1.3x damage boost and 1.1x accuracy boost.",
+		shortDesc: "Every move used by or against this Pokemon will always hit.",
 	},
 	callofthehunt: {
 		name: "Call of the Hunt",
@@ -2484,7 +2484,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	windywall: {
 		name: "Windy Wall",
-		shortDesc: "Grants immunity to Flying-Type moves and ignores opponent's tailwind."
+		shortDesc: "Grants immunity to Flying-Type moves."
 	},
 	sludgeslider: {
 		name: "Sludge Slider",
@@ -2505,4 +2505,38 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "If this Pokemon is a Lycanmimiktoo, it changes formes between its base forme and Ruined forme when hit by a supereffective move.",
 		shortDesc: "If Lycanmimiktoo, changes formes between base and Ruined when hit by a supereffective move.",
 	},
+	magmabubble: {
+		name: "Magma Bubble",
+		desc: "1.5x power to Fire-type moves. 30% chance to burn opponents that makes contact.",
+		shortDesc: "1.5x power to Fire-type moves. 30% chance on contact.",
+	},
+	claustrophobia: {
+		name: "Claustrophobia",
+		shortDesc: "When trapped or a room is active, its attack is doubled.",
+	},
+	refurbished: {
+		name: "Refurbished",
+		shortDesc: "Shroomie only. Shroomie changes forme based on the field effect."
+	},
+	multitasker: {
+		name: "Multitasker",
+		shortDesc: "All attacking moves use your current highest attack stat."
+	},
+	stolenart: {
+		name: "Stolen Art",
+		shortDesc: "Steals a Pokemon's types on contact."
+	},
+	turfmelter: {
+		name: "Turf Melter",
+		shortDesc: "While this Pokemon is out, all ground moves become Fire-type."
+	},
+	hueshift: {
+		name: "Hue Shift",
+		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type.",
+		shortDesc: "This Pokemon's type changes to match the type of the move it is about to use.",
+	},
+	fairylaw: {
+		name: "Fairy Law",
+		shortDesc: "The effect of Imprison begins when this Pokemon enters the field."
+	}
 };
