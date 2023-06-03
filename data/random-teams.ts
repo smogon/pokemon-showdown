@@ -183,8 +183,8 @@ export class RandomTeams {
 			},
 			Psychic: (movePool, moves, abilities, types, counter) => {
 				if (counter.get('Psychic')) return false;
-				if (movePool.includes('calmmind') || movePool.includes('psychicfangs') || movePool.includes('psychocut')) return true;
-				return abilities.has('Psychic Surge') || types.includes('Fire') || types.includes('Electric');
+				if (movePool.includes('calmmind') || movePool.includes('psychicfangs')) return true;
+				return abilities.has('Psychic Surge') || types.includes('Fire') || types.includes('Electric') || types.includes('Fighting');
 			},
 			Rock: (movePool, moves, abilities, types, counter, species) => !counter.get('Rock') && species.baseStats.atk >= 80,
 			Steel: (movePool, moves, abilities, types, counter, species) => {
@@ -443,6 +443,11 @@ export class RandomTeams {
 			.map(move => move.id);
 
 		// Team-based move culls
+		if (teamDetails.screens && movePool.length >= this.maxMoveCount + 2) {
+			if (movePool.includes('reflect')) this.fastPop(movePool, movePool.indexOf('reflect'));
+			if (movePool.includes('lightscreen')) this.fastPop(movePool, movePool.indexOf('lightscreen'));
+			if (moves.size + movePool.length <= this.maxMoveCount) return;
+		}
 		if (teamDetails.stickyWeb) {
 			if (movePool.includes('stickyweb')) this.fastPop(movePool, movePool.indexOf('stickyweb'));
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
@@ -485,7 +490,7 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'liquidation', 'wavecrash');
 		this.incompatibleMoves(moves, movePool, ['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']);
 		this.incompatibleMoves(moves, movePool, ['knockoff', 'bite'], 'foulplay');
-		this.incompatibleMoves(moves, movePool, 'doubleedge', ['headbutt', 'bodyslam']);
+		this.incompatibleMoves(moves, movePool, 'doubleedge', 'headbutt');
 		this.incompatibleMoves(moves, movePool, 'fireblast', ['fierydance', 'flamethrower']);
 		this.incompatibleMoves(moves, movePool, 'lavaplume', 'magmastorm');
 		this.incompatibleMoves(moves, movePool, 'thunderpunch', 'wildcharge');
@@ -513,8 +518,8 @@ export class RandomTeams {
 		}
 		// Landorus
 		this.incompatibleMoves(moves, movePool, 'nastyplot', 'rockslide');
-		// Persian and Grafaiai
-		this.incompatibleMoves(moves, movePool, 'switcheroo', ['fakeout', 'superfang']);
+		// Persian
+		this.incompatibleMoves(moves, movePool, 'switcheroo', 'fakeout');
 		// Beartic
 		this.incompatibleMoves(moves, movePool, 'snowscape', 'swordsdance');
 		// Cryogonal
@@ -800,7 +805,7 @@ export class RandomTeams {
 			const attackingMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
-				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback)) attackingMoves.push(moveid);
+				if (!this.noStab.includes(moveid) && move.category !== 'Status') attackingMoves.push(moveid);
 			}
 			if (attackingMoves.length) {
 				const moveid = this.sample(attackingMoves);
