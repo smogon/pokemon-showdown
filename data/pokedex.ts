@@ -27898,4 +27898,17 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 38,
 		eggGroups: ["Fairy"],
 	},
+	canyou: {
+		num: -6018,
+		name: "Can You",
+		types: ["Normal", "Steel"],
+		gender: "N",
+		baseStats: {hp: 78, atk: 80, def: 102, spa: 80, spd: 100, spe: 130},
+		abilities: {0: "Quark Drive"},
+		heightm: 0.7,
+		weightkg: 19,
+		color: "Gray",
+		tags: ["Paradox"],
+		eggGroups: ["Undiscovered"],
+	},
 };

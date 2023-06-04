@@ -3629,4 +3629,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	canyou: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };
