@@ -23290,7 +23290,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			return success;
 		},
 		secondary: null,
-		target: "any",
+		target: "adjacentAllyOrSelf",
 		type: "Normal",
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
@@ -23317,7 +23317,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			return success;
 		},
 		secondary: null,
-		target: "any",
+		target: "adjacentAllyOrSelf",
 		type: "Normal",
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",

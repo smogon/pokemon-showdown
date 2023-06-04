@@ -27638,7 +27638,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: -6009,
 		name: "Magnemite-Rhinian-Swarm",
 		baseSpecies: "Magnemite-Rhinian",
-		forme: "School",
+		forme: "Swarm",
 		types: ["Electric", "Steel"],
 		baseStats: {hp: 25, atk: 125, def: 105, spa: 130, spd: 155, spe: 130},
 		abilities: {0: "Swarming"},
@@ -27646,7 +27646,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 78.6,
 		color: "Blue",
 		eggGroups: ["Water 2"],
-		requiredAbility: "Schooling",
+		requiredAbility: "Swarming",
 		battleOnly: "Magnemite-Rhinian",
 	},
 	dewpiderdelta: {
@@ -27810,7 +27810,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Delta Aggronite",
 	},
-	kelaidleon: {
+	kaleidleon: {
 		num: -6014,
 		name: "Kelaidleon",
 		types: ["Normal", "Dragon"],
@@ -27862,7 +27862,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Crystallocause-Purity",
 		baseSpecies: "Crystallocause",
 		forme: "Purity",
-		types: ["Crystal", "Nuclear"],
+		types: ["Crystal"],
 		baseStats: {hp: 25, atk: 25, def: 25, spa: 25, spd: 25, spe: 25},
 		abilities: {0: "Clear Body"},
 		heightm: 1,

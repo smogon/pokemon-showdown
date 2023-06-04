@@ -3599,7 +3599,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "OU",
 	},
-	kelaidleon: {
+	kaleidleon: {
 		inherit: true,
 		isNonstandard: null,
 		natDexTier: "UU",
