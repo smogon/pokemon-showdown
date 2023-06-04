@@ -4834,7 +4834,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "Uber",
 	},
 	magearna: {
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "DUber",
 		natDexTier: "Uber",
 	},
