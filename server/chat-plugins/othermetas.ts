@@ -392,16 +392,22 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
 		}
 		const boosts: {[tier in TierShiftTiers]: number} = {
-			UU: 10,
-			RUBL: 10,
+			UU: 15,
+			RUBL: 15,
 			RU: 20,
 			NUBL: 20,
-			NU: 30,
-			PUBL: 30,
-			PU: 40,
-			NFE: 40,
-			LC: 40,
+			NU: 25,
+			PUBL: 25,
+			PU: 30,
+			NFE: 30,
+			LC: 30,
 		};
+		if (dex.gen < 9) {
+			boosts['UU'] = boosts['RUBL'] = 10;
+			boosts['RU'] = boosts['NUBL'] = 20;
+			boosts['NU'] = boosts['PUBL'] = 30;
+			boosts['PU'] = boosts['NFE'] = boosts['LC'] = 40;
+		}
 		let tier = species.tier;
 		if (tier[0] === '(') tier = tier.slice(1, -1);
 		if (!(tier in boosts)) return this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
