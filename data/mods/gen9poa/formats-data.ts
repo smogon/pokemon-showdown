@@ -3664,5 +3664,10 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	dudunsparcedelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 
 };

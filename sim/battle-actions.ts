@@ -986,6 +986,9 @@ export class BattleActions {
 				break;
 			}
 		}
+		if (targetHits === 5 && move.id === "aquashot") {
+			this.battle.boost({atk: 1}, pokemon);
+		}
 		// hit is 1 higher than the actual hit count
 		if (hit === 1) return damage.fill(false);
 		if (nullDamage) damage.fill(false);

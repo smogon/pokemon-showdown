@@ -27993,4 +27993,17 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 37,
 		eggGroups: ["Human-Like"],
 	},
+	dudunsparcedelta: {
+		num: 982,
+		name: "Dudunsparce-Delta",
+		types: ["Water", "Bug"],
+		baseStats: {hp: 125, atk: 100, def: 80, spa: 85, spd: 75, spe: 55},
+		abilities: {0: "Hyper Cutter", 1: "Swift Swim", H: "Skill Link"},
+		heightm: 3.6,
+		weightkg: 39.2,
+		color: "Yellow",
+		prevo: "Dunsparce-Delta",
+		evoType: "levelMove",
+		eggGroups: ["Field"],
+	},
 };
