@@ -344,6 +344,7 @@ export class RandomTeams {
 			if (move.damage || move.damageCallback) {
 				// Moves that do a set amount of damage:
 				counter.add('damage');
+				counter.damagingMoves.add(move);
 			} else {
 				// Are Physical/Special/Status moves:
 				categories[move.category]++;
@@ -672,6 +673,12 @@ export class RandomTeams {
 				movePool, teraType, role);
 		}
 
+		// Enforce Seismic Toss
+		if (movePool.includes('seismictoss')) {
+			counter = this.addMove('seismictoss', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
+		}
+
 		// Enforce Toxic on Grafaiai
 		if (movePool.includes('toxic') && species.id === 'grafaiai') {
 			counter = this.addMove('toxic', moves, types, abilities, teamDetails, species, isLead, isDoubles,
@@ -805,7 +812,7 @@ export class RandomTeams {
 			const attackingMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
-				if (!this.noStab.includes(moveid) && move.category !== 'Status') attackingMoves.push(moveid);
+				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback)) attackingMoves.push(moveid);
 			}
 			if (attackingMoves.length) {
 				const moveid = this.sample(attackingMoves);
