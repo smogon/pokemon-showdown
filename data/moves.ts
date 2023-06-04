@@ -23681,4 +23681,22 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fire",
 	},
+	outcold: {
+		num: -49,
+		accuracy: 85,
+		basePower: 50,
+		category: "Physical",
+		name: "Out Cold",
+		pp: 15,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		secondary: {
+			chance: 50,
+			onHit(target, source) {
+				target.trySetStatus('slp', source);
+			},
+		},
+		target: "normal",
+		type: "Dark",
+	},
 };

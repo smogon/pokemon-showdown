@@ -7089,5 +7089,24 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4,
 		num: -70,
 	},
+	cutthroat: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Dark' && attacker.hp <= attacker.maxhp / 3) {
+				this.debug('cutthroat boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Dark' && attacker.hp <= attacker.maxhp / 3) {
+				this.debug('cutthroat boost');
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Cutthroat",
+		rating: 2,
+		num: -71,
+	},
 };
 

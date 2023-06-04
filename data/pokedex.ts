@@ -27939,4 +27939,15 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
+	simigloom: {
+		num: -6020,
+		name: "Simigloom",
+		types: ["Dark"],
+		baseStats: {hp: 98, atk: 98, def: 101, spa: 63, spd: 75, spe: 63},
+		abilities: {0: "Gluttony", H: "Cutthroat"},
+		heightm: 0.5,
+		weightkg: 20,
+		color: "Gray",
+		eggGroups: ["Bug"],
+	}
 };
