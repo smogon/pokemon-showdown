@@ -53,6 +53,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	kecleon: {
 		inherit: true,
-		evos: ["Kelaidleon"],
+		evos: ["Kaleidleon"],
 	},
 };
