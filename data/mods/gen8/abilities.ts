@@ -1063,6 +1063,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	transistor: {
 		inherit: true,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Electric') {
+				this.debug('Transistor boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Electric') {
+				this.debug('Transistor boost');
+				return this.chainModify(1.5);
+			}
+		},
 		rating: 3.5,
 	},
 	triage: {
