@@ -1970,7 +1970,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	transistor: {
 		name: "Transistor",
-		shortDesc: "This Pokemon's offensive stat is multiplied by 1.5 while using an Electric-type attack.",
+		shortDesc: "This Pokemon's offensive stat is multiplied by 1.3 while using an Electric-type attack.",
+		gen8: {
+			shortDesc: "This Pokemon's offensive stat is multiplied by 1.5 while using an Electric-type attack.",
+		},
 	},
 	triage: {
 		name: "Triage",
