@@ -1217,7 +1217,6 @@ export class Pokemon {
 			if (this.modifiedStats) this.modifiedStats[statName] = pokemon.modifiedStats![statName]; // Gen 1: Copy modified stats.
 		}
 		this.moveSlots = [];
-		this.set.ivs = (this.battle.gen >= 5 ? this.set.ivs : pokemon.set.ivs);
 		this.hpType = (this.battle.gen >= 5 ? this.hpType : pokemon.hpType);
 		this.hpPower = (this.battle.gen >= 5 ? this.hpPower : pokemon.hpPower);
 		this.timesAttacked = pokemon.timesAttacked;
@@ -1489,9 +1488,9 @@ export class Pokemon {
 					if (this.illusion) {
 						this.battle.add('detailschange', this, details);
 						this.ability = '';
-						this.battle.add('-primal', this.illusion);
+						this.battle.add('-primal', this.illusion, species.requiredItem);
 					} else {
-						this.battle.add('-primal', this);
+						this.battle.add('-primal', this, species.requiredItem);
 					}
 				} else {
 					if (this.illusion) {

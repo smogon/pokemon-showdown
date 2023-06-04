@@ -468,7 +468,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UUBL",
 	},
 	omanyte: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	omastar: {
 		tier: "UU",
@@ -792,7 +792,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "PU",
 	},
 	zigzagoon: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	linoone: {
 		tier: "UU",
@@ -921,7 +921,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	meditite: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	medicham: {
 		tier: "UUBL",

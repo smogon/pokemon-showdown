@@ -155,7 +155,7 @@ export const commands: Chat.ChatCommands = {
 		room.saveSettings();
 	},
 	modchathelp: [
-		`/modchat [off/autoconfirmed/trusted/+/%/@/*/player/#/&] - Set the level of moderated chat. Requires: % \u2606 for off/autoconfirmed/+ options, * @ # & for all the options`,
+		`/modchat [off/autoconfirmed/trusted/+/%/@/*/player/#/&] - Set the level of moderated chat. Requires: % \u2606 for off/autoconfirmed/+/player options, * @ # & for all the options`,
 	],
 
 	automodchat(target, room, user) {
@@ -401,7 +401,8 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`${rank} is not a valid rank.`);
 			}
 			const validPerms = Users.Auth.supportedRoomPermissions(room);
-			if (!validPerms.some(p => p === perm || p.startsWith(`${perm} `))) {
+			const sanitizedPerm = perm.replace('!', '/'); // handles ! commands so we don't have to add commands to the array twice
+			if (!validPerms.some(p => p === sanitizedPerm || p.startsWith(`${sanitizedPerm} `))) {
 				return this.errorReply(`${perm} is not a valid room permission.`);
 			}
 			if (!room.auth.atLeast(user, '#')) {
@@ -1046,15 +1047,15 @@ export const commands: Chat.ChatCommands = {
 			if (target.includes(',') || target.includes('|') || target.includes('[') || target.includes('-')) {
 				return this.errorReply("Room titles can't contain any of: ,|[-");
 			}
-			target = `[G] ${target}`;
 		} else {
 			this.checkCan('makeroom');
 		}
 		const creatorID = room.roomid.split('-')[1];
 		const id = isGroupchat ? `groupchat-${creatorID}-${toID(target)}` as RoomID : undefined;
+		const title = isGroupchat ? `[G] ${target}` : target;
 		const oldID = room.roomid;
 
-		room.rename(target, id);
+		room.rename(title, id);
 
 		Chat.handleRoomRename(oldID, id || toID(target) as RoomID, room);
 

@@ -163,7 +163,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Anger Shell",
-		rating: 4,
+		rating: 3,
 		num: 271,
 	},
 	anticipation: {
@@ -350,7 +350,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				source.abilityState.battleBondTriggered = true;
 			}
 		},
-		isNonstandard: "Unobtainable",
 		isPermanent: true,
 		name: "Battle Bond",
 		rating: 3.5,
@@ -1639,6 +1638,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return this.chainModify([5461, 4096]);
 			}
 		},
+		isPermanent: true,
 		name: "Hadron Engine",
 		rating: 4.5,
 		num: 289,
@@ -2810,6 +2810,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return this.chainModify([5461, 4096]);
 			}
 		},
+		isPermanent: true,
 		name: "Orichalcum Pulse",
 		rating: 4.5,
 		num: 288,
@@ -4735,14 +4736,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Electric') {
 				this.debug('Transistor boost');
-				return this.chainModify(1.5);
+				return this.chainModify(1.3);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Electric') {
 				this.debug('Transistor boost');
-				return this.chainModify(1.5);
+				return this.chainModify(1.3);
 			}
 		},
 		name: "Transistor",

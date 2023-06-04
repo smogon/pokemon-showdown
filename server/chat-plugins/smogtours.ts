@@ -13,6 +13,8 @@ interface TourEvent {
 	id: string;
 	shortDesc: string;
 	date: number;
+	// make this required later
+	ends?: number;
 }
 
 interface TourTable {
@@ -65,7 +67,17 @@ function saveTours() {
 
 function getTour(categoryID: ID, id: string) {
 	id = toID(id);
-	return tours?.[categoryID].tours.find(f => f.id === id) || null;
+	if (!tours[categoryID]) return null;
+	const idx = tours[categoryID].tours.findIndex(f => f.id === id) ?? -1;
+	const tour = tours[categoryID].tours[idx];
+	if (!tour) {
+		return null;
+	}
+	if (tour.ends && Date.now() > tour.ends) {
+		tours[categoryID].tours.splice(idx, 1);
+		return null;
+	}
+	return tour;
 }
 
 function checkWhitelisted(category: ID, user: User) {
@@ -94,10 +106,10 @@ export const commands: Chat.ChatCommands = {
 			const targets = target.split('|');
 			const isEdit = cmd === 'edit';
 			const tourID = isEdit ? toID(targets.shift()) : null;
-			// {title}|{category}|{url}|{img}|{shortDesc}|{desc}
+			// {title}|{category}|{url}|{end date}|{img}|{shortDesc}|{desc}
 			const [
-				title, rawSection, url, rawImg, rawShort, rawDesc,
-			] = Utils.splitFirst(targets.join('|'), '|', 5).map(f => f.trim());
+				title, rawSection, url, rawEnds, rawImg, rawShort, rawDesc,
+			] = Utils.splitFirst(targets.join('|'), '|', 6).map(f => f.trim());
 			const sectionID = toID(rawSection);
 			if (!toID(title)) {
 				return this.popupReply(`Invalid title. Must have at least one alphanumeric character.`);
@@ -112,6 +124,13 @@ export const commands: Chat.ChatCommands = {
 			checkCanEdit(user, this, sectionID);
 			if (!Chat.isLink(url)) {
 				return this.popupReply(`Invalid info URL: "${url}"`);
+			}
+			if (!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(rawEnds)) {
+				return this.popupReply(`Invalid ending date: ${rawEnds}.`);
+			}
+			const ends = new Date(rawEnds).getTime();
+			if (isNaN(ends)) {
+				return this.popupReply(`Invalid ending date: ${rawEnds}.`);
 			}
 			let image;
 			if (rawImg) {
@@ -136,6 +155,7 @@ export const commands: Chat.ChatCommands = {
 				desc: rawDesc.replace(/&#13;&#10;/g, '\n'),
 				id: tourID || toID(title),
 				date: Date.now(),
+				ends,
 			};
 			if (isEdit) {
 				const index = section.tours.findIndex(t => t.id === tour.id);
@@ -360,7 +380,11 @@ export const pages: Chat.PageTable = {
 			if (tour.image) {
 				buf += `<img src="${tour.image[0]}" width="${tour.image[1]}" height="${tour.image[2]}" />`;
 			}
-			buf += `</center><hr />`;
+			buf += `</center>`;
+			if (tour.ends) {
+				buf += `<br />Signups end: ${Chat.toTimestamp(new Date(tour.ends)).split(' ')[0]}`;
+			}
+			buf += `<hr />`;
 			buf += Utils.escapeHTML(tour.desc).replace(/\n/ig, '<br />');
 			buf += `<br /><br /><a class="button notifying" href="${tour.url}">View information and signups</a>`;
 			try {
@@ -386,6 +410,14 @@ export const pages: Chat.PageTable = {
 				buf += `<img src="${category.icon[0]}" width="${category.icon[1]}" height="${category.icon[2]}" /><br />`;
 			}
 			buf += `</center>${category.desc}<hr />`;
+			let needsSave = false;
+			for (const [i, tour] of category.tours.entries()) {
+				if (tour.ends && (tour.ends < Date.now())) {
+					category.tours.splice(i, 1);
+					needsSave = true;
+				}
+			}
+			if (needsSave) saveTours();
 			if (!category.tours.length) {
 				buf += `<p>There are currently no tournaments in this section with open signups.</p>`;
 				buf += `<p>Check back later for new tours.</p>`;
@@ -405,7 +437,7 @@ export const pages: Chat.PageTable = {
 			let buf = `${refresh(this.pageid)}<br />`;
 			this.title = '[Tournaments] Add';
 			buf += `<center><h2>Add new tournament</h2></center><hr />`;
-			buf += `<form data-submitsend="/smogtours add {title}|{category}|{url}|{img}|{shortDesc}|{desc}">`;
+			buf += `<form data-submitsend="/smogtours add {title}|{category}|{url}|{enddate}|{img}|{shortDesc}|{desc}">`;
 			let possibleCategory = Object.keys(tours)[0];
 			for (const k in tours) {
 				if (tours[k].whitelist?.includes(user.id)) {
@@ -422,6 +454,7 @@ export const pages: Chat.PageTable = {
 			buf += keys.map(k => `<option>${k}</option>`).join('');
 			buf += `</select><br />`;
 			buf += `Info link: <input name="url" /><br />`;
+			buf += `End date: <input type="date" name="enddate" value="${Chat.toTimestamp(new Date()).split(' ')[0]}" /><br />`;
 			buf += `<abbr title="Max length and width: 300px">Image link</abbr> (optional): <input name="img" /><br />`;
 			buf += `Short description: <br /><textarea name="shortDesc" rows="6" cols="50"></textarea><br />`;
 			buf += `Full description: <br /><textarea name="desc" rows="20" cols="50"></textarea><br />`;
@@ -440,9 +473,11 @@ export const pages: Chat.PageTable = {
 			const tour = section.tours.find(t => t.id === tourID);
 			if (!tour) return error('edit', `Tour with ID "${tourID}" not found.`, user);
 			let buf = `${refresh(this.pageid)}<br /><center><h2>Edit tournament "${tour.title}"</h2></center><hr />`;
-			buf += `<form data-submitsend="/smogtours edit ${tour.id}|{title}|${sectionID}|{url}|{img}|{shortDesc}|{desc}">`;
+			buf += `<form data-submitsend="/smogtours edit ${tour.id}|{title}|${sectionID}|{url}|{enddate}|{img}|{shortDesc}|{desc}">`;
 			buf += `Title: <input name="title" value="${tour.title}"/><br />`;
 			buf += `Info link: <input name="url" value="${tour.url}" /><br />`;
+			const curEndDay = Chat.toTimestamp(new Date(tour.ends || Date.now())).split(' ')[0];
+			buf += `End date: <input type="date" name="enddate" value="${curEndDay}" /><br />`;
 			buf += `Image link (optional): <input name="img" value="${tour.image?.[0] || ""}" /><br />`;
 			buf += `Short description: <br />`;
 			buf += `<textarea name="shortDesc" rows="6" cols="50">${tour.shortDesc}</textarea><br />`;
@@ -465,6 +500,12 @@ export const pages: Chat.PageTable = {
 				}
 				const section = tours[cat];
 				innerBuf += `<strong>${section.title}</strong>:<br />`;
+				for (const [i, tour] of section.tours.entries()) {
+					if (tour.ends && Date.now() > tour.ends) {
+						section.tours.splice(i, 1);
+						saveTours();
+					}
+				}
 				innerBuf += section.tours.map(
 					t => `&bull; <a href="/view-tournaments-edit-${cat}-${t.id}">${t.title}</a>`
 				).join('<br />') || "None active.";
