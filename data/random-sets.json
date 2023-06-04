@@ -269,6 +269,16 @@
             }
         ]
     },
+    "chansey": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Heal Bell", "Seismic Toss", "Soft-Boiled", "Stealth Rock", "Thunder Wave"],
+                "teraTypes": ["Steel", "Fairy", "Ghost", "Poison"]
+            }
+        ]
+    },
     "scyther": {
         "level": 84,
         "sets": [
