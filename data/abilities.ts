@@ -7115,7 +7115,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onSwitchIn(pokemon) {
 			if (this.effectState.muscleStats) {
 				this.add('-activate', pokemon, 'ability: Muscle Memory');
-				pokemon.boosts = this.effectState.muscleStats;
+				this.boost(this.effectState.muscleStats, pokemon, pokemon);
 			}
 		},
 		name: "Muscle Memory",
