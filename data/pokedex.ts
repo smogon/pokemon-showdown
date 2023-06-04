@@ -27996,8 +27996,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	dudunsparcedelta: {
 		num: 982,
 		name: "Dudunsparce-Delta",
-		baseSpecies: "Dudunsparce",
-		forme: "Delta",
 		types: ["Water", "Bug"],
 		baseStats: {hp: 125, atk: 100, def: 80, spa: 85, spd: 75, spe: 55},
 		abilities: {0: "Hyper Cutter", 1: "Swift Swim", H: "Skill Link"},
