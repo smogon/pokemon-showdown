@@ -3654,4 +3654,10 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	heatransupra: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+
 };

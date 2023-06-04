@@ -27966,4 +27966,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Monster", "Field"],
 		requiredItem: "Eelektrossite",
 	},
+	heatransupra: {
+		num: 485,
+		name: "Heatran",
+		baseSpecies: "Heatran",
+		forme: "Supra",
+		types: ["Fire", "Grass"],
+		baseStats: {hp: 91, atk: 90, def: 106, spa: 130, spd: 106, spe: 77},
+		abilities: {0: "Dancer", H: "Chlorophyll"},
+		heightm: 1.7,
+		weightkg: 430,
+		color: "Brown",
+		tags: ["Sub-Legendary"],
+		eggGroups: ["Undiscovered"],
+	},
 };
