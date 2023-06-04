@@ -3634,4 +3634,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	kleavordelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };
