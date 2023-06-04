@@ -10785,6 +10785,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "useItem",
 		evoItem: "Thunder Stone",
 		eggGroups: ["Amorphous"],
+		otherFormes: ["Eelektross-Mega"],
+		formeOrder: ["Eelektross", "Eelektross-Mega"],
 	},
 	elgyem: {
 		num: 605,
@@ -27949,5 +27951,19 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 20,
 		color: "Gray",
 		eggGroups: ["Bug"],
-	}
+	},
+	eelektrossmega: {
+		num: 604,
+		name: "Eelektross-Mega",
+		baseSpecies: "Eelektross",
+		forme: "Mega",
+		types: ["Electric"],
+		baseStats: {hp: 85, atk: 125, def: 110, spa: 125, spd: 110, spe: 60},
+		abilities: {0: "Levitate"},
+		heightm: 1.4,
+		weightkg: 61.5,
+		color: "Yellow",
+		eggGroups: ["Monster", "Field"],
+		requiredItem: "Eelektrossite",
+	},
 };
