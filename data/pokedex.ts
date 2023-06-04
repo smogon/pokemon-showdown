@@ -27980,4 +27980,17 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		tags: ["Sub-Legendary"],
 		eggGroups: ["Undiscovered"],
 	},
+	meditao: {
+		num: -6021,
+		name: "Meditao",
+		types: ["Psychic", "Fighting"],
+		baseStats: {hp: 60, atk: 65, def: 65, spa: 65, spd: 65, spe: 90},
+		abilities: {0: "Inner Focus", H: "Muscle Memory"},
+		heightm: 1.3,
+		weightkg: 31.5,
+		color: "Red",
+		prevo: "Meditite",
+		evoLevel: 37,
+		eggGroups: ["Human-Like"],
+	},
 };
