@@ -3639,4 +3639,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	ironsurge: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };

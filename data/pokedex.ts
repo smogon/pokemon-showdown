@@ -27926,4 +27926,17 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoCondition: "Black Augurite",
 		eggGroups: ["Bug"],
 	},
+	ironsurge: {
+		num: -6019,
+		name: "Iron Surge",
+		types: ["Normal", "Psychic"],
+		gender: "N",
+		baseStats: {hp: 80, atk: 70, def: 96, spa: 140, spd: 84, spe: 100},
+		abilities: {0: "Quark Drive"},
+		heightm: 0.7,
+		weightkg: 19,
+		color: "Gray",
+		tags: ["Paradox"],
+		eggGroups: ["Undiscovered"],
+	},
 };
