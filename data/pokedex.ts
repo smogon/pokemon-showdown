@@ -27968,7 +27968,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	},
 	heatransupra: {
 		num: 485,
-		name: "Heatran",
+		name: "Heatran-Supra",
 		baseSpecies: "Heatran",
 		forme: "Supra",
 		types: ["Fire", "Grass"],
