@@ -53,7 +53,10 @@ export const Formats: FormatList = [
 
 		mod: 'gen9poa',
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Sleep Clause Mod'],
-		banlist: ['ND Uber', 'ND AG', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Assist', 'Baton Pass', 'Hydreigonite', 'Haxorite', 'Blazikenite'],
+		banlist: [
+			'ND Uber', 'ND AG', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw', 
+			'Razor Fang', 'Assist', 'Baton Pass', 'Hydreigonite', 'Haxorite', 'Blazikenite', 'Reuniclite'
+		],
 	},
 
 	// POA Doubles
