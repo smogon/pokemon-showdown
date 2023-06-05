@@ -987,16 +987,16 @@ export class BattleActions {
 			}
 		}
 
-		if (hit === 6 && move.id === "aquashot") {
-			this.battle.boost({atk: 1}, pokemon);
-		}
-
 		// hit is 1 higher than the actual hit count
 		if (hit === 1) return damage.fill(false);
 		if (nullDamage) damage.fill(false);
 		this.battle.faintMessages(false, false, !pokemon.hp);
 		if (move.multihit && typeof move.smartTarget !== 'boolean') {
 			this.battle.add('-hitcount', targets[0], hit - 1);
+		}
+
+		if (hit === 6 && move.id === "aquashot") {
+			this.battle.boost({atk: 1}, pokemon);
 		}
 
 		if (move.recoil && move.totalDamage) {
