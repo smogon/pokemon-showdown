@@ -5825,7 +5825,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	annihilape: {
 		tier: "Uber",
-		doublesTier: "DOU",
+		doublesTier: "DUber",
 		natDexTier: "Uber",
 	},
 	walkingwake: {
