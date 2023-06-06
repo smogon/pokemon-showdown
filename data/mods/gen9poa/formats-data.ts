@@ -3669,5 +3669,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
-
+	enchantobra: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };

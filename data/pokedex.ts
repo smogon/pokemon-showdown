@@ -28006,4 +28006,16 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "levelMove",
 		eggGroups: ["Field"],
 	},
+	enchantobra: {
+		num: -6022,
+		name: "Enchantobra",
+		types: ["Fire", "Fairy"],
+		baseStats: {hp: 117, atk: 40, def: 60, spa: 117, spd: 60, spe: 116},
+		abilities: {0: "Cute Charm", 1: "Flame Body", H: "Magic Guard"},
+		heightm: 1.3,
+		weightkg: 31.5,
+		color: "Red",
+		evoLevel: 37,
+		eggGroups: ["Human-Like"],
+	},
 };
