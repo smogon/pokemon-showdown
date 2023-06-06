@@ -23775,4 +23775,26 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Tough",
 	},
+	subzerostorm: {
+		num: -54,
+		accuracy: 90,
+		basePower: 65,
+		category: "Physical",
+		name: "Subzero Storm",
+		pp: 15,
+		priority: 0,
+		onBasePower(basePower, pokemon, target) {
+			if (pokemon.item === "icyrock") {
+				return this.chainModify(1.2);
+			}
+		},
+		onHit(source) {
+			this.field.setWeather('snowstorm');
+		},
+		flags: {protect: 1, mirror: 1},
+		secondary: null,
+		target: "normal",
+		type: "Ice",
+		contestType: "Beautiful",
+	},
 };

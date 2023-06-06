@@ -3689,4 +3689,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	enteisupra: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
 };

@@ -28055,4 +28055,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Stumbolt",
 		eggGroups: ["Human-Like"],
 	},
+	enteisupra: {
+		num: 244,
+		name: "Entei-Supra",
+		baseSpecies: "Entei",
+		forme: "Supra",
+		types: ["Ice"],
+		baseStats: {hp: 115, atk: 115, def: 85, spa: 95, spd: 75, spe: 100},
+		abilities: {0: "Fur Coat", 1: "Snow Warning", H: "Adaptability"},
+		heightm: 1.7,
+		weightkg: 430,
+		color: "White",
+		tags: ["Sub-Legendary"],
+		eggGroups: ["Undiscovered"],
+	},
 };
