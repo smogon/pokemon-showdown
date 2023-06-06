@@ -7122,5 +7122,34 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4,
 		num: -72,
 	},
+	blissfulignorance: {
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') {
+				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
+				return false;
+			}
+		},
+		onChangeBoost(boost, target, source, effect) {
+			if (effect && effect.id === 'zpower') return;
+			let i: BoostID;
+			for (i in boost) {
+				boost[i]! *= 0;
+			}
+		},
+		onModifyMove(move, pokemon) {
+			if (move.drain) delete move.drain;
+			if (move.critRatio) delete move.critRatio;
+			if (move.secondaries) {
+				delete move.secondaries;
+				// Technically not a secondary effect, but it is negated
+				delete move.self;
+				if (move.id === 'clangoroussoulblaze') delete move.selfBoost;
+				// Actual negation of `AfterMoveSecondary` effects implemented in scripts.js
+			}
+		},
+		name: "Blissful Ignorance",
+		rating: 4,
+		num: -73,
+	},
 };
 

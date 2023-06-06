@@ -55,4 +55,32 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		evos: ["Kaleidleon"],
 	},
+	hoopa: {
+		inherit: true,
+		abilities: {0: "Magician", H: "Blissful Ignorance"},
+	},
+	vileplume: {
+		inherit: true,
+		abilities: {0: "Chlorophyll", 1: "Blissful Ignorance", H: "Effect Spore"},
+	},
+	sirfetchd: {
+		inherit: true,
+		abilities: {0: "Steadfast", 1: "Blissful Ignorance", H: "Scrappy"},
+	},
+	simisear: {
+		inherit: true,
+		abilities: {0: "Gluttony", 1: "Blissful Ignorance", H: "Blaze"},
+	},
+	simipour: {
+		inherit: true,
+		abilities: {0: "Gluttony", 1: "Blissful Ignorance", H: "Torrent"},
+	},
+	simisage: {
+		inherit: true,
+		abilities: {0: "Gluttony", 1: "Blissful Ignorance", H: "Overgrow"},
+	},
+	slurpuff: {
+		inherit: true,
+		abilities: {0: "Sweet Veil", 1: "Blissful Ignorance", H: "Unburden"},
+	},
 };
