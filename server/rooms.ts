@@ -1320,7 +1320,8 @@ export class GlobalRoomState {
 				`INSERT INTO stored_battles (roomid, input_log, players, title, rated, timer) VALUES ($1, $2, $3, $4, $5, $6)` +
 				` ON CONFLICT (roomid) DO UPDATE ` +
 				`SET input_log = EXCLUDED.input_log, players = EXCLUDED.players, title = EXCLUDED.title, rated = EXCLUDED.rated`,
-				[room.roomid, log.join('\n'), players, room.title, room.battle.rated, timerData]
+				// for some reason Battle#rated is sometimes a float which Postgres can't handle
+				[room.roomid, log.join('\n'), players, room.title, Math.floor(room.battle.rated), timerData]
 			);
 			room.battle.timer.stop();
 			count++;
