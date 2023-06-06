@@ -3279,6 +3279,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	hemogoblin: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
 
 	// Our Additions!
 	susan: {
