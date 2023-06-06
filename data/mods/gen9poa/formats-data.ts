@@ -3674,4 +3674,19 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	stumbolt: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	raylegant: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	allurent: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };

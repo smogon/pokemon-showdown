@@ -23735,4 +23735,44 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Cool",
 	},
+	plasmabolt: {
+		num: -52,
+		accuracy: 95,
+		basePower: 95,
+		category: "Special",
+		name: "Plasma Bolt",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: {
+			chance: 20,
+			onHit(target, source) {
+				const result = this.random(2);
+				if (result === 0) {
+					target.trySetStatus('par', source);
+				} else {
+					target.trySetStatus('brn', source);
+				}
+			},
+		},
+		target: "normal",
+		type: "Electric",
+	},
+	shockbombs: {
+		num: -53,
+		accuracy: 90,
+		basePower: 25,
+		category: "Physical",
+		name: "Shock Bombs",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		multihit: [2, 5],
+		secondary: null,
+		target: "normal",
+		type: "Electric",
+		zMove: {basePower: 140},
+		maxMove: {basePower: 130},
+		contestType: "Tough",
+	},
 };
