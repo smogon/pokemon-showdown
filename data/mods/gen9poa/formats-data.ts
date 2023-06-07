@@ -3699,4 +3699,24 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "OU",
 	},
+	reflight: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	porygonrhinian: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	porygon2rhinian: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "PU",
+	},
+	porygonzrhinian: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
 };
