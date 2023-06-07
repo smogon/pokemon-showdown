@@ -3637,7 +3637,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	canyou: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "PU",
 	},
 	kleavordelta: {
 		inherit: true,
@@ -3652,7 +3652,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	simigloom: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "RU",
 	},
 	eelektrossmega: {
 		inherit: true,
@@ -3667,12 +3667,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	meditao: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "RU",
 	},
 	dudunsparcedelta: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "RU",
 	},
 	enchantobra: {
 		inherit: true,
@@ -3687,7 +3687,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	raylegant: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "RU",
 	},
 	allurent: {
 		inherit: true,
