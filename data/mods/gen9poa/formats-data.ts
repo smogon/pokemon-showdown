@@ -3719,4 +3719,44 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "RU",
 	},
+	larvitardelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	pupitardelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "NFE",
+	},
+	tyranitardelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
+	blazikendeltamega: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
+	madame: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	bunnor: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	rabicicle: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	barrimander: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };
