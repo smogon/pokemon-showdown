@@ -79,17 +79,6 @@ export const Formats: FormatList = [
 		section: "Vanilla Singles",
 	},
 	{
-		name: "[Gen 9] Random Battle",
-		desc: `Randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3712619/">Random Battle Suggestions</a>`,
-		],
-
-		mod: 'gen9',
-		team: 'random',
-		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
-	},
-	{
 		name: "[Gen 9] OU",
 
 		mod: 'gen9',
@@ -125,18 +114,6 @@ export const Formats: FormatList = [
 		battle: {trunc: Math.trunc},
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
-	},
-	{
-		name: "[Gen 9] Not-So-Custom Game",
-
-		mod: 'gen9',
-		searchShow: false,
-		battle: {trunc: Math.trunc},
-		// no restrictions, for serious (other than team preview)
-		ruleset: [
-			'Team Preview', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100',
-			'Sleep Clause Mod', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause',
-		],
 	},
 
 	// S/V Doubles
@@ -205,30 +182,6 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Sleep Clause Mod'],
 		banlist: ['ND Uber', 'ND AG', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Assist', 'Baton Pass'],
-	},
-
-	// Insurgence Singles
-	//////////////////////////////////////////////////////////////////
-
-	{
-		section: "Insurgence Legacy",
-		column: 2,
-	},
-	{
-		name: "[Gen 6] Insurgence OU",
-		mod: 'gen6insurgence',
-		ruleset: ['Standard', 'Swagger Clause', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120'],
-		banlist: ['Uber', 'Arena Trap', 'Shadow Tag', 'Soul Dew', 'Baton Pass'],
-	},
-	{
-		name: "[Gen 6] Insurgence Ubers",
-		mod: 'gen6insurgence',
-		ruleset: ['Standard', 'Swagger Clause', 'Mega Rayquaza Clause', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120'],
-	},
-	{
-		name: "[Gen 6] Insurgence Anything Goes",
-		mod: 'gen6insurgence',
-		ruleset: ['Obtainable', 'Team Preview', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Adjust Level = 120', 'Max Level = 120', 'Default Level = 120'],
 	},
 
 	// Insurgence National Dex
