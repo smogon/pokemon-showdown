@@ -7129,15 +7129,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return false;
 			}
 		},
-		onChangeBoost(boost, target, source, effect) {
-			if (effect && effect.id === 'zpower') return;
-			let i: BoostID;
-			for (i in boost) {
-				boost[i]! *= 0;
-			}
-		},
 		onModifyMove(move, pokemon) {
+			if (move.category === "Status") return;
 			if (move.drain) delete move.drain;
+			if (move.boosts) delete move.boosts;
 			if (move.critRatio) delete move.critRatio;
 			if (move.secondaries) {
 				delete move.secondaries;

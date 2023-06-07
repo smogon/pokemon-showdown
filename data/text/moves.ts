@@ -7834,4 +7834,37 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn.",
 		shortDesc: "Charges turn 1. Hits turn 2.",
 	},
+	flameaxe: {
+		name: "Flame Axe",
+		desc: "If this move is successful, it sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Fire type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any opposing Pokemon uses Mortal Spin, Rapid Spin, or Defog successfully, or is hit by Defog.",
+		shortDesc: "Sets Hot Coals on the target's side.",
+	},
+	outcold: {
+		name: "Out Cold",
+		shortDesc: "30% chance to put the target to sleep.",
+	},
+	bloomsday: {
+		name: "Bloom's Day",
+		desc: "Power is equal to (user's current HP * 150 / user's maximum HP), rounded down, but not less than 1.",
+		shortDesc: "Less power as user's HP decreases. Hits foe(s).",
+	},
+	aquashot: {
+		name: "Aqua Shot",
+		desc: "Hits two to five times. Has a 35% chance to hit two or three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If this move hits five times, atk is raised by 1.",
+		shortDesc: "Hits 2-5 times in one turn. 5 hits -> +1 atk.",
+	},
+	subzerostorm: {
+		name: "Subzero Storm",
+		shortDesc: "Summons snowstorm. 1.2x damage if user is holding an Icy Rock.",
+	},
+	shockbombs: {
+		name: "Shock Bombs",
+		desc: "Hits two to five times. Has a 35% chance to hit two or three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
+		shortDesc: "Hits 2-5 times in one turn.",
+	},
+	plasmabolt: {
+		name: "Plasma Bolt",
+		desc: "Has a 20% chance to cause the target to either become burned or paralyzed",
+		shortDesc: "20% chance to burn or paralyze target.",
+	},
 };

@@ -2541,5 +2541,19 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	fairylaw: {
 		name: "Fairy Law",
 		shortDesc: "The effect of Imprison begins when this Pokemon enters the field."
-	}
+	},
+	cutthroat: {
+		name: "Cut Throat",
+		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its offensive stat is multiplied by 1.5 while using a Dark-type attack.",
+		shortDesc: "At 1/3 or less of its max HP, this Pokemon's offensive stat is 1.5x with Dark attacks.",
+	},
+	musclememory: {
+		name: "Muscle Memory",
+		shortDesc: "Preserves stats on switch."
+	},
+	blissfulignorance: {
+		name: "Blissful Ignorance",
+		desc: "This Pokemon can only be damaged by direct attacks. Curse and Substitute on use, Belly Drum, Pain Split, Struggle recoil, and confusion damage are considered direct damage. It's stats cannot be raised or lowered and none of it's move's secondary effects activate.",
+		shortDesc: "This Pokemon can only be damaged by direct attacks. Move secondaries are ignored.",
+	},
 };
