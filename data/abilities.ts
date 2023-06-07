@@ -7146,5 +7146,17 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4,
 		num: -73,
 	},
+	parry: {
+		onTryHit(pokemon, target, move) {
+			if (move.flags['slicing']) {
+				this.add('-immune', pokemon, '[from] ability: Parry');
+				return null;
+			}
+		},
+		isBreakable: true,
+		name: "Parry",
+		rating: 3,
+		num: -74,
+	},
 };
 

@@ -9963,4 +9963,24 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Unobtainable",
 	},
+	discardedcloth: {
+		name: "Discarded Cloth",
+		spritenum: 0,
+		fling: {
+			basePower: 10,
+		},
+		onDamagePriority: -40,
+		onDamage(damage, target, source, effect) {
+			if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move') {
+				if (target.useItem()) {
+					this.add("-activate", target, "item: Discarded Cloth");
+					this.boost({spe: -1, def: -1, spd: -1}, target);
+					return 0;
+				}
+			}
+		},
+		num: -79,
+		gen: 6,
+		isNonstandard: "Unobtainable",
+	},
 };
