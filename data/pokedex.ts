@@ -1,21 +1,18 @@
 {
 
 "10000000voltthunderbolt": {
-num: 719,
-accuracy: true,
-basePower: 195,
+accuracy: 100,
+basePower: 250,
 category: "Special",
-isNonstandard: "Past",
 name: "10,000,000 Volt Thunderbolt",
-pp: .625,
+pp: 0.625,
 priority: 0,
-flags: {},
-isZ: "pikashuniumz",
-critRatio: 3,
+flags: {protect: 1, mirror: 1, noparentalbond: 1},
+selfdestruct: "always",
+critRatio: 4,
 secondary: null,
-target: "normal",
+target: "allAdjacentFoes",
 type: "Electric",
-contestType: "Cool",
 },
 
 absorb: {
