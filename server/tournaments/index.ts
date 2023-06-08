@@ -304,7 +304,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			return;
 		}
 		const possiblePlayer = this.playerTable[targetUser.id];
-		let isJoined: boolean = false;
+		let isJoined = false;
 		if (possiblePlayer) {
 			if (this.generator.name === "Elimination") {
 				isJoined = !possiblePlayer.isEliminated && !possiblePlayer.isDisqualified;
@@ -314,8 +314,9 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 				} else if ((this.generator as RoundRobin)?.matchesPerPlayer) {
 					isJoined = possiblePlayer.games !== (this.generator as RoundRobin).matchesPerPlayer;
 				}
-			}
-			else isJoined = true;
+			} else {
+                isJoined = true;
+            }
 		}
 		const update: {
 			format: string, teambuilderFormat?: string, generator: string,
