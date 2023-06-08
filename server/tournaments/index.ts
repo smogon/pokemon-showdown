@@ -315,8 +315,8 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 					isJoined = possiblePlayer.games !== (this.generator as RoundRobin).matchesPerPlayer;
 				}
 			} else {
-                isJoined = true;
-            }
+				isJoined = true;
+			}
 		}
 		const update: {
 			format: string, teambuilderFormat?: string, generator: string,
