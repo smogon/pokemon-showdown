@@ -1,6 +1,7 @@
 // List of flags and their descriptions can be found in sim/dex-moves.ts
 
 export const Moves: {[moveid: string]: MoveData} = {
+
 	"10000000voltthunderbolt": {
 		num: 719,
 		accuracy: true,
@@ -18,6 +19,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 	absorb: {
 		num: 71,
 		accuracy: 94,
@@ -33,6 +35,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Clever",
 	},
+
 	accelerock: {
 		num: 709,
 		accuracy: 94,
@@ -47,6 +50,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Rock",
 		contestType: "Cool",
 	},
+
 	acid: {
 		num: 51,
 		accuracy: 94,
@@ -66,6 +70,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Clever",
 	},
+
 	acidarmor: {
 		num: 151,
 		accuracy: true,
@@ -84,6 +89,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Tough",
 	},
+
 	aciddownpour: {
 		num: 628,
 		accuracy: true,
@@ -100,6 +106,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Cool",
 	},
+
 	acidspray: {
 		num: 491,
 		accuracy: 94,
@@ -119,6 +126,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Beautiful",
 	},
+
 	acrobatics: {
 		num: 512,
 		accuracy: 94,
@@ -140,6 +148,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Cool",
 	},
+
 	acupressure: {
 		num: 367,
 		accuracy: true,
@@ -172,6 +181,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'crit2'},
 		contestType: "Tough",
 	},
+
 	aerialace: {
 		num: 332,
 		accuracy: true,
@@ -186,6 +196,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Cool",
 	},
+
 	aeroblast: {
 		num: 177,
 		accuracy: 95,
@@ -202,6 +213,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Cool",
 	},
+
 	afteryou: {
 		num: 495,
 		accuracy: true,
@@ -227,6 +239,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Cute",
 	},
+
 	agility: {
 		num: 97,
 		accuracy: true,
@@ -245,6 +258,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cool",
 	},
+
 	aircutter: {
 		num: 314,
 		accuracy: 95,
@@ -260,6 +274,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Cool",
 	},
+
 	airslash: {
 		num: 403,
 		accuracy: 95,
@@ -277,6 +292,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Cool",
 	},
+
 	alloutpummeling: {
 		num: 624,
 		accuracy: true,
@@ -293,6 +309,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+
 	allyswitch: {
 		num: 502,
 		accuracy: true,
@@ -323,6 +340,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 2}},
 		contestType: "Clever",
 	},
+
 	amnesia: {
 		num: 133,
 		accuracy: true,
@@ -341,6 +359,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
+
 	anchorshot: {
 		num: 677,
 		accuracy: 94,
@@ -361,6 +380,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Tough",
 	},
+
 	ancientpower: {
 		num: 246,
 		accuracy: 94,
@@ -386,6 +406,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Rock",
 		contestType: "Tough",
 	},
+
 	appleacid: {
 		num: 787,
 		accuracy: 94,
@@ -404,6 +425,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Grass",
 	},
+
 	aquacutter: {
 		num: 895,
 		accuracy: 94,
@@ -419,6 +441,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Cool",
 	},
+
 	aquajet: {
 		num: 453,
 		accuracy: 94,
@@ -433,6 +456,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Cool",
 	},
+
 	aquaring: {
 		num: 392,
 		accuracy: true,
@@ -458,6 +482,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Beautiful",
 	},
+
 	aquastep: {
 		num: 872,
 		accuracy: 94,
@@ -479,6 +504,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Cool",
 	},
+
 	aquatail: {
 		num: 401,
 		accuracy: 90,
@@ -493,6 +519,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
+
 	armorcannon: {
 		num: 890,
 		accuracy: 94,
@@ -512,6 +539,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fire",
 	},
+
 	armthrust: {
 		num: 292,
 		accuracy: 94,
@@ -527,6 +555,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
+
 	aromatherapy: {
 		num: 312,
 		accuracy: true,
@@ -555,6 +584,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'heal'},
 		contestType: "Clever",
 	},
+
 	aromaticmist: {
 		num: 597,
 		accuracy: true,
@@ -573,6 +603,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 2}},
 		contestType: "Beautiful",
 	},
+
 	assist: {
 		num: 274,
 		accuracy: true,
@@ -608,6 +639,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cute",
 	},
+
 	assurance: {
 		num: 372,
 		accuracy: 94,
@@ -629,6 +661,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Clever",
 	},
+
 	astonish: {
 		num: 310,
 		accuracy: 94,
@@ -646,6 +679,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Cute",
 	},
+
 	astralbarrage: {
 		num: 825,
 		accuracy: 94,
@@ -659,6 +693,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "allAdjacentFoes",
 		type: "Ghost",
 	},
+
 	attackorder: {
 		num: 454,
 		accuracy: 94,
@@ -674,6 +709,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Clever",
 	},
+
 	attract: {
 		num: 213,
 		accuracy: 94,
@@ -731,6 +767,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
+
 	aurasphere: {
 		num: 396,
 		accuracy: true,
@@ -745,6 +782,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Beautiful",
 	},
+
 	aurawheel: {
 		num: 783,
 		accuracy: 94,
@@ -782,6 +820,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Electric",
 	},
+
 	aurorabeam: {
 		num: 62,
 		accuracy: 94,
@@ -801,6 +840,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
+
 	auroraveil: {
 		num: 694,
 		accuracy: true,
@@ -850,6 +890,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Beautiful",
 	},
+
 	autotomize: {
 		num: 475,
 		accuracy: true,
@@ -881,6 +922,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
+
 	avalanche: {
 		num: 419,
 		accuracy: 94,
@@ -905,6 +947,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
+
 	axekick: {
 		num: 853,
 		accuracy: 90,
@@ -925,6 +968,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fighting",
 	},
+
 	babydolleyes: {
 		num: 608,
 		accuracy: 94,
@@ -943,6 +987,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Cute",
 	},
+
 	baddybad: {
 		num: 737,
 		accuracy: 95,
@@ -961,6 +1006,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Clever",
 	},
+
 	banefulbunker: {
 		num: 661,
 		accuracy: true,
@@ -1019,6 +1065,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Tough",
 	},
+
 	barbbarrage: {
 		num: 839,
 		accuracy: 94,
@@ -1041,6 +1088,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Poison",
 	},
+
 	barrage: {
 		num: 140,
 		accuracy: 85,
@@ -1057,6 +1105,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cute",
 	},
+
 	barrier: {
 		num: 112,
 		accuracy: true,
@@ -1076,6 +1125,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cool",
 	},
+
 	batonpass: {
 		num: 226,
 		accuracy: true,
@@ -1104,6 +1154,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
+
 	beakblast: {
 		num: 690,
 		accuracy: 94,
@@ -1137,6 +1188,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Tough",
 	},
+
 	beatup: {
 		num: 251,
 		accuracy: 94,
@@ -1161,6 +1213,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Clever",
 	},
+
 	behemothbash: {
 		num: 782,
 		accuracy: 94,
@@ -1174,6 +1227,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Steel",
 	},
+
 	behemothblade: {
 		num: 781,
 		accuracy: 94,
@@ -1187,6 +1241,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Steel",
 	},
+
 	belch: {
 		num: 562,
 		accuracy: 90,
@@ -1204,6 +1259,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Tough",
 	},
+
 	bellydrum: {
 		num: 187,
 		accuracy: true,
@@ -1226,6 +1282,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'heal'},
 		contestType: "Cute",
 	},
+
 	bestow: {
 		num: 516,
 		accuracy: true,
@@ -1254,6 +1311,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 2}},
 		contestType: "Cute",
 	},
+
 	bide: {
 		num: 117,
 		accuracy: true,
@@ -1328,6 +1386,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	bind: {
 		num: 20,
 		accuracy: 85,
@@ -1343,6 +1402,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	bite: {
 		num: 44,
 		accuracy: 94,
@@ -1360,6 +1420,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Tough",
 	},
+
 	bitterblade: {
 		num: 891,
 		accuracy: 94,
@@ -1374,6 +1435,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fire",
 	},
+
 	bittermalice: {
 		num: 841,
 		accuracy: 94,
@@ -1392,6 +1454,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Ghost",
 	},
+
 	blackholeeclipse: {
 		num: 654,
 		accuracy: true,
@@ -1408,6 +1471,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Cool",
 	},
+
 	blastburn: {
 		num: 307,
 		accuracy: 90,
@@ -1425,6 +1489,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
+
 	blazekick: {
 		num: 299,
 		accuracy: 90,
@@ -1443,6 +1508,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Cool",
 	},
+
 	blazingtorque: {
 		num: 896,
 		accuracy: 94,
@@ -1462,6 +1528,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fire",
 	},
+
 	bleakwindstorm: {
 		num: 846,
 		accuracy: 80,
@@ -1481,6 +1548,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "allAdjacentFoes",
 		type: "Flying",
 	},
+
 	blizzard: {
 		num: 59,
 		accuracy: 75,
@@ -1501,6 +1569,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
+
 	block: {
 		num: 335,
 		accuracy: true,
@@ -1519,6 +1588,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Cute",
 	},
+
 	bloomdoom: {
 		num: 644,
 		accuracy: true,
@@ -1535,6 +1605,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Cool",
 	},
+
 	blueflare: {
 		num: 551,
 		accuracy: 85,
@@ -1553,6 +1624,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
+
 	bodypress: {
 		num: 776,
 		accuracy: 94,
@@ -1567,6 +1639,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fighting",
 	},
+
 	bodyslam: {
 		num: 34,
 		accuracy: 94,
@@ -1584,6 +1657,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	boltbeak: {
 		num: 754,
 		accuracy: 94,
@@ -1606,6 +1680,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Electric",
 	},
+
 	boltstrike: {
 		num: 550,
 		accuracy: 85,
@@ -1624,6 +1699,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Beautiful",
 	},
+
 	boneclub: {
 		num: 125,
 		accuracy: 85,
@@ -1642,6 +1718,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ground",
 		contestType: "Tough",
 	},
+
 	bonemerang: {
 		num: 155,
 		accuracy: 90,
@@ -1659,6 +1736,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Tough",
 	},
+
 	bonerush: {
 		num: 198,
 		accuracy: 90,
@@ -1676,6 +1754,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Tough",
 	},
+
 	boomburst: {
 		num: 586,
 		accuracy: 94,
@@ -1690,6 +1769,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	bounce: {
 		num: 340,
 		accuracy: 85,
@@ -1734,6 +1814,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Cute",
 	},
+
 	bouncybubble: {
 		num: 733,
 		accuracy: 94,
@@ -1750,6 +1831,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Clever",
 	},
+
 	branchpoke: {
 		num: 785,
 		accuracy: 94,
@@ -1763,6 +1845,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Grass",
 	},
+
 	bravebird: {
 		num: 413,
 		accuracy: 94,
@@ -1778,6 +1861,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Cool",
 	},
+
 	breakingswipe: {
 		num: 784,
 		accuracy: 94,
@@ -1796,6 +1880,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "allAdjacentFoes",
 		type: "Dragon",
 	},
+
 	breakneckblitz: {
 		num: 622,
 		accuracy: true,
@@ -1812,6 +1897,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	brickbreak: {
 		num: 280,
 		accuracy: 94,
@@ -1832,6 +1918,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+
 	brine: {
 		num: 362,
 		accuracy: 94,
@@ -1851,6 +1938,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Tough",
 	},
+
 	brutalswing: {
 		num: 693,
 		accuracy: 94,
@@ -1865,6 +1953,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Tough",
 	},
+
 	bubble: {
 		num: 145,
 		accuracy: 94,
@@ -1885,6 +1974,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Cute",
 	},
+
 	bubblebeam: {
 		num: 61,
 		accuracy: 94,
@@ -1904,6 +1994,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
+
 	bugbite: {
 		num: 450,
 		accuracy: 94,
@@ -1929,6 +2020,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Cute",
 	},
+
 	bugbuzz: {
 		num: 405,
 		accuracy: 94,
@@ -1948,6 +2040,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Beautiful",
 	},
+
 	bulkup: {
 		num: 339,
 		accuracy: true,
@@ -1967,6 +2060,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1}},
 		contestType: "Cool",
 	},
+
 	bulldoze: {
 		num: 523,
 		accuracy: 94,
@@ -1986,6 +2080,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ground",
 		contestType: "Tough",
 	},
+
 	bulletpunch: {
 		num: 418,
 		accuracy: 94,
@@ -2000,6 +2095,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Tough",
 	},
+
 	bulletseed: {
 		num: 331,
 		accuracy: 94,
@@ -2017,6 +2113,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Cool",
 	},
+
 	burningjealousy: {
 		num: 807,
 		accuracy: 94,
@@ -2038,6 +2135,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Tough",
 	},
+
 	burnup: {
 		num: 682,
 		accuracy: 94,
@@ -2064,6 +2162,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Clever",
 	},
+
 	buzzybuzz: {
 		num: 734,
 		accuracy: 94,
@@ -2082,6 +2181,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Clever",
 	},
+
 	calmmind: {
 		num: 347,
 		accuracy: true,
@@ -2101,6 +2201,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
+
 	camouflage: {
 		num: 293,
 		accuracy: true,
@@ -2132,6 +2233,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {evasion: 1}},
 		contestType: "Clever",
 	},
+
 	captivate: {
 		num: 445,
 		accuracy: 94,
@@ -2154,6 +2256,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 2}},
 		contestType: "Cute",
 	},
+
 	catastropika: {
 		num: 658,
 		accuracy: true,
@@ -2170,6 +2273,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 	ceaselessedge: {
 		num: 845,
 		accuracy: 90,
@@ -2191,6 +2295,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Dark",
 	},
+
 	celebrate: {
 		num: 606,
 		accuracy: true,
@@ -2209,6 +2314,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Cute",
 	},
+
 	charge: {
 		num: 268,
 		accuracy: true,
@@ -2264,6 +2370,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
 	},
+
 	chargebeam: {
 		num: 451,
 		accuracy: 90,
@@ -2285,6 +2392,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Beautiful",
 	},
+
 	charm: {
 		num: 204,
 		accuracy: 94,
@@ -2303,6 +2411,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Cute",
 	},
+
 	chatter: {
 		num: 448,
 		accuracy: 94,
@@ -2325,6 +2434,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Cute",
 	},
+
 	chillingwater: {
 		num: 886,
 		accuracy: 94,
@@ -2344,6 +2454,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
+
 	chillyreception: {
 		num: 881,
 		accuracy: true,
@@ -2361,6 +2472,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "all",
 		type: "Ice",
 	},
+
 	chipaway: {
 		num: 498,
 		accuracy: 94,
@@ -2378,6 +2490,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	chloroblast: {
 		num: 835,
 		accuracy: 95,
@@ -2402,6 +2515,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Grass",
 	},
+
 	circlethrow: {
 		num: 509,
 		accuracy: 90,
@@ -2416,6 +2530,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+
 	clamp: {
 		num: 128,
 		accuracy: 85,
@@ -2432,6 +2547,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Tough",
 	},
+
 	clangingscales: {
 		num: 691,
 		accuracy: 94,
@@ -2452,6 +2568,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dragon",
 		contestType: "Tough",
 	},
+
 	clangoroussoul: {
 		num: 775,
 		accuracy: 94,
@@ -2483,6 +2600,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "self",
 		type: "Dragon",
 	},
+
 	clangoroussoulblaze: {
 		num: 728,
 		accuracy: true,
@@ -2510,6 +2628,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dragon",
 		contestType: "Cool",
 	},
+
 	clearsmog: {
 		num: 499,
 		accuracy: true,
@@ -2528,6 +2647,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Beautiful",
 	},
+
 	closecombat: {
 		num: 370,
 		accuracy: 94,
@@ -2548,6 +2668,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
+
 	coaching: {
 		num: 811,
 		accuracy: true,
@@ -2565,6 +2686,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "adjacentAlly",
 		type: "Fighting",
 	},
+
 	coil: {
 		num: 489,
 		accuracy: true,
@@ -2585,6 +2707,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Tough",
 	},
+
 	collisioncourse: {
 		num: 878,
 		accuracy: 94,
@@ -2606,6 +2729,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
+
 	combattorque: {
 		num: 899,
 		accuracy: 94,
@@ -2625,6 +2749,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fighting",
 	},
+
 	cometpunch: {
 		num: 4,
 		accuracy: 85,
@@ -2642,6 +2767,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 100},
 		contestType: "Tough",
 	},
+
 	comeuppance: {
 		num: 894,
 		accuracy: 94,
@@ -2673,6 +2799,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Cool",
 	},
+
 	confide: {
 		num: 590,
 		accuracy: true,
@@ -2691,6 +2818,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Cute",
 	},
+
 	confuseray: {
 		num: 109,
 		accuracy: 94,
@@ -2707,6 +2835,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
+
 	confusion: {
 		num: 93,
 		accuracy: 94,
@@ -2724,6 +2853,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
+
 	constrict: {
 		num: 132,
 		accuracy: 94,
@@ -2744,6 +2874,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	continentalcrush: {
 		num: 632,
 		accuracy: true,
@@ -2760,6 +2891,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Rock",
 		contestType: "Cool",
 	},
+
 	conversion: {
 		num: 160,
 		accuracy: true,
@@ -2781,6 +2913,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Beautiful",
 	},
+
 	conversion2: {
 		num: 176,
 		accuracy: true,
@@ -2818,6 +2951,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'heal'},
 		contestType: "Beautiful",
 	},
+
 	copycat: {
 		num: 383,
 		accuracy: true,
@@ -2843,6 +2977,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {accuracy: 1}},
 		contestType: "Cute",
 	},
+
 	coreenforcer: {
 		num: 687,
 		accuracy: 94,
@@ -2869,6 +3004,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {basePower: 140},
 		contestType: "Tough",
 	},
+
 	corkscrewcrash: {
 		num: 638,
 		accuracy: true,
@@ -2885,6 +3021,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Cool",
 	},
+
 	corrosivegas: {
 		num: 810,
 		accuracy: 94,
@@ -2906,6 +3043,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "allAdjacent",
 		type: "Poison",
 	},
+
 	cosmicpower: {
 		num: 322,
 		accuracy: true,
@@ -2926,6 +3064,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Beautiful",
 	},
+
 	cottonguard: {
 		num: 538,
 		accuracy: true,
@@ -2944,6 +3083,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
+
 	cottonspore: {
 		num: 178,
 		accuracy: 94,
@@ -2962,6 +3102,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
+
 	counter: {
 		num: 68,
 		accuracy: 94,
@@ -3008,6 +3149,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 75},
 		contestType: "Tough",
 	},
+
 	courtchange: {
 		num: 756,
 		accuracy: 94,
@@ -3080,6 +3222,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "all",
 		type: "Normal",
 	},
+
 	covet: {
 		num: 343,
 		accuracy: 94,
@@ -3111,6 +3254,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cute",
 	},
+
 	crabhammer: {
 		num: 152,
 		accuracy: 90,
@@ -3126,6 +3270,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Tough",
 	},
+
 	craftyshield: {
 		num: 578,
 		accuracy: true,
@@ -3158,6 +3303,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
 	},
+
 	crosschop: {
 		num: 238,
 		accuracy: 80,
@@ -3173,6 +3319,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+
 	crosspoison: {
 		num: 440,
 		accuracy: 94,
@@ -3191,6 +3338,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Cool",
 	},
+
 	crunch: {
 		num: 242,
 		accuracy: 94,
@@ -3210,6 +3358,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Tough",
 	},
+
 	crushclaw: {
 		num: 306,
 		accuracy: 95,
@@ -3229,6 +3378,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	crushgrip: {
 		num: 462,
 		accuracy: 94,
@@ -3253,6 +3403,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 140},
 		contestType: "Tough",
 	},
+
 	curse: {
 		num: 174,
 		accuracy: true,
@@ -3298,6 +3449,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'curse'},
 		contestType: "Tough",
 	},
+
 	cut: {
 		num: 15,
 		accuracy: 95,
@@ -3312,6 +3464,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	darkestlariat: {
 		num: 663,
 		accuracy: 94,
@@ -3328,6 +3481,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Cool",
 	},
+
 	darkpulse: {
 		num: 399,
 		accuracy: 94,
@@ -3345,6 +3499,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Cool",
 	},
+
 	darkvoid: {
 		num: 464,
 		accuracy: 75,
@@ -3370,6 +3525,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
+
 	dazzlinggleam: {
 		num: 605,
 		accuracy: 94,
@@ -3384,6 +3540,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fairy",
 		contestType: "Beautiful",
 	},
+
 	decorate: {
 		num: 777,
 		accuracy: true,
@@ -3402,6 +3559,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fairy",
 	},
+
 	defendorder: {
 		num: 455,
 		accuracy: true,
@@ -3421,6 +3579,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
+
 	defensecurl: {
 		num: 111,
 		accuracy: true,
@@ -3444,6 +3603,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {accuracy: 1}},
 		contestType: "Cute",
 	},
+
 	defog: {
 		num: 432,
 		accuracy: true,
@@ -3484,6 +3644,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {accuracy: 1}},
 		contestType: "Cool",
 	},
+
 	destinybond: {
 		num: 194,
 		accuracy: true,
@@ -3528,6 +3689,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'redirect'},
 		contestType: "Clever",
 	},
+
 	detect: {
 		num: 197,
 		accuracy: true,
@@ -3551,6 +3713,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {evasion: 1}},
 		contestType: "Cool",
 	},
+
 	devastatingdrake: {
 		num: 652,
 		accuracy: true,
@@ -3567,6 +3730,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dragon",
 		contestType: "Cool",
 	},
+
 	diamondstorm: {
 		num: 591,
 		accuracy: 95,
@@ -3589,6 +3753,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Rock",
 		contestType: "Beautiful",
 	},
+
 	dig: {
 		num: 91,
 		accuracy: 94,
@@ -3631,6 +3796,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ground",
 		contestType: "Tough",
 	},
+
 	disable: {
 		num: 50,
 		accuracy: 94,
@@ -3701,6 +3867,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
+
 	disarmingvoice: {
 		num: 574,
 		accuracy: true,
@@ -3715,6 +3882,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fairy",
 		contestType: "Cute",
 	},
+
 	discharge: {
 		num: 435,
 		accuracy: 94,
@@ -3732,6 +3900,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Beautiful",
 	},
+
 	direclaw: {
 		num: 827,
 		accuracy: 94,
@@ -3758,6 +3927,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Poison",
 	},
+
 	dive: {
 		num: 291,
 		accuracy: 94,
@@ -3806,6 +3976,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
+
 	dizzypunch: {
 		num: 146,
 		accuracy: 94,
@@ -3824,6 +3995,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cute",
 	},
+
 	doodle: {
 		num: 867,
 		accuracy: 94,
@@ -3857,6 +4029,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "adjacentFoe",
 		type: "Normal",
 	},
+
 	doomdesire: {
 		num: 353,
 		accuracy: 94,
@@ -3892,6 +4065,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Beautiful",
 	},
+
 	doubleedge: {
 		num: 38,
 		accuracy: 94,
@@ -3907,6 +4081,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	doublehit: {
 		num: 458,
 		accuracy: 90,
@@ -3924,6 +4099,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 120},
 		contestType: "Cool",
 	},
+
 	doubleironbash: {
 		num: 742,
 		accuracy: 94,
@@ -3945,6 +4121,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 140},
 		contestType: "Clever",
 	},
+
 	doublekick: {
 		num: 24,
 		accuracy: 94,
@@ -3961,6 +4138,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 80},
 		contestType: "Cool",
 	},
+
 	doubleshock: {
 		num: 892,
 		accuracy: 94,
@@ -3987,6 +4165,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Clever",
 	},
+
 	doubleslap: {
 		num: 3,
 		accuracy: 85,
@@ -4003,6 +4182,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cute",
 	},
+
 	doubleteam: {
 		num: 104,
 		accuracy: true,
@@ -4021,6 +4201,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cool",
 	},
+
 	dracometeor: {
 		num: 434,
 		accuracy: 90,
@@ -4040,6 +4221,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dragon",
 		contestType: "Beautiful",
 	},
+
 	dragonascent: {
 		num: 620,
 		accuracy: 94,
@@ -4059,6 +4241,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Beautiful",
 	},
+
 	dragonbreath: {
 		num: 225,
 		accuracy: 94,
@@ -4076,6 +4259,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dragon",
 		contestType: "Cool",
 	},
+
 	dragonclaw: {
 		num: 337,
 		accuracy: 94,
@@ -4090,6 +4274,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dragon",
 		contestType: "Cool",
 	},
+
 	dragondance: {
 		num: 349,
 		accuracy: true,
@@ -4109,6 +4294,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cool",
 	},
+
 	dragondarts: {
 		num: 751,
 		accuracy: 94,
@@ -4125,6 +4311,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dragon",
 		maxMove: {basePower: 130},
 	},
+
 	dragonenergy: {
 		num: 820,
 		accuracy: 94,
@@ -4143,6 +4330,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "allAdjacentFoes",
 		type: "Dragon",
 	},
+
 	dragonhammer: {
 		num: 692,
 		accuracy: 94,
@@ -4158,6 +4346,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dragon",
 		contestType: "Tough",
 	},
+
 	dragonpulse: {
 		num: 406,
 		accuracy: 94,
@@ -4172,6 +4361,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dragon",
 		contestType: "Beautiful",
 	},
+
 	dragonrage: {
 		num: 82,
 		accuracy: 94,
@@ -4188,6 +4378,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dragon",
 		contestType: "Cool",
 	},
+
 	dragonrush: {
 		num: 407,
 		accuracy: 75,
@@ -4205,6 +4396,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dragon",
 		contestType: "Tough",
 	},
+
 	dragontail: {
 		num: 525,
 		accuracy: 90,
@@ -4219,6 +4411,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dragon",
 		contestType: "Tough",
 	},
+
 	drainingkiss: {
 		num: 577,
 		accuracy: 94,
@@ -4234,6 +4427,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fairy",
 		contestType: "Cute",
 	},
+
 	drainpunch: {
 		num: 409,
 		accuracy: 94,
@@ -4249,6 +4443,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
+
 	dreameater: {
 		num: 138,
 		accuracy: 94,
@@ -4267,6 +4462,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
+
 	drillpeck: {
 		num: 65,
 		accuracy: 94,
@@ -4281,6 +4477,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Cool",
 	},
+
 	drillrun: {
 		num: 529,
 		accuracy: 95,
@@ -4296,6 +4493,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ground",
 		contestType: "Tough",
 	},
+
 	drumbeating: {
 		num: 778,
 		accuracy: 94,
@@ -4314,6 +4512,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Grass",
 	},
+
 	dualchop: {
 		num: 530,
 		accuracy: 90,
@@ -4331,6 +4530,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Tough",
 	},
+
 	dualwingbeat: {
 		num: 814,
 		accuracy: 90,
@@ -4346,6 +4546,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		maxMove: {basePower: 130},
 	},
+
 	dynamaxcannon: {
 		num: 744,
 		accuracy: 94,
@@ -4359,6 +4560,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Dragon",
 	},
+
 	dynamicpunch: {
 		num: 223,
 		accuracy: 75,
@@ -4376,6 +4578,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+
 	earthpower: {
 		num: 414,
 		accuracy: 94,
@@ -4395,6 +4598,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ground",
 		contestType: "Beautiful",
 	},
+
 	earthquake: {
 		num: 89,
 		accuracy: 94,
@@ -4409,6 +4613,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ground",
 		contestType: "Tough",
 	},
+
 	echoedvoice: {
 		num: 497,
 		accuracy: 94,
@@ -4448,6 +4653,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
+
 	eerieimpulse: {
 		num: 598,
 		accuracy: 94,
@@ -4466,6 +4672,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
 	},
+
 	eeriespell: {
 		num: 826,
 		accuracy: 94,
@@ -4491,6 +4698,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Psychic",
 	},
+
 	eggbomb: {
 		num: 121,
 		accuracy: 75,
@@ -4506,6 +4714,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cute",
 	},
+
 	electricterrain: {
 		num: 604,
 		accuracy: true,
@@ -4565,6 +4774,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
+
 	electrify: {
 		num: 582,
 		accuracy: true,
@@ -4598,6 +4808,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
+
 	electroball: {
 		num: 486,
 		accuracy: 94,
@@ -4621,6 +4832,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Cool",
 	},
+
 	electrodrift: {
 		num: 879,
 		accuracy: 94,
@@ -4642,6 +4854,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 	electroweb: {
 		num: 527,
 		accuracy: 95,
@@ -4661,6 +4874,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Beautiful",
 	},
+
 	embargo: {
 		num: 373,
 		accuracy: 94,
@@ -4690,6 +4904,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
+
 	ember: {
 		num: 52,
 		accuracy: 94,
@@ -4707,6 +4922,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Cute",
 	},
+
 	encore: {
 		num: 227,
 		accuracy: 94,
@@ -4767,6 +4983,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Cute",
 	},
+
 	endeavor: {
 		num: 283,
 		accuracy: 94,
@@ -4789,6 +5006,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Tough",
 	},
+
 	endure: {
 		num: 203,
 		accuracy: true,
@@ -4825,6 +5043,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Tough",
 	},
+
 	energyball: {
 		num: 412,
 		accuracy: 94,
@@ -4844,6 +5063,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Beautiful",
 	},
+
 	entrainment: {
 		num: 494,
 		accuracy: 94,
@@ -4883,6 +5103,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Cute",
 	},
+
 	eruption: {
 		num: 284,
 		accuracy: 94,
@@ -4902,6 +5123,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
+
 	esperwing: {
 		num: 840,
 		accuracy: 94,
@@ -4924,6 +5146,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Psychic",
 	},
+
 	eternabeam: {
 		num: 795,
 		accuracy: 90,
@@ -4941,6 +5164,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Dragon",
 	},
+
 	expandingforce: {
 		num: 797,
 		accuracy: 94,
@@ -4965,6 +5189,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Psychic",
 	},
+
 	explosion: {
 		num: 153,
 		accuracy: 94,
@@ -4980,6 +5205,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
+
 	extrasensory: {
 		num: 326,
 		accuracy: 94,
@@ -4997,6 +5223,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
+
 	extremeevoboost: {
 		num: 702,
 		accuracy: true,
@@ -5020,6 +5247,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
+
 	extremespeed: {
 		num: 245,
 		accuracy: 94,
@@ -5034,6 +5262,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	facade: {
 		num: 263,
 		accuracy: 94,
@@ -5053,6 +5282,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cute",
 	},
+
 	fairylock: {
 		num: 587,
 		accuracy: true,
@@ -5078,6 +5308,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
+
 	fairywind: {
 		num: 584,
 		accuracy: 94,
@@ -5092,6 +5323,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fairy",
 		contestType: "Beautiful",
 	},
+
 	fakeout: {
 		num: 252,
 		accuracy: 94,
@@ -5115,6 +5347,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cute",
 	},
+
 	faketears: {
 		num: 313,
 		accuracy: 94,
@@ -5133,6 +5366,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 1}},
 		contestType: "Cute",
 	},
+
 	falsesurrender: {
 		num: 793,
 		accuracy: true,
@@ -5146,6 +5380,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Dark",
 	},
+
 	falseswipe: {
 		num: 206,
 		accuracy: 94,
@@ -5164,6 +5399,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	featherdance: {
 		num: 297,
 		accuracy: 94,
@@ -5182,6 +5418,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Beautiful",
 	},
+
 	feint: {
 		num: 364,
 		accuracy: 94,
@@ -5198,6 +5435,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Clever",
 	},
+
 	feintattack: {
 		num: 185,
 		accuracy: true,
@@ -5213,6 +5451,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Clever",
 	},
+
 	fellstinger: {
 		num: 565,
 		accuracy: 94,
@@ -5230,6 +5469,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Cool",
 	},
+
 	fierydance: {
 		num: 552,
 		accuracy: 94,
@@ -5251,6 +5491,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
+
 	fierywrath: {
 		num: 822,
 		accuracy: 94,
@@ -5267,6 +5508,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "allAdjacentFoes",
 		type: "Dark",
 	},
+
 	filletaway: {
 		num: 868,
 		accuracy: true,
@@ -5295,6 +5537,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "self",
 		type: "Normal",
 	},
+
 	finalgambit: {
 		num: 515,
 		accuracy: 94,
@@ -5315,6 +5558,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {basePower: 180},
 		contestType: "Tough",
 	},
+
 	fireblast: {
 		num: 126,
 		accuracy: 85,
@@ -5332,6 +5576,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
+
 	firefang: {
 		num: 424,
 		accuracy: 95,
@@ -5354,6 +5599,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Cool",
 	},
+
 	firelash: {
 		num: 680,
 		accuracy: 94,
@@ -5373,6 +5619,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Cute",
 	},
+
 	firepledge: {
 		num: 519,
 		accuracy: 94,
@@ -5437,6 +5684,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
+
 	firepunch: {
 		num: 7,
 		accuracy: 94,
@@ -5454,6 +5702,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Tough",
 	},
+
 	firespin: {
 		num: 83,
 		accuracy: 85,
@@ -5469,6 +5718,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
+
 	firstimpression: {
 		num: 660,
 		accuracy: 94,
@@ -5489,6 +5739,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Cute",
 	},
+
 	fishiousrend: {
 		num: 755,
 		accuracy: 94,
@@ -5511,6 +5762,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Water",
 	},
+
 	fissure: {
 		num: 90,
 		accuracy: 30,
@@ -5528,6 +5780,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Tough",
 	},
+
 	flail: {
 		num: 175,
 		accuracy: 94,
@@ -5563,6 +5816,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Cute",
 	},
+
 	flameburst: {
 		num: 481,
 		accuracy: 94,
@@ -5588,6 +5842,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
+
 	flamecharge: {
 		num: 488,
 		accuracy: 94,
@@ -5609,6 +5864,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Cool",
 	},
+
 	flamewheel: {
 		num: 172,
 		accuracy: 94,
@@ -5626,6 +5882,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
+
 	flamethrower: {
 		num: 53,
 		accuracy: 94,
@@ -5643,6 +5900,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
+
 	flareblitz: {
 		num: 394,
 		accuracy: 94,
@@ -5661,6 +5919,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Cool",
 	},
+
 	flash: {
 		num: 148,
 		accuracy: 94,
@@ -5680,6 +5939,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {evasion: 1}},
 		contestType: "Beautiful",
 	},
+
 	flashcannon: {
 		num: 430,
 		accuracy: 94,
@@ -5699,6 +5959,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Beautiful",
 	},
+
 	flatter: {
 		num: 260,
 		accuracy: 94,
@@ -5718,6 +5979,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
 	},
+
 	fleurcannon: {
 		num: 705,
 		accuracy: 90,
@@ -5737,6 +5999,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fairy",
 		contestType: "Beautiful",
 	},
+
 	fling: {
 		num: 374,
 		accuracy: 94,
@@ -5789,6 +6052,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Cute",
 	},
+
 	flipturn: {
 		num: 812,
 		accuracy: 94,
@@ -5803,6 +6067,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Water",
 	},
+
 	floatyfall: {
 		num: 731,
 		accuracy: 95,
@@ -5821,6 +6086,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Cool",
 	},
+
 	floralhealing: {
 		num: 666,
 		accuracy: true,
@@ -5853,6 +6119,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
+
 	flowershield: {
 		num: 579,
 		accuracy: true,
@@ -5887,6 +6154,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Beautiful",
 	},
+
 	flowertrick: {
 		num: 870,
 		accuracy: true,
@@ -5901,6 +6169,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Grass",
 	},
+
 	fly: {
 		num: 19,
 		accuracy: 95,
@@ -5942,6 +6211,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Clever",
 	},
+
 	flyingpress: {
 		num: 560,
 		accuracy: 95,
@@ -5960,6 +6230,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {basePower: 170},
 		contestType: "Tough",
 	},
+
 	focusblast: {
 		num: 411,
 		accuracy: 75,
@@ -5979,6 +6250,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+
 	focusenergy: {
 		num: 116,
 		accuracy: true,
@@ -6009,6 +6281,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {accuracy: 1}},
 		contestType: "Cool",
 	},
+
 	focuspunch: {
 		num: 264,
 		accuracy: 94,
@@ -6046,6 +6319,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
+
 	followme: {
 		num: 266,
 		accuracy: true,
@@ -6083,6 +6357,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
+
 	forcepalm: {
 		num: 395,
 		accuracy: 94,
@@ -6100,6 +6375,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+
 	foresight: {
 		num: 193,
 		accuracy: true,
@@ -6134,6 +6410,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'crit2'},
 		contestType: "Clever",
 	},
+
 	forestscurse: {
 		num: 571,
 		accuracy: 94,
@@ -6155,6 +6432,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Clever",
 	},
+
 	foulplay: {
 		num: 492,
 		accuracy: 94,
@@ -6170,6 +6448,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Clever",
 	},
+
 	freezedry: {
 		num: 573,
 		accuracy: 94,
@@ -6190,6 +6469,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
+
 	freezeshock: {
 		num: 553,
 		accuracy: 90,
@@ -6219,6 +6499,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
+
 	freezingglare: {
 		num: 821,
 		accuracy: 94,
@@ -6235,6 +6516,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Psychic",
 	},
+
 	freezyfrost: {
 		num: 739,
 		accuracy: 90,
@@ -6256,6 +6538,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Clever",
 	},
+
 	frenzyplant: {
 		num: 338,
 		accuracy: 90,
@@ -6273,6 +6556,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Cool",
 	},
+
 	frostbreath: {
 		num: 524,
 		accuracy: 90,
@@ -6288,6 +6572,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
+
 	frustration: {
 		num: 218,
 		accuracy: 94,
@@ -6308,6 +6593,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Cute",
 	},
+
 	furyattack: {
 		num: 31,
 		accuracy: 85,
@@ -6323,6 +6609,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	furycutter: {
 		num: 210,
 		accuracy: 95,
@@ -6357,6 +6644,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Cool",
 	},
+
 	furyswipes: {
 		num: 154,
 		accuracy: 80,
@@ -6373,6 +6661,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 100},
 		contestType: "Tough",
 	},
+
 	fusionbolt: {
 		num: 559,
 		accuracy: 94,
@@ -6394,6 +6683,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 	fusionflare: {
 		num: 558,
 		accuracy: 94,
@@ -6415,6 +6705,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
+
 	futuresight: {
 		num: 248,
 		accuracy: 94,
@@ -6452,6 +6743,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
+
 	gastroacid: {
 		num: 380,
 		accuracy: 94,
@@ -6488,6 +6780,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Tough",
 	},
+
 	geargrind: {
 		num: 544,
 		accuracy: 85,
@@ -6506,6 +6799,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Clever",
 	},
+
 	gearup: {
 		num: 674,
 		accuracy: true,
@@ -6534,6 +6828,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
+
 	genesissupernova: {
 		num: 703,
 		accuracy: true,
@@ -6557,6 +6852,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
+
 	geomancy: {
 		num: 601,
 		accuracy: true,
@@ -6589,6 +6885,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Beautiful",
 	},
+
 	gigadrain: {
 		num: 202,
 		accuracy: 94,
@@ -6604,6 +6901,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Clever",
 	},
+
 	gigaimpact: {
 		num: 416,
 		accuracy: 90,
@@ -6621,6 +6919,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	gigatonhammer: {
 		num: 893,
 		accuracy: 94,
@@ -6646,6 +6945,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Steel",
 	},
+
 	gigavolthavoc: {
 		num: 646,
 		accuracy: true,
@@ -6662,6 +6962,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 	glaciallance: {
 		num: 824,
 		accuracy: 94,
@@ -6675,6 +6976,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "allAdjacentFoes",
 		type: "Ice",
 	},
+
 	glaciate: {
 		num: 549,
 		accuracy: 95,
@@ -6695,6 +6997,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
+
 	glaiverush: {
 		num: 862,
 		accuracy: 94,
@@ -6728,6 +7031,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Dragon",
 	},
+
 	glare: {
 		num: 137,
 		accuracy: 94,
@@ -6744,6 +7048,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Tough",
 	},
+
 	glitzyglow: {
 		num: 736,
 		accuracy: 95,
@@ -6762,6 +7067,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
+
 	gmaxbefuddle: {
 		num: 1000,
 		accuracy: true,
@@ -6791,6 +7097,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Cool",
 	},
+
 	gmaxcannonade: {
 		num: 1000,
 		accuracy: true,
@@ -6830,6 +7137,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Cool",
 	},
+
 	gmaxcentiferno: {
 		num: 1000,
 		accuracy: true,
@@ -6853,6 +7161,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Cool",
 	},
+
 	gmaxchistrike: {
 		num: 1000,
 		accuracy: true,
@@ -6895,6 +7204,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+
 	gmaxcuddle: {
 		num: 1000,
 		accuracy: true,
@@ -6918,6 +7228,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	gmaxdepletion: {
 		num: 1000,
 		accuracy: true,
@@ -6950,6 +7261,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dragon",
 		contestType: "Cool",
 	},
+
 	gmaxdrumsolo: {
 		num: 1000,
 		accuracy: true,
@@ -6967,6 +7279,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Cool",
 	},
+
 	gmaxfinale: {
 		num: 1000,
 		accuracy: true,
@@ -6990,6 +7303,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fairy",
 		contestType: "Cool",
 	},
+
 	gmaxfireball: {
 		num: 1000,
 		accuracy: true,
@@ -7007,6 +7321,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Cool",
 	},
+
 	gmaxfoamburst: {
 		num: 1000,
 		accuracy: true,
@@ -7030,6 +7345,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Cool",
 	},
+
 	gmaxgoldrush: {
 		num: 1000,
 		accuracy: true,
@@ -7053,6 +7369,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	gmaxgravitas: {
 		num: 1000,
 		accuracy: true,
@@ -7071,6 +7388,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
+
 	gmaxhydrosnipe: {
 		num: 1000,
 		accuracy: true,
@@ -7088,6 +7406,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Cool",
 	},
+
 	gmaxmalodor: {
 		num: 1000,
 		accuracy: true,
@@ -7110,6 +7429,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Cool",
 	},
+
 	gmaxmeltdown: {
 		num: 1000,
 		accuracy: true,
@@ -7133,6 +7453,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Cool",
 	},
+
 	gmaxoneblow: {
 		num: 1000,
 		accuracy: true,
@@ -7149,6 +7470,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Cool",
 	},
+
 	gmaxrapidflow: {
 		num: 1000,
 		accuracy: true,
@@ -7165,6 +7487,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Cool",
 	},
+
 	gmaxreplenish: {
 		num: 1000,
 		accuracy: true,
@@ -7196,6 +7519,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	gmaxresonance: {
 		num: 1000,
 		accuracy: true,
@@ -7215,6 +7539,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Cool",
 	},
+
 	gmaxsandblast: {
 		num: 1000,
 		accuracy: true,
@@ -7238,6 +7563,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ground",
 		contestType: "Cool",
 	},
+
 	gmaxsmite: {
 		num: 1000,
 		accuracy: true,
@@ -7261,6 +7587,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fairy",
 		contestType: "Cool",
 	},
+
 	gmaxsnooze: {
 		num: 1000,
 		accuracy: true,
@@ -7287,6 +7614,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Cool",
 	},
+
 	gmaxsteelsurge: {
 		num: 1000,
 		accuracy: true,
@@ -7326,6 +7654,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Cool",
 	},
+
 	gmaxstonesurge: {
 		num: 1000,
 		accuracy: true,
@@ -7349,6 +7678,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Cool",
 	},
+
 	gmaxstunshock: {
 		num: 1000,
 		accuracy: true,
@@ -7377,6 +7707,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 	gmaxsweetness: {
 		num: 1000,
 		accuracy: true,
@@ -7400,6 +7731,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Cool",
 	},
+
 	gmaxtartness: {
 		num: 1000,
 		accuracy: true,
@@ -7423,6 +7755,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Cool",
 	},
+
 	gmaxterror: {
 		num: 1000,
 		accuracy: true,
@@ -7446,6 +7779,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
+
 	gmaxvinelash: {
 		num: 1000,
 		accuracy: true,
@@ -7485,6 +7819,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Cool",
 	},
+
 	gmaxvolcalith: {
 		num: 1000,
 		accuracy: true,
@@ -7524,6 +7859,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Rock",
 		contestType: "Cool",
 	},
+
 	gmaxvoltcrash: {
 		num: 1000,
 		accuracy: true,
@@ -7547,6 +7883,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 	gmaxwildfire: {
 		num: 1000,
 		accuracy: true,
@@ -7586,6 +7923,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Cool",
 	},
+
 	gmaxwindrage: {
 		num: 1000,
 		accuracy: true,
@@ -7626,6 +7964,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Cool",
 	},
+
 	grassknot: {
 		num: 447,
 		accuracy: 94,
@@ -7668,6 +8007,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Cute",
 	},
+
 	grasspledge: {
 		num: 520,
 		accuracy: 94,
@@ -7730,6 +8070,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Beautiful",
 	},
+
 	grasswhistle: {
 		num: 320,
 		accuracy: 75,
@@ -7747,6 +8088,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
+
 	grassyglide: {
 		num: 803,
 		accuracy: 94,
@@ -7766,6 +8108,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Cool",
 	},
+
 	grassyterrain: {
 		num: 580,
 		accuracy: true,
@@ -7824,6 +8167,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Beautiful",
 	},
+
 	gravapple: {
 		num: 788,
 		accuracy: 94,
@@ -7847,6 +8191,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Grass",
 	},
+
 	gravity: {
 		num: 356,
 		accuracy: true,
@@ -7937,6 +8282,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
+
 	growl: {
 		num: 45,
 		accuracy: 94,
@@ -7955,6 +8301,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Cute",
 	},
+
 	growth: {
 		num: 74,
 		accuracy: true,
@@ -7977,6 +8324,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 1}},
 		contestType: "Beautiful",
 	},
+
 	grudge: {
 		num: 288,
 		accuracy: true,
@@ -8018,6 +8366,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'redirect'},
 		contestType: "Tough",
 	},
+
 	guardianofalola: {
 		num: 698,
 		accuracy: true,
@@ -8045,6 +8394,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fairy",
 		contestType: "Tough",
 	},
+
 	guardsplit: {
 		num: 470,
 		accuracy: true,
@@ -8069,6 +8419,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
+
 	guardswap: {
 		num: 385,
 		accuracy: true,
@@ -8099,6 +8450,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
+
 	guillotine: {
 		num: 12,
 		accuracy: 30,
@@ -8116,6 +8468,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Cool",
 	},
+
 	gunkshot: {
 		num: 441,
 		accuracy: 80,
@@ -8133,6 +8486,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Tough",
 	},
+
 	gust: {
 		num: 16,
 		accuracy: 94,
@@ -8147,6 +8501,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Clever",
 	},
+
 	gyroball: {
 		num: 360,
 		accuracy: 94,
@@ -8170,6 +8525,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Cool",
 	},
+
 	hail: {
 		num: 258,
 		accuracy: true,
@@ -8187,6 +8543,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Beautiful",
 	},
+
 	hammerarm: {
 		num: 359,
 		accuracy: 90,
@@ -8206,6 +8563,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
+
 	happyhour: {
 		num: 603,
 		accuracy: true,
@@ -8224,6 +8582,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Cute",
 	},
+
 	harden: {
 		num: 106,
 		accuracy: true,
@@ -8242,6 +8601,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Tough",
 	},
+
 	haze: {
 		num: 114,
 		accuracy: true,
@@ -8263,6 +8623,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'heal'},
 		contestType: "Beautiful",
 	},
+
 	headbutt: {
 		num: 29,
 		accuracy: 94,
@@ -8280,6 +8641,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	headcharge: {
 		num: 543,
 		accuracy: 94,
@@ -8296,6 +8658,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	headlongrush: {
 		num: 838,
 		accuracy: 94,
@@ -8315,6 +8678,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Ground",
 	},
+
 	headsmash: {
 		num: 457,
 		accuracy: 80,
@@ -8330,6 +8694,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Rock",
 		contestType: "Tough",
 	},
+
 	healbell: {
 		num: 215,
 		accuracy: true,
@@ -8355,6 +8720,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'heal'},
 		contestType: "Beautiful",
 	},
+
 	healblock: {
 		num: 377,
 		accuracy: 94,
@@ -8420,6 +8786,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 2}},
 		contestType: "Clever",
 	},
+
 	healingwish: {
 		num: 361,
 		accuracy: true,
@@ -8453,6 +8820,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Beautiful",
 	},
+
 	healorder: {
 		num: 456,
 		accuracy: true,
@@ -8470,6 +8838,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
+
 	healpulse: {
 		num: 505,
 		accuracy: true,
@@ -8501,6 +8870,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
+
 	heartstamp: {
 		num: 531,
 		accuracy: 94,
@@ -8519,6 +8889,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Cute",
 	},
+
 	heartswap: {
 		num: 391,
 		accuracy: true,
@@ -8549,6 +8920,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'crit2'},
 		contestType: "Clever",
 	},
+
 	heatcrash: {
 		num: 535,
 		accuracy: 94,
@@ -8590,6 +8962,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Tough",
 	},
+
 	heatwave: {
 		num: 257,
 		accuracy: 90,
@@ -8607,6 +8980,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
+
 	heavyslam: {
 		num: 484,
 		accuracy: 94,
@@ -8648,6 +9022,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Tough",
 	},
+
 	helpinghand: {
 		num: 270,
 		accuracy: true,
@@ -8683,6 +9058,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
+
 	hex: {
 		num: 506,
 		accuracy: 94,
@@ -8705,6 +9081,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {basePower: 160},
 		contestType: "Clever",
 	},
+
 	hiddenpower: {
 		num: 237,
 		accuracy: 94,
@@ -8723,6 +9100,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Clever",
 	},
+
 	hiddenpowerbug: {
 		num: 237,
 		accuracy: 94,
@@ -8739,6 +9117,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Clever",
 	},
+
 	hiddenpowerdark: {
 		num: 237,
 		accuracy: 94,
@@ -8755,6 +9134,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Clever",
 	},
+
 	hiddenpowerdragon: {
 		num: 237,
 		accuracy: 94,
@@ -8771,6 +9151,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dragon",
 		contestType: "Clever",
 	},
+
 	hiddenpowerelectric: {
 		num: 237,
 		accuracy: 94,
@@ -8787,6 +9168,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Clever",
 	},
+
 	hiddenpowerfighting: {
 		num: 237,
 		accuracy: 94,
@@ -8803,6 +9185,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Clever",
 	},
+
 	hiddenpowerfire: {
 		num: 237,
 		accuracy: 94,
@@ -8819,6 +9202,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Clever",
 	},
+
 	hiddenpowerflying: {
 		num: 237,
 		accuracy: 94,
@@ -8835,6 +9219,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Clever",
 	},
+
 	hiddenpowerghost: {
 		num: 237,
 		accuracy: 94,
@@ -8851,6 +9236,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Clever",
 	},
+
 	hiddenpowergrass: {
 		num: 237,
 		accuracy: 94,
@@ -8867,6 +9253,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Clever",
 	},
+
 	hiddenpowerground: {
 		num: 237,
 		accuracy: 94,
@@ -8883,6 +9270,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ground",
 		contestType: "Clever",
 	},
+
 	hiddenpowerice: {
 		num: 237,
 		accuracy: 94,
@@ -8899,6 +9287,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Clever",
 	},
+
 	hiddenpowerpoison: {
 		num: 237,
 		accuracy: 94,
@@ -8915,6 +9304,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Clever",
 	},
+
 	hiddenpowerpsychic: {
 		num: 237,
 		accuracy: 94,
@@ -8931,6 +9321,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
+
 	hiddenpowerrock: {
 		num: 237,
 		accuracy: 94,
@@ -8947,6 +9338,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Rock",
 		contestType: "Clever",
 	},
+
 	hiddenpowersteel: {
 		num: 237,
 		accuracy: 94,
@@ -8963,6 +9355,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Clever",
 	},
+
 	hiddenpowerwater: {
 		num: 237,
 		accuracy: 94,
@@ -8979,6 +9372,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Clever",
 	},
+
 	highhorsepower: {
 		num: 667,
 		accuracy: 95,
@@ -8993,6 +9387,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ground",
 		contestType: "Tough",
 	},
+
 	highjumpkick: {
 		num: 136,
 		accuracy: 90,
@@ -9011,6 +9406,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+
 	holdback: {
 		num: 610,
 		accuracy: 94,
@@ -9029,6 +9425,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	holdhands: {
 		num: 607,
 		accuracy: true,
@@ -9044,6 +9441,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Cute",
 	},
+
 	honeclaws: {
 		num: 468,
 		accuracy: true,
@@ -9063,6 +9461,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1}},
 		contestType: "Cute",
 	},
+
 	hornattack: {
 		num: 30,
 		accuracy: 94,
@@ -9077,6 +9476,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	horndrill: {
 		num: 32,
 		accuracy: 30,
@@ -9094,6 +9494,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Cool",
 	},
+
 	hornleech: {
 		num: 532,
 		accuracy: 94,
@@ -9109,6 +9510,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Tough",
 	},
+
 	howl: {
 		num: 336,
 		accuracy: true,
@@ -9127,6 +9529,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1}},
 		contestType: "Cool",
 	},
+
 	hurricane: {
 		num: 542,
 		accuracy: 75,
@@ -9156,6 +9559,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Tough",
 	},
+
 	hydrocannon: {
 		num: 308,
 		accuracy: 90,
@@ -9173,6 +9577,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
+
 	hydropump: {
 		num: 56,
 		accuracy: 80,
@@ -9187,6 +9592,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
+
 	hydrosteam: {
 		num: 876,
 		accuracy: 94,
@@ -9202,6 +9608,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Water",
 	},
+
 	hydrovortex: {
 		num: 642,
 		accuracy: true,
@@ -9218,6 +9625,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Cool",
 	},
+
 	hyperbeam: {
 		num: 63,
 		accuracy: 90,
@@ -9235,6 +9643,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	hyperdrill: {
 		num: 887,
 		accuracy: 94,
@@ -9249,6 +9658,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Clever",
 	},
+
 	hyperfang: {
 		num: 158,
 		accuracy: 90,
@@ -9267,6 +9677,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	hyperspacefury: {
 		num: 621,
 		accuracy: true,
@@ -9301,6 +9712,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Tough",
 	},
+
 	hyperspacehole: {
 		num: 593,
 		accuracy: true,
@@ -9316,6 +9728,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
+
 	hypervoice: {
 		num: 304,
 		accuracy: 94,
@@ -9330,6 +9743,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	hypnosis: {
 		num: 95,
 		accuracy: 75,
@@ -9346,6 +9760,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
+
 	iceball: {
 		num: 301,
 		accuracy: 90,
@@ -9417,6 +9832,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
+
 	icebeam: {
 		num: 58,
 		accuracy: 94,
@@ -9434,6 +9850,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
+
 	iceburn: {
 		num: 554,
 		accuracy: 90,
@@ -9463,6 +9880,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
+
 	icefang: {
 		num: 423,
 		accuracy: 95,
@@ -9485,6 +9903,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Cool",
 	},
+
 	icehammer: {
 		num: 665,
 		accuracy: 90,
@@ -9504,6 +9923,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Tough",
 	},
+
 	icepunch: {
 		num: 8,
 		accuracy: 94,
@@ -9521,6 +9941,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
+
 	iceshard: {
 		num: 420,
 		accuracy: 94,
@@ -9535,6 +9956,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
+
 	icespinner: {
 		num: 861,
 		accuracy: 94,
@@ -9554,6 +9976,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Ice",
 	},
+
 	iciclecrash: {
 		num: 556,
 		accuracy: 90,
@@ -9571,6 +9994,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
+
 	iciclespear: {
 		num: 333,
 		accuracy: 94,
@@ -9588,6 +10012,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Beautiful",
 	},
+
 	icywind: {
 		num: 196,
 		accuracy: 95,
@@ -9607,6 +10032,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
+
 	imprison: {
 		num: 286,
 		accuracy: true,
@@ -9643,6 +10069,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 2}},
 		contestType: "Clever",
 	},
+
 	incinerate: {
 		num: 510,
 		accuracy: 94,
@@ -9663,6 +10090,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Tough",
 	},
+
 	infernalparade: {
 		num: 844,
 		accuracy: 94,
@@ -9684,6 +10112,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Ghost",
 	},
+
 	inferno: {
 		num: 517,
 		accuracy: 75,
@@ -9701,6 +10130,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
+
 	infernooverdrive: {
 		num: 640,
 		accuracy: true,
@@ -9717,6 +10147,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Cool",
 	},
+
 	infestation: {
 		num: 611,
 		accuracy: 94,
@@ -9732,6 +10163,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Cute",
 	},
+
 	ingrain: {
 		num: 275,
 		accuracy: true,
@@ -9765,6 +10197,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
 	},
+
 	instruct: {
 		num: 689,
 		accuracy: true,
@@ -9800,6 +10233,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
+
 	iondeluge: {
 		num: 569,
 		accuracy: true,
@@ -9831,6 +10265,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 1}},
 		contestType: "Beautiful",
 	},
+
 	irondefense: {
 		num: 334,
 		accuracy: true,
@@ -9849,6 +10284,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Tough",
 	},
+
 	ironhead: {
 		num: 442,
 		accuracy: 94,
@@ -9866,6 +10302,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Tough",
 	},
+
 	irontail: {
 		num: 231,
 		accuracy: 75,
@@ -9885,6 +10322,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Cool",
 	},
+
 	jawlock: {
 		num: 746,
 		accuracy: 94,
@@ -9902,6 +10340,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Dark",
 	},
+
 	jetpunch: {
 		num: 857,
 		accuracy: 94,
@@ -9917,6 +10356,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Cool",
 	},
+
 	judgment: {
 		num: 449,
 		accuracy: 94,
@@ -9938,6 +10378,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
+
 	jumpkick: {
 		num: 26,
 		accuracy: 95,
@@ -9957,6 +10398,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+
 	junglehealing: {
 		num: 816,
 		accuracy: true,
@@ -9974,6 +10416,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "allies",
 		type: "Grass",
 	},
+
 	karatechop: {
 		num: 2,
 		accuracy: 94,
@@ -9990,6 +10433,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
+
 	kinesis: {
 		num: 134,
 		accuracy: 80,
@@ -10009,6 +10453,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {evasion: 1}},
 		contestType: "Clever",
 	},
+
 	kingsshield: {
 		num: 588,
 		accuracy: true,
@@ -10068,6 +10513,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cool",
 	},
+
 	knockoff: {
 		num: 282,
 		accuracy: 94,
@@ -10097,6 +10543,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Clever",
 	},
+
 	kowtowcleave: {
 		num: 869,
 		accuracy: true,
@@ -10110,6 +10557,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Dark",
 	},
+
 	landswrath: {
 		num: 616,
 		accuracy: 94,
@@ -10126,6 +10574,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {basePower: 185},
 		contestType: "Beautiful",
 	},
+
 	laserfocus: {
 		num: 673,
 		accuracy: true,
@@ -10163,6 +10612,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1}},
 		contestType: "Cool",
 	},
+
 	lashout: {
 		num: 808,
 		accuracy: 94,
@@ -10182,6 +10632,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Dark",
 	},
+
 	lastresort: {
 		num: 387,
 		accuracy: 94,
@@ -10208,6 +10659,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cute",
 	},
+
 	lastrespects: {
 		num: 854,
 		accuracy: 94,
@@ -10224,6 +10676,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Ghost",
 	},
+
 	lavaplume: {
 		num: 436,
 		accuracy: 94,
@@ -10241,6 +10694,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Tough",
 	},
+
 	leafage: {
 		num: 670,
 		accuracy: 94,
@@ -10255,6 +10709,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Tough",
 	},
+
 	leafblade: {
 		num: 348,
 		accuracy: 94,
@@ -10270,6 +10725,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Cool",
 	},
+
 	leafstorm: {
 		num: 437,
 		accuracy: 90,
@@ -10289,6 +10745,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Beautiful",
 	},
+
 	leaftornado: {
 		num: 536,
 		accuracy: 90,
@@ -10309,6 +10766,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Cool",
 	},
+
 	leechlife: {
 		num: 141,
 		accuracy: 94,
@@ -10324,6 +10782,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Clever",
 	},
+
 	leechseed: {
 		num: 73,
 		accuracy: 90,
@@ -10360,6 +10819,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
+
 	leer: {
 		num: 43,
 		accuracy: 94,
@@ -10378,6 +10838,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1}},
 		contestType: "Cool",
 	},
+
 	letssnuggleforever: {
 		num: 726,
 		accuracy: true,
@@ -10394,6 +10855,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fairy",
 		contestType: "Cool",
 	},
+
 	lick: {
 		num: 122,
 		accuracy: 94,
@@ -10411,6 +10873,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Cute",
 	},
+
 	lifedew: {
 		num: 791,
 		accuracy: true,
@@ -10425,6 +10888,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "allies",
 		type: "Water",
 	},
+
 	lightofruin: {
 		num: 617,
 		accuracy: 90,
@@ -10441,6 +10905,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fairy",
 		contestType: "Beautiful",
 	},
+
 	lightscreen: {
 		num: 113,
 		accuracy: true,
@@ -10483,6 +10948,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Beautiful",
 	},
+
 	lightthatburnsthesky: {
 		num: 723,
 		accuracy: true,
@@ -10503,6 +10969,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
+
 	liquidation: {
 		num: 710,
 		accuracy: 94,
@@ -10522,6 +10989,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Cool",
 	},
+
 	lockon: {
 		num: 199,
 		accuracy: true,
@@ -10555,6 +11023,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
+
 	lovelykiss: {
 		num: 142,
 		accuracy: 75,
@@ -10572,6 +11041,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Beautiful",
 	},
+
 	lowkick: {
 		num: 67,
 		accuracy: 94,
@@ -10613,6 +11083,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {basePower: 160},
 		contestType: "Tough",
 	},
+
 	lowsweep: {
 		num: 490,
 		accuracy: 94,
@@ -10632,6 +11103,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Clever",
 	},
+
 	luckychant: {
 		num: 381,
 		accuracy: true,
@@ -10661,6 +11133,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {evasion: 1}},
 		contestType: "Cute",
 	},
+
 	luminacrash: {
 		num: 855,
 		accuracy: 94,
@@ -10679,6 +11152,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Psychic",
 	},
+
 	lunarblessing: {
 		num: 849,
 		accuracy: true,
@@ -10697,6 +11171,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "allies",
 		type: "Psychic",
 	},
+
 	lunardance: {
 		num: 461,
 		accuracy: true,
@@ -10739,6 +11214,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Beautiful",
 	},
+
 	lunge: {
 		num: 679,
 		accuracy: 94,
@@ -10758,6 +11234,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Cute",
 	},
+
 	lusterpurge: {
 		num: 295,
 		accuracy: 94,
@@ -10778,6 +11255,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
+
 	machpunch: {
 		num: 183,
 		accuracy: 94,
@@ -10792,6 +11270,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+
 	magicalleaf: {
 		num: 345,
 		accuracy: true,
@@ -10806,6 +11285,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Beautiful",
 	},
+
 	magicaltorque: {
 		num: 900,
 		accuracy: 94,
@@ -10825,6 +11305,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fairy",
 	},
+
 	magiccoat: {
 		num: 277,
 		accuracy: true,
@@ -10872,6 +11353,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 2}},
 		contestType: "Beautiful",
 	},
+
 	magicpowder: {
 		num: 750,
 		accuracy: 94,
@@ -10889,6 +11371,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Psychic",
 	},
+
 	magicroom: {
 		num: 478,
 		accuracy: true,
@@ -10934,6 +11417,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
 	},
+
 	magmastorm: {
 		num: 463,
 		accuracy: 75,
@@ -10949,6 +11433,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Tough",
 	},
+
 	magnetbomb: {
 		num: 443,
 		accuracy: true,
@@ -10964,6 +11449,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Cool",
 	},
+
 	magneticflux: {
 		num: 602,
 		accuracy: true,
@@ -10992,6 +11478,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
 	},
+
 	magnetrise: {
 		num: 393,
 		accuracy: true,
@@ -11030,6 +11517,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {evasion: 1}},
 		contestType: "Clever",
 	},
+
 	magnitude: {
 		num: 222,
 		accuracy: 94,
@@ -11075,6 +11563,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 140},
 		contestType: "Tough",
 	},
+
 	makeitrain: {
 		num: 874,
 		accuracy: 94,
@@ -11094,6 +11583,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Beautiful",
 	},
+
 	maliciousmoonsault: {
 		num: 696,
 		accuracy: true,
@@ -11110,6 +11600,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Cool",
 	},
+
 	matblock: {
 		num: 561,
 		accuracy: true,
@@ -11159,6 +11650,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Cool",
 	},
+
 	maxairstream: {
 		num: 766,
 		accuracy: true,
@@ -11182,6 +11674,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Cool",
 	},
+
 	maxdarkness: {
 		num: 772,
 		accuracy: true,
@@ -11205,6 +11698,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Cool",
 	},
+
 	maxflare: {
 		num: 757,
 		accuracy: true,
@@ -11226,6 +11720,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Cool",
 	},
+
 	maxflutterby: {
 		num: 758,
 		accuracy: true,
@@ -11249,6 +11744,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Cool",
 	},
+
 	maxgeyser: {
 		num: 765,
 		accuracy: true,
@@ -11270,6 +11766,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Cool",
 	},
+
 	maxguard: {
 		num: 743,
 		accuracy: true,
@@ -11320,6 +11817,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	maxhailstorm: {
 		num: 763,
 		accuracy: true,
@@ -11341,6 +11839,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Cool",
 	},
+
 	maxknuckle: {
 		num: 761,
 		accuracy: true,
@@ -11364,6 +11863,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+
 	maxlightning: {
 		num: 759,
 		accuracy: true,
@@ -11385,6 +11885,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 	maxmindstorm: {
 		num: 769,
 		accuracy: true,
@@ -11406,6 +11907,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
+
 	maxooze: {
 		num: 764,
 		accuracy: true,
@@ -11429,6 +11931,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Cool",
 	},
+
 	maxovergrowth: {
 		num: 773,
 		accuracy: true,
@@ -11450,6 +11953,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Cool",
 	},
+
 	maxphantasm: {
 		num: 762,
 		accuracy: true,
@@ -11473,6 +11977,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
+
 	maxquake: {
 		num: 771,
 		accuracy: true,
@@ -11496,6 +12001,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ground",
 		contestType: "Cool",
 	},
+
 	maxrockfall: {
 		num: 770,
 		accuracy: true,
@@ -11517,6 +12023,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Rock",
 		contestType: "Cool",
 	},
+
 	maxstarfall: {
 		num: 767,
 		accuracy: true,
@@ -11538,6 +12045,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fairy",
 		contestType: "Cool",
 	},
+
 	maxsteelspike: {
 		num: 774,
 		accuracy: true,
@@ -11561,6 +12069,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Cool",
 	},
+
 	maxstrike: {
 		num: 760,
 		accuracy: true,
@@ -11584,6 +12093,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	maxwyrmwind: {
 		num: 768,
 		accuracy: true,
@@ -11607,6 +12117,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dragon",
 		contestType: "Cool",
 	},
+
 	meanlook: {
 		num: 212,
 		accuracy: true,
@@ -11625,6 +12136,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Beautiful",
 	},
+
 	meditate: {
 		num: 96,
 		accuracy: true,
@@ -11644,6 +12156,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1}},
 		contestType: "Beautiful",
 	},
+
 	mefirst: {
 		num: 382,
 		accuracy: true,
@@ -11682,6 +12195,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 2}},
 		contestType: "Clever",
 	},
+
 	megadrain: {
 		num: 72,
 		accuracy: 94,
@@ -11698,6 +12212,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {basePower: 120},
 		contestType: "Clever",
 	},
+
 	megahorn: {
 		num: 224,
 		accuracy: 85,
@@ -11712,6 +12227,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Cool",
 	},
+
 	megakick: {
 		num: 25,
 		accuracy: 75,
@@ -11726,6 +12242,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	megapunch: {
 		num: 5,
 		accuracy: 85,
@@ -11740,6 +12257,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	memento: {
 		num: 262,
 		accuracy: 94,
@@ -11760,6 +12278,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'healreplacement'},
 		contestType: "Tough",
 	},
+
 	menacingmoonrazemaelstrom: {
 		num: 725,
 		accuracy: true,
@@ -11777,6 +12296,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
+
 	metalburst: {
 		num: 368,
 		accuracy: 94,
@@ -11808,6 +12328,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Cool",
 	},
+
 	metalclaw: {
 		num: 232,
 		accuracy: 95,
@@ -11829,6 +12350,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Cool",
 	},
+
 	metalsound: {
 		num: 319,
 		accuracy: 85,
@@ -11847,6 +12369,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
+
 	meteorassault: {
 		num: 794,
 		accuracy: 94,
@@ -11864,6 +12387,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fighting",
 	},
+
 	meteorbeam: {
 		num: 800,
 		accuracy: 90,
@@ -11889,6 +12413,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Rock",
 	},
+
 	meteormash: {
 		num: 309,
 		accuracy: 90,
@@ -11910,6 +12435,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Cool",
 	},
+
 	metronome: {
 		num: 118,
 		accuracy: true,
@@ -11943,6 +12469,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cute",
 	},
+
 	milkdrink: {
 		num: 208,
 		accuracy: true,
@@ -11959,6 +12486,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
+
 	mimic: {
 		num: 102,
 		accuracy: true,
@@ -11998,6 +12526,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {accuracy: 1}},
 		contestType: "Cute",
 	},
+
 	mindblown: {
 		num: 720,
 		accuracy: 94,
@@ -12023,6 +12552,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Cool",
 	},
+
 	mindreader: {
 		num: 170,
 		accuracy: true,
@@ -12046,6 +12576,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
+
 	minimize: {
 		num: 107,
 		accuracy: true,
@@ -12086,6 +12617,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
+
 	miracleeye: {
 		num: 357,
 		accuracy: true,
@@ -12120,6 +12652,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
+
 	mirrorcoat: {
 		num: 243,
 		accuracy: 94,
@@ -12165,6 +12698,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Beautiful",
 	},
+
 	mirrormove: {
 		num: 119,
 		accuracy: true,
@@ -12189,6 +12723,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 2}},
 		contestType: "Clever",
 	},
+
 	mirrorshot: {
 		num: 429,
 		accuracy: 85,
@@ -12209,6 +12744,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Beautiful",
 	},
+
 	mist: {
 		num: 54,
 		accuracy: true,
@@ -12252,6 +12788,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'heal'},
 		contestType: "Beautiful",
 	},
+
 	mistball: {
 		num: 296,
 		accuracy: 94,
@@ -12272,6 +12809,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
+
 	mistyexplosion: {
 		num: 802,
 		accuracy: 94,
@@ -12292,6 +12830,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "allAdjacent",
 		type: "Fairy",
 	},
+
 	mistyterrain: {
 		num: 581,
 		accuracy: true,
@@ -12350,6 +12889,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Beautiful",
 	},
+
 	moonblast: {
 		num: 585,
 		accuracy: 94,
@@ -12369,6 +12909,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fairy",
 		contestType: "Beautiful",
 	},
+
 	moongeistbeam: {
 		num: 714,
 		accuracy: 94,
@@ -12385,6 +12926,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
+
 	moonlight: {
 		num: 236,
 		accuracy: true,
@@ -12422,6 +12964,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
+
 	morningsun: {
 		num: 234,
 		accuracy: true,
@@ -12459,6 +13002,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
+
 	mortalspin: {
 		num: 866,
 		accuracy: 94,
@@ -12503,6 +13047,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "allAdjacentFoes",
 		type: "Poison",
 	},
+
 	mountaingale: {
 		num: 836,
 		accuracy: 85,
@@ -12520,6 +13065,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Ice",
 	},
+
 	mudbomb: {
 		num: 426,
 		accuracy: 85,
@@ -12540,6 +13086,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ground",
 		contestType: "Cute",
 	},
+
 	mudshot: {
 		num: 341,
 		accuracy: 95,
@@ -12559,6 +13106,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ground",
 		contestType: "Tough",
 	},
+
 	mudslap: {
 		num: 189,
 		accuracy: 94,
@@ -12578,6 +13126,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ground",
 		contestType: "Cute",
 	},
+
 	mudsport: {
 		num: 300,
 		accuracy: true,
@@ -12613,6 +13162,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Cute",
 	},
+
 	muddywater: {
 		num: 330,
 		accuracy: 85,
@@ -12632,6 +13182,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Tough",
 	},
+
 	multiattack: {
 		num: 718,
 		accuracy: 94,
@@ -12653,6 +13204,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 95},
 		contestType: "Tough",
 	},
+
 	mysticalfire: {
 		num: 595,
 		accuracy: 94,
@@ -12672,6 +13224,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
+
 	mysticalpower: {
 		num: 832,
 		accuracy: 90,
@@ -12693,6 +13246,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Psychic",
 	},
+
 	nastyplot: {
 		num: 417,
 		accuracy: true,
@@ -12711,6 +13265,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
+
 	naturalgift: {
 		num: 363,
 		accuracy: 94,
@@ -12745,6 +13300,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Clever",
 	},
+
 	naturepower: {
 		num: 267,
 		accuracy: true,
@@ -12774,6 +13330,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
+
 	naturesmadness: {
 		num: 717,
 		accuracy: 90,
@@ -12792,6 +13349,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fairy",
 		contestType: "Tough",
 	},
+
 	needlearm: {
 		num: 302,
 		accuracy: 94,
@@ -12810,6 +13368,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Clever",
 	},
+
 	neverendingnightmare: {
 		num: 636,
 		accuracy: true,
@@ -12826,6 +13385,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
+
 	nightdaze: {
 		num: 539,
 		accuracy: 95,
@@ -12845,6 +13405,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Cool",
 	},
+
 	nightmare: {
 		num: 171,
 		accuracy: 94,
@@ -12875,6 +13436,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
+
 	nightshade: {
 		num: 101,
 		accuracy: 94,
@@ -12890,6 +13452,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Clever",
 	},
+
 	nightslash: {
 		num: 400,
 		accuracy: 94,
@@ -12905,6 +13468,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Cool",
 	},
+
 	nobleroar: {
 		num: 568,
 		accuracy: 94,
@@ -12924,6 +13488,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Tough",
 	},
+
 	noretreat: {
 		num: 748,
 		accuracy: true,
@@ -12959,6 +13524,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "self",
 		type: "Fighting",
 	},
+
 	noxioustorque: {
 		num: 898,
 		accuracy: 94,
@@ -12978,6 +13544,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Poison",
 	},
+
 	nuzzle: {
 		num: 609,
 		accuracy: 94,
@@ -12995,6 +13562,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cute",
 	},
+
 	oblivionwing: {
 		num: 613,
 		accuracy: 94,
@@ -13011,6 +13579,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Cool",
 	},
+
 	obstruct: {
 		num: 792,
 		accuracy: 94,
@@ -13068,6 +13637,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "self",
 		type: "Dark",
 	},
+
 	oceanicoperetta: {
 		num: 697,
 		accuracy: true,
@@ -13084,6 +13654,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Cool",
 	},
+
 	octazooka: {
 		num: 190,
 		accuracy: 85,
@@ -13104,6 +13675,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Tough",
 	},
+
 	octolock: {
 		num: 753,
 		accuracy: 94,
@@ -13140,6 +13712,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fighting",
 	},
+
 	odorsleuth: {
 		num: 316,
 		accuracy: true,
@@ -13160,6 +13733,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1}},
 		contestType: "Clever",
 	},
+
 	ominouswind: {
 		num: 466,
 		accuracy: 94,
@@ -13186,6 +13760,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Beautiful",
 	},
+
 	orderup: {
 		num: 856,
 		accuracy: 94,
@@ -13216,6 +13791,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Dragon",
 	},
+
 	originpulse: {
 		num: 618,
 		accuracy: 85,
@@ -13229,6 +13805,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
+
 	outrage: {
 		num: 200,
 		accuracy: 94,
@@ -13251,6 +13828,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dragon",
 		contestType: "Cool",
 	},
+
 	overdrive: {
 		num: 786,
 		accuracy: 94,
@@ -13264,6 +13842,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "allAdjacentFoes",
 		type: "Electric",
 	},
+
 	overheat: {
 		num: 315,
 		accuracy: 90,
@@ -13283,6 +13862,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
+
 	painsplit: {
 		num: 220,
 		accuracy: true,
@@ -13307,6 +13887,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
+
 	paleowave: {
 		num: 0,
 		accuracy: 94,
@@ -13327,6 +13908,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Rock",
 		contestType: "Beautiful",
 	},
+
 	paraboliccharge: {
 		num: 570,
 		accuracy: 94,
@@ -13342,6 +13924,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Clever",
 	},
+
 	partingshot: {
 		num: 575,
 		accuracy: 94,
@@ -13364,6 +13947,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'healreplacement'},
 		contestType: "Cool",
 	},
+
 	payback: {
 		num: 371,
 		accuracy: 94,
@@ -13386,6 +13970,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Tough",
 	},
+
 	payday: {
 		num: 6,
 		accuracy: 94,
@@ -13400,6 +13985,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Clever",
 	},
+
 	peck: {
 		num: 64,
 		accuracy: 94,
@@ -13414,6 +14000,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Cool",
 	},
+
 	perishsong: {
 		num: 195,
 		accuracy: true,
@@ -13460,6 +14047,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
+
 	petalblizzard: {
 		num: 572,
 		accuracy: 94,
@@ -13474,6 +14062,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Beautiful",
 	},
+
 	petaldance: {
 		num: 80,
 		accuracy: 94,
@@ -13496,6 +14085,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Beautiful",
 	},
+
 	phantomforce: {
 		num: 566,
 		accuracy: 94,
@@ -13526,6 +14116,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
+
 	photongeyser: {
 		num: 722,
 		accuracy: 94,
@@ -13545,6 +14136,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
+
 	pikapapow: {
 		num: 732,
 		accuracy: true,
@@ -13565,6 +14157,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cute",
 	},
+
 	pinmissile: {
 		num: 42,
 		accuracy: 95,
@@ -13582,6 +14175,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Cool",
 	},
+
 	plasmafists: {
 		num: 721,
 		accuracy: 94,
@@ -13598,6 +14192,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 	playnice: {
 		num: 589,
 		accuracy: true,
@@ -13616,6 +14211,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Cute",
 	},
+
 	playrough: {
 		num: 583,
 		accuracy: 90,
@@ -13635,6 +14231,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fairy",
 		contestType: "Cute",
 	},
+
 	pluck: {
 		num: 365,
 		accuracy: 94,
@@ -13660,6 +14257,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Cute",
 	},
+
 	poisonfang: {
 		num: 305,
 		accuracy: 94,
@@ -13677,6 +14275,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Clever",
 	},
+
 	poisongas: {
 		num: 139,
 		accuracy: 90,
@@ -13693,6 +14292,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
+
 	poisonjab: {
 		num: 398,
 		accuracy: 94,
@@ -13710,6 +14310,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Tough",
 	},
+
 	poisonpowder: {
 		num: 77,
 		accuracy: 75,
@@ -13726,6 +14327,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
+
 	poisonsting: {
 		num: 40,
 		accuracy: 94,
@@ -13743,6 +14345,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Clever",
 	},
+
 	poisontail: {
 		num: 342,
 		accuracy: 94,
@@ -13761,6 +14364,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Clever",
 	},
+
 	pollenpuff: {
 		num: 676,
 		accuracy: 94,
@@ -13789,6 +14393,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Cute",
 	},
+
 	poltergeist: {
 		num: 809,
 		accuracy: 90,
@@ -13808,6 +14413,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Ghost",
 	},
+
 	populationbomb: {
 		num: 860,
 		accuracy: 90,
@@ -13823,6 +14429,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Normal",
 	},
+
 	pounce: {
 		num: 884,
 		accuracy: 94,
@@ -13842,6 +14449,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Cute",
 	},
+
 	pound: {
 		num: 1,
 		accuracy: 94,
@@ -13856,6 +14464,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	powder: {
 		num: 600,
 		accuracy: 94,
@@ -13888,6 +14497,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 2}},
 		contestType: "Clever",
 	},
+
 	powdersnow: {
 		num: 181,
 		accuracy: 94,
@@ -13905,6 +14515,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
+
 	powergem: {
 		num: 408,
 		accuracy: 94,
@@ -13919,6 +14530,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Rock",
 		contestType: "Beautiful",
 	},
+
 	powershift: {
 		num: 829,
 		accuracy: true,
@@ -13959,6 +14571,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "self",
 		type: "Normal",
 	},
+
 	powersplit: {
 		num: 471,
 		accuracy: true,
@@ -13983,6 +14596,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
+
 	powerswap: {
 		num: 384,
 		accuracy: true,
@@ -14013,6 +14627,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
+
 	powertrick: {
 		num: 379,
 		accuracy: true,
@@ -14054,6 +14669,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1}},
 		contestType: "Clever",
 	},
+
 	powertrip: {
 		num: 681,
 		accuracy: 94,
@@ -14075,6 +14691,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Clever",
 	},
+
 	poweruppunch: {
 		num: 612,
 		accuracy: 94,
@@ -14097,6 +14714,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
+
 	powerwhip: {
 		num: 438,
 		accuracy: 85,
@@ -14111,6 +14729,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Tough",
 	},
+
 	precipiceblades: {
 		num: 619,
 		accuracy: 85,
@@ -14124,6 +14743,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ground",
 		contestType: "Cool",
 	},
+
 	present: {
 		num: 217,
 		accuracy: 90,
@@ -14151,6 +14771,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cute",
 	},
+
 	prismaticlaser: {
 		num: 711,
 		accuracy: 94,
@@ -14169,6 +14790,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
+
 	protect: {
 		num: 182,
 		accuracy: true,
@@ -14219,6 +14841,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
+
 	psybeam: {
 		num: 60,
 		accuracy: 94,
@@ -14236,6 +14859,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Beautiful",
 	},
+
 	psyblade: {
 		num: 875,
 		accuracy: 94,
@@ -14255,6 +14879,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Psychic",
 	},
+
 	psychup: {
 		num: 244,
 		accuracy: true,
@@ -14286,6 +14911,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'heal'},
 		contestType: "Clever",
 	},
+
 	psychic: {
 		num: 94,
 		accuracy: 94,
@@ -14305,6 +14931,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
+
 	psychicfangs: {
 		num: 706,
 		accuracy: 94,
@@ -14325,6 +14952,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
+
 	psychicterrain: {
 		num: 678,
 		accuracy: true,
@@ -14385,6 +15013,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
+
 	psychoboost: {
 		num: 354,
 		accuracy: 90,
@@ -14405,6 +15034,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
+
 	psychocut: {
 		num: 427,
 		accuracy: 94,
@@ -14420,6 +15050,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
+
 	psychoshift: {
 		num: 375,
 		accuracy: 94,
@@ -14445,6 +15076,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 2}},
 		contestType: "Clever",
 	},
+
 	psyshieldbash: {
 		num: 828,
 		accuracy: 90,
@@ -14466,6 +15098,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Psychic",
 	},
+
 	psyshock: {
 		num: 473,
 		accuracy: 94,
@@ -14481,6 +15114,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Beautiful",
 	},
+
 	psystrike: {
 		num: 540,
 		accuracy: 94,
@@ -14496,6 +15130,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
+
 	psywave: {
 		num: 149,
 		accuracy: 94,
@@ -14514,6 +15149,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
+
 	pulverizingpancake: {
 		num: 701,
 		accuracy: true,
@@ -14530,6 +15166,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	punishment: {
 		num: 386,
 		accuracy: 94,
@@ -14553,6 +15190,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Cool",
 	},
+
 	purify: {
 		num: 685,
 		accuracy: true,
@@ -14577,6 +15215,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Beautiful",
 	},
+
 	pursuit: {
 		num: 228,
 		accuracy: 94,
@@ -14644,6 +15283,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Clever",
 	},
+
 	pyroball: {
 		num: 780,
 		accuracy: 90,
@@ -14660,6 +15300,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fire",
 	},
+
 	quash: {
 		num: 511,
 		accuracy: 94,
@@ -14683,6 +15324,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
+
 	quickattack: {
 		num: 98,
 		accuracy: 94,
@@ -14697,6 +15339,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	quickguard: {
 		num: 501,
 		accuracy: true,
@@ -14745,6 +15388,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Cool",
 	},
+
 	quiverdance: {
 		num: 483,
 		accuracy: true,
@@ -14765,6 +15409,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
+
 	rage: {
 		num: 99,
 		accuracy: 94,
@@ -14798,6 +15443,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	ragefist: {
 		num: 889,
 		accuracy: 94,
@@ -14814,6 +15460,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Ghost",
 	},
+
 	ragepowder: {
 		num: 476,
 		accuracy: true,
@@ -14850,6 +15497,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
+
 	ragingbull: {
 		num: 873,
 		accuracy: 94,
@@ -14882,6 +15530,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Normal",
 	},
+
 	ragingfury: {
 		num: 833,
 		accuracy: 94,
@@ -14904,6 +15553,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "randomNormal",
 		type: "Fire",
 	},
+
 	raindance: {
 		num: 240,
 		accuracy: true,
@@ -14920,6 +15570,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Beautiful",
 	},
+
 	rapidspin: {
 		num: 229,
 		accuracy: 94,
@@ -14969,6 +15620,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	razorleaf: {
 		num: 75,
 		accuracy: 95,
@@ -14984,6 +15636,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Cool",
 	},
+
 	razorshell: {
 		num: 534,
 		accuracy: 95,
@@ -15003,6 +15656,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Cool",
 	},
+
 	razorwind: {
 		num: 13,
 		accuracy: 94,
@@ -15030,6 +15684,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	recover: {
 		num: 105,
 		accuracy: true,
@@ -15046,6 +15701,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
+
 	recycle: {
 		num: 278,
 		accuracy: true,
@@ -15068,6 +15724,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 2}},
 		contestType: "Clever",
 	},
+
 	reflect: {
 		num: 115,
 		accuracy: true,
@@ -15110,6 +15767,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
+
 	reflecttype: {
 		num: 513,
 		accuracy: true,
@@ -15143,6 +15801,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
+
 	refresh: {
 		num: 287,
 		accuracy: true,
@@ -15163,6 +15822,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'heal'},
 		contestType: "Cute",
 	},
+
 	relicsong: {
 		num: 547,
 		accuracy: 94,
@@ -15191,6 +15851,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
+
 	rest: {
 		num: 156,
 		accuracy: true,
@@ -15225,6 +15886,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
+
 	retaliate: {
 		num: 514,
 		accuracy: 94,
@@ -15245,6 +15907,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	return: {
 		num: 216,
 		accuracy: 94,
@@ -15265,6 +15928,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Cute",
 	},
+
 	revelationdance: {
 		num: 686,
 		accuracy: 94,
@@ -15284,6 +15948,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
+
 	revenge: {
 		num: 279,
 		accuracy: 94,
@@ -15309,6 +15974,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
+
 	reversal: {
 		num: 179,
 		accuracy: 94,
@@ -15343,6 +16009,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {basePower: 160},
 		contestType: "Cool",
 	},
+
 	revivalblessing: {
 		num: 863,
 		accuracy: true,
@@ -15371,6 +16038,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "self",
 		type: "Normal",
 	},
+
 	risingvoltage: {
 		num: 804,
 		accuracy: 94,
@@ -15392,6 +16060,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		maxMove: {basePower: 140},
 	},
+
 	roar: {
 		num: 46,
 		accuracy: true,
@@ -15408,6 +16077,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Cool",
 	},
+
 	roaroftime: {
 		num: 459,
 		accuracy: 90,
@@ -15425,6 +16095,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dragon",
 		contestType: "Beautiful",
 	},
+
 	rockblast: {
 		num: 350,
 		accuracy: 90,
@@ -15442,6 +16113,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Tough",
 	},
+
 	rockclimb: {
 		num: 431,
 		accuracy: 85,
@@ -15460,6 +16132,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	rockpolish: {
 		num: 397,
 		accuracy: true,
@@ -15478,6 +16151,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Tough",
 	},
+
 	rockslide: {
 		num: 157,
 		accuracy: 90,
@@ -15495,6 +16169,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Rock",
 		contestType: "Tough",
 	},
+
 	rocksmash: {
 		num: 249,
 		accuracy: 94,
@@ -15514,6 +16189,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
+
 	rockthrow: {
 		num: 88,
 		accuracy: 90,
@@ -15528,6 +16204,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Rock",
 		contestType: "Tough",
 	},
+
 	rocktomb: {
 		num: 317,
 		accuracy: 95,
@@ -15547,6 +16224,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Rock",
 		contestType: "Clever",
 	},
+
 	rockwrecker: {
 		num: 439,
 		accuracy: 90,
@@ -15565,6 +16243,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Rock",
 		contestType: "Tough",
 	},
+
 	roleplay: {
 		num: 272,
 		accuracy: true,
@@ -15601,6 +16280,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Cute",
 	},
+
 	rollingkick: {
 		num: 27,
 		accuracy: 85,
@@ -15619,6 +16299,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+
 	rollout: {
 		num: 205,
 		accuracy: 90,
@@ -15688,6 +16369,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Rock",
 		contestType: "Cute",
 	},
+
 	roost: {
 		num: 355,
 		accuracy: true,
@@ -15723,6 +16405,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
+
 	rototiller: {
 		num: 563,
 		accuracy: true,
@@ -15758,6 +16441,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1}},
 		contestType: "Tough",
 	},
+
 	round: {
 		num: 496,
 		accuracy: 94,
@@ -15788,6 +16472,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
+
 	ruination: {
 		num: 877,
 		accuracy: 90,
@@ -15805,6 +16490,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Tough",
 	},
+
 	sacredfire: {
 		num: 221,
 		accuracy: 95,
@@ -15823,6 +16509,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
+
 	sacredsword: {
 		num: 533,
 		accuracy: 94,
@@ -15839,6 +16526,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+
 	safeguard: {
 		num: 219,
 		accuracy: true,
@@ -15897,6 +16585,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Beautiful",
 	},
+
 	saltcure: {
 		num: 864,
 		accuracy: 94,
@@ -15926,6 +16615,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Rock",
 	},
+
 	sandattack: {
 		num: 28,
 		accuracy: 94,
@@ -15944,6 +16634,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {evasion: 1}},
 		contestType: "Cute",
 	},
+
 	sandsearstorm: {
 		num: 848,
 		accuracy: 80,
@@ -15961,6 +16652,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "allAdjacentFoes",
 		type: "Ground",
 	},
+
 	sandstorm: {
 		num: 201,
 		accuracy: true,
@@ -15977,6 +16669,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Tough",
 	},
+
 	sandtomb: {
 		num: 328,
 		accuracy: 85,
@@ -15992,6 +16685,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ground",
 		contestType: "Clever",
 	},
+
 	sappyseed: {
 		num: 738,
 		accuracy: 90,
@@ -16011,6 +16705,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Clever",
 	},
+
 	savagespinout: {
 		num: 634,
 		accuracy: true,
@@ -16027,6 +16722,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Cool",
 	},
+
 	scald: {
 		num: 503,
 		accuracy: 94,
@@ -16045,6 +16741,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Tough",
 	},
+
 	scaleshot: {
 		num: 799,
 		accuracy: 90,
@@ -16067,6 +16764,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {basePower: 140},
 		maxMove: {basePower: 130},
 	},
+
 	scaryface: {
 		num: 184,
 		accuracy: 94,
@@ -16085,6 +16783,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Tough",
 	},
+
 	scorchingsands: {
 		num: 815,
 		accuracy: 94,
@@ -16102,6 +16801,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Ground",
 	},
+
 	scratch: {
 		num: 10,
 		accuracy: 94,
@@ -16116,6 +16816,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	screech: {
 		num: 103,
 		accuracy: 85,
@@ -16134,6 +16835,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1}},
 		contestType: "Clever",
 	},
+
 	searingshot: {
 		num: 545,
 		accuracy: 94,
@@ -16152,6 +16854,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Cool",
 	},
+
 	searingsunrazesmash: {
 		num: 724,
 		accuracy: true,
@@ -16169,6 +16872,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Cool",
 	},
+
 	secretpower: {
 		num: 290,
 		accuracy: 94,
@@ -16216,6 +16920,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Clever",
 	},
+
 	secretsword: {
 		num: 548,
 		accuracy: 94,
@@ -16232,6 +16937,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Beautiful",
 	},
+
 	seedbomb: {
 		num: 402,
 		accuracy: 94,
@@ -16246,6 +16952,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Tough",
 	},
+
 	seedflare: {
 		num: 465,
 		accuracy: 85,
@@ -16266,6 +16973,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Beautiful",
 	},
+
 	seismictoss: {
 		num: 69,
 		accuracy: 94,
@@ -16282,6 +16990,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 75},
 		contestType: "Tough",
 	},
+
 	selfdestruct: {
 		num: 120,
 		accuracy: 94,
@@ -16297,6 +17006,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
+
 	shadowball: {
 		num: 247,
 		accuracy: 94,
@@ -16316,6 +17026,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Clever",
 	},
+
 	shadowbone: {
 		num: 708,
 		accuracy: 94,
@@ -16336,6 +17047,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
+
 	shadowclaw: {
 		num: 421,
 		accuracy: 94,
@@ -16351,6 +17063,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
+
 	shadowforce: {
 		num: 467,
 		accuracy: 94,
@@ -16381,6 +17094,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
+
 	shadowpunch: {
 		num: 325,
 		accuracy: true,
@@ -16395,6 +17109,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Clever",
 	},
+
 	shadowsneak: {
 		num: 425,
 		accuracy: 94,
@@ -16409,6 +17124,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Clever",
 	},
+
 	shadowstrike: {
 		num: 0,
 		accuracy: 95,
@@ -16429,6 +17145,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Clever",
 	},
+
 	sharpen: {
 		num: 159,
 		accuracy: true,
@@ -16448,6 +17165,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1}},
 		contestType: "Cute",
 	},
+
 	shatteredpsyche: {
 		num: 648,
 		accuracy: true,
@@ -16464,6 +17182,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
+
 	shedtail: {
 		num: 880,
 		accuracy: true,
@@ -16502,6 +17221,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		zMove: {effect: 'clearnegativeboost'},
 	},
+
 	sheercold: {
 		num: 329,
 		accuracy: 30,
@@ -16519,6 +17239,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Beautiful",
 	},
+
 	shellsidearm: {
 		num: 801,
 		accuracy: 94,
@@ -16560,6 +17281,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Poison",
 	},
+
 	shellsmash: {
 		num: 504,
 		accuracy: true,
@@ -16582,6 +17304,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Tough",
 	},
+
 	shelltrap: {
 		num: 704,
 		accuracy: 94,
@@ -16622,6 +17345,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Tough",
 	},
+
 	shelter: {
 		num: 842,
 		accuracy: true,
@@ -16639,6 +17363,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "self",
 		type: "Steel",
 	},
+
 	shiftgear: {
 		num: 508,
 		accuracy: true,
@@ -16658,6 +17383,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
+
 	shockwave: {
 		num: 351,
 		accuracy: true,
@@ -16672,6 +17398,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 	shoreup: {
 		num: 659,
 		accuracy: true,
@@ -16699,6 +17426,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
+
 	signalbeam: {
 		num: 324,
 		accuracy: 94,
@@ -16717,6 +17445,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Beautiful",
 	},
+
 	silktrap: {
 		num: 852,
 		accuracy: true,
@@ -16771,6 +17500,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "self",
 		type: "Bug",
 	},
+
 	silverwind: {
 		num: 318,
 		accuracy: 94,
@@ -16797,6 +17527,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Beautiful",
 	},
+
 	simplebeam: {
 		num: 493,
 		accuracy: 94,
@@ -16826,6 +17557,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 1}},
 		contestType: "Cute",
 	},
+
 	sing: {
 		num: 47,
 		accuracy: 75,
@@ -16842,6 +17574,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Cute",
 	},
+
 	sinisterarrowraid: {
 		num: 695,
 		accuracy: true,
@@ -16858,6 +17591,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
+
 	sizzlyslide: {
 		num: 735,
 		accuracy: 94,
@@ -16876,6 +17610,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Clever",
 	},
+
 	sketch: {
 		num: 166,
 		accuracy: true,
@@ -16916,6 +17651,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Clever",
 	},
+
 	skillswap: {
 		num: 285,
 		accuracy: true,
@@ -16966,6 +17702,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
+
 	skittersmack: {
 		num: 806,
 		accuracy: 90,
@@ -16984,6 +17721,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Bug",
 	},
+
 	skullbash: {
 		num: 130,
 		accuracy: 94,
@@ -17011,6 +17749,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	skyattack: {
 		num: 143,
 		accuracy: 90,
@@ -17040,6 +17779,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Cool",
 	},
+
 	skydrop: {
 		num: 507,
 		accuracy: 94,
@@ -17154,6 +17894,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Tough",
 	},
+
 	skyuppercut: {
 		num: 327,
 		accuracy: 90,
@@ -17169,6 +17910,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+
 	slackoff: {
 		num: 303,
 		accuracy: true,
@@ -17185,6 +17927,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
+
 	slam: {
 		num: 21,
 		accuracy: 75,
@@ -17199,6 +17942,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	slash: {
 		num: 163,
 		accuracy: 94,
@@ -17214,6 +17958,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	sleeppowder: {
 		num: 79,
 		accuracy: 75,
@@ -17230,6 +17975,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
+
 	sleeptalk: {
 		num: 214,
 		accuracy: true,
@@ -17267,6 +18013,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'crit2'},
 		contestType: "Cute",
 	},
+
 	sludge: {
 		num: 124,
 		accuracy: 94,
@@ -17284,6 +18031,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Tough",
 	},
+
 	sludgebomb: {
 		num: 188,
 		accuracy: 94,
@@ -17301,6 +18049,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Tough",
 	},
+
 	sludgewave: {
 		num: 482,
 		accuracy: 94,
@@ -17318,6 +18067,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Tough",
 	},
+
 	smackdown: {
 		num: 479,
 		accuracy: 94,
@@ -17365,6 +18115,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Rock",
 		contestType: "Tough",
 	},
+
 	smartstrike: {
 		num: 684,
 		accuracy: true,
@@ -17379,6 +18130,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Cool",
 	},
+
 	smellingsalts: {
 		num: 265,
 		accuracy: 94,
@@ -17404,6 +18156,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	smog: {
 		num: 123,
 		accuracy: 75,
@@ -17421,6 +18174,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Tough",
 	},
+
 	smokescreen: {
 		num: 108,
 		accuracy: 94,
@@ -17439,6 +18193,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {evasion: 1}},
 		contestType: "Clever",
 	},
+
 	snaptrap: {
 		num: 779,
 		accuracy: 94,
@@ -17454,6 +18209,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Grass",
 	},
+
 	snarl: {
 		num: 555,
 		accuracy: 95,
@@ -17473,6 +18229,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Tough",
 	},
+
 	snatch: {
 		num: 289,
 		accuracy: true,
@@ -17508,6 +18265,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 2}},
 		contestType: "Clever",
 	},
+
 	snipeshot: {
 		num: 745,
 		accuracy: 94,
@@ -17523,6 +18281,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Water",
 	},
+
 	snore: {
 		num: 173,
 		accuracy: 94,
@@ -17544,6 +18303,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cute",
 	},
+
 	snowscape: {
 		num: 883,
 		accuracy: true,
@@ -17558,6 +18318,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "all",
 		type: "Ice",
 	},
+
 	soak: {
 		num: 487,
 		accuracy: 94,
@@ -17582,6 +18343,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 1}},
 		contestType: "Cute",
 	},
+
 	softboiled: {
 		num: 135,
 		accuracy: true,
@@ -17598,6 +18360,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
+
 	solarbeam: {
 		num: 76,
 		accuracy: 94,
@@ -17635,6 +18398,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Cool",
 	},
+
 	solarblade: {
 		num: 669,
 		accuracy: 94,
@@ -17672,6 +18436,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Cool",
 	},
+
 	sonicboom: {
 		num: 49,
 		accuracy: 90,
@@ -17688,6 +18453,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	soulstealing7starstrike: {
 		num: 699,
 		accuracy: true,
@@ -17704,6 +18470,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
+
 	spacialrend: {
 		num: 460,
 		accuracy: 95,
@@ -17719,6 +18486,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dragon",
 		contestType: "Beautiful",
 	},
+
 	spark: {
 		num: 209,
 		accuracy: 94,
@@ -17736,6 +18504,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 	sparklingaria: {
 		num: 664,
 		accuracy: 94,
@@ -17762,6 +18531,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Tough",
 	},
+
 	sparklyswirl: {
 		num: 740,
 		accuracy: 85,
@@ -17788,6 +18558,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fairy",
 		contestType: "Clever",
 	},
+
 	spectralthief: {
 		num: 712,
 		accuracy: 94,
@@ -17805,6 +18576,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
+
 	speedswap: {
 		num: 683,
 		accuracy: true,
@@ -17826,6 +18598,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
+
 	spicyextract: {
 		num: 858,
 		accuracy: true,
@@ -17843,6 +18616,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Grass",
 	},
+
 	spiderweb: {
 		num: 169,
 		accuracy: true,
@@ -17862,6 +18636,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
+
 	spikecannon: {
 		num: 131,
 		accuracy: 94,
@@ -17879,6 +18654,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 120},
 		contestType: "Cool",
 	},
+
 	spikes: {
 		num: 191,
 		accuracy: true,
@@ -17912,6 +18688,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
+
 	spikyshield: {
 		num: 596,
 		accuracy: true,
@@ -17970,6 +18747,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Tough",
 	},
+
 	spinout: {
 		num: 859,
 		accuracy: 94,
@@ -17988,6 +18766,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Steel",
 	},
+
 	spiritbreak: {
 		num: 789,
 		accuracy: 94,
@@ -18006,6 +18785,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fairy",
 	},
+
 	spiritshackle: {
 		num: 662,
 		accuracy: 94,
@@ -18025,6 +18805,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ghost",
 		contestType: "Tough",
 	},
+
 	spitup: {
 		num: 255,
 		accuracy: 94,
@@ -18049,6 +18830,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	spite: {
 		num: 180,
 		accuracy: 94,
@@ -18073,6 +18855,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'heal'},
 		contestType: "Tough",
 	},
+
 	splash: {
 		num: 150,
 		accuracy: true,
@@ -18098,6 +18881,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 3}},
 		contestType: "Cute",
 	},
+
 	splinteredstormshards: {
 		num: 727,
 		accuracy: true,
@@ -18120,6 +18904,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Rock",
 		contestType: "Cool",
 	},
+
 	splishysplash: {
 		num: 730,
 		accuracy: 94,
@@ -18138,6 +18923,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Cool",
 	},
+
 	spore: {
 		num: 147,
 		accuracy: 94,
@@ -18154,6 +18940,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
+
 	spotlight: {
 		num: 671,
 		accuracy: true,
@@ -18187,6 +18974,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Cute",
 	},
+
 	springtidestorm: {
 		num: 831,
 		accuracy: 80,
@@ -18206,6 +18994,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "allAdjacentFoes",
 		type: "Fairy",
 	},
+
 	stealthrock: {
 		num: 446,
 		accuracy: true,
@@ -18233,6 +19022,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Cool",
 	},
+
 	steameruption: {
 		num: 592,
 		accuracy: 95,
@@ -18251,6 +19041,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
+
 	steamroller: {
 		num: 537,
 		accuracy: 94,
@@ -18269,6 +19060,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Tough",
 	},
+
 	steelbeam: {
 		num: 796,
 		accuracy: 95,
@@ -18292,6 +19084,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Steel",
 	},
+
 	steelroller: {
 		num: 798,
 		accuracy: 94,
@@ -18314,6 +19107,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Steel",
 	},
+
 	steelwing: {
 		num: 211,
 		accuracy: 90,
@@ -18335,6 +19129,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Cool",
 	},
+
 	stickyweb: {
 		num: 564,
 		accuracy: true,
@@ -18361,6 +19156,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Tough",
 	},
+
 	stockpile: {
 		num: 254,
 		accuracy: true,
@@ -18415,6 +19211,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'heal'},
 		contestType: "Tough",
 	},
+
 	stokedsparksurfer: {
 		num: 700,
 		accuracy: true,
@@ -18434,6 +19231,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 	stomp: {
 		num: 23,
 		accuracy: 94,
@@ -18451,6 +19249,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	stompingtantrum: {
 		num: 707,
 		accuracy: 94,
@@ -18472,6 +19271,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ground",
 		contestType: "Tough",
 	},
+
 	stoneaxe: {
 		num: 830,
 		accuracy: 90,
@@ -18493,6 +19293,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Rock",
 	},
+
 	stoneedge: {
 		num: 444,
 		accuracy: 80,
@@ -18508,6 +19309,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Rock",
 		contestType: "Tough",
 	},
+
 	storedpower: {
 		num: 500,
 		accuracy: 94,
@@ -18529,6 +19331,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Clever",
 	},
+
 	stormthrow: {
 		num: 480,
 		accuracy: 94,
@@ -18545,6 +19348,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+
 	strangesteam: {
 		num: 790,
 		accuracy: 95,
@@ -18562,6 +19366,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fairy",
 	},
+
 	strength: {
 		num: 70,
 		accuracy: 94,
@@ -18576,6 +19381,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	strengthsap: {
 		num: 668,
 		accuracy: 94,
@@ -18597,6 +19403,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Cute",
 	},
+
 	stringshot: {
 		num: 81,
 		accuracy: 95,
@@ -18615,6 +19422,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
+
 	struggle: {
 		num: 165,
 		accuracy: true,
@@ -18639,6 +19447,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	strugglebug: {
 		num: 522,
 		accuracy: 94,
@@ -18658,6 +19467,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Cute",
 	},
+
 	stuffcheeks: {
 		num: 747,
 		accuracy: true,
@@ -18681,6 +19491,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "self",
 		type: "Normal",
 	},
+
 	stunspore: {
 		num: 78,
 		accuracy: 75,
@@ -18697,6 +19508,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
 	},
+
 	submission: {
 		num: 66,
 		accuracy: 80,
@@ -18713,6 +19525,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+
 	substitute: {
 		num: 164,
 		accuracy: true,
@@ -18795,6 +19608,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
+
 	subzeroslammer: {
 		num: 650,
 		accuracy: true,
@@ -18811,6 +19625,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ice",
 		contestType: "Cool",
 	},
+
 	suckerpunch: {
 		num: 389,
 		accuracy: 94,
@@ -18832,6 +19647,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Clever",
 	},
+
 	sunnyday: {
 		num: 241,
 		accuracy: true,
@@ -18848,6 +19664,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Beautiful",
 	},
+
 	sunsteelstrike: {
 		num: 713,
 		accuracy: 94,
@@ -18864,6 +19681,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Cool",
 	},
+
 	superfang: {
 		num: 162,
 		accuracy: 90,
@@ -18881,6 +19699,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	superpower: {
 		num: 276,
 		accuracy: 94,
@@ -18901,6 +19720,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
+
 	supersonic: {
 		num: 48,
 		accuracy: 75,
@@ -18917,6 +19737,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
+
 	supersonicskystrike: {
 		num: 626,
 		accuracy: true,
@@ -18933,6 +19754,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Cool",
 	},
+
 	surf: {
 		num: 57,
 		accuracy: 94,
@@ -18947,6 +19769,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
+
 	surgingstrikes: {
 		num: 818,
 		accuracy: 94,
@@ -18964,6 +19787,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {basePower: 140},
 		maxMove: {basePower: 130},
 	},
+
 	swagger: {
 		num: 207,
 		accuracy: 85,
@@ -18983,6 +19807,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
+
 	swallow: {
 		num: 256,
 		accuracy: true,
@@ -19008,6 +19833,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Tough",
 	},
+
 	sweetkiss: {
 		num: 186,
 		accuracy: 75,
@@ -19024,6 +19850,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 1}},
 		contestType: "Cute",
 	},
+
 	sweetscent: {
 		num: 230,
 		accuracy: 94,
@@ -19042,6 +19869,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {accuracy: 1}},
 		contestType: "Cute",
 	},
+
 	swift: {
 		num: 129,
 		accuracy: true,
@@ -19056,6 +19884,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	switcheroo: {
 		num: 415,
 		accuracy: 94,
@@ -19104,6 +19933,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 2}},
 		contestType: "Clever",
 	},
+
 	swordsdance: {
 		num: 14,
 		accuracy: true,
@@ -19122,6 +19952,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
+
 	synchronoise: {
 		num: 485,
 		accuracy: 94,
@@ -19140,6 +19971,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
+
 	synthesis: {
 		num: 235,
 		accuracy: true,
@@ -19177,6 +20009,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
+
 	tackle: {
 		num: 33,
 		accuracy: 94,
@@ -19191,6 +20024,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	tailglow: {
 		num: 294,
 		accuracy: true,
@@ -19210,6 +20044,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
+
 	tailslap: {
 		num: 541,
 		accuracy: 85,
@@ -19227,6 +20062,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Cute",
 	},
+
 	tailwhip: {
 		num: 39,
 		accuracy: 94,
@@ -19245,6 +20081,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1}},
 		contestType: "Cute",
 	},
+
 	tailwind: {
 		num: 366,
 		accuracy: true,
@@ -19286,6 +20123,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'crit2'},
 		contestType: "Cool",
 	},
+
 	takedown: {
 		num: 36,
 		accuracy: 85,
@@ -19301,6 +20139,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	takeheart: {
 		num: 850,
 		accuracy: true,
@@ -19319,6 +20158,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "self",
 		type: "Psychic",
 	},
+
 	tarshot: {
 		num: 749,
 		accuracy: 94,
@@ -19348,6 +20188,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Rock",
 	},
+
 	taunt: {
 		num: 269,
 		accuracy: 94,
@@ -19392,6 +20233,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1}},
 		contestType: "Clever",
 	},
+
 	tearfullook: {
 		num: 715,
 		accuracy: true,
@@ -19411,6 +20253,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Cute",
 	},
+
 	teatime: {
 		num: 752,
 		accuracy: true,
@@ -19443,6 +20286,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "all",
 		type: "Normal",
 	},
+
 	technoblast: {
 		num: 546,
 		accuracy: 94,
@@ -19462,6 +20306,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cool",
 	},
+
 	tectonicrage: {
 		num: 630,
 		accuracy: true,
@@ -19478,6 +20323,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ground",
 		contestType: "Cool",
 	},
+
 	teeterdance: {
 		num: 298,
 		accuracy: 94,
@@ -19494,6 +20340,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 1}},
 		contestType: "Cute",
 	},
+
 	telekinesis: {
 		num: 477,
 		accuracy: true,
@@ -19548,6 +20395,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
+
 	teleport: {
 		num: 100,
 		accuracy: true,
@@ -19567,6 +20415,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'heal'},
 		contestType: "Cool",
 	},
+
 	terablast: {
 		num: 851,
 		accuracy: 94,
@@ -19590,6 +20439,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Normal",
 	},
+
 	terrainpulse: {
 		num: 805,
 		accuracy: 94,
@@ -19628,6 +20478,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {basePower: 160},
 		maxMove: {basePower: 130},
 	},
+
 	thief: {
 		num: 168,
 		accuracy: 94,
@@ -19658,6 +20509,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Tough",
 	},
+
 	thousandarrows: {
 		num: 614,
 		accuracy: 94,
@@ -19684,6 +20536,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {basePower: 180},
 		contestType: "Beautiful",
 	},
+
 	thousandwaves: {
 		num: 615,
 		accuracy: 94,
@@ -19702,6 +20555,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Ground",
 		contestType: "Tough",
 	},
+
 	thrash: {
 		num: 37,
 		accuracy: 94,
@@ -19724,6 +20578,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	throatchop: {
 		num: 675,
 		accuracy: 94,
@@ -19773,6 +20628,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dark",
 		contestType: "Clever",
 	},
+
 	thunder: {
 		num: 87,
 		accuracy: 75,
@@ -19802,6 +20658,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 	thunderbolt: {
 		num: 85,
 		accuracy: 94,
@@ -19819,6 +20676,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 	thundercage: {
 		num: 819,
 		accuracy: 90,
@@ -19833,6 +20691,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Electric",
 	},
+
 	thunderfang: {
 		num: 422,
 		accuracy: 95,
@@ -19855,6 +20714,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 	thunderouskick: {
 		num: 823,
 		accuracy: 94,
@@ -19873,6 +20733,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fighting",
 	},
+
 	thunderpunch: {
 		num: 9,
 		accuracy: 94,
@@ -19890,6 +20751,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 	thundershock: {
 		num: 84,
 		accuracy: 94,
@@ -19907,6 +20769,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 	thunderwave: {
 		num: 86,
 		accuracy: 90,
@@ -19924,6 +20787,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Cool",
 	},
+
 	tickle: {
 		num: 321,
 		accuracy: 94,
@@ -19943,6 +20807,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Cute",
 	},
+
 	tidyup: {
 		num: 882,
 		accuracy: true,
@@ -19974,6 +20839,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "self",
 		type: "Normal",
 	},
+
 	topsyturvy: {
 		num: 576,
 		accuracy: true,
@@ -20001,6 +20867,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1}},
 		contestType: "Clever",
 	},
+
 	torchsong: {
 		num: 871,
 		accuracy: 94,
@@ -20022,6 +20889,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
+
 	torment: {
 		num: 259,
 		accuracy: 94,
@@ -20055,6 +20923,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Tough",
 	},
+
 	toxic: {
 		num: 92,
 		accuracy: 90,
@@ -20072,6 +20941,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
+
 	toxicspikes: {
 		num: 390,
 		accuracy: true,
@@ -20113,6 +20983,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
+
 	toxicthread: {
 		num: 672,
 		accuracy: 94,
@@ -20133,6 +21004,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Tough",
 	},
+
 	trailblaze: {
 		num: 885,
 		accuracy: 94,
@@ -20154,6 +21026,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Cool",
 	},
+
 	transform: {
 		num: 144,
 		accuracy: true,
@@ -20174,6 +21047,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'heal'},
 		contestType: "Clever",
 	},
+
 	triattack: {
 		num: 161,
 		accuracy: 94,
@@ -20200,6 +21074,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
+
 	trick: {
 		num: 271,
 		accuracy: 94,
@@ -20248,6 +21123,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 2}},
 		contestType: "Clever",
 	},
+
 	trickortreat: {
 		num: 567,
 		accuracy: 94,
@@ -20277,6 +21153,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Cute",
 	},
+
 	trickroom: {
 		num: 433,
 		accuracy: true,
@@ -20319,6 +21196,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {accuracy: 1}},
 		contestType: "Clever",
 	},
+
 	triplearrows: {
 		num: 843,
 		accuracy: 94,
@@ -20344,6 +21222,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fighting",
 	},
+
 	tripleaxel: {
 		num: 813,
 		accuracy: 90,
@@ -20364,6 +21243,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {basePower: 120},
 		maxMove: {basePower: 140},
 	},
+
 	tripledive: {
 		num: 865,
 		accuracy: 95,
@@ -20378,6 +21258,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Water",
 	},
+
 	triplekick: {
 		num: 167,
 		accuracy: 90,
@@ -20400,6 +21281,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 80},
 		contestType: "Cool",
 	},
+
 	tropkick: {
 		num: 688,
 		accuracy: 94,
@@ -20419,6 +21301,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Cute",
 	},
+
 	trumpcard: {
 		num: 376,
 		accuracy: true,
@@ -20466,6 +21349,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Cool",
 	},
+
 	twinbeam: {
 		num: 888,
 		accuracy: 94,
@@ -20481,6 +21365,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
+
 	twineedle: {
 		num: 41,
 		accuracy: 94,
@@ -20501,6 +21386,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 100},
 		contestType: "Cool",
 	},
+
 	twinkletackle: {
 		num: 656,
 		accuracy: true,
@@ -20517,6 +21403,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fairy",
 		contestType: "Cool",
 	},
+
 	twister: {
 		num: 239,
 		accuracy: 94,
@@ -20534,6 +21421,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Dragon",
 		contestType: "Cool",
 	},
+
 	uturn: {
 		num: 369,
 		accuracy: 94,
@@ -20549,6 +21437,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Cute",
 	},
+
 	uproar: {
 		num: 253,
 		accuracy: 94,
@@ -20608,6 +21497,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cute",
 	},
+
 	vacuumwave: {
 		num: 410,
 		accuracy: 94,
@@ -20622,6 +21512,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+
 	vcreate: {
 		num: 557,
 		accuracy: 95,
@@ -20644,6 +21535,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {basePower: 220},
 		contestType: "Cool",
 	},
+
 	veeveevolley: {
 		num: 741,
 		accuracy: true,
@@ -20664,6 +21556,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Cute",
 	},
+
 	venomdrench: {
 		num: 599,
 		accuracy: 94,
@@ -20686,6 +21579,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
+
 	venoshock: {
 		num: 474,
 		accuracy: 94,
@@ -20705,6 +21599,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Beautiful",
 	},
+
 	victorydance: {
 		num: 837,
 		accuracy: true,
@@ -20724,6 +21619,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "self",
 		type: "Fighting",
 	},
+
 	vinewhip: {
 		num: 22,
 		accuracy: 94,
@@ -20738,6 +21634,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Cool",
 	},
+
 	visegrip: {
 		num: 11,
 		accuracy: 94,
@@ -20752,6 +21649,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	vitalthrow: {
 		num: 233,
 		accuracy: true,
@@ -20767,6 +21665,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
+
 	voltswitch: {
 		num: 521,
 		accuracy: 94,
@@ -20782,6 +21681,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 	volttackle: {
 		num: 344,
 		accuracy: 94,
@@ -20800,6 +21700,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 	wakeupslap: {
 		num: 358,
 		accuracy: 94,
@@ -20825,6 +21726,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
+
 	waterfall: {
 		num: 127,
 		accuracy: 94,
@@ -20842,6 +21744,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Tough",
 	},
+
 	watergun: {
 		num: 55,
 		accuracy: 94,
@@ -20856,6 +21759,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Cute",
 	},
+
 	waterpledge: {
 		num: 518,
 		accuracy: 94,
@@ -20928,6 +21832,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
+
 	waterpulse: {
 		num: 352,
 		accuracy: 94,
@@ -20945,6 +21850,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
+
 	watershuriken: {
 		num: 594,
 		accuracy: 94,
@@ -20967,6 +21873,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Cool",
 	},
+
 	watersport: {
 		num: 346,
 		accuracy: true,
@@ -21002,6 +21909,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Cute",
 	},
+
 	waterspout: {
 		num: 323,
 		accuracy: 94,
@@ -21021,6 +21929,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
+
 	wavecrash: {
 		num: 834,
 		accuracy: 94,
@@ -21035,6 +21944,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Water",
 	},
+
 	weatherball: {
 		num: 311,
 		accuracy: 94,
@@ -21090,6 +22000,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Beautiful",
 	},
+
 	whirlpool: {
 		num: 250,
 		accuracy: 85,
@@ -21105,6 +22016,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
+
 	whirlwind: {
 		num: 18,
 		accuracy: true,
@@ -21121,6 +22033,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
 	},
+
 	wickedblow: {
 		num: 817,
 		accuracy: 94,
@@ -21135,6 +22048,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Dark",
 	},
+
 	wickedtorque: {
 		num: 897,
 		accuracy: 94,
@@ -21154,6 +22068,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Dark",
 	},
+
 	wideguard: {
 		num: 469,
 		accuracy: true,
@@ -21203,6 +22118,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Tough",
 	},
+
 	wildboltstorm: {
 		num: 847,
 		accuracy: 80,
@@ -21220,6 +22136,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "allAdjacentFoes",
 		type: "Electric",
 	},
+
 	wildcharge: {
 		num: 528,
 		accuracy: 94,
@@ -21235,6 +22152,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Tough",
 	},
+
 	willowisp: {
 		num: 261,
 		accuracy: 85,
@@ -21251,6 +22169,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1}},
 		contestType: "Beautiful",
 	},
+
 	wingattack: {
 		num: 17,
 		accuracy: 94,
@@ -21265,6 +22184,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Flying",
 		contestType: "Cool",
 	},
+
 	wish: {
 		num: 273,
 		accuracy: true,
@@ -21296,6 +22216,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Cute",
 	},
+
 	withdraw: {
 		num: 110,
 		accuracy: true,
@@ -21314,6 +22235,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Cute",
 	},
+
 	wonderroom: {
 		num: 472,
 		accuracy: true,
@@ -21364,6 +22286,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
 	},
+
 	woodhammer: {
 		num: 452,
 		accuracy: 94,
@@ -21379,6 +22302,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Tough",
 	},
+
 	workup: {
 		num: 526,
 		accuracy: true,
@@ -21398,6 +22322,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {atk: 1}},
 		contestType: "Tough",
 	},
+
 	worryseed: {
 		num: 388,
 		accuracy: 94,
@@ -21436,6 +22361,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
+
 	wrap: {
 		num: 35,
 		accuracy: 90,
@@ -21451,6 +22377,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Normal",
 		contestType: "Tough",
 	},
+
 	wringout: {
 		num: 378,
 		accuracy: 94,
@@ -21475,6 +22402,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		maxMove: {basePower: 140},
 		contestType: "Tough",
 	},
+
 	xscissor: {
 		num: 404,
 		accuracy: 94,
@@ -21489,6 +22417,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Bug",
 		contestType: "Cool",
 	},
+
 	yawn: {
 		num: 281,
 		accuracy: true,
@@ -21522,6 +22451,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {spe: 1}},
 		contestType: "Cute",
 	},
+
 	zapcannon: {
 		num: 192,
 		accuracy: 75,
@@ -21539,6 +22469,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 	zenheadbutt: {
 		num: 428,
 		accuracy: 90,
@@ -21556,6 +22487,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
+
 	zingzap: {
 		num: 716,
 		accuracy: 94,
@@ -21573,6 +22505,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 	zippyzap: {
 		num: 729,
 		accuracy: 94,
@@ -21595,4 +22528,5 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
 };
