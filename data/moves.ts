@@ -1,7 +1,5 @@
 export const Pokedex: {[speciesid: string]: SpeciesData} = {
-
 {
-
 "10000000voltthunderbolt": {
 accuracy: 100,
 basePower: 250,
