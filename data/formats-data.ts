@@ -5302,7 +5302,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "OU",
 	},
 	zamazentacrowned: {
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "DUber",
 		natDexTier: "Uber",
 	},
@@ -5755,7 +5755,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "UU",
 	},
 	chienpao: {
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "DOU",
 		natDexTier: "Uber",
 	},
