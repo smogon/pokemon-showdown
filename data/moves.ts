@@ -15753,11 +15753,12 @@ priority: 0,
 flags: {protect: 1, mirror: 1},
 secondaries: [
 {
-chance: 50,
+chance: 75,
 boosts: {
 atk: 1,
+},
 }, {
-chance: 50,
+chance: 75,
 boosts: {
 spa: 1,
 },
@@ -17691,37 +17692,18 @@ pp: 1.25,
 priority: 0,
 flags: {snatch: 1, dance: 1},
 status: 'slp',
-secondaries: [
-{
-chance: 50,
 boosts: {
 atk: 1,
-}, {
-chance: 50,
-boosts: {
 spa: 1,
-}, {
-chance: 50,
-boosts: {
 spe: 1,
-}, {
-chance: 50,
-boosts: {
 spd: 1,
-}, {
-chance: 50,
-boosts: {
 def: 1,
-}, {
-chance: 50,
-boosts: {
-spa: 1,
-}, {
-chance: 50,
-boosts: {
-evasion: 1,
+evasion: -4,
 },
-],
+secondary: null,
+target: "self",
+type: "Fighting",
+},
 target: "self",
 type: "Fighting",
 },
