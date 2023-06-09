@@ -15753,14 +15753,13 @@ priority: 0,
 flags: {protect: 1, mirror: 1},
 secondaries: [
 {
-chance: 75,
+chance: 50,
 boosts: {
-spa: -1,
+atk: 1,
 }, {
-{
-chance: 75,
+chance: 50,
 boosts: {
-atk: -1,
+spa: 1,
 },
 ],
 target: "allAdjacentFoes",
