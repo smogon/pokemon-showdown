@@ -103,10 +103,14 @@ pp: 1.25,
 priority: 0,
 flags: {bullet: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 spd: -2,
 },
+secondary: {
+chance: 75,
+boosts: {
+def: -2,
 },
 target: "normal",
 type: "Poison",
