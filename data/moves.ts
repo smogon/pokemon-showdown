@@ -5870,14 +5870,15 @@ type: "Ice",
 frustration: {
 accuracy: 93,
 basePower: 0,
-basePowerCallback(pokemon) {
-return Math.floor(((255 - pokemon.happiness) * 10) / 25) || 1;
+damageCallback(pokemon) {
+return (this.random(15, 150))
 },
 category: "Physical",
 name: "Frustration",
 pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
+recoil: [100, 100],
 secondary: null,
 target: "normal",
 type: "Normal",
@@ -10482,7 +10483,7 @@ type: "Ghost",
 nightshade: {
 accuracy: 93,
 damageCallback(pokemon) {
-return (this.random(15, 150)
+return (this.random(15, 150))
 },
 category: "Special",
 name: "Night Shade",
@@ -12702,14 +12703,15 @@ type: "Normal",
 return: {
 accuracy: 93,
 basePower: 0,
-basePowerCallback(pokemon) {
-return Math.floor((pokemon.happiness * 10) / 25) || 1;
+damageCallback(pokemon) {
+return (this.random(15, 150))
 },
-category: "Physical",
+category: "Special",
 name: "Return",
 pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
+recoil: [100, 100],
 secondary: null,
 target: "normal",
 type: "Normal",
@@ -13604,11 +13606,11 @@ seismictoss: {
 accuracy: 93,
 basePower: 0,
 damageCallback(pokemon) {
-return (this.random(15, 150)
+return (this.random(15, 150))
 },
 category: "Physical",
 name: "Seismic Toss",
-pp: 0.625,
+pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
 secondary: null,
