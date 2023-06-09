@@ -47,7 +47,7 @@ export const TIERS = new Set([
 	'battlestadiumsinglesseries2', 'battlestadiumsinglesregulationc',
 	//
 	'vgc2016', 'vgc2017', 'vgc2018', 'vgc2019ultraseries', 'vgc2020', '1v1',
-	'anythinggoes', 'nationaldexag', 'almostanyability', 'balancedhackmons',
+	'anythinggoes', 'nationaldexubers', 'almostanyability', 'balancedhackmons',
 	'letsgoou', 'monotype', 'purehackmons',
 ]);
 const FORMATS = new Map<ID, {gen: GenerationNum, format: Format}>();
