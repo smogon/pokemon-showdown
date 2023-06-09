@@ -122,7 +122,6 @@ boosts: {
 def: -2,
 },
 },
-},
 ]
 target: "normal",
 type: "Poison",
