@@ -4865,7 +4865,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 onAfterMoveSecondarySelf(pokemon, target, move) {
-if (!target || target.fainted || target.hp <= 0) this.boost({atk: 3}, pokemon, pokemon, move);
+if (!target || target.fainted || target.hp <= 0) this.boost({randomStat: 2}, pokemon, pokemon, move);
 },
 secondary: null,
 target: "normal",
@@ -17688,9 +17688,7 @@ pp: 1.25,
 priority: 0,
 flags: {snatch: 1, dance: 1},
 boosts: {
-atk: 1,
-def: 1,
-spe: 1,
+boost[randomStat] = 2;
 },
 secondary: null,
 target: "self",
@@ -17732,6 +17730,7 @@ pp: 1.25,
 priority: -1,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: null,
+forceSwitch: true,
 target: "normal",
 type: "Fighting",
 },
@@ -17909,13 +17908,6 @@ type: "Water",
 watershuriken: {
 accuracy: 93,
 basePower: 15,
-basePowerCallback(pokemon, target, move) {
-if (pokemon.species.name === 'Greninja-Ash' && pokemon.hasAbility('battlebond') &&
-!pokemon.transformed) {
-return move.basePower + 5;
-}
-return move.basePower;
-},
 category: "Special",
 name: "Water Shuriken",
 pp: 1.25,
@@ -17987,7 +17979,7 @@ priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 recoil: [33, 100],
 secondary: null,
-target: "normal",
+target: "allAdjacent",
 type: "Water",
 },
 
@@ -18067,7 +18059,7 @@ priority: -6,
 flags: {reflectable: 1, mirror: 1, bypasssub: 1, allyanim: 1, wind: 1, noassist: 1, failcopycat: 1},
 forceSwitch: true,
 secondary: null,
-target: "normal",
+target: "allAdjacent",
 type: "Normal",
 },
 
@@ -18245,7 +18237,9 @@ pp: 1.25,
 priority: 0,
 flags: {snatch: 1},
 boosts: {
+spd: 1,
 def: 1,
+evasion: -1,
 },
 secondary: null,
 target: "self",
