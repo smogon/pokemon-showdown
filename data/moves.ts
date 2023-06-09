@@ -5867,22 +5867,6 @@ target: "normal",
 type: "Ice",
 },
 
-frustration: {
-accuracy: 93,
-basePower: 0,
-damageCallback(pokemon) {
-return (this.random(15, 150))
-},
-category: "Physical",
-name: "Frustration",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
 furyattack: {
 accuracy: 85,
 basePower: 15,
@@ -12694,22 +12678,6 @@ this.debug('Boosted for a faint last turn');
 return this.chainModify(2);
 }
 },
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-return: {
-accuracy: 93,
-basePower: 0,
-damageCallback(pokemon) {
-return (this.random(15, 150))
-},
-category: "Special",
-name: "Return",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
 secondary: null,
 target: "normal",
 type: "Normal",
