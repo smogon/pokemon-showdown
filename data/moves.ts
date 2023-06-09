@@ -4865,7 +4865,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 onAfterMoveSecondarySelf(pokemon, target, move) {
-if (!target || target.fainted || target.hp <= 0) this.boost({randomStat: 2}, pokemon, pokemon, move);
+if (!target || target.fainted || target.hp <= 0) this.boost({atk: 3}, pokemon, pokemon, move);
 },
 secondary: null,
 target: "normal",
@@ -17688,7 +17688,9 @@ pp: 1.25,
 priority: 0,
 flags: {snatch: 1, dance: 1},
 boosts: {
-boost[randomStat] = 2;
+atk: 1,
+spe: 1,
+def: 1,
 },
 secondary: null,
 target: "self",
