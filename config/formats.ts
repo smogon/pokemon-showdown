@@ -41,6 +41,22 @@ export const Formats: FormatList = [
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 9', 'Max Move Count = 8', 'Max Level = 100', 'Default Level = 50','Team Preview'],
 	},
 	{
+		name: "[BudpoW] Singles Test",
+
+		mod: 'gen9',
+		searchShow: true,
+		gameType: 'Singles',
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 100', 'Max Move Count = 100', 'Max Level = 100', 'Default Level = 50','Team Preview'],
+	},
+	{
+		name: "[BudpoW] Doubles Test",
+
+		mod: 'gen9',
+		searchShow: true,
+		gameType: 'doubles',
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 100', 'Max Move Count = 100', 'Max Level = 100', 'Default Level = 50','Team Preview'],
+	},
+	{
 		name: "[Gen 9] Random Battle",
 				desc: `Randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
 		threads: [
