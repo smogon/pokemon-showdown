@@ -15751,12 +15751,18 @@ name: "Struggle Bug",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 95,
+secondaries: [
+{
+chance: 75,
 boosts: {
 spa: -1,
+}, {
+{
+chance: 75,
+boosts: {
+atk: -1,
 },
-},
+],
 target: "allAdjacentFoes",
 type: "Bug",
 },
@@ -15807,7 +15813,11 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 recoil: [1, 4],
-secondary: null,
+secondary: {
+chance: 75,
+onHit(target, source, move) {
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+},
 target: "normal",
 type: "Fighting",
 },
@@ -16129,7 +16139,9 @@ name: "Swift",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
-secondary: null,
+boosts: {
+accuracy: 1,
+},
 target: "allAdjacentFoes",
 type: "Normal",
 },
@@ -16189,7 +16201,8 @@ pp: 1.25,
 priority: 0,
 flags: {snatch: 1, dance: 1},
 boosts: {
-atk: 2,
+atk: 3,
+evasion: -3,
 },
 secondary: null,
 target: "self",
@@ -16255,6 +16268,7 @@ name: "Tackle",
 pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
+critRatio: 2,
 secondary: null,
 target: "normal",
 type: "Normal",
@@ -16299,7 +16313,9 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1},
 boosts: {
+spd: -1,
 def: -1,
+evasion: -1,
 },
 secondary: null,
 target: "allAdjacentFoes",
@@ -16455,6 +16471,7 @@ name: "Tearful Look",
 pp: 1.25,
 priority: 0,
 flags: {reflectable: 1, mirror: 1},
+volatileStatus: 'attract',
 boosts: {
 atk: -1,
 spa: -1,
@@ -16610,7 +16627,7 @@ return !!this.canSwitch(source.side);
 selfSwitch: true,
 forceSwitch: true,
 secondary: null,
-target: "any",
+target: "randomNormal",
 type: "Psychic",
 },
 
@@ -16964,7 +16981,11 @@ priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
 boosts: {
 atk: -1,
+spa: -1,
+spe: 1,
+spd: -1,
 def: -1,
+evasion: 1,
 },
 secondary: null,
 target: "normal",
@@ -17188,14 +17209,14 @@ type: "Normal",
 
 triattack: {
 accuracy: 93,
-basePower: 80,
+basePower: 70,
 category: "Special",
 name: "Tri Attack",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 25,
+chance: 50,
 onHit(target, source) {
 const result = this.random(3);
 if (result === 0) {
@@ -17409,6 +17430,7 @@ secondary: {
 chance: 95,
 boosts: {
 atk: -1,
+spa: -1,
 },
 },
 target: "normal",
@@ -17482,7 +17504,7 @@ priority: 0,
 flags: {protect: 1, mirror: 1},
 multihit: 2,
 secondary: {
-chance: 25,
+chance: 50,
 status: 'tox',
 },
 target: "normal",
@@ -17624,24 +17646,6 @@ target: "normal",
 type: "Fire",
 },
 
-veeveevolley: {
-accuracy: 93,
-basePower: 0,
-basePowerCallback(pokemon) {
-const bp = Math.floor((pokemon.happiness * 10) / 25) || 1;
-this.debug('BP: ' + bp);
-return bp;
-},
-category: "Physical",
-name: "Veevee Volley",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
 venomdrench: {
 accuracy: 93,
 basePower: 0,
@@ -17688,15 +17692,37 @@ pp: 1.25,
 priority: 0,
 flags: {snatch: 1, dance: 1},
 status: 'slp',
+secondaries: [
+{
+chance: 50,
 boosts: {
 atk: 1,
+}, {
+chance: 50,
+boosts: {
 spa: 1,
+}, {
+chance: 50,
+boosts: {
 spe: 1,
+}, {
+chance: 50,
+boosts: {
 spd: 1,
+}, {
+chance: 50,
+boosts: {
 def: 1,
-evasion: -1,
+}, {
+chance: 50,
+boosts: {
+spa: 1,
+}, {
+chance: 50,
+boosts: {
+evasion: 1,
 },
-secondary: null,
+],
 target: "self",
 type: "Fighting",
 },
