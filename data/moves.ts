@@ -15751,18 +15751,6 @@ name: "Struggle Bug",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
-secondaries: [
-{
-chance: 75,
-boosts: {
-atk: 1,
-},
-}, {
-chance: 75,
-boosts: {
-spa: 1,
-},
-],
 target: "allAdjacentFoes",
 type: "Bug",
 },
