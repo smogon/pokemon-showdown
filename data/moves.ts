@@ -4,15 +4,15 @@ export const Moves: {[moveid: string]: MoveData} = {
 
 "10000000voltthunderbolt": {
 accuracy: 93,
-basePower: 250,
+basePower: 195,
 category: "Special",
 name: "10,000,000 Volt Thunderbolt",
 pp: .625,
 priority: 0,
-flags: {protect: 1, mirror: 1, noparentalbond: 1},
-selfdestruct: "always",
+flags: {},
+critRatio: 3,
 secondary: null,
-target: "allAdjacent",
+target: "normal",
 type: "Electric",
 },
 
@@ -79,18 +79,14 @@ type: "Poison",
 
 aciddownpour: {
 accuracy: 93,
-basePower: 95,
+basePower: 1,
 category: "Physical",
 name: "Acid Downpour",
 pp: .625,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-weather: 'RainDance',
-secondary: {
-chance: 75,
-status: 'tox',
-},
-target: "allAdjacent",
+flags: {},
+secondary: null,
+target: "normal",
 type: "Poison",
 },
 
@@ -259,13 +255,13 @@ type: "Flying",
 },
 
 alloutpummeling: {
-accuracy: 85,
-basePower: 115,
+accuracy: 93,
+basePower: 1,
 category: "Physical",
 name: "All-Out Pummeling",
 pp: .625,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
+flags: {},
 secondary: null,
 target: "normal",
 type: "Fighting",
@@ -971,7 +967,7 @@ return this.chainModify(2);
 },
 secondary: {
 chance: 50,
-status: 'tox',
+status: 'psn',
 },
 target: "normal",
 type: "Poison",
@@ -1309,16 +1305,13 @@ type: "Ghost",
 },
 
 blackholeeclipse: {
-accuracy: 90,
-basePower: 150,
-category: "Special",
+accuracy: 93,
+basePower: 1,
+category: "Physical",
 name: "Black Hole Eclipse",
-pp: 1.25,
+pp: .625,
 priority: 0,
-flags: {recharge: 1, protect: 1, mirror: 1},
-self: {
-volatileStatus: 'mustrecharge',
-},
+flags: {},
 secondary: null,
 target: "normal",
 type: "Dark",
@@ -1429,34 +1422,13 @@ type: "Normal",
 },
 
 bloomdoom: {
-accuracy: 80,
-basePower: 95,
-category: "Special",
+accuracy: 93,
+basePower: 1,
+category: "Physical",
 name: "Bloom Doom",
 pp: .625,
 priority: 0,
-flags: {protect: 1, mirror: 1},
-volatileStatus: 'leechseed',
-condition: {
-onStart(target) {
-this.add('-start', target, 'move: Leech Seed');
-},
-onResidualOrder: 8,
-onResidual(pokemon) {
-const target = this.getAtSlot(pokemon.volatiles['leechseed'].sourceSlot);
-if (!target || target.fainted || target.hp <= 0) {
-this.debug('Nothing to leech into');
-return;
-}
-const damage = this.damage(pokemon.baseMaxhp / 8, pokemon, target);
-if (damage) {
-this.heal(damage, target, pokemon);
-}
-},
-},
-onTryImmunity(target) {
-return !target.hasType('Grass');
-},
+flags: {},
 secondary: null,
 target: "normal",
 type: "Grass",
@@ -1705,20 +1677,15 @@ type: "Dragon",
 },
 
 breakneckblitz: {
-accuracy: 80,
-basePower: 105,
+accuracy: 93,
+basePower: 1,
 category: "Physical",
 name: "Breakneck Blitz",
-pp: 1.25,
-priority: 10,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [50, 100],
-hasCrashDamage: true,
-onMoveFail(target, source, move) {
-this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
-},
+pp: .625,
+priority: 0,
+flags: {},
 secondary: null,
-target: "randomNormal",
+target: "normal",
 type: "Normal",
 },
 
@@ -2037,6 +2004,19 @@ target: "allAdjacentFoes",
 type: "Normal",
 },
 
+catastropika: {
+accuracy: 93,
+basePower: 210,
+category: "Physical",
+name: "Catastropika",
+pp: .625,
+priority: 0,
+flags: {contact: 1},
+secondary: null,
+target: "normal",
+type: "Electric",
+},
+
 ceaselessedge: {
 accuracy: 90,
 basePower: 65,
@@ -2331,8 +2311,8 @@ type: "Dragon",
 },
 
 clangoroussoulblaze: {
-accuracy: 80,
-basePower: 120,
+accuracy: 93,
+basePower: 185,
 category: "Special",
 name: "Clangorous Soulblaze",
 pp: .625,
@@ -2341,7 +2321,10 @@ flags: {sound: 1, bypasssub: 1},
 selfBoost: {
 boosts: {
 atk: 1,
+def: 1,
 spa: 1,
+spd: 1,
+spe: 1,
 },
 },
 secondary: {
@@ -2462,7 +2445,7 @@ type: "Fighting",
 
 cometpunch: {
 accuracy: 85,
-basePower: 15,
+basePower: 18,
 category: "Physical",
 name: "Comet Punch",
 pp: 1.25,
@@ -2552,7 +2535,7 @@ type: "Psychic",
 
 constrict: {
 accuracy: 93,
-basePower: 15,
+basePower: 10,
 category: "Physical",
 name: "Constrict",
 pp: 1.25,
@@ -2569,19 +2552,15 @@ type: "Normal",
 },
 
 continentalcrush: {
-accuracy: 85,
-basePower: 105,
+accuracy: 93,
+basePower: 1,
 category: "Physical",
 name: "Continental Crush",
 pp: .625,
-priority: -5,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 75,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
+priority: 0,
+flags: {},
+secondary: null,
+target: "normal",
 type: "Rock",
 },
 
@@ -2684,13 +2663,13 @@ type: "Dragon",
 },
 
 corkscrewcrash: {
-accuracy: 85,
-basePower: 60,
+accuracy: 93,
+basePower: 1,
 category: "Physical",
 name: "Corkscrew Crash",
 pp: .625,
-priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1},
+priority: 0,
+flags: {},
 secondary: null,
 target: "normal",
 type: "Steel",
@@ -2979,7 +2958,7 @@ priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
 secondary: {
 chance: 10,
-status: 'tox',
+status: 'psn',
 },
 critRatio: 2,
 target: "normal",
@@ -3263,7 +3242,7 @@ basePower: 0,
 category: "Status",
 name: "Destiny Bond",
 pp: 1.25,
-priority: 1,
+priority: 0,
 flags: {bypasssub: 1, noassist: 1, failcopycat: 1},
 volatileStatus: 'destinybond',
 onPrepareHit(pokemon) {
@@ -3321,13 +3300,13 @@ type: "Fighting",
 },
 
 devastatingdrake: {
-accuracy: 90,
-basePower: 75,
+accuracy: 93,
+basePower: 1,
 category: "Physical",
 name: "Devastating Drake",
-pp: 1.25,
-priority: 2,
-flags: {protect: 1, mirror: 1},
+pp: .625,
+priority: 0,
+flags: {},
 secondary: null,
 target: "normal",
 type: "Dragon",
@@ -3754,7 +3733,6 @@ priority: 0,
 flags: {snatch: 1},
 boosts: {
 evasion: 1,
-spe: 1,
 },
 secondary: null,
 target: "self",
@@ -4609,7 +4587,7 @@ type: "Psychic",
 
 eternabeam: {
 accuracy: 90,
-basePower: 150,
+basePower: 160,
 category: "Special",
 name: "Eternabeam",
 pp: 1.25,
@@ -4675,6 +4653,26 @@ volatileStatus: 'flinch',
 },
 target: "normal",
 type: "Psychic",
+},
+
+extremeevoboost: {
+accuracy: 93,
+basePower: 0,
+category: "Status",
+name: "Extreme Evoboost",
+pp: .625,
+priority: 0,
+flags: {},
+boosts: {
+atk: 2,
+def: 2,
+spa: 2,
+spd: 2,
+spe: 2,
+},
+secondary: null,
+target: "self",
+type: "Normal",
 },
 
 extremespeed: {
@@ -5292,7 +5290,7 @@ boosts: {
 accuracy: -1,
 },
 secondary: null,
-target: "allAdjacent",
+target: "normal",
 type: "Normal",
 },
 
@@ -5932,7 +5930,7 @@ type: "Bug",
 
 furyswipes: {
 accuracy: 80,
-basePower: 15,
+basePower: 18,
 category: "Physical",
 name: "Fury Swipes",
 pp: 1.25,
@@ -6093,12 +6091,12 @@ type: "Steel",
 
 genesissupernova: {
 accuracy: 93,
-basePower: 80,
+basePower: 185,
 category: "Special",
 name: "Genesis Supernova",
 pp: .625,
 priority: 0,
-flags: {protect: 1, mirror: 1},
+flags: {},
 secondary: {
 chance: 100,
 self: {
@@ -6172,7 +6170,7 @@ type: "Normal",
 
 gigatonhammer: {
 accuracy: 93,
-basePower: 115,
+basePower: 160,
 category: "Physical",
 name: "Gigaton Hammer",
 pp: 1.25,
@@ -6196,18 +6194,15 @@ type: "Steel",
 },
 
 gigavolthavoc: {
-accuracy: 75,
-basePower: 95,
-category: "Special",
+accuracy: 93,
+basePower: 1,
+category: "Physical",
 name: "Gigavolt Havoc",
-pp: 1.25,
-priority: 1,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 50,
-status: 'par',
-},
-target: "randomNormal",
+pp: .625,
+priority: 0,
+flags: {},
+secondary: null,
+target: "normal",
 type: "Electric",
 },
 
@@ -6280,7 +6275,7 @@ accuracy: 93,
 basePower: 0,
 category: "Status",
 name: "Glare",
-pp: 0.625,
+pp: 1.25,
 priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1},
 status: 'par',
@@ -6303,6 +6298,804 @@ sideCondition: 'lightscreen',
 secondary: null,
 target: "normal",
 type: "Psychic",
+},
+
+gmaxbefuddle: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Befuddle",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Butterfree",
+self: {
+onHit(source) {
+for (const pokemon of source.foes()) {
+const result = this.random(3);
+if (result === 0) {
+pokemon.trySetStatus('slp', source);
+} else if (result === 1) {
+pokemon.trySetStatus('par', source);
+} else {
+pokemon.trySetStatus('psn', source);
+}
+}
+},
+},
+target: "adjacentFoe",
+type: "Bug",
+},
+
+gmaxcannonade: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Cannonade",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Blastoise",
+self: {
+onHit(source) {
+for (const side of source.side.foeSidesWithConditions()) {
+side.addSideCondition('gmaxcannonade');
+}
+},
+},
+condition: {
+duration: 4,
+onSideStart(targetSide) {
+this.add('-sidestart', targetSide, 'G-Max Cannonade');
+},
+onResidualOrder: 5,
+onResidualSubOrder: 1,
+onResidual(target) {
+if (!target.hasType('Water')) this.damage(target.baseMaxhp / 6, target);
+},
+onSideResidualOrder: 26,
+onSideResidualSubOrder: 11,
+onSideEnd(targetSide) {
+this.add('-sideend', targetSide, 'G-Max Cannonade');
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Water",
+},
+
+gmaxcentiferno: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Centiferno",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Centiskorch",
+self: {
+onHit(source) {
+for (const pokemon of source.foes()) {
+pokemon.addVolatile('partiallytrapped', source, this.dex.getActiveMove('G-Max Centiferno'));
+}
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Fire",
+},
+
+gmaxchistrike: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Chi Strike",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Machamp",
+self: {
+onHit(source) {
+for (const pokemon of source.alliesAndSelf()) {
+pokemon.addVolatile('gmaxchistrike');
+}
+},
+},
+condition: {
+noCopy: true,
+onStart(target, source, effect) {
+this.effectState.layers = 1;
+if (!['costar', 'imposter', 'psychup', 'transform'].includes(effect?.id)) {
+this.add('-start', target, 'move: G-Max Chi Strike');
+}
+},
+onRestart(target, source, effect) {
+if (this.effectState.layers >= 3) return false;
+this.effectState.layers++;
+if (!['costar', 'imposter', 'psychup', 'transform'].includes(effect?.id)) {
+this.add('-start', target, 'move: G-Max Chi Strike');
+}
+},
+onModifyCritRatio(critRatio) {
+return critRatio + this.effectState.layers;
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Fighting",
+},
+
+gmaxcuddle: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Cuddle",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Eevee",
+self: {
+onHit(source) {
+for (const pokemon of source.foes()) {
+pokemon.addVolatile('attract');
+}
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Normal",
+},
+
+gmaxdepletion: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Depletion",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Duraludon",
+self: {
+onHit(source) {
+for (const pokemon of source.foes()) {
+let move: Move | ActiveMove | null = pokemon.lastMove;
+if (!move || move.isZ) continue;
+if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
+
+const ppDeducted = pokemon.deductPP(move.id, 2);
+if (ppDeducted) {
+this.add("-activate", pokemon, 'move: G-Max Depletion', move.name, ppDeducted);
+// Don't return here because returning early doesn't trigger
+// activation text for the second Pokemon in doubles
+}
+}
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Dragon",
+},
+
+gmaxdrumsolo: {
+accuracy: 93,
+basePower: 160,
+category: "Physical",
+name: "G-Max Drum Solo",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Rillaboom",
+ignoreAbility: true,
+secondary: null,
+target: "adjacentFoe",
+type: "Grass",
+},
+
+gmaxfinale: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Finale",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Alcremie",
+self: {
+onHit(target, source, move) {
+for (const pokemon of source.alliesAndSelf()) {
+this.heal(pokemon.maxhp / 6, pokemon, source, move);
+}
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Fairy",
+},
+
+gmaxfireball: {
+accuracy: 93,
+basePower: 160,
+category: "Physical",
+name: "G-Max Fireball",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Cinderace",
+ignoreAbility: true,
+secondary: null,
+target: "adjacentFoe",
+type: "Fire",
+},
+
+gmaxfoamburst: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Foam Burst",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Kingler",
+self: {
+onHit(source) {
+for (const pokemon of source.foes()) {
+this.boost({spe: -2}, pokemon);
+}
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Water",
+},
+
+gmaxgoldrush: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Gold Rush",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Meowth",
+self: {
+onHit(source) {
+for (const pokemon of source.foes()) {
+pokemon.addVolatile('confusion');
+}
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Normal",
+},
+
+gmaxgravitas: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Gravitas",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Orbeetle",
+self: {
+pseudoWeather: 'gravity',
+},
+target: "adjacentFoe",
+type: "Psychic",
+},
+
+gmaxhydrosnipe: {
+accuracy: 93,
+basePower: 160,
+category: "Physical",
+name: "G-Max Hydrosnipe",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Inteleon",
+ignoreAbility: true,
+secondary: null,
+target: "adjacentFoe",
+type: "Water",
+},
+
+gmaxmalodor: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Malodor",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Garbodor",
+self: {
+onHit(source) {
+for (const pokemon of source.foes()) {
+pokemon.trySetStatus('psn', source);
+}
+},
+},
+target: "adjacentFoe",
+type: "Poison",
+},
+
+gmaxmeltdown: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Meltdown",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Melmetal",
+self: {
+onHit(source, target, effect) {
+for (const pokemon of source.foes()) {
+if (!pokemon.volatiles['dynamax']) pokemon.addVolatile('torment', source, effect);
+}
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Steel",
+},
+
+gmaxoneblow: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max One Blow",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Urshifu",
+secondary: null,
+target: "adjacentFoe",
+type: "Dark",
+},
+
+gmaxrapidflow: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Rapid Flow",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Urshifu-Rapid-Strike",
+secondary: null,
+target: "adjacentFoe",
+type: "Water",
+},
+
+gmaxreplenish: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Replenish",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Snorlax",
+self: {
+onHit(source) {
+if (this.random(2) === 0) return;
+for (const pokemon of source.alliesAndSelf()) {
+if (pokemon.item) continue;
+
+if (pokemon.lastItem && this.dex.items.get(pokemon.lastItem).isBerry) {
+const item = pokemon.lastItem;
+pokemon.lastItem = '';
+this.add('-item', pokemon, this.dex.items.get(item), '[from] move: G-Max Replenish');
+pokemon.setItem(item);
+}
+}
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Normal",
+},
+
+gmaxresonance: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Resonance",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Lapras",
+self: {
+sideCondition: 'auroraveil',
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Ice",
+},
+
+gmaxsandblast: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Sandblast",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Sandaconda",
+self: {
+onHit(source) {
+for (const pokemon of source.foes()) {
+pokemon.addVolatile('partiallytrapped', source, this.dex.getActiveMove('G-Max Sandblast'));
+}
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Ground",
+},
+
+gmaxsmite: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Smite",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Hatterene",
+self: {
+onHit(source) {
+for (const pokemon of source.foes()) {
+pokemon.addVolatile('confusion', source);
+}
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Fairy",
+},
+
+gmaxsnooze: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Snooze",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Grimmsnarl",
+onHit(target) {
+if (target.status || !target.runStatusImmunity('slp')) return;
+if (this.random(2) === 0) return;
+target.addVolatile('yawn');
+},
+onAfterSubDamage(damage, target) {
+if (target.status || !target.runStatusImmunity('slp')) return;
+if (this.random(2) === 0) return;
+target.addVolatile('yawn');
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Dark",
+},
+
+gmaxsteelsurge: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Steelsurge",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Copperajah",
+self: {
+onHit(source) {
+for (const side of source.side.foeSidesWithConditions()) {
+side.addSideCondition('gmaxsteelsurge');
+}
+},
+},
+condition: {
+onSideStart(side) {
+this.add('-sidestart', side, 'move: G-Max Steelsurge');
+},
+onEntryHazard(pokemon) {
+if (pokemon.hasItem('heavydutyboots')) return;
+// Ice Face and Disguise correctly get typed damage from Stealth Rock
+// because Stealth Rock bypasses Substitute.
+// They don't get typed damage from Steelsurge because Steelsurge doesn't,
+// so we're going to test the damage of a Steel-type Stealth Rock instead.
+const steelHazard = this.dex.getActiveMove('Stealth Rock');
+steelHazard.type = 'Steel';
+const typeMod = this.clampIntRange(pokemon.runEffectiveness(steelHazard), -6, 6);
+this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Steel",
+},
+
+gmaxstonesurge: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Stonesurge",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Drednaw",
+self: {
+onHit(source) {
+for (const side of source.side.foeSidesWithConditions()) {
+side.addSideCondition('stealthrock');
+}
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Water",
+},
+
+gmaxstunshock: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Stun Shock",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Toxtricity",
+self: {
+onHit(source) {
+for (const pokemon of source.foes()) {
+const result = this.random(2);
+if (result === 0) {
+pokemon.trySetStatus('par', source);
+} else {
+pokemon.trySetStatus('psn', source);
+}
+}
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Electric",
+},
+
+gmaxsweetness: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Sweetness",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Appletun",
+self: {
+onHit(source) {
+for (const ally of source.side.pokemon) {
+ally.cureStatus();
+}
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Grass",
+},
+
+gmaxtartness: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Tartness",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Flapple",
+self: {
+onHit(source) {
+for (const pokemon of source.foes()) {
+this.boost({evasion: -1}, pokemon);
+}
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Grass",
+},
+
+gmaxterror: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Terror",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Gengar",
+self: {
+onHit(source) {
+for (const pokemon of source.foes()) {
+pokemon.addVolatile('trapped', source, null, 'trapper');
+}
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Ghost",
+},
+
+gmaxvinelash: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Vine Lash",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Venusaur",
+self: {
+onHit(source) {
+for (const side of source.side.foeSidesWithConditions()) {
+side.addSideCondition('gmaxvinelash');
+}
+},
+},
+condition: {
+duration: 4,
+onSideStart(targetSide) {
+this.add('-sidestart', targetSide, 'G-Max Vine Lash');
+},
+onResidualOrder: 5,
+onResidualSubOrder: 1,
+onResidual(target) {
+if (!target.hasType('Grass')) this.damage(target.baseMaxhp / 6, target);
+},
+onSideResidualOrder: 26,
+onSideResidualSubOrder: 11,
+onSideEnd(targetSide) {
+this.add('-sideend', targetSide, 'G-Max Vine Lash');
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Grass",
+},
+
+gmaxvolcalith: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Volcalith",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Coalossal",
+self: {
+onHit(source) {
+for (const side of source.side.foeSidesWithConditions()) {
+side.addSideCondition('gmaxvolcalith');
+}
+},
+},
+condition: {
+duration: 4,
+onSideStart(targetSide) {
+this.add('-sidestart', targetSide, 'G-Max Volcalith');
+},
+onResidualOrder: 5,
+onResidualSubOrder: 1,
+onResidual(target) {
+if (!target.hasType('Rock')) this.damage(target.baseMaxhp / 6, target);
+},
+onSideResidualOrder: 26,
+onSideResidualSubOrder: 11,
+onSideEnd(targetSide) {
+this.add('-sideend', targetSide, 'G-Max Volcalith');
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Rock",
+},
+
+gmaxvoltcrash: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Volt Crash",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Pikachu",
+self: {
+onHit(source) {
+for (const pokemon of source.foes()) {
+pokemon.trySetStatus('par', source);
+}
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Electric",
+},
+
+gmaxwildfire: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Wildfire",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Charizard",
+self: {
+onHit(source) {
+for (const side of source.side.foeSidesWithConditions()) {
+side.addSideCondition('gmaxwildfire');
+}
+},
+},
+condition: {
+duration: 4,
+onSideStart(targetSide) {
+this.add('-sidestart', targetSide, 'G-Max Wildfire');
+},
+onResidualOrder: 5,
+onResidualSubOrder: 1,
+onResidual(target) {
+if (!target.hasType('Fire')) this.damage(target.baseMaxhp / 6, target);
+},
+onSideResidualOrder: 26,
+onSideResidualSubOrder: 11,
+onSideEnd(targetSide) {
+this.add('-sideend', targetSide, 'G-Max Wildfire');
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Fire",
+},
+
+gmaxwindrage: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "G-Max Wind Rage",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: "Corviknight",
+self: {
+onHit(source) {
+let success = false;
+const removeTarget = [
+'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
+];
+const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+for (const targetCondition of removeTarget) {
+if (source.side.foe.removeSideCondition(targetCondition)) {
+if (!removeAll.includes(targetCondition)) continue;
+this.add('-sideend', source.side.foe, this.dex.conditions.get(targetCondition).name, '[from] move: G-Max Wind Rage', '[of] ' + source);
+success = true;
+}
+}
+for (const sideCondition of removeAll) {
+if (source.side.removeSideCondition(sideCondition)) {
+this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: G-Max Wind Rage', '[of] ' + source);
+success = true;
+}
+}
+this.field.clearTerrain();
+return success;
+},
+},
+secondary: null,
+target: "adjacentFoe",
+type: "Flying",
 },
 
 grassknot: {
@@ -6696,7 +7489,7 @@ category: "Special",
 name: "Guardian of Alola",
 pp: .625,
 priority: 0,
-flags: {protect: 1, mirror: 1, wind: 1},
+flags: {},
 secondary: null,
 target: "normal",
 type: "Fairy",
@@ -6776,7 +7569,7 @@ priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
 chance: 30,
-status: 'tox',
+status: 'psn',
 },
 target: "normal",
 type: "Poison",
@@ -7309,6 +8102,7 @@ target: "normal",
 type: "Ghost",
 },
 
+
 highhorsepower: {
 accuracy: 95,
 basePower: 95,
@@ -7516,19 +8310,14 @@ type: "Water",
 },
 
 hydrovortex: {
-accuracy: 85,
-basePower: 105,
-category: "Special",
+accuracy: 93,
+basePower: 1,
+category: "Physical",
 name: "Hydro Vortex",
-pp: 1.25,
+pp: .625,
 priority: 0,
-flags: {recharge: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 75,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
+flags: {},
+secondary: null,
 target: "normal",
 type: "Water",
 },
@@ -7648,29 +8437,78 @@ priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1},
 status: 'slp',
 secondary: null,
-target: "allAdjacent",
+target: "normal",
 type: "Psychic",
 },
 
 iceball: {
-accuracy: 75,
-basePower: 15,
+accuracy: 90,
+basePower: 30,
 basePowerCallback(pokemon, target, move) {
-return 15 * move.hit;
+let bp = move.basePower;
+const iceballData = pokemon.volatiles['iceball'];
+if (iceballData?.hitCount) {
+bp *= Math.pow(2, iceballData.contactHitCount);
+}
+if (iceballData && pokemon.status !== 'slp') {
+iceballData.hitCount++;
+iceballData.contactHitCount++;
+if (iceballData.hitCount < 5) {
+iceballData.duration = 2;
+}
+}
+if (pokemon.volatiles['defensecurl']) {
+bp *= 2;
+}
+this.debug("BP: " + bp);
+return bp;
 },
 category: "Physical",
 name: "Ice Ball",
-pp: 0.625,
+pp: 1.25,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [1, 4],
-multihit: [3, 10],
-multiaccuracy: 75,
+flags: {bullet: 1, contact: 1, protect: 1, mirror: 1, noparentalbond: 1, failinstruct: 1},
+onModifyMove(move, pokemon, target) {
+if (pokemon.volatiles['iceball'] || pokemon.status === 'slp' || !target) return;
+pokemon.addVolatile('iceball');
+// @ts-ignore
+// TS thinks pokemon.volatiles['iceball'] doesn't exist because of the condition on the return above
+// but it does exist now because addVolatile created it
+pokemon.volatiles['iceball'].targetSlot = move.sourceEffect ? pokemon.lastMoveTargetLoc : pokemon.getLocOf(target);
+},
+onAfterMove(source, target, move) {
+const iceballData = source.volatiles["iceball"];
+if (
+iceballData &&
+iceballData.hitCount === 5 &&
+iceballData.contactHitCount < 5
+// this conditions can only be met in gen7 and gen8dlc1
+// see `disguise` and `iceface` abilities in the resp mod folders
+) {
+source.addVolatile("rolloutstorage");
+source.volatiles["rolloutstorage"].contactHitCount =
+iceballData.contactHitCount;
+}
+},
+
+condition: {
+duration: 1,
+onLockMove: 'iceball',
+onStart() {
+this.effectState.hitCount = 0;
+this.effectState.contactHitCount = 0;
+},
+onResidual(target) {
+if (target.lastMove && target.lastMove.id === 'struggle') {
+// don't lock
+delete target.volatiles['iceball'];
+}
+},
+},
 secondary: null,
 target: "normal",
 type: "Ice",
 },
-
 
 icebeam: {
 accuracy: 93,
@@ -7940,17 +8778,14 @@ type: "Fire",
 },
 
 infernooverdrive: {
-accuracy: 90,
-basePower: 55,
+accuracy: 93,
+basePower: 1,
 category: "Physical",
 name: "Inferno Overdrive",
-pp: 1.25,
-priority: 3,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 50,
-status: 'brn',
-},
+pp: .625,
+priority: 0,
+flags: {},
+secondary: null,
 target: "normal",
 type: "Fire",
 },
@@ -8575,18 +9410,13 @@ type: "Normal",
 
 letssnuggleforever: {
 accuracy: 93,
-basePower: 90,
+basePower: 190,
 category: "Physical",
 name: "Let's Snuggle Forever",
 pp: .625,
 priority: 0,
 flags: {contact: 1},
-secondary: {
-chance: 75,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
+secondary: null,
 target: "normal",
 type: "Fairy",
 },
@@ -8677,12 +9507,12 @@ type: "Psychic",
 
 lightthatburnsthesky: {
 accuracy: 93,
-basePower: 125,
+basePower: 200,
 category: "Special",
 name: "Light That Burns the Sky",
 pp: .625,
 priority: 0,
-flags: {protect: 1, mirror: 1,},
+flags: {},
 onModifyMove(move, pokemon) {
 if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
 },
@@ -9106,7 +9936,6 @@ name: "Magma Storm",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
-weather: 'sunnyday',
 volatileStatus: 'partiallytrapped',
 secondary: null,
 target: "normal",
@@ -9231,13 +10060,17 @@ type: "Ground",
 
 makeitrain: {
 accuracy: 93,
-basePower: 50,
+basePower: 120,
 category: "Special",
 name: "Make It Rain",
 pp: 1.25,
 priority: 0,
-flags: {mirror: 1},
-weather: 'RainDance',
+flags: {protect: 1, mirror: 1},
+self: {
+boosts: {
+spa: -1,
+},
+},
 secondary: null,
 target: "allAdjacentFoes",
 type: "Steel",
@@ -9245,10 +10078,10 @@ type: "Steel",
 
 maliciousmoonsault: {
 accuracy: 93,
-basePower: 105,
+basePower: 180,
 category: "Physical",
 name: "Malicious Moonsault",
-pp: 1.25,
+pp: .625,
 priority: 0,
 flags: {contact: 1},
 secondary: null,
@@ -9300,6 +10133,416 @@ return this.NOT_FAIL;
 secondary: null,
 target: "allySide",
 type: "Fighting",
+},
+
+maxairstream: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "Max Airstream",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: true,
+self: {
+onHit(source) {
+if (!source.volatiles['dynamax']) return;
+for (const pokemon of source.alliesAndSelf()) {
+this.boost({spe: 1}, pokemon);
+}
+},
+},
+target: "adjacentFoe",
+type: "Flying",
+},
+
+maxdarkness: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "Max Darkness",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: true,
+self: {
+onHit(source) {
+if (!source.volatiles['dynamax']) return;
+for (const pokemon of source.foes()) {
+this.boost({spd: -1}, pokemon);
+}
+},
+},
+target: "adjacentFoe",
+type: "Dark",
+},
+
+maxflare: {
+accuracy: 93,
+basePower: 100,
+category: "Physical",
+name: "Max Flare",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: true,
+self: {
+onHit(source) {
+if (!source.volatiles['dynamax']) return;
+this.field.setWeather('sunnyday');
+},
+},
+target: "adjacentFoe",
+type: "Fire",
+},
+
+maxflutterby: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "Max Flutterby",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: true,
+self: {
+onHit(source) {
+if (!source.volatiles['dynamax']) return;
+for (const pokemon of source.foes()) {
+this.boost({spa: -1}, pokemon);
+}
+},
+},
+target: "adjacentFoe",
+type: "Bug",
+},
+
+maxgeyser: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "Max Geyser",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: true,
+self: {
+onHit(source) {
+if (!source.volatiles['dynamax']) return;
+this.field.setWeather('raindance');
+},
+},
+target: "adjacentFoe",
+type: "Water",
+},
+
+maxguard: {
+accuracy: 93,
+basePower: 0,
+category: "Status",
+name: "Max Guard",
+pp: 1.25,
+priority: 4,
+flags: {},
+isMax: true,
+stallingMove: true,
+volatileStatus: 'maxguard',
+onPrepareHit(pokemon) {
+return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+},
+onHit(pokemon) {
+pokemon.addVolatile('stall');
+},
+condition: {
+duration: 1,
+onStart(target) {
+this.add('-singleturn', target, 'Max Guard');
+},
+onTryHitPriority: 3,
+onTryHit(target, source, move) {
+const bypassesMaxGuard = [
+'acupressure', 'afteryou', 'allyswitch', 'aromatherapy', 'aromaticmist', 'coaching', 'confide', 'copycat', 'curse', 'decorate', 'doomdesire', 'feint', 'futuresight', 'gmaxoneblow', 'gmaxrapidflow', 'healbell', 'holdhands', 'howl', 'junglehealing', 'lifedew', 'meanlook', 'perishsong', 'playnice', 'powertrick', 'roar', 'roleplay', 'tearfullook',
+];
+if (bypassesMaxGuard.includes(move.id)) return;
+if (move.smartTarget) {
+move.smartTarget = false;
+} else {
+this.add('-activate', target, 'move: Max Guard');
+}
+const lockedmove = source.getVolatile('lockedmove');
+if (lockedmove) {
+// Outrage counter is reset
+if (source.volatiles['lockedmove'].duration === 2) {
+delete source.volatiles['lockedmove'];
+}
+}
+return this.NOT_FAIL;
+},
+},
+secondary: null,
+target: "self",
+type: "Normal",
+},
+
+maxhailstorm: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "Max Hailstorm",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: true,
+self: {
+onHit(source) {
+if (!source.volatiles['dynamax']) return;
+this.field.setWeather('hail');
+},
+},
+target: "adjacentFoe",
+type: "Ice",
+},
+
+maxknuckle: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "Max Knuckle",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: true,
+self: {
+onHit(source) {
+if (!source.volatiles['dynamax']) return;
+for (const pokemon of source.alliesAndSelf()) {
+this.boost({atk: 1}, pokemon);
+}
+},
+},
+target: "adjacentFoe",
+type: "Fighting",
+},
+
+maxlightning: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "Max Lightning",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: true,
+self: {
+onHit(source) {
+if (!source.volatiles['dynamax']) return;
+this.field.setTerrain('electricterrain');
+},
+},
+target: "adjacentFoe",
+type: "Electric",
+},
+
+maxmindstorm: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "Max Mindstorm",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: true,
+self: {
+onHit(source) {
+if (!source.volatiles['dynamax']) return;
+this.field.setTerrain('psychicterrain');
+},
+},
+target: "adjacentFoe",
+type: "Psychic",
+},
+
+maxooze: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "Max Ooze",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: true,
+self: {
+onHit(source) {
+if (!source.volatiles['dynamax']) return;
+for (const pokemon of source.alliesAndSelf()) {
+this.boost({spa: 1}, pokemon);
+}
+},
+},
+target: "adjacentFoe",
+type: "Poison",
+},
+
+maxovergrowth: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "Max Overgrowth",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: true,
+self: {
+onHit(source) {
+if (!source.volatiles['dynamax']) return;
+this.field.setTerrain('grassyterrain');
+},
+},
+target: "adjacentFoe",
+type: "Grass",
+},
+
+maxphantasm: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "Max Phantasm",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: true,
+self: {
+onHit(source) {
+if (!source.volatiles['dynamax']) return;
+for (const pokemon of source.foes()) {
+this.boost({def: -1}, pokemon);
+}
+},
+},
+target: "adjacentFoe",
+type: "Ghost",
+},
+
+maxquake: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "Max Quake",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: true,
+self: {
+onHit(source) {
+if (!source.volatiles['dynamax']) return;
+for (const pokemon of source.alliesAndSelf()) {
+this.boost({spd: 1}, pokemon);
+}
+},
+},
+target: "adjacentFoe",
+type: "Ground",
+},
+
+maxrockfall: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "Max Rockfall",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: true,
+self: {
+onHit(source) {
+if (!source.volatiles['dynamax']) return;
+this.field.setWeather('sandstorm');
+},
+},
+target: "adjacentFoe",
+type: "Rock",
+},
+
+maxstarfall: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "Max Starfall",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: true,
+self: {
+onHit(source) {
+if (!source.volatiles['dynamax']) return;
+this.field.setTerrain('mistyterrain');
+},
+},
+target: "adjacentFoe",
+type: "Fairy",
+},
+
+maxsteelspike: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "Max Steelspike",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: true,
+self: {
+onHit(source) {
+if (!source.volatiles['dynamax']) return;
+for (const pokemon of source.alliesAndSelf()) {
+this.boost({def: 1}, pokemon);
+}
+},
+},
+target: "adjacentFoe",
+type: "Steel",
+},
+
+maxstrike: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "Max Strike",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: true,
+self: {
+onHit(source) {
+if (!source.volatiles['dynamax']) return;
+for (const pokemon of source.foes()) {
+this.boost({spe: -1}, pokemon);
+}
+},
+},
+target: "adjacentFoe",
+type: "Normal",
+},
+
+maxwyrmwind: {
+accuracy: 93,
+basePower: 10,
+category: "Physical",
+name: "Max Wyrmwind",
+pp: 1.25,
+priority: 0,
+flags: {},
+isMax: true,
+self: {
+onHit(source) {
+if (!source.volatiles['dynamax']) return;
+for (const pokemon of source.foes()) {
+this.boost({atk: -1}, pokemon);
+}
+},
+},
+target: "adjacentFoe",
+type: "Dragon",
 },
 
 meanlook: {
@@ -9442,13 +10685,12 @@ type: "Dark",
 
 menacingmoonrazemaelstrom: {
 accuracy: 93,
-basePower: 125,
+basePower: 200,
 category: "Special",
 name: "Menacing Moonraze Maelstrom",
 pp: .625,
 priority: 0,
-flags: {protect: 1, mirror: 1,},
-pseudoWeather: 'fairylock',
+flags: {},
 ignoreAbility: true,
 secondary: null,
 target: "normal",
@@ -9522,7 +10764,7 @@ type: "Steel",
 },
 
 meteorassault: {
-accuracy: 90,
+accuracy: 93,
 basePower: 150,
 category: "Physical",
 name: "Meteor Assault",
@@ -9736,7 +10978,6 @@ return accuracy;
 },
 boosts: {
 evasion: 2,
-spe: 2,
 },
 secondary: null,
 target: "self",
@@ -9918,7 +11159,7 @@ type: "Psychic",
 
 mistyexplosion: {
 accuracy: 93,
-basePower: 250,
+basePower: 100,
 category: "Special",
 name: "Misty Explosion",
 pp: 1.25,
@@ -10132,7 +11373,7 @@ pokemon.removeVolatile('partiallytrapped');
 },
 secondary: {
 chance: 100,
-status: 'tox',
+status: 'psn',
 },
 target: "allAdjacentFoes",
 type: "Poison",
@@ -10419,18 +11660,15 @@ type: "Grass",
 },
 
 neverendingnightmare: {
-accuracy: 90,
-basePower: 45,
-category: "Special",
+accuracy: 93,
+basePower: 1,
+category: "Physical",
 name: "Never-Ending Nightmare",
-pp: 1.25,
+pp: .625,
 priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 75,
-status: 'slp',
-},
-target: "allAdjacentFoes",
+flags: {},
+secondary: null,
+target: "normal",
 type: "Ghost",
 },
 
@@ -10571,7 +11809,7 @@ protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopy
 },
 secondary: {
 chance: 30,
-status: 'tox',
+status: 'psn',
 },
 target: "normal",
 type: "Poison",
@@ -10665,15 +11903,14 @@ type: "Dark",
 
 oceanicoperetta: {
 accuracy: 93,
-basePower: 50,
+basePower: 195,
 category: "Special",
 name: "Oceanic Operetta",
-pp: 1.25,
+pp: .625,
 priority: 0,
-flags: {protect: 1, mirror: 1,},
-status: 'slp',
+flags: {},
 secondary: null,
-target: "allAdjacentFoes",
+target: "normal",
 type: "Water",
 },
 
@@ -11238,7 +12475,7 @@ name: "Poison Gas",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1},
-status: 'tox',
+status: 'psn',
 secondary: null,
 target: "allAdjacentFoes",
 type: "Poison",
@@ -11254,7 +12491,7 @@ priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
 chance: 30,
-status: 'tox',
+status: 'psn',
 },
 target: "normal",
 type: "Poison",
@@ -11268,7 +12505,7 @@ name: "Poison Powder",
 pp: 1.25,
 priority: 0,
 flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
-status: 'tox',
+status: 'psn',
 secondary: null,
 target: "normal",
 type: "Poison",
@@ -11284,7 +12521,7 @@ priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
 chance: 30,
-status: 'tox',
+status: 'psn',
 },
 target: "normal",
 type: "Poison",
@@ -11301,7 +12538,7 @@ flags: {contact: 1, protect: 1, mirror: 1},
 critRatio: 2,
 secondary: {
 chance: 10,
-status: 'tox',
+status: 'psn',
 },
 target: "normal",
 type: "Poison",
@@ -11354,14 +12591,15 @@ type: "Ghost",
 },
 
 populationbomb: {
-accuracy: 73,
-basePower: 15,
+accuracy: 90,
+basePower: 20,
 category: "Physical",
 name: "Population Bomb",
 pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
-multihit: [1, 25],
+multihit: 10,
+multiaccuracy: 93,
 secondary: null,
 target: "normal",
 type: "Normal",
@@ -11399,27 +12637,31 @@ type: "Normal",
 },
 
 powder: {
-accuracy: 94,
-basePower: 40,
-category: "Special",
+accuracy: 93,
+basePower: 0,
+category: "Status",
 name: "Powder",
-pp: 0.625,
-priority: 4,
-flags: {bullet: 1, protect: 1, mirror: 1, allyanim: 1},
-secondary: {
-chance: 100,
-onHit(target, source) {
-const result = this.random(3);
-if (result === 0) {
-target.trySetStatus('tox', source);
-} else if (result === 1) {
-target.trySetStatus('par', source);
-} else {
-target.trySetStatus('slp', source);
+pp: 1.25,
+priority: 1,
+flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
+volatileStatus: 'powder',
+condition: {
+duration: 1,
+onStart(target) {
+this.add('-singleturn', target, 'Powder');
+},
+onTryMovePriority: -1,
+onTryMove(pokemon, target, move) {
+if (move.type === 'Fire') {
+this.add('-activate', pokemon, 'move: Powder');
+this.damage(this.clampIntRange(Math.round(pokemon.maxhp / 4), 1));
+this.attrLastMove('[still]');
+return false;
 }
 },
 },
-target: "allAdjacentFoes",
+secondary: null,
+target: "normal",
 type: "Bug",
 },
 
@@ -11670,8 +12912,8 @@ type: "Normal",
 },
 
 prismaticlaser: {
-accuracy: 90,
-basePower: 150,
+accuracy: 93,
+basePower: 160,
 category: "Special",
 name: "Prismatic Laser",
 pp: 1.25,
@@ -11799,7 +13041,7 @@ type: "Normal",
 
 psychic: {
 accuracy: 93,
-basePower: 95,
+basePower: 90,
 category: "Special",
 name: "Psychic",
 pp: 1.25,
@@ -11809,7 +13051,6 @@ secondary: {
 chance: 10,
 boosts: {
 spd: -1,
-def: -1,
 },
 },
 target: "normal",
@@ -11956,10 +13197,9 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 90,
+chance: 100,
 self: {
 boosts: {
-spd: 1,
 def: 1,
 },
 },
@@ -12014,13 +13254,12 @@ type: "Psychic",
 
 pulverizingpancake: {
 accuracy: 93,
-basePower: 95,
+basePower: 210,
 category: "Physical",
 name: "Pulverizing Pancake",
-pp: 1.25,
-priority: -1,
+pp: .625,
+priority: 0,
 flags: {contact: 1},
-recoil: [33, 100],
 secondary: null,
 target: "normal",
 type: "Normal",
@@ -12841,11 +14080,11 @@ basePower: 0,
 category: "Status",
 name: "Roar",
 pp: 1.25,
-priority: 0,
+priority: -6,
 flags: {reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, allyanim: 1, noassist: 1, failcopycat: 1},
 forceSwitch: true,
 secondary: null,
-target: "allAdjacent",
+target: "normal",
 type: "Normal",
 },
 
@@ -13043,19 +14282,68 @@ type: "Fighting",
 },
 
 rollout: {
-accuracy: 75,
-basePower: 15,
+accuracy: 90,
+basePower: 30,
 basePowerCallback(pokemon, target, move) {
-return 15 * move.hit;
+let bp = move.basePower;
+const rolloutData = pokemon.volatiles['rollout'];
+if (rolloutData?.hitCount) {
+bp *= Math.pow(2, rolloutData.contactHitCount);
+}
+if (rolloutData && pokemon.status !== 'slp') {
+rolloutData.hitCount++;
+rolloutData.contactHitCount++;
+if (rolloutData.hitCount < 5) {
+rolloutData.duration = 2;
+}
+}
+if (pokemon.volatiles['defensecurl']) {
+bp *= 2;
+}
+this.debug("BP: " + bp);
+return bp;
 },
 category: "Physical",
 name: "Rollout",
-pp: 0.625,
+pp: 1.25,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [1, 4],
-multihit: [3, 10],
-multiaccuracy: 75,
+flags: {contact: 1, protect: 1, mirror: 1, noparentalbond: 1, failinstruct: 1},
+onModifyMove(move, pokemon, target) {
+if (pokemon.volatiles['rollout'] || pokemon.status === 'slp' || !target) return;
+pokemon.addVolatile('rollout');
+// @ts-ignore
+// TS thinks pokemon.volatiles['rollout'] doesn't exist because of the condition on the return above
+// but it does exist now because addVolatile created it
+pokemon.volatiles['rollout'].targetSlot = move.sourceEffect ? pokemon.lastMoveTargetLoc : pokemon.getLocOf(target);
+},
+onAfterMove(source, target, move) {
+const rolloutData = source.volatiles["rollout"];
+if (
+rolloutData &&
+rolloutData.hitCount === 5 &&
+rolloutData.contactHitCount < 5
+// this conditions can only be met in gen7 and gen8dlc1
+// see `disguise` and `iceface` abilities in the resp mod folders
+) {
+source.addVolatile("rolloutstorage");
+source.volatiles["rolloutstorage"].contactHitCount =
+rolloutData.contactHitCount;
+}
+},
+condition: {
+duration: 1,
+onLockMove: 'rollout',
+onStart() {
+this.effectState.hitCount = 0;
+this.effectState.contactHitCount = 0;
+},
+onResidual(target) {
+if (target.lastMove && target.lastMove.id === 'struggle') {
+// don't lock
+delete target.volatiles['rollout'];
+}
+},
+},
 secondary: null,
 target: "normal",
 type: "Rock",
@@ -13299,7 +14587,7 @@ boosts: {
 accuracy: -1,
 },
 secondary: null,
-target: "allAdjacent",
+target: "normal",
 type: "Ground",
 },
 
@@ -13366,12 +14654,12 @@ type: "Grass",
 
 savagespinout: {
 accuracy: 93,
-basePower: 55,
+basePower: 1,
 category: "Physical",
 name: "Savage Spin-Out",
-pp: 1.25,
-priority: 5,
-flags: {protect: 1, reflectable: 1, mirror: 1},
+pp: .625,
+priority: 0,
+flags: {},
 secondary: null,
 target: "normal",
 type: "Bug",
@@ -13494,17 +14782,14 @@ type: "Fire",
 
 searingsunrazesmash: {
 accuracy: 93,
-basePower: 125,
+basePower: 200,
 category: "Physical",
 name: "Searing Sunraze Smash",
 pp: .625,
 priority: 0,
 flags: {contact: 1},
 ignoreAbility: true,
-secondary: {
-chance: 30,
-status: 'brn',
-},
+secondary: null,
 target: "normal",
 type: "Steel",
 },
@@ -13615,7 +14900,7 @@ type: "Fighting",
 
 selfdestruct: {
 accuracy: 93,
-basePower: 250,
+basePower: 200,
 category: "Physical",
 name: "Self-Destruct",
 pp: 1.25,
@@ -13768,13 +15053,12 @@ type: "Normal",
 
 shatteredpsyche: {
 accuracy: 93,
-basePower: 45,
-category: "Special",
+basePower: 1,
+category: "Physical",
 name: "Shattered Psyche",
-pp: 1.25,
+pp: .625,
 priority: 0,
-flags: {bullet: 1, protect: 1, mirror: 1},
-volatileStatus: 'confusion',
+flags: {},
 secondary: null,
 target: "normal",
 type: "Psychic",
@@ -13785,7 +15069,7 @@ accuracy: 93,
 basePower: 0,
 category: "Status",
 name: "Shed Tail",
-pp: 0.625,
+pp: 1.25,
 priority: 0,
 flags: {},
 volatileStatus: 'substitute',
@@ -13866,7 +15150,7 @@ if (!source.isAlly(target)) this.hint(move.category + " Shell Side Arm");
 },
 secondary: {
 chance: 20,
-status: 'tox',
+status: 'psn',
 },
 target: "normal",
 type: "Poison",
@@ -14131,20 +15415,18 @@ priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1},
 status: 'slp',
 secondary: null,
-target: "allAdjacent",
+target: "normal",
 type: "Normal",
 },
 
 sinisterarrowraid: {
-accuracy: 82,
-basePower: 20,
+accuracy: 93,
+basePower: 180,
 category: "Physical",
 name: "Sinister Arrow Raid",
-pp: 1.25,
+pp: .625,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-multihit: [1, 7],
-multiaccuracy: 82,
+flags: {},
 secondary: null,
 target: "normal",
 type: "Ghost",
@@ -14547,7 +15829,7 @@ priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
 chance: 30,
-status: 'tox',
+status: 'psn',
 },
 target: "normal",
 type: "Poison",
@@ -14563,7 +15845,7 @@ priority: 0,
 flags: {bullet: 1, protect: 1, mirror: 1},
 secondary: {
 chance: 30,
-status: 'tox',
+status: 'psn',
 },
 target: "normal",
 type: "Poison",
@@ -14579,7 +15861,7 @@ priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
 chance: 10,
-status: 'tox',
+status: 'psn',
 },
 target: "allAdjacent",
 type: "Poison",
@@ -14677,9 +15959,9 @@ priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
 chance: 40,
-status: 'tox',
+status: 'psn',
 },
-target: "allAdjacent",
+target: "normal",
 type: "Poison",
 },
 
@@ -14922,27 +16204,26 @@ type: "Grass",
 
 sonicboom: {
 accuracy: 90,
-basePower: 50,
+basePower: 0,
+damage: 20,
 category: "Special",
 name: "Sonic Boom",
 pp: 1.25,
-priority: 10,
+priority: 0,
 flags: {protect: 1, mirror: 1},
-recoil: [50, 100],
 secondary: null,
-target: "randomNormal",
+target: "normal",
 type: "Normal",
 },
 
 soulstealing7starstrike: {
 accuracy: 93,
-basePower: 85,
+basePower: 195,
 category: "Physical",
 name: "Soul-Stealing 7-Star Strike",
-pp: 1.25,
+pp: .625,
 priority: 0,
-flags: {protect: 1, mirror: 1, heal: 1},
-drain: [1, 2],
+flags: {contact: 1},
 secondary: null,
 target: "normal",
 type: "Ghost",
@@ -15294,27 +16575,36 @@ type: "Ghost",
 },
 
 splash: {
-accuracy: 75,
+accuracy: 93,
 basePower: 0,
-category: "Special",
+category: "Status",
 name: "Splash",
 pp: 1.25,
-priority: 3,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-volatileStatus: 'confusion',
+priority: 0,
+flags: {gravity: 1},
+onTry(source, target, move) {
+// Additional Gravity check for Z-move variant
+if (this.field.getPseudoWeather('Gravity')) {
+this.add('cant', source, 'move: Gravity', move);
+return null;
+}
+},
+onTryHit(target, source) {
+this.add('-nothing');
+},
 secondary: null,
-target: "allAdjacentFoes",
+target: "self",
 type: "Normal",
 },
 
 splinteredstormshards: {
 accuracy: 93,
-basePower: 80,
+basePower: 190,
 category: "Physical",
 name: "Splintered Stormshards",
 pp: .625,
 priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
+flags: {},
 onHit() {
 this.field.clearTerrain();
 },
@@ -15442,7 +16732,7 @@ secondary: {
 chance: 30,
 status: 'brn',
 },
-target: "allAdjacent",
+target: "normal",
 type: "Water",
 },
 
@@ -15605,14 +16895,14 @@ type: "Normal",
 
 stokedsparksurfer: {
 accuracy: 93,
-basePower: 115,
+basePower: 175,
 category: "Special",
 name: "Stoked Sparksurfer",
-pp: 1.25,
+pp: .625,
 priority: 0,
-flags: {protect: 1, mirror: 1},
+flags: {},
 secondary: {
-chance: 50,
+chance: 100,
 status: 'par',
 },
 target: "normal",
@@ -15709,14 +16999,13 @@ type: "Psychic",
 
 stormthrow: {
 accuracy: 93,
-basePower: 45,
+basePower: 60,
 category: "Physical",
 name: "Storm Throw",
 pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
-weather: 'rain',
-critRatio: 2,
+willCrit: true,
 secondary: null,
 target: "normal",
 type: "Fighting",
@@ -15959,17 +17248,14 @@ type: "Normal",
 },
 
 subzeroslammer: {
-accuracy: 80,
-basePower: 90,
+accuracy: 93,
+basePower: 1,
 category: "Physical",
 name: "Subzero Slammer",
 pp: .625,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 50,
-status: 'frz',
-},
+flags: {},
+secondary: null,
 target: "normal",
 type: "Ice",
 },
@@ -16017,10 +17303,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 ignoreAbility: true,
-secondary: {
-chance: 33,
-status: 'brn',
-},
+secondary: null,
 target: "normal",
 type: "Steel",
 },
@@ -16070,21 +17353,20 @@ priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1},
 volatileStatus: 'confusion',
 secondary: null,
-target: "allAdjacent",
+target: "normal",
 type: "Normal",
 },
 
 supersonicskystrike: {
-accuracy: 80,
-basePower: 120,
+accuracy: 93,
+basePower: 1,
 category: "Physical",
 name: "Supersonic Skystrike",
-pp: 1.25,
-priority: 10,
-flags: {protect: 1, mirror: 1},
-recoil: [50, 100],
+pp: .625,
+priority: 0,
+flags: {},
 secondary: null,
-target: "randomNormal",
+target: "normal",
 type: "Flying",
 },
 
@@ -16109,8 +17391,8 @@ name: "Surging Strikes",
 pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, punch: 1, mirror: 1},
-critRatio: 2,
-multihit: 4,
+willCrit: true,
+multihit: 3,
 secondary: null,
 target: "normal",
 type: "Water",
@@ -16127,7 +17409,6 @@ flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
 volatileStatus: 'confusion',
 boosts: {
 atk: 2,
-spa: 2,
 },
 secondary: null,
 target: "normal",
@@ -16581,18 +17862,13 @@ type: "Normal",
 
 tectonicrage: {
 accuracy: 93,
-basePower: 55,
+basePower: 1,
 category: "Physical",
 name: "Tectonic Rage",
 pp: .625,
 priority: 0,
-flags: {protect: 1, mirror: 1},
-secondary: {
-chance: 75,
-onHit(target, source, move) {
-if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-},
-},
+flags: {},
+secondary: null,
 target: "normal",
 type: "Ground",
 },
@@ -16663,20 +17939,19 @@ type: "Psychic",
 },
 
 teleport: {
-accuracy: 85,
+accuracy: 93,
 basePower: 0,
 category: "Status",
 name: "Teleport",
-pp: 0.625,
-priority: 10,
-flags: {protect: 1},
+pp: 1.25,
+priority: -6,
+flags: {},
 onTry(source) {
 return !!this.canSwitch(source.side);
 },
 selfSwitch: true,
-forceSwitch: true,
 secondary: null,
-target: "any",
+target: "self",
 type: "Psychic",
 },
 
@@ -17205,7 +18480,7 @@ name: "Toxic Thread",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1},
-status: 'tox',
+status: 'psn',
 boosts: {
 spe: -1,
 },
@@ -17447,7 +18722,7 @@ type: "Water",
 
 triplekick: {
 accuracy: 90,
-basePower: 15,
+basePower: 10,
 basePowerCallback(pokemon, target, move) {
 return 10 * move.hit;
 },
@@ -17549,7 +18824,7 @@ flags: {protect: 1, mirror: 1},
 multihit: 2,
 secondary: {
 chance: 20,
-status: 'tox',
+status: 'psn',
 },
 target: "normal",
 type: "Bug",
@@ -17557,14 +18832,13 @@ type: "Bug",
 
 twinkletackle: {
 accuracy: 93,
-basePower: 55,
+basePower: 1,
 category: "Physical",
 name: "Twinkle Tackle",
 pp: .625,
 priority: 0,
-flags: {protect: 1, mirror: 1},
+flags: {},
 secondary: null,
-forceSwitch: true,
 target: "normal",
 type: "Fairy",
 },
@@ -17671,8 +18945,8 @@ type: "Fighting",
 },
 
 vcreate: {
-accuracy: 90,
-basePower: 105,
+accuracy: 95,
+basePower: 180,
 category: "Physical",
 name: "V-create",
 pp: 1.25,
