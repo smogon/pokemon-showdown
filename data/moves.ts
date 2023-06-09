@@ -2576,9 +2576,12 @@ name: "Continental Crush",
 pp: .625,
 priority: -5,
 flags: {contact: 1, protect: 1, mirror: 1},
-volatileStatus: 'partiallytrapped',
-secondary: null,
-target: "allAdjacentFoes",
+secondary: {
+chance: 75,
+onHit(target, source, move) {
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+},
+},
 type: "Rock",
 },
 
@@ -7520,8 +7523,12 @@ name: "Hydro Vortex",
 pp: 1.25,
 priority: 0,
 flags: {recharge: 1, protect: 1, mirror: 1},
-volatileStatus: 'partiallytrapped',
-secondary: null,
+secondary: {
+chance: 75,
+onHit(target, source, move) {
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+},
+},
 target: "normal",
 type: "Water",
 },
@@ -8574,8 +8581,12 @@ name: "Let's Snuggle Forever",
 pp: .625,
 priority: 0,
 flags: {contact: 1},
-volatileStatus: 'partiallytrapped',
-secondary: null,
+secondary: {
+chance: 75,
+onHit(target, source, move) {
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+},
+},
 target: "normal",
 type: "Fairy",
 },
@@ -16576,8 +16587,12 @@ name: "Tectonic Rage",
 pp: .625,
 priority: 0,
 flags: {protect: 1, mirror: 1},
-secondary: null,
-volatileStatus: 'partiallytrapped',
+secondary: {
+chance: 75,
+onHit(target, source, move) {
+if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+},
+},
 target: "normal",
 type: "Ground",
 },
