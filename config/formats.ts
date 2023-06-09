@@ -46,7 +46,7 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		searchShow: true,
 		gameType: 'Singles',
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 100', 'Max Move Count = 100', 'Max Level = 100', 'Default Level = 50','Team Preview'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 24', 'Max Move Count = 100', 'Max Level = 100', 'Default Level = 50','Team Preview'],
 	},
 	{
 		name: "[BudpoW] Doubles Test",
@@ -54,7 +54,7 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		searchShow: true,
 		gameType: 'doubles',
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 100', 'Max Move Count = 100', 'Max Level = 100', 'Default Level = 50','Team Preview'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 24', 'Max Move Count = 100', 'Max Level = 100', 'Default Level = 50','Team Preview'],
 	},
 	{
 		name: "[Gen 9] Random Battle",
