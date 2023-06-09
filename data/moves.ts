@@ -110,8 +110,8 @@ name: "Acid Spray",
 pp: 1.25,
 priority: 0,
 flags: {bullet: 1, protect: 1, mirror: 1},
-{
 secondaries: [
+{
 chance: 95,
 boosts: {
 spd: -2,
