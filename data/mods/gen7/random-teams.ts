@@ -272,7 +272,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			);
 			const singlesCondition = (
 				(counter.setupType && !moves.has('wish')) ||
-				(!['Guts', 'Harvest', 'Poison Heal', 'Quick Feet', 'Speed Boost'].some(abil => abilities.has(abil)) &&
+				(!['Guts', 'Harvest', 'Quick Feet', 'Speed Boost'].some(abil => abilities.has(abil)) &&
 				!['leechseed', 'perishsong', 'toxic', 'wish'].some(m => moves.has(m)) &&
 				species.id !== 'sharpedomega')
 			);
@@ -436,8 +436,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				(isDoubles && moves.has('energyball')) ||
 				(counter.get('Grass') > 1 && !!counter.setupType)
 			)};
-		case 'seedbomb':
-			return {cull: moves.has('leafstorm') || isDoubles && moves.has('gigadrain')};
 		case 'solarbeam':
 			return {cull: (
 				(!abilities.has('Drought') && !moves.has('sunnyday')) ||
@@ -784,12 +782,10 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
 			return (types.has('Fire') || ability === 'Quick Feet' || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
 		}
-		if (
-			(ability === 'Magic Guard' && counter.damagingMoves.size > 1) ||
-			(ability === 'Sheer Force' && counter.get('sheerforce'))
-		) {
-			return 'Life Orb';
+		if (ability === 'Magic Guard' && counter.damagingMoves.size > 1) {
+			return moves.has('counter') ? 'Focus Sash' : 'Life Orb';
 		}
+		if (ability === 'Sheer Force' && counter.get('sheerforce')) return 'Life Orb';
 		if (ability === 'Unburden') return moves.has('fakeout') ? 'Normal Gem' : 'Sitrus Berry';
 		if (moves.has('acrobatics')) return '';
 		if (moves.has('electricterrain') || ability === 'Electric Surge' && moves.has('thunderbolt')) return 'Electrium Z';
@@ -1546,7 +1542,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				case 'Aegislash': case 'Basculin': case 'Gourgeist': case 'Groudon': case 'Kyogre': case 'Meloetta':
 					if (this.randomChance(1, 2)) continue;
 					break;
-				case 'Cherrim': case 'Greninja':
+				case 'Greninja':
 					if (this.gen >= 7 && this.randomChance(1, 2)) continue;
 					break;
 				}

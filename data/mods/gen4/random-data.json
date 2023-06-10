@@ -29,7 +29,7 @@
     },
     "fearow": {
         "level": 88,
-        "moves": ["doubleedge", "drillpeck", "heatwave", "pursuit", "quickattack", "return", "uturn"]
+        "moves": ["doubleedge", "drillpeck", "pursuit", "quickattack", "return", "uturn"]
     },
     "arbok": {
         "level": 90,
@@ -73,7 +73,7 @@
     },
     "parasect": {
         "level": 93,
-        "moves": ["leechseed", "seedbomb", "spore", "stunspore", "synthesis", "xscissor"]
+        "moves": ["seedbomb", "spore", "stunspore", "synthesis", "xscissor"]
     },
     "venomoth": {
         "level": 87,
@@ -281,7 +281,7 @@
     },
     "mew": {
         "level": 76,
-        "moves": ["aurasphere", "explosion", "flamethrower", "nastyplot", "psychic", "softboiled", "stealthrock", "taunt", "uturn", "willowisp"]
+        "moves": ["aurasphere", "batonpass", "explosion", "flamethrower", "nastyplot", "psychic", "softboiled", "stealthrock", "taunt", "uturn", "willowisp"]
     },
     "meganium": {
         "level": 89,
@@ -501,7 +501,7 @@
     },
     "celebi": {
         "level": 80,
-        "moves": ["earthpower", "energyball", "hiddenpowerfire", "leafstorm", "leechseed", "nastyplot", "psychic", "recover", "stealthrock", "substitute", "thunderwave", "uturn"]
+        "moves": ["batonpass", "earthpower", "energyball", "hiddenpowerfire", "leafstorm", "leechseed", "nastyplot", "psychic", "recover", "stealthrock", "substitute", "thunderwave", "uturn"]
     },
     "sceptile": {
         "level": 84,
@@ -585,7 +585,7 @@
     },
     "delcatty": {
         "level": 96,
-        "moves": ["healbell", "protect", "return", "sing", "thunderwave", "wish"]
+        "moves": ["healbell", "protect", "return", "thunderwave", "wish"]
     },
     "sableye": {
         "level": 94,
@@ -921,7 +921,7 @@
     },
     "bronzong": {
         "level": 80,
-        "moves": ["earthquake", "explosion", "gyroball", "hypnosis", "lightscreen", "payback", "reflect", "stealthrock"]
+        "moves": ["earthquake", "explosion", "gyroball", "lightscreen", "payback", "reflect", "stealthrock", "toxic"]
     },
     "chatot": {
         "level": 89,
@@ -1037,23 +1037,23 @@
     },
     "rotomheat": {
         "level": 79,
-        "moves": ["discharge", "lightscreen", "overheat", "painsplit", "reflect", "shadowball", "thunderbolt", "trick", "willowisp"]
+        "moves": ["lightscreen", "overheat", "painsplit", "reflect", "shadowball", "thunderbolt", "trick", "willowisp"]
     },
     "rotomwash": {
         "level": 80,
-        "moves": ["discharge", "hydropump", "lightscreen", "reflect", "rest", "shadowball", "sleeptalk", "thunderbolt", "trick", "willowisp"]
+        "moves": ["hydropump", "lightscreen", "reflect", "rest", "shadowball", "sleeptalk", "thunderbolt", "trick", "willowisp"]
     },
     "rotomfrost": {
         "level": 80,
-        "moves": ["blizzard", "discharge", "lightscreen", "reflect", "rest", "shadowball", "sleeptalk", "thunderbolt", "trick", "willowisp"]
+        "moves": ["blizzard", "lightscreen", "reflect", "rest", "shadowball", "sleeptalk", "thunderbolt", "trick", "willowisp"]
     },
     "rotomfan": {
         "level": 79,
-        "moves": ["discharge", "lightscreen", "painsplit", "reflect", "rest", "shadowball", "sleeptalk", "thunderbolt", "willowisp"]
+        "moves": ["lightscreen", "painsplit", "reflect", "rest", "shadowball", "sleeptalk", "thunderbolt", "willowisp"]
     },
     "rotommow": {
         "level": 80,
-        "moves": ["discharge", "leafstorm", "lightscreen", "painsplit", "reflect", "shadowball", "thunderbolt", "trick", "willowisp"]
+        "moves": ["leafstorm", "lightscreen", "painsplit", "reflect", "shadowball", "thunderbolt", "trick", "willowisp"]
     },
     "rotom": {
         "level": 84,
