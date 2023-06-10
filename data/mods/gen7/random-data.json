@@ -677,7 +677,7 @@
     },
     "magcargo": {
         "level": 90,
-        "moves": ["ancientpower", "lavaplume", "recover", "stealthrock", "toxic"],
+        "moves": ["ancientpower", "earthpower", "fireblast", "hiddenpowergrass", "lavaplume", "recover", "shellsmash", "stealthrock", "toxic"],
         "doublesMoves": ["earthpower", "fireblast", "heatwave", "incinerate", "protect", "stealthrock", "willowisp"]
     },
     "corsola": {
