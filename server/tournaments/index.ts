@@ -306,9 +306,9 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		const possiblePlayer = this.playerTable[targetUser.id];
 		let isJoined = false;
 		if (possiblePlayer) {
-			if (this.generator.name === "Elimination") {
+			if (this.generator.name.includes("Elimination")) {
 				isJoined = !possiblePlayer.isEliminated && !possiblePlayer.isDisqualified;
-			} else if (this.generator.name === "Round Robin") {
+			} else if (this.generator.name.includes("Round Robin")) {
 				if (possiblePlayer.isDisqualified) {
 					isJoined = !possiblePlayer.isDisqualified;
 				} else if ((this.generator as RoundRobin)?.matchesPerPlayer) {
