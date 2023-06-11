@@ -5325,7 +5325,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	urshifurapidstrike: {
 		tier: "Uber",
-		doublesTier: "DOU",
+		doublesTier: "DUber",
 		natDexTier: "OU",
 	},
 	urshifugmax: {
