@@ -166,7 +166,7 @@
     },
     "alakazam": {
         "level": 82,
-        "moves": ["focusblast", "hiddenpowerfire", "hiddenpowerice", "psychic", "psyshock", "shadowball"],
+        "moves": ["counter", "focusblast", "hiddenpowerfire", "hiddenpowerice", "psychic", "psyshock", "shadowball"],
         "doublesMoves": ["dazzlinggleam", "encore", "focusblast", "protect", "psychic", "psyshock", "shadowball", "substitute"]
     },
     "machamp": {
@@ -565,7 +565,7 @@
     },
     "dunsparce": {
         "level": 88,
-        "moves": ["bite", "bodyslam", "coil", "glare", "headbutt", "rockslide", "roost"],
+        "moves": ["bite", "bodyslam", "coil", "earthquake", "glare", "headbutt", "roost"],
         "doublesMoves": ["bite", "bodyslam", "coil", "glare", "headbutt", "protect", "rockslide"]
     },
     "gligar": {
@@ -960,7 +960,7 @@
     },
     "torkoal": {
         "level": 88,
-        "moves": ["earthpower", "lavaplume", "rapidspin", "stealthrock", "yawn"],
+        "moves": ["earthquake", "lavaplume", "rapidspin", "stealthrock", "yawn"],
         "doublesMoves": ["earthpower", "fireblast", "heatwave", "hiddenpowergrass", "protect", "shellsmash", "willowisp"]
     },
     "grumpig": {
@@ -1216,7 +1216,7 @@
     },
     "deoxys": {
         "level": 77,
-        "moves": ["extremespeed", "firepunch", "knockoff", "psychoboost", "spikes", "stealthrock", "superpower", "taunt"],
+        "moves": ["extremespeed", "firepunch", "icebeam", "knockoff", "psychoboost", "stealthrock", "superpower"],
         "doublesMoves": ["extremespeed", "firepunch", "icebeam", "knockoff", "protect", "psychoboost", "psyshock", "superpower", "thunderbolt"]
     },
     "deoxysattack": {
@@ -1286,7 +1286,7 @@
     },
     "wormadam": {
         "level": 95,
-        "moves": ["gigadrain", "hiddenpowerrock", "protect", "signalbeam", "synthesis", "toxic"],
+        "moves": ["gigadrain", "hiddenpowerground", "hiddenpowerrock", "protect", "signalbeam", "synthesis", "toxic"],
         "doublesMoves": ["gigadrain", "hiddenpowerice", "hiddenpowerrock", "leafstorm", "protect", "signalbeam", "stringshot"]
     },
     "wormadamsandy": {
@@ -1424,7 +1424,7 @@
     },
     "carnivine": {
         "level": 92,
-        "moves": ["knockoff", "powerwhip", "return", "sleeppowder", "substitute", "swordsdance"],
+        "moves": ["defog", "knockoff", "powerwhip", "return", "sleeppowder", "substitute", "swordsdance"],
         "doublesMoves": ["knockoff", "leechseed", "powerwhip", "protect", "ragepowder", "return", "sleeppowder", "substitute", "swordsdance"]
     },
     "lumineon": {
@@ -2052,7 +2052,7 @@
     },
     "bisharp": {
         "level": 80,
-        "moves": ["ironhead", "knockoff", "lowkick", "suckerpunch", "swordsdance"],
+        "moves": ["ironhead", "knockoff", "suckerpunch", "swordsdance"],
         "doublesMoves": ["brickbreak", "ironhead", "knockoff", "protect", "substitute", "suckerpunch", "swordsdance"]
     },
     "bouffalant": {
@@ -2197,7 +2197,7 @@
     },
     "diggersby": {
         "level": 82,
-        "moves": ["agility", "earthquake", "knockoff", "quickattack", "return", "swordsdance", "uturn", "wildcharge"],
+        "moves": ["agility", "earthquake", "knockoff", "quickattack", "return", "swordsdance", "uturn"],
         "doublesMoves": ["earthquake", "protect", "quickattack", "return", "uturn", "wildcharge"]
     },
     "talonflame": {
@@ -2412,7 +2412,7 @@
     },
     "volcanion": {
         "level": 80,
-        "moves": ["earthpower", "fireblast", "hiddenpowerice", "sludgewave", "steameruption", "substitute", "superpower"],
+        "moves": ["defog", "earthpower", "fireblast", "hiddenpowerice", "sludgewave", "steameruption", "substitute", "superpower"],
         "doublesMoves": ["earthquake", "heatwave", "protect", "rockslide", "sludgebomb", "steameruption", "substitute"]
     }
 }
