@@ -325,7 +325,7 @@
     },
     "crobat": {
         "level": 82,
-        "moves": ["bravebird", "heatwave", "roost", "sludgebomb", "superfang", "taunt", "toxic", "uturn"]
+        "moves": ["bravebird", "heatwave", "roost", "superfang", "taunt", "toxic", "uturn"]
     },
     "lanturn": {
         "level": 84,

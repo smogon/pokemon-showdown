@@ -191,7 +191,7 @@
     },
     "alakazam": {
         "level": 82,
-        "moves": ["focusblast", "hiddenpowerfire", "psychic", "psyshock", "shadowball"],
+        "moves": ["counter", "focusblast", "hiddenpowerfire", "psychic", "psyshock", "shadowball"],
         "doublesMoves": ["dazzlinggleam", "encore", "focusblast", "protect", "psychic", "shadowball"]
     },
     "alakazammega": {
@@ -618,7 +618,7 @@
     },
     "dunsparce": {
         "level": 91,
-        "moves": ["bite", "bodyslam", "coil", "glare", "headbutt", "rockslide", "roost"],
+        "moves": ["bite", "bodyslam", "coil", "earthquake", "glare", "headbutt", "roost"],
         "doublesMoves": ["bite", "bodyslam", "coil", "glare", "headbutt", "protect", "rockslide"]
     },
     "gligar": {
@@ -850,7 +850,7 @@
     },
     "shiftry": {
         "level": 88,
-        "moves": ["defog", "knockoff", "leafstorm", "lowkick", "seedbomb", "suckerpunch", "swordsdance"],
+        "moves": ["defog", "knockoff", "leafblade", "leafstorm", "lowkick", "suckerpunch", "swordsdance"],
         "doublesMoves": ["fakeout", "knockoff", "leafblade", "leafstorm", "protect", "suckerpunch", "swordsdance"]
     },
     "swellow": {
@@ -1015,7 +1015,7 @@
     },
     "torkoal": {
         "level": 84,
-        "moves": ["earthpower", "fireblast", "lavaplume", "rapidspin", "shellsmash", "solarbeam", "stealthrock", "yawn"],
+        "moves": ["earthquake", "lavaplume", "rapidspin", "solarbeam", "stealthrock", "yawn"],
         "doublesMoves": ["earthpower", "fireblast", "heatwave", "protect", "solarbeam", "willowisp"]
     },
     "grumpig": {
@@ -1025,7 +1025,7 @@
     },
     "spinda": {
         "level": 100,
-        "moves": ["encore", "return", "rockslide", "superpower"],
+        "moves": ["encore", "return", "suckerpunch", "superpower"],
         "doublesMoves": ["fakeout", "protect", "return", "suckerpunch", "superpower", "trickroom"]
     },
     "flygon": {
@@ -1342,7 +1342,7 @@
     },
     "wormadam": {
         "level": 92,
-        "moves": ["bugbuzz", "gigadrain", "hiddenpowerrock", "leafstorm", "quiverdance"],
+        "moves": ["bugbuzz", "gigadrain", "hiddenpowerground", "hiddenpowerrock", "leafstorm", "quiverdance"],
         "doublesMoves": ["bugbuzz", "gigadrain", "leafstorm", "protect", "stringshot"]
     },
     "wormadamsandy": {
@@ -1381,7 +1381,6 @@
     },
     "cherrimsunshine": {
         "level": 92,
-        "moves": ["gigadrain", "hiddenpowerice", "solarbeam", "sunnyday", "weatherball"],
         "doublesMoves": ["gigadrain", "helpinghand", "solarbeam", "sunnyday", "weatherball"]
     },
     "gastrodon": {
@@ -1481,7 +1480,7 @@
     },
     "carnivine": {
         "level": 92,
-        "moves": ["knockoff", "powerwhip", "return", "sleeppowder", "substitute", "swordsdance"],
+        "moves": ["defog", "knockoff", "powerwhip", "return", "sleeppowder", "substitute", "swordsdance"],
         "doublesMoves": ["knockoff", "powerwhip", "protect", "ragepowder", "return", "sleeppowder", "swordsdance"]
     },
     "lumineon": {
@@ -2109,7 +2108,7 @@
     },
     "bisharp": {
         "level": 82,
-        "moves": ["ironhead", "knockoff", "lowkick", "suckerpunch", "swordsdance"],
+        "moves": ["ironhead", "knockoff", "suckerpunch", "swordsdance"],
         "doublesMoves": ["ironhead", "knockoff", "protect", "suckerpunch", "swordsdance"]
     },
     "bouffalant": {
@@ -2478,12 +2477,12 @@
     },
     "volcanion": {
         "level": 82,
-        "moves": ["earthpower", "fireblast", "sludgebomb", "steameruption", "substitute", "superpower"],
+        "moves": ["defog", "earthpower", "fireblast", "sludgebomb", "steameruption", "substitute", "superpower"],
         "doublesMoves": ["earthpower", "heatwave", "protect", "sludgebomb", "steameruption"]
     },
     "decidueye": {
         "level": 86,
-        "moves": ["leafblade", "roost", "shadowsneak", "spiritshackle", "swordsdance", "uturn"],
+        "moves": ["defog", "leafblade", "roost", "shadowsneak", "spiritshackle", "swordsdance", "uturn"],
         "doublesMoves": ["bravebird", "leafblade", "protect", "spiritshackle", "suckerpunch"]
     },
     "incineroar": {
@@ -2578,7 +2577,7 @@
     },
     "lurantis": {
         "level": 90,
-        "moves": ["hiddenpowerice", "knockoff", "leafstorm", "superpower", "synthesis"],
+        "moves": ["defog", "hiddenpowerice", "knockoff", "leafstorm", "superpower", "synthesis"],
         "doublesMoves": ["hiddenpowerice", "knockoff", "leafstorm", "protect", "superpower"]
     },
     "shiinotic": {
@@ -2603,7 +2602,7 @@
     },
     "comfey": {
         "level": 86,
-        "moves": ["aromatherapy", "drainingkiss", "synthesis", "toxic", "uturn"],
+        "moves": ["aromatherapy", "defog", "drainingkiss", "synthesis", "toxic", "uturn"],
         "doublesMoves": ["drainingkiss", "floralhealing", "taunt", "toxic", "uturn"]
     },
     "oranguru": {
@@ -2657,12 +2656,12 @@
     },
     "silvallyelectric": {
         "level": 87,
-        "moves": ["flamethrower", "icebeam", "multiattack", "partingshot", "toxic"],
+        "moves": ["defog", "flamethrower", "icebeam", "multiattack", "partingshot", "toxic"],
         "doublesMoves": ["icebeam", "partingshot", "protect", "snarl", "thunderbolt", "thunderwave", "uturn"]
     },
     "silvallyfairy": {
         "level": 87,
-        "moves": ["flamethrower", "multiattack", "partingshot", "rockslide", "thunderwave"],
+        "moves": ["defog", "flamethrower", "multiattack", "partingshot", "rockslide", "thunderwave"],
         "doublesMoves": ["flamethrower", "icebeam", "multiattack", "partingshot", "protect", "thunderwave", "uturn"]
     },
     "silvallyfighting": {
@@ -2677,17 +2676,17 @@
     },
     "silvallyflying": {
         "level": 87,
-        "moves": ["flamethrower", "ironhead", "multiattack", "partingshot", "thunderwave"],
+        "moves": ["defog", "flamethrower", "ironhead", "multiattack", "partingshot", "thunderwave"],
         "doublesMoves": ["flamecharge", "ironhead", "multiattack", "partingshot", "protect", "swordsdance", "thunderwave", "uturn"]
     },
     "silvallyghost": {
         "level": 87,
-        "moves": ["flamethrower", "icebeam", "multiattack", "partingshot", "toxic"],
+        "moves": ["defog", "flamethrower", "icebeam", "multiattack", "partingshot", "toxic"],
         "doublesMoves": ["icebeam", "multiattack", "partingshot", "protect", "uturn"]
     },
     "silvallygrass": {
         "level": 87,
-        "moves": ["flamethrower", "icebeam", "multiattack", "partingshot", "toxic"],
+        "moves": ["defog", "flamethrower", "icebeam", "multiattack", "partingshot", "toxic"],
         "doublesMoves": ["flamethrower", "icebeam", "multiattack", "partingshot", "protect", "thunderwave", "uturn"]
     },
     "silvallyground": {
@@ -2697,22 +2696,22 @@
     },
     "silvallyice": {
         "level": 87,
-        "moves": ["flamethrower", "multiattack", "thunderbolt", "toxic", "uturn"],
+        "moves": ["defog", "flamethrower", "multiattack", "thunderbolt", "toxic", "uturn"],
         "doublesMoves": ["icebeam", "partingshot", "protect", "thunderbolt", "thunderwave", "uturn"]
     },
     "silvallypoison": {
         "level": 87,
-        "moves": ["flamethrower", "icebeam", "multiattack", "partingshot", "toxic"],
+        "moves": ["defog", "flamethrower", "icebeam", "multiattack", "partingshot", "toxic"],
         "doublesMoves": ["flamethrower", "icebeam", "multiattack", "partingshot", "protect", "thunderwave", "uturn"]
     },
     "silvallypsychic": {
         "level": 87,
-        "moves": ["flamethrower", "multiattack", "partingshot", "rockslide", "thunderwave"],
+        "moves": ["defog", "flamethrower", "multiattack", "partingshot", "rockslide", "thunderwave"],
         "doublesMoves": ["flamethrower", "multiattack", "partingshot", "protect", "thunderwave", "uturn"]
     },
     "silvallyrock": {
         "level": 87,
-        "moves": ["flamethrower", "grasspledge", "multiattack", "partingshot", "toxic"],
+        "moves": ["defog", "flamethrower", "grasspledge", "multiattack", "partingshot", "toxic"],
         "doublesMoves": ["flamethrower", "icebeam", "partingshot", "protect", "rockslide", "uturn"]
     },
     "silvallysteel": {
@@ -2757,7 +2756,7 @@
     },
     "drampa": {
         "level": 89,
-        "moves": ["dracometeor", "dragonpulse", "fireblast", "glare", "hypervoice", "roost", "thunderbolt"],
+        "moves": ["defog", "dracometeor", "dragonpulse", "fireblast", "glare", "hypervoice", "roost", "thunderbolt"],
         "doublesMoves": ["dracometeor", "dragonpulse", "fireblast", "glare", "hypervoice", "protect", "roost"]
     },
     "dhelmise": {

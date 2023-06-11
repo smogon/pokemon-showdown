@@ -326,6 +326,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			return !moves.has('raindance') && !teamDetails['rain'];
 		case 'Swarm':
 			return !counter.get('Bug');
+		case 'Thick Fat':
+			return abilities.has('Immunity');
 		case 'Torrent':
 			return !counter.get('Water');
 		case 'Water Absorb':

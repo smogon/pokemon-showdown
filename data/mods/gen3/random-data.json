@@ -873,7 +873,7 @@
     },
     "deoxysdefense": {
         "level": 76,
-        "moves": ["nightshade", "recover", "spikes", "taunt", "toxic"]
+        "moves": ["recover", "seismictoss", "spikes", "taunt", "toxic"]
     },
     "deoxysspeed": {
         "level": 76,
