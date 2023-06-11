@@ -106,7 +106,7 @@ const MovePairs = [
 
 /** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
 const priorityPokemon = [
-	'banette', 'breloom', 'brutebonnet', 'cacturne', 'giratinaorigin', 'lycanrocdusk', 'mimikyu', 'scizor',
+	'banette', 'breloom', 'brutebonnet', 'cacturne', 'lycanrocdusk', 'mimikyu', 'scizor',
 ];
 
 /** Pokemon who should never be in the lead slot */
@@ -156,7 +156,7 @@ export class RandomTeams {
 		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
 
 		this.moveEnforcementCheckers = {
-			Bug: (movePool) => movePool.includes('megahorn'),
+			Bug: (movePool) => (movePool.includes('megahorn') || movePool.includes('xscissor')),
 			Dark: (movePool, moves, abilities, types, counter) => !counter.get('Dark'),
 			Dragon: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Dragon') &&
@@ -949,7 +949,7 @@ export class RandomTeams {
 		case 'Technician':
 			return (!counter.get('technician') || abilities.has('Punk Rock'));
 		case 'Tinted Lens':
-			return (species.id === 'braviaryhisui' && role === 'Fast Support');
+			return (species.id === 'braviaryhisui' && role === 'Setup Sweeper');
 		case 'Unburden':
 			return (abilities.has('Prankster') || !counter.get('setup'));
 		case 'Volt Absorb':
