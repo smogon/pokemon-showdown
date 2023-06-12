@@ -23789,7 +23789,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		onHit(source) {
-			this.field.setWeather('snowstorm');
+			this.field.setWeather('snow');
 		},
 		flags: {protect: 1, mirror: 1},
 		secondary: null,
