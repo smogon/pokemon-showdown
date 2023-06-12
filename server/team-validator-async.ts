@@ -20,7 +20,7 @@ export class TeamValidatorAsync {
 		let formatid = this.format.id;
 		if (this.format.customRules) formatid += '@@@' + this.format.customRules.join(',');
 		if (team.length > (25 * 1024 - 6)) { // don't even let it go to the child process
-			return '0Your team is over 25KB. Please use a smaller team.';
+			return Promise.resolve('0Your team is over 25KB. Please use a smaller team.');
 		}
 		return PM.query({formatid, options, team});
 	}
