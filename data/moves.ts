@@ -13280,7 +13280,7 @@ multiaccuracy: 90,
 selfBoost: {
 boosts: {
 def: -1,
-spd -1,
+spd: -1,
 spe: 1,
 },
 },
