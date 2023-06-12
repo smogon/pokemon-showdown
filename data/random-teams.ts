@@ -84,6 +84,9 @@ const Setup = [
 	'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'noretreat', 'poweruppunch', 'quiverdance', 'rockpolish',
 	'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'tidyup', 'trailblaze', 'workup', 'victorydance',
 ];
+const SpeedControl = [
+	'electroweb', 'glare', 'icywind', 'lowsweep', 'quash', 'rocktomb', 'stringshot', 'tailwind' 'thunderwave', 'trickroom'
+];
 // Moves that shouldn't be the only STAB moves:
 const NoStab = [
 	'accelerock', 'aquajet', 'beakblast', 'bounce', 'breakingswipe', 'chatter', 'chloroblast', 'clearsmog', 'dragontail', 'eruption',
@@ -96,7 +99,7 @@ const Hazards = [
 	'spikes', 'stealthrock', 'stickyweb', 'toxicspikes',
 ];
 // Protect and its variants
-const protectMove = [
+const ProtectMove = [
 	'banefulbunker', 'protect', 'spikyshield',
 ];
 
@@ -478,6 +481,31 @@ export class RandomTeams {
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
 		}
 
+		if (isDoubles) {
+			// In order of decreasing generalizability
+			this.incompatibleMoves(moves, movePool, SpeedControl, SpeedControl);
+			this.incompatibleMoves(moves, movePool, 'rockslide', 'stoneedge');
+			this.incompatibleMoves(moves, movePool, Setup, ['fakeout', 'helpinghand']);
+			this.incompatibleMoves(moves, movePool, ProtectMove, 'wideguard');
+			this.incompatibleMoves(moves, movePool, 'fireblast', ['fierydance', 'heatwave']);
+			this.incompatibleMoves(moves, movePool, 'dazzlinggleam', ['fleurcannon', 'moonblast']);
+			this.incompatibleMoves(moves, movePool, 'poisongas', 'toxicspikes');
+			this.incompatibleMoves(moves, movePool, RecoveryMove, 'healpulse');
+			this.incompatibleMoves(moves, movePool, 'haze', ['icywind', 'rocktomb']);
+			this.incompatibleMoves(moves, movePool, 'disable', 'encore');
+			this.incompatibleMoves(moves, movePool, 'freezedry', 'icebeam');
+			this.incompatibleMoves(moves, movePool, 'bodyslam', 'doubleedge');
+			this.incompatibleMoves(moves, movePool, 'toxic', 'yawn');
+			this.incompatibleMoves(moves, movePool, 'bravebird', 'hurricane');
+			this.incompatibleMoves(moves, movePool, 'earthpower', 'sandsearstorm');
+			this.incompatibleMoves(moves, movePool, 'drumbeating', 'woodhammer');
+			this.incompatibleMoves(moves, movePool, 'boomburst', 'hyperdrill');
+
+			if (role !== 'Offensive Protect') {
+				this.incompatibleMoves(moves, movePool, ProtectMove, 'uturn');
+			}
+		}	
+
 		// These moves don't mesh well with other aspects of the set
 		this.incompatibleMoves(moves, movePool, statusMoves, ['healingwish', 'switcheroo', 'trick']);
 		this.incompatibleMoves(moves, movePool, Setup, pivotingMoves);
@@ -511,7 +539,9 @@ export class RandomTeams {
 
 
 		// These status moves are redundant with each other
-		this.incompatibleMoves(moves, movePool, ['taunt', 'strengthsap'], 'encore');
+		if (!isDoubles) {
+			this.incompatibleMoves(moves, movePool, ['taunt', 'strengthsap'], 'encore');
+		}
 		this.incompatibleMoves(moves, movePool, 'taunt', 'disable');
 		this.incompatibleMoves(moves, movePool, 'toxic', 'willowisp');
 		this.incompatibleMoves(moves, movePool, ['thunderwave', 'toxic', 'willowisp'], 'toxicspikes');
@@ -531,7 +561,7 @@ export class RandomTeams {
 		// Beartic
 		this.incompatibleMoves(moves, movePool, 'snowscape', 'swordsdance');
 		// Cryogonal
-		if (!teamDetails.defog && !teamDetails.rapidSpin && species.id === 'cryogonal') {
+		if (!teamDetails.defog && !teamDetails.rapidSpin && species.id === 'cryogonal' && !isDoubles) {
 			if (movePool.includes('haze')) this.fastPop(movePool, movePool.indexOf('haze'));
 		}
 		// Magnezone
@@ -832,7 +862,7 @@ export class RandomTeams {
 
 		// Enforce Protect
 		if (role.includes('Protect')) {
-			const protectMoves = movePool.filter(moveid => protectMove.includes(moveid));
+			const protectMoves = movePool.filter(moveid => ProtectMove.includes(moveid));
 			if (protectMoves.length) {
 				const moveid = this.sample(protectMoves);
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
@@ -947,7 +977,7 @@ export class RandomTeams {
 		case 'Guts':
 			return (!moves.has('facade') && !moves.has('sleeptalk'));
 		case 'Hustle':
-			return (counter.get('Physical') < 2);
+			return (counter.get('Physical') < 2 || moves.has('fakeout'));
 		case 'Infiltrator':
 			return (isDoubles && abilities.has('Clear Body'));
 		case 'Insomnia':
@@ -970,6 +1000,8 @@ export class RandomTeams {
 			return !counter.get('Grass');
 		case 'Prankster':
 			return !counter.get('Status');
+		case 'Protean':
+			return role === 'Offensive Protect';	
 		case 'Reckless':
 			return !counter.get('recoil');
 		case 'Rock Head':
@@ -983,7 +1015,7 @@ export class RandomTeams {
 		case 'Shed Skin':
 			return species.id === 'seviper';
 		case 'Sheer Force':
-			const braviaryCase = (species.id === 'braviaryhisui' && role === 'Wallbreaker');
+			const braviaryCase = (species.id === 'braviaryhisui' && (role === 'Wallbreaker' || role === 'Bulky Protect'));
 			const abilitiesCase = (abilities.has('Guts') || abilities.has('Sharpness'));
 			return (!counter.get('sheerforce') || moves.has('bellydrum') || braviaryCase || abilitiesCase);
 		case 'Slush Rush':
@@ -1005,7 +1037,7 @@ export class RandomTeams {
 		case 'Technician':
 			return (!counter.get('technician') || abilities.has('Punk Rock'));
 		case 'Tinted Lens':
-			return (species.id === 'braviaryhisui' && role === 'Setup Sweeper');
+			return (species.id === 'braviaryhisui' && (role === 'Setup Sweeper' || role === 'Doubles Wallbreaker'));
 		case 'Unburden':
 			return (abilities.has('Prankster') || !counter.get('setup'));
 		case 'Volt Absorb':
@@ -1040,21 +1072,46 @@ export class RandomTeams {
 
 		// Hard-code abilities here
 		if (species.id === 'arcaninehisui') return 'Rock Head';
-		if (species.id === 'staraptor') return 'Reckless';
 		if (species.id === 'scovillain') return 'Chlorophyll';
-		if (species.id === 'vespiquen') return 'Pressure';
-		if (species.id === 'enamorus' && moves.has('calmmind')) return 'Cute Charm';
-		if (species.id === 'cetitan' && role === 'Wallbreaker') return 'Sheer Force';
-		if (species.id === 'klawf' && role === 'Setup Sweeper') return 'Anger Shell';
-		if (abilities.has('Cud Chew') && moves.has('substitute')) return 'Cud Chew';
-		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk'))) return 'Guts';
-		if (abilities.has('Harvest') && moves.has('substitute')) return 'Harvest';
 		if (species.id === 'hypno') return 'Insomnia';
-		if (abilities.has('Serene Grace') && moves.has('headbutt')) return 'Serene Grace';
+		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk'))) return 'Guts';
 		if (abilities.has('Technician') && counter.get('technician')) return 'Technician';
-		if (abilities.has('Own Tempo') && moves.has('petaldance')) return 'Own Tempo';
-		if (abilities.has('Slush Rush') && moves.has('snowscape')) return 'Slush Rush';
-		if (abilities.has('Soundproof') && moves.has('substitute')) return 'Soundproof';
+		
+		if (!isDoubles) {
+			if (species.id === 'staraptor') return 'Reckless';
+			if (species.id === 'vespiquen') return 'Pressure';
+			if (species.id === 'enamorus' && moves.has('calmmind')) return 'Cute Charm';
+			if (species.id === 'cetitan' && role === 'Wallbreaker') return 'Sheer Force';
+			if (species.id === 'klawf' && role === 'Setup Sweeper') return 'Anger Shell';
+			if (abilities.has('Cud Chew') && moves.has('substitute')) return 'Cud Chew';
+			if (abilities.has('Harvest') && moves.has('substitute')) return 'Harvest';
+			if (abilities.has('Serene Grace') && moves.has('headbutt')) return 'Serene Grace';
+			if (abilities.has('Own Tempo') && moves.has('petaldance')) return 'Own Tempo';
+			if (abilities.has('Slush Rush') && moves.has('snowscape')) return 'Slush Rush';
+			if (abilities.has('Soundproof') && moves.has('substitute')) return 'Soundproof';
+		}
+		
+		if (isDoubles) {
+			if (species.id === 'farigiraf') return 'Armor Tail';
+			if (species.id === 'oinkolognef') return 'Aroma Veil';
+			if (species.id === 'bellibolt') return 'Electromorphosis';
+			if (species.id === 'armarouge') return 'Flash Fire';
+			if (species.baseSpecies === 'maushold' && role === 'Doubles Support') return 'Friend Guard';
+			if (species.id === 'tropius') return 'Harvest';
+			if (species.id === 'dragonite') return 'Inner Focus';
+			if (species.id === 'barraskewda') return 'Propeller Tail';
+			if (species.id === 'flapple' || (species.id === 'appletun' && this.randomChance(1, 2))) return 'Ripen';
+			if (species.id === 'gumshoos') return 'Strong Jaw';
+			if (species.id === 'magnezone') return 'Sturdy';
+			if (species.id === 'florges') return 'Symbiosis';
+			if (species.id === 'oranguru' || abilities.has('pressure')) return 'Telepathy';
+			if (species.id === 'drifblim') return 'Unburden';
+			if (abilities.has('Intimidate')) return 'Intimidate';
+			
+			if (this.randomChance(1, 2) && species.id === 'kilowattrel') return 'Competitive';
+			if (this.randomChance(1, 2) && species.id === 'kingambit') return 'Defiant';
+			if (this.randomChance(1, 2) && species.id === 'mukalola') return 'Power of Alchemy';
+		}
 
 		let abilityAllowed: Ability[] = [];
 		// Obtain a list of abilities that are allowed (not culled)
