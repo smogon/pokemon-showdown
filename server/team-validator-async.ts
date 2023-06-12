@@ -69,7 +69,7 @@ export const PM = new QueryProcessManager<{
 	// console.log('FROM: ' + message.substr(pipeIndex2 + 1));
 	// console.log('TO: ' + packedTeam);
 	return '1' + packedTeam;
-});
+}, 2 * 60 * 1000);
 
 if (!PM.isParentProcess) {
 	// This is a child process!
