@@ -3412,7 +3412,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Draco Meteor", "Muddy Water", "Icy Wind", "Rapid Spin"],
+                "movepool": ["Draco Meteor", "Icy Wind", "Muddy Water", "Rapid Spin"],
                 "teraTypes": ["Fire", "Steel"]
             },
             {
@@ -3472,7 +3472,7 @@
         "sets": [
             {
                 "role": "Choice Item user",
-                "movepool": ["Brave Bird", "Knock Off", "Protect", "Rock Slide", "Sucker Punch"],
+                "movepool": ["Brave Bird", "Knock Off", "Rock Slide", "Sucker Punch"],
                 "teraTypes": ["Rock"]
             },
             {
