@@ -95,6 +95,10 @@ const NoStab = [
 const Hazards = [
 	'spikes', 'stealthrock', 'stickyweb', 'toxicspikes',
 ];
+// Protect and its variants
+const protectMove = [
+	'banefulbunker', 'protect', 'spikyshield',
+];
 
 // Moves that should be paired together when possible
 const MovePairs = [
@@ -112,6 +116,9 @@ const priorityPokemon = [
 /** Pokemon who should never be in the lead slot */
 const noLeadPokemon = [
 	'Basculegion', 'Houndstone', 'Rillaboom', 'Zacian', 'Zamazenta',
+];
+const doublesNoLeadPokemon = [
+	'Basculegion', 'Houndstone', 'Zacian', 'Zamazenta',
 ];
 
 function sereneGraceBenefits(move: Move) {
@@ -531,6 +538,8 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'bodypress', 'mirrorcoat');
 		// Amoonguss, though this can work well as a general rule later
 		this.incompatibleMoves(moves, movePool, 'toxic', 'clearsmog');
+		// Dudunsparce
+		if (species.id === 'dudunsparce') this.incompatibleMoves(moves, movePool, 'earthpower', 'shadowball');
 	}
 
 	// Checks for and removes incompatible moves, starting with the first move in movesA.
@@ -636,7 +645,7 @@ export class RandomTeams {
 			);
 		};
 
-		if (role === "Tera Blast user") {
+		if (role === 'Tera Blast user') {
 			counter = this.addMove('terablast', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 				movePool, teraType, role);
 		}
@@ -685,8 +694,30 @@ export class RandomTeams {
 				movePool, teraType, role);
 		}
 
+		// Enforce Trick Room on Doubles Wallbreaker
+		if (movePool.includes('trickroom') && role === 'Doubles Wallbreaker') {
+			counter = this.addMove('trickroom', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
+		}
+
+		// Enforce moves in doubles
+		if (isDoubles) {
+			const doublesEnforcedMoves = ['auroraveil', 'mortalspin', 'spore'];
+			for (const moveid of doublesEnforcedMoves) {
+				if (movePool.includes(moveid)) {
+					counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+						movePool, teraType, role);
+				}
+			}
+			// Enforce Fake Out on slow Pokemon
+			if (movePool.includes('fakeout') && species.baseStats.spe <= 50) {
+				counter = this.addMove('fakeout', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
+			}
+		}
+
 		// Enforce STAB priority
-		if (role === 'Bulky Attacker' || role === 'Bulky Setup' || priorityPokemon.includes(species.id)) {
+		if (['Bulky Attacker', 'Bulky Setup', 'Doubles Wallbreaker'].includes(role) || priorityPokemon.includes(species.id)) {
 			const priorityMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
@@ -739,7 +770,7 @@ export class RandomTeams {
 		}
 
 		// Enforce Tera STAB
-		if (!counter.get('stabtera') && role !== "Bulky Support" && species.baseSpecies !== 'Dudunsparce') {
+		if (!counter.get('stabtera') && !['Bulky Support', 'Doubles Support'].includes(role)) {
 			const stabMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
@@ -756,7 +787,7 @@ export class RandomTeams {
 		}
 
 		// Enforce recovery
-		if (["Bulky Support", "Bulky Attacker", "Bulky Setup"].includes(role)) {
+		if (['Bulky Support', 'Bulky Attacker', 'Bulky Setup'].includes(role)) {
 			const recoveryMoves = movePool.filter(moveid => RecoveryMove.includes(moveid));
 			if (recoveryMoves.length) {
 				const moveid = this.sample(recoveryMoves);
@@ -784,8 +815,33 @@ export class RandomTeams {
 			}
 		}
 
+		// Enforce redirecting moves, or Fake Out if no redirecting move
+		if (role === 'Doubles Support') {
+			const redirectMoves = movePool.filter(moveid => ['followme', 'ragepowder'].includes(moveid));
+			if (redirectMoves.length) {
+				const moveid = this.sample(redirectMoves);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
+			} else {
+				if (movePool.includes('fakeout')) {
+					counter = this.addMove('fakeout', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+						movePool, teraType, role);
+				}
+			}
+		}
+
+		// Enforce Protect
+		if (role.includes('Protect')) {
+			const protectMoves = movePool.filter(moveid => protectMove.includes(moveid));
+			if (protectMoves.length) {
+				const moveid = this.sample(protectMoves);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
+			}
+		}
+
 		// Enforce coverage move
-		if (!['AV Pivot', 'Fast Support', 'Bulky Support'].includes(role)) {
+		if (!['AV Pivot', 'Fast Support', 'Bulky Support', 'Bulky Protect', 'Doubles Support'].includes(role)) {
 			if (counter.damagingMoves.size <= 1) {
 				// Find the type of the current attacking move
 				const currentAttackType = counter.damagingMoves.values().next().value.type;
@@ -812,7 +868,7 @@ export class RandomTeams {
 			const attackingMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
-				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback)) attackingMoves.push(moveid);
+				if (!this.noStab.includes(moveid) && (move.category !== 'Status')) attackingMoves.push(moveid);
 			}
 			if (attackingMoves.length) {
 				const moveid = this.sample(attackingMoves);
@@ -1308,7 +1364,7 @@ export class RandomTeams {
 		const sets = (this as any)[`random${isDoubles ? 'Doubles' : ''}Sets`][species.id]["sets"];
 		const possibleSets = [];
 		for (const set of sets) {
-			if (teamDetails.teraBlast && set.role === "Tera Blast user") {
+			if (teamDetails.teraBlast && set.role === 'Tera Blast user') {
 				continue;
 			}
 			possibleSets.push(set);
@@ -1471,7 +1527,7 @@ export class RandomTeams {
 
 	// TODO: Make types for this
 	randomSets: AnyObject = require('./random-sets.json');
-	randomDoublesSets: AnyObject = require('./random-sets.json'); // Doubles sets are the same as singles for now
+	randomDoublesSets: AnyObject = require('./random-doubles-sets.json');
 
 	randomTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
@@ -1498,7 +1554,7 @@ export class RandomTeams {
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, isDoubles);
 
-		let generatedLead = false;
+		let leadsRemaining = this.format.gameType === 'doubles' ? 2 : 1;
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
 			const currentSpeciesPool: Species[] = [];
@@ -1570,15 +1626,18 @@ export class RandomTeams {
 
 			let set: RandomTeamsTypes.RandomSet;
 
-			if (!generatedLead) {
-				if (noLeadPokemon.includes(species.baseSpecies)) {
-					if (pokemon.length + 1 === this.maxTeamSize) continue;
+			if (leadsRemaining) {
+				if (
+					isDoubles && doublesNoLeadPokemon.includes(species.baseSpecies) ||
+					!isDoubles && noLeadPokemon.includes(species.baseSpecies)
+				) {
+					if (pokemon.length + leadsRemaining === this.maxTeamSize) continue;
 					set = this.randomSet(species, teamDetails, false, isDoubles);
 					pokemon.push(set);
 				} else {
 					set = this.randomSet(species, teamDetails, true, isDoubles);
 					pokemon.unshift(set);
-					generatedLead = true;
+					leadsRemaining--;
 				}
 			} else {
 				set = this.randomSet(species, teamDetails, false, isDoubles);

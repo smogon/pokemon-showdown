@@ -3331,12 +3331,12 @@
         "level": 83,
         "sets": [
             {
-                "role": "Bulky Support",
+                "role": "Bulky Attacker",
                 "movepool": ["Earthquake", "Glare", "Headbutt", "Roost"],
                 "teraTypes": ["Ghost", "Ground"]
             },
             {
-                "role": "Bulky Setup",
+                "role": "Bulky Support",
                 "movepool": ["Boomburst", "Calm Mind", "Earth Power", "Roost", "Shadow Ball"],
                 "teraTypes": ["Ghost"]
             }
@@ -3346,12 +3346,12 @@
         "level": 83,
         "sets": [
             {
-                "role": "Bulky Support",
+                "role": "Bulky Attacker",
                 "movepool": ["Earthquake", "Glare", "Headbutt", "Roost"],
                 "teraTypes": ["Ghost", "Ground"]
             },
             {
-                "role": "Bulky Setup",
+                "role": "Bulky Support",
                 "movepool": ["Boomburst", "Calm Mind", "Earth Power", "Roost", "Shadow Ball"],
                 "teraTypes": ["Ghost"]
             }

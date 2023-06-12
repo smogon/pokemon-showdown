@@ -76,12 +76,18 @@ describe('value rule support (slow)', () => {
 });
 
 describe("New set format", () => {
-	const files = ['../../data/random-sets.json'];
+	const files = ['../../data/random-sets.json', '../../data/random-doubles-sets.json'];
 	for (const filename of files) {
 		it(`${filename} should have valid set data`, () => {
 			const setsJSON = require(filename);
-			const validRoles = ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user",
-				"Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"];
+			let validRoles = [];
+			if (filename === '../../data/random-sets.json') {
+				validRoles = ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user",
+					"Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"];
+			} else {
+				validRoles = ["Doubles Fast Attacker", "Doubles Setup Sweeper", "Doubles Wallbreaker", "Tera Blast user",
+					"Doubles Bulky Attacker", "Doubles Bulky Setup", "Offensive Protect", "Bulky Protect", "Doubles Support", "Choice Item user"];
+			}
 			for (const [id, sets] of Object.entries(setsJSON)) {
 				const species = Dex.species.get(id);
 				assert(species.exists, `Misspelled species ID: ${id}`);
