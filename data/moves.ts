@@ -1295,6 +1295,7 @@ flags: {protect: 1, mirror: 1},
 secondary: {
 chance: 25,
 status: 'frz',
+},
 target: "normal",
 type: "Ghost",
 },
