@@ -7043,14 +7043,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					types.push(single_type);
 				}
 				source.setType(types);
-				this.add('-start', source, 'typechange', source.getTypes().join('/'), '[from] ability: Palette Drain');
+				this.add('-start', source, 'typechange', source.getTypes().join('/'), '[from] ability: Stolen Art');
 				target.setType("???");
 				this.add('-start', target, 'typechange', target.getTypes().join('/'));
 			}
 		},
 		onSwitchIn(source) {
 			source.setType(source.types);
-			this.add('-start', source, 'typechange', source.getTypes().join('/'), '[from] ability: Palette Drain');
+			this.add('-start', source, 'typechange', source.getTypes().join('/'), '[from] ability: Stolen Art');
 		},
 		name: "Stolen Art",
 		rating: 1.5,
