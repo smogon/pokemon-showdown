@@ -1242,7 +1242,7 @@ export class RandomTeams {
 		isDoubles: boolean,
 		teraType: string,
 		role: string,
-	): string | undefined {
+	): string {
 		if (
 			(counter.get('Physical') >= 4 ||
 			(counter.get('Physical') >= 3 && moves.has('memento'))) &&
@@ -1316,8 +1316,7 @@ export class RandomTeams {
 			['flamecharge', 'rapidspin'].every(m => !moves.has(m)) &&
 			['Fast Attacker', 'Setup Sweeper', 'Tera Blast user', 'Wallbreaker'].some(m => role === (m))
 		) return 'Life Orb';
-		if (isDoubles) return 'Sitrus Berry';
-		return 'Leftovers';
+		return (isDoubles ? 'Sitrus Berry' : 'Leftovers');
 	}
 
 	getLevel(
@@ -1417,9 +1416,6 @@ export class RandomTeams {
 		if (item === undefined) {
 			item = this.getItem(ability, types, moves, counter, teamDetails, species, isLead, isDoubles, teraType, role);
 		}
-
-		// fallback
-		if (item === undefined) item = isDoubles ? 'Sitrus Berry' : 'Leftovers';
 
 		if (species.baseSpecies === 'Pikachu') {
 			forme = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']);
