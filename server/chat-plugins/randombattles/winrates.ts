@@ -45,6 +45,7 @@ function getDefaultStats() {
 			// all of these requested by rands staff. they don't anticipate it being changed much
 			// so i'm not spending the time to add commands to toggle this
 			gen9randombattle: {mons: {}},
+			gen9randomdoublesbattle: {mons: {}},
 			gen7randombattle: {mons: {}},
 			gen6randombattle: {mons: {}},
 			gen5randombattle: {mons: {}},
@@ -149,6 +150,8 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 	const format = Dex.formats.get(battle.format);
 	if (format.mod !== `gen${Dex.gen}`) {
 		eloFloor = 1300;
+	} else if (format.gameType === 'doubles') {
+		eloFloor = 1400;
 	}
 	if (!formatData || battle.rated < eloFloor) return;
 	checkRollover();
