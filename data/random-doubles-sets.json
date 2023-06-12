@@ -2802,7 +2802,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Acupressure", "Thunder Wave", "Thunderbolt", "Toxic Spikes"],
+                "movepool": ["Acupressure", "Recover", "Thunderbolt", "Toxic Spikes"],
                 "teraTypes": ["Electric"]
             }
         ]
