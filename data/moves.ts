@@ -17587,7 +17587,6 @@ name: "Victory Dance",
 pp: 1.25,
 priority: 0,
 flags: {snatch: 1, dance: 1},
-status: 'slp',
 boosts: {
 atk: 1,
 spa: 1,
