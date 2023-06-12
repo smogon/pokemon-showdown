@@ -1024,7 +1024,7 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Dragon Ascent", "Dragon Claw", "Dragon Dance", "Earthquake", "Extreme Speed", "Swords Dance"],
+                "movepool": ["Dragon Ascent", "Dragon Dance", "Earthquake", "Extreme Speed", "Swords Dance"],
                 "teraTypes": ["Normal"]
             },
             {
@@ -3412,12 +3412,17 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Draco Meteor", "Hydro Pump", "Icy Wind", "Rapid Spin"],
+                "movepool": ["Draco Meteor", "Muddy Water", "Icy Wind", "Rapid Spin"],
                 "teraTypes": ["Fire", "Steel"]
             },
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Draco Meteor", "Hydro Pump", "Nasty Plot", "Protect"],
+                "movepool": ["Draco Meteor", "Muddy Water", "Nasty Plot", "Protect"],
+                "teraTypes": ["Dragon", "Fire", "Water"]
+            },
+            {
+                "role": "Choice Item user",
+                "movepool": ["Draco Meteor", "Hydro Pump", "Icy Wind", "Muddy Water"],
                 "teraTypes": ["Dragon", "Fire", "Water"]
             }
         ]
@@ -3466,8 +3471,13 @@
         "level": 86,
         "sets": [
             {
-                "role": "Doubles Wallbreaker",
+                "role": "Choice Item user",
                 "movepool": ["Brave Bird", "Knock Off", "Protect", "Rock Slide", "Sucker Punch"],
+                "teraTypes": ["Rock"]
+            },
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Brave Bird", "Knock Off", "Protect", "Rock Slide"],
                 "teraTypes": ["Rock"]
             }
         ]
