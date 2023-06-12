@@ -2963,4 +2963,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Mantinite",
 		desc: "If held by a Mantine, this item allows it to Mega Evolve in battle.",
 	},
+	discardedcloth: {
+		name: "Discarded Cloth",
+		desc: "If holder's HP is full, will take no damage and -1 to Spe, SpD, Def. Single use.",
+	},
 };

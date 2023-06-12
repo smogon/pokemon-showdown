@@ -2556,4 +2556,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "This Pokemon can only be damaged by direct attacks. Curse and Substitute on use, Belly Drum, Pain Split, Struggle recoil, and confusion damage are considered direct damage. It's stats cannot be raised or lowered and none of it's move's secondary effects activate.",
 		shortDesc: "This Pokemon can only be damaged by direct attacks. Move secondaries are ignored.",
 	},
+	parry: {
+		name: "Parry",
+		shortDesc: "This Pokemon is immune to slicing moves.",
+	},
 };

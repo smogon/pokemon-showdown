@@ -7867,4 +7867,15 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Has a 20% chance to cause the target to either become burned or paralyzed",
 		shortDesc: "20% chance to burn or paralyze target.",
 	},
+	bulwark: {
+		name: "Bulwark",
+		shortDesc: "Sets screens.",
+	},
+	mindtrap: {
+		name: "Mindtrap",
+		desc: "If an opposing Pokemon switches out this turn, this move hits that Pokemon before it leaves the field, even if it was not the original target. If the user moves after an opponent using Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch, but not Baton Pass, it will hit that opponent before it leaves the field. Power doubles and no accuracy check is done if the user hits an opponent switching out, and the user's turn is over; if an opponent faints from this, the replacement Pokemon does not become active until the end of the turn.",
+		shortDesc: "If a foe is switching out, hits it at 2x power.",
+
+		activate: "  ([TARGET] is being withdrawn...)",
+	},
 };
