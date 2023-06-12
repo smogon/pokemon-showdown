@@ -3303,7 +3303,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		natDexTier: "Illegal",
 		tier: "Illegal",
 	},
-	raikoudelta: {
+	raikousupra: {
 		inherit: true,
 		isNonstandard: null,
 		natDexTier: "OU",

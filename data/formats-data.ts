@@ -8742,7 +8742,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 		natDexTier: "Illegal",
 	},
-	raikoudelta: {
+	raikousupra: {
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "Illegal",

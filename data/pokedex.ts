@@ -26988,11 +26988,11 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		requiredAbility: "Stone Face",
 		battleOnly: "Eiscue-Delta",
 	},
-	raikoudelta: {
+	raikousupra: {
 		num: 243,
-		name: "Raikou-Delta",
+		name: "Raikou-Supra",
 		baseSpecies: "Raikou",
-		forme: "Delta",
+		forme: "Supra",
 		types: ["Rock"],
 		gender: "N",
 		baseStats: {hp: 90, atk: 85, def: 75, spa: 115, spd: 100, spe: 115},
