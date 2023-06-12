@@ -23874,8 +23874,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onHit(source) {
-			source.side.addSideCondition('reflect');
-			source.side.addSideCondition('lightscreen');
+			source.foes()[0].side.addSideCondition('reflect');
+			source.foes()[0].side.addSideCondition('lightscreen');
 		},
 		secondary: null,
 		target: "normal",
