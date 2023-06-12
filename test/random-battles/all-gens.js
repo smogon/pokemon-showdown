@@ -110,6 +110,9 @@ describe("New set format", () => {
 						assert(dexType.exists, `${species.name} has invalid Tera Type: ${type}`);
 						assert.equal(type, dexType.name, `${species.name} has misformatted Tera Type: ${type}`);
 					}
+					for (let i = 0; i < set.teraTypes.length - 1; i++) {
+						assert(set.teraTypes[i + 1] > set.teraTypes[i], `${species} teraTypes should be sorted alphabetically`);
+					}
 				}
 			}
 		});
