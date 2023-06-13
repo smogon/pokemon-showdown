@@ -725,7 +725,7 @@
             {
                 "role": "Doubles Support",
                 "movepool": ["High Horsepower", "Ice Shard", "Knock Off", "Rapid Spin", "Stone Edge"],
-                "teraTypes": ["Dragon", "Ice", "Water"]
+                "teraTypes": ["Dragon", "Water"]
             }
         ]
     },
@@ -2248,7 +2248,7 @@
             {
                 "role": "Doubles Bulky Attacker",
                 "movepool": ["Draco Meteor", "Dragon Tail", "Fire Blast", "Heavy Slam", "Hydro Pump", "Thunderbolt"],
-                "teraTypes": ["Dragon", "Electric", "Fire", "Ground", "Steel", "Water"]
+                "teraTypes": ["Dragon", "Electric", "Fire", "Steel", "Water"]
             }
         ]
     },
