@@ -561,6 +561,13 @@ export const Formats: FormatList = [
 		ruleset: ['Draft', 'Min Source Gen = 9'],
 	},
 	{
+		name: "[Gen 9] Tera Preview Paldea Dex Draft",
+
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['[Gen 9] Paldea Dex Draft', 'Tera Type Preview'],
+	},
+	{
 		name: "[Gen 9] 6v6 Doubles Draft",
 
 		mod: 'gen9',
@@ -582,6 +589,13 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		searchShow: false,
 		ruleset: ['Draft', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Tera Preview NatDex Draft",
+
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['[Gen 9] NatDex Draft', 'Tera Type Preview'],
 	},
 	{
 		name: "[Gen 9] NatDex 6v6 Doubles Draft",
