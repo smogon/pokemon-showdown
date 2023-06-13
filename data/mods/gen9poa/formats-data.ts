@@ -3311,7 +3311,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	sceptiledeltamega: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "Uber",
+		natDexTier: "OU",
 	},
 	cetoddlehisui: {
 		inherit: true,

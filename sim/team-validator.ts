@@ -2344,7 +2344,7 @@ export class TeamValidator {
 			return this.dex.species.get(species.baseSpecies);
 		} else if (species.name === 'Lycanroc-Dusk') {
 			return this.dex.species.get('Rockruff-Dusk');
-		} else if (species.name === 'Greninja-Ash') {
+		} else if (['Greninja-Ash', 'Espeon', 'Umbreon', 'Sylveon', 'Flareon', 'Leafeon', 'Vaporeon', 'Jolteon', 'Glaceon'].includes(species.name)) {
 			return null;
 		} else if (species.prevo) {
 			// there used to be a check for Hidden Ability here, but apparently it's unnecessary
