@@ -784,7 +784,7 @@
             },
             {
                 "role": "Doubles Support",
-                "movepool": ["Bug Buzz", "Hurricane", "Quiver Dance", "Sticky Web", "Tailwind"],
+                "movepool": ["Bug Buzz", "Hurricane", "Sticky Web", "Tailwind"],
                 "teraTypes": ["Ground"]
             }
         ]
@@ -1908,7 +1908,7 @@
             {
                 "role": "Offensive Protect",
                 "movepool": ["Aqua Jet", "Close Combat", "Icicle Crash", "Protect"],
-                "teraTypes": ["Fighting"]
+                "teraTypes": ["Fighting", "Water"]
             }
         ]
     },
@@ -2023,7 +2023,7 @@
             {
                 "role": "Doubles Fast Attacker",
                 "movepool": ["Grass Knot", "Protect", "Sludge Bomb", "Volt Switch", "Wildbolt Storm"],
-                "teraTypes": ["Electric", "Poison", "Psychic"]
+                "teraTypes": ["Electric", "Poison"]
             },
             {
                 "role": "Tera Blast user",
@@ -2098,7 +2098,7 @@
             {
                 "role": "Doubles Setup Sweeper",
                 "movepool": ["Fire Blast", "Heat Wave", "Nasty Plot", "Protect", "Psyshock"],
-                "teraTypes": ["Fire", "Grass", "Psychic"]
+                "teraTypes": ["Fire", "Psychic"]
             }
         ]
     },
@@ -2518,7 +2518,7 @@
             {
                 "role": "Doubles Support",
                 "movepool": ["Hyper Voice", "Instruct", "Psyshock", "Trick Room"],
-                "teraTypes": ["Fairy", "Fighting"]
+                "teraTypes": ["Fairy"]
             }
         ]
     },
