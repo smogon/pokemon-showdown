@@ -487,7 +487,7 @@ export class RandomTeams {
 			this.incompatibleMoves(moves, movePool, 'rockslide', 'stoneedge');
 			this.incompatibleMoves(moves, movePool, Setup, ['fakeout', 'helpinghand']);
 			this.incompatibleMoves(moves, movePool, ProtectMove, 'wideguard');
-			this.incompatibleMoves(moves, movePool, 'fireblast', ['fierydance', 'heatwave']);
+			this.incompatibleMoves(moves, movePool, ['fierydance', 'fireblast'], 'heatwave');
 			this.incompatibleMoves(moves, movePool, 'dazzlinggleam', ['fleurcannon', 'moonblast']);
 			this.incompatibleMoves(moves, movePool, 'poisongas', 'toxicspikes');
 			this.incompatibleMoves(moves, movePool, RecoveryMove, 'healpulse');
@@ -496,7 +496,6 @@ export class RandomTeams {
 			this.incompatibleMoves(moves, movePool, 'freezedry', 'icebeam');
 			this.incompatibleMoves(moves, movePool, 'bodyslam', 'doubleedge');
 			this.incompatibleMoves(moves, movePool, 'energyball', 'leafstorm');
-			this.incompatibleMoves(moves, movePool, 'toxic', 'yawn');
 			this.incompatibleMoves(moves, movePool, 'earthpower', 'sandsearstorm');
 			this.incompatibleMoves(moves, movePool, 'drumbeating', 'woodhammer');
 			this.incompatibleMoves(moves, movePool, 'boomburst', 'hyperdrill');
@@ -504,7 +503,7 @@ export class RandomTeams {
 			if (role !== 'Offensive Protect') {
 				this.incompatibleMoves(moves, movePool, ProtectMove, 'uturn');
 			}
-			if (!types.has('Ice')) {
+			if (!types.includes('Ice')) {
 				this.incompatibleMoves(moves, movePool, 'icebeam', 'icywind');
 			}
 		}
@@ -1102,7 +1101,7 @@ export class RandomTeams {
 			if (species.id === 'dragapult') return 'Clear Body';
 			if (species.id === 'bellibolt') return 'Electromorphosis';
 			if (species.id === 'armarouge') return 'Flash Fire';
-			if (species.baseSpecies === 'maushold' && role === 'Doubles Support') return 'Friend Guard';
+			if (species.baseSpecies === 'Maushold' && role === 'Doubles Support') return 'Friend Guard';
 			if (species.id === 'tropius') return 'Harvest';
 			if (species.id === 'dragonite') return 'Inner Focus';
 			if (species.id === 'barraskewda') return 'Propeller Tail';
@@ -1110,7 +1109,7 @@ export class RandomTeams {
 			if (species.id === 'gumshoos') return 'Strong Jaw';
 			if (species.id === 'magnezone') return 'Sturdy';
 			if (species.id === 'florges') return 'Symbiosis';
-			if (species.id === 'oranguru' || abilities.has('pressure')) return 'Telepathy';
+			if (species.id === 'oranguru' || abilities.has('Pressure') && abilities.has('Telepathy')) return 'Telepathy';
 			if (species.id === 'drifblim') return 'Unburden';
 			if (abilities.has('Intimidate')) return 'Intimidate';
 
@@ -1255,9 +1254,10 @@ export class RandomTeams {
 		counter: MoveCounter,
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
+		isLead: boolean,
 		teraType: string,
 		role: string,
-	) {
+	): string {
 		const scarfReqs = (
 			!counter.get('priority') && ability !== 'Speed Boost' && role !== 'Doubles Wallbreaker' &&
 			species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
@@ -1318,7 +1318,6 @@ export class RandomTeams {
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
 		isLead: boolean,
-		isDoubles: boolean,
 		teraType: string,
 		role: string,
 	): string {
@@ -1395,7 +1394,7 @@ export class RandomTeams {
 			['flamecharge', 'rapidspin'].every(m => !moves.has(m)) &&
 			['Fast Attacker', 'Setup Sweeper', 'Tera Blast user', 'Wallbreaker'].some(m => role === (m))
 		) return 'Life Orb';
-		return ('Leftovers');
+		return 'Leftovers';
 	}
 
 	getLevel(
@@ -1489,11 +1488,12 @@ export class RandomTeams {
 		// Get items
 		// First, the priority items
 		item = this.getPriorityItem(ability, types, moves, counter, teamDetails, species, isLead, isDoubles, teraType, role);
-		if (item === undefined && isDoubles) {
-			item = this.getDoublesItem(ability, types, moves, counter, teamDetails, species, teraType, role);
-		}
 		if (item === undefined) {
-			item = this.getItem(ability, types, moves, counter, teamDetails, species, isLead, isDoubles, teraType, role);
+			if (isDoubles) {
+				item = this.getDoublesItem(ability, types, moves, counter, teamDetails, species, isLead, teraType, role);
+			} else {
+				item = this.getItem(ability, types, moves, counter, teamDetails, species, isLead, teraType, role);
+			}
 		}
 
 		if (species.baseSpecies === 'Pikachu') {
