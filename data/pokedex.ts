@@ -28118,6 +28118,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 474,
 		name: "Porygon-Z-Rhinian",
 		baseSpecies: "Porygon-Z",
+		forme: "Rhinian",
 		types: ["Grass", "Electric"],
 		gender: "N",
 		baseStats: {hp: 100, atk: 95, def: 65, spa: 135, spd: 60, spe: 80},
@@ -28211,12 +28212,12 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.4,
 		weightkg: 2,
 		color: "White",
-		evos: ["Rabicicle"],
+		evos: ["Rabbicicle"],
 		eggGroups: ["Undiscovered"],
 	},
-	rabicicle: {
+	rabbicicle: {
 		num: -6029,
-		name: "Rabicicle",
+		name: "Rabbicicle",
 		types: ["Normal", "Ice"],
 		baseStats: {hp: 90, atk: 105, def: 65, spa: 65, spd: 75, spe: 100},
 		abilities: {0: "Snow Cloak", 1: "Ice Body", H: "Fluffy"},
