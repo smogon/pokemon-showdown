@@ -21776,12 +21776,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		//Super-effective unless target is immune, implemented in sim/battle-actions.ts
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Low Kick', target);
-		},
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -21796,13 +21790,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', target, 'Earthquake', source);
-			this.add('-anim', source, 'Hyper Voice', target);
-		},
 		secondary: null,
 		target: "normal",
 		type: "Rock",
@@ -21817,13 +21804,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Poison Gas', target);
-			this.add('-anim', source, 'Sludge Wave', target);
-		},
 		onEffectiveness(typeMod, target, type) {
 			if (type === 'Steel') return 1;
 		},
@@ -21842,13 +21822,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 30,
 		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Rock Polish', target);
-			this.add('-anim', source, 'Head Smash', target);
-		},
 		secondary: null,
 		target: "normal",
 		type: "Crystal",
