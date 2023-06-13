@@ -27820,8 +27820,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.7,
 		weightkg: 112.8,
 		color: "Pink",
-		prevo: "Tinkatuff",
-		evoLevel: 38,
 		eggGroups: ["Fairy"],
 	},
 	canyou: {
