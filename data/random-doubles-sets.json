@@ -550,7 +550,7 @@
         ]
     },
     "sunflora": {
-        "level": 90,
+        "level": 100,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -700,7 +700,7 @@
             {
                 "role": "Doubles Support",
                 "movepool": ["Brave Bird", "Fake Out", "Helping Hand", "Memento", "Rapid Spin", "Tailwind"],
-                "teraTypes": ["Ghost", "Steel"]
+                "teraTypes": ["Steel"]
             }
         ]
     },
@@ -1290,7 +1290,7 @@
             {
                 "role": "Tera Blast user",
                 "movepool": ["Blizzard", "Calm Mind", "Freeze-Dry", "Tera Blast"],
-                "teraTypes": ["Fire"]
+                "teraTypes": ["Fire", "Ground"]
             }
         ]
     },
@@ -2028,7 +2028,7 @@
             {
                 "role": "Tera Blast user",
                 "movepool": ["Nasty Plot", "Protect", "Tera Blast", "Wildbolt Storm"],
-                "teraTypes": ["Flying"]
+                "teraTypes": ["Flying", "Ice"]
             }
         ]
     },
@@ -2043,7 +2043,7 @@
             {
                 "role": "Tera Blast user",
                 "movepool": ["Nasty Plot", "Protect", "Sandsear Storm", "Tera Blast"],
-                "teraTypes": ["Ice"]
+                "teraTypes": ["Flying", "Ice"]
             }
         ]
     },
@@ -2488,7 +2488,7 @@
             {
                 "role": "Bulky Protect",
                 "movepool": ["Defog", "Leaf Storm", "Pollen Puff", "Protect"],
-                "teraTypes": ["Fighting", "Steel"]
+                "teraTypes": ["Steel"]
             }
         ]
     },
@@ -2673,7 +2673,7 @@
             {
                 "role": "Doubles Bulky Attacker",
                 "movepool": ["Dragon Dance", "Dragon Rush", "Grav Apple", "Protect", "Sucker Punch"],
-                "teraTypes": ["Dark", "Grass"]
+                "teraTypes": ["Grass"]
             }
         ]
     },
