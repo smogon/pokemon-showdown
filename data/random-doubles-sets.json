@@ -199,7 +199,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Fire Punch", "Gunk Shot", "Helping Hand", "Ice Punch", "Knock Off", "Poison Jab", "Protect", "Rock Tomb", "Snarl"],
+                "movepool": ["Drain Punch", "Gunk Shot", "Helping Hand", "Ice Punch", "Knock Off", "Poison Jab", "Protect", "Rock Tomb", "Snarl"],
                 "teraTypes": ["Dark", "Flying"]
             }
         ]
@@ -464,8 +464,8 @@
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
-                "movepool": ["Aura Sphere", "Fire Blast", "Nasty Plot", "Protect", "Psystrike", "Recover", "Shadow Ball"],
-                "teraTypes": ["Fighting", "Fire", "Ghost", "Psychic"]
+                "movepool": ["Aura Sphere", "Dark Pulse", "Fire Blast", "Nasty Plot", "Protect", "Psystrike", "Recover"],
+                "teraTypes": ["Dark", "Fighting", "Fire", "Psychic"]
             }
         ]
     },
@@ -2418,7 +2418,7 @@
             {
                 "role": "Bulky Protect",
                 "movepool": ["Hurricane", "Protect", "Quiver Dance", "Revelation Dance", "Tailwind"],
-                "teraTypes": ["Ground"]
+                "teraTypes": ["Fighting", "Ground"]
             }
         ]
     },
