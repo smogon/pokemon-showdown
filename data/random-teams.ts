@@ -1268,13 +1268,14 @@ export class RandomTeams {
 		);
 
 		if (moves.has('covet')) return '';
+		if (moves.has('iciclespear') && ability !== 'Skill Link') return 'Loaded Dice';
 		if (species.id === 'calyrexice') return 'Weakness Policy';
 		if (
 			(['dragonenergy', 'waterspout'].some(m => moves.has(m))) &&
 			counter.damagingMoves.size >= 4
 		) return 'Choice Scarf';
 		if (role === 'Choice Item user') {
-			if (scarfReqs || (counter.get('Physical') < 4 && counter.get('Special') < 4)) return 'Choice Scarf';
+			if (scarfReqs || (counter.get('Physical') < 4 && counter.get('Special') < 3)) return 'Choice Scarf';
 			return (counter.get('Physical') === 4) ? 'Choice Band' : 'Choice Specs';
 		}
 		if (moves.has('blizzard') && ability !== 'Snow Warning' && !teamDetails.snow) return 'Blunder Policy';
@@ -1285,10 +1286,9 @@ export class RandomTeams {
 			return (scarfReqs) ? 'Choice Scarf' : 'Choice Band';
 		}
 		if (
-			(counter.get('Special') >= 4 && (moves.has('voltswitch') || role === 'Doubles Wallbreaker')) || (
-				(counter.get('Special') >= 3 && (moves.has('flipturn') || moves.has('uturn'))) &&
-				!moves.has('acidspray') && !moves.has('electroweb')
-			)
+			((counter.get('Special') >= 4 && (moves.has('voltswitch') || role === 'Doubles Wallbreaker')) || (
+				counter.get('Special') >= 3 && moves.has('uturn')
+			)) && !moves.has('acidspray') && !moves.has('electroweb')
 		) {
 			return (scarfReqs) ? 'Choice Scarf' : 'Choice Specs';
 		}
