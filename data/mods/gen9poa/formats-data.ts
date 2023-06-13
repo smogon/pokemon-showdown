@@ -3749,7 +3749,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "LC",
 	},
-	rabicicle: {
+	rabbicicle: {
 		inherit: true,
 		isNonstandard: null,
 		natDexTier: "RU",
