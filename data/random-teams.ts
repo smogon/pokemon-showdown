@@ -503,9 +503,6 @@ export class RandomTeams {
 			if (role !== 'Offensive Protect') {
 				this.incompatibleMoves(moves, movePool, ProtectMove, 'uturn');
 			}
-			if (!types.includes('Ice')) {
-				this.incompatibleMoves(moves, movePool, 'icebeam', 'icywind');
-			}
 		}
 
 		// These moves don't mesh well with other aspects of the set
@@ -538,6 +535,9 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'bugbite', 'pounce');
 		this.incompatibleMoves(moves, movePool, 'bittermalice', 'shadowball');
 		this.incompatibleMoves(moves, movePool, ['dragonpulse', 'spacialrend'], 'dracometeor');
+		if (!types.includes('Ice')) {
+			this.incompatibleMoves(moves, movePool, 'icebeam', 'icywind');
+		}
 
 
 		// These status moves are redundant with each other
