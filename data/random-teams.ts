@@ -504,6 +504,9 @@ export class RandomTeams {
 			if (role !== 'Offensive Protect') {
 				this.incompatibleMoves(moves, movePool, ProtectMove, 'uturn');
 			}
+			if (!types.has('Ice')) {
+				this.incompatibleMoves(moves, movePool, 'icebeam', 'icywind');
+			}
 		}
 
 		// These moves don't mesh well with other aspects of the set
