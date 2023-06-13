@@ -1,4 +1,5 @@
 export const Pokedex: {[k: string]: ModdedSpeciesData} = {
+	
 	spiritomb: {
 		inherit: true,
 		abilities: {0: "Pressure", H: "Noctem"},
