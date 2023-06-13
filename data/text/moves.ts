@@ -7841,7 +7841,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	outcold: {
 		name: "Out Cold",
-		shortDesc: "30% chance to put the target to sleep.",
+		shortDesc: "Puts the target to sleep.",
 	},
 	bloomsday: {
 		name: "Bloom's Day",

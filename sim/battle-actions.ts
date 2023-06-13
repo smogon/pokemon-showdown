@@ -732,24 +732,24 @@ export class BattleActions {
 			if (accuracy !== true) {
 				let hitSuccess = this.battle.randomChance(accuracy, 100);
 
-				if (!hitSuccess && pokemon.ability === "snakeeyes") {
+				if (!hitSuccess && pokemon.hasAbility("Snake Eyes")) {
 
 					hitSuccess = this.battle.randomChance(accuracy, 100);
 					if (hitSuccess) this.battle.add('-ability', pokemon, 'Snake Eyes');
 					
-					if (!hitSuccess && pokemon.item === "loadeddice") {
+					if (!hitSuccess && pokemon.hasItem("loadeddice")) {
 
 						hitSuccess = this.battle.randomChance(accuracy, 100);
 						if (hitSuccess) this.battle.add('-ability', pokemon, 'Snake Eyes');
 					}
 				}
 
-				if (hitSuccess && target.ability === "snakeeyes"){
+				if (hitSuccess && target.hasAbility("Snake Eyes")){
 
 					hitSuccess = this.battle.randomChance(accuracy, 100);
 					if (!hitSuccess) this.battle.add('-ability', pokemon, 'Snake Eyes');
 
-					if (hitSuccess && target.item === "loadeddice") {
+					if (hitSuccess && target.hasItem("loadeddice")) {
 
 						hitSuccess = this.battle.randomChance(accuracy, 100);
 						if (!hitSuccess) this.battle.add('-ability', pokemon, 'Snake Eyes');
@@ -1380,24 +1380,24 @@ export class BattleActions {
 				
 				let secondaryRoll = this.battle.random(100);
 
-				if (typeof secondary.chance !== 'undefined' && source.ability === "snakeeyes" && secondaryRoll >= secondary.chance) {
+				if (typeof secondary.chance !== 'undefined' && source.hasAbility("Snake Eyes") && secondaryRoll >= secondary.chance) {
 
 					secondaryRoll = this.battle.random(100);
 					if (secondaryRoll < secondary.chance) this.battle.add('-ability', source, 'Snake Eyes');
 
-					if (source.item === "loadeddice" && secondaryRoll >= secondary.chance) {
+					if (source.hasItem("loadeddice") && secondaryRoll >= secondary.chance) {
 
 						secondaryRoll = this.battle.random(100);
 						if (secondaryRoll < secondary.chance) this.battle.add('-ability', source, 'Snake Eyes');
 					}
 				}
 
-				if (typeof secondary.chance !== 'undefined' && target?.ability === "snakeeyes" && secondaryRoll < secondary.chance) {
+				if (typeof secondary.chance !== 'undefined' && target?.hasAbility("Snake Eyes") && secondaryRoll < secondary.chance) {
 
 					secondaryRoll = this.battle.random(100);
 					if (secondaryRoll >= secondary.chance) this.battle.add('-ability', source, 'Snake Eyes');
 
-					if (target?.item === "loadeddice" && secondaryRoll < secondary.chance) {
+					if (target?.hasItem("loadeddice") && secondaryRoll < secondary.chance) {
 
 						secondaryRoll = this.battle.random(100);
 						if (secondaryRoll >= secondary.chance) this.battle.add('-ability', source, 'Snake Eyes');
@@ -1686,24 +1686,24 @@ export class BattleActions {
 		if (move.willCrit === undefined) {
 			if (critRatio) {
 				moveHit.crit = this.battle.randomChance(1, critMult[critRatio]);
-				if (!moveHit.crit && source.ability === "snakeeyes") {
+				if (!moveHit.crit && source.hasAbility("Snake Eyes")) {
 
 					moveHit.crit = this.battle.randomChance(1, critMult[critRatio]);
 					if (moveHit.crit) this.battle.add('-ability', source, 'Snake Eyes');
 
-					if (!moveHit.crit && source.item === "loadeddice") {
+					if (!moveHit.crit && source.hasItem("loadeddice")) {
 
 						moveHit.crit = this.battle.randomChance(1, critMult[critRatio]);
 						if (moveHit.crit) this.battle.add('-ability', source, 'Snake Eyes');
 					} 
 				}
 
-				if (moveHit.crit && target.ability === "snakeeyes") {
+				if (moveHit.crit && target.hasAbility("Snake Eyes")) {
 
 					moveHit.crit = this.battle.randomChance(1, critMult[critRatio]);
 					if (!moveHit.crit) this.battle.add('-ability', source, 'Snake Eyes');
 
-					if (moveHit.crit && target.item === "loadeddice") {
+					if (moveHit.crit && target.hasItem("loadeddice")) {
 
 						moveHit.crit = this.battle.randomChance(1, critMult[critRatio]);
 						if (!moveHit.crit) this.battle.add('-ability', source, 'Snake Eyes');
@@ -1826,24 +1826,24 @@ export class BattleActions {
 
 		// random factor - also not a modifier
 		baseDamage = this.battle.randomizer(baseDamage);
-		if (pokemon.ability === "snakeeyes") {
+		if (pokemon.hasAbility("Snake Eyes")) {
 			let baseDamageSE = this.battle.randomizer(baseDamage);
 			if (baseDamageSE > baseDamage) {
 				baseDamage = baseDamageSE
 			} 
-			if (pokemon.item === "loadeddice") {
+			if (pokemon.hasItem("loadeddice")) {
 				let baseDamageLD = this.battle.randomizer(baseDamage);
 				if (baseDamageLD > baseDamage) {
 					baseDamage = baseDamageLD
 				}
 			}
 		}
-		if (target.ability === "snakeeyes") {
+		if (target.hasAbility("Snake Eyes")) {
 			let baseDamageSEO = this.battle.randomizer(baseDamage);
 			if (baseDamageSEO < baseDamage) {
 				baseDamage = baseDamageSEO
 			} 
-			if (target.item === "loadeddice") {
+			if (target.hasItem("loadeddice")) {
 				let baseDamageLDO = this.battle.randomizer(baseDamage);
 				if (baseDamageLDO < baseDamage) {
 					baseDamage = baseDamageLDO
