@@ -106,7 +106,7 @@ const MovePairs = [
 
 /** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
 const priorityPokemon = [
-	'banette', 'breloom', 'brutebonnet', 'cacturne', 'giratinaorigin', 'lycanrocdusk', 'mimikyu', 'scizor',
+	'banette', 'breloom', 'brutebonnet', 'cacturne', 'lycanrocdusk', 'mimikyu', 'scizor',
 ];
 
 /** Pokemon who should never be in the lead slot */
@@ -156,7 +156,7 @@ export class RandomTeams {
 		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
 
 		this.moveEnforcementCheckers = {
-			Bug: (movePool) => movePool.includes('megahorn'),
+			Bug: (movePool) => (movePool.includes('megahorn') || movePool.includes('xscissor')),
 			Dark: (movePool, moves, abilities, types, counter) => !counter.get('Dark'),
 			Dragon: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Dragon') &&
@@ -183,8 +183,8 @@ export class RandomTeams {
 			},
 			Psychic: (movePool, moves, abilities, types, counter) => {
 				if (counter.get('Psychic')) return false;
-				if (movePool.includes('calmmind') || movePool.includes('psychicfangs') || movePool.includes('psychocut')) return true;
-				return abilities.has('Psychic Surge') || types.includes('Fire') || types.includes('Electric');
+				if (movePool.includes('calmmind') || movePool.includes('psychicfangs')) return true;
+				return abilities.has('Psychic Surge') || types.includes('Fire') || types.includes('Electric') || types.includes('Fighting');
 			},
 			Rock: (movePool, moves, abilities, types, counter, species) => !counter.get('Rock') && species.baseStats.atk >= 80,
 			Steel: (movePool, moves, abilities, types, counter, species) => {
@@ -344,6 +344,7 @@ export class RandomTeams {
 			if (move.damage || move.damageCallback) {
 				// Moves that do a set amount of damage:
 				counter.add('damage');
+				counter.damagingMoves.add(move);
 			} else {
 				// Are Physical/Special/Status moves:
 				categories[move.category]++;
@@ -443,6 +444,11 @@ export class RandomTeams {
 			.map(move => move.id);
 
 		// Team-based move culls
+		if (teamDetails.screens && movePool.length >= this.maxMoveCount + 2) {
+			if (movePool.includes('reflect')) this.fastPop(movePool, movePool.indexOf('reflect'));
+			if (movePool.includes('lightscreen')) this.fastPop(movePool, movePool.indexOf('lightscreen'));
+			if (moves.size + movePool.length <= this.maxMoveCount) return;
+		}
 		if (teamDetails.stickyWeb) {
 			if (movePool.includes('stickyweb')) this.fastPop(movePool, movePool.indexOf('stickyweb'));
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
@@ -485,7 +491,7 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'liquidation', 'wavecrash');
 		this.incompatibleMoves(moves, movePool, ['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']);
 		this.incompatibleMoves(moves, movePool, ['knockoff', 'bite'], 'foulplay');
-		this.incompatibleMoves(moves, movePool, 'doubleedge', ['headbutt', 'bodyslam']);
+		this.incompatibleMoves(moves, movePool, 'doubleedge', 'headbutt');
 		this.incompatibleMoves(moves, movePool, 'fireblast', ['fierydance', 'flamethrower']);
 		this.incompatibleMoves(moves, movePool, 'lavaplume', 'magmastorm');
 		this.incompatibleMoves(moves, movePool, 'thunderpunch', 'wildcharge');
@@ -513,8 +519,8 @@ export class RandomTeams {
 		}
 		// Landorus
 		this.incompatibleMoves(moves, movePool, 'nastyplot', 'rockslide');
-		// Persian and Grafaiai
-		this.incompatibleMoves(moves, movePool, 'switcheroo', ['fakeout', 'superfang']);
+		// Persian
+		this.incompatibleMoves(moves, movePool, 'switcheroo', 'fakeout');
 		// Beartic
 		this.incompatibleMoves(moves, movePool, 'snowscape', 'swordsdance');
 		// Cryogonal
@@ -664,6 +670,12 @@ export class RandomTeams {
 		// Enforce Salt Cure
 		if (movePool.includes('saltcure')) {
 			counter = this.addMove('saltcure', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
+		}
+
+		// Enforce Seismic Toss
+		if (movePool.includes('seismictoss')) {
+			counter = this.addMove('seismictoss', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 				movePool, teraType, role);
 		}
 
@@ -937,7 +949,7 @@ export class RandomTeams {
 		case 'Technician':
 			return (!counter.get('technician') || abilities.has('Punk Rock'));
 		case 'Tinted Lens':
-			return (species.id === 'braviaryhisui' && role === 'Fast Support');
+			return (species.id === 'braviaryhisui' && role === 'Setup Sweeper');
 		case 'Unburden':
 			return (abilities.has('Prankster') || !counter.get('setup'));
 		case 'Volt Absorb':
@@ -1846,7 +1858,7 @@ export class RandomTeams {
 		if (isNotCustom) {
 			speciesPool = [...this.dex.species.all()];
 			for (const species of speciesPool) {
-				if (species.isNonstandard) continue;
+				if (species.isNonstandard && species.isNonstandard !== 'Unobtainable') continue;
 				if (requireMoves) {
 					const hasMovesInCurrentGen = Object.values(this.dex.species.getLearnset(species.id) || {})
 						.some(sources => sources.some(source => source.startsWith('9')));
@@ -1860,7 +1872,7 @@ export class RandomTeams {
 				pool.push(num);
 			}
 		} else {
-			const EXISTENCE_TAG = ['nothing'];
+			const EXISTENCE_TAG = ['past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent'];
 			const nonexistentBanReason = ruleTable.check('nonexistent');
 			// Assume tierSpecies does not differ from species here (mega formes can be used without their stone, etc)
 			for (const species of this.dex.species.all()) {
