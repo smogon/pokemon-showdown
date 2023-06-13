@@ -2622,7 +2622,7 @@
         "sets": [
             {
                 "role": "Choice Item user",
-                "movepool": ["Air Slash", "Hydro Pump", "Ice Beam", "U-turn"],
+                "movepool": ["Dark Pulse", "Hydro Pump", "Ice Beam", "U-turn"],
                 "teraTypes": ["Water"]
             }
         ]
