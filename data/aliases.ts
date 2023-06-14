@@ -1865,4 +1865,7 @@ export const Aliases: {[alias: string]: string} = {
 	snorlaxdeltaautumn: "Snorlax-Delta",
 	snorlaxdeltawinter: "Snorlax-Delta",
 	snorlaxdeltasakura: "Snorlax-Delta",
+
+	// custom
+	thegoat: "Pyukumuku",
 };

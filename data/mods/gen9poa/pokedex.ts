@@ -234,6 +234,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		otherFormes: ["Spiritomb-Mega"],
 		formeOrder: ["Spiritomb", "Spiritomb-Mega"],
 	},
+
+	// uranium mega changes
 	arbok: {
 		inherit: true,
 		otherFormes: ["Arbok-Mega"],
@@ -244,4 +246,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		otherFormes: ["Whimsicott-Mega"],
 		formeOrder: ["Whimsicott", "Whimsicott-Mega"],
 	},
+
+	
 };
