@@ -304,7 +304,6 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		team: 'randomHC',
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
-		banlist: ['Nonexistent'],
 	},
 	{
 		name: "[Gen 9] Doubles Hackmons Cup",
