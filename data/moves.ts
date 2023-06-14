@@ -23392,6 +23392,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "???",
 		contestType: "Tough",
+		isNonstandard: "Unobtainable",
 	},
 	uranium: {
 		num: -42,
@@ -23405,6 +23406,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "???",
 		contestType: "Tough",
+		isNonstandard: "Unobtainable",
 	},
 	planofattack: {
 		num: -42,
@@ -23418,6 +23420,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "???",
 		contestType: "Tough",
+		isNonstandard: "Unobtainable",
 	},
 	cap: {
 		num: -42,
@@ -23431,6 +23434,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "???",
 		contestType: "Tough",
+		isNonstandard: "Unobtainable",
 	},
 	everyoneexplodenow: {
 		num: -43,
