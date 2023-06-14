@@ -1455,19 +1455,6 @@ export class RandomTeams {
 		const teraTypes = set.teraTypes;
 		const teraType = this.sampleIfArray(teraTypes);
 
-		if (this.format.gameType === 'multi' || this.format.gameType === 'freeforall') {
-			// Random Multi Battle uses doubles move pools, but Ally Switch fails in multi battles
-			// Random Free-For-All also uses doubles move pools, for now
-			const allySwitch = movePool.indexOf('allyswitch');
-			if (allySwitch > -1) {
-				if (movePool.length > this.maxMoveCount) {
-					this.fastPop(movePool, allySwitch);
-				} else {
-					// Ideally, we'll never get here, but better to have a move that usually does nothing than one that always does
-					movePool[allySwitch] = 'sleeptalk';
-				}
-			}
-		}
 		let ability = '';
 		let item = undefined;
 

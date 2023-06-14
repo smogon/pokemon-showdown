@@ -1160,11 +1160,11 @@
         ]
     },
     "spiritomb": {
-        "level": 86,
+        "level": 88,
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Ally Switch", "Foul Play", "Helping Hand", "Icy Wind", "Shadow Sneak", "Snarl", "Trick Room", "Will-O-Wisp"],
+                "movepool": ["Foul Play", "Helping Hand", "Icy Wind", "Shadow Sneak", "Snarl", "Trick Room", "Will-O-Wisp"],
                 "teraTypes": ["Steel"]
             }
         ]
