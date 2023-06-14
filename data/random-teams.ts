@@ -1246,7 +1246,6 @@ export class RandomTeams {
 	}
 
 	/** Item generation specific to Random Doubles */
-	// This will be changed and used later, once doubles is actually coming out.
 	getDoublesItem(
 		ability: string,
 		types: string[],
