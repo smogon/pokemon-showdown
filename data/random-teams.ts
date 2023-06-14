@@ -1039,7 +1039,7 @@ export class RandomTeams {
 		case 'Synchronize':
 			return (species.id !== 'umbreon' && species.id !== 'rabsca');
 		case 'Technician':
-			return (!counter.get('technician') || abilities.has('Punk Rock'));
+			return (!counter.get('technician') || abilities.has('Punk Rock') || abilities.has('Fur Coat'));
 		case 'Tinted Lens':
 			return (species.id === 'braviaryhisui' && (role === 'Setup Sweeper' || role === 'Doubles Wallbreaker'));
 		case 'Unburden':
@@ -1077,12 +1077,12 @@ export class RandomTeams {
 		// Hard-code abilities here
 		if (species.id === 'arcaninehisui') return 'Rock Head';
 		if (species.id === 'scovillain') return 'Chlorophyll';
-		if (species.id === 'hypno') return 'Insomnia';
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk'))) return 'Guts';
 		if (species.id === 'cetitan' && (role === 'Wallbreaker' || isDoubles)) return 'Sheer Force';
-		if (abilities.has('Technician') && counter.get('technician')) return 'Technician';
+		if (species.id === 'breloom') return 'Technician';
 
 		if (!isDoubles) {
+			if (species.id === 'hypno') return 'Insomnia';
 			if (species.id === 'staraptor') return 'Reckless';
 			if (species.id === 'vespiquen') return 'Pressure';
 			if (species.id === 'enamorus' && moves.has('calmmind')) return 'Cute Charm';
@@ -1103,7 +1103,8 @@ export class RandomTeams {
 			if (species.id === 'armarouge') return 'Flash Fire';
 			if (species.baseSpecies === 'Maushold' && role === 'Doubles Support') return 'Friend Guard';
 			if (species.id === 'tropius') return 'Harvest';
-			if (species.id === 'dragonite') return 'Inner Focus';
+			if (species.id === 'blissey') return 'Healer';
+			if (species.id === 'dragonite' || species.id === 'lucario') return 'Inner Focus';
 			if (species.id === 'barraskewda') return 'Propeller Tail';
 			if (species.id === 'flapple' || (species.id === 'appletun' && this.randomChance(1, 2))) return 'Ripen';
 			if (species.id === 'gumshoos') return 'Strong Jaw';
