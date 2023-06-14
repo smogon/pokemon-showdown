@@ -21891,13 +21891,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Hyper Voice', target);
-			this.add('-anim', source, 'Spacial Rend', target);
-		},
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Dragon",
@@ -21926,13 +21919,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onSideEnd(side) {
 				this.add('-sideend', side, 'move: Jet Stream');
 			},
-		},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Dragon Dance', source);
-			this.add('-anim', source, 'Tailwind', source);
 		},
 		secondary: null,
 		target: "allySide",
@@ -21997,8 +21983,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', defender, "Poltergeist", attacker);
-			if (this.field.isWeather('newmoon')) {
+			this.add('-prepare', attacker, move.name);
+			if (['newmoon'].includes(attacker.effectiveWeather())) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
@@ -22023,12 +22009,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Mean Look', target);
-		},
 		onHit(target) {
 			if (target.getTypes().join() === 'Rock' || !target.setType('Rock')) {
 				// Soak should animate even when it fails.
@@ -22073,13 +22053,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Shift Gear', target);
-			this.add('-anim', source, 'Recover', target);
-		},
 		heal: [1, 2],
 		boosts: {
 			def: 1,
@@ -22099,13 +22072,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Rain Dance', target);
-			this.add('-message', `The party is getting started!`);
-		},
 		weather: 'New Moon',
 		secondary: null,
 		target: "all",
@@ -22168,11 +22134,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Terablast', target);
 			this.add('-message', `Buuuuuuurp`);
 		},
 		onModifyMove(move, pokemon, target) {
