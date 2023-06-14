@@ -23484,6 +23484,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onBeforeMove(pokemon, target, move) {
 				if (move.category === "Status" && this.randomChance(20, 100)) {
 					this.add('cant', pokemon, 'Panic Room', move);
+					return false;
 				}
 			},
 			onFieldStart(target, source) {
