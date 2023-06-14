@@ -1927,7 +1927,7 @@ export class RandomTeams {
 		for (const species of speciesPool) {
 			if (!(species.num in hasDexNumber)) continue;
 			if (isNotCustom && (species.gen > this.gen ||
-				(species.isNonstandard && species.isNonstandard !== 'Unobtainable'))) continue;
+				(species.isNonstandard && species.isNonstandard === 'Unobtainable'))) continue;
 			if (!formes[hasDexNumber[species.num]]) formes[hasDexNumber[species.num]] = [];
 			formes[hasDexNumber[species.num]].push(species.name);
 		}
