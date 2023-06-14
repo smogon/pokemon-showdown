@@ -1858,7 +1858,7 @@ export class RandomTeams {
 		if (isNotCustom) {
 			speciesPool = [...this.dex.species.all()];
 			for (const species of speciesPool) {
-				if (species.isNonstandard && species.isNonstandard !== 'Unobtainable') continue;
+				if (species.isNonstandard && species.isNonstandard === 'Unobtainable') continue;
 				if (requireMoves) {
 					const hasMovesInCurrentGen = Object.values(this.dex.species.getLearnset(species.id) || {})
 						.some(sources => sources.some(source => source.startsWith('9')));
