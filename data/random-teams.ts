@@ -1867,7 +1867,7 @@ export class RandomTeams {
 				if (requiredType && !species.types.includes(requiredType)) continue;
 				if (minSourceGen && species.gen < minSourceGen) continue;
 				const num = species.num;
-				if (num <= 0 || pool.includes(num)) continue;
+				if (pool.includes(num)) continue;
 				if (num > last) break;
 				pool.push(num);
 			}
