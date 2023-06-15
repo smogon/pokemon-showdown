@@ -23871,7 +23871,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			this.add("-message", target.hp);
 			if (target.volatiles['getburned'] && target.hp <= target.maxhp / 2) {
 				this.add("-message", target.hp);
-				source.trySetStatus('brn', target);
+				target.trySetStatus('brn', source);
 				target.removeVolatile('lockedmove');
 			}
 		},
