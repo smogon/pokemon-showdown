@@ -23863,15 +23863,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onPrepareHit(target, source, move) {
 			if (target.hp > target.maxhp / 2) {
 				this.add("-message", target.hp);
-				target.addVolatile('get burned');
+				target.addVolatile('getburned');
 			}
 
 		},
 		onAfterHit(target, source, move) {
 			this.add("-message", target.hp);
-			if (target.volatiles['get burned'] && target.hp <= target.maxhp / 2) {
+			if (target.volatiles['getburned'] && target.hp <= target.maxhp / 2) {
 				this.add("-message", target.hp);
 				source.trySetStatus('brn', target);
+				target.removeVolatile('lockedmove');
 			}
 		},
 		basePowerCallback(pokemon, target, move) {
