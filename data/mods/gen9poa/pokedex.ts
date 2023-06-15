@@ -31,62 +31,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Levitate", H: "Drought"},
 	},
-	samurott: {
-		inherit: true,
-		abilities: {0: "Torrent", H: "Sharpness"},
-	},
-	cameruptdelta: {
-		inherit: true,
-		abilities: {0: "Pollutant", 1: "Poison Point", H: "Liquid Ooze"},
-	},
-	cameruptdeltamega: {
-		inherit: true,
-		abilities: {0: "Corrosion"},
-	},
-	kecleon: {
-		inherit: true,
-		evos: ["Kaleidleon"],
-	},
-	starmie: {
-		inherit: true,
-		evos: ["Staruhz"],
-	},
-	emperahog: {
-		inherit: true,
-		evos: ["Grumpig"],
-	},
-	bisharpdelta: {
-		inherit: true,
-		evos: ["Kingambit-Delta"],
-	},
-	hoopa: {
-		inherit: true,
-		abilities: {0: "Magician", H: "Blissful Ignorance"},
-	},
-	vileplume: {
-		inherit: true,
-		abilities: {0: "Chlorophyll", 1: "Blissful Ignorance", H: "Effect Spore"},
-	},
-	sirfetchd: {
-		inherit: true,
-		abilities: {0: "Steadfast", 1: "Blissful Ignorance", H: "Scrappy"},
-	},
-	simisear: {
-		inherit: true,
-		abilities: {0: "Gluttony", 1: "Blissful Ignorance", H: "Blaze"},
-	},
-	simipour: {
-		inherit: true,
-		abilities: {0: "Gluttony", 1: "Blissful Ignorance", H: "Torrent"},
-	},
-	simisage: {
-		inherit: true,
-		abilities: {0: "Gluttony", 1: "Blissful Ignorance", H: "Overgrow"},
-	},
-	slurpuff: {
-		inherit: true,
-		abilities: {0: "Sweet Veil", 1: "Blissful Ignorance", H: "Unburden"},
-	},
 
 	// insurgence mega changes
 	bisharp: {
@@ -259,5 +203,67 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		formeOrder: ["Whimsicott", "Whimsicott-Mega"],
 	},
 
-	
+	//poa changes
+
+	samurott: {
+		inherit: true,
+		abilities: {0: "Torrent", H: "Sharpness"},
+	},
+	cameruptdelta: {
+		inherit: true,
+		abilities: {0: "Pollutant", 1: "Poison Point", H: "Liquid Ooze"},
+	},
+	cameruptdeltamega: {
+		inherit: true,
+		abilities: {0: "Corrosion"},
+	},
+	kecleon: {
+		inherit: true,
+		evos: ["Kaleidleon"],
+	},
+	starmie: {
+		inherit: true,
+		evos: ["Staruhz"],
+	},
+	emperahog: {
+		inherit: true,
+		evos: ["Grumpig"],
+	},
+	bisharpdelta: {
+		inherit: true,
+		evos: ["Kingambit-Delta"],
+	},
+	hoopa: {
+		inherit: true,
+		abilities: {0: "Magician", H: "Blissful Ignorance"},
+	},
+	vileplume: {
+		inherit: true,
+		abilities: {0: "Chlorophyll", 1: "Blissful Ignorance", H: "Effect Spore"},
+	},
+	sirfetchd: {
+		inherit: true,
+		abilities: {0: "Steadfast", 1: "Blissful Ignorance", H: "Scrappy"},
+	},
+	simisear: {
+		inherit: true,
+		abilities: {0: "Gluttony", 1: "Blissful Ignorance", H: "Blaze"},
+	},
+	simipour: {
+		inherit: true,
+		abilities: {0: "Gluttony", 1: "Blissful Ignorance", H: "Torrent"},
+	},
+	simisage: {
+		inherit: true,
+		abilities: {0: "Gluttony", 1: "Blissful Ignorance", H: "Overgrow"},
+	},
+	slurpuff: {
+		inherit: true,
+		abilities: {0: "Sweet Veil", 1: "Blissful Ignorance", H: "Unburden"},
+	},
+	unown: {
+		inherit: true,
+		cosmeticFormes: undefined,
+		otherFormes: ["Unown-A", "Unown-B", "Unown-C", "Unown-D", "Unown-E", "Unown-F", "Unown-G", "Unown-H", "Unown-I", "Unown-J", "Unown-K", "Unown-L", "Unown-M", "Unown-N", "Unown-O", "Unown-P", "Unown-Q", "Unown-R", "Unown-S", "Unown-T", "Unown-U", "Unown-V", "Unown-W", "Unown-X", "Unown-Y", "Unown-Z", "Unown-Exclamation", "Unown-Question"],
+	},
 };

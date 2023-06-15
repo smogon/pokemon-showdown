@@ -2044,7 +2044,6 @@ export class TeamValidator {
 
 		let limit1 = true;
 		let sketch = false;
-		let unown = false;
 		let blockedHM = false;
 
 		let babyOnly = '';
@@ -2103,8 +2102,7 @@ export class TeamValidator {
 				}
 			}
 
-			if (species.id === 'unown') {
-				unown = true;
+			if (species.id === 'unown' && this.format.id.startsWith('gen9poanationaldex')) {
 				if (s.forme) {
 					if (moveid.charAt(0) === s.forme.toLowerCase()) return null;
 				}
