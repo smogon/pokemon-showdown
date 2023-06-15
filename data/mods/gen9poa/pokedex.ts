@@ -55,6 +55,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		evos: ["Grumpig"],
 	},
+	bisharpdelta: {
+		inherit: true,
+		evos: ["Kingambit-Delta"],
+	},
 	hoopa: {
 		inherit: true,
 		abilities: {0: "Magician", H: "Blissful Ignorance"},

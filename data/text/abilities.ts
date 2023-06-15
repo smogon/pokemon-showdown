@@ -2560,4 +2560,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Parry",
 		shortDesc: "This Pokemon is immune to slicing moves.",
 	},
+	driftfactor: {
+		name: "Drift Factor",
+		desc: "This Pokemon's speed is multiplied by 1+(X*0.1), where X is the total number of times any Pokemon has fainted on the user's side when this Ability became active, and X cannot be greater than 5.",
+		shortDesc: "This Pokemon's speed increases by 10% for each fainted ally, up to 5 allies.",
+
+		activate: "  [POKEMON] gained speed from the fallen!",
+	},
 };

@@ -7898,4 +7898,8 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Power is equal to (user's current HP * 150 / user's maximum HP), rounded down, but not less than 1. Will burn if the target drops below 50%.",
 		shortDesc: "Less power as user's HP decreases. Can burn.",
 	},
+	skystrafe: {
+		name: "Sky Strafe",
+		shortDesc: "This move does not check accuracy.",
+	},
 };
