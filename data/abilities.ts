@@ -6985,6 +6985,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	refurbished: {
 		onStart(pokemon) {
+			if (!pokemon.species.id.startsWith('shroomie')) return;
 			let forme = 'Shroomie';
 			if (this.field.getPseudoWeather('trickroom') && pokemon.species.id !== 'trickshroomie') {
 				forme = 'Trick Shroomie';
@@ -6999,8 +7000,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				pokemon.formeChange(forme, this.effect, false, '[msg]');
 			}
 		},
-		onAnyPseudoWeatherChange() {
-			const pokemon = this.effectState.target;
+		onUpdate(pokemon) {
+			if (!pokemon.species.id.startsWith('shroomie')) return;
 			let forme = 'Shroomie';
 			if (this.field.getPseudoWeather('trickroom') && pokemon.species.id !== 'trickshroomie') {
 				forme = 'Trick Shroomie';
