@@ -28182,4 +28182,16 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Black",
 		eggGroups: ["Undiscovered"],
 	},
+	emperahog: {
+		num: -6033,
+		name: "Emperahog",
+		types: ["Psychic", "Ground"],
+		baseStats: {hp: 105, atk: 110, def: 85, spa: 110, spd: 110, spe: 65},
+		abilities: {0: "Thick Fat", 1: "Own Tempo", H: "Anger Point"},
+		heightm: 1.2,
+		weightkg: 111,
+		prevo: "Grumpig",
+		color: "Purple",
+		eggGroups: ["Undiscovered"],
+	},
 };

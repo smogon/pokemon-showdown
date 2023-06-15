@@ -51,6 +51,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		evos: ["Staruhz"],
 	},
+	emperahog: {
+		inherit: true,
+		evos: ["Grumpig"],
+	},
 	hoopa: {
 		inherit: true,
 		abilities: {0: "Magician", H: "Blissful Ignorance"},

@@ -3769,4 +3769,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	emperahog: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };
