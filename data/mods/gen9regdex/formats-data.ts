@@ -2,14 +2,17 @@
 export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	chandeluredelta: {
 		inherit: true,
-		tier: "OU"
+		isNonstandard: null,
+		tier: "OU",
 	},
 	alpico: {
 		inherit: true,
-		tier: "OU"
+		isNonstandard: null,
+		tier: "OU",
 	},
 	spiritombdelta: {
 		inherit: true,
-		tier: "OU"
+		isNonstandard: null,
+		tier: "OU",
 	}
 };
