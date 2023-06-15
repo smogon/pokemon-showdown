@@ -2106,10 +2106,7 @@ export class TeamValidator {
 			if (species.id === 'unown') {
 				unown = true;
 				if (s.forme) {
-					return ` i hate unown- ${s.forme}`;
-				}
-				else {
-					return ` i hate base unown`;
+					if (moveid.charAt(0) === s.forme.toLowerCase()) return null;
 				}
 			}
 
