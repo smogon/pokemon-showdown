@@ -503,6 +503,16 @@ export const Formats: FormatList = [
 		ruleset: ['Dynamax Clause', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Mega Data Mod', 'Z-Move Clause'],
 	},
 	{
+		name: "[Gen 9] Freedom Cup",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3722982/">Freedom Cup Tournament Thread</a>`,
+		],
+
+		mod: 'gen9',
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9'],
+		banlist: ['Walking Wake', 'Iron Leaves'],
+	},
+	{
 		name: "[Gen 6] NEXT OU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3476151/">Gen-NEXT Development Thread</a>`,
