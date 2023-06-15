@@ -8733,6 +8733,148 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "Illegal",
 	},
 
+	// unowns
+	unowna: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unownb: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unownc: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unownd: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unowne: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unownf: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unowng: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unownh: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unowni: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unownj: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unownk: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unownl: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unownm: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unownn: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unowno: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unownp: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unownq: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unownr: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unowns: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unownt: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unownu: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unownv: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unownw: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unownx: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unowny: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unownz: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unownexclamation: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	unownquestion: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+
 	// Our Additions!
 	susan: {
 		isNonstandard: "Past",
@@ -9229,145 +9371,14 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 		natDexTier: "Illegal",
 	},
-	unowna: {
+	pollutoad: {
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "Illegal",
 	},
-	unownb: {
+	desekroak: {
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "Illegal",
 	},
-	unownc: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unownd: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unowne: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unownf: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unowng: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unownh: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unowni: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unownj: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unownk: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unownl: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unownm: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unownn: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unowno: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unownp: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unownq: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unownr: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unowns: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unownt: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unownu: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unownv: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unownw: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unownx: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unowny: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unownz: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unownexclamation: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-	unownquestion: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-		natDexTier: "Illegal",
-	},
-
 };

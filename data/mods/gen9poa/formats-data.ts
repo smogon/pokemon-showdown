@@ -3285,6 +3285,154 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		natDexTier: "OU",
 	},
 
+	// unowns
+	unown: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+		natDexTier: "Illegal",
+		tier: "Illegal",
+	},
+	unowna: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unownb: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unownc: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unownd: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unowne: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unownf: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unowng: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unownh: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unowni: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unownj: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unownk: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unownl: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unownm: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unownn: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unowno: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unownp: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unownq: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unownr: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unowns: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unownt: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unownu: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unownv: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unownw: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unownx: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unowny: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unownz: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unownquestion: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	unownexclamation: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+
 	// Our Additions!
 	susan: {
 		inherit: true,
@@ -3789,151 +3937,14 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
-	unown: {
-		inherit: true,
-		isNonstandard: "Unobtainable",
-		natDexTier: "Illegal",
-		tier: "Illegal",
-	},
-	unowna: {
+	pollutoad: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "PU",
 	},
-	unownb: {
+	desekroak: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "UU",
 	},
-	unownc: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unownd: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unowne: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unownf: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unowng: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unownh: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unowni: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unownj: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unownk: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unownl: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unownm: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unownn: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unowno: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unownp: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unownq: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unownr: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unowns: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unownt: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unownu: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unownv: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unownw: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unownx: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unowny: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unownz: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unownquestion: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-	unownexclamation: {
-		inherit: true,
-		isNonstandard: null,
-		natDexTier: "RU",
-	},
-
 };

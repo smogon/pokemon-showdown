@@ -7161,7 +7161,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Starfall",
-		rating: 3.5,
+		rating: 4,
 		num: -75,
 	},
 	driftfactor: {
@@ -7184,8 +7184,20 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Drift Factor",
-		rating: 4,
+		rating: 3,
 		num: -76,
+	},
+	potency: {
+		onModifyMove(move, pokemon, target) {
+			if (move.category === "Status" || move.type !== "Poison" || !target) return;
+			move.overrideDefensiveStat = 'def';
+			if (target.getStat('spd', false, true) > pokemon.getStat('def', false, true)) {
+				move.overrideDefensiveStat = 'spd';
+			}
+		},
+		name: "Potency",
+		rating: 3,
+		num: -77,
 	},
 };
 
