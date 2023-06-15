@@ -5,14 +5,29 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		tier: "OU",
 	},
-	alpico: {
+	// alpico: { ( fuck you dunscy)
+	// 	inherit: true,
+	// 	isNonstandard: null,
+	// 	tier: "OU",
+	// },
+	// spiritombdelta: {
+	// 	inherit: true,
+	// 	isNonstandard: null,
+	// 	tier: "OU",
+	// }
+	coatlith: {
+		inherit: true,
+		isNonstandard: null,
+		tier: "UU",
+	},
+	arghonaut: {
 		inherit: true,
 		isNonstandard: null,
 		tier: "OU",
 	},
-	spiritombdelta: {
+	malaconda: {
 		inherit: true,
 		isNonstandard: null,
-		tier: "OU",
-	}
+		tier: "RU",
+	},
 };

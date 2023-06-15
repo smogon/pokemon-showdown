@@ -27790,7 +27790,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 	},
 	marshtompdelta: {
-		tags: ["Insurgence"],
 		num: 259,
 		name: "Marshtomp-Delta",
 		baseSpecies: "Marshtomp",
@@ -27808,7 +27807,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 	},
 	swampertdelta: {
-		tags: ["Insurgence"],
 		num: 260,
 		name: "Swampert-Delta",
 		types: ["Dark", "Rock"],
@@ -27825,7 +27823,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		formeOrder: ["Swampert-Delta", "Swampert-Delta-Mega"],
 	},
 	swampertdeltamega: {
-		tags: ["Insurgence"],
 		num: 260,
 		name: "Swampert-Delta-Mega",
 		baseSpecies: "Swampert-Delta",

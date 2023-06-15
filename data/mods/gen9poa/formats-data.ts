@@ -3935,7 +3935,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	kingambitdelta: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "OU",
 	},
 	pollutoad: {
 		inherit: true,
