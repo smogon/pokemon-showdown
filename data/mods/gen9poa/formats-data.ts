@@ -3930,7 +3930,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "RU",
 	},
-	unownexclamtion: {
+	unownexclamation: {
 		inherit: true,
 		isNonstandard: null,
 		natDexTier: "RU",
