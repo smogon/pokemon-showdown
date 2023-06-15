@@ -7129,13 +7129,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move.drain) delete move.drain;
 			if (move.boosts) delete move.boosts;
 			if (move.critRatio) delete move.critRatio;
-			if (move.secondaries) {
-				delete move.secondaries;
-				// Technically not a secondary effect, but it is negated
-				delete move.self;
-				if (move.id === 'clangoroussoulblaze') delete move.selfBoost;
-				// Actual negation of `AfterMoveSecondary` effects implemented in scripts.js
-			}
+			if (move.self) delete move.self;
+			if (move.secondary) delete move.secondary;
+			if (move.secondaries) delete move.secondaries;
 		},
 		name: "Blissful Ignorance",
 		rating: 4,
