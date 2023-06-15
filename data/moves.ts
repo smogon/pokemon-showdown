@@ -23864,9 +23864,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 			this.add("-message", target.hp);
 			this.effectState.meltdownBurn = false;
 			if (target.hp > target.maxhp / 2) this.effectState.meltdownBurn = true;
+			this.add("-message", this.effectState.meltdownBurn);
 		},
 		onAfterHit(target, source, move) {
 			this.add("-message", target.hp);
+			this.add("-message", this.effectState.meltdownBurn);
 			if (this.effectState.meltdownBurn && target.hp <= target.maxhp / 2) {
 				source.trySetStatus('brn', target);
 			}
