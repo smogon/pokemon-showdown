@@ -85,6 +85,19 @@ describe('Team Validator', function () {
 			{species: 'kyurem-white', ability: 'turboblaze', moves: ['scaryface'], evs: {hp: 1}},
 		];
 		assert.false.legalTeam(team, 'gen7anythinggoes');
+
+		// Hoopa's Hyperspace moves are form-specific in Generation 9
+		team = [
+			{species: 'hoopa-confined', ability: 'magician', moves: ['hyperspacefury'], evs: {hp: 1}},
+			{species: 'hoopa-unbound', ability: 'magician', moves: ['hyperspacehole'], evs: {hp: 1}},
+		];
+		assert.false.legalTeam(team, 'gen9anythinggoes');
+
+		team = [
+			{species: 'hoopa-confined', ability: 'magician', moves: ['hyperspacefury'], evs: {hp: 1}},
+			{species: 'hoopa-unbound', ability: 'magician', moves: ['hyperspacehole'], evs: {hp: 1}},
+		];
+		assert.legalTeam(team, 'gen7anythinggoes');
 	});
 
 	// Zamazenta is unreleased currently

@@ -2359,6 +2359,12 @@ export const Rulesets: {[k: string]: FormatData} = {
 			for (const set of team) {
 				let species = this.dex.species.get(set.species);
 				if (typeof species.battleOnly === 'string') species = this.dex.species.get(species.battleOnly);
+				if (
+					(species.baseSpecies === 'Zamazenta' && this.toID(set.item) === 'rustedshield') ||
+					(species.baseSpecies === 'Zacian' && this.toID(set.item) === 'rustedshield')
+				) {
+					species = this.dex.species.get(`${species.baseSpecies}-Crowned`);
+				}
 				if (set.item && this.dex.items.get(set.item).megaStone) {
 					const item = this.dex.items.get(set.item);
 					if (item.megaEvolves === species.baseSpecies) {

@@ -19,6 +19,9 @@ export class TeamValidatorAsync {
 	validateTeam(team: string, options?: {removeNicknames?: boolean}) {
 		let formatid = this.format.id;
 		if (this.format.customRules) formatid += '@@@' + this.format.customRules.join(',');
+		if (team.length > (25 * 1024 - 6)) { // don't even let it go to the child process
+			return Promise.resolve('0Your team is over 25KB. Please use a smaller team.');
+		}
 		return PM.query({formatid, options, team});
 	}
 
@@ -66,7 +69,7 @@ export const PM = new QueryProcessManager<{
 	// console.log('FROM: ' + message.substr(pipeIndex2 + 1));
 	// console.log('TO: ' + packedTeam);
 	return '1' + packedTeam;
-});
+}, 2 * 60 * 1000);
 
 if (!PM.isParentProcess) {
 	// This is a child process!

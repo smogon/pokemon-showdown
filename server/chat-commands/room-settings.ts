@@ -392,9 +392,11 @@ export const commands: Chat.ChatCommands = {
 	permissions: {
 		clear: 'set',
 		set(target, room, user) {
-			let [perm, rank] = this.splitOne(target);
+			const [perm, displayRank] = this.splitOne(target);
 			room = this.requireRoom();
+			let rank = displayRank;
 			if (rank === 'default') rank = '';
+			if (rank === 'all users') rank = Users.Auth.defaultSymbol();
 			if (!room.persist) return this.errorReply(`This room does not allow customizing permissions.`);
 			if (!target || !perm) return this.parse(`/permissions help`);
 			if (rank && rank !== 'whitelist' && !Config.groupsranking.includes(rank as EffectiveGroupSymbol)) {
@@ -402,7 +404,11 @@ export const commands: Chat.ChatCommands = {
 			}
 			const validPerms = Users.Auth.supportedRoomPermissions(room);
 			const sanitizedPerm = perm.replace('!', '/'); // handles ! commands so we don't have to add commands to the array twice
-			if (!validPerms.some(p => p === sanitizedPerm || p.startsWith(`${sanitizedPerm} `))) {
+			if (!validPerms.some(p => (
+				// we need to check the raw permissions also because broadcast permissions are listed with the !
+				p === sanitizedPerm || p === perm ||
+				p.startsWith(`${sanitizedPerm} `) || p.startsWith(`${perm} `)
+			))) {
 				return this.errorReply(`${perm} is not a valid room permission.`);
 			}
 			if (!room.auth.atLeast(user, '#')) {
@@ -417,7 +423,7 @@ export const commands: Chat.ChatCommands = {
 
 			const currentPermissions = room.settings.permissions || {};
 			if (currentPermissions[perm] === (rank || undefined)) {
-				return this.errorReply(`${perm} is already set to ${rank || 'default'}.`);
+				return this.errorReply(`${perm} is already set to ${displayRank || 'default'}.`);
 			}
 
 			if (rank) {
@@ -429,10 +435,9 @@ export const commands: Chat.ChatCommands = {
 			}
 			room.saveSettings();
 
-			if (!rank) rank = `default`;
-			this.modlog(`SETPERMISSION`, null, `${perm}: ${rank}`);
+			this.modlog(`SETPERMISSION`, null, `${perm}: ${displayRank}`);
 			this.refreshPage(`permissions-${room.roomid}`);
-			return this.privateModAction(`${user.name} set the required rank for ${perm} to ${rank}.`);
+			return this.privateModAction(`${user.name} set the required rank for ${perm} to ${displayRank}.`);
 		},
 		sethelp: [
 			`/permissions set [command], [rank symbol] - sets the required permission to use the command [command] to [rank]. Requires: # &`,
@@ -448,17 +453,19 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 
 			const allPermissions = Users.Auth.supportedRoomPermissions(room);
-			const permissionGroups = allPermissions.filter(perm => !perm.startsWith('/'));
+			const permissionGroups = allPermissions.filter(perm => !perm.startsWith('/') && !perm.startsWith('!'));
 			const permissions = allPermissions.filter(perm => {
 				const handler = Chat.parseCommand(perm)?.handler;
 				if (handler?.isPrivate && !user.can('lock')) return false;
-				return perm.startsWith('/') && !perm.includes(' ');
+				return (perm.startsWith('/') || perm.startsWith('!')) && !perm.includes(' ');
 			});
-			const subPermissions = allPermissions.filter(perm => perm.startsWith('/') && perm.includes(' ')).filter(perm => {
-				const handler = Chat.parseCommand(perm)?.handler;
-				if (handler?.isPrivate && !user.can('lock')) return false;
-				return perm.startsWith('/') && perm.includes(' ');
-			});
+			const subPermissions = allPermissions
+				.filter(perm => (perm.startsWith('/') || perm.startsWith('!')) && perm.includes(' '))
+				.filter(perm => {
+					const handler = Chat.parseCommand(perm)?.handler;
+					if (handler?.isPrivate && !user.can('lock')) return false;
+					return (perm.startsWith('/') || perm.startsWith('!')) && perm.includes(' ');
+				});
 			const subPermissionsByNamespace: {[k: string]: string[]} = {};
 			for (const perm of subPermissions) {
 				const [namespace] = perm.split(' ', 1);
@@ -474,6 +481,7 @@ export const commands: Chat.ChatCommands = {
 			buffer += `<p><strong>Group permissions:</strong> (will affect multiple commands or part of one command)<br />`;
 			buffer += `<code>` + permissionGroups.join(`</code> <code>`) + `</code></p>`;
 			buffer += `<p><details class="readmore"><summary><strong>Single-command permissions:</strong> (will affect one command)</summary>`;
+			buffer += `Permissions starting with <code>!</code> are for broadcasting the command, not using it.<br />`;
 			buffer += `<code>` + permissions.join(`</code> <code>`) + `</code></details></p>`;
 			buffer += `<p><details class="readmore"><summary><strong>Sub-commands:</strong> (will affect one sub-command, like /roomevents view)</summary>`;
 			for (const subPerms of Object.values(subPermissionsByNamespace)) {
@@ -1722,7 +1730,7 @@ export const pages: Chat.PageTable = {
 		const room = this.requireRoom();
 		this.checkCan('mute', null, room);
 
-		const roomGroups = ['default', ...Config.groupsranking.slice(1)];
+		const roomGroups = ['default', 'all users', ...Config.groupsranking.slice(1)];
 		const permissions = room.settings.permissions || {};
 
 		let buf = `<div class="pad"><h2>Command permissions for ${room.title}</h2>`;
