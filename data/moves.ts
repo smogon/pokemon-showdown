@@ -23817,4 +23817,21 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
+	mindwipe: {
+		num: -57,
+		accuracy: 95,
+		basePower: 90,
+		category: "Special",
+		name: "Mindwipe",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: {
+			chance: 20,
+			volatileStatus: 'confusion',
+		},
+		target: "normal",
+		type: "Psychic",
+		contestType: "Clever",
+	},
 };

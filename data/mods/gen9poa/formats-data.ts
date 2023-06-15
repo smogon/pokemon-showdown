@@ -3759,4 +3759,14 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	sedimentairy: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	staruhz: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };

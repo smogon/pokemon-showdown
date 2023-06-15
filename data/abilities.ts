@@ -7113,7 +7113,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onBeforeSwitchOut(pokemon) {
 			this.effectState.muscleStats = pokemon.boosts
 		},
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.effectState.muscleStats) {
 				this.add('-activate', pokemon, 'ability: Muscle Memory');
 				this.boost(this.effectState.muscleStats, pokemon, pokemon);
@@ -7148,6 +7148,21 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Parry",
 		rating: 3,
 		num: -74,
+	},
+	starfall: {
+		onBeforeSwitchIn(pokemon) {
+			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'livewire', 'permafrost', 'hotcoals', 'stickyweb', 'gmaxsteelsurge'];
+			this.prng.shuffle(sideConditions);
+			for (const condition of sideConditions) {
+				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] ability: Starfall', '[of] ' + pokemon);
+					return;
+				}
+			}
+		},
+		name: "Starfall",
+		rating: 3.5,
+		num: -75,
 	},
 };
 
