@@ -3774,4 +3774,14 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	clodsiredelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	weezingrhinian: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };

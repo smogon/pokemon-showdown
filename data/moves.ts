@@ -23856,5 +23856,35 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
-	
+	meltdown: {
+		num: -59,
+		accuracy: 100,
+		basePower: 150,
+		onPrepareHit(target, source, move) {
+			this.effectState.meltdownBurn = false;
+			if (target.hp > target.maxhp / 2) this.effectState.meltdownBurn = true;
+		},
+		onAfterHit(source, target, move) {
+			if (this.effectState.meltdownBurn && target.hp <= target.maxhp / 2) {
+				source.trySetStatus('brn', target);
+			}
+		},
+		basePowerCallback(pokemon, target, move) {
+			const bp = move.basePower * pokemon.hp / pokemon.maxhp;
+			this.debug('BP: ' + bp);
+			return bp;
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			return typeMod + this.dex.getEffectiveness('Water', type);
+		},
+		category: "Special",
+		name: "Meltdown",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: null,
+		target: "allAdjacentFoes",
+		type: "Fire",
+		contestType: "Beautiful",
+	},
 };
