@@ -2044,6 +2044,7 @@ export class TeamValidator {
 
 		let limit1 = true;
 		let sketch = false;
+		let unown = false;
 		let blockedHM = false;
 
 		let babyOnly = '';
@@ -2100,6 +2101,11 @@ export class TeamValidator {
 				if (!setSources.babyOnly || !species.prevo) {
 					babyOnly = species.id;
 				}
+			}
+
+			if (species.id === 'unown') {
+				unown = true;
+				return ` i hate unown`;
 			}
 
 			let sources = learnset[moveid];
