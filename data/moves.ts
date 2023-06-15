@@ -23861,10 +23861,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 150,
 		onPrepareHit(target, source, move) {
-			if (target.hp > target.maxhp / 2) target.addVolatile('get burned');
+			if (target.hp > target.maxhp / 2) {
+				this.add("-message", target.hp);
+				target.addVolatile('get burned');
+			}
+
 		},
 		onAfterHit(target, source, move) {
+			this.add("-message", target.hp);
 			if (target.volatiles['get burned'] && target.hp <= target.maxhp / 2) {
+				this.add("-message", target.hp);
 				source.trySetStatus('brn', target);
 			}
 		},
