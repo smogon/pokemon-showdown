@@ -7124,12 +7124,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: -72,
 	},
 	blissfulignorance: {
-		onDamage(damage, target, source, effect) {
-			if (effect.effectType !== 'Move') {
-				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
-				return false;
-			}
-		},
 		onModifyMove(move, pokemon) {
 			if (move.category === "Status") return;
 			if (move.drain) delete move.drain;
