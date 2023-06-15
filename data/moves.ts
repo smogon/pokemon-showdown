@@ -23806,7 +23806,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		category: "Status",
 		name: "Bulwark",
 		pp: 5,
-		priority: 0,
+		priority: -1,
 		flags: {protect: 1, mirror: 1},
 		onHit(source) {
 			source.side.addSideCondition('reflect');
