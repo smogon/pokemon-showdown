@@ -2105,7 +2105,12 @@ export class TeamValidator {
 
 			if (species.id === 'unown') {
 				unown = true;
-				return ` i hate unown`;
+				if (s.forme) {
+					return ` i hate unown- ${s.forme}`;
+				}
+				else {
+					return ` i hate base unown`;
+				}
 			}
 
 			let sources = learnset[moveid];
