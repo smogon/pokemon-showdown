@@ -23862,15 +23862,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 150,
 		onPrepareHit(target, source, move) {
 			if (target.hp > target.maxhp / 2) {
-				this.add("-message", target.hp);
 				target.addVolatile('getburned');
 			}
 
 		},
 		onAfterHit(target, source, move) {
-			this.add("-message", target.hp);
 			if (target.volatiles['getburned'] && target.hp <= target.maxhp / 2) {
-				this.add("-message", target.hp);
 				target.trySetStatus('brn', source);
 				target.removeVolatile('lockedmove');
 			}
