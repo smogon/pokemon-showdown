@@ -378,6 +378,13 @@ export const Formats: FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] POA Regional Dex",
+
+		mod: 'gen9regdex',
+		ruleset: ['Standard'],
+		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'King\'s Rock', 'Baton Pass', 'Last Respects', 'Shed Tail'],
+	},
+	{
 		name: "[Gen 9] POA Free-For-All AG",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3711724/">Free-For-All</a>`,

@@ -4,4 +4,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		inherit: true,
 		tier: "OU"
 	},
+	alpico: {
+		inherit: true,
+		tier: "OU"
+	},
+	spiritombdelta: {
+		inherit: true,
+		tier: "OU"
+	}
 };
