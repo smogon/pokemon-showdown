@@ -3863,7 +3863,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	pupitardelta: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "NFE",
+		natDexTier: "PU",
 	},
 	tyranitardelta: {
 		inherit: true,
@@ -3878,7 +3878,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	madame: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "OU",
 	},
 	bunnor: {
 		inherit: true,
