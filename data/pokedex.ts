@@ -28694,4 +28694,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		requiredAbility: "Ice Face",
 		battleOnly: "Sharpedo-Rhinian",
 	},
+	excadrillmega: {
+		num: 530,
+		name: "Excadrill-Mega",
+		baseSpecies: "Excadrill",
+		forme: "Mega",
+		types: ["Ground", "Steel"],
+		baseStats: {hp: 110, atk: 150, def: 95, spa: 80, spd: 95, spe: 78},
+		abilities: {0: "Sand Rush"},
+		heightm: 0.7,
+		weightkg: 40.4,
+		color: "Gray",
+		requiredItem: "Excadrite",
+		eggGroups: ["Field"],
+	},
 };

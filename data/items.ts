@@ -10013,4 +10013,18 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 3,
 		isNonstandard: "Unobtainable",
 	},
+	excadrite: {
+		name: "Excadrite",
+		spritenum: 0,
+		megaStone: "Excadrill-Mega",
+		megaEvolves: "Excadrill",
+		itemUser: ["Excadrill"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -77,
+		gen: 6,
+		isNonstandard: "Unobtainable",
+	},
 };

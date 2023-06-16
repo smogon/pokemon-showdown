@@ -3945,4 +3945,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "OU",
 	},
+	excadrillmega: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };
