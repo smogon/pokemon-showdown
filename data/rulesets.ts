@@ -2464,4 +2464,14 @@ export const Rulesets: {[k: string]: FormatData} = {
 			return this.checkCanLearn(move, species, setSources, set);
 		},
 	},
+	teranuclearclause: {
+		effectType: 'ValidatorRule',
+		name: 'Tera Nuclear Clause',
+		desc: "Blocks Tera Nuclear",
+		onValidateSet(set, format) {
+			if (set.teraType === "Nuclear") {
+				return [`Tera Nuclear is not allowed in this format.`];
+			}
+		},
+	},
 };
