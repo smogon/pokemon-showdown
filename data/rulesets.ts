@@ -2469,7 +2469,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Tera Nuclear Clause',
 		desc: "Blocks Tera Nuclear",
 		onValidateSet(set, format) {
-			if (set.teraType === "Nuclear") {
+			if (set.teraType === 'Nuclear') {
 				return [`Tera Nuclear is not allowed in this format.`];
 			}
 		},
