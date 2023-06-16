@@ -13937,23 +13937,23 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Power Shift');
-				[pokemon.storedStats.atk, pokemon.storedStats.spa,
-					pokemon.storedStats.def, pokemon.storedStats.spd] =
-				[pokemon.storedStats.def, pokemon.storedStats.spd,
-					pokemon.storedStats.atk, pokemon.storedStats.spa];
+				const newatk = pokemon.storedStats.def;
+				const newdef = pokemon.storedStats.atk;
+				pokemon.storedStats.atk = newatk;
+				pokemon.storedStats.def = newdef;
 			},
 			onCopy(pokemon) {
-				[pokemon.storedStats.atk, pokemon.storedStats.spa,
-					pokemon.storedStats.def, pokemon.storedStats.spd] =
-				[pokemon.storedStats.def, pokemon.storedStats.spd,
-					pokemon.storedStats.atk, pokemon.storedStats.spa];
+				const newatk = pokemon.storedStats.def;
+				const newdef = pokemon.storedStats.atk;
+				pokemon.storedStats.atk = newatk;
+				pokemon.storedStats.def = newdef;
 			},
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Power Shift');
-				[pokemon.storedStats.atk, pokemon.storedStats.spa,
-					pokemon.storedStats.def, pokemon.storedStats.spd] =
-				[pokemon.storedStats.def, pokemon.storedStats.spd,
-					pokemon.storedStats.atk, pokemon.storedStats.spa];
+				const newatk = pokemon.storedStats.def;
+				const newdef = pokemon.storedStats.atk;
+				pokemon.storedStats.atk = newatk;
+				pokemon.storedStats.def = newdef;
 			},
 			onRestart(pokemon) {
 				pokemon.removeVolatile('Power Shift');
