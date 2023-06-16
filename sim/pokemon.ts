@@ -2196,10 +2196,7 @@ export class Pokemon {
 	}
 
 	runEffectiveness(move: ActiveMove) {
-		this.battle.add("-message", move.type);
-		this.battle.add("-message", this.name);
-		this.battle.add("-message", this.terastallized);
-		if (this.terastallized && move.type === "Nuclear") return 0;
+		if (this.terastallized && move.type === "Nuclear") return 3;
 		let totalTypeMod = 0;
 		for (const type of this.getTypes()) {
 			let typeMod = this.battle.dex.getEffectiveness(move, type);
