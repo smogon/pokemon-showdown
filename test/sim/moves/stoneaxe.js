@@ -82,4 +82,16 @@ describe('Stone Axe', function () {
 		battle.makeChoices();
 		assert.equal(!!(battle.p2.sideConditions.stealthrock), false);
 	});
+
+	it(`should not set Stealth Rock when the user faints from Rocky Helmet`, function () {
+		battle = common.createBattle([[
+			{species: 'kleavor', ability: 'noguard', item: 'focussash', moves: ['stoneaxe']},
+			{species: 'wynaut', moves: ['sleeptalk']},
+		], [
+			{species: 'regieleki', item: 'rockyhelmet', moves: ['sheercold']},
+		]]);
+
+		battle.makeChoices(); // Kleavor will faint to the Rocky Helmet
+		assert.equal(!!(battle.p2.sideConditions.stealthrock), false);
+	});
 });
