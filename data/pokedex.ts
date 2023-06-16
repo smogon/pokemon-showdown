@@ -28722,7 +28722,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Human-Like"],
 	},
 	hrsublime: {
-		num: 122,
+		num: -6037,
 		name: "Hr. Sublime",
 		types: ["Grass", "Psychic"],
 		baseStats: {hp: 50, atk: 55, def: 85, spa: 90, spd: 90, spe: 90},
@@ -28757,5 +28757,16 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Black",
 		requiredItem: "Weavilite",
 		eggGroups: ["Field"],
+	},
+	pandiz: {
+		num: -6038,
+		name: "Pandiz",
+		types: ["Normal"],
+		baseStats: {hp: 90, atk: 110, def: 85, spa: 70, spd: 85, spe: 100},
+		abilities: {0: "Own Tempo", 1: "Unaware", H: "Contrary"},
+		heightm: 1.1,
+		weightkg: 50,
+		color: "Brown",
+		eggGroups: ["Field", "Human-Like"],
 	},
 };

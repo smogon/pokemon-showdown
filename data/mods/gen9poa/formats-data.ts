@@ -3970,4 +3970,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "Uber",
 	},
+	pandiz: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
 };
