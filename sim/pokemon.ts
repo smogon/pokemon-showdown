@@ -2196,6 +2196,7 @@ export class Pokemon {
 	}
 
 	runEffectiveness(move: ActiveMove) {
+		this.battle.add("-message", move.type);
 		if (this.terastallized && move.type === "Nuclear") return 0;
 		let totalTypeMod = 0;
 		for (const type of this.getTypes()) {
