@@ -82,4 +82,16 @@ describe('Ceaseless Edge', function () {
 		battle.makeChoices();
 		assert.equal(!!(battle.p2.sideConditions.spikes), false);
 	});
+
+	it(`should not set Spikes when the user faints from Rocky Helmet`, function () {
+		battle = common.createBattle([[
+			{species: 'samurotthisui', ability: 'noguard', item: 'focussash', moves: ['ceaselessedge']},
+			{species: 'wynaut', moves: ['sleeptalk']},
+		], [
+			{species: 'regieleki', item: 'rockyhelmet', moves: ['sheercold']},
+		]]);
+
+		battle.makeChoices(); // Samurott will faint to the Rocky Helmet
+		assert.equal(!!(battle.p2.sideConditions.spikes), false);
+	});
 });
