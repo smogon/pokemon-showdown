@@ -3960,4 +3960,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	pelipperelectrified: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
 };
