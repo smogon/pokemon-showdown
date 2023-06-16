@@ -3445,12 +3445,6 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
-	eiscuedeltanorock: {
-		inherit: true,
-		isNonstandard: "Unobtainable",
-		natDexTier: "Illegal",
-		tier: "Illegal",
-	},
 	raikousupra: {
 		inherit: true,
 		isNonstandard: null,
@@ -3680,12 +3674,6 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		inherit: true,
 		isNonstandard: null,
 		natDexTier: "OU",
-	},
-	magnemiterhinianswarm: {
-		inherit: true,
-		isNonstandard: "Unobtainable",
-		natDexTier: "Illegal",
-		tier: "Illegal",
 	},
 	dewpiderdelta: {
 		inherit: true,

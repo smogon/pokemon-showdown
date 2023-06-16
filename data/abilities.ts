@@ -1792,6 +1792,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.effectState.busted = false;
 				pokemon.formeChange('Eiscue', this.effect, true);
 			}
+			if (this.field.isWeather(['hail', 'snow']) &&
+				pokemon.species.id === 'sharpedorhiniannoice' && !pokemon.transformed) {
+				this.add('-activate', pokemon, 'ability: Ice Face');
+				this.effectState.busted = false;
+				pokemon.formeChange('Sharpedo-Rhinian', this.effect, true);
+			}
 		},
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
@@ -1803,17 +1809,25 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.effectState.busted = true;
 				return 0;
 			}
+			if (
+				effect && effect.effectType === 'Move' && effect.category === 'Physical' &&
+				target.species.id === 'sharpedorhinian' && !target.transformed
+			) {
+				this.add('-activate', target, 'ability: Ice Face');
+				this.effectState.busted = true;
+				return 0;
+			}
 		},
 		onCriticalHit(target, type, move) {
 			if (!target) return;
-			if (move.category !== 'Physical' || target.species.id !== 'eiscue' || target.transformed) return;
+			if (move.category !== 'Physical' || target.species.id !== 'eiscue' || target.species.id !== 'sharpedorhinian' || target.transformed) return;
 			if (target.volatiles['substitute'] && !(move.flags['bypasssub'] || move.infiltrates)) return;
 			if (!target.runImmunity(move.type)) return;
 			return false;
 		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (!target) return;
-			if (move.category !== 'Physical' || target.species.id !== 'eiscue' || target.transformed) return;
+			if (move.category !== 'Physical' || target.species.id !== 'eiscue' || target.species.id !== 'sharpedorhinian' || target.transformed) return;
 
 			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 			if (hitSub) return;
@@ -1825,6 +1839,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (pokemon.species.id === 'eiscue' && this.effectState.busted) {
 				pokemon.formeChange('Eiscue-Noice', this.effect, true);
 			}
+			if (pokemon.species.id === 'sharpedorhinian' && this.effectState.busted) {
+				pokemon.formeChange('Sharpedo-Rhinian-Noice', this.effect, true);
+			}
 		},
 		onWeatherChange(pokemon, source, sourceEffect) {
 			// snow/hail resuming because Cloud Nine/Air Lock ended does not trigger Ice Face
@@ -1835,6 +1852,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.add('-activate', pokemon, 'ability: Ice Face');
 				this.effectState.busted = false;
 				pokemon.formeChange('Eiscue', this.effect, true);
+			}
+			if (this.field.isWeather(['hail', 'snow']) &&
+				pokemon.species.id === 'sharpedorhiniannoice' && !pokemon.transformed) {
+				this.add('-activate', pokemon, 'ability: Ice Face');
+				this.effectState.busted = false;
+				pokemon.formeChange('Sharpedo-Rhinian', this.effect, true);
 			}
 		},
 		isBreakable: true,
