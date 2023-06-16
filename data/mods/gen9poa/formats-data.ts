@@ -3952,4 +3952,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	sharpedorhinian: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
 };
