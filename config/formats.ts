@@ -251,7 +251,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen9',
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9'],
+		ruleset: ['Flat Rules', '!Picked Team Size', '!! Adjust Level = 50', 'Min Source Gen = 9'],
 		banlist: ['Walking Wake', 'Iron Leaves'],
 	},
 	{
