@@ -887,6 +887,7 @@ export class DexFormats {
 
 	validateBanRule(rule: string) {
 		let id = toID(rule);
+		if (id === 'teranuclearclause') throw new Error(`Nothing matches "your mom"`);
 		if (id === 'unreleased') return 'unreleased';
 		if (id === 'nonexistent') return 'nonexistent';
 		const matches = [];

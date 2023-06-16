@@ -2465,7 +2465,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		},
 	},
 	teranuclearclause: {
-		effectType: 'Rule',
+		effectType: 'ValidatorRule',
 		name: 'Tera Nuclear Clause',
 		desc: "Blocks Tera Nuclear",
 		onValidateSet(set, format) {
