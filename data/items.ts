@@ -9997,4 +9997,20 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Unobtainable",
 	},
+	pixiedust: {
+		name: "Pixie Dust",
+		spritenum: 0,
+		fling: {
+			basePower: 10,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Fairy') {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		num: -80,
+		gen: 3,
+		isNonstandard: "Unobtainable",
+	},
 };

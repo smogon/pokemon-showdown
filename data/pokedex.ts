@@ -28653,4 +28653,17 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Pollutoad",
 		eggGroups: ["Amorphous"],
 	},
+	parashukado: {
+		num: -6036,
+		name: "Parasect",
+		types: ["Bug", "Ghost"],
+		baseStats: {hp: 85, atk: 115, def: 90, spa: 95, spd: 100, spe: 40},
+		abilities: {0: "Effect Spore", 1: "Dry Skin", H: "Bursting Spores"},
+		heightm: 1.32,
+		weightkg: 44,
+		color: "Blue",
+		prevo: "Parasect",
+		evoLevel: 36,
+		eggGroups: ["Bug", "Grass"],
+	},
 };
