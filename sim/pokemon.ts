@@ -2196,20 +2196,19 @@ export class Pokemon {
 	}
 
 	runEffectiveness(move: ActiveMove) {
-		if (this.terastallized && move.type === "Nuclear") return 3;
 		let totalTypeMod = 0;
 		for (const type of this.getTypes()) {
 			let typeMod = this.battle.dex.getEffectiveness(move, type);
 			typeMod = this.battle.singleEvent('Effectiveness', move, null, this, type, move, typeMod);
 			totalTypeMod += this.battle.runEvent('Effectiveness', this, type, move, typeMod);
 		}
-		this.battle.add('-message', totalTypeMod);
 		return totalTypeMod;
 	}
 
 	/** false = immune, true = not immune */
 	runImmunity(type: string, message?: string | boolean) {
 		if (!type || type === '???') return true;
+		if (this.terastallized && type === "Nuclear") return false;
 		if (!this.battle.dex.types.isName(type)) {
 			throw new Error("Use runStatusImmunity for " + type);
 		}
