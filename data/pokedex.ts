@@ -28655,7 +28655,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	},
 	parashukado: {
 		num: -6036,
-		name: "Parasect",
+		name: "Parashukado",
 		types: ["Bug", "Ghost"],
 		baseStats: {hp: 85, atk: 115, def: 90, spa: 95, spd: 100, spe: 40},
 		abilities: {0: "Effect Spore", 1: "Dry Skin", H: "Bursting Spores"},
