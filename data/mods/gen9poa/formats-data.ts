@@ -3948,7 +3948,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	excadrillmega: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "OU",
 	},
 	mrmimerhinian: {
 		inherit: true,
