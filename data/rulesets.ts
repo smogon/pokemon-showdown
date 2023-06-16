@@ -2467,10 +2467,15 @@ export const Rulesets: {[k: string]: FormatData} = {
 	teranuclearclause: {
 		effectType: 'ValidatorRule',
 		name: 'Tera Nuclear Clause',
-		desc: "Blocks Tera Nuclear",
-		onValidateSet(set, format) {
-			if (set.teraType === 'Nuclear') {
-				return [`Tera Nuclear is not allowed in this format.`];
+		desc: "Limit two restricted Pokémon (flagged with * in the rules list)",
+		onValidateTeam(team) {
+			const restrictedSpecies = [];
+			for (const set of team) {
+				const species = this.dex.species.get(set.species);
+				if (this.ruleTable.isRestrictedSpecies(species)) restrictedSpecies.push(species.name);
+			}
+			if (restrictedSpecies.length > 2) {
+				return [`You can only use up to two restricted Pok\u00E9mon (you have: ${restrictedSpecies.join(', ')})`];
 			}
 		},
 	},
