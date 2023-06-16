@@ -3965,4 +3965,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "OU",
 	},
+	weavilemega: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "Uber",
+	},
 };

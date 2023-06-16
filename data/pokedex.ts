@@ -28744,4 +28744,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Yellow",
 		eggGroups: ["Water 1", "Flying"],
 	},
+	weavilemega: {
+		num: 461,
+		name: "Weavile-Mega",
+		baseSpecies: "Weavile",
+		forme: "Mega",
+		types: ["Dark", "Ice"],
+		baseStats: {hp: 70, atk: 165, def: 90, spa: 55, spd: 95, spe: 135},
+		abilities: {0: "Technician"},
+		heightm: 1.1,
+		weightkg: 34,
+		color: "Black",
+		requiredItem: "Weavilite",
+		eggGroups: ["Field"],
+	},
 };

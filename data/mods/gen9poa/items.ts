@@ -489,6 +489,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	weavilite: {
+		inherit: true,
+		isNonstandard: null,
+	},
 
 	//Cap Items
 	crucibellite: {
