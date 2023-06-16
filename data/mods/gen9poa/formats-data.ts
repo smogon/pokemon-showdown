@@ -3950,4 +3950,14 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	mrmimerhinian: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	hrsublime: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };

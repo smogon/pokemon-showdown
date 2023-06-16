@@ -14,6 +14,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 		// Damage reduction is handled directly in the sim/battle.js damage function
 		onResidualOrder: 10,
 		onResidual(pokemon) {
+			for (const mon of this.getAllActive()) {
+				if (mon.hasAbility("Carneval")) return;
+			}
 			this.damage(pokemon.baseMaxhp / 16);
 		},
 	},
@@ -29,6 +32,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 		onModifySpe(spe, pokemon) {
 			// Paralysis occurs after all other Speed modifiers, so evaluate all modifiers up to this point first
+			for (const mon of this.getAllActive()) {
+				if (mon.hasAbility("Carneval")) return;
+			}
 			spe = this.finalModify(spe);
 			if (!pokemon.hasAbility('quickfeet')) {
 				spe = Math.floor(spe * 50 / 100);
@@ -37,6 +43,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 		onBeforeMovePriority: 1,
 		onBeforeMove(pokemon) {
+			for (const mon of this.getAllActive()) {
+				if (mon.hasAbility("Carneval")) return;
+			}
 			if (this.randomChance(1, 4)) {
 				this.add('cant', pokemon, 'par');
 				return false;
@@ -72,6 +81,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 				pokemon.cureStatus();
 				return;
 			}
+			for (const mon of this.getAllActive()) {
+				if (mon.hasAbility("Carneval")) return;
+			}
 			this.add('cant', pokemon, 'slp');
 			if (move.sleepUsable) {
 				return;
@@ -98,6 +110,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (this.randomChance(1, 5)) {
 				pokemon.cureStatus();
 				return;
+			}
+			for (const mon of this.getAllActive()) {
+				if (mon.hasAbility("Carneval")) return;
 			}
 			this.add('cant', pokemon, 'frz');
 			return false;
@@ -131,6 +146,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 		onResidualOrder: 9,
 		onResidual(pokemon) {
+			for (const mon of this.getAllActive()) {
+				if (mon.hasAbility("Carneval")) return;
+			}
 			this.damage(pokemon.baseMaxhp / 8);
 		},
 	},
@@ -154,6 +172,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onResidual(pokemon) {
 			if (this.effectState.stage < 15) {
 				this.effectState.stage++;
+			}
+			for (const mon of this.getAllActive()) {
+				if (mon.hasAbility("Carneval")) return;
 			}
 			this.damage(this.clampIntRange(pokemon.baseMaxhp / 16, 1) * this.effectState.stage);
 		},
