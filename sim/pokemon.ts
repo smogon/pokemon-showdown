@@ -2203,6 +2203,7 @@ export class Pokemon {
 			typeMod = this.battle.singleEvent('Effectiveness', move, null, this, type, move, typeMod);
 			totalTypeMod += this.battle.runEvent('Effectiveness', this, type, move, typeMod);
 		}
+		this.battle.add('-message', totalTypeMod);
 		return totalTypeMod;
 	}
 
