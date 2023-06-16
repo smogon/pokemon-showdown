@@ -7199,5 +7199,17 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: -77,
 	},
+	burstingspores: {
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target, true)) {
+				this.damage(source.baseMaxhp / 8, source, target);
+				this.heal(source.baseMaxhp / 8, target);
+			}
+		},
+		name: "Bursting Spores",
+		rating: 2.5,
+		num: -78,
+	},
 };
 

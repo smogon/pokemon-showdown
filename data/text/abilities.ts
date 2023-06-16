@@ -2567,4 +2567,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 
 		activate: "  [POKEMON] gained speed from the fallen!",
 	},
+	burstingspores: {
+		name: "Bursting Spores",
+		desc: "Pokemon making contact with this Pokemon lose 1/8 of their maximum HP, rounded down.",
+		shortDesc: "Pokemon that contact this Pokemon lose 1/8 health. Heals user.",
+
+		damage: "#roughskin",
+	},
 };
