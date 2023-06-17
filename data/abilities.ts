@@ -344,6 +344,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				source.abilityState.battleBondTriggered = true;
 			}
 		},
+		isNonstandard: "Unobtainable",
 		isPermanent: true,
 		name: "Battle Bond",
 		rating: 3.5,
@@ -800,8 +801,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	dauntlessshield: {
 		onStart(pokemon) {
 			if (this.effectState.shieldBoost) return;
-			this.effectState.shieldBoost = true;
-			this.boost({def: 1}, pokemon);
+			if (this.boost({def: 1}, pokemon)) {
+				this.effectState.shieldBoost = true;
+			}
 		},
 		name: "Dauntless Shield",
 		rating: 3.5,
@@ -1611,7 +1613,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return this.chainModify([5461, 4096]);
 			}
 		},
-		isPermanent: true,
 		name: "Hadron Engine",
 		rating: 4.5,
 		num: 289,
@@ -1980,8 +1981,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	intrepidsword: {
 		onStart(pokemon) {
 			if (this.effectState.swordBoost) return;
-			this.effectState.swordBoost = true;
-			this.boost({atk: 1}, pokemon);
+			if (this.boost({atk: 1}, pokemon)) {
+				this.effectState.swordBoost = true;
+			}
 		},
 		name: "Intrepid Sword",
 		rating: 4,
@@ -2769,7 +2771,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return this.chainModify([5461, 4096]);
 			}
 		},
-		isPermanent: true,
 		name: "Orichalcum Pulse",
 		rating: 4.5,
 		num: 288,
@@ -4660,14 +4661,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Electric') {
 				this.debug('Transistor boost');
-				return this.chainModify([5325, 4096]);
+				return this.chainModify(1.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Electric') {
 				this.debug('Transistor boost');
-				return this.chainModify([5325, 4096]);
+				return this.chainModify(1.5);
 			}
 		},
 		name: "Transistor",

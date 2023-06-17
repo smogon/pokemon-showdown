@@ -186,7 +186,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NUBL",
 	},
 	abra: {
-		tier: "PU",
+		tier: "LC",
 	},
 	kadabra: {
 		tier: "UU",
@@ -222,7 +222,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	graveler: {
-		tier: "PU",
+		tier: "NFE",
 	},
 	golem: {
 		tier: "NU",
@@ -273,7 +273,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	gastly: {
-		tier: "PU",
+		tier: "LC",
 	},
 	haunter: {
 		tier: "UU",
@@ -285,10 +285,10 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "PU",
 	},
 	drowzee: {
-		tier: "PU",
+		tier: "LC",
 	},
 	hypno: {
-		tier: "UUBL",
+		tier: "UU",
 	},
 	krabby: {
 		tier: "LC",
@@ -357,7 +357,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "PU",
 	},
 	staryu: {
-		tier: "PU",
+		tier: "LC",
 	},
 	starmie: {
 		tier: "OU",
@@ -390,7 +390,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	lapras: {
-		tier: "UUBL",
+		tier: "UU",
 	},
 	ditto: {
 		tier: "PU",
@@ -411,7 +411,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "PU",
 	},
 	omanyte: {
-		tier: "PU",
+		tier: "LC",
 	},
 	omastar: {
 		tier: "UU",
@@ -441,7 +441,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	dragonair: {
-		tier: "PU",
+		tier: "NFE",
 	},
 	dragonite: {
 		tier: "UU",

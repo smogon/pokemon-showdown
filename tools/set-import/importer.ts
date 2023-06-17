@@ -43,12 +43,9 @@ type GenerationNum = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 export const TIERS = new Set([
 	'ubers', 'ou', 'uu', 'ru', 'nu', 'pu', 'zu', 'lc', 'cap', 'nationaldex',
 	'doublesou', 'battlespotsingles', 'battlespotdoubles', 'battlestadiumsingles',
-	// UGH
-	'battlestadiumsinglesseries2', 'battlestadiumsinglesregulationc',
-	//
 	'vgc2016', 'vgc2017', 'vgc2018', 'vgc2019ultraseries', 'vgc2020', '1v1',
-	'anythinggoes', 'nationaldexag', 'almostanyability', 'balancedhackmons',
-	'letsgoou', 'monotype', 'purehackmons', 'nationaldexmonotype',
+	'anythinggoes', 'nationaldexag', 'balancedhackmons', 'letsgoou', 'monotype',
+	'purehackmons',
 ]);
 const FORMATS = new Map<ID, {gen: GenerationNum, format: Format}>();
 const VALIDATORS = new Map<ID, TeamValidator>();
@@ -400,8 +397,6 @@ const SMOGON = {
 	vgc17: 'vgc2017',
 	vgc18: 'vgc2018',
 	vgc19: 'vgc2019ultraseries',
-	// bssseries1: 'battlestadiumsinglesseries1', // ?
-	bssseries2: 'battlestadiumsinglesseries2',
 } as unknown as {[id: string]: ID};
 
 const getAnalysis = retrying(async (u: string) => {
@@ -428,11 +423,7 @@ async function getAnalysesByFormat(pokemon: string, gen: GenerationNum) {
 
 		const analysesByFormat = new Map<Format, smogon.Analysis[]>();
 		for (const [tier, analyses] of analysesByTier.entries()) {
-			let t = toID(tier);
-			// Dumb hack, need to talk to BSS people
-			if (gen === 9 && t === 'battlestadiumsingles') {
-				t = 'battlestadiumsinglesregulationc' as ID;
-			}
+			const t = toID(tier);
 			const f = FORMATS.get(`gen${gen}${SMOGON[t] || t}` as ID);
 			if (f) analysesByFormat.set(f.format, analyses);
 		}

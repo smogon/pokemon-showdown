@@ -255,7 +255,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Disable');
 			},
-			onBeforeMovePriority: 6,
+			onBeforeMovePriority: 7,
 			onBeforeMove(pokemon, target, move) {
 				pokemon.volatiles['disable'].time--;
 				if (!pokemon.volatiles['disable'].time) {

@@ -76,18 +76,12 @@ describe('value rule support (slow)', () => {
 });
 
 describe("New set format", () => {
-	const files = ['../../data/random-sets.json', '../../data/random-doubles-sets.json'];
+	const files = ['../../data/random-sets.json'];
 	for (const filename of files) {
 		it(`${filename} should have valid set data`, () => {
 			const setsJSON = require(filename);
-			let validRoles = [];
-			if (filename === '../../data/random-sets.json') {
-				validRoles = ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user",
-					"Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"];
-			} else {
-				validRoles = ["Doubles Fast Attacker", "Doubles Setup Sweeper", "Doubles Wallbreaker", "Tera Blast user",
-					"Doubles Bulky Attacker", "Doubles Bulky Setup", "Offensive Protect", "Bulky Protect", "Doubles Support", "Choice Item user"];
-			}
+			const validRoles = ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user",
+				"Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"];
 			for (const [id, sets] of Object.entries(setsJSON)) {
 				const species = Dex.species.get(id);
 				assert(species.exists, `Misspelled species ID: ${id}`);
@@ -109,9 +103,6 @@ describe("New set format", () => {
 						const dexType = Dex.types.get(type);
 						assert(dexType.exists, `${species.name} has invalid Tera Type: ${type}`);
 						assert.equal(type, dexType.name, `${species.name} has misformatted Tera Type: ${type}`);
-					}
-					for (let i = 0; i < set.teraTypes.length - 1; i++) {
-						assert(set.teraTypes[i + 1] > set.teraTypes[i], `${species} teraTypes should be sorted alphabetically`);
 					}
 				}
 			}

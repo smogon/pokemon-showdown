@@ -413,7 +413,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		if (!target) return this.parse('/help status');
 
-		const maxLength = 70;
+		const maxLength = 52;
 		if (target.length > maxLength) {
 			return this.errorReply(this.tr`Your status is too long; it must be under ${maxLength} characters.`);
 		}

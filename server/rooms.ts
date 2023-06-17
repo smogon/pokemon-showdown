@@ -721,14 +721,14 @@ export abstract class BasicRoom {
 	}
 	getStaffIntroMessage(user: User) {
 		if (!user.can('mute', null, this)) return ``;
-		const messages = [];
+		let message = ``;
 		if (this.settings.staffMessage) {
-			messages.push(`|raw|<div class="infobox">(Staff intro:)<br /><div>` +
+			message += `\n|raw|<div class="infobox">(Staff intro:)<br /><div>` +
 				this.settings.staffMessage.replace(/\n/g, '') +
-				`</div>`);
+				`</div>`;
 		}
 		if (this.pendingApprovals?.size) {
-			let message = `|raw|<div class="infobox">`;
+			message += `\n|raw|<div class="infobox">`;
 			message += `<details open><summary>(Pending media requests: ${this.pendingApprovals.size})</summary>`;
 			for (const [userid, entry] of this.pendingApprovals) {
 				message += `<div class="infobox">`;
@@ -746,13 +746,8 @@ export abstract class BasicRoom {
 				message += `<hr />`;
 			}
 			message += `</details></div>`;
-			messages.push(message);
 		}
-		if (!this.settings.isPrivate && !this.settings.isPersonal &&
-				this.settings.modchat && this.settings.modchat !== 'autoconfirmed') {
-			messages.push(`|raw|<div class="broadcast-red">Modchat currently set to ${this.settings.modchat}</div>`);
-		}
-		return messages.join('\n');
+		return message ? `|raw|${message}` : ``;
 	}
 	getSubRooms(includeSecret = false) {
 		if (!this.subRooms) return [];
@@ -760,7 +755,7 @@ export abstract class BasicRoom {
 			room => includeSecret ? true : !room.settings.isPrivate && !room.settings.isPersonal
 		);
 	}
-	validateTitle(newTitle: string, newID?: string, oldID?: string) {
+	validateTitle(newTitle: string, newID?: string) {
 		if (!newID) newID = toID(newTitle);
 		// `,` is a delimiter used by a lot of /commands
 		// `|` and `[` are delimiters used by the protocol
@@ -772,7 +767,7 @@ export abstract class BasicRoom {
 			throw new Chat.ErrorMessage(`Room title "${newTitle}" can't contain -`);
 		}
 		if (newID.length > MAX_CHATROOM_ID_LENGTH) throw new Chat.ErrorMessage("The given room title is too long.");
-		if (newID !== oldID && Rooms.search(newTitle)) throw new Chat.ErrorMessage(`The room '${newTitle}' already exists.`);
+		if (Rooms.search(newTitle)) throw new Chat.ErrorMessage(`The room '${newTitle}' already exists.`);
 	}
 	setParent(room: Room | null) {
 		if (this.parent === room) return;
@@ -890,21 +885,13 @@ export abstract class BasicRoom {
 	 */
 	rename(newTitle: string, newID?: RoomID, noAlias?: boolean) {
 		if (!newID) newID = toID(newTitle) as RoomID;
-		const oldID = this.roomid;
-		this.validateTitle(newTitle, newID, oldID);
+		this.validateTitle(newTitle, newID);
 		if (this.type === 'chat' && this.game) {
 			throw new Chat.ErrorMessage(`Please finish your game (${this.game.title}) before renaming ${this.roomid}.`);
 		}
+		const oldID = this.roomid;
 		(this as any).roomid = newID;
-		this.title = this.settings.title = newTitle;
-		this.saveSettings();
-		if (newID === oldID) {
-			for (const user of Object.values(this.users)) {
-				user.sendTo(this, `|title|${newTitle}`);
-			}
-			return;
-		}
-
+		this.title = newTitle;
 		Rooms.rooms.delete(oldID);
 		Rooms.rooms.set(newID, this as Room);
 		if (this.battle && oldID) {
@@ -946,6 +933,8 @@ export abstract class BasicRoom {
 
 		this.game?.renameRoom(newID);
 
+		this.saveSettings();
+
 		for (const user of Object.values(this.users)) {
 			user.moveConnections(oldID, newID);
 			user.send(`>${oldID}\n|noinit|rename|${newID}|${newTitle}`);
@@ -962,6 +951,7 @@ export abstract class BasicRoom {
 			}
 		}
 
+		this.settings.title = newTitle;
 		this.saveSettings();
 
 		Punishments.renameRoom(oldID, newID);
@@ -982,7 +972,6 @@ export abstract class BasicRoom {
 		if (!user) return false; // ???
 		if (this.users[user.id]) return false;
 
-		Chat.runHandlers('onBeforeRoomJoin', this, user, connection);
 		if (user.named) {
 			this.reportJoin('j', user.getIdentityWithStatus(this), user);
 		}
@@ -1320,8 +1309,7 @@ export class GlobalRoomState {
 				`INSERT INTO stored_battles (roomid, input_log, players, title, rated, timer) VALUES ($1, $2, $3, $4, $5, $6)` +
 				` ON CONFLICT (roomid) DO UPDATE ` +
 				`SET input_log = EXCLUDED.input_log, players = EXCLUDED.players, title = EXCLUDED.title, rated = EXCLUDED.rated`,
-				// for some reason Battle#rated is sometimes a float which Postgres can't handle
-				[room.roomid, log.join('\n'), players, room.title, Math.floor(room.battle.rated), timerData]
+				[room.roomid, log.join('\n'), players, room.title, room.battle.rated, timerData]
 			);
 			room.battle.timer.stop();
 			count++;
@@ -1643,19 +1631,12 @@ export class GlobalRoomState {
 			}
 		}
 		if (Config.reportbattles) {
-			if (typeof Config.reportbattles === 'string') {
-				Config.reportbattles = [Config.reportbattles];
-			} else if (Config.reportbattles === true) {
-				Config.reportbattles = ['lobby'];
-			}
-			for (const roomid of Config.reportbattles) {
-				const reportRoom = Rooms.get(roomid);
-				if (reportRoom) {
-					const reportPlayers = players.map(p => p.getIdentity()).join('|');
-					reportRoom
-						.add(`|b|${room.roomid}|${reportPlayers}`)
-						.update();
-				}
+			const reportRoom = Rooms.get(Config.reportbattles === true ? 'lobby' : Config.reportbattles);
+			if (reportRoom) {
+				const reportPlayers = players.map(p => p.getIdentity()).join('|');
+				reportRoom
+					.add(`|b|${room.roomid}|${reportPlayers}`)
+					.update();
 			}
 		}
 		if (Config.logladderip && options.rated) {
@@ -2010,7 +1991,6 @@ export class GameRoom extends BasicRoom {
 		if (!user) return false; // ???
 		if (this.users[user.id]) return false;
 
-		Chat.runHandlers('onBeforeRoomJoin', this, user, connection);
 		if (user.named) {
 			this.reportJoin('j', user.getIdentityWithStatus(this), user);
 		}

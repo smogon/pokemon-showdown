@@ -556,9 +556,8 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager<
 		const timeout = setTimeout(() => {
 			const debugInfo = process.debug || "No debug information found.";
 			process.destroy();
-			this.spawnOne();
 			throw new Error(
-				`A query originating in ${this.basename} took too long to complete; the process has been respawned.\n${debugInfo}`
+				`A query originating in ${this.basename} took too long to complete; the process has been killed.\n${debugInfo}`
 			);
 		}, this.timeout);
 
