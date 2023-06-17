@@ -28464,7 +28464,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		forme: "Delta",
 		types: ["Dragon", "Psychic"],
 		baseStats: {hp: 70, atk: 84, def: 70, spa: 65, spd: 70, spe: 51},
-		abilities: {0: "Synchronize", 1: "Regenerator"},
+		abilities: {0: "Synchronize", H: "Regenerator"},
 		heightm: 1.2,
 		weightkg: 152,
 		color: "Purple",
