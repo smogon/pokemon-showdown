@@ -677,11 +677,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	iceface: {
 		name: "Ice Face",
-		desc: "If this Pokemon is an Eiscue, the first physical hit it takes in battle deals 0 neutral damage. Its ice face is then broken and it changes forme to Noice Face. Eiscue regains its Ice Face forme when Snow begins or when Eiscue switches in while Snow is active. Confusion damage also breaks the ice face.",
-		shortDesc: "If Eiscue, the first physical hit it takes deals 0 damage. Effect is restored in Snow.",
+		desc: "If this Pokemon is an Eiscue or Sharpedo-Rhinian, the first physical hit it takes in battle deals 0 neutral damage. Its ice face is then broken and it changes forme to Noice Face. The Pokémon regains its Ice Face forme when Snow begins or when it switches in while Snow is active. Confusion damage also breaks the ice face.",
+		shortDesc: "If Eiscue or Sharpedo-Rhinian, the first physical hit it takes deals 0 damage. Effect is restored in Snow.",
 		gen8: {
-			desc: "If this Pokemon is an Eiscue, the first physical hit it takes in battle deals 0 neutral damage. Its ice face is then broken and it changes forme to Noice Face. Eiscue regains its Ice Face forme when Hail begins or when Eiscue switches in while Hail is active. Confusion damage also breaks the ice face.",
-			shortDesc: "If Eiscue, the first physical hit it takes deals 0 damage. This effect is restored in Hail.",
+			desc: "If this Pokemon is an Eiscue or Sharpedo-Rhinian, the first physical hit it takes in battle deals 0 neutral damage. Its ice face is then broken and it changes forme to Noice Face. The Pokémon regains its Ice Face forme when Hail begins or when it switches in while Hail is active. Confusion damage also breaks the ice face.",
+			shortDesc: "If Eiscue or Sharpedo-Rhinian, the first physical hit it takes deals 0 damage. This effect is restored in Hail.",
 		},
 	},
 	stoneface: {
