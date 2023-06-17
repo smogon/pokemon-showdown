@@ -114,6 +114,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		otherFormes: ["Flygon-Mega"],
 		formeOrder: ["Flygon", "Flygon-Mega"],
 	},
+	flygonarmor: {
+		inherit: true,
+		abilities: {0: "Levitate", H: "Tinted Lens"},
+	},
 	cacturne: {
 		inherit: true,
 		abilities: {0: "Sand Veil", 1: "Adaptability", H: "Water Absorb"},
