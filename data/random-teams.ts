@@ -1312,7 +1312,7 @@ export class RandomTeams {
 		) {
 			return (
 				(ability === 'Quark Drive' || ability === 'Protosynthesis') &&
-				!moves.has('uturn') && !moves.has('voltswitch') && species.id !== 'ironvaliant'
+				['firstimpression', 'uturn', 'voltswitch'].every(m => !moves.has(m)) && species.id !== 'ironvaliant'
 			) ? 'Booster Energy' : 'Life Orb';
 		}
 		if (!counter.get('Status')) return 'Assault Vest';
