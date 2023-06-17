@@ -17423,7 +17423,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Cyclizar",
 		types: ["Dragon", "Normal"],
 		baseStats: {hp: 70, atk: 95, def: 65, spa: 85, spd: 65, spe: 121},
-		abilities: {0: "Shed Skin", H: "Motor Drive"},
+		abilities: {0: "Shed Skin", H: "Regenerator"},
 		heightm: 1.6,
 		weightkg: 63,
 		color: "Green",

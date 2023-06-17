@@ -675,7 +675,7 @@ export class User extends Chat.MessageContext {
 			// Monitor.warn(`verify failed: ${token}`);
 			// Monitor.warn(`challenge was: ${challenge}`);
 			// Monitor.warn(`user joined from .psim.us`);
-			this.send(`|nametaken|${name}|Your verification signature was invalid.` /*+ \nVisit https://play.pseudo.gq`*/);
+			this.send(`|nametaken|${name}|Your verification signature was invalid.` /*+ \nVisit https://play.othermetas.com`*/);
 			return null;
 		}
 
