@@ -810,7 +810,7 @@ export const commands: Chat.ChatCommands = {
 					if (!data) continue;
 					if (!data.moves || pokemon.isNonstandard === 'Future') continue;
 					let randomMoves = data.moves;
-					if (isDoubles) randomMoves = data.doublesMoves;
+					if (isDoubles && data.doublesMoves) randomMoves = data.doublesMoves;
 					if (isNoDMax && data.noDynamaxMoves) randomMoves = data.noDynamaxMoves;
 					const m = randomMoves.slice().sort().map(formatMove);
 					movesets.push(
