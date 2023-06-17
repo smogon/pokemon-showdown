@@ -7255,5 +7255,22 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4,
 		num: -80,
 	},
+	upandaway: {
+		onSourceModifyDamage(damage, source, target, move) {
+			let mod = 1;
+			if (["Rock", "Electric", "Ice"].includes(move.type)) mod *= 1.2;
+			return this.chainModify(mod);
+		},
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Ground') {
+				this.add('-immune', target, '[from] ability: Up and Away');
+				return null;
+			}
+		},
+		isBreakable: true,
+		name: "Up and Away",
+		rating: 3.5,
+		num: 218,
+	},
 };
 

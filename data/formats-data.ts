@@ -9436,4 +9436,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 		natDexTier: "Illegal",
 	},
+	chiroptelinx: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
 };

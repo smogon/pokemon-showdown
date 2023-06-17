@@ -28792,4 +28792,15 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		eggGroups: ["Field", "Human-Like"],
 	},
+	chiroptelinx: {
+		num: -6041,
+		name: "Chiroptelinx",
+		types: ["Dragon", "Fairy"],
+		baseStats: {hp: 85, atk: 110, def: 85, spa: 100, spd: 95, spe: 125},
+		abilities: {0: "Up and Away"},
+		heightm: 1.1,
+		weightkg: 50,
+		color: "Brown",
+		eggGroups: ["Field", "Human-Like"],
+	},
 };

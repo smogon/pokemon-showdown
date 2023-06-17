@@ -3985,4 +3985,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "OU",
 	},
+	chiroptelinx: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };
