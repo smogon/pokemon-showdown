@@ -3975,4 +3975,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "OU",
 	},
+	musifrog: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };

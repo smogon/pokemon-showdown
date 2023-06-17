@@ -238,6 +238,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		evos: ["Parashukado"],
 	},
+	spinda: {
+		inherit: true,
+		evos: ["Pandiz"],
+	},
 	hoopa: {
 		inherit: true,
 		abilities: {0: "Magician", H: "Blissful Ignorance"},

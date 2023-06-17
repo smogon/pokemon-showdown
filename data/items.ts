@@ -9988,7 +9988,6 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (target.hp === target.maxhp && effect && effect.effectType === 'Move') {
 				if (target.useItem()) {
 					this.add("-activate", target, "item: Discarded Cloth");
-					this.add("-message", "fuck dunscy i hate dunscy.");
 					this.boost({spe: -1, def: -1, spd: -1}, target);
 					return 0;
 				}

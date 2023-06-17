@@ -28767,6 +28767,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.1,
 		weightkg: 50,
 		color: "Brown",
+		prevo: "Spinda",
+		eggGroups: ["Field", "Human-Like"],
+	},
+	musifrog: {
+		num: -6039,
+		name: "Musifrog",
+		types: ["Dark", "Steel"],
+		baseStats: {hp: 91, atk: 69, def: 76, spa: 110, spd: 72, spe: 81},
+		abilities: {0: "Soundproof", 1: "Punk Rock", H: "Heavy Metal"},
+		heightm: 1.1,
+		weightkg: 50,
+		color: "Brown",
 		eggGroups: ["Field", "Human-Like"],
 	},
 };
