@@ -3980,4 +3980,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	nekitan: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
 };

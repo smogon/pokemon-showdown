@@ -23918,4 +23918,22 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Flying",
 	},
+	heavybellow: {
+		num: -62,
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		name: "Heavy Bellow",
+		pp: 10,
+		priority: 0,
+		secondary: {
+			chance: 30,
+			volatileStatus: 'confusion',
+		},
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
+		target: "allAdjacentFoes",
+		type: "Steel",
+		contestType: "Cool",
+	},
+	
 };

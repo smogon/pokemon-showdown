@@ -7237,7 +7237,23 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	carneval: {
 		name: "Carneval",
 		rating: 4,
-		num: -22,
+		num: -79,
+	},
+	fusionforce: {
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			let willBoost = false;
+			for (const active of this.getAllActive()) {
+				let toMove = this.queue.willMove(active);
+				if (toMove && ["Fire", "Electric"].includes(toMove.move.type)) {
+					willBoost = true;
+				}
+			}
+			if (willBoost) return this.chainModify(2);
+		},
+		name: "Fusion Force",
+		rating: 4,
+		num: -80,
 	},
 };
 

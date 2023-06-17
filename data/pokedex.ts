@@ -28781,4 +28781,15 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		eggGroups: ["Field", "Human-Like"],
 	},
+	nekitan: {
+		num: -6040,
+		name: "Nekitan",
+		types: ["Fire", "Electric"],
+		baseStats: {hp: 53, atk: 59, def: 36, spa: 59, spd: 70, spe: 99},
+		abilities: {0: "Fusion Force", H: "Volt Absorb"},
+		heightm: 1.1,
+		weightkg: 50,
+		color: "Brown",
+		eggGroups: ["Field", "Human-Like"],
+	},
 };
