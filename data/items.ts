@@ -5588,7 +5588,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	strangeball: {
 		name: "Strange Ball",
-		spritenum: 303, // TODO
+		spritenum: 308,
 		num: 1785,
 		gen: 8,
 		isPokeball: true,
