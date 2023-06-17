@@ -7019,7 +7019,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			} if (this.field.getPseudoWeather('panicroom') && pokemon.species.id !== 'panicshroomie') {
 				forme = 'Panic Shroomie';
 			}
-			if (pokemon.isActive && forme) {
+			if (pokemon.isActive && forme !== pokemon.species.name) {
 				pokemon.formeChange(forme, this.effect, false, '[msg]');
 			}
 		},
@@ -7035,7 +7035,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			} if (this.field.getPseudoWeather('panicroom') && pokemon.species.id !== 'panicshroomie') {
 				forme = 'Panic Shroomie';
 			}
-			if (pokemon.isActive && forme) {
+			if (pokemon.isActive && forme !== pokemon.species.name) {
 				pokemon.formeChange(forme, this.effect, false, '[msg]');
 			}
 		},

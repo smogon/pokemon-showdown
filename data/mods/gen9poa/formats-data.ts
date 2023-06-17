@@ -2291,7 +2291,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	escartress: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "UU",
+		natDexTier: "OU",
 	},
 	nupin: {
 		inherit: true,
@@ -2431,7 +2431,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	tracton: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	snopach: {
 		inherit: true,
@@ -2531,7 +2531,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	raffiti: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "RU",
+		natDexTier: "UU",
 	},
 	gargryph: {
 		inherit: true,
