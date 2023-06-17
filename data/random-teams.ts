@@ -1285,7 +1285,7 @@ export class RandomTeams {
 			if (scarfReqs || (counter.get('Physical') < 4 && counter.get('Special') < 3 && !moves.has('memento'))) {
 				return 'Choice Scarf';
 			}
-			return (counter.get('Physical') === 3) ? 'Choice Band' : 'Choice Specs';
+			return (counter.get('Physical') >= 3) ? 'Choice Band' : 'Choice Specs';
 		}
 		if (moves.has('blizzard') && ability !== 'Snow Warning' && !teamDetails.snow) return 'Blunder Policy';
 		if (counter.get('Physical') >= 4 &&
