@@ -90,7 +90,7 @@ const SpeedControl = [
 // Moves that shouldn't be the only STAB moves:
 const NoStab = [
 	'accelerock', 'aquajet', 'beakblast', 'bounce', 'breakingswipe', 'bulletpunch', 'chatter', 'chloroblast', 'clearsmog', 'covet',
-	'dragontail', 'eruption', 'explosion', 'fakeout', 'feint', 'flamecharge', 'flipturn', 'iceshard', 'icywind', 'incinerate',
+	'dragontail', 'electroweb', 'eruption', 'explosion', 'fakeout', 'feint', 'flamecharge', 'flipturn', 'iceshard', 'icywind', 'incinerate',
 	'machpunch', 'meteorbeam', 'mortalspin', 'nuzzle', 'pluck', 'pursuit', 'quickattack', 'rapidspin', 'reversal', 'selfdestruct',
 	'shadowsneak', 'skydrop', 'snarl', 'strugglebug', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
 ];
@@ -197,8 +197,8 @@ export class RandomTeams {
 				return abilities.has('Psychic Surge') || types.includes('Fire') || types.includes('Electric') || types.includes('Fighting');
 			},
 			Rock: (movePool, moves, abilities, types, counter, species) => !counter.get('Rock') && species.baseStats.atk >= 80,
-			Steel: (movePool, moves, abilities, types, counter, species) => {
-				if (species.baseStats.atk <= 95 && !movePool.includes('makeitrain')) return false;
+			Steel: (movePool, moves, abilities, types, counter, species, isDoubles) => {
+				if (!isDoubles && species.baseStats.atk <= 95 && !movePool.includes('makeitrain')) return false;
 				return !counter.get('Steel');
 			},
 			Water: (movePool, moves, abilities, types, counter, species) => {
@@ -572,6 +572,12 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'toxic', 'clearsmog');
 		// Dudunsparce
 		if (species.id === 'dudunsparce') this.incompatibleMoves(moves, movePool, 'earthpower', 'shadowball');
+		// Luvdisc
+		if (species.id === 'luvdisc' && !isDoubles) {
+			this.incompatibleMoves(moves, movePool, 'charm', ['icebeam', 'icywind']);
+		}
+		// Chansey and Blissey
+		this.incompatibleMoves(moves, movePool, 'healbell', 'stealthrock');
 	}
 
 	// Checks for and removes incompatible moves, starting with the first move in movesA.
@@ -702,6 +708,12 @@ export class RandomTeams {
 				movePool, teraType, role);
 		}
 
+		// Enforce Revelation Dance
+		if (movePool.includes('revelationdance')) {
+			counter = this.addMove('revelationdance', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
+		}
+
 		// Enforce Revival Blessing
 		if (movePool.includes('revivalblessing')) {
 			counter = this.addMove('revivalblessing', moves, types, abilities, teamDetails, species, isLead, isDoubles,
@@ -711,12 +723,6 @@ export class RandomTeams {
 		// Enforce Salt Cure
 		if (movePool.includes('saltcure')) {
 			counter = this.addMove('saltcure', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
-		}
-
-		// Enforce Seismic Toss
-		if (movePool.includes('seismictoss')) {
-			counter = this.addMove('seismictoss', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 				movePool, teraType, role);
 		}
 
@@ -1099,6 +1105,7 @@ export class RandomTeams {
 			if (species.id === 'farigiraf') return 'Armor Tail';
 			if (species.id === 'oinkolognef') return 'Aroma Veil';
 			if (species.id === 'dragapult') return 'Clear Body';
+			if (species.id === 'altaria') return 'Cloud Nine';
 			if (species.id === 'bellibolt') return 'Electromorphosis';
 			if (species.id === 'armarouge') return 'Flash Fire';
 			if (species.baseSpecies === 'Maushold' && role === 'Doubles Support') return 'Friend Guard';
@@ -1181,7 +1188,6 @@ export class RandomTeams {
 			if (species.id === 'lokix') {
 				return (role === 'Fast Attacker') ? 'Silver Powder' : 'Life Orb';
 			}
-			if (moves.has('shellsmash')) return 'White Herb';
 		}
 		if (species.requiredItems) {
 			// Z-Crystals aren't available in Gen 9, so require Plates
@@ -1231,6 +1237,7 @@ export class RandomTeams {
 		if (moves.has('populationbomb')) return 'Wide Lens';
 		if (moves.has('stuffcheeks')) return this.randomChance(1, 2) ? 'Liechi Berry' : 'Salac Berry';
 		if (ability === 'Unburden') return moves.has('closecombat') ? 'White Herb' : 'Sitrus Berry';
+		if (moves.has('shellsmash')) return 'White Herb';
 		if (moves.has('acrobatics') && ability !== 'Protosynthesis') return ability === 'Grassy Surge' ? 'Grassy Seed' : '';
 		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
 		if (
@@ -1272,11 +1279,13 @@ export class RandomTeams {
 		if (species.id === 'calyrexice') return 'Weakness Policy';
 		if (
 			(['dragonenergy', 'waterspout'].some(m => moves.has(m))) &&
-			counter.damagingMoves.size >= 4
+			counter.get('Physical') + counter.get('Special') === 4
 		) return 'Choice Scarf';
 		if (role === 'Choice Item user') {
-			if (scarfReqs || (counter.get('Physical') < 4 && counter.get('Special') < 3)) return 'Choice Scarf';
-			return (counter.get('Physical') === 4) ? 'Choice Band' : 'Choice Specs';
+			if (scarfReqs || (counter.get('Physical') < 4 && counter.get('Special') < 3 && !moves.has('memento'))) {
+				return 'Choice Scarf';
+			}
+			return (counter.get('Physical') === 3) ? 'Choice Band' : 'Choice Specs';
 		}
 		if (moves.has('blizzard') && ability !== 'Snow Warning' && !teamDetails.snow) return 'Blunder Policy';
 		if (counter.get('Physical') >= 4 &&
@@ -1294,10 +1303,11 @@ export class RandomTeams {
 		}
 		if ((role === 'Bulky Protect' && counter.get('setup')) || moves.has('substitute')) return 'Leftovers';
 		if (species.id === 'sylveon') return 'Pixie Plate';
+		if ((species.id === 'sneasler' || species.id === 'toxicroak') && moves.has('fakeout')) return 'Clear Amulet';
 		if (
 			(offensiveRole || (role === 'Tera Blast user' && species.baseStats.spe >= 80 && !moves.has('trickroom'))) &&
 			(!moves.has('fakeout') || role === 'Doubles Wallbreaker') &&
-			(!moves.has('uturn') || types.includes('Bug') || species.baseStats.atk >= 120) &&
+			(!moves.has('uturn') || types.includes('Bug') || species.baseStats.atk >= 120 || ability === 'Libero') &&
 			(!moves.has('icywind') || species.id === 'ironbundle')
 		) {
 			return (
@@ -1365,13 +1375,13 @@ export class RandomTeams {
 		) return 'Heavy-Duty Boots';
 
 		// Low Priority
-		if (moves.has('outrage')) return 'Lum Berry';
 		if (
 			(species.id === 'garchomp' && role === 'Fast Support') || (
 				ability === 'Regenerator' && (role === 'Bulky Support' || role === 'Bulky Attacker') &&
 				(species.baseStats.hp + species.baseStats.def) >= 180 && this.randomChance(1, 2)
 			)
 		) return 'Rocky Helmet';
+		if (moves.has('outrage')) return 'Lum Berry';
 		if (
 			role === 'Fast Support' && isLead &&
 			!counter.get('recovery') && !counter.get('recoil') && !moves.has('protect') &&
