@@ -197,7 +197,7 @@ export class RandomTeams {
 				return abilities.has('Psychic Surge') || types.includes('Fire') || types.includes('Electric') || types.includes('Fighting');
 			},
 			Rock: (movePool, moves, abilities, types, counter, species) => !counter.get('Rock') && species.baseStats.atk >= 80,
-			Steel: (movePool, moves, abilities, types, counter, species, isDoubles) => {
+			Steel: (movePool, moves, abilities, types, counter, species, teamDetails, isLead, isDoubles) => {
 				if (!isDoubles && species.baseStats.atk <= 95 && !movePool.includes('makeitrain')) return false;
 				return !counter.get('Steel');
 			},
