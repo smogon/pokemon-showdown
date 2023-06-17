@@ -1858,7 +1858,7 @@
             {
                 "role": "Doubles Setup Sweeper",
                 "movepool": ["Double-Edge", "Horn Leech", "Protect", "Stomping Tantrum", "Swords Dance"],
-                "teraTypes": ["Fire", "Normal", "Steel"]
+                "teraTypes": ["Normal"]
             }
         ]
     },
