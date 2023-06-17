@@ -23935,5 +23935,27 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Cool",
 	},
-	
+	vialjab: {
+		num: -63,
+		accuracy: 95,
+		basePower: 90,
+		basePowerCallback(pokemon, target, move) {
+			if (target.status || target.hasAbility('comatose')) {
+				this.debug('BP + 50% from status condition');
+				target.cureStatus();
+				return move.basePower * 1.5;
+			}
+			return move.basePower;
+		},
+		category: "Physical",
+		name: "Vial Jab",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+		zMove: {basePower: 160},
+		contestType: "Clever",
+	},
 };

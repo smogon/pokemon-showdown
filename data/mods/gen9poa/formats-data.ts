@@ -3990,4 +3990,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	hypodevious: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };
