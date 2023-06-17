@@ -2767,7 +2767,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DUU",
 	},
-	greninjaash: {
+	greninjabond: {
 		tier: "OU",
 		doublesTier: "DUU",
 	},

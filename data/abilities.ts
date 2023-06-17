@@ -338,7 +338,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect?.effectType !== 'Move') return;
 			if (source.abilityState.battleBondTriggered) return;
-			if (source.species.id === 'greninja' && source.hp && !source.transformed && source.side.foePokemonLeft()) {
+			if (source.species.id === 'greninjabond' && source.hp && !source.transformed && source.side.foePokemonLeft()) {
 				this.add('-activate', source, 'ability: Battle Bond');
 				this.boost({atk: 1, spa: 1, spe: 1}, source, source, this.effect);
 				source.abilityState.battleBondTriggered = true;

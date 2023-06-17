@@ -1346,7 +1346,7 @@
     "greninja": {
         "moves": ["gunkshot", "hydropump", "icebeam", "spikes", "taunt", "toxicspikes", "uturn"]
     },
-    "greninjaash": {
+    "greninjabond": {
         "moves": ["darkpulse", "hydropump", "icebeam", "uturn", "watershuriken"]
     },
     "diggersby": {
