@@ -7270,7 +7270,15 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		isBreakable: true,
 		name: "Up and Away",
 		rating: 3.5,
-		num: 218,
+		num: -81,
+	},
+	calciumcollapse: {
+		onDamage(damage, target, source, effect) {
+			return damage * 2;
+		},
+		name: "Calcium Collapse",
+		rating: 4,
+		num: -82,
 	},
 };
 
