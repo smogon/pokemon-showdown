@@ -28828,4 +28828,15 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Monster", "Water 1"],
 		canGigantamax: "G-Max Resonance",
 	},
+	glitchomp: {
+		num: -6043,
+		name: "Glitchomp",
+		types: ["Ice", "Fairy"],
+		baseStats: {hp: 102, atk: 80, def: 85, spa: 130, spd: 95, spe: 108},
+		abilities: {0: "Slush Rush"},
+		heightm: 2.5,
+		weightkg: 240,
+		color: "White",
+		eggGroups: ["Field", "Human-Like"],
+	},
 };
