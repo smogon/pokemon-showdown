@@ -28839,4 +28839,17 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "White",
 		eggGroups: ["Field", "Human-Like"],
 	},
+	tardoso: {
+		num: -6044,
+		name: "Tardoso",
+		types: ["Water", "Bug"],
+		gender: "N",
+		baseStats: {hp: 10, atk: 30, def: 50, spa: 25, spd: 35, spe: 10},
+		maxHP: 1,
+		abilities: {0: "Tough Claws", 1: "Regenerator", H: "Wonder Guard"},
+		heightm: 0.001,
+		weightkg: 0.001,
+		color: "Brown",
+		eggGroups: ["Mineral"],
+	},
 };

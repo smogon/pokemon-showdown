@@ -4005,4 +4005,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	tardoso: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "PU",
+	},
 };
