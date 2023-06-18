@@ -28814,4 +28814,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		eggGroups: ["Field", "Human-Like"],
 	},
+	laprasdelta: {
+		num: 131,
+		name: "Lapras-Delta",
+		baseSpecies: "Lapras",
+		forme: "Delta",
+		types: ["Fire"],
+		baseStats: {hp: 130, atk: 85, def: 80, spa: 85, spd: 95, spe: 60},
+		abilities: {0: "Flash Fire", 1: "Shell Armor", H: "Solar Power"},
+		heightm: 2.5,
+		weightkg: 220,
+		color: "Blue",
+		eggGroups: ["Monster", "Water 1"],
+		canGigantamax: "G-Max Resonance",
+	},
 };

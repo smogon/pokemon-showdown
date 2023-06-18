@@ -3995,4 +3995,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	laprasdelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };
