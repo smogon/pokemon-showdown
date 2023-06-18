@@ -28863,4 +28863,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Mineral"],
 	},
+	ribombeemega: {
+		num: 743,
+		name: "Ribombee-Mega",
+		baseSpecies: "Ribombee",
+		forme: "Mega",
+		types: ["Bug", "Fairy"],
+		baseStats: {hp: 60, atk: 75, def: 85, spa: 120, spd: 100, spe: 124},
+		abilities: {0: "Tinted Lens"},
+		heightm: 1.1,
+		weightkg: 34,
+		color: "Pink",
+		requiredItem: "Ribombite",
+		eggGroups: ["Field"],
+	},
 };

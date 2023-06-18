@@ -493,6 +493,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	ribombite: {
+		inherit: true,
+		isNonstandard: null,
+	},
 
 	//Cap Items
 	crucibellite: {

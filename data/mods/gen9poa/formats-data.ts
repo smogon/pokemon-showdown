@@ -4015,4 +4015,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	ribombeemega: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };
