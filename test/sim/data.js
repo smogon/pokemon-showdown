@@ -285,7 +285,7 @@ describe('Dex data', function () {
 	// Aegislash (1) + Pumpkaboo (3) + Gourgeist (3) + Hoopa (1) +
 	// Pikachu (6) + Mega (48) [Floette (1)]
 	formes[6] = formes[5] + 1 + 2 + 1 + 2 + 1 + 3 + 3 + 1 + 6 + 48;
-	// Alola (18) + Totem (12) + Pikachu (7) - Pikachu (6) + Greninja (1) + Zygarde (2) +
+	// Alola (18) + Totem (12) + Pikachu (7) - Pikachu (6) + Greninja (2) + Zygarde (2) +
 	// Oricorio (3) + Rockruff (1) + Lycanroc (2) + Wishiwashi (1) + Silvally (17) + Minior (1)
 	// Mimikyu (1) + Necrozma (3) [Magearna (1) + LGPE Starters/Meltan/Melmetal (4)]
 	formes[7] = formes[6] + 18 + 12 + 7 - 6 + 1 + 2 + 3 + 1 + 2 + 1 + 17 + 1 + 1 + 3 - 1;
@@ -303,13 +303,12 @@ describe('Dex data', function () {
 	  1 + 1 + 1 + 2 + 1 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 +
 	  (4 + 1 + 1 + 1 + 1 + 2 + (1 + 1)) + (1 + 3 + 4 + 2 + 3 + 1 + 2) - 1; // FIXME Rockruff
 	// Pikachu (8) + Origin (3) + Therian (4) + Alola (7) + Galar (7) + Paldea (4) + Hisui (16) +
-	// Rotom (5) + Arceus (17) + Basculin (2) + Meloetta (1) + Vivillon (2) + Hoopa (1) + Oricorio (3) +
-	// Lycanroc (2) + Mimikyu (1) + Magearna (1) + Toxtricity (1) + Antique (2) + Eiscue (1) +
-	// Indeedee (1) + Crowned (2) + Urshifu (1) + Zarude (1) + Calyrex (2) + Oinkologne (1) +
-	// Dudunsparce (1) + Palafin (1) + Maushold (1) + Squawkabilly (3) + Gimmighoul (1) +
-	// Basculegion (1)
+	// Rotom (5) + Arceus (17) + Basculin (2) + Meloetta (1) + Greninja (1) + Vivillon (2) + Hoopa (1) +
+	// Oricorio (3) + Lycanroc (2) + Mimikyu (1) + Magearna (1) + Toxtricity (1) + Antique (2) +
+	// Eiscue (1) + Indeedee (1) + Crowned (2) + Urshifu (1) + Zarude (1) + Calyrex (2) + Oinkologne (1) +
+	// Dudunsparce (1) + Palafin (1) + Maushold (1) + Squawkabilly (3) + Gimmighoul (1) + Basculegion (1)
 	formes[9] = 8 + 3 + 4 + 7 + 7 + 4 + 16 + 5 + 17 + 2 + 1 +
-	  2 + 1 + 3 + 2 + 1 + 1 + 1 + 2 + 1 + 1 + 2 + 1 + 1 +
+	  1 + 2 + 1 + 3 + 2 + 1 + 1 + 1 + 2 + 1 + 1 + 2 + 1 + 1 +
 	  2 + 1 + 1 + 1 + 1 + 3 + 1 + 1;
 
 	for (const gen of [1, 2, 3, 4, 5, 6, 7, 8, 9]) {

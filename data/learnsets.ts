@@ -65333,7 +65333,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			{generation: 6, level: 100, isHidden: true, moves: ["hydrocannon", "gunkshot", "matblock", "happyhour"], pokeball: "cherishball"},
 		],
 	},
-	greninjaash: {
+	greninjabond: {
 		learnset: {
 			acrobatics: ["7M"],
 			aerialace: ["9M", "9L33", "7M", "7S0"],

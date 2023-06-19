@@ -29,12 +29,12 @@ describe("Custom Rules", function () {
 		assert.false.legalTeam(team, 'gen7anythinggoes@@@-Pikachu');
 
 		team = [
-			{species: 'greninja', ability: 'battlebond', moves: ['surf'], evs: {hp: 1}},
+			{species: 'greninjaash', ability: 'battlebond', moves: ['surf'], evs: {hp: 1}},
 		];
-		assert.false.legalTeam(team, 'gen7anythinggoes@@@-Greninja-Ash');
+		assert.false.legalTeam(team, 'gen7anythinggoes@@@-Greninja-Bond');
 
 		team = [
-			{species: 'greninja', ability: 'battlebond', moves: ['surf'], evs: {hp: 1}},
+			{species: 'greninjabond', ability: 'battlebond', moves: ['surf'], evs: {hp: 1}},
 		];
 		assert.legalTeam(team, 'gen7anythinggoes@@@!Obtainable Formes,-Greninja-Ash');
 	});
