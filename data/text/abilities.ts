@@ -2574,4 +2574,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 
 		damage: "#roughskin",
 	},
+	calciumcollapse: {
+		name: "Calcium Collapse",
+		shortDesc: "This Pokemon takes double damage from all sources.",
+	},
 };
