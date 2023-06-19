@@ -2251,7 +2251,7 @@
         "moves": ["gunkshot", "hydropump", "icebeam", "spikes", "taunt", "toxicspikes", "uturn"],
         "doublesMoves": ["darkpulse", "gunkshot", "hydropump", "icebeam", "matblock", "protect", "taunt", "uturn"]
     },
-    "greninjaash": {
+    "greninjabond": {
         "level": 80,
         "moves": ["darkpulse", "hydropump", "icebeam", "uturn", "watershuriken"]
     },
