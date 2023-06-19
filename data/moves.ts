@@ -18241,7 +18241,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		secondary: null,
 		target: "self",
-		type: "Normal",
+		type: "Water",
 		zMove: {boost: {atk: 3}},
 		contestType: "Cute",
 	},
@@ -23956,6 +23956,65 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Steel",
 		zMove: {basePower: 160},
+		contestType: "Clever",
+	},
+	foreshadowing: {
+		num: -64,
+		accuracy: 100,
+		basePower: 120,
+		category: "Special",
+		name: "Foreshadowing",
+		pp: 10,
+		priority: 0,
+		flags: {allyanim: 1, futuremove: 1},
+		ignoreImmunity: true,
+		onTry(source, target) {
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			const periodic = source.hasAbility('periodicorbit');
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				duration: periodic ? 5 : 3,
+				move: 'foreshadowing',
+				source: source,
+				moveData: {
+					id: 'foreshadowing',
+					name: "Foreshadowing",
+					accuracy: 100,
+					basePower: 120,
+					category: "Special",
+					priority: 0,
+					flags: {},
+					ignoreImmunity: false,
+					effectType: 'Move',
+					isFutureMove: true,
+					type: 'Normal',
+				},
+			});
+			if (periodic && target.side.addSlotCondition(target, 'futuremoveperiodic')) {
+				Object.assign(target.side.slotConditions[target.position]['futuremoveperiodic'], {
+					duration: 3,
+					move: 'foreshadowing',
+					source: source,
+					moveData: {
+						id: 'foreshadowing',
+						name: "Foreshadowing",
+						accuracy: 100,
+						basePower: 120,
+						category: "Special",
+						priority: 0,
+						flags: {},
+						ignoreImmunity: false,
+						effectType: 'Move',
+						isFutureMove: true,
+						type: 'Normal',
+					},
+				});
+			}
+			this.add('-start', source, 'move: Foreshadowing');
+			return this.NOT_FAIL;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
 		contestType: "Clever",
 	},
 };

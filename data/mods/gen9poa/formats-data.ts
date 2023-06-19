@@ -4020,4 +4020,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	grandelrachnid: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };
