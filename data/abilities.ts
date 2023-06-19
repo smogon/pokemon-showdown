@@ -7244,14 +7244,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onFractionalPriority(priority, pokemon, target, move) {
 			this.effectState.willBoost = false;
 			for (const active of this.getAllActive()) {
-				this.add('-message', active.name);
 				let toMove = this.queue.willMove(active);
-				if (toMove) {
-					this.add('-message', toMove.move.type);
-				}
 				if (toMove && ["Fire", "Electric"].includes(toMove.move.type)) {
 					this.effectState.willBoost = true;
 				}
+			}
+			if (["Fire", "Electric"].includes(move.type)) {
+				this.effectState.willBoost = true;
 			}
 		},
 		onBasePowerPriority: 23,
