@@ -1199,7 +1199,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	aerodactylmega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "RU",
+		natDexTier: "RUBL",
 	},
 	munchlax: {
 		isNonstandard: "Past",
@@ -2585,7 +2585,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	deoxysdefense: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "RU",
+		natDexTier: "RUBL",
 	},
 	deoxysspeed: {
 		isNonstandard: "Past",
@@ -3728,7 +3728,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	bisharp: {
 		tier: "UU",
 		doublesTier: "DUU",
-		natDexTier: "NFE",
+		natDexTier: "RUBL",
 	},
 	bouffalant: {
 		isNonstandard: "Past",
@@ -5836,7 +5836,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	ironleaves: {
 		tier: "UUBL",
 		doublesTier: "DUU",
-		natDexTier: "RU",
+		natDexTier: "RUBL",
 	},
 	missingno: {
 		isNonstandard: "Custom",
