@@ -819,12 +819,12 @@ export const Formats: FormatList = [
 		mod: 'mixandmega',
 		ruleset: ['Standard OMs', 'Evasion Items Clause', 'Evasion Abilities Clause', 'Sleep Moves Clause', 'Terastal Clause', 'Min Source Gen = 9'],
 		banlist: [
-			'Calyrex-Shadow', 'Koraidon', 'Kyogre', 'Miraidon', 'Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite',
-			'Mawilite', 'Medichamite', 'Moody', 'Rusted Sword', 'Shadow Tag', 'Baton Pass', 'Shed Tail',
+			'Calyrex-Shadow', 'Eternatus', 'Koraidon', 'Kyogre', 'Miraidon', 'Beedrillite', 'Blazikenite', 'Gengarite',
+			'Kangaskhanite', 'Mawilite', 'Medichamite', 'Moody', 'Rusted Sword', 'Shadow Tag', 'Baton Pass', 'Shed Tail',
 		],
 		restricted: [
-			'Arceus', 'Calyrex-Ice', 'Dialga', 'Dragapult', 'Eternatus', 'Flutter Mane', 'Gengar', 'Giratina', 'Groudon', 'Iron Bundle',
-			'Kilowattrel', 'Mewtwo', 'Palkia', 'Rayquaza', 'Slaking', 'Sneasler', 'Urshifu-Base', 'Zacian', 'Zapdos-Base',
+			'Arceus', 'Basculegion-Base', 'Calyrex-Ice', 'Dialga', 'Dragapult', 'Flutter Mane', 'Gengar', 'Gholdengo', 'Giratina', 'Groudon', 'Iron Bundle',
+			'Kilowattrel', 'Mewtwo', 'Palkia', 'Rayquaza', 'Slaking', 'Sneasler', 'Urshifu', 'Urshifu-Rapid-Strike', 'Zacian', 'Zapdos-Base',
 		],
 		onValidateTeam(team) {
 			const itemTable = new Set<ID>();
