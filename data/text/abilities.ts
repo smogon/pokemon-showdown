@@ -2578,4 +2578,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Calcium Collapse",
 		shortDesc: "This Pokemon takes double damage from all sources.",
 	},
+	fusionforce: {
+		name: "Fusion Force",
+		shortDesc: "2x damage if any Pokemon on the field selects a Fire or Electric move.",
+	},
 };
