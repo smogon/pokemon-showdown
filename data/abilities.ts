@@ -7240,16 +7240,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: -79,
 	},
 	fusionforce: {
-		onBasePowerPriority: 23,
-		onBasePower(basePower, pokemon, target, move) {
-			let willBoost = false;
+		onFractionalPriorityPriority: -1,
+		onFractionalPriority(priority, pokemon, target, move) {
+			this.effectState.willBoost = false;
 			for (const active of this.getAllActive()) {
 				let toMove = this.queue.willMove(active);
 				if (toMove && ["Fire", "Electric"].includes(toMove.move.type)) {
-					willBoost = true;
+					this.effectState.willBoost = true;
 				}
 			}
-			if (willBoost) return this.chainModify(2);
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (this.effectState.willBoost) return this.chainModify(2);
 		},
 		name: "Fusion Force",
 		rating: 4,
