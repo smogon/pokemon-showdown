@@ -7247,6 +7247,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.add('-message', active.name);
 				let toMove = this.queue.willMove(active);
 				if (toMove && ["Fire", "Electric"].includes(toMove.move.type)) {
+					this.add('-message', toMove.move.name);
 					this.effectState.willBoost = true;
 				}
 			}
