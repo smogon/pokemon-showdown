@@ -382,7 +382,7 @@ export class TeamValidator {
 
 		let outOfBattleSpecies = species;
 		let tierSpecies = species;
-		if (ability.id === 'battlebond' && toID(species.name) === 'greninja') {
+		if (ability.id === 'battlebond' && toID(species.baseSpecies) === 'greninja') {
 			outOfBattleSpecies = dex.species.get('greninjabond');
 			if (ruleTable.has('obtainableformes')) {
 				tierSpecies = outOfBattleSpecies;
@@ -507,7 +507,7 @@ export class TeamValidator {
 		ability = dex.abilities.get(set.ability);
 
 		const [outOfBattleSpecies, tierSpecies] = this.getValidationSpecies(set);
-		if (ability.id === 'battlebond' && toID(species.name) === 'greninja') {
+		if (ability.id === 'battlebond' && toID(species.baseSpecies) === 'greninja') {
 			if (ruleTable.has('obtainablemisc')) {
 				if (set.gender && set.gender !== 'M') {
 					problems.push(`Battle Bond Greninja must be male.`);
