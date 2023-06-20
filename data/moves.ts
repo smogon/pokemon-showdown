@@ -24019,7 +24019,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	adaptivestance: {
 		num: -65,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		name: "Adaptive Stance",
@@ -24057,6 +24057,28 @@ export const Moves: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Dark",
+		contestType: "Tough",
+	},
+	volatileshower: {
+		num: -66,
+		accuracy: 95,
+		basePower: 80,
+		category: "Special",
+		name: "Volatile Shower",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: {
+			chance: 30,
+			status: 'psn',
+		},
+		onModifyMove(move, pokemon, target) {
+			if (target?.effectiveWeather() === 'acidrain') {
+				move.secondary.chance = 100;
+			}
+		},
+		target: "normal",
+		type: "Water",
 		contestType: "Tough",
 	},
 };

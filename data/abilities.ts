@@ -7323,5 +7323,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2,
 		num: -83,
 	},
+	causticbreakdown: {
+		onStart(pokemon) {
+			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
+		},
+		onWeatherChange(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Radiangler' || pokemon.transformed) return;
+			if (pokemon.effectiveWeather() === 'acidrain' && pokemon.isActive && pokemon.species.id !== 'radianglerexposed') {
+				pokemon.formeChange('Radiangler-Exposed', this.effect, false, '[msg]');
+			}
+		},
+		name: "Caustic Breakdown",
+		rating: 2,
+		num: 59,
+	},
 };
 

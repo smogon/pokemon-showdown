@@ -4050,4 +4050,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "OU",
 	},
+	radiangler: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "Uber",
+	},
 };
