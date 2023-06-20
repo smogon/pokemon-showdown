@@ -4055,4 +4055,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "Uber",
 	},
+	shedinjarhinian: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };
