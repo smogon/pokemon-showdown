@@ -4025,4 +4025,19 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	rolycolymountain: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	carkolmountain: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "NFE",
+	},
+	coalossalmountain: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };
