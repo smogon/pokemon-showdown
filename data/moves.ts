@@ -24081,4 +24081,26 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Water",
 		contestType: "Tough",
 	},
+	acidcyclone: {
+		num: -67,
+		accuracy: 90,
+		basePower: 65,
+		category: "Special",
+		name: "Acid Cyclone",
+		pp: 15,
+		priority: 0,
+		onBasePower(basePower, pokemon, target) {
+			if (pokemon.item === "acidicrock") {
+				return this.chainModify(1.2);
+			}
+		},
+		onHit(source) {
+			this.field.setWeather('acidrain');
+		},
+		flags: {protect: 1, mirror: 1},
+		secondary: null,
+		target: "normal",
+		type: "Poison",
+		contestType: "Beautiful",
+	},
 };
