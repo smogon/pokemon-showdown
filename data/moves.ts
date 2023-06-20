@@ -24114,7 +24114,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isNonstandard: "Unobtainable",
 		pp: 10,
 		priority: 0,
-		flags: {snatch: 1, heal: 1},
+		flags: {},
 		onTryHit(source) {
 			if (!this.canSwitch(source.side)) {
 				this.attrLastMove('[still]');
@@ -24126,15 +24126,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			duration: 1,
 			onSwap(target) {
-				if (!target.fainted && (target.hp < target.maxhp || target.status)) {
-					target.heal(target.maxhp);
+				if (!target.fainted && target.status) {
 					target.clearStatus();
-					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
 				}
 			},
-			onEnd(target) {
-				this.add('-message', 'ended!');
-			}
+			onModifyDef(def, target, source, move) {
+				return this.chainModify([4, 3])
+			},
+			onModifySpD(spd, target, source, move) {
+				return this.chainModify([4, 3])
+			},
 		},
 		secondary: null,
 		target: "self",
