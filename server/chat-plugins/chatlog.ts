@@ -1571,7 +1571,7 @@ export const commands: Chat.ChatCommands = {
 			`If you provide a user argument in the form <code>user=username</code>, it will search for messages (that match the other arguments) only from that user.<br />` +
 			`All other arguments will be considered part of the search ` +
 			`(if more than one argument is specified, it searches for lines containing all terms).<br />` +
-			"Requires: % @ # &</div>";
+			"Requires: &</div>";
 		return this.sendReplyBox(buffer);
 	},
 	topusers: 'linecount',
