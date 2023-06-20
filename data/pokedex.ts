@@ -28736,6 +28736,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	pelipperelectrified: {
 		num: 279,
 		name: "Pelipper-Electrified",
+		baseSpecies: "Pelipper",
+		forme: "Electrified",
 		types: ["Electric", "Flying"],
 		baseStats: {hp: 60, atk: 50, def: 100, spa: 95, spd: 70, spe: 65},
 		abilities: {0: "Static", H: "Stormbringer"},
