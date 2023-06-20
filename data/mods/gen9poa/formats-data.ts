@@ -4058,6 +4058,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	shedinjarhinian: {
 		inherit: true,
 		isNonstandard: null,
+		natDexTier: "OU",
+	},
+	suicunesupra: {
+		inherit: true,
+		isNonstandard: null,
 		natDexTier: "UU",
 	},
 };
