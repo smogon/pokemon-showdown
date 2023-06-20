@@ -7246,13 +7246,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			for (const active of this.getAllActive()) {
 				let toMove = this.queue.willMove(active);
 				if (toMove && ["Fire", "Electric"].includes(toMove.move.type)) {
-					let thing = toMove.move.type + active.name; // wahuh
 					this.effectState.willBoost = true;
 				}
 			}
 			if (["Fire", "Electric"].includes(move.type)) {
 				this.effectState.willBoost = true;
 			}
+			if (this.effectState.willBoost) this.add('-activate', pokemon, 'ability: Fusion Force');
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
