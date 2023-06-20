@@ -7356,5 +7356,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 5,
 		num: 25,
 	},
+	fabledprotector: {
+		onBeforeSwitchOut(pokemon) {
+			this.actions.useMove('fabledprotector', pokemon);
+		},
+		name: "Fabled Protector",
+		rating: 3,
+		num: -2,
+	},
 };
 

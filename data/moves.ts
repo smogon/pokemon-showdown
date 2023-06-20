@@ -22148,6 +22148,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
+		isNonstandard: "Unobtainable",
 		contestType: "Cool",
 	},
 	retrograde: {
@@ -22940,6 +22941,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
 		target: "normal",
 		type: "Fire",
+		isNonstandard: "Unobtainable",
 		contestType: "Tough",
 	},
 	ferociouscrash: {
@@ -23547,7 +23549,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		isNonstandard: "Past",
+		isNonstandard: "Unobtainable",
 		name: "Turf Melter",
 		pp: 25,
 		priority: 0,
@@ -24101,6 +24103,42 @@ export const Moves: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Poison",
+		contestType: "Beautiful",
+	},
+	fabledprotector: {
+		num: -68,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Fabled Protector",
+		isNonstandard: "Unobtainable",
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1, heal: 1},
+		onTryHit(source) {
+			if (!this.canSwitch(source.side)) {
+				this.attrLastMove('[still]');
+				this.add('-fail', source);
+				return this.NOT_FAIL;
+			}
+		},
+		slotCondition: 'fabledprotector',
+		condition: {
+			duration: 1,
+			onSwap(target) {
+				if (!target.fainted && (target.hp < target.maxhp || target.status)) {
+					target.heal(target.maxhp);
+					target.clearStatus();
+					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
+				}
+			},
+			onEnd(target) {
+				this.add('-message', 'ended!');
+			}
+		},
+		secondary: null,
+		target: "self",
+		type: "Psychic",
 		contestType: "Beautiful",
 	},
 };
