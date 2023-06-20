@@ -9876,7 +9876,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (
 				lastMove.flags['failinstruct'] || lastMove.isZ || lastMove.isMax ||
 				lastMove.flags['charge'] || lastMove.flags['recharge'] ||
-				target.volatiles['beakblast'] || target.volatiles['focuspunch'] || target.volatiles['shelltrap'] ||
+				target.volatiles['beakblast'] || target.volatiles['adaptivestance'] || target.volatiles['focuspunch'] || target.volatiles['shelltrap'] ||
 				(target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)
 			) {
 				return false;
@@ -24016,5 +24016,47 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Normal",
 		contestType: "Clever",
+	},
+	adaptivestance: {
+		num: -65,
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		name: "Adaptive Stance",
+		pp: 5,
+		priority: -3,
+		flags: {contact: 1, protect: 1, punch: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
+		priorityChargeCallback(pokemon) {
+			pokemon.addVolatile('adaptivestance');
+		},
+		beforeMoveCallback(pokemon) {
+			if (pokemon.volatiles['adaptivestance']?.lostFocus) {
+				this.add('cant', pokemon, 'Adaptive Stance', 'Adaptive Stance');
+				return true;
+			}
+		},
+		condition: {
+			duration: 1,
+			onStart(pokemon) {
+				this.add('-singleturn', pokemon, 'move: Adaptive Stance');
+			},
+			onHit(pokemon, source, move) {
+				if (move.category !== 'Status') {
+					this.effectState.lostFocus = true;
+				}
+			},
+			onTryAddVolatile(status, pokemon) {
+				if (status.id === 'flinch') return null;
+			},
+		},
+		boosts: {
+			atk: 1,
+			spa: 1,
+			spe: 1,
+		},
+		secondary: null,
+		target: "self",
+		type: "Dark",
+		contestType: "Tough",
 	},
 };

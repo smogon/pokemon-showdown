@@ -28947,4 +28947,15 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		eggGroups: ["Monster", "Field"],
 	},
+	orioruse: {
+		num: -6047,
+		name: "Orioruse",
+		types: ["Fairy", "Dark"],
+		baseStats: {hp: 84, atk: 108, def: 74, spa: 129, spd: 77, spe: 93},
+		abilities: {0: "Fierce Howl"},
+		heightm: 1.55,
+		weightkg: 26,
+		color: "Gray",
+		eggGroups: ["Mineral"],
+	},
 };

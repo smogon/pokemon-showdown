@@ -4045,4 +4045,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "OU",
 	},
+	orioruse: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
 };
