@@ -7342,7 +7342,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
 			if (move.id === 'skydrop' && !source.volatiles['skydrop']) return;
 			this.debug('Wonder Guard immunity: ' + move.id);
-			if ((move.category === "Physical" && source.getStat('atk') >= target.getStat('atk')) || (move.category === "Special" && source.getStat('spa') >= target.getStat('spa'))) {
+			if ((move.category === "Physical" && source.getStat('atk') <= target.getStat('atk')) || (move.category === "Special" && source.getStat('spa') <= target.getStat('spa'))) {
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
