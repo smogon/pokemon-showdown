@@ -28933,4 +28933,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 34,
 		eggGroups: ["Mineral"],
 	},
+	nidokingdelta: {
+		num: 34,
+		name: "Nidoking-Delta",
+		baseSpecies: "Nidoking",
+		forme: "Delta",
+		types: ["Ground", "Fighting"],
+		gender: "M",
+		baseStats: {hp: 81, atk: 102, def: 77, spa: 85, spd: 75, spe: 85},
+		abilities: {0: "Guts", 1: "Stamina", H: "Iron Fist"},
+		heightm: 1.4,
+		weightkg: 62,
+		color: "Red",
+		eggGroups: ["Monster", "Field"],
+	},
 };

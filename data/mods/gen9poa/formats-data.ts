@@ -4040,4 +4040,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	nidokingdelta: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
 };
