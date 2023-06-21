@@ -40,6 +40,14 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 9', 'Max Move Count = 8', 'Max Level = 100', 'Default Level = 50','Team Preview'],
 	},
+	
+		{
+		name: "[BudpoW] MBSFB Cup",
+		mod: 'gen9',
+		searchShow: true,
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 20', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 50','Team Preview'],
+	},
+	
 	{
 		name: "[BudpoW] Singles Test",
 
