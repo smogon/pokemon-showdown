@@ -361,7 +361,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod', 'Mega Stone Clause', 'Z-Move Clause'],
+		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod', 'Z-Move Clause'],
 		banlist: ['ND Uber', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Quick Claw', 'Baton Pass',
 		'Clefable', 'Corviknight', 'Ferrothorn', 'Garchomp', 'Greninja', 'Heatran', 'Kartana', 'Kyurem', 'Landorus-Therian', 'Serperior', 
 		'Tapu Fini', 'Tapu Koko', 'Tapu Lele', 'Toxapex', 'Victini', 'Volcarona', 'Weavile', 'Zapdos', ' Blacephalon', 'Blaziken', 
@@ -1193,178 +1193,178 @@ export const Formats: FormatList = [
 	// Challengeable OMs
 	///////////////////////////////////////////////////////////////////
 
-	{
-		section: "Challengeable OMs",
-		column: 2,
-	},
-	{
-		name: "[Gen 9] Camomons",
-		desc: `Pok&eacute;mon have their types set to match their first two moves.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3711340/">Camomons</a>`,
-		],
+	// {
+	// 	section: "Challengeable OMs",
+	// 	column: 2,
+	// },
+	// {
+	// 	name: "[Gen 9] Camomons",
+	// 	desc: `Pok&eacute;mon have their types set to match their first two moves.`,
+	// 	threads: [
+	// 		`&bullet; <a href="https://www.smogon.com/forums/threads/3711340/">Camomons</a>`,
+	// 	],
 
-		mod: 'gen9',
-		searchShow: false,
-		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Evasion Items Clause', 'Evasion Abilities Clause', 'Terastal Clause', 'Camomons Mod', 'Min Source Gen = 9'],
-		banlist: [
-			'Arceus', 'Baxcalibur', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Dialga', 'Dialga-Origin', 'Dragonite', 'Drednaw', 'Enamorus-Base',
-			'Espathra', 'Eternatus', 'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Groudon', 'Iron Bundle', 'Koraidon', 'Kyogre', 'Landorus-Base', 'Mewtwo',
-			'Miraidon', 'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Roaring Moon', 'Sneasler', 'Spectrier', 'Tornadus-Therian', 'Volcarona', 'Zacian',
-			'Zacian-Crowned', 'Zamazenta-Crowned', 'Arena Trap', 'Moody', 'Shadow Tag', 'Booster Energy', 'King\'s Rock', 'Baton Pass', 'Last Respects', 'Shed Tail',
-		],
-	},
-	{
-		name: "[Gen 9] Convergence",
-		desc: `Allows all Pok&eacute;mon that have identical types to share moves and abilities.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3714048/">Convergence</a>`,
-		],
+	// 	mod: 'gen9',
+	// 	searchShow: false,
+	// 	ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Evasion Items Clause', 'Evasion Abilities Clause', 'Terastal Clause', 'Camomons Mod', 'Min Source Gen = 9'],
+	// 	banlist: [
+	// 		'Arceus', 'Baxcalibur', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Dialga', 'Dialga-Origin', 'Dragonite', 'Drednaw', 'Enamorus-Base',
+	// 		'Espathra', 'Eternatus', 'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Groudon', 'Iron Bundle', 'Koraidon', 'Kyogre', 'Landorus-Base', 'Mewtwo',
+	// 		'Miraidon', 'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Roaring Moon', 'Sneasler', 'Spectrier', 'Tornadus-Therian', 'Volcarona', 'Zacian',
+	// 		'Zacian-Crowned', 'Zamazenta-Crowned', 'Arena Trap', 'Moody', 'Shadow Tag', 'Booster Energy', 'King\'s Rock', 'Baton Pass', 'Last Respects', 'Shed Tail',
+	// 	],
+	// },
+	// {
+	// 	name: "[Gen 9] Convergence",
+	// 	desc: `Allows all Pok&eacute;mon that have identical types to share moves and abilities.`,
+	// 	threads: [
+	// 		`&bullet; <a href="https://www.smogon.com/forums/threads/3714048/">Convergence</a>`,
+	// 	],
 
-		mod: 'gen9',
-		searchShow: false,
-		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Convergence Legality', '!Obtainable Abilities', 'Min Source Gen = 9'],
-		banlist: [
-			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Dialga', 'Dialga-Origin', 'Dondozo', 'Eternatus', 'Flutter Mane', 'Giratina', 'Giratina-Origin',
-			'Groudon', 'Inteleon', 'Iron Bundle', 'Iron Hands', 'Koraidon', 'Kyogre', 'Landorus-Base', 'Magearna', 'Mewtwo', 'Miraidon', 'Palafin', 'Palkia',
-			'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Slaking', 'Spectrier', 'Urshifu-Base', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned',
-			'Arena Trap', 'Comatose', 'Imposter', 'Moody', 'Pure Power', 'Shadow Tag', 'Speed Boost', 'Damp Rock', 'King\'s Rock', 'Baton Pass', 'Extreme Speed',
-			'Last Respects', 'Quiver Dance', 'Rage Fist', 'Shed Tail', 'Shell Smash', 'Spore', 'Transform',
-		],
-	},
-	{
-		name: "[Gen 9] Cross Evolution",
-		desc: `Give a Pok&eacute;mon a Pok&eacute;mon name of the next evolution stage as a nickname to inherit stat changes, typing, abilities, and moves from the next stage Pok&eacute;mon.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3710953/">Cross Evolution</a>`,
-		],
+	// 	mod: 'gen9',
+	// 	searchShow: false,
+	// 	ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Convergence Legality', '!Obtainable Abilities', 'Min Source Gen = 9'],
+	// 	banlist: [
+	// 		'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Dialga', 'Dialga-Origin', 'Dondozo', 'Eternatus', 'Flutter Mane', 'Giratina', 'Giratina-Origin',
+	// 		'Groudon', 'Inteleon', 'Iron Bundle', 'Iron Hands', 'Koraidon', 'Kyogre', 'Landorus-Base', 'Magearna', 'Mewtwo', 'Miraidon', 'Palafin', 'Palkia',
+	// 		'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Slaking', 'Spectrier', 'Urshifu-Base', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned',
+	// 		'Arena Trap', 'Comatose', 'Imposter', 'Moody', 'Pure Power', 'Shadow Tag', 'Speed Boost', 'Damp Rock', 'King\'s Rock', 'Baton Pass', 'Extreme Speed',
+	// 		'Last Respects', 'Quiver Dance', 'Rage Fist', 'Shed Tail', 'Shell Smash', 'Spore', 'Transform',
+	// 	],
+	// },
+	// {
+	// 	name: "[Gen 9] Cross Evolution",
+	// 	desc: `Give a Pok&eacute;mon a Pok&eacute;mon name of the next evolution stage as a nickname to inherit stat changes, typing, abilities, and moves from the next stage Pok&eacute;mon.`,
+	// 	threads: [
+	// 		`&bullet; <a href="https://www.smogon.com/forums/threads/3710953/">Cross Evolution</a>`,
+	// 	],
 
-		mod: 'gen9',
-		searchShow: false,
-		ruleset: ['Standard OMs', 'Ability Clause = 2', 'Sleep Moves Clause', 'Min Source Gen = 9'],
-		banlist: ['Girafarig', 'Miraidon', 'Scyther', 'Sneasel-Base', 'Ursaring', 'Arena Trap', 'Huge Power', 'Ice Scales', 'Pure Power', 'Shadow Tag', 'Speed Boost', 'Moody', 'King\'s Rock', 'Baton Pass', 'Revival Blessing'],
-		restricted: ['Gallade', 'Gholdengo'],
-		onValidateTeam(team) {
-			const names = new Set<ID>();
-			for (const set of team) {
-				const name = set.name;
-				if (names.has(this.dex.toID(name))) {
-					return [
-						`Your Pok\u00e9mon must have different nicknames.`,
-						`(You have more than one Pok\u00e9mon named '${name}')`,
-					];
-				}
-				names.add(this.dex.toID(name));
-			}
-			if (!names.size) {
-				return [
-					`${this.format.name} works using nicknames; your team has 0 nicknamed Pok\u00e9mon.`,
-					`(If this was intentional, add a nickname to one Pok\u00e9mon that isn't the name of a Pok\u00e9mon species.)`,
-				];
-			}
-		},
-		checkCanLearn(move, species, lsetData, set) {
-			// @ts-ignore
-			if (!set.sp?.exists || !set.crossSpecies?.exists) {
-				return this.checkCanLearn(move, species, lsetData, set);
-			}
-			// @ts-ignore
-			const problem = this.checkCanLearn(move, set.sp);
-			if (!problem) return null;
-			// @ts-ignore
-			if (this.checkCanLearn(move, set.crossSpecies)) return problem;
-			return null;
-		},
-		validateSet(set, teamHas) {
-			const crossSpecies = this.dex.species.get(set.name);
-			let problems = this.dex.formats.get('Obtainable Misc').onChangeSet?.call(this, set, this.format) || null;
-			if (Array.isArray(problems) && problems.length) return problems;
-			const crossNonstandard = (!this.ruleTable.has('standardnatdex') && crossSpecies.isNonstandard === 'Past') ||
-				crossSpecies.isNonstandard === 'Future';
-			const crossIsCap = !this.ruleTable.has('+pokemontag:cap') && crossSpecies.isNonstandard === 'CAP';
-			if (!crossSpecies.exists || crossNonstandard || crossIsCap) return this.validateSet(set, teamHas);
-			const species = this.dex.species.get(set.species);
-			const check = this.checkSpecies(set, species, species, {});
-			if (check) return [check];
-			const nonstandard = !this.ruleTable.has('standardnatdex') && species.isNonstandard === 'Past';
-			const isCap = !this.ruleTable.has('+pokemontag:cap') && species.isNonstandard === 'CAP';
-			if (!species.exists || nonstandard || isCap || species === crossSpecies) return this.validateSet(set, teamHas);
-			if (!species.nfe) return [`${species.name} cannot cross evolve because it doesn't evolve.`];
-			const crossIsUnreleased = (crossSpecies.tier === "Unreleased" && crossSpecies.isNonstandard === "Unobtainable" &&
-				!this.ruleTable.has('+unobtainable'));
-			if (crossSpecies.battleOnly || crossIsUnreleased || !crossSpecies.prevo) {
-				return [`${species.name} cannot cross evolve into ${crossSpecies.name} because it isn't an evolution.`];
-			}
-			if (this.ruleTable.isRestrictedSpecies(crossSpecies)) {
-				return [`${species.name} cannot cross evolve into ${crossSpecies.name} because it is banned.`];
-			}
-			const crossPrevoSpecies = this.dex.species.get(crossSpecies.prevo);
-			if (!crossPrevoSpecies.prevo !== !species.prevo) {
-				return [
-					`${species.name} cannot cross evolve into ${crossSpecies.name} because they are not consecutive evolution stages.`,
-				];
-			}
-			const item = this.dex.items.get(set.item);
-			if (item.itemUser?.length) {
-				if (!item.itemUser.includes(crossSpecies.name) || crossSpecies.name !== species.name) {
-					return [`${species.name} cannot use ${item.name} because it is cross evolved into ${crossSpecies.name}.`];
-				}
-			}
-			const ability = this.dex.abilities.get(set.ability);
-			if (!this.ruleTable.isRestricted(`ability:${ability.id}`) || Object.values(species.abilities).includes(ability.name)) {
-				set.species = crossSpecies.name;
-			}
+	// 	mod: 'gen9',
+	// 	searchShow: false,
+	// 	ruleset: ['Standard OMs', 'Ability Clause = 2', 'Sleep Moves Clause', 'Min Source Gen = 9'],
+	// 	banlist: ['Girafarig', 'Miraidon', 'Scyther', 'Sneasel-Base', 'Ursaring', 'Arena Trap', 'Huge Power', 'Ice Scales', 'Pure Power', 'Shadow Tag', 'Speed Boost', 'Moody', 'King\'s Rock', 'Baton Pass', 'Revival Blessing'],
+	// 	restricted: ['Gallade', 'Gholdengo'],
+	// 	onValidateTeam(team) {
+	// 		const names = new Set<ID>();
+	// 		for (const set of team) {
+	// 			const name = set.name;
+	// 			if (names.has(this.dex.toID(name))) {
+	// 				return [
+	// 					`Your Pok\u00e9mon must have different nicknames.`,
+	// 					`(You have more than one Pok\u00e9mon named '${name}')`,
+	// 				];
+	// 			}
+	// 			names.add(this.dex.toID(name));
+	// 		}
+	// 		if (!names.size) {
+	// 			return [
+	// 				`${this.format.name} works using nicknames; your team has 0 nicknamed Pok\u00e9mon.`,
+	// 				`(If this was intentional, add a nickname to one Pok\u00e9mon that isn't the name of a Pok\u00e9mon species.)`,
+	// 			];
+	// 		}
+	// 	},
+	// 	checkCanLearn(move, species, lsetData, set) {
+	// 		// @ts-ignore
+	// 		if (!set.sp?.exists || !set.crossSpecies?.exists) {
+	// 			return this.checkCanLearn(move, species, lsetData, set);
+	// 		}
+	// 		// @ts-ignore
+	// 		const problem = this.checkCanLearn(move, set.sp);
+	// 		if (!problem) return null;
+	// 		// @ts-ignore
+	// 		if (this.checkCanLearn(move, set.crossSpecies)) return problem;
+	// 		return null;
+	// 	},
+	// 	validateSet(set, teamHas) {
+	// 		const crossSpecies = this.dex.species.get(set.name);
+	// 		let problems = this.dex.formats.get('Obtainable Misc').onChangeSet?.call(this, set, this.format) || null;
+	// 		if (Array.isArray(problems) && problems.length) return problems;
+	// 		const crossNonstandard = (!this.ruleTable.has('standardnatdex') && crossSpecies.isNonstandard === 'Past') ||
+	// 			crossSpecies.isNonstandard === 'Future';
+	// 		const crossIsCap = !this.ruleTable.has('+pokemontag:cap') && crossSpecies.isNonstandard === 'CAP';
+	// 		if (!crossSpecies.exists || crossNonstandard || crossIsCap) return this.validateSet(set, teamHas);
+	// 		const species = this.dex.species.get(set.species);
+	// 		const check = this.checkSpecies(set, species, species, {});
+	// 		if (check) return [check];
+	// 		const nonstandard = !this.ruleTable.has('standardnatdex') && species.isNonstandard === 'Past';
+	// 		const isCap = !this.ruleTable.has('+pokemontag:cap') && species.isNonstandard === 'CAP';
+	// 		if (!species.exists || nonstandard || isCap || species === crossSpecies) return this.validateSet(set, teamHas);
+	// 		if (!species.nfe) return [`${species.name} cannot cross evolve because it doesn't evolve.`];
+	// 		const crossIsUnreleased = (crossSpecies.tier === "Unreleased" && crossSpecies.isNonstandard === "Unobtainable" &&
+	// 			!this.ruleTable.has('+unobtainable'));
+	// 		if (crossSpecies.battleOnly || crossIsUnreleased || !crossSpecies.prevo) {
+	// 			return [`${species.name} cannot cross evolve into ${crossSpecies.name} because it isn't an evolution.`];
+	// 		}
+	// 		if (this.ruleTable.isRestrictedSpecies(crossSpecies)) {
+	// 			return [`${species.name} cannot cross evolve into ${crossSpecies.name} because it is banned.`];
+	// 		}
+	// 		const crossPrevoSpecies = this.dex.species.get(crossSpecies.prevo);
+	// 		if (!crossPrevoSpecies.prevo !== !species.prevo) {
+	// 			return [
+	// 				`${species.name} cannot cross evolve into ${crossSpecies.name} because they are not consecutive evolution stages.`,
+	// 			];
+	// 		}
+	// 		const item = this.dex.items.get(set.item);
+	// 		if (item.itemUser?.length) {
+	// 			if (!item.itemUser.includes(crossSpecies.name) || crossSpecies.name !== species.name) {
+	// 				return [`${species.name} cannot use ${item.name} because it is cross evolved into ${crossSpecies.name}.`];
+	// 			}
+	// 		}
+	// 		const ability = this.dex.abilities.get(set.ability);
+	// 		if (!this.ruleTable.isRestricted(`ability:${ability.id}`) || Object.values(species.abilities).includes(ability.name)) {
+	// 			set.species = crossSpecies.name;
+	// 		}
 
-			// @ts-ignore
-			set.sp = species;
-			// @ts-ignore
-			set.crossSpecies = crossSpecies;
-			problems = this.validateSet(set, teamHas);
-			set.name = crossSpecies.name;
-			set.species = species.name;
-			return problems;
-		},
-		onModifySpecies(species, target, source, effect) {
-			if (!target) return; // chat
-			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
-			if (target.set.name === target.set.species) return;
-			const crossSpecies = this.dex.species.get(target.set.name);
-			if (!crossSpecies.exists) return;
-			if (species.battleOnly || !species.nfe) return;
-			const crossIsUnreleased = (crossSpecies.tier === "Unreleased" && crossSpecies.isNonstandard === "Unobtainable" &&
-				!this.ruleTable.has('+unobtainable'));
-			if (crossSpecies.battleOnly || crossIsUnreleased || !crossSpecies.prevo) return;
-			const crossPrevoSpecies = this.dex.species.get(crossSpecies.prevo);
-			if (!crossPrevoSpecies.prevo !== !species.prevo) return;
+	// 		// @ts-ignore
+	// 		set.sp = species;
+	// 		// @ts-ignore
+	// 		set.crossSpecies = crossSpecies;
+	// 		problems = this.validateSet(set, teamHas);
+	// 		set.name = crossSpecies.name;
+	// 		set.species = species.name;
+	// 		return problems;
+	// 	},
+	// 	onModifySpecies(species, target, source, effect) {
+	// 		if (!target) return; // chat
+	// 		if (effect && ['imposter', 'transform'].includes(effect.id)) return;
+	// 		if (target.set.name === target.set.species) return;
+	// 		const crossSpecies = this.dex.species.get(target.set.name);
+	// 		if (!crossSpecies.exists) return;
+	// 		if (species.battleOnly || !species.nfe) return;
+	// 		const crossIsUnreleased = (crossSpecies.tier === "Unreleased" && crossSpecies.isNonstandard === "Unobtainable" &&
+	// 			!this.ruleTable.has('+unobtainable'));
+	// 		if (crossSpecies.battleOnly || crossIsUnreleased || !crossSpecies.prevo) return;
+	// 		const crossPrevoSpecies = this.dex.species.get(crossSpecies.prevo);
+	// 		if (!crossPrevoSpecies.prevo !== !species.prevo) return;
 
-			const mixedSpecies = this.dex.deepClone(species);
-			mixedSpecies.weightkg =
-				Math.max(0.1, +(species.weightkg + crossSpecies.weightkg - crossPrevoSpecies.weightkg)).toFixed(1);
-			mixedSpecies.nfe = false;
-			mixedSpecies.evos = [];
-			mixedSpecies.eggGroups = crossSpecies.eggGroups;
-			mixedSpecies.abilities = crossSpecies.abilities;
-			mixedSpecies.bst = 0;
-			let i: StatID;
-			for (i in species.baseStats) {
-				const statChange = crossSpecies.baseStats[i] - crossPrevoSpecies.baseStats[i];
-				mixedSpecies.baseStats[i] = this.clampIntRange(species.baseStats[i] + statChange, 1, 255);
-				mixedSpecies.bst += mixedSpecies.baseStats[i];
-			}
-			if (crossSpecies.types[0] !== crossPrevoSpecies.types[0]) mixedSpecies.types[0] = crossSpecies.types[0];
-			if (crossSpecies.types[1] !== crossPrevoSpecies.types[1]) {
-				mixedSpecies.types[1] = crossSpecies.types[1] || crossSpecies.types[0];
-			}
-			if (mixedSpecies.types[0] === mixedSpecies.types[1]) mixedSpecies.types = [mixedSpecies.types[0]];
+	// 		const mixedSpecies = this.dex.deepClone(species);
+	// 		mixedSpecies.weightkg =
+	// 			Math.max(0.1, +(species.weightkg + crossSpecies.weightkg - crossPrevoSpecies.weightkg)).toFixed(1);
+	// 		mixedSpecies.nfe = false;
+	// 		mixedSpecies.evos = [];
+	// 		mixedSpecies.eggGroups = crossSpecies.eggGroups;
+	// 		mixedSpecies.abilities = crossSpecies.abilities;
+	// 		mixedSpecies.bst = 0;
+	// 		let i: StatID;
+	// 		for (i in species.baseStats) {
+	// 			const statChange = crossSpecies.baseStats[i] - crossPrevoSpecies.baseStats[i];
+	// 			mixedSpecies.baseStats[i] = this.clampIntRange(species.baseStats[i] + statChange, 1, 255);
+	// 			mixedSpecies.bst += mixedSpecies.baseStats[i];
+	// 		}
+	// 		if (crossSpecies.types[0] !== crossPrevoSpecies.types[0]) mixedSpecies.types[0] = crossSpecies.types[0];
+	// 		if (crossSpecies.types[1] !== crossPrevoSpecies.types[1]) {
+	// 			mixedSpecies.types[1] = crossSpecies.types[1] || crossSpecies.types[0];
+	// 		}
+	// 		if (mixedSpecies.types[0] === mixedSpecies.types[1]) mixedSpecies.types = [mixedSpecies.types[0]];
 
-			return mixedSpecies;
-		},
-		onBegin() {
-			for (const pokemon of this.getAllPokemon()) {
-				pokemon.baseSpecies = pokemon.species;
-			}
-		},
-	},
+	// 		return mixedSpecies;
+	// 	},
+	// 	onBegin() {
+	// 		for (const pokemon of this.getAllPokemon()) {
+	// 			pokemon.baseSpecies = pokemon.species;
+	// 		}
+	// 	},
+	// },
 	// {
 	// 	name: "[Gen 9] Fortemons",
 	// 	desc: `Put an attacking move in the item slot to have all of a Pok&eacute;mon's attacks inherit its properties.`,
@@ -1507,41 +1507,41 @@ export const Formats: FormatList = [
 	// Randomized Format Spotlight
 	///////////////////////////////////////////////////////////////////
 
-	{
-		section: "Randomized Format Spotlight",
-		column: 3,
-	},
-	{
-		name: "[Gen 9] Mix and Mega Cup",
-		desc: `[Gen 9] Challenge Cup with the Mix and Mega mod. The only items are mega stones, Primal orbs and Rusted items.`,
-		mod: 'mixandmega',
-		team: 'randomCC',
-		ruleset: ['[Gen 9] Challenge Cup 6v6'],
-		onBegin() {
-			for (const pokemon of this.getAllPokemon()) {
-				pokemon.m.originalSpecies = pokemon.baseSpecies.name;
-			}
-		},
-		onSwitchIn(pokemon) {
-			// @ts-ignore
-			const originalFormeSecies = this.dex.species.get(pokemon.species.originalSpecies);
-			if (originalFormeSecies.exists && pokemon.m.originalSpecies !== originalFormeSecies.baseSpecies) {
-				// Place volatiles on the Pokémon to show its mega-evolved condition and details
-				this.add('-start', pokemon, originalFormeSecies.requiredItem || originalFormeSecies.requiredMove, '[silent]');
-				const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
-				if (oSpecies.types.length !== pokemon.species.types.length || oSpecies.types[1] !== pokemon.species.types[1]) {
-					this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
-				}
-			}
-		},
-		onSwitchOut(pokemon) {
-			// @ts-ignore
-			const oMegaSpecies = this.dex.species.get(pokemon.species.originalSpecies);
-			if (oMegaSpecies.exists && pokemon.m.originalSpecies !== oMegaSpecies.baseSpecies) {
-				this.add('-end', pokemon, oMegaSpecies.requiredItem || oMegaSpecies.requiredMove, '[silent]');
-			}
-		},
-	},
+	// {
+	// 	section: "Randomized Format Spotlight",
+	// 	column: 3,
+	// },
+	// {
+	// 	name: "[Gen 9] Mix and Mega Cup",
+	// 	desc: `[Gen 9] Challenge Cup with the Mix and Mega mod. The only items are mega stones, Primal orbs and Rusted items.`,
+	// 	mod: 'mixandmega',
+	// 	team: 'randomCC',
+	// 	ruleset: ['[Gen 9] Challenge Cup 6v6'],
+	// 	onBegin() {
+	// 		for (const pokemon of this.getAllPokemon()) {
+	// 			pokemon.m.originalSpecies = pokemon.baseSpecies.name;
+	// 		}
+	// 	},
+	// 	onSwitchIn(pokemon) {
+	// 		// @ts-ignore
+	// 		const originalFormeSecies = this.dex.species.get(pokemon.species.originalSpecies);
+	// 		if (originalFormeSecies.exists && pokemon.m.originalSpecies !== originalFormeSecies.baseSpecies) {
+	// 			// Place volatiles on the Pokémon to show its mega-evolved condition and details
+	// 			this.add('-start', pokemon, originalFormeSecies.requiredItem || originalFormeSecies.requiredMove, '[silent]');
+	// 			const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
+	// 			if (oSpecies.types.length !== pokemon.species.types.length || oSpecies.types[1] !== pokemon.species.types[1]) {
+	// 				this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
+	// 			}
+	// 		}
+	// 	},
+	// 	onSwitchOut(pokemon) {
+	// 		// @ts-ignore
+	// 		const oMegaSpecies = this.dex.species.get(pokemon.species.originalSpecies);
+	// 		if (oMegaSpecies.exists && pokemon.m.originalSpecies !== oMegaSpecies.baseSpecies) {
+	// 			this.add('-end', pokemon, oMegaSpecies.requiredItem || oMegaSpecies.requiredMove, '[silent]');
+	// 		}
+	// 	},
+	// },
 
 	// Randomized Metas
 	///////////////////////////////////////////////////////////////////

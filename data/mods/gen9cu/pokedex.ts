@@ -20043,7 +20043,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Magpillage",
 		types: ["Fire", "Flying"],
 		baseStats: {hp: 80, atk: 72, def: 95, spa: 108, spd: 80, spe: 85},
-		abilities: {0: "Blaze", 1: "Blaze", H: "Sticky Hold"},
+		abilities: {0: "Blaze", H: "Sticky Hold"},
 		heightm: 0.7,
 		weightkg: 10.2,
 		color: "Red",
