@@ -12,8 +12,10 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		this.noStab = [...this.noStab, 'aquajet', 'fakeout', 'iceshard', 'machpunch', 'quickattack', 'vacuumwave'];
 
 		this.moveEnforcementCheckers = {
-			Bug: (movePool, moves, abilities, types, counter) => (['megahorn', 'pinmissile'].some(m => movePool.includes(m)) ||
-				!counter.get('Bug') && abilities.has('Tinted Lens')),
+			Bug: (movePool, moves, abilities, types, counter) => (
+				['megahorn', 'pinmissile'].some(m => movePool.includes(m)) ||
+				!counter.get('Bug') && (abilities.has('Tinted Lens') || abilities.has('Adaptability'))
+			),
 			Dark: (movePool, moves, abilities, types, counter, species) => (
 				(!counter.get('Dark') && !abilities.has('Protean'))
 			),
@@ -226,7 +228,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			const screens = moves.has('lightscreen') && moves.has('reflect');
 			return {cull: (
 				moves.has('rest') || screens || (!!counter.setupType && !moves.has('wish')) ||
-				(!['Guts', 'Harvest', 'Poison Heal', 'Quick Feet', 'Speed Boost'].some(abil => abilities.has(abil)) &&
+				(!['Guts', 'Harvest', 'Quick Feet', 'Speed Boost'].some(abil => abilities.has(abil)) &&
 				!['leechseed', 'perishsong', 'toxic', 'wish'].some(m => moves.has(m)) &&
 				!['sharpedomega', 'dianciemega'].includes(species.id))
 			)};
@@ -267,7 +269,12 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				(abilities.has('Protean') && counter.get('Status') > 2)
 			)};
 		case 'voltswitch':
-			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('raindance') || moves.has('uturn')};
+			return {cull: (
+				!!counter.setupType ||
+				!!counter.get('speedsetup') ||
+				moves.has('raindance') ||
+				moves.has('uturn') ||
+				movePool.includes('boltstrike'))};
 		case 'wish':
 			return {cull: (
 				species.baseStats.hp < 110 &&
@@ -640,6 +647,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (species.name === 'Deoxys-Attack') return (isLead && moves.has('stealthrock')) ? 'Focus Sash' : 'Life Orb';
 		if (species.name === 'Farfetch\u2019d') return 'Stick';
 		if (species.name === 'Genesect' && moves.has('technoblast')) return 'Douse Drive';
+		if (species.name === 'Latias' || species.name === 'Latios') return 'Soul Dew';
 		if (species.baseSpecies === 'Pikachu') return 'Light Ball';
 		if (species.name === 'Shedinja' || species.name === 'Smeargle') return 'Focus Sash';
 		if (species.name === 'Unfezant' && counter.get('Physical') >= 2) return 'Scope Lens';
@@ -671,12 +679,10 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
 			return moves.has('drainpunch') ? 'Flame Orb' : 'Toxic Orb';
 		}
-		if (
-			(ability === 'Magic Guard' && counter.damagingMoves.size > 1) ||
-			(ability === 'Sheer Force' && !!counter.get('sheerforce'))
-		) {
-			return 'Life Orb';
+		if (ability === 'Magic Guard' && counter.damagingMoves.size > 1) {
+			return moves.has('counter') ? 'Focus Sash' : 'Life Orb';
 		}
+		if (ability === 'Sheer Force' && counter.get('sheerforce')) return 'Life Orb';
 		if (moves.has('psychoshift')) return 'Flame Orb';
 		if (ability === 'Poison Heal') return 'Toxic Orb';
 		if (ability === 'Unburden') {

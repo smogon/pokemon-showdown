@@ -1905,6 +1905,13 @@ export const Punishments = new class {
 			}
 		}
 
+		for (const id of user.previousIDs) {
+			punishments = Punishments.roomUserids.nestedGet(roomid, id);
+			for (const p of punishments || []) {
+				if (['ROOMBAN', 'BLACKLIST'].includes(p.type)) return p;
+			}
+		}
+
 		const room = Rooms.get(roomid);
 		if (!room) throw new Error(`Trying to ban a user from a nonexistent room: ${roomid}`);
 

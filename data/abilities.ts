@@ -338,13 +338,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect?.effectType !== 'Move') return;
 			if (source.abilityState.battleBondTriggered) return;
-			if (source.species.id === 'greninja' && source.hp && !source.transformed && source.side.foePokemonLeft()) {
-				this.add('-activate', source, 'ability: Battle Bond');
+			if (source.species.id === 'greninjabond' && source.hp && !source.transformed && source.side.foePokemonLeft()) {
 				this.boost({atk: 1, spa: 1, spe: 1}, source, source, this.effect);
+				this.add('-activate', source, 'ability: Battle Bond');
 				source.abilityState.battleBondTriggered = true;
 			}
 		},
-		isNonstandard: "Unobtainable",
 		isPermanent: true,
 		name: "Battle Bond",
 		rating: 3.5,
@@ -801,9 +800,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	dauntlessshield: {
 		onStart(pokemon) {
 			if (this.effectState.shieldBoost) return;
-			if (this.boost({def: 1}, pokemon)) {
-				this.effectState.shieldBoost = true;
-			}
+			this.effectState.shieldBoost = true;
+			this.boost({def: 1}, pokemon);
 		},
 		name: "Dauntless Shield",
 		rating: 3.5,
@@ -1613,6 +1611,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return this.chainModify([5461, 4096]);
 			}
 		},
+		isPermanent: true,
 		name: "Hadron Engine",
 		rating: 4.5,
 		num: 289,
@@ -1981,9 +1980,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	intrepidsword: {
 		onStart(pokemon) {
 			if (this.effectState.swordBoost) return;
-			if (this.boost({atk: 1}, pokemon)) {
-				this.effectState.swordBoost = true;
-			}
+			this.effectState.swordBoost = true;
+			this.boost({atk: 1}, pokemon);
 		},
 		name: "Intrepid Sword",
 		rating: 4,
@@ -2771,6 +2769,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return this.chainModify([5461, 4096]);
 			}
 		},
+		isPermanent: true,
 		name: "Orichalcum Pulse",
 		rating: 4.5,
 		num: 288,
@@ -4661,14 +4660,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Electric') {
 				this.debug('Transistor boost');
-				return this.chainModify(1.5);
+				return this.chainModify([5325, 4096]);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Electric') {
 				this.debug('Transistor boost');
-				return this.chainModify(1.5);
+				return this.chainModify([5325, 4096]);
 			}
 		},
 		name: "Transistor",

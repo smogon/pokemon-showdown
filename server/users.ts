@@ -555,11 +555,23 @@ export class User extends Chat.MessageContext {
 		const status = statusMessage + (this.userMessage || '');
 		return status;
 	}
-	can(permission: RoomPermission, target: User | null, room: BasicRoom, cmd?: string): boolean;
+	can(permission: RoomPermission, target: User | null, room: BasicRoom, cmd?: string, cmdToken?: string): boolean;
 	can(permission: GlobalPermission, target?: User | null): boolean;
-	can(permission: RoomPermission & GlobalPermission, target: User | null, room?: BasicRoom | null, cmd?: string): boolean;
-	can(permission: string, target: User | null = null, room: BasicRoom | null = null, cmd?: string): boolean {
-		return Auth.hasPermission(this, permission, target, room, cmd);
+	can(
+		permission: RoomPermission & GlobalPermission,
+		target: User | null,
+		room?: BasicRoom | null,
+		cmd?: string,
+		cmdToken?: string,
+	): boolean;
+	can(
+		permission: string,
+		target: User | null = null,
+		room: BasicRoom | null = null,
+		cmd?: string,
+		cmdToken?: string,
+	): boolean {
+		return Auth.hasPermission(this, permission, target, room, cmd, cmdToken);
 	}
 	/**
 	 * Special permission check for system operators

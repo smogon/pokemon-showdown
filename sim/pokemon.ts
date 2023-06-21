@@ -340,7 +340,9 @@ export class Pokemon {
 		}
 
 		this.position = 0;
-		this.details = this.species.name + (this.level === 100 ? '' : ', L' + this.level) +
+		let displayedSpeciesName = this.species.name;
+		if (displayedSpeciesName === 'Greninja-Bond') displayedSpeciesName = 'Greninja';
+		this.details = displayedSpeciesName + (this.level === 100 ? '' : ', L' + this.level) +
 			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 
 		this.status = '';
@@ -1347,9 +1349,9 @@ export class Pokemon {
 				} else if (source.onPrimal) {
 					if (this.illusion) {
 						this.ability = '';
-						this.battle.add('-primal', this.illusion);
+						this.battle.add('-primal', this.illusion, species.requiredItem);
 					} else {
-						this.battle.add('-primal', this);
+						this.battle.add('-primal', this, species.requiredItem);
 					}
 				} else {
 					this.battle.add('-mega', this, apparentSpecies, species.requiredItem);

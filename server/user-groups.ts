@@ -115,7 +115,8 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		permission: string,
 		target: User | EffectiveGroupSymbol | ID | null,
 		room?: BasicRoom | null,
-		cmd?: string
+		cmd?: string,
+		cmdToken?: string,
 	): boolean {
 		if (user.hasSysopAccess()) return true;
 
@@ -156,18 +157,25 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		if (roomPermissions) {
 			let foundSpecificPermission = false;
 			if (cmd) {
+				if (!cmdToken) cmdToken = `/`;
 				const namespace = cmd.slice(0, cmd.indexOf(' '));
-				if (roomPermissions[`/${cmd}`]) {
+				if (roomPermissions[`${cmdToken}${cmd}`]) {
 					// this checks sub commands and command objects, but it checks to see if a sub-command
 					// overrides (should a perm for the command object exist) first
-					if (!auth.atLeast(user, roomPermissions[`/${cmd}`])) return false;
+					if (!auth.atLeast(user, roomPermissions[`${cmdToken}${cmd}`])) return false;
 					jurisdiction = 'u';
 					foundSpecificPermission = true;
-				} else if (roomPermissions[`/${namespace}`]) {
+				} else if (roomPermissions[`${cmdToken}${namespace}`]) {
 					// if it's for one command object
-					if (!auth.atLeast(user, roomPermissions[`/${namespace}`])) return false;
+					if (!auth.atLeast(user, roomPermissions[`${cmdToken}${namespace}`])) return false;
 					jurisdiction = 'u';
 					foundSpecificPermission = true;
+				}
+				if (foundSpecificPermission && targetSymbol === Users.Auth.defaultSymbol()) {
+					// if /permissions has granted unranked users permission to use the command,
+					// grant jurisdiction over unranked (since unranked users don't have jurisdiction over unranked)
+					// see https://github.com/smogon/pokemon-showdown/pull/9534#issuecomment-1565719315
+					jurisdiction += Users.Auth.defaultSymbol();
 				}
 			}
 			if (!foundSpecificPermission && roomPermissions[permission]) {
@@ -181,15 +189,18 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		return Auth.getGroup(symbol).rank >= Auth.getGroup(symbol2).rank;
 	}
 	static supportedRoomPermissions(room: Room | null = null) {
-		const handlers = Chat.allCommands().filter(c => c.hasRoomPermissions);
 		const commands = [];
-		for (const handler of handlers) {
-			commands.push(`/${handler.fullCmd}`);
+		for (const handler of Chat.allCommands()) {
+			if (!handler.hasRoomPermissions && !handler.broadcastable) continue;
+
+			// if it's only broadcast permissions, not use permissions, use the broadcast symbol
+			const cmdPrefix = handler.hasRoomPermissions ? "/" : "!";
+			commands.push(`${cmdPrefix}${handler.fullCmd}`);
 			if (handler.aliases.length) {
 				for (const alias of handler.aliases) {
 					// kind of a hack but this is the only good way i could think of to
 					// overwrite the alias without making assumptions about the string
-					commands.push(`/${handler.fullCmd.replace(handler.cmd, alias)}`);
+					commands.push(`${cmdPrefix}${handler.fullCmd.replace(handler.cmd, alias)}`);
 				}
 			}
 		}
