@@ -95952,7 +95952,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			sandtomb: ["9T"],
 			playrough: ["9T"],
 			moonblast: ["9T"],
-			moonlight: ["9T"],
+			// moonlight: ["9T"],
 			closecombat: ["9T"],
 			focusblast: ["9T"],
 			focuspunch: ["9T"],

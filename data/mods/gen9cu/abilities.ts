@@ -217,6 +217,112 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: 3009,
 	},
+	stackeddeck: {
+		onStart(pokemon) {
+			let types = new Set();
+			for (const moveSlot of pokemon.moveSlots) {
+				const move = this.dex.moves.get(moveSlot.move);
+				types.add(move.type);
+			}
+			if (types.size === 4) {
+				this.add('-ability', pokemon, 'Stacked Deck');
+				this.add('-message', pokemon.name + ' is feeling lucky!');
+			} else if (types.size === 1) {
+				this.add('-ability', pokemon, 'Stacked Deck');
+				this.add('-message', pokemon.name + ' is ready to go!');
+				this.queue.prioritizeAction(this.queue.resolveAction({
+					choice: 'move',
+					pokemon: pokemon,
+					moveid: pokemon.moveSlots[0].id,
+					targetLoc: pokemon.getLocOf(Dex.moves.get(pokemon.moveSlots[0].move).target === 'self' ? pokemon : this.prng.sample(pokemon.side.foe.active)), 
+				})[0] as MoveAction);			
+			}
+		},
+		onModifyCritRatio(this, relayVar, source, target, move) {
+			let types = new Set();
+			for (const moveSlot of source.moveSlots) {
+				const move = this.dex.moves.get(moveSlot.move);
+				types.add(move.type);
+			}
+			if (types.size === 4) {
+				return relayVar + 2;
+			}
+		},
+		name: "Stacked Deck",
+		rating: 3,
+		num: 3010,
+	},		
+	sidehop: {
+		onTryHit(target, source, move) {
+			if (move.target === 'allAdjacent' || move.target === 'allAdjacentFoes') {
+				this.add('-immune', target, '[from] ability: Side Hop');
+				return null;
+			}
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType === 'Move' && (effect.target === 'allAdjacent' || effect.target === 'allAdjacentFoes')) {
+				return null;
+			}
+		},
+		onEntryHazard(this, pokemon) {
+			this.add('-activate', pokemon, 'ability: Side Hop');
+			this.add('-message', pokemon.name + ' is ready to go!');
+			return null;
+		},
+		name: "Side Hop",
+		rating: 3,
+		num: 3011,
+	},
+	// sphinx's riddle: this pokemon receives a 30% detriment to its defenses and speed for the first (full) turn that it's out, its stats are normal during the second, third, and fourth turns, and then it receives a 30% detriment to its offenses and speed for the fifth turn onward
+	sphinxsriddle: {
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Sphinx\'s Riddle');
+			pokemon.addVolatile('sphinxsriddle');
+		},
+		onEnd(pokemon) {
+			pokemon.removeVolatile('sphinxsriddle');
+		},
+		condition: {
+			onStart(target) {
+				this.add('-start', target, 'ability: Sphinx\'s Riddle');
+			},
+			onResidualOrder: 10,
+			onResidualSubOrder: 1,
+			onModifyDefPriority: 5,
+			onModifyDef(def, pokemon) {
+				if (pokemon.activeTurns === 1) {
+					return this.chainModify(0.7);
+				}
+			},
+			onModifySpDPriority: 5,
+			onModifySpD(spd, pokemon) {
+				if (pokemon.activeTurns === 1) {
+					return this.chainModify(0.7);
+				}
+			},
+			onModifySpePriority: 5,
+			onModifySpe(spe, pokemon) {
+				if (pokemon.activeTurns === 1) {
+					return this.chainModify(0.7);
+				}
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, pokemon) {
+				if (pokemon.activeTurns >= 5) {
+					return this.chainModify(0.7);
+				}
+			},
+			onModifySpAPriority: 5,
+			onModifySpA(spa, pokemon) {
+				if (pokemon.activeTurns >= 5) {
+					return this.chainModify(0.7);
+				}
+			}
+		},
+		name: "Sphinx's Riddle",
+		rating: 3,
+		num: 3012,
+	},
 
 	noability: {
 		isNonstandard: "Past",
