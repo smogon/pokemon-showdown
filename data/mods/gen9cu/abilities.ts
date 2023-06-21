@@ -248,6 +248,18 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return relayVar + 2;
 			}
 		},
+		onModifyDamage(this, relayVar, source, target, move) {
+			// if its a crit and all moves are different types, boost damage by 1.5
+			let types = new Set();
+			for (const moveSlot of source.moveSlots) {
+				const move = this.dex.moves.get(moveSlot.move);
+				types.add(move.type);
+			}
+			if (types.size === 4 && move.crit) {
+				return this.chainModify(1.5);
+			}
+		},
+		
 		name: "Stacked Deck",
 		rating: 3,
 		num: 3010,
