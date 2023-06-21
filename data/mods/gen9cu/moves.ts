@@ -493,6 +493,53 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {basePower: 175},
 		contestType: "Tough",
 	},
+	// cu new frontier
+	// Quickdraw Quill 40 Base Power, 100 Accuracy, Grass, Physical, +1 priority, if the opponent selected an attacking move, their attacking stats are dropped by 1 stage.
+	quickdrawquill: {
+		num: 8021,
+		accuracy: 100,
+		basePower: 40,
+		category: "Physical",
+		name: "Quickdraw Quill",
+		pp: 15,
+		priority: 1,
+		flags: {protect: 1, mirror: 1, nonsky: 1, contact: 1},
+		onTryHit(target, source) {
+			const action = this.queue.willMove(target);
+			let dropStats = true;
+			if (!action) dropStats = false;
+			if (action.choice !== 'move') dropStats = false;
+			if (action.move.category === 'Status') dropStats = false;
+			if (dropStats) {
+				this.add('-activate', target, 'move: Quickdraw Quill');
+				this.boost({atk: -1, spa: -1}, target, source);
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Grass",
+		zMove: {basePower: 100},
+		contestType: "Cool",
+	},
+	// cacklingconflagration 100 Base Power, 95 Accuracy, Fire, Special, taunts the opponent
+	cacklingconflagration: {
+		num: 8022,
+		accuracy: 95,
+		basePower: 100,
+		category: "Special",
+		name: "Cackling Conflagration",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, nonsky: 1},
+		volatileStatus: 'taunt',
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+		zMove: {basePower: 180},
+		contestType: "Cool",
+	},
+	
+
 	"10000000voltthunderbolt": {
 		num: 719,
 		accuracy: true,

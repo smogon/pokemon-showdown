@@ -96524,5 +96524,97 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			mistball: ["9T"],
 		}
 	},
+	// new frontier update
+	cardtridge: {
+		learnset: {
+			bravebird: ["9T"],
+            headlongrush: ["9T"],
+            earthquake: ["9T"],
+            defog: ["9T"],
+            roost: ["9T"],
+            protect: ["9T"],
+            tailwind: ["9T"],
+            focusenergy: ["9T"],
+            stompingtantrum: ["9T"],
+            bulldoze: ["9T"],
+            drillpeck: ["9T"],
+            workup: ["9T"],
+            honeclaws: ["9T"],
+            substitute: ["9T"],
+            doubleedge: ["9T"],
+            rest: ["9T"],
+            sleeptalk: ["9T"]
+		}
+	},
+	magpillage: {
+		learnset: {
+			cacklingconflagration: ["9T"],
+            flamethrower: ["9T"],
+            fireblast: ["9T"],
+            hurricane: ["9T"],
+            airslash: ["9T"],
+            uturn: ["9T"],
+            defog: ["9T"],
+            mindblown: ["9T"],
+            explosion: ["9T"],
+            whirlwind: ["9T"],
+            drillpeck: ["9T"],
+            acrobatics: ["9T"],
+            fling: ["9T"],
+            switcheroo: ["9T"],
+            thief: ["9T"],
+            focusenergy: ["9T"],
+            darkpulse: ["9T"],
+            roost: ["9T"]
+		}
+	},
+	hopobops: {
+		learnset: {
+			highjumpkick: ["9T"],
+            closecombat: ["9T"],
+            jumpkick: ["9T"],
+            drainpunch: ["9T"],
+            firepunch: ["9T"],
+            icepunch: ["9T"],
+            thunderpunch: ["9T"],
+            megapunch: ["9T"],
+            doubleedge: ["9T"],
+            bounce: ["9T"],
+            fakeout: ["9T"]
+		}
+	},
+	motheorie: {
+		learnset: {
+			quiverdance: ["9T"],
+            roost: ["9T"],
+            dazzlinggleam: ["9T"],
+            earthpower: ["9T"],
+            bugbuzz: ["9T"],
+            protect: ["9T"],
+            substitute: ["9T"],
+            uturn: ["9T"],
+            rest: ["9T"],
+            sleeptalk: ["9T"],
+            gust: ["9T"],
+            hiddenpowert: ["9T"],
+		}
+	},
+	barbarado: {
+		learnset: {
+			quickdrawquill: ["9T"],
+            spikes: ["9T"],
+            powerwhip: ["9T"],
+            synthesis: ["9T"],
+            uturn: ["9T"],
+            spikyshield: ["9T"],
+            ironhead: ["9T"],
+            roar: ["9T"],
+            earthquake: ["9T"],
+            stoneedge: ["9T"],
+            stunspore: ["9T"],
+            curse: ["9T"],
+            poisonjab: ["9T"],
+		}
+	},
 };
 
