@@ -98,7 +98,7 @@ target.formeChange('Shaymin', this.effect, true);
 onBeforeMovePriority: 10,
 onBeforeMove(pokemon, target, move) {
 if (move.flags['defrost']) return;
-if (this.randomChance(1, 3)) {
+if (this.randomChance(25, 100)) {
 pokemon.cureStatus();
 return;
 }
