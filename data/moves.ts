@@ -7184,9 +7184,6 @@ if (damage >= target.hp) return target.hp - 1;
 secondary: null,
 target: "normal",
 type: "Normal",
-secondary: null,
-target: "self",
-type: "Dark",
 },
 
 hornattack: {
