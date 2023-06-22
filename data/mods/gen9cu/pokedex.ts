@@ -19450,17 +19450,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		eggGroups: ["Human-Like"],
 	},
-	cactitan: {
-		num: 9012,
-		name: "Cactitan",
-		types: ["Grass", "Steel"],
-		baseStats: {hp: 71, atk: 99, def: 125, spa: 99, spd: 71, spe: 70},
-		abilities: {0: "Overgrow", H: "Iron Barbs"},
-		heightm: 3.2,
-		weightkg: 204,
-		color: "Green",
-		eggGroups: ["Grass"],
-	},
 	puppupa: {
 		num: 9013,
 		name: "Puppupa",

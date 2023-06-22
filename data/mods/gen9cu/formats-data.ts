@@ -6303,7 +6303,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	salamenceallira: { "tier": "CU", "doublesTier": "DUU", "natDexTier": "UU"},
 	scarva: { "tier": "CU", "doublesTier": "DUU", "natDexTier": "UU"},
 	gentloo: { "tier": "CU", "doublesTier": "DUU", "natDexTier": "UU"},
-	cactitan: { "tier": "CU", "doublesTier": "DUU", "natDexTier": "UU"},
 	puppupa: { "tier": "CU", "doublesTier": "DUU", "natDexTier": "UU"},
 	crawroon: { "tier": "CU", "doublesTier": "DUU", "natDexTier": "UU"},
 	soilynx: { "tier": "CU", "doublesTier": "DUU", "natDexTier": "UU"},
