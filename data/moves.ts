@@ -264,7 +264,7 @@ type: "Flying",
 
 alloutpummeling: {
 accuracy: 85,
-basePower: 20,
+basePower: 25,
 category: "Physical",
 name: "All-Out Pummeling",
 pp: .625,
@@ -6600,20 +6600,6 @@ this.add('-swapboost', source, target, 'def, spd', '[from] move: Guard Swap');
 secondary: null,
 target: "normal",
 type: "Psychic",
-},
-
-guillotine: {
-accuracy: 0,
-basePower: 0,
-category: "Physical",
-name: "Guillotine",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-ohko: true,
-secondary: null,
-target: "normal",
-type: "Normal",
 },
 
 gunkshot: {
@@ -13695,15 +13681,26 @@ type: "Normal",
 },
 
 sheercold: {
-accuracy: 0,
-basePower: 0,
+accuracy: 90,
+basePower: 50,
 category: "Special",
 name: "Sheer Cold",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: null,
-ohko: 'Ice',
+secondaries: [
+{
+chance: 33,
+status: 'frz',
+}, {
+chance: 33,
+weather: 'snow',
+},
+],
+
+
+
 target: "normal",
 type: "Ice",
 },
@@ -18307,12 +18304,15 @@ type: "Normal",
 
 xscissor: {
 accuracy: 93,
-basePower: 80,
+basePower: 45,
 category: "Physical",
 name: "X-Scissor",
 pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
+critRatio: 2,
+multihit: [1, 15],
+multiaccuracy: 85,
 secondary: null,
 target: "normal",
 type: "Bug",
