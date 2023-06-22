@@ -1416,7 +1416,7 @@ export class RandomTeams {
 			return (counter.get('Physical') + counter.get('Special') >= 3 && !moves.has('nuzzle')) ? 'Life Orb' : 'Leftovers';
 		}
 		if (
-			role === 'Tera Blast user' && species.baseSpecies === 'florges'
+			role === 'Tera Blast user' && species.baseSpecies === 'Florges'
 		) return 'Leftovers';
 		if (
 			['flamecharge', 'rapidspin'].every(m => !moves.has(m)) &&
