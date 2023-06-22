@@ -264,7 +264,7 @@ type: "Flying",
 
 alloutpummeling: {
 accuracy: 85,
-basePower: 10,
+basePower: 20,
 category: "Physical",
 name: "All-Out Pummeling",
 pp: .625,
