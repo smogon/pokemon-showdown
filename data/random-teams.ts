@@ -1407,22 +1407,21 @@ export class RandomTeams {
 		) return 'Air Balloon';
 		if (['Bulky Attacker', 'Bulky Support', 'Bulky Setup'].some(m => role === (m))) return 'Leftovers';
 		if (species.id === 'pawmot' && moves.has('nuzzle')) return 'Leppa Berry';
+		if (
+			['Fast Bulky Setup', 'Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === (m)) &&
+			types.includes('Dark') && moves.has('suckerpunch') && !priorityPokemon.includes(species.id) &&
+			counter.get('setup') && counter.get('Dark')
+		) return 'Black Glasses';
 		if (role === 'Fast Support' || role === 'Fast Bulky Setup') {
 			return (counter.get('Physical') + counter.get('Special') >= 3 && !moves.has('nuzzle')) ? 'Life Orb' : 'Leftovers';
 		}
 		if (
-			role === 'Tera Blast user' && counter.get('recovery') &&
-			counter.get('Physical') + counter.get('Special') < 3
+			role === 'Tera Blast user' && species.baseSpecies === 'florges'
 		) return 'Leftovers';
 		if (
 			['flamecharge', 'rapidspin'].every(m => !moves.has(m)) &&
 			['Fast Attacker', 'Setup Sweeper', 'Tera Blast user', 'Wallbreaker'].some(m => role === (m))
-		) {
-			return (
-				types.includes('Dark') && moves.has('suckerpunch') && !priorityPokemon.includes(species.id) &&
-				counter.get('setup') && counter.get('Dark')
-			) ? 'Black Glasses' : 'Life Orb';
-		}
+		) return 'Life Orb';
 		return 'Leftovers';
 	}
 
