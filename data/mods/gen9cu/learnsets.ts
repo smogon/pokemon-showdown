@@ -95095,7 +95095,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			imprison: ["9T"],
 			bugbuzz: ["9T"],
 			infestation: ["9T"],
-			polenpuff: ["9T"],
+			pollenpuff: ["9T"],
 			signalbeam: ["9T"],
 			leechlife: ["9T"],
 			lunge: ["9T"],
