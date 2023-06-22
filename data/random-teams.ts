@@ -1288,7 +1288,8 @@ export class RandomTeams {
 			['Doubles Fast Attacker', 'Doubles Wallbreaker', 'Doubles Setup Sweeper', 'Offensive Protect'].some(m => role === m)
 		);
 
-		if (moves.has('covet')) return (moves.has('fakeout')) ? 'Normal Gem' : '';
+		if (moves.has('covet')) return 'Normal Gem';
+		if (moves.has('thief')) return '';
 		if (moves.has('iciclespear') && ability !== 'Skill Link') return 'Loaded Dice';
 		if (species.id === 'calyrexice') return 'Weakness Policy';
 		if (
