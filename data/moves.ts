@@ -14473,7 +14473,32 @@ category: "Physical",
 name: "Smart Strike",
 pp: 1.25,
 priority: 1,
-flags: {contact: 1, protect: 1, mirror: 1},
+flags: {protect: 1, mirror: 1},
+onPrepareHit(target, source, move) {
+if (!source.isAlly(target)) {
+this.attrLastMove('[anim] Shell Side Arm ' + move.category);
+}
+},
+onModifyMove(move, pokemon, target) {
+if (!target) return;
+const atk = pokemon.getStat('atk', false, true);
+const spa = pokemon.getStat('spa', false, true);
+const def = target.getStat('def', false, true);
+const spd = target.getStat('spd', false, true);
+const physical = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * atk) / def) / 50);
+const special = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * spa) / spd) / 50);
+if (physical > special || (physical === special && this.random(2) === 0)) {
+move.category = 'Physical';
+move.flags.contact = 1;
+}
+},
+onHit(target, source, move) {
+// Shell Side Arm normally reveals its category via animation on cart, but doesn't play either custom animation against allies
+if (!source.isAlly(target)) this.hint(move.category + " Shell Side Arm");
+},
+onAfterSubDamage(damage, target, source, move) {
+if (!source.isAlly(target)) this.hint(move.category + " Shell Side Arm");
+},
 secondary: null,
 target: "normal",
 type: "Steel",
