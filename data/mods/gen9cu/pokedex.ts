@@ -19850,7 +19850,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 36.2,
 		color: "Red",
 		eggGroups: ["Bug"],
-		requiredItem: ["Ledyite"]
+		requiredItem: "Ledyite",
 	},
 	archanchant: {
 		num: 9046,
