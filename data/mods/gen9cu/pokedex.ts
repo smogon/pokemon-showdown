@@ -19609,7 +19609,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Ceramimik",
 		types: ["Ghost", "Ground"],
 		baseStats: {hp: 75, atk: 85, def: 120, spa: 125, spd: 100, spe: 35},
-		abilities: {0: "Clear Body", 1: "Water Compaction" },
+		abilities: {0: "Clear Body", 1: "Water Compaction", H: "Shattering Form"},
 		heightm: 0.9,
 		weightkg: 37.6,
 		color: "Brown",
