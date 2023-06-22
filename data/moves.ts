@@ -13695,12 +13695,12 @@ chance: 33,
 status: 'frz',
 }, {
 chance: 33,
+weather: 'hail',
+}, {
+chance: 33,
 weather: 'snow',
 },
 ],
-
-
-
 target: "normal",
 type: "Ice",
 },
@@ -18311,7 +18311,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
 critRatio: 2,
-multihit: [1, 15],
+multihit: [1, 2],
 multiaccuracy: 85,
 secondary: null,
 target: "normal",
