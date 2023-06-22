@@ -19438,6 +19438,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 25,
 		color: "Black",
 		eggGroups: ["Bug"],
+		evos: ["Serket"],
 	},
 	gentloo: {
 		num: 9011,
@@ -19449,6 +19450,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 10,
 		color: "Blue",
 		eggGroups: ["Human-Like"],
+		evos: ["Corotrek"],
 	},
 	puppupa: {
 		num: 9013,
@@ -19460,6 +19462,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 12.4,
 		color: "Purple",
 		eggGroups: ["Bug"],
+		evos: ["Veltrilokist"],
 	},
 	crawroon: {
 		num: 9014,
@@ -19493,6 +19496,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 12,
 		color: "Purple",
 		eggGroups: ["Bug"],
+		evos: ["Crawroon"],
 	},
 	weavingwonder: {
 		num: 9017,
@@ -19515,6 +19519,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 9.6,
 		color: "Brown",
 		eggGroups: ["Field"],
+		evos: ["Soilynx"]
 	},
 	cactarimba: {
 		num: 9019,
@@ -19592,6 +19597,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 235,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		evos: ["Coopoch"],
 	},
 	magearnaallira: {
 		num: 9026,
@@ -19724,6 +19730,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 230,
 		color: "Gray",
 		eggGroups: ["Dragon"],
+		evos: ["Salamence-Allira"],
 	},
 	bagonallira: {
 		num: 9038,
@@ -19735,6 +19742,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 35,
 		color: "Brown",
 		eggGroups: ["Dragon"],
+		evos: ["Shelgon-Allira"],
 	},
 	drifblimallira: {
 		num: 9039,
@@ -19746,6 +19754,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 20,
 		color: "Gray",
 		eggGroups: ["Amorphous"],
+		evos: ["Zepblim"],
 	},
 	aegislashallira: {
 		num: 9040,
@@ -19864,6 +19873,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0.1,
 		color: "White",
 		eggGroups: ["Human-Like"],
+		evos: ["Archanchant"],
 	},
 	electrocampus: {
 		num: 9048,
@@ -19915,6 +19925,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 43,
 		color: "Blue",
 		eggGroups: ["Water 3"],
+		evos: ["Shrimpact"],
 	},
 	crustarid: {
 		num: 9051,
@@ -19926,6 +19937,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 12,
 		color: "Blue",
 		eggGroups: ["Water 3"],
+		evos: ["Pistroop"],
 	},
 	chemiclysm: {
 		num: 9052,
@@ -19948,6 +19960,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 13,
 		color: "Gray",
 		eggGroups: ["Mineral"],
+		evos: ["Rollision"],
 	},
 	scorsmith: {
 		num: 9056,
