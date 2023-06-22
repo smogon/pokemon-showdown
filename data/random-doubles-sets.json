@@ -3157,7 +3157,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Covet", "Double-Edge", "Helping Hand", "Protect", "Yawn"],
+                "movepool": ["Double-Edge", "Helping Hand", "Protect", "Thief", "Yawn"],
                 "teraTypes": ["Ghost", "Normal"]
             }
         ]
@@ -3167,7 +3167,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Covet", "Double-Edge", "Helping Hand", "Protect", "Yawn"],
+                "movepool": ["Double-Edge", "Helping Hand", "Protect", "Thief", "Yawn"],
                 "teraTypes": ["Ghost", "Normal"]
             }
         ]
