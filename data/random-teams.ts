@@ -1408,7 +1408,7 @@ export class RandomTeams {
 		if (['Bulky Attacker', 'Bulky Support', 'Bulky Setup'].some(m => role === (m))) return 'Leftovers';
 		if (species.id === 'pawmot' && moves.has('nuzzle')) return 'Leppa Berry';
 		if (
-			['Fast Bulky Setup', 'Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === (m)) &&
+			['Fast Bulky Setup', 'Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === m) &&
 			types.includes('Dark') && moves.has('suckerpunch') && !priorityPokemon.includes(species.id) &&
 			counter.get('setup') && counter.get('Dark')
 		) return 'Black Glasses';
