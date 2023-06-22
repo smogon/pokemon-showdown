@@ -109,10 +109,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 3002,
 	},
 	improvjazz: {
-		volatilestatus: "improvjazz",
 		condition: {
 			noCopy: true,
 			onStart(pokemon) {
+				pokemon.addVolatile('improvjazz');
 				this.add('-ability', pokemon, 'Improv Jazz');
 				this.add('-message', pokemon.name + ' is jamming out!');
 				// permanently apply torment
