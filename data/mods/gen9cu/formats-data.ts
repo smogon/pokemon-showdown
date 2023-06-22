@@ -6354,5 +6354,5 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	motheorie: { "tier": "CU", "doublesTier": "DUU", "natDexTier": "UU"},
 	hopobops: { "tier": "CU", "doublesTier": "DUU", "natDexTier": "UU"},
 	barbarado: { "tier": "CU", "doublesTier": "DUU", "natDexTier": "UU"},
-	magpir: { "tier": "CU", "doublesTier": "DUU", "natDexTier": "UU"},
+	magpillage: { "tier": "CU", "doublesTier": "DUU", "natDexTier": "UU"},
 };

@@ -508,11 +508,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 			const action = this.queue.willMove(target);
 			let dropStats = true;
 			if (!action) dropStats = false;
-			if (action.choice !== 'move') dropStats = false;
-			if (action.move.category === 'Status') dropStats = false;
-			if (dropStats) {
-				this.add('-activate', target, 'move: Quickdraw Quill');
-				this.boost({atk: -1, spa: -1}, target, source);
+			if (action) {
+				if (action.choice !== 'move') dropStats = false;
+				if (action.move.category === 'Status') dropStats = false;
+				if (dropStats) {
+					this.add('-activate', target, 'move: Quickdraw Quill');
+					this.boost({atk: -1, spa: -1}, target, source);
+				}
 			}
 		},
 		secondary: null,
