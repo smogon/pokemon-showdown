@@ -24142,4 +24142,25 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Psychic",
 		contestType: "Beautiful",
 	},
+	antentacle: {
+		num: -69,
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		name: "Antentacle",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		secondary: {
+			chance: 20,
+			self: {
+				boosts: {
+					atk: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Bug",
+		contestType: "Cool",
+	},
 };
