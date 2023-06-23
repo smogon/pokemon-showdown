@@ -579,9 +579,9 @@ export const Rulesets: {[k: string]: FormatData} = {
 	uudclause: {
 		effectType: 'ValidatorRule',
 		name: 'UUD Clause',
-		desc: 'Bans Revival Blessing',
+		desc: 'Bans Shed Tail and Last Respects',
 		onValidateSet(set) {
-			const banlist = ['Revival Blessing'];
+			const banlist = ['Shed Tail', 'Last Respects'];
 			const moves = set.moves;
 			if (!moves) return;
 			const problems: string[] = [];
