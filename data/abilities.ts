@@ -7391,5 +7391,18 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: -2,
 	},
+	inverted: {
+		condition: {
+			noCopy: true,
+			onEffectiveness(typeMod, target, type, move) {
+				this.add('-message', typeMod);
+				return typeMod * -1;
+			},
+		},
+		name: "Ivy Wall",
+		isBreakable: true,
+		rating: 3,
+		num: -51,
+	},
 };
 

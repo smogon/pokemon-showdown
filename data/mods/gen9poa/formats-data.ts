@@ -4080,4 +4080,24 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	malamarforest: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
+	mephistoxin: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	pebbal: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "AG",
+	},
+	pebmaul: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
 };
