@@ -19399,7 +19399,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 9007,
 		name: "Shrimpact",
 		types: ["Water", "Fighting"],
-		baseStats: {hp: 108, atk: 70, def: 105, spa: 115, spd: 91, spe: 55},
+		baseStats: {hp: 108, atk: 65, def: 100, spa: 115, spd: 82, spe: 60},
 		abilities: {0: "Torrent", H: "Technician"},
 		heightm: 1.4,
 		weightkg: 56,

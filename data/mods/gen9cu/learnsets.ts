@@ -96499,7 +96499,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 	cardtridge: {
 		learnset: {
 			bravebird: ["9T"],
-            headlongrush: ["9T"],
+            mudslap: ["9T"],
             earthquake: ["9T"],
             defog: ["9T"],
             roost: ["9T"],
