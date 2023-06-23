@@ -4100,4 +4100,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "RU",
 	},
+	gastrodonpolluted: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };

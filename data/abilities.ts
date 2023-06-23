@@ -7393,13 +7393,20 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	inverted: {
 		onAnyEffectiveness(typeMod, target, type, move) {
-			this.add('-message', typeMod);
 			if (typeMod === 0) return 1;
 			return typeMod * -1;
 		},
 		name: "Inverted",
 		rating: 3,
 		num: -88,
+	},
+	contaminate: {
+		onEffectiveness(typeMod, target, type, move) {
+			if (move.type === "Poison" && type === "Water") return 1;
+		},
+		name: "Contaminate",
+		rating: 3,
+		num: -89,
 	},
 };
 

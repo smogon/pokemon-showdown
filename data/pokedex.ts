@@ -29100,4 +29100,17 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Pebbal",
 		eggGroups: ["Undiscovered"],
 	},
+	gastrodonpolluted: {
+		num: -6056,
+		name: "Gastrodon-Polluted",
+		baseSpecies: "Gastrodon",
+		forme: "Polluted",
+		types: ["Water", "Poison"],
+		baseStats: {hp: 111, atk: 60, def: 88, spa: 75, spd: 102, spe: 39},
+		abilities: {0: "Contaminate", 1: "Storm Drain", H: "Corrosion"},
+		heightm: 0.6,
+		weightkg: 90,
+		color: "Purple",
+		eggGroups: ["Undiscovered"],
+	},
 };
