@@ -7371,20 +7371,20 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onAnyModifyDef(def, target, source, move) {
 			const abilityHolder = this.effectState.target;
-			this.add('-message', abilityHolder.activeTurns);
-			if (target.hasAbility('Sword of Ruin')) return;
-			if (!move.ruinedDef?.hasAbility('Sword of Ruin')) move.ruinedDef = abilityHolder;
+			if(abilityHolder.activeTurns && abilityHolder.effectiveWeather() !== 'newmoon') return;
+			if (target.hasAbility('Ominous Presence')) return;
+			if (!move.ruinedDef?.hasAbility('Ominous Presence')) move.ruinedDef = abilityHolder;
 			if (move.ruinedDef !== abilityHolder) return;
-			this.debug('Sword of Ruin Def drop');
+			this.debug('Ominous Presence Def drop');
 			return this.chainModify(0.75);
 		},
 		onAnyModifySpD(spd, target, source, move) {
 			const abilityHolder = this.effectState.target;
-			this.add('-message', abilityHolder.activeTurns);
-			if (target.hasAbility('Beads of Ruin')) return;
-			if (!move.ruinedSpD?.hasAbility('Beads of Ruin')) move.ruinedSpD = abilityHolder;
+			if(abilityHolder.activeTurns && abilityHolder.effectiveWeather() !== 'newmoon') return;
+			if (target.hasAbility('Ominous Presence')) return;
+			if (!move.ruinedSpD?.hasAbility('Ominous Presence')) move.ruinedSpD = abilityHolder;
 			if (move.ruinedSpD !== abilityHolder) return;
-			this.debug('Beads of Ruin SpD drop');
+			this.debug('Ominous Presence SpD drop');
 			return this.chainModify(0.75);
 		},
 		name: "Ominous Presence",
