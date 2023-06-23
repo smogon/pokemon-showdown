@@ -7392,12 +7392,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: -87,
 	},
 	inverted: {
-		condition: {
-			noCopy: true,
-			onEffectiveness(typeMod, target, type, move) {
-				this.add('-message', typeMod);
-				return typeMod * -1;
-			},
+		onAnyEffectiveness(typeMod, target, type, move) {
+			this.add('-message', typeMod);
+			return typeMod * -1;
 		},
 		name: "Inverted",
 		rating: 3,
