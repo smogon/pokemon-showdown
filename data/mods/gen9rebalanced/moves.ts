@@ -1144,31 +1144,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Beak Blast",
-		pp: 15,
-		priority: -3,
-		flags: {bullet: 1, protect: 1},
-		priorityChargeCallback(pokemon) {
-			pokemon.addVolatile('beakblast');
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, defrost: 1},
+		secondary: {
+			chance: 50,
+			status: 'brn',
 		},
-		condition: {
-			duration: 1,
-			onStart(pokemon) {
-				this.add('-singleturn', pokemon, 'move: Beak Blast');
-			},
-			onHit(target, source, move) {
-				if (this.checkMoveMakesContact(move, source, target)) {
-					source.trySetStatus('brn', target);
-				}
-			},
-		},
-		// FIXME: onMoveAborted(pokemon) {pokemon.removeVolatile('beakblast')},
-		onAfterMove(pokemon) {
-			pokemon.removeVolatile('beakblast');
-		},
-		secondary: null,
 		target: "normal",
-		type: "Flying",
-		contestType: "Tough",
+		type: "Normal",
+		contestType: "Beautiful",
 	},
 	beatup: {
 		num: 251,
@@ -20412,13 +20397,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 	triplekick: {
 		num: 167,
 		accuracy: 90,
-		basePower: 10,
+		basePower: 20,
 		basePowerCallback(pokemon, target, move) {
-			return 10 * move.hit;
+			return 20 * move.hit;
 		},
 		category: "Physical",
-		isNonstandard: "Past",
-		name: "Triple Kick",
+		name: "Triple Axel",
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
@@ -20428,8 +20412,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Fighting",
 		zMove: {basePower: 120},
-		maxMove: {basePower: 80},
-		contestType: "Cool",
+		maxMove: {basePower: 140},
 	},
 	tropkick: {
 		num: 688,
