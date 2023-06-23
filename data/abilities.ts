@@ -7335,7 +7335,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Caustic Breakdown",
 		rating: 2,
-		num: 59,
+		num: -84,
 	},
 	raginghalo: {
 		onTryHit(target, source, move) {
@@ -7354,7 +7354,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		isBreakable: true,
 		name: "Raging Halo",
 		rating: 5,
-		num: 25,
+		num: -85,
 	},
 	fabledprotector: {
 		onBeforeSwitchOut(pokemon) {
@@ -7362,7 +7362,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Fabled Protector",
 		rating: 3,
-		num: -2,
+		num: -86,
 	},
 	ominouspresence: {
 		onStart(pokemon) {
@@ -7389,7 +7389,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Ominous Presence",
 		rating: 3,
-		num: -2,
+		num: -87,
 	},
 	inverted: {
 		condition: {
@@ -7399,10 +7399,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return typeMod * -1;
 			},
 		},
-		name: "Ivy Wall",
-		isBreakable: true,
+		name: "Inverted",
 		rating: 3,
-		num: -51,
+		num: -88,
 	},
 };
 
