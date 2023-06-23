@@ -1061,7 +1061,6 @@ export class Pokemon {
 	getSwitchRequestData(forAlly?: boolean) {
 		const entry: AnyObject = {
 			ident: this.fullname,
-			species: this.species.name,
 			details: this.details,
 			condition: this.getHealth().secret,
 			active: (this.position < this.side.active.length),
