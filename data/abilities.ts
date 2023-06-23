@@ -7371,7 +7371,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onAnyModifyDef(def, target, source, move) {
 			const abilityHolder = this.effectState.target;
-			if(abilityHolder.activeTurns && abilityHolder.effectiveWeather() !== 'newmoon') return;
+			if (abilityHolder.activeMoveActions <= 1 && abilityHolder.effectiveWeather() !== 'newmoon') return;
 			if (target.hasAbility('Ominous Presence')) return;
 			if (!move.ruinedDef?.hasAbility('Ominous Presence')) move.ruinedDef = abilityHolder;
 			if (move.ruinedDef !== abilityHolder) return;
@@ -7380,7 +7380,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onAnyModifySpD(spd, target, source, move) {
 			const abilityHolder = this.effectState.target;
-			if(abilityHolder.activeTurns && abilityHolder.effectiveWeather() !== 'newmoon') return;
+			if (abilityHolder.activeMoveActions <= 1 && abilityHolder.effectiveWeather() !== 'newmoon') return;
 			if (target.hasAbility('Ominous Presence')) return;
 			if (!move.ruinedSpD?.hasAbility('Ominous Presence')) move.ruinedSpD = abilityHolder;
 			if (move.ruinedSpD !== abilityHolder) return;
