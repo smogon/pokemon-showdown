@@ -226,16 +226,20 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 			if (types.size === 4) {
 				this.add('-ability', pokemon, 'Stacked Deck');
-				this.add('-message', pokemon.name + ' is feeling lucky!');
 			} else if (types.size === 1) {
 				this.add('-ability', pokemon, 'Stacked Deck');
-				this.add('-message', pokemon.name + ' is ready to go!');
-				this.queue.prioritizeAction(this.queue.resolveAction({
+				let oldMove = this.dex.moves.get(pokemon.moveSlots[0].move);
+				let basePower = oldMove.basePower * 0.5;
+				// create a new move object with the same data as the old one but with the new base power
+				let newMove = this.dex.deepClone(oldMove);
+				newMove.basePower = basePower;
+
+				this.queue.insertAtPriority(this.queue.resolveAction({
 					choice: 'move',
 					pokemon: pokemon,
-					moveid: pokemon.moveSlots[0].id,
+					move: newMove,
 					targetLoc: pokemon.getLocOf(Dex.moves.get(pokemon.moveSlots[0].move).target === 'self' ? pokemon : this.prng.sample(pokemon.side.foe.active)), 
-				})[0] as MoveAction);			
+				})[0] as MoveAction, this.midTurn ? 3 : 1);			
 			}
 		},
 		onModifyCritRatio(this, relayVar, source, target, move) {
@@ -266,13 +270,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},		
 	sidehop: {
 		onTryHit(target, source, move) {
-			if (move.target === 'allAdjacent' || move.target === 'allAdjacentFoes') {
+			console.log(move);
+			if (target !== source && (move.target === 'allAdjacent' || move.target === 'allAdjacentFoes')) {
 				this.add('-immune', target, '[from] ability: Side Hop');
-				return null;
-			}
-		},
-		onDamage(damage, target, source, effect) {
-			if (effect.effectType === 'Move' && (effect.target === 'allAdjacent' || effect.target === 'allAdjacentFoes')) {
 				return null;
 			}
 		},

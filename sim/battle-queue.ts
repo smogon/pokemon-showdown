@@ -269,6 +269,57 @@ export class BattleQueue {
 		this.list.unshift(action);
 	}
 
+	insertAtPriority(action: Action, priorityBracket: number) {
+		// Get speed of the action's pokemon
+		const actionSpeed = action.pokemon.speed;
+	
+		// Find the range of actions in the specified priority bracket
+		let startIdx = null;
+		let endIdx = null;
+		for (let i = 0; i < this.list.length; i++) {
+			if (this.list[i].priority === priorityBracket) {
+				if (startIdx === null) {
+					startIdx = i;
+				}
+				endIdx = i;
+			}
+			// If we've passed the end of the priority bracket, stop searching
+			if (this.list[i].priority < priorityBracket) {
+				break;
+			}
+		}
+	
+		// If there are no actions in the priority bracket, find the last action with a higher priority
+		if (startIdx === null) {
+			for (let i = 0; i < this.list.length; i++) {
+				if (this.list[i].priority > priorityBracket) {
+					startIdx = i;
+					break;
+				}
+			}
+			// If no higher priority actions are found, insert at the beginning of the list
+			if (startIdx === null) {
+				startIdx = 0;
+			}
+		}
+	
+		// Determine where in the priority bracket to insert the new action based on speed
+		let insertIdx = startIdx;
+		if (endIdx !== null) {
+			for (let i = startIdx; i <= endIdx; i++) {
+				if (this.list[i].speed < actionSpeed) {
+					insertIdx = i;
+					break;
+				}
+			}
+		}
+	
+		// Insert the action into the list at the determined index
+		this.list.splice(insertIdx, 0, action);
+	}
+	
+	
+
 	/**
 	 * Changes a pokemon's action, and inserts its new action
 	 * in priority order.
