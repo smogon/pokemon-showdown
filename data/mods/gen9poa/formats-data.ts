@@ -4065,4 +4065,19 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	querubi: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	vitangel: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
+	mortangel: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };

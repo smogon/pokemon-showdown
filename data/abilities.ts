@@ -7370,20 +7370,18 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.add('-ability', pokemon, 'Ominous Presence');
 		},
 		onAnyModifyDef(def, target, source, move) {
+			this.add('-message', source.activeTurns);
 			if (source.activeTurns && source.effectiveWeather() !== "newmoon") return;
 			const abilityHolder = this.effectState.target;
 			if (target.hasAbility('Ominous Presence')) return;
-			if (!move.ruinedDef?.hasAbility('Ominous Presence')) move.ruinedDef = abilityHolder;
-			if (move.ruinedDef !== abilityHolder) return;
 			this.debug('Ominous Presence def drop');
 			return this.chainModify(0.75);
 		},
 		onAnyModifySpD(spd, target, source, move) {
+			this.add('-message', source.activeTurns);
 			if (source.activeTurns && source.effectiveWeather() !== "newmoon") return;
 			const abilityHolder = this.effectState.target;
 			if (target.hasAbility('Ominous Presence')) return;
-			if (!move.ruinedDef?.hasAbility('Ominous Presence')) move.ruinedDef = abilityHolder;
-			if (move.ruinedDef !== abilityHolder) return;
 			this.debug('Ominous Presence spdef drop');
 			return this.chainModify(0.75);
 		},
