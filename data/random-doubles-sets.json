@@ -2102,7 +2102,7 @@
             }
         ]
     },
-    "greninja": {
+    "greninjabond": {
         "level": 82,
         "sets": [
             {
@@ -2184,6 +2184,11 @@
                 "role": "Choice Item user",
                 "movepool": ["Aura Sphere", "Dark Pulse", "Dragon Pulse", "Muddy Water", "U-turn"],
                 "teraTypes": ["Dark", "Dragon", "Fighting"]
+            },
+            {
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Aura Sphere", "Dark Pulse", "Heal Pulse", "Muddy Water", "Protect"],
+                "teraTypes": ["Dark", "Fighting"]
             }
         ]
     },
@@ -3152,7 +3157,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Covet", "Double-Edge", "Helping Hand", "Protect", "Yawn"],
+                "movepool": ["Double-Edge", "Helping Hand", "Protect", "Thief", "Yawn"],
                 "teraTypes": ["Ghost", "Normal"]
             }
         ]
@@ -3162,7 +3167,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Covet", "Double-Edge", "Helping Hand", "Protect", "Yawn"],
+                "movepool": ["Double-Edge", "Helping Hand", "Protect", "Thief", "Yawn"],
                 "teraTypes": ["Ghost", "Normal"]
             }
         ]
@@ -3626,7 +3631,7 @@
                 "teraTypes": ["Fairy", "Steel"]
             },
             {
-                "role": "Bulky Protect",
+                "role": "Doubles Bulky Setup",
                 "movepool": ["Make It Rain", "Nasty Plot", "Protect", "Shadow Ball"],
                 "teraTypes": ["Steel", "Water"]
             }
@@ -3672,7 +3677,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Disable", "Encore", "Helping Hand", "Howl", "Play Rough", "Stealth Rock", "Thunder Wave"],
+                "movepool": ["Dazzling Gleam", "Disable", "Encore", "Helping Hand", "Howl", "Play Rough", "Stealth Rock", "Thunder Wave"],
                 "teraTypes": ["Steel"]
             }
         ]
@@ -3772,7 +3777,7 @@
             },
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Dragon Dance", "Ice Punch", "Protect", "Rock Slide", "Stomping Tantrum", "Stone Edge", "Wild Charge"],
+                "movepool": ["Dragon Dance", "Ice Punch", "Protect", "Rock Slide", "Stomping Tantrum", "Wild Charge"],
                 "teraTypes": ["Grass", "Rock"]
             }
         ]
@@ -3896,7 +3901,7 @@
         "level": 80,
         "sets": [
             {
-                "role": "Offensive Protect",
+                "role": "Doubles Setup Sweeper",
                 "movepool": ["Bitter Blade", "Close Combat", "Protect", "Shadow Sneak", "Swords Dance"],
                 "teraTypes": ["Fighting", "Fire", "Grass"]
             }
