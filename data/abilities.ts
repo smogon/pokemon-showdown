@@ -7434,8 +7434,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onStart(pokemon) {
 			for (const target of this.getAllActive()) {
 				if (target !== pokemon) {
-					if (!target.setType("Ghost")) return false;
-					this.add('-start', target, 'typechange', "Ghost", '[from] ability: Graveyard');
+					if (!target.addType("Ghost")) return false;
+					this.add('-start', target, 'typeadd', "Ghost", '[from] ability: Graveyard');
 				}
 			}
 		},
