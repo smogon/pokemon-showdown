@@ -7401,7 +7401,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: -88,
 	},
 	contaminate: {
-		onEffectiveness(typeMod, target, type, move) {
+		onFoeEffectiveness(typeMod, target, type, move) {
 			this.add('-message', typeMod);
 			if (move.type === "Poison" && type === "Water") return 1;
 		},
