@@ -4105,4 +4105,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	manastrea: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
 };

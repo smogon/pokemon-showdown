@@ -29113,4 +29113,15 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
 	},
+	manastrea: {
+		num: -6057,
+		name: "Manastrea",
+		types: ["Fairy", "Dragon"],
+		baseStats: {hp: 120, atk: 60, def: 100, spa: 70, spd: 130, spe: 100},
+		abilities: {0: "Noctem", 1: "Star Fall", H: "Misty Surge"},
+		heightm: 0.6,
+		weightkg: 90,
+		color: "Purple",
+		eggGroups: ["Undiscovered"],
+	},
 };
