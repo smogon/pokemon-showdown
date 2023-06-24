@@ -29213,4 +29213,15 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
 	},
+	wrighvern: {
+		num: -6061,
+		name: "Wrighvern",
+		types: ["Dragon", "Flying"],
+		baseStats: {hp: 90, atk: 90, def: 80, spa: 125, spd: 85, spe: 130},
+		abilities: {0: "Technician", 1: "Wind Rider", H: "Opportunist"},
+		heightm: 0.6,
+		weightkg: 90,
+		color: "Purple",
+		eggGroups: ["Undiscovered"],
+	},
 };
