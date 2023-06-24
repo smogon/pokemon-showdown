@@ -7447,7 +7447,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
 			this.add('-message', 'bro got damamged 💀');
-			if (effect && effect.effectType === 'Move' && target.baseSpecies.id === "tiamutt" && !target.transformed) {
+			if (effect && effect.effectType === 'Move' && target.baseSpecies.id.startsWith('tiamutt') && !target.transformed) {
 				let forme = target.species.forme;
 				this.effectState.manyHeads = false;
 				if (!forme) {
