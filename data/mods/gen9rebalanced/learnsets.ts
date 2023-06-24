@@ -38172,7 +38172,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			snore: ["9M", "7T", "6T", "5T", "4T", "3T"],
 			solarbeam: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			stringshot: ["4T"],
-			strugglebug: "9M", ["7L15", "6M", "6L15", "5M"],
+			strugglebug: ["9M", "7L15", "6M", "6L15", "5M"],
 			substitute: ["9M", "7M", "6M", "5M", "4M", "3T"],
 			sunnyday: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			swagger: ["9M", "7M", "6M", "5M", "4M", "3T"],
