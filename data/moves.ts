@@ -24228,7 +24228,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Beautiful",
 	},
 	germinate: {
-		num: -64,
+		num: -72,
 		accuracy: 100,
 		basePower: 120,
 		category: "Physical",
@@ -24287,7 +24287,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Clever",
 	},
 	skystrike: {
-		num: -65,
+		num: -73,
 		accuracy: 100,
 		basePower: 60,
 		category: "Physical",
@@ -24303,5 +24303,46 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Flying",
 		contestType: "Clever",
+	},
+	destructiondance: {
+		num: -74,
+		accuracy: 100,
+		basePower: 40,
+		category: "Special",
+		name: "Destruction Dance",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, dance: 1},
+		onAfterHit(target, pokemon) {
+			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
+				this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + pokemon);
+			}
+			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'livewire', 'permafrost', 'hotcoals', 'stickyweb', 'gmaxsteelsurge'];
+			for (const condition of sideConditions) {
+				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
+				}
+			}
+			if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
+				pokemon.removeVolatile('partiallytrapped');
+			}
+		},
+		onAfterSubDamage(damage, target, pokemon) {
+			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
+				this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + pokemon);
+			}
+			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'livewire', 'permafrost', 'hotcoals', 'stickyweb', 'gmaxsteelsurge'];
+			for (const condition of sideConditions) {
+				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
+				}
+			}
+			if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
+				pokemon.removeVolatile('partiallytrapped');
+			}
+		},
+		target: "normal",
+		type: "Fire",
+		contestType: "Cool",
 	},
 };
