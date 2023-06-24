@@ -29299,4 +29299,15 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
 	},
+	reactoise: {
+		num: -6062,
+		name: "Reactoise",
+		types: ["Nuclear"],
+		baseStats: {hp: 165, atk: 25, def: 140, spa: 50, spd: 140, spe: 5},
+		abilities: {0: "Filter", 1: "Shell Armor", H: "White Smoke"},
+		heightm: 0.6,
+		weightkg: 500,
+		color: "Purple",
+		eggGroups: ["Undiscovered"],
+	},
 };
