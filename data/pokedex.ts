@@ -29310,4 +29310,15 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
 	},
+	mantinedelta: {
+		num: 226,
+		name: "Mantine-Delta",
+		types: ["Ghost", "Flying"],
+		baseStats: {hp: 85, atk: 40, def: 70, spa: 80, spd: 140, spe: 70},
+		abilities: {0: "Graveyard", 1: "Cursed Body", H: "Prankster"},
+		heightm: 2.1,
+		weightkg: 220,
+		color: "Purple",
+		eggGroups: ["Water 1"],
+	},
 };
