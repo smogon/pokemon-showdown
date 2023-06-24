@@ -7467,7 +7467,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onUpdate(pokemon) {
-			if (pokemon.baseSpecies.id.includes("tiamutt") && this.effectState.manyHeads) {
+			if (pokemon.baseSpecies.id.includes("tiamutt") && pokemon.hp && this.effectState.manyHeads) {
 				const speciesid = 'tiamutt' + this.effectState.manyHeads.toLowerCase();
 				pokemon.formeChange(speciesid, this.effect, true);
 				this.effectState.manyHeads = false;
