@@ -150,7 +150,7 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['Little Cup', 'Standard'],
 		banlist: [
-			'Basculin-White-Striped', 'Diglett-Base', 'Dunsparce', 'Flittle', 'Gastly', 'Girafarig', 'Meditite', 'Misdreavus',
+			'Basculin-White-Striped', 'Diglett-Base', 'Dunsparce', 'Flittle', 'Gastly', 'Girafarig', 'Growlithe-Hisui', 'Meditite', 'Misdreavus',
 			'Murkrow', 'Qwilfish-Hisui', 'Rufflet', 'Scyther', 'Sneasel', 'Sneasel-Hisui', 'Stantler', 'Moody', 'Baton Pass',
 		],
 	},
@@ -223,7 +223,7 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 9] LC'],
 		banlist: [
 			'Bramblin', 'Crabrawler', 'Diglett-Alola', 'Drifloon', 'Fennekin', 'Foongus', 'Gimmighoul-Roaming', 'Glimmet', 'Gothita',
-			'Greavard', 'Grimer-Alola', 'Grookey', 'Growlithe-Hisui', 'Larvesta', 'Magnemite', 'Mareanie', 'Meowth-Base', 'Meowth-Alola',
+			'Greavard', 'Grimer-Alola', 'Grookey', 'Larvesta', 'Magnemite', 'Mareanie', 'Meowth-Base', 'Meowth-Alola',
 			'Mudbray', 'Numel', 'Nymble', 'Pawniard', 'Quaxly', 'Sandile', 'Shellder', 'Shroodle', 'Slowpoke-Galar', 'Stunky', 'Surskit',
 			'Tinkatink', 'Toedscool', 'Voltorb', 'Voltorb-Hisui', 'Wattrel', 'Wingull', 'Zorua', 'Zorua-Hisui',
 		],
