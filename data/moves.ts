@@ -23116,7 +23116,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 			return move.basePower;
 		},
 		category: "Physical",
-		isNonstandard: "Past",
 		name: "Monkey Arms",
 		pp: 20,
 		priority: 0,
