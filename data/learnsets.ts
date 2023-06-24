@@ -51742,7 +51742,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			frustration: ["7M", "6M", "5M"],
 			gastroacid: ["7T", "7L40", "6T", "6L40", "5T", "5L40"],
 			gigadrain: ["7T", "7L34", "6T", "6L34", "5T", "5L34"],
-			glare: ["9M", "7E", "6E", "5E"],
+			glare: ["7E", "6E", "5E"],
 			grassknot: ["7M", "6M", "5M"],
 			grasspledge: ["7T", "6T", "5T"],
 			grassyterrain: ["7E", "6E"],
