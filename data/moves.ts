@@ -23746,7 +23746,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 			return move.basePower;
 		},
 		category: "Physical",
-		isNonstandard: "Past",
 		name: "Mindtrap",
 		pp: 20,
 		priority: 0,
