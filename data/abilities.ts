@@ -7408,5 +7408,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: -89,
 	},
+	inertia: {
+		onAnyModifyPriority(priority, pokemon) {
+			this.add('-message', pokemon.name);
+			if (pokemon.activeMoveActions === 0) return priority - 1;
+		},
+		name: "Inertia",
+		rating: 4.5,
+		num: -90,
+	},
 };
 

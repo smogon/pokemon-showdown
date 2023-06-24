@@ -4120,4 +4120,14 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	mossling: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+	mosster: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };
