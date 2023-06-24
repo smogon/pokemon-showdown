@@ -7446,26 +7446,31 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	manyheads: {
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
-			let forme = target.species.forme;
-			this.add('-message', forme);
-			if (
-				effect && effect.effectType === 'Move' &&
-				target.baseSpecies.id === "tiamutt" && !target.transformed
-			) {
-				this.add('-activate', target, 'ability: Many Heads');
+			if (effect && effect.effectType === 'Move' && target.baseSpecies.id === "tiamutt" && !target.transformed) {
+				let forme = target.species.forme;
+				this.effectState.manyHeads = false;
 				if (!forme) {
-					target.formeChange('Tiamutt-Two', this.effect, true);
-					return damage;
-				} else if (forme === "Two") {
-					target.formeChange('Tiamutt-Three', this.effect, true);
-					return damage;
-				} else if (forme === "Three") {
-					target.formeChange('Tiamutt-Four', this.effect, true);
-					return damage;
-				} else if (forme === "Four") {
-					target.formeChange('Tiamutt-Five', this.effect, true);
+					this.effectState.manyHeads = 'Two';
 					return damage;
 				}
+				switch (forme) {
+					case 'Two':
+						this.effectState.manyHeads = 'Three';
+						break;
+					case 'Three':
+						this.effectState.manyHeads = 'Four';
+						break;
+					case 'Four':
+						this.effectState.manyHeads = 'Five';
+						break;
+				}
+			}
+		},
+		onUpdate(pokemon) {
+			if (pokemon.baseSpecies.id === "tiamutt" && this.effectState.manyHeads) {
+				const speciesid = 'tiamutt' + this.effectState.manyHeads.toLowerCase();
+				this.add('-message', speciesid);
+				pokemon.formeChange(speciesid, this.effect, true);
 			}
 		},
 		onModifyAtkPriority: 5,
