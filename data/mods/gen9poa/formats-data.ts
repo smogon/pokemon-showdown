@@ -4185,4 +4185,15 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "OU",
 	},
+	wispit: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	wispec: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
+
 };

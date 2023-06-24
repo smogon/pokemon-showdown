@@ -9641,4 +9641,14 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 		natDexTier: "Illegal",
 	},
+	wispit: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+	wispec: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
 };
