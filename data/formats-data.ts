@@ -481,7 +481,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	growlithehisui: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	arcanine: {
 		tier: "RU",
