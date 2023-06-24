@@ -7393,6 +7393,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	inverted: {
 		onAnyEffectiveness(typeMod, target, type, move) {
+			this.debug(typeMod.toString());
 			if (typeMod === 0) return 1;
 			return typeMod * -1;
 		},
