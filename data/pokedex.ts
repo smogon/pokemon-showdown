@@ -29442,4 +29442,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
 	},
+	empoleonmega: {
+		num: 395,
+		name: "Empoleon-Mega",
+		baseSpecies: "Empoleon",
+		forme: "Mega",
+		types: ["Water", "Steel"],
+		baseStats: {hp: 84, atk: 101, def: 132, spa: 135, spd: 123, spe: 70},
+		abilities: {0: "Mirror Armor"},
+		heightm: 0.6,
+		weightkg: 90,
+		color: "Purple",
+		eggGroups: ["Undiscovered"],
+		requiredItem: "Empoleonite",
+	},
 };

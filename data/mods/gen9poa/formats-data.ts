@@ -4205,4 +4205,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "Uber",
 	},
+	empoleonmega: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };
