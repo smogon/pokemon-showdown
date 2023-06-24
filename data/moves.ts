@@ -24286,4 +24286,22 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		contestType: "Clever",
 	},
+	skystrike: {
+		num: -65,
+		accuracy: 100,
+		basePower: 60,
+		category: "Physical",
+		name: "Sky Strike",
+		onBasePower(relayVar, source, target, move) {
+			this.add('-message', source.heightm);
+			return this.chainModify([source.heightm, target.heightm]);
+		},
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		secondary: null,
+		target: "normal",
+		type: "Flying",
+		contestType: "Clever",
+	},
 };

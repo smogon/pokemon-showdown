@@ -19,6 +19,7 @@ export interface SpeciesData extends Partial<Species> {
 	baseStats: StatsTable;
 	eggGroups: string[];
 	weightkg: number;
+	heightm: number;
 }
 
 export type ModdedSpeciesData = SpeciesData | Partial<Omit<SpeciesData, 'name'>> & {inherit: true};
