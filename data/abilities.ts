@@ -7417,5 +7417,18 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4.5,
 		num: -90,
 	},
+	hardwoodstance: {
+		onModifyMovePriority: 1,
+		onModifyMove(move, attacker, defender) {
+			if (attacker.species.baseSpecies !== 'Aegislash-Supra' || attacker.transformed) return;
+			if (move.category === 'Status' && move.id !== 'petrification') return;
+			const targetForme = (move.id === 'petrification' ? 'Aegislash-Supra' : 'Aegislash-Supra-Axe');
+			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
+		},
+		isPermanent: true,
+		name: "Hardwood Stance",
+		rating: 4,
+		num: -91,
+	},
 };
 

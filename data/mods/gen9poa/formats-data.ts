@@ -4150,4 +4150,19 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	honedgesupra: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "LC",
+	},
+	doubladesupra: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "RU",
+	},
+	aegislashsupra: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
 };
