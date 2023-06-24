@@ -29321,4 +29321,15 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		eggGroups: ["Water 1"],
 	},
+	austratus: {
+		num: -6063,
+		name: "Austratus",
+		types: ["Water", "Psychic"],
+		baseStats: {hp: 65, atk: 50, def: 85, spa: 100, spd: 110, spe: 80},
+		abilities: {0: "Water Absorb", 1: "Levitate", H: "Water Bubble"},
+		heightm: 5,
+		weightkg: 58000,
+		color: "Purple",
+		eggGroups: ["Undiscovered"],
+	},
 };

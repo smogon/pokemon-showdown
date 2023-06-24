@@ -4180,4 +4180,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "OU",
 	},
+	austratus: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
 };
