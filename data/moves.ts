@@ -24293,7 +24293,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		category: "Physical",
 		name: "Sky Strike",
 		onBasePower(relayVar, source, target, move) {
-			this.add('-message', source.heightm);
 			return this.chainModify([source.heightm, target.heightm]);
 		},
 		pp: 10,

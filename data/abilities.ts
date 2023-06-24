@@ -7402,6 +7402,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	contaminate: {
 		onEffectiveness(typeMod, target, type, move) {
+			this.add('-message', typeMod);
 			if (move.type === "Poison" && type === "Water") return 1;
 		},
 		name: "Contaminate",
@@ -7446,6 +7447,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
 			let forme = target.species.forme;
+			this.add('-message', forme);
 			if (
 				effect && effect.effectType === 'Move' &&
 				target.baseSpecies.id === "tiamutt" && !target.transformed
