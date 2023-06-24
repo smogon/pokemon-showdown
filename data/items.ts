@@ -10083,4 +10083,18 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Unobtainable",
 	},
+	delphoxite: {
+		name: "Delphoxite",
+		spritenum: 0,
+		megaStone: "Delphox-Mega",
+		megaEvolves: "Delphox",
+		itemUser: ["Delphox"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -82,
+		gen: 6,
+		isNonstandard: "Unobtainable",
+	},
 };

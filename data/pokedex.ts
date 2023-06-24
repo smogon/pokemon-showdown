@@ -29456,4 +29456,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Empoleonite",
 	},
+	delphoxmega: {
+		num: 655,
+		name: "Delphox-Mega",
+		baseSpecies: "Delphox",
+		forme: "Mega",
+		types: ["Fire", "Psychic"],
+		baseStats: {hp: 74, atk: 69, def: 87, spa: 144, spd: 125, spe: 134},
+		abilities: {0: "Magic Trick"},
+		heightm: 0.6,
+		weightkg: 90,
+		color: "Purple",
+		eggGroups: ["Undiscovered"],
+		requiredItem: "Delphoxite",
+	},
 };
