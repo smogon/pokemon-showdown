@@ -7910,4 +7910,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		start: "  [POKEMON] foresaw an attack!",
 		activate: "  [TARGET] took the Foreshadowed attack!",
 	},
+	scaleblessing: {
+		name: "Scale Blessing",
+		desc: "At the end of the next turn, the Pokemon at the user's position has 1/2 of the user's maximum HP restored to it, rounded down. Fails if this move is already in effect for the user's position.",
+		shortDesc: "Next turn, 50% of users HP is healed. +Dragon Type",
+
+		heal: "  [NICKNAME]'s Scale Blessing came true!",
+	},
 };
