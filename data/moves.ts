@@ -24439,7 +24439,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				if (target && !target.fainted) {
 					const damage = this.heal(this.effectState.hp, target, target);
 					if (damage) {
-						// this.add('-heal', target, target.getHealth, '[from] move: Scale Blessing', '[wisher] ' + this.effectState.source.name);
+						this.add('-heal', target, target.getHealth, '[from] move: Scale Blessing');
 						if (target.hasType('Dragon')) return false;
 						if (!target.addType('Dragon')) return false;
 						this.add('-start', target, 'typeadd', 'Dragon', '[from] move: Scale Blessing');
