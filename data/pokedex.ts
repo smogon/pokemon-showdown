@@ -29175,4 +29175,15 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Mossling",
 		eggGroups: ["Undiscovered"],
 	},
+	slakong: {
+		num: -6060,
+		name: "Slakong",
+		types: ["Fighting"],
+		baseStats: {hp: 150, atk: 150, def: 100, spa: 85, spd: 75, spe: 110},
+		abilities: {0: "Monkeying Around"},
+		heightm: 0.6,
+		weightkg: 90,
+		color: "Purple",
+		eggGroups: ["Undiscovered"],
+	},
 };
