@@ -7502,5 +7502,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3.5,
 		num: -92,
 	},
+	magictrick: {
+		onStart(source) {
+			this.field.addPseudoWeather('magicroom');
+		},
+		name: "Magic Trick",
+		gen: 6,
+		rating: 4.5,
+		num: -93,
+	},
 };
 
