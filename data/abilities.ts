@@ -7469,14 +7469,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onUpdate(pokemon) {
 			if (pokemon.baseSpecies.id.includes("tiamutt") && this.effectState.manyHeads) {
 				const speciesid = 'tiamutt' + this.effectState.manyHeads.toLowerCase();
-				this.add('-message', speciesid);
 				pokemon.formeChange(speciesid, this.effect, true);
 				this.effectState.manyHeads = false;
 			}
 		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (attacker.baseSpecies.id !== "tiamutt") return;
+			if (attacker.baseSpecies.id.includes("tiamutt")) return;
 			if (!attacker.species.forme) {
 				return this.chainModify(1.1);
 			} else if (attacker.species.forme === "Two") {
@@ -7491,7 +7490,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(spa, attacker, defender, move) {
-			if (attacker.baseSpecies.id !== "tiamutt") return;
+			if (attacker.baseSpecies.id.includes("tiamutt")) return;
 			if (!attacker.species.forme) {
 				return this.chainModify(1.1);
 			} else if (attacker.species.forme === "Two") {
