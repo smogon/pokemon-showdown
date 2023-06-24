@@ -62100,7 +62100,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			dualchop: ["7T", "7S0", "6T", "5T"],
 			endure: ["9M", "8M"],
 			facade: ["9M", "8M", "7M", "6M", "5M"],
-			fakeout: "9M", ["8L1", "7L1", "7S0", "6L1", "5L1"],
+			fakeout: ["9M", "8L1", "7L1", "7S0", "6L1", "5L1"],
 			fling: ["9M", "8M", "7M", "6M", "5M"],
 			focusblast: ["9M", "8M", "7M", "6M", "5M"],
 			focusenergy: ["9M", "8M"],
