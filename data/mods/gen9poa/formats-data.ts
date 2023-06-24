@@ -4130,4 +4130,14 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	slakong: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "Uber",
+	},
+	gardevoirnightmare: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };

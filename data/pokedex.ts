@@ -29186,4 +29186,17 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
 	},
+	gardevoirnightmare: {
+		num: 282,
+		name: "Gardevoir-Nightmare",
+		baseSpecies: "Gardevoir",
+		forme: "Nightmare",
+		types: ["Dark", "Poison"],
+		baseStats: {hp: 68, atk: 114, def: 71, spa: 87, spd: 71, spe: 107},
+		abilities: {0: "Merciless", 1: "Poison Touch"},
+		heightm: 0.6,
+		weightkg: 90,
+		color: "Purple",
+		eggGroups: ["Undiscovered"],
+	},
 };
