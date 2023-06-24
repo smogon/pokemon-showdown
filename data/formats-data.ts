@@ -9651,4 +9651,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 		natDexTier: "Illegal",
 	},
+	tiamutt: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
 };

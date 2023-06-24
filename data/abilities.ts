@@ -7436,11 +7436,68 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				if (target !== pokemon) {
 					if (!target.setType("Ghost")) return false;
 					this.add('-start', target, 'typechange', "Ghost", '[from] ability: Graveyard');
-					break;
 				}
 			}
 		},
 		name: "Graveyard",
+		rating: 3.5,
+		num: -92,
+	},
+	manyheads: {
+		onDamagePriority: 1,
+		onDamage(damage, target, source, effect) {
+			let forme = target.species.forme;
+			if (
+				effect && effect.effectType === 'Move' &&
+				target.baseSpecies.id === "tiamutt" && !target.transformed
+			) {
+				this.add('-activate', target, 'ability: Many Heads');
+				if (!forme) {
+					target.formeChange('Tiamutt-Two', this.effect, true);
+					return damage;
+				} else if (forme === "Two") {
+					target.formeChange('Tiamutt-Three', this.effect, true);
+					return damage;
+				} else if (forme === "Three") {
+					target.formeChange('Tiamutt-Four', this.effect, true);
+					return damage;
+				} else if (forme === "Four") {
+					target.formeChange('Tiamutt-Five', this.effect, true);
+					return damage;
+				}
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (attacker.baseSpecies.id !== "tiamutt") return;
+			if (!attacker.species.forme) {
+				return this.chainModify(1.1);
+			} else if (attacker.species.forme === "Two") {
+				return this.chainModify(1.2);
+			} else if (attacker.species.forme === "Three") {
+				return this.chainModify(1.3);
+			} else if (attacker.species.forme === "Four") {
+				return this.chainModify(1.4);
+			} else if (attacker.species.forme === "Five") {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(spa, attacker, defender, move) {
+			if (attacker.baseSpecies.id !== "tiamutt") return;
+			if (!attacker.species.forme) {
+				return this.chainModify(1.1);
+			} else if (attacker.species.forme === "Two") {
+				return this.chainModify(1.2);
+			} else if (attacker.species.forme === "Three") {
+				return this.chainModify(1.3);
+			} else if (attacker.species.forme === "Four") {
+				return this.chainModify(1.4);
+			} else if (attacker.species.forme === "Five") {
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Many Heads",
 		rating: 3.5,
 		num: -92,
 	},
