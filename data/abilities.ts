@@ -7475,7 +7475,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (attacker.baseSpecies.id.includes("tiamutt")) return;
+			if (!attacker.baseSpecies.id.includes("tiamutt")) return;
 			if (!attacker.species.forme) {
 				return this.chainModify(1.1);
 			} else if (attacker.species.forme === "Two") {
@@ -7490,7 +7490,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(spa, attacker, defender, move) {
-			if (attacker.baseSpecies.id.includes("tiamutt")) return;
+			if (!attacker.baseSpecies.id.includes("tiamutt")) return;
 			if (!attacker.species.forme) {
 				return this.chainModify(1.1);
 			} else if (attacker.species.forme === "Two") {
