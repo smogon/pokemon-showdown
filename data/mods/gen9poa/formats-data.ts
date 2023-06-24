@@ -4140,4 +4140,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	shedinjatandor: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };

@@ -29199,4 +29199,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
 	},
+	shedinjatandor: {
+		num: 292,
+		name: "Shedinja-Tandor",
+		baseSpecies: "Shedinja",
+		forme: "Tandor",
+		types: ["Steel", "Nuclear"],
+		baseStats: {hp: 1, atk: 90, def: 45, spa: 30, spd: 30, spe: 40},
+		maxHP: 1,
+		abilities: {0: "Wonder Guard"},
+		heightm: 0.6,
+		weightkg: 1,
+		color: "Purple",
+		eggGroups: ["Undiscovered"],
+	},
 };
