@@ -29286,4 +29286,17 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		requiredAbility: "Hardwood Stance",
 		battleOnly: "Aegislash-Supra",
 	},
+	mienshaoillusionist: {
+		num: 620,
+		name: "Mienshao-Illusionist",
+		baseSpecies: "Mienshao",
+		forme: "Illusionist",
+		types: ["Fighting", "Dark"],
+		baseStats: {hp: 63, atk: 130, def: 60, spa: 90, spd: 60, spe: 110},
+		abilities: {0: "Illusion", 1: "Regenerator", H: "Reckless"},
+		heightm: 0.6,
+		weightkg: 90,
+		color: "Purple",
+		eggGroups: ["Undiscovered"],
+	},
 };
