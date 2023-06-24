@@ -24227,4 +24227,63 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Rock",
 		contestType: "Beautiful",
 	},
+	germinate: {
+		num: -64,
+		accuracy: 100,
+		basePower: 120,
+		category: "Physical",
+		name: "Germinate",
+		pp: 10,
+		priority: 0,
+		flags: {allyanim: 1, futuremove: 1},
+		ignoreImmunity: true,
+		onTry(source, target) {
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			const periodic = source.hasAbility('periodicorbit');
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				duration: periodic ? 5 : 3,
+				move: 'germinate',
+				source: source,
+				moveData: {
+					id: 'germinate',
+					name: "Germinate",
+					accuracy: 100,
+					basePower: 120,
+					category: "Physical",
+					priority: 0,
+					flags: {},
+					ignoreImmunity: false,
+					effectType: 'Move',
+					isFutureMove: true,
+					type: 'Grass',
+				},
+			});
+			if (periodic && target.side.addSlotCondition(target, 'futuremoveperiodic')) {
+				Object.assign(target.side.slotConditions[target.position]['futuremoveperiodic'], {
+					duration: 3,
+					move: 'germinate',
+					source: source,
+					moveData: {
+						id: 'germinate',
+						name: "Germinate",
+						accuracy: 100,
+						basePower: 120,
+						category: "Physical",
+						priority: 0,
+						flags: {},
+						ignoreImmunity: false,
+						effectType: 'Move',
+						isFutureMove: true,
+						type: 'Grass',
+					},
+				});
+			}
+			this.add('-start', source, 'move: Germinate');
+			return this.NOT_FAIL;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Grass",
+		contestType: "Clever",
+	},
 };
