@@ -29429,4 +29429,17 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		requiredAbility: "Many Heads",
 		battleOnly: "Tiamutt",
 	},
+	kyogrecorrupted: {
+		num: 382,
+		name: "Kyogre-Corrupted",
+		baseSpecies: "Kyogre",
+		forme: "Corrupted",
+		types: ["Water", "Poison"],
+		baseStats: {hp: 90, atk: 110, def: 90, spa: 150, spd: 140, spe: 90},
+		abilities: {0: "Pollutant"},
+		heightm: 4,
+		weightkg: 450,
+		color: "Purple",
+		eggGroups: ["Undiscovered"],
+	},
 };

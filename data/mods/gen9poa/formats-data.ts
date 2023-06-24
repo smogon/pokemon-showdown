@@ -4200,4 +4200,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "UU",
 	},
+	kyogrecorrupted: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "Uber",
+	},
 };
