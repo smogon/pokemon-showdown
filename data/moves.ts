@@ -24419,4 +24419,38 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cool",
 	},
+	scaleblessing: {
+		num: -77,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Scale Blessing",
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1, heal: 1},
+		slotCondition: 'scaleblessing',
+		condition: {
+			duration: 2,
+			onStart(pokemon, source) {
+				this.effectState.hp = source.maxhp / 2;
+			},
+			onResidualOrder: 4,
+			onEnd(target) {
+				if (target && !target.fainted) {
+					const damage = this.heal(this.effectState.hp, target, target);
+					if (damage) {
+						this.add('-heal', target, target.getHealth, '[from] move: Scale Blessing', '[wisher] ' + this.effectState.source.name);
+						if (target.hasType('Dragon')) return false;
+						if (!target.addType('Dragon')) return false;
+						this.add('-start', target, 'typeadd', 'Dragon', '[from] move: Scale Blessing');
+					}
+				}
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Dragon",
+		zMove: {boost: {spd: 1}},
+		contestType: "Cute",
+	},
 };
