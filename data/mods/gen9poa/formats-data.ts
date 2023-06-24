@@ -4093,7 +4093,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	pebbal: {
 		inherit: true,
 		isNonstandard: null,
-		natDexTier: "AG",
+		natDexTier: "LC",
 	},
 	pebmaul: {
 		inherit: true,
