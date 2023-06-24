@@ -10055,4 +10055,18 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Unobtainable",
 	},
+	gigalite: {
+		name: "Gigalite",
+		spritenum: 0,
+		megaStone: "Gigalith-Mega",
+		megaEvolves: "Gigalith",
+		itemUser: ["Gigalith"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -80,
+		gen: 6,
+		isNonstandard: "Unobtainable",
+	},
 };

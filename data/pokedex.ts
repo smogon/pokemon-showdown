@@ -29124,4 +29124,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
 	},
+	gigalithmega: {
+		num: 526,
+		name: "Gigalith-Mega",
+		baseSpecies: "Gigalith",
+		forme: "Mega",
+		types: ["Rock"],
+		baseStats: {hp: 85, atk: 145, def: 175, spa: 75, spd: 115, spe: 20},
+		abilities: {0: "Sandy Defense"},
+		heightm: 1.5,
+		weightkg: 500,
+		color: "Purple",
+		requiredItem: "Gigalite",
+		eggGroups: ["Undiscovered"],
+	},
 };

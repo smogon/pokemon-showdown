@@ -4110,4 +4110,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "OU",
 	},
+	gigalithmega: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "OU",
+	},
 };
