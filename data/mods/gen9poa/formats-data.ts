@@ -4115,4 +4115,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: null,
 		natDexTier: "OU",
 	},
+	terrakionrhinian: {
+		inherit: true,
+		isNonstandard: null,
+		natDexTier: "UU",
+	},
 };

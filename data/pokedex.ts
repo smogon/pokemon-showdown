@@ -29138,4 +29138,17 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		requiredItem: "Gigalite",
 		eggGroups: ["Undiscovered"],
 	},
+	terrakionrhinian: {
+		num: 639,
+		name: "Terrakion-Rhinian",
+		baseSpecies: "Terrakion",
+		forme: "Rhinian",
+		types: ["Rock", "Dark"],
+		baseStats: {hp: 91, atk: 139, def: 80, spa: 82, spd: 80, spe: 108},
+		abilities: {0: "Defiant", 1: "Infiltrator"},
+		heightm: 0.6,
+		weightkg: 90,
+		color: "Purple",
+		eggGroups: ["Undiscovered"],
+	},
 };
