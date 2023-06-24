@@ -7446,10 +7446,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	manyheads: {
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
-			this.add('-message', 'bro got damamged 💀');
-			this.add('-message', target.baseSpecies.id);
-			this.add('-message', target.baseSpecies.id.includes("tiamutt"));
-			this.add('-message', !target.transformed);
 			if (effect && effect.effectType === 'Move' && target.baseSpecies.id.includes("tiamutt") && !target.transformed) {
 				let forme = target.species.forme;
 				this.effectState.manyHeads = false;
@@ -7471,7 +7467,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onUpdate(pokemon) {
-			if (pokemon.baseSpecies.id === "tiamutt" && this.effectState.manyHeads) {
+			if (pokemon.baseSpecies.id.includes("tiamutt") && this.effectState.manyHeads) {
 				const speciesid = 'tiamutt' + this.effectState.manyHeads.toLowerCase();
 				this.add('-message', speciesid);
 				pokemon.formeChange(speciesid, this.effect, true);
