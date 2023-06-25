@@ -24126,6 +24126,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onSwap(target) {
 				if (!target.fainted && target.status) {
 					target.clearStatus();
+					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
+					target.side.removeSlotCondition(target, 'fabledprotector');
 				}
 			},
 			onModifyDef(def, target, source, move) {
