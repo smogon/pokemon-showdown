@@ -6939,11 +6939,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	magmabubble: {
 		onModifyAtk(atk, attacker, defender, move) {
+			this.add('-message', 'magmabubble start phys');
 			if (move.type === 'Fire') {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpA(atk, attacker, defender, move) {
+			this.add('-message', 'magmabubble start spec');
 			if (move.type === 'Fire') {
 				return this.chainModify(1.5);
 			}
@@ -7339,6 +7341,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	raginghalo: {
 		onTryHit(target, source, move) {
+			this.add('-message', 'raging halo start');
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
 			if (move.id === 'skydrop' && !source.volatiles['skydrop']) return;
 			this.debug('Wonder Guard immunity: ' + move.id);
@@ -7348,6 +7351,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				} else {
 					this.add('-immune', target, '[from] ability: Raging Halo');
 				}
+				this.add('-message', 'raging halo end');
 				return null;
 			}
 		},
