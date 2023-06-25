@@ -13226,7 +13226,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		name: "Ribombee",
 		types: ["Bug", "Fairy"],
 		baseStats: {hp: 60, atk: 55, def: 60, spa: 105, spd: 80, spe: 124},
-		abilities: {0: "Honey Gather", 1: "Shield Dust", H: "Sweet Veil"},
+		abilities: {0: "Levitate", 1: "Shield Dust", H: "Sweet Veil"},
 		heightm: 0.2,
 		weightkg: 0.5,
 		color: "Yellow",
