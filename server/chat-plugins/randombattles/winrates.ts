@@ -46,11 +46,13 @@ function getDefaultStats() {
 			// so i'm not spending the time to add commands to toggle this
 			gen9randombattle: {mons: {}},
 			gen9randomdoublesbattle: {mons: {}},
+			gen8randombattle: {mons: {}},
 			gen7randombattle: {mons: {}},
 			gen6randombattle: {mons: {}},
 			gen5randombattle: {mons: {}},
 			gen4randombattle: {mons: {}},
 			gen3randombattle: {mons: {}},
+			gen2randombattle: {mons: {}},
 			gen1randombattle: {mons: {}},
 		},
 	} as Stats;
