@@ -6939,13 +6939,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	magmabubble: {
 		onModifyAtk(atk, attacker, defender, move) {
-			this.add('-message', 'magmabubble start phys');
 			if (move.type === 'Fire') {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpA(atk, attacker, defender, move) {
-			this.add('-message', 'magmabubble start spec');
 			if (move.type === 'Fire') {
 				return this.chainModify(1.5);
 			}
@@ -7341,11 +7339,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	raginghalo: {
 		onTryHit(target, source, move) {
-			this.add('-message', 'raging halo start');
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
 			if (move.id === 'skydrop' && !source.volatiles['skydrop']) return;
 			this.debug('Wonder Guard immunity: ' + move.id);
-			if ((move.category === "Physical" && source.getStat('atk') < target.getStat('atk')) || (move.category === "Special" && source.getStat('spa') < target.getStat('spa'))) {
+			if ((move.category === "Physical" && source.getStat('atk', false, true) < target.getStat('atk', false, true)) || (move.category === "Special" && source.getStat('spa', false, true) < target.getStat('spa', false, true))) {
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
