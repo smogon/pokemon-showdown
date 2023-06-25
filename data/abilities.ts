@@ -7330,7 +7330,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onWeatherChange(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Radiangler' || pokemon.transformed) return;
 			if (pokemon.effectiveWeather() === 'acidrain' && pokemon.isActive && pokemon.species.id !== 'radianglerexposed') {
-				pokemon.formeChange('Radiangler-Exposed', this.effect, false, '[msg]');
+				pokemon.formeChange('Radiangler-Exposed', this.effect, true, '[msg]');
 			}
 		},
 		name: "Caustic Breakdown",
