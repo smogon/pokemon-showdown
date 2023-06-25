@@ -20289,6 +20289,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wonderroom: ["8M", "7T", "6T", "5T"],
 			zapcannon: ["8L60", "7L62", "7V", "6L62", "5L62", "4L62", "3L48"],
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
+			voltswitch: ["9M"],
 		},
 		eventData: [
 			{generation: 5, level: 10, isHidden: true, moves: ["tackle", "conversion", "sharpen", "psybeam"]},
@@ -54642,7 +54643,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			highhorsepower: ["8M"],
 			hyperbeam: ["8M", "7M", "6M", "5M"],
 			icepunch: ["8M", "7T", "6T", "5T"],
-			knockoff: ["7T", "6T", "5T"],
+			knockoff: ["9M", "7T", "6T", "5T"],
 			leer: ["8L1", "7L1", "6L1", "5L1"],
 			lowkick: ["8M", "8L1", "7T", "7L12", "6T", "6L12", "5T", "5L12"],
 			lowsweep: ["8M", "7M", "6M", "5M"],
