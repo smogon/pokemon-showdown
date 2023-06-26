@@ -8300,7 +8300,8 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 752 + 7,
 		itemUser: ["Arceus", "Giratina", "Regigigas"],
 		onSwitchIn(pokemon) {
-			if (pokemon.isActive && (pokemon.baseSpecies.name === 'Arceus' || pokemon.baseSpecies.name === 'Giratina' || pokemon.baseSpecies.name === 'Regigigas')) {
+			if (pokemon.isActive && (pokemon.baseSpecies.name === 'Arceus' ||
+			pokemon.baseSpecies.name === 'Giratina' || pokemon.baseSpecies.name === 'Regigigas')) {
 				this.queue.insertChoice({choice: 'runPrimal', pokemon: pokemon});
 			}
 		},
@@ -8314,7 +8315,8 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTakeItem(item, source) {
-			if (source.baseSpecies.baseSpecies === 'Arceus' || source.baseSpecies.baseSpecies === 'Giratina' || source.baseSpecies.baseSpecies === 'Regigigas') return false;
+			if (source.baseSpecies.baseSpecies === 'Arceus' ||
+			source.baseSpecies.baseSpecies === 'Giratina' || source.baseSpecies.baseSpecies === 'Regigigas') return false;
 			return true;
 		},
 		num: -59,
@@ -8401,7 +8403,8 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 60,
 		},
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.baseSpecies === 'Volcarona-Delta') || pokemon.baseSpecies.baseSpecies === 'Volcarona-Delta') {
+			if ((source && source.baseSpecies.baseSpecies === 'Volcarona-Delta') ||
+			pokemon.baseSpecies.baseSpecies === 'Volcarona-Delta') {
 				return false;
 			}
 			return true;
@@ -8858,7 +8861,6 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (move.type === 'Steel') {
 				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
-	
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[strengthen]');
@@ -8882,7 +8884,6 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (move.type === 'Rock') {
 				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
-	
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[strengthen]');
@@ -8964,7 +8965,6 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (move.type === 'Fighting') {
 				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
-	
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[strengthen]');
@@ -8988,7 +8988,6 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (move.type === 'Flying') {
 				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
-	
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[strengthen]');
@@ -9012,7 +9011,6 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (move.type === 'Dark') {
 				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
-	
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[strengthen]');
@@ -9125,7 +9123,6 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (move.type === 'Dragon') {
 				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
-	
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[strengthen]');
@@ -9192,7 +9189,6 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (move.type === 'Ghost') {
 				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
-	
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[strengthen]');
@@ -9216,7 +9212,6 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (move.type === 'Poison') {
 				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
-	
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[strengthen]');
@@ -9278,7 +9273,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			type: "Fighting",
 		},
 		onUpdate(pokemon) {
-				pokemon.eatItem();
+			pokemon.eatItem();
 		},
 		onEat(pokemon) {
 			const moveSlot = this.sample(pokemon.moveSlots);
@@ -9416,7 +9411,6 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (move.type === 'Fire') {
 				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
-	
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[strengthen]');
@@ -9438,7 +9432,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onUpdate(pokemon) {
 			if (pokemon.level < 20) {
-			pokemon.eatItem();
+				pokemon.eatItem();
 			}
 		},
 		onEat(pokemon) {
@@ -9459,7 +9453,6 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (move.type === 'Water') {
 				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
-	
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[strengthen]');
@@ -9483,7 +9476,6 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (move.type === 'Psychic') {
 				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
-	
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[strengthen]');
@@ -9578,7 +9570,6 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (move.type === 'Grass') {
 				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
-	
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[strengthen]');
@@ -9602,7 +9593,6 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (move.type === 'Fairy') {
 				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
-	
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[strengthen]');
@@ -9666,7 +9656,6 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (move.type === 'Ground') {
 				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
-	
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[strengthen]');
@@ -9741,7 +9730,6 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (move.type === 'Bug') {
 				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
-	
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[strengthen]');
@@ -9811,7 +9799,6 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (move.type === 'Ice') {
 				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
-	
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[strengthen]');
