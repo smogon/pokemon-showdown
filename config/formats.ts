@@ -54,8 +54,8 @@ export const Formats: FormatList = [
 		mod: 'gen9poa',
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Sleep Clause Mod'],
 		banlist: [
-			'ND Uber', 'ND AG', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw', 
-			'Razor Fang', 'Assist', 'Baton Pass', 'Hydreigonite', 'Haxorite', 'Blazikenite', 'Reuniclite'
+			'ND Uber', 'ND AG', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw',
+			'Razor Fang', 'Assist', 'Baton Pass', 'Hydreigonite', 'Haxorite', 'Blazikenite', 'Reuniclite',
 		],
 	},
 
@@ -144,7 +144,6 @@ export const Formats: FormatList = [
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
-	
 
 	// National Dex
 	///////////////////////////////////////////////////////////////////

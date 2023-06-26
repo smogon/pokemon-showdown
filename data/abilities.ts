@@ -32,7 +32,7 @@ Ratings and how they work:
 
 */
 
-import { PokemonSources } from "../sim/team-validator";
+import {PokemonSources} from "../sim/team-validator";
 
 export const Abilities: {[abilityid: string]: AbilityData} = {
 	noability: {
@@ -807,8 +807,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move.auraBooster !== this.effectState.target) return;
 			if (this.field.isWeather(['newmoon'])) {
 				return this.chainModify([move.hasAuraBreak ? 9 : 25, 15]);
-			}
-			else {
+			} else {
 				return this.chainModify([move.hasAuraBreak ? 3072 : 5448, 4096]);
 			}
 		},
@@ -1331,7 +1330,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				break;
 			case 'sandstorm':
 				if (pokemon.species.id !== 'castformsandy') forme = 'Castform-Sandy';
-				break;	
+				break;
 			case 'sunnyday':
 			case 'desolateland':
 				if (pokemon.species.id !== 'castformsunny') forme = 'Castform-Sunny';
@@ -1820,14 +1819,16 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onCriticalHit(target, type, move) {
 			if (!target) return;
-			if (move.category !== 'Physical' || target.species.id !== 'eiscue' || target.species.id !== 'sharpedorhinian' || target.transformed) return;
+			if (move.category !== 'Physical' || target.species.id !== 'eiscue' ||
+			target.species.id !== 'sharpedorhinian' || target.transformed) return;
 			if (target.volatiles['substitute'] && !(move.flags['bypasssub'] || move.infiltrates)) return;
 			if (!target.runImmunity(move.type)) return;
 			return false;
 		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (!target) return;
-			if (move.category !== 'Physical' || target.species.id !== 'eiscue' || target.species.id !== 'sharpedorhinian' || target.transformed) return;
+			if (move.category !== 'Physical' || target.species.id !== 'eiscue' ||
+			target.species.id !== 'sharpedorhinian' || target.transformed) return;
 
 			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 			if (hitSub) return;
@@ -2919,7 +2920,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	pastelveil: {
 		onStart(pokemon) {
-			if (!this.field.isWeather('acidrain')){
+			if (!this.field.isWeather('acidrain')) {
 				for (const ally of pokemon.alliesAndSelf()) {
 					if (['psn', 'tox'].includes(ally.status)) {
 						this.add('-activate', pokemon, 'ability: Pastel Veil');
@@ -2929,7 +2930,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onUpdate(pokemon) {
-			if (!this.field.isWeather('acidrain')){
+			if (!this.field.isWeather('acidrain')) {
 				if (['psn', 'tox'].includes(pokemon.status)) {
 					this.add('-activate', pokemon, 'ability: Pastel Veil');
 					pokemon.cureStatus();
@@ -2937,7 +2938,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onAllySwitchIn(pokemon) {
-			if (!this.field.isWeather('acidrain')){
+			if (!this.field.isWeather('acidrain')) {
 				if (['psn', 'tox'].includes(pokemon.status)) {
 					this.add('-activate', this.effectState.target, 'ability: Pastel Veil');
 					pokemon.cureStatus();
@@ -2945,7 +2946,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onSetStatus(status, target, source, effect) {
-			if (!this.field.isWeather('acidrain')){
+			if (!this.field.isWeather('acidrain')) {
 				if (!['psn', 'tox'].includes(status.id)) return;
 				if ((effect as Move)?.status) {
 					this.add('-immune', target, '[from] ability: Pastel Veil');
@@ -6048,7 +6049,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onSourceDamagingHit(damage, target, source, move) {
 			if (source === target) return;
 			if (move.name === "Regurgitation" || target.fainted || target.isSemiInvulnerable()) return;
-			let firstdamage = this.actions.getDamage(source, target, 'regurgitation');
+			const firstdamage = this.actions.getDamage(source, target, 'regurgitation');
 			if (typeof firstdamage === 'number') this.damage(firstdamage, target, source);
 			return null;
 		},
@@ -6162,9 +6163,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	supercell: {
 		onStart(pokemon) {
 			if (this.field.isWeather(['newmoon', 'raindance', 'primordialsea', 'thunderstorm'])) {
-				if (pokemon.species.name === 'Typhlosion-Delta-Mega') pokemon.formeChange('Typhlosion-Delta-Mega-Active', this.effect, false);
+				if (pokemon.species.name === 'Typhlosion-Delta-Mega') {
+					pokemon.formeChange('Typhlosion-Delta-Mega-Active', this.effect, false);
+				}
 			} else {
-				if (pokemon.species.name === 'Typhlosion-Delta-Mega-Active') pokemon.formeChange('Typhlosion-Delta-Mega', this.effect, false);
+				if (pokemon.species.name === 'Typhlosion-Delta-Mega-Active') {
+					pokemon.formeChange('Typhlosion-Delta-Mega', this.effect, false);
+				}
 			}
 		},
 		onModifySpAPriority: 5,
@@ -6175,9 +6180,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onUpdate(pokemon) {
 			if (this.field.isWeather(['newmoon', 'raindance', 'primordialsea', 'thunderstorm'])) {
-				if (pokemon.species.name === 'Typhlosion-Delta-Mega') pokemon.formeChange('Typhlosion-Delta-Mega-Active', this.effect, false);
+				if (pokemon.species.name === 'Typhlosion-Delta-Mega') {
+					pokemon.formeChange('Typhlosion-Delta-Mega-Active', this.effect, false);
+				}
 			} else {
-				if (pokemon.species.name === 'Typhlosion-Delta-Mega-Active') pokemon.formeChange('Typhlosion-Delta-Mega', this.effect, false);
+				if (pokemon.species.name === 'Typhlosion-Delta-Mega-Active') {
+					pokemon.formeChange('Typhlosion-Delta-Mega', this.effect, false);
+				}
 			}
 		},
 		onEnd(pokemon) {
