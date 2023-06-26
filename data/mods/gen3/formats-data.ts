@@ -690,7 +690,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	piloswine: {
-		tier: "PU",
+		tier: "PUBL",
 	},
 	corsola: {
 		tier: "PU",
