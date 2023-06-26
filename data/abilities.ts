@@ -2171,6 +2171,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return null;
 			}
 		},
+		onImmunity(type, pokemon) {
+			if (type === 'thunderstorm') return false;
+		},
 		onAnyRedirectTarget(target, source, source2, move) {
 			if (move.type !== 'Electric' || move.flags['pledgecombo']) return;
 			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
@@ -2512,6 +2515,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 				return null;
 			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'thunderstorm') return false;
 		},
 		isBreakable: true,
 		name: "Motor Drive",
@@ -4939,6 +4945,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 				return null;
 			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'thunderstorm') return false;
 		},
 		isBreakable: true,
 		name: "Volt Absorb",
