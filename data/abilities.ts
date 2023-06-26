@@ -2961,7 +2961,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onAllySetStatus(status, target, source, effect) {
-			if (!this.field.isWeather('acidrain')){
+			if (!this.field.isWeather('acidrain')) {
 				if (!['psn', 'tox'].includes(status.id)) return;
 				if ((effect as Move)?.status) {
 					const effectHolder = this.effectState.target;
@@ -3073,15 +3073,15 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onResidual(pokemon) {
 			if (this.field.isWeather(['acidrain'])) {
 				this.heal(pokemon.baseMaxhp / 8);
-			} 
+			}
 		},
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
 			if (this.field.isWeather('acidrain')) return;
-				if (effect.id === 'psn' || effect.id === 'tox') {
-					this.heal(target.baseMaxhp / 8);
-					return false;
-				}
+			if (effect.id === 'psn' || effect.id === 'tox') {
+				this.heal(target.baseMaxhp / 8);
+				return false;
+			}
 		},
 		onImmunity(type, pokemon) {
 			if (type === 'acidrain') return false;
@@ -3529,7 +3529,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!this.effectState.target.hp) return;
 			const ability = target.getAbility();
 			const additionalBannedAbilities = [
-				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard','refurbished', 'toughterror', 'swarming', 'iceface,'
+				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard', 'refurbished', 'toughterror', 'swarming', 'iceface,',
 			];
 			if (target.getAbility().isPermanent || additionalBannedAbilities.includes(target.ability)) return;
 			if (this.effectState.target.setAbility(ability)) {
@@ -4300,7 +4300,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					move.secondaries.push({
 						chance: 15,
 						volatileStatus: 'flinch',
-				})
+					});
 			}
 				move.secondaries.push({
 					chance: 10,
@@ -4956,7 +4956,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	wanderingspirit: {
 		onDamagingHit(damage, target, source, move) {
-			const additionalBannedAbilities = ['hungerswitch', 'illusion', 'neutralizinggas', 'wonderguard','refurbished', 'toughterror', 'swarming', 'iceface'];
+			const additionalBannedAbilities = [
+				'hungerswitch', 'illusion', 'neutralizinggas', 'wonderguard',
+				'refurbished', 'toughterror', 'swarming', 'iceface',
+			];
 			if (source.getAbility().isPermanent || additionalBannedAbilities.includes(source.ability) ||
 				target.volatiles['dynamax']
 			) {
@@ -5395,7 +5398,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onBeforeMove(attacker, defender, move) {
 			if (move.category === 'Status') return;
 			if (move.type === 'Fire' || (move.id === 'custommove' && attacker.cmType === 'Fire') || 
-			(move.id === 'weatherball' &&  attacker.effectiveWeather() === "sunnyday") || (move.id === 'terablast' &&  attacker.terastallized === 'Fire')) {
+			(move.id === 'weatherball' &&  attacker.effectiveWeather() === "sunnyday") ||
+			(move.id === 'terablast' &&  attacker.terastallized === 'Fire')) {
 				this.boost({spa: 1, atk: 1, spe: 1}, attacker);
 				if (attacker.species.id === 'emolgadelta') {
 					attacker.formeChange('Emolga-Delta-Fired');
@@ -6562,7 +6566,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	feral: {
 		onAfterMove(pokemon, target, move) {
-			const moves = ['bite', 'scratch', 'growl', 'pounce', 'babydolleyes', 'copycat', 'assist', 'cut', 'defensecurl', 'feint', 'furyswipes', 'flail', 'howl', 'lick', 'lockon', 'meanlook', 'powertrip', 'agility', 'honeclaws', 'screech', 'slash', 'snarl', 'spite', 'struggle', 'swagger', 'tackle', 'work up'];
+			const moves = ['bite', 'scratch', 'growl', 'pounce', 'babydolleyes', 'copycat',
+			'assist', 'cut', 'defensecurl', 'feint', 'furyswipes', 'flail', 'howl', 'lick',
+			'lockon', 'meanlook', 'powertrip', 'agility', 'honeclaws', 'screech', 'slash',
+			'snarl', 'spite', 'struggle', 'swagger', 'tackle', 'work up'];
+
 			if (pokemon === target) return;
 			let randomMove = '';
 			if (moves.length) randomMove = this.sample(moves);
@@ -6680,14 +6688,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (source === target) return;
 			if (move.name === "Call of the Hunt" || target.fainted || target.isSemiInvulnerable()) return;
 			if (this.field.isWeather(['sunnyday','newmoon'])) {
-				let firstdamage = this.actions.getDamage(source, target, 'callofthehunt');
+				const firstdamage = this.actions.getDamage(source, target, 'callofthehunt');
 				if (typeof firstdamage === 'number') this.damage(firstdamage, target, source);
 				
 				const CotHDark = this.dex.getActiveMove('callofthehunt');
 				CotHDark.type = 'Dark';
 				if (target.fainted || target.isSemiInvulnerable()) return;
 
-				let seconddamage = this.actions.getDamage(source, target, CotHDark);
+				const seconddamage = this.actions.getDamage(source, target, CotHDark);
 				if (typeof seconddamage === 'number') this.damage(seconddamage, target, source);
 			}
 			return null;
@@ -6861,10 +6869,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onUpdate(source) {
 			if (!source.isStarted) return;
-			const targets: Pokemon[] = [];
 			for (const pokemon of this.getAllActive()) {
-				let item = pokemon.getItem();
-				let newItem = ('Rotten ' + item);
+				const item = pokemon.getItem();
+				const newItem = ('Rotten ' + item);
 
 				if (pokemon.hp && item.isBerry && item.onEat !== false && !item.id.includes('rotten')) {
 					pokemon.setItem('Rotten ' + item);
@@ -7015,7 +7022,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	claustrophobia: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon) {
-			if (pokemon?.volatiles['trapped'] || pokemon?.volatiles['partiallyTrapped'] || pokemon?.volatiles['noretreat'] || this.field.getPseudoWeather('trickroom') || this.field.getPseudoWeather('magicroom') || this.field.getPseudoWeather('wonderroom') || this.field.getPseudoWeather('panicroom')) {
+			if (pokemon?.volatiles['trapped'] || pokemon?.volatiles['partiallyTrapped'] ||
+			pokemon?.volatiles['noretreat'] || this.field.getPseudoWeather('trickroom') ||
+			this.field.getPseudoWeather('magicroom') || this.field.getPseudoWeather('wonderroom') ||
+			this.field.getPseudoWeather('panicroom')) {
 				this.debug('claustrophobia boost');
 				return this.chainModify(2);
 			}
