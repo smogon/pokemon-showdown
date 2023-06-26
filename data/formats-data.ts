@@ -1618,7 +1618,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	ursaluna: {
 		tier: "OU",
-		doublesTier: "DOU",
+		doublesTier: "DUber",
 		natDexTier: "Uber",
 	},
 	slugma: {
