@@ -7242,7 +7242,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyMove(move, pokemon, target) {
 			if (move.category === "Status" || move.type !== "Poison" || !target) return;
 			move.overrideDefensiveStat = 'def';
-			if (target.getStat('spd', false, true) > pokemon.getStat('def', false, true)) {
+			if (target.getStat('spd', false, true) < pokemon.getStat('def', false, true)) {
 				move.overrideDefensiveStat = 'spd';
 			}
 		},
