@@ -6437,7 +6437,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	bloodlust: {
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (move.totalDamage) {
-				this.heal(move.totalDamage / 8, source);
+				this.heal(move.totalDamage / 6, source);
 			}
 		},
 		name: "Blood Lust",
