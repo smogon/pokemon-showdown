@@ -45,7 +45,7 @@ export const Formats: FormatList = [
 		name: "[BudpoW] MBSFB Cup",
 		mod: 'gen9',
 		searchShow: true,
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 20', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 50','Team Preview'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 20', 'Max Move Count = 8', 'Max Level = 100', 'Default Level = 50','Team Preview'],
 	},
 	
 	{
