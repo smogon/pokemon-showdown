@@ -38,7 +38,7 @@ return spe;
 },
 onBeforeMovePriority: 1,
 onBeforeMove(pokemon) {
-if (this.randomChance(1, 5)) {
+if (this.randomChance(20, 100)) {
 this.add('cant', pokemon, 'par');
 return false;
 }
@@ -57,7 +57,7 @@ this.add('-status', target, 'slp', '[from] move: ' + sourceEffect.name);
 this.add('-status', target, 'slp');
 }
 // 1-3 turns
-this.effectState.startTime = this.random(3, 8);
+this.effectState.startTime = this.random(1, 4);
 this.effectState.time = this.effectState.startTime;
 
 if (target.removeVolatile('nightmare')) {
