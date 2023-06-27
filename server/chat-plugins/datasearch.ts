@@ -509,11 +509,12 @@ export const commands: Chat.ChatCommands = {
 	bw2learn: 'learn',
 	oraslearn: 'learn',
 	usumlearn: 'learn',
+	sslearn: 'learn',
 	async learn(target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help learn');
 		if (target.length > 300) throw new Chat.ErrorMessage(`Query too long.`);
 
-		const GENS: {[k: string]: number} = {rby: 1, gsc: 2, adv: 3, dpp: 4, bw2: 5, oras: 6, usum: 7};
+		const GENS: {[k: string]: number} = {rby: 1, gsc: 2, adv: 3, dpp: 4, bw2: 5, oras: 6, usum: 7, ss: 8};
 		const cmdGen = GENS[cmd.slice(0, -5)];
 		if (cmdGen) target = `gen${cmdGen}, ${target}`;
 
@@ -543,7 +544,7 @@ export const commands: Chat.ChatCommands = {
 		`A value of 'min source gen [number]' indicates that trading (or Pokémon Bank) from generations before [number] is not allowed.`,
 		`/learn5 displays how the Pok\u00e9mon can learn the given moves at level 5, if it can at all.`,
 		`/learnall displays all of the possible fathers for egg moves.`,
-		`/learn can also be prefixed by a generation acronym (e.g.: /dpplearn) to indicate which generation is used. Valid options are: rby gsc adv dpp bw2 oras usum`,
+		`/learn can also be prefixed by a generation acronym (e.g.: /dpplearn) to indicate which generation is used. Valid options are: rby gsc adv dpp bw2 oras usum ss`,
 	],
 	randtype: 'randomtype',
 	async randomtype(target, room, user, connection, cmd, message) {
