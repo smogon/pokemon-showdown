@@ -1003,13 +1003,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 					}
 				}
 				if (this.checkMoveMakesContact(move, source, target)) {
-					source.trySetStatus('psn', target);
+					source.trySetStatus('tox', target);
 				}
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
 				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
-					source.trySetStatus('psn', target);
+					source.trySetStatus('tox', target);
 				}
 			},
 		},
@@ -1030,13 +1030,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onBasePower(basePower, pokemon, target) {
-			if (target.status === 'psn' || target.status === 'tox') {
+			if (target.status === 'tox' || target.status === 'tox') {
 				return this.chainModify(2);
 			}
 		},
 		secondary: {
 			chance: 50,
-			status: 'psn',
+			status: 'tox',
 		},
 		target: "normal",
 		type: "Poison",
@@ -3184,7 +3184,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
 		secondary: {
 			chance: 10,
-			status: 'psn',
+			status: 'tox',
 		},
 		critRatio: 2,
 		target: "normal",
@@ -3747,7 +3747,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onHit(target, source) {
 				const result = this.random(3);
 				if (result === 0) {
-					target.trySetStatus('psn', source);
+					target.trySetStatus('tox', source);
 				} else if (result === 1) {
 					target.trySetStatus('par', source);
 				} else {
@@ -6782,7 +6782,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					} else if (result === 1) {
 						pokemon.trySetStatus('par', source);
 					} else {
-						pokemon.trySetStatus('psn', source);
+						pokemon.trySetStatus('tox', source);
 					}
 				}
 			},
@@ -7102,7 +7102,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				for (const pokemon of source.foes()) {
-					pokemon.trySetStatus('psn', source);
+					pokemon.trySetStatus('tox', source);
 				}
 			},
 		},
@@ -7367,7 +7367,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 					if (result === 0) {
 						pokemon.trySetStatus('par', source);
 					} else {
-						pokemon.trySetStatus('psn', source);
+						pokemon.trySetStatus('tox', source);
 					}
 				}
 			},
@@ -8127,7 +8127,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1},
 		secondary: {
 			chance: 30,
-			status: 'psn',
+			status: 'tox',
 		},
 		target: "normal",
 		type: "Poison",
@@ -12498,7 +12498,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		secondary: {
 			chance: 100,
-			status: 'psn',
+			status: 'tox',
 		},
 		target: "allAdjacentFoes",
 		type: "Poison",
@@ -12973,7 +12973,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		secondary: {
 			chance: 30,
-			status: 'psn',
+			status: 'tox',
 		},
 		target: "normal",
 		type: "Poison",
@@ -13686,7 +13686,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 1.25,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		status: 'psn',
+		status: 'tox',
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Poison",
@@ -13704,7 +13704,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		secondary: {
 			chance: 30,
-			status: 'psn',
+			status: 'tox',
 		},
 		target: "normal",
 		type: "Poison",
@@ -13719,7 +13719,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 1.25,
 		priority: 0,
 		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
-		status: 'psn',
+		status: 'tox',
 		secondary: null,
 		target: "normal",
 		type: "Poison",
@@ -13737,7 +13737,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1},
 		secondary: {
 			chance: 30,
-			status: 'psn',
+			status: 'tox',
 		},
 		target: "normal",
 		type: "Poison",
@@ -13755,7 +13755,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		critRatio: 2,
 		secondary: {
 			chance: 10,
-			status: 'psn',
+			status: 'tox',
 		},
 		target: "normal",
 		type: "Poison",
@@ -16555,7 +16555,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		secondary: {
 			chance: 20,
-			status: 'psn',
+			status: 'tox',
 		},
 		target: "normal",
 		type: "Poison",
@@ -17278,7 +17278,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1},
 		secondary: {
 			chance: 30,
-			status: 'psn',
+			status: 'tox',
 		},
 		target: "normal",
 		type: "Poison",
@@ -17295,7 +17295,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {bullet: 1, protect: 1, mirror: 1},
 		secondary: {
 			chance: 30,
-			status: 'psn',
+			status: 'tox',
 		},
 		target: "normal",
 		type: "Poison",
@@ -17312,7 +17312,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1},
 		secondary: {
 			chance: 10,
-			status: 'psn',
+			status: 'tox',
 		},
 		target: "allAdjacent",
 		type: "Poison",
@@ -17415,7 +17415,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1},
 		secondary: {
 			chance: 40,
-			status: 'psn',
+			status: 'tox',
 		},
 		target: "normal",
 		type: "Poison",
@@ -20103,7 +20103,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				} else if (this.effectState.layers >= 2) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
 				} else {
-					pokemon.trySetStatus('psn', pokemon.side.foe.active[0]);
+					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
 				}
 			},
 		},
@@ -20123,7 +20123,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 1.25,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		status: 'psn',
+		status: 'tox',
 		boosts: {
 			spe: -1,
 		},
@@ -20494,7 +20494,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		multihit: 2,
 		secondary: {
 			chance: 20,
-			status: 'psn',
+			status: 'tox',
 		},
 		target: "normal",
 		type: "Bug",
@@ -20675,7 +20675,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		onHit(target, source, move) {
-			if (target.status === 'psn' || target.status === 'tox') {
+			if (target.status === 'tox' || target.status === 'tox') {
 				return !!this.boost({atk: -1, spa: -1, spe: -1}, target, source, move);
 			}
 			return false;
@@ -20696,7 +20696,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onBasePower(basePower, pokemon, target) {
-			if (target.status === 'psn' || target.status === 'tox') {
+			if (target.status === 'tox' || target.status === 'tox') {
 				return this.chainModify(2);
 			}
 		},
