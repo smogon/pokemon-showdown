@@ -892,6 +892,7 @@ priority: 1,
 flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
 volatileStatus: 'attract',
 boosts: {
+spa: -1,
 atk: -1,
 },
 secondary: null,
@@ -1589,11 +1590,13 @@ priority: 0,
 flags: {
 contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
 },
+recoil: [25, 100],
 onTryMove(attacker, defender, move) {
 if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
+this.boost({spe: 1, evasion: -2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -3324,6 +3327,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
+this.boost({atk: 1, spe: 2, evasion: -2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -3494,6 +3498,7 @@ const forme = attacker.hp <= attacker.maxhp / 2 ? 'cramorantgorging' : 'cramoran
 attacker.formeChange(forme, move);
 }
 this.add('-prepare', attacker, move.name);
+this.boost({atk: 1, spe: 2, evasion: -2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -4002,7 +4007,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 spe: -1,
 },
@@ -5466,6 +5471,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
+this.boost({atk: 1, spe: 1, evasion: -2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -5485,6 +5491,10 @@ if (move.id === 'gust' || move.id === 'twister') {
 return this.chainModify(2);
 }
 },
+},
+hasCrashDamage: true,
+onMoveFail(target, source, move) {
+this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
 },
 secondary: null,
 target: "any",
@@ -5716,6 +5726,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
+this.boost({atk: 1, spe: 1, evasion: -2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -5723,7 +5734,7 @@ attacker.addVolatile('twoturnmove', defender);
 return null;
 },
 secondary: {
-chance: 25,
+chance: 33,
 status: 'par',
 },
 target: "normal",
@@ -5995,8 +6006,8 @@ type: "Psychic",
 
 geomancy: {
 accuracy: 95,
-basePower: 0,
-category: "Status",
+basePower: 120,
+category: "Physical",
 name: "Geomancy",
 pp: 1.25,
 priority: 0,
@@ -6006,19 +6017,15 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
+this.boost({atk: 1, spd: 2, evasion: -2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
 attacker.addVolatile('twoturnmove', defender);
 return null;
 },
-boosts: {
-spa: 2,
-spd: 2,
-spe: 2,
-},
 secondary: null,
-target: "self",
+target: "normal",
 type: "Fairy",
 },
 
@@ -7216,6 +7223,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
+this.boost({atk: 2, evasion: -2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -7532,6 +7540,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
+this.boost({spa: 1, spe: 1, evasion: -2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -7539,7 +7548,7 @@ attacker.addVolatile('twoturnmove', defender);
 return null;
 },
 secondary: {
-chance: 25,
+chance: 33,
 status: 'brn',
 },
 target: "normal",
@@ -8624,7 +8633,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 spe: -1,
 },
@@ -8668,7 +8677,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 spd: -2,
 },
@@ -8744,7 +8753,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 atk: -1,
 },
@@ -9383,7 +9392,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({spa: 1}, attacker, attacker, move);
+this.boost({atk: 1, evasion: -2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -10033,9 +10042,9 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
-spe: -1,
+spe: -2,
 },
 },
 target: "normal",
@@ -10044,16 +10053,16 @@ type: "Ground",
 
 mudslap: {
 accuracy: 95,
-basePower: 20,
+basePower: 40,
 category: "Special",
 name: "Mud-Slap",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
-evasion: -1,
+evasion: -2,
 },
 },
 target: "normal",
@@ -10120,7 +10129,7 @@ priority: 0,
 flags: {protect: 1, mirror: 1},
 weather: 'sunnyday',
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 spa: -1,
 },
@@ -10905,6 +10914,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
+this.boost({evasion: -2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -11193,7 +11203,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 spe: -1,
 },
@@ -11638,7 +11648,6 @@ secondary: {
 chance: 25,
 boosts: {
 spd: -1,
-def: -1,
 },
 },
 target: "normal",
@@ -12784,7 +12793,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 spe: -1,
 },
@@ -13243,7 +13252,7 @@ boosts: {
 spe: -2,
 },
 secondary: null,
-target: "normal",
+target: "allAdjacent",
 type: "Normal",
 },
 
@@ -13499,10 +13508,10 @@ type: "Ghost",
 
 shadowforce: {
 accuracy: 95,
-basePower: 120,
-category: "Physical",
+basePower: 90,
+category: "Special",
 name: "Shadow Force",
-pp: .625,
+pp: 1.25,
 priority: 0,
 flags: {contact: 1, charge: 1, mirror: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1},
 breaksProtect: true,
@@ -13511,6 +13520,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
+this.boost({evasion: -2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -13997,7 +14007,7 @@ type: "Ghost",
 },
 
 sizzlyslide: {
-accuracy: 95,
+accuracy: 85,
 basePower: 60,
 category: "Physical",
 name: "Sizzly Slide",
@@ -14069,7 +14079,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 atk: -1,
 },
@@ -14091,7 +14101,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({def: 2, atk: 2, evasion: -2,}, attacker, attacker, move);
+this.boost({def: 2, atk: 1, evasion: -2, spe: -1,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -14104,7 +14114,7 @@ type: "Normal",
 },
 
 skyattack: {
-accuracy: 90,
+accuracy: 95,
 basePower: 140,
 category: "Physical",
 name: "Sky Attack",
@@ -14117,6 +14127,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
+this.boost({atk: 1, spe: 1, evasion: -2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -14532,7 +14543,7 @@ boosts: {
 evasion: -1,
 },
 secondary: null,
-target: "normal",
+target: "allAdjacent",
 type: "Normal",
 },
 
@@ -14559,7 +14570,7 @@ pp: 1.25,
 priority: 1,
 flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 atk: -1,
 spa: -1,
@@ -14698,6 +14709,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
+this.boost({spa: 1, spd: 1, evasion: -2,}, attacker, attacker, move);
 if (['sunnyday', 'desolateland'].includes(attacker.effectiveWeather())) {
 this.attrLastMove('[still]');
 this.addMove('-anim', attacker, move.name, defender);
@@ -14734,6 +14746,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
+this.boost({atk: 1, spe: 1, evasion: -2,}, attacker, attacker, move);
 if (['sunnyday', 'desolateland'].includes(attacker.effectiveWeather())) {
 this.attrLastMove('[still]');
 this.addMove('-anim', attacker, move.name, defender);
@@ -14882,6 +14895,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1},
 boosts: {
+chance: 95,
 atk: 2,
 spa: 2,
 spe: 1,
@@ -14889,7 +14903,7 @@ spd: -2,
 def: -2,
 },
 secondary: {
-chance: 100,
+chance: 95,
 status: 'brn',
 },
 target: "normal",
@@ -15041,7 +15055,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 spa: -1,
 },
@@ -16668,7 +16682,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 def: -1,
 },
@@ -16741,7 +16755,7 @@ flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
 boosts: {
 atk: -1,
 spa: -1,
-spe: 1,
+spe: 2,
 spd: -1,
 def: -1,
 },
@@ -17186,10 +17200,9 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 atk: -1,
-spa: -1,
 },
 },
 target: "normal",
