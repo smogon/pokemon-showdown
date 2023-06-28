@@ -587,7 +587,7 @@ export class TeamValidator {
 		}
 		if (set.cmType) {
 			const type = dex.types.get(set.cmType);
-			if (!type.exists) {
+			if (!type.exists || (["Nuclear"].includes(type.name) && format.id !== 'gen9poanationaldexag')) {
 				problems.push(`${name}'s Custom Move type (${set.cmType}) is invalid.`);
 			} else {
 				set.cmType = type.name;
