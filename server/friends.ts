@@ -208,9 +208,9 @@ export class FriendsDatabase {
 
 		const result = await this.transaction('send', [user.id, receiverID]);
 		if (receiver) {
-			sendPM(`/raw <span class="username">${user.name}</span> sent you a friend request!`, receiver.id);
-			sendPM(buf, receiver.id);
-			sendPM(disclaimer, receiver.id);
+			sendPM(`/raw <span class="username">${user.name}</span> sent you a friend request!`, receiver.id, user.id);
+			sendPM(buf, receiver.id, user.id);
+			sendPM(disclaimer, receiver.id, user.id);
 		}
 		sendPM(
 			`/nonotify You sent a friend request to ${receiver?.connected ? receiver.name : receiverID}!`,
