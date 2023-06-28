@@ -7875,7 +7875,6 @@ accuracy: 95,
 basePower: 0,
 category: "Status",
 name: "Ion Deluge",
-pp: 1.25,
 pp: .625,
 flags: {},
 pseudoWeather: 'iondeluge',
@@ -14086,7 +14085,7 @@ category: "Physical",
 name: "Skull Bash",
 pp: .625,
 priority: 0,
-flags: {charge: 1, contact: 1, charge: 1, protect: 1, mirror: 1, nosleeptalk: 1, failinstruct: 1},
+flags: {charge: 1, contact: 1, protect: 1, mirror: 1, nosleeptalk: 1, failinstruct: 1},
 onTryMove(attacker, defender, move) {
 if (attacker.removeVolatile(move.id)) {
 return;
@@ -14729,7 +14728,7 @@ category: "Physical",
 name: "Solar Blade",
 pp: .625,
 priority: 0,
-flags: {charge: 1, contact: 1, charge: 1, protect: 1, mirror: 1, slicing: 1, nosleeptalk: 1, failinstruct: 1},
+flags: {charge: 1, contact: 1, protect: 1, mirror: 1, slicing: 1, nosleeptalk: 1, failinstruct: 1},
 onTryMove(attacker, defender, move) {
 if (attacker.removeVolatile(move.id)) {
 return;
