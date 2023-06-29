@@ -303,7 +303,21 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			);
 			return;
 		}
-		const isJoined = targetUser.id in this.playerTable;
+		const possiblePlayer = this.playerTable[targetUser.id];
+		let isJoined = false;
+		if (possiblePlayer) {
+			if (this.generator.name.includes("Elimination")) {
+				isJoined = !possiblePlayer.isEliminated && !possiblePlayer.isDisqualified;
+			} else if (this.generator.name.includes("Round Robin")) {
+				if (possiblePlayer.isDisqualified) {
+					isJoined = !possiblePlayer.isDisqualified;
+				} else if ((this.generator as RoundRobin)?.matchesPerPlayer) {
+					isJoined = possiblePlayer.games !== (this.generator as RoundRobin).matchesPerPlayer;
+				}
+			} else {
+				isJoined = true;
+			}
+		}
 		const update: {
 			format: string, teambuilderFormat?: string, generator: string,
 			isStarted: boolean, isJoined: boolean, bracketData: AnyObject,

@@ -511,12 +511,13 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, Setup, Hazards);
 		this.incompatibleMoves(moves, movePool, Setup, ['defog', 'nuzzle', 'toxic', 'waterspout', 'yawn', 'haze']);
 		this.incompatibleMoves(moves, movePool, PhysicalSetup, PhysicalSetup);
-		this.incompatibleMoves(moves, movePool, SpecialSetup, 'thunderwave');
+		this.incompatibleMoves(moves, movePool, SpecialSetup, ['suckerpunch', 'thunderwave']);
 		this.incompatibleMoves(moves, movePool, 'substitute', pivotingMoves);
 		this.incompatibleMoves(moves, movePool, SpeedSetup, ['aquajet', 'rest', 'trickroom']);
 		this.incompatibleMoves(moves, movePool, 'curse', 'rapidspin');
 		this.incompatibleMoves(moves, movePool, 'dragondance', 'dracometeor');
 		this.incompatibleMoves(moves, movePool, 'healingwish', 'uturn');
+		this.incompatibleMoves(moves, movePool, 'dazzlinggleam', ['howl', 'playrough']);
 
 
 		// These attacks are redundant with each other
@@ -562,10 +563,6 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'switcheroo', 'fakeout');
 		// Beartic
 		this.incompatibleMoves(moves, movePool, 'snowscape', 'swordsdance');
-		// Cryogonal
-		if (!teamDetails.defog && !teamDetails.rapidSpin && species.id === 'cryogonal' && !isDoubles) {
-			if (movePool.includes('haze')) this.fastPop(movePool, movePool.indexOf('haze'));
-		}
 		// Magnezone
 		this.incompatibleMoves(moves, movePool, 'bodypress', 'mirrorcoat');
 		// Amoonguss, though this can work well as a general rule later
@@ -738,6 +735,18 @@ export class RandomTeams {
 				movePool, teraType, role);
 		}
 
+		// Enforce hazard removal on Bulky Support if the team doesn't already have it
+		if (role === 'Bulky Support' && !teamDetails.defog && !teamDetails.rapidSpin) {
+			if (movePool.includes('rapidspin')) {
+				counter = this.addMove('rapidspin', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
+			}
+			if (movePool.includes('defog')) {
+				counter = this.addMove('defog', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
+			}
+		}
+
 		// Enforce moves in doubles
 		if (isDoubles) {
 			const doublesEnforcedMoves = ['auroraveil', 'mortalspin', 'spore'];
@@ -750,6 +759,11 @@ export class RandomTeams {
 			// Enforce Fake Out on slow Pokemon
 			if (movePool.includes('fakeout') && species.baseStats.spe <= 50) {
 				counter = this.addMove('fakeout', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
+			}
+			// Enforce Tailwind on Prankster users
+			if (movePool.includes('tailwind') && abilities.has('Prankster')) {
+				counter = this.addMove('tailwind', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);
 			}
 		}
@@ -1274,7 +1288,8 @@ export class RandomTeams {
 			['Doubles Fast Attacker', 'Doubles Wallbreaker', 'Doubles Setup Sweeper', 'Offensive Protect'].some(m => role === m)
 		);
 
-		if (moves.has('covet')) return '';
+		if (moves.has('covet')) return 'Normal Gem';
+		if (moves.has('thief')) return '';
 		if (moves.has('iciclespear') && ability !== 'Skill Link') return 'Loaded Dice';
 		if (species.id === 'calyrexice') return 'Weakness Policy';
 		if (
@@ -1393,12 +1408,16 @@ export class RandomTeams {
 		) return 'Air Balloon';
 		if (['Bulky Attacker', 'Bulky Support', 'Bulky Setup'].some(m => role === (m))) return 'Leftovers';
 		if (species.id === 'pawmot' && moves.has('nuzzle')) return 'Leppa Berry';
+		if (
+			['Fast Bulky Setup', 'Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === m) &&
+			types.includes('Dark') && moves.has('suckerpunch') && !priorityPokemon.includes(species.id) &&
+			counter.get('setup') && counter.get('Dark')
+		) return 'Black Glasses';
 		if (role === 'Fast Support' || role === 'Fast Bulky Setup') {
 			return (counter.get('Physical') + counter.get('Special') >= 3 && !moves.has('nuzzle')) ? 'Life Orb' : 'Leftovers';
 		}
 		if (
-			role === 'Tera Blast user' && counter.get('recovery') &&
-			counter.get('Physical') + counter.get('Special') < 3
+			role === 'Tera Blast user' && species.baseSpecies === 'Florges'
 		) return 'Leftovers';
 		if (
 			['flamecharge', 'rapidspin'].every(m => !moves.has(m)) &&
