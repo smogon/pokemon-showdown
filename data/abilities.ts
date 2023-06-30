@@ -7426,10 +7426,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			// The effectiveness of Freeze Dry on Water isn't reverted
 			if (move && move.id === 'freezedry' && type === 'Water') return;
 			if (move && !this.dex.getImmunity(move, type)) return 1;
-			this.add('-message', type);
-			this.add('-message', typeMod);
 			return -typeMod;
 		},
+		onAnyNegateImmunity: false,
 		name: "Inverted",
 		rating: 3,
 		num: -88,
