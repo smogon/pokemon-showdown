@@ -90,6 +90,8 @@ function getSpeciesName(set: PokemonSet, format: Format) {
 		return 'Dudunsparce';
 	} else if (species === "Maushold-Four") {
 		return 'Maushold';
+	} else if (species === "Greninja-Bond") {
+		return 'Greninja';
 	} else if (species === "Squawkabilly-Blue") {
 		return "Squawkabilly";
 	} else if (species === "Squawkabilly-White") {
