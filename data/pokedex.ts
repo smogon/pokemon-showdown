@@ -28852,9 +28852,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		eggGroups: ["Mineral"],
 	},
-	diegain: {
+	diagain: {
 		num: -6045,
-		name: "Diegain",
+		name: "Diagain",
 		types: ["Crystal", "Ghost"],
 		baseStats: {hp: 105, atk: 153, def: 25, spa: 45, spd: 25, spe: 125},
 		abilities: {0: "Calcium Collapse"},
