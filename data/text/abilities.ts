@@ -684,11 +684,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 			shortDesc: "If Eiscue or Sharpedo-Rhinian, the first physical hit it takes deals 0 damage. This effect is restored in Hail.",
 		},
 	},
-	stoneface: {
-		name: "Stone Face",
-		desc: "If this Pokemon is an Eiscue-Delta, the first physical hit it takes in battle deals 0 neutral damage. Its stone face is then broken and it changes forme to Norock Face. Eiscue-Delta regains its Stone Face forme when Snow begins or when Eiscue-Delta switches in while Sandstorm is active. Confusion damage also breaks the ice face.",
-		shortDesc: "If Eiscue-Delta, the first physical hit it takes deals 0 damage. Effect restores in Sandstorm.",
-	},
 	icescales: {
 		name: "Ice Scales",
 		shortDesc: "This Pokemon receives 1/2 damage from special attacks.",
@@ -2426,6 +2421,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 
 	// Our Additions
+	stoneface: {
+		name: "Stone Face",
+		desc: "If this Pokemon is an Eiscue-Delta, the first physical hit it takes in battle deals 0 neutral damage. Its stone face is then broken and it changes forme to Norock Face. Eiscue-Delta regains its Stone Face forme when Snow begins or when Eiscue-Delta switches in while Sandstorm is active. Confusion damage also breaks the ice face.",
+		shortDesc: "If Eiscue-Delta, the first physical hit it takes deals 0 damage. Effect restores in Sandstorm.",
+	},
 	sandydefense: {
 		name: "Sandy Defense",
 		shortDesc: "This Pokemon's Defense and Special Defense are boosted 1.5 in sandstorm.",
@@ -2460,7 +2460,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	ivywall: {
 		name: "Ivy Wall",
 		desc: "This Pokémon takes on the resistances and immunities of the Grass type.",
-		shortDesc: "Gains Grass-type resistances and immunities."
+		shortDesc: "Gains Grass-type resistances and immunities.",
 	},
 	consumerexchange: {
 		name: "Consumer Exchange",
@@ -2470,7 +2470,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	flowingtranquility: {
 		name: "Flowing Tranquility",
 		desc: "Flowing tranquility activates during rain, giving golduck a 1.5x speed boost and a 1.3x power boost to its psychic type attacks.",
-		shortDesc: "Speed is boosted 1.5x and Psychic-Type attacks are boosted 1.3x in Rain."
+		shortDesc: "Speed is boosted 1.5x and Psychic-Type attacks are boosted 1.3x in Rain.",
 	},
 	bushido: {
 		name: "Bushido",
@@ -2487,7 +2487,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	windywall: {
 		name: "Windy Wall",
-		shortDesc: "Grants immunity to Flying-Type moves."
+		shortDesc: "Grants immunity to Flying-Type moves.",
 	},
 	sludgeslider: {
 		name: "Sludge Slider",
@@ -2581,5 +2581,77 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	fusionforce: {
 		name: "Fusion Force",
 		shortDesc: "2x damage if any Pokemon on the field selects a Fire or Electric move.",
+	},
+	starfall: {
+		name: "Starfall",
+		desc: "Removes one random hazard on switch-in. Occurs before the user takes hazard damage.",
+		shortDesc: "Removes one random hazard on switch-in.",
+	},
+	potency: {
+		name: "Potency",
+		shortDesc: "User's Poison-type moves calculate damage using the target's lower defense.",
+	},
+	carneval: {
+		name: "Carneval",
+		shortDesc: "All Pokemon ignore the effects of non-volatile status conditions.",
+	},
+	upandaway: {
+		name: "Up and Away",
+		shortDesc: "Immune to ground. 1.2x damage from Rock, Ice, Electric.",
+	},
+	fiercehowl: {
+		name: "Fierce Howl",
+		desc: "When this Pokemon has more than 1/2 its maximum HP and takes damage from an attack bringing it to 1/2 or less of its maximum HP, its Special Attack and Attack are raised by 1 stage. This effect applies after all hits from a multi-hit move. This effect is prevented if the move had a secondary effect removed by the Sheer Force Ability.",
+		shortDesc: "This Pokemon's Sp. Atk and Atk are raised by 1 when it reaches 50% HP",
+	},
+	causticbreakdown: {
+		name: "Caustic Breakdown",
+		shortDesc: "If Radiangler, changes forme to Radiangler-Exposed in Acid Rain.",
+	},
+	raginghalo: {
+		name: "Raging Halo",
+		desc: "This Pokemon is immune to damage from moves used by a Pokemon with a lower attack stat corresponding to the move used.",
+		shortDesc: "Can only take damage from a foe with a higher offensive stat or indirect damage.",
+	},
+	fabledprotector: {
+		name: "Fabled Protector",
+		shortDesc: "On switch-out, cures incoming Pokemon of status and 0.75x damage for 1 turn.",
+	},
+	ominouspresence: {
+		name: "Ominous Presence",
+		desc: "On switch-in, Pokemon without this Ability have 0.75x offenses for 1 turn. Permanent in darkness.",
+		shortDesc: "On switch-in, Pokemon without this Ability have 0.75x offenses for 1 turn.",
+	},
+	inverted: {
+		name: "Inverted",
+		shortDesc: "The typechart is inverted while this Pokemon is on the field.",
+	},
+	contaminate: {
+		name: "Contaminate",
+		shortDesc: "The user's Poison-type moves are SE against Water-type.",
+	},
+	inertia: {
+		name: "Inertia",
+		shortDesc: "On every Pokemon's first turn, its moves have -1 priority. Includes user.",
+	},
+	hardwoodstance: {
+		name: "Hardwood Stance",
+		desc: "If this Pokemon is an Aegislash-Supra, it changes to Axe Forme before using an attacking move, and changes to Shield Forme before using Petrification.",
+		shortDesc: "If Aegislash-Supra, changes Forme to Axe before attacks and Shield before Petrification.",
+
+		transform: "Changed to Axe Forme!",
+		transformEnd: "Changed to Shield Forme!",
+	},
+	graveyard: {
+		name: "Graveyard",
+		shortDesc: "On switch-in, all Pokemon on the field become Ghost-type.",
+	},
+	manyheads: {
+		name: "Many Heads",
+		shortDesc: "If Tiamutt, grows 1 head when attacked, up to 5 heads. +0.1 to 1.0x boost per head.",
+	},
+	magictrick: {
+		name: "Magic Trick",
+		shortDesc: "On Switch-in, this Pokemon summons Magic Room; if Magic Room is active its effects are removed.",
 	},
 };

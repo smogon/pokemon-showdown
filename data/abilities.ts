@@ -7421,12 +7421,15 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: -87,
 	},
 	inverted: {
-		onNegateImmunity: false,
-		onAnyEffectiveness(typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.dex.getImmunity(move, type)) return 1;
-			return -typeMod;
+		condition: {
+			onNegateImmunity: false,
+			onEffectivenessPriority: 1,
+			onEffectiveness(typeMod, target, type, move) {
+				// The effectiveness of Freeze Dry on Water isn't reverted
+				if (move && move.id === 'freezedry' && type === 'Water') return;
+				if (move && !this.dex.getImmunity(move, type)) return 1;
+				return -typeMod;
+			},
 		},
 		name: "Inverted",
 		rating: 3,
