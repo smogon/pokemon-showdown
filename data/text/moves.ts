@@ -7917,4 +7917,73 @@ export const MovesText: {[k: string]: MoveText} = {
 
 		heal: "  [NICKNAME]'s Scale Blessing came true!",
 	},
+	heavybellow: {
+		name: "Heavy Bellow",
+		desc: "Has a 30% chance to confuse the target.",
+		shortDesc: "30% chance to confuse the target.",
+	},
+	vialjab: {
+		name: "Vial Jab",
+		desc: "1.5x Power if the target has a non-volatile status condition. Cures Status.",
+		shortDesc: "1.5x Power if the target is statused. Cures status.",
+	},
+	adaptivestance: {
+		name: "Adaptive Stance",
+		desc: "The user loses its focus and does nothing if it is hit by a damaging attack this turn before it can execute the move.",
+		shortDesc: "Fails if the user takes damage before it hits.",
+
+		start: "  [POKEMON] is tightening its focus!",
+		cant: "[POKEMON] lost its focus and couldn't move!",
+	},
+	volatileshower: {
+		name: "Volatile Shower",
+		desc: "Has a 30% chance to poison the target. 100% chance in rain.",
+		shortDesc: "30% chance to psn the target. 100% in Acid Rain.",
+	},
+	acidcyclone: {
+		name: "Acid Cyclone",
+		shortDesc: "Summons acid rain. 1.2x damage if user is holding an Acidic Rock.",
+	},
+	antentacle: {
+		name: "Antentacle",
+		desc: "Has a 20% chance to raise the user's Attack by 1 stage.",
+		shortDesc: "20% chance to raise the user's Attack by 1.",
+	},
+	taintedaroma: {
+		name: "Tainted Aroma",
+		shortDesc: "Resets all of the target's stat stages to 0.",
+	},
+	siegebreaker: {
+		name: "Siege Breaker",
+		desc: "Has a 100% chance to lower the target's Special Attack by 1 stage.",
+		shortDesc: "100% chance to lower the target's Sp. Atk by 1.",
+	},
+	germinate: {
+		name: "Germinate",
+		desc: "Deals damage two turns after this move is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move or Doom Desire is already in effect for the target's position.",
+		shortDesc: "Hits two turns after being used.",
+
+		start: "  [POKEMON] sprouted an attack!",
+		activate: "  [TARGET] took the germinated attack!",
+	},
+	skystrike: {
+		name: "Sky Strike",
+		desc: "The power of this move depends on (user's height / target's height) * base power.",
+		shortDesc: "More power the taller the user than the target.",
+	},
+	destructiondance: {
+		name: "Destruction Dance",
+		desc: "If this move is successful and the user has not fainted, the effects of Leech Seed and binding moves end for the user, and all hazards are removed from the user's side of the field.",
+		shortDesc: "Free user from hazards/bind/Leech Seed.",
+	},
+	twingust: {
+		name: "Twin Gust",
+		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit. In Double Battles, this move attempts to hit the targeted Pokemon and its ally once each. If hitting one of these Pokemon would be prevented by immunity, protection, semi-invulnerability, an Ability, or accuracy, it attempts to hit the other Pokemon twice instead. If this move is redirected, it hits that target twice.",
+		shortDesc: "Hits twice. Doubles: Tries to hit each foe once.",
+	},
+	petrification: {
+		name: "Petrification",
+		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Speed lowered by 1 stage. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Max Guard, Obstruct, Protect, Quick Guard, Silk Trap, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+		shortDesc: "Protects from damaging attacks. Contact: -1 Spe.",
+	},
 };
