@@ -24,7 +24,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			side.team = team;
 			side.pokemon = [];
 			for (let i = 0; i < team.length && i < 24; i++) {
-				// console.log("NEW POKEMON: " + (this.team[i] ? this.team[i].name : '[unidentified]'));
 				side.pokemon.push(new Pokemon(team[i], side));
 				side.pokemon[i].position = i;
 			}
