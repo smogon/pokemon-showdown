@@ -92,6 +92,10 @@ function getSpeciesName(set: PokemonSet, format: Format) {
 		return 'Maushold';
 	} else if (species === "Greninja-Bond") {
 		return 'Greninja';
+	} else if (species === "Keldeo-Resolute") {
+		return 'Keldeo';
+	} else if (species === "Zarude-Dada") {
+		return 'Zarude';
 	} else if (species === "Squawkabilly-Blue") {
 		return "Squawkabilly";
 	} else if (species === "Squawkabilly-White") {
