@@ -208,8 +208,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		formeOrder: ["Whimsicott", "Whimsicott-Mega"],
 	},
 
-	//poa changes
-
+	// poa changes
 	samurott: {
 		inherit: true,
 		abilities: {0: "Torrent", H: "Sharpness"},
@@ -278,5 +277,107 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		cosmeticFormes: undefined,
 		otherFormes: ["Unown-A", "Unown-B", "Unown-C", "Unown-D", "Unown-E", "Unown-F", "Unown-G", "Unown-H", "Unown-I", "Unown-J", "Unown-K", "Unown-L", "Unown-M", "Unown-N", "Unown-O", "Unown-P", "Unown-Q", "Unown-R", "Unown-S", "Unown-T", "Unown-U", "Unown-V", "Unown-W", "Unown-X", "Unown-Y", "Unown-Z", "Unown-Exclamation", "Unown-Question"],
+	},
+	
+	// mega additions
+	sceptiledelta: {
+		inherit: true,
+		otherFormes: ["Sceptile-Delta-Mega"],
+		formeOrder: ["Sceptile-Delta", "Sceptile-Delta-Mega"],
+	},
+	florges: {
+		inherit: true,
+		otherFormes: ["Florges-Mega"],
+		formeOrder: ["Florges", "Florges-Mega"],
+	},
+	golduck: {
+		inherit: true,
+		otherFormes: ["Golduck-Mega"],
+		formeOrder: ["Golduck", "Golduck-Mega"],
+	},
+	slowking: {
+		inherit: true,
+		otherFormes: ["Slowking-Mega"],
+		formeOrder: ["Slowking", "Slowking-Mega"],
+	},
+	ariados: {
+		inherit: true,
+		otherFormes: ["Ariados-Mega"],
+		formeOrder: ["Ariados", "Ariados-Mega"],
+	},
+	granbull: {
+		inherit: true,
+		otherFormes: ["Granbull-Mega"],
+		formeOrder: ["Granbull", "Granbull-Mega"],
+	},
+	electrode: {
+		inherit: true,
+		otherFormes: ["Electrode-Mega"],
+		formeOrder: ["Electrode", "Electrode-Mega"],
+	},
+	garbodor: {
+		inherit: true,
+		otherFormes: ["Garbodor-Mega"],
+		formeOrder: ["Garbodor", "Garbodor-Mega"],
+	},
+	swampertdelta: {
+		inherit: true,
+		otherFormes: ["Swampert-Delta-Mega"],
+		formeOrder: ["Swampert-Delta", "Swampert-Delta-Mega"],
+	},
+	mantine: {
+		inherit: true,
+		otherFormes: ["Mantine-Mega"],
+		formeOrder: ["Mantine", "Mantine-Mega"],
+	},
+	spiritombdelta: {
+		inherit: true,
+		otherFormes: ["Spiritomb-Delta-Mega"],
+		formeOrder: ["Spiritomb-Delta", "Spiritomb-Delta-Mega"],
+	},
+	aggrondelta: {
+		inherit: true,
+		otherFormes: ["Aggron-Delta-Mega"],
+		formeOrder: ["Aggron-Delta", "Aggron-Delta-Mega"],
+	},
+	eelektross: {
+		inherit: true,
+		otherFormes: ["Eelektross-Mega"],
+		formeOrder: ["Eelektross", "Eelektross-Mega"],
+	},
+	blazikendelta: {
+		inherit: true,
+		otherFormes: ["Blaziken-Delta-Mega"],
+		formeOrder: ["Blaziken-Delta", "Blaziken-Delta-Mega"],
+	},
+	excadrill: {
+		inherit: true,
+		otherFormes: ["Excadrill-Mega"],
+		formeOrder: ["Excadrill", "Excadrill-Mega"],
+	},
+	weavile: {
+		inherit: true,
+		otherFormes: ["Weavile-Mega"],
+		formeOrder: ["Weavile", "Weavile-Mega"],
+	},
+	ribombee: {
+		inherit: true,
+		otherFormes: ["Ribombee-Mega"],
+		formeOrder: ["Ribombee", "Ribombee-Mega"],
+	},
+	gigalith: {
+		inherit: true,
+		otherFormes: ["Gigalith-Mega"],
+		formeOrder: ["Gigalith", "Gigalith-Mega"],
+	},
+	empoleon: {
+		inherit: true,
+		otherFormes: ["Empoleon-Mega"],
+		formeOrder: ["Empoleon", "Empoleon-Mega"],
+	},
+	delphox: {
+		inherit: true,
+		otherFormes: ["Delphox-Mega"],
+		formeOrder: ["Delphox", "Delphox-Mega"],
 	},
 };
