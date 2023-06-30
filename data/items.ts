@@ -8780,6 +8780,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Null Helm",
 		spritenum: 849,
 		isNonstandard: "Unobtainable",
+		ignoreKlutz: true,
 		fling: {
 			basePower: 60,
 			volatileStatus: 'gastroacid',
