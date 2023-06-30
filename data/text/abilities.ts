@@ -2553,7 +2553,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	blissfulignorance: {
 		name: "Blissful Ignorance",
-		desc: "This Pokemon can only be damaged by direct attacks. Curse and Substitute on use, Belly Drum, Pain Split, Struggle recoil, and confusion damage are considered direct damage. It's stats cannot be raised or lowered and none of it's move's secondary effects activate.",
 		shortDesc: "All of the user's move secondaries are ignored.",
 	},
 	parry: {
