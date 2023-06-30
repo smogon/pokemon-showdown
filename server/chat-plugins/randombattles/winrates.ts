@@ -159,7 +159,8 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 	if (format.mod !== `gen${Dex.gen}`) {
 		eloFloor = 1300;
 	} else if (format.gameType === 'doubles') {
-		eloFloor = 1400;
+		// may need to be raised again if doubles ladder takes off
+		eloFloor = 1300;
 	}
 	if (!formatData || battle.rated < eloFloor) return;
 	checkRollover();
