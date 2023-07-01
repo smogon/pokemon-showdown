@@ -9,7 +9,7 @@ category: "Special",
 name: "10,000,000 Volt Thunderbolt",
 pp: .625,
 priority: -7,
-flags: {protect: 1, mirror: 1, noparentalbond: 1},
+flags: {protect: 1, mirror: 1},
 selfdestruct: "always",
 secondary: null,
 target: "allAdjacent",
@@ -107,7 +107,7 @@ priority: 0,
 flags: {bullet: 1, protect: 1, mirror: 1},
 critRatio: 2,
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 spd: -2,
 },
@@ -172,7 +172,7 @@ basePower: 60,
 category: "Physical",
 name: "Aerial Ace",
 pp: 1.25,
-priority: 0,
+priority: 1,
 flags: {contact: 1, protect: 1, mirror: 1, distance: 1, slicing: 1},
 secondary: null,
 target: "any",
@@ -332,7 +332,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 onHit(target, source, move) {
 if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 },
@@ -374,7 +374,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 spd: -1,
 def: -1,
@@ -444,7 +444,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1, dance: 1},
 secondary: {
-chance: 95,
+chance: 75,
 self: {
 boosts: {
 spe: 1,
@@ -554,7 +554,7 @@ category: "Status",
 name: "Assist",
 pp: 1.25,
 priority: 0,
-flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+flags: {},
 onHit(target) {
 const moves = [];
 for (const pokemon of target.side.pokemon) {
@@ -663,7 +663,6 @@ if (!this.runEvent('Attract', pokemon, source)) {
 this.debug('Attract event failed');
 return false;
 }
-
 if (effect.name === 'Cute Charm') {
 this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', '[of] ' + source);
 } else if (effect.name === 'Destiny Knot') {
@@ -707,6 +706,9 @@ pp: 1.25,
 priority: 0,
 flags: {bullet: 1, protect: 1, pulse: 1, mirror: 1, distance: 1},
 secondary: null,
+boosts: {
+accuracy: 1,
+},
 target: "any",
 type: "Fighting",
 },
@@ -720,7 +722,7 @@ pp: .625,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 self: {
 boosts: {
 spe: 1,
@@ -907,7 +909,7 @@ category: "Status",
 name: "Baneful Bunker",
 pp: 1.25,
 priority: 4,
-flags: {noassist: 1, failcopycat: 1},
+flags: {},
 stallingMove: true,
 volatileStatus: 'banefulbunker',
 onPrepareHit(pokemon) {
@@ -1014,7 +1016,7 @@ basePower: 0,
 category: "Status",
 name: "Baton Pass",
 pp: 1.25,
-priority: 0,
+priority: -2,
 flags: {},
 onTryHit(target) {
 if (!this.canSwitch(target.side) || target.volatiles['commanded']) {
@@ -1041,7 +1043,7 @@ category: "Physical",
 name: "Beak Blast",
 pp: .625,
 priority: -3,
-flags: {bullet: 1, protect: 1, noassist: 1, failmefirst: 1, nosleeptalk: 1, failcopycat: 1, failinstruct: 1},
+flags: {bullet: 1, protect: 1},
 priorityChargeCallback(pokemon) {
 pokemon.addVolatile('beakblast');
 },
@@ -1095,7 +1097,7 @@ category: "Physical",
 name: "Behemoth Bash",
 pp: .625,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, failcopycat: 1, failmimic: 1},
+flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
 chance: 50,
 boosts: {
@@ -1113,7 +1115,7 @@ category: "Physical",
 name: "Behemoth Blade",
 pp: .625,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, slicing: 1, failcopycat: 1, failmimic: 1},
+flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
 secondary: {
 chance: 50,
 boosts: {
@@ -1131,7 +1133,7 @@ category: "Special",
 name: "Belch",
 pp: .625,
 priority: 0,
-flags: {protect: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+flags: {protect: 1},
 onDisableMove(pokemon) {
 if (!pokemon.ateBerry) pokemon.disableMove('belch');
 },
@@ -1167,7 +1169,7 @@ category: "Status",
 name: "Bestow",
 pp: 1.25,
 priority: 0,
-flags: {mirror: 1, bypasssub: 1, allyanim: 1, noassist: 1, failcopycat: 1},
+flags: {mirror: 1, bypasssub: 1, allyanim: 1},
 onHit(target, source, move) {
 if (target.item) {
 return false;
@@ -1192,7 +1194,7 @@ category: "Physical",
 name: "Bide",
 pp: 1.25,
 priority: 1,
-flags: {contact: 1, protect: 1, nosleeptalk: 1, failinstruct: 1},
+flags: {contact: 1, protect: 1},
 volatileStatus: 'bide',
 ignoreImmunity: true,
 beforeMoveCallback(pokemon) {
@@ -1294,7 +1296,7 @@ category: "Physical",
 name: "Bitter Blade",
 pp: 1.25,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
+flags: {contact: 1, protect: 1, mirror: 1, slicing: 1, heal: 1},
 drain: [45, 100],
 secondary: null,
 target: "normal",
@@ -1373,9 +1375,7 @@ category: "Physical",
 name: "Blazing Torque",
 pp: 1.25,
 priority: 0,
-flags: {
-protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
-},
+flags: {protect: 1},
 secondary: {
 chance: 25,
 status: 'brn',
@@ -1475,7 +1475,7 @@ category: "Physical",
 name: "Body Slam",
 pp: 1.25,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
+flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
 chance: 25,
 status: 'par',
@@ -1580,16 +1580,14 @@ target: "allAdjacent",
 type: "Normal",
 },
 
-bounce: {
+solarblade: {
 accuracy: 85,
 basePower: 85,
 category: "Physical",
 name: "Bounce",
 pp: 1.25,
 priority: 0,
-flags: {
-contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
-},
+flags: {contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, slicing: 1},
 recoil: [25, 100],
 onTryMove(attacker, defender, move) {
 if (attacker.removeVolatile(move.id)) {
@@ -1662,7 +1660,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 atk: -1,
 spa: -1,
@@ -1843,9 +1841,9 @@ category: "Physical",
 name: "Bulldoze",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1},
+flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 spe: -1,
 },
@@ -1892,7 +1890,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 onHit(target, source, move) {
 if (target?.statsRaisedThisTurn) {
 target.trySetStatus('brn', source, move);
@@ -2069,7 +2067,7 @@ type: "Electric",
 },
 
 chargebeam: {
-accuracy: 90,
+accuracy: 85,
 basePower: 50,
 category: "Special",
 name: "Charge Beam",
@@ -2111,13 +2109,10 @@ category: "Special",
 name: "Chatter",
 pp: 1.25,
 priority: 1,
-flags: {
-protect: 1, mirror: 1, sound: 1, distance: 1, bypasssub: 1, nosleeptalk: 1, noassist: 1,
-failcopycat: 1, failinstruct: 1, failmimic: 1,
-},
+flags: {protect: 1, mirror: 1, sound: 1, distance: 1, bypasssub: 1},
 noSketch: true,
 secondary: {
-chance: 95,
+chance: 75,
 volatileStatus: 'confusion',
 },
 target: "any",
@@ -2133,7 +2128,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 atk: -1,
 spa: -1,
@@ -2205,7 +2200,7 @@ category: "Physical",
 name: "Circle Throw",
 pp: 1.25,
 priority: -6,
-flags: {contact: 1, protect: 1, mirror: 1, noassist: 1, failcopycat: 1},
+flags: {contact: 1, protect: 1, mirror: 1},
 forceSwitch: true,
 target: "normal",
 type: "Fighting",
@@ -2252,14 +2247,14 @@ pp: 1.25,
 priority: 1,
 flags: {snatch: 1, sound: 1, dance: 1},
 onTry(source) {
-if (source.hp <= (source.maxhp * 33 / 100) || source.maxhp === 1) return false;
+if (source.hp <= (source.maxhp * 50 / 100) || source.maxhp === 1) return false;
 },
 onTryHit(pokemon, target, move) {
 if (!this.boost(move.boosts as SparseBoostsTable)) return null;
 delete move.boosts;
 },
 onHit(pokemon) {
-this.directDamage(pokemon.maxhp * 33 / 100);
+this.directDamage(pokemon.maxhp * 50 / 100);
 },
 boosts: {
 atk: 1,
@@ -2267,6 +2262,7 @@ def: 1,
 spa: 1,
 spd: 1,
 spe: 1,
+evasion: -4,
 },
 secondary: null,
 target: "self",
@@ -2281,6 +2277,7 @@ name: "Clangorous Soulblaze",
 pp: .625,
 priority: 1,
 flags: {sound: 1, bypasssub: 1},
+chance: 75,
 selfBoost: {
 boosts: {
 atk: 1,
@@ -2396,9 +2393,7 @@ category: "Physical",
 name: "Combat Torque",
 pp: .625,
 priority: 0,
-flags: {
-protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
-},
+flags: {protect: 1},
 secondary: {
 chance: 25,
 status: 'par',
@@ -2437,7 +2432,7 @@ category: "Physical",
 name: "Comeuppance",
 pp: 1.25,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, failmefirst: 1},
+flags: {contact: 1, protect: 1, mirror: 1},
 onTry(source) {
 const lastDamagedBy = source.getLastDamagedBy(true);
 if (lastDamagedBy === undefined || !lastDamagedBy.thisTurn) return false;
@@ -2577,7 +2572,6 @@ if (!possibleTypes.length) {
 return false;
 }
 const randomType = this.sample(possibleTypes);
-
 if (!source.setType(randomType)) return false;
 this.add('-start', source, 'typechange', randomType);
 },
@@ -2593,13 +2587,11 @@ category: "Status",
 name: "Copycat",
 pp: 1.25,
 priority: 0,
-flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+flags: {},
 onHit(pokemon) {
 let move: Move | ActiveMove | null = this.lastMove;
 if (!move) return;
-
 if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
-if (move.flags['failcopycat'] || move.isZ || move.isMax) {
 return false;
 }
 this.actions.useMove(move.id, pokemon);
@@ -2729,7 +2721,7 @@ category: "Physical",
 name: "Counter",
 pp: 1.25,
 priority: -9,
-flags: {contact: 1, protect: 1, failmefirst: 1, noassist: 1, failcopycat: 1},
+flags: {contact: 1, protect: 1},
 beforeTurnCallback(pokemon) {
 pokemon.addVolatile('counter');
 },
@@ -2841,7 +2833,7 @@ category: "Physical",
 name: "Covet",
 pp: 1.25,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, failmefirst: 1, noassist: 1, failcopycat: 1},
+flags: {contact: 1, protect: 1, mirror: 1},
 onAfterHit(target, source, move) {
 if (source.item || source.volatiles['gem']) {
 return;
@@ -2965,7 +2957,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 30,
+chance: 33,
 boosts: {
 def: -1,
 },
@@ -3046,7 +3038,10 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
 critRatio: 3,
-secondary: null,
+secondary: {
+chance: 100,
+status: 'bld',
+},
 target: "normal",
 type: "Normal",
 },
@@ -3219,7 +3214,7 @@ category: "Status",
 name: "Destiny Bond",
 pp: .625,
 priority: 1,
-flags: {bypasssub: 1, noassist: 1, failcopycat: 1},
+flags: {bypasssub: 1},
 volatileStatus: 'destinybond',
 onPrepareHit(pokemon) {
 return !pokemon.removeVolatile('destinybond');
@@ -3261,7 +3256,7 @@ category: "Status",
 name: "Detect",
 pp: 1.25,
 priority: 4,
-flags: {noassist: 1, failcopycat: 1},
+flags: {},
 stallingMove: true,
 volatileStatus: 'protect',
 onPrepareHit(pokemon) {
@@ -3321,7 +3316,7 @@ category: "Physical",
 name: "Dig",
 pp: 1.25,
 priority: 0,
-flags: {contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1},
+flags: {contact: 1, charge: 1, protect: 1, mirror: 1},
 onTryMove(attacker, defender, move) {
 if (attacker.removeVolatile(move.id)) {
 return;
@@ -3486,9 +3481,7 @@ category: "Physical",
 name: "Dive",
 pp: 1.25,
 priority: 0,
-flags: {
-contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1, allyanim: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
-},
+flags: {contact: 1, charge: 1, protect: 1, mirror: 1, allyanim: 1},
 onTryMove(attacker, defender, move) {
 if (attacker.removeVolatile(move.id)) {
 return;
@@ -3725,7 +3718,7 @@ pp: 1.25,
 priority: 0,
 flags: {snatch: 1},
 boosts: {
-spe: 1,
+spe: 2,
 },
 secondary: null,
 target: "allySide",
@@ -3793,7 +3786,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 30,
+chance: 33,
 boosts: {
 spe: -1,
 },
@@ -3829,7 +3822,7 @@ category: "Physical",
 name: "Dragon Darts",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, mirror: 1, noparentalbond: 1},
+flags: {protect: 1, mirror: 1},
 multihit: [1, 3],
 multiaccuracy: 95,
 smartTarget: true,
@@ -3913,15 +3906,15 @@ type: "Dragon",
 },
 
 dragontail: {
-accuracy: 90,
+accuracy: 95,
 basePower: 60,
 category: "Physical",
 name: "Dragon Tail",
 pp: 1.25,
 priority: -6,
-flags: {contact: 1, protect: 1, mirror: 1, noassist: 1, failcopycat: 1},
+flags: {contact: 1, protect: 1, mirror: 1},
 forceSwitch: true,
-target: "normal",
+target: "allAdjacentFoes",
 type: "Dragon",
 },
 
@@ -3977,7 +3970,7 @@ category: "Physical",
 name: "Drill Peck",
 pp: 1.25,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, distance: 1},
+flags: {contact: 1, protect: 1, mirror: 1, distance: 1, heal: 1},
 drain: [70, 100],
 secondary: null,
 target: "any",
@@ -4017,7 +4010,7 @@ type: "Grass",
 },
 
 dualchop: {
-accuracy: 90,
+accuracy: 95,
 basePower: 35,
 category: "Physical",
 name: "Dual Chop",
@@ -4025,7 +4018,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 multihit: [1, 2],
-multiaccuracy: 90,
+multiaccuracy: 95,
 secondary: null,
 target: "normal",
 type: "Dragon",
@@ -4056,7 +4049,7 @@ pp: .625,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 secondary: {
-chance: 95,
+chance: 75,
 volatileStatus: 'confusion',
 },
 target: "normal",
@@ -4070,7 +4063,7 @@ category: "Special",
 name: "Earth Power",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1},
+flags: {protect: 1, mirror: 1},
 secondary: {
 chance: 25,
 boosts: {
@@ -4088,7 +4081,7 @@ category: "Physical",
 name: "Earthquake",
 pp: .625,
 priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1},
+flags: {protect: 1, mirror: 1},
 secondary: null,
 target: "allAdjacent",
 type: "Ground",
@@ -4136,7 +4129,7 @@ pp: 1.25,
 priority: 1,
 flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 secondary: {
-chance: 95,
+chance: 75,
 onHit(target) {
 if (!target.hp) return;
 let move: Move | ActiveMove | null = target.lastMove;
@@ -4173,7 +4166,7 @@ category: "Physical",
 name: "Electric Terrain",
 pp: .625,
 priority: 0,
-flags: {nonsky: 1},
+flags: {},
 terrain: 'electricterrain',
 condition: {
 duration: 5,
@@ -4302,7 +4295,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 spe: -1,
 },
@@ -4361,7 +4354,7 @@ category: "Status",
 name: "Encore",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, failencore: 1},
+flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
 volatileStatus: 'encore',
 condition: {
 duration: 3,
@@ -4422,7 +4415,7 @@ category: "Physical",
 name: "Endeavor",
 pp: 1.25,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, noparentalbond: 1},
+flags: {contact: 1, protect: 1, mirror: 1},
 onTryImmunity(target, pokemon) {
 return pokemon.hp < target.hp;
 },
@@ -4438,7 +4431,7 @@ category: "Status",
 name: "Endure",
 pp: 1.25,
 priority: 4,
-flags: {noassist: 1, failcopycat: 1},
+flags: {},
 stallingMove: true,
 volatileStatus: 'endure',
 onPrepareHit(pokemon) {
@@ -4548,7 +4541,7 @@ priority: 0,
 flags: {protect: 1, mirror: 1},
 critRatio: 2,
 secondary: {
-chance: 95,
+chance: 75,
 self: {
 boosts: {
 spe: 1,
@@ -4605,7 +4598,7 @@ category: "Physical",
 name: "Explosion",
 pp: .625,
 priority: -7,
-flags: {protect: 1, mirror: 1, noparentalbond: 1},
+flags: {protect: 1, mirror: 1},
 selfdestruct: "always",
 secondary: null,
 target: "allAdjacent",
@@ -4711,7 +4704,7 @@ return false;
 }
 },
 secondary: {
-chance: 95,
+chance: 75,
 volatileStatus: 'flinch',
 },
 target: "normal",
@@ -4745,6 +4738,9 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: null,
+boosts: {
+accuracy: 1,
+},
 target: "normal",
 type: "Dark",
 },
@@ -4791,7 +4787,7 @@ category: "Physical",
 name: "Feint",
 pp: 1.25,
 priority: 2,
-flags: {mirror: 1, noassist: 1, failcopycat: 1},
+flags: {mirror: 1},
 breaksProtect: true,
 // Breaking protection implemented in scripts.js
 secondary: null,
@@ -4808,6 +4804,9 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: null,
+boosts: {
+accuracy: 1,
+},
 target: "normal",
 type: "Dark",
 },
@@ -4904,7 +4903,7 @@ category: "Special",
 name: "Final Gambit",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, noparentalbond: 1},
+flags: {protect: 1},
 secondary: null,
 target: "normal",
 type: "Fighting",
@@ -4956,7 +4955,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 def: -1,
 },
@@ -4979,7 +4978,7 @@ category: "Special",
 name: "Fire Pledge",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1, pledgecombo: 1},
+flags: {protect: 1, mirror: 1, pledgecombo: 1},
 onPrepareHit(target, source, move) {
 for (const action of this.queue.list as MoveAction[]) {
 if (
@@ -5117,7 +5116,7 @@ category: "Physical",
 name: "Fissure",
 pp: 1.25,
 priority: -2,
-flags: {protect: 1, mirror: 1, nonsky: 1},
+flags: {protect: 1, mirror: 1},
 secondary: null,
 target: "normal",
 type: "Ground",
@@ -5187,7 +5186,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 self: {
 boosts: {
 spe: 1,
@@ -5324,7 +5323,7 @@ category: "Physical",
 name: "Fling",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, mirror: 1, allyanim: 1, noparentalbond: 1},
+flags: {protect: 1, mirror: 1, allyanim: 1},
 onPrepareHit(target, source, move) {
 if (source.ignoringItem()) return false;
 const item = source.getItem();
@@ -5463,9 +5462,7 @@ category: "Physical",
 name: "Fly",
 pp: 1.25,
 priority: 0,
-flags: {
-contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
-},
+flags: {charge: 1, contact: 1, protect: 1, mirror: 1, gravity: 1, distance: 1},
 onTryMove(attacker, defender, move) {
 if (attacker.removeVolatile(move.id)) {
 return;
@@ -5507,7 +5504,7 @@ basePower: 100,
 category: "Physical",
 name: "Flying Press",
 pp: .625,
-flags: {contact: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nonsky: 1},
+flags: {contact: 1, protect: 1, mirror: 1, gravity: 1, distance: 1},
 onEffectiveness(typeMod, target, type, move) {
 return typeMod + this.dex.getEffectiveness('Flying', type);
 },
@@ -5572,7 +5569,7 @@ pp: 1.25,
 priority: -3,
 flags: {contact: 1, protect: 1, punch: 1},
 boosts: {
-chance: 95,
+chance: 75,
 accuracy: 1,
 },
 secondary: null,
@@ -5587,7 +5584,7 @@ category: "Status",
 name: "Follow Me",
 pp: 1.25,
 priority: 2,
-flags: {noassist: 1, failcopycat: 1},
+flags: {},
 volatileStatus: 'followme',
 onTry(source) {
 return this.activePerHalf > 1;
@@ -5713,14 +5710,14 @@ target: "normal",
 type: "Ice",
 },
 
-freezeshock: {
+solarbeam: {
 accuracy: 85,
 basePower: 140,
 category: "Physical",
 name: "Freeze Shock",
 pp: .625,
 priority: 0,
-flags: {charge: 1, protect: 1, mirror: 1, nosleeptalk: 1, failinstruct: 1},
+flags: {charge: 1, protect: 1, mirror: 1},
 onTryMove(attacker, defender, move) {
 if (attacker.removeVolatile(move.id)) {
 return;
@@ -5764,7 +5761,7 @@ category: "Special",
 name: "Frenzy Plant",
 pp: .625,
 priority: 0,
-flags: {recharge: 1, protect: 1, mirror: 1, nonsky: 1},
+flags: {recharge: 1, protect: 1, mirror: 1},
 self: {
 volatileStatus: 'mustrecharge',
 },
@@ -5774,7 +5771,7 @@ type: "Grass",
 },
 
 frostbreath: {
-accuracy: 90,
+accuracy: 95,
 basePower: 60,
 category: "Special",
 name: "Frost Breath",
@@ -5812,7 +5809,7 @@ category: "Physical",
 name: "Fury Cutter",
 pp: .625,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
+flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
 recoil: [33, 100],
 multihit: [1, 10],
 multiaccuracy: 75,
@@ -5993,7 +5990,7 @@ pp: .625,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 self: {
 onHit() {
 this.field.setTerrain('psychicterrain');
@@ -6011,7 +6008,7 @@ category: "Physical",
 name: "Geomancy",
 pp: 1.25,
 priority: 0,
-flags: {charge: 1, nonsky: 1, nosleeptalk: 1, failinstruct: 1},
+flags: {charge: 1},
 onTryMove(attacker, defender, move) {
 if (attacker.removeVolatile(move.id)) {
 return;
@@ -6122,7 +6119,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 spe: -1,
 },
@@ -6204,7 +6201,7 @@ category: "Special",
 name: "Grass Knot",
 pp: 1.25,
 priority: -10,
-flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
+flags: {contact: 1, protect: 1, mirror: 1},
 onTryHit(target, source, move) {
 if (target.volatiles['dynamax']) {
 this.add('-fail', source, 'move: Grass Knot', '[from] Dynamax');
@@ -6231,7 +6228,7 @@ category: "Special",
 name: "Grass Pledge",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1, pledgecombo: 1},
+flags: {protect: 1, mirror: 1, pledgecombo: 1},
 onPrepareHit(target, source, move) {
 for (const action of this.queue.list as MoveAction[]) {
 if (
@@ -6299,7 +6296,7 @@ category: "Physical",
 name: "Grassy Terrain",
 pp: .625,
 priority: 0,
-flags: {nonsky: 1},
+flags: {},
 terrain: 'grassyterrain',
 condition: {
 duration: 5,
@@ -6362,7 +6359,7 @@ return this.chainModify(1.5);
 }
 },
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 def: -1,
 },
@@ -6378,7 +6375,7 @@ category: "Status",
 name: "Gravity",
 pp: .625,
 priority: 0,
-flags: {nonsky: 1},
+flags: {},
 pseudoWeather: 'gravity',
 condition: {
 duration: 5,
@@ -6773,7 +6770,6 @@ flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 self: {
 boosts: {
 def: -1,
-spd: -1,
 },
 },
 secondary: null,
@@ -7023,7 +7019,7 @@ category: "Physical",
 name: "Heat Crash",
 pp: .625,
 priority: -10,
-flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
+flags: {contact: 1, protect: 1, mirror: 1},
 onTryHit(target, pokemon, move) {
 if (target.volatiles['dynamax']) {
 this.add('-fail', pokemon, 'Dynamax');
@@ -7045,7 +7041,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1, wind: 1},
 secondary: {
-chance: 25,
+chance: 33,
 status: 'brn',
 },
 target: "allAdjacentFoes",
@@ -7077,7 +7073,7 @@ category: "Physical",
 name: "Heavy Slam",
 pp: 0.625,
 priority: -10,
-flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
+flags: {contact: 1, protect: 1, mirror: 1},
 onTryHit(target, pokemon, move) {
 if (target.volatiles['dynamax']) {
 this.add('-fail', pokemon, 'Dynamax');
@@ -7097,7 +7093,7 @@ category: "Status",
 name: "Helping Hand",
 pp: 1.25,
 priority: 5,
-flags: {bypasssub: 1, noassist: 1, failcopycat: 1},
+flags: {bypasssub: 1},
 volatileStatus: 'helpinghand',
 onTryHit(target) {
 if (!target.newlySwitched && !this.queue.willMove(target)) return false;
@@ -7216,7 +7212,7 @@ category: "Physical",
 name: "Horn Drill",
 pp: .625,
 priority: 0,
-flags: {charge: 1, contact: 1, protect: 1, mirror: 1, nonsky: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1},
+flags: {charge: 1, contact: 1, protect: 1, mirror: 1},
 weather: 'Sandstorm',
 onTryMove(attacker, defender, move) {
 if (attacker.removeVolatile(move.id)) {
@@ -7534,7 +7530,7 @@ category: "Special",
 name: "Ice Burn",
 pp: .625,
 priority: 0,
-flags: {charge: 1, protect: 1, mirror: 1, nosleeptalk: 1, failinstruct: 1},
+flags: {charge: 1, protect: 1, mirror: 1},
 onTryMove(attacker, defender, move) {
 if (attacker.removeVolatile(move.id)) {
 return;
@@ -7577,7 +7573,7 @@ type: "Ice",
 },
 
 icehammer: {
-accuracy: 90,
+accuracy: 85,
 basePower: 100,
 category: "Physical",
 name: "Ice Hammer",
@@ -7649,7 +7645,7 @@ type: "Ice",
 },
 
 iciclecrash: {
-accuracy: 90,
+accuracy: 85,
 basePower: 85,
 category: "Physical",
 name: "Icicle Crash",
@@ -7687,7 +7683,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1, wind: 1},
 secondary: {
-chance: 95,
+chance: 75,
 boosts: {
 spe: -1,
 },
@@ -7703,7 +7699,7 @@ category: "Status",
 name: "Imprison",
 pp: 1.25,
 priority: 0,
-flags: {snatch: 1, bypasssub: 1, mustpressure: 1},
+flags: {snatch: 1, bypasssub: 1},
 volatileStatus: 'imprison',
 condition: {
 noCopy: true,
@@ -7778,7 +7774,7 @@ pp: .625,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 status: 'brn',
 },
 target: "normal",
@@ -7786,7 +7782,7 @@ type: "Fire",
 },
 
 infernooverdrive: {
-accuracy: 90,
+accuracy: 95,
 basePower: 55,
 category: "Physical",
 name: "Inferno Overdrive",
@@ -7822,7 +7818,7 @@ category: "Status",
 name: "Ingrain",
 pp: 1.25,
 priority: 0,
-flags: {snatch: 1, nonsky: 1},
+flags: {snatch: 1},
 volatileStatus: 'ingrain',
 condition: {
 onStart(pokemon) {
@@ -7853,7 +7849,7 @@ category: "Status",
 name: "Instruct",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, bypasssub: 1, allyanim: 1, failinstruct: 1},
+flags: {protect: 1, bypasssub: 1, allyanim: 1},
 onHit(target, source) {
 if (!target.lastMove || target.volatiles['dynamax']) return false;
 const lastMove = target.lastMove;
@@ -8038,15 +8034,15 @@ type: "Fighting",
 },
 
 kinesis: {
-accuracy: 85,
-basePower: 40,
+accuracy: 95,
+basePower: 50,
 category: "Special",
 name: "Kinesis",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1},
-boosts: {
-evasion: -1,
+flags: {contact: 1, protect: 1, mirror: 1},
+onAfterMoveSecondarySelf(pokemon, target, move) {
+if (!target || target.fainted || target.hp <= 0) this.boost({spa: 3}, pokemon, pokemon, move);
 },
 secondary: null,
 target: "normal",
@@ -8060,7 +8056,7 @@ category: "Status",
 name: "King's Shield",
 pp: 1.25,
 priority: 4,
-flags: {noassist: 1, failcopycat: 1, failinstruct: 1},
+flags: {},
 stallingMove: true,
 volatileStatus: 'kingsshield',
 onPrepareHit(pokemon) {
@@ -8158,7 +8154,7 @@ category: "Physical",
 name: "Land's Wrath",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1},
+flags: {protect: 1, mirror: 1},
 secondary: null,
 target: "allAdjacentFoes",
 type: "Ground",
@@ -8303,7 +8299,7 @@ type: "Grass",
 },
 
 leafstorm: {
-accuracy: 90,
+accuracy: 85,
 basePower: 130,
 category: "Special",
 name: "Leaf Storm",
@@ -8321,7 +8317,7 @@ type: "Grass",
 },
 
 leaftornado: {
-accuracy: 90,
+accuracy: 95,
 basePower: 65,
 category: "Special",
 name: "Leaf Tornado",
@@ -8353,7 +8349,7 @@ type: "Bug",
 },
 
 leechseed: {
-accuracy: 90,
+accuracy: 95,
 basePower: 0,
 category: "Status",
 name: "Leech Seed",
@@ -8452,7 +8448,7 @@ type: "Water",
 },
 
 lightofruin: {
-accuracy: 90,
+accuracy: 85,
 basePower: 140,
 category: "Special",
 name: "Light of Ruin",
@@ -8803,6 +8799,9 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: null,
+boosts: {
+accuracy: 1,
+},
 target: "normal",
 type: "Grass",
 },
@@ -8814,9 +8813,7 @@ category: "Physical",
 name: "Magical Torque",
 pp: .625,
 priority: 0,
-flags: {
-protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
-},
+flags: {protect: 1},
 secondary: {
 chance: 25,
 volatileStatus: 'confusion',
@@ -9027,7 +9024,7 @@ category: "Physical",
 name: "Magnitude",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1},
+flags: {protect: 1, mirror: 1},
 onModifyMove(move, pokemon) {
 const i = this.random(100);
 if (i < 5) {
@@ -9068,7 +9065,7 @@ category: "Special",
 name: "Make It Rain",
 pp: .625,
 priority: 0,
-flags: {mirror: 1},
+flags: {distance: 1, mirror: 1},
 weather: 'RainDance',
 secondary: null,
 target: "allAdjacentFoes",
@@ -9098,7 +9095,7 @@ category: "Status",
 name: "Mat Block",
 pp: 1.25,
 priority: 0,
-flags: {snatch: 1, nonsky: 1, noassist: 1, failcopycat: 1},
+flags: {snatch: 1},
 stallingMove: true,
 sideCondition: 'matblock',
 onTry(source) {
@@ -9177,10 +9174,7 @@ category: "Status",
 name: "Me First",
 pp: 1.25,
 priority: 0,
-flags: {
-protect: 1, bypasssub: 1,
-failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
-},
+flags: {protect: 1, bypasssub: 1},
 onTryHit(target, pokemon) {
 const action = this.queue.willMove(target);
 if (!action) return false;
@@ -9188,7 +9182,6 @@ const move = this.dex.getActiveMove(action.move.id);
 if (action.zmove || move.isZ || move.isMax) return false;
 if (target.volatiles['mustrecharge']) return false;
 if (move.category === 'Status' || move.flags['failmefirst']) return false;
-
 pokemon.addVolatile('mefirst');
 this.actions.useMove(move, pokemon, target);
 return null;
@@ -9311,7 +9304,7 @@ category: "Physical",
 name: "Metal Burst",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, mirror: 1, failmefirst: 1},
+flags: {protect: 1, mirror: 1},
 onTry(source) {
 const lastDamagedBy = source.getLastDamagedBy(true);
 if (lastDamagedBy === undefined || !lastDamagedBy.thisTurn) return false;
@@ -9336,7 +9329,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 30,
+chance: 33,
 self: {
 boosts: {
 atk: 1,
@@ -9371,7 +9364,7 @@ category: "Physical",
 name: "Meteor Assault",
 pp: .625,
 priority: 0,
-flags: {protect: 1, recharge: 1, mirror: 1, failinstruct: 1},
+flags: {protect: 1, recharge: 1, mirror: 1},
 self: {
 volatileStatus: 'mustrecharge',
 },
@@ -9381,7 +9374,7 @@ type: "Fighting",
 },
 
 meteorbeam: {
-accuracy: 90,
+accuracy: 85,
 basePower: 120,
 category: "Special",
 name: "Meteor Beam",
@@ -9405,7 +9398,7 @@ type: "Rock",
 },
 
 meteormash: {
-accuracy: 90,
+accuracy: 95,
 basePower: 90,
 category: "Physical",
 name: "Meteor Mash",
@@ -9431,7 +9424,7 @@ category: "Status",
 name: "Metronome",
 pp: .625,
 priority: 0,
-flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+flags: {},
 onHit(target, source, effect) {
 const moves = this.dex.moves.all().filter(move => (
 (![2, 4].includes(this.gen) || !source.moves.includes(move.id)) &&
@@ -9473,10 +9466,7 @@ category: "Status",
 name: "Mimic",
 pp: 1.25,
 priority: 0,
-flags: {
-protect: 1, bypasssub: 1, allyanim: 1,
-failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
-},
+flags: {protect: 1, bypasssub: 1, allyanim: 1},
 onHit(target, source) {
 const move = target.lastMove;
 if (source.transformed || !move || move.flags['failmimic'] || source.moves.includes(move.id)) {
@@ -9485,7 +9475,6 @@ return false;
 if (move.isZ || move.isMax) return false;
 const mimicIndex = source.moves.indexOf('mimic');
 if (mimicIndex < 0) return false;
-
 source.moveSlots[mimicIndex] = {
 move: move.name,
 id: move.id,
@@ -9522,7 +9511,7 @@ this.runEvent('EmergencyExit', pokemon, pokemon);
 }
 },
 secondary: null,
-target: "allAdjacent",
+target: "normal",
 type: "Fire",
 },
 
@@ -9577,8 +9566,9 @@ return accuracy;
 },
 },
 boosts: {
-evasion: 2,
-spe: 2,
+atk: -2,
+spa: -2,
+spe: 4,
 },
 secondary: null,
 target: "self",
@@ -9627,7 +9617,7 @@ category: "Special",
 name: "Mirror Coat",
 pp: 1.25,
 priority: -9,
-flags: {protect: 1, failmefirst: 1, noassist: 1},
+flags: {protect: 1},
 beforeTurnCallback(pokemon) {
 pokemon.addVolatile('mirrorcoat');
 },
@@ -9667,7 +9657,7 @@ category: "Status",
 name: "Mirror Move",
 pp: 1.25,
 priority: 0,
-flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+flags: {},
 onTryHit(target, pokemon) {
 const move = target.lastMove;
 if (!move?.flags['mirror'] || move.isZ || move.isMax) {
@@ -9785,7 +9775,7 @@ category: "Physical",
 name: "Misty Terrain",
 pp: .625,
 priority: 0,
-flags: {nonsky: 1},
+flags: {},
 terrain: 'mistyterrain',
 condition: {
 duration: 5,
@@ -9972,7 +9962,7 @@ pokemon.removeVolatile('partiallytrapped');
 }
 },
 secondary: {
-chance: 95,
+chance: 75,
 status: 'tox',
 },
 target: "allAdjacentFoes",
@@ -10076,7 +10066,7 @@ category: "Status",
 name: "Mud Sport",
 pp: .625,
 priority: 0,
-flags: {nonsky: 1},
+flags: {},
 pseudoWeather: 'mudsport',
 condition: {
 duration: 5,
@@ -10108,9 +10098,9 @@ category: "Special",
 name: "Muddy Water",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1},
+flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 25,
+chance: 33,
 boosts: {
 evasion: -1,
 },
@@ -10139,7 +10129,7 @@ type: "Fire",
 },
 
 mysticalpower: {
-accuracy: 90,
+accuracy: 95,
 basePower: 70,
 category: "Special",
 name: "Mystical Power",
@@ -10147,7 +10137,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 self: {
 boosts: {
 spa: 1,
@@ -10213,7 +10203,7 @@ category: "Status",
 name: "Nature Power",
 pp: 1.25,
 priority: 0,
-flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+flags: {},
 onTryHit(target, pokemon) {
 let move = 'triattack';
 if (this.field.isTerrain('electricterrain')) {
@@ -10234,7 +10224,7 @@ type: "Normal",
 },
 
 naturesmadness: {
-accuracy: 90,
+accuracy: 95,
 basePower: 0,
 damageCallback(pokemon, target) {
 return this.clampIntRange(Math.floor(target.getUndynamaxedHP() / 2), 1);
@@ -10266,7 +10256,7 @@ type: "Grass",
 },
 
 neverendingnightmare: {
-accuracy: 90,
+accuracy: 95,
 basePower: 45,
 category: "Special",
 name: "Never-Ending Nightmare",
@@ -10402,6 +10392,7 @@ def: 1,
 spa: 1,
 spd: 1,
 spe: 1,
+evasion: -2,
 },
 secondary: null,
 target: "self",
@@ -10415,9 +10406,7 @@ category: "Physical",
 name: "Noxious Torque",
 pp: .625,
 priority: 0,
-flags: {
-protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
-},
+flags: {protect: 1},
 secondary: {
 chance: 25,
 status: 'tox',
@@ -10435,7 +10424,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 status: 'par',
 },
 target: "normal",
@@ -10463,7 +10452,7 @@ category: "Status",
 name: "Obstruct",
 pp: 1.25,
 priority: 4,
-flags: {failinstruct: 1},
+flags: {},
 stallingMove: true,
 volatileStatus: 'obstruct',
 onPrepareHit(pokemon) {
@@ -10669,7 +10658,7 @@ category: "Physical",
 name: "Outrage",
 pp: .625,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, failinstruct: 1},
+flags: {contact: 1, protect: 1, mirror: 1},
 self: {
 volatileStatus: 'lockedmove',
 },
@@ -10697,7 +10686,7 @@ type: "Electric",
 },
 
 overheat: {
-accuracy: 90,
+accuracy: 85,
 basePower: 130,
 category: "Special",
 name: "Overheat",
@@ -10886,7 +10875,7 @@ category: "Special",
 name: "Petal Dance",
 pp: .625,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, dance: 1, failinstruct: 1},
+flags: {contact: 1, protect: 1, mirror: 1, dance: 1},
 self: {
 volatileStatus: 'lockedmove',
 },
@@ -10907,7 +10896,7 @@ category: "Physical",
 name: "Phantom Force",
 pp: 1.25,
 priority: 0,
-flags: {contact: 1, charge: 1, mirror: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1},
+flags: {contact: 1, charge: 1, mirror: 1},
 breaksProtect: true,
 onTryMove(attacker, defender, move) {
 if (attacker.removeVolatile(move.id)) {
@@ -10994,7 +10983,7 @@ type: "Normal",
 },
 
 playrough: {
-accuracy: 90,
+accuracy: 95,
 basePower: 90,
 category: "Physical",
 name: "Play Rough",
@@ -11041,7 +11030,7 @@ basePower: 50,
 category: "Physical",
 name: "Poison Fang",
 pp: 1.25,
-priority: 1,
+priority: 0,
 flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
 secondaries: [
 {
@@ -11057,7 +11046,7 @@ type: "Poison",
 },
 
 poisongas: {
-accuracy: 90,
+accuracy: 95,
 basePower: 0,
 category: "Status",
 name: "Poison Gas",
@@ -11066,7 +11055,7 @@ priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1},
 status: 'tox',
 secondary: null,
-target: "allAdjacentFoes",
+target: "allAdjacent",
 type: "Poison",
 },
 
@@ -11161,7 +11150,7 @@ type: "Bug",
 },
 
 poltergeist: {
-accuracy: 90,
+accuracy: 85,
 basePower: 110,
 category: "Physical",
 name: "Poltergeist",
@@ -11236,7 +11225,7 @@ priority: 4,
 flags: {bullet: 1, protect: 1, mirror: 1, allyanim: 1},
 critRatio: 2,
 secondary: {
-chance: 95,
+chance: 75,
 onHit(target, source) {
 const result = this.random(3);
 if (result === 0) {
@@ -11248,7 +11237,7 @@ target.trySetStatus('slp', source);
 }
 },
 },
-target: "allAdjacentFoes",
+target: "allAdjacent",
 type: "Bug",
 },
 
@@ -11259,7 +11248,7 @@ category: "Special",
 name: "Powder Snow",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, mirror: 1},
+flags: {powder: 1, protect: 1, mirror: 1},
 critRatio: 2,
 secondary: {
 chance: 25,
@@ -11443,7 +11432,7 @@ onAfterMoveSecondarySelf(pokemon, target, move) {
 if (!target || target.fainted || target.hp <= 0) this.boost({atk: 2}, pokemon, pokemon, move);
 },
 secondary: {
-chance: 95,
+chance: 75,
 self: {
 boosts: {
 atk: 1,
@@ -11478,13 +11467,13 @@ category: "Physical",
 name: "Precipice Blades",
 pp: .625,
 priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1},
+flags: {protect: 1, mirror: 1, slicing: 1},
 target: "allAdjacentFoes",
 type: "Ground",
 },
 
 present: {
-accuracy: 90,
+accuracy: 95,
 basePower: 0,
 category: "Physical",
 name: "Present",
@@ -11532,7 +11521,7 @@ category: "Status",
 name: "Protect",
 pp: 1.25,
 priority: 4,
-flags: {noassist: 1, failcopycat: 1},
+flags: {},
 stallingMove: true,
 volatileStatus: 'protect',
 onPrepareHit(pokemon) {
@@ -11688,7 +11677,7 @@ category: "Physical",
 name: "Psychic Terrain",
 pp: .625,
 priority: 0,
-flags: {nonsky: 1},
+flags: {},
 terrain: 'psychicterrain',
 condition: {
 duration: 5,
@@ -11740,16 +11729,23 @@ type: "Psychic",
 },
 
 psychoboost: {
-accuracy: 90,
-basePower: 140,
+accuracy: 95,
+basePower: 40,
 category: "Special",
 name: "Psycho Boost",
-pp: .625,
+pp: 1.25,
 priority: 0,
-flags: {protect: 1, mirror: 1},
+flags: {contact: 1, protect: 1, mirror: 1},
+onAfterMoveSecondarySelf(pokemon, target, move) {
+if (!target || target.fainted || target.hp <= 0) this.boost({spa: 2}, pokemon, pokemon, move);
+},
+secondary: {
+chance: 75,
 self: {
 boosts: {
-spa: -2,
+spa: 1,
+evasion: -1,
+},
 },
 },
 secondary: null,
@@ -11794,7 +11790,7 @@ type: "Psychic",
 },
 
 psyshieldbash: {
-accuracy: 90,
+accuracy: 95,
 basePower: 70,
 category: "Physical",
 name: "Psyshield Bash",
@@ -11802,7 +11798,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 self: {
 boosts: {
 spd: 1,
@@ -11978,7 +11974,7 @@ type: "Dark",
 },
 
 pyroball: {
-accuracy: 90,
+accuracy: 85,
 basePower: 115,
 category: "Physical",
 name: "Pyro Ball",
@@ -12005,7 +12001,6 @@ onHit(target) {
 if (this.activePerHalf === 1) return false; // fails in singles
 const action = this.queue.willMove(target);
 if (!action) return false;
-
 action.order = 201;
 this.add('-activate', target, 'move: Quash');
 },
@@ -12094,11 +12089,11 @@ type: "Bug",
 
 rage: {
 accuracy: 95,
-basePower: 20,
+basePower: 40,
 category: "Physical",
 name: "Rage",
 pp: 1.25,
-priority: 0,
+priority: 3,
 flags: {contact: 1, protect: 1, mirror: 1},
 self: {
 volatileStatus: 'rage',
@@ -12109,7 +12104,7 @@ this.add('-singlemove', pokemon, 'Rage');
 },
 onHit(target, source, move) {
 if (target !== source && move.category !== 'Status') {
-this.boost({atk: 1});
+this.boost({atk: 2});
 }
 },
 onBeforeMovePriority: 100,
@@ -12146,7 +12141,7 @@ category: "Status",
 name: "Rage Powder",
 pp: 1.25,
 priority: 2,
-flags: {powder: 1, noassist: 1, failcopycat: 1},
+flags: {powder: 1},
 volatileStatus: 'ragepowder',
 onTry(source) {
 return this.activePerHalf > 1;
@@ -12160,7 +12155,6 @@ onFoeRedirectTargetPriority: 1,
 onFoeRedirectTarget(target, source, source2, move) {
 const ragePowderUser = this.effectState.target;
 if (ragePowderUser.isSkyDropped()) return;
-
 if (source.runStatusImmunity('powder') && this.validTarget(ragePowderUser, source, move.target)) {
 if (move.smartTarget) move.smartTarget = false;
 this.debug("Rage Powder redirected target of move");
@@ -12207,17 +12201,17 @@ type: "Normal",
 
 ragingfury: {
 accuracy: 95,
-basePower: 120,
+basePower: 115,
 category: "Physical",
 name: "Raging Fury",
 pp: .625,
 priority: 0,
-flags: {protect: 1, mirror: 1},
+flags: {contact: 1, protect: 1, mirror: 1},
 self: {
 volatileStatus: 'lockedmove',
 },
 onAfterMove(pokemon) {
-if (pokemon.volatiles['lockedmove']?.duration === 1) {
+if (pokemon.volatiles['lockedmove'] && pokemon.volatiles['lockedmove'].duration === 1) {
 pokemon.removeVolatile('lockedmove');
 }
 },
@@ -12233,7 +12227,7 @@ category: "Special",
 name: "Rain Dance",
 pp: .625,
 priority: 0,
-flags: {},
+flags: {dance: 1},
 weather: 'RainDance',
 secondary: null,
 target: "all",
@@ -12277,7 +12271,7 @@ pokemon.removeVolatile('partiallytrapped');
 }
 },
 secondary: {
-chance: 95,
+chance: 75,
 self: {
 boosts: {
 spe: 1,
@@ -12320,14 +12314,14 @@ target: "normal",
 type: "Water",
 },
 
-razorwind: {
+iceburn: {
 accuracy: 95,
 basePower: 80,
 category: "Special",
 name: "Razor Wind",
 pp: .625,
 priority: -3,
-flags: {charge: 1, protect: 1, mirror: 1, nosleeptalk: 1},
+flags: {charge: 1, protect: 1, mirror: 1},
 weather: 'snow',
 critRatio: 2,
 secondary: null,
@@ -12663,7 +12657,7 @@ category: "Status",
 name: "Roar",
 pp: 1.25,
 priority: 1,
-flags: {reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, allyanim: 1, noassist: 1, failcopycat: 1},
+flags: {reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, allyanim: 1},
 forceSwitch: true,
 secondary: null,
 target: "allAdjacentFoes",
@@ -12687,7 +12681,7 @@ type: "Dragon",
 },
 
 rockblast: {
-accuracy: 90,
+accuracy: 85,
 basePower: 25,
 category: "Physical",
 name: "Rock Blast",
@@ -12695,7 +12689,7 @@ pp: 1.25,
 priority: 0,
 flags: {bullet: 1, protect: 1, mirror: 1},
 multihit: [1, 5],
-multiaccuracy: 90,
+multiaccuracy: 85,
 secondary: null,
 target: "normal",
 type: "Rock",
@@ -12734,7 +12728,7 @@ type: "Rock",
 },
 
 rockslide: {
-accuracy: 90,
+accuracy: 85,
 basePower: 75,
 category: "Physical",
 name: "Rock Slide",
@@ -12895,7 +12889,7 @@ name: "Roost",
 pp: .625,
 priority: 0,
 flags: {snatch: 1, heal: 1},
-heal: [66, 100],
+heal: [60, 100],
 self: {
 volatileStatus: 'roost',
 },
@@ -12927,7 +12921,7 @@ category: "Status",
 name: "Rototiller",
 pp: 1.25,
 priority: 0,
-flags: {distance: 1, nonsky: 1},
+flags: {distance: 1},
 onHitField(target, source) {
 const targets: Pokemon[] = [];
 let anyAirborne = false;
@@ -12982,7 +12976,7 @@ type: "Normal",
 },
 
 ruination: {
-accuracy: 90,
+accuracy: 95,
 basePower: 0,
 damageCallback(pokemon, target) {
 return this.clampIntRange(Math.floor(target.getUndynamaxedHP() / 2), 1);
@@ -13106,7 +13100,7 @@ this.add('-end', pokemon, 'Salt Cure');
 },
 },
 secondary: {
-chance: 95,
+chance: 75,
 volatileStatus: 'saltcure',
 },
 target: "normal",
@@ -13172,7 +13166,7 @@ type: "Ground",
 },
 
 sappyseed: {
-accuracy: 90,
+accuracy: 95,
 basePower: 100,
 category: "Physical",
 name: "Sappy Seed",
@@ -13219,7 +13213,7 @@ type: "Water",
 },
 
 scaleshot: {
-accuracy: 90,
+accuracy: 85,
 basePower: 25,
 category: "Physical",
 name: "Scale Shot",
@@ -13227,12 +13221,11 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 multihit: [1, 5],
-multiaccuracy: 90,
+multiaccuracy: 85,
 selfBoost: {
 boosts: {
 def: -1,
-spd: -1,
-spe: 1,
+spd: +1,
 },
 },
 secondary: null,
@@ -13387,7 +13380,7 @@ overrideDefensiveStat: 'def',
 name: "Secret Sword",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, mirror: 1},
+flags: {protect: 1, mirror: 1, slicing: 1},
 secondary: null,
 target: "normal",
 type: "Fighting",
@@ -13436,7 +13429,7 @@ category: "Physical",
 name: "Seismic Toss",
 pp: .625,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
+flags: {contact: 1, protect: 1, mirror: 1},
 secondary: null,
 target: "normal",
 type: "Fighting",
@@ -13449,7 +13442,7 @@ category: "Physical",
 name: "Self-Destruct",
 pp: .625,
 priority: -7,
-flags: {protect: 1, mirror: 1, noparentalbond: 1},
+flags: {protect: 1, mirror: 1},
 selfdestruct: "always",
 secondary: null,
 target: "allAdjacent",
@@ -13513,7 +13506,7 @@ category: "Special",
 name: "Shadow Force",
 pp: 1.25,
 priority: 0,
-flags: {contact: 1, charge: 1, mirror: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1},
+flags: {contact: 1, charge: 1, mirror: 1},
 breaksProtect: true,
 onTryMove(attacker, defender, move) {
 if (attacker.removeVolatile(move.id)) {
@@ -13659,7 +13652,7 @@ type: "Normal",
 },
 
 sheercold: {
-accuracy: 90,
+accuracy: 95,
 basePower: 50,
 category: "Special",
 name: "Sheer Cold",
@@ -13738,7 +13731,7 @@ spd: -2,
 atk: 2,
 spa: 2,
 spe: 2,
-evasion: -2,
+evasion: -3,
 },
 secondary: null,
 target: "self",
@@ -13752,7 +13745,7 @@ category: "Special",
 name: "Shell Trap",
 pp: .625,
 priority: -3,
-flags: {protect: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
+flags: {protect: 1},
 priorityChargeCallback(pokemon) {
 pokemon.addVolatile('shelltrap');
 },
@@ -13829,6 +13822,10 @@ name: "Shock Wave",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
+secondary: null,
+boosts: {
+accuracy: 1,
+},
 secondary: null,
 target: "normal",
 type: "Electric",
@@ -14015,7 +14012,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1, defrost: 1},
 secondary: {
-chance: 95,
+chance: 75,
 status: 'brn',
 },
 target: "normal",
@@ -14071,7 +14068,7 @@ type: "Psychic",
 },
 
 skittersmack: {
-accuracy: 90,
+accuracy: 95,
 basePower: 70,
 category: "Physical",
 name: "Skitter Smack",
@@ -14088,14 +14085,14 @@ target: "normal",
 type: "Bug",
 },
 
-skullbash: {
+bounce: {
 accuracy: 95,
 basePower: 125,
 category: "Physical",
 name: "Skull Bash",
 pp: .625,
 priority: 0,
-flags: {charge: 1, contact: 1, protect: 1, mirror: 1, nosleeptalk: 1, failinstruct: 1},
+flags: {charge: 1, contact: 1, protect: 1, mirror: 1},
 onTryMove(attacker, defender, move) {
 if (attacker.removeVolatile(move.id)) {
 return;
@@ -14120,7 +14117,7 @@ category: "Physical",
 name: "Sky Attack",
 pp: .625,
 priority: 0,
-flags: {charge: 1, protect: 1, mirror: 1, distance: 1, nosleeptalk: 1, failinstruct: 1},
+flags: {charge: 1, protect: 1, mirror: 1, distance: 1},
 critRatio: 3,
 onTryMove(attacker, defender, move) {
 if (attacker.removeVolatile(move.id)) {
@@ -14149,9 +14146,7 @@ category: "Physical",
 name: "Sky Drop",
 pp: 1.25,
 priority: 0,
-flags: {
-contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
-},
+flags: {contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1},
 onModifyMove(move, source) {
 if (!source.volatiles['skydrop']) {
 move.accuracy = true;
@@ -14255,7 +14250,7 @@ type: "Flying",
 },
 
 skyuppercut: {
-accuracy: 90,
+accuracy: 95,
 basePower: 85,
 category: "Physical",
 name: "Sky Uppercut",
@@ -14288,7 +14283,7 @@ category: "Physical",
 name: "Slam",
 pp: 1.25,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
+flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
 chance: 25,
 volatileStatus: 'flinch',
@@ -14332,7 +14327,7 @@ category: "Status",
 name: "Sleep Talk",
 pp: 1.25,
 priority: 0,
-flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+flags: {},
 sleepUsable: true,
 onTry(source) {
 return source.status === 'slp' || source.hasAbility('comatose');
@@ -14415,7 +14410,7 @@ category: "Physical",
 name: "Smack Down",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1},
+flags: {protect: 1, mirror: 1},
 volatileStatus: 'smackdown',
 condition: {
 noCopy: true,
@@ -14587,7 +14582,7 @@ category: "Status",
 name: "Snatch",
 pp: 1.25,
 priority: 5,
-flags: {bypasssub: 1, mustpressure: 1, noassist: 1, failcopycat: 1},
+flags: {bypasssub: 1},
 volatileStatus: 'snatch',
 condition: {
 duration: 1,
@@ -14697,13 +14692,14 @@ target: "self",
 type: "Normal",
 },
 
-solarbeam: {
+freezeshock: {
 accuracy: 95,
 basePower: 120,
 category: "Special",
 name: "Solar Beam",
 pp: .625,
-flags: {charge: 1, protect: 1, mirror: 1, nosleeptalk: 1, failinstruct: 1},
+priority: 0,
+flags: {charge: 1, protect: 1, mirror: 1},
 onTryMove(attacker, defender, move) {
 if (attacker.removeVolatile(move.id)) {
 return;
@@ -14733,14 +14729,14 @@ target: "normal",
 type: "Grass",
 },
 
-solarblade: {
+skullbash: {
 accuracy: 95,
 basePower: 125,
 category: "Physical",
 name: "Solar Blade",
 pp: .625,
 priority: 0,
-flags: {charge: 1, contact: 1, protect: 1, mirror: 1, slicing: 1, nosleeptalk: 1, failinstruct: 1},
+flags: {charge: 1, contact: 1, protect: 1, mirror: 1, slicing: 1},
 onTryMove(attacker, defender, move) {
 if (attacker.removeVolatile(move.id)) {
 return;
@@ -14771,7 +14767,7 @@ type: "Grass",
 },
 
 sonicboom: {
-accuracy: 90,
+accuracy: 95,
 basePower: 50,
 category: "Special",
 name: "Sonic Boom",
@@ -14838,7 +14834,7 @@ priority: 1,
 flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 secondary: {
 dustproof: true,
-chance: 95,
+chance: 75,
 volatileStatus: 'sparklingaria',
 },
 onAfterMove(source, target, move) {
@@ -14895,18 +14891,19 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1},
 boosts: {
-chance: 95,
+chance: 75,
 atk: 2,
 spa: 2,
 spe: 1,
 spd: -2,
 def: -2,
+evasion: -2
 },
 secondary: {
-chance: 95,
+chance: 75,
 status: 'brn',
 },
-target: "normal",
+target: "self",
 type: "Grass",
 },
 
@@ -14948,7 +14945,7 @@ category: "Status",
 name: "Spikes",
 pp: 1.25,
 priority: 0,
-flags: {reflectable: 1, nonsky: 1, mustpressure: 1},
+flags: {reflectable: 1},
 sideCondition: 'spikes',
 condition: {
 // this is a side condition
@@ -14979,7 +14976,7 @@ category: "Status",
 name: "Spiky Shield",
 pp: 1.25,
 priority: 4,
-flags: {noassist: 1, failcopycat: 1},
+flags: {},
 stallingMove: true,
 volatileStatus: 'spikyshield',
 onPrepareHit(pokemon) {
@@ -15073,7 +15070,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 onHit(target, source, move) {
 if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 },
@@ -15158,7 +15155,7 @@ category: "Status",
 name: "Spotlight",
 pp: 1.25,
 priority: 3,
-flags: {protect: 1, reflectable: 1, allyanim: 1, noassist: 1, failcopycat: 1},
+flags: {protect: 1, reflectable: 1, allyanim: 1},
 volatileStatus: 'spotlight',
 onTryHit(target) {
 if (this.activePerHalf === 1) return false;
@@ -15206,7 +15203,7 @@ category: "Status",
 name: "Stealth Rock",
 pp: 1.25,
 priority: 0,
-flags: {reflectable: 1, mustpressure: 1},
+flags: {reflectable: 1},
 sideCondition: 'stealthrock',
 condition: {
 // this is a side condition
@@ -15260,7 +15257,7 @@ type: "Bug",
 
 steelbeam: {
 accuracy: 95,
-basePower: 140,
+basePower: 135,
 category: "Special",
 name: "Steel Beam",
 pp: .625,
@@ -15303,7 +15300,7 @@ type: "Steel",
 },
 
 steelwing: {
-accuracy: 90,
+accuracy: 95,
 basePower: 70,
 category: "Physical",
 name: "Steel Wing",
@@ -15370,7 +15367,7 @@ category: "Physical",
 name: "Stomp",
 pp: 1.25,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
+flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
 chance: 25,
 volatileStatus: 'flinch',
@@ -15400,7 +15397,7 @@ type: "Ground",
 },
 
 stoneaxe: {
-accuracy: 90,
+accuracy: 85,
 basePower: 65,
 category: "Physical",
 name: "Stone Axe",
@@ -15544,10 +15541,7 @@ name: "Struggle",
 pp: .625,
 noPPBoosts: true,
 priority: 0,
-flags: {
-contact: 1, protect: 1,
-failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
-},
+flags: {contact: 1, protect: 1},
 noSketch: true,
 onModifyMove(move, pokemon, target) {
 move.type = '???';
@@ -15634,7 +15628,7 @@ category: "Status",
 name: "Substitute",
 pp: 1.25,
 priority: 0,
-flags: {snatch: 1, nonsky: 1},
+flags: {snatch: 1},
 volatileStatus: 'substitute',
 onTryHit(source) {
 if (source.volatiles['substitute']) {
@@ -15775,7 +15769,7 @@ type: "Steel",
 },
 
 superfang: {
-accuracy: 90,
+accuracy: 95,
 basePower: 0,
 damageCallback(pokemon, target) {
 return this.clampIntRange(target.getUndynamaxedHP() / 2, 1);
@@ -15844,7 +15838,7 @@ category: "Special",
 name: "Surf",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1},
+flags: {protect: 1, mirror: 1},
 secondary: null,
 target: "allAdjacent",
 type: "Water",
@@ -15922,8 +15916,9 @@ name: "Swift",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
+chance: 75,
 boosts: {
-accuracy: 1,
+accuracy: 2,
 },
 target: "allAdjacentFoes",
 type: "Normal",
@@ -15936,7 +15931,7 @@ category: "Status",
 name: "Switcheroo",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, mirror: 1, allyanim: 1, noassist: 1, failcopycat: 1},
+flags: {protect: 1, mirror: 1, allyanim: 1},
 onTryImmunity(target) {
 return !target.hasAbility('stickyhold');
 },
@@ -16067,6 +16062,7 @@ priority: 0,
 flags: {snatch: 1},
 boosts: {
 spa: 3,
+evasion: -3,
 },
 secondary: null,
 target: "self",
@@ -16201,7 +16197,7 @@ boosts: {
 spe: -1,
 },
 secondary: null,
-target: "normal",
+target: "allAdjacent",
 type: "Rock",
 },
 
@@ -16405,7 +16401,7 @@ category: "Special",
 name: "Tera Blast",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, mirror: 1, mustpressure: 1},
+flags: {protect: 1, mirror: 1},
 onModifyType(move, pokemon, target) {
 if (pokemon.terastallized) {
 move.type = pokemon.teraType;
@@ -16464,7 +16460,7 @@ category: "Physical",
 name: "Thief",
 pp: 1.25,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, failmefirst: 1, noassist: 1, failcopycat: 1},
+flags: {contact: 1, protect: 1, mirror: 1},
 onAfterHit(target, source, move) {
 if (source.item || source.volatiles['gem']) {
 return;
@@ -16493,7 +16489,7 @@ category: "Physical",
 name: "Thousand Arrows",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1},
+flags: {protect: 1, mirror: 1},
 onEffectiveness(typeMod, target, type, move) {
 if (move.type !== 'Ground') return;
 if (!target) return; // avoid crashing when called from a chat plugin
@@ -16516,7 +16512,7 @@ category: "Physical",
 name: "Thousand Waves",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1},
+flags: {protect: 1, mirror: 1},
 onHit(target, source, move) {
 if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 },
@@ -16532,7 +16528,7 @@ category: "Physical",
 name: "Thrash",
 pp: .625,
 priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1, failinstruct: 1},
+flags: {contact: 1, protect: 1, mirror: 1},
 self: {
 volatileStatus: 'lockedmove',
 },
@@ -16585,7 +16581,7 @@ this.add('-end', target, 'Throat Chop', '[silent]');
 },
 },
 secondary: {
-chance: 95,
+chance: 75,
 onHit(target) {
 target.addVolatile('throatchop');
 },
@@ -16600,7 +16596,7 @@ basePower: 110,
 category: "Special",
 name: "Thunder",
 pp: .625,
-priority: 1,
+priority: 0,
 flags: {protect: 1, mirror: 1},
 onModifyMove(move, pokemon, target) {
 switch (target?.effectiveWeather()) {
@@ -16628,7 +16624,7 @@ basePower: 90,
 category: "Special",
 name: "Thunderbolt",
 pp: 1.25,
-priority: 1,
+priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
 chance: 25,
@@ -16639,12 +16635,12 @@ type: "Electric",
 },
 
 thundercage: {
-accuracy: 90,
+accuracy: 85,
 basePower: 80,
 category: "Special",
 name: "Thunder Cage",
 pp: 1.25,
-priority: 1,
+priority: 0,
 flags: {protect: 1, mirror: 1},
 volatileStatus: 'partiallytrapped',
 secondary: null,
@@ -16658,7 +16654,7 @@ basePower: 65,
 category: "Physical",
 name: "Thunder Fang",
 pp: 1.25,
-priority: 1,
+priority: 0,
 flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
 secondaries: [
 {
@@ -16697,7 +16693,7 @@ basePower: 75,
 category: "Physical",
 name: "Thunder Punch",
 pp: 1.25,
-priority: 1,
+priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 secondaries: [
 {
@@ -16718,7 +16714,7 @@ basePower: 40,
 category: "Special",
 name: "Thunder Shock",
 pp: 1.25,
-priority: 1,
+priority: 0,
 flags: {protect: 1, mirror: 1},
 critRatio: 2,
 secondary: {
@@ -16730,12 +16726,12 @@ type: "Electric",
 },
 
 thunderwave: {
-accuracy: 90,
+accuracy: 85,
 basePower: 0,
 category: "Status",
 name: "Thunder Wave",
 pp: 1.25,
-priority: 1,
+priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1},
 status: 'par',
 ignoreImmunity: false,
@@ -16828,7 +16824,7 @@ pp: 1.25,
 priority: 1,
 flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 secondary: {
-chance: 95,
+chance: 75,
 self: {
 boosts: {
 spa: 1,
@@ -16892,7 +16888,7 @@ category: "Status",
 name: "Toxic Spikes",
 pp: 1.25,
 priority: 0,
-flags: {reflectable: 1, nonsky: 1, mustpressure: 1},
+flags: {reflectable: 1},
 sideCondition: 'toxicspikes',
 condition: {
 // this is a side condition
@@ -16950,7 +16946,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 self: {
 boosts: {
 spe: 1,
@@ -16968,7 +16964,7 @@ category: "Status",
 name: "Transform",
 pp: 1.25,
 priority: 5,
-flags: {allyanim: 1, failencore: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+flags: {allyanim: 1},
 onHit(target, pokemon) {
 if (!pokemon.transformInto(target)) {
 return false;
@@ -17011,7 +17007,7 @@ category: "Status",
 name: "Trick",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, mirror: 1, allyanim: 1, noassist: 1, failcopycat: 1},
+flags: {protect: 1, mirror: 1, allyanim: 1},
 onTryImmunity(target) {
 return !target.hasAbility('stickyhold');
 },
@@ -17141,7 +17137,7 @@ type: "Fighting",
 },
 
 tripleaxel: {
-accuracy: 90,
+accuracy: 85,
 basePower: 20,
 basePowerCallback(pokemon, target, move) {
 return 20 * move.hit;
@@ -17152,7 +17148,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 multihit: [1, 3],
-multiaccuracy: 95,
+multiaccuracy: 85,
 secondary: null,
 target: "normal",
 type: "Ice",
@@ -17174,7 +17170,7 @@ type: "Water",
 },
 
 triplekick: {
-accuracy: 90,
+accuracy: 85,
 basePower: 15,
 basePowerCallback(pokemon, target, move) {
 return 10 * move.hit;
@@ -17185,7 +17181,7 @@ pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 multihit: [1, 3],
-multiaccuracy: 95,
+multiaccuracy: 85,
 secondary: null,
 target: "normal",
 type: "Fighting",
@@ -17207,49 +17203,6 @@ atk: -1,
 },
 target: "normal",
 type: "Grass",
-},
-
-trumpcard: {
-accuracy: 95,
-basePower: 0,
-basePowerCallback(source, target, move) {
-const callerMoveId = move.sourceEffect || move.id;
-const moveSlot = callerMoveId === 'instruct' ? source.getMoveData(move.id) : source.getMoveData(callerMoveId);
-let bp;
-if (!moveSlot) {
-bp = 40;
-} else {
-switch (moveSlot.pp) {
-case 0:
-bp = 200;
-break;
-case 1:
-bp = 80;
-break;
-case 2:
-bp = 60;
-break;
-case 3:
-bp = 50;
-break;
-default:
-bp = 40;
-break;
-}
-}
-
-this.debug('BP: ' + bp);
-return bp;
-},
-category: "Special",
-name: "Trump Card",
-pp: 1.25,
-noPPBoosts: true,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: null,
-target: "normal",
-type: "Normal",
 },
 
 twinbeam: {
@@ -17336,7 +17289,7 @@ category: "Special",
 name: "Uproar",
 pp: 1.25,
 priority: 1,
-flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1, nosleeptalk: 1, failinstruct: 1},
+flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 self: {
 volatileStatus: 'uproar',
 },
@@ -17402,7 +17355,7 @@ type: "Fighting",
 },
 
 vcreate: {
-accuracy: 90,
+accuracy: 85,
 basePower: 105,
 category: "Physical",
 name: "V-create",
@@ -17600,7 +17553,7 @@ category: "Special",
 name: "Water Pledge",
 pp: 1.25,
 priority: 0,
-flags: {protect: 1, mirror: 1, nonsky: 1, pledgecombo: 1},
+flags: {protect: 1, mirror: 1, pledgecombo: 1},
 onPrepareHit(target, source, move) {
 for (const action of this.queue) {
 if (action.choice !== 'move') continue;
@@ -17695,7 +17648,7 @@ category: "Status",
 name: "Water Sport",
 pp: .625,
 priority: 0,
-flags: {nonsky: 1},
+flags: {},
 pseudoWeather: 'watersport',
 condition: {
 duration: 5,
@@ -17758,7 +17711,7 @@ basePower: 50,
 category: "Special",
 name: "Weather Ball",
 pp: 1.25,
-priority: -1,
+priority: 0,
 flags: {bullet: 1, protect: 1, mirror: 1},
 onModifyType(move, pokemon) {
 switch (pokemon.effectiveWeather()) {
@@ -17825,7 +17778,7 @@ category: "Status",
 name: "Whirlwind",
 pp: 1.25,
 priority: -6,
-flags: {reflectable: 1, mirror: 1, bypasssub: 1, allyanim: 1, wind: 1, noassist: 1, failcopycat: 1},
+flags: {reflectable: 1, mirror: 1, bypasssub: 1, allyanim: 1, wind: 1},
 forceSwitch: true,
 secondary: null,
 target: "allAdjacentFoes",
@@ -17853,9 +17806,7 @@ category: "Physical",
 name: "Wicked Torque",
 pp: 1.25,
 priority: 0,
-flags: {
-protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
-},
+flags: {protect: 1},
 secondary: {
 chance: 25,
 status: 'slp',
@@ -18088,9 +18039,10 @@ flags: {snatch: 1},
 boosts: {
 atk: 1,
 spa: 1,
+evasion: -2,
 },
 secondary: null,
-target: "self",
+target: "allySide",
 type: "Normal",
 },
 
@@ -18131,7 +18083,7 @@ type: "Grass",
 },
 
 wrap: {
-accuracy: 90,
+accuracy: 95,
 basePower: 15,
 category: "Physical",
 name: "Wrap",
@@ -18220,7 +18172,7 @@ pp: .625,
 priority: 0,
 flags: {bullet: 1, protect: 1, mirror: 1},
 secondary: {
-chance: 95,
+chance: 75,
 status: 'par',
 },
 target: "normal",
@@ -18228,7 +18180,7 @@ type: "Electric",
 },
 
 zenheadbutt: {
-accuracy: 90,
+accuracy: 85,
 basePower: 80,
 category: "Physical",
 name: "Zen Headbutt",
