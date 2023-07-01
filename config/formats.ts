@@ -1941,6 +1941,7 @@ export const Formats: FormatList = [
 
 		mod: 'randomroulette',
 		team: 'random',
+		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 
 	// Randomized Metas
