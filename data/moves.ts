@@ -24075,7 +24075,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onModifyMove(move, pokemon, target) {
 			this.add('-message', 'modifying...');
 			if (pokemon?.effectiveWeather() === 'acidrain') {
-				this.add('-message', 'modified');
+				this.add('-message', move.secondary?.chance);
 				if (move.secondary) move.secondary.chance = 100;
 			}
 		},
