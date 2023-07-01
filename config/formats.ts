@@ -371,6 +371,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		gameType: 'doubles',
+		searchShow: false,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
 	},
 	{
