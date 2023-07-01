@@ -123,19 +123,19 @@ target.cureStatus();
 },
 },
 
-psn: {
-name: 'psn',
+bld: {
+name: 'bld',
 effectType: 'Status',
 onStart(target, source, sourceEffect) {
 if (sourceEffect && sourceEffect.effectType === 'Ability') {
-this.add('-status', target, 'psn', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
+this.add('-status', target, 'bld', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
 } else {
-this.add('-status', target, 'psn');
+this.add('-status', target, 'bld');
 }
 },
 onResidualOrder: 9,
 onResidual(pokemon) {
-this.damage(pokemon.baseMaxhp / 8);
+this.damage(this.clampIntRange(pokemon.baseMaxhp / 32, 1) * this.effectState.stage);
 },
 },
 
