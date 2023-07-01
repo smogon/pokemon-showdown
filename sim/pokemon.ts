@@ -1312,7 +1312,6 @@ export class Pokemon {
 			deltaID = deltaID + extension as ID;
 		}
 
-
 		if(Object.keys(this.battle.dex.data.Pokedex).includes(deltaID)) {
 			const deltaSpecies = this.battle.dex.species.get(deltaID);
 			if (this.formeChange(deltaSpecies, effect)) {
@@ -1327,7 +1326,7 @@ export class Pokemon {
 					this.setAbility(deltaSpecies.abilities[1], this, true);
 				} else this.setAbility(deltaSpecies.abilities[0], this, true);
 
-				const learnsetData = {...(this.battle.dex.data.Learnsets[deltaID]?.learnset || {})};
+				const learnsetData = {...(this.battle.dex.data.Learnsets[deltaID.replace('mega', '')]?.learnset || {})};
 				const dict: any = {};
 				const oldDeltas = [ //Deltas that have no gen 6 level-up moves, but do have gen 5 ones.
 					'aerodactyldelta', 'aggrondeltai', 'blastoisedeltas', 'charizarddeltae',
