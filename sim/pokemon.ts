@@ -1301,7 +1301,11 @@ export class Pokemon {
 		if (target.species.id.includes('delta')) return true;
 		
 		let deltaID: ID = target.species.id as ID;
-		if (!deltaID.endsWith('mega')) deltaID = deltaID.replace('mega', 'deltamega') as ID;
+		if (!deltaID.endsWith('mega')) {
+			deltaID = deltaID.replace('mega', 'deltamega') as ID;
+		} else {
+			deltaID = deltaID + 'delta' as ID;
+		}
 
 		if(Object.keys(this.battle.dex.data.Pokedex).includes(deltaID)) {
 			const deltaSpecies = this.battle.dex.species.get(deltaID);
