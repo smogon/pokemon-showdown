@@ -109,7 +109,7 @@ export const translations: Translations = {
 		"Your status cannot be updated while you are locked or semilocked.": "Dein Status kann nicht geändert werden, solange du \"locked\" (gesperrt) oder semilocked (semi-gesperrt) bist.",
 		"Your status is too long; it must be under ${maxLength} characters.": "Dein Status ist zu lang; er muss kürzer als ${maxLength} Zeichen sein.",
 		"Your status contains a banned word.": "Dein Status beinhaltet ein verbotenes Wort.",
-		"Your status has been set to: ${target}.": "Dein Status wurde zu ${target} geändert.", 
+		"Your status has been set to: ${target}.": "Dein Status wurde zu ${target} geändert.",
 		"You are now marked as busy.": "Du bist jetzt als beschäftigt markiert.",
 		"You are now marked as away. Send a message or use /back to indicate you are back.": "Du bist jetzt als abwesend markiert. Versende eine Nachricht oder nutze /back um zu signalisieren, dass du zurück bist.",
 		"You are already marked as back.": "Du bist bereits als anwesend markiert.",
