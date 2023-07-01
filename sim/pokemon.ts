@@ -1301,7 +1301,7 @@ export class Pokemon {
 		if (target.species.id.includes('delta')) return true;
 		
 		let deltaID: ID = target.species.id + 'delta' as ID;
-		if (this.battle.dex.data.Pokedex[deltaID].name) this.battle.add('-message', this.battle.dex.data.Pokedex[deltaID].name);
+		if (Object.keys(this.battle.dex.data.Pokedex).includes(deltaID)) this.battle.add('-message', this.battle.dex.data.Pokedex[deltaID].name);
 
 		if(deltaID !== target.species.id) {
 			const deltaSpecies = this.battle.dex.species.get(deltaID);
