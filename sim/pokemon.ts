@@ -1301,7 +1301,7 @@ export class Pokemon {
 		if (target.species.id.includes('delta')) return true;
 		
 		let deltaID: ID = target.species.id as ID;
-		if (!deltaID.endsWith('mega')) {
+		if (deltaID.endsWith('mega')) {
 			deltaID = deltaID.replace('mega', 'deltamega') as ID;
 		} else {
 			deltaID = deltaID + 'delta' as ID;
