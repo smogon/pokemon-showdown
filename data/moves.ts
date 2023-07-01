@@ -3039,11 +3039,8 @@ name: "Cut",
 pp: 1.25,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
-critRatio: 3,
-secondary: {
-chance: 100,
-status: 'bld',
-},
+critRatio: 2,
+secondary: null,
 target: "normal",
 type: "Normal",
 },
@@ -14118,7 +14115,7 @@ name: "Sky Attack",
 pp: .625,
 priority: 0,
 flags: {charge: 1, protect: 1, mirror: 1, distance: 1},
-critRatio: 3,
+critRatio: 1,
 onTryMove(attacker, defender, move) {
 if (attacker.removeVolatile(move.id)) {
 return;
@@ -18209,7 +18206,7 @@ chance: 25,
 volatileStatus: 'flinch',
 },
 target: "normal",
-type: "Electric",
+type: "Fire",
 },
 
 };
