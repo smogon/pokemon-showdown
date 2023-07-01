@@ -3328,7 +3328,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "RU",
 	},
 	basculinwhitestriped: {
-		tier: "NFE",
+		tier: "PU",
+		doublesTier: "(DUU)",
+		natDexTier: "RU",
 	},
 	basculegion: {
 		tier: "UU",
