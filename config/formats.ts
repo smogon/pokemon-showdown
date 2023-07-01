@@ -1919,6 +1919,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 9] Random Roulette",
 		desc: `Random Battles in a random generation! [Gen 1] Random Battle - [Gen 9] Random Battle.`,
+
 		mod: 'randomroulette',
 		team: 'random',
 	},
