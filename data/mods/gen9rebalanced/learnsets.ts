@@ -41672,6 +41672,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			healbell: ["9M"],
 			sparklingauria: ["9M"],
 			dazzlinggleam: ["9M"],
+			calmmind: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 35, moves: ["waterpulse", "twister", "recover", "raindance"], pokeball: "pokeball"},

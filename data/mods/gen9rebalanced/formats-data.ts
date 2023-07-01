@@ -4748,7 +4748,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	thwackey: {
 //		isNonstandard: "Unobtainable",
-		tier: "PU",
+		tier: "NFE",
 		natDexTier: "NFE",
 	},
 	rillaboom: {
@@ -5486,7 +5486,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "UU",
 	},
 	glimmet: {
-		tier: "PU",
+		tier: "LC",
 	},
 	glimmora: {
 		tier: "OU",
