@@ -19670,6 +19670,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 6.9,
 		color: "Green",
 		evos: ["Metalynx"],
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Grass"],
 	},
 	metalynx: {
@@ -19685,6 +19686,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Orchynx",
 		evoLevel: 28,
 		eggGroups: ["Field", "Grass"],
+		tags: ["Uranium"],
 		otherFormes: ["Metalynx-Mega"],
 		formeOrder: ["Metalynx", "Metalynx-Mega"],
 	},
@@ -19701,6 +19703,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 146.5,
 		color: "Green",
 		eggGroups: ["Field", "Grass"],
+		tags: ["Uranium"],
 		requiredItem: "Metalynxite",
 	},
 	raptorch: {
@@ -19714,6 +19717,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 85.5,
 		color: "Black",
 		evos: ["Archilles"],
+		tags: ["Uranium"],
 		eggGroups: ["Monster", "Dragon"],
 	},
 	archilles: {
@@ -19729,6 +19733,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Raptorch",
 		evoLevel: 29,
 		eggGroups: ["Monster", "Dragon"],
+		tags: ["Uranium"],
 		otherFormes: ["Archilles-Mega"],
 		formeOrder: ["Archilles", "Archilles-Mega"],
 	},
@@ -19745,6 +19750,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 88.7,
 		color: "Black",
 		eggGroups: ["Monster", "Dragon"],
+		tags: ["Uranium"],
 		requiredItem: "Archillesite",
 	},
 	eletux: {
@@ -19758,6 +19764,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 18.5,
 		color: "Blue",
 		evos: ["Electruxo"],
+		tags: ["Uranium"],
 		eggGroups: ["Monster", "Water 1"],
 	},
 	electruxo: {
@@ -19773,6 +19780,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Eletux",
 		evoLevel: 27,
 		eggGroups: ["Monster", "Water 1"],
+		tags: ["Uranium"],
 		otherFormes: ["Electruxo-Mega"],
 		formeOrder: ["Electruxo", "Electruxo-Mega"],
 	},
@@ -19789,6 +19797,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 96.5,
 		color: "Blue",
 		eggGroups: ["Monster", "Water 1"],
+		tags: ["Uranium"],
 		requiredItem: "Electruxolite",
 	},
 	chyinmunk: {
@@ -19801,6 +19810,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 6.0,
 		color: "Brown",
 		evos: ["Kinetmunk"],
+		tags: ["Uranium"],
 		eggGroups: ["Field"],
 	},
 	chyinmunknuclear: {
@@ -19815,6 +19825,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 6.0,
 		color: "Brown",
 		evos: ["Kinetmunk-Nuclear"],
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	kinetmunk: {
@@ -19828,6 +19839,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Yellow",
 		prevo: "Chyinmunk",
 		evoLevel: 14,
+		tags: ["Uranium"],
 		eggGroups: ["Field"],
 	},
 	kinetmunknuclear: {
@@ -19843,6 +19855,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Yellow",
 		prevo: "Chyinmunk-Nuclear",
 		evoLevel: 14,
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	birbie: {
@@ -19855,6 +19868,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 1.6,
 		color: "Black",
 		evos: ["Aveden"],
+		tags: ["Uranium"],
 		eggGroups: ["Flying"],
 	},
 	aveden: {
@@ -19869,6 +19883,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Birbie",
 		evoLevel: 17,
 		evos: ["Splendifowl"],
+		tags: ["Uranium"],
 		eggGroups: ["Flying"],
 	},
 	splendifowl: {
@@ -19882,6 +19897,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Black",
 		prevo: "Aveden",
 		evoLevel: 31,
+		tags: ["Uranium"],
 		eggGroups: ["Flying"],
 	},
 	cubbug: {
@@ -19894,6 +19910,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0.6,
 		color: "Pink",
 		evos: ["Cubblfly"],
+		tags: ["Uranium"],
 		eggGroups: ["Bug"],
 	},
 	cubblfly: {
@@ -19908,6 +19925,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Cubbug",
 		evoLevel: 10,
 		evos: ["Nimflora"],
+		tags: ["Uranium"],
 		eggGroups: ["Bug"],
 	},
 	nimflora: {
@@ -19921,6 +19939,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Green",
 		prevo: "Cubblfly",
 		evoLevel: 24,
+		tags: ["Uranium"],
 		eggGroups: ["Bug"],
 	},
 	barewl: {
@@ -19933,6 +19952,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 120.0,
 		color: "Brown",
 		evos: ["Dearewl"],
+		tags: ["Uranium"],
 		eggGroups: ["Monster", "Mineral"],
 	},
 	dearewl: {
@@ -19947,6 +19967,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Barewl",
 		evoLevel: 15,
 		evos: ["Gararewl"],
+		tags: ["Uranium"],
 		eggGroups: ["Monster", "Mineral"],
 	},
 	gararewl: {
@@ -19960,6 +19981,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Yellow",
 		prevo: "Dearewl",
 		evoLevel: 32,
+		tags: ["Uranium"],
 		eggGroups: ["Monster", "Mineral"],
 	},
 	grozard: {
@@ -19972,6 +19994,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 14.3,
 		color: "Brown",
 		evos: ["Terlard"],
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Dragon"],
 	},
 	terlard: {
@@ -19985,6 +20008,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		prevo: "Grozard",
 		evoLevel: 22,
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Dragon"],
 	},
 	tonemy: {
@@ -19997,6 +20021,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 1.0,
 		color: "Purple",
 		evos: ["Tofurang"],
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Amorphous"],
 	},
 	tofurang: {
@@ -20010,6 +20035,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		prevo: "Tonemy",
 		evoLevel: 20,
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Amorphous"],
 	},
 	dunseraph: {
@@ -20024,6 +20050,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Dunsparce",
 		evoType: "levelMove",
 		evoMove: "Sky Fall",
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Dragon"],
 	},
 	fortog: {
@@ -20036,6 +20063,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 65.3,
 		color: "Green",
 		evos: ["Folerog"],
+		tags: ["Uranium"],
 		eggGroups: ["Water 1"],
 	},
 	folerog: {
@@ -20050,6 +20078,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Fortog",
 		evoLevel: 18,
 		evos: ["Blubelrog"],
+		tags: ["Uranium"],
 		eggGroups: ["Water 1"],
 	},
 	blubelrog: {
@@ -20063,6 +20092,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Green",
 		prevo: "Folerog",
 		evoLevel: 36,
+		tags: ["Uranium"],
 		eggGroups: ["Water 1"],
 	},
 	feleng: {
@@ -20075,6 +20105,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 6.8,
 		color: "Brown",
 		evos: ["Felunge"],
+		tags: ["Uranium"],
 		eggGroups: ["Field"],
 	},
 	felunge: {
@@ -20089,6 +20120,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Feleng",
 		evoLevel: 19,
 		evos: ["Feliger"],
+		tags: ["Uranium"],
 		eggGroups: ["Field"],
 	},
 	feliger: {
@@ -20103,6 +20135,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Felunge",
 		evoType: "levelMove",
 		evoMove: "Rest",
+		tags: ["Uranium"],
 		eggGroups: ["Field"],
 	},
 	empirilla: {
@@ -20116,6 +20149,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		prevo: "Primeape",
 		evoType: "levelHold",
+		tags: ["Uranium"],
 		evoItem: "Jungle Crown",
 		eggGroups: ["Field"],
 	},
@@ -20129,6 +20163,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 2.3,
 		color: "White",
 		evos: ["Eshouten"],
+		tags: ["Uranium"],
 		eggGroups: ["Flying", "Field"],
 	},
 	owtennuclear: {
@@ -20143,6 +20178,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 2.3,
 		color: "White",
 		evos: ["Eshouten-Nuclear"],
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	eshouten: {
@@ -20156,6 +20192,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "White",
 		prevo: "Owten",
 		evoLevel: 20,
+		tags: ["Uranium"],
 		eggGroups: ["Flying", "Field"],
 	},
 	eshoutennuclear: {
@@ -20171,6 +20208,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "White",
 		prevo: "Owten-Nuclear",
 		evoLevel: 20,
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	smore: {
@@ -20184,6 +20222,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 1.2,
 		color: "Red",
 		evos: ["Firoke"],
+		tags: ["Uranium"],
 		eggGroups: ["Bug"],
 	},
 	firoke: {
@@ -20199,6 +20238,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Smore",
 		evoType: "levelMove",
 		evoMove: "Incinerate",
+		tags: ["Uranium"],
 		eggGroups: ["Bug"],
 	},
 	brailip: {
@@ -20211,6 +20251,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 22.4,
 		color: "Green",
 		evos: ["Brainoar"],
+		tags: ["Uranium"],
 		eggGroups: ["Water 2"],
 	},
 	brainoar: {
@@ -20224,6 +20265,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Green",
 		prevo: "Brailip",
 		evoLevel: 34,
+		tags: ["Uranium"],
 		eggGroups: ["Water 2"],
 	},
 	tancoon: {
@@ -20236,6 +20278,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 6.3,
 		color: "Brown",
 		evos: ["Tanscure"],
+		tags: ["Uranium"],
 		eggGroups: ["Field"],
 	},
 	tancoonnuclear: {
@@ -20250,6 +20293,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 6.3,
 		color: "Brown",
 		evos: ["Tanscure-Nuclear"],
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	tanscure: {
@@ -20262,6 +20306,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 38.5,
 		color: "Brown",
 		prevo: "Tancoon",
+		tags: ["Uranium"],
 		evoLevel: 18,
 		eggGroups: ["Field"],
 	},
@@ -20277,6 +20322,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 38.5,
 		color: "Brown",
 		prevo: "Tancoon-Nuclear",
+		tags: ["Uranium"],
 		evoLevel: 18,
 		eggGroups: ["Undiscovered"],
 	},
@@ -20291,6 +20337,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 2.2,
 		color: "Blue",
 		evos: ["Sponaree"],
+		tags: ["Uranium"],
 		eggGroups: ["Bug"],
 	},
 	sponaree: {
@@ -20306,6 +20353,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Sponee",
 		evoType: "levelMove",
 		evoMove: "Bubble Beam",
+		tags: ["Uranium"],
 		eggGroups: ["Bug"],
 	},
 	pahar: {
@@ -20318,6 +20366,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 1.6,
 		color: "Red",
 		evos: ["Palij"],
+		tags: ["Uranium"],
 		eggGroups: ["Flying"],
 	},
 	paharnuclear: {
@@ -20332,6 +20381,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 1.6,
 		color: "Red",
 		evos: ["Palij-Nuclear"],
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	palij: {
@@ -20346,6 +20396,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Pahar",
 		evoLevel: 19,
 		evos: ["Pajay"],
+		tags: ["Uranium"],
 		eggGroups: ["Flying"],
 	},
 	palijnuclear: {
@@ -20362,6 +20413,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Pahar-Nuclear",
 		evoLevel: 19,
 		evos: ["Pajay-Nuclear"],
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	pajay: {
@@ -20375,6 +20427,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		prevo: "Palij",
 		evoLevel: 36,
+		tags: ["Uranium"],
 		eggGroups: ["Flying"],
 	},
 	pajaynuclear: {
@@ -20390,6 +20443,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		prevo: "Palij-Nuclear",
 		evoLevel: 36,
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	jerbolta: {
@@ -20401,6 +20455,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.5,
 		weightkg: 2.9,
 		color: "Yellow",
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Fairy"],
 	},
 	jerboltanuclear: {
@@ -20414,6 +20469,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.5,
 		weightkg: 2.9,
 		color: "Yellow",
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	comite: {
@@ -20426,6 +20482,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.6,
 		weightkg: 60.8,
 		color: "Brown",
+		tags: ["Uranium"],
 		evos: ["Cometeor"],
 		eggGroups: ["Mineral"],
 	},
@@ -20441,6 +20498,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		prevo: "Comite",
 		evoLevel: 25,
+		tags: ["Uranium"],
 		evos: ["Astronite"],
 		eggGroups: ["Mineral"],
 	},
@@ -20456,6 +20514,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Black",
 		prevo: "Cometeor",
 		evoType: "trade",
+		tags: ["Uranium"],
 		eggGroups: ["Mineral"],
 	},
 	baashaun: {
@@ -20469,6 +20528,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 10.5,
 		color: "Black",
 		evos: ["Baaschaf"],
+		tags: ["Uranium"],
 		eggGroups: ["Monster", "Field"],
 	},
 	baashaunnuclear: {
@@ -20484,6 +20544,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 10.5,
 		color: "Black",
 		evos: ["Baaschaf-Nuclear"],
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	baaschaf: {
@@ -20499,6 +20560,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Baashaun",
 		evoLevel: 22,
 		evos: ["Baariette"],
+		tags: ["Uranium"],
 		eggGroups: ["Monster", "Field"],
 	},
 	baaschafnuclear: {
@@ -20516,6 +20578,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Baashaun-Nuclear",
 		evoLevel: 22,
 		evos: ["Baariette-Nuclear"],
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	baariette: {
@@ -20531,6 +20594,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Baaschaf",
 		evoLevel: 44,
 		eggGroups: ["Monster", "Field"],
+		tags: ["Uranium"],
 		otherFormes: ["Baariette-Mega"],
 		formeOrder: ["Baariette", "Baariette-Mega"],
 	},
@@ -20546,6 +20610,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.6,
 		weightkg: 115.7,
 		color: "Black",
+		tags: ["Uranium"],
 		eggGroups: ["Monster", "Field"],
 		requiredItem: "Baariettite",
 	},
@@ -20562,6 +20627,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Baaschaf-Nuclear",
 		evoLevel: 44,
 		eggGroups: ["Undiscovered"],
+		tags: ["Uranium"],
 		otherFormes: ["Baariette-Nuclear-Mega"],
 		formeOrder: ["Baariette-Nuclear", "Baariette-Nuclear-Mega"],
 	},
@@ -20578,6 +20644,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 115.7,
 		color: "Black",
 		eggGroups: ["Undiscovered"],
+		tags: ["Uranium"],
 		requiredItem: "Nuclear Baariettite",
 	},
 	tricwe: {
@@ -20591,6 +20658,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 2.5,
 		color: "Yellow",
 		evos: ["Harylect"],
+		tags: ["Uranium"],
 		eggGroups: ["Bug"],
 	},
 	harylect: {
@@ -20606,6 +20674,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Tricwe",
 		evoType: "levelMove",
 		evoMove: "Wild Charge",
+		tags: ["Uranium"],
 		eggGroups: ["Bug"],
 	},
 	costraw: {
@@ -20618,6 +20687,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 6.9,
 		color: "Purple",
 		evos: ["Trawpint"],
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Dragon"],
 	},
 	costrawnuclear: {
@@ -20631,6 +20701,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2.0,
 		weightkg: 6.9,
 		color: "Purple",
+		tags: ["Uranium"],
 		evos: ["Trawpint-Nuclear"],
 		eggGroups: ["Undiscovered"],
 	},
@@ -20643,6 +20714,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2.1,
 		weightkg: 65.0,
 		color: "Purple",
+		tags: ["Uranium"],
 		prevo: "Costraw",
 		evoLevel: 28,
 		eggGroups: ["Field", "Dragon"],
@@ -20658,6 +20730,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2.1,
 		weightkg: 65.0,
 		color: "Purple",
+		tags: ["Uranium"],
 		prevo: "Costraw-Nuclear",
 		evoLevel: 28,
 		eggGroups: ["Undiscovered"],
@@ -20671,6 +20744,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.6,
 		weightkg: 8.0,
 		color: "Brown",
+		tags: ["Uranium"],
 		evos: ["Herolune"],
 		eggGroups: ["Field", "Human-Like"],
 	},
@@ -20684,6 +20758,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 88.2,
 		color: "Brown",
 		prevo: "Lunapup",
+		tags: ["Uranium"],
 		evoType: "useItem",
 		evoItem: "Moon Stone",
 		eggGroups: ["Field", "Human-Like"],
@@ -20698,6 +20773,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 14.8,
 		color: "Purple",
 		evos: ["Vilucard"],
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Human-Like"],
 		otherFormes: ["Minyan-Mystery"],
 		formeOrder: ["Minyan", "Minyan-Mystery"],
@@ -20713,6 +20789,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.5,
 		weightkg: 14.8,
 		color: "Purple",
+		tags: ["Uranium"],
 		evos: ["Vilucard-Mystery"],
 		eggGroups: ["Field", "Human-Like"],
 	},
@@ -20728,6 +20805,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Minyan",
 		evoType: "useItem",
 		evoItem: "Dusk Stone",
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Human-Like"],
 		otherFormes: ["Vilucard-Mystery"],
 		formeOrder: ["Vilucard", "Vilucard-Mystery"],
@@ -20745,6 +20823,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		prevo: "Minyan-Mystery",
 		evoType: "useItem",
+		tags: ["Uranium"],
 		evoItem: "Dusk Stone",
 		eggGroups: ["Field", "Human-Like"],
 	},
@@ -20757,6 +20836,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.1,
 		weightkg: 44.3,
 		color: "Gray",
+		tags: ["Uranium"],
 		evos: ["Drilgann"],
 		eggGroups: ["Monster", "Field"],
 	},
@@ -20772,6 +20852,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Modrille",
 		evoLevel: 34,
 		eggGroups: ["Monster", "Field"],
+		tags: ["Uranium"],
 		otherFormes: ["Drilgann-Mega"],
 		formeOrder: ["Drilgann", "Drilgann-Mega"],
 	},
@@ -20786,6 +20867,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2.2,
 		weightkg: 223.2,
 		color: "Gray",
+		tags: ["Uranium"],
 		eggGroups: ["Monster", "Field"],
 		requiredItem: "Drilgannite",
 	},
@@ -20800,6 +20882,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		evos: ["Cararalm"],
 		eggGroups: ["Water 3", "Grass"],
+		tags: ["Uranium"],
 		otherFormes: ["Cocaran-Mystery"],
 		formeOrder: ["Cocaran", "Cocaran-Mystery"],
 	},
@@ -20815,6 +20898,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 14.0,
 		color: "Brown",
 		evos: ["Cararalm-Mystery"],
+		tags: ["Uranium"],
 		eggGroups: ["Water 3", "Grass"],
 	},
 	cararalm: {
@@ -20830,6 +20914,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 24,
 		evos: ["Cocancer"],
 		eggGroups: ["Water 3", "Grass"],
+		tags: ["Uranium"],
 		otherFormes: ["Cararalm-Mystery"],
 		formeOrder: ["Cararalm", "Cararalm-Mystery"],
 	},
@@ -20846,6 +20931,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Yellow",
 		prevo: "Cocaran-Mystery",
 		evoLevel: 24,
+		tags: ["Uranium"],
 		evos: ["Cocancer-Mystery"],
 		eggGroups: ["Water 3", "Grass"],
 	},
@@ -20862,6 +20948,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "useItem",
 		evoItem: "Coconut Milk",
 		eggGroups: ["Water 3", "Grass"],
+		tags: ["Uranium"],
 		otherFormes: ["Cocancer-Mystery"],
 		formeOrder: ["Cocancer", "Cocancer-Mystery"],
 	},
@@ -20879,6 +20966,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Cararalm-Mystery",
 		evoType: "useItem",
 		evoItem: "Coconut Milk",
+		tags: ["Uranium"],
 		eggGroups: ["Water 3", "Grass"],
 	},
 	corsoreef: {
@@ -20893,6 +20981,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Pink",
 		prevo: "Corsola",
 		evoType: "levelFriendship",
+		tags: ["Uranium"],
 		eggGroups: ["Water 1", "Water 3"],
 	},
 	corsoreefnuclear: {
@@ -20908,6 +20997,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 84.0,
 		color: "Pink",
 		prevo: "Corsola-Nuclear",
+		tags: ["Uranium"],
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
 	},
@@ -20922,6 +21012,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 55.4,
 		color: "Blue",
 		evos: ["Tubareel"],
+		tags: ["Uranium"],
 		eggGroups: ["Water 2"],
 	},
 	tubjawnuclear: {
@@ -20936,6 +21027,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.6,
 		weightkg: 55.4,
 		color: "Blue",
+		tags: ["Uranium"],
 		evos: ["Tubareel-Nuclear"],
 		eggGroups: ["Undiscovered"],
 	},
@@ -20951,6 +21043,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		prevo: "Tubjaw",
 		evoLevel: 34,
+		tags: ["Uranium"],
 		eggGroups: ["Water 2"],
 	},
 	tubareelnuclear: {
@@ -20967,6 +21060,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		prevo: "Tubjaw-Nuclear",
 		evoLevel: 34,
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	cassnail: {
@@ -20979,6 +21073,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 11.3,
 		color: "Blue",
 		evos: ["Sableau"],
+		tags: ["Uranium"],
 		eggGroups: ["Water 1", "Amorphous"],
 	},
 	sableau: {
@@ -20993,6 +21088,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Cassnail",
 		evoLevel: 25,
 		evos: ["Escartress"],
+		tags: ["Uranium"],
 		eggGroups: ["Water 1", "Amorphous"],
 	},
 	escartress: {
@@ -21006,6 +21102,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		prevo: "Sableau",
 		evoLevel: 45,
+		tags: ["Uranium"],
 		eggGroups: ["Water 1", "Amorphous"],
 	},
 	nupin: {
@@ -21019,6 +21116,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 2.6,
 		color: "Green",
 		evos: ["Gellin"],
+		tags: ["Uranium"],
 		eggGroups: ["Amorphous"],
 	},
 	nupinnuclear: {
@@ -21034,6 +21132,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 2.6,
 		color: "Green",
 		evos: ["Gellin-Nuclear"],
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	gellin: {
@@ -21048,6 +21147,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Green",
 		prevo: "Nupin",
 		evoLevel: 35,
+		tags: ["Uranium"],
 		eggGroups: ["Amorphous"],
 	},
 	gellinnuclear: {
@@ -21064,6 +21164,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Green",
 		prevo: "Nupin-Nuclear",
 		evoLevel: 35,
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	barand: {
@@ -21075,6 +21176,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 3.0,
 		weightkg: 90.4,
 		color: "Green",
+		tags: ["Uranium"],
 		eggGroups: ["Dragon", "Monster"],
 	},
 	barandnuclear: {
@@ -21088,6 +21190,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 3.0,
 		weightkg: 90.4,
 		color: "Green",
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	glaslug: {
@@ -21100,6 +21203,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 18.0,
 		color: "Blue",
 		evos: ["Glavinug"],
+		tags: ["Uranium"],
 		eggGroups: ["Monster", "Water 1"],
 	},
 	glavinug: {
@@ -21114,6 +21218,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Glaslug",
 		evoType: "useItem",
 		evoItem: "Water Stone",
+		tags: ["Uranium"],
 		eggGroups: ["Monster", "Water 1"],
 	},
 	s51: {
@@ -21127,6 +21232,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 12.5,
 		color: "Gray",
 		evos: ["S51-A"],
+		tags: ["Uranium"],
 		eggGroups: ["Amorphous"],
 	},
 	s51a: {
@@ -21142,6 +21248,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "S51",
 		evoLevel: 40,
 		eggGroups: ["Amorphous"],
+		tags: ["Uranium"],
 		otherFormes: ["S51-A-Mega"],
 		formeOrder: ["S51-A", "S51-A-Mega"],
 	},
@@ -21158,6 +21265,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 137.8,
 		color: "Gray",
 		eggGroups: ["Amorphous"],
+		tags: ["Uranium"],
 		requiredItem: "Unidentified Fallen Object",
 	},
 	paraudio: {
@@ -21170,6 +21278,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 47.9,
 		color: "Purple",
 		evos: ["Paraboom"],
+		tags: ["Uranium"],
 		eggGroups: ["Field"],
 	},
 	paraudionuclear: {
@@ -21184,6 +21293,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 47.9,
 		color: "Purple",
 		evos: ["Paraboom-Nuclear"],
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	paraboom: {
@@ -21197,6 +21307,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		prevo: "Paraudio",
 		evoLevel: 38,
+		tags: ["Uranium"],
 		eggGroups: ["Field"],
 	},
 	paraboomnuclear: {
@@ -21212,6 +21323,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		prevo: "Paraudio-Nuclear",
 		evoLevel: 38,
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	flager: {
@@ -21225,6 +21337,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 8.5,
 		color: "Red",
 		evos: ["Inflagetah"],
+		tags: ["Uranium"],
 		eggGroups: ["Monster", "Field"],
 	},
 	inflagetah: {
@@ -21241,6 +21354,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "useItem",
 		evoItem: "Fire Stone",
 		eggGroups: ["Monster", "Field"],
+		tags: ["Uranium"],
 		otherFormes: ["Inflagetah-Mega"],
 		formeOrder: ["Inflagetah", "Inflagetah"],
 	},
@@ -21257,6 +21371,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 52.2,
 		color: "Red",
 		eggGroups: ["Monster", "Field"],
+		tags: ["Uranium"],
 		requiredItem: "Inflagetite",
 	},
 	chimical: {
@@ -21269,6 +21384,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 5.7,
 		color: "Red",
 		evos: ["Chimaconda"],
+		tags: ["Uranium"],
 		eggGroups: ["Field"],
 	},
 	chimaconda: {
@@ -21282,6 +21398,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		prevo: "Chimical",
 		evoLevel: 40,
+		tags: ["Uranium"],
 		eggGroups: ["Field"],
 	},
 	tikiki: {
@@ -21294,6 +21411,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 26.9,
 		color: "Brown",
 		evos: ["Frikitiki"],
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Grass"],
 	},
 	frikitiki: {
@@ -21307,6 +21425,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		prevo: "Tikiki",
 		evoLevel: 32,
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Grass"],
 	},
 	unymph: {
@@ -21319,6 +21438,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 21.5,
 		color: "Blue",
 		evos: ["Harptera"],
+		tags: ["Uranium"],
 		eggGroups: ["Bug"],
 	},
 	harptera: {
@@ -21332,6 +21452,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		prevo: "Unymph",
 		evoLevel: 28,
+		tags: ["Uranium"],
 		eggGroups: ["Bug"],
 	},
 	chicoatl: {
@@ -21344,6 +21465,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 3.6,
 		color: "Green",
 		evos: ["Quetzoral"],
+		tags: ["Uranium"],
 		eggGroups: ["Flying", "Dragon"],
 	},
 	quetzoral: {
@@ -21358,6 +21480,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Coatlith"],
 		prevo: "Chicoatl",
 		evoLevel: 25,
+		tags: ["Uranium"],
 		eggGroups: ["Flying", "Dragon"],
 	},
 	coatlith: {
@@ -21371,6 +21494,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		prevo: "Quetzoral",
 		evoLevel: 41,
+		tags: ["Uranium"],
 		eggGroups: ["Flying", "Dragon"],
 	},
 	tracton: {
@@ -21383,6 +21507,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.9,
 		weightkg: 120.0,
 		color: "Gray",
+		tags: ["Uranium"],
 		eggGroups: ["Monster", "Dragon"],
 	},
 	snopach: {
@@ -21396,6 +21521,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 140.8,
 		color: "Brown",
 		evos: ["Dermafrost"],
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Mineral"],
 	},
 	dermafrost: {
@@ -21410,6 +21536,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		prevo: "Snopach",
 		evoLevel: 41,
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Mineral"],
 	},
 	slothohm: {
@@ -21423,6 +21550,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 44.8,
 		color: "Yellow",
 		evos: ["Theriamp"],
+		tags: ["Uranium"],
 		eggGroups: ["Field"],
 	},
 	theriamp: {
@@ -21437,6 +21565,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Yellow",
 		prevo: "Slothohm",
 		evoLevel: 40,
+		tags: ["Uranium"],
 		eggGroups: ["Field"],
 	},
 	titanice: {
@@ -21448,6 +21577,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 4.3,
 		weightkg: 1050.5,
 		color: "Red",
+		tags: ["Uranium"],
 		eggGroups: ["Mineral"],
 	},
 	frynai: {
@@ -21460,6 +21590,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 3.6,
 		color: "Black",
 		evos: ["Saidine"],
+		tags: ["Uranium"],
 		eggGroups: ["Water 2"],
 	},
 	saidine: {
@@ -21474,6 +21605,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Frynai",
 		evoLevel: 36,
 		evos: ["Daikatuna"],
+		tags: ["Uranium"],
 		eggGroups: ["Water 2"],
 	},
 	daikatuna: {
@@ -21488,6 +21620,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Saidine",
 		evoType: "useItem",
 		evoItem: "Water Stone",
+		tags: ["Uranium"],
 		eggGroups: ["Water 2"],
 	},
 	selkid: {
@@ -21501,6 +21634,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 15.5,
 		color: "Blue",
 		evos: ["Syrentide"],
+		tags: ["Uranium"],
 		eggGroups: ["Water 1", "Human-Like"],
 	},
 	syrentide: {
@@ -21515,6 +21649,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Pink",
 		prevo: "Selkid",
 		evoType: "levelFriendship",
+		tags: ["Uranium"],
 		eggGroups: ["Water 1", "Human-Like"],
 		otherFormes: ["Syrentide-Mega"],
 		formeOrder: ["Syrentide", "Syrentide-Mega"],
@@ -21531,6 +21666,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.8,
 		weightkg: 44.8,
 		color: "Pink",
+		tags: ["Uranium"],
 		eggGroups: ["Water 1", "Human-Like"],
 		requiredItem: "Syrentideite",
 	},
@@ -21545,6 +21681,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Pink",
 		prevo: "Spritzee",
 		evoType: "trade",
+		tags: ["Uranium"],
 		evoItem: "Aromatic Herb",
 		eggGroups: ["Fairy"],
 	},
@@ -21558,6 +21695,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 11.2,
 		color: "Pink",
 		evos: ["Winotinger"],
+		tags: ["Uranium"],
 		eggGroups: ["Fairy", "Human-Like"],
 		otherFormes: ["Jackdeary-Mystery"],
 		formeOrder: ["Jackdeary", "Jackdeary-Mystery"],
@@ -21573,6 +21711,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.6,
 		weightkg: 11.2,
 		color: "Pink",
+		tags: ["Uranium"],
 		evos: ["Winotinger-Mystery"],
 		eggGroups: ["Fairy", "Human-Like"],
 	},
@@ -21588,6 +21727,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Jackdeary",
 		evoType: "useItem",
 		evoItem: "Carrot Wine",
+		tags: ["Uranium"],
 		eggGroups: ["Fairy", "Human-Like"],
 		otherFormes: ["Winotinger-Mystery"],
 		formeOrder: ["Winotinger", "Winotinger-Mystery"],
@@ -21606,6 +21746,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Jackdeary-Mystery",
 		evoType: "useItem",
 		evoItem: "Carrot Wine",
+		tags: ["Uranium"],
 		eggGroups: ["Fairy", "Human-Like"],
 	},
 	duplicat: {
@@ -21618,6 +21759,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.6,
 		weightkg: 7.2,
 		color: "White",
+		tags: ["Uranium"],
 		eggGroups: ["Ditto"],
 	},
 	nucleon: {
@@ -21632,6 +21774,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Black",
 		prevo: "Eevee",
 		evoType: "levelExtra",
+		tags: ["Uranium"],
 		eggGroups: ["Field"],
 	},
 	ratsy: {
@@ -21645,6 +21788,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 12.5,
 		color: "Gray",
 		evos: ["Raffiti"],
+		tags: ["Uranium"],
 		eggGroups: ["Field"],
 	},
 	raffiti: {
@@ -21659,6 +21803,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		prevo: "Ratsy",
 		evoLevel: 30,
+		tags: ["Uranium"],
 		eggGroups: ["Field"],
 	},
 	gargryph: {
@@ -21671,6 +21816,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.7,
 		weightkg: 230.0,
 		color: "Gray",
+		tags: ["Uranium"],
 		eggGroups: ["Flying", "Mineral"],
 	},
 	masking: {
@@ -21683,6 +21829,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 10.2,
 		color: "White",
 		evos: ["Dramsama"],
+		tags: ["Uranium"],
 		eggGroups: ["Amorphous"],
 	},
 	dramsama: {
@@ -21697,6 +21844,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Masking",
 		evoLevel: 42,
 		eggGroups: ["Amorphous"],
+		tags: ["Uranium"],
 		otherFormes: ["Dramsama-Mega"],
 		formeOrder: ["Dramsama", "Dramsama-Mega"],
 	},
@@ -21712,6 +21860,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 50.3,
 		color: "White",
 		eggGroups: ["Amorphous"],
+		tags: ["Uranium"],
 		requiredItem: "Dramsamaite",
 	},
 	antarki: {
@@ -21723,6 +21872,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.5,
 		weightkg: 42.3,
 		color: "White",
+		tags: ["Uranium"],
 		eggGroups: ["Amorphous", "Field"],
 	},
 	chupacho: {
@@ -21735,6 +21885,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 25.6,
 		color: "Brown",
 		evos: ["Luchabra"],
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Human-Like"],
 	},
 	chupachonuclear: {
@@ -21749,6 +21900,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 25.6,
 		color: "Brown",
 		evos: ["Luchabra-Nuclear"],
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	luchabra: {
@@ -21762,6 +21914,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		prevo: "Chupacho",
 		evoLevel: 38,
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Human-Like"],
 	},
 	luchabranuclear: {
@@ -21777,6 +21930,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		prevo: "Chupacho-Nuclear",
 		evoLevel: 38,
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	linkite: {
@@ -21790,6 +21944,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 98.6,
 		color: "Green",
 		evos: ["Chainite"],
+		tags: ["Uranium"],
 		eggGroups: ["Amorphous"],
 	},
 	chainite: {
@@ -21804,6 +21959,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Black",
 		prevo: "Linkite",
 		evoType: "trade",
+		tags: ["Uranium"],
 		eggGroups: ["Amorphous"],
 	},
 	pufluff: {
@@ -21816,6 +21972,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 8.5,
 		color: "Blue",
 		evos: ["Alpico", "Anderind"],
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Fairy"],
 	},
 	alpico: {
@@ -21829,6 +21986,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		prevo: "Pufluff",
 		evoCondition: "with an Atk stat < its Spe stat",
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Fairy"],
 	},
 	anderind: {
@@ -21842,6 +22000,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		prevo: "Pufluff",
 		evoCondition: "with an Atk stat > its Spe stat",
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Fairy"],
 	},
 	colarva: {
@@ -21854,6 +22013,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 28.8,
 		color: "White",
 		evos: ["Frosulo"],
+		tags: ["Uranium"],
 		eggGroups: ["Bug"],
 	},
 	frosulo: {
@@ -21868,6 +22028,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Colarva",
 		evoLevel: 41,
 		evos: ["Frosthra"],
+		tags: ["Uranium"],
 		eggGroups: ["Bug"],
 	},
 	frosthra: {
@@ -21881,6 +22042,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "White",
 		prevo: "Frosulo",
 		evoLevel: 53,
+		tags: ["Uranium"],
 		eggGroups: ["Bug"],
 	},
 	fafurr: {
@@ -21893,6 +22055,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 64.3,
 		color: "White",
 		evos: ["Fafninter"],
+		tags: ["Uranium"],
 		eggGroups: ["Monster", "Dragon"],
 	},
 	fafninter: {
@@ -21906,6 +22069,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "White",
 		prevo: "Fafurr",
 		evoLevel: 55,
+		tags: ["Uranium"],
 		eggGroups: ["Monster", "Dragon"],
 	},
 	shrimputy: {
@@ -21918,6 +22082,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 11.5,
 		color: "Blue",
 		evos: ["Krilvolver"],
+		tags: ["Uranium"],
 		eggGroups: ["Water 1", "Water 3"],
 	},
 	krilvolver: {
@@ -21931,6 +22096,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		prevo: "Shrimputy",
 		evoLevel: 38,
+		tags: ["Uranium"],
 		eggGroups: ["Water 1", "Water 3"],
 	},
 	lavent: {
@@ -21942,6 +22108,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.9,
 		weightkg: 120.4,
 		color: "Red",
+		tags: ["Uranium"],
 		eggGroups: ["Monster", "Dragon"],
 	},
 	swabone: {
@@ -21954,6 +22121,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 14.9,
 		color: "Purple",
 		evos: ["Skelerogue"],
+		tags: ["Uranium"],
 		eggGroups: ["Human-Like"],
 	},
 	skelerogue: {
@@ -21968,6 +22136,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Swabone",
 		evoLevel: 40,
 		evos: ["Navighast"],
+		tags: ["Uranium"],
 		eggGroups: ["Human-Like"],
 	},
 	navighast: {
@@ -21981,6 +22150,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		prevo: "Skelerogue",
 		evoLevel: 55,
+		tags: ["Uranium"],
 		eggGroups: ["Human-Like"],
 	},
 	stenowatt: {
@@ -21992,6 +22162,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.5,
 		weightkg: 67.9,
 		color: "Blue",
+		tags: ["Uranium"],
 		eggGroups: ["Monster", "Dragon"],
 	},
 	jungore: {
@@ -22005,6 +22176,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 56.9,
 		color: "Brown",
 		evos: ["Majungold"],
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Mineral"],
 	},
 	majungold: {
@@ -22019,6 +22191,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		prevo: "Jungore",
 		evoLevel: 41,
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Mineral"],
 	},
 	hagoop: {
@@ -22032,6 +22205,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 39.9,
 		color: "Black",
 		evos: ["Haagross"],
+		tags: ["Uranium"],
 		eggGroups: ["Bug", "Water 1"],
 	},
 	hagoopnuclear: {
@@ -22047,6 +22221,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 39.9,
 		color: "Black",
 		evos: ["Haagross-Nuclear"],
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	haagross: {
@@ -22061,6 +22236,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Black",
 		prevo: "Hagoop",
 		evoLevel: 45,
+		tags: ["Uranium"],
 		eggGroups: ["Bug", "Water 1"],
 	},
 	haagrossnuclear: {
@@ -22077,6 +22253,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Black",
 		prevo: "Hagoop-Nuclear",
 		evoLevel: 45,
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	xenomite: {
@@ -22090,6 +22267,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 35.9,
 		color: "Black",
 		evos: ["Xenogen"],
+		tags: ["Uranium"],
 		eggGroups: ["Monster", "Bug"],
 	},
 	xenogen: {
@@ -22105,6 +22283,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Xenomite",
 		evoLevel: 55,
 		evos: ["Xenoqueen"],
+		tags: ["Uranium"],
 		eggGroups: ["Monster", "Bug"],
 	},
 	xenoqueen: {
@@ -22119,6 +22298,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Black",
 		prevo: "Xenogen",
 		evoType: "trade",
+		tags: ["Uranium"],
 		eggGroups: ["Monster", "Bug"],
 	},
 	hazma: {
@@ -22131,6 +22311,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.8,
 		weightkg: 25.9,
 		color: "Yellow",
+		tags: ["Uranium"],
 		eggGroups: ["Human-Like"],
 	},
 	geigeroach: {
@@ -22142,6 +22323,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.2,
 		weightkg: 39.9,
 		color: "Gray",
+		tags: ["Uranium"],
 		eggGroups: ["Bug"],
 	},
 	minicorn: {
@@ -22155,6 +22337,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 29.8,
 		color: "Pink",
 		evos: ["Kiricorn", "Oblivicorn"],
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Fairy"],
 	},
 	kiricorn: {
@@ -22171,6 +22354,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "useItem",
 		evoItem: "Shiny Stone",
 		eggGroups: ["Field", "Fairy"],
+		tags: ["Uranium"],
 		otherFormes: ["Kiricorn-Mega"],
 		formeOrder: ["Kiricorn", "Kiricorn-Mega"],
 	},
@@ -22187,6 +22371,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 480.7,
 		color: "Pink",
 		eggGroups: ["Field", "Fairy"],
+		tags: ["Uranium"],
 		requiredItem: "Kiricornite",
 	},
 	oblivicorn: {
@@ -22202,6 +22387,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Minicorn",
 		evoType: "useItem",
 		evoItem: "Dusk Stone",
+		tags: ["Uranium"],
 		eggGroups: ["Field", "Fairy"],
 	},
 	luxi: {
@@ -22215,6 +22401,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 28.9,
 		color: "Green",
 		evos: ["Luxor"],
+		tags: ["Uranium"],
 		eggGroups: ["Dragon"],
 	},
 	luxor: {
@@ -22230,6 +22417,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evos: ["Luxelong"],
 		prevo: "Luxi",
 		evoType: "levelFriendship",
+		tags: ["Uranium"],
 		eggGroups: ["Dragon"],
 	},
 	luxelong: {
@@ -22245,6 +22433,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Luxor",
 		evoType: "useItem",
 		evoItem: "Shiny Stone",
+		tags: ["Uranium"],
 		eggGroups: ["Dragon"],
 	},
 	praseopunk: {
@@ -22257,6 +22446,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.5,
 		weightkg: 43.6,
 		color: "Green",
+		tags: ["Uranium"],
 		eggGroups: ["Human-Like"],
 	},
 	neopunk: {
@@ -22269,6 +22459,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.4,
 		weightkg: 40.2,
 		color: "Pink",
+		tags: ["Uranium"],
 		eggGroups: ["Human-Like"],
 	},
 	sheebit: {
@@ -22281,6 +22472,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 15.2,
 		color: "Brown",
 		evos: ["Terrabbit"],
+		tags: ["Uranium"],
 		eggGroups: ["Field"],
 	},
 	terrabbit: {
@@ -22295,6 +22487,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Sheebit",
 		evoLevel: 42,
 		evos: ["Laissure"],
+		tags: ["Uranium"],
 		eggGroups: ["Field"],
 	},
 	laissure: {
@@ -22308,6 +22501,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		prevo: "Terrabbit",
 		evoLevel: 66,
+		tags: ["Uranium"],
 		eggGroups: ["Field"],
 	},
 	volchik: {
@@ -22320,6 +22514,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 9.5,
 		color: "Black",
 		evos: ["Voltasu"],
+		tags: ["Uranium"],
 		eggGroups: ["Dragon", "Flying"],
 	},
 	voltasu: {
@@ -22334,6 +22529,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Volchik",
 		evoLevel: 42,
 		evos: ["Yatagaryu"],
+		tags: ["Uranium"],
 		eggGroups: ["Dragon", "Flying"],
 	},
 	yatagaryu: {
@@ -22347,6 +22543,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Black",
 		prevo: "Voltasu",
 		evoLevel: 66,
+		tags: ["Uranium"],
 		eggGroups: ["Dragon", "Flying"],
 	},
 	devimp: {
@@ -22359,6 +22556,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 28.6,
 		color: "Red",
 		evos: ["Fallengel"],
+		tags: ["Uranium"],
 		eggGroups: ["Human-Like"],
 	},
 	fallengel: {
@@ -22373,6 +22571,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Devimp",
 		evoLevel: 48,
 		evos: ["Beliaddon"],
+		tags: ["Uranium"],
 		eggGroups: ["Human-Like"],
 	},
 	beliaddon: {
@@ -22386,6 +22585,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		prevo: "Fallengel",
 		evoLevel: 72,
+		tags: ["Uranium"],
 		eggGroups: ["Human-Like"],
 	},
 	seikamater: {
@@ -22398,7 +22598,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 8.4,
 		weightkg: 638.5,
 		color: "Brown",
-		tags: ["Sub-Legendary"],
+		tags: ["Sub-Legendary", "Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	garlikid: {
@@ -22411,7 +22611,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.4,
 		weightkg: 33.4,
 		color: "Green",
-		tags: ["Sub-Legendary"],
+		tags: ["Sub-Legendary", "Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	baitatao: {
@@ -22424,7 +22624,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 3.3,
 		weightkg: 255.5,
 		color: "Red",
-		tags: ["Restricted Legendary"],
+		tags: ["Restricted Legendary", "Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	leviathao: {
@@ -22437,7 +22637,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.4,
 		weightkg: 150.6,
 		color: "Blue",
-		tags: ["Restricted Legendary"],
+		tags: ["Restricted Legendary", "Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	krakanao: {
@@ -22450,7 +22650,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.8,
 		weightkg: 88.8,
 		color: "Blue",
-		tags: ["Restricted Legendary"],
+		tags: ["Restricted Legendary", "Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	lanthan: {
@@ -22463,7 +22663,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2.5,
 		weightkg: 1430.0,
 		color: "Brown",
-		tags: ["Sub-Legendary"],
+		tags: ["Sub-Legendary", "Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	actan: {
@@ -22476,7 +22676,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 3.3,
 		weightkg: 1270.0,
 		color: "Blue",
-		tags: ["Sub-Legendary"],
+		tags: ["Sub-Legendary", "Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	actannuclear: {
@@ -22491,7 +22691,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 3.3,
 		weightkg: 1270.0,
 		color: "Blue",
-		tags: ["Sub-Legendary"],
+		tags: ["Sub-Legendary", "Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	urayne: {
@@ -22505,7 +22705,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2.3,
 		weightkg: 240.0,
 		color: "Gray",
-		tags: ["Restricted Legendary"],
+		tags: ["Restricted Legendary", "Uranium"],
 		eggGroups: ["Undiscovered"],
 		otherFormes: ["Urayne-Beta", "Urayne-Gamma"],
 		formeOrder: ["Urayne", "Urayne-Beta", "Urayne-Gamma"],
@@ -22522,7 +22722,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2.3,
 		weightkg: 240.0,
 		color: "Gray",
-		tags: ["Restricted Legendary"],
+		tags: ["Restricted Legendary", "Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	uraynegamma: {
@@ -22537,7 +22737,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2.3,
 		weightkg: 240.0,
 		color: "Gray",
-		tags: ["Restricted Legendary"],
+		tags: ["Restricted Legendary", "Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	aotius: {
@@ -22550,7 +22750,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 4.8,
 		weightkg: 360.0,
 		color: "White",
-		tags: ["Restricted Legendary"],
+		tags: ["Restricted Legendary", "Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	mutios: {
@@ -22563,7 +22763,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 4.8,
 		weightkg: 360.0,
 		color: "Black",
-		tags: ["Restricted Legendary"],
+		tags: ["Restricted Legendary", "Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	zephy: {
@@ -22576,7 +22776,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.9,
 		weightkg: 28.0,
 		color: "Blue",
-		tags: ["Mythical"],
+		tags: ["Mythical", "Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	magikarpnuclear: {
@@ -22591,6 +22791,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 10,
 		color: "Red",
 		evos: ["Gyarados-Nuclear"],
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	gyaradosnuclear: {
@@ -22605,6 +22806,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Magikarp-Nuclear",
 		evoLevel: 20,
 		eggGroups: ["Undiscovered"],
+		tags: ["Uranium"],
 		otherFormes: ["Gyarados-Nuclear-Mega"],
 		formeOrder: ["Gyarados-Nuclear", "Gyarados-Nuclear-Mega"],
 	},
@@ -22620,6 +22822,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 305,
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
+		tags: ["Uranium"],
 		requiredItem: "Nuclear Gyaradosite",
 	},
 	ekansnuclear: {
@@ -22634,6 +22837,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 6.9,
 		color: "Purple",
 		evos: ["Arbok-Nuclear"],
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	arbokmega: {
@@ -22648,6 +22852,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 122.5,
 		color: "Purple",
 		eggGroups: ["Field", "Dragon"],
+		tags: ["Uranium"],
 		requiredItem: "Arbokite",
 	},
 	arboknuclear: {
@@ -22662,6 +22867,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Ekans-Nuclear",
 		evoLevel: 22,
 		eggGroups: ["Undiscovered"],
+		tags: ["Uranium"],
 		otherFormes: ["Arbok-Nuclear-Mega"],
 		formeOrder: ["Arbok-Nuclear", "Arbok-Nuclear-Mega"],
 	},
@@ -22677,6 +22883,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 122.5,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
+		tags: ["Uranium"],
 		requiredItem: "Nuclear Arbokite",
 	},
 	gligarnuclear: {
@@ -22691,6 +22898,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 64.8,
 		color: "Purple",
 		evos: ["Gliscor-Nuclear"],
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	gliscornuclear: {
@@ -22708,6 +22916,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "levelHold",
 		evoItem: "Razor Fang",
 		evoCondition: "at night",
+		tags: ["Uranium"],
 		eggGroups: ["Undiscovered"],
 	},
 	corsolanuclear: {
@@ -22722,6 +22931,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.6,
 		weightkg: 5,
 		color: "Pink",
+		tags: ["Uranium"],
 		evos: ["Corsoreef-Nuclear"],
 		eggGroups: ["Undiscovered"],
 	},
@@ -22737,6 +22947,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 10.5,
 		color: "Green",
 		eggGroups: ["Fairy", "Grass"],
+		tags: ["Uranium"],
 		requiredItem: "Whimsicottite",
 	},
 	
@@ -27285,6 +27496,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 89,
 		color: "Grey",
 		eggGroups: ["Water 1", "Field"],
+		tags: ["Plan of Attack"],
 		otherFormes: ["Eiscue-Delta-Norock"],
 		formeOrder: ["Eiscue-Delta", "Eiscue-Delta-Norock"],
 	},
@@ -27301,6 +27513,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Grey",
 		eggGroups: ["Water 1", "Field"],
 		requiredAbility: "Stone Face",
+		tags: ["Plan of Attack"],
 		battleOnly: "Eiscue-Delta",
 	},
 	raikousupra: {
@@ -27315,11 +27528,10 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.9,
 		weightkg: 178,
 		color: "Yellow",
-		tags: ["Sub-Legendary"],
+		tags: ["Sub-Legendary", "Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	sceptiledeltamega: {
-		tags: ["Insurgence"],
 		num: 254,
 		name: "Sceptile-Delta-Mega",
 		baseSpecies: "Sceptile-Delta",
@@ -27331,6 +27543,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1,
 		color: "Red",
 		eggGroups: ["Undiscovered"],
+		tags: ["Plan of Attack"],
 		requiredItem: "Delta Sceptilite",
 	},
 	cetoddlehisui: {
@@ -27345,6 +27558,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 45,
 		color: "Gray",
 		evos: ["Cetitan-Hisui"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Field"],
 	},
 	cetitanhisui: {
@@ -27359,6 +27573,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 750,
 		color: "Black",
 		prevo: "Cetoddle-Hisui",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Field"],
 	},
 	alakazamgambler: {
@@ -27375,6 +27590,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		prevo: "Kadabra",
 		evoType: "trade",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Human-Like"],
 	},
 	rockruffdelta: {
@@ -27388,6 +27604,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.5,
 		weightkg: 9.2,
 		color: "Brown",
+		tags: ["Plan of Attack"],
 		evos: ["Lycanroc-Delta", "Lycanroc-Midnight-Delta", "Lycanroc-Dusk-Delta"],
 		eggGroups: ["Field"],
 	},
@@ -27405,6 +27622,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Rockruff-Delta",
 		evoLevel: 25,
 		evoCondition: "during the day",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Field"],
 	},
 	lycanrocmidnightdelta: {
@@ -27421,6 +27639,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Rockruff-Delta",
 		evoLevel: 25,
 		evoCondition: "at night",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Field"],
 	},
 	lycanrocduskdelta: {
@@ -27437,6 +27656,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Rockruff-Delta",
 		evoLevel: 25,
 		evoCondition: "from a special Rockruff",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Field"],
 	},
 	kecleonmono: {
@@ -27450,6 +27670,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1,
 		weightkg: 22,
 		color: "White",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Field"],
 	},
 	soulply: {
@@ -27461,6 +27682,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.6,
 		weightkg: 4,
 		color: "Brown",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	screamtaildelta: {
@@ -27475,6 +27697,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.2,
 		weightkg: 8,
 		color: "Blue",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	florgesmega: {
@@ -27490,6 +27713,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 10,
 		color: "White",
 		eggGroups: ["Fairy"],
+		tags: ["Plan of Attack"],
 		requiredItem: "Florgesite",
 	},
 	golduckmega: {
@@ -27504,6 +27728,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 76.6,
 		color: "Blue",
 		eggGroups: ["Water 1", "Field"],
+		tags: ["Plan of Attack"],
 		requiredItem: "Golduckite",
 	},
 	pinecodelta: {
@@ -27518,6 +27743,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 7.2,
 		color: "Gray",
 		evos: ["Forretress-Delta"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Bug", "Rock"],
 	},
 	forretressdelta: {
@@ -27533,6 +27759,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		prevo: "Pineco-Delta",
 		evoLevel: 31,
+		tags: ["Plan of Attack"],
 		eggGroups: ["Bug"],
 	},
 	thunderoustitan: {
@@ -27545,7 +27772,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 4,
 		weightkg: 1001.1,
 		color: "Yellow",
-		tags: ["Paradox"],
+		tags: ["Paradox", "Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	ironbrew: {
@@ -27558,7 +27785,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.2,
 		weightkg: 20.2,
 		color: "Gray",
-		tags: ["Paradox"],
+		tags: ["Paradox", "Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	golisopodshogun: {
@@ -27573,6 +27800,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 108,
 		color: "Gray",
 		evoLevel: 30,
+		tags: ["Plan of Attack"],
 		eggGroups: ["Bug", "Water 3"],
 	},
 	belcevour: {
@@ -27586,6 +27814,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		prevo: "Swalot",
 		evoLevel: 45,
+		tags: ["Plan of Attack"],
 		eggGroups: ["Amorphous"],
 	},
 	applindelta: {
@@ -27600,6 +27829,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0.5,
 		color: "Purple",
 		evos: ["Flapple-Delta", "Appletun-Delta"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Grass", "Dragon"],
 	},
 	flappledelta: {
@@ -27616,6 +27846,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Applin-Delta",
 		evoType: "useItem",
 		evoItem: "Tart Apple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Grass", "Dragon"],
 	},
 	appletundelta: {
@@ -27632,6 +27863,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Applin-Delta",
 		evoType: "useItem",
 		evoItem: "Sweet Apple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Grass", "Dragon"],
 	},
 	slowkingmega: {
@@ -27646,6 +27878,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 120,
 		color: "Pink",
 		eggGroups: ["Monster", "Water 1"],
+		tags: ["Plan of Attack"],
 		requiredItem: "Slowkingite",
 	},
 	rellordelta: {
@@ -27660,6 +27893,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 1,
 		color: "Brown",
 		evos: ["Rabsca-Delta"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Bug"],
 	},
 	rabscadelta: {
@@ -27676,6 +27910,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Rellor-Delta",
 		evoType: "other",
 		evoCondition: "walk 1000 steps in Let's Go",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Bug"],
 	},
 	imitotion: {
@@ -27689,6 +27924,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		evoLevel: 45,
 		evos: ["Aviotion"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Amorphous"],
 	},
 	aviotion: {
@@ -27703,6 +27939,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoLevel: 55,
 		prevo: "Imitotion",
 		evos: ["Dracotion"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Amorphous"],
 	},
 	dracotion: {
@@ -27715,6 +27952,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 95,
 		color: "Purple",
 		prevo: "Aviotion",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Amorphous"],
 	},
 	ariadosmega: {
@@ -27729,6 +27967,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 50,
 		color: "Red",
 		eggGroups: ["Bug"],
+		tags: ["Plan of Attack"],
 		requiredItem: "Ariadosite",
 	},
 	granbullmega: {
@@ -27742,6 +27981,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2,
 		weightkg: 70,
 		color: "Pink",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Field", "Fairy"],
 		requiredItem: "Granbullite",
 	},
@@ -27756,6 +27996,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.7,
 		weightkg: 80,
 		color: "Red",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Mineral"],
 		requiredItem: "Electrodite",
 	},
@@ -27770,11 +28011,11 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2.3,
 		weightkg: 130,
 		color: "Green",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Mineral"],
 		requiredItem: "Garbodorite",
 	},
 	mudkipdelta: {
-		tags: ["Insurgence"],
 		num: 258,
 		name: "Mudkip-Delta",
 		baseSpecies: "Mudkip",
@@ -27786,6 +28027,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.4,
 		weightkg: 7.6,
 		color: "Black",
+		tags: ["Plan of Attack"],
 		evos: ["Marshtomp-Delta"],
 		eggGroups: ["Undiscovered"],
 	},
@@ -27804,6 +28046,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Mudkip-Delta",
 		evoLevel: 16,
 		evos: ["Swampert-Delta"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	swampertdelta: {
@@ -27819,6 +28062,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Marshtomp-Delta",
 		evoLevel: 36,
 		eggGroups: ["Undiscovered"],
+		tags: ["Plan of Attack"],
 		otherFormes: ["Swampert-Delta-Mega"],
 		formeOrder: ["Swampert-Delta", "Swampert-Delta-Mega"],
 	},
@@ -27834,11 +28078,11 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.9,
 		weightkg: 102,
 		color: "Black",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Delta Swampertite",
 	},
 	torkoaldelta: {
-		tags: ["Insurgence"],
 		num: 324,
 		name: "Torkoal-Delta",
 		baseSpecies: "Torkoal",
@@ -27849,6 +28093,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.5,
 		weightkg: 80.4,
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Field"],
 	},
 	mausholddeltaformation: {
@@ -27864,6 +28109,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 2.3,
 		color: "White",
 		evoLevel: 25,
+		tags: ["Plan of Attack"],
 		eggGroups: ["Field", "Fairy"],
 	},
 	mantinemega: {
@@ -27877,6 +28123,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2.1,
 		weightkg: 220,
 		color: "Blue",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Water 1"],
 		requiredItem: "Mantinite",
 	},
@@ -27890,6 +28137,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 75,
 		color: "Green",
 		evoLevel: 55,
+		tags: ["Plan of Attack"],
 		eggGroups: ["Amorphous"],
 		otherFormes: ["Lycanmimiktoo-Ruined"],
 		formeOrder: ["Lycanmimiktoo", "Lycanmimiktoo-Ruined"],
@@ -27906,6 +28154,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 75,
 		color: "Green",
 		evoLevel: 55,
+		tags: ["Plan of Attack"],
 		eggGroups: ["Amorphous"],
 	},
 	palossandmirage: {
@@ -27920,6 +28169,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 250,
 		color: "Brown",
 		evoLevel: 42,
+		tags: ["Plan of Attack"],
 		eggGroups: ["Amorphous"],
 	},
 	spiritombdelta: {
@@ -27932,6 +28182,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 108,
 		color: "Purple",
 		eggGroups: ["Amorphous"],
+		tags: ["Plan of Attack"],
 		otherFormes: ["Spiritomb-Mega"],
 		formeOrder: ["Spiritomb", "Spiritomb-Mega"],
 	},
@@ -27947,6 +28198,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 108,
 		color: "Purple",
 		eggGroups: ["Amorphous"],
+		tags: ["Plan of Attack"],
 		requiredItem: "Delta Spiritombite",
 	},
 	magnemiterhinian: {
@@ -27960,6 +28212,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0.3,
 		color: "Blue",
 		eggGroups: ["Water 2"],
+		tags: ["Plan of Attack"],
 		otherFormes: ["Magnemite-Rhinian-Swarm"],
 		formeOrder: ["Magnemite-Rhinian", "Magnemite-Rhinian-Swarm"],
 	},
@@ -27974,6 +28227,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 8.2,
 		weightkg: 78.6,
 		color: "Blue",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Water 2"],
 		requiredAbility: "Swarming",
 		battleOnly: "Magnemite-Rhinian",
@@ -27989,6 +28243,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.3,
 		weightkg: 4,
 		color: "Red",
+		tags: ["Plan of Attack"],
 		evos: ["Araquanid-Delta"],
 		eggGroups: ["Undiscovered"],
 	},
@@ -28005,6 +28260,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		prevo: "Dewpider-Delta",
 		evoLevel: 22,
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	ironrose: {
@@ -28017,7 +28273,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.7,
 		weightkg: 19,
 		color: "Gray",
-		tags: ["Paradox"],
+		tags: ["Paradox", "Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	shroomie: {
@@ -28029,6 +28285,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.3,
 		weightkg: 0.8,
 		color: "Gray",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Fairy", "Amorphous"],
 	},
 	wondershroomie: {
@@ -28040,6 +28297,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.3,
 		weightkg: 0.8,
 		color: "Gray",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Fairy", "Amorphous"],
 	},
 	trickshroomie: {
@@ -28051,6 +28309,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.3,
 		weightkg: 0.8,
 		color: "Gray",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Fairy", "Amorphous"],
 	},
 	magicshroomie: {
@@ -28062,6 +28321,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.3,
 		weightkg: 0.8,
 		color: "Gray",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Fairy", "Amorphous"],
 	},
 	panicshroomie: {
@@ -28073,6 +28333,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.3,
 		weightkg: 0.8,
 		color: "Gray",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Fairy", "Amorphous"],
 	},
 	youcan: {
@@ -28085,7 +28346,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.7,
 		weightkg: 19,
 		color: "Gray",
-		tags: ["Paradox"],
+		tags: ["Paradox", "Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	felapstan: {
@@ -28098,6 +28359,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.3,
 		weightkg: 0.3,
 		color: "Red",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Amorphous"],
 	},
 	carbinkdelta: {
@@ -28112,6 +28374,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.3,
 		weightkg: 5.7,
 		color: "Gray",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Fairy", "Mineral"],
 	},
 	sableyemono: {
@@ -28123,6 +28386,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.5,
 		weightkg: 11,
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Human-Like"],
 	},
 	aggrondeltamega: {
@@ -28137,6 +28401,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1,
 		color: "Red",
 		eggGroups: ["Undiscovered"],
+		tags: ["Plan of Attack"],
 		requiredItem: "Delta Aggronite",
 	},
 	kaleidleon: {
@@ -28149,6 +28414,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 22,
 		prevo: "Kecleon",
 		color: "Green",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Field"],
 	},
 	squice: {
@@ -28161,6 +28427,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 22,
 		color: "Blue",
 		evos: ["Toxice"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Field"],
 	},
 	toxice: {
@@ -28173,6 +28440,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 22,
 		color: "Purple",
 		prevo: "Squice",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Field"],
 	},
 	crystallocause: {
@@ -28184,6 +28452,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1,
 		weightkg: 22,
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Field"],
 	},
 	crystallocausepurity: {
@@ -28197,6 +28466,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1,
 		weightkg: 22,
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Field"],
 	},
 	tinkatonrhinian: {
@@ -28211,6 +28481,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.7,
 		weightkg: 112.8,
 		color: "Pink",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Fairy"],
 	},
 	canyou: {
@@ -28223,7 +28494,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.7,
 		weightkg: 19,
 		color: "Gray",
-		tags: ["Paradox"],
+		tags: ["Paradox", "Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	kleavordelta: {
@@ -28239,6 +28510,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Orange",
 		evoType: "other",
 		evoCondition: "Black Augurite",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Bug"],
 	},
 	ironsurge: {
@@ -28251,7 +28523,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.7,
 		weightkg: 19,
 		color: "Gray",
-		tags: ["Paradox"],
+		tags: ["Paradox", "Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	simigloom: {
@@ -28263,6 +28535,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.5,
 		weightkg: 20,
 		color: "Gray",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Bug"],
 	},
 	eelektrossmega: {
@@ -28277,6 +28550,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 61.5,
 		color: "Yellow",
 		eggGroups: ["Monster", "Field"],
+		tags: ["Plan of Attack"],
 		requiredItem: "Eelektrossite",
 	},
 	heatransupra: {
@@ -28290,7 +28564,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.7,
 		weightkg: 430,
 		color: "Brown",
-		tags: ["Sub-Legendary"],
+		tags: ["Sub-Legendary", "Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	meditao: {
@@ -28304,6 +28578,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		prevo: "Meditite",
 		evoLevel: 37,
+		tags: ["Plan of Attack"],
 		eggGroups: ["Human-Like"],
 	},
 	dudunsparcedelta: {
@@ -28317,6 +28592,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Yellow",
 		prevo: "Dunsparce-Delta",
 		evoType: "levelMove",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Field"],
 	},
 	enchantobra: {
@@ -28329,6 +28605,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 31.5,
 		color: "Red",
 		evoLevel: 37,
+		tags: ["Plan of Attack"],
 		eggGroups: ["Human-Like"],
 	},
 	stumbolt: {
@@ -28342,6 +28619,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		evos: ["Allurent", "Raylegant"],
 		evoLevel: 28,
+		tags: ["Plan of Attack"],
 		eggGroups: ["Human-Like"],
 	},
 	allurent: {
@@ -28354,6 +28632,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 68,
 		color: "Red",
 		prevo: "Stumbolt",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Human-Like"],
 	},
 	raylegant: {
@@ -28366,6 +28645,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 62,
 		color: "Red",
 		prevo: "Stumbolt",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Human-Like"],
 	},
 	enteisupra: {
@@ -28379,7 +28659,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.7,
 		weightkg: 430,
 		color: "White",
-		tags: ["Sub-Legendary"],
+		tags: ["Sub-Legendary", "Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	reflight: {
@@ -28391,6 +28671,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2.8,
 		weightkg: 122,
 		color: "White",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	porygonrhinian: {
@@ -28406,6 +28687,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 36.5,
 		color: "Pink",
 		evos: ["Porygon2-Rhinian"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Mineral"],
 	},
 	porygon2rhinian: {
@@ -28424,6 +28706,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "trade",
 		evoItem: "Up-Grade",
 		evos: ["Porygon-Z-Rhinian"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Mineral"],
 	},
 	porygonzrhinian: {
@@ -28441,6 +28724,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Porygon2-Rhinian",
 		evoType: "trade",
 		evoItem: "Dubious Disc",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Mineral"],
 	},
 	larvitardelta: {
@@ -28455,6 +28739,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 72,
 		color: "Purple",
 		evos: ["Pupitar-Delta"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Monster"],
 	},
 	pupitardelta: {
@@ -28471,6 +28756,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Larvitar-Delta",
 		evoLevel: 30,
 		evos: ["Tyranitar-Delta"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Monster"],
 	},
 	tyranitardelta: {
@@ -28486,6 +28772,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		prevo: "Pupitar-Delta",
 		evoLevel: 55,
+		tags: ["Plan of Attack"],
 		eggGroups: ["Monster"],
 	},
 	blazikendeltamega: {
@@ -28500,6 +28787,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 52,
 		color: "Red",
 		eggGroups: ["Undiscovered"],
+		tags: ["Plan of Attack"],
 		requiredItem: "Delta Blazikenite",
 	},
 	madame: {
@@ -28513,6 +28801,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "White",
 		prevo: "Farfetch\u2019d",
 		evoType: "other",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Flying", "Field"],
 	},
 	bunnor: {
@@ -28525,6 +28814,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 2,
 		color: "White",
 		evos: ["Rabbicicle"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	rabbicicle: {
@@ -28537,6 +28827,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 10,
 		color: "White",
 		prevo: "Bunnor",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	barrimander: {
@@ -28548,6 +28839,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.8,
 		weightkg: 10,
 		color: "Black",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	sedimentairy: {
@@ -28559,6 +28851,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.8,
 		weightkg: 100,
 		color: "Black",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	staruhz: {
@@ -28571,6 +28864,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 10,
 		prevo: "Starmie",
 		color: "Black",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	emperahog: {
@@ -28583,6 +28877,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 111,
 		prevo: "Grumpig",
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	clodsiredelta: {
@@ -28598,6 +28893,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		prevo: "Wooper-Delta",
 		evoLevel: 20,
+		tags: ["Plan of Attack"],
 		eggGroups: ["Water 1", "Field"],
 	},
 	weezingrhinian: {
@@ -28611,6 +28907,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 3,
 		weightkg: 16,
 		color: "Gray",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Amorphous"],
 	},
 	kingambitdelta: {
@@ -28627,6 +28924,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Bisharp-Delta",
 		evoType: "other",
 		evoCondition: "Defeat 3 Bisharp leading Pawniard and level-up",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Human-Like"],
 	},
 	pollutoad: {
@@ -28639,6 +28937,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 16,
 		color: "Gray",
 		evos: ["Desekroak"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Amorphous"],
 	},
 	desekroak: {
@@ -28651,6 +28950,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 16,
 		color: "Gray",
 		prevo: "Pollutoad",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Amorphous"],
 	},
 	parashukado: {
@@ -28664,6 +28964,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		prevo: "Parasect",
 		evoLevel: 36,
+		tags: ["Plan of Attack"],
 		eggGroups: ["Bug", "Grass"],
 	},
 	sharpedorhinian: {
@@ -28675,6 +28976,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.4,
 		weightkg: 89,
 		color: "Blue",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Water 1", "Field"],
 		otherFormes: ["Sharpedo-Noice"],
 		formeOrder: ["Sharpedo", "Sharpedo-Noice"],
@@ -28690,6 +28992,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.4,
 		weightkg: 50,
 		color: "Blue",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Water 1", "Field"],
 		requiredAbility: "Ice Face",
 		battleOnly: "Sharpedo-Rhinian",
@@ -28705,6 +29008,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.7,
 		weightkg: 40.4,
 		color: "Gray",
+		tags: ["Plan of Attack"],
 		requiredItem: "Excadrite",
 		eggGroups: ["Field"],
 	},
@@ -28719,6 +29023,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.3,
 		weightkg: 54.5,
 		color: "Pink",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Human-Like"],
 	},
 	hrsublime: {
@@ -28730,6 +29035,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.3,
 		weightkg: 54.5,
 		color: "Pink",
+		tags: ["Plan of Attack"],
 		prevo: "Mr. Mime-Rhinian",
 		eggGroups: ["Human-Like"],
 	},
@@ -28744,6 +29050,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.2,
 		weightkg: 28,
 		color: "Yellow",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Water 1", "Flying"],
 	},
 	weavilemega: {
@@ -28757,6 +29064,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.1,
 		weightkg: 34,
 		color: "Black",
+		tags: ["Plan of Attack"],
 		requiredItem: "Weavilite",
 		eggGroups: ["Field"],
 	},
@@ -28770,6 +29078,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 50,
 		color: "Brown",
 		prevo: "Spinda",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Field", "Human-Like"],
 	},
 	musifrog: {
@@ -28781,6 +29090,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.1,
 		weightkg: 50,
 		color: "Brown",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Field", "Human-Like"],
 	},
 	nekitan: {
@@ -28792,6 +29102,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.3,
 		weightkg: 3,
 		color: "Brown",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Field", "Human-Like"],
 	},
 	chiroptelinx: {
@@ -28803,6 +29114,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.1,
 		weightkg: 50,
 		color: "Brown",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Field", "Human-Like"],
 	},
 	hypodevious: {
@@ -28814,6 +29126,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.1,
 		weightkg: 50,
 		color: "Brown",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Field", "Human-Like"],
 	},
 	laprasdelta: {
@@ -28827,8 +29140,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2.5,
 		weightkg: 220,
 		color: "Blue",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Monster", "Water 1"],
-		canGigantamax: "G-Max Resonance",
 	},
 	glitchomp: {
 		num: -6043,
@@ -28839,6 +29152,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2.5,
 		weightkg: 240,
 		color: "White",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Field", "Human-Like"],
 	},
 	tardoso: {
@@ -28850,6 +29164,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.001,
 		weightkg: 0.001,
 		color: "Brown",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Mineral"],
 	},
 	diagain: {
@@ -28861,6 +29176,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.01,
 		weightkg: 30,
 		color: "Gray",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Mineral"],
 	},
 	ribombeemega: {
@@ -28874,6 +29190,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.1,
 		weightkg: 34,
 		color: "Pink",
+		tags: ["Plan of Attack"],
 		requiredItem: "Ribombite",
 		eggGroups: ["Field"],
 	},
@@ -28886,6 +29203,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 3.01,
 		weightkg: 100,
 		color: "Gray",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Mineral"],
 	},
 	rolycolymountain: {
@@ -28900,6 +29218,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 12,
 		color: "Black",
 		evos: ["Carkol-Mountain"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Mineral"],
 	},
 	carkolmountain: {
@@ -28916,6 +29235,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Rolycoly-Mountain",
 		evoLevel: 18,
 		evos: ["Coalossal-Mountain"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Mineral"],
 	},
 	coalossalmountain: {
@@ -28931,6 +29251,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Black",
 		prevo: "Carkol-Mountain",
 		evoLevel: 34,
+		tags: ["Plan of Attack"],
 		eggGroups: ["Mineral"],
 	},
 	nidokingdelta: {
@@ -28945,6 +29266,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.4,
 		weightkg: 62,
 		color: "Red",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Monster", "Field"],
 	},
 	orioruse: {
@@ -28956,6 +29278,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.55,
 		weightkg: 26,
 		color: "Gray",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Mineral"],
 	},
 	radiangler: {
@@ -28968,6 +29291,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.6,
 		weightkg: 90,
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 		otherFormes: ["Radiangler-Exposed"],
 		formeOrder: ["Radiangler", "Radiangler-Pirouette"],
@@ -28984,6 +29308,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 90,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
+		tags: ["Plan of Attack"],
 		battleOnly: "Radiangler",
 	},
 	shedinjarhinian: {
@@ -28999,6 +29324,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.8,
 		weightkg: 1.2,
 		color: "Brown",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Mineral"],
 	},
 	suicunesupra: {
@@ -29013,7 +29339,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2,
 		weightkg: 187,
 		color: "Purple",
-		tags: ["Sub-Legendary"],
+		tags: ["Sub-Legendary", "Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	querubi: {
@@ -29026,6 +29352,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 90,
 		color: "Purple",
 		evos: ["Vitangel", "Mortangel"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	vitangel: {
@@ -29038,6 +29365,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 90,
 		color: "Purple",
 		prevo: "Querubi",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	mortangel: {
@@ -29050,6 +29378,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 90,
 		color: "Purple",
 		prevo: "Querubi",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	malamarforest: {
@@ -29063,6 +29392,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.6,
 		weightkg: 90,
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	mephistoxin: {
@@ -29074,6 +29404,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.6,
 		weightkg: 90,
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	pebbal: {
@@ -29086,6 +29417,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 90,
 		color: "Purple",
 		evos: ["Pebmaul"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	pebmaul: {
@@ -29098,6 +29430,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 90,
 		color: "Purple",
 		prevo: "Pebbal",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	gastrodonpolluted: {
@@ -29111,6 +29444,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.6,
 		weightkg: 90,
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	manastrea: {
@@ -29122,6 +29456,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.6,
 		weightkg: 90,
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	gigalithmega: {
@@ -29135,6 +29470,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.5,
 		weightkg: 500,
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		requiredItem: "Gigalite",
 		eggGroups: ["Undiscovered"],
 	},
@@ -29149,6 +29485,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.6,
 		weightkg: 90,
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	mossling: {
@@ -29161,6 +29498,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 90,
 		color: "Purple",
 		evos: ["Mosster"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	mosster: {
@@ -29173,6 +29511,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 90,
 		color: "Purple",
 		prevo: "Mossling",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	slakong: {
@@ -29184,6 +29523,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.6,
 		weightkg: 90,
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	gardevoirnightmare: {
@@ -29197,6 +29537,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.6,
 		weightkg: 90,
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	shedinjatandor: {
@@ -29211,6 +29552,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.6,
 		weightkg: 1,
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	wrighvern: {
@@ -29222,6 +29564,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.6,
 		weightkg: 90,
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	honedgesupra: {
@@ -29236,6 +29579,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 2,
 		color: "Brown",
 		evos: ["Doublade-Supra"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Mineral"],
 	},
 	doubladesupra: {
@@ -29252,6 +29596,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Honedge-Supra",
 		evoLevel: 35,
 		evos: ["Aegislash-Supra"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Mineral"],
 	},
 	aegislashsupra: {
@@ -29266,6 +29611,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Doublade-Supra",
 		evoType: "useItem",
 		evoItem: "Dusk Stone",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Mineral"],
 	},
 	aegislashsupraaxe: {
@@ -29283,6 +29629,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "useItem",
 		evoItem: "Dusk Stone",
 		eggGroups: ["Mineral"],
+		tags: ["Plan of Attack"],
 		requiredAbility: "Hardwood Stance",
 		battleOnly: "Aegislash-Supra",
 	},
@@ -29297,6 +29644,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.6,
 		weightkg: 90,
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	reactoise: {
@@ -29308,6 +29656,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.6,
 		weightkg: 500,
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	mantinedelta: {
@@ -29321,6 +29670,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2.1,
 		weightkg: 220,
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Water 1"],
 	},
 	austratus: {
@@ -29332,6 +29682,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 5,
 		weightkg: 58000,
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	wispit: {
@@ -29344,6 +29695,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 1,
 		color: "Purple",
 		evos: ["Wispec"],
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	wispec: {
@@ -29356,6 +29708,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 90,
 		color: "Purple",
 		prevo: "Wispit",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	tiamutt: {
@@ -29367,6 +29720,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.6,
 		weightkg: 90,
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	tiamutttwo: {
@@ -29381,6 +29735,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 90,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
+		tags: ["Plan of Attack"],
 		requiredAbility: "Many Heads",
 		battleOnly: "Tiamutt",
 	},
@@ -29396,6 +29751,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 90,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
+		tags: ["Plan of Attack"],
 		requiredAbility: "Many Heads",
 		battleOnly: "Tiamutt",
 	},
@@ -29411,6 +29767,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 90,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
+		tags: ["Plan of Attack"],
 		requiredAbility: "Many Heads",
 		battleOnly: "Tiamutt",
 	},
@@ -29426,6 +29783,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 90,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
+		tags: ["Plan of Attack"],
 		requiredAbility: "Many Heads",
 		battleOnly: "Tiamutt",
 	},
@@ -29440,6 +29798,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 4,
 		weightkg: 450,
 		color: "Purple",
+		tags: ["Plan of Attack"],
 		eggGroups: ["Undiscovered"],
 	},
 	empoleonmega: {
@@ -29454,6 +29813,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 90,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
+		tags: ["Plan of Attack"],
 		requiredItem: "Empoleonite",
 	},
 	delphoxmega: {
@@ -29468,6 +29828,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 90,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
+		tags: ["Plan of Attack"],
 		requiredItem: "Delphoxite",
 	},
 };
