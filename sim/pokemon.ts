@@ -1300,53 +1300,10 @@ export class Pokemon {
 		if (!this.transformInto(target, effect)) return false;
 		if (target.species.id.includes('delta')) return true;
 		
-		let deltaID: string = target.species.id;
-		const deltaPokemon = [ //Pokémon with only 1 delta form that don't have their delta in their otherFormes list.
-			'venusaur', 'bisharp', 'gardevoir', 'gallade', 'sunflora', 'scizor',
-			'glalie', 'froslass', 'typhlosion', 'pidgeot', 'girafarig', 'sableye',
-			'mawile', 'medicham', 'camerupt', 'lopunny', 'lucario', 'hoopa',
-			'muk', 'emolga', 'volcarona',
-		];
+		let deltaID: ID = target.species.id + 'delta' as ID;
 
-		if (deltaPokemon.includes(deltaID)) {
-			deltaID += 'delta';
-		} else if (deltaID === 'charizard') {
-			deltaID = ['charizarddelta', 'charizarddeltae'][this.battle.random(2)];
-		} else if (deltaID === 'blastoise') {
-			deltaID = ['blastoisedelta', 'blastoisedeltas'][this.battle.random(2)];
-		} else if (deltaID === 'milotic') {
-			deltaID = ['miloticdelta', 'miloticdeltaf'][this.battle.random(2)];
-		} else if (deltaID === 'metagross') {
-			deltaID = ['metagrossdeltas', 'metagrossdeltar'][this.battle.random(2)];
-		} else if (deltaID === 'metagrossmega') {
-			deltaID = ['metagrossdeltasmega', 'metagrossdeltarmega'][this.battle.random(2)];
-		} else if (deltaID === 'meloettapirouette') {
-			deltaID = 'meloettadeltamagician';
-		} else if (deltaID === 'meloetta') {
-			deltaID = 'meloettadelta';
-		} else if (deltaID === 'hoopaunbound') {
-			deltaID = 'hoopadeltaunleashed';
-		} else if (['charizardmegax', 'charizardmegay'].includes(deltaID)) {
-			deltaID = 'charizarddeltamega';
-		} else if (['sunfloramegaf', 'sunfloramegam'].includes(deltaID)) {
-			deltaID = 'sunfloradeltamega';
-		} else if (target.species.isMega) {
-			deltaID = deltaID.substr(0, (deltaID.length - 4)) + 'deltamega';
-		} else if (target.species.otherFormes) {
-			const deltaFormes = [];
-			for (const forme of target.species.otherFormes) {
-				if (forme.includes('Delta')) {
-					deltaFormes[deltaFormes.length] = forme;
-				}
-			}
-			if (deltaFormes.length === 1) {
-				deltaID = deltaFormes[0];
-			} else if (deltaFormes.length > 1) {
-				deltaID = deltaFormes[this.battle.random(deltaFormes.length)];
-			}
-		} else return true;
+		this.battle.add('-message', this.battle.dex.species.getByID(deltaID));
 
-		deltaID = toID(deltaID);
 		if(deltaID !== target.species.id) {
 			const deltaSpecies = this.battle.dex.species.get(deltaID);
 			if(deltaSpecies.exists) {
@@ -1362,57 +1319,55 @@ export class Pokemon {
 						this.setAbility(deltaSpecies.abilities[1], this, true);
 					} else this.setAbility(deltaSpecies.abilities[0], this, true);
 
-					const noLearnsetDeltas = ['victinidelta', 'jirachidelta']; //Deltas with no level-up moves.
-					if (!noLearnsetDeltas.includes(deltaID)) {
-						const learnsetData = {...(this.battle.dex.data.Learnsets[deltaID]?.learnset || {})};
-						const dict: any = {};
-						const oldDeltas = [ //Deltas that have no gen 6 level-up moves, but do have gen 5 ones.
-							'aerodactyldelta', 'aggrondeltai', 'blastoisedeltas', 'charizarddeltae',
-							'chimechodelta', 'houndoomdelta', 'machampdelta', 'miloticdeltaf',
-							'ninetalesdelta', 'pinsirdelta', 'raichudeltas', 'zangoosedelta',
-						];
-						const learnPrefix = oldDeltas.includes(deltaID) ? "5L" : "6L";
-						for (const move in learnsetData) {
-							const learnmoment = learnsetData[move].filter(learn => learn.startsWith(learnPrefix));
-							if (learnmoment.length <= 0) continue;
-							const learnLvls: number[] = [];
-							for (let i=0; i < learnmoment.length; i++) {
-								if (learnmoment[i].length > 2) learnLvls[learnLvls.length] = parseInt(learnmoment[i].slice(2));
-							}
-							for (let i = learnLvls.length - 1; i >= 0; i--) {
-								if (learnLvls[i] <= target.level) {
-									dict[move] = learnLvls[i];
-									break;
-								}
+					const learnsetData = {...(this.battle.dex.data.Learnsets[deltaID]?.learnset || {})};
+					const dict: any = {};
+					const oldDeltas = [ //Deltas that have no gen 6 level-up moves, but do have gen 5 ones.
+						'aerodactyldelta', 'aggrondeltai', 'blastoisedeltas', 'charizarddeltae',
+						'chimechodelta', 'houndoomdelta', 'machampdelta', 'miloticdeltaf',
+						'ninetalesdelta', 'pinsirdelta', 'raichudeltas', 'zangoosedelta',
+					];
+					const learnPrefix = oldDeltas.includes(deltaID) ? "5L" : "6L";
+
+					for (const move in learnsetData) {
+						const learnmoment = learnsetData[move].filter(learn => learn.startsWith(learnPrefix));
+						if (learnmoment.length <= 0) continue;
+						const learnLvls: number[] = [];
+						for (let i=0; i < learnmoment.length; i++) {
+							if (learnmoment[i].length > 2) learnLvls[learnLvls.length] = parseInt(learnmoment[i].slice(2));
+						}
+						for (let i = learnLvls.length - 1; i >= 0; i--) {
+							if (learnLvls[i] <= target.level) {
+								dict[move] = learnLvls[i];
+								break;
 							}
 						}
-						const items = Object.keys(dict).map(function (key) {
-							return [key, dict[key]];
-						});
-						items.reverse();
-						items.sort(function (first, second) {
-							return second[1] - first[1];
-						});
-						let numberOfMoves = this.battle.ruleTable.maxMoveCount;
-						if (numberOfMoves <= 0) numberOfMoves = 4;
-						if (items.length < numberOfMoves) numberOfMoves = items.length;
-						if (numberOfMoves > 24) numberOfMoves = 24;
-						if (numberOfMoves > 0) {
-							this.moveSlots = [];
-							for (let i = 0; i < numberOfMoves; i++) {
-								const slotMove = this.battle.dex.moves.get(items[i][0]);
-								const slotPP = Math.floor(slotMove.noPPBoosts ? slotMove.pp : slotMove.pp * 8 / 5);
-								this.moveSlots.push({
-									move: slotMove.name,
-									id: slotMove.id,
-									pp: slotPP === 1 ? 1 : 5,
-									maxpp: slotPP === 1 ? 1 : 5,
-									target: slotMove.target,
-									disabled: false,
-									used: false,
-									virtual: true,
-								});
-							}
+					}
+					const items = Object.keys(dict).map(function (key) {
+						return [key, dict[key]];
+					});
+					items.reverse();
+					items.sort(function (first, second) {
+						return second[1] - first[1];
+					});
+					let numberOfMoves = this.battle.ruleTable.maxMoveCount;
+					if (numberOfMoves <= 0) numberOfMoves = 4;
+					if (items.length < numberOfMoves) numberOfMoves = items.length;
+					if (numberOfMoves > 24) numberOfMoves = 24;
+					if (numberOfMoves > 0) {
+						this.moveSlots = [];
+						for (let i = 0; i < numberOfMoves; i++) {
+							const slotMove = this.battle.dex.moves.get(items[i][0]);
+							const slotPP = Math.floor(slotMove.noPPBoosts ? slotMove.pp : slotMove.pp * 8 / 5);
+							this.moveSlots.push({
+								move: slotMove.name,
+								id: slotMove.id,
+								pp: slotPP === 1 ? 1 : 5,
+								maxpp: slotPP === 1 ? 1 : 5,
+								target: slotMove.target,
+								disabled: false,
+								used: false,
+								virtual: true,
+							});
 						}
 					}
 				}
