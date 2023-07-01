@@ -258,13 +258,13 @@ export const Formats: FormatList = [
 		name: "[Gen 9] Battle Stadium Singles Regulation C",
 
 		mod: 'gen9',
+		searchShow: false,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer'],
 	},
 	{
 		name: "[Gen 9] Battle Stadium Singles Regulation D",
 
 		mod: 'gen9',
-		searchShow: false,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer'],
 		banlist: ['Walking Wake', 'Iron Leaves'],
 	},
