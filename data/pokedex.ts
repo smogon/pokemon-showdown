@@ -19034,7 +19034,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: -71,
 		name: "Hemogoblin",
 		types: ["Fairy", "Fire"],
-		baseStats: {hp: 90, atk: 99, def: 89, spa: 99, spd: 97, spe: 55},
+		baseStats: {hp: 90, atk: 96, def: 87, spa: 99, spd: 89, spe: 55},
 		abilities: {0: "Pixilate", 1: "Intimidate"},
 		heightm: 1.4,
 		weightkg: 85,
