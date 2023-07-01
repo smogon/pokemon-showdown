@@ -516,7 +516,7 @@ flags: {snatch: 1, distance: 1},
 onHit(target, source, move) {
 this.add('-activate', source, 'move: Aromatherapy');
 let success = false;
-const allies = [target.side.pokemon, .target.side.allySide?.pokemon || []];
+const allies = [.target.side.pokemon, .target.side.allySide?.pokemon || []];
 for (const ally of allies) {
 if (ally !== source && ((ally.hasAbility('sapsipper')) ||
 (ally.volatiles['substitute'] && !move.infiltrates))) {
