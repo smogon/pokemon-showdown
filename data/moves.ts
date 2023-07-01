@@ -24073,7 +24073,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 			status: 'psn',
 		},
 		onModifyMove(move, pokemon, target) {
+			this.add('-message', 'modifying...');
 			if (pokemon?.effectiveWeather() === 'acidrain') {
+				this.add('-message', 'modified');
 				if (move.secondary) move.secondary.chance = 100;
 			}
 		},
