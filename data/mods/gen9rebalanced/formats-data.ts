@@ -5203,7 +5203,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	regieleki: {
 //		isNonstandard: "Unobtainable",
-		tier: "UU",
+		tier: "OU",
 		natDexTier: "Uber",
 	},
 	regidrago: {
