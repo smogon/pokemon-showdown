@@ -33,7 +33,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Flat Rules',
 		desc: "The in-game Flat Rules: Adjust Level Down 50, Species Clause, Item Clause, -Mythical, -Restricted Legendary, Bring 6 Pick 3-6 depending on game type.",
 		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Adjust Level Down = 50', 'Picked Team Size = Auto', 'Cancel Mod'],
-		banlist: ['Mythical', 'Restricted Legendary'],
+		banlist: ['Mythical', 'Restricted Legendary', 'Greninja-Bond'],
 	},
 	limittworestricted: {
 		effectType: 'ValidatorRule',
