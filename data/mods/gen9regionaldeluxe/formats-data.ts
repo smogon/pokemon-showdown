@@ -5161,7 +5161,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	hatterene: {
-		tier: "OU",
+		tier: "UUD",
 		doublesTier: "DOU",
 		natDexTier: "UU",
 	},
@@ -5399,7 +5399,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	meowscarada: {
-		tier: "OU",
+		tier: "UUD",
 		doublesTier: "DUU",
 		natDexTier: "UU",
 	},
@@ -5627,7 +5627,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	garganacl: {
-		tier: "UUD",
+		tier: "OU",
 		doublesTier: "DOU",
 		natDexTier: "UU",
 	},
@@ -5738,7 +5738,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	*/
 	ironmoth: {
-		tier: "OU",
+		tier: "UUD",
 		doublesTier: "DOU",
 		natDexTier: "UU",
 	},
@@ -5768,7 +5768,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "UU",
 	},
 	tinglu: {
-		tier: "UUD",
+		tier: "OU",
 		doublesTier: "DOU",
 		natDexTier: "UU",
 	},

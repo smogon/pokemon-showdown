@@ -21626,4 +21626,170 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+	roughterrain: {
+		num: 604,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Rough Terrain",
+		pp: 10,
+		priority: 0,
+		flags: {nonsky: 1},
+		terrain: 'roughterrain',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onSetStatus(status, target, source, effect) {
+				if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
+					if (effect.id === 'yawn' || (effect.effectType === 'Move' && !effect.secondaries)) {
+						this.add('-activate', target, 'move: Rough Terrain');
+					}
+					return false;
+				}
+			},
+			onTryAddVolatile(status, target) {
+				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+				if (status.id === 'yawn') {
+					this.add('-activate', target, 'move: Rough Terrain');
+					return null;
+				}
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, attacker, defender, move) {
+				if (move.type === 'Ground' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+					this.debug('rough terrain boost');
+					return this.chainModify([0x14CD, 0x1000]);
+				}
+			},
+			onFieldStart(field, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Rough Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Rough Terrain');
+				}
+			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 2,
+			onResidual(pokemon) {
+				if (!target.isGrounded()) {
+					this.damage(target.baseMaxhp / 8, target, target);
+				}
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'move: Rough Terrain');
+			},
+		},
+		secondary: null,
+		target: "all",
+		type: "Ground",
+		zMove: {boost: {spe: 1}},
+		contestType: "Clever",
+	},
+	fieryterrain: {
+		num: 604,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Fiery Terrain",
+		pp: 10,
+		priority: 0,
+		flags: { nonsky: 1 },
+		terrain: 'fieryterrain',
+		condition: {
+		  duration: 5,
+		  durationCallback(source, effect) {
+			if (source?.hasItem('terrainextender')) {
+			  return 8;
+			}
+			return 5;
+		  },
+		  onBasePowerPriority: 6,
+		  onBasePower(basePower, attacker, defender, move) {
+			if (attacker.hasType('Fire') && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+			  this.debug('fiery terrain boost');
+			  return this.chainModify([0x1000, 0x1800]);
+			}
+		  },
+		  onFieldStart(field, source, effect) {
+			if (effect?.effectType === 'Ability') {
+			  this.add('-fieldstart', 'move: Fiery Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
+			} else {
+			  this.add('-fieldstart', 'move: Fiery Terrain');
+			}
+		  },
+		  onFieldEnd() {
+			this.add('-fieldend', 'move: Fiery Terrain');
+		  },
+		},
+		secondary: null,
+		target: "all",
+		type: "Fire",
+		zMove: { boost: { spe: 1 } },
+		contestType: "Clever",
+	},
+	aquaticterrain: {
+		num: 610,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Aquatic Terrain",
+		pp: 10,
+		priority: 0,
+		flags: {nonsky: 1},
+		terrain: 'aquaticterrain',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+			  if (source?.hasItem('terrainextender')) {
+				return 8;
+			  }
+			  return 5;
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, attacker, defender, move) {
+			  const boostedTypes = ['Grass'];
+			  if (boostedTypes.includes(move.type) && attacker.isGrounded()) {
+				this.debug('aquatic terrain boost');
+				return this.chainModify([5325, 4096]);
+			  }
+			  return basePower;
+			},
+			onFieldStart(field, source, effect) {
+			  if (effect?.effectType === 'Ability') {
+				this.add('-fieldstart', 'move: Aquatic Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
+			  } else {
+				this.add('-fieldstart', 'move: Aquatic Terrain');
+			  }
+			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 2,
+			onResidual(pokemon) {
+			  if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
+				this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+			  } else {
+				this.debug(`Pokemon semi-invuln or not grounded; Aquatic Terrain skipped`);
+			  }
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 7,
+			onFieldEnd() {
+			  this.add('-fieldend', 'move: Aquatic Terrain');
+			},
+		  },
+		boosts: {
+			grass: 1.5,
+			water: 1.3,
+		  },
+		secondary: null,
+		target: "all",
+		type: "Ground",
+		zMove: {boost: {def: 1}},
+		contestType: "Beautiful",
+		},
+	  };  
 };
