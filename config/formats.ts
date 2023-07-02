@@ -936,8 +936,8 @@ export const Formats: FormatList = [
 		banlist: [
 			'Calyrex-Shadow', 'Miraidon', 'Slaking', 'Zacian-Crowned', 'Arena Trap', 'Comatose', 'Contrary', 'Gorilla Tactics', 'Huge Power', 'Illusion',
 			'Innards Out', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Orichalcum Pulse', 'Parental Bond', 'Poison Heal', 'Pure Power', 'Shadow Tag',
-			'Stakeout', 'Water Bubble', 'Wonder Guard', 'Belly Drum', 'Ceaseless Edge', 'Last Respects', 'Quiver Dance', 'Rage Fist', 'Revival Blessing',
-			'Shed Tail', 'Shell Smash',
+			'Stakeout', 'Water Bubble', 'Wonder Guard', 'Baton Pass', 'Belly Drum', 'Ceaseless Edge', 'Last Respects', 'Quiver Dance', 'Rage Fist',
+			'Revival Blessing', 'Shed Tail', 'Shell Smash',
 		],
 	},
 	{
