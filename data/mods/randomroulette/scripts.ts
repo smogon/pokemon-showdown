@@ -16,6 +16,25 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (this.actions.dex.data.Scripts.actions) Object.assign(this.actions, this.actions.dex.data.Scripts.actions);
 		if (format.actions) Object.assign(this.actions, format.actions);
 
+		for (const i in this.dex.data.Scripts) {
+			const entry = this.dex.data.Scripts[i];
+			if (typeof entry === 'function') (this as any)[i] = entry;
+		}
+
+		for (const rule of this.ruleTable.keys()) {
+			if ('+*-!'.includes(rule.charAt(0))) continue;
+			const subFormat = this.dex.formats.get(rule);
+			if (subFormat.exists) {
+				const hasEventHandler = Object.keys(subFormat).some(
+					// skip event handlers that are handled elsewhere
+					val => val.startsWith('on') && ![
+						'onBegin', 'onTeamPreview', 'onBattleStart', 'onValidateRule', 'onValidateTeam', 'onChangeSet', 'onValidateSet',
+					].includes(val)
+				);
+				if (hasEventHandler) this.field.addPseudoWeather(rule);
+			}
+		}
+
 		// Generate teams using the format
 		for (const side of this.sides) {
 			this.teamGenerator.setSeed(PRNG.generateSeed());
