@@ -1,7 +1,7 @@
 export const Items: {[itemid: string]: ItemData} = {
 	abilityshield: {
 		name: "Ability Shield",
-		spritenum: 0, // TODO
+		spritenum: 746,
 		ignoreKlutz: true,
 		// Neutralizing Gas protection implemented in Pokemon.ignoringAbility() within sim/pokemon.ts
 		// and in Neutralizing Gas itself within data/abilities.ts
@@ -63,7 +63,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	adamantcrystal: {
 		name: "Adamant Crystal",
-		spritenum: 4, // TODO
+		spritenum: 741,
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (user.baseSpecies.num === 483 && (move.type === 'Steel' || move.type === 'Dragon')) {
@@ -345,7 +345,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	auspiciousarmor: {
 		name: "Auspicious Armor",
-		spritenum: 0, // TODO
+		spritenum: 753,
 		num: 2344,
 		gen: 9,
 	},
@@ -595,7 +595,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	boosterenergy: {
 		name: "Booster Energy",
-		spritenum: 0, // TODO
+		spritenum: 745,
 		onUpdate(pokemon) {
 			if (pokemon.transformed) return;
 			if (this.queue.peek(true)?.choice === 'runSwitch') return;
@@ -1000,7 +1000,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	clearamulet: {
 		name: "Clear Amulet",
-		spritenum: 0, // TODO
+		spritenum: 747,
 		onTryBoost(boost, target, source, effect) {
 			if (source && target === source) return;
 			let showMsg = false;
@@ -1104,7 +1104,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 0, // TODO
+		spritenum: 750,
 		onModifySecondaries(secondaries) {
 			this.debug('Covert Cloak prevent secondary');
 			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
@@ -2318,7 +2318,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	griseouscore: {
 		name: "Griseous Core",
-		spritenum: 180, // TODO
+		spritenum: 743,
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (user.baseSpecies.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
@@ -3081,7 +3081,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	loadeddice: {
 		name: "Loaded Dice",
-		spritenum: 0, // TODO
+		spritenum: 751,
 		// partially implemented in sim/battle-actions.ts:BattleActions#hitStepMoveHitLoop
 		onModifyMove(move) {
 			if (move.multiaccuracy) {
@@ -3213,7 +3213,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	lustrousglobe: {
 		name: "Lustrous Globe",
-		spritenum: 265, // TODO
+		spritenum: 742,
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (user.baseSpecies.num === 484 && (move.type === 'Water' || move.type === 'Dragon')) {
@@ -3356,7 +3356,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	maliciousarmor: {
 		name: "Malicious Armor",
-		spritenum: 0, // TODO
+		spritenum: 744,
 		num: 1861,
 		gen: 9,
 	},
@@ -3710,7 +3710,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 0, // TODO
+		spritenum: 748,
 		onFoeAfterBoost(boost, target, source, effect) {
 			if (effect?.name === 'Opportunist' || effect?.name === 'Mirror Herb') return;
 			const boostPlus: SparseBoostsTable = {};
@@ -4465,7 +4465,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	punchingglove: {
 		name: "Punching Glove",
-		spritenum: 0, // TODO
+		spritenum: 749,
 		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
