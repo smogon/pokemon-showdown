@@ -2685,7 +2685,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen4',
 		ruleset: ['Standard', 'Freeze Clause Mod'],
-		banlist: ['AG', 'Uber', 'Arena Trap', 'Sand Veil', 'Swinub + Snow Cloak', 'Piloswine + Snow Cloak', 'Mamoswine + Snow Cloak', 'Quick Claw', 'Soul Dew', 'Baton Pass', 'Swagger'],
+		banlist: ['AG', 'Uber', 'Arena Trap', 'Sand Veil', 'Swinub + Snow Cloak', 'Piloswine + Snow Cloak', 'Mamoswine + Snow Cloak', 'Soul Dew', 'Baton Pass', 'Swagger'],
 	},
 	{
 		name: "[Gen 3] OU",
@@ -3944,7 +3944,7 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['[Gen 4] OU', '!Freeze Clause Mod'],
 		banlist: ['OU', 'UUBL'],
-		unbanlist: ['Arena Trap', 'Quick Claw', 'Swagger'],
+		unbanlist: ['Arena Trap', 'Swagger'],
 	},
 	{
 		name: "[Gen 4] NU",
