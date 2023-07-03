@@ -1429,7 +1429,11 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Standard Doubles'],
-		banlist: ['Annihilape', 'Chi-Yu', 'Flutter Mane', 'Koraidon', 'Miraidon', 'Dancer', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Ally Switch', 'Revival Blessing', 'Swagger'],
+		banlist: [
+			'Annihilape', 'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Dialga', 'Eternatus', 'Flutter Mane', 'Giratina', 'Groudon', 'Koraidon',
+			'Kyogre', 'Magearna', 'Mewtwo', 'Miraidon', 'Palkia', 'Rayquaza', 'Urshifu-Base', 'Zacian', 'Zamazenta', 'Dancer', 'Huge Power', 'Moody',
+			'Pure Power', 'Shadow Tag', 'Ally Switch', 'Revival Blessing', 'Swagger',
+		],
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
 				pokemon.m.trackPP = new Map<string, number>();
