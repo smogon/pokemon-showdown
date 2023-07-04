@@ -684,14 +684,14 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen9',
-		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Min Source Gen = 9'],
+		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Min Source Gen = 9', 'Terastal Clause'],
 		banlist: [
-			'Annihilape', 'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Dialga', 'Dialga-Origin', 'Enamorus-Base', 'Espathra', 'Eternatus',
-			'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Groudon', 'Iron Bundle', 'Komala', 'Koraidon', 'Kyogre', 'Landorus-Base', 'Magearna', 'Mewtwo',
+			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Dialga', 'Dialga-Origin', 'Enamorus-Base', 'Espathra', 'Eternatus', 'Flutter Mane',
+			'Giratina', 'Giratina-Origin', 'Groudon', 'Iron Bundle', 'Komala', 'Koraidon', 'Kyogre', 'Landorus-Base', 'Lilligant-Hisui', 'Magearna', 'Mewtwo',
 			'Miraidon', 'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Spectrier', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Arena Trap',
-			'Moody', 'Shadow Tag', 'Booster Energy', 'King\'s Rock', 'Baton Pass', 'Last Respects', 'Shed Tail',
+			'Moody', 'Shadow Tag', 'Booster Energy', 'King\'s Rock', 'Baton Pass', 'Last Respects', 'Rage Fist', 'Shed Tail',
 		],
-		restricted: ['Extreme Speed', 'Revival Blessing', 'Transform'],
+		restricted: ['Belly Drum', 'Extreme Speed', 'Quiver Dance', 'Population Bomb', 'Revival Blessing', 'Shell Smash', 'Transform'],
 		onValidateSet(set, format, setHas, teamHas) {
 			const lastMoveslot = this.dex.moves.get(set.moves[set.moves.length - 1]);
 			if (this.ruleTable.isRestricted(`move:${lastMoveslot.id}`)) {
