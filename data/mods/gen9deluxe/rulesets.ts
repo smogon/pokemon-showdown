@@ -5,6 +5,7 @@ import {Pokemon} from "../../../sim/pokemon";
 import {checkIsMoveNotUseless} from "./useless";
 import { Dex, toID } from "@pkmn/dex";
 import { Pokedex } from "./pokedex";
+import { validatorprocesses } from "../../../config/config-example";
 
 // The list of formats is stored in config/formats.js
 export const Rulesets: {[k: string]: FormatData} = {
@@ -808,6 +809,48 @@ export const Rulesets: {[k: string]: FormatData} = {
 				}
 			}
 			return problems;
+		},
+	},
+	dnugodlygiftmod: {
+		effectType: 'Rule',
+		name: "DNU Godly Gift Mod",
+		onValidateTeam(team) {
+			const gods = new Set<string>();
+			for (const set of team) {
+				let species = this.dex.species.get(set.species);
+				if (typeof species.battleOnly === 'string') species = this.dex.species.get(species.battleOnly);
+				if (
+					(species.bst < 350 && (species.tier != 'Do Not Use' && species.tier != 'DNUU'))
+				) {
+					gods.add(species.name);
+				}
+			}
+			if (gods.size > 1) {
+				return [`You have too many Gods.`, `(${Array.from(gods).join(', ')} are Gods.)`];
+			}
+		},
+		onModifySpeciesPriority: 3,
+		onModifySpecies(species, target, source) {
+			if (source || !target?.side) return;
+			const god = target.side.team.find(set => {
+				// check for a species that's tier isn't DNUU or Do Not Use and has a bst of less than 350
+				let species = this.dex.species.get(set.species);
+				if (typeof species.battleOnly === 'string') species = this.dex.species.get(species.battleOnly);
+				return (species.bst < 350 && (species.tier != 'Do Not Use' && species.tier != 'DNUU'));
+			}) || target.side.team[0];
+			const stat = Dex.stats.ids()[target.side.team.indexOf(target.set)];
+			const newSpecies = this.dex.deepClone(species);
+			let godSpecies = this.dex.species.get(god.species);
+			if (typeof godSpecies.battleOnly === 'string') {
+				godSpecies = this.dex.species.get(godSpecies.battleOnly);
+			}
+			newSpecies.bst -= newSpecies.baseStats[stat];
+			newSpecies.baseStats[stat] = godSpecies.baseStats[stat];
+			if (this.gen === 1 && (stat === 'spa' || stat === 'spd')) {
+				newSpecies.baseStats['spa'] = newSpecies.baseStats['spd'] = godSpecies.baseStats[stat];
+			}
+			newSpecies.bst += newSpecies.baseStats[stat];
+			return newSpecies;
 		},
 	},
 	dnurandbats: {

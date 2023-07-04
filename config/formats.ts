@@ -17,6 +17,9 @@ New sections will be added to the bottom of the specified column.
 The column value will be ignored for repeat sections.
 */
 
+import { fstat } from "fs";
+import { FS } from "../lib";
+
 export const Formats: FormatList = [
 	// SV Pseudos Metas
 	///////////////////////////////////////////////////////////////////
@@ -48,6 +51,16 @@ export const Formats: FormatList = [
 		ruleset: ['DNU Clause', 'Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause'],
 		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
 		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass", "Smoliv", "Ledyba"]
+	},
+
+	{
+		name: "[Gen 9] Do NOT Use Pineco",
+
+		mod: 'gen9deluxe',
+		ruleset: ['DNU Clause', 'Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause'],
+		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
+		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass", "Smoliv", "Ledyba"],
+		unbanlist: ['Pineco'],
 	},
 
 /*	{
@@ -112,7 +125,17 @@ export const Formats: FormatList = [
 	},
 
 	{
-		name: "[Gen 9] Do Not Use Doubles",
+		name: "[Gen 9] DNU Godly Gift",
+
+		mod: 'gen9deluxe',
+		ruleset: ['DNU Clause', 'Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause', 'DNU Godly Gift Mod'],
+		banlist: ["AG", "Uber", "OUD", "OU", "UUBL", "UU", "RUBL", "RU", "NUBL", "NU",
+		"PUBL", "PU", "NFE", "LC", "Moody", "Huge Power", "Baton Pass", "Smoliv", "Ledyba", "Shedinja", "Wishiwashi", "Happiny", "Flittle"],
+		unbanlist: FS('config/unbanlist.txt').readIfExistsSync().split('\n').filter(x => x)
+	},
+
+	{
+		name: "[Gen 9] DNU ",
 		gameType: 'doubles',
 		mod: 'gen9deluxe',
 		ruleset: ['DNU Clause', 'Standard', 'Evasion Clause', 'Z-Move Clause', 'Terastal Clause'],
