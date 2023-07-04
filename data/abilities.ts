@@ -5312,32 +5312,17 @@ num: 193,
 },
 
 windpower: {
-onDamagingHitOrder: 1,
-onDamagingHit(damage, target, source, move) {
-if (move.flags['wind']) {
-target.addVolatile('charge');
-}
-},
-onAllySideConditionStart(target, source, sideCondition) {
-const pokemon = this.effectState.target;
-if (sideCondition.id === 'tailwind') {
-pokemon.addVolatile('charge');
-}
-},
-name: "Wind Power",
-rating: 1,
-num: 277,
 },
 
 windrider: {
 onStart(pokemon) {
 if (pokemon.side.sideConditions['tailwind']) {
-this.boost({atk: 1}, pokemon, pokemon);
+this.boost({atk: 1, spa: 1}, pokemon, pokemon);
 }
 },
 onTryHit(target, source, move) {
 if (target !== source && move.flags['wind']) {
-if (!this.boost({atk: 1}, target, target)) {
+if (!this.boost({atk: 1, spa: 1}, target, target)) {
 this.add('-immune', target, '[from] ability: Wind Rider');
 }
 return null;
