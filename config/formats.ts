@@ -1263,7 +1263,7 @@ export const Formats: FormatList = [
 				const forte = this.toID(set.item);
 				if (!forte) continue;
 				const move = this.dex.moves.get(forte);
-				if (move.exists) {
+				if (move.exists && move.id !== 'metronome') {
 					if (itemTable.has(forte)) {
 						return [
 							`You are limited to one of each move in the item slot and have more than one ${this.dex.moves.get(forte).name}).`,
