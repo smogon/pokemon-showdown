@@ -1269,8 +1269,8 @@ export const Formats: FormatList = [
 							`You are limited to one of each move in the item slot and have more than one ${this.dex.moves.get(forte).name}).`,
 						];
 					}
-				itemTable.add(forte);
-				};
+					itemTable.add(forte);
+				}
 			}
 		},
 		validateSet(set, teamHas) {
