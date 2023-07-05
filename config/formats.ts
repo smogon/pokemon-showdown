@@ -1256,7 +1256,23 @@ export const Formats: FormatList = [
 			'Mewtwo', 'Miraidon', 'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Spectrier', 'Sneasler', 'Urshifu-Base', 'Zacian', 'Zacian-Crowned',
 			'Zamazenta-Base', 'Arena Trap', 'Moody', 'Serene Grace', 'Shadow Tag', 'Damp Rock', 'Heat Rock', 'Baton Pass', 'Beat Up', 'Last Respects',
 		],
-		restricted: ['Dynamic Punch', 'Flail', 'Fury Cutter', 'Grass Knot', 'Heavy Slam', 'Inferno', 'Last Respects', 'Low Kick', 'Nuzzle', 'Power Trip', 'Reversal', 'Spit Up', 'Stored Power', 'Zap Cannon'],
+		restricted: ['Dynamic Punch', 'Flail', 'Fury Cutter', 'Grass Knot', 'Heavy Slam', 'Inferno', 'Low Kick', 'Nuzzle', 'Power Trip', 'Reversal', 'Spit Up', 'Stored Power', 'Zap Cannon'],
+		onValidateTeam(team) {
+			const itemTable = new Set<string>();
+			for (const set of team) {
+				const forte = this.toID(set.item);
+				if (!forte) continue;
+				const move = this.dex.moves.get(forte);
+				if (move.exists) {
+					if (itemTable.has(forte)) {
+						return [
+							`You are limited to one of each move in the item slot and have more than one ${this.dex.moves.get(forte).name}).`,
+						];
+					}
+				itemTable.add(forte);
+				};
+			}
+		},
 		validateSet(set, teamHas) {
 			const item = set.item;
 			const species = this.dex.species.get(set.species);
@@ -1272,6 +1288,9 @@ export const Formats: FormatList = [
 			}
 			if (set.moves.map(this.toID).includes(move.id)) {
 				problems.push(`Moves in the item slot can't be in the moveslots as well.`);
+			}
+			if (this.ruleTable.has(`-move:${move.id}`)) {
+				problems.push(`The move ${move.name} is fully banned.`);
 			}
 			const accuracyLoweringMove =
 				move.secondaries?.some(secondary => secondary.boosts?.accuracy && secondary.boosts?.accuracy < 0);
