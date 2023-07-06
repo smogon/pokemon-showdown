@@ -709,8 +709,8 @@ export const Formats: FormatList = [
 				ally.moveSlots = (ally as any).baseMoveSlots = [...ally.baseMoveSlots, target.m.trueLastMoveSlot];
 			}
 			if (!target.side.foe.pokemon) {
-				const allies = target.side.foe.pokemon.filter(ally => ally && target.side.foe !== ally);
-				for (const ally of allies) {
+				const foeAllies = target.side.foe.pokemon.filter(ally => ally && target.side.foe !== ally);
+				for (const ally of foeAllies) {
 					ally.moveSlots = (ally as any).baseMoveSlots = [...ally.baseMoveSlots, target.side.foe.m.trueLastMoveSlot];
 				}
 			}
