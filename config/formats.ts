@@ -708,11 +708,10 @@ export const Formats: FormatList = [
 			for (const ally of allies) {
 				ally.moveSlots = (ally as any).baseMoveSlots = [...ally.baseMoveSlots, target.m.trueLastMoveSlot];
 			}
-			const foePokemon = target.side.foe.pokemon;
-			if (foePokemon.fainted) {
-				const foeAllies = foePokemon.filter(ally => ally && foePokemon !== ally);
+			if (target.side.foe.active.fainted) {
+				const foeAllies = target.side.foe.pokemon.filter(ally => ally && target.side.foe.active !== ally);
 				for (const ally of foeAllies) {
-					ally.moveSlots = (ally as any).baseMoveSlots = [...ally.baseMoveSlots, foePokemon.m.trueLastMoveSlot];
+					ally.moveSlots = (ally as any).baseMoveSlots = [...ally.baseMoveSlots, target.side.foe.active.m.trueLastMoveSlot];
 				}
 			}
 		},
