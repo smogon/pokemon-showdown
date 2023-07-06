@@ -151,7 +151,7 @@ export const Formats: FormatList = [
 		ruleset: ['Little Cup', 'Standard'],
 		banlist: [
 			'Basculin-White-Striped', 'Diglett-Base', 'Dunsparce', 'Flittle', 'Gastly', 'Girafarig', 'Growlithe-Hisui', 'Meditite', 'Misdreavus',
-			'Murkrow', 'Qwilfish-Hisui', 'Rufflet', 'Scyther', 'Sneasel', 'Sneasel-Hisui', 'Stantler', 'Moody', 'Baton Pass',
+			'Murkrow', 'Qwilfish-Hisui', 'Rufflet', 'Scyther', 'Sneasel', 'Sneasel-Hisui', 'Stantler', 'Moody', 'Baton Pass', 'Tinkatink + Knock Off',
 		],
 	},
 	{
