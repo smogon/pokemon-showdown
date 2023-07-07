@@ -703,7 +703,7 @@ export const Formats: FormatList = [
 				pokemon.m.trueLastMoveSlot = pokemon.baseMoveSlots[pokemon.baseMoveSlots.length - 1];
 			}
 		},
-		onAfterFaint(length, target, source, effect) {
+		onFaint(target) {
 			const allies = target.side.pokemon.filter(ally => ally && target !== ally);
 			for (const ally of allies) {
 				ally.moveSlots = (ally as any).baseMoveSlots = [...ally.baseMoveSlots, target.m.trueLastMoveSlot];
