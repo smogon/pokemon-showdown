@@ -50,6 +50,7 @@ export const Aliases: {[alias: string]: string} = {
 	camo: "[Gen 9] Camomons",
 	revmons: "[Gen 9] Revelationmons",
 	tcg: "[Gen 9] The Card Game",
+	fotf: "[Gen 9] Force of the Fallen",
 	ffa: "[Gen 9] Free-For-All",
 	ph: "[Gen 9] Pure Hackmons",
 	hackmons: "[Gen 9] Pure Hackmons",
