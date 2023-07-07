@@ -1266,7 +1266,8 @@ export const Formats: FormatList = [
 				if (move.exists && move.id !== 'metronome') {
 					if (itemTable.has(forte)) {
 						return [
-							`You are limited to one of each move in the item slot and have more than one ${this.dex.moves.get(forte).name}).`,
+							`You are limited to one of each move in the item slot per team.`,
+							`(You have more than one ${move.name}.)`,
 						];
 					}
 					itemTable.add(forte);
