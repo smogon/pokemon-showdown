@@ -598,7 +598,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'Simple':
 			return (!counter.setupType && !moves.has('flamecharge'));
 		case 'Solar Power':
-			return (!counter.get('Special') || !teamDetails.sun || !!species.isMega);
+			return (!counter.get('Special') || abilities.has('Harvest') || !teamDetails.sun || !!species.isMega);
 		case 'Speed Boost':
 			return moves.has('uturn');
 		case 'Swarm':
