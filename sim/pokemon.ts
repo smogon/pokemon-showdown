@@ -496,7 +496,9 @@ export class Pokemon {
 		const health = this.getHealth();
 		let details = this.details;
 		if (this.illusion) {
-			const illusionDetails = this.illusion.species.name + (this.level === 100 ? '' : ', L' + this.level) +
+			let displayedSpeciesName = this.illusion.species.name;
+			if (displayedSpeciesName === 'Greninja-Bond') displayedSpeciesName = 'Greninja';
+			const illusionDetails = displayedSpeciesName + (this.level === 100 ? '' : ', L' + this.level) +
 				(this.illusion.gender === '' ? '' : ', ' + this.illusion.gender) + (this.illusion.set.shiny ? ', shiny' : '');
 			details = illusionDetails;
 		}
