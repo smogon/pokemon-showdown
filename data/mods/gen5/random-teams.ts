@@ -279,8 +279,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		species: Species
 	): boolean {
 		switch (ability) {
-		case 'Anger Point': case 'Gluttony': case 'Keen Eye': case 'Moody':
-		case 'Sand Veil': case 'Snow Cloak': case 'Steadfast': case 'Weak Armor':
+		case 'Anger Point': case 'Gluttony': case 'Moody': case 'Sand Veil': case 'Snow Cloak': case 'Steadfast':
 			return true;
 		case 'Analytic': case 'Download': case 'Hyper Cutter':
 			return species.nfe;

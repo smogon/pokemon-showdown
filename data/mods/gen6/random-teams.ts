@@ -531,7 +531,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return species.nfe;
 		case 'Battle Armor': case 'Sturdy':
 			return (!!counter.get('recoil') && !counter.get('recovery'));
-		case 'Chlorophyll': case 'Leaf Guard':
+		case 'Chlorophyll':
 			return (
 				species.baseStats.spe > 100 ||
 				abilities.has('Harvest') ||
@@ -622,8 +622,6 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return (!!species.isMega || abilities.has('Prankster') || !counter.setupType && !moves.has('acrobatics'));
 		case 'Water Absorb':
 			return (moves.has('raindance') || ['Drizzle', 'Unaware', 'Volt Absorb'].some(a => abilities.has(a)));
-		case 'Weak Armor':
-			return counter.setupType !== 'Physical';
 		}
 
 		return false;

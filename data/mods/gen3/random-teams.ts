@@ -309,8 +309,6 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			return !counter.get('inaccurate');
 		case 'Hustle':
 			return counter.get('Physical') < 2;
-		case 'Lightning Rod':
-			return species.types.includes('Ground');
 		case 'Overgrow':
 			return !counter.get('Grass');
 		case 'Rain Dish': case 'Swift Swim':
@@ -319,8 +317,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			return !counter.get('recoil');
 		case 'Sand Veil':
 			return !teamDetails['sand'];
-		case 'Soundproof': case 'Sturdy':
-			// Electrode prefers Static, and Sturdy is bad.
+		case 'Soundproof':
+			// Electrode prefers Static
 			return true;
 		case 'Swarm':
 			return !counter.get('Bug');
