@@ -1961,7 +1961,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		baseStats: {hp: 52, atk: 95, def: 55, spa: 58, spd: 62, spe: 55},
 		abilities: {0: "Steadfast", H: "Scrappy"},
 		heightm: 0.8,
-		weightkg: 15,
+		weightkg: 42,
 		color: "Brown",
 		evos: ["Sirfetch\u2019d"],
 		eggGroups: ["Flying", "Field"],
