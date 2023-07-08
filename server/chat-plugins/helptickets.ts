@@ -2992,6 +2992,16 @@ export const commands: Chat.ChatCommands = {
 			`/helpticket public [user], [date] - Makes the ticket logs for the [user] on the [date] public to staff. Requires: &`,
 		],
 	},
+
+	tb: 'ticketban',
+	ticketban(target, room, user) {
+		return this.parse(`/helpticket ban ${target}`);
+	},
+
+	unticketban(target, room, user) {
+		return this.parse(`/helpticket unban ${target}`);
+	},
+	
 	helptickethelp: [
 		`/helpticket create - Creates a new ticket, requesting help from global staff.`,
 		`/helpticket list - Lists all tickets. Requires: % @ &`,
