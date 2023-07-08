@@ -310,7 +310,11 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Limber':
 			return species.types.includes('Electric');
 		case 'Mold Breaker':
-			return (abilities.has('Adaptability') || moves.has('rest') && moves.has('sleeptalk'));
+			return (
+				abilities.has('Adaptability') ||
+				moves.has('rest') && moves.has('sleeptalk') ||
+				(abilities.has('Sheer Force') && !!counter.get('sheerforce'))
+			);
 		case 'Overgrow':
 			return !counter.get('Grass');
 		case 'Poison Heal':
