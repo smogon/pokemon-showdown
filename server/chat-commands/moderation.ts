@@ -2094,6 +2094,9 @@ export const commands: Chat.ChatCommands = {
 	bl: 'blacklist',
 	forceblacklist: 'blacklist',
 	forcebl: 'blacklist',
+	permanentblacklist: 'blacklist',
+	permablacklist: 'blacklist',
+	permabl: 'blacklist',
 	blacklist(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		if (!target) return this.parse('/help blacklist');
@@ -2143,9 +2146,16 @@ export const commands: Chat.ChatCommands = {
 			);
 		}
 
-		this.privateModAction(`${name} was blacklisted from ${room.title} by ${user.name}.${reason ? ` (${reason})` : ''}`);
 
-		const affected = Punishments.roomBlacklist(room, targetUser, null, null, reason);
+		const expireTime = cmd.includes('perma') ? Date.now() + (10 * 365 * 24 * 60 * 60 * 1000) : null;
+		const action = expireTime ? 'PERMABLACKLIST' : 'BLACKLIST';
+
+		this.privateModAction(
+			`${name} was blacklisted from ${room.title} by ${user.name}${expireTime ? ' for ten years' : ''}.` +
+			`${reason ? ` (${reason})` : ''}`
+		);
+
+		const affected = Punishments.roomBlacklist(room, targetUser, expireTime, null, reason);
 
 		if (!room.settings.isPrivate && room.persist) {
 			const acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
@@ -2160,15 +2170,16 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		if (!room.settings.isPrivate && room.persist) {
-			this.globalModlog("BLACKLIST", targetUser, reason);
+			this.globalModlog(action, targetUser, reason);
 		} else {
 			// Room modlog only
-			this.modlog("BLACKLIST", targetUser, reason);
+			this.modlog(action, targetUser, reason);
 		}
 		return true;
 	},
 	blacklisthelp: [
 		`/blacklist [username], [reason] - Blacklists the user from the room you are in for a year. Requires: # &`,
+		`/permablacklist OR /permabl - blacklist a user for 10 years. Requires: # &`,
 		`/unblacklist [username] - Unblacklists the user from the room you are in. Requires: # &`,
 		`/showblacklist OR /showbl - show a list of blacklisted users in the room. Requires: % @ # &`,
 		`/expiringblacklists OR /expiringbls - show a list of blacklisted users from the room whose blacklists are expiring in 3 months or less. Requires: % @ # &`,
