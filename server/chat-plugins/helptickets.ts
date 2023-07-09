@@ -2992,7 +2992,7 @@ export const commands: Chat.ChatCommands = {
 			`/helpticket public [user], [date] - Makes the ticket logs for the [user] on the [date] public to staff. Requires: &`,
 		],
 	},
-	
+
 	tb: 'ticketban',
 	unticketban: 'ticketban',
 	ticketban(target, room, user, connection, cmd) {
