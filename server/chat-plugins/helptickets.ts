@@ -2994,12 +2994,9 @@ export const commands: Chat.ChatCommands = {
 	},
 
 	tb: 'ticketban',
-	ticketban(target, room, user) {
-		return this.parse(`/helpticket ban ${target}`);
-	},
-
-	unticketban(target, room, user) {
-		return this.parse(`/helpticket unban ${target}`);
+	unticketban: 'ticketban',
+	ticketban(target, room, user, connection, cmd) {
+		return this.parse(`/helpticket ${cmd} ${target}`);
 	},
 	
 	helptickethelp: [
