@@ -284,7 +284,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Analytic': case 'Download': case 'Hyper Cutter':
 			return species.nfe;
 		case 'Chlorophyll': case 'Solar Power':
-			return (!moves.has('sunnyday') && !teamDetails.sun);
+			return (abilities.has('Harvest') || (!moves.has('sunnyday') && !teamDetails.sun));
 		case 'Compound Eyes': case 'No Guard':
 			return !counter.get('inaccurate');
 		case 'Contrary': case 'Iron Fist': case 'Skill Link':
