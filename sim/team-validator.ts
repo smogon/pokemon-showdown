@@ -980,8 +980,14 @@ export class TeamValidator {
 					set.ivs[stat as 'hp']++;
 				}
 			}
+			if (set.ivs.atk !== set.ivs.spa && !(canBottleCap && (set.ivs.atk === 31 || set.ivs.spa === 31))) {
+				problems.push(`${name}'s Atk and Spa IVs must match because it is from Pokemon GO.`);
+			}
+			if (set.ivs.def !== set.ivs.spd && !(canBottleCap && (set.ivs.def === 31 || set.ivs.spd === 31))) {
+				problems.push(`${name}'s Def and Spd IVs must match because it is from Pokemon GO.`);
+			}
 			if (set.hpType && set.hpType !== 'Dark' && set.hpType !== 'Ice') {
-				problems.push(`${name} must have Hidden Power Dark or Ice to be from Pokemon GO.`);
+				problems.push(`${name} must have Hidden Power Dark or Ice because it is from Pokemon GO.`);
 			}
 		}
 
@@ -2140,12 +2146,6 @@ export class TeamValidator {
 						(minIVs === 1 ? `IV` : `IVs`) + ` in non-Speed stats to be from Pokemon GO.`);
 						break;
 					}
-				}
-				if (Math.floor(ivs.atk / 2) !== Math.floor(ivs.spa / 2)) {
-					problems.push(`${name}'s Atk and Spa IVs must match to be from Pokemon GO.`);
-				}
-				if (Math.floor(ivs.def / 2) !== Math.floor(ivs.spd / 2)) {
-					problems.push(`${name}'s Def and Spd IVs must match to be from Pokemon GO.`);
 				}
 			}
 		}
