@@ -89,6 +89,7 @@ export class PokemonSources {
 	sketchMove?: string;
 	dreamWorldMoveCount: number;
 	hm?: string;
+	isFromPokemonGo?: boolean;
 	restrictiveMoves?: string[];
 	/** Obscure learn methods */
 	restrictedMove?: ID;
@@ -647,10 +648,6 @@ export class TeamValidator {
 			return problems;
 		}
 
-		if (ruleTable.isBanned('nonexistent')) {
-			problems.push(...this.validateStats(set, species, setSources));
-		}
-
 		const moveLegalityWhitelist: {[k: string]: true | undefined} = {};
 		for (const moveName of set.moves) {
 			if (!moveName) continue;
@@ -673,11 +670,56 @@ export class TeamValidator {
 			}
 		}
 
-		if (ruleTable.has('obtainablemoves')) {
-			problems.push(...this.validateMoves(outOfBattleSpecies, set.moves, setSources, set, name, moveLegalityWhitelist));
+		const pokemonGoProblems = this.validatePokemonGo(outOfBattleSpecies, set);
+		const learnsetSpecies = dex.species.getLearnsetData(outOfBattleSpecies.id);
+		let isFromRBYEncounter = false;
+		if (this.gen === 1 && ruleTable.has('obtainablemisc') && !this.ruleTable.has('allowtradeback')) {
+			let lowestEncounterLevel;
+			for (const encounter of learnsetSpecies.encounters || []) {
+				if (encounter.generation !== 1) continue;
+				if (!encounter.level) continue;
+				if (lowestEncounterLevel && encounter.level > lowestEncounterLevel) continue;
+
+				lowestEncounterLevel = encounter.level;
+			}
+
+			if (lowestEncounterLevel) {
+				if (set.level < lowestEncounterLevel) {
+					problems.push(`${name} is not obtainable at levels below ${lowestEncounterLevel} in Gen 1.`);
+				}
+				isFromRBYEncounter = true;
+			}
+		}
+		if (!isFromRBYEncounter && ruleTable.has('obtainablemisc')) {
+			// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
+			let evoSpecies = species;
+			while (evoSpecies.prevo) {
+				if (set.level < (evoSpecies.evoLevel || 0)) {
+					if (!pokemonGoProblems || (pokemonGoProblems && pokemonGoProblems.length)) {
+						problems.push(`${name} must be at least level ${evoSpecies.evoLevel} to be evolved.`);
+						if (pokemonGoProblems && pokemonGoProblems.length) {
+							problems.push(`It failed to validate as a Pokemon from Pokemon GO because:`);
+							for (const pokemonGoProblem of pokemonGoProblems) {
+								problems.push(pokemonGoProblem);
+							}
+						}
+					} else {
+						// Pokemon from Pokemon GO can be transferred to LGPE
+						setSources.isFromPokemonGo = true;
+						setSources.sources.push('8V');
+						setSources.sourcesBefore = 0;
+					}
+					break;
+				}
+				evoSpecies = dex.species.get(evoSpecies.prevo);
+			}
 		}
 
-		const learnsetSpecies = dex.species.getLearnsetData(outOfBattleSpecies.id);
+		const moveProblems = this.validateMoves(outOfBattleSpecies, set.moves, setSources, set, name, moveLegalityWhitelist);
+		if (ruleTable.has('obtainablemoves')) {
+			problems.push(...moveProblems);
+		}
+
 		let eventOnlyData;
 
 		if (!setSources.sourcesBefore && setSources.sources.length) {
@@ -722,53 +764,56 @@ export class TeamValidator {
 				legal = true;
 			}
 			if (!legal) {
-				if (eventData.length === 1) {
-					problems.push(`${species.name} is only obtainable from an event - it needs to match its event:`);
+				if (!pokemonGoProblems || (pokemonGoProblems && pokemonGoProblems.length)) {
+					if (eventData.length === 1) {
+						problems.push(`${species.name} is only obtainable from an event - it needs to match its event:`);
+					} else {
+						problems.push(`${species.name} is only obtainable from events - it needs to match one of its events:`);
+					}
+					for (const [i, event] of eventData.entries()) {
+						if (event.generation <= dex.gen && event.generation >= this.minSourceGen) {
+							const eventInfo = event;
+							const eventNum = i + 1;
+							const eventName = eventData.length > 1 ? ` #${eventNum}` : ``;
+							const eventProblems = this.validateEvent(
+								set, setSources, eventInfo, eventSpecies, ` to be`, `from its event${eventName}`
+							);
+							if (eventProblems) problems.push(...eventProblems);
+						}
+					}
+					if (pokemonGoProblems && pokemonGoProblems.length) {
+						problems.push(`Additionally, it failed to validate as a Pokemon from Pokemon GO because:`);
+						for (const pokemonGoProblem of pokemonGoProblems) {
+							problems.push(pokemonGoProblem);
+						}
+					}
 				} else {
-					problems.push(`${species.name} is only obtainable from events - it needs to match one of its events:`);
-				}
-				for (const [i, event] of eventData.entries()) {
-					if (event.generation <= dex.gen && event.generation >= this.minSourceGen) {
-						const eventInfo = event;
-						const eventNum = i + 1;
-						const eventName = eventData.length > 1 ? ` #${eventNum}` : ``;
-						const eventProblems = this.validateEvent(
-							set, setSources, eventInfo, eventSpecies, ` to be`, `from its event${eventName}`
-						);
-						if (eventProblems) problems.push(...eventProblems);
+					// Attempt move validation again after verifying Pokemon GO origin
+					setSources.isFromPokemonGo = true;
+					setSources.sources = ['8V'];
+					setSources.sourcesBefore = 0;
+					if (!moveProblems.length && ruleTable.has('obtainablemoves')) {
+						problems.push(...this.validateMoves(outOfBattleSpecies, set.moves, setSources, set, name,
+							moveLegalityWhitelist));
 					}
 				}
 			}
 		}
 
-		let isFromRBYEncounter = false;
-		if (this.gen === 1 && ruleTable.has('obtainablemisc') && !this.ruleTable.has('allowtradeback')) {
-			let lowestEncounterLevel;
-			for (const encounter of learnsetSpecies.encounters || []) {
-				if (encounter.generation !== 1) continue;
-				if (!encounter.level) continue;
-				if (lowestEncounterLevel && encounter.level > lowestEncounterLevel) continue;
-
-				lowestEncounterLevel = encounter.level;
-			}
-
-			if (lowestEncounterLevel) {
-				if (set.level < lowestEncounterLevel) {
-					problems.push(`${name} is not obtainable at levels below ${lowestEncounterLevel} in Gen 1.`);
+		// Hardcoded forced validation for Pokemon GO
+		const pokemonGoOnlySpecies = ['meltan', 'melmetal', 'gimmighoulroaming'];
+		if (ruleTable.has('obtainablemisc') && (pokemonGoOnlySpecies.includes(species.id))) {
+			setSources.isFromPokemonGo = true;
+			if (pokemonGoProblems && pokemonGoProblems.length) {
+				problems.push(`${name} is only obtainable from Pokemon GO, and failed to validate because:`);
+				for (const pokemonGoProblem of pokemonGoProblems) {
+					problems.push(pokemonGoProblem);
 				}
-				isFromRBYEncounter = true;
 			}
 		}
-		if (!isFromRBYEncounter && ruleTable.has('obtainablemisc')) {
-			// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
-			let evoSpecies = species;
-			while (evoSpecies.prevo) {
-				if (set.level < (evoSpecies.evoLevel || 0)) {
-					problems.push(`${name} must be at least level ${evoSpecies.evoLevel} to be evolved.`);
-					break;
-				}
-				evoSpecies = dex.species.get(evoSpecies.prevo);
-			}
+
+		if (ruleTable.isBanned('nonexistent')) {
+			problems.push(...this.validateStats(set, species, setSources));
 		}
 
 		if (ruleTable.has('obtainablemoves')) {
@@ -924,6 +969,19 @@ export class TeamValidator {
 		} else if (set.hpType) {
 			if (!this.possibleBottleCapHpType(set.hpType, set.ivs)) {
 				problems.push(`${name} has Hidden Power ${set.hpType}, but its IVs don't allow this even with (Bottle Cap) Hyper Training.`);
+			}
+		}
+
+		if (setSources.isFromPokemonGo) {
+			// Pokemon from Pokemon GO must have odd IVs in non-Spe stats
+			// Since the set can be fixed while making minimal changes, it does not force the IVs to be manually fixed
+			for (const stat in set.ivs) {
+				if (set.ivs[stat as 'hp'] % 2 === 0 && stat !== 'spe') {
+					set.ivs[stat as 'hp']++;
+				}
+			}
+			if (set.hpType && set.hpType !== 'Dark' && set.hpType !== 'Ice') {
+				problems.push(`${name} must have Hidden Power Dark or Ice to be from Pokemon GO.`);
 			}
 		}
 
@@ -1980,6 +2038,119 @@ export class TeamValidator {
 
 		return problems;
 	}
+	/**
+	 * Returns a list of problems regarding a Pokemon's avilability in Pokemon GO (empty list if no problems)
+	 * If the Pokemon cannot be obtained from Pokemon GO, returns null
+	 */
+	validatePokemonGo(
+		species: Species, set: Partial<PokemonSet>, name: string = species.name,
+	): string[] | null {
+		let problems = [];
+		let minLevel = 50; // maximum level a Pokemon can be in Pokemon GO
+		let minIVs = 15; // IVs range from 0 to 15 in Pokemon GO
+		const dex = this.dex;
+		const pokemonGoData = dex.species.getPokemonGoData(species.id);
+		if (dex.gen < 8 || this.format.mod === 'gen8dlc1') return null;
+		if (!pokemonGoData) {
+			// Handles forms and evolutions not obtainable from Pokemon GO
+			const otherSpecies = this.learnsetParent(species);
+			// If a Pokemon is somehow not obtainable from Pokemon GO and it must be leveled up to be evolved,
+			// validation for the game should stop because it's more optimal to get the Pokemon outside of the game
+			if (otherSpecies && !species.evoLevel) {
+				const otherProblems = this.validatePokemonGo(otherSpecies, set, name);
+				if (otherProblems) {
+					problems = otherProblems;
+				} else {
+					return null;
+				}
+			} else {
+				return null;
+			}
+		} else {
+			const pokemonGoSources = pokemonGoData.encounters;
+			// should never happen
+			if (!pokemonGoSources) throw new Error(`Species with no Pokemon GO data: ${species.id}`);
+			if (set.shiny) name = "Shiny " + name;
+			if (set.shiny && pokemonGoSources.includes('noshiny')) {
+				problems.push(`${name} is not obtainable from Pokemon GO.`);
+			} else {
+				if (pokemonGoSources.includes('wild') && !((set.shiny && pokemonGoSources.includes('nowildshiny')))) {
+					minLevel = 1;
+					minIVs = 0;
+				}
+				if (pokemonGoSources.includes('egg') && !(set.shiny && pokemonGoSources.includes('noeggshiny'))) {
+					/**
+					 * A Pokemon's level when hatched is determined by the trainer's level when it is obtained
+					 * It is no longer possible for new accounts to obtain eggs at level 1 because they will have reached
+					 * level 2 by the time they can spin a PokeStop. However, it might be possible for a sleeper account
+					 * from before XP changes to get a level 1 egg from spinning a PokeStop that sends the account to
+					 * level 2, but this needs research
+					*/
+					minLevel = Math.min(minLevel, 2);
+					minIVs = Math.min(minIVs, 10);
+				}
+				if (pokemonGoSources.includes('7kmegg') && !(set.shiny && pokemonGoSources.includes('no7kmeggshiny'))) {
+					minLevel = Math.min(minLevel, 10);
+					minIVs = Math.min(minIVs, 10);
+				}
+				if (pokemonGoSources.includes('12kmegg')) {
+					minLevel = Math.min(minLevel, 8);
+					minIVs = Math.min(minIVs, 10);
+				}
+				if (pokemonGoSources.includes('raid')) {
+					minLevel = Math.min(minLevel, 20);
+					minIVs = Math.min(minIVs, 10);
+				}
+				if (pokemonGoSources.includes('research') &&
+					!(set.shiny && pokemonGoSources.includes('noresearchshiny'))) {
+					minLevel = Math.min(minLevel, 15);
+					minIVs = Math.min(minIVs, 10);
+				}
+				if (pokemonGoSources.includes('giovanni') && !set.shiny) {
+					/**
+					 * Finding Giovanni is possible at a minimum level of 11 due to XP gained from special research
+					 * with a minimum XP gain of 36225 (starting from level 8, this is 775 XP below level 12)
+					 * This requires an account created before late 2020, after which XP was buffed
+					 * Giovanni Shadow Pokemon cannot be shiny, have an IV floor of 6 and after being purified, will
+					 * level up to the trainer's current level and have its IVs increased by 2
+					 * After getting a Super Rocket Radar before late 2020, an account can potentially wait until a
+					 * future Giovanni team cycle to get a particular legendary
+					 * This should only work for Pokemon that were introduced before XP buffs; any Pokemon introduced
+					 * after will have to be obtained as a new Pokedex entry (which currently gives 1000 XP) and reach
+					 * level 12, and at this point trading would be less restrictive; no Pokemon fall under this yet
+					*/
+					minLevel = Math.min(minLevel, 11);
+					minIVs = Math.min(minIVs, 8);
+				}
+				// Attempt to trade the Pokemon to reduce level and IVs
+				if (!pokemonGoSources.includes('notrade')) {
+					// Special trades require a good friend
+					// Trading with a friend of this level has an IV floor of 1
+					const specialTrade = pokemonGoSources.includes('specialtrade') || set.shiny;
+					minLevel = Math.min(minLevel, 12);
+					minIVs = Math.min(minIVs, specialTrade ? 1 : 0);
+				}
+				if (set.level && set.level < minLevel) {
+					problems.push(`${name} must be at least level ${minLevel} to be from Pokemon GO.`);
+				}
+				const ivs = set.ivs || TeamValidator.fillStats(null, 31);
+				for (const stat in ivs) {
+					if (Math.floor(ivs[stat as 'hp'] / 2) < minIVs && stat !== 'spe') {
+						problems.push(`${name} must have at least ${minIVs} ` +
+						(minIVs === 1 ? `IV` : `IVs`) + ` in non-Speed stats to be from Pokemon GO.`);
+						break;
+					}
+				}
+				if (Math.floor(ivs.atk / 2) !== Math.floor(ivs.spa / 2)) {
+					problems.push(`${name}'s Atk and Spa IVs must match to be from Pokemon GO.`);
+				}
+				if (Math.floor(ivs.def / 2) !== Math.floor(ivs.spd / 2)) {
+					problems.push(`${name}'s Def and Spd IVs must match to be from Pokemon GO.`);
+				}
+			}
+		}
+		return problems;
+	}
 
 	omCheckCanLearn(
 		move: Move,
@@ -2296,6 +2467,7 @@ export class TeamValidator {
 			// prevents a crash if OMs override `checkCanLearn` to keep validating after an error
 			setSources.sources = backupSources;
 			setSources.sourcesBefore = backupSourcesBefore;
+			if (setSources.isFromPokemonGo) return `'s move ${move.name} is incompatible with its Pokemon GO origin.`;
 			return `'s moves ${(setSources.restrictiveMoves || []).join(', ')} are incompatible.`;
 		}
 
