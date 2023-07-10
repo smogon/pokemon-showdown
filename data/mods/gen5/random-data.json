@@ -77,7 +77,7 @@
     },
     "venomoth": {
         "level": 84,
-        "moves": ["bugbuzz", "quiverdance", "roost", "sleeppowder", "substitute"]
+        "moves": ["bugbuzz", "quiverdance", "roost", "sleeppowder"]
     },
     "dugtrio": {
         "level": 82,
@@ -609,7 +609,7 @@
     },
     "sableye": {
         "level": 85,
-        "moves": ["foulplay", "nightshade", "recover", "taunt", "willowisp"]
+        "moves": ["foulplay", "recover", "seismictoss", "taunt", "willowisp"]
     },
     "mawile": {
         "level": 91,
@@ -641,7 +641,7 @@
     },
     "illumise": {
         "level": 90,
-        "moves": ["bugbuzz", "encore", "roost", "substitute", "thunderwave", "wish"]
+        "moves": ["bugbuzz", "encore", "roost", "thunderwave", "wish"]
     },
     "swalot": {
         "level": 91,
@@ -777,7 +777,7 @@
     },
     "luvdisc": {
         "level": 100,
-        "moves": ["icebeam", "protect", "surf", "sweetkiss", "toxic"]
+        "moves": ["icebeam", "protect", "scald", "sweetkiss", "toxic"]
     },
     "salamence": {
         "level": 79,
@@ -1033,7 +1033,7 @@
     },
     "gliscor": {
         "level": 80,
-        "moves": ["earthquake", "icefang", "protect", "roost", "substitute", "swordsdance", "taunt", "toxic"]
+        "moves": ["earthquake", "facade", "protect", "roost", "substitute", "swordsdance", "taunt", "toxic"]
     },
     "mamoswine": {
         "level": 79,
@@ -1117,7 +1117,7 @@
     },
     "giratina": {
         "level": 73,
-        "moves": ["calmmind", "dragonpulse", "dragontail", "rest", "sleeptalk", "willowisp"]
+        "moves": ["calmmind", "dragonpulse", "rest", "sleeptalk", "willowisp"]
     },
     "cresselia": {
         "level": 82,
@@ -1237,7 +1237,7 @@
     },
     "liepard": {
         "level": 86,
-        "moves": ["darkpulse", "encore", "hiddenpowerfire", "nastyplot", "thunderwave"]
+        "moves": ["darkpulse", "encore", "hiddenpowerfighting", "nastyplot", "thunderwave"]
     },
     "simisage": {
         "level": 88,
@@ -1440,7 +1440,7 @@
     },
     "cryogonal": {
         "level": 85,
-        "moves": ["hiddenpowerfire", "icebeam", "rapidspin", "recover", "toxic"]
+        "moves": ["hiddenpowerground", "icebeam", "rapidspin", "recover", "toxic"]
     },
     "accelgor": {
         "level": 84,
