@@ -2107,6 +2107,10 @@ export class TeamValidator {
 					minLevel = Math.min(minLevel, 20);
 					minIVs = Math.min(minIVs, 10);
 				}
+				if (species.id === 'mewtwo' && set.level && set.level >= 20) {
+					// A bug allowed Mewtwo to be encountered with an IV floor of 0 from GO Battle League
+					minIVs = Math.min(minIVs, 0);
+				}
 				if (pokemonGoSources.includes('research') &&
 					!(set.shiny && pokemonGoSources.includes('noresearchshiny'))) {
 					minLevel = Math.min(minLevel, 15);
@@ -2114,19 +2118,11 @@ export class TeamValidator {
 				}
 				if (pokemonGoSources.includes('giovanni') && !set.shiny) {
 					/**
-					 * Finding Giovanni is possible at a minimum level of 11 due to XP gained from special research
-					 * with a minimum XP gain of 36225 (starting from level 8, this is 775 XP below level 12)
-					 * This requires an account created before late 2020, after which XP was buffed
-					 * Giovanni Shadow Pokemon cannot be shiny, have an IV floor of 6 and after being purified, will
-					 * level up to the trainer's current level and have its IVs increased by 2
-					 * After getting a Super Rocket Radar before late 2020, an account can potentially wait until a
-					 * future Giovanni team cycle to get a particular legendary
-					 * This should only work for Pokemon that were introduced before XP buffs; any Pokemon introduced
-					 * after will have to be obtained as a new Pokedex entry (which currently gives 1000 XP) and reach
-					 * level 12, and at this point trading would be less restrictive; no Pokemon fall under this yet
+					 * Purified Pokemon can be leveled down to level 8 after trading; they are forced to
+					 * special trades, but currently all Giovanni Shadow Pokemon are already forced special trades
 					*/
-					minLevel = Math.min(minLevel, 11);
-					minIVs = Math.min(minIVs, 8);
+					minLevel = Math.min(minLevel, 8);
+					minIVs = Math.min(minIVs, 1);
 				}
 				// Attempt to trade the Pokemon to reduce level and IVs
 				if (!pokemonGoSources.includes('notrade')) {
