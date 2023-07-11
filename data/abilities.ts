@@ -5211,7 +5211,121 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: -4,
 	},
-	spook: {
+		Stalk: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Dark' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Stalk');
+				return this.chainModify(1.25);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Dark' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Stalk');
+				return this.chainModify(1.25);
+			}
+		},
+		name: "Stalk",
+		rating: 2,
+		num: 66,
+	},
+		draging: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Dragon' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Dragging');
+				return this.chainModify(1.25);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Dragon' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Dragging');
+				return this.chainModify(1.25);
+			}
+		},
+		name: "Dragging",
+		rating: 2,
+		num: 66,
+	},
+		shock: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Electric' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Shock');
+				return this.chainModify(1.25);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Electric' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Shock');
+				return this.chainModify(1.25);
+			}
+		},
+		name: "Shock",
+		rating: 2,
+		num: 66,
+	},
+		dirt: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Ground' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Dirt');
+				return this.chainModify(1.25);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Ground' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Dirt');
+				return this.chainModify(1.25);
+			}
+		},
+		name: "Dirt",
+		rating: 2,
+		num: 66,
+	},
+		fae: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Fairy' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Fae');
+				return this.chainModify(1.25);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Fairy' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Fae');
+				return this.chainModify(1.25);
+			}
+		},
+		name: "Fae",
+		rating: 2,
+		num: 66,
+	},
+		fisting: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Fighting' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Fisting');
+				return this.chainModify(1.25);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Fighting' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Fisting');
+				return this.chainModify(1.25);
+			}
+		},
+		name: "Fisting",
+		rating: 2,
+		num: 66,
+	},
+		spook: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Ghost' && attacker.hp <= attacker.maxhp / 2) {
@@ -5230,4 +5344,156 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2,
 		num: 66,
 	},
-};
+		spook: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Ghost' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Spook');
+				return this.chainModify(1.25);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Ghost' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Spook');
+				return this.chainModify(1.25);
+			}
+		},
+		name: "Spook",
+		rating: 2,
+		num: 66,
+	},
+		cooled: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Ice' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Cooled');
+				return this.chainModify(1.25);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Ice' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Cooled');
+				return this.chainModify(1.25);
+			}
+		},
+		name: "Cooled",
+		rating: 2,
+		num: 66,
+	},
+		swoop: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Swoop' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Spook');
+				return this.chainModify(1.25);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Flying' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Swoop');
+				return this.chainModify(1.25);
+			}
+		},
+		name: "Swoop",
+		rating: 2,
+		num: 66,
+	},
+		normallity: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Normal' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Normallity');
+				return this.chainModify(1.25);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Normal' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Normallity');
+				return this.chainModify(1.25);
+			}
+		},
+		name: "Normallity",
+		rating: 2,
+		num: 66,
+	},
+		spray: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Ghost' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Poison');
+				return this.chainModify(1.25);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Poison' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Spray');
+				return this.chainModify(1.25);
+			}
+		},
+		name: "Spray",
+		rating: 2,
+		num: 66,
+	},
+		spook: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Rock' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Spook');
+				return this.chainModify(1.25);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Rock' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Spook');
+				return this.chainModify(1.25);
+			}
+		},
+		name: "Spook",
+		rating: 2,
+		num: 66,
+	},
+		spook: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Steel' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Spook');
+				return this.chainModify(1.25);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Steel' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Spook');
+				return this.chainModify(1.25);
+			}
+		},
+		name: "Spook",
+		rating: 2,
+		num: 66,
+	},
+		spook: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Psychic' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Spook');
+				return this.chainModify(1.25);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Psychic' && attacker.hp <= attacker.maxhp / 2) {
+				this.debug('Spook');
+				return this.chainModify(1.25);
+			}
+		},
+		name: "Spook",
+		rating: 2,
+		num: 66,
+	},
+	};
