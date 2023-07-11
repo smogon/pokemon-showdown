@@ -5249,41 +5249,41 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2,
 		num: 66,
 	},
-		shock: {
+		powercell: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Electric' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Shock');
+				this.debug('Powercell');
 				return this.chainModify(1.25);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Electric' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Shock');
+				this.debug('Powercell');
 				return this.chainModify(1.25);
 			}
 		},
-		name: "Shock",
+		name: "Powercell",
 		rating: 2,
 		num: 66,
 	},
-		dirt: {
+		sinkhole: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Ground' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Dirt');
+				this.debug('Sinkhole');
 				return this.chainModify(1.25);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Ground' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Dirt');
+				this.debug('Sinkhole');
 				return this.chainModify(1.25);
 			}
 		},
-		name: "Dirt",
+		name: "Sinkhole",
 		rating: 2,
 		num: 66,
 	},
