@@ -5363,22 +5363,22 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2,
 		num: 66,
 	},
-		cooled: {
+		whiteout: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Ice' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Cooled');
+				this.debug('Whiteout');
 				return this.chainModify(1.25);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Ice' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Cooled');
+				this.debug('Whiteout');
 				return this.chainModify(1.25);
 			}
 		},
-		name: "Cooled",
+		name: "Whiteout",
 		rating: 2,
 		num: 66,
 	},
@@ -5401,29 +5401,29 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2,
 		num: 66,
 	},
-		normallity: {
+		basic: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Normal' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Normallity');
+				this.debug('Basic');
 				return this.chainModify(1.25);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Normal' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Normallity');
+				this.debug('Basic');
 				return this.chainModify(1.25);
 			}
 		},
-		name: "Normallity",
+		name: "Basic",
 		rating: 2,
 		num: 66,
 	},
-		spray: {
+		venomous: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Ghost' && attacker.hp <= attacker.maxhp / 2) {
+			if (move.type === 'Venomous' && attacker.hp <= attacker.maxhp / 2) {
 				this.debug('Poison');
 				return this.chainModify(1.25);
 			}
@@ -5431,56 +5431,56 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Poison' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Spray');
+				this.debug('Venomous');
 				return this.chainModify(1.25);
 			}
 		},
-		name: "Spray",
+		name: "Venomous",
 		rating: 2,
 		num: 66,
 	},
-		spook: {
+		landslide: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Rock' && attacker.hp <= attacker.maxhp / 2) {
+			if (move.type === 'Landslide' && attacker.hp <= attacker.maxhp / 2) {
 				this.debug('Spook');
 				return this.chainModify(1.25);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Rock' && attacker.hp <= attacker.maxhp / 2) {
+			if (move.type === 'Landslide' && attacker.hp <= attacker.maxhp / 2) {
 				this.debug('Spook');
 				return this.chainModify(1.25);
 			}
 		},
-		name: "Spook",
+		name: "Landslide",
 		rating: 2,
 		num: 66,
 	},
-		spook: {
+		ferrous: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Steel' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Spook');
+				this.debug('Ferrous');
 				return this.chainModify(1.25);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Steel' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Spook');
+				this.debug('Ferrous');
 				return this.chainModify(1.25);
 			}
 		},
-		name: "Spook",
+		name: "Ferrous",
 		rating: 2,
 		num: 66,
 	},
-		spook: {
+		esp: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Psychic' && attacker.hp <= attacker.maxhp / 2) {
+			if (move.type === 'ESP' && attacker.hp <= attacker.maxhp / 2) {
 				this.debug('Spook');
 				return this.chainModify(1.25);
 			}
@@ -5488,11 +5488,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Psychic' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Spook');
+				this.debug('ESP');
 				return this.chainModify(1.25);
 			}
 		},
-		name: "Spook",
+		name: "ESP",
 		rating: 2,
 		num: 66,
 	},
