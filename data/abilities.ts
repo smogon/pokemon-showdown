@@ -3957,7 +3957,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			},
 			if (pokemon.activeTurns) {
 				this.boost({spe: 1});
-			}
+			},
 		},
 		name: "Slow Start",
 		rating: -1,
