@@ -1830,6 +1830,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 			pokemon.side.removeSideCondition('lightscreen');
 			pokemon.side.removeSideCondition('auroraveil');
 		},
+		onAfterMove(source, target, move) {
+			if (this.gen === 4) { // In gen 4, brick break removes screens even on inmunity
+				target.side.removeSideCondition('reflect');
+				target.side.removeSideCondition('lightscreen');
+			}
+		},
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
