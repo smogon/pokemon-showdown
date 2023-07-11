@@ -3955,9 +3955,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			onEnd(target) {
 				this.add('-end', target, 'Slow Start');
 			},
-			if (pokemon.activeTurns) {
-				this.boost({spe: 1});
-			},
 		},
 		name: "Slow Start",
 		rating: -1,
