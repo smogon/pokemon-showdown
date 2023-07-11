@@ -5344,25 +5344,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2,
 		num: 66,
 	},
-		spook: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Ghost' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Spook');
-				return this.chainModify(1.25);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Ghost' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Spook');
-				return this.chainModify(1.25);
-			}
-		},
-		name: "Spook",
-		rating: 2,
-		num: 66,
-	},
 		whiteout: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
