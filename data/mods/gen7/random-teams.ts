@@ -749,7 +749,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		) return 'Guts';
 		if (abilities.has('Moxie') && (counter.get('Physical') > 3 || moves.has('bounce')) && !isDoubles) return 'Moxie';
 		if (isDoubles) {
-			if (abilities.has('Intimidate') && !species.battleOnly) return 'Intimidate';
+			if (abilities.has('Intimidate')) return 'Intimidate';
 			if (abilities.has('Guts')) return 'Guts';
 			if (abilities.has('Storm Drain')) return 'Storm Drain';
 			if (abilities.has('Harvest')) return 'Harvest';
