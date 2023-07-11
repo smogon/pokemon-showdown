@@ -947,7 +947,7 @@ export class BattleActions {
 
 		if ((move.recoil || move.id === 'chloroblast') && move.totalDamage) {
 			const hpBeforeRecoil = pokemon.hp;
-			let recoilDamage: number;
+			let recoilDamage;
 			if (move.id === 'chloroblast') {
 				recoilDamage = Math.round(pokemon.maxhp / 2);
 			} else {
