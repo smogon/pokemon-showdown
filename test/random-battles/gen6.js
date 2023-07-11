@@ -6,8 +6,29 @@
 const assert = require('../assert');
 const {testNotBothMoves, testAlwaysHasMove, testHiddenPower, testSet} = require('./tools');
 
-describe('[Gen 6] Random Battle', () => {
+describe('[Gen 6] Random Battle (slow)', () => {
 	const options = {format: 'gen6randombattle'};
+	const dataJSON = require(`../../dist/data/mods/gen6/random-data.json`);
+	const dex = Dex.forFormat(options.format);
+	const generator = Teams.getGenerator(options.format);
+
+	it('All moves on all sets should be obtainable', () => {
+		const rounds = 500;
+		for (const pokemon of Object.keys(dataJSON)) {
+			const species = dex.species.get(pokemon);
+			const data = dataJSON[pokemon];
+			if (!data.moves || species.isNonstandard) continue;
+			const remainingMoves = new Set(data.moves);
+			for (let i = 0; i < rounds; i++) {
+				// Test lead 1/6 of the time
+				const set = generator.randomSet(species, {}, i % 6 === 0);
+				for (const move of set.moves) remainingMoves.delete(move);
+				if (!remainingMoves.size) break;
+			}
+			assert.false(remainingMoves.size,
+				`The following moves on ${species.name} are unused: ${[...remainingMoves].join(', ')}`);
+		}
+	});
 
 	it('should not give mega evolution abilities to base formes', () => {
 		testSet('manectricmega', {rounds: 1, ...options}, set => {

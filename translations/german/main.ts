@@ -3,6 +3,9 @@ import type {Translations} from '../../server/chat';
 export const translations: Translations = {
 	name: "German",
 	strings: {
+		"namelocked": "namensgesperrt",
+		"locked": "gesperrt",
+
 		"autoconfirmed": "autoconfirmed",
 		"trusted": "vertrauenswürdig",
 
@@ -106,7 +109,8 @@ export const translations: Translations = {
 		"Your status cannot be updated while you are locked or semilocked.": "Dein Status kann nicht geändert werden, solange du \"locked\" (gesperrt) oder semilocked (semi-gesperrt) bist.",
 		"Your status is too long; it must be under ${maxLength} characters.": "Dein Status ist zu lang; er muss kürzer als ${maxLength} Zeichen sein.",
 		"Your status contains a banned word.": "Dein Status beinhaltet ein verbotenes Wort.",
-		"Your status has been set to: ${target}.": "Dein Status wurde zu ${target} geändert.", "You are now marked as busy.": "Du bist jetzt als beschäftigt markiert.",
+		"Your status has been set to: ${target}.": "Dein Status wurde zu ${target} geändert.",
+		"You are now marked as busy.": "Du bist jetzt als beschäftigt markiert.",
 		"You are now marked as away. Send a message or use /back to indicate you are back.": "Du bist jetzt als abwesend markiert. Versende eine Nachricht oder nutze /back um zu signalisieren, dass du zurück bist.",
 		"You are already marked as back.": "Du bist bereits als anwesend markiert.",
 		"You are no longer marked as busy.": "Du bist nicht länger als beschäftigt markiert.",
@@ -149,8 +153,8 @@ export const translations: Translations = {
 		"You are already blocking challenges!": "Du blockierst bereits Herausforderungen!",
 		"You are already available for challenges!": "Du bist bereits für Herausforderungen verfügbar!",
 		"You are available for challenges from now on.": "Du bist ab jetzt für Herausforderungen verfügbar.",
-		"You are now blocking challenges, except from staff and ${rank}.": "",
-		"You are now blocking challenges, except from staff and ${status} users.": "",
+		"You are now blocking challenges, except from staff and ${rank}.": "Du blockierst nun Herausforderungen mit Ausnahme derjenigen vom Staff-Team und ${rank}.",
+		"You are now blocking challenges, except from staff and ${status} users.": "Du blockierst nun Herausforderungen mit Ausnahme derjenigen vom Staff-Team und ${status}-Nutzern.",
 
 		"Staff FAQ": "Staff-FAQ",
 		"You cannot broadcast all FAQs at once.": "Du kannst nicht sämtliche FAQs auf einmal anzeigen lassen.",
@@ -162,14 +166,16 @@ export const translations: Translations = {
 		"To join a room tournament, click the <strong>Join!</strong> button or type the command <code>/tour join</code> in the room's chat. You can check if your team is legal for the tournament by clicking the <strong>Validate</strong> button once you've joined and selected a team. To battle your opponent in the tournament, click the <strong>Ready!</strong> button when it appears. There are two different types of room tournaments: elimination (if a user loses more than a certain number of times, they are eliminated) and round robin (all users play against each other, and the user with the most wins is the winner).": "Um einem Raum-Turnier beizutreten, klicke auf <strong>Join!</strong> oder gebe den Befehl <code>/tour join</code> in den Chat ein. Du kannst überprüfen, ob dein Team für das Turnier legal ist, indem du auf <strong>Validate</strong> klickst, nachdem du dem Turnier beigetreten bist und ein Team ausgewählt hast. Um deinen Gegner im Turnier herauszufordern, klicke auf <strong>Ready!</strong>, sobald es erscheint. Es gibt zwei verschiedene Arten von Raum-Turnieren: Elimination (falls ein Nutzer mehr als eine bestimmte Anzahl an Spielen verliert, ist er draußen) und Round Robin (jeder spielt gegen jeden und der Nutzer mit den meisten Siegen am Ende gewinnt das Turnier).",
 		"Frequently Asked Questions": "Häufig gestellte Fragen",
 
+		"Invalid room.": "Ungültiger Raum.",
+
 		"pages/faq": "pages/faq",
 		"pages/ladderhelp": "pages/ladderhelp-de",
 		"pages/rng": "pages/rng",
 		"pages/staff": "pages/staff-de",
 
-		"- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.": "",
-		"- We log IPs to enforce bans and mutes.": "",
-		"- We use cookies to save your login info and teams, and for Google Analytics and AdSense.": "",
+		"- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.": "Wir speichern die Inhalte privater Nachrichten, damit du diese nötigenfalls melden kannst - das Staff-Team kann diese ohne Erlaubnis nicht einsehen, es sei denn, es gilt, ein Gesetz zu vollstrecken.",
+		"- We log IPs to enforce bans and mutes.": "Wir registrieren IP-Adressen, um Verbannungen und Stummschaltungen zu vollstrecken.",
+		"- We use cookies to save your login info and teams, and for Google Analytics and AdSense.": "Wir nutzen Cookies, um sowohl deine Login-Daten und Teams zu sichern als auch für Google Analytics and AdSense.",
 		'- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>': '',
 	},
 };

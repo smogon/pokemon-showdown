@@ -7,7 +7,7 @@ interface SpeciesAbility {
 	S?: string;
 }
 
-type SpeciesTag = "Mythical" | "Restricted Legendary" | "Sub-Legendary";
+type SpeciesTag = "Mythical" | "Restricted Legendary" | "Sub-Legendary" | "Paradox";
 
 export interface SpeciesData extends Partial<Species> {
 	name: string;
@@ -24,18 +24,10 @@ export interface SpeciesData extends Partial<Species> {
 export type ModdedSpeciesData = SpeciesData | Partial<Omit<SpeciesData, 'name'>> & {inherit: true};
 
 export interface SpeciesFormatsData {
-	comboMoves?: readonly string[];
 	doublesTier?: TierTypes.Doubles | TierTypes.Other;
-	essentialMove?: string;
-	exclusiveMoves?: readonly string[];
 	gmaxUnreleased?: boolean;
 	isNonstandard?: Nonstandard | null;
 	natDexTier?: TierTypes.Singles | TierTypes.Other;
-	randomBattleMoves?: readonly string[];
-	randomBattleLevel?: number;
-	randomDoubleBattleMoves?: readonly string[];
-	randomDoubleBattleLevel?: number;
-	randomBattleNoDynamaxMoves?: readonly string[];
 	tier?: TierTypes.Singles | TierTypes.Other;
 }
 
@@ -226,14 +218,6 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * National Dex Tier. The Pokemon's location in the Smogon National Dex tier system.
 	 */
 	readonly natDexTier: TierTypes.Singles | TierTypes.Other;
-	declare readonly randomBattleMoves?: readonly ID[];
-	declare readonly randomBattleLevel?: number;
-	declare readonly randomDoubleBattleMoves?: readonly ID[];
-	declare readonly randomDoubleBattleLevel?: number;
-	declare readonly randomBattleNoDynamaxMoves?: readonly ID[];
-	declare readonly exclusiveMoves?: readonly ID[];
-	declare readonly comboMoves?: readonly ID[];
-	declare readonly essentialMove?: ID;
 
 	constructor(data: AnyObject) {
 		super(data);
@@ -292,7 +276,9 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		if (Array.isArray(data.changesFrom)) this.changesFrom = data.changesFrom[0];
 
 		if (!this.gen && this.num >= 1) {
-			if (this.num >= 810 || ['Gmax', 'Galar', 'Galar-Zen', 'Hisui'].includes(this.forme)) {
+			if (this.num >= 906 || this.forme.includes('Paldea')) {
+				this.gen = 9;
+			} else if (this.num >= 810 || ['Gmax', 'Galar', 'Galar-Zen', 'Hisui'].includes(this.forme)) {
 				this.gen = 8;
 			} else if (this.num >= 722 || this.forme.startsWith('Alola') || this.forme === 'Starter') {
 				this.gen = 7;
@@ -406,6 +392,8 @@ export class DexSpecies {
 			const formeNames: {[k: string]: string[]} = {
 				alola: ['a', 'alola', 'alolan'],
 				galar: ['g', 'galar', 'galarian'],
+				hisui: ['h', 'hisui', 'hisuian'],
+				paldea: ['p', 'paldea', 'paldean'],
 				mega: ['m', 'mega'],
 				primal: ['p', 'primal'],
 			};
@@ -498,7 +486,10 @@ export class DexSpecies {
 			}
 			species.nfe = species.evos.some(evo => {
 				const evoSpecies = this.get(evo);
-				return !evoSpecies.isNonstandard || evoSpecies.isNonstandard === species?.isNonstandard;
+				return !evoSpecies.isNonstandard ||
+					evoSpecies.isNonstandard === species?.isNonstandard ||
+					// Pokemon with Hisui evolutions
+					evoSpecies.isNonstandard === "Unobtainable";
 			});
 			species.canHatch = species.canHatch ||
 				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) && !species.prevo && species.name !== 'Manaphy');

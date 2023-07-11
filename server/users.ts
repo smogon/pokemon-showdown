@@ -36,6 +36,7 @@ const THROTTLE_DELAY_PUBLIC_BOT = 25;
 const THROTTLE_BUFFER_LIMIT = 6;
 const THROTTLE_MULTILINE_WARN = 3;
 const THROTTLE_MULTILINE_WARN_STAFF = 6;
+const THROTTLE_MULTILINE_WARN_ADMIN = 25;
 
 const NAMECHANGE_THROTTLE = 2 * 60 * 1000; // 2 minutes
 const NAMES_PER_THROTTLE = 3;
@@ -554,11 +555,23 @@ export class User extends Chat.MessageContext {
 		const status = statusMessage + (this.userMessage || '');
 		return status;
 	}
-	can(permission: RoomPermission, target: User | null, room: BasicRoom, cmd?: string): boolean;
+	can(permission: RoomPermission, target: User | null, room: BasicRoom, cmd?: string, cmdToken?: string): boolean;
 	can(permission: GlobalPermission, target?: User | null): boolean;
-	can(permission: RoomPermission & GlobalPermission, target: User | null, room?: BasicRoom | null, cmd?: string): boolean;
-	can(permission: string, target: User | null = null, room: BasicRoom | null = null, cmd?: string): boolean {
-		return Auth.hasPermission(this, permission, target, room, cmd);
+	can(
+		permission: RoomPermission & GlobalPermission,
+		target: User | null,
+		room?: BasicRoom | null,
+		cmd?: string,
+		cmdToken?: string,
+	): boolean;
+	can(
+		permission: string,
+		target: User | null = null,
+		room: BasicRoom | null = null,
+		cmd?: string,
+		cmdToken?: string,
+	): boolean {
+		return Auth.hasPermission(this, permission, target, room, cmd, cmdToken);
 	}
 	/**
 	 * Special permission check for system operators
@@ -824,6 +837,7 @@ export class User extends Chat.MessageContext {
 
 		this.isPublicBot = Users.isPublicBot(userid);
 
+		Chat.runHandlers('onRename', this, this.id, userid);
 		let user = users.get(userid);
 		const possibleUser = Users.get(userid);
 		if (possibleUser?.namelocked) {
@@ -1690,8 +1704,11 @@ function socketReceive(worker: ProcessManager.StreamWorker, workerid: number, so
 	const lines = message.split('\n');
 	if (!lines[lines.length - 1]) lines.pop();
 	// eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-	const maxLineCount = (user.isStaff || (room && room.auth.isStaff(user.id))) ?
-		THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN;
+	const maxLineCount = (
+		user.can('bypassall') ? THROTTLE_MULTILINE_WARN_ADMIN :
+		(user.isStaff || (room && room.auth.isStaff(user.id))) ?
+			THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN
+	);
 	if (lines.length > maxLineCount && !Config.nothrottle) {
 		connection.popup(`You're sending too many lines at once. Try using a paste service like [[Pastebin]].`);
 		return;

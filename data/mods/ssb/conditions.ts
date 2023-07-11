@@ -2051,7 +2051,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				this.boost({atk: 1}, pokemon);
 			}
 		},
-		onBoost(boost, target, source, effect) {
+		onTryBoost(boost, target, source, effect) {
 			if (target.set.shiny) return;
 			if (source && target === source) return;
 			if (target.species.id !== 'miniorblue') return;
@@ -2284,7 +2284,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	mist: {
 		name: "Mist",
 		duration: 5,
-		onBoost(boost, target, source, effect) {
+		onTryBoost(boost, target, source, effect) {
 			if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
 			if (source && target !== source) {
 				let showMsg = false;

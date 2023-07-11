@@ -2822,9 +2822,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 15,
 		priority: 0,
-		flags: {},
+		flags: {futuremove: 1},
 		ignoreImmunity: true,
-		isFutureMove: true,
 		onTry(source, target) {
 			this.attrLastMove('[still]');
 			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
@@ -2841,10 +2840,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					basePower: 110,
 					category: "Special",
 					priority: 0,
-					flags: {},
+					flags: {futuremove: 1},
 					ignoreImmunity: false,
 					effectType: 'Move',
-					isFutureMove: true,
 					type: 'Psychic',
 				},
 			});
@@ -5277,7 +5275,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// genderless infatuation for nui's Condition Override
 	attract: {
 		inherit: true,
-		volatileStatus: 'attract',
 		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon, source, effect) {
@@ -5325,6 +5322,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Attract', '[silent]');
 			},
+		},
+		onTryImmunity(target, source) {
+			if (source.hasAbility('conditionoverride')) return true;
+			return (target.gender === 'M' && source.gender === 'F') || (target.gender === 'F' && source.gender === 'M');
 		},
 	},
 

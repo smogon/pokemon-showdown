@@ -3,9 +3,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		priority: 0,
 		accuracy: true,
-		ignoreEvasion: true,
 		condition: {
-			duration: 2,
 			durationCallback(target, source, effect) {
 				return this.random(3, 5);
 			},
@@ -163,18 +161,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		condition: {
 			// Rage lock
-			duration: 255,
 			onStart(target, source, effect) {
 				this.effectState.move = 'rage';
 			},
 			onLockMove: 'rage',
-			onTryHit(target, source, move) {
-				if (target.boosts.atk < 6 && move.id === 'disable') {
-					this.boost({atk: 1});
-				}
-			},
 			onHit(target, source, move) {
-				if (target.boosts.atk < 6 && move.category !== 'Status') {
+				if (target.boosts.atk < 6 && (move.category !== 'Status' || move.id === 'disable')) {
 					this.boost({atk: 1});
 				}
 			},
@@ -253,11 +245,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				if (move.volatileStatus && target === source) return;
 				let damage = this.actions.getDamage(source, target, move);
-				if (!damage) return null;
+				if (damage && damage > target.volatiles['substitute'].hp) {
+					damage = target.volatiles['substitute'].hp;
+				}
+				if (!damage && damage !== 0) return null;
 				damage = this.runEvent('SubDamage', target, source, move, damage);
-				if (!damage) return damage;
+				if (!damage && damage !== 0) return damage;
 				target.volatiles['substitute'].hp -= damage;
-				source.lastDamage = damage;
 				this.lastDamage = damage;
 				if (target.volatiles['substitute'].hp <= 0) {
 					this.debug('Substitute broke');
@@ -269,7 +263,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// Drain/recoil does not happen if the substitute breaks
 				if (target.volatiles['substitute']) {
 					if (move.recoil) {
-						this.damage(Math.round(damage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
+						this.damage(this.clampIntRange(Math.floor(damage * move.recoil[0] / move.recoil[1]), 1), source, target, 'recoil');
 					}
 				}
 				this.runEvent('AfterSubDamage', target, source, move, damage);

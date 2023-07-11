@@ -1,7 +1,7 @@
 /**
  * Neural net chat'filters'.
  * These are in a separate file so that they don't crash the other filters.
- * (issues with globals, etc)
+	 * (issues with globals, etc)
  * We use Google's Perspective API to classify messages.
  * @see https://perspectiveapi.com/
  * by Mia.
@@ -92,6 +92,18 @@ export const reviews: Record<string, ReviewRequest[]> = (() => {
 	}
 })();
 
+/**
+ * Non-core settings - ones that shouldn't be included in /am backups/backup rollbacks/etc.
+ * They should stay unless changed via specific command.
+ */
+export const metadata: MetaSettings = (() => {
+	try {
+		return JSON.parse(FS('config/chat-plugins/artemis-metadata.json').readSync());
+	} catch {
+		return {};
+	}
+})();
+
 interface PunishmentSettings {
 	count?: number;
 	certainty?: number;
@@ -116,6 +128,11 @@ interface FilterSettings {
 	punishments: PunishmentSettings[];
 	/** Should it make recommendations, or punish? */
 	recommendOnly?: boolean;
+}
+
+interface MetaSettings {
+	/** {[userid]: entries to ignore[] OR ignore entries after date [string]} */
+	modlogIgnores?: Record<string, string | number[]>;
 }
 
 interface ReviewRequest {
@@ -209,6 +226,7 @@ export async function searchModlog(
 	}
 	const modlog = await Rooms.Modlog.search('global', search);
 	if (!modlog) return 0;
+	const ignores = metadata.modlogIgnores?.[query.user];
 	if (userObj) {
 		const validTypes = Array.from(Punishments.punishmentTypes.keys());
 		const cacheEntry: Record<string, number> = {};
@@ -216,6 +234,16 @@ export async function searchModlog(
 			if ((Date.now() - entry.time) > MAX_MODLOG_TIME) continue;
 			if (!validTypes.some(k => entry.action.endsWith(k))) continue;
 			if (!cacheEntry[entry.action]) cacheEntry[entry.action] = 0;
+			if (ignores) {
+				if (
+					typeof ignores === 'string' &&
+					new Date(ignores).getTime() < new Date(entry.time).getTime()
+				) {
+					continue;
+				} else if (Array.isArray(ignores) && ignores.includes(entry.entryID)) {
+					continue;
+				}
+			}
 			cacheEntry[entry.action]++;
 		}
 		punishmentCache.set(userObj, cacheEntry);
@@ -389,7 +417,7 @@ export async function lock(user: User, room: GameRoom, reason: string, isWeek?: 
 		['#artemis'],
 	);
 	globalModlog(`${isWeek ? 'WEEK' : ''}LOCK`, user, reason, room);
-	addGlobalModAction(`${user.name} was locked from talking by Artemis ${isWeek ? 'for a week ' : ""}(${reason})`, room);
+	addGlobalModAction(`${user.name} was locked from talking by Artemis${isWeek ? ' for a week. ' : ". "}(${reason})`, room);
 	if (affected.length > 1) {
 		Rooms.get('staff')?.add(
 			`|c|&|/log (${user.id}'s ` +
@@ -398,8 +426,8 @@ export async function lock(user: User, room: GameRoom, reason: string, isWeek?: 
 	}
 	room.add(`|c|&|/raw ${DISCLAIMER}`).update();
 	room.hideText(affected.map(f => f.id), undefined, true);
-	let message = `|popup||html|${user.name} has locked you from talking in chats, battles, and PMing regular users`;
-	message += ` ${isWeek ? "for two days" : "for a week"}`;
+	let message = `|popup||html|Artemis has locked you from talking in chats, battles, and PMing regular users`;
+	message += ` ${!isWeek ? "for two days" : "for a week"}`;
 	message += `\n\nReason: ${reason}`;
 	let appeal = '';
 	if (Chat.pages.help) {
@@ -539,7 +567,8 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 
 	const roomid = room.roomid;
 	void (async () => {
-		message = message.replace(pokemonRegex, '[Pokemon]');
+		message = message.trim();
+		message = message.replace(pokemonRegex, '[[Pokemon]]');
 
 		for (const k in settings.replacements) {
 			message = message.replace(new RegExp(k, 'gi'), settings.replacements[k]);
@@ -657,6 +686,10 @@ function saveReviews() {
 	FS(`config/chat-plugins/artemis-reviews.json`).writeUpdate(() => JSON.stringify(reviews));
 }
 
+function saveMetadata() {
+	FS('config/chat-plugins/artemis-metadata.json').writeUpdate(() => JSON.stringify(metadata));
+}
+
 export const pokemonRegex = new RegExp( // we want only base formes and existent stuff
 	`\\b(${Dex.species.all().filter(s => !s.forme && s.num > 0).map(f => f.id).join('|')})\\b`, 'gi'
 );
@@ -703,14 +736,17 @@ export const commands: Chat.ChatCommands = {
 		},
 		async test(target, room, user) {
 			checkAccess(this);
-			const text = target.trim();
+			const text = target;
 			if (!text) return this.parse(`/help abusemonitor`);
 			this.runBroadcast();
 			let response = await classifier.classify(text);
 			if (!response) response = {};
+			for (const k in settings.replacements) {
+				target = target.replace(new RegExp(k, 'gi'), settings.replacements[k]);
+			}
 			// intentionally hardcoded to staff to ensure threshold is never altered.
 			const {score, flags} = makeScore('staff', response);
-			let buf = `<strong>Score for "${text}":</strong> ${score}<br />`;
+			let buf = `<strong>Score for "${text}"${target === text ? '' : ` (alt: "${target}")`}:</strong> ${score}<br />`;
 			buf += `<strong>Flags:</strong> ${flags.join(', ')}<br />`;
 			const punishments: {punishment: PunishmentSettings, desc: string[], index: number}[] = [];
 			for (const [i, p] of settings.punishments.entries()) {
@@ -1642,6 +1678,83 @@ export const commands: Chat.ChatCommands = {
 			this.globalModlog(`ABUSEMONITOR REMOVEREPLACEMENT`, null, `${target} (=> ${replaceTo})`);
 			this.refreshPage('abusemonitor-settings');
 		},
+		edithistory(target, room, user) {
+			this.checkCan('globalban');
+			target = toID(target);
+			if (!target) {
+				return this.parse(`/help abusemonitor`);
+			}
+			return this.parse(`/j view-abusemonitor-edithistory-${target}`);
+		},
+		ignoremodlog: {
+			add(target, room, user) {
+				this.checkCan('globalban');
+				let targetUser: string;
+				[targetUser, target] = this.splitOne(target).map(f => f.trim());
+				targetUser = toID(targetUser);
+				if (!targetUser || !target) {
+					return this.popupReply(
+						`Must specify a user and a target date (or modlog entry number).`
+					);
+				}
+				if (!metadata.modlogIgnores) metadata.modlogIgnores = {};
+				const num = Number(target);
+				if (isNaN(num)) {
+					if (!/[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(target)) {
+						return this.errorReply(`Invalid date provided. Must be in YYYY-MM-DD format.`);
+					}
+					metadata.modlogIgnores[targetUser] = target;
+					target = 'before and including ' + target;
+				} else {
+					let ignores = metadata.modlogIgnores[targetUser];
+					if (!Array.isArray(ignores)) {
+						metadata.modlogIgnores[targetUser] = ignores = [];
+					}
+					if (ignores.includes(num)) {
+						return this.errorReply(`That modlog entry is already ignored.`);
+					}
+					ignores.push(num);
+					target = `entry #${target}`;
+				}
+				this.globalModlog(`ABUSEMONITOR MODLOGIGNORE`, targetUser, target);
+				saveMetadata();
+				this.refreshPage(`abusemonitor-edithistory-${targetUser}`);
+			},
+			remove(target, room, user) {
+				this.checkCan('globalban');
+				let [targetUser, rawNum] = this.splitOne(target).map(f => f.trim());
+				targetUser = toID(targetUser);
+				const num = Number(rawNum);
+				if (!targetUser || !rawNum) {
+					return this.popupReply(
+						`Specify a target user and a target (either a modlog entry # or a date).`
+					);
+				}
+				const entry = metadata.modlogIgnores?.[targetUser];
+				if (!entry) {
+					return this.errorReply(`That user has no ignored modlog entries registered.`);
+				}
+				if (typeof entry === 'string') {
+					rawNum = entry;
+					delete metadata.modlogIgnores![targetUser];
+				} else {
+					if (isNaN(num)) {
+						return this.errorReply(`Invalid modlog entry number: ${num}`);
+					}
+					const idx = entry.indexOf(num);
+					if (idx === -1) {
+						return this.errorReply(`That modlog entry is not ignored for the user ${targetUser}.`);
+					}
+					entry.splice(idx, 1);
+					if (!entry.length) {
+						delete metadata.modlogIgnores![targetUser];
+					}
+				}
+				saveMetadata();
+				this.globalModlog(`ABUSEMONITOR REMOVEMODLOGIGNORE`, targetUser, rawNum);
+				this.refreshPage(`abusemonitor-edithistory-${targetUser}`);
+			},
+		},
 	},
 	abusemonitorhelp() {
 		return this.sendReplyBox([
@@ -1656,6 +1769,7 @@ export const commands: Chat.ChatCommands = {
 			`/am respawn - Respawns abuse monitor processes. Requires: whitelist &`,
 			`/am logs [count][, userid] - View logs of recent matches by the abuse monitor. `,
 			`If a userid is given, searches only logs from that userid. Requires: whitelist &`,
+			`/am edithistory [user] - Clear specific abuse monitor hit(s) for a user. Requires: @ &`,
 			`/am userclear [user] - Clear all logged abuse monitor hits for a user. Requires: whitelist &`,
 			`/am deletelog [number] - Deletes a abuse monitor log matching the row ID [number] given. Requires: whitelist &`,
 			`/am editspecial [type], [percent], [score] - Sets a special case for the abuse monitor. Requires: whitelist &`,
@@ -2195,6 +2309,46 @@ export const pages: Chat.PageTable = {
 			buf += `<br />`;
 			buf += `<button class="button notifying" type="submit">Submit</button>`;
 			buf += `</form>`;
+			return buf;
+		},
+		async edithistory(query, user) {
+			this.checkCan('globalban');
+			const targetUser = toID(query[0]);
+			if (!targetUser) {
+				return this.errorReply(`Specify a user.`);
+			}
+			this.title = `[Artemis History] ${targetUser}`;
+			let buf = `<div class="pad"><h2>Artemis modlog handling for ${targetUser}</h2><hr />`;
+			const modlogEntries = await Rooms.Modlog.search('global', {
+				user: [{search: targetUser, isExact: true}],
+				note: [],
+				ip: [],
+				action: [],
+				actionTaker: [],
+			}, 100, true);
+			if (!modlogEntries?.results.length) {
+				buf += `<div class="message-error">No entries found.</div>`;
+				return buf;
+			}
+			buf += `<div class="ladder pad"><table><tr><th>Entry</th><th>Options</th></tr><tr>`;
+			buf += modlogEntries.results.map(result => {
+				const day = Chat.toTimestamp(new Date(result.time)).split(' ')[0];
+				let innerBuf = Utils.html`<td><small>#${result.entryID}</small> [${day}] `;
+				innerBuf += `${result.action}${result.note ? ` (${result.note.trim()})` : ``}</td>`;
+				const existingIgnore = metadata.modlogIgnores?.[targetUser];
+				const todayMatch = existingIgnore === day;
+				const entryMatch = (
+					(Array.isArray(existingIgnore) && existingIgnore?.includes(result.entryID))
+				);
+				let cmd = entryMatch ? `am ignoremodlog remove` : `am ignoremodlog add`;
+				innerBuf += `<td><button class="button" name="send" value="/${cmd} ${targetUser},${result.entryID}">`;
+				innerBuf += `(${entryMatch ? 'Unignore' : 'Ignore'} specific)</button> `;
+				cmd = todayMatch ? `am ignoremodlog remove` : `am ignoremodlog add`;
+				innerBuf += `<button class="button" name="send" value="/${cmd} ${targetUser},${day}">`;
+				innerBuf += `(${todayMatch ? 'Unignore' : 'Ignore'} up to this date)</button></td>`;
+				return innerBuf;
+			}).join('</tr><tr>');
+			buf += `</tr></table></div>`;
 			return buf;
 		},
 	},

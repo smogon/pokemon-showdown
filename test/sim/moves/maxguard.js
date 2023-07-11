@@ -11,7 +11,7 @@ describe('Max Guard', function () {
 	});
 
 	it('should be disallowed by Taunt', function () {
-		battle = common.createBattle([[
+		battle = common.gen(8).createBattle([[
 			{species: "Feebas", moves: ['splash', 'tackle']},
 		], [
 			{species: "Wynaut", moves: ['taunt', 'splash']},
@@ -21,7 +21,7 @@ describe('Max Guard', function () {
 	});
 
 	it('should allow Feint to damage the user, but not break the protection effect', function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'minun', moves: ['sleeptalk']},
 			{species: 'plusle', moves: ['sleeptalk']},
 		], [
@@ -35,7 +35,7 @@ describe('Max Guard', function () {
 	});
 
 	it('should block certain moves that bypass Protect', function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'sunflora', item: 'sitrusberry', ability: 'minus', moves: ['sleeptalk']},
 			{species: 'plusle', ability: 'plus', moves: ['magneticflux', 'gearup']},
 		], [

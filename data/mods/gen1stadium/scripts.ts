@@ -1,6 +1,13 @@
 /**
  * Stadium mechanics inherit from gen 1 mechanics, but fixes some stuff.
  */
+
+const SKIP_LASTDAMAGE = new Set([
+	'confuseray', 'conversion', 'counter', 'focusenergy', 'glare', 'haze', 'leechseed', 'lightscreen',
+	'mimic', 'mist', 'poisongas', 'poisonpowder', 'recover', 'reflect', 'rest', 'softboiled',
+	'splash', 'stunspore', 'substitute', 'supersonic', 'teleport', 'thunderwave', 'toxic', 'transform',
+]);
+
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen1',
 	gen: 1,
@@ -82,7 +89,6 @@ export const Scripts: ModdedBattleScriptsData = {
 					return;
 				}
 			}
-			pokemon.lastDamage = 0;
 			let lockedMove = this.battle.runEvent('LockMove', pokemon);
 			if (lockedMove === true) lockedMove = false;
 			if (
@@ -90,8 +96,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				(!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)
 			) {
 				pokemon.deductPP(move, null, target);
-				pokemon.side.lastMove = move;
-				pokemon.lastMove = move;
 			} else {
 				sourceEffect = move;
 			}
@@ -126,13 +130,13 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (move.id !== 'mirrormove' ||
 					(!pokemon.side.foe.active[0]?.lastMove || pokemon.side.foe.active[0].lastMove?.id === 'mirrormove')) {
 					// The move is our 'final' move (a failed Mirror Move, or any move that isn't Metronome or Mirror Move).
+					pokemon.side.lastMove = move;
+					pokemon.lastMove = move;
 					this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 
 					// If target fainted
 					if (target && target.hp <= 0) {
-						// We remove screens
-						target.side.removeSideCondition('reflect');
-						target.side.removeSideCondition('lightscreen');
+						delete pokemon.volatiles['partialtrappinglock'];
 					} else {
 						this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 					}
@@ -184,9 +188,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			let attrs = '';
 			if (pokemon.fainted) {
-				// Removing screens upon faint.
-				pokemon.side.removeSideCondition('reflect');
-				pokemon.side.removeSideCondition('lightscreen');
 				return false;
 			}
 
@@ -211,20 +212,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.add('-notarget');
 				return true;
 			}
-			damage = this.tryMoveHit(target, pokemon, move);
+			// Store 0 damage for last damage if the move is not in the array.
+			if (!SKIP_LASTDAMAGE.has(move.id)) this.battle.lastDamage = 0;
 
-			// Store 0 damage for last damage if move failed.
-			// This only happens on moves that don't deal damage but call GetDamageVarsForPlayerAttack (disassembly).
-			const neverDamageMoves = [
-				'conversion', 'haze', 'mist', 'focusenergy', 'confuseray', 'supersonic', 'transform', 'lightscreen', 'reflect', 'substitute', 'mimic', 'leechseed', 'splash', 'softboiled', 'recover', 'rest',
-			];
-			if (
-				!damage && damage !== 0 &&
-				(move.category !== 'Status' || (move.status && !['psn', 'tox', 'par'].includes(move.status))) &&
-				!neverDamageMoves.includes(move.id)
-			) {
-				this.battle.lastDamage = 0;
-			}
+			damage = this.tryMoveHit(target, pokemon, move);
 
 			// Go ahead with results of the used move.
 			if (damage === false) {
@@ -246,6 +237,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (hitResult === false) {
 				this.battle.attrLastMove('[miss]');
 				this.battle.add('-miss', pokemon);
+				if (move.selfdestruct) {
+					this.battle.faint(pokemon, pokemon, move);
+				}
 				return false;
 			}
 
@@ -308,17 +302,17 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.attrLastMove('[miss]');
 				this.battle.add('-miss', pokemon);
 				damage = false;
+				this.battle.lastDamage = 0;
 			}
 
 			// If damage is 0 and not false it means it didn't miss, let's calc.
 			if (damage !== false) {
-				pokemon.lastDamage = 0;
 				if (move.multihit) {
 					let hits = move.multihit;
 					if (Array.isArray(hits)) {
 						// Yes, it's hardcoded... meh
 						if (hits[0] === 2 && hits[1] === 5) {
-							hits = this.battle.sample([2, 2, 3, 3, 4, 5]);
+							hits = this.battle.sample([2, 2, 2, 3, 3, 3, 4, 5]);
 						} else {
 							hits = this.battle.random(hits[0], hits[1] + 1);
 						}
@@ -389,6 +383,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				const targetHadSub = !!target.volatiles['substitute'];
 				if (targetHadSub && moveData.volatileStatus && moveData.volatileStatus === 'partiallytrapped') {
 					target.addVolatile(moveData.volatileStatus, pokemon, move);
+					if (!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].duration > 1) {
+						target.volatiles[moveData.volatileStatus].duration = 2;
+					}
 				}
 
 				if (!hitResult) {
@@ -425,6 +422,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				let didSomething = false;
 
 				damage = this.getDamage(pokemon, target, moveData);
+				if (damage && damage > target.hp) {
+					damage = target.hp;
+				}
 				if ((damage || damage === 0) && !target.fainted) {
 					damage = this.battle.damage(damage, target, pokemon, move);
 					if (!(damage || damage === 0)) return false;
@@ -499,11 +499,11 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Now we can save the partial trapping damage.
 			if (pokemon.volatiles['partialtrappinglock']) {
-				pokemon.volatiles['partialtrappinglock'].damage = pokemon.lastDamage;
+				pokemon.volatiles['partialtrappinglock'].damage = this.battle.lastDamage;
 			}
 
 			// Apply move secondaries.
-			if (moveData.secondaries) {
+			if (moveData.secondaries && target && target.hp > 0) {
 				for (const secondary of moveData.secondaries) {
 					// Multi-hit moves only roll for status once
 					if (!move.multihit || move.lastHit) {
@@ -511,7 +511,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						// In the game, this is checked and if true, the random number generator is not called.
 						// That means that a move that does not share the type of the target can status it.
 						// If a move that was not fire-type would exist on Gen 1, it could burn a Pokémon.
-						if (!(secondary.status && ['par', 'brn', 'frz'].includes(secondary.status) && target && target.hasType(move.type))) {
+						if (!(secondary.status && ['par', 'brn', 'frz'].includes(secondary.status) && target.hasType(move.type))) {
 							const effectChance = Math.floor((secondary.chance || 100) * 255 / 100);
 							if (typeof secondary.chance === 'undefined' || this.battle.randomChance(effectChance + 1, 256)) {
 								this.moveHit(target, pokemon, move, secondary, true, isSelf);
@@ -521,7 +521,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			if (move.selfSwitch && pokemon.hp) {
-				pokemon.switchFlag = move.selfSwitch;
+				pokemon.switchFlag = move.selfSwitch === true ? true : this.dex.toID(move.selfSwitch);
 			}
 
 			return damage;
@@ -549,7 +549,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Is it an OHKO move?
 			if (move.ohko) {
-				return target.maxhp;
+				return 65535;
 			}
 
 			// We edit the damage through move's damage callback if necessary.
@@ -708,7 +708,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			damage *= basePower;
 			damage *= attack;
 			damage = Math.floor(damage / defense);
-			damage = this.battle.clampIntRange(Math.floor(damage / 50), 1, 997);
+			damage = this.battle.clampIntRange(Math.floor(damage / 50), 0, 997);
 			damage += 2;
 
 			// STAB damage bonus, the "???" type never gets STAB
@@ -717,26 +717,26 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Type effectiveness.
-			// The order here is not correct, must change to check the move versus each type.
-			const totalTypeMod = this.dex.getEffectiveness(type, target);
-			// Super effective attack
-			if (totalTypeMod > 0) {
-				if (!suppressMessages) this.battle.add('-supereffective', target);
-				damage *= 20;
-				damage = Math.floor(damage / 10);
-				if (totalTypeMod >= 2) {
+			// In Gen 1, type effectiveness is applied against each of the target's types.
+			for (const targetType of target.types) {
+				const typeMod = this.battle.dex.getEffectiveness(type, targetType);
+				if (typeMod > 0) {
+					// Super effective against targetType
 					damage *= 20;
 					damage = Math.floor(damage / 10);
 				}
-			}
-			if (totalTypeMod < 0) {
-				if (!suppressMessages) this.battle.add('-resisted', target);
-				damage *= 5;
-				damage = Math.floor(damage / 10);
-				if (totalTypeMod <= -2) {
+				if (typeMod < 0) {
+					// Not very effective against targetType
 					damage *= 5;
 					damage = Math.floor(damage / 10);
 				}
+			}
+			const totalTypeMod = target.runEffectiveness(move);
+			if (totalTypeMod > 0) {
+				if (!suppressMessages) this.battle.add('-supereffective', target);
+			}
+			if (totalTypeMod < 0) {
+				if (!suppressMessages) this.battle.add('-resisted', target);
 			}
 
 			// If damage becomes 0, the move is made to miss.
@@ -747,10 +747,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (damage > 1) {
 				damage *= this.battle.random(217, 256);
 				damage = Math.floor(damage / 255);
-				if (damage > target.hp && !target.volatiles['substitute']) damage = target.hp;
-				if (target.volatiles['substitute'] && damage > target.volatiles['substitute'].hp) {
-					damage = target.volatiles['substitute'].hp;
-				}
 			}
 
 			// We are done, this is the final damage.
