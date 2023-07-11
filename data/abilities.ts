@@ -3943,15 +3943,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.add('-end', pokemon, 'Slow Start', '[silent]');
 		},
 		condition: {
-			duration: 5,
+			duration: 3,
 			onResidualOrder: 28,
 			onResidualSubOrder: 2,
 			onStart(target) {
 				this.add('-start', target, 'ability: Slow Start');
-			},
-			onModifyAtkPriority: 5,
-			onModifyAtk(atk, pokemon) {
-				return this.chainModify(0.5);
 			},
 			onModifySpe(spe, pokemon) {
 				return this.chainModify(0.5);
