@@ -333,7 +333,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	strikevest: {
 		name: "Strike Vest",
-		spritenum: 749,
+		spritenum: 581,
 		fling: {
 			basePower: 80,
 		},
@@ -348,7 +348,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				}
 			}
 		},
-		num: 640,
+		num: 4000,
 		gen: 6,
 	},
 	audinite: {
@@ -544,10 +544,10 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 281,
 		gen: 4,
 	},
-	blastoisinite: {
-		name: "Blastoisinite",
+	blastoisinitex: {
+		name: "Blastoisinite-X",
 		spritenum: 583,
-		megaStone: "Blastoise-Mega",
+		megaStone: "Blastoise-Mega-X",
 		megaEvolves: "Blastoise",
 		itemUser: ["Blastoise"],
 		onTakeItem(item, source) {
@@ -555,6 +555,20 @@ export const Items: {[itemid: string]: ItemData} = {
 			return true;
 		},
 		num: 661,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	blastoisinitey: {
+		name: "Blastoisinite-Y",
+		spritenum: 583,
+		megaStone: "Blastoise-Mega-Y",
+		megaEvolves: "Blastoise",
+		itemUser: ["Blastoise"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6005,
 		gen: 6,
 		isNonstandard: "Past",
 	},
@@ -789,6 +803,20 @@ export const Items: {[itemid: string]: ItemData} = {
 			return true;
 		},
 		num: 678,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	charizarditez: {
+		name: "Charizardite Z",
+		spritenum: 586,
+		megaStone: "Charizard-Mega-Z",
+		megaEvolves: "Charizard",
+		itemUser: ["Charizard"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6004,
 		gen: 6,
 		isNonstandard: "Past",
 	},
@@ -2173,10 +2201,10 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Past",
 	},
-	gengarite: {
-		name: "Gengarite",
+	gengaritex: {
+		name: "Gengarite-X",
 		spritenum: 588,
-		megaStone: "Gengar-Mega",
+		megaStone: "Gengar-Mega-X",
 		megaEvolves: "Gengar",
 		itemUser: ["Gengar"],
 		onTakeItem(item, source) {
@@ -2184,6 +2212,20 @@ export const Items: {[itemid: string]: ItemData} = {
 			return true;
 		},
 		num: 656,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	gengaritey: {
+		name: "Gengarite-Y",
+		spritenum: 588,
+		megaStone: "Gengar-Mega-Y",
+		megaEvolves: "Gengar",
+		itemUser: ["Gengar"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6003,
 		gen: 6,
 		isNonstandard: "Past",
 	},
@@ -6919,10 +6961,10 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 1123,
 		gen: 8,
 	},
-	venusaurite: {
-		name: "Venusaurite",
+	venusauritex: {
+		name: "Venusaurite-X",
 		spritenum: 608,
-		megaStone: "Venusaur-Mega",
+		megaStone: "Venusaur-Mega-X",
 		megaEvolves: "Venusaur",
 		itemUser: ["Venusaur"],
 		onTakeItem(item, source) {
@@ -6930,6 +6972,20 @@ export const Items: {[itemid: string]: ItemData} = {
 			return true;
 		},
 		num: 659,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	venusauritey: {
+		name: "Venusaurite-Y",
+		spritenum: 608,
+		megaStone: "Venusaur-Mega-Y",
+		megaEvolves: "Venusaur",
+		itemUser: ["Venusaur"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6006,
 		gen: 6,
 		isNonstandard: "Past",
 	},
@@ -7554,5 +7610,397 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: -2,
 		gen: 8,
 		isNonstandard: "CAP",
+	},
+	butterfrite: {
+		name: "Butterfrite",
+		spritenum: 584,
+		megaStone: "Butterfree-Mega",
+		megaEvolves: "Butterfree",
+		itemUser: ["Butterfree"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6002,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	machampite: {
+		name: "Machampite",
+		spritenum: 584,
+		megaStone: "Machamp-Mega",
+		megaEvolves: "Machamp",
+		itemUser: ["Machamp"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6001,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	kinglerite: {
+		name: "Kinglerite",
+		spritenum: 584,
+		megaStone: "Kingler-Mega",
+		megaEvolves: "Kingler",
+		itemUser: ["Kingler"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6000,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	laprasite: {
+		name: "Laprasite",
+		spritenum: 584,
+		megaStone: "Lapras-Mega",
+		megaEvolves: "Lapras",
+		itemUser: ["Lapras"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6007,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	snorlaxite: {
+		name: "Snorlaxite",
+		spritenum: 584,
+		megaStone: "Snorlax-Mega",
+		megaEvolves: "Snorlax",
+		itemUser: ["Snorlax"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6008,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	rayquazite: {
+		name: "Rayquazite",
+		spritenum: 584,
+		megaStone: "Rayquaza-Mega",
+		megaEvolves: "Rayquaza",
+		itemUser: ["Rayquaza"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6009,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	garbodorite: {
+		name: "Garbodorite",
+		spritenum: 584,
+		megaStone: "Garbodor-Mega",
+		megaEvolves: "Garbodor",
+		itemUser: ["Garbodor"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6010,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	melmetalite: {
+		name: "Melmetalite",
+		spritenum: 584,
+		megaStone: "Melmetal-Mega",
+		megaEvolves: "Melmetal",
+		itemUser: ["Melmetal"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6011,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	rillaboomite: {
+		name: "Rillaboomite",
+		spritenum: 584,
+		megaStone: "Rillaboom-Mega",
+		megaEvolves: "Rillaboom",
+		itemUser: ["Rillaboom"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6012,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	cinderite: {
+		name: "Cinderite",
+		spritenum: 584,
+		megaStone: "Cinderace-Mega",
+		megaEvolves: "Cinderace",
+		itemUser: ["Cinderace"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6013,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	inteleonite: {
+		name: "Inteleonite",
+		spritenum: 584,
+		megaStone: "Inteleon-Mega",
+		megaEvolves: "Inteleon",
+		itemUser: ["Inteleon"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6014,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	corvite: {
+		name: "Corvite",
+		spritenum: 584,
+		megaStone: "Corviknight-Mega",
+		megaEvolves: "Corviknight",
+		itemUser: ["Corviknight"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6015,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	orbeetite: {
+		name: "Orbeetite",
+		spritenum: 584,
+		megaStone: "Orbeetle-Mega",
+		megaEvolves: "Orbeetle",
+		itemUser: ["Orbeetle"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6016,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	drednite: {
+		name: "Drednite",
+		spritenum: 584,
+		megaStone: "Drednaw-Mega",
+		megaEvolves: "Drednaw",
+		itemUser: ["Drednaw"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6017,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	coalossite: {
+		name: "Coalossite",
+		spritenum: 584,
+		megaStone: "Coalossal-Mega",
+		megaEvolves: "Coalossal",
+		itemUser: ["Coalossal"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6018,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	flappite: {
+		name: "Flappite",
+		spritenum: 584,
+		megaStone: "Flapple-Mega",
+		megaEvolves: "Flapple",
+		itemUser: ["Flapple"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6019,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	appletite: {
+		name: "Appletite",
+		spritenum: 584,
+		megaStone: "Appletun-Mega",
+		megaEvolves: "Appletun",
+		itemUser: ["Appletun"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6020,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	sandacondite: {
+		name: "Sandacondite",
+		spritenum: 584,
+		megaStone: "Sandaconda-Mega",
+		megaEvolves: "Sandaconda",
+		itemUser: ["Sandaconda"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6021,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	toxtricitite: {
+		name: "Toxtricitite",
+		spritenum: 584,
+		megaStone: "Toxtricity-Mega",
+		megaEvolves: "Toxtricity",
+		itemUser: ["Toxtricity"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6022,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	toxtricititelowkey: {
+		name: "Toxtricitite-Low-Key",
+		spritenum: 584,
+		megaStone: "Toxtricity-Low-Key-Mega",
+		megaEvolves: "Toxtricity-Low-Key",
+		itemUser: ["Toxtricity-Low-Key"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6023,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	centiskite: {
+		name: "Centiskite",
+		spritenum: 584,
+		megaStone: "Centiskorch-Mega",
+		megaEvolves: "Centiskorch",
+		itemUser: ["Centiskorch"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6024,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	hatterite: {
+		name: "Hatterite",
+		spritenum: 584,
+		megaStone: "Hatterene-Mega",
+		megaEvolves: "Hatterene",
+		itemUser: ["Hatterene"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6025,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	grimmite: {
+		name: "Grimmite",
+		spritenum: 584,
+		megaStone: "Grimmsnarl-Mega",
+		megaEvolves: "Grimmsnarl",
+		itemUser: ["Grimmsnarl"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6026,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	alcremite: {
+		name: "Alcremite",
+		spritenum: 584,
+		megaStone: "Alcremie-Mega",
+		megaEvolves: "Alcremie",
+		itemUser: ["Alcremie"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6027,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	copperajite: {
+		name: "Copperajite",
+		spritenum: 584,
+		megaStone: "Copperajah-Mega",
+		megaEvolves: "Copperajah",
+		itemUser: ["Copperajah"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6028,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	duraludite: {
+		name: "Duraludite",
+		spritenum: 584,
+		megaStone: "Duraludon-Mega",
+		megaEvolves: "Duraludon",
+		itemUser: ["Duraludon"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6029,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	urshifite: {
+		name: "Urshifite",
+		spritenum: 584,
+		megaStone: "Urshifu-Mega",
+		megaEvolves: "Urshifu",
+		itemUser: ["Urshifu"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6030,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	urshifiterapidstrike: {
+		name: "Urshifite-Rapid-Strike",
+		spritenum: 584,
+		megaStone: "Urshifu-Rapid-Strike-Mega",
+		megaEvolves: "Urshifu-Rapid-Strike",
+		itemUser: ["Urshifu-Rapid-Strike"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 6031,
+		gen: 6,
+		isNonstandard: "Past",
 	},
 };
