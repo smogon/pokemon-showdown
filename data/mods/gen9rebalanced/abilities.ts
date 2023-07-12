@@ -1521,7 +1521,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (pokemon.volatiles['dynamax']) return;
 			// PLACEHOLDER
 			this.debug('Gorilla Tactics Atk Boost');
-			return this.chainModify(1.5);
+			return this.chainModify(1.3);
 		},
 		onDisableMove(pokemon) {
 			if (!pokemon.abilityState.choiceLock) return;
