@@ -12,7 +12,7 @@ describe('Chloroblast', function () {
 
 	it('should deal recoil damage to the user equal to half its max HP, rounded up', function () {
 		battle = common.createBattle([[
-			{species: "Electrode-Hisui", ability: 'noguard', moves: ['chloroblast']},
+			{species: "Electrode-Hisui", item: 'widelens', moves: ['chloroblast']},
 		], [
 			{species: "Blissey", moves: ['sleeptalk']},
 		]]);
@@ -21,7 +21,7 @@ describe('Chloroblast', function () {
 
 	it('should not deal recoil damage to the user if it misses or is blocked by Protect', function () {
 		battle = common.createBattle([[
-			{species: "Electrode-Hisui", ability: 'noguard', moves: ['chloroblast', 'protect']},
+			{species: "Electrode-Hisui", item: 'widelens', moves: ['chloroblast', 'protect']},
 		], [
 			{species: "Talonflame", ability: 'galewings', moves: ['fly', 'protect']},
 		]]);
