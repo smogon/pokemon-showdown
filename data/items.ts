@@ -156,7 +156,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 5,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Dragon",
 		},
 		onUpdate(pokemon) {
@@ -295,7 +295,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 13,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Ice",
 		},
 		onUpdate(pokemon) {
@@ -315,7 +315,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Assault Vest",
 		spritenum: 581,
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		onModifySpDPriority: 1,
 		onModifySpD(spd) {
@@ -356,7 +356,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 17,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Steel",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -577,7 +577,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 44,
 		isBerry: true,
 		naturalGift: {
-			basePower: 90,
+			basePower: 100,
 			type: "Fire",
 		},
 		onEat: false,
@@ -589,7 +589,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Blunder Policy",
 		spritenum: 716,
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		// Item activation located in scripts.js
 		num: 1121,
@@ -777,7 +777,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 62,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Rock",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -801,7 +801,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 63,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Fire",
 		},
 		onUpdate(pokemon) {
@@ -830,7 +830,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 65,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Water",
 		},
 		onUpdate(pokemon) {
@@ -851,7 +851,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 66,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Normal",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -890,7 +890,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Chipped Pot",
 		spritenum: 720,
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		num: 1254,
 		gen: 8,
@@ -971,7 +971,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 71,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Fighting",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -1035,7 +1035,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 76,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Flying",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -1059,7 +1059,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 78,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Dark",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -1083,7 +1083,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 81,
 		isBerry: true,
 		naturalGift: {
-			basePower: 90,
+			basePower: 100,
 			type: "Bug",
 		},
 		onEat: false,
@@ -1118,7 +1118,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Cracked Pot",
 		spritenum: 719,
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		num: 1253,
 		gen: 8,
@@ -1204,7 +1204,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Dawn Stone",
 		spritenum: 92,
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		num: 109,
 		gen: 4,
@@ -1466,7 +1466,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Dusk Stone",
 		spritenum: 116,
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		num: 108,
 		gen: 4,
@@ -1561,7 +1561,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Electirizer",
 		spritenum: 119,
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		num: 322,
 		gen: 4,
@@ -1785,7 +1785,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 140,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Bug",
 		},
 		onUpdate(pokemon) {
@@ -2306,7 +2306,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 178,
 		isBerry: true,
 		naturalGift: {
-			basePower: 90,
+			basePower: 100,
 			type: "Flying",
 		},
 		onEat: false,
@@ -2422,7 +2422,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 185,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Dragon",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -2483,7 +2483,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Heavy-Duty Boots",
 		spritenum: 715,
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		num: 1120,
 		gen: 8,
@@ -2518,7 +2518,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 213,
 		isBerry: true,
 		naturalGift: {
-			basePower: 90,
+			basePower: 100,
 			type: "Ground",
 		},
 		onEat: false,
@@ -2544,7 +2544,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 217,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Dark",
 		},
 		onUpdate(pokemon) {
@@ -2752,7 +2752,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 233,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Ghost",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -2776,7 +2776,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 234,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Poison",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -2821,7 +2821,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 235,
 		isBerry: true,
 		naturalGift: {
-			basePower: 90,
+			basePower: 100,
 			type: "Fighting",
 		},
 		onEat: false,
@@ -2994,7 +2994,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 244,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Fighting",
 		},
 		onUpdate(pokemon) {
@@ -3169,7 +3169,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 262,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Flying",
 		},
 		onAfterSetStatusPriority: -1,
@@ -3297,7 +3297,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Magmarizer",
 		spritenum: 272,
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		num: 323,
 		gen: 4,
@@ -3323,7 +3323,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 274,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Ghost",
 		},
 		onUpdate(pokemon) {
@@ -3349,7 +3349,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 275,
 		isBerry: true,
 		naturalGift: {
-			basePower: 90,
+			basePower: 100,
 			type: "Rock",
 		},
 		onEat: false,
@@ -3819,7 +3819,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 302,
 		isBerry: true,
 		naturalGift: {
-			basePower: 90,
+			basePower: 100,
 			type: "Water",
 		},
 		onEat: false,
@@ -3861,7 +3861,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 306,
 		isBerry: true,
 		naturalGift: {
-			basePower: 90,
+			basePower: 100,
 			type: "Dragon",
 		},
 		onEat: false,
@@ -3897,7 +3897,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 311,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Fire",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -3947,7 +3947,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 319,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Poison",
 		},
 		onUpdate(pokemon) {
@@ -3968,7 +3968,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Oval Stone",
 		spritenum: 321,
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		num: 110,
 		gen: 4,
@@ -3978,7 +3978,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 323,
 		isBerry: true,
 		naturalGift: {
-			basePower: 90,
+			basePower: 100,
 			type: "Steel",
 		},
 		onEat: false,
@@ -3999,7 +3999,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 329,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Water",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -4023,7 +4023,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 330,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Psychic",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -4047,7 +4047,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 333,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Electric",
 		},
 		onUpdate(pokemon) {
@@ -4068,7 +4068,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 334,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Ground",
 		},
 		onUpdate(pokemon) {
@@ -4143,7 +4143,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 337,
 		isBerry: true,
 		naturalGift: {
-			basePower: 90,
+			basePower: 100,
 			type: "Grass",
 		},
 		onEat: false,
@@ -4266,7 +4266,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 351,
 		isBerry: true,
 		naturalGift: {
-			basePower: 90,
+			basePower: 100,
 			type: "Ice",
 		},
 		onEat: false,
@@ -4410,7 +4410,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Protector",
 		spritenum: 367,
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		num: 321,
 		gen: 4,
@@ -4502,7 +4502,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 371,
 		isBerry: true,
 		naturalGift: {
-			basePower: 90,
+			basePower: 100,
 			type: "Poison",
 		},
 		onEat: false,
@@ -4528,7 +4528,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Quick Claw",
 		spritenum: 373,
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		num: 217,
 		gen: 2,
@@ -4554,7 +4554,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 375,
 		isBerry: true,
 		naturalGift: {
-			basePower: 90,
+			basePower: 100,
 			type: "Ghost",
 		},
 		onEat: false,
@@ -4576,7 +4576,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 381,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Grass",
 		},
 		onUpdate(pokemon) {
@@ -4596,7 +4596,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Razor Claw",
 		spritenum: 382,
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		onModifyCritRatio(critRatio) {
 			return critRatio + 1;
@@ -4633,7 +4633,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 384,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Steel",
 		},
 		onEat: false,
@@ -4715,7 +4715,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 409,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Grass",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -4871,7 +4871,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 603,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Fairy",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -4956,7 +4956,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Sachet",
 		spritenum: 691,
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		num: 647,
 		gen: 6,
@@ -4974,7 +4974,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Safety Goggles",
 		spritenum: 604,
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		onImmunity(type, pokemon) {
 			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
@@ -5149,7 +5149,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Shiny Stone",
 		spritenum: 439,
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		num: 107,
 		gen: 4,
@@ -5175,7 +5175,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 443,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Ground",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -5229,7 +5229,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 448,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Psychic",
 		},
 		onUpdate(pokemon) {
@@ -5394,7 +5394,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 462,
 		isBerry: true,
 		naturalGift: {
-			basePower: 90,
+			basePower: 100,
 			type: "Dark",
 		},
 		onEat: false,
@@ -5570,7 +5570,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Sticky Barb",
 		spritenum: 476,
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		onResidualOrder: 28,
 		onResidualSubOrder: 3,
@@ -5664,7 +5664,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 486,
 		isBerry: true,
 		naturalGift: {
-			basePower: 90,
+			basePower: 100,
 			type: "Psychic",
 		},
 		onEat: false,
@@ -5676,7 +5676,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 487,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Bug",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -5973,7 +5973,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tr16: {
 		name: "TR16",
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		spritenum: 731,
 		num: 1146,
@@ -5993,7 +5993,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tr18: {
 		name: "TR18",
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		spritenum: 727,
 		num: 1148,
@@ -6003,7 +6003,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tr19: {
 		name: "TR19",
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		spritenum: 721,
 		num: 1149,
@@ -6063,7 +6063,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tr25: {
 		name: "TR25",
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		spritenum: 734,
 		num: 1155,
@@ -6133,7 +6133,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tr32: {
 		name: "TR32",
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		spritenum: 737,
 		num: 1162,
@@ -6143,7 +6143,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tr33: {
 		name: "TR33",
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		spritenum: 728,
 		num: 1163,
@@ -6283,7 +6283,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tr47: {
 		name: "TR47",
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		spritenum: 736,
 		num: 1177,
@@ -6373,7 +6373,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tr56: {
 		name: "TR56",
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		spritenum: 722,
 		num: 1186,
@@ -6383,7 +6383,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tr57: {
 		name: "TR57",
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		spritenum: 724,
 		num: 1187,
@@ -6393,7 +6393,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tr58: {
 		name: "TR58",
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		spritenum: 737,
 		num: 1188,
@@ -6403,7 +6403,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tr59: {
 		name: "TR59",
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		spritenum: 732,
 		num: 1189,
@@ -6413,7 +6413,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tr60: {
 		name: "TR60",
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		spritenum: 727,
 		num: 1190,
@@ -6443,7 +6443,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tr63: {
 		name: "TR63",
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		spritenum: 726,
 		num: 1193,
@@ -6503,7 +6503,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tr69: {
 		name: "TR69",
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		spritenum: 734,
 		num: 1199,
@@ -6513,7 +6513,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tr70: {
 		name: "TR70",
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		spritenum: 729,
 		num: 1200,
@@ -6553,7 +6553,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tr74: {
 		name: "TR74",
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		spritenum: 729,
 		num: 1204,
@@ -6653,7 +6653,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tr84: {
 		name: "TR84",
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		spritenum: 731,
 		num: 1214,
@@ -6683,7 +6683,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tr87: {
 		name: "TR87",
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		spritenum: 725,
 		num: 1217,
@@ -6733,7 +6733,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tr92: {
 		name: "TR92",
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		spritenum: 738,
 		num: 1222,
@@ -6763,7 +6763,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tr95: {
 		name: "TR95",
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		spritenum: 737,
 		num: 1225,
@@ -6803,7 +6803,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	tr99: {
 		name: "TR99",
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		spritenum: 722,
 		num: 1229,
@@ -6915,7 +6915,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 526,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Electric",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -7017,7 +7017,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Weakness Policy",
 		spritenum: 609,
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (!move.damage && !move.damageCallback && target.getMoveHitData(move).typeMod > 0) {
@@ -7036,7 +7036,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 533,
 		isBerry: true,
 		naturalGift: {
-			basePower: 90,
+			basePower: 100,
 			type: "Electric",
 		},
 		onEat: false,
@@ -7048,7 +7048,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Whipped Dream",
 		spritenum: 692,
 		fling: {
-			basePower: 80,
+			basePower: 100,
 		},
 		num: 646,
 		gen: 6,
@@ -7113,7 +7113,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 538,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Rock",
 		},
 		onUpdate(pokemon) {
@@ -7154,7 +7154,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 567,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Ice",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -7233,8 +7233,8 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 319,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
-			type: "Poison",
+			basePower: 100,
+			type: "Normal",
 		},
 		onResidualOrder: 5,
 		onResidual(pokemon) {
@@ -7257,7 +7257,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 334,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Ground",
 		},
 		onUpdate(pokemon) {
@@ -7277,7 +7277,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 13,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Ice",
 		},
 		onUpdate(pokemon) {
@@ -7299,7 +7299,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 448,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Psychic",
 		},
 		onResidualOrder: 5,
@@ -7323,7 +7323,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 381,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Grass",
 		},
 		onUpdate(pokemon) {
@@ -7345,7 +7345,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 65,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Water",
 		},
 		onUpdate(pokemon) {
@@ -7367,7 +7367,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 262,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Flying",
 		},
 		onUpdate(pokemon) {
@@ -7388,7 +7388,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 244,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Fighting",
 		},
 		onUpdate(pokemon) {
@@ -7451,7 +7451,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 63,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Fire",
 		},
 		onUpdate(pokemon) {
@@ -7473,7 +7473,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		spritenum: 333,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 100,
 			type: "Electric",
 		},
 		onUpdate(pokemon) {
