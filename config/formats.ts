@@ -29,7 +29,7 @@ export const Formats: FormatList = [
 		name: "[BudpoW] Singles",
 		mod: 'gen9',
 		searchShow: true,
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 9', 'Max Move Count = 8', 'Max Level = 100', 'Default Level = 50','Team Preview'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 3', 'Max Move Count = 8', 'Max Level = 100', 'Default Level = 50','Team Preview',`VGC Timer`],
 	},
 
 	{
@@ -38,16 +38,22 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		searchShow: true,
 		gameType: 'doubles',
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 9', 'Max Move Count = 8', 'Max Level = 100', 'Default Level = 50','Team Preview'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 4', 'Max Move Count = 8', 'Max Level = 100', 'Default Level = 50','Team Preview',`VGC Timer`],
 	},
 	
 		{
 		name: "[BudpoW] MBSFB Cup",
 		mod: 'gen9',
 		searchShow: true,
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 20', 'Max Move Count = 8', 'Max Level = 100', 'Default Level = 50','Team Preview'],
+		ruleset: ['Exact HP Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 20', 'Max Move Count = 8', 'Max Level = 100', 'Default Level = 100','Team Preview'],
 	},
-	
+			{
+		name: "[BudpoW] the GGC",
+		mod: 'gen9',
+		searchShow: true,
+		ruleset: ['Exact HP Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 1', 'Max Move Count = 8', 'Max Level = 100', 'Default Level = 100','Team Preview'],
+	},
+
 	{
 		name: "[BudpoW] Singles Test",
 
