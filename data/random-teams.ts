@@ -1123,6 +1123,7 @@ export class RandomTeams {
 			if (species.id === 'bellibolt') return 'Electromorphosis';
 			if (species.id === 'armarouge') return 'Flash Fire';
 			if (species.baseSpecies === 'Maushold' && role === 'Doubles Support') return 'Friend Guard';
+			if (species.id === 'talonflame') return 'Gale Wings';
 			if (species.id === 'tropius') return 'Harvest';
 			if (species.id === 'blissey') return 'Healer';
 			if (species.id === 'dragonite' || species.id === 'lucario') return 'Inner Focus';
@@ -1537,7 +1538,7 @@ export class RandomTeams {
 				if (hp % 2 === 0) break;
 			} else {
 				// Maximize number of Stealth Rock switch-ins
-				if (srWeakness <= 0 || hp % (4 / srWeakness) > 0 || ['Leftovers', 'Life Orb'].includes(item)) break;
+				if (srWeakness <= 0 || hp % (4 / srWeakness) > 0 || ['Leftovers', 'Life Orb', 'Sitrus Berry'].includes(item)) break;
 			}
 			evs.hp -= 4;
 		}
