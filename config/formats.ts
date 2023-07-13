@@ -4164,8 +4164,8 @@ export const Formats: FormatList = [
 
 		mod: 'gen3',
 		searchShow: false,
-		ruleset: ['Standard'],
-		banlist: ['Uber', 'OU', 'UUBL', 'UU', 'NUBL', 'NU'],
+		ruleset: ['Standard', 'Baton Pass Clause'],
+		banlist: ['Uber', 'OU', 'UUBL', 'UU', 'NUBL', 'NU', 'PUBL'],
 	},
 	{
 		name: "[Gen 3] LC",
