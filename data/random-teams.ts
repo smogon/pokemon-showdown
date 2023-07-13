@@ -1149,8 +1149,13 @@ export class RandomTeams {
 			}
 		}
 
-		// If all abilities are culled, re-allow all
-		if (!abilityAllowed.length) abilityAllowed = abilityData;
+		// If all abilities are rejected, re-allow all abilities
+		if (!abilityAllowed.length) {
+			for (const ability of abilityData) {
+				if (ability.rating > 0) abilityAllowed.push(ability);
+			}
+			if (!abilityAllowed.length) abilityAllowed = abilityData;
+		}
 
 		if (abilityAllowed.length === 1) return abilityAllowed[0].name;
 		// Sort abilities by rating with an element of randomness

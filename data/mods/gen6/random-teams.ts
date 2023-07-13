@@ -531,7 +531,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return species.nfe;
 		case 'Battle Armor': case 'Sturdy':
 			return (!!counter.get('recoil') && !counter.get('recovery'));
-		case 'Chlorophyll': case 'Leaf Guard':
+		case 'Chlorophyll':
 			return (
 				species.baseStats.spe > 100 ||
 				abilities.has('Harvest') ||
@@ -598,7 +598,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'Simple':
 			return (!counter.setupType && !moves.has('flamecharge'));
 		case 'Solar Power':
-			return (!counter.get('Special') || !teamDetails.sun || !!species.isMega);
+			return (!counter.get('Special') || abilities.has('Harvest') || !teamDetails.sun || !!species.isMega);
 		case 'Speed Boost':
 			return moves.has('uturn');
 		case 'Swarm':
@@ -622,11 +622,86 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return (!!species.isMega || abilities.has('Prankster') || !counter.setupType && !moves.has('acrobatics'));
 		case 'Water Absorb':
 			return (moves.has('raindance') || ['Drizzle', 'Unaware', 'Volt Absorb'].some(a => abilities.has(a)));
-		case 'Weak Armor':
-			return counter.setupType !== 'Physical';
 		}
 
 		return false;
+	}
+
+
+	getAbility(
+		types: Set<string>,
+		moves: Set<string>,
+		abilities: Set<string>,
+		counter: MoveCounter,
+		movePool: string[],
+		teamDetails: RandomTeamsTypes.TeamDetails,
+		species: Species,
+	): string {
+		if (species.battleOnly && !species.requiredAbility) {
+			abilities = new Set(Object.values(this.dex.species.get(species.battleOnly as string).abilities));
+		}
+		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
+		Utils.sortBy(abilityData, abil => -abil.rating);
+
+		if (abilityData.length <= 1) return abilityData[0].name;
+
+		// Hard-code abilities here
+		if (
+			abilities.has('Guts') &&
+			!abilities.has('Quick Feet') &&
+			(moves.has('facade') || moves.has('protect') || (moves.has('rest') && moves.has('sleeptalk')))
+		) return 'Guts';
+		if (abilities.has('Moxie') && counter.get('Physical') > 3) return 'Moxie';
+		if (species.name === 'Ambipom' && !counter.get('technician')) {
+			// If it doesn't qualify for Technician, Skill Link is useless on it
+			return 'Pickup';
+		}
+		if (species.name === 'Lopunny' && moves.has('switcheroo') && this.randomChance(2, 3)) return 'Klutz';
+		if (species.baseSpecies === 'Altaria') return 'Natural Cure';
+
+		let abilityAllowed: Ability[] = [];
+		// Obtain a list of abilities that are allowed (not culled)
+		for (const ability of abilityData) {
+			if (ability.rating >= 1 && !this.shouldCullAbility(
+				ability.name, types, moves, abilities, counter, movePool, teamDetails, species
+			)) {
+				abilityAllowed.push(ability);
+			}
+		}
+
+		// If all abilities are rejected, re-allow all abilities
+		if (!abilityAllowed.length) {
+			for (const ability of abilityData) {
+				if (ability.rating > 0) abilityAllowed.push(ability);
+			}
+			if (!abilityAllowed.length) abilityAllowed = abilityData;
+		}
+
+		if (abilityAllowed.length === 1) return abilityAllowed[0].name;
+		// Sort abilities by rating with an element of randomness
+		// All three abilities can be chosen
+		if (abilityAllowed[2] && abilityAllowed[0].rating - 0.5 <= abilityAllowed[2].rating) {
+			if (abilityAllowed[1].rating <= abilityAllowed[2].rating) {
+				if (this.randomChance(1, 2)) [abilityAllowed[1], abilityAllowed[2]] = [abilityAllowed[2], abilityAllowed[1]];
+			} else {
+				if (this.randomChance(1, 3)) [abilityAllowed[1], abilityAllowed[2]] = [abilityAllowed[2], abilityAllowed[1]];
+			}
+			if (abilityAllowed[0].rating <= abilityAllowed[1].rating) {
+				if (this.randomChance(2, 3)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
+			} else {
+				if (this.randomChance(1, 2)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
+			}
+		} else {
+			// Third ability cannot be chosen
+			if (abilityAllowed[0].rating <= abilityAllowed[1].rating) {
+				if (this.randomChance(1, 2)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
+			} else if (abilityAllowed[0].rating - 0.5 <= abilityAllowed[1].rating) {
+				if (this.randomChance(1, 3)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
+			}
+		}
+
+		// After sorting, choose the first ability
+		return abilityAllowed[0].name;
 	}
 
 	getHighPriorityItem(
@@ -1064,54 +1139,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (species.battleOnly && !species.requiredAbility) {
 			abilities = new Set(Object.values(this.dex.species.get(species.battleOnly as string).abilities));
 		}
-		const abilityData = [...abilities].map(a => this.dex.abilities.get(a));
-		Utils.sortBy(abilityData, abil => -abil.rating);
 
-		if (abilityData.length > 1) {
-			// Sort abilities by rating with an element of randomness
-			if (abilityData[2] && abilityData[1].rating <= abilityData[2].rating && this.randomChance(1, 2)) {
-				[abilityData[1], abilityData[2]] = [abilityData[2], abilityData[1]];
-			}
-			if (abilityData[0].rating <= abilityData[1].rating && this.randomChance(1, 2)) {
-				[abilityData[0], abilityData[1]] = [abilityData[1], abilityData[0]];
-			} else if (abilityData[0].rating - 0.6 <= abilityData[1].rating && this.randomChance(2, 3)) {
-				[abilityData[0], abilityData[1]] = [abilityData[1], abilityData[0]];
-			}
-
-			// Start with the first abiility and work our way through, culling as we go
-			ability = abilityData[0].name;
-
-			while (this.shouldCullAbility(ability, types, moves, abilities, counter, movePool, teamDetails, species)) {
-				if (ability === abilityData[0].name && abilityData[1].rating >= 1) {
-					ability = abilityData[1].name;
-				} else if (ability === abilityData[1].name && abilityData[2] && abilityData[2].rating >= 1) {
-					ability = abilityData[2].name;
-				} else {
-					// Default to the highest rated ability if all are rejected
-					ability = abilityData[0].name;
-					break;
-				}
-			}
-
-			if (
-				abilities.has('Guts') &&
-				ability !== 'Quick Feet' &&
-				(moves.has('facade') || moves.has('protect') || (moves.has('rest') && moves.has('sleeptalk')))
-			) {
-				ability = 'Guts';
-			} else if (abilities.has('Moxie') && counter.get('Physical') > 3) {
-				ability = 'Moxie';
-			}
-			if (species.name === 'Ambipom' && !counter.get('technician')) {
-				// If it doesn't qualify for Technician, Skill Link is useless on it
-				ability = 'Pickup';
-			} else if (species.name === 'Lopunny' && moves.has('switcheroo') && this.randomChance(2, 3)) {
-				ability = 'Klutz';
-			}
-			if (species.name === 'Altaria') ability = 'Natural Cure';
-		} else {
-			ability = abilityData[0].name;
-		}
+		ability = this.getAbility(types, moves, abilities, counter, movePool, teamDetails, species);
 
 		let item = this.getHighPriorityItem(ability, types, moves, counter, teamDetails, species, isLead);
 		if (item === undefined) item = this.getMediumPriorityItem(ability, moves, counter, species, false, isLead);
