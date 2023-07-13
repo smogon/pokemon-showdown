@@ -2403,7 +2403,7 @@
             {
                 "role": "Fast Support",
                 "movepool": ["Dazzling Gleam", "Foul Play", "Spikes", "Thunder Wave"],
-                "teraTypes": ["Water"]
+                "teraTypes": ["Flying", "Water"]
             }
         ]
     },
