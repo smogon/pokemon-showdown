@@ -2073,7 +2073,7 @@
             {
                 "role": "Doubles Wallbreaker",
                 "movepool": ["Calm Mind", "Focus Blast", "Hyper Voice", "Protect", "Psychic", "U-turn"],
-                "teraTypes": ["Dark", "Normal", "Psychic"]
+                "teraTypes": ["Fighting", "Normal", "Psychic"]
             },
             {
                 "role": "Tera Blast user",
