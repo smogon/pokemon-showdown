@@ -10,6 +10,7 @@ import {ConfigType} from "../server/config-loader";
 import {IPTools as IPToolsType} from './ip-tools';
 import {Ladders as LaddersType} from './ladders';
 import {LoginServer as LoginServerType} from './loginserver';
+import {ReplayLoginServer as ReplayLoginServerType} from './loginserver';
 import {Monitor as MonitorType} from './monitor';
 import {Punishments as PunishmentsType} from './punishments';
 import {Tournaments as TournamentsType} from './tournaments';
@@ -47,6 +48,7 @@ declare global {
 	const IPTools: typeof IPToolsType;
 	const Ladders: typeof LaddersType;
 	const LoginServer: typeof LoginServerType;
+	const ReplayLoginServer: typeof ReplayLoginServerType;
 	const Monitor: typeof MonitorType;
 	const Punishments: typeof PunishmentsType;
 	const Rooms: typeof RoomsType.Rooms;

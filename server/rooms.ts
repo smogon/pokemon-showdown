@@ -2091,7 +2091,7 @@ export class GameRoom extends BasicRoom {
 		// so it can't be spoofed.)
 
 		battle.replaySaved = true;
-		const [success] = await LoginServer.request('prepreplay', {
+		const [success] = await ReplayLoginServer.request('prepreplay', {
 			id: id,
 			loghash: datahash,
 			p1: battle.p1.name,

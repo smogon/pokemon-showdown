@@ -182,11 +182,26 @@ class LoginServerInstance {
 	}
 }
 
+class ReplayLoginServerInstance extends LoginServerInstance {
+	readonly uri: string;
+	constructor() {
+		super();
+		this.uri = "http://ps.localhost/";
+	}
+}
+
 export const LoginServer = Object.assign(new LoginServerInstance(), {
 	TimeoutError,
 
 	ladderupdateServer: new LoginServerInstance(),
 	prepreplayServer: new LoginServerInstance(),
+});
+
+export const ReplayLoginServer = Object.assign(new ReplayLoginServerInstance(), {
+	TimeoutError,
+
+	ladderupdateServer: new ReplayLoginServerInstance(),
+	prepreplayServer: new ReplayLoginServerInstance(),
 });
 
 FS('./config/custom.css').onModify(() => {
