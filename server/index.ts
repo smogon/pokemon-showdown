@@ -96,6 +96,9 @@ function setupGlobals() {
 	const {LoginServer} = require('./loginserver');
 	global.LoginServer = LoginServer;
 
+	const {ReplayLoginServer} = require('./loginserver');
+	global.ReplayLoginServer = ReplayLoginServer;
+
 	const {Ladders} = require('./ladders');
 	global.Ladders = Ladders;
 
