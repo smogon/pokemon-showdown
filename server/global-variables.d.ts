@@ -28,6 +28,7 @@ declare global {
 			IPTools: any;
 			Ladders: any;
 			LoginServer: any;
+			ReplayLoginServer: any;
 			Monitor: any;
 			nodeOomHeapdump: any;
 			Punishments: any;
