@@ -568,7 +568,7 @@ export class RandomTeams {
 		// Amoonguss, though this can work well as a general rule later
 		this.incompatibleMoves(moves, movePool, 'toxic', 'clearsmog');
 		// Dudunsparce
-		if (species.id === 'dudunsparce') this.incompatibleMoves(moves, movePool, 'earthpower', 'shadowball');
+		if (species.baseSpecies === 'Dudunsparce') this.incompatibleMoves(moves, movePool, 'earthpower', 'shadowball');
 		// Luvdisc
 		if (species.id === 'luvdisc' && !isDoubles) {
 			this.incompatibleMoves(moves, movePool, 'charm', ['icebeam', 'icywind']);
