@@ -214,7 +214,7 @@ interface BattleScriptsData {
 interface ModdedBattleActions {
 	inherit?: true;
 	afterMoveSecondaryEvent?: (this: BattleActions, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => undefined;
-	calcRecoilDamage?: (this: BattleActions, damageDealt: number, move: Move) => number;
+	calcRecoilDamage?: (this: BattleActions, damageDealt: number, move: Move, pokemon: Pokemon) => number;
 	canMegaEvo?: (this: BattleActions, pokemon: Pokemon) => string | undefined | null;
 	canUltraBurst?: (this: BattleActions, pokemon: Pokemon) => string | null;
 	canZMove?: (this: BattleActions, pokemon: Pokemon) => ZMoveOptions | void;

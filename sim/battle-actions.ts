@@ -947,13 +947,7 @@ export class BattleActions {
 
 		if ((move.recoil || move.id === 'chloroblast') && move.totalDamage) {
 			const hpBeforeRecoil = pokemon.hp;
-			let recoilDamage;
-			if (move.id === 'chloroblast') {
-				recoilDamage = Math.round(pokemon.maxhp / 2);
-			} else {
-				recoilDamage = this.calcRecoilDamage(move.totalDamage, move);
-			}
-			this.battle.damage(recoilDamage, pokemon, pokemon, 'recoil');
+			this.battle.damage(this.calcRecoilDamage(move.totalDamage, move, pokemon), pokemon, pokemon, 'recoil');
 			if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
 				this.battle.runEvent('EmergencyExit', pokemon, pokemon);
 			}
@@ -1365,7 +1359,8 @@ export class BattleActions {
 		return retVal === true ? undefined : retVal;
 	}
 
-	calcRecoilDamage(damageDealt: number, move: Move): number {
+	calcRecoilDamage(damageDealt: number, move: Move, pokemon: Pokemon): number {
+		if (move.id === 'chloroblast') return Math.round(pokemon.maxhp / 2);
 		return this.battle.clampIntRange(Math.round(damageDealt * move.recoil![0] / move.recoil![1]), 1);
 	}
 

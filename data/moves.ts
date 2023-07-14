@@ -18779,8 +18779,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 				} else {
 					this.add('-activate', target, 'move: Substitute', '[damage]');
 				}
-				if (move.recoil) {
-					this.damage(this.actions.calcRecoilDamage(damage, move), source, target, 'recoil');
+				if (move.recoil || move.id === 'chloroblast') {
+					this.damage(this.actions.calcRecoilDamage(damage, move, source), source, target, 'recoil');
 				}
 				if (move.drain) {
 					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
