@@ -2121,7 +2121,7 @@ export class GameRoom extends BasicRoom {
 		if (!this.roomid.endsWith('pw')) return {id: this.roomid.slice(7)};
 		const end = this.roomid.length - 2;
 		const lastHyphen = this.roomid.lastIndexOf('-', end);
-		return {id: this.roomid.slice(7, lastHyphen), password: this.roomid.slice(lastHyphen + 1, end)};
+		return {id: 'anastarawneh' + this.roomid.slice(7, lastHyphen), password: this.roomid.slice(lastHyphen + 1, end)};
 	}
 }
 
