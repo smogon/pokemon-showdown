@@ -2401,7 +2401,7 @@
                 "teraTypes": ["Water"]
             },
             {
-                "role": "Fast Support",
+                "role": "Bulky Attacker",
                 "movepool": ["Dazzling Gleam", "Foul Play", "Spikes", "Thunder Wave"],
                 "teraTypes": ["Flying", "Water"]
             }
