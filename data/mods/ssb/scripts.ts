@@ -527,7 +527,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (move.recoil && move.totalDamage) {
-				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, pokemon, 'recoil');
+				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move, pokemon), pokemon, pokemon, 'recoil');
 			}
 
 			if (move.struggleRecoil) {
