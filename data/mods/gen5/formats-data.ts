@@ -1463,7 +1463,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	latias: {
-		tier: "(OU)",
+		tier: "OU",
 		doublesTier: "DUU",
 	},
 	latios: {
