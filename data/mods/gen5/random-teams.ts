@@ -886,6 +886,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			const set = this.randomSet(species, teamDetails, pokemon.length === 0);
 
 			const types = species.types;
+			let typeCombo = types.slice().sort().join();
 
 			if (!isMonotype && !this.forceMonotype) {
 				// Limit two of any type
@@ -910,16 +911,15 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					}
 				}
 				if (skip) continue;
-			}
 
-			// Limit one of any type combination, two in Monotype
-			let typeCombo = types.slice().sort().join();
-			if (set.ability === 'Drought' || set.ability === 'Drizzle' || set.ability === 'Sand Stream') {
-				// Drought, Drizzle and Sand Stream don't count towards the type combo limit
-				typeCombo = set.ability;
-				if (typeCombo in typeComboCount) continue;
-			} else if (!this.forceMonotype) {
-				if (typeComboCount[typeCombo] >= (isMonotype ? 2 : 1) * limitFactor) continue;
+				// Limit one of any type combination
+				if (set.ability === 'Drought' || set.ability === 'Drizzle' || set.ability === 'Sand Stream') {
+					// Drought, Drizzle and Sand Stream don't count towards the type combo limit
+					typeCombo = set.ability;
+					if (typeCombo in typeComboCount) continue;
+				} else {
+					if (typeComboCount[typeCombo] >= 1 * limitFactor) continue;
+				}
 			}
 
 			// Okay, the set passes, add it to our team
