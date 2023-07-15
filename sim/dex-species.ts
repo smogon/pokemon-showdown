@@ -45,6 +45,7 @@ export type ModdedLearnsetData = LearnsetData & {inherit?: true};
 
 export interface PokemonGoData {
 	encounters?: string[];
+	LGPERestrictiveMoves?: {[moveid: string]: number | null};
 }
 
 export class Species extends BasicEffect implements Readonly<BasicEffect & SpeciesFormatsData> {
