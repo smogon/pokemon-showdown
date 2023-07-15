@@ -16,7 +16,7 @@ describe('Chloroblast', function () {
 		], [
 			{species: "Blissey", moves: ['sleeptalk']},
 		]]);
-		assert.hurtsBy(battle.p1.active[0], Math.ceil(battle.p1.active[0].maxhp / 2), () => battle.makeChoices());
+		assert.hurtsBy(battle.p1.active[0], Math.round(battle.p1.active[0].maxhp / 2), () => battle.makeChoices());
 	});
 
 	it('should not deal recoil damage to the user if it misses or is blocked by Protect', function () {
