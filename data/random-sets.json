@@ -414,7 +414,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Air Slash", "Freeze-Dry", "Haze", "Hurricane", "Roost", "Substitute", "U-turn"],
+                "movepool": ["Freeze-Dry", "Haze", "Hurricane", "Roost", "Substitute", "U-turn"],
                 "teraTypes": ["Ground", "Steel"]
             }
         ]
@@ -424,7 +424,7 @@
         "sets": [
             {
                 "role": "Fast Bulky Setup",
-                "movepool": ["Air Slash", "Calm Mind", "Freezing Glare", "Hurricane", "Recover"],
+                "movepool": ["Calm Mind", "Freezing Glare", "Hurricane", "Recover"],
                 "teraTypes": ["Psychic", "Steel"]
             }
         ]
@@ -553,13 +553,8 @@
         "level": 82,
         "sets": [
             {
-                "role": "Bulky Setup",
-                "movepool": ["Aqua Jet", "Belly Drum", "Liquidation", "Play Rough"],
-                "teraTypes": ["Water"]
-            },
-            {
                 "role": "Bulky Attacker",
-                "movepool": ["Aqua Jet", "Ice Spinner", "Liquidation", "Play Rough", "Superpower"],
+                "movepool": ["Aqua Jet", "Belly Drum", "Ice Spinner", "Liquidation", "Play Rough", "Superpower"],
                 "teraTypes": ["Water"]
             }
         ]
@@ -1324,7 +1319,7 @@
             },
             {
                 "role": "Fast Attacker",
-                "movepool": ["Earthquake", "Fire Fang", "Outrage", "Stone Edge", "Swords Dance"],
+                "movepool": ["Earthquake", "Outrage", "Poison Jab", "Stone Edge", "Swords Dance"],
                 "teraTypes": ["Dragon", "Ground"]
             }
         ]
@@ -2402,8 +2397,13 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Dazzling Gleam", "Magnet Rise", "Play Rough", "Spikes", "Thunder Wave"],
+                "movepool": ["Magnet Rise", "Play Rough", "Spikes", "Thunder Wave"],
                 "teraTypes": ["Water"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Dazzling Gleam", "Foul Play", "Spikes", "Thunder Wave"],
+                "teraTypes": ["Flying", "Water"]
             }
         ]
     },
@@ -2852,7 +2852,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Aqua Jet", "Close Combat", "Crunch", "Liquidation", "Poison Jab", "Psychic Fangs"],
+                "movepool": ["Aqua Jet", "Close Combat", "Crunch", "Poison Jab", "Psychic Fangs", "Waterfall"],
                 "teraTypes": ["Fighting"]
             }
         ]
@@ -3468,7 +3468,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Curse", "Rest", "Sleep Talk", "Wave Crash"],
-                "teraTypes": ["Dragon", "Fairy", "Ground"]
+                "teraTypes": ["Dragon", "Fairy"]
             }
         ]
     },
@@ -3752,7 +3752,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Body Press", "Recover", "Salt Cure", "Stealth Rock", "Stone Edge"],
+                "movepool": ["Body Press", "Iron Defense", "Recover", "Salt Cure", "Stealth Rock"],
                 "teraTypes": ["Ghost"]
             }
         ]
