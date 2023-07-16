@@ -21224,6 +21224,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				break;
 			case 'newmoon':
 				move.type = 'Dark';
+				break;
 			case 'acidrain':
 				move.type = 'Poison';
 				break;
