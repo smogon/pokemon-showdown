@@ -2116,9 +2116,7 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 	let randomOutput = 0;
 
 	const targetSplit = target.split(',');
-	const lastCommaIndex = target.lastIndexOf(',');
-	const lastArgumentSubstr = target.substr(lastCommaIndex + 1).trim();
-	if (lastArgumentSubstr === 'all') {
+	if (targetSplit[targetSplit.length - 1].trim() === 'all') {
 		if (!canAll) return {error: "A search ending in ', all' cannot be broadcast."};
 		showAll = true;
 		targetSplit.pop();
@@ -2399,9 +2397,7 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 	let randomOutput = 0;
 
 	const targetSplit = target.split(',');
-	const lastCommaIndex = target.lastIndexOf(',');
-	const lastArgumentSubstr = target.substr(lastCommaIndex + 1).trim();
-	if (lastArgumentSubstr === 'all') {
+	if (targetSplit[targetSplit.length - 1].trim() === 'all') {
 		if (!canAll) return {error: "A search ending in ', all' cannot be broadcast."};
 		showAll = true;
 		targetSplit.pop();
