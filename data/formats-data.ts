@@ -1059,7 +1059,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "UUBL",
 	},
 	tauros: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DUU",
 		natDexTier: "RU",
 	},
