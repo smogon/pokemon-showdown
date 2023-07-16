@@ -22072,7 +22072,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {},
-		weather: 'New Moon',
+		weather: 'NewMoon',
 		secondary: null,
 		target: "all",
 		type: "Dark",

@@ -481,7 +481,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 	// weather is implemented here since it's so important to the game
 
 	newmoon: {
-		name: 'New Moon',
+		name: 'NewMoon',
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
