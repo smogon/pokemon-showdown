@@ -14738,7 +14738,7 @@ target: "self",
 type: "Normal",
 },
 
-freezeshock: {
+solarbeam: {
 accuracy: 95,
 basePower: 120,
 category: "Special",
@@ -14775,7 +14775,7 @@ target: "normal",
 type: "Grass",
 },
 
-skullbash: {
+solarblade: {
 accuracy: 95,
 basePower: 125,
 category: "Physical",
