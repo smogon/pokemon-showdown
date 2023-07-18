@@ -5,6 +5,9 @@ interface SpeciesAbility {
 	1?: string;
 	H?: string;
 	S?: string;
+	I1?: string;
+	I2?: string;
+	I3?: string;
 }
 
 type SpeciesTag = "Mythical" | "Restricted Legendary" | "Sub-Legendary" | "Paradox";
