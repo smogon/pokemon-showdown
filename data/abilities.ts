@@ -1705,7 +1705,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		// This should be applied directly to the stat as opposed to chaining with the others
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk) {
-			return this.modify(atk, 1.5);
+			return this.modify(atk, 1.75);
 		},
 		onSourceModifyAccuracyPriority: -1,
 		onSourceModifyAccuracy(accuracy, target, source, move) {
