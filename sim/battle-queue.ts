@@ -282,13 +282,13 @@ export class BattleQueue {
 		this.insertChoice(action);
 	}
 
-	addChoice(choices: ActionChoice | ActionChoice[]) {
+	addChoice(choices: ActionChoice | ActionChoice[], sleeporfreezegen1=false) {
 		if (!Array.isArray(choices)) choices = [choices];
 		for (const choice of choices) {
 			const resolvedChoices = this.resolveAction(choice);
 			this.list.push(...resolvedChoices);
 			for (const resolvedChoice of resolvedChoices) {
-				if (resolvedChoice && resolvedChoice.choice === 'move' && resolvedChoice.move.id !== 'recharge') {
+				if (resolvedChoice && resolvedChoice.choice === 'move' && resolvedChoice.move.id !== 'recharge' && !sleeporfreezegen1) {
 					resolvedChoice.pokemon.side.lastSelectedMove = resolvedChoice.move.id;
 				}
 			}
