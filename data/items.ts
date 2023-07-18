@@ -2,6 +2,9 @@ export const Items: {[itemid: string]: ItemData} = {
 	abilityshield: {
 		name: "Ability Shield",
 		spritenum: 746,
+		fling: {
+			basePower: 30,
+		},
 		ignoreKlutz: true,
 		// Neutralizing Gas protection implemented in Pokemon.ignoringAbility() within sim/pokemon.ts
 		// and in Neutralizing Gas itself within data/abilities.ts
@@ -346,6 +349,9 @@ export const Items: {[itemid: string]: ItemData} = {
 	auspiciousarmor: {
 		name: "Auspicious Armor",
 		spritenum: 753,
+		fling: {
+			basePower: 30,
+		},
 		num: 2344,
 		gen: 9,
 	},
@@ -596,6 +602,9 @@ export const Items: {[itemid: string]: ItemData} = {
 	boosterenergy: {
 		name: "Booster Energy",
 		spritenum: 745,
+		fling: {
+			basePower: 30,
+		},
 		onUpdate(pokemon) {
 			if (pokemon.transformed) return;
 			if (this.queue.peek(true)?.choice === 'runSwitch') return;
@@ -1001,6 +1010,9 @@ export const Items: {[itemid: string]: ItemData} = {
 	clearamulet: {
 		name: "Clear Amulet",
 		spritenum: 747,
+		fling: {
+			basePower: 30,
+		},
 		onTryBoost(boost, target, source, effect) {
 			if (source && target === source) return;
 			let showMsg = false;
@@ -1101,10 +1113,10 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	covertcloak: {
 		name: "Covert Cloak",
-		fling: {
-			basePower: 10,
-		},
 		spritenum: 750,
+		fling: {
+			basePower: 30,
+		},
 		onModifySecondaries(secondaries) {
 			this.debug('Covert Cloak prevent secondary');
 			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
@@ -3082,6 +3094,9 @@ export const Items: {[itemid: string]: ItemData} = {
 	loadeddice: {
 		name: "Loaded Dice",
 		spritenum: 751,
+		fling: {
+			basePower: 30,
+		},
 		// partially implemented in sim/battle-actions.ts:BattleActions#hitStepMoveHitLoop
 		onModifyMove(move) {
 			if (move.multiaccuracy) {
@@ -3357,6 +3372,9 @@ export const Items: {[itemid: string]: ItemData} = {
 	maliciousarmor: {
 		name: "Malicious Armor",
 		spritenum: 744,
+		fling: {
+			basePower: 30,
+		},
 		num: 1861,
 		gen: 9,
 	},
@@ -3707,10 +3725,10 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	mirrorherb: {
 		name: "Mirror Herb",
-		fling: {
-			basePower: 10,
-		},
 		spritenum: 748,
+		fling: {
+			basePower: 30,
+		},
 		onFoeAfterBoost(boost, target, source, effect) {
 			if (effect?.name === 'Opportunist' || effect?.name === 'Mirror Herb') return;
 			const boostPlus: SparseBoostsTable = {};
@@ -4466,6 +4484,9 @@ export const Items: {[itemid: string]: ItemData} = {
 	punchingglove: {
 		name: "Punching Glove",
 		spritenum: 749,
+		fling: {
+			basePower: 30,
+		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
