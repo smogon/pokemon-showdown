@@ -246,6 +246,11 @@
                 "role": "Doubles Support",
                 "movepool": ["Foul Play", "Helping Hand", "Light Screen", "Taunt", "Thunder Wave", "Thunderbolt", "Volt Switch"],
                 "teraTypes": ["Dark", "Flying"]
+            },
+            {
+                "role": "Tera Blast user",
+                "movepool": ["Protect", "Tera Blast", "Thunderbolt", "Volt Switch"],
+                "teraTypes": ["Ice"]
             }
         ]
     },
@@ -1095,7 +1100,7 @@
             {
                 "role": "Doubles Wallbreaker",
                 "movepool": ["Aqua Jet", "Crunch", "Ice Spinner", "Protect", "Wave Crash"],
-                "teraTypes": ["Fire", "Steel", "Water"]
+                "teraTypes": ["Water"]
             }
         ]
     },
@@ -1832,7 +1837,7 @@
             },
             {
                 "role": "Tera Blast user",
-                "movepool": ["Hyper Voice", "Protect", "Shadow Ball", "Tera Blast"],
+                "movepool": ["Bitter Malice", "Hyper Voice", "Protect", "Tera Blast"],
                 "teraTypes": ["Fairy"]
             }
         ]
@@ -2068,7 +2073,7 @@
             {
                 "role": "Doubles Wallbreaker",
                 "movepool": ["Calm Mind", "Focus Blast", "Hyper Voice", "Protect", "Psychic", "U-turn"],
-                "teraTypes": ["Dark", "Normal", "Psychic"]
+                "teraTypes": ["Fighting", "Normal", "Psychic"]
             },
             {
                 "role": "Tera Blast user",
@@ -2083,12 +2088,12 @@
             {
                 "role": "Doubles Bulky Attacker",
                 "movepool": ["Body Press", "Leech Seed", "Spiky Shield", "Wood Hammer"],
-                "teraTypes": ["Rock", "Steel"]
+                "teraTypes": ["Fire", "Rock", "Steel", "Water"]
             },
             {
                 "role": "Doubles Bulky Setup",
                 "movepool": ["Body Press", "Iron Defense", "Synthesis", "Wood Hammer"],
-                "teraTypes": ["Rock", "Steel"]
+                "teraTypes": ["Fire", "Rock", "Steel", "Water"]
             }
         ]
     },
@@ -3601,7 +3606,7 @@
         "level": 86,
         "sets": [
             {
-                "role": "Choice Item user",
+                "role": "Doubles Wallbreaker",
                 "movepool": ["Crunch", "Fire Fang", "Play Rough", "Psychic Fangs", "Wild Charge"],
                 "teraTypes": ["Fairy"]
             }
