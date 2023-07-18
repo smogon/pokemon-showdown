@@ -3334,7 +3334,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	basculegion: {
 		tier: "UU",
-		doublesTier: "DOU",
+		doublesTier: "DUber",
 		natDexTier: "UU",
 	},
 	basculegionf: {
