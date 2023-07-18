@@ -91,4 +91,18 @@ describe('Team Validator', function () {
 		];
 		assert.false.legalTeam(team, 'gen8cap');
 	});
+
+	it('should allow Level 1 Donphan from Pokemon GO', function () {
+		const team = [
+			{species: 'donphan', level: 1, ability: 'sturdy', moves: ['endeavor']},
+		];
+		assert.legalTeam(team, 'gen9ou');
+	});
+
+	it('should disallow Pokemon from Pokemon GO knowing incompatible moves', function () {
+		const team = [
+			{species: 'mew', shiny: true, level: 50, ability: 'synchronize', moves: ['naturalgift'], evs: {hp: 1}, ivs: {hp: 21, atk: 31, def: 21, spa: 21, spd: 31, spe: 0}},
+		];
+		assert.false.legalTeam(team, 'gen9ou');
+	});
 });
