@@ -313,7 +313,9 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 					isJoined = !possiblePlayer.isDisqualified;
 				} else if ((this.generator as RoundRobin)?.matchesPerPlayer) {
 					isJoined = possiblePlayer.games !== (this.generator as RoundRobin).matchesPerPlayer;
-				} else if (!this.isTournamentStarted) isJoined = true;
+				} else if (!this.isTournamentStarted) {
+					isJoined = true;
+				}
 			} else {
 				isJoined = true;
 			}
