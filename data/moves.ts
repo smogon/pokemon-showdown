@@ -12711,86 +12711,40 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 },
-naturalgift: {
-accuracy: 95,
-basePower: 0,
-category: "Physical",
-name: "Natural Gift",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, mirror: 1},
-onModifyType(move, pokemon) {
-if (pokemon.ignoringItem()) return;
-const item = pokemon.getItem();
-if (!item.naturalGift) return;
-move.type = item.naturalGift.type;
-},
-onPrepareHit(target, pokemon, move) {
-if (pokemon.ignoringItem()) return false;
-const item = pokemon.getItem();
-if (!item.naturalGift) return false;
-move.basePower = item.naturalGift.basePower;
-this.debug('BP: ' + move.basePower);
-pokemon.setItem('');
-pokemon.lastItem = item.id;
-pokemon.usedItemThisTurn = true;
-this.runEvent('AfterUseItem', pokemon, null, null, item);
-if (!source.isAlly(target)) {
-this.attrLastMove('[anim] Shell Side Arm ' + move.category);
-}
-},
-onModifyMove(move, pokemon, target) {
-if (!target) return;
-const atk = pokemon.getStat('atk', false, true);
-const spa = pokemon.getStat('spa', false, true);
-const def = target.getStat('def', false, true);
-const spd = target.getStat('spd', false, true);
-const physical = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * atk) / def) / 50);
-const special = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * spa) / spd) / 50);
-if (physical > special || (physical === special && this.random(2) === 0)) {
-move.category = 'Physical';
-move.flags.contact = 1;
-}
-},
-onHit(target, source, move) {
-// Shell Side Arm normally reveals its category via animation on cart, but doesn't play either custom animation against allies
-if (!source.isAlly(target)) this.hint(move.category + " Shell Side Arm");
-},
-onAfterSubDamage(damage, target, source, move) {
-if (!source.isAlly(target)) this.hint(move.category + " Shell Side Arm");
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
-naturepower: {
-accuracy: 95,
-basePower: 0,
-category: "Status",
-name: "Nature Power",
-pp: 1.25,
-priority: 0,
-flags: {},
-onTryHit(target, pokemon) {
-let move = 'triattack';
-if (this.field.isTerrain('electricterrain')) {
-move = 'thunderbolt';
-} else if (this.field.isTerrain('grassyterrain')) {
-move = 'energyball';
-} else if (this.field.isTerrain('mistyterrain')) {
-move = 'moonblast';
-} else if (this.field.isTerrain('psychicterrain')) {
-move = 'psychic';
-}
-this.actions.useMove(move, pokemon, target);
-return null;
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
-
+	naturalgift: {
+		num: 363,
+		accuracy: 100,
+		basePower: 0,
+		category: "Physical",
+		isNonstandard: "Past",
+		name: "Natural Gift",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onModifyType(move, pokemon) {
+			if (pokemon.ignoringItem()) return;
+			const item = pokemon.getItem();
+			if (!item.naturalGift) return;
+			move.type = item.naturalGift.type;
+		},
+		onPrepareHit(target, pokemon, move) {
+			if (pokemon.ignoringItem()) return false;
+			const item = pokemon.getItem();
+			if (!item.naturalGift) return false;
+			move.basePower = item.naturalGift.basePower;
+			this.debug('BP: ' + move.basePower);
+			pokemon.setItem('');
+			pokemon.lastItem = item.id;
+			pokemon.usedItemThisTurn = true;
+			this.runEvent('AfterUseItem', pokemon, null, null, item);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		zMove: {basePower: 160},
+		maxMove: {basePower: 130},
+		contestType: "Clever",
+	},
 	naturesmadness: {
 		num: 717,
 		accuracy: 95,
