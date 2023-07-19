@@ -26,12 +26,13 @@ export const Formats: FormatList = [
 		section: "S/V Singles",
 	},
 	{
-		name: "[Gen 8] Testing",
+		name: "[Gen 8] Innate Testing",
 		desc: `Testing for ER Innates`,
-		mod: 'gen8er',
+		mod: 'gen9er',
 		rated: false, 
 		ruleset: ['Obtainable'],
 		onValidateSet(set) {
+			//TODO: Change from AAA script to ER innate script
 			const species = this.dex.species.get(set.species);
 			const unSeenAbilities = Object.keys(species.abilities)
 				.filter(key => key !== 'S' && (key !== 'H' || !species.unreleasedHidden))
