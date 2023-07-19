@@ -1578,7 +1578,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({spe: 1, evasion: -2,}, attacker, attacker, move);
+this.boost({spe: -1, evasion: 2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -3284,7 +3284,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({atk: 1, spe: 2, evasion: -2,}, attacker, attacker, move);
+this.boost({atk: -1, spe: -2, evasion: 2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -3386,7 +3386,7 @@ const forme = attacker.hp <= attacker.maxhp / 2 ? 'cramorantgorging' : 'cramoran
 attacker.formeChange(forme, move);
 }
 this.add('-prepare', attacker, move.name);
-this.boost({atk: 1, spe: 2, evasion: -2,}, attacker, attacker, move);
+this.boost({atk: -1, spe: -2, evasion: 2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -5346,7 +5346,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({atk: 1, spe: 1, evasion: -2,}, attacker, attacker, move);
+this.boost({atk: -1, spe: -1, evasion: 2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -5601,7 +5601,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({atk: 1, spe: 1, evasion: -2,}, attacker, attacker, move);
+this.boost({atk: -1, spe: -1, evasion: 2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -5892,7 +5892,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({atk: 1, spd: 2, evasion: -2,}, attacker, attacker, move);
+this.boost({atk: -1, spd: -2, evasion: 2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -6457,7 +6457,7 @@ pokemon.disableMove(moveSlot.id);
 },
 },
 secondary: null,
-target: "self",
+target: "normal",
 type: "Ghost",
 },
 
@@ -7163,7 +7163,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({atk: 2, evasion: -2,}, attacker, attacker, move);
+this.boost({atk: -2, evasion: 2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -7480,7 +7480,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({spa: 1, spe: 1, evasion: -2,}, attacker, attacker, move);
+this.boost({spa: -1, spe: -1, evasion: 2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -9338,7 +9338,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({atk: 1, evasion: -2,}, attacker, attacker, move);
+this.boost({atk: -1, evasion: 2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -13994,7 +13994,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({def: 2, atk: 1, evasion: -2, spe: -1,}, attacker, attacker, move);
+this.boost({def: -2, atk: -1, evasion: 2, spe: 1,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -14020,7 +14020,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({atk: 1, spe: 1, evasion: -2,}, attacker, attacker, move);
+this.boost({atk: -1, spe: -1, evasion: 2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -14601,7 +14601,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({spa: 1, spd: 1, evasion: -2,}, attacker, attacker, move);
+this.boost({spa: -1, spd: -1, evasion: 2,}, attacker, attacker, move);
 if (['sunnyday', 'desolateland'].includes(attacker.effectiveWeather())) {
 this.attrLastMove('[still]');
 this.addMove('-anim', attacker, move.name, defender);
@@ -14638,7 +14638,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({atk: 1, spe: 1, evasion: -2,}, attacker, attacker, move);
+this.boost({atk: -1, spe: -1, evasion: 2,}, attacker, attacker, move);
 if (['sunnyday', 'desolateland'].includes(attacker.effectiveWeather())) {
 this.attrLastMove('[still]');
 this.addMove('-anim', attacker, move.name, defender);
