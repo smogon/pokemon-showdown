@@ -1578,7 +1578,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({spe: -1, evasion: 2,}, attacker, attacker, move);
+this.boost({spe: 1, evasion: -2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -3284,7 +3284,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({atk: -1, spe: -2, evasion: 2,}, attacker, attacker, move);
+this.boost({atk: 1, spe: 1, evasion: -2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -3386,7 +3386,7 @@ const forme = attacker.hp <= attacker.maxhp / 2 ? 'cramorantgorging' : 'cramoran
 attacker.formeChange(forme, move);
 }
 this.add('-prepare', attacker, move.name);
-this.boost({atk: -1, spe: -2, evasion: 2,}, attacker, attacker, move);
+this.boost({atk: 1, spe: 1, evasion: -2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -4017,23 +4017,27 @@ type: "Electric",
 
 eeriespell: {
 accuracy: 95,
-basePower: 80,
+basePower: 60,
 category: "Special",
 name: "Eerie Spell",
 pp: 1.25,
 priority: 1,
 flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 secondary: {
-chance: 75,
-onHit(target) {
-if (!target.hp) return;
-let move: Move | ActiveMove | null = target.lastMove;
-if (!move || move.isZ) return;
-if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
-
-const ppDeducted = target.deductPP(move.id, 3);
-if (!ppDeducted) return;
-this.add('-activate', target, 'move: Eerie Spell', move.name, ppDeducted);
+chance: 100,
+onHit(target, source) {
+const result = this.random(5);
+if (result === 0) {
+target.trySetStatus('brn', source);
+} else if (result === 1) {
+target.trySetStatus('par', source);
+} else if (result === 2) {
+target.trySetStatus('tox', source);
+} else if (result === 3) {
+target.trySetStatus('slp', source);
+} else {
+target.trySetStatus('frz', source);
+}
 },
 },
 target: "normal",
@@ -5346,7 +5350,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({atk: -1, spe: -1, evasion: 2,}, attacker, attacker, move);
+this.boost({atk: 1, spe: 1, evasion: -2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -5601,7 +5605,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({atk: -1, spe: -1, evasion: 2,}, attacker, attacker, move);
+this.boost({atk: 1, spe: 1, evasion: -2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -6402,60 +6406,6 @@ pp: 1.25,
 priority: 0,
 flags: {bypasssub: 1},
 pseudoWeather: 'fairylock',
-onTryHit(target) {
-if (!target.lastMove || target.lastMove.isZ || target.lastMove.isMax || target.lastMove.id === 'struggle') {
-return false;
-}
-},
-condition: {
-duration: 5,
-noCopy: true, // doesn't get copied by Baton Pass
-onStart(pokemon, source, effect) {
-// The target hasn't taken its turn, or Cursed Body activated and the move was not used through Dancer or Instruct
-if (
-this.queue.willMove(pokemon) ||
-(pokemon === this.activePokemon && this.activeMove && !this.activeMove.isExternal)
-) {
-this.effectState.duration--;
-}
-if (!pokemon.lastMove) {
-this.debug(`Pokemon hasn't moved yet`);
-return false;
-}
-for (const moveSlot of pokemon.moveSlots) {
-if (moveSlot.id === pokemon.lastMove.id) {
-if (!moveSlot.pp) {
-this.debug('Move out of PP');
-return false;
-}
-}
-}
-if (effect.effectType === 'Ability') {
-this.add('-start', pokemon, 'Disable', pokemon.lastMove.name, '[from] ability: Cursed Body', '[of] ' + source);
-} else {
-this.add('-start', pokemon, 'Disable', pokemon.lastMove.name);
-}
-this.effectState.move = pokemon.lastMove.id;
-},
-onResidualOrder: 17,
-onEnd(pokemon) {
-this.add('-end', pokemon, 'Disable');
-},
-onBeforeMovePriority: 7,
-onBeforeMove(attacker, defender, move) {
-if (!move.isZ && move.id === this.effectState.move) {
-this.add('cant', attacker, 'Disable', move);
-return false;
-}
-},
-onDisableMove(pokemon) {
-for (const moveSlot of pokemon.moveSlots) {
-if (moveSlot.id === this.effectState.move) {
-pokemon.disableMove(moveSlot.id);
-}
-}
-},
-},
 secondary: null,
 target: "normal",
 type: "Ghost",
@@ -7163,7 +7113,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({atk: -2, evasion: 2,}, attacker, attacker, move);
+this.boost({atk: 2, evasion: -2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -7480,7 +7430,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({spa: -1, spe: -1, evasion: 2,}, attacker, attacker, move);
+this.boost({spa: 1, spe: 1, evasion: -2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -9338,7 +9288,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({atk: -1, evasion: 2,}, attacker, attacker, move);
+this.boost({spa: 1, evasion: -2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -13994,7 +13944,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({def: -2, atk: -1, evasion: 2, spe: 1,}, attacker, attacker, move);
+this.boost({def: 2, atk: 1, evasion: -2, spe: -1,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -14020,7 +13970,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({atk: -1, spe: -1, evasion: 2,}, attacker, attacker, move);
+this.boost({atk: 1, spe: 1, evasion: -2,}, attacker, attacker, move);
 if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 return;
 }
@@ -14601,7 +14551,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({spa: -1, spd: -1, evasion: 2,}, attacker, attacker, move);
+this.boost({spa: 1, spd: 1, evasion: -2,}, attacker, attacker, move);
 if (['sunnyday', 'desolateland'].includes(attacker.effectiveWeather())) {
 this.attrLastMove('[still]');
 this.addMove('-anim', attacker, move.name, defender);
@@ -14638,7 +14588,7 @@ if (attacker.removeVolatile(move.id)) {
 return;
 }
 this.add('-prepare', attacker, move.name);
-this.boost({atk: -1, spe: -1, evasion: 2,}, attacker, attacker, move);
+this.boost({atk: 1, spe: 1, evasion: -2,}, attacker, attacker, move);
 if (['sunnyday', 'desolateland'].includes(attacker.effectiveWeather())) {
 this.attrLastMove('[still]');
 this.addMove('-anim', attacker, move.name, defender);
@@ -14977,20 +14927,43 @@ type: "Ghost",
 
 spite: {
 accuracy: 95,
-basePower: 0,
-category: "Status",
+basePower: 40,
+category: "Special",
 name: "Spite",
-pp: 1.25,
+pp: .625,
 priority: 0,
 flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
-onHit(target) {
-let move: Move | ActiveMove | null = target.lastMove;
-if (!move || move.isZ) return false;
-if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
-
-const ppDeducted = target.deductPP(move.id, 4);
-if (!ppDeducted) return false;
-this.add("-activate", target, 'move: Spite', move.name, ppDeducted);
+pseudoWeather: 'fairylock',
+onHitField(target, source, move) {
+let result = false;
+let message = false;
+for (const pokemon of this.getAllActive()) {
+if (this.runEvent('Invulnerability', pokemon, source, move) === false) {
+this.add('-miss', source, pokemon);
+result = true;
+} else if (this.runEvent('TryHit', pokemon, source, move) === null) {
+result = true;
+} else if (!pokemon.volatiles['perishsong']) {
+pokemon.addVolatile('perishsong');
+this.add('-start', pokemon, 'perish3', '[silent]');
+result = true;
+message = true;
+}
+}
+if (!result) return false;
+if (message) this.add('-fieldactivate', 'move: Perish Song');
+},
+condition: {
+duration: 2,
+onEnd(target) {
+this.add('-start', target, 'perish0');
+target.faint();
+},
+onResidualOrder: 24,
+onResidual(pokemon) {
+const duration = pokemon.volatiles['perishsong'].duration;
+this.add('-start', pokemon, 'perish' + duration);
+},
 },
 secondary: null,
 target: "normal",
@@ -16879,7 +16852,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 secondary: {
-chance: 50,
+chance: 66,
 onHit(target, source) {
 const result = this.random(3);
 if (result === 0) {
