@@ -1060,6 +1060,19 @@ export class Pokemon {
 		return data;
 	}
 
+	getMoveList(forAlly?: boolean) {
+		return this[forAlly ? 'baseMoves' : 'moves'].map(move => {
+			if (move === 'hiddenpower') {
+				return move + toID(this.hpType) + (this.battle.gen < 6 ? '' : this.hpPower);
+			}
+			if (move === 'frustration' || move === 'return') {
+				const basePowerCallback = this.battle.dex.moves.get(move).basePowerCallback as (pokemon: Pokemon) => number;
+				return move + basePowerCallback(this);
+			}
+			return move;
+		});
+	}
+
 	getSwitchRequestData(forAlly?: boolean) {
 		const entry: AnyObject = {
 			ident: this.fullname,
@@ -1073,16 +1086,7 @@ export class Pokemon {
 				spd: this.baseStoredStats['spd'],
 				spe: this.baseStoredStats['spe'],
 			},
-			moves: this[forAlly ? 'baseMoves' : 'moves'].map(move => {
-				if (move === 'hiddenpower') {
-					return move + toID(this.hpType) + (this.battle.gen < 6 ? '' : this.hpPower);
-				}
-				if (move === 'frustration' || move === 'return') {
-					const basePowerCallback = this.battle.dex.moves.get(move).basePowerCallback as (pokemon: Pokemon) => number;
-					return move + basePowerCallback(this);
-				}
-				return move;
-			}),
+			moves: this.getMoveList(forAlly),
 			baseAbility: this.baseAbility,
 			item: this.item,
 			pokeball: this.pokeball,

@@ -2989,6 +2989,49 @@ export class Battle {
 		return team as PokemonSet[];
 	}
 
+	showOpenTeamSheets(visibleToSpectators?: boolean) {
+		let buf = 'raw|';
+		const inTeamPreview = this.turn === 0;
+		for (const side of this.sides) {
+			buf += Utils.html`<div class="infobox" style="margin-top:5px"><details><summary>Open Team Sheet for ${side.name}</summary>${Teams.export(side.team, {hideStats: true})}</details></div>`;
+		}
+		if (visibleToSpectators) {
+			this.add(buf);
+			if (inTeamPreview) this.add('clearpoke');
+		} else {
+			for (const side of this.sides) {
+				this.addSplit(side.id, [buf]);
+				if (inTeamPreview) this.addSplit(side.id, ['clearpoke']);
+			}
+		}
+		if (!inTeamPreview) return;
+		for (const pokemon of this.getAllPokemon()) {
+			let details = pokemon.details;
+			let setNotes = `[name] ${pokemon.name}`;
+			const moveList = pokemon.getMoveList(true);
+			if (pokemon.item) setNotes += `|[item] ${pokemon.item}`;
+			if (pokemon.ability) setNotes += `|[ability] ${pokemon.ability}`;
+			if (pokemon.canTerastallize) setNotes += `|[teraType] ${pokemon.teraType}`;
+			if (pokemon.species.id === 'zacian' && pokemon.item === 'rustedsword') {
+				const ironHead = moveList.indexOf('ironhead');
+				if (ironHead >= 0) moveList[ironHead] = 'behemothblade';
+				details = details.replace('Zacian', 'Zacian-Crowned');
+			} else if (pokemon.species.id === 'zamazenta' && pokemon.item === 'rustedshield') {
+				const ironHead = moveList.indexOf('ironhead');
+				if (ironHead >= 0) moveList[ironHead] = 'behemothbash';
+				details = details.replace('Zamazenta', 'Zamazenta-Crowned');
+			}
+			setNotes += `|[moveList] ${moveList.join(';')}`;
+			if (visibleToSpectators) {
+				this.add('poke', pokemon.side.id, details, setNotes);
+			} else {
+				for (const side of this.sides) {
+					this.addSplit(side.id, ['poke', pokemon.side.id, details, setNotes]);
+				}
+			}
+		}
+	}
+
 	setPlayer(slot: SideID, options: PlayerOptions) {
 		let side;
 		let didSomething = true;

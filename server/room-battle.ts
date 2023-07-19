@@ -1088,6 +1088,10 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		return true;
 	}
 
+	forceOpenTeamSheets() {
+		void this.stream.write(`>force-openteamsheets`);
+	}
+
 	/**
 	 * playerOpts should be empty only if importing an inputlog
 	 * (so the player isn't recreated)

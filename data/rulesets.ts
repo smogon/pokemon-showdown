@@ -2,7 +2,6 @@
 
 import {Utils} from "../lib";
 import {Pokemon} from "../sim/pokemon";
-import {Teams} from "../sim/teams";
 
 // The list of formats is stored in config/formats.js
 export const Rulesets: {[k: string]: FormatData} = {
@@ -535,12 +534,18 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 		onTeamPreview() {
-			this.add('clearpoke');
-			for (const pokemon of this.getAllPokemon()) {
-				const details = pokemon.details.replace(', shiny', '')
-					.replace(/(Greninja|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu|Dudunsparce)(-[a-zA-Z?-]+)?/g, '$1-*')
-					.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*'); // Hacked-in Crowned formes will be revealed
-				this.add('poke', pokemon.side.id, details, '');
+			if (this.ruleTable.has(`forceopenteamsheets`)) {
+				this.showOpenTeamSheets(true);
+			} else {
+				this.add('clearpoke');
+				for (const pokemon of this.getAllPokemon()) {
+					const teraTypeNote = this.ruleTable.has(`teratypepreview`) && pokemon.canTerastallize ?
+						`[teraType] ${pokemon.teraType}` : ``;
+					const details = pokemon.details.replace(', shiny', '')
+						.replace(/(Greninja|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu|Dudunsparce)(-[a-zA-Z?-]+)?/g, '$1-*')
+						.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*'); // Hacked-in Crowned formes will be revealed
+					this.add('poke', pokemon.side.id, details, teraTypeNote);
+				}
 			}
 			this.makeRequest('teampreview');
 			if (this.ruleTable.has(`teratypepreview`)) {
@@ -1660,7 +1665,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 	openteamsheets: {
 		effectType: 'Rule',
 		name: 'Open Team Sheets',
-		desc: "Allows each player to see the Pok&eacute;mon and all non-stat information about them, before they choose their lead Pok&eacute;mon",
+		desc: "If all players agree during Team Preview, all non-stat Pok&eacute;mon set information is revealed to them",
 		onTeamPreview() {
 			const msg = 'uhtml|otsrequest|<button name="send" value="/acceptopenteamsheets" class="button" style="margin-right: 10px;"><strong>Accept Open Team Sheets</strong></button><button name="send" value="/rejectopenteamsheets" class="button" style="margin-top: 10px"><strong>Deny Open Team Sheets</strong></button>';
 			for (const side of this.sides) {
@@ -1676,14 +1681,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 	forceopenteamsheets: {
 		effectType: 'Rule',
 		name: 'Force Open Team Sheets',
-		desc: "Allows each player to see the Pok&eacute;mon and all non-stat information about them, before they choose their lead Pok&eacute;mon",
-		onTeamPreview() {
-			let buf = 'raw|';
-			for (const side of this.sides) {
-				buf += Utils.html`<div class="infobox" style="margin-top:5px"><details><summary>Open Team Sheet for ${side.name}</summary>${Teams.export(side.team, {hideStats: true})}</details></div>`;
-			}
-			this.add(buf);
-		},
+		desc: "Allows players to see all non-stat Pok&eacute;mon set information during Team Preview",
+		// hardcoded in the teampreview rule
 	},
 	aaarestrictedabilities: {
 		effectType: 'ValidatorRule',

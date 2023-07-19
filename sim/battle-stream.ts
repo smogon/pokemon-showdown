@@ -224,6 +224,13 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			const team = Teams.pack(side.team);
 			this.push(`requesteddata\n${team}`);
 			break;
+		case 'force-openteamsheets':
+			this.battle!.showOpenTeamSheets();
+			if (this.battle!.turn === 0) {
+				// update display and reset lead choices
+				this.battle!.makeRequest('teampreview');
+			}
+			break;
 		case 'version':
 		case 'version-origin':
 			break;
