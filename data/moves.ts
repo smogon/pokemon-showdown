@@ -1,21 +1,4 @@
-// List of flags and their descriptions can be found in sim/dex-moves.ts
-
 export const Moves: {[moveid: string]: MoveData} = {
-
-"10000000voltthunderbolt": {
-accuracy: 95,
-basePower: 250,
-category: "Special",
-name: "10,000,000 Volt Thunderbolt",
-pp: .625,
-priority: -7,
-flags: {protect: 1, mirror: 1},
-selfdestruct: "always",
-secondary: null,
-target: "allAdjacent",
-type: "Electric",
-},
-
 absorb: {
 accuracy: 95,
 basePower: 40,
@@ -3213,7 +3196,7 @@ basePower: 0,
 category: "Status",
 name: "Destiny Bond",
 pp: .625,
-priority: 1,
+priority: 5,
 flags: {bypasssub: 1},
 volatileStatus: 'destinybond',
 onPrepareHit(pokemon) {
@@ -3247,27 +3230,6 @@ pokemon.removeVolatile('destinybond');
 secondary: null,
 target: "self",
 type: "Ghost",
-},
-
-detect: {
-accuracy: 95,
-basePower: 0,
-category: "Status",
-name: "Detect",
-pp: 1.25,
-priority: 4,
-flags: {},
-stallingMove: true,
-volatileStatus: 'protect',
-onPrepareHit(pokemon) {
-return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
-},
-onHit(pokemon) {
-pokemon.addVolatile('stall');
-},
-secondary: null,
-target: "self",
-type: "Fighting",
 },
 
 devastatingdrake: {
@@ -3351,73 +3313,6 @@ target: "normal",
 type: "Ground",
 },
 
-disable: {
-accuracy: 95,
-basePower: 0,
-category: "Status",
-name: "Disable",
-pp: 1.25,
-priority: 0,
-flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
-volatileStatus: 'disable',
-onTryHit(target) {
-if (!target.lastMove || target.lastMove.isZ || target.lastMove.isMax || target.lastMove.id === 'struggle') {
-return false;
-}
-},
-condition: {
-duration: 5,
-noCopy: true, // doesn't get copied by Baton Pass
-onStart(pokemon, source, effect) {
-// The target hasn't taken its turn, or Cursed Body activated and the move was not used through Dancer or Instruct
-if (
-this.queue.willMove(pokemon) ||
-(pokemon === this.activePokemon && this.activeMove && !this.activeMove.isExternal)
-) {
-this.effectState.duration--;
-}
-if (!pokemon.lastMove) {
-this.debug(`Pokemon hasn't moved yet`);
-return false;
-}
-for (const moveSlot of pokemon.moveSlots) {
-if (moveSlot.id === pokemon.lastMove.id) {
-if (!moveSlot.pp) {
-this.debug('Move out of PP');
-return false;
-}
-}
-}
-if (effect.effectType === 'Ability') {
-this.add('-start', pokemon, 'Disable', pokemon.lastMove.name, '[from] ability: Cursed Body', '[of] ' + source);
-} else {
-this.add('-start', pokemon, 'Disable', pokemon.lastMove.name);
-}
-this.effectState.move = pokemon.lastMove.id;
-},
-onResidualOrder: 17,
-onEnd(pokemon) {
-this.add('-end', pokemon, 'Disable');
-},
-onBeforeMovePriority: 7,
-onBeforeMove(attacker, defender, move) {
-if (!move.isZ && move.id === this.effectState.move) {
-this.add('cant', attacker, 'Disable', move);
-return false;
-}
-},
-onDisableMove(pokemon) {
-for (const moveSlot of pokemon.moveSlots) {
-if (moveSlot.id === this.effectState.move) {
-pokemon.disableMove(moveSlot.id);
-}
-}
-},
-},
-secondary: null,
-target: "normal",
-type: "Normal",
-},
 
 disarmingvoice: {
 accuracy: 95,
@@ -10075,38 +9970,6 @@ evasion: -2,
 },
 },
 target: "normal",
-type: "Ground",
-},
-
-mudsport: {
-accuracy: 95,
-basePower: 0,
-category: "Status",
-name: "Mud Sport",
-pp: .625,
-priority: 0,
-flags: {},
-pseudoWeather: 'mudsport',
-condition: {
-duration: 5,
-onFieldStart(field, source) {
-this.add('-fieldstart', 'move: Mud Sport', '[of] ' + source);
-},
-onBasePowerPriority: 1,
-onBasePower(basePower, attacker, defender, move) {
-if (move.type === 'Electric') {
-this.debug('mud sport weaken');
-return this.chainModify([1352, 4096]);
-}
-},
-onFieldResidualOrder: 27,
-onFieldResidualSubOrder: 4,
-onFieldEnd() {
-this.add('-fieldend', 'move: Mud Sport');
-},
-},
-secondary: null,
-target: "all",
 type: "Ground",
 },
 
@@ -17631,38 +17494,6 @@ multihit: [1, 5],
 multiaccuracy: 95,
 secondary: null,
 target: "normal",
-type: "Water",
-},
-
-watersport: {
-accuracy: 95,
-basePower: 0,
-category: "Status",
-name: "Water Sport",
-pp: .625,
-priority: 0,
-flags: {},
-pseudoWeather: 'watersport',
-condition: {
-duration: 5,
-onFieldStart(field, source) {
-this.add('-fieldstart', 'move: Water Sport', '[of] ' + source);
-},
-onBasePowerPriority: 1,
-onBasePower(basePower, attacker, defender, move) {
-if (move.type === 'Fire') {
-this.debug('water sport weaken');
-return this.chainModify([1352, 4096]);
-}
-},
-onFieldResidualOrder: 27,
-onFieldResidualSubOrder: 3,
-onFieldEnd() {
-this.add('-fieldend', 'move: Water Sport');
-},
-},
-secondary: null,
-target: "all",
 type: "Water",
 },
 
