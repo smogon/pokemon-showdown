@@ -6402,16 +6402,6 @@ pp: 1.25,
 priority: 0,
 flags: {bypasssub: 1},
 pseudoWeather: 'fairylock',
-condition: {
-duration: 5,
-onFieldStart(target) {
-this.add('-fieldactivate', 'move: Fairy Lock');
-},
-onTrapPokemon(pokemon) {
-pokemon.tryTrap();
-},
-},
-volatileStatus: 'disable',
 onTryHit(target) {
 if (!target.lastMove || target.lastMove.isZ || target.lastMove.isMax || target.lastMove.id === 'struggle') {
 return false;
