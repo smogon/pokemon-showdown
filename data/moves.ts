@@ -4026,7 +4026,7 @@ flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 secondary: {
 chance: 100,
 onHit(target, source) {
-const result = this.random(5);
+const result = this.random(4);
 if (result === 0) {
 target.trySetStatus('brn', source);
 } else if (result === 1) {
