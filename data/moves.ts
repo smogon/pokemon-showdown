@@ -1360,7 +1360,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1},
 secondary: {
-chance: 25,
+chance: 33,
 status: 'brn',
 },
 target: "normal",
@@ -1398,7 +1398,7 @@ onModifyMove(move) {
 if (this.field.isWeather(['hail', 'snow'])) move.accuracy = true;
 },
 secondary: {
-chance: 25,
+chance: 33,
 status: 'frz',
 },
 target: "allAdjacentFoes",
@@ -2379,7 +2379,7 @@ pp: .625,
 priority: 0,
 flags: {protect: 1},
 secondary: {
-chance: 25,
+chance: 33,
 status: 'par',
 },
 target: "normal",
@@ -6395,35 +6395,75 @@ type: "Normal",
 
 grudge: {
 accuracy: 95,
-basePower: 0,
-category: "Status",
+basePower: 60,
+category: "Special",
 name: "Grudge",
 pp: 1.25,
 priority: 0,
 flags: {bypasssub: 1},
-volatileStatus: 'grudge',
+pseudoWeather: 'fairylock',
 condition: {
-onStart(pokemon) {
-this.add('-singlemove', pokemon, 'Grudge');
+duration: 5,
+onFieldStart(target) {
+this.add('-fieldactivate', 'move: Fairy Lock');
 },
-onFaint(target, source, effect) {
-if (!source || source.fainted || !effect) return;
-if (effect.effectType === 'Move' && !effect.flags['futuremove'] && source.lastMove) {
-let move: Move = source.lastMove;
-if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
-
-for (const moveSlot of source.moveSlots) {
-if (moveSlot.id === move.id) {
-moveSlot.pp = 0;
-this.add('-activate', source, 'move: Grudge', move.name);
-}
-}
+onTrapPokemon(pokemon) {
+pokemon.tryTrap();
+},
+},
+volatileStatus: 'disable',
+onTryHit(target) {
+if (!target.lastMove || target.lastMove.isZ || target.lastMove.isMax || target.lastMove.id === 'struggle') {
+return false;
 }
 },
-onBeforeMovePriority: 100,
-onBeforeMove(pokemon) {
-this.debug('removing Grudge before attack');
-pokemon.removeVolatile('grudge');
+condition: {
+duration: 5,
+noCopy: true, // doesn't get copied by Baton Pass
+onStart(pokemon, source, effect) {
+// The target hasn't taken its turn, or Cursed Body activated and the move was not used through Dancer or Instruct
+if (
+this.queue.willMove(pokemon) ||
+(pokemon === this.activePokemon && this.activeMove && !this.activeMove.isExternal)
+) {
+this.effectState.duration--;
+}
+if (!pokemon.lastMove) {
+this.debug(`Pokemon hasn't moved yet`);
+return false;
+}
+for (const moveSlot of pokemon.moveSlots) {
+if (moveSlot.id === pokemon.lastMove.id) {
+if (!moveSlot.pp) {
+this.debug('Move out of PP');
+return false;
+}
+}
+}
+if (effect.effectType === 'Ability') {
+this.add('-start', pokemon, 'Disable', pokemon.lastMove.name, '[from] ability: Cursed Body', '[of] ' + source);
+} else {
+this.add('-start', pokemon, 'Disable', pokemon.lastMove.name);
+}
+this.effectState.move = pokemon.lastMove.id;
+},
+onResidualOrder: 17,
+onEnd(pokemon) {
+this.add('-end', pokemon, 'Disable');
+},
+onBeforeMovePriority: 7,
+onBeforeMove(attacker, defender, move) {
+if (!move.isZ && move.id === this.effectState.move) {
+this.add('cant', attacker, 'Disable', move);
+return false;
+}
+},
+onDisableMove(pokemon) {
+for (const moveSlot of pokemon.moveSlots) {
+if (moveSlot.id === this.effectState.move) {
+pokemon.disableMove(moveSlot.id);
+}
+}
 },
 },
 secondary: null,
@@ -7214,7 +7254,7 @@ break;
 }
 },
 secondary: {
-chance: 25,
+chance: 33,
 volatileStatus: 'confusion',
 },
 target: "any",
@@ -8729,7 +8769,7 @@ pp: .625,
 priority: 0,
 flags: {protect: 1},
 secondary: {
-chance: 25,
+chance: 33,
 volatileStatus: 'confusion',
 },
 target: "normal",
@@ -9198,6 +9238,15 @@ pp: .625,
 priority: 0,
 flags: {protect: 1, mirror: 1,},
 pseudoWeather: 'fairylock',
+condition: {
+duration: 5,
+onFieldStart(target) {
+this.add('-fieldactivate', 'move: Fairy Lock');
+},
+onTrapPokemon(pokemon) {
+pokemon.tryTrap();
+},
+},
 ignoreAbility: true,
 secondary: null,
 target: "normal",
@@ -10261,7 +10310,7 @@ pp: .625,
 priority: 0,
 flags: {protect: 1},
 secondary: {
-chance: 25,
+chance: 33,
 status: 'tox',
 },
 target: "normal",
@@ -16467,7 +16516,7 @@ break;
 }
 },
 secondary: {
-chance: 25,
+chance: 33,
 status: 'par',
 },
 target: "normal",
@@ -17292,6 +17341,15 @@ pp: .625,
 priority: 0,
 flags: {contact: 1, protect: 1, mirror: 1},
 pseudoWeather: 'fairylock',
+condition: {
+duration: 5,
+onFieldStart(target) {
+this.add('-fieldactivate', 'move: Fairy Lock');
+},
+onTrapPokemon(pokemon) {
+pokemon.tryTrap();
+},
+},
 secondary: null,
 target: "normal",
 type: "Normal",
@@ -17632,7 +17690,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1},
 secondary: {
-chance: 25,
+chance: 33,
 status: 'slp',
 },
 target: "normal",
