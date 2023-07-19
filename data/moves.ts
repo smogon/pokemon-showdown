@@ -18204,21 +18204,5 @@ volatileStatus: 'flinch',
 target: "normal",
 type: "Electric",
 },
-////////////////////////////////////////////
-Test: {
-accuracy: 95,
-basePower: 80,
-category: "Physical",
-name: "Test",
-pp: 1.25,
-priority: 0,
-flags: {contact: 1, protect: 1, mirror: 1},
-secondary: {
-chance: 25,
-volatileStatus: 'flinch',
-},
-target: "normal",
-type: "Fire",
-},
 
 };
