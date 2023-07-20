@@ -19,6 +19,28 @@ num: 281,
 gen: 4,
 },
 
+eviomax: {
+name: "Eviomax",
+spritenum: 130,
+fling: {
+basePower: 40,
+},
+onModifyDefPriority: 2,
+onModifyDef(def, pokemon) {
+if (!pokemon.baseSpecies.nfe) {
+return this.chainModify(1.25);
+}
+},
+onModifySpDPriority: 2,
+onModifySpD(spd, pokemon) {
+if (!pokemon.baseSpecies.nfe) {
+return this.chainModify(1.25);
+}
+},
+num: 538,
+gen: 5,
+},
+
 captainsarmband: {
 name: "Captains Armband",
 spritenum: 34,
@@ -34,6 +56,27 @@ if (this.randomChance(5, 100) && damage >= target.hp && effect && effect.effectT
 this.add("-activate", target, "item: Focus Band");
 return target.hp - 1;
 }
+},
+
+bulletproofvest: {
+name: "Bullet Proof Vest",
+spritenum: 581,
+fling: {
+basePower: 80,
+},
+onModifyDefPriority: 1,
+onModifyDef(def) {
+return this.chainModify(1.5);
+},
+onDisableMove(pokemon) {
+for (const moveSlot of pokemon.moveSlots) {
+if (this.dex.moves.get(moveSlot.move).category === 'Status') {
+pokemon.disableMove(moveSlot.id);
+}
+}
+},
+num: 640,
+gen: 6,
 },
 
 abilityshield: {
@@ -808,6 +851,7 @@ target.useItem();
 },
 boosts: {
 atk: 1,
+spa: 1,
 },
 num: 546,
 gen: 5,
@@ -1242,7 +1286,7 @@ onFractionalPriorityPriority: -2,
 onFractionalPriority(priority, pokemon) {
 if (
 priority <= 0 &&
-(pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+(pokemon.hp <= pokemon.maxhp / 2 || (pokemon.hp <= pokemon.maxhp &&
 pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony))
 ) {
 if (pokemon.eatItem()) {
@@ -1785,7 +1829,7 @@ type: "Bug",
 onHit(target, source, move) {
 if (move && target.getMoveHitData(move).typeMod > 0) {
 if (target.eatItem()) {
-this.heal(target.baseMaxhp / 4);
+this.heal(target.baseMaxhp / 3);
 }
 }
 },
