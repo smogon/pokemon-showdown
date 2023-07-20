@@ -9979,6 +9979,7 @@ export const Items: {[itemid: string]: ItemData} = {
 					this.boost({spe: -1, def: -1, spd: -1}, target);
 					return 0;
 				}
+			this.damage(source.baseMaxhp / 12, source, source, this.dex.items.get('discardedcloth'));
 			}
 		},
 		num: -79,
