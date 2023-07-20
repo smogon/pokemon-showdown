@@ -374,9 +374,9 @@ onModifyAtkPriority: 1,
 onModifyAtk(atk, pokemon) {
 if (pokemon.volatiles['dynamax']) return;
 return this.chainModify(1.5);
-},
 onSourceModifyAccuracyPriority: 2,
 onSourceModifyAccuracy(accuracy) {
+},
 },
 
 choicescarf: {
@@ -400,6 +400,7 @@ return this.chainModify(1.5);
 onSourceModifyAccuracyPriority: 2,
 onSourceModifyAccuracy(accuracy) {
 },
+},
 
 choicespecs: {
 name: "Choice Specs",
@@ -422,6 +423,7 @@ return this.chainModify(1.5);
 },
 onSourceModifyAccuracyPriority: 2,
 onSourceModifyAccuracy(accuracy) {
+},
 },
 
 chopleberry: {
