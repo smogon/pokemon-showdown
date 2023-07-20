@@ -26,11 +26,11 @@ export const Formats: FormatList = [
 		section: "S/V Singles",
 	},
 	{
-		name: "[Gen 8] Innate Testing",
+		name: "[Gen 9] Elite Redux",
 		desc: `Testing for ER Innates`,
-		mod: 'gen9er',
+		mod: 'gen9eliteredux',
 		rated: false, 
-		ruleset: ['Obtainable'],
+		ruleset: ['Standard NatDex'],
 		onValidateSet(set) {
 			//TODO: Change from AAA script to ER innate script
 			const species = this.dex.species.get(set.species);
