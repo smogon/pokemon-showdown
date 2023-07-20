@@ -973,7 +973,7 @@ onModifyAtk(atk, pokemon) {
 if (pokemon.volatiles['dynamax']) return;
 return this.chainModify(1.5);
 },
-onSourceModifyAccuracyPriority: -2,
+onSourceModifyAccuracyPriority: 2,
 onSourceModifyAccuracy(accuracy) {
 if (typeof accuracy === 'number') {
 return this.chainModify([4505, 4096]);
@@ -998,7 +998,7 @@ pokemon.removeVolatile('choicelock');
 onModifyMove(move, pokemon) {
 pokemon.addVolatile('choicelock');
 },
-onSourceModifyAccuracyPriority: -2,
+onSourceModifyAccuracyPriority: 2,
 onSourceModifyAccuracy(accuracy) {
 if (typeof accuracy === 'number') {
 return this.chainModify([4505, 4096]);
@@ -1032,7 +1032,7 @@ onModifySpA(spa, pokemon) {
 if (pokemon.volatiles['dynamax']) return;
 return this.chainModify(1.5);
 },
-onSourceModifyAccuracyPriority: -2,
+onSourceModifyAccuracyPriority: 2,
 onSourceModifyAccuracy(accuracy) {
 if (typeof accuracy === 'number') {
 return this.chainModify([4505, 4096]);

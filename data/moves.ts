@@ -15786,7 +15786,7 @@ priority: 0,
 flags: {protect: 1, mirror: 1},
 chance: 75,
 selfBoost:
-accuracy: 2,
+accuracy: 1,
 },
 target: "allAdjacentFoes",
 type: "Normal",
