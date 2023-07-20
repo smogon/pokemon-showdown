@@ -15785,7 +15785,7 @@ pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
 chance: 75,
-boosts: {
+selfBoost:
 accuracy: 2,
 },
 target: "allAdjacentFoes",
