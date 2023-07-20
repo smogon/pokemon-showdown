@@ -976,7 +976,7 @@ return this.chainModify(1.5);
 onSourceModifyAccuracyPriority: 2,
 onSourceModifyAccuracy(accuracy) {
 if (typeof accuracy === 'number') {
-return this.chainModify([4505, 4096]);
+return this.chainModify([4596, 4005]);
 }
 },
 num: 220,
@@ -1001,7 +1001,7 @@ pokemon.addVolatile('choicelock');
 onSourceModifyAccuracyPriority: 2,
 onSourceModifyAccuracy(accuracy) {
 if (typeof accuracy === 'number') {
-return this.chainModify([4505, 4096]);
+return this.chainModify([4596, 4005]);
 }
 },
 onModifySpe(spe, pokemon) {
@@ -1035,7 +1035,7 @@ return this.chainModify(1.5);
 onSourceModifyAccuracyPriority: 2,
 onSourceModifyAccuracy(accuracy) {
 if (typeof accuracy === 'number') {
-return this.chainModify([4505, 4096]);
+return this.chainModify([4596, 4005]);
 }
 },
 num: 297,
