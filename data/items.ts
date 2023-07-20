@@ -45,7 +45,7 @@ fling: {
 basePower: 10,
 },
 onAfterMoveSecondary(target, source, move) {
-if (source && source !== target && source.hp && target.hp) {
+if (source && source !== target && source.hp && target.hp && move && move.category !== 'Status') {
 if (!source.isActive || !this.canSwitch(source.side) || source.forceSwitchFlag || target.forceSwitchFlag) {
 return;
 }
@@ -5040,6 +5040,26 @@ if (target.useItem(source)) {
 if (this.runEvent('DragOut', source, target, move)) {
 source.forceSwitchFlag = true;
 }
+}
+}
+},
+onAfterBoost(boost, target, source, effect) {
+if (this.activeMove?.id === 'partingshot') return;
+let eject = false;
+let i: BoostID;
+for (i in boost) {
+if (boost[i]! < 0) {
+eject = true;
+}
+}
+if (eject) {
+if (target.hp) {
+if (!this.canSwitch(target.side)) return;
+if (target.volatiles['commanding'] || target.volatiles['commanded']) return;
+for (const pokemon of this.getAllActive()) {
+if (pokemon.switchFlag === true) return;
+}
+if (target.useItem()) target.switchFlag = true;
 }
 }
 },
