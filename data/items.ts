@@ -52,7 +52,8 @@ onResidualSubOrder: 4,
 onResidual(pokemon) {
 this.heal(pokemon.baseMaxhp / 25);
 },
-if (this.randomChance(5, 100) && damage >= target.hp && effect && effect.effectType === 'Move') {
+onDamage(damage, target, source, effect) {
+if (this.randomChance(15, 100) && damage >= target.hp && effect && effect.effectType === 'Move') {
 this.add("-activate", target, "item: Focus Band");
 return target.hp - 1;
 }
