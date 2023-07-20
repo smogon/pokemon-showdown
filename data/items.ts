@@ -973,7 +973,6 @@ onModifyAtk(atk, pokemon) {
 if (pokemon.volatiles['dynamax']) return;
 return this.chainModify(1.5);
 },
-isChoice: true,
 num: 220,
 gen: 3,
 },
@@ -997,7 +996,6 @@ onModifySpe(spe, pokemon) {
 if (pokemon.volatiles['dynamax']) return;
 return this.chainModify(1.5);
 },
-isChoice: true,
 num: 287,
 gen: 4,
 },
@@ -1022,7 +1020,6 @@ onModifySpA(spa, pokemon) {
 if (pokemon.volatiles['dynamax']) return;
 return this.chainModify(1.5);
 },
-isChoice: true,
 num: 297,
 gen: 4,
 },
