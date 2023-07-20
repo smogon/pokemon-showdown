@@ -28,17 +28,12 @@ basePower: 30,
 onResidualOrder: 5,
 onResidualSubOrder: 4,
 onResidual(pokemon) {
-this.heal(pokemon.baseMaxhp / 50);
+this.heal(pokemon.baseMaxhp / 25);
 },
-onDamagingHit(damage, target, source, move) {
-},
-boosts: {
-atk: 1,
-spa: 1,
-evasion: -1,
-},
-num: 281,
-gen: 4,
+if (this.randomChance(5, 100) && damage >= target.hp && effect && effect.effectType === 'Move') {
+this.add("-activate", target, "item: Focus Band");
+return target.hp - 1;
+}
 },
 
 abilityshield: {
@@ -1760,6 +1755,7 @@ pokemon.useItem();
 },
 boosts: {
 def: 1,
+spd: 1,
 },
 num: 881,
 gen: 7,
@@ -2156,7 +2152,7 @@ basePower: 10,
 },
 onDamagePriority: -40,
 onDamage(damage, target, source, effect) {
-if (this.randomChance(1, 10) && damage >= target.hp && effect && effect.effectType === 'Move') {
+if (this.randomChance(15, 100) && damage >= target.hp && effect && effect.effectType === 'Move') {
 this.add("-activate", target, "item: Focus Band");
 return target.hp - 1;
 }
@@ -2293,7 +2289,7 @@ basePower: 100,
 type: "Ice",
 },
 onUpdate(pokemon) {
-if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+if (pokemon.hp <= pokemon.maxhp / 3 || (pokemon.hp <= pokemon.maxhp / 2 &&
 pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 pokemon.eatItem();
 }
@@ -2483,6 +2479,7 @@ pokemon.useItem();
 },
 boosts: {
 def: 1,
+spd: 1,
 },
 num: 884,
 gen: 7,
@@ -2952,7 +2949,7 @@ type: "Dragon",
 onDamagingHit(damage, target, source, move) {
 if (move.category === 'Physical' && source.hp && source.isActive && !source.hasAbility('magicguard')) {
 if (target.eatItem()) {
-this.damage(source.baseMaxhp / (target.hasAbility('ripen') ? 4 : 8), source, target);
+this.damage(source.baseMaxhp / (target.hasAbility('ripen') ? 4 : 4), source, target);
 }
 }
 },
@@ -3129,7 +3126,7 @@ basePower: 100,
 type: "Flying",
 },
 onUpdate(pokemon) {
-if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+if (pokemon.hp <= pokemon.maxhp / 3 || (pokemon.hp <= pokemon.maxhp / 2 &&
 pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 pokemon.eatItem();
 }
@@ -3273,7 +3270,7 @@ basePower: 100,
 type: "Grass",
 },
 onUpdate(pokemon) {
-if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+if (pokemon.hp <= pokemon.maxhp / 3 || (pokemon.hp <= pokemon.maxhp / 2 &&
 pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 pokemon.eatItem();
 }
@@ -3296,7 +3293,7 @@ return this.chainModify([5324, 4096]);
 },
 onAfterMoveSecondarySelf(source, target, move) {
 if (source && source !== target && move && move.category !== 'Status' && !source.forceSwitchFlag) {
-this.damage(source.baseMaxhp / 10, source, source, this.dex.items.get('lifeorb'));
+this.damage(source.baseMaxhp / 5, source, source, this.dex.items.get('lifeorb'));
 }
 },
 num: 270,
@@ -3582,8 +3579,8 @@ num: 242,
 gen: 2,
 },
 
-magoberry: {
-name: "Mago Berry",
+mangoberry: {
+name: "Mango Berry",
 spritenum: 274,
 isBerry: true,
 naturalGift: {
@@ -3591,7 +3588,7 @@ basePower: 80,
 type: "Ghost",
 },
 onUpdate(pokemon) {
-if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+if (pokemon.hp <= pokemon.maxhp / 2 || (pokemon.hp <= pokemon.maxhp / 2 &&
 pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 pokemon.eatItem();
 }
@@ -3600,7 +3597,7 @@ onTryEatItem(item, pokemon) {
 if (!this.runEvent('TryHeal', pokemon)) return false;
 },
 onEat(pokemon) {
-this.heal(pokemon.baseMaxhp / 3);
+this.heal(pokemon.baseMaxhp / 2);
 if (pokemon.getNature().minus === 'spe') {
 pokemon.addVolatile('confusion');
 }
@@ -3933,7 +3930,7 @@ basePower: 100,
 type: "Rock",
 },
 onResidual(pokemon) {
-if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+if (pokemon.hp <= pokemon.maxhp / 3 || (pokemon.hp <= pokemon.maxhp / 2 &&
 pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 pokemon.eatItem();
 }
@@ -3948,7 +3945,7 @@ if (!move.ohko) {
 this.add('-enditem', source, 'Micle Berry');
 source.removeVolatile('micleberry');
 if (typeof accuracy === 'number') {
-return this.chainModify([4915, 4096]);
+return this.chainModify([4915, 2455]);
 }
 }
 },
@@ -4051,6 +4048,7 @@ pokemon.useItem();
 }
 },
 boosts: {
+def: 1,
 spd: 1,
 },
 num: 883,
@@ -4254,7 +4252,7 @@ basePower: 80,
 type: "Poison",
 },
 onUpdate(pokemon) {
-if (pokemon.hp <= pokemon.maxhp / 2) {
+if (pokemon.hp <= pokemon.maxhp) {
 pokemon.eatItem();
 }
 },
@@ -4402,7 +4400,7 @@ basePower: 100,
 type: "Poison",
 },
 onUpdate(pokemon) {
-if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+if (pokemon.hp <= pokemon.maxhp / 3 || (pokemon.hp <= pokemon.maxhp / 2 &&
 pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 pokemon.eatItem();
 }
@@ -4802,6 +4800,7 @@ pokemon.useItem();
 }
 },
 boosts: {
+def: 1,
 spd: 1,
 },
 num: 882,
@@ -5174,7 +5173,7 @@ basePower: 60,
 onDamagingHitOrder: 2,
 onDamagingHit(damage, target, source, move) {
 if (this.checkMoveMakesContact(move, source, target)) {
-this.damage(source.baseMaxhp / 6, source, target);
+this.damage(source.baseMaxhp / 5, source, target);
 }
 },
 num: 540,
@@ -5269,7 +5268,7 @@ type: "Dark",
 onDamagingHit(damage, target, source, move) {
 if (move.category === 'Special' && source.hp && source.isActive && !source.hasAbility('magicguard')) {
 if (target.eatItem()) {
-this.damage(source.baseMaxhp / (target.hasAbility('ripen') ? 4 : 8), source, target);
+this.damage(source.baseMaxhp / (target.hasAbility('ripen') ? 4 : 4), source, target);
 }
 }
 },
@@ -5383,7 +5382,7 @@ basePower: 100,
 type: "Fighting",
 },
 onUpdate(pokemon) {
-if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+if (pokemon.hp <= pokemon.maxhp / 3 || (pokemon.hp <= pokemon.maxhp / 2 &&
 pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 pokemon.eatItem();
 }
@@ -5721,6 +5720,7 @@ target.useItem();
 },
 boosts: {
 atk: 1,
+spa: 1,
 },
 num: 649,
 gen: 6,
@@ -5867,7 +5867,7 @@ basePower: 100,
 type: "Psychic",
 },
 onUpdate(pokemon) {
-if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+if (pokemon.hp <= pokemon.maxhp / 3 || (pokemon.hp <= pokemon.maxhp / 2 &&
 pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 pokemon.eatItem();
 }
@@ -7568,7 +7568,7 @@ basePower: 80,
 type: "Rock",
 },
 onUpdate(pokemon) {
-if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+if (pokemon.hp <= pokemon.maxhp / 3 || (pokemon.hp <= pokemon.maxhp / 2 &&
 pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 pokemon.eatItem();
 }
