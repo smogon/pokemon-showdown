@@ -117,7 +117,7 @@ export class ModdedDex {
 	modsLoaded = false;
 
 	dataCache: DexTableData | null;
-	textCache: TextTableData | null;
+	textCache: Record<string, TextTableData> | null;
 
 	deepClone = Utils.deepClone;
 
@@ -274,7 +274,8 @@ export class ModdedDex {
 				shortDesc: dataEntry.shortDesc,
 			};
 		}
-		const entry = this.loadTextData()[table][id];
+		// TODO: Figure out translating /dt
+		const entry = this.loadTextData().english[table][id];
 		if (!entry) return null;
 		const descs = {
 			desc: '',
@@ -436,9 +437,9 @@ export class ModdedDex {
 	}
 
 	loadTextFile(
-		name: string, exportName: string
+		name: string, exportName: string, language = 'english',
 	): DexTable<MoveText | ItemText | AbilityText | PokedexText | DefaultText> {
-		return require(`${DATA_DIR}/text/${name}`)[exportName];
+		return require(`${DATA_DIR}/text/${language}/${name}`)[exportName];
 	}
 
 	includeMods(): this {
@@ -467,13 +468,16 @@ export class ModdedDex {
 
 	loadTextData() {
 		if (dexes['base'].textCache) return dexes['base'].textCache;
-		dexes['base'].textCache = {
-			Pokedex: this.loadTextFile('pokedex', 'PokedexText') as DexTable<PokedexText>,
-			Moves: this.loadTextFile('moves', 'MovesText') as DexTable<MoveText>,
-			Abilities: this.loadTextFile('abilities', 'AbilitiesText') as DexTable<AbilityText>,
-			Items: this.loadTextFile('items', 'ItemsText') as DexTable<ItemText>,
-			Default: this.loadTextFile('default', 'DefaultText') as DexTable<DefaultText>,
-		};
+		dexes['base'].textCache = {};
+		for (const language of fs.readdirSync(this.dataDir + '/text')) {
+			dexes['base'].textCache[language] = {
+				Pokedex: this.loadTextFile('pokedex', 'PokedexText', language) as DexTable<PokedexText>,
+				Moves: this.loadTextFile('moves', 'MovesText', language) as DexTable<MoveText>,
+				Abilities: this.loadTextFile('abilities', 'AbilitiesText', language) as DexTable<AbilityText>,
+				Items: this.loadTextFile('items', 'ItemsText', language) as DexTable<ItemText>,
+				Default: this.loadTextFile('default', 'DefaultText', language) as DexTable<DefaultText>,
+			};
+		}
 		return dexes['base'].textCache;
 	}
 
