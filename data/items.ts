@@ -19,6 +19,48 @@ num: 281,
 gen: 4,
 },
 
+captainsarmband: {
+name: "Captains Armband",
+spritenum: 34,
+fling: {
+basePower: 30,
+},
+onResidualOrder: 5,
+onResidualSubOrder: 4,
+onResidual(pokemon) {
+if (pokemon.hasType('Fire')) {
+this.heal(pokemon.baseMaxhp / 20);
+} else {
+this.damage(pokemon.baseMaxhp / 4);
+}
+},
+num: 281,
+gen: 4,
+},
+
+yellowcard: {
+name: "Yellow Card",
+spritenum: 387,
+fling: {
+basePower: 10,
+},
+onAfterMoveSecondary(target, source, move) {
+if (source && source !== target && source.hp && target.hp) {
+if (!source.isActive || !this.canSwitch(source.side) || source.forceSwitchFlag || target.forceSwitchFlag) {
+return;
+}
+// The item is used up even against a pokemon with Ingrain or that otherwise can't be forced out
+if (target.useItem(source)) {
+if (this.runEvent('DragOut', source, target, move)) {
+source.forceSwitchFlag = true;
+}
+}
+}
+},
+num: 542,
+gen: 5,
+},
+
 abilityshield: {
 name: "Ability Shield",
 spritenum: 0, // TODO
