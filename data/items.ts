@@ -58,6 +58,7 @@ this.add("-activate", target, "item: Focus Band");
 return target.hp - 1;
 }
 },
+},
 
 bulletproofvest: {
 name: "Bullet Proof Vest",
