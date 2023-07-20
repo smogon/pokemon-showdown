@@ -1,5 +1,24 @@
 export const Items: {[itemid: string]: ItemData} = {
 
+superspicycurry: {
+name: "Superspicy Curry",
+spritenum: 34,
+fling: {
+basePower: 30,
+},
+onResidualOrder: 5,
+onResidualSubOrder: 4,
+onResidual(pokemon) {
+if (pokemon.hasType('Fire')) {
+this.heal(pokemon.baseMaxhp / 20);
+} else {
+this.damage(pokemon.baseMaxhp / 4);
+}
+},
+num: 281,
+gen: 4,
+},
+
 abilityshield: {
 name: "Ability Shield",
 spritenum: 0, // TODO
@@ -549,9 +568,9 @@ onResidualOrder: 5,
 onResidualSubOrder: 4,
 onResidual(pokemon) {
 if (pokemon.hasType('Poison')) {
-this.heal(pokemon.baseMaxhp / 16);
+this.heal(pokemon.baseMaxhp / 20);
 } else {
-this.damage(pokemon.baseMaxhp / 8);
+this.damage(pokemon.baseMaxhp / 4);
 }
 },
 num: 281,
@@ -973,12 +992,7 @@ onModifyAtk(atk, pokemon) {
 if (pokemon.volatiles['dynamax']) return;
 return this.chainModify(1.5);
 },
-onSourceModifyAccuracyPriority: 2,
-onSourceModifyAccuracy(accuracy) {
-if (typeof accuracy === 'number') {
-return this.chainModify([4596, 4005]);
-}
-},
+isChoice: true,
 num: 220,
 gen: 3,
 },
@@ -998,16 +1012,11 @@ pokemon.removeVolatile('choicelock');
 onModifyMove(move, pokemon) {
 pokemon.addVolatile('choicelock');
 },
-onSourceModifyAccuracyPriority: 2,
-onSourceModifyAccuracy(accuracy) {
-if (typeof accuracy === 'number') {
-return this.chainModify([4596, 4005]);
-}
-},
 onModifySpe(spe, pokemon) {
 if (pokemon.volatiles['dynamax']) return;
 return this.chainModify(1.5);
 },
+isChoice: true,
 num: 287,
 gen: 4,
 },
@@ -1032,12 +1041,7 @@ onModifySpA(spa, pokemon) {
 if (pokemon.volatiles['dynamax']) return;
 return this.chainModify(1.5);
 },
-onSourceModifyAccuracyPriority: 2,
-onSourceModifyAccuracy(accuracy) {
-if (typeof accuracy === 'number') {
-return this.chainModify([4596, 4005]);
-}
-},
+isChoice: true,
 num: 297,
 gen: 4,
 },
@@ -3198,7 +3202,7 @@ basePower: 10,
 onResidualOrder: 5,
 onResidualSubOrder: 4,
 onResidual(pokemon) {
-this.heal(pokemon.baseMaxhp / 16);
+this.heal(pokemon.baseMaxhp / 20);
 },
 num: 234,
 gen: 2,
