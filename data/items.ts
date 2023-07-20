@@ -361,11 +361,21 @@ name: "Choice Band",
 fling: {
 basePower: 10,
 },
+onStart(pokemon) {
+if (pokemon.volatiles['choicelock']) {
+this.debug('removing choicelock: ' + pokemon.volatiles['choicelock']);
+}
+pokemon.removeVolatile('choicelock');
+},
+onModifyMove(move, pokemon) {
+pokemon.addVolatile('choicelock');
+},
 onModifyAtkPriority: 1,
 onModifyAtk(atk, pokemon) {
 if (pokemon.volatiles['dynamax']) return;
 return this.chainModify(1.5);
 },
+isChoice: true,
 },
 
 choicescarf: {
@@ -373,10 +383,20 @@ name: "Choice Scarf",
 fling: {
 basePower: 10,
 },
+onStart(pokemon) {
+if (pokemon.volatiles['choicelock']) {
+this.debug('removing choicelock: ' + pokemon.volatiles['choicelock']);
+}
+pokemon.removeVolatile('choicelock');
+},
+onModifyMove(move, pokemon) {
+pokemon.addVolatile('choicelock');
+},
 onModifySpe(spe, pokemon) {
 if (pokemon.volatiles['dynamax']) return;
 return this.chainModify(1.5);
 },
+isChoice: true,
 },
 
 choicespecs: {
@@ -384,11 +404,21 @@ name: "Choice Specs",
 fling: {
 basePower: 10,
 },
+onStart(pokemon) {
+if (pokemon.volatiles['choicelock']) {
+this.debug('removing choicelock: ' + pokemon.volatiles['choicelock']);
+}
+pokemon.removeVolatile('choicelock');
+},
+onModifyMove(move, pokemon) {
+pokemon.addVolatile('choicelock');
+},
 onModifySpAPriority: 1,
 onModifySpA(spa, pokemon) {
 if (pokemon.volatiles['dynamax']) return;
 return this.chainModify(1.5);
 },
+isChoice: true,
 },
 
 chopleberry: {
