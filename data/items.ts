@@ -374,9 +374,8 @@ onModifyAtkPriority: 1,
 onModifyAtk(atk, pokemon) {
 if (pokemon.volatiles['dynamax']) return;
 return this.chainModify(1.5);
-onSourceModifyAccuracyPriority: 2,
-onSourceModifyAccuracy(accuracy) {
 },
+isChoice: true,
 },
 
 choicescarf: {
@@ -397,9 +396,7 @@ onModifySpe(spe, pokemon) {
 if (pokemon.volatiles['dynamax']) return;
 return this.chainModify(1.5);
 },
-onSourceModifyAccuracyPriority: 2,
-onSourceModifyAccuracy(accuracy) {
-},
+isChoice: true,
 },
 
 choicespecs: {
@@ -421,9 +418,7 @@ onModifySpA(spa, pokemon) {
 if (pokemon.volatiles['dynamax']) return;
 return this.chainModify(1.5);
 },
-onSourceModifyAccuracyPriority: 2,
-onSourceModifyAccuracy(accuracy) {
-},
+isChoice: true,
 },
 
 chopleberry: {
@@ -709,7 +704,6 @@ if (move && target.getMoveHitData(move).typeMod > 0) {
 return this.chainModify([4915, 4096]);
 }
 },
-
 },
 
 fairygem: {
