@@ -50,7 +50,7 @@ basePower: 30,
 onResidualOrder: 5,
 onResidualSubOrder: 4,
 onResidual(pokemon) {
-this.heal(pokemon.baseMaxhp / 25);
+this.heal(pokemon.baseMaxhp / 40);
 },
 onDamage(damage, target, source, effect) {
 if (this.randomChance(15, 100) && damage >= target.hp && effect && effect.effectType === 'Move') {
