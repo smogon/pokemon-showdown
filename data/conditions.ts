@@ -162,12 +162,13 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'confusion',
 		// this is a volatile status
 		onStart(target, source, sourceEffect) {
-			if (sourceEffect && sourceEffect.id === 'lockedmove') {
+			if (sourceEffect?.id === 'lockedmove') {
 				this.add('-start', target, 'confusion', '[fatigue]');
 			} else {
 				this.add('-start', target, 'confusion');
 			}
-			this.effectState.time = this.random(2, 6);
+			const min = sourceEffect?.id === 'axekick' ? 3 : 2;
+			this.effectState.time = this.random(min, 6);
 		},
 		onEnd(target) {
 			this.add('-end', target, 'confusion');
@@ -539,6 +540,10 @@ export const Conditions: {[k: string]: ConditionData} = {
 			return 5;
 		},
 		onWeatherModifyDamage(damage, attacker, defender, move) {
+			if (move.id === 'hydrosteam' && !attacker.hasItem('utilityumbrella')) {
+				this.debug('Sunny Day Hydro Steam boost');
+				return this.chainModify(1.5);
+			}
 			if (defender.hasItem('utilityumbrella')) return;
 			if (move.type === 'Fire') {
 				this.debug('Sunny Day fire boost');
@@ -714,7 +719,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onEffectivenessPriority: -1,
 		onEffectiveness(typeMod, target, type, move) {
 			if (move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Flying' && typeMod > 0) {
-				this.add('-activate', '', 'deltastream');
+				this.add('-fieldactivate', 'Delta Stream');
 				return 0;
 			}
 		},
@@ -807,9 +812,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 	commanding: {
 		name: "Commanding",
 		noCopy: true,
-		onStart(pokemon) {
-			this.add('-activate', pokemon, 'ability: Commander');
-		},
 		onDragOutPriority: 2,
 		onDragOut() {
 			return false;

@@ -22,6 +22,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	assist: {
+		inherit: true,
+		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
+	},
 	aurawheel: {
 		inherit: true,
 		isNonstandard: null,
@@ -35,6 +39,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	autotomize: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	belch: {
+		inherit: true,
+		flags: {protect: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
 	},
 	blizzard: {
 		inherit: true,
@@ -58,22 +66,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	celebrate: {
+		inherit: true,
+		flags: {nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
+	},
 	charge: {
 		inherit: true,
 		condition: {
 			onStart(pokemon, source, effect) {
-				if (effect && ['electromorphosis', 'windpower'].includes(effect.id)) {
-					this.add('-start', pokemon, 'Charge', this.activeMove!.name, '[from] ability: ' + effect.name);
-				} else {
-					this.add('-start', pokemon, 'Charge');
-				}
+				this.add('-start', pokemon, 'Charge');
 			},
 			onRestart(pokemon, source, effect) {
-				if (effect && ['electromorphosis', 'windpower'].includes(effect.id)) {
-					this.add('-start', pokemon, 'Charge', this.activeMove!.name, '[from] ability: ' + effect.name);
-				} else {
-					this.add('-start', pokemon, 'Charge');
-				}
+				this.add('-start', pokemon, 'Charge');
 			},
 			onBasePowerPriority: 9,
 			onBasePower(basePower, attacker, defender, move) {
@@ -82,19 +86,26 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return this.chainModify(2);
 				}
 			},
-			onMoveAborted(target, source, move) {
+			onMoveAborted(pokemon, target, move) {
 				if (move.id !== 'charge') {
-					source.removeVolatile('charge');
+					pokemon.removeVolatile('charge');
 				}
 			},
-			onAfterMove(target, source, move) {
+			onAfterMove(pokemon, target, move) {
 				if (move.id !== 'charge') {
-					source.removeVolatile('charge');
+					pokemon.removeVolatile('charge');
 				}
 			},
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Charge', '[silent]');
 			},
+		},
+	},
+	chatter: {
+		inherit: true,
+		flags: {
+			protect: 1, mirror: 1, sound: 1, distance: 1, bypasssub: 1,
+			noassist: 1, failcopycat: 1, failinstruct: 1, failmefirst: 1, nosleeptalk: 1, failmimic: 1,
 		},
 	},
 	clangingscales: {
@@ -113,6 +124,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	copycat: {
+		inherit: true,
+		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
+	},
 	coreenforcer: {
 		inherit: true,
 		isNonstandard: null,
@@ -128,6 +143,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	crushgrip: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	curse: {
+		inherit: true,
+		onModifyMove(move, source, target) {
+			if (!source.hasType('Ghost')) {
+				move.target = move.nonGhostTarget as MoveTarget;
+			}
+		},
+		target: "randomNormal",
 	},
 	decorate: {
 		inherit: true,
@@ -155,6 +179,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	eternabeam: {
 		inherit: true,
+		flags: {recharge: 1, protect: 1, mirror: 1, failinstruct: 1},
 		isNonstandard: null,
 	},
 	fishiousrend: {
@@ -168,6 +193,31 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	flowershield: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	fly: {
+		inherit: true,
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+
+			// In SwSh, Fly's animation leaks the initial target through a camera focus
+			// The animation leak target itself isn't "accurate"; the target it reveals is as if Fly weren't a charge movee
+			// (Fly, like all other charge moves, will actually target slots on its charging turn, relevant for things like Follow Me)
+			// We use a generic single-target move to represent this
+			if (this.gameType === 'doubles' || this.gameType === 'multi') {
+				const animatedTarget = attacker.getMoveTargets(this.dex.getActiveMove('aerialace'), defender).targets[0];
+				if (animatedTarget) {
+					this.hint(`${move.name}'s animation targeted ${animatedTarget.name}`);
+				}
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
 	},
 	forestscurse: {
 		inherit: true,
@@ -184,6 +234,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	fusionflare: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	futuresight: {
+		inherit: true,
+		flags: {futuremove: 1},
 	},
 	geargrind: {
 		inherit: true,
@@ -228,6 +282,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	heartswap: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	holdhands: {
+		inherit: true,
+		flags: {bypasssub: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
 	},
 	hyperspacefury: {
 		inherit: true,
@@ -361,9 +419,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	mefirst: {
+		inherit: true,
+		flags: {
+			protect: 1, bypasssub: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1,
+		},
+	},
 	meteorassault: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	metronome: {
+		inherit: true,
+		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
 	},
 	milkdrink: {
 		inherit: true,
@@ -376,6 +444,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	mindreader: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	mirrorcoat: {
+		inherit: true,
+		flags: {protect: 1, failmefirst: 1, noassist: 1, failcopycat: 1},
+	},
+	mirrormove: {
+		inherit: true,
+		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
 	},
 	mistball: {
 		inherit: true,
@@ -392,6 +468,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	naturepower: {
 		inherit: true,
 		isNonstandard: null,
+		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
 	},
 	naturesmadness: {
 		inherit: true,
@@ -500,6 +577,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	slackoff: {
 		inherit: true,
 		pp: 10,
+	},
+	sleeptalk: {
+		inherit: true,
+		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
 	},
 	snaptrap: {
 		inherit: true,

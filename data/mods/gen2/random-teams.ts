@@ -1,13 +1,16 @@
 import RandomGen3Teams from '../gen3/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
-import type {MoveCounter} from '../../random-teams';
+import type {MoveCounter, OldRandomBattleSpecies} from '../gen8/random-teams';
 
 export class RandomGen2Teams extends RandomGen3Teams {
+	randomData: {[species: string]: OldRandomBattleSpecies} = require('./random-data.json');
+
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 		this.moveEnforcementCheckers = {
 			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
 			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire'),
+			Flying: (movePool, moves, abilities, types, counter) => !counter.get('Flying') && types.has('Ground'),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
 			Normal: (movePool, moves, abilities, types, counter) => !counter.get('Normal') && counter.setupType === 'Physical',
@@ -34,16 +37,17 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			return {
 				cull: (
 					(counter.setupType !== 'Physical' || counter.get('physicalsetup') > 1) ||
-					(!counter.get('Physical') || counter.damagingMoves.size < 2 && !moves.has('batonpass') && !moves.has('sleeptalk'))
+					(!counter.get('Physical') || counter.damagingMoves.size < 2 && !moves.has('batonpass') && !moves.has('sleeptalk')) ||
+					(move.id === 'bellydrum' && moves.has('sleeptalk'))
 				),
 				isSetup: true,
 			};
 
 		// Not very useful without their supporting moves
 		case 'batonpass':
-			return {cull: !counter.setupType && !counter.get('speedsetup') && !moves.has('meanlook')};
-		case 'meanlook':
-			return {cull: movePool.includes('perishsong')};
+			return {cull: !counter.setupType && !counter.get('speedsetup') && !moves.has('meanlook') && !moves.has('spiderweb')};
+		case 'meanlook': case 'spiderweb':
+			return {cull: movePool.includes('perishsong') || movePool.includes('batonpass')};
 		case 'nightmare':
 			return {cull: !moves.has('lovelykiss') && !moves.has('sleeppowder')};
 		case 'swagger':
@@ -66,22 +70,18 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			return {cull: moves.has('bodyslam') || restTalk};
 		case 'hyperbeam':
 			return {cull: moves.has('rockslide')};
-		case 'quickattack':
-			return {cull: moves.has('rest')};
 		case 'rapidspin':
-			return {cull: !!teamDetails.rapidSpin || moves.has('sleeptalk')};
+			return {cull: !!teamDetails.rapidSpin || !!counter.setupType || moves.has('sleeptalk')};
 		case 'return':
 			return {cull: moves.has('bodyslam')};
 		case 'surf':
 			return {cull: moves.has('hydropump')};
 		case 'thunder':
 			return {cull: moves.has('thunderbolt')};
-		case 'gigadrain':
-			return {cull: moves.has('razorleaf') || moves.has('swordsdance') && movePool.includes('sludgebomb')};
+		case 'razorleaf':
+			return {cull: moves.has('swordsdance') && movePool.includes('sludgebomb')};
 		case 'icebeam':
 			return {cull: moves.has('dragonbreath')};
-		case 'seismictoss':
-			return {cull: moves.has('rest') || moves.has('sleeptalk')};
 		case 'destinybond':
 			return {cull: moves.has('explosion')};
 		case 'pursuit':
@@ -92,18 +92,16 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			return {cull: types.has('Ground') && movePool.includes('earthquake')};
 
 		// Status and illegal move rejections
-		case 'confuseray': case 'roar': case 'whirlwind':
+		case 'encore': case 'roar': case 'whirlwind':
 			return {cull: restTalk};
-		case 'encore':
-			return {cull: moves.has('bodyslam') || moves.has('surf') || restTalk};
 		case 'lovelykiss':
-			return {cull: ['healbell', 'moonlight', 'morningsun'].some(m => moves.has(m)) || restTalk};
+			return {cull: ['healbell', 'moonlight', 'morningsun', 'sleeptalk'].some(m => moves.has(m))};
 		case 'sleeptalk':
 			return {cull: moves.has('curse') && counter.get('stab') >= 2};
 		case 'softboiled':
 			return {cull: movePool.includes('swordsdance')};
 		case 'spikes':
-			return {cull: !!teamDetails.spikes || types.has('Ice') && moves.has('rapidspin')};
+			return {cull: !!teamDetails.spikes};
 		case 'substitute':
 			return {cull: moves.has('agility') || moves.has('rest')};
 		case 'synthesis':
@@ -123,7 +121,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		species: Species,
 	) {
 		// First, the high-priority items
-		if (species.name === 'Ditto') return this.sample(['Metal Powder', 'Quick Claw']);
+		if (species.name === 'Ditto') return 'Metal Powder';
 		if (species.name === 'Farfetch\u2019d') return 'Stick';
 		if (species.name === 'Marowak') return 'Thick Club';
 		if (species.name === 'Pikachu') return 'Light Ball';
@@ -148,7 +146,8 @@ export class RandomGen2Teams extends RandomGen3Teams {
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}): RandomTeamsTypes.RandomSet {
 		species = this.dex.species.get(species);
 
-		const movePool = (species.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
+		const data = this.randomData[species.id];
+		const movePool = (data.moves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool: string[] = [];
 		const moves = new Set<string>();
 
@@ -202,7 +201,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				const moveIsRejectable = (
 					(move.category !== 'Status' || !move.flags.heal) &&
 					// These moves cannot be rejected in favor of a forced move
-					!['batonpass', 'sleeptalk', 'spikes', 'sunnyday'].includes(move.id) &&
+					!['batonpass', 'sleeptalk', 'spikes', 'spore', 'sunnyday'].includes(move.id) &&
 					(move.category === 'Status' || !types.has(move.type) || (move.basePower && move.basePower < 40))
 				);
 
@@ -221,7 +220,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 						// Sunny Day + Solar Beam should be selected together
 						(moves.has('sunnyday') && movePool.includes('solarbeam') ||
 						(moves.has('solarbeam') && movePool.includes('sunnyday'))) ||
-						['milkdrink', 'recover', 'spore'].some(m => movePool.includes(m))
+						['milkdrink', 'recover', 'spikes', 'spore'].some(m => movePool.includes(m))
 					) {
 						cull = true;
 					} else {
@@ -291,10 +290,8 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			OU: 65,
 			Uber: 61,
 		};
-		const customScale: {[k: string]: number} = {
-			Ditto: 83, Unown: 87, Wobbuffet: 83,
-		};
-		const level = this.adjustLevel || customScale[species.name] || levelScale[species.tier] || 80;
+
+		const level = this.adjustLevel || data.level || levelScale[species.tier] || 80;
 
 		return {
 			name: species.name,

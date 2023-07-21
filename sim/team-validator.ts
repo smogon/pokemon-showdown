@@ -315,7 +315,7 @@ export class TeamValidator {
 			if (options.removeNicknames) {
 				const species = dex.species.get(set.species);
 				let crossSpecies: Species;
-				if (format.name === '[Gen 8] Cross Evolution' && (crossSpecies = dex.species.get(set.name)).exists) {
+				if (format.name === '[Gen 9] Cross Evolution' && (crossSpecies = dex.species.get(set.name)).exists) {
 					set.name = crossSpecies.name;
 				} else {
 					set.name = species.baseSpecies;
@@ -382,8 +382,8 @@ export class TeamValidator {
 
 		let outOfBattleSpecies = species;
 		let tierSpecies = species;
-		if (ability.id === 'battlebond' && species.id === 'greninja') {
-			if (this.gen < 9) outOfBattleSpecies = dex.species.get('greninjaash');
+		if (ability.id === 'battlebond' && toID(species.baseSpecies) === 'greninja') {
+			outOfBattleSpecies = dex.species.get('greninjabond');
 			if (ruleTable.has('obtainableformes')) {
 				tierSpecies = outOfBattleSpecies;
 			}
@@ -393,7 +393,7 @@ export class TeamValidator {
 		}
 
 		if (ruleTable.has('obtainableformes')) {
-			const canMegaEvo = dex.gen <= 7 || ruleTable.has('standardnatdex');
+			const canMegaEvo = dex.gen <= 7 || ruleTable.has('+pokemontag:past');
 			if (item.megaEvolves === species.name) {
 				if (!item.megaStone) throw new Error(`Item ${item.name} has no base form for mega evolution`);
 				tierSpecies = dex.species.get(item.megaStone);
@@ -401,7 +401,8 @@ export class TeamValidator {
 				tierSpecies = dex.species.get('Groudon-Primal');
 			} else if (item.id === 'blueorb' && species.id === 'kyogre') {
 				tierSpecies = dex.species.get('Kyogre-Primal');
-			} else if (canMegaEvo && species.id === 'rayquaza' && set.moves.map(toID).includes('dragonascent' as ID)) {
+			} else if (canMegaEvo && species.id === 'rayquaza' && set.moves.map(toID).includes('dragonascent' as ID) &&
+					!ruleTable.has('megarayquazaclause')) {
 				tierSpecies = dex.species.get('Rayquaza-Mega');
 			} else if (item.id === 'rustedsword' && species.id === 'zacian') {
 				tierSpecies = dex.species.get('Zacian-Crowned');
@@ -506,7 +507,7 @@ export class TeamValidator {
 		ability = dex.abilities.get(set.ability);
 
 		const [outOfBattleSpecies, tierSpecies] = this.getValidationSpecies(set);
-		if (ability.id === 'battlebond' && species.id === 'greninja') {
+		if (ability.id === 'battlebond' && toID(species.baseSpecies) === 'greninja') {
 			if (ruleTable.has('obtainablemisc')) {
 				if (set.gender && set.gender !== 'M') {
 					problems.push(`Battle Bond Greninja must be male.`);
@@ -659,7 +660,7 @@ export class TeamValidator {
 			problem = this.checkMove(set, move, setHas);
 			if (problem) {
 				let allowedByOM;
-				if (problem.endsWith('is not obtainable without hacking or glitches.') &&
+				if (problem.includes('hacking or glitches') &&
 					ruleTable.has('omunobtainablemoves')) {
 					problem = `${name}'s ${problem}`;
 					allowedByOM = !this.omCheckCanLearn(move, outOfBattleSpecies, setSources, set, problem);
@@ -855,7 +856,7 @@ export class TeamValidator {
 
 		const allowAVs = ruleTable.has('allowavs');
 		const evLimit = ruleTable.evLimit;
-		const canBottleCap = dex.gen >= 7 && (set.level >= 100 || !ruleTable.has('obtainablemisc'));
+		const canBottleCap = dex.gen >= 7 && (set.level >= (dex.gen < 9 ? 100 : 50) || !ruleTable.has('obtainablemisc'));
 
 		if (!set.evs) set.evs = TeamValidator.fillStats(null, evLimit === null ? 252 : 0);
 		if (!set.ivs) set.ivs = TeamValidator.fillStats(null, 31);
@@ -889,7 +890,7 @@ export class TeamValidator {
 		}
 
 		const cantBreedNorEvolve = (species.eggGroups[0] === 'Undiscovered' && !species.prevo && !species.nfe);
-		const isLegendary = (cantBreedNorEvolve && ![
+		const isLegendary = (cantBreedNorEvolve && !species.tags.includes('Paradox') && ![
 			'Pikachu', 'Unown', 'Dracozolt', 'Arctozolt', 'Dracovish', 'Arctovish',
 		].includes(species.baseSpecies)) || [
 			'Manaphy', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala',
@@ -1361,10 +1362,19 @@ export class TeamValidator {
 				set.moves[behemothMove] = 'ironhead';
 			}
 		}
+		if (species.baseSpecies === "Hoopa" && dex.gen >= 9) {
+			const moves = set.moves.map(toID);
+			const hyperspaceHole = moves.indexOf('hyperspacehole' as ID);
+			const hyperspaceFury = moves.indexOf('hyperspacefury' as ID);
+			if (species.name === "Hoopa" && hyperspaceFury >= 0) {
+				problems.push(`In Generation 9, Hoopa cannot run Hyperspace Fury because it gets replaced with Hyperspace Hole upon changing forme.`);
+			} else if (species.name === "Hoopa-Unbound" && hyperspaceHole >= 0) {
+				problems.push(`In Generation 9, Hoopa-Unbound cannot run Hyperspace Hole because it gets replaced with Hyperspace Fury upon changing forme.`);
+			}
+		}
 
-		// Temporary backwards compatability until Pokemon HOME update
-		if (species.baseSpecies === 'Vivillon' && species.forme !== 'Fancy' && dex.gen === 9) {
-			set.species = 'Vivillon-Fancy';
+		if (species.baseSpecies === "Greninja" && toID(set.ability) === 'battlebond') {
+			set.species = "Greninja-Bond";
 		}
 		return problems;
 	}
@@ -1397,6 +1407,9 @@ export class TeamValidator {
 		if (tierSpecies.canGigantamax && set.gigantamax) {
 			setHas['pokemon:' + tierSpecies.id + 'gmax'] = true;
 			isGmax = true;
+		}
+		if (tierSpecies.baseSpecies === 'Greninja' && toID(set.ability) === 'battlebond') {
+			setHas['pokemon:greninjabond'] = true;
 		}
 
 		const tier = tierSpecies.tier === '(PU)' ? 'ZU' : tierSpecies.tier === '(NU)' ? 'PU' : tierSpecies.tier;
@@ -1622,7 +1635,7 @@ export class TeamValidator {
 
 		setHas['ability:' + ability.id] = true;
 
-		if (this.format.id.startsWith('gen8pokebilities')) {
+		if (this.format.id.startsWith('gen9pokebilities')) {
 			const species = dex.species.get(set.species);
 			const unSeenAbilities = Object.keys(species.abilities)
 				.filter(key => key !== 'S' && (key !== 'H' || !species.unreleasedHidden))
@@ -1769,8 +1782,8 @@ export class TeamValidator {
 		}
 		let requiredIVs = 0;
 		if (eventData.ivs) {
-			/** In Gen 7, IVs can be changed to 31 */
-			const canBottleCap = (dex.gen >= 7 && set.level === 100);
+			/** In Gen 7+, IVs can be changed to 31 */
+			const canBottleCap = dex.gen >= 7 && set.level >= (dex.gen < 9 ? 100 : 50);
 
 			if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 			let statName: StatID;
@@ -2075,7 +2088,7 @@ export class TeamValidator {
 				} else if (move.gen > 7 && !canSketchPostGen7Moves) {
 					cantLearnReason = `can't be Sketched because it's a Gen ${move.gen} move and Sketch isn't available in Gen ${move.gen}.`;
 				} else {
-					if (!sources) sketch = true;
+					if (!sources || !moveSources.size()) sketch = true;
 					sources = learnset['sketch'].concat(sources || []);
 				}
 			}
@@ -2300,7 +2313,7 @@ export class TeamValidator {
 			return this.dex.species.get(species.baseSpecies);
 		} else if (species.name === 'Lycanroc-Dusk') {
 			return this.dex.species.get('Rockruff-Dusk');
-		} else if (species.name === 'Greninja-Ash') {
+		} else if (species.name === 'Greninja-Bond') {
 			return null;
 		} else if (species.prevo) {
 			// there used to be a check for Hidden Ability here, but apparently it's unnecessary

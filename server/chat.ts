@@ -74,6 +74,7 @@ interface Handlers {
 	onBattleStart: (user: User, room: GameRoom) => void;
 	onBattleLeave: (user: User, room: GameRoom) => void;
 	onRoomJoin: (room: BasicRoom, user: User, connection: Connection) => void;
+	onBeforeRoomJoin: (room: BasicRoom, user: User, connection: Connection) => void;
 	onDisconnect: (user: User) => void;
 	onRoomDestroy: (roomid: RoomID) => void;
 	onBattleEnd: (battle: RoomBattle, winner: ID, players: ID[]) => void;
@@ -82,6 +83,7 @@ interface Handlers {
 		battle: Rooms.RoomBattle, winner: ID, ratings: (AnyObject | null | undefined)[], players: ID[]
 	) => void;
 	onRename: (user: User, oldID: ID, newID: ID) => void;
+	onTicketCreate: (ticket: import('./chat-plugins/helptickets').TicketState, user: User) => void;
 }
 
 export interface ChatPlugin {
@@ -151,19 +153,16 @@ const BROADCAST_TOKEN = '!';
 
 const PLUGIN_DATABASE_PATH = './databases/chat-plugins.db';
 const MAX_PLUGIN_LOADING_DEPTH = 3;
-const VALID_PLUGIN_ENDINGS = ['.jsx', '.tsx', '.js', '.ts'];
 
 import {formatText, linkRegex, stripFormatting} from './chat-formatter';
 
 // @ts-ignore no typedef available
 import ProbeModule = require('probe-image-size');
-import {Monitor} from './monitor';
 const probe: (url: string) => Promise<{width: number, height: number}> = ProbeModule;
 
 const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
-// to account for Sucrase
-const TRANSLATION_PATH = __dirname.endsWith('.server-dist') ? `../.translations-dist` : `../translations`;
-const TRANSLATION_DIRECTORY = `${__dirname}/${TRANSLATION_PATH}`;
+
+const TRANSLATION_DIRECTORY = pathModule.resolve(__dirname, '..', 'translations');
 
 class PatternTester {
 	// This class sounds like a RegExp
@@ -998,7 +997,7 @@ export class CommandContext extends MessageContext {
 	checkCan(permission: RoomPermission, target: User | ID | null, room: Room): undefined;
 	checkCan(permission: GlobalPermission, target?: User | ID | null): undefined;
 	checkCan(permission: string, target: User | ID | null = null, room: Room | null = null) {
-		if (!Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd)) {
+		if (!Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, this.cmdToken)) {
 			throw new Chat.ErrorMessage(`${this.cmdToken}${this.fullCmd} - Access denied.`);
 		}
 	}
@@ -1006,7 +1005,7 @@ export class CommandContext extends MessageContext {
 	privatelyCheckCan(permission: GlobalPermission, target?: User | ID | null): boolean;
 	privatelyCheckCan(permission: string, target: User | ID | null = null, room: Room | null = null) {
 		this.handler!.isPrivate = true;
-		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd)) {
+		if (Users.Auth.hasPermission(this.user, permission, target, room, this.fullCmd, this.cmdToken)) {
 			return true;
 		}
 		this.commandDoesNotExist();
@@ -1032,8 +1031,10 @@ export class CommandContext extends MessageContext {
 			throw new Chat.ErrorMessage(`To see it for yourself, use: /${this.message.slice(1)}`);
 		}
 
-		if (this.room && !this.user.can('show', null, this.room)) {
-			this.errorReply(`You need to be voiced to broadcast this command's information.`);
+		if (this.room && !this.user.can('show', null, this.room, this.cmd, this.cmdToken)) {
+			const perm = this.room.settings.permissions?.[`!${this.cmd}`];
+			const atLeast = perm ? `at least rank ${perm}` : 'voiced';
+			this.errorReply(`You need to be ${atLeast} to broadcast this command's information.`);
 			throw new Chat.ErrorMessage(`To see it for yourself, use: /${this.message.slice(1)}`);
 		}
 
@@ -1707,7 +1708,7 @@ export const Chat = new class {
 			const languageID = Dex.toID(dirname);
 			const files = await dir.readdir();
 			for (const filename of files) {
-				if (!filename.endsWith('.ts')) continue;
+				if (!filename.endsWith('.js')) continue;
 
 				const content: Translations = require(`${TRANSLATION_DIRECTORY}/${dirname}/${filename}`).translations;
 
@@ -1926,7 +1927,7 @@ export const Chat = new class {
 	}
 
 	loadPluginFile(file: string) {
-		if (!VALID_PLUGIN_ENDINGS.some(ext => file.endsWith(ext))) return;
+		if (!file.endsWith('.js')) return;
 		this.loadPlugin(require(file), this.getPluginName(file));
 	}
 
@@ -1990,6 +1991,9 @@ export const Chat = new class {
 		return commandTable;
 	}
 	loadPlugin(plugin: AnyObject, name: string) {
+		// esbuild builds cjs exports in such a way that they use getters, leading to crashes
+		// in the plugin.roomSettings = [plugin.roomSettings] action. So, we have to make them not getters
+		plugin = {...plugin};
 		if (plugin.commands) {
 			Object.assign(Chat.commands, this.annotateCommands(plugin.commands));
 		}
@@ -2043,7 +2047,7 @@ export const Chat = new class {
 
 		Chat.commands = Object.create(null);
 		Chat.pages = Object.create(null);
-		this.loadPluginDirectory('server/chat-commands');
+		this.loadPluginDirectory('dist/server/chat-commands');
 		Chat.baseCommands = Chat.commands;
 		Chat.basePages = Chat.pages;
 		Chat.commands = Object.assign(Object.create(null), Chat.baseCommands);
@@ -2053,7 +2057,7 @@ export const Chat = new class {
 		this.loadPlugin(Config, 'config');
 		this.loadPlugin(Tournaments, 'tournaments');
 
-		this.loadPluginDirectory('server/chat-plugins');
+		this.loadPluginDirectory('dist/server/chat-plugins');
 		Chat.oldPlugins = {};
 		// lower priority should run later
 		Utils.sortBy(Chat.filters, filter => -(filter.priority || 0));
@@ -2589,6 +2593,17 @@ export const Chat = new class {
 	readonly formatText = formatText;
 	readonly linkRegex = linkRegex;
 	readonly stripFormatting = stripFormatting;
+
+	/** Helper function to ensure no state issues occur when regex testing for links. */
+	isLink(possibleUrl: string) {
+		// if we don't do this, it starts spitting out false every other time even if it's a valid link
+		//  since global regexes are stateful.
+		// this took me so much pain to debug.
+		// Yes, that is intended JS behavior. Yes, it fills me with unyielding rage.
+		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test
+		this.linkRegex.lastIndex = -1;
+		return this.linkRegex.test(possibleUrl);
+	}
 
 	readonly filterWords: {[k: string]: FilterWord[]} = {};
 	readonly monitors: {[k: string]: Monitor} = {};

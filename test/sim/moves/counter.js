@@ -92,10 +92,12 @@ describe('Mirror Coat', function () {
 		battle.destroy();
 	});
 
-	it('should deal damage equal to twice the damage taken from the last Special attack', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Espeon', ability: 'synchronize', moves: ['sonicboom']}]});
-		battle.setPlayer('p2', {team: [{species: 'Umbreon', ability: 'synchronize', moves: ['mirrorcoat']}]});
+	it(`should deal damage equal to twice the damage taken from the last Special attack`, function () {
+		battle = common.createBattle([[
+			{species: 'Espeon', ability: 'noguard', moves: ['sonicboom']},
+		], [
+			{species: 'Umbreon', moves: ['mirrorcoat']},
+		]]);
 		assert.hurtsBy(battle.p1.active[0], 40, () => battle.makeChoices());
 	});
 
@@ -323,5 +325,26 @@ describe('Counter', function () {
 		battle.makeChoices('move mirrormove', 'move counter');
 		const pidgeot = battle.p1.active[0];
 		assert.equal(pidgeot.maxhp - pidgeot.hp, 300);
+	});
+
+	it(`[Gen 1] Moves with unique damage calculation don't overdamage a target with less HP`, function () {
+		battle = common.gen(1).createBattle([[
+			{species: 'Gengar', moves: ['seismictoss']},
+		], [
+			{species: 'Abra', moves: ['teleport'], level: 5},
+		]]);
+		battle.makeChoices();
+		assert(battle.lastDamage < 100);
+	});
+
+	it(`[Gen 1] Metronome calling Counter fails`, function () {
+		battle = common.gen(1).createBattle({seed: [1, 3, 1, 7]}, [[
+			{species: 'Persian', moves: ['Swift']},
+		], [
+			{species: 'Chansey', moves: ['Metronome']},
+		]]);
+		battle.makeChoices();
+		assert(battle.log.some(line => line.includes('Chansey|Counter')));
+		assert.fullHP(battle.p1.active[0]);
 	});
 });

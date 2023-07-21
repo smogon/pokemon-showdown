@@ -95,9 +95,9 @@ Sets player information:
 
 - `avatar` is a string for the player avatar (defaults to "")
 
-- `team` is a team (either in JSON or a string in [packed format][./TEAMS.md])
+- `team` is a team (either in JSON or a string in [packed format][teams])
 
-`team` will not be validated! [Use the team validator first][./TEAMS.md]. In random formats, `team` can be left out or set to `null` to have the team generator generate a random team for you.
+`team` will not be validated! [Use the team validator first][teams]. In random formats, `team` can be left out or set to `null` to have the team generator generate a random team for you.
 
 ```
 >p1 CHOICE
@@ -108,6 +108,7 @@ Sets player information:
 
 Makes a choice for a player. [Possible choices are documented in `SIM-PROTOCOL.md`][possible-choices].
 
+  [teams]: ./TEAMS.md
   [possible-choices]: ./SIM-PROTOCOL.md#possible-choices
 
 

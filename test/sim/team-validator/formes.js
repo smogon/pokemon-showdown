@@ -85,17 +85,31 @@ describe('Team Validator', function () {
 			{species: 'kyurem-white', ability: 'turboblaze', moves: ['scaryface'], evs: {hp: 1}},
 		];
 		assert.false.legalTeam(team, 'gen7anythinggoes');
+
+		// Hoopa's Hyperspace moves are form-specific in Generation 9
+		team = [
+			{species: 'hoopa-confined', ability: 'magician', moves: ['hyperspacefury'], evs: {hp: 1}},
+			{species: 'hoopa-unbound', ability: 'magician', moves: ['hyperspacehole'], evs: {hp: 1}},
+		];
+		assert.false.legalTeam(team, 'gen9anythinggoes');
+
+		team = [
+			{species: 'hoopa-confined', ability: 'magician', moves: ['hyperspacefury'], evs: {hp: 1}},
+			{species: 'hoopa-unbound', ability: 'magician', moves: ['hyperspacehole'], evs: {hp: 1}},
+		];
+		assert.legalTeam(team, 'gen7anythinggoes');
 	});
 
-	it('should tier Zacian and Zamazenta formes seperately', () => {
+	// Zamazenta is unreleased currently
+	it.skip('should tier Zacian and Zamazenta formes seperately', () => {
 		team = [
 			{species: 'zamazenta-crowned', ability: 'dauntlessshield', item: 'rustedshield', moves: ['howl'], evs: {hp: 1}},
 		];
-		assert.legalTeam(team, 'gen8almostanyability');
+		assert.legalTeam(team, 'gen9almostanyability');
 
 		team = [
 			{species: 'zamazenta', ability: 'dauntlessshield', item: 'lifeorb', moves: ['howl'], evs: {hp: 1}},
 		];
-		assert.false.legalTeam(team, 'gen8almostanyability');
+		assert.false.legalTeam(team, 'gen9almostanyability');
 	});
 });
