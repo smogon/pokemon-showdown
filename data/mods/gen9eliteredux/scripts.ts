@@ -1,5 +1,5 @@
 export const Scripts: ModdedBattleScriptsData = {
-	gen: 9,
+	gen: 7,
 	field: {
 		suppressingWeather() {
 			for (const pokemon of this.battle.getAllActive()) {
