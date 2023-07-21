@@ -437,7 +437,7 @@ export class ModdedDex {
 	}
 
 	loadTextFile(
-		name: string, exportName: string, language = 'english',
+		name: string, exportName: string, language = 'english'
 	): DexTable<MoveText | ItemText | AbilityText | PokedexText | DefaultText> {
 		return require(`${DATA_DIR}/text/${language}/${name}`)[exportName];
 	}
