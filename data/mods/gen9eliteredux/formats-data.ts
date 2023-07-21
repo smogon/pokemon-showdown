@@ -3523,4 +3523,1244 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	melmetal: {
 		tier: "OU",
 	},
+	grookey: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	thwackey: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	rillaboom: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	rillaboomgmax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	scorbunny: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	raboot: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	cinderace: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	cinderacegmax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	sobble: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	drizzile: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	inteleon: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	inteleongmax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	skwovet: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	greedent: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	rookidee: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	corvisquire: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	corviknight: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	corviknightgmax: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+	},
+	blipbug: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	dottler: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	orbeetle: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	orbeetlegmax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	nickit: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	thievul: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	gossifleur: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	eldegoss: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	wooloo: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	dubwool: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	chewtle: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	drednaw: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	drednawgmax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	yamper: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	boltund: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	rolycoly: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	carkol: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	coalossal: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	coalossalgmax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	applin: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	flapple: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	flapplegmax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	appletun: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	appletungmax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	silicobra: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	sandaconda: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	sandacondagmax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	cramorant: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	cramorantgulping: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	cramorantgorging: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	arrokuda: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	barraskewda: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	toxel: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	toxtricity: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	toxtricitygmax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	toxtricitylowkeygmax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	sizzlipede: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	centiskorch: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	centiskorchgmax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	clobbopus: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	grapploct: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	sinistea: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	polteageist: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	hatenna: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	hattrem: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	hatterene: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	hatterenegmax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	impidimp: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	morgrem: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	grimmsnarl: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	grimmsnarlgmax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	milcery: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	alcremie: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	alcremiegmax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	falinks: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	pincurchin: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	snom: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	frosmoth: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	stonjourner: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	eiscue: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	indeedee: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	indeedeef: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	morpeko: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	morpekohangry: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	cufant: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	copperajah: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	copperajahgmax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	dracozolt: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	arctozolt: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	dracovish: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	arctovish: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	duraludon: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	duraludongmax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	dreepy: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	drakloak: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	dragapult: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	zacian: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	zaciancrowned: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	zamazenta: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	zamazentacrowned: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	eternatus: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	eternatuseternamax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	kubfu: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	urshifu: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	urshifurapidstrike: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	urshifugmax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	urshifurapidstrikegmax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	zarude: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	regieleki: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	regidrago: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	glastrier: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	spectrier: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	calyrex: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	calyrexice: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	calyrexshadow: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	enamorus: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	enamorustherian: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	sprigatito: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	floragato: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	meowscarada: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	fuecoco: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	crocalor: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	skeledirge: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	quaxly: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	quaxwell: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	quaquaval: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	lechonk: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	oinkologne: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	oinkolognef: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	tarountula: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	spidops: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	nymble: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	lokix: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	rellor: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	rabsca: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	greavard: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	houndstone: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	flittle: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	espathra: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	wiglett: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	wugtrio: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	dondozo: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	veluza: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	finizen: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	palafin: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	smoliv: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	dolliv: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	arboliva: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	capsakid: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	scovillain: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	tadbulb: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	bellibolt: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	varoom: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	revavroom: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	orthworm: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	tandemaus: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	maushold: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	cetoddle: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	cetitan: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	frigibax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	arctibax: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	baxcalibur: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	tatsugiri: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	cyclizar: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	pawmi: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	pawmo: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	pawmot: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	wattrel: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	kilowattrel: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	bombirdier: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	squawkabilly: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	flamigo: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	klawf: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	nacli: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	naclstack: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	garganacl: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	glimmet: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	glimmora: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	shroodle: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	grafaiai: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	fidough: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	dachsbun: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	maschiff: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	mabosstiff: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	bramblin: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	brambleghast: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	gimmighoul: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	gholdengo: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	greattusk: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	brutebonnet: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	sandyshocks: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	screamtail: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	fluttermane: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	slitherwing: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	roaringmoon: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	irontreads: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	ironmoth: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	ironhands: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	ironjugulis: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	ironthorns: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	ironbundle: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	ironvaliant: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	tinglu: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	chienpao: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	wochien: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	chiyu: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	koraidon: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	miraidon: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	tinkatink: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	tinkatuff: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	tinkaton: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	charcadet: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	armarouge: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	ceruledge: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	toedscool: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	toedscruel: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	kingambit: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	clodsire: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	annihilape: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	walkingwake: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	ironleaves: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	missingno: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
+	syclar: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	syclant: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	revenankh: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	embirch: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	flarelm: {
+		isNonstandard: "CAP",
+		tier: "CAP NFE",
+	},
+	pyroak: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	breezi: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	fidgit: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	rebble: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	tactite: {
+		isNonstandard: "CAP",
+		tier: "CAP NFE",
+	},
+	stratagem: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	privatyke: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	arghonaut: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	nohface: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	kitsunoh: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	monohm: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	duohm: {
+		isNonstandard: "CAP",
+		tier: "CAP NFE",
+	},
+	cyclohm: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	dorsoil: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	colossoil: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	protowatt: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	krilowatt: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	voodoll: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	voodoom: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	scratchet: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	tomohawk: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	necturine: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	necturna: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	mollux: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	cupra: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	argalis: {
+		isNonstandard: "CAP",
+		tier: "CAP NFE",
+	},
+	aurumoth: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	brattler: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	malaconda: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	cawdet: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	cawmodore: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	volkritter: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	volkraken: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	snugglow: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	plasmanta: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	floatoy: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	caimanoe: {
+		isNonstandard: "CAP",
+		tier: "CAP NFE",
+	},
+	naviathan: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	crucibelle: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	crucibellemega: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	pluffle: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	kerfluffle: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	pajantom: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	mumbao: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	jumbao: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	fawnifer: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	electrelk: {
+		isNonstandard: "CAP",
+		tier: "CAP NFE",
+	},
+	caribolt: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	smogecko: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	smoguana: {
+		isNonstandard: "CAP",
+		tier: "CAP NFE",
+	},
+	smokomodo: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	swirlpool: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	coribalis: {
+		isNonstandard: "CAP",
+		tier: "CAP NFE",
+	},
+	snaelstrom: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	justyke: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	equilibra: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	solotl: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	astrolotl: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	miasmite: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	miasmaw: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	chromera: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	venomicon: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	venomiconepilogue: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	saharascal: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	saharaja: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	hemogoblin: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	pokestarsmeargle: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
+	pokestarufo: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
+	pokestarufo2: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
+	pokestarbrycenman: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
+	pokestarmt: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
+	pokestarmt2: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
+	pokestartransport: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
+	pokestargiant: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
+	pokestargiant2: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
+	pokestarhumanoid: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
+	pokestarmonster: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
+	pokestarf00: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
+	pokestarf002: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
+	pokestarspirit: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
+	pokestarblackdoor: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
+	pokestarwhitedoor: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
+	pokestarblackbelt: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
+	pokestargiantpropo2: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
+	pokestarufopropu2: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
 };
