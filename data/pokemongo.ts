@@ -888,6 +888,7 @@ export const PokemonGoData: {[source: string]: PokemonGoData} = {
 	noivern: {encounters: ['wild']},
 	xerneas: {encounters: ['raid', 'specialtrade']},
 	yveltal: {encounters: ['raid', 'specialtrade']},
+	zygarde: {encounters: ['research', 'noshiny', 'notrade']},
 	hoopa: {encounters: ['raid', 'research', 'noshiny', 'notrade']},
 	rowlet: {encounters: ['wild', 'noshiny']},
 	dartrix: {encounters: ['wild', 'noshiny']},
