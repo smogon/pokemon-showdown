@@ -606,7 +606,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	jumpluff: {
-		tier: "UUBL",
+		tier: "UU",
 	},
 	aipom: {
 		tier: "PU",
@@ -795,7 +795,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	linoone: {
-		tier: "UU",
+		tier: "UUBL",
 	},
 	wurmple: {
 		tier: "LC",
