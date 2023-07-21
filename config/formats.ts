@@ -1456,8 +1456,9 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['Standard Doubles'],
 		banlist: [
-			'Annihilape', 'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Dialga', 'Eternatus', 'Flutter Mane', 'Giratina', 'Groudon', 'Koraidon',
-			'Kyogre', 'Magearna', 'Mewtwo', 'Miraidon', 'Palkia', 'Rayquaza', 'Urshifu-Base', 'Zacian', 'Zamazenta', 'Dancer', 'Huge Power', 'Moody',
+			'Annihilape', 'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Dialga', 'Dialga-Origin', 'Enamorus-Base', 'Eternatus', 'Flutter Mane',
+			'Giratina', 'Giratina-Origin', 'Groudon', 'Koraidon', 'Kyogre', 'Magearna', 'Mewtwo', 'Miraidon', 'Palkia', 'Palkia-Origin', 'Rayquaza',
+			'Urshifu', 'Urshifu-Rapid-Strike', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Dancer', 'Huge Power', 'Moody',
 			'Pure Power', 'Shadow Tag', 'Ally Switch', 'Revival Blessing', 'Swagger',
 		],
 		onBegin() {
