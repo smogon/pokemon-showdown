@@ -2146,6 +2146,38 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 
 		activate: "  [POKEMON] underwent a heroic transformation!",
 	},
+	pyromancy: {
+		name: "Pyromancy",
+		shortDesc: "This Pokemon's Fire-type moves have a 5x chance to brun",
+	},
+	keenedge: {
+		name: "Keen Edge",
+		shortDesc: "This pokemon's slicing moves have their power boosted by 30%",
+	},
+	prismscales: {
+		name: "Prism Scales",
+		shortDesc: "This pokemon takes 30% less damage from special attacks",
+	},
+	powerfists: {
+		name: "Power Fists",
+		shortDesc: "Punching moves deal 30% more damage and use opponent's Special Def.",
+	},
+	sandsong: {
+		name: "Sand Song",
+		shortDesc: "This Pokemon's sound-based moves become Ground type.",
+	},
+	rampage: {
+		name: "Rampage",
+		shortDesc: "This pokemon doesn't recharge after a KO",
+	}, 
+	vengeance: {
+		name: "Vengeance",
+		shortDesc: "Boost pokemon's ghost moves by 20%, 50% when below 1/3 HP",
+	},
+	blitzboxer: {
+		name: "Blitz Boxer",
+		shortDesc: "This pokemon's punching moves gain +1 priority",
+	},
 
 	// CAP
 	mountaineer: {

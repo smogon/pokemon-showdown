@@ -5152,6 +5152,102 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 5,
 		num: 278,
 	},
+	//Inclement Emerald Abilities
+	pyromancy: {
+		onModifyMovePriority: -2,
+		onModifyMove(move) {
+			if (move.secondaries) {
+				this.debug('quintupling burn chance');
+				for (const secondary of move.secondaries) {
+					if (secondary.status?.includes('brn') && secondary.chance) secondary.chance *= 5;
+				}
+			}
+		},
+		name: "Pyromancy",
+		rating: 3.5,
+		num: 299,
+	},
+	keenedge: {
+		onBasePowerPriority: 25,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['slicing']) {
+				return this.chainModify([5325, 4096]);
+			}
+		},
+		name: "Keen Edge",
+		rating: 3.5,
+		num: 300,
+	},
+	prismscales: {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.category === 'Special') {
+				return this.chainModify(0.70);
+			}
+		},
+		name: "Prism Scales",
+		rating: 4,
+		num: 301,
+	},
+	powerfists: {
+		onBasePowerPriority: 26,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['punch']) {
+				return this.chainModify([5325, 4096]);
+			}
+		},
+		onModifyMove(move) {
+			if (move.flags['punch']) {
+				move.overrideDefensiveStat = 'spd'
+			}
+		},
+		name: "Power Fists",
+		rating: 4,
+		num: 301,
+	}, 
+	sandsong: {
+		onModifyTypePriority: -2,
+		onModifyType(move, pokemon) {
+			if (move.flags['sound'] && !pokemon.volatiles['dynamax']) { // hardcode
+				move.type = 'Ground';
+			}
+		},
+		name: "Sand Song",
+		rating: 1.5,
+		num: 302,
+	},
+	rampage: { 
+		onAfterMove(source, target, move) {
+			if (target && target.hp <= 0) {
+				if (source.volatiles['mustrecharge']) {
+					source.removeVolatile('mustrecharge');
+				}
+			}
+		},
+		name: "Rampage",
+		rating: 3,
+		num: 303
+	},
+	vengeance: {
+		onBasePowerPriority: 26,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Ghost' && attacker.hp <= attacker.maxhp / 3) {
+				return this.chainModify(1.5);
+			} else if (move.type === 'Ghost') {
+				this.chainModify([4915, 4096]);
+			}
+		},
+		name: "Vengeance",
+		rating: 3,
+		num: 304
+	},
+	blitzboxer: {
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move.flags['punch']) return priority + 1;
+		},
+		name: "Blitz Boxer",
+		rating: 3,
+		num: 307,
+	},
 
 	// CAP
 	mountaineer: {
