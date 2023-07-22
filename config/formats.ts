@@ -33,30 +33,33 @@ export const Formats: FormatList = [
 		//TODO: Create Elite Redux ruleset
 		ruleset: [],
 		onValidateSet(set) {
-			//TODO: Change from AAA script to ER innate script
-			const species = this.dex.species.get(set.species);
-			const unSeenAbilities = Object.keys(species.abilities)
-				.filter(key => key !== 'S' && (key !== 'H' || !species.unreleasedHidden))
-				.map(key => species.abilities[key as "0" | "1" | "H" | "S"])
-				.filter(ability => ability !== set.ability);
-			if (unSeenAbilities.length && this.toID(set.ability) !== this.toID(species.abilities['S'])) {
-				for (const abilityName of unSeenAbilities) {
-					const banReason = this.ruleTable.check('ability:' + this.toID(abilityName));
-					if (banReason) {
-						return [`${set.name}'s ability ${abilityName} is ${banReason}.`];
-					}
+						const species = this.dex.species.get(set.species);
+			console.log(set.ability);
+			const innateList = Object.keys(species.abilities)
+				.filter(key => key.includes('I'))
+				.map(key => species.abilities[key as 'I1' | 'I2' | 'I3'])
+			console.table(innateList); //debug
+			for (const innateName of innateList) {
+				//Checks if set ability is an innate, which is not allowed
+				if (set.ability == innateName){ 
+					return [`${set.name} already has ${innateName} as Innate. Please select from Abilities`];
+				} 
+
+				//Checks if innate is banned
+				const banReason = this.ruleTable.check('ability:' + this.toID(innateName));
+				if (banReason) {
+					return [`${set.name}'s ability ${innateName} is ${banReason}.`];
 				}
 			}
 		},
-		//TODO: Change 'formats' to work with innate tag
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.ability === this.toID(pokemon.species.abilities['S'])) {
-					continue;
-				}
+				// if (pokemon.ability === this.toID(pokemon.species.abilities['S'])) {
+				// 	continue;  
+				// }
 				pokemon.m.innates = Object.keys(pokemon.species.abilities)
-					.filter(key => key !== 'S' && (key !== 'H' || !pokemon.species.unreleasedHidden))
-					.map(key => this.toID(pokemon.species.abilities[key as "0" | "1" | "H" | "S"]))
+					.filter(key => key.includes('I'))
+					.map(key => this.toID(pokemon.species.abilities[key as "I1" | "I2" | "I3"]))
 					.filter(ability => ability !== pokemon.ability);
 			}
 		},
