@@ -166,6 +166,8 @@ export const translations: Translations = {
 		"To join a room tournament, click the <strong>Join!</strong> button or type the command <code>/tour join</code> in the room's chat. You can check if your team is legal for the tournament by clicking the <strong>Validate</strong> button once you've joined and selected a team. To battle your opponent in the tournament, click the <strong>Ready!</strong> button when it appears. There are two different types of room tournaments: elimination (if a user loses more than a certain number of times, they are eliminated) and round robin (all users play against each other, and the user with the most wins is the winner).": "Para entrar em um torneio de sala, clique no botão <strong>Join!</strong> ou digite o comando <code>/tour join</code> no chat da sala. Você pode checar se sua equipe é válida para o torneio clicando no botão <strong>Validate</strong> uma vez que você tenha entrado e selecionado um time. Para batalhar contra um oponente no torneio, clique no botão <strong>Ready!</strong> quando ele aparecer. Existem tipos diferentes de torneios de sala: eliminação (se um usuário perder mais do que um certo número de vezes estará eliminado) e round robin (todos jogam entre si, com o usuário com mais pontos sendo o vencedor).",
 		"Frequently Asked Questions": "Perguntas Frequentes",
 
+		"Invalid room.": "Sala inválida.",
+
 		"pages/faq": "pages/faq",
 		"pages/ladderhelp": "pages/ladderhelp",
 		"pages/rng": "pages/rng",
