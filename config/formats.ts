@@ -30,7 +30,8 @@ export const Formats: FormatList = [
 		desc: `Testing for ER Innates`,
 		mod: 'gen9eliteredux',
 		rated: false, 
-		ruleset: ['Standard NatDex'],
+		//TODO: Create Elite Redux ruleset
+		ruleset: [],
 		onValidateSet(set) {
 			//TODO: Change from AAA script to ER innate script
 			const species = this.dex.species.get(set.species);
