@@ -2146,17 +2146,19 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 
 		activate: "  [POKEMON] underwent a heroic transformation!",
 	},
+
+	//IE 
 	pyromancy: {
 		name: "Pyromancy",
 		shortDesc: "This Pokemon's Fire-type moves have a 5x chance to brun",
 	},
 	keenedge: {
 		name: "Keen Edge",
-		shortDesc: "This pokemon's slicing moves have their power boosted by 30%",
+		shortDesc: "This Pokemon's slicing moves have their power boosted by 30%",
 	},
 	prismscales: {
 		name: "Prism Scales",
-		shortDesc: "This pokemon takes 30% less damage from special attacks",
+		shortDesc: "This Pokemon takes 30% less damage from special attacks",
 	},
 	powerfists: {
 		name: "Power Fists",
@@ -2168,15 +2170,61 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	rampage: {
 		name: "Rampage",
-		shortDesc: "This pokemon doesn't recharge after a KO",
+		shortDesc: "This Pokemon doesn't recharge after a KO",
 	}, 
 	vengeance: {
 		name: "Vengeance",
-		shortDesc: "Boost pokemon's ghost moves by 20%, 50% when below 1/3 HP",
+		shortDesc: "Boost Pokemon's ghost moves by 20%, 50% when below 1/3 HP",
 	},
 	blitzboxer: {
 		name: "Blitz Boxer",
-		shortDesc: "This pokemon's punching moves gain +1 priority",
+		shortDesc: "This Pokemon's punching moves gain +1 priority",
+	},
+
+	//Elite Redux
+	antarcticbird: {
+		name: "Antarctic Bird",
+		shortDesc: "This Pokemon's Ice and Flying type moves are boosted by 50%"
+	},
+	burnate: {
+		name: "Burnate",
+		shortDesc: "This Pokemon's Normal-type moves become Fire type and have 1.2x power."
+	},
+	crystallize: {
+		name: "Crystallize",
+		shortDesc: "This Pokemon's Normal-type moves become Rock type and have 1.2x power."
+	},
+	electrolytes: {
+		name: "Electrolytes",
+		shortDesc: "This Pokemon's electric type moves are boosted by 25%"
+	},
+	aerodynamics: {
+		name: "Aerodynamics",
+		shortDesc: "This Pokemon's Speed is raised 1 stage if hit by an Flying move; Flying immunity.",
+	},
+	christmasspirit: {
+		name: "Christmas Spirit",
+		shortDesc: "This Pokemon takes half damage during Hail."
+	}, 
+	exploitweakness: {
+		name: "Exploit Weakness",
+		shortDesc: "This Pokemon has its move's power boosted by 25% when opponent is statused."
+	},
+	groundshock: {
+		name: "Ground Shock",
+		shortDesc: "This Pokemon cam hit Ground types with Electric attacks."
+	},
+	ancientidol: {
+		name: "Ancient Idol",
+		shortDesc: "Uses its respective defensive stats for attacks."
+	},
+	mysticpower: {
+		name: "Mystic Power",
+		shortDesc: "Gains STAB for all moves."
+	}, 
+	perfectionist: {
+		name: "Perfectionist",
+		shortDesc: "+1 crit ratio for moves under 50 power, +1 priority for moves under 25 power."
 	},
 
 	// CAP
