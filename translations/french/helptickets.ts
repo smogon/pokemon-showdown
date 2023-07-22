@@ -1,4 +1,4 @@
-import type {Translations} from '../../server/chat';upload
+import type {Translations} from '../../server/chat';
 
 export const translations: Translations = {
 	strings: {
