@@ -152,7 +152,7 @@ export const translations: Translations = {
 		"You will now receive help ticket notifications.": "Tu recevras désormais les notifications des tickets",
 		"${target} does not have a ticket.": "${target} n'a pas de ticket actif.",
 		"You deleted ${target}'s ticket.": "Tu as supprimé le ticket de ${target}.",
-		
+
 		"Hi! All global staff members are busy right now and we apologize for the delay. ": "Bonjour ! Tous les membres du global staff sont actuellement occupés, merci de bien vouloir attendre.",
 		"Please make sure you have given us the permission to check the PMs between you and the user you reported. You can also provide any relevant context; for example, a replay of a battle with the person you're reporting.": "Merci de vérifier que tu as bien donné l'autorisation au staff de lire les messages privés avec l'utilisateur que tu as signalé. Tu peux aussi nous donner des informations additionnelles ; par exemple, un replay d'un match avec l'utilisateur que tu signales.",
 		'Please save the replay of the battle and provide a link to it in this chat, so we can see the harassment even if the battle expires. You can save the replay by clicking on the "Upload and share replay" button once the battle has ended.': "Merci d'enregistrer le replay du combat et d'indiquer le lien afin que nous puissions prendre connaissance de la situation même si le match expire. Tu peux enregistrer le replay en cliquant sur le bouton 'Upload and share replay' une fois le combat terminé.",
