@@ -149,7 +149,7 @@ export const translations: Translations = {
 		"You are not ignoring help ticket notifications. Use /helpticket ignore to stop receiving notifications.": "你没有忽略帮助请求的通知，用/helpticket ignore来停止接收通知。",
 		"You will now receive help ticket notifications.": "你已开启接收帮助请求的通知。",
 		"${target} does not have a ticket.": "${target}没有请求。",
-		"You deleted ${target}'s ticket.": "你删掉了${target}的请求。"
+		"You deleted ${target}'s ticket.": "你删掉了${target}的请求。",
 
 		"Hi! All global staff members are busy right now and we apologize for the delay. ": "",
 		"Please make sure you have given us the permission to check the PMs between you and the user you reported. You can also provide any relevant context; for example, a replay of a battle with the person you're reporting.": "",
