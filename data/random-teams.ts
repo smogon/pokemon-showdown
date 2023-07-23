@@ -121,8 +121,7 @@ const noLeadPokemon = [
 	'Basculegion', 'Houndstone', 'Rillaboom', 'Zacian', 'Zamazenta',
 ];
 const doublesNoLeadPokemon = [
-	'Basculegion', 'Flutter Mane', 'Houndstone', 'Iron Bundle', 'Iron Jugulis', 'Iron Leaves', 'Iron Moth',
-	'Iron Thorns', 'Sandy Shocks', 'Roaring Moon', 'Walking Wake', 'Zacian', 'Zamazenta',
+	'Basculegion', 'Houndstone', 'Roaring Moon', 'Zacian', 'Zamazenta',
 ];
 
 function sereneGraceBenefits(move: Move) {
