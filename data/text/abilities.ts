@@ -2267,7 +2267,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Lead Coat",
 		shortDesc: "Ups Defense by 30% but lowers speed by 10%",
 	},
-	coiledup: {
+	coilup: {
 		name: "Coil Up",
 		shortDesc: "This pokemon's biting moves have +1 priority the first time they are used",
 

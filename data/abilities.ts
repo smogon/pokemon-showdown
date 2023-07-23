@@ -5556,7 +5556,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 326,
 	}, 
 	//TODO: Coilup needs ingame message
-	coiledup: {
+	coilup: {
 		onStart(pokemon) {
 			this.effectState.coiled = true;
 		},
