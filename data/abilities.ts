@@ -5561,6 +5561,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	coilup: {
 		onStart(pokemon) {
 			this.effectState.coiled = true;
+			this.add('-ability', pokemon, 'Coil Up');
 		},
 		onModifyPriority(priority, source, target, move) {
 			if (this.effectState.coiled && move.flags['bite']) {
@@ -5638,6 +5639,255 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 5,
 		num: 332,
 	},
+	fossilized: {
+		onSourceModifyAtkPriority: 5,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Rock') {
+				return this.chainModify(0.5);
+			}
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Rock') {
+				return this.chainModify(0.5);
+			}
+		},
+		isBreakable: true,
+		name: "Fossilized",
+		rating: 3,
+		num: 333,
+	},
+	magicaldust: {
+		onDamagingHit(damage, target, source, move) {
+			this.add('-start', source, 'typeadd', 'Psychic', '[from] ability: Magical Dust')
+		},
+		name: "Magical Dust",
+		rating: 3,
+		num: 334,
+	},
+	dreamcatcher: {
+		onBasePower(bp, source, target, move) {
+			for (const target of source.foes()) {
+				if (target.status === 'slp' || target.hasAbility('comatose')) {
+					return this.chainModify(2);
+				}
+			}
+		},
+		name: "Dreamcatcher",
+		rating: 3,
+		num: 335
+	},
+	nocturnal: {
+		onSourceModifyAtkPriority: 5,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Dark' || 'Fairy') {
+				return this.chainModify(0.75);
+			}
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Dark' || 'Fairy') {
+				return this.chainModify(0.75);
+			}
+		},
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Dark') {
+				return this.chainModify(1.25);
+			}
+		},
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Dark') {
+				return this.chainModify(1.25);
+			}
+		},
+		isBreakable: true,
+		name: "Nocturnal",
+		rating: 4,
+		num: 336,
+
+	},
+	selfsufficient: {
+		onResidualOrder: 29,
+		onResidualSubOrder: 4,
+		onResidual(pokemon) {
+			this.add('-ability', pokemon, 'Self Sufficient');
+			this.heal(pokemon.baseMaxhp / 16);
+		},
+		name: "Self Sufficient",
+		rating: 3,
+		num: 337,
+	},
+	groundate: {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Ground';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+		},
+		name: "Groundate",
+		rating: 4,
+		num: 338,
+	},
+	iceage: {
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'typeadd', 'Ice', '[from] ability: Ice Age');
+		},
+		name: "Ice Age",
+		rating: 3.5,
+		num: 339,
+	},
+	halfdrake: {
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'typeadd', 'Dragon', '[from] ability: Half Drake');
+		},
+		name: "Half Drake",
+		rating: 3.5,
+		num: 340,
+	},
+	liquified: {
+		onSourceModifyDamage(damage, source, target, move) {
+			let mod = 1;
+			if (move.type === 'Water') mod *= 2;
+			if (move.flags['contact']) mod /= 2;
+			return this.chainModify(mod);
+		},
+		isBreakable: true,
+		name: "Liquified",
+		rating: 3.5,
+		num: 341,
+	},
+	dragonfly: {
+		// airborneness implemented in sim/pokemon.js:Pokemon#isGrounded
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'typeadd', 'Dragon', '[from] ability: Dragonfly');
+		},
+		isBreakable: true,
+		name: "Dragonfly",
+		rating: 3.5,
+		num: 342,
+	},
+	dragonslayer: {
+		onModifyDamage(damage, source, target, move) {
+			if (target.getTypes().includes('Dragon')) {
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Dragon Slayer",
+		rating: 3.5,
+		num: 343,
+	},
+	hydrate: {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Water';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+		},
+		name: "Hydrate",
+		rating: 4,
+		num: 344,
+	},
+	metallic: {
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'typeadd', 'Metallic', '[from] ability: Metallic');
+		},
+		name: "Metallic",
+		rating: 3.5,
+		num: 345,
+	},
+	permafrost: {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod > 0) {
+				this.debug('Permafrost neutralize');
+				return this.chainModify(0.75);
+			}
+		},
+		isBreakable: true,
+		name: "Permafrost",
+		rating: 3,
+		num: 346,
+	},
+	primalarmor: {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod > 0) {
+				this.debug('Primal Armor neutralize');
+				return this.chainModify(0.5);
+			}
+		},
+		isBreakable: true,
+		name: "Primal Armor",
+		rating: 3,
+		num: 347,
+	},
+	ragingboxer: { //Uses parentalBond as base.
+		onPrepareHit(source, target, move) {
+			if (move.category === 'Status' || move.multihit || move.flags['noparentalbond'] || move.flags['charge'] ||
+			move.flags['futuremove'] || move.spreadHit || move.isZ || move.isMax) return;
+			if (move.flags['punch']) {
+				move.multihit = 2;
+				move.multihitType = 'boxer';
+			}
+		},
+		// Damage modifier implemented in BattleActions#modifyDamage()
+		onSourceModifySecondaries(secondaries, target, source, move) {
+			if (move.multihitType === 'boxer' && move.id === 'secretpower' && move.hit < 2) {
+				// hack to prevent accidentally suppressing King's Rock/Razor Fang
+				return secondaries.filter(effect => effect.volatileStatus === 'flinch');
+			}
+		},
+		name: "Raging Boxer",
+		rating: 4.5,
+		num: 348,
+	}, 
+	airblower: {
+		onStart(source) {
+			const side = source.side;
+			const tailwind = side.sideConditions['tailwind']
+			if (!tailwind) {
+				this.add('-activate', source, 'ability: Air Blower');
+			}
+		},
+		condition: {
+			duration: 3,
+			durationCallback(target, source, effect) {
+				return 3;
+			},
+			onSideStart(side,source) {
+				this.add('-sidestart', side, 'move: Tailwind');
+			},
+			onModifySpe(spe, pokemon) {
+				return this.chainModify(2);
+			},
+			onSideResidualOrder: 26,
+			onSideResidualSubOrder: 5,
+			onSideEnd(side) {
+				this.add('-sideend', side, 'move: Tailwind');
+			},
+		},
+		name: "Air Blower",
+		rating: 5,
+		num: 349,
+	},
+
+
 
 
 	// CAP

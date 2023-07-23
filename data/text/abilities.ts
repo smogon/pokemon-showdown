@@ -2294,6 +2294,76 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		shortDesc: "This Pokemon's Special Attack is doubled."
 
 	},
+	fossilized: {
+		name: "Fossilized",
+		shortDesc: "This pokemon takes half damage from Rock type moves"
+	},
+	magicaldust: {
+		name: "Magical Dust",
+		shortDesc: "Pokemon making contact with this Pokemon gain the Psychic type"
+	},
+	dreamcatcher: {
+		name: "Dreamcatcher",
+		shortDesc: "This pokemon's move power is doubled if anyone on the field is asleep"
+	},
+	nocturnal: {
+		name: "Nocturnal",
+		shortDesc: "This Pokemon reduces damage recived from Dark and Fairy type moves by 25%; Pokemon's dark moves boosted by 25%"
+
+	},
+	selfsufficient: {
+		name: "Self Sufficient",
+		shortDesc: "This Pokemon heals 1/16 HP each turn"
+	},
+	groundate: {
+		name: "Groundate",
+		shortDesc: "This Pokemon's Normal-type moves become Ground type and have 1.2x power."
+
+	},
+	iceage: {
+		name: "Ice Age",
+		shortDesc: "This Pokemon gains the Ice type"
+	},
+	halfdrake: {
+		name: "Half Drake",
+		shortDesc: "This Pokemon gains the Dragon type"
+	},
+	liquified: {
+		name: "Liquified",
+		shortDesc: "This Pokemon takes 1/2 damage from contact moves, 2x damage from Water moves.",
+	},
+	dragonfly: {
+		name: "Half Drake",
+		shortDesc: "This Pokemon gains the Dragon type and Levitates"
+	},
+	dragonslayer: {
+		name: "Half Drake",
+		shortDesc: "This Pokemon's moves deal 50% more damage against Dragon Types"
+	},
+	hydrate: {
+		name: "Hydrate",
+		shortDesc: "This Pokemon's Normal-type moves become Water type and have 1.2x power."
+	},
+	metallic: {
+		name: "Metallic",
+		shortDesc: "This Pokemon gains the Steel type"
+	},
+	permafrost: {
+		name: "Permafrost",
+		shortDesc: "This Pokemon receives 3/4 damage from supereffective attacks.",
+	},
+	primalarmor: {
+		name: "Primal Armor",
+		shortDesc: "This Pokemon receives 1/2 damage from supereffective attacks.",
+	},
+	ragingboxer: { 
+		name: "Raging Boxer",
+		shortDesc: "This Pokemon's punching moves hit twice. The second hit has its damage halved.",
+	}, 
+	airblower: {
+		name: "Air Blower",
+		shortDesc: "On switch-in, this Pokemon summons Tailwind for 3 turns.",
+	},
 
 	// CAP
 	mountaineer: {
