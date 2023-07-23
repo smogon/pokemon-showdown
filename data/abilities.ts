@@ -5473,7 +5473,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					}				
 				return null;
 			}
-		},
+		}
 	},
 		isBreakable: true,
 		name: "Inflatable",
