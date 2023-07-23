@@ -121,7 +121,7 @@ const noLeadPokemon = [
 	'Basculegion', 'Houndstone', 'Rillaboom', 'Zacian', 'Zamazenta',
 ];
 const doublesNoLeadPokemon = [
-	'Basculegion', 'Houndstone', 'Zacian', 'Zamazenta',
+	'Basculegion', 'Houndstone', 'Roaring Moon', 'Zacian', 'Zamazenta',
 ];
 
 function sereneGraceBenefits(move: Move) {
@@ -517,7 +517,6 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'curse', 'rapidspin');
 		this.incompatibleMoves(moves, movePool, 'dragondance', 'dracometeor');
 		this.incompatibleMoves(moves, movePool, 'healingwish', 'uturn');
-		this.incompatibleMoves(moves, movePool, 'dazzlinggleam', ['howl', 'playrough']);
 
 
 		// These attacks are redundant with each other

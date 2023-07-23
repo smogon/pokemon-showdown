@@ -689,8 +689,13 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Body Press", "Iron Head", "Rapid Spin", "Spikes", "Stealth Rock", "Volt Switch"],
+                "movepool": ["Iron Head", "Rapid Spin", "Stealth Rock", "Toxic Spikes", "Volt Switch"],
                 "teraTypes": ["Water"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Body Press", "Iron Head", "Rapid Spin", "Spikes", "Stealth Rock"],
+                "teraTypes": ["Fighting", "Water"]
             }
         ]
     },
@@ -2507,7 +2512,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Defog", "Leaf Blade", "Sucker Punch", "Swords Dance", "Synthesis", "Triple Arrows", "U-turn"],
+                "movepool": ["Defog", "Leaf Blade", "Roost", "Sucker Punch", "Swords Dance", "Triple Arrows", "U-turn"],
                 "teraTypes": ["Steel"]
             }
         ]
@@ -3872,8 +3877,8 @@
             },
             {
                 "role": "Tera Blast user",
-                "movepool": ["Earth Power", "Tera Blast", "Thunderbolt", "Volt Switch"],
-                "teraTypes": ["Flying", "Ice"]
+                "movepool": ["Earth Power", "Sunny Day", "Tera Blast", "Thunderbolt"],
+                "teraTypes": ["Fire"]
             }
         ]
     },
@@ -3882,7 +3887,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Dazzling Gleam", "Encore", "Play Rough", "Protect", "Thunder Wave", "Wish"],
+                "movepool": ["Encore", "Play Rough", "Protect", "Thunder Wave", "Wish"],
                 "teraTypes": ["Steel"]
             }
         ]
@@ -3917,8 +3922,8 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Crunch", "Dragon Dance", "Earthquake", "Outrage", "Roost"],
-                "teraTypes": ["Dark", "Dragon", "Ground"]
+                "movepool": ["Crunch", "Dragon Dance", "Earthquake", "Iron Head", "Outrage", "Roost"],
+                "teraTypes": ["Dark", "Dragon", "Ground", "Steel"]
             },
             {
                 "role": "Bulky Attacker",
