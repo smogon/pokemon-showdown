@@ -5153,6 +5153,29 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 278,
 	},
 	//Inclement Emerald Abilities
+	chloroplast: {
+		name: "Chloroplast",
+		// implemented in the corresponding move(s)
+		//TODO: Actually implement chloroplast into moves lmao
+		rating: 3,
+		num: 298,
+	},
+	whiteout: {
+		onModifySpAPriority: 5,
+		onModifySpA(spa, pokemon) {
+			if (['hail', 'snow'].includes(pokemon.effectiveWeather())) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifyAtk(atk, pokemon) {
+			if (['hail', 'snow'].includes(pokemon.effectiveWeather())) {
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Whiteout",
+		rating: 3,
+		num: 299,
+	},
 	pyromancy: {
 		onModifyMovePriority: -2,
 		onModifyMove(move) {
@@ -5165,7 +5188,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Pyromancy",
 		rating: 3.5,
-		num: 299,
+		num: 300,
 	},
 	keenedge: {
 		onBasePowerPriority: 25,
@@ -5176,7 +5199,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Keen Edge",
 		rating: 3.5,
-		num: 300,
+		num: 301,
 	},
 	prismscales: {
 		onSourceModifyDamage(damage, source, target, move) {
@@ -5186,7 +5209,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Prism Scales",
 		rating: 4,
-		num: 301,
+		num: 302,
 	},
 	powerfists: {
 		onBasePowerPriority: 26,
@@ -5203,7 +5226,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Power Fists",
 		rating: 4,
-		num: 301,
+		num: 303,
 	}, 
 	sandsong: {
 		onModifyTypePriority: -2,
@@ -5214,7 +5237,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Sand Song",
 		rating: 1.5,
-		num: 302,
+		num: 306,
 	},
 	rampage: { 
 		onAfterMove(source, target, move) {
@@ -5226,7 +5249,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Rampage",
 		rating: 3,
-		num: 303
+		num: 307
 	},
 	vengeance: {
 		onModifyAtkPriority: 5,
@@ -5253,7 +5276,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Vengeance",
 		rating: 3,
-		num: 306,
+		num: 308,
 	},
 	blitzboxer: {
 		onModifyPriority(priority, pokemon, target, move) {
@@ -5261,7 +5284,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Blitz Boxer",
 		rating: 3,
-		num: 307,
+		num: 309,
 	},
 
 	//Elite Redux Abilities
@@ -5282,7 +5305,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Antarctic Bird",
 		rating: 3,
-		num: 308,
+		num: 310,
 	},
 	burnate: {
 		onModifyTypePriority: -1,
@@ -5302,7 +5325,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Burnate",
 		rating: 4,
-		num: 309,
+		num: 311,
 	},
 	crystallize: {
 		onModifyTypePriority: -1,
@@ -5322,7 +5345,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Crystallize",
 		rating: 4,
-		num: 310,
+		num: 312,
 	},
 	electrolytes: {
 		onModifyAtkPriority: 5,
@@ -5341,7 +5364,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Electrolytes",
 		rating: 3,
-		num: 311,
+		num: 313,
 	},
 	aerodynamics: {
 		onTryHit(target, source, move) {
@@ -5373,7 +5396,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		isBreakable: true,
 		name: "Christmas Spirit",
 		rating: 4,
-		num: 313,
+		num: 314,
 	}, 
 	exploitweakness: {
 		onBasePowerPriority: 27,
@@ -5384,11 +5407,15 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Exploit Weakness",
 		rating: 3,
-		num: 314,
+		num: 315,
 	},
 	groundshock: {
-		onFoeEffectiveness(typeMod, target, type, move) {
-			if (move.type === 'Electric' && type === 'Ground') return 0;
+		onModifyMovePriority: -5,
+		onModifyMove(move) {
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Electric'] = true;
+			}
 		},
 		name: "Ground Shock",
 		rating: 3,
@@ -5405,7 +5432,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Ancient Idol",
 		rating: 3,
-		num: 315,
+		num: 316,
 	},
 	mysticpower: {
 		onModifyMove(move) {
@@ -5413,20 +5440,201 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Mystic Power",
 		rating: 5,
-		num: 316,
+		num: 317,
 	}, 
 	perfectionist: {
-		onModifyMove(move) {
-			if (50 > move.basePower) {
-				move.critRatio ? move.critRatio = move.critRatio += 1 : move.critRatio = 1;
-				if (25 > move.basePower) {
-					move.priority = move.priority + 1
-				}
-			}
+		onModifyMovePriority: -5,
+		onModifyCritRatio(critRatio, source, target, move) {
+			if (move.basePower < 50) return critRatio + 1;
+		},
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move.basePower < 25) return priority + 1;
 		},
 		name: "Perfectionist",
 		rating: 4,
-		num: 317,
+		num: 318,
+	},
+	growingtooth: {
+		onAfterMove(attacker, defender, move) {
+			if (move.flags['bite']) {
+				this.boost({atk: 1}, attacker);
+			}
+		},
+		name: "Growing Tooth",
+		rating: 4,
+		num: 319,
+	},
+	inflatable: {
+		onTryHit(target, source, move) {
+			if (target !== source && (move.type === 'Flying' || 'Fire')) {
+				if (!this.boost({def: 1}) && !this.boost({spd: 1})) {
+					this.add('-immune', target, '[from] ability: Aerodynamics');
+				}
+				return null;
+			}
+		},
+		isBreakable: true,
+		name: "Inflatable",
+		rating: 3,
+		num: 320,
+	},
+	auroraborealis: {
+		onModifyMove(move) {
+			if (move.type === 'Ice') {
+				move.forceSTAB = true;
+			}
+		},
+		name: "Aurora Borealis",
+		rating: 3,
+		num: 321,
+	},
+	avenger: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (attacker.side.faintedLastTurn) {
+				this.debug('Avenger boost')
+				return this.chainModify(1.5);	
+				}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (attacker.side.faintedLastTurn) {
+				this.debug('Avenger boost')
+				return this.chainModify(1.5);	
+			}
+		},
+		name: "Avenger",
+		rating: 3,
+		num: 322,
+	},
+	letsroll: {
+		onStart(pokemon) {
+			this.boost({def: 1}, pokemon);
+		},
+		name: "Let's Roll",
+		rating: 3.5,
+		num: 323,
+	},
+	aquatic: {
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'typeadd', 'Water', '[from] ability: Aquatic');
+		},
+		name: "Aquatic",
+		rating: 3.5,
+		num: 324,
+	},
+	loudbang: {
+		onModifyMove(move, attacker, defender) {
+			if (move.category !== "Status" && move.flags['sound']) {
+				if (!move.secondaries) move.secondaries = [];
+				for (const secondary of move.secondaries) {
+					if (secondary.volatileStatus === 'confusion' && secondary.chance) { 
+						secondary.chance += 20;
+					} else { 
+						move.secondaries.push({
+							chance: 20,
+							volatileStatus: 'confusion',
+						});
+					}
+				}
+				
+			}
+		},
+		name: "Loud Bang",
+		rating: 3.5,
+		num: 325,
+	},
+	leadcoat: {
+		onModifySpe(def, pokemon) {
+			this.chainModify(0.9)
+		},
+		onModifyDef(spe, pokemon) {
+			this.chainModify([5325,4096])
+		},
+		name: "Lead Coat",
+		rating: 3.5,
+		num: 326,
+	}, 
+	//TODO: Coilup needs ingame message
+	coiledup: {
+		onStart(pokemon) {
+			this.effectState.coiled = true;
+		},
+		onModifyPriority(priority, source, target, move) {
+			if (this.effectState.coiled && move.flags['bite']) {
+				this.effectState.coiled = false;
+				return priority + 1
+			}
+		},
+		name: "Coil Up",
+		rating: 3.5,
+		num: 327,
+	},
+	amphibious: {
+		onModifyMove(move) {
+			if (move.type === 'Water') {
+				move.forceSTAB = true;
+			}
+		},
+		name: "Amphibious",
+		rating: 3,
+		num: 328,
+	}, 
+	grounded: {
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'typeadd', 'Ground', '[from] ability: Grounded');
+		},
+		name: "Grounded",
+		rating: 3.5,
+		num: 329,
+	},
+	earthbound: {
+		onModifyAtkPriority: 6,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Ground') {
+				this.debug('Earthbound boost');
+				return this.chainModify(1.25);	
+				}
+		},
+		onModifySpAPriority: 6,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Ground') {
+				this.debug('Earthbound boost');
+				return this.chainModify(1.25);	
+			}
+		},
+		name: "Electrolytes",
+		rating: 3,
+		num: 330,
+	},
+	fightingspirit: {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Fighting';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+		},
+		name: "Fighting Spirit",
+		rating: 4,
+		num: 331,
+	},
+	felineprowess: {
+		onModifySpAPriority: 5,
+		onModifySpA(spa) {
+			return this.chainModify(2);
+		},
+		name: "Feline Prowess",
+		rating: 5,
+		num: 332,
 	},
 
 

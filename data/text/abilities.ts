@@ -2148,6 +2148,15 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 
 	//IE 
+	chloroplast: {
+		name: "Chloroplast",
+		shortDesc: "This Pokemon uses moves as if under Sunny Day",
+	},
+	whiteout: {
+		name: "whiteout",
+		shortDesc: "This pokemon's moves are boosted by 50% under Hail",
+
+	},
 	pyromancy: {
 		name: "Pyromancy",
 		shortDesc: "This Pokemon's Fire-type moves have a 5x chance to brun",
@@ -2225,6 +2234,65 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	perfectionist: {
 		name: "Perfectionist",
 		shortDesc: "+1 crit ratio for moves under 50 power, +1 priority for moves under 25 power."
+	},
+	growingtooth: {
+		name: "Growing Tooth",
+		shortDesc: "This Pokemon's Attack is raised 1 state when using biting moves",
+	},
+	inflatable: {
+		name: "Inflatable",
+		shortDesc: "Raises defenses when hit by Fire or Flying type moves (Immune).",
+	},
+	auroraborealis: {
+		name: "Aurora Borealis",
+		shortDesc: "Gains STAB for Ice moves",
+	}, 
+	avenger: {
+		name: "Avenger",
+		shortDesc: "Boosts offenses by 50% if ally fainted last turn.",
+	},
+	letsroll: {
+		name: "Let's Roll",
+		shortDesc: "Defense Curl on switch-in"
+	},
+	aquatic: {
+		name: "Aquatic",
+		shortDesc: "This Pokemon gains the Water type"
+	},
+	loudbang: {
+		name: "Loud Bang",
+		shortDesc: "This pokemon's sound-based moves have 20% chance to confuse",
+	},
+	leadcoat: {
+		name: "Lead Coat",
+		shortDesc: "Ups Defense by 30% but lowers speed by 10%",
+	},
+	coiledup: {
+		name: "Coil Up",
+		shortDesc: "This pokemon's biting moves have +1 priority the first time they are used",
+
+		activate: "  [POKEMON] prepares to strike!",
+	},
+	amphibious: {
+		name: "Amphibious",
+		shortDesc: "Gains STAB for Water moves",
+	},
+	grounded: {
+		name: "Grounded",
+		shortDesc: "This Pokemon gains the Ground type"
+	},
+	earthbound: {
+		name: "Earthbound",
+		shortDesc: "This Pokemon's Ground type attacks are boosted by 25%"
+	},
+	fightingspirit: {
+		name: "Fighting Spirit",
+		shortDesc: "This Pokemon's Normal-type moves become Fighting type and have 1.2x power."
+	},
+	felineprowess: {
+		name: "Feline Prowess",
+		shortDesc: "This Pokemon's Special Attack is doubled."
+
 	},
 
 	// CAP
