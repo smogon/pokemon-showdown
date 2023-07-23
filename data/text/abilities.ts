@@ -2271,7 +2271,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Coil Up",
 		shortDesc: "This pokemon's biting moves have +1 priority the first time they are used",
 
-		activate: "  [POKEMON] prepares to strike!",
+		start: "  [POKEMON] prepares to strike!",
 	},
 	amphibious: {
 		name: "Amphibious",
