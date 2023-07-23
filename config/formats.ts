@@ -33,12 +33,10 @@ export const Formats: FormatList = [
 		//TODO: Create Elite Redux ruleset
 		ruleset: [],
 		onValidateSet(set) {
-						const species = this.dex.species.get(set.species);
-			console.log(set.ability);
+			const species = this.dex.species.get(set.species);
 			const innateList = Object.keys(species.abilities)
 				.filter(key => key.includes('I'))
 				.map(key => species.abilities[key as 'I1' | 'I2' | 'I3'])
-			console.table(innateList); //debug
 			for (const innateName of innateList) {
 				//Checks if set ability is an innate, which is not allowed
 				if (set.ability == innateName){ 
