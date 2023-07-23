@@ -3672,7 +3672,7 @@
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
-                "movepool": ["Earth Power", "Protect", "Stealth Rock", "Thunderbolt", "Volt Switch"],
+                "movepool": ["Earth Power", "Protect", "Spikes", "Stealth Rock", "Thunderbolt", "Volt Switch"],
                 "teraTypes": ["Electric", "Grass", "Ground"]
             },
             {
