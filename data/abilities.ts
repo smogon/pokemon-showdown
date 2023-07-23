@@ -5467,12 +5467,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	inflatable: {
 		onTryHit(target, source, move) {
 			if (target !== source && (move.type === 'Flying' || 'Fire')) {
-				if (!this.boost({def: 1}) && !this.boost({spd: 1})) {
+				if (!this.boost({def: 1})) {
+					if (!this.boost({spd: 1})) {
 					this.add('-immune', target, '[from] ability: Aerodynamics');
-				}
+					}				
 				return null;
 			}
 		},
+	},
 		isBreakable: true,
 		name: "Inflatable",
 		rating: 3,
