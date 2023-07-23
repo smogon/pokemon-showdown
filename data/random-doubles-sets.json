@@ -1424,7 +1424,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Draco Meteor", "Fire Blast", "Heavy Slam", "Protect", "Trick Room"],
+                "movepool": ["Draco Meteor", "Fire Blast", "Heavy Slam", "Protect", "Thunder Wave"],
                 "teraTypes": ["Dragon", "Fire", "Flying", "Steel"]
             }
         ]
@@ -1434,7 +1434,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Draco Meteor", "Fire Blast", "Flash Cannon", "Protect", "Trick Room"],
+                "movepool": ["Draco Meteor", "Fire Blast", "Flash Cannon", "Protect", "Thunder Wave"],
                 "teraTypes": ["Dragon", "Fire", "Flying"]
             }
         ]
@@ -1825,6 +1825,11 @@
                 "role": "Doubles Wallbreaker",
                 "movepool": ["Dark Pulse", "Flamethrower", "Focus Blast", "Protect", "Sludge Bomb"],
                 "teraTypes": ["Poison"]
+            },
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Flamethrower", "Focus Blast", "Knock Off", "Protect", "Sludge Bomb"],
+                "teraTypes": ["Poison"]
             }
         ]
     },
@@ -2017,7 +2022,7 @@
             },
             {
                 "role": "Doubles Support",
-                "movepool": ["Foul Play", "Protect", "Snarl", "Taunt", "Thunder Wave", "Thunderbolt"],
+                "movepool": ["Grass Knot", "Protect", "Snarl", "Taunt", "Thunder Wave", "Thunderbolt"],
                 "teraTypes": ["Steel"]
             }
         ]
@@ -3682,7 +3687,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Dazzling Gleam", "Disable", "Encore", "Helping Hand", "Howl", "Play Rough", "Stealth Rock", "Thunder Wave"],
+                "movepool": ["Disable", "Encore", "Helping Hand", "Howl", "Play Rough", "Stealth Rock", "Thunder Wave"],
                 "teraTypes": ["Steel"]
             }
         ]
