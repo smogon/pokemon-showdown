@@ -5534,14 +5534,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				for (const secondary of move.secondaries) {
 					if (secondary.volatileStatus === 'confusion' && secondary.chance) { 
 						secondary.chance += 20;
-					} else { 
-						move.secondaries.push({
-							chance: 20,
-							volatileStatus: 'confusion',
-						});
-					}
+						return;
+					} 
 				}
-				
+				move.secondaries.push({
+					chance: 20,
+					volatileStatus: 'confusion',
+				});
 			}
 		},
 		name: "Loud Bang",
@@ -5562,7 +5561,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	coilup: {
 		onStart(pokemon) {
 			this.effectState.coiled = true;
-			this.add('-activity', pokemon, 'Coil Up');
+			this.add('-activite', pokemon, 'Coil Up');
 		},
 		onModifyPriority(priority, source, target, move) {
 			if (this.effectState.coiled && move.flags['bite']) {
@@ -5713,7 +5712,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onResidualOrder: 29,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
-			this.add('-activate', pokemon, 'Self Sufficient');
 			this.heal(pokemon.baseMaxhp / 16);
 		},
 		name: "Self Sufficient",
@@ -6030,9 +6028,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	majesticmoth: {
 		onStart(pokemon) {
-			this.add('-activate', pokemon, 'Majestic Moth');
 			const bestStat = pokemon.getBestStat(true, true);
-			this.boost({[bestStat]: length}, pokemon);
+			this.boost({[bestStat]: 1}, pokemon);
 		},
 		name: "Majestic Moth",
 		rating: 5,
@@ -6041,21 +6038,21 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	souleater: {
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				this.heal(source.baseMaxhp / 4);
+				this.add('-activate', source, 'Soul Eater');
+				source.heal(source.baseMaxhp / 4);
+				this.add('-heal', source, source.getHealth, '[silent]')
 			}
 		},
 		name: "Soul Eater",
 		rating: 3,
 		num: 360,
 	},
-	soullinker: { //TODO: Desperately needs testing
+	soullinker: { 
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
-			this.add('-activate', target, 'ability: Soul Linker');
 			this.damage(damage, source, target);
 		},
 		onFoeDamagingHit(damage, target, source, move) {
-			this.add('-activate', source, 'ability: Soul Linker');
 			this.damage(damage, source, target);
 		},
 		name: "Soul Linker",
@@ -6067,7 +6064,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			if (pokemon.status === 'slp' || pokemon.hasAbility('comatose')) {
-				this.add('-activate', pokemon, 'Sweet Dreams');
 				this.heal(pokemon.baseMaxhp / 16);
 			}
 
@@ -6079,8 +6075,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	}, 
 	badluck: {
 		onFoeModifyAccuracy(acc, target, source, move) {
+			console.log(`accuracy: ${acc}`); //debug for uni acc drop
 			if (typeof acc == 'boolean') return 95 //apparently bad luck lowers accuracy of moevs with no accuracy. fun stuff.
-			if (typeof acc == 'number') return this.chainModify(0.95)
+			if (typeof acc == 'number') return this.chainModify(0.95);
 
 		},
 		onFoeModifyMove(move, pokemon) {
@@ -6090,6 +6087,100 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: 362,
 	},
+	hauntedspirit: {
+		onDamagingHitOrder: 2,
+		onDamagingHit(damage, target, source, move) {
+			if (!target.hp && !source.getVolatile('curse')) {
+				source.addVolatile('curse');
+			}
+		},		
+		name: "Haunted Spirit",
+		rating: 3,
+		num: 363,
+	},
+	electricburst: { //TODO: Testing Needed
+		onModifyAtkPriority: 6,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Electric') {
+				this.debug('Electric Burst boost');
+				return this.chainModify([5529,4096]); // ~35% boost
+			}
+		},
+		onModifySpAPriority: 6,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Electric') {
+				this.debug('Electric Burst boost');
+				return this.chainModify([5529,4096]); // ~35% boost
+			}
+		},
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (source && source !== target && move && move.type === 'Electric' && !source.forceSwitchFlag && move.totalDamage) {
+				const ebRecoilDamage = this.clampIntRange(Math.round(move.totalDamage * 0.10), 1)
+				this.damage(ebRecoilDamage, source, source, 'recoil');
+			}
+		},
+		name: "Electric Burst",
+		rating: 3,
+		num: 364,
+
+	},
+	rawwood: {
+		onSourceModifyAtkPriority: 5,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Grass') {
+				return this.chainModify(0.5);
+			}
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Grass') {
+				return this.chainModify(0.5);
+			}
+		},
+		isBreakable: true,
+		name: "Raw Wood",
+		rating: 3,
+		num: 365,
+	},
+	solenoglyphs: {
+		onModifyMove(move, attacker, defender) {
+			if (move.category !== "Status" && move.flags['bite']) {
+				if (!move.secondaries) move.secondaries = [];
+				for (const secondary of move.secondaries) {
+					if ((secondary.status === 'psn' || 'tox') && secondary.chance) { //Affects Poison Fang chance (i think????)
+						secondary.chance += 50;
+						return;
+					} 
+				}
+				move.secondaries.push({
+					chance: 20,
+					status: 'psn'
+				});
+			}
+		},
+		name: "Solenoglyphs",
+		rating: 3.5,
+		num: 366,
+	},
+	spiderlair: {//TODO: Testing Needed
+		onStart(source) { //duration handled in data/moves.js:tailind
+			const hasWebs = source.side.foe.sideConditions['stickyweb']
+			if (!hasWebs) {
+				//has to have target so that Magic Bounce isn't bypassed
+				for (let i = 0; i < source.side.foe.pokemon.length, i++;) { 
+					if (source.side.foe.pokemon[i]) {
+						this.add('-activate', source, 'ability: Spider Lair');
+						this.actions.runMove('stickyweb', source, 0, source.getAbility());
+					}
+				}
+			}
+		},	
+		name: "Spider Lair",
+		rating: 5,
+		num: 367,
+	},
+	
+
 
 
 

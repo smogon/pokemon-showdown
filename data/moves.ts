@@ -18344,6 +18344,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {reflectable: 1},
 		sideCondition: 'stickyweb',
 		condition: {
+			duration: 0, //
+			durationCallback(target, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					return 5;
+				}
+				return 0; //no duration unless set by Spider Lair
+			},
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Sticky Web');
 			},
@@ -18352,6 +18359,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-activate', pokemon, 'move: Sticky Web');
 				this.boost({spe: -1}, pokemon, this.effectState.source, this.dex.getActiveMove('stickyweb'));
 			},
+			onSideResidualOrder: 26,
+			onSideResidualSubOrder: 12,
+			onSideEnd(side) { 
+				this.add('-sideend', side, 'move: Sticky Web');
+			}
 		},
 		secondary: null,
 		target: "foeSide",

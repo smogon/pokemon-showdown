@@ -1706,7 +1706,7 @@ export class BattleActions {
 			const bondModifier = this.battle.gen > 6 ? 0.25 : 0.5;
 			this.battle.debug(`Parental Bond modifier: ${bondModifier}`);
 			baseDamage = this.battle.modify(baseDamage, bondModifier);
-		} else if (move.multihitType === 'boxer') {
+		} else if (move.multihitType === 'boxer' && move.hit > 1) {
 			// Boxer modifier
 			const bondModifier = 0.5
 			this.battle.debug(`Raging Boxer modifier: ${bondModifier}`);

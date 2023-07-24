@@ -2271,7 +2271,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Coil Up",
 		shortDesc: "This pokemon's biting moves have +1 priority the first time they are used",
 
-		start: "  [POKEMON] prepares to strike!",
+		activate: "  [POKEMON] prepares to strike!",
 	},
 	amphibious: {
 		name: "Amphibious",
@@ -2409,7 +2409,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Majestic Moth",
 		desc: "This Pokemon's highest stat is raised by 1 stage on switch-in. Stat stage changes are not considered. If multiple stats are tied, Attack, Defense, Special Attack, Special Defense, and Speed are prioritized in that order.",
 		shortDesc: "This Pokemon's highest stat is raised by 1 on switch-in.",
-
 	},
 	souleater: {
 		name: "Soul Eater",
@@ -2426,6 +2425,28 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	badluck: {
 		name: "Bad Luck",
 		shortDesc: "Foes cannot land critical hits and have all accuracy lowered by 5%"
+	},
+	hauntedspirit: {
+		name: "Haunted Spirit",
+		shortDesc: "When this Pokemon faints, the attacker becomes cursed"
+
+	},
+	electricburst: {
+		name: "Electric Burst",
+		shortDesc: "Electric type moves are 35% stronger, but take 10% recoil"
+
+	},
+	rawwood: {
+		name: "Raw Wood",
+		shortDesc: "This Pokemon takes half damage from Grass type moves"
+	},
+	solenoglyphs: {
+		name: "Solenoglyphs",
+		shortDesc: "This Pokemon's biting moves have an addition 50% chance to poison"
+	},
+	spiderlair: {
+		name: "Spider Lair",
+		shortDesc: "On switch-in, sets Sticky Web on opposing side; Sticky Webs end after 5 turns"
 	},
 
 	// CAP
