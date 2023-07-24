@@ -5266,12 +5266,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Ghost' && attacker.hp <= attacker.maxhp / 3) {
-				this.debug('Full Vengeance boost');
-				return this.chainModify(1.5);
-			} else if (move.type === 'Ghost') {
-				this.debug('Lite Vengeance boost');
-				return this.chainModify(1.2);
+			if (move.type === 'Ghost') {
+				if (attacker.hp <= attacker.maxhp / 3) {
+					this.debug('Full Vengeance boost');
+					return this.chainModify(1.5);	
+				} else {
+					this.debug('Lite Vengeance boost');
+					return this.chainModify(1.2);
+				}
 			}
 		},
 		name: "Vengeance",
@@ -5469,7 +5471,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (target !== source && (move.type === 'Flying' || 'Fire')) {
 				if (!this.boost({def: 1})) {
 					if (!this.boost({spd: 1})) {
-					this.add('-immune', target, '[from] ability: Aerodynamics');
+					this.add('-immune', target, '[from] ability: Inflatable');
 					}				
 				return null;
 			}
@@ -5557,11 +5559,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3.5,
 		num: 326,
 	}, 
-	//TODO: Coilup needs ingame message
 	coilup: {
 		onStart(pokemon) {
 			this.effectState.coiled = true;
-			this.add('-ability', pokemon, 'Coil Up');
+			this.add('-activity', pokemon, 'Coil Up');
 		},
 		onModifyPriority(priority, source, target, move) {
 			if (this.effectState.coiled && move.flags['bite']) {
@@ -5659,7 +5660,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	magicaldust: {
 		onDamagingHit(damage, target, source, move) {
-			this.add('-start', source, 'typeadd', 'Psychic', '[from] ability: Magical Dust')
+			if (!source.types.includes('Psychic')) {
+				this.add('-start', source, 'typeadd', 'Psychic', '[from] ability: Magical Dust')
+			}
 		},
 		name: "Magical Dust",
 		rating: 3,
@@ -5710,7 +5713,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onResidualOrder: 29,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
-			this.add('-ability', pokemon, 'Self Sufficient');
+			this.add('-activate', pokemon, 'Self Sufficient');
 			this.heal(pokemon.baseMaxhp / 16);
 		},
 		name: "Self Sufficient",
@@ -5807,7 +5810,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	metallic: {
 		onStart(pokemon) {
-			this.add('-start', pokemon, 'typeadd', 'Metallic', '[from] ability: Metallic');
+			this.add('-start', pokemon, 'typeadd', 'Steel', '[from] ability: Metallic');
 		},
 		name: "Metallic",
 		rating: 3.5,
@@ -5858,33 +5861,236 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 348,
 	}, 
 	airblower: {
-		onStart(source) {
-			const side = source.side;
-			const tailwind = side.sideConditions['tailwind']
+		onStart(source) { //duration handled in data/moves.js:tailind
+			const tailwind = source.side.sideConditions['tailwind']
 			if (!tailwind) {
 				this.add('-activate', source, 'ability: Air Blower');
+				source.side.addSideCondition('tailwind', source, source.getAbility())
 			}
-		},
-		condition: {
-			duration: 3,
-			durationCallback(target, source, effect) {
-				return 3;
-			},
-			onSideStart(side,source) {
-				this.add('-sidestart', side, 'move: Tailwind');
-			},
-			onModifySpe(spe, pokemon) {
-				return this.chainModify(2);
-			},
-			onSideResidualOrder: 26,
-			onSideResidualSubOrder: 5,
-			onSideEnd(side) {
-				this.add('-sideend', side, 'move: Tailwind');
-			},
 		},
 		name: "Air Blower",
 		rating: 5,
 		num: 349,
+	},
+	juggernaut: {
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.flags['contact']) {
+				return (atk + (attacker.getStat('def') * .2));
+			}
+		},
+		onModifySpA(spa, attacker, defender, move) {
+			if (move.flags['contact']) {
+				return (spa + (attacker.getStat('spd') * .2));
+			}
+		},
+		onUpdate(pokemon) {
+			if (pokemon.status === 'par') {
+				this.add('-activate', pokemon, 'ability: Juggernaut');
+				pokemon.cureStatus();
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if (status.id !== 'par') return;
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Juggernaut');
+			}
+			return false;
+		},
+		name: "Juggernaut",
+		rating: 3,
+		num: 350,
+	},
+	shortcircuit: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Electric') {
+				if (attacker.hp <= attacker.maxhp / 3) {
+					this.debug('Full Short Circuit boost');
+					return this.chainModify(1.5);	
+				} else {
+					this.debug('Full Short Circuit boost');
+					return this.chainModify(1.2);
+				}
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Electric') {
+				if (attacker.hp <= attacker.maxhp / 3) {
+					this.debug('Full Short Circuit boost');
+					return this.chainModify(1.5);	
+				} else {
+					this.debug('Lite Short Circuit boost');
+					return this.chainModify(1.2);
+				}
+			}
+		},
+		name: "Short Circuit",
+		rating: 3,
+		num: 351,
+	},
+	majesticbird: {
+		onModifySpA(atk, attacker, defender, move) {
+			return this.chainModify(1.5);
+		},
+		name: "Majestic Bird",
+		rating: 4.5,
+		num: 352,
+	},
+	phantom: {
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'typeadd', 'Ghost', '[from] ability: Phantom');
+		},
+		name: "Phantom",
+		rating: 3.5,
+		num: 353,
+	},
+	poisonate: {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Poison';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+		},
+		name: "Poisonate",
+		rating: 4,
+		num: 354,
+	},
+	impenetrable: {
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') {
+				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
+				return false;
+			}
+		},
+		name: "Impenetrable",
+		rating: 4,
+		num: 355,
+	},
+	hypnotist: {
+		onModifyMovePriority: -10,
+		onModifyMove(move, pokemon, target) {
+			if (move.id === 'hypnosis') {
+				move.accuracy = 90
+			}
+		},
+		name: "Hypnotist",
+		rating: 4,
+		num: 356,
+	},
+	overwhelm: {
+		onModifyMovePriority: -5,
+		onModifyMove(move, attacker, defender) {
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Dragon'] = true;
+			}
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (effect.name === 'Intimidate' && boost.atk) {
+				delete boost.atk;
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Juggernaut', '[of] ' + target);
+			}
+			if (effect.name === 'Scare' && boost.spa) {
+				delete boost.spa;
+				this.add('-fail', target, 'unboost', 'Special Attack', '[from] ability: Juggernaut', '[of] ' + target);
+			}
+		},
+		name: "Overwhelm",
+		rating: 4,
+		num: 357,
+	},
+	scare: {
+		onStart(pokemon) {
+			let activated = false;
+			for (const target of pokemon.adjacentFoes()) {
+				if (!activated) {
+					this.add('-ability', pokemon, 'Scare', 'boost');
+					activated = true;
+				}
+				if (target.volatiles['substitute']) {
+					this.add('-immune', target);
+				} else {
+					this.boost({spa: -1}, target, pokemon, null, true);
+				}
+			}
+		},
+		name: "Scare",
+		rating: 3.5,
+		num: 358,
+	},
+	majesticmoth: {
+		onStart(pokemon) {
+			this.add('-activate', pokemon, 'Majestic Moth');
+			const bestStat = pokemon.getBestStat(true, true);
+			this.boost({[bestStat]: length}, pokemon);
+		},
+		name: "Majestic Moth",
+		rating: 5,
+		num: 359,
+	},
+	souleater: {
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				this.heal(source.baseMaxhp / 4);
+			}
+		},
+		name: "Soul Eater",
+		rating: 3,
+		num: 360,
+	},
+	soullinker: { //TODO: Desperately needs testing
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			this.add('-activate', target, 'ability: Soul Linker');
+			this.damage(damage, source, target);
+		},
+		onFoeDamagingHit(damage, target, source, move) {
+			this.add('-activate', source, 'ability: Soul Linker');
+			this.damage(damage, source, target);
+		},
+		name: "Soul Linker",
+		rating: 3,
+		num: 360,
+	},
+	sweetdreams: {
+		onResidualOrder: 30,
+		onResidualSubOrder: 4,
+		onResidual(pokemon) {
+			if (pokemon.status === 'slp' || pokemon.hasAbility('comatose')) {
+				this.add('-activate', pokemon, 'Sweet Dreams');
+				this.heal(pokemon.baseMaxhp / 16);
+			}
+
+		},
+		name: "Sweet Dreams",
+		rating: 3,
+		num: 361,
+
+	}, 
+	badluck: {
+		onFoeModifyAccuracy(acc, target, source, move) {
+			if (typeof acc == 'boolean') return 95 //apparently bad luck lowers accuracy of moevs with no accuracy. fun stuff.
+			if (typeof acc == 'number') return this.chainModify(0.95)
+
+		},
+		onFoeModifyMove(move, pokemon) {
+			move.willCrit = false;
+		},
+		name: "Bad Luck",
+		rating: 3,
+		num: 362,
+
+
 	},
 
 

@@ -2364,6 +2364,69 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Air Blower",
 		shortDesc: "On switch-in, this Pokemon summons Tailwind for 3 turns.",
 	},
+	juggernaut: {
+		name: "Juggernaut",
+		shortDesc: "This Pokemon's contact moves use + 20% of defense stat; cannot be paralyzed",
+	},
+	shortcircuit: {
+		name: "Short Circuit",
+		shortDesc: "Boost Pokemon's Electric moves by 20%, 50% when below 1/3 HP",
+	},
+	majesticbird: {
+		name: "Short Circuit",
+		shortDesc: "Boost Special moves by 50%",
+	},
+	phantom: {
+		name: "Phantom",
+		shortDesc: "This Pokemon gains the Ghost type"
+	},
+	poisonate: {
+		name: "Poisonate",
+		shortDesc: "This Pokemon's Normal-type moves become Poison type and have 1.2x power."
+
+	},
+	impenetrable: {
+		name: "Impenetrable",
+		desc: "This Pokemon can only be damaged by direct attacks. Curse and Substitute on use, Belly Drum, Pain Split, Struggle recoil, and confusion damage are considered direct damage.",
+		shortDesc: "This Pokemon can only be damaged by direct attacks.",
+	},
+	hypnotist: {
+		name: "Hypnotist",
+		shortDesc: "Hypnosis is 90% accurate for this Pokemon"
+
+	},
+	overwhelm: {
+		name: "Overwhelm",
+		desc: "This Pokemon can hit Fairy types with Dragon-type moves. This Pokemon is immune to the effect of the Intimidate and Scare abilities.",
+		shortDesc: "Dragon moves hit Fairy types. Immune to Intimidate and Scare.",
+	},
+	scare: {
+		name: "Scare",
+		desc: "On switch-in, this Pokemon lowers the Special Attack of opposing Pokemon by 1 stage. Pokemon with the Inner Focus, Oblivious, Own Tempo, Overwhelm, or Scrappy Abilities and Pokemon behind a substitute are immune.",
+		shortDesc: "On switch-in, this Pokemon lowers the Special Attack of opponents by 1 stage.",
+	},
+	majesticmoth: {
+		name: "Majestic Moth",
+		desc: "This Pokemon's highest stat is raised by 1 stage on switch-in. Stat stage changes are not considered. If multiple stats are tied, Attack, Defense, Special Attack, Special Defense, and Speed are prioritized in that order.",
+		shortDesc: "This Pokemon's highest stat is raised by 1 on switch-in.",
+
+	},
+	souleater: {
+		name: "Soul Eater",
+		shortDesc: "This pokemon heals 1/4 hp if it knock out a Pokemon"
+	},
+	soullinker: { 
+		name: "Soul Linker",
+		shortDesc: "This Pokemon recieves all damage it inflicts and shares all damage taken"
+	},
+	sweetdreams: {
+		name: "Sweet Dreams",
+		shortDesc: "This Pokemon heals 1/16 hp each turn if asleep"
+	}, 
+	badluck: {
+		name: "Bad Luck",
+		shortDesc: "Foes cannot land critical hits and have all accuracy lowered by 5%"
+	},
 
 	// CAP
 	mountaineer: {
