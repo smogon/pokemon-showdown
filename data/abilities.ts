@@ -6089,8 +6089,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Bad Luck",
 		rating: 3,
 		num: 362,
-
-
 	},
 
 
