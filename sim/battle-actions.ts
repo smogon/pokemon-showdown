@@ -1271,7 +1271,7 @@ export class BattleActions {
 				this.battle.faint(source, source, move);
 			}
 			if (moveData.selfSwitch) {
-				if (this.battle.canSwitch(source.side)) {
+				if (this.battle.canSwitch(source.side) && !source.volatiles['commanded']) {
 					didSomething = true;
 				} else {
 					didSomething = this.combineResults(didSomething, false);
@@ -1291,7 +1291,7 @@ export class BattleActions {
 				}
 			}
 			this.battle.debug('move failed because it did nothing');
-		} else if (move.selfSwitch && source.hp) {
+		} else if (move.selfSwitch && source.hp && !source.volatiles['commanded']) {
 			source.switchFlag = move.id;
 		}
 
