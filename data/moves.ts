@@ -19262,18 +19262,24 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			duration: 4,
 			durationCallback(target, source, effect) {
+				if (effect?.effectType === 'Ability') { //Air Blower duration change
+					return 3;
+				}
 				if (source?.hasAbility('persistent')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Tailwind');
 					return 6;
 				}
 				return 4;
 			},
-			onSideStart(side, source) {
+			onSideStart(this,side,source,effect) {
 				if (source?.hasAbility('persistent')) {
 					this.add('-sidestart', side, 'move: Tailwind', '[persistent]');
+				} else if (effect?.effectType === 'Ability') { 
+					this.add('-sidestart', side, 'move: Tailwind', '[from] ability: ' + effect.name, '[of] ' + source);
 				} else {
 					this.add('-sidestart', side, 'move: Tailwind');
 				}
+				
 			},
 			onModifySpe(spe, pokemon) {
 				return this.chainModify(2);
