@@ -36,7 +36,7 @@ describe('Team Validator', function () {
 		assert.false.legalTeam(team, 'gen8anythinggoes');
 
 		team = [
-			{species: 'raichualola', ability: 'surgesurfer', moves: ['sing'], evs: {hp: 1}},
+			{species: 'raichualola', ability: 'surgesurfer', moves: ['sing', 'fakeout'], evs: {hp: 1}},
 		];
 		assert.false.legalTeam(team, 'gen8anythinggoes@@@minsourcegen=8');
 
@@ -44,6 +44,12 @@ describe('Team Validator', function () {
 			{species: 'exeggutoralola', ability: 'frisk', moves: ['psybeam'], evs: {hp: 1}},
 		];
 		assert.false.legalTeam(team, 'gen8anythinggoes');
+
+		// This works in Gen 9+ because of Mirror Herb
+		team = [
+			{species: 'raichualola', ability: 'surgesurfer', moves: ['fakeout'], evs: {hp: 1}},
+		];
+		assert.legalTeam(team, 'gen9anythinggoes@@@minsourcegen=9');
 	});
 
 	it('should prevent Pokemon that don\'t evolve via level-up and evolve from a Pokemon that does evolve via level-up from being underleveled.', function () {
