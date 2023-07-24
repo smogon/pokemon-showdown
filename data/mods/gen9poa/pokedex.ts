@@ -196,7 +196,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		formeOrder: ["Spiritomb", "Spiritomb-Mega"],
 	},
 
-	// uranium mega changes
+	// uranium mega/evo changes
 	arbok: {
 		inherit: true,
 		otherFormes: ["Arbok-Mega"],
@@ -206,6 +206,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		otherFormes: ["Whimsicott-Mega"],
 		formeOrder: ["Whimsicott", "Whimsicott-Mega"],
+	},
+	corsola: {
+		inherit: true,
+		evos: ["Corsoreef"],
 	},
 
 	// poa changes
@@ -229,9 +233,17 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		evos: ["Staruhz"],
 	},
-	emperahog: {
+	grumpig: {
 		inherit: true,
-		evos: ["Grumpig"],
+		evos: ["Emperahog"],
+	},
+	swalot: {
+		inherit: true,
+		evos: ["Belcevour"],
+	},
+	farfetchd: {
+		inherit: true,
+		evos: ["Madame"],
 	},
 	bisharpdelta: {
 		inherit: true,
@@ -244,6 +256,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	spinda: {
 		inherit: true,
 		evos: ["Pandiz"],
+	},
+	dunsparcedelta: {
+		inherit: true,
+		evos: ["Dudunsparce-Delta"],
 	},
 	hoopa: {
 		inherit: true,
