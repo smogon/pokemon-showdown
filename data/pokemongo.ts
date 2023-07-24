@@ -97,9 +97,9 @@ export const PokemonGoData: {[source: string]: PokemonGoData} = {
 	mankey: {encounters: ['wild']},
 	primeape: {encounters: ['wild']},
 	growlithe: {encounters: ['wild']},
-	growlithehisui: {encounters: ['egg', 'raid', 'research', 'noshiny']},
+	growlithehisui: {encounters: ['egg', 'raid', 'research', 'noshiny']}, // wild encounter available on 2023-08-26
 	arcanine: {encounters: ['wild']},
-	arcaninehisui: {encounters: ['egg', 'raid', 'research', 'noshiny']},
+	arcaninehisui: {encounters: ['egg', 'raid', 'research', 'noshiny']}, // wild encounter available on 2023-08-26
 	poliwag: {encounters: ['wild']},
 	poliwhirl: {encounters: ['wild']},
 	poliwrath: {encounters: ['wild']},
@@ -295,7 +295,7 @@ export const PokemonGoData: {[source: string]: PokemonGoData} = {
 	unownj: {encounters: ['wild']},
 	unownk: {encounters: ['wild', 'noshiny']},
 	unownl: {encounters: ['wild']},
-	unownm: {encounters: ['wild', 'noshiny']},
+	unownm: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-04
 	unownn: {encounters: ['wild']},
 	unowno: {encounters: ['wild']},
 	unownp: {encounters: ['wild']},
@@ -309,7 +309,7 @@ export const PokemonGoData: {[source: string]: PokemonGoData} = {
 	unownx: {encounters: ['wild']},
 	unowny: {encounters: ['wild']},
 	unownz: {encounters: ['wild', 'noshiny']},
-	unownexclamation: {encounters: ['wild', 'noshiny']},
+	unownexclamation: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-04
 	unownquestion: {encounters: ['wild', 'noshiny']},
 	wobbuffet: {encounters: ['wild']},
 	girafarig: {encounters: ['wild']},
@@ -535,10 +535,10 @@ export const PokemonGoData: {[source: string]: PokemonGoData} = {
 	buizel: {encounters: ['wild']},
 	floatzel: {encounters: ['wild']},
 	cherubi: {encounters: ['wild']},
-	shellos: {encounters: ['wild']},
-	shelloseast: {encounters: ['wild']},
-	gastrodon: {encounters: ['wild']},
-	gastrodoneast: {encounters: ['wild']},
+	shellos: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-26
+	shelloseast: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-26
+	gastrodon: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-26
+	gastrodoneast: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-26
 	ambipom: {encounters: ['wild']},
 	drifloon: {encounters: ['wild']},
 	drifblim: {encounters: ['wild']},
@@ -563,7 +563,7 @@ export const PokemonGoData: {[source: string]: PokemonGoData} = {
 	garchomp: {encounters: ['wild']},
 	munchlax: {encounters: ['egg']},
 	riolu: {encounters: ['egg']},
-	lucario: {encounters: ['wild']},
+	lucario: {encounters: ['egg', 'research']}, // wild encounter available on 2023-08-18
 	hippopotas: {encounters: ['wild']},
 	hippowdon: {encounters: ['wild']},
 	skorupi: {encounters: ['wild']},
@@ -644,9 +644,9 @@ export const PokemonGoData: {[source: string]: PokemonGoData} = {
 	drilbur: {encounters: ['wild']},
 	exacdrill: {encounters: ['wild']},
 	audino: {encounters: ['wild']},
-	timburr: {encounters: ['egg', 'raid']},
-	gurdurr: {encounters: ['egg', 'raid']},
-	conkeldurr: {encounters: ['egg', 'raid']},
+	timburr: {encounters: ['egg', 'raid']}, // wild encounter available on 2023-08-26
+	gurdurr: {encounters: ['egg', 'raid']}, // wild encounter available on 2023-08-26
+	conkeldurr: {encounters: ['egg', 'raid']}, // wild encounter available on 2023-08-26
 	tympole: {encounters: ['wild']},
 	palpitoad: {encounters: ['wild']},
 	seismitoad: {encounters: ['wild']},
@@ -660,8 +660,8 @@ export const PokemonGoData: {[source: string]: PokemonGoData} = {
 	scolipede: {encounters: ['wild']},
 	cottonee: {encounters: ['wild']},
 	whimsicott: {encounters: ['wild']},
-	petilil: {encounters: ['wild']},
-	lilligant: {encounters: ['wild']},
+	petilil: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-04
+	lilligant: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-04
 	basculin: {encounters: ['wild', 'noshiny']},
 	basculinbluestriped: {encounters: ['wild', 'noshiny']},
 	sandile: {encounters: ['12kmegg', 'research', 'noshiny']},
@@ -717,8 +717,8 @@ export const PokemonGoData: {[source: string]: PokemonGoData} = {
 	frillish: {encounters: ['wild']},
 	jellicent: {encounters: ['wild']},
 	alomomola: {encounters: ['wild']},
-	joltik: {encounters: ['wild', 'noshiny']},
-	galvantula: {encounters: ['wild', 'noshiny']},
+	joltik: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-26
+	galvantula: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-26
 	ferroseed: {encounters: ['wild']},
 	ferrothorn: {encounters: ['wild']},
 	klink: {encounters: ['wild']},
@@ -745,10 +745,10 @@ export const PokemonGoData: {[source: string]: PokemonGoData} = {
 	mienfoo: {encounters: ['wild', 'noshiny']},
 	mienshao: {encounters: ['wild', 'noshiny']},
 	druddigon: {encounters: ['raid', 'research']},
-	golett: {encounters: ['wild', 'noshiny']},
-	golurk: {encounters: ['wild', 'noshiny']},
-	pawniard: {encounters: ['12kmegg', 'research']},
-	bisharp: {encounters: ['12kmegg', 'research']},
+	golett: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-18
+	golurk: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-18
+	pawniard: {encounters: ['12kmegg', 'research']}, // wild encounter available on 2023-08-18
+	bisharp: {encounters: ['12kmegg', 'research']}, // wild encounter available on 2023-08-18
 	bouffalant: {encounters: ['wild', 'noshiny']},
 	rufflet: {encounters: ['wild']},
 	braviary: {encounters: ['wild']},
@@ -867,20 +867,20 @@ export const PokemonGoData: {[source: string]: PokemonGoData} = {
 	hawlucha: {encounters: ['wild', 'noshiny']},
 	dedenne: {encounters: ['wild']},
 	carbink: {encounters: ['research', 'noshiny']},
-	goomy: {encounters: ['wild', 'noshiny']},
-	sliggoo: {encounters: ['wild', 'noshiny']},
-	goodra: {encounters: ['wild', 'noshiny']},
+	goomy: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-26
+	sliggoo: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-26
+	goodra: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-26
 	klefki: {encounters: ['wild', 'noshiny']},
 	phantump: {encounters: ['wild', 'noshiny']},
 	trevenant: {encounters: ['wild', 'noshiny']},
-	pumpkaboo: {encounters: ['wild', 'noshiny']},
-	pumpkaboolarge: {encounters: ['wild', 'noshiny']},
-	pumpkaboosmall: {encounters: ['wild', 'noshiny']},
-	pumpkaboosuper: {encounters: ['wild', 'noshiny']},
-	gourgeist: {encounters: ['wild', 'noshiny']},
-	gourgeistlarge: {encounters: ['wild', 'noshiny']},
-	gourgeistsmall: {encounters: ['wild', 'noshiny']},
-	gourgeistsuper: {encounters: ['wild', 'noshiny']},
+	pumpkaboo: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-04
+	pumpkaboolarge: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-04
+	pumpkaboosmall: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-04
+	pumpkaboosuper: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-04
+	gourgeist: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-04
+	gourgeistlarge: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-04
+	gourgeistsmall: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-04
+	gourgeistsuper: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-04
 	bergmite: {encounters: ['wild']},
 	avalugg: {encounters: ['wild']},
 	avalugghisui: {encounters: ['raid']},
@@ -888,7 +888,8 @@ export const PokemonGoData: {[source: string]: PokemonGoData} = {
 	noivern: {encounters: ['wild']},
 	xerneas: {encounters: ['raid', 'specialtrade']},
 	yveltal: {encounters: ['raid', 'specialtrade']},
-	zygarde: {encounters: ['research', 'noshiny', 'notrade']},
+	// zygarde: {encounters: ['research', 'noshiny']}, trading/transferring will be made available in the future
+	// diancie: {encounters: ['research', 'noshiny', 'notrade']}, will be made available on 2023-08-04
 	hoopa: {encounters: ['raid', 'research', 'noshiny', 'notrade']},
 	rowlet: {encounters: ['wild', 'noshiny']},
 	dartrix: {encounters: ['wild', 'noshiny']},
@@ -917,8 +918,8 @@ export const PokemonGoData: {[source: string]: PokemonGoData} = {
 	lycanrocmidnight: {encounters: ['wild']},
 	mareanie: {encounters: ['wild', 'noshiny']},
 	toxapex: {encounters: ['wild', 'noshiny']},
-	dewpider: {encounters: ['wild', 'noshiny']},
-	araquanid: {encounters: ['wild', 'noshiny']},
+	dewpider: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-04
+	araquanid: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-04
 	fomantis: {encounters: ['wild']},
 	lurantis: {encounters: ['wild']},
 	morelull: {encounters: ['wild', 'noshiny']},
@@ -931,7 +932,7 @@ export const PokemonGoData: {[source: string]: PokemonGoData} = {
 	steenee: {encounters: ['wild', 'noshiny']},
 	tsareena: {encounters: ['wild', 'noshiny']},
 	comfey: {encounters: ['wild', 'noshiny']},
-	oranguru: {encounters: ['wild', 'noshiny']},
+	oranguru: {encounters: ['wild', 'noshiny']}, // shiny available on 2023-08-26
 	wimpod: {encounters: ['wild', 'noshiny']},
 	golisopod: {encounters: ['wild', 'noshiny']},
 	sandygast: {encounters: ['raid', 'research', 'noshiny']},
