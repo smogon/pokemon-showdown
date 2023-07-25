@@ -431,16 +431,16 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	blaze: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Fire' && attacker.hp <= attacker.maxhp / 2) {
+			if (move.type === 'Fire' && attacker.hp <= attacker.maxhp / 3) {
 				this.debug('Blaze boost');
-				return this.chainModify(1.25);
+				return this.chainModify(1.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Fire' && attacker.hp <= attacker.maxhp / 2) {
+			if (move.type === 'Fire' && attacker.hp <= attacker.maxhp / 3) {
 				this.debug('Blaze boost');
-				return this.chainModify(1.25);
+				return this.chainModify(1.5);
 			}
 		},
 		name: "Blaze",
@@ -1705,7 +1705,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		// This should be applied directly to the stat as opposed to chaining with the others
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk) {
-			return this.modify(atk, 1.75);
+			return this.modify(atk, 1.5);
 		},
 		onSourceModifyAccuracyPriority: -1,
 		onSourceModifyAccuracy(accuracy, target, source, move) {
@@ -2796,16 +2796,16 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	overgrow: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Grass' && attacker.hp <= attacker.maxhp / 2) {
+			if (move.type === 'Grass' && attacker.hp <= attacker.maxhp / 3) {
 				this.debug('Overgrow boost');
-				return this.chainModify(1.25);
+				return this.chainModify(1.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Grass' && attacker.hp <= attacker.maxhp / 2) {
+			if (move.type === 'Grass' && attacker.hp <= attacker.maxhp / 3) {
 				this.debug('Overgrow boost');
-				return this.chainModify(1.25);
+				return this.chainModify(1.5);
 			}
 		},
 		name: "Overgrow",
@@ -3943,11 +3943,15 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.add('-end', pokemon, 'Slow Start', '[silent]');
 		},
 		condition: {
-			duration: 3,
+			duration: 5,
 			onResidualOrder: 28,
 			onResidualSubOrder: 2,
 			onStart(target) {
 				this.add('-start', target, 'ability: Slow Start');
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, pokemon) {
+				return this.chainModify(0.5);
 			},
 			onModifySpe(spe, pokemon) {
 				return this.chainModify(0.5);
@@ -4334,16 +4338,16 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	swarm: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Bug' && attacker.hp <= attacker.maxhp / 2) {
+			if (move.type === 'Bug' && attacker.hp <= attacker.maxhp / 3) {
 				this.debug('Swarm boost');
-				return this.chainModify(1.25);
+				return this.chainModify(1.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Bug' && attacker.hp <= attacker.maxhp / 2) {
+			if (move.type === 'Bug' && attacker.hp <= attacker.maxhp / 3) {
 				this.debug('Swarm boost');
-				return this.chainModify(1.25);
+				return this.chainModify(1.5);
 			}
 		},
 		name: "Swarm",
@@ -4568,16 +4572,16 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	torrent: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Water' && attacker.hp <= attacker.maxhp / 2) {
+			if (move.type === 'Water' && attacker.hp <= attacker.maxhp / 3) {
 				this.debug('Torrent boost');
-				return this.chainModify(1.25);
+				return this.chainModify(1.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Water' && attacker.hp <= attacker.maxhp / 2) {
+			if (move.type === 'Water' && attacker.hp <= attacker.maxhp / 3) {
 				this.debug('Torrent boost');
-				return this.chainModify(1.25);
+				return this.chainModify(1.5);
 			}
 		},
 		name: "Torrent",
@@ -5211,270 +5215,4 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: -4,
 	},
-		Stalk: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Dark' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Stalk');
-				return this.chainModify(1.25);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Dark' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Stalk');
-				return this.chainModify(1.25);
-			}
-		},
-		name: "Stalk",
-		rating: 2,
-		num: 66,
-	},
-		draging: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Dragon' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Dragging');
-				return this.chainModify(1.25);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Dragon' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Dragging');
-				return this.chainModify(1.25);
-			}
-		},
-		name: "Dragging",
-		rating: 2,
-		num: 66,
-	},
-		powercell: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Electric' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Powercell');
-				return this.chainModify(1.25);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Electric' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Powercell');
-				return this.chainModify(1.25);
-			}
-		},
-		name: "Powercell",
-		rating: 2,
-		num: 66,
-	},
-		sinkhole: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Ground' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Sinkhole');
-				return this.chainModify(1.25);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Ground' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Sinkhole');
-				return this.chainModify(1.25);
-			}
-		},
-		name: "Sinkhole",
-		rating: 2,
-		num: 66,
-	},
-		fae: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Fairy' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Fae');
-				return this.chainModify(1.25);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Fairy' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Fae');
-				return this.chainModify(1.25);
-			}
-		},
-		name: "Fae",
-		rating: 2,
-		num: 66,
-	},
-		fisting: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Fighting' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Fisting');
-				return this.chainModify(1.25);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Fighting' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Fisting');
-				return this.chainModify(1.25);
-			}
-		},
-		name: "Fisting",
-		rating: 2,
-		num: 66,
-	},
-		spook: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Ghost' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Spook');
-				return this.chainModify(1.25);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Ghost' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Spook');
-				return this.chainModify(1.25);
-			}
-		},
-		name: "Spook",
-		rating: 2,
-		num: 66,
-	},
-		whiteout: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Ice' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Whiteout');
-				return this.chainModify(1.25);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Ice' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Whiteout');
-				return this.chainModify(1.25);
-			}
-		},
-		name: "Whiteout",
-		rating: 2,
-		num: 66,
-	},
-		swoop: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Swoop' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Spook');
-				return this.chainModify(1.25);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Flying' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Swoop');
-				return this.chainModify(1.25);
-			}
-		},
-		name: "Swoop",
-		rating: 2,
-		num: 66,
-	},
-		basic: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Normal' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Basic');
-				return this.chainModify(1.25);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Normal' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Basic');
-				return this.chainModify(1.25);
-			}
-		},
-		name: "Basic",
-		rating: 2,
-		num: 66,
-	},
-		venomous: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Venomous' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Poison');
-				return this.chainModify(1.25);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Poison' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Venomous');
-				return this.chainModify(1.25);
-			}
-		},
-		name: "Venomous",
-		rating: 2,
-		num: 66,
-	},
-		landslide: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Landslide' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Spook');
-				return this.chainModify(1.25);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Landslide' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Spook');
-				return this.chainModify(1.25);
-			}
-		},
-		name: "Landslide",
-		rating: 2,
-		num: 66,
-	},
-		ferrous: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Steel' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Ferrous');
-				return this.chainModify(1.25);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Steel' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Ferrous');
-				return this.chainModify(1.25);
-			}
-		},
-		name: "Ferrous",
-		rating: 2,
-		num: 66,
-	},
-		esp: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'ESP' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('Spook');
-				return this.chainModify(1.25);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Psychic' && attacker.hp <= attacker.maxhp / 2) {
-				this.debug('ESP');
-				return this.chainModify(1.25);
-			}
-		},
-		name: "ESP",
-		rating: 2,
-		num: 66,
-	},
-	};
+};
