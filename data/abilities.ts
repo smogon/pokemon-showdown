@@ -5469,10 +5469,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	inflatable: {
 		onTryHit(target, source, move) {
 			if (target !== source && (move.type === 'Flying' || 'Fire')) {
-				if (!this.boost({def: 1})) {
-					if (!this.boost({spd: 1})) {
-					this.add('-immune', target, '[from] ability: Inflatable');
-					}				
+				if (!this.boost({def: 1, spd: 1})) {
+					this.add('-immune', target, '[from] ability: Inflatable');		
 				return null;
 			}
 		}
@@ -6074,14 +6072,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 
 	}, 
 	badluck: {
-		onFoeModifyAccuracy(acc, target, source, move) {
-			console.log(`accuracy: ${acc}`); //debug for uni acc drop
-			if (typeof acc == 'boolean') return 95 //apparently bad luck lowers accuracy of moevs with no accuracy. fun stuff.
-			if (typeof acc == 'number') return this.chainModify(0.95);
-
-		},
 		onFoeModifyMove(move, pokemon) {
 			move.willCrit = false;
+
+			//apparently bad luck lowers accuracy of moevs with no accuracy. fun stuff.
+			if(typeof move.accuracy === 'number') move.accuracy -= 5;
+			if (move.accuracy === true) move.accuracy = 95; 
 		},
 		name: "Bad Luck",
 		rating: 3,
@@ -6091,6 +6087,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onDamagingHitOrder: 2,
 		onDamagingHit(damage, target, source, move) {
 			if (!target.hp && !source.getVolatile('curse')) {
+				this.add('-activate', target, 'Haunted Spirit');
 				source.addVolatile('curse');
 			}
 		},		
@@ -6113,9 +6110,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return this.chainModify([5529,4096]); // ~35% boost
 			}
 		},
+
+		onAfterMoveSecondaryPriority: -1,
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (source && source !== target && move && move.type === 'Electric' && !source.forceSwitchFlag && move.totalDamage) {
 				const ebRecoilDamage = this.clampIntRange(Math.round(move.totalDamage * 0.10), 1)
+				this.add('-activite', source, 'Electric Burst');
 				this.damage(ebRecoilDamage, source, source, 'recoil');
 			}
 		},
@@ -6163,21 +6163,255 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 366,
 	},
 	spiderlair: {//TODO: Testing Needed
-		onStart(source) { //duration handled in data/moves.js:tailind
+		onSwitchIn(source) { //duration handled in data/moves.js:stickyweb
 			const hasWebs = source.side.foe.sideConditions['stickyweb']
-			if (!hasWebs) {
-				//has to have target so that Magic Bounce isn't bypassed
-				for (let i = 0; i < source.side.foe.pokemon.length, i++;) { 
-					if (source.side.foe.pokemon[i]) {
-						this.add('-activate', source, 'ability: Spider Lair');
-						this.actions.runMove('stickyweb', source, 0, source.getAbility());
-					}
-				}
+			if (!hasWebs) { //I don't think Spider Lair checks for Magic Bounce, so I get away with addSideCondition here (maybe???)
+				this.add('-activate', source, 'ability: Spider Lair');
+				source.side.foe.addSideCondition('stickyweb', source, source.getAbility())
 			}
 		},	
 		name: "Spider Lair",
 		rating: 5,
 		num: 367,
+	},
+	fatalprecision: {
+		onBeforeMove(source, target, move) { //uses onBeforeMove to account for switch-ins
+			if (target) {
+				const moveType = move.id === 'hiddenpower' ? source.hpType : move.type;
+				if (this.dex.getEffectiveness(moveType, target) > 0) {
+					this.debug('Fatal Precision accuracy boost')
+					move.accuracy = true;
+				}
+			}
+		},
+		onModifyDamage(damage, source, target, move) {
+			const moveType = move.id === 'hiddenpower' ? source.hpType : move.type;
+			if (this.dex.getEffectiveness(moveType, target) > 0) {
+				this.debug('Fatal Precision damage boost')
+				return this.chainModify(1.2);
+			}
+		},
+		name: "Fatal Precision",
+		rating: 3,
+		num: 368,
+	},
+	fortknox: {
+		onAfterEachBoost(boost, target, source, effect) {
+			if (!source || target.isAlly(source)) {
+				if (effect.id === 'stickyweb') {
+					this.hint("Court Change Sticky Web counts as lowering your own Speed, and Fort Knox only affects stats lowered by foes.", true, source.side);
+				}
+				return;
+			}
+			let statsLowered = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					statsLowered = true;
+				}
+			}
+			if (statsLowered) {
+				this.boost({def: 3}, target, target, null, false, true);
+			}
+		},
+		name: "Fort Knox",
+		rating: 3,
+		num: 369,
+	},
+	seaweed: {
+		onModifyDamage(damage, source, target, move) {
+			if (move.type === 'Grass' && target.hasType('Fire')) {
+				this.debug('Seaweed boost');
+				return this.chainModify(2);
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Fire' && source.hasType('Grass')) {
+				this.debug('Seaweed neutralize');
+				return this.chainModify(0.5);
+			}
+		},
+		isBreakable: true,
+		name: "Seaweed",
+		rating: 3,
+		num: 370,
+	},
+	psychicmind: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Psychic') {
+				this.debug('Psychic Mind boost');
+				return this.chainModify(1.25);	
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Psychic') {
+				this.debug('Psychic Mind boost');
+				return this.chainModify(1.25);	
+			}
+		},
+		name: "Psychic Mind",
+		rating: 3,
+		num: 371,
+	},
+	poisonabsorb: {
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Poison') {
+				if (!this.heal(target.baseMaxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Poison Absorb');
+				}
+				return null;
+			}
+		},
+		isBreakable: true,
+		name: "Poison Absorb",
+		rating: 3.5,
+		num: 372,
+	},
+	scavenger: {
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				this.add('-activate', source, 'Scavenger');
+				source.heal(source.baseMaxhp / 4);
+				this.add('-heal', source, source.getHealth, '[silent]')
+			}
+		},
+		name: "Scavenger",
+		rating: 3,
+		num: 360,
+	},
+	twistdimension: {//TODO: Testing
+		onStart(source) {
+			this.field.addPseudoWeather('trickroom', source, source.getAbility());
+		},
+		name: "Twist. Dimension",
+		rating: 5,
+		num: 361,
+	}, 
+	multiheaded: { //TODO: Testing
+		onPrepareHit(source, target, move) {
+			if (move.category === 'Status' || move.multihit || move.flags['noparentalbond'] || move.flags['charge'] ||
+			move.flags['futuremove'] || move.spreadHit || move.isZ || move.isMax) return;
+			const twoHeaded = ['doduo', 'weezing', 'girafarig', 'mawile', 'zweilous', 'doublade', 'binacle'];
+			const threeHeaded = ['dugtrio', 'dugtrioalola', 'magneton', 'dodrio', 'exeggutor', 'exeggutoralola','mawilemega','combee','magnezone','barbaracle','hydregion'];
+			if (twoHeaded.includes(source.species.id)) {
+				move.multihit = 2;
+				move.multihitType = 'headed';
+			}
+			if (threeHeaded.includes(source.species.id)) {
+				move.multihit = 3;
+				move.multihitType = 'headed';
+			}
+		},
+		// Damage modifier implemented in BattleActions#modifyDamage()
+		onSourceModifySecondaries(secondaries, target, source, move) {
+			if (move.multihitType === 'headed' && move.id === 'secretpower' && move.hit < 2) {
+				// hack to prevent accidentally suppressing King's Rock/Razor Fang
+				return secondaries.filter(effect => effect.volatileStatus === 'flinch');
+			}
+		},
+		name: "Multi Headed",
+		rating: 5,
+		num: 362,
+	},
+	northwind: {//TODO: Testing
+		onStart(source) { //duration handled in data/moves.js:tailind
+			const veil = source.side.sideConditions['auroraveil']
+			if (!veil) {
+				this.add('-activate', source, 'ability: North Wind');
+				source.side.addSideCondition('auroraveil', source, source.getAbility())
+			}
+		},
+		name: "North Wind",
+		rating: 5,
+		num: 363,
+	},
+	overcharge: {
+		onModifyDamage(damage, source, target, move) {
+			if (move.type === 'Electric' && target.hasType('Electric')) {
+				this.debug('Overcharge boost');
+				return this.chainModify(2);
+			}
+		},
+		//Electric type paralysis implemented in sim/pokemon.js:setStatus
+		name: "Overcharge",
+		rating: 3,
+		num: 364,
+
+	},
+	violentrush: {
+		onModifyAtk(atk, source, target, move) {
+			console.log(`VR active turns: ${source.activeTurns}`);
+			if (!source.activeTurns) {
+				return this.chainModify(1.2);
+			}
+		},
+		onModifySpe(spe, source) {
+			if (!source.activeTurns) {
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Violent Rush",
+		rating: 3,
+		num: 365,
+
+	},
+	flamingsoul: {
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.type === 'Fire' && pokemon.hp === pokemon.maxhp) return priority + 1;
+		},
+		name: "Flaming Soul",
+		rating: 3,
+		num: 366,
+	},
+	sagepower: {
+		onStart(pokemon) {
+			pokemon.abilityState.choiceLock = "";
+		},
+		onBeforeMove(pokemon, target, move) {
+			if (move.isZOrMaxPowered || move.id === 'struggle') return;
+			if (pokemon.abilityState.choiceLock && pokemon.abilityState.choiceLock !== move.id) {
+				// Fails unless ability is being ignored (these events will not run), no PP lost.
+				this.addMove('move', pokemon, move.name);
+				this.attrLastMove('[still]');
+				this.debug("Disabled by Sage Power");
+				this.add('-fail', pokemon);
+				return false;
+			}
+		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.abilityState.choiceLock || move.isZOrMaxPowered || move.id === 'struggle') return;
+			pokemon.abilityState.choiceLock = move.id;
+		},
+		onModifySpAPriority: 1,
+		onModifySpA(spa, pokemon) {
+			if (pokemon.volatiles['dynamax']) return;
+			// PLACEHOLDER
+			this.debug('Sage Power Atk Boost');
+			return this.chainModify(1.5);
+		},
+		onDisableMove(pokemon) {
+			if (!pokemon.abilityState.choiceLock) return;
+			if (pokemon.volatiles['dynamax']) return;
+			for (const moveSlot of pokemon.moveSlots) {
+				if (moveSlot.id !== pokemon.abilityState.choiceLock) {
+					pokemon.disableMove(moveSlot.id, false, this.effectState.sourceEffect);
+				}
+			}
+		},
+		onEnd(pokemon) {
+			pokemon.abilityState.choiceLock = "";
+		},
+		name: "Sage Power",
+		rating: 4.5,
+		num: 367,
+	},
+	bonezone: {
+		//TODO: Implement Bone move Flag
+		name: "Bone Zone",
+		rating: 4.5,
+		num: 368,
 	},
 	
 

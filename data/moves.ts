@@ -811,12 +811,19 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1},
 		sideCondition: 'auroraveil',
-		onTry() {
+		onTry(source, target, move) {
 			return this.field.isWeather(['hail', 'snow']);
 		},
 		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					if (source?.hasItem('lightclay')) {
+						return 5;
+					} else {
+						return 3;
+					}
+				}
 				if (source?.hasItem('lightclay')) {
 					return 8;
 				}
@@ -20318,7 +20325,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 				return 5;
 			},
-			onFieldStart(target, source) {
+			onFieldStart(target, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.effectState.duration = 3; //Twist Dimension duration change
+				}
+					if (this.gen <= 5) this.effectState.duration = 0;
 				if (source?.hasAbility('persistent')) {
 					this.add('-fieldstart', 'move: Trick Room', '[of] ' + source, '[persistent]');
 				} else {

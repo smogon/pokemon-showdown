@@ -2205,7 +2205,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	electrolytes: {
 		name: "Electrolytes",
-		shortDesc: "This Pokemon's electric type moves are boosted by 25%"
+		shortDesc: "This Pokemon's Electric type moves are boosted by 25%"
 	},
 	aerodynamics: {
 		name: "Aerodynamics",
@@ -2447,6 +2447,75 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	spiderlair: {
 		name: "Spider Lair",
 		shortDesc: "On switch-in, sets Sticky Web on opposing side; Sticky Webs end after 5 turns"
+	},
+	fatalprecision: {
+		name: "Fatal Precision",
+		shortDesc: "This Pokemon's super effective moves deal 20% more damage and cannot miss"
+
+	},
+	fortknox: {
+		name: "Fort Knox",
+		shortDesc: "This Pokemon's Defense is raised by 3 for each of its stats that is lowered by a foe.",
+
+	},
+	seaweed: {
+		name: "Fort Knox",
+		shortDesc: "This Pokemon's Grass type moves deal neutral damage to Fire; Fire neutrality if Grass type.",
+
+	},
+	psychicmind: {
+		name: "Psychic Mind",
+		shortDesc: "This Pokemon's Psychic type moves are boosted by 25%"
+	},
+	poisonabsorb: {
+		name: "Poison Absorb",
+		desc: "This Pokemon is immune to Poison-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Poison-type move.",
+		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Poison moves; Poison immunity.",
+
+	},
+	scavenger: {
+		name: "Scavenger",
+		shortDesc: "This pokemon heals 1/4 hp if it knock out a Pokemon"
+
+	},
+	twistdimension: {
+		name: "Air Blower",
+		shortDesc: "On switch-in, this Pokemon summons Trick Room for 3 turns.",
+
+	}, 
+	multiheaded: {
+		name: "Multi Headed",
+		desc: "This Pokemon gains an addition attack for each of its heads. For additional attacks, the first addition attack deals 20% of the intital hit, with each hit after dealing 15%.",
+		shortDesc: "This Pokemon gains more attacks for each of its heads.",
+
+	},
+	northwind: {
+		name: "North Wind",
+		shortDesc: "On switch-in, this Pokemon summons Aurora Veil for 3 turns; 5 turns if holding Light Clay",
+
+	},
+	overcharge: {
+		name: "Overcharge",
+		shortDesc: "This Pokemon's Electric moves deal 2x damage to Electric types and may paralyze Electric types.",
+
+	},
+	violentrush: {
+		name: "Violent Rush",
+		shortDesc: "This Pokemon is granted a 20% Attack boost and 50% Speed boost during its first turn on field",
+
+	},
+	flamingsoul: {
+		name: "Flaming Soul",
+		shortDesc: "If this Pokemon is at full HP, its Flying-type moves have their priority increased by 1.", 
+	},
+	sagepower: {
+		name: "Sage Power",
+		desc: "This Pokemon's Special Attack is multiplied by 1.5, but it can only select the first move it executes. These effects are prevented while this Pokemon is Dynamaxed.",
+		shortDesc: "This Pokemon's Special Attack is 1.5x, but it can only select the first move it executes.",
+	},
+	bonezone: {
+		name: "Bone Zone",
+		shortDesc: "This Pokemon's bone moves ignore immunities and deal 2x damage if not very effective ",
 	},
 
 	// CAP

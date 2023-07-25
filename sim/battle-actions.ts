@@ -1711,7 +1711,16 @@ export class BattleActions {
 			const bondModifier = 0.5
 			this.battle.debug(`Raging Boxer modifier: ${bondModifier}`);
 			baseDamage = this.battle.modify(baseDamage, bondModifier);
+		} else if (move.multihitType === 'headed') {
+			let bondModifier;
+			if (move.hit === 2) bondModifier = 0.2;
+			if (move.hit >= 3) bondModifier = 0.15;
+			if (bondModifier) {
+				this.battle.debug(`Multi-Headed modifier: ${bondModifier}`);
+				baseDamage = this.battle.modify(baseDamage, bondModifier);
+			}
 		}
+
 
 		// weather modifier
 		baseDamage = this.battle.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
