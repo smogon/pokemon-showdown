@@ -83,6 +83,7 @@ export const translations: Translations = {
 		"${user.name} hid the replay of this battle.": "${user.name} ocultou o replay desta batalha.",
 		"You can only do this in battle rooms.": "Você só pode fazer isso em sala de batalhas.",
 		"You can only add a Player to unrated battles.": "Você só pode adicionar um jogador em batalhas que não valham pontos.",
+		"Player must be set to \"p1\" or \"p2\", not \"${target}\".": "Jogadores devem estar classificados como \"p1\" ou \"p2\", não \"${target}\".",
 		"User ${name} not found.": "Usuário ${name} não encontrado.",
 		"This room already has a player in slot ${target}.": "Esta sala já tem um jogador na posição ${target}.",
 		"${targetUser.name} is already a player in this battle.": "${targetUser.name} já é um jogador nesta batalha.",
