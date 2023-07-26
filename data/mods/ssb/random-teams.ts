@@ -502,7 +502,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Not-so-worthy Pirouette',
 		evs: {hp: 252, def: 200, spd: 56}, ivs: {atk: 0}, nature: 'Calm', shiny: true,
 	},
-	Nol: {
+	Theia: {
 		species: 'Litwick', ability: 'Burning Soul', item: 'Spooky Plate', gender: 'F',
 		moves: ['Shadow Ball', 'Flamethrower', 'Giga Drain'],
 		signatureMove: 'Mad Hacks',

@@ -1138,16 +1138,16 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Naziel')}|Toy xikito no puedo ;-;`);
 		},
 	},
-	nol: {
+	theia: {
 		noCopy: true,
 		onStart() {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Nol')}|What's up nerds`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Theia')}|What's up nerds`);
 		},
 		onSwitchOut() {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Nol')}|cya nerds later`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Theia')}|cya nerds later`);
 		},
 		onFaint() {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Nol')}|nerd`);
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Theia')}|nerd`);
 		},
 		innateName: "RSUA",
 		shortDesc: "+1 priority to status moves. 1.5x Defense and Special Defense.",
