@@ -132,7 +132,7 @@ export const translations: Translations = {
 		"Get help with this": "Consigue ayuda con esto",
 		"The user \"${targetUser.name}\" is locked and cannot be PMed.": "El usuario \"${targetUser.name}\" tiene un lock y no puede recibir mensajes privados.",
 		"On this server, you must be of rank ${groupName} or higher to PM users.": "",
-		"This user is blocking private messages right now.": "Este usuario está bloqueando mensajes privados por el momento",
+		"This user is blocking private messages right now.": "Este usuario está bloqueando mensajes privados por el momento.",
 		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "Este ${Config.groups[targetUser.group].name} está muy ocupado para responder mensajes privados por el momento. Por favor contacta a otro miembro del staff.",
 		"If you need help, try opening a <a href=\"view-help-request\" class=\"button\">help ticket</a>": "Si necesitas ayuda, prueba abriendo un <a href=\"view-help-request\" class=\"button\">help ticket</a>",
 		"You are blocking private messages right now.": "Estás bloqueando mensajes privados en este momento.",
