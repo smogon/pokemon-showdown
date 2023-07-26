@@ -3039,7 +3039,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fairy",
 	},
 
-	// Nol
+	// Theia
 	madhacks: {
 		accuracy: true,
 		basePower: 0,
