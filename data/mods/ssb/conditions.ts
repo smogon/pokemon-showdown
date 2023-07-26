@@ -136,18 +136,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Alpha')}|caio`);
 		},
 	},
-	andrew: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Andrew')}|/me vents in`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Andrew')}|purple sus`);
-		},
-		onFaint() {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Andrew')}|tidal otter is impostor! He vented in front of me in admin! Vote him out next!`);
-		},
-	},
 	annika: {
 		noCopy: true,
 		onStart() {
@@ -1976,7 +1964,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			return this.chainModify(0.75);
 		},
 	},
-	// Kipkluif, needs to end in mod to not trigger aelita/andrew's effect
+	// Kipkluif, needs to end in mod to not trigger aelita's effect
 	degeneratormod: {
 		onBeforeSwitchOut(pokemon) {
 			let alreadyAdded = false;

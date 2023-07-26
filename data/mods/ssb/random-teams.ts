@@ -90,12 +90,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Blizzard',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 	},
-	Andrew: {
-		species: 'Spectrier', ability: 'Neutralizing Gas', item: 'Choice Specs', gender: 'M',
-		moves: ['Moongeist Beam', 'Pollen Puff', 'Trick'],
-		signatureMove: 'Whammer Jammer',
-		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
-	},
 	Annika: {
 		species: 'Mewtwo', ability: 'Overprotective', item: 'Mewtwonite Y', gender: 'F',
 		moves: [['Rising Voltage', 'Lava Plume'], ['Hex', 'Aurora Beam'], ['Psychic', 'Psyshock']],
