@@ -119,7 +119,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 	},
-	},
 	psn: {
 		name: 'psn',
 		effectType: 'Status',
