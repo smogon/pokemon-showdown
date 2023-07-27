@@ -6593,7 +6593,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onBasePower(bp, source, target, move) {
-			console.log (`momentum test: ${source.volatiles}`);
 			if (source.hasAbility('speedforce')) {
 				this.chainModify(1.2);
 			}
@@ -6606,11 +6605,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onFoeDamagingHit(damage, target, source, move) {
 			if (move.flags['contact'] && this.randomChance(3, 10)) {
 				this.add('-activate', source, 'ability: Grip Pincer');
-				target.addVolatile('partiallytrapped');
+				target.addVolatile('trapped', target, source.getAbility(), 'trapper');
 			}
 		},
 		onModifyMove(move, pokemon, target) {
-			if (target?.volatiles['partiallytrapped']) {
+			if (target?.volatiles['trapped']) {
 				move.ignoreEvasion = true;
 				move.ignoreDefensive = true;
 			}
