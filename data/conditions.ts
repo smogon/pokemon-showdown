@@ -118,11 +118,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 				target.cureStatus();
 			}
 		},
-		// Damage reduction is handled directly in the sim/battle.js damage function
-		onResidualOrder: 10,
-		onResidual(pokemon) {
-			this.damage(pokemon.baseMaxhp / 32);
-		},
 	},
 	},
 	psn: {
