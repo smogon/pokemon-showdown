@@ -95,7 +95,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onBeforeMovePriority: 10,
 		onBeforeMove(pokemon, target, move) {
 			if (move.flags['defrost']) return;
-			if (this.randomChance(1, 5)) {
+			if (this.randomChance(1, 6)) {
 				pokemon.cureStatus();
 				return;
 			}
@@ -118,6 +118,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 				target.cureStatus();
 			}
 		},
+		// Damage reduction is handled directly in the sim/battle.js damage function
+		onResidualOrder: 10,
+		onResidual(pokemon) {
+			this.damage(pokemon.baseMaxhp / 32);
+		},
+	},
 	},
 	psn: {
 		name: 'psn',
@@ -181,7 +187,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 				return;
 			}
 			this.add('-activate', pokemon, 'confusion');
-			if (!this.randomChance(33, 100)) {
+			if (!this.randomChance(1, 3)) {
 				return;
 			}
 			this.activeTarget = pokemon;
