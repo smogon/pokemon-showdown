@@ -2516,6 +2516,139 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	bonezone: {
 		name: "Bone Zone",
 		shortDesc: "This Pokemon's bone moves ignore immunities and deal 2x damage if not very effective ",
+	},	weathercontrol: {
+		name: "Weather Control",
+		shortDesc: "Opponent's weather-based moves are negated"
+
+	},
+	speedforce: {
+		name: "Speed Force",
+		shortDesc: "This Pokemon's contact moves add 20% of speed for damage calculation"
+	},
+	seaguardian: {
+		name: "Sea Guardian",
+		shortDesc: "This Pokemon raises highest stat if switched in during rain."
+	},
+	moltendown: {
+		name: "Molten Down",
+		shortDesc: "This Pokemon's Fire type moves deal super effective damage against Rock."
+
+	},
+	hyperaggressive: {
+		name: "Hyper Aggressive",
+		desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage quartered. Does not affect Doom Desire, Dragon Darts, Dynamax Cannon, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, any multi-hit move, any move that has multiple targets, or any two-turn move.",
+		shortDesc: "This Pokemon's damaging moves hit twice. The second hit has its damage quartered.",
+
+	},
+	flock: {
+		name: "Flock",
+		shortDesc: "Boost Pokemon's Flying moves by 20%, 50% when below 1/3 HP",
+	},
+	fieldexplorer: {
+		name: "Field Explorer",
+		shortDesc: "This Pokemon's field-based moves are boosted by 25%",
+	},
+	striker: {
+		name: "Striker",
+		shortDesc: "This Pokemon's kicking moves are boosted by 40%",
+
+	},
+	frozensoul: {
+		name: "Frozen Soul",
+		shortDesc: "If this Pokemon is at full HP, its Ice-type moves have their priority increased by 1.",
+
+	},
+	predator: {
+		name: "Predator",
+		shortDesc: "This pokemon heals 1/4 hp if it knock out a Pokemon"
+
+	},
+	looter: {
+		name: "Looter",
+		shortDesc: "This pokemon heals 1/4 hp if it knock out a Pokemon"
+
+	},
+	powercore: {
+		name: "Power Core",
+		shortDesc: "This Pokemon uses 25% of its Def/SpD during moves"
+
+	},
+	sightingsystem: {
+		name: "Sighting System",
+		shortDesc: "This Pokemon's move go last. Moves with less than 75% accuracy go last."
+	},
+	//badcompany: {
+	//
+	//},
+	giantwings: {
+		name: "Giant Wings",
+		shortDesc: "This Pokemon's wind moves are boosted by 25%."
+	},
+	momentum: { 
+		name: "Momentum",
+		shortDesc: "This Pokemon's contact moves use the Speed stat for calculation."
+
+	},
+	grippincer: {
+		name: "Grip Pincer",
+		shortDesc: "This Pokemon's contact moves have a 30% chance to trap. Ignores foe's defense if they're trapped."
+
+	},
+	bigleaves: {
+		name: "Big Leaves",
+		shortDesc: "Chloroplast, Chlorophyll, Solar Power, Leaf Guard, Harvest bundled into one bunch."
+
+	},
+	precisefist: {
+		name: "Precise Fist",
+		shortDesc: "This Pokemon's punching moves have double effect chance and have an increased crit ratio"
+
+	},
+	deadeye: {
+		name: "Deadeye",
+		shortDesc: "This Pokemon never misses."
+
+	},
+	artillery: {
+		name: "Artillery",
+		shortDesc: "This Pokemon's single-target pulse moves now hit both foes and never miss"
+
+	},
+	amplifier: {
+		name: "Amplifier",
+		shortDesc: "This Pokemon's single-target pulse sound now hit both foes."
+
+	},
+	icedew: {
+		name: "Ice Dew",
+		shortDesc: "This Pokemon's highest attacking stat is boosted when hit by Ice; Ice type immunities."
+	},
+	sunworship: {
+		name: "Sun Worship",
+		shortDesc: "This Pokemon raises highest stat if switched in during rain."
+
+	},
+	buginize: {
+		name: "Buginize",
+		desc: "This Pokemon's Normal-type moves become Bug-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
+		shortDesc: "This Pokemon's Normal-type moves become Bug type and have 1.2x power.",
+
+	},
+	solarflare: {
+		name: "Solar Flare",
+		shortDesc: "Fire type moves gain STAB; Uses moves as if under sun."
+
+	},
+	lunareclipse: {
+		name: "Lunar Eclipse",
+		shortDesc: "Fairy and Dark type moves gain STAB; Hypnosis accuracy + 50%."
+
+	},
+	//Elite Redux's Opportunist renamed to 'Expert Hunter' to avoid name confict with gen 9's Opportunist
+	experthunter: { 
+		name: "Expert Hunter",
+		shortDesc: "This Pokemon goes hirst against foes below 50% HP."
+
 	},
 
 	// CAP

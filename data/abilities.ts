@@ -5468,7 +5468,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	inflatable: {
 		onTryHit(target, source, move) {
-			if (target !== source && (move.type === 'Flying' || 'Fire')) {
+			if (target !== source && (move.type === 'Flying' || move.type === 'Fire')) {
 				if (!this.boost({def: 1, spd: 1})) {
 					this.add('-immune', target, '[from] ability: Inflatable');		
 				return null;
@@ -5876,7 +5876,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onModifySpA(spa, attacker, defender, move) {
 			if (move.flags['contact']) {
-				return (spa + (attacker.getStat('spd') * .2));
+				return (spa + (attacker.getStat('def') * .2));
 			}
 		},
 		onUpdate(pokemon) {
@@ -6095,7 +6095,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: 363,
 	},
-	electricburst: { //TODO: Testing Needed
+	electricburst: {
 		onModifyAtkPriority: 6,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Electric') {
@@ -6162,7 +6162,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3.5,
 		num: 366,
 	},
-	spiderlair: {//TODO: Testing Needed
+	spiderlair: {
 		onSwitchIn(source) { //duration handled in data/moves.js:stickyweb
 			const hasWebs = source.side.foe.sideConditions['stickyweb']
 			if (!hasWebs) { //I don't think Spider Lair checks for Magic Bounce, so I get away with addSideCondition here (maybe???)
@@ -6281,7 +6281,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: 360,
 	},
-	twistdimension: {//TODO: Testing
+	twistdimension: {
 		onStart(source) {
 			this.field.addPseudoWeather('trickroom', source, source.getAbility());
 		},
@@ -6289,7 +6289,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 5,
 		num: 361,
 	}, 
-	multiheaded: { //TODO: Testing
+	multiheaded: {
 		onPrepareHit(source, target, move) {
 			if (move.category === 'Status' || move.multihit || move.flags['noparentalbond'] || move.flags['charge'] ||
 			move.flags['futuremove'] || move.spreadHit || move.isZ || move.isMax) return;
@@ -6315,7 +6315,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 5,
 		num: 362,
 	},
-	northwind: {//TODO: Testing
+	northwind: {
 		onStart(source) { //duration handled in data/moves.js:tailind
 			const veil = source.side.sideConditions['auroraveil']
 			if (!veil) {
@@ -6413,6 +6413,406 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4.5,
 		num: 368,
 	},
+	weathercontrol: {
+		//TODO: Implement Weather move Flag
+		name: "Weather Control",
+		rating: 2,
+		num: 369,
+	},
+	speedforce: {
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.flags['contact']) {
+				return (atk + (attacker.getStat('spe') * .2));
+			}
+		},
+		onModifySpA(spa, attacker, defender, move) {
+			if (move.flags['contact']) {
+				return (spa + (attacker.getStat('spe') * .2));
+			}
+		},
+		name: "Speed Force",
+		rating: 4,
+		num: 370,
+	},
+	seaguardian: {
+		onStart(pokemon) {
+			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
+				const bestStat = pokemon.getBestStat(true, true);
+				this.boost({[bestStat]: 1}, pokemon);
+			}
+
+		},
+		name: "Sea Guardian",
+		rating: 4,
+		num: 371,
+	},
+	moltendown: {
+		onFoeEffectiveness(typeMod, target, type, move) {
+			if (type === 'Rock' && move.type === 'Fire') {
+				return 1;
+			}
+		},
+		name: "Molten Down",
+		rating: 3,
+		num: 372,
+	},
+	hyperaggressive: {
+		onPrepareHit(source, target, move) {
+			if (move.category === 'Status' || move.multihit || move.flags['noparentalbond'] || move.flags['charge'] ||
+			move.flags['futuremove'] || move.spreadHit || move.isZ || move.isMax) return;
+			move.multihit = 2;
+			move.multihitType = 'parentalbond';
+		},
+		// Damage modifier implemented in BattleActions#modifyDamage()
+		onSourceModifySecondaries(secondaries, target, source, move) {
+			if (move.multihitType === 'parentalbond' && move.id === 'secretpower' && move.hit < 2) {
+				// hack to prevent accidentally suppressing King's Rock/Razor Fang
+				return secondaries.filter(effect => effect.volatileStatus === 'flinch');
+			}
+		},
+		name: "Hyper Aggressive",
+		rating: 4.5,
+		num: 373,
+	},
+	flock: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Flying') {
+				if (attacker.hp <= attacker.maxhp / 3) {
+					this.debug('Flock Circuit boost');
+					return this.chainModify(1.5);	
+				} else {
+					this.debug('Flock Circuit boost');
+					return this.chainModify(1.2);
+				}
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Flying') {
+				if (attacker.hp <= attacker.maxhp / 3) {
+					this.debug('Flock Circuit boost');
+					return this.chainModify(1.5);	
+				} else {
+					this.debug('Flock Circuit boost');
+					return this.chainModify(1.2);
+				}
+			}
+		},
+		name: "Flock",
+		rating: 3,
+		num: 374,
+	},
+	fieldexplorer: {
+		//TODO: Implement Field move Flag
+		name: "Field Explorer",
+		rating: 3,
+		num: 375,
+	},
+	striker: {
+		//TODO: Implement Field move Flag
+		name: "Striker",
+		rating: 3,
+		num: 376,
+	},
+	frozensoul: {
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.type === 'Ice' && pokemon.hp === pokemon.maxhp) return priority + 1;
+		},
+		name: "Frozen Soul",
+		rating: 3,
+		num: 377,
+	},
+	predator: {
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				this.add('-activate', source, 'Predator');
+				source.heal(source.baseMaxhp / 4);
+				this.add('-heal', source, source.getHealth, '[silent]')
+			}
+		},
+		name: "Predator",
+		rating: 3,
+		num: 378,
+	},
+	looter: {
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				this.add('-activate', source, 'Looter');
+				source.heal(source.baseMaxhp / 4);
+				this.add('-heal', source, source.getHealth, '[silent]')
+			}
+		},
+		name: "Looter",
+		rating: 3,
+		num: 379,
+	},
+	powercore: {
+		onModifyAtk(atk, attacker, defender, move) {
+			return (atk + (attacker.getStat('def') * .25));
+		},
+		onModifySpA(spa, attacker, defender, move) {
+			return (spa + (attacker.getStat('spd') * .25));
+		},
+		name: "Power Core",
+		rating: 3,
+		num: 380,
+	},
+	sightingsystem: {
+		onModifyMove(move) {
+			move.accuracy = true;
+		},
+		onModifyPriority(priority, source, target, move) {
+			if (typeof move.accuracy !== 'boolean' && move.accuracy <= 75) {
+				return priority - 3;
+			}
+		},
+		name: "Sighting System",
+		rating: 3,
+		num: 381,
+	},
+	//badcompany: {
+	//
+	//},
+	giantwings: {
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['wind']) {
+				this.debug('Giant Wings boost');
+				return this.chainModify(1.25);
+			}
+		},
+		name: "Giant Wings",
+		rating: 4,
+		num: 384,
+	},
+	momentum: { //TODO: Testing
+		onModifyMove(move) {
+			if (move.flags['contact']) {
+				move.overrideOffensiveStat = 'spe'
+			}
+		},
+		onBasePower(bp, source, target, move) {
+			console.log (`momentum test: ${source.volatiles}`);
+			if (source.hasAbility('speedforce')) {
+				this.chainModify(1.2);
+			}
+		},		
+		name: "Momentum",
+		rating: 4,
+		num: 385,
+	},
+	grippincer: { //TODO: Testing
+		onFoeDamagingHit(damage, target, source, move) {
+			if (move.flags['contact'] && this.randomChance(3, 10)) {
+				this.add('-activate', source, 'ability: Grip Pincer');
+				target.addVolatile('partiallytrapped');
+			}
+		},
+		onModifyMove(move, pokemon, target) {
+			if (target?.volatiles['partiallytrapped']) {
+				move.ignoreEvasion = true;
+				move.ignoreDefensive = true;
+			}
+		},
+		name: "Grip Pincer",
+		rating: 4,
+		num: 386,
+	},
+	bigleaves: {
+		//TODO: Implement Chloroplast for Big Leaves
+		//Chlorophyll
+		onModifySpe(spe, pokemon) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+				return this.chainModify(2);
+			}
+		},
+		//Harvest
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (this.field.isWeather(['sunnyday', 'desolateland']) || this.randomChance(1, 2)) {
+				if (pokemon.hp && !pokemon.item && this.dex.items.get(pokemon.lastItem).isBerry) {
+					pokemon.setItem(pokemon.lastItem);
+					pokemon.lastItem = '';
+					this.add('-item', pokemon, pokemon.getItem(), '[from] ability: Big Leaves');
+				}
+			}
+		},
+		//Solar Power
+		onModifySpAPriority: 5,
+		onModifySpA(spa, pokemon) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+				return this.chainModify(1.5);
+			}
+		},
+		onWeather(target, source, effect) {
+			if (target.hasItem('utilityumbrella')) return;
+			if (effect.id === 'sunnyday' || effect.id === 'desolateland') {
+				this.damage(target.baseMaxhp / 8, target, target);
+			}
+		},
+		//Leaf Guard
+		onSetStatus(status, target, source, effect) {
+			if (['sunnyday', 'desolateland'].includes(target.effectiveWeather())) {
+				if ((effect as Move)?.status) {
+					this.add('-immune', target, '[from] ability: Big Leaves');
+				}
+				return false;
+			}
+		},
+		name: "Big Leaves",
+		rating: 4,
+		num: 387,
+	},
+	precisefist: {
+		onModifyMove(move) {
+			if (move.flags['punch']) {
+				if (move.secondaries) {
+					this.debug('doubling secondary chance');
+					for (const secondary of move.secondaries) {
+						if (secondary.chance) secondary.chance *= 2;
+					}
+				}
+				if (move.self?.chance) move.self.chance *= 2;
+			}
+		},
+		onModifyCritRatio(critRatio, source, target, move) {
+			if (move.flags['punch']) return critRatio + 1;
+		},
+		name: "Precise Fist",
+		rating: 4,
+		num: 388,
+
+	},
+	deadeye: {
+		onModifyMove(move) {
+			move.accuracy = true;
+		},
+		name: "Deadeye",
+		rating: 4,
+		num: 389,
+	},
+	artillery: {
+		onModifyMove(move) {
+			if (move.flags['pulse']) {
+				move.accuracy = true;
+				if (move.target === 'normal') move.target = 'allAdjacentFoes';
+			}
+		},
+		name: "Artillery",
+		rating: 4,
+		num: 390,
+	},
+	amplifier: {
+		onModifyMove(move) {
+			if (move.flags['sound'] && move.target === 'normal') {
+				move.target = 'allAdjacentFoes';
+			}
+		},
+		name: "Amplifier",
+		rating: 4,
+		num: 391,
+	},
+	icedew: {
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Ice') {
+				if (target.getStat('atk') > target.getStat('spa')) {
+					if (!this.boost({atk: 1})) {
+						this.add('-immune', target, '[from] ability: Ice Dew');
+				} else {
+					if (!this.boost({spa: 1})) {
+						this.add('-immune', target, '[from] ability: Ice Dew');
+					}
+				}
+				return null;
+				}
+			}
+		},
+		onAllyTryHitSide(target, source, move) {
+			if (source === this.effectState.target || !target.isAlly(source)) return;
+			if (move.type === 'Ice') {
+				if (target.getStat('atk') > target.getStat('spa')) this.boost({atk: 1}, this.effectState.target);
+				else this.boost({spa: 1}, this.effectState.target);
+				
+			}
+		},
+		isBreakable: true,
+		name: "Ice Dew",
+		rating: 3,
+		num: 392,
+	},
+	sunworship: {
+		onStart(pokemon) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+				const bestStat = pokemon.getBestStat(true, true);
+				this.boost({[bestStat]: 1}, pokemon);
+			}
+
+		},
+		name: "Sun Worship",
+		rating: 4,
+		num: 393,
+	},
+	buginize: {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Bug';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+		},
+		name: "Buginize",
+		rating: 4,
+		num: 394,
+	},
+	solarflare: {
+		onModifyMove(move) {
+			if (move.type === 'Fire') {
+				move.forceSTAB = true;
+			}
+		},
+		//TODO: Implement Chloroplast for Solar Flare
+		name: "Solar Flare",
+		rating: 4,
+		num: 395,
+	},
+	lunareclipse: {
+		onModifyMove(move) {
+			if (move.type === 'Dark' || move.type === 'Fairy') {
+				move.forceSTAB = true;
+			}
+			if (move.id === 'hypnosis' && typeof move.accuracy === 'number') {
+				move.accuracy += 50
+			}
+		},
+		name: "Lunar Eclipse",
+		rating: 4,
+		num: 395,
+	},
+	//Elite Redux's Opportunist renamed to 'Expert Hunter' to avoid name confict with gen 9's Opportunist
+	experthunter: { 
+		onFractionalPriority(priority, source, target, move) {
+			if (move.category === "Status" && source.hasAbility("myceliummight")) return; //Just in case this happens
+			if (source.hp <= source.maxhp / 2) {
+				this.add('-activate', source, 'ability: Expert Hunter');
+				return 0.1;
+			}
+		},
+		name: "Expert Hunter",
+		rating: 4,
+		num: 396,
+	},
+	
 	
 
 
