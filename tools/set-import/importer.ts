@@ -149,14 +149,16 @@ function toGen(dex: ModdedDex, name: string): GenerationNum | undefined {
 	const pokemon = dex.species.get(name);
 	if (pokemon.isNonstandard === 'LGPE') return 7;
 	if (!pokemon.exists || (pokemon.isNonstandard && pokemon.isNonstandard !== 'CAP')) return undefined;
+	// CAP mons should have a gen property
+	if (pokemon.gen) return pokemon.gen as GenerationNum;
 
 	const n = pokemon.num;
 	if (n > 905) return 9;
 	if (n > 810) return 8;
-	if (n > 721 || (n <= -23 && n >= -28) || (n <= -120 && n >= -126)) return 7;
-	if (n > 649 || (n <= -8 && n >= -22) || (n <= -106 && n >= -110)) return 6;
-	if (n > 493 || (n <= -12 && n >= -17) || (n <= -111 && n >= -115)) return 5;
-	if (n > 386 || (n <= -1 && n >= -11) || (n <= -101 && n >= -104) || (n <= -116 && n >= -119)) return 4;
+	if (n > 721) return 7;
+	if (n > 649) return 6;
+	if (n > 493) return 5;
+	if (n > 386) return 4;
 	if (n > 251) return 3;
 	if (n > 151) return 2;
 	if (n > 0) return 1;
