@@ -1,4 +1,4 @@
-// TODO: Make Gastro Acid only disabe ability, not innates
+// TODO: Make Gastro Acid only disable ability, not innates
 export const Moves: {[k: string]: ModdedMoveData} = {
 	gastroacid: {
 		inherit: true,

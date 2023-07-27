@@ -21630,4 +21630,60 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+
+	//New Elite Redux Moves
+	deathroll: {
+		num: 901,
+		accuracy: 95,
+		basePower: 100,
+		category: "Physical",
+		name: "Deathroll",
+		pp: 5,
+		priority: 0,
+		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
+		secondary: {
+			chance: 20,
+			volatileStatus: 'confusion',
+		},
+		ignoreEvasion: true,
+		ignoreDefensive: true,
+		target: "normal",
+		type: "Water",
+		contestType: "Tough",
+	},
+	excalibur: {
+		num: 902,
+		accuracy: 80,
+		basePower: 120,
+		category: "Physical",
+		name: "Excalibur",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		critRatio: 2,
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Dragon') return 1;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+		contestType: "Tough",
+	},
+	aquafang: {
+		num: 903,
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		name: "Aqua Fang",
+		pp: 15,
+		priority: 0,
+		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
+		secondary: {
+			chance: 10,
+			volatileStatus: 'flinch',
+		},
+		target: "normal",
+		type: "Water",
+		contestType: "Tough",
+	}
 };
