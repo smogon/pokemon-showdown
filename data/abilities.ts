@@ -5156,7 +5156,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	chloroplast: {
 		name: "Chloroplast",
 		// implemented in the corresponding move(s)
-		//TODO: Actually implement chloroplast into moves lmao
 		rating: 3,
 		num: 298,
 	},
@@ -5669,6 +5668,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onBasePower(bp, source, target, move) {
 			for (const target of source.foes()) {
 				if (target.status === 'slp' || target.hasAbility('comatose')) {
+					return this.chainModify(2);
+				}
+			}
+			for (const ally of source.alliesAndSelf()) {
+				if (ally.status === 'slp' || target.hasAbility('comatose')) {
 					return this.chainModify(2);
 				}
 			}
@@ -6408,13 +6412,28 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 367,
 	},
 	bonezone: {
-		//TODO: Implement Bone move Flag
+		onModifyMove(move) {
+			if (move.flags['bone'])  {
+				move.ignoreImmunity = true;
+			}
+		},
+		onModifyDamage(damage, source, target, move) {
+			if (move.flags['bone'] && target.getMoveHitData(move).typeMod < 0) {
+				this.debug('Bone Zone boost');
+				return this.chainModify(2);
+			}
+		},
 		name: "Bone Zone",
 		rating: 4.5,
 		num: 368,
 	},
 	weathercontrol: {
-		//TODO: Implement Weather move Flag
+		onTryHit(target, source, move) {
+			if (target !== source && move.flags['weather']) {
+				this.add('-immune', target, '[from] ability: Weather Control');
+				return null;
+			}
+		},
 		name: "Weather Control",
 		rating: 2,
 		num: 369,
@@ -6504,13 +6523,25 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 374,
 	},
 	fieldexplorer: {
-		//TODO: Implement Field move Flag
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['field']) {
+				this.debug('Field Explorer boost');
+				return this.chainModify(1.25);
+			}
+		},
 		name: "Field Explorer",
 		rating: 3,
 		num: 375,
 	},
 	striker: {
-		//TODO: Implement Field move Flag
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['kick']) {
+				this.debug('Striker boost');
+				return this.chainModify([5325, 4096]);
+			}
+		},
 		name: "Striker",
 		rating: 3,
 		num: 376,
@@ -6619,7 +6650,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 386,
 	},
 	bigleaves: {
-		//TODO: Implement Chloroplast for Big Leaves
 		//Chlorophyll
 		onModifySpe(spe, pokemon) {
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
@@ -6780,7 +6810,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				move.forceSTAB = true;
 			}
 		},
-		//TODO: Implement Chloroplast for Solar Flare
 		name: "Solar Flare",
 		rating: 4,
 		num: 395,
