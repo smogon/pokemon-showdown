@@ -15,7 +15,7 @@ export const Aliases: {[alias: string]: string} = {
 	bss: "[Gen 9] Battle Stadium Singles Series 2",
 	vgc: "[Gen 9] VGC 2023 Series 2",
 	bsd: "[Gen 9] VGC 2023 Series 2",
-	randdubs: "[Gen 8] Random Doubles Battle",
+	randdubs: "[Gen 9] Random Doubles Battle",
 	doubles: "[Gen 9] Doubles OU",
 	dou: "[Gen 9] Doubles OU",
 	dubs: "[Gen 9] Doubles OU",
