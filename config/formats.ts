@@ -26,9 +26,9 @@ export const Formats: FormatList = [
 		section: "S/V Singles",
 	},
 	{
-		name: "[Gen 9] Elite Redux",
+		name: "[Gen 8] Elite Redux",
 		desc: `Testing for ER Innates`,
-		mod: 'gen9eliteredux',
+		mod: 'gen8eliteredux',
 		rated: false, 
 		//TODO: Create Elite Redux ruleset
 		ruleset: [],
