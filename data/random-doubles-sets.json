@@ -395,7 +395,7 @@
         ]
     },
     "articunogalar": {
-        "level": 87,
+        "level": 85,
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
@@ -630,7 +630,7 @@
         ]
     },
     "slowkinggalar": {
-        "level": 85,
+        "level": 83,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -3208,7 +3208,7 @@
         ]
     },
     "dudunsparcethreesegment": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Bulky Protect",
