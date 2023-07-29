@@ -59,10 +59,16 @@ interface MoveFlags {
 	snatch?: 1; // Can be stolen from the original user and instead used by another Pokemon using Snatch.
 	sound?: 1; // Has no effect on Pokemon with the Ability Soundproof.
 	wind?: 1; // Activates the Wind Power and Wind Rider Abilities.
+	//**ELITE REDUX FLAGS: */
+	field?: 1; //Boosted by Field Explorer
+	kick?: 1; //Boosted by Striker
+	weather?: 1; //Negated by Weather Control
+	bone?: 1; //Affected by Bone Based
 }
 
 export interface HitEffect {
 	onHit?: MoveEventMethods['onHit'];
+	onEffectiveness?: MoveEventMethods['onEffectiveness']; //Exclusively for Sheer Cold
 
 	// set pokemon conditions
 	boosts?: SparseBoostsTable | null;

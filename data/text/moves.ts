@@ -74,8 +74,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	aeroblast: {
 		name: "Aeroblast",
-		desc: "Has a higher chance for a critical hit.",
-		shortDesc: "High critical hit ratio.",
+		desc: "This move always crits. Wind-based.",
+		shortDesc: "This move always crits.",
 	},
 	afteryou: {
 		name: "After You",
@@ -178,7 +178,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	armthrust: {
 		name: "Arm Thrust",
 		desc: "Hits two to five times. Has a 35% chance to hit two or three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
-		shortDesc: "Hits 2-5 times in one turn.",
+		shortDesc: "Hits 2-5 times in one turn. High crit ratio.",
 		gen4: {
 			desc: "Hits two to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},
@@ -592,8 +592,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	boneclub: {
 		name: "Bone Club",
-		desc: "Has a 10% chance to make the target flinch.",
-		shortDesc: "10% chance to make the target flinch.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 	},
 	bonemerang: {
 		name: "Bonemerang",
@@ -612,7 +612,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	bonerush: {
 		name: "Bone Rush",
 		desc: "Hits two to five times. Has a 35% chance to hit two or three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
-		shortDesc: "Hits 2-5 times in one turn.",
+		shortDesc: "Hits 2-5 times in one turn. Usually goes first.",
 		gen4: {
 			desc: "Hits two to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},
@@ -1210,7 +1210,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	cut: {
 		name: "Cut",
-		shortDesc: "No additional effect.",
+		shortDesc: "This move always results in a critical hit.",
 	},
 	darkestlariat: {
 		name: "Darkest Lariat",
@@ -1591,7 +1591,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	drillpeck: {
 		name: "Drill Peck",
-		shortDesc: "No additional effect.",
+		shortDesc: "High crit ratio.",
 	},
 	drillrun: {
 		name: "Drill Run",
@@ -1665,7 +1665,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	eggbomb: {
 		name: "Egg Bomb",
-		shortDesc: "No additional effect.",
+		shortDesc: "10% chance to burn.",
 	},
 	electricterrain: {
 		name: "Electric Terrain",
@@ -2029,8 +2029,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	fissure: {
 		name: "Fissure",
-		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Sturdy Ability are immune.",
-		shortDesc: "OHKOs the target. Fails if user is a lower level.",
+		shortDesc: "No additional effect.",
 		gen2: {
 			desc: "Deals 65535 damage to the target. This attack's accuracy out of 256 is equal to the lesser of (2 * (user's level - target's level) + 76) and 255, before applying accuracy and evasiveness modifiers. Fails if the target is at a higher level. Can hit a target using Dig.",
 		},
@@ -2090,7 +2089,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	flash: {
 		name: "Flash",
 		desc: "Lowers the target's accuracy by 1 stage.",
-		shortDesc: "Lowers the target's accuracy by 1.",
+		shortDesc: "Lowers the target's attack by 1.",
 	},
 	flashcannon: {
 		name: "Flash Cannon",
@@ -2310,8 +2309,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	furyswipes: {
 		name: "Fury Swipes",
-		desc: "Hits two to five times. Has a 35% chance to hit two or three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
-		shortDesc: "Hits 2-5 times in one turn.",
+		desc: "Hits two to five times. Has a 35% chance to hit two or three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. Increased crit ratio by 1",
+		shortDesc: "Hits 2-5 times in one turn. High crit ratio.",
 		gen4: {
 			desc: "Hits two to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},
@@ -5594,7 +5593,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	sheercold: {
 		name: "Sheer Cold",
 		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + X)%, where X is 30 if the user is an Ice type and 20 otherwise, and fails if the target is at a higher level. Ice-type Pokemon and Pokemon with the Sturdy Ability are immune.",
-		shortDesc: "OHKOs non-Ice targets. Fails if user's lower level.",
+		shortDesc: "30% chance to freeze. 20% chance to deal super effective damage on water.",
 		gen6: {
 			desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Sturdy Ability are immune.",
 			shortDesc: "OHKOs the target. Fails if user is a lower level.",
