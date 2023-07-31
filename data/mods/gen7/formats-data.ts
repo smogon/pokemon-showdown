@@ -2771,6 +2771,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DUU",
 	},
+	greninjaash: {
+		isNonstandard: null,
+		tier: "OU",
+		doublesTier: "DUU",
+	},
 	bunnelby: {
 		tier: "LC",
 	},

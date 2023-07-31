@@ -50,6 +50,7 @@ export const Aliases: {[alias: string]: string} = {
 	camo: "[Gen 9] Camomons",
 	revmons: "[Gen 9] Revelationmons",
 	tcg: "[Gen 9] The Card Game",
+	fotf: "[Gen 9] Force of the Fallen",
 	ffa: "[Gen 9] Free-For-All",
 	ph: "[Gen 9] Pure Hackmons",
 	hackmons: "[Gen 9] Pure Hackmons",
@@ -82,8 +83,8 @@ export const Aliases: {[alias: string]: string} = {
 	gen6ag: "[Gen 6] Anything Goes",
 	crossevo: "[Gen 9] Cross Evolution",
 	mayhem: "[Gen 9] Random Battle Mayhem",
-	omotm: "[Gen 9] Alphabet Cup",
-	lcotm: "[Gen 9] Trademarked",
+	omotm: "[Gen 9] Force of the Fallen",
+	lcotm: "[Gen 9] Inheritance",
 
 	// mega evos
 	fabio: "Ampharos-Mega",

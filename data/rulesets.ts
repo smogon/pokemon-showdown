@@ -33,7 +33,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Flat Rules',
 		desc: "The in-game Flat Rules: Adjust Level Down 50, Species Clause, Item Clause, -Mythical, -Restricted Legendary, Bring 6 Pick 3-6 depending on game type.",
 		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Adjust Level Down = 50', 'Picked Team Size = Auto', 'Cancel Mod'],
-		banlist: ['Mythical', 'Restricted Legendary'],
+		banlist: ['Mythical', 'Restricted Legendary', 'Greninja-Bond'],
 	},
 	limittworestricted: {
 		effectType: 'ValidatorRule',
@@ -2020,16 +2020,20 @@ export const Rulesets: {[k: string]: FormatData} = {
 	bonustyperule: {
 		name: "Bonus Type Rule",
 		effectType: "Rule",
-		desc: `Pok&eacute;mon can be nicknamed the name of a type to have that type added onto their current ones.`,
+		desc: `Pok&eacute;mon have their Tera Type added onto their current ones.`,
 		onBegin() {
-			this.add('rule', 'Bonus Type Rule: Pok\u00e9mon can be nicknamed the name of a type to have that type added onto their current ones.');
+			this.add('rule', 'Bonus Type Rule: Pok\u00e9mon have their Tera Type added onto their current ones.');
+			for (const pokemon of this.getAllPokemon()) {
+				pokemon.m.bonusType = pokemon.teraType;
+				pokemon.canTerastallize = null;
+			}
 		},
 		onModifySpeciesPriority: 1,
 		onModifySpecies(species, target, source, effect) {
 			if (!target) return; // Chat command
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
 			const typesSet = new Set(species.types);
-			const bonusType = this.dex.types.get(target.set.name);
+			const bonusType = this.dex.types.get(target.m.bonusType);
 			if (bonusType.exists) typesSet.add(bonusType.name);
 			return {...species, types: [...typesSet]};
 		},

@@ -121,7 +121,7 @@ const noLeadPokemon = [
 	'Basculegion', 'Houndstone', 'Rillaboom', 'Zacian', 'Zamazenta',
 ];
 const doublesNoLeadPokemon = [
-	'Basculegion', 'Houndstone', 'Zacian', 'Zamazenta',
+	'Basculegion', 'Houndstone', 'Roaring Moon', 'Zacian', 'Zamazenta',
 ];
 
 function sereneGraceBenefits(move: Move) {
@@ -484,6 +484,7 @@ export class RandomTeams {
 		if (isDoubles) {
 			// In order of decreasing generalizability
 			this.incompatibleMoves(moves, movePool, SpeedControl, SpeedControl);
+			this.incompatibleMoves(moves, movePool, Hazards, Hazards);
 			this.incompatibleMoves(moves, movePool, 'rockslide', 'stoneedge');
 			this.incompatibleMoves(moves, movePool, Setup, ['fakeout', 'helpinghand']);
 			this.incompatibleMoves(moves, movePool, ProtectMove, 'wideguard');
@@ -517,7 +518,6 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, 'curse', 'rapidspin');
 		this.incompatibleMoves(moves, movePool, 'dragondance', 'dracometeor');
 		this.incompatibleMoves(moves, movePool, 'healingwish', 'uturn');
-		this.incompatibleMoves(moves, movePool, 'dazzlinggleam', ['howl', 'playrough']);
 
 
 		// These attacks are redundant with each other
@@ -568,7 +568,7 @@ export class RandomTeams {
 		// Amoonguss, though this can work well as a general rule later
 		this.incompatibleMoves(moves, movePool, 'toxic', 'clearsmog');
 		// Dudunsparce
-		if (species.id === 'dudunsparce') this.incompatibleMoves(moves, movePool, 'earthpower', 'shadowball');
+		if (species.baseSpecies === 'Dudunsparce') this.incompatibleMoves(moves, movePool, 'earthpower', 'shadowball');
 		// Luvdisc
 		if (species.id === 'luvdisc' && !isDoubles) {
 			this.incompatibleMoves(moves, movePool, 'charm', ['icebeam', 'icywind']);
@@ -761,8 +761,8 @@ export class RandomTeams {
 				counter = this.addMove('fakeout', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);
 			}
-			// Enforce Tailwind on Prankster users
-			if (movePool.includes('tailwind') && abilities.has('Prankster')) {
+			// Enforce Tailwind on Prankster and Gale Wings users
+			if (movePool.includes('tailwind') && (abilities.has('Prankster') || abilities.has('Gale Wings'))) {
 				counter = this.addMove('tailwind', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);
 			}
@@ -1123,6 +1123,7 @@ export class RandomTeams {
 			if (species.id === 'bellibolt') return 'Electromorphosis';
 			if (species.id === 'armarouge') return 'Flash Fire';
 			if (species.baseSpecies === 'Maushold' && role === 'Doubles Support') return 'Friend Guard';
+			if (species.id === 'talonflame') return 'Gale Wings';
 			if (species.id === 'tropius') return 'Harvest';
 			if (species.id === 'blissey') return 'Healer';
 			if (species.id === 'dragonite' || species.id === 'lucario') return 'Inner Focus';
@@ -1149,8 +1150,13 @@ export class RandomTeams {
 			}
 		}
 
-		// If all abilities are culled, re-allow all
-		if (!abilityAllowed.length) abilityAllowed = abilityData;
+		// If all abilities are rejected, re-allow all abilities
+		if (!abilityAllowed.length) {
+			for (const ability of abilityData) {
+				if (ability.rating > 0) abilityAllowed.push(ability);
+			}
+			if (!abilityAllowed.length) abilityAllowed = abilityData;
+		}
 
 		if (abilityAllowed.length === 1) return abilityAllowed[0].name;
 		// Sort abilities by rating with an element of randomness
@@ -1532,7 +1538,10 @@ export class RandomTeams {
 				if (hp % 2 === 0) break;
 			} else {
 				// Maximize number of Stealth Rock switch-ins
-				if (srWeakness <= 0 || hp % (4 / srWeakness) > 0 || ['Leftovers', 'Life Orb'].includes(item)) break;
+				if (srWeakness <= 0 || ability === 'Regenerator' || ['Leftovers', 'Life Orb'].includes(item)) break;
+				if (item !== 'Sitrus Berry' && hp % (4 / srWeakness) > 0) break;
+				// Minimise number of Stealth Rock switch-ins to activate Sitrus Berry
+				if (item === 'Sitrus Berry' && hp % (4 / srWeakness) === 0) break;
 			}
 			evs.hp -= 4;
 		}
@@ -1709,8 +1718,8 @@ export class RandomTeams {
 				if (skip) continue;
 			}
 
-			// Limit one of any type combination, two in Monotype
-			if (!this.forceMonotype && typeComboCount[typeCombo] >= (isMonotype ? 2 : 1) * limitFactor) continue;
+			// Limit one of any type combination, three in Monotype
+			if (!this.forceMonotype && typeComboCount[typeCombo] >= (isMonotype ? 3 : 1) * limitFactor) continue;
 
 			// The Pokemon of the Day
 			if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;

@@ -799,8 +799,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	dauntlessshield: {
 		onStart(pokemon) {
-			if (this.effectState.shieldBoost) return;
-			this.effectState.shieldBoost = true;
+			if (pokemon.shieldBoost) return;
+			pokemon.shieldBoost = true;
 			this.boost({def: 1}, pokemon);
 		},
 		name: "Dauntless Shield",
@@ -1415,7 +1415,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move?.type === 'Flying' && pokemon.hp === pokemon.maxhp) return priority + 1;
 		},
 		name: "Gale Wings",
-		rating: 2.5,
+		rating: 1.5,
 		num: 177,
 	},
 	galvanize: {
@@ -1979,8 +1979,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	intrepidsword: {
 		onStart(pokemon) {
-			if (this.effectState.swordBoost) return;
-			this.effectState.swordBoost = true;
+			if (pokemon.swordBoost) return;
+			pokemon.swordBoost = true;
 			this.boost({atk: 1}, pokemon);
 		},
 		name: "Intrepid Sword",
@@ -2237,7 +2237,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	magician: {
 		onAfterMoveSecondarySelf(source, target, move) {
-			if (!move || !target) return;
+			if (!move || !target || source.switchFlag === true) return;
 			if (target !== source && move.category !== 'Status') {
 				if (source.item || source.volatiles['gem'] || move.id === 'fling') return;
 				const yourItem = target.takeItem(source);

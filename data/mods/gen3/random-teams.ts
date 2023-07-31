@@ -309,25 +309,19 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			return !counter.get('inaccurate');
 		case 'Hustle':
 			return counter.get('Physical') < 2;
-		case 'Lightning Rod':
-			return species.types.includes('Ground');
 		case 'Overgrow':
 			return !counter.get('Grass');
+		case 'Rain Dish': case 'Swift Swim':
+			return !moves.has('raindance') && !teamDetails['rain'];
 		case 'Rock Head':
 			return !counter.get('recoil');
 		case 'Sand Veil':
 			return !teamDetails['sand'];
-		case 'Serene Grace':
-			return species.id === 'blissey';
-		case 'Soundproof': case 'Sturdy':
-			// Electrode prefers Static, and Sturdy is bad.
+		case 'Soundproof':
+			// Electrode prefers Static
 			return true;
-		case 'Swift Swim':
-			return !moves.has('raindance') && !teamDetails['rain'];
 		case 'Swarm':
 			return !counter.get('Bug');
-		case 'Thick Fat':
-			return abilities.has('Immunity');
 		case 'Torrent':
 			return !counter.get('Water');
 		case 'Water Absorb':
@@ -335,6 +329,55 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		}
 
 		return false;
+	}
+
+
+	getAbility(
+		types: Set<string>,
+		moves: Set<string>,
+		abilities: Set<string>,
+		counter: MoveCounter,
+		movePool: string[],
+		teamDetails: RandomTeamsTypes.TeamDetails,
+		species: Species,
+	): string {
+		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
+		Utils.sortBy(abilityData, abil => -abil.rating);
+
+		if (abilityData.length <= 1) return abilityData[0].name;
+
+		// Hard-code abilities here
+		if (species.id === 'snorlax') return 'Immunity';
+		if (species.id === 'blissey') return 'Natural Cure';
+
+		let abilityAllowed: Ability[] = [];
+		// Obtain a list of abilities that are allowed (not culled)
+		for (const ability of abilityData) {
+			if (ability.rating >= 1 && !this.shouldCullAbility(
+				ability.name, types, moves, abilities, counter, movePool, teamDetails, species
+			)) {
+				abilityAllowed.push(ability);
+			}
+		}
+
+		// If all abilities are rejected, re-allow all abilities
+		if (!abilityAllowed.length) {
+			for (const ability of abilityData) {
+				if (ability.rating > 0) abilityAllowed.push(ability);
+			}
+			if (!abilityAllowed.length) abilityAllowed = abilityData;
+		}
+
+		if (abilityAllowed.length === 1) return abilityAllowed[0].name;
+		// Sort abilities by rating with an element of randomness
+		if (abilityAllowed[0].rating <= abilityAllowed[1].rating) {
+			if (this.randomChance(1, 2)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
+		} else if (abilityAllowed[0].rating - 0.5 <= abilityAllowed[1].rating) {
+			if (this.randomChance(1, 3)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
+		}
+
+		// After sorting, choose the first ability
+		return abilityAllowed[0].name;
 	}
 
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}): RandomTeamsTypes.RandomSet {
@@ -507,30 +550,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			}
 		}
 
-		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a)).filter(a => a.gen === 3);
-		Utils.sortBy(abilityData, abil => -abil.rating);
-		let ability0 = abilityData[0];
-		let ability1 = abilityData[1];
-		if (abilityData[1]) {
-			if (ability0.rating <= ability1.rating && this.randomChance(1, 2)) {
-				[ability0, ability1] = [ability1, ability0];
-			} else if (ability0.rating - 0.6 <= ability1.rating && this.randomChance(2, 3)) {
-				[ability0, ability1] = [ability1, ability0];
-			}
-			ability = ability0.name;
-
-			while (this.shouldCullAbility(ability, types, moves, abilities, counter, movePool, teamDetails, species)) {
-				if (ability === ability0.name && ability1.rating > 1) {
-					ability = ability1.name;
-				} else {
-					// Default to the highest rated ability if all are rejected
-					ability = abilityData[0].name;
-					break;
-				}
-			}
-		} else {
-			ability = abilityData[0].name;
-		}
+		ability = this.getAbility(types, moves, abilities, counter, movePool, teamDetails, species);
 
 		const item = this.getItem(ability, types, moves, counter, species);
 		const level = this.adjustLevel || data.level || (species.nfe ? 90 : 80);

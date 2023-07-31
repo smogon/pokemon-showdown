@@ -91,7 +91,51 @@ describe('Team Validator', function () {
 		];
 		assert.false.legalTeam(team, 'gen8cap');
 	});
+  
+	// Based on research by Anubis: https://www.smogon.com/forums/posts/9713378
+	describe.skip(`Hackmons forms`, function () {
+		it(`should reject battle-only forms in Gen 9, even in Hackmons`, function () {
+			const team = [
+				{species: 'palafinhero', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
+				{species: 'zamazentacrowned', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
+			];
+			assert.false.legalTeam(team, 'gen9purehackmons');
+		});
 
+		it(`should also reject battle-only dexited forms in Gen 9 Hackmons`, function () {
+			const team = [
+				{species: 'zygardecomplete', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
+				{species: 'darmanitangalarzen', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
+				{species: 'eternatuseternamax', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
+			];
+			assert.false.legalTeam(team, 'gen9purehackmons');
+		});
+
+		it(`should not allow a Xerneas with a hacked Ability in Gen 9 Hackmons`, function () {
+			const team = [
+				{species: 'xerneas', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
+			];
+			assert.false.legalTeam(team, 'gen9purehackmons');
+		});
+
+		it(`should allow various other hacked forms in Gen 9 Hackmons`, function () {
+			const team = [
+				{species: 'giratinaorigin', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
+				{species: 'calyrexshadow', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
+				{species: 'greninjaash', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
+			];
+			assert.legalTeam(team, 'gen9purehackmons');
+		});
+
+		it(`should allow battle-only forms in Hackmons before Gen 9`, function () {
+			const team = [
+				{species: 'zamazentacrowned', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
+				{species: 'zygardecomplete', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
+			];
+			assert.legalTeam(team, 'gen8purehackmons');
+		});
+	});
+  
 	it('should allow Level 1 Donphan from Pokemon GO', function () {
 		const team = [
 			{species: 'donphan', level: 1, ability: 'sturdy', moves: ['endeavor']},
@@ -104,5 +148,5 @@ describe('Team Validator', function () {
 			{species: 'mew', shiny: true, level: 50, ability: 'synchronize', moves: ['naturalgift'], evs: {hp: 1}, ivs: {hp: 21, atk: 31, def: 21, spa: 21, spd: 31, spe: 0}},
 		];
 		assert.false.legalTeam(team, 'gen9ou');
-	});
+  });
 });
