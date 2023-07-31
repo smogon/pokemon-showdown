@@ -799,8 +799,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	dauntlessshield: {
 		onStart(pokemon) {
-			if (this.effectState.shieldBoost) return;
-			this.effectState.shieldBoost = true;
+			if (pokemon.shieldBoost) return;
+			pokemon.shieldBoost = true;
 			this.boost({def: 1}, pokemon);
 		},
 		name: "Dauntless Shield",
@@ -1979,8 +1979,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	intrepidsword: {
 		onStart(pokemon) {
-			if (this.effectState.swordBoost) return;
-			this.effectState.swordBoost = true;
+			if (pokemon.swordBoost) return;
+			pokemon.swordBoost = true;
 			this.boost({atk: 1}, pokemon);
 		},
 		name: "Intrepid Sword",
