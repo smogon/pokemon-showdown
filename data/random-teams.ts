@@ -484,6 +484,7 @@ export class RandomTeams {
 		if (isDoubles) {
 			// In order of decreasing generalizability
 			this.incompatibleMoves(moves, movePool, SpeedControl, SpeedControl);
+			this.incompatibleMoves(moves, movePool, Hazards, Hazards);
 			this.incompatibleMoves(moves, movePool, 'rockslide', 'stoneedge');
 			this.incompatibleMoves(moves, movePool, Setup, ['fakeout', 'helpinghand']);
 			this.incompatibleMoves(moves, movePool, ProtectMove, 'wideguard');
@@ -760,8 +761,8 @@ export class RandomTeams {
 				counter = this.addMove('fakeout', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);
 			}
-			// Enforce Tailwind on Prankster users
-			if (movePool.includes('tailwind') && abilities.has('Prankster')) {
+			// Enforce Tailwind on Prankster and Gale Wings users
+			if (movePool.includes('tailwind') && (abilities.has('Prankster') || abilities.has('Gale Wings'))) {
 				counter = this.addMove('tailwind', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);
 			}
