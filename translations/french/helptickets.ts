@@ -45,7 +45,7 @@ export const translations: Translations = {
 		"Inappropriate Pokemon Nicknames": "Surnom de Pokémon inapproprié",
 		"Appeal": "Appel",
 		"IP-Appeal": "Appel IP",
-		"ISP-Appeal": "NOT SURE TBH LOL",
+		"ISP-Appeal": "Appel ISP",
 		"Public Room Assistance Request": "Demande d'assistance pour une room publique",
 		"Other": "Autre",
 		"I want to report someone": "J'aimerais signaler quelqu'un",
