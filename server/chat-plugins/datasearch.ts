@@ -1485,7 +1485,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			if (target === 'crit' || toID(target) === 'highcrit') target = 'highcrit';
 			if (['thaw', 'thaws', 'melt', 'melts', 'defrosts'].includes(target)) target = 'defrost';
 			if (target === 'slices' || target === 'slice') target = 'slicing';
-			if (target === 'sheerforce') target = 'secondary';
+			if (toID(target) === 'sheerforce') target = 'secondary';
 			if (target === 'bounceable' || toID(target) === 'magiccoat' || toID(target) === 'magicbounce') target = 'reflectable';
 			if (allFlags.includes(target)) {
 				if ((orGroup.flags[target] && isNotSearch) || (orGroup.flags[target] === false && !isNotSearch)) {
