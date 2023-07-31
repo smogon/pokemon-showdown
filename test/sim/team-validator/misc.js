@@ -91,7 +91,7 @@ describe('Team Validator', function () {
 		];
 		assert.false.legalTeam(team, 'gen8cap');
 	});
-  
+
 	// Based on research by Anubis: https://www.smogon.com/forums/posts/9713378
 	describe.skip(`Hackmons forms`, function () {
 		it(`should reject battle-only forms in Gen 9, even in Hackmons`, function () {
@@ -135,7 +135,7 @@ describe('Team Validator', function () {
 			assert.legalTeam(team, 'gen8purehackmons');
 		});
 	});
-  
+
 	it('should allow Level 1 Donphan from Pokemon GO', function () {
 		const team = [
 			{species: 'donphan', level: 1, ability: 'sturdy', moves: ['endeavor']},
@@ -148,5 +148,5 @@ describe('Team Validator', function () {
 			{species: 'mew', shiny: true, level: 50, ability: 'synchronize', moves: ['naturalgift'], evs: {hp: 1}, ivs: {hp: 21, atk: 31, def: 21, spa: 21, spd: 31, spe: 0}},
 		];
 		assert.false.legalTeam(team, 'gen9ou');
-  });
+	});
 });
