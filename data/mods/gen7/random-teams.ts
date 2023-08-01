@@ -32,7 +32,7 @@ const ZeroAttackHPIVs: {[k: string]: SparseStatsTable} = {
 
 // Moves that restore HP:
 const RecoveryMove = [
-	'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'roost', 'shoreup', 'slackoff', 'softboiled', 'strengthsap', 'synthesis',
+	'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'recycle', 'roost', 'shoreup', 'slackoff', 'softboiled', 'strengthsap', 'synthesis',
 ];
 // Moves that drop stats:
 const ContraryMoves = [
@@ -62,10 +62,10 @@ const Setup = [
 ];
 // Moves that shouldn't be the only STAB moves:
 const NoStab = [
-	'accelerock', 'aquajet', 'beakblast', 'bounce', 'chatter', 'clearsmog', 'dragontail', 'eruption', 'explosion',
-	'fakeout', 'firstimpression', 'flamecharge', 'iceshard', 'icywind', 'incinerate', 'machpunch', 'nuzzle',
-	'pluck', 'pursuit', 'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak', 'skydrop', 'snarl', 'suckerpunch',
-	'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
+	'accelerock', 'aquajet', 'bulletpunch', 'clearsmog', 'dragontail', 'eruption', 'explosion',
+	'fakeout', 'firstimpression', 'flamecharge', 'futuresight', 'iceshard', 'icywind', 'incinerate', 'machpunch', 'nuzzle',
+	'pluck', 'pursuit', 'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak', 'skyattack', 'skydrop', 
+	'snarl', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
 ];
 // Hazard-setting moves
 const Hazards = [
@@ -109,77 +109,41 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 				!counter.get('Bug') && (abilities.has('Tinted Lens') || abilities.has('Adaptability'))
 			),
 			Dark: (movePool, moves, abilities, types, counter, species) => (
-				(!counter.get('Dark') && !abilities.has('Protean')) ||
-				(moves.has('pursuit') && species.types.length > 1 && counter.get('Dark') === 1)
+				(!counter.get('Dark'))
 			),
 			Dragon: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Dragon') &&
-				!abilities.has('Aerilate') && !abilities.has('Pixilate') &&
-				!moves.has('dragonascent') && !moves.has('fly') && !moves.has('rest') && !moves.has('sleeptalk')
+				!counter.get('Dragon') && !abilities.has('Aerilate')
 			),
-			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric') || movePool.includes('thunder'),
-			Fairy: (movePool, moves, abilities, types, counter) => (
-				(!counter.get('Fairy') && !types.has('Flying') && !abilities.has('Pixilate'))
-			),
-			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting') || !counter.get('stab'),
-			Fire: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Fire') || ['eruption', 'quiverdance'].some(m => movePool.includes(m)) ||
-				moves.has('flamecharge') && (movePool.includes('flareblitz') || movePool.includes('blueflare'))
-			),
+			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
+			Fairy: (movePool, moves, abilities, types, counter) => !counter.get('Fairy'),
+			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting'),
+			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire'),
 			Flying: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Flying') && (
-					species.id === 'rotomfan' ||
-					abilities.has('Gale Wings') ||
-					abilities.has('Serene Grace') || (
-						types.has('Normal') && (movePool.includes('beakblast') || movePool.includes('bravebird'))
-					)
-				)
+				!counter.get('Flying') && ['aerodactylmega', 'charizardmega', 'mantine'].every(m => species.id !== m)
 			),
-			Ghost: (movePool, moves, abilities, types, counter) => (
-				(!counter.get('Ghost') || movePool.includes('spectralthief')) &&
-				!types.has('Dark') &&
-				!abilities.has('Steelworker')
-			),
+			Ghost: (movePool, moves, abilities, types, counter) => !counter.get('Ghost'),
 			Grass: (movePool, moves, abilities, types, counter, species) => (
 				!counter.get('Grass') && (species.baseStats.atk >= 100 || movePool.includes('leafstorm'))
 			),
-			Ground: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Ground') && !moves.has('rest') && !moves.has('sleeptalk')
-			),
+			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => (
-				!abilities.has('Refrigerate') && (
-					!counter.get('Ice') ||
-					movePool.includes('iciclecrash') ||
-					(abilities.has('Snow Warning') && movePool.includes('blizzard'))
-				)
+				!counter.get('Ice') || movePool.includes('blizzard') ||
+				abilities.has('Refrigerate') && (movePool.includes('return') || movePool.includes('hypervoice'))
 			),
-			Normal: movePool => movePool.includes('facade'),
-			Poison: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Poison') &&
-				(!!counter.setupType || abilities.has('Adaptability') || abilities.has('Sheer Force') || movePool.includes('gunkshot'))
-			),
+			Normal: movePool => movePool.includes('boomburst'),
+			Poison: (movePool, moves, abilities, types, counter) => !counter.get('Poison'),
 			Psychic: (movePool, moves, abilities, types, counter, species) => (
 				!counter.get('Psychic') && (
-					abilities.has('Psychic Surge') ||
-					movePool.includes('psychicfangs') ||
-					(!types.has('Steel') && !types.has('Flying') && !abilities.has('Pixilate') &&
-						counter.get('stab') < species.types.length)
+					types.has('Fighting') || movePool.includes('psychicfangs') || movePool.includes('calmmind')
 				)
 			),
 			Rock: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Rock') &&
-				!types.has('Fairy') &&
-				(counter.setupType === 'Physical' || species.baseStats.atk >= 105 || abilities.has('Rock Head'))
+				!counter.get('Rock') && (species.baseStats.atk >= 100 || abilities.has('Rock Head'))
 			),
 			Steel: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Steel') && (species.baseStats.atk >= 100 || abilities.has('Steelworker'))
+				!counter.get('Steel') && (species.baseStats.atk >= 100)
 			),
-			Water: (movePool, moves, abilities, types, counter, species) => (
-				(!counter.get('Water') && !abilities.has('Protean')) ||
-				!counter.get('stab') ||
-				movePool.includes('crabhammer') ||
-				(abilities.has('Huge Power') && movePool.includes('aquajet'))
-			),
+			Water: (movePool, moves, abilities, types, counter, species) => !counter.get('Water'),
 		};
 	}
 
@@ -346,16 +310,70 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 
 		// Develop additional move lists
 		const pivotingMoves = ['partingshot', 'uturn', 'voltswitch'];
+		const badWithSetup = ['defog', 'dragontail', 'haze', 'healbell', 'pursuit', 'rapidspin', 'toxic'];
 		const statusMoves = this.dex.moves.all()
 			.filter(move => move.category === 'Status')
 			.map(move => move.id);
 
 		// These moves don't mesh well with other aspects of the set
-		this.incompatibleMoves(moves, movePool, statusMoves, ['healingwish', 'switcheroo', 'trick']);
+		this.incompatibleMoves(moves, movePool, statusMoves, ['healingwish', 'memento', 'switcheroo', 'trick']);
 		this.incompatibleMoves(moves, movePool, Setup, pivotingMoves);
+		this.incompatibleMoves(moves, movePool, Setup, Hazards)
+		this.incompatibleMoves(moves, movePool, Setup, badWithSetup)
+		this.incompatibleMoves(moves, movePool, SpeedSetup, RecoveryMove)
+		this.incompatibleMoves(moves, movePool, SpeedSetup, ['quickattack', 'suckerpunch'])
+		this.incompatibleMoves(moves, movePool, 'defog', Hazards);
+		this.incompatibleMoves(moves, movePool, ['fakeout', 'uturn'], ['switcheroo', 'trick']);
+		this.incompatibleMoves(moves, movePool, 'substitute', pivotingMoves)
+		this.incompatibleMoves(moves, movePool, 'nastyplot', 'suckerpunch');
+		this.incompatibleMoves(moves, movePool, 'leechseed', 'dragontail');
+		this.incompatibleMoves(moves, movePool, 'rest', 'substitute');
+		this.incompatibleMoves(moves, movePool, PhysicalSetup, 'dracometeor')
+		this.incompatibleMoves(moves, movePool, SpecialSetup, 'knockoff');
+
+		if (!types.includes('Normal')) {
+			this.incompatibleMoves(moves, movePool, Setup, 'Explosion');
+		}
 
 		// These attacks are redundant with each other
 		this.incompatibleMoves(moves, movePool, 'psychic', 'psyshock');
+		this.incompatibleMoves(moves, movePool, 'scald', ['hydropump', 'originpulse', 'waterpulse']);
+		this.incompatibleMoves(moves, movePool, 'return', ['bodyslam', 'doubleedge']);
+		this.incompatibleMoves(moves, movePool, ['firelash', 'lavaplume'], ['fireblast', 'magmastorm']);
+		this.incompatibleMoves(moves, movePool, ['flamethrower', 'flareblitz'], ['fireblast', 'overheat']);
+		this.incompatibleMoves(moves, movePool, 'blueflare', 'vcreate');
+		this.incompatibleMoves(moves, movePool, 'hornleech', 'woodhammer');
+		this.incompatibleMoves(moves, movePool, ['gigadrain', 'leafstorm', 'powerwhip'], ['leafstorm', 'petaldance', 'powerwhip']);
+		this.incompatibleMoves(moves, movePool, 'wildcharge', 'thunderbolt');
+		this.incompatibleMoves(moves, movePool, 'gunkshot', 'poisonjab');
+		this.incompatibleMoves(moves, movePool, ['drainpunch', 'focusblast'], ['highjumpkick', 'superpower']);
+		this.incompatibleMoves(moves, movePool, 'stoneedge', 'headsmash');
+		this.incompatibleMoves(moves, movePool, 'dracometeor', 'dragonpulse');
+		this.incompatibleMoves(moves, movePool, 'dragonclaw', 'outrage')
+		this.incompatibleMoves(moves, movePool, 'knockoff', ['darkestlariat', 'darkpulse', 'foulplay'])
+		if (!types.includes('Dark') && preferredType !== 'Dark') {
+			this.incompatibleMoves(moves, movePool, 'knockoff', ['pursuit', 'suckerpunch']);
+		}
+
+		// Status move incompatibilities
+		if (!abilities.has('Prankster')) {
+			this.incompatibleMoves(moves, movePool, ['thunderwave', 'toxic', 'willowisp'], ['thunderwave', 'toxic', 'willowisp']);
+		}
+		this.incompatibleMoves(moves, movePool, 'toxic', 'toxicspikes');
+		this.incompatibleMoves(moves, movePool, 'taunt', 'disable');
+		this.incompatibleMoves(moves, movePool, 'defog', ['leechseed', 'substitute']);
+
+		// Assorted hardcodes go here:
+		// Lunatone
+		this.incompatibleMoves(moves, movePool, 'moonlight', 'rockpolish');
+		// Smeargle
+		this.incompatibleMoves(moves, movePool, 'destinybond', 'whirlwind');
+		// Z-Conversion Porygon-Z
+		if (species.id === 'porygonz') {
+			this.incompatibleMoves(moves, movePool, 'shadowball', 'recover');
+		}
+		// Liepard
+		this.incompatibleMoves(moves, movePool, 'copycat', 'uturn');
 	}
 
 	// Checks for and removes incompatible moves, starting with the first move in movesA.
