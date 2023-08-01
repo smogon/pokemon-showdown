@@ -2034,16 +2034,13 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: `Pok&eacute;mon have their Tera Type added onto their current ones.`,
 		onBegin() {
 			this.add('rule', 'Bonus Type Mod: Pok\u00e9mon have their Tera Type added onto their current ones.');
-			for (const pokemon of this.getAllPokemon()) {
-				pokemon.m.bonusType = pokemon.teraType;
-			}
 		},
 		onModifySpeciesPriority: 1,
 		onModifySpecies(species, target, source, effect) {
 			if (!target) return; // Chat command
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
 			const typesSet = new Set(species.types);
-			const bonusType = this.dex.types.get(target.m.bonusType);
+			const bonusType = this.dex.types.get(target.teraType);
 			if (bonusType.exists) typesSet.add(bonusType.name);
 			return {...species, types: [...typesSet]};
 		},
