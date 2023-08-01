@@ -541,6 +541,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				if (!this.ruleTable.has('speciesrevealclause')) {
 					details = details
 						.replace(/(Greninja|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu|Dudunsparce)(-[a-zA-Z?-]+)?/g, '$1-*')
+						// Still here for National Dex BH
 						.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*'); // Hacked-in Crowned formes will be revealed
 				}
 				this.add('poke', pokemon.side.id, details, '');
