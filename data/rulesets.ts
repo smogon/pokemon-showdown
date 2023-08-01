@@ -2525,6 +2525,16 @@ export const Rulesets: {[k: string]: FormatData} = {
 					set.ability = 'Fairy Aura';
 				}
 			}
+			for (const moveid of set.moves) {
+				const move = this.dex.moves.get(moveid);
+				if (move.isNonstandard && move.isNonstandard !== 'Unobtainable' && !this.ruleTable.has(`+move:${move.id}`)) {
+					return [`${move.name} is illegal.`];
+				}
+			}
+			const item = this.dex.items.get(set.item);
+			if (item.isNonstandard && item.isNonstandard !== 'Unobtainable' && !this.ruleTable.has(`+item:${item.id}`)) {
+				return [`${item.name} is illegal.`];
+			}
 			return problems;
 		},
 	},
