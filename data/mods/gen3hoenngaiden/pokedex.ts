@@ -461,10 +461,6 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		abilities: {0: "Levitate"},
 		gen: 3,
 	},
-	raichu: {
-		inherit: true,
-		baseStats: {hp: 60, atk: 85, def: 50, spa: 95, spd: 85, spe: 110},
-	},
 	pichu: {
 		inherit: true,
 		abilities: {0: "Static", 1: "Mold Breaker"},
