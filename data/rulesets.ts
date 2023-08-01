@@ -2506,21 +2506,16 @@ export const Rulesets: {[k: string]: FormatData} = {
 					!(s.isMega || s.isPrimal || ['Greninja-Ash', 'Necrozma-Ultra'].includes(s.name)) &&
 					!(this.ruleTable.has(`+pokemon:${s.id}`) || this.ruleTable.has(`+basepokemon:${this.toID(s.baseSpecies)}`))
 			));
-			const problems = [];
 			if (problemPokemon.includes(species)) {
 				if (species.requiredItem && this.toID(set.item) !== this.toID(species.requiredItem)) {
-					problems.push(`${set.name ? `${set.name} (${species.name})` : species.name} is required to hold ${species.requiredItem}.`);
+					return [`${set.name ? `${set.name} (${species.name})` : species.name} is required to hold ${species.requiredItem}.`];
 				}
 				if (species.requiredMove && !set.moves.map(this.toID).includes(this.toID(species.requiredMove))) {
-					problems.push(`${set.name ? `${set.name} (${species.name})` : species.name} is required to have ${species.requiredMove}.`);
+					return [`${set.name ? `${set.name} (${species.name})` : species.name} is required to have ${species.requiredMove}.`];
 				}
 				set.species = (species.id === 'xerneas' ? 'Xerneas-Neutral' :
 					species.id === 'zygardecomplete' ? 'Zygarde' : species.battleOnly) as string;
 				species = this.dex.species.get(set.species);
-				if (species.baseSpecies === 'Xerneas' && this.toID(set.ability) !== 'fairyaura') {
-					problems.push(`${set.name ? `${set.name} (${species.name})` : species.name} is ability-locked into Fairy Aura.`);
-					set.ability = 'Fairy Aura';
-				}
 			}
 			for (const moveid of set.moves) {
 				const move = this.dex.moves.get(moveid);
@@ -2532,7 +2527,9 @@ export const Rulesets: {[k: string]: FormatData} = {
 			if (item.isNonstandard && item.isNonstandard !== 'Unobtainable' && !this.ruleTable.has(`+item:${item.id}`)) {
 				return [`${item.name} is illegal.`];
 			}
-			return problems;
+			if (species.baseSpecies === 'Xerneas' && this.toID(set.ability) !== 'fairyaura') {
+				return [`${set.name ? `${set.name} (${species.name})` : species.name} is ability-locked into Fairy Aura.`];
+			}
 		},
 	},
 	speciesrevealclause: {
