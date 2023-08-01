@@ -55,7 +55,8 @@ export class MoveCounter extends Utils.Multiset<string> {
 
 type MoveEnforcementChecker = (
 	movePool: string[], moves: Set<string>, abilities: Set<string>, types: Set<string>,
-	counter: MoveCounter, species: Species, teamDetails: RandomTeamsTypes.TeamDetails
+	counter: MoveCounter, species: Species, teamDetails: RandomTeamsTypes.TeamDetails,
+	isDoubles: boolean
 ) => boolean;
 
 // Moves that restore HP:
@@ -2218,7 +2219,7 @@ export class RandomGen8Teams {
 			const runEnforcementChecker = (checkerName: string) => {
 				if (!this.moveEnforcementCheckers[checkerName]) return false;
 				return this.moveEnforcementCheckers[checkerName](
-					movePool, moves, abilities, types, counter, species as Species, teamDetails
+					movePool, moves, abilities, types, counter, species as Species, teamDetails, isDoubles
 				);
 			};
 
