@@ -70,7 +70,6 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 		},
 		onSwitchIn(pokemon) {
 			let species = this.dex.species.get(pokemon.species.name);
-			const switchedIn = pokemon.switchedIn;
 			if (pokemon.illusion) {
 				species = this.dex.species.get(pokemon.illusion.species.name);
 				if (!pokemon.illusion.isModded) return;
