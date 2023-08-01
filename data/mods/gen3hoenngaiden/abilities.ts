@@ -71,7 +71,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
 			if (move.type === 'Normal' && !noModifyType.includes(move.id)) {
-        		move.type = 'Electric';
+				move.type = 'Electric';
 				move.category = 'Special';
 				move.typeChangerBoosted = this.effect;
 			}
