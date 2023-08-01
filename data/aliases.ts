@@ -83,8 +83,8 @@ export const Aliases: {[alias: string]: string} = {
 	gen6ag: "[Gen 6] Anything Goes",
 	crossevo: "[Gen 9] Cross Evolution",
 	mayhem: "[Gen 9] Random Battle Mayhem",
-	omotm: "[Gen 9] Force of the Fallen",
-	lcotm: "[Gen 9] Inheritance",
+	omotm: "[Gen 9] 350 Cup",
+	lcotm: "[Gen 9] Bonus Type",
 
 	// mega evos
 	fabio: "Ampharos-Mega",
