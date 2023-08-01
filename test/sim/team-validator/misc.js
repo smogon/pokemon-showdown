@@ -93,7 +93,7 @@ describe('Team Validator', function () {
 	});
 
 	// Based on research by Anubis: https://www.smogon.com/forums/posts/9713378
-	describe.only(`Hackmons formes`, function () {
+	describe(`Hackmons formes`, function () {
 		it(`should reject battle-only formes in Gen 9, even in Hackmons`, function () {
 			const team = [
 				{species: 'palafinhero', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
