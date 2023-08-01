@@ -136,17 +136,22 @@ describe('Team Validator', function () {
 		});
 	});
 
-	it('should allow Level 1 Donphan from Pokemon GO', function () {
+	it('should allow various (underleveled) from Pokemon GO', function () {
 		const team = [
+			{species: 'mewtwo', level: 20, ability: 'pressure', moves: ['agility'], evs: {hp: 1}, ivs: {hp: 1, atk: 1, def: 1, spa: 1, spd: 1}},
 			{species: 'donphan', level: 1, ability: 'sturdy', moves: ['endeavor']},
+			{species: 'mew', shiny: true, level: 15, ability: 'synchronize', moves: ['pound'], evs: {hp: 1}},
+			{species: 'uxie', level: 1, ability: 'levitate', moves: ['acrobatics']},
+			{species: 'zacian', ability: 'intrepidsword', moves: ['agility'], evs: {hp: 1}},
+			{species: 'volcarona', level: 2, ability: 'flamebody', moves: ['acrobatics'], evs: {hp: 1}},
 		];
-		assert.legalTeam(team, 'gen9ou');
+		assert.legalTeam(team, 'gen9ubers');
 	});
 
 	it('should disallow Pokemon from Pokemon GO knowing incompatible moves', function () {
 		const team = [
-			{species: 'mew', shiny: true, level: 50, ability: 'synchronize', moves: ['naturalgift'], evs: {hp: 1}, ivs: {hp: 21, atk: 31, def: 21, spa: 21, spd: 31, spe: 0}},
+			{species: 'mew', shiny: true, level: 15, ability: 'synchronize', moves: ['aircutter'], evs: {hp: 1}, ivs: {hp: 21, atk: 31, def: 21, spa: 21, spd: 31, spe: 0}},
 		];
-		assert.false.legalTeam(team, 'gen9ou');
+		assert.false.legalTeam(team, 'gen8ou');
 	});
 });

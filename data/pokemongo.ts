@@ -888,8 +888,8 @@ export const PokemonGoData: {[source: string]: PokemonGoData} = {
 	noivern: {encounters: ['wild']},
 	xerneas: {encounters: ['raid', 'specialtrade']},
 	yveltal: {encounters: ['raid', 'specialtrade']},
-	// zygarde: {encounters: ['research', 'noshiny']}, trading/transferring will be made available in the future
-	// diancie: {encounters: ['research', 'noshiny', 'notrade']}, will be made available on 2023-08-04
+	// zygarde: {encounters: ['research', 'noshiny']}, trading/transferring may be made available in the future
+	// diancie: {encounters: ['research', 'noshiny', 'notrade']}, transferring may be made available in the future
 	hoopa: {encounters: ['raid', 'research', 'noshiny', 'notrade']},
 	rowlet: {encounters: ['wild', 'noshiny']},
 	dartrix: {encounters: ['wild', 'noshiny']},
