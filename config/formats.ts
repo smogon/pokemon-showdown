@@ -498,7 +498,9 @@ export const Formats: FormatList = [
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3711099/">National Dex BH</a>`,
 		],
+
 		mod: 'gen9',
+		searchShow: false,
 		ruleset: ['-Nonexistent', 'Standard NatDex', 'Forme Clause', 'Sleep Moves Clause', 'Ability Clause = 2', 'OHKO Clause', 'Evasion Moves Clause', 'Dynamax Clause', 'CFZ Clause', '!Obtainable'],
 		banlist: [
 			'Cramorant-Gorging', 'Calyrex-Shadow', 'Darmanitan-Galar-Zen', 'Eternatus-Eternamax', 'Groudon-Primal', 'Rayquaza-Mega', 'Shedinja',
@@ -742,6 +744,27 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen9',
+		ruleset: [
+			'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Moves Clause',
+			'Endless Battle Clause', 'Hackmons Forme Legality', 'Species Reveal Clause', 'Terastal Clause',
+		],
+		banlist: [
+			'Calyrex-Shadow', 'Groudon-Primal', 'Rayquaza-Mega', 'Regigigas', 'Shedinja', 'Slaking', 'Arena Trap', 'Comatose', 'Contrary', 'Gorilla Tactics',
+			'Hadron Engine', 'Huge Power', 'Illusion', 'Innards Out', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Orichalcum Pulse', 'Parental Bond',
+			'Poison Heal', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard', 'Baton Pass', 'Belly Drum', 'Ceaseless Edge', 'Imprison',
+			'Last Respects', 'Quiver Dance', 'Rage Fist', 'Revival Blessing', 'Shed Tail', 'Substitute', 'Shell Smash',
+		],
+	},
+	{
+		name: "[Gen 9] Pre-Full Dex BH",
+		desc: `Anything directly hackable onto a set (EVs, IVs, forme, ability, item, and move) and is usable in local battles is allowed.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3710859/">Balanced Hackmons</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3712766/">BH Resources</a>`,
+		],
+
+		mod: 'gen9',
+		searchShow: false,
 		ruleset: ['-Nonexistent', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Moves Clause', 'Endless Battle Clause', 'Terastal Clause'],
 		banlist: [
 			'Calyrex-Shadow', 'Slaking', 'Zacian-Crowned', 'Arena Trap', 'Comatose', 'Contrary', 'Hadron Engine', 'Huge Power', 'Illusion',
@@ -1587,7 +1610,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		searchShow: false,
-		ruleset: ['-Nonexistent', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
+		ruleset: ['Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Hackmons Forme Legality', 'Species Reveal Clause', 'Endless Battle Clause'],
 	},
 	{
 		name: "[Gen 9] Revelationmons",
@@ -2011,7 +2034,8 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		team: 'randomHC',
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
-		banlist: ['Nonexistent'],
+		banlist: ['CAP', 'LGPE', 'MissingNo.', 'Pikachu-Cosplay', 'Pichu-Spiky-eared', 'Pokestar Smeargle', 'Pokestar UFO', 'Pokestar UFO-2', 'Pokestar Brycen-Man', 'Pokestar MT', 'Pokestar MT2', 'Pokestar Transport', 'Pokestar Giant', 'Pokestar Humanoid', 'Pokestar Monster', 'Pokestar F-00', 'Pokestar F-002', 'Pokestar Spirit', 'Pokestar Black Door', 'Pokestar White Door', 'Pokestar Black Belt', 'Pokestar UFO-PropU2', 'Xerneas-Base'],
+		unbanlist: ['All Pokemon'],
 	},
 	{
 		name: "[Gen 9] Doubles Hackmons Cup",
@@ -2029,7 +2053,7 @@ export const Formats: FormatList = [
 
 		team: 'randomHC',
 		searchShow: false,
-		ruleset: ['[Gen 9] Hackmons Cup'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['All Pokemon', 'All Abilities', 'All Items', 'All Moves'],
 		unbanlist: [
 			'10,000,000 Volt Thunderbolt', 'Abomasnow-Mega', 'Absol-Mega', 'Accelerock', 'Acid Spray', 'Adaptability',

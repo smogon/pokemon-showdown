@@ -537,9 +537,13 @@ export const Rulesets: {[k: string]: FormatData} = {
 		onTeamPreview() {
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
-				const details = pokemon.details.replace(', shiny', '')
-					.replace(/(Greninja|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu|Dudunsparce)(-[a-zA-Z?-]+)?/g, '$1-*')
-					.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*'); // Hacked-in Crowned formes will be revealed
+				let details = pokemon.details.replace(', shiny', '');
+				if (!this.ruleTable.has('speciesrevealclause')) {
+					details = details
+						.replace(/(Greninja|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu|Dudunsparce)(-[a-zA-Z?-]+)?/g, '$1-*')
+						// Still here for National Dex BH
+						.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*'); // Hacked-in Crowned formes will be revealed
+				}
 				this.add('poke', pokemon.side.id, details, '');
 			}
 			this.makeRequest('teampreview');
@@ -2476,6 +2480,54 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const someCanLearn = matchingSpecies.some(s => this.checkCanLearn(move, s, setSources, set) === null);
 			if (someCanLearn) return null;
 			return this.checkCanLearn(move, species, setSources, set);
+		},
+	},
+	hackmonsformelegality: {
+		effectType: 'ValidatorRule',
+		name: "Hackmons Forme Legality",
+		desc: `Enforces proper forme legality for hackmons-based metagames.`,
+		unbanlist: ['All Pokemon'],
+		banlist: ['CAP', 'LGPE', 'Future'],
+		onChangeSet(set, format, setHas, teamHas) {
+			let species = this.dex.species.get(set.species);
+			if (
+				(species.natDexTier === 'Illegal' || species.forme.includes('Totem')) &&
+				!['Floette-Eternal', 'Greninja-Ash', 'Xerneas-Neutral'].includes(species.name) &&
+				!this.ruleTable.has(`+pokemon:${species.id}`)
+			) {
+				return [`${species.name} is illegal.`];
+			}
+			const problemPokemon = this.dex.species.all().filter(s => (
+				(s.name === 'Xerneas' || s.battleOnly || s.forme === 'Eternamax') &&
+					!(s.isMega || s.isPrimal || ['Greninja-Ash', 'Necrozma-Ultra'].includes(s.name)) &&
+					!(this.ruleTable.has(`+pokemon:${s.id}`) || this.ruleTable.has(`+basepokemon:${this.toID(s.baseSpecies)}`))
+			));
+			const problems = [];
+			if (problemPokemon.includes(species)) {
+				if (species.requiredItem && this.toID(set.item) !== this.toID(species.requiredItem)) {
+					problems.push(`${set.name ? `${set.name} (${species.name})` : species.name} is required to hold ${species.requiredItem}.`);
+				}
+				if (species.requiredMove && !set.moves.map(this.toID).includes(this.toID(species.requiredMove))) {
+					problems.push(`${set.name ? `${set.name} (${species.name})` : species.name} is required to have ${species.requiredMove}.`);
+				}
+				set.species = (species.id === 'xerneas' ? 'Xerneas-Neutral' :
+					species.id === 'zygardecomplete' ? 'Zygarde' : species.battleOnly) as string;
+				species = this.dex.species.get(set.species);
+				if (species.baseSpecies === 'Xerneas' && this.toID(set.ability) !== 'fairyaura') {
+					problems.push(`${set.name ? `${set.name} (${species.name})` : species.name} is ability-locked into Fairy Aura.`);
+					set.ability = 'Fairy Aura';
+				}
+			}
+			return problems;
+		},
+	},
+	speciesrevealclause: {
+		effectType: 'Rule',
+		name: 'Species Reveal Clause',
+		desc: "Reveals a Pok&eacute;mon's true species in hackmons-based metagames.",
+		// Hardcoded into effect, cannot be disabled, ties into team preview
+		onBegin() {
+			this.add('rule', 'Species Reveal Clause: Reveals a Pok\u00e9mon\'s true species in hackmons-based metagames.');
 		},
 	},
 };
