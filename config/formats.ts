@@ -534,7 +534,7 @@ export const Formats: FormatList = [
 		mod: 'gen3hoenngaiden',
 		ruleset: ['HG Standard', 'Data Mod', 'Freeze Clause Mod'],
 		banlist: ['Uber'],
-		unbanlist: ['Sand Veil',],
+		unbanlist: ['Sand Veil'],
 	},
 	{
 		name: "[Gen 8] JolteMons Random Battle",
