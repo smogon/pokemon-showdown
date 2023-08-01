@@ -2017,15 +2017,14 @@ export const Rulesets: {[k: string]: FormatData} = {
 			pokemon.setSpecies(newSpecies, null);
 		},
 	},
-	bonustyperule: {
-		name: "Bonus Type Rule",
+	bonustypemod: {
+		name: "Bonus Type Mod",
 		effectType: "Rule",
 		desc: `Pok&eacute;mon have their Tera Type added onto their current ones.`,
 		onBegin() {
-			this.add('rule', 'Bonus Type Rule: Pok\u00e9mon have their Tera Type added onto their current ones.');
+			this.add('rule', 'Bonus Type Mod: Pok\u00e9mon have their Tera Type added onto their current ones.');
 			for (const pokemon of this.getAllPokemon()) {
 				pokemon.m.bonusType = pokemon.teraType;
-				pokemon.canTerastallize = null;
 			}
 		},
 		onModifySpeciesPriority: 1,
@@ -2250,6 +2249,29 @@ export const Rulesets: {[k: string]: FormatData} = {
 						},
 					];
 				}
+			}
+		},
+	},
+	forceofthefallenmod: {
+		effectType: 'Rule',
+		name: 'Force of the Fallen Mod',
+		desc: `Pok&eacute;mon pass the move in their last moveslot to their allies when they are KOed.`,
+		onValidateSet(set, format, setHas, teamHas) {
+			const lastMoveslot = this.dex.moves.get(set.moves[set.moves.length - 1]);
+			if (this.ruleTable.isRestricted(`move:${lastMoveslot.id}`)) {
+				return [`${set.species}'s move ${lastMoveslot.name} cannot be placed in the last moveslot.`];
+			}
+		},
+		onBegin() {
+			this.add('rule', 'Force of the Fallen Mod: Pok&\u00e9mon pass the move in their last moveslot to their allies when they\'re KOed');
+			for (const pokemon of this.getAllPokemon()) {
+				pokemon.m.trueLastMoveSlot = pokemon.baseMoveSlots[pokemon.baseMoveSlots.length - 1];
+			}
+		},
+		onFaint(target) {
+			const allies = target.side.pokemon.filter(ally => ally && target !== ally);
+			for (const ally of allies) {
+				ally.moveSlots = (ally as any).baseMoveSlots = [...ally.baseMoveSlots, target.m.trueLastMoveSlot];
 			}
 		},
 	},

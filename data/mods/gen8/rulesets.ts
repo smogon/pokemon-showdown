@@ -65,11 +65,11 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			return pokemon;
 		},
 	},
-	bonustyperule: {
+	bonustypemod: {
 		inherit: true,
 		desc: `Pok&eacute;mon can be nicknamed the name of a type to have that type added onto their current ones.`,
 		onBegin() {
-			this.add('rule', 'Bonus Type Rule: Pok\u00e9mon can be nicknamed the name of a type to have that type added onto their current ones.');
+			this.add('rule', 'Bonus Type Mod: Pok\u00e9mon can be nicknamed the name of a type to have that type added onto their current ones.');
 		},
 		onModifySpecies(species, target, source, effect) {
 			if (!target) return; // Chat command
