@@ -131,6 +131,13 @@ export const Rulesets: {[k: string]: FormatData} = {
 				return [`${set.name}'s item ${item.name} does not exist in Gen ${this.dex.gen}.`];
 			}
 		},
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				if (pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra") {
+					pokemon.canTerastallize = null;
+				}
+			}
+		},
 	},
 	draft: {
 		effectType: 'ValidatorRule',
