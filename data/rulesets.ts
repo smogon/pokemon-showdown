@@ -2034,16 +2034,13 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: `Pok&eacute;mon have their Tera Type added onto their current ones.`,
 		onBegin() {
 			this.add('rule', 'Bonus Type Mod: Pok\u00e9mon have their Tera Type added onto their current ones.');
-			for (const pokemon of this.getAllPokemon()) {
-				pokemon.m.bonusType = pokemon.teraType;
-			}
 		},
 		onModifySpeciesPriority: 1,
 		onModifySpecies(species, target, source, effect) {
 			if (!target) return; // Chat command
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
 			const typesSet = new Set(species.types);
-			const bonusType = this.dex.types.get(target.m.bonusType);
+			const bonusType = this.dex.types.get(target.teraType);
 			if (bonusType.exists) typesSet.add(bonusType.name);
 			return {...species, types: [...typesSet]};
 		},
@@ -2509,23 +2506,30 @@ export const Rulesets: {[k: string]: FormatData} = {
 					!(s.isMega || s.isPrimal || ['Greninja-Ash', 'Necrozma-Ultra'].includes(s.name)) &&
 					!(this.ruleTable.has(`+pokemon:${s.id}`) || this.ruleTable.has(`+basepokemon:${this.toID(s.baseSpecies)}`))
 			));
-			const problems = [];
 			if (problemPokemon.includes(species)) {
 				if (species.requiredItem && this.toID(set.item) !== this.toID(species.requiredItem)) {
-					problems.push(`${set.name ? `${set.name} (${species.name})` : species.name} is required to hold ${species.requiredItem}.`);
+					return [`${set.name ? `${set.name} (${species.name})` : species.name} is required to hold ${species.requiredItem}.`];
 				}
 				if (species.requiredMove && !set.moves.map(this.toID).includes(this.toID(species.requiredMove))) {
-					problems.push(`${set.name ? `${set.name} (${species.name})` : species.name} is required to have ${species.requiredMove}.`);
+					return [`${set.name ? `${set.name} (${species.name})` : species.name} is required to have ${species.requiredMove}.`];
 				}
 				set.species = (species.id === 'xerneas' ? 'Xerneas-Neutral' :
 					species.id === 'zygardecomplete' ? 'Zygarde' : species.battleOnly) as string;
 				species = this.dex.species.get(set.species);
-				if (species.baseSpecies === 'Xerneas' && this.toID(set.ability) !== 'fairyaura') {
-					problems.push(`${set.name ? `${set.name} (${species.name})` : species.name} is ability-locked into Fairy Aura.`);
-					set.ability = 'Fairy Aura';
+			}
+			for (const moveid of set.moves) {
+				const move = this.dex.moves.get(moveid);
+				if (move.isNonstandard && move.isNonstandard !== 'Unobtainable' && !this.ruleTable.has(`+move:${move.id}`)) {
+					return [`${move.name} is illegal.`];
 				}
 			}
-			return problems;
+			const item = this.dex.items.get(set.item);
+			if (item.isNonstandard && item.isNonstandard !== 'Unobtainable' && !this.ruleTable.has(`+item:${item.id}`)) {
+				return [`${item.name} is illegal.`];
+			}
+			if (species.baseSpecies === 'Xerneas' && this.toID(set.ability) !== 'fairyaura') {
+				return [`${set.name ? `${set.name} (${species.name})` : species.name} is ability-locked into Fairy Aura.`];
+			}
 		},
 	},
 	speciesrevealclause: {
