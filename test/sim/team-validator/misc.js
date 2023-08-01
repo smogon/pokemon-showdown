@@ -113,7 +113,7 @@ describe('Team Validator', function () {
 
 		it(`should not allow Xerneas with a hacked Ability in Gen 9 Hackmons`, function () {
 			const team = [
-				{species: 'xerneas', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
+				{species: 'xerneasneutral', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
 			];
 			assert.false.legalTeam(team, 'gen9purehackmons');
 		});
