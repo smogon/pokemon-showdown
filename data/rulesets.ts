@@ -2501,7 +2501,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'Rule',
 		name: 'Species Reveal Clause',
 		desc: "Reveals a Pok&eacute;mon's true species in hackmons-based metagames.",
-		// Hardcoded into effect, cannot be disabled.
+		// Hardcoded into effect, cannot be disabled, ties into team preview
 		onBegin() {
 			this.add('rule', 'Species Reveal Clause: Reveals a Pok\u00e9mon\'s true species in hackmons-based metagames.');
 		},
