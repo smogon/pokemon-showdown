@@ -2469,7 +2469,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		onChangeSet(set, format, setHas, teamHas) {
 			let species = this.dex.species.get(set.species);
 			if (
-				species.natDexTier === 'Illegal' &&
+				(species.natDexTier === 'Illegal' || species.forme.includes('Totem')) &&
 				!['Floette-Eternal', 'Greninja-Ash', 'Xerneas-Neutral'].includes(species.name) &&
 				!this.ruleTable.has(`+pokemon:${species.id}`)
 			) {
