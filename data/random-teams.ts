@@ -804,13 +804,13 @@ export class RandomTeams {
 			}
 		}
 
-		// If no STAB move was added in the previous step, add a STAB move
-		if (!counter.stabCounter) {
+		// Enforce Tera STAB
+		if (!counter.get('stabtera') && !['Bulky Support', 'Doubles Support'].includes(role)) {
 			const stabMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
 				const moveType = this.getMoveType(move, species, abilities, teraType);
-				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && types.includes(moveType)) {
+				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && teraType === moveType) {
 					stabMoves.push(moveid);
 				}
 			}
@@ -821,13 +821,13 @@ export class RandomTeams {
 			}
 		}
 
-		// Enforce Tera STAB
-		if (!counter.get('stabtera') && !['Bulky Support', 'Doubles Support'].includes(role)) {
+		// If no STAB move was added, add a STAB move
+		if (!counter.stabCounter) {
 			const stabMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
 				const moveType = this.getMoveType(move, species, abilities, teraType);
-				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && teraType === moveType) {
+				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && types.includes(moveType)) {
 					stabMoves.push(moveid);
 				}
 			}
@@ -892,9 +892,24 @@ export class RandomTeams {
 			}
 		}
 
+		// Enforce a move not on the noSTAB list
+		if (!counter.damagingMoves.size) {
+			// Choose an attacking move
+			const attackingMoves = [];
+			for (const moveid of movePool) {
+				const move = this.dex.moves.get(moveid);
+				if (!this.noStab.includes(moveid) && (move.category !== 'Status')) attackingMoves.push(moveid);
+			}
+			if (attackingMoves.length) {
+				const moveid = this.sample(attackingMoves);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
+			}
+		}
+
 		// Enforce coverage move
 		if (!['AV Pivot', 'Fast Support', 'Bulky Support', 'Bulky Protect', 'Doubles Support'].includes(role)) {
-			if (counter.damagingMoves.size <= 1) {
+			if (counter.damagingMoves.size === 1) {
 				// Find the type of the current attacking move
 				const currentAttackType = counter.damagingMoves.values().next().value.type;
 				// Choose an attacking move that is of different type to the current single attack
@@ -911,21 +926,6 @@ export class RandomTeams {
 					counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 						movePool, teraType, role);
 				}
-			}
-		}
-
-		// Enforce a move not on the noSTAB list
-		if (!counter.damagingMoves.size) {
-			// Choose an attacking move
-			const attackingMoves = [];
-			for (const moveid of movePool) {
-				const move = this.dex.moves.get(moveid);
-				if (!this.noStab.includes(moveid) && (move.category !== 'Status')) attackingMoves.push(moveid);
-			}
-			if (attackingMoves.length) {
-				const moveid = this.sample(attackingMoves);
-				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, teraType, role);
 			}
 		}
 

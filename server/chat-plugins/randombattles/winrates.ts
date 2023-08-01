@@ -126,7 +126,7 @@ function getSpeciesName(set: PokemonSet, format: Format) {
 		return "Groudon-Primal";
 	} else if (item.megaStone) {
 		return item.megaStone;
-	} else if (species === "Rayquaza" && moves.includes('Dragon Ascent') && megaRayquazaPossible) {
+	} else if (species === "Rayquaza" && moves.includes('Dragon Ascent') && !item.zMove && megaRayquazaPossible) {
 		return "Rayquaza-Mega";
 	} else {
 		return species;

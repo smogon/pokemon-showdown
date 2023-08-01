@@ -17,10 +17,13 @@ describe('value rule support (slow)', () => {
 
 		testTeam({format: 'gen8multirandombattle', rounds: 100}, team => assert.equal(team.length, 3));
 		testTeam({format: 'gen8cap1v1', rounds: 100}, team => assert.equal(team.length, 3));
+
+		testTeam({format: 'gen7randombattle', rounds: 100}, team => assert.equal(team.length, 6));
 	});
 
 	// TODO: Support gen 9 set format
 	for (let gen = 1; gen <= 8; gen++) {
+		if (gen === 7) continue;
 		const formatID = `gen${gen}randombattle`;
 		const dataJSON = require(`../../dist/data/mods/gen${gen}/random-data.json`);
 		const dex = Dex.forFormat(formatID);
