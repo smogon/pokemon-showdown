@@ -29822,7 +29822,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		baseSpecies: "Delphox",
 		forme: "Mega",
 		types: ["Fire", "Psychic"],
-		baseStats: {hp: 74, atk: 69, def: 87, spa: 144, spd: 125, spe: 134},
+		baseStats: {hp: 75, atk: 69, def: 87, spa: 144, spd: 125, spe: 134},
 		abilities: {0: "Magic Trick"},
 		heightm: 0.6,
 		weightkg: 90,
