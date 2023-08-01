@@ -93,8 +93,8 @@ describe('Team Validator', function () {
 	});
 
 	// Based on research by Anubis: https://www.smogon.com/forums/posts/9713378
-	describe.skip(`Hackmons forms`, function () {
-		it(`should reject battle-only forms in Gen 9, even in Hackmons`, function () {
+	describe.only(`Hackmons formes`, function () {
+		it(`should reject battle-only formes in Gen 9, even in Hackmons`, function () {
 			const team = [
 				{species: 'palafinhero', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
 				{species: 'zamazentacrowned', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
@@ -102,7 +102,7 @@ describe('Team Validator', function () {
 			assert.false.legalTeam(team, 'gen9purehackmons');
 		});
 
-		it(`should also reject battle-only dexited forms in Gen 9 Hackmons`, function () {
+		it(`should also reject battle-only dexited formes in Gen 9 Hackmons`, function () {
 			const team = [
 				{species: 'zygardecomplete', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
 				{species: 'darmanitangalarzen', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
@@ -111,28 +111,55 @@ describe('Team Validator', function () {
 			assert.false.legalTeam(team, 'gen9purehackmons');
 		});
 
-		it(`should not allow a Xerneas with a hacked Ability in Gen 9 Hackmons`, function () {
+		it(`should not allow Xerneas with a hacked Ability in Gen 9 Hackmons`, function () {
 			const team = [
 				{species: 'xerneas', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
 			];
 			assert.false.legalTeam(team, 'gen9purehackmons');
 		});
 
-		it(`should allow various other hacked forms in Gen 9 Hackmons`, function () {
+		it(`should allow various other hacked formes in Gen 9 Hackmons`, function () {
 			const team = [
 				{species: 'giratinaorigin', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
 				{species: 'calyrexshadow', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
 				{species: 'greninjaash', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
+				{species: 'gengarmega', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
+				{species: 'groudonprimal', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
+				{species: 'necrozmaultra', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
 			];
 			assert.legalTeam(team, 'gen9purehackmons');
 		});
 
-		it(`should allow battle-only forms in Hackmons before Gen 9`, function () {
+		it(`should not allow old gen-exclusive formes in Gen 9 Hackmons`, function () {
+			let team = [
+				{species: 'pikachucosplay', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
+			];
+			assert.false.legalTeam(team, 'gen9purehackmons');
+
+			team = [
+				{species: 'pichuspikyeared', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
+			];
+			assert.false.legalTeam(team, 'gen9purehackmons');
+
+			team = [
+				{species: 'pokestarsmeargle', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
+			];
+			assert.false.legalTeam(team, 'gen9purehackmons');
+		});
+
+		it(`should not allow CAP Pokemon in Gen 9 Hackmons`, function () {
+			const team = [
+				{species: 'hemogoblin', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
+			];
+			assert.false.legalTeam(team, 'gen9purehackmons');
+		});
+
+		it(`should allow battle-only formes in Hackmons before Gen 9`, function () {
 			const team = [
 				{species: 'zamazentacrowned', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
 				{species: 'zygardecomplete', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
 			];
-			assert.legalTeam(team, 'gen8purehackmons');
+			assert.legalTeam(team, 'gen8customgame@@@-Nonexistent');
 		});
 	});
 });
