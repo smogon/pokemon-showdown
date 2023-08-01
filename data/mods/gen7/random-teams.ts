@@ -456,7 +456,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		const runEnforcementChecker = (checkerName: string) => {
 			if (!this.moveEnforcementCheckers[checkerName]) return false;
 			return this.moveEnforcementCheckers[checkerName](
-				movePool, moves, abilities, new Set(types), counter, species, teamDetails, isDoubles
+				movePool, moves, abilities, new Set(types), counter, species, teamDetails
 			);
 		};
 
@@ -1829,7 +1829,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			const runEnforcementChecker = (checkerName: string) => {
 				if (!this.moveEnforcementCheckers[checkerName]) return false;
 				return this.moveEnforcementCheckers[checkerName](
-					movePool, moves, abilities, types, counter, species as Species, teamDetails, true
+					movePool, moves, abilities, types, counter, species as Species, teamDetails
 				);
 			};
 
