@@ -168,6 +168,7 @@ type ModdedSpeciesFormatsData = import('./dex-species').ModdedSpeciesFormatsData
 type LearnsetData = import('./dex-species').LearnsetData;
 type ModdedLearnsetData = import('./dex-species').ModdedLearnsetData;
 type Species = import('./dex-species').Species;
+type PokemonGoData = import('./dex-species').PokemonGoData;
 
 type FormatData = import('./dex-formats').FormatData;
 type FormatList = import('./dex-formats').FormatList;
