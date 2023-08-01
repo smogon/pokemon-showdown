@@ -2239,13 +2239,23 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			ivs.spe = (hasHiddenPower && level < 100) ? ivs.spe - 30 : 0;
 		}
 
+		// shuffle moves to add more randomness to camomons
+		const shuffledMoves = Array.from(moves);
+		this.prng.shuffle(shuffledMoves);
+
+		// Z-Conversion Porygon-Z should have Shadow Ball first if no Recover, otherwise Thunderbolt
+		if (species.id === 'porygonz' && role === 'Z-Move user') {
+			const firstMove = (moves.has('shadowball') ? 'shadowball' : 'thunderbolt')
+			this.fastPop(shuffledMoves, shuffledMoves.indexOf(firstMove));
+			shuffledMoves.unshift(firstMove);
+		}
 		return {
 			name: species.baseSpecies,
 			species: forme,
 			gender: species.gender,
 			shiny: this.randomChance(1, 1024),
 			level,
-			moves: Array.from(moves),
+			moves: shuffledMoves,
 			ability,
 			evs,
 			ivs,
