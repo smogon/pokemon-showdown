@@ -337,7 +337,6 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		this.incompatibleMoves(moves, movePool, 'return', ['bodyslam', 'doubleedge']);
 		this.incompatibleMoves(moves, movePool, ['firelash', 'lavaplume'], ['fireblast', 'magmastorm']);
 		this.incompatibleMoves(moves, movePool, ['flamethrower', 'flareblitz'], ['fireblast', 'overheat']);
-		this.incompatibleMoves(moves, movePool, 'blueflare', 'vcreate');
 		this.incompatibleMoves(moves, movePool, 'hornleech', 'woodhammer');
 		this.incompatibleMoves(moves, movePool, ['gigadrain', 'leafstorm'], ['leafstorm', 'petaldance', 'powerwhip']);
 		this.incompatibleMoves(moves, movePool, 'wildcharge', 'thunderbolt');
@@ -371,6 +370,8 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		}
 		// Liepard
 		this.incompatibleMoves(moves, movePool, 'copycat', 'uturn');
+		// Seviper
+		this.incompatibleMoves(moves, movePool, 'switcheroo', 'suckerpunch');
 	}
 
 	// Checks for and removes incompatible moves, starting with the first move in movesA.
@@ -849,6 +850,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		if (abilities.has('Gluttony') && (moves.has('recycle') || moves.has('bellydrum'))) return 'Gluttony';
 		if (abilities.has('Harvest') && (role === 'Bulky Support' || role === 'Staller')) return 'Harvest';
 		if (species.name === 'Raticate-Alola') return 'Hustle';
+		if (species.id === 'ninjask') return 'Infiltrator';
 		if (abilities.has('Sheer Force') && abilities.has('Mold Breaker') && role !== 'Wallbreaker') return 'Mold Breaker';
 		if (species.baseSpecies === 'Altaria') return 'Natural Cure';
 		if (species.id === 'tsareena') return 'Queenly Majesty';
@@ -940,28 +942,31 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			return this.sample(species.requiredItems);
 		}
 		if (role === 'AV Pivot') return 'Assault Vest';
-		if (species.name === 'Dedenne') return moves.has('substitute') ? 'Petaya Berry' : 'Sitrus Berry';
+		// maybe cut this one
 		if (species.name === 'Deoxys-Attack') return (isLead && moves.has('stealthrock')) ? 'Focus Sash' : 'Life Orb';
 		if (species.name === 'Farfetch\u2019d') return 'Stick';
-		if (species.name === 'Genesect' && moves.has('technoblast')) return 'Douse Drive';
 		if (species.baseSpecies === 'Marowak') return 'Thick Club';
 		if (species.name === 'Pikachu') return 'Light Ball';
 		if (species.name === 'Shedinja' || species.name === 'Smeargle') return 'Focus Sash';
-		if (species.name === 'Unfezant' && counter.get('Physical') >= 2) return 'Scope Lens';
+		if (species.name === 'Unfezant') return 'Scope Lens';
 		if (species.name === 'Unown') return 'Choice Specs';
 		if (species.name === 'Wobbuffet') return 'Custap Berry';
-		if (ability === 'Harvest' || ability === 'Emergency Exit' && !!counter.get('Status')) return 'Sitrus Berry';
-		if (ability === 'Imposter') return 'Choice Scarf';
+		if (species.name === 'Shuckle') return 'Mental Herb';
+		if (
+			ability === 'Harvest' || ability === 'Cheek Pouch' || (ability === 'Emergency Exit' && !!counter.get('Status'))
+		) return 'Sitrus Berry';
+		if (species.name === 'Ditto') return 'Choice Scarf';
 		if (ability === 'Poison Heal') return 'Toxic Orb';
-		if (species.nfe) return (ability === 'Technician' && counter.get('Physical') >= 4) ? 'Choice Band' : 'Eviolite';
-		if (moves.has('switcheroo') || moves.has('trick')) {
+		if (ability === 'Speed Boost') return 'Life Orb';
+		if (species.nfe) return (species.name === 'Scyther' && role === 'Fast Attacker') ? 'Choice Band' : 'Eviolite';
+		if (['healingwish', 'memento', 'switcheroo', 'trick'].some(m => moves.has(m))) {
 			if (species.baseStats.spe >= 60 && species.baseStats.spe <= 108) {
 				return 'Choice Scarf';
 			} else {
 				return (counter.get('Physical') > counter.get('Special')) ? 'Choice Band' : 'Choice Specs';
 			}
 		}
-		if (moves.has('bellydrum')) {
+		if (moves.has('bellydrum') || moves.has('recycle')) {
 			if (ability === 'Gluttony') {
 				return `${this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki'])} Berry`;
 			} else {
@@ -976,17 +981,16 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
 			return (types.includes('Fire') || ability === 'Quick Feet' || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
 		}
-		if (ability === 'Magic Guard' && counter.damagingMoves.size > 1) {
+		if (ability === 'Magic Guard' && role !== 'Bulky Support') {
 			return moves.has('counter') ? 'Focus Sash' : 'Life Orb';
 		}
 		if (ability === 'Sheer Force' && counter.get('sheerforce')) return 'Life Orb';
-		if (ability === 'Unburden') return moves.has('fakeout') ? 'Normal Gem' : 'Sitrus Berry';
+		if (ability === 'Unburden') return moves.has('closecombat') ? 'White Herb' : 'Sitrus Berry';
 		if (moves.has('acrobatics')) return '';
-
 		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
 		if (
 			moves.has('rest') && !moves.has('sleeptalk') &&
-			ability !== 'Natural Cure' && ability !== 'Shed Skin' && ability !== 'Shadow Tag'
+			['Hydration', 'Natural Cure', 'Shed Skin'].every(abil => ability !== abil)
 		) {
 			return 'Chesto Berry';
 		}
@@ -1006,110 +1010,73 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 	): string {
 		const defensiveStatTotal = species.baseStats.hp + species.baseStats.def + species.baseStats.spd;
 
-		if (
-			(ability === 'Speed Boost' || ability === 'Stance Change' || species.name === 'Pheromosa') &&
-			counter.get('Physical') + counter.get('Special') > 2 &&
-			!moves.has('uturn')
-		) {
-			return 'Life Orb';
-		}
+		const scarfReqs = (
+			role !== 'Wallbreaker' &&
+			species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
+			!counter.get('priority') && !moves.has('pursuit')
+		);
 
-		if (
-			counter.get('Physical') >= 4 &&
-			['bodyslam', 'dragontail', 'fakeout', 'flamecharge', 'rapidspin', 'suckerpunch'].every(m => !moves.has(m))
-		) {
+		if (species.id === 'pyroar' && moves.has('solarbeam')) return 'Power Herb';
+		if (moves.has('pursuit') && moves.has('suckerpunch') && counter.get('Dark')) return 'Black Glasses';
+		if (counter.get('Special') === 4) {
 			return (
-				(species.baseStats.atk >= 100 || ability === 'Huge Power') &&
-				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
-				!counter.get('priority') &&
-				this.randomChance(2, 3)
-			) ? 'Choice Scarf' : 'Choice Band';
-		}
-		if (
-			(counter.get('Special') >= 4 || (counter.get('Special') >= 3 && moves.has('uturn'))) &&
-			!moves.has('acidspray') && !moves.has('clearsmog')
-		) {
-			return (
-				species.baseStats.spa >= 100 &&
-				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
-				ability !== 'Tinted Lens' &&
-				!counter.get('Physical') && !counter.get('priority') &&
-				this.randomChance(2, 3)
+				scarfReqs && (species.baseStats.spa >= 90 || moves.has('voltswitch')) && this.randomChance(1, 2)
 			) ? 'Choice Scarf' : 'Choice Specs';
 		}
-		if (
-			counter.get('Physical') >= 3 &&
-			(moves.has('defog') || moves.has('healingwish')) &&
-			!moves.has('foulplay') &&
-			species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
-			!counter.get('priority')
+		if (species.id === 'sigilyph' || (counter.get('Special') === 3 && moves.has('uturn'))) return 'Choice Specs';
+		if (counter.get('Physical') === 4 &&
+			['dragontail', 'fakeout', 'flamecharge', 'nuzzle', 'rapidspin'].every(m => !moves.has(m))
 		) {
-			return 'Choice Scarf';
+			return (
+				scarfReqs && (species.baseStats.atk >= 100 || moves.has('uturn')) && this.randomChance(1, 2)
+			) ? 'Choice Scarf' : 'Choice Band';
 		}
-		if (
-			ability === 'Drizzle' ||
-			ability === 'Slow Start' ||
-			species.name.includes('Rotom-') ||
-			['aromatherapy', 'bite', 'clearsmog', 'curse', 'protect', 'sleeptalk'].some(m => moves.has(m))
-		) {
-			return 'Leftovers';
-		}
-		if (['endeavor', 'flail', 'reversal'].some(m => moves.has(m)) && ability !== 'Sturdy') {
-			return (ability === 'Defeatist') ? 'Expert Belt' : 'Focus Sash';
-		}
-		if (moves.has('outrage') && counter.setupType) return 'Lum Berry';
 
-		if (moves.has('substitute')) return counter.damagingMoves.size > 2 && !!counter.get('drain') ? 'Life Orb' : 'Leftovers';
+		if (ability === 'Sturdy' && moves.has('explosion') && !counter.get('speedsetup')) return 'Custap Berry';
+		if (types.includes('Normal') && moves.has('fakeout') && !!counter.get('Normal')) return 'Silk Scarf';
+		if (role === 'Bulky Setup' && !!counter.get('speedsetup') && !moves.has('swordsdance')) {
+			return 'Weakness Policy';
+		}
+		if (species.id === 'palkia') return 'Lustrous Orb';
+		if (species.id === 'archeops') return 'Expert Belt';
+		if (!counter.get('Status') && (
+			['Fast Support', 'Bulky Support', 'Bulky Attacker'].some(m => role === m) || moves.has('rapidspin')
+		)) {
+			return 'Assault Vest';
+		}
+		if (moves.has('outrage') && counter.get('Setup')) return 'Lum Berry';
+		if (
+			(ability === 'Rough Skin') || (species.id !== ('hooh') &&
+			ability === 'Regenerator' && species.baseStats.hp + species.baseStats.def >= 180 && this.randomChance(1, 2)
+		)) return 'Rocky Helmet';
+		if (['protect', 'spikyshield', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
 		if (
 			this.dex.getEffectiveness('Ground', species) >= 2 &&
-			ability !== 'Levitate' &&
-			!moves.has('magnetrise')
+			ability !== 'Levitate'
 		) {
 			return 'Air Balloon';
 		}
-		if ((ability === 'Iron Barbs' || ability === 'Rough Skin') && this.randomChance(1, 2)) return 'Rocky Helmet';
 		if (
-			counter.get('Physical') + counter.get('Special') >= 4 &&
-			species.baseStats.spd >= 50 && defensiveStatTotal >= 235
-		) {
-			return 'Assault Vest';
-		}
-		if (species.name === 'Palkia' && (moves.has('dracometeor') || moves.has('spacialrend')) && moves.has('hydropump')) {
-			return 'Lustrous Orb';
-		}
-		if (species.types.includes('Normal') && moves.has('fakeout') && counter.get('Normal') >= 2) return 'Silk Scarf';
-		if (counter.damagingMoves.size >= 4) {
-			return (counter.get('Dragon') || moves.has('suckerpunch') || counter.get('Normal')) ? 'Life Orb' : 'Expert Belt';
-		}
-		if (counter.damagingMoves.size >= 3 && !!counter.get('speedsetup') && defensiveStatTotal >= 300) {
-			return 'Weakness Policy';
-		}
-		if (
-			isLead &&
-			!['Regenerator', 'Sturdy'].includes(ability) &&
-			!counter.get('recoil') && !counter.get('recovery') &&
-			defensiveStatTotal < 255
-		) {
-			return 'Focus Sash';
-		}
+			(role === 'Fast Support' || moves.has('stickyweb')) && isLead && defensiveStatTotal < 255 &&
+			!counter.get('recovery') && !moves.has('protect') && (!counter.get('recoil') || ability === 'Rock Head')
+		) return 'Focus Sash';
 
-		// This is the "REALLY can't think of a good item" cutoff
-		if (moves.has('stickyweb') && ability === 'Sturdy') return 'Mental Herb';
-		if (ability === 'Serene Grace' && moves.has('airslash') && species.baseStats.spe > 100) return 'Metronome';
-		if (ability === 'Sturdy' && moves.has('explosion') && !counter.get('speedsetup')) return 'Custap Berry';
-		if (ability === 'Super Luck') return 'Scope Lens';
-		if (
-			counter.damagingMoves.size >= 3 &&
-			ability !== 'Sturdy' &&
-			(species.baseStats.spe >= 90 || !moves.has('voltswitch')) &&
-			['acidspray', 'dragontail', 'foulplay', 'rapidspin', 'superfang', 'uturn'].every(m => !moves.has(m)) && (
-				counter.get('speedsetup') ||
-				moves.has('trickroom') ||
-				(species.baseStats.spe > 40 && species.baseStats.hp + species.baseStats.def + species.baseStats.spd < 275)
-			)
-		) {
-			return 'Life Orb';
+		// Default Items
+		if (role === 'Fast Support') {
+			return (
+				counter.get('Physical') + counter.get('Special') >= 3 &&
+				['nuzzle', 'uturn', 'voltswitch'].every(m => !moves.has(m))
+			) ? 'Life Orb' : 'Leftovers';
 		}
+		if (!counter.get('Status')) {
+			return (
+				(moves.has('uturn') || moves.has('voltswitch')) && !counter.get('Dragon') && !counter.get('Normal')
+			) ? 'Expert Belt' : 'Life Orb';
+		}
+		if (
+			['Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === m) &&
+			(this.dex.getEffectiveness('Rock', species) < 2 || species.id === 'ninjask')
+		) return 'Life Orb';
 		return 'Leftovers';
 	}
 
