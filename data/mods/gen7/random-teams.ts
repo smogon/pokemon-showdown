@@ -690,35 +690,29 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		role = ''
 	): boolean {
 		switch (ability) {
-		case 'Battle Bond': case 'Dazzling': case 'Flare Boost': case 'Hyper Cutter':
-		case 'Ice Body': case 'Innards Out': case 'Moody': case 'Steadfast': case 'Magician':
+		case 'Battle Bond': case 'Dazzling': case 'Flare Boost': case 'Gluttony': case 'Harvest': case 'Hyper Cutter':
+		case 'Ice Body': case 'Innards Out': case 'Liquid Voice': case 'Magician': case 'Moody': case 'Steadfast': case 'Unburden':
 			return true;
 		case 'Aerilate': case 'Galvanize': case 'Pixilate': case 'Refrigerate':
 			return !counter.get('Normal');
-		case 'Analytic': case 'Download':
-			return species.nfe;
+		case 'Analytic':
+			return (species.id === 'starmie' && role !== 'Wallbreaker');
 		case 'Battle Armor': case 'Sturdy':
 			return (!!counter.get('recoil') && !counter.get('recovery'));
 		case 'Chlorophyll':
 			return (
 				species.baseStats.spe > 100 ||
-				abilities.has('Harvest') ||
 				(!moves.has('sunnyday') && !teamDetails.sun)
 			);
 		case 'Competitive':
-			return (!counter.get('Special') || moves.has('sleeptalk') && moves.has('rest'));
+			return (!counter.get('Special'));
 		case 'Compound Eyes': case 'No Guard':
-			return !counter.get('inaccurate');
-		case 'Contrary': case 'Iron Fist': case 'Skill Link': case 'Strong Jaw':
+			// Shadow Punch bit is for Golurk
+			return (!counter.get('inaccurate') || moves.has('shadowpunch'));
+		case 'Contrary': case 'Skill Link': case 'Strong Jaw':
 			return !counter.get(toID(ability));
 		case 'Defiant': case 'Justified': case 'Moxie':
-			return !counter.get('Physical') || moves.has('dragontail');
-		case 'Flash Fire':
-			return abilities.has('Drought');
-		case 'Gluttony':
-			return !moves.has('bellydrum');
-		case 'Harvest':
-			return abilities.has('Frisk');
+			return !counter.get('Physical');
 		case 'Hustle':
 			return counter.get('Physical') < 2;
 		case 'Hydration': case 'Rain Dish': case 'Swift Swim':
@@ -726,35 +720,33 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 				species.baseStats.spe > 100 || !moves.has('raindance') && !teamDetails.rain ||
 				!moves.has('raindance') && ['Rock Head', 'Water Absorb'].some(abil => abilities.has(abil))
 			);
-		case 'Slush Rush': case 'Snow Cloak':
-			return !teamDetails.hail;
-		case 'Immunity': case 'Snow Warning':
-			return (moves.has('facade') || moves.has('hypervoice'));
 		case 'Intimidate':
+			// Slam part is for Tauros
 			return (moves.has('bodyslam') || moves.has('rest') || abilities.has('Reckless') && counter.get('recoil') > 1);
+		case 'Iron Fist':
+			// Dynamic Punch bit is for Golurk
+			return (!counter.get(toID(ability)) || moves.has('dynamicpunch'));
 		case 'Lightning Rod':
 			return (
 				species.types.includes('Ground') ||
-				(!!teamDetails.rain || moves.has('raindance')) && abilities.has('Swift Swim')
+				((!!teamDetails.rain || moves.has('raindance')) && species.id === 'seaking')
 			);
 		case 'Limber':
-			return species.types.includes('Electric');
-		case 'Liquid Voice':
-			return !counter.get('sound');
+			return species.id === 'stunfisk';
 		case 'Magic Guard': case 'Speed Boost':
-			return (abilities.has('Tinted Lens') && (!counter.get('Status') || moves.has('uturn')));
+			return (abilities.has('Tinted Lens') && (role === 'Wallbreaker'));
 		case 'Magnet Pull':
 			return (!!counter.get('Normal') || !types.has('Electric') && !moves.has('earthpower'));
 		case 'Mold Breaker':
 			return (
-				moves.has('acrobatics') || moves.has('sleeptalk') ||
-				abilities.has('Adaptability') || abilities.has('Iron Fist') ||
-				(abilities.has('Sheer Force') && !!counter.get('sheerforce'))
+				species.baseSpecies === 'basculin' || species.id === 'pangoro' || (abilities.has('Sheer Force'))
 			);
+		case 'Natural Cure':
+			return (species.id === 'starmie' && role === 'Wallbreaker');
 		case 'Overgrow':
 			return !counter.get('Grass');
 		case 'Poison Heal':
-			return (abilities.has('Technician') && !!counter.get('technician'));
+			return (species.id === 'breloom');
 		case 'Power Construct':
 			return species.forme === '10%';
 		case 'Prankster':
@@ -762,9 +754,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		case 'Pressure': case 'Synchronize':
 			return (counter.get('Status') < 2 || !!counter.get('recoil') || !!species.isMega);
 		case 'Regenerator':
-			return abilities.has('Magic Guard');
-		case 'Quick Feet':
-			return moves.has('bellydrum');
+			return species.id === 'mienshao' || species.id === 'reuniclus';
 		case 'Reckless': case 'Rock Head':
 			return (!counter.get('recoil') || !!species.isMega);
 		case 'Sand Force': case 'Sand Rush': case 'Sand Veil':
@@ -774,34 +764,36 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		case 'Serene Grace':
 			return (!counter.get('serenegrace') || species.name === 'Blissey');
 		case 'Sheer Force':
-			return (!counter.get('sheerforce') || moves.has('doubleedge') || abilities.has('Guts') || !!species.isMega);
+			return (
+				!counter.get('sheerforce') ||
+				moves.has('doubleedge') || abilities.has('Guts') ||
+				!!species.isMega || species.id === 'toucannon'
+			);
 		case 'Simple':
-			return (!counter.setupType && !moves.has('flamecharge'));
+			return (!counter.get('setup'));
+		case 'Slush Rush': case 'Snow Cloak':
+			return !teamDetails.hail;
+		case 'Snow Warning':
+			// Aurorus
+			return moves.has('hypervoice');
 		case 'Solar Power':
-			return (!counter.get('Special') || abilities.has('Harvest') || !teamDetails.sun || !!species.isMega);
+			return (!counter.get('Special') || !teamDetails.sun || !!species.isMega);
 		case 'Swarm':
 			return (!counter.get('Bug') || !!species.isMega);
-		case 'Sweet Veil':
-			return types.has('Grass');
 		case 'Technician':
 			return (!counter.get('technician') || moves.has('tailslap') || !!species.isMega);
 		case 'Tinted Lens':
-			return (
-				moves.has('protect') || !!counter.get('damage') ||
-				(counter.get('Status') > 2 && !counter.setupType) ||
-				abilities.has('Prankster') ||
-				(abilities.has('Magic Guard') && !!counter.get('Status'))
-			);
+			return (['illumise', 'sigilyph', 'yanmega'].some(m => species.id === (m)) && role !== 'Wallbreaker');
 		case 'Torrent':
 			return (!counter.get('Water') || !!species.isMega);
 		case 'Unaware':
-			return (!!counter.setupType || abilities.has('Magic Guard'));
+			return (role !== 'Bulky Support' && role !== 'Staller');
 		case 'Unburden':
 			return (!!species.isMega || abilities.has('Prankster') || !counter.setupType && !moves.has('acrobatics'));
 		case 'Water Absorb':
 			return moves.has('raindance') || ['Drizzle', 'Unaware', 'Volt Absorb'].some(abil => abilities.has(abil));
 		case 'Weak Armor':
-			return counter.setupType !== 'Physical';
+			return (!counter.get('setup') || species.id !== 'kabutops');
 		}
 
 		return false;
@@ -829,25 +821,32 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		if (abilityData.length <= 1) return abilityData[0].name;
 
 		// Hard-code abilities here
-		if (
+		if (species.id === 'gurdurr' || (
 			abilities.has('Guts') &&
 			!abilities.has('Quick Feet') &&
-			(moves.has('facade') || (moves.has('protect') && !isDoubles) || (moves.has('sleeptalk') && moves.has('rest')))
-		) return 'Guts';
+			(moves.has('facade') || (moves.has('sleeptalk') && moves.has('rest')))
+		)) return 'Guts';
 		if (abilities.has('Moxie') && (counter.get('Physical') > 3 || moves.has('bounce')) && !isDoubles) return 'Moxie';
-		if (isDoubles) {
-			if (abilities.has('Intimidate')) return 'Intimidate';
-			if (abilities.has('Guts')) return 'Guts';
-			if (abilities.has('Storm Drain')) return 'Storm Drain';
-			if (abilities.has('Harvest')) return 'Harvest';
-			if (abilities.has('Unburden') && !abilities.has('Prankster') && !species.isMega) return 'Unburden';
-		}
 		if (species.name === 'Ambipom' && !counter.get('technician')) {
 			// If it doesn't qualify for Technician, Skill Link is useless on it
 			return 'Pickup';
 		}
+		if (
+			abilities.has('Unburden') && ['acrobatics', 'bellydrum', 'closecombat'].some(m => moves.has(m))
+		) return 'Unburden';
+		if (abilities.has('Drought')) return 'Drought';
+		if (species.id === 'talonflame' && role === 'Z-Move user') return 'Gale Wings';
+		if (abilities.has('Gluttony') && (moves.has('recycle') || moves.has('bellydrum'))) return 'Gluttony';
+		if (abilities.has('Harvest') && (role === 'Bulky Support' || role === 'Staller')) return 'Harvest';
 		if (species.name === 'Raticate-Alola') return 'Hustle';
+		if (abilities.has('Sheer Force') && abilities.has('Mold Breaker') && role !== 'Wallbreaker') return 'Mold Breaker';
 		if (species.baseSpecies === 'Altaria') return 'Natural Cure';
+		if (species.id === 'tsareena') return 'Queenly Majesty';
+		if (role === 'AV Pivot' && abilities.has('Regenerator')) return 'Regenerator';
+		if (abilities.has('Scrappy') && moves.has('boomburst')) return 'Scrappy';
+		if (species.id === 'scrafty' && role === 'Bulky Setup') return 'Shed Skin';
+		if (abilities.has('Toxic Boost')) return 'Toxic Boost';
+		if (species.id === 'porygon2') return 'Trace';
 
 		let abilityAllowed: Ability[] = [];
 		// Obtain a list of abilities that are allowed (not culled)
