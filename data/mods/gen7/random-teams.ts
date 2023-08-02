@@ -57,8 +57,8 @@ const SpeedSetup = [
 // Conglomerate for ease of access
 const Setup = [
 	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'celebrate', 'coil', 'conversion', 'curse', 'dragondance',
-	'electricterrain', 'flamecharge', 'growth', 'happyhour', 'holdhands', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot',
-	'poweruppunch', 'quiverdance', 'raindance', 'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'workup',
+	'electricterrain', 'flamecharge', 'geomancy', 'growth', 'happyhour', 'holdhands', 'honeclaws', 'howl', 'irondefense', 'meditate',
+	'nastyplot', 'poweruppunch', 'quiverdance', 'raindance', 'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'workup',
 ];
 // Moves that shouldn't be the only STAB moves:
 const NoStab = [
@@ -700,7 +700,8 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 	): boolean {
 		switch (ability) {
 		case 'Battle Bond': case 'Dazzling': case 'Flare Boost': case 'Gluttony': case 'Harvest': case 'Hyper Cutter':
-		case 'Ice Body': case 'Innards Out': case 'Liquid Voice': case 'Magician': case 'Moody': case 'Steadfast':
+		case 'Ice Body': case 'Innards Out': case 'Liquid Voice': case 'Magician': case 'Moody': case 'Sand Veil':
+		case 'Snow Cloak': case 'Steadfast':
 			return true;
 		case 'Aerilate': case 'Galvanize': case 'Pixilate': case 'Refrigerate':
 			return !counter.get('Normal');
@@ -766,7 +767,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			return species.id === 'mienshao' || species.id === 'reuniclus';
 		case 'Reckless': case 'Rock Head':
 			return (!counter.get('recoil') || !!species.isMega);
-		case 'Sand Force': case 'Sand Rush': case 'Sand Veil':
+		case 'Sand Force': case 'Sand Rush':
 			return !teamDetails.sand;
 		case 'Scrappy':
 			return !species.types.includes('Normal');
@@ -780,7 +781,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			);
 		case 'Simple':
 			return (!counter.get('setup'));
-		case 'Slush Rush': case 'Snow Cloak':
+		case 'Slush Rush':
 			return !teamDetails.hail;
 		case 'Snow Warning':
 			// Aurorus
