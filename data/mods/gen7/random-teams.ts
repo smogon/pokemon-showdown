@@ -504,6 +504,12 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 				movePool, preferredType, role);
 		}
 
+		// Enforce Shadow Sneak on Kecleon
+		if (movePool.includes('shadowsneak') && species.id === 'kecleon') {
+			counter = this.addMove('shadowsneak', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, preferredType, role);
+		}
+
 		// Enforce hazard removal on Bulky Support if the team doesn't already have it
 		if (role === 'Bulky Support' && !teamDetails.defog && !teamDetails.rapidSpin) {
 			if (movePool.includes('rapidspin')) {
