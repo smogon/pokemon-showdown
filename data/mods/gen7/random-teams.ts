@@ -1257,7 +1257,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
-			gender: species.gender,
+			gender: species.baseSpecies === 'Greninja' ? 'M' : species.gender,
 			shiny: this.randomChance(1, 1024),
 			level,
 			moves: shuffledMoves,
