@@ -144,7 +144,8 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["doubleedge", "drillpeck", "drillrun", "pursuit", "return", "uturn"]
+                "movepool": ["doubleedge", "drillpeck", "drillrun", "pursuit", "return", "uturn"],
+                "preferredTypes": ["Normal"]
             },
             {
                 "role": "Setup Sweeper",
@@ -465,7 +466,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["autotomize", "earthquake", "explosion", "stealthrock", "stoneedge", "suckerpunch", "toxic"]
+                "movepool": ["earthquake", "explosion", "stealthrock", "stoneedge", "suckerpunch", "toxic"]
             }
         ]
     },
@@ -786,7 +787,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["dazzlinggleam", "encore", "focusblast", "healingwish", "nastyplot", "psychic", "psyshock", "shadowball"]
+                "movepool": ["dazzlinggleam", "encore", "focusblast", "healingwish", "nastyplot", "psychic", "psyshock", "shadowball"],
+                "preferredTypes": ["Psychic"]
             }
         ]
     },
@@ -1360,7 +1362,8 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["earthquake", "ironhead", "roar", "rockslide", "stealthrock", "toxic"]
+                "movepool": ["earthquake", "ironhead", "roar", "rockslide", "stealthrock", "toxic"],
+                "preferredTypes": ["Steel"]
             }
         ]
     },
@@ -1369,8 +1372,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["dragontail", "earthquake", "heavyslam", "stealthrock", "toxic"],
-                "preferredTypes": ["Ground"]
+                "movepool": ["dragontail", "earthquake", "heavyslam", "stealthrock", "toxic"]
             }
         ]
     },
@@ -2935,7 +2937,11 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["crunch", "earthquake", "firepunch", "headsmash", "rockpolish", "rockslide"]
+                "movepool": ["crunch", "earthquake", "firepunch", "rockpolish", "rockslide"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["crunch", "earthquake", "firepunch", "headsmash"]
             }
         ]
     },
@@ -3075,7 +3081,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["fakeout", "highjumpkick", "icepunch", "poweruppunch", "return", "substitute"]
+                "movepool": ["fakeout", "highjumpkick", "icepunch", "poweruppunch", "return", "substitute"],
+                "preferredTypes": ["Normal"]
             }
         ]
     },
@@ -3150,7 +3157,7 @@
                 "movepool": ["calmmind", "darkpulse", "rest", "sleeptalk"]
             },
             {
-                "role": "Bulky Support",
+                "role": "Bulky Attacker",
                 "movepool": ["foulplay", "painsplit", "pursuit", "shadowsneak", "suckerpunch", "willowisp"]
             }
         ]
@@ -4045,10 +4052,6 @@
             {
                 "role": "Fast Support",
                 "movepool": ["copycat", "encore", "knockoff", "substitute", "thunderwave", "uturn"]
-            },
-            {
-                "role": "Wallbreaker",
-                "movepool": ["copycat", "knockoff", "playrough", "uturn"]
             }
         ]
     },
@@ -4102,7 +4105,8 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["defog", "nightslash", "pluck", "return", "roost", "toxic", "uturn"]
+                "movepool": ["defog", "nightslash", "pluck", "return", "roost", "toxic", "uturn"],
+                "preferredTypes": ["Normal"]
             }
         ]
     },
@@ -4127,6 +4131,10 @@
     "swoobat": {
         "level": 88,
         "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["calmmind", "heatwave", "roost", "storedpower"]
+            },
             {
                 "role": "Setup Sweeper",
                 "movepool": ["airslash", "calmmind", "heatwave", "roost", "storedpower"]
@@ -5007,8 +5015,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["calmmind", "focusblast", "hypervoice", "psyshock", "shadowball", "trick", "uturn"],
-                "preferredTypes": ["Fighting"]
+                "movepool": ["calmmind", "focusblast", "hypervoice", "psyshock", "uturn"]
             }
         ]
     },
@@ -5089,11 +5096,13 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["agility", "earthquake", "knockoff", "quickattack", "return", "swordsdance"]
+                "movepool": ["agility", "earthquake", "knockoff", "quickattack", "return", "swordsdance"],
+                "preferredTypes": ["Normal"]
             },
             {
                 "role": "Fast Attacker",
-                "movepool": ["earthquake", "foulplay", "quickattack", "return", "uturn"]
+                "movepool": ["earthquake", "foulplay", "quickattack", "return", "uturn"],
+                "preferredTypes": ["Normal"]
             }
         ]
     },
@@ -5708,7 +5717,7 @@
             },
             {
                 "role": "Fast Support",
-                "movepool": ["aromatherapy", "defog", "moonblast", "roost", "stickyweb", "stunspore", "uturn"]
+                "movepool": ["aromatherapy", "moonblast", "roost", "stickyweb", "stunspore", "uturn"]
             }
         ]
     },
@@ -5843,7 +5852,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["doubleedge", "icepunch", "return", "shadowclaw", "superpower", "swordsdance"]
+                "movepool": ["doubleedge", "icepunch", "return", "shadowclaw", "superpower", "swordsdance"],
+                "preferredTypes": ["Normal"]
             }
         ]
     },
@@ -6401,11 +6411,13 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["autotomize", "earthquake", "knockoff", "photongeyser", "sunsteelstrike", "swordsdance"]
+                "movepool": ["autotomize", "earthquake", "knockoff", "photongeyser", "sunsteelstrike", "swordsdance"],
+                "preferredTypes": ["Ground"]
             },
             {
                 "role": "Z-Move user",
-                "movepool": ["autotomize", "earthquake", "knockoff", "photongeyser", "sunsteelstrike", "swordsdance"]
+                "movepool": ["autotomize", "earthquake", "knockoff", "photongeyser", "sunsteelstrike", "swordsdance"],
+                "preferredTypes": ["Psychic"]
             }
         ]
     },
