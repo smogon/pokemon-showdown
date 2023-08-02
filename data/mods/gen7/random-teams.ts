@@ -781,7 +781,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		case 'Swarm':
 			return (!counter.get('Bug') || !!species.isMega);
 		case 'Technician':
-			return (!counter.get('technician') || moves.has('tailslap') || !!species.isMega);
+			return (!counter.get('technician') || moves.has('tailslap') || !!species.isMega || species.id === 'persianalola');
 		case 'Tinted Lens':
 			return (['illumise', 'sigilyph', 'yanmega'].some(m => species.id === (m)) && role !== 'Wallbreaker');
 		case 'Torrent':
