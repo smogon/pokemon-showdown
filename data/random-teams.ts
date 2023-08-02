@@ -1417,7 +1417,7 @@ export class RandomTeams {
 		if (
 			['Fast Bulky Setup', 'Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === m) &&
 			types.includes('Dark') && moves.has('suckerpunch') && !priorityPokemon.includes(species.id) &&
-			counter.get('setup') && counter.get('Dark')
+			counter.get('PhysicalSetup') && counter.get('Dark')
 		) return 'Black Glasses';
 		if (role === 'Fast Support' || role === 'Fast Bulky Setup') {
 			return (counter.get('Physical') + counter.get('Special') >= 3 && !moves.has('nuzzle')) ? 'Life Orb' : 'Leftovers';
