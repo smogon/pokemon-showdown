@@ -1047,8 +1047,8 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		if (moves.has('outrage') && counter.get('Setup')) return 'Lum Berry';
 		if (
 			(ability === 'Rough Skin') || (species.id !== ('hooh') &&
-			ability === 'Regenerator' && species.baseStats.hp + species.baseStats.def >= 180 && this.randomChance(1, 2)
-		)) return 'Rocky Helmet';
+			ability === 'Regenerator' && species.baseStats.hp + species.baseStats.def >= 180 && this.randomChance(1, 2))
+		) return 'Rocky Helmet';
 		if (['protect', 'spikyshield', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
 		if (
 			this.dex.getEffectiveness('Ground', species) >= 2 &&
