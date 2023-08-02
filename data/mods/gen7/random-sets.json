@@ -6302,8 +6302,7 @@
             },
             {
                 "role": "Z-Move user",
-                "movepool": ["calmmind", "moonblast", "moongeistbeam", "psyshock", "roost"],
-                "preferredTypes": ["Ghost"]
+                "movepool": ["calmmind", "moonblast", "moongeistbeam", "psyshock", "roost"]
             }
         ]
     },
@@ -6461,8 +6460,7 @@
             },
             {
                 "role": "Z-Move user",
-                "movepool": ["bulkup", "closecombat", "icepunch", "rocktomb", "shadowsneak", "spectralthief"],
-                "preferredTypes": ["Ghost"]
+                "movepool": ["bulkup", "closecombat", "icepunch", "rocktomb", "shadowsneak", "spectralthief"]
             }
         ]
     },

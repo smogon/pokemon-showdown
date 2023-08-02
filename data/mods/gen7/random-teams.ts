@@ -56,8 +56,8 @@ const SpeedSetup = [
 ];
 // Conglomerate for ease of access
 const Setup = [
-	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'celebrate', 'coil', 'curse', 'dragondance',
-	'electricterrain', 'flamecharge', 'growth', 'happyhour', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot',
+	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'celebrate', 'coil', 'conversion', 'curse', 'dragondance',
+	'electricterrain', 'flamecharge', 'growth', 'happyhour', 'holdhands', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot',
 	'poweruppunch', 'quiverdance', 'raindance', 'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'workup',
 ];
 // Moves that shouldn't be the only STAB moves:
@@ -916,6 +916,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			if (species.name === 'Raichu-Alola') return 'Aloraichium Z';
 			if (species.name === 'Decidueye') return 'Decidium Z';
 			if (species.name === 'Kommo-o') return 'Kommonium Z';
+			if (species.name === 'Lunala') return 'Lunalium Z';
 			if (species.baseSpecies === 'Lycanroc') return 'Lycanium Z';
 			if (species.name === 'Marshadow') return 'Marshadium Z';
 			if (species.name === 'Mew') return 'Mewnium Z';
