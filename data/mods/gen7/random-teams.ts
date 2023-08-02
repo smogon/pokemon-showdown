@@ -108,12 +108,8 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 				['megahorn', 'pinmissile'].some(m => movePool.includes(m)) ||
 				!counter.get('Bug') && (abilities.has('Tinted Lens') || abilities.has('Adaptability'))
 			),
-			Dark: (movePool, moves, abilities, types, counter, species) => (
-				(!counter.get('Dark'))
-			),
-			Dragon: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Dragon') && !abilities.has('Aerilate')
-			),
+			Dark: (movePool, moves, abilities, types, counter) => !counter.get('Dark'),
+			Dragon: (movePool, moves, abilities, types, counter) => !counter.get('Dragon') && !abilities.has('Aerilate'),
 			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
 			Fairy: (movePool, moves, abilities, types, counter) => !counter.get('Fairy'),
 			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting'),
@@ -132,7 +128,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			),
 			Normal: movePool => movePool.includes('boomburst'),
 			Poison: (movePool, moves, abilities, types, counter) => !counter.get('Poison'),
-			Psychic: (movePool, moves, abilities, types, counter, species) => (
+			Psychic: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Psychic') && (
 					types.has('Fighting') || movePool.includes('psychicfangs') || movePool.includes('calmmind')
 				)
@@ -141,9 +137,9 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 				!counter.get('Rock') && (species.baseStats.atk >= 100 || abilities.has('Rock Head'))
 			),
 			Steel: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Steel') && (species.baseStats.atk >= 100)
+				!counter.get('Steel') && species.baseStats.atk >= 100
 			),
-			Water: (movePool, moves, abilities, types, counter, species) => !counter.get('Water'),
+			Water: (movePool, moves, abilities, types, counter) => !counter.get('Water'),
 		};
 	}
 
@@ -310,7 +306,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 
 		// Develop additional move lists
 		const pivotingMoves = ['partingshot', 'uturn', 'voltswitch'];
-		const badWithSetup = ['defog', 'dragontail', 'haze', 'healbell', 'pursuit', 'rapidspin', 'toxic'];
+		const badWithSetup = ['defog', 'dragontail', 'haze', 'healbell', 'nuzzle', 'pursuit', 'rapidspin', 'toxic'];
 		const statusMoves = this.dex.moves.all()
 			.filter(move => move.category === 'Status')
 			.map(move => move.id);
@@ -320,6 +316,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		this.incompatibleMoves(moves, movePool, Setup, pivotingMoves);
 		this.incompatibleMoves(moves, movePool, Setup, Hazards);
 		this.incompatibleMoves(moves, movePool, Setup, badWithSetup);
+		this.incompatibleMoves(moves, movePool, PhysicalSetup, PhysicalSetup);
 		this.incompatibleMoves(moves, movePool, SpeedSetup, ['quickattack', 'suckerpunch']);
 		this.incompatibleMoves(moves, movePool, 'defog', Hazards);
 		this.incompatibleMoves(moves, movePool, ['fakeout', 'uturn'], ['switcheroo', 'trick']);
@@ -355,8 +352,9 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		}
 
 		// Status move incompatibilities
+		const statusInflictingMoves = ['thunderwave', 'toxic', 'willowisp', 'yawn'];
 		if (!abilities.has('Prankster')) {
-			this.incompatibleMoves(moves, movePool, ['thunderwave', 'toxic', 'willowisp'], ['thunderwave', 'toxic', 'willowisp']);
+			this.incompatibleMoves(moves, movePool, statusInflictingMoves, statusInflictingMoves);
 		}
 		this.incompatibleMoves(moves, movePool, 'toxic', 'toxicspikes');
 		this.incompatibleMoves(moves, movePool, 'taunt', 'disable');
@@ -739,12 +737,12 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		case 'Limber':
 			return species.id === 'stunfisk';
 		case 'Magic Guard': case 'Speed Boost':
-			return (abilities.has('Tinted Lens') && (role === 'Wallbreaker'));
+			return (abilities.has('Tinted Lens') && role === 'Wallbreaker');
 		case 'Magnet Pull':
 			return (!!counter.get('Normal') || !types.has('Electric') && !moves.has('earthpower'));
 		case 'Mold Breaker':
 			return (
-				species.baseSpecies === 'basculin' || species.id === 'pangoro' || (abilities.has('Sheer Force'))
+				species.baseSpecies === 'Basculin' || species.id === 'pangoro' || (abilities.has('Sheer Force'))
 			);
 		case 'Natural Cure':
 			return (species.id === 'starmie' && role === 'Wallbreaker');
@@ -794,7 +792,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		case 'Unaware':
 			return (role !== 'Bulky Support' && role !== 'Staller');
 		case 'Unburden':
-			return (!!species.isMega || abilities.has('Prankster') || !counter.setupType && !moves.has('acrobatics'));
+			return (!!species.isMega || abilities.has('Prankster') || !counter.get('setup') && !moves.has('acrobatics'));
 		case 'Water Absorb':
 			return moves.has('raindance') || ['Drizzle', 'Unaware', 'Volt Absorb'].some(abil => abilities.has(abil));
 		case 'Weak Armor':
@@ -857,7 +855,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		// Obtain a list of abilities that are allowed (not culled)
 		for (const ability of abilityData) {
 			if (ability.rating >= 1 && !this.shouldCullAbility(
-				ability.name, types, moves, abilities, counter, movePool, teamDetails, species, isDoubles
+				ability.name, types, moves, abilities, counter, movePool, teamDetails, species, isDoubles, preferredType, role
 			)) {
 				abilityAllowed.push(ability);
 			}
