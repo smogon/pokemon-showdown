@@ -512,7 +512,7 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, Setup, Hazards);
 		this.incompatibleMoves(moves, movePool, Setup, ['defog', 'nuzzle', 'toxic', 'waterspout', 'yawn', 'haze']);
 		this.incompatibleMoves(moves, movePool, PhysicalSetup, PhysicalSetup);
-		this.incompatibleMoves(moves, movePool, SpecialSetup, ['suckerpunch', 'thunderwave']);
+		this.incompatibleMoves(moves, movePool, SpecialSetup, 'thunderwave');
 		this.incompatibleMoves(moves, movePool, 'substitute', pivotingMoves);
 		this.incompatibleMoves(moves, movePool, SpeedSetup, ['aquajet', 'rest', 'trickroom']);
 		this.incompatibleMoves(moves, movePool, 'curse', 'rapidspin');
