@@ -2607,7 +2607,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["agility", "earthquake", "explosion", "icepunch", "meteormash", "thunderpunch", "zenheadbutt"],
+                "movepool": ["agility", "earthquake", "icepunch", "meteormash", "thunderpunch", "zenheadbutt"],
                 "preferredTypes": ["Ground"]
             },
             {
@@ -3007,7 +3007,7 @@
         "level": 90,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Bulky Support",
                 "movepool": ["nuzzle", "superfang", "thunderbolt", "toxic", "uturn"]
             }
         ]
@@ -3050,7 +3050,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["fakeout", "knockoff", "lowkick", "return", "seedbomb", "switcheroo", "uturn"]
+                "movepool": ["fakeout", "knockoff", "lowkick", "return", "seedbomb", "switcheroo", "uturn"],
+                "preferredTypes": ["Dark"]
             }
         ]
     },
@@ -3336,7 +3337,11 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["dragontail", "earthquake", "icepunch", "megahorn", "rockpolish", "stoneedge"]
+                "movepool": ["dragontail", "earthquake", "icepunch", "megahorn", "stoneedge"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["earthquake", "icepunch", "megahorn", "rockpolish", "stoneedge"]
             }
         ]
     },
@@ -4145,7 +4150,7 @@
         "level": 81,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Fast Attacker",
                 "movepool": ["earthquake", "ironhead", "rapidspin", "rockslide", "swordsdance"]
             }
         ]
@@ -4262,8 +4267,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["defog", "encore", "energyball", "moonblast", "stunspore", "taunt", "toxic", "uturn"],
-                "preferredTypes": ["Fairy"]
+                "movepool": ["defog", "encore", "energyball", "moonblast", "stunspore", "taunt", "toxic", "uturn"]
             },
             {
                 "role": "Staller",
@@ -4902,7 +4906,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["blueflare", "dracometeor", "flamecharge", "roost", "toxic"]
+                "movepool": ["blueflare", "defog", "dracometeor", "roost", "toxic"]
             }
         ]
     },
@@ -5632,7 +5636,7 @@
         "level": 88,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Wallbreaker",
                 "movepool": ["beakblast", "boomburst", "brickbreak", "bulletseed", "roost"]
             },
             {
@@ -6409,7 +6413,7 @@
         "level": 69,
         "sets": [
             {
-                "role": "Setup Sweeper",
+                "role": "Bulky Setup",
                 "movepool": ["autotomize", "earthquake", "knockoff", "photongeyser", "sunsteelstrike", "swordsdance"],
                 "preferredTypes": ["Ground"]
             },
