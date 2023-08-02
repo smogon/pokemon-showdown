@@ -2067,7 +2067,7 @@
             },
             {
                 "role": "Tera Blast user",
-                "movepool": ["Ice Beam", "Rapid Spin", "Tera Blast", "Recover"],
+                "movepool": ["Ice Beam", "Rapid Spin", "Recover", "Tera Blast"],
                 "teraTypes": ["Electric"]
             }
         ]
