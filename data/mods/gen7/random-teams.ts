@@ -64,7 +64,7 @@ const Setup = [
 const NoStab = [
 	'accelerock', 'aquajet', 'bulletpunch', 'clearsmog', 'dragontail', 'eruption', 'explosion',
 	'fakeout', 'firstimpression', 'flamecharge', 'futuresight', 'iceshard', 'icywind', 'incinerate', 'machpunch', 'nuzzle',
-	'pluck', 'pursuit', 'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak', 'skyattack', 'skydrop', 
+	'pluck', 'pursuit', 'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak', 'skyattack', 'skydrop',
 	'snarl', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
 ];
 // Hazard-setting moves
@@ -89,7 +89,7 @@ const MovePairs = [
 
 /** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
 const priorityPokemon = [
-	'aegislashblade', 'banette', 'breloom', 'cacturne', 'doublade', 'dusknoir', 'golisopod', 'honchkrow', 'mimikyu', 'scizor', 'shedinja',
+	'aegislashblade', 'banette', 'breloom', 'cacturne', 'doublade', 'dusknoir', 'golisopod', 'honchkrow', 'mimikyu', 'scizor', 'scizormega', 'shedinja',
 ];
 function sereneGraceBenefits(move: Move) {
 	return move.secondary?.chance && move.secondary.chance >= 20 && move.secondary.chance < 100;
@@ -318,17 +318,16 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		// These moves don't mesh well with other aspects of the set
 		this.incompatibleMoves(moves, movePool, statusMoves, ['healingwish', 'memento', 'switcheroo', 'trick']);
 		this.incompatibleMoves(moves, movePool, Setup, pivotingMoves);
-		this.incompatibleMoves(moves, movePool, Setup, Hazards)
-		this.incompatibleMoves(moves, movePool, Setup, badWithSetup)
-		this.incompatibleMoves(moves, movePool, SpeedSetup, RecoveryMove)
-		this.incompatibleMoves(moves, movePool, SpeedSetup, ['quickattack', 'suckerpunch'])
+		this.incompatibleMoves(moves, movePool, Setup, Hazards);
+		this.incompatibleMoves(moves, movePool, Setup, badWithSetup);
+		this.incompatibleMoves(moves, movePool, SpeedSetup, ['quickattack', 'suckerpunch']);
 		this.incompatibleMoves(moves, movePool, 'defog', Hazards);
 		this.incompatibleMoves(moves, movePool, ['fakeout', 'uturn'], ['switcheroo', 'trick']);
-		this.incompatibleMoves(moves, movePool, 'substitute', pivotingMoves)
+		this.incompatibleMoves(moves, movePool, 'substitute', pivotingMoves);
 		this.incompatibleMoves(moves, movePool, 'nastyplot', 'suckerpunch');
 		this.incompatibleMoves(moves, movePool, 'leechseed', 'dragontail');
 		this.incompatibleMoves(moves, movePool, 'rest', 'substitute');
-		this.incompatibleMoves(moves, movePool, PhysicalSetup, 'dracometeor')
+		this.incompatibleMoves(moves, movePool, PhysicalSetup, 'dracometeor');
 		this.incompatibleMoves(moves, movePool, SpecialSetup, 'knockoff');
 
 		if (!types.includes('Normal')) {
@@ -343,14 +342,14 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		this.incompatibleMoves(moves, movePool, ['flamethrower', 'flareblitz'], ['fireblast', 'overheat']);
 		this.incompatibleMoves(moves, movePool, 'blueflare', 'vcreate');
 		this.incompatibleMoves(moves, movePool, 'hornleech', 'woodhammer');
-		this.incompatibleMoves(moves, movePool, ['gigadrain', 'leafstorm', 'powerwhip'], ['leafstorm', 'petaldance', 'powerwhip']);
+		this.incompatibleMoves(moves, movePool, ['gigadrain', 'leafstorm'], ['leafstorm', 'petaldance', 'powerwhip']);
 		this.incompatibleMoves(moves, movePool, 'wildcharge', 'thunderbolt');
 		this.incompatibleMoves(moves, movePool, 'gunkshot', 'poisonjab');
 		this.incompatibleMoves(moves, movePool, ['drainpunch', 'focusblast'], ['highjumpkick', 'superpower']);
 		this.incompatibleMoves(moves, movePool, 'stoneedge', 'headsmash');
 		this.incompatibleMoves(moves, movePool, 'dracometeor', 'dragonpulse');
-		this.incompatibleMoves(moves, movePool, 'dragonclaw', 'outrage')
-		this.incompatibleMoves(moves, movePool, 'knockoff', ['darkestlariat', 'darkpulse', 'foulplay'])
+		this.incompatibleMoves(moves, movePool, 'dragonclaw', 'outrage');
+		this.incompatibleMoves(moves, movePool, 'knockoff', ['darkestlariat', 'darkpulse', 'foulplay']);
 		if (!types.includes('Dark') && preferredType !== 'Dark') {
 			this.incompatibleMoves(moves, movePool, 'knockoff', ['pursuit', 'suckerpunch']);
 		}
@@ -691,7 +690,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 	): boolean {
 		switch (ability) {
 		case 'Battle Bond': case 'Dazzling': case 'Flare Boost': case 'Gluttony': case 'Harvest': case 'Hyper Cutter':
-		case 'Ice Body': case 'Innards Out': case 'Liquid Voice': case 'Magician': case 'Moody': case 'Steadfast': case 'Unburden':
+		case 'Ice Body': case 'Innards Out': case 'Liquid Voice': case 'Magician': case 'Moody': case 'Steadfast':
 			return true;
 		case 'Aerilate': case 'Galvanize': case 'Pixilate': case 'Refrigerate':
 			return !counter.get('Normal');
