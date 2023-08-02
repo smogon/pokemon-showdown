@@ -48,7 +48,7 @@ const SpecialSetup = [
 ];
 // Moves that boost Attack AND Special Attack:
 const MixedSetup = [
-	'celebrate', 'clangoroussoul', 'growth', 'happyhour', 'holdhands', 'noretreat', 'shellsmash', 'workup',
+	'celebrate', 'growth', 'happyhour', 'holdhands', 'shellsmash', 'workup',
 ];
 // Some moves that only boost Speed:
 const SpeedSetup = [
@@ -57,8 +57,8 @@ const SpeedSetup = [
 // Conglomerate for ease of access
 const Setup = [
 	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'celebrate', 'coil', 'curse', 'dragondance',
-	'electricterrain', 'flamecharge', 'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'poweruppunch',
-	'quiverdance', 'raindance', 'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'tidyup', 'trailblaze', 'workup',
+	'electricterrain', 'flamecharge', 'growth', 'happyhour', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot',
+	'poweruppunch', 'quiverdance', 'raindance', 'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'workup',
 ];
 // Moves that shouldn't be the only STAB moves:
 const NoStab = [
