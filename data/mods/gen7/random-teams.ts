@@ -48,7 +48,7 @@ const SpecialSetup = [
 ];
 // Moves that boost Attack AND Special Attack:
 const MixedSetup = [
-	'clangoroussoul', 'growth', 'happyhour', 'holdhands', 'noretreat', 'shellsmash', 'workup',
+	'celebrate', 'clangoroussoul', 'growth', 'happyhour', 'holdhands', 'noretreat', 'shellsmash', 'workup',
 ];
 // Some moves that only boost Speed:
 const SpeedSetup = [
@@ -56,9 +56,9 @@ const SpeedSetup = [
 ];
 // Conglomerate for ease of access
 const Setup = [
-	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'coil', 'curse', 'dragondance', 'flamecharge',
-	'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'noretreat', 'poweruppunch', 'quiverdance', 'rockpolish',
-	'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'tidyup', 'trailblaze', 'workup', 'victorydance',
+	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'celebrate', 'coil', 'curse', 'dragondance',
+	'electricterrain', 'flamecharge', 'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'poweruppunch',
+	'quiverdance', 'raindance', 'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'tidyup', 'trailblaze', 'workup',
 ];
 // Moves that shouldn't be the only STAB moves:
 const NoStab = [
@@ -611,11 +611,17 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 
 		// Enforce setup
 		if (role.includes('Setup') || role === 'Z-Move user') {
-			const setupMoves = movePool.filter(moveid => Setup.includes(moveid));
+			// Prioritise other setup moves over Flame Charge
+			const setupMoves = movePool.filter(moveid => Setup.includes(moveid) && moveid !== 'flamecharge');
 			if (setupMoves.length) {
 				const moveid = this.sample(setupMoves);
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, preferredType, role);
+			} else {
+				if (movePool.includes('flamecharge')) {
+					counter = this.addMove('flamecharge', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+						movePool, preferredType, role);
+				}
 			}
 		}
 
