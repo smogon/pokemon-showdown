@@ -190,7 +190,12 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["focusblast", "nastyplot", "psyshock", "surf", "thunderbolt", "voltswitch"],
+                "movepool": ["focusblast", "psyshock", "surf", "thunderbolt", "voltswitch"],
+                "preferredTypes": ["Psychic"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["focusblast", "nastyplot", "psyshock", "surf", "thunderbolt"],
                 "preferredTypes": ["Psychic"]
             },
             {
