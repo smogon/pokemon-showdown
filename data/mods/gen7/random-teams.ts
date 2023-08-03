@@ -711,10 +711,6 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			return true;
 		case 'Aerilate': case 'Galvanize': case 'Pixilate': case 'Refrigerate':
 			return ['doubleedge', 'hypervoice', 'return'].every(m => !moves.has(m));
-		case 'Analytic':
-			return (species.id === 'starmie' && role !== 'Wallbreaker');
-		case 'Sturdy':
-			return (!!counter.get('recoil') && !counter.get('recovery'));
 		case 'Chlorophyll':
 			return (
 				species.baseStats.spe > 100 ||
@@ -747,20 +743,14 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 				types.has('Ground') || species.id === 'marowakalola' ||
 				((!!teamDetails.rain || moves.has('raindance')) && species.id === 'seaking')
 			);
-		case 'Limber':
-			return species.id === 'stunfisk';
 		case 'Magic Guard': case 'Speed Boost':
 			return (abilities.has('Tinted Lens') && role === 'Wallbreaker');
 		case 'Mold Breaker':
 			return (
 				species.baseSpecies === 'Basculin' || species.id === 'pangoro' || abilities.has('Sheer Force')
 			);
-		case 'Natural Cure':
-			return (species.id === 'starmie' && role === 'Wallbreaker');
 		case 'Overgrow':
 			return !counter.get('Grass');
-		case 'Poison Heal':
-			return species.id === 'breloom';
 		case 'Power Construct':
 			return species.forme === '10%';
 		case 'Prankster':
@@ -792,6 +782,8 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			return moves.has('hypervoice');
 		case 'Solar Power':
 			return (!counter.get('Special') || !teamDetails.sun || !!species.isMega);
+		case 'Sturdy':
+			return (!!counter.get('recoil') && !counter.get('recovery'));
 		case 'Swarm':
 			return (!counter.get('Bug') || !!species.isMega);
 		case 'Technician':
@@ -803,7 +795,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		case 'Unaware':
 			return (role !== 'Bulky Support' && role !== 'Staller');
 		case 'Unburden':
-			return (!!species.isMega || abilities.has('Prankster') || !counter.get('setup') && !moves.has('acrobatics'));
+			return (!!species.isMega || !counter.get('setup') && !moves.has('acrobatics'));
 		case 'Water Absorb':
 			return moves.has('raindance') || ['Drizzle', 'Unaware', 'Volt Absorb'].some(abil => abilities.has(abil));
 		}
@@ -846,6 +838,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		if (
 			abilities.has('Unburden') && ['acrobatics', 'bellydrum', 'closecombat'].some(m => moves.has(m))
 		) return 'Unburden';
+		if (species.id === 'starmie') return role === 'Wallbreaker' ? 'Analytic' : 'Natural Cure';
 		if (abilities.has('Drought')) return 'Drought';
 		if (species.id === 'talonflame' && role === 'Z-Move user') return 'Gale Wings';
 		if (species.id === 'golemalola' && moves.has('return')) return 'Galvanize';
@@ -860,6 +853,8 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		if (abilities.has('Scrappy') && moves.has('boomburst')) return 'Scrappy';
 		if (abilities.has('Shed Skin') && moves.has('rest') && !moves.has('sleeptalk')) return 'Shed Skin';
 		if (species.name === 'Kommo-o' && role === 'Z-Move user') return 'Soundproof';
+		if (species.id === 'stunfisk') return 'Static';
+		if (species.id === 'breloom') return 'Technician';
 		if (abilities.has('Toxic Boost')) return 'Toxic Boost';
 		if (species.id === 'porygon2') return 'Trace';
 		if (types.has('Water') && counter.get('setup') && abilities.has('Weak Armor')) return 'Weak Armor';
