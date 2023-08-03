@@ -1026,7 +1026,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		) {
 			return (
 				scarfReqs && (species.baseStats.atk >= 100 || ability === 'Pure Power' || ability === 'Huge Power') &&
-				this.randomChance(1, 2)
+				species.id !== 'jirachi' && this.randomChance(1, 2)
 			) ? 'Choice Scarf' : 'Choice Band';
 		}
 
