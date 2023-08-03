@@ -57,7 +57,7 @@ const SpeedSetup = [
 // Conglomerate for ease of access
 const Setup = [
 	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'celebrate', 'coil', 'conversion', 'curse', 'dragondance',
-	'electricterrain', 'flamecharge', 'geomancy', 'growth', 'happyhour', 'holdhands', 'honeclaws', 'howl', 'irondefense', 'meditate',
+	'electricterrain', 'flamecharge', 'focusenergy', 'geomancy', 'growth', 'happyhour', 'holdhands', 'honeclaws', 'howl', 'irondefense', 'meditate',
 	'nastyplot', 'poweruppunch', 'quiverdance', 'raindance', 'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'workup',
 ];
 // Moves that shouldn't be the only STAB moves:
@@ -943,12 +943,12 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		}
 		if (role === 'AV Pivot') return 'Assault Vest';
 		// maybe cut this one
-		if (species.name === 'Deoxys-Attack') return (isLead && moves.has('stealthrock')) ? 'Focus Sash' : 'Life Orb';
+		if (species.name === 'Deoxys-Attack') return 'Life Orb';
 		if (species.name === 'Farfetch\u2019d') return 'Stick';
 		if (species.baseSpecies === 'Marowak') return 'Thick Club';
 		if (species.name === 'Pikachu') return 'Light Ball';
 		if (species.name === 'Shedinja' || species.name === 'Smeargle') return 'Focus Sash';
-		if (species.name === 'Unfezant') return 'Scope Lens';
+		if (species.name === 'Unfezant' || moves.has('focusenergy')) return 'Scope Lens';
 		if (species.name === 'Unown') return 'Choice Specs';
 		if (species.name === 'Wobbuffet') return 'Custap Berry';
 		if (species.name === 'Shuckle') return 'Mental Herb';
@@ -988,10 +988,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		if (ability === 'Unburden') return moves.has('closecombat') ? 'White Herb' : 'Sitrus Berry';
 		if (moves.has('acrobatics')) return '';
 		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
-		if (
-			moves.has('rest') && !moves.has('sleeptalk') &&
-			['Hydration', 'Natural Cure', 'Shed Skin'].every(abil => ability !== abil)
-		) {
+		if (moves.has('rest') && !moves.has('sleeptalk') && !['Hydration', 'Natural Cure', 'Shed Skin'].includes(ability)) {
 			return 'Chesto Berry';
 		}
 		if (role === 'Staller') return 'Leftovers';
@@ -1016,7 +1013,6 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			!counter.get('priority') && !moves.has('pursuit')
 		);
 
-		if (species.id === 'pyroar' && moves.has('solarbeam')) return 'Power Herb';
 		if (moves.has('pursuit') && moves.has('suckerpunch') && counter.get('Dark')) return 'Black Glasses';
 		if (counter.get('Special') === 4) {
 			return (
@@ -1044,9 +1040,9 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		)) {
 			return 'Assault Vest';
 		}
-		if (moves.has('outrage') && counter.get('Setup')) return 'Lum Berry';
+		if (moves.has('outrage') && counter.get('setup')) return 'Lum Berry';
 		if (
-			(ability === 'Rough Skin') || (species.id !== ('hooh') &&
+			(ability === 'Rough Skin') || (species.id !== 'hooh' &&
 			ability === 'Regenerator' && species.baseStats.hp + species.baseStats.def >= 180 && this.randomChance(1, 2))
 		) return 'Rocky Helmet';
 		if (['protect', 'spikyshield', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
