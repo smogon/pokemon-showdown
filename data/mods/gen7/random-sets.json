@@ -4,8 +4,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["gigadrain", "leechseed", "sleeppowder", "sludgebomb", "substitute"],
-                "preferredTypes": ["Poison"]
+                "movepool": ["gigadrain", "leechseed", "sleeppowder", "sludgebomb", "substitute"]
             },
             {
                 "role": "Bulky Attacker",
@@ -289,8 +288,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["aromatherapy", "gigadrain", "hiddenpowerfire", "sleeppowder", "sludgebomb", "strengthsap"],
-                "preferredTypes": ["Poison"]
+                "movepool": ["aromatherapy", "gigadrain", "hiddenpowerfire", "sleeppowder", "sludgebomb", "strengthsap"]
             }
         ]
     },
@@ -324,8 +322,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["earthquake", "memento", "stealthrock", "stoneedge", "suckerpunch"],
-                "preferredTypes": ["Rock"]
+                "movepool": ["earthquake", "memento", "stealthrock", "stoneedge", "suckerpunch"]
             }
         ]
     },
@@ -661,8 +658,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["dracometeor", "flamethrower", "gigadrain", "leafstorm", "trickroom"],
-                "preferredTypes": ["Fire"]
+                "movepool": ["dracometeor", "flamethrower", "gigadrain", "leafstorm", "trickroom"]
             },
             {
                 "role": "Bulky Attacker",
@@ -782,8 +778,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["psyshock", "rapidspin", "recover", "scald", "thunderwave", "toxic"],
-                "preferredTypes": ["Water"]
+                "movepool": ["psyshock", "rapidspin", "recover", "scald", "thunderwave", "toxic"]
             }
         ]
     },
@@ -883,8 +878,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["freezedry", "healbell", "hydropump", "icebeam", "thunderbolt", "toxic"],
-                "preferredTypes": ["Ice"]
+                "movepool": ["freezedry", "healbell", "hydropump", "icebeam", "thunderbolt", "toxic"]
             },
             {
                 "role": "Staller",
@@ -1123,8 +1117,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["defog", "heatwave", "hurricane", "hypervoice", "roost", "whirlwind"],
-                "preferredTypes": ["Flying"]
+                "movepool": ["defog", "heatwave", "hurricane", "hypervoice", "roost", "whirlwind"]
             }
         ]
     },
@@ -1142,8 +1135,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["megahorn", "poisonjab", "stickyweb", "suckerpunch", "toxicspikes"],
-                "preferredTypes": ["Bug"]
+                "movepool": ["megahorn", "poisonjab", "stickyweb", "suckerpunch", "toxicspikes"]
             }
         ]
     },
@@ -1480,8 +1472,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["ancientpower", "lavaplume", "recover", "stealthrock", "toxic"],
-                "preferredTypes": ["Fire"]
+                "movepool": ["ancientpower", "lavaplume", "recover", "stealthrock", "toxic"]
             },
             {
                 "role": "Setup Sweeper",
@@ -1494,8 +1485,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["powergem", "recover", "scald", "stealthrock", "toxic"],
-                "preferredTypes": ["Water"]
+                "movepool": ["powergem", "recover", "scald", "stealthrock", "toxic"]
             }
         ]
     },
@@ -1522,8 +1512,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["airslash", "defog", "haze", "roost", "scald", "toxic"],
-                "preferredTypes": ["Water"]
+                "movepool": ["airslash", "defog", "haze", "roost", "scald", "toxic"]
             }
         ]
     },
@@ -1858,8 +1847,7 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["energyball", "focusblast", "hydropump", "icebeam", "scald"],
-                "preferredTypes": ["Grass"]
+                "movepool": ["energyball", "focusblast", "hydropump", "icebeam", "scald"]
             }
         ]
     },
@@ -1894,8 +1882,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["defog", "hurricane", "knockoff", "roost", "scald", "uturn"],
-                "preferredTypes": ["Water"]
+                "movepool": ["defog", "hurricane", "knockoff", "roost", "scald", "uturn"]
             },
             {
                 "role": "Wallbreaker",
@@ -2373,8 +2360,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["earthquake", "icebeam", "psychic", "rapidspin", "stealthrock", "toxic"],
-                "preferredTypes": ["Ground"]
+                "movepool": ["earthquake", "icebeam", "psychic", "rapidspin", "stealthrock", "toxic"]
             }
         ]
     },
@@ -2396,8 +2382,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["earthquake", "knockoff", "rapidspin", "stealthrock", "stoneedge", "toxic", "xscissor"],
-                "preferredTypes": ["Rock"]
+                "movepool": ["earthquake", "knockoff", "rapidspin", "stealthrock", "stoneedge", "toxic", "xscissor"]
             },
             {
                 "role": "Bulky Attacker",
@@ -2947,8 +2932,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["gigadrain", "hiddenpowerfire", "leafstorm", "sleeppowder", "sludgebomb", "spikes", "synthesis", "toxicspikes"],
-                "preferredTypes": ["Poison"]
+                "movepool": ["gigadrain", "hiddenpowerfire", "leafstorm", "sleeppowder", "sludgebomb", "spikes", "synthesis", "toxicspikes"]
             }
         ]
     },
@@ -3311,8 +3295,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["blizzard", "earthquake", "focusblast", "gigadrain", "iceshard", "woodhammer"],
-                "preferredTypes": ["Grass"]
+                "movepool": ["blizzard", "earthquake", "focusblast", "gigadrain", "iceshard", "woodhammer"]
             }
         ]
     },
@@ -3775,8 +3758,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["airslash", "earthpower", "hiddenpowerice", "leechseed", "seedflare", "substitute"],
-                "preferredTypes": ["Grass"]
+                "movepool": ["airslash", "earthpower", "hiddenpowerice", "leechseed", "seedflare", "substitute"]
             }
         ]
     },
@@ -4135,8 +4117,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["defog", "nightslash", "pluck", "return", "roost", "toxic", "uturn"],
-                "preferredTypes": ["Normal"]
+                "movepool": ["defog", "nightslash", "pluck", "return", "roost", "toxic", "uturn"]
             }
         ]
     },
@@ -4278,8 +4259,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["earthquake", "megahorn", "poisonjab", "protect", "spikes", "toxicspikes"],
-                "preferredTypes": ["Bug"]
+                "movepool": ["earthquake", "megahorn", "poisonjab", "protect", "spikes", "toxicspikes"]
             },
             {
                 "role": "Setup Sweeper",
@@ -4543,8 +4523,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["clearsmog", "foulplay", "gigadrain", "hiddenpowerfire", "sludgebomb", "spore"],
-                "preferredTypes": ["Poison"]
+                "movepool": ["clearsmog", "foulplay", "gigadrain", "hiddenpowerfire", "sludgebomb", "spore"]
             },
             {
                 "role": "Bulky Support",
@@ -4557,8 +4536,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["icebeam", "recover", "scald", "shadowball", "taunt", "toxic", "willowisp"],
-                "preferredTypes": ["Water"]
+                "movepool": ["icebeam", "recover", "scald", "shadowball", "taunt"]
             },
             {
                 "role": "Bulky Support",
@@ -5366,8 +5344,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["ancientpower", "blizzard", "earthpower", "freezedry", "stealthrock"],
-                "preferredTypes": ["Ice"]
+                "movepool": ["ancientpower", "blizzard", "earthpower", "freezedry", "stealthrock"]
             },
             {
                 "role": "Bulky Support",
@@ -5836,8 +5813,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["leechlife", "liquidation", "mirrorcoat", "stickyweb", "toxic"],
-                "preferredTypes": ["Water"]
+                "movepool": ["leechlife", "liquidation", "mirrorcoat", "stickyweb", "toxic"]
             }
         ]
     },
@@ -6518,8 +6494,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["earthquake", "gyroball", "stoneedge", "superpower", "trickroom"],
-                "preferredTypes": ["Steel"]
+                "movepool": ["earthquake", "gyroball", "stoneedge", "superpower", "trickroom"]
             }
         ]
     },
