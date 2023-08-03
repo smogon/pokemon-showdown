@@ -1022,7 +1022,8 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			['dragontail', 'fakeout', 'flamecharge', 'nuzzle', 'rapidspin'].every(m => !moves.has(m))
 		) {
 			return (
-				scarfReqs && (species.baseStats.atk >= 100 || moves.has('uturn')) && this.randomChance(1, 2)
+				scarfReqs && (species.baseStats.atk >= 100 || ability === 'Pure Power' || ability === 'Huge Power') &&
+				this.randomChance(1, 2)
 			) ? 'Choice Scarf' : 'Choice Band';
 		}
 
