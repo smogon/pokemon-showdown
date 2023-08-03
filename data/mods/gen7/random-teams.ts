@@ -972,7 +972,6 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 				return 'Sitrus Berry';
 			}
 		}
-		if (moves.has('copycat') && counter.get('Physical') >= 3) return 'Choice Band';
 		if (moves.has('geomancy') || moves.has('skyattack')) return 'Power Herb';
 		if (moves.has('shellsmash')) {
 			return (ability === 'Solid Rock' && !!counter.get('priority')) ? 'Weakness Policy' : 'White Herb';
@@ -1018,7 +1017,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 				scarfReqs && (species.baseStats.spa >= 90 || moves.has('voltswitch')) && this.randomChance(1, 2)
 			) ? 'Choice Scarf' : 'Choice Specs';
 		}
-		if (species.id === 'sigilyph' || (counter.get('Special') === 3 && moves.has('uturn'))) return 'Choice Specs';
+		if (counter.get('Special') === 3 && moves.has('uturn')) return 'Choice Specs';
 		if (counter.get('Physical') === 4 &&
 			['dragontail', 'fakeout', 'flamecharge', 'nuzzle', 'rapidspin'].every(m => !moves.has(m))
 		) {
