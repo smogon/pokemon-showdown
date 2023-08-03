@@ -182,7 +182,7 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 export const commands: Chat.ChatCommands = {
 	rwr: 'randswinrates',
 	randswinrates(target, room, user) {
-		return this.parse(`/j view-winrates-${toID(target) || `gen${Dex.gen}randombattle`}`);
+		return this.parse(`/j view-winrates-${target ? Dex.formats.get(target).id : `gen${Dex.gen}randombattle`}`);
 	},
 	randswinrateshelp: [
 		'/randswinrates OR /rwr [format] - Get a list of the win rates for all Pokemon in the given Random Battles format.',
