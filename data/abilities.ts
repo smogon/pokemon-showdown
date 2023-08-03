@@ -5998,11 +5998,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onTryBoost(boost, target, source, effect) {
 			if (effect.name === 'Intimidate' && boost.atk) {
 				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Juggernaut', '[of] ' + target);
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Overwhelm', '[of] ' + target);
 			}
 			if (effect.name === 'Scare' && boost.spa) {
 				delete boost.spa;
-				this.add('-fail', target, 'unboost', 'Special Attack', '[from] ability: Juggernaut', '[of] ' + target);
+				this.add('-fail', target, 'unboost', 'Special Attack', '[from] ability: Overwhelm', '[of] ' + target);
 			}
 		},
 		name: "Overwhelm",
@@ -6617,7 +6617,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4,
 		num: 384,
 	},
-	momentum: { //TODO: Testing
+	momentum: {
 		onModifyMove(move) {
 			if (move.flags['contact']) {
 				move.overrideOffensiveStat = 'spe'
@@ -6632,7 +6632,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4,
 		num: 385,
 	},
-	grippincer: { //TODO: Testing
+	grippincer: {
 		onFoeDamagingHit(damage, target, source, move) {
 			if (move.flags['contact'] && this.randomChance(3, 10)) {
 				this.add('-activate', source, 'ability: Grip Pincer');
