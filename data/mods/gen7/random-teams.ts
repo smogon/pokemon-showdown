@@ -115,7 +115,8 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting'),
 			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire'),
 			Flying: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Flying') && ['aerodactylmega', 'charizardmega', 'mantine'].every(m => species.id !== m)
+				!counter.get('Flying') && ['aerodactylmega', 'charizardmega', 'mantine'].every(m => species.id !== m) &&
+				!movePool.includes('hiddenpowerflying')
 			),
 			Ghost: (movePool, moves, abilities, types, counter) => !counter.get('Ghost'),
 			Grass: (movePool, moves, abilities, types, counter, species) => (
