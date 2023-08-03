@@ -745,9 +745,6 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			return species.id === 'stunfisk';
 		case 'Magic Guard': case 'Speed Boost':
 			return (abilities.has('Tinted Lens') && role === 'Wallbreaker');
-		case 'Magnet Pull':
-			// Return part is for Golem-Alola
-			return (moves.has('return') || !types.has('Electric') && !moves.has('earthpower'));
 		case 'Mold Breaker':
 			return (
 				species.baseSpecies === 'Basculin' || species.id === 'pangoro' || abilities.has('Sheer Force')
@@ -845,6 +842,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		) return 'Unburden';
 		if (abilities.has('Drought')) return 'Drought';
 		if (species.id === 'talonflame' && role === 'Z-Move user') return 'Gale Wings';
+		if (species.id === 'golemalola' && moves.has('return')) return 'Galvanize';
 		if (abilities.has('Gluttony') && (moves.has('recycle') || moves.has('bellydrum'))) return 'Gluttony';
 		if (abilities.has('Harvest') && (role === 'Bulky Support' || role === 'Staller')) return 'Harvest';
 		if (species.name === 'Raticate-Alola') return 'Hustle';
