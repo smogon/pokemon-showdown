@@ -589,6 +589,12 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 				const moveid = this.sample(stabMoves);
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, preferredType, role);
+			} else {
+				// If they have no regular STAB move, enforce U-turn on Bug types.
+				if (movePool.includes('uturn')) {
+					counter = this.addMove('uturn', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+						movePool, preferredType, role);
+				}
 			}
 		}
 
