@@ -307,8 +307,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["bugbuzz", "quiverdance", "sleeppowder", "sludgebomb", "substitute"],
-                "preferredTypes": ["Bug"]
+                "movepool": ["bugbuzz", "quiverdance", "sleeppowder", "sludgebomb", "substitute"]
             },
             {
                 "role": "Z-Move user",
