@@ -732,7 +732,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			);
 		case 'Intimidate':
 			// Slam part is for Tauros
-			return (moves.has('bodyslam') || moves.has('rest') || abilities.has('Reckless') && counter.get('recoil') > 1);
+			return (moves.has('bodyslam') || abilities.has('Reckless') && counter.get('recoil') > 1);
 		case 'Iron Fist':
 			// Dynamic Punch bit is for Golurk
 			return (!counter.get(toID(ability)) || moves.has('dynamicpunch'));
@@ -848,13 +848,13 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		if (abilities.has('Gluttony') && (moves.has('recycle') || moves.has('bellydrum'))) return 'Gluttony';
 		if (abilities.has('Harvest') && (role === 'Bulky Support' || role === 'Staller')) return 'Harvest';
 		if (species.name === 'Raticate-Alola') return 'Hustle';
-		if (species.id === 'ninjask') return 'Infiltrator';
+		if (species.id === 'ninjask' || species.id === 'seviper') return 'Infiltrator';
 		if (abilities.has('Sheer Force') && abilities.has('Mold Breaker') && role !== 'Wallbreaker') return 'Mold Breaker';
 		if (species.baseSpecies === 'Altaria') return 'Natural Cure';
 		if (species.id === 'tsareena') return 'Queenly Majesty';
 		if (role === 'AV Pivot' && abilities.has('Regenerator')) return 'Regenerator';
 		if (abilities.has('Scrappy') && moves.has('boomburst')) return 'Scrappy';
-		if (species.id === 'scrafty' && role === 'Bulky Setup') return 'Shed Skin';
+		if (abilities.has('Shed Skin') && moves.has('rest') && !moves.has('sleeptalk')) return 'Shed Skin';
 		if (species.name === 'Kommo-o' && role === 'Z-Move user') return 'Soundproof';
 		if (abilities.has('Toxic Boost')) return 'Toxic Boost';
 		if (species.id === 'porygon2') return 'Trace';
