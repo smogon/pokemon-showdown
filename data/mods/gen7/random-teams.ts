@@ -1014,7 +1014,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		if (moves.has('pursuit') && moves.has('suckerpunch') && counter.get('Dark')) return 'Black Glasses';
 		if (counter.get('Special') === 4) {
 			return (
-				scarfReqs && (species.baseStats.spa >= 90 || moves.has('voltswitch')) && this.randomChance(1, 2)
+				scarfReqs && species.baseStats.spa >= 90 && this.randomChance(1, 2)
 			) ? 'Choice Scarf' : 'Choice Specs';
 		}
 		if (counter.get('Special') === 3 && moves.has('uturn')) return 'Choice Specs';
