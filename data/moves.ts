@@ -16526,13 +16526,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 			{
 				chance: 30,
 				status: 'frz',
-			}, {
-				chance: 20,
-				onEffectiveness(typeMod, target, type) {
-					if (type === 'Water') return 1;
-				},
-			},
+			}
 		],
+		onEffectiveness(typeMod, target, type) {
+			if (this.randomChance(2, 10)) {
+				if (type === 'Water') return 1;
+			}
+		},
 		target: "normal",
 		type: "Ice",
 		zMove: {basePower: 180},
