@@ -177,7 +177,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	armthrust: {
 		name: "Arm Thrust",
-		desc: "Hits two to five times. Has a 35% chance to hit two or three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
+		desc: "Hits two to five times. Has a 35% chance to hit two or three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. High crit ratio.",
 		shortDesc: "Hits 2-5 times in one turn. High crit ratio.",
 		gen4: {
 			desc: "Hits two to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
@@ -1665,6 +1665,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	eggbomb: {
 		name: "Egg Bomb",
+		desc: "This move has a 10% chance to burn.",
 		shortDesc: "10% chance to burn.",
 	},
 	electricterrain: {
@@ -2029,7 +2030,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	fissure: {
 		name: "Fissure",
-		shortDesc: "No additional effect.",
+		desc: "Damage doubles if the target is using Dig.",
+		shortDesc: "Hits adjacent Pokemon. Double damage on Dig.",
 		gen2: {
 			desc: "Deals 65535 damage to the target. This attack's accuracy out of 256 is equal to the lesser of (2 * (user's level - target's level) + 76) and 255, before applying accuracy and evasiveness modifiers. Fails if the target is at a higher level. Can hit a target using Dig.",
 		},
@@ -2088,7 +2090,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	flash: {
 		name: "Flash",
-		desc: "Lowers the target's accuracy by 1 stage.",
+		desc: "Lowers the target's attack by 1 stage",
 		shortDesc: "Lowers the target's attack by 1.",
 	},
 	flashcannon: {
@@ -2285,8 +2287,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	frustration: {
 		name: "Frustration",
-		desc: "Power is equal to the greater of ((255 - user's Happiness) * 2/5), rounded down, or 1.",
-		shortDesc: "Max 102 power at minimum Happiness.",
+		shortDesc: "No additional effect.",
 	},
 	furyattack: {
 		name: "Fury Attack",
@@ -2730,8 +2731,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	guillotine: {
 		name: "Guillotine",
-		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Sturdy Ability are immune.",
-		shortDesc: "OHKOs the target. Fails if user is a lower level.",
+		desc: "Has a higher chance for a critical hit.",
+		shortDesc: "High critical hit ratio.",
 		gen2: {
 			desc: "Deals 65535 damage to the target. This attack's accuracy out of 256 is equal to the lesser of (2 * (user's level - target's level) + 76) and 255, before applying accuracy and evasiveness modifiers. Fails if the target is at a higher level.",
 		},
@@ -3048,8 +3049,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	horndrill: {
 		name: "Horn Drill",
-		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Sturdy Ability are immune.",
-		shortDesc: "OHKOs the target. Fails if user is a lower level.",
+		desc: "Has a higher chance for a critical hit.",
+		shortDesc: "High critical hit ratio.",		
 		gen2: {
 			desc: "Deals 65535 damage to the target. This attack's accuracy out of 256 is equal to the lesser of (2 * (user's level - target's level) + 76) and 255, before applying accuracy and evasiveness modifiers. Fails if the target is at a higher level.",
 		},
@@ -4409,8 +4410,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	octazooka: {
 		name: "Octazooka",
-		desc: "Has a 50% chance to lower the target's accuracy by 1 stage.",
-		shortDesc: "50% chance to lower the target's accuracy by 1.",
+		desc: "Has a 100% chance to lower the target's accuracy by 1 stage.",
+		shortDesc: "100% chance to lower the target's accuracy by 1.",
 	},
 	octolock: {
 		name: "Octolock",
@@ -5152,8 +5153,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	return: {
 		name: "Return",
-		desc: "Power is equal to the greater of (user's Happiness * 2/5), rounded down, or 1.",
-		shortDesc: "Max 102 power at maximum Happiness.",
+		shortDesc: "No additional effect.",
 	},
 	revelationdance: {
 		name: "Revelation Dance",
@@ -5215,8 +5215,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	roaroftime: {
 		name: "Roar of Time",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "User cannot move next turn.",
+		desc: "If both the user and the target have not fainted, the target is forced to switch out and be replaced with a random unfainted ally. This effect fails if the target used Ingrain previously, has the Suction Cups Ability, or this move hit a substitute.",
+		shortDesc: "Forces the target to switch to a random ally.",
 	},
 	rockblast: {
 		name: "Rock Blast",
@@ -5592,7 +5592,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	sheercold: {
 		name: "Sheer Cold",
-		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + X)%, where X is 30 if the user is an Ice type and 20 otherwise, and fails if the target is at a higher level. Ice-type Pokemon and Pokemon with the Sturdy Ability are immune.",
+		desc: "Has a 30% chance to freeze the target and a 20% chance to deal super effective damage against Water.",
 		shortDesc: "30% chance to freeze. 20% chance to deal super effective damage on water.",
 		gen6: {
 			desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Sturdy Ability are immune.",
@@ -6305,7 +6305,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	strength: {
 		name: "Strength",
-		shortDesc: "No additional effect.",
+		desc: "Lowers the user's Defense and Special Defense by 1 stage.",
+		shortDesc: "Lowers the user's Defense and Sp. Def by 1.",
 	},
 	strengthsap: {
 		name: "Strength Sap",
@@ -6369,8 +6370,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	submission: {
 		name: "Submission",
-		desc: "If the target lost HP, the user takes recoil damage equal to 1/4 the HP lost by the target, rounded half up, but not less than 1 HP.",
-		shortDesc: "Has 1/4 recoil.",
+		desc: "If the target lost HP, the user takes recoil damage equal to 1/2 the HP lost by the target, rounded half up, but not less than 1 HP.",
+		shortDesc: "Has 1/2 recoil.",
 		gen4: {
 			desc: "If the target lost HP, the user takes recoil damage equal to 1/4 the HP lost by the target, rounded down, but not less than 1 HP.",
 		},
@@ -7409,7 +7410,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	xscissor: {
 		name: "X-Scissor",
-		shortDesc: "No additional effect.",
+		desc: "Has a higher chance for a critical hit.",
+		shortDesc: "High critical hit ratio.",
 	},
 	yawn: {
 		name: "Yawn",
