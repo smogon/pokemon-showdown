@@ -174,6 +174,10 @@ function getData(species: string | Species, format: string | Format): any | null
 	return data;
 }
 
+/**
+ * Gets the random battles data for a Pokemon for doubles where doubles is its own file
+ * but it still uses the old system. Currently only gen7dubs.
+ */
 function getStandaloneDoublesData(species: string | Species, format: string | Format): any | null {
 	const dex = Dex.forFormat(format);
 	species = dex.species.get(species);
