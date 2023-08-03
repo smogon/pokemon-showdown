@@ -101,7 +101,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 
-		this.noStab = NoStab;
+		if (this.format.gameType === 'singles') this.noStab = NoStab;
 
 		this.moveEnforcementCheckers = (this.format.gameType !== 'singles') ? this.moveEnforcementCheckers : {
 			Bug: (movePool, moves, abilities, types, counter) => (
