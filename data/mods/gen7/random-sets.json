@@ -943,6 +943,11 @@
             {
                 "role": "Fast Support",
                 "movepool": ["aquajet", "knockoff", "liquidation", "rapidspin", "stoneedge", "swordsdance"]
+            },
+            {
+                "role": "Z-Move user",
+                "movepool": ["aquajet", "knockoff", "liquidation", "stoneedge", "swordsdance"],
+                "preferredTypes": ["Rock"]
             }
         ]
     },
