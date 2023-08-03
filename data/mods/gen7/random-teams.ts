@@ -855,6 +855,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		if (species.id === 'druddigon' && role === 'Bulky Support') return 'Rough Skin';
 		if (abilities.has('Scrappy') && moves.has('boomburst')) return 'Scrappy';
 		if (abilities.has('Shed Skin') && moves.has('rest') && !moves.has('sleeptalk')) return 'Shed Skin';
+		if (abilities.has('Sniper') && moves.has('focusenergy')) return 'Sniper';
 		if (species.name === 'Kommo-o' && role === 'Z-Move user') return 'Soundproof';
 		if (species.id === 'stunfisk') return 'Static';
 		if (species.id === 'breloom') return 'Technician';
@@ -1021,12 +1022,12 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			) ? 'Choice Scarf' : 'Choice Specs';
 		}
 		if (counter.get('Special') === 3 && moves.has('uturn')) return 'Choice Specs';
-		if (counter.get('Physical') === 4 &&
+		if (counter.get('Physical') === 4 && species.id !== 'jirachi' &&
 			['dragontail', 'fakeout', 'flamecharge', 'nuzzle', 'rapidspin'].every(m => !moves.has(m))
 		) {
 			return (
 				scarfReqs && (species.baseStats.atk >= 100 || ability === 'Pure Power' || ability === 'Huge Power') &&
-				species.id !== 'jirachi' && this.randomChance(1, 2)
+				this.randomChance(1, 2)
 			) ? 'Choice Scarf' : 'Choice Band';
 		}
 
