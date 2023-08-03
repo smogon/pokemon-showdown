@@ -2853,7 +2853,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		num: 687,
 		accuracy: 100,
 		basePower: 100,
-		category: "Special",
+		category: "Physical",
 		isNonstandard: "Past",
 		name: "Core Enforcer",
 		pp: 10,
