@@ -146,10 +146,11 @@ function formatItem(item: Item | string) {
  * Gets the sets for a Pokemon for a format that uses the new schema.
  * Old formats will use getData()
  */
-function getSets(species: string | Species, format = 'gen9randombattle'): any[] | null {
+function getSets(species: string | Species, format: string | Format = 'gen9randombattle'): any[] | null {
 	const dex = Dex.forFormat(format);
+	format = Dex.formats.get(format);
 	species = dex.species.get(species);
-	const isDoubles = format.includes('doubles');
+	const isDoubles = format.gameType === 'doubles';
 	const setsFile = JSON.parse(
 		FS(`data/${dex.isBase ? '' : `mods/${dex.currentMod}/`}random-${isDoubles ? `doubles-` : ``}sets.json`)
 			.readIfExistsSync() || '{}'
@@ -160,13 +161,28 @@ function getSets(species: string | Species, format = 'gen9randombattle'): any[] 
 }
 
 /**
- * Gets the random battles data for a Pokemon for formats before gen 9.
+ * Gets the random battles data for a Pokemon for formats other than gen9 and gen7singles.
  */
 function getData(species: string | Species, format: string | Format): any | null {
 	const dex = Dex.forFormat(format);
 	species = dex.species.get(species);
 	const dataFile = JSON.parse(
 		FS(`data/mods/${dex.currentMod}/random-data.json`).readIfExistsSync() || '{}'
+	);
+	const data = dataFile[species.id];
+	if (!data) return null;
+	return data;
+}
+
+/**
+ * Gets the random battles data for a Pokemon for doubles where doubles is its own file
+ * but it still uses the old system. Currently only gen7dubs.
+ */
+function getStandaloneDoublesData(species: string | Species, format: string | Format): any | null {
+	const dex = Dex.forFormat(format);
+	species = dex.species.get(species);
+	const dataFile = JSON.parse(
+		FS(`data/mods/${dex.currentMod}/random-doubles-data.json`).readIfExistsSync() || '{}'
 	);
 	const data = dataFile[species.id];
 	if (!data) return null;
@@ -785,20 +801,36 @@ export const commands: Chat.ChatCommands = {
 			setCount = 1;
 		} else {
 			const setsToCheck = [species];
-			if (dex.gen > 7 && !isNoDMax) setsToCheck.push(dex.species.get(`${args[0]}gmax`));
+			if (dex.gen >= 8 && !isNoDMax) setsToCheck.push(dex.species.get(`${args[0]}gmax`));
 			if (species.otherFormes) setsToCheck.push(...species.otherFormes.map(pkmn => dex.species.get(pkmn)));
-			if (dex.gen >= 9) {
+			if (dex.gen >= 9 || dex.gen === 7 && !isDoubles) {
 				for (const pokemon of setsToCheck) {
 					const sets = getSets(pokemon, format.id);
 					if (!sets) continue;
 					let buf = `<span style="color:#999999;">Moves for ${pokemon.name} in ${format.name}:</span><br/>`;
 					for (const set of sets) {
 						buf += `<details><summary>${set.role}</summary>` +
-							`<b>Tera Type${Chat.plural(set.teraTypes)}</b>: ${set.teraTypes.join(', ')}<br/>` +
+							(dex.gen === 9 ?
+								`<b>Tera Type${Chat.plural(set.teraTypes)}</b>: ${set.teraTypes.join(', ')}<br/>` :
+								'') +
 							`<b>Moves</b>: ${set.movepool.sort().map(formatMove).join(', ')}</details>`;
 						setCount++;
 					}
 					movesets.push(buf);
+				}
+			} else if (dex.gen === 7 && isDoubles) {
+				for (const pokemon of setsToCheck) {
+					const data = getStandaloneDoublesData(pokemon, format.name);
+					if (!data) continue;
+					if (!data.moves) continue;
+					const randomMoves = data.moves;
+					const m = randomMoves.slice().sort().map(formatMove);
+					movesets.push(
+						`<details>` +
+						`<summary><span style="color:#999999;">Moves for ${pokemon.name} in ${format.name}:<span style="color:#999999;"></summary>` +
+						`${m.join(`, `)}</details>`
+					);
+					setCount++;
 				}
 			} else {
 				for (let pokemon of setsToCheck) {
@@ -965,13 +997,15 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		let setExists: boolean;
-		if (dex.gen >= 9) {
-			setExists = !!getSets(species);
+		if (dex.gen >= 9 || dex.gen === 7 && format.gameType !== 'doubles') {
+			setExists = !!getSets(species, format);
+		} else if (dex.gen === 7 && format.gameType === 'doubles') {
+			setExists = !!getStandaloneDoublesData(species, format);
 		} else {
 			const data = getData(species, format);
 			if (!data) {
 				setExists = false;
-			} else if (format.gameType === 'doubles' || format.gameType === 'freeforall') {
+			} else if (format.gameType === 'doubles' && dex.gen !== 7 || format.gameType === 'freeforall') {
 				setExists = !!data.doublesMoves;
 			} else {
 				setExists = !!data.moves;
