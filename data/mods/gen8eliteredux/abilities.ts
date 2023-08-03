@@ -8,14 +8,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			} else if (move?.effectType === 'Move') {
 				this.boost({atk: 1}, target, target);
 			}
-		},		
+		},
+		desc: "This Pokemon's Attack is raised by 1 stage when hit. If this Pokemon, but not its substitute, is struck by a critical hit, its Attack is raised by 12 stages.",
+		shortDesc: "Ups attack on hit. If this Pokemon (not its substitute) takes a critical hit, its Attack is raised 12 stages.",
+		
 	},
 	battlearmor: {
 		inherit: true,
 		onSourceModifyDamage(damage, source, target, move) {
 			this.debug('Battle Armor weaken')
 			return this.chainModify(0.9)
-		}
+		},
+		shortDesc: "This Pokemon takes 10% less damage. Cannot be struck by a critical hit.",
+		desc: "This Pokemon takes 10% less damage. Cannot be struck by a critical hit.",
+		
 	},
 	blaze: {
 		inherit: true,
@@ -43,6 +49,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
+		shortDesc: "Boost Pokemon's Fire moves by 20%, 50% when below 1/3 HP",
+		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its offensive stat is multiplied by 1.5 while using a Fire-type attack, and 1.2 otherwise.",
+
 	},
 	colorchange: {
 		onFoePrepareHit(source, target, move) {
@@ -65,10 +74,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (!target.setType(bestType)) return;
 				this.add('-start', target, 'typechange', bestType, '[from] ability: Color Change');
 			}
-
-
-			
 		},
+		desc: "This Pokemon's type changes to one that best resists an incoming move, unless that type is already one of its types. This effect applies right before an incoming hit.",
+		shortDesc: "This Pokemon's type changes to the type that best resists an incoming move unless it has that type.",
 		name: "Color Change",
 		rating: 5,
 		num: 16,
@@ -88,7 +96,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				move.ignoreImmunity = {'Poison': true}
 			}
 		},
+		shortDesc: "This Pokemon can poison or badly poison a Pokemon regardless of its typing. Poison hits Steel super effectively",
 	},
+	
 	flamebody: {
 		inherit: true,
 		onModifyMove(move) {
@@ -102,6 +112,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				ability: this.dex.abilities.get('flamebody'),
 			});
 		},
+		shortDesc: "Contact moves used by or against this Pokemon have a 30% chance to burn the opponent.",
 	},
 	flareboost: {
 		inherit: true,
@@ -110,6 +121,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return false;
 			}
 		},
+		desc: "While this Pokemon is burned, the power of its special attacks is multiplied by 1.5. Immune to burn damage",
+		shortDesc: "While this Pokemon is burned, its special attacks have 1.5x power. Immune to burn damage.",
+
 	},
 	friendguard: {
 		inherit: true,
@@ -119,20 +133,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(0.5);
 			}
 		},
+		shortDesc: "This Pokemon's allies receive 1/2 damage from other Pokemon's attacks.",
 	},
 	hypercutter: {
 		inherit: true,
 		onModifyCritRatio(critRatio) {
 			return critRatio + 1;
 		},
+		shortDesc: "Prevents other Pokemon from lowering this Pokemon's Attack stat stage. This Pokemon's critical hit ratio is raised by 1 stage.",
+
 	},
 	illuminate: {
 		inherit: true,
 		onSourceModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
 			this.debug('illuminate - enhancing accuracy');
-			return accuracy + 20;
-		}
+			return this.chainModify(1.2);
+		},
+		shortDesc: "This Pokemon's moves have their accuracy multiplied by 1.2.",
 	},
 	illusion: {
 		inherit: true,
@@ -141,7 +159,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.debug('Illusion - power boost');
 				return this.chainModify([5325, 4096]);
 			}
-		}
+		},
+		desc: "When this Pokemon switches in, it appears as the last unfainted Pokemon in its party until it takes direct damage from another Pokemon's attack. This Pokemon's actual level and HP are displayed instead of those of the mimicked Pokemon. This Pokemon's attacks deal 30% more damage while under Illusion",
+		shortDesc: "This Pokemon appears as the last Pokemon in the party until it takes direct damage. 30% more damage while Illusion persists.",
+
 	},
 	immunity: {
 		inherit: true,
@@ -151,6 +172,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(0.8);
 			}
 		},
+		shortDesc: "This Pokemon cannot be poisoned. Gaining this Ability while poisoned cures it. 20% less damage from Poison",
 	},
 	innerfocus: {
 		inherit: true,
@@ -159,12 +181,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				move.accuracy = 90
 			}
 		},
+		desc: "This Pokemon cannot be made to flinch. This Pokemon is immune to the effect of the Intimidate and Scare Abilities. The Accuracy of this Pokemon's Focus Blast becomes 90%.",
+		shortDesc: "This Pokemon cannot be made to flinch. Immune to Intimidate and Scare. Focus Blast's Accuracy becomes 90",
+
 	},
 	keeneye: {
 		inherit: true,
 		onModifyAccuracy(accuracy) {
 			return this.chainModify(1.1);
-		}
+		},
+		desc: "Prevents other Pokemon from lowering this Pokemon's accuracy stat stage. This Pokemon ignores a target's evasiveness stat stage. This Pokemon has their Accuracy multiplied by 1.1",
+		shortDesc: "10% accuracy boost. This Pokemon's accuracy can't be lowered by others; ignores their evasiveness stat.",
+		
 	},
 	levitate: {
 		inherit: true,
@@ -180,6 +208,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(1.25);	
 			}
 		},
+		desc: "This Pokemon is immune to Ground-type attacks and the effects of Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability. The effects of Gravity, Ingrain, Smack Down, Thousand Arrows, and Iron Ball nullify the immunity. Thousand Arrows can hit this Pokemon as if it did not have this Ability. While levitating, the power of this Pokemon's Flying-type moves are multiplied by 1.25",
+		shortDesc: "This Pokemon is immune to Ground; Gravity/Ingrain/Smack Down/Iron Ball nullify it. 25% boost to Flying moves",
 	},
 	limber: {
 		inherit: true,
@@ -189,6 +219,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (this.activeMove.id !== 'struggle') return this.chainModify([2868,4096]);
 			}
 		},
+		shortDesc: "This Pokemon cannot be paralyzed. Gaining this Ability while paralyzed cures it. Takes 30% less recoil damage.",
 	},
 	magmaarmor: {
 		inherit: true,
@@ -198,6 +229,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		isBreakable: true,
+		shortDesc: "This Pokemon cannot be frozen. Gaining this Ability while frozen cures it. 30% less damage from Ice and Water attacks",
 
 	},
 	mountaineer: {
@@ -209,6 +241,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return null;
 			}
 		},
+		shortDesc: "This Pokemon takes no damage from Stealth Rock; Rock Immunity",
 	},
 	// mummy: {
 	// 	inherit: true,
@@ -311,8 +344,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.debug('Overcoat weaken')
 				return this.chainModify(0.9)
 			}
-
-		}
+		},
+		desc: "This Pokemon is immune to powder moves, damage from Sandstorm, and the effects of Rage Powder and the Effect Spore Ability. This Pokemon takes 10% less damage from Special attacks",
+		shortDesc: "This Pokemon is immune to powder moves, Sandstorm damage, and Effect Spore. 10% less damage from Special attacks",
 	},
 	overgrow: {
 		inherit: true,
@@ -339,7 +373,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					return this.chainModify(1.2);
 				}
 			}
-		}
+		},
+		shortDesc: "Boost Pokemon's Grass moves by 20%, 50% when below 1/3 HP",
+		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its offensive stat is multiplied by 1.5 while using a Grass-type attack, and 1.2 otherwise.",
 	},
 	poisontouch: {
 		inherit: true,
@@ -406,6 +442,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				} 
 			}
 		},
+		desc: "This Pokemon's attacks have their power multiplied by 1.25 against targets of the same gender. There is no modifier if either this Pokemon or the target is genderless.",
+		shortDesc: "This Pokemon's attacks do 1.25x on same gender targets.",
 	},
 	runaway: { 
 		inherit: true,
@@ -427,6 +465,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.boost({spe: 2}, target, target, null, false, true);
 			}
 		},
+		desc: "This Pokemon's Speed is raised by 2 stages for each of its stat stages that is lowered by an opposing Pokemon.",
+		shortDesc: "This Pokemon's Speed is raised by 2 for each of its stats that is lowered by a foe.",
 	},
 	scrappy: {
 		inherit: true,
@@ -439,14 +479,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				delete boost.spa;
 				this.add('-fail', target, 'unboost', 'Special Attack', '[from] ability: Scrappy', '[of] ' + target);
 			}
-		}
+		},
+		desc: "This Pokemon can hit Ghost types with Normal- and Fighting-type moves. This Pokemon is immune to the effect of the Intimidate and Scare Abilities.",
+		shortDesc: "Fighting, Normal moves hit Ghost. Immune to Intimidate and Scare.",
 	},
 	shellarmor: {
 		inherit: true,
 		onSourceModifyDamage(damage, source, target, move) {
 			this.debug('Shell Armor weaken')
 			return this.chainModify(0.9)
-		}
+		},
+		shortDesc: "This Pokemon takes 10% less damage. Cannot be struck by a critical hit.",
+		desc: "This Pokemon takes 10% less damage. Cannot be struck by a critical hit.",
+
 	},
 	static: {
 		inherit: true,
@@ -461,6 +506,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				ability: this.dex.abilities.get('static'),
 			});
 		},
+		shortDesc: "Contact moves used by or against this Pokemon have a 30% chance to burn the opponent.",
 	},
 	swarm: {
 		inherit: true,
@@ -487,13 +533,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					return this.chainModify(1.2);
 				}
 			}
-		}
+		},
+		shortDesc: "Boost Pokemon's Bug moves by 20%, 50% when below 1/3 HP",
+		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its offensive stat is multiplied by 1.5 while using a Bug-type attack, and 1.2 otherwise.",
+
 	},
 	terravolt: {
 		inherit: true,
 		onStart(pokemon) {
 			this.add('-start', pokemon, 'typeadd', 'Electric', '[from] ability: Terravolt');
 		},
+		desc: "On switch-in, This Pokemon gains the Electric type in addition to its current typing. Moves and their effects ignore certain Abilities of other Pokemon. The Abilities that can be negated are Aroma Veil, Aura Break, Battle Armor, Big Pecks, Bulletproof, Clear Body, Contrary, Damp, Dazzling, Disguise, Dry Skin, Filter, Flash Fire, Flower Gift, Flower Veil, Fluffy, Friend Guard, Fur Coat, Grass Pelt, Heatproof, Heavy Metal, Hyper Cutter, Ice Face, Ice Scales, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Light Metal, Lightning Rod, Limber, Magic Bounce, Magma Armor, Marvel Scale, Mirror Armor, Motor Drive, Multiscale, Oblivious, Overcoat, Own Tempo, Pastel Veil, Punk Rock, Queenly Majesty, Sand Veil, Sap Sipper, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Sweet Veil, Tangled Feet, Telepathy, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Bubble, Water Veil, White Smoke, Wonder Guard, and Wonder Skin. This affects every other Pokemon on the field, whether or not it is a target of this Pokemon's move, and whether or not their Ability is beneficial to this Pokemon.",
+		shortDesc: "This Pokemon gains the Electric Type and its moves and their effects ignore the Abilities of other Pokemon.",
+
 	},
 	torrent: {
 		inherit: true,
@@ -520,7 +572,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					return this.chainModify(1.2);
 				}
 			}
-		}
+		},
+		shortDesc: "Boost Pokemon's Water moves by 20%, 50% when below 1/3 HP",
+		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its offensive stat is multiplied by 1.5 while using a Water-type attack, and 1.2 otherwise.",
+
 	},
 	toxicboost: {
 		inherit: true,
@@ -529,6 +584,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return false;
 			}
 		},
+		desc: "While this Pokemon is poisoned, the power of its physical attacks is multiplied by 1.5. This Pokemon takes no damage from the effects of Poison or Toxic.",
+		shortDesc: "While this Pokemon is poisoned, its physical attacks have 1.5x power. Immune to Poison and Toxic status damage",
+
 	},
 	//*** Pokebilities Trace - Commented just in case */
 	// trace: {
@@ -574,6 +632,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			this.add('-start', pokemon, 'typeadd', 'Fire', '[from] ability: Turboblaze');
 		},
+		desc: "On switch-in, This Pokemon gains the Fire type in addition to its current typing. Moves and their effects ignore certain Abilities of other Pokemon. The Abilities that can be negated are Aroma Veil, Aura Break, Battle Armor, Big Pecks, Bulletproof, Clear Body, Contrary, Damp, Dazzling, Disguise, Dry Skin, Filter, Flash Fire, Flower Gift, Flower Veil, Fluffy, Friend Guard, Fur Coat, Grass Pelt, Heatproof, Heavy Metal, Hyper Cutter, Ice Face, Ice Scales, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Light Metal, Lightning Rod, Limber, Magic Bounce, Magma Armor, Marvel Scale, Mirror Armor, Motor Drive, Multiscale, Oblivious, Overcoat, Own Tempo, Pastel Veil, Punk Rock, Queenly Majesty, Sand Veil, Sap Sipper, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Sweet Veil, Tangled Feet, Telepathy, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Bubble, Water Veil, White Smoke, Wonder Guard, and Wonder Skin. This affects every other Pokemon on the field, whether or not it is a target of this Pokemon's move, and whether or not their Ability is beneficial to this Pokemon.",
+		shortDesc: "This Pokemon gains the Fire Type and its moves and their effects ignore the Abilities of other Pokemon.",
+
 	},
 	// wanderingspirit: {
 	// 	inherit: true,
@@ -630,7 +691,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart(source) {
 			this.add('-activate', source, 'ability: Water Veil');
 			source.addVolatile('aquaring', source, source.getAbility());
-
-		}
+		},
+		name: "Water Veil",
+		shortDesc: "Summons Aqua Ring on switch-in. This Pokemon cannot be burned. Gaining this Ability while burned cures it.",
 	},
 };

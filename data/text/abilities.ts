@@ -2183,7 +2183,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	}, 
 	vengeance: {
 		name: "Vengeance",
-		shortDesc: "Boost Pokemon's ghost moves by 20%, 50% when below 1/3 HP",
+		shortDesc: "Boost Pokemon's Ghost moves by 20%, 50% when below 1/3 HP",
 	},
 	blitzboxer: {
 		name: "Blitz Boxer",
