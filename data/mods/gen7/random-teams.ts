@@ -704,7 +704,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		case 'Snow Cloak': case 'Steadfast': case 'Weak Armor':
 			return true;
 		case 'Aerilate': case 'Galvanize': case 'Pixilate': case 'Refrigerate':
-			return !counter.get('Normal');
+			return ['doubleedge', 'hypervoice', 'return'].every(m => !moves.has(m));
 		case 'Analytic':
 			return (species.id === 'starmie' && role !== 'Wallbreaker');
 		case 'Battle Armor': case 'Sturdy':
@@ -746,7 +746,8 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		case 'Magic Guard': case 'Speed Boost':
 			return (abilities.has('Tinted Lens') && role === 'Wallbreaker');
 		case 'Magnet Pull':
-			return (!!counter.get('Normal') || !types.has('Electric') && !moves.has('earthpower'));
+			// Return part is for Golem-Alola
+			return (moves.has('return') || !types.has('Electric') && !moves.has('earthpower'));
 		case 'Mold Breaker':
 			return (
 				species.baseSpecies === 'Basculin' || species.id === 'pangoro' || (abilities.has('Sheer Force'))
