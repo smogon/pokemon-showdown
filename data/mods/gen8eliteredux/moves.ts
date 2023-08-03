@@ -1,4 +1,5 @@
 // TODO: Make Gastro Acid only disable ability, not innates
+//TODO: Implement Shield Dust entry hazard immunity
 export const Moves: {[k: string]: ModdedMoveData} = {
 	aeroblast: {
 		inherit: true,
