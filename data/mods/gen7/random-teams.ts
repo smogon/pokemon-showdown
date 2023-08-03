@@ -341,7 +341,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		this.incompatibleMoves(moves, movePool, ['gigadrain', 'leafstorm'], ['leafstorm', 'petaldance', 'powerwhip']);
 		this.incompatibleMoves(moves, movePool, 'wildcharge', 'thunderbolt');
 		this.incompatibleMoves(moves, movePool, 'gunkshot', 'poisonjab');
-		this.incompatibleMoves(moves, movePool, ['drainpunch', 'focusblast'], ['highjumpkick', 'superpower']);
+		this.incompatibleMoves(moves, movePool, ['drainpunch', 'focusblast'], ['closecombat', 'highjumpkick', 'superpower']);
 		this.incompatibleMoves(moves, movePool, 'stoneedge', 'headsmash');
 		this.incompatibleMoves(moves, movePool, 'dracometeor', 'dragonpulse');
 		this.incompatibleMoves(moves, movePool, 'dragonclaw', 'outrage');
