@@ -702,7 +702,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		switch (ability) {
 		case 'Battle Bond': case 'Dazzling': case 'Flare Boost': case 'Gluttony': case 'Harvest': case 'Hyper Cutter':
 		case 'Ice Body': case 'Innards Out': case 'Liquid Voice': case 'Magician': case 'Moody': case 'Sand Veil':
-		case 'Snow Cloak': case 'Steadfast':
+		case 'Snow Cloak': case 'Steadfast': case 'Weak Armor':
 			return true;
 		case 'Aerilate': case 'Galvanize': case 'Pixilate': case 'Refrigerate':
 			return !counter.get('Normal');
@@ -739,7 +739,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			return (!counter.get(toID(ability)) || moves.has('dynamicpunch'));
 		case 'Lightning Rod':
 			return (
-				species.types.includes('Ground') ||
+				types.has('Ground') ||
 				((!!teamDetails.rain || moves.has('raindance')) && species.id === 'seaking')
 			);
 		case 'Limber':
@@ -771,7 +771,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		case 'Sand Force': case 'Sand Rush':
 			return !teamDetails.sand;
 		case 'Scrappy':
-			return !species.types.includes('Normal');
+			return !types.has('Normal');
 		case 'Serene Grace':
 			return (!counter.get('serenegrace') || species.name === 'Blissey');
 		case 'Sheer Force':
@@ -803,8 +803,6 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			return (!!species.isMega || abilities.has('Prankster') || !counter.get('setup') && !moves.has('acrobatics'));
 		case 'Water Absorb':
 			return moves.has('raindance') || ['Drizzle', 'Unaware', 'Volt Absorb'].some(abil => abilities.has(abil));
-		case 'Weak Armor':
-			return (!counter.get('setup') || species.id !== 'kabutops');
 		}
 
 		return false;
@@ -860,6 +858,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		if (species.name === 'Kommo-o' && role === 'Z-Move user') return 'Soundproof';
 		if (abilities.has('Toxic Boost')) return 'Toxic Boost';
 		if (species.id === 'porygon2') return 'Trace';
+		if (types.has('Water') && counter.get('setup') && abilities.has('Weak Armor')) return 'Weak Armor';
 
 		let abilityAllowed: Ability[] = [];
 		// Obtain a list of abilities that are allowed (not culled)
