@@ -1183,11 +1183,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		const srWeakness = srImmunity ? 0 : this.dex.getEffectiveness('Rock', species);
 		while (evs.hp > 1) {
 			const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-			if (moves.has('substitute') && (
-				['Petaya Berry', 'Sitrus Berry'].includes(item) ||
-				(ability === 'Power Construct' && item !== 'Leftovers')
-			)) {
-				// Three Substitutes should activate Petaya Berry for Dedenne
+			if (moves.has('substitute') && (item === 'Sitrus Berry' || (ability === 'Power Construct' && item !== 'Leftovers'))) {
 				// Two Substitutes should activate Sitrus Berry or Power Construct
 				if (hp % 4 === 0) break;
 			} else if (moves.has('bellydrum') && (item === 'Sitrus Berry' || ability === 'Gluttony')) {
