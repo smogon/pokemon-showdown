@@ -707,7 +707,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			return ['doubleedge', 'hypervoice', 'return'].every(m => !moves.has(m));
 		case 'Analytic':
 			return (species.id === 'starmie' && role !== 'Wallbreaker');
-		case 'Battle Armor': case 'Sturdy':
+		case 'Sturdy':
 			return (!!counter.get('recoil') && !counter.get('recovery'));
 		case 'Chlorophyll':
 			return (
@@ -715,7 +715,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 				(!moves.has('sunnyday') && !teamDetails.sun)
 			);
 		case 'Competitive':
-			return (!counter.get('Special'));
+			return !counter.get('Special');
 		case 'Compound Eyes': case 'No Guard':
 			// Shadow Punch bit is for Golurk
 			return (!counter.get('inaccurate') || moves.has('shadowpunch'));
@@ -732,13 +732,13 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			);
 		case 'Intimidate':
 			// Slam part is for Tauros
-			return (moves.has('bodyslam') || abilities.has('Reckless') && counter.get('recoil') > 1);
+			return (moves.has('bodyslam') || species.id === 'staraptor');
 		case 'Iron Fist':
 			// Dynamic Punch bit is for Golurk
 			return (!counter.get(toID(ability)) || moves.has('dynamicpunch'));
 		case 'Lightning Rod':
 			return (
-				types.has('Ground') ||
+				types.has('Ground') || species.id === 'marowakalola' ||
 				((!!teamDetails.rain || moves.has('raindance')) && species.id === 'seaking')
 			);
 		case 'Limber':
@@ -750,14 +750,14 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			return (moves.has('return') || !types.has('Electric') && !moves.has('earthpower'));
 		case 'Mold Breaker':
 			return (
-				species.baseSpecies === 'Basculin' || species.id === 'pangoro' || (abilities.has('Sheer Force'))
+				species.baseSpecies === 'Basculin' || species.id === 'pangoro' || abilities.has('Sheer Force')
 			);
 		case 'Natural Cure':
 			return (species.id === 'starmie' && role === 'Wallbreaker');
 		case 'Overgrow':
 			return !counter.get('Grass');
 		case 'Poison Heal':
-			return (species.id === 'breloom');
+			return species.id === 'breloom';
 		case 'Power Construct':
 			return species.forme === '10%';
 		case 'Prankster':
@@ -781,7 +781,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 				!!species.isMega || species.id === 'toucannon'
 			);
 		case 'Simple':
-			return (!counter.get('setup'));
+			return !counter.get('setup');
 		case 'Slush Rush':
 			return !teamDetails.hail;
 		case 'Snow Warning':
