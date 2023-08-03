@@ -749,12 +749,12 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			return (
 				species.baseSpecies === 'Basculin' || species.id === 'pangoro' || abilities.has('Sheer Force')
 			);
+		case 'Oblivious': case 'Prankster':
+			return !counter.get('Status');
 		case 'Overgrow':
 			return !counter.get('Grass');
 		case 'Power Construct':
 			return species.forme === '10%';
-		case 'Prankster':
-			return !counter.get('Status');
 		case 'Pressure': case 'Synchronize':
 			return (counter.get('Status') < 2 || !!counter.get('recoil') || !!species.isMega);
 		case 'Regenerator':
