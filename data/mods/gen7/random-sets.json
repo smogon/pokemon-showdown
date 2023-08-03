@@ -1263,7 +1263,7 @@
         "level": 85,
         "sets": [
             {
-                "role": "Bulky Attacker",
+                "role": "Bulky Support",
                 "movepool": ["earthquake", "icebeam", "recover", "scald", "toxic"]
             }
         ]
@@ -3543,8 +3543,8 @@
         "level": 87,
         "sets": [
             {
-                "role": "Fast Attacker",
-                "movepool": ["hiddenpowerice", "painsplit", "shadowball", "thunderbolt", "trick", "voltswitch", "willowisp"]
+                "role": "Fast Support",
+                "movepool": ["defog", "hiddenpowerice", "painsplit", "shadowball", "thunderbolt", "trick", "voltswitch", "willowisp"]
             }
         ]
     },

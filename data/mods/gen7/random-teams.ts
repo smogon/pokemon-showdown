@@ -712,8 +712,9 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		case 'Aerilate': case 'Galvanize': case 'Pixilate': case 'Refrigerate':
 			return ['doubleedge', 'hypervoice', 'return'].every(m => !moves.has(m));
 		case 'Chlorophyll':
+			// Petal Dance is for Lilligant
 			return (
-				species.baseStats.spe > 100 ||
+				species.baseStats.spe > 100 || moves.has('petaldance') ||
 				(!moves.has('sunnyday') && !teamDetails.sun)
 			);
 		case 'Competitive':
@@ -783,7 +784,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		case 'Solar Power':
 			return (!counter.get('Special') || !teamDetails.sun || !!species.isMega);
 		case 'Sturdy':
-			return (!!counter.get('recoil') && !counter.get('recovery'));
+			return (!!counter.get('recoil') && !counter.get('recovery') || species.id === 'steelix');
 		case 'Swarm':
 			return (!counter.get('Bug') || !!species.isMega);
 		case 'Technician':
@@ -846,10 +847,11 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		if (abilities.has('Harvest') && (role === 'Bulky Support' || role === 'Staller')) return 'Harvest';
 		if (species.name === 'Raticate-Alola') return 'Hustle';
 		if (species.id === 'ninjask' || species.id === 'seviper') return 'Infiltrator';
-		if (abilities.has('Sheer Force') && abilities.has('Mold Breaker') && role !== 'Wallbreaker') return 'Mold Breaker';
+		if (species.id === 'rampardos' && role === 'Bulky Attacker') return 'Mold Breaker';
 		if (species.baseSpecies === 'Altaria') return 'Natural Cure';
 		if (species.id === 'tsareena') return 'Queenly Majesty';
 		if (role === 'AV Pivot' && abilities.has('Regenerator')) return 'Regenerator';
+		if (species.id === 'druddigon' && role === 'Bulky Support') return 'Rough Skin';
 		if (abilities.has('Scrappy') && moves.has('boomburst')) return 'Scrappy';
 		if (abilities.has('Shed Skin') && moves.has('rest') && !moves.has('sleeptalk')) return 'Shed Skin';
 		if (species.name === 'Kommo-o' && role === 'Z-Move user') return 'Soundproof';
@@ -1060,7 +1062,8 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		if (role === 'Fast Support') {
 			return (
 				counter.get('Physical') + counter.get('Special') >= 3 &&
-				['nuzzle', 'uturn', 'voltswitch'].every(m => !moves.has(m))
+				['nuzzle', 'rapidspin', 'uturn', 'voltswitch'].every(m => !moves.has(m)) &&
+				this.dex.getEffectiveness('Rock', species) < 2
 			) ? 'Life Orb' : 'Leftovers';
 		}
 		if (!counter.get('Status')) {
