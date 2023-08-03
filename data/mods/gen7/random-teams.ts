@@ -857,6 +857,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		if (role === 'AV Pivot' && abilities.has('Regenerator')) return 'Regenerator';
 		if (abilities.has('Scrappy') && moves.has('boomburst')) return 'Scrappy';
 		if (species.id === 'scrafty' && role === 'Bulky Setup') return 'Shed Skin';
+		if (species.name === 'Kommo-o' && role === 'Z-Move user') return 'Soundproof';
 		if (abilities.has('Toxic Boost')) return 'Toxic Boost';
 		if (species.id === 'porygon2') return 'Trace';
 
