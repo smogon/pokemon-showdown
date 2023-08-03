@@ -2679,6 +2679,11 @@
             {
                 "role": "Fast Support",
                 "movepool": ["calmmind", "defog", "dracometeor", "healingwish", "hiddenpowerfire", "psyshock", "roost", "trick"]
+            },
+            {
+                "role": "Z-Move user",
+                "movepool": ["calmmind", "dracometeor", "psyshock", "roost"],
+                "preferredTypes": ["Dragon"]
             }
         ]
     },
@@ -2697,6 +2702,11 @@
             {
                 "role": "Fast Support",
                 "movepool": ["calmmind", "dracometeor", "hiddenpowerfire", "psyshock", "roost", "surf", "thunderbolt", "trick"]
+            },
+            {
+                "role": "Z-Move user",
+                "movepool": ["calmmind", "dracometeor", "psyshock", "roost"],
+                "preferredTypes": ["Dragon"]
             }
         ]
     },
@@ -3717,6 +3727,11 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["energyball", "icebeam", "surf", "tailglow"]
+            },
+            {
+                "role": "Z-Move user",
+                "movepool": ["energyball", "icebeam", "surf", "tailglow"],
+                "preferredTypes": ["Water"]
             }
         ]
     },
@@ -4466,8 +4481,9 @@
                 "movepool": ["bravebird", "defog", "icebeam", "roost", "scald"]
             },
             {
-                "role": "Setup Sweeper",
-                "movepool": ["hurricane", "icebeam", "raindance", "rest", "scald"]
+                "role": "Z-Move user",
+                "movepool": ["hurricane", "icebeam", "raindance", "rest", "scald"],
+                "preferredTypes": ["Water"]
             }
         ]
     },
@@ -6473,7 +6489,16 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["dracometeor", "fireblast", "nastyplot", "sludgewave", "uturn"]
+                "movepool": ["dracometeor", "fireblast", "sludgewave", "uturn"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["dracometeor", "fireblast", "nastyplot", "sludgewave"]
+            },
+            {
+                "role": "Z-Move user",
+                "movepool": ["dracometeor", "fireblast", "nastyplot", "sludgewave"],
+                "preferredTypes": ["Dragon"]
             }
         ]
     },
