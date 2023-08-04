@@ -809,11 +809,13 @@ export const commands: Chat.ChatCommands = {
 					if (!sets) continue;
 					let buf = `<span style="color:#999999;">Moves for ${pokemon.name} in ${format.name}:</span><br/>`;
 					for (const set of sets) {
-						buf += `<details><summary>${set.role}</summary>` +
-							(dex.gen === 9 ?
-								`<b>Tera Type${Chat.plural(set.teraTypes)}</b>: ${set.teraTypes.join(', ')}<br/>` :
-								'') +
-							`<b>Moves</b>: ${set.movepool.sort().map(formatMove).join(', ')}</details>`;
+						buf += `<details><summary>${set.role}</summary>`
+						if (dex.gen === 9) {
+							buf += `<b>Tera Type${Chat.plural(set.teraTypes)}</b>: ${set.teraTypes.join(', ')}<br/>`;
+						} else if (dex.gen === 7 && set.preferredTypes) {
+							buf += `<b>Preferred Type${Chat.plural(set.preferredTypes)}</b>: ${set.preferredTypes.join(', ')}<br/>`;
+						}
+						buf += `<b>Moves</b>: ${set.movepool.sort().map(formatMove).join(', ')}</details>`;
 						setCount++;
 					}
 					movesets.push(buf);
