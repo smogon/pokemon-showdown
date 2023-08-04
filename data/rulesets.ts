@@ -2586,11 +2586,12 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const fusionName = target.set.name;
 			if (!fusionName || fusionName === newSpecies.name) return;
 			const fusionSpecies = this.dex.deepClone(this.dex.species.get(fusionName));
+			newSpecies.bst = newSpecies.baseStats.hp;
 			for (const stat in newSpecies.baseStats) {
 				if (stat === 'hp') continue;
 				const addition = Math.floor(fusionSpecies.baseStats[stat] / 4);
-				newSpecies.baseStats[stat] += addition;
-				newSpecies.bst += addition;
+				newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] + addition, 1, 255);
+				newSpecies.bst += newSpecies.baseStats[stat];
 			}
 			return newSpecies;
 		},
