@@ -456,12 +456,12 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
 		}
 		if (!fusion.exists || fusion.gen > dex.gen) {
-			const monName = fusion.gen > dex.gen ? fusion.name : args[0].trim();
+			const monName = fusion.gen > dex.gen ? fusion.name : args[1].trim();
 			const additionalReason = fusion.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
 			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
 		}
 		if (fusion.name === species.name) {
-			throw new Chat.ErrorMessage('Pok\u00e9 can\'t fuse with themselves.');
+			throw new Chat.ErrorMessage('Pok\u00e9mon can\'t fuse with themselves.');
 		}
 		species.bst = species.baseStats.hp;
 		for (const statName in species.baseStats) {
