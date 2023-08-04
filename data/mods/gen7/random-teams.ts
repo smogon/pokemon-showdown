@@ -592,7 +592,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 					movePool, preferredType, role);
 			} else {
 				// If they have no regular STAB move, enforce U-turn on Bug types.
-				if (movePool.includes('uturn')) {
+				if (movePool.includes('uturn') && types.includes('Bug')) {
 					counter = this.addMove('uturn', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 						movePool, preferredType, role);
 				}
@@ -637,7 +637,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		}
 
 		// Enforce a move not on the noSTAB list
-		if (!counter.damagingMoves.size) {
+		if (!counter.damagingMoves.size && !(moves.has('uturn') && types.includes('Bug'))) {
 			// Choose an attacking move
 			const attackingMoves = [];
 			for (const moveid of movePool) {
