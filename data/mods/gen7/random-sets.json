@@ -744,8 +744,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["drainpunch", "earthquake", "fakeout", "return", "suckerpunch"],
-                "preferredTypes": ["Ground"]
+                "movepool": ["drainpunch", "earthquake", "fakeout", "return", "suckerpunch"]
             }
         ]
     },
