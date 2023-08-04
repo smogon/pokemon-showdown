@@ -1075,7 +1075,8 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		}
 		if (
 			['Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === m) &&
-			(this.dex.getEffectiveness('Rock', species) < 2 || species.id === 'ninjask')
+			(this.dex.getEffectiveness('Rock', species) < 2 || species.id === 'ninjask') &&
+			ability !== 'Sturdy'
 		) return 'Life Orb';
 		return 'Leftovers';
 	}
