@@ -1060,7 +1060,7 @@
         "level": 82,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Staller",
                 "movepool": ["defog", "knockoff", "psychic", "roost", "stealthrock", "taunt", "uturn", "willowisp"]
             },
             {
