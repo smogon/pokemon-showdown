@@ -5348,22 +5348,22 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4,
 		num: 312,
 	},
-	electrolytes: {
+	electrocytes: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Electric') {
-				this.debug('Electrolytes boost');
+				this.debug('Electrocytes boost');
 				return this.chainModify(1.25);	
 				}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Electric') {
-				this.debug('Electrolytes boost');
+				this.debug('Electrocytes boost');
 				return this.chainModify(1.25);	
 			}
 		},
-		name: "Electrolytes",
+		name: "Electrocytes",
 		rating: 3,
 		num: 313,
 	},
@@ -5512,13 +5512,16 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onStart(pokemon) {
 			this.boost({def: 1}, pokemon);
 		},
-		name: "Let's Roll",
+		name: "Lets Roll",
 		rating: 3.5,
 		num: 323,
 	},
 	aquatic: {
 		onStart(pokemon) {
-			this.add('-start', pokemon, 'typeadd', 'Water', '[from] ability: Aquatic');
+			if (!pokemon.types.includes('Water')) {
+				this.add('-start', pokemon, 'typeadd', 'Water', '[from] ability: Aquatic');
+
+			}
 		},
 		name: "Aquatic",
 		rating: 3.5,
@@ -5582,7 +5585,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	}, 
 	grounded: {
 		onStart(pokemon) {
-			this.add('-start', pokemon, 'typeadd', 'Ground', '[from] ability: Grounded');
+			if (!pokemon.types.includes('Ground')) {
+				this.add('-start', pokemon, 'typeadd', 'Ground', '[from] ability: Grounded');
+
+			}
 		},
 		name: "Grounded",
 		rating: 3.5,
@@ -5742,7 +5748,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	iceage: {
 		onStart(pokemon) {
-			this.add('-start', pokemon, 'typeadd', 'Ice', '[from] ability: Ice Age');
+			if (!pokemon.types.includes('Ice')) {
+				this.add('-start', pokemon, 'typeadd', 'Ice', '[from] ability: Ice Age');
+			}
 		},
 		name: "Ice Age",
 		rating: 3.5,
@@ -5750,7 +5758,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	halfdrake: {
 		onStart(pokemon) {
-			this.add('-start', pokemon, 'typeadd', 'Dragon', '[from] ability: Half Drake');
+			if (!pokemon.types.includes('Dragon')) {
+				this.add('-start', pokemon, 'typeadd', 'Dragon', '[from] ability: Half Drake');
+			}
 		},
 		name: "Half Drake",
 		rating: 3.5,
@@ -5771,7 +5781,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	dragonfly: {
 		// airborneness implemented in sim/pokemon.js:Pokemon#isGrounded
 		onStart(pokemon) {
-			this.add('-start', pokemon, 'typeadd', 'Dragon', '[from] ability: Dragonfly');
+			if (!pokemon.types.includes('Dragon')) {
+				this.add('-start', pokemon, 'typeadd', 'Dragon', '[from] ability: Dragonfly');
+			}
 		},
 		isBreakable: true,
 		name: "Dragonfly",
@@ -5810,7 +5822,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	metallic: {
 		onStart(pokemon) {
-			this.add('-start', pokemon, 'typeadd', 'Steel', '[from] ability: Metallic');
+			if (!pokemon.types.includes('Steel')) {
+				this.add('-start', pokemon, 'typeadd', 'Steel', '[from] ability: Metallic');
+
+			}
 		},
 		name: "Metallic",
 		rating: 3.5,
@@ -5939,7 +5954,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	phantom: {
 		onStart(pokemon) {
-			this.add('-start', pokemon, 'typeadd', 'Ghost', '[from] ability: Phantom');
+			if (!pokemon.types.includes('Ghost')) {
+				this.add('-start', pokemon, 'typeadd', 'Ghost', '[from] ability: Phantom');
+			}
 		},
 		name: "Phantom",
 		rating: 3.5,

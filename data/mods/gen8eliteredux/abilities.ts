@@ -211,6 +211,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "This Pokemon is immune to Ground-type attacks and the effects of Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability. The effects of Gravity, Ingrain, Smack Down, Thousand Arrows, and Iron Ball nullify the immunity. Thousand Arrows can hit this Pokemon as if it did not have this Ability. While levitating, the power of this Pokemon's Flying-type moves are multiplied by 1.25",
 		shortDesc: "This Pokemon is immune to Ground; Gravity/Ingrain/Smack Down/Iron Ball nullify it. 25% boost to Flying moves",
 	},
+	lightningrod: {
+		inherit: true,
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Electric') {
+				if (target.getStat('atk') > target.getStat('spa')) {
+					if (!this.boost({atk: 1})) {
+						this.add('-immune', target, '[from] ability: Lightning Rod');
+				} else {
+					if (!this.boost({spa: 1})) {
+						this.add('-immune', target, '[from] ability: Lightning Rod');
+					}
+				}
+				return null;
+				}
+			}
+		},
+	},
 	limber: {
 		inherit: true,
 		onDamage(damage, target, source, effect) {
@@ -468,6 +485,31 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "This Pokemon's Speed is raised by 2 stages for each of its stat stages that is lowered by an opposing Pokemon.",
 		shortDesc: "This Pokemon's Speed is raised by 2 for each of its stats that is lowered by a foe.",
 	},
+	sapsipper: {
+		inherit: true,
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Grass') {
+				if (target.getStat('atk') > target.getStat('spa')) {
+					if (!this.boost({atk: 1})) {
+						this.add('-immune', target, '[from] ability: Sap Sipper');
+				} else {
+					if (!this.boost({spa: 1})) {
+						this.add('-immune', target, '[from] ability: Sap Sipper');
+					}
+				}
+				return null;
+				}
+			}
+		},
+		onAllyTryHitSide(target, source, move) {
+			if (source === this.effectState.target || !target.isAlly(source)) return;
+			if (move.type === 'Grass') {
+				if (target.getStat('atk') > target.getStat('spa')) this.boost({atk: 1}, this.effectState.target);
+				else this.boost({spa: 1}, this.effectState.target);
+				
+			}
+		},
+	},
 	scrappy: {
 		inherit: true,
 		onTryBoost(boost, target, source, effect) {
@@ -508,6 +550,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		shortDesc: "Contact moves used by or against this Pokemon have a 30% chance to burn the opponent.",
 	},
+	stormdrain: {
+		inherit: true,
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Water') {
+				if (target.getStat('atk') > target.getStat('spa')) {
+					if (!this.boost({atk: 1})) {
+						this.add('-immune', target, '[from] ability: Storm Drain');
+				} else {
+					if (!this.boost({spa: 1})) {
+						this.add('-immune', target, '[from] ability: Storm Drain');
+					}
+				}
+				return null;
+				}
+			}
+		},
+	},
 	swarm: {
 		inherit: true,
 		onModifyAtkPriority: 5,
@@ -541,7 +600,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	terravolt: {
 		inherit: true,
 		onStart(pokemon) {
-			this.add('-start', pokemon, 'typeadd', 'Electric', '[from] ability: Terravolt');
+			if (!pokemon.types.includes('Electric')) {
+				this.add('-start', pokemon, 'typeadd', 'Electric', '[from] ability: Terravolt');
+			}
 		},
 		desc: "On switch-in, This Pokemon gains the Electric type in addition to its current typing. Moves and their effects ignore certain Abilities of other Pokemon. The Abilities that can be negated are Aroma Veil, Aura Break, Battle Armor, Big Pecks, Bulletproof, Clear Body, Contrary, Damp, Dazzling, Disguise, Dry Skin, Filter, Flash Fire, Flower Gift, Flower Veil, Fluffy, Friend Guard, Fur Coat, Grass Pelt, Heatproof, Heavy Metal, Hyper Cutter, Ice Face, Ice Scales, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Light Metal, Lightning Rod, Limber, Magic Bounce, Magma Armor, Marvel Scale, Mirror Armor, Motor Drive, Multiscale, Oblivious, Overcoat, Own Tempo, Pastel Veil, Punk Rock, Queenly Majesty, Sand Veil, Sap Sipper, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Sweet Veil, Tangled Feet, Telepathy, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Bubble, Water Veil, White Smoke, Wonder Guard, and Wonder Skin. This affects every other Pokemon on the field, whether or not it is a target of this Pokemon's move, and whether or not their Ability is beneficial to this Pokemon.",
 		shortDesc: "This Pokemon gains the Electric Type and its moves and their effects ignore the Abilities of other Pokemon.",
@@ -630,7 +691,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	turboblaze: {
 		inherit: true,
 		onStart(pokemon) {
-			this.add('-start', pokemon, 'typeadd', 'Fire', '[from] ability: Turboblaze');
+			if (!pokemon.types.includes('Fire')) {
+				this.add('-start', pokemon, 'typeadd', 'Fire', '[from] ability: Turboblaze');
+			}
 		},
 		desc: "On switch-in, This Pokemon gains the Fire type in addition to its current typing. Moves and their effects ignore certain Abilities of other Pokemon. The Abilities that can be negated are Aroma Veil, Aura Break, Battle Armor, Big Pecks, Bulletproof, Clear Body, Contrary, Damp, Dazzling, Disguise, Dry Skin, Filter, Flash Fire, Flower Gift, Flower Veil, Fluffy, Friend Guard, Fur Coat, Grass Pelt, Heatproof, Heavy Metal, Hyper Cutter, Ice Face, Ice Scales, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Light Metal, Lightning Rod, Limber, Magic Bounce, Magma Armor, Marvel Scale, Mirror Armor, Motor Drive, Multiscale, Oblivious, Overcoat, Own Tempo, Pastel Veil, Punk Rock, Queenly Majesty, Sand Veil, Sap Sipper, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Sweet Veil, Tangled Feet, Telepathy, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Bubble, Water Veil, White Smoke, Wonder Guard, and Wonder Skin. This affects every other Pokemon on the field, whether or not it is a target of this Pokemon's move, and whether or not their Ability is beneficial to this Pokemon.",
 		shortDesc: "This Pokemon gains the Fire Type and its moves and their effects ignore the Abilities of other Pokemon.",
