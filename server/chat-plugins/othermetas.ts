@@ -554,7 +554,11 @@ export const commands: Chat.ChatCommands = {
 			buf += '</span>';
 		}
 		buf += '<span style="float:left;min-height:26px">';
-		if (fusion.name.length) buf += '<span class="col statcol"><em>HP</em><br />' + species.baseStats.hp + '</span> ';
+		if (fusion.name.length) {
+			buf += '<span class="col statcol"><em>HP</em><br />' + species.baseStats.hp + '</span> ';
+		} else {
+			buf += '<span class="col statcol"><em>HP</em><br />0</span> ';
+		}
 		buf += '<span class="col statcol"><em>Atk</em><br />' + species.baseStats.atk + '</span> ';
 		buf += '<span class="col statcol"><em>Def</em><br />' + species.baseStats.def + '</span> ';
 		if (dex.gen <= 1) {
