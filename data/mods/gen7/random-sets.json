@@ -1997,7 +1997,8 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["bulletpunch", "closecombat", "facade", "knockoff"]
+                "movepool": ["bulkup", "bulletpunch", "closecombat", "facade", "knockoff"],
+                "preferredTypes": ["Dark"]
             }
         ]
     },
