@@ -4052,7 +4052,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["crunch", "icefang", "return", "superpower", "wildcharge"],
+                "movepool": ["crunch", "playrough", "return", "superpower", "wildcharge"],
                 "preferredTypes": ["Fighting"]
             }
         ]
