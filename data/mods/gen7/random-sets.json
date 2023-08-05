@@ -2128,7 +2128,7 @@
         "level": 90,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Bulky Attacker",
                 "movepool": ["defog", "encore", "roost", "thunderwave", "toxic", "uturn"]
             }
         ]
