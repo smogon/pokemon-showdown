@@ -963,7 +963,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		if (ability === 'Speed Boost') return 'Life Orb';
 		if (species.nfe) return (species.name === 'Scyther' && role === 'Fast Attacker') ? 'Choice Band' : 'Eviolite';
 		if (['healingwish', 'memento', 'switcheroo', 'trick'].some(m => moves.has(m))) {
-			if (species.baseStats.spe >= 60 && species.baseStats.spe <= 108) {
+			if (species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && role !== 'Wallbreaker') {
 				return 'Choice Scarf';
 			} else {
 				return (counter.get('Physical') > counter.get('Special')) ? 'Choice Band' : 'Choice Specs';
