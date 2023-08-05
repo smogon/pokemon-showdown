@@ -455,7 +455,7 @@ export const commands: Chat.ChatCommands = {
 			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
 			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
 		}
-		if (fusion.name.length) {			
+		if (fusion.name.length) {
 			if (!fusion.exists || fusion.gen > dex.gen) {
 				const monName = fusion.gen > dex.gen ? fusion.name : args[1].trim();
 				const additionalReason = fusion.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
@@ -475,7 +475,7 @@ export const commands: Chat.ChatCommands = {
 			if (!fusion.name.length) {
 				species.baseStats[statName] = Math.floor(species.baseStats[statName as StatID] / 4);
 				species.bst += species.baseStats[statName];
-			} else {				
+			} else {
 				const addition = Math.floor(fusion.baseStats[statName as StatID] / 4);
 				species.baseStats[statName] = Utils.clampIntRange(species.baseStats[statName] + addition, 1, 255);
 				species.bst += species.baseStats[statName];
