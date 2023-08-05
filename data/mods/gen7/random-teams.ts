@@ -1015,7 +1015,9 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			!counter.get('priority') && !moves.has('pursuit')
 		);
 
-		if (moves.has('pursuit') && moves.has('suckerpunch') && counter.get('Dark')) return 'Black Glasses';
+		if (
+			moves.has('pursuit') && moves.has('suckerpunch') && counter.get('Dark') && !priorityPokemon.includes(species.id)
+		) return 'Black Glasses';
 		if (counter.get('Special') === 4) {
 			return (
 				scarfReqs && species.baseStats.spa >= 90 && this.randomChance(1, 2)
