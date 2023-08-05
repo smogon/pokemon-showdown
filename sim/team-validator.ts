@@ -823,11 +823,11 @@ export class TeamValidator {
 		}
 
 		// Attempt move validation again after verifying Pokemon GO origin
-		if (setSources.isFromPokemonGo) {
+		if (ruleTable.has('obtainablemoves') && setSources.isFromPokemonGo) {
 			setSources.restrictiveMoves = [];
 			setSources.sources = ['8V'];
 			setSources.sourcesBefore = 0;
-			if (moveProblems && !moveProblems.length && ruleTable.has('obtainablemoves')) {
+			if (moveProblems && !moveProblems.length) {
 				problems.push(...this.validateMoves(outOfBattleSpecies, set.moves, setSources, set, name,
 					moveLegalityWhitelist));
 			}
