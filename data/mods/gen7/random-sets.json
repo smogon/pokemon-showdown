@@ -624,7 +624,7 @@
         "level": 88,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Setup Sweeper",
                 "movepool": ["agility", "knockoff", "liquidation", "rockslide", "superpower", "swordsdance", "xscissor"]
             }
         ]
