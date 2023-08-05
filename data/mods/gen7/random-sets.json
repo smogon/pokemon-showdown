@@ -3094,7 +3094,7 @@
         "level": 86,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Bulky Support",
                 "movepool": ["dazzlinggleam", "painsplit", "shadowball", "substitute", "taunt", "willowisp"]
             },
             {
