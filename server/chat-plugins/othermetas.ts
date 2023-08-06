@@ -574,7 +574,7 @@ export const commands: Chat.ChatCommands = {
 		this.sendReply(`|raw|${buf}`);
 	},
 	franticfusionshelp: [
-		`/fuse <pokemon>, <fusion>[, generation] - Shows the stats and abilities that <pokemon> would get when fused with <fusion>.`,
+		`/fuse <pokemon>, <fusion>[, generation] - Shows the stats and abilities that <pokemon> would get when fused with <fusion>, if only one Pok\u00e9mon is ingressed it shows the values it would add.`,
 		`Alternatively, you can use /fuse[gen number] to see a Pok\u00e9mon's stats in that generation.`,
 	],
 
