@@ -2492,7 +2492,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["fireblast", "icebeam", "knockoff", "playrough", "pursuit", "suckerpunch", "superpower"]
+                "movepool": ["fireblast", "knockoff", "playrough", "pursuit", "suckerpunch", "superpower"]
             },
             {
                 "role": "Setup Sweeper",
