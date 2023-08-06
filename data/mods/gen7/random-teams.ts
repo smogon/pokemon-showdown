@@ -1059,7 +1059,8 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		}
 		if (
 			(role === 'Fast Support' || moves.has('stickyweb')) && isLead && defensiveStatTotal < 255 &&
-			!counter.get('recovery') && !moves.has('protect') && (!counter.get('recoil') || ability === 'Rock Head')
+			!counter.get('recovery') && !moves.has('protect') && (!counter.get('recoil') || ability === 'Rock Head') &&
+			!moves.has('defog') && ability !== 'Regenerator'
 		) return 'Focus Sash';
 
 		// Default Items
