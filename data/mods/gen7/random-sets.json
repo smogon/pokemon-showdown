@@ -5315,7 +5315,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["darkpulse", "glare", "hiddenpowerice", "hypervoice", "surf", "thunderbolt", "voltswitch"]
+                "movepool": ["darkpulse", "glare", "hiddenpowerice", "hypervoice", "surf", "thunderbolt", "voltswitch"],
+                "preferredTypes": ["Normal"]
             },
             {
                 "role": "Setup Sweeper",
