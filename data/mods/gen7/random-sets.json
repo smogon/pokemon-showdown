@@ -2301,7 +2301,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["earthquake", "flamethrower", "gigadrain", "glare", "knockoff", "sludgewave", "suckerpunch", "switcheroo"],
-                "preferredTypes": ["Fire", "Ground"]
+                "preferredTypes": ["Ground"]
             },
             {
                 "role": "Setup Sweeper",
