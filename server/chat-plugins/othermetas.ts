@@ -455,20 +455,31 @@ export const commands: Chat.ChatCommands = {
 			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
 			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
 		}
-		if (!fusion.exists || fusion.gen > dex.gen) {
-			const monName = fusion.gen > dex.gen ? fusion.name : args[1].trim();
-			const additionalReason = fusion.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
-			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
+		if (fusion.name.length) {
+			if (!fusion.exists || fusion.gen > dex.gen) {
+				const monName = fusion.gen > dex.gen ? fusion.name : args[1].trim();
+				const additionalReason = fusion.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
+				throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
+			}
+			if (fusion.name === species.name) {
+				throw new Chat.ErrorMessage('Pok\u00e9mon can\'t fuse with themselves.');
+			}
 		}
-		if (fusion.name === species.name) {
-			throw new Chat.ErrorMessage('Pok\u00e9mon can\'t fuse with themselves.');
+		if (fusion.name.length) {
+			species.bst = species.baseStats.hp;
+		} else {
+			species.bst = 0;
 		}
-		species.bst = species.baseStats.hp;
 		for (const statName in species.baseStats) {
 			if (statName === 'hp') continue;
-			const addition = Math.floor(fusion.baseStats[statName as StatID] / 4);
-			species.baseStats[statName] = Utils.clampIntRange(species.baseStats[statName] + addition, 1, 255);
-			species.bst += species.baseStats[statName];
+			if (!fusion.name.length) {
+				species.baseStats[statName] = Math.floor(species.baseStats[statName as StatID] / 4);
+				species.bst += species.baseStats[statName];
+			} else {
+				const addition = Math.floor(fusion.baseStats[statName as StatID] / 4);
+				species.baseStats[statName] = Utils.clampIntRange(species.baseStats[statName] + addition, 1, 255);
+				species.bst += species.baseStats[statName];
+			}
 		}
 		const abilities = new Set<string>([...Object.values(species.abilities), ...Object.values(fusion.abilities)]);
 		let buf = '<div class="message"><ul class="utilichart"><li class="result">';
@@ -476,7 +487,7 @@ export const commands: Chat.ChatCommands = {
 		buf += `<span class="col iconcol"><psicon pokemon="${species.id}"/></span> `;
 		buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/pokemon/${species.id}" target="_blank">${species.name}</a></span> `;
 		buf += '<span class="col typecol">';
-		if (species.types) {
+		if (species.types && fusion.name.length) {
 			for (const type of species.types) {
 				buf += `<img src="https://${Config.routes.client}/sprites/types/${type}.png" alt="${type}" height="14" width="32">`;
 			}
@@ -543,7 +554,11 @@ export const commands: Chat.ChatCommands = {
 			buf += '</span>';
 		}
 		buf += '<span style="float:left;min-height:26px">';
-		buf += '<span class="col statcol"><em>HP</em><br />' + species.baseStats.hp + '</span> ';
+		if (fusion.name.length) {
+			buf += '<span class="col statcol"><em>HP</em><br />' + species.baseStats.hp + '</span> ';
+		} else {
+			buf += '<span class="col statcol"><em>HP</em><br />0</span> ';
+		}
 		buf += '<span class="col statcol"><em>Atk</em><br />' + species.baseStats.atk + '</span> ';
 		buf += '<span class="col statcol"><em>Def</em><br />' + species.baseStats.def + '</span> ';
 		if (dex.gen <= 1) {
@@ -560,6 +575,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	franticfusionshelp: [
 		`/fuse <pokemon>, <fusion>[, generation] - Shows the stats and abilities that <pokemon> would get when fused with <fusion>.`,
+		`/fuse <pokemon>[, generation] - Shows the stats and abilities that <pokemon> donates.`,
 		`Alternatively, you can use /fuse[gen number] to see a Pok\u00e9mon's stats in that generation.`,
 	],
 
