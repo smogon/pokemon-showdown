@@ -3748,7 +3748,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["airslash", "earthpower", "leechseed", "rest", "seedflare", "substitute"],
-                "preferredTypes": ["Ground"]
+                "preferredTypes": ["Flying"]
             }
         ]
     },
