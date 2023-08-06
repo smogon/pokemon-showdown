@@ -2596,4 +2596,26 @@ export const Rulesets: {[k: string]: FormatData} = {
 			return newSpecies;
 		},
 	},
+	teraswitchmod: {
+		effectType: 'Rule',
+		name: "Tera Switch Mod",
+		desc: `The Pokémon automatically switches in and out of its base typing and its designated Tera typing at the end of each turn .`,
+		onBegin() {
+			this.add('rule', 'Tera Switch Mod: The Pokémon automatically switches in and out of its base typing and its designated Tera typing at the end of each turn ');
+		},
+		onResidualOrder: 29,
+		onResidual(pokemon) {
+			if (!pokemon.terastallized) {
+				this.actions.terastallize(pokemon);
+			} else {
+				delete pokemon.terastallized;
+				this.add('-start', pokemon, 'typechange', pokemon.species.types, 'returned');
+			}
+		},
+		onSwitchOut(pokemon) {
+			if (pokemon.terastallized) {
+				delete pokemon.terastallized;
+			}
+		},
+	},
 };
