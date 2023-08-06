@@ -1158,10 +1158,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			ivs.atk = 0;
 		}
 
-		// Ensure Nihilego's Beast Boost gives it Special Attack boosts instead of Special Defense
-		if (forme === 'Nihilego') evs.spd -= 32;
-
-		if (ability === 'Beast Boost' && counter.get('Special') < 1) {
+		if (ability === 'Beast Boost' && !counter.get('Special')) {
 			evs.spa = 0;
 			ivs.spa = 0;
 		}
@@ -1206,6 +1203,16 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 				if (item === 'Sitrus Berry' && hp % (4 / srWeakness) === 0) break;
 			}
 			evs.hp -= 4;
+		}
+
+		// Ensure Nihilego's Beast Boost gives it Special Attack boosts instead of Special Defense
+		if (forme === 'Nihilego') {
+			while (evs.spd > 1) {
+				const spa = Math.floor(Math.floor(2 * species.baseStats.spa + ivs.spa + Math.floor(evs.spa / 4)) * level / 100 + 5);
+				const spd = Math.floor(Math.floor(2 * species.baseStats.spd + ivs.spd + Math.floor(evs.spd / 4)) * level / 100 + 5);
+				if (spa >= spd) break;
+				evs.spd -= 4;
+			}
 		}
 
 		if (['gyroball', 'metalburst', 'trickroom'].some(m => moves.has(m))) {
