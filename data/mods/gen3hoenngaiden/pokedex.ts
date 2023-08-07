@@ -685,7 +685,6 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 70, atk: 90, def: 65, spa: 90, spd: 85, spe: 110},
 		abilities: {0: "Water Absorb", 1: "Guts"},
 		gen: 3,
-		prevo: ["Caterpie"],
 	},
 	panpour: {
 		inherit: true,
