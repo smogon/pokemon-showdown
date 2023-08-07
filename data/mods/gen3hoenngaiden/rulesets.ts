@@ -37,6 +37,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			'Armaldo ++ Rapid Spin ++ Knock Off',
 			'Kabutops ++ Rapid Spin ++ Knock Off',
 			'Skarmory ++ Whirlwind ++ Drill Peck',
+			'Weavile + Calm Mind',
 		],
 	},
 };
