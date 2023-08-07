@@ -5675,6 +5675,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	gimmighoul: {
 		tier: "LC",
+		natDexTier: "LC",
 	},
 	gholdengo: {
 		tier: "OU",
