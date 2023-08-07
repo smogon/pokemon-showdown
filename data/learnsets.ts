@@ -14544,7 +14544,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			thunderpunch: ["8M", "8V", "7T", "7V", "6T", "5T", "4T", "3T"],
 			toxic: ["8V", "7M", "7V", "6M", "5M", "4M", "3M"],
 			uproar: ["8M", "7T", "6T", "5T", "4T"],
-			uturn: ['7E'],
 			watergun: ["7V"],
 		},
 		eventData: [
