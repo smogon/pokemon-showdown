@@ -75,6 +75,10 @@ const Hazards = [
 const ProtectMove = [
 	'banefulbunker', 'kingsshield', 'protect', 'spikyshield',
 ];
+// Moves that switch the user out
+const PivotingMoves = [
+	'partingshot', 'uturn', 'voltswitch',
+];
 
 // Moves that should be paired together when possible
 const MovePairs = [
@@ -306,7 +310,6 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		}
 
 		// Develop additional move lists
-		const pivotingMoves = ['partingshot', 'uturn', 'voltswitch'];
 		const badWithSetup = ['defog', 'dragontail', 'haze', 'healbell', 'nuzzle', 'pursuit', 'rapidspin', 'toxic'];
 		const statusMoves = this.dex.moves.all()
 			.filter(move => move.category === 'Status')
@@ -314,14 +317,14 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 
 		// These moves don't mesh well with other aspects of the set
 		this.incompatibleMoves(moves, movePool, statusMoves, ['healingwish', 'memento', 'switcheroo', 'trick']);
-		this.incompatibleMoves(moves, movePool, Setup, pivotingMoves);
+		this.incompatibleMoves(moves, movePool, Setup, PivotingMoves);
 		this.incompatibleMoves(moves, movePool, Setup, Hazards);
 		this.incompatibleMoves(moves, movePool, Setup, badWithSetup);
 		this.incompatibleMoves(moves, movePool, PhysicalSetup, PhysicalSetup);
 		this.incompatibleMoves(moves, movePool, SpeedSetup, ['quickattack', 'suckerpunch']);
 		this.incompatibleMoves(moves, movePool, 'defog', Hazards);
 		this.incompatibleMoves(moves, movePool, ['fakeout', 'uturn'], ['switcheroo', 'trick']);
-		this.incompatibleMoves(moves, movePool, 'substitute', pivotingMoves);
+		this.incompatibleMoves(moves, movePool, 'substitute', PivotingMoves);
 		this.incompatibleMoves(moves, movePool, 'leechseed', 'dragontail');
 		this.incompatibleMoves(moves, movePool, 'rest', 'substitute');
 		this.incompatibleMoves(moves, movePool, PhysicalSetup, 'dracometeor');
