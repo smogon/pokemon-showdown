@@ -547,7 +547,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen3hoenngaiden',
-		ruleset: ['HG Standard', 'Data Mod', 'Freeze Clause Mod'],
+		ruleset: ['HG Standard', 'Freeze Clause Mod'],
 		banlist: ['Uber'],
 		unbanlist: ['Sand Veil'],
 	},
