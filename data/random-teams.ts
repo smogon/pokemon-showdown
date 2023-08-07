@@ -512,7 +512,7 @@ export class RandomTeams {
 		this.incompatibleMoves(moves, movePool, Setup, Hazards);
 		this.incompatibleMoves(moves, movePool, Setup, ['defog', 'nuzzle', 'toxic', 'waterspout', 'yawn', 'haze']);
 		this.incompatibleMoves(moves, movePool, PhysicalSetup, PhysicalSetup);
-		this.incompatibleMoves(moves, movePool, SpecialSetup, ['suckerpunch', 'thunderwave']);
+		this.incompatibleMoves(moves, movePool, SpecialSetup, 'thunderwave');
 		this.incompatibleMoves(moves, movePool, 'substitute', pivotingMoves);
 		this.incompatibleMoves(moves, movePool, SpeedSetup, ['aquajet', 'rest', 'trickroom']);
 		this.incompatibleMoves(moves, movePool, 'curse', 'rapidspin');
@@ -1417,7 +1417,7 @@ export class RandomTeams {
 		if (
 			['Fast Bulky Setup', 'Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === m) &&
 			types.includes('Dark') && moves.has('suckerpunch') && !priorityPokemon.includes(species.id) &&
-			counter.get('setup') && counter.get('Dark')
+			counter.get('physicalsetup') && counter.get('Dark')
 		) return 'Black Glasses';
 		if (role === 'Fast Support' || role === 'Fast Bulky Setup') {
 			return (counter.get('Physical') + counter.get('Special') >= 3 && !moves.has('nuzzle')) ? 'Life Orb' : 'Leftovers';
