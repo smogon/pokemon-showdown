@@ -315,52 +315,59 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			.filter(move => move.category === 'Status')
 			.map(move => move.id);
 
-		// These moves don't mesh well with other aspects of the set
-		this.incompatibleMoves(moves, movePool, statusMoves, ['healingwish', 'memento', 'switcheroo', 'trick']);
-		this.incompatibleMoves(moves, movePool, Setup, PivotingMoves);
-		this.incompatibleMoves(moves, movePool, Setup, Hazards);
-		this.incompatibleMoves(moves, movePool, Setup, badWithSetup);
-		this.incompatibleMoves(moves, movePool, PhysicalSetup, PhysicalSetup);
-		this.incompatibleMoves(moves, movePool, SpeedSetup, ['quickattack', 'suckerpunch']);
-		this.incompatibleMoves(moves, movePool, 'defog', Hazards);
-		this.incompatibleMoves(moves, movePool, ['fakeout', 'uturn'], ['switcheroo', 'trick']);
-		this.incompatibleMoves(moves, movePool, 'substitute', PivotingMoves);
-		this.incompatibleMoves(moves, movePool, 'leechseed', 'dragontail');
-		this.incompatibleMoves(moves, movePool, 'rest', 'substitute');
-		this.incompatibleMoves(moves, movePool, PhysicalSetup, 'dracometeor');
-		this.incompatibleMoves(moves, movePool, SpecialSetup, 'knockoff');
+		// General incompatibilities
+		const incompatiblePairs = [
+			// These moves don't mesh well with other aspects of the set
+			[statusMoves, ['healingwish', 'memento', 'switcheroo', 'trick']],
+			[Setup, PivotingMoves],
+			[Setup, Hazards],
+			[Setup, badWithSetup],
+			[PhysicalSetup, PhysicalSetup],
+			[SpeedSetup, ['quickattack', 'suckerpunch']],
+			['defog', Hazards],
+			[['fakeout', 'uturn'], ['switcheroo', 'trick']],
+			['substitute', PivotingMoves],
+			['leechseed', 'dragontail'],
+			['rest', 'substitute'],
+			[PhysicalSetup, 'dracometeor'],
+			[SpecialSetup, 'knockoff'],
+
+			// These attacks are redundant with each other
+			['psychic', 'psyshock'],
+			['scald', ['hydropump', 'originpulse', 'waterpulse']],
+			['return', ['bodyslam', 'doubleedge']],
+			[['fierydance', 'firelash', 'lavaplume'], ['fireblast', 'magmastorm']],
+			[['flamethrower', 'flareblitz'], ['fireblast', 'overheat']],
+			['hornleech', 'woodhammer'],
+			[['gigadrain', 'leafstorm'], ['leafstorm', 'petaldance', 'powerwhip']],
+			['wildcharge', 'thunderbolt'],
+			['gunkshot', 'poisonjab'],
+			[['drainpunch', 'focusblast'], ['closecombat', 'highjumpkick', 'superpower']],
+			['stoneedge', 'headsmash'],
+			['dracometeor', 'dragonpulse'],
+			['dragonclaw', 'outrage'],
+			['knockoff', ['darkestlariat', 'darkpulse', 'foulplay']],
+
+			// Status move incompatibilities
+			['toxic', 'toxicspikes'],
+			['taunt', 'disable'],
+			['defog', ['leechseed', 'substitute']],
+		];
+
+		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
 
 		if (!types.includes('Normal')) {
 			this.incompatibleMoves(moves, movePool, Setup, 'Explosion');
 		}
 
-		// These attacks are redundant with each other
-		this.incompatibleMoves(moves, movePool, 'psychic', 'psyshock');
-		this.incompatibleMoves(moves, movePool, 'scald', ['hydropump', 'originpulse', 'waterpulse']);
-		this.incompatibleMoves(moves, movePool, 'return', ['bodyslam', 'doubleedge']);
-		this.incompatibleMoves(moves, movePool, ['fierydance', 'firelash', 'lavaplume'], ['fireblast', 'magmastorm']);
-		this.incompatibleMoves(moves, movePool, ['flamethrower', 'flareblitz'], ['fireblast', 'overheat']);
-		this.incompatibleMoves(moves, movePool, 'hornleech', 'woodhammer');
-		this.incompatibleMoves(moves, movePool, ['gigadrain', 'leafstorm'], ['leafstorm', 'petaldance', 'powerwhip']);
-		this.incompatibleMoves(moves, movePool, 'wildcharge', 'thunderbolt');
-		this.incompatibleMoves(moves, movePool, 'gunkshot', 'poisonjab');
-		this.incompatibleMoves(moves, movePool, ['drainpunch', 'focusblast'], ['closecombat', 'highjumpkick', 'superpower']);
-		this.incompatibleMoves(moves, movePool, 'stoneedge', 'headsmash');
-		this.incompatibleMoves(moves, movePool, 'dracometeor', 'dragonpulse');
-		this.incompatibleMoves(moves, movePool, 'dragonclaw', 'outrage');
-		this.incompatibleMoves(moves, movePool, 'knockoff', ['darkestlariat', 'darkpulse', 'foulplay']);
 		if (!types.includes('Dark') && preferredType !== 'Dark') {
 			this.incompatibleMoves(moves, movePool, 'knockoff', ['pursuit', 'suckerpunch']);
 		}
 
-		// Status move incompatibilities
 		const statusInflictingMoves = ['thunderwave', 'toxic', 'willowisp', 'yawn'];
 		if (!abilities.has('Prankster')) {
 			this.incompatibleMoves(moves, movePool, statusInflictingMoves, statusInflictingMoves);
 		}
-		this.incompatibleMoves(moves, movePool, 'toxic', 'toxicspikes');
-		this.incompatibleMoves(moves, movePool, 'taunt', 'disable');
-		this.incompatibleMoves(moves, movePool, 'defog', ['leechseed', 'substitute']);
 
 		// Assorted hardcodes go here:
 		// Lunatone
