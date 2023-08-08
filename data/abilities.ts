@@ -5609,7 +5609,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return this.chainModify(1.25);	
 			}
 		},
-		name: "Electrolytes",
+		name: "Earthbound",
 		rating: 3,
 		num: 330,
 	},

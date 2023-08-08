@@ -2203,8 +2203,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Crystallize",
 		shortDesc: "This Pokemon's Normal-type moves become Rock type and have 1.2x power."
 	},
-	electrolytes: {
-		name: "Electrolytes",
+	electrocytes: {
+		name: "Electrocytes",
 		shortDesc: "This Pokemon's Electric type moves are boosted by 25%"
 	},
 	aerodynamics: {
