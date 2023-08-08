@@ -896,7 +896,8 @@ export class TeamValidator {
 			// nickname is the name of a species
 			if (nameSpecies.baseSpecies === species.baseSpecies) {
 				set.name = species.baseSpecies;
-			} else if (nameSpecies.name !== species.name && nameSpecies.name !== species.baseSpecies) {
+			} else if (nameSpecies.name !== species.name &&
+				nameSpecies.name !== species.baseSpecies && ruleTable.has('nicknameclause')) {
 				// nickname species doesn't match actual species
 				// Nickname Clause
 				problems.push(`${name} must not be nicknamed a different Pokémon species than what it actually is.`);

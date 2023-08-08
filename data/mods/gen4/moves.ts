@@ -1457,7 +1457,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	spikes: {
 		inherit: true,
-		flags: {},
+		flags: {mustpressure: 1},
 	},
 	spite: {
 		inherit: true,
@@ -1465,7 +1465,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	stealthrock: {
 		inherit: true,
-		flags: {},
+		flags: {mustpressure: 1},
 	},
 	struggle: {
 		inherit: true,
@@ -1639,7 +1639,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	toxicspikes: {
 		inherit: true,
-		flags: {},
+		flags: {mustpressure: 1},
 		condition: {
 			// this is a side condition
 			onSideStart(side) {

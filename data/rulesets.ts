@@ -2541,4 +2541,58 @@ export const Rulesets: {[k: string]: FormatData} = {
 			this.add('rule', 'Species Reveal Clause: Reveals a Pok\u00e9mon\'s true species in hackmons-based metagames.');
 		},
 	},
+	franticfusionsmod: {
+		effectType: 'Rule',
+		name: "Frantic Fusions Mod",
+		desc: `Pok&eacute;mon nicknamed after another Pok&eacute;mon get their stats buffed by 1/4 of that Pok&eacute;mon's stats, barring HP, and access to their abilities.`,
+		onBegin() {
+			this.add('rule', 'Frantic Fusions Mod: Pok\u00e9mon nicknamed after another Pok\u00e9mon get buffed stats and more abilities.');
+		},
+		onValidateSet(set) {
+			const species = this.dex.species.get(set.species);
+			const fusion = this.dex.species.get(set.name);
+			const abilityPool = new Set<string>(Object.values(species.abilities));
+			if (fusion.exists) {
+				for (const ability of Object.values(fusion.abilities)) {
+					abilityPool.add(ability);
+				}
+			}
+			const ability = this.dex.abilities.get(set.ability);
+			if (!abilityPool.has(ability.name)) {
+				return [`${species.name} only has access to the following abilities: ${Array.from(abilityPool).join(', ')}.`];
+			}
+		},
+		onValidateTeam(team, format) {
+			const donors = new Utils.Multiset<string>();
+			for (const set of team) {
+				const species = this.dex.species.get(set.species);
+				const fusion = this.dex.species.get(set.name);
+				if (fusion.name === species.name) continue;
+				donors.add(fusion.name);
+			}
+			for (const [fusionName, number] of donors) {
+				if (number > 1) {
+					return [`You can only fuse with any Pok\u00e9 once.`, `(You have ${number} Pok\u00e9mon fused with ${fusionName}.)`];
+				}
+				if (this.ruleTable.isBannedSpecies(this.dex.species.get(fusionName))) {
+					return [`Pok\u00e9mon can't fuse with banned Pok\u00e9mon.`, `(${fusionName} is banned.)`];
+				}
+			}
+		},
+		onModifySpecies(species, target, source, effect) {
+			if (!target) return;
+			const newSpecies = this.dex.deepClone(species);
+			const fusionName = target.set.name;
+			if (!fusionName || fusionName === newSpecies.name) return;
+			const fusionSpecies = this.dex.deepClone(this.dex.species.get(fusionName));
+			newSpecies.bst = newSpecies.baseStats.hp;
+			for (const stat in newSpecies.baseStats) {
+				if (stat === 'hp') continue;
+				const addition = Math.floor(fusionSpecies.baseStats[stat] / 4);
+				newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] + addition, 1, 255);
+				newSpecies.bst += newSpecies.baseStats[stat];
+			}
+			return newSpecies;
+		},
+	},
 };
