@@ -110,7 +110,6 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 		};
 	}
 
-	// This is only used for Doubles
 	shouldCullMove(
 		move: Move,
 		types: Set<string>,
@@ -551,7 +550,7 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 		return {cull: false};
 	}
 
-	shouldCullDoublesAbility(
+	shouldCullAbility(
 		ability: string,
 		types: Set<string>,
 		moves: Set<string>,
@@ -680,7 +679,7 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 	}
 
 
-	getDoublesAbility(
+	getAbility(
 		types: Set<string>,
 		moves: Set<string>,
 		abilities: Set<string>,
@@ -718,7 +717,7 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 		let abilityAllowed: Ability[] = [];
 		// Obtain a list of abilities that are allowed (not culled)
 		for (const ability of abilityData) {
-			if (ability.rating >= 1 && !this.shouldCullDoublesAbility(
+			if (ability.rating >= 1 && !this.shouldCullAbility(
 				ability.name, types, moves, abilities, counter, movePool, teamDetails, species
 			)) {
 				abilityAllowed.push(ability);
@@ -980,10 +979,11 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 		if (ability === 'Super Luck') return 'Scope Lens';
 	}
 
-	randomDoublesSet(
+	randomSet(
 		species: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false,
+		isDoubles = true,
 	): RandomTeamsTypes.RandomSet {
 		species = this.dex.species.get(species);
 		let forme = species.name;
@@ -1208,7 +1208,7 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 		const battleOnly = species.battleOnly && !species.requiredAbility;
 		const baseSpecies: Species = battleOnly ? this.dex.species.get(species.battleOnly as string) : species;
 
-		ability = this.getDoublesAbility(types, moves, abilities, counter, movePool, teamDetails, species);
+		ability = this.getAbility(types, moves, abilities, counter, movePool, teamDetails, species);
 
 		if (species.name === 'Genesect' && moves.has('technoblast')) forme = 'Genesect-Douse';
 
@@ -1339,6 +1339,195 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 			item,
 			level,
 		};
+	}
+
+	randomTeam() {
+		this.enforceNoDirectCustomBanlistChanges();
+
+		const seed = this.prng.seed;
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
+		const pokemon = [];
+
+		// For Monotype
+		const isMonotype = !!this.forceMonotype || ruleTable.has('sametypeclause');
+		const typePool = this.dex.types.names();
+		const type = this.forceMonotype || this.sample(typePool);
+
+		const baseFormes: {[k: string]: number} = {};
+		let hasMega = false;
+
+		const tierCount: {[k: string]: number} = {};
+		const typeCount: {[k: string]: number} = {};
+		const typeComboCount: {[k: string]: number} = {};
+		const typeWeaknesses: {[k: string]: number} = {};
+		const teamDetails: RandomTeamsTypes.TeamDetails = {};
+
+		// We make at most two passes through the potential Pokemon pool when creating a team - if the first pass doesn't
+		// result in a team of six Pokemon we perform a second iteration relaxing as many restrictions as possible.
+		for (const restrict of [true, false]) {
+			if (pokemon.length >= this.maxTeamSize) break;
+			const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
+			while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
+				const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
+
+				// Check if the forme has moves for random battle
+				if (!this.randomDoublesData[species.id]?.moves) continue;
+				if (!species.exists) continue;
+
+				// Limit to one of each species (Species Clause)
+				if (baseFormes[species.baseSpecies]) continue;
+
+				// Limit one Mega per team
+				if (hasMega && species.isMega) continue;
+
+				// Adjust rate for species with multiple sets
+				switch (species.baseSpecies) {
+				case 'Arceus': case 'Silvally':
+					if (this.randomChance(8, 9) && !isMonotype) continue;
+					break;
+				case 'Oricorio':
+					if (this.randomChance(3, 4)) continue;
+					break;
+				case 'Castform': case 'Floette':
+					if (this.randomChance(2, 3)) continue;
+					break;
+				case 'Aegislash': case 'Basculin': case 'Gourgeist': case 'Groudon': case 'Kyogre': case 'Meloetta':
+					if (this.randomChance(1, 2)) continue;
+					break;
+				case 'Greninja':
+					if (this.gen >= 7 && this.randomChance(1, 2)) continue;
+					break;
+				}
+				if (species.otherFormes && !hasMega && (
+					species.otherFormes.includes(species.name + '-Mega') ||
+					species.otherFormes.includes(species.name + '-Mega-X')
+				)) {
+					continue;
+				}
+
+				const tier = species.tier;
+				const types = species.types;
+				const typeCombo = types.slice().sort().join();
+				// Dynamically scale limits for different team sizes. The default and minimum value is 1.
+				const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
+
+				if (restrict) {
+					// Limit one Pokemon per tier, two for Monotype
+					if (
+						(tierCount[tier] >= (isMonotype || this.forceMonotype ? 2 : 1) * limitFactor) &&
+						!this.randomChance(1, Math.pow(5, tierCount[tier]))
+					) {
+						continue;
+					}
+
+					if (!isMonotype && !this.forceMonotype) {
+						// Limit two of any type
+						let skip = false;
+						for (const typeName of types) {
+							if (typeCount[typeName] >= 2 * limitFactor) {
+								skip = true;
+								break;
+							}
+						}
+						if (skip) continue;
+
+						// Limit three weak to any type
+						for (const typeName of this.dex.types.names()) {
+							// it's weak to the type
+							if (this.dex.getEffectiveness(typeName, species) > 0) {
+								if (!typeWeaknesses[typeName]) typeWeaknesses[typeName] = 0;
+								if (typeWeaknesses[typeName] >= 3 * limitFactor) {
+									skip = true;
+									break;
+								}
+							}
+						}
+						if (skip) continue;
+					}
+
+					// Limit one of any type combination, three in Monotype
+					if (!this.forceMonotype && typeComboCount[typeCombo] >= (isMonotype ? 3 : 1) * limitFactor) continue;
+				}
+
+				const set = this.randomSet(
+					species,
+					teamDetails,
+					pokemon.length === this.maxTeamSize - 1,
+					true
+				);
+
+				const item = this.dex.items.get(set.item);
+
+				// Limit one Z-Move per team
+				if (item.zMove && teamDetails.zMove) continue;
+
+				// Zoroark copies the last Pokemon
+				if (set.ability === 'Illusion') {
+					if (pokemon.length < 1) continue;
+					set.level = pokemon[pokemon.length - 1].level;
+				}
+
+				// Okay, the set passes, add it to our team
+				pokemon.unshift(set);
+
+				// Don't bother tracking details for the last Pokemon
+				if (pokemon.length === this.maxTeamSize) break;
+
+				// Now that our Pokemon has passed all checks, we can increment our counters
+				baseFormes[species.baseSpecies] = 1;
+
+				// Increment tier counter
+				if (tierCount[tier]) {
+					tierCount[tier]++;
+				} else {
+					tierCount[tier] = 1;
+				}
+
+				// Increment type counters
+				for (const typeName of types) {
+					if (typeName in typeCount) {
+						typeCount[typeName]++;
+					} else {
+						typeCount[typeName] = 1;
+					}
+				}
+				if (typeCombo in typeComboCount) {
+					typeComboCount[typeCombo]++;
+				} else {
+					typeComboCount[typeCombo] = 1;
+				}
+
+				// Increment weakness counter
+				for (const typeName of this.dex.types.names()) {
+					// it's weak to the type
+					if (this.dex.getEffectiveness(typeName, species) > 0) {
+						typeWeaknesses[typeName]++;
+					}
+				}
+
+				// Track what the team has
+				if (item.megaStone || species.name === 'Rayquaza-Mega') hasMega = true;
+				if (item.zMove) teamDetails.zMove = 1;
+				if (set.ability === 'Snow Warning' || set.moves.includes('hail')) teamDetails.hail = 1;
+				if (set.moves.includes('raindance') || set.ability === 'Drizzle' && !item.onPrimal) teamDetails.rain = 1;
+				if (set.ability === 'Sand Stream') teamDetails.sand = 1;
+				if (set.moves.includes('sunnyday') || set.ability === 'Drought' && !item.onPrimal) teamDetails.sun = 1;
+				if (set.moves.includes('spikes')) teamDetails.spikes = (teamDetails.spikes || 0) + 1;
+				if (set.moves.includes('stealthrock')) teamDetails.stealthRock = 1;
+				if (set.moves.includes('stickyweb')) teamDetails.stickyWeb = 1;
+				if (set.moves.includes('toxicspikes')) teamDetails.toxicSpikes = 1;
+				if (set.moves.includes('defog')) teamDetails.defog = 1;
+				if (set.moves.includes('rapidspin')) teamDetails.rapidSpin = 1;
+				if (set.moves.includes('auroraveil') || (set.moves.includes('reflect') && set.moves.includes('lightscreen'))) {
+					teamDetails.screens = 1;
+				}
+			}
+		}
+		if (pokemon.length < this.maxTeamSize && pokemon.length < 12) {
+			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
+		}
+
+		return pokemon;
 	}
 }
 

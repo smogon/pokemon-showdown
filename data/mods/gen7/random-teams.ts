@@ -1,5 +1,4 @@
-import {MoveCounter, TeamData} from '../gen8/random-teams';
-import {RandomGen7DoublesTeams} from './random-doubles-teams';
+import {MoveCounter, TeamData, RandomGen8Teams} from '../gen8/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
@@ -99,7 +98,7 @@ function sereneGraceBenefits(move: Move) {
 	return move.secondary?.chance && move.secondary.chance >= 20 && move.secondary.chance < 100;
 }
 
-export class RandomGen7Teams extends RandomGen7DoublesTeams {
+export class RandomGen7Teams extends RandomGen8Teams {
 	randomSets: AnyObject = require('./random-sets.json');
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
@@ -842,7 +841,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 			!abilities.has('Quick Feet') &&
 			(moves.has('facade') || (moves.has('sleeptalk') && moves.has('rest')))
 		)) return 'Guts';
-		if (abilities.has('Moxie') && (counter.get('Physical') > 3 || moves.has('bounce')) && !isDoubles) return 'Moxie';
+		if (abilities.has('Moxie') && (counter.get('Physical') > 3 || moves.has('bounce'))) return 'Moxie';
 		if (species.name === 'Ambipom' && !counter.get('technician')) {
 			// If it doesn't qualify for Technician, Skill Link is useless on it
 			return 'Pickup';
@@ -1100,7 +1099,6 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		isLead = false,
 		isDoubles = false
 	): RandomTeamsTypes.RandomSet {
-		if (isDoubles) return this.randomDoublesSet(species, teamDetails, isLead);
 		species = this.dex.species.get(species);
 		let forme = species.name;
 
@@ -1286,21 +1284,17 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 				const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 
 				// Check if the forme has moves for random battle
-				if (this.format.gameType === 'singles') {
-					// Gen 7 is using the new set format, while Gen 6 is still using the old format
-					if (this.gen === 7) {
-						if (!this.randomSets[species.id]) continue;
-						// If the team has a Z-Move user, reject Pokemon that only have the Z-Move user role
-						if (
-							this.randomSets[species.id]["sets"].length === 1 &&
-							this.randomSets[species.id]["sets"][0]["role"] === 'Z-Move user' &&
-							teamDetails.zMove
-						) continue;
-					} else {
-						if (!this.randomData[species.id]?.moves) continue;
-					}
+				// Gen 7 is using the new set format, while Gen 6 is still using the old format
+				if (this.gen === 7) {
+					if (!this.randomSets[species.id]) continue;
+					// If the team has a Z-Move user, reject Pokemon that only have the Z-Move user role
+					if (
+						this.randomSets[species.id]["sets"].length === 1 &&
+						this.randomSets[species.id]["sets"][0]["role"] === 'Z-Move user' &&
+						teamDetails.zMove
+					) continue;
 				} else {
-					if (!this.randomDoublesData[species.id]?.moves) continue;
+					if (!this.randomData[species.id]?.moves) continue;
 				}
 				if (!species.exists) continue;
 
@@ -1383,7 +1377,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 					species,
 					teamDetails,
 					pokemon.length === this.maxTeamSize - 1,
-					this.format.gameType !== 'singles'
+					false
 				);
 
 				const item = this.dex.items.get(set.item);
