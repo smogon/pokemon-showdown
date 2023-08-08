@@ -238,6 +238,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		shortDesc: "This Pokemon cannot be paralyzed. Gaining this Ability while paralyzed cures it. Takes 30% less recoil damage.",
 	},
+	longreach: { 
+		inherit: true,
+		onModifyMove(move, pokemon, target) {
+			if (move.flags['contact']) {
+				delete move.flags['contact'];
+			}
+		},
+		onBasePower(bp, source, target, move) {
+			const unmodifiedMove = this.dex.moves.get(move);
+			if (!unmodifiedMove.flags['contact']) {
+				return this.chainModify(1.2);
+			}
+		}
+	},
 	magmaarmor: {
 		inherit: true,
 		onSourceModifyDamage(damage, source, target, move) {
@@ -601,6 +615,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onStart(pokemon) {
 			if (!pokemon.types.includes('Electric')) {
+				if (!pokemon.setType('Electric')) return;
 				this.add('-start', pokemon, 'typeadd', 'Electric', '[from] ability: Terravolt');
 			}
 		},
@@ -692,6 +707,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onStart(pokemon) {
 			if (!pokemon.types.includes('Fire')) {
+				if (!pokemon.setType('Fire')) return;
 				this.add('-start', pokemon, 'typeadd', 'Fire', '[from] ability: Turboblaze');
 			}
 		},
