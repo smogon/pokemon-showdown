@@ -51,7 +51,7 @@ export class MoveCounter extends Utils.Multiset<string> {
 type MoveEnforcementChecker = (
 	movePool: string[], moves: Set<string>, abilities: Set<string>, types: string[],
 	counter: MoveCounter, species: Species, teamDetails: RandomTeamsTypes.TeamDetails,
-	isLead: boolean, isDoubles: boolean, teraType: string, role: string,
+	isLead: boolean, isDoubles: boolean, teraType: string, role: RandomTeamsTypes.Role,
 ) => boolean;
 
 // Moves that restore HP:
@@ -424,7 +424,7 @@ export class RandomTeams {
 		isLead: boolean,
 		isDoubles: boolean,
 		teraType: string,
-		role: string,
+		role: RandomTeamsTypes.Role,
 	): void {
 		if (moves.size + movePool.length <= this.maxMoveCount) return;
 		// If we have two unfilled moves and only one unpaired move, cull the unpaired move.
@@ -622,7 +622,7 @@ export class RandomTeams {
 		isDoubles: boolean,
 		movePool: string[],
 		teraType: string,
-		role: string,
+		role: RandomTeamsTypes.Role,
 	): MoveCounter {
 		moves.add(move);
 		this.fastPop(movePool, movePool.indexOf(move));
@@ -662,7 +662,7 @@ export class RandomTeams {
 		isDoubles: boolean,
 		movePool: string[],
 		teraType: string,
-		role: string,
+		role: RandomTeamsTypes.Role,
 	): Set<string> {
 		const moves = new Set<string>();
 		let counter = this.queryMoves(moves, species, teraType, abilities);
@@ -971,7 +971,7 @@ export class RandomTeams {
 		isLead: boolean,
 		isDoubles: boolean,
 		teraType: string,
-		role: string,
+		role: RandomTeamsTypes.Role,
 	): boolean {
 		if ([
 			'Armor Tail', 'Early Bird', 'Flare Boost', 'Gluttony', 'Harvest', 'Hydration', 'Ice Body', 'Immunity',
@@ -1090,7 +1090,7 @@ export class RandomTeams {
 		isLead: boolean,
 		isDoubles: boolean,
 		teraType: string,
-		role: string,
+		role: RandomTeamsTypes.Role,
 	): string {
 		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
 		Utils.sortBy(abilityData, abil => -abil.rating);
@@ -1198,7 +1198,7 @@ export class RandomTeams {
 		isLead: boolean,
 		isDoubles: boolean,
 		teraType: string,
-		role: string,
+		role: RandomTeamsTypes.Role,
 	) {
 		if (!isDoubles) {
 			if (
@@ -1286,7 +1286,7 @@ export class RandomTeams {
 		species: Species,
 		isLead: boolean,
 		teraType: string,
-		role: string,
+		role: RandomTeamsTypes.Role,
 	): string {
 		const scarfReqs = (
 			!counter.get('priority') && ability !== 'Speed Boost' && role !== 'Doubles Wallbreaker' &&
@@ -1353,7 +1353,7 @@ export class RandomTeams {
 		species: Species,
 		isLead: boolean,
 		teraType: string,
-		role: string,
+		role: RandomTeamsTypes.Role,
 	): string {
 		if (
 			(counter.get('Physical') >= 4 ||

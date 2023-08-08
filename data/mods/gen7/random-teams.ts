@@ -235,7 +235,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		isLead: boolean,
 		isDoubles: boolean,
 		preferredType: string,
-		role: string,
+		role: RandomTeamsTypes.Role,
 	): void {
 		// Pokemon cannot have multiple Hidden Powers in any circumstance
 		let hasHiddenPower = false;
@@ -426,7 +426,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		isDoubles: boolean,
 		movePool: string[],
 		preferredType: string,
-		role: string,
+		role: RandomTeamsTypes.Role,
 	): MoveCounter {
 		moves.add(move);
 		this.fastPop(movePool, movePool.indexOf(move));
@@ -461,7 +461,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		isDoubles: boolean,
 		movePool: string[],
 		preferredType: string,
-		role: string,
+		role: RandomTeamsTypes.Role,
 	): Set<string> {
 		const moves = new Set<string>();
 		let counter = this.newQueryMoves(moves, species, preferredType, abilities);
@@ -713,7 +713,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		species: Species,
 		isDoubles: boolean,
 		preferredType = '',
-		role = ''
+		role: RandomTeamsTypes.Role
 	): boolean {
 		switch (ability) {
 		case 'Battle Bond': case 'Dazzling': case 'Flare Boost': case 'Gluttony': case 'Harvest': case 'Hyper Cutter':
@@ -826,7 +826,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		species: Species,
 		isDoubles: boolean,
 		preferredType = '',
-		role = '',
+		role: RandomTeamsTypes.Role,
 	): string {
 		if (species.battleOnly && !species.requiredAbility) {
 			abilities = new Set(Object.values(this.dex.species.get(species.battleOnly as string).abilities));
@@ -927,7 +927,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		species: Species,
 		isLead: boolean,
 		preferredType = '',
-		role = '',
+		role: RandomTeamsTypes.Role,
 	): string | undefined {
 		// Z-Moves
 		if (role === 'Z-Move user') {
@@ -1015,7 +1015,7 @@ export class RandomGen7Teams extends RandomGen7DoublesTeams {
 		species: Species,
 		isLead: boolean,
 		preferredType: string,
-		role: string,
+		role: RandomTeamsTypes.Role,
 	): string {
 		const defensiveStatTotal = species.baseStats.hp + species.baseStats.def + species.baseStats.spd;
 
