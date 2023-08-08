@@ -24466,6 +24466,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			helpinghand: ["9M"],
 			hiddenpower: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			hyperbeam: ["9M", "7M", "7V", "6M", "5M", "4M", "3M"],
+			hypervoice: ['7L0'],
 			incinerate: ["6M", "5M"],
 			inferno: ["9L56", "7L56", "6L56", "5L56"],
 			ironhead: ["9M"],
