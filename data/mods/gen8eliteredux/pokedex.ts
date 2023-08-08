@@ -10701,7 +10701,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	eelektrik: {
 		num: 603,
 		name: "Eelektrik",
-		types: ["Electric", "Water"],
+		types: ["Electric"],
 		baseStats: {hp: 65, atk: 85, def: 70, spa: 75, spd: 70, spe: 40},
 		abilities: {0: "Electrocytes", 1: "Hydrate", H: "Swift Swim", I1: "Plus", I2: "Levitate", I3: "Aquatic"},
 		heightm: 1.2,
@@ -10715,7 +10715,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	eelektross: {
 		num: 604,
 		name: "Eelektross",
-		types: ["Electric", "Water"],
+		types: ["Electric"],
 		baseStats: {hp: 85, atk: 115, def: 90, spa: 105, spd: 90, spe: 50},
 		abilities: {0: "Predator", 1: "Hydrate", H: "Swift Swim", I1: "Electrocytes", I2: "Levitate", I3: "Aquatic"},
 		heightm: 2.1,
