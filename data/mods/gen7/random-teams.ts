@@ -954,8 +954,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			return this.sample(species.requiredItems);
 		}
 		if (role === 'AV Pivot') return 'Assault Vest';
-		// maybe cut this one
-		if (species.name === 'Deoxys-Attack') return 'Life Orb';
 		if (species.name === 'Farfetch\u2019d') return 'Stick';
 		if (species.baseSpecies === 'Marowak') return 'Thick Club';
 		if (species.name === 'Pikachu') return 'Light Ball';
