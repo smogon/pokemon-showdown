@@ -104,9 +104,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 
-		if (this.format.gameType === 'singles') this.noStab = NoStab;
+		this.noStab = NoStab;
 
-		this.moveEnforcementCheckers = (this.format.gameType !== 'singles') ? this.moveEnforcementCheckers : {
+		this.moveEnforcementCheckers = {
 			Bug: (movePool, moves, abilities, types, counter) => (
 				['megahorn', 'pinmissile'].some(m => movePool.includes(m)) ||
 				!counter.get('Bug') && (abilities.has('Tinted Lens') || abilities.has('Adaptability'))
