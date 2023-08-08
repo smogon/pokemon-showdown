@@ -5519,6 +5519,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	aquatic: {
 		onStart(pokemon) {
 			if (!pokemon.types.includes('Water')) {
+				if (!pokemon.setType('Water')) return;
 				this.add('-start', pokemon, 'typeadd', 'Water', '[from] ability: Aquatic');
 
 			}
@@ -5586,6 +5587,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	grounded: {
 		onStart(pokemon) {
 			if (!pokemon.types.includes('Ground')) {
+				if (!pokemon.setType('Ground')) return;
 				this.add('-start', pokemon, 'typeadd', 'Ground', '[from] ability: Grounded');
 
 			}
@@ -5663,6 +5665,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	magicaldust: {
 		onDamagingHit(damage, target, source, move) {
 			if (!source.types.includes('Psychic')) {
+				if (!source.setType('Psychic')) return;
 				this.add('-start', source, 'typeadd', 'Psychic', '[from] ability: Magical Dust')
 			}
 		},
@@ -5749,6 +5752,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	iceage: {
 		onStart(pokemon) {
 			if (!pokemon.types.includes('Ice')) {
+				if (!pokemon.setType('Ice')) return;
 				this.add('-start', pokemon, 'typeadd', 'Ice', '[from] ability: Ice Age');
 			}
 		},
@@ -5759,6 +5763,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	halfdrake: {
 		onStart(pokemon) {
 			if (!pokemon.types.includes('Dragon')) {
+				if (!pokemon.setType('Dragon')) return;
 				this.add('-start', pokemon, 'typeadd', 'Dragon', '[from] ability: Half Drake');
 			}
 		},
@@ -5782,6 +5787,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		// airborneness implemented in sim/pokemon.js:Pokemon#isGrounded
 		onStart(pokemon) {
 			if (!pokemon.types.includes('Dragon')) {
+				if (!pokemon.setType('Dragon')) return;
 				this.add('-start', pokemon, 'typeadd', 'Dragon', '[from] ability: Dragonfly');
 			}
 		},
@@ -5823,6 +5829,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	metallic: {
 		onStart(pokemon) {
 			if (!pokemon.types.includes('Steel')) {
+				if (!pokemon.setType('Steel')) return;
 				this.add('-start', pokemon, 'typeadd', 'Steel', '[from] ability: Metallic');
 
 			}
@@ -5955,6 +5962,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	phantom: {
 		onStart(pokemon) {
 			if (!pokemon.types.includes('Ghost')) {
+				if (!pokemon.setType('Ghost')) return;
 				this.add('-start', pokemon, 'typeadd', 'Ghost', '[from] ability: Phantom');
 			}
 		},
