@@ -247,7 +247,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onBasePower(bp, source, target, move) {
 			const unmodifiedMove = this.dex.moves.get(move);
-			if (!unmodifiedMove.flags['contact']) {
+			//In ER, this boost only applies to Physical moves. Sorry, Vacuum Wave
+			if (!unmodifiedMove.flags['contact'] && unmodifiedMove.category === 'Physical') {
 				return this.chainModify(1.2);
 			}
 		}
