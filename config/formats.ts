@@ -691,7 +691,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen9',
-		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Evasion Abilities Clause', 'Evasion Items Clause', '350 Cup Mod', 'Terastal Clause', 'Min Source Gen = 9'],
+		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Evasion Abilities Clause', 'Evasion Items Clause', '350 Cup Mod', 'Min Source Gen = 9'],
 		banlist: ['Calyrex-Shadow', 'Flittle', 'Gastly', 'Miraidon', 'Rufflet', 'Shadow Tag', 'Arena Trap', 'Moody', 'Eviolite', 'Light Ball', 'Baton Pass'],
 	},
 	{
