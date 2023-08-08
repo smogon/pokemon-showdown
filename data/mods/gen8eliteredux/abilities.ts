@@ -615,7 +615,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onStart(pokemon) {
 			if (!pokemon.types.includes('Electric')) {
-				if (!pokemon.setType('Electric')) return;
+				if (!pokemon.addType('Electric')) return;
 				this.add('-start', pokemon, 'typeadd', 'Electric', '[from] ability: Terravolt');
 			}
 		},
@@ -707,7 +707,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onStart(pokemon) {
 			if (!pokemon.types.includes('Fire')) {
-				if (!pokemon.setType('Fire')) return;
+				if (!pokemon.addType('Fire')) return;
 				this.add('-start', pokemon, 'typeadd', 'Fire', '[from] ability: Turboblaze');
 			}
 		},
