@@ -6658,14 +6658,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 385,
 	},
 	grippincer: {
-		onFoeDamagingHit(damage, target, source, move) {
-			if (move.flags['contact'] && this.randomChance(3, 10)) {
-				this.add('-activate', source, 'ability: Grip Pincer');
-				target.addVolatile('trapped', target, source.getAbility(), 'trapper');
-			}
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (!move || !target || source.switchFlag === true) return;
+			if (target !== source && move.flags['contact'] && this.randomChance(9, 10)) {
+
+				target.addVolatile('partiallytrapped', source, this.dex.abilities.getByID("grippincer" as ID));			}
 		},
 		onModifyMove(move, pokemon, target) {
-			if (target?.volatiles['trapped']) {
+			if (target?.volatiles['partiallytrapped']) {
 				move.ignoreEvasion = true;
 				move.ignoreDefensive = true;
 			}
