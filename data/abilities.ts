@@ -5158,6 +5158,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		// implemented in the corresponding move(s)
 		rating: 3,
 		num: 298,
+		gen: 8,
 	},
 	whiteout: {
 		onModifySpAPriority: 5,
@@ -5174,6 +5175,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Whiteout",
 		rating: 3,
 		num: 299,
+		gen: 8,
 	},
 	pyromancy: {
 		onModifyMovePriority: -2,
@@ -5188,6 +5190,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Pyromancy",
 		rating: 3.5,
 		num: 300,
+		gen: 8,
 	},
 	keenedge: {
 		onBasePowerPriority: 25,
@@ -5199,6 +5202,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Keen Edge",
 		rating: 3.5,
 		num: 301,
+		gen: 8,
 	},
 	prismscales: {
 		onSourceModifyDamage(damage, source, target, move) {
@@ -5209,6 +5213,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Prism Scales",
 		rating: 4,
 		num: 302,
+		gen: 8,
 	},
 	powerfists: {
 		onBasePowerPriority: 26,
@@ -5226,6 +5231,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Power Fists",
 		rating: 4,
 		num: 303,
+		gen: 8,
 	}, 
 	sandsong: {
 		onModifyTypePriority: -2,
@@ -5237,6 +5243,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Sand Song",
 		rating: 1.5,
 		num: 306,
+		gen: 8,
 	},
 	rampage: { 
 		onAfterMove(source, target, move) {
@@ -5248,7 +5255,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Rampage",
 		rating: 3,
-		num: 307
+		num: 307,
+		gen: 8,
 	},
 	vengeance: {
 		onModifyAtkPriority: 5,
@@ -5278,6 +5286,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Vengeance",
 		rating: 3,
 		num: 308,
+		gen: 8,
 	},
 	blitzboxer: {
 		onModifyPriority(priority, pokemon, target, move) {
@@ -5286,6 +5295,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Blitz Boxer",
 		rating: 3,
 		num: 309,
+		gen: 8,
 	},
 
 	//Elite Redux Abilities
@@ -5307,6 +5317,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Antarctic Bird",
 		rating: 3,
 		num: 310,
+		gen: 8,
 	},
 	burnate: {
 		onModifyTypePriority: -1,
@@ -5327,6 +5338,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Burnate",
 		rating: 4,
 		num: 311,
+		gen: 8,
 	},
 	crystallize: {
 		onModifyTypePriority: -1,
@@ -5347,12 +5359,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Crystallize",
 		rating: 4,
 		num: 312,
+		gen: 8,
 	},
 	electrocytes: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Electric') {
 				this.debug('Electrocytes boost');
+				console.log(`Electrocytes: Atk: ${atk}, Modified Atk: ${this.chainModify(1.25)}`)
 				return this.chainModify(1.25);	
 				}
 		},
@@ -5366,6 +5380,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Electrocytes",
 		rating: 3,
 		num: 313,
+		gen: 8,
 	},
 	aerodynamics: {
 		onTryHit(target, source, move) {
@@ -5380,6 +5395,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Aerodynamics",
 		rating: 3,
 		num: 312,
+		gen: 8,
 	},
 	christmasspirit: {
 		onModifyDefPriority: 6,
@@ -5398,6 +5414,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Christmas Spirit",
 		rating: 4,
 		num: 314,
+		gen: 8,
 	}, 
 	exploitweakness: {
 		onBasePowerPriority: 27,
@@ -5409,6 +5426,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Exploit Weakness",
 		rating: 3,
 		num: 315,
+		gen: 8,
 	},
 	groundshock: {
 		onModifyMovePriority: -5,
@@ -5421,6 +5439,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Ground Shock",
 		rating: 3,
 		num: 315,
+		gen: 8,
 	},
 	ancientidol: {
 		onModifyMove(move) {
@@ -5434,6 +5453,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Ancient Idol",
 		rating: 3,
 		num: 316,
+		gen: 8,
 	},
 	mysticpower: {
 		onModifyMove(move) {
@@ -5442,6 +5462,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Mystic Power",
 		rating: 5,
 		num: 317,
+		gen: 8,
 	}, 
 	perfectionist: {
 		onModifyMovePriority: -5,
@@ -5454,6 +5475,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Perfectionist",
 		rating: 4,
 		num: 318,
+		gen: 8,
 	},
 	growingtooth: {
 		onAfterMove(attacker, defender, move) {
@@ -5464,20 +5486,22 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Growing Tooth",
 		rating: 4,
 		num: 319,
+		gen: 8,
 	},
 	inflatable: {
 		onTryHit(target, source, move) {
 			if (target !== source && (move.type === 'Flying' || move.type === 'Fire')) {
 				if (!this.boost({def: 1, spd: 1})) {
 					this.add('-immune', target, '[from] ability: Inflatable');		
-				return null;
-			}
-		}
-	},
+					return null;
+				}	
+			}	
+		},
 		isBreakable: true,
 		name: "Inflatable",
 		rating: 3,
 		num: 320,
+		gen: 8,
 	},
 	auroraborealis: {
 		onModifyMove(move) {
@@ -5488,6 +5512,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Aurora Borealis",
 		rating: 3,
 		num: 321,
+		gen: 8,
 	},
 	avenger: {
 		onModifyAtkPriority: 5,
@@ -5507,6 +5532,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Avenger",
 		rating: 3,
 		num: 322,
+		gen: 8,
 	},
 	letsroll: {
 		onStart(pokemon) {
@@ -5515,6 +5541,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Lets Roll",
 		rating: 3.5,
 		num: 323,
+		gen: 8,
 	},
 	aquatic: {
 		onStart(pokemon) {
@@ -5527,6 +5554,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Aquatic",
 		rating: 3.5,
 		num: 324,
+		gen: 8,
 	},
 	loudbang: {
 		onModifyMove(move, attacker, defender) {
@@ -5547,6 +5575,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Loud Bang",
 		rating: 3.5,
 		num: 325,
+		gen: 8,
 	},
 	leadcoat: {
 		onModifySpe(def, pokemon) {
@@ -5558,6 +5587,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Lead Coat",
 		rating: 3.5,
 		num: 326,
+		gen: 8,
 	}, 
 	coilup: {
 		onStart(pokemon) {
@@ -5573,6 +5603,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Coil Up",
 		rating: 3.5,
 		num: 327,
+		gen: 8,
 	},
 	amphibious: {
 		onModifyMove(move) {
@@ -5583,6 +5614,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Amphibious",
 		rating: 3,
 		num: 328,
+		gen: 8,
 	}, 
 	grounded: {
 		onStart(pokemon) {
@@ -5595,6 +5627,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Grounded",
 		rating: 3.5,
 		num: 329,
+		gen: 8,
 	},
 	earthbound: {
 		onModifyAtkPriority: 6,
@@ -5614,6 +5647,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Earthbound",
 		rating: 3,
 		num: 330,
+		gen: 8,
 	},
 	fightingspirit: {
 		onModifyTypePriority: -1,
@@ -5634,6 +5668,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Fighting Spirit",
 		rating: 4,
 		num: 331,
+		gen: 8,
 	},
 	felineprowess: {
 		onModifySpAPriority: 5,
@@ -5643,6 +5678,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Feline Prowess",
 		rating: 5,
 		num: 332,
+		gen: 8,
 	},
 	fossilized: {
 		onSourceModifyAtkPriority: 5,
@@ -5661,6 +5697,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Fossilized",
 		rating: 3,
 		num: 333,
+		gen: 8,
 	},
 	magicaldust: {
 		onDamagingHit(damage, target, source, move) {
@@ -5672,6 +5709,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Magical Dust",
 		rating: 3,
 		num: 334,
+		gen: 8,
 	},
 	dreamcatcher: {
 		onBasePower(bp, source, target, move) {
@@ -5717,6 +5755,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Nocturnal",
 		rating: 4,
 		num: 336,
+		gen: 8,
 
 	},
 	selfsufficient: {
@@ -5728,6 +5767,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Self Sufficient",
 		rating: 3,
 		num: 337,
+		gen: 8,
 	},
 	groundate: {
 		onModifyTypePriority: -1,
@@ -5748,6 +5788,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Groundate",
 		rating: 4,
 		num: 338,
+		gen: 8,
 	},
 	iceage: {
 		onStart(pokemon) {
@@ -5759,6 +5800,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Ice Age",
 		rating: 3.5,
 		num: 339,
+		gen: 8,
 	},
 	halfdrake: {
 		onStart(pokemon) {
@@ -5770,6 +5812,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Half Drake",
 		rating: 3.5,
 		num: 340,
+		gen: 8,
 	},
 	liquified: {
 		onSourceModifyDamage(damage, source, target, move) {
@@ -5782,6 +5825,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Liquified",
 		rating: 3.5,
 		num: 341,
+		gen: 8,
 	},
 	dragonfly: {
 		// airborneness implemented in sim/pokemon.js:Pokemon#isGrounded
@@ -5795,6 +5839,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Dragonfly",
 		rating: 3.5,
 		num: 342,
+		gen: 8,
 	},
 	dragonslayer: {
 		onModifyDamage(damage, source, target, move) {
@@ -5805,6 +5850,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Dragon Slayer",
 		rating: 3.5,
 		num: 343,
+		gen: 8,
 	},
 	hydrate: {
 		onModifyTypePriority: -1,
@@ -5825,6 +5871,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Hydrate",
 		rating: 4,
 		num: 344,
+		gen: 8,
 	},
 	metallic: {
 		onStart(pokemon) {
@@ -5837,6 +5884,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Metallic",
 		rating: 3.5,
 		num: 345,
+		gen: 8,
 	},
 	permafrost: {
 		onSourceModifyDamage(damage, source, target, move) {
@@ -5849,6 +5897,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Permafrost",
 		rating: 3,
 		num: 346,
+		gen: 8,
 	},
 	primalarmor: {
 		onSourceModifyDamage(damage, source, target, move) {
@@ -5861,6 +5910,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Primal Armor",
 		rating: 3,
 		num: 347,
+		gen: 8,
 	},
 	ragingboxer: { //Uses parentalBond as base.
 		onPrepareHit(source, target, move) {
@@ -5881,6 +5931,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Raging Boxer",
 		rating: 4.5,
 		num: 348,
+		gen: 8,
 	}, 
 	airblower: {
 		onStart(source) { //duration handled in data/moves.js:tailind
@@ -5893,16 +5944,20 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Air Blower",
 		rating: 5,
 		num: 349,
+		gen: 8,
 	},
 	juggernaut: {
+		onModifyAtkPriority: 11,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.flags['contact']) {
-				return (atk + (attacker.getStat('def') * .2));
+				console.log(`Attack: ${atk}, Modified Attack: ${atk + (attacker.getStat('def') * .2)}`)
+				return this.chainModify((((atk + (attacker.getStat('def') * .20)) / (atk ? atk : 1))));
 			}
 		},
+		onModifySpAPriority: 11,
 		onModifySpA(spa, attacker, defender, move) {
 			if (move.flags['contact']) {
-				return (spa + (attacker.getStat('def') * .2));
+				return this.chainModify((((spa + (attacker.getStat('def') * .20)) / (spa ? spa : 1))));
 			}
 		},
 		onUpdate(pokemon) {
@@ -5921,6 +5976,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Juggernaut",
 		rating: 3,
 		num: 350,
+		gen: 8,
 	},
 	shortcircuit: {
 		onModifyAtkPriority: 5,
@@ -5950,6 +6006,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Short Circuit",
 		rating: 3,
 		num: 351,
+		gen: 8,
 	},
 	majesticbird: {
 		onModifySpA(atk, attacker, defender, move) {
@@ -5958,6 +6015,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Majestic Bird",
 		rating: 4.5,
 		num: 352,
+		gen: 8,
 	},
 	phantom: {
 		onStart(pokemon) {
@@ -5969,6 +6027,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Phantom",
 		rating: 3.5,
 		num: 353,
+		gen: 8,
 	},
 	poisonate: {
 		onModifyTypePriority: -1,
@@ -5989,6 +6048,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Poisonate",
 		rating: 4,
 		num: 354,
+		gen: 8,
 	},
 	impenetrable: {
 		onDamage(damage, target, source, effect) {
@@ -6000,6 +6060,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Impenetrable",
 		rating: 4,
 		num: 355,
+		gen: 8,
 	},
 	hypnotist: {
 		onModifyMovePriority: -10,
@@ -6011,6 +6072,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Hypnotist",
 		rating: 4,
 		num: 356,
+		gen: 8,
 	},
 	overwhelm: {
 		onModifyMovePriority: -5,
@@ -6033,6 +6095,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Overwhelm",
 		rating: 4,
 		num: 357,
+		gen: 8,
 	},
 	scare: {
 		onStart(pokemon) {
@@ -6052,6 +6115,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Scare",
 		rating: 3.5,
 		num: 358,
+		gen: 8,
 	},
 	majesticmoth: {
 		onStart(pokemon) {
@@ -6061,6 +6125,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Majestic Moth",
 		rating: 5,
 		num: 359,
+		gen: 8,
 	},
 	souleater: {
 		onSourceAfterFaint(length, target, source, effect) {
@@ -6073,6 +6138,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Soul Eater",
 		rating: 3,
 		num: 360,
+		gen: 8,
 	},
 	soullinker: { 
 		onDamagingHitOrder: 1,
@@ -6085,6 +6151,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Soul Linker",
 		rating: 3,
 		num: 360,
+		gen: 8,
 	},
 	sweetdreams: {
 		onResidualOrder: 30,
@@ -6098,6 +6165,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Sweet Dreams",
 		rating: 3,
 		num: 361,
+		gen: 8,
 
 	}, 
 	badluck: {
@@ -6111,6 +6179,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Bad Luck",
 		rating: 3,
 		num: 362,
+		gen: 8,
 	},
 	hauntedspirit: {
 		onDamagingHitOrder: 2,
@@ -6123,6 +6192,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Haunted Spirit",
 		rating: 3,
 		num: 363,
+		gen: 8,
 	},
 	electricburst: {
 		onModifyAtkPriority: 6,
@@ -6151,6 +6221,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Electric Burst",
 		rating: 3,
 		num: 364,
+		gen: 8,
 
 	},
 	rawwood: {
@@ -6170,6 +6241,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Raw Wood",
 		rating: 3,
 		num: 365,
+		gen: 8,
 	},
 	solenoglyphs: {
 		onModifyMove(move, attacker, defender) {
@@ -6190,6 +6262,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Solenoglyphs",
 		rating: 3.5,
 		num: 366,
+		gen: 8,
 	},
 	spiderlair: {
 		onSwitchIn(source) { //duration handled in data/moves.js:stickyweb
@@ -6202,6 +6275,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Spider Lair",
 		rating: 5,
 		num: 367,
+		gen: 8,
 	},
 	fatalprecision: {
 		onBeforeMove(source, target, move) { //uses onBeforeMove to account for switch-ins
@@ -6223,6 +6297,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Fatal Precision",
 		rating: 3,
 		num: 368,
+		gen: 8,
 	},
 	fortknox: {
 		onAfterEachBoost(boost, target, source, effect) {
@@ -6246,6 +6321,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Fort Knox",
 		rating: 3,
 		num: 369,
+		gen: 8,
 	},
 	seaweed: {
 		onModifyDamage(damage, source, target, move) {
@@ -6264,6 +6340,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Seaweed",
 		rating: 3,
 		num: 370,
+		gen: 8,
 	},
 	psychicmind: {
 		onModifyAtkPriority: 5,
@@ -6283,6 +6360,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Psychic Mind",
 		rating: 3,
 		num: 371,
+		gen: 8,
 	},
 	poisonabsorb: {
 		onTryHit(target, source, move) {
@@ -6297,6 +6375,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Poison Absorb",
 		rating: 3.5,
 		num: 372,
+		gen: 8,
 	},
 	scavenger: {
 		onSourceAfterFaint(length, target, source, effect) {
@@ -6309,6 +6388,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Scavenger",
 		rating: 3,
 		num: 360,
+		gen: 8,
 	},
 	twistdimension: {
 		onStart(source) {
@@ -6317,6 +6397,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Twist. Dimension",
 		rating: 5,
 		num: 361,
+		gen: 8,
 	}, 
 	multiheaded: {
 		onPrepareHit(source, target, move) {
@@ -6343,6 +6424,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Multi Headed",
 		rating: 5,
 		num: 362,
+		gen: 8,
 	},
 	northwind: {
 		onStart(source) { //duration handled in data/moves.js:tailind
@@ -6355,6 +6437,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "North Wind",
 		rating: 5,
 		num: 363,
+		gen: 8,
 	},
 	overcharge: {
 		onModifyDamage(damage, source, target, move) {
@@ -6367,11 +6450,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Overcharge",
 		rating: 3,
 		num: 364,
+		gen: 8,
 
 	},
 	violentrush: {
 		onModifyAtk(atk, source, target, move) {
-			console.log(`VR active turns: ${source.activeTurns}`);
 			if (!source.activeTurns) {
 				return this.chainModify(1.2);
 			}
@@ -6384,6 +6467,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Violent Rush",
 		rating: 3,
 		num: 365,
+		gen: 8,
 
 	},
 	flamingsoul: {
@@ -6393,6 +6477,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Flaming Soul",
 		rating: 3,
 		num: 366,
+		gen: 8,
 	},
 	sagepower: {
 		onStart(pokemon) {
@@ -6435,6 +6520,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Sage Power",
 		rating: 4.5,
 		num: 367,
+		gen: 8,
 	},
 	bonezone: {
 		onModifyMove(move) {
@@ -6451,6 +6537,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Bone Zone",
 		rating: 4.5,
 		num: 368,
+		gen: 8,
 	},
 	weathercontrol: {
 		onTryHit(target, source, move) {
@@ -6462,21 +6549,23 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Weather Control",
 		rating: 2,
 		num: 369,
+		gen: 8,
 	},
 	speedforce: {
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.flags['contact']) {
-				return (atk + (attacker.getStat('spe') * .2));
+				return this.chainModify(((atk + (attacker.getStat('spe') * .20)) / (atk ? atk : 1)));
 			}
 		},
 		onModifySpA(spa, attacker, defender, move) {
 			if (move.flags['contact']) {
-				return (spa + (attacker.getStat('spe') * .2));
+				return this.chainModify(((spa + (attacker.getStat('spe') * .20)) / (spa ? spa : 1)));
 			}
 		},
 		name: "Speed Force",
 		rating: 4,
 		num: 370,
+		gen: 8,
 	},
 	seaguardian: {
 		onStart(pokemon) {
@@ -6489,6 +6578,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Sea Guardian",
 		rating: 4,
 		num: 371,
+		gen: 8,
 	},
 	moltendown: {
 		onFoeEffectiveness(typeMod, target, type, move) {
@@ -6499,6 +6589,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Molten Down",
 		rating: 3,
 		num: 372,
+		gen: 8,
 	},
 	hyperaggressive: {
 		onPrepareHit(source, target, move) {
@@ -6517,6 +6608,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Hyper Aggressive",
 		rating: 4.5,
 		num: 373,
+		gen: 8,
 	},
 	flock: {
 		onModifyAtkPriority: 5,
@@ -6546,6 +6638,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Flock",
 		rating: 3,
 		num: 374,
+		gen: 8,
 	},
 	fieldexplorer: {
 		onBasePowerPriority: 23,
@@ -6558,6 +6651,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Field Explorer",
 		rating: 3,
 		num: 375,
+		gen: 8,
 	},
 	striker: {
 		onBasePowerPriority: 23,
@@ -6570,6 +6664,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Striker",
 		rating: 3,
 		num: 376,
+		gen: 8,
 	},
 	frozensoul: {
 		onModifyPriority(priority, pokemon, target, move) {
@@ -6578,6 +6673,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Frozen Soul",
 		rating: 3,
 		num: 377,
+		gen: 8,
 	},
 	predator: {
 		onSourceAfterFaint(length, target, source, effect) {
@@ -6590,6 +6686,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Predator",
 		rating: 3,
 		num: 378,
+		gen: 8,
 	},
 	looter: {
 		onSourceAfterFaint(length, target, source, effect) {
@@ -6602,17 +6699,20 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Looter",
 		rating: 3,
 		num: 379,
+		gen: 8,
 	},
+	//TODO: Fix Power Core and Juggernaut Damage Calcs
 	powercore: {
 		onModifyAtk(atk, attacker, defender, move) {
-			return (atk + (attacker.getStat('def') * .25));
+			return this.chainModify(((atk + (attacker.getStat('def') * .25)) / (atk ? atk : 1)));
 		},
 		onModifySpA(spa, attacker, defender, move) {
-			return (spa + (attacker.getStat('spd') * .25));
+			return this.chainModify(((spa + (attacker.getStat('spd') * .25)) / (spa ? spa : 1)));
 		},
 		name: "Power Core",
 		rating: 3,
 		num: 380,
+		gen: 8,
 	},
 	sightingsystem: {
 		onModifyMove(move) {
@@ -6626,6 +6726,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Sighting System",
 		rating: 3,
 		num: 381,
+		gen: 8,
 	},
 	//badcompany: {
 	//
@@ -6641,6 +6742,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Giant Wings",
 		rating: 4,
 		num: 384,
+		gen: 8,
 	},
 	momentum: {
 		onModifyMove(move) {
@@ -6656,6 +6758,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Momentum",
 		rating: 4,
 		num: 385,
+		gen: 8,
 	},
 	grippincer: {
 		onAfterMoveSecondarySelf(source, target, move) {
@@ -6672,6 +6775,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Grip Pincer",
 		rating: 4,
 		num: 386,
+		gen: 8,
 	},
 	bigleaves: {
 		//Chlorophyll
@@ -6717,6 +6821,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Big Leaves",
 		rating: 4,
 		num: 387,
+		gen: 8,
 	},
 	precisefist: {
 		onModifyMove(move) {
@@ -6745,6 +6850,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Deadeye",
 		rating: 4,
 		num: 389,
+		gen: 8,
 	},
 	artillery: {
 		onModifyMove(move) {
@@ -6756,6 +6862,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Artillery",
 		rating: 4,
 		num: 390,
+		gen: 8,
 	},
 	amplifier: {
 		onModifyMove(move) {
@@ -6766,6 +6873,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Amplifier",
 		rating: 4,
 		num: 391,
+		gen: 8,
 	},
 	icedew: {
 		onTryHitPriority: 1,
@@ -6795,6 +6903,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Ice Dew",
 		rating: 3,
 		num: 392,
+		gen: 8,
 	},
 	sunworship: {
 		onStart(pokemon) {
@@ -6807,6 +6916,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Sun Worship",
 		rating: 4,
 		num: 393,
+		gen: 8,
 	},
 	buginize: {
 		onModifyTypePriority: -1,
@@ -6827,6 +6937,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Buginize",
 		rating: 4,
 		num: 394,
+		gen: 8,
 	},
 	solarflare: {
 		onModifyMove(move) {
@@ -6837,6 +6948,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Solar Flare",
 		rating: 4,
 		num: 395,
+		gen: 8,
 	},
 	lunareclipse: {
 		onModifyMove(move) {
@@ -6850,12 +6962,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Lunar Eclipse",
 		rating: 4,
 		num: 395,
+		gen: 8,
 	},
 	//Elite Redux's Opportunist renamed to 'Expert Hunter' to avoid name confict with gen 9's Opportunist
 	experthunter: { 
 		onFractionalPriority(priority, source, target, move) {
-			if (move.category === "Status" && source.hasAbility("myceliummight")) return; //Just in case this happens
-			if (source.hp <= source.maxhp / 2) {
+			if ((move.category === "Status" && source.hasAbility("myceliummight")) || !target) return; //Just in case this happens
+			if (target.hp && target.hp <= target.maxhp / 2) {
 				this.add('-activate', source, 'ability: Expert Hunter');
 				return 0.1;
 			}
@@ -6863,6 +6976,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Expert Hunter",
 		rating: 4,
 		num: 396,
+		gen: 8,
 	},
 	
 	
