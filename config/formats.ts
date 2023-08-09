@@ -30,8 +30,12 @@ export const Formats: FormatList = [
 		desc: `Testing for ER Innates`,
 		mod: 'gen8eliteredux',
 		rated: false, 
-		//TODO: Create Elite Redux ruleset
-		ruleset: [],
+		ruleset: ['Standard'],
+		banlist: ['Uber', 'AG', 'King\'s Rock', 'Baton Pass'],
+
+
+
+		//ER Scripts
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
 			const innateList = Object.keys(species.abilities)
