@@ -738,6 +738,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			return !counter.get(toID(ability));
 		case 'Defiant': case 'Justified': case 'Moxie':
 			return !counter.get('Physical');
+		case 'Guts':
+			return (!moves.has('facade') && !moves.has('sleeptalk'));
 		case 'Hustle':
 			return counter.get('Physical') < 2;
 		case 'Hydration': case 'Rain Dish': case 'Swift Swim':
@@ -843,36 +845,33 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			!abilities.has('Quick Feet') &&
 			(moves.has('facade') || (moves.has('sleeptalk') && moves.has('rest')))
 		)) return 'Guts';
-		if (abilities.has('Moxie') && (counter.get('Physical') > 3 || moves.has('bounce'))) return 'Moxie';
-		if (species.name === 'Ambipom' && !counter.get('technician')) {
-			// If it doesn't qualify for Technician, Skill Link is useless on it
-			return 'Pickup';
-		}
-		if (
-			abilities.has('Unburden') && ['acrobatics', 'bellydrum', 'closecombat'].some(m => moves.has(m))
-		) return 'Unburden';
+
 		if (species.id === 'starmie') return role === 'Wallbreaker' ? 'Analytic' : 'Natural Cure';
-		if (abilities.has('Drought')) return 'Drought';
 		if (species.id === 'talonflame' && role === 'Z-Move user') return 'Gale Wings';
 		if (species.id === 'golemalola' && moves.has('return')) return 'Galvanize';
-		if (abilities.has('Gluttony') && (moves.has('recycle') || moves.has('bellydrum'))) return 'Gluttony';
-		if (abilities.has('Harvest') && (role === 'Bulky Support' || role === 'Staller')) return 'Harvest';
-		if (species.name === 'Raticate-Alola') return 'Hustle';
+		if (species.id === 'raticatealola') return 'Hustle';
 		if (species.id === 'ninjask' || species.id === 'seviper') return 'Infiltrator';
 		if (species.id === 'rampardos' && role === 'Bulky Attacker') return 'Mold Breaker';
 		if (species.baseSpecies === 'Altaria') return 'Natural Cure';
+		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
+		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
 		if (species.id === 'tsareena') return 'Queenly Majesty';
-		if (role === 'AV Pivot' && abilities.has('Regenerator')) return 'Regenerator';
 		if (species.id === 'druddigon' && role === 'Bulky Support') return 'Rough Skin';
-		if (abilities.has('Scrappy') && moves.has('boomburst')) return 'Scrappy';
-		if (abilities.has('Shed Skin') && moves.has('rest') && !moves.has('sleeptalk')) return 'Shed Skin';
-		if (abilities.has('Sniper') && moves.has('focusenergy')) return 'Sniper';
-		if (species.name === 'Kommo-o' && role === 'Z-Move user') return 'Soundproof';
+		if (species.id === 'kommoo' && role === 'Z-Move user') return 'Soundproof';
 		if (species.id === 'stunfisk') return 'Static';
 		if (species.id === 'breloom') return 'Technician';
-		if (abilities.has('Toxic Boost')) return 'Toxic Boost';
 		if (species.id === 'porygon2') return 'Trace';
-		if (types.has('Water') && counter.get('setup') && abilities.has('Weak Armor')) return 'Weak Armor';
+
+		if (abilities.has('Drought')) return 'Drought';
+		if (abilities.has('Gluttony') && (moves.has('recycle') || moves.has('bellydrum'))) return 'Gluttony';
+		if (abilities.has('Harvest') && (role === 'Bulky Support' || role === 'Staller')) return 'Harvest';
+		if (abilities.has('Moxie') && (counter.get('Physical') > 3 || moves.has('bounce'))) return 'Moxie';
+		if (abilities.has('Regenerator') && role === 'AV Pivot') return 'Regenerator';
+		if (abilities.has('Shed Skin') && moves.has('rest') && !moves.has('sleeptalk')) return 'Shed Skin';
+		if (abilities.has('Sniper') && moves.has('focusenergy')) return 'Sniper';
+		if (abilities.has('Toxic Boost')) return 'Toxic Boost';
+		if (abilities.has('Unburden') && ['acrobatics', 'bellydrum', 'closecombat'].some(m => moves.has(m))) return 'Unburden';
+		if (abilities.has('Weak Armor') && types.has('Water') && counter.get('setup')) return 'Weak Armor';
 
 		let abilityAllowed: Ability[] = [];
 		// Obtain a list of abilities that are allowed (not culled)
