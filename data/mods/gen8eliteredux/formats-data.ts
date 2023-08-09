@@ -401,7 +401,14 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	ponyta: {
 		tier: "LC",
 	},
+	ponytagalar: {
+		tier: "LC",
+	},
 	rapidash: {
+		tier: "(PU)",
+		doublesTier: "(DUU)",
+	},
+	rapidashgalar: {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
@@ -434,6 +441,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	farfetchd: {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
+	},
+	farfetchdgalar: {
+		tier: "LC",
 	},
 	doduo: {
 		tier: "LC",
@@ -1241,8 +1251,15 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	zigzagoon: {
 		tier: "LC",
 	},
+	zigzagoongalar: {
+		tier: "LC",
+	},
 	linoone: {
 		tier: "RUBL",
+		doublesTier: "(DUU)",
+	},
+	linoonegalar: {
+		tier: "NFE",
 		doublesTier: "(DUU)",
 	},
 	wurmple: {
@@ -2391,8 +2408,23 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	darumaka: {
 		tier: "LC",
 	},
+	darumakagalar: {
+		tier: "LC",
+	},
 	darmanitan: {
 		tier: "RUBL",
+		doublesTier: "(DUU)",
+	},
+	darmanitanzen: {
+		tier: "RUBL",
+		doublesTier: "(DUU)",
+	},
+	darmanitangalar: {
+		tier: "OU",
+		doublesTier: "(DUU)",
+	},
+	darmanitangalarzen: {
+		tier: "OU",
 		doublesTier: "(DUU)",
 	},
 	maractus: {
@@ -2418,6 +2450,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	yamask: {
+		tier: "LC",
+	},
+	yamaskgalar: {
 		tier: "LC",
 	},
 	cofagrigus: {
