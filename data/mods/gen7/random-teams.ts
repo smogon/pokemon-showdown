@@ -351,6 +351,16 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			['toxic', 'toxicspikes'],
 			['taunt', 'disable'],
 			['defog', ['leechseed', 'substitute']],
+
+			// Assorted hardcodes go here:
+			// Lunatone
+			['moonlight', 'rockpolish'],
+			// Smeargle
+			['destinybond', 'whirlwind'],
+			// Liepard
+			['copycat', 'uturn'],
+			// Seviper
+			['switcheroo', 'suckerpunch'],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -369,18 +379,10 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		}
 
 		// Assorted hardcodes go here:
-		// Lunatone
-		this.incompatibleMoves(moves, movePool, 'moonlight', 'rockpolish');
-		// Smeargle
-		this.incompatibleMoves(moves, movePool, 'destinybond', 'whirlwind');
 		// Z-Conversion Porygon-Z
 		if (species.id === 'porygonz') {
 			this.incompatibleMoves(moves, movePool, 'shadowball', 'recover');
 		}
-		// Liepard
-		this.incompatibleMoves(moves, movePool, 'copycat', 'uturn');
-		// Seviper
-		this.incompatibleMoves(moves, movePool, 'switcheroo', 'suckerpunch');
 	}
 
 	// Checks for and removes incompatible moves, starting with the first move in movesA.
