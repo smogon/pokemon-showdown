@@ -6660,8 +6660,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	grippincer: {
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (!move || !target || source.switchFlag === true) return;
-			if (target !== source && move.flags['contact'] && this.randomChance(9, 10)) {
-
+			if (target !== source && move.flags['contact'] && this.randomChance(3, 10)) {
 				target.addVolatile('partiallytrapped', source, this.dex.abilities.getByID("grippincer" as ID));			}
 		},
 		onModifyMove(move, pokemon, target) {
