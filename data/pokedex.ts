@@ -18048,6 +18048,16 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 	},
+	llampas: {
+		num: -906,
+		name: "Llampas",
+		types: ["Grass"],
+		baseStats: {hp: 65, atk: 50, def: 65, spa: 25, spd: 65, spe: 40},
+		abilities: {0: "Overgrow", H: "Droughtproof"},
+		weightkg: 310,
+		evos: ["Danfluff"],
+		eggGroups: ["Field", "Grass"],
+	},
 	syclar: {
 		num: -1,
 		name: "Syclar",
