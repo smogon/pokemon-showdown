@@ -847,6 +847,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		)) return 'Guts';
 
 		if (species.id === 'starmie') return role === 'Wallbreaker' ? 'Analytic' : 'Natural Cure';
+		if (species.id === 'ninetales') return 'Drought';
 		if (species.id === 'talonflame' && role === 'Z-Move user') return 'Gale Wings';
 		if (species.id === 'golemalola' && moves.has('return')) return 'Galvanize';
 		if (species.id === 'raticatealola') return 'Hustle';
@@ -860,16 +861,15 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (species.id === 'kommoo' && role === 'Z-Move user') return 'Soundproof';
 		if (species.id === 'stunfisk') return 'Static';
 		if (species.id === 'breloom') return 'Technician';
+		if (species.id === 'zangoose') return 'Toxic Boost';
 		if (species.id === 'porygon2') return 'Trace';
 
-		if (abilities.has('Drought')) return 'Drought';
 		if (abilities.has('Gluttony') && (moves.has('recycle') || moves.has('bellydrum'))) return 'Gluttony';
 		if (abilities.has('Harvest') && (role === 'Bulky Support' || role === 'Staller')) return 'Harvest';
 		if (abilities.has('Moxie') && (counter.get('Physical') > 3 || moves.has('bounce'))) return 'Moxie';
 		if (abilities.has('Regenerator') && role === 'AV Pivot') return 'Regenerator';
 		if (abilities.has('Shed Skin') && moves.has('rest') && !moves.has('sleeptalk')) return 'Shed Skin';
 		if (abilities.has('Sniper') && moves.has('focusenergy')) return 'Sniper';
-		if (abilities.has('Toxic Boost')) return 'Toxic Boost';
 		if (abilities.has('Unburden') && ['acrobatics', 'bellydrum', 'closecombat'].some(m => moves.has(m))) return 'Unburden';
 		if (abilities.has('Weak Armor') && types.has('Water') && counter.get('setup')) return 'Weak Armor';
 
