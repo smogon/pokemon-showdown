@@ -23,7 +23,7 @@ export const Formats: FormatList = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		section: "Singles",
+		section: "S/V Singles",
 	},
 	{
 		name: "[Gen 9] Random Battle",
@@ -84,7 +84,7 @@ export const Formats: FormatList = [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3712493/">SV OU Viability Rankings</a>`,
 		],
 
-		mod: 'swse',
+		mod: 'gen9',
 		ruleset: ['Standard'],
 		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'King\'s Rock', 'Baton Pass', 'Last Respects', 'Shed Tail'],
 	},
