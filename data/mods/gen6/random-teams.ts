@@ -5,7 +5,7 @@ import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
 
 // Moves that shouldn't be the only STAB moves:
-const NoStab = [
+const noStab = [
 	'aquajet', 'bounce', 'chatter', 'clearsmog', 'dragontail', 'eruption', 'explosion', 'fakeout', 'flamecharge',
 	'iceshard', 'icywind', 'incinerate', 'machpunch', 'pluck', 'pursuit', 'quickattack', 'reversal', 'selfdestruct',
 	'skydrop', 'snarl', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
@@ -16,7 +16,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
-		this.noStab = NoStab;
+		this.noStab = noStab;
 
 		this.moveEnforcementCheckers = {
 			Bug: (movePool, moves, abilities, types, counter) => (
