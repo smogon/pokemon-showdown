@@ -1497,8 +1497,8 @@ export class RandomGen8Teams {
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
 		isDoubles: boolean,
-		preferredType = '',
-		role: RandomTeamsTypes.Role = '',
+		preferredType: string,
+		role: RandomTeamsTypes.Role,
 		isNoDynamax: boolean
 	): boolean {
 		if ([
@@ -1693,8 +1693,8 @@ export class RandomGen8Teams {
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
 		isDoubles: boolean,
-		preferredType = '',
-		role: RandomTeamsTypes.Role = '',
+		preferredType: string,
+		role: RandomTeamsTypes.Role,
 		isNoDynamax: boolean
 	): string {
 		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));

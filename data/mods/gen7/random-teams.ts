@@ -713,7 +713,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
 		isDoubles: boolean,
-		preferredType = '',
+		preferredType: string,
 		role: RandomTeamsTypes.Role
 	): boolean {
 		switch (ability) {
@@ -828,7 +828,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
 		isDoubles: boolean,
-		preferredType = '',
+		preferredType: string,
 		role: RandomTeamsTypes.Role,
 	): string {
 		if (species.battleOnly && !species.requiredAbility) {
@@ -926,7 +926,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
 		isLead: boolean,
-		preferredType = '',
+		preferredType: string,
 		role: RandomTeamsTypes.Role,
 	): string | undefined {
 		// Z-Moves
