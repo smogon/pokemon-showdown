@@ -98,10 +98,36 @@ export const Formats: FormatList = [
 			}
 		},
 		onAfterMega(pokemon) {
+			//clear original pokemon innates
 			for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
 				pokemon.removeVolatile(innate);
 			}
-			pokemon.m.innates = undefined;
+			//initialize mega innates
+			pokemon.m.innates = Object.keys(pokemon.species.abilities)
+			.filter(key => key.includes('I'))
+			.map(key => this.toID(pokemon.species.abilities[key as "I1" | "I2" | "I3"]))
+			.filter(ability => ability !== pokemon.ability);
+
+			//before switch in innate load
+			const neededBeforeSwitchInIDs = [
+				'clearbody', 'competitive', 'contrary', 'defiant', 'fullmetalbody', 'hypercutter', 'innerfocus',
+				'mirrorarmor', 'oblivious', 'owntempo', 'rattled', 'scrappy', 'simple', 'whitesmoke',
+			];
+			if (pokemon.m.innates) {
+				for (const innate of pokemon.m.innates) {
+					if (!neededBeforeSwitchInIDs.includes(innate)) continue;
+					if (pokemon.hasAbility(innate)) continue;
+					pokemon.addVolatile("ability:" + innate, pokemon);
+				}
+			}
+			//after switch in innate load
+			if (pokemon.m.innates) {
+				for (const innate of pokemon.m.innates) {
+					if (pokemon.hasAbility(innate)) continue;
+					pokemon.addVolatile("ability:" + innate, pokemon);
+				}
+			}
+
 		},
 		
 	},
