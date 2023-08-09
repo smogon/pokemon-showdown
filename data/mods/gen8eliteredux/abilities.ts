@@ -160,6 +160,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify([5325, 4096]);
 			}
 		},
+
+		onBeforeMega(pokemon) {
+			this.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
+		},
 		desc: "When this Pokemon switches in, it appears as the last unfainted Pokemon in its party until it takes direct damage from another Pokemon's attack. This Pokemon's actual level and HP are displayed instead of those of the mimicked Pokemon. This Pokemon's attacks deal 30% more damage while under Illusion",
 		shortDesc: "This Pokemon appears as the last Pokemon in the party until it takes direct damage. 30% more damage while Illusion persists.",
 
@@ -612,12 +616,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its offensive stat is multiplied by 1.5 while using a Bug-type attack, and 1.2 otherwise.",
 
 	},
-	terravolt: {
+	teravolt: {
 		inherit: true,
 		onStart(pokemon) {
 			if (!pokemon.types.includes('Electric')) {
 				if (!pokemon.addType('Electric')) return;
-				this.add('-start', pokemon, 'typeadd', 'Electric', '[from] ability: Terravolt');
+				this.add('-start', pokemon, 'typeadd', 'Electric', '[from] ability: Teravolt');
 			}
 		},
 		desc: "On switch-in, This Pokemon gains the Electric type in addition to its current typing. Moves and their effects ignore certain Abilities of other Pokemon. The Abilities that can be negated are Aroma Veil, Aura Break, Battle Armor, Big Pecks, Bulletproof, Clear Body, Contrary, Damp, Dazzling, Disguise, Dry Skin, Filter, Flash Fire, Flower Gift, Flower Veil, Fluffy, Friend Guard, Fur Coat, Grass Pelt, Heatproof, Heavy Metal, Hyper Cutter, Ice Face, Ice Scales, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Light Metal, Lightning Rod, Limber, Magic Bounce, Magma Armor, Marvel Scale, Mirror Armor, Motor Drive, Multiscale, Oblivious, Overcoat, Own Tempo, Pastel Veil, Punk Rock, Queenly Majesty, Sand Veil, Sap Sipper, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Sweet Veil, Tangled Feet, Telepathy, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Bubble, Water Veil, White Smoke, Wonder Guard, and Wonder Skin. This affects every other Pokemon on the field, whether or not it is a target of this Pokemon's move, and whether or not their Ability is beneficial to this Pokemon.",
