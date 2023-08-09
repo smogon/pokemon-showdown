@@ -5,7 +5,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (!target.hp) return;
 			if (move?.effectType === 'Move' && target.getMoveHitData(move).crit) {
 				this.boost({atk: 12}, target, target);
-			} else if (move?.effectType === 'Move') {
+			} 
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (damage && move?.effectType === 'Move') {
 				this.boost({atk: 1}, target, target);
 			}
 		},
