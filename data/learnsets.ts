@@ -88588,6 +88588,839 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		],
 		eventOnly: true,
 	},
+	llampas: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	danfluff: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	alfalphalops: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	therpal: {
+			learnset: {
+		tackle: ["7L1"],
+		}
+	},
+	aspfault: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	tarmendoa: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	burbwhirl: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	spoutlaw: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	vaquamael: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	chewmunk: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	cheekat: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	specoey: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	opakespiel: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	kwaile: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	quailert: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	quailstion: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	sighlo: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	cooreds: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	probaska: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	histameanie: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	apheed: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	musleafo: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	eecroach: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	eecroachswarm: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	clamtrip: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	stackem: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	rowviar: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	sanook: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	cereboral: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	bagoul: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	tofrug: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	kaskazog: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	ananot: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	ananoop: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	mosster: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	mosskrat: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	catteraxe: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	catatomb: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	skinka: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	dredgen: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	stalagen: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	
+	chromagen: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	
+	aerogen: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	
+	caragen: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	bludgen: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	pathagen: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	ectogen: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	legen: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	enigmeon: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	desoray: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	pudet: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	woond: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	pramblo: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	glashulimp: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	palossandkaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	marillkaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	azumarillkaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	snoverlowland: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	abomasnowlowland: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	sudowoodoamazeall: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	gastlykaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	haunterkaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	gengarkaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	phantumpkaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	trevenantkasakde: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	drifblimamazeall: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	rotomsol: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	rotomsway: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	rotombrawl: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	rotomweb: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	rotomjunk: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	drout: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	droutdry: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	guruchi: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	bruxishkaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	porygonω: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	estoe: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	perpetua: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	tooburm: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	detrarc: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	excadrillkaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	auditaur: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	oxillery: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	qayagus: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	dubwoolkaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	mienflux: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	gneckle: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	rabyoose: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	tamroast: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	tamroastf: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	vitisquash: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	ambipomkaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	gurdurrkaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	conkeldurrkaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	umbralu: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	nomobjeka: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	kleptarak: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	kituff: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	beadamup: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	skuntankkaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	raticatekaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	rascoom: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	exploudkaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	jynxkaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	faebril: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	aeradio: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	botnyak: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	castformgutsy: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	castformwindy: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	castformsmoggy: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	castformdusty: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	castformsandy: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	castformswarmy: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	castformspooky: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	castformallergy: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	castformzappy: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	castformzenny: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	castformsorcery: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	castformshady: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	castformlovely: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	castformwhirly: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	vendrom: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	buwuve: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	wasgrowl: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	worcane: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	probat: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	jemineye: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	bearvoyance: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	folleming: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	drosabell: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	shinxkaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	luxiokaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	luxraykaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	yanmakaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	yanmage: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	bloomage: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	obsidious: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	mercryni: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	meraculisk: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	crabominablekaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	golettkaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	golgre: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	prospectre: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	lapraskaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	skideer: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	yuleigh: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	feafurr: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	vaicear: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	phisnooz: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	telemac: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	macedontus: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	crynorawst: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	rotomb: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	tamunk: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	temunk: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	manadza: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	arctikull: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	wicoot: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	Ωrogon: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	dianciekaskade: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	orbtholod: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	pestalation: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	revylon: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	leoseace: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	lamentu: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
+	endramodai: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
 	syclar: {
 		learnset: {
 			absorb: ["9L1", "8L1", "7L1"],
