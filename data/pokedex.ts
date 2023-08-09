@@ -1031,7 +1031,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	ninetales: {
 		num: 38,
 		name: "Ninetales",
-		types: ["Fire"],
+		types: ["Fire", "Ghost"],
 		genderRatio: {M: 0.25, F: 0.75},
 		baseStats: {hp: 73, atk: 76, def: 75, spa: 81, spd: 100, spe: 100},
 		abilities: {0: "Flash Fire", H: "Drought"},
