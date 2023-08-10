@@ -30,7 +30,7 @@ const ZeroAttackHPIVs: {[k: string]: SparseStatsTable} = {
 };
 
 // Moves that restore HP:
-const RecoveryMove = [
+const RECOVERY_MOVES = [
 	'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'recycle', 'roost', 'shoreup', 'slackoff', 'softboiled', 'strengthsap', 'synthesis',
 ];
 // Moves that drop stats:
