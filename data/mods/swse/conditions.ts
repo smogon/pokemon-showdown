@@ -1,4 +1,4 @@
-export const Conditions: {[k: string]: ConditionData} = {
+export const Conditions: {[k: string]: ModdedConditionData} = {
 	brn: {
 		name: 'brn',
 		effectType: 'Status',
@@ -743,6 +743,49 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
 			this.add('-weather', 'BloodMoon', '[upkeep]');
+			this.eachEvent('Weather');
+		},
+		onFieldEnd() {
+			this.add('-weather', 'none');
+		},
+	},
+	foghorn: {
+		name: 'Foghorn',
+		effectType: 'Weather',
+		duration: 5,
+		durationCallback(source, effect) {
+			if (source?.hasItem('weatherballoon')) {
+				return 8;
+			}
+			return 5;
+		},
+		onModifyAccuracyPriority: -2,
+		onModifyAccuracy(accuracy, target, source, move) {
+			if (typeof accuracy === 'number' && move?.type !== 'Normal') {
+				// This one piece of code took over 5 hours to do because it was reading move as move: Pokemon and not move: ActiveMove
+				if (typeof accuracy !== 'number') return;
+				this.debug('Fog accuracy decrease');
+				return this.chainModify(0.9);
+			}
+		},
+		onModifyMovePriority: -5,
+		onModifyMove(move) {
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Normal'] = true;
+			}
+		},
+		onFieldStart(field, source, effect) {
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-weather', 'Foghorn', '[from] ability: ' + effect.name, '[of] ' + source);
+			} else {
+				this.add('-weather', 'Foghorn');
+			}
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-weather', 'Foghorn', '[upkeep]');
 			this.eachEvent('Weather');
 		},
 		onFieldEnd() {

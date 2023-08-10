@@ -5023,6 +5023,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 2.5,
 		num: 254,
 	},
+	warpmist: {
+		onModifySpAPriority: 5,
+		onModifySpA(spa, source, pokemon) {
+			if (['foghorn'].includes(pokemon.effectiveWeather())) {
+				if (source.storedStats.spa >= source.storedStats.atk) this.chainModify(1.2);
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, source, pokemon) {
+			if (['foghorn'].includes(pokemon.effectiveWeather())) {
+				if (source.storedStats.atk > source.storedStats.spa) this.chainModify(1.2);
+			}
+		},
+		name: "Warp Mist",
+		rating: 2,
+		num: -17,
+	},
 	waterabsorb: {
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Water') {
