@@ -712,6 +712,46 @@ export const Conditions: {[k: string]: ConditionData} = {
 			this.add('-weather', 'none');
 		},
 	},
+	bloodmoon: {
+		name: 'BloodMoon',
+		effectType: 'Weather',
+		duration: 5,
+		durationCallback(source, effect) {
+			if (source?.hasItem('weatherballoon')) {
+				return 8;
+			}
+			return 5;
+		},
+		onModifyDamage(damage, attacker, defender, move) {
+			if (defender.hasItem('utilityumbrella')) return;
+			if (move && defender.getMoveHitData(move).typeMod > 0) {
+				this.debug('Blood Moon super-effective boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.type === 'Dark' && move.category === 'Status') return priority + 1;
+		},
+		onFieldStart(field, source, effect) {
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-weather', 'BloodMoon', '[from] ability: ' + effect.name, '[of] ' + source);
+			} else {
+				this.add('-weather', 'BloodMoon');
+			}
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-weather', 'BloodMoon', '[upkeep]');
+			this.eachEvent('Weather');
+		},
+		onFieldEnd() {
+			this.add('-weather', 'none');
+		},
+	},
+
+
+
 	deltastream: {
 		name: 'DeltaStream',
 		effectType: 'Weather',
