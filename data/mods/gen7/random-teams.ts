@@ -75,7 +75,7 @@ const PROTECT_MOVES = [
 	'banefulbunker', 'kingsshield', 'protect', 'spikyshield',
 ];
 // Moves that switch the user out
-const PivotingMoves = [
+const PIVOT_MOVES = [
 	'partingshot', 'uturn', 'voltswitch',
 ];
 
