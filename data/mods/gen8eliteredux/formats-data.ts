@@ -4094,7 +4094,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
-	sneaseler: {
+	sneasler: {
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
