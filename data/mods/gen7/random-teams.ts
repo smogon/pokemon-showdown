@@ -632,7 +632,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		// Enforce setup
 		if (role.includes('Setup') || role === 'Z-Move user') {
 			// Prioritise other setup moves over Flame Charge
-			const setupMoves = movePool.filter(moveid => Setup.includes(moveid) && moveid !== 'flamecharge');
+			const setupMoves = movePool.filter(moveid => SETUP.includes(moveid) && moveid !== 'flamecharge');
 			if (setupMoves.length) {
 				const moveid = this.sample(setupMoves);
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
