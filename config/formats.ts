@@ -23,9 +23,9 @@ export const Formats: FormatList = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		section: "S/V Singles",
+		section: "SwSe Singles",
 	},
-	{
+	/* {
 		name: "[Gen 9] Random Battle",
 		desc: `Randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
 		threads: [
@@ -75,42 +75,29 @@ export const Formats: FormatList = [
 			'Max Team Size = 3',
 			'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod',
 		],
-	},
+	}, */
 	{
 		name: "[Gen 9] OU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3710915/">SV OU Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3712513/">SV OU Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3712493/">SV OU Viability Rankings</a>`,
-		],
 
-		mod: 'gen9',
+		mod: 'swse',
 		ruleset: ['Standard'],
-		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'King\'s Rock', 'Baton Pass', 'Last Respects', 'Shed Tail'],
+		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'King\'s Rock', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 9] Ubers",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3710870/">Ubers Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3712978/">Ubers Viability Rankings</a>`,
-		],
 
-		mod: 'gen9',
+		mod: 'swse',
 		ruleset: ['Standard'],
 		banlist: ['AG', 'Moody', 'King\'s Rock', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 9] UU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3713709/">UU Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3716435/">UU Viability Rankings</a>`,
-		],
 
-		mod: 'gen9',
+		mod: 'swse',
 		ruleset: ['[Gen 9] OU'],
 		banlist: ['OU', 'UUBL'],
 	},
-	{
+	/* {
 		name: "[Gen 9] RU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3713711/">RU Metagame Discussion</a>`,
@@ -138,16 +125,11 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['[Gen 9] NU'],
 		banlist: ['NU', 'PUBL'],
-	},
+	}, */
 	{
 		name: "[Gen 9] LC",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3710868/">Little Cup Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3712989/">Little Cup Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3712664/">Little Cup Viability Rankings</a>`,
-		],
 
-		mod: 'gen9',
+		mod: 'swse',
 		ruleset: ['Little Cup', 'Standard'],
 		banlist: [
 			'Basculin-White-Striped', 'Diglett-Base', 'Dunsparce', 'Flittle', 'Gastly', 'Girafarig', 'Growlithe-Hisui', 'Meditite', 'Misdreavus',
@@ -157,13 +139,8 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] Monotype",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3710724/">Monotype Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3715794/">Monotype Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3714063/">Monotype Viability Rankings</a>`,
-		],
 
-		mod: 'gen9',
+		mod: 'swse',
 		ruleset: ['Standard', 'Evasion Abilities Clause', 'Same Type Clause', 'Terastal Clause'],
 		banlist: [
 			'Annihilape', 'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Dialga', 'Dialga-Origin', 'Eternatus',
@@ -176,12 +153,8 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 9] 1v1",
 		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3710864/">1v1 Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3712375/">1v1 Viability Rankings</a>`,
-		],
 
-		mod: 'gen9',
+		mod: 'swse',
 		ruleset: [
 			'Picked Team Size = 1', 'Max Team Size = 3',
 			'Standard', 'Terastal Clause', 'Sleep Moves Clause', 'Accuracy Moves Clause', '!Sleep Clause Mod',
@@ -195,15 +168,11 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] Anything Goes",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3710911/">AG Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3714177/">AG Viability Rankings</a>`,
-		],
 
-		mod: 'gen9',
+		mod: 'swse',
 		ruleset: ['Min Source Gen = 9', 'Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 	},
-	{
+	/* {
 		name: "[Gen 9] NFE",
 		desc: `Only Pok&eacute;mon that can evolve are allowed.`,
 		threads: [
@@ -282,11 +251,11 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer'],
 		banlist: ['Walking Wake', 'Iron Leaves'],
-	},
+	}, */
 	{
 		name: "[Gen 9] Custom Game",
 
-		mod: 'gen9',
+		mod: 'swse',
 		searchShow: false,
 		debug: true,
 		battle: {trunc: Math.trunc},
@@ -298,28 +267,25 @@ export const Formats: FormatList = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		section: "S/V Doubles",
+		section: "SwSe Doubles",
 	},
-	{
+	/* {
 		name: "[Gen 9] Random Doubles Battle",
 
 		mod: 'gen9',
 		gameType: 'doubles',
 		team: 'random',
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod'],
-	},
+	}, */
 	{
 		name: "[Gen 9] Doubles OU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3710876/">Doubles OU Sample Teams</a>`,
-		],
 
-		mod: 'gen9',
+		mod: 'swse',
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles'],
-		banlist: ['DUber', 'Shadow Tag'],
+		banlist: ['DUber', 'Arena Trap', 'Shadow Tag'],
 	},
-	{
+	/* {
 		name: "[Gen 9] Doubles Ubers",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3712864/">Doubles Ubers</a>`,
@@ -386,11 +352,11 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
 		banlist: ['Walking Wake', 'Iron Leaves'],
-	},
+	}, */
 	{
 		name: "[Gen 9] Doubles Custom Game",
 
-		mod: 'gen9',
+		mod: 'swse',
 		gameType: 'doubles',
 		searchShow: false,
 		battle: {trunc: Math.trunc},
@@ -402,7 +368,7 @@ export const Formats: FormatList = [
 	// National Dex
 	///////////////////////////////////////////////////////////////////
 
-	{
+	/* {
 		section: "National Dex",
 	},
 	{
@@ -531,12 +497,12 @@ export const Formats: FormatList = [
 				}
 			}
 		},
-	},
+	}, */
 
 	// Pet Mods
 	///////////////////////////////////////////////////////////////////
 
-	{
+	/* {
 		section: "Pet Mods",
 	},
 	{
@@ -561,12 +527,12 @@ export const Formats: FormatList = [
 		challengeShow: false,
 		ruleset: ['Obtainable', 'Standard NEXT', 'Team Preview'],
 		banlist: ['Uber'],
-	},
+	}, */
 
 	// Draft League
 	///////////////////////////////////////////////////////////////////
 
-	{
+	/* {
 		section: "Draft",
 		column: 1,
 	},
@@ -674,12 +640,12 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['Draft', 'Moody Clause', 'Swagger Clause'],
 		banlist: ['Soul Dew'],
-	},
+	}, */
 
 	// OM of the Month
 	///////////////////////////////////////////////////////////////////
 
-	{
+	/* {
 		section: "OM of the Month",
 		column: 2,
 	},
@@ -709,7 +675,7 @@ export const Formats: FormatList = [
 			'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Roaring Moon', 'Spectrier', 'Urshifu-Base', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned',
 			'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass', 'Shed Tail', 'Last Respects',
 		],
-	},
+	}, */
 
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
@@ -721,12 +687,8 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 9] Almost Any Ability",
 		desc: `Pok&eacute;mon have access to almost any ability.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3710568/">Almost Any Ability</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3710571/">AAA Resources</a>`,
-		],
 
-		mod: 'gen9',
+		mod: 'swse',
 		ruleset: ['Standard OMs', '!Obtainable Abilities', 'Ability Clause = 1', 'Sleep Moves Clause', 'Terastal Clause', 'Min Source Gen = 9'],
 		banlist: [
 			'Annihilape', 'Arceus', 'Baxcalibur', 'Calyrex-Ice', 'Calyrex-Shadow', 'Dialga', 'Dialga-Origin', 'Dragapult', 'Dragonite', 'Enamorus-Base',
@@ -739,7 +701,7 @@ export const Formats: FormatList = [
 			'King\'s Rock', 'Baton Pass', 'Last Respects', 'Revival Blessing', 'Shed Tail',
 		],
 	},
-	{
+	/* {
 		name: "[Gen 9] Balanced Hackmons",
 		desc: `Anything directly hackable onto a set (EVs, IVs, forme, ability, item, and move) and is usable in local battles is allowed.`,
 		threads: [
@@ -885,12 +847,12 @@ export const Formats: FormatList = [
 			'Acupressure', 'Astral Barrage', 'Belly Drum', 'Dire Claw', 'Extreme Speed', 'Fillet Away', 'Gigaton Hammer', 'Last Respects',
 			'No Retreat', 'Revival Blessing', 'Shell Smash', 'Shift Gear', 'V-create', 'Victory Dance', 'Wicked Blow',
 		],
-	},
+	}, */
 
 	// Challengeable OMs
 	///////////////////////////////////////////////////////////////////
 
-	{
+	/* {
 		section: "Challengeable OMs",
 		column: 2,
 	},
@@ -1941,12 +1903,12 @@ export const Formats: FormatList = [
 			teamHas.trademarks[ability.name] = (teamHas.trademarks[ability.name] || 0) + 1;
 			return problems.length ? problems : null;
 		},
-	},
+	}, */
 
 	// Retro Other Metagames
 	///////////////////////////////////////////////////////////////////
 
-	{
+	/* {
 		section: "Retro Other Metagames",
 		column: 2,
 	},
@@ -4392,5 +4354,5 @@ export const Formats: FormatList = [
 		debug: true,
 		battle: {trunc: Math.trunc},
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
-	},
+	}, */
 ];
