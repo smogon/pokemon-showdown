@@ -50,7 +50,7 @@ const MIXED_SETUP = [
 	'celebrate', 'growth', 'happyhour', 'holdhands', 'shellsmash', 'workup',
 ];
 // Some moves that only boost Speed:
-const SpeedSetup = [
+const SPEED_SETUP = [
 	'agility', 'autotomize', 'flamecharge', 'rockpolish',
 ];
 // Conglomerate for ease of access
