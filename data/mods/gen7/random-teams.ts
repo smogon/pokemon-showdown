@@ -71,7 +71,7 @@ const Hazards = [
 	'spikes', 'stealthrock', 'stickyweb', 'toxicspikes',
 ];
 // Protect and its variants
-const ProtectMove = [
+const PROTECT_MOVES = [
 	'banefulbunker', 'kingsshield', 'protect', 'spikyshield',
 ];
 // Moves that switch the user out
