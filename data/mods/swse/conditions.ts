@@ -763,7 +763,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onModifyAccuracy(accuracy, target, source, move) {
 			if (typeof accuracy === 'number' && move?.type !== 'Normal') {
 				// This one piece of code took over 5 hours to do because it was reading move as move: Pokemon and not move: ActiveMove
-				if (typeof accuracy !== 'number') return;
 				this.debug('Fog accuracy decrease');
 				return this.chainModify(0.9);
 			}
