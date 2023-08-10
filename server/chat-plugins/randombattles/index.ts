@@ -165,24 +165,12 @@ function getSets(species: string | Species, format: string | Format = 'gen9rando
  */
 function getData(species: string | Species, format: string | Format): any | null {
 	const dex = Dex.forFormat(format);
+	format = Dex.formats.get(format);
 	species = dex.species.get(species);
+	// Gen 7 Random Doubles has a separate file to Gen 7 singles but still uses the old system.
+	const isGen7Doubles = format.gameType === 'doubles' && dex.currentMod === 'gen7';
 	const dataFile = JSON.parse(
-		FS(`data/mods/${dex.currentMod}/random-data.json`).readIfExistsSync() || '{}'
-	);
-	const data = dataFile[species.id];
-	if (!data) return null;
-	return data;
-}
-
-/**
- * Gets the random battles data for a Pokemon for doubles where doubles is its own file
- * but it still uses the old system. Currently only gen7dubs.
- */
-function getStandaloneDoublesData(species: string | Species, format: string | Format): any | null {
-	const dex = Dex.forFormat(format);
-	species = dex.species.get(species);
-	const dataFile = JSON.parse(
-		FS(`data/mods/${dex.currentMod}/random-doubles-data.json`).readIfExistsSync() || '{}'
+		FS(`data/mods/${dex.currentMod}/random-${isGen7Doubles ? 'doubles-' : ''}data.json`).readIfExistsSync() || '{}'
 	);
 	const data = dataFile[species.id];
 	if (!data) return null;
@@ -822,7 +810,7 @@ export const commands: Chat.ChatCommands = {
 				}
 			} else if (dex.gen === 7 && isDoubles) {
 				for (const pokemon of setsToCheck) {
-					const data = getStandaloneDoublesData(pokemon, format.name);
+					const data = getData(pokemon, format.name);
 					if (!data) continue;
 					if (!data.moves) continue;
 					const randomMoves = data.moves;
@@ -1002,7 +990,7 @@ export const commands: Chat.ChatCommands = {
 		if (dex.gen >= 9 || dex.gen === 7 && format.gameType !== 'doubles') {
 			setExists = !!getSets(species, format);
 		} else if (dex.gen === 7 && format.gameType === 'doubles') {
-			setExists = !!getStandaloneDoublesData(species, format);
+			setExists = !!getData(species, format);
 		} else {
 			const data = getData(species, format);
 			if (!data) {
