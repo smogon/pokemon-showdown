@@ -46,7 +46,7 @@ const SPECIAL_SETUP = [
 	'calmmind', 'chargebeam', 'geomancy', 'nastyplot', 'quiverdance', 'tailglow',
 ];
 // Moves that boost Attack AND Special Attack:
-const MixedSetup = [
+const MIXED_SETUP = [
 	'celebrate', 'growth', 'happyhour', 'holdhands', 'shellsmash', 'workup',
 ];
 // Some moves that only boost Speed:
