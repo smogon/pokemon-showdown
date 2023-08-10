@@ -716,8 +716,9 @@ export class TeamValidator {
 			}
 		}
 
-		const moveProblems = this.validateMoves(outOfBattleSpecies, set.moves, setSources, set, name, moveLegalityWhitelist);
+		let moveProblems;
 		if (ruleTable.has('obtainablemoves')) {
+			moveProblems = this.validateMoves(outOfBattleSpecies, set.moves, setSources, set, name, moveLegalityWhitelist);
 			problems.push(...moveProblems);
 		}
 
@@ -805,17 +806,6 @@ export class TeamValidator {
 			}
 		}
 
-		// Attempt move validation again after verifying Pokemon GO origin
-		if (setSources.isFromPokemonGo) {
-			setSources.restrictiveMoves = [];
-			setSources.sources = ['8V'];
-			setSources.sourcesBefore = 0;
-			if (!moveProblems.length && ruleTable.has('obtainablemoves')) {
-				problems.push(...this.validateMoves(outOfBattleSpecies, set.moves, setSources, set, name,
-					moveLegalityWhitelist));
-			}
-		}
-
 		// Hardcoded forced validation for Pokemon GO
 		const pokemonGoOnlySpecies = ['meltan', 'melmetal', 'gimmighoulroaming'];
 		if (ruleTable.has('obtainablemisc') && (pokemonGoOnlySpecies.includes(species.id))) {
@@ -830,6 +820,17 @@ export class TeamValidator {
 
 		if (ruleTable.isBanned('nonexistent')) {
 			problems.push(...this.validateStats(set, species, setSources, pokemonGoProblems));
+		}
+
+		// Attempt move validation again after verifying Pokemon GO origin
+		if (ruleTable.has('obtainablemoves') && setSources.isFromPokemonGo) {
+			setSources.restrictiveMoves = [];
+			setSources.sources = ['8V'];
+			setSources.sourcesBefore = 0;
+			if (moveProblems && !moveProblems.length) {
+				problems.push(...this.validateMoves(outOfBattleSpecies, set.moves, setSources, set, name,
+					moveLegalityWhitelist));
+			}
 		}
 
 		if (ruleTable.has('obtainablemoves')) {
