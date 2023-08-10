@@ -5,7 +5,7 @@ import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
 
 // Moves that shouldn't be the only STAB moves:
-const noStab = [
+const NO_STAB = [
 	'aquajet', 'bounce', 'chatter', 'clearsmog', 'dragontail', 'eruption', 'explosion', 'fakeout', 'flamecharge',
 	'iceshard', 'icywind', 'incinerate', 'machpunch', 'pluck', 'pursuit', 'quickattack', 'reversal', 'selfdestruct',
 	'skydrop', 'snarl', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
