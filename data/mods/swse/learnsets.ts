@@ -88768,6 +88768,11 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			tackle: ["7L1"],
 		}
 	},
+	mosskrattidebloom: {
+		learnset: {
+			tackle: ["7L1"],
+		}
+	},
 	catteraxe: {
 		learnset: {
 			tackle: ["7L1"],

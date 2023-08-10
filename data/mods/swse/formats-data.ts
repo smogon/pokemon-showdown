@@ -6190,6 +6190,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 		natDexTier: "OU",
 	},
+	mosskrattidebloom: {
+		tier: "OU",
+		doublesTier: "DOU",
+		natDexTier: "OU",
+	},
 	specoey: {
 		tier: "LC",
 	},
