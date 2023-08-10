@@ -34,7 +34,7 @@ const RECOVERY_MOVES = [
 	'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'recycle', 'roost', 'shoreup', 'slackoff', 'softboiled', 'strengthsap', 'synthesis',
 ];
 // Moves that drop stats:
-const ContraryMoves = [
+const CONTRARY_MOVES = [
 	'closecombat', 'leafstorm', 'overheat', 'superpower', 'vcreate',
 ];
 // Moves that boost Attack:
