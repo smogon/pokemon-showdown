@@ -15,8 +15,10 @@ describe('[Gen 7] Random Battle (slow)', () => {
 		const filename = '../../data/mods/gen7/random-sets.json';
 		it(`${filename} should have valid set data`, () => {
 			const setsJSON = require(filename);
-			const validRoles = ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Z-Move user",
-				"Bulky Attacker", "Bulky Setup", "Staller", "Bulky Support", "Fast Support", "AV Pivot"];
+			const validRoles = [
+				"Fast Attacker", "Setup Sweeper", "Wallbreaker", "Z-Move user", "Bulky Attacker",
+				"Bulky Setup", "Staller", "Bulky Support", "Fast Support", "AV Pivot",
+			];
 			for (const [id, sets] of Object.entries(setsJSON)) {
 				const species = Dex.species.get(id);
 				assert(species.exists, `Misspelled species ID: ${id}`);
