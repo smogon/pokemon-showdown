@@ -51,7 +51,7 @@ export class MoveCounter extends Utils.Multiset<string> {
 type MoveEnforcementChecker = (
 	movePool: string[], moves: Set<string>, abilities: Set<string>, types: string[],
 	counter: MoveCounter, species: Species, teamDetails: RandomTeamsTypes.TeamDetails,
-	isLead: boolean, isDoubles: boolean, teraType: string, role: string,
+	isLead: boolean, isDoubles: boolean, teraType: string, role: RandomTeamsTypes.Role,
 ) => boolean;
 
 // Moves that restore HP:
@@ -101,6 +101,10 @@ const Hazards = [
 // Protect and its variants
 const ProtectMove = [
 	'banefulbunker', 'protect', 'spikyshield',
+];
+// Moves that switch the user out
+const PivotingMoves = [
+	'chillyreception', 'flipturn', 'partingshot', 'shedtail', 'teleport', 'uturn', 'voltswitch',
 ];
 
 // Moves that should be paired together when possible
@@ -420,7 +424,7 @@ export class RandomTeams {
 		isLead: boolean,
 		isDoubles: boolean,
 		teraType: string,
-		role: string,
+		role: RandomTeamsTypes.Role,
 	): void {
 		if (moves.size + movePool.length <= this.maxMoveCount) return;
 		// If we have two unfilled moves and only one unpaired move, cull the unpaired move.
@@ -448,7 +452,6 @@ export class RandomTeams {
 		}
 
 		// Develop additional move lists
-		const pivotingMoves = ['chillyreception', 'flipturn', 'partingshot', 'shedtail', 'teleport', 'uturn', 'voltswitch'];
 		const statusMoves = this.dex.moves.all()
 			.filter(move => move.category === 'Status')
 			.map(move => move.id);
@@ -508,12 +511,12 @@ export class RandomTeams {
 
 		// These moves don't mesh well with other aspects of the set
 		this.incompatibleMoves(moves, movePool, statusMoves, ['healingwish', 'switcheroo', 'trick']);
-		this.incompatibleMoves(moves, movePool, Setup, pivotingMoves);
+		this.incompatibleMoves(moves, movePool, Setup, PivotingMoves);
 		this.incompatibleMoves(moves, movePool, Setup, Hazards);
 		this.incompatibleMoves(moves, movePool, Setup, ['defog', 'nuzzle', 'toxic', 'waterspout', 'yawn', 'haze']);
 		this.incompatibleMoves(moves, movePool, PhysicalSetup, PhysicalSetup);
 		this.incompatibleMoves(moves, movePool, SpecialSetup, 'thunderwave');
-		this.incompatibleMoves(moves, movePool, 'substitute', pivotingMoves);
+		this.incompatibleMoves(moves, movePool, 'substitute', PivotingMoves);
 		this.incompatibleMoves(moves, movePool, SpeedSetup, ['aquajet', 'rest', 'trickroom']);
 		this.incompatibleMoves(moves, movePool, 'curse', 'rapidspin');
 		this.incompatibleMoves(moves, movePool, 'dragondance', 'dracometeor');
@@ -619,7 +622,7 @@ export class RandomTeams {
 		isDoubles: boolean,
 		movePool: string[],
 		teraType: string,
-		role: string,
+		role: RandomTeamsTypes.Role,
 	): MoveCounter {
 		moves.add(move);
 		this.fastPop(movePool, movePool.indexOf(move));
@@ -659,7 +662,7 @@ export class RandomTeams {
 		isDoubles: boolean,
 		movePool: string[],
 		teraType: string,
-		role: string,
+		role: RandomTeamsTypes.Role,
 	): Set<string> {
 		const moves = new Set<string>();
 		let counter = this.queryMoves(moves, species, teraType, abilities);
@@ -804,13 +807,13 @@ export class RandomTeams {
 			}
 		}
 
-		// If no STAB move was added in the previous step, add a STAB move
-		if (!counter.stabCounter) {
+		// Enforce Tera STAB
+		if (!counter.get('stabtera') && !['Bulky Support', 'Doubles Support'].includes(role)) {
 			const stabMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
 				const moveType = this.getMoveType(move, species, abilities, teraType);
-				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && types.includes(moveType)) {
+				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && teraType === moveType) {
 					stabMoves.push(moveid);
 				}
 			}
@@ -821,13 +824,13 @@ export class RandomTeams {
 			}
 		}
 
-		// Enforce Tera STAB
-		if (!counter.get('stabtera') && !['Bulky Support', 'Doubles Support'].includes(role)) {
+		// If no STAB move was added, add a STAB move
+		if (!counter.stabCounter) {
 			const stabMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
 				const moveType = this.getMoveType(move, species, abilities, teraType);
-				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && teraType === moveType) {
+				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && types.includes(moveType)) {
 					stabMoves.push(moveid);
 				}
 			}
@@ -892,9 +895,24 @@ export class RandomTeams {
 			}
 		}
 
+		// Enforce a move not on the noSTAB list
+		if (!counter.damagingMoves.size) {
+			// Choose an attacking move
+			const attackingMoves = [];
+			for (const moveid of movePool) {
+				const move = this.dex.moves.get(moveid);
+				if (!this.noStab.includes(moveid) && (move.category !== 'Status')) attackingMoves.push(moveid);
+			}
+			if (attackingMoves.length) {
+				const moveid = this.sample(attackingMoves);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
+			}
+		}
+
 		// Enforce coverage move
 		if (!['AV Pivot', 'Fast Support', 'Bulky Support', 'Bulky Protect', 'Doubles Support'].includes(role)) {
-			if (counter.damagingMoves.size <= 1) {
+			if (counter.damagingMoves.size === 1) {
 				// Find the type of the current attacking move
 				const currentAttackType = counter.damagingMoves.values().next().value.type;
 				// Choose an attacking move that is of different type to the current single attack
@@ -911,21 +929,6 @@ export class RandomTeams {
 					counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 						movePool, teraType, role);
 				}
-			}
-		}
-
-		// Enforce a move not on the noSTAB list
-		if (!counter.damagingMoves.size) {
-			// Choose an attacking move
-			const attackingMoves = [];
-			for (const moveid of movePool) {
-				const move = this.dex.moves.get(moveid);
-				if (!this.noStab.includes(moveid) && (move.category !== 'Status')) attackingMoves.push(moveid);
-			}
-			if (attackingMoves.length) {
-				const moveid = this.sample(attackingMoves);
-				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, teraType, role);
 			}
 		}
 
@@ -968,7 +971,7 @@ export class RandomTeams {
 		isLead: boolean,
 		isDoubles: boolean,
 		teraType: string,
-		role: string,
+		role: RandomTeamsTypes.Role,
 	): boolean {
 		if ([
 			'Armor Tail', 'Early Bird', 'Flare Boost', 'Gluttony', 'Harvest', 'Hydration', 'Ice Body', 'Immunity',
@@ -1087,7 +1090,7 @@ export class RandomTeams {
 		isLead: boolean,
 		isDoubles: boolean,
 		teraType: string,
-		role: string,
+		role: RandomTeamsTypes.Role,
 	): string {
 		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
 		Utils.sortBy(abilityData, abil => -abil.rating);
@@ -1195,7 +1198,7 @@ export class RandomTeams {
 		isLead: boolean,
 		isDoubles: boolean,
 		teraType: string,
-		role: string,
+		role: RandomTeamsTypes.Role,
 	) {
 		if (!isDoubles) {
 			if (
@@ -1283,7 +1286,7 @@ export class RandomTeams {
 		species: Species,
 		isLead: boolean,
 		teraType: string,
-		role: string,
+		role: RandomTeamsTypes.Role,
 	): string {
 		const scarfReqs = (
 			!counter.get('priority') && ability !== 'Speed Boost' && role !== 'Doubles Wallbreaker' &&
@@ -1350,7 +1353,7 @@ export class RandomTeams {
 		species: Species,
 		isLead: boolean,
 		teraType: string,
-		role: string,
+		role: RandomTeamsTypes.Role,
 	): string {
 		if (
 			(counter.get('Physical') >= 4 ||
@@ -1438,8 +1441,8 @@ export class RandomTeams {
 	): number {
 		if (this.adjustLevel) return this.adjustLevel;
 		// doubles levelling
-		if (isDoubles && this.randomDoublesSets[species.id]["level"]) return this.randomDoublesSets[species.id]["level"];
-		if (!isDoubles && this.randomSets[species.id]["level"]) return this.randomSets[species.id]["level"];
+		if (isDoubles && this.randomDoublesSets[species.id]["level"]) return this.randomDoublesSets[species.id]["level"]!;
+		if (!isDoubles && this.randomSets[species.id]["level"]) return this.randomSets[species.id]["level"]!;
 		// Default to tier-based levelling
 		const tier = species.tier;
 		const tierScale: Partial<Record<Species['tier'], number>> = {
@@ -1625,9 +1628,8 @@ export class RandomTeams {
 		return [pokemonPool, baseSpeciesPool];
 	}
 
-	// TODO: Make types for this
-	randomSets: AnyObject = require('./random-sets.json');
-	randomDoublesSets: AnyObject = require('./random-doubles-sets.json');
+	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./random-sets.json');
+	randomDoublesSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./random-doubles-sets.json');
 
 	randomTeam() {
 		this.enforceNoDirectCustomBanlistChanges();

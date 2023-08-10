@@ -238,9 +238,10 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 	getItem(
 		ability: string,
-		types: Set<string>,
+		types: string[],
 		moves: Set<string>,
 		counter: MoveCounter,
+		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species
 	) {
 		// First, the high-priority items
@@ -281,7 +282,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			['fireblast', 'icebeam', 'overheat'].some(m => moves.has(m)) ||
 			Array.from(moves).some(m => {
 				const moveData = this.dex.moves.get(m);
-				return moveData.category === 'Special' && types.has(moveData.type);
+				return moveData.category === 'Special' && types.includes(moveData.type);
 			})
 		)) {
 			return 'Choice Band';
@@ -552,7 +553,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		ability = this.getAbility(types, moves, abilities, counter, movePool, teamDetails, species);
 
-		const item = this.getItem(ability, types, moves, counter, species);
+		const item = this.getItem(ability, species.types, moves, counter, teamDetails, species);
 		const level = this.adjustLevel || data.level || (species.nfe ? 90 : 80);
 
 		// Prepare optimal HP
