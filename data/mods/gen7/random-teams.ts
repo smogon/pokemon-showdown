@@ -80,7 +80,7 @@ const PIVOT_MOVES = [
 ];
 
 // Moves that should be paired together when possible
-const MovePairs = [
+const MOVE_PAIRS = [
 	['lightscreen', 'reflect'],
 	['sleeptalk', 'rest'],
 	['protect', 'wish'],
