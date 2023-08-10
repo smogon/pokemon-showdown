@@ -1441,8 +1441,8 @@ export class RandomTeams {
 	): number {
 		if (this.adjustLevel) return this.adjustLevel;
 		// doubles levelling
-		if (isDoubles && this.randomDoublesSets[species.id]["level"]) return this.randomDoublesSets[species.id]["level"];
-		if (!isDoubles && this.randomSets[species.id]["level"]) return this.randomSets[species.id]["level"];
+		if (isDoubles && this.randomDoublesSets[species.id]["level"]) return this.randomDoublesSets[species.id]["level"]!;
+		if (!isDoubles && this.randomSets[species.id]["level"]) return this.randomSets[species.id]["level"]!;
 		// Default to tier-based levelling
 		const tier = species.tier;
 		const tierScale: Partial<Record<Species['tier'], number>> = {
@@ -1628,9 +1628,8 @@ export class RandomTeams {
 		return [pokemonPool, baseSpeciesPool];
 	}
 
-	// TODO: Make types for this
-	randomSets: AnyObject = require('./random-sets.json');
-	randomDoublesSets: AnyObject = require('./random-doubles-sets.json');
+	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./random-sets.json');
+	randomDoublesSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./random-doubles-sets.json');
 
 	randomTeam() {
 		this.enforceNoDirectCustomBanlistChanges();

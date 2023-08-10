@@ -559,6 +559,16 @@ namespace RandomTeamsTypes {
 		dynamaxLevel?: number;
 		gigantamax?: boolean;
 	}
+	export interface RandomSetData {
+		role: Role;
+		movepool: string[];
+		teraTypes?: string[];
+		preferredTypes?: string;
+	}
+	export interface RandomSpeciesData {
+		level?: number;
+		sets: RandomSetData[];
+	}
 	export type Role = '' | 'Fast Attacker' | 'Setup Sweeper' | 'Wallbreaker' | 'Tera Blast user' |
 	'Bulky Attacker' | 'Bulky Setup' | 'Fast Bulky Setup' | 'Bulky Support' | 'Fast Support' | 'AV Pivot' |
 	'Doubles Fast Attacker' | 'Doubles Setup Sweeper' | 'Doubles Wallbreaker' | 'Doubles Bulky Attacker' |

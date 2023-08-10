@@ -99,7 +99,7 @@ function sereneGraceBenefits(move: Move) {
 }
 
 export class RandomGen7Teams extends RandomGen8Teams {
-	randomSets: AnyObject = require('./random-sets.json');
+	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./random-sets.json');
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
@@ -1124,7 +1124,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		const role = set.role;
 		const movePool: string[] = Array.from(set.movepool);
 		const preferredTypes = set.preferredTypes;
-		const preferredType = this.sampleIfArray(preferredTypes);
+		const preferredType = this.sampleIfArray(preferredTypes) || '';
 
 		let ability = '';
 		let item = undefined;
