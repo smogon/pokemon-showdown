@@ -4,12 +4,19 @@ import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
 
+// Moves that shouldn't be the only STAB moves:
+const NO_STAB = [
+	'aquajet', 'bounce', 'chatter', 'clearsmog', 'dragontail', 'eruption', 'explosion', 'fakeout', 'flamecharge',
+	'iceshard', 'icywind', 'incinerate', 'machpunch', 'pluck', 'pursuit', 'quickattack', 'reversal', 'selfdestruct',
+	'skydrop', 'snarl', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
+];
+
 export class RandomGen6Teams extends RandomGen7Teams {
 	randomData: {[species: string]: OldRandomBattleSpecies} = require('./random-data.json');
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
-		this.noStab = [...this.noStab, 'aquajet', 'fakeout', 'iceshard', 'machpunch', 'quickattack', 'vacuumwave'];
+		this.noStab = NO_STAB;
 
 		this.moveEnforcementCheckers = {
 			Bug: (movePool, moves, abilities, types, counter) => (
@@ -785,7 +792,6 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		moves: Set<string>,
 		counter: MoveCounter,
 		species: Species,
-		isDoubles: boolean,
 		isLead: boolean
 	): string | undefined {
 		const defensiveStatTotal = species.baseStats.hp + species.baseStats.def + species.baseStats.spd;
@@ -925,7 +931,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 
 		const types = new Set(species.types);
-		let abilities = new Set(Object.values(species.abilities));
+		const abilities = new Set(Object.values(species.abilities));
 		if (species.unreleasedHidden) abilities.delete(species.abilities.H);
 		let availableHP = 0;
 		for (const setMoveid of movePool) {
@@ -1136,14 +1142,10 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			moves.add('thunder');
 		}
 
-		if (species.battleOnly && !species.requiredAbility) {
-			abilities = new Set(Object.values(this.dex.species.get(species.battleOnly as string).abilities));
-		}
-
 		ability = this.getAbility(types, moves, abilities, counter, movePool, teamDetails, species);
 
 		let item = this.getHighPriorityItem(ability, types, moves, counter, teamDetails, species, isLead);
-		if (item === undefined) item = this.getMediumPriorityItem(ability, moves, counter, species, false, isLead);
+		if (item === undefined) item = this.getMediumPriorityItem(ability, moves, counter, species, isLead);
 		if (item === undefined) {
 			item = this.getLowPriorityItem(ability, types, moves, abilities, counter, teamDetails, species, isLead);
 		}

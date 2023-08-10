@@ -59,38 +59,38 @@ type MoveEnforcementChecker = (
 ) => boolean;
 
 // Moves that restore HP:
-const RecoveryMove = [
+const RECOVERY_MOVES = [
 	'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'roost', 'shoreup', 'slackoff', 'softboiled', 'strengthsap', 'synthesis',
 ];
 // Moves that drop stats:
-const ContraryMoves = [
+const CONTRARY_MOVES = [
 	'closecombat', 'leafstorm', 'overheat', 'superpower', 'vcreate',
 ];
 // Moves that boost Attack:
-const PhysicalSetup = [
+const PHYSICAL_SETUP = [
 	'bellydrum', 'bulkup', 'coil', 'curse', 'dragondance', 'honeclaws', 'howl', 'meditate', 'poweruppunch', 'screech', 'swordsdance',
 ];
 // Moves which boost Special Attack:
-const SpecialSetup = [
+const SPECIAL_SETUP = [
 	'calmmind', 'chargebeam', 'geomancy', 'nastyplot', 'quiverdance', 'tailglow',
 ];
 // Moves that boost Attack AND Special Attack:
-const MixedSetup = [
+const MIXED_SETUP = [
 	'clangoroussoul', 'growth', 'happyhour', 'holdhands', 'noretreat', 'shellsmash', 'workup',
 ];
 // Some moves that only boost Speed:
-const SpeedSetup = [
+const SPEED_SETUP = [
 	'agility', 'autotomize', 'flamecharge', 'rockpolish',
 ];
 // Moves that shouldn't be the only STAB moves:
-const NoStab = [
+const NO_STAB = [
 	'accelerock', 'aquajet', 'beakblast', 'bounce', 'breakingswipe', 'chatter', 'clearsmog', 'dragontail', 'eruption', 'explosion',
 	'fakeout', 'firstimpression', 'flamecharge', 'flipturn', 'iceshard', 'icywind', 'incinerate', 'machpunch',
 	'meteorbeam', 'pluck', 'pursuit', 'quickattack', 'reversal', 'selfdestruct', 'skydrop', 'snarl', 'suckerpunch', 'uturn', 'watershuriken',
 	'vacuumwave', 'voltswitch', 'waterspout',
 ];
 // Hazard-setting moves
-const Hazards = [
+const HAZARDS = [
 	'spikes', 'stealthrock', 'stickyweb', 'toxicspikes',
 ];
 
@@ -123,7 +123,7 @@ export class RandomGen8Teams {
 		format = Dex.formats.get(format);
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;
-		this.noStab = NoStab;
+		this.noStab = NO_STAB;
 
 		const ruleTable = Dex.formats.getRuleTable(format);
 		this.maxTeamSize = ruleTable.maxTeamSize;
@@ -974,19 +974,19 @@ export class RandomGen8Teams {
 			if (move.accuracy && move.accuracy !== true && move.accuracy < 90) counter.add('inaccurate');
 
 			// Moves that change stats:
-			if (RecoveryMove.includes(moveid)) counter.add('recovery');
-			if (ContraryMoves.includes(moveid)) counter.add('contrary');
-			if (PhysicalSetup.includes(moveid)) {
+			if (RECOVERY_MOVES.includes(moveid)) counter.add('recovery');
+			if (CONTRARY_MOVES.includes(moveid)) counter.add('contrary');
+			if (PHYSICAL_SETUP.includes(moveid)) {
 				counter.add('physicalsetup');
 				counter.setupType = 'Physical';
-			} else if (SpecialSetup.includes(moveid)) {
+			} else if (SPECIAL_SETUP.includes(moveid)) {
 				counter.add('specialsetup');
 				counter.setupType = 'Special';
 			}
 
-			if (MixedSetup.includes(moveid)) counter.add('mixedsetup');
-			if (SpeedSetup.includes(moveid)) counter.add('speedsetup');
-			if (Hazards.includes(moveid)) counter.add('hazards');
+			if (MIXED_SETUP.includes(moveid)) counter.add('mixedsetup');
+			if (SPEED_SETUP.includes(moveid)) counter.add('speedsetup');
+			if (HAZARDS.includes(moveid)) counter.add('hazards');
 		}
 
 		// Keep track of the available moves
@@ -1497,6 +1497,8 @@ export class RandomGen8Teams {
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
 		isDoubles: boolean,
+		preferredType: string,
+		role: RandomTeamsTypes.Role,
 		isNoDynamax: boolean
 	): boolean {
 		if ([
@@ -1691,6 +1693,8 @@ export class RandomGen8Teams {
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
 		isDoubles: boolean,
+		preferredType: string,
+		role: RandomTeamsTypes.Role,
 		isNoDynamax: boolean
 	): string {
 		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
@@ -1735,7 +1739,7 @@ export class RandomGen8Teams {
 		// Obtain a list of abilities that are allowed (not culled)
 		for (const ability of abilityData) {
 			if (ability.rating >= 1 && !this.shouldCullAbility(
-				ability.name, types, moves, abilities, counter, movePool, teamDetails, species, isDoubles, isNoDynamax
+				ability.name, types, moves, abilities, counter, movePool, teamDetails, species, isDoubles, '', '', isNoDynamax
 			)) {
 				abilityAllowed.push(ability);
 			}
@@ -1880,7 +1884,7 @@ export class RandomGen8Teams {
 		counter: MoveCounter,
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
-	) {
+	): string | undefined {
 		const defensiveStatTotal = species.baseStats.hp + species.baseStats.def + species.baseStats.spd;
 
 		if (
@@ -2328,7 +2332,8 @@ export class RandomGen8Teams {
 			}
 		}
 
-		ability = this.getAbility(types, moves, abilities, counter, movePool, teamDetails, species, isDoubles, isNoDynamax);
+		ability = this.getAbility(types, moves, abilities, counter, movePool, teamDetails, species,
+			isDoubles, '', '', isNoDynamax);
 
 		if (species.requiredItems) {
 			item = this.sample(species.requiredItems);
