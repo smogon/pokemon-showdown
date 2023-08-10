@@ -329,7 +329,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			['leechseed', 'dragontail'],
 			['rest', 'substitute'],
 			[PHYSICAL_SETUP, 'dracometeor'],
-			[PHYSICAL_SETUP, 'knockoff'],
+			[SPECIAL_SETUP, 'knockoff'],
 
 			// These attacks are redundant with each other
 			['psychic', 'psyshock'],
