@@ -54,7 +54,7 @@ const SPEED_SETUP = [
 	'agility', 'autotomize', 'flamecharge', 'rockpolish',
 ];
 // Conglomerate for ease of access
-const Setup = [
+const SETUP = [
 	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'celebrate', 'coil', 'conversion', 'curse', 'dragondance',
 	'electricterrain', 'flamecharge', 'focusenergy', 'geomancy', 'growth', 'happyhour', 'holdhands', 'honeclaws', 'howl', 'irondefense', 'meditate',
 	'nastyplot', 'poweruppunch', 'quiverdance', 'raindance', 'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'workup',
