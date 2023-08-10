@@ -16,7 +16,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
-		this.noStab = noStab;
+		this.noStab = NO_STAB;
 
 		this.moveEnforcementCheckers = {
 			Bug: (movePool, moves, abilities, types, counter) => (
