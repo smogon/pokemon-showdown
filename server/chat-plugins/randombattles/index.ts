@@ -168,7 +168,7 @@ function getData(species: string | Species, format: string | Format): any | null
 	format = Dex.formats.get(format);
 	species = dex.species.get(species);
 	// Gen 7 Random Doubles has a separate file to Gen 7 singles but still uses the old system.
-	const isGen7Doubles = format.gameType === 'doubles' && dex.currentMod === 'gen7';
+	const isGen7Doubles = format.gameType === 'doubles' && dex.gen === 7;
 	const dataFile = JSON.parse(
 		FS(`data/mods/${dex.currentMod}/random-${isGen7Doubles ? 'doubles-' : ''}data.json`).readIfExistsSync() || '{}'
 	);
