@@ -38,7 +38,7 @@ const CONTRARY_MOVES = [
 	'closecombat', 'leafstorm', 'overheat', 'superpower', 'vcreate',
 ];
 // Moves that boost Attack:
-const PhysicalSetup = [
+const PHYSICAL_SETUP = [
 	'bellydrum', 'bulkup', 'coil', 'curse', 'dragondance', 'honeclaws', 'howl', 'meditate', 'poweruppunch', 'screech', 'swordsdance',
 ];
 // Moves which boost Special Attack:
