@@ -621,7 +621,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 		// Enforce Staller moves
 		if (role === 'Staller') {
-			const enforcedMoves = [...ProtectMove, 'toxic', 'wish'];
+			const enforcedMoves = [...PROTECT_MOVES, 'toxic', 'wish'];
 			for (const move of enforcedMoves) {
 				if (movePool.includes(move)) {
 					counter = this.addMove(move, moves, types, abilities, teamDetails, species, isLead, isDoubles,
