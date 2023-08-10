@@ -67,7 +67,7 @@ const NO_STAB = [
 	'skydrop', 'snarl', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
 ];
 // Hazard-setting moves
-const Hazards = [
+const HAZARDS = [
 	'spikes', 'stealthrock', 'stickyweb', 'toxicspikes',
 ];
 // Protect and its variants
