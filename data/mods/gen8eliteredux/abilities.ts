@@ -26,6 +26,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "This Pokemon takes 10% less damage. Cannot be struck by a critical hit.",
 		
 	},
+	baddreams: {
+		inherit: true,
+		onResidual(pokemon) {
+			if (!pokemon.hp) return;
+			for (const target of pokemon.foes()) {
+				if (!target.hasAbility('sweetdreams') && (target.status === 'slp' || target.hasAbility('comatose'))) {
+					this.damage(target.baseMaxhp / 8, target, pokemon);
+				}
+			}
+		},
+	},
 	blaze: {
 		inherit: true,
 		onModifyAtkPriority: 5,
