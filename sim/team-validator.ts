@@ -679,68 +679,68 @@ export class TeamValidator {
 
 		const learnsetSpecies = dex.species.getLearnsetData(outOfBattleSpecies.id);
 		let eventOnlyData;
-
-		if (!setSources.sourcesBefore && setSources.sources.length) {
-			let legal = false;
-			for (const source of setSources.sources) {
-				if (this.validateSource(set, source, setSources, outOfBattleSpecies)) continue;
-				legal = true;
-				break;
-			}
-
-			if (!legal) {
-				let nonEggSource = null;
+		if ((this.format.mod !== 'gen8eliteredux')) {
+			if (!setSources.sourcesBefore && setSources.sources.length) {
+				let legal = false;
 				for (const source of setSources.sources) {
-					if (source.charAt(1) !== 'E') {
-						nonEggSource = source;
-						break;
+					if (this.validateSource(set, source, setSources, outOfBattleSpecies)) continue;
+					legal = true;
+					break;
+				}
+
+				if (!legal) {
+					let nonEggSource = null;
+					for (const source of setSources.sources) {
+						if (source.charAt(1) !== 'E') {
+							nonEggSource = source;
+							break;
+						}
 					}
-				}
-				if (!nonEggSource) {
-					// all egg moves
-					problems.push(`${name} can't get its egg move combination (${setSources.limitedEggMoves!.join(', ')}) from any possible father.`);
-					problems.push(`(Is this incorrect? If so, post the chainbreeding instructions in Bug Reports)`);
-				} else {
-					if (setSources.sources.length > 1) {
-						problems.push(`${name} has an event-exclusive move that it doesn't qualify for (only one of several ways to get the move will be listed):`);
-					}
-					const eventProblems = this.validateSource(
-						set, nonEggSource, setSources, outOfBattleSpecies, ` because it has a move only available`
-					);
-					if (eventProblems) problems.push(...eventProblems);
-				}
-			}
-		} else if (ruleTable.has('obtainablemisc') && (eventOnlyData = this.getEventOnlyData(outOfBattleSpecies))) {
-			const {species: eventSpecies, eventData} = eventOnlyData;
-			let legal = false;
-			for (const event of eventData) {
-				if (this.validateEvent(set, setSources, event, eventSpecies)) continue;
-				legal = true;
-				break;
-			}
-			if (!legal && species.gen <= 2 && dex.gen >= 7 && !this.validateSource(set, '7V', setSources, species)) {
-				legal = true;
-			}
-			if (!legal) {
-				if (eventData.length === 1) {
-					problems.push(`${species.name} is only obtainable from an event - it needs to match its event:`);
-				} else {
-					problems.push(`${species.name} is only obtainable from events - it needs to match one of its events:`);
-				}
-				for (const [i, event] of eventData.entries()) {
-					if (event.generation <= dex.gen && event.generation >= this.minSourceGen) {
-						const eventInfo = event;
-						const eventNum = i + 1;
-						const eventName = eventData.length > 1 ? ` #${eventNum}` : ``;
-						const eventProblems = this.validateEvent(
-							set, setSources, eventInfo, eventSpecies, ` to be`, `from its event${eventName}`
+					if (!nonEggSource) {
+						// all egg moves
+						problems.push(`${name} can't get its egg move combination (${setSources.limitedEggMoves!.join(', ')}) from any possible father.`);
+						problems.push(`(Is this incorrect? If so, post the chainbreeding instructions in Bug Reports)`);
+					} else {
+						if (setSources.sources.length > 1) {
+							problems.push(`${name} has an event-exclusive move that it doesn't qualify for (only one of several ways to get the move will be listed):`);
+						}
+						const eventProblems = this.validateSource(
+							set, nonEggSource, setSources, outOfBattleSpecies, ` because it has a move only available`
 						);
 						if (eventProblems) problems.push(...eventProblems);
 					}
 				}
+			} else if (ruleTable.has('obtainablemisc') && (eventOnlyData = this.getEventOnlyData(outOfBattleSpecies))) {
+				const {species: eventSpecies, eventData} = eventOnlyData;
+				let legal = false;
+				for (const event of eventData) {
+					if (this.validateEvent(set, setSources, event, eventSpecies)) continue;
+					legal = true;
+					break;
+				}
+				if (!legal && species.gen <= 2 && dex.gen >= 7 && !this.validateSource(set, '7V', setSources, species)) {
+					legal = true;
+				}
+				if (!legal) {
+					if (eventData.length === 1) {
+						problems.push(`${species.name} is only obtainable from an event - it needs to match its event:`);
+					} else {
+						problems.push(`${species.name} is only obtainable from events - it needs to match one of its events:`);
+					}
+					for (const [i, event] of eventData.entries()) {
+						if (event.generation <= dex.gen && event.generation >= this.minSourceGen) {
+							const eventInfo = event;
+							const eventNum = i + 1;
+							const eventName = eventData.length > 1 ? ` #${eventNum}` : ``;
+							const eventProblems = this.validateEvent(
+								set, setSources, eventInfo, eventSpecies, ` to be`, `from its event${eventName}`
+							);
+							if (eventProblems) problems.push(...eventProblems);
+						}
+					}
+				}
 			}
 		}
-
 		let isFromRBYEncounter = false;
 		if (this.gen === 1 && ruleTable.has('obtainablemisc') && !this.ruleTable.has('allowtradeback')) {
 			let lowestEncounterLevel;
