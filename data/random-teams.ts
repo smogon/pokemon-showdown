@@ -508,9 +508,7 @@ export class RandomTeams {
 
 			for (const pair of doublesIncompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
 
-			if (role !== 'Offensive Protect') {
-				this.incompatibleMoves(moves, movePool, PROTECT_MOVES, 'uturn');
-			}
+			if (role !== 'Offensive Protect') this.incompatibleMoves(moves, movePool, PROTECT_MOVES, 'uturn');
 		}
 
 		// General incompatibilities
@@ -568,27 +566,15 @@ export class RandomTeams {
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
 
-		if (!types.includes('Ice')) {
-			this.incompatibleMoves(moves, movePool, 'icebeam', 'icywind');
-		}
+		if (!types.includes('Ice')) this.incompatibleMoves(moves, movePool, 'icebeam', 'icywind');
 
-		if (!isDoubles) {
-			this.incompatibleMoves(moves, movePool, ['taunt', 'strengthsap'], 'encore');
-		}
+		if (!isDoubles) this.incompatibleMoves(moves, movePool, ['taunt', 'strengthsap'], 'encore');
 
 		// This space reserved for assorted hardcodes that otherwise make little sense out of context
-		if (species.id === "dugtrio") {
-			this.incompatibleMoves(moves, movePool, statusMoves, 'memento');
-		}
-		if (species.id === "cyclizar") {
-			this.incompatibleMoves(moves, movePool, 'taunt', 'knockoff');
-		}
-		// Dudunsparce
+		if (species.id === "dugtrio") this.incompatibleMoves(moves, movePool, statusMoves, 'memento');
+		if (species.id === "cyclizar") this.incompatibleMoves(moves, movePool, 'taunt', 'knockoff');
 		if (species.baseSpecies === 'Dudunsparce') this.incompatibleMoves(moves, movePool, 'earthpower', 'shadowball');
-		// Luvdisc
-		if (species.id === 'luvdisc' && !isDoubles) {
-			this.incompatibleMoves(moves, movePool, 'charm', ['icebeam', 'icywind']);
-		}
+		if (species.id === 'luvdisc' && !isDoubles) this.incompatibleMoves(moves, movePool, 'charm', ['icebeam', 'icywind']);
 	}
 
 	// Checks for and removes incompatible moves, starting with the first move in movesA.
