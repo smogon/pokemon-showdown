@@ -1916,65 +1916,66 @@ export class TeamValidator {
 				break;
 			}
 		}
-
-		if (setSources.size() && setSources.moveEvoCarryCount > 3) {
-			if (setSources.sourcesBefore < 6) setSources.sourcesBefore = 0;
-			setSources.sources = setSources.sources.filter(
-				source => source.charAt(1) === 'E' && parseInt(source.charAt(0)) >= 6
-			);
-			if (!setSources.size()) {
-				problems.push(`${name} needs to know ${species.evoMove || 'a Fairy-type move'} to evolve, so it can only know 3 other moves from ${species.prevo}.`);
-			}
-		}
-
-		if (problems.length) return problems;
-
-		if (setSources.isHidden) {
-			setSources.sources = setSources.sources.filter(
-				source => parseInt(source.charAt(0)) >= 5
-			);
-			if (setSources.sourcesBefore < 5) setSources.sourcesBefore = 0;
-			const canUseAbilityPatch = dex.gen >= 8 && this.format.mod !== 'gen8dlc1';
-			if (!setSources.size() && !canUseAbilityPatch) {
-				problems.push(`${name} has a hidden ability - it can't have moves only learned before gen 5.`);
-				return problems;
-			}
-		}
-
-		if (setSources.babyOnly && setSources.sources.length) {
-			const baby = dex.species.get(setSources.babyOnly);
-			const babyEvo = toID(baby.evos[0]);
-			setSources.sources = setSources.sources.filter(source => {
-				if (source.charAt(1) === 'S') {
-					const sourceId = source.split(' ')[1];
-					if (sourceId !== baby.id) return false;
+		if (this.format.mod !== 'gen8eliteredux') { //a non-issue in ER
+			if (setSources.size() && setSources.moveEvoCarryCount > 3) {
+				if (setSources.sourcesBefore < 6) setSources.sourcesBefore = 0;
+				setSources.sources = setSources.sources.filter(
+					source => source.charAt(1) === 'E' && parseInt(source.charAt(0)) >= 6
+				);
+				if (!setSources.size()) {
+					problems.push(`${name} needs to know ${species.evoMove || 'a Fairy-type move'} to evolve, so it can only know 3 other moves from ${species.prevo}.`);
 				}
-				if (source.charAt(1) === 'E') {
-					if (babyEvo && source.slice(2) === babyEvo) return false;
-				}
-				if (source.charAt(1) === 'D') {
-					if (babyEvo && source.slice(2) === babyEvo) return false;
-				}
-				return true;
-			});
-			if (!setSources.size()) {
-				problems.push(`${name}'s event/egg moves are from an evolution, and are incompatible with its moves from ${baby.name}.`);
 			}
-		}
-		if (setSources.babyOnly && setSources.size() && this.gen > 2) {
-			// there do theoretically exist evo/tradeback incompatibilities in
-			// gen 2, but those are very complicated to validate and should be
-			// handled separately anyway, so for now we just treat them all as
-			// legal (competitively relevant ones can be manually banned)
-			const baby = dex.species.get(setSources.babyOnly);
-			setSources.sources = setSources.sources.filter(source => {
-				if (baby.gen > parseInt(source.charAt(0)) && !source.startsWith('1ST')) return false;
-				if (baby.gen > 2 && source === '7V') return false;
-				return true;
-			});
-			if (setSources.sourcesBefore < baby.gen) setSources.sourcesBefore = 0;
-			if (!setSources.size()) {
-				problems.push(`${name} has moves from before Gen ${baby.gen}, which are incompatible with its moves from ${baby.name}.`);
+
+			if (problems.length) return problems;
+
+			if (setSources.isHidden) {
+				setSources.sources = setSources.sources.filter(
+					source => parseInt(source.charAt(0)) >= 5
+				);
+				if (setSources.sourcesBefore < 5) setSources.sourcesBefore = 0;
+				const canUseAbilityPatch = dex.gen >= 8 && this.format.mod !== 'gen8dlc1';
+				if (!setSources.size() && !canUseAbilityPatch) {
+					problems.push(`${name} has a hidden ability - it can't have moves only learned before gen 5.`);
+					return problems;
+				}
+			}
+
+			if (setSources.babyOnly && setSources.sources.length) {
+				const baby = dex.species.get(setSources.babyOnly);
+				const babyEvo = toID(baby.evos[0]);
+				setSources.sources = setSources.sources.filter(source => {
+					if (source.charAt(1) === 'S') {
+						const sourceId = source.split(' ')[1];
+						if (sourceId !== baby.id) return false;
+					}
+					if (source.charAt(1) === 'E') {
+						if (babyEvo && source.slice(2) === babyEvo) return false;
+					}
+					if (source.charAt(1) === 'D') {
+						if (babyEvo && source.slice(2) === babyEvo) return false;
+					}
+					return true;
+				});
+				if (!setSources.size()) {
+					problems.push(`${name}'s event/egg moves are from an evolution, and are incompatible with its moves from ${baby.name}.`);
+				}
+			}
+			if (setSources.babyOnly && setSources.size() && this.gen > 2) {
+				// there do theoretically exist evo/tradeback incompatibilities in
+				// gen 2, but those are very complicated to validate and should be
+				// handled separately anyway, so for now we just treat them all as
+				// legal (competitively relevant ones can be manually banned)
+				const baby = dex.species.get(setSources.babyOnly);
+				setSources.sources = setSources.sources.filter(source => {
+					if (baby.gen > parseInt(source.charAt(0)) && !source.startsWith('1ST')) return false;
+					if (baby.gen > 2 && source === '7V') return false;
+					return true;
+				});
+				if (setSources.sourcesBefore < baby.gen) setSources.sourcesBefore = 0;
+				if (!setSources.size()) {
+					problems.push(`${name} has moves from before Gen ${baby.gen}, which are incompatible with its moves from ${baby.name}.`);
+				}
 			}
 		}
 
