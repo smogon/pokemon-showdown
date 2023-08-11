@@ -28,7 +28,7 @@ interface IPData {
 
 function getIPData(ip: string) {
 	try {
-		return Net("http://ip-api.com/json/" + ip).get().then(JSON.parse) as Promise<IPData>;
+		return Net("https://miapi.dev/api/ip/" + ip).get().then(JSON.parse) as Promise<IPData>;
 	} catch {
 		return null;
 	}
