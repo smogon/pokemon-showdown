@@ -4522,6 +4522,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
+
+	//ER Megas
+	butterfreemega: {
+		tier: "(PU)",
+		doublesTier: "(DUU)",
+	},
 	missingno: {
 		isNonstandard: "Custom",
 		tier: "Illegal",

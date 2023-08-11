@@ -18048,6 +18048,23 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 	},
+	//ER Megas
+	butterfreemega: {
+		num: 12,
+		name: "Butterfree-Mega",
+		baseSpecies: "Butterfree",
+		forme: "Mega",
+		types: ["Bug", "Psychic"],
+		baseStats: {hp: 60, atk: 15, def: 60, spa: 140, spd: 120, spe: 110},
+		abilities: {0: "Tinted Lens"},
+		heightm: 1.1,
+		weightkg: 32,
+		color: "White",
+		eggGroups: ["Amorphous"],
+		requiredItem: "Butterfrite",
+	},
+
+
 	syclar: {
 		num: -1,
 		name: "Syclar",
