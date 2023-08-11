@@ -2322,6 +2322,13 @@ export const ItemsText: {[k: string]: ItemText} = {
 		desc: "The accuracy of attacks by the holder is 1.2x if it moves after its target.",
 	},
 
+	//ER Items 
+	butterfrite: {
+		name: "Butterfrite",
+		desc: "If held by a Butterfree, this item allows it to Mega Evolve in battle.",
+	},
+
+
 	// Gen 2 items
 
 	berserkgene: {

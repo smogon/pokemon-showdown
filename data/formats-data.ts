@@ -5842,6 +5842,11 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 		natDexTier: "RUBL",
 	},
+	butterfreemega: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "RU",
+	},
 	missingno: {
 		isNonstandard: "Custom",
 		tier: "Illegal",

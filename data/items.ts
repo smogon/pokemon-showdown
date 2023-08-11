@@ -7186,6 +7186,22 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 4,
 	},
 
+	// ER items
+	butterfrite: {
+		name: "Butterfrite",
+		spritenum: 575,
+		megaStone: "Butterfree-Mega",
+		megaEvolves: "Butterfree",
+		itemUser: ["Butterfree"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 1000,
+		gen: 7,
+		isNonstandard: "Past",
+	},
+
 	// Gen 2 items
 
 	berserkgene: {

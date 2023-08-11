@@ -56,6 +56,9 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	butterfree: {
 		name: "Butterfree",
 	},
+	butterfreemega: {
+		name: "Butterfree-Mega",
+	},
 	butterfreegmax: {
 		name: "Butterfree-Gmax",
 	},
