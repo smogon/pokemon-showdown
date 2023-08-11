@@ -485,73 +485,96 @@ export class RandomTeams {
 		}
 
 		if (isDoubles) {
-			// In order of decreasing generalizability
-			this.incompatibleMoves(moves, movePool, SPEED_CONTROL, SPEED_CONTROL);
-			this.incompatibleMoves(moves, movePool, HAZARDS, HAZARDS);
-			this.incompatibleMoves(moves, movePool, 'rockslide', 'stoneedge');
-			this.incompatibleMoves(moves, movePool, SETUP, ['fakeout', 'helpinghand']);
-			this.incompatibleMoves(moves, movePool, PROTECT_MOVES, 'wideguard');
-			this.incompatibleMoves(moves, movePool, ['fierydance', 'fireblast'], 'heatwave');
-			this.incompatibleMoves(moves, movePool, 'dazzlinggleam', ['fleurcannon', 'moonblast']);
-			this.incompatibleMoves(moves, movePool, 'poisongas', 'toxicspikes');
-			this.incompatibleMoves(moves, movePool, RECOVERY_MOVES, 'healpulse');
-			this.incompatibleMoves(moves, movePool, 'haze', ['icywind', 'rocktomb']);
-			this.incompatibleMoves(moves, movePool, 'disable', 'encore');
-			this.incompatibleMoves(moves, movePool, 'freezedry', 'icebeam');
-			this.incompatibleMoves(moves, movePool, 'bodyslam', 'doubleedge');
-			this.incompatibleMoves(moves, movePool, 'energyball', 'leafstorm');
-			this.incompatibleMoves(moves, movePool, 'earthpower', 'sandsearstorm');
-			this.incompatibleMoves(moves, movePool, 'drumbeating', 'woodhammer');
-			this.incompatibleMoves(moves, movePool, 'boomburst', 'hyperdrill');
+			const doublesIncompatiblePairs = [
+				// In order of decreasing generalizability
+				[SPEED_CONTROL, SPEED_CONTROL],
+				[HAZARDS, HAZARDS],
+				['rockslide', 'stoneedge'],
+				[SETUP, ['fakeout', 'helpinghand']],
+				[PROTECT_MOVES, 'wideguard'],
+				[['fierydance', 'fireblast'], 'heatwave'],
+				['dazzlinggleam', ['fleurcannon', 'moonblast']],
+				['poisongas', 'toxicspikes'],
+				[RECOVERY_MOVES, 'healpulse'],
+				['haze', ['icywind', 'rocktomb']],
+				['disable', 'encore'],
+				['freezedry', 'icebeam'],
+				['bodyslam', 'doubleedge'],
+				['energyball', 'leafstorm'],
+				['earthpower', 'sandsearstorm'],
+				['drumbeating', 'woodhammer'],
+				['boomburst', 'hyperdrill'],
+			];
+
+			for (const pair of doublesIncompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
 
 			if (role !== 'Offensive Protect') {
 				this.incompatibleMoves(moves, movePool, PROTECT_MOVES, 'uturn');
 			}
 		}
 
-		// These moves don't mesh well with other aspects of the set
-		this.incompatibleMoves(moves, movePool, statusMoves, ['healingwish', 'switcheroo', 'trick']);
-		this.incompatibleMoves(moves, movePool, SETUP, PIVOT_MOVES);
-		this.incompatibleMoves(moves, movePool, SETUP, HAZARDS);
-		this.incompatibleMoves(moves, movePool, SETUP, ['defog', 'nuzzle', 'toxic', 'waterspout', 'yawn', 'haze']);
-		this.incompatibleMoves(moves, movePool, PHYSICAL_SETUP, PHYSICAL_SETUP);
-		this.incompatibleMoves(moves, movePool, SPECIAL_SETUP, 'thunderwave');
-		this.incompatibleMoves(moves, movePool, 'substitute', PIVOT_MOVES);
-		this.incompatibleMoves(moves, movePool, SPEED_SETUP, ['aquajet', 'rest', 'trickroom']);
-		this.incompatibleMoves(moves, movePool, 'curse', 'rapidspin');
-		this.incompatibleMoves(moves, movePool, 'dragondance', 'dracometeor');
-		this.incompatibleMoves(moves, movePool, 'healingwish', 'uturn');
+		// General incompatibilities
+		const incompatiblePairs = [
+			// These moves don't mesh well with other aspects of the set
+			[statusMoves, ['healingwish', 'switcheroo', 'trick']],
+			[SETUP, PIVOT_MOVES],
+			[SETUP, HAZARDS],
+			[SETUP, ['defog', 'nuzzle', 'toxic', 'waterspout', 'yawn', 'haze']],
+			[PHYSICAL_SETUP, PHYSICAL_SETUP],
+			[SPECIAL_SETUP, 'thunderwave'],
+			['substitute', PIVOT_MOVES],
+			[SPEED_SETUP, ['aquajet', 'rest', 'trickroom']],
+			['curse', 'rapidspin'],
+			['dragondance', 'dracometeor'],
+			['healingwish', 'uturn'],
 
+			// These attacks are redundant with each other
+			['psychic', 'psyshock'],
+			['surf', 'hydropump'],
+			['liquidation', 'wavecrash'],
+			[['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']],
+			[['knockoff', 'bite'], 'foulplay'],
+			['doubleedge', 'headbutt'],
+			['fireblast', ['fierydance', 'flamethrower']],
+			['lavaplume', 'magmastorm'],
+			['thunderpunch', 'wildcharge'],
+			['gunkshot', ['direclaw', 'poisonjab']],
+			['aurasphere', 'focusblast'],
+			['closecombat', 'drainpunch'],
+			['bugbite', 'pounce'],
+			['bittermalice', 'shadowball'],
+			[['dragonpulse', 'spacialrend'], 'dracometeor'],
 
-		// These attacks are redundant with each other
-		this.incompatibleMoves(moves, movePool, 'psychic', 'psyshock');
-		this.incompatibleMoves(moves, movePool, 'surf', 'hydropump');
-		this.incompatibleMoves(moves, movePool, 'liquidation', 'wavecrash');
-		this.incompatibleMoves(moves, movePool, ['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']);
-		this.incompatibleMoves(moves, movePool, ['knockoff', 'bite'], 'foulplay');
-		this.incompatibleMoves(moves, movePool, 'doubleedge', 'headbutt');
-		this.incompatibleMoves(moves, movePool, 'fireblast', ['fierydance', 'flamethrower']);
-		this.incompatibleMoves(moves, movePool, 'lavaplume', 'magmastorm');
-		this.incompatibleMoves(moves, movePool, 'thunderpunch', 'wildcharge');
-		this.incompatibleMoves(moves, movePool, 'gunkshot', ['direclaw', 'poisonjab']);
-		this.incompatibleMoves(moves, movePool, 'aurasphere', 'focusblast');
-		this.incompatibleMoves(moves, movePool, 'closecombat', 'drainpunch');
-		this.incompatibleMoves(moves, movePool, 'bugbite', 'pounce');
-		this.incompatibleMoves(moves, movePool, 'bittermalice', 'shadowball');
-		this.incompatibleMoves(moves, movePool, ['dragonpulse', 'spacialrend'], 'dracometeor');
+			// These status moves are redundant with each other
+			['taunt', 'disable'],
+			['toxic', 'willowisp'],
+			[['thunderwave', 'toxic', 'willowisp'], 'toxicspikes'],
+			['thunderwave', 'yawn'],
+
+			// This space reserved for assorted hardcodes that otherwise make little sense out of context
+			// Landorus
+			['nastyplot', 'rockslide'],
+			// Persian
+			['switcheroo', 'fakeout'],
+			// Beartic
+			['snowscape', 'swordsdance'],
+			// Magnezone
+			['bodypress', 'mirrorcoat'],
+			// Amoonguss, though this can work well as a general rule later
+			['toxic', 'clearsmog'],
+			// Chansey and Blissey
+			['healbell', 'stealthrock'],
+		];
+
+		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
+
 		if (!types.includes('Ice')) {
 			this.incompatibleMoves(moves, movePool, 'icebeam', 'icywind');
 		}
 
-
-		// These status moves are redundant with each other
 		if (!isDoubles) {
 			this.incompatibleMoves(moves, movePool, ['taunt', 'strengthsap'], 'encore');
 		}
-		this.incompatibleMoves(moves, movePool, 'taunt', 'disable');
-		this.incompatibleMoves(moves, movePool, 'toxic', 'willowisp');
-		this.incompatibleMoves(moves, movePool, ['thunderwave', 'toxic', 'willowisp'], 'toxicspikes');
-		this.incompatibleMoves(moves, movePool, 'thunderwave', 'yawn');
 
 		// This space reserved for assorted hardcodes that otherwise make little sense out of context
 		if (species.id === "dugtrio") {
@@ -560,24 +583,12 @@ export class RandomTeams {
 		if (species.id === "cyclizar") {
 			this.incompatibleMoves(moves, movePool, 'taunt', 'knockoff');
 		}
-		// Landorus
-		this.incompatibleMoves(moves, movePool, 'nastyplot', 'rockslide');
-		// Persian
-		this.incompatibleMoves(moves, movePool, 'switcheroo', 'fakeout');
-		// Beartic
-		this.incompatibleMoves(moves, movePool, 'snowscape', 'swordsdance');
-		// Magnezone
-		this.incompatibleMoves(moves, movePool, 'bodypress', 'mirrorcoat');
-		// Amoonguss, though this can work well as a general rule later
-		this.incompatibleMoves(moves, movePool, 'toxic', 'clearsmog');
 		// Dudunsparce
 		if (species.baseSpecies === 'Dudunsparce') this.incompatibleMoves(moves, movePool, 'earthpower', 'shadowball');
 		// Luvdisc
 		if (species.id === 'luvdisc' && !isDoubles) {
 			this.incompatibleMoves(moves, movePool, 'charm', ['icebeam', 'icywind']);
 		}
-		// Chansey and Blissey
-		this.incompatibleMoves(moves, movePool, 'healbell', 'stealthrock');
 	}
 
 	// Checks for and removes incompatible moves, starting with the first move in movesA.
