@@ -26,7 +26,7 @@ interface IPData {
 	lon: number;
 }
 
-function getIPData(ip: string) {
+export function getIPData(ip: string) {
 	try {
 		return Net("https://miapi.dev/api/ip/" + ip).get().then(JSON.parse) as Promise<IPData>;
 	} catch {
