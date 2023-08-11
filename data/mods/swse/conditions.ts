@@ -793,7 +793,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 
 
-
 	deltastream: {
 		name: 'DeltaStream',
 		effectType: 'Weather',

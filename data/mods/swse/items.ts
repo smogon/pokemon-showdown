@@ -1,4 +1,4 @@
-export const Items: {[itemid: string]: ItemData} = {
+export const Items: {[k: string]: ModdedItemData} = {
 	abilityshield: {
 		name: "Ability Shield",
 		spritenum: 746,

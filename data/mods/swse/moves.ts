@@ -1,6 +1,6 @@
 // List of flags and their descriptions can be found in sim/dex-moves.ts
 
-export const Moves: {[moveid: string]: MoveData} = {
+export const Moves: {[k: string]: ModdedMoveData} = {
 	"10000000voltthunderbolt": {
 		num: 719,
 		accuracy: true,
@@ -2364,7 +2364,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {},
 		// TODO show prepare message before the "POKEMON used MOVE!" message
 		// This happens even before sleep shows its "POKEMON is fast asleep." message
-		weather: 'snow',
+		weather: 'hail',
 		selfSwitch: true,
 		secondary: null,
 		target: "all",
@@ -8171,7 +8171,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		isNonstandard: "Past",
 		name: "Hail",
 		pp: 10,
 		priority: 0,
@@ -17552,6 +17551,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
+		isNonstandard: "Past",
 		name: "Snowscape",
 		pp: 10,
 		priority: 0,
