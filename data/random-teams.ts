@@ -1614,6 +1614,8 @@ export class RandomTeams {
 		for (const baseSpecies of Object.keys(baseSpeciesCount)) {
 			for (let i = 0; i < Math.min(Math.ceil(baseSpeciesCount[baseSpecies] / 3), 3); i++) {
 				baseSpeciesPool.push(baseSpecies);
+				// Squawkabilly has 4 formes, but only 2 functionally different formes, so only include it 1x
+				if (baseSpecies === 'Squawkabilly') break;
 			}
 		}
 		return [pokemonPool, baseSpeciesPool];
