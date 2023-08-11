@@ -1591,38 +1591,29 @@ export class RandomTeams {
 		type: string,
 		pokemonToExclude: RandomTeamsTypes.RandomSet[] = [],
 		isMonotype = false,
-		isDoubles = false,
+		pokemonList: string[]
 	) {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
 		const pokemonPool = [];
-		const baseSpeciesPool: string[] = [];
-		if (isDoubles) {
-			for (const pokemon of Object.keys(this.randomDoublesSets)) {
-				let species = this.dex.species.get(pokemon);
-				if (species.gen > this.gen || exclude.includes(species.id)) continue;
-				if (isMonotype) {
+		const baseSpeciesPool = [];
+		const baseSpeciesCount: {[k: string]: number} = {};
+		for (const pokemon of pokemonList) {
+			let species = this.dex.species.get(pokemon);
+			if (exclude.includes(species.id)) continue;
+			if (isMonotype) {
+				if (!species.types.includes(type)) continue;
+				if (typeof species.battleOnly === 'string') {
+					species = this.dex.species.get(species.battleOnly);
 					if (!species.types.includes(type)) continue;
-					if (typeof species.battleOnly === 'string') {
-						species = this.dex.species.get(species.battleOnly);
-						if (!species.types.includes(type)) continue;
-					}
 				}
-				pokemonPool.push(pokemon);
-				if (!baseSpeciesPool.includes(species.baseSpecies)) baseSpeciesPool.push(species.baseSpecies);
 			}
-		} else {
-			for (const pokemon of Object.keys(this.randomSets)) {
-				let species = this.dex.species.get(pokemon);
-				if (species.gen > this.gen || exclude.includes(species.id)) continue;
-				if (isMonotype) {
-					if (!species.types.includes(type)) continue;
-					if (typeof species.battleOnly === 'string') {
-						species = this.dex.species.get(species.battleOnly);
-						if (!species.types.includes(type)) continue;
-					}
-				}
-				pokemonPool.push(pokemon);
-				if (!baseSpeciesPool.includes(species.baseSpecies)) baseSpeciesPool.push(species.baseSpecies);
+			pokemonPool.push(pokemon);
+			baseSpeciesCount[species.baseSpecies] = (baseSpeciesCount[species.baseSpecies] || 0) + 1;
+		}
+		// Include base species 1x if 1-3 formes, 2x if 4-6 formes, 3x if 7+ formes
+		for (const baseSpecies of Object.keys(baseSpeciesCount)) {
+			for (let i = 0; i < Math.min(Math.ceil(baseSpeciesCount[baseSpecies] / 3), 3); i++) {
+				baseSpeciesPool.push(baseSpecies);
 			}
 		}
 		return [pokemonPool, baseSpeciesPool];
@@ -1654,7 +1645,9 @@ export class RandomTeams {
 		const typeComboCount: {[k: string]: number} = {};
 		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
-		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, isDoubles);
+
+		const pokemonList = isDoubles ? Object.keys(this.randomDoublesSets) : Object.keys(this.randomSets);
+		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
 
 		let leadsRemaining = this.format.gameType === 'doubles' ? 2 : 1;
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
