@@ -971,7 +971,7 @@ export class RandomTeams {
 		role: RandomTeamsTypes.Role,
 	): boolean {
 		if ([
-			'Armor Tail', 'Early Bird', 'Flare Boost', 'Gluttony', 'Harvest', 'Hydration', 'Ice Body', 'Immunity',
+			'Armor Tail', 'Battle Bond', 'Early Bird', 'Flare Boost', 'Gluttony', 'Harvest', 'Hydration', 'Ice Body', 'Immunity',
 			'Moody', 'Own Tempo', 'Pressure', 'Quick Feet', 'Rain Dish', 'Sand Veil', 'Snow Cloak', 'Steadfast', 'Steam Engine',
 		].includes(ability)) return true;
 
@@ -979,8 +979,6 @@ export class RandomTeams {
 		// Abilities which are primarily useful for certain moves
 		case 'Contrary': case 'Serene Grace': case 'Skill Link': case 'Strong Jaw':
 			return !counter.get(toID(ability));
-		case 'Battle Bond':
-			return !isDoubles;
 		case 'Chlorophyll':
 			return (!moves.has('sunnyday') && !teamDetails.sun && species.id !== 'lilligant');
 		case 'Cloud Nine':
@@ -1014,6 +1012,8 @@ export class RandomTeams {
 			return !counter.ironFist;
 		case 'Justified':
 			return !counter.get('Physical');
+		case 'Libero': case 'Protean':
+			return role === 'Offensive Protect' || (species.id === 'meowscarada' && role === 'Fast Attacker');
 		case 'Mold Breaker':
 			return (abilities.has('Sharpness') || abilities.has('Unburden'));
 		case 'Moxie':
@@ -1024,8 +1024,6 @@ export class RandomTeams {
 			return !counter.get('Grass');
 		case 'Prankster':
 			return !counter.get('Status');
-		case 'Protean':
-			return role === 'Offensive Protect';
 		case 'Reckless':
 			return !counter.get('recoil');
 		case 'Rock Head':
@@ -1377,7 +1375,9 @@ export class RandomTeams {
 			);
 			return (scarfReqs && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Specs';
 		}
-		if (!counter.get('Status') && role !== 'Fast Attacker' && role !== 'Wallbreaker') return 'Assault Vest';
+		if (!counter.get('Status') && !['Fast Attacker', 'Wallbreaker', 'Tera Blast user'].includes(role)) {
+			return 'Assault Vest';
+		}
 		if (counter.get('speedsetup') && this.dex.getEffectiveness('Ground', species) < 1) return 'Weakness Policy';
 		if (species.id === 'urshifurapidstrike') return 'Punching Glove';
 		if (species.id === 'palkia') return 'Lustrous Orb';
