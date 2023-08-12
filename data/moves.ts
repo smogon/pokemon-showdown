@@ -8118,7 +8118,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		critRatio: 2,
 		secondary: null,
 		target: "normal",
-		type: "Normal",
+		type: "Bug",
 		zMove: {basePower: 180},
 		maxMove: {basePower: 130},
 		contestType: "Cool",
