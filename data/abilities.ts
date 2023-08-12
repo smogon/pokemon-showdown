@@ -5950,7 +5950,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyAtkPriority: 11,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.flags['contact']) {
-				console.log(`Attack: ${atk}, Modified Attack: ${atk + (attacker.getStat('def') * .2)}`)
 				return this.chainModify((((atk + (attacker.getStat('def') * .20)) / (atk ? atk : 1))));
 			}
 		},
@@ -6392,6 +6391,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	twistdimension: {
 		onStart(source) {
+			this.add('-activate', source, 'ability: Twist. Dimension');
 			this.field.addPseudoWeather('trickroom', source, source.getAbility());
 		},
 		name: "Twist. Dimension",
@@ -6856,7 +6856,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyMove(move) {
 			if (move.flags['pulse']) {
 				move.accuracy = true;
-				if (move.target === 'normal') move.target = 'allAdjacentFoes';
+				if (move.target === 'normal' || move.target === 'any') move.target = 'allAdjacentFoes';
 			}
 		},
 		name: "Artillery",
@@ -6866,7 +6866,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	amplifier: {
 		onModifyMove(move) {
-			if (move.flags['sound'] && move.target === 'normal') {
+			if (move.flags['sound'] && (move.target === 'normal' || move.target === 'any')) {
 				move.target = 'allAdjacentFoes';
 			}
 		},
