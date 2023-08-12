@@ -120,12 +120,11 @@ export class PokemonSources {
 	}
 	add(source: PokemonSource, limitedEggMove?: ID | null) {
 		if (this.sources[this.sources.length - 1] !== source) this.sources.push(source);
-		if (limitedEggMove) {
-			if (source.substr(0, 3) === '1ET') {
-				this.possiblyLimitedEggMoves = [limitedEggMove];
-			} else if (this.limitedEggMoves !== null) {
-				this.limitedEggMoves = [limitedEggMove];
-			}
+		if (limitedEggMove && source.substr(0, 3) === '1ET') {
+			this.possiblyLimitedEggMoves = [limitedEggMove];
+		}
+		if (limitedEggMove && this.limitedEggMoves !== null) {
+			this.limitedEggMoves = [limitedEggMove];
 		} else if (limitedEggMove === null) {
 			this.limitedEggMoves = null;
 		}
