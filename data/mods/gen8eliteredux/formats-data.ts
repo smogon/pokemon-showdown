@@ -4541,6 +4541,10 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
+	laprasmega: {
+		tier: "OU",
+		doublesTier: "DOU",
+	},
 
 
 	//Unused (...for now)

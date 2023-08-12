@@ -2892,6 +2892,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 220,
 		color: "Blue",
 		eggGroups: ["Monster", "Water 1"],
+		otherFormes: ["Lapras-Mega"],
+		formeOrder: ["Lapras", "Lapras-Mega"],
 		canGigantamax: "G-Max Resonance",
 	},
 	laprasgmax: {
@@ -16567,6 +16569,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kinglermega: {
 		inherit: true, 
 		abilities: {0: "Tough Claws", I1: "Swift Swim", I2: "Hyper Cutter", I3: "Grip Pincer"},
+	},
+	laprasmega: {
+		inherit: true, 
+		abilities: {0: "Liquid Voice", I1: "Ice Scales", I2: "Shell Armor", I3: "Self Sufficient"},
+	},
 
-	}
 };

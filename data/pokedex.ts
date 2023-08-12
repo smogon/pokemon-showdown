@@ -18105,6 +18105,20 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Amorphous"],
 		requiredItem: "Kinglerite",
 	},
+	laprasmega: {
+		num: 131,
+		name: "Lapras-Mega",
+		baseSpecies: "Lapras",
+		types: ["Water", "Ice"],
+		baseStats: {hp: 130, atk: 105, def: 110, spa: 125, spd: 125, spe: 50},
+		abilities: {0: "Liquid Voice"},
+		heightm: 2.5,
+		weightkg: 220,
+		color: "Blue",
+		forme: "Mega",
+		eggGroups: ["Amorphous"],
+		requiredItem: "Laprasite",
+	},
 
 
 

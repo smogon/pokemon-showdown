@@ -605,6 +605,9 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	lapras: {
 		name: "Lapras",
 	},
+	laprasmega: {
+		name: "Lapras-Mega",
+	},
 	laprasgmax: {
 		name: "Lapras-Gmax",
 	},

@@ -323,9 +323,17 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	kinglerite: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	kommoniumz: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	laprasite: {
+		inherit: true,
+		isNonstandard: null,	
 	},
 	latiasite: {
 		inherit: true,
