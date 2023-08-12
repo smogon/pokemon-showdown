@@ -1611,6 +1611,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "Machoke",
 		evoType: "trade",
 		eggGroups: ["Human-Like"],
+		otherFormes: ["Machamp-Mega"],
+		formeOrder: ["Machamp", "Machamp-Mega"],
 		canGigantamax: "G-Max Chi Strike",
 	},
 	machampgmax: {
