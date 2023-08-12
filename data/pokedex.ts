@@ -18091,6 +18091,20 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Amorphous"],
 		requiredItem: "Machampite",
 	},
+	kinglermega: {
+		num: 99,
+		name: "Kingler-Mega",
+		baseSpecies: "Kingler",
+		types: ["Water"],
+		baseStats: {hp: 80, atk: 170, def: 135, spa: 50, spd: 80, spe: 85},
+		abilities: {0: "Tough Claws"},
+		heightm: 1.3,
+		weightkg: 60,
+		color: "Red",
+		forme: "Mega",
+		eggGroups: ["Amorphous"],
+		requiredItem: "Kinglerite",
+	},
 
 
 

@@ -473,6 +473,9 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	kingler: {
 		name: "Kingler",
 	},
+	kinglermega: {
+		name: "Kingler-Mega",
+	},
 	kinglergmax: {
 		name: "Kingler-Gmax",
 	},

@@ -4537,6 +4537,10 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
+	kinglermega: {
+		tier: "RU",
+		doublesTier: "(DUU)",
+	},
 
 
 	//Unused (...for now)

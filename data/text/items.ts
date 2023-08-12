@@ -2335,6 +2335,11 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Machampite",
 		desc: "If held by a Machamp, this item allows it to Mega Evolve in battle.",
 	},
+	kinglerite: {
+		name: "Kinglerite",
+		desc: "If held by a Kingler, this item allows it to Mega Evolve in battle.",
+	},
+
 
 
 	// Gen 2 items

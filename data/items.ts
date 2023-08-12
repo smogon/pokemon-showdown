@@ -7229,6 +7229,20 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 7,
 		isNonstandard: "Past",
 	},
+	kinglerite: {
+		name: "Kinglerite",
+		spritenum: 627,
+		megaStone: "Kingler-Mega",
+		megaEvolves: "Kingler",
+		itemUser: ["Kingler"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 1003,
+		gen: 7,
+		isNonstandard: "Past",
+	},
 
 	// Gen 2 items
 

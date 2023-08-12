@@ -5857,6 +5857,11 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 		natDexTier: "RU",
 	},
+	kinglermega: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "RU",
+	},
 	missingno: {
 		isNonstandard: "Custom",
 		tier: "Illegal",

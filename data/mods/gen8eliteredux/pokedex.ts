@@ -16564,4 +16564,9 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Raging Boxer", I1: "No Guard", I2: "Iron Fist", I3: "Anger Point"},
 	},
+	kinglermega: {
+		inherit: true, 
+		abilities: {0: "Tough Claws", I1: "Swift Swim", I2: "Hyper Cutter", I3: "Grip Pincer"},
+
+	}
 };
