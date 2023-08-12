@@ -6841,7 +6841,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Precise Fist",
 		rating: 4,
 		num: 388,
-
+		gen: 8,
 	},
 	deadeye: {
 		onModifyMove(move) {
