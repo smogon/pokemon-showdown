@@ -335,6 +335,9 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	machamp: {
 		name: "Machamp",
 	},
+	machampmega: {
+		name: "Machamp-Mega"
+	},
 	machampgmax: {
 		name: "Machamp-Gmax",
 	},

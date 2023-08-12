@@ -7215,6 +7215,20 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 7,
 		isNonstandard: "Past",
 	},
+	machampite: {
+		name: "Machampite",
+		spritenum: 615,
+		megaStone: "Machamp-Mega",
+		megaEvolves: "Machamp",
+		itemUser: ["Machamp"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 1002,
+		gen: 7,
+		isNonstandard: "Past",
+	},
 
 	// Gen 2 items
 

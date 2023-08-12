@@ -4533,6 +4533,10 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
+	machampmega: {
+		tier: "RU",
+		doublesTier: "(DUU)",
+	},
 
 
 	//Unused (...for now)

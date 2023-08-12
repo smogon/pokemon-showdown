@@ -18077,6 +18077,20 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Amorphous"],
 		requiredItem: "Butterfrite",
 	},
+	machampmega: {
+		num: 68,
+		name: "Machamp-Mega",
+		baseSpecies: "Machamp",
+		forme: "Mega",
+		types: ["Fighting"],
+		baseStats: {hp: 90, atk: 170, def: 100, spa: 65, spd: 105, spe: 75},
+		abilities: {0: "Raging Boxer"},
+		heightm: 1.6,
+		weightkg: 130,
+		color: "Gray",
+		eggGroups: ["Amorphous"],
+		requiredItem: "Machampite",
+	},
 
 
 

@@ -2323,9 +2323,17 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 
 	//ER Items 
+	milotite: {
+		name: "Milotite",
+		desc: "If held by a Milotic, this item allows it to Mega Evolve in battle.",
+	},
 	butterfrite: {
 		name: "Butterfrite",
 		desc: "If held by a Butterfree, this item allows it to Mega Evolve in battle.",
+	},
+	machampite: {
+		name: "Machampite",
+		desc: "If held by a Machamp, this item allows it to Mega Evolve in battle.",
 	},
 
 
