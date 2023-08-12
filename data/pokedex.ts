@@ -18049,6 +18049,20 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 	},
 	//ER Megas
+	miloticmega: {
+		num: 350,
+		name: "Milotic-Mega",
+		baseSpecies: "Milotic",
+		forme: "Mega",
+		types: ["Water", "Fairy"],
+		baseStats: {hp: 95, atk: 70, def: 109, spa: 130, spd: 155, spe: 81},
+		abilities: {0: "Self Sufficient"},
+		heightm: 6.2,
+		weightkg: 162,
+		color: "Pink",
+		eggGroups: ["Amorphous"],
+		requiredItem: "Milotite",
+	},
 	butterfreemega: {
 		num: 12,
 		name: "Butterfree-Mega",
@@ -18063,6 +18077,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Amorphous"],
 		requiredItem: "Butterfrite",
 	},
+
 
 
 	syclar: {

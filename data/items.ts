@@ -7187,6 +7187,20 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 
 	// ER items
+	milotite: {
+		name: "Milotite",
+		spritenum: 615,
+		megaStone: "Milotic-Mega",
+		megaEvolves: "Milotic",
+		itemUser: ["Milotic"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 1001,
+		gen: 7,
+		isNonstandard: "Past",
+	},
 	butterfrite: {
 		name: "Butterfrite",
 		spritenum: 575,

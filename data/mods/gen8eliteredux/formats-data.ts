@@ -4524,10 +4524,18 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 
 	//ER Megas
+
+	miloticmega: {
+		tier: "RU",
+		doublesTier: "DOU",
+	},
 	butterfreemega: {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
+
+
+	//Unused (...for now)
 	missingno: {
 		isNonstandard: "Custom",
 		tier: "Illegal",

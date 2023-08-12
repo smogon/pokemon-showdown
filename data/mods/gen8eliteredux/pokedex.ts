@@ -6341,6 +6341,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "Feebas",
 		evoType: "trade",
 		evoItem: "Prism Scale",
+		otherFormes: ["Milotic-Mega"],
+		formeOrder: ["Milotic", "Milotic-Mega"],
 		eggGroups: ["Water 1", "Dragon"],
 	},
 	castform: {
@@ -16546,6 +16548,21 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Pink",
 		eggGroups: ["Undiscovered"],
 		changesFrom: "Enamorus",
+	},
+	//ER Megas
+	miloticmega: {
+		num: 350,
+		name: "Milotic-Mega",
+		baseSpecies: "Milotic",
+		forme: "Mega",
+		types: ["Water", "Fairy"],
+		baseStats: {hp: 95, atk: 70, def: 109, spa: 130, spd: 155, spe: 81},
+		abilities: {0: "Self Sufficient", I1: 'Prism Scales', I2: 'Adaptability', I3: 'Sea Guardian'},
+		heightm: 6.2,
+		weightkg: 162,
+		color: "Pink",
+		eggGroups: ["Amorphous"],
+		requiredItem: "Milotite",
 	},
 	butterfreemega: {
 		num: 12,
