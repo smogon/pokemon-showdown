@@ -4545,6 +4545,14 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DOU",
 	},
+	flygonmega: {
+		tier: "UU",
+		doublesTier: "DUU",
+	},
+	kingdrite: {
+		tier: "UU",
+		doublesTier: "DUU",
+	},
 
 
 	//Unused (...for now)

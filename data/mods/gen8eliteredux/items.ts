@@ -214,6 +214,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	flygonite: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	flyinggem: {
 		inherit: true,
 		isNonstandard: null,
@@ -320,6 +324,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		isNonstandard: null,
 	},
 	kangaskhanite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	kingdrite: {
 		inherit: true,
 		isNonstandard: null,
 	},

@@ -7257,6 +7257,34 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 7,
 		isNonstandard: "Past",
 	},
+	flygonite: {
+		name: "Flygonite",
+		spritenum: 607,
+		megaStone: "Flygon-Mega",
+		megaEvolves: "Flygon",
+		itemUser: ["Flygon"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 1005,
+		gen: 7,
+		isNonstandard: "Past",
+	},
+	kingdrite: {
+		name: "Kingdrite",
+		spritenum: 621,
+		megaStone: "Kingdra-Mega",
+		megaEvolves: "Kingdra",
+		itemUser: ["Kingdra"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 1006,
+		gen: 7,
+		isNonstandard: "Past",
+	},
 
 	// Gen 2 items
 

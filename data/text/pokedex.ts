@@ -1304,6 +1304,9 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	flygon: {
 		name: "Flygon",
 	},
+	flygonmega: {
+		name: "Flygon"
+	},
 	cacnea: {
 		name: "Cacnea",
 	},

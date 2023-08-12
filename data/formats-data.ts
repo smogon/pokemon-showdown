@@ -5867,6 +5867,16 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 		natDexTier: "OU",	
 	},
+	flygonmega: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "OU",	
+	},
+	kingdramegaw: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "OU",	
+	},
 	missingno: {
 		isNonstandard: "Custom",
 		tier: "Illegal",

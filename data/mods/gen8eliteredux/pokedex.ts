@@ -16574,5 +16574,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true, 
 		abilities: {0: "Liquid Voice", I1: "Ice Scales", I2: "Shell Armor", I3: "Self Sufficient"},
 	},
+	flygonmega: {
+		inherit: true, 
+		abilities: {0: "Tinted Lens", I1: "Dragonfly", I2: "Sand Song", I3: "Sand Rush"},
+	},
+	kingdramega: {
+		inherit: true, 
+		abilities: {0: "Swift Swim", I1: "Sea Guardian", I2: "Mega Launcher", I3: "Marvel Scale"},
+	},
 
 };
