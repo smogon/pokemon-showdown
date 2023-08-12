@@ -18134,7 +18134,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		requiredItem: "Flygonite",
 	},
 	kingdramega: {
-		num: 330,
+		num: 230,
 		name: "Kingdra-Mega",
 		baseSpecies: "Kingdra",
 		types: ["Water", "Dragon"],
@@ -18147,9 +18147,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Amorphous"],
 		requiredItem: "Kingdrite",
 	},
-
-
-
 	syclar: {
 		num: -1,
 		name: "Syclar",

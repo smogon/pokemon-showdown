@@ -5872,7 +5872,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 		natDexTier: "OU",	
 	},
-	kingdramegaw: {
+	kingdramega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "OU",	
