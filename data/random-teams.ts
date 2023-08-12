@@ -33,13 +33,11 @@ interface BattleFactorySet {
 }
 export class MoveCounter extends Utils.Multiset<string> {
 	damagingMoves: Set<Move>;
-	stabCounter: number;
 	ironFist: number;
 
 	constructor() {
 		super();
 		this.damagingMoves = new Set();
-		this.stabCounter = 0;
 		this.ironFist = 0;
 	}
 
@@ -375,7 +373,7 @@ export class RandomTeams {
 			if (move.basePower || move.basePowerCallback) {
 				if (!this.noStab.includes(moveid) || PRIORITY_POKEMON.includes(species.id) && move.priority > 0) {
 					counter.add(moveType);
-					if (types.includes(moveType)) counter.stabCounter++;
+					if (types.includes(moveType)) counter.add('stab');
 					if (teraType === moveType) counter.add('stabtera');
 					counter.damagingMoves.add(move);
 				}
@@ -822,7 +820,7 @@ export class RandomTeams {
 		}
 
 		// If no STAB move was added, add a STAB move
-		if (!counter.stabCounter) {
+		if (!counter.get('stab')) {
 			const stabMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
