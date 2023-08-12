@@ -7217,7 +7217,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	machampite: {
 		name: "Machampite",
-		spritenum: 615,
+		spritenum: 625,
 		megaStone: "Machamp-Mega",
 		megaEvolves: "Machamp",
 		itemUser: ["Machamp"],

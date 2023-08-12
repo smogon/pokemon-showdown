@@ -375,6 +375,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	machampite: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	machobrace: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
